@@ -9,6 +9,7 @@
 #include "fctsys.h"
 #include <wx/fontdlg.h>
 #include "common.h"
+#include "online_help.h"
 #include "id.h"
 
 
@@ -220,6 +221,7 @@ wxString WinEDA_BasicFrame::GetLastProject( int rang )
 void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /**************************************************************/
 {
+#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
     if( m_Parent->m_HtmlCtrl == NULL )
     {
         m_Parent->InitOnLineHelp();
@@ -237,6 +239,19 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
         msg.Printf( _( "Help file %s not found" ), m_Parent->m_HelpFileName.GetData() );
         DisplayError( this, msg );
     }
+#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
+    wxString fullfilename = FindKicadHelpPath() + m_Parent->m_HelpFileName;
+    if ( wxFileExists(fullfilename) )
+        GetAssociatedDocument( this, wxEmptyString, fullfilename );
+    else    // Try to find file in English format:
+    {
+        fullfilename = FindKicadHelpPath() + wxT("../en/") + m_Parent->m_HelpFileName;;
+        GetAssociatedDocument( this, wxEmptyString, fullfilename );
+    }
+
+#else
+    #error Help files format not defined
+#endif
 }
 
 

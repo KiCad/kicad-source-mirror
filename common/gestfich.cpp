@@ -74,7 +74,8 @@ static wxString    s_HelpPathList[] = {
 #else
     wxT( "/usr/share/doc/kicad/help/" ),
     wxT( "/usr/local/share/doc/kicad/help/" ),
-    wxT( "/usr/local/kicad/" ),                 // default install for "universal tarballs" and build for a server
+    wxT( "/usr/local/kicad/doc/" ),             // default install for "universal tarballs" and build for a server (new)
+//    wxT( "/usr/local/kicad/" ),                 // default install for "universal tarballs" and build for a server (old)
 #endif
     wxT( "end_list" )                           // End of list symbol, do not change
 };
@@ -103,18 +104,12 @@ static wxString    s_KicadBinaryPathList[] = {
 #ifdef __WINDOWS__
     wxT( "c:/kicad/bin/" ),
     wxT( "d:/kicad/bin/" ),
-    wxT( "c:/kicad/winexe/" ),              // TODO: must be removed
-    wxT( "d:/kicad/winexe/" ),              // TODO: must be removed
     wxT( "c:/Program Files/kicad/bin/" ),
     wxT( "d:/Program Files/kicad/bin/" ),
-    wxT( "c:/Program Files/kicad/winexe/" ),    // TODO: must be removed
-    wxT( "d:/Program Files/kicad/winexe/" ),    // TODO: must be removed
 #else
     wxT( "/usr/bin/" ),
     wxT( "/usr/local/bin/" ),
     wxT( "/usr/local/kicad/bin/" ),
-    wxT( "/usr/local/kicad/linux/" ),               // TODO: must be removed
-    wxT( "/usr/local/kicad/linux-non_unicode/" ),   // TODO: must be removed
 #endif
     wxT( "end_list" )                               // End of list symbol, do not change
 };
@@ -386,8 +381,8 @@ wxString FindKicadHelpPath()
  *  from BinDir
  *  else from environment variable KICAD
  *  else from one of s_HelpPathList
- *  typically c:\kicad\doc\help or /usr/share/doc/kicad/help
- *            or /usr/local/share/doc/kicad/help
+ *  typically c:\kicad\doc\help or /usr/share/kicad/help
+ *            or /usr/local/share/kicad/help
  *  (must have kicad in path name)
  *
  *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
@@ -410,7 +405,7 @@ wxString FindKicadHelpPath()
     if( tmp.Last() == '/' )
         tmp.RemoveLast();
     FullPath     = tmp.BeforeLast( '/' ); // cd ..
-    FullPath    += wxT( "/help/" );
+    FullPath    += wxT( "/doc/help/" );
     LocaleString = g_EDA_Appl->m_Locale->GetCanonicalName();
 
     wxString path_tmp = FullPath;
@@ -426,7 +421,7 @@ wxString FindKicadHelpPath()
     /* find kicad/help/ from environment variable  KICAD */
     if( !PathFound && g_EDA_Appl->m_Env_Defined )
     {
-        FullPath = g_EDA_Appl->m_KicadEnv + wxT( "/help/" );
+        FullPath = g_EDA_Appl->m_KicadEnv + wxT( "/doc/help/" );
         if( wxDirExists( FullPath ) )
             PathFound = TRUE;
     }

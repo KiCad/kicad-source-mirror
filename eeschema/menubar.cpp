@@ -69,6 +69,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item->SetBitmap( save_as_xpm );
         m_FilesMenu->Append( item );
 
+        // Print and Plot section:
+        m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_GEN_PRINT,
                               _( "P&rint" ), _( "Print on current printer" ) );
         item->SetBitmap( print_button );
@@ -99,7 +101,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         choice_plot_fmt->Append( item );
 #endif
 
-        m_FilesMenu->AppendSeparator();
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU( m_FilesMenu, choice_plot_fmt,
                                             ID_GEN_PLOT, _( "&Plot" ),
                                             _( "Plot HPGL, PostScript, SVG" ), plot_xpm );

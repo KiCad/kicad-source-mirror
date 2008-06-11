@@ -28,6 +28,7 @@
 #include "build_version.h"
 #include "hotkeys_basic.h"
 #include "macros.h"
+#include "online_help.h"
 
 #include "bitmaps.h"
 
@@ -223,7 +224,13 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     }
 
     /* Prepare On Line Help */
+#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
     m_HelpFileName = name + wxT( ".html" );
+#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
+    m_HelpFileName = name + wxT( ".pdf" );
+#else
+    #error Help files format not defined
+#endif
 
     // Init parameters for configuration
     SetVendorName( wxT( "kicad" ) );
@@ -263,7 +270,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     if( !succes )
     {
     }
-    
+
     SetLocaleTo_Default( );     // Set locale option for separator used in float numbers
 
 #ifdef KICAD_PYTHON
@@ -281,6 +288,8 @@ void WinEDA_App::InitOnLineHelp()
 {
     wxString fullfilename = FindKicadHelpPath();
 
+#if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
+    m_HelpFileName = fullfilename + wxT( ".html" );
     fullfilename += wxT( "kicad.hhp" );
     if( wxFileExists( fullfilename ) )
     {
@@ -291,6 +300,11 @@ void WinEDA_App::InitOnLineHelp()
         m_HtmlCtrl->SetTitleFormat( wxT( "Kicad Help" ) );
         m_HtmlCtrl->AddBook( fullfilename );
     }
+#elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
+    m_HtmlCtrl = NULL;
+#else
+    #error Help files format not defined
+#endif
 }
 
 

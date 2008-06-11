@@ -195,15 +195,17 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
             {
                 success = TRUE; command.Empty();
                 if( wxFileExists( wxT( "/usr/bin/kpdf" ) ) )
-                    command = wxT( "xpdf " ) + fullfilename;
+                    command = wxT( "kpdf " ) + fullfilename;
                 else if( wxFileExists( wxT( "/usr/bin/konqueror" ) ) )
                     command = wxT( "konqueror " ) + fullfilename;
                 else if( wxFileExists( wxT( "/usr/bin/gpdf" ) ) )
                     command = wxT( "gpdf " ) + fullfilename;
+                if( wxFileExists( wxT( "/usr/bin/xpdf" ) ) )
+                    command = wxT( "xpdf " ) + fullfilename;
                 if( command.IsEmpty() ) // not started
                 {
                     DisplayError( frame,
-                        _( " Cannot find the PDF viewer (kpdf, gpdf or konqueror) in /usr/bin/" ) );
+                        _( " Cannot find the PDF viewer (kpdf, gpdf, konqueror or xpdf) in /usr/bin/" ) );
                     success = FALSE;
                 }
                 else
