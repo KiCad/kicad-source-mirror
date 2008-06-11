@@ -6,7 +6,7 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
-2008-June-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2008-June-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +all:
     Online doc format changed to PDF format.
