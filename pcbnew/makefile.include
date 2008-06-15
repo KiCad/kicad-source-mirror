@@ -4,7 +4,7 @@ EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a\
             ../polygon/kbool/src/libkbool.a
 
 EXTRACPPFLAGS += -DPCBNEW  -fno-strict-aliasing -I./ -Ibitmaps -I../include -I../share\
-	-I../pcbnew -I../3d-viewer -I../polygon
+	-I../pcbnew -I../3d-viewer -I../polygon -I/opt/local/include
 
 #COMMON = pcbnew.h struct.h class_pad.h class_module.h class_text_mod.h \
 #		class_edge_mod.h class_equipot.h

@@ -29,15 +29,10 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 set(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
 
 if(UNIX)
-    if(APPLE)
-    else(APPLE)
-        # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-        set(CMAKE_INSTALL_PREFIX /usr/local CACHE PATH "")
-        # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-        set(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
-        set(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-        set(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
-    endif(APPLE)
+    # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
+    set(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
+    set(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
+    set(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
 endif(UNIX)
 
 if(WIN32)
