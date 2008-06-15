@@ -574,10 +574,13 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxStr
         if( IsOK( NULL, msg ) )
         {
             LoadFromFile = true;
-            m_AssociatedScreen->m_RefCount--;                                       //be careful with these
-            if( m_AssociatedScreen->m_RefCount == 0 )
-                SAFE_DELETE( m_AssociatedScreen );
-            m_AssociatedScreen = NULL;         //will be created later
+            if ( m_AssociatedScreen )   // Can be NULL if loading a file when creating a new sheet
+            {
+                m_AssociatedScreen->m_RefCount--;                 //be careful with these
+                if( m_AssociatedScreen->m_RefCount == 0 )
+                    SAFE_DELETE( m_AssociatedScreen );
+                m_AssociatedScreen = NULL;         //will be created later
+            }
         }
     }
 

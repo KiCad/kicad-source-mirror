@@ -5,6 +5,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-June-15 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Bug solved: Eeschema crashed when creating a new subsheet with the same
+    filename as an existing filename, if loading this existing file.
+
 
 2008-June-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
@@ -15,10 +21,10 @@ email address.
     - Only one file for application
     - Is standart (The old html format used a zipped archive, not standart)
     - the doc tree is less complex (see doc/help/fr or doc/help/en for the new tree).
-    
+
     If a localized doc file is not found, the english version is automatically loaded instead.
     No need to copy the same pdf file in subdirectory.
-    
+
 
 2008-June-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
