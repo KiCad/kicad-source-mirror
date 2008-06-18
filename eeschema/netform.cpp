@@ -386,7 +386,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
  *  tous les textes graphiques commen�ant par [.-+]pspice ou  [.-+]gnucap
  *  sont consideres comme des commandes a placer dans la netliste
  *      [.-]pspice ou gnucap sont en debut
- +pspice et +gnucap sont en fin de netliste
+ *      +pspice et +gnucap sont en fin de netliste
  */
 {
     char            Line[1024];
@@ -424,6 +424,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                 continue;
             text.Remove( 0, 1 );    //Remove the first char.
             text.Remove( 6 );       //text contains 6 char.
+            text.MakeLower();
             if( ( text == wxT( "pspice" ) ) || ( text == wxT( "gnucap" ) ) )
             {
                 /* Put the Y position as an ascii string, for sort by vertical position,
