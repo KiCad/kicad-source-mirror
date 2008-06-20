@@ -719,8 +719,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
         bool first = true;
         while( booleng->PolygonHasMorePoints() )
         {
-            int x = booleng->GetPolygonXPoint();
-            int y = booleng->GetPolygonYPoint();
+            int x = (int)booleng->GetPolygonXPoint();
+            int y = (int)booleng->GetPolygonYPoint();
             if( first )
             {
                 first = false;
@@ -779,8 +779,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
         }
         while( booleng->PolygonHasMorePoints() )
         {
-            int x = booleng->GetPolygonXPoint();
-            int y = booleng->GetPolygonYPoint();
+            int x = (int)booleng->GetPolygonXPoint();
+            int y = (int)booleng->GetPolygonYPoint();
             area_ref->m_Poly->AppendCorner( x, y );
         }
 

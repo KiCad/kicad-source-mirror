@@ -83,8 +83,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             hole_array.push_back( hole );
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // store hole
             {
-                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
                 hole->push_back( x );
                 hole->push_back( y );
             }
@@ -99,8 +99,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             bool first = true;
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
             {       // foreach point in the polygon
-                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
                 if( first )
                 {
                     first = false;
@@ -121,8 +121,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             bool first = true;
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // read next external contour
             {
-                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
                 if( first )
                 {
                     first = false;
@@ -225,8 +225,8 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
         {
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
             {
-                int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
                 aBooleng->AddPoint( x, y );
                 count++;
             }
@@ -293,8 +293,8 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                 {
                     while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
                     {
-                        int x = m_Kbool_Poly_Engine->GetPolygonXPoint();
-                        int y = m_Kbool_Poly_Engine->GetPolygonYPoint();
+                        int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
+                        int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
                         booleng->AddPoint( x, y );
                     }
 
