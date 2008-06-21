@@ -159,7 +159,7 @@ endif(WIN32)
 if(APPLE)
     set(PCBNEW_RESOURCES pcbnew.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+        PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
     set(MACOSX_BUNDLE_ICON_FILE pcbnew.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew)
@@ -170,10 +170,16 @@ add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${
 
 target_link_libraries(pcbnew 3d-viewer common polygon kbool bitmaps ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
-install(TARGETS pcbnew
+if(NOT APPLE)
+    install(TARGETS pcbnew
+        RUNTIME DESTINATION ${KICAD_BIN}
+        COMPONENT binary)
+else(NOT APPLE)
+    install(TARGETS pcbnew
         RUNTIME DESTINATION ${KICAD_BIN}
         BUNDLE DESTINATION ${KICAD_BIN}
         COMPONENT binary)
+endif(NOT APPLE)
 
 
 # This one gets made only when testing.

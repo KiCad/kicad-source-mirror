@@ -1,6 +1,10 @@
 project(kicad)
 
-cmake_minimum_required(VERSION 2.4.6 FATAL_ERROR)
+if(NOT APPLE)
+    cmake_minimum_required(VERSION 2.4.6 FATAL_ERROR)
+else(NOT APPLE)
+    cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+endif(NOT APPLE)
 
 # Path to local CMake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
