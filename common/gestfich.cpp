@@ -94,7 +94,8 @@ static wxString    s_KicadDataPathList[] = {
 #else
     wxT( "/usr/share/kicad/" ),
     wxT( "/usr/local/share/kicad/" ),
-    wxT( "/usr/local/kicad/" ),             // default install for "universal tarballs" and build for a server
+    wxT( "/usr/local/kicad/share/" ),       // default data path for "universal tarballs" and build for a server (new)
+    wxT( "/usr/local/kicad/" ),             // default data path for "universal tarballs" and build for a server (old)
 #endif
     wxT( "end_list" )                       // End of list symbol, do not change
 };
