@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-21 04:30+0100\n"
-"PO-Revision-Date: 2008-06-21 04:57+0100\n"
+"POT-Creation-Date: 2008-06-22 19:30+0100\n"
+"PO-Revision-Date: 2008-06-22 22:50+0100\n"
 "Last-Translator: Mateusz Skowroński <skowri@gmail.com>\n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Powiększ"
 
 #: kicad/3d-viewer/3d_canvas.cpp:333
 msgid "Zoom -"
-msgstr "Zmniejsz"
+msgstr "Pomniejsz"
 
 #: kicad/3d-viewer/3d_canvas.cpp:339
 msgid "Top View"
@@ -92,7 +92,7 @@ msgstr "Powiększ (F1)"
 #: kicad/eeschema/tool_viewlib.cpp:71
 #: kicad/cvpcb/displayframe.cpp:126
 msgid "zoom - (F2)"
-msgstr "Zmniejsz (F2)"
+msgstr "Pomniejsz (F2)"
 
 #: kicad/3d-viewer/3d_toolbar.cpp:49
 #: kicad/eeschema/tool_viewlib.cpp:75
@@ -264,11 +264,11 @@ msgstr "Tekst:"
 msgid "Help file %s not found"
 msgstr "Nie znaleziono pliku pomocy %s"
 
-#: kicad/common/gestfich.cpp:668
+#: kicad/common/gestfich.cpp:679
 msgid "No default editor found, you must choose it"
-msgstr "Nie znaleziono domyślnego edytora, musisz go wybrać"
+msgstr "Nie znaleziono domyślnego edytora. Musisz go wybrać."
 
-#: kicad/common/gestfich.cpp:674
+#: kicad/common/gestfich.cpp:685
 #: kicad/kicad/preferences.cpp:97
 msgid "Prefered Editor:"
 msgstr "Preferowany edytor:"
@@ -326,7 +326,7 @@ msgstr "Pokaż bieżącą konfigurację klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:623
 msgid "Create Hotkey config file"
-msgstr "Utwórz plik konfiguracyjny klawiszy skrótów"
+msgstr "Utwórz plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:624
 msgid "Create or Recreate the hotkey config file from current hotkey list"
@@ -334,7 +334,7 @@ msgstr "Utwórz lub odtwórz plik konfiguracji klawiszy skrótów z bieżącej l
 
 #: kicad/common/hotkeys_basic.cpp:630
 msgid "Reread Hotkey config file"
-msgstr "Wczytaj ponownie plik konfiguracyjny klawiszy skrótów"
+msgstr "Wczytaj ponownie plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:631
 msgid "Reread the hotkey config file"
@@ -342,11 +342,11 @@ msgstr "Wczytaj ponownie plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:635
 msgid "Edit Hotkey config file"
-msgstr "Edytuj plik konfiguracyjny klawiszy skrótów"
+msgstr "Edytuj plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:636
 msgid "Run the text editor and edit the hotkey config file"
-msgstr "Uruchom edytor tekstu, aby edytować plik konfiguracyjny klawiszy skrótów"
+msgstr "Uruchom edytor tekstu, aby edytować plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:642
 msgid "home directory"
@@ -354,7 +354,7 @@ msgstr "Katalog domowy"
 
 #: kicad/common/hotkeys_basic.cpp:643
 msgid "Use home directory to load or store Hotkey config files"
-msgstr "Użyj katalogu domowego, aby zapisywać lub wczytywać plik konfiguracyjny klawiszy skrótów"
+msgstr "Użyj katalogu domowego, aby zapisywać lub wczytywać plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:648
 msgid "kicad/template directory"
@@ -362,15 +362,15 @@ msgstr "Katalog kicad/template"
 
 #: kicad/common/hotkeys_basic.cpp:649
 msgid "Use kicad/template directory to load or store Hotkey config files"
-msgstr "Użyj katalogu kicad/template, aby zapisywać lub wczytywać plik konfiguracyjny klawiszy skrótów"
+msgstr "Użyj katalogu kicad/template, aby zapisywać lub wczytywać plik konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:655
 msgid "Hotkey config location"
-msgstr "Położenie pliku konfiguracyjnego klawiszy skrótów"
+msgstr "Położenie pliku konfiguracji klawiszy skrótów"
 
 #: kicad/common/hotkeys_basic.cpp:657
 msgid "Hotkey config file location selection (home directory or kicad tree)"
-msgstr "Wybór położenia pliku konfiguracyjnego klawiszy skrótów (katalog domowy lub drzewo katalogów kicada)"
+msgstr "Wybór położenia pliku konfiguracji klawiszy skrótów (katalog domowy lub drzewo katalogów kicada)"
 
 #: kicad/common/common.cpp:84
 msgid " (\"):"
@@ -556,7 +556,7 @@ msgstr "Plik dokumentacji "
 #: kicad/pcbnew/librairi.cpp:256
 #: kicad/pcbnew/files.cpp:56
 msgid " not found"
-msgstr " nie znaleziono"
+msgstr " nie znaleziony"
 
 #: kicad/common/eda_doc.cpp:208
 msgid " Cannot find the PDF viewer (kpdf, gpdf, konqueror or xpdf) in /usr/bin/"
@@ -990,7 +990,7 @@ msgstr "Plik"
 
 #: kicad/eeschema/eeconfig.cpp:73
 msgid "not found"
-msgstr "nie znaleziono"
+msgstr "nie znaleziony"
 
 #: kicad/eeschema/eeconfig.cpp:199
 #: kicad/cvpcb/cfg.cpp:78
@@ -1071,7 +1071,7 @@ msgstr " Znaleziony w "
 
 #: kicad/eeschema/find.cpp:621
 msgid " Not Found"
-msgstr " Nie znaleziono"
+msgstr " Nie znaleziony"
 
 #: kicad/eeschema/find.cpp:680
 #: kicad/eeschema/find.cpp:745
@@ -1120,7 +1120,7 @@ msgstr " został stworzony w nowszej wersji Eeschema i może wczytać się z bł
 
 #: kicad/eeschema/load_one_schematic_file.cpp:133
 msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
-msgstr " został stworzony w starszej wersji Eeschema. Zostanie zachowany w nowym formacie, gdy ponownie zapiszesz plik."
+msgstr " został stworzony w starszej wersji Eeschema. Plik zostanie zachowany w nowym formacie, gdy ponownie go zapiszesz."
 
 #: kicad/eeschema/load_one_schematic_file.cpp:484
 msgid "Done Loading "
@@ -1298,7 +1298,7 @@ msgstr "Nazwa pliku:"
 
 #: kicad/eeschema/sheet.cpp:168
 msgid "Sheetname:"
-msgstr "Nazwa arkusza"
+msgstr "Nazwa arkusza:"
 
 #: kicad/eeschema/sheet.cpp:266
 msgid "No Filename! Aborted"
@@ -1861,7 +1861,7 @@ msgstr "Skala 1:1"
 
 #: kicad/eeschema/tool_viewlib.cpp:84
 msgid "Show as \"De Morgan\" normal part"
-msgstr "Pokaż jako normalną część \"De Morgana\""
+msgstr "Pokaż jako normalny element \"De Morgana\""
 
 #: kicad/eeschema/tool_viewlib.cpp:88
 msgid "Show as \"De Morgan\" convert part"
@@ -1969,7 +1969,7 @@ msgstr "Kopiuj do schowka"
 
 #: kicad/eeschema/menubar.cpp:99
 msgid "Export drawings to clipboard"
-msgstr "Eksportuj obrazy do schowka"
+msgstr "Kopiuj obrazy do schowka"
 
 #: kicad/eeschema/menubar.cpp:105
 #: kicad/pcbnew/menubarpcb.cpp:89
@@ -2145,7 +2145,7 @@ msgstr "&Opcje"
 
 #: kicad/eeschema/menubar.cpp:372
 msgid "Select general options..."
-msgstr "Wybierz główne opcje..."
+msgstr "Wybierz opcje główne..."
 
 #: kicad/eeschema/menubar.cpp:382
 #: kicad/pcbnew/menubarpcb.cpp:200
@@ -2228,7 +2228,7 @@ msgstr "Nie znaleziono biblioteki <%s>"
 
 #: kicad/eeschema/eelibs_read_libraryfiles.cpp:115
 msgid "Start loading schematic libs"
-msgstr "Rozpocznij wczytywanie bibliotek schematów"
+msgstr "Rozpocznij wczytywanie bibliotek schematu"
 
 #: kicad/eeschema/eelibs_read_libraryfiles.cpp:302
 #: kicad/eeschema/eelibs_read_libraryfiles.cpp:309
@@ -2351,7 +2351,7 @@ msgstr "Pliki netlist:"
 
 #: kicad/eeschema/netlist_control.cpp:471
 msgid "Must be Annotated, Continue ?"
-msgstr "Musi mieć numerację, kontynuować?"
+msgstr "Musi mieć numerację. Kontynuować?"
 
 #: kicad/eeschema/netlist_control.cpp:629
 msgid "Error. You must provide a command String"
@@ -2363,7 +2363,7 @@ msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
 
 #: kicad/eeschema/eeschema.cpp:54
 msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema jest już uruchomiony, kontynuować?"
+msgstr "Eeschema jest już uruchomiony. Kontynuować?"
 
 #: kicad/eeschema/backanno.cpp:136
 msgid "Load Stuff File"
@@ -2371,7 +2371,7 @@ msgstr "Otwórz plik elementów"
 
 #: kicad/eeschema/backanno.cpp:157
 msgid "Set the Footprint Field to Visible ?"
-msgstr "Czy ustawić pole obudowy jako widoczne?"
+msgstr "Czy pole obudowy ma być widoczne?"
 
 #: kicad/eeschema/backanno.cpp:158
 msgid "Field Display Option"
@@ -2469,7 +2469,7 @@ msgstr "Sprawdź czy są zduplikowane piny"
 
 #: kicad/eeschema/tool_lib.cpp:186
 msgid "show as \"De Morgan\" normal part"
-msgstr "Pokaż jako normalną część \"De Morgana\""
+msgstr "Pokaż jako normalny element \"De Morgana\""
 
 #: kicad/eeschema/tool_lib.cpp:192
 msgid "show as \"De Morgan\" convert part"
@@ -3032,15 +3032,15 @@ msgstr " Element %d"
 
 #: kicad/eeschema/pinedit.cpp:1009
 msgid "  Convert"
-msgstr "  Skonwertowana"
+msgstr "  Skonwertowany"
 
 #: kicad/eeschema/pinedit.cpp:1011
 msgid "  Normal"
-msgstr " Normalna"
+msgstr " Normalny"
 
 #: kicad/eeschema/files-io.cpp:72
 msgid "Clear Schematic Hierarchy (modified!)?"
-msgstr "Wyczyścić hierarchię schematu (zmodyfikowano!)?"
+msgstr "Wyczyścić hierarchię schematu (zmodyfikowana!)?"
 
 #: kicad/eeschema/files-io.cpp:130
 msgid ""
@@ -3061,7 +3061,7 @@ msgstr "Nawigator"
 
 #: kicad/eeschema/hierarch.cpp:131
 msgid "Root"
-msgstr "Root"
+msgstr "Korzeń"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:105
 #: kicad/gerbview/reglage.cpp:90
@@ -3380,8 +3380,8 @@ msgid ""
 "Note: this new library will be available only if it is loaded by eeschema.\n"
 "Modify eeschema config if you want use it."
 msgstr ""
-"Uwaga: Ta nowa biblioteka będzie dostępna tylko wtedy, gdy zostanie wczytana przez Eeschema.\n"
-"Zmień konfigurację Eeschema jeśli chcesz używać tej biblioteki."
+"Uwaga: Nowa biblioteka będzie dostępna tylko wtedy, gdy zostanie wczytana przez Eeschema.\n"
+"Zmień konfigurację Eeschema jeśli chcesz jej używać."
 
 #: kicad/eeschema/lib_export.cpp:149
 msgid "Error while create "
@@ -3487,7 +3487,7 @@ msgid ""
 "Part is a POWER, value cannot be modified!\n"
 "You must create a new power"
 msgstr ""
-"Ta część jest zasilaniem i nie może być zmieniana!\n"
+"Ten element jest zasilaniem i nie może być zmieniany!\n"
 "Musisz utworzyć nowe zasilanie."
 
 #: kicad/eeschema/edit_component_in_schematic.cpp:581
@@ -3621,7 +3621,7 @@ msgstr "Obudowy"
 #: kicad/eeschema/edit_component_in_lib.cpp:401
 #: kicad/eeschema/dialog_create_component.cpp:183
 msgid "As Convert"
-msgstr "Jako skonwertowana"
+msgstr "Jako skonwertowany"
 
 #: kicad/eeschema/edit_component_in_lib.cpp:407
 msgid "Show Pin Num"
@@ -4581,7 +4581,7 @@ msgstr "   Skonwertowany"
 
 #: kicad/eeschema/libedit.cpp:53
 msgid "   Normal"
-msgstr "  Normalny"
+msgstr "   Normalny"
 
 #: kicad/eeschema/libedit.cpp:56
 msgid "  (Power Symbol)"
@@ -4979,7 +4979,7 @@ msgstr "Narzędzie "
 # sprawdzić
 #: kicad/gerbview/tool_gerber.cpp:366
 msgid "Add Flashes"
-msgstr "Dodaj \"Flashes\""
+msgstr "Dodaj \"flashes\""
 
 #: kicad/gerbview/tool_gerber.cpp:372
 msgid "Add Lines"
@@ -5037,7 +5037,7 @@ msgstr "Nie pokazuj"
 #: kicad/gerbview/options.cpp:177
 #: kicad/pcbnew/dialog_general_options.cpp:291
 msgid "Display Polar Coord"
-msgstr "Pokazuj współrzędne polarne"
+msgstr "Pokaż współrzędne polarne"
 
 #: kicad/gerbview/options.cpp:185
 #: kicad/pcbnew/set_grid.cpp:147
@@ -5049,7 +5049,7 @@ msgstr "Cale"
 #: kicad/gerbview/options.cpp:186
 #: kicad/pcbnew/dialog_general_options.cpp:300
 msgid "millimeters"
-msgstr "milimetry"
+msgstr "Milimetry"
 
 #: kicad/gerbview/options.cpp:193
 #: kicad/pcbnew/dialog_general_options.cpp:309
@@ -5389,7 +5389,7 @@ msgstr "Netlista i lista elementów (Cmp) zostały zmienione. Zapisać przed zak
 
 #: kicad/cvpcb/cvframe.cpp:199
 msgid "Problem when saving files, Exit anyway"
-msgstr "Problem podczas zapisu pliku, kończę mimo to"
+msgstr "Problem podczas zapisu pliku. Kończę mimo to"
 
 #: kicad/cvpcb/cvframe.cpp:326
 msgid "Delete selections"
@@ -5402,7 +5402,7 @@ msgstr "Czcionka dla okien dialogowych"
 
 #: kicad/cvpcb/cvframe.cpp:426
 msgid "font for Lists"
-msgstr "czcionka dla list"
+msgstr "Czcionka dla list"
 
 #: kicad/cvpcb/cvframe.cpp:428
 #: kicad/share/drawframe.cpp:138
@@ -5466,7 +5466,7 @@ msgstr "Nie znaleziono pliku biblioteki <%s>"
 #: kicad/cvpcb/listlib.cpp:79
 #, c-format
 msgid "Library file <%s> is not a module library"
-msgstr "Plik biblioteczny <%s> nie jest biblioteką modułów"
+msgstr "Plik biblioteki <%s> nie jest biblioteką modułów"
 
 #: kicad/cvpcb/tool_cvpcb.cpp:32
 #: kicad/cvpcb/tool_cvpcb.cpp:110
@@ -5581,7 +5581,7 @@ msgstr "%s %s pin %s : Różne sieci"
 
 #: kicad/cvpcb/cvpcb.cpp:41
 msgid "Cvpcb is already running, Continue?"
-msgstr "Cvpcb jest już uruchomiony, kontynuować?"
+msgstr "Cvpcb jest już uruchomiony. Kontynuować?"
 
 #: kicad/cvpcb/setvisu.cpp:31
 #: kicad/pcbnew/class_edge_mod.cpp:286
@@ -5760,7 +5760,7 @@ msgid ""
 "Only components with this option are put in the footprint position list file"
 msgstr ""
 "Użyj tego atrybutu dla elementów SMD.\n"
-"Jedynie elementy z tą opcją są umieszczone na liście obudów."
+"Tylko elementy z tą opcją są umieszczone na liście obudów."
 
 #: kicad/pcbnew/dialog_edit_module.cpp:297
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
@@ -5966,7 +5966,7 @@ msgstr "Przesunąć moduły?"
 
 #: kicad/pcbnew/automove.cpp:221
 msgid "Autoplace modules: No boad edges detected, unable to place modules"
-msgstr "Automatyczne rozmieszczanie modułów: Nie wykryto krawędzi płytki, nie mogę rozmieścić modułów"
+msgstr "Automatyczne rozmieszczanie modułów: Nie wykryto krawędzi płytki. Nie mogę rozmieścić modułów"
 
 #: kicad/pcbnew/automove.cpp:344
 #, c-format
@@ -6006,7 +6006,7 @@ msgstr "Eksportuj moduł:"
 #: kicad/pcbnew/librairi.cpp:441
 #, c-format
 msgid "File %s exists, OK to replace ?"
-msgstr "Plik %s istnieje, czy mam go zastąpić?"
+msgstr "Plik %s istnieje. Czy mam go zastąpić?"
 
 #: kicad/pcbnew/librairi.cpp:224
 #, c-format
@@ -6034,7 +6034,7 @@ msgstr "Nie znaleziono modułu [%s]"
 #: kicad/pcbnew/librairi.cpp:390
 #, c-format
 msgid "Component %s deleted in library %s"
-msgstr "Element %s wykasowany z biblioteki %s"
+msgstr "Element %s usunięty z biblioteki %s"
 
 #: kicad/pcbnew/librairi.cpp:416
 msgid " No modules to archive!"
@@ -6061,7 +6061,7 @@ msgstr "Plik %s nie jest plikiem biblioteki Eeschema"
 
 #: kicad/pcbnew/librairi.cpp:576
 msgid "Module exists Line "
-msgstr "Moduł istnieje Linia "
+msgstr "Moduł istnieje. Linia "
 
 #: kicad/pcbnew/librairi.cpp:695
 msgid "Component "
@@ -6169,7 +6169,7 @@ msgstr "Znajdź następny znacznik"
 
 #: kicad/pcbnew/editedge.cpp:162
 msgid "Copper layer global delete not allowed!"
-msgstr "Globalne kasowanie po stronie ścieżek jest niedozwolone!"
+msgstr "Globalne usuwanie po stronie ścieżek jest niedozwolone!"
 
 #: kicad/pcbnew/editedge.cpp:168
 msgid "Segment is being edited"
@@ -6199,7 +6199,7 @@ msgstr " (cale):"
 #: kicad/pcbnew/muonde.cpp:202
 #: kicad/pcbnew/gen_self.h:231
 msgid "Incorrect number, abort"
-msgstr "Nieprawidłowy numer, przerywam"
+msgstr "Nieprawidłowy numer. Przerywam"
 
 #: kicad/pcbnew/muonde.cpp:198
 msgid "Angle (0.1deg):"
@@ -6219,7 +6219,7 @@ msgstr "Symetryczny"
 
 #: kicad/pcbnew/muonde.cpp:360
 msgid "Mirrored"
-msgstr "Odbite"
+msgstr "Odbity"
 
 #: kicad/pcbnew/muonde.cpp:362
 msgid "Shape Option"
@@ -6333,7 +6333,7 @@ msgstr "Czy usunąć obudowy nie będące na netliście?"
 #: kicad/pcbnew/netlist.cpp:497
 #, c-format
 msgid "Cmp %s: Mismatch! module is [%s] and netlist said [%s]\n"
-msgstr "Element %s: Niedopasowanie! Moduł to [%s] a netlista mówi [%s]\n"
+msgstr "Element %s: Niedopasowanie! Moduł to [%s], a netlista mówi [%s]\n"
 
 #: kicad/pcbnew/netlist.cpp:538
 #, c-format
@@ -6380,7 +6380,7 @@ msgstr "Brak w netliście:"
 #: kicad/pcbnew/netlist.cpp:901
 #, c-format
 msgid "File <%s> not found, use Netlist for lib module selection"
-msgstr "Nie znaleziono pliku <%s>, użyj netlisty do wybrania biblioteki modułu"
+msgstr "Nie znaleziono pliku <%s>. Użyj netlisty do wybrania biblioteki modułu"
 
 #: kicad/pcbnew/netlist.cpp:1036
 #, c-format
@@ -6546,7 +6546,7 @@ msgstr "Nie pokazuj współrzędnych polarnych"
 
 #: kicad/pcbnew/pcbframe.cpp:397
 msgid "Display Polar Coords"
-msgstr "Pokazuj współrzędne polarne"
+msgstr "Pokaż współrzędne polarne"
 
 #: kicad/pcbnew/pcbframe.cpp:411
 msgid "General ratsnest not show"
@@ -7244,6 +7244,7 @@ msgstr "Widok &3D"
 msgid "Delete unconnected tracks:"
 msgstr "Usuń niepołączone ścieżki:"
 
+# sprawdzić
 #: kicad/pcbnew/clean.cpp:198
 msgid "ViaDef"
 msgstr "ViaDef"
@@ -7377,7 +7378,7 @@ msgstr "Czy otworzyć plik kopii zapasowej "
 
 #: kicad/pcbnew/files.cpp:140
 msgid "Board Modified: Continue ?"
-msgstr "Płytka została zmieniona: kontynuować?"
+msgstr "Płytka została zmieniona. Kontynuować?"
 
 #: kicad/pcbnew/files.cpp:160
 msgid "Load board files:"
@@ -7389,7 +7390,7 @@ msgstr "Ten plik został stworzony w nowszej wersji Pcbnew i może wczytać się
 
 #: kicad/pcbnew/files.cpp:210
 msgid "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."
-msgstr "Ten plik został stworzony w starszej wersji Pcbnew. Zostanie zachowany w nowym formacie, gdy ponownie zapiszesz plik."
+msgstr "Ten plik został stworzony w starszej wersji Pcbnew. Plik zostanie zachowany w nowym formacie, gdy ponownie go zapiszesz."
 
 #: kicad/pcbnew/files.cpp:289
 msgid "Save board files:"
@@ -7401,7 +7402,7 @@ msgstr "Ostrzeżenie: nie mogę utworzyć pliku kopii zapasowej "
 
 #: kicad/pcbnew/files.cpp:362
 msgid "Backup file: "
-msgstr "Plik zapasowy: "
+msgstr "Plik kopii zapasowej: "
 
 #: kicad/pcbnew/files.cpp:366
 msgid "Wrote board file: "
@@ -7486,7 +7487,7 @@ msgstr "Błąd DRC: punkt początkowy jest wewnątrz lub za blisko innego obszar
 
 #: kicad/pcbnew/zones_by_polygon.cpp:628
 msgid "DRC error: closing this area creates a drc error with an other area"
-msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd drc z innym obszarem"
+msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd DRC z innym obszarem"
 
 #: kicad/pcbnew/zones_by_polygon.cpp:857
 msgid "No Net"
@@ -7528,15 +7529,15 @@ msgstr "Przesunięcie Y"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:278
 msgid "horiz"
-msgstr "poziomo"
+msgstr "Poziomo"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:279
 msgid "vertical"
-msgstr "pionowo"
+msgstr "Pionowo"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:287
 msgid "show"
-msgstr "Pokazuj"
+msgstr "Pokaż"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:288
 msgid "no show"
@@ -7809,7 +7810,7 @@ msgstr "Kontrola reguł projektowych PCB"
 
 #: kicad/pcbnew/tool_pcb.cpp:293
 msgid "Mode Module: Manual and Automatic Move or Place for modules"
-msgstr "Tryb modułu: przenoś/umieszczaj moduły ręcznie lub automatycznie"
+msgstr "Tryb modułu: automatyczne lub ręczne przenoszenie/umieszczanie modułów"
 
 #: kicad/pcbnew/tool_pcb.cpp:296
 msgid "Mode Track and Autorouting"
@@ -7976,7 +7977,7 @@ msgstr "Otwory zdefiniowane"
 
 #: kicad/pcbnew/dialog_display_options.cpp:209
 msgid "Show Via Holes"
-msgstr "Pokazuj otwory przelotek"
+msgstr "Pokaż otwory przelotek"
 
 #: kicad/pcbnew/dialog_display_options.cpp:213
 msgid "Modules"
@@ -8335,11 +8336,11 @@ msgstr "Nowa Szerokość (1/10000\"):"
 
 #: kicad/pcbnew/edgemod.cpp:253
 msgid "Incorrect number, no change"
-msgstr "Nieprawidłowy numer, bez zmian"
+msgstr "Nieprawidłowy numer. Bez zmian"
 
 #: kicad/pcbnew/pcbnew.cpp:42
 msgid "Pcbnew is already running, Continue?"
-msgstr "Pcbnew jest już uruchomione, kontynuować?"
+msgstr "Pcbnew jest już uruchomione. Kontynuować?"
 
 #: kicad/pcbnew/router.cpp:60
 msgid "Unable to create temporary file "
@@ -8514,7 +8515,7 @@ msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
 
 #: kicad/pcbnew/editpads.cpp:493
 msgid "Unknown netname, no change"
-msgstr "Nieznana nazwa sieci, bez zmian"
+msgstr "Nieznana nazwa sieci. Bez zmian"
 
 #: kicad/pcbnew/surbrill.cpp:37
 msgid "Filter for net names:"
@@ -8554,7 +8555,7 @@ msgstr "Nie mogę przeciągnąć tego segmentu: dwa współliniowe segmenty"
 
 #: kicad/pcbnew/class_marker.cpp:137
 msgid "ErrType"
-msgstr "TypBłędu"
+msgstr "Typ błędu"
 
 #: kicad/pcbnew/dialog_general_options.cpp:324
 msgid "Number of Layers:"
@@ -8582,7 +8583,7 @@ msgstr "Pokaż połączenia modułów"
 
 #: kicad/pcbnew/dialog_general_options.cpp:408
 msgid "Tracks Auto Del"
-msgstr "Automatyczne kasowanie ścieżek"
+msgstr "Automatyczne usuwanie ścieżek"
 
 #: kicad/pcbnew/dialog_general_options.cpp:415
 msgid "Track 45 Only"
@@ -8639,7 +8640,7 @@ msgstr "Netlista: "
 
 #: kicad/pcbnew/ioascii.cpp:167
 msgid "Error: Unexpected end of file !"
-msgstr "Błąd: Nieoczekiwany koniec pliku !"
+msgstr "Błąd: Nieoczekiwany koniec pliku!"
 
 #: kicad/pcbnew/specctra.cpp:133
 #: kicad/pcbnew/specctra.cpp:140
@@ -8678,7 +8679,7 @@ msgstr "Obudowy, które nie zostały dodane będą przesunięte"
 
 #: kicad/pcbnew/autoplac.cpp:402
 msgid "No edge PCB, Unknown board size!"
-msgstr "Brak krawędzi PCB, nieznany rozmiar płytki!"
+msgstr "Brak krawędzi PCB. Nieznany rozmiar płytki!"
 
 #: kicad/pcbnew/autoplac.cpp:423
 msgid "Cols"
@@ -9352,7 +9353,7 @@ msgstr "Zachowaj lub usuń błędne ścieżki po zmianie w netliście"
 
 #: kicad/pcbnew/dialog_netlist.cpp:197
 msgid "Display Warnings"
-msgstr "Pokazuj ostrzeżenia"
+msgstr "Pokaż ostrzeżenia"
 
 #: kicad/pcbnew/dialog_netlist.cpp:201
 msgid "Remove Extra Footprints"
@@ -10823,7 +10824,7 @@ msgstr "Zakotwiczenia"
 
 #: kicad/pcbnew/set_color.h:432
 msgid "Show Noconnect"
-msgstr "Pokazuj \"niepołączone\""
+msgstr "Pokaż \"niepołączone\""
 
 #: kicad/pcbnew/set_color.h:441
 msgid "Show Modules Cmp"
