@@ -47,10 +47,10 @@ If windows, then try running g++ and make from within your msys bash shell.
 
 4)  Install wxWidgets [and build it if on windows].
 If on windows, download
-http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.7.zip or a newer version.
+http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.8.zip or a newer version.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
-will be.  It must be where you can access it from within the msys environment, 
-such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide 
+will be.  It must be where you can access it from within the msys environment,
+such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide
 access to this build directory from msys.  (Note that if you want you can build
 a "debug" version of the wxWidgets library at this point, instead of the release
 version, or in addition to the the release version.)
@@ -72,14 +72,14 @@ and then:
     make
     make install
 
-I think the default is to install into /usr/local/wxMSW-2.8.7.  You can probably
+I think the default is to install into /usr/local/wxMSW-2.8.8.  You can probably
 pass --prefix=<wxInstallDir> to configure above to change where "make install"
 puts everything.  We will refer to <wxInstallDir> again below.  Without the
 --prefix=<wxInstallDir> passed to configure, <wxInstallDir> will likely be
-    /usr/local/wxMSW-2.8.7
+    /usr/local/wxMSW-2.8.8
 
 Verify that wx-config is in your path.  Modify your PATH environment variable
-if need be so you can run wx-config from a command prompt.  You may have to 
+if need be so you can run wx-config from a command prompt.  You may have to
 restart your msys shell, depending on how you modify your PATH.
 
 
@@ -94,8 +94,8 @@ your path by running it from a command prompt. Linux users then go to next step.
 If on windows, download http://www.zlib.net/zlib123.zip or a newer version.
 Start msys so you have a bash shell. Decide where your zlib build directory
 will be. It must be where you can access it from within the msys environment,
-such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide 
-access to this build directory from msys. Unzip the zlib123.zip file into this 
+such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide
+access to this build directory from msys. Unzip the zlib123.zip file into this
 build directory. Change directories into there, and then:
     ./configure
     make
@@ -113,7 +113,7 @@ Note (JP Charras):
 -----------------------------------------------------------------------------
 
 6)  Install CMAKE.
-If windows, download the installation binary for windows from cmake.org.  
+If windows, download the installation binary for windows from cmake.org.
 Install that and choose to add cmake to your path during installation.  You
 will have to restart and command shells for the new path to take effect.
 Verify that cmake is in your path by trying to run it from a command prompt.
@@ -130,14 +130,14 @@ command prompt.
 If windows, well I'm guessing, so somebody please try these two options and
 correct this text please according to which ever is easier:
 (optionA) Go to http://sourceforge.net/project/showfiles.php?group_id=7586
-and download boost_1_34_1.zip or later and unzip it so as to put the files 
+and download boost_1_34_1.zip or later and unzip it so as to put the files
 into C:\Program Files\boost\boost_1_34_1
-(optionB) 
+(optionB)
 Go to http://www.boost-consulting.com/products/free
 and download the http://www.boost-consulting.com/boost_1_34_1_setup.exe
 file and run it.
 
-If linux, and using a GCC earlier than 4.2, then install the 
+If linux, and using a GCC earlier than 4.2, then install the
 "Boost C++ Libraries development files" or similarly named package using your
 package manager. Note that if you are using gcc 4.2 or later, there were
 incompatibilities that exist between boost 1.34.1 and gcc 4.2. So in this case,
@@ -148,12 +148,12 @@ HEAD copy which overcomes the gcc 4.2 incompatibility, specifically with
 -----------------------------------------------------------------------------
 
 8)  Install the kicad source tree.
-You can use the subversion repository or a tar file for this.  See the wiki. 
+You can use the subversion repository or a tar file for this.  See the wiki.
 
 -----------------------------------------------------------------------------
 
 9)  Use cmake to create the kicad makefiles.
-If windows, go into your msys shell.  Linux and windows users both then make 
+If windows, go into your msys shell.  Linux and windows users both then make
 two "out of source" build directories:
     cd <kicadSource>
     mkdir -p build/release
@@ -187,7 +187,7 @@ So point your Boost_INCLUDE_DIR:PATH= variable to a directory above the
 -----------------------------------------------------------------------------
 
 10)  Use make to build and install kicad.
-You compile Kicad here.  You will only need to do step 8) again when one of the 
+You compile Kicad here.  You will only need to do step 8) again when one of the
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
     cd <kicadSource>/build/release
@@ -229,20 +229,20 @@ These should be set from command line:
    Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
 
  wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
-   
+
 
  CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
    Turns ON/OFF verbose build messages.
    You can also pass VERBOSE=1 to make for the same effect.
 
  CMAKE_INSTALL_PREFIX (OPTIONAL)
-   
+
 
  KICAD_MINIZIP ON/OFF
-   
+
 
  KICAD_PYTHON ON/OFF
-   
+
 
 -----------------------------------------------------------------------------
 

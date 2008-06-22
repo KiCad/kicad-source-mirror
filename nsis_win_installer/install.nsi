@@ -17,13 +17,15 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2008.06.15"
+!define PRODUCT_VERSION "2008.06.22"
 !define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
+!define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
 !define COPYRIGHT "Jean-Pierre Charras"
 !define COMMENTS ""
 !define HELP_WEB_SITE "http://groups.yahoo.com/group/kicad-users/"
+!define DEVEL_WEB_SITE "http://groups.yahoo.com/group/kicad-devel/"
 !define WINGS3D_WEB_SITE "http://www.wings3d.com"
 
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -108,53 +110,52 @@ Section $(TITLE_SEC01) SEC01
   SetOverwrite try
   SetOutPath "$INSTDIR"
   File /nonfatal "..\author.txt"
-  File /nonfatal "..\contrib.txt"
   File /nonfatal "..\copyright.txt"
   File /nonfatal "..\gpl.txt"
   File /nonfatal "..\licendoc.txt"
-  File /nonfatal "..\news.txt"
-  File /nonfatal "..\version.txt"
-  File /nonfatal "..\doc_conv_orcad_to_kicad.txt"
-  File /nonfatal "..\doc_conv_orcad_to_kicad_spanish.txt"
-  SetOutPath "$INSTDIR\template"
-  File /nonfatal /r "..\template\*"
+  SetOutPath "$INSTDIR\share\template"
+  File /nonfatal /r "..\share\template\*"
   SetOutPath "$INSTDIR\bin"
   File /r "..\bin\*"
-  SetOutPath "$INSTDIR\internat"
-  File /r "..\internat\*"
+  SetOutPath "$INSTDIR\share\internat"
+  File /r "..\share\internat\*"
 SectionEnd
 
 Section $(TITLE_SEC02) SEC02
   SetOverwrite try
-  SetOutPath "$INSTDIR\library"
-  File /nonfatal /r "..\library\*"
-  SetOutPath "$INSTDIR\modules"
-  File /nonfatal /r "..\modules\*"
+  SetOutPath "$INSTDIR\share\library"
+  File /nonfatal /r "..\share\library\*"
+  SetOutPath "$INSTDIR\share\modules"
+  File /nonfatal /r "..\share\modules\*"
 SectionEnd
 
 Section $(TITLE_SEC03) SEC03
   SetOverwrite try
-  SetOutPath "$INSTDIR\demos"
-  File /nonfatal /r "..\demos\*"
-  SetOutPath "$INSTDIR\tutorial"
-  File /nonfatal /r "..\tutorial\*"
+  SetOutPath "$INSTDIR\share\demos"
+  File /nonfatal /r "..\share\demos\*"
+  SetOutPath "$INSTDIR\doc\tutorial"
+  File /nonfatal /r "..\doc\tutorial\*"
 SectionEnd
 
 Section $(TITLE_SEC04) SEC04
   SetOverwrite try
-  SetOutPath "$INSTDIR\help"
-  File /nonfatal /r "..\help\*"
+  SetOutPath "$INSTDIR\doc\help"
+  File /nonfatal /r "..\doc\help\*"
 SectionEnd
 
 Section -CreateShortcuts
   SetOutPath $INSTDIR
   WriteIniStr "$INSTDIR\HomePage.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  WriteIniStr "$INSTDIR\SourceForge.url" "InternetShortcut" "URL" "${SOURCEFORGE_WEB_SITE}"
   WriteIniStr "$INSTDIR\UserGroup.url" "InternetShortcut" "URL" "${HELP_WEB_SITE}"
+  WriteIniStr "$INSTDIR\DevelGroup.url" "InternetShortcut" "URL" "${DEVEL_WEB_SITE}"
   WriteIniStr "$INSTDIR\Wings3D.url" "InternetShortcut" "URL" "${WINGS3D_WEB_SITE}"
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\KiCad"
   CreateShortCut "$SMPROGRAMS\KiCad\Home Page.lnk" "$INSTDIR\HomePage.url"
+  CreateShortCut "$SMPROGRAMS\KiCad\Kicad SourceForge.lnk" "$INSTDIR\SourceForge.url"
   CreateShortCut "$SMPROGRAMS\KiCad\User Group.lnk" "$INSTDIR\UserGroup.url"
+  CreateShortCut "$SMPROGRAMS\KiCad\Devel Group.lnk" "$INSTDIR\DevelGroup.url"
   CreateShortCut "$SMPROGRAMS\KiCad\Uninstall.lnk" "$INSTDIR\uninstaller.exe"
   CreateShortCut "$SMPROGRAMS\KiCad\KiCad.lnk" "$INSTDIR\bin\kicad.exe"
   CreateShortCut "$SMPROGRAMS\KiCad\Wings3D.lnk" "$INSTDIR\Wings3D.url"
@@ -174,7 +175,7 @@ Section -CreateAddRemoveEntry
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "HelpLink" "${HELP_WEB_SITE}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "URLUpdateInfo" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}" "InstallLocation" "$INSTDIR"
-  
+
   WriteUninstaller "$INSTDIR\uninstaller.exe"
 SectionEnd
 
@@ -207,35 +208,42 @@ Section Uninstall
   ;remove start menu shortcuts and web page links
   SetShellVarContext all
   Delete "$SMPROGRAMS\KiCad\Home Page.lnk"
-  Delete "$SMPROGRAMS\KiCad\User Group.lnk" 
-  Delete "$SMPROGRAMS\KiCad\Uninstall.lnk" 
+  Delete "$SMPROGRAMS\KiCad\User Group.lnk"
+  Delete "$SMPROGRAMS\KiCad\Uninstall.lnk"
   Delete "$SMPROGRAMS\KiCad\KiCad.lnk"
   Delete "$SMPROGRAMS\KiCad\Wings3D.lnk"
-  Delete "$DESKTOP\KiCad.lnk" 
+  Delete "$DESKTOP\KiCad.lnk"
   Delete "$INSTDIR\Wings3D.url"
   Delete "$INSTDIR\HomePage.url"
   Delete "$INSTDIR\UserGroup.url"
   RMDir "$SMPROGRAMS\KiCad"
-  
+
   ;remove all program files now
+  RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\library"
   RMDir /r "$INSTDIR\modules"
   RMDir /r "$INSTDIR\template"
-  RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\internat"
   RMDir /r "$INSTDIR\demos"
   RMDir /r "$INSTDIR\tutorial"
   RMDir /r "$INSTDIR\help"
+  RMDir /r "$INSTDIR\share\library"
+  RMDir /r "$INSTDIR\share\modules"
+  RMDir /r "$INSTDIR\share\template"
+  RMDir /r "$INSTDIR\share\internat"
+  RMDir /r "$INSTDIR\share\demos"
+  RMDir /r "$INSTDIR\doc\tutorial"
+  RMDir /r "$INSTDIR\doc\help"
   RMDir /r "$INSTDIR\wings3d"
   ;don't remove $INSTDIR recursively just in case the user has installed it in c:\ or
   ;c:\program files as this would attempt to delete a lot more than just this package
   Delete "$INSTDIR\*.txt"
   RMDir "$INSTDIR"
-  
+
   ;Note - application registry keys are stored in the users individual registry hive (HKCU\Software\kicad".
   ;It might be possible to remove these keys as well but it would require a lot of testing of permissions
   ;and access to other people's registry entries. So for now we will leave the application registry keys.
-  
+
   ;remove installation registary keys
   DeleteRegKey ${UNINST_ROOT} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true

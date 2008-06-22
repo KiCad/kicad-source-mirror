@@ -1,11 +1,11 @@
-EESchema Schematic File Version 1
-LIBS:pspice,./pspice.cache
+EESchema Schematic File Version 2
+LIBS:pspice,.\pspice.cache
 EELAYER 20  0
 EELAYER END
 $Descr A4 11700 8267
 Sheet 1 1
 Title ""
-Date "28 mar 2006"
+Date "22 feb 2008"
 Rev ""
 Comp ""
 Comment1 ""
@@ -13,6 +13,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Kmarq B 8400 3300 "Warning Pin power_in non pilotée (Net 6)" F=1
+Kmarq B 7700 1000 "Warning Pin power_in non pilotée (Net 2)" F=1
 Wire Wire Line
 	5300 2800 4400 2800
 Text Label 4500 2800 0    60   ~
@@ -23,9 +25,9 @@ Connection ~ 9200 1800
 Wire Wire Line
 	8700 1800 9200 1800
 Wire Wire Line
-	7800 1800 8200 1800
+	8200 1800 7800 1800
 Wire Wire Line
-	7800 1500 7800 1800
+	7800 1800 7800 1500
 $Comp
 L R R12
 U 1 1 3E9D53DA
@@ -47,9 +49,9 @@ $EndComp
 Wire Wire Line
 	7800 1500 7700 1500
 Wire Wire Line
-	9200 2100 7700 2100
+	7700 2100 9200 2100
 Wire Wire Line
-	9200 1500 9200 2100
+	9200 2100 9200 1500
 $Comp
 L INDUCTOR L1
 U 1 1 3E9D4A5D
@@ -94,7 +96,7 @@ F 1 "10uF" V 8500 2900 50  0000 C C
 	1    0    0    -1  
 $EndComp
 Text Notes 3500 1000 0    60   ~
--pspice .DC V1 10 12 0.5
+-PSPICE .DC V1 10 12 0.5
 Connection ~ 7050 2450
 Wire Wire Line
 	7050 2600 7050 2450
@@ -116,18 +118,16 @@ F 1 "1nF" V 7150 2700 50  0000 C C
 	1    7050 2850
 	1    0    0    -1  
 $EndComp
-Kmarq B 2000 5150 "" F=1
-Kmarq B 7700 3450 "" F=1
 Connection ~ 5750 3200
 Connection ~ 6100 3200
 Wire Wire Line
-	6350 3200 6350 3150
+	6350 3150 6350 3200
 Wire Wire Line
-	5500 3200 6350 3200
+	6350 3200 5500 3200
 Wire Wire Line
 	5750 3200 5750 3150
 Wire Wire Line
-	5500 3150 5500 3200
+	5500 3200 5500 3150
 Wire Wire Line
 	3900 2800 3850 2800
 Wire Wire Line
@@ -169,9 +169,9 @@ F 1 "Q2N2222" H 7450 2650 50  0000 C C
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6100 2450 7250 2450
+	7250 2450 6100 2450
 Text Notes 3500 800  0    60   ~
--pspice .model Q2N2222 npn (bf=200)
+-PSPICE .model Q2N2222 npn (bf=200)
 $Comp
 L 0 #GND5
 U 1 1 32CFC469
@@ -202,32 +202,32 @@ $EndComp
 Text Notes 3500 900  0    60   ~
 -gnucap .AC 10 1Meg *1.2
 Text Notes 3500 1100 0    60   ~
-+pspice .print ac v(vout)
++PSPICE .print ac v(vout)
 $Comp
 L +12V #+12V5
 U 1 1 32CFC34D
-P 2000 5150
-F 0 "#+12V5" H 2000 5350 40  0001 C C
-F 1 "+12V" H 2000 5300 40  0000 C C
-	1    2000 5150
+P 2850 1500
+F 0 "#+12V5" H 2850 1700 40  0001 C C
+F 1 "+12V" H 2850 1650 40  0000 C C
+	1    2850 1500
 	1    0    0    -1  
 $EndComp
 $Comp
 L 0 #GND4
 U 1 1 32CFC344
-P 2000 6550
-F 0 "#GND4" H 2000 6450 40  0001 C C
-F 1 "0" H 2000 6480 40  0000 C C
-	1    2000 6550
+P 2850 2900
+F 0 "#GND4" H 2850 2800 40  0001 C C
+F 1 "0" H 2850 2830 40  0000 C C
+	1    2850 2900
 	1    0    0    -1  
 $EndComp
 $Comp
 L VSOURCE V1
 U 1 1 32CFC337
-P 2000 5850
-F 0 "V1" H 2000 5750 60  0000 C C
-F 1 "DC 12V" H 2000 5950 60  0000 C C
-	1    2000 5850
+P 2850 2200
+F 0 "V1" H 2850 2100 60  0000 C C
+F 1 "DC 12V" H 2850 2300 60  0000 C C
+	1    2850 2200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line

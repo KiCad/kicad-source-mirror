@@ -1,4 +1,4 @@
-Cmp-Mod V01 Genere par PcbNew le 31/12/2006-08:17:33
+Cmp-Mod V01 Genere par PcbNew le 9/8/2007-16:28:54
 
 BeginCmp
 TimeStamp = 349FB562
@@ -11,7 +11,7 @@ BeginCmp
 TimeStamp = 269C6109
 Reference = BUS1;
 ValeurCmp = BUSPCI_5V;
-IdModule  = PCI5V32B;
+IdModule  = BUSPCI;
 EndCmp
 
 BeginCmp

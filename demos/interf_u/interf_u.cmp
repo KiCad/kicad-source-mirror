@@ -1,4 +1,4 @@
-Cmp-Mod V01 Genere par PcbNew le 14/4/2007-11:06:02
+Cmp-Mod V01 Created by Cvpcb (20080313-r890) date = 22/3/2008-09:05:19
 
 BeginCmp
 TimeStamp = 322D3011;
@@ -81,35 +81,35 @@ BeginCmp
 TimeStamp = 32307EA1;
 Reference = R1;
 ValeurCmp = 100K;
-IdModule  = 16DIP300;
+IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = 32307EAA;
 Reference = R2;
 ValeurCmp = 1K;
-IdModule  = 16DIP300;
+IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = 324002E6;
 Reference = R3;
 ValeurCmp = 10K;
-IdModule  = 16DIP300;
+IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = 322D3295;
 Reference = R4;
 ValeurCmp = 330;
-IdModule  = 16DIP300;
+IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = 322D32A0;
 Reference = R5;
 ValeurCmp = 330;
-IdModule  = 16DIP300;
+IdModule  = R3;
 EndCmp
 
 BeginCmp
