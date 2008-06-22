@@ -83,14 +83,14 @@ static wxString    s_HelpPathList[] = {
 // Path list for kicad data files
 static wxString    s_KicadDataPathList[] = {
 #ifdef __WINDOWS__
-    wxT( "c:/kicad/" ),
-    wxT( "d:/kicad/" ),
     wxT( "c:/kicad/share/" ),
     wxT( "d:/kicad/share/" ),
-    wxT( "c:/Program Files/kicad/" ),
-    wxT( "d:/Program Files/kicad/" ),
+    wxT( "c:/kicad/" ),
+    wxT( "d:/kicad/" ),
     wxT( "c:/Program Files/kicad/share/" ),
     wxT( "d:/Program Files/kicad/share/" ),
+    wxT( "c:/Program Files/kicad/" ),
+    wxT( "d:/Program Files/kicad/" ),
 #else
     wxT( "/usr/share/kicad/" ),
     wxT( "/usr/local/share/kicad/" ),
@@ -469,7 +469,7 @@ wxString FindKicadFile( const wxString& shortname )
 /* Search the executable file shortname in kicad binary path
  *  and return full file name if found or shortname
  *  kicad binary path is
- *  kicad/winexe or kicad/linux
+ *  kicad/bin
  *
  *  kicad binary path is found from:
  *  BinDir
@@ -552,7 +552,7 @@ void SetRealLibraryPath( const wxString& shortlibname )
  *  Sinon g_UserLibDirBuffer = /usr/share/kicad/shortlibname/
  *
  *  Remarque:
- *  Les \ sont remplac�s par / (a la mode Unix)
+ *  Les \ sont remplaces par / (a la mode Unix)
  */
 {
     bool PathFound = FALSE;
@@ -619,8 +619,18 @@ wxString ReturnKicadDatasPath()
                 tmp.RemoveLast();
             data_path  = tmp.BeforeLast( '/' ); // id cd ../
             data_path += UNIX_STRING_DIR_SEP;
+            // Old versions of kicad use kicad/ as default for data
+            // and last versions kicad/share/
+            // So we search for kicad/share/ first
+            wxString old_path = data_path;
+            data_path += wxT("share/");
             if( wxDirExists( data_path ) )
                 PathFound = TRUE;
+            else if ( wxDirExists( old_path ) )
+            {
+                data_path = old_path;
+                PathFound = TRUE;
+            }
         }
     }
 

@@ -5,6 +5,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-June-22 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    Default path kicad/share added when searching kicad data (like library, internat ...)
+    Kicad data Default paths are now (windows version and linux server install)
+    1 - kicad/share
+    2 - kicad
+
+
 2008-June-15 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:

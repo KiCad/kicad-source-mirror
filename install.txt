@@ -66,7 +66,7 @@ kicad/share/modules/packages3d - 3D component models (.wrl and .wings format).
 
    Files '*.mod' are libraries, and files '*.brd' are printed boards you can
 view with pcbnew.
-   Files *.brd show the existing modules (and 3D shapes) in libraries. 
+   Files *.brd show the existing modules (and 3D shapes) in libraries.
 
 Linux KiCad tree:
 =================
@@ -80,9 +80,13 @@ Linux KiCad tree:
 /usr/share/kicad/modules            - Module libraries for printed boards.
 /usr/share/kicad/modules/packages3d - 3D component models (.wrl and .wings format).
 
+if not found search kicad in
+/usr/local/
+and if found, kicad uses the same tree as the Windows KiCad tree above
+
    Files '*.mod' are the libraries, and files '*.brd' are printed boards you can
 view with pcbnew.
-   Files *.brd show the existing modules (and 3D shapes) in libraries. 
+   Files *.brd show the existing modules (and 3D shapes) in libraries.
 
 Warning:
 Do not change the KiCad tree, or the location of binary files,
@@ -94,7 +98,7 @@ Installation from source code
 =============================
 
    Some dependencies must be satisfied for the correct installation of KiCad:
-   
+
 wxWidgets           >= 2.6.3.3       http://www.wxwidgets.org/
 CMake               >= 2.4.6         http://www.cmake.org/
 Boost C++ Libraries                  http://www.boost.org/
@@ -116,7 +120,7 @@ the Makefiles.
 
    It is easy to build only a specific binary such as pcbnew alone:
     make pcbnew
-    
+
    After "make" type "make install" and install begins.
 
    You may install to a temporary-root with
