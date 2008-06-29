@@ -309,7 +309,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
  *  Function to move items in the current selected block
  */
 {
-    int     deltaX, deltaY;
+    wxPoint delta;
     wxPoint oldpos;
 
     oldpos = GetScreen()->m_Curseur;
@@ -321,8 +321,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     GetScreen()->BlockLocate.Normalize();
 
     /* calcul du vecteur de deplacement pour les deplacements suivants */
-    deltaX = GetScreen()->BlockLocate.m_MoveVector.x;
-    deltaY = GetScreen()->BlockLocate.m_MoveVector.y;
+    delta = GetScreen()->BlockLocate.m_MoveVector;
 
     /* Move the Track segments in block */
     TRACK* track = m_Pcb->m_Track;
@@ -332,9 +331,13 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         {
             m_Pcb->m_Status_Pcb = 0;
             track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
-            track->m_Start.x += deltaX; track->m_Start.y += deltaY;
-            track->m_End.x   += deltaX; track->m_End.y += deltaY;
-            track->m_Param   += deltaX; track->SetSubNet( track->GetSubNet() + deltaY );
+            track->m_Start += delta;
+            track->m_End   += delta;
+            // the two parameters are used in gerbview to store centre coordinates for arcs.
+            // move this centre
+            track->m_Param  += delta.x;
+            track->SetSubNet( track->GetSubNet() + delta.y );
+
             track->Draw( DrawPanel, DC, GR_OR ); // redraw the moved track
         }
         track = track->Next();
@@ -344,12 +347,15 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     SEGZONE * zsegment= m_Pcb->m_Zone;
     while( zsegment )
     {
-        if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
+        if( IsSegmentInBox( GetScreen()->BlockLocate, zsegment ) )
         {
             zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
-            zsegment->m_Start.x += deltaX; track->m_Start.y += deltaY;
-            zsegment->m_End.x   += deltaX; track->m_End.y += deltaY;
-            zsegment->m_Param   += deltaX; track->SetSubNet( track->GetSubNet() + deltaY );
+            zsegment->m_Start += delta;
+            zsegment->m_End   += delta;
+            // the two parameters are used in gerbview to store centre coordinates for arcs.
+            // move this centre
+            zsegment->m_Param  += delta.x;
+            zsegment->SetSubNet( zsegment->GetSubNet() + delta.y );
             zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone zegment
         }
         zsegment = zsegment->Next();
@@ -407,7 +413,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     while( zsegment )
     {
         SEGZONE * next_zsegment = zsegment->Next();
-        if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
+        if( IsSegmentInBox( GetScreen()->BlockLocate, zsegment ) )
         {
             /* this zone segment must be duplicated */
             SEGZONE * new_zsegment = (SEGZONE*) zsegment->Copy();

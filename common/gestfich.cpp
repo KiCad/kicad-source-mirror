@@ -74,8 +74,8 @@ static wxString    s_HelpPathList[] = {
 #else
     wxT( "/usr/share/doc/kicad/help/" ),
     wxT( "/usr/local/share/doc/kicad/help/" ),
-    wxT( "/usr/local/kicad/doc/" ),             // default install for "universal tarballs" and build for a server (new)
-//    wxT( "/usr/local/kicad/" ),                 // default install for "universal tarballs" and build for a server (old)
+    wxT( "/usr/local/kicad/doc/help/" ),             // default install for "universal tarballs" and build for a server (new)
+    wxT( "/usr/local/kicad/help/" ),                 // default install for "universal tarballs" and build for a server (old)
 #endif
     wxT( "end_list" )                           // End of list symbol, do not change
 };
@@ -701,64 +701,101 @@ wxString GetEditorName()
     return g_EditorName;
 }
 
-
-void OpenPDF( const wxString& file )
+/***********************************/
+bool OpenPDF( const wxString& file )
+/***********************************/
+/** Function OpenPDF
+ * run the PDF viewer and display a PDF file
+ * @param file = PDF file to open
+ * @return true is success, false if no PDF viewer found
+ */
 {
     wxString command;
     wxString filename = file;
     wxString type;
+    bool     success  = false;
 
     g_EDA_Appl->ReadPdfBrowserInfos();
-    if( !g_EDA_Appl->m_PdfBrowserIsDefault )
+    if( !g_EDA_Appl->m_PdfBrowserIsDefault )    //  Run the prefered PDF Browser
     {
         AddDelimiterString( filename );
-        command = g_EDA_Appl->m_PdfBrowser + filename;
+        command = g_EDA_Appl->m_PdfBrowser  + wxT( " " ) + filename;
     }
     else
     {
-        bool        success  = false;
         wxFileType* filetype = NULL;
-
         wxFileType::MessageParameters params( filename, type );
-
-        filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( ".pdf" ) );
+        filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
         if( filetype )
             success = filetype->GetOpenCommand( &command, params );
         delete filetype;
+#ifndef __WINDOWS__
+        // Bug ? under linux wxWidgets returns acroread as PDF viewer,even it not exists
+        if ( command.StartsWith(wxT("acroread")) )  // Workaround
+            success = false;
+#endif
+        if( success && !command.IsEmpty() )
+        {
+            success = ProcessExecute( command );
+        }
+        else
+            success = false;
 
         if( !success )
         {
-            AddDelimiterString( filename );
             command.Empty();
-
+#ifndef __WINDOWS__
+            AddDelimiterString( filename );
+            /* here is a list of PDF viewers candidates */
             const static wxString tries[] =
             {
                 wxT( "/usr/bin/evince" ),
-                wxT( "/usr/bin/xpdf" ),
-                wxT( "/usr/bin/konqueror" ),
                 wxT( "/usr/bin/gpdf" ),
+                wxT( "/usr/bin/konqueror" ),
+                wxT( "/usr/bin/kpdf" ),
+                wxT( "/usr/bin/xpdf" ),
                 wxT( "" ),
             };
 
-            for( int i = 0; ; i++ )
+            for( int ii = 0; ; ii++ )
             {
-                if( tries[i].IsEmpty() )
+                if( tries[ii].IsEmpty() )
                     break;
 
-                if( wxFileExists( tries[i] ) )
+                if( wxFileExists( tries[ii] ) )
                 {
-                    command = tries[i] + wxT( " " ) + filename;
+                    command = tries[ii] + wxT( " " ) + filename;
+                    break;
                 }
             }
+#endif
         }
     }
 
     if( !command.IsEmpty() )
-        ProcessExecute( command );
+    {
+        success = ProcessExecute( command );
+        if ( !success )
+        {
+            wxString msg = _("Problem while running the PDF viewer");
+            msg << wxT("\n command is") << command;
+            DisplayError( NULL, msg );
+        }
+    }
+    else
+    {
+        wxString msg = _("Unable to find a PDF viewer for");
+        msg << wxT(" ") << filename;
+        DisplayError( NULL, msg );
+        success = false;
+    }
+
+    return success;
 }
 
-
+/*************************************/
 void OpenFile( const wxString& file )
+/*************************************/
 {
     wxString    command;
     wxString    filename = file;

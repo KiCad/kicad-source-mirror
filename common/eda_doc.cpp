@@ -54,27 +54,21 @@ void WinEDA_App::WritePdfBrowserInfos()
 }
 
 
-//  Mime type extensions
+//  Mime type extensions (PDF files are not considered here)
 static wxMimeTypesManager*  mimeDatabase;
 static const wxFileTypeInfo EDAfallbacks[] =
 {
-    wxFileTypeInfo( wxT( "text/pdf" ),
-        wxT( "xpdf %s" ),
-        wxT( "xpdf -p %s" ),
-        wxT( "pdf document (from Kicad)" ),
-        wxT( "pdf" ), wxT( "PDF" ),  NULL ),
-
     wxFileTypeInfo( wxT( "text/html" ),
         wxT( "wxhtml %s" ),
         wxT( "wxhtml %s" ),
         wxT( "html document (from Kicad)" ),
-        wxT( "htm" ), wxT( "html" ), NULL ),
+        wxT( "htm" ),                         wxT( "html" ),NULL ),
 
     wxFileTypeInfo( wxT( "application/sch" ),
         wxT( "eeschema %s" ),
         wxT( "eeschema -p %s" ),
         wxT( "sch document (from Kicad)" ),
-        wxT( "sch" ), wxT( "SCH" ),  NULL ),
+        wxT( "sch" ),                         wxT( "SCH" ), NULL ),
 
     // must terminate the table with this!
     wxFileTypeInfo()
@@ -87,15 +81,15 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
 /*********************************************************************/
 
 /* Launch the viewer for the doc file  DocName (mime type)
-  * LibPath is the doc file search path:
-  * (kicad/library)
-  * DocName is the short filename with ext. Wildcarts are allowed
-  * Seach file is made in LibPath/doc/DocName
+ * LibPath is the doc file search path:
+ * (kicad/library)
+ * DocName is the short filename with ext. Wildcarts are allowed
+ * Seach file is made in LibPath/doc/DocName
  *
-  * if DocName is starting by http: or ftp: or www. the default internet browser is launched
+ * if DocName is starting by http: or ftp: or www. the default internet browser is launched
  */
 {
-    wxString docpath, fullfilename;
+    wxString docpath, fullfilename, file_ext;
     wxString Line;
     wxString command;
     bool     success = FALSE;
@@ -146,7 +140,7 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
                 wxFD_OPEN,                          /* wxSAVE, wxFD_OPEN ..*/
                 TRUE,                               /* true = ne change pas le repertoire courant */
                 wxPoint( -1, -1 )
-                );
+        );
         if( fullfilename.IsEmpty() )
             return FALSE;
     }
@@ -158,83 +152,46 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
         return FALSE;
     }
 
-    /* Try to launch some browser (usefull under linux) */
-    g_EDA_Appl->ReadPdfBrowserInfos();
-    if( g_EDA_Appl->m_PdfBrowserIsDefault )
+    wxFileName CurrentFileName( fullfilename );
+    file_ext = CurrentFileName.GetExt();
+
+    if( file_ext == wxT( "pdf" ) )
     {
-        wxFileType* filetype;
-        wxFileName CurrentFileName( fullfilename );
-
-        wxString    ext, type;
-        ext      = CurrentFileName.GetExt();
-        filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
-
-        if( !filetype )   // 2ieme tentative
-        {
-            mimeDatabase = new wxMimeTypesManager;
-            mimeDatabase->AddFallbacks( EDAfallbacks );
-            filetype = mimeDatabase->GetFileTypeFromExtension( ext );
-            delete mimeDatabase;
-            mimeDatabase = NULL;
-        }
-
-        if( filetype )
-        {
-            wxFileType::MessageParameters params( fullfilename, type );
-
-            success = filetype->GetOpenCommand( &command, params );
-            delete filetype;
-            if( success )
-                ProcessExecute( command );
-        }
-
-        if( !success )
-        {
-#ifdef __LINUX__
-            if( ext == wxT( "pdf" ) )
-            {
-                success = TRUE; command.Empty();
-                if( wxFileExists( wxT( "/usr/bin/kpdf" ) ) )
-                    command = wxT( "kpdf " ) + fullfilename;
-                else if( wxFileExists( wxT( "/usr/bin/konqueror" ) ) )
-                    command = wxT( "konqueror " ) + fullfilename;
-                else if( wxFileExists( wxT( "/usr/bin/gpdf" ) ) )
-                    command = wxT( "gpdf " ) + fullfilename;
-                if( wxFileExists( wxT( "/usr/bin/xpdf" ) ) )
-                    command = wxT( "xpdf " ) + fullfilename;
-                if( command.IsEmpty() ) // not started
-                {
-                    DisplayError( frame,
-                        _( " Cannot find the PDF viewer (kpdf, gpdf, konqueror or xpdf) in /usr/bin/" ) );
-                    success = FALSE;
-                }
-                else
-                    ProcessExecute( command );
-            }
-            else
-#endif
-            {
-                Line.Printf( _( "Unknown MIME type for Doc File [%s] (%s)" ),
-                    fullfilename.GetData(), ext.GetData() );
-                DisplayError( frame, Line );
-            }
-        }
+        success = OpenPDF( fullfilename );
+        return success;
     }
-    else
+
+
+    /* Try to launch some browser (usefull under linux) */
+    wxFileType* filetype;
+
+    wxString    type;
+    filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( file_ext );
+
+    if( !filetype )       // 2ieme tentative
     {
-        command = g_EDA_Appl->m_PdfBrowser;
-        if( wxFileExists( command ) )
-        {
-            success = TRUE;
-            AddDelimiterString( fullfilename );
-            command += wxT( " " ) + fullfilename;
-            ProcessExecute( command );
-        }
-        else
-        {
-            Line.Printf( _( "Cannot find Pdf viewer %s" ), command.GetData() );
-            DisplayError( frame, Line );
-        }
+        mimeDatabase = new wxMimeTypesManager;
+        mimeDatabase->AddFallbacks( EDAfallbacks );
+        filetype = mimeDatabase->GetFileTypeFromExtension( file_ext );
+        delete mimeDatabase;
+        mimeDatabase = NULL;
+    }
+
+    if( filetype )
+    {
+        wxFileType::MessageParameters params( fullfilename, type );
+
+        success = filetype->GetOpenCommand( &command, params );
+        delete filetype;
+        if( success )
+            success = ProcessExecute( command );
+    }
+
+    if( !success )
+    {
+        Line.Printf( _( "Unknown MIME type for Doc File [%s]" ),
+            fullfilename.GetData() );
+        DisplayError( frame, Line );
     }
 
     return success;
@@ -246,11 +203,11 @@ int KeyWordOk( const wxString& KeyList, const wxString& Database )
 /******************************************************************/
 
 /* Recherche si dans le texte Database on retrouve tous les mots
-  * cles donnes dans KeyList ( KeyList = suite de mots cles
-  * separes par des espaces
-  * Retourne:
-  *     0 si aucun mot cle trouvé
-  *     1 si mot cle trouvé
+ * cles donnes dans KeyList ( KeyList = suite de mots cles
+ * separes par des espaces
+ * Retourne:
+ *     0 si aucun mot cle trouvé
+ *     1 si mot cle trouvé
  */
 {
     wxString KeysCopy, DataList;
@@ -265,7 +222,7 @@ int KeyWordOk( const wxString& KeyList, const wxString& Database )
 
     while( Token.HasMoreTokens() )
     {
-        wxString Key = Token.GetNextToken();
+        wxString          Key = Token.GetNextToken();
 
         // Search Key in Datalist:
         wxStringTokenizer Data( DataList, wxT( " \n\r" ) );
@@ -274,7 +231,7 @@ int KeyWordOk( const wxString& KeyList, const wxString& Database )
         {
             wxString word = Data.GetNextToken();
             if( word == Key )
-                return 1;                   // Key found !
+                return 1; // Key found !
         }
     }
 

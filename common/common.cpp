@@ -277,14 +277,23 @@ void* MyMalloc( size_t nb_octets )
 }
 
 
+/**************************************************************/
 bool ProcessExecute( const wxString& aCommandLine, int aFlags )
+/**************************************************************/
+/**
+ * Function ProcessExecute
+ * runs a child process.
+ * @param aCommandLine The process and any arguments to it all in a single string.
+ * @param aFlags The same args as allowed for wxExecute()
+ * @return bool - true if success, else false
+ */
 {
 #ifdef __WINDOWS__
-    wxExecute(aCommandLine);
-    return true;
+    int pid = wxExecute(aCommandLine);
+    return pid ? true : false;
 #else
     wxProcess*  process = wxProcess::Open( aCommandLine, aFlags );
-    return process != NULL;
+    return (process != NULL) ? true : false;
 #endif
 }
 

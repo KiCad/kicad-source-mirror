@@ -448,9 +448,15 @@ int     Get_Message( const wxString& titre, wxString& buffer, wxWindow* frame );
 /************************/
 
 wxString    GetEditorName(); // Return the prefered editor name
-void        OpenPDF( const wxString& file );
-void        OpenFile( const wxString& file );
 
+/** Function OpenPDF
+ * run the PDF viewer and display a PDF file
+ * @param file = PDF file to open
+ * @return true is success, false if no PDF viewer found
+ */
+bool        OpenPDF( const wxString& file );
+
+void        OpenFile( const wxString& file );
 
 bool        EDA_DirectorySelector( const wxString& Title,           /* Titre de la fenetre */
                                    wxString&       Path,            /* Chemin par defaut */
