@@ -677,7 +677,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
                 #undef STRUCT
                 #define STRUCT ( (DrawJunctionStruct*) DrawList )
             x1 = STRUCT->m_Pos.x; y1 = STRUCT->m_Pos.y;
-            PlotCercle( wxPoint( x1, y1 ), DRAWJUNCTION_SIZE * 2 );
+            PlotCercle( wxPoint( x1, y1 ), DRAWJUNCTION_SIZE * 2, 1 );
             break;
 
         case TYPE_SCH_TEXT:

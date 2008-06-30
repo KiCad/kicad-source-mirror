@@ -543,8 +543,8 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
             rayon = 1;
         if( rayon < w )
             w = rayon;
-        PlotArcPS( wxPoint( pos.x + x1, pos.y + y1 ), -orient, -orient + 1800, rayon, w );
-        PlotArcPS( wxPoint( pos.x + x0, pos.y + y0 ), -orient + 1800, -orient, rayon, w );
+        PlotArcPS( wxPoint( pos.x + x1, pos.y + y1 ), -orient, -orient + 1800, rayon, w, 0);
+        PlotArcPS( wxPoint( pos.x + x0, pos.y + y0 ), -orient + 1800, -orient, rayon, w, 0 );
 
         x0 = -rayon;
         y0 = -delta / 2;

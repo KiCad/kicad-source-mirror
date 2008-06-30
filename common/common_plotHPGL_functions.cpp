@@ -68,9 +68,25 @@ bool CloseFileHPGL( FILE* plot_file )
     return TRUE;
 }
 
+/************************************************************/
+void PlotRectHPGL( wxPoint p1, wxPoint p2, int fill, int width )
+/************************************************************/
+{
+    char Line[256];
+
+    UserToDeviceCoordinate( p1 );
+    UserToDeviceCoordinate( p2 );
+
+    Plume_HPGL( 'U' );
+    sprintf( Line, "PA %d,%d;EA %d,%d;\n", p1.x, p1.y, p2.x, p2.y );
+    fputs( Line, PlotOutputFile );
+
+    Plume_HPGL( 'U' ); return;
+}
+
 
 /************************************************************/
-void PlotCircle_HPGL( wxPoint centre, int diameter, int width )
+void PlotCircleHPGL( wxPoint centre, int diameter, int fill, int width )
 /************************************************************/
 {
     int  rayon;
@@ -91,7 +107,7 @@ void PlotCircle_HPGL( wxPoint centre, int diameter, int width )
 
 
 /********************************************************************/
-void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, int width )
+void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width )
 /********************************************************************/
 
 /* trace d'un arc de cercle:

@@ -122,6 +122,15 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
 namespace DSN {
 
+
+/**
+ * Function scale
+ * converts a session file distance to Kicad units of deci-mils.
+ * @param distance The session file length to convert.
+ * @param aResolution The session UNIT_RES which holds the engineering unit
+ *  specifier
+ * @return int - The Kicad length in deci-mils
+ */
 static int scale( double distance, UNIT_RES* aResolution )
 {
     double  resValue = aResolution->GetValue();
@@ -152,7 +161,7 @@ static int scale( double distance, UNIT_RES* aResolution )
     // used within Kicad.
     factor *= 10.0;
 
-    int ret = (int)  round(factor * distance / resValue);
+    int ret = (int)  round( factor * distance / resValue );
     return ret;
 }
 

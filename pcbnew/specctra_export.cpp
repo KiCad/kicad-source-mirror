@@ -132,24 +132,8 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
 namespace DSN {
 
-struct POINT_PAIR
-{
-    POINT       start;
-    POINT       end;
-    BOARD_ITEM* item;       ///< the item which has these points, TRACK or DRAWSEGMENT
-};
-typedef std::vector<POINT_PAIR>     POINT_PAIRS;
-
 
 const KICAD_T SPECCTRA_DB::scanPADs[] = { TYPEPAD, EOT };
-
-
-static inline void swap( POINT_PAIR& pair )
-{
-    POINT temp = pair.start;
-    pair.start = pair.end;
-    pair.end   = temp;
-}
 
 
 /**

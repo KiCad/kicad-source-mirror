@@ -791,7 +791,7 @@ void PlotCircle( int format_plot, int thickness, wxPoint centre, int radius )
         break;
 
     case PLOT_FORMAT_POST:
-        PlotCircle_PS( centre, radius * 2, thickness );
+        PlotCirclePS( centre, radius * 2, thickness, 0);
         break;
     }
 }
@@ -837,7 +837,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
 
     if( IsPostScript( format_plot ) )
     {
-        PlotArcPS( centre, start_angle, end_angle, radius, thickness );
+        PlotArcPS( centre, start_angle, end_angle, radius, thickness, 0 );
         return;
     }
 

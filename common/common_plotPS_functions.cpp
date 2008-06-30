@@ -113,9 +113,20 @@ void PlotFilledSegmentPS( wxPoint start, wxPoint end, int width )
     fprintf( PlotOutputFile, "%d %d %d %d line\n", start.x, start.y, end.x, end.y );
 }
 
+/***************************************************************/
+void PlotRectPS( wxPoint p1, wxPoint p2, int fill, int width )
+/***************************************************************/
+{
+    UserToDeviceCoordinate( p1 );
+    UserToDeviceCoordinate( p2 );
+
+    SetCurrentLineWidthPS( width );
+    fprintf( PlotOutputFile, "%d %d %d %d rect%d\n", p1.x, p1.y, 
+	p2.x-p1.x, p2.y-p1.y, fill );
+}
 
 /******************************************************/
-void PlotCircle_PS( wxPoint pos, int diametre, int width )
+void PlotCirclePS( wxPoint pos, int diametre, int fill, int width )
 /******************************************************/
 {
     int  rayon;
@@ -128,13 +139,13 @@ void PlotCircle_PS( wxPoint pos, int diametre, int width )
         rayon = 0;
 
     SetCurrentLineWidthPS( width );
-    sprintf( Line, "newpath %d %d %d 0 360 arc stroke\n", pos.x, pos.y, rayon );
+    sprintf(Line, "%d %d %d cir%d\n", pos.x, pos.y, rayon, fill);
     fputs( Line, PlotOutputFile );
 }
 
 
 /**************************************************************************************/
-void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int width )
+void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width )
 /**************************************************************************************/
 
 /* Plot an arc:
@@ -152,11 +163,13 @@ void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int width 
     UserToDeviceCoordinate( centre );
 
     if( PlotOrientOptions == PLOT_MIROIR )
-        sprintf( Line, "newpath %d %d %d %f %f arc stroke\n", centre.x, centre.y,
-            (int) (rayon * XScale), (float) StAngle / 10, (float) EndAngle / 10 );
+        sprintf( Line, "%d %d %d %f %f arc%d\n", centre.x, centre.y,
+            (int) (rayon * XScale), (float) StAngle / 10, (float) EndAngle / 10,
+	    fill);
     else
-        sprintf( Line, "newpath %d %d %d %f %f arc stroke\n", centre.x, centre.y,
-            (int) (rayon * XScale), -(float) EndAngle / 10, -(float) StAngle / 10 );
+        sprintf( Line, "%d %d %d %f %f arc%d\n", centre.x, centre.y,
+            (int) (rayon * XScale), -(float) EndAngle / 10, -(float) StAngle / 10,
+	    fill);
 
     // Undo internationalization printf (float x.y printed x,y)
     to_point( Line );
@@ -197,11 +210,7 @@ void PlotPolyPS( int nb_segm, int* coord, int fill, int width )
     }
 
     // Fermeture du polygone
-    if( fill )
-        fprintf( PlotOutputFile, "closepath " );
-    if( fill == 1 )
-        fprintf( PlotOutputFile, "fill " );
-    fprintf( PlotOutputFile, "stroke\n" );
+    fprintf(PlotOutputFile, "poly%d\n", fill);
 }
 
 
@@ -260,7 +269,19 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
         "    moveto\n",
         "    lineto\n",
         "    stroke\n",
-        "} def\n",
+        "} bind def\n",
+	"/cir0 { newpath 0 360 arc stroke } bind def\n",
+	"/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
+	"/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
+	"/arc0 { newpath arc stroke } bind def\n",
+	"/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill grestore stroke } bind def\n",
+	"/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill grestore stroke } bind def\n",
+	"/poly0 { stroke } bind def\n",
+	"/poly1 { closepath gsave fill grestore stroke } bind def\n",
+	"/poly2 { closepath gsave fill grestore stroke } bind def\n",
+	"/rect0 { rectstroke } bind def\n",
+	"/rect1 { rectfill } bind def\n",
+	"/rect2 { rectfill } bind def\n",
         "gsave\n",
         "72 72 scale\t\t\t% Talk inches\n",
         "1 setlinecap\n",

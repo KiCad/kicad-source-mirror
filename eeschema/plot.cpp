@@ -73,9 +73,24 @@ void SetCurrentLineWidth( int width )
     }
 }
 
+/*******************************************************************************/
+void PlotRect( wxPoint p1, wxPoint p2, int fill, int width )
+/*******************************************************************************/
+{
+    switch( g_PlotFormat )
+    {
+    case PLOT_FORMAT_HPGL:
+        PlotRectHPGL( p1, p2, fill, width );
+        break;
+
+    case PLOT_FORMAT_POST:
+        PlotRectPS( p1, p2, fill, width );
+        break;
+    }
+}
 
 /*******************************************************************************/
-void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, int width )
+void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width )
 /*******************************************************************************/
 
 /* trace d'un arc de cercle:
@@ -87,28 +102,28 @@ void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, int width )
     switch( g_PlotFormat )
     {
     case PLOT_FORMAT_HPGL:
-        PlotArcHPGL( centre, StAngle, EndAngle, rayon, width );
+        PlotArcHPGL( centre, StAngle, EndAngle, rayon, fill, width );
         break;
 
     case PLOT_FORMAT_POST:
-        PlotArcPS( centre, StAngle, EndAngle, rayon, width );
+        PlotArcPS( centre, StAngle, EndAngle, rayon, fill, width );
         break;
     }
 }
 
 
 /*******************************************************/
-void PlotCercle( wxPoint pos, int diametre, int width )
+void PlotCercle( wxPoint pos, int diametre, int fill, int width )
 /*******************************************************/
 {
     switch( g_PlotFormat )
     {
     case PLOT_FORMAT_HPGL:
-        PlotCircle_HPGL( pos, diametre, width );
+        PlotCircleHPGL( pos, diametre, fill, width );
         break;
 
     case PLOT_FORMAT_POST:
-        PlotCircle_PS( pos, diametre, width );
+        PlotCirclePS( pos, diametre, fill, width );
         break;
     }
 }
@@ -204,7 +219,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
                     TransMat[1][1] * Arc->m_Pos.y;
             MapAngles( &t1, &t2, TransMat );
-            PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Width );
+            PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill, Arc->m_Width );
         }
             break;
 
@@ -215,7 +230,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                     TransMat[0][1] * Circle->m_Pos.y;
             pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
                     TransMat[1][1] * Circle->m_Pos.y;
-            PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Width );
+            PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill, Circle->m_Width );
         }
             break;
 
@@ -251,12 +266,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             y2 = PartY + TransMat[1][0] * Square->m_End.x
                  + TransMat[1][1] * Square->m_End.y;
 
-            SetCurrentLineWidth( Square->m_Width );
-            Move_Plume( wxPoint( x1, y1 ), 'U' );
-            Move_Plume( wxPoint( x1, y2 ), 'D' );
-            Move_Plume( wxPoint( x2, y2 ), 'D' );
-            Move_Plume( wxPoint( x2, y1 ), 'D' );
-            Move_Plume( wxPoint( x1, y1 ), 'D' );
+            PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill, Square->m_Width );
         }
             break;
 
@@ -469,8 +479,8 @@ static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape )
     if( Shape & INVERT )
     {
         PlotCercle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
-                             MapY1 * INVERT_PIN_RADIUS + y1 ),
-                    INVERT_PIN_RADIUS * 2 );
+                             MapY1 * INVERT_PIN_RADIUS + y1),
+                    INVERT_PIN_RADIUS * 2,0 );
 
         Move_Plume( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
                              MapY1 * INVERT_PIN_RADIUS * 2 + y1 ), 'U' );

@@ -559,7 +559,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
                 #define STRUCT ( (DrawJunctionStruct*) DrawList )
             if( g_PlotPSColorOpt )
                 SetColorMapPS( ReturnLayerColor( STRUCT->GetLayer() ) );
-            PlotCercle( STRUCT->m_Pos, DRAWJUNCTION_SIZE );
+            PlotCercle( STRUCT->m_Pos, DRAWJUNCTION_SIZE, 1 );
             break;
 
         case TYPE_SCH_TEXT:
