@@ -778,7 +778,7 @@ bool OpenPDF( const wxString& file )
         if ( !success )
         {
             wxString msg = _("Problem while running the PDF viewer");
-            msg << wxT("\n command is") << command;
+            msg << _("\n command is ") << command;
             DisplayError( NULL, msg );
         }
     }
