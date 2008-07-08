@@ -26,6 +26,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     MODULE*         module;
     D_PAD*          pad;
     EQUIPOT*        equipot;
+    double	    lengthnet = 0;
 
     frame->MsgPanel->EraseMsgBox();
 
@@ -57,8 +58,14 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
         if( Struct->Type() == TYPEVIA )
             if( ( (SEGVIA*) Struct )->GetNet() == netcode )
                 nb_vias++;
+	if( Struct->Type() == TYPETRACK )
+            if( ( (TRACK*) Struct )->GetNet() == netcode )
+    		lengthnet += ( (TRACK*) Struct )->GetLength();
     }
 
     txt.Printf( wxT( "%d" ), nb_vias );
     Affiche_1_Parametre( frame, 50, _( "Vias" ), txt, BLUE );
+
+    valeur_param( (int) lengthnet, txt );
+    Affiche_1_Parametre( frame, 60, _( "Net Length" ), txt, RED );
 }
