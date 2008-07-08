@@ -737,13 +737,15 @@ bool OpenPDF( const wxString& file )
         if( success && !command.IsEmpty() )
         {
             success = ProcessExecute( command );
+            if ( success )
+                return success;
         }
-        else
-            success = false;
+
+        success = false;
+        command.Empty();
 
         if( !success )
         {
-            command.Empty();
 #ifndef __WINDOWS__
             AddDelimiterString( filename );
             /* here is a list of PDF viewers candidates */

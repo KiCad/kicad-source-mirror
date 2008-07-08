@@ -154,13 +154,11 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
 
     wxFileName CurrentFileName( fullfilename );
     file_ext = CurrentFileName.GetExt();
-
     if( file_ext == wxT( "pdf" ) )
     {
         success = OpenPDF( fullfilename );
         return success;
     }
-
 
     /* Try to launch some browser (usefull under linux) */
     wxFileType* filetype;
