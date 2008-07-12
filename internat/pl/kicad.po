@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-04 00:27+0100\n"
-"PO-Revision-Date: 2008-07-04 00:28+0100\n"
+"POT-Creation-Date: 2008-07-12 19:26+0100\n"
+"PO-Revision-Date: 2008-07-12 19:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -19,50 +19,30 @@ msgid "Incorrect value for Via drill. No via drill change"
 msgstr "Nieprawidłowa wartość dla otworu przelotki. Parametr nie został zmieniony."
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:97
-#: kicad/eeschema/dialog_eeschema_config.cpp:105
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:77
-#: kicad/gerbview/reglage.cpp:90
 msgid "from "
 msgstr "z "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:153
-#: kicad/eeschema/dialog_eeschema_config.cpp:161
-#: kicad/cvpcb/dialog_display_options.cpp:177
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:132
 msgid "Save Cfg"
 msgstr "Zapisz konfigurację"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:159
-#: kicad/eeschema/dialog_eeschema_config.cpp:178
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:153
 msgid "Files ext:"
 msgstr "Rozszerzenia plików:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:175
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:172
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:204
 msgid "Del"
 msgstr "Usuń"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:179
-#: kicad/eeschema/dialog_eeschema_config.cpp:197
-#: kicad/eeschema/edit_component_in_lib.cpp:233
-#: kicad/eeschema/edit_component_in_lib.cpp:312
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:176
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:208
 msgid "Add"
 msgstr "Dodaj"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:183
-#: kicad/eeschema/dialog_eeschema_config.cpp:203
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:180
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:212
 msgid "Ins"
 msgstr "Wstaw"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:191
-#: kicad/eeschema/dialog_eeschema_config.cpp:213
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:187
 msgid "Libraries"
 msgstr "Biblioteki"
 
@@ -71,7 +51,6 @@ msgid "Lib Modules Dir:"
 msgstr "Ścieżka dostępu do pliku bibliotek:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:206
-#: kicad/cvpcb/menucfg.cpp:88
 msgid "Module Doc File:"
 msgstr "Plik dokumentacji modułu:"
 
@@ -92,19 +71,14 @@ msgid "Net ext: "
 msgstr "Netlista: "
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:367
-#: kicad/cvpcb/menucfg.cpp:229
 msgid "Library Files:"
 msgstr "Pliki bibliotek:"
 
 #: kicad/pcbnew/dialog_setup_libs.cpp:392
-#: kicad/eeschema/dialog_eeschema_config.cpp:394
-#: kicad/cvpcb/menucfg.cpp:254
-#: kicad/cvpcb/menucfg.cpp:322
 msgid "Library already in use"
 msgstr "Biblioteka jest już w użyciu"
 
 #: kicad/pcbnew/tool_modedit.cpp:44
-#: kicad/eeschema/tool_lib.cpp:120
 msgid "Select working library"
 msgstr "Wybierz bibliotekę roboczą"
 
@@ -121,7 +95,6 @@ msgid "Delete part in current library"
 msgstr "Usuń element z bieżącej biblioteki"
 
 #: kicad/pcbnew/tool_modedit.cpp:61
-#: kicad/pcbnew/xchgmod.cpp:156
 msgid "New Module"
 msgstr "Nowy moduł"
 
@@ -150,16 +123,10 @@ msgid "export module"
 msgstr "Eksportuj moduł"
 
 #: kicad/pcbnew/tool_modedit.cpp:92
-#: kicad/eeschema/menubar.cpp:130
-#: kicad/eeschema/tool_lib.cpp:147
-#: kicad/eeschema/tool_sch.cpp:74
 msgid "Undo last edition"
 msgstr "Cofnij ostatnią edycję"
 
 #: kicad/pcbnew/tool_modedit.cpp:94
-#: kicad/eeschema/menubar.cpp:138
-#: kicad/eeschema/tool_lib.cpp:149
-#: kicad/eeschema/tool_sch.cpp:77
 msgid "Redo the last undo command"
 msgstr "Ponów ostatnio cofniętą operację"
 
@@ -172,43 +139,22 @@ msgid "Print Module"
 msgstr "Drukuj moduł"
 
 #: kicad/pcbnew/tool_modedit.cpp:106
-#: kicad/pcbnew/tool_pcb.cpp:255
-#: kicad/eeschema/tool_lib.cpp:167
-#: kicad/eeschema/tool_sch.cpp:92
-#: kicad/gerbview/tool_gerber.cpp:271
 msgid "zoom +"
 msgstr "Powiększ"
 
 #: kicad/pcbnew/tool_modedit.cpp:110
-#: kicad/pcbnew/tool_pcb.cpp:259
-#: kicad/eeschema/tool_lib.cpp:171
-#: kicad/eeschema/tool_sch.cpp:96
-#: kicad/gerbview/tool_gerber.cpp:278
 msgid "zoom -"
 msgstr "Pomniejsz"
 
 #: kicad/pcbnew/tool_modedit.cpp:114
-#: kicad/pcbnew/tool_pcb.cpp:263
-#: kicad/eeschema/menubar.cpp:193
-#: kicad/eeschema/tool_lib.cpp:175
-#: kicad/eeschema/tool_sch.cpp:100
-#: kicad/gerbview/tool_gerber.cpp:285
 msgid "redraw"
 msgstr "Odśwież"
 
 #: kicad/pcbnew/tool_modedit.cpp:119
-#: kicad/pcbnew/tool_pcb.cpp:268
-#: kicad/eeschema/tool_lib.cpp:181
-#: kicad/eeschema/tool_sch.cpp:105
-#: kicad/3d-viewer/3d_toolbar.cpp:52
-#: kicad/gerbview/tool_gerber.cpp:296
 msgid "auto zoom"
 msgstr "Dopasuj powiększenie"
 
 #: kicad/pcbnew/tool_modedit.cpp:124
-#: kicad/pcbnew/menubarpcb.cpp:233
-#: kicad/pcbnew/modedit.cpp:396
-#: kicad/pcbnew/menubarmodedit.cpp:45
 msgid "Pad Settings"
 msgstr "Właściwości pól lutowniczych"
 
@@ -221,78 +167,50 @@ msgid "Add Pads"
 msgstr "Dodaj pola lutownicze"
 
 #: kicad/pcbnew/tool_modedit.cpp:159
-#: kicad/pcbnew/tool_pcb.cpp:429
 msgid "Add graphic line or polygon"
 msgstr "Dodaj linię lub wielokąt (grafika)"
 
 #: kicad/pcbnew/tool_modedit.cpp:163
-#: kicad/pcbnew/tool_pcb.cpp:433
 msgid "Add graphic circle"
 msgstr "Dodaj okrąg (grafika)"
 
 #: kicad/pcbnew/tool_modedit.cpp:167
-#: kicad/pcbnew/tool_pcb.cpp:437
 msgid "Add graphic arc"
 msgstr "Dodaj łuk (grafika)"
 
 #: kicad/pcbnew/tool_modedit.cpp:171
-#: kicad/pcbnew/edit.cpp:290
-#: kicad/eeschema/schedit.cpp:217
-#: kicad/eeschema/libframe.cpp:501
-#: kicad/gerbview/tool_gerber.cpp:385
 msgid "Add Text"
 msgstr "Dodaj tekst"
 
 #: kicad/pcbnew/tool_modedit.cpp:176
-#: kicad/pcbnew/modedit.cpp:410
 msgid "Place anchor"
 msgstr "Dodaj zakotwiczenie"
 
 #: kicad/pcbnew/tool_modedit.cpp:181
-#: kicad/pcbnew/tool_pcb.cpp:455
-#: kicad/eeschema/menubar.cpp:146
-#: kicad/eeschema/tool_lib.cpp:90
-#: kicad/eeschema/tool_sch.cpp:228
-#: kicad/gerbview/tool_gerber.cpp:393
 msgid "Delete items"
 msgstr "Usuń elementy"
 
 #: kicad/pcbnew/tool_modedit.cpp:203
-#: kicad/pcbnew/tool_pcb.cpp:328
-#: kicad/eeschema/tool_sch.cpp:250
-#: kicad/gerbview/tool_gerber.cpp:417
 msgid "Display Grid OFF"
 msgstr "Wyłącz siatkę"
 
 #: kicad/pcbnew/tool_modedit.cpp:207
-#: kicad/pcbnew/tool_pcb.cpp:331
-#: kicad/gerbview/tool_gerber.cpp:423
 msgid "Display Polar Coord ON"
 msgstr "Pokazywanie współrzędnych polarnych włączone"
 
 #: kicad/pcbnew/tool_modedit.cpp:211
-#: kicad/pcbnew/tool_pcb.cpp:333
-#: kicad/eeschema/tool_sch.cpp:254
-#: kicad/gerbview/tool_gerber.cpp:427
 msgid "Units = Inch"
 msgstr "Jednostka = cale"
 
 #: kicad/pcbnew/tool_modedit.cpp:215
-#: kicad/pcbnew/tool_pcb.cpp:335
-#: kicad/eeschema/tool_sch.cpp:258
-#: kicad/gerbview/tool_gerber.cpp:431
 msgid "Units = mm"
 msgstr "Jednostka = mm"
 
 #: kicad/pcbnew/tool_modedit.cpp:221
-#: kicad/pcbnew/tool_pcb.cpp:338
-#: kicad/eeschema/tool_sch.cpp:262
-#: kicad/gerbview/tool_gerber.cpp:437
 msgid "Change Cursor Shape"
 msgstr "Zmień kształt kursora"
 
 #: kicad/pcbnew/tool_modedit.cpp:229
-#: kicad/pcbnew/tool_pcb.cpp:360
 msgid "Show Pads Sketch"
 msgstr "Pokaż zarys pól lutowniczych"
 
@@ -305,9 +223,6 @@ msgid "Show Edges Sketch"
 msgstr "Pokaż zarys krawędzi"
 
 #: kicad/pcbnew/tool_modedit.cpp:276
-#: kicad/pcbnew/tool_pcb.cpp:577
-#: kicad/share/zoom.cpp:368
-#: kicad/eeschema/plotps.cpp:195
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
@@ -327,71 +242,38 @@ msgid "Grid %.3f"
 msgstr "Siatka %.3f"
 
 #: kicad/pcbnew/tool_modedit.cpp:305
-#: kicad/pcbnew/tool_pcb.cpp:611
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
 #: kicad/pcbnew/plothpgl.cpp:67
-#: kicad/pcbnew/files.cpp:343
-#: kicad/pcbnew/export_gencad.cpp:83
-#: kicad/pcbnew/gen_modules_placefile.cpp:128
-#: kicad/pcbnew/gen_modules_placefile.cpp:139
-#: kicad/pcbnew/gen_modules_placefile.cpp:292
-#: kicad/pcbnew/librairi.cpp:308
-#: kicad/pcbnew/librairi.cpp:454
-#: kicad/pcbnew/librairi.cpp:604
-#: kicad/pcbnew/librairi.cpp:807
-#: kicad/eeschema/plothpgl.cpp:601
-#: kicad/eeschema/plotps.cpp:478
-#: kicad/common/hotkeys_basic.cpp:385
-#: kicad/cvpcb/genequiv.cpp:42
-#: kicad/gerbview/export_to_pcbnew.cpp:75
 msgid "Unable to create "
 msgstr "Nie mogę utworzyć "
 
 #: kicad/pcbnew/plothpgl.cpp:74
-#: kicad/pcbnew/plotps.cpp:58
-#: kicad/pcbnew/plotgerb.cpp:84
 msgid "File"
 msgstr "Plik"
 
 #: kicad/pcbnew/class_board_item.cpp:23
-#: kicad/pcbnew/pcbplot.cpp:415
-#: kicad/pcbnew/dialog_display_options.cpp:221
-#: kicad/pcbnew/dialog_display_options.cpp:229
-#: kicad/pcbnew/dialog_display_options.cpp:266
-#: kicad/pcbnew/dialog_zones_by_polygon.cpp:170
-#: kicad/gerbview/options.cpp:321
 msgid "Line"
 msgstr "Linia"
 
 #: kicad/pcbnew/class_board_item.cpp:24
-#: kicad/pcbnew/dialog_pad_edit.cpp:198
 msgid "Rect"
 msgstr "Prostokąt"
 
 #: kicad/pcbnew/class_board_item.cpp:25
-#: kicad/pcbnew/class_drawsegment.cpp:311
 msgid "Arc"
 msgstr "Łuk"
 
 #: kicad/pcbnew/class_board_item.cpp:26
-#: kicad/pcbnew/class_track.cpp:879
-#: kicad/pcbnew/dialog_pad_edit.cpp:176
-#: kicad/pcbnew/dialog_pad_edit.cpp:196
-#: kicad/pcbnew/class_drawsegment.cpp:307
 msgid "Circle"
 msgstr "Okrąg"
 
 #: kicad/pcbnew/class_board_item.cpp:57
-#: kicad/pcbnew/class_pad.cpp:902
 msgid "Net"
 msgstr "Sieć"
 
 #: kicad/pcbnew/class_board_item.cpp:62
-#: kicad/eeschema/edit_component_in_schematic.cpp:835
-#: kicad/eeschema/dialog_build_BOM.cpp:298
-#: kicad/eeschema/component_class.cpp:74
 msgid "Footprint"
 msgstr "Obudowa"
 
@@ -435,20 +317,10 @@ msgid "Pcb Text"
 msgstr "Tekst PCB"
 
 #: kicad/pcbnew/class_board_item.cpp:100
-#: kicad/pcbnew/dialog_netlist.cpp:162
-#: kicad/eeschema/edit_component_in_schematic.cpp:758
-#: kicad/eeschema/dialog_create_component.cpp:167
-#: kicad/eeschema/onrightclick.cpp:307
-#: kicad/eeschema/eelayer.h:152
 msgid "Reference"
 msgstr "Oznaczenie"
 
 #: kicad/pcbnew/class_board_item.cpp:104
-#: kicad/pcbnew/class_edge_mod.cpp:287
-#: kicad/pcbnew/class_text_mod.cpp:394
-#: kicad/eeschema/edit_component_in_schematic.cpp:796
-#: kicad/eeschema/component_class.cpp:73
-#: kicad/eeschema/eelayer.h:158
 msgid "Value"
 msgstr "Wartość"
 
@@ -459,8 +331,6 @@ msgid " of "
 msgstr " z "
 
 #: kicad/pcbnew/class_board_item.cpp:109
-#: kicad/pcbnew/class_text_mod.cpp:394
-#: kicad/pcbnew/class_text_mod.cpp:402
 msgid "Text"
 msgstr "Tekst"
 
@@ -469,39 +339,31 @@ msgid "Graphic"
 msgstr "Grafika"
 
 #: kicad/pcbnew/class_board_item.cpp:127
-#: kicad/pcbnew/pcbframe.cpp:467
-#: kicad/pcbnew/class_track.cpp:841
 msgid "Track"
 msgstr "Ścieżka"
 
 #: kicad/pcbnew/class_board_item.cpp:134
 #: kicad/pcbnew/class_board_item.cpp:201
-#: kicad/pcbnew/dialog_zones_by_polygon.cpp:231
 msgid "Net:"
 msgstr "Sieć:"
 
 #: kicad/pcbnew/class_board_item.cpp:139
-#: kicad/pcbnew/class_zone.cpp:601
 msgid "Zone Outline"
 msgstr "Obrys strefy"
 
 #: kicad/pcbnew/class_board_item.cpp:144
-#: kicad/pcbnew/class_zone.cpp:605
 msgid "(Cutout)"
 msgstr "(Obszar odcięty)"
 
 #: kicad/pcbnew/class_board_item.cpp:163
-#: kicad/pcbnew/class_zone.cpp:625
 msgid "Not Found"
 msgstr "Nie znaleziono"
 
 #: kicad/pcbnew/class_board_item.cpp:169
-#: kicad/pcbnew/class_track.cpp:845
 msgid "Zone"
 msgstr "Strefa"
 
 #: kicad/pcbnew/class_board_item.cpp:187
-#: kicad/pcbnew/pcbframe.cpp:499
 msgid "Via"
 msgstr "Przelotka"
 
@@ -510,12 +372,10 @@ msgid "Blind/Buried"
 msgstr "Ślepa/zagrzebana"
 
 #: kicad/pcbnew/class_board_item.cpp:193
-#: kicad/pcbnew/pcbnew.h:297
 msgid "Micro Via"
 msgstr "Mikroprzelotka"
 
 #: kicad/pcbnew/class_board_item.cpp:216
-#: kicad/pcbnew/class_marker.cpp:133
 msgid "Marker"
 msgstr "Znacznik"
 
@@ -597,57 +457,10 @@ msgid "Text Module Size H"
 msgstr "Rozmiar poziomy tekstu modułu"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:263
-#: kicad/pcbnew/set_grid.cpp:171
-#: kicad/pcbnew/dialog_pad_edit.cpp:217
-#: kicad/pcbnew/dialog_general_options.cpp:479
-#: kicad/pcbnew/dialog_drc.cpp:550
-#: kicad/pcbnew/swap_layers.cpp:223
-#: kicad/pcbnew/dialog_track_options.cpp:322
-#: kicad/pcbnew/dialog_edit_mod_text.cpp:268
-#: kicad/pcbnew/dialog_initpcb.cpp:161
-#: kicad/pcbnew/dialog_display_options.cpp:282
-#: kicad/share/setpage.cpp:444
-#: kicad/eeschema/dialog_edit_label.cpp:181
-#: kicad/eeschema/symbtext.cpp:177
-#: kicad/eeschema/dialog_build_BOM.cpp:344
-#: kicad/eeschema/dialog_create_component.cpp:198
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:241
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:221
-#: kicad/eeschema/dialog_cmp_graphic_properties.cpp:178
-#: kicad/eeschema/pinedit-dialog.cpp:308
-#: kicad/eeschema/sheet.cpp:198
-#: kicad/eeschema/dialog_options.cpp:288
-#: kicad/cvpcb/dialog_display_options.cpp:186
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:140
-#: kicad/gerbview/select_layers_to_pcb.cpp:285
 msgid "&OK"
 msgstr "&OK"
 
 #: kicad/pcbnew/dialog_graphic_items_options.cpp:267
-#: kicad/pcbnew/set_grid.cpp:176
-#: kicad/pcbnew/dialog_pad_edit.cpp:221
-#: kicad/pcbnew/dialog_general_options.cpp:485
-#: kicad/pcbnew/dialog_drc.cpp:546
-#: kicad/pcbnew/swap_layers.cpp:227
-#: kicad/pcbnew/dialog_track_options.cpp:328
-#: kicad/pcbnew/dialog_edit_mod_text.cpp:273
-#: kicad/pcbnew/dialog_initpcb.cpp:164
-#: kicad/pcbnew/dialog_display_options.cpp:286
-#: kicad/pcbnew/dialog_zones_by_polygon.cpp:207
-#: kicad/share/setpage.cpp:448
-#: kicad/eeschema/dialog_edit_label.cpp:186
-#: kicad/eeschema/symbtext.cpp:182
-#: kicad/eeschema/netlist_control.cpp:144
-#: kicad/eeschema/netlist_control.cpp:267
-#: kicad/eeschema/dialog_create_component.cpp:203
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:233
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:217
-#: kicad/eeschema/dialog_cmp_graphic_properties.cpp:183
-#: kicad/eeschema/pinedit-dialog.cpp:304
-#: kicad/eeschema/sheet.cpp:194
-#: kicad/eeschema/dialog_options.cpp:293
-#: kicad/cvpcb/dialog_display_options.cpp:191
-#: kicad/gerbview/select_layers_to_pcb.cpp:289
 msgid "&Cancel"
 msgstr "&Anuluj"
 
@@ -665,13 +478,10 @@ msgstr "Usuń warstwę "
 
 #: kicad/pcbnew/set_color.cpp:269
 #: kicad/pcbnew/set_color.cpp:296
-#: kicad/gerbview/set_color.cpp:258
-#: kicad/gerbview/set_color.cpp:285
 msgid "Show None"
 msgstr "Żadna"
 
 #: kicad/pcbnew/set_color.cpp:278
-#: kicad/gerbview/set_color.cpp:267
 msgid "Show All"
 msgstr "Wszystkie"
 
@@ -684,62 +494,14 @@ msgid "Switch off all of the copper layers"
 msgstr "Wyłącz na wszystkich warstwach ścieżek"
 
 #: kicad/pcbnew/set_color.cpp:353
-#: kicad/pcbnew/dialog_gendrill.cpp:278
-#: kicad/pcbnew/mirepcb.cpp:99
-#: kicad/pcbnew/block.cpp:157
-#: kicad/pcbnew/dialog_edit_module.cpp:118
-#: kicad/pcbnew/sel_layer.cpp:159
-#: kicad/pcbnew/sel_layer.cpp:318
-#: kicad/pcbnew/cotation.cpp:105
-#: kicad/pcbnew/muonde.cpp:348
-#: kicad/pcbnew/pcbtexte.cpp:114
-#: kicad/pcbnew/dialog_zones_by_polygon.cpp:204
-#: kicad/eeschema/eelayer.cpp:251
-#: kicad/eeschema/sheetlab.cpp:94
-#: kicad/common/displlst.cpp:106
-#: kicad/common/get_component_dialog.cpp:112
-#: kicad/gerbview/set_color.cpp:325
-#: kicad/gerbview/reglage.cpp:108
-#: kicad/gerbview/options.cpp:165
-#: kicad/gerbview/options.cpp:289
 msgid "OK"
 msgstr "OK"
 
 #: kicad/pcbnew/set_color.cpp:357
-#: kicad/pcbnew/mirepcb.cpp:103
-#: kicad/pcbnew/block.cpp:154
-#: kicad/pcbnew/dialog_edit_module.cpp:122
-#: kicad/pcbnew/sel_layer.cpp:163
-#: kicad/pcbnew/sel_layer.cpp:322
-#: kicad/pcbnew/onrightclick.cpp:122
-#: kicad/pcbnew/onrightclick.cpp:136
-#: kicad/pcbnew/cotation.cpp:109
-#: kicad/pcbnew/muonde.cpp:352
-#: kicad/pcbnew/modedit_onclick.cpp:192
-#: kicad/pcbnew/modedit_onclick.cpp:224
-#: kicad/pcbnew/globaleditpad.cpp:108
-#: kicad/pcbnew/pcbtexte.cpp:119
-#: kicad/eeschema/libedit_onrightclick.cpp:42
-#: kicad/eeschema/libedit_onrightclick.cpp:57
-#: kicad/eeschema/eelayer.cpp:255
-#: kicad/eeschema/sheetlab.cpp:98
-#: kicad/eeschema/onrightclick.cpp:98
-#: kicad/eeschema/onrightclick.cpp:110
-#: kicad/common/displlst.cpp:111
-#: kicad/common/selcolor.cpp:171
-#: kicad/common/get_component_dialog.cpp:121
-#: kicad/gerbview/set_color.cpp:329
-#: kicad/gerbview/reglage.cpp:112
-#: kicad/gerbview/options.cpp:169
-#: kicad/gerbview/options.cpp:293
-#: kicad/gerbview/onrightclick.cpp:39
-#: kicad/gerbview/onrightclick.cpp:58
 msgid "Cancel"
 msgstr "Anuluj"
 
 #: kicad/pcbnew/set_color.cpp:361
-#: kicad/eeschema/eelayer.cpp:260
-#: kicad/gerbview/set_color.cpp:333
 msgid "Apply"
 msgstr "Zastosuj"
 
@@ -775,13 +537,10 @@ msgid "Footprint name:"
 msgstr "Oznaczenie elementu (np. R1):"
 
 #: kicad/pcbnew/modules.cpp:291
-#: kicad/pcbnew/onrightclick.cpp:728
 msgid "Delete Module"
 msgstr "Usuń moduł"
 
 #: kicad/pcbnew/modules.cpp:292
-#: kicad/eeschema/find.cpp:220
-#: kicad/eeschema/onrightclick.cpp:304
 msgid "Value "
 msgstr "Wartość "
 
@@ -810,9 +569,6 @@ msgid "Millimeters"
 msgstr "Milimetry"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:165
-#: kicad/pcbnew/set_grid.cpp:147
-#: kicad/pcbnew/dialog_general_options.cpp:299
-#: kicad/gerbview/options.cpp:185
 msgid "Inches"
 msgstr "Cale"
 
@@ -841,12 +597,10 @@ msgid "Zeros Format"
 msgstr "Format zer"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:180
-#: kicad/pcbnew/gendrill.cpp:378
 msgid "2:3"
 msgstr "2:3"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:181
-#: kicad/pcbnew/gendrill.cpp:379
 msgid "2:4"
 msgstr "2:4"
 
@@ -868,8 +622,6 @@ msgstr "Punkt zerowy wierceń:"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:197
 #: kicad/pcbnew/dialog_gendrill.cpp:205
-#: kicad/eeschema/viewlibs.cpp:120
-#: kicad/eeschema/libedit.cpp:41
 msgid "None"
 msgstr "Brak"
 
@@ -902,15 +654,10 @@ msgid "Speed (cm/s)"
 msgstr "Szybkość (cm/s)"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:221
-#: kicad/eeschema/plothpgl.cpp:256
 msgid "Pen Number"
 msgstr "Numer pisaka"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:227
-#: kicad/pcbnew/dialog_general_options.cpp:376
-#: kicad/share/dialog_print.cpp:167
-#: kicad/eeschema/dialog_build_BOM.cpp:283
-#: kicad/eeschema/netlist_control.cpp:121
 msgid "Options:"
 msgstr "Opcje:"
 
@@ -955,7 +702,6 @@ msgid "Through Vias:"
 msgstr "Przelotki na wylot:"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:270
-#: kicad/pcbnew/dialog_track_options.cpp:223
 msgid "Micro Vias:"
 msgstr "Mikroprzelotki:"
 
@@ -964,39 +710,32 @@ msgid "Buried Vias:"
 msgstr "Przelotki zagrzebane:"
 
 #: kicad/pcbnew/dialog_gendrill.cpp:282
-#: kicad/pcbnew/dialog_netlist.cpp:253
-#: kicad/pcbnew/dialog_freeroute_exchange.cpp:222
-#: kicad/share/dialog_print.cpp:222
-#: kicad/share/svg_print.cpp:258
-#: kicad/eeschema/plothpgl.cpp:291
-#: kicad/eeschema/dialog_erc.cpp:219
-#: kicad/eeschema/dialog_build_BOM.cpp:348
 msgid "&Close"
 msgstr "&Zamknij"
 
-#: kicad/pcbnew/affiche.cpp:34
+#: kicad/pcbnew/affiche.cpp:35
 msgid "Net Name"
 msgstr "Nazwa sieci"
 
-#: kicad/pcbnew/affiche.cpp:36
+#: kicad/pcbnew/affiche.cpp:37
 msgid "No Net (not connected)"
 msgstr "Brak sieci (niepołączone)"
 
-#: kicad/pcbnew/affiche.cpp:39
+#: kicad/pcbnew/affiche.cpp:40
 msgid "Net Code"
 msgstr "Kod sieci"
 
-#: kicad/pcbnew/affiche.cpp:52
-#: kicad/pcbnew/class_module.cpp:1131
-#: kicad/pcbnew/class_board.cpp:551
+#: kicad/pcbnew/affiche.cpp:53
 msgid "Pads"
 msgstr "Pola lutownicze"
 
-#: kicad/pcbnew/affiche.cpp:63
-#: kicad/pcbnew/class_board.cpp:561
-#: kicad/pcbnew/plotps.cpp:363
+#: kicad/pcbnew/affiche.cpp:67
 msgid "Vias"
 msgstr "Przelotki"
+
+#: kicad/pcbnew/affiche.cpp:70
+msgid "Net Length"
+msgstr "Długość sieci"
 
 #: kicad/pcbnew/clean.cpp:179
 msgid "Delete unconnected tracks:"
@@ -1020,10 +759,6 @@ msgid "Merge"
 msgstr "Połącz"
 
 #: kicad/pcbnew/clean.cpp:464
-#: kicad/pcbnew/dialog_pad_edit.cpp:186
-#: kicad/eeschema/dialog_erc.cpp:193
-#: kicad/eeschema/dialog_erc.cpp:197
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:172
 msgid "0"
 msgstr "0"
 
@@ -1064,10 +799,6 @@ msgid "Unknown Pad shape"
 msgstr "Nieznany kształt pola lutowniczego"
 
 #: kicad/pcbnew/class_pad.cpp:896
-#: kicad/pcbnew/class_edge_mod.cpp:286
-#: kicad/pcbnew/class_module.cpp:1146
-#: kicad/pcbnew/class_text_mod.cpp:399
-#: kicad/cvpcb/setvisu.cpp:31
 msgid "Module"
 msgstr "Moduł"
 
@@ -1076,36 +807,18 @@ msgid "RefP"
 msgstr "Oznaczenie pola lutowniczego"
 
 #: kicad/pcbnew/class_pad.cpp:986
-#: kicad/pcbnew/class_track.cpp:909
-#: kicad/pcbnew/class_module.cpp:1119
-#: kicad/pcbnew/class_pcb_text.cpp:190
-#: kicad/pcbnew/class_zone.cpp:637
-#: kicad/pcbnew/dialog_edit_module.cpp:235
-#: kicad/pcbnew/sel_layer.cpp:146
-#: kicad/pcbnew/class_text_mod.cpp:418
-#: kicad/pcbnew/class_text_mod.cpp:422
-#: kicad/pcbnew/class_drawsegment.cpp:327
-#: kicad/gerbview/affiche.cpp:110
 msgid "Layer"
 msgstr "Warstwa"
 
 #: kicad/pcbnew/class_pad.cpp:999
-#: kicad/pcbnew/class_pcb_text.cpp:207
-#: kicad/pcbnew/class_text_mod.cpp:438
-#: kicad/gerbview/affiche.cpp:55
 msgid "H Size"
 msgstr "Rozmiar poziomy"
 
 #: kicad/pcbnew/class_pad.cpp:1003
-#: kicad/pcbnew/class_pcb_text.cpp:210
-#: kicad/pcbnew/class_text_mod.cpp:441
-#: kicad/gerbview/affiche.cpp:58
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
 #: kicad/pcbnew/class_pad.cpp:1009
-#: kicad/pcbnew/class_track.cpp:924
-#: kicad/pcbnew/class_track.cpp:929
 msgid "Drill"
 msgstr "Wiercenie"
 
@@ -1114,12 +827,6 @@ msgid "Drill X / Y"
 msgstr "Wiercenie X / Y"
 
 #: kicad/pcbnew/class_pad.cpp:1028
-#: kicad/pcbnew/class_module.cpp:1143
-#: kicad/pcbnew/class_pcb_text.cpp:201
-#: kicad/pcbnew/dialog_edit_module.cpp:246
-#: kicad/pcbnew/class_text_mod.cpp:432
-#: kicad/eeschema/affiche.cpp:116
-#: kicad/gerbview/affiche.cpp:49
 msgid "Orient"
 msgstr "Orientacja"
 
@@ -1136,9 +843,6 @@ msgid "Board modified, Save before exit ?"
 msgstr "Płytka została zmieniona. Zapisać przed zakończeniem?"
 
 #: kicad/pcbnew/pcbframe.cpp:281
-#: kicad/eeschema/schframe.cpp:311
-#: kicad/common/confirm.cpp:119
-#: kicad/cvpcb/cvframe.cpp:178
 msgid "Confirmation"
 msgstr "Potwierdzenie"
 
@@ -1159,12 +863,10 @@ msgid "Display Polar Coords"
 msgstr "Pokaż współrzędne polarne"
 
 #: kicad/pcbnew/pcbframe.cpp:402
-#: kicad/eeschema/schframe.cpp:411
 msgid "Grid not show"
 msgstr "Wyłącz siatkę"
 
 #: kicad/pcbnew/pcbframe.cpp:402
-#: kicad/eeschema/schframe.cpp:411
 msgid "Show Grid"
 msgstr "Pokaż siatkę"
 
@@ -1197,8 +899,6 @@ msgid "Do not Show Zones"
 msgstr "Nie pokazuj stref"
 
 #: kicad/pcbnew/pcbframe.cpp:434
-#: kicad/pcbnew/tool_pcb.cpp:355
-#: kicad/pcbnew/set_color.h:423
 msgid "Show Zones"
 msgstr "Pokaż strefy"
 
@@ -1223,7 +923,6 @@ msgid "Normal Contrast Mode Display"
 msgstr "Wyświetlaj w trybie zwykłego kontrastu"
 
 #: kicad/pcbnew/pcbframe.cpp:455
-#: kicad/pcbnew/tool_pcb.cpp:368
 msgid "Hight Contrast Mode Display"
 msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 
@@ -1285,16 +984,6 @@ msgstr "Warstwa segmentu"
 #: kicad/pcbnew/class_edge_mod.cpp:297
 #: kicad/pcbnew/mirepcb.cpp:113
 #: kicad/pcbnew/class_track.cpp:932
-#: kicad/pcbnew/class_pcb_text.cpp:204
-#: kicad/pcbnew/class_text_mod.cpp:435
-#: kicad/pcbnew/cotation.cpp:129
-#: kicad/pcbnew/dialog_edit_mod_text.cpp:254
-#: kicad/pcbnew/pcbtexte.cpp:133
-#: kicad/pcbnew/class_drawsegment.cpp:332
-#: kicad/eeschema/affiche.cpp:187
-#: kicad/eeschema/dialog_cmp_graphic_properties.cpp:189
-#: kicad/gerbview/affiche.cpp:52
-#: kicad/gerbview/affiche.cpp:114
 msgid "Width"
 msgstr "Szerokość"
 
@@ -1303,14 +992,6 @@ msgid "Target Properties"
 msgstr "Właściwości elementu pozycjonującego"
 
 #: kicad/pcbnew/mirepcb.cpp:108
-#: kicad/pcbnew/cotation.cpp:125
-#: kicad/pcbnew/muonde.cpp:367
-#: kicad/pcbnew/pcbtexte.cpp:129
-#: kicad/eeschema/pinedit-dialog.cpp:274
-#: kicad/eeschema/pinedit-dialog.cpp:280
-#: kicad/eeschema/sheet.cpp:177
-#: kicad/eeschema/sheet.cpp:183
-#: kicad/common/wxwineda.cpp:91
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -1331,13 +1012,6 @@ msgid "Recovery file "
 msgstr "Plik kopii zapasowej "
 
 #: kicad/pcbnew/files.cpp:56
-#: kicad/pcbnew/librairi.cpp:256
-#: kicad/eeschema/find.cpp:241
-#: kicad/eeschema/find.cpp:249
-#: kicad/eeschema/find.cpp:695
-#: kicad/common/eda_doc.cpp:150
-#: kicad/gerbview/readgerb.cpp:145
-#: kicad/gerbview/dcode.cpp:266
 msgid " not found"
 msgstr " nie znaleziony"
 
@@ -1354,9 +1028,6 @@ msgid "Load board files:"
 msgstr "Otwórz pliki płytek:"
 
 #: kicad/pcbnew/files.cpp:187
-#: kicad/pcbnew/librairi.cpp:77
-#: kicad/cvpcb/readschematicnetlist.cpp:53
-#: kicad/cvpcb/rdpcad.cpp:45
 #, c-format
 msgid "File <%s> not found"
 msgstr "Nie znaleziono pliku <%s>"
@@ -1425,12 +1096,6 @@ msgid "Keep or change an existing footprint when the netlist gives a different f
 msgstr "Zachowaj lub zmień istniejącą obudowę, gdy netlista daje inną obudowę"
 
 #: kicad/pcbnew/dialog_netlist.cpp:186
-#: kicad/pcbnew/onrightclick.cpp:579
-#: kicad/pcbnew/onrightclick.cpp:760
-#: kicad/pcbnew/onrightclick.cpp:864
-#: kicad/eeschema/menubar.cpp:146
-#: kicad/eeschema/edit_component_in_lib.cpp:239
-#: kicad/eeschema/edit_component_in_lib.cpp:320
 msgid "Delete"
 msgstr "Usuń"
 
@@ -1443,11 +1108,6 @@ msgid "Keep or delete bad tracks after a netlist change"
 msgstr "Zachowaj lub usuń błędne ścieżki po zmianie w netliście"
 
 #: kicad/pcbnew/dialog_netlist.cpp:193
-#: kicad/pcbnew/dialog_drc.cpp:430
-#: kicad/eeschema/dialog_erc.cpp:239
-#: kicad/eeschema/dialog_create_component.cpp:179
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:202
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:169
 msgid "Options"
 msgstr "Opcje"
 
@@ -1492,11 +1152,6 @@ msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr "Odbuduj pełne połączenia (użyteczne po ręcznej zmianie nazwy sieci pola)"
 
 #: kicad/pcbnew/dialog_netlist.cpp:232
-#: kicad/pcbnew/pcbplot.cpp:284
-#: kicad/pcbnew/xchgmod.cpp:137
-#: kicad/share/zoom.cpp:449
-#: kicad/eeschema/annotate_dialog.cpp:230
-#: kicad/eeschema/plotps.cpp:256
 msgid "Close"
 msgstr "Zamknij"
 
@@ -1579,7 +1234,6 @@ msgid "<%s> Not Found"
 msgstr "Nie znaleziono <%s>"
 
 #: kicad/pcbnew/find.cpp:238
-#: kicad/eeschema/dialog_find.cpp:117
 msgid "Item to find:"
 msgstr "Element do wyszukania:"
 
@@ -1600,37 +1254,26 @@ msgid "Find Next Marker"
 msgstr "Znajdź następny znacznik"
 
 #: kicad/pcbnew/class_track.cpp:852
-#: kicad/pcbnew/class_marker.cpp:133
-#: kicad/pcbnew/class_zone.cpp:608
-#: kicad/pcbnew/class_text_mod.cpp:408
-#: kicad/pcbnew/class_drawsegment.cpp:302
-#: kicad/gerbview/affiche.cpp:94
 msgid "Type"
 msgstr "Typ"
 
 #: kicad/pcbnew/class_track.cpp:868
-#: kicad/pcbnew/zones_by_polygon.cpp:859
-#: kicad/pcbnew/class_zone.cpp:628
 msgid "NetName"
 msgstr "Nazwa sieci"
 
 #: kicad/pcbnew/class_track.cpp:873
-#: kicad/pcbnew/class_zone.cpp:633
 msgid "NetCode"
 msgstr "Kod sieci"
 
 #: kicad/pcbnew/class_track.cpp:877
-#: kicad/pcbnew/class_drawsegment.cpp:317
 msgid "Segment"
 msgstr "Segment"
 
 #: kicad/pcbnew/class_track.cpp:881
-#: kicad/pcbnew/dialog_pad_edit.cpp:205
 msgid "Standard"
 msgstr "Standardowe"
 
 #: kicad/pcbnew/class_track.cpp:893
-#: kicad/pcbnew/class_module.cpp:1139
 msgid "Stat"
 msgstr "Status"
 
@@ -1708,8 +1351,6 @@ msgid "Save Board"
 msgstr "Zapisz płytkę"
 
 #: kicad/pcbnew/tool_pcb.cpp:231
-#: kicad/eeschema/tool_sch.cpp:49
-#: kicad/gerbview/tool_gerber.cpp:232
 msgid "page settings (size, texts)"
 msgstr "Ustawienia strony (rozmiar, teksty)"
 
@@ -1718,25 +1359,18 @@ msgid "Open Module Editor"
 msgstr "Otwórz edytor modułów"
 
 #: kicad/pcbnew/tool_pcb.cpp:238
-#: kicad/eeschema/tool_sch.cpp:65
-#: kicad/gerbview/tool_gerber.cpp:243
 msgid "Cut selected item"
 msgstr "Wytnij zaznaczony element"
 
 #: kicad/pcbnew/tool_pcb.cpp:242
-#: kicad/eeschema/tool_sch.cpp:68
-#: kicad/gerbview/tool_gerber.cpp:248
 msgid "Copy selected item"
 msgstr "Kopiuj zaznaczony element"
 
 #: kicad/pcbnew/tool_pcb.cpp:244
-#: kicad/eeschema/tool_sch.cpp:71
-#: kicad/gerbview/tool_gerber.cpp:254
 msgid "Paste"
 msgstr "Wklej"
 
 #: kicad/pcbnew/tool_pcb.cpp:247
-#: kicad/gerbview/tool_gerber.cpp:261
 msgid "Undelete"
 msgstr "Cofnij usunięcie"
 
@@ -1749,8 +1383,6 @@ msgid "Plot (HPGL, PostScript, or GERBER format)"
 msgstr "Rysuj (format HPGL, Postscript lub Gerbera)"
 
 #: kicad/pcbnew/tool_pcb.cpp:272
-#: kicad/eeschema/menubar.cpp:154
-#: kicad/eeschema/tool_sch.cpp:109
 msgid "Find components and texts"
 msgstr "Znajdź elementy i teksty"
 
@@ -1831,7 +1463,6 @@ msgid "Add dimension"
 msgstr "Dodaj wymiar"
 
 #: kicad/pcbnew/tool_pcb.cpp:450
-#: kicad/gerbview/tool_gerber.cpp:378
 msgid "Add layer alignment target"
 msgstr "Dodaj element pozycjonujący warstwy"
 
@@ -1872,10 +1503,6 @@ msgid "Zoom "
 msgstr "Powiększenie "
 
 #: kicad/pcbnew/tool_pcb.cpp:595
-#: kicad/eeschema/eelayer.cpp:223
-#: kicad/pcbnew/set_color.h:414
-#: kicad/eeschema/eelayer.h:214
-#: kicad/gerbview/set_color.h:324
 msgid "Grid"
 msgstr "Siatka"
 
@@ -1900,7 +1527,6 @@ msgid "Edit All Track Sizes"
 msgstr "Edytuj rozmiary wszystkich ścieżek"
 
 #: kicad/pcbnew/editmod.cpp:45
-#: kicad/pcbnew/edit.cpp:179
 msgid "Module Editor"
 msgstr "Edytor modułów"
 
@@ -1913,7 +1539,6 @@ msgid "Text is VALUE!"
 msgstr "Tekst jest WARTOŚCIĄ!"
 
 #: kicad/pcbnew/set_grid.cpp:148
-#: kicad/share/drawframe.cpp:377
 msgid "mm"
 msgstr "mm"
 
@@ -1951,17 +1576,14 @@ msgid "90"
 msgstr "90"
 
 #: kicad/pcbnew/dialog_pad_edit.cpp:188
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:175
 msgid "-90"
 msgstr "-90"
 
 #: kicad/pcbnew/dialog_pad_edit.cpp:189
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:174
 msgid "180"
 msgstr "180"
 
 #: kicad/pcbnew/dialog_pad_edit.cpp:190
-#: kicad/pcbnew/dialog_edit_module.cpp:243
 msgid "User"
 msgstr "Użytkownika"
 
@@ -1982,7 +1604,6 @@ msgid "SMD"
 msgstr "SMD"
 
 #: kicad/pcbnew/dialog_pad_edit.cpp:207
-#: kicad/eeschema/netlist.cpp:209
 msgid "Conn"
 msgstr "Łącze"
 
@@ -2079,7 +1700,6 @@ msgid "Un-terminated delimited string"
 msgstr "Niezakończony separator tekstu"
 
 #: kicad/pcbnew/class_drc_item.cpp:39
-#: kicad/pcbnew/dialog_drc.cpp:484
 msgid "Unconnected pads"
 msgstr "Pola niepołączone"
 
@@ -2215,7 +1835,6 @@ msgid "Incorrect number, no change"
 msgstr "Nieprawidłowy numer. Bez zmian"
 
 #: kicad/pcbnew/muwave_command.cpp:52
-#: kicad/eeschema/libframe.cpp:517
 msgid "Add Line"
 msgstr "Dodaj linię"
 
@@ -2256,49 +1875,34 @@ msgid "KeyW: "
 msgstr "Słowo kluczowe: "
 
 #: kicad/pcbnew/dialog_general_options.cpp:288
-#: kicad/gerbview/options.cpp:175
 msgid "No Display"
 msgstr "Nie pokazuj"
 
 #: kicad/pcbnew/dialog_general_options.cpp:289
-#: kicad/pcbnew/class_text_mod.cpp:410
-#: kicad/pcbnew/cotation.cpp:114
-#: kicad/pcbnew/dialog_edit_mod_text.cpp:291
-#: kicad/pcbnew/pcbtexte.cpp:181
-#: kicad/eeschema/affiche.cpp:91
-#: kicad/gerbview/options.cpp:176
-#: kicad/gerbview/tool_gerber.cpp:113
 msgid "Display"
 msgstr "Pokazuj"
 
 #: kicad/pcbnew/dialog_general_options.cpp:291
-#: kicad/gerbview/options.cpp:177
 msgid "Display Polar Coord"
 msgstr "Pokaż współrzędne polarne"
 
 #: kicad/pcbnew/dialog_general_options.cpp:300
-#: kicad/gerbview/options.cpp:186
 msgid "millimeters"
 msgstr "Milimetry"
 
 #: kicad/pcbnew/dialog_general_options.cpp:302
-#: kicad/eeschema/dialog_options.cpp:264
-#: kicad/gerbview/options.cpp:187
 msgid "Units"
 msgstr "Jednostki"
 
 #: kicad/pcbnew/dialog_general_options.cpp:309
-#: kicad/gerbview/options.cpp:193
 msgid "Small"
 msgstr "Mały"
 
 #: kicad/pcbnew/dialog_general_options.cpp:310
-#: kicad/gerbview/options.cpp:193
 msgid "Big"
 msgstr "Duży"
 
 #: kicad/pcbnew/dialog_general_options.cpp:312
-#: kicad/gerbview/options.cpp:194
 msgid "Cursor"
 msgstr "Kursor"
 
@@ -2339,7 +1943,6 @@ msgid "Segments 45 Only"
 msgstr "Tylko segmenty 45 stopni"
 
 #: kicad/pcbnew/dialog_general_options.cpp:429
-#: kicad/eeschema/dialog_options.cpp:256
 msgid "Auto PAN"
 msgstr "Autodopasowanie powiększenia"
 
@@ -2349,8 +1952,6 @@ msgstr "Ścieżka z podwójnym segmentem"
 
 #: kicad/pcbnew/dialog_general_options.cpp:449
 #: kicad/pcbnew/dialog_general_options.cpp:464
-#: kicad/pcbnew/dialog_display_options.cpp:200
-#: kicad/pcbnew/dialog_display_options.cpp:206
 msgid "Never"
 msgstr "Nigdy"
 
@@ -2361,8 +1962,6 @@ msgstr "W trakcie tworzenia ścieżek"
 
 #: kicad/pcbnew/dialog_general_options.cpp:451
 #: kicad/pcbnew/dialog_general_options.cpp:466
-#: kicad/pcbnew/dialog_display_options.cpp:198
-#: kicad/pcbnew/dialog_display_options.cpp:208
 msgid "Always"
 msgstr "Zawsze"
 
@@ -2387,7 +1986,6 @@ msgid "Module name:"
 msgstr "Nazwa modułu:"
 
 #: kicad/pcbnew/loadcmp.cpp:215
-#: kicad/eeschema/eelibs_read_libraryfiles.cpp:64
 #, c-format
 msgid "Library <%s> not found"
 msgstr "Nie znaleziono biblioteki <%s>"
@@ -2517,19 +2115,14 @@ msgid "Save current board as.."
 msgstr "Zapisz bieżącą płytkę jako..."
 
 #: kicad/pcbnew/menubarpcb.cpp:84
-#: kicad/eeschema/menubar.cpp:75
-#: kicad/gerbview/tool_gerber.cpp:88
 msgid "P&rint"
 msgstr "&Drukuj"
 
 #: kicad/pcbnew/menubarpcb.cpp:84
-#: kicad/eeschema/menubar.cpp:75
-#: kicad/gerbview/tool_gerber.cpp:88
 msgid "Print on current printer"
 msgstr "Drukuj na bieżącej drukarce"
 
 #: kicad/pcbnew/menubarpcb.cpp:89
-#: kicad/eeschema/menubar.cpp:105
 msgid "&Plot"
 msgstr "&Plotter"
 
@@ -2578,7 +2171,6 @@ msgid "Import a routed \"Specctra Session\" (*.ses) file"
 msgstr "Importuj plik \"Specctra Session\" (*.ses)"
 
 #: kicad/pcbnew/menubarpcb.cpp:133
-#: kicad/eeschema/libframe.cpp:525
 msgid "Import"
 msgstr "Importuj"
 
@@ -2611,10 +2203,6 @@ msgid "Archive or Add footprints in a library file"
 msgstr "Archiwizuje lub dodaje obudowy do pliku biblioteki"
 
 #: kicad/pcbnew/menubarpcb.cpp:156
-#: kicad/eeschema/menubar.cpp:109
-#: kicad/cvpcb/tool_cvpcb.cpp:122
-#: kicad/kicad/buildmnu.cpp:122
-#: kicad/gerbview/tool_gerber.cpp:93
 msgid "E&xit"
 msgstr "&Zakończ"
 
@@ -2623,19 +2211,14 @@ msgid "Quit pcbnew"
 msgstr "Zakończ Pcbnew"
 
 #: kicad/pcbnew/menubarpcb.cpp:174
-#: kicad/eeschema/menubar.cpp:358
 msgid "&Libs and Dir"
 msgstr "&Biblioteki i katalogi"
 
 #: kicad/pcbnew/menubarpcb.cpp:175
-#: kicad/eeschema/menubar.cpp:359
-#: kicad/cvpcb/tool_cvpcb.cpp:137
 msgid "Setting Libraries, Directories and others..."
 msgstr "Ustawienia bibliotek, katalogów i pozostałych..."
 
 #: kicad/pcbnew/menubarpcb.cpp:179
-#: kicad/eeschema/menubar.cpp:364
-#: kicad/gerbview/tool_gerber.cpp:108
 msgid "&Colors"
 msgstr "&Kolory"
 
@@ -2660,23 +2243,18 @@ msgid "Select what items are displayed"
 msgstr "Wybierz elementy, które będą wyświetlane"
 
 #: kicad/pcbnew/menubarpcb.cpp:200
-#: kicad/eeschema/menubar.cpp:382
 msgid "&Save preferences"
 msgstr "&Zapisz ustawienia"
 
 #: kicad/pcbnew/menubarpcb.cpp:201
-#: kicad/eeschema/menubar.cpp:383
-#: kicad/gerbview/tool_gerber.cpp:123
 msgid "Save application preferences"
 msgstr "Zapisz ustawienia aplikacji"
 
 #: kicad/pcbnew/menubarpcb.cpp:205
-#: kicad/eeschema/menubar.cpp:386
 msgid "&Read preferences"
 msgstr "W&czytaj ustawienia"
 
 #: kicad/pcbnew/menubarpcb.cpp:206
-#: kicad/eeschema/menubar.cpp:387
 msgid "Read application preferences"
 msgstr "Wczytaj ustawienia aplikacji"
 
@@ -2689,33 +2267,26 @@ msgid "Adjust size and width for tracks, vias"
 msgstr "Dostosuj rozmiar i szerokość dla ścieżek, przelotek"
 
 #: kicad/pcbnew/menubarpcb.cpp:223
-#: kicad/pcbnew/menubarmodedit.cpp:50
-#: kicad/pcbnew/set_grid.h:39
 msgid "User Grid Size"
 msgstr "Rozmiar siatki użytkownika"
 
 #: kicad/pcbnew/menubarpcb.cpp:224
-#: kicad/pcbnew/menubarmodedit.cpp:51
 msgid "Adjust User Grid"
 msgstr "Dostosuj siatkę użytkownika"
 
 #: kicad/pcbnew/menubarpcb.cpp:228
-#: kicad/pcbnew/dialog_graphic_items_options.h:47
 msgid "Texts and Drawings"
 msgstr "Teksty i rysunki"
 
 #: kicad/pcbnew/menubarpcb.cpp:229
-#: kicad/pcbnew/menubarmodedit.cpp:41
 msgid "Adjust width for texts and drawings"
 msgstr "Dostosuj szerokość dla tekstów i rysunków"
 
 #: kicad/pcbnew/menubarpcb.cpp:234
-#: kicad/pcbnew/menubarmodedit.cpp:46
 msgid "Adjust size,shape,layers... for Pads"
 msgstr "Dostosuj rozmiary, kształty, warstwy... dla pól lutowniczych"
 
 #: kicad/pcbnew/menubarpcb.cpp:239
-#: kicad/gerbview/tool_gerber.cpp:122
 msgid "&Save Setup"
 msgstr "&Zapisz ustawienia"
 
@@ -2780,71 +2351,42 @@ msgid "Swap tracks on copper layers or drawings on others layers"
 msgstr "Zamień ścieżki na warstwach ścieżek lub rysunki na innych warstwach"
 
 #: kicad/pcbnew/menubarpcb.cpp:292
-#: kicad/pcbnew/menubarmodedit.cpp:60
-#: kicad/eeschema/menubar.cpp:397
-#: kicad/cvpcb/tool_cvpcb.cpp:155
-#: kicad/kicad/buildmnu.cpp:190
-#: kicad/gerbview/tool_gerber.cpp:149
 msgid "&Contents"
 msgstr "&Zawartość"
 
 #: kicad/pcbnew/menubarpcb.cpp:292
-#: kicad/pcbnew/menubarmodedit.cpp:60
 msgid "Open the pcbnew manual"
 msgstr "Otwórz podręcznik Pcbnew"
 
 #: kicad/pcbnew/menubarpcb.cpp:296
-#: kicad/pcbnew/menubarmodedit.cpp:64
-#: kicad/eeschema/menubar.cpp:402
-#: kicad/cvpcb/tool_cvpcb.cpp:159
-#: kicad/kicad/buildmnu.cpp:195
-#: kicad/gerbview/tool_gerber.cpp:151
 msgid "&About"
 msgstr "&O programie"
 
 #: kicad/pcbnew/menubarpcb.cpp:296
-#: kicad/pcbnew/menubarmodedit.cpp:64
-#: kicad/eeschema/menubar.cpp:402
-#: kicad/cvpcb/tool_cvpcb.cpp:160
-#: kicad/kicad/buildmnu.cpp:195
-#: kicad/gerbview/tool_gerber.cpp:152
 msgid "About this application"
 msgstr "Informacje na temat tej aplikacji"
 
 #: kicad/pcbnew/menubarpcb.cpp:304
-#: kicad/pcbnew/menubarmodedit.cpp:72
 msgid "3D Display"
 msgstr "Widok 3D"
 
 #: kicad/pcbnew/menubarpcb.cpp:304
-#: kicad/pcbnew/menubarmodedit.cpp:72
 msgid "Show Board in 3D Mode"
 msgstr "Pokaż płytkę w trybie 3D"
 
 #: kicad/pcbnew/menubarpcb.cpp:308
-#: kicad/eeschema/menubar.cpp:407
-#: kicad/cvpcb/tool_cvpcb.cpp:164
-#: kicad/3d-viewer/3d_toolbar.cpp:110
-#: kicad/gerbview/tool_gerber.cpp:154
 msgid "&File"
 msgstr "&Plik"
 
 #: kicad/pcbnew/menubarpcb.cpp:309
-#: kicad/eeschema/menubar.cpp:411
-#: kicad/cvpcb/tool_cvpcb.cpp:165
-#: kicad/kicad/buildmnu.cpp:202
-#: kicad/3d-viewer/3d_toolbar.cpp:118
-#: kicad/gerbview/tool_gerber.cpp:155
 msgid "&Preferences"
 msgstr "&Ustawienia"
 
 #: kicad/pcbnew/menubarpcb.cpp:310
-#: kicad/pcbnew/menubarmodedit.cpp:76
 msgid "&Dimensions"
 msgstr "&Wymiary"
 
 #: kicad/pcbnew/menubarpcb.cpp:311
-#: kicad/gerbview/tool_gerber.cpp:156
 msgid "&Miscellaneous"
 msgstr "&Różne"
 
@@ -2853,16 +2395,10 @@ msgid "P&ostprocess"
 msgstr "P&ostprodukcja"
 
 #: kicad/pcbnew/menubarpcb.cpp:313
-#: kicad/pcbnew/menubarmodedit.cpp:77
 msgid "&3D Display"
 msgstr "Widok &3D"
 
 #: kicad/pcbnew/menubarpcb.cpp:314
-#: kicad/pcbnew/menubarmodedit.cpp:78
-#: kicad/eeschema/menubar.cpp:412
-#: kicad/cvpcb/tool_cvpcb.cpp:166
-#: kicad/kicad/buildmnu.cpp:203
-#: kicad/gerbview/tool_gerber.cpp:159
 msgid "&Help"
 msgstr "Pomo&c"
 
@@ -2885,7 +2421,6 @@ msgid "No Net"
 msgstr "Brak sieci"
 
 #: kicad/pcbnew/dialog_drc.cpp:440
-#: kicad/pcbnew/dialog_track_options.cpp:290
 msgid "Clearance"
 msgstr "Prześwit"
 
@@ -2926,7 +2461,6 @@ msgid "Include tests for clearances between pad to pads"
 msgstr "Dołącz testy prześwitu pomiędzy polami"
 
 #: kicad/pcbnew/dialog_drc.cpp:478
-#: kicad/pcbnew/onrightclick.cpp:644
 msgid "Zones"
 msgstr "Strefy"
 
@@ -3022,7 +2556,6 @@ msgid "Delete draw items?"
 msgstr "Usunąć rysunki?"
 
 #: kicad/pcbnew/initpcb.cpp:249
-#: kicad/gerbview/initpcb.cpp:150
 msgid "Delete Tracks?"
 msgstr "Usunąć ścieżki?"
 
@@ -3031,45 +2564,65 @@ msgid "Delete Modules?"
 msgstr "Usunąć moduły?"
 
 #: kicad/pcbnew/initpcb.cpp:295
-#: kicad/gerbview/initpcb.cpp:173
 msgid "Delete Pcb Texts"
 msgstr "Usuń teksty PCB"
 
 #: kicad/pcbnew/class_pcb_text.cpp:186
-#: kicad/gerbview/affiche.cpp:29
 msgid "COTATION"
 msgstr "Linie wymiarowe"
 
 #: kicad/pcbnew/class_pcb_text.cpp:188
-#: kicad/gerbview/affiche.cpp:32
 msgid "PCB Text"
 msgstr "Tekst PCB"
 
 #: kicad/pcbnew/class_pcb_text.cpp:194
-#: kicad/pcbnew/class_text_mod.cpp:429
-#: kicad/pcbnew/cotation.cpp:113
-#: kicad/pcbnew/modedit_onclick.cpp:243
-#: kicad/pcbnew/pcbtexte.cpp:180
-#: kicad/share/dialog_print.cpp:178
-#: kicad/gerbview/affiche.cpp:40
 msgid "Mirror"
 msgstr "Odbicie"
 
 #: kicad/pcbnew/class_pcb_text.cpp:196
-#: kicad/pcbnew/class_text_mod.cpp:412
-#: kicad/pcbnew/dialog_display_options.cpp:275
-#: kicad/eeschema/dialog_options.cpp:280
-#: kicad/gerbview/affiche.cpp:43
 msgid "No"
 msgstr "Nie"
 
 #: kicad/pcbnew/class_pcb_text.cpp:198
-#: kicad/pcbnew/class_text_mod.cpp:414
-#: kicad/pcbnew/dialog_display_options.cpp:274
-#: kicad/eeschema/dialog_options.cpp:279
-#: kicad/gerbview/affiche.cpp:45
 msgid "Yes"
 msgstr "Tak"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:147
+msgid "Orientation:"
+msgstr "Orientacja:"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:152
+msgid "New orientation (0.1 degree resolution)"
+msgstr "Nowa orientacja (rozdzielczość 0.1 stopnia)"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:155
+msgid "Filter:"
+msgstr "Filtr:"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:158
+msgid "*"
+msgstr "*"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:160
+msgid "Filter to select footprints by reference"
+msgstr "Filtruj, aby wybrać obudowy poprzez oznaczenie"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:165
+msgid "Include Locked Footprints"
+msgstr "Dołącz zablokowane obudowy"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:168
+msgid "Force locked footprints to be modified"
+msgstr "Wymuś zmianę zablokowanych obudów"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:255
+#, c-format
+msgid "Ok to set footprints orientation to %g degrees ?"
+msgstr "Czy ustawić orientację obudów na %g stopni?"
+
+#: kicad/pcbnew/dialog_orient_footprints.cpp:289
+msgid "Bad value for footprints orientation"
+msgstr "Zła wartość orientacji obudów"
 
 #: kicad/pcbnew/controle.cpp:172
 #: kicad/pcbnew/modedit.cpp:77
@@ -3093,13 +2646,11 @@ msgid "Connect"
 msgstr "Połączone"
 
 #: kicad/pcbnew/class_board.cpp:576
-#: kicad/eeschema/eelayer.h:115
 msgid "NoConn"
 msgstr "Niepołączone"
 
 #: kicad/pcbnew/pcbplot.cpp:145
 #: kicad/pcbnew/pcbplot.cpp:272
-#: kicad/gerbview/tool_gerber.cpp:90
 msgid "Plot"
 msgstr "Rysuj"
 
@@ -3156,7 +2707,6 @@ msgid "X scale adjust"
 msgstr "Dostosuj skalę X"
 
 #: kicad/pcbnew/pcbplot.cpp:259
-#: kicad/share/wxprint.cpp:193
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Dostosuj skalę w osi X dla dokładnej skali rysowania"
 
@@ -3165,7 +2715,6 @@ msgid "Y scale adjust"
 msgstr "Dostosuj skalę Y"
 
 #: kicad/pcbnew/pcbplot.cpp:264
-#: kicad/share/wxprint.cpp:194
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Dostosuj skalę w osi Y dla dokładnej skali rysowania"
 
@@ -3270,12 +2819,10 @@ msgid "Scale 1.5"
 msgstr "Skala 1,5"
 
 #: kicad/pcbnew/pcbplot.cpp:406
-#: kicad/share/dialog_print.cpp:143
 msgid "Scale 2"
 msgstr "Skala 2"
 
 #: kicad/pcbnew/pcbplot.cpp:406
-#: kicad/share/dialog_print.cpp:144
 msgid "Scale 3"
 msgstr "Skala 3"
 
@@ -3284,25 +2831,10 @@ msgid "Scale Opt"
 msgstr "Opcje skali"
 
 #: kicad/pcbnew/pcbplot.cpp:415
-#: kicad/pcbnew/dialog_display_options.cpp:192
-#: kicad/pcbnew/dialog_display_options.cpp:222
-#: kicad/pcbnew/dialog_display_options.cpp:230
-#: kicad/pcbnew/dialog_display_options.cpp:245
-#: kicad/pcbnew/dialog_display_options.cpp:267
-#: kicad/eeschema/dialog_cmp_graphic_properties.cpp:169
-#: kicad/gerbview/options.cpp:298
-#: kicad/gerbview/options.cpp:321
 msgid "Filled"
 msgstr "Wypełniony"
 
 #: kicad/pcbnew/pcbplot.cpp:415
-#: kicad/pcbnew/dialog_display_options.cpp:191
-#: kicad/pcbnew/dialog_display_options.cpp:223
-#: kicad/pcbnew/dialog_display_options.cpp:231
-#: kicad/pcbnew/dialog_display_options.cpp:244
-#: kicad/pcbnew/dialog_display_options.cpp:268
-#: kicad/gerbview/options.cpp:298
-#: kicad/gerbview/options.cpp:321
 msgid "Sketch"
 msgstr "Zarys"
 
@@ -3331,20 +2863,15 @@ msgid "Draw origin ( 0,0 ) in sheet center"
 msgstr "Punkt zerowy rysowania (0,0) na środku arkusza"
 
 #: kicad/pcbnew/pcbcfg.cpp:71
-#: kicad/eeschema/eeconfig.cpp:60
-#: kicad/cvpcb/menucfg.cpp:167
 msgid "Read config file"
 msgstr "Wczytaj plik konfiguracji"
 
 #: kicad/pcbnew/pcbcfg.cpp:85
-#: kicad/cvpcb/menucfg.cpp:179
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
 #: kicad/pcbnew/pcbcfg.cpp:204
-#: kicad/eeschema/eeconfig.cpp:199
-#: kicad/cvpcb/cfg.cpp:78
 msgid "Save preferences"
 msgstr "Zapisz ustawienia"
 
@@ -3418,7 +2945,7 @@ msgid "Change module %s (%s)  "
 msgstr "Zamień moduł %s (%s) "
 
 #: kicad/pcbnew/xchgmod.cpp:612
-#: kicad/pcbnew/automove.cpp:208
+#: kicad/pcbnew/automove.cpp:207
 msgid "No Modules!"
 msgstr "Brak modułów!"
 
@@ -3427,9 +2954,6 @@ msgid "Cmp files:"
 msgstr "Pliki elementów:"
 
 #: kicad/pcbnew/xchgmod.cpp:637
-#: kicad/pcbnew/plotps.cpp:51
-#: kicad/pcbnew/gendrill.cpp:322
-#: kicad/pcbnew/gendrill.cpp:789
 msgid "Unable to create file "
 msgstr "Nie mogę utworzyć pliku "
 
@@ -3452,13 +2976,10 @@ msgid "Change module(s)"
 msgstr "Zmień moduł(y)"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:186
-#: kicad/pcbnew/modedit_onclick.cpp:250
 msgid "Edit Module"
 msgstr "Edytuj moduł"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:193
-#: kicad/eeschema/onrightclick.cpp:343
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:206
 msgid "Doc"
 msgstr "Dokument"
 
@@ -3475,7 +2996,6 @@ msgid "Add Field"
 msgstr "Dodaj pole"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:222
-#: kicad/eeschema/onrightclick.cpp:248
 msgid "Edit Field"
 msgstr "Edytuj pole"
 
@@ -3484,7 +3004,6 @@ msgid "Delete Field"
 msgstr "Usuń pole"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:234
-#: kicad/common/common.cpp:343
 msgid "Component"
 msgstr "Elementów "
 
@@ -3494,12 +3013,6 @@ msgstr "Ścieżek"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:243
 #: kicad/pcbnew/dialog_edit_module.cpp:289
-#: kicad/pcbnew/cotation.cpp:113
-#: kicad/pcbnew/muonde.cpp:360
-#: kicad/pcbnew/pcbtexte.cpp:180
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:181
-#: kicad/eeschema/onrightclick.cpp:293
-#: kicad/eeschema/dialog_options.cpp:247
 msgid "Normal"
 msgstr "Normalny"
 
@@ -3568,7 +3081,6 @@ msgid "3D Shape Name"
 msgstr "Ścieżka do biblioteki obudowy 3D:"
 
 #: kicad/pcbnew/dialog_edit_module.cpp:395
-#: kicad/eeschema/dialog_eeschema_config.cpp:231
 msgid "Browse"
 msgstr "Przeglądaj"
 
@@ -3670,14 +3182,10 @@ msgid "Add Pad"
 msgstr "Dodaj pole lutownicze"
 
 #: kicad/pcbnew/modedit.cpp:406
-#: kicad/eeschema/schedit.cpp:197
 msgid "Add Drawing"
 msgstr "Dodaj rysunek"
 
 #: kicad/pcbnew/modedit.cpp:424
-#: kicad/pcbnew/edit.cpp:552
-#: kicad/eeschema/schedit.cpp:366
-#: kicad/eeschema/libframe.cpp:577
 msgid "Delete item"
 msgstr "Usuń element"
 
@@ -3709,18 +3217,13 @@ msgstr "Znaleziono obudowę %s, ale jest ona zablokowana"
 msgid "Delete module?"
 msgstr "Usunąć moduł?"
 
-#: kicad/pcbnew/automove.cpp:212
+#: kicad/pcbnew/automove.cpp:211
 msgid "Move Modules ?"
 msgstr "Przesunąć moduły?"
 
-#: kicad/pcbnew/automove.cpp:221
+#: kicad/pcbnew/automove.cpp:220
 msgid "Autoplace modules: No boad edges detected, unable to place modules"
 msgstr "Automatyczne rozmieszczanie modułów: Nie wykryto krawędzi płytki. Nie mogę rozmieścić modułów"
-
-#: kicad/pcbnew/automove.cpp:344
-#, c-format
-msgid "Ok to set module orientation to %d degrees ?"
-msgstr "Czy ustawić orientację modułu na %d stopni?"
 
 #: kicad/pcbnew/dialog_track_options.cpp:151
 msgid "Vias:"
@@ -3739,7 +3242,6 @@ msgid "Alternate Via Drill"
 msgstr "Alternatywny otwór przelotki"
 
 #: kicad/pcbnew/dialog_track_options.cpp:208
-#: kicad/pcbnew/pcbnew.h:299
 msgid "Through Via"
 msgstr "Przelotka na wylot"
 
@@ -3821,10 +3323,6 @@ msgid "Via %.3f"
 msgstr "Przelotka %.3f"
 
 #: kicad/pcbnew/onrightclick.cpp:127
-#: kicad/pcbnew/modedit_onclick.cpp:196
-#: kicad/eeschema/libedit_onrightclick.cpp:47
-#: kicad/eeschema/onrightclick.cpp:102
-#: kicad/gerbview/onrightclick.cpp:41
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
 
@@ -3849,7 +3347,6 @@ msgid "Move Drawing"
 msgstr "Przesuń rysunek"
 
 #: kicad/pcbnew/onrightclick.cpp:238
-#: kicad/eeschema/onrightclick.cpp:208
 msgid "End Drawing"
 msgstr "Zakończ rysunek"
 
@@ -3858,7 +3355,6 @@ msgid "Edit Drawing"
 msgstr "Edytuj rysunek"
 
 #: kicad/pcbnew/onrightclick.cpp:241
-#: kicad/eeschema/onrightclick.cpp:210
 msgid "Delete Drawing"
 msgstr "Usuń rysunek"
 
@@ -3875,7 +3371,6 @@ msgid "Delete Last Corner"
 msgstr "Usuń ostatni narożnik"
 
 #: kicad/pcbnew/onrightclick.cpp:273
-#: kicad/eeschema/onrightclick.cpp:155
 msgid "Delete Marker"
 msgstr "Usuń znacznik"
 
@@ -3988,33 +3483,18 @@ msgid "Read Global AutoRouter Data"
 msgstr "Wczytaj globalne dane autoroutera"
 
 #: kicad/pcbnew/onrightclick.cpp:445
-#: kicad/pcbnew/modedit_onclick.cpp:206
-#: kicad/eeschema/libedit_onrightclick.cpp:231
-#: kicad/eeschema/onrightclick.cpp:609
-#: kicad/gerbview/onrightclick.cpp:50
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
 #: kicad/pcbnew/onrightclick.cpp:447
-#: kicad/pcbnew/modedit_onclick.cpp:208
-#: kicad/eeschema/libedit_onrightclick.cpp:234
-#: kicad/eeschema/onrightclick.cpp:615
-#: kicad/gerbview/onrightclick.cpp:51
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Powiększ blok (shift + przeciąganie myszką)"
 
 #: kicad/pcbnew/onrightclick.cpp:450
-#: kicad/pcbnew/modedit_onclick.cpp:211
-#: kicad/eeschema/libedit_onrightclick.cpp:238
-#: kicad/eeschema/onrightclick.cpp:617
-#: kicad/gerbview/onrightclick.cpp:53
 msgid "Place Block"
 msgstr "Dodaj blok"
 
 #: kicad/pcbnew/onrightclick.cpp:452
-#: kicad/pcbnew/modedit_onclick.cpp:213
-#: kicad/eeschema/libedit_onrightclick.cpp:244
-#: kicad/eeschema/onrightclick.cpp:626
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Kopiuj blok (shift + przeciąganie myszką)"
 
@@ -4023,12 +3503,10 @@ msgid "Flip Block (alt + drag mouse)"
 msgstr "Odbij blok (alt + przeciąganie myszką)"
 
 #: kicad/pcbnew/onrightclick.cpp:456
-#: kicad/pcbnew/modedit_onclick.cpp:217
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Obróć blok (ctrl + przeciąganie myszką)"
 
 #: kicad/pcbnew/onrightclick.cpp:458
-#: kicad/pcbnew/modedit_onclick.cpp:219
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
@@ -4258,7 +3736,6 @@ msgid "Rotate  +"
 msgstr "Obróć +"
 
 #: kicad/pcbnew/onrightclick.cpp:717
-#: kicad/eeschema/onrightclick.cpp:288
 msgid "Rotate -"
 msgstr "Obróć -"
 
@@ -4269,24 +3746,19 @@ msgstr "Odbij"
 #: kicad/pcbnew/onrightclick.cpp:722
 #: kicad/pcbnew/onrightclick.cpp:756
 #: kicad/pcbnew/onrightclick.cpp:860
-#: kicad/pcbnew/modedit_onclick.cpp:306
-#: kicad/eeschema/onrightclick.cpp:300
 msgid "Edit"
 msgstr "Edytuj"
 
 #: kicad/pcbnew/onrightclick.cpp:754
 #: kicad/pcbnew/onrightclick.cpp:858
-#: kicad/pcbnew/modedit_onclick.cpp:241
 msgid "Rotate"
 msgstr "Obrót"
 
 #: kicad/pcbnew/onrightclick.cpp:793
-#: kicad/pcbnew/modedit_onclick.cpp:263
 msgid "Edit Pad"
 msgstr "Edytuj pole"
 
 #: kicad/pcbnew/onrightclick.cpp:797
-#: kicad/pcbnew/modedit_onclick.cpp:265
 msgid "New Pad Settings"
 msgstr "Nowe ustawienia pola lutowniczego"
 
@@ -4295,7 +3767,6 @@ msgid "Copy current pad settings to this pad"
 msgstr "Kopiuj ustawienia bieżącego pola do tego pola"
 
 #: kicad/pcbnew/onrightclick.cpp:801
-#: kicad/pcbnew/modedit_onclick.cpp:267
 msgid "Export Pad Settings"
 msgstr "Eksportuj ustawienia pola lutowniczego"
 
@@ -4304,7 +3775,6 @@ msgid "Copy this pad settings to current pad settings"
 msgstr "Kopiuj ustawienia tego pola do bieżących ustawień pola"
 
 #: kicad/pcbnew/onrightclick.cpp:808
-#: kicad/pcbnew/modedit_onclick.cpp:274
 msgid "Global Pad Settings"
 msgstr "Globalne ustawienia pól lutowniczych"
 
@@ -4377,8 +3847,6 @@ msgid "Dimension properties"
 msgstr "Właściwości wymiaru"
 
 #: kicad/pcbnew/cotation.cpp:133
-#: kicad/pcbnew/dialog_zones_by_polygon.cpp:238
-#: kicad/gerbview/affiche.cpp:37
 msgid "Layer:"
 msgstr "Warstwa:"
 
@@ -4481,7 +3949,6 @@ msgid "vertical"
 msgstr "Pionowo"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:282
-#: kicad/pcbnew/pcbtexte.cpp:156
 msgid "Orientation"
 msgstr "Orientacja"
 
@@ -4498,9 +3965,6 @@ msgid "Value:"
 msgstr "Wartość:"
 
 #: kicad/pcbnew/dialog_edit_mod_text.cpp:384
-#: kicad/pcbnew/pcbtexte.cpp:123
-#: kicad/eeschema/sheetlab.cpp:102
-#: kicad/common/confirm.cpp:145
 msgid "Text:"
 msgstr "Tekst:"
 
@@ -4633,12 +4097,10 @@ msgid "Show Pad NoConnect"
 msgstr "Pokaż niepołączone pola lutownicze"
 
 #: kicad/pcbnew/dialog_display_options.cpp:269
-#: kicad/gerbview/options.cpp:322
 msgid "Display other items:"
 msgstr "Pokaż pozostałe elementy:"
 
 #: kicad/pcbnew/dialog_display_options.cpp:276
-#: kicad/eeschema/dialog_options.cpp:281
 msgid "Show page limits"
 msgstr "Pokaż granice strony"
 
@@ -4665,7 +4127,6 @@ msgid "File %s exists, OK to replace ?"
 msgstr "Plik %s istnieje. Czy mam go zastąpić?"
 
 #: kicad/pcbnew/librairi.cpp:203
-#: kicad/eeschema/symbedit.cpp:166
 #, c-format
 msgid "Unable to create <%s>"
 msgstr "Nie mogę utworzyć <%s>"
@@ -4712,8 +4173,6 @@ msgid "Library %s not found"
 msgstr "Nie znaleziono biblioteki %s"
 
 #: kicad/pcbnew/librairi.cpp:527
-#: kicad/eeschema/symbtext.cpp:143
-#: kicad/common/get_component_dialog.cpp:98
 msgid "Name:"
 msgstr "Nazwa:"
 
@@ -4780,7 +4239,6 @@ msgid "Arc Stub"
 msgstr "Wycinek łuku"
 
 #: kicad/pcbnew/muonde.cpp:175
-#: kicad/common/common.cpp:88
 msgid " (mm):"
 msgstr " (mm):"
 
@@ -4790,7 +4248,6 @@ msgstr " (cale):"
 
 #: kicad/pcbnew/muonde.cpp:189
 #: kicad/pcbnew/muonde.cpp:202
-#: kicad/pcbnew/gen_self.h:231
 msgid "Incorrect number, abort"
 msgstr "Nieprawidłowy numer. Przerywam"
 
@@ -5162,7 +4619,6 @@ msgid "Pad options:"
 msgstr "Opcje pól lutowniczych:"
 
 #: kicad/pcbnew/dialog_zones_by_polygon.cpp:193
-#: kicad/eeschema/dialog_options.cpp:273
 msgid "Any"
 msgstr "Dowolna"
 
@@ -5285,7 +4741,6 @@ msgid "Component [%s]: footprint <%s> not found"
 msgstr "Element [%s]: nie znaleziono obudowy %s"
 
 #: kicad/share/drawframe.cpp:134
-#: kicad/cvpcb/cvframe.cpp:424
 msgid "font for dialog boxes"
 msgstr "Czcionka dla okien dialogowych"
 
@@ -5294,17 +4749,14 @@ msgid "font for info display"
 msgstr "Czcionka dla wyświetlania informacji"
 
 #: kicad/share/drawframe.cpp:138
-#: kicad/cvpcb/cvframe.cpp:428
 msgid "font for Status Line"
 msgstr "Czcionka dla linii stanu"
 
 #: kicad/share/drawframe.cpp:141
-#: kicad/cvpcb/cvframe.cpp:431
 msgid "&Font selection"
 msgstr "&Wybór czcionki"
 
 #: kicad/share/drawframe.cpp:142
-#: kicad/cvpcb/cvframe.cpp:433
 msgid "Choose font type and size for dialogs, infos and status box"
 msgstr "Wybierz typ czcionki i rozmiar dla okien dialogowych, informacji i panelu statusu"
 
@@ -5358,18 +4810,15 @@ msgstr "Dostosuj skalę Y"
 
 #: kicad/share/dialog_print.cpp:174
 #: kicad/share/svg_print.cpp:225
-#: kicad/eeschema/plotps.cpp:229
 msgid "Print Sheet Ref"
 msgstr "Drukuj oznaczenia arkusza"
 
 #: kicad/share/dialog_print.cpp:183
 #: kicad/share/svg_print.cpp:213
-#: kicad/eeschema/plotps.cpp:219
 msgid "Color"
 msgstr "Kolor"
 
 #: kicad/share/dialog_print.cpp:184
-#: kicad/eeschema/eelayer.cpp:234
 msgid "Black"
 msgstr "Czarny"
 
@@ -5398,8 +4847,6 @@ msgstr "Bieżąca"
 
 #: kicad/share/dialog_print.cpp:198
 #: kicad/share/svg_print.cpp:239
-#: kicad/eeschema/affiche.cpp:168
-#: kicad/eeschema/affiche.cpp:174
 msgid "All"
 msgstr "Wszystkie"
 
@@ -5429,20 +4876,14 @@ msgid "Grid: "
 msgstr "Siatka: "
 
 #: kicad/share/zoom.cpp:360
-#: kicad/eeschema/edit_component_in_lib.cpp:476
-#: kicad/eeschema/edit_component_in_lib.cpp:478
 msgid "Center"
 msgstr "Wyśrodkuj"
 
 #: kicad/share/zoom.cpp:361
-#: kicad/eeschema/menubar.cpp:169
-#: kicad/eeschema/menubar.cpp:172
 msgid "Zoom in"
 msgstr "Powiększ"
 
 #: kicad/share/zoom.cpp:362
-#: kicad/eeschema/menubar.cpp:177
-#: kicad/eeschema/menubar.cpp:180
 msgid "Zoom out"
 msgstr "Pomniejsz"
 
@@ -5564,7 +5005,6 @@ msgid "Export to other sheets"
 msgstr "Przenieś na inne arkusze"
 
 #: kicad/share/setpage.cpp:354
-#: kicad/eeschema/netlist_control.cpp:320
 msgid "Title:"
 msgstr "Tytuł:"
 
@@ -5601,7 +5041,6 @@ msgid "Create &File"
 msgstr "&Utwórz plik"
 
 #: kicad/share/svg_print.cpp:265
-#: kicad/eeschema/sheet.cpp:162
 msgid "Filename:"
 msgstr "Nazwa pliku:"
 
@@ -5639,8 +5078,6 @@ msgid "Current Part: <%s>"
 msgstr "Bieżący element: <%s>"
 
 #: kicad/eeschema/eeredraw.cpp:130
-#: kicad/eeschema/component_class.cpp:75
-#: kicad/eeschema/eelayer.h:171
 msgid "Sheet"
 msgstr "Arkusz"
 
@@ -5649,7 +5086,6 @@ msgid "Sheet Size"
 msgstr "Rozmiar arkusza"
 
 #: kicad/eeschema/plothpgl.cpp:223
-#: kicad/eeschema/plotps.cpp:196
 msgid "Page Size A4"
 msgstr "Rozmiar strony A4"
 
@@ -5670,7 +5106,6 @@ msgid "Page Size A0"
 msgstr "Rozmiar strony A0"
 
 #: kicad/eeschema/plothpgl.cpp:228
-#: kicad/eeschema/plotps.cpp:197
 msgid "Page Size A"
 msgstr "Rozmiar strony A"
 
@@ -5691,7 +5126,6 @@ msgid "Page Size E"
 msgstr "Rozmiar strony E"
 
 #: kicad/eeschema/plothpgl.cpp:233
-#: kicad/eeschema/plotps.cpp:199
 msgid "Plot page size:"
 msgstr "Rozmiar strony rysunku:"
 
@@ -5720,12 +5154,10 @@ msgid "Plot Offset Y"
 msgstr "Przesunięcie rysunku Y"
 
 #: kicad/eeschema/plothpgl.cpp:283
-#: kicad/eeschema/plotps.cpp:242
 msgid "&Plot CURRENT"
 msgstr "&Rysuj BIEŻĄCY"
 
 #: kicad/eeschema/plothpgl.cpp:287
-#: kicad/eeschema/plotps.cpp:249
 msgid "Plot A&LL"
 msgstr "Rysuj &WSZYSTKO"
 
@@ -5858,7 +5290,6 @@ msgstr ""
 "Ta operacja usunie istniejącą numerację i nie może zostać cofnięta."
 
 #: kicad/eeschema/affiche.cpp:22
-#: kicad/eeschema/dialog_create_component.cpp:160
 msgid "Name"
 msgstr "Nazwa"
 
@@ -5867,7 +5298,6 @@ msgid "FileName"
 msgstr "Nazwa pliku"
 
 #: kicad/eeschema/affiche.cpp:37
-#: kicad/eeschema/component_class.cpp:72
 msgid "Ref"
 msgstr "Oznaczenie"
 
@@ -5892,7 +5322,6 @@ msgid "PinName"
 msgstr "Nazwa pinu"
 
 #: kicad/eeschema/affiche.cpp:79
-#: kicad/eeschema/eelayer.h:140
 msgid "PinNum"
 msgstr "Numer pinu"
 
@@ -5915,37 +5344,26 @@ msgid "Lengh"
 msgstr "Długość"
 
 #: kicad/eeschema/affiche.cpp:101
-#: kicad/eeschema/dialog_edit_label.cpp:150
-#: kicad/eeschema/pinedit-dialog.cpp:291
 msgid "Up"
 msgstr "Góra"
 
 #: kicad/eeschema/affiche.cpp:104
-#: kicad/eeschema/dialog_edit_label.cpp:152
-#: kicad/eeschema/pinedit-dialog.cpp:292
 msgid "Down"
 msgstr "Dół"
 
 #: kicad/eeschema/affiche.cpp:107
-#: kicad/eeschema/dialog_edit_label.cpp:151
-#: kicad/eeschema/pinedit-dialog.cpp:290
 msgid "Left"
 msgstr "Lewo"
 
 #: kicad/eeschema/affiche.cpp:110
-#: kicad/eeschema/dialog_edit_label.cpp:149
-#: kicad/eeschema/pinedit-dialog.cpp:289
 msgid "Right"
 msgstr "Prawo"
 
 #: kicad/eeschema/affiche.cpp:171
-#: kicad/eeschema/onrightclick.cpp:328
 msgid "Unit"
 msgstr "Część"
 
 #: kicad/eeschema/affiche.cpp:181
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:191
-#: kicad/eeschema/onrightclick.cpp:315
 msgid "Convert"
 msgstr "Skonwertowany"
 
@@ -5998,7 +5416,6 @@ msgid " in library"
 msgstr " w bibliotece"
 
 #: kicad/eeschema/menubar.cpp:41
-#: kicad/gerbview/tool_gerber.cpp:63
 msgid "&New"
 msgstr "&Nowy"
 
@@ -6007,7 +5424,6 @@ msgid "New schematic"
 msgstr "Nowy schemat"
 
 #: kicad/eeschema/menubar.cpp:47
-#: kicad/cvpcb/tool_cvpcb.cpp:109
 msgid "&Open"
 msgstr "&Otwórz "
 
@@ -6020,7 +5436,6 @@ msgid "&Save"
 msgstr "&Zapisz"
 
 #: kicad/eeschema/menubar.cpp:55
-#: kicad/eeschema/tool_sch.cpp:45
 msgid "Save schematic project"
 msgstr "Zapisz projekt schematu"
 
@@ -6089,7 +5504,6 @@ msgid "&Redo\t"
 msgstr "&Ponów\t"
 
 #: kicad/eeschema/menubar.cpp:154
-#: kicad/pcbnew/find.h:38
 msgid "Find"
 msgstr "Znajdź"
 
@@ -6111,7 +5525,6 @@ msgid "&Component"
 msgstr "&Element"
 
 #: kicad/eeschema/menubar.cpp:206
-#: kicad/eeschema/tool_sch.cpp:156
 msgid "Place the component"
 msgstr "Dodaj element"
 
@@ -6120,7 +5533,6 @@ msgid "&Power port"
 msgstr "&Zasilanie"
 
 #: kicad/eeschema/menubar.cpp:212
-#: kicad/eeschema/tool_sch.cpp:160
 msgid "Place the power port"
 msgstr "Dodaj zasilanie"
 
@@ -6129,7 +5541,6 @@ msgid "&Wire"
 msgstr "&Połączenie"
 
 #: kicad/eeschema/menubar.cpp:218
-#: kicad/eeschema/tool_sch.cpp:165
 msgid "Place the wire"
 msgstr "Dodaj połączenie"
 
@@ -6138,7 +5549,6 @@ msgid "&Bus"
 msgstr "&Magistrala"
 
 #: kicad/eeschema/menubar.cpp:227
-#: kicad/eeschema/tool_sch.cpp:169
 msgid "Place the bus"
 msgstr "Dodaj magistralę"
 
@@ -6147,7 +5557,6 @@ msgid "W&ire to bus entry"
 msgstr "Wejście połączenia do mag&istrali"
 
 #: kicad/eeschema/menubar.cpp:237
-#: kicad/eeschema/tool_sch.cpp:173
 msgid "Place the wire to bus entry"
 msgstr "Dodaj wejście połączenia do magistrali"
 
@@ -6156,7 +5565,6 @@ msgid "B&us to bus entry"
 msgstr "Wejście magistrali &do magistrali"
 
 #: kicad/eeschema/menubar.cpp:247
-#: kicad/eeschema/tool_sch.cpp:177
 msgid "Place the bus to bus entry"
 msgstr "Dodaj wejście magistrali do magistrali"
 
@@ -6165,7 +5573,6 @@ msgid "No connect flag"
 msgstr "Flaga \"niepołączone\""
 
 #: kicad/eeschema/menubar.cpp:257
-#: kicad/eeschema/tool_sch.cpp:182
 msgid "Place the no connect flag"
 msgstr "Dodaj flagę \"niepołączone\""
 
@@ -6174,7 +5581,6 @@ msgid "Net name"
 msgstr "Nazwa sieci"
 
 #: kicad/eeschema/menubar.cpp:267
-#: kicad/eeschema/tool_sch.cpp:186
 msgid "Place the net name"
 msgstr "Dodaj nazwę sieci"
 
@@ -6187,12 +5593,10 @@ msgid "Place the global label. Warning: all global labels with the same name are
 msgstr "Dodaj etykietę globalną. Ostrzeżenie: wszystkie etykiety globalne o tej samej nazwie są połączone w całej hierarchii"
 
 #: kicad/eeschema/menubar.cpp:284
-#: kicad/eeschema/eelayer.h:85
 msgid "Junction"
 msgstr "Węzeł"
 
 #: kicad/eeschema/menubar.cpp:285
-#: kicad/eeschema/tool_sch.cpp:195
 msgid "Place the junction"
 msgstr "Dodaj węzeł"
 
@@ -6201,7 +5605,6 @@ msgid "Hierarchical label"
 msgstr "Etykieta hierarchiczna"
 
 #: kicad/eeschema/menubar.cpp:297
-#: kicad/eeschema/tool_sch.cpp:200
 msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Dodaj etykietę hierarchiczną. Etykieta ta będzie widoczna jako arkusz pinów w symbolu arkusza"
 
@@ -6210,7 +5613,6 @@ msgid "Hierarchical sheet"
 msgstr "Arkusz hierarchiczny"
 
 #: kicad/eeschema/menubar.cpp:307
-#: kicad/eeschema/tool_sch.cpp:205
 msgid "Place the hierarchical sheet"
 msgstr "Dodaj hierarchiczny arkusz"
 
@@ -6219,7 +5621,6 @@ msgid "Imported hierarchical label"
 msgstr "Zaimportowana etykieta hierarchiczna"
 
 #: kicad/eeschema/menubar.cpp:317
-#: kicad/eeschema/tool_sch.cpp:209
 msgid "Place the pin sheet (imported hierarchical label from sheet)"
 msgstr "Dodaj arkusz pinów (zaimportowaną etykietę hierarchiczną z arkusza)"
 
@@ -6244,7 +5645,6 @@ msgid "Graphic text (comment)"
 msgstr "Tekst-komentarz (grafika)"
 
 #: kicad/eeschema/menubar.cpp:349
-#: kicad/eeschema/tool_sch.cpp:223
 msgid "Place the graphic text (comment)"
 msgstr "Dodaj tekst-komentarz (grafika)"
 
@@ -6253,7 +5653,6 @@ msgid "Setting colors..."
 msgstr "Ustawienia kolorów..."
 
 #: kicad/eeschema/menubar.cpp:371
-#: kicad/gerbview/tool_gerber.cpp:110
 msgid "&Options"
 msgstr "&Opcje"
 
@@ -6318,7 +5717,6 @@ msgid "Move Text "
 msgstr "Przesuń tekst "
 
 #: kicad/eeschema/libedit_onrightclick.cpp:126
-#: kicad/eeschema/dialog_edit_label.h:44
 msgid "Text Editor"
 msgstr "Edytor tekstu"
 
@@ -6423,7 +5821,6 @@ msgid "Add NoConnect Flag"
 msgstr "Ustaw flagę \"niepołączony\""
 
 #: kicad/eeschema/schedit.cpp:189
-#: kicad/eeschema/hotkeys.cpp:271
 msgid "Add Wire"
 msgstr "Dodaj połączenie"
 
@@ -6432,14 +5829,10 @@ msgid "Add Bus"
 msgstr "Dodaj magistralę"
 
 #: kicad/eeschema/schedit.cpp:201
-#: kicad/eeschema/onrightclick.cpp:513
-#: kicad/eeschema/onrightclick.cpp:545
 msgid "Add Junction"
 msgstr "Dodaj węzeł"
 
 #: kicad/eeschema/schedit.cpp:205
-#: kicad/eeschema/onrightclick.cpp:514
-#: kicad/eeschema/onrightclick.cpp:546
 msgid "Add Label"
 msgstr "Dodaj etykietę"
 
@@ -6472,7 +5865,6 @@ msgid "Import PinSheet"
 msgstr "Importuj arkusz pinów"
 
 #: kicad/eeschema/schedit.cpp:241
-#: kicad/eeschema/hotkeys.cpp:249
 msgid "Add Component"
 msgstr "Dodaj element"
 
@@ -6485,7 +5877,6 @@ msgid "save current configuration setting in the local .pro file"
 msgstr "Zapisz bieżącą konfigurację w lokalnym pliku .pro"
 
 #: kicad/eeschema/dialog_eeschema_config.cpp:169
-#: kicad/cvpcb/dialog_cvpcb_config.cpp:149
 msgid "NetList Formats:"
 msgstr "Formaty netlist:"
 
@@ -6666,14 +6057,6 @@ msgstr ""
 "#Koniec listy\n"
 
 #: kicad/eeschema/build_BOM.cpp:687
-#: kicad/eeschema/component_class.cpp:76
-#: kicad/eeschema/component_class.cpp:77
-#: kicad/eeschema/component_class.cpp:78
-#: kicad/eeschema/component_class.cpp:79
-#: kicad/eeschema/component_class.cpp:80
-#: kicad/eeschema/component_class.cpp:81
-#: kicad/eeschema/component_class.cpp:82
-#: kicad/eeschema/component_class.cpp:83
 msgid "Field"
 msgstr "Pole"
 
@@ -6742,17 +6125,14 @@ msgid "Text Orient:"
 msgstr "Orientacja tekstu:"
 
 #: kicad/eeschema/dialog_edit_label.cpp:160
-#: kicad/eeschema/pinedit-dialog.cpp:330
 msgid "Input"
 msgstr "Wejście"
 
 #: kicad/eeschema/dialog_edit_label.cpp:161
-#: kicad/eeschema/pinedit-dialog.cpp:331
 msgid "Output"
 msgstr "Wyjście"
 
 #: kicad/eeschema/dialog_edit_label.cpp:162
-#: kicad/eeschema/pinedit-dialog.cpp:332
 msgid "Bidi"
 msgstr "Dwukierunkowy"
 
@@ -6761,7 +6141,6 @@ msgid "TriState"
 msgstr "Trójstanowy"
 
 #: kicad/eeschema/dialog_edit_label.cpp:164
-#: kicad/eeschema/pinedit-dialog.cpp:334
 msgid "Passive"
 msgstr "Pasywny"
 
@@ -6774,22 +6153,18 @@ msgid "Size "
 msgstr "Rozmiar "
 
 #: kicad/eeschema/edit_component_in_schematic.cpp:199
-#: kicad/eeschema/edit_component_in_lib.cpp:554
 msgid "Field to edit"
 msgstr "Pole do edycji"
 
 #: kicad/eeschema/edit_component_in_schematic.cpp:205
-#: kicad/eeschema/edit_component_in_lib.cpp:508
 msgid "Field Name:"
 msgstr "Nazwa pola:"
 
 #: kicad/eeschema/edit_component_in_schematic.cpp:215
-#: kicad/eeschema/edit_component_in_lib.cpp:518
 msgid "Field Text:"
 msgstr "Tekst pola:"
 
 #: kicad/eeschema/edit_component_in_schematic.cpp:223
-#: kicad/eeschema/edit_component_in_lib.cpp:524
 msgid "Pos"
 msgstr "Pozycja"
 
@@ -6839,20 +6214,14 @@ msgid " Text Options : "
 msgstr " Opcje tekstu: "
 
 #: kicad/eeschema/symbtext.cpp:162
-#: kicad/eeschema/dialog_cmp_graphic_properties.cpp:156
-#: kicad/eeschema/pinedit-dialog.cpp:259
 msgid "Common to Units"
 msgstr "Wspólny dla części"
 
 #: kicad/eeschema/symbtext.cpp:166
-#: kicad/eeschema/dialog_cmp_graphic_properties.cpp:160
-#: kicad/eeschema/pinedit-dialog.cpp:263
 msgid "Common to convert"
 msgstr "Wspólny dla skonwertowanych"
 
 #: kicad/eeschema/symbtext.cpp:170
-#: kicad/eeschema/dialog_edit_component_in_schematic.cpp:216
-#: kicad/eeschema/edit_component_in_lib.cpp:502
 msgid "Vertical"
 msgstr "Pionowo"
 
@@ -6961,7 +6330,6 @@ msgid "Edit pins part per part (Carefully use!)"
 msgstr "Edytuj piny element po elemencie (używaj ostrożnie!)"
 
 #: kicad/eeschema/tool_lib.cpp:238
-#: kicad/eeschema/tool_viewlib.cpp:128
 #, c-format
 msgid "Part %c"
 msgstr "Element %c"
@@ -7044,7 +6412,6 @@ msgid "Hierachy Pins by Sheets"
 msgstr "Piny hierarchii wg arkuszy"
 
 #: kicad/eeschema/dialog_build_BOM.cpp:269
-#: kicad/eeschema/netlist.cpp:161
 msgid "List"
 msgstr "Lista"
 
@@ -7117,13 +6484,11 @@ msgid "Create &List"
 msgstr "Utwórz &listę"
 
 #: kicad/eeschema/dialog_build_BOM.cpp:352
-#: kicad/cvpcb/dialog_display_options.cpp:195
 msgid "&Apply"
 msgstr "&Zastosuj"
 
 #: kicad/eeschema/netlist_control.cpp:124
 #: kicad/eeschema/netlist_control.cpp:240
-#: kicad/gerbview/options.cpp:201
 msgid "Default format"
 msgstr "Format domyślny"
 
@@ -7218,7 +6583,6 @@ msgid "Failed to open Stuff File <%s>"
 msgstr "Błąd otwierania pliku elementów <%s>"
 
 #: kicad/eeschema/component_class.cpp:316
-#: kicad/eeschema/dialog_create_component.cpp:171
 msgid "U"
 msgstr "U"
 
@@ -7295,7 +6659,6 @@ msgid "Place the graphic line or polygon"
 msgstr "Dodaj linię lub wielokąt (grafika)"
 
 #: kicad/eeschema/tool_sch.cpp:267
-#: kicad/eeschema/schframe.cpp:422
 msgid "Show Hidden Pins"
 msgstr "Pokaż ukryte piny"
 
@@ -7353,18 +6716,15 @@ msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
 
 #: kicad/eeschema/dialog_create_component.cpp:183
-#: kicad/eeschema/edit_component_in_lib.cpp:401
 msgid "As Convert"
 msgstr "Jako skonwertowany"
 
 #: kicad/eeschema/dialog_create_component.cpp:187
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:161
 msgid "Power Symbol"
 msgstr "Symbol zasilania"
 
 #: kicad/eeschema/dialog_create_component.cpp:191
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:188
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:165
 msgid "Parts are locked"
 msgstr "Elementy są zablokowane"
 
@@ -7485,17 +6845,14 @@ msgid "Show Pin Number"
 msgstr "Pokaż numer pinu"
 
 #: kicad/eeschema/dialog_create_component.cpp:254
-#: kicad/eeschema/edit_component_in_lib.cpp:418
 msgid "Show Pin Name"
 msgstr "Pokaż nazwę pinu"
 
 #: kicad/eeschema/dialog_create_component.cpp:258
-#: kicad/eeschema/edit_component_in_lib.cpp:429
 msgid "Pin Name Inside"
 msgstr "Nazwa pinu w środku"
 
 #: kicad/eeschema/dialog_create_component.cpp:262
-#: kicad/eeschema/dialog_edit_component_in_lib.cpp:155
 msgid "Skew:"
 msgstr "Skos:"
 
@@ -7658,13 +7015,10 @@ msgid "Chip Name:"
 msgstr "Nazwa elementu:"
 
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:212
-#: kicad/eeschema/edit_component_in_lib.cpp:497
 msgid "Show Text"
 msgstr "Pokaż tekst"
 
 #: kicad/eeschema/dialog_edit_component_in_schematic.cpp:226
-#: kicad/eeschema/edit_component_in_lib.cpp:484
-#: kicad/eeschema/eelayer.h:164
 msgid "Fields"
 msgstr "Pola"
 
@@ -7689,7 +7043,6 @@ msgid "Messages :"
 msgstr "Wiadomości:"
 
 #: kicad/eeschema/plotps.cpp:291
-#: kicad/eeschema/dialog_options.cpp:326
 msgid "Default Line Width"
 msgstr "Domyślna szerokość linii"
 
@@ -8003,26 +7356,18 @@ msgid "Display next part"
 msgstr "Pokaż następny element"
 
 #: kicad/eeschema/tool_viewlib.cpp:67
-#: kicad/cvpcb/displayframe.cpp:123
-#: kicad/3d-viewer/3d_toolbar.cpp:43
 msgid "zoom + (F1)"
 msgstr "Powiększ (F1)"
 
 #: kicad/eeschema/tool_viewlib.cpp:71
-#: kicad/cvpcb/displayframe.cpp:126
-#: kicad/3d-viewer/3d_toolbar.cpp:46
 msgid "zoom - (F2)"
 msgstr "Pomniejsz (F2)"
 
 #: kicad/eeschema/tool_viewlib.cpp:75
-#: kicad/cvpcb/displayframe.cpp:129
-#: kicad/3d-viewer/3d_toolbar.cpp:49
 msgid "redraw (F3)"
 msgstr "Odśwież (F3)"
 
 #: kicad/eeschema/tool_viewlib.cpp:79
-#: kicad/cvpcb/displayframe.cpp:132
-#: kicad/cvpcb/displayframe.cpp:136
 msgid "1:1 zoom"
 msgstr "Skala 1:1"
 
@@ -8043,37 +7388,30 @@ msgid "Export to schematic"
 msgstr "Eksportuj do schematu"
 
 #: kicad/eeschema/pinedit.cpp:22
-#: kicad/eeschema/pinedit-dialog.cpp:317
 msgid "line"
 msgstr "Linia"
 
 #: kicad/eeschema/pinedit.cpp:22
-#: kicad/eeschema/pinedit-dialog.cpp:318
 msgid "invert"
 msgstr "Odwrócony"
 
 #: kicad/eeschema/pinedit.cpp:22
-#: kicad/eeschema/pinedit-dialog.cpp:319
 msgid "clock"
 msgstr "Zegar"
 
 #: kicad/eeschema/pinedit.cpp:22
-#: kicad/eeschema/pinedit-dialog.cpp:320
 msgid "clock inv"
 msgstr "Zegar odwrócony"
 
 #: kicad/eeschema/pinedit.cpp:23
-#: kicad/eeschema/pinedit-dialog.cpp:321
 msgid "low in"
 msgstr "Wejście L"
 
 #: kicad/eeschema/pinedit.cpp:23
-#: kicad/eeschema/pinedit-dialog.cpp:322
 msgid "low clock"
 msgstr "Zegar L"
 
 #: kicad/eeschema/pinedit.cpp:23
-#: kicad/eeschema/pinedit-dialog.cpp:323
 msgid "low out"
 msgstr "Wyjście L"
 
@@ -8325,7 +7663,6 @@ msgid "Component %s saved in %s"
 msgstr "Element %s zapisany w %s"
 
 #: kicad/eeschema/edit_component_in_lib.cpp:168
-#: kicad/eeschema/dialog_edit_component_in_lib.h:56
 msgid "Lib Component Properties"
 msgstr "Właściwości elementu biblioteki"
 
@@ -8420,7 +7757,6 @@ msgid "Delete Convert items"
 msgstr "Usuń skonwertowane elementy"
 
 #: kicad/eeschema/edit_component_in_lib.cpp:1144
-#: kicad/common/eda_doc.cpp:134
 msgid "Doc Files"
 msgstr "Pliki dokumentacji"
 
@@ -8433,7 +7769,6 @@ msgid "New FootprintFilter:"
 msgstr "Nowy filtr obudów:"
 
 #: kicad/eeschema/save_schemas.cpp:61
-#: kicad/eeschema/files-io.cpp:82
 msgid "Schematic files:"
 msgstr "Pliki schematów:"
 
@@ -8455,9 +7790,6 @@ msgid "Failed to create doc lib file "
 msgstr "Błąd przy tworzeniu pliku biblioteki dokumentacji"
 
 #: kicad/eeschema/eeconfig.cpp:73
-#: kicad/kicad/files-io.cpp:131
-#: kicad/gerbview/readgerb.cpp:145
-#: kicad/gerbview/dcode.cpp:266
 msgid "File "
 msgstr "Plik"
 
@@ -9251,15 +8583,14 @@ msgid "No default editor found, you must choose it"
 msgstr "Nie znaleziono domyślnego edytora. Musisz go wybrać."
 
 #: kicad/common/gestfich.cpp:685
-#: kicad/kicad/preferences.cpp:97
 msgid "Prefered Editor:"
 msgstr "Preferowany edytor:"
 
-#: kicad/common/gestfich.cpp:780
+#: kicad/common/gestfich.cpp:782
 msgid "Problem while running the PDF viewer"
 msgstr "Wystąpił problem przy uruchamianiu przeglądarki PDF"
 
-#: kicad/common/gestfich.cpp:781
+#: kicad/common/gestfich.cpp:783
 msgid ""
 "\n"
 " command is "
@@ -9267,7 +8598,7 @@ msgstr ""
 "\n"
 " polecenie to "
 
-#: kicad/common/gestfich.cpp:787
+#: kicad/common/gestfich.cpp:789
 msgid "Unable to find a PDF viewer for"
 msgstr "Nie mogę znaleźć przeglądarki PDF dla"
 
@@ -9275,7 +8606,7 @@ msgstr "Nie mogę znaleźć przeglądarki PDF dla"
 msgid "Doc File "
 msgstr "Plik dokumentacji "
 
-#: kicad/common/eda_doc.cpp:192
+#: kicad/common/eda_doc.cpp:190
 #, c-format
 msgid "Unknown MIME type for Doc File [%s]"
 msgstr "Nieznany typ MIME pliku dokumentacji [%s]"
@@ -9291,8 +8622,6 @@ msgid "Library file <%s> is not a module library"
 msgstr "Plik biblioteki <%s> nie jest biblioteką modułów"
 
 #: kicad/cvpcb/readschematicnetlist.cpp:75
-#: kicad/cvpcb/viewlogi.cpp:72
-#: kicad/cvpcb/rdpcad.cpp:56
 #, c-format
 msgid "Unknown file format <%s>"
 msgstr "Nieznany format pliku <%s>"
@@ -9384,7 +8713,6 @@ msgid "Open the cvpcb manual"
 msgstr "Otwórz podręcznik Cvpcb"
 
 #: kicad/cvpcb/writenetlistpcbnew.cpp:168
-#: kicad/cvpcb/genorcad.cpp:134
 #, c-format
 msgid "%s %s pin %s : Different Nets"
 msgstr "%s %s pin %s : Różne sieci"
@@ -9447,7 +8775,6 @@ msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
 #: kicad/cvpcb/cvframe.cpp:340
-#: kicad/cvpcb/init.cpp:134
 #, c-format
 msgid "Componants: %d (free: %d)"
 msgstr "Elementy: %d (wolne: %d)"
@@ -9544,8 +8871,6 @@ msgid "Netlist file "
 msgstr "Plik netlisty "
 
 #: kicad/cvpcb/displayframe.cpp:118
-#: kicad/pcbnew/dialog_display_options.h:54
-#: kicad/cvpcb/dialog_display_options.h:51
 msgid "Display Options"
 msgstr "Opcje wyświetlania"
 
@@ -10127,7 +9452,6 @@ msgid "Switch off all of the Gerber layers"
 msgstr "Wyłącz na wszystkich warstwach Gerbera"
 
 #: kicad/gerbview/affiche.cpp:34
-#: kicad/gerbview/tool_gerber.cpp:310
 msgid "Layer "
 msgstr "Warstwa "
 
@@ -10182,7 +9506,6 @@ msgid "Gerber files:"
 msgstr "Pliki Gerbera:"
 
 #: kicad/gerbview/files.cpp:187
-#: kicad/gerbview/readgerb.cpp:273
 msgid "D codes files:"
 msgstr "Pliki kodów wierceń:"
 
@@ -10476,7 +9799,6 @@ msgid "List D codes"
 msgstr "Lista kodów wierceń"
 
 #: kicad/pcbnew/dialog_general_options.h:60
-#: kicad/eeschema/dialog_options.h:55
 msgid "General Options"
 msgstr "Opcje główne"
 
@@ -10505,7 +9827,6 @@ msgid "Fill Zones Options"
 msgstr "Opcje wypełniania stref"
 
 #: kicad/pcbnew/dialog_setup_libs.h:43
-#: kicad/eeschema/dialog_eeschema_config.h:50
 msgid "Dialog"
 msgstr "Dialog"
 
@@ -10615,6 +9936,10 @@ msgstr "Pokaż moduły po stronie elementów"
 #: kicad/pcbnew/set_color.h:450
 msgid "Show Modules Cu"
 msgstr "Pokaż moduły po stronie ścieżek"
+
+#: kicad/pcbnew/dialog_orient_footprints.h:42
+msgid "Footprints Orientation"
+msgstr "Orientacja obudów"
 
 #: kicad/share/dialog_print.h:51
 msgid "Print"
