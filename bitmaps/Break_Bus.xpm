@@ -1,8 +1,6 @@
-
 /* XPM */
 #ifndef XPMMAIN
 extern const char *break_bus_xpm[];
-
 #else
 const char * break_bus_xpm[] = {
 "16 16 36 1",
