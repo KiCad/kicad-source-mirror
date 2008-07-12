@@ -70,6 +70,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		zoom.o\
 		dialog_setup_libs.o \
 		dialog_general_options.o \
+        dialog_orient_footprints.o\
 		muwave_command.o \
 		initpcb.o\
 		editrack.o \

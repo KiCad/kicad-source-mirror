@@ -54,6 +54,7 @@ set(PCBNEW_SRCS
 #   dialog_netlist.cpp
 #   dialog_pad_edit.cpp
     dialog_setup_libs.cpp
+    dialog_orient_footprints.cpp
 #   dialog_track_options.cpp
 #   dialog_zones_by_polygon.cpp
     dist.cpp

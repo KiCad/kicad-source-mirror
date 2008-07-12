@@ -674,8 +674,18 @@ public:
 
     // Autoplacement:
     void                AutoPlace( wxCommandEvent& event );
+    /** function OnOrientFootprints
+     * install the dialog box for the comman Orient Footprints
+     */
+    void                OnOrientFootprints( void );
+    /** function ReOrientModules
+     * Set the orientation of footprints
+     * @param ModuleMask = mask (wildcard allowed) selection
+     * @param Orient = new orientation
+     * @param include_fixe = true to orient locked footprints
+     */
     void                ReOrientModules( const wxString& ModuleMask, int Orient,
-                                         bool include_fixe, wxDC* DC );
+                                         bool include_fixe );
     void                FixeModule( MODULE* Module, bool Fixe );
     void                AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb );
     bool                SetBoardBoundaryBoxFromEdgesOnly();

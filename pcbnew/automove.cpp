@@ -31,7 +31,6 @@ static int tri_modules( MODULE** pt_ref, MODULE** pt_compare );
 
 /* Variables locales */
 wxString ModulesMaskSelection = wxT( "*" );
-int      ModulesNewOrient;
 
 
 /******************************************************/
@@ -146,7 +145,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REORIENT_ALL_MODULES:
-        ReOrientModules( ModulesMaskSelection, ModulesNewOrient, FALSE, &dc );
+        OnOrientFootprints( );
         break;
 
     case ID_POPUP_PCB_AUTOROUTE_ALL_MODULES:
@@ -323,40 +322,6 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
                 Module->SetLocked( Fixe );
                 GetScreen()->SetModify();
             }
-        }
-    }
-}
-
-
-/*******************************************************************/
-void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
-                                       int Orient, bool include_fixe, wxDC* DC )
-/*******************************************************************/
-
-/*
- *  Reoriente tous les modules selon masque et attribut, avec la nouvelle
- *  orientation selectionnee
- */
-{
-    MODULE*  Module;
-    wxString line;
-
-    line.Printf( _( "Ok to set module orientation to %d degrees ?" ), Orient / 10 );
-    if( !IsOK( this, line ) )
-        return;
-
-    Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
-    {
-        if( Module->IsLocked() && !include_fixe )
-            continue;
-
-        if( WildCompareString( ModuleMask, Module->m_Reference->m_Text, FALSE ) )
-        {
-            GetScreen()->SetModify();
-            Module->Draw( DrawPanel, DC, GR_XOR );
-            Rotate_Module( NULL, Module, Orient, FALSE );
-            Module->Draw( DrawPanel, DC, GR_OR );
         }
     }
 }
