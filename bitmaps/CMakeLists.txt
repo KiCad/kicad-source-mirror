@@ -1,7 +1,7 @@
 # Generate a static library target named "bitmaps"
 # (with filename libbitmaps.a on Linux)
 
-# Copy the *.xmp files to bitmaps/${XMP_CPP_DIR}/${BASENAME}.cpp, on change only.
+# Copy the *.xpm files to ${XPM_CPP_PATH}/*.cpp, on change only.
 # Compile those *.cpp files and put them into the library, then done.
 
 set(BITMAP_SRCS
@@ -383,17 +383,17 @@ set(BITMAP_SRCS
     viewlibs_icon.xpm
     )
 
-# The name of the directory to put the copied and renamed *.xpm files into
-# just below the bitmaps directory.  As files are copied they are renamed to *.cpp.
-set(XMP_CPP_DIR auto_renamed_to_cpp)
-
 # Get the path of the *.xpm files into "PATH"
 set(PATH ${CMAKE_CURRENT_SOURCE_DIR})
 #message("PATH = ${PATH}")
 
+# The name of the directory to put the copied and renamed *.xpm files into.
+# As files are copied they are renamed to *.cpp.
+set(XPM_CPP_PATH "${PATH}/auto_renamed_to_cpp" CACHE PATH "path to store renamed .xpm files for compilation" )
+
 foreach(LOOP_VAR ${BITMAP_SRCS})
     get_filename_component(BASENAME ${LOOP_VAR} NAME_WE)
-    set(CPP_BITMAP "${PATH}/${XMP_CPP_DIR}/${BASENAME}.cpp")
+    set(CPP_BITMAP "${XPM_CPP_PATH}/${BASENAME}.cpp")
     add_custom_command(
         OUTPUT ${CPP_BITMAP}
         COMMAND cmake -E copy '${PATH}/${BASENAME}.xpm' '${CPP_BITMAP}'
