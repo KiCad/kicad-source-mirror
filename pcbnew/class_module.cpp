@@ -342,7 +342,9 @@ void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
+/**************************************/
 bool MODULE::Save( FILE* aFile ) const
+/**************************************/
 {
     char        statusTxt[8];
     BOARD_ITEM* item;

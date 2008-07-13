@@ -71,7 +71,9 @@ TEXTE_MODULE::~TEXTE_MODULE()
 }
 
 
+/*******************************************/
 bool TEXTE_MODULE::Save( FILE* aFile ) const
+/*******************************************/
 {
     MODULE* parent = (MODULE*) GetParent();
     int     orient = m_Orient;
@@ -79,7 +81,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
     if( parent )
         orient += parent->m_Orient;
 
-    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d \"%.16s\"\n",
+    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d \"%s\"\n",
             m_Type,
             m_Pos0.x, m_Pos0.y,
             m_Size.y, m_Size.x,
