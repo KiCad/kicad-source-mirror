@@ -78,8 +78,11 @@ include(${wxWidgets_USE_FILE})
 include(MinGWResourceCompiler)
 
 # Automagically create version header file.
+# does not work with mingw for me (jpc)
+if(UNIX)
 include(CreateSVNVersionHeader)
 create_svn_version_header()
+endif(UNIX)
 
 # Include paths.
 include_directories(

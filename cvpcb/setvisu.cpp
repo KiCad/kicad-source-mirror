@@ -67,7 +67,7 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
     }
     else if( !IsNew )
     {
-        DrawFrame->ReDrawPanel();
+        DrawFrame->Refresh();
         if( DrawFrame->m_Draw3DFrame )
             DrawFrame->m_Draw3DFrame->NewDisplay();
     }

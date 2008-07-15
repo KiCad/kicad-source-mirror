@@ -240,6 +240,7 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_RELOAD3D_BOARD:
         NewDisplay();
+        return;
         break;
 
     case ID_ROTATE3D_X_POS:
@@ -299,7 +300,7 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
     }
 
     m_Canvas->DisplayStatus();
-    m_Canvas->Refresh( FALSE );
+    m_Canvas->Refresh( true );
 }
 
 
@@ -310,7 +311,7 @@ void WinEDA3D_DrawFrame::NewDisplay()
     m_Canvas->ClearLists();
     m_Canvas->InitGL();
     m_Canvas->DisplayStatus();
-    m_Canvas->Refresh( FALSE );
+    m_Canvas->Refresh( true );
 }
 
 

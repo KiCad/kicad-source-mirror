@@ -90,8 +90,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
 /**********************************************/
 GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 /**********************************************/
-
-/* Creation de la liste des elements a afficher
+/* Create the draw list items
  */
 {
     GLuint               gllist   = glGenLists( 1 );
@@ -114,7 +113,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_Epoxy_Width = epoxy_width / 2.54 * 1000
                                    * g_Parm_3D_Visu.m_BoardScale;
 
-    /* calcul de l'altitude de chaque couche */
+    /* calculate z position for each layer */
     for( ii = 0; ii < 32; ii++ )
     {
         if( ii < g_Parm_3D_Visu.m_Layers )
@@ -456,32 +455,19 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     {
     case S_SEGMENT:
         Draw3D_FilledSegment( x, -y, fx, -fy, w, zpos );
-#if 0
-		s.Printf("Draw FilledSegment: %g, %g, %g, %g, %g, %g\n",x,-y,fx,-fy,w,zpos);
-		printf( CONV_TO_UTF8( s ) );
-#endif
         break;
 
     case S_CIRCLE:
 		Draw3D_CircleSegment( x, -y, fx, -fy, w, zpos);
-#if 0
-		s.Printf("Draw Circle: %g, %g, %g, %g, %g, %g\n",x,-y,fx,-fy,w,zpos);
-		printf( CONV_TO_UTF8( s ) );
-#endif
         break;
 
     case S_ARC:
 		Draw3D_ArcSegment( x, -y, fx, -fy, w, zpos);
-#if 0
-		s.Printf("Draw Arc: %g, %g, %g, %g, %g, %g\n",x,-y,fx,-fy,w,zpos);
-		printf( CONV_TO_UTF8( s ) );
-#endif
 		break;
 
 	default:
 		s.Printf(wxT("Error: Shape nr %d not implemented!\n"), m_Shape);
 		printf( CONV_TO_UTF8( s ) );
-	
 		break;
     }
 }
@@ -924,7 +910,7 @@ int angle;
 	angle = static_cast<int>(atan2( startx - endx, starty - endy) * 1800 / M_PI) + 900;
 	rayon = hypot(startx - endx, starty - endy) + ( width / 2);
 	hole = rayon - width;
-	
+
 	glBegin(GL_QUAD_STRIP);
 	for ( ii = 0; ii <= slice / 4; ii++ )
 	{
@@ -938,16 +924,17 @@ int angle;
 	glEnd();
 }
 
-/********************************************************/
+/*******************************************************************/
 static void Draw3D_CircleSegment(double startx, double starty,
 				double endx, double endy,double width, double zpos)
+/*******************************************************************/
 {
 int ii, slice = 36;
 double x, y, hole, rayon;
 
 	rayon = hypot(startx - endx, starty - endy) + ( width / 2);
 	hole = rayon - width;
-	
+
 	glBegin(GL_QUAD_STRIP);
 	for ( ii = 0; ii <= slice; ii++ )
 	{
