@@ -612,7 +612,7 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 
     if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
         ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                      _( "Zoom Block (drag middle mouse)" ), zoom_selected_xpm );
+                      _( "Zoom Block (Drag Middle Mouse)" ), zoom_selected_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
 
@@ -627,7 +627,7 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DRAG_BLOCK,
                       _( "Drag Block (ctrl + drag mouse)" ), move_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DELETE_BLOCK,
-                      _( "Delelet Block (shift+ctrl + drag mouse)" ), delete_xpm );
+                      _( "Delete Block (shift+ctrl + drag mouse)" ), delete_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_MIRROR_Y_BLOCK, _(
                           "Mirror Block ||" ), mirror_H_xpm );
 #if 0
