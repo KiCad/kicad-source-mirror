@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-12 19:26+0100\n"
-"PO-Revision-Date: 2008-07-12 19:26+0100\n"
+"POT-Creation-Date: 2008-07-18 11:23+0100\n"
+"PO-Revision-Date: 2008-07-18 11:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -1854,23 +1854,23 @@ msgstr "Dodaj wycinek łuku"
 msgid "Add Polynomial Shape"
 msgstr "Dodaj wielokątny kształt"
 
-#: kicad/pcbnew/class_module.cpp:1109
+#: kicad/pcbnew/class_module.cpp:1111
 msgid "Last Change"
 msgstr "Ostatnia zmiana"
 
-#: kicad/pcbnew/class_module.cpp:1115
+#: kicad/pcbnew/class_module.cpp:1117
 msgid "Netlist path"
 msgstr "Ścieżka netlisty"
 
-#: kicad/pcbnew/class_module.cpp:1149
+#: kicad/pcbnew/class_module.cpp:1151
 msgid "3D-Shape"
 msgstr "Kształt 3D"
 
-#: kicad/pcbnew/class_module.cpp:1153
+#: kicad/pcbnew/class_module.cpp:1155
 msgid "Doc:  "
 msgstr "Dokumentacja:  "
 
-#: kicad/pcbnew/class_module.cpp:1154
+#: kicad/pcbnew/class_module.cpp:1156
 msgid "KeyW: "
 msgstr "Słowo kluczowe: "
 
@@ -3149,7 +3149,7 @@ msgstr "Warstwa dolna"
 msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Ostrzeżenie: Górna i dolna warstwa są takie same."
 
-#: kicad/pcbnew/class_text_mod.cpp:394
+#: kicad/pcbnew/class_text_mod.cpp:396
 msgid "Ref."
 msgstr "Oznaczenie"
 
@@ -7306,6 +7306,10 @@ msgstr "Edytuj arkusz pinów"
 msgid "Delete PinSheet"
 msgstr "Usuń arkusz pinów"
 
+#: kicad/eeschema/onrightclick.cpp:615
+msgid "Zoom Block (Drag Middle Mouse)"
+msgstr "Powiększ blok (środkowy przycisk + przeciąganie myszką)"
+
 #: kicad/eeschema/onrightclick.cpp:623
 msgid "Other Block Commands"
 msgstr "Pozostałe operacje na bloku"
@@ -7317,10 +7321,6 @@ msgstr "Zapisz blok"
 #: kicad/eeschema/onrightclick.cpp:628
 msgid "Drag Block (ctrl + drag mouse)"
 msgstr "Przeciągnij blok (ctrl + przeciąganie myszką)"
-
-#: kicad/eeschema/onrightclick.cpp:630
-msgid "Delelet Block (shift+ctrl + drag mouse)"
-msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
 #: kicad/eeschema/onrightclick.cpp:632
 msgid "Mirror Block ||"
@@ -8062,7 +8062,7 @@ msgstr "Domyślny rozmiar etykiety"
 msgid "Clear Schematic Hierarchy (modified!)?"
 msgstr "Wyczyścić hierarchię schematu (zmodyfikowana!)?"
 
-#: kicad/eeschema/files-io.cpp:130
+#: kicad/eeschema/files-io.cpp:133
 msgid ""
 "Ready\n"
 "Working dir: \n"
@@ -8070,7 +8070,7 @@ msgstr ""
 "Gotowy\n"
 "Katalog roboczy: \n"
 
-#: kicad/eeschema/files-io.cpp:176
+#: kicad/eeschema/files-io.cpp:181
 #, c-format
 msgid "File %s not found (new project ?)"
 msgstr "Nie znaleziono pliku %s (nowy projekt?)"
