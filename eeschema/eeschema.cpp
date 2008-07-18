@@ -80,6 +80,7 @@ bool WinEDA_App::OnInit()
         SetupServerFunction( RemoteCommand );
     }
 
+    ActiveScreen = m_SchematicFrame->GetScreen();
     m_SchematicFrame->Zoom_Automatique( TRUE );
 
     /* Load file specified in the command line. */
@@ -93,7 +94,7 @@ bool WinEDA_App::OnInit()
     }
     else
     {
-        Read_Config( wxEmptyString, TRUE ); // Read config file ici si pas de fichier a charger
+        Read_Config( wxEmptyString, TRUE ); // Read a default config file if no file to load
         if( m_SchematicFrame->DrawPanel )
             m_SchematicFrame->DrawPanel->Refresh( TRUE );
     }

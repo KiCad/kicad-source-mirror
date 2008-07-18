@@ -28,7 +28,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
     switch( id )
     {
     case ID_SAVE_PROJECT:     /* Update Schematic File */
-        SaveProject( );
+        SaveProject();
         break;
 
     case ID_SAVE_ONE_SHEET:     /* Update Schematic File */
@@ -51,10 +51,10 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 /************************************************************************************/
 {
     /*
-    *  Load an entire project
-    * ( schematic root file and its subhierarchies, the configuration and the libs
-    *  which are not already loaded)
-    */
+     *  Load an entire project
+     * ( schematic root file and its subhierarchies, the configuration and the libs
+     *  which are not already loaded)
+     */
     SCH_SCREEN*    screen;
     wxString       FullFileName, msg;
     bool           LibCacheExist = FALSE;
@@ -80,32 +80,35 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     {
         wxString mask = wxT( "*" ) + g_SchExtBuffer;
         FullFileName = EDA_FileSelector( _( "Schematic files:" ),
-                    wxEmptyString,     /* Chemin par defaut */
-                    wxEmptyString,     /* nom fichier par defaut */
-                    g_SchExtBuffer,    /* extension par defaut */
-                    mask,              /* Masque d'affichage */
-                    this,
-                    wxFD_OPEN,
-                    TRUE
-                    );
+            wxEmptyString,              /* Chemin par defaut */
+            wxEmptyString,              /* nom fichier par defaut */
+            g_SchExtBuffer,             /* extension par defaut */
+            mask,                       /* Masque d'affichage */
+            this,
+            wxFD_OPEN,
+            TRUE
+        );
         if( FullFileName.IsEmpty() )
-            return FALSE;
+            return 0;
     }
-    if(g_RootSheet){
-        SAFE_DELETE(g_RootSheet);
+    if( g_RootSheet )
+    {
+        SAFE_DELETE( g_RootSheet );
     }
     CreateScreens();
-    screen = (SCH_SCREEN*)GetScreen();
+    ActiveScreen = GetScreen();
+    screen = (SCH_SCREEN*) GetScreen();
 
     wxSetWorkingDirectory( wxPathOnly( FullFileName ) );
     GetScreen()->m_FileName = FullFileName;
-    g_RootSheet->SetFileName(FullFileName);
+    g_RootSheet->SetFileName( FullFileName );
     Affiche_Message( wxEmptyString );
     MsgPanel->EraseMsgBox();
 
     memset( &g_EESchemaVar, 0, sizeof(g_EESchemaVar) );
 
     GetScreen()->ClrModify();
+
     //m_CurrentSheet->m_AssociatedScreen->Pnext = NULL; should be by default
 
     if( IsNew )
@@ -143,7 +146,8 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 
     if( IsNew )
     {
-        ReDrawPanel();
+        if( DrawPanel )
+            DrawPanel->Refresh( true );
         return 1;
     }
 
@@ -152,7 +156,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     wxString       shortfilename;
     wxSplitPath( g_RootSheet->m_AssociatedScreen->m_FileName, NULL, &shortfilename, NULL );
     FullLibName << wxT( "." ) << STRING_DIR_SEP << shortfilename << wxT( ".cache" ) <<
-            g_LibExtBuffer;
+    g_LibExtBuffer;
     if( wxFileExists( FullLibName ) )
     {
         wxString libname;
@@ -173,62 +177,68 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
 
     if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName ) && !LibCacheExist )   // Nouveau projet prpbablement
     {
+        Zoom_Automatique( FALSE );
         msg.Printf( _( "File %s not found (new project ?)" ),
-                    g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
+            g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
         DisplayInfo( this, msg, 20 );
         return -1;
     }
 
     //load the project.
-    SAFE_DELETE(g_RootSheet->m_AssociatedScreen);
-    bool diag = g_RootSheet->Load(this);
+    SAFE_DELETE( g_RootSheet->m_AssociatedScreen );
+    bool diag = g_RootSheet->Load( this );
 
     /* Reaffichage ecran de base (ROOT) si necessaire */
     ActiveScreen = GetScreen();
     Zoom_Automatique( FALSE );
     SetSheetNumberAndCount();
-    DrawPanel->Refresh( TRUE );
+    DrawPanel->Refresh( true );
     return diag;
 }
-/**********************************************************/
-SCH_SCREEN * WinEDA_SchematicFrame::CreateNewScreen(
-        SCH_SCREEN * OldScreen, int TimeStamp)
-/**********************************************************/
-/* Routine de creation ( par allocation memoire ) d'un nouvel ecran
-        cet ecran est en chainage arriere avec OldScreen
-        la valeur TimeStamp est attribuee au parametre NewScreen->TimeStamp
-*/
-{
-    SCH_SCREEN * NewScreen;
 
-    NewScreen = new SCH_SCREEN(SCHEMATIC_FRAME);
+
+/**********************************************************/
+SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen(
+    SCH_SCREEN* OldScreen, int TimeStamp )
+/**********************************************************/
+
+/* Routine de creation ( par allocation memoire ) d'un nouvel ecran
+  *     cet ecran est en chainage arriere avec OldScreen
+  *     la valeur TimeStamp est attribuee au parametre NewScreen->TimeStamp
+ */
+{
+    SCH_SCREEN* NewScreen;
+
+    NewScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
 
     NewScreen->SetRefreshReq();
-    if(OldScreen) NewScreen->m_Company = OldScreen->m_Company;
+    if( OldScreen )
+        NewScreen->m_Company = OldScreen->m_Company;
     NewScreen->m_TimeStamp = TimeStamp;
 
     NewScreen->Pback = OldScreen;
 
-    return(NewScreen);
+    return NewScreen;
 }
 
+
 /****************************************************/
-void WinEDA_SchematicFrame::SaveProject( )
+void WinEDA_SchematicFrame::SaveProject()
 /****************************************************/
 
 /* Saves the entire project and creates an archive for components
  *  the library archive name is <root_name>.cache.lib
  */
 {
-    SCH_SCREEN* screen;
-    wxString    LibArchiveFileName;
+    SCH_SCREEN*    screen;
+    wxString       LibArchiveFileName;
 
     EDA_ScreenList ScreenList;
 
     for( screen = ScreenList.GetFirst(); screen != NULL;
-            screen = ScreenList.GetNext() )
+        screen = ScreenList.GetNext() )
     {
-        D(printf("SaveEEFile, %s\n", CONV_TO_UTF8(screen->m_FileName) );)
+        D( printf( "SaveEEFile, %s\n", CONV_TO_UTF8( screen->m_FileName ) ); )
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 
@@ -250,29 +260,30 @@ int CountCmpNumber()
  *  powers non comprises */
 {
     return g_RootSheet->ComponentCount();
+
     /*
-    BASE_SCREEN*    Window;
-    EDA_BaseStruct* Phead;
-    int             Nb = 0;
-
-
-
-    Window = ScreenSch;
-    while( Window )
-    {
-        for( Phead = Window->EEDrawList; Phead != NULL; Phead = Phead->Pnext )
-        {
-            if( Phead->Type() == TYPE_SCH_COMPONENT )
-            {
-                DrawPartStruct* Cmp = (DrawPartStruct*) Phead;
-                if( Cmp->m_Field[VALUE].m_Text.GetChar( 0 ) != '#' )
-                    Nb++;
-            }
-        }
-
-        Window = (BASE_SCREEN*) Window->Pnext;
-    }
-
-    return Nb;
-    */
+      * BASE_SCREEN*    Window;
+      * EDA_BaseStruct* Phead;
+      * int             Nb = 0;
+     *
+     *
+     *
+      * Window = ScreenSch;
+      * while( Window )
+      * {
+      * for( Phead = Window->EEDrawList; Phead != NULL; Phead = Phead->Pnext )
+      * {
+      *     if( Phead->Type() == TYPE_SCH_COMPONENT )
+      *     {
+      *         DrawPartStruct* Cmp = (DrawPartStruct*) Phead;
+      *         if( Cmp->m_Field[VALUE].m_Text.GetChar( 0 ) != '#' )
+      *             Nb++;
+      *     }
+      * }
+     *
+      * Window = (BASE_SCREEN*) Window->Pnext;
+      * }
+     *
+      * return Nb;
+     */
 }
