@@ -266,7 +266,7 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
     if( width < PenMinWidth )
         width = PenMinWidth;
 
-    if( ForceBlackPen && Color != WHITE )
+    if( ForceBlackPen )
     {
         Color = BLACK;
     }
@@ -300,7 +300,7 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
 /***********************************************/
 {
     Color &= MASKCOLOR; // Pour 32 couleurs Max
-    if( ForceBlackPen && Color != WHITE )
+    if( ForceBlackPen )
         Color = BLACK;
     wxBrush DrawBrush;
     DrawBrush.SetColour(
