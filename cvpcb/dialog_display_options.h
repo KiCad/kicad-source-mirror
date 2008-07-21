@@ -121,6 +121,7 @@ public:
     wxCheckBox* m_IsShowPadFill;
     wxCheckBox* m_IsShowPadNum;
     wxBoxSizer* BottomBoxSizer;
+    wxButton* m_CancelButton;
 ////@end WinEDA_FootprintDisplayOptionsFrame member variables
 
 	WinEDA_BasePcbFrame * m_Parent;

@@ -75,9 +75,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
         glCallList( m_gllist );
     else
     {
-        m_gllist = CreateDrawGL_List();
-
-//		m_gllist = DisplayCubeforTest();	// Only for test
+        CreateDrawGL_List();
     }
 
     glFlush();
@@ -93,13 +91,14 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 /* Create the draw list items
  */
 {
-    GLuint               gllist   = glGenLists( 1 );
     WinEDA_BasePcbFrame* pcbframe = m_Parent->m_Parent;
     BOARD*               pcb = pcbframe->m_Pcb;
     TRACK*               pt_piste;
     int                  ii;
 
     wxBusyCursor         dummy;
+
+    m_gllist = glGenLists( 1 );
 
     pcb->ComputeBoundaryBox();
     g_Parm_3D_Visu.m_BoardSettings = pcb->m_BoardSettings;
@@ -134,7 +133,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_LayerZcoord[ECO1_N]    = zpos_cmp + zpos_cu;
     g_Parm_3D_Visu.m_LayerZcoord[ECO2_N]    = zpos_cmp + zpos_cu;
 
-    glNewList( gllist, GL_COMPILE_AND_EXECUTE );
+    glNewList( m_gllist, GL_COMPILE_AND_EXECUTE );
 
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
@@ -223,7 +222,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     GLenum err = glGetError();
     if( err != GL_NO_ERROR )
         DisplayError( this, wxT( "Error in GL commands" ) );
-    return gllist;
+    return m_gllist;
 }
 
 

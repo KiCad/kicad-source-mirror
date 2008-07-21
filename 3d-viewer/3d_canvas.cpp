@@ -493,11 +493,11 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
 void Pcb3D_GLCanvas::OnSize( wxSizeEvent& event )
 /**********************************************/
 {
+    int w, h;
+    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
     // this is also necessary to update the context on some platforms
     wxGLCanvas::OnSize( event );
 
-    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    int w, h;
     GetClientSize( &w, &h );
 #ifndef __WXMOTIF__
     if( GetContext() )
@@ -506,6 +506,8 @@ void Pcb3D_GLCanvas::OnSize( wxSizeEvent& event )
         SetCurrent();
         glViewport( 0, 0, (GLint) w, (GLint) h );
     }
+
+    event.Skip();
 }
 
 

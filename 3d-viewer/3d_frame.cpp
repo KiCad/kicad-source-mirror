@@ -309,6 +309,7 @@ void WinEDA3D_DrawFrame::NewDisplay()
 /*****************************************/
 {
     m_Canvas->ClearLists();
+    m_Canvas->CreateDrawGL_List();
     m_Canvas->InitGL();
     m_Canvas->DisplayStatus();
     m_Canvas->Refresh( true );

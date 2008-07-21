@@ -185,6 +185,7 @@ void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
 
     wxLayoutAlgorithm layout;
     layout.LayoutFrame( this );
+    event.Skip();
 }
 
 
@@ -214,6 +215,8 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
     layout.LayoutFrame( this );
     if( m_CommandWin )
         m_CommandWin->Refresh( TRUE );
+    
+    event.Skip();
 }
 
 

@@ -163,7 +163,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
 
     if( m_HToolBar )
     {
-#if wxCHECK_VERSION( 2, 8, 3 )
+#if wxCHECK_VERSION( 2, 8, 3 ) & !defined(__WXX11__)
         m_HToolBar->SetToolNormalBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap );
 #else
         int pos = m_HToolBar->GetToolPos( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR );
