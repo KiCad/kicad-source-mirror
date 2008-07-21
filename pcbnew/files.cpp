@@ -237,7 +237,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     if( Append )
     {
         GetScreen()->SetModify();
-        GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
+        GetScreen()->m_FileName.Printf( wxT( "%s%cboard_append%s" ),
                   wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
     }
 
