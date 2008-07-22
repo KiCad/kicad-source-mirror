@@ -210,9 +210,6 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
         DisplayInfo( this, _( "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."));
     }
 
-    SetTitle( GetScreen()->m_FileName );
-    SetLastProject( GetScreen()->m_FileName );
-
     // Reload the corresponding configuration file:
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->m_FileName ) );
     if( Append )
@@ -234,12 +231,23 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 
     GetScreen()->ClrModify();
 
+    /* If append option: change the initial board name to <oldname>-append.brd */
     if( Append )
     {
+        wxString new_filename = GetScreen()->m_FileName.BeforeLast('.');
+        if ( ! new_filename.EndsWith(wxT("-append")) )
+            new_filename += wxT("-append");
+
+        new_filename += PcbExtBuffer;
+
         GetScreen()->SetModify();
-        GetScreen()->m_FileName.Printf( wxT( "%s%cboard_append%s" ),
-                  wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
+        GetScreen()->m_FileName = new_filename;
     }
+
+    GetScreen()->m_FileName.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
+    SetTitle( GetScreen()->m_FileName );
+    SetLastProject( GetScreen()->m_FileName );
 
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     build_liste_pads();
