@@ -3,11 +3,10 @@
 
 include ../libs.linux
 
-BOOST_LIB = /usr/include/boost
+BOOST_LIB = ../
 
 # Additional compiler flags
-CPPFLAGS +=
-
+CPPFLAGS += -I $(BOOST_LIB)
 
 TARGET = pcbnew
 
@@ -20,7 +19,7 @@ include makefile.include
 -include *.d
 
 CPPFLAGS += $(EXTRACPPFLAGS)
-EDACPPFLAGS = $(CPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)  $(BOOST_LIB)
 
 
 $(TARGET): $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../libs.linux
