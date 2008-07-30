@@ -177,8 +177,11 @@ static POINT mapPt( const wxPoint& pt )
  * Function findPoint
  * searches for a DRAWSEGMENT with an end point or start point of aPoint, and
  * if found, removes it from the TYPE_COLLECTOR and returns it, else returns NULL.
+ * @param aPoint The starting or ending point to search for.
+ * @return DRAWSEGMENT* - The first DRAWSEGMENT that has a start or end point matching
+ *   aPoint, otherwise NULL if none.
  */
-static DRAWSEGMENT* findPoint( const wxPoint& pt, TYPE_COLLECTOR* items )
+static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
 {
     for( int i=0;  i<items->GetCount();  ++i )
     {
@@ -186,7 +189,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& pt, TYPE_COLLECTOR* items )
 
         wxASSERT( graphic->Type() == TYPEDRAWSEGMENT );
 
-        if( pt == graphic->GetStart() || pt == graphic->GetEnd() )
+        if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
         {
             items->Remove(i);
             return graphic;
@@ -196,7 +199,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& pt, TYPE_COLLECTOR* items )
 
 #if defined(DEBUG)
     printf("Unable to find segment matching point (%d,%d)\n",
-                         pt.x, pt.y );
+                         aPoint.x, aPoint.y );
 
     for( int i=0;  i<items->GetCount();  ++i )
     {
@@ -950,13 +953,19 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     {
         pcb->unit->units = T_mil;
         pcb->resolution->units = T_mil;
-        pcb->resolution->value = 100;
+
+        // Kicad only supports 1/10th of mil internal coordinates.  So to avoid
+        // having the router give us back 1/100th of mil coordinates which we
+        // will have to round and thereby cause error, we declare our maximum
+        // resolution precisely at 1/10th for now.  For more on this, see:
+        // http://www.freerouting.net/usren/viewtopic.php?f=3&t=354
+        pcb->resolution->value = 10;
     }
 
 
     //-----<boundary_descriptor>------------------------------------------
     {
-        // because fillBOUNDARY() can throw an exception, we link in an
+        // Because fillBOUNDARY() can throw an exception, we link in an
         // empty boundary so the BOUNDARY does not get lost in the event of
         // of an exception.
         BOUNDARY* boundary = new BOUNDARY(0);
