@@ -237,8 +237,7 @@ void Out_Pads( BOARD* Pcb, FILE* outfile )
                 fprintf( outfile, " %d", 2 );
                 break;
 
-            case PAD_P_HOLE:
-            case PAD_MECA:
+            case PAD_HOLE_NOT_PLATED:
                 fprintf( outfile, " %d", 4 );
                 break;
             }

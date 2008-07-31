@@ -30,18 +30,18 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     wxString          Line;
     Ki_WorkSheetData* WsItem;
     int               scale = m_InternalUnits / 1000;
-    wxSize  size( SIZETEXT* scale, SIZETEXT* scale );
-    wxSize  size_ref( SIZETEXT_REF* scale, SIZETEXT_REF* scale );
+    wxSize            size( SIZETEXT * scale, SIZETEXT * scale );
+    wxSize            size_ref( SIZETEXT_REF * scale, SIZETEXT_REF * scale );
 
-    wxString msg;
-    int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
-    int      width = line_width;
+    wxString          msg;
+    int               UpperLimit = VARIABLE_BLOCK_START_POSITION;
+    int               width = line_width;
 
     Color = RED;
     if( Sheet == NULL )
     {
         DisplayError( this,
-            wxT( "WinEDA_DrawFrame::TraceWorkSheet() error: m_CurrentSheet NULL" ) );
+            wxT( "WinEDA_DrawFrame::TraceWorkSheet() error: NULL Sheet" ) );
         return;
     }
 
@@ -312,6 +312,61 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             break;
         }
     }
+}
+
+
+/************************************************************************************************/
+wxString WinEDA_DrawFrame::GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition )
+/************************************************************************************************/
+
+/** Function GetXYSheetReferences
+ * Return the X,Y sheet references where the point position is located
+ * @param aScreen = screen to use
+ * @param aPosition = position to identify by YX ref
+ * @return a wxString containing the message locator like A3 or B6 (or ?? if out of page limits)
+ */
+{
+    Ki_PageDescr* Sheet = aScreen->m_CurrentSheetDesc;
+    int           ii, xg, yg, ipas, gxpas, gypas;
+    int           refx, refy;
+    wxString      msg;
+
+    if( Sheet == NULL )
+    {
+        DisplayError( this,
+            wxT( "WinEDA_DrawFrame::GetXYSheetReferences() error: NULL Sheet" ) );
+        return msg;
+    }
+
+    refx = Sheet->m_LeftMargin;
+    refy = Sheet->m_TopMargin;                      /* Upper left corner */
+    xg   = Sheet->m_Size.x - Sheet->m_RightMargin;
+    yg   = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
+
+    /* Get the Y axis identifier (A symbol A ... Z) */
+    if( aPosition.y < refy || aPosition.y > yg )  // Ouside of Y limits
+        msg << wxT( "?" );
+    else
+    {
+        ipas  = (yg - refy) / PAS_REF;      // ipas = Y count sections
+        gypas = ( yg - refy) / ipas;        // gypas = Y section size
+        ii    = (aPosition.y - refy) / gypas;
+        msg.Printf( wxT( "%c" ), 'A' + ii );
+    }
+
+    /* Get the X axis identifier (A number 1 ... n) */
+    if( aPosition.x < refx || aPosition.x > xg )  // Ouside of X limits
+        msg << wxT( "?" );
+    else
+    {
+        ipas  = (xg - refx) / PAS_REF;  // ipas = X count sections
+        gxpas = ( xg - refx) / ipas;    // gxpas = X section size
+
+        ii = (aPosition.x - refx) / gxpas;
+        msg << ii + 1;
+    }
+
+    return msg;
 }
 
 

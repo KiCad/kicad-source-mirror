@@ -26,22 +26,26 @@ int CodeShape[NBSHAPES] = /* forme des pads  */
 };
 
 
-#define NBTYPES 5
+#define NBTYPES 4
 int CodeType[NBTYPES] =
 {
-    PAD_STANDARD, PAD_SMD, PAD_CONN, PAD_P_HOLE, PAD_MECA
+    PAD_STANDARD, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
 };
 
-
+// Default mask layers for pads according to the pas type
 static long Std_Pad_Layers[NBTYPES] =
 {
+    // PAD_STANDARD:
     ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP,
+
+    // PAD_CONN:
     CMP_LAYER | SOLDERPASTE_LAYER_CMP | SOLDERMASK_LAYER_CMP,
+
+    // PAD_SMD:
     CMP_LAYER | SOLDERMASK_LAYER_CMP,
-    ALL_CU_LAYERS | SILKSCREEN_LAYER_CU | SILKSCREEN_LAYER_CMP |
-    SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP,
-    ALL_CU_LAYERS | SILKSCREEN_LAYER_CU | SILKSCREEN_LAYER_CMP |
-    SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
+
+    //PAD_HOLE_NOT_PLATED:
+    ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
 };
 
 
@@ -247,18 +251,12 @@ void WinEDA_PadPropertiesFrame::PadOrientEvent( wxCommandEvent& event )
 }
 
 
-/**************************************************************************/
-void WinEDA_PadPropertiesFrame::PadTypeSelectedEvent( wxCommandEvent& event )
-/**************************************************************************/
 
-/* calcule un layer_mask type selon la selection du type du pad
- */
-{
-    PadTypeSelected();
-}
-
-
+/************************************************/
 void WinEDA_PadPropertiesFrame::PadTypeSelected()
+/************************************************/
+/* Adjust the better mask layer according to the selected pad type
+ */
 {
     long layer_mask;
     int  ii;
@@ -524,8 +522,11 @@ void WinEDA_PadPropertiesFrame::PadPropertiesAccept( wxCommandEvent& event )
             CurrentPad->m_Drill  = wxSize( 0, 0 );
             break;
 
-        case PAD_P_HOLE:
-        case PAD_MECA:
+        case PAD_HOLE_NOT_PLATED:
+            break;
+
+        default:
+            DisplayError(this, wxT("Error: unknown pad type"));
             break;
         }
 

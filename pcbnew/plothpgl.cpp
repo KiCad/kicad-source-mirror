@@ -499,6 +499,7 @@ void trace_1_pastille_RONDE_HPGL( wxPoint pos, int diametre, int modetrace )
 /**************************************************************************/
 /* Trace 1 pastille RONDE (via,pad rond) en position pos */
 {
+    char cbuf[1024];
     int rayon, delta;
 
     UserToDeviceCoordinate( pos );

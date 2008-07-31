@@ -367,6 +367,7 @@ void trace_1_pastille_OVALE_GERBER( wxPoint pos, wxSize size, int orient )
  */
 {
     D_CODE* dcode_ptr;
+    char cbuf[256];
     int     x0, y0, x1, y1, delta;
 
     if( orient == 900 || orient == 2700 )  /* orient tournee de 90 deg */
@@ -420,6 +421,7 @@ void Plot_1_CIRCLE_pad_GERBER( wxPoint pos, int diametre )
  */
 {
     D_CODE* dcode_ptr;
+    char cbuf[256];
 
     wxSize size( diametre, diametre );
 
@@ -451,6 +453,7 @@ void PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient )
  */
 {
     D_CODE* dcode_ptr;
+    char cbuf[256];
 
     /* Trace de la forme flashee */
     switch( orient )
@@ -630,6 +633,7 @@ void PlotGERBERLine( wxPoint start, wxPoint end, int large )
  */
 {
     D_CODE* dcode_ptr;
+    char cbuf[256];
 
     UserToDeviceCoordinate( start );
     UserToDeviceCoordinate( end );
@@ -865,6 +869,7 @@ int WinEDA_BasePcbFrame::Gen_D_CODE_File( FILE* penfile )
  */
 {
     D_CODE* ptr_tool;
+    char cbuf[1024];
     int     nb_dcodes = 0;
 
     /* Init : */

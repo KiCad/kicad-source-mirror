@@ -298,6 +298,14 @@ public:
     void            OnActivate( wxActivateEvent& event );
     void            ReDrawPanel();
     void            TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
+    /** Function GetXYSheetReferences
+     * Return the X,Y sheet references where the point position is located
+     * @param aScreen = screen to use
+     * @param aPosition = position to identify by YX ref
+     * @return a wxString containing the message locator like A3 or B6 (or ?? if out of page limits)
+     */
+    wxString        GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
+
     void            DisplayToolMsg( const wxString msg );
     void            Process_Zoom( wxCommandEvent& event );
     void            Process_Grid( wxCommandEvent& event );

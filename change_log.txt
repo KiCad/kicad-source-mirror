@@ -5,6 +5,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Juil-31 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Added component sheet X,Y location in BOM.
+    Netlist generation: now spaces in names are replaced by '_' for pcbnew (which does not accept spaces)
+    Bug: print all pages did not work.
+    Please note in complex hierarchy, the current "Print All" function needs to be enhanced,
+    because it does not draw all sheets but only all different sheets
+
 2008-Jule-08 UPDATE   Andrey Fedorushkov <andrf@mail.ru>
 ================================================================================
 +pcbnew:

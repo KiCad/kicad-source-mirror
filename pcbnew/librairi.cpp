@@ -794,6 +794,7 @@ int WinEDA_ModuleEditFrame::Create_Librairie( const wxString& LibName )
 {
     FILE*    lib_module;
     wxString msg;
+    char cbuf[256];
 
     if( wxFileExists( LibName ) )
     {
@@ -835,6 +836,7 @@ static bool CreateDocLibrary( const wxString& LibName )
  */
 {
     char     Line[1024];
+    char     cbuf[256];
     wxString Name, Doc, KeyWord;
     wxString LibDocName;
     FILE*    LibMod, * LibDoc;

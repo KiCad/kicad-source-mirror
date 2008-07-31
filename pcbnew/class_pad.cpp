@@ -94,7 +94,7 @@ EDA_Rect D_PAD::GetBoundingBox()
     EDA_Rect      area;
 	area.SetOrigin(m_Pos);
 	area.Inflate(m_Rayon, m_Rayon);
-	
+
 	return area;
 }
 
@@ -256,7 +256,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     int                  zoom;
     int                  fillpad = 0;
     wxPoint              shape_pos;
-	
+
 	if ( m_Flags & DO_NOT_DRAW )
 		return;
 
@@ -747,9 +747,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
             if( strncmp( BufLine, "CONN", 4 ) == 0 )
                 m_Attribut = PAD_CONN;
             if( strncmp( BufLine, "HOLE", 4 ) == 0 )
-                m_Attribut = PAD_P_HOLE;
-            if( strncmp( BufLine, "MECA", 4 ) == 0 )
-                m_Attribut = PAD_MECA;
+                m_Attribut = PAD_HOLE_NOT_PLATED;
             break;
 
         case 'N':       /* Lecture du netname */
@@ -777,7 +775,9 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 }
 
 
+/*************************************/
 bool D_PAD::Save( FILE* aFile ) const
+/*************************************/
 {
     int         cshape;
     const char* texttype;
@@ -833,11 +833,8 @@ bool D_PAD::Save( FILE* aFile ) const
     case PAD_CONN:
         texttype = "CONN"; break;
 
-    case PAD_P_HOLE:
+    case PAD_HOLE_NOT_PLATED:
         texttype = "HOLE"; break;
-
-    case PAD_MECA:
-        texttype = "MECA"; break;
 
     default:
         texttype = "STD";
@@ -1144,8 +1141,7 @@ static const char* ShowPadAttr( int aPadAttr )
     case PAD_STANDARD:      return "STD";
     case PAD_SMD:           return "SMD";
     case PAD_CONN:          return "CONN";
-    case PAD_P_HOLE:        return "HOLE";
-    case PAD_MECA:          return "MECA";
+    case PAD_HOLE_NOT_PLATED:        return "HOLE";
     default:                return "??unkown??";
     }
 }

@@ -212,10 +212,7 @@ eda_global char* adr_himem;     /* adresse haute limite de la memoire disponible
 eda_global char* adr_max;       /* adresse haute maxi utilisee pour la memoire */
 
 
-/* variables g�erales */
-
-eda_global char   cbuf[1024];           /* buffer for some text printing */
-eda_global BOARD* g_ModuleEditor_Pcb;   /* board used to edit footprints (used by modedit)*/
+/* variables generales */
 eda_global int    g_TimeOut;            // Timer for automatic saving
 eda_global int    g_SaveTime;           // Time for next saving
 
@@ -320,6 +317,7 @@ eda_global int         g_PadCMPColor;
 #endif
 
 eda_global PCB_SCREEN* ScreenPcb;       /* Ecran principal */
+eda_global BOARD* g_ModuleEditor_Pcb;   /* board used to edit footprints (used by modedit)*/
 eda_global PCB_SCREEN* ScreenModule;    /* Ecran de l'editeur de modules */
 
 

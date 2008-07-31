@@ -20,8 +20,7 @@
 #define PAD_SMD         1       // Smd pad, appears on the layer paste (default)
 #define PAD_CONN        2       // Like smd, does not appear on the layer paste (default)
 // reserved, but not yet really used:
-#define PAD_P_HOLE      3       // trou simple, utile sur pad stack
-#define PAD_MECA        4       // PAD "mecanique" (fixation, zone cuivre...)
+#define PAD_HOLE_NOT_PLATED      3       // like PAD_STANDARD, but not plated (no connection between copper layers)
 
 
 #endif  // PAD_SHAPES_H_

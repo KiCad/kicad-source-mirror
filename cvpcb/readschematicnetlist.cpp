@@ -57,7 +57,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
      * or "# EESchema Netliste"
      */
-    fgets( Line, 255, source );
+    fgets( Line, BUFFER_CHAR_SIZE, source );
     /* test for netlist type PCB2 */
     i = strnicmp( Line, "( {", 3 );
     if( i != 0 )
@@ -310,7 +310,7 @@ int ReadPinConnection( STORECMP* Cmp )
             memset( net, 0, sizeof(net) );
             memset( numpin, 0, sizeof(numpin) );
 
-            /* Read pi name , 4 letters */
+            /* Read pin name , 4 letters */
             for( jj = 0; jj < 4; jj++, i++ )
             {
                 if( Line[i] == ' ' )

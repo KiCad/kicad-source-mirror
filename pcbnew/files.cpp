@@ -132,6 +132,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     int      ii;
     FILE*    source;
     wxString msg;
+    char cbuf[1024];
 
     ActiveScreen = GetScreen();
 

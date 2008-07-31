@@ -312,8 +312,8 @@ int BuildComponentsListFromSchematic( ListComponent* aList )
                         CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
                         sizeof( aList->m_Ref ) );
 
-                // @todo the above line is probably a bug, because it will not always nul terminate m_Ref.
-
+                // Ensure always nul terminate m_Ref.
+                aList->m_Ref[sizeof( aList->m_Ref ) - 1 ] = 0;
                 aList++;
             }
         }
@@ -670,7 +670,11 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
         fprintf( f, "ref%cvalue", s_ExportSeparatorSymbol );
 
         if( aIncludeSubComponents )
+        {
             fprintf( f, "%csheet path", s_ExportSeparatorSymbol );
+            fprintf( f, "%clocation", s_ExportSeparatorSymbol );
+
+        }
 
         if( m_AddFootprintField->IsChecked() )
             fprintf( f, "%cfootprint", s_ExportSeparatorSymbol );
@@ -737,9 +741,17 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
         {
             msg = aList[ii].m_SheetList.PathHumanReadable();
             if( CompactForm )
+            {
                 fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
+                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->m_Parent, DrawLibItem->m_Pos );
+                fprintf( f, "%c%s)", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
+            }
             else
+            {
                 fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->m_Parent, DrawLibItem->m_Pos );
+                fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+            }
         }
 
         PrintFieldData( f, DrawLibItem, CompactForm );
@@ -811,6 +823,8 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
         {
             msg = aList[ii].m_SheetList.PathHumanReadable();
             fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+            msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->m_Parent, DrawLibItem->m_Pos );
+            fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
         }
 
         PrintFieldData( f, DrawLibItem );

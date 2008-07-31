@@ -236,11 +236,13 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
         {
             if( g_TabObjNet[jj].m_Type != NET_PINLABEL )
             {
-                NetName = g_TabObjNet[jj].m_SheetList.PathHumanReadable()
-                          + NetName;
+                wxString lnet = NetName;
+                NetName = g_TabObjNet[jj].m_SheetList.PathHumanReadable();
+                // If sheet path is too long, use the time stamp name insteed
+                if ( NetName.Length() > 32 )
+                    NetName = g_TabObjNet[jj].m_SheetList.Path();
+                NetName += lnet;
             }
-
-            //NetName << wxT("_") << g_TabObjNet[jj].m_SheetList.PathHumanReadable();
         }
         else
         {
@@ -619,7 +621,8 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                     continue;
                 wxString netname = ReturnPinNetName( Pin, wxT( "N-%.6d" ) );
                 if( netname.IsEmpty() )
-                    netname = wxT( " ?" );
+                    netname = wxT( "?" );
+                netname.Replace( wxT( " " ), wxT( "_" ) );
                 fprintf( f, "  ( %4.4s %s )\n", (char*) &Pin->m_PinNum,
                         CONV_TO_UTF8( netname ) );
             }
