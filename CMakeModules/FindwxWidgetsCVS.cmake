@@ -5,9 +5,9 @@
 # configuration to use. wxWidgets is a modular library. To specify the
 # modules that you will use, you need to name them as components to
 # the package:
-# 
+#
 # FIND_PACKAGE(wxWidgets COMPONENTS base core ...)
-# 
+#
 # There are two search branches: a windows style and a unix style. For
 # windows, the following variables are searched for and set to
 # defaults in case of multiple choices. Change them if the defaults
@@ -20,7 +20,7 @@
 #                            (e.g., C:/wxWidgets-2.6.3/lib/vc_lib).
 #  wxWidgets_CONFIGURATION - Configuration to use
 #                            (e.g., msw, mswd, mswu, mswunivud, etc.)
-# 
+#
 # For unix style it uses the wx-config utility. You can select between
 # debug/release, unicode/ansi, universal/non-universal, and
 # static/shared in the QtDialog or ccmake interfaces by turning ON/OFF
@@ -30,7 +30,7 @@
 #  wxWidgets_USE_UNICODE
 #  wxWidgets_USE_UNIVERSAL
 #  wxWidgets_USE_STATIC
-#  
+#
 # The following are set after the configuration is done for both
 # windows and unix style:
 #
@@ -115,7 +115,7 @@
 
 # FIXME: This and all the DBG_MSG calls should be removed after the
 # module stabilizes.
-# 
+#
 # Helper macro to control the debugging output globally. There are
 # two versions for controlling how verbose your output should be.
 MACRO(DBG_MSG _MSG)
@@ -378,7 +378,7 @@ IF(WIN32_STYLE_FIND)
   #-------------------------------------------------------------------
 
   # Look for an installation tree.
-  FIND_PATH(wxWidgets_ROOT_DIR 
+  FIND_PATH(wxWidgets_ROOT_DIR
     NAMES include/wx/wx.h
     PATHS
       $ENV{wxWidgets_ROOT_DIR}
@@ -387,7 +387,8 @@ IF(WIN32_STYLE_FIND)
       C:/
       D:/
       $ENV{ProgramFiles}
-    PATH_SUFFIXES 
+    PATH_SUFFIXES
+      wxWidgets-2.8.8
       wxWidgets-2.8.7
       wxWidgets-2.8.6
       wxWidgets-2.8.5
@@ -396,19 +397,9 @@ IF(WIN32_STYLE_FIND)
       wxWidgets-2.8.2
       wxWidgets-2.8.1
       wxWidgets-2.8.0
-      wxWidgets-2.7.4
-      wxWidgets-2.7.3
-      wxWidgets-2.7.2
-      wxWidgest-2.7.1
-      wxWidgets-2.7.0
-      wxWidgets-2.7.0-1
       wxWidgets-2.6.3
       wxWidgets-2.6.2
       wxWidgets-2.6.1
-      wxWidgets-2.5.4
-      wxWidgets-2.5.3
-      wxWidgets-2.5.2
-      wxWidgets-2.5.1
       wxWidgets
     DOC "wxWidgets base/installation directory?"
     )
@@ -600,7 +591,7 @@ ELSE(WIN32_STYLE_FIND)
       ENDIF(_wx_result_yes EQUAL 0 AND _wx_result_no EQUAL 0)
     ENDMACRO(WX_CONFIG_SELECT_QUERY_BOOL)
 
-    # 
+    #
     # Set wxWidgets_SELECT_OPTIONS to wx-config options for selecting
     # among multiple builds.
     #
@@ -766,18 +757,18 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 # #
 # # wxWidgets_wxrc_EXECUTABLE
 # #=====================================================================
-# 
+#
 # # Resource file compiler.
 # FIND_PROGRAM(wxWidgets_wxrc_EXECUTABLE wxrc
 #   ${wxWidgets_ROOT_DIR}/utils/wxrc/vc_msw
 #   )
-# 
-# # 
+#
+# #
 # # WX_SPLIT_ARGUMENTS_ON(<keyword> <left> <right> <arg1> <arg2> ...)
-# # 
+# #
 # # Sets <left> and <right> to contain arguments to the left and right,
 # # respectively, of <keyword>.
-# # 
+# #
 # # Example usage:
 # #  FUNCTION(WXWIDGETS_ADD_RESOURCES outfiles)
 # #    WX_SPLIT_ARGUMENTS_ON(OPTIONS wxrc_files wxrc_options ${ARGN})
@@ -785,7 +776,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 # #  ENDFUNCTION(WXWIDGETS_ADD_RESOURCES)
 # #
 # #  WXWIDGETS_ADD_RESOURCES(sources ${xrc_files} OPTIONS -e -o file.C)
-# # 
+# #
 # # NOTE: This is a generic piece of code that should be renamed to
 # # SPLIT_ARGUMENTS_ON and put in a file serving the same purpose as
 # # FindPackageStandardArgs.cmake. At the time of this writing
@@ -799,7 +790,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #   #LIST(APPEND ${_rightvar} "")
 #   SET(${_leftvar}  "")
 #   SET(${_rightvar} "")
-# 
+#
 #   SET(_doing_right FALSE)
 #   FOREACH(element ${ARGN})
 #     IF("${element}" STREQUAL "${_keyword}")
@@ -812,11 +803,11 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #       ENDIF(_doing_right)
 #     ENDIF("${element}" STREQUAL "${_keyword}")
 #   ENDFOREACH(element)
-# 
+#
 #   RAISE_SCOPE(${_leftvar})
 #   RAISE_SCOPE(${_rightvar})
 # ENDFUNCTION(WX_SPLIT_ARGUMENTS_ON)
-# 
+#
 # #
 # # WX_GET_DEPENDENCIES_FROM_XML(
 # #   <depends>
@@ -835,7 +826,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #     _xml_contents
 #     _depends_path
 #     )
-# 
+#
 #   STRING(REGEX MATCHALL
 #     ${_match_patt}
 #     dep_file_list
@@ -843,46 +834,46 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #     )
 #   FOREACH(dep_file ${dep_file_list})
 #     STRING(REGEX REPLACE ${_clean_patt} "" dep_file "${dep_file}")
-# 
+#
 #     # make the file have an absolute path
 #     IF(NOT IS_ABSOLUTE "${dep_file}")
 #       SET(dep_file "${${_depends_path}}/${dep_file}")
 #     ENDIF(NOT IS_ABSOLUTE "${dep_file}")
-# 
+#
 #     # append file to dependency list
 #     LIST(APPEND ${_depends} "${dep_file}")
 #   ENDFOREACH(dep_file)
-# 
+#
 #   RAISE_SCOPE(${_depends})
 # ENDFUNCTION(WX_GET_DEPENDENCIES_FROM_XML)
-# 
-# # 
+#
+# #
 # # WXWIDGETS_ADD_RESOURCES(<sources> <xrc_files>
 # #                         OPTIONS <options> [NO_CPP_CODE])
-# # 
+# #
 # # Adds a custom command for resource file compilation of the
 # # <xrc_files> and appends the output files to <sources>.
-# # 
+# #
 # # Example usages:
 # #   WXWIDGETS_ADD_RESOURCES(sources xrc/main_frame.xrc)
 # #   WXWIDGETS_ADD_RESOURCES(sources ${xrc_files} OPTIONS -e -o altname.cxx)
 # #
 # FUNCTION(WXWIDGETS_ADD_RESOURCES _outfiles)
 #   WX_SPLIT_ARGUMENTS_ON(OPTIONS rc_file_list rc_options ${ARGN})
-# 
+#
 #   # Parse files for dependencies.
 #   SET(rc_file_list_abs "")
 #   SET(rc_depends       "")
 #   FOREACH(rc_file ${rc_file_list})
 #     GET_FILENAME_COMPONENT(depends_path ${rc_file} PATH)
-# 
+#
 #     GET_FILENAME_COMPONENT(rc_file_abs ${rc_file} ABSOLUTE)
 #     LIST(APPEND rc_file_list_abs "${rc_file_abs}")
-# 
+#
 #     # All files have absolute paths or paths relative to the location
 #     # of the rc file.
 #     FILE(READ "${rc_file_abs}" rc_file_contents)
-# 
+#
 #     # get bitmap/bitmap2 files
 #     WX_GET_DEPENDENCIES_FROM_XML(
 #       rc_depends
@@ -891,7 +882,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #       rc_file_contents
 #       depends_path
 #       )
-# 
+#
 #     # get url files
 #     WX_GET_DEPENDENCIES_FROM_XML(
 #       rc_depends
@@ -900,7 +891,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #       rc_file_contents
 #       depends_path
 #       )
-# 
+#
 #     # get wxIcon files
 #     WX_GET_DEPENDENCIES_FROM_XML(
 #       rc_depends
@@ -910,10 +901,10 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #       depends_path
 #       )
 #   ENDFOREACH(rc_file)
-# 
+#
 #   #
 #   # Parse options.
-#   # 
+#   #
 #   # If NO_CPP_CODE option specified, then produce .xrs file rather
 #   # than a .cpp file (i.e., don't add the default --cpp-code option).
 #   LIST(FIND rc_options NO_CPP_CODE index)
@@ -926,7 +917,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #     # wxrc's default output filename for xrs file.
 #     SET(outfile resource.xrs)
 #   ENDIF(index EQUAL -1)
-# 
+#
 #   # Get output name for use in ADD_CUSTOM_COMMAND.
 #   # - short option scanning
 #   LIST(FIND rc_options -o index)
@@ -942,7 +933,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #   ENDIF(outfile_opt)
 #   #STRING(REGEX REPLACE "--output=[^;]*;?" "" rc_options "${rc_options}")
 #   #STRING(REGEX REPLACE ";$" "" rc_options "${rc_options}")
-#   
+#
 #   IF(NOT IS_ABSOLUTE "${outfile}")
 #     SET(outfile "${CMAKE_CURRENT_BINARY_DIR}/${outfile}")
 #   ENDIF(NOT IS_ABSOLUTE "${outfile}")
@@ -951,7 +942,7 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #     COMMAND ${wxWidgets_wxrc_EXECUTABLE} ${rc_options} ${rc_file_list_abs}
 #     DEPENDS ${rc_file_list_abs} ${rc_depends}
 #     )
-# 
+#
 #   # Add generated header to output file list.
 #   LIST(FIND rc_options -e short_index)
 #   LIST(FIND rc_options --extra-cpp-code long_index)
@@ -963,9 +954,9 @@ SET(wxWidgets_FOUND ${WXWIDGETS_FOUND})
 #       "${outfile_header}" PROPERTIES GENERATED TRUE
 #       )
 #   ENDIF(NOT short_index EQUAL -1 OR NOT long_index EQUAL -1)
-# 
+#
 #   # Add generated file to output file list.
 #   LIST(APPEND ${_outfiles} "${outfile}")
-# 
+#
 #   RAISE_SCOPE(${_outfiles})
 # ENDFUNCTION(WXWIDGETS_ADD_RESOURCES)

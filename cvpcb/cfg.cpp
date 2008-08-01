@@ -39,9 +39,6 @@ void Read_Config( const wxString& FileName )
     g_EDA_Appl->ReadProjectConfig( FullFileName,
         GROUP, ParamCfgList, FALSE );
 
-    if( PkgInExtBuffer.IsEmpty() )
-        PkgInExtBuffer = wxT( ".pkg" );
-
     if( NetInExtBuffer.IsEmpty() )
         NetInExtBuffer = wxT( ".net" );
 

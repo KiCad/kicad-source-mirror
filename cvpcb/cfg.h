@@ -35,25 +35,10 @@ static PARAM_CFG_LIBNAME_LIST EquivNameBufCfg
 	GROUPEQU
 );
 
-
-static PARAM_CFG_INT NetInTypeCfg	// format Netliste ( 0= auto 1=ORCADPCB2 3,4=VIEWLOGIC)
-(
-	wxT("NetITyp"),		/* identification */
-	&g_NetType,		/* Adresse du parametre */
-	0, 4,			/* Valeurs extremes */
-	1				/* Valeur par defaut */
-);
-
 static PARAM_CFG_WXSTRING NetInExtBufCfg
 (
 	wxT("NetIExt"),		  /* identification */
 	&NetInExtBuffer
-);
-
-static PARAM_CFG_WXSTRING PkgInExtBufCfg
-(
-	wxT("PkgIExt"),		  /* identification */
-	&PkgInExtBuffer /* Adresse du parametre */
 );
 
 static PARAM_CFG_WXSTRING NetDirBufCfg
@@ -68,14 +53,6 @@ static PARAM_CFG_WXSTRING UserLibDirBufCfg
 	wxT("LibDir"),		  /* identification */
 	&g_UserLibDirBuffer, /* Adresse du parametre */
 	GROUPLIB
-);
-
-static PARAM_CFG_INT NetTypeCfg
-(
-	wxT("NetType"),		/* identification */
-	&g_NetType,		/* Adresse du parametre */
-	0,				/* Valeur par defaut */
-	0, 1			/* Valeurs extremes */
 );
 
 static PARAM_CFG_BOOL DisplayPadFillCfg
@@ -139,14 +116,11 @@ static PARAM_CFG_BOOL DisplayPcbTrackFillCfg
 static PARAM_CFG_BASE * ParamCfgList[] =
 {
 	& CommandCfg,
-	& NetInTypeCfg,
 	& NetInExtBufCfg,
-	& PkgInExtBufCfg,
 	& NetDirBufCfg,
 	& UserLibDirBufCfg,
 	& LibNameBufCfg,
 	& EquivNameBufCfg,
-	& NetTypeCfg,
 	& DisplayPadFillCfg,
 	& DisplayPadNumCfg,
 	& DisplayPadNoConnCfg,

@@ -23,13 +23,10 @@ set(CVPCB_SRCS
     loadcmp.cpp
     memoire.cpp
     menucfg.cpp
-    rdpcad.cpp
     readschematicnetlist.cpp
     savecmp.cpp
     setvisu.cpp
     tool_cvpcb.cpp
-    viewlnet.cpp
-    viewlogi.cpp
     writenetlistpcbnew.cpp)
 
 set(CVPCB_EXTRA_SRCS

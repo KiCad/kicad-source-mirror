@@ -196,8 +196,6 @@ eda_global wxString g_Shapes3DExtBuffer     //3D shape file extension
 #endif
 ;
 
-eda_global int g_NetType;       // for cvpcb: Net type identifier
-
 eda_global int g_CurrentVersionPCB
 #ifdef MAIN
 = 1

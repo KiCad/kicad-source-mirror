@@ -26,16 +26,17 @@ OBJECTS = $(TARGET).o \
 			class_mire.o\
 			displayframe.o\
 			drawpanel.o \
-			init.o rdpcad.o \
+			init.o\
 			readschematicnetlist.o\
-			viewlogi.o viewlnet.o \
-			loadcmp.o savecmp.o \
+			loadcmp.o\
+            savecmp.o \
 			tool_cvpcb.o \
 			writenetlistpcbnew.o\
 			genequiv.o \
 			ioascii.o \
 			menucfg.o \
-			cfg.o listlib.o \
+			cfg.o\
+            listlib.o \
 			autosel.o \
 			setvisu.o\
 			dialog_display_options.o\

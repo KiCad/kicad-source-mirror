@@ -75,33 +75,11 @@ void WinEDA_CvpcbFrame::ReadNetListe()
 STORECMP * Composant;
 wxString msg;
 int ii;
-int error_level = -1;
+int error_level;
 
-	switch( g_NetType )
-		{
-		case TYPE_NON_SPECIFIE:
-		case TYPE_ORCADPCB2:
-			error_level = ReadSchematicNetlist();
-			break;
+	error_level = ReadSchematicNetlist();
 
-		case TYPE_PCAD:
-			error_level = rdpcad() ;
-			break;
-
-		case TYPE_VIEWLOGIC_WIR:
-			error_level = ReadViewlogicWirList() ;
-			break;
-
-		case TYPE_VIEWLOGIC_NET:
-			error_level = ReadViewlogicNetList() ;
-			break;
-
-		default:
-			DisplayError(this, _("Unknown Netlist Format") );
-			break;
-		}
-
-	if ( error_level < 0 ) return; 
+	if ( error_level < 0 ) return;
 
 	/* lecture des correspondances */
 	loadcmp();
@@ -151,7 +129,7 @@ int WinEDA_CvpcbFrame::SaveNetList(const wxString & FullFilename)
 */
 {
 wxString NetlistFullFileName = FullFilename;
-	
+
 	if ( NetlistFullFileName.IsEmpty() )
 	{
 	wxString Mask = wxT("*") + NetExtBuffer;
@@ -160,7 +138,7 @@ wxString NetlistFullFileName = FullFilename;
 			NetlistFullFileName = NetNameBuffer;
 			ChangeFileNameExt(NetlistFullFileName, NetExtBuffer);
 		}
-	
+
 		NetlistFullFileName = EDA_FileSelector( _("Save NetList and Components List files"),
 						NetDirBuffer,		/* Chemin par defaut */
 						NetlistFullFileName,			/* nom fichier par defaut */

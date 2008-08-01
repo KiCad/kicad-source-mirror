@@ -137,7 +137,6 @@ eda_global int           composants_non_affectes;   /* nbre de composants non af
 eda_global wxString      NameBuffer;
 eda_global wxString      NetInNameBuffer;
 eda_global wxString      NetInExtBuffer;
-eda_global wxString      PkgInExtBuffer;
 eda_global wxString      NetDirBuffer;
 
 eda_global wxString      ExtRetroBuffer

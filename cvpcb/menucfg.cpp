@@ -48,28 +48,6 @@ void KiConfigCvpcbFrame::SetDialogDatas()
 	m_ListLibr->InsertItems(g_LibName_List,0);
 	m_ListEquiv->InsertItems(g_ListName_Equ,0);
 
-	switch( g_NetType )
-	{
-		case TYPE_NON_SPECIFIE:
-		case TYPE_ORCADPCB2:
-			m_NetFormatBox->SetSelection(0);
-			break;
-
-		case TYPE_PCAD:
-			break;
-
-		case TYPE_VIEWLOGIC_WIR:
-			m_NetFormatBox->SetSelection(1);
-			break;
-
-		case TYPE_VIEWLOGIC_NET:
-			m_NetFormatBox->SetSelection(2);
-			break;
-
-		default:
-			break;
-	}
-
 	m_LibDirCtrl = new WinEDA_EnterText(this,
 				_("Lib Dir:"), g_UserLibDirBuffer,
 				m_RightBoxSizer, wxDefaultSize);
@@ -78,10 +56,6 @@ void KiConfigCvpcbFrame::SetDialogDatas()
 				_("Net Input Ext:"),NetInExtBuffer,
 				m_NetExtBoxSizer, wxDefaultSize);
 
-	m_PkgExtCtrl = new WinEDA_EnterText(this,
-				_("Pkg Ext:"), PkgInExtBuffer,
-				m_PkgExtBoxSizer, wxDefaultSize);
-				
 	wxString DocModuleFileName =
 		g_EDA_Appl->m_EDA_CommonConfig->Read( DOC_FOOTPRINTS_LIST_KEY, DEFAULT_FOOTPRINTS_LIST_FILENAME);
 	m_TextHelpModulesFileName = new WinEDA_EnterText(this,
@@ -125,10 +99,9 @@ void KiConfigCvpcbFrame::Update()
 /**********************************/
 {
 wxString msg;
-	
+
 	if ( ! m_DoUpdate ) return;
 	NetInExtBuffer = m_NetInputExtCtrl->GetValue();
-	PkgInExtBuffer = m_PkgExtCtrl->GetValue();
 	g_EDA_Appl->m_EDA_CommonConfig->Write( DOC_FOOTPRINTS_LIST_KEY,
 			m_TextHelpModulesFileName->GetValue());
 
@@ -159,9 +132,9 @@ void KiConfigCvpcbFrame::ReadOldCfg(wxCommandEvent& event)
 wxString line;
 
 	NetInNameBuffer.Replace(WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP);
-	
+
 wxString FullFileName = NetInNameBuffer.AfterLast('/');
-	
+
 	ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
 	FullFileName = EDA_FileSelector(_("Read config file"),
@@ -191,7 +164,7 @@ void KiConfigCvpcbFrame::LibDelFct(wxCommandEvent& event)
 /*******************************************************/
 {
 int ii;
-	
+
 	ii = m_ListLibr->GetSelection();
 	if ( ii < 0 ) return;
 
@@ -200,7 +173,7 @@ int ii;
 
 	/* suppression de la reference dans la liste des librairies */
 	m_ListLibr->Delete(ii);
-	
+
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
 	SetRealLibraryPath( wxT("modules") );
 	listlib();
@@ -233,7 +206,7 @@ wxString FullFileName, ShortLibName, mask;
 	FilesDialog.ShowModal();
 	wxArrayString Filenames;
 	FilesDialog.GetPaths(Filenames);
-	
+
 	if ( Filenames.GetCount() == 0 )
 		return;
 
@@ -255,7 +228,7 @@ wxString FullFileName, ShortLibName, mask;
 			DisplayError(this, msg);
 		}
 	}
-	
+
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
 	SetRealLibraryPath( wxT("modules") );
 	listlib();
@@ -302,7 +275,7 @@ wxString FullFileName, ShortLibName, mask;
 	FilesDialog.ShowModal();
 	wxArrayString Filenames;
 	FilesDialog.GetFilenames(Filenames);
-	
+
 	if ( Filenames.GetCount() == 0 )
 		return;
 
@@ -328,24 +301,9 @@ wxString FullFileName, ShortLibName, mask;
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
 	SetRealLibraryPath( wxT("modules") );
 	listlib();
-	
+
 	m_ListEquiv->Clear();
 	m_ListEquiv->InsertItems(g_ListName_Equ, 0);
 }
 
-
-
-
-/*****************************************************************/
-void KiConfigCvpcbFrame::ReturnNetFormat(wxCommandEvent& event)
-/*****************************************************************/
-{
-int ii;
-
-	ii = m_NetFormatBox->GetSelection();
-	g_NetType = TYPE_ORCADPCB2;
-	if ( ii == 1 ) g_NetType = TYPE_VIEWLOGIC_WIR;
-	if ( ii == 2 ) g_NetType = TYPE_VIEWLOGIC_NET;
-
-}
 
