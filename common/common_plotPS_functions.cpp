@@ -114,19 +114,19 @@ void PlotFilledSegmentPS( wxPoint start, wxPoint end, int width )
 }
 
 /***************************************************************/
-void PlotRectPS( wxPoint p1, wxPoint p2, int fill, int width )
+void PlotRectPS( wxPoint p1, wxPoint p2, bool fill, int width )
 /***************************************************************/
 {
     UserToDeviceCoordinate( p1 );
     UserToDeviceCoordinate( p2 );
 
     SetCurrentLineWidthPS( width );
-    fprintf( PlotOutputFile, "%d %d %d %d rect%d\n", p1.x, p1.y, 
-	p2.x-p1.x, p2.y-p1.y, fill );
+    fprintf( PlotOutputFile, "%d %d %d %d rect%d\n", p1.x, p1.y,
+    p2.x-p1.x, p2.y-p1.y, fill );
 }
 
 /******************************************************/
-void PlotCirclePS( wxPoint pos, int diametre, int fill, int width )
+void PlotCirclePS( wxPoint pos, int diametre, bool fill, int width )
 /******************************************************/
 {
     int  rayon;
@@ -145,7 +145,7 @@ void PlotCirclePS( wxPoint pos, int diametre, int fill, int width )
 
 
 /**************************************************************************************/
-void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width )
+void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width )
 /**************************************************************************************/
 
 /* Plot an arc:
@@ -165,11 +165,11 @@ void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, 
     if( PlotOrientOptions == PLOT_MIROIR )
         sprintf( Line, "%d %d %d %f %f arc%d\n", centre.x, centre.y,
             (int) (rayon * XScale), (float) StAngle / 10, (float) EndAngle / 10,
-	    fill);
+            fill);
     else
         sprintf( Line, "%d %d %d %f %f arc%d\n", centre.x, centre.y,
             (int) (rayon * XScale), -(float) EndAngle / 10, -(float) StAngle / 10,
-	    fill);
+            fill);
 
     // Undo internationalization printf (float x.y printed x,y)
     to_point( Line );
@@ -178,7 +178,7 @@ void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, 
 
 
 /*****************************************************************/
-void PlotPolyPS( int nb_segm, int* coord, int fill, int width )
+void PlotPolyPS( int nb_segm, int* coord, bool fill, int width )
 /*****************************************************************/
 
 /* Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
@@ -270,18 +270,18 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
         "    lineto\n",
         "    stroke\n",
         "} bind def\n",
-	"/cir0 { newpath 0 360 arc stroke } bind def\n",
-	"/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
-	"/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
-	"/arc0 { newpath arc stroke } bind def\n",
-	"/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill grestore stroke } bind def\n",
-	"/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill grestore stroke } bind def\n",
-	"/poly0 { stroke } bind def\n",
-	"/poly1 { closepath gsave fill grestore stroke } bind def\n",
-	"/poly2 { closepath gsave fill grestore stroke } bind def\n",
-	"/rect0 { rectstroke } bind def\n",
-	"/rect1 { rectfill } bind def\n",
-	"/rect2 { rectfill } bind def\n",
+        "/cir0 { newpath 0 360 arc stroke } bind def\n",
+        "/cir1 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
+        "/cir2 { newpath 0 360 arc gsave fill grestore stroke } bind def\n",
+        "/arc0 { newpath arc stroke } bind def\n",
+        "/arc1 { newpath 4 index 4 index moveto arc closepath gsave fill grestore stroke } bind def\n",
+        "/arc2 { newpath 4 index 4 index moveto arc closepath gsave fill grestore stroke } bind def\n",
+        "/poly0 { stroke } bind def\n",
+        "/poly1 { closepath gsave fill grestore stroke } bind def\n",
+        "/poly2 { closepath gsave fill grestore stroke } bind def\n",
+        "/rect0 { rectstroke } bind def\n",
+        "/rect1 { rectfill } bind def\n",
+        "/rect2 { rectfill } bind def\n",
         "gsave\n",
         "72 72 scale\t\t\t% Talk inches\n",
         "1 setlinecap\n",

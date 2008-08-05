@@ -258,8 +258,8 @@ public:
 class LibDrawCircle   : public LibEDA_BaseStruct
 {
 public:
-    int m_Rayon;
-    int m_Fill;
+    int     m_Rayon;
+    bool    m_Fill;
 
 public:
     LibDrawCircle();

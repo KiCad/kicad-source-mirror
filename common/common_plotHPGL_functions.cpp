@@ -69,7 +69,7 @@ bool CloseFileHPGL( FILE* plot_file )
 }
 
 /************************************************************/
-void PlotRectHPGL( wxPoint p1, wxPoint p2, int fill, int width )
+void PlotRectHPGL( wxPoint p1, wxPoint p2, bool fill, int width )
 /************************************************************/
 {
     char Line[256];
@@ -86,7 +86,7 @@ void PlotRectHPGL( wxPoint p1, wxPoint p2, int fill, int width )
 
 
 /************************************************************/
-void PlotCircleHPGL( wxPoint centre, int diameter, int fill, int width )
+void PlotCircleHPGL( wxPoint centre, int diameter, bool fill, int width )
 /************************************************************/
 {
     int  rayon;
@@ -107,7 +107,7 @@ void PlotCircleHPGL( wxPoint centre, int diameter, int fill, int width )
 
 
 /********************************************************************/
-void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width )
+void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width )
 /********************************************************************/
 
 /* trace d'un arc de cercle:
@@ -153,7 +153,7 @@ void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill
 
 
 /*****************************************************/
-void PlotPolyHPGL( int nb, int* coord, int fill, int width )
+void PlotPolyHPGL( int nb, int* coord, bool fill, int width )
 /*****************************************************/
 
 /* Trace un polygone (ferme si rempli) en format HPGL

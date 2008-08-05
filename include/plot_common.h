@@ -1,5 +1,5 @@
 /********************/
-/*	plot_common.h	*/
+/*  plot_common.h   */
 /********************/
 
 #ifndef PLOT_COMMON_H
@@ -61,12 +61,12 @@ void    InitPlotParametresPS( wxPoint offset,
                               double yscale,
                               int orient = 0 );
 void    SetDefaultLineWidthPS( int width );
-void	PlotRectPS(wxPoint p1, wxPoint p2, int fill, int width = -1);
-void    PlotCirclePS( wxPoint pos, int diametre, int fill, int width = -1 );
-void    PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width = -1 );
+void    PlotRectPS( wxPoint p1, wxPoint p2, bool fill, int width = -1 );
+void    PlotCirclePS( wxPoint pos, int diametre, bool fill, int width = -1 );
+void    PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width = -1 );
 
 // Plot an arc: StAngle, EndAngle = start and end arc in 0.1 degree
-void    PlotPolyPS( int nb_segm, int* coord, int fill, int width = -1 );
+void    PlotPolyPS( int nb_segm, int* coord, bool fill, int width = -1 );
 void    PlotFilledSegmentPS( wxPoint start, wxPoint end, int width );
 void    LineTo_PS( wxPoint pos, int plume );
 void    PrintHeaderPS( FILE* file,
@@ -85,10 +85,10 @@ void    SetColorMapPS( int color );
 void    InitPlotParametresHPGL( wxPoint offset, double xscale, double yscale, int orient = 0 );
 bool    PrintHeaderHPGL( FILE* plot_file, int pen_speed, int pen_num );
 bool    CloseFileHPGL( FILE* plot_file );
-void    PlotCircleHPGL( wxPoint centre, int diameter, int fill, int width = -1 );
-void	PlotRectHPGL(wxPoint t1, wxPoint t2, int fill, int width = -1);
-void    PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width = -1 );
-void    PlotPolyHPGL( int nb, int* coord, int fill, int width = -1 );
+void    PlotCircleHPGL( wxPoint centre, int diameter, bool fill, int width = -1 );
+void    PlotRectHPGL( wxPoint t1, wxPoint t2, bool fill, int width = -1 );
+void    PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width = -1 );
+void    PlotPolyHPGL( int nb, int* coord, bool fill, int width = -1 );
 void    Move_Plume_HPGL( wxPoint pos, int plume );
 void    Plume_HPGL( int plume );
 
