@@ -23,8 +23,8 @@ static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape );
 /***/
 
 /* cte pour remplissage de polygones */
-#define FILL   1
-#define NOFILL 0
+#define FILL   true
+#define NOFILL false
 
 #define PLOT_SHEETREF_MARGIN 0      // margin for sheet refs
 
@@ -90,7 +90,7 @@ void PlotRect( wxPoint p1, wxPoint p2, int fill, int width )
 }
 
 /*******************************************************************************/
-void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, int width )
+void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width )
 /*******************************************************************************/
 
 /* trace d'un arc de cercle:
@@ -113,7 +113,7 @@ void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, int fill, in
 
 
 /*******************************************************/
-void PlotCercle( wxPoint pos, int diametre, int fill, int width )
+void PlotCercle( wxPoint pos, int diametre, bool fill, int width )
 /*******************************************************/
 {
     switch( g_PlotFormat )
@@ -130,7 +130,7 @@ void PlotCercle( wxPoint pos, int diametre, int fill, int width )
 
 
 /******************************************************************/
-void PlotPoly( int nb, int* coord, int fill, int width )
+void PlotPoly( int nb, int* coord, bool fill, int width )
 /******************************************************************/
 
 /* Trace un polygone ferme
@@ -480,7 +480,7 @@ static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape )
     {
         PlotCercle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
                              MapY1 * INVERT_PIN_RADIUS + y1),
-                    INVERT_PIN_RADIUS * 2,0 );
+                    false, INVERT_PIN_RADIUS * 2 );
 
         Move_Plume( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
                              MapY1 * INVERT_PIN_RADIUS * 2 + y1 ), 'U' );

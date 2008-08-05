@@ -238,7 +238,7 @@ class LibDrawArc      : public LibEDA_BaseStruct
 {
 public:
     int     m_Rayon;
-    int     m_Fill;
+    bool    m_Fill;
     int     t1, t2;                 /* position des 2 extremites de l'arc en 0,1 degres */
     wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
 
@@ -299,7 +299,7 @@ class LibDrawSquare   : public LibEDA_BaseStruct
 {
 public:
     wxPoint m_End;
-    int     m_Fill;
+    bool    m_Fill;
 
 public:
     LibDrawSquare();
@@ -335,8 +335,9 @@ public:
 class LibDrawPolyline : public LibEDA_BaseStruct
 {
 public:
-    int n, * PolyList;
-    int m_Fill;
+    int         n;
+    int*        PolyList;
+    bool        m_Fill;
 
 public:
     LibDrawPolyline();
