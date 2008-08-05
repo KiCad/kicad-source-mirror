@@ -2631,18 +2631,24 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* quote = out->GetQuoteChar( net_id.c_str() );
+        const char* space = " ";
 
-        out->Print( nestLevel, "(%s %s%s%s ", LEXER::GetTokenText( Type() ),
+        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
                    quote, net_id.c_str(), quote );
 
         if( unassigned )
-            out->Print( 0, "(unassigned)" );
+        {
+            out->Print( 0, "%s(unassigned)", space );
+            space = "";         // only needed one space
+        }
 
         if( net_number != T_NONE )
-            out->Print( 0, "(net_number %d)", net_number );
+        {
+            out->Print( 0, "%s(net_number %d)", space, net_number );
+            // space = "";
+        }
 
         out->Print( 0, "\n" );
-
 
         const int RIGHTMARGIN = 80;
         int perLine = out->Print( nestLevel+1, "(%s", LEXER::GetTokenText( pins_type ) );
