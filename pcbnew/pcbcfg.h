@@ -688,14 +688,6 @@ static PARAM_CFG_BOOL HPGLcenterCfg     //HPGL Org Coord ( 0 normal, 1 Centre)
     FALSE                               /* Default value */
 );
 
-static PARAM_CFG_INT GERBERSpotMiniCfg  //Aperture Mini (mils)
-(
-    wxT( "GERBmin" ),                   /* Keyword */
-    &spot_mini,                         /* Parameter address */
-    15,                                 /* Default value */
-    1, 100                              /* Min and max values*/
-);
-
 static PARAM_CFG_INT VernisEpargneGardeCfg
 (
     wxT( "VEgarde" ),                       /* Keyword */
@@ -734,14 +726,6 @@ static PARAM_CFG_INT ModuleSegmWidthCfg
     &ModuleSegmentWidth,            /* Parameter address */
     120,                            /* Default value */
     0, 0xFFFF                       /* Min and max values*/
-);
-
-static PARAM_CFG_INT FormatPlotCfg
-(
-    wxT( "ForPlot" ),           /* Keyword */
-    &format_plot,               /* Parameter address */
-    1,                          /* Default value */
-    0, 3                        /* Min and max values*/
 );
 
 static PARAM_CFG_INT WTraitSerigraphiePlotCfg
@@ -926,13 +910,11 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &HPGLspeedCfg,
     &HPGLrecouvrementCfg,
     &HPGLcenterCfg,
-    &GERBERSpotMiniCfg,
     &VernisEpargneGardeCfg,
     &DrawSegmLargeurCfg,
     &EdgeSegmLargeurCfg,
     &TexteSegmLargeurCfg,
     &ModuleSegmWidthCfg,
-    &FormatPlotCfg,
     &WTraitSerigraphiePlotCfg,
     &UserGrilleXCfg,
     &UserGrilleYCfg,

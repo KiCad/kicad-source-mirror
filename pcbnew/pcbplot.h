@@ -80,9 +80,6 @@ eda_global int g_HPGL_Pen_Speed					/* vitesse en cm/s */
 eda_global int g_HPGL_Pen_Diam;					/* diametre en mils */
 eda_global int g_HPGL_Pen_Recouvrement;			/* recouvrement en mils ( pour remplissages */
 
-/* Gestion des ouvertures GERBER */
-eda_global int spot_mini;			/* Diametre mini de l'ouverture pour trace GERBER */
-
 /* Gestion des cadrages et echelles de trace */
 eda_global float Scale_X, Scale_Y ;  /* coeff d'agrandissement en X et Y demandes */
 eda_global wxPoint g_PlotOffset;	/* Offset de trace modifies par l'echelle */
@@ -91,7 +88,12 @@ eda_global int nb_plot_erreur ;
 eda_global int nb_items;		/* utilise pour decompter les objets traces */
 eda_global int g_PlotLine_Width; /* Largeur du trait en mode filaire (utilise en serigraphie,
                              pour traces en mode sketch et filaire) */
-eda_global int format_plot;  /* numero de code du format de sortie  */
+
+eda_global int g_PlotFormat  /* id for plot format (see enum PlotFormat in plot_common.h) */
+#ifdef MAIN
+= PLOT_FORMAT_GERBER
+#endif
+;
 eda_global int g_PlotOrient;  /* numero de code de l'orientation du trace ( voir
                             defines precedents):
                             0 = normal
@@ -160,7 +162,7 @@ void PlotMirePcb( MIREPCB* PtMire, int format_plot,int masque_layer );
 void Plot_1_EdgeModule(int format_plot, EDGE_MODULE * PtEdge);
 
 /* PLOTGERB.CPP */
-void PlotGERBERLine(wxPoint start, wxPoint end, int hauteur);
+void PlotGERBERLine(wxPoint start, wxPoint end, int width);
 void PlotCircle_GERBER( wxPoint centre, int rayon, int width);
 void PlotPolygon_GERBER(int nb_segm, int * coord, bool fill);
 void trace_1_contour_GERBER(wxPoint pos, wxSize size, wxSize delta,

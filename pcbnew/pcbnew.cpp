@@ -12,6 +12,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "plot_common.h"
 #include "pcbplot.h"
 #include "autorout.h"
 #include "trigo.h"

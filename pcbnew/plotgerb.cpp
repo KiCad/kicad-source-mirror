@@ -17,7 +17,6 @@
 /* Variables locales : */
 static int     s_Last_D_code;
 static float   Gerb_scale_plot;     // Coeff de conversion d'unites des traces
-static int     scale_spot_mini;     // Ouverture mini (pour remplissages)
 static D_CODE* s_DCodeList;         // Pointeur sur la zone de stockage des D_CODES
 wxString       GerberFullFileName;
 static double  scale_x, scale_y;    // echelles de convertion en X et Y (compte tenu
@@ -58,7 +57,6 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 
     /* Calcul des echelles de conversion */
     Gerb_scale_plot = 1.0;  /* pour unites gerber en 0,1 Mils, format 3.4 */
-    scale_spot_mini = (int) (10 * spot_mini * Gerb_scale_plot);
     scale_x = Scale_X * Gerb_scale_plot;
     scale_y = Scale_Y * Gerb_scale_plot;
     g_PlotOffset.x = 0;
@@ -615,10 +613,11 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
 
     if( modetrace != FILLED )
     {
-        PlotGERBERLine( polygone[0], polygone[1], scale_spot_mini );
-        PlotGERBERLine( polygone[1], polygone[2], scale_spot_mini );
-        PlotGERBERLine( polygone[2], polygone[3], scale_spot_mini );
-        PlotGERBERLine( polygone[3], polygone[0], scale_spot_mini );
+        int plotLine_width = (int) (10 * g_PlotLine_Width * Gerb_scale_plot);
+        PlotGERBERLine( polygone[0], polygone[1], plotLine_width );
+        PlotGERBERLine( polygone[1], polygone[2], plotLine_width );
+        PlotGERBERLine( polygone[2], polygone[3], plotLine_width );
+        PlotGERBERLine( polygone[3], polygone[0], plotLine_width );
     }
     else
         PlotPolygon_GERBER( 4, coord, TRUE );
@@ -626,7 +625,7 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
 
 
 /**********************************************************/
-void PlotGERBERLine( wxPoint start, wxPoint end, int large )
+void PlotGERBERLine( wxPoint start, wxPoint end, int width )
 /**********************************************************/
 
 /* Trace 1 segment de piste :
@@ -638,7 +637,7 @@ void PlotGERBERLine( wxPoint start, wxPoint end, int large )
     UserToDeviceCoordinate( start );
     UserToDeviceCoordinate( end );
 
-    dcode_ptr = get_D_code( large, large, GERB_LINE, 0 );
+    dcode_ptr = get_D_code( width, width, GERB_LINE, 0 );
     if( dcode_ptr->m_NumDcode != s_Last_D_code )
     {
         sprintf( cbuf, "G54D%d*\n", dcode_ptr->m_NumDcode );

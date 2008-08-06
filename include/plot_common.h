@@ -19,7 +19,7 @@
 enum PlotFormat {
     PLOT_FORMAT_HPGL,
     PLOT_FORMAT_GERBER,
-    PLOT_FORMAT_POST,
+    PLOT_FORMAT_POST
 };
 
 

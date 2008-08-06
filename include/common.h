@@ -406,10 +406,6 @@ wxString            ReturnPcbLayerName( int layer_number, bool is_filename = FAL
  *  (not internatinalized, no space)*/
 
 
-/*********************/
-/* PROJET_CONFIG.CPP */
-/*********************/
-
 /**************/
 /* DRAWTXT.CPP */
 /**************/

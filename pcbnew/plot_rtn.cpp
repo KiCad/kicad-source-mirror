@@ -330,7 +330,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte )
     if( no_miroir == 0 )
         size.x = -size.x;                       // Text is mirrored
 
-    Plot_1_texte( format_plot, pt_texte->m_Text,
+    Plot_1_texte( g_PlotFormat, pt_texte->m_Text,
                   orient, thickness,
                   pos.x, pos.y, size.x, size.y );
 }
