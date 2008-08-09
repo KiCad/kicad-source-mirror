@@ -9,7 +9,6 @@ email address.
 ================================================================================
 +pcbnew:
     bug solved: pads holes not printed.
-+eeschema
     enforced controls against malformed libraries
 
 2008-Aug-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
