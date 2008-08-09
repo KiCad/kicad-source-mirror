@@ -46,20 +46,20 @@ public:
 
 
     /* supprime du chainage la structure Struct */
-    void    UnLink();
+    void     UnLink();
 
-    void    Copy( TEXTE_MODULE* source ); // copy structure
+    void     Copy( TEXTE_MODULE* source ); // copy structure
 
     /* Gestion du texte */
-    void    SetWidth( int new_width );
-    int     GetLength();          /* text length */
-    int     Pitch();              /* retourne le pas entre 2 caracteres */
-    int     GetDrawRotation();    // Return text rotation for drawings and plotting
+    void     SetWidth( int new_width );
+    int      GetLength();           /* text length */
+    int      Pitch();               /* retourne le pas entre 2 caracteres */
+    int      GetDrawRotation();     // Return text rotation for drawings and plotting
 
     /** Function GetTextRect
      * @return an EDA_Rect which gives the position and size of the text area (for the 0 orient text and footprint)
      */
-    EDA_Rect GetTextRect(void);
+    EDA_Rect GetTextRect( void );
 
     /**
      * Function GetBoundingBox
@@ -67,10 +67,11 @@ public:
      */
     EDA_Rect GetBoundingBox();
 
-    void    SetDrawCoord();       // mise a jour des coordonn�s absolues de trac�
-                                        // a partir des coord relatives
+    void     SetDrawCoord();      // mise a jour des coordonn�s absolues de trac�
 
-    void    SetLocalCoord();      // mise a jour des coordonn�s relatives
+    // a partir des coord relatives
+
+    void     SetLocalCoord();     // mise a jour des coordonn�s relatives
 
     /**
      * Function Save
@@ -78,13 +79,23 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool Save( FILE* aFile ) const;
+    bool     Save( FILE* aFile ) const;
 
-
-    int     ReadDescr( FILE* File, int* LineNum = NULL );
+    /**
+     * Function ReadLineDescr
+     * Read description from a given line in "*.brd" format.
+     * @param aLine The current line which contains the first line of description.
+     * @param aLine The FILE to read next lines (currently not used).
+     * @param LineNum a point to the line count (currently not used).
+     * @return int - > 0 if success reading else 0.
+     */
+    int      ReadDescr( char* aLine, FILE* aFile, int* aLineNum = NULL );
 
     /* drawing functions */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void     Draw( WinEDA_DrawPanel* panel,
+                   wxDC*             DC,
+                   int               aDrawMode,
+                   const wxPoint&    offset = ZeroOffset );
 
 
     /**
@@ -94,7 +105,7 @@ public:
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void    Display_Infos( WinEDA_DrawFrame* frame );
+    void Display_Infos( WinEDA_DrawFrame* frame );
 
 
     /**
@@ -103,7 +114,7 @@ public:
      * @param posref A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& posref );
+    bool HitTest( const wxPoint& posref );
 
     /**
      * Function IsOnLayer
@@ -124,10 +135,8 @@ public:
      * virtual inheritance from BOARD_ITEM.
      * @param aLayerMask The bit-mapped set of layers to test for.
      * @return bool - true if on one of the given layers, else false.
-    bool IsOnOneOfTheseLayers( int aLayerMask ) const;
+      * bool IsOnOneOfTheseLayers( int aLayerMask ) const;
      */
-
-
 
 
     /**
@@ -140,7 +149,9 @@ public:
         return wxT( "MTEXT" );
     }
 
-#if defined(DEBUG)
+
+#if defined (DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -149,8 +160,8 @@ public:
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 
 #endif // TEXT_MODULE_H
-

@@ -5,6 +5,12 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Aug-09 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    bug solved: pads holes not printed.
++eeschema
+    enforced controls against malformed libraries
 
 2008-Aug-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

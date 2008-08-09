@@ -67,7 +67,16 @@ int GRGetDrawMode(wxDC * DC);
 void GRResetPenAndBrush(wxDC * DC);
 void GRSetColorPen(wxDC * DC, int Color , int width = 1, int stype = wxSOLID);
 void GRSetBrush(wxDC * DC, int Color , int fill = 0);
+
+/** function GRForceBlackPen
+ * @param flagforce True to force a black pen whenever the asked color
+ */
 void GRForceBlackPen(bool flagforce );
+
+/** function GetGRForceBlackPenState
+ * @return ForceBlackPen (True if  a black pen was forced)
+ */
+bool GetGRForceBlackPenState( void );
 void SetPenMinWidth(int minwidth); /* ajustage de la largeur mini de plume */
 
 void GRLine(EDA_Rect * ClipBox, wxDC * DC, int x1, int y1, int x2, int y2, int width, int Color);

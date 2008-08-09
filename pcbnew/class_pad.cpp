@@ -550,7 +550,15 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     if( fillpad && hole )
     {
-        color = g_IsPrinting ? WHITE : BLACK; // ou DARKGRAY;
+        bool blackpenstate = false;
+        if ( g_IsPrinting )
+        {
+            blackpenstate = GetGRForceBlackPenState( );
+            GRForceBlackPen( false );
+            color = WHITE;
+        }
+        else
+            color = BLACK; // or DARKGRAY;
 
         if( draw_mode != GR_XOR )
             GRSetDrawMode( DC, GR_COPY );
@@ -589,6 +597,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         default:
             break;
         }
+        if ( g_IsPrinting )
+            GRForceBlackPen( blackpenstate );
     }
 
     GRSetDrawMode( DC, draw_mode );

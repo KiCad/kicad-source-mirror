@@ -320,10 +320,22 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
 /*************************************/
 void GRForceBlackPen( bool flagforce )
 /*************************************/
+/** function GRForceBlackPen
+ * @param flagforce True to force a black pen whenever the asked color
+ */
 {
     ForceBlackPen = flagforce;
 }
 
+/***********************************/
+bool GetGRForceBlackPenState( void )
+/***********************************/
+/** function GetGRForceBlackPenState
+ * @return ForceBlackPen (True if  a black pen was forced)
+ */
+{
+    return ForceBlackPen;
+}
 
 /************************************************************/
 /* routines de controle et positionnement du curseur souris */

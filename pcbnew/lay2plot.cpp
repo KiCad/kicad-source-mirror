@@ -108,10 +108,12 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
         Plot_Module( this, DC, Module, drawmode, printmasklayer );
     }
 
-    /* draw the via holes */
+    /* draw the via holes in white color*/
     pt_piste = Pcb->m_Track;
     int rayon = g_DesignSettings.m_ViaDrill / 2;
     int color = WHITE;
+    bool blackpenstate = GetGRForceBlackPenState( );
+    GRForceBlackPen( FALSE );
     for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
@@ -123,6 +125,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
                             rayon, 0, color, color );
         }
     }
+    GRForceBlackPen( blackpenstate );
 
     if( Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( DC, ActiveScreen, 0 );
@@ -159,7 +162,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
 			pt_pad->Draw( panel, DC, draw_mode );
 			((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = tmp_fill;
 		}
-		else	// on copper layer, draw pads accordint to current options
+		else	// on copper layer, draw pads according to current options
 			pt_pad->Draw( panel, DC, draw_mode );
     }
 

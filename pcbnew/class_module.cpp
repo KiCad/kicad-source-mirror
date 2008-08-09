@@ -571,7 +571,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
     EDA_BaseStruct* LastModStruct = NULL;
     EDGE_MODULE*    DrawSegm;
     TEXTE_MODULE*   DrawText;
-    char            Line[256], BufLine[256], BufCar1[128], BufCar2[128], * PtLine;
+    char            Line[256], BufLine[256], BufCar1[128], * PtLine;
     int             itmp1, itmp2;
 
     while( GetLine( File, Line, LineNum, sizeof(Line) - 1 ) != NULL )
@@ -672,7 +672,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             }
             break;
 
-        case 'T':    /* lecture des textes modules */
+        case 'T':    /* Read a footprint text description (ref, value, or drawing */
             sscanf( Line + 1, "%d", &itmp1 );
             if( itmp1 == TEXT_is_REFERENCE )
                 DrawText = m_Reference;
@@ -694,48 +694,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 LastModStruct = DrawText;
             }
 
-            int layer;
-            sscanf( Line + 1, "%d %d %d %d %d %d %d %s %s %d",
-                &itmp1,
-                &DrawText->m_Pos0.x, &DrawText->m_Pos0.y,
-                &DrawText->m_Size.y, &DrawText->m_Size.x,
-                &DrawText->m_Orient, &DrawText->m_Width,
-                BufCar1, BufCar2, &layer );
-
-            DrawText->m_Type    = itmp1;
-            DrawText->m_Orient -= m_Orient;     // m_Orient texte relative au module
-            if( BufCar1[0] == 'M' )
-                DrawText->m_Miroir = 0;
-            else
-                DrawText->m_Miroir = 1;
-            if( BufCar2[0]  == 'I' )
-                DrawText->m_NoShow = 1;
-            else
-                DrawText->m_NoShow = 0;
-
-            if( layer == COPPER_LAYER_N )
-                layer = SILKSCREEN_N_CU;
-            else if( layer == CMP_N )
-                layer = SILKSCREEN_N_CMP;
-
-            DrawText->SetLayer( layer );
-
-            /* calcul de la position vraie */
-            DrawText->SetDrawCoord();
-            /* Lecture de la chaine "text" */
-            ReadDelimitedText( BufLine, Line, sizeof(BufLine) );
-            DrawText->m_Text = CONV_FROM_UTF8( BufLine );
-
-            // Test for a reasonnable width:
-            if( DrawText->m_Width <= 1 )
-                DrawText->m_Width = 1;
-            if( DrawText->m_Width > TEXTS_MAX_WIDTH )
-                DrawText->m_Width = TEXTS_MAX_WIDTH;
-            // Test for a reasonnable size:
-            if ( DrawText->m_Size.x < TEXTS_MIN_SIZE )
-                DrawText->m_Size.x = TEXTS_MIN_SIZE;
-            if ( DrawText->m_Size.y < TEXTS_MIN_SIZE )
-                DrawText->m_Size.y = TEXTS_MIN_SIZE;
+            DrawText->ReadDescr( Line, File, LineNum );
             break;
 
         case 'D':    /* lecture du contour */
