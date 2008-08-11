@@ -136,7 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
-        <long name="makefile-last-written">0</long>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -393,7 +393,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxTextCtrl: ID_TEXTCTRL"</string>
+                <string name="title">"wxTextCtrl: ID_TEXTCTRL_PINNAME"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"textctrl"</string>
@@ -403,7 +403,7 @@
                 <long name="locked">0</long>
                 <string name="created">"11/5/2006"</string>
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
-                <string name="proxy-Id name">"ID_TEXTCTRL"</string>
+                <string name="proxy-Id name">"ID_TEXTCTRL_PINNAME"</string>
                 <long name="proxy-Id value">10001</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
@@ -473,7 +473,6 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Custom arguments">""</string>
                 <string name="proxy-Custom ctor arguments">""</string>
-                <bool name="proxy-wxTE_LINEWRAP">0</bool>
               </document>
               <document>
                 <string name="title">"wxStaticText: wxID_STATIC"</string>
@@ -546,7 +545,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxTextCtrl: ID_TEXTCTRL1"</string>
+                <string name="title">"wxTextCtrl: ID_TEXTCTRL_PINNUM"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"textctrl"</string>
@@ -556,7 +555,7 @@
                 <long name="locked">0</long>
                 <string name="created">"11/5/2006"</string>
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
-                <string name="proxy-Id name">"ID_TEXTCTRL1"</string>
+                <string name="proxy-Id name">"ID_TEXTCTRL_PINNUM"</string>
                 <long name="proxy-Id value">10002</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
@@ -626,7 +625,6 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Custom arguments">""</string>
                 <string name="proxy-Custom ctor arguments">""</string>
-                <bool name="proxy-wxTE_LINEWRAP">0</bool>
               </document>
               <document>
                 <string name="title">"Spacer"</string>
@@ -689,6 +687,187 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                 <document>
+                  <string name="title">"wxBoxSizer H"</string>
+                  <string name="type">"dialog-control-document"</string>
+                  <string name="filename">""</string>
+                  <string name="icon-name">"sizer"</string>
+                  <long name="is-transient">0</long>
+                  <long name="owns-file">1</long>
+                  <long name="title-mode">0</long>
+                  <long name="locked">0</long>
+                  <string name="created">"11/8/2008"</string>
+                  <string name="proxy-type">"wbBoxSizerProxy"</string>
+                  <string name="proxy-Orientation">"Horizontal"</string>
+                  <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-AlignH">"Expand"</string>
+                  <string name="proxy-AlignV">"Centre"</string>
+                  <long name="proxy-Stretch factor">0</long>
+                  <long name="proxy-Border">5</long>
+                  <bool name="proxy-wxLEFT">0</bool>
+                  <bool name="proxy-wxRIGHT">0</bool>
+                  <bool name="proxy-wxTOP">0</bool>
+                  <bool name="proxy-wxBOTTOM">0</bool>
+                  <bool name="proxy-wxSHAPED">0</bool>
+                  <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                  <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                  <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                  <document>
+                    <string name="title">"wxTextCtrl: ID_TEXTCTRL_PINSIZE"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"textctrl"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="created">"11/8/2008"</string>
+                    <string name="proxy-type">"wbTextCtrlProxy"</string>
+                    <string name="proxy-Id name">"ID_TEXTCTRL_PINSIZE"</string>
+                    <long name="proxy-Id value">10003</long>
+                    <string name="proxy-Name">""</string>
+                    <string name="proxy-Class">"wxTextCtrl"</string>
+                    <string name="proxy-Base class">"wxTextCtrl"</string>
+                    <bool name="proxy-External implementation">1</bool>
+                    <bool name="proxy-Separate files">0</bool>
+                    <string name="proxy-Implementation filename">""</string>
+                    <string name="proxy-Header filename">""</string>
+                    <string name="proxy-Member variable name">"m_PinSizeCtrl"</string>
+                    <string name="proxy-Initial value">""</string>
+                    <long name="proxy-Max length">0</long>
+                    <string name="proxy-Help text">""</string>
+                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Background colour">""</string>
+                    <string name="proxy-Foreground colour">""</string>
+                    <string name="proxy-Font">""</string>
+                    <bool name="proxy-Hidden">0</bool>
+                    <bool name="proxy-Enabled">1</bool>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                    <string name="proxy-Data variable">""</string>
+                    <string name="proxy-Data validator">""</string>
+                    <string name="proxy-Data source">""</string>
+                    <string name="proxy-Data class name">""</string>
+                    <string name="proxy-Data class implementation filename">""</string>
+                    <string name="proxy-Data class header filename">""</string>
+                    <string name="proxy-Data class manager window">""</string>
+                    <bool name="proxy-wxTE_MULTILINE">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
+                    <bool name="proxy-wxTE_PROCESS_TAB">0</bool>
+                    <bool name="proxy-wxTE_PASSWORD">0</bool>
+                    <bool name="proxy-wxTE_READONLY">0</bool>
+                    <bool name="proxy-wxTE_RICH">0</bool>
+                    <bool name="proxy-wxTE_RICH2">0</bool>
+                    <bool name="proxy-wxTE_AUTO_URL">0</bool>
+                    <bool name="proxy-wxTE_NOHIDESEL">0</bool>
+                    <bool name="proxy-wxTE_LEFT">0</bool>
+                    <bool name="proxy-wxTE_CENTRE">0</bool>
+                    <bool name="proxy-wxTE_RIGHT">0</bool>
+                    <bool name="proxy-wxHSCROLL">0</bool>
+                    <bool name="proxy-wxTE_CHARWRAP">0</bool>
+                    <bool name="proxy-wxTE_WORDWRAP">0</bool>
+                    <bool name="proxy-wxTE_CAPITALIZE">0</bool>
+                    <bool name="proxy-wxNO_BORDER">0</bool>
+                    <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+                    <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+                    <bool name="proxy-wxRAISED_BORDER">0</bool>
+                    <bool name="proxy-wxSTATIC_BORDER">0</bool>
+                    <bool name="proxy-wxWANTS_CHARS">0</bool>
+                    <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                    <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                    <string name="proxy-Custom styles">""</string>
+                    <long name="proxy-X">-1</long>
+                    <long name="proxy-Y">-1</long>
+                    <long name="proxy-Width">-1</long>
+                    <long name="proxy-Height">-1</long>
+                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">1</bool>
+                    <bool name="proxy-wxRIGHT">1</bool>
+                    <bool name="proxy-wxTOP">1</bool>
+                    <bool name="proxy-wxBOTTOM">1</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <string name="proxy-Custom arguments">""</string>
+                    <string name="proxy-Custom ctor arguments">""</string>
+                  </document>
+                  <document>
+                    <string name="title">"wxSpinButton: ID_SPINBUTTON_INC_DEC_PINSIZE"</string>
+                    <string name="type">"dialog-control-document"</string>
+                    <string name="filename">""</string>
+                    <string name="icon-name">"spinctrl"</string>
+                    <long name="is-transient">0</long>
+                    <long name="owns-file">1</long>
+                    <long name="title-mode">0</long>
+                    <long name="locked">0</long>
+                    <string name="created">"11/8/2008"</string>
+                    <string name="proxy-type">"wbSpinButtonProxy"</string>
+                    <string name="event-handler-0">"wxEVT_SCROLL_LINEUP|OnSpinbuttonIncDecPinsizeUp|NONE||WinEDA_PinPropertiesFrame"</string>
+                    <string name="event-handler-1">"wxEVT_SCROLL_LINEDOWN|OnSpinbuttonIncDecPinsizeDown|NONE||"</string>
+                    <string name="proxy-Id name">"ID_SPINBUTTON_INC_DEC_PINSIZE"</string>
+                    <long name="proxy-Id value">10010</long>
+                    <string name="proxy-Name">""</string>
+                    <string name="proxy-Class">"wxSpinButton"</string>
+                    <string name="proxy-Base class">"wxSpinButton"</string>
+                    <bool name="proxy-External implementation">1</bool>
+                    <bool name="proxy-Separate files">0</bool>
+                    <string name="proxy-Implementation filename">""</string>
+                    <string name="proxy-Header filename">""</string>
+                    <string name="proxy-Member variable name">"m_PinSizeIncDecButton"</string>
+                    <long name="proxy-Minimum value">0</long>
+                    <long name="proxy-Maximum value">2000</long>
+                    <long name="proxy-Initial value">0</long>
+                    <string name="proxy-Help text">""</string>
+                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Background colour">""</string>
+                    <string name="proxy-Foreground colour">""</string>
+                    <string name="proxy-Font">""</string>
+                    <bool name="proxy-Hidden">0</bool>
+                    <bool name="proxy-Enabled">1</bool>
+                    <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                    <string name="proxy-Data variable">""</string>
+                    <string name="proxy-Data validator">""</string>
+                    <string name="proxy-Data source">""</string>
+                    <string name="proxy-Data class name">""</string>
+                    <string name="proxy-Data class implementation filename">""</string>
+                    <string name="proxy-Data class header filename">""</string>
+                    <string name="proxy-Data class manager window">""</string>
+                    <bool name="proxy-wxSP_HORIZONTAL">0</bool>
+                    <bool name="proxy-wxSP_VERTICAL">1</bool>
+                    <bool name="proxy-wxSP_ARROW_KEYS">0</bool>
+                    <bool name="proxy-wxSP_WRAP">0</bool>
+                    <bool name="proxy-wxNO_BORDER">0</bool>
+                    <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+                    <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+                    <bool name="proxy-wxRAISED_BORDER">0</bool>
+                    <bool name="proxy-wxSTATIC_BORDER">0</bool>
+                    <bool name="proxy-wxWANTS_CHARS">0</bool>
+                    <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                    <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                    <string name="proxy-Custom styles">""</string>
+                    <long name="proxy-X">-1</long>
+                    <long name="proxy-Y">-1</long>
+                    <long name="proxy-Width">-1</long>
+                    <long name="proxy-Height">-1</long>
+                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignV">"Centre"</string>
+                    <long name="proxy-Stretch factor">0</long>
+                    <long name="proxy-Border">5</long>
+                    <bool name="proxy-wxLEFT">0</bool>
+                    <bool name="proxy-wxRIGHT">1</bool>
+                    <bool name="proxy-wxTOP">0</bool>
+                    <bool name="proxy-wxBOTTOM">0</bool>
+                    <bool name="proxy-wxSHAPED">0</bool>
+                    <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                    <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                    <string name="proxy-Custom arguments">""</string>
+                    <string name="proxy-Custom ctor arguments">""</string>
+                  </document>
+                </document>
+                <document>
                   <string name="title">"wxStaticText: wxID_STATIC"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
@@ -697,7 +876,7 @@
                   <long name="owns-file">1</long>
                   <long name="title-mode">0</long>
                   <long name="locked">0</long>
-                  <string name="created">"11/5/2006"</string>
+                  <string name="created">"11/8/2008"</string>
                   <string name="proxy-type">"wbStaticTextProxy"</string>
                   <string name="proxy-Id name">"wxID_STATIC"</string>
                   <long name="proxy-Id value">5105</long>
@@ -708,8 +887,8 @@
                   <bool name="proxy-Separate files">0</bool>
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
-                  <string name="proxy-Member variable name">""</string>
-                  <string name="proxy-Label">"Pin lenght :"</string>
+                  <string name="proxy-Member variable name">"m_PinSizeText"</string>
+                  <string name="proxy-Label">"Pin Lenght"</string>
                   <long name="proxy-Wrapping width">-1</long>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
@@ -759,76 +938,7 @@
                   <string name="proxy-Custom ctor arguments">""</string>
                 </document>
                 <document>
-                  <string name="title">"wxSpinCtrl: ID_SPINCTRL"</string>
-                  <string name="type">"dialog-control-document"</string>
-                  <string name="filename">""</string>
-                  <string name="icon-name">"spinctrl"</string>
-                  <long name="is-transient">0</long>
-                  <long name="owns-file">1</long>
-                  <long name="title-mode">0</long>
-                  <long name="locked">0</long>
-                  <string name="created">"11/5/2006"</string>
-                  <string name="proxy-type">"wbSpinCtrlProxy"</string>
-                  <string name="proxy-Id name">"ID_SPINCTRL"</string>
-                  <long name="proxy-Id value">10003</long>
-                  <string name="proxy-Name">""</string>
-                  <string name="proxy-Class">"wxSpinCtrl"</string>
-                  <string name="proxy-Base class">"wxSpinCtrl"</string>
-                  <bool name="proxy-External implementation">1</bool>
-                  <bool name="proxy-Separate files">0</bool>
-                  <string name="proxy-Implementation filename">""</string>
-                  <string name="proxy-Header filename">""</string>
-                  <string name="proxy-Member variable name">"m_PinSize"</string>
-                  <long name="proxy-Minimum value">0</long>
-                  <long name="proxy-Maximum value">2000</long>
-                  <long name="proxy-Initial value">0</long>
-                  <string name="proxy-Help text">""</string>
-                  <string name="proxy-Tooltip text">""</string>
-                  <string name="proxy-Background colour">""</string>
-                  <string name="proxy-Foreground colour">""</string>
-                  <string name="proxy-Font">""</string>
-                  <bool name="proxy-Hidden">0</bool>
-                  <bool name="proxy-Enabled">1</bool>
-                  <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
-                  <string name="proxy-Data variable">""</string>
-                  <string name="proxy-Data validator">""</string>
-                  <string name="proxy-Data source">""</string>
-                  <string name="proxy-Data class name">""</string>
-                  <string name="proxy-Data class implementation filename">""</string>
-                  <string name="proxy-Data class header filename">""</string>
-                  <string name="proxy-Data class manager window">""</string>
-                  <bool name="proxy-wxSP_ARROW_KEYS">1</bool>
-                  <bool name="proxy-wxSP_WRAP">0</bool>
-                  <bool name="proxy-wxNO_BORDER">0</bool>
-                  <bool name="proxy-wxSIMPLE_BORDER">0</bool>
-                  <bool name="proxy-wxDOUBLE_BORDER">0</bool>
-                  <bool name="proxy-wxSUNKEN_BORDER">0</bool>
-                  <bool name="proxy-wxRAISED_BORDER">0</bool>
-                  <bool name="proxy-wxSTATIC_BORDER">0</bool>
-                  <bool name="proxy-wxWANTS_CHARS">0</bool>
-                  <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
-                  <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
-                  <string name="proxy-Custom styles">""</string>
-                  <long name="proxy-X">-1</long>
-                  <long name="proxy-Y">-1</long>
-                  <long name="proxy-Width">-1</long>
-                  <long name="proxy-Height">-1</long>
-                  <string name="proxy-AlignH">"Centre"</string>
-                  <string name="proxy-AlignV">"Centre"</string>
-                  <long name="proxy-Stretch factor">0</long>
-                  <long name="proxy-Border">5</long>
-                  <bool name="proxy-wxLEFT">1</bool>
-                  <bool name="proxy-wxRIGHT">1</bool>
-                  <bool name="proxy-wxTOP">1</bool>
-                  <bool name="proxy-wxBOTTOM">1</bool>
-                  <bool name="proxy-wxSHAPED">0</bool>
-                  <bool name="proxy-wxADJUST_MINSIZE">0</bool>
-                  <bool name="proxy-wxFIXED_MINSIZE">0</bool>
-                  <string name="proxy-Custom arguments">""</string>
-                  <string name="proxy-Custom ctor arguments">""</string>
-                </document>
-                <document>
-                  <string name="title">"wxCheckBox: ID_CHECKBOX"</string>
+                  <string name="title">"wxCheckBox: ID_CHECKBOX_COMMON_UNITS"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
                   <string name="icon-name">"checkbox"</string>
@@ -838,7 +948,7 @@
                   <long name="locked">0</long>
                   <string name="created">"11/5/2006"</string>
                   <string name="proxy-type">"wbCheckBoxProxy"</string>
-                  <string name="proxy-Id name">"ID_CHECKBOX"</string>
+                  <string name="proxy-Id name">"ID_CHECKBOX_COMMON_UNITS"</string>
                   <long name="proxy-Id value">10004</long>
                   <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxCheckBox"</string>
@@ -892,7 +1002,7 @@
                   <string name="proxy-Custom ctor arguments">""</string>
                 </document>
                 <document>
-                  <string name="title">"wxCheckBox: ID_CHECKBOX1"</string>
+                  <string name="title">"wxCheckBox: ID_CHECKBOX_COMMON_CONVERT"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
                   <string name="icon-name">"checkbox"</string>
@@ -902,7 +1012,7 @@
                   <long name="locked">0</long>
                   <string name="created">"11/5/2006"</string>
                   <string name="proxy-type">"wbCheckBoxProxy"</string>
-                  <string name="proxy-Id name">"ID_CHECKBOX1"</string>
+                  <string name="proxy-Id name">"ID_CHECKBOX_COMMON_CONVERT"</string>
                   <long name="proxy-Id value">10005</long>
                   <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxCheckBox"</string>
@@ -956,7 +1066,7 @@
                   <string name="proxy-Custom ctor arguments">""</string>
                 </document>
                 <document>
-                  <string name="title">"wxCheckBox: ID_CHECKBOX2"</string>
+                  <string name="title">"wxCheckBox: ID_CHECKBOX_NOT_DRAWN"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
                   <string name="icon-name">"checkbox"</string>
@@ -966,7 +1076,7 @@
                   <long name="locked">0</long>
                   <string name="created">"11/5/2006"</string>
                   <string name="proxy-type">"wbCheckBoxProxy"</string>
-                  <string name="proxy-Id name">"ID_CHECKBOX2"</string>
+                  <string name="proxy-Id name">"ID_CHECKBOX_NOT_DRAWN"</string>
                   <long name="proxy-Id value">10006</long>
                   <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxCheckBox"</string>
@@ -1117,7 +1227,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxTextCtrl: ID_TEXTCTRL2"</string>
+                <string name="title">"wxTextCtrl: ID_TEXTCTRL_PINNAME_SIZE"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"textctrl"</string>
@@ -1127,7 +1237,7 @@
                 <long name="locked">0</long>
                 <string name="created">"11/5/2006"</string>
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
-                <string name="proxy-Id name">"ID_TEXTCTRL2"</string>
+                <string name="proxy-Id name">"ID_TEXTCTRL_PINNAME_SIZE"</string>
                 <long name="proxy-Id value">10007</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
@@ -1197,7 +1307,6 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Custom arguments">""</string>
                 <string name="proxy-Custom ctor arguments">""</string>
-                <bool name="proxy-wxTE_LINEWRAP">0</bool>
               </document>
               <document>
                 <string name="title">"wxStaticText: wxID_STATIC"</string>
@@ -1270,7 +1379,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxTextCtrl: ID_TEXTCTRL3"</string>
+                <string name="title">"wxTextCtrl: ID_TEXTCTRL_PINNUM_SIZE"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"textctrl"</string>
@@ -1280,7 +1389,7 @@
                 <long name="locked">0</long>
                 <string name="created">"11/5/2006"</string>
                 <string name="proxy-type">"wbTextCtrlProxy"</string>
-                <string name="proxy-Id name">"ID_TEXTCTRL3"</string>
+                <string name="proxy-Id name">"ID_TEXTCTRL_PINNUM_SIZE"</string>
                 <long name="proxy-Id value">10008</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxTextCtrl"</string>
@@ -1350,7 +1459,6 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Custom arguments">""</string>
                 <string name="proxy-Custom ctor arguments">""</string>
-                <bool name="proxy-wxTE_LINEWRAP">0</bool>
               </document>
               <document>
                 <string name="title">"Spacer"</string>

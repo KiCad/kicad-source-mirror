@@ -5,6 +5,13 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Aug-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    libedit:
+        solved : a bug which can crash eeschema on a double click.
+        modified : pin lenght edit in pin edit dialog. The value (handle by spin control) was not editable with recent wxWidgets versions
+
 2008-Aug-09 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:

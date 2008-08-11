@@ -139,7 +139,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                                        CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(), 
+				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
 											 GetScreen()->m_Curseur,
                                             CurrentLibEntry, CurrentUnit,
                                             CurrentConvert, LOCATE_ALL_DRAW_ITEM );
@@ -179,11 +179,9 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /*************************************************************************/
 
-/* Appel� sur un double click:
- *  pour un �l�ment editable (textes, composant):
- *      appel de l'editeur correspondant.
- *  pour une connexion en cours:
- *      termine la connexion
+/* Called on a double click:
+ *  If an editable item  (field, pin, graphic):
+ *      Call the suitable dialog editor.
  */
 {
     wxPoint            pos = GetPosition();
@@ -192,9 +190,8 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     if( CurrentLibEntry == NULL )
         return;
 
-    if( !m_ID_current_state    // Simple localisation des elements
-       || (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
-    {
+    if( (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
+    {   // We can locate an item
 		DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )

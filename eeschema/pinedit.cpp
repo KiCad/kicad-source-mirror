@@ -66,9 +66,13 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
     LastPinCommonConvert = m_CommonConvert->GetValue();
     LastPinCommonUnit    = m_CommonUnit->GetValue();
     LastPinNoDraw = m_NoDraw->GetValue();
-    LastPinSize   = m_PinSize->GetValue();
+
+    msg = m_PinSizeCtrl->GetValue();
+    LastPinSize   = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+
     msg = m_PinNameSizeCtrl->GetValue();
     LastPinNameSize = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+
     msg = m_PinNumSizeCtrl->GetValue();
     LastPinNumSize = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
 
@@ -113,7 +117,12 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
 void WinEDA_LibeditFrame::InitEditOnePin()
 /*********************************************/
 
-/* Routine d'installation du menu d'edition d'une pin
+/* Called when installing the edit pin dialog frame
+ * Set pins flags (.m_Flags pins member) to ensure a correctins edition:
+ * If 2 or more pins are on the same location (and the same orientation) they are all moved or resized.
+ * This is usefull for components which have more than one part per package
+ * In this case all parts can be edited at once.
+ * Note: if the option "Edit Pin per Pin" (tool of the main toolbar) is activated, only the current part is edited
  */
 {
     LibDrawPin* Pin;
@@ -135,7 +144,8 @@ void WinEDA_LibeditFrame::InitEditOnePin()
         if( (Pin->m_Pos == CurrentPin->m_Pos)
            && (Pin->m_Orient == CurrentPin->m_Orient)
            && ( !(CurrentPin->m_Flags & IS_NEW) )
-           && (g_EditPinByPinIsOn == FALSE) )
+           && (g_EditPinByPinIsOn == FALSE)     // This is set by the tool of the main toolbar
+            )
             Pin->m_Flags |= IS_LINKED | IN_EDIT;
         else
             Pin->m_Flags = 0;
