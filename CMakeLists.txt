@@ -17,8 +17,13 @@ option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 # Comment this out if you don't want to build with Python support.
 # OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")
 
+
+#================================================
 # Set flags for GCC.
+#================================================
+
 if(CMAKE_COMPILER_IS_GNUCXX)
+
     # Set default flags for Release build.
     set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
     set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
@@ -27,16 +32,21 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     # Set default flags for Debug build.
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 # Locations for install targets.
-set(KICAD_BIN bin CACHE PATH "Location of KiCad binaries.")
+set(KICAD_BIN bin
+    CACHE PATH "Location of KiCad binaries.")
 
 if(UNIX)
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-    set(KICAD_PLUGINS lib/kicad/plugins CACHE PATH "Location of KiCad plugins.")
-    set(KICAD_DATA share/kicad CACHE PATH "Location of KiCad data files.")
-    set(KICAD_DOCS share/doc/kicad CACHE PATH "Location of KiCad documentation files.")
+    set(KICAD_PLUGINS lib/kicad/plugins
+        CACHE PATH "Location of KiCad plugins.")
+    set(KICAD_DATA share/kicad
+        CACHE PATH "Location of KiCad data files.")
+    set(KICAD_DOCS share/doc/kicad
+        CACHE PATH "Location of KiCad documentation files.")
 endif(UNIX)
 
 if(WIN32)
@@ -48,28 +58,51 @@ if(WIN32)
     set(KICAD_DOCS doc CACHE PATH "Location of KiCad documentation files.")
 endif(WIN32)
 
-set(KICAD_DEMOS ${KICAD_DATA}/demos CACHE PATH "Location of KiCad demo files.")
-set(KICAD_INTERNAT ${KICAD_DATA}/internat CACHE PATH "Location of KiCad i18n files.")
-set(KICAD_TEMPLATE ${KICAD_DATA}/template CACHE PATH "Location of KiCad template files.")
+set(KICAD_DEMOS ${KICAD_DATA}/demos 
+    CACHE PATH "Location of KiCad demo files.")
+set(KICAD_INTERNAT ${KICAD_DATA}/internat 
+    CACHE PATH "Location of KiCad i18n files.")
+set(KICAD_TEMPLATE ${KICAD_DATA}/template
+    CACHE PATH "Location of KiCad template files.")
 
-mark_as_advanced(KICAD_BIN KICAD_PLUGINS KICAD_DATA KICAD_DOCS
-    KICAD_DEMOS KICAD_INTERNAT KICAD_TEMPLATE)
+mark_as_advanced(KICAD_BIN 
+                 KICAD_PLUGINS
+                 KICAD_DATA
+                 KICAD_DOCS
+                 KICAD_DEMOS
+                 KICAD_INTERNAT
+                 KICAD_TEMPLATE)
 
+
+
+#================================================
 # Find libraries that are needed to build KiCad.
+#================================================
 include(CheckFindPackageResult)
 
+#######################
+# Find OpenGL library #
+#######################
 find_package(OpenGL)
 check_find_package_result(OPENGL_FOUND "OpenGL")
 
+######################
+# Find Boost library #
+######################
 find_package(Boost)
 check_find_package_result(Boost_FOUND "Boost")
 
+##########################
+# Find wxWidgets library #
+##########################
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 set(wxWidgets_USE_LIBS base core adv gl html net)
 find_package(wxWidgetsCVS)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
+
+
 
 # Include wxWidgets macros.
 include(${wxWidgets_USE_FILE})
@@ -80,18 +113,25 @@ include(MinGWResourceCompiler)
 # Automagically create version header file.
 # does not work with mingw for me (jpc)
 if(UNIX)
-include(CreateSVNVersionHeader)
-create_svn_version_header()
+ include(CreateSVNVersionHeader)
+ create_svn_version_header()
 endif(UNIX)
 
 # Include paths.
-include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/share
-    ${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include
+                    ${CMAKE_SOURCE_DIR}/share
+                    ${CMAKE_BINARY_DIR})
 
-# CMake will look in these dirs for nested 'CMakeLists.txt' files.
-# Binaries.
+
+
+#================================================
+# Let CMake look in these directories for nested
+# 'CMakeLists.txt' files to process
+#================================================
+
+############
+# Binaries #
+############
 add_subdirectory(3d-viewer)
 add_subdirectory(bitmaps)
 add_subdirectory(common)
@@ -102,21 +142,31 @@ add_subdirectory(kicad)
 add_subdirectory(pcbnew)
 add_subdirectory(polygon)
 add_subdirectory(polygon/kbool/src)
-# Resources.
+
+#############
+# Resources #
+#############
 add_subdirectory(demos)
 add_subdirectory(internat)
 add_subdirectory(template)
 
-install(FILES install.txt DESTINATION ${KICAD_DOCS}
-    COMPONENT resources)
-install(FILES freeroute.jnlp DESTINATION ${KICAD_BIN}
-    COMPONENT resources)
+
+
+#================================================
+# Installation parameters
+#================================================
+install(FILES install.txt 
+        DESTINATION ${KICAD_DOCS}
+        COMPONENT resources)
+install(FILES freeroute.jnlp 
+        DESTINATION ${KICAD_BIN}
+        COMPONENT resources)
 
 if(UNIX)
     install(FILES share/kicad.desktop
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
-        COMPONENT resources)
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+            COMPONENT resources)
     install(FILES bitmaps/kicad.png
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
-        COMPONENT resources)
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
+            COMPONENT resources)
 endif(UNIX)

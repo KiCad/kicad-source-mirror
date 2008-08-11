@@ -16,7 +16,7 @@
 //#define SPLASH_OK
 
 #ifdef SPLASH_OK
-#include <wx/splash.h>
+ #include <wx/splash.h>
 #endif
 #include <wx/button.h>
 
@@ -27,7 +27,7 @@
 #include "macros.h"
 
 #ifdef KICAD_PYTHON
-#include <pyhandler.h>
+ #include <pyhandler.h>
 #endif
 
 /* Routines exportees */
@@ -203,7 +203,7 @@ bool WinEDA_App::OnInit()
     GetSettings();                  // read current setup
 
     m_MainFrame = new WinEDA_MainFrame(this, NULL, wxT("KiCad"),
-                 wxPoint(0,0), wxSize(600,400) );
+                 wxPoint(30,20), wxSize(600,400) );
     
     if(argc > 1 ) 
         m_MainFrame->m_PrjFileName = argv[1];

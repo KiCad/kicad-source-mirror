@@ -1,8 +1,8 @@
-/****************************************************/
-/*				drawpanel_wxstruct.h:				*/
+/********************************************************/
+/* drawpanel_wxstruct.h:				*/
 /* descriptions des principales classes utilisees:	*/
 /*	ici classe: "WinEDA_DrawPanel",  "BASE_SCREEN"	*/
-/*****************************************************/
+/********************************************************/
 
 /* Doit etre inclus dans "wxstruch.h"
  */
@@ -12,7 +12,7 @@
 
 
 #ifndef eda_global
-#define eda_global extern
+ #define eda_global extern
 #endif
 
 #include "colors.h"
@@ -43,7 +43,7 @@ public:
 
     bool              m_Block_Enable;       // TRUE to accept Block Commands
     int               m_CanStartBlock;      // >= 0 (or >= n) if a block can start
-    // usefull ot avoid false start block in certain cases (like switch from a sheet to an other scheet
+    // usefull to avoid false start block in certain cases (like switch from a sheet to an other scheet
     int               m_PanelDefaultCursor; // Current mouse cursor default shape id for this window
     int               m_PanelCursor;        // Current mouse cursor shape id for this window
     int               m_CursorLevel;        // Index for cursor redraw in XOR mode
@@ -373,4 +373,4 @@ public:
 };
 
 
-#endif  /* PANEL_WXSTRUCT_H */
+#endif  /* #ifndef PANEL_WXSTRUCT_H */

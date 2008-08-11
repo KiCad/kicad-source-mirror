@@ -6,9 +6,9 @@
 #define PLOT_COMMON_H
 
 #ifndef EDA_BASE
-#define COMMON_GLOBL extern
+ #define COMMON_GLOBL extern
 #else
-#define COMMON_GLOBL
+ #define COMMON_GLOBL
 #endif
 
 
@@ -33,7 +33,7 @@ const int PLOT_MIROIR = 1;
 
 
 /*******************************/
-/* common_plot_functions.cpp */
+/* common_plot_functions.cpp   */
 /*******************************/
 void    SetPlotScale( double xscale, double yscale );   // Set the plot scale for the current plotting)
 void    SetPlotOffset( wxPoint offset );                // Set the plot offset for the current plotting)
@@ -92,4 +92,4 @@ void    PlotPolyHPGL( int nb, int* coord, bool fill, int width = -1 );
 void    Move_Plume_HPGL( wxPoint pos, int plume );
 void    Plume_HPGL( int plume );
 
-#endif  // PLOT_COMMON_H
+#endif  /* #ifndef PLOT_COMMON_H */

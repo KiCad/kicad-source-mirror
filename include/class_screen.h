@@ -6,7 +6,7 @@
 #define CLASS_SCREEN_H
 
 #ifndef eda_global
-#define eda_global extern
+ #define eda_global extern
 #endif
 
 #include "macros.h"

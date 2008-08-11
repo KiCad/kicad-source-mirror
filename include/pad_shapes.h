@@ -1,4 +1,6 @@
-
+/******************/
+/*  pad_shapes.h  */
+/******************/
 
 #ifndef PAD_SHAPES_H_
 #define PAD_SHAPES_H_
@@ -19,9 +21,9 @@
 #define PAD_STANDARD    0       // Usual pad
 #define PAD_SMD         1       // Smd pad, appears on the layer paste (default)
 #define PAD_CONN        2       // Like smd, does not appear on the layer paste (default)
+
 // reserved, but not yet really used:
 #define PAD_HOLE_NOT_PLATED      3       // like PAD_STANDARD, but not plated (no connection between copper layers)
 
 
-#endif  // PAD_SHAPES_H_
-
+#endif  /* #ifndef PAD_SHAPES_H_ */
