@@ -5,6 +5,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Aug-15 UPDATE   Jerry Jacobs <jerkejacobs@gmail.com>
+================================================================================
++About dialog 
+modified: (common.cpp) GetAboutBuildVersion() is a custom build version for the about dialog
+          (config.h.cmake) 
+          (CreateSVNVersionHeader.cmake) KICAD_ABOUT_VERSION macro added
+
+added:  (about_dialog.cpp) InitKiCadAbout() initalise the about dialog
+
+removed: (common/infospgm.cpp) is no longer needed
+
+
 2008-Aug-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +eeschema:
