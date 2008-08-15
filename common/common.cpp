@@ -25,6 +25,15 @@ wxString GetBuildVersion()
 }
 
 
+/*********************************************/
+/* Return custom build date for about dialog */
+/*********************************************/
+wxString GetAboutBuildVersion()
+/*********************************************/
+{
+  return g_BuildAboutVersion; 
+}
+
 /********************************/
 void SetLocaleTo_C_standard(void)
 /********************************/

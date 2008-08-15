@@ -1,4 +1,5 @@
 set(COMMON_SRCS
+    about_kicad.cpp
     base_screen.cpp
     base_struct.cpp
     basicframe.cpp
@@ -20,7 +21,6 @@ set(COMMON_SRCS
     get_component_dialog.cpp
     gr_basic.cpp
     hotkeys_basic.cpp
-    infospgm.cpp
     msgpanel.cpp
     projet_config.cpp
 #   pyhandler.cpp

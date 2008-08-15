@@ -98,7 +98,7 @@ EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, WinEDA_PcbFrame::Process_Special_Functions )
 
 // Menu Help
 EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
-EVT_MENU( ID_KICAD_ABOUT, WinEDA_PcbFrame::GetKicadAbout )
+EVT_MENU( ID_KICAD_ABOUT, WinEDA_BasicFrame::GetKicadAbout )
 
 // Menu 3D Frame
 EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_PcbFrame::Show3D_Frame )
@@ -186,7 +186,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     WinEDA_BasePcbFrame( father, parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName                = wxT( "PcbFrame" );
-    m_AboutTitle               = g_PcbnewAboutTitle;
+    //m_AboutTitle               = g_PcbnewAboutTitle;
     m_Draw_Axis                = TRUE;          // TRUE pour avoir les axes dessines
     m_Draw_Grid                = g_ShowGrid;    // TRUE pour avoir la grille dessinee
     m_Draw_Sheet_Ref           = TRUE;          // TRUE pour avoir le cartouche dessine
@@ -567,18 +567,4 @@ void WinEDA_PcbFrame::SetToolbars()
     PrepareLayerIndicator();
 
     DisplayUnitsMsg();
-}
-
-
-/***********************************************************/
-void WinEDA_PcbFrame::GetKicadAbout( wxCommandEvent& event )
-/**********************************************************/
-{
-    wxString extra_message;
-
-    extra_message << wxT( "\nPcbnew uses the kbool library version " )
-                  << wxT( KBOOL_VERSION )
-                  << wxT( "\nsee http://boolean.klaasholwerda.nl/bool.html\n" );
-
-    Print_Kicad_Infos( this, m_AboutTitle, extra_message );
 }

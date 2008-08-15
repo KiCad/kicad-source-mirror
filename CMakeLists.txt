@@ -117,6 +117,7 @@ if(UNIX)
  create_svn_version_header()
 endif(UNIX)
 
+
 # Include paths.
 include_directories(${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/share

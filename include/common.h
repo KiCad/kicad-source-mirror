@@ -5,6 +5,12 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+/* wxWidgets about dialog */
+#include <wx/aboutdlg.h>
+#include "wx/statline.h"
+#include "wx/generic/aboutdlgg.h"
+/**************************/
+
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 
@@ -598,23 +604,18 @@ char*       to_point( char* Text );
 /* convertit les , en . dans une chaine. utilise pour compenser la fct printf
  *  qui genere les flottants avec une virgule au lieu du point en mode international */
 
-/****************/
-/* infospgm.cpp */
-/****************/
-extern wxString g_KicadAboutTitle;
-extern wxString g_CvpcbAboutTitle;
-extern wxString g_EeschemaAboutTitle;
-extern wxString g_PcbnewAboutTitle;
-extern wxString g_GerbviewAboutTitle;
 
-void        Print_Kicad_Infos( wxWindow* frame,
-                               const wxString& title,
-                               const wxString& aExtra_infos );
+/*******************/
+/* about_kicad.cpp */
+/*******************/
+void     InitKiCadAbout( wxAboutDialogInfo& info);
+
 
 /**************/
 /* common.cpp */
 /**************/
 wxString    GetBuildVersion(); /* Return the build date */
+wxString    GetAboutBuildVersion(); /* Return custom build date for about dialog */
 
 void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
                                  int               pos_X,

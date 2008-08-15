@@ -7,6 +7,8 @@ macro(create_svn_version_header)
             _kicad_svn_date ${Kicad_WC_LAST_CHANGED_DATE})
         set(KICAD_SVN_VERSION
             "(${_kicad_svn_date} SVN-R${Kicad_WC_LAST_CHANGED_REV})")
+        set(KICAD_ABOUT_VERSION
+            "SVN-R${Kicad_WC_LAST_CHANGED_REV} (${_kicad_svn_date})")
 
         # Definition to conditionally use date and revision returned from the
         # Subversion info command instead of hand coded date and revision in

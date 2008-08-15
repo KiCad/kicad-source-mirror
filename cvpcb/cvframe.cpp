@@ -25,7 +25,7 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( WinEDA_App* parent, const wxString& title,
     WinEDA_BasicFrame( NULL, CVPCB_FRAME, parent, title, wxDefaultPosition, wxDefaultSize, style )
 {
     m_FrameName     = wxT( "CvpcbFrame" );
-    m_AboutTitle    = g_CvpcbAboutTitle;
+    //m_AboutTitle    = g_CvpcbAboutTitle;
     m_ListCmp       = NULL;
     m_FootprintList = NULL;
     DrawFrame   = NULL;

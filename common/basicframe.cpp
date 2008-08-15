@@ -6,6 +6,11 @@
 #pragma implementation
 #endif
 
+/* wxWidgets about dialog */
+#include <wx/aboutdlg.h>
+#include "wx/statline.h"
+#include "wx/generic/aboutdlgg.h"
+
 #include "fctsys.h"
 #include <wx/fontdlg.h>
 #include "common.h"
@@ -254,12 +259,13 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 #endif
 }
 
-
-/***********************************************************/
-void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& event )
-/**********************************************************/
+/***********************************************************************/
+void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
+/***********************************************************************/
 {
-    Print_Kicad_Infos( this, m_AboutTitle, wxEmptyString );
+    wxAboutDialogInfo info;
+    InitKiCadAbout(info);
+    wxAboutBox(info);
 }
 
 

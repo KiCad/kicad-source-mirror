@@ -34,7 +34,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( WinEDA_App* eda_app,
     wxSize   clientsize;
 
     m_FrameName         = wxT( "KicadFrame" );
-    m_AboutTitle        = g_KicadAboutTitle;
+    //m_AboutTitle        = g_KicadAboutTitle;
     m_VToolBar          = NULL;
     m_LeftWin           = NULL;
     m_BottomWin         = NULL;

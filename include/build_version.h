@@ -14,4 +14,16 @@ COMMON_GLOBL wxString g_BuildVersion
 #endif
 ;
 
+COMMON_GLOBL wxString g_BuildAboutVersion
+#ifdef EDA_BASE
+#  ifdef HAVE_SVN_VERSION
+#    include "config.h"
+     (wxT(KICAD_ABOUT_VERSION))
+#  else
+     (wxT("(20080811.r1188)"))
+#  endif
+#endif
+;
+
+
 #endif	// KICAD_BUILD_VERSION
