@@ -54,6 +54,14 @@ public:
     float m_Rot[4];				/* man rotation of object */
     float m_Zoom;				/* field of view in degrees */
 	S3D_Color m_BgColor;
+	bool m_Draw3DAxis;
+	bool m_Draw3DModule;
+	bool m_Draw3DPlace;
+	bool m_Draw3DZone;
+	bool m_Draw3DComments;
+	bool m_Draw3DDrawings;
+	bool m_Draw3DEco1;
+	bool m_Draw3DEco2;
 	wxPoint m_BoardPos;
 	wxSize m_BoardSize;
 	int m_Layers;
@@ -107,6 +115,8 @@ public:
 	void Draw3D_Track(TRACK * track);
 	void Draw3D_Via(SEGVIA * via);
 	void Draw3D_DrawSegment(DRAWSEGMENT * segment);
+	void Draw3D_DrawText(TEXTE_PCB * text);
+	//int Get3DLayerEnable(int act_layer);
 
 DECLARE_EVENT_TABLE()
 };
@@ -151,6 +161,14 @@ public:
 
 	void NewDisplay();
 	void Set3DBgColor();
+	void Set3DAxisOnOff();
+	void Set3DModuleOnOff();
+	void Set3DPlaceOnOff();
+	void Set3DZoneOnOff();
+	void Set3DCommentsOnOff();
+	void Set3DDrawingsOnOff();
+	void Set3DEco1OnOff();
+	void Set3DEco2OnOff();
 
 DECLARE_EVENT_TABLE()
 };

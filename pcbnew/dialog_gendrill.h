@@ -47,7 +47,7 @@ class wxBoxSizer;
 #define ID_CHECKBOX2 10011
 #define ID_CHECKBOX3 10012
 #define SYMBOL_WINEDA_DRILLFRAME_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL
-#define SYMBOL_WINEDA_DRILLFRAME_TITLE _("WinEDA_DrillFrame")
+#define SYMBOL_WINEDA_DRILLFRAME_TITLE _("Drill Files Generation")
 #define SYMBOL_WINEDA_DRILLFRAME_IDNAME ID_WINEDA_DRILLFRAME
 #define SYMBOL_WINEDA_DRILLFRAME_SIZE wxSize(400, 300)
 #define SYMBOL_WINEDA_DRILLFRAME_POSITION wxDefaultPosition
@@ -99,8 +99,8 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
-    void OnCloseClick( wxCommandEvent& event );
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
+    void OnCancelClick( wxCommandEvent& event );
 
 ////@end WinEDA_DrillFrame event handler declarations
 
@@ -136,6 +136,8 @@ public:
     wxStaticText* m_ThroughViasInfoMsg;
     wxStaticText* m_MicroViasInfoMsg;
     wxStaticText* m_BuriedViasInfoMsg;
+    wxButton* m_OkButton;
+    wxButton* m_CancelButton;
 ////@end WinEDA_DrillFrame member variables
 
 private:

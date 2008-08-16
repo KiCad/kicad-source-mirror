@@ -15,7 +15,7 @@ OBJECTS= \
 		common_plotHPGL_functions.o\
 		hotkeys_basic.o\
 		drawtxt.o \
-		infospgm.o\
+		about_kicad.o\
 		wxwineda.o \
 		string.o \
 		gr_basic.o\

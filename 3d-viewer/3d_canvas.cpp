@@ -83,6 +83,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 /*************************************/
 {
     ClearLists();
+	m_init = FALSE;
 }
 
 
@@ -92,7 +93,7 @@ void Pcb3D_GLCanvas::ClearLists()
 {
     if( m_gllist > 0 )
         glDeleteLists( m_gllist, 1 );
-    m_init   = FALSE;
+//    m_init   = FALSE;
     m_gllist = 0;
 }
 

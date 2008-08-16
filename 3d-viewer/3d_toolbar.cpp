@@ -120,6 +120,29 @@ void WinEDA3D_DrawFrame::ReCreateMenuBar()
     ADD_MENUITEM( referencesMenu, ID_MENU3D_BGCOLOR_SELECTION,
                   _( "Choose background color" ), palette_xpm );
 
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_AXIS_ONOFF,
+                  _( "Axis On/Off" ), axis3d_front_xpm );
+
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_MODULE_ONOFF,
+                  _( "Module 3D On/Off" ), add_component_xpm );
+
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_PLACE_ONOFF,
+                  _( "PCB place 3D On/off" ), select_w_layer_xpm );
+
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_ZONE_ONOFF,
+                  _( "Zone On/Off" ), add_zone_xpm );
+				  
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_COMMENTS_ONOFF,
+                  _( "Comments On/Off" ), edit_sheet_xpm );
+
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_DRAWINGS_ONOFF,
+                  _( "Drawings On/Off" ), options_text_xpm );
+
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO1_ONOFF,
+                  _( "Eco1 On/Off" ), options_text_xpm );
+
+    ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO2_ONOFF,
+                  _( "Eco2 On/Off" ), options_text_xpm );
 
     SetMenuBar( menuBar );
 }

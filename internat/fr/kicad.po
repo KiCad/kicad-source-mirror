@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 09:14+0100\n"
-"PO-Revision-Date: 2008-08-05 09:16+0100\n"
+"POT-Creation-Date: 2008-08-12 13:05+0100\n"
+"PO-Revision-Date: 2008-08-12 13:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -341,7 +341,7 @@ msgstr "dimension"
 
 #: pcbnew/class_drawsegment.cpp:302
 #: pcbnew/class_marker.cpp:133
-#: pcbnew/class_text_mod.cpp:410
+#: pcbnew/class_text_mod.cpp:503
 #: pcbnew/class_track.cpp:852
 #: pcbnew/class_zone.cpp:608
 msgid "Type"
@@ -361,11 +361,11 @@ msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:327
-#: pcbnew/class_module.cpp:1121
-#: pcbnew/class_pad.cpp:983
+#: pcbnew/class_module.cpp:1080
+#: pcbnew/class_pad.cpp:993
 #: pcbnew/class_pcb_text.cpp:190
-#: pcbnew/class_text_mod.cpp:420
-#: pcbnew/class_text_mod.cpp:424
+#: pcbnew/class_text_mod.cpp:513
+#: pcbnew/class_text_mod.cpp:517
 #: pcbnew/class_track.cpp:909
 #: pcbnew/class_zone.cpp:637
 msgid "Layer"
@@ -374,7 +374,7 @@ msgstr "Couche"
 #: pcbnew/class_drawsegment.cpp:332
 #: pcbnew/class_edge_mod.cpp:297
 #: pcbnew/class_pcb_text.cpp:204
-#: pcbnew/class_text_mod.cpp:437
+#: pcbnew/class_text_mod.cpp:530
 #: pcbnew/class_track.cpp:932
 msgid "Width"
 msgstr "Epaisseur"
@@ -444,9 +444,9 @@ msgid "Seg"
 msgstr "Seg"
 
 #: pcbnew/class_edge_mod.cpp:286
-#: pcbnew/class_module.cpp:1148
-#: pcbnew/class_pad.cpp:893
-#: pcbnew/class_text_mod.cpp:401
+#: pcbnew/class_module.cpp:1107
+#: pcbnew/class_pad.cpp:903
+#: pcbnew/class_text_mod.cpp:494
 msgid "Module"
 msgstr "Module"
 
@@ -466,73 +466,73 @@ msgstr "Couche Seg."
 msgid "ErrType"
 msgstr "Type Err"
 
-#: pcbnew/class_module.cpp:1111
+#: pcbnew/class_module.cpp:1070
 msgid "Last Change"
 msgstr "Last Change"
 
-#: pcbnew/class_module.cpp:1117
+#: pcbnew/class_module.cpp:1076
 msgid "Netlist path"
 msgstr "Chemin Netliste "
 
-#: pcbnew/class_module.cpp:1141
+#: pcbnew/class_module.cpp:1100
 #: pcbnew/class_track.cpp:893
 msgid "Stat"
 msgstr "Stat"
 
-#: pcbnew/class_module.cpp:1145
-#: pcbnew/class_pad.cpp:1025
+#: pcbnew/class_module.cpp:1104
+#: pcbnew/class_pad.cpp:1035
 #: pcbnew/class_pcb_text.cpp:201
-#: pcbnew/class_text_mod.cpp:434
+#: pcbnew/class_text_mod.cpp:527
 msgid "Orient"
 msgstr "Orient"
 
-#: pcbnew/class_module.cpp:1151
+#: pcbnew/class_module.cpp:1110
 msgid "3D-Shape"
 msgstr "Forme 3D"
 
-#: pcbnew/class_module.cpp:1155
+#: pcbnew/class_module.cpp:1114
 msgid "Doc:  "
 msgstr "Doc: "
 
-#: pcbnew/class_module.cpp:1156
+#: pcbnew/class_module.cpp:1115
 msgid "KeyW: "
 msgstr "KeyW: "
 
-#: pcbnew/class_pad.cpp:810
+#: pcbnew/class_pad.cpp:820
 msgid "Unknown Pad shape"
 msgstr "Forme pad inconnue"
 
-#: pcbnew/class_pad.cpp:896
+#: pcbnew/class_pad.cpp:906
 msgid "RefP"
 msgstr "RefP"
 
-#: pcbnew/class_pad.cpp:996
+#: pcbnew/class_pad.cpp:1006
 #: pcbnew/class_pcb_text.cpp:207
-#: pcbnew/class_text_mod.cpp:440
+#: pcbnew/class_text_mod.cpp:533
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_pad.cpp:1000
+#: pcbnew/class_pad.cpp:1010
 #: pcbnew/class_pcb_text.cpp:210
-#: pcbnew/class_text_mod.cpp:443
+#: pcbnew/class_text_mod.cpp:536
 msgid "V Size"
 msgstr "Taille V"
 
-#: pcbnew/class_pad.cpp:1006
+#: pcbnew/class_pad.cpp:1016
 #: pcbnew/class_track.cpp:924
 #: pcbnew/class_track.cpp:929
 msgid "Drill"
 msgstr "Perçage"
 
-#: pcbnew/class_pad.cpp:1014
+#: pcbnew/class_pad.cpp:1024
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
 
-#: pcbnew/class_pad.cpp:1029
+#: pcbnew/class_pad.cpp:1039
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:1033
+#: pcbnew/class_pad.cpp:1043
 msgid "Y pos"
 msgstr "Y pos"
 
@@ -545,25 +545,25 @@ msgid "PCB Text"
 msgstr "Texte Pcb"
 
 #: pcbnew/class_pcb_text.cpp:194
-#: pcbnew/class_text_mod.cpp:431
+#: pcbnew/class_text_mod.cpp:524
 msgid "Mirror"
 msgstr "Miroir"
 
 #: pcbnew/class_pcb_text.cpp:196
-#: pcbnew/class_text_mod.cpp:414
+#: pcbnew/class_text_mod.cpp:506
 msgid "No"
 msgstr "Non"
 
 #: pcbnew/class_pcb_text.cpp:198
-#: pcbnew/class_text_mod.cpp:416
+#: pcbnew/class_text_mod.cpp:508
 msgid "Yes"
 msgstr "Oui"
 
-#: pcbnew/class_text_mod.cpp:396
+#: pcbnew/class_text_mod.cpp:488
 msgid "Ref."
 msgstr "Ref."
 
-#: pcbnew/class_text_mod.cpp:412
+#: pcbnew/class_text_mod.cpp:509
 msgid "Display"
 msgstr "Affichage"
 
@@ -1225,157 +1225,9 @@ msgid "The URL of the FreeRouting.net website"
 msgstr "L' URL du site FreeRouting.net"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:222
-#: pcbnew/dialog_gendrill.cpp:282
 #: pcbnew/dialog_netlist.cpp:253
 msgid "&Close"
 msgstr "&Fermer"
-
-#: pcbnew/dialog_gendrill.cpp:164
-msgid "Millimeters"
-msgstr "Millimetres"
-
-#: pcbnew/dialog_gendrill.cpp:165
-#: pcbnew/dialog_general_options.cpp:299
-msgid "Inches"
-msgstr "Pouces"
-
-#: pcbnew/dialog_gendrill.cpp:166
-msgid "Drill Units:"
-msgstr "Unités perçage:"
-
-#: pcbnew/dialog_gendrill.cpp:171
-msgid "decimal format"
-msgstr "Format décimal"
-
-#: pcbnew/dialog_gendrill.cpp:172
-msgid "suppress leading zeros"
-msgstr "Suppression zeros de tête"
-
-#: pcbnew/dialog_gendrill.cpp:173
-msgid "suppress trailing zeros"
-msgstr "Suppression zeros de fin"
-
-#: pcbnew/dialog_gendrill.cpp:174
-msgid "keep zeros"
-msgstr "Garder les zéros"
-
-#: pcbnew/dialog_gendrill.cpp:175
-msgid "Zeros Format"
-msgstr "Format des zéros"
-
-#: pcbnew/dialog_gendrill.cpp:180
-msgid "2:3"
-msgstr "2:3"
-
-#: pcbnew/dialog_gendrill.cpp:181
-msgid "2:4"
-msgstr "2:4"
-
-#: pcbnew/dialog_gendrill.cpp:182
-msgid "Precision"
-msgstr "Précision"
-
-#: pcbnew/dialog_gendrill.cpp:187
-msgid "absolute"
-msgstr "Absolu"
-
-#: pcbnew/dialog_gendrill.cpp:188
-msgid "auxiliary axis"
-msgstr "Axe Auxiliaire"
-
-#: pcbnew/dialog_gendrill.cpp:189
-msgid "Drill Origin:"
-msgstr "Origine des coord de percage:"
-
-#: pcbnew/dialog_gendrill.cpp:197
-#: pcbnew/dialog_gendrill.cpp:205
-msgid "None"
-msgstr "Aucun"
-
-#: pcbnew/dialog_gendrill.cpp:198
-msgid "drill sheet (HPGL)"
-msgstr "Plan de perçage (HPGL)"
-
-#: pcbnew/dialog_gendrill.cpp:199
-msgid "drill sheet (PostScript)"
-msgstr "Plan de perçage (Postscript)"
-
-#: pcbnew/dialog_gendrill.cpp:200
-msgid "Drill Sheet:"
-msgstr "Plan de perçage:"
-
-#: pcbnew/dialog_gendrill.cpp:206
-msgid "Drill report"
-msgstr "Rapport de perçage"
-
-#: pcbnew/dialog_gendrill.cpp:207
-msgid "Drill Report:"
-msgstr "Rapport de perçage:"
-
-#: pcbnew/dialog_gendrill.cpp:211
-msgid "HPGL plotter Options:"
-msgstr "Options de Tracé HPGL:"
-
-#: pcbnew/dialog_gendrill.cpp:215
-msgid "Speed (cm/s)"
-msgstr "Vitesse plume ( cm/s )"
-
-#: pcbnew/dialog_gendrill.cpp:221
-msgid "Pen Number"
-msgstr "Numéro de plume"
-
-#: pcbnew/dialog_gendrill.cpp:227
-#: pcbnew/dialog_general_options.cpp:376
-msgid "Options:"
-msgstr "Options :"
-
-#: pcbnew/dialog_gendrill.cpp:231
-msgid "mirror y axis"
-msgstr "Miroir sur axe Y"
-
-#: pcbnew/dialog_gendrill.cpp:235
-msgid "minimal header"
-msgstr "Entête minimal"
-
-#: pcbnew/dialog_gendrill.cpp:242
-msgid "Info:"
-msgstr "Infos:"
-
-#: pcbnew/dialog_gendrill.cpp:246
-msgid "Default Vias Drill:"
-msgstr "Perçage vias par Défaut"
-
-#: pcbnew/dialog_gendrill.cpp:250
-msgid "Via Drill Value"
-msgstr "Perçage des Vias"
-
-#: pcbnew/dialog_gendrill.cpp:253
-msgid "Micro Vias Drill:"
-msgstr "Perçage Micro Via:"
-
-#: pcbnew/dialog_gendrill.cpp:257
-msgid "Micro Via Drill Value"
-msgstr "Valeur Perçage Micro Via"
-
-#: pcbnew/dialog_gendrill.cpp:260
-msgid "Holes Count:"
-msgstr "Nb Trous"
-
-#: pcbnew/dialog_gendrill.cpp:264
-msgid "Pads:"
-msgstr "Pastilles:"
-
-#: pcbnew/dialog_gendrill.cpp:267
-msgid "Through Vias:"
-msgstr "Via Traversantes:"
-
-#: pcbnew/dialog_gendrill.cpp:270
-msgid "Micro Vias:"
-msgstr "Micro Vias:"
-
-#: pcbnew/dialog_gendrill.cpp:273
-msgid "Buried Vias:"
-msgstr "Via Enterrées:"
 
 #: pcbnew/dialog_general_options.cpp:288
 msgid "No Display"
@@ -1384,6 +1236,10 @@ msgstr "Pas d'affichage"
 #: pcbnew/dialog_general_options.cpp:291
 msgid "Display Polar Coord"
 msgstr "Affichage coord Polaires"
+
+#: pcbnew/dialog_general_options.cpp:299
+msgid "Inches"
+msgstr "Pouces"
 
 #: pcbnew/dialog_general_options.cpp:300
 msgid "millimeters"
@@ -1416,6 +1272,10 @@ msgstr "Liens max:"
 #: pcbnew/dialog_general_options.cpp:356
 msgid "Auto Save (minuts):"
 msgstr "Sauveg. Auto (min)"
+
+#: pcbnew/dialog_general_options.cpp:376
+msgid "Options:"
+msgstr "Options :"
 
 #: pcbnew/dialog_general_options.cpp:385
 msgid "Drc ON"
@@ -1786,6 +1646,10 @@ msgstr "Via enterrée ou Aveugle"
 msgid "Default Via Type"
 msgstr "Via par Défaut"
 
+#: pcbnew/dialog_track_options.cpp:223
+msgid "Micro Vias:"
+msgstr "Micro Vias:"
+
 #: pcbnew/dialog_track_options.cpp:232
 msgid "Micro Via Size"
 msgstr "Diametre Micro Via"
@@ -2081,14 +1945,6 @@ msgid "GenCAD file:"
 msgstr "Fichier GenCAD:"
 
 #: pcbnew/export_gencad.cpp:83
-#: pcbnew/files.cpp:352
-#: pcbnew/gen_modules_placefile.cpp:128
-#: pcbnew/gen_modules_placefile.cpp:139
-#: pcbnew/gen_modules_placefile.cpp:292
-#: pcbnew/librairi.cpp:308
-#: pcbnew/librairi.cpp:454
-#: pcbnew/librairi.cpp:604
-#: pcbnew/librairi.cpp:808
 msgid "Unable to create "
 msgstr "Impossible de créer "
 
@@ -2193,6 +2049,14 @@ msgstr "Fichier de percage"
 #: pcbnew/gendrill.cpp:789
 msgid "Unable to create file "
 msgstr "Impossible de créer le fichier "
+
+#: pcbnew/gendrill.cpp:378
+msgid "2:3"
+msgstr "2:3"
+
+#: pcbnew/gendrill.cpp:379
+msgid "2:4"
+msgstr "2:4"
 
 #: pcbnew/gendrill.cpp:384
 msgid "3:2"
@@ -2902,22 +2766,27 @@ msgid "Place anchor"
 msgstr "Place Ancre"
 
 #: pcbnew/modedit_onclick.cpp:196
+#: pcbnew/onrightclick.cpp:127
 msgid "End Tool"
 msgstr "Fin Outil"
 
 #: pcbnew/modedit_onclick.cpp:206
+#: pcbnew/onrightclick.cpp:445
 msgid "Cancel Block"
 msgstr "Annuler Bloc"
 
 #: pcbnew/modedit_onclick.cpp:208
+#: pcbnew/onrightclick.cpp:447
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Zoom Bloc (drag bouton du milieu souris)"
 
 #: pcbnew/modedit_onclick.cpp:211
+#: pcbnew/onrightclick.cpp:450
 msgid "Place Block"
 msgstr "Place Bloc"
 
 #: pcbnew/modedit_onclick.cpp:213
+#: pcbnew/onrightclick.cpp:452
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Copie Bloc (shift + drag mouse)"
 
@@ -2926,14 +2795,18 @@ msgid "Mirror Block (alt + drag mouse)"
 msgstr "Bloc Miroir (alt + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:217
+#: pcbnew/onrightclick.cpp:456
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Rotation Bloc (ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:219
+#: pcbnew/onrightclick.cpp:458
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:241
+#: pcbnew/onrightclick.cpp:754
+#: pcbnew/onrightclick.cpp:858
 msgid "Rotate"
 msgstr "Rotation"
 
@@ -2958,14 +2831,17 @@ msgid "Move Pad"
 msgstr "Déplace Pad"
 
 #: pcbnew/modedit_onclick.cpp:263
+#: pcbnew/onrightclick.cpp:793
 msgid "Edit Pad"
 msgstr "Edit Pad"
 
 #: pcbnew/modedit_onclick.cpp:265
+#: pcbnew/onrightclick.cpp:797
 msgid "New Pad Settings"
 msgstr "Nouvelles Caract. Pads"
 
 #: pcbnew/modedit_onclick.cpp:267
+#: pcbnew/onrightclick.cpp:801
 msgid "Export Pad Settings"
 msgstr "Exporte Caract. Pads"
 
@@ -2974,6 +2850,7 @@ msgid "delete Pad"
 msgstr "Supprimer Pad"
 
 #: pcbnew/modedit_onclick.cpp:274
+#: pcbnew/onrightclick.cpp:808
 msgid "Global Pad Settings"
 msgstr "Edition Globale des pads"
 
@@ -3006,6 +2883,9 @@ msgid "Place edge"
 msgstr "Place contour"
 
 #: pcbnew/modedit_onclick.cpp:306
+#: pcbnew/onrightclick.cpp:722
+#: pcbnew/onrightclick.cpp:756
+#: pcbnew/onrightclick.cpp:860
 msgid "Edit"
 msgstr "Editer"
 
@@ -3041,11 +2921,12 @@ msgstr "Editeur de Module: module modifié!  Continuer ?"
 msgid "Footprint name:"
 msgstr "Nom Module: "
 
-#: pcbnew/modules.cpp:291
+#: pcbnew/modules.cpp:305
+#: pcbnew/onrightclick.cpp:728
 msgid "Delete Module"
 msgstr "Supprimer Module"
 
-#: pcbnew/modules.cpp:292
+#: pcbnew/modules.cpp:306
 msgid "Value "
 msgstr "Valeur "
 
@@ -3790,16 +3671,16 @@ msgstr "Mode d'affichage Contraste normal"
 msgid "Hight Contrast Mode Display"
 msgstr "Mode d'affichage Haut Contraste"
 
-#: pcbnew/pcbnew.cpp:42
+#: pcbnew/pcbnew.cpp:43
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est est cours d'exécution. Continuer ?"
 
-#: pcbnew/pcbplot.cpp:146
+#: pcbnew/pcbplot.cpp:147
 #: pcbnew/pcbplot.cpp:272
 msgid "Plot"
 msgstr "Tracer"
 
-#: pcbnew/pcbplot.cpp:190
+#: pcbnew/pcbplot.cpp:191
 msgid "Plot Format"
 msgstr "Format de tracé"
 
@@ -4026,33 +3907,6 @@ msgstr "Ne peut pas réouvrir fichier <%s>"
 msgid "Tracks"
 msgstr "Pistes"
 
-#: pcbnew/plot_rtn.cpp:224
-#, c-format
-msgid ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"reference\" text."
-msgstr ""
-"Votre PCB a un mauvais numero de couche  %u pour le module\n"
-" %s's \"reference\"."
-
-#: pcbnew/plot_rtn.cpp:244
-#, c-format
-msgid ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"value\" text."
-msgstr ""
-"Votre PCB a un mauvais numero de couche %u pour le module\n"
-" %s's \"valeur\"."
-
-#: pcbnew/plot_rtn.cpp:290
-#, c-format
-msgid ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"module text\" text of %s."
-msgstr ""
-"Votre PCB a un mauvais numero de couche  %u pour le module\n"
-" %s's \"texte module\" de %s."
-
 #: pcbnew/router.cpp:60
 msgid "Unable to create temporary file "
 msgstr "Impossible de créer le fichier temporaire "
@@ -4267,6 +4121,7 @@ msgid "Delete part in current library"
 msgstr "Supprimer composant en librairie de travail"
 
 #: pcbnew/tool_modedit.cpp:61
+#: pcbnew/xchgmod.cpp:156
 msgid "New Module"
 msgstr "Nouveau Module"
 
@@ -4839,6 +4694,182 @@ msgstr "couche E.C.O.2"
 #: pcbnew/dialog_pad_edit.cpp:277
 msgid "Draft layer"
 msgstr "Couche dessin"
+
+#: pcbnew/plot_rtn.cpp:224
+#, c-format
+msgid ""
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"reference\" text."
+msgstr ""
+"Votre PCB a un mauvais numero de couche  %u pour le module\n"
+" %s's \"reference\"."
+
+#: pcbnew/plot_rtn.cpp:244
+#, c-format
+msgid ""
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"value\" text."
+msgstr ""
+"Votre PCB a un mauvais numero de couche %u pour le module\n"
+" %s's \"valeur\"."
+
+#: pcbnew/plot_rtn.cpp:290
+#, c-format
+msgid ""
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"module text\" text of %s."
+msgstr ""
+"Votre PCB a un mauvais numero de couche  %u pour le module\n"
+" %s's \"texte module\" de %s."
+
+#: pcbnew/dialog_gendrill.cpp:166
+msgid "Millimeters"
+msgstr "Millimetres"
+
+#: pcbnew/dialog_gendrill.cpp:168
+msgid "Drill Units:"
+msgstr "Unités perçage:"
+
+#: pcbnew/dialog_gendrill.cpp:173
+msgid "decimal format"
+msgstr "Format décimal"
+
+#: pcbnew/dialog_gendrill.cpp:174
+msgid "suppress leading zeros"
+msgstr "Suppression zeros de tête"
+
+#: pcbnew/dialog_gendrill.cpp:175
+msgid "suppress trailing zeros"
+msgstr "Suppression zeros de fin"
+
+#: pcbnew/dialog_gendrill.cpp:176
+msgid "keep zeros"
+msgstr "Garder les zéros"
+
+#: pcbnew/dialog_gendrill.cpp:177
+msgid "Zeros Format"
+msgstr "Format des zéros"
+
+#: pcbnew/dialog_gendrill.cpp:180
+msgid "Choose EXCELLON numbers notation"
+msgstr "Choisir la notation des nombres en format EXCELLON"
+
+#: pcbnew/dialog_gendrill.cpp:186
+msgid "Precision"
+msgstr "Précision"
+
+#: pcbnew/dialog_gendrill.cpp:189
+msgid "Choose EXCELLON numbers precision"
+msgstr "Choisir la précision des nombres en format EXCELLON"
+
+#: pcbnew/dialog_gendrill.cpp:193
+msgid "absolute"
+msgstr "Absolu"
+
+#: pcbnew/dialog_gendrill.cpp:194
+msgid "auxiliary axis"
+msgstr "Axe Auxiliaire"
+
+#: pcbnew/dialog_gendrill.cpp:195
+msgid "Drill Origin:"
+msgstr "Origine des coord de percage:"
+
+#: pcbnew/dialog_gendrill.cpp:198
+msgid "Choose the coordinate origin: absolute or relative to the auxiliray axis"
+msgstr "Choisir l'origine des coordonnées: absolue ou relative à l'axe auxiliaire"
+
+#: pcbnew/dialog_gendrill.cpp:205
+#: pcbnew/dialog_gendrill.cpp:215
+msgid "None"
+msgstr "Aucun"
+
+#: pcbnew/dialog_gendrill.cpp:206
+msgid "drill sheet (HPGL)"
+msgstr "Plan de perçage (HPGL)"
+
+#: pcbnew/dialog_gendrill.cpp:207
+msgid "drill sheet (PostScript)"
+msgstr "Plan de perçage (Postscript)"
+
+#: pcbnew/dialog_gendrill.cpp:208
+msgid "Drill Sheet:"
+msgstr "Plan de perçage:"
+
+#: pcbnew/dialog_gendrill.cpp:211
+msgid "Creates a drill map in PS or HPGL format"
+msgstr "Créer un plan de perçage en format PS ou HPGL"
+
+#: pcbnew/dialog_gendrill.cpp:216
+msgid "Drill report"
+msgstr "Rapport de perçage"
+
+#: pcbnew/dialog_gendrill.cpp:217
+msgid "Drill Report:"
+msgstr "Rapport de perçage:"
+
+#: pcbnew/dialog_gendrill.cpp:220
+msgid "Creates a plain text report"
+msgstr "Créer un fichier rapport ascii"
+
+#: pcbnew/dialog_gendrill.cpp:223
+msgid "HPGL plotter Options:"
+msgstr "Options de Tracé HPGL:"
+
+#: pcbnew/dialog_gendrill.cpp:227
+msgid "Speed (cm/s)"
+msgstr "Vitesse plume ( cm/s )"
+
+#: pcbnew/dialog_gendrill.cpp:233
+msgid "Pen Number"
+msgstr "Numéro de plume"
+
+#: pcbnew/dialog_gendrill.cpp:243
+msgid "mirror y axis"
+msgstr "Miroir sur axe Y"
+
+#: pcbnew/dialog_gendrill.cpp:247
+msgid "minimal header"
+msgstr "Entête minimal"
+
+#: pcbnew/dialog_gendrill.cpp:250
+msgid "If checked, the EXCELLON header is minimal"
+msgstr "Si activé, l'entête di fichier EXELLON est minimale"
+
+#: pcbnew/dialog_gendrill.cpp:256
+msgid "Info:"
+msgstr "Infos:"
+
+#: pcbnew/dialog_gendrill.cpp:260
+msgid "Default Vias Drill:"
+msgstr "Perçage vias par Défaut"
+
+#: pcbnew/dialog_gendrill.cpp:264
+msgid "Via Drill Value"
+msgstr "Perçage des Vias"
+
+#: pcbnew/dialog_gendrill.cpp:267
+msgid "Micro Vias Drill:"
+msgstr "Perçage Micro Via:"
+
+#: pcbnew/dialog_gendrill.cpp:271
+msgid "Micro Via Drill Value"
+msgstr "Valeur Perçage Micro Via"
+
+#: pcbnew/dialog_gendrill.cpp:274
+msgid "Holes Count:"
+msgstr "Nb Trous"
+
+#: pcbnew/dialog_gendrill.cpp:278
+msgid "Pads:"
+msgstr "Pastilles:"
+
+#: pcbnew/dialog_gendrill.cpp:281
+msgid "Through Vias:"
+msgstr "Via Traversantes:"
+
+#: pcbnew/dialog_gendrill.cpp:287
+msgid "Buried Vias:"
+msgstr "Via Enterrées:"
 
 #: eeschema/affiche.cpp:22
 msgid "Name"
@@ -6987,6 +7018,7 @@ msgstr "&Placer"
 
 #: eeschema/netform.cpp:60
 #: eeschema/netform.cpp:278
+#: eeschema/save_schemas.cpp:86
 msgid "Failed to create file "
 msgstr "Impossible de créer le fichier "
 
@@ -7303,11 +7335,13 @@ msgstr "Supprimer Fil"
 
 #: eeschema/onrightclick.cpp:513
 #: eeschema/onrightclick.cpp:545
+#: eeschema/schedit.cpp:201
 msgid "Add Junction"
 msgstr "Ajout jonctions"
 
 #: eeschema/onrightclick.cpp:514
 #: eeschema/onrightclick.cpp:546
+#: eeschema/schedit.cpp:205
 msgid "Add Label"
 msgstr "Ajout Label"
 
@@ -7392,215 +7426,67 @@ msgstr "Miroir Bloc ||"
 msgid "Copy to Clipboard"
 msgstr "Copie dans Presse papier"
 
-#: eeschema/pinedit-dialog.cpp:234
-msgid "Pin Name :"
-msgstr "Nom de la pin :"
-
-#: eeschema/pinedit-dialog.cpp:240
-msgid "Pin Num :"
-msgstr "Num de la pin :"
-
-#: eeschema/pinedit-dialog.cpp:248
-msgid " Pin Options :"
-msgstr "Options pin :"
-
-#: eeschema/pinedit-dialog.cpp:253
-msgid "Pin lenght :"
-msgstr "Longueur pin:"
-
-#: eeschema/pinedit-dialog.cpp:267
-msgid "No Draw"
-msgstr "Invisible"
-
-#: eeschema/pinedit-dialog.cpp:293
-msgid "Pin Orient:"
-msgstr "Pin Orient:"
-
-#: eeschema/pinedit-dialog.cpp:317
 #: eeschema/pinedit.cpp:22
 msgid "line"
 msgstr "Ligne"
 
-#: eeschema/pinedit-dialog.cpp:318
 #: eeschema/pinedit.cpp:22
 msgid "invert"
 msgstr "invert"
 
-#: eeschema/pinedit-dialog.cpp:319
 #: eeschema/pinedit.cpp:22
 msgid "clock"
 msgstr "clock"
 
-#: eeschema/pinedit-dialog.cpp:320
 #: eeschema/pinedit.cpp:22
 msgid "clock inv"
 msgstr "clock inv"
 
-#: eeschema/pinedit-dialog.cpp:321
 #: eeschema/pinedit.cpp:23
 msgid "low in"
 msgstr "low in"
 
-#: eeschema/pinedit-dialog.cpp:322
 #: eeschema/pinedit.cpp:23
 msgid "low clock"
 msgstr "low clock"
 
-#: eeschema/pinedit-dialog.cpp:323
 #: eeschema/pinedit.cpp:23
 msgid "low out"
 msgstr "low out"
 
-#: eeschema/pinedit-dialog.cpp:324
-msgid "Pin Shape:"
-msgstr "Forme Pin:"
-
-#: eeschema/pinedit-dialog.cpp:333
-msgid "3 States"
-msgstr "3 Etats"
-
-#: eeschema/pinedit-dialog.cpp:335
-msgid "Unspecified"
-msgstr "Non specifié"
-
-#: eeschema/pinedit-dialog.cpp:336
-msgid "Power In"
-msgstr "Power In"
-
-#: eeschema/pinedit-dialog.cpp:337
-msgid "Power Out"
-msgstr "Power Out"
-
-#: eeschema/pinedit-dialog.cpp:338
-msgid "Open coll"
-msgstr "Coll ouvert"
-
-#: eeschema/pinedit-dialog.cpp:339
-msgid "Open emit"
-msgstr "Emetteur ouv."
-
-#: eeschema/pinedit-dialog.cpp:340
-msgid "Electrical Type:"
-msgstr "Type électrique:"
-
-#: eeschema/pinedit.cpp:206
+#: eeschema/pinedit.cpp:216
 msgid "Occupied by other pin. Continue?"
 msgstr "Occupé une autre pin, Continuer ?"
 
-#: eeschema/pinedit.cpp:997
+#: eeschema/pinedit.cpp:1007
 #, c-format
 msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
 msgstr "Pin dupliquée  %4.4s (Pin %s loc %d, %d, etPin %s loc %d, %d)"
 
-#: eeschema/pinedit.cpp:1003
+#: eeschema/pinedit.cpp:1013
 #, c-format
 msgid "  Part %d"
 msgstr "Composant %d"
 
-#: eeschema/pinedit.cpp:1009
+#: eeschema/pinedit.cpp:1019
 msgid "  Convert"
 msgstr "  Convert"
 
-#: eeschema/pinedit.cpp:1011
+#: eeschema/pinedit.cpp:1021
 msgid "  Normal"
 msgstr "  Normal"
 
-#: eeschema/plothpgl.cpp:222
-msgid "Sheet Size"
-msgstr "Dim. feuille"
-
-#: eeschema/plothpgl.cpp:223
 #: eeschema/plotps.cpp:196
 msgid "Page Size A4"
 msgstr "Feuille A4"
 
-#: eeschema/plothpgl.cpp:224
-msgid "Page Size A3"
-msgstr "Feuille A3"
-
-#: eeschema/plothpgl.cpp:225
-msgid "Page Size A2"
-msgstr "Feuille A2"
-
-#: eeschema/plothpgl.cpp:226
-msgid "Page Size A1"
-msgstr "Feuille A1"
-
-#: eeschema/plothpgl.cpp:227
-msgid "Page Size A0"
-msgstr "Feuille A0"
-
-#: eeschema/plothpgl.cpp:228
 #: eeschema/plotps.cpp:197
 msgid "Page Size A"
 msgstr "Feuille A"
 
-#: eeschema/plothpgl.cpp:229
-msgid "Page Size B"
-msgstr "Feuille B"
-
-#: eeschema/plothpgl.cpp:230
-msgid "Page Size C"
-msgstr "Feuille C"
-
-#: eeschema/plothpgl.cpp:231
-msgid "Page Size D"
-msgstr "Feuille D"
-
-#: eeschema/plothpgl.cpp:232
-msgid "Page Size E"
-msgstr "Feuille E"
-
-#: eeschema/plothpgl.cpp:233
 #: eeschema/plotps.cpp:199
 msgid "Plot page size:"
 msgstr "Format de la feuille:"
-
-#: eeschema/plothpgl.cpp:240
-msgid "Pen control:"
-msgstr "Controle plume"
-
-#: eeschema/plothpgl.cpp:244
-msgid "Pen Width ( mils )"
-msgstr "Epaiss plume (mils)"
-
-#: eeschema/plothpgl.cpp:250
-msgid "Pen Speed ( cm/s )"
-msgstr "Vitesse plume ( cm/s )"
-
-#: eeschema/plothpgl.cpp:262
-msgid "Page offset:"
-msgstr "Offset page:"
-
-#: eeschema/plothpgl.cpp:266
-msgid "Plot Offset X"
-msgstr "Offset de tracé X"
-
-#: eeschema/plothpgl.cpp:272
-msgid "Plot Offset Y"
-msgstr "Offset de tracé Y"
-
-#: eeschema/plothpgl.cpp:283
-#: eeschema/plotps.cpp:242
-msgid "&Plot CURRENT"
-msgstr "&Imprimer courant"
-
-#: eeschema/plothpgl.cpp:287
-#: eeschema/plotps.cpp:249
-msgid "Plot A&LL"
-msgstr "&Tout tracer"
-
-#: eeschema/plothpgl.cpp:298
-msgid "&Accept Offset"
-msgstr "&Accepter Offset"
-
-#: eeschema/plothpgl.cpp:580
-msgid "** Plot End **\n"
-msgstr "** Fin de Tracé **\n"
-
-#: eeschema/plothpgl.cpp:605
-msgid "Plot  "
-msgstr "Trace  "
 
 #: eeschema/plotps.cpp:209
 msgid "Plot Options:"
@@ -7621,6 +7507,14 @@ msgstr "Tracé et Couleurs:"
 #: eeschema/plotps.cpp:229
 msgid "Print Sheet Ref"
 msgstr "Imprimer cartouche"
+
+#: eeschema/plotps.cpp:242
+msgid "&Plot CURRENT"
+msgstr "&Imprimer courant"
+
+#: eeschema/plotps.cpp:249
+msgid "Plot A&LL"
+msgstr "&Tout tracer"
 
 #: eeschema/plotps.cpp:268
 msgid "Messages :"
@@ -8032,6 +7926,229 @@ msgstr "Cmp Courant: <%s>"
 #: eeschema/viewlib_frame.cpp:53
 msgid "Library browser"
 msgstr "Visualisateur des librairies"
+
+#: eeschema/plothpgl.cpp:222
+msgid "Sheet Size"
+msgstr "Dim. feuille"
+
+#: eeschema/plothpgl.cpp:224
+msgid "Page Size A3"
+msgstr "Feuille A3"
+
+#: eeschema/plothpgl.cpp:225
+msgid "Page Size A2"
+msgstr "Feuille A2"
+
+#: eeschema/plothpgl.cpp:226
+msgid "Page Size A1"
+msgstr "Feuille A1"
+
+#: eeschema/plothpgl.cpp:227
+msgid "Page Size A0"
+msgstr "Feuille A0"
+
+#: eeschema/plothpgl.cpp:229
+msgid "Page Size B"
+msgstr "Feuille B"
+
+#: eeschema/plothpgl.cpp:230
+msgid "Page Size C"
+msgstr "Feuille C"
+
+#: eeschema/plothpgl.cpp:231
+msgid "Page Size D"
+msgstr "Feuille D"
+
+#: eeschema/plothpgl.cpp:232
+msgid "Page Size E"
+msgstr "Feuille E"
+
+#: eeschema/plothpgl.cpp:240
+msgid "Pen control:"
+msgstr "Controle plume"
+
+#: eeschema/plothpgl.cpp:244
+msgid "Pen Width ( mils )"
+msgstr "Epaiss plume (mils)"
+
+#: eeschema/plothpgl.cpp:250
+msgid "Pen Speed ( cm/s )"
+msgstr "Vitesse plume ( cm/s )"
+
+#: eeschema/plothpgl.cpp:262
+msgid "Page offset:"
+msgstr "Offset page:"
+
+#: eeschema/plothpgl.cpp:266
+msgid "Plot Offset X"
+msgstr "Offset de tracé X"
+
+#: eeschema/plothpgl.cpp:272
+msgid "Plot Offset Y"
+msgstr "Offset de tracé Y"
+
+#: eeschema/plothpgl.cpp:298
+msgid "&Accept Offset"
+msgstr "&Accepter Offset"
+
+#: eeschema/plothpgl.cpp:580
+msgid "** Plot End **\n"
+msgstr "** Fin de Tracé **\n"
+
+#: eeschema/plothpgl.cpp:605
+msgid "Plot  "
+msgstr "Trace  "
+
+#: eeschema/pinedit-dialog.cpp:160
+msgid "Pin Name :"
+msgstr "Nom de la pin :"
+
+#: eeschema/pinedit-dialog.cpp:166
+msgid "Pin Num :"
+msgstr "Num de la pin :"
+
+#: eeschema/pinedit-dialog.cpp:174
+msgid " Pin Options :"
+msgstr "Options pin :"
+
+#: eeschema/pinedit-dialog.cpp:190
+msgid "Pin Lenght"
+msgstr "Longueur Pin"
+
+#: eeschema/pinedit-dialog.cpp:201
+msgid "No Draw"
+msgstr "Invisible"
+
+#: eeschema/pinedit-dialog.cpp:227
+msgid "Pin Orient:"
+msgstr "Pin Orient:"
+
+#: eeschema/pinedit-dialog.cpp:258
+msgid "Pin Shape:"
+msgstr "Forme Pin:"
+
+#: eeschema/pinedit-dialog.cpp:267
+msgid "3 States"
+msgstr "3 Etats"
+
+#: eeschema/pinedit-dialog.cpp:269
+msgid "Unspecified"
+msgstr "Non specifié"
+
+#: eeschema/pinedit-dialog.cpp:270
+msgid "Power In"
+msgstr "Power In"
+
+#: eeschema/pinedit-dialog.cpp:271
+msgid "Power Out"
+msgstr "Power Out"
+
+#: eeschema/pinedit-dialog.cpp:272
+msgid "Open coll"
+msgstr "Coll ouvert"
+
+#: eeschema/pinedit-dialog.cpp:273
+msgid "Open emit"
+msgstr "Emetteur ouv."
+
+#: eeschema/pinedit-dialog.cpp:274
+msgid "Electrical Type:"
+msgstr "Type électrique:"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:141
+msgid "Quick KICAD Library Component Builder"
+msgstr ""
+
+#: eeschema/component_wizard/ki_component_setup.cpp:145
+msgid "Component Features"
+msgstr "Propriétés du Composant"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:153
+msgid "Component Name"
+msgstr "Nom du Composant!"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:156
+#, fuzzy
+msgid "MyComponent"
+msgstr "Composant"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:159
+msgid " Symbol Text Size  "
+msgstr "Taille du Texte"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:162
+#: eeschema/component_wizard/ki_component_setup.cpp:212
+#: eeschema/component_wizard/ki_component_setup.cpp:235
+msgid "50"
+msgstr "50"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:165
+msgid "Parts Count"
+msgstr "Nb Parts"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:168
+msgid "1"
+msgstr "1"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:171
+msgid "Pin Distance"
+msgstr "Distance entre Pins"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:174
+msgid "100"
+msgstr "100"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:177
+msgid "Pin Features"
+msgstr "Propriétés des Pins"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:185
+msgid "Default Pin Format"
+msgstr "Format des Pins par Défaut"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:209
+msgid "Pin Name Text Size"
+msgstr "Taille du Texte Nom de Pin"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:215
+msgid "Default Pin Type"
+msgstr "Type Pin par Défaut"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:221
+msgid "BiDir"
+msgstr "Bidi"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:222
+msgid "Tri-State"
+msgstr "3 états"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:225
+msgid "Power Input"
+msgstr "Power Input"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:226
+msgid "Power Output"
+msgstr "Power Output"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:227
+msgid "Open Colletor"
+msgstr "Coll Ouvert"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:228
+msgid "Open Emitter"
+msgstr "Emetteur Ouv."
+
+#: eeschema/component_wizard/ki_component_setup.cpp:232
+msgid " Pin Number Text Size"
+msgstr "Taille Texte Numéro de Pin"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:241
+msgid "Pin Count"
+msgstr "Nombre de Pins"
+
+#: eeschema/component_wizard/ki_component_setup.cpp:244
+msgid "Component Style"
+msgstr "Style du Composant"
 
 #: cvpcb/autosel.cpp:68
 #, c-format
@@ -9884,10 +10001,6 @@ msgstr "Propriétés du Texte sur Module"
 msgid "dialog_freeroute_exchange"
 msgstr "dialog_freeroute_exchange"
 
-#: pcbnew/dialog_gendrill.h:50
-msgid "WinEDA_DrillFrame"
-msgstr "WinEDA_DrillFrame"
-
 #: pcbnew/dialog_general_options.h:60
 msgid "General Options"
 msgstr "Options générales"
@@ -10011,6 +10124,10 @@ msgstr "Afficher Modules Cu"
 msgid "Pad properties"
 msgstr "Propriétés des Pads"
 
+#: pcbnew/dialog_gendrill.h:50
+msgid "Drill Files Generation"
+msgstr "Génération Fichiers de Perçagee"
+
 #: eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
 msgstr "Annotation des composants"
@@ -10131,10 +10248,6 @@ msgstr "Marqueur ERC"
 msgid "Other"
 msgstr "Autre"
 
-#: eeschema/pinedit-dialog.h:65
-msgid "Pin properties"
-msgstr "Propriétés des Pins"
-
 #: eeschema/plothpgl.h:55
 msgid "EESchema Plot HPGL"
 msgstr "EESchema Tracé HPGL"
@@ -10150,6 +10263,14 @@ msgstr "Propriétés de la feuille"
 #: eeschema/symbtext.h:47
 msgid "Graphic text properties"
 msgstr "Propriétés du texte"
+
+#: eeschema/pinedit-dialog.h:66
+msgid "Pin properties"
+msgstr "Propriétés des Pins"
+
+#: eeschema/component_wizard/ki_component_setup.h:54
+msgid "Component Builder"
+msgstr "Générateur de Composant"
 
 #: cvpcb/dialog_cvpcb_config.h:49
 msgid "Cvpcb Configuration"
@@ -10315,6 +10436,8 @@ msgstr "Ajustage opt Page"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "WinEDA_DrillFrame"
+#~ msgstr "WinEDA_DrillFrame"
 #~ msgid "Spot min"
 #~ msgstr "Spot min"
 #~ msgid "Pen speed (cm/s)"

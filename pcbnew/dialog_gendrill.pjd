@@ -128,6 +128,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -169,6 +170,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -219,7 +222,7 @@
           <string name="proxy-Implementation filename">"dialog_gendrill.cpp"</string>
           <string name="proxy-Header filename">"dialog_gendrill.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"WinEDA_DrillFrame"</string>
+          <string name="proxy-Title">"Drill Files Generation"</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -405,7 +408,7 @@
                 <string name="proxy-Items">"decimal format|suppress leading zeros|suppress trailing zeros|keep zeros"</string>
                 <long name="proxy-Initial value">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Choose EXCELLON numbers notation"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -469,7 +472,7 @@
                 <string name="proxy-Items">"2:3|2:4"</string>
                 <long name="proxy-Initial value">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Choose EXCELLON numbers precision"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -533,7 +536,7 @@
                 <string name="proxy-Items">"absolute|auxiliary axis"</string>
                 <long name="proxy-Initial value">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Choose the coordinate origin: absolute or relative to the auxiliray axis"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -623,7 +626,7 @@
                 <string name="proxy-Items">"None|drill sheet (HPGL)|drill sheet (PostScript)"</string>
                 <long name="proxy-Initial value">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Creates a drill map in PS or HPGL format"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -687,7 +690,7 @@
                 <string name="proxy-Items">"None|Drill report"</string>
                 <long name="proxy-Initial value">0</long>
                 <string name="proxy-Help text">""</string>
-                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Tooltip text">"Creates a plain text report"</string>
                 <string name="proxy-Background colour">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1185,7 +1188,7 @@
                     <string name="proxy-Label">"minimal header"</string>
                     <bool name="proxy-Initial value">0</bool>
                     <string name="proxy-Help text">""</string>
-                    <string name="proxy-Tooltip text">""</string>
+                    <string name="proxy-Tooltip text">"If checked, the EXCELLON header is minimal"</string>
                     <string name="proxy-Data variable">"Minimal"</string>
                     <string name="proxy-Data validator">"wxGenericValidator(&amp; %VARIABLE%)"</string>
                     <string name="proxy-Data source">""</string>
@@ -1860,9 +1863,9 @@
                 <bool name="proxy-Separate files">0</bool>
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
-                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-Member variable name">"m_OkButton"</string>
                 <string name="proxy-Label">"OK"</string>
-                <bool name="proxy-Default">0</bool>
+                <bool name="proxy-Default">1</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
                 <string name="proxy-Data variable">""</string>
@@ -1907,7 +1910,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxButton: wxID_CLOSE"</string>
+                <string name="title">"wxButton: wxID_CANCEL"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"dialogcontrol"</string>
@@ -1917,9 +1920,9 @@
                 <long name="locked">0</long>
                 <string name="created">"13/1/2008"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
-                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCloseClick|NONE||WinEDA_DrillFrame"</string>
-                <string name="proxy-Id name">"wxID_CLOSE"</string>
-                <long name="proxy-Id value">5001</long>
+                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick|NONE||WinEDA_DrillFrame"</string>
+                <string name="proxy-Id name">"wxID_CANCEL"</string>
+                <long name="proxy-Id value">5101</long>
                 <string name="proxy-Name">""</string>
                 <string name="proxy-Class">"wxButton"</string>
                 <string name="proxy-Base class">"wxButton"</string>
@@ -1927,8 +1930,8 @@
                 <bool name="proxy-Separate files">0</bool>
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
-                <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Label">"&amp;Close"</string>
+                <string name="proxy-Member variable name">"m_CancelButton"</string>
+                <string name="proxy-Label">"Cancel"</string>
                 <bool name="proxy-Default">0</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>

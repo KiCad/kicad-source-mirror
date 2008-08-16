@@ -172,6 +172,14 @@ Info_3D_Visu::Info_3D_Visu()
 
     m_Layers = 1;
     m_BoardSettings = NULL;
+	m_Draw3DAxis = TRUE;
+	m_Draw3DModule = TRUE;
+	m_Draw3DPlace = TRUE;
+	m_Draw3DZone = TRUE;
+	m_Draw3DComments = TRUE;
+	m_Draw3DDrawings = TRUE;
+	m_Draw3DEco1 = TRUE;
+	m_Draw3DEco2 = TRUE;
 }
 
 
