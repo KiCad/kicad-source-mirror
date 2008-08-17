@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-12 13:05+0100\n"
-"PO-Revision-Date: 2008-08-12 13:05+0100\n"
+"POT-Creation-Date: 2008-08-17 18:59+0100\n"
+"PO-Revision-Date: 2008-08-17 19:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -3583,98 +3583,6 @@ msgstr " fichier %s non trouvé"
 msgid "Save preferences"
 msgstr "Sauver préférences"
 
-#: pcbnew/pcbframe.cpp:280
-msgid "Board modified, Save before exit ?"
-msgstr "Circuit Imprimé modifiée,  Sauver avant de quitter ?"
-
-#: pcbnew/pcbframe.cpp:281
-msgid "Confirmation"
-msgstr "Confirmation"
-
-#: pcbnew/pcbframe.cpp:383
-msgid "DRC Off (Disable !!!), Currently: DRC is active"
-msgstr "DRC off (désactivée !!!), actuellement DRC active"
-
-#: pcbnew/pcbframe.cpp:385
-msgid "DRC On (Currently: DRC is inactive !!!)"
-msgstr "DRC On (Actuellement, DRC désactivée !!!)"
-
-#: pcbnew/pcbframe.cpp:396
-msgid "Polar Coords not show"
-msgstr "Coord Polaires non affichées"
-
-#: pcbnew/pcbframe.cpp:397
-msgid "Display Polar Coords"
-msgstr "Affichage coord Polaires"
-
-#: pcbnew/pcbframe.cpp:402
-msgid "Grid not show"
-msgstr "Grille non montrée"
-
-#: pcbnew/pcbframe.cpp:402
-msgid "Show Grid"
-msgstr "Afficher grille"
-
-#: pcbnew/pcbframe.cpp:411
-msgid "General ratsnest not show"
-msgstr "Chevelu général non affiché"
-
-#: pcbnew/pcbframe.cpp:412
-msgid "Show General ratsnest"
-msgstr "Afficher le chevelu général"
-
-#: pcbnew/pcbframe.cpp:418
-msgid "Module ratsnest not show"
-msgstr "Ne pas montrer le chevelu du module pendant déplacement"
-
-#: pcbnew/pcbframe.cpp:419
-msgid "Show Module ratsnest"
-msgstr "Montrer le chevelu du module"
-
-#: pcbnew/pcbframe.cpp:426
-msgid "Disable Auto Delete old Track"
-msgstr "Ne pas Autoriser l'effacement automatique des pistes"
-
-#: pcbnew/pcbframe.cpp:427
-msgid "Enable Auto Delete old Track"
-msgstr "Autoriser l'effacement automatique des pistes"
-
-#: pcbnew/pcbframe.cpp:434
-msgid "Do not Show Zones"
-msgstr "Ne pas monter Zones"
-
-#: pcbnew/pcbframe.cpp:434
-msgid "Show Zones"
-msgstr "Monter Zones"
-
-#: pcbnew/pcbframe.cpp:440
-msgid "Show Pads Sketch mode"
-msgstr "Afficher pastilles en contour"
-
-#: pcbnew/pcbframe.cpp:441
-msgid "Show pads filled mode"
-msgstr "Afficher pastilles en mode plein"
-
-#: pcbnew/pcbframe.cpp:447
-msgid "Show Tracks Sketch mode"
-msgstr "Afficher pistes en contour"
-
-#: pcbnew/pcbframe.cpp:448
-msgid "Show Tracks filled mode"
-msgstr "Afficher pistes en mode plein"
-
-#: pcbnew/pcbframe.cpp:454
-msgid "Normal Contrast Mode Display"
-msgstr "Mode d'affichage Contraste normal"
-
-#: pcbnew/pcbframe.cpp:455
-msgid "Hight Contrast Mode Display"
-msgstr "Mode d'affichage Haut Contraste"
-
-#: pcbnew/pcbnew.cpp:43
-msgid "Pcbnew is already running, Continue?"
-msgstr "Pcbnew est est cours d'exécution. Continuer ?"
-
 #: pcbnew/pcbplot.cpp:147
 #: pcbnew/pcbplot.cpp:272
 msgid "Plot"
@@ -4368,9 +4276,17 @@ msgstr "Monter le chevelu du module pendant déplacement"
 msgid "Enable Auto Del Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
+#: pcbnew/tool_pcb.cpp:355
+msgid "Show Zones"
+msgstr "Monter Zones"
+
 #: pcbnew/tool_pcb.cpp:364
 msgid "Show Tracks Sketch"
 msgstr "Afficher Pistes en Contour"
+
+#: pcbnew/tool_pcb.cpp:368
+msgid "Hight Contrast Mode Display"
+msgstr "Mode d'affichage Haut Contraste"
 
 #: pcbnew/tool_pcb.cpp:377
 msgid ""
@@ -4550,6 +4466,10 @@ msgstr "Pas de pads ou de points de départ pour remplir ce contour de zone"
 #: pcbnew/zone_filling_algorithm.cpp:246
 msgid "Ok"
 msgstr "Ok"
+
+#: pcbnew/pcbnew.cpp:43
+msgid "Pcbnew is already running, Continue?"
+msgstr "Pcbnew est est cours d'exécution. Continuer ?"
 
 #: pcbnew/specctra_export.cpp:64
 msgid "Specctra DSN file:"
@@ -4870,6 +4790,86 @@ msgstr "Via Traversantes:"
 #: pcbnew/dialog_gendrill.cpp:287
 msgid "Buried Vias:"
 msgstr "Via Enterrées:"
+
+#: pcbnew/pcbframe.cpp:280
+msgid "Board modified, Save before exit ?"
+msgstr "Circuit Imprimé modifiée,  Sauver avant de quitter ?"
+
+#: pcbnew/pcbframe.cpp:281
+msgid "Confirmation"
+msgstr "Confirmation"
+
+#: pcbnew/pcbframe.cpp:383
+msgid "DRC Off (Disable !!!), Currently: DRC is active"
+msgstr "DRC off (désactivée !!!), actuellement DRC active"
+
+#: pcbnew/pcbframe.cpp:385
+msgid "DRC On (Currently: DRC is inactive !!!)"
+msgstr "DRC On (Actuellement, DRC désactivée !!!)"
+
+#: pcbnew/pcbframe.cpp:396
+msgid "Polar Coords not show"
+msgstr "Coord Polaires non affichées"
+
+#: pcbnew/pcbframe.cpp:397
+msgid "Display Polar Coords"
+msgstr "Affichage coord Polaires"
+
+#: pcbnew/pcbframe.cpp:402
+msgid "Grid not show"
+msgstr "Grille non montrée"
+
+#: pcbnew/pcbframe.cpp:402
+msgid "Show Grid"
+msgstr "Afficher grille"
+
+#: pcbnew/pcbframe.cpp:411
+msgid "General ratsnest not show"
+msgstr "Chevelu général non affiché"
+
+#: pcbnew/pcbframe.cpp:412
+msgid "Show General ratsnest"
+msgstr "Afficher le chevelu général"
+
+#: pcbnew/pcbframe.cpp:418
+msgid "Module ratsnest not show"
+msgstr "Ne pas montrer le chevelu du module pendant déplacement"
+
+#: pcbnew/pcbframe.cpp:419
+msgid "Show Module ratsnest"
+msgstr "Montrer le chevelu du module"
+
+#: pcbnew/pcbframe.cpp:426
+msgid "Disable Auto Delete old Track"
+msgstr "Ne pas Autoriser l'effacement automatique des pistes"
+
+#: pcbnew/pcbframe.cpp:427
+msgid "Enable Auto Delete old Track"
+msgstr "Autoriser l'effacement automatique des pistes"
+
+#: pcbnew/pcbframe.cpp:434
+msgid "Do not Show Zones"
+msgstr "Ne pas monter Zones"
+
+#: pcbnew/pcbframe.cpp:440
+msgid "Show Pads Sketch mode"
+msgstr "Afficher pastilles en contour"
+
+#: pcbnew/pcbframe.cpp:441
+msgid "Show pads filled mode"
+msgstr "Afficher pastilles en mode plein"
+
+#: pcbnew/pcbframe.cpp:447
+msgid "Show Tracks Sketch mode"
+msgstr "Afficher pistes en contour"
+
+#: pcbnew/pcbframe.cpp:448
+msgid "Show Tracks filled mode"
+msgstr "Afficher pistes en mode plein"
+
+#: pcbnew/pcbframe.cpp:454
+msgid "Normal Contrast Mode Display"
+msgstr "Mode d'affichage Contraste normal"
 
 #: eeschema/affiche.cpp:22
 msgid "Name"
@@ -6553,11 +6553,11 @@ msgstr "Fin ligne"
 
 #: eeschema/libedit_onrightclick.cpp:148
 msgid "Line Options"
-msgstr "Options"
+msgstr "Options pour Ligne"
 
 #: eeschema/libedit_onrightclick.cpp:151
 msgid "Delete Line "
-msgstr "Efface rLigne"
+msgstr "Efface Ligne"
 
 #: eeschema/libedit_onrightclick.cpp:158
 msgid "Delete Segment "
@@ -7573,27 +7573,6 @@ msgstr "Importer Connecteur de hiérarchie"
 msgid "Add Power"
 msgstr "Add Alims"
 
-#: eeschema/schframe.cpp:310
-msgid "Schematic modified, Save before exit ?"
-msgstr "Schematique modifiée,  Sauver avant de quitter ?"
-
-#: eeschema/schframe.cpp:422
-msgid "No show Hidden Pins"
-msgstr "N'affichage pas les pins invisibles"
-
-#: eeschema/schframe.cpp:422
-#: eeschema/tool_sch.cpp:267
-msgid "Show Hidden Pins"
-msgstr "Force affichage des pins invisibles"
-
-#: eeschema/schframe.cpp:426
-msgid "Draw lines at any direction"
-msgstr "Tracer traits de direction  quelconque"
-
-#: eeschema/schframe.cpp:427
-msgid "Draw lines H, V or 45 deg only"
-msgstr "Tracer traits H, V ou 45 deg seulement"
-
 #: eeschema/selpart.cpp:45
 msgid "Select Lib"
 msgstr "Sélection librairie"
@@ -7635,7 +7614,7 @@ msgstr "Forme Pin de hiérarchie:"
 msgid "No New Hierarchal Label found"
 msgstr "Pas de nouvea Label Hiérarchique trouvé"
 
-#: eeschema/symbdraw.cpp:793
+#: eeschema/symbdraw.cpp:790
 #, c-format
 msgid "Arc %.1f deg"
 msgstr "Arc %.1f deg"
@@ -7852,6 +7831,11 @@ msgstr "Place une pin de hierarchie dans la feuille"
 msgid "Place the graphic line or polygon"
 msgstr "Placer la ligne ou le polygones graphique"
 
+#: eeschema/tool_sch.cpp:267
+#: eeschema/schframe.cpp:422
+msgid "Show Hidden Pins"
+msgstr "Force affichage des pins invisibles"
+
 #: eeschema/tool_sch.cpp:272
 msgid "HV orientation for Wires and Bus"
 msgstr "Force direction H, V et X  pour les fils et bus"
@@ -8055,6 +8039,22 @@ msgstr "Emetteur ouv."
 msgid "Electrical Type:"
 msgstr "Type électrique:"
 
+#: eeschema/schframe.cpp:310
+msgid "Schematic modified, Save before exit ?"
+msgstr "Schematique modifiée,  Sauver avant de quitter ?"
+
+#: eeschema/schframe.cpp:422
+msgid "No show Hidden Pins"
+msgstr "N'affichage pas les pins invisibles"
+
+#: eeschema/schframe.cpp:426
+msgid "Draw lines at any direction"
+msgstr "Tracer traits de direction  quelconque"
+
+#: eeschema/schframe.cpp:427
+msgid "Draw lines H, V or 45 deg only"
+msgstr "Tracer traits H, V ou 45 deg seulement"
+
 #: eeschema/component_wizard/ki_component_setup.cpp:141
 msgid "Quick KICAD Library Component Builder"
 msgstr ""
@@ -8068,9 +8068,8 @@ msgid "Component Name"
 msgstr "Nom du Composant!"
 
 #: eeschema/component_wizard/ki_component_setup.cpp:156
-#, fuzzy
 msgid "MyComponent"
-msgstr "Composant"
+msgstr "MyComponent"
 
 #: eeschema/component_wizard/ki_component_setup.cpp:159
 msgid " Symbol Text Size  "
@@ -8165,44 +8164,6 @@ msgstr "%d équivalences"
 msgid "Component %s: Footprint %s not found in libraries"
 msgstr "Composant %s: Module %s non trouvé en librairies"
 
-#: cvpcb/cvframe.cpp:176
-msgid "Netlist and Cmp list modified, Save before exit ?"
-msgstr "Netlist et liste composants modifiés,  Sauver avant de quitter ?"
-
-#: cvpcb/cvframe.cpp:199
-msgid "Problem when saving files, Exit anyway"
-msgstr "Problemes en sauvant les fichiers, quitter quand même"
-
-#: cvpcb/cvframe.cpp:326
-msgid "Delete selections"
-msgstr "Effacement des associations existantes"
-
-#: cvpcb/cvframe.cpp:340
-#: cvpcb/init.cpp:112
-#, c-format
-msgid "Componants: %d (free: %d)"
-msgstr "Composants: %d (libres: %d)"
-
-#: cvpcb/cvframe.cpp:424
-msgid "font for dialog boxes"
-msgstr "fonte pour boites de dialogue"
-
-#: cvpcb/cvframe.cpp:426
-msgid "font for Lists"
-msgstr "fonte pour listes"
-
-#: cvpcb/cvframe.cpp:428
-msgid "font for Status Line"
-msgstr "fonte pour Ligne d'état"
-
-#: cvpcb/cvframe.cpp:431
-msgid "&Font selection"
-msgstr "Sélection Fonte"
-
-#: cvpcb/cvframe.cpp:433
-msgid "Choose font type and size for dialogs, infos and status box"
-msgstr "Choisir les fontes et leur taille pour les dialogues, infos et ligne d'état"
-
 #: cvpcb/cvpcb.cpp:41
 msgid "Cvpcb is already running, Continue?"
 msgstr "Cvpcb est est cours d'exécution. Continuer ?"
@@ -8219,6 +8180,11 @@ msgstr "%s %s pin %s :  Nets Differents"
 #: cvpcb/init.cpp:64
 #, c-format
 msgid "Components: %d (free: %d)"
+msgstr "Composants: %d (libres: %d)"
+
+#: cvpcb/init.cpp:112
+#, c-format
+msgid "Componants: %d (free: %d)"
 msgstr "Composants: %d (libres: %d)"
 
 #: cvpcb/init.cpp:142
@@ -8445,6 +8411,38 @@ msgstr "Lire Cfg"
 msgid "Equiv"
 msgstr "Equiv"
 
+#: cvpcb/cvframe.cpp:176
+msgid "Netlist and Cmp list modified, Save before exit ?"
+msgstr "Netlist et liste composants modifiés,  Sauver avant de quitter ?"
+
+#: cvpcb/cvframe.cpp:199
+msgid "Problem when saving files, Exit anyway"
+msgstr "Problemes en sauvant les fichiers, quitter quand même"
+
+#: cvpcb/cvframe.cpp:326
+msgid "Delete selections"
+msgstr "Effacement des associations existantes"
+
+#: cvpcb/cvframe.cpp:424
+msgid "font for dialog boxes"
+msgstr "fonte pour boites de dialogue"
+
+#: cvpcb/cvframe.cpp:426
+msgid "font for Lists"
+msgstr "fonte pour listes"
+
+#: cvpcb/cvframe.cpp:428
+msgid "font for Status Line"
+msgstr "fonte pour Ligne d'état"
+
+#: cvpcb/cvframe.cpp:431
+msgid "&Font selection"
+msgstr "Sélection Fonte"
+
+#: cvpcb/cvframe.cpp:433
+msgid "Choose font type and size for dialogs, infos and status box"
+msgstr "Choisir les fontes et leur taille pour les dialogues, infos et ligne d'état"
+
 #: kicad/buildmnu.cpp:92
 msgid "&Open Project Descr"
 msgstr "&Ouvrir Descr de projet"
@@ -8656,23 +8654,6 @@ msgstr ""
 "\n"
 "Créer Archive zippée"
 
-#: kicad/mainframe.cpp:103
-#, c-format
-msgid ""
-"Ready\n"
-"Working dir: %s\n"
-msgstr ""
-"Pret\n"
-"Répertoire de travail: %s\n"
-
-#: kicad/mainframe.cpp:339
-msgid "Execute Python Script:"
-msgstr "Executer le Script Python:"
-
-#: kicad/mainframe.cpp:362
-msgid "Load file:"
-msgstr "Charger Fichiers:"
-
 #: kicad/preferences.cpp:33
 msgid "Prefered Pdf Browser:"
 msgstr "Visualisateur PDF préféré:"
@@ -8851,6 +8832,23 @@ msgstr "noname"
 msgid "Change File Name: "
 msgstr "ChangerNom Fichier: "
 
+#: kicad/mainframe.cpp:103
+#, c-format
+msgid ""
+"Ready\n"
+"Working dir: %s\n"
+msgstr ""
+"Pret\n"
+"Répertoire de travail: %s\n"
+
+#: kicad/mainframe.cpp:339
+msgid "Execute Python Script:"
+msgstr "Executer le Script Python:"
+
+#: kicad/mainframe.cpp:362
+msgid "Load file:"
+msgstr "Charger Fichiers:"
+
 #: gerbview/affiche.cpp:34
 msgid "Layer "
 msgstr "Couche "
@@ -8907,10 +8905,6 @@ msgstr "Fichiers Gerber:"
 #: gerbview/files.cpp:187
 msgid "D codes files:"
 msgstr "Fichiers D-Codes:"
-
-#: gerbview/gerberframe.cpp:183
-msgid "Layer modified,  Continue ?"
-msgstr "Couche modifiée,  Continuer ?"
 
 #: gerbview/gerbview.cpp:37
 msgid "GerbView is already running. Continue?"
@@ -9204,10 +9198,9 @@ msgstr "Afficher Poiygones en Mode Ccontour"
 msgid "Show dcode number"
 msgstr "Afficher le n° de DCode"
 
-#: common/basicframe.cpp:239
-#, c-format
-msgid "Help file %s not found"
-msgstr "Fichier d'aide %s non trouvé"
+#: gerbview/gerberframe.cpp:183
+msgid "Layer modified,  Continue ?"
+msgstr "Couche modifiée,  Continuer ?"
 
 #: common/block_commande.cpp:57
 msgid "Block Move"
@@ -9248,126 +9241,6 @@ msgstr "Inversion Bloc"
 #: common/block_commande.cpp:94
 msgid "Block Mirror"
 msgstr "Bloc Miroir"
-
-#: common/common.cpp:84
-msgid " (\"):"
-msgstr " (\"):"
-
-#: common/common.cpp:340
-msgid "Copper   "
-msgstr "Cuivre   "
-
-#: common/common.cpp:340
-msgid "Inner L1 "
-msgstr "Interne 1"
-
-#: common/common.cpp:340
-msgid "Inner L2 "
-msgstr "Interne 2"
-
-#: common/common.cpp:340
-msgid "Inner L3 "
-msgstr "Interne 3"
-
-#: common/common.cpp:341
-msgid "Inner L4 "
-msgstr "Interne 4"
-
-#: common/common.cpp:341
-msgid "Inner L5 "
-msgstr "Interne 5"
-
-#: common/common.cpp:341
-msgid "Inner L6 "
-msgstr "Interne 6"
-
-#: common/common.cpp:341
-msgid "Inner L7 "
-msgstr "Interne 7"
-
-#: common/common.cpp:342
-msgid "Inner L8 "
-msgstr "Interne 8"
-
-#: common/common.cpp:342
-msgid "Inner L9 "
-msgstr "Interne 9"
-
-#: common/common.cpp:342
-msgid "Inner L10"
-msgstr "Interne 10"
-
-#: common/common.cpp:342
-msgid "Inner L11"
-msgstr "Interne 11"
-
-#: common/common.cpp:343
-msgid "Inner L12"
-msgstr "Interne 12"
-
-#: common/common.cpp:343
-msgid "Inner L13"
-msgstr "Interne 13"
-
-#: common/common.cpp:343
-msgid "Inner L14"
-msgstr "Interne 14"
-
-#: common/common.cpp:344
-msgid "Adhes Cop"
-msgstr "Adhes Cu "
-
-#: common/common.cpp:344
-msgid "Adhes Cmp"
-msgstr "Adhe  Cmp"
-
-#: common/common.cpp:344
-msgid "SoldP Cop"
-msgstr "SoldP Cu "
-
-#: common/common.cpp:344
-msgid "SoldP Cmp"
-msgstr "SoldP Cmp"
-
-#: common/common.cpp:345
-msgid "SilkS Cop"
-msgstr "Sérigr Cu "
-
-#: common/common.cpp:345
-msgid "SilkS Cmp"
-msgstr "Sérigr Cmp"
-
-#: common/common.cpp:345
-msgid "Mask Cop "
-msgstr "Masque Cu "
-
-#: common/common.cpp:345
-msgid "Mask Cmp "
-msgstr "Masque Cmp"
-
-#: common/common.cpp:346
-msgid "Drawings "
-msgstr "Drawings "
-
-#: common/common.cpp:346
-msgid "Comments "
-msgstr "Comments "
-
-#: common/common.cpp:346
-msgid "Eco1     "
-msgstr "Eco1     "
-
-#: common/common.cpp:346
-msgid "Eco2     "
-msgstr "Eco2     "
-
-#: common/common.cpp:347
-msgid "Edges Pcb"
-msgstr "Contour Pcb"
-
-#: common/common.cpp:347
-msgid "BAD INDEX"
-msgstr "BAD INDEX"
 
 #: common/confirm.cpp:106
 msgid "Infos:"
@@ -9559,48 +9432,6 @@ msgstr "Emplacement des Fichiers des Hotkeys"
 msgid "Hotkey config file location selection (home directory or kicad tree)"
 msgstr "Selection emplacement des fichiers de config. des hotkeys(\"home\" ou répertoire kicad)"
 
-#: common/infospgm.cpp:33
-msgid "Build Version:"
-msgstr "Build Version:"
-
-#: common/infospgm.cpp:48
-msgid "Author:"
-msgstr "Autheur:"
-
-#: common/infospgm.cpp:49
-msgid "Based on wxWidgets "
-msgstr "Based on wxWidgets "
-
-#: common/infospgm.cpp:54
-msgid ""
-"\n"
-"\n"
-"GPL License"
-msgstr ""
-"\n"
-"\n"
-"GPL Licence"
-
-#: common/infospgm.cpp:55
-msgid ""
-"\n"
-"\n"
-"Author's sites:\n"
-msgstr ""
-"\n"
-"\n"
-"Sites Web de l'auteur:\n"
-
-#: common/infospgm.cpp:58
-msgid ""
-"\n"
-"\n"
-"International wiki:\n"
-msgstr ""
-"\n"
-"\n"
-"International wiki:\n"
-
 #: common/selcolor.cpp:76
 msgid "Colors"
 msgstr "Couleurs"
@@ -9618,59 +9449,188 @@ msgstr "X"
 msgid "Y"
 msgstr "Y"
 
-#: 3d-viewer/3d_aux.cpp:199
+#: common/common.cpp:93
+msgid " (\"):"
+msgstr " (\"):"
+
+#: common/common.cpp:349
+msgid "Copper   "
+msgstr "Cuivre   "
+
+#: common/common.cpp:349
+msgid "Inner L1 "
+msgstr "Interne 1"
+
+#: common/common.cpp:349
+msgid "Inner L2 "
+msgstr "Interne 2"
+
+#: common/common.cpp:349
+msgid "Inner L3 "
+msgstr "Interne 3"
+
+#: common/common.cpp:350
+msgid "Inner L4 "
+msgstr "Interne 4"
+
+#: common/common.cpp:350
+msgid "Inner L5 "
+msgstr "Interne 5"
+
+#: common/common.cpp:350
+msgid "Inner L6 "
+msgstr "Interne 6"
+
+#: common/common.cpp:350
+msgid "Inner L7 "
+msgstr "Interne 7"
+
+#: common/common.cpp:351
+msgid "Inner L8 "
+msgstr "Interne 8"
+
+#: common/common.cpp:351
+msgid "Inner L9 "
+msgstr "Interne 9"
+
+#: common/common.cpp:351
+msgid "Inner L10"
+msgstr "Interne 10"
+
+#: common/common.cpp:351
+msgid "Inner L11"
+msgstr "Interne 11"
+
+#: common/common.cpp:352
+msgid "Inner L12"
+msgstr "Interne 12"
+
+#: common/common.cpp:352
+msgid "Inner L13"
+msgstr "Interne 13"
+
+#: common/common.cpp:352
+msgid "Inner L14"
+msgstr "Interne 14"
+
+#: common/common.cpp:353
+msgid "Adhes Cop"
+msgstr "Adhes Cu "
+
+#: common/common.cpp:353
+msgid "Adhes Cmp"
+msgstr "Adhe  Cmp"
+
+#: common/common.cpp:353
+msgid "SoldP Cop"
+msgstr "SoldP Cu "
+
+#: common/common.cpp:353
+msgid "SoldP Cmp"
+msgstr "SoldP Cmp"
+
+#: common/common.cpp:354
+msgid "SilkS Cop"
+msgstr "Sérigr Cu "
+
+#: common/common.cpp:354
+msgid "SilkS Cmp"
+msgstr "Sérigr Cmp"
+
+#: common/common.cpp:354
+msgid "Mask Cop "
+msgstr "Masque Cu "
+
+#: common/common.cpp:354
+msgid "Mask Cmp "
+msgstr "Masque Cmp"
+
+#: common/common.cpp:355
+msgid "Drawings "
+msgstr "Drawings "
+
+#: common/common.cpp:355
+msgid "Comments "
+msgstr "Comments "
+
+#: common/common.cpp:355
+msgid "Eco1     "
+msgstr "Eco1     "
+
+#: common/common.cpp:355
+msgid "Eco2     "
+msgstr "Eco2     "
+
+#: common/common.cpp:356
+msgid "Edges Pcb"
+msgstr "Contour Pcb"
+
+#: common/common.cpp:356
+msgid "BAD INDEX"
+msgstr "BAD INDEX"
+
+#: common/basicframe.cpp:244
+#, c-format
+msgid "Help file %s not found"
+msgstr "Fichier d'aide %s non trouvé"
+
+#: 3d-viewer/3d_aux.cpp:207
 msgid "Vertex "
 msgstr "Vertex "
 
-#: 3d-viewer/3d_canvas.cpp:328
+#: 3d-viewer/3d_canvas.cpp:329
 msgid "Zoom +"
 msgstr "Zoom +"
 
-#: 3d-viewer/3d_canvas.cpp:333
+#: 3d-viewer/3d_canvas.cpp:334
 msgid "Zoom -"
 msgstr "Zoom -"
 
-#: 3d-viewer/3d_canvas.cpp:339
+#: 3d-viewer/3d_canvas.cpp:340
 msgid "Top View"
 msgstr "Vue de dessus"
 
-#: 3d-viewer/3d_canvas.cpp:344
+#: 3d-viewer/3d_canvas.cpp:345
 msgid "Bottom View"
 msgstr "Vue de dessous"
 
-#: 3d-viewer/3d_canvas.cpp:350
+#: 3d-viewer/3d_canvas.cpp:351
 msgid "Right View"
 msgstr "Vue a Droite"
 
-#: 3d-viewer/3d_canvas.cpp:355
+#: 3d-viewer/3d_canvas.cpp:356
 msgid "Left View"
 msgstr "Vue à Gauche"
 
-#: 3d-viewer/3d_canvas.cpp:362
+#: 3d-viewer/3d_canvas.cpp:363
 msgid "Front View"
 msgstr "Vue de face"
 
-#: 3d-viewer/3d_canvas.cpp:367
+#: 3d-viewer/3d_canvas.cpp:368
 msgid "Back View"
 msgstr "Vue arrière"
 
-#: 3d-viewer/3d_canvas.cpp:373
+#: 3d-viewer/3d_canvas.cpp:374
+#: 3d-viewer/3d_toolbar.cpp:77
 msgid "Move left <-"
 msgstr "Vers la gauche <-"
 
-#: 3d-viewer/3d_canvas.cpp:378
+#: 3d-viewer/3d_canvas.cpp:379
+#: 3d-viewer/3d_toolbar.cpp:80
 msgid "Move right ->"
 msgstr "Vers la droite ->"
 
-#: 3d-viewer/3d_canvas.cpp:383
+#: 3d-viewer/3d_canvas.cpp:384
+#: 3d-viewer/3d_toolbar.cpp:83
 msgid "Move Up ^"
 msgstr "Vers le haut ^"
 
-#: 3d-viewer/3d_canvas.cpp:388
+#: 3d-viewer/3d_canvas.cpp:389
+#: 3d-viewer/3d_toolbar.cpp:86
 msgid "Move Down"
 msgstr "Vers le bas"
 
-#: 3d-viewer/3d_canvas.cpp:641
+#: 3d-viewer/3d_canvas.cpp:642
 msgid "3D Image filename:"
 msgstr "Non fichier Image 3D:"
 
@@ -9706,21 +9666,53 @@ msgstr "Rotation Z <-"
 msgid "Rotate Z ->"
 msgstr "Rotation Z ->"
 
-#: 3d-viewer/3d_toolbar.cpp:112
+#: 3d-viewer/3d_toolbar.cpp:118
 msgid "Create Image (png format)"
 msgstr "Créer fichier Image (format png)"
 
-#: 3d-viewer/3d_toolbar.cpp:113
+#: 3d-viewer/3d_toolbar.cpp:119
 msgid "Create Image (jpeg format)"
 msgstr "Créer fichier Image (format jpeg)"
 
-#: 3d-viewer/3d_toolbar.cpp:115
+#: 3d-viewer/3d_toolbar.cpp:121
 msgid "&Exit"
 msgstr "&Quitter"
 
-#: 3d-viewer/3d_toolbar.cpp:121
+#: 3d-viewer/3d_toolbar.cpp:127
 msgid "Choose background color"
 msgstr "Choix Couleur du fond"
+
+#: 3d-viewer/3d_toolbar.cpp:130
+msgid "3D Axis On/Off"
+msgstr "Axes 3D On/Off"
+
+#: 3d-viewer/3d_toolbar.cpp:135
+msgid "3D Footprints Shapes On/Off"
+msgstr "Modules 3D On/Off"
+
+#: 3d-viewer/3d_toolbar.cpp:139
+msgid "PCB place 3D On/off"
+msgstr ""
+
+#: 3d-viewer/3d_toolbar.cpp:143
+msgid "Zone Filling On/Off"
+msgstr " Remplissage de Zone On/Off"
+
+#: 3d-viewer/3d_toolbar.cpp:146
+msgid "Comments Layer On/Off"
+msgstr "Couche Comments On/Off "
+
+#: 3d-viewer/3d_toolbar.cpp:149
+msgid "Drawings Layer On/Off"
+msgstr "Couche Drawings  On/Off"
+
+#: 3d-viewer/3d_toolbar.cpp:152
+msgid "Eco1 Layer On/Off"
+msgstr "Couche ECO1 On/Off"
+
+#: 3d-viewer/3d_toolbar.cpp:155
+msgid "Eco2 Layer On/Off"
+msgstr "Couche ECO2 On/Off"
 
 #: share/dialog_print.cpp:137
 msgid "fit in page"
@@ -10436,6 +10428,36 @@ msgstr "Ajustage opt Page"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Build Version:"
+#~ msgstr "Build Version:"
+#~ msgid "Author:"
+#~ msgstr "Autheur:"
+#~ msgid "Based on wxWidgets "
+#~ msgstr "Based on wxWidgets "
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "GPL License"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "GPL Licence"
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Author's sites:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Sites Web de l'auteur:\n"
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "International wiki:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "International wiki:\n"
 #~ msgid "WinEDA_DrillFrame"
 #~ msgstr "WinEDA_DrillFrame"
 #~ msgid "Spot min"

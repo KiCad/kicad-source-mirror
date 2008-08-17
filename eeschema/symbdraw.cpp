@@ -181,9 +181,6 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
     int  DrawType;
     int* ptpoly;
 
-    if( CurrentDrawItem )
-        return NULL;
-
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
     // Creation du nouvel element

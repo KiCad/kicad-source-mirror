@@ -103,6 +103,12 @@ void WinEDA3D_DrawFrame::ReCreateVToolbar()
 void WinEDA3D_DrawFrame::ReCreateMenuBar()
 /**********************************************/
 {
+bool full_options = true;
+
+    // If called from the display frame of cvpcb, only some options are relevant
+    if ( m_Parent->m_FrameName == wxT( "CmpFrame" ) )   // Called from cvpcb !
+        full_options =  false;  // Do not display all options
+
     wxMenuBar* menuBar = new wxMenuBar;
 
     wxMenu*    fileMenu = new wxMenu;
@@ -121,28 +127,33 @@ void WinEDA3D_DrawFrame::ReCreateMenuBar()
                   _( "Choose background color" ), palette_xpm );
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_AXIS_ONOFF,
-                  _( "Axis On/Off" ), axis3d_front_xpm );
+                  _( "3D Axis On/Off" ), axis3d_front_xpm );
 
+    if ( full_options )
+    {
     ADD_MENUITEM( referencesMenu, ID_MENU3D_MODULE_ONOFF,
-                  _( "Module 3D On/Off" ), add_component_xpm );
+                  _( "3D Footprints Shapes On/Off" ), add_component_xpm );
 
+#if 0
     ADD_MENUITEM( referencesMenu, ID_MENU3D_PLACE_ONOFF,
                   _( "PCB place 3D On/off" ), select_w_layer_xpm );
+#endif
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_ZONE_ONOFF,
-                  _( "Zone On/Off" ), add_zone_xpm );
-				  
+                  _( "Zone Filling On/Off" ), add_zone_xpm );
+
     ADD_MENUITEM( referencesMenu, ID_MENU3D_COMMENTS_ONOFF,
-                  _( "Comments On/Off" ), edit_sheet_xpm );
+                  _( "Comments Layer On/Off" ), edit_sheet_xpm );
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_DRAWINGS_ONOFF,
-                  _( "Drawings On/Off" ), options_text_xpm );
+                  _( "Drawings Layer On/Off" ), add_polygon_xpm );
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO1_ONOFF,
-                  _( "Eco1 On/Off" ), options_text_xpm );
+                  _( "Eco1 Layer On/Off" ), tools_xpm );
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO2_ONOFF,
-                  _( "Eco2 On/Off" ), options_text_xpm );
+                  _( "Eco2 Layer On/Off" ), tools_xpm );
+              }
 
     SetMenuBar( menuBar );
 }

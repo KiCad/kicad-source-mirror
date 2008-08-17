@@ -44,17 +44,17 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
 
     /* Add developers */
     info.AddDeveloper(_T("Dick Hollenbeck <dick@softplc.com>"));
-    info.AddDeveloper(_T("Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
+    info.AddDeveloper(_T("\nJean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
 
     /* Add document writers */
     info.AddDocWriter(_T("Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
-    info.AddDocWriter(_T("Igor Plyatov <plyatov@gmail.com>"));
+    info.AddDocWriter(_T("\nIgor Plyatov <plyatov@gmail.com>"));
 
     /* Add translators */
     info.AddTranslator(_T("Czech (CZ) Milan Horák <stranger@tiscali.cz>"));
-    info.AddTranslator(_T("Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"));
-    info.AddTranslator(_T("French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
-    info.AddTranslator(_T("Polish (PL) Mateusz Skowroński <skowri@gmail.com>"));
-    info.AddTranslator(_T("Russian (RU) Igor Plyatov <plyatov@gmail.com>"));
+    info.AddTranslator(_T("\nDutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"));
+    info.AddTranslator(_T("\nFrench (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
+    info.AddTranslator(_T("\nPolish (PL) Mateusz Skowroński <skowri@gmail.com>"));
+    info.AddTranslator(_T("\nRussian (RU) Igor Plyatov <plyatov@gmail.com>"));
 
 }

@@ -226,6 +226,8 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
     wxPoint         curpos, oldpos;
     int             hotkey = 0;
 
+    ActiveScreen = screen;
+
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
@@ -355,6 +357,8 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     wxPoint         curpos, oldpos;
     int             hotkey = 0;
 
+    ActiveScreen = screen;
+
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
@@ -482,6 +486,8 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     int             zoom = screen->GetZoom();
     wxPoint         curpos, oldpos;
     int             hotkey = 0;
+
+    ActiveScreen = screen;
 
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;

@@ -25,7 +25,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 
-    if( CurrentLibEntry == NULL )
+    if( CurrentLibEntry == NULL )   // No component loaded !
         return;
 
     if( m_ID_current_state == 0 )
@@ -107,11 +107,11 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         case ID_LIBEDIT_BODY_CIRCLE_BUTT:
         case ID_LIBEDIT_BODY_RECT_BUTT:
         case ID_LIBEDIT_BODY_TEXT_BUTT:
-            if( CurrentDrawItem == NULL )
+            if( CurrentDrawItem == NULL || CurrentDrawItem->m_Flags == 0 )
             {
                 CurrentDrawItem = CreateGraphicItem( DC );
             }
-            else
+            else if( CurrentDrawItem )
             {
                 if( CurrentDrawItem->m_Flags & IS_NEW )
                     GraphicItemBeginDraw( DC );
