@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=KiCad - CVpcb
+GenericName[en]=CVpcb - Schema to PCB converter
+Comment[en]=Schematic to PCB utility
+MimeType=text/pro;
+Exec=cvpcb
+Icon=kicad_cvpcb
+Type=Application
+Terminal=false
+Categories=Scientific;Development

@@ -197,7 +197,7 @@ static void py_common_init()
 bool WinEDA_App::OnInit()
 {
     g_EDA_Appl = this;
-    InitEDA_Appl( wxT("kicad"));
+    InitEDA_Appl( wxT("KiCad"));
     
     /* init kicad */
     GetSettings();                  // read current setup

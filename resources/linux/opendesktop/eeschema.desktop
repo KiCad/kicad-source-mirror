@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=KiCad - EESchema
+GenericName[en]=KiCad - Schematic Designer
+Comment[en]=Electrical schematic and PCB design suite
+MimeType=text/pro;
+Exec=eeschema
+Icon=kicad_eeschema
+Type=Application
+Terminal=false
+Categories=Scientific;Development

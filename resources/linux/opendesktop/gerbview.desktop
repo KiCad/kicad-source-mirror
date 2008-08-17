@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=KiCad - GerbView
+GenericName[en]=KiCad - Gerber Viewer
+Comment[en]=KiCad's gerber viewer
+MimeType=text/pro;
+Exec=gerbview
+Icon=kicad_gerbview
+Type=Application
+Terminal=false
+Categories=Scientific;Development

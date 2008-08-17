@@ -25,7 +25,7 @@
 
 #include "eda_dde.h"
 
-wxString g_Main_Title( wxT( "PCBNEW" ) );
+wxString g_Main_Title( wxT( "PCBnew" ) );
 
 IMPLEMENT_APP( WinEDA_App )
 

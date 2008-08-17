@@ -163,11 +163,67 @@ install(FILES freeroute.jnlp
         DESTINATION ${KICAD_BIN}
         COMPONENT resources)
 
+
 if(UNIX)
-    install(FILES share/kicad.desktop
+
+  # set resource dir variables
+  set(LINUX_RESOURCES_DIR resources/linux)
+  set(LINUX_DESKTOP_FILES ${LINUX_RESOURCES_DIR}/opendesktop)
+  set(LINUX_ICONS ${LINUX_RESOURCES_DIR}/icons)
+
+
+
+    # KiCad desktop file
+    install(FILES ${LINUX_DESKTOP_FILES}/kicad.desktop
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
             COMPONENT resources)
-    install(FILES bitmaps/kicad.png
+    # KiCad icon file
+    install(FILES ${LINUX_ICONS}/kicad.png
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
             COMPONENT resources)
+
+
+
+   # CVpcb desktop file
+   install(FILES ${LINUX_DESKTOP_FILES}/cvpcb.desktop
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+           COMPONENT resources)
+   # CVpcb icon file
+   install(FILES ${LINUX_ICONS}/kicad_cvpcb.png
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
+           COMPONENT resources)
+
+
+
+   # EEschema desktop file
+   install(FILES ${LINUX_DESKTOP_FILES}/eeschema.desktop
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+           COMPONENT resources)
+   # EEschema icon file
+   install(FILES ${LINUX_ICONS}/kicad_eeschema.png
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
+           COMPONENT resources)
+
+
+
+   # GerbView desktop file
+   install(FILES ${LINUX_DESKTOP_FILES}/gerbview.desktop
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+           COMPONENT resources)
+   # GerbView icon file
+   install(FILES ${LINUX_ICONS}/kicad_gerbview.png
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
+           COMPONENT resources)
+
+
+
+   # PCBnew desktop file
+   install(FILES ${LINUX_DESKTOP_FILES}/pcbnew.desktop
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+           COMPONENT resources)
+   # PCBnew icon file
+   install(FILES ${LINUX_ICONS}/kicad_pcbnew.png
+           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
+           COMPONENT resources)
+
 endif(UNIX)

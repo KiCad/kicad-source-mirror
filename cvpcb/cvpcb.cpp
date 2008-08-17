@@ -17,7 +17,7 @@
 
 #include "id.h"
 
-wxString g_Main_Title = wxT("Cvpcb");
+wxString g_Main_Title = wxT("CVpcb");
 
 // Create a new application object
 IMPLEMENT_APP(WinEDA_App)
