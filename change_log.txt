@@ -8,7 +8,7 @@ email address.
 2008-Aug-18 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
-    bug solved: Horizontal Oblong pads holes have a bad T Code size.
+    bug solved: Horizontal Oblong pads holes have a bad T Code size in the drill file.
 
 
 2008-Aug-15 UPDATE   Jerry Jacobs <jerkejacobs@gmail.com>
