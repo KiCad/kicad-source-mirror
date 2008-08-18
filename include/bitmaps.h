@@ -7,6 +7,7 @@
 
 // Please keep list sorted alphabetically, ignoring case.
 
+extern const char* shape_3d_xpm[];
 extern const char* add_arc_xpm[];
 extern const char* add_bus2bus_xpm[];
 extern const char* add_bus_xpm[];

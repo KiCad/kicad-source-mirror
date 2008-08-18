@@ -132,7 +132,7 @@ bool full_options = true;
     if ( full_options )
     {
     ADD_MENUITEM( referencesMenu, ID_MENU3D_MODULE_ONOFF,
-                  _( "3D Footprints Shapes On/Off" ), add_component_xpm );
+                  _( "3D Footprints Shapes On/Off" ), shape_3d_xpm );
 
 #if 0
     ADD_MENUITEM( referencesMenu, ID_MENU3D_PLACE_ONOFF,

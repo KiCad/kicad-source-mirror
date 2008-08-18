@@ -1019,8 +1019,8 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     {
         valeur_param( (unsigned) m_Drill.x, Line );
         wxString msg;
-        valeur_param( (unsigned) m_Drill.x, msg );
-        Line += wxT( " " ) + msg;
+        valeur_param( (unsigned) m_Drill.y, msg );
+        Line += wxT( " / " ) + msg;
         Affiche_1_Parametre( frame, pos, _( "Drill X / Y" ), Line, RED );
     }
 

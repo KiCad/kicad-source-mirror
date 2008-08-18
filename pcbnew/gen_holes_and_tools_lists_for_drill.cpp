@@ -109,7 +109,7 @@ void Build_Holes_List( BOARD* aPcb,
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->m_Orient;
                 new_hole.m_Hole_Shape    = 0;           // hole shape: round
-                new_hole.m_Hole_Diameter = min( pad->m_Drill.x, pad->m_Drill.x );
+                new_hole.m_Hole_Diameter = min( pad->m_Drill.x, pad->m_Drill.y );
                 new_hole.m_Hole_SizeX    = new_hole.m_Hole_SizeY = new_hole.m_Hole_Diameter;
                 if( pad->m_DrillShape != PAD_CIRCLE )
                     new_hole.m_Hole_Shape = 1; // oval flag set

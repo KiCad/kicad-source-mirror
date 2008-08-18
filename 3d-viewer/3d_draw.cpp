@@ -125,7 +125,6 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
             g_Parm_3D_Visu.m_LayerZcoord[ii] = g_Parm_3D_Visu.m_Epoxy_Width;
     }
 
-    //GLfloat zpos_cu  = 500 * g_Parm_3D_Visu.m_BoardScale;
     GLfloat zpos_cu  = 10 * g_Parm_3D_Visu.m_BoardScale;
     GLfloat zpos_cmp = g_Parm_3D_Visu.m_Epoxy_Width + zpos_cu;
     g_Parm_3D_Visu.m_LayerZcoord[ADHESIVE_N_CU]    = -zpos_cu * 2;
@@ -406,7 +405,8 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     double x, y, xf, yf;
     double zpos, w;
     int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-    int    coord[104];
+    #define BUFFSIZE 50
+    int    coord[(BUFFSIZE+2)*2];
     int    ii, jj, kk, ll, nbpoints;
 
 
@@ -415,13 +415,12 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
         zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
         glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
 
-        text->CreateDrawData();
         jj = 5; ii = jj + 1;
         while( ii < text->m_TextDrawingsSize )
         {
             nbpoints = text->m_TextDrawings[jj];
-            if( nbpoints > 50 )
-                nbpoints = 50;
+            if( nbpoints > BUFFSIZE )
+                nbpoints = BUFFSIZE;
 
             for( kk = 0, ll = 0; (kk < nbpoints) && (ii < text->m_TextDrawingsSize); kk++ )
             {
@@ -440,7 +439,6 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
                 xf = coord[ll + 2] * g_Parm_3D_Visu.m_BoardScale;
                 yf = coord[ll + 3] * g_Parm_3D_Visu.m_BoardScale;
 
-                //printf("text koordinata x=%d, y=%d, x2=%d, y2=%d\n",x,y,xf,yf);
                 Draw3D_FilledSegment( x, -y, xf, -yf, w, zpos );
             }
         }

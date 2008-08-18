@@ -249,6 +249,7 @@ OBJECTS = \
     showtrack.o\
     Show_Zone.o\
     Swap_Layer.o\
+    shape_3d.o\
     Text_Sketch.o\
     tool_ratsnet.o\
     tools.o\

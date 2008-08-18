@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-17 18:59+0100\n"
-"PO-Revision-Date: 2008-08-17 19:02+0100\n"
+"PO-Revision-Date: 2008-08-17 21:41+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2591,7 +2591,7 @@ msgstr "Selection couleurs et affichage des éléments du C.I."
 
 #: pcbnew/menubarpcb.cpp:184
 msgid "&General Options"
-msgstr "Options &générales"
+msgstr "Options &Générales"
 
 #: pcbnew/menubarpcb.cpp:185
 msgid "Select general options for pcbnew"
@@ -3658,7 +3658,7 @@ msgstr "Tracé en Negatif"
 
 #: pcbnew/pcbplot.cpp:276
 msgid "Save Options"
-msgstr "Sauver options"
+msgstr "Sauver Options"
 
 #: pcbnew/pcbplot.cpp:280
 msgid "Create Drill File"
@@ -3738,7 +3738,7 @@ msgstr "Perçage réel"
 
 #: pcbnew/pcbplot.cpp:399
 msgid "Pads Drill Opt"
-msgstr "Options perçage"
+msgstr "Options Perçage Pads"
 
 #: pcbnew/pcbplot.cpp:406
 msgid "Auto scale"
@@ -5484,7 +5484,7 @@ msgstr "Parts par omposant"
 
 #: eeschema/dialog_create_component.cpp:246
 msgid "Draw options"
-msgstr "Options affichage"
+msgstr "Options de Tracé"
 
 #: eeschema/dialog_create_component.cpp:250
 msgid "Show Pin Number"
@@ -5891,7 +5891,7 @@ msgstr "Incrément Y"
 
 #: eeschema/dialog_options.cpp:227
 msgid "Draw Options:"
-msgstr "Options de tracé:"
+msgstr "Options de Tracé:"
 
 #: eeschema/dialog_options.cpp:231
 msgid "Show grid"
@@ -6497,7 +6497,7 @@ msgstr "Déplacer arc"
 
 #: eeschema/libedit_onrightclick.cpp:81
 msgid "Arc Options"
-msgstr "Options"
+msgstr "Options pour l'Arc"
 
 #: eeschema/libedit_onrightclick.cpp:84
 msgid "Delete Arc "
@@ -6509,7 +6509,7 @@ msgstr "Déplacer Cercle"
 
 #: eeschema/libedit_onrightclick.cpp:96
 msgid "Circle Options"
-msgstr "Options"
+msgstr "Options pour le Cercle"
 
 #: eeschema/libedit_onrightclick.cpp:99
 msgid "Delete Circle "
@@ -6521,7 +6521,7 @@ msgstr "Déplacer Rect"
 
 #: eeschema/libedit_onrightclick.cpp:111
 msgid "Rect Options"
-msgstr "Options"
+msgstr "Options pour le Rectangle"
 
 #: eeschema/libedit_onrightclick.cpp:114
 msgid "Delete Rect "
@@ -6662,7 +6662,7 @@ msgstr "Addition de \"pins\""
 
 #: eeschema/libframe.cpp:483
 msgid "Set Pin Options"
-msgstr "Choix Options des pins"
+msgstr "Choix Options des Pins"
 
 #: eeschema/libframe.cpp:505
 msgid "Add Rectangle"
@@ -7089,7 +7089,7 @@ msgstr "Utiliser numéro de net"
 
 #: eeschema/netlist_control.cpp:245
 msgid "Netlist Options:"
-msgstr "Options de netliste:"
+msgstr "Options de Netliste:"
 
 #: eeschema/netlist_control.cpp:254
 msgid "Simulator command:"
@@ -7490,7 +7490,7 @@ msgstr "Format de la feuille:"
 
 #: eeschema/plotps.cpp:209
 msgid "Plot Options:"
-msgstr "Options de tracé:"
+msgstr "Options de Tracé:"
 
 #: eeschema/plotps.cpp:218
 msgid "B/W"
@@ -7655,7 +7655,7 @@ msgstr "Taille:"
 
 #: eeschema/symbtext.cpp:158
 msgid " Text Options : "
-msgstr "Options du texte:"
+msgstr "Options du Texte: "
 
 #: eeschema/tool_lib.cpp:45
 msgid "deselect current tool"
@@ -7993,7 +7993,7 @@ msgstr "Num de la pin :"
 
 #: eeschema/pinedit-dialog.cpp:174
 msgid " Pin Options :"
-msgstr "Options pin :"
+msgstr "Options Pin :"
 
 #: eeschema/pinedit-dialog.cpp:190
 msgid "Pin Lenght"
@@ -8170,7 +8170,7 @@ msgstr "Cvpcb est est cours d'exécution. Continuer ?"
 
 #: cvpcb/displayframe.cpp:118
 msgid "Display Options"
-msgstr "Options d'affichage"
+msgstr "Options d'Affichage"
 
 #: cvpcb/genorcad.cpp:134
 #, c-format
@@ -8953,7 +8953,7 @@ msgstr "Format 3.4"
 
 #: gerbview/options.cpp:273
 msgid "Gerbview Draw Options"
-msgstr "Options d'affichage"
+msgstr "Options d'Affichage"
 
 #: gerbview/options.cpp:299
 msgid "Lines:"
@@ -9979,7 +9979,7 @@ msgstr "grille user"
 
 #: pcbnew/cleaningoptions_dialog.h:48
 msgid "Cleaning options"
-msgstr "Options de nettoyage"
+msgstr "Options de Nettoyage"
 
 #: pcbnew/dialog_drc.h:63
 msgid "DRC Control"
@@ -9995,7 +9995,7 @@ msgstr "dialog_freeroute_exchange"
 
 #: pcbnew/dialog_general_options.h:60
 msgid "General Options"
-msgstr "Options générales"
+msgstr "Options Générales"
 
 #: pcbnew/dialog_initpcb.h:38
 msgid "Global Delete"
@@ -10019,7 +10019,7 @@ msgstr "Dims Pistes et Vias"
 
 #: pcbnew/dialog_zones_by_polygon.h:53
 msgid "Fill Zones Options"
-msgstr "Options de remplissage de Zone"
+msgstr "Options de Remplissage de Zone"
 
 #: pcbnew/drc_stuff.h:147
 #, c-format
