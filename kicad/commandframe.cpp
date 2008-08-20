@@ -55,19 +55,19 @@ void WinEDA_CommandFrame::CreateCommandToolbar( void )
     m_ButtonLastPosition.y = 20;
 
     btn = new wxBitmapButton( this, ID_TO_EESCHEMA, BITMAP( icon_eeschema_xpm ) );
-    btn->SetToolTip( _( "eeschema (Schematic editor)" ) );
+    btn->SetToolTip( _( "EESchema (Schematic editor)" ) );
     AddFastLaunch( btn );
 
     btn = new wxBitmapButton( this, ID_TO_CVPCB, BITMAP( icon_cvpcb_xpm ) );
-    btn->SetToolTip( _( "cvpcb (Components to modules)" ) );
+    btn->SetToolTip( _( "CVpcb (Components to modules)" ) );
     AddFastLaunch( btn );
 
     btn = new wxBitmapButton( this, ID_TO_PCB, BITMAP( a_icon_pcbnew_xpm ) );
-    btn->SetToolTip( _( "pcbnew (PCB editor)" ) );
+    btn->SetToolTip( _( "PCBnew (PCB editor)" ) );
     AddFastLaunch( btn );
 
     btn = new wxBitmapButton( this, ID_TO_GERBVIEW, BITMAP( icon_gerbview_xpm ) );
-    btn->SetToolTip( _( "gerbview (Gerber viewer)" ) );
+    btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
     AddFastLaunch( btn );
 
 

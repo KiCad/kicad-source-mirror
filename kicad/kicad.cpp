@@ -16,10 +16,15 @@
 //#define SPLASH_OK
 
 #ifdef SPLASH_OK
- #include <wx/splash.h>
-#endif
-#include <wx/button.h>
 
+  /* Define Splash Image */
+  #define SPLASH_IMAGE logo_kicad.png
+
+  #include "wx/splash.h"
+  #include "wx/mediactrl.h"
+#endif
+
+#include <wx/button.h>
 #include "wxstruct.h"
 #include "common.h"
 #include "bitmaps.h"
@@ -196,6 +201,9 @@ static void py_common_init()
 
 bool WinEDA_App::OnInit()
 {
+    wxImage::AddHandler(new wxPNGHandler);
+
+
     g_EDA_Appl = this;
     InitEDA_Appl( wxT("KiCad"));
     
@@ -223,21 +231,23 @@ bool WinEDA_App::OnInit()
 
     m_MainFrame->m_LeftWin->ReCreateTreePrj();
     SetTopWindow(m_MainFrame);
-    m_MainFrame->Show(TRUE);
 
-    /* Preparation Affichage du logo */
+    /* Splash Screen Logo */
 #ifdef SPLASH_OK
-    wxString logoname( wxString(m_BinDir) + wxT("logokicad.png") );
-    wxBitmap image;
-    if ( image.LoadFile( logoname, wxBITMAP_TYPE_PNG ) )
+    wxString logoname( wxString(m_BinDir) + _T("logokicad.png") );
+    wxBitmap splash_screen;
+    if ( splash_screen.LoadFile( logoname, wxBITMAP_TYPE_PNG ) )
     {
-        wxSplashScreen * logoscreen = new wxSplashScreen( image,
-                wxSPLASH_CENTRE_ON_PARENT | wxSPLASH_TIMEOUT,
-                500, m_MainFrame, -1,
-                wxDefaultPosition, wxDefaultSize,
-                wxSIMPLE_BORDER | wxSTAY_ON_TOP);
+        wxSplashScreen *splash = new wxSplashScreen(splash_screen,
+            wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+            3000, m_MainFrame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+            wxSIMPLE_BORDER|wxSTAY_ON_TOP);   
     }
 #endif
+
+    m_MainFrame->Show(TRUE);
+    m_MainFrame->Raise();
+
 
     if( wxFileExists(m_MainFrame->m_PrjFileName) )
     {

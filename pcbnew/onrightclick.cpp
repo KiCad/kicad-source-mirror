@@ -812,7 +812,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
         sub_menu_Pad->AppendSeparator();
 
         ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD,
-            _( "delete" ), delete_pad_xpm );
+            _( "Delete" ), delete_pad_xpm );
     }
 
     if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
