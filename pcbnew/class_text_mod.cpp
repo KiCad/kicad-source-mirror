@@ -494,7 +494,7 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, 1, _( "Module" ), Line, DARKCYAN );
 
     Line = m_Text;
-    Affiche_1_Parametre( frame, 10, _( "Text" ), Line, YELLOW );
+    Affiche_1_Parametre( frame, 10, _( "Text" ), Line, BROWN );
 
     ii = m_Type;
     if( ii > 2 )
@@ -510,18 +510,16 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 
     ii = m_Layer;
     if( ii < NB_LAYERS )
-        Affiche_1_Parametre( frame, 28, _( "Layer" ), board->GetLayerName( ii ), DARKGREEN );
+        msg = board->GetLayerName( ii );
     else
-    {
         msg.Printf( wxT( "%d" ), ii );
-        Affiche_1_Parametre( frame, 28, _( "Layer" ), msg, DARKGREEN );
-    }
+    Affiche_1_Parametre( frame, 31, _( "Layer" ), msg, DARKGREEN );
 
     msg = wxT( " Yes" );
     if( m_Miroir & 1 )
         msg = wxT( " No" );
 
-    Affiche_1_Parametre( frame, 36, _( "Mirror" ), msg, DARKGREEN );
+    Affiche_1_Parametre( frame, 37, _( "Mirror" ), msg, DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     Affiche_1_Parametre( frame, 43, _( "Orient" ), msg, DARKGREEN );

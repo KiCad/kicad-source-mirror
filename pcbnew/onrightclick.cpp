@@ -237,8 +237,10 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING,
                     _( "End Drawing" ), apply_xpm );
             }
-            aPopMenu->Append( ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ) );
-            aPopMenu->Append( ID_POPUP_PCB_DELETE_DRAWING, _( "Delete Drawing" ) );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING,
+                _( "Edit Drawing" ), edit_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING,
+                _( "Delete Drawing" ), delete_xpm );
             break;
 
         case TYPEZONE:      // Item used to fill a zone

@@ -219,7 +219,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
                     TransMat[1][1] * Arc->m_Pos.y;
             MapAngles( &t1, &t2, TransMat );
-            PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill, Arc->m_Width );
+            PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill == FILLED_SHAPE ? true : false, Arc->m_Width );
         }
             break;
 
@@ -230,7 +230,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                     TransMat[0][1] * Circle->m_Pos.y;
             pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
                     TransMat[1][1] * Circle->m_Pos.y;
-            PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill, Circle->m_Width );
+            PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill == FILLED_SHAPE ? true : false, Circle->m_Width );
         }
             break;
 
@@ -266,7 +266,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             y2 = PartY + TransMat[1][0] * Square->m_End.x
                  + TransMat[1][1] * Square->m_End.y;
 
-            PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill, Square->m_Width );
+            PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
         }
             break;
 
@@ -311,7 +311,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                                    TransMat[1][1] * polyline->PolyList[ii * 2 + 1];
             }
 
-            PlotPoly( ii, Poly, polyline->m_Fill, polyline->m_Width );
+            PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
             MyFree( Poly );
         }
             break;
