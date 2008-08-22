@@ -44,7 +44,7 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
    description << (_("on GNU/Linux "));
 #if __x86_64
    description << (_("64 bits"));
-#elif
+#else
    description << (_("32 bits"));
 #endif
 #endif
