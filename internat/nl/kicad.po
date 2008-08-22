@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 22:41+0100\n"
-"PO-Revision-Date: 2008-08-20 22:42+0100\n"
+"POT-Creation-Date: 2008-08-22 12:12+0100\n"
+"PO-Revision-Date: 2008-08-22 12:12+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -9163,6 +9163,11 @@ msgstr ""
 msgid "Save project file"
 msgstr "Opslaan van project bestand"
 
+#: kicad/kicad.cpp:215
+#: kicad/treeprj_frame.cpp:432
+msgid "noname"
+msgstr "naamloos"
+
 #: kicad/treeprj_frame.cpp:94
 msgid "&Run"
 msgstr "&Uitvoeren"
@@ -9257,10 +9262,6 @@ msgstr "Creëer Nieuw Bestand:"
 #: kicad/treeprj_frame.cpp:430
 msgid "Create New Directory"
 msgstr "Creëer Nieuwe Map"
-
-#: kicad/treeprj_frame.cpp:432
-msgid "noname"
-msgstr "naamloos"
 
 #: kicad/treeprj_frame.cpp:878
 msgid "Change File Name: "
@@ -9383,19 +9384,23 @@ msgid "Load file:"
 msgstr "Bestand laden:"
 
 #: kicad/commandframe.cpp:58
-msgid "eeschema (Schematic editor)"
+#, fuzzy
+msgid "EESchema (Schematic editor)"
 msgstr "EESchema (Schema Editor)"
 
 #: kicad/commandframe.cpp:62
-msgid "cvpcb (Components to modules)"
+#, fuzzy
+msgid "CVpcb (Components to modules)"
 msgstr "CvPCB (Componenten naar Modules)"
 
 #: kicad/commandframe.cpp:66
-msgid "pcbnew (PCB editor)"
+#, fuzzy
+msgid "PCBnew (PCB editor)"
 msgstr "PCBnew (Layout Editor)"
 
 #: kicad/commandframe.cpp:70
-msgid "gerbview (Gerber viewer)"
+#, fuzzy
+msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Gerber Viewer)"
 
 #: kicad/commandframe.cpp:78

@@ -210,6 +210,10 @@ bool WinEDA_App::OnInit()
     /* init kicad */
     GetSettings();                  // read current setup
 
+    /* Make nameless project translatable */
+    wxString project_ext = _T(".pro");
+    wxString nameless_project = _("noname") + project_ext;
+
     m_MainFrame = new WinEDA_MainFrame(this, NULL, wxT("KiCad"),
                  wxPoint(30,20), wxSize(600,400) );
     
@@ -218,10 +222,10 @@ bool WinEDA_App::OnInit()
     else if ( m_EDA_Config )
     {
         m_MainFrame->m_PrjFileName = m_EDA_Config->Read(wxT("LastProject"),
-                wxT("noname.pro") );
+                nameless_project );
     }
     else 
-        m_MainFrame->m_PrjFileName = wxT("noname.pro");
+        m_MainFrame->m_PrjFileName = nameless_project;
 
     wxString Title = g_Main_Title + wxT(" ") + GetBuildVersion();
     Title += wxT(" ") + m_MainFrame->m_PrjFileName;
