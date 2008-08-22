@@ -42,7 +42,7 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
 /* Check for linux and arch */
 #if __gnu_linux__
    description << (_("on GNU/Linux "));
-#if __x86_64
+#ifdef _LP64
    description << (_("64 bits"));
 #else
    description << (_("32 bits"));
