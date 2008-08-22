@@ -245,7 +245,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
         DisplayError( this, msg );
     }
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    wxString fullfilename = FindKicadHelpPath() + m_Parent->m_HelpFileName;
+    wxString fullfilename = FindKicadHelpPath() + _T("kicad.pdf");
     if ( wxFileExists(fullfilename) )
         GetAssociatedDocument( this, wxEmptyString, fullfilename );
     else    // Try to find file in English format:

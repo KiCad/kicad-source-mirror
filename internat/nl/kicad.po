@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-22 12:12+0100\n"
-"PO-Revision-Date: 2008-08-22 12:12+0100\n"
+"POT-Creation-Date: 2008-08-22 13:51+0100\n"
+"PO-Revision-Date: 2008-08-22 14:16+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -33,23 +33,27 @@ msgstr ""
 
 #: pcbnew/class_drc_item.cpp:43
 msgid "Track near pad"
-msgstr ""
+msgstr "Spoor naast pad"
 
 #: pcbnew/class_drc_item.cpp:45
+#, fuzzy
 msgid "Track near via"
-msgstr ""
+msgstr "Spoor naast via"
 
 #: pcbnew/class_drc_item.cpp:47
+#, fuzzy
 msgid "Via near via"
-msgstr ""
+msgstr "Via naast via"
 
 #: pcbnew/class_drc_item.cpp:49
+#, fuzzy
 msgid "Via near track"
-msgstr ""
+msgstr "Via naast spoor"
 
 #: pcbnew/class_drc_item.cpp:59
+#, fuzzy
 msgid "Two track ends"
-msgstr ""
+msgstr "Twee spoor eindes"
 
 #: pcbnew/class_drc_item.cpp:61
 msgid "This looks bad"
@@ -60,8 +64,9 @@ msgid "Tracks crossing"
 msgstr "Sporen kruisen"
 
 #: pcbnew/class_drc_item.cpp:65
+#, fuzzy
 msgid "Pad near pad"
-msgstr ""
+msgstr "Pad naast pad"
 
 #: pcbnew/class_drc_item.cpp:67
 msgid "Via hole > diameter"
@@ -163,8 +168,9 @@ msgstr "GenCAD bestand:"
 #: cvpcb/genequiv.cpp:42
 #: gerbview/export_to_pcbnew.cpp:75
 #: common/hotkeys_basic.cpp:385
+#, fuzzy
 msgid "Unable to create "
-msgstr "Kan niet creeeren"
+msgstr "Kan niet creeren"
 
 #: pcbnew/modules.cpp:81
 msgid "Footprint name:"
@@ -183,15 +189,15 @@ msgstr "Waarde"
 
 #: pcbnew/specctra_export.cpp:64
 msgid "Specctra DSN file:"
-msgstr ""
+msgstr "Specctra DSN bestand:"
 
 #: pcbnew/specctra_export.cpp:122
 msgid "BOARD exported OK."
-msgstr ""
+msgstr "BORD export OK."
 
 #: pcbnew/specctra_export.cpp:127
 msgid "Unable to export, please fix and try again."
-msgstr ""
+msgstr "Kan niet exporteren, verhelp probleem en probeer opnieuw."
 
 #: pcbnew/specctra_export.cpp:808
 #, c-format
@@ -226,7 +232,7 @@ msgstr ""
 
 #: pcbnew/dialog_graphic_items_options.cpp:204
 msgid "Board Edges Width"
-msgstr ""
+msgstr "Bord Hoeken Breedte"
 
 #: pcbnew/dialog_graphic_items_options.cpp:210
 msgid "Copper Text Width"
@@ -246,7 +252,7 @@ msgstr "Modules:"
 
 #: pcbnew/dialog_graphic_items_options.cpp:234
 msgid "Edges Module Width"
-msgstr ""
+msgstr "Module Hoeken Breedte"
 
 #: pcbnew/dialog_graphic_items_options.cpp:240
 msgid "Text Module Width"
@@ -458,11 +464,11 @@ msgstr ""
 
 #: pcbnew/dialog_netlist.cpp:212
 msgid "Browse Netlist Files"
-msgstr ""
+msgstr "Verken Netlijst Bestanden"
 
 #: pcbnew/dialog_netlist.cpp:216
 msgid "Read Current Netlist"
-msgstr ""
+msgstr "Lees Huidige Netlijst"
 
 #: pcbnew/dialog_netlist.cpp:220
 msgid "Footprints Test"
@@ -509,7 +515,7 @@ msgstr "Netlijst Selectie:"
 
 #: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
-msgstr "Lagen Omwisselen:"
+msgstr "Lagen Omwisselen"
 
 #: pcbnew/swap_layers.cpp:191
 #: pcbnew/swap_layers.cpp:196
@@ -859,7 +865,7 @@ msgstr "Roteer Block"
 
 #: pcbnew/block.cpp:659
 msgid "Zone rotation"
-msgstr ""
+msgstr "Zone rotatie"
 
 #: pcbnew/block.cpp:767
 msgid "Block mirroring"
@@ -890,7 +896,7 @@ msgstr "Onverwachts"
 #: pcbnew/specctra.cpp:3549
 #, c-format
 msgid "Unable to open file \"%s\""
-msgstr ""
+msgstr "Can bestand \"%s\" niet openen"
 
 #: pcbnew/specctra.cpp:3465
 #, c-format
@@ -960,7 +966,7 @@ msgstr ""
 
 #: pcbnew/cleaningoptions_dialog.cpp:156
 msgid "Merge segments"
-msgstr ""
+msgstr "Segmenten samenvoegen"
 
 #: pcbnew/cleaningoptions_dialog.cpp:159
 msgid "merge aligned track segments, and remove null segments"
@@ -1003,8 +1009,9 @@ msgstr "Bestand"
 #: pcbnew/plotps.cpp:363
 #: pcbnew/class_board.cpp:561
 #: pcbnew/affiche.cpp:67
+#, fuzzy
 msgid "Vias"
-msgstr ""
+msgstr "Vias"
 
 #: pcbnew/plotps.cpp:392
 msgid "Tracks"
@@ -1102,7 +1109,7 @@ msgstr ""
 #: pcbnew/class_zone.cpp:605
 #: pcbnew/class_board_item.cpp:144
 msgid "(Cutout)"
-msgstr ""
+msgstr "(Uitsnede)"
 
 #: pcbnew/class_zone.cpp:625
 #: pcbnew/class_board_item.cpp:163
@@ -1520,7 +1527,7 @@ msgstr ""
 
 #: pcbnew/onleftclick.cpp:199
 msgid "Tracks on Copper layers only "
-msgstr ""
+msgstr "Sporen alleen op Koper lagen"
 
 #: pcbnew/onleftclick.cpp:281
 msgid "Cotation not authorized on Copper layers"
@@ -1747,8 +1754,9 @@ msgid "Read application preferences"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:218
+#, fuzzy
 msgid "Tracks and Vias"
-msgstr ""
+msgstr "Sporen en Vias"
 
 #: pcbnew/menubarpcb.cpp:219
 msgid "Adjust size and width for tracks, vias"
@@ -1824,7 +1832,7 @@ msgstr ""
 
 #: pcbnew/menubarpcb.cpp:273
 msgid "&List nets"
-msgstr ""
+msgstr "Net &lijst"
 
 #: pcbnew/menubarpcb.cpp:274
 msgid "List nets (names and id)"
@@ -1957,7 +1965,7 @@ msgstr "Laatste Wijziging"
 
 #: pcbnew/class_module.cpp:1076
 msgid "Netlist path"
-msgstr ""
+msgstr "Netlijst pad"
 
 #: pcbnew/class_module.cpp:1092
 #: pcbnew/class_board.cpp:551
@@ -1973,7 +1981,7 @@ msgstr ""
 #: eeschema/affiche.cpp:116
 #: gerbview/affiche.cpp:49
 msgid "Orient"
-msgstr ""
+msgstr "Orientatie"
 
 #: pcbnew/class_module.cpp:1107
 #: pcbnew/class_text_mod.cpp:494
@@ -2108,7 +2116,7 @@ msgstr "Module [%s] niet gevonden"
 #: pcbnew/librairi.cpp:390
 #, c-format
 msgid "Component %s deleted in library %s"
-msgstr ""
+msgstr "Component %s verwijderd in bibliotheek %s"
 
 #: pcbnew/librairi.cpp:416
 msgid " No modules to archive!"
@@ -2639,7 +2647,7 @@ msgstr "3D Viewer"
 #: pcbnew/move-drag_pads.cpp:274
 #, c-format
 msgid "Delete Pad (module %s %s) "
-msgstr ""
+msgstr "Verwijder Pad (module %s %s) "
 
 #: pcbnew/muonde.cpp:149
 msgid "Gap"
@@ -2666,7 +2674,7 @@ msgstr " (inch):"
 #: pcbnew/muonde.cpp:202
 #: pcbnew/gen_self.h:231
 msgid "Incorrect number, abort"
-msgstr ""
+msgstr "Incorrect nummer, afbreken"
 
 #: pcbnew/muonde.cpp:198
 msgid "Angle (0.1deg):"
@@ -2774,7 +2782,7 @@ msgstr "Backup bestand:"
 
 #: pcbnew/files.cpp:375
 msgid "Wrote board file: "
-msgstr ""
+msgstr "Schreef bord bestand: "
 
 #: pcbnew/files.cpp:377
 msgid "Failed to create "
@@ -2798,7 +2806,7 @@ msgstr "Doel Vorm:"
 
 #: pcbnew/initpcb.cpp:125
 msgid "Current Board will be lost ?"
-msgstr ""
+msgstr "Huidige Bord zal verloren gaan ?"
 
 #: pcbnew/initpcb.cpp:175
 msgid "Delete Zones ?"
@@ -2806,11 +2814,11 @@ msgstr "Zones Verwijderen?"
 
 #: pcbnew/initpcb.cpp:202
 msgid "Delete Board edges ?"
-msgstr ""
+msgstr "Verwijder Bord hoeken"
 
 #: pcbnew/initpcb.cpp:207
 msgid "Delete draw items?"
-msgstr ""
+msgstr "Verwijder tekening items?"
 
 #: pcbnew/initpcb.cpp:249
 #: gerbview/initpcb.cpp:150
@@ -2913,7 +2921,7 @@ msgstr ""
 
 #: pcbnew/editrack-part2.cpp:136
 msgid "Drc error, cancelled"
-msgstr ""
+msgstr "DRC fout, afgebroken"
 
 #: pcbnew/tool_modedit.cpp:44
 #: eeschema/tool_lib.cpp:120
@@ -3029,17 +3037,17 @@ msgstr "Pads Toevoegen"
 #: pcbnew/tool_modedit.cpp:159
 #: pcbnew/tool_pcb.cpp:429
 msgid "Add graphic line or polygon"
-msgstr ""
+msgstr "Plaats grafische lijn of polygoon"
 
 #: pcbnew/tool_modedit.cpp:163
 #: pcbnew/tool_pcb.cpp:433
 msgid "Add graphic circle"
-msgstr ""
+msgstr "Plaats grafische cirkel"
 
 #: pcbnew/tool_modedit.cpp:167
 #: pcbnew/tool_pcb.cpp:437
 msgid "Add graphic arc"
-msgstr ""
+msgstr "Plaats grafische boog"
 
 #: pcbnew/tool_modedit.cpp:181
 #: pcbnew/tool_pcb.cpp:455
@@ -3137,16 +3145,17 @@ msgid "mm"
 msgstr "mm"
 
 #: pcbnew/set_grid.cpp:150
+#, fuzzy
 msgid "Grid Size Units"
-msgstr ""
+msgstr "Raster Grote"
 
 #: pcbnew/set_grid.cpp:156
 msgid "User Grid Size X"
-msgstr ""
+msgstr "Gebruikers Raster Grote X"
 
 #: pcbnew/set_grid.cpp:162
 msgid "User Grid Size Y"
-msgstr ""
+msgstr "Gebruikers Raster Grote Y"
 
 #: pcbnew/affiche.cpp:35
 msgid "Net Name"
@@ -3226,7 +3235,7 @@ msgstr ""
 
 #: pcbnew/dialog_drc.cpp:487
 msgid "Find unconnected pads"
-msgstr ""
+msgstr "Zoek onverbonden pads"
 
 #: pcbnew/dialog_drc.cpp:493
 msgid "Start DRC"
@@ -3295,11 +3304,11 @@ msgstr ""
 
 #: pcbnew/dialog_drc.cpp:772
 msgid "DRC Report file"
-msgstr ""
+msgstr "DRC Rapport bestand"
 
 #: pcbnew/menubarmodedit.cpp:40
 msgid "Sizes and Widths"
-msgstr ""
+msgstr "Grotes en Breedtes"
 
 #: pcbnew/tool_pcb.cpp:33
 msgid ""
@@ -3372,7 +3381,7 @@ msgstr "Lees Netlijst"
 
 #: pcbnew/tool_pcb.cpp:281
 msgid "Pcb Design Rules Check"
-msgstr ""
+msgstr "Pcb Design Rules Check (DRC)"
 
 #: pcbnew/tool_pcb.cpp:293
 msgid "Mode Module: Manual and Automatic Move or Place for modules"
@@ -3790,7 +3799,7 @@ msgstr "Oke"
 #: pcbnew/dialog_general_options.cpp:288
 #: gerbview/options.cpp:175
 msgid "No Display"
-msgstr ""
+msgstr "Geen Weergave"
 
 #: pcbnew/dialog_general_options.cpp:291
 #: gerbview/options.cpp:177
@@ -3846,7 +3855,7 @@ msgstr "Opties:"
 
 #: pcbnew/dialog_general_options.cpp:385
 msgid "Drc ON"
-msgstr ""
+msgstr "DRC aan"
 
 #: pcbnew/dialog_general_options.cpp:394
 msgid "Show Ratsnest"
@@ -4097,9 +4106,9 @@ msgid "file %s not found"
 msgstr "bestand %s niet gevonden"
 
 #: pcbnew/xchgmod.cpp:237
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to create file %s"
-msgstr ""
+msgstr "Kan bestand %s niet creeren"
 
 #: pcbnew/xchgmod.cpp:344
 #, c-format
@@ -4706,7 +4715,7 @@ msgstr "Afbreken?"
 
 #: pcbnew/pcbnew.cpp:43
 msgid "Pcbnew is already running, Continue?"
-msgstr ""
+msgstr "PCBnew is al gestart. Doorgaan?"
 
 #: pcbnew/automove.cpp:211
 msgid "Move Modules ?"
@@ -6903,7 +6912,7 @@ msgstr "Fout tijdens maken"
 
 #: eeschema/hierarch.cpp:122
 msgid "Navigator"
-msgstr "Navigator"
+msgstr "Navigatie"
 
 #: eeschema/hierarch.cpp:133
 msgid "Root"
@@ -6955,7 +6964,7 @@ msgstr "Bestand %s niet gevonden (Nieuw Project?)"
 
 #: eeschema/eeschema.cpp:54
 msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema is al actief, Doorgaan?"
+msgstr "EESchema is al gestart. Doorgaan?"
 
 #: eeschema/libframe.cpp:102
 msgid ""
@@ -8766,26 +8775,26 @@ msgstr "Componenten: %d (free: %d)"
 #: cvpcb/cvframe.cpp:424
 #: share/drawframe.cpp:134
 msgid "font for dialog boxes"
-msgstr "Lettertype voor dialogen"
+msgstr "Dialog lettertype"
 
 #: cvpcb/cvframe.cpp:426
 msgid "font for Lists"
-msgstr "Lettertype voor lijsten"
+msgstr "Lijst lettertype"
 
 #: cvpcb/cvframe.cpp:428
 #: share/drawframe.cpp:138
 msgid "font for Status Line"
-msgstr "Lettertype voor Statusbalk"
+msgstr "Statusbalk lettertype"
 
 #: cvpcb/cvframe.cpp:431
 #: share/drawframe.cpp:141
 msgid "&Font selection"
-msgstr "&Lettertype selectie"
+msgstr "&Lettertype"
 
 #: cvpcb/cvframe.cpp:433
 #: share/drawframe.cpp:142
 msgid "Choose font type and size for dialogs, infos and status box"
-msgstr ""
+msgstr "Kies lettertype en lettertype grote voor dialogen, informatie en status balk"
 
 #: cvpcb/menucfg.cpp:52
 msgid "Lib Dir:"
@@ -8904,7 +8913,7 @@ msgstr "Open de CvPCB handleiding"
 
 #: cvpcb/cvpcb.cpp:41
 msgid "Cvpcb is already running, Continue?"
-msgstr ""
+msgstr "CVpcb is al gestart. Doorgaan?"
 
 #: cvpcb/dialog_cvpcb_config.cpp:132
 msgid "Read Cfg"
@@ -8957,12 +8966,12 @@ msgstr ""
 #: cvpcb/listboxes.cpp:460
 #, c-format
 msgid "Footprints (All): %d"
-msgstr ""
+msgstr "Voetprinten (Alle): %d"
 
 #: cvpcb/listboxes.cpp:462
 #, c-format
 msgid "Footprints (filtered): %d"
-msgstr ""
+msgstr "Voetprinten (gefiltered): %d"
 
 #: cvpcb/loadcmp.cpp:49
 msgid "This file is NOT a library file"
@@ -8992,7 +9001,7 @@ msgstr ""
 
 #: cvpcb/init.cpp:188
 msgid "Load Net List"
-msgstr ""
+msgstr "Laad Net Lijst"
 
 #: kicad/preferences.cpp:33
 msgid "Prefered Pdf Browser:"
@@ -9000,7 +9009,7 @@ msgstr "Voorkeur PDF Browser:"
 
 #: kicad/preferences.cpp:74
 msgid "You must choose a PDF viewer before use this option"
-msgstr ""
+msgstr "U moet een pdf viewer gekozen hebben om deze optie te gebruiken"
 
 #: kicad/preferences.cpp:97
 #: common/gestfich.cpp:685
@@ -9109,7 +9118,7 @@ msgstr "Selecteer PDF Programma"
 
 #: kicad/buildmnu.cpp:175
 msgid "Select your favourite PDF viewer used to browse datasheets"
-msgstr ""
+msgstr "Selecteer uw favoriete pdf viewer om datasheets te bekijken"
 
 #: kicad/buildmnu.cpp:179
 msgid "Pdf Browser"
@@ -9183,7 +9192,7 @@ msgstr "&Bewerk in een tekst editor"
 
 #: kicad/treeprj_frame.cpp:103
 msgid "&Open the file in a Text Editor"
-msgstr ""
+msgstr "&Open dit bestand in een Tekst Editor"
 
 #: kicad/treeprj_frame.cpp:117
 msgid "New D&irectory"
@@ -9352,7 +9361,7 @@ msgstr "*FOUT*\n"
 
 #: kicad/files-io.cpp:246
 msgid "Archive Project files:"
-msgstr "Archief Project bestanden:"
+msgstr "Archiveer Project bestanden:"
 
 #: kicad/files-io.cpp:286
 msgid "Compress file "
@@ -9432,7 +9441,7 @@ msgstr ""
 
 #: gerbview/block.cpp:267
 msgid "Ok to delete block ?"
-msgstr "Block echt verwijderen?"
+msgstr "Block verwijderen?"
 
 #: gerbview/process_config.cpp:117
 #: gerbview/gerbview_config.cpp:131
@@ -9474,7 +9483,7 @@ msgstr "Laag aangepast, Doorgaan?"
 
 #: gerbview/gerbview.cpp:37
 msgid "GerbView is already running. Continue?"
-msgstr ""
+msgstr "GerbView is al gestart. Doorgaan?"
 
 #: gerbview/rs274x.cpp:317
 #, c-format
@@ -9483,7 +9492,7 @@ msgstr ""
 
 #: gerbview/rs274x.cpp:354
 msgid "Too many include files!!"
-msgstr ""
+msgstr "Teveel include bestanden!!"
 
 #: gerbview/files.cpp:86
 msgid "Not yet available..."
@@ -9945,6 +9954,67 @@ msgstr " Gevonden in"
 #, fuzzy
 msgid "Unable to find a PDF viewer for"
 msgstr "Kan data bestand niet vinden"
+
+#: common/about_kicad.cpp:27
+msgid " Unicode "
+msgstr " Unicode "
+
+#: common/about_kicad.cpp:29
+#, fuzzy
+msgid " Ansi "
+msgstr " aan"
+
+#: common/about_kicad.cpp:34
+msgid "on Windows"
+msgstr "op Windows"
+
+#: common/about_kicad.cpp:39
+msgid "on Macintosch"
+msgstr "op Macintosch"
+
+#: common/about_kicad.cpp:44
+msgid "on GNU/Linux "
+msgstr "op GNU/Linux "
+
+#: common/about_kicad.cpp:46
+msgid "64 bits"
+msgstr "64 bit"
+
+#: common/about_kicad.cpp:48
+msgid "32 bits"
+msgstr "32 bit"
+
+#: common/about_kicad.cpp:77
+msgid ""
+"\n"
+"Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
+msgstr ""
+"\n"
+"Nederlands (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
+
+#: common/about_kicad.cpp:78
+msgid ""
+"\n"
+"French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
+msgstr ""
+"\n"
+"Frans (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
+
+#: common/about_kicad.cpp:80
+msgid ""
+"\n"
+"Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
+msgstr ""
+"\n"
+"Portugees (PT) Renie Marquet <reniemarquet@uol.com.br>"
+
+#: common/about_kicad.cpp:81
+msgid ""
+"\n"
+"Russian (RU) Igor Plyatov <plyatov@gmail.com>"
+msgstr ""
+"\n"
+"Russisch (RU) Igor Plyatov <plyatov@gmail.com>"
 
 #: common/selcolor.cpp:76
 msgid "Colors"
@@ -10408,7 +10478,7 @@ msgstr "&Printen"
 
 #: share/drawframe.cpp:136
 msgid "font for info display"
-msgstr "Lettertype voor display"
+msgstr "Display lettertype"
 
 #: share/drawframe.cpp:373
 msgid "Inch"

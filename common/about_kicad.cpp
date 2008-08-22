@@ -21,10 +21,32 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
     wxString description;
 
     description << (_T("Build: ")) << GetAboutBuildVersion();
+
+/* Check for unicode */
 #if wxUSE_UNICODE
-    description << (_T( " Unicode" ));
+    description << (_(" Unicode " ));
 #else
-    description << (_T( " Ansi" ));
+    description << (_(" Ansi "));
+#endif
+
+/* Check for wxMSW */
+#if wxMSW
+    description << (_("on Windows"));
+#endif
+
+/* Check for wxMAC */
+#if wxMAC
+    description << (_("on Macintosch"));
+#endif
+
+/* Check for linux and arch */
+#if __gnu_linux__
+   description << (_("on GNU/Linux "));
+#if __x86_64
+   description << (_("64 bits"));
+#elif
+   description << (_("32 bits"));
+#endif
 #endif
 
     info.SetDescription(description);
@@ -51,10 +73,11 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
     info.AddDocWriter(_T("\nIgor Plyatov <plyatov@gmail.com>"));
 
     /* Add translators */
-    info.AddTranslator(_T("Czech (CZ) Milan Horák <stranger@tiscali.cz>"));
-    info.AddTranslator(_T("\nDutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"));
-    info.AddTranslator(_T("\nFrench (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
-    info.AddTranslator(_T("\nPolish (PL) Mateusz Skowroński <skowri@gmail.com>"));
-    info.AddTranslator(_T("\nRussian (RU) Igor Plyatov <plyatov@gmail.com>"));
+    info.AddTranslator(wxT("Czech (CZ) Milan Horák <stranger@tiscali.cz>")); /* fix for translation ! */
+    info.AddTranslator(_("\nDutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"));
+    info.AddTranslator(_("\nFrench (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
+    info.AddTranslator(wxT("\nPolish (PL) Mateusz Skowroński <skowri@gmail.com>")); /* fix for translation ! */
+    info.AddTranslator(_("\nPortuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"));
+    info.AddTranslator(_("\nRussian (RU) Igor Plyatov <plyatov@gmail.com>"));
 
 }
