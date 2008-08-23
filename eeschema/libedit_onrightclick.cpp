@@ -63,8 +63,8 @@ bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
 	else return true;
 
 	CurrentDrawItem = DrawEntry;
-	wxString msg; 
-	
+	wxString msg;
+
 	switch ( DrawEntry->Type() )
 	{
 		case  COMPONENT_PIN_DRAW_TYPE:
@@ -159,13 +159,13 @@ bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
 					ADD_MENUITEM(PopMenu,
 						ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT, msg, delete_segment_xpm);
 				}
-			}	
+			}
 			break;
 
 		case COMPONENT_FIELD_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				msg = AddHotkeyName( _( "Move Feild " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				msg = AddHotkeyName( _( "Move Field " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
 				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_field_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM,
@@ -195,10 +195,10 @@ void AddMenusForPin(wxMenu * PopMenu, LibDrawPin* Pin, WinEDA_LibeditFrame * fra
 bool selected = (Pin->m_Selected & IS_SELECTED) != 0;
 bool not_in_move = (Pin->m_Flags == 0);
 
-	if( not_in_move )	
+	if( not_in_move )
 		ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, _("Move Pin"), move_xpm );
 
-	wxString msg; 
+	wxString msg;
 	msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT_PIN );
 	ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_PIN_EDIT, msg, edit_xpm );
 
