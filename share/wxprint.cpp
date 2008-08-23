@@ -172,9 +172,6 @@ void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
     WinEDA_PrintFrame* frame = new WinEDA_PrintFrame( this );
 
     frame->ShowModal(); frame->Destroy();
-#ifdef EESCHEMA
-    g_PrintFillMask = 0;
-#endif
 }
 
 
@@ -783,10 +780,7 @@ void EDA_Printout::DrawPage()
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
     g_IsPrinting = TRUE;
-#ifdef EESCHEMA
-    if( s_Print_Black_and_White )
-        g_PrintFillMask = FILLED_WITH_BG_BODYCOLOR;
-#endif
+
 #ifdef PCBNEW
     if( m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
@@ -830,10 +824,6 @@ void EDA_Printout::DrawPage()
 
 #else
     panel->PrintPage( dc, m_Print_Sheet_Ref, s_PrintMaskLayer );
-#endif
-
-#ifdef EESCHEMA
-    g_PrintFillMask = 0;
 #endif
 
     g_IsPrinting     = FALSE;

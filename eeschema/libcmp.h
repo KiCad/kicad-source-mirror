@@ -30,9 +30,10 @@
 #define IEEE_SYMBOL_PIN_DIM 40                              /* Dim of special pin symbol. */
 
 #define NO_FILL                  0                          // Poly, Squar, Circle, Arc = option No Fill
-#define FILLED_SHAPE             1                          // Poly, Squar, Circle, Arc = option Fill with current color
-#define FILLED_WITH_BG_BODYCOLOR 2                          // Poly, Squar, Circle, Arc = option Fill
-// with background body color
+#define FILLED_SHAPE             1                          // Poly, Squar, Circle, Arc = option Fill with current color ("Solid shape")
+#define FILLED_WITH_BG_BODYCOLOR 2                          /* Poly, Squar, Circle, Arc = option Fill
+                                                            * with background body color, translucent (texts on this shape can be see)
+                                                            * not fille in B&W plot mode */
 
 //Offsets used in editing library component, for handle aliad dats
 #define ALIAS_NAME         0

@@ -11,8 +11,6 @@ email address.
     bug solved: netlist calculations could crash eeschema under very rare circumstances.
     recent bug solved: background filled shapes (filled but not solid: texts are readables inside shapes)
         were drawn (and plotted) as filled (solid) shapes
-        enhancements needed for plotting background filled shapes, in color mode
-        (cannot be filled in black and white mode)
 
 2008-Aug-18 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

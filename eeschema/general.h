@@ -161,9 +161,6 @@ struct EESchemaVariables
 };
 
 eda_global struct EESchemaVariables g_EESchemaVar;
-/* Variable fonction print */
-eda_global int g_PrintFillMask;	/* pour les options "FILL",
-							l'option reelle est m_Fill & ~PrintFillMask */
 
 /* Variables globales pour Libview */
 eda_global wxString g_CurrentViewLibraryName;			/* nom de la librairie en cours d'examen */

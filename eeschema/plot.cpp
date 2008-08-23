@@ -187,6 +187,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
     int                     TransMat[2][2], PartX, PartY, Multi, convert;
     int                     CharColor = -1;
     wxPoint                 pos;
+    bool                    draw_bgfill = false;
 
     Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( Entry == NULL )
@@ -206,7 +207,10 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 
         Plume( 'U' );
         if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+        {
             SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+            draw_bgfill = true;
+        }
 
         switch( DEntry->Type() )
         {
@@ -219,6 +223,13 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
                     TransMat[1][1] * Arc->m_Pos.y;
             MapAngles( &t1, &t2, TransMat );
+            if ( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotArc( pos, t1, t2, Arc->m_Rayon, true, 0 );
+            }
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
             PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill == FILLED_SHAPE ? true : false, Arc->m_Width );
         }
             break;
@@ -230,6 +241,13 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                     TransMat[0][1] * Circle->m_Pos.y;
             pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
                     TransMat[1][1] * Circle->m_Pos.y;
+            if ( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotCercle( pos, Circle->m_Rayon * 2, true, 0 );
+            }
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
             PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill == FILLED_SHAPE ? true : false, Circle->m_Width );
         }
             break;
@@ -266,6 +284,13 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             y2 = PartY + TransMat[1][0] * Square->m_End.x
                  + TransMat[1][1] * Square->m_End.y;
 
+            if ( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), true, 0 );
+            }
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
             PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
         }
             break;
@@ -311,6 +336,13 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                                    TransMat[1][1] * polyline->PolyList[ii * 2 + 1];
             }
 
+            if ( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotPoly( ii, Poly, true, 0 );
+            }
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
             PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
             MyFree( Poly );
         }

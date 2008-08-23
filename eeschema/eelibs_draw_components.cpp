@@ -471,10 +471,12 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
             {
                 EXCHG( x1, x2 ); EXCHG( y1, y2 )
             }
-            fill_option = Arc->m_Fill & (~g_PrintFillMask);
+            fill_option = Arc->m_Fill;
+            if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+                fill_option = NO_FILL;
             if( Color < 0 )         // Normal Color Layer
             {
-                if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+                if( fill_option == FILLED_WITH_BG_BODYCOLOR )
                     GRFilledArc( &panel->m_ClipBox, DC, xc, yc, t1, t2,
                                 Arc->m_Rayon, Arc->m_Width, CharColor,
                                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -513,10 +515,12 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
             y1 = Pos.y + TransMat[1][0] * Circle->m_Pos.x +
                  TransMat[1][1] * Circle->m_Pos.y;
 
-            fill_option = Circle->m_Fill & (~g_PrintFillMask);
+            fill_option = Circle->m_Fill;
+            if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+                fill_option = NO_FILL;
             if( Color < 0 )
             {
-                if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+                if( fill_option == FILLED_WITH_BG_BODYCOLOR )
                     GRFilledCircle( &panel->m_ClipBox, DC, x1, y1,
                                    Circle->m_Rayon, LineWidth, CharColor,
                                    ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -567,10 +571,12 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                  + TransMat[0][1] * Square->m_End.y;
             y2 = Pos.y + TransMat[1][0] * Square->m_End.x
                  + TransMat[1][1] * Square->m_End.y;
-            fill_option = Square->m_Fill & (~g_PrintFillMask);
+            fill_option = Square->m_Fill;
+            if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+                fill_option = NO_FILL;
             if( Color < 0 )
             {
-                if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+                if( fill_option == FILLED_WITH_BG_BODYCOLOR )
                     GRFilledRect( &panel->m_ClipBox, DC, x1, y1, x2, y2,
                                  CharColor, LineWidth,
                                  ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -648,10 +654,12 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                                                TransMat[1][1] * polyline->PolyList[i * 2 + 1];
             }
 
-            fill_option = polyline->m_Fill & (~g_PrintFillMask);
+            fill_option = polyline->m_Fill;
+            if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+                fill_option = NO_FILL;
             if( Color < 0 )
             {
-                if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+                if( fill_option == FILLED_WITH_BG_BODYCOLOR )
                     GRPoly( &panel->m_ClipBox, DC, polyline->n,
                            Buf_Poly_Drawings, 1, LineWidth, CharColor,
                            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -962,12 +970,14 @@ void DrawLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             EXCHG( x1, x2 ); EXCHG( y1, y2 )
         }
-        fill_option = Arc->m_Fill & (~g_PrintFillMask);
-        if( (Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+        fill_option = Arc->m_Fill;
+        if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+            fill_option = NO_FILL;
+        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
             GRFilledArc( &panel->m_ClipBox, DC, xc, yc, t1, t2,
                         Arc->m_Rayon, CharColor,
                         ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        else if( Arc->m_Fill == FILLED_SHAPE )
+        else if( fill_option == FILLED_SHAPE )
             GRFilledArc( &panel->m_ClipBox, DC, xc, yc, t1, t2,
                          Arc->m_Rayon, LineWidth, CharColor, CharColor );
 #ifdef DRAW_ARC_WITH_ANGLE
@@ -987,8 +997,10 @@ void DrawLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
         LibDrawCircle* Circle = (LibDrawCircle*) DrawItem;
         x1 = PartX + Circle->m_Pos.x;
         y1 = PartY - Circle->m_Pos.y;
-        fill_option = Circle->m_Fill & (~g_PrintFillMask);
-        if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+        fill_option = Circle->m_Fill;
+        if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+            fill_option = NO_FILL;
+        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
             GRFilledCircle( &panel->m_ClipBox, DC, x1, y1,
                            Circle->m_Rayon, LineWidth, CharColor,
                            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -1020,8 +1032,10 @@ void DrawLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
         y1 = PartY - Square->m_Pos.y;
         x2 = PartX + Square->m_End.x;
         y2 = PartY - Square->m_End.y;
-        fill_option = Square->m_Fill & (~g_PrintFillMask);
-        if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+        fill_option = Square->m_Fill;
+        if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+            fill_option = NO_FILL;
+        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
             GRFilledRect( &panel->m_ClipBox, DC, x1, y1, x2, y2,
                          CharColor, LineWidth,
                          ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -1078,8 +1092,10 @@ void DrawLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
             Buf_Poly_Drawings[i * 2 + 1] = PartY - polyline->PolyList[i * 2 + 1];
         }
 
-        fill_option = polyline->m_Fill & (~g_PrintFillMask);
-        if( (fill_option == FILLED_WITH_BG_BODYCOLOR) && !g_IsPrinting )
+        fill_option = polyline->m_Fill;
+        if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
+            fill_option = NO_FILL;
+        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
             GRPoly( &panel->m_ClipBox, DC, polyline->n,
                    Buf_Poly_Drawings, 1, LineWidth, CharColor,
                    ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );

@@ -221,7 +221,6 @@
           <string name="id-suffix">""</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
-          <string name="event-handler-0">"wxEVT_INIT_DIALOG|OnInitDialog|NONE||WinEDA_PlotPSFrame"</string>
           <string name="proxy-Id name">"ID_DIALOG"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"WinEDA_PlotPSFrame"</string>
@@ -649,8 +648,8 @@
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
                   <string name="proxy-Member variable name">""</string>
-                  <string name="proxy-Label">"&amp;Plot CURRENT"</string>
-                  <bool name="proxy-Default">0</bool>
+                  <string name="proxy-Label">"&amp;Plot Page"</string>
+                  <bool name="proxy-Default">1</bool>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Data variable">""</string>
@@ -784,7 +783,7 @@
                   <string name="proxy-Header filename">""</string>
                   <string name="proxy-Member variable name">"m_btClose"</string>
                   <string name="proxy-Label">"Close"</string>
-                  <bool name="proxy-Default">1</bool>
+                  <bool name="proxy-Default">0</bool>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Data variable">""</string>
@@ -1007,7 +1006,6 @@
               <bool name="proxy-wxFIXED_MINSIZE">1</bool>
               <string name="proxy-Custom arguments">""</string>
               <string name="proxy-Custom ctor arguments">""</string>
-              <bool name="proxy-wxTE_LINEWRAP">0</bool>
             </document>
           </document>
         </document>

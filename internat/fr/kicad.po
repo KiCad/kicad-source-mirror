@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-17 18:59+0100\n"
-"PO-Revision-Date: 2008-08-22 14:10+0100\n"
+"PO-Revision-Date: 2008-08-22 19:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -8080,7 +8080,7 @@ msgstr "Imprimer cartouche"
 #: eeschema/plotps.cpp:242
 #: eeschema/plothpgl.cpp:283
 msgid "&Plot CURRENT"
-msgstr "&Imprimer courant"
+msgstr "&Tracer courant"
 
 #: eeschema/plotps.cpp:249
 #: eeschema/plothpgl.cpp:287
@@ -9432,7 +9432,6 @@ msgid "PCBnew (PCB editor)"
 msgstr "PCBnew (Editeur de circuits imprimés)"
 
 #: kicad/commandframe.cpp:70
-#, fuzzy
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Visualisateur  Gerber)"
 

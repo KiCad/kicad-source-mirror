@@ -83,9 +83,6 @@ public:
 
 ////@begin WinEDA_PlotPSFrame event handler declarations
 
-    /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
-    void OnInitDialog( wxInitDialogEvent& event );
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PLOT_PS_CURRENT_EXECUTE
     void OnPlotPsCurrentExecuteClick( wxCommandEvent& event );
 
