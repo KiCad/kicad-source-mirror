@@ -76,7 +76,7 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
     info.AddTranslator(wxT("Czech (CZ) Milan Horák <stranger@tiscali.cz>")); /* fix for translation ! */
     info.AddTranslator(_("\nDutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"));
     info.AddTranslator(_("\nFrench (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"));
-    info.AddTranslator(wxT("\nPolish (PL) Mateusz Skowroński <skowri@gmail.com>")); /* fix for translation ! */
+    info.AddTranslator(_("\nPolish (PL) Mateusz Skowronski <skowri@gmail.com>"));
     info.AddTranslator(_("\nPortuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"));
     info.AddTranslator(_("\nRussian (RU) Igor Plyatov <plyatov@gmail.com>"));
 
