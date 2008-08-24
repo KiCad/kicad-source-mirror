@@ -167,18 +167,21 @@ install(FILES freeroute.jnlp
 if(UNIX)
 
   # set resource dir variables
+  #set(KICAD_PROGRAM_ICONS ${CMAKE_INSTALL_PREFIX}/share/kicad/icons)
   set(LINUX_RESOURCES_DIR resources/linux)
   set(LINUX_DESKTOP_FILES ${LINUX_RESOURCES_DIR}/opendesktop)
-  set(LINUX_ICONS ${LINUX_RESOURCES_DIR}/icons)
+  set(LINUX_DESKTOP_ICONS ${LINUX_RESOURCES_DIR}/icons)
 
 
+    # Install program icons
+    #add_subdirectory(resources/icons)
 
     # KiCad desktop file
     install(FILES ${LINUX_DESKTOP_FILES}/kicad.desktop
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
             COMPONENT resources)
     # KiCad icon file
-    install(FILES ${LINUX_ICONS}/kicad.png
+    install(FILES ${LINUX_DESKTOP_ICONS}/kicad.png
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
             COMPONENT resources)
 
@@ -189,7 +192,7 @@ if(UNIX)
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
            COMPONENT resources)
    # CVpcb icon file
-   install(FILES ${LINUX_ICONS}/kicad_cvpcb.png
+   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_cvpcb.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
 
@@ -200,7 +203,7 @@ if(UNIX)
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
            COMPONENT resources)
    # EEschema icon file
-   install(FILES ${LINUX_ICONS}/kicad_eeschema.png
+   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_eeschema.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
 
@@ -211,7 +214,7 @@ if(UNIX)
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
            COMPONENT resources)
    # GerbView icon file
-   install(FILES ${LINUX_ICONS}/kicad_gerbview.png
+   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_gerbview.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
 
@@ -222,7 +225,7 @@ if(UNIX)
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
            COMPONENT resources)
    # PCBnew icon file
-   install(FILES ${LINUX_ICONS}/kicad_pcbnew.png
+   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_pcbnew.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
 
