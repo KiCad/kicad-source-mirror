@@ -53,7 +53,7 @@ struct LANGUAGE_DESCR
     bool          m_DoNotTranslate;                     // set to true if the m_Lang_Label must not be translated
 };
 
-#define LANGUAGE_DESCR_COUNT 15
+#define LANGUAGE_DESCR_COUNT 16
 static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
 {
     {

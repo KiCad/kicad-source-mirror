@@ -306,6 +306,7 @@ OBJECTS = \
     Lang_Catalan.o\
     Lang_chinese.o\
     Lang_Default.o\
+    Lang_Cs.o\
     Lang_De.o\
     Lang_En.o\
     Lang_Es.o\

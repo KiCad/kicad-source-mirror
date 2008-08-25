@@ -91,7 +91,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case ID_LIBEDIT_PIN_BUTT:
-            if( CurrentDrawItem == NULL )
+            if( CurrentDrawItem == NULL || CurrentDrawItem->m_Flags == 0 )
             {
                 CreatePin( DC );
             }
