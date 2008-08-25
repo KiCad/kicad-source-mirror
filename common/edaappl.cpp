@@ -118,6 +118,12 @@ static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
         _( "Polish" )
     },
     {
+        wxLANGUAGE_CZECH,
+        ID_LANGUAGE_CZECH,
+        lang_cs_xpm,
+        _( "Czech" )
+    },
+    {
         wxLANGUAGE_RUSSIAN,
         ID_LANGUAGE_RUSSIAN,
         lang_ru_xpm,

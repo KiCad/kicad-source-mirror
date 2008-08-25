@@ -1,0 +1,29 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *lang_cs_xpm[];
+
+#else
+const char * lang_cs_xpm[] = {
+"16 16 5 1",
+". c None",
+"# c #000000",
+"a c #1000ff",
+"c c #ff0000",
+"b c #ffffff",
+"................",
+"................",
+"##############..",
+"#abbbbbbbbbbb#..",
+"#aabbbbbbbbbb#..",
+"#aaabbbbbbbbb#..",
+"#aaaabbbbbbbb#..",
+"#aaaaabbbbbbb#..",
+"#aaaacccccccc#..",
+"#aaaccccccccc#..",
+"#aacccccccccc#..",
+"#accccccccccc#..",
+"##############..",
+"................",
+"................",
+"................"};
+#endif

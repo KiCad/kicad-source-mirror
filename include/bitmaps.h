@@ -162,6 +162,7 @@ extern const char* label2text_xpm[];
 extern const char* label_xpm[];
 extern const char* lang_catalan_xpm[];
 extern const char* lang_chinese_xpm[];
+extern const char* lang_cs_xpm[];
 extern const char* lang_def_xpm[];
 extern const char* lang_de_xpm[];
 extern const char* lang_en_xpm[];
