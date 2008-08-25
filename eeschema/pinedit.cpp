@@ -558,11 +558,9 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 /* Creation d'une nouvelle pin */
 {
     LibEDA_BaseStruct* DrawItem;
-    LibDrawPin*        CurrentPin = (LibDrawPin*) CurrentDrawItem;
+    LibDrawPin*        CurrentPin;
 
     if( CurrentLibEntry == NULL )
-        return;
-    if( CurrentPin != NULL )
         return;
 
     /* Effacement des flags */

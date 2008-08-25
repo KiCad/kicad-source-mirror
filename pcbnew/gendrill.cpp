@@ -646,13 +646,13 @@ void WinEDA_DrillFrame::Write_Excellon_Header( FILE* aFile )
     if( !Minimal )
     {
         DateAndTime( Line );
-        wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-        fprintf( dest, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( Title ), Line );
-        fputs( ";FORMAT={", aFile );
-        fprintf( dest, "%s / absolute / ",
-                CONV_TO_UTF8( m_Choice_Precision->GetStringSelection() ) );
-        fprintf( dest, "%s / ", CONV_TO_UTF8( m_Choice_Unit->GetStringSelection() ) );
-        fprintf( dest, "%s}\n", CONV_TO_UTF8( m_Choice_Zeros_Format->GetStringSelection() ) );
+        wxString msg = g_Main_Title + wxT( " " ) + GetBuildVersion();
+        fprintf( aFile, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( msg ), Line );
+        msg = wxT( ";FORMAT={" );
+        msg << m_Choice_Precision->GetStringSelection() <<  wxT("/ absolute / ");
+        msg << m_Choice_Unit->GetStringSelection() <<  wxT(" / ");
+        msg << m_Choice_Zeros_Format->GetStringSelection() << wxT("}\n");
+        fputs( CONV_TO_UTF8( msg ), aFile );
 
         fputs( "R,T\nVER,1\nFMAT,2\n", aFile );
     }
