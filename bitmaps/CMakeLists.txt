@@ -20,7 +20,7 @@ foreach(LOOP_VAR ${BITMAP_SRCS})
     set(CPP_BITMAP "${XPM_CPP_PATH}/${BASENAME}.cpp")
     add_custom_command(
         OUTPUT ${CPP_BITMAP}
-        COMMAND cmake -E copy '${PATH}/${BASENAME}.xpm' '${CPP_BITMAP}'
+        COMMAND cmake -E copy "${PATH}/${BASENAME}.xpm" "${CPP_BITMAP}"
         DEPENDS ${BASENAME}.xpm)
     list(APPEND CPP_BITMAPS ${CPP_BITMAP})
     set_source_files_properties(${CPP_BITMAP} PROPERTIES COMPILE_FLAGS -DXPMMAIN)

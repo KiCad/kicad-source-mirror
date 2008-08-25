@@ -59,7 +59,7 @@
 #define OPTKEY_LAYERBASE             wxT( "PrintLayer_%d" )
 #define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
 #define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
-#define OPTKEY_PRINT_SCALE wxT( "PrintScale" )
+#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 #endif
 
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
@@ -90,7 +90,6 @@ static int          s_Print_Black_and_White = TRUE;
 static int          s_Scale_Select = 3; // default selected scale = ScaleList[3] = 1
 static bool         s_PrintMirror;
 static bool         s_Print_Sheet_Ref = TRUE;
-
 
 
 /****************************************************************/
@@ -201,20 +200,26 @@ void WinEDA_PrintFrame::SetOthersDatas()
     {
         m_BoxSelecLayer[ii] = new wxCheckBox( this, -1,
 #if defined (PCBNEW)
-            ( (WinEDA_PcbFrame*) m_Parent )->m_Pcb->GetLayerName( ii ) );
+                                             ( (WinEDA_PcbFrame*) m_Parent )->m_Pcb->GetLayerName(
+                                                 ii ) );
          #else
-            ReturnLayerName( ii ) );
+                                             ReturnLayerName( ii ) );
 #endif
 
         if( mask & s_SelectedLayers )
             m_BoxSelecLayer[ii]->SetValue( TRUE );
         if( ii < 16 )
             m_CopperLayersBoxSizer->Add( m_BoxSelecLayer[ii],
-                wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+                                         wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
         else
             m_TechLayersBoxSizer->Add( m_BoxSelecLayer[ii],
-                wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+                                       wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
     }
+
+    // Option for excluding contents of "Edges Pcb" layer
+#ifndef GERBVIEW
+    m_Exclude_Edges_Pcb->Show( true );
+#endif
 
     // Read the scale adjust option
     if( config )
@@ -343,7 +348,7 @@ wxString WinEDA_PrintFrame::BuildPrintTitle()
     wxString name, ext;
 
     wxFileName::SplitPath( m_Parent->GetBaseScreen()->m_FileName,
-        (wxString*) NULL, &name, &ext );
+                           (wxString*) NULL, &name, &ext );
     name += wxT( "-" ) + ext;
     return name;
 }
@@ -434,7 +439,7 @@ void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
     wxString        title   = BuildPrintTitle();
     wxPrintPreview* preview =
         new wxPrintPreview( new EDA_Printout( this, m_Parent, title, print_ref ),
-            new EDA_Printout( this, m_Parent, title, print_ref ), g_PrintData );
+                            new EDA_Printout( this, m_Parent, title, print_ref ), g_PrintData );
 
     if( preview == NULL )
     {
@@ -455,7 +460,7 @@ void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
     WSize.y += 6;
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this,
-        title, WPos, WSize );
+                                                title, WPos, WSize );
 
     frame->Initialize();
     frame->Show( TRUE );
@@ -715,7 +720,7 @@ void EDA_Printout::DrawPage()
 #ifdef PCBNEW
     double accurate_Xscale, accurate_Yscale;
     dc->SetUserScale( DrawZoom / scale * m_PrintFrame->m_XScaleAdjust,
-        DrawZoom / scale * m_PrintFrame->m_YScaleAdjust );
+                      DrawZoom / scale * m_PrintFrame->m_YScaleAdjust );
 
     // Compute Accurate scale 1
     {
@@ -820,7 +825,11 @@ void EDA_Printout::DrawPage()
         panel->m_ClipBox.SetOrigin( wxPoint( -0x7FFFFF, -0x7FFFFF ) );
     }
 
-    if ( !m_PrintFrame->m_Exclude_Edges_Pcb->GetValue() ) s_PrintMaskLayer |= EDGE_LAYER;
+#ifndef GERBVIEW
+    if( !m_PrintFrame->m_Exclude_Edges_Pcb->GetValue() )
+        s_PrintMaskLayer |= EDGE_LAYER;
+#endif
+
     panel->PrintPage( dc, 0, s_PrintMaskLayer );
 
 #else

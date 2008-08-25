@@ -36,6 +36,7 @@ class wxBoxSizer;
 
 ////@begin control identifiers
 #define ID_DIALOG 10000
+#define ID_EXCLUDE_EDGES_PCB 10005
 #define ID_SET_PRINT_SCALE 10004
 #define ID_TEXTCTRL 10009
 #define ID_TEXTCTRL1 10010
@@ -47,7 +48,6 @@ class wxBoxSizer;
 #define ID_PRINT_SETUP 10001
 #define ID_PRINT_PREVIEW 10002
 #define ID_PRINT_EXECUTE 10003
-#define ID_EXCLUDE_EDGES_PCB 10012
 #define SYMBOL_WINEDA_PRINTFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_PRINTFRAME_TITLE _("Print")
 #define SYMBOL_WINEDA_PRINTFRAME_IDNAME ID_DIALOG
@@ -130,20 +130,26 @@ public:
 
 
 ////@begin WinEDA_PrintFrame member variables
+    wxBoxSizer* m_FullDialogBowSizer;
+    wxBoxSizer* m_LeftBoxSizer;
+    wxBoxSizer* m_LayersSelectionsBoxSizer;
     wxBoxSizer* m_CopperLayersBoxSizer;
     wxBoxSizer* m_TechLayersBoxSizer;
     wxCheckBox* m_Exclude_Edges_Pcb;
+    wxBoxSizer* m_ScaleBoxSizer;
     wxRadioBox* m_ScaleOption;
     wxStaticText* m_FineAdjustXscaleTitle;
     wxTextCtrl* m_FineAdjustXscaleOpt;
     wxStaticText* m_FineAdjustYscaleTitle;
     wxTextCtrl* m_FineAdjustYscaleOpt;
+    wxStaticBox* m_OptionsBoxSizer;
     wxBoxSizer* m_DialogPenWidthSizer;
     wxCheckBox* m_Print_Sheet_Ref;
     wxCheckBox* m_Print_Mirror;
     wxRadioBox* m_ColorOption;
     wxRadioBox* m_PagesOptionPcb;
     wxRadioBox* m_PagesOptionEeschema;
+    wxBoxSizer* m_ButtonsBoxSizer;
     wxButton* m_CloseButton;
 ////@end WinEDA_PrintFrame member variables
 

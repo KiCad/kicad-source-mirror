@@ -136,6 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">0</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -177,6 +178,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -289,7 +292,7 @@
             <long name="locked">0</long>
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Horizontal"</string>
-            <string name="proxy-Member variable name">""</string>
+            <string name="proxy-Member variable name">"m_FullDialogBowSizer"</string>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -303,22 +306,164 @@
               <long name="owns-file">1</long>
               <long name="title-mode">0</long>
               <long name="locked">0</long>
-              <string name="created">"28/12/2006"</string>
+              <string name="created">"25/8/2008"</string>
               <string name="proxy-type">"wbBoxSizerProxy"</string>
               <string name="proxy-Orientation">"Vertical"</string>
-              <string name="proxy-Member variable name">"m_CopperLayersBoxSizer"</string>
+              <string name="proxy-Member variable name">"m_LeftBoxSizer"</string>
               <string name="proxy-AlignH">"Centre"</string>
-              <string name="proxy-AlignV">"Top"</string>
+              <string name="proxy-AlignV">"Expand"</string>
               <long name="proxy-Stretch factor">0</long>
               <long name="proxy-Border">5</long>
-              <bool name="proxy-wxLEFT">1</bool>
-              <bool name="proxy-wxRIGHT">1</bool>
+              <bool name="proxy-wxLEFT">0</bool>
+              <bool name="proxy-wxRIGHT">0</bool>
               <bool name="proxy-wxTOP">1</bool>
               <bool name="proxy-wxBOTTOM">1</bool>
               <bool name="proxy-wxSHAPED">0</bool>
               <bool name="proxy-wxADJUST_MINSIZE">0</bool>
               <bool name="proxy-wxFIXED_MINSIZE">0</bool>
               <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+              <document>
+                <string name="title">"wxBoxSizer H"</string>
+                <string name="type">"dialog-control-document"</string>
+                <string name="filename">""</string>
+                <string name="icon-name">"sizer"</string>
+                <long name="is-transient">0</long>
+                <long name="owns-file">1</long>
+                <long name="title-mode">0</long>
+                <long name="locked">0</long>
+                <string name="created">"25/8/2008"</string>
+                <string name="proxy-type">"wbBoxSizerProxy"</string>
+                <string name="proxy-Orientation">"Horizontal"</string>
+                <string name="proxy-Member variable name">"m_LayersSelectionsBoxSizer"</string>
+                <string name="proxy-AlignH">"Expand"</string>
+                <string name="proxy-AlignV">"Centre"</string>
+                <long name="proxy-Stretch factor">0</long>
+                <long name="proxy-Border">5</long>
+                <bool name="proxy-wxLEFT">1</bool>
+                <bool name="proxy-wxRIGHT">1</bool>
+                <bool name="proxy-wxTOP">1</bool>
+                <bool name="proxy-wxBOTTOM">1</bool>
+                <bool name="proxy-wxSHAPED">0</bool>
+                <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                <document>
+                  <string name="title">"wxBoxSizer V"</string>
+                  <string name="type">"dialog-control-document"</string>
+                  <string name="filename">""</string>
+                  <string name="icon-name">"sizer"</string>
+                  <long name="is-transient">0</long>
+                  <long name="owns-file">1</long>
+                  <long name="title-mode">0</long>
+                  <long name="locked">0</long>
+                  <string name="created">"25/8/2008"</string>
+                  <string name="proxy-type">"wbBoxSizerProxy"</string>
+                  <string name="proxy-Orientation">"Vertical"</string>
+                  <string name="proxy-Member variable name">"m_CopperLayersBoxSizer"</string>
+                  <string name="proxy-AlignH">"Centre"</string>
+                  <string name="proxy-AlignV">"Top"</string>
+                  <long name="proxy-Stretch factor">0</long>
+                  <long name="proxy-Border">5</long>
+                  <bool name="proxy-wxLEFT">0</bool>
+                  <bool name="proxy-wxRIGHT">1</bool>
+                  <bool name="proxy-wxTOP">1</bool>
+                  <bool name="proxy-wxBOTTOM">1</bool>
+                  <bool name="proxy-wxSHAPED">0</bool>
+                  <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                  <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                  <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                </document>
+                <document>
+                  <string name="title">"wxBoxSizer V"</string>
+                  <string name="type">"dialog-control-document"</string>
+                  <string name="filename">""</string>
+                  <string name="icon-name">"sizer"</string>
+                  <long name="is-transient">0</long>
+                  <long name="owns-file">1</long>
+                  <long name="title-mode">0</long>
+                  <long name="locked">0</long>
+                  <string name="created">"25/8/2008"</string>
+                  <string name="proxy-type">"wbBoxSizerProxy"</string>
+                  <string name="proxy-Orientation">"Vertical"</string>
+                  <string name="proxy-Member variable name">"m_TechLayersBoxSizer"</string>
+                  <string name="proxy-AlignH">"Centre"</string>
+                  <string name="proxy-AlignV">"Top"</string>
+                  <long name="proxy-Stretch factor">0</long>
+                  <long name="proxy-Border">5</long>
+                  <bool name="proxy-wxLEFT">1</bool>
+                  <bool name="proxy-wxRIGHT">1</bool>
+                  <bool name="proxy-wxTOP">1</bool>
+                  <bool name="proxy-wxBOTTOM">1</bool>
+                  <bool name="proxy-wxSHAPED">0</bool>
+                  <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                  <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                  <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                </document>
+              </document>
+              <document>
+                <string name="title">"wxCheckBox: ID_EXCLUDE_EDGES_PCB"</string>
+                <string name="type">"dialog-control-document"</string>
+                <string name="filename">""</string>
+                <string name="icon-name">"checkbox"</string>
+                <long name="is-transient">0</long>
+                <long name="owns-file">1</long>
+                <long name="title-mode">0</long>
+                <long name="locked">0</long>
+                <string name="created">"25/8/2008"</string>
+                <string name="proxy-type">"wbCheckBoxProxy"</string>
+                <string name="proxy-Id name">"ID_EXCLUDE_EDGES_PCB"</string>
+                <long name="proxy-Id value">10005</long>
+                <string name="proxy-Name">""</string>
+                <string name="proxy-Class">"wxCheckBox"</string>
+                <string name="proxy-Base class">"wxCheckBox"</string>
+                <bool name="proxy-External implementation">1</bool>
+                <bool name="proxy-Separate files">0</bool>
+                <string name="proxy-Implementation filename">""</string>
+                <string name="proxy-Header filename">""</string>
+                <string name="proxy-Member variable name">"m_Exclude_Edges_Pcb"</string>
+                <string name="proxy-Label">"Exclude Edges_Pcb Layer"</string>
+                <bool name="proxy-Initial value">0</bool>
+                <string name="proxy-Help text">""</string>
+                <string name="proxy-Tooltip text">"Exclude contents of Edges_Pcb layer from all other layers"</string>
+                <string name="proxy-Data variable">""</string>
+                <string name="proxy-Data validator">""</string>
+                <string name="proxy-Data source">""</string>
+                <string name="proxy-Data class name">""</string>
+                <string name="proxy-Data class implementation filename">""</string>
+                <string name="proxy-Data class header filename">""</string>
+                <string name="proxy-Data class manager window">""</string>
+                <string name="proxy-Background colour">""</string>
+                <string name="proxy-Foreground colour">""</string>
+                <string name="proxy-Font">""</string>
+                <bool name="proxy-Hidden">1</bool>
+                <bool name="proxy-Enabled">1</bool>
+                <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                <bool name="proxy-wxALIGN_RIGHT">0</bool>
+                <bool name="proxy-wxCHK_2STATE">0</bool>
+                <bool name="proxy-wxCHK_3STATE">0</bool>
+                <bool name="proxy-wxCHK_ALLOW_3RD_STATE_FOR_USER">0</bool>
+                <bool name="proxy-wxWANTS_CHARS">0</bool>
+                <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
+                <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
+                <string name="proxy-Custom styles">""</string>
+                <long name="proxy-X">-1</long>
+                <long name="proxy-Y">-1</long>
+                <long name="proxy-Width">-1</long>
+                <long name="proxy-Height">-1</long>
+                <string name="proxy-AlignH">"Expand"</string>
+                <string name="proxy-AlignV">"Centre"</string>
+                <long name="proxy-Stretch factor">0</long>
+                <long name="proxy-Border">5</long>
+                <bool name="proxy-wxLEFT">1</bool>
+                <bool name="proxy-wxRIGHT">1</bool>
+                <bool name="proxy-wxTOP">1</bool>
+                <bool name="proxy-wxBOTTOM">1</bool>
+                <bool name="proxy-wxSHAPED">0</bool>
+                <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                <string name="proxy-Custom arguments">""</string>
+                <string name="proxy-Custom ctor arguments">""</string>
+              </document>
             </document>
             <document>
               <string name="title">"wxBoxSizer V"</string>
@@ -332,33 +477,7 @@
               <string name="created">"28/12/2006"</string>
               <string name="proxy-type">"wbBoxSizerProxy"</string>
               <string name="proxy-Orientation">"Vertical"</string>
-              <string name="proxy-Member variable name">"m_TechLayersBoxSizer"</string>
-              <string name="proxy-AlignH">"Centre"</string>
-              <string name="proxy-AlignV">"Top"</string>
-              <long name="proxy-Stretch factor">0</long>
-              <long name="proxy-Border">5</long>
-              <bool name="proxy-wxLEFT">1</bool>
-              <bool name="proxy-wxRIGHT">1</bool>
-              <bool name="proxy-wxTOP">1</bool>
-              <bool name="proxy-wxBOTTOM">1</bool>
-              <bool name="proxy-wxSHAPED">0</bool>
-              <bool name="proxy-wxADJUST_MINSIZE">0</bool>
-              <bool name="proxy-wxFIXED_MINSIZE">0</bool>
-              <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
-            </document>
-            <document>
-              <string name="title">"wxBoxSizer V"</string>
-              <string name="type">"dialog-control-document"</string>
-              <string name="filename">""</string>
-              <string name="icon-name">"sizer"</string>
-              <long name="is-transient">0</long>
-              <long name="owns-file">1</long>
-              <long name="title-mode">0</long>
-              <long name="locked">0</long>
-              <string name="created">"28/12/2006"</string>
-              <string name="proxy-type">"wbBoxSizerProxy"</string>
-              <string name="proxy-Orientation">"Vertical"</string>
-              <string name="proxy-Member variable name">""</string>
+              <string name="proxy-Member variable name">"m_ScaleBoxSizer"</string>
               <string name="proxy-AlignH">"Centre"</string>
               <string name="proxy-AlignV">"Expand"</string>
               <long name="proxy-Stretch factor">0</long>
@@ -739,7 +858,6 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Custom arguments">""</string>
                 <string name="proxy-Custom ctor arguments">""</string>
-                <bool name="proxy-wxTE_LINEWRAP">0</bool>
               </document>
             </document>
             <document>
@@ -807,7 +925,7 @@
                 <string name="proxy-Id name">"wxID_ANY"</string>
                 <long name="proxy-Id value">-1</long>
                 <string name="proxy-Label">"Options:"</string>
-                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-Member variable name">"m_OptionsBoxSizer"</string>
                 <string name="proxy-Sizer member variable name">""</string>
                 <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
@@ -1214,7 +1332,7 @@
               <string name="created">"28/12/2006"</string>
               <string name="proxy-type">"wbBoxSizerProxy"</string>
               <string name="proxy-Orientation">"Vertical"</string>
-              <string name="proxy-Member variable name">""</string>
+              <string name="proxy-Member variable name">"m_ButtonsBoxSizer"</string>
               <string name="proxy-AlignH">"Centre"</string>
               <string name="proxy-AlignV">"Top"</string>
               <long name="proxy-Stretch factor">0</long>
