@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-24 13:20+0100\n"
-"PO-Revision-Date: 2008-08-24 13:25+0100\n"
+"POT-Creation-Date: 2008-08-25 20:03+0100\n"
+"PO-Revision-Date: 2008-08-25 20:56+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -4780,101 +4780,105 @@ msgstr "cale"
 msgid "??"
 msgstr "??"
 
-#: kicad/share/dialog_print.cpp:137
+#: kicad/share/dialog_print.cpp:146
+msgid "Exclude Edges_Pcb Layer"
+msgstr "Pomiń warstwę krawędzi PCB"
+
+#: kicad/share/dialog_print.cpp:157
 msgid "fit in page"
 msgstr "Dopasuj do strony"
 
-#: kicad/share/dialog_print.cpp:138
+#: kicad/share/dialog_print.cpp:158
 msgid "Scale 0.5"
 msgstr "Skala 0,5"
 
-#: kicad/share/dialog_print.cpp:139
+#: kicad/share/dialog_print.cpp:159
 msgid "Scale 0.7"
 msgstr "Skala 0,7"
 
-#: kicad/share/dialog_print.cpp:140
+#: kicad/share/dialog_print.cpp:160
 msgid "Approx. Scale 1"
 msgstr "Przybliżona skala 1"
 
-#: kicad/share/dialog_print.cpp:141
+#: kicad/share/dialog_print.cpp:161
 msgid "Accurate Scale 1"
 msgstr "Dokładna skala 1"
 
-#: kicad/share/dialog_print.cpp:142
+#: kicad/share/dialog_print.cpp:162
 msgid "Scale 1.4"
 msgstr "Skala 1,4"
 
-#: kicad/share/dialog_print.cpp:145
+#: kicad/share/dialog_print.cpp:165
 msgid "Scale 4"
 msgstr "Skala 4"
 
-#: kicad/share/dialog_print.cpp:146
+#: kicad/share/dialog_print.cpp:166
 msgid "Approx. Scale:"
 msgstr "Przybliżona skala:"
 
-#: kicad/share/dialog_print.cpp:150
+#: kicad/share/dialog_print.cpp:170
 msgid "X Scale Adjust"
 msgstr "Dostosuj skalę X"
 
-#: kicad/share/dialog_print.cpp:156
+#: kicad/share/dialog_print.cpp:176
 msgid "Y Scale Adjust"
 msgstr "Dostosuj skalę Y"
 
-#: kicad/share/dialog_print.cpp:174
+#: kicad/share/dialog_print.cpp:194
 #: kicad/share/svg_print.cpp:218
 msgid "Print Sheet Ref"
 msgstr "Drukuj oznaczenia arkusza"
 
-#: kicad/share/dialog_print.cpp:183
+#: kicad/share/dialog_print.cpp:203
 #: kicad/share/svg_print.cpp:212
 msgid "Color"
 msgstr "Kolor"
 
-#: kicad/share/dialog_print.cpp:184
+#: kicad/share/dialog_print.cpp:204
 msgid "Black"
 msgstr "Czarny"
 
-#: kicad/share/dialog_print.cpp:185
+#: kicad/share/dialog_print.cpp:205
 msgid "Color Print:"
 msgstr "Kolor wydruku:"
 
-#: kicad/share/dialog_print.cpp:190
+#: kicad/share/dialog_print.cpp:210
 msgid "1 Page per Layer"
 msgstr "1 strona na warstwę"
 
-#: kicad/share/dialog_print.cpp:191
+#: kicad/share/dialog_print.cpp:211
 msgid "Single Page"
 msgstr "Pojedyncza strona"
 
-#: kicad/share/dialog_print.cpp:192
-#: kicad/share/dialog_print.cpp:199
+#: kicad/share/dialog_print.cpp:212
+#: kicad/share/dialog_print.cpp:219
 #: kicad/share/svg_print.cpp:230
 msgid "Page Print:"
 msgstr "Wydruk strony:"
 
-#: kicad/share/dialog_print.cpp:197
+#: kicad/share/dialog_print.cpp:217
 #: kicad/share/svg_print.cpp:228
 msgid "Current"
 msgstr "Bieżąca"
 
-#: kicad/share/dialog_print.cpp:198
+#: kicad/share/dialog_print.cpp:218
 #: kicad/share/svg_print.cpp:229
 msgid "All"
 msgstr "Wszystkie"
 
-#: kicad/share/dialog_print.cpp:210
+#: kicad/share/dialog_print.cpp:230
 msgid "Print S&etup"
 msgstr "&Ustawienia wydruku"
 
-#: kicad/share/dialog_print.cpp:214
+#: kicad/share/dialog_print.cpp:234
 msgid "Pre&view"
 msgstr "Pod&gląd"
 
-#: kicad/share/dialog_print.cpp:218
+#: kicad/share/dialog_print.cpp:238
 msgid "&Print"
 msgstr "&Drukuj"
 
-#: kicad/share/dialog_print.cpp:235
+#: kicad/share/dialog_print.cpp:256
 #: kicad/share/svg_print.cpp:262
 msgid "Pen width mini"
 msgstr "Minimalna szerokość pisaka"
@@ -4915,23 +4919,23 @@ msgstr "Wybór siatki"
 msgid "grid user"
 msgstr "Siatka użytkownika"
 
-#: kicad/share/wxprint.cpp:164
+#: kicad/share/wxprint.cpp:163
 msgid "Error Init Printer info"
 msgstr "Błąd inicjalizacji drukarki"
 
-#: kicad/share/wxprint.cpp:408
+#: kicad/share/wxprint.cpp:413
 msgid "Printer Problem!"
 msgstr "Problem drukarki!"
 
-#: kicad/share/wxprint.cpp:441
+#: kicad/share/wxprint.cpp:446
 msgid "There was a problem previewing"
 msgstr "Wystąpił problem podczas tworzenia podglądu"
 
-#: kicad/share/wxprint.cpp:505
+#: kicad/share/wxprint.cpp:510
 msgid "There was a problem printing"
 msgstr "Wystąpił problem podczas drukowania"
 
-#: kicad/share/wxprint.cpp:521
+#: kicad/share/wxprint.cpp:526
 #, c-format
 msgid "Print page %d"
 msgstr "Drukuj stronę %d"
@@ -5561,7 +5565,7 @@ msgid "&Bus"
 msgstr "&Magistrala"
 
 #: kicad/eeschema/menubar.cpp:227
-msgid "Place the bus"
+msgid "Place a bus"
 msgstr "Dodaj magistralę"
 
 #: kicad/eeschema/menubar.cpp:236
@@ -5569,7 +5573,7 @@ msgid "W&ire to bus entry"
 msgstr "Wejście połączenia do mag&istrali"
 
 #: kicad/eeschema/menubar.cpp:237
-msgid "Place the wire to bus entry"
+msgid "Place a wire to bus entry"
 msgstr "Dodaj wejście połączenia do magistrali"
 
 #: kicad/eeschema/menubar.cpp:246
@@ -5577,7 +5581,7 @@ msgid "B&us to bus entry"
 msgstr "Wejście magistrali &do magistrali"
 
 #: kicad/eeschema/menubar.cpp:247
-msgid "Place the bus to bus entry"
+msgid "Place a bus to bus entry"
 msgstr "Dodaj wejście magistrali do magistrali"
 
 #: kicad/eeschema/menubar.cpp:256
@@ -5585,7 +5589,7 @@ msgid "No connect flag"
 msgstr "Flaga \"niepołączone\""
 
 #: kicad/eeschema/menubar.cpp:257
-msgid "Place the no connect flag"
+msgid "Place a no connect flag"
 msgstr "Dodaj flagę \"niepołączone\""
 
 #: kicad/eeschema/menubar.cpp:266
@@ -5593,7 +5597,7 @@ msgid "Net name"
 msgstr "Nazwa sieci"
 
 #: kicad/eeschema/menubar.cpp:267
-msgid "Place the net name"
+msgid "Place a net name"
 msgstr "Dodaj nazwę sieci"
 
 #: kicad/eeschema/menubar.cpp:274
@@ -5601,7 +5605,7 @@ msgid "Global label"
 msgstr "Etykieta globalna"
 
 #: kicad/eeschema/menubar.cpp:275
-msgid "Place the global label. Warning: all global labels with the same name are connected in whole hierarchy"
+msgid "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy"
 msgstr "Dodaj etykietę globalną. Ostrzeżenie: wszystkie etykiety globalne o tej samej nazwie są połączone w całej hierarchii"
 
 #: kicad/eeschema/menubar.cpp:284
@@ -5609,7 +5613,7 @@ msgid "Junction"
 msgstr "Węzeł"
 
 #: kicad/eeschema/menubar.cpp:285
-msgid "Place the junction"
+msgid "Place a junction"
 msgstr "Dodaj węzeł"
 
 #: kicad/eeschema/menubar.cpp:296
@@ -5617,7 +5621,7 @@ msgid "Hierarchical label"
 msgstr "Etykieta hierarchiczna"
 
 #: kicad/eeschema/menubar.cpp:297
-msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
+msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Dodaj etykietę hierarchiczną. Etykieta ta będzie widoczna jako arkusz pinów w symbolu arkusza"
 
 #: kicad/eeschema/menubar.cpp:306
@@ -5625,23 +5629,23 @@ msgid "Hierarchical sheet"
 msgstr "Arkusz hierarchiczny"
 
 #: kicad/eeschema/menubar.cpp:307
-msgid "Place the hierarchical sheet"
-msgstr "Dodaj hierarchiczny arkusz"
+msgid "Create a hierarchical sheet"
+msgstr "Utwórz arkusz hierarchiczny"
 
 #: kicad/eeschema/menubar.cpp:316
-msgid "Imported hierarchical label"
-msgstr "Zaimportowana etykieta hierarchiczna"
+msgid "Import Hierarchical Label"
+msgstr "Importuj hierarchiczną etykietę"
 
 #: kicad/eeschema/menubar.cpp:317
-msgid "Place the pin sheet (imported hierarchical label from sheet)"
-msgstr "Dodaj arkusz pinów (zaimportowaną etykietę hierarchiczną z arkusza)"
+msgid "Place a pin sheet created by importing a hierarchical label from sheet"
+msgstr "Dodaj arkusz pinów utworzony poprzez zaimportowanie etykiety hierarchicznej z arkusza)"
 
 #: kicad/eeschema/menubar.cpp:326
-msgid "Hierarchical pin to sheet"
-msgstr "Hierarchiczny pin do arkusza"
+msgid "Add Hierarchical Pin to Sheet"
+msgstr "Dodaj hierarchiczny pin do arkusza"
 
 #: kicad/eeschema/menubar.cpp:327
-msgid "Place the hierarchical pin to sheet"
+msgid "Place a hierarchical pin to sheet"
 msgstr "Dodaj hierarchiczny pin do arkusza"
 
 #: kicad/eeschema/menubar.cpp:338
@@ -6654,6 +6658,26 @@ msgstr "Numeracja wsteczna obudowy"
 msgid "Hierarchy Push/Pop"
 msgstr "Nawigacja w hierarchii"
 
+#: kicad/eeschema/tool_sch.cpp:169
+msgid "Place the bus"
+msgstr "Dodaj magistralę"
+
+#: kicad/eeschema/tool_sch.cpp:173
+msgid "Place the wire to bus entry"
+msgstr "Dodaj wejście połączenia do magistrali"
+
+#: kicad/eeschema/tool_sch.cpp:177
+msgid "Place the bus to bus entry"
+msgstr "Dodaj wejście magistrali do magistrali"
+
+#: kicad/eeschema/tool_sch.cpp:182
+msgid "Place the no connect flag"
+msgstr "Dodaj flagę \"niepołączone\""
+
+#: kicad/eeschema/tool_sch.cpp:186
+msgid "Place the net name"
+msgstr "Dodaj nazwę sieci"
+
 #: kicad/eeschema/tool_sch.cpp:190
 msgid ""
 "Place the global label.\n"
@@ -6661,6 +6685,22 @@ msgid ""
 msgstr ""
 "Dodaj etykietę globalną.\n"
 "Ostrzeżenie: wszystkie etykiety globalne z tą samą nazwą są połączone w całej hierarchii"
+
+#: kicad/eeschema/tool_sch.cpp:195
+msgid "Place the junction"
+msgstr "Dodaj węzeł"
+
+#: kicad/eeschema/tool_sch.cpp:200
+msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
+msgstr "Dodaj etykietę hierarchiczną. Etykieta ta będzie widoczna jako arkusz pinów w symbolu arkusza"
+
+#: kicad/eeschema/tool_sch.cpp:205
+msgid "Place the hierarchical sheet"
+msgstr "Dodaj hierarchiczny arkusz"
+
+#: kicad/eeschema/tool_sch.cpp:209
+msgid "Place the pin sheet (imported hierarchical label from sheet)"
+msgstr "Dodaj arkusz pinów (zaimportowaną etykietę hierarchiczną z arkusza)"
 
 #: kicad/eeschema/tool_sch.cpp:214
 msgid "Place the hierachical pin to sheet"
@@ -7431,21 +7471,21 @@ msgstr "Wyjście L"
 msgid "Occupied by other pin. Continue?"
 msgstr "Zajmowane przez inny pin. Kontynuować?"
 
-#: kicad/eeschema/pinedit.cpp:1007
+#: kicad/eeschema/pinedit.cpp:1005
 #, c-format
 msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
 msgstr "Zduplikowany pin %4.4s (Pin %s lok. %d, %d, i Pin %s lok. %d, %d)"
 
-#: kicad/eeschema/pinedit.cpp:1013
+#: kicad/eeschema/pinedit.cpp:1011
 #, c-format
 msgid "  Part %d"
 msgstr " Element %d"
 
-#: kicad/eeschema/pinedit.cpp:1019
+#: kicad/eeschema/pinedit.cpp:1017
 msgid "  Convert"
 msgstr "  Skonwertowany"
 
-#: kicad/eeschema/pinedit.cpp:1021
+#: kicad/eeschema/pinedit.cpp:1019
 msgid "  Normal"
 msgstr " Normalny"
 
@@ -8242,26 +8282,30 @@ msgid "Polish"
 msgstr "Polski"
 
 #: kicad/common/edaappl.cpp:124
+msgid "Czech"
+msgstr "Czeski"
+
+#: kicad/common/edaappl.cpp:130
 msgid "Russian"
 msgstr "Rosyjski"
 
-#: kicad/common/edaappl.cpp:130
+#: kicad/common/edaappl.cpp:136
 msgid "Korean"
 msgstr "Koreański"
 
-#: kicad/common/edaappl.cpp:136
+#: kicad/common/edaappl.cpp:142
 msgid "Chinese simplified"
 msgstr "Chiński uproszczony"
 
-#: kicad/common/edaappl.cpp:142
+#: kicad/common/edaappl.cpp:148
 msgid "Catalan"
 msgstr "Kataloński"
 
-#: kicad/common/edaappl.cpp:148
+#: kicad/common/edaappl.cpp:154
 msgid "Dutch"
 msgstr "Holenderski"
 
-#: kicad/common/edaappl.cpp:597
+#: kicad/common/edaappl.cpp:603
 msgid "Language"
 msgstr "Język"
 
@@ -8491,74 +8535,6 @@ msgstr "BŁĘDNY INDEKS"
 #, c-format
 msgid "Help file %s not found"
 msgstr "Nie znaleziono pliku pomocy %s"
-
-#: kicad/common/about_kicad.cpp:27
-msgid " Unicode "
-msgstr " Unicode "
-
-#: kicad/common/about_kicad.cpp:29
-msgid " Ansi "
-msgstr " Ansi "
-
-#: kicad/common/about_kicad.cpp:34
-msgid "on Windows"
-msgstr "na Windows"
-
-#: kicad/common/about_kicad.cpp:39
-msgid "on Macintosch"
-msgstr "na Macintosch"
-
-#: kicad/common/about_kicad.cpp:44
-msgid "on GNU/Linux "
-msgstr "na GNU/Linuksie "
-
-#: kicad/common/about_kicad.cpp:46
-msgid "64 bits"
-msgstr "64 bity"
-
-#: kicad/common/about_kicad.cpp:48
-msgid "32 bits"
-msgstr "32 bity"
-
-#: kicad/common/about_kicad.cpp:77
-msgid ""
-"\n"
-"Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
-msgstr ""
-"\n"
-"Holenderski (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
-
-#: kicad/common/about_kicad.cpp:78
-msgid ""
-"\n"
-"French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
-msgstr ""
-"\n"
-"Francuski (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
-
-#: kicad/common/about_kicad.cpp:79
-msgid ""
-"\n"
-"Polish (PL) Mateusz Skowronski <skowri@gmail.com>"
-msgstr ""
-"\n"
-"Polski (PL) Mateusz Skowroński <skowri@gmail.com>"
-
-#: kicad/common/about_kicad.cpp:80
-msgid ""
-"\n"
-"Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
-msgstr ""
-"\n"
-"Portugalski (PT) Renie Marquet <reniemarquet@uol.com.br>"
-
-#: kicad/common/about_kicad.cpp:81
-msgid ""
-"\n"
-"Russian (RU) Igor Plyatov <plyatov@gmail.com>"
-msgstr ""
-"\n"
-"Rosyjski (RU) Igor Plyatov <plyatov@gmail.com>"
 
 #: kicad/common/get_component_dialog.cpp:105
 msgid "History list:"
@@ -9444,7 +9420,6 @@ msgid "3D Footprints Shapes On/Off"
 msgstr "Kształty obudów 3D Wł./Wył."
 
 #: kicad/3d-viewer/3d_toolbar.cpp:139
-#, fuzzy
 msgid "PCB place 3D On/off"
 msgstr ""
 
@@ -9969,7 +9944,7 @@ msgstr "Pokaż moduły po stronie ścieżek"
 msgid "Footprints Orientation"
 msgstr "Orientacja obudów"
 
-#: kicad/share/dialog_print.h:51
+#: kicad/share/dialog_print.h:52
 msgid "Print"
 msgstr "Drukuj"
 
@@ -10273,6 +10248,50 @@ msgstr "Pozostałe"
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
 
+#~ msgid " Unicode "
+#~ msgstr " Unicode "
+#~ msgid " Ansi "
+#~ msgstr " Ansi "
+#~ msgid "on Windows"
+#~ msgstr "na Windows"
+#~ msgid "on Macintosch"
+#~ msgstr "na Macintosch"
+#~ msgid "on GNU/Linux "
+#~ msgstr "na GNU/Linuksie "
+#~ msgid "64 bits"
+#~ msgstr "64 bity"
+#~ msgid "32 bits"
+#~ msgstr "32 bity"
+#~ msgid ""
+#~ "\n"
+#~ "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
+#~ msgstr ""
+#~ "\n"
+#~ "Holenderski (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
+#~ msgid ""
+#~ "\n"
+#~ "French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
+#~ msgstr ""
+#~ "\n"
+#~ "Francuski (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
+#~ msgid ""
+#~ "\n"
+#~ "Polish (PL) Mateusz Skowronski <skowri@gmail.com>"
+#~ msgstr ""
+#~ "\n"
+#~ "Polski (PL) Mateusz Skowroński <skowri@gmail.com>"
+#~ msgid ""
+#~ "\n"
+#~ "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
+#~ msgstr ""
+#~ "\n"
+#~ "Portugalski (PT) Renie Marquet <reniemarquet@uol.com.br>"
+#~ msgid ""
+#~ "\n"
+#~ "Russian (RU) Igor Plyatov <plyatov@gmail.com>"
+#~ msgstr ""
+#~ "\n"
+#~ "Rosyjski (RU) Igor Plyatov <plyatov@gmail.com>"
 #~ msgid "&Plot CURRENT"
 #~ msgstr "&Rysuj BIEŻĄCY"
 #~ msgid "Move Feild "
