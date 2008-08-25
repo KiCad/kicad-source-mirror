@@ -47,6 +47,7 @@ class wxBoxSizer;
 #define ID_PRINT_SETUP 10001
 #define ID_PRINT_PREVIEW 10002
 #define ID_PRINT_EXECUTE 10003
+#define ID_EXCLUDE_EDGES_PCB 10012
 #define SYMBOL_WINEDA_PRINTFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_PRINTFRAME_TITLE _("Print")
 #define SYMBOL_WINEDA_PRINTFRAME_IDNAME ID_DIALOG
@@ -131,6 +132,7 @@ public:
 ////@begin WinEDA_PrintFrame member variables
     wxBoxSizer* m_CopperLayersBoxSizer;
     wxBoxSizer* m_TechLayersBoxSizer;
+    wxCheckBox* m_Exclude_Edges_Pcb;
     wxRadioBox* m_ScaleOption;
     wxStaticText* m_FineAdjustXscaleTitle;
     wxTextCtrl* m_FineAdjustXscaleOpt;

@@ -80,6 +80,7 @@ bool WinEDA_PrintFrame::Create( wxWindow* parent, wxWindowID id, const wxString&
 ////@begin WinEDA_PrintFrame member initialisation
     m_CopperLayersBoxSizer = NULL;
     m_TechLayersBoxSizer = NULL;
+    m_Exclude_Edges_Pcb = NULL;
     m_ScaleOption = NULL;
     m_FineAdjustXscaleTitle = NULL;
     m_FineAdjustXscaleOpt = NULL;
@@ -124,14 +125,29 @@ void WinEDA_PrintFrame::CreateControls()
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     itemDialog1->SetSizer(itemBoxSizer2);
 
+    wxBoxSizer* leftBoxSizer = new wxBoxSizer(wxVERTICAL);
+    itemBoxSizer2->Add(leftBoxSizer, 0, wxALIGN_TOP|wxALL,5);
+    
+    wxBoxSizer* layersBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    leftBoxSizer->Add(layersBoxSizer, 0, wxGROW|wxALL,5);
+    
     m_CopperLayersBoxSizer = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer2->Add(m_CopperLayersBoxSizer, 0, wxALIGN_TOP|wxALL, 5);
+    layersBoxSizer->Add(m_CopperLayersBoxSizer, 0, wxGROW|wxALL, 5);
 
     m_TechLayersBoxSizer = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer2->Add(m_TechLayersBoxSizer, 0, wxALIGN_TOP|wxALL, 5);
+    layersBoxSizer->Add(m_TechLayersBoxSizer, 0, wxALIGN_TOP|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer5, 0, wxGROW|wxALL, 5);
+    
+    // Option for excluding contents of "Edges Pcb" layer
+    m_Exclude_Edges_Pcb = new wxCheckBox( this,
+	ID_EXCLUDE_EDGES_PCB, _( "Exclude Edges_Pcb layer" ) );
+                
+    //m_Exclude_Edges_Pcb->SetValue( g_Exclude_Edges_Pcb );
+    m_Exclude_Edges_Pcb->SetToolTip(
+        _( "Exclude contents of Edges_Pcb layer from all other layers" ) );
+    leftBoxSizer->Add( m_Exclude_Edges_Pcb, 0, wxGROW | wxALL, 1 );
 
     wxArrayString m_ScaleOptionStrings;
     m_ScaleOptionStrings.Add(_("fit in page"));

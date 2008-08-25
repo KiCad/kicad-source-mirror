@@ -820,6 +820,7 @@ void EDA_Printout::DrawPage()
         panel->m_ClipBox.SetOrigin( wxPoint( -0x7FFFFF, -0x7FFFFF ) );
     }
 
+    if ( !m_PrintFrame->m_Exclude_Edges_Pcb->GetValue() ) s_PrintMaskLayer |= EDGE_LAYER;
     panel->PrintPage( dc, 0, s_PrintMaskLayer );
 
 #else

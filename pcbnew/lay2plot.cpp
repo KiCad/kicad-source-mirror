@@ -51,8 +51,6 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayDrawItems  = FILLED;
     DisplayOpt.DisplayZones      = TRUE;
 
-    printmasklayer |= EDGE_LAYER;
-
     /* Draw the pcb graphic items (texts, ...) */
     for( BOARD_ITEM* item = Pcb->m_Drawings;  item;  item = item->Next() )
     {
