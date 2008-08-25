@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-23 13:52+0100\n"
-"PO-Revision-Date: 2008-08-23 14:01+0100\n"
+"POT-Creation-Date: 2008-08-25 08:23+0100\n"
+"PO-Revision-Date: 2008-08-25 08:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -6867,87 +6867,87 @@ msgid "&Bus"
 msgstr "&Bus"
 
 #: eeschema/menubar.cpp:227
-msgid "Place the bus"
-msgstr "Placer le Bus"
+msgid "Place a bus"
+msgstr "Placer un Bus"
 
 #: eeschema/menubar.cpp:236
 msgid "W&ire to bus entry"
 msgstr "Entrées de bus (type fil vers bus)"
 
 #: eeschema/menubar.cpp:237
-msgid "Place the wire to bus entry"
-msgstr "Placer des entrées de bus (type fil vers bus)"
+msgid "Place a wire to bus entry"
+msgstr "Placer une Entrée de Bus (type fil vers bus)"
 
 #: eeschema/menubar.cpp:246
 msgid "B&us to bus entry"
 msgstr "Entrées de bus (type bus vers bus)"
 
 #: eeschema/menubar.cpp:247
-msgid "Place the bus to bus entry"
-msgstr "Placer des entrées de bus (type bus vers bus)"
+msgid "Place a bus to bus entry"
+msgstr "Placer une Entrée de Bus (type bus vers bus)"
 
 #: eeschema/menubar.cpp:256
 msgid "No connect flag"
 msgstr "Symbole de Non Connexion"
 
 #: eeschema/menubar.cpp:257
-msgid "Place the no connect flag"
-msgstr "Placer le symbole de non connexion"
+msgid "Place a no connect flag"
+msgstr "Placer un Symbole de Non Connexion"
 
 #: eeschema/menubar.cpp:266
 msgid "Net name"
 msgstr "Net Name"
 
 #: eeschema/menubar.cpp:267
-msgid "Place the net name"
-msgstr "Placer le nom de net"
+msgid "Place a net name"
+msgstr "Placer un Nom de Net"
 
 #: eeschema/menubar.cpp:274
 msgid "Global label"
 msgstr "Label Global"
 
 #: eeschema/menubar.cpp:275
-msgid "Place the global label. Warning: all global labels with the same name are connected in whole hierarchy"
-msgstr "Placerun label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hierarchie"
+msgid "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy"
+msgstr "Placer un label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hierarchie"
 
 #: eeschema/menubar.cpp:284
 msgid "Junction"
 msgstr "Jonction"
 
 #: eeschema/menubar.cpp:285
-msgid "Place the junction"
-msgstr "Placer la Jonction"
+msgid "Place a junction"
+msgstr "Placer une Jonction"
 
 #: eeschema/menubar.cpp:296
 msgid "Hierarchical label"
 msgstr "Label Hiérarchique"
 
 #: eeschema/menubar.cpp:297
-msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
-msgstr "Placer le label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
+msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
+msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
 
 #: eeschema/menubar.cpp:306
 msgid "Hierarchical sheet"
 msgstr "Feuille Hiérrachique"
 
 #: eeschema/menubar.cpp:307
-msgid "Place the hierarchical sheet"
-msgstr "Placer la Feuille Hiérachique"
+msgid "Create a hierarchical sheet"
+msgstr "Créer une Feuille Hiérachique"
 
 #: eeschema/menubar.cpp:316
-msgid "Imported hierarchical label"
-msgstr "Importer label hiérarchique"
+msgid "Import Hierarchical Label"
+msgstr "Importer Label Hiérarchique"
 
 #: eeschema/menubar.cpp:317
-msgid "Place the pin sheet (imported hierarchical label from sheet)"
-msgstr "Placer la pin hiérarchique ( Importer un label hiérarchique vers la feuille)"
+msgid "Place a pin sheet created by importing a hierarchical label from sheet"
+msgstr "Placer une pin hiérarchique créée par importation d'un label hiérarchique de la feuille"
 
 #: eeschema/menubar.cpp:326
-msgid "Hierarchical pin to sheet"
-msgstr "Ppins de hierarchie vers feuille"
+msgid "Add Hierarchical Pin to Sheet"
+msgstr "Ajouter Pins de Hierarchie dans feuille"
 
 #: eeschema/menubar.cpp:327
-msgid "Place the hierarchical pin to sheet"
+msgid "Place a hierarchical pin to sheet"
 msgstr "Addition de pins de hierarchie dans les feuilles symboles de hierarchie"
 
 #: eeschema/menubar.cpp:338
@@ -7837,6 +7837,26 @@ msgstr "Rétroannotation Module"
 msgid "Hierarchy Push/Pop"
 msgstr "Navigation dans la hierarchie"
 
+#: eeschema/tool_sch.cpp:169
+msgid "Place the bus"
+msgstr "Placer le Bus"
+
+#: eeschema/tool_sch.cpp:173
+msgid "Place the wire to bus entry"
+msgstr "Placer des entrées de bus (type fil vers bus)"
+
+#: eeschema/tool_sch.cpp:177
+msgid "Place the bus to bus entry"
+msgstr "Placer des entrées de bus (type bus vers bus)"
+
+#: eeschema/tool_sch.cpp:182
+msgid "Place the no connect flag"
+msgstr "Placer le symbole de non connexion"
+
+#: eeschema/tool_sch.cpp:186
+msgid "Place the net name"
+msgstr "Placer le nom de net"
+
 #: eeschema/tool_sch.cpp:190
 msgid ""
 "Place the global label.\n"
@@ -7844,6 +7864,22 @@ msgid ""
 msgstr ""
 "Placer le label global.\n"
 "Attention: tous les labels globaux de même nom sont connecté dans toute la hiérarchie"
+
+#: eeschema/tool_sch.cpp:195
+msgid "Place the junction"
+msgstr "Placer la Jonction"
+
+#: eeschema/tool_sch.cpp:200
+msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
+msgstr "Placer le label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
+
+#: eeschema/tool_sch.cpp:205
+msgid "Place the hierarchical sheet"
+msgstr "Placer la Feuille Hiérachique"
+
+#: eeschema/tool_sch.cpp:209
+msgid "Place the pin sheet (imported hierarchical label from sheet)"
+msgstr "Placer la pin hiérarchique ( Importer un label hiérarchique vers la feuille)"
 
 #: eeschema/tool_sch.cpp:214
 msgid "Place the hierachical pin to sheet"
@@ -9556,66 +9592,6 @@ msgstr "BAD INDEX"
 msgid "Help file %s not found"
 msgstr "Fichier d'aide %s non trouvé"
 
-#: common/about_kicad.cpp:27
-msgid " Unicode "
-msgstr " Unicode "
-
-#: common/about_kicad.cpp:29
-msgid " Ansi "
-msgstr " Ansi "
-
-#: common/about_kicad.cpp:34
-msgid "on Windows"
-msgstr ""
-
-#: common/about_kicad.cpp:39
-msgid "on Macintosch"
-msgstr ""
-
-#: common/about_kicad.cpp:44
-msgid "on GNU/Linux "
-msgstr ""
-
-#: common/about_kicad.cpp:46
-msgid "64 bits"
-msgstr "64 bits"
-
-#: common/about_kicad.cpp:48
-msgid "32 bits"
-msgstr "32 bits"
-
-#: common/about_kicad.cpp:77
-msgid ""
-"\n"
-"Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
-msgstr ""
-"\n"
-"Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
-
-#: common/about_kicad.cpp:78
-msgid ""
-"\n"
-"French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
-msgstr ""
-"\n"
-"French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
-
-#: common/about_kicad.cpp:80
-msgid ""
-"\n"
-"Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
-msgstr ""
-"\n"
-"Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
-
-#: common/about_kicad.cpp:81
-msgid ""
-"\n"
-"Russian (RU) Igor Plyatov <plyatov@gmail.com>"
-msgstr ""
-"\n"
-"Russian (RU) Igor Plyatov <plyatov@gmail.com>"
-
 #: 3d-viewer/3d_aux.cpp:207
 msgid "Vertex "
 msgstr "Vertex "
@@ -10470,6 +10446,38 @@ msgstr "Ajustage opt Page"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid " Unicode "
+#~ msgstr " Unicode "
+#~ msgid " Ansi "
+#~ msgstr " Ansi "
+#~ msgid "64 bits"
+#~ msgstr "64 bits"
+#~ msgid "32 bits"
+#~ msgstr "32 bits"
+#~ msgid ""
+#~ "\n"
+#~ "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
+#~ msgstr ""
+#~ "\n"
+#~ "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>"
+#~ msgid ""
+#~ "\n"
+#~ "French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
+#~ msgstr ""
+#~ "\n"
+#~ "French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>"
+#~ msgid ""
+#~ "\n"
+#~ "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
+#~ msgstr ""
+#~ "\n"
+#~ "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
+#~ msgid ""
+#~ "\n"
+#~ "Russian (RU) Igor Plyatov <plyatov@gmail.com>"
+#~ msgstr ""
+#~ "\n"
+#~ "Russian (RU) Igor Plyatov <plyatov@gmail.com>"
 #~ msgid "Move Feild "
 #~ msgstr "Déplace Champ"
 #~ msgid "&Plot CURRENT"

@@ -224,7 +224,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_BUS_BUTT,
             _( "&Bus" ),
-            _( "Place the bus" ),
+            _( "Place a bus" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_bus_xpm );
@@ -234,7 +234,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_WIRETOBUS_ENTRY_BUTT,
             _( "W&ire to bus entry" ),
-            _( "Place the wire to bus entry" ),
+            _( "Place a wire to bus entry" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_line2bus_xpm );
@@ -244,7 +244,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_BUSTOBUS_ENTRY_BUTT,
             _( "B&us to bus entry" ),
-            _( "Place the bus to bus entry" ),
+            _( "Place a bus to bus entry" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_bus2bus_xpm );
@@ -254,7 +254,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_NOCONN_BUTT,
             _( "No connect flag" ),
-            _( "Place the no connect flag" ),
+            _( "Place a no connect flag" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( noconn_button );
@@ -264,7 +264,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_LABEL_BUTT,
             _( "Net name" ),
-            _( "Place the net name" ),
+            _( "Place a net name" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_line_label_xpm );
@@ -272,7 +272,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT,
             _( "Global label" ),
-            _( "Place the global label. Warning: all global labels with the same name are connected in whole hierarchy" ),
+            _( "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_glabel_xpm );
@@ -282,7 +282,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_JUNCTION_BUTT,
             _( "Junction" ),
-            _( "Place the junction" ),
+            _( "Place a junction" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_junction_xpm );
@@ -294,7 +294,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_HIERLABEL_BUTT,
             _( "Hierarchical label" ),
-            _( "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
+            _( "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_hierarchical_label_xpm );
@@ -304,7 +304,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_SHEET_SYMBOL_BUTT,
             _( "Hierarchical sheet" ),
-            _( "Place the hierarchical sheet" ),
+            _( "Create a hierarchical sheet" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_hierarchical_subsheet_xpm );
@@ -313,8 +313,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem(
             placeMenu,
             ID_IMPORT_GLABEL_BUTT,
-            _( "Imported hierarchical label" ),
-            _( "Place the pin sheet (imported hierarchical label from sheet)" ),
+            _( "Import Hierarchical Label" ),
+            _( "Place a pin sheet created by importing a hierarchical label from sheet" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( import_hierarchical_label_xpm );
@@ -323,8 +323,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem(
             placeMenu,
             ID_SHEET_LABEL_BUTT,
-            _( "Hierarchical pin to sheet" ),
-            _( "Place the hierarchical pin to sheet" ),
+            _( "Add Hierarchical Pin to Sheet" ),
+            _( "Place a hierarchical pin to sheet" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_hierar_pin_xpm );
