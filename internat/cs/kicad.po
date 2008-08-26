@@ -1,13 +1,14 @@
-# translation of kicad.po to čeština
+# translation of kicad.po to
 # Martin <martin@ok1rr.com>, 2008.
+# Milan Horák <stranger@tiscali.cz>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-23 03:17+0100\n"
-"PO-Revision-Date: 2008-08-23 05:22+0100\n"
-"Last-Translator: Martin Kratoška <martin@ok1rr.com>\n"
-"Language-Team: Martin Kratoška <martin@ok1rr.com>\n"
+"PO-Revision-Date: 2008-08-26 14:21+0200\n"
+"Last-Translator: Milan Horák <stranger@tiscali.cz>\n"
+"Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,7 +16,8 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: /home/martin/kicad/\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: /home/martin/kicad/cvpcb/autosel.cpp:68
 msgid "Library: <%s> not found"
@@ -23,7 +25,7 @@ msgstr "Knihovna: <%s> nenalezena"
 
 #: /home/martin/kicad/cvpcb/autosel.cpp:107
 msgid "%d equivalences"
-msgstr "%d ekvivalence"
+msgstr "%d náhrady "
 
 #: /home/martin/kicad/cvpcb/autosel.cpp:163
 msgid "Component %s: Footprint %s not found in libraries"
@@ -95,7 +97,7 @@ msgstr "Pouzdra (vše): %d"
 
 #: /home/martin/kicad/cvpcb/listboxes.cpp:462
 msgid "Footprints (filtered): %d"
-msgstr "pouzdra (filtrováno): %d"
+msgstr "Pouzdra (filtrováno): %d"
 
 #: /home/martin/kicad/cvpcb/displayframe.cpp:118
 msgid "Display Options"
@@ -116,7 +118,7 @@ msgstr "Překreslit (F3)"
 #: /home/martin/kicad/cvpcb/displayframe.cpp:132
 #: /home/martin/kicad/cvpcb/displayframe.cpp:136
 msgid "1:1 zoom"
-msgstr "zvětšení 1:1"
+msgstr "Zvětšení 1:1"
 
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:148
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:156
@@ -147,7 +149,7 @@ msgstr "&Ploška vyplněná"
 
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:170
 msgid "Display Pad &Num"
-msgstr "Zobrazit čís. plošky"
+msgstr "Zobrazit číslo plošky"
 
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:173
 msgid "Display pad number"
@@ -296,7 +298,7 @@ msgstr "Načíst konfiguraci"
 
 #: /home/martin/kicad/cvpcb/dialog_cvpcb_config.cpp:143
 msgid "Files ext:"
-msgstr "Přípona souboru:"
+msgstr "Přípona souborů:"
 
 #: /home/martin/kicad/cvpcb/dialog_cvpcb_config.cpp:162
 #: /home/martin/kicad/cvpcb/dialog_cvpcb_config.cpp:194
@@ -380,7 +382,7 @@ msgstr "Knihovna se již používá"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:271
 msgid "Equiv Files:"
-msgstr "Ekviv. soubory:"
+msgstr "Soubory náhrad:"
 
 #: /home/martin/kicad/cvpcb/readschematicnetlist.cpp:110
 msgid "File <%s> not found"
@@ -400,7 +402,7 @@ msgstr "Chyba netlistu: %s"
 
 #: /home/martin/kicad/cvpcb/cvpcb.cpp:41
 msgid "Cvpcb is already running, Continue?"
-msgstr "CVPCB je již spištěn. Pokačovat?"
+msgstr "CVPCB je již spuštěn. Pokračovat?"
 
 #: /home/martin/kicad/cvpcb/init.cpp:64
 msgid "Components: %d (free: %d)"
@@ -412,7 +414,7 @@ msgstr "Uložit netlist a seznam součástek"
 
 #: /home/martin/kicad/cvpcb/init.cpp:158
 msgid "Unable to create component file (.cmp)"
-msgstr "Nelze vytvořit soubor (.cmp) součástky"
+msgstr "Nelze vytvořit soubor součástky (.cmp)"
 
 #: /home/martin/kicad/cvpcb/init.cpp:165
 msgid "Unable to create netlist file"
@@ -424,7 +426,7 @@ msgstr "Načíst netlist"
 
 #: /home/martin/kicad/cvpcb/cfg.cpp:75
 msgid "Save preferences"
-msgstr "Uložit volby"
+msgstr "Uložit předvolby"
 
 #: /home/martin/kicad/cvpcb/loadcmp.cpp:49
 msgid "This file is NOT a library file"
@@ -538,30 +540,30 @@ msgstr "Změnit název souboru:"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:92
 msgid "&Open Project Descr"
-msgstr "&Otevřít projekt"
+msgstr "&Otevřít popis projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:93
 #: /home/martin/kicad/kicad/buildmnu.cpp:248
 msgid "Select an existing project descriptor"
-msgstr "Vybrat existující projekt"
+msgstr "Vybrat existující popis projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:98
 msgid "&New Project Descr"
-msgstr "&Nový projekt"
+msgstr "&Nový popis projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:99
 #: /home/martin/kicad/kicad/buildmnu.cpp:243
 msgid "Create new project descriptor"
-msgstr "Vytvořit nový projekt"
+msgstr "Vytvořit nový popis projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:104
 msgid "&Save Project Descr"
-msgstr "&Uložit projekt"
+msgstr "&Uložit popis projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:105
 #: /home/martin/kicad/kicad/buildmnu.cpp:253
 msgid "Save current project descriptor"
-msgstr "Uložit aktuální projekt"
+msgstr "Uložit aktuální popis projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:111
 msgid "Save &Project Files"
@@ -597,7 +599,7 @@ msgstr "&Procházet soubory"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:141
 msgid "Read or edit files"
-msgstr "Číst nebo upravovat soubory"
+msgstr "Prohlížet nebo upravovat soubory"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:146
 msgid "&Select Editor"
@@ -621,15 +623,15 @@ msgstr "Výchozí prohlížeč PDF"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:160
 msgid "Use the default (system) PDF viewer used to browse datasheets"
-msgstr "Použít k prohlížení PDF kat. listů výchozí prohlížeč"
+msgstr "Použít k prohlížení PDF katalogových listů výchozí prohlížeč"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:167
 msgid "Favourite Pdf Viewer"
-msgstr "Prefer. prohlížeč PDF"
+msgstr "Preferovaný prohlížeč PDF"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:167
 msgid "Use your favourite PDF viewer used to browse datasheets"
-msgstr "Použít prohlížeč PDF preferovaný k prohlížení kat. listů"
+msgstr "Použít preferovaný prohlížeč PDF k prohlížení katalogových listů"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:175
 msgid "Select Pdf Viewer"
@@ -637,7 +639,7 @@ msgstr "Vybrat prohlížeč PDF"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:175
 msgid "Select your favourite PDF viewer used to browse datasheets"
-msgstr "Vybrat prohlížeč PDF preferovaný k prohlížení kat. listů"
+msgstr "Vybrat preferovaný prohlížeč PDF k prohlížení katalogových listů"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:179
 msgid "Pdf Browser"
@@ -657,7 +659,7 @@ msgstr "&Procházet"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:259
 msgid "Archive all project files"
-msgstr "Archivovat všechny projekty"
+msgstr "Archivovat všechny soubory projektu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:265
 msgid "Refresh project tree"
@@ -698,7 +700,7 @@ msgstr "Smazat soubor"
 
 #: /home/martin/kicad/kicad/treeprj_datas.cpp:391
 msgid "no kicad files found in this directory"
-msgstr "v tomto adresáři nejsou soubory Kicadu"
+msgstr "v tomto adresáři nejsou soubory KICADu"
 
 #: /home/martin/kicad/kicad/files-io.cpp:70
 msgid "Create Project files:"
@@ -718,7 +720,7 @@ msgstr "Soubor"
 
 #: /home/martin/kicad/kicad/files-io.cpp:132
 msgid " exists! OK to continue?"
-msgstr "existuje. OK - pokračování?"
+msgstr "existuje. OK pro pokračování?"
 
 #: /home/martin/kicad/kicad/files-io.cpp:163
 msgid "Unzip Project:"
@@ -738,7 +740,7 @@ msgstr "Cílový adresář"
 
 #: /home/martin/kicad/kicad/files-io.cpp:184
 msgid "Unzip in "
-msgstr "Rozbalit v "
+msgstr "Rozbalit do "
 
 #: /home/martin/kicad/kicad/files-io.cpp:207
 msgid "Extract file "
@@ -794,7 +796,7 @@ msgstr "CVPCB (součástky -> moduly)"
 
 #: /home/martin/kicad/kicad/commandframe.cpp:66
 msgid "PCBnew (PCB editor)"
-msgstr "PCBNEW (editor desek)"
+msgstr "PCBNEW (editor plošných spojů)"
 
 #: /home/martin/kicad/kicad/commandframe.cpp:70
 msgid "GerbView (Gerber viewer)"
@@ -822,7 +824,7 @@ msgstr "Soubor projektu <"
 
 #: /home/martin/kicad/kicad/prjconfig.cpp:25
 msgid "> not found"
-msgstr "> nenalezeno"
+msgstr "> nenalezen"
 
 #: /home/martin/kicad/kicad/prjconfig.cpp:35
 msgid ""
@@ -830,7 +832,7 @@ msgid ""
 "Working dir: "
 msgstr ""
 "\n"
-"Pracov. adr.: "
+"Pracovní adresář: "
 
 #: /home/martin/kicad/kicad/prjconfig.cpp:36
 msgid ""
@@ -1098,11 +1100,11 @@ msgstr "Zrcadlit"
 #: /home/martin/kicad/share/dialog_print.cpp:183
 #: /home/martin/kicad/share/svg_print.cpp:213
 msgid "Color"
-msgstr "Barva"
+msgstr "Barevně"
 
 #: /home/martin/kicad/share/dialog_print.cpp:184
 msgid "Black"
-msgstr "Černá"
+msgstr "Černobíle"
 
 #: /home/martin/kicad/share/dialog_print.cpp:185
 msgid "Color Print:"
@@ -1152,11 +1154,11 @@ msgstr "&Zavřít"
 #: /home/martin/kicad/share/dialog_print.cpp:235
 #: /home/martin/kicad/share/svg_print.cpp:301
 msgid "Pen width mini"
-msgstr "Síla pera: mini"
+msgstr "Minimální tloušťka pera"
 
 #: /home/martin/kicad/share/svg_print.cpp:214
 msgid "Black and White"
-msgstr "Černobílý"
+msgstr "Černobíle"
 
 #: /home/martin/kicad/share/svg_print.cpp:217
 msgid "Print mode"
@@ -1259,7 +1261,7 @@ msgstr "Rotovat +"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:288
 msgid "Rotate -"
-msgstr "Otáčet -"
+msgstr "Rotovat -"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:289
 msgid "Mirror --"
@@ -1267,11 +1269,11 @@ msgstr "Zrcadlit --"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:291
 msgid "Mirror ||"
-msgstr "Zrcadlení ||"
+msgstr "Zrcadlit ||"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:293
 msgid "Normal"
-msgstr "Normální"
+msgstr "Normálně"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:297
 msgid "Orient Component"
@@ -1323,11 +1325,11 @@ msgstr "Dok."
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:357
 msgid "Move Glabel"
-msgstr "Přesunout Glabel"
+msgstr "Přesunout GLabel"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:358
 msgid "Rotate GLabel  (R)"
-msgstr "Otočit GLabel (R)"
+msgstr "Otočit GLabel (P)"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:359
 msgid "Edit GLabel"
@@ -1368,7 +1370,7 @@ msgstr "Přesunout HLabel"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:385
 msgid "Rotate HLabel  (R)"
-msgstr "Otočit HLabel (R)"
+msgstr "Otočit HLabel (P)"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:386
 msgid "Edit HLabel"
@@ -1389,7 +1391,7 @@ msgstr "Přemístit označení"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:412
 msgid "Rotate Label  (R)"
-msgstr "Otočit označení (R)"
+msgstr "Otočit označení (P)"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:413
 msgid "Edit Label"
@@ -1405,7 +1407,7 @@ msgstr "Přemístit text"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:439
 msgid "Rotate Text (R)"
-msgstr "Otočit text (R)"
+msgstr "Otočit text (P)"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:440
 msgid "Edit Text"
@@ -1479,7 +1481,7 @@ msgstr "Vložit list"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:566
 msgid "Move Sheet"
-msgstr "Přemístit list"
+msgstr "Přesunout list"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:571
 msgid "Place Sheet"
@@ -1519,7 +1521,7 @@ msgstr "Zrušit blok"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:615
 msgid "Zoom Block (Drag Middle Mouse)"
-msgstr "Zvětšit blok (shift + stř. tlač. myši)"
+msgstr "Zvětšit blok (shift + prostřední tlačítko myši)"
 
 #: /home/martin/kicad/eeschema/onrightclick.cpp:617
 msgid "Place Block"
@@ -1572,7 +1574,7 @@ msgstr "> je prázdný!"
 
 #: /home/martin/kicad/eeschema/eelibs_read_libraryfiles.cpp:309
 msgid "> is NOT EESCHEMA library!"
-msgstr "> NENÍ knihovna Eeschema"
+msgstr "> NENÍ knihovna EESchema"
 
 #: /home/martin/kicad/eeschema/eelibs_read_libraryfiles.cpp:328
 msgid "Library <"
@@ -1596,7 +1598,7 @@ msgstr "Možnosti zobrazení pole"
 
 #: /home/martin/kicad/eeschema/backanno.cpp:171
 msgid "Failed to open Stuff File <%s>"
-msgstr "Selhalo otevření seznamu mat. <%s>"
+msgstr "Selhalo otevření seznamu materiálu <%s>"
 
 #: /home/martin/kicad/eeschema/dialog_cmp_graphic_properties.cpp:152
 msgid "Options :"
@@ -1658,7 +1660,7 @@ msgstr "Vícenásobná část %s%s"
 #: /home/martin/kicad/eeschema/annotate.cpp:802
 #: /home/martin/kicad/eeschema/annotate.cpp:825
 msgid " (unit %d)"
-msgstr " (jedn. %d)"
+msgstr " (jednotka %d)"
 
 #: /home/martin/kicad/eeschema/annotate.cpp:842
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
@@ -1687,7 +1689,7 @@ msgstr " bylo vytvořeno ve starší verzi EESchema. Pokud ho uložíte znovu, u
 
 #: /home/martin/kicad/eeschema/load_one_schematic_file.cpp:484
 msgid "Done Loading "
-msgstr "Načítání - hotovo"
+msgstr "Načítání hotovo"
 
 #: /home/martin/kicad/eeschema/libarch.cpp:78
 msgid "Failed to create archive lib file "
@@ -1695,7 +1697,7 @@ msgstr "Vytvoření archivní knihovny selhalo"
 
 #: /home/martin/kicad/eeschema/libarch.cpp:85
 msgid "Failed to create doc lib file "
-msgstr "Vytvoření knihovny dokumentace selhalo"
+msgstr "Vytvoření dokumentace knihovny selhalo"
 
 #: /home/martin/kicad/eeschema/annotate_dialog.cpp:159
 msgid "Scope"
@@ -1755,7 +1757,7 @@ msgstr "na celé schéma?"
 
 #: /home/martin/kicad/eeschema/annotate_dialog.cpp:265
 msgid "on the current sheet?"
-msgstr "na aktuální, listu?"
+msgstr "na aktuálním listu?"
 
 #: /home/martin/kicad/eeschema/annotate_dialog.cpp:267
 msgid ""
@@ -1777,7 +1779,7 @@ msgstr "celé schéma?"
 
 #: /home/martin/kicad/eeschema/annotate_dialog.cpp:291
 msgid "the current sheet?"
-msgstr "Aktuální list"
+msgstr "aktuální list"
 
 #: /home/martin/kicad/eeschema/annotate_dialog.cpp:293
 msgid ""
@@ -1799,7 +1801,7 @@ msgstr "Název pole:"
 
 #: /home/martin/kicad/eeschema/edit_component_in_schematic.cpp:215
 msgid "Field Text:"
-msgstr "Text pole"
+msgstr "Text pole:"
 
 #: /home/martin/kicad/eeschema/edit_component_in_schematic.cpp:223
 msgid "Pos"
@@ -1826,7 +1828,7 @@ msgid ""
 "Part is a POWER, value cannot be modified!\n"
 "You must create a new power"
 msgstr ""
-"Součást je NAPÁJENÍ, hodnotu nelze změnit!\n"
+"Součástka je NAPÁJENÍ, hodnotu nelze změnit!\n"
 "Musí být vytvořeno nové napájení"
 
 #: /home/martin/kicad/eeschema/edit_component_in_schematic.cpp:581
@@ -1863,7 +1865,7 @@ msgstr "Soubor s názvem %s existuje. Načíst (zachovat současná data na list
 
 #: /home/martin/kicad/eeschema/class_drawsheet.cpp:590
 msgid "This sheet uses shared data in a complex hierarchy"
-msgstr "Tento list používá data, sdílená ve složitější hierarchii"
+msgstr "Tento list používá data sdílená ve složitější hierarchii"
 
 #: /home/martin/kicad/eeschema/class_drawsheet.cpp:593
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
@@ -1875,7 +1877,7 @@ msgstr "%8.8lX/"
 
 #: /home/martin/kicad/eeschema/symbedit.cpp:52
 msgid "Import symbol drawings:"
-msgstr "Importova kresby symbolů:"
+msgstr "Importovat kresby symbolů:"
 
 #: /home/martin/kicad/eeschema/symbedit.cpp:74
 msgid "Failed to open Symbol File <%s>"
@@ -1891,7 +1893,7 @@ msgstr "Neplatný soubor symbolů"
 
 #: /home/martin/kicad/eeschema/symbedit.cpp:151
 msgid "Export symbol drawings:"
-msgstr "Exportovat kresby symbol:"
+msgstr "Exportovat kresby symbolů:"
 
 #: /home/martin/kicad/eeschema/symbedit.cpp:166
 msgid "Unable to create <%s>"
@@ -1917,7 +1919,7 @@ msgstr "Ref"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:41
 msgid "Pwr Symb"
-msgstr "Symbol nap."
+msgstr "Symbol napájení"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:43
 msgid "Val"
@@ -1933,11 +1935,11 @@ msgstr "Knihovna"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:71
 msgid "PinName"
-msgstr "Název výv."
+msgstr "Název vývodu"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:79
 msgid "PinNum"
-msgstr "Čís. vývodu"
+msgstr "Číslo vývodu"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:83
 msgid "PinType"
@@ -1971,11 +1973,11 @@ msgstr "Dolů"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:107
 msgid "Left"
-msgstr "Levá"
+msgstr "Vlevo"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:110
 msgid "Right"
-msgstr "Pravá"
+msgstr "Vpravo"
 
 #: /home/martin/kicad/eeschema/affiche.cpp:116
 msgid "Orient"
@@ -1991,7 +1993,7 @@ msgstr "čára"
 
 #: /home/martin/kicad/eeschema/pinedit.cpp:22
 msgid "invert"
-msgstr "obrátit"
+msgstr "invertovaný"
 
 #: /home/martin/kicad/eeschema/pinedit.cpp:22
 msgid "clock"
@@ -1999,7 +2001,7 @@ msgstr "hodiny"
 
 #: /home/martin/kicad/eeschema/pinedit.cpp:22
 msgid "clock inv"
-msgstr "obrácené hodiny"
+msgstr "invertované hodiny"
 
 #: /home/martin/kicad/eeschema/pinedit.cpp:23
 msgid "low in"
@@ -2083,7 +2085,7 @@ msgstr ","
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM.cpp:279
 msgid "Field separator for spreadsheet import:"
-msgstr "Oddělovač polí pro import do spreadsheetu"
+msgstr "Oddělovač polí pro import do spreadsheetu:"
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM.cpp:287
 msgid "Launch list browser"
@@ -2091,7 +2093,7 @@ msgstr "Spustit prohlížeč seznamů"
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM.cpp:294
 msgid "Fields to add:"
-msgstr "Pole k přidání"
+msgstr "Pole k přidání:"
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM.cpp:302
 msgid "Field 1"
@@ -2537,11 +2539,11 @@ msgstr "Zarovnat nahoru"
 
 #: /home/martin/kicad/eeschema/edit_component_in_lib.cpp:529
 msgid "Hor Justify"
-msgstr "Srovnat horiz."
+msgstr "Zarovnat horizontálně"
 
 #: /home/martin/kicad/eeschema/edit_component_in_lib.cpp:536
 msgid "Vert Justify"
-msgstr "Srovnat vert."
+msgstr "Zarovnat vertikálně"
 
 #: /home/martin/kicad/eeschema/edit_component_in_lib.cpp:551
 msgid "Chip Name"
@@ -2549,7 +2551,7 @@ msgstr "Název obvodu:"
 
 #: /home/martin/kicad/eeschema/edit_component_in_lib.cpp:890
 msgid "Ok to Delete Alias LIST"
-msgstr "Smazat Alias List - OK"
+msgstr "Smazat seznam aliasů - OK"
 
 #: /home/martin/kicad/eeschema/edit_component_in_lib.cpp:915
 msgid "New alias:"
@@ -2611,11 +2613,11 @@ msgid ""
 "Discard changes?"
 msgstr ""
 "Knihovna \"%s\" byla změněna.\n"
-"Zrušit změny?"
+"Zahodit změny?"
 
 #: /home/martin/kicad/eeschema/libframe.cpp:342
 msgid "Include last component changes?"
-msgstr "Zahrnout poslední úpravy souč."
+msgstr "Zahrnout poslední úpravy součástky?"
 
 #: /home/martin/kicad/eeschema/libframe.cpp:405
 msgid " Pins Test OK!"
@@ -2783,7 +2785,7 @@ msgstr "Možnosti kreslení"
 
 #: /home/martin/kicad/eeschema/dialog_create_component.cpp:250
 msgid "Show Pin Number"
-msgstr "Zobrazit číslo data"
+msgstr "Zobrazit číslo vývodu"
 
 #: /home/martin/kicad/eeschema/dialog_create_component.cpp:262
 msgid "Skew:"
@@ -2827,7 +2829,7 @@ msgstr "Exportovat do schématu"
 
 #: /home/martin/kicad/eeschema/tool_viewlib.cpp:128
 msgid "Part %c"
-msgstr "Souč. %c"
+msgstr "Součástka %c"
 
 #: /home/martin/kicad/eeschema/lib_export.cpp:39
 msgid "Import component:"
@@ -2863,7 +2865,7 @@ msgstr ""
 
 #: /home/martin/kicad/eeschema/lib_export.cpp:149
 msgid "Error while create "
-msgstr "Chyba při vytvoření"
+msgstr "Chyba při vytváření"
 
 #: /home/martin/kicad/eeschema/netlist_control.cpp:124
 #: /home/martin/kicad/eeschema/netlist_control.cpp:240
@@ -3006,19 +3008,19 @@ msgstr "Neurčeno"
 
 #: /home/martin/kicad/eeschema/pinedit-dialog.cpp:270
 msgid "Power In"
-msgstr "Nap. vst."
+msgstr "Napěťový vstup"
 
 #: /home/martin/kicad/eeschema/pinedit-dialog.cpp:271
 msgid "Power Out"
-msgstr "Nap. výst."
+msgstr "Napěťový výstup"
 
 #: /home/martin/kicad/eeschema/pinedit-dialog.cpp:272
 msgid "Open coll"
-msgstr "Otev. kol."
+msgstr "Otevřený kolektor"
 
 #: /home/martin/kicad/eeschema/pinedit-dialog.cpp:273
 msgid "Open emit"
-msgstr "Otev. emit."
+msgstr "Otevřený emitor"
 
 #: /home/martin/kicad/eeschema/pinedit-dialog.cpp:274
 msgid "Electrical Type:"
@@ -3088,7 +3090,7 @@ msgstr "milimetr"
 
 #: /home/martin/kicad/eeschema/dialog_options.cpp:263
 msgid "inches"
-msgstr "palců"
+msgstr "palce"
 
 #: /home/martin/kicad/eeschema/dialog_options.cpp:264
 msgid "Units"
@@ -3096,7 +3098,7 @@ msgstr "Jednotky"
 
 #: /home/martin/kicad/eeschema/dialog_options.cpp:272
 msgid "Horiz/Vertical"
-msgstr "Horiz/Vertikálně"
+msgstr "Horizontálně/Vertikálně"
 
 #: /home/martin/kicad/eeschema/dialog_options.cpp:273
 msgid "Any"
@@ -3136,7 +3138,7 @@ msgstr "Výchozí velikost označení"
 
 #: /home/martin/kicad/eeschema/libfield.cpp:221
 msgid "No new text: no change"
-msgstr "Není nový test: beze změn"
+msgstr "Není nový text: beze změn"
 
 #: /home/martin/kicad/eeschema/hotkeys.cpp:249
 msgid "Add Component"
@@ -3148,7 +3150,7 @@ msgstr "Přidat vodič"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:71
 msgid "Bill of materials:"
-msgstr "Seznam materiálu"
+msgstr "Seznam materiálu:"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:122
 #: /home/martin/kicad/eeschema/build_BOM.cpp:177
@@ -3161,7 +3163,7 @@ msgid ""
 "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
 msgstr ""
 "\n"
-"#Globální, hierarchické označení a listy vývodů (dle č. listu) počet = %d\n"
+"#Globální, hierarchické označení a listy vývodů (dle čísla listu) počet = %d\n"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:261
 msgid ""
@@ -3170,7 +3172,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"#Globální, hierarchické označení a listy vývodů (obecedně) počet = %d\n"
+"#Globální, hierarchické označení a listy vývodů (abecedně) počet = %d\n"
 "\n"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:269
@@ -3179,7 +3181,7 @@ msgid ""
 "#End List\n"
 msgstr ""
 "\n"
-"#Konec sez.\n"
+"#Konec seznamu\n"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:699
 msgid ""
@@ -3261,7 +3263,7 @@ msgstr "T&isk"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:75
 msgid "Print on current printer"
-msgstr "Tiska na aktuální tiskárně"
+msgstr "Tisk na aktuální tiskárně"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:82
 msgid "Plot PostScript"
@@ -3337,7 +3339,7 @@ msgstr "Najít součástky a text"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:162
 msgid "BackAnno"
-msgstr "Zpět. anotace"
+msgstr "Zpětná anotace"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:162
 msgid "Back Annotated Footprint Fields"
@@ -3398,7 +3400,7 @@ msgstr "Přidat sběrnici do sběrnice"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:247
 msgid "Place the bus to bus entry"
-msgstr "Přidat vodič do sběrnice"
+msgstr "Přidat sběrnici do sběrnice"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:256
 msgid "No connect flag"
@@ -3498,7 +3500,7 @@ msgstr "&Možnosti"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:372
 msgid "Select general options..."
-msgstr "Vybrat obecné nastavení"
+msgstr "Vybrat obecná nastavení"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:382
 msgid "&Save preferences"
@@ -3577,7 +3579,7 @@ msgstr "Vlastnosti hierarchického označení"
 
 #: /home/martin/kicad/eeschema/dialog_edit_label.cpp:76
 msgid "Label properties"
-msgstr "Vlastnosti etikety"
+msgstr "Vlastnosti označení"
 
 #: /home/martin/kicad/eeschema/dialog_edit_label.cpp:80
 msgid "Text properties"
@@ -3597,7 +3599,7 @@ msgstr "Třístavový"
 
 #: /home/martin/kicad/eeschema/dialog_edit_label.cpp:165
 msgid "Glabel Shape:"
-msgstr "Tvar Glabel:"
+msgstr "Tvar GLabel:"
 
 #: /home/martin/kicad/eeschema/dialog_edit_label.cpp:173
 msgid "Size "
@@ -3617,7 +3619,7 @@ msgstr "Počet částí:"
 
 #: /home/martin/kicad/eeschema/dialog_edit_component_in_lib.cpp:175
 msgid "Doc:"
-msgstr "Dok.:"
+msgstr "Dokumentace:"
 
 #: /home/martin/kicad/eeschema/dialog_edit_component_in_lib.cpp:182
 msgid "Keywords:"
@@ -3625,7 +3627,7 @@ msgstr "Klíčová slova:"
 
 #: /home/martin/kicad/eeschema/dialog_edit_component_in_lib.cpp:189
 msgid "DocFileName:"
-msgstr "Název souboru kat. listu:"
+msgstr "Název souboru katalogového listu:"
 
 #: /home/martin/kicad/eeschema/dialog_edit_component_in_lib.cpp:198
 msgid "Copy Doc"
@@ -3786,7 +3788,7 @@ msgstr " \" nenalezena."
 
 #: /home/martin/kicad/eeschema/libedit.cpp:234
 msgid "Modify Library File \""
-msgstr "Změnít soubor knihovny \""
+msgstr "Změnit soubor knihovny \""
 
 #: /home/martin/kicad/eeschema/libedit.cpp:234
 msgid "\"?"
@@ -3879,7 +3881,7 @@ msgstr "Hlavní"
 
 #: /home/martin/kicad/eeschema/schframe.cpp:309
 msgid "Schematic modified, Save before exit ?"
-msgstr "Schéma změněno. Uložit pře ukončením?"
+msgstr "Schéma změněno. Uložit před ukončením?"
 
 #: /home/martin/kicad/eeschema/schframe.cpp:410
 msgid "Grid not show"
@@ -3903,7 +3905,7 @@ msgstr "Kreslit čáry libovolným směrem"
 
 #: /home/martin/kicad/eeschema/schframe.cpp:426
 msgid "Draw lines H, V or 45 deg only"
-msgstr "Kreslit jen čáry hor., vert. nebo 45 st."
+msgstr "Kreslit čáry jen horizontálně, vertikálně nebo 45 st."
 
 #: /home/martin/kicad/eeschema/sheetlab.cpp:73
 msgid "PinSheet Properties:"
@@ -3992,11 +3994,11 @@ msgstr "Přesunout kruh"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:96
 msgid "Circle Options"
-msgstr "Možnosti kružnice"
+msgstr "Možnosti kruhu"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:99
 msgid "Delete Circle "
-msgstr "Smazat kružnici"
+msgstr "Smazat kruh"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:107
 msgid "Move Rect "
@@ -4020,7 +4022,7 @@ msgstr "Textový editor"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:128
 msgid "Rotate Text"
-msgstr "Otáčet text"
+msgstr "Otočit text"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:131
 msgid "Delete Text "
@@ -4100,7 +4102,7 @@ msgstr "Velikost čísla vývodu -> ostatní"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:234
 msgid "Zoom Block (drag middle mouse)"
-msgstr "Zvětšit blok (shift + stř. tl. myši)"
+msgstr "Zvětšit blok (shift + prostřední tačítko myši)"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:242
 msgid "Select items"
@@ -4112,7 +4114,7 @@ msgstr "Zrcadlit blok(ctrl + tah myší)"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:247
 msgid "Del. Block (shift+ctrl + drag mouse)"
-msgstr "Smazat blok (shift+ctrl + táhnout myší)"
+msgstr "Smazat blok (shift+ctrl + tah myší)"
 
 #: /home/martin/kicad/eeschema/selpart.cpp:45
 msgid "Select Lib"
@@ -4124,7 +4126,7 @@ msgstr "Vybrat součástku (%d položek)"
 
 #: /home/martin/kicad/eeschema/eeschema.cpp:54
 msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema je již spušteno, pokračovat?"
+msgstr "EESchema je již spušteno, pokračovat?"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:39
 msgid "New schematic project"
@@ -4136,7 +4138,7 @@ msgstr "Otevřít schéma (projekt)"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:49
 msgid "page settings (size, texts)"
-msgstr "Nastavení stránky (velikost, text)"
+msgstr "Nastavení stránky (velikost, texty)"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:53
 msgid "go to library editor"
