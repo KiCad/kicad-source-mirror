@@ -283,13 +283,13 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          msg );
 
     msg = AddHotkeyName( _( "redraw" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_REDRAW );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, BITMAP( repaint_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, BITMAP( zoom_redraw_xpm ),
                          wxNullBitmap,
                          FALSE,
                          -1, -1, (wxObject*) NULL,
                          msg );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, BITMAP( zoom_optimal_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, BITMAP( zoom_auto_xpm ),
                         wxNullBitmap,
                         FALSE,
                         -1, -1, (wxObject*) NULL,

@@ -83,14 +83,14 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
         m_Choice_Precision->Enable( false );
 
     msg = ReturnStringFromValue( g_UnitMetric,
-                                 g_DesignSettings.m_ViaDrill,
-                                 m_Parent->m_InternalUnits );
+        g_DesignSettings.m_ViaDrill,
+        m_Parent->m_InternalUnits );
     msg += ReturnUnitSymbol( g_UnitMetric );
     m_ViaDrillValue->SetLabel( msg );
 
     msg = ReturnStringFromValue( g_UnitMetric,
-                                 g_DesignSettings.m_MicroViaDrill,
-                                 m_Parent->m_InternalUnits );
+        g_DesignSettings.m_MicroViaDrill,
+        m_Parent->m_InternalUnits );
     msg += ReturnUnitSymbol( g_UnitMetric );
     m_MicroViaDrillValue->SetLabel( msg );
 
@@ -133,8 +133,8 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
                     m_PadsHoleCount++;
             }
             else
-                if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
-                    m_PadsHoleCount++;
+            if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
+                m_PadsHoleCount++;
         }
     }
 
@@ -285,7 +285,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     for( ; ; )
     {
         Build_Holes_List( m_Parent->m_Pcb, s_HoleListBuffer, s_ToolListBuffer,
-                          layer1, layer2, gen_through_holes ? false : true );
+            layer1, layer2, gen_through_holes ? false : true );
         if( s_ToolListBuffer.size() > 0 ) //holes?
         {
             FullFileName = m_Parent->GetScreen()->m_FileName;
@@ -305,14 +305,14 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             ChangeFileNameExt( FullFileName, layer_extend );
 
             FullFileName = EDA_FileSelector( _( "Drill file" ),
-                                            wxEmptyString, /* Chemin par defaut */
-                                            FullFileName,  /* nom fichier par defaut */
-                                            Ext,           /* extension par defaut */
-                                            Mask,          /* Masque d'affichage */
-                                            this,
-                                            wxFD_SAVE,
-                                            TRUE
-                                            );
+                wxEmptyString,                              /* Chemin par defaut */
+                FullFileName,                               /* nom fichier par defaut */
+                Ext,                                        /* extension par defaut */
+                Mask,                                       /* Masque d'affichage */
+                this,
+                wxFD_SAVE,
+                TRUE
+            );
 
             if( FullFileName != wxEmptyString )
             {
@@ -408,7 +408,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
     float xt, yt;
     char  line[1024];
 
-    SetLocaleTo_C_standard( ); // Use the standard notation for float numbers
+    SetLocaleTo_C_standard(); // Use the standard notation for float numbers
 
     Write_Excellon_Header( dest );
 
@@ -420,10 +420,10 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
     {
         if( s_Unit_Drill_is_Inch )  /* does it need T01, T02 or is T1,T2 ok?*/
             sprintf( line, "T%dC%.3f\n", ii + 1,
-                     float (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits );
+                float (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits );
         else
             sprintf( line, "T%dC%.3f\n", ii + 1,
-                     float (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits * 10.0 );
+                float (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits * 10.0 );
 
         fputs( line, dest );
     }
@@ -539,7 +539,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
 
     Write_End_Of_File_Drill( dest );
 
-    SetLocaleTo_Default( );  // Revert to locale float notation
+    SetLocaleTo_Default();  // Revert to locale float notation
 
     return holes_count;
 }
@@ -629,7 +629,7 @@ void WinEDA_DrillFrame::Write_Excellon_Header( FILE* aFile )
 /* Print the DRILL file header. The full header is:
  * M48
  * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
- * ;FORMAT={2:4 / absolute / Pouces / Suppression zeros de t�te}
+ * ;FORMAT={ <precision> / absolute / <units> / <numbers format>}
  * R,T
  * VER,1
  * FMAT,2
@@ -645,22 +645,43 @@ void WinEDA_DrillFrame::Write_Excellon_Header( FILE* aFile )
 
     if( !Minimal )
     {
+        int            ii = m_Choice_Zeros_Format->GetSelection();
         DateAndTime( Line );
+        // The next 2 lines in EXCELLON files are comments:
         wxString msg = g_Main_Title + wxT( " " ) + GetBuildVersion();
         fprintf( aFile, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( msg ), Line );
         msg = wxT( ";FORMAT={" );
-        msg << m_Choice_Precision->GetStringSelection() <<  wxT("/ absolute / ");
-        msg << m_Choice_Unit->GetStringSelection() <<  wxT(" / ");
-        msg << m_Choice_Zeros_Format->GetStringSelection() << wxT("}\n");
+        // Print precision:
+        if ( ii > 0 )
+            msg << m_Choice_Precision->GetStringSelection();
+        else
+            msg << wxT("-.-");  // in decimal format the precision is irrelevant
+        msg << wxT( "/ absolute / " );
+        msg << ( s_Unit_Drill_is_Inch ? wxT( "inch" ) : wxT( "metric" ) );
+
+        /* Adding numbers notation format.
+         * this is same as m_Choice_Zeros_Format strings, but NOT translated
+         * because some EXCELLON parsers do not like non ascii values
+         * so we use ONLY english (ascii) strings.
+         * if new options are added in m_Choice_Zeros_Format, they must also be added here
+         */
+        msg << wxT( " / " );
+        const wxString zero_fmt[5] =
+        {
+            wxT( "decimal" ),          wxT( "suppress leading zeros" ),
+            wxT( "suppress trailing zeros" ), wxT( "keep zeros" ),
+            wxT( "???" )
+        };
+        if( ii < 0 || ii > 4 )
+            ii = 4;
+        msg << zero_fmt[ii];
+        msg << wxT( "}\n" );
         fputs( CONV_TO_UTF8( msg ), aFile );
 
         fputs( "R,T\nVER,1\nFMAT,2\n", aFile );
     }
 
-    if( s_Unit_Drill_is_Inch )
-        fputs( "INCH", aFile );     // Si unites en INCHES
-    else
-        fputs( "METRIC", aFile );   // Si unites en mm
+    fputs( s_Unit_Drill_is_Inch ? "INCH" : "METRIC", aFile );
 
     switch( s_Zeros_Format )
     {
@@ -726,14 +747,14 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     Mask += Ext;
 
     FullFileName = EDA_FileSelector( _( "Drill Map file" ),
-                                     wxEmptyString, /* Chemin par defaut */
-                                     FullFileName,  /* nom fichier par defaut */
-                                     Ext,           /* extension par defaut */
-                                     Mask,          /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
+        wxEmptyString,                              /* Chemin par defaut */
+        FullFileName,                               /* nom fichier par defaut */
+        Ext,                                        /* extension par defaut */
+        Mask,                                       /* Masque d'affichage */
+        this,
+        wxFD_SAVE,
+        TRUE
+    );
     if( FullFileName.IsEmpty() )
         return;
 
@@ -746,13 +767,13 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     }
 
     GenDrillMapFile( m_Parent->m_Pcb,
-                     dest,
-                     FullFileName,
-                     m_Parent->GetScreen()->m_CurrentSheetDesc->m_Size,
-                     s_HoleListBuffer,
-                     s_ToolListBuffer,
-                     s_Unit_Drill_is_Inch,
-                     format );
+        dest,
+        FullFileName,
+        m_Parent->GetScreen()->m_CurrentSheetDesc->m_Size,
+        s_HoleListBuffer,
+        s_ToolListBuffer,
+        s_Unit_Drill_is_Inch,
+        format );
 }
 
 
@@ -772,14 +793,14 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
     Mask += Ext;
 
     FileName = EDA_FileSelector( _( "Drill Report file" ),
-                                 wxEmptyString, /* Chemin par defaut */
-                                 FileName,      /* nom fichier par defaut */
-                                 Ext,           /* extension par defaut */
-                                 Mask,          /* Masque d'affichage */
-                                 this,
-                                 wxFD_SAVE,
-                                 TRUE
-                                 );
+        wxEmptyString,                          /* Chemin par defaut */
+        FileName,                               /* nom fichier par defaut */
+        Ext,                                    /* extension par defaut */
+        Mask,                                   /* Masque d'affichage */
+        this,
+        wxFD_SAVE,
+        TRUE
+    );
     if( FileName.IsEmpty() )
         return;
 
@@ -791,8 +812,8 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
         return;
     }
     GenDrillReportFile( dest, m_Parent->m_Pcb,
-                        m_Parent->GetScreen()->m_FileName,
-                        s_Unit_Drill_is_Inch,
-                        s_HoleListBuffer,
-                        s_ToolListBuffer );
+        m_Parent->GetScreen()->m_FileName,
+        s_Unit_Drill_is_Inch,
+        s_HoleListBuffer,
+        s_ToolListBuffer );
 }

@@ -71,12 +71,12 @@ bool asdeMorgan = FALSE, state;
 					_("zoom - (F2)"));
 
 		m_HToolBar->AddTool(ID_ZOOM_REDRAW_BUTT, wxEmptyString,
-					BITMAP(repaint_xpm),
+					BITMAP(zoom_redraw_xpm),
 					_("redraw (F3)"));
 
 		m_HToolBar->AddTool(ID_ZOOM_PAGE_BUTT, wxEmptyString,
-					BITMAP(zoom_optimal_xpm),
-					_("1:1 zoom"));
+					BITMAP(zoom_auto_xpm),
+					_("best zoom"));
 
 		m_HToolBar->AddSeparator();
 		m_HToolBar->AddTool(ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,

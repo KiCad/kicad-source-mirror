@@ -185,7 +185,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE_BUTT,
                                _( "Zoom auto" ), _( "Zoom auto" ),
                                wxITEM_NORMAL );
-        item->SetBitmap( zoom_optimal_xpm );
+        item->SetBitmap( zoom_auto_xpm );
         viewMenu->Append( item );
 
         viewMenu->AppendSeparator();
@@ -195,7 +195,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW_BUTT,
                                msg, _( "Zoom auto" ),
                                wxITEM_NORMAL );
-        item->SetBitmap( repaint_xpm );
+        item->SetBitmap( zoom_redraw_xpm );
         viewMenu->Append( item );
 
         // Place Menu

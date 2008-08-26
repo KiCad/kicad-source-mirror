@@ -225,7 +225,6 @@ OBJECTS = \
     red.o\
     reload2.o\
     reload.o\
-    Repaint.o\
     right.o\
     Rotate_Field.o\
     Rotate_Module-.o\
@@ -278,9 +277,10 @@ OBJECTS = \
     zip.o\
     Zoom_1.o\
     Zoom_Center.o\
-    Zoom_In.o\
-    Zoom_Optimal.o\
-    Zoom_Out.o\
+    zoom_in.o\
+    zoom_auto.o\
+    zoom_out.o\
+    zoom_redraw.o\
     Zoom_Page.o\
     Zoom_Selected.o\
     Zoom_Select.o\

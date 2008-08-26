@@ -125,10 +125,10 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                         _( "zoom - (F2)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( repaint_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( zoom_redraw_xpm ),
                         _( "redraw (F3)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP( zoom_optimal_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP( zoom_auto_xpm ),
                         _( "1:1 zoom" ) );
 
     m_HToolBar->AddSeparator();
