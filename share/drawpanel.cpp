@@ -24,6 +24,16 @@
 // Local defines
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
+// Locad variables
+
+/* Used to inhibit a response to a mouse left button release, after a double click
+ * (when releasing the left button at the end of the second click
+ * Used in eeschema to inhibit a mouse left release command when switching between
+ * hierarchical sheets on a double click
+ */
+static bool s_IgnoreNextLeftButtonRelease = false;
+
+
 // Events used by WinEDA_DrawPanel
 BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
 EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
@@ -37,7 +47,7 @@ EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
 EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
 
 EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-    WinEDA_DrawPanel::Process_Popup_Zoom )
+                WinEDA_DrawPanel::Process_Popup_Zoom )
 END_EVENT_TABLE()
 
 /************************************************************************/
@@ -47,7 +57,7 @@ END_EVENT_TABLE()
 WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
                                     const wxPoint& pos, const wxSize& size ) :
     wxScrolledWindow( parent, id, pos, size,
-                    wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
+                      wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
 {
     m_Parent          = parent;
     m_Ident           = m_Parent->m_Ident;
@@ -55,8 +65,8 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     m_ScrollButt_unit = 40;
 
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
-            ColorRefs[g_DrawBgColor].m_Green,
-            ColorRefs[g_DrawBgColor].m_Blue ) );
+                                   ColorRefs[g_DrawBgColor].m_Green,
+                                   ColorRefs[g_DrawBgColor].m_Blue ) );
 
     EnableScrolling( TRUE, TRUE );
     m_ClipBox.SetSize( size );
@@ -82,7 +92,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
 
 BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
 {
-    WinEDA_DrawFrame*       parentFrame = m_Parent;
+    WinEDA_DrawFrame* parentFrame = m_Parent;
 
     wxASSERT( parentFrame );
 
@@ -116,18 +126,18 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
         int dy = m_ClipBox.GetHeight() * GetZoom();
 
         GRLine( &m_ClipBox, DC, Cursor.x - dx, Cursor.y,
-            Cursor.x + dx, Cursor.y, 0, color );                // axe Y
+                Cursor.x + dx, Cursor.y, 0, color );            // axe Y
         GRLine( &m_ClipBox, DC, Cursor.x, Cursor.y - dx,
-            Cursor.x, Cursor.y + dy, 0, color );                // axe X
+                Cursor.x, Cursor.y + dy, 0, color );            // axe X
     }
     else
     {
         int len = CURSOR_SIZE * GetZoom();
 
         GRLine( &m_ClipBox, DC, Cursor.x - len, Cursor.y,
-            Cursor.x + len, Cursor.y, 0, color );
+                Cursor.x + len, Cursor.y, 0, color );
         GRLine( &m_ClipBox, DC, Cursor.x, Cursor.y - len,
-            Cursor.x, Cursor.y + len, 0, color );
+                Cursor.x, Cursor.y + len, 0, color );
     }
 }
 
@@ -289,8 +299,8 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 
 void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
 {
-    D(printf("1) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
-             aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y );)
+    D( printf( "1) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
+               aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
 
     // Convert the rect coordinates and size to pixels (make a draw clip box):
     ConvertPcbUnitsToPixelsUnits( &aRect );
@@ -302,8 +312,8 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
     aRect.m_Size.x += 2;  // += 1 is not enough!
     aRect.m_Size.y += 2;
 
-    D(printf("2) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
-             aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y );)
+    D( printf( "2) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
+               aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
 
     // pass wxRect() via EDA_Rect::operator wxRect() overload
     RefreshRect( aRect, TRUE );
@@ -569,8 +579,8 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
     GRSetDrawMode( DC, GR_COPY );
 
     GRSFilledRect( &m_ClipBox, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
-        m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
-        g_DrawBgColor, g_DrawBgColor );
+                   m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
+                   g_DrawBgColor, g_DrawBgColor );
 }
 
 
@@ -588,21 +598,21 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 
     org = m_ClipBox.GetOrigin();
 
-    wxRegion   upd = GetUpdateRegion(); // get the update rect list
+    wxRegion upd = GetUpdateRegion(); // get the update rect list
 
     // get the union of all rectangles in the update region, 'upd'
     PaintClipBox = upd.GetBox();
 
 #if 0 && defined (DEBUG)
     printf( "1) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
-        PaintClipBox.x,
-        PaintClipBox.y,
-        PaintClipBox.width,
-        PaintClipBox.height,
-        org.x, org.y,
-        m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
-        m_ClipBox.m_Size.x, m_ClipBox.m_Size.y
-        );
+            PaintClipBox.x,
+            PaintClipBox.y,
+            PaintClipBox.width,
+            PaintClipBox.height,
+            org.x, org.y,
+            m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
+            m_ClipBox.m_Size.x, m_ClipBox.m_Size.y
+            );
 #endif
 
     PaintClipBox.x += org.x;
@@ -621,16 +631,16 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 #endif
 
 
-#if 0 && defined(DEBUG)
+#if 0 && defined (DEBUG)
     printf( "2) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
-        PaintClipBox.x,
-        PaintClipBox.y,
-        PaintClipBox.width,
-        PaintClipBox.height,
-        org.x, org.y,
-        m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
-        m_ClipBox.m_Size.x, m_ClipBox.m_Size.y
-        );
+            PaintClipBox.x,
+            PaintClipBox.y,
+            PaintClipBox.width,
+            PaintClipBox.height,
+            org.x, org.y,
+            m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
+            m_ClipBox.m_Size.x, m_ClipBox.m_Size.y
+            );
 #endif
 
 
@@ -683,8 +693,8 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
     DC->SetFont( *g_StdFont );
 
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
-            ColorRefs[g_DrawBgColor].m_Green,
-            ColorRefs[g_DrawBgColor].m_Blue ) );
+                                   ColorRefs[g_DrawBgColor].m_Green,
+                                   ColorRefs[g_DrawBgColor].m_Blue ) );
 
     GRResetPenAndBrush( DC );
 
@@ -804,11 +814,11 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     {
         /* Draw the Y axis */
         GRDashedLine( &m_ClipBox, DC, 0, -screen->ReturnPageSize().y,
-            0, screen->ReturnPageSize().y, 0, Color );
+                      0, screen->ReturnPageSize().y, 0, Color );
 
         /* Draw the X axis */
         GRDashedLine( &m_ClipBox, DC, -screen->ReturnPageSize().x, 0,
-            screen->ReturnPageSize().x, 0, 0, Color );
+                      screen->ReturnPageSize().x, 0, 0, Color );
     }
 
     /* Draw auxiliary axis */
@@ -839,15 +849,15 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 
     /* Draw the Y axis */
     GRDashedLine( &m_ClipBox, DC,
-        m_Parent->m_Auxiliary_Axis_Position.x, -screen->ReturnPageSize().y,
-        m_Parent->m_Auxiliary_Axis_Position.x, screen->ReturnPageSize().y,
-        0, Color );
+                  m_Parent->m_Auxiliary_Axis_Position.x, -screen->ReturnPageSize().y,
+                  m_Parent->m_Auxiliary_Axis_Position.x, screen->ReturnPageSize().y,
+                  0, Color );
 
     /* Draw the X axis */
     GRDashedLine( &m_ClipBox, DC,
-        -screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
-        screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
-        0, Color );
+                  -screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
+                  screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
+                  0, Color );
 }
 
 
@@ -909,7 +919,6 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     int                      localrealbutt = 0, localbutt = 0, localkey = 0;
     BASE_SCREEN*             screen = GetScreen();
     static WinEDA_DrawPanel* LastPanel;
-    static bool              IgnoreNextLeftButtonRelease = false;
 
     if( !screen )
         return;
@@ -1022,14 +1031,27 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
     {
         m_Parent->OnLeftDClick( &DC, screen->m_MousePositionInPixels );
-        IgnoreNextLeftButtonRelease = true;
+
+        // inhibit a response to the mouse left button release,
+        // because we have a double click, and we do not want a new OnLeftClick command at end of this Double Click
+        s_IgnoreNextLeftButtonRelease = true;
     }
     else if( event.LeftUp() )
     {
-        if( screen->BlockLocate.m_State==STATE_NO_BLOCK  &&  !IgnoreNextLeftButtonRelease )
+        if( screen->BlockLocate.m_State==STATE_NO_BLOCK     // A block command is in progress: a left up is the end of block
+            && !s_IgnoreNextLeftButtonRelease )             // This is the end of a double click, already seen
             m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
 
-        IgnoreNextLeftButtonRelease = false;
+        s_IgnoreNextLeftButtonRelease = false;
+    }
+
+    if( !event.LeftIsDown() )
+    {
+        /* be sure there is a response to a left button release command
+         * even when a LeftUp event is not seen
+         * happens when a double click opens a dialog box, and the release mouse button is made when the dialog box is open
+         */
+        s_IgnoreNextLeftButtonRelease = false;
     }
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
@@ -1087,7 +1109,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             {
                 m_AutoPAN_Request = FALSE;
                 m_Parent->HandleBlockPlace( &DC );
-                IgnoreNextLeftButtonRelease = true;
+                s_IgnoreNextLeftButtonRelease = true;
             }
         }
         else if( (m_CanStartBlock >= 0 )
@@ -1179,16 +1201,16 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 #if 0
     wxString msg_debug;
     msg_debug.Printf( " block state %d, cmd %d",
-        screen->BlockLocate.m_State, screen->BlockLocate.m_Command );
+                      screen->BlockLocate.m_State, screen->BlockLocate.m_Command );
     m_Parent->PrintMsg( msg_debug );
 #endif
 
     LastPanel = this;
 
     /* @todo: move this to where it is really needed, obviously not here in
-        response to every mouse move event:
-    m_Parent->SetToolbars();
-    */
+     * response to every mouse move event:
+     * m_Parent->SetToolbars();
+     */
 }
 
 
