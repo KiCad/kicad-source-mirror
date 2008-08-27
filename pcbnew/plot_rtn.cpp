@@ -837,7 +837,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
 
     if( IsPostScript( format_plot ) )
     {
-        PlotArcPS( centre, start_angle, end_angle, radius, 0, thickness );
+        PlotArcPS( centre, start_angle, end_angle, radius, false, thickness );
         return;
     }
 

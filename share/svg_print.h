@@ -24,6 +24,7 @@
 
 ////@begin includes
 #include "wx/valgen.h"
+#include "wx/grid.h"
 ////@end includes
 
 /*!
@@ -44,6 +45,7 @@ class wxBoxSizer;
 #define ID_CHECKBOX 10004
 #define ID_RADIOBOX1 10008
 #define ID_PRINT_EXECUTE 10002
+#define ID_GRID1 10003
 #define ID_TEXTCTRL 10001
 #define ID_TEXTCTRL1 10006
 #define SYMBOL_WINEDA_PRINTSVGFRAME_STYLE wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|MAYBE_RESIZE_BORDER

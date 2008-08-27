@@ -511,7 +511,7 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
  */
 {
     int x0, y0, x1, y1, delta;
-    int w, rayon;
+    int thickness, rayon;
 
     // la pastille est ramenee a une pastille ovale avec dy > dx
     if( size.x > size.y )
@@ -537,14 +537,14 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
     }
     else
     {
-        w     = g_PlotLine_Width;
-        rayon = (size.x - w) / 2;
+        thickness     = g_PlotLine_Width;
+        rayon = (size.x - thickness) / 2;
         if( rayon < 1 )
             rayon = 1;
-        if( rayon < w )
-            w = rayon;
-        PlotArcPS( wxPoint( pos.x + x1, pos.y + y1 ), -orient, -orient + 1800, rayon, 0, w);
-        PlotArcPS( wxPoint( pos.x + x0, pos.y + y0 ), -orient + 1800, -orient, rayon, 0, w );
+        if( rayon < thickness )
+            thickness = rayon;
+        PlotArcPS( wxPoint( pos.x + x1, pos.y + y1 ), -orient, -orient + 1800, rayon, false, thickness);
+        PlotArcPS( wxPoint( pos.x + x0, pos.y + y0 ), -orient + 1800, -orient, rayon, false, thickness );
 
         x0 = -rayon;
         y0 = -delta / 2;
@@ -553,7 +553,7 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
         RotatePoint( &x0, &y0, orient );
         RotatePoint( &x1, &y1, orient );
         PlotFilledSegmentPS( wxPoint( pos.x + x0, pos.y + y0 ),
-            wxPoint( pos.x + x1, pos.y + y1 ), w );
+            wxPoint( pos.x + x1, pos.y + y1 ), thickness );
 
         x0 = rayon;
         y0 = -delta / 2;
@@ -562,7 +562,7 @@ void trace_1_pastille_OVALE_POST( wxPoint pos, wxSize size, int orient, int mode
         RotatePoint( &x0, &y0, orient );
         RotatePoint( &x1, &y1, orient );
         PlotFilledSegmentPS( wxPoint( pos.x + x0, pos.y + y0 ),
-            wxPoint( pos.x + x1, pos.y + y1 ), w );
+            wxPoint( pos.x + x1, pos.y + y1 ), thickness );
     }
 }
 

@@ -1,57 +1,129 @@
-*PADS-PCB*
-*PART*
-P4 unknown
-U1 unknown
-C1 unknown
-P3 unknown
-P2 unknown
-P1 unknown
-C2 unknown
-R3 unknown
-R4 unknown
-R2 unknown
-R1 unknown
-
-*NET*
-*SIGNAL* GND
- R2.2
- R4.2
- R3.2
- P1.1
- P2.2
- P3.2
- C1.2
-*SIGNAL* N-000002
- U1.5
- U1.4
- P4.1
-*SIGNAL* N-000003
- U1.9
- P4.2
-*SIGNAL* N-000004
- P2.1
- C2.1
- R3.1
-*SIGNAL* N-000005
- U1.1
- U1.1
- R1.1
- U1.7
-*SIGNAL* N-000006
- U1.3
- R2.1
- U1.3
-*SIGNAL* N-000007
- U1.2
- U1.2
- R4.1
- P1.2
-*SIGNAL* N-000008
- P3.1
- U1.6
- C1.1
-*SIGNAL* N-000009
- C2.2
- U1.8
- R1.2
-*END*
+# EESchema Netlist Version 1.1 created  27/8/2008-06:26:11
+(
+ ( /48B4F266 VALVE-NOVAL_P  U1 ECC81_83 {Lib=ECC81_83}
+  (    1 N-000001 )
+  (    2 N-000004 )
+  (    3 N-000005 )
+  (    4 N-000007 )
+  (    5 N-000007 )
+  (    6 N-000008 )
+  (    7 N-000001 )
+  (    8 N-000009 )
+  (    9 N-000002 )
+ )
+ ( /456A8ACC $noname  P4 CONN_2 {Lib=CONN_2}
+  (    1 N-000007 )
+  (    2 N-000002 )
+ )
+ ( /4549F4BE $noname  C1 10uF {Lib=C}
+  (    1 N-000008 )
+  (    2 GND )
+ )
+ ( /4549F4A5 $noname  P3 POWER {Lib=CONN_2}
+  (    1 N-000008 )
+  (    2 GND )
+ )
+ ( /4549F46C $noname  P2 OUT {Lib=CONN_2}
+  (    1 N-000006 )
+  (    2 GND )
+ )
+ ( /4549F464 $noname  P1 IN {Lib=CONN_2}
+  (    1 GND )
+  (    2 N-000004 )
+ )
+ ( /4549F3BE $noname  C2 680nF {Lib=C}
+  (    1 N-000006 )
+  (    2 N-000009 )
+ )
+ ( /4549F3AD $noname  R3 100K {Lib=R}
+  (    1 N-000006 )
+  (    2 GND )
+ )
+ ( /4549F3A2 $noname  R4 47K {Lib=R}
+  (    1 N-000004 )
+  (    2 GND )
+ )
+ ( /4549F39D $noname  R2 1.5K {Lib=R}
+  (    1 N-000005 )
+  (    2 GND )
+ )
+ ( /4549F38A $noname  R1 1.5K {Lib=R}
+  (    1 N-000001 )
+  (    2 N-000009 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C1
+ SM*
+ C?
+ C1-1
+$endlist
+$component C2
+ SM*
+ C?
+ C1-1
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 1 ""
+ R1 1
+ U1 7
+ U1 1
+Net 2 ""
+ P4 2
+ U1 9
+Net 3 "GND"
+ R2 2
+ R4 2
+ R3 2
+ P1 1
+ P2 2
+ P3 2
+ C1 2
+Net 4 ""
+ P1 2
+ R4 1
+ U1 2
+Net 5 ""
+ R2 1
+ U1 3
+Net 6 ""
+ P2 1
+ R3 1
+ C2 1
+Net 7 ""
+ P4 1
+ U1 4
+ U1 5
+Net 8 ""
+ P3 1
+ U1 6
+ C1 1
+Net 9 ""
+ U1 8
+ C2 2
+ R1 2
+}
+#End

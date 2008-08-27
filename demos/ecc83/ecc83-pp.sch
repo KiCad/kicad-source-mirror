@@ -1,4 +1,4 @@
-EESchema Schematic File Version 1
+EESchema Schematic File Version 2
 LIBS:power,device,conn,valves,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,microcontrollers,microchip,analog_switches,motorola,intel,audio,interface,digital-audio,philips,display,cypress,siliconi,contrib,.\ecc83-pp.cache
 EELAYER 23  0
 EELAYER END
@@ -13,123 +13,149 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Wire Wire Line
+	6050 4450 6150 4450
+Wire Wire Line
+	5750 3850 5750 4050
+Connection ~ 4450 4500
+Wire Wire Line
+	4450 5400 4450 4450
+Wire Wire Line
+	4450 4450 4650 4450
+Wire Wire Line
+	9850 6350 9950 6350
+Wire Wire Line
+	9950 6350 9950 6150
+Wire Wire Line
+	4150 5300 4150 5000
+Wire Wire Line
+	6950 5150 6950 5000
+Wire Wire Line
+	4150 4800 4450 4800
+Connection ~ 4450 4800
+Wire Wire Line
+	6950 4350 6950 4050
+Connection ~ 6950 4250
+Wire Wire Line
+	4850 4850 4850 5400
+Wire Wire Line
+	6300 3900 6300 4000
+Wire Wire Line
+	6950 3850 5750 3850
+Connection ~ 6700 3850
+Wire Wire Line
+	6700 4250 6950 4250
+Wire Wire Line
+	6150 4450 6150 3900
+Connection ~ 6150 3900
+Wire Wire Line
+	6300 4500 6300 4900
+Connection ~ 6300 4800
+Wire Wire Line
+	6950 4800 6700 4800
+Wire Wire Line
+	6700 4800 6700 5400
+Wire Wire Line
+	10050 6150 10050 6350
+Wire Wire Line
+	10050 6250 9850 6250
+Connection ~ 10050 6250
+Wire Wire Line
+	4100 5250 4150 5250
+Connection ~ 4150 5250
+Wire Wire Line
+	9850 6250 9850 6150
+Wire Wire Line
+	6300 3900 4950 3900
+Wire Wire Line
+	4950 3900 4950 4050
+Wire Wire Line
+	5850 4850 5850 4900
+Wire Wire Line
+	5850 4900 6300 4900
 $Comp
-L GND #PWR1
+L ECC83 U1
+U 3 1 48B4F266
+P 9950 5700
+F 0 "U1" H 10080 6010 50  0000 C C
+F 1 "ECC81_83" H 10300 5400 50  0000 C C
+F 2 "VALVE-NOVAL_P" H 10220 5300 50  0001 C C
+	3    9950 5700
+	1    0    0    -1  
+$EndComp
+$Comp
+L ECC83 U1
+U 2 1 48B4F263
+P 4950 4450
+F 0 "U1" H 5080 4760 50  0000 C C
+F 1 "ECC83" H 5150 4100 50  0000 C C
+F 2 "VALVE-NOVAL_P" H 5220 4050 50  0001 C C
+	2    4950 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L ECC83 U1
+U 1 1 48B4F256
+P 5750 4450
+F 0 "U1" H 5880 4760 50  0000 C C
+F 1 "ECC83" H 5500 4150 50  0000 C C
+F 2 "VALVE-NOVAL_P" H 6020 4050 50  0001 C C
+	1    5750 4450
+	-1   0    0    -1  
+$EndComp
+$Comp
+L GND #PWR01
 U 1 1 457DBAF8
 P 6950 5150
-F 0 "#PWR1" H 6950 5150 30  0001 C C
+F 0 "#PWR01" H 6950 5150 30  0001 C C
 F 1 "GND" H 6950 5080 30  0001 C C
 	1    6950 5150
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR2
+L GND #PWR02
 U 1 1 457DBAF5
 P 6700 5900
-F 0 "#PWR2" H 6700 5900 30  0001 C C
+F 0 "#PWR02" H 6700 5900 30  0001 C C
 F 1 "GND" H 6700 5830 30  0001 C C
 	1    6700 5900
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR3
+L GND #PWR03
 U 1 1 457DBAF1
-P 5250 5900
-F 0 "#PWR3" H 5250 5900 30  0001 C C
-F 1 "GND" H 5250 5830 30  0001 C C
-	1    5250 5900
-	1    0    0    -1  
-$EndComp
-$Comp
-L GND #PWR4
-U 1 1 457DBAEF
 P 4850 5900
-F 0 "#PWR4" H 4850 5900 30  0001 C C
+F 0 "#PWR03" H 4850 5900 30  0001 C C
 F 1 "GND" H 4850 5830 30  0001 C C
 	1    4850 5900
 	1    0    0    -1  
 $EndComp
-Connection ~ 4550 5250
-Wire Wire Line
-	4500 5250 4550 5250
-Connection ~ 5800 5050
-Wire Wire Line
-	5800 5050 5400 5050
-Wire Wire Line
-	5400 5050 5400 4950
-Wire Wire Line
-	5600 4950 5600 5150
-Wire Wire Line
-	5800 5150 5800 4950
-Wire Wire Line
-	6700 5400 6700 4800
-Wire Wire Line
-	6700 4800 6950 4800
-Connection ~ 6300 4800
-Wire Wire Line
-	6300 4500 6300 4900
-Connection ~ 6150 3900
-Wire Wire Line
-	6150 4500 6150 3900
-Wire Wire Line
-	6700 4250 6950 4250
-Connection ~ 6700 3850
-Wire Wire Line
-	6950 3850 5750 3850
-Wire Wire Line
-	5750 3850 5750 4000
-Wire Wire Line
-	6300 4900 5950 4900
-Wire Wire Line
-	5950 4900 5950 4850
-Wire Wire Line
-	6300 4000 6300 3900
-Wire Wire Line
-	6300 3900 5450 3900
-Wire Wire Line
-	5450 3900 5450 4000
-Wire Wire Line
-	5250 4850 5250 5400
-Wire Wire Line
-	5050 4500 4850 4500
-Wire Wire Line
-	4850 4500 4850 5400
-Connection ~ 6950 4250
-Wire Wire Line
-	6950 4050 6950 4350
-Connection ~ 4850 4800
-Wire Wire Line
-	4550 4800 4850 4800
-Wire Wire Line
-	6950 5150 6950 5000
-Wire Wire Line
-	4550 5000 4550 5300
 $Comp
-L PWR_FLAG #FLG5
+L GND #PWR04
+U 1 1 457DBAEF
+P 4450 5900
+F 0 "#PWR04" H 4450 5900 30  0001 C C
+F 1 "GND" H 4450 5830 30  0001 C C
+	1    4450 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG05
 U 1 1 457DBAC0
-P 4500 5250
-F 0 "#FLG5" H 4500 5520 30  0001 C C
-F 1 "PWR_FLAG" H 4500 5480 30  0000 C C
-	1    4500 5250
+P 4100 5250
+F 0 "#FLG05" H 4100 5520 30  0001 C C
+F 1 "PWR_FLAG" H 4100 5480 30  0000 C C
+	1    4100 5250
 	0    -1   -1   0   
 $EndComp
 $Comp
 L CONN_2 P4
 U 1 1 456A8ACC
-P 5700 5500
-F 0 "P4" V 5650 5500 40  0000 C C
-F 1 "CONN_2" V 5750 5500 40  0000 C C
-	1    5700 5500
+P 9950 6700
+F 0 "P4" V 9900 6700 40  0000 C C
+F 1 "CONN_2" V 10000 6700 40  0000 C C
+	1    9950 6700
 	0    1    1    0   
-$EndComp
-$Comp
-L ECC83_2 U1
-U 1 1 454A08DD
-P 5600 4500
-F 0 "U1" H 5700 4000 60  0000 C C
-F 1 "ECC83" H 5200 4850 60  0000 C C
-	1    5600 4500
-	1    0    0    -1  
 $EndComp
 $Comp
 L C C1
@@ -141,19 +167,19 @@ F 1 "10uF" H 6450 4150 50  0000 L C
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR6
+L GND #PWR06
 U 1 1 4549F4B9
-P 4550 5300
-F 0 "#PWR6" H 4550 5300 30  0001 C C
-F 1 "GND" H 4550 5230 30  0001 C C
-	1    4550 5300
+P 4150 5300
+F 0 "#PWR06" H 4150 5300 30  0001 C C
+F 1 "GND" H 4150 5230 30  0001 C C
+	1    4150 5300
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR7
+L GND #PWR07
 U 1 1 4549F4B3
 P 6950 4350
-F 0 "#PWR7" H 6950 4350 30  0001 C C
+F 0 "#PWR07" H 6950 4350 30  0001 C C
 F 1 "GND" H 6950 4280 30  0001 C C
 	1    6950 4350
 	1    0    0    -1  
@@ -179,10 +205,10 @@ $EndComp
 $Comp
 L CONN_2 P1
 U 1 1 4549F464
-P 4200 4900
-F 0 "P1" V 4150 4900 40  0000 C C
-F 1 "IN" V 4250 4900 40  0000 C C
-	1    4200 4900
+P 3800 4900
+F 0 "P1" V 3750 4900 40  0000 C C
+F 1 "IN" V 3850 4900 40  0000 C C
+	1    3800 4900
 	-1   0    0    1   
 $EndComp
 $Comp
@@ -206,19 +232,19 @@ $EndComp
 $Comp
 L R R4
 U 1 1 4549F3A2
-P 4850 5650
-F 0 "R4" V 4930 5650 50  0000 C C
-F 1 "47K" V 4850 5650 50  0000 C C
-	1    4850 5650
+P 4450 5650
+F 0 "R4" V 4530 5650 50  0000 C C
+F 1 "47K" V 4450 5650 50  0000 C C
+	1    4450 5650
 	1    0    0    -1  
 $EndComp
 $Comp
 L R R2
 U 1 1 4549F39D
-P 5250 5650
-F 0 "R2" V 5330 5650 50  0000 C C
-F 1 "1.5K" V 5250 5650 50  0000 C C
-	1    5250 5650
+P 4850 5650
+F 0 "R2" V 4930 5650 50  0000 C C
+F 1 "1.5K" V 4850 5650 50  0000 C C
+	1    4850 5650
 	1    0    0    -1  
 $EndComp
 $Comp
