@@ -117,6 +117,14 @@ if(UNIX)
  create_svn_version_header()
 endif(UNIX)
 
+if(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
+ # This file may exist (created by an alternate process to the svn test above),
+ # e.g. could be created by a checkout script that produces a source tar file.
+ # This directive means the about box will have the svn date & revision in it,
+ # but the hard coded release date (program version) will be preserved.
+ add_definitions(-DHAVE_SVN_REVISION)
+endif(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
+
 
 # Include paths.
 include_directories(${CMAKE_SOURCE_DIR}/include

@@ -14,6 +14,8 @@ macro(create_svn_version_header)
         # Subversion info command instead of hand coded date and revision in
         # "include/build_version.h".  If subversion is not found then the date
         # and version information must be manually edited.
+        # Directive means SVN build, program version and build version will
+        # reflect this.
         add_definitions(-DHAVE_SVN_VERSION)
 
         # Generate config.h.

@@ -16,7 +16,7 @@ COMMON_GLOBL wxString g_BuildVersion
 
 COMMON_GLOBL wxString g_BuildAboutVersion
 #ifdef EDA_BASE
-#  ifdef HAVE_SVN_VERSION
+#  if defined(HAVE_SVN_VERSION) || defined(HAVE_SVN_REVISION)
 #    include "config.h"
      (wxT(KICAD_ABOUT_VERSION))
 #  else
