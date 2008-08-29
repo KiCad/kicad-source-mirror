@@ -74,16 +74,22 @@ class SPECCTRA_DB;
 class OUTPUTFORMATTER
 {
 
+#if defined(__GNUG__)   // The GNU C++ compiler defines this
+
 // When used on a C++ function, we must account for the "this" pointer,
 // so increase the STRING-INDEX and FIRST-TO_CHECK by one.
 // See http://docs.freebsd.org/info/gcc/gcc.info.Function_Attributes.html
 // Then to get format checking during the compile, compile with -Wall or -Wformat
 #define PRINTF_FUNC       __attribute__ ((format (printf, 3, 4)))
 
+#else
+#define PRINTF_FUNC       // nothing
+#endif
+
 public:
 
     /**
-     * Function print
+     * Function Print
      * formats and writes text to the output stream.
      *
      * @param nestLevel The multiple of spaces to preceed the output with.
@@ -97,9 +103,11 @@ public:
 
     /**
      * Function GetQuoteChar
-     * returns the quote character as a single character string for a given
-     * input wrapee string.  Often the return value is "" the null string if
-     * there are no delimiters in the input string.  If you want the quote_char
+     * performs quote character need determination.
+     * It returns the quote character as a single character string for a given
+     * input wrapee string.  If the wrappee does not need to be quoted,
+     * the return value is "" (the null string), such as when there are no
+     * delimiters in the input wrapee string.  If you want the quote_char
      * to be assuredly not "", then pass in "(" as the wrappee.
      * @param wrapee A string that might need wrapping on each end.
      * @return const char* - the quote_char as a single character string, or ""
@@ -111,9 +119,10 @@ public:
 
     /**
      * Function GetQuoteChar
-     * factor may be used by derived classes to perform quote character selection.
+     * performs quote character need determination.
      * @param wrapee A string that might need wrapping on each end.
-     * @param quote_char A single character C string which hold the current quote character.
+     * @param quote_char A single character C string which provides the current
+     *          quote character, should it be needed by the wrapee.
      * @return const char* - the quote_char as a single character string, or ""
      *   if the wrapee does not need to be wrapped.
      */
