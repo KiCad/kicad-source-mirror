@@ -498,7 +498,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                 _( "Export via hole to others id vias" ), global_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
                 _( "Set ALL via holes to default" ), apply_xpm );
-            if( !Track->IsDrillDefault() )
+            if( Track->IsDrillDefault() )   // Can't export the drill value, because this value is 0
             {
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
             }

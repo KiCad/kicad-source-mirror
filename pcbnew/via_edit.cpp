@@ -88,11 +88,11 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
 
     case ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT:        // Reset all via hole to default value
         via_struct = m_Pcb->m_Track;
-        for( ; via_struct != NULL; via_struct = (TRACK*) via_struct->Pnext )
+        for( ; via_struct != NULL; via_struct = via_struct->Next() )
         {
             if( via_struct->Type() == TYPEVIA )     /* mise a jour du diametre de la via */
             {
-                if( via_struct->IsDrillDefault() )
+                if( ! via_struct->IsDrillDefault() )
                 {
                     via_struct->Draw( DrawPanel, DC, GR_XOR );
                     via_struct->SetDrillDefault();
