@@ -9,7 +9,7 @@ COMMON_GLOBL wxString g_BuildVersion
 #    include "config.h"
      (wxT(KICAD_SVN_VERSION))
 #  else
-     (wxT("(20080825)"))
+     (wxT("(20080825)")) /* main program version */
 #  endif
 #endif
 ;
@@ -20,7 +20,7 @@ COMMON_GLOBL wxString g_BuildAboutVersion
 #    include "config.h"
      (wxT(KICAD_ABOUT_VERSION))
 #  else
-     (wxT("(20080811.r1188)"))
+     (wxT("(20080811.r1188)")) /* svn date & rev (normally overridden) */
 #  endif
 #endif
 ;
