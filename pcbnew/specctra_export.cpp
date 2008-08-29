@@ -748,91 +748,92 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
         items.Remove( 0 );
 
         prevPt = graphic->GetEnd();
-
-        path->AppendPoint( mapPt( graphic->GetStart() ) );
         path->AppendPoint( mapPt( graphic->GetEnd() ) );
 
-        while( items.GetCount() )
+        // do not append the other end point yet, this first edge item might be an arc
+
+        for(;;)
         {
-            graphic = findPoint( prevPt, &items );
-            if( graphic )
+            switch( graphic->m_Shape )
             {
-                switch( graphic->m_Shape )
+            case S_ARC:
+                // freerouter does not yet understand arcs, so approximate
+                // an arc with a series of short lines and put those
+                // line segments into the !same! PATH.
                 {
-                case S_ARC:
-                    // freerouter does not yet understand arcs, so approximate
-                    // an arc with a series of short lines and put those
-                    // line segments into the !same! PATH.
+                    const int STEPS =  9;      // in an arc of 90 degrees
+
+                    wxPoint start  = graphic->GetStart();
+                    wxPoint end    = graphic->GetEnd();
+                    wxPoint center = graphic->m_Start;
+                    int     angle  = -graphic->m_Angle;
+
+                    if( prevPt != start )
                     {
-                        const int STEPS =  9;      // in an arc of 90 degrees
+                        wxASSERT( prevPt == graphic->GetEnd() );
 
-                        wxPoint start  = graphic->GetStart();
-                        wxPoint end    = graphic->GetEnd();
-                        wxPoint center = graphic->m_Start;
-                        int     angle  = -graphic->m_Angle;
-
-                        if( prevPt != start )
-                        {
-                            wxASSERT( prevPt == graphic->GetEnd() );
-
-                            angle = -angle;
-                            EXCHG( start, end );
-                        }
-
-                        wxPoint nextPt;
-
-                        for( int step=1;  step<=STEPS;  ++step )
-                        {
-                            int rotation = ( angle * step )/STEPS;
-
-                            nextPt = start;
-
-                            RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
-
-                            path->AppendPoint( mapPt( nextPt ) );
-                        }
-
-                        prevPt = nextPt;
+                        angle = -angle;
+                        EXCHG( start, end );
                     }
-                    break;
 
-                case S_CIRCLE:
-                    // do not output a circle, freerouter does not understand it.
-                    // this might be a mounting hole or something, ignore it without error
-                    break;
+                    wxPoint nextPt;
 
-                default:
+                    for( int step=1;  step<=STEPS;  ++step )
                     {
-                        wxString error;
+                        int rotation = ( angle * step )/STEPS;
 
-                        error.Printf( _("Unsupported DRAWSEGMENT type %s"),
-                          BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ).GetData() );
+                        nextPt = start;
 
-                        ThrowIOError( error );
+                        RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+
+                        path->AppendPoint( mapPt( nextPt ) );
                     }
-                    break;
 
-                case S_SEGMENT:
-                    {
-                        POINT  nextPt;
-
-                        if( prevPt != graphic->GetStart() )
-                        {
-                            wxASSERT( prevPt == graphic->GetEnd() );
-                            nextPt = mapPt( graphic->GetStart() );
-                            prevPt = graphic->GetStart();
-                        }
-                        else
-                        {
-                            nextPt = mapPt( graphic->GetStart() );
-                            prevPt = graphic->GetEnd();
-                        }
-
-                        path->AppendPoint( nextPt );
-                     }
+                    prevPt = nextPt;
                 }
+                break;
+
+            case S_CIRCLE:
+                // do not output a circle, freerouter does not understand it.
+                // this might be a mounting hole or something, ignore it without error
+                break;
+
+            default:
+                {
+                    wxString error;
+
+                    error.Printf( _("Unsupported DRAWSEGMENT type %s"),
+                      BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ).GetData() );
+
+                    ThrowIOError( error );
+                }
+                break;
+
+            case S_SEGMENT:
+                {
+                    POINT  nextPt;
+
+                    if( prevPt != graphic->GetStart() )
+                    {
+                        wxASSERT( prevPt == graphic->GetEnd() );
+                        nextPt = mapPt( graphic->GetStart() );
+                        prevPt = graphic->GetStart();
+                    }
+                    else
+                    {
+                        nextPt = mapPt( graphic->GetStart() );
+                        prevPt = graphic->GetEnd();
+                    }
+
+                    path->AppendPoint( nextPt );
+                 }
             }
-            else
+
+            if( items.GetCount() == 0 )
+                break;
+
+            graphic = findPoint( prevPt, &items );
+            if( !graphic )
             {
                 wxString error;
 
