@@ -71,9 +71,25 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
         Read_Hotkey_Config( this, true );
         break;
 
+    case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
+    {
+        FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
+        FullFileName += HOTKEY_FILENAME;
+        FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+        AddDelimiterString(FullFileName);
+        wxString editorname = GetEditorName();
+        if( !editorname.IsEmpty() )
+            ExecuteFile( this, editorname, FullFileName );
+    }
+        break;
+
     case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
     case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
         HandleHotkeyConfigMenuSelection( this, id );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:           // Display Current hotkey list for gerbview
+        DisplayHotkeyList( this, s_Gerbview_Hokeys_Descr );
         break;
 
     default:

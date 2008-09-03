@@ -93,6 +93,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
+        AddDelimiterString(FullFileName);
         wxString editorname = GetEditorName();
         if( !editorname.IsEmpty() )
             ExecuteFile( this, editorname, FullFileName );

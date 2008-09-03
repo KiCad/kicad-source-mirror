@@ -14,10 +14,6 @@
 
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( ".key" )
 
-/* define default path for config key file */
-#define DEFAULT_HOTKEY_FILENAME_PATH_IS_HOME  wxGetHomeDir() + wxT( "/" )
-#define DEFAULT_HOTKEY_FILENAME_PATH_IS_KICAD g_EDA_Appl->m_BinDir + wxT( "../template/" )
-
 /* keyword idetifier in kicad config use ti store/retrieve path option */
 #define HOTKEY_CFG_PATH_OPT wxT( "HotkeyPathOption" )
 

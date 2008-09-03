@@ -1,5 +1,6 @@
 #
-# Configuration for kicad build & install
+# Configuration for kicad build & install if not using cmake
+# and wxWidgets 2.8.8
 #
 
 # You must comment or uncomment this line to disable/enable python support
@@ -12,12 +13,12 @@
 # non-standard location edit common/gestfich.ccp so it knows where to
 # load help/data/etc. files from.
 # Current supported PREFIXes are /usr and /usr/local (standard install for distributions)
-# and /usr/local/kicad is used when STD_INSTALL = 0 or STD_INSTALL = 2
+# /usr/local/kicad is used when STD_INSTALL = 0, or STD_INSTALL = 2
 # all kicad files will be in /usr/local/kicad
-# STD_INSTALL = 2 is used only to make static link (only useful when kicad run on an other 
+# STD_INSTALL = 2 is used only to make static link (only useful when kicad run on an other
 # linux distribution than the distributions used to compil kicad.
 
-STD_INSTALL = 1
+STD_INSTALL = 0
 
 #*******************************************
 #*******************************************
@@ -32,68 +33,57 @@ ifndef KICAD_STATIC_LINK
 KICAD_STATIC_LINK = 0
 endif
 
-ifeq ($(STD_INSTALL), 1)
-PREFIX = /usr
-KICAD_BIN = $(PREFIX)/bin
-KICAD_PLUGINS = $(PREFIX)/lib/kicad/plugins
-KICAD_DOCS=$(PREFIX)/share/doc/kicad
-KICAD_DATA=$(PREFIX)/share/kicad
-KICAD_MODULES=$(KICAD_DATA)/modules
-KICAD_LIBRARY=$(KICAD_DATA)/library
-KICAD_INTERNAT=$(KICAD_DATA)/internat
-KICAD_TEMPLATE=$(KICAD_DATA)/template
+ifeq ($(STD_INSTALL), 1)                # Used to build linux distribs
+PREFIX = /usr                           # (can also be /usr/local)
+KICAD_BIN = $(PREFIX)/bin               # Install main binaries here
+KICAD_PLUGINS = $(KICAD_BIN)            # Install other binaries here
+KICAD_DOCS=$(PREFIX)/share/doc/kicad    # Install doc files here
+KICAD_DATA=$(PREFIX)/share/kicad        # Install libraries and others files here
 
-else
+else    # Install ALL files in /usr/local/kicad
 # when STD_INSTALL = 0 or STD_INSTALL = 2
-# STD_INSTALL = 2 is used by myself (JP Charras) to build a statically linked distribution intalled in /usr/local (with STD_INSTALL = 0)
+# STD_INSTALL = 0 is used to build kicad intalled in /usr/local
+# STD_INSTALL = 2 is used by myself (JP Charras) to build a statically linked distribution intalled in /usr/local
 PREFIX = /usr/local/kicad
-KICAD_BIN = $(PREFIX)/linux
+KICAD_BIN = $(PREFIX)/bin
 KICAD_PLUGINS = $(KICAD_BIN)/plugins
 KICAD_DOCS=$(PREFIX)/help
-KICAD_DATA=$(PREFIX)
+KICAD_DATA=$(PREFIX)/share
+endif
+
 KICAD_MODULES=$(KICAD_DATA)/modules
 KICAD_LIBRARY=$(KICAD_DATA)/library
 KICAD_INTERNAT=$(KICAD_DATA)/internat
 KICAD_TEMPLATE=$(KICAD_DATA)/template
-endif
 
-# http://www.gnu.org/software/autoconf/manual/make/Catalogue-of-Rules.html#Catalogue-of-Rules
-CXX = g++
-
+# define compil and link
+LD  = g++
 
 SRCSUFF = .cpp
 OBJSUFF = .o
 FINAL = 1
 
 
-# turn on/OFF debugging for all executables, only tested without KICAD_PYTHON
-DEBUG = 1
+# turn ON/OFF debugging for all executables, only tested without KICAD_PYTHON
+DEBUG = 0
 
 
-# common CPPFLAGS to all components, further CPPFLAGS customization in 
+# common CPPFLAGS to all components, further CPPFLAGS customization in
 # directory specific makefile.gtk files.
 ifeq ($(DEBUG), 1)
-WXXFLAGS := $(shell wx-config --debug --cxxflags) 
+WXXFLAGS := $(shell wx-config --debug --cxxflags)
 CPPFLAGS = -Wall -g3 -ggdb3 ${WXXFLAGS} -fno-strict-aliasing -DDEBUG -D_UNICODE
 LDFLAGS = -g3 -ggdb3 #-v
 else
-WXXFLAGS := $(shell wx-config --cxxflags) 
+WXXFLAGS := $(shell wx-config --cxxflags)
 CPPFLAGS = -Wall -O2 ${WXXFLAGS} -fno-strict-aliasing -D_UNICODE
 LDFLAGS = -s #-v
 endif
 
 
-# a command line define which affects pcbnew only, causing it to match current layer 
+# a command line define which affects pcbnew only, causing it to match current layer
 ifdef USE_MATCH_LAYER
-CPPFLAGS += -DUSE_MATCH_LAYER 
-endif
-
-
-
-ifeq ($(KICAD_STATIC_LINK), 1)
-LD  = gcc
-else
-LD  = g++
+CPPFLAGS += -DUSE_MATCH_LAYER
 endif
 
 ifdef KICAD_PYTHON
@@ -105,70 +95,40 @@ PYLIBS+= -lboost_python-mt
 EXTRACPPFLAGS+=-I /usr/include/python$(PYTHON_VERSION) -DKICAD_PYTHON -fno-strict-aliasing
 endif
 
-# path and version definition for wxWidgets and mesa libs
+# mesa (free opengl library) libs
 MESALIBSPATH = /usr/local/lib
+
+#for static link: add wx gl lib
+LIBVERSION=`wx-config --release`
 WXPATH = `wx-config --prefix`/lib
 PREFIX_WX_LIBS = lib`wx-config --basename`
-SUFFIX_WX_LIBSTD = `wx-config --utility=`
 SUFFIX_WX_LIBGL = _gl-$(LIBVERSION).a
-
-# Use static link for libstdc++.a (sometimes also libsupc++.a)
-# locate libstdc++.a and copy it in kicad_dev/syslibs
-ifeq ($(KICAD_STATIC_LINK), 1)
-#define path for a copy of libstdc++.a or/and libsupc++.a:
-LIBSTDC = ../syslibs/libstdc++.a
-else
-# Or Use static link for libsupc++ or libstdc++ (more easy!!)
-LIBSTDC = #-lstdc++ is implied when using g++ to link
-endif
-
-
-LIBVERSION=`wx-config --release`
-LIBREGEX=$(WXPATH)/libwxregexu-$(LIBVERSION).a
-
-# use link static for wxWidgets
-ifeq ($(KICAD_STATIC_LINK), 1)
-LIBS3D = $(WXPATH)/$(PREFIX_WX_LIBS)$(SUFFIX_WX_LIBGL)\
-	 $(MESALIBSPATH)/libGL.a $(MESALIBSPATH)/libGLU.a
-
-AUXLIB = -lXxf86vm
-#AUXLIB = /usr/X11R6/lib/libXinerama.a
-
-WXSYSLIB= $(WXPATH)/$(PREFIX_WX_LIBS)-$(LIBVERSION).a \
-	$(WXPATH)/libwxpng-$(LIBVERSION).a\
-	$(WXPATH)/libwxjpeg-$(LIBVERSION).a\
-	$(WXPATH)/libwxzlib-$(LIBVERSION).a\
-	$(LIBREGEX)\
-         $(AUXLIB)\
-		-lgtk-x11-2.0 -lgdk-x11-2.0 \
-        -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lgthread-2.0\
-        -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl\
-        -lglib-2.0 -lpangoft2-1.0 -lSM\
-        -L/usr/lib $(PYLIBS)
-
-
-WXSYSLIB_WITH_GL= $(WXSYSLIB) $(LIBS3D)
-
-else
 
 ifeq ($(DEBUG), 1)
 # debug wxWidgets
 WXSYSLIB= `wx-config --debug --libs std`
-WXSYSLIB_WITH_GL= `wx-config --debug --libs std,gl`
 else
 # or use "standard command" for wxWidgets
 WXSYSLIB= `wx-config --libs std`
+endif
+
+# use link static
+ifeq ($(KICAD_STATIC_LINK), 1)
+LIBS3D = $(WXPATH)/$(PREFIX_WX_LIBS)$(SUFFIX_WX_LIBGL) $(MESALIBSPATH)/libGL.a $(MESALIBSPATH)/libGLU.a
+WXSYSLIB_WITH_GL= $(WXSYSLIB) $(LIBS3D)
+
+else
+ifeq ($(DEBUG), 1)
+WXSYSLIB_WITH_GL= `wx-config --debug --libs std,gl`
+else
 WXSYSLIB_WITH_GL= `wx-config --libs std,gl`
 endif
-
 endif
 
 
-# attention � l'ordre des libairies
+# attention a l'ordre des libairies
 LIBS = -L/usr/local/lib -L/usr/X11R6/lib\
-	$(EXTRALIBS) $(WXSYSLIB)\
-	$(LIBSTDC) $(PYLIBS)
+	$(EXTRALIBS) $(WXSYSLIB) $(PYLIBS)
 
 LIBS_WITH_GL = -L/usr/local/lib -L/usr/X11R6/lib\
-	$(EXTRALIBS) $(WXSYSLIB_WITH_GL)\
-	$(LIBSTDC) $(PYLIBS)
+	$(EXTRALIBS) $(WXSYSLIB_WITH_GL) $(PYLIBS)

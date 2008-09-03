@@ -65,11 +65,13 @@ void InitKiCadAbout(wxAboutDialogInfo& info)
 #else
    description << (wxT(" 32 bits"));
 #endif
+    description << (wxT("\n with wxWidgets "));
+    description << wxMAJOR_VERSION << wxT(".") << wxMINOR_VERSION << wxT(".") << wxRELEASE_NUMBER;
 
     description << wxT("\n\nWeb sites:\n");
     description << wxT("http://iut-tice.ujf-grenoble.fr/kicad/" );
     description << wxT("\n");
-    description <<  wxT("http://kicad.sourceforge.net/" );
+    description << wxT("http://kicad.sourceforge.net/" );
     description << wxT("\n");
 
 

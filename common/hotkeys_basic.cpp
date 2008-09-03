@@ -272,7 +272,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
     {
         if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )  // End of list reached
             break;
-        
+
         if( keyname.CmpNoCase( s_Hotkey_Name_List[ii].m_Name ) == 0 )
         {
             keycode = s_Hotkey_Name_List[ii].m_KeyCode;
@@ -542,13 +542,13 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString&                    
         /* Get the key name */
         strtok( NULL, "\"\n\r" );
         keyname = strtok( NULL, "\"\n\r" );
-        
+
         strtok( NULL, "\"\n\r" );
-        
+
         /* Get the command name */
         fctname = strtok( NULL, "\"\n\r" );
         msg = CONV_FROM_UTF8( fctname );
-        
+
         /* search the hotkey in current hotkey list */
         for( Ki_HotkeyInfo** List = CurrentHotkeyList; *List != NULL; List++ )
         {
@@ -556,11 +556,11 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString&                    
             if( hk_decr->m_InfoMsg == msg )
             {
                 msg = CONV_FROM_UTF8( keyname );
-                
+
                 int code = ReturnKeyCodeFromKeyName( msg );
                 if( code )
                     hk_decr->m_KeyCode = code;
-                
+
                 break;
             }
         }
@@ -576,7 +576,7 @@ wxString    ReturnHotkeyConfigFilePath( int choice )
 /****************************************************/
 
 /* return the hotkey config file path
- * @param choice : 0 = home, 1 = kicad/template
+ * @param choice : 0 = home, 1 = kicad/share/template
  */
 {
     wxString path;
@@ -584,11 +584,11 @@ wxString    ReturnHotkeyConfigFilePath( int choice )
     switch( choice )
     {
     case 0:
-        path = DEFAULT_HOTKEY_FILENAME_PATH_IS_HOME;
+        path = wxGetHomeDir() + wxT( "/" );
         break;
 
     case 1:
-        path = DEFAULT_HOTKEY_FILENAME_PATH_IS_KICAD;
+        path = ReturnKicadDatasPath() + wxT( "template/" );
         break;
 
     default:

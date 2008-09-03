@@ -1,6 +1,6 @@
 # File:		makefile for eeschema, mingw
 
-#used only to define (KICAD_BIN) and (LIBSTDC) :
+#used only to define (KICAD_PLUGINS) :
 include ../../libs.linux
 
 all: netlist_form_pads-pcb
@@ -11,7 +11,7 @@ deps:
 -include *.d
 
 netlist_form_pads-pcb: netlist_form_pads-pcb.cpp makefile.gtk
-	gcc -D__UNIX__  -Wall netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb $(LIBSTDC)
+	g++ -D__UNIX__  -Wall netlist_form_pads-pcb.cpp -o netlist_form_pads-pcb
 
 install: netlist_form_pads-pcb
 	mkdir -p $(KICAD_PLUGINS)
