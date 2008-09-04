@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 20:03+0100\n"
-"PO-Revision-Date: 2008-08-25 20:56+0100\n"
+"POT-Creation-Date: 2008-09-04 21:46+0100\n"
+"PO-Revision-Date: 2008-09-04 21:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -2887,7 +2887,7 @@ msgstr "Wczytaj plik konfiguracji"
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: kicad/pcbnew/pcbcfg.cpp:204
+#: kicad/pcbnew/pcbcfg.cpp:205
 msgid "Save preferences"
 msgstr "Zapisz ustawienia"
 
@@ -4040,15 +4040,15 @@ msgstr "3:2"
 msgid "3:3"
 msgstr "3:3"
 
-#: kicad/pcbnew/gendrill.cpp:728
+#: kicad/pcbnew/gendrill.cpp:749
 msgid "Drill Map file"
 msgstr "Plik mapy wierceń"
 
-#: kicad/pcbnew/gendrill.cpp:743
+#: kicad/pcbnew/gendrill.cpp:764
 msgid "Unable to create file"
 msgstr "Nie mogę utworzyć pliku"
 
-#: kicad/pcbnew/gendrill.cpp:774
+#: kicad/pcbnew/gendrill.cpp:795
 msgid "Drill Report file"
 msgstr "Plik raportu wierceń"
 
@@ -4451,25 +4451,25 @@ msgstr "Eksport płytki udany."
 msgid "Unable to export, please fix and try again."
 msgstr "Nie mogę eksportować. Napraw błędy i spróbuj ponownie."
 
-#: kicad/pcbnew/specctra_export.cpp:808
+#: kicad/pcbnew/specctra_export.cpp:805
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "Niewspierany typ SEGMENTURYSUNKOWEGO %s"
 
-#: kicad/pcbnew/specctra_export.cpp:839
+#: kicad/pcbnew/specctra_export.cpp:840
 msgid "Unable to find the next segment with an endpoint of "
 msgstr "Nie mogę znaleźć następnego segmentu z punktem końcowy w "
 
-#: kicad/pcbnew/specctra_export.cpp:842
+#: kicad/pcbnew/specctra_export.cpp:843
 msgid "Edit Edges_Pcb segments, making them contiguous."
 msgstr "Zmień segmenty na warstwie krawędzi PCB, tak aby były ciągłe."
 
-#: kicad/pcbnew/specctra_export.cpp:894
+#: kicad/pcbnew/specctra_export.cpp:895
 #, c-format
 msgid "Component with value of \"%s\" has empty reference id."
 msgstr "Element o wartości \"%s\" nie ma oznaczenia"
 
-#: kicad/pcbnew/specctra_export.cpp:902
+#: kicad/pcbnew/specctra_export.cpp:903
 #, c-format
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr "Wiele elementów ma takie samo oznaczenie \"%s\"."
@@ -4879,7 +4879,7 @@ msgid "&Print"
 msgstr "&Drukuj"
 
 #: kicad/share/dialog_print.cpp:256
-#: kicad/share/svg_print.cpp:262
+#: kicad/share/svg_print.cpp:270
 msgid "Pen width mini"
 msgstr "Minimalna szerokość pisaka"
 
@@ -5056,21 +5056,21 @@ msgstr "Tryb wydruku"
 msgid "Create &File"
 msgstr "&Utwórz plik"
 
-#: kicad/share/svg_print.cpp:243
+#: kicad/share/svg_print.cpp:251
 msgid "Filename:"
 msgstr "Nazwa pliku:"
 
-#: kicad/share/svg_print.cpp:249
+#: kicad/share/svg_print.cpp:257
 msgid "Messages:"
 msgstr "Wiadomości:"
 
-#: kicad/share/svg_print.cpp:392
-#: kicad/share/svg_print.cpp:409
+#: kicad/share/svg_print.cpp:400
+#: kicad/share/svg_print.cpp:417
 msgid "Create file "
 msgstr "Utwórz plik "
 
-#: kicad/share/svg_print.cpp:394
-#: kicad/share/svg_print.cpp:411
+#: kicad/share/svg_print.cpp:402
+#: kicad/share/svg_print.cpp:419
 msgid " error"
 msgstr " błąd"
 
@@ -7420,8 +7420,8 @@ msgid "redraw (F3)"
 msgstr "Odśwież (F3)"
 
 #: kicad/eeschema/tool_viewlib.cpp:79
-msgid "1:1 zoom"
-msgstr "Skala 1:1"
+msgid "best zoom"
+msgstr "Dopasuj powiększenie"
 
 #: kicad/eeschema/tool_viewlib.cpp:84
 msgid "Show as \"De Morgan\" normal part"
@@ -8727,6 +8727,7 @@ msgid "Open the cvpcb manual"
 msgstr "Otwórz podręcznik Cvpcb"
 
 #: kicad/cvpcb/writenetlistpcbnew.cpp:168
+#: kicad/cvpcb/genorcad.cpp:134
 #, c-format
 msgid "%s %s pin %s : Different Nets"
 msgstr "%s %s pin %s : Różne sieci"
@@ -8860,6 +8861,11 @@ msgstr "Biblioteka: "
 #: kicad/cvpcb/displayframe.cpp:118
 msgid "Display Options"
 msgstr "Opcje wyświetlania"
+
+#: kicad/cvpcb/displayframe.cpp:132
+#: kicad/cvpcb/displayframe.cpp:136
+msgid "1:1 zoom"
+msgstr "Skala 1:1"
 
 #: kicad/cvpcb/dialog_display_options.cpp:148
 #: kicad/cvpcb/dialog_display_options.cpp:156
@@ -9596,6 +9602,7 @@ msgid "GerbView is already running. Continue?"
 msgstr "Gerbview jest już uruchomiony. Kontynuować?"
 
 #: kicad/gerbview/process_config.cpp:117
+#: kicad/gerbview/gerbview_config.cpp:147
 msgid "Save config file"
 msgstr "Zapisz plik konfiguracji"
 
@@ -9952,7 +9959,7 @@ msgstr "Drukuj"
 msgid "Page Settings"
 msgstr "Ustawienia strony"
 
-#: kicad/share/svg_print.h:50
+#: kicad/share/svg_print.h:52
 msgid "Create SVG file"
 msgstr "Utwórz plik SVG"
 
