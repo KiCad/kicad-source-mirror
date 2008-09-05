@@ -31,7 +31,7 @@ wxString GetBuildVersion()
 wxString GetAboutBuildVersion()
 /*********************************************/
 {
-  return g_BuildAboutVersion; 
+  return g_BuildAboutVersion;
 }
 
 /********************************/
@@ -500,7 +500,9 @@ int GetTimeStamp()
 const wxString& valeur_param( int valeur, wxString& buf_texte )
 /**************************************************************/
 
-/* Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
+/**
+ *  @todo replace this obsolete funtion by MakeStringFromValue
+ * Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
  *  entree : valeur en mils , buffer de texte
  *  retourne en buffer : texte : valeur exprimee en pouces ou millimetres
  *                      suivie de " ou mm
@@ -517,6 +519,34 @@ const wxString& valeur_param( int valeur, wxString& buf_texte )
 
     return buf_texte;
 }
+
+/****************************************************************************************/
+const wxString MakeStringFromValue( int value, int internal_unit )
+/****************************************************************************************/
+/** Function MakeStringFromValue
+ * convert the value of a parameter to a string like <value in prefered units> <unit symbol>
+ * like 100 mils converted to 0.1 " or 0.245 mm
+ * use g_UnitMetric do select inch or metric format
+ * @param : value in internal units
+ * @param : internal_unit per inch: currently 1000 for eeschema and 10000 for pcbnew
+ * @return : the string to display or print
+ */
+{
+    wxString text;
+
+    if( g_UnitMetric )
+    {
+        text.Printf( wxT( "%3.3f mm" ), (float) value * 2.54 / (float) internal_unit );
+    }
+    else
+    {
+        text.Printf( wxT( "%2.4f \"" ), (float) value  / (float) internal_unit );
+    }
+
+    return text;
+}
+
+
 
 
 wxString& operator << ( wxString& aString, const wxPoint& aPos )

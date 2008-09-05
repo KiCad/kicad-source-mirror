@@ -68,7 +68,7 @@ void LibDrawPin::Display_Infos( WinEDA_DrawFrame* frame )
     frame->MsgPanel->EraseMsgBox();
 
     /* Affichage du nom */
-    Affiche_1_Parametre( frame, 24, _( "PinName" ), m_PinName, DARKCYAN );
+    Affiche_1_Parametre( frame, 30, _( "PinName" ), m_PinName, DARKCYAN );
 
     /* Affichage du numero */
     if( m_PinNum == 0 )
@@ -76,11 +76,11 @@ void LibDrawPin::Display_Infos( WinEDA_DrawFrame* frame )
     else
         ReturnPinStringNum( Text );
 
-    Affiche_1_Parametre( frame, 40, _( "PinNum" ), Text, DARKCYAN );
+    Affiche_1_Parametre( frame, 38, _( "PinNum" ), Text, DARKCYAN );
 
     /* Affichage du type */
     ii = m_PinType;
-    Affiche_1_Parametre( frame, 48, _( "PinType" ), MsgPinElectricType[ii], RED );
+    Affiche_1_Parametre( frame, 44, _( "PinType" ), MsgPinElectricType[ii], RED );
 
     /* Affichage de la visiblite */
     ii = m_Attributs;
@@ -88,11 +88,11 @@ void LibDrawPin::Display_Infos( WinEDA_DrawFrame* frame )
         Text = _( "no" );
     else
         Text = _( "yes" );
-    Affiche_1_Parametre( frame, 58, _( "Display" ), Text, DARKGREEN );
+    Affiche_1_Parametre( frame, 50, _( "Display" ), Text, DARKGREEN );
 
-    /* Affichage de la longueur */
-    Text.Printf( wxT( "%d" ), m_PinLen );
-    Affiche_1_Parametre( frame, 66, _( "Lengh" ), Text, MAGENTA );
+    /* Display pin length */
+    Text = MakeStringFromValue( m_PinLen, EESCHEMA_INTERNAL_UNIT );
+    Affiche_1_Parametre( frame, 56, _( "Length" ), Text, MAGENTA );
 
     /* Affichage de l'orientation */
     switch( m_Orient )
@@ -113,7 +113,7 @@ void LibDrawPin::Display_Infos( WinEDA_DrawFrame* frame )
         Text = wxT( "??" ); break;
     }
 
-    Affiche_1_Parametre( frame, 72, _( "Orient" ), Text, MAGENTA );
+    Affiche_1_Parametre( frame, 62, _( "Orient" ), Text, MAGENTA );
 }
 
 
@@ -168,7 +168,7 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_Unit );
-    Affiche_1_Parametre( frame, 10, _( "Unit" ), msg, BROWN );
+    Affiche_1_Parametre( frame, 8, _( "Unit" ), msg, BROWN );
 
     if( m_Convert == 0 )
         msg = _( "All" );
@@ -178,11 +178,11 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
         msg = _( "yes" );
     else
         msg = wxT( "?" );
-    Affiche_1_Parametre( frame, 16, _( "Convert" ), msg, BROWN );
+    Affiche_1_Parametre( frame, 14, _( "Convert" ), msg, BROWN );
 
     if( m_Width )
-        valeur_param( m_Width, msg );
+        msg = MakeStringFromValue( m_Width, EESCHEMA_INTERNAL_UNIT );
     else
         msg = _( "default" );
-    Affiche_1_Parametre( frame, 24, _( "Width" ), msg, BLUE );
+    Affiche_1_Parametre( frame, 20, _( "Width" ), msg, BLUE );
 }
