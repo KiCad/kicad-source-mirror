@@ -24,7 +24,7 @@ svn export -r ${svnrev} ${svnpath}/kicad-library
 
 # create "include/config.h" with svn date & revision in it
 echo "Getting svn revision info..."
-svndate=`svn info -r ${svnrev} ${svnpath}/kicad | grep "Last Changed Date: " | cut -f4 -d' ' | sed s/-//g`
+svndate=`LANG=C svn info -r ${svnrev} ${svnpath}/kicad | grep "Last Changed Date: " | cut -f4 -d' ' | sed s/-//g`
 cat <<EOF >kicad/include/config.h
 #ifndef __KICAD_SVN_VERSION_H__
 #define __KICAD_SVN_VERSION_H__
@@ -41,5 +41,4 @@ cd ..
 
 # rename with proper version and tar it up
 mv ${tempdir} kicad-${mainver}
-tar -zcf kicad-${mainver}.tar.z kicad-${mainver}
-
+tar -zcf kicad-${mainver}.tar.gz kicad-${mainver}
