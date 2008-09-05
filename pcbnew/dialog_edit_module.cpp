@@ -168,6 +168,8 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
     wxBoxSizer*   PropLeftSizer;
     wxBoxSizer*   PropRightSizer;
     wxString      msg;
+    wxStaticText*  XPositionStatic = new wxStaticText(m_PanelProperties, -1, _("X"));
+    wxStaticText*  YPositionStatic = new wxStaticText(m_PanelProperties, -1, _("Y"));
 
     /* Create a sizer for controls in the left column */
     PropLeftSizer = new wxBoxSizer( wxVERTICAL );
@@ -186,6 +188,28 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
                               _( "Edit Module" ) );
         Button->SetForegroundColour( wxColor( 0, 128, 80 ) );
         PropRightSizer->Add( Button, 0, wxGROW | wxALL, 5 );
+
+        wxStaticBox* positionBox = new wxStaticBox(m_PanelProperties, -1, _("Position") );
+        wxStaticBoxSizer* positionBoxSizer = new wxStaticBoxSizer( positionBox, wxVERTICAL );
+        PropRightSizer->Add(positionBoxSizer, 0, wxGROW | wxALL, 5 );
+
+        m_ModPositionX = new wxTextCtrl( m_PanelProperties, ID_MODULE_EDIT_X_POSITION, wxT(""),
+                            wxDefaultPosition, wxDefaultSize, 0,
+                            wxTextValidator(wxFILTER_NUMERIC, NULL), wxTextCtrlNameStr);
+
+        PutValueInLocalUnits( *m_ModPositionX, m_CurrentModule->GetPosition().x, PCB_INTERNAL_UNIT );
+        AddUnitSymbol( *XPositionStatic, g_UnitMetric );
+        positionBoxSizer->Add( XPositionStatic, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+        positionBoxSizer->Add( m_ModPositionX, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+
+        m_ModPositionY = new wxTextCtrl( m_PanelProperties, ID_MODULE_EDIT_Y_POSITION,
+                            wxT(""), wxDefaultPosition, wxDefaultSize, 0,
+                            wxTextValidator(wxFILTER_NUMERIC, NULL), wxTextCtrlNameStr);
+
+        PutValueInLocalUnits( *m_ModPositionY, m_CurrentModule->GetPosition().y, PCB_INTERNAL_UNIT );
+        AddUnitSymbol( *YPositionStatic, g_UnitMetric );
+        positionBoxSizer->Add( YPositionStatic, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+        positionBoxSizer->Add( m_ModPositionY, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
     else        // Module is edited in libedit
     {
@@ -496,6 +520,15 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
 /******************************************************************************/
 {
     bool change_layer = FALSE;
+    wxPoint modpos;
+
+    // Set Module Position
+    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );
+    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY, PCB_INTERNAL_UNIT );
+    m_CurrentModule->SetPosition(modpos);
+
+     if( m_DC )
+         m_Parent->DrawPanel->CursorOff( m_DC );
 
     if( m_DC )
         m_Parent->DrawPanel->CursorOff( m_DC );

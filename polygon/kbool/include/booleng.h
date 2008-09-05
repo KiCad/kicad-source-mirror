@@ -24,10 +24,14 @@
 #define A2DKBOOLDLLEXP WXEXPORT
 #define A2DKBOOLDLLEXP_DATA(type) WXEXPORT type
 #define A2DKBOOLDLLEXP_CTORFN
+#if 0   // Kicad does dot use wxWidgets lib when building the kbool library
+        // but uses wxWidgets. So WXUSINGDLL has no meaning here, but could be defined in makefiles
+        // but must not be used when building kbool
 #elif defined(WXUSINGDLL)
 #define A2DKBOOLDLLEXP WXIMPORT
 #define A2DKBOOLDLLEXP_DATA(type) WXIMPORT type
 #define A2DKBOOLDLLEXP_CTORFN
+#endif
 #else // not making nor using DLL
 #define A2DKBOOLDLLEXP
 #define A2DKBOOLDLLEXP_DATA(type) type

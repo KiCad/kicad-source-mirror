@@ -23,8 +23,12 @@
 
 enum SCANTYPE{NODELINK,LINKLINK,GENLR,LINKHOLES,INOUT};
 
+#if 0   // Kicad does dot use wxWidgets lib when building the kbool library
+        // but uses wxWidgets. So WXUSINGDLL could be defined in makefiles
+        // but must not be used when building kbool
 #if defined(WXUSINGDLL)
-    template class A2DKBOOLDLLEXP DL_Iter<Record*>;
+template class A2DKBOOLDLLEXP DL_Iter<Record*>;
+#endif
 #endif
 
 class A2DKBOOLDLLEXP ScanBeam : public DL_List<Record*>

@@ -15,7 +15,9 @@ enum id_Module_properties
 	ID_BROWSE_3D_LIB,
 	ID_ADD_3D_SHAPE,
 	ID_REMOVE_3D_SHAPE,
-	ID_NOTEBOOK
+	ID_NOTEBOOK,
+	ID_MODULE_EDIT_X_POSITION,
+	ID_MODULE_EDIT_Y_POSITION
 };
 
 class Panel3D_Ctrl;
@@ -45,6 +47,8 @@ private:
 	wxTextCtrl *m_Doc, *m_Keyword;
 	wxBoxSizer * m_GeneralBoxSizer;
     wxBoxSizer* m_PanelPropertiesBoxSizer;
+    wxTextCtrl *m_ModPositionX, *m_ModPositionY;
+    wxString *m_ModPosXStr, *m_ModPosYStr;
 
 
 public:
