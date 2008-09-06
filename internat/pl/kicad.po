@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:46+0100\n"
-"PO-Revision-Date: 2008-09-04 21:46+0100\n"
+"POT-Creation-Date: 2008-09-06 15:47+0100\n"
+"PO-Revision-Date: 2008-09-06 15:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -2987,72 +2987,84 @@ msgstr "Właściwości"
 msgid "3D settings"
 msgstr "Ustawienia 3D"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:182
+#: kicad/pcbnew/dialog_edit_module.cpp:171
+msgid "X"
+msgstr "X"
+
+#: kicad/pcbnew/dialog_edit_module.cpp:172
+msgid "Y"
+msgstr "Y"
+
+#: kicad/pcbnew/dialog_edit_module.cpp:184
 msgid "Change module(s)"
 msgstr "Zmień moduł(y)"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:186
+#: kicad/pcbnew/dialog_edit_module.cpp:188
 msgid "Edit Module"
 msgstr "Edytuj moduł"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:193
+#: kicad/pcbnew/dialog_edit_module.cpp:192
+msgid "Position"
+msgstr "Pozycja"
+
+#: kicad/pcbnew/dialog_edit_module.cpp:217
 msgid "Doc"
 msgstr "Dokument"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:200
+#: kicad/pcbnew/dialog_edit_module.cpp:224
 msgid "Keywords"
 msgstr "Słowa kluczowe"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:207
+#: kicad/pcbnew/dialog_edit_module.cpp:231
 msgid "Fields:"
 msgstr "Pola:"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:217
+#: kicad/pcbnew/dialog_edit_module.cpp:241
 msgid "Add Field"
 msgstr "Dodaj pole"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:222
+#: kicad/pcbnew/dialog_edit_module.cpp:246
 msgid "Edit Field"
 msgstr "Edytuj pole"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:227
+#: kicad/pcbnew/dialog_edit_module.cpp:251
 msgid "Delete Field"
 msgstr "Usuń pole"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:234
+#: kicad/pcbnew/dialog_edit_module.cpp:258
 msgid "Component"
 msgstr "Elementów "
 
-#: kicad/pcbnew/dialog_edit_module.cpp:234
+#: kicad/pcbnew/dialog_edit_module.cpp:258
 msgid "Copper"
 msgstr "Ścieżek"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:243
-#: kicad/pcbnew/dialog_edit_module.cpp:289
+#: kicad/pcbnew/dialog_edit_module.cpp:267
+#: kicad/pcbnew/dialog_edit_module.cpp:313
 msgid "Normal"
 msgstr "Normalny"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:279
+#: kicad/pcbnew/dialog_edit_module.cpp:303
 msgid "Orient (0.1 deg)"
 msgstr "Orientacja (0.1 stopnia)"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:289
+#: kicad/pcbnew/dialog_edit_module.cpp:313
 msgid "Normal+Insert"
 msgstr "Normalny+Wstawianie"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:289
+#: kicad/pcbnew/dialog_edit_module.cpp:313
 msgid "Virtual"
 msgstr "Wirtualny"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:290
+#: kicad/pcbnew/dialog_edit_module.cpp:314
 msgid "Attributes"
 msgstr "Atrybuty"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:293
+#: kicad/pcbnew/dialog_edit_module.cpp:317
 msgid "Use this attribute for most non smd components"
 msgstr "Użyj tego atrybutu dla większości elementów nie SMD"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:295
+#: kicad/pcbnew/dialog_edit_module.cpp:319
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -3060,75 +3072,75 @@ msgstr ""
 "Użyj tego atrybutu dla elementów SMD.\n"
 "Tylko elementy z tą opcją są umieszczone na liście obudów."
 
-#: kicad/pcbnew/dialog_edit_module.cpp:297
+#: kicad/pcbnew/dialog_edit_module.cpp:321
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
 msgstr "Użyj tego atrybutu dla \"wirtualnych\" elementów rysowanych na płytce (jak stare złącze PC ISA)"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:321
+#: kicad/pcbnew/dialog_edit_module.cpp:345
 msgid "Free"
 msgstr "Wolny"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:321
+#: kicad/pcbnew/dialog_edit_module.cpp:345
 msgid "Locked"
 msgstr "Zablokowany"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:323
+#: kicad/pcbnew/dialog_edit_module.cpp:347
 msgid "Move and Auto Place"
 msgstr "Przesuwanie i autorozmieszczanie"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:328
+#: kicad/pcbnew/dialog_edit_module.cpp:352
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Włącz przesuwanie i autorozmieszczanie klawiszami skrótów"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:329
+#: kicad/pcbnew/dialog_edit_module.cpp:353
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Wyłącz przesuwanie i autorozmieszczanie klawiszami skrótów"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:333
+#: kicad/pcbnew/dialog_edit_module.cpp:357
 msgid "Rot 90"
 msgstr "Obrót 90"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:341
+#: kicad/pcbnew/dialog_edit_module.cpp:365
 msgid "Rot 180"
 msgstr "Obrót 180"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:378
+#: kicad/pcbnew/dialog_edit_module.cpp:402
 msgid "3D Shape Name"
 msgstr "Ścieżka do biblioteki obudowy 3D:"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:395
+#: kicad/pcbnew/dialog_edit_module.cpp:419
 msgid "Browse"
 msgstr "Przeglądaj"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:399
+#: kicad/pcbnew/dialog_edit_module.cpp:423
 msgid "Add 3D Shape"
 msgstr "Dodaj kształt 3D"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:405
+#: kicad/pcbnew/dialog_edit_module.cpp:429
 msgid "Remove 3D Shape"
 msgstr "Usuń kształt 3D"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:411
+#: kicad/pcbnew/dialog_edit_module.cpp:435
 msgid "Shape Scale:"
 msgstr "Skala kształtu:"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:418
+#: kicad/pcbnew/dialog_edit_module.cpp:442
 msgid "Shape Offset:"
 msgstr "Przesunięcie kształtu:"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:427
+#: kicad/pcbnew/dialog_edit_module.cpp:451
 msgid "Shape Rotation:"
 msgstr "Obrót kształtu:"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:467
+#: kicad/pcbnew/dialog_edit_module.cpp:491
 msgid "3D Shape:"
 msgstr "Kształt 3D:"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:769
+#: kicad/pcbnew/dialog_edit_module.cpp:802
 msgid "Reference or Value cannot be deleted"
 msgstr "Oznaczenie lub wartość nie może być usunięte"
 
-#: kicad/pcbnew/dialog_edit_module.cpp:773
+#: kicad/pcbnew/dialog_edit_module.cpp:806
 #, c-format
 msgid "Delete [%s]"
 msgstr "Usuń [%s]"
@@ -4575,10 +4587,6 @@ msgstr "Błąd DRC, anulowano"
 msgid "TextPCB properties"
 msgstr "Właściwości tekstu PCB"
 
-#: kicad/pcbnew/pcbtexte.cpp:137
-msgid "Position"
-msgstr "Pozycja"
-
 #: kicad/pcbnew/class_drawsegment.cpp:304
 msgid "Shape"
 msgstr "Kształt"
@@ -5356,7 +5364,7 @@ msgid "yes"
 msgstr "tak"
 
 #: kicad/eeschema/affiche.cpp:95
-msgid "Lengh"
+msgid "Length"
 msgstr "Długość"
 
 #: kicad/eeschema/affiche.cpp:101
@@ -8314,14 +8322,6 @@ msgstr "Język"
 msgid "Pos "
 msgstr "Pozycja "
 
-#: kicad/common/wxwineda.cpp:171
-msgid "X"
-msgstr "X"
-
-#: kicad/common/wxwineda.cpp:180
-msgid "Y"
-msgstr "Y"
-
 #: kicad/common/confirm.cpp:106
 msgid "Infos:"
 msgstr "Informacje:"
@@ -10255,6 +10255,8 @@ msgstr "Pozostałe"
 msgid "D codes id."
 msgstr "ID kodu wiercenia"
 
+#~ msgid "Lengh"
+#~ msgstr "Długość"
 #~ msgid " Unicode "
 #~ msgstr " Unicode "
 #~ msgid " Ansi "
