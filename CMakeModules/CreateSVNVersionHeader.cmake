@@ -1,10 +1,10 @@
 macro(create_svn_version_header)
     # Include Subversion support to automagically create version header file.
-    find_package(SubversionCVS)
+    find_package(Subversion)
     if(Subversion_FOUND)
         Subversion_WC_INFO(${PROJECT_SOURCE_DIR} Kicad)
         string(REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+).*" "\\1\\2\\3"
-            _kicad_svn_date ${Kicad_WC_LAST_CHANGED_DATE})
+               _kicad_svn_date ${Kicad_WC_LAST_CHANGED_DATE})
         set(KICAD_SVN_VERSION
             "(${_kicad_svn_date} SVN-R${Kicad_WC_LAST_CHANGED_REV})")
         set(KICAD_ABOUT_VERSION
@@ -20,6 +20,6 @@ macro(create_svn_version_header)
 
         # Generate config.h.
         configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/config.h.cmake
-            ${CMAKE_BINARY_DIR}/config.h)
+                       ${CMAKE_BINARY_DIR}/config.h)
     endif(Subversion_FOUND)
 endmacro(create_svn_version_header)

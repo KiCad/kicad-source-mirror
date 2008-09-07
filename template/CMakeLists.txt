@@ -1,2 +1,3 @@
-install(FILES kicad.pro DESTINATION ${KICAD_TEMPLATE}
-    COMPONENT resources)
+install(FILES kicad.pro
+        DESTINATION ${KICAD_TEMPLATE}
+        COMPONENT resources)

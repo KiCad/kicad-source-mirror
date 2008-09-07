@@ -12,9 +12,8 @@ else(ZLIB_FOUND)
     set(ZLIB_LIBRARIES ${wxWidgets_ROOT_DIR}/lib/libwxzlib-2.8.a)
 endif(ZLIB_FOUND)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${ZLIB_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${ZLIB_INCLUDE_DIR})
 
 set(MINIZIP_SRCS
     ioapi.c
@@ -25,5 +24,6 @@ add_executable(minizip ${MINIZIP_SRCS})
 
 target_link_libraries(minizip ${ZLIB_LIBRARIES})
 
-install(TARGETS minizip RUNTIME DESTINATION ${KICAD_BIN}
-    COMPONENT binary)
+install(TARGETS minizip
+        RUNTIME DESTINATION ${KICAD_BIN}
+        COMPONENT binary)

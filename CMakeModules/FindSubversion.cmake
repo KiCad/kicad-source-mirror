@@ -1,5 +1,8 @@
-# CMake CVS r1.2.2.2
 #
+# From CMake 2.6.1
+#
+
+# 
 # - Extract information from a subversion working copy
 # The module defines the following variables:
 #  Subversion_SVN_EXECUTABLE - path to svn command line client
@@ -22,6 +25,8 @@
 #  IF(Subversion_FOUND)
 #    Subversion_WC_INFO(${PROJECT_SOURCE_DIR} Project)
 #    MESSAGE("Current revision is ${Project_WC_REVISION}")
+#    Subversion_WC_LOG(${PROJECT_SOURCE_DIR} Project)
+#    MESSAGE("Last changed log is ${Project_LAST_CHANGED_LOG}")
 #  ENDIF(Subversion_FOUND)
 
 # Copyright (c) 2006, Tristan Carel
@@ -49,16 +54,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# $Id: FindSubversion.cmake,v 1.2.2.2 2008/03/26 18:08:24 hoffman Exp $
+# $Id: FindSubversion.cmake,v 1.2.2.3 2008-05-23 20:09:34 hoffman Exp $
 
 SET(Subversion_FOUND FALSE)
 SET(Subversion_SVN_FOUND FALSE)
-
-# the subversion commands should be executed with the C locale, otherwise
-# the message (which are parsed) may be translated, Alex
-SET(_Subversion_SAVED_LC_ALL "$ENV{LC_ALL}" )
-SET(ENV{LC_ALL} C)
-SET(ENV{LANG} C)
 
 FIND_PROGRAM(Subversion_SVN_EXECUTABLE svn
   DOC "subversion command line client")
@@ -69,6 +68,11 @@ IF(Subversion_SVN_EXECUTABLE)
   SET(Subversion_FOUND TRUE)
 
   MACRO(Subversion_WC_INFO dir prefix)
+    # the subversion commands should be executed with the C locale, otherwise
+    # the message (which are parsed) may be translated, Alex
+    SET(_Subversion_SAVED_LC_ALL "$ENV{LC_ALL}")
+    SET(ENV{LC_ALL} C)
+
     EXECUTE_PROCESS(COMMAND ${Subversion_SVN_EXECUTABLE} --version
       WORKING_DIRECTORY ${dir}
       OUTPUT_VARIABLE Subversion_VERSION_SVN
@@ -99,9 +103,19 @@ IF(Subversion_SVN_EXECUTABLE)
 
     ENDIF(NOT ${Subversion_svn_info_result} EQUAL 0)
 
+    # restore the previous LC_ALL
+    SET(ENV{LC_ALL} ${_Subversion_SAVED_LC_ALL})
+
+  ENDMACRO(Subversion_WC_INFO)
+
+  MACRO(Subversion_WC_LOG dir prefix)
+    # This macro can block if the certificate is not signed:
+    # svn ask you to accept the certificate and wait for your answer
+    # This macro requires a svn server network access (Internet most of the time)
+    # and can also be slow since it access the svn server
     EXECUTE_PROCESS(COMMAND
       ${Subversion_SVN_EXECUTABLE} log -r BASE ${dir}
-      OUTPUT_VARIABLE Subversion_LAST_CHANGED_LOG
+      OUTPUT_VARIABLE ${prefix}_LAST_CHANGED_LOG
       ERROR_VARIABLE Subversion_svn_log_error
       RESULT_VARIABLE Subversion_svn_log_result
       OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -109,12 +123,9 @@ IF(Subversion_SVN_EXECUTABLE)
     IF(NOT ${Subversion_svn_log_result} EQUAL 0)
       MESSAGE(SEND_ERROR "Command \"${Subversion_SVN_EXECUTABLE} log -r BASE ${dir}\" failed with output:\n${Subversion_svn_log_error}")
     ENDIF(NOT ${Subversion_svn_log_result} EQUAL 0)
-  ENDMACRO(Subversion_WC_INFO)
+  ENDMACRO(Subversion_WC_LOG)
 
 ENDIF(Subversion_SVN_EXECUTABLE)
-
-# restore the previous LC_ALL
-SET(ENV{LC_ALL} ${_Subversion_SAVED_LC_ALL})
 
 IF(NOT Subversion_FOUND)
   IF(NOT Subversion_FIND_QUIETLY)

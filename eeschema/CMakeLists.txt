@@ -110,11 +110,11 @@ if(WIN32)
         set(EESCHEMA_RESOURCES eeschema.rc)
     endif(MINGW)
 endif(WIN32)
+
 if(APPLE)
     set(EESCHEMA_RESOURCES eeschema.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns"
-        PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE eeschema.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema)
     set(MACOSX_BUNDLE_NAME eeschema)
@@ -124,15 +124,9 @@ add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SR
 
 target_link_libraries(eeschema common bitmaps ${wxWidgets_LIBRARIES})
 
-if(NOT APPLE)
-    install(TARGETS eeschema
-        RUNTIME DESTINATION ${KICAD_BIN}
-        COMPONENT binary)
-else(NOT APPLE)
-    install(TARGETS eeschema
+install(TARGETS eeschema
         RUNTIME DESTINATION ${KICAD_BIN}
         BUNDLE DESTINATION ${KICAD_BIN}
         COMPONENT binary)
-endif(NOT APPLE)
 
 add_subdirectory(plugins)

@@ -1,10 +1,10 @@
 project(kicad)
 
-if(NOT APPLE)
-    cmake_minimum_required(VERSION 2.4.6 FATAL_ERROR)
-else(NOT APPLE)
+if(WIN32)
+    cmake_minimum_required(VERSION 2.6.1 FATAL_ERROR)
+else(WIN32)
     cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-endif(NOT APPLE)
+endif(WIN32)
 
 # Path to local CMake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
@@ -23,7 +23,6 @@ option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 #================================================
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-
     # Set default flags for Release build.
     set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
     set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
@@ -32,7 +31,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     # Set default flags for Debug build.
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
-
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 # Locations for install targets.
@@ -51,21 +49,25 @@ endif(UNIX)
 
 if(WIN32)
     # Like all variables, CMAKE_INSTALL_PREFIX can be over-ridden on the command line.
-    set(CMAKE_INSTALL_PREFIX c:/kicad CACHE PATH "")
+    set(CMAKE_INSTALL_PREFIX c:/kicad
+        CACHE PATH "")
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-    set(KICAD_PLUGINS ${KICAD_BIN}/plugins CACHE PATH "Location of KiCad plugins.")
-    set(KICAD_DATA share CACHE PATH "Location of KiCad data files.")
-    set(KICAD_DOCS doc CACHE PATH "Location of KiCad documentation files.")
+    set(KICAD_PLUGINS ${KICAD_BIN}/plugins
+        CACHE PATH "Location of KiCad plugins.")
+    set(KICAD_DATA share
+        CACHE PATH "Location of KiCad data files.")
+    set(KICAD_DOCS doc
+        CACHE PATH "Location of KiCad documentation files.")
 endif(WIN32)
 
-set(KICAD_DEMOS ${KICAD_DATA}/demos 
+set(KICAD_DEMOS ${KICAD_DATA}/demos
     CACHE PATH "Location of KiCad demo files.")
-set(KICAD_INTERNAT ${KICAD_DATA}/internat 
+set(KICAD_INTERNAT ${KICAD_DATA}/internat
     CACHE PATH "Location of KiCad i18n files.")
 set(KICAD_TEMPLATE ${KICAD_DATA}/template
     CACHE PATH "Location of KiCad template files.")
 
-mark_as_advanced(KICAD_BIN 
+mark_as_advanced(KICAD_BIN
                  KICAD_PLUGINS
                  KICAD_DATA
                  KICAD_DOCS
@@ -83,13 +85,13 @@ include(CheckFindPackageResult)
 #######################
 # Find OpenGL library #
 #######################
-find_package(OpenGL)
+find_package(OpenGL QUIET)
 check_find_package_result(OPENGL_FOUND "OpenGL")
 
 ######################
 # Find Boost library #
 ######################
-find_package(Boost)
+find_package(Boost QUIET)
 check_find_package_result(Boost_FOUND "Boost")
 
 ##########################
@@ -98,8 +100,7 @@ check_find_package_result(Boost_FOUND "Boost")
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
-set(wxWidgets_USE_LIBS base core adv gl html net)
-find_package(wxWidgetsCVS)
+find_package(wxWidgets COMPONENTS base core adv gl html net QUIET)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
 
@@ -113,16 +114,16 @@ include(MinGWResourceCompiler)
 # Automagically create version header file.
 # does not work with mingw for me (jpc)
 if(UNIX)
- include(CreateSVNVersionHeader)
- create_svn_version_header()
+    include(CreateSVNVersionHeader)
+    create_svn_version_header()
 endif(UNIX)
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
- # This file may exist (created by an alternate process to the svn test above),
- # e.g. could be created by a checkout script that produces a source tar file.
- # This directive means the about box will have the svn date & revision in it,
- # but the hard coded release date (program version) will be preserved.
- add_definitions(-DHAVE_SVN_REVISION)
+    # This file may exist (created by an alternate process to the svn test above),
+    # e.g. could be created by a checkout script that produces a source tar file.
+    # This directive means the about box will have the svn date & revision in it,
+    # but the hard coded release date (program version) will be preserved.
+    add_definitions(-DHAVE_SVN_REVISION)
 endif(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
 
 
@@ -164,21 +165,20 @@ add_subdirectory(template)
 #================================================
 # Installation parameters
 #================================================
-install(FILES install.txt 
+install(FILES install.txt
         DESTINATION ${KICAD_DOCS}
         COMPONENT resources)
-install(FILES freeroute.jnlp 
+install(FILES freeroute.jnlp
         DESTINATION ${KICAD_BIN}
         COMPONENT resources)
 
 
 if(UNIX)
-
-  # set resource dir variables
-  #set(KICAD_PROGRAM_ICONS ${CMAKE_INSTALL_PREFIX}/share/kicad/icons)
-  set(LINUX_RESOURCES_DIR resources/linux)
-  set(LINUX_DESKTOP_FILES ${LINUX_RESOURCES_DIR}/opendesktop)
-  set(LINUX_DESKTOP_ICONS ${LINUX_RESOURCES_DIR}/icons)
+    # set resource dir variables
+    #set(KICAD_PROGRAM_ICONS ${CMAKE_INSTALL_PREFIX}/share/kicad/icons)
+    set(LINUX_RESOURCES_DIR resources/linux)
+    set(LINUX_DESKTOP_FILES ${LINUX_RESOURCES_DIR}/opendesktop)
+    set(LINUX_DESKTOP_ICONS ${LINUX_RESOURCES_DIR}/icons)
 
 
     # Install program icons
@@ -236,5 +236,4 @@ if(UNIX)
    install(FILES ${LINUX_DESKTOP_ICONS}/kicad_pcbnew.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
-
 endif(UNIX)

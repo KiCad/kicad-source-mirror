@@ -1,11 +1,10 @@
 add_definitions(-DGERBVIEW -DPCBNEW)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ../3d-viewer
-    ../cvpcb
-    ../pcbnew
-    ../polygon)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ../3d-viewer
+                    ../cvpcb
+                    ../pcbnew
+                    ../polygon)
 
 set(GERBVIEW_SRCS
     affiche.cpp
@@ -67,11 +66,11 @@ if(WIN32)
         set(GERBVIEW_RESOURCES gerbview.rc)
     endif(MINGW)
 endif(WIN32)
+
 if(APPLE)
     set(GERBVIEW_RESOURCES gerbview.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns"
-        PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE gerbview.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.gerbview)
     set(MACOSX_BUNDLE_NAME gerbview)
@@ -79,15 +78,9 @@ endif(APPLE)
 
 add_executable(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
 
-target_link_libraries(gerbview 3d-viewer common polygon kbool bitmaps ${wxWidgets_LIBRARIES})
+target_link_libraries(gerbview 3d-viewer common polygon bitmaps kbool ${wxWidgets_LIBRARIES})
 
-if(NOT APPLE)
-    install(TARGETS gerbview
-        RUNTIME DESTINATION ${KICAD_BIN}
-        COMPONENT binary)
-else(NOT APPLE)
-    install(TARGETS gerbview
+install(TARGETS gerbview
         RUNTIME DESTINATION ${KICAD_BIN}
         BUNDLE DESTINATION ${KICAD_BIN}
         COMPONENT binary)
-endif(NOT APPLE)
