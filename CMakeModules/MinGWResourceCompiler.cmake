@@ -5,6 +5,12 @@ macro(dbg_msg _MSG)
 endmacro(dbg_msg)
 
 macro(mingw_resource_compiler _NAME)
+    # Resource compiler name.
+    if(NOT DEFINED CMAKE_RC_COMPILER)
+        set(CMAKE_RC_COMPILER windres.exe)
+    endif(NOT DEFINED CMAKE_RC_COMPILER)
+    dbg_msg("CMAKE_RC_COMPILER: ${CMAKE_RC_COMPILER}")
+
     # Input file.
     set(_IN "${CMAKE_CURRENT_SOURCE_DIR}/${_NAME}.rc")
     dbg_msg("_IN: ${_IN}")
@@ -20,13 +26,13 @@ macro(mingw_resource_compiler _NAME)
     endforeach(wx_include_dir ${wxWidgets_INCLUDE_DIRS})
     dbg_msg("_WINDRES_INCLUDE_DIRS: ${_WINDRES_INCLUDE_DIRS}")
 
-    # windres.exe arguments.
+    # windres arguments.
     set(_ARGS ${_WINDRES_INCLUDE_DIRS} -i${_IN} -o${_OUT})
     dbg_msg("_ARGS: ${_ARGS}")
 
     # Compile resource file.
     add_custom_command(OUTPUT ${_OUT}
-        COMMAND windres.exe
+        COMMAND ${CMAKE_RC_COMPILER}
         ARGS ${_ARGS}
         COMMENT "Compiling ${_NAME}'s resource file"
         VERBATIM)
