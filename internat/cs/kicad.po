@@ -1,14 +1,16 @@
-# translation of kicad.po to
+# translation of kicad.po to Čeština
 # Martin <martin@ok1rr.com>, 2008.
 # Milan Horák <stranger@tiscali.cz>, 2008.
+# Milan Horak <stranger@tiscali.cz>, 2008.
+# translation of kicad.po to
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-27 13:38+0100\n"
-"PO-Revision-Date: 2008-09-02 12:15+0200\n"
-"Last-Translator: Milan Horák <stranger@tiscali.cz>\n"
-"Language-Team:  <cs@li.org>\n"
+"PO-Revision-Date: 2008-09-07 12:15+0200\n"
+"Last-Translator: Milan Horak <stranger@tiscali.cz>\n"
+"Language-Team: Čeština <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -7443,7 +7445,7 @@ msgstr "Součástka %s nalezena, ale uzamčená"
 
 #: /home/martin/newkicad/kicad/pcbnew/hotkeys.cpp:630
 msgid "Delete module?"
-msgstr "Smazat modul"
+msgstr "Smazat modul?"
 
 #: /home/martin/newkicad/kicad/pcbnew/basepcbframe.cpp:172
 msgid "3D Frame already opened"
@@ -7464,11 +7466,11 @@ msgstr "Poloha"
 
 #: /home/martin/newkicad/kicad/pcbnew/router.cpp:60
 msgid "Unable to create temporary file "
-msgstr "Nelze vytvořit přechodný soubor "
+msgstr "Nelze vytvořit dočasný soubor "
 
 #: /home/martin/newkicad/kicad/pcbnew/router.cpp:65
 msgid "Create temporary file "
-msgstr "Vytvořit přechodný soubor"
+msgstr "Vytvořit dočasný soubor"
 
 #: /home/martin/newkicad/kicad/pcbnew/router.cpp:565
 msgid "Unable to find data file "
@@ -7488,7 +7490,7 @@ msgstr "Spoje pouze na vrstvách mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/onleftclick.cpp:281
 msgid "Cotation not authorized on Copper layers"
-msgstr "Kótování není povoleno na vrstvě Cu"
+msgstr "Kótování není povoleno na vrstvách mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/globaleditpad.cpp:74
 msgid "Pads Global Edit"
@@ -7496,7 +7498,7 @@ msgstr "Hromadné úpravy plošek"
 
 #: /home/martin/newkicad/kicad/pcbnew/globaleditpad.cpp:91
 msgid "Pad Settings..."
-msgstr "Nastavení plošky"
+msgstr "Nastavení plošky..."
 
 #: /home/martin/newkicad/kicad/pcbnew/globaleditpad.cpp:97
 msgid "Change Module"
@@ -7556,7 +7558,7 @@ msgstr "OK - smazat pouzdra, která nejsou v netlistu?"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:497
 msgid "Cmp %s: Mismatch! module is [%s] and netlist said [%s]\n"
-msgstr "Souč.: %s: Neshoda! modul je [%s], podle netlistu [%s]\n"
+msgstr "Součástka: %s: Neshoda! modul je [%s], podle netlistu [%s]\n"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:538
 msgid "Component [%s] not found"
@@ -7568,7 +7570,7 @@ msgstr "Modul [%s]: Ploška [%s] nenalezena"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:635
 msgid "No Modules"
-msgstr "Nejsou moduly"
+msgstr "Žádné moduly"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:650
 msgid "Components"
@@ -7576,11 +7578,11 @@ msgstr "Součástky"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:699
 msgid "No modules"
-msgstr "Nejsou moduly"
+msgstr "Žádné moduly"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:709
 msgid "No modules in NetList"
-msgstr "V netlistu nejsou moduly"
+msgstr "V netlistu nejsou žádné moduly"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:712
 msgid "Check Modules"
@@ -7596,11 +7598,11 @@ msgstr "Chyba:"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:755
 msgid "Not in Netlist:"
-msgstr "Není v netlistu"
+msgstr "Není v netlistu:"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:901
 msgid "File <%s> not found, use Netlist for lib module selection"
-msgstr "Soubor <%s> nenalezen, k výběru modulu použít netlist"
+msgstr "Soubor <%s> nenalezen, k výběru modulu použijte netlist"
 
 #: /home/martin/newkicad/kicad/pcbnew/netlist.cpp:1036
 msgid "Component [%s]: footprint <%s> not found"
@@ -7616,15 +7618,15 @@ msgstr "Zadat tloušťku izolační mezery (v jednotkách)"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:448
 msgid "Create Report File"
-msgstr "Soubor ERC zpráv:"
+msgstr "Vytvořit soubor ERC hlášení:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:455
 msgid "Enable writing report to this file"
-msgstr "Povolit zápis zprávy do tohoto souboru"
+msgstr "Povolit zápis hlášení do tohoto souboru"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:460
 msgid "Enter the report filename"
-msgstr "Zadejte název souboru zpráv"
+msgstr "Zadejte název souboru hlášení"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:463
 msgid "..."
@@ -7692,15 +7694,15 @@ msgstr "Chybové zprávy:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:527
 msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
-msgstr "Dvojklik na značce -> deska, pravé tlačítko -> menu"
+msgstr "Dvojklik na značce pro přechod na desku, pravé tlačítko pro menu"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:529
 msgid "Distance Problem Markers"
-msgstr "Značky, označující příliš malou vzdálenost"
+msgstr "Značky označující příliš malou vzdálenost"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:533
 msgid "A list of unconnected pads, right click for popup menu"
-msgstr "Seznam nezapojených plošek, kliknout pravýn tlačítkem -> menu"
+msgstr "Seznam nezapojených plošek, kliknout pravým tlačítkem pro menu"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:535
 msgid "Unconnected"
@@ -7709,16 +7711,16 @@ msgstr "Nezapojeno"
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:664
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:742
 msgid "Report file \"%s\" created"
-msgstr "Soubor zpráv \"%s\" vytvořen"
+msgstr "Soubor hlášení \"%s\" vytvořen"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:666
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:744
 msgid "Disk File Report Completed"
-msgstr "Soubor zpráv uložen na disk"
+msgstr "Soubor hlášení uložen na disk"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_drc.cpp:772
 msgid "DRC Report file"
-msgstr "Soubor ERC zpráv:"
+msgstr "Soubor ERC zpráv"
 
 #: /home/martin/newkicad/kicad/pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
@@ -7736,7 +7738,7 @@ msgstr "Zrušit výběr této vrstvy -> stav beze změn"
 
 #: /home/martin/newkicad/kicad/pcbnew/automove.cpp:207
 msgid "No Modules!"
-msgstr "Moduly neexistují!"
+msgstr "Žádné moduly!"
 
 #: /home/martin/newkicad/kicad/pcbnew/automove.cpp:211
 msgid "Move Modules ?"
@@ -7764,15 +7766,15 @@ msgstr "Šířka okrajů desky"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:210
 msgid "Copper Text Width"
-msgstr "Šířka textu na Cu"
+msgstr "Šířka textu na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:216
 msgid "Text Size V"
-msgstr "Velikost textu vert."
+msgstr "Velikost textu vertikálně"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:222
 msgid "Text Size H"
-msgstr "Velikost textu hor."
+msgstr "Velikost textu horizontálně"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:230
 msgid "Modules:"
@@ -7784,15 +7786,15 @@ msgstr "Šířka okrajů modulu"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:240
 msgid "Text Module Width"
-msgstr "Šířka text. modulu"
+msgstr "Šířka textového modulu"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:246
 msgid "Text Module Size V"
-msgstr "Šířka text. modulu vert."
+msgstr "Velikost textového modulu vertikálně"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_graphic_items_options.cpp:252
 msgid "Text Module Size H"
-msgstr "Šířka text. modulu hor."
+msgstr "Velikost textového modulu horizontálně"
 
 #: /home/martin/newkicad/kicad/pcbnew/muwave_command.cpp:56
 msgid "Add Gap"
@@ -7834,7 +7836,7 @@ msgstr "Segment"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:157
 msgid "Pad Num :"
-msgstr "Č. plošky:"
+msgstr "Číslo plošky:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:163
 msgid "Pad Net Name :"
@@ -7868,7 +7870,7 @@ msgstr "Obdélník"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:199
 msgid "Trapezoidal"
-msgstr "Lichoběžníkový"
+msgstr "Lichoběžník"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:200
 msgid "Pad Shape:"
@@ -7900,35 +7902,35 @@ msgstr "Vrstva součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:237
 msgid "Adhesive Cmp"
-msgstr "Lepidlo souč."
+msgstr "Lepidlo na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:241
 msgid "Adhesive Copper"
-msgstr "Lepidlo Cu"
+msgstr "Lepidlo na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:245
 msgid "Solder paste Cmp"
-msgstr "Pájecí pasta souč."
+msgstr "Pájecí pasta na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:249
 msgid "Solder paste Copper"
-msgstr "Pájecí pasta Cu"
+msgstr "Pájecí pasta na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:253
 msgid "Silkscreen Cmp"
-msgstr "Potisk souč."
+msgstr "Potisk na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:257
 msgid "Silkscreen Copper"
-msgstr "Potisk Cu"
+msgstr "Potisk na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:261
 msgid "Solder mask Cmp"
-msgstr "Maska souč."
+msgstr "Maska na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:265
 msgid "Solder mask Copper"
-msgstr "Maska Cu"
+msgstr "Maska na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:269
 msgid "E.C.O.1 layer"
@@ -7948,11 +7950,11 @@ msgstr "Žádné moduly k automatickému umístění"
 
 #: /home/martin/newkicad/kicad/pcbnew/gen_modules_placefile.cpp:151
 msgid "Component side place file:"
-msgstr "Umístit soubor (strana souč.)"
+msgstr "Umísťovací soubor (strana součástek)"
 
 #: /home/martin/newkicad/kicad/pcbnew/gen_modules_placefile.cpp:154
 msgid "Copper side place file:"
-msgstr "Umístit soubor (strana mědi)"
+msgstr "Umísťovací soubor (strana mědi)"
 
 #: /home/martin/newkicad/kicad/pcbnew/gen_modules_placefile.cpp:157
 msgid "Module count"
@@ -8030,7 +8032,7 @@ msgstr ""
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:297
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
-msgstr "Použít tento atribut pro \"virtual\" součástky na desce (např. starý ISA PC bus konektor)"
+msgstr "Použít tento atribut pro \"virtuální\" součástky nakreslené na desce (např. starý ISA PC bus konektor)"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:321
 msgid "Free"
@@ -8042,15 +8044,15 @@ msgstr "Uzamčeno"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:323
 msgid "Move and Auto Place"
-msgstr "Autom. přesunutí a umístění"
+msgstr "Automatické přesunutí a umístění"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:328
 msgid "Enable hotkey move commands and Auto Placement"
-msgstr "Povolit kláv. zkratky pro příkazy přemístění (vč. automatického umístění)"
+msgstr "Povolit klávesové zkratky pro příkazy přemístění (včetně automatického umístění)"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:329
 msgid "Disable hotkey move commands and Auto Placement"
-msgstr "Zakázat kláv. zkratky pro příkazy přemístění (vč. automatického umístění)"
+msgstr "Zakázat klávesové zkratky pro příkazy přemístění (včetně automatického umístění)"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:333
 msgid "Rot 90"
@@ -8102,7 +8104,7 @@ msgstr "Počet vrstev:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:340
 msgid "Max Links:"
-msgstr "Max. označ. plošek:"
+msgstr "Maximum odkyzů:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:356
 msgid "Auto Save (minuts):"
@@ -8110,7 +8112,7 @@ msgstr "Automaticky ukládat (interval min.):"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:385
 msgid "Drc ON"
-msgstr "DRC zap."
+msgstr "DRC zapnuto"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:394
 msgid "Show Ratsnest"
@@ -8147,7 +8149,7 @@ msgstr "Magnetické plošky"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:460
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
-msgstr "ovládání snímání PCB kurzoru když se dostane na plošku"
+msgstr "ovládání zachycení PCB kurzoru když se dostane na plošku"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:468
 msgid "Magnetic Tracks"
@@ -8155,7 +8157,7 @@ msgstr "Magnetické spoje"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:475
 msgid "control the capture of the pcb cursor when the mouse cursor enters a track"
-msgstr "ovládání snímání PCB kurzoru když se dostane na plošku"
+msgstr "ovládání zachycení PCB kurzoru když se dostane na spoj"
 
 #: /home/martin/newkicad/kicad/pcbnew/editmod.cpp:144
 msgid "Text is REFERENCE!"
@@ -8187,7 +8189,7 @@ msgstr "Umístit buňky"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.cpp:290
 msgid "Switch on all of the copper layers"
-msgstr "Zahrnout text na vrstvách mědi"
+msgstr "Zapnout všechny vrstvy mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.cpp:299
 msgid "Switch off all of the copper layers"
@@ -8203,7 +8205,7 @@ msgstr "Smazat starou desku a načíst novou"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:44
 msgid "Append Board"
-msgstr "Přidat desku"
+msgstr "Připojit desku"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:45
 msgid "Add Board to old Board"
@@ -8243,11 +8245,11 @@ msgstr "Uložit aktuální desku"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:76
 msgid "Save Board as.."
-msgstr "Uložit desku jako:"
+msgstr "Uložit desku jako.."
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:77
 msgid "Save current board as.."
-msgstr "Uložit aktuální desku jako:"
+msgstr "Uložit aktuální desku jako.."
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:90
 msgid "Plot (HPGL, PostScript, or Gerber format)"
@@ -8291,7 +8293,7 @@ msgstr "&Relace Specctra"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:121
 msgid "Import a routed \"Specctra Session\" (*.ses) file"
-msgstr "Importán a propojen soubor \"Specctra Session\" (*.ses)"
+msgstr "Importovat a propojený soubor \"Relace Specctra\" (*.ses)"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:133
 msgid "Import files"
@@ -8323,7 +8325,7 @@ msgstr "Archivovat nebo přidat pouzdra do knihovny"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:156
 msgid "Quit pcbnew"
-msgstr "Ukončit PCBNEW"
+msgstr "Ukončit PCBNew"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:180
 msgid "Select Colors and Display for PCB items"
@@ -8335,7 +8337,7 @@ msgstr "Obecná &nastavení"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:185
 msgid "Select general options for pcbnew"
-msgstr "Vybrat možnosti PCBNEW"
+msgstr "Vybrat možnosti PCBNew"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:189
 msgid "&Display Options"
@@ -8403,7 +8405,7 @@ msgstr "Vytvořit soubor &Cmp"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:260
 msgid "Recreate .cmp file for CvPcb"
-msgstr "Obnovit soubor .cmp pro CVPCB"
+msgstr "Znovu vytvořit soubor .cmp pro CVPCB"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:268
 msgid "Global &Deletions"
@@ -8419,11 +8421,11 @@ msgstr "&Seznam sítí"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:274
 msgid "List nets (names and id)"
-msgstr "Seznam sítí (název a ID)"
+msgstr "Seznam sítí (názvy a ID)"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:278
 msgid "&Track operations"
-msgstr "&Operace s spoji"
+msgstr "&Operace se spoji"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:279
 msgid "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias"
@@ -8435,12 +8437,12 @@ msgstr "&Zaměnit vrstvy"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:284
 msgid "Swap tracks on copper layers or drawings on others layers"
-msgstr "Zaměnit spoje na vrstvách Cu nebo kresby na ostatních vrstvách"
+msgstr "Zaměnit spoje na vrstvách mědi nebo kresby na ostatních vrstvách"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:292
 #: /home/martin/newkicad/kicad/pcbnew/menubarmodedit.cpp:60
 msgid "Open the pcbnew manual"
-msgstr "Otevřít mauál PCBNEW"
+msgstr "Otevřít manuál PCBNew"
 
 #: /home/martin/newkicad/kicad/pcbnew/menubarpcb.cpp:304
 #: /home/martin/newkicad/kicad/pcbnew/menubarmodedit.cpp:72
@@ -8513,7 +8515,7 @@ msgstr "Vrtat"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_track_options.cpp:151
 msgid "Vias:"
-msgstr "Via"
+msgstr "Via:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_track_options.cpp:160
 msgid "Via Size"
@@ -8529,7 +8531,7 @@ msgstr "Alernativní vrtání via"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_track_options.cpp:208
 msgid "Through Via"
-msgstr "Via skrz"
+msgstr "Průchozí via"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_track_options.cpp:209
 msgid "Blind or Buried Via "
@@ -8615,7 +8617,7 @@ msgstr "Sloupců"
 
 #: /home/martin/newkicad/kicad/pcbnew/autoplac.cpp:425
 msgid "Lines"
-msgstr "Čáry"
+msgstr "Řádků"
 
 #: /home/martin/newkicad/kicad/pcbnew/autoplac.cpp:427
 msgid "Cells."
@@ -8708,11 +8710,11 @@ msgstr "Vrtání X / Y"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_pad.cpp:1039
 msgid "X Pos"
-msgstr "Poz. X"
+msgstr "Pozice X"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_pad.cpp:1043
 msgid "Y pos"
-msgstr "Poz. Y"
+msgstr "Pozice Y"
 
 #: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:64
 msgid "Specctra DSN file:"
@@ -8736,15 +8738,15 @@ msgstr "Nelze najít další segment s koncovým bodem "
 
 #: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:842
 msgid "Edit Edges_Pcb segments, making them contiguous."
-msgstr "Upravit segmenty okrajů desky, budou nepřerušené."
+msgstr "Upravit pospojováním segmenty okrajů desky."
 
 #: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:894
 msgid "Component with value of \"%s\" has empty reference id."
-msgstr "U součástky s hodnotou \"%s\" chybí reference"
+msgstr "U součástky s hodnotou \"%s\" chybí referenční ID."
 
 #: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:902
 msgid "Multiple components have identical reference IDs of \"%s\"."
-msgstr "Vícenásobné součástky mají stejnou referenci \"%s\"."
+msgstr "Vícenásobné součástky mají stejné referenční ID \"%s\"."
 
 #: /home/martin/newkicad/kicad/pcbnew/modules.cpp:81
 msgid "Footprint name:"
@@ -8776,23 +8778,23 @@ msgstr "Přemístit plošku"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:269
 msgid "delete Pad"
-msgstr "smazat plošku"
+msgstr "Smazat plošku"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:282
 msgid "Move Text Mod."
-msgstr "Přemístit text. modul"
+msgstr "Přemístit textový modul"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:285
 msgid "Rotate Text Mod."
-msgstr "Otočit text. modul"
+msgstr "Otočit textový modul"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:287
 msgid "Edit Text Mod."
-msgstr "Upravit text. modul"
+msgstr "Upravit textový modul"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:290
 msgid "Delete Text Mod."
-msgstr "Smazat text. modul"
+msgstr "Smazat textový modul"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:297
 msgid "End edge"
@@ -8816,11 +8818,11 @@ msgstr "Upravit šířku (vše)"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:312
 msgid "Edit Layer (Current)"
-msgstr "Upravit vrstvy (aktuální)"
+msgstr "Upravit vrstvu (aktuální)"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:314
 msgid "Edit Layer (All)"
-msgstr "Upravit vrstvy (vše)"
+msgstr "Upravit vrstvu (vše)"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:316
 msgid "Delete edge"
@@ -8828,7 +8830,7 @@ msgstr "Smazat okraj"
 
 #: /home/martin/newkicad/kicad/pcbnew/modedit_onclick.cpp:357
 msgid "Set Width"
-msgstr "nastavit šířku"
+msgstr "Nastavit šířku"
 
 #: /home/martin/newkicad/kicad/pcbnew/plot_rtn.cpp:224
 msgid ""
@@ -8836,15 +8838,15 @@ msgid ""
 " %s's \"reference\" text."
 msgstr ""
 "Deska obsahuje nesprávné číslo vrstvy %u u modulu\n"
-" v textu %s's \"reference\"."
+" v textu %s \"reference\"."
 
 #: /home/martin/newkicad/kicad/pcbnew/plot_rtn.cpp:244
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
 " %s's \"value\" text."
 msgstr ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"value\" text."
+"Deska obsahuje nesprávné číslo vrstvy %u u modulu\n"
+" v textu %s \"hodnota\"."
 
 #: /home/martin/newkicad/kicad/pcbnew/plot_rtn.cpp:290
 msgid ""
@@ -8852,7 +8854,7 @@ msgid ""
 " %s's \"module text\" text of %s."
 msgstr ""
 "Deska obsahuje nesprávné číslo vrstvy %u u modulu\n"
-" v textu %s's \"text modulu\" %s."
+" v textu %s \"text modulu\" %s."
 
 #: /home/martin/newkicad/kicad/pcbnew/zone_filling_algorithm.cpp:200
 msgid "No pads or starting point found to fill this zone outline"
@@ -8860,7 +8862,7 @@ msgstr "K vyplnění obrysu této zóny nenalezen počáteční bod nebo ploška
 
 #: /home/martin/newkicad/kicad/pcbnew/zone_filling_algorithm.cpp:246
 msgid "Ok"
-msgstr "Ok"
+msgstr "OK"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_setup_libs.cpp:199
 msgid "Lib Modules Dir:"
@@ -8868,23 +8870,23 @@ msgstr "Adresář modulů knihoven:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_setup_libs.cpp:216
 msgid "Board ext: "
-msgstr "Deska - přípona:"
+msgstr "Přípona souboru desky:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_setup_libs.cpp:220
 msgid "Cmp ext: "
-msgstr "Součástky - přípona: "
+msgstr "Přípona souboru součástek: "
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_setup_libs.cpp:224
 msgid "Lib ext: "
-msgstr "Knihovna - přípona:"
+msgstr "Přípona souboru knihovny:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_setup_libs.cpp:228
 msgid "Net ext: "
-msgstr "Síť - přípona:"
+msgstr "Přípona souboru sítě:"
 
 #: /home/martin/newkicad/kicad/pcbnew/tool_modedit.cpp:47
 msgid "Save Module in working library"
-msgstr "Uložit modul do pracovního adresáře"
+msgstr "Uložit modul do pracovní knihovny"
 
 #: /home/martin/newkicad/kicad/pcbnew/tool_modedit.cpp:51
 msgid "Create new library and save current module"
@@ -8912,7 +8914,7 @@ msgstr "Nahradit modul na aktuální desce"
 
 #: /home/martin/newkicad/kicad/pcbnew/tool_modedit.cpp:78
 msgid "Insert module into current board"
-msgstr "Načíst modul z aktuální desky"
+msgstr "vložit modul do aktuální desky"
 
 #: /home/martin/newkicad/kicad/pcbnew/tool_modedit.cpp:83
 msgid "import module"
@@ -8964,7 +8966,7 @@ msgstr "Ploška"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:71
 msgid "all copper layers"
-msgstr "všechny vrstvy Cu"
+msgstr "všechny vrstvy mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:76
 msgid "???"
@@ -9013,7 +9015,7 @@ msgstr "Obrys zóny"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:144
 msgid "(Cutout)"
-msgstr "(Vyříznout)"
+msgstr "(Výřez)"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:163
 msgid "Not Found"
@@ -9049,11 +9051,11 @@ msgstr "Deska změněna. Uložit?"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbframe.cpp:383
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
-msgstr "DRC vyp., nyní je DRC aktivní"
+msgstr "DRC vypnout, nyní je DRC aktivní"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbframe.cpp:385
 msgid "DRC On (Currently: DRC is inactive !!!)"
-msgstr "DRC zap., nyní je DRC vypnuto"
+msgstr "DRC zapnout, nyní je DRC vypnuto"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbframe.cpp:396
 msgid "Polar Coords not show"
@@ -9125,7 +9127,7 @@ msgstr "Změnit stejné moduly"
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:119
 msgid "Ch. same module+value"
-msgstr "Změnit týž modul+hodnotu"
+msgstr "Změnit stejné moduly + hodnoty"
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:125
 msgid "Change all"
@@ -9153,15 +9155,15 @@ msgstr "Nelze vytvořit soubor %s"
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:344
 msgid "Change modules <%s> -> <%s> (val = %s)?"
-msgstr "Změnit moduly <%s> -> <%s> (hodn. = %s)?"
+msgstr "Změnit moduly <%s> -> <%s> (hodnota = %s)?"
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:351
 msgid "Change modules <%s> -> <%s> ?"
-msgstr "Změnit moduly <%s> -> <%s> ?"
+msgstr "Změnit moduly <%s> -> <%s>?"
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:415
 msgid "Change ALL modules ?"
-msgstr "Zmenit všechny moduly ?"
+msgstr "Změnit všechny moduly?"
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:477
 msgid "Change module %s (%s)  "
@@ -9169,11 +9171,11 @@ msgstr "Změnit modul %s (%s)  "
 
 #: /home/martin/newkicad/kicad/pcbnew/xchgmod.cpp:621
 msgid "Cmp files:"
-msgstr "Soubory cmp:"
+msgstr "Soubory součástek:"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbnew.cpp:43
 msgid "Pcbnew is already running, Continue?"
-msgstr "PCBNEW je již spuštěn. Pokačovat?"
+msgstr "PCBNew je již spuštěn. Pokračovat?"
 
 #: /home/martin/newkicad/kicad/pcbnew/gendrill.cpp:307
 msgid "Drill file"
@@ -9197,7 +9199,7 @@ msgstr "Nelze vytvořit soubor"
 
 #: /home/martin/newkicad/kicad/pcbnew/gendrill.cpp:795
 msgid "Drill Report file"
-msgstr "Soubor ERC zpráv"
+msgstr "Soubor zpráv vrtání"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:191
 msgid "Plot Format"
@@ -9209,7 +9211,7 @@ msgstr "Možnosti HPGL:"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:209
 msgid "Pen Size"
-msgstr "Velikost pera"
+msgstr "Tloušťka pera"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:214
 msgid "Pen Speed (cm/s)"
@@ -9221,7 +9223,7 @@ msgstr "Nastavit rychlost pera (cm/s)"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:220
 msgid "Pen ovr"
-msgstr "Pen Ovr"
+msgstr "Přesah pera"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:224
 msgid "Set plot overlay for filling"
@@ -9241,7 +9243,7 @@ msgstr "Absolutní"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:234
 msgid "Auxiliary axis"
-msgstr "Vnější osa"
+msgstr "Pomocná osa"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:237
 msgid "Plot Origin"
@@ -9253,7 +9255,7 @@ msgstr "Nastavení měřítka X"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:262
 msgid "Y scale adjust"
-msgstr "Nastavení měřítka X"
+msgstr "Nastavení měřítka Y"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:266
 msgid "Plot negative"
@@ -9301,7 +9303,7 @@ msgstr "Povolit/zakázat tisk/kreslení hodnot modulů na vrstvě potisku"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:372
 msgid "Print module reference"
-msgstr "Tisknout ref. modulu"
+msgstr "Tisknout reference modulu"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:376
 msgid "Enable/disable print/plot module reference on silkscreen layers"
@@ -9309,11 +9311,11 @@ msgstr "Zapnout/vypnout tisk/kreslení referencí modulů na vrstvách potisku"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:380
 msgid "Print other module texts"
-msgstr "Tisknout další textove moduly"
+msgstr "Tisknout další texty modulu"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:384
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
-msgstr "Zapnout/vypnout tisk/kreslení textových polí na vrstvách potisku"
+msgstr "Zapnout/vypnout tisk/kreslení textových polí modulu na vrstvách potisku"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:389
 msgid "Force print invisible texts"
@@ -9369,7 +9371,7 @@ msgstr "Via na masce"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:435
 msgid "Print/plot vias on mask layers. They are in this case not protected"
-msgstr "Tisk/kreslení via na vrstvách masky. Nebude chráněno"
+msgstr "Tisk/kreslení via na vrstvách masky. Nebudou chráněny."
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:439
 msgid "Org = Centre"
@@ -9377,7 +9379,7 @@ msgstr "Nulové souřadnice = střed"
 
 #: /home/martin/newkicad/kicad/pcbnew/pcbplot.cpp:442
 msgid "Draw origin ( 0,0 ) in sheet center"
-msgstr "Kreslit zač. souřadnic (0,0) uprostřed listu"
+msgstr "Kreslit začátek souřadnic (0,0) uprostřed listu"
 
 #: /home/martin/newkicad/kicad/pcbnew/cotation.cpp:85
 msgid "Dimension properties"
@@ -9416,7 +9418,7 @@ msgstr "Zaměnit modul:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:176
 msgid "Keep or change an existing footprint when the netlist gives a different footprint"
-msgstr "Zachovat nebo změnit exustující pouzdro pokud netlist najde odlišné pouzdro"
+msgstr "Zachovat nebo změnit existující pouzdro pokud netlist obsahuje odlišné pouzdro"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:187
 msgid "Bad Tracks Deletion:"
@@ -9432,15 +9434,15 @@ msgstr "Zobrazit upozornění"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:201
 msgid "Remove Extra Footprints"
-msgstr "Odstranit extra pouzdra"
+msgstr "Odstranit přebytečná pouzdra"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:204
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
-"Odstranit pouzdra z desky, ale NE z netlistu\n"
-"Pozn.: budou odstraněna pouze neuzamčená pouzdra"
+"Odstranit pouzdra z desky, ale ne z netlistu\n"
+"Poznámka: budou odstraněna pouze neuzamčená pouzdra"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:212
 msgid "Browse Netlist Files"
@@ -9448,7 +9450,7 @@ msgstr "Projít soubory netlistu"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:216
 msgid "Read Current Netlist"
-msgstr "Číst aktuální netlist"
+msgstr "Načíst aktuální netlist"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:220
 msgid "Footprints Test"
@@ -9456,7 +9458,7 @@ msgstr "Test pouzder"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:222
 msgid "Read the current neltist file and list missing and extra footprints"
-msgstr "Načíst aktuální netlist a zobrazit chybějící a spec. pouzdra"
+msgstr "Načíst aktuální netlist a zobrazit chybějící a přebytečná pouzdra"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:226
 msgid "Rebuild Board Connectivity"
@@ -9476,11 +9478,11 @@ msgstr "Výběr netlistu:"
 
 #: /home/martin/newkicad/kicad/pcbnew/loadcmp.cpp:103
 msgid "Module name:"
-msgstr "Název modulu"
+msgstr "Název modulu:"
 
 #: /home/martin/newkicad/kicad/pcbnew/loadcmp.cpp:220
 msgid "Scan Lib: %s"
-msgstr "procházet knihovnu: %s"
+msgstr "Procházet knihovnu: %s"
 
 #: /home/martin/newkicad/kicad/pcbnew/loadcmp.cpp:229
 msgid "File is Not a library"
@@ -9521,7 +9523,7 @@ msgstr "Velikost Y uživatelské mřížky"
 
 #: /home/martin/newkicad/kicad/pcbnew/move_or_drag_track.cpp:778
 msgid "Unable to drag this segment: too many segments connected"
-msgstr "Nelze táhnout segment, spojeno příliš mnoho segmentů"
+msgstr "Nelze táhnout tento segment, spojeno příliš mnoho segmentů"
 
 #: /home/martin/newkicad/kicad/pcbnew/move_or_drag_track.cpp:832
 msgid "Unable to drag this segment: two collinear segments"
@@ -9553,7 +9555,7 @@ msgstr "Zahrnout kresby"
 
 #: /home/martin/newkicad/kicad/pcbnew/block.cpp:143
 msgid "Include egde layer"
-msgstr "Zahrnout vrstvu obrysů"
+msgstr "Zahrnout vrstvu okrajů"
 
 #: /home/martin/newkicad/kicad/pcbnew/block.cpp:450
 msgid "Delete Block"
@@ -9577,7 +9579,7 @@ msgstr "Zrcadlení bloku"
 
 #: /home/martin/newkicad/kicad/pcbnew/block.cpp:955
 msgid "Move Block"
-msgstr "Přemístit bloky"
+msgstr "Přemístit blok"
 
 #: /home/martin/newkicad/kicad/pcbnew/block.cpp:1110
 msgid "Copy Block"
@@ -9609,7 +9611,7 @@ msgstr "Spodní pohled"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_canvas.cpp:351
 msgid "Right View"
-msgstr "Pravy pohled"
+msgstr "Pravý pohled"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_canvas.cpp:356
 msgid "Left View"
@@ -9645,7 +9647,7 @@ msgstr "Přesunout dolů"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_canvas.cpp:642
 msgid "3D Image filename:"
-msgstr "název souboru 3D obrázku:"
+msgstr "Název souboru 3D obrázku:"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_toolbar.cpp:33
 msgid "Reload board"
@@ -9701,11 +9703,11 @@ msgstr "3D osy zap/vyp"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_toolbar.cpp:135
 msgid "3D Footprints Shapes On/Off"
-msgstr "3D tvary pouzder zap./vyp."
+msgstr "3D tvary pouzder zap/vyp"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_toolbar.cpp:139
 msgid "PCB place 3D On/off"
-msgstr "3D umístění desky zap./vyp."
+msgstr "3D umístění desky zap/vyp"
 
 #: /home/martin/newkicad/kicad/3d-viewer/3d_toolbar.cpp:143
 msgid "Zone Filling On/Off"
@@ -9729,7 +9731,7 @@ msgstr "Vrstva ECO2 zap/vyp"
 
 #: /home/martin/newkicad/kicad/cvpcb/dialog_cvpcb_config.h:49
 msgid "Cvpcb Configuration"
-msgstr "Uložit nastavení CVPCB"
+msgstr "Nastavení CVPCB"
 
 #: /home/martin/newkicad/kicad/share/svg_print.h:52
 msgid "Create SVG file"
@@ -9833,7 +9835,7 @@ msgstr "Jiný"
 
 #: /home/martin/newkicad/kicad/eeschema/dialog_options.h:55
 msgid "General Options"
-msgstr "Obecné nastavení"
+msgstr "Obecná nastavení"
 
 #: /home/martin/newkicad/kicad/eeschema/dialog_cmp_graphic_properties.h:43
 msgid "Graphic shape properties"
@@ -9877,7 +9879,7 @@ msgstr "Rozpiska materiálu"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
-msgstr "EESchema Annotace"
+msgstr "EESchema anotace"
 
 #: /home/martin/newkicad/kicad/eeschema/plotps.h:50
 msgid "EESchema Plot PS"
@@ -9893,7 +9895,7 @@ msgstr "Najít EESchema"
 
 #: /home/martin/newkicad/kicad/gerbview/set_color.h:38
 msgid "GerbView Layer Colors:"
-msgstr "Gerbview - barvy vrstev"
+msgstr "GerbView - barvy vrstev:"
 
 #: /home/martin/newkicad/kicad/gerbview/set_color.h:80
 msgid "Layers 1-16"
@@ -10045,7 +10047,7 @@ msgstr "Vyčistit volby"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:38
 msgid "Pcbnew Layer Colors:"
-msgstr "PCBNEW - barvy vrstev"
+msgstr "PCBNew - barvy vrstev:"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:81
 msgid "Copper Layers"
@@ -10061,19 +10063,19 @@ msgstr "Naznačené spoje"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:366
 msgid "Pad Cu"
-msgstr "Ploška Cu"
+msgstr "Ploška na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:374
 msgid "Pad Cmp"
-msgstr "Ploška souč."
+msgstr "Ploška na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:382
 msgid "Text Module Cu"
-msgstr "Textový modul Cu"
+msgstr "Textový modul na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:390
 msgid "Text Module Cmp"
-msgstr "Textový modul souč."
+msgstr "Textový modul na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:398
 msgid "Text Module invisible"
@@ -10089,19 +10091,19 @@ msgstr "Zobrazit nezapojené"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:441
 msgid "Show Modules Cmp"
-msgstr "Zobrazit moduly souč."
+msgstr "Zobrazit moduly na vrstvě součástek"
 
 #: /home/martin/newkicad/kicad/pcbnew/set_color.h:450
 msgid "Show Modules Cu"
-msgstr "Zobrazit moduly Cu"
+msgstr "Zobrazit moduly na vrstvě mědi"
 
 #: /home/martin/newkicad/kicad/pcbnew/drc_stuff.h:147
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
-msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
+msgstr "Typ chyby(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 
 #: /home/martin/newkicad/kicad/pcbnew/drc_stuff.h:155
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
-msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
+msgstr "Typ chyby(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_zones_by_polygon.h:53
 msgid "Fill Zones Options"
@@ -10125,7 +10127,7 @@ msgstr "Kontrola DRC"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_edit_mod_text.h:43
 msgid "TextMod properties"
-msgstr "Vlastnosti text. modulu"
+msgstr "Vlastnosti textového modulu"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_orient_footprints.h:42
 msgid "Footprints Orientation"
@@ -10141,7 +10143,7 @@ msgstr "Rozměry spojů a via"
 
 #: /home/martin/newkicad/kicad/pcbnew/gen_self.h:217
 msgid "Length(inch):"
-msgstr "Délka (inch):"
+msgstr "Délka (palce):"
 
 #: /home/martin/newkicad/kicad/pcbnew/gen_self.h:223
 msgid "Length(mm):"
