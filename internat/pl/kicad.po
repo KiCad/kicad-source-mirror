@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-06 15:47+0100\n"
-"PO-Revision-Date: 2008-09-06 15:47+0100\n"
+"POT-Creation-Date: 2008-09-09 17:11+0100\n"
+"PO-Revision-Date: 2008-09-09 17:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish KiCAD Team - Mateusz Skowroński <skowri@gmail.com>, Krzysztof Kawa <elektrotrans@wp.pl>\n"
 "MIME-Version: 1.0\n"
@@ -8411,123 +8411,131 @@ msgstr "Wybór położenia pliku konfiguracji klawiszy skrótów (katalog domowy
 msgid "Colors"
 msgstr "Kolory"
 
-#: kicad/common/common.cpp:93
+#: kicad/common/common.cpp:98
 msgid " (\"):"
 msgstr " (\"):"
 
-#: kicad/common/common.cpp:349
+#: kicad/common/common.cpp:188
+msgid " \""
+msgstr " \""
+
+#: kicad/common/common.cpp:192
+msgid " mm"
+msgstr " mm"
+
+#: kicad/common/common.cpp:373
 msgid "Copper   "
 msgstr "Ścieżek   "
 
-#: kicad/common/common.cpp:349
+#: kicad/common/common.cpp:373
 msgid "Inner L1 "
 msgstr "Wewnętrzna L1 "
 
-#: kicad/common/common.cpp:349
+#: kicad/common/common.cpp:373
 msgid "Inner L2 "
 msgstr "Wewnętrzna L2 "
 
-#: kicad/common/common.cpp:349
+#: kicad/common/common.cpp:373
 msgid "Inner L3 "
 msgstr "Wewnętrzna L3 "
 
-#: kicad/common/common.cpp:350
+#: kicad/common/common.cpp:374
 msgid "Inner L4 "
 msgstr "Wewnętrzna L4 "
 
-#: kicad/common/common.cpp:350
+#: kicad/common/common.cpp:374
 msgid "Inner L5 "
 msgstr "Wewnętrzna L5 "
 
-#: kicad/common/common.cpp:350
+#: kicad/common/common.cpp:374
 msgid "Inner L6 "
 msgstr "Wewnętrzna L6 "
 
-#: kicad/common/common.cpp:350
+#: kicad/common/common.cpp:374
 msgid "Inner L7 "
 msgstr "Wewnętrzna L7 "
 
-#: kicad/common/common.cpp:351
+#: kicad/common/common.cpp:375
 msgid "Inner L8 "
 msgstr "Wewnętrzna L8 "
 
-#: kicad/common/common.cpp:351
+#: kicad/common/common.cpp:375
 msgid "Inner L9 "
 msgstr "Wewnętrzna L9 "
 
-#: kicad/common/common.cpp:351
+#: kicad/common/common.cpp:375
 msgid "Inner L10"
 msgstr "Wewnętrzna L10"
 
-#: kicad/common/common.cpp:351
+#: kicad/common/common.cpp:375
 msgid "Inner L11"
 msgstr "Wewnętrzna L11"
 
-#: kicad/common/common.cpp:352
+#: kicad/common/common.cpp:376
 msgid "Inner L12"
 msgstr "Wewnętrzna L12"
 
-#: kicad/common/common.cpp:352
+#: kicad/common/common.cpp:376
 msgid "Inner L13"
 msgstr "Wewnętrzna L13"
 
-#: kicad/common/common.cpp:352
+#: kicad/common/common.cpp:376
 msgid "Inner L14"
 msgstr "Wewnętrzna L14"
 
-#: kicad/common/common.cpp:353
+#: kicad/common/common.cpp:377
 msgid "Adhes Cop"
 msgstr "Kleju dolna"
 
-#: kicad/common/common.cpp:353
+#: kicad/common/common.cpp:377
 msgid "Adhes Cmp"
 msgstr "Kleju górna"
 
-#: kicad/common/common.cpp:353
+#: kicad/common/common.cpp:377
 msgid "SoldP Cop"
 msgstr "Lutownicza dolna"
 
-#: kicad/common/common.cpp:353
+#: kicad/common/common.cpp:377
 msgid "SoldP Cmp"
 msgstr "Lutownicza górna"
 
-#: kicad/common/common.cpp:354
+#: kicad/common/common.cpp:378
 msgid "SilkS Cop"
 msgstr "Opisu dolna"
 
-#: kicad/common/common.cpp:354
+#: kicad/common/common.cpp:378
 msgid "SilkS Cmp"
 msgstr "Opisu górna"
 
-#: kicad/common/common.cpp:354
+#: kicad/common/common.cpp:378
 msgid "Mask Cop "
 msgstr "Maska ścieżek"
 
-#: kicad/common/common.cpp:354
+#: kicad/common/common.cpp:378
 msgid "Mask Cmp "
 msgstr "Maska elementów"
 
-#: kicad/common/common.cpp:355
+#: kicad/common/common.cpp:379
 msgid "Drawings "
 msgstr "Rysunkowa"
 
-#: kicad/common/common.cpp:355
+#: kicad/common/common.cpp:379
 msgid "Comments "
 msgstr "Komentarzy"
 
-#: kicad/common/common.cpp:355
+#: kicad/common/common.cpp:379
 msgid "Eco1     "
 msgstr "Dodatkowa dolna"
 
-#: kicad/common/common.cpp:355
+#: kicad/common/common.cpp:379
 msgid "Eco2     "
 msgstr "Dodatkowa górna"
 
-#: kicad/common/common.cpp:356
+#: kicad/common/common.cpp:380
 msgid "Edges Pcb"
 msgstr "Krawędzi PCB"
 
-#: kicad/common/common.cpp:356
+#: kicad/common/common.cpp:380
 msgid "BAD INDEX"
 msgstr "BŁĘDNY INDEKS"
 

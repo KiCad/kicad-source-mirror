@@ -106,7 +106,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT(
                                    "French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) ) );
-    info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowronski <skowri@gmail.com>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowroński <skowri@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );
     info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT(
