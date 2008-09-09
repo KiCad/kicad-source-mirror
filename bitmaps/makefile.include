@@ -92,7 +92,7 @@ OBJECTS = \
     export.o\
     File_FootPrint.o\
     fill_zone.o\
-    find.o\
+    find_xpm.o\
     Flag.o\
     Fonts.o\
     Footprint_Text.o\
@@ -212,7 +212,7 @@ OBJECTS = \
     pin.o\
     plot_HPG.o\
     plot_PS.o\
-    plot.o\
+    plot_xpm.o\
     polar.o\
     Post_Compo.o\
     Post_Drill.o\
