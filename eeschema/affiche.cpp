@@ -91,7 +91,7 @@ void LibDrawPin::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, 50, _( "Display" ), Text, DARKGREEN );
 
     /* Display pin length */
-    Text = MakeStringFromValue( m_PinLen, EESCHEMA_INTERNAL_UNIT );
+    Text = ReturnStringFromValue( g_UnitMetric, m_PinLen, EESCHEMA_INTERNAL_UNIT, true );
     Affiche_1_Parametre( frame, 56, _( "Length" ), Text, MAGENTA );
 
     /* Affichage de l'orientation */
@@ -181,7 +181,7 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, 14, _( "Convert" ), msg, BROWN );
 
     if( m_Width )
-        msg = MakeStringFromValue( m_Width, EESCHEMA_INTERNAL_UNIT );
+        msg = ReturnStringFromValue( g_UnitMetric, m_Width, EESCHEMA_INTERNAL_UNIT, true );
     else
         msg = _( "default" );
     Affiche_1_Parametre( frame, 20, _( "Width" ), msg, BLUE );

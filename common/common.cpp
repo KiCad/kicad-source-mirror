@@ -31,50 +31,55 @@ wxString GetBuildVersion()
 wxString GetAboutBuildVersion()
 /*********************************************/
 {
-  return g_BuildAboutVersion;
+    return g_BuildAboutVersion;
 }
 
-/********************************/
-void SetLocaleTo_C_standard(void)
-/********************************/
-/** function SetLocaleTo_C_standard
-because kicad is internationalized, switch internatization to "C" standard
-i.e. uses the . (dot) as separator in print/read float numbers
-(some contries (France, Germany ..) use , (comma) as separator)
-This function must be called before read or write ascii files using float numbers in data
-the SetLocaleTo_C_standard function must be called after reading or writing the file
 
-This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
-but could make more easier an optional use of locale in kicad
-*/
+/********************************/
+void SetLocaleTo_C_standard( void )
+/********************************/
+
+/** function SetLocaleTo_C_standard
+  * because kicad is internationalized, switch internatization to "C" standard
+  * i.e. uses the . (dot) as separator in print/read float numbers
+  * (some contries (France, Germany ..) use , (comma) as separator)
+  * This function must be called before read or write ascii files using float numbers in data
+  * the SetLocaleTo_C_standard function must be called after reading or writing the file
+ *
+  * This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
+  * but could make more easier an optional use of locale in kicad
+ */
 {
     setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
 }
 
-/********************************/
-void SetLocaleTo_Default(void)
-/********************************/
-/** function SetLocaleTo_Default
-because kicad is internationalized, switch internatization to default
-to use the default separator in print/read float numbers
-(. (dot) but some contries (France, Germany ..) use , (comma) as separator)
-This function must be called after a call to SetLocaleTo_C_standard
 
-This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
-but could make more easier an optional use of locale in kicad
-*/
+/********************************/
+void SetLocaleTo_Default( void )
+/********************************/
+
+/** function SetLocaleTo_Default
+  * because kicad is internationalized, switch internatization to default
+  * to use the default separator in print/read float numbers
+  * (. (dot) but some contries (France, Germany ..) use , (comma) as separator)
+  * This function must be called after a call to SetLocaleTo_C_standard
+ *
+  * This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
+  * but could make more easier an optional use of locale in kicad
+ */
 {
     setlocale( LC_NUMERIC, "" );      // revert to the current locale
 }
+
 
 /*********************************************************************************************/
 Ki_PageDescr::Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name )
 /*********************************************************************************************/
 {
     // All sizes are in 1/1000 inch
-    m_Size = size;
+    m_Size   = size;
     m_Offset = offset;
-    m_Name = name;
+    m_Name   = name;
 
     // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)
     m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
@@ -150,28 +155,46 @@ int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit )
 }
 
 
-/****************************************************************************/
-wxString ReturnStringFromValue( int Units, int Value, int Internal_Unit )
-/****************************************************************************/
+/**************************************************************************************************/
+wxString ReturnStringFromValue(  int aUnits, int aValue, int aInternal_Unit, bool aAdd_unit_symbol )
+/**************************************************************************************************/
 
-/* Return the string from Value, according to units (inch, mm ...) for display,
- *  and the initial unit for value
- *  Unit = display units (INCH, MM ..)
- *  Value = value in Internal_Unit
- *  Internal_Unit = units per inch for Value
+/** Function ReturnStringFromValue
+ * Return the string from Value, according to units (inch, mm ...) for display,
+ * and the initial unit for value
+ * @param aUnit = display units (INCHES, MILLIMETRE ..)
+ * @param aValue = value in Internal_Unit
+ * @param aInternal_Unit = units per inch for Value
+ * @param aAdd_unit_symbol = true to add symbol unit to the string value
+ * @return a wxString what contains value and optionnaly the sumbol unit (like 2.000 mm)
  */
 {
     wxString StringValue;
     double   value_to_print;
 
-    if( Units >= CENTIMETRE )
-        StringValue << Value;
+    if( aUnits >= CENTIMETRE )
+        StringValue << aValue;
     else
     {
-        value_to_print = To_User_Unit( Units, Value, Internal_Unit );
-        StringValue.Printf( ( Internal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
-                           value_to_print );
+        value_to_print = To_User_Unit( aUnits, aValue, aInternal_Unit );
+        StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
+            value_to_print );
     }
+
+    if( aAdd_unit_symbol )
+        switch( aUnits )
+        {
+        case INCHES:
+            StringValue += _( " \"" );
+            break;
+
+        case MILLIMETRE:
+            StringValue += _( " mm" );
+            break;
+
+        default:
+            break;
+        }
 
     return StringValue;
 }
@@ -250,15 +273,15 @@ wxString GenDate()
         wxT( "jul" ), wxT( "aug" ), wxT( "sep" ), wxT( "oct" ), wxT( "nov" ), wxT( "dec" )
     };
 
-    time_t buftime;
-    struct tm*            Date;
-    wxString string_date;
+    time_t     buftime;
+    struct tm* Date;
+    wxString   string_date;
 
     time( &buftime );
     Date = gmtime( &buftime );
     string_date.Printf( wxT( "%d %s %d" ), Date->tm_mday,
-                        mois[Date->tm_mon].GetData(),
-                        Date->tm_year + 1900 );
+        mois[Date->tm_mon].GetData(),
+        Date->tm_year + 1900 );
     return string_date;
 }
 
@@ -289,6 +312,7 @@ void* MyMalloc( size_t nb_octets )
 /**************************************************************/
 bool ProcessExecute( const wxString& aCommandLine, int aFlags )
 /**************************************************************/
+
 /**
  * Function ProcessExecute
  * runs a child process.
@@ -298,10 +322,10 @@ bool ProcessExecute( const wxString& aCommandLine, int aFlags )
  */
 {
 #ifdef __WINDOWS__
-    int pid = wxExecute(aCommandLine);
+    int        pid = wxExecute( aCommandLine );
     return pid ? true : false;
 #else
-    wxProcess*  process = wxProcess::Open( aCommandLine, aFlags );
+    wxProcess* process = wxProcess::Open( aCommandLine, aFlags );
     return (process != NULL) ? true : false;
 #endif
 }
@@ -367,7 +391,7 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
 
         // modify the copy
         ret.Trim();
-        ret.Replace( wxT(" "), wxT("_") );
+        ret.Replace( wxT( " " ), wxT( "_" ) );
 
         return ret;
     }
@@ -400,9 +424,9 @@ WinEDA_TextFrame::WinEDA_TextFrame( wxWindow* parent, const wxString& title ) :
 
     size   = GetClientSize();
     m_List = new wxListBox( this, ID_TEXTBOX_LIST,
-                            wxPoint( 0, 0 ), size,
-                            0, NULL,
-                            wxLB_ALWAYS_SB | wxLB_SINGLE );
+        wxPoint( 0, 0 ), size,
+        0, NULL,
+        wxLB_ALWAYS_SB | wxLB_SINGLE );
 
     m_List->SetBackgroundColour( wxColour( 200, 255, 255 ) );
     SetReturnCode( -1 );
@@ -466,7 +490,7 @@ void AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc, const wxString& K
 {
     wxString Line1( wxT( "Doc:  " ) ), Line2( wxT( "KeyW: " ) );
 
-    int color = BLUE;
+    int      color = BLUE;
 
     if( frame && frame->MsgPanel )
     {
@@ -501,7 +525,7 @@ const wxString& valeur_param( int valeur, wxString& buf_texte )
 /**************************************************************/
 
 /**
- *  @todo replace this obsolete funtion by MakeStringFromValue
+ *  @todo replace this obsolete funtion by ReturnStringFromValue
  * Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
  *  entree : valeur en mils , buffer de texte
  *  retourne en buffer : texte : valeur exprimee en pouces ou millimetres
@@ -520,44 +544,14 @@ const wxString& valeur_param( int valeur, wxString& buf_texte )
     return buf_texte;
 }
 
-/****************************************************************************************/
-const wxString MakeStringFromValue( int value, int internal_unit )
-/****************************************************************************************/
-/** Function MakeStringFromValue
- * convert the value of a parameter to a string like <value in prefered units> <unit symbol>
- * like 100 mils converted to 0.1 " or 0.245 mm
- * use g_UnitMetric do select inch or metric format
- * @param : value in internal units
- * @param : internal_unit per inch: currently 1000 for eeschema and 10000 for pcbnew
- * @return : the string to display or print
- */
-{
-    wxString text;
 
-    if( g_UnitMetric )
-    {
-        text.Printf( wxT( "%3.3f mm" ), (float) value * 2.54 / (float) internal_unit );
-    }
-    else
-    {
-        text.Printf( wxT( "%2.4f \"" ), (float) value  / (float) internal_unit );
-    }
-
-    return text;
-}
-
-
-
-
-wxString& operator << ( wxString& aString, const wxPoint& aPos )
+wxString& operator <<( wxString& aString, const wxPoint& aPos )
 {
     wxString temp;
 
-    aString << wxT("@ (") << valeur_param( aPos.x, temp );
-    aString << wxT(",")  << valeur_param( aPos.y, temp );
-    aString << wxT(")");
+    aString << wxT( "@ (" ) << valeur_param( aPos.x, temp );
+    aString << wxT( "," ) << valeur_param( aPos.y, temp );
+    aString << wxT( ")" );
 
     return aString;
 }
-
-

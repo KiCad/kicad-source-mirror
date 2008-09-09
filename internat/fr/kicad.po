@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 21:24+0100\n"
-"PO-Revision-Date: 2008-08-25 21:24+0100\n"
+"POT-Creation-Date: 2008-09-08 19:19+0100\n"
+"PO-Revision-Date: 2008-09-08 19:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -697,8 +697,8 @@ msgid "Dimension properties"
 msgstr "Propriétés des Cotes"
 
 #: pcbnew/cotation.cpp:113
-#: pcbnew/dialog_edit_module.cpp:243
-#: pcbnew/dialog_edit_module.cpp:289
+#: pcbnew/dialog_edit_module.cpp:267
+#: pcbnew/dialog_edit_module.cpp:313
 msgid "Normal"
 msgstr "Normal"
 
@@ -985,71 +985,83 @@ msgstr "Propriétés"
 msgid "3D settings"
 msgstr "3D Caract"
 
-#: pcbnew/dialog_edit_module.cpp:182
+#: pcbnew/dialog_edit_module.cpp:171
+msgid "X"
+msgstr "X"
+
+#: pcbnew/dialog_edit_module.cpp:172
+msgid "Y"
+msgstr "Y"
+
+#: pcbnew/dialog_edit_module.cpp:184
 msgid "Change module(s)"
 msgstr "Change module(s)"
 
-#: pcbnew/dialog_edit_module.cpp:186
+#: pcbnew/dialog_edit_module.cpp:188
 msgid "Edit Module"
 msgstr "Edit Module"
 
-#: pcbnew/dialog_edit_module.cpp:193
+#: pcbnew/dialog_edit_module.cpp:192
+msgid "Position"
+msgstr "Position"
+
+#: pcbnew/dialog_edit_module.cpp:217
 msgid "Doc"
 msgstr "Doc"
 
-#: pcbnew/dialog_edit_module.cpp:200
+#: pcbnew/dialog_edit_module.cpp:224
 msgid "Keywords"
 msgstr "Mots Cles"
 
-#: pcbnew/dialog_edit_module.cpp:207
+#: pcbnew/dialog_edit_module.cpp:231
 msgid "Fields:"
 msgstr "Champs:"
 
-#: pcbnew/dialog_edit_module.cpp:217
+#: pcbnew/dialog_edit_module.cpp:241
 msgid "Add Field"
 msgstr "Ajouter Champ"
 
-#: pcbnew/dialog_edit_module.cpp:222
+#: pcbnew/dialog_edit_module.cpp:246
 msgid "Edit Field"
 msgstr "Editer Champ"
 
-#: pcbnew/dialog_edit_module.cpp:227
+#: pcbnew/dialog_edit_module.cpp:251
 msgid "Delete Field"
 msgstr "Supprimer Champ"
 
-#: pcbnew/dialog_edit_module.cpp:234
+#: pcbnew/dialog_edit_module.cpp:258
 msgid "Component"
 msgstr "Composant"
 
-#: pcbnew/dialog_edit_module.cpp:234
+#: pcbnew/dialog_edit_module.cpp:258
 msgid "Copper"
 msgstr "Cuivre"
 
-#: pcbnew/dialog_edit_module.cpp:243
+#: pcbnew/dialog_edit_module.cpp:267
 msgid "User"
 msgstr "User"
 
-#: pcbnew/dialog_edit_module.cpp:279
+#: pcbnew/dialog_edit_module.cpp:303
 msgid "Orient (0.1 deg)"
 msgstr "Orient (0.1 deg)"
 
-#: pcbnew/dialog_edit_module.cpp:289
+#: pcbnew/dialog_edit_module.cpp:313
 msgid "Normal+Insert"
 msgstr "Normal+Insert"
 
-#: pcbnew/dialog_edit_module.cpp:289
+#: pcbnew/dialog_edit_module.cpp:313
 msgid "Virtual"
 msgstr "Virtuel"
 
-#: pcbnew/dialog_edit_module.cpp:290
+#: pcbnew/dialog_edit_module.cpp:314
 msgid "Attributes"
 msgstr "Attributs"
 
-#: pcbnew/dialog_edit_module.cpp:293
+#: pcbnew/dialog_edit_module.cpp:317
 msgid "Use this attribute for most non smd components"
 msgstr "Utiliser cet attribut pour la plupart des composants"
 
-#: pcbnew/dialog_edit_module.cpp:295
+#: pcbnew/dialog_edit_module.cpp:319
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -1057,75 +1069,75 @@ msgstr ""
 "Uiliser cet attribut pour les composants CMS.\n"
 "Seuls les composants avec cette option sont mis dans le fichier de position des composants"
 
-#: pcbnew/dialog_edit_module.cpp:297
+#: pcbnew/dialog_edit_module.cpp:321
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
 msgstr "Uiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
 
-#: pcbnew/dialog_edit_module.cpp:321
+#: pcbnew/dialog_edit_module.cpp:345
 msgid "Free"
 msgstr "Libre"
 
-#: pcbnew/dialog_edit_module.cpp:321
+#: pcbnew/dialog_edit_module.cpp:345
 msgid "Locked"
 msgstr "Verrouillé"
 
-#: pcbnew/dialog_edit_module.cpp:323
+#: pcbnew/dialog_edit_module.cpp:347
 msgid "Move and Auto Place"
 msgstr "Move et Placement Automatique"
 
-#: pcbnew/dialog_edit_module.cpp:328
+#: pcbnew/dialog_edit_module.cpp:352
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Autoriser les commandes clavier de déplacement et l'auto placement"
 
-#: pcbnew/dialog_edit_module.cpp:329
+#: pcbnew/dialog_edit_module.cpp:353
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Interdire les commandes clavier de déplacement et l'auto placement"
 
-#: pcbnew/dialog_edit_module.cpp:333
+#: pcbnew/dialog_edit_module.cpp:357
 msgid "Rot 90"
 msgstr "Rot 90"
 
-#: pcbnew/dialog_edit_module.cpp:341
+#: pcbnew/dialog_edit_module.cpp:365
 msgid "Rot 180"
 msgstr "Rot 180"
 
-#: pcbnew/dialog_edit_module.cpp:378
+#: pcbnew/dialog_edit_module.cpp:402
 msgid "3D Shape Name"
 msgstr "3D forme"
 
-#: pcbnew/dialog_edit_module.cpp:395
+#: pcbnew/dialog_edit_module.cpp:419
 msgid "Browse"
 msgstr "Examiner"
 
-#: pcbnew/dialog_edit_module.cpp:399
+#: pcbnew/dialog_edit_module.cpp:423
 msgid "Add 3D Shape"
 msgstr "Ajout Forme 3D"
 
-#: pcbnew/dialog_edit_module.cpp:405
+#: pcbnew/dialog_edit_module.cpp:429
 msgid "Remove 3D Shape"
 msgstr "Suppr. Forme 3D:"
 
-#: pcbnew/dialog_edit_module.cpp:411
+#: pcbnew/dialog_edit_module.cpp:435
 msgid "Shape Scale:"
 msgstr "Echelle de la forme:"
 
-#: pcbnew/dialog_edit_module.cpp:418
+#: pcbnew/dialog_edit_module.cpp:442
 msgid "Shape Offset:"
 msgstr "Offset forme:"
 
-#: pcbnew/dialog_edit_module.cpp:427
+#: pcbnew/dialog_edit_module.cpp:451
 msgid "Shape Rotation:"
 msgstr "Rot de la forme"
 
-#: pcbnew/dialog_edit_module.cpp:467
+#: pcbnew/dialog_edit_module.cpp:491
 msgid "3D Shape:"
 msgstr "Forme 3D:"
 
-#: pcbnew/dialog_edit_module.cpp:769
+#: pcbnew/dialog_edit_module.cpp:802
 msgid "Reference or Value cannot be deleted"
 msgstr "Référence ou Valeur ne peut etre effacée"
 
-#: pcbnew/dialog_edit_module.cpp:773
+#: pcbnew/dialog_edit_module.cpp:806
 #, c-format
 msgid "Delete [%s]"
 msgstr "Supprimer [%s]"
@@ -3102,7 +3114,7 @@ msgstr "Lire config"
 msgid "File %s not found"
 msgstr " fichier %s non trouvé"
 
-#: pcbnew/pcbcfg.cpp:204
+#: pcbnew/pcbcfg.cpp:205
 msgid "Save preferences"
 msgstr "Sauver préférences"
 
@@ -3314,10 +3326,6 @@ msgstr "Origine des tracés au centre de la feuille"
 #: pcbnew/pcbtexte.cpp:88
 msgid "TextPCB properties"
 msgstr "Propriétés des textes PCB"
-
-#: pcbnew/pcbtexte.cpp:137
-msgid "Position"
-msgstr "Position"
 
 #: pcbnew/plotgerb.cpp:70
 msgid "unable to create file "
@@ -3973,6 +3981,41 @@ msgstr "Pas de pads ou de points de départ pour remplir ce contour de zone"
 msgid "Ok"
 msgstr "Ok"
 
+#: pcbnew/specctra_export.cpp:64
+msgid "Specctra DSN file:"
+msgstr "Fichier Specctra DSN"
+
+#: pcbnew/specctra_export.cpp:122
+msgid "BOARD exported OK."
+msgstr "PCB exporté Ok."
+
+#: pcbnew/specctra_export.cpp:127
+msgid "Unable to export, please fix and try again."
+msgstr "Impossible d'exporter, fixer le problème et recommencer"
+
+#: pcbnew/specctra_export.cpp:805
+#, c-format
+msgid "Unsupported DRAWSEGMENT type %s"
+msgstr "DRAWSEGMENT type %s non supporté"
+
+#: pcbnew/specctra_export.cpp:840
+msgid "Unable to find the next segment with an endpoint of "
+msgstr "Impossible de trouver le segment suivant avec une extrémité à "
+
+#: pcbnew/specctra_export.cpp:843
+msgid "Edit Edges_Pcb segments, making them contiguous."
+msgstr "Modifier les segments du contour PCB pour les rendre contigus."
+
+#: pcbnew/specctra_export.cpp:895
+#, c-format
+msgid "Component with value of \"%s\" has empty reference id."
+msgstr "Le composant avec valeur \"%s\" a une référence vide."
+
+#: pcbnew/specctra_export.cpp:903
+#, c-format
+msgid "Multiple components have identical reference IDs of \"%s\"."
+msgstr "Multiple composants ont une reference identique  \"%s\"."
+
 #: pcbnew/pcbnew.cpp:43
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est est cours d'exécution. Continuer ?"
@@ -4417,41 +4460,6 @@ msgstr "Autoroute Pad"
 msgid "Autoroute Net"
 msgstr "Autoroute Net"
 
-#: pcbnew/specctra_export.cpp:64
-msgid "Specctra DSN file:"
-msgstr "Fichier Specctra DSN"
-
-#: pcbnew/specctra_export.cpp:122
-msgid "BOARD exported OK."
-msgstr "PCB exporté Ok."
-
-#: pcbnew/specctra_export.cpp:127
-msgid "Unable to export, please fix and try again."
-msgstr "Impossible d'exporter, fixer le problème et recommencer"
-
-#: pcbnew/specctra_export.cpp:808
-#, c-format
-msgid "Unsupported DRAWSEGMENT type %s"
-msgstr "DRAWSEGMENT type %s non supporté"
-
-#: pcbnew/specctra_export.cpp:839
-msgid "Unable to find the next segment with an endpoint of "
-msgstr "Impossible de trouver le segment suivant avec une extrémité à "
-
-#: pcbnew/specctra_export.cpp:842
-msgid "Edit Edges_Pcb segments, making them contiguous."
-msgstr "Modifier les segments du contour PCB pour les rendre contigus."
-
-#: pcbnew/specctra_export.cpp:894
-#, c-format
-msgid "Component with value of \"%s\" has empty reference id."
-msgstr "Le composant avec valeur \"%s\" a une référence vide."
-
-#: pcbnew/specctra_export.cpp:902
-#, c-format
-msgid "Multiple components have identical reference IDs of \"%s\"."
-msgstr "Multiple composants ont une reference identique  \"%s\"."
-
 #: pcbnew/dialog_pad_edit.cpp:157
 msgid "Pad Num :"
 msgstr "Num Pad :"
@@ -4868,8 +4876,8 @@ msgid "yes"
 msgstr "oui"
 
 #: eeschema/affiche.cpp:95
-msgid "Lengh"
-msgstr "Long."
+msgid "Length"
+msgstr "Longueur"
 
 #: eeschema/affiche.cpp:101
 msgid "Up"
@@ -8040,99 +8048,119 @@ msgstr "Tracer traits de direction  quelconque"
 msgid "Draw lines H, V or 45 deg only"
 msgstr "Tracer traits H, V ou 45 deg seulement"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:141
+#: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
 msgstr ""
 
-#: eeschema/component_wizard/ki_component_setup.cpp:145
+#: eeschema/component_wizard/dialog_component_setup.cpp:141
 msgid "Component Features"
 msgstr "Propriétés du Composant"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:153
+#: eeschema/component_wizard/dialog_component_setup.cpp:149
 msgid "Component Name"
 msgstr "Nom du Composant!"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:156
-msgid "MyComponent"
-msgstr "MyComponent"
-
-#: eeschema/component_wizard/ki_component_setup.cpp:159
+#: eeschema/component_wizard/dialog_component_setup.cpp:155
 msgid " Symbol Text Size  "
 msgstr "Taille du Texte"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:162
-#: eeschema/component_wizard/ki_component_setup.cpp:212
-#: eeschema/component_wizard/ki_component_setup.cpp:235
+#: eeschema/component_wizard/dialog_component_setup.cpp:158
+#: eeschema/component_wizard/dialog_component_setup.cpp:194
+#: eeschema/component_wizard/dialog_component_setup.cpp:217
 msgid "50"
 msgstr "50"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:165
+#: eeschema/component_wizard/dialog_component_setup.cpp:161
 msgid "Parts Count"
 msgstr "Nb Parts"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:168
+#: eeschema/component_wizard/dialog_component_setup.cpp:164
 msgid "1"
 msgstr "1"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:171
+#: eeschema/component_wizard/dialog_component_setup.cpp:167
 msgid "Pin Distance"
 msgstr "Distance entre Pins"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:174
+#: eeschema/component_wizard/dialog_component_setup.cpp:170
 msgid "100"
 msgstr "100"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:177
+#: eeschema/component_wizard/dialog_component_setup.cpp:173
 msgid "Pin Features"
 msgstr "Propriétés des Pins"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:185
+#: eeschema/component_wizard/dialog_component_setup.cpp:181
 msgid "Default Pin Format"
 msgstr "Format des Pins par Défaut"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:209
+#: eeschema/component_wizard/dialog_component_setup.cpp:191
 msgid "Pin Name Text Size"
 msgstr "Taille du Texte Nom de Pin"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:215
+#: eeschema/component_wizard/dialog_component_setup.cpp:197
 msgid "Default Pin Type"
 msgstr "Type Pin par Défaut"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:221
+#: eeschema/component_wizard/dialog_component_setup.cpp:203
 msgid "BiDir"
 msgstr "Bidi"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:222
+#: eeschema/component_wizard/dialog_component_setup.cpp:204
 msgid "Tri-State"
 msgstr "3 états"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:225
+#: eeschema/component_wizard/dialog_component_setup.cpp:207
 msgid "Power Input"
 msgstr "Power Input"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:226
+#: eeschema/component_wizard/dialog_component_setup.cpp:208
 msgid "Power Output"
 msgstr "Power Output"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:227
+#: eeschema/component_wizard/dialog_component_setup.cpp:209
 msgid "Open Colletor"
 msgstr "Coll Ouvert"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:228
+#: eeschema/component_wizard/dialog_component_setup.cpp:210
 msgid "Open Emitter"
 msgstr "Emetteur Ouv."
 
-#: eeschema/component_wizard/ki_component_setup.cpp:232
+#: eeschema/component_wizard/dialog_component_setup.cpp:214
 msgid " Pin Number Text Size"
 msgstr "Taille Texte Numéro de Pin"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:241
+#: eeschema/component_wizard/dialog_component_setup.cpp:223
 msgid "Pin Count"
 msgstr "Nombre de Pins"
 
-#: eeschema/component_wizard/ki_component_setup.cpp:244
+#: eeschema/component_wizard/dialog_component_setup.cpp:226
 msgid "Component Style"
 msgstr "Style du Composant"
+
+#: eeschema/component_wizard/component_setup_frame.cpp:51
+msgid "Invert"
+msgstr "Invert"
+
+#: eeschema/component_wizard/component_setup_frame.cpp:52
+msgid "Clock"
+msgstr "Clock"
+
+#: eeschema/component_wizard/component_setup_frame.cpp:53
+msgid "Clock Invert"
+msgstr "Clock Invert"
+
+#: eeschema/component_wizard/component_setup_frame.cpp:54
+msgid "Active Low Input"
+msgstr "Entrée Active Bas"
+
+#: eeschema/component_wizard/component_setup_frame.cpp:55
+msgid "Clock Active Low"
+msgstr "Clock Active Bas"
+
+#: eeschema/component_wizard/component_setup_frame.cpp:56
+msgid "Active Low Output"
+msgstr " Output Active Bas"
 
 #: cvpcb/autosel.cpp:68
 #, c-format
@@ -8795,7 +8823,6 @@ msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
 #: kicad/treeprj_frame.cpp:432
-#: kicad/kicad.cpp:215
 msgid "noname"
 msgstr "noname"
 
@@ -8901,7 +8928,7 @@ msgstr "Fichiers D-Codes:"
 msgid "GerbView is already running. Continue?"
 msgstr "Gerbview est est cours d'exécution. Continuer ?"
 
-#: gerbview/gerbview_config.cpp:131
+#: gerbview/gerbview_config.cpp:147
 msgid "Save config file"
 msgstr "Sauver config"
 
@@ -9372,131 +9399,131 @@ msgstr "Couleurs"
 msgid "Pos "
 msgstr "Pos "
 
-#: common/wxwineda.cpp:171
-msgid "X"
-msgstr "X"
-
-#: common/wxwineda.cpp:180
-msgid "Y"
-msgstr "Y"
-
-#: common/common.cpp:93
+#: common/common.cpp:98
 msgid " (\"):"
 msgstr " (\"):"
 
-#: common/common.cpp:349
+#: common/common.cpp:188
+msgid " \""
+msgstr " \""
+
+#: common/common.cpp:192
+msgid " mm"
+msgstr " mm"
+
+#: common/common.cpp:373
 msgid "Copper   "
 msgstr "Cuivre   "
 
-#: common/common.cpp:349
+#: common/common.cpp:373
 msgid "Inner L1 "
 msgstr "Interne 1"
 
-#: common/common.cpp:349
+#: common/common.cpp:373
 msgid "Inner L2 "
 msgstr "Interne 2"
 
-#: common/common.cpp:349
+#: common/common.cpp:373
 msgid "Inner L3 "
 msgstr "Interne 3"
 
-#: common/common.cpp:350
+#: common/common.cpp:374
 msgid "Inner L4 "
 msgstr "Interne 4"
 
-#: common/common.cpp:350
+#: common/common.cpp:374
 msgid "Inner L5 "
 msgstr "Interne 5"
 
-#: common/common.cpp:350
+#: common/common.cpp:374
 msgid "Inner L6 "
 msgstr "Interne 6"
 
-#: common/common.cpp:350
+#: common/common.cpp:374
 msgid "Inner L7 "
 msgstr "Interne 7"
 
-#: common/common.cpp:351
+#: common/common.cpp:375
 msgid "Inner L8 "
 msgstr "Interne 8"
 
-#: common/common.cpp:351
+#: common/common.cpp:375
 msgid "Inner L9 "
 msgstr "Interne 9"
 
-#: common/common.cpp:351
+#: common/common.cpp:375
 msgid "Inner L10"
 msgstr "Interne 10"
 
-#: common/common.cpp:351
+#: common/common.cpp:375
 msgid "Inner L11"
 msgstr "Interne 11"
 
-#: common/common.cpp:352
+#: common/common.cpp:376
 msgid "Inner L12"
 msgstr "Interne 12"
 
-#: common/common.cpp:352
+#: common/common.cpp:376
 msgid "Inner L13"
 msgstr "Interne 13"
 
-#: common/common.cpp:352
+#: common/common.cpp:376
 msgid "Inner L14"
 msgstr "Interne 14"
 
-#: common/common.cpp:353
+#: common/common.cpp:377
 msgid "Adhes Cop"
 msgstr "Adhes Cu "
 
-#: common/common.cpp:353
+#: common/common.cpp:377
 msgid "Adhes Cmp"
 msgstr "Adhe  Cmp"
 
-#: common/common.cpp:353
+#: common/common.cpp:377
 msgid "SoldP Cop"
 msgstr "SoldP Cu "
 
-#: common/common.cpp:353
+#: common/common.cpp:377
 msgid "SoldP Cmp"
 msgstr "SoldP Cmp"
 
-#: common/common.cpp:354
+#: common/common.cpp:378
 msgid "SilkS Cop"
 msgstr "Sérigr Cu "
 
-#: common/common.cpp:354
+#: common/common.cpp:378
 msgid "SilkS Cmp"
 msgstr "Sérigr Cmp"
 
-#: common/common.cpp:354
+#: common/common.cpp:378
 msgid "Mask Cop "
 msgstr "Masque Cu "
 
-#: common/common.cpp:354
+#: common/common.cpp:378
 msgid "Mask Cmp "
 msgstr "Masque Cmp"
 
-#: common/common.cpp:355
+#: common/common.cpp:379
 msgid "Drawings "
 msgstr "Drawings "
 
-#: common/common.cpp:355
+#: common/common.cpp:379
 msgid "Comments "
 msgstr "Comments "
 
-#: common/common.cpp:355
+#: common/common.cpp:379
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:355
+#: common/common.cpp:379
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:356
+#: common/common.cpp:380
 msgid "Edges Pcb"
 msgstr "Contour Pcb"
 
-#: common/common.cpp:356
+#: common/common.cpp:380
 msgid "BAD INDEX"
 msgstr "BAD INDEX"
 
@@ -9845,48 +9872,6 @@ msgstr "Sélection Grille"
 msgid "grid user"
 msgstr "grille user"
 
-#: share/svg_print.cpp:213
-msgid "Black and White"
-msgstr "Noir et Blanc"
-
-#: share/svg_print.cpp:214
-msgid "Print mode"
-msgstr "Mode d'impression"
-
-#: share/svg_print.cpp:228
-#: share/dialog_print.cpp:217
-msgid "Current"
-msgstr "Courant"
-
-#: share/svg_print.cpp:230
-#: share/dialog_print.cpp:212
-#: share/dialog_print.cpp:219
-msgid "Page Print:"
-msgstr "Imprimer page"
-
-#: share/svg_print.cpp:234
-msgid "Create &File"
-msgstr "Créer &Fichier"
-
-#: share/svg_print.cpp:249
-msgid "Messages:"
-msgstr "Messages:"
-
-#: share/svg_print.cpp:262
-#: share/dialog_print.cpp:256
-msgid "Pen width mini"
-msgstr "Epaiss plume mini"
-
-#: share/svg_print.cpp:392
-#: share/svg_print.cpp:409
-msgid "Create file "
-msgstr "Créer Fichier "
-
-#: share/svg_print.cpp:394
-#: share/svg_print.cpp:411
-msgid " error"
-msgstr " erreur"
-
 #: share/wxprint.cpp:163
 msgid "Error Init Printer info"
 msgstr "Erreur Init info imprimante"
@@ -9964,6 +9949,17 @@ msgstr "1 Page par couche"
 msgid "Single Page"
 msgstr "Page unique"
 
+#: share/dialog_print.cpp:212
+#: share/dialog_print.cpp:219
+#: share/svg_print.cpp:230
+msgid "Page Print:"
+msgstr "Imprimer page"
+
+#: share/dialog_print.cpp:217
+#: share/svg_print.cpp:228
+msgid "Current"
+msgstr "Courant"
+
 #: share/dialog_print.cpp:230
 msgid "Print S&etup"
 msgstr "Options Impr&ession"
@@ -9975,6 +9971,37 @@ msgstr "Pre&visualisation"
 #: share/dialog_print.cpp:238
 msgid "&Print"
 msgstr "Imp&rimer"
+
+#: share/dialog_print.cpp:256
+#: share/svg_print.cpp:270
+msgid "Pen width mini"
+msgstr "Epaiss plume mini"
+
+#: share/svg_print.cpp:213
+msgid "Black and White"
+msgstr "Noir et Blanc"
+
+#: share/svg_print.cpp:214
+msgid "Print mode"
+msgstr "Mode d'impression"
+
+#: share/svg_print.cpp:234
+msgid "Create &File"
+msgstr "Créer &Fichier"
+
+#: share/svg_print.cpp:257
+msgid "Messages:"
+msgstr "Messages:"
+
+#: share/svg_print.cpp:400
+#: share/svg_print.cpp:417
+msgid "Create file "
+msgstr "Créer Fichier "
+
+#: share/svg_print.cpp:402
+#: share/svg_print.cpp:419
+msgid " error"
+msgstr " erreur"
 
 #: pcbnew/cleaningoptions_dialog.h:48
 msgid "Cleaning options"
@@ -10259,7 +10286,7 @@ msgstr "Propriétés des Pins"
 msgid "EESchema Plot PS"
 msgstr "EESchema Tracé PS"
 
-#: eeschema/component_wizard/ki_component_setup.h:54
+#: eeschema/component_wizard/dialog_component_setup.h:55
 msgid "Component Builder"
 msgstr "Générateur de Composant"
 
@@ -10419,11 +10446,16 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
-#: share/svg_print.h:50
-msgid "Create SVG file"
-msgstr "Créer Fichier SVG"
-
 #: share/dialog_print.h:52
 msgid "Print"
 msgstr "Imprimer"
+
+#: share/svg_print.h:52
+msgid "Create SVG file"
+msgstr "Créer Fichier SVG"
+
+#~ msgid "Lengh"
+#~ msgstr "Long."
+#~ msgid "MyComponent"
+#~ msgstr "MyComponent"
 
