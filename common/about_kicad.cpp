@@ -110,12 +110,10 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );
     info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT(
-                                   " David Briscoe, Jean Dupont (Remy),Boris Barbour, Dominique Laigle, Paul Burke" ) ) );
+                                   " David Briscoe, Remy Halvick, Boris Barbour, Dominique Laigle, Paul Burke" ) ) );
 
     info.AddTranslator( SetMsg( wxT( "Pedro Martin del Valle, Inigo Zuluaga")));
 
-    /* Add programm credits */
-#if 0   // TODO
-    info.AddArtist( wxT( "" ) );
-#endif
+    /* Add programm credits for icons */
+    info.AddArtist( wxT( "Icons: Inigo Zuluaga" ) );
 }
