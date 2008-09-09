@@ -11,29 +11,37 @@
 
 #include "priorque.h"
 
-#define LIB_VERSION_MAJOR 2
-#define LIB_VERSION_MINOR 3
-#define LIBFILE_IDENT     "EESchema-LIBRARY Version"        /* Must be at the lib file start. */
-#define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"    /* Must be at the doc file start. */
-#define DOC_EXT           wxT( ".dcm" )                     /* extension des fichiers de documentation */
+#define LIB_VERSION_MAJOR   2
+#define LIB_VERSION_MINOR   3
+#define LIBFILE_IDENT       "EESchema-LIBRARY Version"      /* Must be at the lib file start. */
+#define DOCFILE_IDENT       "EESchema-DOCLIB  Version 2.0"  /* Must be at the doc file start. */
+#define DOC_EXT             wxT( ".dcm" )                   /* extension des fichiers de documentation */
 
-#define TARGET_PIN_DIAM 12                                  /* Diam cercle des extremites des pins */
+#define TARGET_PIN_DIAM     12                              /* Diam cercle des extremites des pins */
 
-#define DEFAULT_TEXT_SIZE 50                                /* Default size for field texts */
-#define PART_NAME_LEN     15                                /* Maximum length of part name. */
-#define PREFIX_NAME_LEN   5                                 /* Maximum length of prefix (IC, R, SW etc.). */
-#define PIN_WIDTH         100                               /* Width between 2 pins in internal units. */
-#define PIN_LENGTH        300                               /* Default Length of each pin to be drawn. */
+#define DEFAULT_TEXT_SIZE   50                              /* Default size for field texts */
+#define PART_NAME_LEN       15                              /* Maximum length of part name. */
+#define PREFIX_NAME_LEN     5                               /* Maximum length of prefix (IC, R, SW etc.). */
+#define PIN_WIDTH           100                             /* Width between 2 pins in internal units. */
+#define PIN_LENGTH          300                             /* Default Length of each pin to be drawn. */
 
 #define INVERT_PIN_RADIUS   35                              /* Radius of inverted pin circle. */
 #define CLOCK_PIN_DIM       40                              /* Dim of clock pin symbol. */
 #define IEEE_SYMBOL_PIN_DIM 40                              /* Dim of special pin symbol. */
 
-#define NO_FILL                  0                          // Poly, Squar, Circle, Arc = option No Fill
-#define FILLED_SHAPE             1                          // Poly, Squar, Circle, Arc = option Fill with current color ("Solid shape")
-#define FILLED_WITH_BG_BODYCOLOR 2                          /* Poly, Squar, Circle, Arc = option Fill
-                                                            * with background body color, translucent (texts on this shape can be see)
-                                                            * not fille in B&W plot mode */
+
+/**
+ * Enum FILL_T
+ * is the set of fill types used in plotting or drawing enclosed areas.
+ */
+enum FILL_T {
+    NO_FILL,                        // Poly, Square, Circle, Arc = option No Fill
+    FILLED_SHAPE,                   // Poly, Square, Circle, Arc = option Fill with current color ("Solid shape")
+    FILLED_WITH_BG_BODYCOLOR,       /* Poly, Square, Circle, Arc = option Fill
+                                     * with background body color, translucent (texts on this shape can be see)
+                                     * not fille in B&W plot mode
+                                     */
+};
 
 //Offsets used in editing library component, for handle aliad dats
 #define ALIAS_NAME         0
@@ -43,7 +51,7 @@
 #define ALIAS_NEXT         4
 
 
-typedef enum {
+enum LocateDrawStructType {
     LOCATE_COMPONENT_ARC_DRAW_TYPE      = 1,
     LOCATE_COMPONENT_CIRCLE_DRAW_TYPE   = 2,
     LOCATE_COMPONENT_GRAPHIC_TEXT_DRAW_TYPE = 4,
@@ -51,7 +59,7 @@ typedef enum {
     LOCATE_LINE_DRAW_TYPE = 0x10,
     LOCATE_COMPONENT_POLYLINE_DRAW_TYPE = 0x20,
     LOCATE_COMPONENT_LINE_DRAW_TYPE     = 0x40
-} LocateDrawStructType;
+};
 
 #define LOCATE_ALL_DRAW_ITEM 0xFFFFFFFF
 
@@ -62,20 +70,23 @@ typedef enum {
                          *  (alias ou racine) */
 
 /* definition des types des structures d'elements de librairie */
-typedef enum {
+enum LibrEntryType {
     ROOT,       /* Structure est a standard EDA_LibComponentStruct */
     ALIAS       /* Structure is an alias */
-} LibrEntryType;
+};
 
 /* valeur du membre .m_Options */
-typedef enum {
+enum  LibrEntryOptions {
     ENTRY_NORMAL,   // Libentry is standard
     ENTRY_POWER     // Libentry is a power symbol
-} LibrEntryOptions;
+};
 
-/* Definitions des Pins */
 
-typedef enum {      /* Type des Pins. si modif: modifier tableau des mgs suivant */
+/**
+ * Enum ElectricPinType
+ * is the set of schematic pin types.
+ */
+enum ElectricPinType {      /* Type des Pins. si modif: modifier tableau des mgs suivant */
     PIN_INPUT,
     PIN_OUTPUT,
     PIN_BIDI,
@@ -88,7 +99,7 @@ typedef enum {      /* Type des Pins. si modif: modifier tableau des mgs suivant
     PIN_OPENEMITTER,
     PIN_NC,             /* No connect */
     PIN_NMAX            /* Valeur limite ( utilisee comme limite de tableaux) */
-} ElectricPinType;
+};
 
 /* Messages d'affichage du type electrique */
 eda_global const wxChar* MsgPinElectricType[]
@@ -114,20 +125,30 @@ eda_global const wxChar* MsgPinElectricType[]
 /* Autres bits: bits du membre .Flag des Pins */
 #define PINNOTDRAW 1        /* si 1: pin invisible */
 
-typedef enum {              /* Forme des Pins */
+
+/**
+ * Enum DrawPinShape
+ * is the set of shapes allowed for pins.
+ */
+enum  DrawPinShape {
     NONE   = 0,
     INVERT = 1,
     CLOCK  = 2,
     LOWLEVEL_IN  = 4,
     LOWLEVEL_OUT = 8
-} DrawPinShape;
+};
 
-typedef enum {              /* Orientation des Pins */
+
+/**
+ * Enum DrawPinOrient
+ * is the set of orientations allowed for pins.
+ */
+enum  DrawPinOrient {
     PIN_RIGHT = 'R',
     PIN_LEFT  = 'L',
     PIN_UP = 'U',
     PIN_DOWN  = 'D',
-} DrawPinOrient;
+};
 
 /*************************************/
 /* Classe representant une librairie */
@@ -239,7 +260,7 @@ class LibDrawArc      : public LibEDA_BaseStruct
 {
 public:
     int     m_Rayon;
-    int     m_Fill;                 // NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
+    FILL_T  m_Fill;                 // NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
     int     t1, t2;                 /* position des 2 extremites de l'arc en 0,1 degres */
     wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
 
@@ -260,7 +281,7 @@ class LibDrawCircle   : public LibEDA_BaseStruct
 {
 public:
     int     m_Rayon;
-    int     m_Fill;
+    FILL_T  m_Fill;
 
 public:
     LibDrawCircle();
@@ -275,7 +296,8 @@ public:
     bool            WriteDescr( FILE* File );
 };
 
-class LibDrawText     : public LibEDA_BaseStruct
+
+class LibDrawText  : public LibEDA_BaseStruct
 {
 public:
     int      m_Horiz;
@@ -296,11 +318,12 @@ public:
     bool            WriteDescr( FILE* File );
 };
 
-class LibDrawSquare   : public LibEDA_BaseStruct
+
+class LibDrawSquare  : public LibEDA_BaseStruct
 {
 public:
     wxPoint m_End;
-    int    m_Fill;
+    FILL_T  m_Fill;
 
 public:
     LibDrawSquare();
@@ -338,7 +361,7 @@ class LibDrawPolyline : public LibEDA_BaseStruct
 public:
     int         n;
     int*        PolyList;
-    int        m_Fill;
+    FILL_T      m_Fill;
 
 public:
     LibDrawPolyline();
@@ -482,7 +505,6 @@ eda_global int CurrentConvert                   /* Convert = 1 .. 255 */
 = 1
 #endif
 ;
-
 
 eda_global wxString FindLibName;        /* nom de la librairie ou a ete trouve le
                                          *  dernier composant recherche par FindLibPart() */
