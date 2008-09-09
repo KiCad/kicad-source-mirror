@@ -215,141 +215,142 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         switch( DEntry->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
-        {
-            LibDrawArc* Arc = (LibDrawArc*) DEntry;
-            t1    = Arc->t1; t2 = Arc->t2;
-            pos.x = PartX + TransMat[0][0] * Arc->m_Pos.x +
-                    TransMat[0][1] * Arc->m_Pos.y;
-            pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
-                    TransMat[1][1] * Arc->m_Pos.y;
-            MapAngles( &t1, &t2, TransMat );
-            if ( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                PlotArc( pos, t1, t2, Arc->m_Rayon, true, 0 );
+                LibDrawArc* Arc = (LibDrawArc*) DEntry;
+                t1    = Arc->t1; t2 = Arc->t2;
+                pos.x = PartX + TransMat[0][0] * Arc->m_Pos.x +
+                        TransMat[0][1] * Arc->m_Pos.y;
+                pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
+                        TransMat[1][1] * Arc->m_Pos.y;
+                MapAngles( &t1, &t2, TransMat );
+                if ( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+                {
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                    PlotArc( pos, t1, t2, Arc->m_Rayon, true, 0 );
+                }
+                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+                PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill == FILLED_SHAPE ? true : false, Arc->m_Width );
             }
-            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-            PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill == FILLED_SHAPE ? true : false, Arc->m_Width );
-        }
             break;
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
-        {
-            LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
-            pos.x = PartX + TransMat[0][0] * Circle->m_Pos.x +
-                    TransMat[0][1] * Circle->m_Pos.y;
-            pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
-                    TransMat[1][1] * Circle->m_Pos.y;
-            if ( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                PlotCercle( pos, Circle->m_Rayon * 2, true, 0 );
+                LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
+                pos.x = PartX + TransMat[0][0] * Circle->m_Pos.x +
+                        TransMat[0][1] * Circle->m_Pos.y;
+                pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
+                        TransMat[1][1] * Circle->m_Pos.y;
+
+                if ( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+                {
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                    PlotCercle( pos, Circle->m_Rayon * 2, true, 0 );
+                }
+                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+                PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill == FILLED_SHAPE ? true : false, Circle->m_Width );
             }
-            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-            PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill == FILLED_SHAPE ? true : false, Circle->m_Width );
-        }
             break;
 
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        {
-            LibDrawText* Text = (LibDrawText*) DEntry;
+            {
+                LibDrawText* Text = (LibDrawText*) DEntry;
 
-            /* The text orientation may need to be flipped if the
-              * transformation matrix causes xy axes to be flipped. */
-            t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
-            pos.x = PartX + TransMat[0][0] * Text->m_Pos.x
-                    + TransMat[0][1] * Text->m_Pos.y;
-            pos.y = PartY + TransMat[1][0] * Text->m_Pos.x
-                    + TransMat[1][1] * Text->m_Pos.y;
-            SetCurrentLineWidth( -1 );
-            PlotGraphicText( g_PlotFormat, pos, CharColor,
-                             Text->m_Text,
-                             t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                             Text->m_Size,
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
-        }
+                /* The text orientation may need to be flipped if the
+                  * transformation matrix causes xy axes to be flipped. */
+                t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
+                pos.x = PartX + TransMat[0][0] * Text->m_Pos.x
+                        + TransMat[0][1] * Text->m_Pos.y;
+                pos.y = PartY + TransMat[1][0] * Text->m_Pos.x
+                        + TransMat[1][1] * Text->m_Pos.y;
+                SetCurrentLineWidth( -1 );
+                PlotGraphicText( g_PlotFormat, pos, CharColor,
+                                 Text->m_Text,
+                                 t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
+                                 Text->m_Size,
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+            }
             break;
 
         case COMPONENT_RECT_DRAW_TYPE:
-        {
-            LibDrawSquare* Square = (LibDrawSquare*) DEntry;
-            x1 = PartX + TransMat[0][0] * Square->m_Pos.x
-                 + TransMat[0][1] * Square->m_Pos.y;
-            y1 = PartY + TransMat[1][0] * Square->m_Pos.x
-                 + TransMat[1][1] * Square->m_Pos.y;
-            x2 = PartX + TransMat[0][0] * Square->m_End.x
-                 + TransMat[0][1] * Square->m_End.y;
-            y2 = PartY + TransMat[1][0] * Square->m_End.x
-                 + TransMat[1][1] * Square->m_End.y;
-
-            if ( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), true, 0 );
+                LibDrawSquare* Square = (LibDrawSquare*) DEntry;
+                x1 = PartX + TransMat[0][0] * Square->m_Pos.x
+                     + TransMat[0][1] * Square->m_Pos.y;
+                y1 = PartY + TransMat[1][0] * Square->m_Pos.x
+                     + TransMat[1][1] * Square->m_Pos.y;
+                x2 = PartX + TransMat[0][0] * Square->m_End.x
+                     + TransMat[0][1] * Square->m_End.y;
+                y2 = PartY + TransMat[1][0] * Square->m_End.x
+                     + TransMat[1][1] * Square->m_End.y;
+
+                if ( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+                {
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                    PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), true, 0 );
+                }
+                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+                PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
             }
-            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-            PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
-        }
             break;
 
         case COMPONENT_PIN_DRAW_TYPE:     /* Trace des Pins */
-        {
-            LibDrawPin* Pin = (LibDrawPin*) DEntry;
-            if( Pin->m_Attributs & PINNOTDRAW )
             {
-                if( ActiveScreen->m_Type == SCHEMATIC_FRAME )
-                    break;
+                LibDrawPin* Pin = (LibDrawPin*) DEntry;
+                if( Pin->m_Attributs & PINNOTDRAW )
+                {
+                    if( ActiveScreen->m_Type == SCHEMATIC_FRAME )
+                        break;
+                }
+
+                /* Calcul de l'orientation reelle de la Pin */
+                orient = Pin->ReturnPinDrawOrient( TransMat );
+                /* compute Pin Pos */
+                x2 = PartX + TransMat[0][0] * Pin->m_Pos.x
+                     + TransMat[0][1] * Pin->m_Pos.y;
+                y2 = PartY + TransMat[1][0] * Pin->m_Pos.x
+                     + TransMat[1][1] * Pin->m_Pos.y;
+
+                /* Dessin de la pin et du symbole special associe */
+                SetCurrentLineWidth( -1 );
+                PlotPinSymbol( x2, y2, Pin->m_PinLen, orient, Pin->m_PinShape );
+                wxPoint pinpos( x2, y2 );
+                Pin->PlotPinTexts( pinpos, orient,
+                                   Entry->m_TextInside,
+                                   Entry->m_DrawPinNum, Entry->m_DrawPinName );
             }
-
-            /* Calcul de l'orientation reelle de la Pin */
-            orient = Pin->ReturnPinDrawOrient( TransMat );
-            /* compute Pin Pos */
-            x2 = PartX + TransMat[0][0] * Pin->m_Pos.x
-                 + TransMat[0][1] * Pin->m_Pos.y;
-            y2 = PartY + TransMat[1][0] * Pin->m_Pos.x
-                 + TransMat[1][1] * Pin->m_Pos.y;
-
-            /* Dessin de la pin et du symbole special associe */
-            SetCurrentLineWidth( -1 );
-            PlotPinSymbol( x2, y2, Pin->m_PinLen, orient, Pin->m_PinShape );
-            wxPoint pinpos( x2, y2 );
-            Pin->PlotPinTexts( pinpos, orient,
-                               Entry->m_TextInside,
-                               Entry->m_DrawPinNum, Entry->m_DrawPinName );
-        }
             break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
-        {
-            LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
-            Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->n );
-            for( ii = 0; ii < polyline->n; ii++ )
             {
-                Poly[ii * 2] = PartX +
-                               TransMat[0][0] * polyline->PolyList[ii * 2] +
-                               TransMat[0][1] * polyline->PolyList[ii * 2 + 1];
-                Poly[ii * 2 + 1] = PartY +
-                                   TransMat[1][0] * polyline->PolyList[ii * 2] +
-                                   TransMat[1][1] * polyline->PolyList[ii * 2 + 1];
-            }
+                LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
+                Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->n );
+                for( ii = 0; ii < polyline->n; ii++ )
+                {
+                    Poly[ii * 2] = PartX +
+                                   TransMat[0][0] * polyline->PolyList[ii * 2] +
+                                   TransMat[0][1] * polyline->PolyList[ii * 2 + 1];
+                    Poly[ii * 2 + 1] = PartY +
+                                       TransMat[1][0] * polyline->PolyList[ii * 2] +
+                                       TransMat[1][1] * polyline->PolyList[ii * 2 + 1];
+                }
 
-            if ( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-            {
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                PlotPoly( ii, Poly, true, 0 );
+                if ( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+                {
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                    PlotPoly( ii, Poly, true, 0 );
+                }
+                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+                PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
+                MyFree( Poly );
             }
-            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-            PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
-            MyFree( Poly );
-        }
             break;
 
         default:
-            ;
+            D(printf("Drawing Type=%d\n", DEntry->Type() )) ;
         }
 
         /* Fin Switch */
@@ -512,7 +513,9 @@ static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape )
     {
         PlotCercle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
                              MapY1 * INVERT_PIN_RADIUS + y1),
-                    false, INVERT_PIN_RADIUS * 2 );
+                    INVERT_PIN_RADIUS * 2,  // diameter
+                    false,                  // fill
+                    -1 );                   // width
 
         Move_Plume( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
                              MapY1 * INVERT_PIN_RADIUS * 2 + y1 ), 'U' );

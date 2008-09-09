@@ -791,7 +791,7 @@ void PlotCircle( int format_plot, int thickness, wxPoint centre, int radius )
         break;
 
     case PLOT_FORMAT_POST:
-        PlotCirclePS( centre, radius * 2, 0, thickness);
+        PlotCirclePS( centre, radius * 2, false, thickness );
         break;
     }
 }

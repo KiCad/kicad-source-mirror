@@ -27,7 +27,7 @@ static void MoveLibDrawItemAt( LibEDA_BaseStruct* DrawItem, wxPoint newpos );
 /* Variables locales */
 static int     StateDrawArc, ArcStartX, ArcStartY, ArcEndX, ArcEndY;
 static wxPoint InitPosition, StartCursor, ItemPreviousPos;
-static int     FlSymbol_Fill = NO_FILL;
+static FILL_T  FlSymbol_Fill = NO_FILL;
 
 
 /************************************/
@@ -46,8 +46,10 @@ bodygraphics_PropertiesAccept( wxCommandEvent& event )
 {
     g_FlDrawSpecificConvert = m_CommonConvert->GetValue() ? FALSE : TRUE;
     g_FlDrawSpecificUnit    = m_CommonUnit->GetValue() ? FALSE : TRUE;
+
     if( m_Filled )
-        FlSymbol_Fill = m_Filled->GetSelection();
+        FlSymbol_Fill = (FILL_T) m_Filled->GetSelection();
+
     g_LibSymbolDefaultLineWidth = m_GraphicShapeWidthCtrl->GetValue();
 
     if( CurrentDrawItem )

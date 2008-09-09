@@ -418,10 +418,10 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     int i, x1, y1, x2, y2, t1, t2, orient;
     LibEDA_BaseStruct* DEntry = NULL;
-    int CharColor;
-    int fill_option;
-    int SetHightColor;
-    int LineWidth;
+    int     CharColor;
+    FILL_T  fill_option;
+    int     SetHightColor;
+    int     LineWidth;
 
 //#define GETCOLOR(l) Color < 0 ? (ReturnLayerColor(l)| SetHightColor) : Color;
 #define GETCOLOR( l ) Color < 0 ? SetHightColor ?\
@@ -471,9 +471,11 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
             {
                 EXCHG( x1, x2 ); EXCHG( y1, y2 )
             }
+
             fill_option = Arc->m_Fill;
             if ( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState( ) )
                 fill_option = NO_FILL;
+
             if( Color < 0 )         // Normal Color Layer
             {
                 if( fill_option == FILLED_WITH_BG_BODYCOLOR )
