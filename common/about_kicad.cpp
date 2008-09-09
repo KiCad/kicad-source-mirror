@@ -102,7 +102,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     info.AddDocWriter( SetMsg( wxT( "Igor Plyatov <plyatov@gmail.com>" ) ) );
 
     /* Add translators */
-    info.AddTranslator( wxT( "Czech (CZ) Milan Horák <stranger@tiscali.cz>" ) ); /* fix for translation ! */
+    info.AddTranslator( wxT( "Czech (CZ) Martin Kratoška <martin@ok1rr.com>" ) );
     info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT(
                                    "French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) ) );
