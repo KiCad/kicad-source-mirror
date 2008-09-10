@@ -44,10 +44,14 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     description << ( _T( "Build: " ) ) << GetAboutBuildVersion();
 
 /* Check for unicode */
+    description << ( wxT( "\n\nUsing  " ) );
+    description << ( wxT( "wxWidgets " ) );
+    description << wxMAJOR_VERSION << wxT( "." ) << wxMINOR_VERSION << wxT( "." ) <<
+    wxRELEASE_NUMBER;
 #if wxUSE_UNICODE
-    description << ( wxT( " Unicode " ) );
+    description << ( wxT( "  Unicode " ) );
 #else
-    description << ( wxT( " Ansi " ) );
+    description << ( wxT( "  Ansi " ) );
 #endif
 
 /* Check for wxMSW */
@@ -67,9 +71,6 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 #else
     description << ( wxT( " 32 bits" ) );
 #endif
-    description << ( wxT( "\n with wxWidgets " ) );
-    description << wxMAJOR_VERSION << wxT( "." ) << wxMINOR_VERSION << wxT( "." ) <<
-    wxRELEASE_NUMBER;
 
     description << wxT( "\n\nWeb sites:\n" );
     description << wxT( "http://iut-tice.ujf-grenoble.fr/kicad/" );
