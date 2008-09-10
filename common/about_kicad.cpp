@@ -15,16 +15,17 @@ wxString SetMsg( const wxString& msg )
 
 /* add \n at the beginning of msg under Windows, and do nothing under other version of wxWidgets
  * Needed under wxWidgets 2.8 because wxGTK and wxMSW do not have the same behavior
- * AddDeveloper needs \n between names under wxGTK, and nothing under wxMSW
+ * Add Developer needs \n between names under wxMSW, and nothing under wxGTK
  * when displaying developer and others.
- * can be removed for next wxWidgets versions when this wxWidgets bug will be solved
+ * Perhaps depending on wxWidgets versions
  */
 {
     wxString tmp;
 
-    #ifdef __WINDOWS__
+//    #ifdef __WINDOWS__
+#if 1
     tmp = wxT( "\n" );
-    #endif
+#endif
 
     tmp << msg;
     return tmp;
