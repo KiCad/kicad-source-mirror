@@ -145,9 +145,9 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         if( m_Poly->TestPointInside( pos.x, pos.y ) )
         {
 			pos -= Pcb->m_BoundaryBox.m_Pos;
-			ZoneStartFill.x = ( pos.x + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+			ZoneStartFill.x = pos.x / g_GridRoutingSize;
 
-            ZoneStartFill.y = ( pos.y + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+            ZoneStartFill.y = pos.y / g_GridRoutingSize;
 			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
 			if ( (cell & CELL_is_EDGE) == 0 )
 			{
@@ -167,9 +167,9 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         if( m_Poly->TestPointInside( pos.x, pos.y ) )
         {
 			pos -= Pcb->m_BoundaryBox.m_Pos;
-			ZoneStartFill.x = ( pos.x + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+			ZoneStartFill.x = pos.x / g_GridRoutingSize;
 
-            ZoneStartFill.y = ( pos.y + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+            ZoneStartFill.y = pos.y / g_GridRoutingSize;
 			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
 			if ( (cell & CELL_is_EDGE) == 0 )
 			{
@@ -181,9 +181,9 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         if( m_Poly->TestPointInside( pos.x, pos.y ) )
         {
 			pos -= Pcb->m_BoundaryBox.m_Pos;
-			ZoneStartFill.x = ( pos.x + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+			ZoneStartFill.x = pos.x / g_GridRoutingSize;
 
-            ZoneStartFill.y = ( pos.y + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+            ZoneStartFill.y = pos.y / g_GridRoutingSize;
 			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
 			if ( (cell & CELL_is_EDGE) == 0 )
 			{
@@ -277,9 +277,9 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         if( m_Poly->TestPointInside( pos.x, pos.y ) )
         {
 			pos -= Pcb->m_BoundaryBox.m_Pos;
-            ZoneStartFill.x = ( pos.x + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+            ZoneStartFill.x = pos.x / g_GridRoutingSize;
 
-            ZoneStartFill.y = ( pos.y + (g_GridRoutingSize / 2) ) / g_GridRoutingSize;
+            ZoneStartFill.y = pos.y / g_GridRoutingSize;
 			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
 			if ( (cell & CELL_is_EDGE) == 0 )
 				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );

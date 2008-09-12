@@ -13,23 +13,23 @@
 #include "trigo.h"
 #include "cell.h"
 
-
-/* Routines externes */
-
-/* routines internes */
+/* Exported functions */
+int     ToMatrixCoordinate ( int aPhysicalCoordinate);
 void    TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color );
-void    DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
-                        int color, int op_logique );
-void    DrawHVSegment( int ux0, int uy0, int ux1, int uy1, int demi_largeur, int layer,
-                       int color, int op_logique );
-
-void    TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
-                           int color, int op_logique );
-void    TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
-                     int color, int op_logique );
-
 void    TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int layer,
                   int color, int op_logique );
+
+
+/* Local functions */
+static void    DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
+                        int color, int op_logique );
+static void    DrawHVSegment( int ux0, int uy0, int ux1, int uy1, int demi_largeur, int layer,
+                       int color, int op_logique );
+
+static void    TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
+                           int color, int op_logique );
+static void    TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
+                     int color, int op_logique );
 
 /* Macro d'appel de mise a jour de cellules */
 #define OP_CELL( layer, dy, dx ) { if( layer < 0 ) \
@@ -46,6 +46,15 @@ void    TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int 
                                                WriteCell( dy, dx, TOP, color );\
                                    } }
 
+int ToMatrixCoordinate ( int aPhysicalCoordinate)
+/** Function ToMatrixCoordinate
+ * compute the coordinate in the routing matrix from the real (board) value
+ * @param aPhysicalCoordinate = value to convert
+ * @return the coordinate relative to the matrix
+ */
+{
+    return aPhysicalCoordinate / g_GridRoutingSize;
+}
 
 /******************************************************************************/
 void Place_1_Pad_Board( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logique )
@@ -349,7 +358,8 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
     {
         if( y1 < y0 )
             EXCHG( y0, y1 );
-        dy = y0 / g_GridRoutingSize; lim = y1 / g_GridRoutingSize;
+        dy = y0 / g_GridRoutingSize;
+        lim = y1 / g_GridRoutingSize;
         dx = x0 / g_GridRoutingSize;
         /* Clipping aux limites du board */
         if( (dx < 0) || (dx >= Ncols) )
@@ -370,7 +380,8 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
     {
         if( x1 < x0 )
             EXCHG( x0, x1 );
-        dx = x0 / g_GridRoutingSize; lim = x1 / g_GridRoutingSize;
+        dx = x0 / g_GridRoutingSize;
+        lim = x1 / g_GridRoutingSize;
         dy = y0 / g_GridRoutingSize;
         /* Clipping aux limites du board */
         if( (dy < 0) || (dy >= Nrows) )
@@ -395,7 +406,8 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
             EXCHG( x1, x0 ); EXCHG( y1, y0 );
         }
 
-        dx  = x0 / g_GridRoutingSize; lim = x1 / g_GridRoutingSize;
+        dx  = x0 / g_GridRoutingSize;
+        lim = x1 / g_GridRoutingSize;
         dy  = y0 / g_GridRoutingSize;
         inc = 1; if( y1 < y0 )
             inc = -1;
@@ -421,7 +433,8 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
             EXCHG( x1, x0 ); EXCHG( y1, y0 );
         }
 
-        dy  = y0 / g_GridRoutingSize; lim = y1 / g_GridRoutingSize;
+        dy  = y0 / g_GridRoutingSize;
+        lim = y1 / g_GridRoutingSize;
         dx  = x0 / g_GridRoutingSize;
         inc = 1; if( x1 < x0 )
             inc = -1;

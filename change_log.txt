@@ -5,6 +5,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Sep-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Fixed a problem in zone filling algo: due tu differents ways to truncate coordinates
+    between 2 functions (one round coordinates, and others truncate coordinates),
+    some start points used to fill zones can be inside the zone outlines,
+    but placed outside when init matrix parameters when rounding them instead of truncate.
+    So zone was filled inside and outside when happens.
+
+
 2008-Sep-9 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +eeschema
