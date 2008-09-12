@@ -243,7 +243,7 @@ void WinEDA_SchematicFrame::SaveProject()
     }
 
     /* Creation du fichier d'archivage composants en repertoire courant */
-    LibArchiveFileName = MakeFileName( wxEmptyString, GetScreen()->m_FileName, wxEmptyString );
+    LibArchiveFileName = MakeFileName( wxEmptyString, g_RootSheet->GetFileName(), wxEmptyString );
     ChangeFileNameExt( LibArchiveFileName, wxEmptyString );
 
     /* mise a jour extension  */
