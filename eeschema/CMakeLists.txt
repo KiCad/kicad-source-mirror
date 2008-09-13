@@ -48,7 +48,6 @@ set(EESCHEMA_SRCS
     eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp
-    eestring.cpp
     erc.cpp
     files-io.cpp
     find.cpp

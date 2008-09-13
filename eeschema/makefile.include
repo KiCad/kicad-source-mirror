@@ -45,7 +45,7 @@ OBJECTS = eeschema.o\
 		block_libedit.o\
 		eeredraw.o\
 		dialog_eeschema_config.o\
-		eestring.o eelayer.o \
+		eelayer.o \
 		priorque.o eeconfig.o \
 		affiche.o \
 		zoom.o \
