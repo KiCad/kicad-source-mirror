@@ -256,7 +256,7 @@ eda_global wxString g_NetListerCommandLine;	// ligne de commande pour l'appel au
 eda_global LayerStruct g_LayerDescr;		/* couleurs des couches  */
 
 eda_global bool g_EditPinByPinIsOn	/* bool: TRUE si edition des pins pin a pin au lieu */
-#ifdef MAIN						/* de l'edition simultan�e des pins de meme coordonn�es */
+#ifdef MAIN						/* de l'edition simultanee des pins de meme coordonnees */
  = FALSE
 #endif
 ;
@@ -264,6 +264,13 @@ eda_global bool g_EditPinByPinIsOn	/* bool: TRUE si edition des pins pin a pin a
 eda_global int g_LibSymbolDefaultLineWidth;	/* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
 eda_global int g_DrawMinimunLineWidth;		/* Minimum line (in EESCHEMA units) width used to draw items on screen; 0 = single pixel line width */
 eda_global int g_PlotPSMinimunLineWidth;	/* Minimum line (in EESCHEMA units) width used to Plot items , postscript format */
+
+eda_global int  g_ItemSelectetColor         // Color to draw selected items
+#ifdef MAIN
+ = BROWN
+#endif
+;
+
 
 /* Config keys */
 #define MINI_DRAW_LINE_WIDTH_KEY wxT("MinimunDrawLineWidth")

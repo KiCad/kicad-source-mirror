@@ -229,12 +229,12 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
     DrawEntry = m_Drawings;
     if( DrawEntry )
     {
-        xmin = ymin = 0x7FFFFFFF; 
+        xmin = ymin = 0x7FFFFFFF;
         xmax = ymax = 0x80000000;
     }
     else
     {
-        xmin = ymin = -50; 
+        xmin = ymin = -50;
         xmax = ymax = 50;    // Min size in 1/1000 inch
     }
 
@@ -337,8 +337,8 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
             LibDrawPolyline* polyline = (LibDrawPolyline*) DrawEntry;
-            pt = polyline->PolyList;
-            for( ii = 0; ii < polyline->n; ii++ )
+            pt = polyline->m_PolyList;
+            for( ii = 0; ii < polyline->m_CornersCount; ii++ )
             {
                 if( xmin > *pt )
                     xmin = *pt;
@@ -353,7 +353,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
             }
         }
             break;
-            
+
         default:
             ;
         }
@@ -380,7 +380,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
 /* a Field is a string linked to a component.
  *  Unlike a pure graphic text, fields can be used in netlist generation
  *  and other things.
- * 
+ *
  *  4 fields have a special meaning:
  *      REFERENCE
  *      VALUE
@@ -739,8 +739,8 @@ LibDrawSegment* LibDrawSegment::GenCopy()
 
 LibDrawPolyline::LibDrawPolyline() : LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
 {
-    n = 0;
-    PolyList = NULL;
+    m_CornersCount = 0;
+    m_PolyList = NULL;
     m_Fill   = NO_FILL;
     m_Width  = 0;
 }
@@ -754,12 +754,12 @@ LibDrawPolyline* LibDrawPolyline::GenCopy()
 
     int size;
 
-    newitem->n = n;
-    size = sizeof(int) * 2 * n;
+    newitem->m_CornersCount = m_CornersCount;
+    size = sizeof(int) * 2 * m_CornersCount;
     if( size )
     {
-        newitem->PolyList = (int*) MyMalloc( size );
-        memcpy( newitem->PolyList, PolyList, size );
+        newitem->m_PolyList = (int*) MyMalloc( size );
+        memcpy( newitem->m_PolyList, m_PolyList, size );
     }
     newitem->m_Pos     = m_Pos;
     newitem->m_Width   = m_Width;
@@ -780,13 +780,13 @@ void LibDrawPolyline::AddPoint( const wxPoint& point )
 {
     int allocsize;
 
-    n++;
-    allocsize = 2 * sizeof(int) * n;
-    if( PolyList == NULL )
-        PolyList = (int*) MyMalloc( allocsize );
+    m_CornersCount++;
+    allocsize = 2 * sizeof(int) * m_CornersCount;
+    if( m_PolyList == NULL )
+        m_PolyList = (int*) MyMalloc( allocsize );
     else
-        PolyList = (int*) realloc( PolyList, allocsize );
+        m_PolyList = (int*) realloc( m_PolyList, allocsize );
 
-    PolyList[(n * 2) - 2] = point.x;
-    PolyList[(n * 2) - 1] = -point.y;
+    m_PolyList[(m_CornersCount * 2) - 2] = point.x;
+    m_PolyList[(m_CornersCount * 2) - 1] = -point.y;
 }

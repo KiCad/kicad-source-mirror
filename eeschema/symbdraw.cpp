@@ -261,9 +261,9 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
         LibDrawPolyline* polyline = new LibDrawPolyline();
 
         CurrentDrawItem = polyline;
-        polyline->n = 2;
+        polyline->m_CornersCount = 2;
         ptpoly = (int*) MyZMalloc( 4 * sizeof(int) );
-        polyline->PolyList = ptpoly;
+        polyline->m_PolyList = ptpoly;
         ptpoly[0] = ptpoly[2] = GetScreen()->m_Curseur.x;
         ptpoly[1] = ptpoly[3] = -( GetScreen()->m_Curseur.y );
         polyline->m_Fill  = FlSymbol_Fill;
@@ -444,8 +444,8 @@ void MoveLibDrawItemAt( LibEDA_BaseStruct* DrawItem, wxPoint newpos )
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
     {
-        int  ii, imax = ( (LibDrawPolyline*) CurrentDrawItem )->n * 2;
-        int* ptpoly = ( (LibDrawPolyline*) CurrentDrawItem )->PolyList;
+        int  ii, imax = ( (LibDrawPolyline*) CurrentDrawItem )->m_CornersCount * 2;
+        int* ptpoly = ( (LibDrawPolyline*) CurrentDrawItem )->m_PolyList;
         int  dx = mx - ptpoly[0];
         int  dy = -my - ptpoly[1];
         for( ii = 0; ii < imax; ii += 2 )
@@ -497,8 +497,8 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
         break;
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
-        InitPosition.x = *( (LibDrawPolyline*) CurrentDrawItem )->PolyList;
-        InitPosition.y = *( ( (LibDrawPolyline*) CurrentDrawItem )->PolyList + 1 );
+        InitPosition.x = *( (LibDrawPolyline*) CurrentDrawItem )->m_PolyList;
+        InitPosition.y = *( ( (LibDrawPolyline*) CurrentDrawItem )->m_PolyList + 1 );
         break;
 
     case COMPONENT_LINE_DRAW_TYPE:
@@ -589,8 +589,8 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         break;
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
-        ptpoly    = ( (LibDrawPolyline*) CurrentDrawItem )->PolyList;
-        ptpoly   += 2 * ( ( (LibDrawPolyline*) CurrentDrawItem )->n - 1 );
+        ptpoly    = ( (LibDrawPolyline*) CurrentDrawItem )->m_PolyList;
+        ptpoly   += 2 * ( ( (LibDrawPolyline*) CurrentDrawItem )->m_CornersCount - 1 );
         ptpoly[0] = mx;
         ptpoly[1] = -my;
         ( (LibDrawPolyline*) CurrentDrawItem )->m_Fill = FlSymbol_Fill;
@@ -827,10 +827,10 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
     DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, 0, 0,
                            CurrentDrawItem, CurrentUnit, g_XorMode );
 
-    while( Poly->n > 2 )    // First segment is kept, only its end point is changed
+    while( Poly->m_CornersCount > 2 )    // First segment is kept, only its end point is changed
     {
-        Poly->n--;
-        ptpoly = Poly->PolyList + ( 2 * (Poly->n - 1) );
+        Poly->m_CornersCount--;
+        ptpoly = Poly->m_PolyList + ( 2 * (Poly->m_CornersCount - 1) );
         if( (ptpoly[0] != GetScreen()->m_Curseur.x)
                    || (ptpoly[1] != -GetScreen()->m_Curseur.y) )
         {
@@ -840,8 +840,8 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
         }
     }
 
-    int allocsize = 2 * sizeof(int) * Poly->n;
-    Poly->PolyList = (int*) realloc( Poly->PolyList, allocsize );
+    int allocsize = 2 * sizeof(int) * Poly->m_CornersCount;
+    Poly->m_PolyList = (int*) realloc( Poly->m_PolyList, allocsize );
 
     DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, 0, 0,
                            CurrentDrawItem, CurrentUnit, g_XorMode );

@@ -14,9 +14,11 @@ set(EESCHEMA_SRCS
     bus-wire-junction.cpp
     class_drawsheet.cpp
     class_hierarchical_PIN_sheet.cpp
+    class_pin.cpp
     class_schematic_items.cpp
     class_screen.cpp
     class_text-label.cpp
+    classes_body_items.cpp
     cleanup.cpp
     component_class.cpp
     controle.cpp

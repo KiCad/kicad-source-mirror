@@ -139,8 +139,8 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            int  ii, imax = ( (LibDrawPolyline*) item )->n * 2;
-            int* ptpoly = ( (LibDrawPolyline*) item )->PolyList;
+            int  ii, imax = ( (LibDrawPolyline*) item )->m_CornersCount * 2;
+            int* ptpoly = ( (LibDrawPolyline*) item )->m_PolyList;
             for( ii = 0; ii < imax; ii += 2 )
             {
                 pos.x = ptpoly[ii]; pos.y = -ptpoly[ii + 1];
@@ -577,8 +577,8 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            int ii, imax = ( (LibDrawPolyline*) item )->n * 2;
-            int* ptpoly = ( (LibDrawPolyline*) item )->PolyList;
+            int ii, imax = ( (LibDrawPolyline*) item )->m_CornersCount * 2;
+            int* ptpoly = ( (LibDrawPolyline*) item )->m_PolyList;
             for( ii = 0; ii < imax; ii += 2 )
             {
                 ptpoly[ii]     += offset.x;
@@ -689,8 +689,8 @@ void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            int ii, imax = ( (LibDrawPolyline*) item )->n * 2;
-            int* ptpoly = ( (LibDrawPolyline*) item )->PolyList;
+            int ii, imax = ( (LibDrawPolyline*) item )->m_CornersCount * 2;
+            int* ptpoly = ( (LibDrawPolyline*) item )->m_PolyList;
             for( ii = 0; ii < imax; ii += 2 )
             {
                 SETMIRROR( ptpoly[ii] );

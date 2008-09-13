@@ -326,15 +326,15 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         case COMPONENT_POLYLINE_DRAW_TYPE:
             {
                 LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
-                Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->n );
-                for( ii = 0; ii < polyline->n; ii++ )
+                Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->m_CornersCount );
+                for( ii = 0; ii < polyline->m_CornersCount; ii++ )
                 {
                     Poly[ii * 2] = PartX +
-                                   TransMat[0][0] * polyline->PolyList[ii * 2] +
-                                   TransMat[0][1] * polyline->PolyList[ii * 2 + 1];
+                                   TransMat[0][0] * polyline->m_PolyList[ii * 2] +
+                                   TransMat[0][1] * polyline->m_PolyList[ii * 2 + 1];
                     Poly[ii * 2 + 1] = PartY +
-                                       TransMat[1][0] * polyline->PolyList[ii * 2] +
-                                       TransMat[1][1] * polyline->PolyList[ii * 2 + 1];
+                                       TransMat[1][0] * polyline->m_PolyList[ii * 2] +
+                                       TransMat[1][1] * polyline->m_PolyList[ii * 2 + 1];
                 }
 
                 if ( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )

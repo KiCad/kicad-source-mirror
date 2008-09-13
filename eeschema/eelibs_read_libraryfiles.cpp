@@ -66,8 +66,8 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
         return NULL;
     }
 
-    currentLibraryName = FullLibName;    
-    
+    currentLibraryName = FullLibName;
+
     NewLib = new LibraryStruct( LIBRARY_TYPE_EESCHEMA, LibName, FullLibName );
 
     Entries = LoadLibraryAux( frame, NewLib, f, &NumOfParts );
@@ -480,7 +480,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
         /* End line or block analysis: test for an error */
         if( !Res )
         {           /* Something went wrong there. */
-            Msg.Printf( wxT( " Error at line %d of library \n\"%s\",\nlibrary not loaded" ), 
+            Msg.Printf( wxT( " Error at line %d of library \n\"%s\",\nlibrary not loaded" ),
                        *LineNum, currentLibraryName.GetData() );
             DisplayError( frame, Msg );
 			SAFE_DELETE( LibEntry );
@@ -734,24 +734,24 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             New = Polyl;
 
             if( sscanf( &Line[2], "%d %d %d %d",
-                        &Polyl->n, &Unit, &Convert,
+                        &Polyl->m_CornersCount, &Unit, &Convert,
                         &Polyl->m_Width ) == 4
-                && Polyl->n > 0 )
+                && Polyl->m_CornersCount > 0 )
             {
                 Polyl->m_Unit = Unit; Polyl->m_Convert = Convert;
 
-                Polyl->PolyList = (int*)
-                                  MyZMalloc( sizeof(int) * Polyl->n * 2 );
+                Polyl->m_PolyList = (int*)
+                                  MyZMalloc( sizeof(int) * Polyl->m_CornersCount * 2 );
 
                 p = strtok( &Line[2], " \t\n" );
                 p = strtok( NULL, " \t\n" );
                 p = strtok( NULL, " \t\n" );
                 p = strtok( NULL, " \t\n" );
 
-                for( i = 0; i < Polyl->n * 2 && !Error; i++ )
+                for( i = 0; i < Polyl->m_CornersCount * 2 && !Error; i++ )
                 {
                     p     = strtok( NULL, " \t\n" );
-                    Error = sscanf( p, "%d", &Polyl->PolyList[i] ) != 1;
+                    Error = sscanf( p, "%d", &Polyl->m_PolyList[i] ) != 1;
                 }
 
                 Polyl->m_Fill = NO_FILL;

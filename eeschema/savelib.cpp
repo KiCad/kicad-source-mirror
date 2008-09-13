@@ -156,11 +156,11 @@ bool LibDrawPolyline::WriteDescr( FILE* ExportFile )
     int ii, * ptpoly;
 
     fprintf( ExportFile, "P %d %d %d %d",
-             n,
+             m_CornersCount,
              m_Unit, m_Convert,
              m_Width );
-    ptpoly = PolyList;
-    for( ii = n; ii > 0; ii-- )
+    ptpoly = m_PolyList;
+    for( ii = m_CornersCount; ii > 0; ii-- )
     {
         fprintf( ExportFile, "  %d %d", *ptpoly, *(ptpoly + 1) );
         ptpoly += 2;

@@ -22,9 +22,9 @@ DEBUG = 0
 #Define the wxWidget path (if not found in environment variables):
 ifndef WXWIN
 ifeq ($(DEBUG), 1)
-WXWIN=f:/wxMSW-2.8.8-debug
+WXWIN=f:/wxMSW-2.8.9-debug
 else
-WXWIN=f:/wxMSW-2.8.8
+WXWIN=f:/wxMSW-2.8.9-rc1
 endif
 endif
 LIBVERSION = 2.8

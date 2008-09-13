@@ -20,7 +20,9 @@ OBJECTS = eeschema.o\
 		cross-probing.o\
 		setpage.o\
 		class_schematic_items.o\
+        classes_body_items.o\
 		class_drawsheet.o\
+		class_pin.o\
         class_hierarchical_PIN_sheet.o\
 		class_text-label.o\
 		component_class.o\

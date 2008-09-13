@@ -36,7 +36,7 @@ void InstallCmpeditFrame(WinEDA_SchematicFrame * parent, wxPoint & pos,
 
 
     /**************/
-    /* EELIBS2.CPP */
+    /* EELIBS_.CPP */
     /**************/
 
 /* Functions common to all EELibs?.c modules: */
@@ -68,6 +68,14 @@ bool MapAngles(int *Angle1, int *Angle2, int TransMat[2][2]);
 EDA_LibComponentStruct * Read_Component_Definition(WinEDA_DrawFrame * frame, char * Line,
         FILE *f, int *LineNum);
 /* Routine to Read a DEF/ENDDEF part entry from given open file. */
+
+/** Function TransformCoordinate
+ * Calculate the wew coordinate from the old one, according to the transform matrix.
+ * @param aTransformMatrix = rotation, mirror .. matrix
+ * @param aPosition = the position to transform
+ * @return the new coordinate
+ */
+wxPoint     TransformCoordinate( int aTransformMatrix[2][2], wxPoint & aPosition );
 
 LibraryStruct *FindLibrary(const wxString & Name);
 int LoadDocLib(WinEDA_DrawFrame * frame, const wxString & FullDocLibName, const wxString & Libname);

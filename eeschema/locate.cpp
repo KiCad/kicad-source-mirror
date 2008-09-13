@@ -880,8 +880,8 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
             LibDrawPolyline* polyline = (LibDrawPolyline*) DrawItem;
             if( (masque & LOCATE_COMPONENT_POLYLINE_DRAW_TYPE) == 0 )
                 break;
-            ptpoly = polyline->PolyList;
-            for( ii = polyline->n - 1; ii > 0; ii--, ptpoly += 2 )
+            ptpoly = polyline->m_PolyList;
+            for( ii = polyline->m_CornersCount - 1; ii > 0; ii--, ptpoly += 2 )
             {
                 if( IsPointOnSegment( px, py,
                        ptpoly[0], -ptpoly[1], ptpoly[2], -ptpoly[3], seuil ) )

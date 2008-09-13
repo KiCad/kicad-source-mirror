@@ -398,11 +398,11 @@ static bool CompareSymbols( LibEDA_BaseStruct* DEntryRef,
         #undef CMPSTRUCT
         #define REFSTRUCT ( (LibDrawPolyline*) DEntryRef )
         #define CMPSTRUCT ( (LibDrawPolyline*) DEntryCompare )
-        if( REFSTRUCT->n != CMPSTRUCT->n )
+        if( REFSTRUCT->m_CornersCount != CMPSTRUCT->m_CornersCount )
             return FALSE;
-        ptref  = REFSTRUCT->PolyList;
-        ptcomp = CMPSTRUCT->PolyList;
-        for( ii = 2 * REFSTRUCT->n; ii > 0; ii-- )
+        ptref  = REFSTRUCT->m_PolyList;
+        ptcomp = CMPSTRUCT->m_PolyList;
+        for( ii = 2 * REFSTRUCT->m_CornersCount; ii > 0; ii-- )
         {
             if( *ptref != *ptcomp )
                 return FALSE;
@@ -495,14 +495,14 @@ void WinEDA_LibeditFrame::PlaceAncre()
         case COMPONENT_POLYLINE_DRAW_TYPE:
             #undef STRUCT
             #define STRUCT ( (LibDrawPolyline*) DrawEntry )
-            ptsegm = STRUCT->PolyList;
-            for( ii = STRUCT->n; ii > 0; ii-- )
+            ptsegm = STRUCT->m_PolyList;
+            for( ii = STRUCT->m_CornersCount; ii > 0; ii-- )
             {
                 *ptsegm += dx; ptsegm++;
                 *ptsegm += dy; ptsegm++;
             }
             break;
-            
+
         default:
             ;
         }
