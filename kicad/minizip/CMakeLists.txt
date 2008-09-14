@@ -25,5 +25,5 @@ add_executable(minizip ${MINIZIP_SRCS})
 target_link_libraries(minizip ${ZLIB_LIBRARIES})
 
 install(TARGETS minizip
-        RUNTIME DESTINATION ${KICAD_BIN}
+        DESTINATION ${KICAD_BIN}
         COMPONENT binary)

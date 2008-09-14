@@ -81,6 +81,5 @@ add_executable(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SR
 target_link_libraries(gerbview 3d-viewer common polygon bitmaps kbool ${wxWidgets_LIBRARIES})
 
 install(TARGETS gerbview
-        RUNTIME DESTINATION ${KICAD_BIN}
-        BUNDLE DESTINATION ${KICAD_BIN}
+        DESTINATION ${KICAD_BIN}
         COMPONENT binary)

@@ -5,5 +5,5 @@ endif(UNIX)
 add_executable(netlist_form_pads-pcb netlist_form_pads-pcb.cpp)
 
 install(TARGETS netlist_form_pads-pcb
-        RUNTIME DESTINATION ${KICAD_PLUGINS}
+        DESTINATION ${KICAD_PLUGINS}
         COMPONENT binary)

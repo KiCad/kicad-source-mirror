@@ -171,8 +171,7 @@ add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${
 target_link_libraries(pcbnew 3d-viewer common polygon bitmaps kbool ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
 install(TARGETS pcbnew
-        RUNTIME DESTINATION ${KICAD_BIN}
-        BUNDLE DESTINATION ${KICAD_BIN}
+        DESTINATION ${KICAD_BIN}
         COMPONENT binary)
 
 
