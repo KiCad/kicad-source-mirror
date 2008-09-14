@@ -15,6 +15,20 @@
 //#define DRAW_ARC_WITH_ANGLE		// Used to draw arcs
 
 
+/* Basic class (abstract) for components bodies items */
+LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
+    EDA_BaseStruct( struct_type )
+{
+    m_Unit    = 0;  /* Unit identification (for multi part per package)
+                     *  0 if the item is common to all units */
+    m_Convert = 0;  /* Shape identification (for parts which have a convert shape)
+                     *  0 if the item is common to all shapes */
+    m_Width   = 0;       /* Default value to draw lines or arc ... */
+    m_Fill    = NO_FILL; /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
+                           * has meaning only for some items */
+}
+
+
 /** Function Draw (virtual)
  * Draw A body item
  * @param aPanel = DrawPanel to use (can be null) mainly used for clipping purposes
@@ -70,9 +84,13 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
     else
 #ifdef DRAW_ARC_WITH_ANGLE
 
+
+
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
             m_Rayon, LineWidth, color );
 #else
+
+
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
             posc.x, posc.y, LineWidth, color );

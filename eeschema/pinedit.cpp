@@ -88,7 +88,7 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
             m_Parent->DrawPanel->ManageCurseur( m_Parent->DrawPanel, &dc, FALSE );
         else
             DrawLibraryDrawStruct( m_Parent->DrawPanel, &dc, CurrentLibEntry,
-                0, 0, CurrentPin, CurrentUnit, g_XorMode );
+                wxPoint(0, 0), CurrentPin, g_XorMode );
 
         SetPinName( m_PinNameCtrl->GetValue(), LastPinNameSize );
         msg = m_PinNumCtrl->GetValue(); if( msg.IsEmpty() )
@@ -103,7 +103,7 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
             m_Parent->DrawPanel->ManageCurseur( m_Parent->DrawPanel, &dc, FALSE );
         else
             DrawLibraryDrawStruct( m_Parent->DrawPanel, &dc, CurrentLibEntry,
-                0, 0, CurrentPin, CurrentUnit, g_XorMode );
+                wxPoint(0, 0), CurrentPin, g_XorMode );
     }
 
     if( CurrentDrawItem )
@@ -250,7 +250,7 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
     }
 
     DrawPanel->CursorOff( DC );
-    DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, 0, 0, CurrentPin, CurrentUnit,
+    DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0), CurrentPin,
         GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );
 
@@ -344,14 +344,14 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( erase || (CurrentPin->m_Flags & IS_NEW) )
     {
         CurrentPin->m_Pos = PinPreviousPos;
-        DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, 0, 0,
-            CurrentPin, CurrentUnit, g_XorMode );
+        DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, wxPoint(0, 0),
+            CurrentPin, g_XorMode );
     }
 
     /* Redraw pin in new position */
     CurrentPin->m_Pos.x = panel->GetScreen()->m_Curseur.x;
     CurrentPin->m_Pos.y = -panel->GetScreen()->m_Curseur.y;
-    DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, 0, 0, CurrentPin, CurrentUnit, g_XorMode );
+    DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, wxPoint(0, 0), CurrentPin, g_XorMode );
 
     PinPreviousPos = CurrentPin->m_Pos;
 
@@ -608,7 +608,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 
     if( DC )
         DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry,
-            0, 0, CurrentPin, CurrentUnit, g_XorMode );
+            wxPoint(0, 0), CurrentPin, g_XorMode );
 
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     InstallPineditFrame( this, DC, wxPoint( -1, -1 ) );
@@ -872,7 +872,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC,
         if( selected && (Pin->m_Selected & IS_SELECTED) == 0 )
             continue;
 
-        DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, 0, 0, Pin, CurrentUnit, g_XorMode );
+        DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0), Pin, g_XorMode );
 
         switch( id )
         {
@@ -889,8 +889,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC,
             break;
         }
 
-        DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, 0, 0, Pin, CurrentUnit,
-            GR_DEFAULT_DRAWMODE );
+        DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0), Pin, GR_DEFAULT_DRAWMODE );
     }
 }
 

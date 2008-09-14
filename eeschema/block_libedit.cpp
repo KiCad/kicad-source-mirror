@@ -462,8 +462,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
                 if( CurrentConvert && item->m_Convert && (item->m_Convert != CurrentConvert) )
                     continue;
                 DrawLibraryDrawStruct( panel, DC, CurrentLibEntry,
-                                       PtBlock->m_MoveVector.x, PtBlock->m_MoveVector.y,
-                                       item, CurrentUnit, g_XorMode );
+                                       PtBlock->m_MoveVector, item, g_XorMode );
             }
         }
     }
@@ -491,8 +490,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
             if( CurrentConvert && item->m_Convert && (item->m_Convert != CurrentConvert) )
                 continue;
             DrawLibraryDrawStruct( panel, DC, CurrentLibEntry,
-                                   PtBlock->m_MoveVector.x, PtBlock->m_MoveVector.y,
-                                   item, CurrentUnit, g_XorMode );
+                                   PtBlock->m_MoveVector,
+                                   item, g_XorMode );
         }
     }
 }

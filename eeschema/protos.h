@@ -54,10 +54,10 @@ void DrawLibEntry(WinEDA_DrawPanel * panel, wxDC * DC,
                             int Multi, int convert,
                             int DrawMode, int Color = -1);
 
-void DrawLibraryDrawStruct(WinEDA_DrawPanel * panel, wxDC * DC,
-                            EDA_LibComponentStruct *LibEntry, int PartX, int PartY,
-                          LibEDA_BaseStruct *DrawItem, int Multi,
-                          int DrawMode, int Color = -1);
+void DrawLibraryDrawStruct(WinEDA_DrawPanel * aPanel, wxDC * aDC,
+                            EDA_LibComponentStruct *aLibEntry, wxPoint aPosition,
+                          LibEDA_BaseStruct *aDrawItem,
+                          int aDrawMode, int aColor = -1);
 
 bool MapAngles(int *Angle1, int *Angle2, int TransMat[2][2]);
 

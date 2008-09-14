@@ -211,7 +211,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
             Field->m_HJustify, Field->m_VJustify, LineWidth );
     }
 
-    // Trac� de l'ancre
+    // Trace de l'ancre
     int len = 3 * panel->GetZoom();
     GRLine( &panel->m_ClipBox, DC, posX, posY - len, posX, posY + len, 0, color );
     GRLine( &panel->m_ClipBox, DC, posX - len, posY, posX + len, posY, 0, color );
@@ -435,10 +435,8 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                      int Color, bool DrawPinText )
 {
     wxPoint            pos1, pos2;
-    LibEDA_BaseStruct* DEntry = NULL;
-    bool               force_nofill;
-    int                SetHightColor;
-    int                LineWidth;
+    LibEDA_BaseStruct* DEntry;
+    bool force_nofill;
 
     if( Entry->m_Drawings == NULL )
         return;
@@ -446,7 +444,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
 
     for( DEntry = Entry->m_Drawings; DEntry != NULL; DEntry = DEntry->Next() )
     {
-        /* Elimination des elements non relatifs a l'unite */
+        /* Do not draw items not attached to the current part */
         if( Multi && DEntry->m_Unit && (DEntry->m_Unit != Multi) )
             continue;
 
@@ -454,72 +452,33 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
             continue;
 
         if( DEntry->m_Flags & IS_MOVED )
-            continue; // Element en deplacement non trace
+            continue; // Do do draw here an item while moving (the cursor handler does that)
 
-        SetHightColor = (DEntry->m_Selected & IS_SELECTED) ? HIGHT_LIGHT_FLAG : 0;
-        LineWidth = MAX( DEntry->m_Width, g_DrawMinimunLineWidth );
+        force_nofill = false;
 
         switch( DEntry->Type() )
         {
-        case COMPONENT_ARC_DRAW_TYPE:
+        case COMPONENT_PIN_DRAW_TYPE:
         {
-            LibDrawArc* Arc = (LibDrawArc*) DEntry;
-            force_nofill = false;
-            if( g_IsPrinting && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-                force_nofill = true;
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, (void*)force_nofill, TransMat );
-            break;
-        }
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-        {
-            LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
-            force_nofill = false;
-            if( g_IsPrinting && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-                force_nofill = true;
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, (void*)force_nofill, TransMat );
-        }
-            break;
-
-        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, NULL, TransMat );
-            break;
-
-        case COMPONENT_RECT_DRAW_TYPE:
-        {
-            LibDrawSquare* Square = (LibDrawSquare*) DEntry;
-            force_nofill = false;
-            if( g_IsPrinting && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-                force_nofill = true;
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, (void*)force_nofill, TransMat );
-        }
-            break;
-
-        case COMPONENT_PIN_DRAW_TYPE:     /* Trace des Pins */
-        {
-            DrawPinPrms prms(Entry, DrawPinText);
+            DrawPinPrms prms( Entry, DrawPinText );
             DEntry->Draw( panel, DC, Pos, Color, DrawMode, &prms, TransMat );
         }
             break;
 
+        case COMPONENT_ARC_DRAW_TYPE:
+        case COMPONENT_CIRCLE_DRAW_TYPE:
+        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+        case COMPONENT_RECT_DRAW_TYPE:
         case COMPONENT_POLYLINE_DRAW_TYPE:
-        {
-            LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
-            force_nofill = false;
-            if( g_IsPrinting && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-                force_nofill = true;
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, (void*)force_nofill, TransMat );
-        }
-            break;
-
         default:
-            wxBell();
+            if( g_IsPrinting && DEntry->m_Fill == FILLED_WITH_BG_BODYCOLOR
+               && GetGRForceBlackPenState() )
+                force_nofill = true;
+            DEntry->Draw( panel, DC, Pos, Color, DrawMode, (void*) force_nofill, TransMat );
             break;
         }
-
-        /* Fin Switch */
     }
 
-    /* Fin Boucle de dessin */
     if( g_DebugLevel > 4 ) /* Draw the component boundary box */
     {
         EDA_Rect BoundaryBox;
@@ -546,7 +505,6 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     }
 }
-
 
 
 /*****************************************************************************
@@ -638,164 +596,42 @@ void DrawingLibInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
 /* DrawMode  = GrXOR, GrOR ..								*/
 /************************************************************/
 /* Utilise en LibEdit et Lib Browse */
-void DrawLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
-                            EDA_LibComponentStruct* LibEntry,
-                            int PartX, int PartY,
-                            LibEDA_BaseStruct* DrawItem, int Multi,
-                            int DrawMode, int Color )
+void DrawLibraryDrawStruct( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                            EDA_LibComponentStruct* aLibEntry,
+                            wxPoint aPosition,
+                            LibEDA_BaseStruct* aDrawItem,
+                            int aDrawMode, int aColor )
 {
-    int x1, y1, x2, y2, t1, t2, orient;
-    int CharColor;
-    int TransMat[2][2];
-    int fill_option;
-    wxPoint position(PartX, PartY);
+    int  TransMat[2][2];
+    bool no_fill;
 
-#undef GETCOLOR
-#define GETCOLOR( l ) Color < 0 ? ReturnLayerColor( l ) : Color;
-
-    Multi = 0;  /* unused */
-    /* Trace de la structure */
-    CharColor = GETCOLOR( LAYER_DEVICE );
-    GRSetDrawMode( DC, DrawMode );
+    GRSetDrawMode( aDC, aDrawMode );
 
     TransMat[0][0] = 1;
     TransMat[0][1] = TransMat[1][0] = 0;
     TransMat[1][1] = -1;
 
-    int LineWidth = MAX( DrawItem->m_Width, g_DrawMinimunLineWidth );
+    no_fill = false;
 
-    switch( DrawItem->Type() )
+    switch( aDrawItem->Type() )
     {
-    case COMPONENT_ARC_DRAW_TYPE:
-    {
-        int         xc, yc, x2, y2;
-        LibDrawArc* Arc = (LibDrawArc*) DrawItem;
-        t1 = Arc->t1; t2 = Arc->t2;
-        bool        swap = MapAngles( &t1, &t2, TransMat );
-        xc = PartX + Arc->m_Pos.x;
-        yc = PartY - Arc->m_Pos.y;
-        x2 = PartX + Arc->m_ArcStart.x;
-        y2 = PartY - Arc->m_ArcStart.y;
-        x1 = PartX + Arc->m_ArcEnd.x;
-        y1 = PartY - Arc->m_ArcEnd.y;
-
-        if( swap )
-        {
-            EXCHG( x1, x2 ); EXCHG( y1, y2 )
-        }
-        fill_option = Arc->m_Fill;
-        if( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-            fill_option = NO_FILL;
-        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
-            GRFilledArc( &panel->m_ClipBox, DC, xc, yc, t1, t2,
-                Arc->m_Rayon, CharColor,
-                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        else if( fill_option == FILLED_SHAPE )
-            GRFilledArc( &panel->m_ClipBox, DC, xc, yc, t1, t2,
-                Arc->m_Rayon, LineWidth, CharColor, CharColor );
-#ifdef DRAW_ARC_WITH_ANGLE
-        else
-            GRArc( &panel->m_ClipBox, DC, xc, yc, t1, t2,
-                Arc->m_Rayon, CharColor );
-#else
-        else
-            GRArc1( &panel->m_ClipBox, DC, x1, y1, x2, y2,
-                xc, yc, LineWidth, CharColor );
-#endif
-    }
-        break;
-
-    case COMPONENT_CIRCLE_DRAW_TYPE:
-    {
-        LibDrawCircle* Circle = (LibDrawCircle*) DrawItem;
-        x1 = PartX + Circle->m_Pos.x;
-        y1 = PartY - Circle->m_Pos.y;
-        fill_option = Circle->m_Fill;
-        if( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-            fill_option = NO_FILL;
-        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
-            GRFilledCircle( &panel->m_ClipBox, DC, x1, y1,
-                Circle->m_Rayon, LineWidth, CharColor,
-                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        else if( fill_option == FILLED_SHAPE )
-            GRFilledCircle( &panel->m_ClipBox, DC, x1, y1,
-                Circle->m_Rayon, 0, CharColor, CharColor );
-        else
-            GRCircle( &panel->m_ClipBox, DC, x1, y1,
-                Circle->m_Rayon, LineWidth, CharColor );
-    }
-        break;
-
-    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-    {
-        LibDrawText* Text = (LibDrawText*) DrawItem;
-        x1 = PartX + Text->m_Pos.x;
-        y1 = PartY - Text->m_Pos.y;
-        DrawGraphicText( panel, DC, wxPoint( x1, y1 ), CharColor, Text->m_Text,
-            Text->m_Horiz,
-            Text->m_Size,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
-    }
-        break;
-
-    case COMPONENT_RECT_DRAW_TYPE:
-    {
-        LibDrawSquare* Square = (LibDrawSquare*) DrawItem;
-        x1 = PartX + Square->m_Pos.x;
-        y1 = PartY - Square->m_Pos.y;
-        x2 = PartX + Square->m_End.x;
-        y2 = PartY - Square->m_End.y;
-        fill_option = Square->m_Fill;
-        if( g_IsPrinting && fill_option == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-            fill_option = NO_FILL;
-        if( fill_option == FILLED_WITH_BG_BODYCOLOR )
-            GRFilledRect( &panel->m_ClipBox, DC, x1, y1, x2, y2,
-                CharColor, LineWidth,
-                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        else if( fill_option == FILLED_SHAPE )
-            GRFilledRect( &panel->m_ClipBox, DC, x1, y1, x2, y2,
-                CharColor, CharColor );
-        else
-            GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, LineWidth,
-                CharColor );
-    }
-        break;
-
     case COMPONENT_PIN_DRAW_TYPE:     /* Trace des Pins */
     {
-        LibDrawPin* Pin = (LibDrawPin*) DrawItem;
-        x2 = PartX + Pin->m_Pos.x;
-        y2 = PartY - Pin->m_Pos.y;
-        /* Compute the real pin orientation, i.e. pin orient + component orient */
-        orient = Pin->ReturnPinDrawOrient( TransMat );
-
-        /* Dessin de la pin et du symbole special associe */
-        if( Pin->m_Attributs & PINNOTDRAW )
-            CharColor = DARKGRAY;
-        else
-            CharColor = -1;
-
-        Pin->DrawPinSymbol( panel, DC, wxPoint( x2, y2 ), orient, DrawMode );
-        wxPoint pinpos( x2, y2 );
-
-        Pin->DrawPinTexts( panel, DC, pinpos, orient,
-            LibEntry->m_TextInside,
-            LibEntry->m_DrawPinNum, LibEntry->m_DrawPinName,
-            CharColor, DrawMode );
+        DrawPinPrms prms( aLibEntry, true );
+        aDrawItem->Draw( aPanel, aDC, aPosition, aColor, aDrawMode, &prms, TransMat );
     }
         break;
 
+    case COMPONENT_ARC_DRAW_TYPE:
+    case COMPONENT_CIRCLE_DRAW_TYPE:
+    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+    case COMPONENT_RECT_DRAW_TYPE:
     case COMPONENT_POLYLINE_DRAW_TYPE:
-    {
-        LibDrawPolyline* polyline = (LibDrawPolyline*) DrawItem;
-        fill_option = false;
-        if( g_IsPrinting && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR && GetGRForceBlackPenState() )
-            fill_option = true;
-        DrawItem->Draw( panel, DC, position, Color,DrawMode, (void *) fill_option, TransMat );
-        break;
-    }
-
     default:
-        ;
+        if( g_IsPrinting && aDrawItem->m_Fill == FILLED_WITH_BG_BODYCOLOR
+           && GetGRForceBlackPenState() )
+            no_fill = true;
+        aDrawItem->Draw( aPanel, aDC, aPosition, aColor, aDrawMode, (void*) no_fill, TransMat );
+        break;
     }
 }

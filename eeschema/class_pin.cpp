@@ -665,3 +665,166 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
         }
     }
 }
+
+
+
+/***************************************************************/
+LibDrawPin::LibDrawPin() : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
+/***************************************************************/
+{
+    m_PinLen      = 300;                /* default Pin len */
+    m_Orient      = PIN_RIGHT;          /* Pin oprient: Up, Down, Left, Right */
+    m_PinShape    = NONE;               /* Bit a bit: Pin shape (voir enum prec) */
+    m_PinType     = PIN_UNSPECIFIED;    /* electrical type of pin */
+    m_Attributs   = 0;                  /* bit 0 != 0: pin invisible */
+    m_PinNum      = 0;                  /*pin number ( i.e. 4 codes Ascii ) */
+    m_PinNumSize  = 50;
+    m_PinNameSize = 50;                 /* Default size for pin name and num */
+    m_Width = 0;
+
+//	m_PinNumWidth = m_PinNameWidth = 0;	// Unused
+}
+
+
+/******************************************/
+wxPoint LibDrawPin::ReturnPinEndPoint()
+/******************************************/
+
+/* return the pin end position, for a component in normal orient
+ */
+{
+    wxPoint pos = m_Pos;
+
+    switch( m_Orient )
+    {
+    case PIN_UP:
+        pos.y += m_PinLen; break;
+
+    case PIN_DOWN:
+        pos.y -= m_PinLen; break;
+
+    case PIN_LEFT:
+        pos.x -= m_PinLen; break;
+
+    case PIN_RIGHT:
+        pos.x += m_PinLen; break;
+    }
+
+    return pos;
+}
+
+
+/********************************************************/
+int LibDrawPin::ReturnPinDrawOrient( int TransMat[2][2] )
+/********************************************************/
+
+/* Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
+ *  according to its orientation,
+ *  AND the matrix transform (rot, mirror) TransMat
+ */
+{
+    int orient;
+    int x1 = 0, y1 = 0;
+    int t1, t2;
+
+    switch( m_Orient )
+    {
+    case PIN_UP:
+        y1 = 1; break;
+
+    case PIN_DOWN:
+        y1 = -1; break;
+
+    case PIN_LEFT:
+        x1 = -1; break;
+
+    case PIN_RIGHT:
+        x1 = 1; break;
+    }
+
+    t1     = TransMat[0][0] * x1 + TransMat[0][1] * y1;
+    t2     = TransMat[1][0] * x1 + TransMat[1][1] * y1;
+    orient = PIN_UP;
+    if( t1 == 0 )
+    {
+        if( t2 > 0 )
+            orient = PIN_DOWN;
+    }
+    else
+    {
+        orient = PIN_RIGHT;
+        if( t1 < 0 )
+            orient = PIN_LEFT;
+    }
+
+    return orient;
+}
+
+
+/****************************************************/
+void LibDrawPin::ReturnPinStringNum( wxString& buffer )
+/****************************************************/
+
+/* fill the buffer with pin num as a wxString
+ *  Pin num is coded as a long
+ *  Used to print/draw the pin num
+ */
+{
+    char ascii_buf[5];
+
+    strncpy( ascii_buf, (char*) &m_PinNum, 4 );
+    ascii_buf[4] = 0;
+
+    buffer = CONV_FROM_UTF8( ascii_buf );
+}
+
+
+/****************************************************/
+void LibDrawPin::SetPinNumFromString( wxString& buffer )
+/****************************************************/
+
+/* fill the buffer with pin num as a wxString
+ *  Pin num is coded as a long
+ *  Used to print/draw the pin num
+ */
+{
+    char     ascii_buf[4];
+    unsigned ii, len = buffer.Len();
+
+    ascii_buf[0] = ascii_buf[1] = ascii_buf[2] = ascii_buf[3] = 0;
+    if( len > 4 )
+        len = 4;
+    for( ii = 0; ii < len; ii++ )
+    {
+        ascii_buf[ii] = buffer.GetChar( ii ) & 0xFF;
+    }
+
+    strncpy( (char*) &m_PinNum, ascii_buf, 4 );
+}
+
+
+/*************************************/
+LibDrawPin* LibDrawPin::GenCopy()
+/*************************************/
+{
+    LibDrawPin* newpin = new LibDrawPin();
+
+    newpin->m_Pos         = m_Pos;
+    newpin->m_PinLen      = m_PinLen;
+    newpin->m_Orient      = m_Orient;
+    newpin->m_PinShape    = m_PinShape;
+    newpin->m_PinType     = m_PinType;
+    newpin->m_Attributs   = m_Attributs;
+    newpin->m_PinNum      = m_PinNum;
+    newpin->m_PinNumSize  = m_PinNumSize;
+    newpin->m_PinNameSize = m_PinNameSize;
+    newpin->m_Unit        = m_Unit;
+    newpin->m_Convert     = m_Convert;
+    newpin->m_Flags       = m_Flags;
+    newpin->m_Width       = m_Width;
+
+    newpin->m_PinName = m_PinName;
+
+    return newpin;
+}
+

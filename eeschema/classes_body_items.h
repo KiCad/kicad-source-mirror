@@ -132,6 +132,7 @@ public:
                              *      0 if the item is common to all shapes */
     wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
     int     m_Width;        /* Tickness */
+    FILL_T  m_Fill;         /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR. has meaning only for some items */
 
 public:
     LibEDA_BaseStruct* Next()
@@ -154,7 +155,7 @@ public:
       *          used for some items to force to force no fill mode
       *         ( has meaning only for items what can be filled ). used in printing or moving objects mode
       *         or to pass refernce to the lib component for pins
-      * @param aTransformMatrix = Transform Matrix
+      * @param aTransformMatrix = Transform Matrix (rotaion, mirror ..)
      */
     virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                        int aDrawMode, void * aData, int aTransformMatrix[2][2] ) = 0;
@@ -223,7 +224,6 @@ class LibDrawArc      : public LibEDA_BaseStruct
 {
 public:
     int     m_Rayon;
-    FILL_T  m_Fill;                 // NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
     int     t1, t2;                 /* position des 2 extremites de l'arc en 0.1 degres */
     wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
 
@@ -249,7 +249,6 @@ class LibDrawCircle   : public LibEDA_BaseStruct
 {
 public:
     int    m_Rayon;
-    FILL_T m_Fill;
 
 public:
     LibDrawCircle();
@@ -304,7 +303,6 @@ class LibDrawSquare  : public LibEDA_BaseStruct
 {
 public:
     wxPoint m_End;
-    FILL_T  m_Fill;
 
 public:
     LibDrawSquare();
@@ -352,7 +350,6 @@ class LibDrawPolyline : public LibEDA_BaseStruct
 public:
     int    m_CornersCount;
     int*   m_PolyList;
-    FILL_T m_Fill;
 
 public:
     LibDrawPolyline();
@@ -392,7 +389,6 @@ class LibDrawField :  public LibEDA_BaseStruct
 public:
     int      m_FieldId;         // 0 a 11
                                 // 0 = Name; 1 = Valeur; 2 .. 11 other fields
-    wxPoint  m_Pos;
     wxSize   m_Size;
     int      m_Orient;                  /* Orientation */
     int      m_Attributs;               /* Attributes (Non visible ...) */

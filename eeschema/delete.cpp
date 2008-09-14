@@ -540,7 +540,7 @@ void DeleteOneLibraryDrawStruct( WinEDA_DrawPanel* panel, wxDC* DC,
 
     /* Effacement du graphique  */
     if( Affiche && DC )
-        DrawLibraryDrawStruct( panel, DC, LibEntry, 0, 0, DrawItem, CurrentUnit, g_XorMode );
+        DrawLibraryDrawStruct( panel, DC, LibEntry, wxPoint(0, 0), DrawItem, g_XorMode );
 
     /* Effacement de la structure en memoire */
     if( LibEntry ) /* Recherche du predecesseur */

@@ -291,8 +291,8 @@ int DrawMode = g_XorMode;
 
 	/* Effacement ancien texte */
 	if( ((LibDrawText*)DrawItem)->m_Text && DC)
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, 0 , 0,
-			DrawItem, CurrentUnit, DrawMode);
+		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
+			DrawItem, DrawMode);
 
 
 	WinEDA_bodytext_PropertiesFrame * frame =
@@ -306,8 +306,8 @@ int DrawMode = g_XorMode;
 	{
 		if ( (DrawItem->m_Flags & IS_MOVED) == 0 )
 			DrawMode = GR_DEFAULT_DRAWMODE;
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, 0 , 0,
-				DrawItem, CurrentUnit, DrawMode);
+		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
+				DrawItem, DrawMode);
 	}
 }
 
@@ -325,8 +325,8 @@ LibDrawText * DrawItem = (LibDrawText *) CurrentDrawItem;
 
 	/* Erase drawing (can be within a move command) */
 	if ( DrawPanel->ManageCurseur == NULL)
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, 0 , 0,
-				DrawItem, CurrentUnit, g_XorMode);
+		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
+				DrawItem, g_XorMode);
 	else DrawPanel->ManageCurseur(DrawPanel, DC, FALSE);
 
 	if( DrawItem->m_Horiz == TEXT_ORIENT_HORIZ)
@@ -337,8 +337,8 @@ LibDrawText * DrawItem = (LibDrawText *) CurrentDrawItem;
 
 	/* Redraw item with new orient */
 	if ( DrawPanel->ManageCurseur == NULL)
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, 0 , 0,
-				DrawItem, CurrentUnit, GR_DEFAULT_DRAWMODE);
+		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
+				DrawItem, GR_DEFAULT_DRAWMODE);
 	else DrawPanel->ManageCurseur(DrawPanel, DC, FALSE);
 
 }
