@@ -1,6 +1,6 @@
-/************************************************/
-/* Routine de trace communes aux divers formats */
-/************************************************/
+/***************************************************/
+/* Plot functions common to different plot formats */
+/***************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -14,23 +14,17 @@
 
 #include "protos.h"
 
-/* Variables locales : */
+/* Local Variables : */
 static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct );
 static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
-static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape );
+static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape );
 
 /***/
 
-/* cte pour remplissage de polygones */
+/* Defines for filling polygons in plot polygon functions */
 #define FILL   true
 #define NOFILL false
-
-#define PLOT_SHEETREF_MARGIN 0      // margin for sheet refs
-
-/*******************************/
-/* Routines de base de trace : */
-/*******************************/
 
 /* routine de lever ou baisser de plume.
   * si plume = 'U' les traces suivants se feront plume levee
@@ -89,32 +83,36 @@ void PlotRect( wxPoint p1, wxPoint p2, int fill, int width )
     }
 }
 
-/*******************************************************************************/
-void PlotArc( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width )
-/*******************************************************************************/
+/*****************************************************************************************/
+void PlotArc( wxPoint aCentre, int aStAngle, int aEndAngle, int aRadius, bool aFill, int aWidth )
+/*****************************************************************************************/
 
-/* trace d'un arc de cercle:
-  * x, y = coord du centre
-  * StAngle, EndAngle = angle de debut et fin
-  * rayon = rayon de l'arc
+/** Function PlotArc
+  * Plot an arc:
+  * @param aCentre = Arc centre
+  * @param aStAngle = begining of arc in 0.1 degrees
+  * @param aEndAngle = end of arc in 0.1 degrees
+  * @param aRadius = Arc radius
+  * @param aFill = fill option
+  * @param aWidth = Tickness of outlines
  */
 {
     switch( g_PlotFormat )
     {
     case PLOT_FORMAT_HPGL:
-        PlotArcHPGL( centre, StAngle, EndAngle, rayon, fill, width );
+        PlotArcHPGL( aCentre, aStAngle, aEndAngle, aRadius, aFill, aWidth );
         break;
 
     case PLOT_FORMAT_POST:
-        PlotArcPS( centre, StAngle, EndAngle, rayon, fill, width );
+        PlotArcPS( aCentre, aStAngle, aEndAngle, aRadius, aFill, aWidth );
         break;
     }
 }
 
 
-/*******************************************************/
+/*****************************************************************/
 void PlotCercle( wxPoint pos, int diametre, bool fill, int width )
-/*******************************************************/
+/*****************************************************************/
 {
     switch( g_PlotFormat )
     {
@@ -179,12 +177,12 @@ void PlotNoConnectStruct( DrawNoConnectStruct* Struct )
 /*************************************************/
 void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 /*************************************************/
-/* Genere le trace d'un composant */
+/* Polt a component */
 {
-    int                     ii, x1, y1, x2, y2, t1, t2, * Poly, orient;
+    int                     ii, t1, t2, * Poly, orient;
     LibEDA_BaseStruct*      DEntry;
     EDA_LibComponentStruct* Entry;
-    int                     TransMat[2][2], PartX, PartY, Multi, convert;
+    int                     TransMat[2][2], Multi, convert;
     int                     CharColor = -1;
     wxPoint                 pos;
     bool                    draw_bgfill = false;
@@ -193,7 +191,6 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
     if( Entry == NULL )
         return;;
     memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );
-    PartX   = DrawLibItem->m_Pos.x; PartY = DrawLibItem->m_Pos.y;
     Multi   = DrawLibItem->m_Multi;
     convert = DrawLibItem->m_Convert;
 
@@ -218,10 +215,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             {
                 LibDrawArc* Arc = (LibDrawArc*) DEntry;
                 t1    = Arc->t1; t2 = Arc->t2;
-                pos.x = PartX + TransMat[0][0] * Arc->m_Pos.x +
-                        TransMat[0][1] * Arc->m_Pos.y;
-                pos.y = PartY + TransMat[1][0] * Arc->m_Pos.x +
-                        TransMat[1][1] * Arc->m_Pos.y;
+                pos = TransformCoordinate( TransMat, Arc->m_Pos ) + DrawLibItem->m_Pos;
                 MapAngles( &t1, &t2, TransMat );
                 if ( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
                 {
@@ -237,11 +231,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         case COMPONENT_CIRCLE_DRAW_TYPE:
             {
                 LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
-                pos.x = PartX + TransMat[0][0] * Circle->m_Pos.x +
-                        TransMat[0][1] * Circle->m_Pos.y;
-                pos.y = PartY + TransMat[1][0] * Circle->m_Pos.x +
-                        TransMat[1][1] * Circle->m_Pos.y;
-
+                pos = TransformCoordinate( TransMat, Circle->m_Pos ) + DrawLibItem->m_Pos;
                 if ( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
                 {
                     SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
@@ -260,10 +250,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 /* The text orientation may need to be flipped if the
                   * transformation matrix causes xy axes to be flipped. */
                 t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
-                pos.x = PartX + TransMat[0][0] * Text->m_Pos.x
-                        + TransMat[0][1] * Text->m_Pos.y;
-                pos.y = PartY + TransMat[1][0] * Text->m_Pos.x
-                        + TransMat[1][1] * Text->m_Pos.y;
+                pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
                 SetCurrentLineWidth( -1 );
                 PlotGraphicText( g_PlotFormat, pos, CharColor,
                                  Text->m_Text,
@@ -276,23 +263,17 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         case COMPONENT_RECT_DRAW_TYPE:
             {
                 LibDrawSquare* Square = (LibDrawSquare*) DEntry;
-                x1 = PartX + TransMat[0][0] * Square->m_Pos.x
-                     + TransMat[0][1] * Square->m_Pos.y;
-                y1 = PartY + TransMat[1][0] * Square->m_Pos.x
-                     + TransMat[1][1] * Square->m_Pos.y;
-                x2 = PartX + TransMat[0][0] * Square->m_End.x
-                     + TransMat[0][1] * Square->m_End.y;
-                y2 = PartY + TransMat[1][0] * Square->m_End.x
-                     + TransMat[1][1] * Square->m_End.y;
+                pos = TransformCoordinate( TransMat, Square->m_Pos ) + DrawLibItem->m_Pos;
+                wxPoint end = TransformCoordinate( TransMat, Square->m_End ) + DrawLibItem->m_Pos;
 
                 if ( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
                 {
                     SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                    PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), true, 0 );
+                    PlotRect( pos, end, true, 0 );
                 }
                 if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
                     SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-                PlotRect( wxPoint(x1, y1), wxPoint(x2, y2), Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
+                PlotRect( pos, end, Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
             }
             break;
 
@@ -308,16 +289,12 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 /* Calcul de l'orientation reelle de la Pin */
                 orient = Pin->ReturnPinDrawOrient( TransMat );
                 /* compute Pin Pos */
-                x2 = PartX + TransMat[0][0] * Pin->m_Pos.x
-                     + TransMat[0][1] * Pin->m_Pos.y;
-                y2 = PartY + TransMat[1][0] * Pin->m_Pos.x
-                     + TransMat[1][1] * Pin->m_Pos.y;
+                pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
 
                 /* Dessin de la pin et du symbole special associe */
                 SetCurrentLineWidth( -1 );
-                PlotPinSymbol( x2, y2, Pin->m_PinLen, orient, Pin->m_PinShape );
-                wxPoint pinpos( x2, y2 );
-                Pin->PlotPinTexts( pinpos, orient,
+                PlotPinSymbol( pos, Pin->m_PinLen, orient, Pin->m_PinShape );
+                Pin->PlotPinTexts( pos, orient,
                                    Entry->m_TextInside,
                                    Entry->m_DrawPinNum, Entry->m_DrawPinName );
             }
@@ -329,12 +306,11 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->m_CornersCount );
                 for( ii = 0; ii < polyline->m_CornersCount; ii++ )
                 {
-                    Poly[ii * 2] = PartX +
-                                   TransMat[0][0] * polyline->m_PolyList[ii * 2] +
-                                   TransMat[0][1] * polyline->m_PolyList[ii * 2 + 1];
-                    Poly[ii * 2 + 1] = PartY +
-                                       TransMat[1][0] * polyline->m_PolyList[ii * 2] +
-                                       TransMat[1][1] * polyline->m_PolyList[ii * 2 + 1];
+                    pos.x = polyline->m_PolyList[ii * 2];
+                    pos.y = polyline->m_PolyList[ii * 2 + 1];
+                    pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
+                    Poly[ii * 2] = pos.x;
+                    Poly[ii * 2 + 1] = pos.y;
                 }
 
                 if ( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
@@ -398,8 +374,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
  */
 
 {
-    int             posX, posY; /* Position des textes */
-    int             px, py, x1, y1;
+    wxPoint         textpos; /* Position des textes */
     PartTextStruct* Field = &DrawLibItem->m_Field[FieldNumber];
     int             hjustify, vjustify;
     int             orient, color = -1;
@@ -416,14 +391,9 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
     /* Calcul de la position des textes, selon orientation du composant */
     orient   = Field->m_Orient;
     hjustify = Field->m_HJustify; vjustify = Field->m_VJustify;
-    posX = DrawLibItem->m_Pos.x; posY = DrawLibItem->m_Pos.y;
-    x1   = Field->m_Pos.x - posX;
-    y1   = Field->m_Pos.y - posY;
+    textpos = Field->m_Pos - DrawLibItem->m_Pos;    // textpos is the text position relative to the component anchor
 
-    px = posX + (DrawLibItem->m_Transform[0][0] * x1)
-         + (DrawLibItem->m_Transform[0][1] * y1);
-    py = posY + (DrawLibItem->m_Transform[1][0] * x1)
-         + (DrawLibItem->m_Transform[1][1] * y1);
+    textpos = TransformCoordinate( DrawLibItem->m_Transform, textpos ) + DrawLibItem->m_Pos;
 
     /* Y a t-il rotation */
     if( DrawLibItem->m_Transform[0][1] )
@@ -453,18 +423,18 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
     //not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
-        PlotGraphicText( g_PlotFormat, wxPoint( px, py ), color, Field->m_Text,
+        PlotGraphicText( g_PlotFormat, textpos, color, Field->m_Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          Field->m_Size,
                          hjustify, vjustify );
     }
-    else    /* Le champ est la reference, et il y a plusieurs parts par boitier */
+    else    /* We plt the reference, for a multiple parts per package */
     {
-            /* On ajoute alors A ou B ... a la reference */
+            /* Adding A, B ... to the reference */
         wxString Text;
         Text = Field->m_Text;
         Text.Append( 'A' - 1 + DrawLibItem->m_Multi );
-        PlotGraphicText( g_PlotFormat, wxPoint( px, py ), color, Text,
+        PlotGraphicText( g_PlotFormat, textpos, color, Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          Field->m_Size, hjustify, vjustify );
     }
@@ -472,7 +442,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 
 
 /**************************************************************************/
-static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape )
+static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape )
 /**************************************************************************/
 
 /* Trace la pin du symbole en cours de trace
@@ -488,24 +458,24 @@ static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape )
 
     SetCurrentLineWidth( -1 );
 
-    MapX1 = MapY1 = 0; x1 = posX; y1 = posY;
+    MapX1 = MapY1 = 0; x1 = pos.x; y1 = pos.y;
 
     switch( orient )
     {
     case PIN_UP:
-        y1 = posY - len; MapY1 = 1;
+        y1 = pos.y - len; MapY1 = 1;
         break;
 
     case PIN_DOWN:
-        y1 = posY + len; MapY1 = -1;
+        y1 = pos.y + len; MapY1 = -1;
         break;
 
     case PIN_LEFT:
-        x1 = posX - len, MapX1 = 1;
+        x1 = pos.x - len, MapX1 = 1;
         break;
 
     case PIN_RIGHT:
-        x1 = posX + len; MapX1 = -1;
+        x1 = pos.x + len; MapX1 = -1;
         break;
     }
 
@@ -519,12 +489,12 @@ static void PlotPinSymbol( int posX, int posY, int len, int orient, int Shape )
 
         Move_Plume( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
                              MapY1 * INVERT_PIN_RADIUS * 2 + y1 ), 'U' );
-        Move_Plume( wxPoint( posX, posY ), 'D' );
+        Move_Plume( pos, 'D' );
     }
     else
     {
         Move_Plume( wxPoint( x1, y1 ), 'U' );
-        Move_Plume( wxPoint( posX, posY ), 'D' );
+        Move_Plume( pos, 'D' );
     }
 
     if( Shape & CLOCK )
