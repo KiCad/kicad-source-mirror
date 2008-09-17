@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-27 13:38+0100\n"
-"PO-Revision-Date: 2008-09-07 12:15+0200\n"
-"Last-Translator: Milan Horak <stranger@tiscali.cz>\n"
+"POT-Creation-Date: 2008-09-15 23:41+0100\n"
+"PO-Revision-Date: 2008-09-16 22:39+0100\n"
+"Last-Translator: Martin Kratoška <martin@ok1rr.com>\n"
 "Language-Team: Čeština <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,9 +18,8 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: /home/martin/newkicad/kicad\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: /home/martin/newkicad/kicad\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #: /home/martin/newkicad/kicad/cvpcb/autosel.cpp:68
 msgid "Library: <%s> not found"
@@ -1195,7 +1194,7 @@ msgstr "Zprávy:"
 #: /home/martin/newkicad/kicad/share/svg_print.cpp:400
 #: /home/martin/newkicad/kicad/share/svg_print.cpp:417
 msgid "Create file "
-msgstr "Vytvořit soubor"
+msgstr "Vytvořit soubor "
 
 #: /home/martin/newkicad/kicad/share/svg_print.cpp:402
 #: /home/martin/newkicad/kicad/share/svg_print.cpp:419
@@ -1649,7 +1648,7 @@ msgstr "nenalezeno"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate.cpp:738
 msgid "item not annotated: %s%s"
-msgstr "u položky %s%s chybí anotace"
+msgstr "u položky %s%s chybí očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate.cpp:743
 msgid "( unit %d)"
@@ -1708,7 +1707,7 @@ msgstr "Vytvoření archivní knihovny selhalo"
 
 #: /home/martin/newkicad/kicad/eeschema/libarch.cpp:85
 msgid "Failed to create doc lib file "
-msgstr "Vytvoření knihovny dokumentace selhalo"
+msgstr "Selhalo vytvoření knihovny dokumentace "
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:159
 msgid "Scope"
@@ -1724,11 +1723,11 @@ msgstr "&Použít pouze současný list"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:178
 msgid "&Keep existing annotation"
-msgstr "&Ponechat existující anotaci"
+msgstr "&Ponechat existující očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:182
 msgid "&Reset existing annotation"
-msgstr "&Vynulovat existující anotaci"
+msgstr "&Vynulovat existující očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:189
 msgid "Order"
@@ -1748,19 +1747,19 @@ msgstr "Třídit součástky podle &hodnoty"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:234
 msgid "Clear Annotation"
-msgstr "Vyčistit anotaci"
+msgstr "Vyčistit očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:238
 msgid "Annotation"
-msgstr "Anotace"
+msgstr "Očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:259
 msgid "Clear and annotate all of the components "
-msgstr "Vyčistit a provést anotaci všech součástek"
+msgstr "Vyčistit a provést očíslování všech součástek"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:261
 msgid "Annotate only the unannotated components "
-msgstr "Annotace dosud neanotovaných součástek "
+msgstr "Očíslování dosud neočíslovaných součástek "
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:263
 msgid "on the entire schematic?"
@@ -1778,11 +1777,11 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Tato operace nevratně změní aktuální annotaci."
+"Tato operace nevratně změní aktuální očíslování."
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:287
 msgid "Clear the existing annotation for "
-msgstr "Vymazat existující anotaci pro"
+msgstr "Vymazat existující očíslování pro"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.cpp:289
 msgid "the entire schematic?"
@@ -1800,7 +1799,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Tato operace nevratně smaže existující annotaci."
+"Tato operace nevratně smaže existující očíslování."
 
 #: /home/martin/newkicad/kicad/eeschema/edit_component_in_schematic.cpp:199
 msgid "Field to edit"
@@ -1971,8 +1970,8 @@ msgid "Display"
 msgstr "Zobrazit"
 
 #: /home/martin/newkicad/kicad/eeschema/affiche.cpp:95
-msgid "Lengh"
-msgstr "Délka"
+msgid "Length"
+msgstr "Délka:"
 
 #: /home/martin/newkicad/kicad/eeschema/affiche.cpp:101
 msgid "Up"
@@ -2030,19 +2029,19 @@ msgstr "nízká úroveň na výstupu"
 msgid "Occupied by other pin. Continue?"
 msgstr "Obsazeno jiným vývodem. Pokračovat?"
 
-#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1005
+#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1004
 msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
 msgstr "Duplicitní vývod %4.4s (Pin %s poz. %d, %d, a Pin %s poz. %d, %d)"
 
-#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1011
+#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1010
 msgid "  Part %d"
 msgstr "  Část %d"
 
-#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1017
+#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1016
 msgid "  Convert"
 msgstr "  Převést"
 
-#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1019
+#: /home/martin/newkicad/kicad/eeschema/pinedit.cpp:1018
 msgid "  Normal"
 msgstr "  Normální"
 
@@ -2144,7 +2143,7 @@ msgstr "&Vytvořit seznam"
 
 #: /home/martin/newkicad/kicad/eeschema/erc.cpp:287
 msgid "Annotation Required!"
-msgstr "Je třeba anotace!"
+msgstr "Je třeba očíslování!"
 
 #: /home/martin/newkicad/kicad/eeschema/erc.cpp:392
 msgid "ERC file:"
@@ -2413,7 +2412,7 @@ msgstr " nalezeno"
 #: /home/martin/newkicad/kicad/eeschema/find.cpp:249
 #: /home/martin/newkicad/kicad/eeschema/find.cpp:695
 msgid " not found"
-msgstr "nenalezeno"
+msgstr " nenalezen"
 
 #: /home/martin/newkicad/kicad/eeschema/find.cpp:371
 msgid "Marker %d found in %s"
@@ -2950,7 +2949,7 @@ msgstr "Soubory netlistů:"
 
 #: /home/martin/newkicad/kicad/eeschema/netlist_control.cpp:471
 msgid "Must be Annotated, Continue ?"
-msgstr "Musí mít anotaci, pokračovat?"
+msgstr "Musí mít očíslování, pokračovat?"
 
 #: /home/martin/newkicad/kicad/eeschema/netlist_control.cpp:629
 msgid "Error. You must provide a command String"
@@ -3354,7 +3353,7 @@ msgstr "Najít součástky a text"
 
 #: /home/martin/newkicad/kicad/eeschema/menubar.cpp:162
 msgid "BackAnno"
-msgstr "Zpět. anotace"
+msgstr "Zpět. očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/menubar.cpp:162
 msgid "Back Annotated Footprint Fields"
@@ -3748,7 +3747,7 @@ msgstr "Importovat seznam vývodů"
 msgid "Add Power"
 msgstr "Přidat napájení"
 
-#: /home/martin/newkicad/kicad/eeschema/symbdraw.cpp:790
+#: /home/martin/newkicad/kicad/eeschema/symbdraw.cpp:789
 msgid "Arc %.1f deg"
 msgstr "Oblouk %.1f st."
 
@@ -4212,7 +4211,7 @@ msgstr "Vytvoření netlistu"
 
 #: /home/martin/newkicad/kicad/eeschema/tool_sch.cpp:116
 msgid "Schematic Annotation"
-msgstr "Anotace schématu"
+msgstr "Očíslování součástek"
 
 #: /home/martin/newkicad/kicad/eeschema/tool_sch.cpp:119
 msgid "Schematic Electric Rules Check"
@@ -4224,7 +4223,7 @@ msgstr "Rozpiska materiálu a/nebo srovnávací tabulka"
 
 #: /home/martin/newkicad/kicad/eeschema/tool_sch.cpp:125
 msgid "BackAnnotate Footprint"
-msgstr "Zpětná anotace pouzdra"
+msgstr "Zpětné očíslování pouzdra"
 
 #: /home/martin/newkicad/kicad/eeschema/tool_sch.cpp:151
 msgid "Hierarchy Push/Pop"
@@ -4678,7 +4677,7 @@ msgstr "Nelze nalézt prohlížeč PDF pro"
 
 #: /home/martin/newkicad/kicad/common/eda_doc.cpp:150
 msgid "Doc File "
-msgstr "Soubor dokumentace"
+msgstr "Soubor dokumentace "
 
 #: /home/martin/newkicad/kicad/common/eda_doc.cpp:190
 msgid "Unknown MIME type for Doc File [%s]"
@@ -4897,131 +4896,139 @@ msgstr "Zrcadlení bloku"
 msgid "Help file %s not found"
 msgstr "Soubor nápovědy %s nenalezen"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:93
+#: /home/martin/newkicad/kicad/common/common.cpp:98
 msgid " (\"):"
 msgstr " (\"):"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:97
+#: /home/martin/newkicad/kicad/common/common.cpp:102
 msgid " (mm):"
 msgstr " (mm):"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:349
+#: /home/martin/newkicad/kicad/common/common.cpp:188
+msgid " \""
+msgstr " \""
+
+#: /home/martin/newkicad/kicad/common/common.cpp:192
+msgid " mm"
+msgstr " (mm):"
+
+#: /home/martin/newkicad/kicad/common/common.cpp:373
 msgid "Copper   "
 msgstr "Měď"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:349
+#: /home/martin/newkicad/kicad/common/common.cpp:373
 msgid "Inner L1 "
 msgstr "Vnitřní L1"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:349
+#: /home/martin/newkicad/kicad/common/common.cpp:373
 msgid "Inner L2 "
 msgstr "Vnitřní L2"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:349
+#: /home/martin/newkicad/kicad/common/common.cpp:373
 msgid "Inner L3 "
 msgstr "Vnitřní L3"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:350
+#: /home/martin/newkicad/kicad/common/common.cpp:374
 msgid "Inner L4 "
 msgstr "Vnitřní L4"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:350
+#: /home/martin/newkicad/kicad/common/common.cpp:374
 msgid "Inner L5 "
 msgstr "Vnitřní L5"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:350
+#: /home/martin/newkicad/kicad/common/common.cpp:374
 msgid "Inner L6 "
 msgstr "Vnitřní L6"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:350
+#: /home/martin/newkicad/kicad/common/common.cpp:374
 msgid "Inner L7 "
 msgstr "Vnitřní L7"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:351
+#: /home/martin/newkicad/kicad/common/common.cpp:375
 msgid "Inner L8 "
 msgstr "Vnitřní L8"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:351
+#: /home/martin/newkicad/kicad/common/common.cpp:375
 msgid "Inner L9 "
 msgstr "Vnitřní L9"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:351
+#: /home/martin/newkicad/kicad/common/common.cpp:375
 msgid "Inner L10"
 msgstr "Vnitřní L10"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:351
+#: /home/martin/newkicad/kicad/common/common.cpp:375
 msgid "Inner L11"
 msgstr "Vnitřní L11"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:352
+#: /home/martin/newkicad/kicad/common/common.cpp:376
 msgid "Inner L12"
 msgstr "Vnitřní L12"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:352
+#: /home/martin/newkicad/kicad/common/common.cpp:376
 msgid "Inner L13"
 msgstr "Vnitřní L13"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:352
+#: /home/martin/newkicad/kicad/common/common.cpp:376
 msgid "Inner L14"
 msgstr "Vnitřní L14"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:352
+#: /home/martin/newkicad/kicad/common/common.cpp:376
 msgid "Component"
 msgstr "Součástky"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:353
+#: /home/martin/newkicad/kicad/common/common.cpp:377
 msgid "Adhes Cop"
 msgstr "Lepidlo-strana mědi"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:353
+#: /home/martin/newkicad/kicad/common/common.cpp:377
 msgid "Adhes Cmp"
 msgstr "Lepidlo-strana součástek"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:353
+#: /home/martin/newkicad/kicad/common/common.cpp:377
 msgid "SoldP Cop"
 msgstr "Pájecí pasta-strana spojů"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:353
+#: /home/martin/newkicad/kicad/common/common.cpp:377
 msgid "SoldP Cmp"
 msgstr "Pájecí pasta-strana součástek"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:354
+#: /home/martin/newkicad/kicad/common/common.cpp:378
 msgid "SilkS Cop"
 msgstr "Potisk-strana mědi"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:354
+#: /home/martin/newkicad/kicad/common/common.cpp:378
 msgid "SilkS Cmp"
 msgstr "Potisk-strana součástek"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:354
+#: /home/martin/newkicad/kicad/common/common.cpp:378
 msgid "Mask Cop "
 msgstr "Maska-strana mědi"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:354
+#: /home/martin/newkicad/kicad/common/common.cpp:378
 msgid "Mask Cmp "
 msgstr "Maska-strana součástek"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:355
+#: /home/martin/newkicad/kicad/common/common.cpp:379
 msgid "Drawings "
 msgstr "Kresby"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:355
+#: /home/martin/newkicad/kicad/common/common.cpp:379
 msgid "Comments "
 msgstr "Komentář"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:355
+#: /home/martin/newkicad/kicad/common/common.cpp:379
 msgid "Eco1     "
 msgstr "ECO1     "
 
-#: /home/martin/newkicad/kicad/common/common.cpp:355
+#: /home/martin/newkicad/kicad/common/common.cpp:379
 msgid "Eco2     "
 msgstr "ECO2     "
 
-#: /home/martin/newkicad/kicad/common/common.cpp:356
+#: /home/martin/newkicad/kicad/common/common.cpp:380
 msgid "Edges Pcb"
 msgstr "Okraje desky"
 
-#: /home/martin/newkicad/kicad/common/common.cpp:356
+#: /home/martin/newkicad/kicad/common/common.cpp:380
 msgid "BAD INDEX"
 msgstr "Chybný index"
 
@@ -5769,7 +5776,7 @@ msgstr "3D tvar"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_module.cpp:1114
 msgid "Doc:  "
-msgstr "Dokumentace:"
+msgstr "Dokumentace:  "
 
 #: /home/martin/newkicad/kicad/pcbnew/class_module.cpp:1115
 msgid "KeyW: "
@@ -7856,7 +7863,7 @@ msgid "90"
 msgstr "90"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_pad_edit.cpp:190
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:243
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:267
 msgid "User"
 msgstr "uživatelská"
 
@@ -7974,55 +7981,55 @@ msgstr "Vlastnosti"
 msgid "3D settings"
 msgstr "Nastavení 3D"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:182
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:184
 msgid "Change module(s)"
 msgstr "Změnit modul(y)"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:186
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:188
 msgid "Edit Module"
 msgstr "Upravit modul"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:200
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:224
 msgid "Keywords"
 msgstr "Klíčová slova"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:207
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:231
 msgid "Fields:"
 msgstr "Pole:"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:217
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:241
 msgid "Add Field"
 msgstr "Přidat pole"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:227
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:251
 msgid "Delete Field"
 msgstr "Smazat pole"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:234
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:258
 msgid "Copper"
 msgstr "Měď"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:279
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:303
 msgid "Orient (0.1 deg)"
 msgstr "Orientace (0,1 st.)"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:289
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:313
 msgid "Normal+Insert"
 msgstr "Normál+vložit"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:289
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:313
 msgid "Virtual"
 msgstr "Virtuální"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:290
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:314
 msgid "Attributes"
 msgstr "Atributy"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:293
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:317
 msgid "Use this attribute for most non smd components"
 msgstr "Použít tento atribut pro většinu ne-SMD součástek"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:295
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:319
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -8030,71 +8037,71 @@ msgstr ""
 "Použít tento atribut pro SMD součástky.\n"
 "Seznam pozic pouzder bude obsahovat pouze tyto součástky"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:297
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:321
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
 msgstr "Použít tento atribut pro \"virtuální\" součástky nakreslené na desce (např. starý ISA PC bus konektor)"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:321
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:345
 msgid "Free"
 msgstr "Volné"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:321
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:345
 msgid "Locked"
 msgstr "Uzamčeno"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:323
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:347
 msgid "Move and Auto Place"
 msgstr "Automatické přesunutí a umístění"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:328
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:352
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Povolit klávesové zkratky pro příkazy přemístění (včetně automatického umístění)"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:329
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:353
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Zakázat klávesové zkratky pro příkazy přemístění (včetně automatického umístění)"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:333
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:357
 msgid "Rot 90"
 msgstr "Rot 90"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:341
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:365
 msgid "Rot 180"
 msgstr "Rot 180"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:378
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:402
 msgid "3D Shape Name"
 msgstr "Název 3D tvaru"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:399
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:423
 msgid "Add 3D Shape"
 msgstr "Přidat 3D tvar"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:405
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:429
 msgid "Remove 3D Shape"
 msgstr "Odstranit 3D tvar"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:411
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:435
 msgid "Shape Scale:"
 msgstr "Měřítko tvaru:"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:418
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:442
 msgid "Shape Offset:"
 msgstr "Posun tvaru:"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:427
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:451
 msgid "Shape Rotation:"
 msgstr "Otočení tvaru:"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:467
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:491
 msgid "3D Shape:"
 msgstr "3D tvar:"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:769
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:802
 msgid "Reference or Value cannot be deleted"
 msgstr "Odkaz nebo hodnotu nelze smazat"
 
-#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:773
+#: /home/martin/newkicad/kicad/pcbnew/dialog_edit_module.cpp:806
 msgid "Delete [%s]"
 msgstr "Smazat [%s]"
 
@@ -8104,7 +8111,7 @@ msgstr "Počet vrstev:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:340
 msgid "Max Links:"
-msgstr "Maximum odkyzů:"
+msgstr "Maximum odkazů:"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_general_options.cpp:356
 msgid "Auto Save (minuts):"
@@ -8700,7 +8707,6 @@ msgid "RefP"
 msgstr "RefP"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_pad.cpp:909
-#: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:57
 msgid "Net"
 msgstr "Síť"
 
@@ -8728,23 +8734,23 @@ msgstr "Deska exportována OK."
 msgid "Unable to export, please fix and try again."
 msgstr "Nelze exportovat, opravte a zkuste znovu."
 
-#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:808
+#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:805
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "Nepodporovaný typ %s DRAWSEGMENT"
 
-#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:839
+#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:840
 msgid "Unable to find the next segment with an endpoint of "
 msgstr "Nelze najít další segment s koncovým bodem "
 
-#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:842
+#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:843
 msgid "Edit Edges_Pcb segments, making them contiguous."
 msgstr "Upravit pospojováním segmenty okrajů desky."
 
-#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:894
+#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:895
 msgid "Component with value of \"%s\" has empty reference id."
 msgstr "U součástky s hodnotou \"%s\" chybí referenční ID."
 
-#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:902
+#: /home/martin/newkicad/kicad/pcbnew/specctra_export.cpp:903
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr "Vícenásobné součástky mají stejné referenční ID \"%s\"."
 
@@ -9010,18 +9016,22 @@ msgid "Graphic"
 msgstr "Grafika"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:139
+#: /home/martin/newkicad/kicad/pcbnew/class_zone.cpp:601
 msgid "Zone Outline"
 msgstr "Obrys zóny"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:144
+#: /home/martin/newkicad/kicad/pcbnew/class_zone.cpp:605
 msgid "(Cutout)"
 msgstr "(Výřez)"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:163
+#: /home/martin/newkicad/kicad/pcbnew/class_zone.cpp:625
 msgid "Not Found"
 msgstr "Nenalezeno"
 
 #: /home/martin/newkicad/kicad/pcbnew/class_board_item.cpp:187
+#: /home/martin/newkicad/kicad/pcbnew/pcbframe.cpp:499
 msgid "Via"
 msgstr "Via"
 
@@ -9401,7 +9411,7 @@ msgid ""
 msgstr ""
 "Zvolte, jak jsou pouzdra rozeznávána:\n"
 "podle reference (U1, R3...) (normální nastavení)\n"
-"nebo podle času (speciální nastavení po opětovné anotaci celého schématu)"
+"nebo podle času (speciální nastavení po opětovném očíslování celého schématu)"
 
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:171
 #: /home/martin/newkicad/kicad/pcbnew/dialog_netlist.cpp:185
@@ -9843,7 +9853,7 @@ msgstr "Vlastnosti tvaru"
 
 #: /home/martin/newkicad/kicad/eeschema/dialog_backanno.h:37
 msgid "EESchema Back Annotate"
-msgstr "EESchema zpětná anotace"
+msgstr "EESchema zpětné očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/pinedit-dialog.h:66
 msgid "Pin properties"
@@ -9879,7 +9889,7 @@ msgstr "Rozpiska materiálu"
 
 #: /home/martin/newkicad/kicad/eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
-msgstr "EESchema anotace"
+msgstr "EESchema očíslování"
 
 #: /home/martin/newkicad/kicad/eeschema/plotps.h:50
 msgid "EESchema Plot PS"
