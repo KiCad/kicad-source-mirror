@@ -167,7 +167,10 @@ DSN_T SPECCTRA_DB::nextTok()
 bool SPECCTRA_DB::isSymbol( DSN_T aTok )
 {
     // if aTok is >= 0, then it might be a coincidental match to a keyword.
-    return aTok==T_SYMBOL || aTok==T_STRING || aTok>=0;
+    return     aTok==T_SYMBOL
+            || aTok==T_STRING
+            || aTok>=0
+            ;
 }
 
 
@@ -1864,7 +1867,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
 
-    if( !isSymbol( tok ) )
+    if( !isSymbol( tok ) && tok != T_NUMBER )
         expecting( "image_id" );
     growth->image_id = lexer->CurText();
 
