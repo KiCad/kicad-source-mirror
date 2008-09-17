@@ -2156,7 +2156,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
         )
     */
 
-    if( !isSymbol( tok ) )
+    if( !isSymbol( tok ) && tok != T_NUMBER  )
         expecting( "image_id" );
 
     growth->image_id = lexer->CurText();
