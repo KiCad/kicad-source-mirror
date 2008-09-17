@@ -65,22 +65,6 @@ class WinEDAChoiceBox;
 #define WinEDA_MenuItem wxMenuItem
 
 // Used but not defined here:
-class LibraryStruct;
-class EDA_LibComponentStruct;
-class LibEDA_BaseStruct;
-class EDA_BaseStruct;
-class DrawBusEntryStruct;
-class SCH_GLOBALLABEL;
-class SCH_TEXT;
-class EDA_DrawLineStruct;
-class DrawSheetStruct;
-class DrawSheetPath;
-class Hierarchical_PIN_Sheet_Struct;
-class SCH_COMPONENT;
-class LibDrawField;
-class PartTextStruct;
-class LibDrawPin;
-class DrawJunctionStruct;
 class DRAWSEGMENT;
 class WinEDA3D_DrawFrame;
 class PARAM_CFG_BASE;

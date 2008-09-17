@@ -167,7 +167,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELDCMPITEM );
     if( DrawStruct )
     {
-        PartTextStruct* Field = (PartTextStruct*) DrawStruct;
+        SCH_CMP_FIELD* Field = (SCH_CMP_FIELD*) DrawStruct;
         LibItem = (SCH_COMPONENT*) Field->m_Parent;
         LibItem->Display_Infos( this );
 

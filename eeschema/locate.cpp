@@ -422,7 +422,7 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 
             if( SearchMask & FIELDCMPITEM )
             {
-                PartTextStruct* Field;
+                SCH_CMP_FIELD* Field;
                 SCH_COMPONENT*  DrawLibItem = (SCH_COMPONENT*) DrawList;
                 for( i = REFERENCE; i < NUMBER_OF_FIELDS; i++ )
                 {

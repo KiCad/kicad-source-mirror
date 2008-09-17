@@ -37,7 +37,7 @@ enum  NumFieldType {
  *  component fields are texts attached to the component (not the graphic texts)
  *  There are 2 major fields : Reference and Value
  */
-class PartTextStruct :  public SCH_ITEM,
+class SCH_CMP_FIELD :  public SCH_ITEM,
     public EDA_TextStruct
 {
 public:
@@ -47,21 +47,21 @@ public:
     bool     m_AddExtraText;    // Mainly for REFERENCE, add extar info (for REFERENCE: add part selection text
 
 public:
-    PartTextStruct( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
-    ~PartTextStruct();
+    SCH_CMP_FIELD( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
+    ~SCH_CMP_FIELD();
 
     virtual wxString GetClass() const
     {
-        return wxT( "PartTextStruct" );
+        return wxT( "SCH_CMP_FIELD" );
     }
 
 
-    void        PartTextCopy( PartTextStruct* target );
+    void        PartTextCopy( SCH_CMP_FIELD* target );
     void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     EDA_Rect    GetBoundaryBox() const;
     bool        IsVoid();
-    void        SwapData( PartTextStruct* copyitem );
+    void        SwapData( SCH_CMP_FIELD* copyitem );
 
     /**
      * Function Draw
@@ -98,7 +98,7 @@ public:
     wxString          m_PrefixString;   /* C, R, U, Q etc - the first character which typically indicates what the component is.
                                          * determined, upon placement, from the library component.
                                          * determined, upon file load, by the first non-digits in the reference fields. */
-    PartTextStruct    m_Field[NUMBER_OF_FIELDS];
+    SCH_CMP_FIELD    m_Field[NUMBER_OF_FIELDS];
 
     int               m_Convert;                    /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
     int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */

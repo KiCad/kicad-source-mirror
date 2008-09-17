@@ -368,7 +368,7 @@ EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 
 
 /**************************************************************************/
-void PartTextStruct::SwapData( PartTextStruct* copyitem )
+void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
 /**************************************************************************/
 
 /* Used if undo / redo command:
@@ -800,7 +800,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 
 
 /***************************************************************************/
-PartTextStruct::PartTextStruct( const wxPoint& pos, const wxString& text ) :
+SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& pos, const wxString& text ) :
     SCH_ITEM( NULL, DRAW_PART_TEXT_STRUCT_TYPE ),
     EDA_TextStruct( text )
 /***************************************************************************/
@@ -812,14 +812,14 @@ PartTextStruct::PartTextStruct( const wxPoint& pos, const wxString& text ) :
 
 
 /************************************/
-PartTextStruct::~PartTextStruct()
+SCH_CMP_FIELD::~SCH_CMP_FIELD()
 /************************************/
 {
 }
 
 
 /***********************************************************/
-void PartTextStruct::PartTextCopy( PartTextStruct* target )
+void SCH_CMP_FIELD::PartTextCopy( SCH_CMP_FIELD* target )
 /***********************************************************/
 {
     target->m_Text = m_Text;
@@ -838,7 +838,7 @@ void PartTextStruct::PartTextCopy( PartTextStruct* target )
 
 
 /*********************************/
-bool PartTextStruct::IsVoid()
+bool SCH_CMP_FIELD::IsVoid()
 /*********************************/
 
 /* return True if The field is void, i.e.:
@@ -852,7 +852,7 @@ bool PartTextStruct::IsVoid()
 
 
 /********************************************/
-EDA_Rect PartTextStruct::GetBoundaryBox() const
+EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
 /********************************************/
 
 /* return
@@ -966,7 +966,7 @@ EDA_Rect PartTextStruct::GetBoundaryBox() const
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool PartTextStruct::Save( FILE* aFile ) const
+bool SCH_CMP_FIELD::Save( FILE* aFile ) const
 {
     char hjustify = 'C';
 
@@ -1113,7 +1113,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
     for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
     {
-        const PartTextStruct* field = &m_Field[ii];
+        const SCH_CMP_FIELD* field = &m_Field[ii];
         if( field->m_Text.IsEmpty() )
             continue;
         if( !field->Save( f ) )

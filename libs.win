@@ -24,7 +24,7 @@ ifndef WXWIN
 ifeq ($(DEBUG), 1)
 WXWIN=f:/wxMSW-2.8.9-debug
 else
-WXWIN=f:/wxMSW-2.8.9-rc1
+WXWIN=f:/wxMSW-2.8.9
 endif
 endif
 LIBVERSION = 2.8

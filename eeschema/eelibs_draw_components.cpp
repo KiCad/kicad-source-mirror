@@ -90,7 +90,7 @@ static void CreateDummyCmp()
 /*************************************************************/
 void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
                    EDA_LibComponentStruct* LibEntry,
-                   int posX, int posY,
+                   const wxPoint & aOffset,
                    int Multi, int convert,
                    int DrawMode, int Color )
 /**************************************************************/
@@ -116,7 +116,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
     TransMat[0][0] = 1; TransMat[1][1] = -1;
     TransMat[1][0] = TransMat[0][1] = 0;
 
-    DrawLibPartAux( panel, DC, NULL, LibEntry, wxPoint( posX, posY ),
+    DrawLibPartAux( panel, DC, NULL, LibEntry, aOffset,
         TransMat, Multi,
         convert, DrawMode, Color );
 
@@ -132,28 +132,15 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
         else
             color = UNVISIBLE_COLOR;
     }
-    else
-    {
-        if( Color >= 0 )
-            color = Color;
-        else
-            color = ReturnLayerColor( LAYER_REFERENCEPART );
-    }
+    else color = Color;
 
     if( LibEntry->m_UnitCount > 1 )
         Prefix.Printf( wxT( "%s?%c" ), LibEntry->m_Prefix.m_Text.GetData(), Multi + 'A' - 1 );
     else
         Prefix = LibEntry->m_Prefix.m_Text + wxT( "?" );
 
-    text_pos.x = LibEntry->m_Prefix.m_Pos.x + posX;
-    text_pos.y = posY - LibEntry->m_Prefix.m_Pos.y;
-    int LineWidth = MAX( LibEntry->m_Prefix.m_Width, g_DrawMinimunLineWidth );
     if( (LibEntry->m_Prefix.m_Flags & IS_MOVED) == 0 )
-        DrawGraphicText( panel, DC, text_pos,
-            color, LibEntry->m_Prefix.m_Text.GetData(),
-            LibEntry->m_Prefix.m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-            LibEntry->m_Prefix.m_Size,
-            LibEntry->m_Prefix.m_HJustify, LibEntry->m_Prefix.m_VJustify, LineWidth );
+        LibEntry->m_Prefix.Draw( panel, DC, aOffset, color, DrawMode, &Prefix, TransMat );
 
     if( LibEntry->m_Name.m_Attributs & TEXT_NO_VISIBLE )
     {
@@ -162,23 +149,10 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
         else
             color = UNVISIBLE_COLOR;
     }
-    else
-    {
-        if( Color >= 0 )
-            color = Color;
-        else
-            color = ReturnLayerColor( LAYER_VALUEPART );
-    }
+    else color = Color;
 
-    text_pos.x = LibEntry->m_Name.m_Pos.x + posX;
-    text_pos.y = posY - LibEntry->m_Name.m_Pos.y;
-    LineWidth  = MAX( LibEntry->m_Name.m_Width, g_DrawMinimunLineWidth );
     if( (LibEntry->m_Name.m_Flags & IS_MOVED) == 0 )
-        DrawGraphicText( panel, DC, text_pos,
-            color, LibEntry->m_Name.m_Text.GetData(),
-            LibEntry->m_Name.m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-            LibEntry->m_Name.m_Size,
-            LibEntry->m_Name.m_HJustify, LibEntry->m_Name.m_VJustify, LineWidth );
+       LibEntry->m_Name.Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
 
     for( Field = LibEntry->Fields; Field != NULL; Field = (LibDrawField*) Field->Pnext )
     {
@@ -193,28 +167,14 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
             else
                 color = UNVISIBLE_COLOR;
         }
-        else
-        {
-            if( Color >= 0 )
-                color = Color;
-            else
-                color = ReturnLayerColor( LAYER_FIELDS );
-        }
-
-        text_pos.x = Field->m_Pos.x + posX;
-        text_pos.y = posY - Field->m_Pos.y;
-        LineWidth  = MAX( Field->m_Width, g_DrawMinimunLineWidth );
-        DrawGraphicText( panel, DC, text_pos,
-            color, Field->m_Text,
-            Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-            Field->m_Size,
-            Field->m_HJustify, Field->m_VJustify, LineWidth );
+        else color = Color;
+        Field->Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
     }
 
     // Trace de l'ancre
     int len = 3 * panel->GetZoom();
-    GRLine( &panel->m_ClipBox, DC, posX, posY - len, posX, posY + len, 0, color );
-    GRLine( &panel->m_ClipBox, DC, posX - len, posY, posX + len, posY, 0, color );
+    GRLine( &panel->m_ClipBox, DC, aOffset.x, aOffset.y - len, aOffset.x, aOffset.y + len, 0, color );
+    GRLine( &panel->m_ClipBox, DC, aOffset.x - len, aOffset.y, aOffset.x + len, aOffset.y, 0, color );
 }
 
 
@@ -272,7 +232,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 /***********************************************************/
-void PartTextStruct::Draw( WinEDA_DrawPanel* panel,
+void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
                            wxDC*             DC,
                            const wxPoint&    offset,
                            int               DrawMode,

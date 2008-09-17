@@ -365,7 +365,7 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case DRAW_PART_TEXT_STRUCT_TYPE:
-            EditCmpFieldText( (PartTextStruct*) DrawStruct, DC );
+            EditCmpFieldText( (SCH_CMP_FIELD*) DrawStruct, DC );
             DrawPanel->MouseToCursorSchema();
             break;
 

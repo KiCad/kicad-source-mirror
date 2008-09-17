@@ -311,11 +311,11 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ROTATE_FIELD:
         DrawPanel->MouseToCursorSchema();
-        RotateCmpField( (PartTextStruct*) screen->GetCurItem(), &dc );
+        RotateCmpField( (SCH_CMP_FIELD*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_FIELD:
-        EditCmpFieldText( (PartTextStruct*) screen->GetCurItem(), &dc );
+        EditCmpFieldText( (SCH_CMP_FIELD*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_DELETE_NODE:
@@ -770,7 +770,7 @@ void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC*  DC )
         break;
 
     case DRAW_PART_TEXT_STRUCT_TYPE:
-        StartMoveCmpField( (PartTextStruct*) DrawStruct, DC );
+        StartMoveCmpField( (SCH_CMP_FIELD*) DrawStruct, DC );
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:

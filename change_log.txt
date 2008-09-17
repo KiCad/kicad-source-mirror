@@ -5,6 +5,13 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Sep-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    code cleaning
+    PartTextStruct class name changed to a name : SCH_CMP_FIELD
+
 2008-Sep-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:

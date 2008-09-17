@@ -375,7 +375,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 
 {
     wxPoint         textpos; /* Position des textes */
-    PartTextStruct* Field = &DrawLibItem->m_Field[FieldNumber];
+    SCH_CMP_FIELD* Field = &DrawLibItem->m_Field[FieldNumber];
     int             hjustify, vjustify;
     int             orient, color = -1;
 

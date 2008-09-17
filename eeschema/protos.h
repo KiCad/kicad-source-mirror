@@ -35,11 +35,9 @@ void InstallCmpeditFrame(WinEDA_SchematicFrame * parent, wxPoint & pos,
             SCH_COMPONENT * m_Cmp);
 
 
-    /**************/
-    /* EELIBS_.CPP */
-    /**************/
-
-/* Functions common to all EELibs?.c modules: */
+    /******************************/
+    /* EELIBS_DRAW_COMPONENTS.CPP */
+    /******************************/
 int LibraryEntryCompare(EDA_LibComponentStruct *LE1, EDA_LibComponentStruct *LE2);
 int NumOfLibraries();
 EDA_LibComponentStruct *FindLibPart(const wxChar *Name, const wxString & LibName, int Alias);
@@ -50,7 +48,7 @@ void DrawingLibInGhost(WinEDA_DrawPanel * panel, wxDC * DC, EDA_LibComponentStru
                         int Color, bool DrawPinText);
 
 void DrawLibEntry(WinEDA_DrawPanel * panel, wxDC * DC,
-                            EDA_LibComponentStruct *LibEntry, int posX, int posY,
+                            EDA_LibComponentStruct *LibEntry, const wxPoint & aOffset,
                             int Multi, int convert,
                             int DrawMode, int Color = -1);
 

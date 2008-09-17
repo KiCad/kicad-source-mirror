@@ -10,6 +10,22 @@
 class DrawPickedStruct;
 class SCH_ITEM;
 class DrawNoConnectStruct;
+class LibraryStruct;
+class EDA_LibComponentStruct;
+class LibEDA_BaseStruct;
+class EDA_BaseStruct;
+class DrawBusEntryStruct;
+class SCH_GLOBALLABEL;
+class SCH_TEXT;
+class EDA_DrawLineStruct;
+class DrawSheetStruct;
+class DrawSheetPath;
+class Hierarchical_PIN_Sheet_Struct;
+class SCH_COMPONENT;
+class LibDrawField;
+class SCH_CMP_FIELD;
+class LibDrawPin;
+class DrawJunctionStruct;
 
 /*******************************/
 /* class WinEDA_SchematicFrame */
@@ -276,9 +292,9 @@ private:
     void                    EditComponentValue( SCH_COMPONENT* DrawLibItem, wxDC* DC );
     void                    EditComponentFootprint( SCH_COMPONENT* DrawLibItem,
                                                     wxDC*                             DC );
-    void                    StartMoveCmpField( PartTextStruct* Field, wxDC* DC );
-    void                    EditCmpFieldText( PartTextStruct* Field, wxDC* DC );
-    void                    RotateCmpField( PartTextStruct* Field, wxDC* DC );
+    void                    StartMoveCmpField( SCH_CMP_FIELD* Field, wxDC* DC );
+    void                    EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC );
+    void                    RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC );
 
     /* Operations sur bloc */
     void                    PasteStruct( wxDC* DC );

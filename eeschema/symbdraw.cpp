@@ -710,7 +710,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         MoveLibDrawItemAt( CurrentDrawItem, pos );
     }
 
-    DrawLibEntry( DrawPanel, DC, CurrentLibEntry, 0, 0, CurrentUnit,
+    DrawLibEntry( DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0), CurrentUnit,
                   CurrentConvert, GR_DEFAULT_DRAWMODE );
 
     CurrentDrawItem->m_Flags = 0;

@@ -25,7 +25,7 @@ LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
                      *  0 if the item is common to all shapes */
     m_Width   = 0;       /* Default value to draw lines or arc ... */
     m_Fill    = NO_FILL; /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
-                           * has meaning only for some items */
+                          * has meaning only for some items */
 }
 
 
@@ -47,7 +47,7 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
     wxPoint pos1, pos2, posc;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -76,7 +76,7 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-            m_Rayon, LineWidth, color,
+            m_Rayon, linewidth, color,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
@@ -87,13 +87,13 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
 
 
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-            m_Rayon, LineWidth, color );
+            m_Rayon, linewidth, color );
 #else
 
 
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            posc.x, posc.y, LineWidth, color );
+            posc.x, posc.y, linewidth, color );
 #endif
 }
 
@@ -106,7 +106,7 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
     wxPoint pos1;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -125,14 +125,14 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-            m_Rayon, LineWidth, color,
+            m_Rayon, linewidth, color,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
             m_Rayon, 0, color, color );
     else
         GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-            m_Rayon, LineWidth, color );
+            m_Rayon, linewidth, color );
 }
 
 
@@ -144,7 +144,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOff
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -163,7 +163,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOff
     DrawGraphicText( aPanel, aDC, pos1, color, m_Text,
         t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
         m_Size,
-        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
 }
 
 
@@ -175,7 +175,7 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -194,14 +194,14 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            color, LineWidth,
+            color, linewidth,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
             color, color );
     else
         GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            LineWidth, color );
+            linewidth, color );
 }
 
 
@@ -213,7 +213,7 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& a
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -226,7 +226,7 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& a
     pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
     pos2 = TransformCoordinate( aTransformMatrix, m_End ) + aOffset;
 
-    GRLine( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, LineWidth, color );
+    GRLine( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, linewidth, color );
 }
 
 
@@ -240,7 +240,7 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint     pos1;
 
     int         color     = ReturnLayerColor( LAYER_DEVICE );
-    int         LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int         linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
     static int* Buf_Poly_Drawings = NULL;               // Buffer used to store current corners coordinates for drawings
     static int  Buf_Poly_Size = 0;                      // Buffer used to store current corners coordinates for drawings
 
@@ -282,14 +282,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 1, LineWidth, color,
+            Buf_Poly_Drawings, 1, linewidth, color,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 1, LineWidth, color, color );
+            Buf_Poly_Drawings, 1, linewidth, color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 0, LineWidth, color, color );
+            Buf_Poly_Drawings, 0, linewidth, color, color );
 }
 
 
@@ -297,5 +297,46 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
                          int aDrawMode, void* aData, int aTransformMatrix[2][2] )
 /*************************************************************************************************/
+/* if aData not NULL, adat must point a wxString which is used instead of the m_Text
+*/
 {
+    wxPoint     text_pos;
+
+    int         color     = aColor;
+    int         linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+
+    if( aColor < 0 )                                    // Used normal color or selected color
+    {
+        if( (m_Selected & IS_SELECTED) )
+            color = g_ItemSelectetColor;
+    }
+    else
+        color = aColor;
+
+    if( color < 0 )
+    {
+        switch( m_FieldId )
+        {
+        case REFERENCE:
+            color = ReturnLayerColor( LAYER_REFERENCEPART );
+            break;
+
+        case VALUE:
+            color = ReturnLayerColor( LAYER_VALUEPART );
+            break;
+
+        default:
+            color = ReturnLayerColor( LAYER_FIELDS );
+            break;
+        }
+    }
+    text_pos = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
+
+    wxString * text = aData ? (wxString *) aData : &m_Text;
+    GRSetDrawMode( aDC, aDrawMode );
+    DrawGraphicText( aPanel, aDC, text_pos,
+        color, text->GetData(),
+        m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+        m_Size,
+        m_HJustify, m_VJustify, linewidth );
 }

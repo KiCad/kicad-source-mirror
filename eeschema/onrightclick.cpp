@@ -33,7 +33,7 @@ static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
 static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
 static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
-static void AddMenusForComponentField( wxMenu* PopMenu, PartTextStruct* Field );
+static void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field );
 static void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
                                  WinEDA_SchematicFrame* frame );
 
@@ -173,7 +173,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
     case DRAW_PART_TEXT_STRUCT_TYPE:
     {
-        AddMenusForComponentField( PopMenu, (PartTextStruct*) DrawStruct );
+        AddMenusForComponentField( PopMenu, (SCH_CMP_FIELD*) DrawStruct );
         if( flags )
             break;
 
@@ -236,7 +236,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
 
 /*************************************************************************/
-void AddMenusForComponentField( wxMenu* PopMenu, PartTextStruct* Field )
+void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field )
 /*************************************************************************/
 
 /* Add menu commands for a component field (like value, reference)

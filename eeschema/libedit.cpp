@@ -198,7 +198,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow(wxDC * DC, bool EraseBg)
 	DrawPanel->DrawBackGround(DC);
 
 	if( CurrentLibEntry)
-		DrawLibEntry(DrawPanel, DC, CurrentLibEntry, 0, 0,
+		DrawLibEntry(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
 					CurrentUnit, CurrentConvert, GR_DEFAULT_DRAWMODE);
 
 	DrawPanel->CursorOn(DC); // reaffichage curseur
@@ -362,7 +362,7 @@ void WinEDA_LibeditFrame::CreateNewLibraryPart()
 /****************************************************/
 /* Routine to create a new library component
 	If an old component is currently in edit, it is deleted.
-*/	
+*/
 {
 wxString msg;
 EDA_LibComponentStruct * NewStruct;

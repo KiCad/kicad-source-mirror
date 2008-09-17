@@ -229,11 +229,12 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
             m_KicadEnv += UNIX_STRING_DIR_SEP;
     }
 
-    /* Prepare On Line Help */
+    /* Prepare On Line Help. Use only lower case for help filenames,
+    * in order to avoid problems with upper/lower case filenames under windows and unix */
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-    m_HelpFileName = name + wxT( ".html" );
+    m_HelpFileName = name.Lower() + wxT( ".html" );
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    m_HelpFileName = name + wxT( ".pdf" );
+    m_HelpFileName = name.Lower() + wxT( ".pdf" );
 #else
     #error Help files format not defined
 #endif

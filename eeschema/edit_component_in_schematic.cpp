@@ -22,7 +22,7 @@ static void AbortMoveCmpField( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 /* variables locales */
-static PartTextStruct* CurrentField;
+static SCH_CMP_FIELD* CurrentField;
 static int             Multiflag;
 static int             TextFieldSize = DEFAULT_SIZE_TEXT;
 static wxPoint         OldPos;
@@ -439,7 +439,7 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
 
 
 /************************************************************************************/
-void WinEDA_SchematicFrame::StartMoveCmpField( PartTextStruct* Field, wxDC* DC )
+void WinEDA_SchematicFrame::StartMoveCmpField( SCH_CMP_FIELD* Field, wxDC* DC )
 /************************************************************************************/
 
 /* Prepare le deplacement du texte en cours d'edition
@@ -508,7 +508,7 @@ void WinEDA_SchematicFrame::StartMoveCmpField( PartTextStruct* Field, wxDC* DC )
 
 
 /**********************************************************************************/
-void WinEDA_SchematicFrame::EditCmpFieldText( PartTextStruct* Field, wxDC* DC )
+void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
 /**********************************************************************************/
 /* Edit the field Field (text, size)  */
 {
@@ -654,7 +654,7 @@ static void AbortMoveCmpField( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /*********************************************************************************/
-void WinEDA_SchematicFrame::RotateCmpField( PartTextStruct* Field, wxDC* DC )
+void WinEDA_SchematicFrame::RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC )
 /*********************************************************************************/
 {
     int FieldNumber, flag;
@@ -698,7 +698,7 @@ void WinEDA_SchematicFrame::RotateCmpField( PartTextStruct* Field, wxDC* DC )
 
 
 /*********************************************************************/
-void PartTextStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /*********************************************************************/
 {
     int FieldNumber;
@@ -790,7 +790,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     if( Entry == NULL )
         return;
 
-    PartTextStruct* TextField = &Cmp->m_Field[VALUE];
+    SCH_CMP_FIELD* TextField = &Cmp->m_Field[VALUE];
 
     msg = TextField->m_Text;
     if( Get_Message( _( "Value" ), msg, this ) )
@@ -827,7 +827,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     if( Entry == NULL )
         return;
 
-    PartTextStruct* TextField = &Cmp->m_Field[FOOTPRINT];
+    SCH_CMP_FIELD* TextField = &Cmp->m_Field[FOOTPRINT];
 
     msg = TextField->m_Text;
     if(msg.IsEmpty() )

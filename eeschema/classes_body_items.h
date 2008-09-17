@@ -381,18 +381,21 @@ public:
 /* Fields , same as component fields.
  * can be defined in libraries (mandatory for ref and value, ca be useful for footprints)
  * 2 Fields are always defined :
- *     Prefix (U, IC..) with gives the reference in scxhematic)
+ *     Prefix (U, IC..) with gives the reference in schematic)
  *     Name (74LS00..) used to find the component in libraries, and give the default value in schematic
  */
 class LibDrawField :  public LibEDA_BaseStruct
 {
 public:
-    int      m_FieldId;         // 0 a 11
-                                // 0 = Name; 1 = Valeur; 2 .. 11 other fields
+    int      m_FieldId;         /* 0 a 11
+                                * 0 = Reference; 1 = Value
+                                * 2 = Default footprint, 3 = subsheet (not used, reserved)
+                                * .. 11 other fields
+                                */
     wxSize   m_Size;
     int      m_Orient;                  /* Orientation */
     int      m_Attributs;               /* Attributes (Non visible ...) */
-    int      m_HJustify, m_VJustify;    /* Horiz an  Vert Texte Justifications  */
+    int      m_HJustify, m_VJustify;    /* Horiz and Vert Text Justifications  */
     wxString m_Text;                    /* Field Data */
     wxString m_Name;                    /* Field Name */
 

@@ -321,7 +321,7 @@ wxString Msg;
 				LibEntry->m_Name.m_Text = CmpName;
 				if ( g_ViewUnit < 1 ) g_ViewUnit = 1;
  				if ( g_ViewConvert < 1 ) g_ViewConvert = 1;
-				DrawLibEntry(DrawPanel, DC, LibEntry, 0, 0,
+				DrawLibEntry(DrawPanel, DC, LibEntry, wxPoint(0, 0),
 						g_ViewUnit, g_ViewConvert, GR_DEFAULT_DRAWMODE);
 				LibEntry->m_Name.m_Text = RealName;
 			}
@@ -330,7 +330,7 @@ wxString Msg;
 		else
 			{
 			Msg.Printf( _("Current Part: <%s>"), ViewCmpEntry->m_Name.m_Text.GetData());
-			DrawLibEntry(DrawPanel, DC, LibEntry, 0, 0,
+			DrawLibEntry(DrawPanel, DC, LibEntry, wxPoint(0, 0),
 					g_ViewUnit, g_ViewConvert, GR_DEFAULT_DRAWMODE);
 			}
 		AfficheDoc(this, ViewCmpEntry->m_Doc, ViewCmpEntry->m_KeyWord);
