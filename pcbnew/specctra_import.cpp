@@ -27,8 +27,7 @@
     a specctra session file (*.ses), and import of a specctra design file
     (*.dsn) file.  The specification for the grammar of the specctra dsn file
     used to develop this code is given here:
-    http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf
-
+    http://tech.groups.yahoo.com/group/kicad-users/files/  then file "specctra.pdf"
     Also see the comments at the top of the specctra.cpp file itself.
 */
 

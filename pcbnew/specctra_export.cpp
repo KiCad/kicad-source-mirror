@@ -26,7 +26,7 @@
 /*  This source is a complement to specctra.cpp and implements the export to
     specctra dsn file format.  The specification for the grammar of the specctra
     dsn file used to develop this code is given here:
-    http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf
+    http://tech.groups.yahoo.com/group/kicad-users/files/  then file "specctra.pdf"
 
     Also see the comments at the top of the specctra.cpp file itself.
 */
