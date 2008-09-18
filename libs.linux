@@ -57,6 +57,7 @@ KICAD_INTERNAT=$(KICAD_DATA)/internat
 KICAD_TEMPLATE=$(KICAD_DATA)/template
 
 # define compil and link
+CXX = gcc
 LD  = g++
 
 SRCSUFF = .cpp
