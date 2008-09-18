@@ -45,8 +45,21 @@ public:
 public:
     LibraryStruct( int type, const wxString& name, const wxString& fullname );
     ~LibraryStruct();
-    bool WriteHeader( FILE* file );
+    /**
+     * Function SaveLibrary
+     * writes the data structures for this object out to 2 file
+     * the library in "*.lib" format.
+     * the doc file in "*.dcm" format.
+     * creates a backup file for each  file (.bak and .bck)
+     * @param aFullFileName The full lib filename.
+     * @return bool - true if success writing else false.
+     */
+    bool SaveLibrary( const wxString& aFullFileName );
+
     bool ReadHeader( FILE* file, int* LineNum );
+
+private:
+    bool WriteHeader( FILE* file );
 };
 
 
@@ -73,8 +86,15 @@ public:
         return wxT( "LibCmpEntry" );
     }
 
-
-    bool WriteDescr( FILE* File );
+    /**
+     * Function SaveLibrary
+     * writes the data structures for this object out to 2 FILE in "*.lib" and ".dcm" format.
+     *  the main file (.lib) is the library content (set of components)
+     *  the second file (.dcm)is the auxiliary file that contents the keywords and description for components)
+     * @param FullFileName the new full filename (*.lib).
+     * @return bool - true if success writing else false.
+     */
+    bool SaveLibrary( const wxString& FullFileName );
 };
 
 

@@ -229,7 +229,7 @@ LibEDA_BaseStruct * CopyDrawEntryStruct( wxWindow * frame, LibEDA_BaseStruct * D
          Retourne:
              Pointeur sur la structure creee (ou NULL si impossible) */
 
-int WriteOneLibEntry(wxWindow * frame, FILE * ExportFile, EDA_LibComponentStruct * LibEntry);
+int WriteOneLibEntry( FILE * ExportFile, EDA_LibComponentStruct * LibEntry);
             /* Routine d'ecriture du composant pointe par LibEntry
                 dans le fichier ExportFile( qui doit etre deja ouvert)
                 return: FALSE si Ok, TRUE si err write */
@@ -244,21 +244,6 @@ int WriteOneDocLibEntry(FILE * ExportFile, EDA_LibComponentStruct * LibEntry);
          dans le fichier ExportFile( qui doit etre deja ouvert)
          return: 0 si Ok
             1 si err write */
-
-
-int SaveOneLibrary(wxWindow * frame, const wxString & FullFileName, LibraryStruct * Library);
-    /* Sauvegarde en fichier la librairie pointee par Library, sous le nom
-    FullFileName.
-    2 fichiers sont crees
-     - La librarie
-     - le fichier de documentation
-
-    une sauvegarde .bak de l'ancien fichier librairie est cree
-    une sauvegarde .bck de l'ancien fichier documentation est cree
-
-    return:
-        0 si OK
-        1 si erreur */
 
 
 /***************/

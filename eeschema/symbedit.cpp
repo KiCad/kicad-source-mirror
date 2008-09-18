@@ -137,7 +137,6 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 {
     EDA_LibComponentStruct* LibEntry = CurrentLibEntry;
     int Unit = CurrentUnit, convert = CurrentConvert;
-    int SymbUnit, SymbConvert;
     LibEDA_BaseStruct*      DrawEntry;
     wxString FullFileName, mask;
     wxString msg;
@@ -196,8 +195,8 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
              1, 0 /* unused */, 'N' );
 
     /* Position / orientation / visibilite des champs */
-    LibEntry->m_Prefix.WriteDescr( ExportFile );
-    LibEntry->m_Name.WriteDescr( ExportFile );
+    LibEntry->m_Prefix.Save( ExportFile );
+    LibEntry->m_Name.Save( ExportFile );
 
     DrawEntry = LibEntry->m_Drawings;
     if( DrawEntry )
@@ -211,55 +210,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
             if( convert && DrawEntry->m_Convert && (DrawEntry->m_Convert != convert) )
                 continue;
 
-            /* .Unit , . Convert est laisse a 0 ou mis a 1 */
-            SymbUnit    = DrawEntry->m_Unit; if( SymbUnit > 1 )
-                SymbUnit = 1;
-            SymbConvert = DrawEntry->m_Convert;
-            if( SymbConvert > 1 )
-                SymbConvert = 1;
-
-            switch( DrawEntry->Type() )
-            {
-            case COMPONENT_ARC_DRAW_TYPE:
-                #define DRAWSTRUCT ( (LibDrawArc*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_CIRCLE_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawCircle*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawText*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_RECT_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawSquare*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_PIN_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawPin*) DrawEntry )
-                if( DRAWSTRUCT->m_Attributs & PINNOTDRAW )
-                    break;
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_POLYLINE_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawPolyline*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            default:
-                ;
-            }
+            DrawEntry->Save( ExportFile );
         }
         fprintf( ExportFile, "ENDDRAW\n" );
     }

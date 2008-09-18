@@ -15,6 +15,7 @@ set(EESCHEMA_SRCS
     class_drawsheet.cpp
     class_hierarchical_PIN_sheet.cpp
     class_pin.cpp
+    class_library.cpp
     class_schematic_items.cpp
     class_screen.cpp
     class_text-label.cpp
@@ -56,7 +57,6 @@ set(EESCHEMA_SRCS
     hotkeys.cpp
     libalias.cpp
     libarch.cpp
-    libclass.cpp
     libedit.cpp
     libedit_onleftclick.cpp
     libedit_onrightclick.cpp

@@ -18,12 +18,11 @@
 //#define DRAW_ARC_WITH_ANGLE		// Used to draw arcs
 
 
-/* Fonctions locales */
 
+
+/* Local functions */
 /* Descr component <DUMMY> used when a component is not found in library,
- *  to draw a dummy shape*/
-
-/*
+ *  to draw a dummy shape
  *  This component is a 400 mils square with the text ??
  *  DEF DUMMY U 0 40 Y Y 1 0 N
  *  F0 "U" 0 -350 60 H V
@@ -34,9 +33,7 @@
  *  ENDDRAW
  *  ENDDEF
  */
-
-
-static EDA_LibComponentStruct* DummyCmp;
+static void CreateDummyCmp();
 static void DrawLibPartAux( WinEDA_DrawPanel * panel, wxDC * DC,
                             SCH_COMPONENT * Component,
                             EDA_LibComponentStruct * Entry,
@@ -45,6 +42,8 @@ static void DrawLibPartAux( WinEDA_DrawPanel * panel, wxDC * DC,
                             int Multi, int convert,
                             int DrawMode, int Color = -1, bool DrawPinText = TRUE );
 
+/* Local variables */
+static EDA_LibComponentStruct* DummyCmp;
 
 /***************************************************************************/
 wxPoint TransformCoordinate( int aTransformMatrix[2][2], wxPoint& aPosition )
@@ -66,7 +65,7 @@ wxPoint TransformCoordinate( int aTransformMatrix[2][2], wxPoint& aPosition )
 
 
 /******************************/
-static void CreateDummyCmp()
+void CreateDummyCmp()
 /******************************/
 {
     DummyCmp = new              EDA_LibComponentStruct( NULL );

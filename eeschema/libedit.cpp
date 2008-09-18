@@ -222,7 +222,6 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
 */
 {
 wxString Name, msg;
-int err;
 
 	if(CurrentLib == NULL)
 	{
@@ -234,11 +233,11 @@ int err;
 	msg = _("Modify Library File \"") + Name + _("\"?");
 	if( ! IsOK(this, msg) ) return;
 
-	err = SaveOneLibrary(this, Name, CurrentLib);
+	bool success = CurrentLib->SaveLibrary( Name );
 
 	MsgPanel->EraseMsgBox();
 
-	if ( err )
+	if ( ! success )
 	{
 		msg = _("Error while saving Library File \"") + Name + _("\".");
 		Affiche_1_Parametre(this, 1, wxT(" *** ERROR : **"), msg,BLUE);

@@ -95,17 +95,12 @@ const wxChar * Text;
 	{
 		if ( ListEntry[ii] == NULL )	// Composant non trouv� en librairie
 		{
-		continue;
-			}
-		if ( ii == 0 )
+            continue;
+        }
+		if ( (ii == 0) || ( ListEntry[ii-1] != ListEntry[ii] ) )
 		{
-			WriteOneLibEntry(frame, ArchiveFile, ListEntry[ii]);
+			WriteOneLibEntry(ArchiveFile, ListEntry[ii]);
 			if( DocFile ) WriteOneDocLibEntry(DocFile, ListEntry[ii]);
-		}
-		else if ( ListEntry[ii-1] != ListEntry[ii] )
-		{
-			 WriteOneLibEntry(frame, ArchiveFile, ListEntry[ii]);
-			 if( DocFile ) WriteOneDocLibEntry(DocFile, ListEntry[ii]);
 		}
 	}
 

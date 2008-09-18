@@ -26,7 +26,7 @@ OBJECTS = eeschema.o\
         class_hierarchical_PIN_sheet.o\
 		class_text-label.o\
 		component_class.o\
-		libclass.o\
+		class_library.o\
 		dialog_options.o\
 		tool_lib.o\
 		tool_sch.o\

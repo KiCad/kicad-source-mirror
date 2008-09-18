@@ -2,7 +2,7 @@
 /*	EESchema - eesavlib.cpp	*/
 /****************************/
 
-/* Write Routines to save schematic libraries and library components (::WriteDescr() members)
+/* Write Routines to save schematic libraries and library components (::Save() members)
  */
 
 #include "fctsys.h"
@@ -27,7 +27,7 @@ static bool WriteLibEntryDateAndTime( FILE*                   ExportFile,
 static int fill_tab[3] = { 'N', 'F', 'f' };
 
 /***********************************************/
-bool LibDrawArc::WriteDescr( FILE* ExportFile )
+bool LibDrawArc::Save( FILE* ExportFile ) const
 /***********************************************/
 
 /* format
@@ -46,12 +46,12 @@ bool LibDrawArc::WriteDescr( FILE* ExportFile )
              m_Unit, m_Convert,
              m_Width, fill_tab[m_Fill],
              m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x, m_ArcEnd.y );
-    return FALSE;
+    return true;
 }
 
 
 /***************************************************/
-bool LibDrawCircle::WriteDescr( FILE* ExportFile )
+bool LibDrawCircle::Save( FILE* ExportFile ) const
 /***************************************************/
 {
     fprintf( ExportFile, "C %d %d %d %d %d %d %c\n",
@@ -59,12 +59,12 @@ bool LibDrawCircle::WriteDescr( FILE* ExportFile )
              m_Rayon,
              m_Unit, m_Convert,
              m_Width, fill_tab[m_Fill] );
-    return FALSE;
+    return true;
 }
 
 
 /************************************************/
-bool LibDrawText::WriteDescr( FILE* ExportFile )
+bool LibDrawText::Save( FILE* ExportFile ) const
 /************************************************/
 {
     wxString text = m_Text;
@@ -77,24 +77,24 @@ bool LibDrawText::WriteDescr( FILE* ExportFile )
             m_Size.x, m_Type,
             m_Unit, m_Convert,
             CONV_TO_UTF8( text ) );
-    return FALSE;
+    return true;
 }
 
 
 /***************************************************/
-bool LibDrawSquare::WriteDescr( FILE* ExportFile )
+bool LibDrawSquare::Save( FILE* ExportFile ) const
 /***************************************************/
 {
     fprintf( ExportFile, "S %d %d %d %d %d %d %d %c\n",
              m_Pos.x, m_Pos.y, m_End.x, m_End.y,
              m_Unit, m_Convert,
              m_Width, fill_tab[m_Fill] );
-    return FALSE;
+    return true;
 }
 
 
 /************************************************/
-bool LibDrawPin::WriteDescr( FILE* ExportFile )
+bool LibDrawPin::Save( FILE* ExportFile ) const
 /************************************************/
 {
     wxString StringPinNum;
@@ -145,12 +145,12 @@ bool LibDrawPin::WriteDescr( FILE* ExportFile )
         fprintf( ExportFile, "V" );
 
     fprintf( ExportFile, "\n" );
-    return FALSE;
+    return true;
 }
 
 
 /****************************************************/
-bool LibDrawPolyline::WriteDescr( FILE* ExportFile )
+bool LibDrawPolyline::Save( FILE* ExportFile ) const
 /****************************************************/
 {
     int ii, * ptpoly;
@@ -167,12 +167,22 @@ bool LibDrawPolyline::WriteDescr( FILE* ExportFile )
     }
 
     fprintf( ExportFile, " %c\n", fill_tab[m_Fill] );
-    return FALSE;
+    return true;
+}
+
+/****************************************************/
+bool LibDrawSegment::Save( FILE* ExportFile ) const
+/****************************************************/
+{
+    fprintf( ExportFile, "L %d %d %d",
+             m_Unit, m_Convert,
+             m_Width );
+    return true;
 }
 
 
 /**************************************************/
-bool LibDrawField::WriteDescr( FILE* ExportFile )
+bool LibDrawField::Save( FILE* ExportFile ) const
 /**************************************************/
 {
     int      hjustify, vjustify;
@@ -203,7 +213,7 @@ bool LibDrawField::WriteDescr( FILE* ExportFile )
         fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_Name ) );
 
     fprintf( ExportFile, "\n" );
-    return FALSE;
+    return true;
 }
 
 
@@ -341,10 +351,9 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
 }
 
 
-/********************************************************/
-int WriteOneLibEntry( wxWindow* frame, FILE* ExportFile,
-                      EDA_LibComponentStruct* LibEntry )
-/********************************************************/
+/*************************************************************************/
+int WriteOneLibEntry( FILE* ExportFile, EDA_LibComponentStruct* LibEntry )
+/*************************************************************************/
 
 /* Routine d'ecriture du composant pointe par LibEntry
  *  dans le fichier ExportFile( qui doit etre deja ouvert)
@@ -384,15 +393,15 @@ int WriteOneLibEntry( wxWindow* frame, FILE* ExportFile,
     WriteLibEntryDateAndTime( ExportFile, LibEntry );
 
     /* Position / orientation / visibilite des champs */
-    LibEntry->m_Prefix.WriteDescr( ExportFile );
-    LibEntry->m_Name.WriteDescr( ExportFile );
+    LibEntry->m_Prefix.Save( ExportFile );
+    LibEntry->m_Name.Save( ExportFile );
 
     for( Field = LibEntry->Fields; Field!= NULL;
          Field = (LibDrawField*) Field->Pnext )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;
-        Field->WriteDescr( ExportFile );
+        Field->Save( ExportFile );
     }
 
     /* Sauvegarde de la ligne "ALIAS" */
@@ -429,48 +438,7 @@ int WriteOneLibEntry( wxWindow* frame, FILE* ExportFile,
         DrawEntry = LibEntry->m_Drawings;
         while( DrawEntry )
         {
-            switch( DrawEntry->Type() )
-            {
-            case COMPONENT_ARC_DRAW_TYPE:
-                #define DRAWSTRUCT ( (LibDrawArc*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_CIRCLE_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawCircle*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawText*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_RECT_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawSquare*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_PIN_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawPin*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            case COMPONENT_POLYLINE_DRAW_TYPE:
-                #undef DRAWSTRUCT
-                #define DRAWSTRUCT ( (LibDrawPolyline*) DrawEntry )
-                DRAWSTRUCT->WriteDescr( ExportFile );
-                break;
-
-            default:
-                DisplayError( frame, wxT( "Save Lib: Unknown Draw Type" ) );
-                break;
-            }
-
+            DrawEntry->Save( ExportFile );
             DrawEntry = DrawEntry->Next();
         }
         fprintf( ExportFile, "ENDDRAW\n" );
@@ -517,104 +485,97 @@ int WriteOneDocLibEntry( FILE* ExportFile, EDA_LibComponentStruct* LibEntry )
 
 
 /*********************************************************************************/
-int SaveOneLibrary( wxWindow* frame, const wxString& FullFileName, LibraryStruct* Library )
+bool LibraryStruct::SaveLibrary( const wxString& FullFileName )
 /*********************************************************************************/
-
-/* Sauvegarde en fichier la librairie pointee par Library, sous le nom
- *  FullFileName.
- *  2 fichiers sont crees
- *   - La librarie
- *   - le fichier de documentation
- *
- *  une sauvegarde .bak de l'ancien fichier librairie est cree
- *  une sauvegarde .bck de l'ancien fichier documentation est cree
- *
- *  return:
- *      0 si OK
- *      1 si erreur
+/**
+ * Function SaveLibrary
+ * writes the data structures for this object out to 2 file
+ * the library in "*.lib" format.
+ * the doc file in "*.dcm" format.
+ * creates a backup file for each  file (.bak and .bck)
+ * @param aFullFileName The full lib filename.
+ * @return bool - true if success writing else false.
  */
 {
-    FILE* SaveFile, * SaveDocFile;
+    FILE* libfile, *docfile;
     EDA_LibComponentStruct* LibEntry;
-    char Line[1024];
-    int err = 1;
-    wxString Name, DocName, BakName, msg;
+    wxString libname, docname, backupname, msg;
 
-    if( Library == NULL )
-        return err;
+    libname = FullFileName;
 
-    Name = FullFileName;
-
-    /* L'ancien fichier lib est renomme en .bak */
-    if( wxFileExists( Name ) )
+    /* the old .lib file is renamed .bak */
+    if( wxFileExists( libname ) )
     {
-        BakName = Name; ChangeFileNameExt( BakName, wxT( ".bak" ) );
-        wxRemoveFile( BakName );
-        if( !wxRenameFile( Name, BakName ) )
+        backupname = libname; ChangeFileNameExt( backupname, wxT( ".bak" ) );
+        wxRemoveFile( backupname );
+        if( !wxRenameFile( libname, backupname ) )
         {
-            msg = wxT( "Failed to rename old lib file " ) + BakName;
-            DisplayError( frame, msg, 20 );
+            msg = wxT( "Failed to rename old lib file " ) + backupname;
+            DisplayError( NULL, msg, 20 );
         }
     }
 
-
-    DocName = Name; ChangeFileNameExt( DocName, DOC_EXT );
+    docname = FullFileName; ChangeFileNameExt( docname, DOC_EXT );
     /* L'ancien fichier doc lib est renomme en .bck */
-    if( wxFileExists( DocName ) )
+    if( wxFileExists( docname ) )
     {
-        BakName = DocName; ChangeFileNameExt( BakName, wxT( ".bck" ) );
-        wxRemoveFile( BakName );
-        if( !wxRenameFile( DocName, BakName ) )
+        backupname = docname; ChangeFileNameExt( backupname, wxT( ".bck" ) );
+        wxRemoveFile( backupname );
+        if( !wxRenameFile( docname, backupname ) )
         {
-            msg = wxT( "Failed to save old doc lib file " ) + BakName;
-            DisplayError( frame, msg, 20 );
+            msg = wxT( "Failed to save old doc lib file " ) + backupname;
+            DisplayError( NULL, msg, 20 );
         }
     }
 
 
-    SaveFile = wxFopen( Name, wxT( "wt" ) );
-    if( SaveFile == NULL )
-    {
-        msg = wxT( "Failed to create Lib File " ) + Name;
-        DisplayError( frame, msg, 20 );
-        return err;
+    libfile = wxFopen( libname, wxT( "wt" ) );
+    if( libfile == NULL )
+     {
+        msg = wxT( "Failed to create Lib File " ) + libname;
+        DisplayError( NULL, msg, 20 );
+        return false;
     }
 
-    SaveDocFile = wxFopen( DocName, wxT( "wt" ) );
-    if( SaveDocFile == NULL )
+    docfile = wxFopen( docname, wxT( "wt" ) );
+    if( docfile == NULL )
     {
-        msg = wxT( "Failed to create DocLib File " ) + DocName;
-        DisplayError( frame, msg, 20 );
-        return err;
+        msg = wxT( "Failed to create DocLib File " ) + docname;
+        DisplayError( NULL, msg, 20 );
     }
 
-    Library->m_Modified = 0;
+    m_Modified = 0;
 
     /* Creation de l'entete de la librairie */
-    Library->m_TimeStamp = GetTimeStamp();
-    Library->WriteHeader( SaveFile );
-    fprintf( SaveDocFile, "%s  Date: %s\n", DOCFILE_IDENT,
-            DateAndTime( Line ) );
-
+    m_TimeStamp = GetTimeStamp();
+    WriteHeader( libfile );
 
     /* Sauvegarde des composant: */
     PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-    LibEntry = (EDA_LibComponentStruct*) PQFirst( &Library->m_Entries, FALSE );
+    LibEntry = (EDA_LibComponentStruct*) PQFirst( &m_Entries, FALSE );
+    char Line[256];
+    fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT,
+            DateAndTime( Line ) );
 
+    bool success = true;
     while( LibEntry )
     {
-        err = WriteOneLibEntry( frame, SaveFile, LibEntry );
-        err = WriteOneDocLibEntry( SaveDocFile, LibEntry );
+        if (  WriteOneLibEntry( libfile, LibEntry ) != 0 )
+            success = false;
+        if ( docfile )
+            if ( WriteOneDocLibEntry( docfile, LibEntry ) != 0 )
+                success = false;
 
         LibEntry = (EDA_LibComponentStruct*)
-                   PQNext( Library->m_Entries, LibEntry, NULL );
+                   PQNext( m_Entries, LibEntry, NULL );
     }
 
-    fprintf( SaveFile, "#\n#End Library\n" );
-    fprintf( SaveDocFile, "#\n#End Doc Library\n" );
-    fclose( SaveFile );
-    fclose( SaveDocFile );
-    return err;
+    fprintf( libfile, "#\n#End Library\n" );
+    if ( docfile )
+        fprintf( docfile, "#\n#End Doc Library\n" );
+    fclose( libfile );
+    fclose( docfile );
+    return success;
 }
 
 

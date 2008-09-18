@@ -151,7 +151,7 @@ public:
       * @param aOffset = offset to draw
       * @param aColor = -1 to use the normal body item color, or use this color if >= 0
       * @param aDrawMode = GR_OR, GR_XOR, ...
-      * @param aData = pointer used to pass others parametres, depending on body items.
+      * @param aData = value or pointer used to pass others parametres, depending on body items.
       *          used for some items to force to force no fill mode
       *         ( has meaning only for items what can be filled ). used in printing or moving objects mode
       *         or to pass refernce to the lib component for pins
@@ -159,6 +159,14 @@ public:
      */
     virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                        int aDrawMode, void * aData, int aTransformMatrix[2][2] ) = 0;
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const = 0;
 
     void Display_Infos_DrawEntry( WinEDA_DrawFrame* frame );
 };
@@ -189,15 +197,21 @@ public:
     {
         return wxT( "LibDrawPin" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawPin* GenCopy();
-    bool        WriteDescr( FILE* File );
     void        Display_Infos( WinEDA_DrawFrame* frame );
     wxPoint     ReturnPinEndPoint();
 
     int ReturnPinDrawOrient( int TransMat[2][2] );
-    void        ReturnPinStringNum( wxString& buffer );
+    void        ReturnPinStringNum( wxString& buffer ) const;
     void        SetPinNumFromString( wxString& buffer );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
@@ -234,10 +248,16 @@ public:
     {
         return wxT( "LibDrawArc" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawArc* GenCopy();
-    bool        WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };
@@ -257,10 +277,16 @@ public:
     {
         return wxT( "LibDrawCircle" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawCircle* GenCopy();
-    bool           WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };
@@ -287,10 +313,16 @@ public:
     {
         return wxT( "LibDrawText" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawText* GenCopy();
-    bool         WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };
@@ -311,10 +343,16 @@ public:
     {
         return wxT( "LibDrawSquare" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawSquare* GenCopy();
-    bool           WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };
@@ -334,10 +372,16 @@ public:
     {
         return wxT( "LibDrawSegment" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawSegment* GenCopy();
-    bool            WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };
@@ -365,10 +409,16 @@ public:
         return wxT( "LibDrawPolyline" );
     }
 
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
     LibDrawPolyline* GenCopy();
     void             AddPoint( const wxPoint& point );
-    bool             WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };
@@ -406,11 +456,17 @@ public:
     {
         return wxT( "LibDrawField" );
     }
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
 
 
     LibDrawField* GenCopy();
     void          Copy( LibDrawField* Target );
-    bool          WriteDescr( FILE* File );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
 };

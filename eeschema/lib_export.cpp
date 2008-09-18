@@ -88,7 +88,6 @@ void WinEDA_LibeditFrame::ExportOnePart( bool create_lib )
 {
     wxString       Name, mask;
     LibraryStruct* NewLib, * LibTmp, * CurLibTmp;
-    int            err;
 
     if( CurrentLibEntry == NULL )
     {
@@ -131,7 +130,7 @@ void WinEDA_LibeditFrame::ExportOnePart( bool create_lib )
     /* Sauvegarde du composant: */
     CurrentLib = NewLib;
     SaveOnePartInMemory();
-    err = SaveOneLibrary( this, Name, NewLib );
+    bool success = NewLib->SaveLibrary( Name );
 
     /* Suppression de la librarie temporaire */
     FreeCmpLibrary( this, NewLib->m_Name );
@@ -139,7 +138,7 @@ void WinEDA_LibeditFrame::ExportOnePart( bool create_lib )
     CurrentLib    = CurLibTmp;
 
     wxString msg;
-    if( create_lib && (err == 0) )
+    if( create_lib && success )
     {
         msg = Name + _( "0k" );
         DisplayInfo( this,
