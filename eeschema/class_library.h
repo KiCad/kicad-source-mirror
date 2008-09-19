@@ -87,14 +87,12 @@ public:
     }
 
     /**
-     * Function SaveLibrary
-     * writes the data structures for this object out to 2 FILE in "*.lib" and ".dcm" format.
-     *  the main file (.lib) is the library content (set of components)
-     *  the second file (.dcm)is the auxiliary file that contents the keywords and description for components)
-     * @param FullFileName the new full filename (*.lib).
+     * Function SaveDoc
+     * writes the doc info out to a FILE in "*.dcm" format.
+     * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool SaveLibrary( const wxString& FullFileName );
+    bool SaveDoc( FILE* aFile );
 };
 
 
@@ -131,6 +129,14 @@ public:
 
     ~EDA_LibComponentStruct();
     void     SortDrawItems();
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.lib" format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    bool Save( FILE* aFile );
 };
 
 

@@ -60,7 +60,7 @@ const wxChar * Text;
 	{
 		Text = List[ii].m_Comp->m_ChipName.GetData();
 		Entry = FindLibPart(Text, wxEmptyString, FIND_ROOT);
-		ListEntry[ii] = Entry;	// = NULL si Composant non trouv� en librairie
+		ListEntry[ii] = Entry;	// = NULL component not found
 	}
 
 	MyFree(List);
@@ -90,21 +90,22 @@ const wxChar * Text;
 	if( DocFile)
 		fprintf(DocFile,"%s  %s\n", DOCFILE_IDENT, DateAndTime(Line));
 
-	/* Generation des elements */
+	/* Save components in file */
 	for ( ii = 0; ii < NbItems; ii++ )
 	{
-		if ( ListEntry[ii] == NULL )	// Composant non trouv� en librairie
+		if ( ListEntry[ii] == NULL )	// Not found in lib
 		{
             continue;
         }
 		if ( (ii == 0) || ( ListEntry[ii-1] != ListEntry[ii] ) )
 		{
-			WriteOneLibEntry(ArchiveFile, ListEntry[ii]);
-			if( DocFile ) WriteOneDocLibEntry(DocFile, ListEntry[ii]);
+            if ( ListEntry[ii]->Type == ROOT)   // Must be always true, but just in case
+                ListEntry[ii]->Save(ArchiveFile);
+			if( DocFile )
+                ListEntry[ii]->SaveDoc(DocFile);
 		}
 	}
 
-	/* Generation fin de fichier */
 	fprintf(ArchiveFile,"#\n#EndLibrary\n");
 	fclose(ArchiveFile);
 

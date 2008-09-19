@@ -59,10 +59,6 @@ void DrawLibraryDrawStruct(WinEDA_DrawPanel * aPanel, wxDC * aDC,
 
 bool MapAngles(int *Angle1, int *Angle2, int TransMat[2][2]);
 
-
-    /**************/
-    /* EELIBS_DRAW_COMPONENTS.CPP */
-    /**************/
 EDA_LibComponentStruct * Read_Component_Definition(WinEDA_DrawFrame * frame, char * Line,
         FILE *f, int *LineNum);
 /* Routine to Read a DEF/ENDDEF part entry from given open file. */
@@ -229,21 +225,11 @@ LibEDA_BaseStruct * CopyDrawEntryStruct( wxWindow * frame, LibEDA_BaseStruct * D
          Retourne:
              Pointeur sur la structure creee (ou NULL si impossible) */
 
-int WriteOneLibEntry( FILE * ExportFile, EDA_LibComponentStruct * LibEntry);
-            /* Routine d'ecriture du composant pointe par LibEntry
-                dans le fichier ExportFile( qui doit etre deja ouvert)
-                return: FALSE si Ok, TRUE si err write */
 
 EDA_LibComponentStruct * CopyLibEntryStruct (wxWindow * frame, EDA_LibComponentStruct * OldEntry);
             /* Routine de copie d'une partlib
                    Parametres d'entree: pointeur sur la structure de depart
                    Parametres de sortie: pointeur sur la structure creee */
-
-int WriteOneDocLibEntry(FILE * ExportFile, EDA_LibComponentStruct * LibEntry);
-        /* Routine d'ecriture de la doc du composant pointe par LibEntry
-         dans le fichier ExportFile( qui doit etre deja ouvert)
-         return: 0 si Ok
-            1 si err write */
 
 
 /***************/
@@ -253,11 +239,6 @@ void SuppressDuplicateDrawItem(EDA_LibComponentStruct * LibEntry);
         /* Routine de suppression des elements de trace dupliques, situation
         frequente lorsque l'on charge des symboles predessines plusieurs fois
         pour definir un composant */
-
-/***************/
-/* SYMBTEXT.CPP */
-/***************/
-
 
 /**************/
 /* NETLIST.CPP */

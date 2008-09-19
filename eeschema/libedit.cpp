@@ -85,7 +85,7 @@ wxString msg;
 wxString CmpName;
 EDA_LibComponentStruct *LibEntry = NULL;
 
-	if( ScreenLib->IsModify() )
+	if( g_ScreenLib->IsModify() )
 	{
 		if( ! IsOK(this, _("Current Part not saved.\nContinue?") ) ) return FALSE;
 	}
@@ -96,7 +96,7 @@ EDA_LibComponentStruct *LibEntry = NULL;
 	i = GetNameOfPartToLoad(this, CurrentLib, CmpName);
 	if( i == 0) return FALSE;
 
-	ScreenLib->ClrModify();
+	g_ScreenLib->ClrModify();
 	CurrentDrawItem = NULL;
 	// Effacement ancien composant affich�
 	if( CurrentLibEntry)
@@ -166,7 +166,7 @@ const wxChar * CmpName, *RootName = NULL;
 
 	BuildAliasData(Library, CurrentLibEntry);
 
-	ScreenLib->ClrModify();
+	g_ScreenLib->ClrModify();
 	g_AsDeMorgan = 0;
 
 	if( LookForConvertPart(CurrentLibEntry) > 1 ) g_AsDeMorgan = 1;
@@ -564,7 +564,7 @@ bool NewCmp = TRUE;
 	}
 
 	CurrentLib->m_Modified = 1;
-	ScreenLib->ClrModify();
+	g_ScreenLib->ClrModify();
 
 	PQCompFunc((PQCompFuncType) LibraryEntryCompare);
 

@@ -275,10 +275,10 @@ void WinEDA_SchematicFrame::CreateScreens()
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
-    if( ScreenLib == NULL )
-        ScreenLib = new SCH_SCREEN( LIBEDITOR_FRAME );
-    ScreenLib->SetZoom( 4 );
-    ScreenLib->m_UndoRedoCountMax = 10;
+    if( g_ScreenLib == NULL )
+        g_ScreenLib = new SCH_SCREEN( LIBEDITOR_FRAME );
+    g_ScreenLib->SetZoom( 4 );
+    g_ScreenLib->m_UndoRedoCountMax = 10;
 }
 
 
@@ -356,9 +356,7 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 
 
 /*****************************************************************************
- *
  * Enable or disable some tools according to current conditions
- *
  *****************************************************************************/
 void WinEDA_SchematicFrame::SetToolbars()
 {
@@ -451,21 +449,27 @@ int WinEDA_SchematicFrame::BestZoom()
     return bestzoom;
 }
 
+/**************************************************************/
 void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )
+/**************************************************************/
 {
     WinEDA_AnnotateFrame* dlg = new WinEDA_AnnotateFrame( this );
     dlg->ShowModal();
     dlg->Destroy();
 }
 
+/*********************************************************/
 void WinEDA_SchematicFrame::OnErc( wxCommandEvent& event )
+/*********************************************************/
 {
     WinEDA_ErcFrame* dlg = new WinEDA_ErcFrame( this );
     dlg->ShowModal();
     dlg->Destroy();
 }
 
+/*******************************************************************/
 void WinEDA_SchematicFrame::OnCreateNetlist( wxCommandEvent& event )
+/*******************************************************************/
 {
     int i;
 
@@ -481,14 +485,18 @@ void WinEDA_SchematicFrame::OnCreateNetlist( wxCommandEvent& event )
     // If a plugin is removed or added, rebuild and reopen the new dialog
 }
 
+/**********************************************************************/
 void WinEDA_SchematicFrame::OnCreateBillOfMaterials( wxCommandEvent & )
+/**********************************************************************/
 {
     WinEDA_Build_BOM_Frame* dlg = new WinEDA_Build_BOM_Frame( this );
     dlg->ShowModal();
     dlg->Destroy();
 }
 
+/*******************************************************************/
 void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
+/*******************************************************************/
 {
     this->DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_FindFrame* dlg = new WinEDA_FindFrame( this );
@@ -497,7 +505,9 @@ void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
     this->DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
 
+/***************************************************************/
 void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
+/***************************************************************/
 {
     int i = event.GetId() - ID_LOAD_FILE_1;
 
@@ -505,23 +515,31 @@ void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
     SetToolbars();
 }
 
+/*******************************************************************/
 void WinEDA_SchematicFrame::OnLoadStuffFile( wxCommandEvent& event )
+/*******************************************************************/
 {
     ReadInputStuffFile( );
     DrawPanel->Refresh();
 }
 
+/****************************************************************/
 void WinEDA_SchematicFrame::OnNewProject( wxCommandEvent& event )
+/****************************************************************/
 {
     LoadOneEEProject( wxEmptyString, true );
 }
 
+/*****************************************************************/
 void WinEDA_SchematicFrame::OnLoadProject( wxCommandEvent& event )
+/*****************************************************************/
 {
     LoadOneEEProject( wxEmptyString, false );
 }
 
+/****************************************************************/
 void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
+/****************************************************************/
 {
     wxString Line = g_RootSheet->m_AssociatedScreen->m_FileName;
 
@@ -535,7 +553,9 @@ void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
         ExecuteFile( this, PCBNEW_EXE );
 }
 
+/***************************************************************/
 void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
+/***************************************************************/
 {
     wxString Line = g_RootSheet->m_AssociatedScreen->m_FileName;
 
@@ -549,7 +569,9 @@ void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
         ExecuteFile( this, CVPCB_EXE );
 }
 
+/*************************************************************************/
 void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
+/*************************************************************************/
 {
     if( m_Parent->m_ViewlibFrame )
     {
@@ -564,7 +586,9 @@ void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
     }
 }
 
+/*************************************************************************/
 void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
+/*************************************************************************/
 {
     if( m_Parent->m_LibeditFrame )
     {
@@ -578,7 +602,7 @@ void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
                                      wxT( "Library Editor" ),
                                      wxPoint( -1, -1 ),
                                      wxSize( 600, 400 ) );
-        ActiveScreen = ScreenLib;
+        ActiveScreen = g_ScreenLib;
         m_Parent->m_LibeditFrame->AdjustScrollBars();
     }
 }

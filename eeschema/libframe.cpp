@@ -71,7 +71,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
-    SetBaseScreen( ScreenLib );
+    SetBaseScreen( g_ScreenLib );
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     if( DrawPanel )

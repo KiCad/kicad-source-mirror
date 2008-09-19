@@ -18,8 +18,17 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
                        int aDrawMode, void* aData, int aTransformMatrix[2][2] )
 /**********************************************************************************************/
 {
-    if( ( m_Attributs & PINNOTDRAW ) && !g_ShowAllPins )
-        return;
+
+    // Invisibles pins are only drawn on request.
+    // But in libedit they are drawn in g_InvisibleItemColor because we must see them
+    if( ( m_Attributs & PINNOTDRAW ) )
+    {
+        if ( g_EDA_Appl->m_LibeditFrame && g_EDA_Appl->m_LibeditFrame->IsActive() )
+            aColor = g_InvisibleItemColor;
+        else  if( !g_ShowAllPins )
+            return;
+    }
+
 
     EDA_LibComponentStruct* Entry = ( (DrawPinPrms*) aData )->m_Entry;
     bool    DrawPinText = ( (DrawPinPrms*) aData )->m_DrawPinText;

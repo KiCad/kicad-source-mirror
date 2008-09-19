@@ -2,7 +2,7 @@
 /*	EESchema - eesavlib.cpp	*/
 /****************************/
 
-/* Write Routines to save schematic libraries and library components (::Save() members)
+/* Functions to save schematic libraries and library components (::Save() members)
  */
 
 #include "fctsys.h"
@@ -350,137 +350,132 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
     return NewStruct;
 }
 
-
-/*************************************************************************/
-int WriteOneLibEntry( FILE* ExportFile, EDA_LibComponentStruct* LibEntry )
-/*************************************************************************/
-
-/* Routine d'ecriture du composant pointe par LibEntry
- *  dans le fichier ExportFile( qui doit etre deja ouvert)
- *  return: 0 si Ok
- *          -1 si err write
- *          1 si composant non ecrit ( type ALIAS )
+/************************************************/
+bool EDA_LibComponentStruct::Save( FILE* aFile )
+/***********************************************/
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
  */
 #define UNUSED 0
 {
     LibEDA_BaseStruct* DrawEntry;
     LibDrawField*      Field;
 
-    if( LibEntry->Type != ROOT )
-        return 1;
+    if( Type != ROOT )  // should not happen, but just in case
+        return false;
 
-    /* Creation du commentaire donnant le nom du composant */
-    fprintf( ExportFile, "#\n# %s\n#\n", CONV_TO_UTF8( LibEntry->m_Name.m_Text ) );
+    /* First line: it s a comment (component name for readers) */
+    fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( m_Name.m_Text ) );
 
-    /* Generation des lignes utiles */
-    fprintf( ExportFile, "DEF" );
-    if( (LibEntry->m_Name.m_Attributs & TEXT_NO_VISIBLE) == 0 )
-        fprintf( ExportFile, " %s", CONV_TO_UTF8( LibEntry->m_Name.m_Text ) );
+    /* Save data */
+    fprintf( aFile, "DEF" );
+    if( (m_Name.m_Attributs & TEXT_NO_VISIBLE) == 0 )
+        fprintf( aFile, " %s", CONV_TO_UTF8( m_Name.m_Text ) );
     else
-        fprintf( ExportFile, " ~%s", CONV_TO_UTF8( LibEntry->m_Name.m_Text ) );
+        fprintf( aFile, " ~%s", CONV_TO_UTF8( m_Name.m_Text ) );
 
-    if( !LibEntry->m_Prefix.m_Text.IsEmpty() )
-        fprintf( ExportFile, " %s", CONV_TO_UTF8( LibEntry->m_Prefix.m_Text ) );
+    if( !m_Prefix.m_Text.IsEmpty() )
+        fprintf( aFile, " %s", CONV_TO_UTF8( m_Prefix.m_Text ) );
     else
-        fprintf( ExportFile, " ~" );
-    fprintf( ExportFile, " %d %d %c %c %d %c %c\n",
-             UNUSED, LibEntry->m_TextInside,
-             LibEntry->m_DrawPinNum ? 'Y' : 'N',
-             LibEntry->m_DrawPinName ? 'Y' : 'N',
-             LibEntry->m_UnitCount, LibEntry->m_UnitSelectionLocked ? 'L' : 'F',
-             LibEntry->m_Options == ENTRY_POWER ? 'P' : 'N' );
+        fprintf( aFile, " ~" );
+    fprintf( aFile, " %d %d %c %c %d %c %c\n",
+             UNUSED, m_TextInside,
+             m_DrawPinNum ? 'Y' : 'N',
+             m_DrawPinName ? 'Y' : 'N',
+             m_UnitCount, m_UnitSelectionLocked ? 'L' : 'F',
+             m_Options == ENTRY_POWER ? 'P' : 'N' );
 
-    WriteLibEntryDateAndTime( ExportFile, LibEntry );
+    WriteLibEntryDateAndTime( aFile, this );
 
-    /* Position / orientation / visibilite des champs */
-    LibEntry->m_Prefix.Save( ExportFile );
-    LibEntry->m_Name.Save( ExportFile );
+    /* Save fields */
+    m_Prefix.Save( aFile );
+    m_Name.Save( aFile );
 
-    for( Field = LibEntry->Fields; Field!= NULL;
+    for( Field = Fields; Field!= NULL;
          Field = (LibDrawField*) Field->Pnext )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;
-        Field->Save( ExportFile );
+        Field->Save( aFile );
     }
 
-    /* Sauvegarde de la ligne "ALIAS" */
-    if( LibEntry->m_AliasList.GetCount() != 0 )
+    /* Save the alias list: a line starting by "ALIAS" */
+    if( m_AliasList.GetCount() != 0 )
     {
-        fprintf( ExportFile, "ALIAS" );
+        fprintf( aFile, "ALIAS" );
         unsigned ii;
-        for( ii = 0; ii < LibEntry->m_AliasList.GetCount(); ii++ )
-            fprintf( ExportFile, " %s", CONV_TO_UTF8( LibEntry->m_AliasList[ii] ) );
+        for( ii = 0; ii < m_AliasList.GetCount(); ii++ )
+            fprintf( aFile, " %s", CONV_TO_UTF8( m_AliasList[ii] ) );
 
-        fprintf( ExportFile, "\n" );
+        fprintf( aFile, "\n" );
     }
 
     /* Write the footprint filter list */
-    if( LibEntry->m_FootprintList.GetCount() != 0 )
+    if( m_FootprintList.GetCount() != 0 )
     {
-        fprintf( ExportFile, "$FPLIST\n" );
+        fprintf( aFile, "$FPLIST\n" );
         unsigned ii;
-        for( ii = 0; ii < LibEntry->m_FootprintList.GetCount(); ii++ )
-            fprintf( ExportFile, " %s\n", CONV_TO_UTF8( LibEntry->m_FootprintList[ii] ) );
+        for( ii = 0; ii < m_FootprintList.GetCount(); ii++ )
+            fprintf( aFile, " %s\n", CONV_TO_UTF8( m_FootprintList[ii] ) );
 
-        fprintf( ExportFile, "$ENDFPLIST\n" );
+        fprintf( aFile, "$ENDFPLIST\n" );
     }
 
-    /* Sauvegarde des elements de trace */
-    DrawEntry = LibEntry->m_Drawings;
-    if( LibEntry->m_Drawings )
+    /* Save graphics items (including pins) */
+    if( m_Drawings )
     {
         /* we sort the draw items, in order to have an edition more easy,
          *  when a file editing "by hand" is made */
-        LibEntry->SortDrawItems();
+        SortDrawItems();
 
-        fprintf( ExportFile, "DRAW\n" );
-        DrawEntry = LibEntry->m_Drawings;
+        fprintf( aFile, "DRAW\n" );
+        DrawEntry = m_Drawings;
         while( DrawEntry )
         {
-            DrawEntry->Save( ExportFile );
+            DrawEntry->Save( aFile );
             DrawEntry = DrawEntry->Next();
         }
-        fprintf( ExportFile, "ENDDRAW\n" );
+        fprintf( aFile, "ENDDRAW\n" );
     }
 
-    fprintf( ExportFile, "ENDDEF\n" );
+    fprintf( aFile, "ENDDEF\n" );
 
-    return 0;
+    return true;
 }
 
 
-/*************************************************************************/
-int WriteOneDocLibEntry( FILE* ExportFile, EDA_LibComponentStruct* LibEntry )
-/*************************************************************************/
-
-/* Routine d'ecriture de la doc du composant pointe par LibEntry
- *  dans le fichier ExportFile( qui doit etre deja ouvert)
- *  return: 0 si Ok
- *          1 si err write
- *  Cependant, si i tous les Pointeurs sur textes sont nulls ( pas de Doc )
- *      rien ne sera ecrit.
+/***************************************/
+bool LibCmpEntry::SaveDoc( FILE* aFile )
+/***************************************/
+/**
+ * Function SaveDoc
+ * writes the doc info out to a FILE in "*.dcm" format.
+ * Only non empty fields are written.
+ * If all fielsd are empty, does not write anything
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
  */
 {
-    if( ( LibEntry->m_Doc.IsEmpty() )
-       && ( LibEntry->m_KeyWord.IsEmpty() )
-       && ( LibEntry->m_DocFile.IsEmpty() ) )
-        return 0;
+    if( m_Doc.IsEmpty() && m_KeyWord.IsEmpty() && m_DocFile.IsEmpty() )
+        return true;
 
     /* Generation des lignes utiles */
-    fprintf( ExportFile, "#\n$CMP %s\n", CONV_TO_UTF8( LibEntry->m_Name.m_Text ) );
+    fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name.m_Text ) );
 
-    if( !LibEntry->m_Doc.IsEmpty() )
-        fprintf( ExportFile, "D %s\n", CONV_TO_UTF8( LibEntry->m_Doc ) );
+    if( ! m_Doc.IsEmpty() )
+        fprintf( aFile, "D %s\n", CONV_TO_UTF8( m_Doc ) );
 
-    if( !LibEntry->m_KeyWord.IsEmpty() )
-        fprintf( ExportFile, "K %s\n", CONV_TO_UTF8( LibEntry->m_KeyWord ) );
+    if( ! m_KeyWord.IsEmpty() )
+        fprintf( aFile, "K %s\n", CONV_TO_UTF8( m_KeyWord ) );
 
-    if( !LibEntry->m_DocFile.IsEmpty() )
-        fprintf( ExportFile, "F %s\n", CONV_TO_UTF8( LibEntry->m_DocFile ) );
+    if( ! m_DocFile.IsEmpty() )
+        fprintf( aFile, "F %s\n", CONV_TO_UTF8( m_DocFile ) );
 
-    fprintf( ExportFile, "$ENDCMP\n" );
-    return 0;
+    fprintf( aFile, "$ENDCMP\n" );
+    return true;
 }
 
 
@@ -560,11 +555,16 @@ bool LibraryStruct::SaveLibrary( const wxString& FullFileName )
     bool success = true;
     while( LibEntry )
     {
-        if (  WriteOneLibEntry( libfile, LibEntry ) != 0 )
-            success = false;
-        if ( docfile )
-            if ( WriteOneDocLibEntry( docfile, LibEntry ) != 0 )
+        if ( LibEntry->Type == ROOT )
+        {
+            if ( ! LibEntry->Save( libfile ) )
                 success = false;
+        }
+        if ( docfile )
+        {
+            if ( ! LibEntry->SaveDoc( docfile ) )
+                success = false;
+        }
 
         LibEntry = (EDA_LibComponentStruct*)
                    PQNext( m_Entries, LibEntry, NULL );

@@ -13,11 +13,7 @@
 #include "trigo.h"
 #include "protos.h"
 
-#define UNVISIBLE_COLOR DARKGRAY
-
-//#define DRAW_ARC_WITH_ANGLE		// Used to draw arcs
-
-
+//#define DRAW_ARC_WITH_ANGLE		// Used to select function to draw arcs
 
 
 /* Local functions */
@@ -129,7 +125,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
         if( Color >= 0 )
             color = Color;
         else
-            color = UNVISIBLE_COLOR;
+            color = g_InvisibleItemColor;
     }
     else color = Color;
 
@@ -146,7 +142,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
         if( Color >= 0 )
             color = Color;
         else
-            color = UNVISIBLE_COLOR;
+            color = g_InvisibleItemColor;
     }
     else color = Color;
 
@@ -164,7 +160,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
             if( Color >= 0 )
                 color = Color;
             else
-                color = UNVISIBLE_COLOR;
+                color = g_InvisibleItemColor;
         }
         else color = Color;
         Field->Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
