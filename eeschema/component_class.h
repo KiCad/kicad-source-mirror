@@ -9,77 +9,12 @@
 #define eda_global extern
 #endif
 
-#include "macros.h"
 #include "base_struct.h"
-#include <wx/arrstr.h>
 #include "class_screen.h"
+#include <wx/arrstr.h>
 #include <wx/dynarray.h>
 
-/* Definition de la representation du composant */
-enum  NumFieldType {
-    REFERENCE = 0,          /* Champ Reference of part, i.e. "IC21" */
-    VALUE,                  /* Champ Value of part, i.e. "3.3K" */
-    FOOTPRINT,              /* Champ Name Module PCB, i.e. "16DIP300" */
-    SHEET_FILENAME,         /* Champ Name Schema component, i.e. "cnt16.sch" */
-    FIELD1,
-    FIELD2,
-    FIELD3,
-    FIELD4,
-    FIELD5,
-    FIELD6,
-    FIELD7,
-    FIELD8,
-    NUMBER_OF_FIELDS        /* Nombre de champs de texte affectes au composant */
-};
-
-
-/* Class to manage component fields.
- *  component fields are texts attached to the component (not the graphic texts)
- *  There are 2 major fields : Reference and Value
- */
-class SCH_CMP_FIELD :  public SCH_ITEM,
-    public EDA_TextStruct
-{
-public:
-    int      m_FieldId;         // Field indicator type (REFERENCE, VALUE or other id)
-    wxString m_Name;    /* Field name (ref, value,pcb, sheet, filed 1..
-                         *  and for fields 1 to 8 the name is editable */
-    bool     m_AddExtraText;    // Mainly for REFERENCE, add extar info (for REFERENCE: add part selection text
-
-public:
-    SCH_CMP_FIELD( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
-    ~SCH_CMP_FIELD();
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "SCH_CMP_FIELD" );
-    }
-
-
-    void        PartTextCopy( SCH_CMP_FIELD* target );
-    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-
-    EDA_Rect    GetBoundaryBox() const;
-    bool        IsVoid();
-    void        SwapData( SCH_CMP_FIELD* copyitem );
-
-    /**
-     * Function Draw
-     */
-    void        Draw( WinEDA_DrawPanel* panel,
-                      wxDC*                 DC,
-                      const wxPoint&        offset,
-                      int                   draw_mode,
-                      int                   Color = -1 );
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool    Save( FILE* aFile ) const;
-};
-
+#include "class_sch_cmp_field.h"
 
 WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
 

@@ -16,6 +16,7 @@ set(EESCHEMA_SRCS
     class_hierarchical_PIN_sheet.cpp
     class_pin.cpp
     class_library.cpp
+	class_sch_cmp_field.cpp
     class_schematic_items.cpp
     class_screen.cpp
     class_text-label.cpp

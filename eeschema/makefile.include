@@ -20,6 +20,7 @@ OBJECTS = eeschema.o\
 		cross-probing.o\
 		setpage.o\
 		class_schematic_items.o\
+		class_sch_cmp_field.o\
         classes_body_items.o\
 		class_drawsheet.o\
 		class_pin.o\
@@ -115,7 +116,7 @@ menubar.o: menubar.cpp $(DEPEND)
 
 find.o:find.cpp dialog_find.cpp dialog_find.h $(DEPEND)
 
-backanno.o:backanno.cpp dialog_backanno.cpp dialog_backanno.h $(DEPEND)
+backanno.o:backanno.cpp $(DEPEND)
 
 eeconfig.o: eeconfig.cpp eeconfig.h $(DEPEND)
 
