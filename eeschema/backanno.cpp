@@ -12,8 +12,6 @@
 
 /* Variables Locales */
 
-#include "dialog_backanno.cpp"
-
 /*******************************************************************************************/
 bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
     const wxString& aReference,

@@ -480,10 +480,9 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
  * @param ObjNet: if NULL, objects count else list to fill
  */
 {
-    int                            ii, NbrItem = 0;
-    EDA_BaseStruct*                DrawList;
-    SCH_COMPONENT*                 DrawLibItem;
-    int                            TransMat[2][2], PartX, PartY, x2, y2;
+    int             ii, NbrItem = 0;
+    EDA_BaseStruct* DrawList;
+    SCH_COMPONENT*  DrawLibItem;
     EDA_LibComponentStruct*        Entry;
     LibEDA_BaseStruct*             DEntry;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
@@ -529,8 +528,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                 ObjNet[NbrItem].m_SheetListInclude = *sheetlist;
                 ObjNet[NbrItem].m_Comp  = STRUCT;
                 ObjNet[NbrItem].m_Type  = NET_JONCTION;
-                ObjNet[NbrItem].m_Start = STRUCT->m_Pos;
-                ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
+                ObjNet[NbrItem].m_Start = ObjNet[NbrItem].m_End = STRUCT->m_Pos;
             }
             NbrItem++;
             break;
@@ -544,8 +542,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                 ObjNet[NbrItem].m_SheetListInclude = *sheetlist;
                 ObjNet[NbrItem].m_Comp  = STRUCT;
                 ObjNet[NbrItem].m_Type  = NET_NOCONNECT;
-                ObjNet[NbrItem].m_Start = STRUCT->m_Pos;
-                ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
+                ObjNet[NbrItem].m_Start = ObjNet[NbrItem].m_End = STRUCT->m_Pos;
             }
             NbrItem++;
             break;
@@ -567,8 +564,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                     ObjNet[NbrItem].m_Type = NET_HIERLABEL;
 
                 ObjNet[NbrItem].m_Label = &STRUCT->m_Text;
-                ObjNet[NbrItem].m_Start = STRUCT->m_Pos;
-                ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
+                ObjNet[NbrItem].m_Start = ObjNet[NbrItem].m_End = STRUCT->m_Pos;
 
                 /* Si c'est un Bus, eclatement en Label */
                 if( ii )
@@ -595,8 +591,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                     ObjNet[NbrItem].m_Type = NET_HIERLABEL;
 
                 ObjNet[NbrItem].m_Label = &STRUCT->m_Text;
-                ObjNet[NbrItem].m_Start = STRUCT->m_Pos;
-                ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
+                ObjNet[NbrItem].m_Start = ObjNet[NbrItem].m_End = STRUCT->m_Pos;
 
                 /* Si c'est un Bus, eclatement en Label */
                 if( ii )
@@ -607,11 +602,6 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
 
         case TYPE_SCH_COMPONENT:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
-
-            memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );
-
-            PartX = DrawLibItem->m_Pos.x;
-            PartY = DrawLibItem->m_Pos.y;
 
             Entry = FindLibPart( DrawLibItem->m_ChipName, wxEmptyString, FIND_ROOT );
 
@@ -636,11 +626,9 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                    && (DEntry->m_Convert != DrawLibItem->m_Convert) )
                     continue;
 
-                x2 = PartX + TransMat[0][0] * Pin->m_Pos.x
-                     + TransMat[0][1] * Pin->m_Pos.y;
-
-                y2 = PartY + TransMat[1][0] * Pin->m_Pos.x
-                     + TransMat[1][1] * Pin->m_Pos.y;
+                wxPoint pos2 =
+                    TransformCoordinate( DrawLibItem->m_Transform,
+                        Pin->m_Pos ) + DrawLibItem->m_Pos;
 
                 if( ObjNet )
                 {
@@ -650,11 +638,9 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                     ObjNet[NbrItem].m_Type = NET_PIN;
                     ObjNet[NbrItem].m_Link = DrawLibItem;
                     ObjNet[NbrItem].m_ElectricalType = Pin->m_PinType;
-                    ObjNet[NbrItem].m_PinNum  = Pin->m_PinNum;
-                    ObjNet[NbrItem].m_Label   = &Pin->m_PinName;
-                    ObjNet[NbrItem].m_Start.x = x2;
-                    ObjNet[NbrItem].m_Start.y = y2;
-                    ObjNet[NbrItem].m_End = ObjNet[NbrItem].m_Start;
+                    ObjNet[NbrItem].m_PinNum = Pin->m_PinNum;
+                    ObjNet[NbrItem].m_Label  = &Pin->m_PinName;
+                    ObjNet[NbrItem].m_Start  = ObjNet[NbrItem].m_End = pos2;
                 }
                 NbrItem++;
 
@@ -667,11 +653,10 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                         ObjNet[NbrItem].m_SheetListInclude = *sheetlist;
                         ObjNet[NbrItem].m_Comp      = NULL;
                         ObjNet[NbrItem].m_SheetList = *sheetlist;
-                        ObjNet[NbrItem].m_Type    = NET_PINLABEL;
-                        ObjNet[NbrItem].m_Label   = &Pin->m_PinName;
-                        ObjNet[NbrItem].m_Start.x = x2;
-                        ObjNet[NbrItem].m_Start.y = y2;
-                        ObjNet[NbrItem].m_End = ObjNet[NbrItem].m_Start;
+                        ObjNet[NbrItem].m_Type  = NET_PINLABEL;
+                        ObjNet[NbrItem].m_Label = &Pin->m_PinName;
+                        ObjNet[NbrItem].m_Start = pos2;
+                        ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
                     }
                     NbrItem++;
                 }
@@ -706,8 +691,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
                     ObjNet[NbrItem].m_ElectricalType = SheetLabel->m_Shape;
                     ObjNet[NbrItem].m_Label = &SheetLabel->m_Text;
                     ObjNet[NbrItem].m_SheetListInclude = list;
-                    ObjNet[NbrItem].m_Start = SheetLabel->m_Pos;
-                    ObjNet[NbrItem].m_End   = ObjNet[NbrItem].m_Start;
+                    ObjNet[NbrItem].m_Start = ObjNet[NbrItem].m_End = SheetLabel->m_Pos;
 
                     /* Si c'est un Bus, eclatement en Label */
                     if( ii )
@@ -726,7 +710,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
         {
             wxString msg;
             msg.Printf( wxT( "Netlist: unexpected type struct %d" ),
-                       DrawList->Type() );
+                DrawList->Type() );
             DisplayError( NULL, msg );
             break;
         }
@@ -1098,15 +1082,15 @@ static void SegmentToPointConnect( ObjetNetListStruct* Jonction,
         }
 
         if( SegmentIntersect( Segment[i].m_Start.x, Segment[i].m_Start.y,
-                              Segment[i].m_End.x, Segment[i].m_End.y,
-                              Jonction->m_Start.x, Jonction->m_Start.y ) )
+               Segment[i].m_End.x, Segment[i].m_End.y,
+               Jonction->m_Start.x, Jonction->m_Start.y ) )
         {
             /* Propagation du Netcode a tous les Objets de meme NetCode */
             if( IsBus == 0 )
             {
                 if( Segment[i].GetNet() )
                     PropageNetCode( Segment[i].GetNet(),
-                                    Jonction->GetNet(), IsBus );
+                        Jonction->GetNet(), IsBus );
                 else
                     Segment[i].SetNet( Jonction->GetNet() );
             }
@@ -1114,7 +1098,7 @@ static void SegmentToPointConnect( ObjetNetListStruct* Jonction,
             {
                 if( Segment[i].m_BusNetCode )
                     PropageNetCode( Segment[i].m_BusNetCode,
-                                    Jonction->m_BusNetCode, IsBus );
+                        Jonction->m_BusNetCode, IsBus );
                 else
                     Segment[i].m_BusNetCode = Jonction->m_BusNetCode;
             }

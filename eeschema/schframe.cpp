@@ -22,7 +22,6 @@
 #include "dialog_build_BOM.h"
 #include "dialog_erc.h"
 #include "dialog_find.h"
-#include "dialog_backanno.h"
 #include "netlist_control.h"
 
 
