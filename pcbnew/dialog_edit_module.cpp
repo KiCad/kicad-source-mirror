@@ -171,6 +171,9 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
     wxStaticText*  XPositionStatic = new wxStaticText(m_PanelProperties, -1, _("X"));
     wxStaticText*  YPositionStatic = new wxStaticText(m_PanelProperties, -1, _("Y"));
 
+    m_ModPositionX = NULL;
+    m_ModPositionY = NULL;
+
     /* Create a sizer for controls in the left column */
     PropLeftSizer = new wxBoxSizer( wxVERTICAL );
     m_PanelPropertiesBoxSizer->Add( PropLeftSizer, 0, wxGROW | wxALL, 5 );
@@ -522,16 +525,20 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
     bool change_layer = FALSE;
     wxPoint modpos;
 
-    // Set Module Position
-    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );
-    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY, PCB_INTERNAL_UNIT );
-    m_CurrentModule->SetPosition(modpos);
-
-     if( m_DC )
-         m_Parent->DrawPanel->CursorOff( m_DC );
-
     if( m_DC )
+    {
         m_Parent->DrawPanel->CursorOff( m_DC );
+        m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+    }
+
+    // Set Module Position, if the dialog is called from the board editor
+    // if the dialog is called from the footprint editor, do nothing because the footprint is always in position 0,0
+    if ( m_ModPositionX && m_ModPositionY )
+    {
+        modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );
+        modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY, PCB_INTERNAL_UNIT );
+        m_CurrentModule->SetPosition(modpos);
+    }
 
     if( m_OrientValue )
     {
@@ -621,9 +628,10 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
     EndModal( 1 );
 
     if( m_DC )
+    {
         m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
-    if( m_DC )
         m_Parent->DrawPanel->CursorOn( m_DC );
+    }
 }
 
 
