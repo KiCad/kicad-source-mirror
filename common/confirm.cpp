@@ -145,7 +145,7 @@ int Get_Message( const wxString& title,                // The question
     if( buffer )
         default_text = buffer;
 
-    message = wxGetTextFromUser( title, frame_title,
+    message = wxGetTextFromUser( title, frame_caption,
                                  default_text, frame );
     if( !message.IsEmpty() )
     {
