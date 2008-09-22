@@ -168,8 +168,6 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
     wxBoxSizer*   PropLeftSizer;
     wxBoxSizer*   PropRightSizer;
     wxString      msg;
-    wxStaticText*  XPositionStatic = new wxStaticText(m_PanelProperties, -1, _("X"));
-    wxStaticText*  YPositionStatic = new wxStaticText(m_PanelProperties, -1, _("Y"));
 
     m_ModPositionX = NULL;
     m_ModPositionY = NULL;
@@ -183,6 +181,8 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
 
     if( FullOptions )  // Module is on a board
     {
+        wxStaticText*  XPositionStatic = new wxStaticText(m_PanelProperties, -1, _("X"));
+        wxStaticText*  YPositionStatic = new wxStaticText(m_PanelProperties, -1, _("Y"));
         Button = new wxButton( m_PanelProperties, ID_MODULE_PROPERTIES_EXCHANGE,
                               _( "Change module(s)" ) );
         Button->SetForegroundColour( wxColor( 80, 40, 0 ) );
