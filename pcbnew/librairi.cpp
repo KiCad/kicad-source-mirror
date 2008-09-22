@@ -524,7 +524,7 @@ int WinEDA_BasePcbFrame::Save_1_Module( const wxString& LibName,
 
     if( DisplayDialog )
     {
-        Get_Message( _( "Name:" ), Name_Cmp, this );
+        Get_Message( _( "Name:" ), _("Save module"), Name_Cmp, this );
         if( Name_Cmp.IsEmpty() )
             return 0;
         Name_Cmp.Trim( TRUE );
@@ -720,7 +720,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     /* Demande du nom du nouveau module */
     if( module_name.IsEmpty() )
     {
-        if( Get_Message( _( "Module Reference:" ), Line, this ) != 0 )
+        if( Get_Message( _( "Module Reference:" ), _("Create module"), Line, this ) != 0 )
             return NULL;
     }
     else

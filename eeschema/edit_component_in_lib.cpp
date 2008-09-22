@@ -912,7 +912,7 @@ void WinEDA_PartPropertiesFrame::AddAliasOfPart( wxCommandEvent& WXUNUSED (event
     if( CurrentLibEntry == NULL )
         return;
 
-    if( Get_Message( _( "New alias:" ), Line, this ) != 0 )
+    if( Get_Message( _( "New alias:" ), _("Component Alias"), Line, this ) != 0 )
         return;
 
     Line.Replace( wxT( " " ), wxT( "_" ) );
@@ -1186,7 +1186,7 @@ void WinEDA_PartPropertiesFrame::AddFootprintFilter( wxCommandEvent& WXUNUSED (e
     if( CurrentLibEntry == NULL )
         return;
 
-    if( Get_Message( _( "New FootprintFilter:" ), Line, this ) != 0 )
+    if( Get_Message( _( "New FootprintFilter:" ), _("Footprint Filter"), Line, this ) != 0 )
         return;
 
     Line.Replace( wxT( " " ), wxT( "_" ) );

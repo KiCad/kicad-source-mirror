@@ -72,7 +72,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
 
     if( Library == NULL )
     {
-        m_LibListSize.x = 90;
+        m_LibListSize.x = 150; // Width of library list
         m_LibListSize.y = -1;
         m_LibList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxPoint( 0, 0 ),
             m_LibListSize, 0, NULL, wxLB_HSCROLL );
@@ -83,7 +83,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
     else
         g_CurrentViewLibraryName = Library->m_Name;
 
-    m_CmpListSize.x = 150;
+    m_CmpListSize.x = 150; // Width of component list
     m_CmpListSize.y = -1;
     m_CmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxPoint( m_LibListSize.x, 0 ),
         m_CmpListSize, 0, NULL, wxLB_HSCROLL );

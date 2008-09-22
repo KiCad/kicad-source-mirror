@@ -325,7 +325,7 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Create_PinSheet(
         break;
     }
 
-    Get_Message( Text, Line, this );
+    Get_Message( Text, _("PinSheet"), Line, this );
     if( Line.IsEmpty() )
         return NULL;
 

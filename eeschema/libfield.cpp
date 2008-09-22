@@ -176,14 +176,15 @@ int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 void WinEDA_LibeditFrame::EditField(wxDC * DC, LibDrawField *Field)
 /******************************************************************/
 {
-wxString Text;
-int color;
-wxString title = wxT("Text:");
+  wxString Text;
+  wxString title;
+  int color;
+  int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 
-    if( Field == NULL) return;
+  if( Field == NULL) return;
 
-    switch (Field->m_FieldId)
-    {
+  switch (Field->m_FieldId)
+  {
         case REFERENCE:
             title = wxT("Reference:");
             color = ReturnLayerColor(LAYER_REFERENCEPART);
@@ -197,16 +198,15 @@ wxString title = wxT("Text:");
         default:
             color = ReturnLayerColor(LAYER_FIELDS);
             break;
-    }
+  }
 
     if( Field->m_Attributs & TEXT_NO_VISIBLE ) color = DARKGRAY;
 
     Text = Field->m_Text;
-    Get_Message(title,Text, this);
+    Get_Message(title, _("Edit field"), Text, this);
     Text.Replace( wxT(" ") , wxT("_") );
 
     GRSetDrawMode(DC, g_XorMode);
-int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
     DrawGraphicText(DrawPanel, DC, wxPoint(Field->m_Pos.x, - Field->m_Pos.y),
                     color, Field->m_Text,
                     Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,

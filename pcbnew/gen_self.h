@@ -214,13 +214,13 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     {
         fcoeff = 10000.0;
         msg.Printf( wxT( "%1.4f" ), Mself.lng / fcoeff );
-        abort = Get_Message( _( "Length(inch):" ), msg, this );
+        abort = Get_Message( _( "Length(inch):" ), _("Lenght"), msg, this );
     }
     else
     {
         fcoeff = 10000.0 / 25.4;
         msg.Printf( wxT( "%2.3f" ), Mself.lng / fcoeff );
-        abort = Get_Message( _( "Length(mm):" ), msg, this );
+        abort = Get_Message( _( "Length(mm):" ), _("Lenght"), msg, this );
     }
     if( abort )
         return NULL;

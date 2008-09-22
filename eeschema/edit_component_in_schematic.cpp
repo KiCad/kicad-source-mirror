@@ -332,9 +332,9 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
     {
         if( FindLibPart( newname.GetData(), wxEmptyString, FIND_ALIAS ) == NULL )
         {
-            wxString msg;
-            msg.Printf( _( "Component [%s] not found!" ), newname.GetData() );
-            DisplayError( this, msg );
+            wxString message;
+            message.Printf( _( "Component [%s] not found!" ), newname.GetData() );
+            DisplayError( this, message );
         }
         else    // Changement de composant!
         {
@@ -555,7 +555,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
 
     wxString newtext = Field->m_Text;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
-    Get_Message( Field->m_Name, newtext, this );
+    Get_Message( Field->m_Name, _("Component field text"), newtext, this );
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
@@ -755,7 +755,7 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
         flag = 1;
 
     wxString ref = Cmp->GetRef(GetSheet());
-    Get_Message( _( "Reference" ), ref, this );
+    Get_Message( _( "Reference" ), _("Component Reference"), ref, this );
 
     if( !ref.IsEmpty() ) // New text entered
     {
@@ -780,7 +780,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
 /*****************************************************************************************/
 /* Routine de changement du texte selectionne */
 {
-    wxString msg;
+    wxString message;
     EDA_LibComponentStruct* Entry;
 
     if( Cmp == NULL )
@@ -792,18 +792,18 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
 
     SCH_CMP_FIELD* TextField = &Cmp->m_Field[VALUE];
 
-    msg = TextField->m_Text;
-    if( Get_Message( _( "Value" ), msg, this ) )
-        msg.Empty(); //allow the user to remove the value.
+    message = TextField->m_Text;
+    if( Get_Message( _( "Value" ), _("Component Value"), message, this ) )
+        message.Empty(); //allow the user to remove the value.
 
-    if( !msg.IsEmpty() && !msg.IsEmpty())
+    if( !message.IsEmpty() && !message.IsEmpty())
     {
         /* save old cmp in undo list if not already in edit, or moving ... */
         if( Cmp->m_Flags == 0 )
             SaveCopyInUndoList( Cmp, IS_CHANGED );
 
         TextField->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
-        TextField->m_Text = msg;
+        TextField->m_Text = message;
         TextField->Draw( DrawPanel, DC, wxPoint(0,0),
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
         GetScreen()->SetModify();
@@ -816,7 +816,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
 void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC )
 /*****************************************************************************************/
 {
-    wxString msg;
+    wxString message;
     EDA_LibComponentStruct* Entry;
     bool wasEmpty = false;
 
@@ -829,18 +829,18 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
 
     SCH_CMP_FIELD* TextField = &Cmp->m_Field[FOOTPRINT];
 
-    msg = TextField->m_Text;
-    if(msg.IsEmpty() )
+    message = TextField->m_Text;
+    if(message.IsEmpty() )
         wasEmpty = true;
-    if( Get_Message( _( "Footprint" ), msg, this ) )
-        msg.Empty(); //allow the user to remove the value.
+    if( Get_Message( _( "Footprint" ), _("Component Footprint"), message, this ) )
+        message.Empty(); //allow the user to remove the value.
 
     /* save old cmp in undo list if not already in edit, or moving ... */
     if( Cmp->m_Flags == 0 )
         SaveCopyInUndoList( Cmp, IS_CHANGED );
     Cmp->m_Field[FOOTPRINT].Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
     //move the field if it was new.
-    if(wasEmpty && !msg.IsEmpty())
+    if(wasEmpty && !message.IsEmpty())
     {
         Cmp->m_Field[FOOTPRINT].m_Pos = Cmp->m_Field[REFERENCE].m_Pos;
         //add offset here - ? suitable heuristic below?
@@ -853,7 +853,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
 
         Cmp->m_Field[FOOTPRINT].m_Orient = Cmp->m_Field[REFERENCE].m_Orient;
     }
-    TextField->m_Text = msg;
+    TextField->m_Text = message;
 
     Cmp->m_Field[FOOTPRINT].Draw( DrawPanel, DC, wxPoint(0,0),
                    Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );

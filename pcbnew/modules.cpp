@@ -78,7 +78,7 @@ MODULE* WinEDA_BasePcbFrame::GetModuleByName()
     wxString modulename;
     MODULE*  module = NULL;
 
-    Get_Message( _( "Footprint name:" ), modulename, this );
+    Get_Message( _( "Footprint name:" ), _("Search Footprint"), modulename, this );
     if( !modulename.IsEmpty() )
     {
         module = m_Pcb->m_Modules;

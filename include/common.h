@@ -437,7 +437,10 @@ bool    IsOK( wxWindow* parent, const wxString& msg );
 /* Routine affichant la fenetre "CONFIRMATION"
  *  Retourne 1 ou 0 selon reponse Yes / No */
 
-int     Get_Message( const wxString& titre, wxString& buffer, wxWindow* frame );
+int     Get_Message( const wxString& title,
+                     const wxString& frame_caption,
+                     wxString& buffer,
+                     wxWindow* frame );
 
 /* Fonction d'installation du menu de Dialogue
  *  entree: titre = titre a afficher

@@ -243,7 +243,7 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
     long     ll;
 
     buffer << ModuleSegmentWidth;
-    if( Get_Message( _( "New Width (1/10000\"):" ), buffer, this ) )
+    if( Get_Message( _( "New Width (1/10000\"):" ), _("Edge Width"), buffer, this ) )
         return;
 
     if( buffer.ToLong( &ll ) )

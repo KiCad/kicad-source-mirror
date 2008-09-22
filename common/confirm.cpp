@@ -124,7 +124,10 @@ bool IsOK( wxWindow* parent, const wxString& text )
 
 
 /***********************************************************************/
-int Get_Message( const wxString& title, wxString& buffer, wxWindow* frame )
+int Get_Message( const wxString& title,                // The question
+                 const wxString& frame_caption,        // The frame caption
+                 wxString& buffer,                     // String input buffer
+                 wxWindow* frame )
 /***********************************************************************/
 
 /* Get a text from user
@@ -142,7 +145,7 @@ int Get_Message( const wxString& title, wxString& buffer, wxWindow* frame )
     if( buffer )
         default_text = buffer;
 
-    message = wxGetTextFromUser( title, _( "Text:" ),
+    message = wxGetTextFromUser( title, frame_title,
                                  default_text, frame );
     if( !message.IsEmpty() )
     {

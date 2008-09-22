@@ -96,8 +96,9 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
     /* Add developers */
     info.AddDeveloper( wxT( "Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) );
+    info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Dick Hollenbeck <dick@softplc.com>" ) ) );
-    info.AddDeveloper( SetMsg( wxT( "kbool library: http://boolean.klaasholwerda.nl/bool.html" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "KBool Library <http://boolean.klaasholwerda.nl/bool.html>" ) ) );
 
     /* Add document writers */
     info.AddDocWriter( wxT( "Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) );

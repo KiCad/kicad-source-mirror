@@ -34,7 +34,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
     int ii, jj;
 
     msg = wxT( "*" );
-    Get_Message( _( "Filter for net names:" ), msg, this );
+    Get_Message( _( "Filter for net names:" ), _("Net Filter"), msg, this );
     if( msg.IsEmpty() )
         return;
 

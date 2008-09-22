@@ -875,8 +875,8 @@ void WinEDA_PrjFrame::OnRenameFile( wxCommandEvent& )
         return;
 
     wxString buffer = m_TreeProject->GetItemText( curr_item );
-    wxString msg    = _( "Change File Name: " ) + tree_data->m_FileName;
-    if( Get_Message( msg, buffer, this ) != 0 )
+    wxString msg    = _( "Change Filename: " ) + tree_data->m_FileName;
+    if( Get_Message(msg, _("Change Filename"), buffer, this ) != 0 )
         return; //Abort command
 
     if( tree_data->Rename( buffer, true ) )
