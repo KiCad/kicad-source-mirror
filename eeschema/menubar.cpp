@@ -18,7 +18,6 @@
 #include "id.h"
 #include "hotkeys.h"
 
-#include "icons.h"
 
 /************************************************/
 void WinEDA_SchematicFrame::ReCreateMenuBar()
@@ -33,11 +32,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     if( menuBar == NULL )
     {
-
-        wxImage::AddHandler( new wxPNGHandler ); /* Support PNG Images */
-        initialise_icons();
-
-
         menuBar = new wxMenuBar();
 
         m_FilesMenu = new wxMenu;
@@ -143,8 +137,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem( editMenu, ID_SCHEMATIC_REDO,
                               msg, _( "Redo the last undo command" ),
                               wxITEM_NORMAL );
-        extern wxBitmap zoom_in_png;
-        item->SetBitmap( zoom_in_png );
+        item->SetBitmap( redo_xpm );
         editMenu->Append( item );
 
         editMenu->AppendSeparator();
@@ -160,8 +153,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem( editMenu, ID_FIND_ITEMS,
                                _( "Find" ), _( "Find components and texts" ),
                                wxITEM_NORMAL );
-        extern wxBitmap edit_find_png;
-        item->SetBitmap( edit_find_png );
+        item->SetBitmap( find_xpm );
         editMenu->Append( item );
 
         editMenu->AppendSeparator();
@@ -179,7 +171,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem( viewMenu, ID_ZOOM_IN_BUTT,
                                msg, _( "Zoom in" ),
                                wxITEM_NORMAL );
-        item->SetBitmap( find_xpm );
+        item->SetBitmap( zoom_in_xpm );
         viewMenu->Append( item );
 
         msg = AddHotkeyName( _( "Zoom out" ), s_Schematic_Hokeys_Descr,
