@@ -173,7 +173,10 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         // Areas must be drawn here only if not moved or dragged,
         // because these areas are drawn by ManageCursor() in a specific manner
         if ( (edge_zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        {
             edge_zone->Draw( DrawPanel, DC, mode );
+            edge_zone->DrawFilledArea( DrawPanel, DC, mode );
+        }
     }
 
     // draw the BOARD's markers.

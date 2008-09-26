@@ -771,7 +771,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     wxBusyCursor    dummy;
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+    // Switch the locale to standard C (needed to read floating point numbers like 1.3)
     SetLocaleTo_C_standard( );
 
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
@@ -1010,6 +1010,13 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     BestZoom();
 
 #ifdef PCBNEW
+    if( m_Pcb->m_ZoneDescriptorList.size() > 0 )
+    {   // Build filled areas
+        for( unsigned ia = 0; ia < m_Pcb->m_ZoneDescriptorList.size(); ia++ )
+            m_Pcb->m_ZoneDescriptorList[ia]->BuildFilledPolysListData( );
+    }
+
+    // Build connectivity info
     Compile_Ratsnest( NULL, TRUE );
 #endif
     return 1;

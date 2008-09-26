@@ -328,6 +328,7 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
         return test;
 
     // now see if we need to clip against other areas
+    int layer = modified_area->GetLayer();
     bool bCheckAllAreas = false;
     if( test == 1 )
         bCheckAllAreas = true;
@@ -336,6 +337,15 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
     if( bCheckAllAreas )
         CombineAllAreasInNet( modified_area->GetNet(), bMessageBoxInt, true );
 
+    if ( layer >= FIRST_NO_COPPER_LAYER )   // Refill non copper zones on this layer
+    {
+        if( m_ZoneDescriptorList.size() > 0 )
+        {
+            for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
+                if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
+                    m_ZoneDescriptorList[ia]->BuildFilledPolysListData( );
+        }
+    }
     return test;
 }
 
@@ -878,6 +888,9 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
     for( int ia = 0; ia < GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* Area_Ref = GetArea( ia );
+        if ( ! Area_Ref->IsOnCopperLayer() )
+            continue;
+
         if( aArea_To_Examine && (aArea_To_Examine != Area_Ref) )
             continue;
         for( int ia2 = 0; ia2 < GetAreaCount(); ia2++ )
@@ -1026,6 +1039,9 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 
 bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
+    if ( ! aArea->IsOnCopperLayer() )  // Cannot have a Drc error if not on copper layer
+        return true;
+
     wxString str;
 
     wxPoint  start = aArea->GetCornerPosition( aCornerIndex );

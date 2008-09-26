@@ -8,6 +8,10 @@
 
 #include <vector>
 
+
+/* install function for DialogNonCopperZonesEditor dialog frame :*/
+bool InstallDialogNonCopperZonesEditor(WinEDA_PcbFrame* aParent, ZONE_CONTAINER* aZone);
+
 /***************/
 /* PAD_CONNECT.CPP */
 /***************/

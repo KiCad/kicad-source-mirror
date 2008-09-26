@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-08 19:19+0100\n"
-"PO-Revision-Date: 2008-09-08 19:21+0100\n"
+"POT-Creation-Date: 2008-09-23 21:02+0100\n"
+"PO-Revision-Date: 2008-09-23 21:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -688,6 +688,33 @@ msgstr "Connecte une extrémité de piste en l'air, lorsque elle couvre un pad o
 msgid "Clean pcb"
 msgstr "Nettoyage PCB"
 
+#: pcbnew/plot_rtn.cpp:224
+#, c-format
+msgid ""
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"reference\" text."
+msgstr ""
+"Votre PCB a un mauvais numero de couche  %u pour le module\n"
+" %s's \"reference\"."
+
+#: pcbnew/plot_rtn.cpp:244
+#, c-format
+msgid ""
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"value\" text."
+msgstr ""
+"Votre PCB a un mauvais numero de couche %u pour le module\n"
+" %s's \"valeur\"."
+
+#: pcbnew/plot_rtn.cpp:290
+#, c-format
+msgid ""
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"module text\" text of %s."
+msgstr ""
+"Votre PCB a un mauvais numero de couche  %u pour le module\n"
+" %s's \"texte module\" de %s."
+
 #: pcbnew/controle.cpp:172
 msgid "Selection Clarification"
 msgstr "Clarification de la Sélection"
@@ -697,8 +724,8 @@ msgid "Dimension properties"
 msgstr "Propriétés des Cotes"
 
 #: pcbnew/cotation.cpp:113
-#: pcbnew/dialog_edit_module.cpp:267
-#: pcbnew/dialog_edit_module.cpp:313
+#: pcbnew/dialog_edit_module.cpp:270
+#: pcbnew/dialog_edit_module.cpp:316
 msgid "Normal"
 msgstr "Normal"
 
@@ -985,83 +1012,83 @@ msgstr "Propriétés"
 msgid "3D settings"
 msgstr "3D Caract"
 
-#: pcbnew/dialog_edit_module.cpp:171
+#: pcbnew/dialog_edit_module.cpp:184
 msgid "X"
 msgstr "X"
 
-#: pcbnew/dialog_edit_module.cpp:172
+#: pcbnew/dialog_edit_module.cpp:185
 msgid "Y"
 msgstr "Y"
 
-#: pcbnew/dialog_edit_module.cpp:184
+#: pcbnew/dialog_edit_module.cpp:187
 msgid "Change module(s)"
 msgstr "Change module(s)"
 
-#: pcbnew/dialog_edit_module.cpp:188
+#: pcbnew/dialog_edit_module.cpp:191
 msgid "Edit Module"
 msgstr "Edit Module"
 
-#: pcbnew/dialog_edit_module.cpp:192
+#: pcbnew/dialog_edit_module.cpp:195
 msgid "Position"
 msgstr "Position"
 
-#: pcbnew/dialog_edit_module.cpp:217
+#: pcbnew/dialog_edit_module.cpp:220
 msgid "Doc"
 msgstr "Doc"
 
-#: pcbnew/dialog_edit_module.cpp:224
+#: pcbnew/dialog_edit_module.cpp:227
 msgid "Keywords"
 msgstr "Mots Cles"
 
-#: pcbnew/dialog_edit_module.cpp:231
+#: pcbnew/dialog_edit_module.cpp:234
 msgid "Fields:"
 msgstr "Champs:"
 
-#: pcbnew/dialog_edit_module.cpp:241
+#: pcbnew/dialog_edit_module.cpp:244
 msgid "Add Field"
 msgstr "Ajouter Champ"
 
-#: pcbnew/dialog_edit_module.cpp:246
+#: pcbnew/dialog_edit_module.cpp:249
 msgid "Edit Field"
 msgstr "Editer Champ"
 
-#: pcbnew/dialog_edit_module.cpp:251
+#: pcbnew/dialog_edit_module.cpp:254
 msgid "Delete Field"
 msgstr "Supprimer Champ"
 
-#: pcbnew/dialog_edit_module.cpp:258
+#: pcbnew/dialog_edit_module.cpp:261
 msgid "Component"
 msgstr "Composant"
 
-#: pcbnew/dialog_edit_module.cpp:258
+#: pcbnew/dialog_edit_module.cpp:261
 msgid "Copper"
 msgstr "Cuivre"
 
-#: pcbnew/dialog_edit_module.cpp:267
+#: pcbnew/dialog_edit_module.cpp:270
 msgid "User"
 msgstr "User"
 
-#: pcbnew/dialog_edit_module.cpp:303
+#: pcbnew/dialog_edit_module.cpp:306
 msgid "Orient (0.1 deg)"
 msgstr "Orient (0.1 deg)"
 
-#: pcbnew/dialog_edit_module.cpp:313
+#: pcbnew/dialog_edit_module.cpp:316
 msgid "Normal+Insert"
 msgstr "Normal+Insert"
 
-#: pcbnew/dialog_edit_module.cpp:313
+#: pcbnew/dialog_edit_module.cpp:316
 msgid "Virtual"
 msgstr "Virtuel"
 
-#: pcbnew/dialog_edit_module.cpp:314
+#: pcbnew/dialog_edit_module.cpp:317
 msgid "Attributes"
 msgstr "Attributs"
 
-#: pcbnew/dialog_edit_module.cpp:317
+#: pcbnew/dialog_edit_module.cpp:320
 msgid "Use this attribute for most non smd components"
 msgstr "Utiliser cet attribut pour la plupart des composants"
 
-#: pcbnew/dialog_edit_module.cpp:319
+#: pcbnew/dialog_edit_module.cpp:322
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -1069,75 +1096,75 @@ msgstr ""
 "Uiliser cet attribut pour les composants CMS.\n"
 "Seuls les composants avec cette option sont mis dans le fichier de position des composants"
 
-#: pcbnew/dialog_edit_module.cpp:321
+#: pcbnew/dialog_edit_module.cpp:324
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
 msgstr "Uiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
 
-#: pcbnew/dialog_edit_module.cpp:345
+#: pcbnew/dialog_edit_module.cpp:348
 msgid "Free"
 msgstr "Libre"
 
-#: pcbnew/dialog_edit_module.cpp:345
+#: pcbnew/dialog_edit_module.cpp:348
 msgid "Locked"
 msgstr "Verrouillé"
 
-#: pcbnew/dialog_edit_module.cpp:347
+#: pcbnew/dialog_edit_module.cpp:350
 msgid "Move and Auto Place"
 msgstr "Move et Placement Automatique"
 
-#: pcbnew/dialog_edit_module.cpp:352
+#: pcbnew/dialog_edit_module.cpp:355
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Autoriser les commandes clavier de déplacement et l'auto placement"
 
-#: pcbnew/dialog_edit_module.cpp:353
+#: pcbnew/dialog_edit_module.cpp:356
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Interdire les commandes clavier de déplacement et l'auto placement"
 
-#: pcbnew/dialog_edit_module.cpp:357
+#: pcbnew/dialog_edit_module.cpp:360
 msgid "Rot 90"
 msgstr "Rot 90"
 
-#: pcbnew/dialog_edit_module.cpp:365
+#: pcbnew/dialog_edit_module.cpp:368
 msgid "Rot 180"
 msgstr "Rot 180"
 
-#: pcbnew/dialog_edit_module.cpp:402
+#: pcbnew/dialog_edit_module.cpp:405
 msgid "3D Shape Name"
 msgstr "3D forme"
 
-#: pcbnew/dialog_edit_module.cpp:419
+#: pcbnew/dialog_edit_module.cpp:422
 msgid "Browse"
 msgstr "Examiner"
 
-#: pcbnew/dialog_edit_module.cpp:423
+#: pcbnew/dialog_edit_module.cpp:426
 msgid "Add 3D Shape"
 msgstr "Ajout Forme 3D"
 
-#: pcbnew/dialog_edit_module.cpp:429
+#: pcbnew/dialog_edit_module.cpp:432
 msgid "Remove 3D Shape"
 msgstr "Suppr. Forme 3D:"
 
-#: pcbnew/dialog_edit_module.cpp:435
+#: pcbnew/dialog_edit_module.cpp:438
 msgid "Shape Scale:"
 msgstr "Echelle de la forme:"
 
-#: pcbnew/dialog_edit_module.cpp:442
+#: pcbnew/dialog_edit_module.cpp:445
 msgid "Shape Offset:"
 msgstr "Offset forme:"
 
-#: pcbnew/dialog_edit_module.cpp:451
+#: pcbnew/dialog_edit_module.cpp:454
 msgid "Shape Rotation:"
 msgstr "Rot de la forme"
 
-#: pcbnew/dialog_edit_module.cpp:491
+#: pcbnew/dialog_edit_module.cpp:494
 msgid "3D Shape:"
 msgstr "Forme 3D:"
 
-#: pcbnew/dialog_edit_module.cpp:802
+#: pcbnew/dialog_edit_module.cpp:810
 msgid "Reference or Value cannot be deleted"
 msgstr "Référence ou Valeur ne peut etre effacée"
 
-#: pcbnew/dialog_edit_module.cpp:806
+#: pcbnew/dialog_edit_module.cpp:814
 #, c-format
 msgid "Delete [%s]"
 msgstr "Supprimer [%s]"
@@ -1805,17 +1832,21 @@ msgstr "Le caractère de délimitation de ligne doit être un seul caractère  '
 msgid "Un-terminated delimited string"
 msgstr "Ligne délimitée non terminée"
 
-#: pcbnew/edgemod.cpp:204
-msgid "The graphic item will be on a copper layer.It is very dangerous. Are you sure"
-msgstr "L'élément graphique sera sur une couche cuivre. C'est très dangereux. Etes vous sûr"
+#: pcbnew/modules.cpp:81
+msgid "Footprint name:"
+msgstr "Nom Module: "
 
-#: pcbnew/edgemod.cpp:246
-msgid "New Width (1/10000\"):"
-msgstr "Novelle largeur (1/10000\"):"
+#: pcbnew/modules.cpp:81
+msgid "Search Footprint"
+msgstr "Cherche Module"
 
-#: pcbnew/edgemod.cpp:253
-msgid "Incorrect number, no change"
-msgstr "Nombre incorrect, pas de changement"
+#: pcbnew/modules.cpp:305
+msgid "Delete Module"
+msgstr "Supprimer Module"
+
+#: pcbnew/modules.cpp:306
+msgid "Value "
+msgstr "Valeur "
 
 #: pcbnew/edit.cpp:179
 #: pcbnew/editmod.cpp:45
@@ -1956,6 +1987,10 @@ msgid "GenCAD file:"
 msgstr "Fichier GenCAD:"
 
 #: pcbnew/export_gencad.cpp:83
+#: pcbnew/files.cpp:352
+#: pcbnew/gen_modules_placefile.cpp:128
+#: pcbnew/gen_modules_placefile.cpp:139
+#: pcbnew/gen_modules_placefile.cpp:292
 msgid "Unable to create "
 msgstr "Impossible de créer "
 
@@ -1964,7 +1999,6 @@ msgid "Recovery file "
 msgstr "Fichier de secours "
 
 #: pcbnew/files.cpp:56
-#: pcbnew/librairi.cpp:256
 msgid " not found"
 msgstr "  non trouvé"
 
@@ -1981,7 +2015,6 @@ msgid "Load board files:"
 msgstr "Charger Fichiers C.I.:"
 
 #: pcbnew/files.cpp:188
-#: pcbnew/librairi.cpp:77
 #, c-format
 msgid "File <%s> not found"
 msgstr " fichier %s non trouvé"
@@ -2113,6 +2146,18 @@ msgstr "Fichier placement coté cuivre:"
 msgid "Module count"
 msgstr "Nb Modules"
 
+#: pcbnew/surbrill.cpp:37
+msgid "Filter for net names:"
+msgstr "Filtre pour nets:"
+
+#: pcbnew/surbrill.cpp:37
+msgid "Net Filter"
+msgstr "Filtre Equipot"
+
+#: pcbnew/surbrill.cpp:41
+msgid "List Nets"
+msgstr "Liste équipots"
+
 #: pcbnew/globaleditpad.cpp:74
 msgid "Pads Global Edit"
 msgstr "Pads: Edition globale"
@@ -2206,123 +2251,97 @@ msgstr "Effacer Textes Pcb"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
-#: pcbnew/librairi.cpp:61
-msgid "Import Module:"
-msgstr "Importer Module:"
+#: pcbnew/muonde.cpp:149
+msgid "Gap"
+msgstr "Gap"
 
-#: pcbnew/librairi.cpp:97
-msgid "Not a module file"
-msgstr "N'est pas un fichier de Modules"
+#: pcbnew/muonde.cpp:154
+msgid "Stub"
+msgstr "Stub"
 
-#: pcbnew/librairi.cpp:179
-msgid "Create lib"
-msgstr "Créer lib"
+#: pcbnew/muonde.cpp:160
+msgid "Arc Stub"
+msgstr "Arc Stub"
 
-#: pcbnew/librairi.cpp:179
-msgid "Export Module:"
-msgstr "Exporter Module:"
+#: pcbnew/muonde.cpp:175
+msgid " (mm):"
+msgstr " (mm):"
 
-#: pcbnew/librairi.cpp:194
-#: pcbnew/librairi.cpp:441
-#, c-format
-msgid "File %s exists, OK to replace ?"
-msgstr "Fichier %s existant, OK pour remplacer ?"
+#: pcbnew/muonde.cpp:176
+#: pcbnew/muonde.cpp:183
+#: pcbnew/muonde.cpp:199
+msgid "Create microwave module"
+msgstr "Créer Module MicroOnde"
 
-#: pcbnew/librairi.cpp:203
-#, c-format
-msgid "Unable to create <%s>"
-msgstr "Incapable de créer <%s>"
+#: pcbnew/muonde.cpp:182
+msgid " (inch):"
+msgstr " (pouce):"
 
-#: pcbnew/librairi.cpp:224
-#, c-format
-msgid "Module exported in file <%s>"
-msgstr "Module exporté en fichier <%s>"
+#: pcbnew/muonde.cpp:189
+#: pcbnew/muonde.cpp:202
+msgid "Incorrect number, abort"
+msgstr "Nombre incorrect, arret"
 
-#: pcbnew/librairi.cpp:246
-#, c-format
-msgid "Ok to delete module %s in library %s"
-msgstr "Ok pour effacer module %sein librairie %s"
+#: pcbnew/muonde.cpp:198
+msgid "Angle (0.1deg):"
+msgstr "Angle (0.1deg):"
 
-#: pcbnew/librairi.cpp:256
-msgid "Library "
-msgstr "Librairie "
+#: pcbnew/muonde.cpp:330
+msgid "Complex shape"
+msgstr "Formr complexe"
 
-#: pcbnew/librairi.cpp:267
-msgid "Not a Library file"
-msgstr "N'est pas un fichier Librairie"
+#: pcbnew/muonde.cpp:356
+msgid "Read Shape Descr File..."
+msgstr "Lire fichier de description de forme..."
 
-#: pcbnew/librairi.cpp:296
-#, c-format
-msgid "Module [%s] not found"
-msgstr "Module [%s] non trouvé"
+#: pcbnew/muonde.cpp:360
+msgid "Symmetrical"
+msgstr "Symétrique"
 
-#: pcbnew/librairi.cpp:390
-#, c-format
-msgid "Component %s deleted in library %s"
-msgstr "Composant %s supprimé en librairie %s"
+#: pcbnew/muonde.cpp:360
+msgid "Mirrored"
+msgstr "Miroir"
 
-#: pcbnew/librairi.cpp:416
-msgid " No modules to archive!"
-msgstr "Pas de Modules a archiver"
+#: pcbnew/muonde.cpp:362
+msgid "Shape Option"
+msgstr "Option Forme"
 
-#: pcbnew/librairi.cpp:423
-msgid "Library"
-msgstr "Librairie"
+#: pcbnew/muonde.cpp:428
+msgid "Read descr shape file"
+msgstr "Lire fichier de description de forme"
 
-#: pcbnew/librairi.cpp:516
-#, c-format
-msgid "Library %s not found"
-msgstr "Librairie %s non trouvée"
+#: pcbnew/muonde.cpp:444
+msgid "File not found"
+msgstr "fichier non trouvé"
 
-#: pcbnew/librairi.cpp:527
-msgid "Name:"
-msgstr "Nom:"
+#: pcbnew/muonde.cpp:548
+msgid "Shape has a null size!"
+msgstr "La forme a une taille nulle"
 
-#: pcbnew/librairi.cpp:537
-#, c-format
-msgid "Unable to open %s"
-msgstr "Ne peut pas ouvrir \"%s\""
+#: pcbnew/muonde.cpp:553
+msgid "Shape has no points!"
+msgstr "La forme n'a pas de points"
 
-#: pcbnew/librairi.cpp:547
-#, c-format
-msgid "File %s is not a eeschema library"
-msgstr "Fichier %s n'est pas une librairie eeschema"
+#: pcbnew/muonde.cpp:679
+msgid "No pad for this module"
+msgstr "Pas de pad dans ce module"
 
-#: pcbnew/librairi.cpp:576
-msgid "Module exists Line "
-msgstr "Module existe Ligne "
+#: pcbnew/muonde.cpp:684
+msgid "Only one pad for this module"
+msgstr "Seulement un pad dans ce module"
 
-#: pcbnew/librairi.cpp:695
-msgid "Component "
-msgstr "Composant"
+#: pcbnew/muonde.cpp:698
+msgid "Gap (mm):"
+msgstr "Gap (mm):"
 
-#: pcbnew/librairi.cpp:696
-msgid " added in "
-msgstr " ajouté dans "
+#: pcbnew/muonde.cpp:698
+#: pcbnew/muonde.cpp:704
+msgid "Create Microwave Gap"
+msgstr "Créer Gap MicroOnde "
 
-#: pcbnew/librairi.cpp:696
-msgid " replaced in "
-msgstr " remplacé dans "
-
-#: pcbnew/librairi.cpp:723
-msgid "Module Reference:"
-msgstr "Référence Module"
-
-#: pcbnew/librairi.cpp:775
-msgid "Active Lib:"
-msgstr "Librairie Active:"
-
-#: pcbnew/librairi.cpp:786
-msgid "Module Editor (lib: "
-msgstr "Editeur de modules (lib: "
-
-#: pcbnew/librairi.cpp:801
-msgid "Library exists "
-msgstr "Librairie existante "
-
-#: pcbnew/librairi.cpp:816
-msgid "Create error "
-msgstr "Erreur en création "
+#: pcbnew/muonde.cpp:704
+msgid "Gap (inch):"
+msgstr "Gap (inch):"
 
 #: pcbnew/loadcmp.cpp:103
 msgid "Module name:"
@@ -2362,58 +2381,72 @@ msgid "Sizes and Widths"
 msgstr "Dims. et Epaiss."
 
 #: pcbnew/menubarmodedit.cpp:41
+#: pcbnew/menubarpcb.cpp:229
 msgid "Adjust width for texts and drawings"
 msgstr "Ajuster dims pour textes et graphiques"
 
 #: pcbnew/menubarmodedit.cpp:45
+#: pcbnew/menubarpcb.cpp:233
 msgid "Pad Settings"
 msgstr "Caract pads"
 
 #: pcbnew/menubarmodedit.cpp:46
+#: pcbnew/menubarpcb.cpp:234
 msgid "Adjust size,shape,layers... for Pads"
 msgstr "Ajuster taille, forme, couches... pour pads"
 
 #: pcbnew/menubarmodedit.cpp:50
+#: pcbnew/menubarpcb.cpp:223
 msgid "User Grid Size"
 msgstr "Dim Grille utilisteur"
 
 #: pcbnew/menubarmodedit.cpp:51
+#: pcbnew/menubarpcb.cpp:224
 msgid "Adjust User Grid"
 msgstr "Ajuster Grille utilisateur"
 
 #: pcbnew/menubarmodedit.cpp:60
+#: pcbnew/menubarpcb.cpp:292
 msgid "&Contents"
 msgstr "&Contenu"
 
 #: pcbnew/menubarmodedit.cpp:60
+#: pcbnew/menubarpcb.cpp:292
 msgid "Open the pcbnew manual"
 msgstr "Ouvrir la documentation de pcbnew"
 
 #: pcbnew/menubarmodedit.cpp:64
+#: pcbnew/menubarpcb.cpp:296
 msgid "&About"
 msgstr "&Infos logiciel"
 
 #: pcbnew/menubarmodedit.cpp:64
+#: pcbnew/menubarpcb.cpp:296
 msgid "About this application"
 msgstr "Au sujet de cette application"
 
 #: pcbnew/menubarmodedit.cpp:72
+#: pcbnew/menubarpcb.cpp:304
 msgid "3D Display"
 msgstr "3D Visu"
 
 #: pcbnew/menubarmodedit.cpp:72
+#: pcbnew/menubarpcb.cpp:304
 msgid "Show Board in 3D Mode"
 msgstr "Visualisation en 3D"
 
 #: pcbnew/menubarmodedit.cpp:76
+#: pcbnew/menubarpcb.cpp:310
 msgid "&Dimensions"
 msgstr "&Dimensions"
 
 #: pcbnew/menubarmodedit.cpp:77
+#: pcbnew/menubarpcb.cpp:313
 msgid "&3D Display"
 msgstr "&3D Visu"
 
 #: pcbnew/menubarmodedit.cpp:78
+#: pcbnew/menubarpcb.cpp:314
 msgid "&Help"
 msgstr "&Aide"
 
@@ -2725,42 +2758,6 @@ msgstr "Forme X"
 msgid "Target Shape:"
 msgstr "Forme Mire:"
 
-#: pcbnew/modedit.cpp:263
-msgid "Unable to find the footprint source on the main board"
-msgstr "Impossible de trouver le module source sur le PCB principal"
-
-#: pcbnew/modedit.cpp:264
-msgid ""
-"\n"
-"Cannot update the footprint"
-msgstr ""
-"\n"
-"Ne peut mettre à jour le module"
-
-#: pcbnew/modedit.cpp:272
-msgid "A footprint source was found on the main board"
-msgstr "Un module source a été trouvé sur le PCB principal"
-
-#: pcbnew/modedit.cpp:273
-msgid ""
-"\n"
-"Cannot insert this footprint"
-msgstr ""
-"\n"
-"Ne peut insérer cd module"
-
-#: pcbnew/modedit.cpp:393
-msgid "Add Pad"
-msgstr "Ajouter Pastilles"
-
-#: pcbnew/modedit.cpp:406
-msgid "Add Drawing"
-msgstr "Ajout d'éléments graphiques"
-
-#: pcbnew/modedit.cpp:410
-msgid "Place anchor"
-msgstr "Place Ancre"
-
 #: pcbnew/modedit_onclick.cpp:196
 msgid "End Tool"
 msgstr "Fin Outil"
@@ -2897,18 +2894,6 @@ msgstr "Ajuste Epaiss"
 msgid "Module Editor: module modified!, Continue ?"
 msgstr "Editeur de Module: module modifié!  Continuer ?"
 
-#: pcbnew/modules.cpp:81
-msgid "Footprint name:"
-msgstr "Nom Module: "
-
-#: pcbnew/modules.cpp:305
-msgid "Delete Module"
-msgstr "Supprimer Module"
-
-#: pcbnew/modules.cpp:306
-msgid "Value "
-msgstr "Valeur "
-
 #: pcbnew/move-drag_pads.cpp:274
 #, c-format
 msgid "Delete Pad (module %s %s) "
@@ -2921,87 +2906,6 @@ msgstr "Impossible de drag ce segment: trop de segments connectés"
 #: pcbnew/move_or_drag_track.cpp:832
 msgid "Unable to drag this segment: two collinear segments"
 msgstr "Impossible de drag ce segment: 2 segments alignés"
-
-#: pcbnew/muonde.cpp:149
-msgid "Gap"
-msgstr "Gap"
-
-#: pcbnew/muonde.cpp:154
-msgid "Stub"
-msgstr "Stub"
-
-#: pcbnew/muonde.cpp:160
-msgid "Arc Stub"
-msgstr "Arc Stub"
-
-#: pcbnew/muonde.cpp:175
-msgid " (mm):"
-msgstr " (mm):"
-
-#: pcbnew/muonde.cpp:182
-msgid " (inch):"
-msgstr " (pouce):"
-
-#: pcbnew/muonde.cpp:189
-#: pcbnew/muonde.cpp:202
-msgid "Incorrect number, abort"
-msgstr "Nombre incorrect, arret"
-
-#: pcbnew/muonde.cpp:198
-msgid "Angle (0.1deg):"
-msgstr "Angle (0.1deg):"
-
-#: pcbnew/muonde.cpp:330
-msgid "Complex shape"
-msgstr "Formr complexe"
-
-#: pcbnew/muonde.cpp:356
-msgid "Read Shape Descr File..."
-msgstr "Lire fichier de description de forme..."
-
-#: pcbnew/muonde.cpp:360
-msgid "Symmetrical"
-msgstr "Symétrique"
-
-#: pcbnew/muonde.cpp:360
-msgid "Mirrored"
-msgstr "Miroir"
-
-#: pcbnew/muonde.cpp:362
-msgid "Shape Option"
-msgstr "Option Forme"
-
-#: pcbnew/muonde.cpp:428
-msgid "Read descr shape file"
-msgstr "Lire fichier de description de forme"
-
-#: pcbnew/muonde.cpp:444
-msgid "File not found"
-msgstr "fichier non trouvé"
-
-#: pcbnew/muonde.cpp:548
-msgid "Shape has a null size!"
-msgstr "La forme a une taille nulle"
-
-#: pcbnew/muonde.cpp:553
-msgid "Shape has no points!"
-msgstr "La forme n'a pas de points"
-
-#: pcbnew/muonde.cpp:679
-msgid "No pad for this module"
-msgstr "Pas de pad dans ce module"
-
-#: pcbnew/muonde.cpp:684
-msgid "Only one pad for this module"
-msgstr "Seulement un pad dans ce module"
-
-#: pcbnew/muonde.cpp:698
-msgid "Gap (mm):"
-msgstr "Gap (mm):"
-
-#: pcbnew/muonde.cpp:704
-msgid "Gap (inch):"
-msgstr "Gap (inch):"
 
 #: pcbnew/muwave_command.cpp:52
 msgid "Add Line"
@@ -3435,6 +3339,43 @@ msgstr "Grille perso dim Y"
 msgid "Abort routing?"
 msgstr "Stopper routage?"
 
+#: pcbnew/modedit.cpp:268
+msgid "Unable to find the footprint source on the main board"
+msgstr "Impossible de trouver le module source sur le PCB principal"
+
+#: pcbnew/modedit.cpp:269
+msgid ""
+"\n"
+"Cannot update the footprint"
+msgstr ""
+"\n"
+"Ne peut mettre à jour le module"
+
+#: pcbnew/modedit.cpp:277
+msgid "A footprint source was found on the main board"
+msgstr "Un module source a été trouvé sur le PCB principal"
+
+#: pcbnew/modedit.cpp:278
+msgid ""
+"\n"
+"Cannot insert this footprint"
+msgstr ""
+"\n"
+"Ne peut insérer cd module"
+
+#: pcbnew/modedit.cpp:396
+msgid "Add Pad"
+msgstr "Ajouter Pastilles"
+
+#: pcbnew/modedit.cpp:409
+msgid "Add Drawing"
+msgstr "Ajout d'éléments graphiques"
+
+#: pcbnew/modedit.cpp:413
+#: pcbnew/tool_modedit.cpp:176
+msgid "Place anchor"
+msgstr "Place Ancre"
+
 #: pcbnew/specctra.cpp:133
 #: pcbnew/specctra.cpp:140
 msgid "Expecting"
@@ -3445,89 +3386,38 @@ msgstr "Attendu"
 msgid "Unexpected"
 msgstr "Inattendu"
 
-#: pcbnew/specctra.cpp:321
-#: pcbnew/specctra.cpp:351
-#: pcbnew/specctra.cpp:3524
-#: pcbnew/specctra.cpp:3549
+#: pcbnew/specctra.cpp:324
+#: pcbnew/specctra.cpp:354
+#: pcbnew/specctra.cpp:3527
+#: pcbnew/specctra.cpp:3552
 #, c-format
 msgid "Unable to open file \"%s\""
 msgstr "Ne peut pas ouvrirle  fichier \"%s\""
 
-#: pcbnew/specctra.cpp:3465
+#: pcbnew/specctra.cpp:3468
 #, c-format
 msgid "System file error writing to file \"%s\""
 msgstr "Erreur système sur écriture fichier \"%s\""
 
-#: pcbnew/specctra.cpp:3644
+#: pcbnew/specctra.cpp:3647
 msgid "Error writing to STRINGFORMATTER"
 msgstr "Error writing to STRINGFORMATTER"
 
-#: pcbnew/specctra_import.cpp:74
-msgid "Merge Specctra Session file:"
-msgstr "Fichier Specctra Session à Fusionner:"
+#: pcbnew/edgemod.cpp:204
+msgid "The graphic item will be on a copper layer.It is very dangerous. Are you sure"
+msgstr "L'élément graphique sera sur une couche cuivre. C'est très dangereux. Etes vous sûr"
 
-#: pcbnew/specctra_import.cpp:101
-msgid "BOARD may be corrupted, do not save it."
-msgstr "Le PCB peut être corrompu. Ne pas le sauver"
+#: pcbnew/edgemod.cpp:246
+msgid "New Width (1/10000\"):"
+msgstr "Novelle largeur (1/10000\"):"
 
-#: pcbnew/specctra_import.cpp:103
-msgid "Fix problem and try again."
-msgstr "Fixer le problème et recommencer."
+#: pcbnew/edgemod.cpp:246
+msgid "Edge Width"
+msgstr "Epaisseur Contour"
 
-#: pcbnew/specctra_import.cpp:117
-msgid "Session file imported and merged OK."
-msgstr "Fichier Session importé et fusionné correctement."
-
-#: pcbnew/specctra_import.cpp:192
-#: pcbnew/specctra_import.cpp:300
-#, c-format
-msgid "Session file uses invalid layer id \"%s\""
-msgstr "Le Fichier Session utilise une couche invalide n° \"%s\""
-
-#: pcbnew/specctra_import.cpp:242
-msgid "Session via padstack has no shapes"
-msgstr "Manque dans le Fichier Session file la section "
-
-#: pcbnew/specctra_import.cpp:249
-#: pcbnew/specctra_import.cpp:267
-#: pcbnew/specctra_import.cpp:291
-#, c-format
-msgid "Unsupported via shape: \"%s\""
-msgstr "Forme via inconnue: \"%s\""
-
-#: pcbnew/specctra_import.cpp:348
-msgid "Session file is missing the \"session\" section"
-msgstr "Session file is missing the \"session\" section"
-
-#: pcbnew/specctra_import.cpp:351
-msgid "Session file is missing the \"placement\" section"
-msgstr "Manque dans le Fichier Session file la section \"placement\""
-
-#: pcbnew/specctra_import.cpp:354
-msgid "Session file is missing the \"routes\" section"
-msgstr "Manque dans le Fichier Session file la section \"routes\""
-
-#: pcbnew/specctra_import.cpp:357
-msgid "Session file is missing the \"library_out\" section"
-msgstr "Manque dans le Fichier Session file la section \"library_out\""
-
-#: pcbnew/specctra_import.cpp:387
-#, c-format
-msgid "Session file has 'reference' to non-existent component \"%s\""
-msgstr "Le fichier Session a une 'reference' a un composant non existant \"%s\""
-
-#: pcbnew/specctra_import.cpp:531
-#, c-format
-msgid "A wire_via references a missing padstack \"%s\""
-msgstr "Une piste ou via  a une référence vers un  pad \"%s\" manquant"
-
-#: pcbnew/surbrill.cpp:37
-msgid "Filter for net names:"
-msgstr "Filtre pour nets:"
-
-#: pcbnew/surbrill.cpp:41
-msgid "List Nets"
-msgstr "Liste équipots"
+#: pcbnew/edgemod.cpp:253
+msgid "Incorrect number, no change"
+msgstr "Nombre incorrect, pas de changement"
 
 #: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
@@ -3981,40 +3871,190 @@ msgstr "Pas de pads ou de points de départ pour remplir ce contour de zone"
 msgid "Ok"
 msgstr "Ok"
 
-#: pcbnew/specctra_export.cpp:64
-msgid "Specctra DSN file:"
-msgstr "Fichier Specctra DSN"
+#: pcbnew/librairi.cpp:61
+msgid "Import Module:"
+msgstr "Importer Module:"
 
-#: pcbnew/specctra_export.cpp:122
-msgid "BOARD exported OK."
-msgstr "PCB exporté Ok."
+#: pcbnew/librairi.cpp:97
+msgid "Not a module file"
+msgstr "N'est pas un fichier de Modules"
 
-#: pcbnew/specctra_export.cpp:127
-msgid "Unable to export, please fix and try again."
-msgstr "Impossible d'exporter, fixer le problème et recommencer"
+#: pcbnew/librairi.cpp:179
+msgid "Create lib"
+msgstr "Créer lib"
 
-#: pcbnew/specctra_export.cpp:805
+#: pcbnew/librairi.cpp:179
+msgid "Export Module:"
+msgstr "Exporter Module:"
+
+#: pcbnew/librairi.cpp:194
+#: pcbnew/librairi.cpp:441
 #, c-format
-msgid "Unsupported DRAWSEGMENT type %s"
-msgstr "DRAWSEGMENT type %s non supporté"
+msgid "File %s exists, OK to replace ?"
+msgstr "Fichier %s existant, OK pour remplacer ?"
 
-#: pcbnew/specctra_export.cpp:840
-msgid "Unable to find the next segment with an endpoint of "
-msgstr "Impossible de trouver le segment suivant avec une extrémité à "
-
-#: pcbnew/specctra_export.cpp:843
-msgid "Edit Edges_Pcb segments, making them contiguous."
-msgstr "Modifier les segments du contour PCB pour les rendre contigus."
-
-#: pcbnew/specctra_export.cpp:895
+#: pcbnew/librairi.cpp:203
 #, c-format
-msgid "Component with value of \"%s\" has empty reference id."
-msgstr "Le composant avec valeur \"%s\" a une référence vide."
+msgid "Unable to create <%s>"
+msgstr "Incapable de créer <%s>"
 
-#: pcbnew/specctra_export.cpp:903
+#: pcbnew/librairi.cpp:224
 #, c-format
-msgid "Multiple components have identical reference IDs of \"%s\"."
-msgstr "Multiple composants ont une reference identique  \"%s\"."
+msgid "Module exported in file <%s>"
+msgstr "Module exporté en fichier <%s>"
+
+#: pcbnew/librairi.cpp:246
+#, c-format
+msgid "Ok to delete module %s in library %s"
+msgstr "Ok pour effacer module %sein librairie %s"
+
+#: pcbnew/librairi.cpp:256
+msgid "Library "
+msgstr "Librairie "
+
+#: pcbnew/librairi.cpp:267
+msgid "Not a Library file"
+msgstr "N'est pas un fichier Librairie"
+
+#: pcbnew/librairi.cpp:296
+#, c-format
+msgid "Module [%s] not found"
+msgstr "Module [%s] non trouvé"
+
+#: pcbnew/librairi.cpp:390
+#, c-format
+msgid "Component %s deleted in library %s"
+msgstr "Composant %s supprimé en librairie %s"
+
+#: pcbnew/librairi.cpp:416
+msgid " No modules to archive!"
+msgstr "Pas de Modules a archiver"
+
+#: pcbnew/librairi.cpp:423
+msgid "Library"
+msgstr "Librairie"
+
+#: pcbnew/librairi.cpp:516
+#, c-format
+msgid "Library %s not found"
+msgstr "Librairie %s non trouvée"
+
+#: pcbnew/librairi.cpp:527
+msgid "Name:"
+msgstr "Nom:"
+
+#: pcbnew/librairi.cpp:527
+msgid "Save module"
+msgstr "Sauver Module"
+
+#: pcbnew/librairi.cpp:537
+#, c-format
+msgid "Unable to open %s"
+msgstr "Ne peut pas ouvrir \"%s\""
+
+#: pcbnew/librairi.cpp:547
+#, c-format
+msgid "File %s is not a eeschema library"
+msgstr "Fichier %s n'est pas une librairie eeschema"
+
+#: pcbnew/librairi.cpp:576
+msgid "Module exists Line "
+msgstr "Module existe Ligne "
+
+#: pcbnew/librairi.cpp:695
+msgid "Component "
+msgstr "Composant"
+
+#: pcbnew/librairi.cpp:696
+msgid " added in "
+msgstr " ajouté dans "
+
+#: pcbnew/librairi.cpp:696
+msgid " replaced in "
+msgstr " remplacé dans "
+
+#: pcbnew/librairi.cpp:723
+msgid "Module Reference:"
+msgstr "Référence Module"
+
+#: pcbnew/librairi.cpp:723
+msgid "Create module"
+msgstr "Créer Module"
+
+#: pcbnew/librairi.cpp:775
+msgid "Active Lib:"
+msgstr "Librairie Active:"
+
+#: pcbnew/librairi.cpp:786
+msgid "Module Editor (lib: "
+msgstr "Editeur de modules (lib: "
+
+#: pcbnew/librairi.cpp:801
+msgid "Library exists "
+msgstr "Librairie existante "
+
+#: pcbnew/librairi.cpp:816
+msgid "Create error "
+msgstr "Erreur en création "
+
+#: pcbnew/specctra_import.cpp:73
+msgid "Merge Specctra Session file:"
+msgstr "Fichier Specctra Session à Fusionner:"
+
+#: pcbnew/specctra_import.cpp:100
+msgid "BOARD may be corrupted, do not save it."
+msgstr "Le PCB peut être corrompu. Ne pas le sauver"
+
+#: pcbnew/specctra_import.cpp:102
+msgid "Fix problem and try again."
+msgstr "Fixer le problème et recommencer."
+
+#: pcbnew/specctra_import.cpp:116
+msgid "Session file imported and merged OK."
+msgstr "Fichier Session importé et fusionné correctement."
+
+#: pcbnew/specctra_import.cpp:191
+#: pcbnew/specctra_import.cpp:299
+#, c-format
+msgid "Session file uses invalid layer id \"%s\""
+msgstr "Le Fichier Session utilise une couche invalide n° \"%s\""
+
+#: pcbnew/specctra_import.cpp:241
+msgid "Session via padstack has no shapes"
+msgstr "Manque dans le Fichier Session file la section "
+
+#: pcbnew/specctra_import.cpp:248
+#: pcbnew/specctra_import.cpp:266
+#: pcbnew/specctra_import.cpp:290
+#, c-format
+msgid "Unsupported via shape: \"%s\""
+msgstr "Forme via inconnue: \"%s\""
+
+#: pcbnew/specctra_import.cpp:347
+msgid "Session file is missing the \"session\" section"
+msgstr "Session file is missing the \"session\" section"
+
+#: pcbnew/specctra_import.cpp:350
+msgid "Session file is missing the \"placement\" section"
+msgstr "Manque dans le Fichier Session file la section \"placement\""
+
+#: pcbnew/specctra_import.cpp:353
+msgid "Session file is missing the \"routes\" section"
+msgstr "Manque dans le Fichier Session file la section \"routes\""
+
+#: pcbnew/specctra_import.cpp:356
+msgid "Session file is missing the \"library_out\" section"
+msgstr "Manque dans le Fichier Session file la section \"library_out\""
+
+#: pcbnew/specctra_import.cpp:386
+#, c-format
+msgid "Session file has 'reference' to non-existent component \"%s\""
+msgstr "Le fichier Session a une 'reference' a un composant non existant \"%s\""
+
+#: pcbnew/specctra_import.cpp:530
+#, c-format
+msgid "A wire_via references a missing padstack \"%s\""
+msgstr "Une piste ou via  a une référence vers un  pad \"%s\" manquant"
 
 #: pcbnew/pcbnew.cpp:43
 msgid "Pcbnew is already running, Continue?"
@@ -4460,6 +4500,41 @@ msgstr "Autoroute Pad"
 msgid "Autoroute Net"
 msgstr "Autoroute Net"
 
+#: pcbnew/specctra_export.cpp:64
+msgid "Specctra DSN file:"
+msgstr "Fichier Specctra DSN"
+
+#: pcbnew/specctra_export.cpp:122
+msgid "BOARD exported OK."
+msgstr "PCB exporté Ok."
+
+#: pcbnew/specctra_export.cpp:127
+msgid "Unable to export, please fix and try again."
+msgstr "Impossible d'exporter, fixer le problème et recommencer"
+
+#: pcbnew/specctra_export.cpp:805
+#, c-format
+msgid "Unsupported DRAWSEGMENT type %s"
+msgstr "DRAWSEGMENT type %s non supporté"
+
+#: pcbnew/specctra_export.cpp:840
+msgid "Unable to find the next segment with an endpoint of "
+msgstr "Impossible de trouver le segment suivant avec une extrémité à "
+
+#: pcbnew/specctra_export.cpp:843
+msgid "Edit Edges_Pcb segments, making them contiguous."
+msgstr "Modifier les segments du contour PCB pour les rendre contigus."
+
+#: pcbnew/specctra_export.cpp:895
+#, c-format
+msgid "Component with value of \"%s\" has empty reference id."
+msgstr "Le composant avec valeur \"%s\" a une référence vide."
+
+#: pcbnew/specctra_export.cpp:903
+#, c-format
+msgid "Multiple components have identical reference IDs of \"%s\"."
+msgstr "Multiple composants ont une reference identique  \"%s\"."
+
 #: pcbnew/dialog_pad_edit.cpp:157
 msgid "Pad Num :"
 msgstr "Num Pad :"
@@ -4568,33 +4643,6 @@ msgstr "couche E.C.O.2"
 #: pcbnew/dialog_pad_edit.cpp:277
 msgid "Draft layer"
 msgstr "Couche dessin"
-
-#: pcbnew/plot_rtn.cpp:224
-#, c-format
-msgid ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"reference\" text."
-msgstr ""
-"Votre PCB a un mauvais numero de couche  %u pour le module\n"
-" %s's \"reference\"."
-
-#: pcbnew/plot_rtn.cpp:244
-#, c-format
-msgid ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"value\" text."
-msgstr ""
-"Votre PCB a un mauvais numero de couche %u pour le module\n"
-" %s's \"valeur\"."
-
-#: pcbnew/plot_rtn.cpp:290
-#, c-format
-msgid ""
-"Your BOARD has a bad layer number of %u for module\n"
-" %s's \"module text\" text of %s."
-msgstr ""
-"Votre PCB a un mauvais numero de couche  %u pour le module\n"
-" %s's \"texte module\" de %s."
 
 #: pcbnew/dialog_gendrill.cpp:166
 msgid "Millimeters"
@@ -5041,19 +5089,19 @@ msgstr ""
 "\n"
 "Cette opération supprimera l'annotation existante et ne peut être annulée."
 
-#: eeschema/backanno.cpp:136
+#: eeschema/backanno.cpp:134
 msgid "Load Stuff File"
 msgstr "Charger Fichier d'échange"
 
-#: eeschema/backanno.cpp:157
+#: eeschema/backanno.cpp:155
 msgid "Set the Footprint Field to Visible ?"
 msgstr "Rendre le Champ Module Visible"
 
-#: eeschema/backanno.cpp:158
+#: eeschema/backanno.cpp:156
 msgid "Field Display Option"
 msgstr "Options d'affichage du Champ"
 
-#: eeschema/backanno.cpp:171
+#: eeschema/backanno.cpp:169
 #, c-format
 msgid "Failed to open Stuff File <%s>"
 msgstr "Ne peut pas ouvrir fichier d'échange <%s>"
@@ -5170,12 +5218,11 @@ msgstr "Doit on la convertir en une feuille de hiérarchie simple (autrement sup
 msgid "%8.8lX/"
 msgstr "%8.8lX/"
 
-#: eeschema/component_class.cpp:75
+#: eeschema/component_class.cpp:72
 msgid "Sheet"
 msgstr "Feuille"
 
-#: eeschema/component_class.cpp:316
-#: eeschema/dialog_create_component.cpp:171
+#: eeschema/component_class.cpp:313
 msgid "U"
 msgstr "U"
 
@@ -5321,10 +5368,13 @@ msgid "As Convert"
 msgstr "A une forme \"convertie\""
 
 #: eeschema/dialog_create_component.cpp:187
+#: eeschema/dialog_edit_component_in_lib.cpp:161
 msgid "Power Symbol"
 msgstr "Symbole Alimentation"
 
 #: eeschema/dialog_create_component.cpp:191
+#: eeschema/dialog_edit_component_in_lib.cpp:165
+#: eeschema/dialog_edit_component_in_schematic.cpp:188
 msgid "Parts are locked"
 msgstr "Les parts sont verrouillées"
 
@@ -5453,6 +5503,7 @@ msgid "Pin Name Inside"
 msgstr "Nom de pin a l'intérieur"
 
 #: eeschema/dialog_create_component.cpp:262
+#: eeschema/dialog_edit_component_in_lib.cpp:155
 msgid "Skew:"
 msgstr "Décalage:"
 
@@ -5489,7 +5540,6 @@ msgid "Browse DocFiles"
 msgstr "Examen Fichiers de Doc"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:210
-#: eeschema/edit_component_in_lib.cpp:216
 msgid "Alias"
 msgstr "Alias"
 
@@ -5631,17 +5681,14 @@ msgid "Chip Name:"
 msgstr "Nom en librairie"
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:212
-#: eeschema/edit_component_in_lib.cpp:497
 msgid "Show Text"
 msgstr "Texte visible"
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:216
-#: eeschema/edit_component_in_lib.cpp:502
 msgid "Vertical"
 msgstr "Vertical"
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:226
-#: eeschema/edit_component_in_lib.cpp:484
 msgid "Fields"
 msgstr "Champs"
 
@@ -5919,786 +5966,6 @@ msgstr "Epaiss. ligne par défaut"
 msgid "Default Label Size"
 msgstr "Taille Label par défaut:"
 
-#: eeschema/edit_component_in_lib.cpp:168
-msgid "Lib Component Properties"
-msgstr "Propriétés du composant librairie"
-
-#: eeschema/edit_component_in_lib.cpp:172
-msgid "Properties for "
-msgstr "Propriétés pour "
-
-#: eeschema/edit_component_in_lib.cpp:177
-msgid "(alias of "
-msgstr "(alias de "
-
-#: eeschema/edit_component_in_lib.cpp:245
-#: eeschema/edit_component_in_lib.cpp:328
-msgid "Delete All"
-msgstr "Tout Supprimer"
-
-#: eeschema/edit_component_in_lib.cpp:281
-msgid "Footprint Filter"
-msgstr "Filtrage Modules"
-
-#: eeschema/edit_component_in_lib.cpp:293
-msgid "Footprints"
-msgstr "Modules"
-
-#: eeschema/edit_component_in_lib.cpp:407
-msgid "Show Pin Num"
-msgstr "Montre Numéro de Pin"
-
-#: eeschema/edit_component_in_lib.cpp:476
-msgid "Left justify"
-msgstr "Justifié à gauche"
-
-#: eeschema/edit_component_in_lib.cpp:476
-#: eeschema/edit_component_in_lib.cpp:478
-msgid "Center"
-msgstr "Centrer"
-
-#: eeschema/edit_component_in_lib.cpp:476
-msgid "Right justify"
-msgstr "Justifié à droite"
-
-#: eeschema/edit_component_in_lib.cpp:478
-msgid "Bottom justify"
-msgstr "Justifié en bas"
-
-#: eeschema/edit_component_in_lib.cpp:478
-msgid "Top justify"
-msgstr "Justifié en haut"
-
-#: eeschema/edit_component_in_lib.cpp:508
-#: eeschema/edit_component_in_schematic.cpp:205
-msgid "Field Name:"
-msgstr "Nom Champ"
-
-#: eeschema/edit_component_in_lib.cpp:518
-#: eeschema/edit_component_in_schematic.cpp:215
-msgid "Field Text:"
-msgstr "Texte du Champ:"
-
-#: eeschema/edit_component_in_lib.cpp:524
-#: eeschema/edit_component_in_schematic.cpp:223
-msgid "Pos"
-msgstr "Pos"
-
-#: eeschema/edit_component_in_lib.cpp:529
-msgid "Hor Justify"
-msgstr "Justifié horiz"
-
-#: eeschema/edit_component_in_lib.cpp:536
-msgid "Vert Justify"
-msgstr "Justifié Vert."
-
-#: eeschema/edit_component_in_lib.cpp:551
-msgid "Chip Name"
-msgstr "Nom en librairie"
-
-#: eeschema/edit_component_in_lib.cpp:554
-#: eeschema/edit_component_in_schematic.cpp:199
-msgid "Field to edit"
-msgstr "Champ à éditer"
-
-#: eeschema/edit_component_in_lib.cpp:890
-msgid "Ok to Delete Alias LIST"
-msgstr "Ok pour effacer la LISTE des Alias"
-
-#: eeschema/edit_component_in_lib.cpp:915
-msgid "New alias:"
-msgstr "Noveau alias"
-
-#: eeschema/edit_component_in_lib.cpp:923
-msgid "This is the Root Part"
-msgstr "Ceci est le composant racine"
-
-#: eeschema/edit_component_in_lib.cpp:932
-#: eeschema/edit_component_in_lib.cpp:1200
-msgid "Already in use"
-msgstr "Déja en usage"
-
-#: eeschema/edit_component_in_lib.cpp:957
-msgid " is Current Selected Alias!"
-msgstr " est l' Alias actuellement sélectionné!"
-
-#: eeschema/edit_component_in_lib.cpp:1010
-msgid "Delete units"
-msgstr "Supprimer  unité"
-
-#: eeschema/edit_component_in_lib.cpp:1080
-msgid "Create pins for Convert items"
-msgstr "Créér les pins des unitées converties"
-
-#: eeschema/edit_component_in_lib.cpp:1084
-msgid "Part as \"De Morgan\" anymore"
-msgstr "Le composant a une représentation convertie"
-
-#: eeschema/edit_component_in_lib.cpp:1109
-msgid "Delete Convert items"
-msgstr "Suppression des éléments convertis"
-
-#: eeschema/edit_component_in_lib.cpp:1144
-msgid "Doc Files"
-msgstr "Fichiers de Doc"
-
-#: eeschema/edit_component_in_lib.cpp:1167
-msgid "Ok to Delete FootprintFilter LIST"
-msgstr "Ok pour effacer la LISTE des filtres de modules"
-
-#: eeschema/edit_component_in_lib.cpp:1189
-msgid "New FootprintFilter:"
-msgstr "Nouveau Filtre de Modules:"
-
-#: eeschema/edit_component_in_schematic.cpp:330
-msgid "No Component Name!"
-msgstr "Pas de nom de composant!"
-
-#: eeschema/edit_component_in_schematic.cpp:336
-#, c-format
-msgid "Component [%s] not found!"
-msgstr "Composant [%s] non trouvé!"
-
-#: eeschema/edit_component_in_schematic.cpp:457
-msgid "No Field to move"
-msgstr "Pas de champ a déplacer"
-
-#: eeschema/edit_component_in_schematic.cpp:520
-msgid "No Field To Edit"
-msgstr "Pas de champ a éditer"
-
-#: eeschema/edit_component_in_schematic.cpp:534
-msgid ""
-"Part is a POWER, value cannot be modified!\n"
-"You must create a new power"
-msgstr ""
-"Composant type ALIMENTATION!\n"
-"valeur non modifiable, Vous devez créer un nouveau composant alimentation "
-
-#: eeschema/edit_component_in_schematic.cpp:581
-msgid "Reference needed !, No change"
-msgstr "Référence NECESSAIRE: changement refusé"
-
-#: eeschema/edit_component_in_schematic.cpp:585
-msgid "Value needed !, No change"
-msgstr "Valeur NECESSAIRE: changement refusé"
-
-#: eeschema/edit_label.cpp:49
-msgid "Empty Text!"
-msgstr "Texte vide"
-
-#: eeschema/eeconfig.cpp:73
-msgid "File "
-msgstr "Fichier "
-
-#: eeschema/eeconfig.cpp:73
-msgid "not found"
-msgstr " non trouvé"
-
-#: eeschema/eelayer.cpp:233
-msgid "White"
-msgstr "Blanc"
-
-#: eeschema/eelayer.cpp:234
-msgid "Black"
-msgstr "Noir"
-
-#: eeschema/eelayer.cpp:235
-msgid "Background Color:"
-msgstr "Couleur du Fond:"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:115
-msgid "Start loading schematic libs"
-msgstr "Demarre chargement des librairies schématiques"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:302
-#: eeschema/eelibs_read_libraryfiles.cpp:309
-msgid "File <"
-msgstr "Fichier <"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:302
-msgid "> is empty!"
-msgstr "> est vide"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:309
-msgid "> is NOT EESCHEMA library!"
-msgstr "> nest PAS une librairie EESCHEMA !"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:328
-msgid "Library <"
-msgstr "Librairie <"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:328
-msgid "> header read error"
-msgstr "> erreur lecture entête"
-
-#: eeschema/eeschema.cpp:54
-msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema est est cours d'exécution. Continuer ?"
-
-#: eeschema/erc.cpp:287
-msgid "Annotation Required!"
-msgstr "Numérotation requise!"
-
-#: eeschema/erc.cpp:392
-msgid "ERC file:"
-msgstr "Fichier ERC:"
-
-#: eeschema/erc.cpp:546
-#, c-format
-msgid "Warning HLabel %s not connected to SheetLabel"
-msgstr "Attention HLabel %s non connecté a SheetLabel"
-
-#: eeschema/erc.cpp:550
-#, c-format
-msgid "Warning SheetLabel %s not connected to HLabel"
-msgstr "Warning SheetLabel %s non connecté a HLabel"
-
-#: eeschema/erc.cpp:564
-#, c-format
-msgid "Warning Pin %s Unconnected"
-msgstr "Warning Pin %s Non connectée"
-
-#: eeschema/erc.cpp:573
-#, c-format
-msgid "Warning Pin %s not driven (Net %d)"
-msgstr "Warning Pin %s non pilotée (Net %d)"
-
-#: eeschema/erc.cpp:584
-msgid "Warning More than 1 Pin connected to UnConnect symbol"
-msgstr "Warning: plus que 1 Pin connectée a un symbole de non connexion"
-
-#: eeschema/erc.cpp:595
-msgid "Warning"
-msgstr "Avertissement"
-
-#: eeschema/erc.cpp:598
-msgid "Error"
-msgstr "Erreur"
-
-#: eeschema/erc.cpp:604
-#, c-format
-msgid "%s: Pin %s connected to Pin %s (net %d)"
-msgstr "%s: Pin %s connectée a Pin %s (net %d)"
-
-#: eeschema/erc.cpp:723
-msgid "ERC control"
-msgstr "Controle ERC"
-
-#: eeschema/erc.cpp:733
-msgid ""
-"\n"
-"***** Sheet / (Root) \n"
-msgstr ""
-"\n"
-"***** Feuille/ ( Racine)\n"
-
-#: eeschema/erc.cpp:738
-#, c-format
-msgid ""
-"\n"
-"***** Sheet %s\n"
-msgstr ""
-"\n"
-"***** Feuille %s\n"
-
-#: eeschema/erc.cpp:755
-#, c-format
-msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
-msgstr "ERC: %s (X= %2.3f pouces, Y= %2.3f pouces\n"
-
-#: eeschema/erc.cpp:764
-#, c-format
-msgid ""
-"\n"
-" >> Errors ERC: %d\n"
-msgstr ""
-"\n"
-" >> Erreurs ERC: %d\n"
-
-#: eeschema/files-io.cpp:72
-msgid "Clear Schematic Hierarchy (modified!)?"
-msgstr "Effacer la hiérarchie schématique (modifiée!)?"
-
-#: eeschema/files-io.cpp:82
-msgid "Schematic files:"
-msgstr "Fichiers schématiques:"
-
-#: eeschema/files-io.cpp:133
-msgid ""
-"Ready\n"
-"Working dir: \n"
-msgstr ""
-"Pret\n"
-"Répertoire de travail: \n"
-
-#: eeschema/files-io.cpp:181
-#, c-format
-msgid "File %s not found (new project ?)"
-msgstr " fichier %s non trouvé (nouveau projet ?)"
-
-#: eeschema/find.cpp:212
-msgid "Pin "
-msgstr "Pin "
-
-#: eeschema/find.cpp:216
-msgid "Ref "
-msgstr "Ref "
-
-#: eeschema/find.cpp:224
-msgid "Field "
-msgstr "Champ "
-
-#: eeschema/find.cpp:234
-#: eeschema/find.cpp:238
-msgid " found"
-msgstr " trouvé "
-
-#: eeschema/find.cpp:371
-#, c-format
-msgid "Marker %d found in %s"
-msgstr "Marqueur %d trouvé en %s "
-
-#: eeschema/find.cpp:377
-msgid "Marker Not Found"
-msgstr "Marqueur non trouvé"
-
-#: eeschema/find.cpp:609
-msgid " Found in "
-msgstr " Trouvé en "
-
-#: eeschema/find.cpp:621
-msgid " Not Found"
-msgstr " Non trouvé"
-
-#: eeschema/find.cpp:653
-msgid "No libraries are loaded"
-msgstr "Pas de librairies chargées"
-
-#: eeschema/find.cpp:680
-#: eeschema/find.cpp:745
-#: eeschema/find.cpp:761
-msgid "Found "
-msgstr "Trouvé "
-
-#: eeschema/find.cpp:682
-#: eeschema/find.cpp:746
-#: eeschema/find.cpp:762
-msgid " in lib "
-msgstr " en libr. "
-
-#: eeschema/find.cpp:693
-msgid " found only in cache"
-msgstr "trouvé seulement en cache"
-
-#: eeschema/find.cpp:696
-msgid ""
-"\n"
-"Explore All Libraries?"
-msgstr ""
-"\n"
-"Explorer toutes les Librairies?"
-
-#: eeschema/find.cpp:702
-msgid "Nothing found"
-msgstr " Rien trouvé"
-
-#: eeschema/getpart.cpp:106
-#, c-format
-msgid "component selection (%d items loaded):"
-msgstr "Sélection Composant (%d items chargés):"
-
-#: eeschema/getpart.cpp:171
-msgid "Failed to find part "
-msgstr "Impossible de trouver le composant  "
-
-#: eeschema/getpart.cpp:171
-msgid " in library"
-msgstr " en librairie"
-
-#: eeschema/hierarch.cpp:122
-msgid "Navigator"
-msgstr "Navigateur"
-
-#: eeschema/hierarch.cpp:133
-msgid "Root"
-msgstr "Racine"
-
-#: eeschema/hotkeys.cpp:249
-msgid "Add Component"
-msgstr "Ajout Composant"
-
-#: eeschema/hotkeys.cpp:271
-msgid "Add Wire"
-msgstr "Ajouter Fils"
-
-#: eeschema/libarch.cpp:78
-msgid "Failed to create archive lib file "
-msgstr "Impossible de créer le fichier librairie archive "
-
-#: eeschema/libarch.cpp:85
-msgid "Failed to create doc lib file "
-msgstr "Impossible de créer le fichier lib document"
-
-#: eeschema/libedit.cpp:38
-msgid " Part:   "
-msgstr "Composant   "
-
-#: eeschema/libedit.cpp:52
-msgid "   Convert"
-msgstr "  Convert"
-
-#: eeschema/libedit.cpp:53
-msgid "   Normal"
-msgstr "  Normal"
-
-#: eeschema/libedit.cpp:56
-msgid "  (Power Symbol)"
-msgstr "  (Symbole Alimentation)"
-
-#: eeschema/libedit.cpp:90
-msgid ""
-"Current Part not saved.\n"
-"Continue?"
-msgstr ""
-"Composant courant non sauvé.\n"
-"Continuer ?"
-
-#: eeschema/libedit.cpp:112
-#: eeschema/libedit.cpp:389
-msgid "Component \""
-msgstr "Composant \""
-
-#: eeschema/libedit.cpp:112
-msgid "\" not found."
-msgstr "\"  non trouvé"
-
-#: eeschema/libedit.cpp:234
-msgid "Modify Library File \""
-msgstr "Ok pour modifier le fichier Librairie \""
-
-#: eeschema/libedit.cpp:234
-msgid "\"?"
-msgstr "\"?"
-
-#: eeschema/libedit.cpp:243
-msgid "Error while saving Library File \""
-msgstr "Erreur en sauvant le fichier Librairie \""
-
-#: eeschema/libedit.cpp:243
-#: eeschema/libedit.cpp:390
-msgid "\"."
-msgstr "\"."
-
-#: eeschema/libedit.cpp:249
-msgid "Library File \""
-msgstr "Fichier Librairie \""
-
-#: eeschema/libedit.cpp:251
-msgid "Document File \""
-msgstr "Fichier de Doc \""
-
-#: eeschema/libedit.cpp:304
-msgid "No Active Library"
-msgstr "Pas de Librairie Active"
-
-#: eeschema/libedit.cpp:320
-#, c-format
-msgid "Select Component (%d items)"
-msgstr "Selection composant (%d items)"
-
-#: eeschema/libedit.cpp:343
-msgid "Component not found"
-msgstr "Composant non trouvé"
-
-#: eeschema/libedit.cpp:347
-msgid "Delete component \""
-msgstr "Suppression Composant \""
-
-#: eeschema/libedit.cpp:348
-msgid "\" from library \""
-msgstr "\" de la librairie \""
-
-#: eeschema/libedit.cpp:372
-msgid "Clear old component from screen (changes will be lost)?"
-msgstr "Supprimer l'ancien composant de l'écran (les changements seront perdus)?"
-
-#: eeschema/libedit.cpp:390
-msgid "\" exists in library \""
-msgstr "\"  existe en librairie \""
-
-#: eeschema/libedit.cpp:557
-msgid "No component to Save."
-msgstr "Pas de composant à sauver"
-
-#: eeschema/libedit.cpp:564
-msgid "No Library specified."
-msgstr "Pas de Librairie spécifiée."
-
-#: eeschema/libedit.cpp:575
-#, c-format
-msgid "Component \"%s\" exists. Change it?"
-msgstr "Le composant \" %s\" existe, Le changer ?"
-
-#: eeschema/libedit.cpp:614
-#, c-format
-msgid "Component %s saved in %s"
-msgstr "Composant %s sauvé en %s"
-
-#: eeschema/libedit_onrightclick.cpp:77
-msgid "Move Arc "
-msgstr "Déplacer arc"
-
-#: eeschema/libedit_onrightclick.cpp:81
-msgid "Arc Options"
-msgstr "Options pour l'Arc"
-
-#: eeschema/libedit_onrightclick.cpp:84
-msgid "Delete Arc "
-msgstr "Effacer Arc"
-
-#: eeschema/libedit_onrightclick.cpp:92
-msgid "Move Circle "
-msgstr "Déplacer Cercle"
-
-#: eeschema/libedit_onrightclick.cpp:96
-msgid "Circle Options"
-msgstr "Options pour le Cercle"
-
-#: eeschema/libedit_onrightclick.cpp:99
-msgid "Delete Circle "
-msgstr "Supprimer Cercle"
-
-#: eeschema/libedit_onrightclick.cpp:107
-msgid "Move Rect "
-msgstr "Déplacer Rect"
-
-#: eeschema/libedit_onrightclick.cpp:111
-msgid "Rect Options"
-msgstr "Options pour le Rectangle"
-
-#: eeschema/libedit_onrightclick.cpp:114
-msgid "Delete Rect "
-msgstr "Supprimer Rect"
-
-#: eeschema/libedit_onrightclick.cpp:122
-msgid "Move Text "
-msgstr "Déplacer Texte"
-
-#: eeschema/libedit_onrightclick.cpp:126
-msgid "Text Editor"
-msgstr "Editeur de Texte"
-
-#: eeschema/libedit_onrightclick.cpp:128
-msgid "Rotate Text"
-msgstr "Rot. Texte"
-
-#: eeschema/libedit_onrightclick.cpp:131
-msgid "Delete Text "
-msgstr "Supprimer Texte"
-
-#: eeschema/libedit_onrightclick.cpp:139
-msgid "Move Line "
-msgstr "Déplacer Ligne"
-
-#: eeschema/libedit_onrightclick.cpp:145
-msgid "Line End"
-msgstr "Fin ligne"
-
-#: eeschema/libedit_onrightclick.cpp:148
-msgid "Line Options"
-msgstr "Options pour Ligne"
-
-#: eeschema/libedit_onrightclick.cpp:151
-msgid "Delete Line "
-msgstr "Efface Ligne"
-
-#: eeschema/libedit_onrightclick.cpp:158
-msgid "Delete Segment "
-msgstr "Supprimer Segment"
-
-#: eeschema/libedit_onrightclick.cpp:168
-msgid "Move Field "
-msgstr "Déplace Champ"
-
-#: eeschema/libedit_onrightclick.cpp:172
-msgid "Field Rotate"
-msgstr "Rotation Champ"
-
-#: eeschema/libedit_onrightclick.cpp:174
-msgid "Field Edit"
-msgstr "Edition du champ"
-
-#: eeschema/libedit_onrightclick.cpp:199
-msgid "Move Pin"
-msgstr "Déplace pin"
-
-#: eeschema/libedit_onrightclick.cpp:202
-msgid "Edit Pin "
-msgstr "Editer Pin"
-
-#: eeschema/libedit_onrightclick.cpp:207
-msgid "Delete Pin "
-msgstr "Supprimer Pin"
-
-#: eeschema/libedit_onrightclick.cpp:212
-msgid "Global"
-msgstr "Global"
-
-#: eeschema/libedit_onrightclick.cpp:214
-msgid "Pin Size to selected pins"
-msgstr "Change taille pins sélectionnées"
-
-#: eeschema/libedit_onrightclick.cpp:214
-msgid "Pin Size to others"
-msgstr "Change taille autres pins"
-
-#: eeschema/libedit_onrightclick.cpp:217
-msgid "Pin Name Size to selected pin"
-msgstr "Change taille Nom pin sélectionnées"
-
-#: eeschema/libedit_onrightclick.cpp:217
-msgid "Pin Name Size to others"
-msgstr "Change taille Nom pin autres pins"
-
-#: eeschema/libedit_onrightclick.cpp:220
-msgid "Pin Num Size to selected pin"
-msgstr "Change taille Num pins sélectionnées"
-
-#: eeschema/libedit_onrightclick.cpp:220
-msgid "Pin Num Size to others"
-msgstr "Change taille Num pin autres pins"
-
-#: eeschema/libedit_onrightclick.cpp:242
-msgid "Select items"
-msgstr "Sélection des éléments"
-
-#: eeschema/libedit_onrightclick.cpp:245
-msgid "Mirror Block (ctrl + drag mouse)"
-msgstr "Bloc Miroir (ctrl + drag mouse)"
-
-#: eeschema/libedit_onrightclick.cpp:247
-msgid "Del. Block (shift+ctrl + drag mouse)"
-msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
-
-#: eeschema/libfield.cpp:221
-msgid "No new text: no change"
-msgstr "Pas de nouveau texte: pas de changements"
-
-#: eeschema/libframe.cpp:102
-msgid ""
-"Component was modified!\n"
-"Discard changes?"
-msgstr ""
-"Le composant a été modifié\n"
-"Perdre les  changements"
-
-#: eeschema/libframe.cpp:115
-#, c-format
-msgid ""
-"Library \"%s\" was modified!\n"
-"Discard changes?"
-msgstr ""
-"Librairie \"%s\"  modifiée!\n"
-"Perdre les changements ?"
-
-#: eeschema/libframe.cpp:342
-msgid "Include last component changes?"
-msgstr "Inclure les dernieres modifs du composant"
-
-#: eeschema/libframe.cpp:405
-msgid " Pins Test OK!"
-msgstr " Test Pins OK!"
-
-#: eeschema/libframe.cpp:479
-msgid "Add Pin"
-msgstr "Addition de \"pins\""
-
-#: eeschema/libframe.cpp:483
-msgid "Set Pin Options"
-msgstr "Choix Options des Pins"
-
-#: eeschema/libframe.cpp:505
-msgid "Add Rectangle"
-msgstr "Addition de rectangles"
-
-#: eeschema/libframe.cpp:509
-msgid "Add Circle"
-msgstr "Addition de cercle"
-
-#: eeschema/libframe.cpp:513
-msgid "Add Arc"
-msgstr "Addition d' arc"
-
-#: eeschema/libframe.cpp:521
-msgid "Anchor"
-msgstr "Ancre"
-
-#: eeschema/libframe.cpp:531
-msgid "Export"
-msgstr "Exporter"
-
-#: eeschema/lib_export.cpp:39
-msgid "Import component:"
-msgstr "Importer composant:"
-
-#: eeschema/lib_export.cpp:73
-msgid "File is empty"
-msgstr "Fichier vide"
-
-#: eeschema/lib_export.cpp:95
-msgid "No Part to Save"
-msgstr "Pas de composant à sauver"
-
-#: eeschema/lib_export.cpp:107
-msgid "New Library"
-msgstr "Nouvelle Librairie"
-
-#: eeschema/lib_export.cpp:107
-msgid "Export component:"
-msgstr "Exporter composant:"
-
-#: eeschema/lib_export.cpp:144
-msgid "0k"
-msgstr "Ok"
-
-#: eeschema/lib_export.cpp:146
-msgid ""
-"Note: this new library will be available only if it is loaded by eeschema.\n"
-"Modify eeschema config if you want use it."
-msgstr ""
-"Note: cette nouvelle librairie sera disponible seulement si elle est chargée par eeschema\n"
-"Modifier la config de eeschema si vous voulez l'utiliser"
-
-#: eeschema/lib_export.cpp:149
-msgid "Error while create "
-msgstr "Erreur en création de "
-
-#: eeschema/load_one_schematic_file.cpp:104
-msgid "Failed to open "
-msgstr "Erreur ouverture "
-
-#: eeschema/load_one_schematic_file.cpp:109
-msgid "Loading "
-msgstr "Chargement "
-
-#: eeschema/load_one_schematic_file.cpp:116
-#: eeschema/load_one_schematic_file.cpp:141
-msgid " is NOT an EESchema file!"
-msgstr " n'est PAS un fichier EESchema!"
-
-#: eeschema/load_one_schematic_file.cpp:126
-msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
-msgstr " a été créé par une version plus récente de Eeschema et peut ne pas être chargé correctement. SVP mettez a jour Eeschema!"
-
-#: eeschema/load_one_schematic_file.cpp:133
-msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
-msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
-
-#: eeschema/load_one_schematic_file.cpp:484
-msgid "Done Loading "
-msgstr "Chargement terminé"
-
 #: eeschema/menubar.cpp:41
 msgid "&New"
 msgstr "&Nouveau"
@@ -6969,6 +6236,651 @@ msgstr "&Voir"
 #: eeschema/menubar.cpp:410
 msgid "&Place"
 msgstr "&Placer"
+
+#: eeschema/libfield.cpp:206
+msgid "Edit field"
+msgstr "Editer Champ"
+
+#: eeschema/libfield.cpp:221
+msgid "No new text: no change"
+msgstr "Pas de nouveau texte: pas de changements"
+
+#: eeschema/sheetlab.cpp:73
+msgid "PinSheet Properties:"
+msgstr "Propriétés des Pins de Hierarchie"
+
+#: eeschema/sheetlab.cpp:107
+msgid "PinSheet Shape:"
+msgstr "Forme Pin de hiérarchie:"
+
+#: eeschema/sheetlab.cpp:328
+msgid "PinSheet"
+msgstr "Pin de Feuille de Hiérarchie"
+
+#: eeschema/sheetlab.cpp:388
+msgid "No New Hierarchal Label found"
+msgstr "Pas de nouvea Label Hiérarchique trouvé"
+
+#: eeschema/viewlib_frame.cpp:53
+msgid "Library browser"
+msgstr "Visualisateur des librairies"
+
+#: eeschema/edit_label.cpp:49
+msgid "Empty Text!"
+msgstr "Texte vide"
+
+#: eeschema/eeconfig.cpp:73
+msgid "File "
+msgstr "Fichier "
+
+#: eeschema/eeconfig.cpp:73
+msgid "not found"
+msgstr " non trouvé"
+
+#: eeschema/eelayer.cpp:233
+msgid "White"
+msgstr "Blanc"
+
+#: eeschema/eelayer.cpp:234
+msgid "Black"
+msgstr "Noir"
+
+#: eeschema/eelayer.cpp:235
+msgid "Background Color:"
+msgstr "Couleur du Fond:"
+
+#: eeschema/symbdraw.cpp:789
+#, c-format
+msgid "Arc %.1f deg"
+msgstr "Arc %.1f deg"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:115
+msgid "Start loading schematic libs"
+msgstr "Demarre chargement des librairies schématiques"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:302
+#: eeschema/eelibs_read_libraryfiles.cpp:309
+msgid "File <"
+msgstr "Fichier <"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:302
+msgid "> is empty!"
+msgstr "> est vide"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:309
+msgid "> is NOT EESCHEMA library!"
+msgstr "> nest PAS une librairie EESCHEMA !"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:328
+msgid "Library <"
+msgstr "Librairie <"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:328
+msgid "> header read error"
+msgstr "> erreur lecture entête"
+
+#: eeschema/eeschema.cpp:54
+msgid "Eeschema is already running, Continue?"
+msgstr "Eeschema est est cours d'exécution. Continuer ?"
+
+#: eeschema/erc.cpp:287
+msgid "Annotation Required!"
+msgstr "Numérotation requise!"
+
+#: eeschema/erc.cpp:392
+msgid "ERC file:"
+msgstr "Fichier ERC:"
+
+#: eeschema/erc.cpp:546
+#, c-format
+msgid "Warning HLabel %s not connected to SheetLabel"
+msgstr "Attention HLabel %s non connecté a SheetLabel"
+
+#: eeschema/erc.cpp:550
+#, c-format
+msgid "Warning SheetLabel %s not connected to HLabel"
+msgstr "Warning SheetLabel %s non connecté a HLabel"
+
+#: eeschema/erc.cpp:564
+#, c-format
+msgid "Warning Pin %s Unconnected"
+msgstr "Warning Pin %s Non connectée"
+
+#: eeschema/erc.cpp:573
+#, c-format
+msgid "Warning Pin %s not driven (Net %d)"
+msgstr "Warning Pin %s non pilotée (Net %d)"
+
+#: eeschema/erc.cpp:584
+msgid "Warning More than 1 Pin connected to UnConnect symbol"
+msgstr "Warning: plus que 1 Pin connectée a un symbole de non connexion"
+
+#: eeschema/erc.cpp:595
+msgid "Warning"
+msgstr "Avertissement"
+
+#: eeschema/erc.cpp:598
+msgid "Error"
+msgstr "Erreur"
+
+#: eeschema/erc.cpp:604
+#, c-format
+msgid "%s: Pin %s connected to Pin %s (net %d)"
+msgstr "%s: Pin %s connectée a Pin %s (net %d)"
+
+#: eeschema/erc.cpp:723
+msgid "ERC control"
+msgstr "Controle ERC"
+
+#: eeschema/erc.cpp:733
+msgid ""
+"\n"
+"***** Sheet / (Root) \n"
+msgstr ""
+"\n"
+"***** Feuille/ ( Racine)\n"
+
+#: eeschema/erc.cpp:738
+#, c-format
+msgid ""
+"\n"
+"***** Sheet %s\n"
+msgstr ""
+"\n"
+"***** Feuille %s\n"
+
+#: eeschema/erc.cpp:755
+#, c-format
+msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
+msgstr "ERC: %s (X= %2.3f pouces, Y= %2.3f pouces\n"
+
+#: eeschema/erc.cpp:764
+#, c-format
+msgid ""
+"\n"
+" >> Errors ERC: %d\n"
+msgstr ""
+"\n"
+" >> Erreurs ERC: %d\n"
+
+#: eeschema/files-io.cpp:72
+msgid "Clear Schematic Hierarchy (modified!)?"
+msgstr "Effacer la hiérarchie schématique (modifiée!)?"
+
+#: eeschema/files-io.cpp:82
+msgid "Schematic files:"
+msgstr "Fichiers schématiques:"
+
+#: eeschema/files-io.cpp:133
+msgid ""
+"Ready\n"
+"Working dir: \n"
+msgstr ""
+"Pret\n"
+"Répertoire de travail: \n"
+
+#: eeschema/files-io.cpp:181
+#, c-format
+msgid "File %s not found (new project ?)"
+msgstr " fichier %s non trouvé (nouveau projet ?)"
+
+#: eeschema/find.cpp:212
+msgid "Pin "
+msgstr "Pin "
+
+#: eeschema/find.cpp:216
+msgid "Ref "
+msgstr "Ref "
+
+#: eeschema/find.cpp:224
+msgid "Field "
+msgstr "Champ "
+
+#: eeschema/find.cpp:234
+#: eeschema/find.cpp:238
+msgid " found"
+msgstr " trouvé "
+
+#: eeschema/find.cpp:371
+#, c-format
+msgid "Marker %d found in %s"
+msgstr "Marqueur %d trouvé en %s "
+
+#: eeschema/find.cpp:377
+msgid "Marker Not Found"
+msgstr "Marqueur non trouvé"
+
+#: eeschema/find.cpp:609
+msgid " Found in "
+msgstr " Trouvé en "
+
+#: eeschema/find.cpp:621
+msgid " Not Found"
+msgstr " Non trouvé"
+
+#: eeschema/find.cpp:653
+msgid "No libraries are loaded"
+msgstr "Pas de librairies chargées"
+
+#: eeschema/find.cpp:680
+#: eeschema/find.cpp:745
+#: eeschema/find.cpp:761
+msgid "Found "
+msgstr "Trouvé "
+
+#: eeschema/find.cpp:682
+#: eeschema/find.cpp:746
+#: eeschema/find.cpp:762
+msgid " in lib "
+msgstr " en libr. "
+
+#: eeschema/find.cpp:693
+msgid " found only in cache"
+msgstr "trouvé seulement en cache"
+
+#: eeschema/find.cpp:696
+msgid ""
+"\n"
+"Explore All Libraries?"
+msgstr ""
+"\n"
+"Explorer toutes les Librairies?"
+
+#: eeschema/find.cpp:702
+msgid "Nothing found"
+msgstr " Rien trouvé"
+
+#: eeschema/getpart.cpp:106
+#, c-format
+msgid "component selection (%d items loaded):"
+msgstr "Sélection Composant (%d items chargés):"
+
+#: eeschema/getpart.cpp:171
+msgid "Failed to find part "
+msgstr "Impossible de trouver le composant  "
+
+#: eeschema/getpart.cpp:171
+msgid " in library"
+msgstr " en librairie"
+
+#: eeschema/hierarch.cpp:122
+msgid "Navigator"
+msgstr "Navigateur"
+
+#: eeschema/hierarch.cpp:133
+msgid "Root"
+msgstr "Racine"
+
+#: eeschema/hotkeys.cpp:249
+msgid "Add Component"
+msgstr "Ajout Composant"
+
+#: eeschema/hotkeys.cpp:271
+msgid "Add Wire"
+msgstr "Ajouter Fils"
+
+#: eeschema/libarch.cpp:78
+msgid "Failed to create archive lib file "
+msgstr "Impossible de créer le fichier librairie archive "
+
+#: eeschema/libarch.cpp:85
+msgid "Failed to create doc lib file "
+msgstr "Impossible de créer le fichier lib document"
+
+#: eeschema/libedit.cpp:38
+msgid " Part:   "
+msgstr "Composant   "
+
+#: eeschema/libedit.cpp:52
+msgid "   Convert"
+msgstr "  Convert"
+
+#: eeschema/libedit.cpp:53
+msgid "   Normal"
+msgstr "  Normal"
+
+#: eeschema/libedit.cpp:56
+msgid "  (Power Symbol)"
+msgstr "  (Symbole Alimentation)"
+
+#: eeschema/libedit.cpp:90
+msgid ""
+"Current Part not saved.\n"
+"Continue?"
+msgstr ""
+"Composant courant non sauvé.\n"
+"Continuer ?"
+
+#: eeschema/libedit.cpp:112
+#: eeschema/libedit.cpp:388
+msgid "Component \""
+msgstr "Composant \""
+
+#: eeschema/libedit.cpp:112
+msgid "\" not found."
+msgstr "\"  non trouvé"
+
+#: eeschema/libedit.cpp:233
+msgid "Modify Library File \""
+msgstr "Ok pour modifier le fichier Librairie \""
+
+#: eeschema/libedit.cpp:233
+msgid "\"?"
+msgstr "\"?"
+
+#: eeschema/libedit.cpp:242
+msgid "Error while saving Library File \""
+msgstr "Erreur en sauvant le fichier Librairie \""
+
+#: eeschema/libedit.cpp:242
+#: eeschema/libedit.cpp:389
+msgid "\"."
+msgstr "\"."
+
+#: eeschema/libedit.cpp:248
+msgid "Library File \""
+msgstr "Fichier Librairie \""
+
+#: eeschema/libedit.cpp:250
+msgid "Document File \""
+msgstr "Fichier de Doc \""
+
+#: eeschema/libedit.cpp:303
+msgid "No Active Library"
+msgstr "Pas de Librairie Active"
+
+#: eeschema/libedit.cpp:319
+#, c-format
+msgid "Select Component (%d items)"
+msgstr "Selection composant (%d items)"
+
+#: eeschema/libedit.cpp:342
+msgid "Component not found"
+msgstr "Composant non trouvé"
+
+#: eeschema/libedit.cpp:346
+msgid "Delete component \""
+msgstr "Suppression Composant \""
+
+#: eeschema/libedit.cpp:347
+msgid "\" from library \""
+msgstr "\" de la librairie \""
+
+#: eeschema/libedit.cpp:371
+msgid "Clear old component from screen (changes will be lost)?"
+msgstr "Supprimer l'ancien composant de l'écran (les changements seront perdus)?"
+
+#: eeschema/libedit.cpp:389
+msgid "\" exists in library \""
+msgstr "\"  existe en librairie \""
+
+#: eeschema/libedit.cpp:556
+msgid "No component to Save."
+msgstr "Pas de composant à sauver"
+
+#: eeschema/libedit.cpp:563
+msgid "No Library specified."
+msgstr "Pas de Librairie spécifiée."
+
+#: eeschema/libedit.cpp:574
+#, c-format
+msgid "Component \"%s\" exists. Change it?"
+msgstr "Le composant \" %s\" existe, Le changer ?"
+
+#: eeschema/libedit.cpp:613
+#, c-format
+msgid "Component %s saved in %s"
+msgstr "Composant %s sauvé en %s"
+
+#: eeschema/libedit_onrightclick.cpp:77
+msgid "Move Arc "
+msgstr "Déplacer arc"
+
+#: eeschema/libedit_onrightclick.cpp:81
+msgid "Arc Options"
+msgstr "Options pour l'Arc"
+
+#: eeschema/libedit_onrightclick.cpp:84
+msgid "Delete Arc "
+msgstr "Effacer Arc"
+
+#: eeschema/libedit_onrightclick.cpp:92
+msgid "Move Circle "
+msgstr "Déplacer Cercle"
+
+#: eeschema/libedit_onrightclick.cpp:96
+msgid "Circle Options"
+msgstr "Options pour le Cercle"
+
+#: eeschema/libedit_onrightclick.cpp:99
+msgid "Delete Circle "
+msgstr "Supprimer Cercle"
+
+#: eeschema/libedit_onrightclick.cpp:107
+msgid "Move Rect "
+msgstr "Déplacer Rect"
+
+#: eeschema/libedit_onrightclick.cpp:111
+msgid "Rect Options"
+msgstr "Options pour le Rectangle"
+
+#: eeschema/libedit_onrightclick.cpp:114
+msgid "Delete Rect "
+msgstr "Supprimer Rect"
+
+#: eeschema/libedit_onrightclick.cpp:122
+msgid "Move Text "
+msgstr "Déplacer Texte"
+
+#: eeschema/libedit_onrightclick.cpp:126
+msgid "Text Editor"
+msgstr "Editeur de Texte"
+
+#: eeschema/libedit_onrightclick.cpp:128
+msgid "Rotate Text"
+msgstr "Rot. Texte"
+
+#: eeschema/libedit_onrightclick.cpp:131
+msgid "Delete Text "
+msgstr "Supprimer Texte"
+
+#: eeschema/libedit_onrightclick.cpp:139
+msgid "Move Line "
+msgstr "Déplacer Ligne"
+
+#: eeschema/libedit_onrightclick.cpp:145
+msgid "Line End"
+msgstr "Fin ligne"
+
+#: eeschema/libedit_onrightclick.cpp:148
+msgid "Line Options"
+msgstr "Options pour Ligne"
+
+#: eeschema/libedit_onrightclick.cpp:151
+msgid "Delete Line "
+msgstr "Efface Ligne"
+
+#: eeschema/libedit_onrightclick.cpp:158
+msgid "Delete Segment "
+msgstr "Supprimer Segment"
+
+#: eeschema/libedit_onrightclick.cpp:168
+msgid "Move Field "
+msgstr "Déplace Champ"
+
+#: eeschema/libedit_onrightclick.cpp:172
+msgid "Field Rotate"
+msgstr "Rotation Champ"
+
+#: eeschema/libedit_onrightclick.cpp:174
+msgid "Field Edit"
+msgstr "Edition du champ"
+
+#: eeschema/libedit_onrightclick.cpp:199
+msgid "Move Pin"
+msgstr "Déplace pin"
+
+#: eeschema/libedit_onrightclick.cpp:202
+msgid "Edit Pin "
+msgstr "Editer Pin"
+
+#: eeschema/libedit_onrightclick.cpp:207
+msgid "Delete Pin "
+msgstr "Supprimer Pin"
+
+#: eeschema/libedit_onrightclick.cpp:212
+msgid "Global"
+msgstr "Global"
+
+#: eeschema/libedit_onrightclick.cpp:214
+msgid "Pin Size to selected pins"
+msgstr "Change taille pins sélectionnées"
+
+#: eeschema/libedit_onrightclick.cpp:214
+msgid "Pin Size to others"
+msgstr "Change taille autres pins"
+
+#: eeschema/libedit_onrightclick.cpp:217
+msgid "Pin Name Size to selected pin"
+msgstr "Change taille Nom pin sélectionnées"
+
+#: eeschema/libedit_onrightclick.cpp:217
+msgid "Pin Name Size to others"
+msgstr "Change taille Nom pin autres pins"
+
+#: eeschema/libedit_onrightclick.cpp:220
+msgid "Pin Num Size to selected pin"
+msgstr "Change taille Num pins sélectionnées"
+
+#: eeschema/libedit_onrightclick.cpp:220
+msgid "Pin Num Size to others"
+msgstr "Change taille Num pin autres pins"
+
+#: eeschema/libedit_onrightclick.cpp:242
+msgid "Select items"
+msgstr "Sélection des éléments"
+
+#: eeschema/libedit_onrightclick.cpp:245
+msgid "Mirror Block (ctrl + drag mouse)"
+msgstr "Bloc Miroir (ctrl + drag mouse)"
+
+#: eeschema/libedit_onrightclick.cpp:247
+msgid "Del. Block (shift+ctrl + drag mouse)"
+msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
+
+#: eeschema/libframe.cpp:102
+msgid ""
+"Component was modified!\n"
+"Discard changes?"
+msgstr ""
+"Le composant a été modifié\n"
+"Perdre les  changements"
+
+#: eeschema/libframe.cpp:115
+#, c-format
+msgid ""
+"Library \"%s\" was modified!\n"
+"Discard changes?"
+msgstr ""
+"Librairie \"%s\"  modifiée!\n"
+"Perdre les changements ?"
+
+#: eeschema/libframe.cpp:342
+msgid "Include last component changes?"
+msgstr "Inclure les dernieres modifs du composant"
+
+#: eeschema/libframe.cpp:405
+msgid " Pins Test OK!"
+msgstr " Test Pins OK!"
+
+#: eeschema/libframe.cpp:479
+msgid "Add Pin"
+msgstr "Addition de \"pins\""
+
+#: eeschema/libframe.cpp:483
+msgid "Set Pin Options"
+msgstr "Choix Options des Pins"
+
+#: eeschema/libframe.cpp:505
+msgid "Add Rectangle"
+msgstr "Addition de rectangles"
+
+#: eeschema/libframe.cpp:509
+msgid "Add Circle"
+msgstr "Addition de cercle"
+
+#: eeschema/libframe.cpp:513
+msgid "Add Arc"
+msgstr "Addition d' arc"
+
+#: eeschema/libframe.cpp:521
+msgid "Anchor"
+msgstr "Ancre"
+
+#: eeschema/libframe.cpp:531
+msgid "Export"
+msgstr "Exporter"
+
+#: eeschema/lib_export.cpp:39
+msgid "Import component:"
+msgstr "Importer composant:"
+
+#: eeschema/lib_export.cpp:73
+msgid "File is empty"
+msgstr "Fichier vide"
+
+#: eeschema/lib_export.cpp:94
+msgid "No Part to Save"
+msgstr "Pas de composant à sauver"
+
+#: eeschema/lib_export.cpp:106
+msgid "New Library"
+msgstr "Nouvelle Librairie"
+
+#: eeschema/lib_export.cpp:106
+msgid "Export component:"
+msgstr "Exporter composant:"
+
+#: eeschema/lib_export.cpp:143
+msgid "0k"
+msgstr "Ok"
+
+#: eeschema/lib_export.cpp:145
+msgid ""
+"Note: this new library will be available only if it is loaded by eeschema.\n"
+"Modify eeschema config if you want use it."
+msgstr ""
+"Note: cette nouvelle librairie sera disponible seulement si elle est chargée par eeschema\n"
+"Modifier la config de eeschema si vous voulez l'utiliser"
+
+#: eeschema/lib_export.cpp:148
+msgid "Error while create "
+msgstr "Erreur en création de "
+
+#: eeschema/load_one_schematic_file.cpp:104
+msgid "Failed to open "
+msgstr "Erreur ouverture "
+
+#: eeschema/load_one_schematic_file.cpp:109
+msgid "Loading "
+msgstr "Chargement "
+
+#: eeschema/load_one_schematic_file.cpp:116
+#: eeschema/load_one_schematic_file.cpp:141
+msgid " is NOT an EESchema file!"
+msgstr " n'est PAS un fichier EESchema!"
+
+#: eeschema/load_one_schematic_file.cpp:126
+msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
+msgstr " a été créé par une version plus récente de Eeschema et peut ne pas être chargé correctement. SVP mettez a jour Eeschema!"
+
+#: eeschema/load_one_schematic_file.cpp:133
+msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
+msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
+
+#: eeschema/load_one_schematic_file.cpp:484
+msgid "Done Loading "
+msgstr "Chargement terminé"
 
 #: eeschema/plothpgl.cpp:222
 msgid "Sheet Size"
@@ -7472,21 +7384,21 @@ msgstr "low out"
 msgid "Occupied by other pin. Continue?"
 msgstr "Occupé une autre pin, Continuer ?"
 
-#: eeschema/pinedit.cpp:1005
+#: eeschema/pinedit.cpp:1004
 #, c-format
 msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
 msgstr "Pin dupliquée  %4.4s (Pin %s loc %d, %d, etPin %s loc %d, %d)"
 
-#: eeschema/pinedit.cpp:1011
+#: eeschema/pinedit.cpp:1010
 #, c-format
 msgid "  Part %d"
 msgstr "Composant %d"
 
-#: eeschema/pinedit.cpp:1017
+#: eeschema/pinedit.cpp:1016
 msgid "  Convert"
 msgstr "  Convert"
 
-#: eeschema/pinedit.cpp:1019
+#: eeschema/pinedit.cpp:1018
 msgid "  Normal"
 msgstr "  Normal"
 
@@ -7600,23 +7512,6 @@ msgstr "Cette opération changera l'annotation actuelle et ne pourra être annul
 msgid "Ok to continue renaming?"
 msgstr "Ok pour continuer le changement de nom?"
 
-#: eeschema/sheetlab.cpp:73
-msgid "PinSheet Properties:"
-msgstr "Propriétés des Pins de Hierarchie"
-
-#: eeschema/sheetlab.cpp:107
-msgid "PinSheet Shape:"
-msgstr "Forme Pin de hiérarchie:"
-
-#: eeschema/sheetlab.cpp:388
-msgid "No New Hierarchal Label found"
-msgstr "Pas de nouvea Label Hiérarchique trouvé"
-
-#: eeschema/symbdraw.cpp:790
-#, c-format
-msgid "Arc %.1f deg"
-msgstr "Arc %.1f deg"
-
 #: eeschema/symbedit.cpp:52
 msgid "Import symbol drawings:"
 msgstr "Importer les symboles:"
@@ -7634,11 +7529,11 @@ msgstr "Warning: plus de 1élément dans le fichier symbole"
 msgid "Symbol File is void"
 msgstr "Fichier Symbole vide"
 
-#: eeschema/symbedit.cpp:151
+#: eeschema/symbedit.cpp:150
 msgid "Export symbol drawings:"
 msgstr "Exporter le symbole"
 
-#: eeschema/symbedit.cpp:171
+#: eeschema/symbedit.cpp:170
 #, c-format
 msgid "Save Symbol in [%s]"
 msgstr "Symbole sauvé en  [%s]"
@@ -7866,7 +7761,6 @@ msgid "Place the graphic line or polygon"
 msgstr "Placer la ligne ou le polygones graphique"
 
 #: eeschema/tool_sch.cpp:267
-#: eeschema/schframe.cpp:421
 msgid "Show Hidden Pins"
 msgstr "Force affichage des pins invisibles"
 
@@ -7941,9 +7835,190 @@ msgstr "Erreur: Root Part <%s> non trouvé"
 msgid "Current Part: <%s>"
 msgstr "Cmp Courant: <%s>"
 
-#: eeschema/viewlib_frame.cpp:53
-msgid "Library browser"
-msgstr "Visualisateur des librairies"
+#: eeschema/edit_component_in_lib.cpp:168
+msgid "Lib Component Properties"
+msgstr "Propriétés du composant librairie"
+
+#: eeschema/edit_component_in_lib.cpp:172
+msgid "Properties for "
+msgstr "Propriétés pour "
+
+#: eeschema/edit_component_in_lib.cpp:177
+msgid "(alias of "
+msgstr "(alias de "
+
+#: eeschema/edit_component_in_lib.cpp:245
+#: eeschema/edit_component_in_lib.cpp:328
+msgid "Delete All"
+msgstr "Tout Supprimer"
+
+#: eeschema/edit_component_in_lib.cpp:281
+#: eeschema/edit_component_in_lib.cpp:1189
+msgid "Footprint Filter"
+msgstr "Filtrage Modules"
+
+#: eeschema/edit_component_in_lib.cpp:293
+msgid "Footprints"
+msgstr "Modules"
+
+#: eeschema/edit_component_in_lib.cpp:407
+msgid "Show Pin Num"
+msgstr "Montre Numéro de Pin"
+
+#: eeschema/edit_component_in_lib.cpp:476
+msgid "Left justify"
+msgstr "Justifié à gauche"
+
+#: eeschema/edit_component_in_lib.cpp:476
+#: eeschema/edit_component_in_lib.cpp:478
+msgid "Center"
+msgstr "Centrer"
+
+#: eeschema/edit_component_in_lib.cpp:476
+msgid "Right justify"
+msgstr "Justifié à droite"
+
+#: eeschema/edit_component_in_lib.cpp:478
+msgid "Bottom justify"
+msgstr "Justifié en bas"
+
+#: eeschema/edit_component_in_lib.cpp:478
+msgid "Top justify"
+msgstr "Justifié en haut"
+
+#: eeschema/edit_component_in_lib.cpp:508
+#: eeschema/edit_component_in_schematic.cpp:205
+msgid "Field Name:"
+msgstr "Nom Champ"
+
+#: eeschema/edit_component_in_lib.cpp:518
+#: eeschema/edit_component_in_schematic.cpp:215
+msgid "Field Text:"
+msgstr "Texte du Champ:"
+
+#: eeschema/edit_component_in_lib.cpp:524
+#: eeschema/edit_component_in_schematic.cpp:223
+msgid "Pos"
+msgstr "Pos"
+
+#: eeschema/edit_component_in_lib.cpp:529
+msgid "Hor Justify"
+msgstr "Justifié horiz"
+
+#: eeschema/edit_component_in_lib.cpp:536
+msgid "Vert Justify"
+msgstr "Justifié Vert."
+
+#: eeschema/edit_component_in_lib.cpp:551
+msgid "Chip Name"
+msgstr "Nom en librairie"
+
+#: eeschema/edit_component_in_lib.cpp:554
+#: eeschema/edit_component_in_schematic.cpp:199
+msgid "Field to edit"
+msgstr "Champ à éditer"
+
+#: eeschema/edit_component_in_lib.cpp:890
+msgid "Ok to Delete Alias LIST"
+msgstr "Ok pour effacer la LISTE des Alias"
+
+#: eeschema/edit_component_in_lib.cpp:915
+msgid "New alias:"
+msgstr "Noveau alias"
+
+#: eeschema/edit_component_in_lib.cpp:915
+msgid "Component Alias"
+msgstr "Alias de Composant"
+
+#: eeschema/edit_component_in_lib.cpp:923
+msgid "This is the Root Part"
+msgstr "Ceci est le composant racine"
+
+#: eeschema/edit_component_in_lib.cpp:932
+#: eeschema/edit_component_in_lib.cpp:1200
+msgid "Already in use"
+msgstr "Déja en usage"
+
+#: eeschema/edit_component_in_lib.cpp:957
+msgid " is Current Selected Alias!"
+msgstr " est l' Alias actuellement sélectionné!"
+
+#: eeschema/edit_component_in_lib.cpp:1010
+msgid "Delete units"
+msgstr "Supprimer  unité"
+
+#: eeschema/edit_component_in_lib.cpp:1080
+msgid "Create pins for Convert items"
+msgstr "Créér les pins des unitées converties"
+
+#: eeschema/edit_component_in_lib.cpp:1084
+msgid "Part as \"De Morgan\" anymore"
+msgstr "Le composant a une représentation convertie"
+
+#: eeschema/edit_component_in_lib.cpp:1109
+msgid "Delete Convert items"
+msgstr "Suppression des éléments convertis"
+
+#: eeschema/edit_component_in_lib.cpp:1144
+msgid "Doc Files"
+msgstr "Fichiers de Doc"
+
+#: eeschema/edit_component_in_lib.cpp:1167
+msgid "Ok to Delete FootprintFilter LIST"
+msgstr "Ok pour effacer la LISTE des filtres de modules"
+
+#: eeschema/edit_component_in_lib.cpp:1189
+msgid "New FootprintFilter:"
+msgstr "Nouveau Filtre de Modules:"
+
+#: eeschema/edit_component_in_schematic.cpp:330
+msgid "No Component Name!"
+msgstr "Pas de nom de composant!"
+
+#: eeschema/edit_component_in_schematic.cpp:336
+#, c-format
+msgid "Component [%s] not found!"
+msgstr "Composant [%s] non trouvé!"
+
+#: eeschema/edit_component_in_schematic.cpp:457
+msgid "No Field to move"
+msgstr "Pas de champ a déplacer"
+
+#: eeschema/edit_component_in_schematic.cpp:520
+msgid "No Field To Edit"
+msgstr "Pas de champ a éditer"
+
+#: eeschema/edit_component_in_schematic.cpp:534
+msgid ""
+"Part is a POWER, value cannot be modified!\n"
+"You must create a new power"
+msgstr ""
+"Composant type ALIMENTATION!\n"
+"valeur non modifiable, Vous devez créer un nouveau composant alimentation "
+
+#: eeschema/edit_component_in_schematic.cpp:558
+msgid "Component field text"
+msgstr "Champ de Composant"
+
+#: eeschema/edit_component_in_schematic.cpp:581
+msgid "Reference needed !, No change"
+msgstr "Référence NECESSAIRE: changement refusé"
+
+#: eeschema/edit_component_in_schematic.cpp:585
+msgid "Value needed !, No change"
+msgstr "Valeur NECESSAIRE: changement refusé"
+
+#: eeschema/edit_component_in_schematic.cpp:758
+msgid "Component Reference"
+msgstr "Référence du Composant"
+
+#: eeschema/edit_component_in_schematic.cpp:796
+msgid "Component Value"
+msgstr "Valeur du Composant"
+
+#: eeschema/edit_component_in_schematic.cpp:835
+msgid "Component Footprint"
+msgstr "Module du Composant"
 
 #: eeschema/pinedit-dialog.cpp:160
 msgid "Pin Name :"
@@ -8028,23 +8103,23 @@ msgstr "Hiérar."
 msgid "Sorting Nets"
 msgstr "Tri des Nets"
 
-#: eeschema/netlist.cpp:852
+#: eeschema/netlist.cpp:836
 msgid "Bad Bus Label: "
 msgstr "Mauvais label de Bus: "
 
-#: eeschema/schframe.cpp:309
+#: eeschema/schframe.cpp:308
 msgid "Schematic modified, Save before exit ?"
 msgstr "Schematique modifiée,  Sauver avant de quitter ?"
 
-#: eeschema/schframe.cpp:421
+#: eeschema/schframe.cpp:418
 msgid "No show Hidden Pins"
 msgstr "N'affichage pas les pins invisibles"
 
-#: eeschema/schframe.cpp:425
+#: eeschema/schframe.cpp:422
 msgid "Draw lines at any direction"
 msgstr "Tracer traits de direction  quelconque"
 
-#: eeschema/schframe.cpp:426
+#: eeschema/schframe.cpp:423
 msgid "Draw lines H, V or 45 deg only"
 msgstr "Tracer traits H, V ou 45 deg seulement"
 
@@ -8729,6 +8804,48 @@ msgstr "Supprimer Fichier"
 msgid "no kicad files found in this directory"
 msgstr "Pas de fichier Kicad tropuvés dans ce répertoire"
 
+#: kicad/commandframe.cpp:58
+msgid "EESchema (Schematic editor)"
+msgstr "EESchema (Editeur de Schématique)"
+
+#: kicad/commandframe.cpp:62
+msgid "CVpcb (Components to modules)"
+msgstr "CVpcb ( Association Composants/ Modules)"
+
+#: kicad/commandframe.cpp:66
+msgid "PCBnew (PCB editor)"
+msgstr "PCBnew (Editeur de circuits imprimés)"
+
+#: kicad/commandframe.cpp:70
+msgid "GerbView (Gerber viewer)"
+msgstr "GerbView (Visualisateur  Gerber)"
+
+#: kicad/commandframe.cpp:78
+msgid "Run Python Script"
+msgstr "Exécuter le Script Python"
+
+#: kicad/mainframe.cpp:102
+#, c-format
+msgid ""
+"Ready\n"
+"Working dir: %s\n"
+msgstr ""
+"Pret\n"
+"Répertoire de travail: %s\n"
+
+#: kicad/mainframe.cpp:338
+msgid "Execute Python Script:"
+msgstr "Executer le Script Python:"
+
+#: kicad/mainframe.cpp:361
+msgid "Load file:"
+msgstr "Charger Fichiers:"
+
+#: kicad/kicad.cpp:215
+#: kicad/treeprj_frame.cpp:432
+msgid "noname"
+msgstr "noname"
+
 #: kicad/treeprj_frame.cpp:94
 msgid "&Run"
 msgstr "Exécute&r"
@@ -8822,50 +8939,13 @@ msgstr "Créer  un nouveau Fichier"
 msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:432
-msgid "noname"
-msgstr "noname"
-
 #: kicad/treeprj_frame.cpp:878
-msgid "Change File Name: "
-msgstr "ChangerNom Fichier: "
+msgid "Change Filename: "
+msgstr "Changer Nom Fichier: "
 
-#: kicad/commandframe.cpp:58
-msgid "EESchema (Schematic editor)"
-msgstr "EESchema (Editeur de Schématique)"
-
-#: kicad/commandframe.cpp:62
-msgid "CVpcb (Components to modules)"
-msgstr "CVpcb ( Association Composants/ Modules)"
-
-#: kicad/commandframe.cpp:66
-msgid "PCBnew (PCB editor)"
-msgstr "PCBnew (Editeur de circuits imprimés)"
-
-#: kicad/commandframe.cpp:70
-msgid "GerbView (Gerber viewer)"
-msgstr "GerbView (Visualisateur  Gerber)"
-
-#: kicad/commandframe.cpp:78
-msgid "Run Python Script"
-msgstr "Exécuter le Script Python"
-
-#: kicad/mainframe.cpp:102
-#, c-format
-msgid ""
-"Ready\n"
-"Working dir: %s\n"
-msgstr ""
-"Pret\n"
-"Répertoire de travail: %s\n"
-
-#: kicad/mainframe.cpp:338
-msgid "Execute Python Script:"
-msgstr "Executer le Script Python:"
-
-#: kicad/mainframe.cpp:361
-msgid "Load file:"
-msgstr "Charger Fichiers:"
+#: kicad/treeprj_frame.cpp:879
+msgid "Change Filename"
+msgstr "Changer Nom Fichier"
 
 #: gerbview/affiche.cpp:34
 msgid "Layer "
@@ -9592,7 +9672,7 @@ msgstr "Catalan"
 msgid "Dutch"
 msgstr "Hollandais"
 
-#: common/edaappl.cpp:603
+#: common/edaappl.cpp:604
 msgid "Language"
 msgstr "Langage"
 
@@ -10061,6 +10141,11 @@ msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 msgid "Length(inch):"
 msgstr "Longueur (pouces):"
 
+#: pcbnew/gen_self.h:217
+#: pcbnew/gen_self.h:223
+msgid "Lenght"
+msgstr "Longueur"
+
 #: pcbnew/gen_self.h:223
 msgid "Length(mm):"
 msgstr "Long. (mm):"
@@ -10149,10 +10234,6 @@ msgstr "Génération Fichiers de Perçagee"
 #: eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
 msgstr "Annotation des composants"
-
-#: eeschema/dialog_backanno.h:37
-msgid "EESchema Back Annotate"
-msgstr "Eeschema Retro Annotation"
 
 #: eeschema/dialog_build_BOM.h:61
 msgid "List of Material"
@@ -10454,8 +10535,8 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
-#~ msgid "Lengh"
-#~ msgstr "Long."
+#~ msgid "EESchema Back Annotate"
+#~ msgstr "Eeschema Retro Annotation"
 #~ msgid "MyComponent"
 #~ msgstr "MyComponent"
 

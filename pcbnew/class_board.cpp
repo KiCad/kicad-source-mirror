@@ -1063,6 +1063,24 @@ void BOARD::RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMo
     }
 }
 
+/***********************************************************************************************/
+void BOARD::RedrawFilledAreas(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer)
+/***********************************************************************************************/
+/**
+ * Function RedrawFilledAreas
+ * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
+ */
+{
+    if ( ! aDC ) return;
+
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* edge_zone = GetArea(ii);
+        if( (aLayer < 0) || (aLayer == edge_zone->GetLayer()) )
+            edge_zone->DrawFilledArea( panel, aDC, aDrawMode );
+    }
+}
+
 
 
 #if defined(DEBUG)

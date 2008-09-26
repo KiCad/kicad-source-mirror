@@ -260,7 +260,7 @@ void WinEDA_ZoneFrame::CreateControls()
                                    m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( title );
 
-    if( Zone_45_Only )
+    if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
 
     static const int GridList[4] = { 25, 50, 100, 250 };
@@ -297,7 +297,7 @@ void WinEDA_ZoneFrame::CreateControls()
             m_FillOpt->SetSelection( 0 );
             break;
         }
-        s_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
+        g_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
 
     }
     else
@@ -314,11 +314,11 @@ void WinEDA_ZoneFrame::CreateControls()
             m_FillOpt->SetSelection( 0 );
             break;
         }
-        s_Zone_Hatching = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
+        g_Zone_Hatching = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
             (long) CPolyLine::DIAGONAL_EDGE );
     }
 
-    switch( s_Zone_Hatching )
+    switch( g_Zone_Hatching )
     {
     case CPolyLine::NO_HATCH:
         m_OutlineAppearanceCtrl->SetSelection(0);
@@ -485,21 +485,21 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
-        s_Zone_Hatching = CPolyLine::NO_HATCH;
+        g_Zone_Hatching = CPolyLine::NO_HATCH;
         break;
 
     case 1:
-        s_Zone_Hatching = CPolyLine::DIAGONAL_EDGE;
+        g_Zone_Hatching = CPolyLine::DIAGONAL_EDGE;
         break;
 
     case 2:
-        s_Zone_Hatching = CPolyLine::DIAGONAL_FULL;
+        g_Zone_Hatching = CPolyLine::DIAGONAL_FULL;
         break;
     }
 
     if( m_Parent->m_Parent->m_EDA_Config )
     {
-        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY, (long)s_Zone_Hatching);
+        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY, (long)g_Zone_Hatching);
     }
 
     switch( m_GridCtrl->GetSelection() )
@@ -526,9 +526,9 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
     g_DesignSettings.m_ZoneClearence =
         ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
     if( m_OrientEdgesOpt->GetSelection() == 0 )
-        Zone_45_Only = FALSE;
+        g_Zone_45_Only = FALSE;
     else
-        Zone_45_Only = TRUE;
+        g_Zone_45_Only = TRUE;
 
     /* Get the layer selection for this zone */
     int ii = m_LayerSelectionCtrl->GetSelection();
@@ -537,7 +537,7 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
         DisplayError( this, _( "Error : you must choose a layer" ) );
         return false;
     }
-    s_Zone_Layer = m_LayerId[ii];
+    g_CurrentZone_Layer = m_LayerId[ii];
 
     /* Get the net name selection for this zone */
     ii = m_ListNetNameSelection->GetSelection();

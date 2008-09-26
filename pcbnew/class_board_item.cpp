@@ -149,7 +149,11 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             TimeStampText.Printf( wxT( "(%8.8X)" ), item->m_TimeStamp );
             text << TimeStampText;
         }
-        if( ((ZONE_CONTAINER*) item)->GetNet() >= 0 )
+        if ( !((ZONE_CONTAINER*) item)->IsOnCopperLayer() )
+        {
+            text << wxT( " [" ) << _("Not on copper layer") << wxT( "]" );
+        }
+        else if( ((ZONE_CONTAINER*) item)->GetNet() >= 0 )
         {
             net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
             if( net )

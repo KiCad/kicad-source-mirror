@@ -51,6 +51,8 @@ set(PCBNEW_SRCS
 #   dialog_graphic_items_options.cpp
 #   dialog_initpcb.cpp
 #   dialog_netlist.cpp
+    zones_non_copper_type_functions.cpp
+    dialog_non_copper_zones_properties.cpp
 #   dialog_pad_edit.cpp
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp

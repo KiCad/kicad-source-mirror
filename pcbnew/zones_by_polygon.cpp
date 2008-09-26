@@ -33,6 +33,8 @@ using namespace std;
 
 #include "protos.h"
 
+#include "zones.h"
+
 bool verbose = false;       // false if zone outline diags must not be shown
 
 // Outline creation:
@@ -46,25 +48,13 @@ static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* pane
                                                           bool              erase );
 
 /* Local variables */
-static bool                        Zone_45_Only = FALSE;
 static ZONE_CONTAINER::m_PadInZone s_Zone_Pad_Options = ZONE_CONTAINER::THERMAL_PAD;
-static int                         s_Zone_Layer;                // Layer used to create the current zone
-static int                         s_Zone_Hatching;             // Option to show the zone area (outlines only, short hatches or full hatches
-static int                         s_NetcodeSelection;          // Net code selection for the current zone
-static wxPoint                     s_CornerInitialPosition;     // Used to abort a move corner command
-static bool                        s_CornerIsNew;               // Used to abort a move corner command (if it is a new corner, it must be deleted)
-static bool                        s_AddCutoutToCurrentZone;    // if true, the next outline will be addes to s_CurrentZone
-static ZONE_CONTAINER*             s_CurrentZone;               // if != NULL, these ZONE_CONTAINER params will be used for the next zone
-static wxPoint                     s_CursorLastPosition;        // in move zone outline, last cursor position. Used to calculate the move vector
-// keys used to store net sort option in config file :
-#define ZONE_NET_OUTLINES_HATCH_OPTION_KEY wxT( "Zone_Ouline_Hatch_Opt" )
-#define ZONE_NET_SORT_OPTION_KEY           wxT( "Zone_NetSort_Opt" )
-#define ZONE_NET_FILTER_STRING_KEY         wxT( "Zone_Filter_Opt" )
-
-enum zone_cmd {
-    ZONE_ABORT,
-    ZONE_OK
-};
+static int             s_NetcodeSelection;                      // Net code selection for the current zone
+static wxPoint         s_CornerInitialPosition;                 // Used to abort a move corner command
+static bool            s_CornerIsNew;                           // Used to abort a move corner command (if it is a new corner, it must be deleted)
+static bool            s_AddCutoutToCurrentZone;                // if true, the next outline will be addes to s_CurrentZone
+static ZONE_CONTAINER* s_CurrentZone;                           // if != NULL, these ZONE_CONTAINER params will be used for the next zone
+static wxPoint         s_CursorLastPosition;                    // in move zone outline, last cursor position. Used to calculate the move vector
 
 #include "dialog_zones_by_polygon.cpp"
 
@@ -228,15 +218,17 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
  * if IsNewCorner is true, the Abort_Zone_Move_Corner_Or_Outlines will remove this corner, if called
  */
 {
-    /* Show the Net */
-    if( g_HightLigt_Status && DC )
+    if( zone_container->IsOnCopperLayer() ) /* Show the Net */
     {
-        Hight_Light( DC );  // Remove old hightlight selection
-    }
+        if( g_HightLigt_Status && DC )
+        {
+            Hight_Light( DC );  // Remove old hightlight selection
+        }
 
-    g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
-    if( DC )
-        Hight_Light( DC );
+        g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
+        if( DC )
+            Hight_Light( DC );
+    }
 
     zone_container->m_Flags  = IN_EDIT;
     DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
@@ -259,11 +251,11 @@ void WinEDA_PcbFrame::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
  * Prepares a drag edge for an existing zone outline,
  */
 {
-    zone_container->m_Flags  = IS_DRAGGED;
+    zone_container->m_Flags = IS_DRAGGED;
     zone_container->m_CornerSelection = corner_id;
     DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
     DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
-    s_CursorLastPosition = s_CornerInitialPosition  = GetScreen()->m_Curseur;
+    s_CursorLastPosition     = s_CornerInitialPosition = GetScreen()->m_Curseur;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 }
@@ -279,13 +271,16 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
  */
 {
     /* Show the Net */
-    if( g_HightLigt_Status )
+    if( zone_container->IsOnCopperLayer() ) /* Show the Net */
     {
-        Hight_Light( DC );  // Remove old hightlight selection
-    }
+        if( g_HightLigt_Status )
+        {
+            Hight_Light( DC );  // Remove old hightlight selection
+        }
 
-    g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
-    Hight_Light( DC );
+        g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
+        Hight_Light( DC );
+    }
 
     zone_container->m_Flags  = IS_MOVED;
     DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
@@ -321,12 +316,7 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
 
     /* Combine zones if possible */
     wxBusyCursor dummy;
-
-//    int          layer = zone_container->GetLayer();
-
-//    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
     m_Pcb->AreaPolygonModified( zone_container, true, verbose );
-//    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
     DrawPanel->Refresh();
 
 
@@ -347,9 +337,12 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
 /*************************************************************************************/
 
 /**
- * Function End_Move_Zone_Corner
+ * Function Remove_Zone_Corner
  * Remove the currently selected corner in a zone outline
  * the .m_CornerSelection is used as corner selection
+ * @param DC = Current deice context (can be NULL )
+ * @param zone_container = the zone that contains the selected corner
+ *  the member .m_CornerSelection is used as selected corner
  */
 {
     GetScreen()->SetModify();
@@ -357,20 +350,32 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
     if( zone_container->m_Poly->GetNumCorners() <= 3 )
     {
         DrawPanel->PostDirtyRect( zone_container->GetBoundingBox() );
-        Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
+        if( DC )
+        {
+            Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
+            zone_container->DrawFilledArea( DrawPanel, DC, GR_XOR );
+        }
         m_Pcb->Delete( zone_container );
         return;
     }
 
     int layer = zone_container->GetLayer();
 
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
+    if( DC )
+    {
+        m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
+        m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_XOR, layer );
+    }
 
     zone_container->m_Poly->DeleteCorner( zone_container->m_CornerSelection );
 
     // modify zones outlines according to the new zone_container shape
     m_Pcb->AreaPolygonModified( zone_container, true, verbose );
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+    if( DC )
+    {
+        m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+        m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_OR, layer );
+    }
 
     int ii = m_Pcb->GetAreaIndex( zone_container );     // test if zone_container exists
     if( ii < 0 )
@@ -506,38 +511,50 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
     zone = m_Pcb->m_CurrentZoneContour;
     if( zone->GetNumCorners() == 0 )    /* Start a new contour: init zone params (net and layer) */
     {
-        if( s_CurrentZone == NULL )
+        if( s_CurrentZone == NULL )     // A new outline is created
         {
+            int diag;
             DrawPanel->m_IgnoreMouseEvents = TRUE;
-            WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
-
-            int diag = frame->ShowModal();
-            frame->Destroy();
+            zone->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+            if( zone->IsOnCopperLayer() )
+            {   // Put a zone on a copper layer
+                WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
+                diag = frame->ShowModal();
+                frame->Destroy();
+            }
+            else   // Put a zone on a non copper layer (technical layer)
+            {
+                diag = InstallDialogNonCopperZonesEditor( this, zone );
+                s_NetcodeSelection = 0;     // No net for non copper zones
+            }
             DrawPanel->MouseToCursorSchema();
             DrawPanel->m_IgnoreMouseEvents = FALSE;
 
             if( diag ==  ZONE_ABORT )
                 return 0;
 
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer;	// Set by the dialog frame
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_CurrentZone_Layer;    // Set by the dialog frame
         }
-        else                                            /* Start a new contour: init zone params (net and layer) from an existing zone */
+        else                                                                        /* Start a new contour: init zone params (net and layer) from an existing zone */
         {
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = s_Zone_Layer = s_CurrentZone->GetLayer();
-            s_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_CurrentZone_Layer =
+                                                                s_CurrentZone->GetLayer();
+            g_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
         }
 
-        /* Show the Net */
-        if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection) )
+        /* Show the Net for zones on copper layers */
+        if( g_CurrentZone_Layer  < FIRST_NO_COPPER_LAYER )
         {
-            Hight_Light( DC );  // Remove old hightlight selection
+            if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection) )
+            {
+                Hight_Light( DC ); // Remove old hightlight selection
+            }
+
+            if( s_CurrentZone )
+                s_NetcodeSelection = s_CurrentZone->GetNet();
+            g_HightLigth_NetCode = s_NetcodeSelection;
+            Hight_Light( DC );
         }
-
-        if( s_CurrentZone )
-            s_NetcodeSelection = s_CurrentZone->GetNet();
-        g_HightLigth_NetCode = s_NetcodeSelection;
-        Hight_Light( DC );
-
         if( !s_AddCutoutToCurrentZone )
             s_CurrentZone = NULL; // the zone is used only once
     }
@@ -546,17 +563,17 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
     if(  zone->GetNumCorners() == 0 )
     {
         zone->m_Flags = IS_NEW;
-        zone->SetLayer( s_Zone_Layer );
+        zone->SetLayer( g_CurrentZone_Layer );
         zone->SetNet( s_NetcodeSelection );
         zone->m_TimeStamp     = GetTimeStamp();
         zone->m_PadOption     = s_Zone_Pad_Options;
         zone->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
         zone->m_GridFillValue = g_GridRoutingSize;
-        zone->m_Poly->Start( s_Zone_Layer,
-                             GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y,
-                             s_Zone_Hatching );
+        zone->m_Poly->Start( g_CurrentZone_Layer,
+            GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y,
+            g_Zone_Hatching );
         zone->AppendCorner( GetScreen()->m_Curseur );
-        if( Drc_On && m_drc->Drc( zone, 0 ) == BAD_DRC )
+        if( Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {
             zone->m_Flags = 0;
             zone->RemoveAllContours();
@@ -566,7 +583,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             // WinEDA_PcbFrame::SetCurItem() calls Display_Infos().
             GetScreen()->SetCurItem( NULL );
             DisplayError( this,
-                         _( "DRC error: this start point is inside or too close an other area" ) );
+                _( "DRC error: this start point is inside or too close an other area" ) );
             return 0;
         }
 
@@ -582,7 +599,8 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         /* edge in progress : the current corner coordinate was set by Show_New_Edge_While_Move_Mouse */
         if( zone->GetCornerPosition( ii - 1 ) != zone->GetCornerPosition( ii ) )
         {
-            if( Drc_On && m_drc->Drc( zone, ii - 1 ) == OK_DRC )  // Ok, we can add a new corner
+            if( (Drc_On && m_drc->Drc( zone, ii - 1 ) == OK_DRC)
+               || !zone->IsOnCopperLayer() ) // Ok, we can add a new corner
             {
                 zone->AppendCorner( GetScreen()->m_Curseur );
                 SetCurItem( zone );     // calls Display_Infos().
@@ -620,14 +638,17 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
     // Validate the current edge:
     int icorner = zone->GetNumCorners() - 1;
-    if( Drc_On && m_drc->Drc( zone, icorner - 1 ) == BAD_DRC )  // we can't validate last edge
-        return false;
-    if( Drc_On && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
+    if( zone->IsOnCopperLayer() )
     {
-        DisplayError( this,
-                     _( "DRC error: closing this area creates a drc error with an other area" ) );
-        DrawPanel->MouseToCursorSchema();
-        return false;
+        if( Drc_On && m_drc->Drc( zone, icorner - 1 ) == BAD_DRC )  // we can't validate last edge
+            return false;
+        if( Drc_On && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
+        {
+            DisplayError( this,
+                _( "DRC error: closing this area creates a drc error with an other area" ) );
+            DrawPanel->MouseToCursorSchema();
+            return false;
+        }
     }
 
     zone->m_Flags = 0;
@@ -640,6 +661,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
     // Undraw old drawings, because they can have important changes
     int layer = zone->GetLayer();
     m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
+    m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_XOR, layer );
 
     /* Put edges in list */
     if( s_CurrentZone == NULL )
@@ -670,6 +692,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
     // Redraw the real edge zone :
     m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+    m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_OR, layer );
 
     int ii = m_Pcb->GetAreaIndex( zone );   // test if zone_container exists
     if( ii < 0 )
@@ -707,12 +730,12 @@ static void Show_New_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, b
     }
 
     /* Redraw the curent edge in its new position */
-    if( Zone_45_Only )
+    if( g_Zone_45_Only )
     {
         // calculate the new position as allowed
         wxPoint StartPoint = zone->GetCornerPosition( icorner - 1 );
         Calcule_Coord_Extremite_45( StartPoint.x, StartPoint.y,
-                                    &c_pos.x, &c_pos.y );
+            &c_pos.x, &c_pos.y );
     }
 
     zone->SetCornerPosition( icorner, c_pos );
@@ -730,11 +753,18 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
  * Edit params (layer, clearance, ...) for a zone outline
  */
 {
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
-    WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this, zone_container );
+    int diag;
 
-    int diag = frame->ShowModal();
-    frame->Destroy();
+    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    if( zone_container->GetLayer() < FIRST_NO_COPPER_LAYER )
+    {   // edit a zone on a copper layer
+        WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
+        diag = frame->ShowModal();
+        frame->Destroy();
+    }
+    else   // edit a zone on a non copper layer (technical layer)
+        diag = InstallDialogNonCopperZonesEditor( this, zone_container );
+
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
@@ -748,12 +778,12 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
         edge_zone->Draw( DrawPanel, DC, GR_XOR );
     }
 
-    zone_container->SetLayer( s_Zone_Layer );
+    zone_container->SetLayer( g_CurrentZone_Layer );
     zone_container->SetNet( s_NetcodeSelection );
     EQUIPOT* net = m_Pcb->FindNet( s_NetcodeSelection );
     if( net )
         zone_container->m_Netname = net->m_Netname;
-    zone_container->m_Poly->SetHatch( s_Zone_Hatching );
+    zone_container->m_Poly->SetHatch( g_Zone_Hatching );
     zone_container->m_PadOption     = s_Zone_Pad_Options;
     zone_container->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
     zone_container->m_GridFillValue = g_GridRoutingSize;
@@ -782,7 +812,7 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
  * otherwise, the hole is deleted
  */
 {
-    int ncont = zone_container->m_Poly->GetContour( zone_container->m_CornerSelection );
+    int      ncont = zone_container->m_Poly->GetContour( zone_container->m_CornerSelection );
 
     EDA_Rect dirty = zone_container->GetBoundingBox();
 
@@ -860,7 +890,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
     zone_container->m_GridFillValue = g_GridRoutingSize;
-    int error_level = zone_container->Fill_Zone( this, DC, verbose );
+    int          error_level = zone_container->Fill_Zone( this, DC, verbose );
 
     GetScreen()->SetModify();
 

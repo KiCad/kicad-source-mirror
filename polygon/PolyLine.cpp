@@ -250,9 +250,14 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
  * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
  *  combining intersecting contours if possible
  * @param arc_array : return corners computed from arcs approximations in arc_array
+ * @param aConvertHoles = mode for holes when a boolean operation is made
+ *   true: holes are linked into outer contours by double overlapping segments
+ *   false: holes are not linked: in this mode contours are added clockwise
+ *          and polygons added counter clockwise are holes (default)
  * @return error: 0 if Ok, 1 if error
  */
-int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<CArc> * arc_array )
+int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<CArc> * arc_array,
+                       bool aConvertHoles )
 {
     if( m_Kbool_Poly_Engine )
     {
@@ -493,7 +498,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
             booleng->Do_Operation( BOOL_OR );
         }
 
-        // now copy result to m_gpc_poly
+        // now use result as new polygon (delete the old one if exists)
         if( m_Kbool_Poly_Engine )
             delete m_Kbool_Poly_Engine;
         m_Kbool_Poly_Engine = booleng;

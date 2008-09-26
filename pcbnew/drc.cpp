@@ -320,6 +320,8 @@ void DRC::testZones(bool adoTestFillSegments)
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ii );
+        if( ! Area_To_Test->IsOnCopperLayer() )
+            continue;
         if( Area_To_Test->GetNet() <= 0 )
         {
             m_currentMarker = fillMarker( Area_To_Test,

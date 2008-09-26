@@ -1,4 +1,4 @@
-update=19/9/2008-05:53:18
+update=23/9/2008-19:07:03
 version=1
 last_client=eeschema
 [general]
@@ -140,5 +140,6 @@ LibName24=display
 LibName25=cypress
 LibName26=siliconi
 LibName27=opto
-LibName28=contrib
-LibName29=valves
+LibName28=atmel
+LibName29=contrib
+LibName30=valves

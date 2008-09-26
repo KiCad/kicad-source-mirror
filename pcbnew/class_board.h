@@ -367,6 +367,12 @@ public:
     void RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer);
 
     /**
+     * Function RedrawFilledAreas
+     * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
+     */
+    void RedrawFilledAreas(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer);
+
+    /**
      * Function SetAreasNetCodesFromNetNames
      * Set the .m_NetCode member of all copper areas, according to the area Net Name
      * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.

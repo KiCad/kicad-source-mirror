@@ -5,6 +5,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Sep-26 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Starting work to use polygons in zone fill algos.
+    Currently, use this to add zone on non copper layers (technical layers)
+    Only for eyes.
+    Plot outputs do not handle this.
+    Problems with holes in zones.
+    Also: first used of wxFormBuilder
+
+
 2008-Sep-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:

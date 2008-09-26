@@ -727,42 +727,41 @@ wxPoint LibDrawPin::ReturnPinEndPoint()
 int LibDrawPin::ReturnPinDrawOrient( int TransMat[2][2] )
 /********************************************************/
 
-/* Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
- *  according to its orientation,
- *  AND the matrix transform (rot, mirror) TransMat
+/** Function ReturnPinDrawOrient
+ * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
+ *  according to its orientation and the matrix transform (rot, mirror) TransMat
+ * @param  TransMat = transform matrix
  */
 {
     int orient;
-    int x1 = 0, y1 = 0;
-    int t1, t2;
+    wxPoint end;    // position of a end pin starting at 0,0 according to its orientation, lenght = 1
 
     switch( m_Orient )
     {
     case PIN_UP:
-        y1 = 1; break;
+        end.y = 1; break;
 
     case PIN_DOWN:
-        y1 = -1; break;
+        end.y = -1; break;
 
     case PIN_LEFT:
-        x1 = -1; break;
+        end.x = -1; break;
 
     case PIN_RIGHT:
-        x1 = 1; break;
+        end.x = 1; break;
     }
 
-    t1     = TransMat[0][0] * x1 + TransMat[0][1] * y1;
-    t2     = TransMat[1][0] * x1 + TransMat[1][1] * y1;
+    end    = TransformCoordinate( TransMat, end );    // = pos of end point, accordint to the component orientation
     orient = PIN_UP;
-    if( t1 == 0 )
+    if( end.x == 0 )
     {
-        if( t2 > 0 )
+        if( end.y > 0 )
             orient = PIN_DOWN;
     }
     else
     {
         orient = PIN_RIGHT;
-        if( t1 < 0 )
+        if( end.x < 0 )
             orient = PIN_LEFT;
     }
 

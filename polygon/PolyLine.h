@@ -28,7 +28,7 @@
  * @param aConvertHoles = mode for holes when a boolean operation is made
  *   true: holes are linked into outer contours by double overlapping segments
  *   false: holes are not linked: in this mode contours are added clockwise
- *          and polygons added counter clockwise are holes
+ *          and polygons added counter clockwise are holes (default)
  */
 void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 
@@ -199,11 +199,16 @@ public:
      * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
      *  combining intersecting contours if possible
      * @param arc_array : return data on arcs in arc_array
+     * @param aConvertHoles = mode for holes when a boolean operation is made
+     *   true: holes are linked into outer contours by double overlapping segments
+     *   false: holes are not linked: in this mode contours are added clockwise
+     *          and polygons added counter clockwise are holes (default)
      * @return error: 0 if Ok, 1 if error
      */
     int MakeKboolPoly( int                 aStart_contour = -1,
                        int                 aEnd_contour = -1,
-                       std::vector<CArc> * arc_array = NULL );
+                       std::vector<CArc> * arc_array = NULL,
+                       bool aConvertHoles = false);
 
     /** Function NormalizeWithKbool
      * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
@@ -217,6 +222,16 @@ public:
      * @return number of external contours, or -1 if error
      */
     int NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs );
+    
+    /** function GetKboolEngine
+     * @return the current used Kbool Engine (after normalization using kbool)
+     */
+    Bool_Engine* GetKboolEngine( ) { return  m_Kbool_Poly_Engine; }
+    /** function FreeKboolEngine
+     * delete the current used Kbool Engine (free memory after normalization using kbool)
+     */
+    void FreeKboolEngine( ) { delete m_Kbool_Poly_Engine; m_Kbool_Poly_Engine = NULL; }
+    
 
 private:
     int m_layer;    // layer to draw on

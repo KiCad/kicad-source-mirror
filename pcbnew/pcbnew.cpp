@@ -18,6 +18,7 @@
 #include "trigo.h"
 #include "cell.h"
 #include "worksheet.h"
+#include "zones.h"
 
 #include "protos.h"
 
