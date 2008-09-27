@@ -59,7 +59,7 @@ bool InstallDialogNonCopperZonesEditor(WinEDA_PcbFrame* aParent, ZONE_CONTAINER*
     DialogNonCopperZonesEditor* frame = new DialogNonCopperZonesEditor( aParent, aZone );
     bool diag = frame->ShowModal();
     frame->Destroy();
-    
+
     return diag;
 }
 
@@ -90,7 +90,7 @@ void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
     }
 
     for( int layer_number = FIRST_NO_COPPER_LAYER, ii = 0;
-         layer_number < LAST_NO_COPPER_LAYER - 1;
+         layer_number <= LAST_NO_COPPER_LAYER;
          layer_number++, ii++ )
     {
         wxString msg;
@@ -109,7 +109,7 @@ void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
                 m_LayerSelectionCtrl->SetSelection( ii );
         }
     }
-	
+
     /* the size of m_LayerSelectionCtrl has changed, so we must recall SetSizeHints() */
     GetSizer()->SetSizeHints(this);
 }
@@ -205,6 +205,6 @@ int ZONE_CONTAINER::BuildFilledPolysListData( void )
     }
 
     m_Poly->FreeKboolEngine();
-    
+
     return count;
 }

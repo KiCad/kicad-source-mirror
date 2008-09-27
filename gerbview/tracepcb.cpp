@@ -29,7 +29,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 {
     DISPLAY_OPTIONS save_opt;
 	int DisplayPolygonsModeImg;
-	
+
     save_opt = DisplayOpt;
     if( printmasklayer & ALL_CU_LAYERS )
         DisplayOpt.DisplayPadFill = FILLED;
@@ -86,11 +86,19 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->Trace_Curseur( DC );
 }
 
+/********************************************************************/
+void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
+                  int aDrawMode, const wxPoint& offset )
+/********************************************************************/
+/* Redraw the BOARD items but not cursors, axis or grid */
+// @todo: replace WinEDA_GerberFrame::Trace_Gerber() by this function
+{
+}
 
 /***********************************************************************************/
 void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer )
 /***********************************************************************************/
-/* 
+/*
 * Trace l'ensemble des elements du PCB sur l'ecran actif
 * @param DC = device context to draw
 * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
@@ -104,7 +112,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
 
     // Draw filled polygons
-    #define NBMAX 2000
+    #define NBMAX 20000
     TRACK* track;
     int    nbpoints    = 0;
     int    nbpointsmax = NBMAX;

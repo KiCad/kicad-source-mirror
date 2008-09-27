@@ -288,7 +288,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         // Fill a kbool engine for this contour,
         // and combine it with previous contours
         Bool_Engine* booleng = new Bool_Engine();
-        ArmBoolEng( booleng );
+        ArmBoolEng( booleng, aConvertHoles );
 
         if( m_Kbool_Poly_Engine )  // a previous contour exists. Put it in new engine
         {
@@ -751,15 +751,6 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
     side_style.push_back( style );
     if( corner.size() > 0 && !corner[corner.size() - 1].end_contour )
         side_style[corner.size() - 1] = style;
-    int dl_type;
-    if( style == CPolyLine::STRAIGHT )
-        dl_type = DL_LINE;
-    else if( style == CPolyLine::ARC_CW )
-        dl_type = DL_ARC_CW;
-    else if( style == CPolyLine::ARC_CCW )
-        dl_type = DL_ARC_CCW;
-    else
-        wxASSERT( 0 );
     if( bDraw )
         Draw();
 }
@@ -1551,170 +1542,6 @@ void CPolyLine::SetEndContour( int ic, bool end_contour )
     corner[ic].end_contour = end_contour;
 }
 
-
-// Create CPolyLine for a pad
-//
-CPolyLine* CPolyLine::MakePolylineForPad( int type, int x, int y, int w, int l, int r, int angle )
-{
-    CPolyLine* poly = new CPolyLine;
-    int        dx   = l / 2;
-    int        dy   = w / 2;
-
-    if( angle % 180 == 90 )
-    {
-        dx = w / 2;
-        dy = l / 2;
-    }
-    if( type == PAD_ROUND )
-    {
-        poly->Start( 0, x - dx, y, 0 );
-        poly->AppendCorner( x, y + dy, ARC_CW, 0 );
-        poly->AppendCorner( x + dx, y, ARC_CW, 0 );
-        poly->AppendCorner( x, y - dy, ARC_CW, 0 );
-        poly->Close( ARC_CW );
-    }
-    return poly;
-}
-
-
-// Add cutout for a pad
-// Convert arcs to multiple straight lines
-// Do NOT draw or undraw
-//
-void CPolyLine::AddContourForPadClearance( int  type,
-                                           int  x,
-                                           int  y,
-                                           int  w,
-                                           int  l,
-                                           int  r,
-                                           int  angle,
-                                           int  fill_clearance,
-                                           int  hole_w,
-                                           int  hole_clearance,
-                                           bool bThermal,
-                                           int  spoke_w )
-{
-    int dx = l / 2;
-    int dy = w / 2;
-
-    if( angle % 180 == 90 )
-    {
-        dx = w / 2;
-        dy = l / 2;
-    }
-    int x_clearance = max( fill_clearance, hole_clearance + hole_w / 2 - dx );
-    int y_clearance = max( fill_clearance, hole_clearance + hole_w / 2 - dy );
-    dx += x_clearance;
-    dy += y_clearance;
-    if( !bThermal )
-    {
-        // normal clearance
-        if( type == PAD_ROUND || (type == PAD_NONE && hole_w > 0) )
-        {
-            AppendCorner( x - dx, y, ARC_CW, 0 );
-            AppendCorner( x, y + dy, ARC_CW, 0 );
-            AppendCorner( x + dx, y, ARC_CW, 0 );
-            AppendCorner( x, y - dy, ARC_CW, 0 );
-            Close( ARC_CW );
-        }
-        else if( type == PAD_SQUARE || type == PAD_RECT
-                 || type == PAD_RRECT || type == PAD_OVAL )
-        {
-            AppendCorner( x - dx, y - dy, STRAIGHT, 0 );
-            AppendCorner( x + dx, y - dy, STRAIGHT, 0 );
-            AppendCorner( x + dx, y + dy, STRAIGHT, 0 );
-            AppendCorner( x - dx, y + dy, STRAIGHT, 0 );
-            Close( STRAIGHT );
-        }
-    }
-    else
-    {
-        // thermal relief
-        if( type == PAD_ROUND || (type == PAD_NONE && hole_w > 0) )
-        {
-            // draw 4 "wedges"
-            double r = max( w / 2 + fill_clearance, hole_w / 2 + hole_clearance );
-            double start_angle = asin( spoke_w / (2.0 * r) );
-            double th1, th2, corner_x, corner_y;
-            th1 = th2 = corner_x = corner_y = 0; // gcc warning fix
-            for( int i = 0; i<4; i++ )
-            {
-                if( i == 0 )
-                {
-                    corner_x = spoke_w / 2;
-                    corner_y = spoke_w / 2;
-                    th1 = start_angle;
-                    th2 = pi / 2.0 - start_angle;
-                }
-                else if( i == 1 )
-                {
-                    corner_x = -spoke_w / 2;
-                    corner_y = spoke_w / 2;
-                    th1 = pi / 2.0 + start_angle;
-                    th2 = pi - start_angle;
-                }
-                else if( i == 2 )
-                {
-                    corner_x = -spoke_w / 2;
-                    corner_y = -spoke_w / 2;
-                    th1 = -pi + start_angle;
-                    th2 = -pi / 2.0 - start_angle;
-                }
-                else if( i == 3 )
-                {
-                    corner_x = spoke_w / 2;
-                    corner_y = -spoke_w / 2;
-                    th1 = -pi / 2.0 + start_angle;
-                    th2 = -start_angle;
-                }
-                AppendCorner( to_int( x + corner_x ), to_int( y + corner_y ), STRAIGHT, 0 );
-                AppendCorner( to_int( x + r * cos( th1 ) ), to_int( y + r * sin(
-                                                                       th1 ) ), STRAIGHT, 0 );
-                AppendCorner( to_int( x + r * cos( th2 ) ), to_int( y + r * sin(
-                                                                       th2 ) ), ARC_CCW, 0 );
-                Close( STRAIGHT );
-            }
-        }
-        else if( type == PAD_SQUARE || type == PAD_RECT
-                 || type == PAD_RRECT || type == PAD_OVAL )
-        {
-            // draw 4 rectangles
-            int xL = x - dx;
-            int xR = x - spoke_w / 2;
-            int yB = y - dy;
-            int yT = y - spoke_w / 2;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-            xL = x + spoke_w / 2;
-            xR = x + dx;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-            xL = x - dx;
-            xR = x - spoke_w / 2;
-            yB = y + spoke_w / 2;
-            yT = y + dy;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-            xL = x + spoke_w / 2;
-            xR = x + dx;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-        }
-    }
-    return;
-}
 
 
 void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num )

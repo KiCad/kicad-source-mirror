@@ -438,7 +438,6 @@ public:
     void                Liste_Equipot( wxCommandEvent& event );
     void                Swap_Layers( wxCommandEvent& event );
     void                Install_Test_DRC_Frame( wxDC* DC );
-    void                Trace_Pcb( wxDC* DC, int mode );
 
     // Handling texts on the board
     void                Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );

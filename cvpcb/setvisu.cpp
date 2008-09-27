@@ -83,21 +83,30 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !m_Pcb )
         return;
 
-    MODULE* Module = m_Pcb->m_Modules;
-
     ActiveScreen = (PCB_SCREEN*) GetScreen();
 
     if( EraseBg )
         DrawPanel->EraseScreen( DC );
 
     DrawPanel->DrawBackGround( DC );
+    m_Pcb->Draw( DrawPanel, DC, GR_COPY, wxPoint(0,0) );
 
-    if( Module )
-    {
-        Module->Draw( DrawPanel, DC, GR_COPY );
+    MODULE* Module = m_Pcb->m_Modules;
+    if ( Module )
         Module->Display_Infos( this );
-    }
-
     Affiche_Status_Box();
     DrawPanel->Trace_Curseur( DC );
+}
+
+
+/********************************************************************/
+void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
+                  int aDrawMode, const wxPoint& offset )
+/********************************************************************/
+/* Redraw the BOARD items but not cursors, axis or grid */
+{
+    if( m_Modules )
+    {
+        m_Modules->Draw( aPanel, DC, GR_COPY );
+   }
 }

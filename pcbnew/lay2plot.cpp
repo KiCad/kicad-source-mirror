@@ -125,6 +125,16 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     }
     GRForceBlackPen( blackpenstate );
 
+    /* Draw areas (i.e. zones) */
+    for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = Pcb->GetArea(ii);
+        if( ( printmasklayer & (1 << zone->GetLayer()) ) == 0 )
+            continue;
+
+        zone->DrawFilledArea( this, DC, drawmode );
+    }
+
     if( Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( DC, ActiveScreen, 0 );
 

@@ -13,26 +13,6 @@
 
 /* variables locales : */
 
-/*********************************************************************************/
-void Trace_Pistes( WinEDA_DrawPanel* panel, BOARD* Pcb, wxDC* DC, int drawmode )
-/********************************************************************************/
-
-/* Draw all tracks and zones.  As long as dark colors are used for the tracks,
- * Then the OR draw mode should show tracks underneath other tracks.  But a white
- * track will cover any other color since it has more bits to OR in.
- */
-{
-    for( TRACK* track = Pcb->m_Track;  track;   track = track->Next() )
-    {
-        track->Draw( panel, DC, drawmode );
-    }
-
-    for( SEGZONE* zone = Pcb->m_Zone;  zone;   zone = zone->Next() )
-    {
-        zone->Draw( panel, DC, drawmode );
-    }
-}
-
 
 /************************************************************************/
 void Trace_Une_Piste( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* Track,

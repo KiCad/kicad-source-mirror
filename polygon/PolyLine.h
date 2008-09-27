@@ -9,7 +9,7 @@
 // separated by setting the end_contour flag of the last corner of
 // each contour.
 //
-// When used for copper areas, the first contour is the outer edge
+// When used for copper (or technical layers) areas, the first contour is the outer edge
 // of the area, subsequent ones are "holes" in the copper.
 
 #ifndef POLYLINE_H
@@ -18,8 +18,17 @@
 #include <vector>
 
 #include "kbool/include/booleng.h"
-#include "freepcbDisplayList.h"
 #include "pad_shapes.h"
+
+// inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
+enum
+{
+	IM_NONE = 0,
+	IM_90_45,
+	IM_45_90,
+	IM_90
+};
+
 
 
 /** Function ArmBoolEng
@@ -159,19 +168,6 @@ public:
     void       SetSideStyle( int is, int style );
 
     int        RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa = NULL );
-    CPolyLine* MakePolylineForPad( int type, int x, int y, int w, int l, int r, int angle );
-    void       AddContourForPadClearance( int  type,
-                                          int  x,
-                                          int  y,
-                                          int  w,
-                                          int  l,
-                                          int  r,
-                                          int  angle,
-                                          int  fill_clearance,
-                                          int  hole_w,
-                                          int  hole_clearance,
-                                          bool bThermal = FALSE,
-                                          int  spoke_w = 0 );
 
     int NormalizeAreaOutlines( std::vector<CPolyLine*> * pa = NULL,
                                bool                      bRetainArcs = FALSE );
@@ -222,7 +218,7 @@ public:
      * @return number of external contours, or -1 if error
      */
     int NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs );
-    
+
     /** function GetKboolEngine
      * @return the current used Kbool Engine (after normalization using kbool)
      */
@@ -231,7 +227,7 @@ public:
      * delete the current used Kbool Engine (free memory after normalization using kbool)
      */
     void FreeKboolEngine( ) { delete m_Kbool_Poly_Engine; m_Kbool_Poly_Engine = NULL; }
-    
+
 
 private:
     int m_layer;    // layer to draw on

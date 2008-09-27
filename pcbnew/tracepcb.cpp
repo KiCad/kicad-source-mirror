@@ -87,7 +87,13 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), 0 );
 
-    Trace_Pcb( DC, GR_OR );
+    m_Pcb->Draw( DrawPanel, DC, GR_OR );
+    if( g_HightLigt_Status )
+        DrawHightLight( DC, g_HightLigth_NetCode );
+
+    DrawGeneralRatsnest( DC );
+
+    GetScreen()->ClrRefreshReq();
 
     Affiche_Status_Box();
 
@@ -99,21 +105,13 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/* should make the function below this one:
-void BOARD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                  int aDrawMode, const wxPoint& offset = ZeroOffset );
-*/
-
-
-/****************************************************/
-void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
-/****************************************************/
+/********************************************************************/
+void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
+                  int aDrawMode, const wxPoint& offset )
+/********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
-    if( !m_Pcb )
-        return;
-
-    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
         bool display = true;
         int  layerMask = ALL_CU_LAYERS;
@@ -136,14 +134,14 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         }
 
         if( display )
-            module->Draw( DrawPanel, DC, mode );
+            module->Draw( aPanel, DC, aDrawMode );
         else
-            Trace_Pads_Only( DrawPanel, DC, module, 0, 0, layerMask, mode );
+            Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
     }
 
 
     // Draw the graphic items
-    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = item->Next() )
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
         if( item->m_Flags & IS_MOVED )
             continue;
@@ -154,7 +152,7 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         case TYPETEXTE:
         case TYPEMIRE:
         case TYPEDRAWSEGMENT:
-            item->Draw( DrawPanel, DC, mode );
+            item->Draw( aPanel, DC, aDrawMode );
             break;
 
        default:
@@ -162,31 +160,40 @@ void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
         }
     }
 
-    Trace_Pistes( DrawPanel, m_Pcb, DC, mode );
-    if( g_HightLigt_Status )
-        DrawHightLight( DC, g_HightLigth_NetCode );
-
-    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    /* Draw all tracks and zones.  As long as dark colors are used for the tracks,
+     * Then the OR draw mode should show tracks underneath other tracks.  But a white
+     * track will cover any other color since it has more bits to OR in.
+     */
+    for( TRACK* track = m_Track;  track;   track = track->Next() )
     {
-        ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
+        track->Draw( aPanel, DC, aDrawMode );
+    }
+
+    for( SEGZONE* zone = m_Zone;  zone;   zone = zone->Next() )
+    {
+        zone->Draw( aPanel, DC, aDrawMode );
+    }
+
+
+    /* Draw areas (i.e. zones) */
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea(ii);
 
         // Areas must be drawn here only if not moved or dragged,
         // because these areas are drawn by ManageCursor() in a specific manner
-        if ( (edge_zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
         {
-            edge_zone->Draw( DrawPanel, DC, mode );
-            edge_zone->DrawFilledArea( DrawPanel, DC, mode );
+            zone->Draw( aPanel, DC, aDrawMode );
+            zone->DrawFilledArea( aPanel, DC, aDrawMode );
         }
     }
 
     // draw the BOARD's markers.
-    for( unsigned i=0; i<m_Pcb->m_markers.size();  ++i )
+    for( unsigned i=0; i < m_markers.size();  ++i )
     {
-        m_Pcb->m_markers[i]->Draw( DrawPanel, DC, mode );
+        m_markers[i]->Draw( aPanel, DC, aDrawMode );
     }
-
-    DrawGeneralRatsnest( DC );
-
-    GetScreen()->ClrRefreshReq();
 }
+
 

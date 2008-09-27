@@ -21,6 +21,7 @@
 /* Fonctions locales */
 static void Plot_Edges_Modules( BOARD* pcb, int format_plot, int masque_layer );
 static void PlotTextModule( TEXTE_MODULE* pt_texte );
+static void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat);
 
 
 /**********************************************************/
@@ -46,27 +47,18 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         {
         case TYPEDRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format_plot, masque_layer );
-
-            // (Following line has been superceded by new commands elsewhere.)
-//												EDGE_LAYER | masque_layer );
             break;
 
         case TYPETEXTE:
             PlotTextePcb( (TEXTE_PCB*) PtStruct, format_plot, masque_layer );
-
-//												EDGE_LAYER | masque_layer );
             break;
 
         case TYPECOTATION:
             PlotCotation( (COTATION*) PtStruct, format_plot, masque_layer );
-
-//												EDGE_LAYER | masque_layer );
             break;
 
         case TYPEMIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, format_plot, masque_layer );
-
-//												EDGE_LAYER | masque_layer );
             break;
 
         case TYPEMARKER:
@@ -301,6 +293,15 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
             msg.Printf( wxT( "%d" ), nb_items );
             Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
         }
+    }
+
+    /* Plot filled ares */
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
+            if( ( (1 << edge_zone->GetLayer()) & masque_layer ) == 0 )
+                continue;
+        PlotFilledAreas(edge_zone, format_plot);
     }
 
 exit:
@@ -704,6 +705,48 @@ void Affiche_erreur( int nb_err )
 //	Affiche_1_Parametre(this, 30,"Err",msg,GREEN) ;
 }
 
+/*********************************************************/
+void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat )
+/*********************************************************/
+/* Plot areas (given by .m_FilledPolysList member) in a zone
+*/
+{
+    static int*     CornersBuffer     = NULL;
+    static unsigned CornersBufferSize = 0;
+    unsigned imax = aZone->m_FilledPolysList.size();
+
+    if( imax == 0 )  // Nothing to draw
+        return;
+
+    // We need a buffer to store corners coordinates:
+    if( CornersBuffer == NULL )
+    {
+        CornersBufferSize = imax * 4;
+        CornersBuffer = (int*) MyMalloc( CornersBufferSize * sizeof(int) );
+    }
+
+    if( (imax * 4) > CornersBufferSize )
+    {
+        CornersBufferSize = imax * 4;
+        CornersBuffer = (int*) realloc( CornersBuffer, CornersBufferSize * sizeof(int) );
+    }
+
+    // Plot all filled areas
+    int corners_count = 0;
+    for( unsigned ic = 0, ii = 0; ic < imax; ic++ )
+    {
+        CPolyPt* corner = &aZone->m_FilledPolysList[ic];
+        CornersBuffer[ii++] = corner->x;
+        CornersBuffer[ii++] = corner->y;
+        corners_count++;
+        if( corner->end_contour )
+        {   // Plot the current filled area
+            PlotPolygon( aFormat, true, corners_count, CornersBuffer );
+            corners_count = 0;
+            ii = 0;
+        }
+    }
+}
 
 /******************************************************************************/
 void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )

@@ -368,7 +368,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
 
 /**
  * Function DrawDrawFilledArea
- * Draws the filled  area for this zone (polygon list .m_FilledPolysList)
+ * Draws the filled areas for this zone (polygon list .m_FilledPolysList)
  * @param panel = current Draw Panel
  * @param DC = current Device Context
  * @param offset = Draw offset (usually wxPoint(0,0))
@@ -416,7 +416,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
     if( color & HIGHT_LIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
-    // draw the filled polygon
+    // We need a buffer to store corners coordinates:
     if( CornersBuffer == NULL )
     {
         CornersBufferSize = imax * 4;
@@ -429,6 +429,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         CornersBuffer = (int*) realloc( CornersBuffer, CornersBufferSize * sizeof(int) );
     }
 
+    // Draw all filled areas
     int corners_count = 0;
     for( unsigned ic = 0, ii = 0; ic < imax; ic++ )
     {
@@ -437,9 +438,8 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         CornersBuffer[ii++] = corner->y + offset.y;
         corners_count++;
         if( corner->end_contour )
-        {
-            GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
-                1, 0, color, color );
+        {   // Draw the current filled area
+            GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer, true, 0, color, color );
             corners_count = 0;
             ii = 0;
         }

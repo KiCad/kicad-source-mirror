@@ -253,11 +253,7 @@ public:
     void    Display_Infos( WinEDA_DrawFrame* frame );
 
     void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int aDrawMode, const wxPoint& offset = ZeroOffset )
-    {
-        // void WinEDA_PcbFrame::Trace_Pcb( wxDC* DC, int mode )
-        // goes here.
-    }
+                      int aDrawMode, const wxPoint& offset = ZeroOffset );
 
 
     /**
@@ -380,6 +376,7 @@ public:
      * or net change
      * Must be called after pad netcodes are calculated
      * @return : error count
+     * For non copper areas, netcode is set to 0
      */
     int SetAreasNetCodesFromNetNames(void);
 
