@@ -4,26 +4,26 @@
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html 
- * or you may search the http://www.gnu.org website for the version 2 license, 
- * or you may write to the Free Software Foundation, Inc., 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- 
+
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>         // bsearch()
@@ -63,7 +63,7 @@ struct KEYWORD
 
 
 // This MUST be sorted alphabetically, and also so MUST enum DSN_T {} be alphabetized.
-// These MUST all be lower case because of the conversion to lowercase in findToken(). 
+// These MUST all be lower case because of the conversion to lowercase in findToken().
 const static KEYWORD tokens[] = {
     TOKDEF(absolute),
     TOKDEF(added),
@@ -461,7 +461,7 @@ static int compare( const void* a1, const void* a2 )
 {
     const KEYWORD* k1 = (const KEYWORD*) a1;
     const KEYWORD* k2 = (const KEYWORD*) a2;
-    
+
     int ret = strcmp( k1->name, k2->name );
     return ret;
 }
@@ -475,11 +475,11 @@ LINE_READER::LINE_READER( FILE* aFile,  unsigned aMaxLineLength )
     lineNum = 0;
     maxLineLength = aMaxLineLength;
 
-    // the real capacity is 10 bytes larger than requested.    
+    // the real capacity is 10 bytes larger than requested.
     capacity = aMaxLineLength + 10;
-    
+
     line = new char[capacity];
-    
+
     line[0] = '\0';
     length  = 0;
 }
@@ -488,7 +488,7 @@ LINE_READER::LINE_READER( FILE* aFile,  unsigned aMaxLineLength )
 int LINE_READER::ReadLine() throw (IOError)
 {
     const char* p = fgets( line, capacity, fp );
-    
+
     if( !p )
     {
         line[0] = 0;
@@ -498,12 +498,12 @@ int LINE_READER::ReadLine() throw (IOError)
     {
         length = strlen( line );
 
-        if( length > maxLineLength )        
+        if( length > maxLineLength )
             throw IOError( _("Line length exceeded") );
-        
+
         ++lineNum;
     }
-    
+
     return length;
 }
 
@@ -519,12 +519,12 @@ LEXER::LEXER( FILE* aFile, const wxString& aFilename ) :
     filename = aFilename;
 
     space_in_quoted_tokens = true;
-    
+
     // "start" should never change until we change the reader.  The DSN
     // format spec supports an include file mechanism but we can add that later
     // using a std::stack to hold a stack of LINE_READERs to track nesting.
-    start = (char*) reader;     
-    
+    start = (char*) reader;
+
     limit = start;
     next  = start;
 }
@@ -535,19 +535,19 @@ int LEXER::findToken( const std::string& tok )
     // convert to lower case once, this should be faster than using strcasecmp()
     // for each test in compare().
     lowercase.clear();
-    
+
     for( std::string::const_iterator iter = tok.begin();  iter!=tok.end();  ++iter )
         lowercase += (char) tolower( *iter );
-    
+
     KEYWORD search;
     search.name = lowercase.c_str();
-    
-    const KEYWORD* findings = (const KEYWORD*) bsearch( &search, 
+
+    const KEYWORD* findings = (const KEYWORD*) bsearch( &search,
                                    tokens, sizeof(tokens)/sizeof(tokens[0]),
                                    sizeof(KEYWORD), compare );
     if( findings )
 //        return findings->token;
-        return findings - tokens; 
+        return findings - tokens;
     else
         return -1;
 }
@@ -556,7 +556,7 @@ int LEXER::findToken( const std::string& tok )
 const char* LEXER::GetTokenText( DSN_T aTok )
 {
     const char* ret;
-    
+
     if( aTok < 0 )
     {
         switch( aTok )
@@ -596,7 +596,7 @@ const char* LEXER::GetTokenText( DSN_T aTok )
     {
         ret = tokens[aTok].name;
     }
-    
+
     return ret;
 }
 
@@ -604,44 +604,44 @@ const char* LEXER::GetTokenText( DSN_T aTok )
 wxString LEXER::GetTokenString( DSN_T aTok )
 {
     wxString    ret;
-    
+
     ret << wxT("'") << CONV_FROM_UTF8( GetTokenText(aTok) ) << wxT("'");
 
-    return ret;    
+    return ret;
 }
 
-    
+
 void LEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 {
-    aText << wxT(" ") << _("in file") << wxT(" \"") << filename 
+    aText << wxT(" ") << _("in file") << wxT(" \"") << filename
           << wxT("\" ") << _("on line") << wxT(" ") << reader.LineNumber()
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
-          
+
     throw IOError( aText );
 }
 
-    
+
 DSN_T LEXER::NextTok() throw (IOError)
 {
     char*   cur  = next;
     char*   head = cur;
 
     prevTok = curTok;
-    
+
     if( curTok != T_EOF )
     {
         if( cur >= limit )
         {
-L_read:                
+L_read:
             int len = readLine();
             if( len == 0 )
             {
                 curTok = T_EOF;
                 goto exit;
             }
-            
+
             cur = start;
-            
+
             // skip leading whitespace
             while( cur<limit && isspace(*cur) )
                 ++cur;
@@ -659,12 +659,12 @@ L_read:
 
         if( cur >= limit )
             goto L_read;
-        
+
         // switching the string_quote character
         if( prevTok == T_string_quote )
         {
-            static const wxString errtxt( _("String delimiter must be a single character of ', \", or $"));   
-            
+            static const wxString errtxt( _("String delimiter must be a single character of ', \", or $"));
+
             char cc = *cur;
             switch( cc )
             {
@@ -675,36 +675,36 @@ L_read:
             default:
                 ThrowIOError( errtxt, CurOffset() );
             }
-            
+
             curText.clear();
             curText += cc;
-            
+
             head = cur+1;
 
             if( head<limit && *head!=')' && *head!='(' && !isspace(*head) )
             {
                 ThrowIOError( errtxt, CurOffset() );
             }
-            
+
             curTok = T_QUOTE_DEF;
             goto exit;
         }
-        
+
         if( *cur == '(' )
         {
             curText.clear();
             curText += *cur;
-            
+
             curTok = T_LEFT;
             head = cur+1;
             goto exit;
         }
-        
+
         if( *cur == ')' )
         {
             curText.clear();
             curText += *cur;
-            
+
             curTok = T_RIGHT;
             head = cur+1;
             goto exit;
@@ -722,8 +722,8 @@ L_read:
             curTok = T_DASH;
             goto exit;
         }
-        
-        // handle T_NUMBER                
+
+        // handle T_NUMBER
         if( strchr( "+-.0123456789", *cur ) )
         {
             head = cur+1;
@@ -737,63 +737,63 @@ L_read:
                 curTok = T_NUMBER;
                 goto exit;
             }
-            
+
             // else it was something like +5V, fall through below
         }
-        
+
         // a quoted string
         if( *cur == stringDelimiter )
         {
             ++cur;  // skip over the leading delimiter: ",', or $
 
             head = cur;
-        
+
             while( head<limit &&  !isStringTerminator( *head ) )
                 ++head;
-            
+
             if( head >= limit )
             {
                 wxString errtxt(_("Un-terminated delimited string") );
                 ThrowIOError( errtxt, CurOffset() );
             }
-            
+
             curText.clear();
             curText.append( cur, head );
-            
+
             ++head;     // skip over the trailing delimiter
-            
+
             curTok  = T_STRING;
             goto exit;
         }
-    
+
         // a token we hope to find in the tokens[] array.  If not, then
         // call it a T_SYMBOL.
         {
             head = cur+1;
             while( head<limit && !isspace( *head ) && *head!=')' && *head!='(' )
                 ++head;
-            
+
             curText.clear();
             curText.append( cur, head );
-            
+
             int found = findToken( curText );
-            
+
             if( found != -1 )
                 curTok = (DSN_T) found;
-            
+
             else                    // unrecogized token, call it a symbol
                 curTok = T_SYMBOL;
         }
     }
 
 exit:                   // single point of exit
-    
+
     curOffset = cur - start;
-    
+
     next = head;
 
     // printf("tok:\"%s\"\n", curText.c_str() );
-    
+
     return curTok;
 }
 
@@ -811,19 +811,19 @@ int main( int argc, char** argv )
 
 //  wxString    filename( wxT("/tmp/fpcroute/Sample_1sided/demo_1sided.dsn") );
     wxString    filename( wxT("/tmp/testdesigns/test.dsn") );
-    
+
     FILE*   fp = wxFopen( filename, wxT("r") );
-    
+
     if( !fp )
     {
-        fprintf( stderr, "unable to open file \"%s\"\n", 
+        fprintf( stderr, "unable to open file \"%s\"\n",
                 (const char*) filename.mb_str() );
         exit(1);
     }
-    
+
     DSN::LEXER  lexer( fp, filename );
 
-    try 
+    try
     {
         int tok;
         while( (tok = lexer.NextTok()) != DSN::T_EOF )
@@ -837,7 +837,7 @@ int main( int argc, char** argv )
     }
 
     fclose( fp );
-    
+
     return 0;
 }
 
