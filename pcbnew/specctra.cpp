@@ -3477,7 +3477,7 @@ int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 
 const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote_char )
 {
-    // I include '#' so a symbol is not confused with a comment.  We intend
+    // Include '#' so a symbol is not confused with a comment.  We intend
     // to wrap any symbol starting with a '#'.
     // Our LEXER class handles comments, and comments appear to be an extension
     // to the SPECCTRA DSN specification.
@@ -3487,9 +3487,9 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
     if( strlen(wrapee)==0 )
         return quote_char;
 
-//    bool    isNumber = true;
+    bool isFirst = true;
 
-    for(  ; *wrapee;  ++wrapee )
+    for(  ; *wrapee;  ++wrapee, isFirst=false )
     {
         static const char quoteThese[] = "\t ()"
             "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
@@ -3501,14 +3501,11 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
         if( strchr( quoteThese, *wrapee ) )
             return quote_char;
 
-//        if( !strchr( "01234567890.-+", *wrapee ) )
-//            isNumber = false;
+        if( !isFirst  &&  '-' == *wrapee )
+            return quote_char;
     }
 
-//    if( isNumber )
-//        return quote_char;
-
-    return "";      // can use an unwrapped string.
+    return "";  // caller does not need to wrap, can use an unwrapped string.
 }
 
 
