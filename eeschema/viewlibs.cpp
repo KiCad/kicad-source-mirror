@@ -115,9 +115,14 @@ wxString msg;
 LibraryStruct * Lib;
 
 	Lib = FindLibrary(g_CurrentViewLibraryName);
-	msg = _("Browse library: ");
-	if ( Lib ) msg += g_CurrentViewLibraryName;
-	else msg += _("None");
+	msg = _("Library browser");
+
+        msg << wxT(" [");
+
+	if ( Lib ) msg << g_CurrentViewLibraryName;
+	else msg += _("none selected");
+
+        msg << wxT("]");
 	SetTitle(msg);
 }
 

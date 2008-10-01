@@ -29,7 +29,6 @@ set(COMMON_SRCS
     toolbars.cpp
     trigo.cpp
     worksheet.cpp
-    wxwineda.cpp
-    icons.cpp)
+    wxwineda.cpp)
 
 add_library(common ${COMMON_SRCS})

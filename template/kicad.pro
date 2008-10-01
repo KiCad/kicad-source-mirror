@@ -115,7 +115,7 @@ LabSize=60
 [eeschema/libraries]
 LibName1=power
 LibName2=device
-LibName3=transistors
+LibName3=transistor
 LibName4=conn
 LibName5=linear
 LibName6=regul
@@ -143,3 +143,4 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
+LibName31=atmel

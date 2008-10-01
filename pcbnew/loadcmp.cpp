@@ -100,7 +100,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
     bool AllowWildSeach = TRUE;
 
     /* Ask for a component name or key words */
-    ModuleName = GetComponentName( this, HistoryList, _( "Module name:" ), NULL );
+    ModuleName = GetComponentName( this, HistoryList, _( "Place module" ), NULL );
     ModuleName.MakeUpper();
     if( ModuleName.IsEmpty() )  /* Cancel command */
     {
@@ -430,7 +430,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
 
     wxEndBusyCursor();
 
-    msg.Printf( _( "Modules (%d items)" ), NbModules );
+    msg.Printf( _( "Modules [%d items]" ), NbModules );
     ListBox->SetTitle( msg );
     ListBox->SortList();
 
@@ -581,7 +581,7 @@ MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
         ListBox->Append( Module->m_Reference->m_Text );
     }
 
-    msg.Printf( _( "Modules (%d items)" ), ii );
+    msg.Printf( _( "Modules [%d items]" ), ii );
     ListBox->SetTitle( msg );
 
     ListBox->SortList();
