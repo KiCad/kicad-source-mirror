@@ -28,9 +28,12 @@ static wxPoint File_Place_Offset;   /* Offset des coord de placement pour le fic
 static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile );
 
 /* Routine de tri utilisee par GenereModulesPosition() */
-static int ListeModCmp( LIST_MOD* Ref, LIST_MOD* Cmp )
+static int ListeModCmp( const void* o1, const void* o2 )
 {
-    return StrLenNumCmp( Ref->m_Reference, Cmp->m_Reference, 16 );
+    LIST_MOD*   ref = (LIST_MOD*) o1;
+    LIST_MOD*   cmp = (LIST_MOD*) o2;
+
+    return StrLenNumCmp( ref->m_Reference, cmp->m_Reference, 16 );
 }
 
 
@@ -67,7 +70,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 {
     bool        doBoardBack = false;
     MODULE*     module;
-    LIST_MOD*   Liste;
+    LIST_MOD*   Liste = 0;
     char        line[1024];
     char        Buff[80];
     wxString    fnFront;
@@ -77,8 +80,8 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     wxString    frontLayerName;
     wxString    backLayerName;
     wxString    Title;
-    FILE*       fpFront = NULL;
-    FILE*       fpBack = NULL;
+    FILE*       fpFront = 0;
+    FILE*       fpBack = 0;
     bool        switchedLocale = false;
 
     /* Calcul des echelles de conversion */
@@ -95,15 +98,18 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     {
         if( module->m_Attributs & MOD_VIRTUAL )
         {
-            D(printf("skipping module %s because its virtual\n", CONV_TO_UTF8(module->GetReference()) );)
+            D(printf("skipping module %s because it's virtual\n", CONV_TO_UTF8(module->GetReference()) );)
             continue;
         }
 
         if( (module->m_Attributs & MOD_CMS)  == 0 )
         {
-#if 0 && defined(DEBUG)  // enable this code to fix a bunch of mis-labeled modules:
+#if 1 && defined(DEBUG)  // enable this code to fix a bunch of mis-labeled modules:
             if( !HasNonSMDPins( module ) )
-                module->m_Attributs |= MOD_CMS;     // all pins are SMD, fix the problem
+            {
+                // all module's pins are SMD, mark the part for pick and place
+                module->m_Attributs |= MOD_CMS;
+            }
             else
             {
                 printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n", CONV_TO_UTF8(module->GetReference()) );
@@ -181,18 +187,17 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     {
         if( module->m_Attributs & MOD_VIRTUAL )
             continue;
+
         if( (module->m_Attributs & MOD_CMS)  == 0 )
             continue;
 
         Liste[ii].m_Module    = module;
         Liste[ii].m_Reference = module->m_Reference->m_Text;
-        Liste[ii].m_Value = module->m_Value->m_Text;
+        Liste[ii].m_Value     = module->m_Value->m_Text;
         ii++;
     }
 
-    qsort( Liste, moduleCount, sizeof(LIST_MOD),
-           ( int( * ) ( const void*, const void* ) )ListeModCmp );
-
+    qsort( Liste, moduleCount, sizeof(LIST_MOD), ListeModCmp );
 
     /* Generation entete du fichier 'commentaires) */
     sprintf( line, "### Module positions - created on %s ###\n",
@@ -245,13 +250,17 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
                  (float) module_pos.y * conv_unit,
                  (float) Liste[ii].m_Module->m_Orient / 10 );
 
-        if( Liste[ii].m_Module->GetLayer() == CMP_N )
+        int layer = Liste[ii].m_Module->GetLayer();
+
+        wxASSERT( layer==CMP_N || layer==COPPER_LAYER_N );
+
+        if( layer == CMP_N )
         {
             strcat( line, CONV_TO_UTF8( frontLayerName ) );
             strcat( line, "\n" );
             fputs( line, fpFront );
         }
-        else if( Liste[ii].m_Module->GetLayer() == COPPER_LAYER_N )
+        else if( layer == COPPER_LAYER_N )
         {
             strcat( line, CONV_TO_UTF8( backLayerName ) );
             strcat( line, "\n" );
@@ -265,8 +274,6 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
         fputs( "## End\n", fpBack );
 
-    MyFree( Liste );
-
     msg = frontLayerName + wxT( " File: " ) + fnFront;
 
     if( doBoardBack )
@@ -274,7 +281,12 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     DisplayInfo( this, msg );
 
-exit:
+
+exit:   // the only safe way out of here, no returns please.
+
+    if( Liste )
+        MyFree( Liste );
+
     if( switchedLocale )
         SetLocaleTo_Default( );      // revert to the current  locale
 
