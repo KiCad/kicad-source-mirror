@@ -103,7 +103,7 @@ bool asdeMorgan = FALSE, state;
 			m_HToolBar->AddSeparator();
 			m_HToolBar->AddTool(ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC, wxEmptyString,
 						BITMAP(export_xpm),
-						_("Export to schematic") );
+						_("Insert component in schematic") );
 		}
 
 		// after adding the buttons to the toolbar, must call Realize() to reflect

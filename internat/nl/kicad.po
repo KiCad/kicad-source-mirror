@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-01 22:49+0100\n"
-"PO-Revision-Date: 2008-10-01 22:49+0100\n"
+"POT-Creation-Date: 2008-10-01 23:05+0100\n"
+"PO-Revision-Date: 2008-10-01 23:05+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3253,16 +3253,6 @@ msgstr "Bibliotheek:"
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Modules [%d items]"
-
-#: pcbnew/loadcmp.cpp:485
-#, fuzzy
-msgid "No Doc"
-msgstr "Kopieer Doc"
-
-#: pcbnew/loadcmp.cpp:487
-#, fuzzy
-msgid "No Keyword"
-msgstr "Sleutelwoorden"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:187
 msgid "Export a Specctra Design (*.dsn) File"
@@ -6679,8 +6669,8 @@ msgid "View component documents"
 msgstr "Bekijk component documenten"
 
 #: eeschema/tool_viewlib.cpp:106
-msgid "Export to schematic"
-msgstr "Exporteer naar schema"
+msgid "Insert component in schematic"
+msgstr "Component in schema plaatsen"
 
 #: eeschema/tool_viewlib.cpp:128
 #: eeschema/tool_lib.cpp:238
@@ -7665,7 +7655,7 @@ msgstr "Component plaatsen"
 
 #: eeschema/menubar.cpp:212
 msgid "&Power port"
-msgstr "& Stroom aansluiting"
+msgstr "&Stroom aansluiting"
 
 #: eeschema/menubar.cpp:212
 #: eeschema/tool_sch.cpp:160
@@ -11185,6 +11175,16 @@ msgstr "Pagina Instellingen"
 #: share/dialog_print.h:52
 msgid "Print"
 msgstr "Printen"
+
+#, fuzzy
+#~ msgid "No Doc"
+#~ msgstr "Kopieer Doc"
+
+#, fuzzy
+#~ msgid "No Keyword"
+#~ msgstr "Sleutelwoorden"
+#~ msgid "Export to schematic"
+#~ msgstr "Exporteer naar schema"
 
 #, fuzzy
 #~ msgid "none"
