@@ -65,41 +65,47 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
  *  utilisé pour les machines de placement de composants
  */
 {
-    float     conv_unit;
-    int       NbMod, ii;
-    bool      GenCu = FALSE;
-    MODULE*   Module;
-    LIST_MOD* Liste;
-    char      Line[1024], Buff[80];
-    wxString  NameLayerCu, NameLayerCmp, msg;
-    FILE*     LayerCu = NULL, * LayerCmp = NULL;
+    bool        doBoardBack = false;
+    MODULE*     module;
+    LIST_MOD*   Liste;
+    char        line[1024];
+    char        Buff[80];
+    wxString    fnFront;
+    wxString    fnBack;
+    wxString    extension;
+    wxString    msg;
+    wxString    frontLayerName;
+    wxString    backLayerName;
+    wxString    Title;
+    FILE*       fpFront = NULL;
+    FILE*       fpBack = NULL;
 
     /* Calcul des echelles de conversion */
-    conv_unit = 0.0001; /* unites = INCHES */
+    float conv_unit = 0.0001; /* unites = INCHES */
 
 //	if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
 
     File_Place_Offset = m_Auxiliary_Axis_Position;
 
     /* Calcul du nombre de modules utiles ( Attribut CMS, non VIRTUAL ) ) */
-    NbMod = 0;
+    int moduleCount = 0;
 
-    for( Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
+    for( module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
-        if( Module->m_Attributs & MOD_VIRTUAL )
+        if( module->m_Attributs & MOD_VIRTUAL )
         {
-            D(printf("skipping module %s because its virtual\n", CONV_TO_UTF8(Module->GetReference()) );)
+            D(printf("skipping module %s because its virtual\n", CONV_TO_UTF8(module->GetReference()) );)
             continue;
         }
 
-        if( (Module->m_Attributs & MOD_CMS)  == 0 )
+        if( (module->m_Attributs & MOD_CMS)  == 0 )
         {
 #if 0 && defined(DEBUG)  // enable this code to fix a bunch of mis-labeled modules:
-            if( !HasNonSMDPins( Module ) )
-                Module->m_Attributs |= MOD_CMS;     // all pins are SMD, fix the problem
+            if( !HasNonSMDPins( module ) )
+                module->m_Attributs |= MOD_CMS;     // all pins are SMD, fix the problem
             else
             {
-                printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n", CONV_TO_UTF8(Module->GetReference()) );
+                printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n", CONV_TO_UTF8(module->GetReference()) );
                 continue;
             }
 #else
@@ -107,39 +113,47 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 #endif
         }
 
-        if( Module->GetLayer() == COPPER_LAYER_N )
-            GenCu = TRUE;
-        NbMod++;
+        if( module->GetLayer() == COPPER_LAYER_N )
+            doBoardBack = true;
+
+        moduleCount++;
     }
 
-    if( NbMod == 0 )
+    if( moduleCount == 0 )
     {
-        DisplayError( this, _( "No Modules for Automated Placement" ), 20 ); return;
+        DisplayError( this, _( "No Modules for Automated Placement" ), 20 );
+        return;
     }
 
+    fnFront = GetScreen()->m_FileName;
 
-    /* Init nom fichier */
-    NameLayerCmp = GetScreen()->m_FileName;
-    ChangeFileNameExt( NameLayerCmp, wxT( "-cmp.pos" ) );
+    frontLayerName = m_Pcb->GetLayerName( CMP_N );
+    extension.Printf( wxT("-%s.pos"), frontLayerName.GetData() );
 
-    LayerCmp = wxFopen( NameLayerCmp, wxT( "wt" ) );
-    if( LayerCmp == 0 )
+    ChangeFileNameExt( fnFront, extension );
+
+    fpFront = wxFopen( fnFront, wxT( "wt" ) );
+    if( fpFront == 0 )
     {
-        msg = _( "Unable to create " ) + NameLayerCu;
-        DisplayError( this, msg ); return;
+        msg = _( "Unable to create " ) + fnFront;
+        DisplayError( this, msg );
+        goto exit;
     }
 
-    if( GenCu )
+    if( doBoardBack )
     {
-        NameLayerCu = GetScreen()->m_FileName;
-        ChangeFileNameExt( NameLayerCu, wxT( "-copper.pos" ) );
-        LayerCu = wxFopen( NameLayerCu, wxT( "wt" ) );
-        if( LayerCu == 0 )
+        fnBack = GetScreen()->m_FileName;
+
+        backLayerName = m_Pcb->GetLayerName( COPPER_LAYER_N );
+        extension.Printf( wxT("-%s.pos"), backLayerName.GetData() );
+
+        ChangeFileNameExt( fnBack, extension );
+        fpBack = wxFopen( fnBack, wxT( "wt" ) );
+        if( fpBack == 0 )
         {
-            msg = _( "Unable to create " ) + NameLayerCu;
+            msg = _( "Unable to create " ) + fnBack;
             DisplayError( this, msg );
-            fclose( LayerCmp );
-            return;
+            goto exit;
         }
     }
 
@@ -148,82 +162,82 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     /* Affichage du bilan : */
     MsgPanel->EraseMsgBox();
-    Affiche_1_Parametre( this, 0, _( "Component side place file:" ), NameLayerCmp, BLUE );
+    Affiche_1_Parametre( this, 0, _( "Component side place file:" ), fnFront, BLUE );
 
-    if( GenCu )
-        Affiche_1_Parametre( this, 32, _( "Copper side place file:" ), NameLayerCu, BLUE );
+    if( doBoardBack )
+        Affiche_1_Parametre( this, 32, _( "Copper side place file:" ), fnBack, BLUE );
 
-    msg.Empty(); msg << NbMod;
+    msg.Empty(); msg << moduleCount;
     Affiche_1_Parametre( this, 65, _( "Module count" ), msg, RED );
 
 
     /* Etablissement de la liste des modules par ordre alphabetique */
-    Liste = (LIST_MOD*) MyZMalloc( NbMod * sizeof(LIST_MOD) );
+    Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );
 
-    Module = m_Pcb->m_Modules;
-    for( ii = 0;  Module;  Module = Module->Next() )
+    module = m_Pcb->m_Modules;
+    for( int ii = 0;  module;  module = module->Next() )
     {
-        if( Module->m_Attributs & MOD_VIRTUAL )
+        if( module->m_Attributs & MOD_VIRTUAL )
             continue;
-        if( (Module->m_Attributs & MOD_CMS)  == 0 )
+        if( (module->m_Attributs & MOD_CMS)  == 0 )
             continue;
 
-        Liste[ii].m_Module    = Module;
-        Liste[ii].m_Reference = Module->m_Reference->m_Text;
-        Liste[ii].m_Value = Module->m_Value->m_Text;
+        Liste[ii].m_Module    = module;
+        Liste[ii].m_Reference = module->m_Reference->m_Text;
+        Liste[ii].m_Value = module->m_Value->m_Text;
         ii++;
     }
 
-    qsort( Liste, NbMod, sizeof(LIST_MOD),
+    qsort( Liste, moduleCount, sizeof(LIST_MOD),
            ( int( * ) ( const void*, const void* ) )ListeModCmp );
 
 
     /* Generation entete du fichier 'commentaires) */
-    sprintf( Line, "### Module positions - created on %s ###\n",
+    sprintf( line, "### Module positions - created on %s ###\n",
             DateAndTime( Buff ) );
-    fputs( Line, LayerCmp );
-    if( GenCu )
-        fputs( Line, LayerCu );
+    fputs( line, fpFront );
+    if( doBoardBack )
+        fputs( line, fpBack );
 
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    sprintf( Line, "### Printed by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
-    fputs( Line, LayerCmp );
-    if( GenCu )
-        fputs( Line, LayerCu );
+    Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    sprintf( line, "### Printed by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
+    fputs( line, fpFront );
+    if( doBoardBack )
+        fputs( line, fpBack );
 
-    sprintf( Line, "## Unit = inches, Angle = deg.\n" );
-    fputs( Line, LayerCmp );
-    if( GenCu )
-        fputs( Line, LayerCu );
+    sprintf( line, "## Unit = inches, Angle = deg.\n" );
+    fputs( line, fpFront );
+    if( doBoardBack )
+        fputs( line, fpBack );
 
-    sprintf( Line, "## Side : Components\n" );
-    fputs( Line, LayerCmp );
+    sprintf( line, "## Side : %s\n", CONV_TO_UTF8( frontLayerName ) );
+    fputs( line, fpFront );
 
-    if( GenCu )
+    if( doBoardBack )
     {
-        sprintf( Line, "## Side : Copper\n" );
-        fputs( Line, LayerCu );
+        sprintf( line, "## Side : %s\n", CONV_TO_UTF8( backLayerName ) );
+        fputs( line, fpBack );
     }
 
-    sprintf( Line,
+    sprintf( line,
              "# Ref    Val                  PosX       PosY        Rot     Side\n" );
-    fputs( Line, LayerCmp );
-    if( GenCu )
-        fputs( Line, LayerCu );
+    fputs( line, fpFront );
+    if( doBoardBack )
+        fputs( line, fpBack );
 
     /* Generation lignes utiles du fichier */
-    for( ii = 0; ii < NbMod; ii++ )
+    for( int ii = 0; ii < moduleCount; ii++ )
     {
         wxPoint  module_pos;
         wxString ref = Liste[ii].m_Reference;
         wxString val = Liste[ii].m_Value;
-        sprintf( Line, "%-8.8s %-16.16s ", CONV_TO_UTF8( ref ), CONV_TO_UTF8( val ) );
+        sprintf( line, "%-8.8s %-16.16s ", CONV_TO_UTF8( ref ), CONV_TO_UTF8( val ) );
 
         module_pos    = Liste[ii].m_Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
         module_pos.y -= File_Place_Offset.y;
 
-        char* text = Line + strlen( Line );
+        char* text = line + strlen( line );
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
                  (float) module_pos.x * conv_unit,
                  (float) module_pos.y * conv_unit,
@@ -231,32 +245,40 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
         if( Liste[ii].m_Module->GetLayer() == CMP_N )
         {
-            strcat( Line, "Cmp.\n" );
-            fputs( Line, LayerCmp );
+            strcat( line, CONV_TO_UTF8( frontLayerName ) );
+            strcat( line, "\n" );
+            fputs( line, fpFront );
         }
         else if( Liste[ii].m_Module->GetLayer() == COPPER_LAYER_N )
         {
-            strcat( Line, "Cu\n" );
-            fputs( Line, LayerCu );
+            strcat( line, CONV_TO_UTF8( backLayerName ) );
+            strcat( line, "\n" );
+            fputs( line, fpBack );
         }
     }
 
     /* Generation fin du fichier */
-    fputs( "## End\n", LayerCmp );
-    fclose( LayerCmp );
-    if( GenCu )
-    {
-        fputs( "## End\n", LayerCu );
-        fclose( LayerCu );
-    }
+    fputs( "## End\n", fpFront );
+
+    if( doBoardBack )
+        fputs( "## End\n", fpBack );
+
     MyFree( Liste );
     SetLocaleTo_Default( );      // revert to the current  locale
 
-    msg = wxT( "Cmp File: " ) + NameLayerCmp;
-    if( GenCu )
-        msg += wxT( "\nCu File: " ) + NameLayerCu;
+    msg = frontLayerName + wxT( " File: " ) + fnFront;
+
+    if( doBoardBack )
+        msg += wxT("\n\n") + backLayerName + wxT( " File: " ) + fnBack;
 
     DisplayInfo( this, msg );
+
+exit:
+    if( fpFront )
+        fclose( fpFront );
+
+    if( fpBack )
+        fclose( fpBack );
 }
 
 
@@ -270,8 +292,8 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     float    conv_unit;
     MODULE*  Module;
     D_PAD*   pad;
-    char     Line[1024], Buff[80];
-    wxString FullFileName, NameLayerCmp, msg;
+    char     line[1024], Buff[80];
+    wxString FullFileName, fnFront, msg;
     FILE*    rptfile;
     wxPoint  module_pos;
 
@@ -297,12 +319,12 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     SetLocaleTo_C_standard( );
 
     /* Generation entete du fichier 'commentaires) */
-    sprintf( Line, "## Module report - date %s\n", DateAndTime( Buff ) );
-    fputs( Line, rptfile );
+    sprintf( line, "## Module report - date %s\n", DateAndTime( Buff ) );
+    fputs( line, rptfile );
 
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    sprintf( Line, "## Created by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
-    fputs( Line, rptfile );
+    sprintf( line, "## Created by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
+    fputs( line, rptfile );
     fputs( "## Unit = inches, Angle = deg.\n", rptfile );
 
     /* Generation lignes utiles du fichier */
@@ -312,30 +334,30 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     m_Pcb->ComputeBoundaryBox();
     fputs( "\n$BOARD\n", rptfile );
     fputs( "unit INCH\n", rptfile );
-    sprintf( Line, "upper_left_corner %9.6f %9.6f\n",
+    sprintf( line, "upper_left_corner %9.6f %9.6f\n",
              (float) m_Pcb->m_BoundaryBox.GetX() * conv_unit,
              (float) m_Pcb->m_BoundaryBox.GetY() * conv_unit );
-    fputs( Line, rptfile );
+    fputs( line, rptfile );
 
-    sprintf( Line, "lower_right_corner %9.6f %9.6f\n",
+    sprintf( line, "lower_right_corner %9.6f %9.6f\n",
              (float) ( m_Pcb->m_BoundaryBox.GetRight() ) * conv_unit,
              (float) ( m_Pcb->m_BoundaryBox.GetBottom() ) * conv_unit );
-    fputs( Line, rptfile );
+    fputs( line, rptfile );
 
     fputs( "$EndBOARD\n\n", rptfile );
 
     Module = (MODULE*) m_Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        sprintf( Line, "$MODULE \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
-        fputs( Line, rptfile );
+        sprintf( line, "$MODULE \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
+        fputs( line, rptfile );
 
-        sprintf( Line, "reference \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
-        fputs( Line, rptfile );
-        sprintf( Line, "value \"%s\"\n", CONV_TO_UTF8( Module->m_Value->m_Text ) );
-        fputs( Line, rptfile );
-        sprintf( Line, "footprint \"%s\"\n", CONV_TO_UTF8( Module->m_LibRef ) );
-        fputs( Line, rptfile );
+        sprintf( line, "reference \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
+        fputs( line, rptfile );
+        sprintf( line, "value \"%s\"\n", CONV_TO_UTF8( Module->m_Value->m_Text ) );
+        fputs( line, rptfile );
+        sprintf( line, "footprint \"%s\"\n", CONV_TO_UTF8( Module->m_LibRef ) );
+        fputs( line, rptfile );
 
         msg = wxT( "attribut" );
         if( Module->m_Attributs & MOD_VIRTUAL )
@@ -350,47 +372,47 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         module_pos    = Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
         module_pos.y -= File_Place_Offset.y;
-        sprintf( Line, "position %9.6f %9.6f\n",
+        sprintf( line, "position %9.6f %9.6f\n",
                  (float) module_pos.x * conv_unit,
                  (float) module_pos.y * conv_unit );
-        fputs( Line, rptfile );
+        fputs( line, rptfile );
 
-        sprintf( Line, "orientation  %.2f\n", (float) Module->m_Orient / 10 );
+        sprintf( line, "orientation  %.2f\n", (float) Module->m_Orient / 10 );
         if( Module->GetLayer() == CMP_N )
-            strcat( Line, "layer component\n" );
+            strcat( line, "layer component\n" );
         else if( Module->GetLayer() == COPPER_LAYER_N )
-            strcat( Line, "layer copper\n" );
+            strcat( line, "layer copper\n" );
         else
-            strcat( Line, "layer other\n" );
-        fputs( Line, rptfile );
+            strcat( line, "layer other\n" );
+        fputs( line, rptfile );
 
         Module->Write_3D_Descr( rptfile );
 
         for( pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             fprintf( rptfile, "$PAD \"%.4s\"\n", pad->m_Padname );
-            sprintf( Line, "position %9.6f %9.6f\n",
+            sprintf( line, "position %9.6f %9.6f\n",
                      (float) pad->m_Pos0.x * conv_unit,
                      (float) pad->m_Pos0.y * conv_unit );
-            fputs( Line, rptfile );
+            fputs( line, rptfile );
 
-            sprintf( Line, "size %9.6f %9.6f\n",
+            sprintf( line, "size %9.6f %9.6f\n",
                      (float) pad->m_Size.x * conv_unit,
                      (float) pad->m_Size.y * conv_unit );
-            fputs( Line, rptfile );
-            sprintf( Line, "drill %9.6f\n", (float) pad->m_Drill.x * conv_unit );
-            fputs( Line, rptfile );
-            sprintf( Line, "shape_offset %9.6f %9.6f\n",
+            fputs( line, rptfile );
+            sprintf( line, "drill %9.6f\n", (float) pad->m_Drill.x * conv_unit );
+            fputs( line, rptfile );
+            sprintf( line, "shape_offset %9.6f %9.6f\n",
                      (float) pad->m_Offset.x * conv_unit,
                      (float) pad->m_Offset.y * conv_unit );
-            fputs( Line, rptfile );
+            fputs( line, rptfile );
 
-            sprintf( Line, "orientation  %.2f\n", (float) (pad->m_Orient - Module->m_Orient) / 10 );
-            fputs( Line, rptfile );
+            sprintf( line, "orientation  %.2f\n", (float) (pad->m_Orient - Module->m_Orient) / 10 );
+            fputs( line, rptfile );
             const char* shape_name[6] =
                 { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
-            sprintf( Line, "Shape  %s\n", shape_name[pad->m_PadShape] );
-            fputs( Line, rptfile );
+            sprintf( line, "Shape  %s\n", shape_name[pad->m_PadShape] );
+            fputs( line, rptfile );
 
             int layer = 0;
             if( pad->m_Masque_Layer & CUIVRE_LAYER )
@@ -398,8 +420,8 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
             if( pad->m_Masque_Layer & CMP_LAYER )
                 layer |= 2;
             const char* layer_name[4] = { "??? ", "copper", "component", "all" };
-            sprintf( Line, "Layer  %s\n", layer_name[layer] );
-            fputs( Line, rptfile );
+            sprintf( line, "Layer  %s\n", layer_name[layer] );
+            fputs( line, rptfile );
             fprintf( rptfile, "$EndPAD\n" );
         }
 
@@ -438,13 +460,15 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 {
     double conv_unit, ux0, uy0, dx, dy;
     double rayon, width;
-    char   Line[1024];
+    char   line[1024];
 
     /* Calcul des echelles de conversion */
     conv_unit = 0.0001; /* unites = INCHES */
+
     /* coord de depart */
     ux0 = PtDrawSegment->m_Start.x * conv_unit;
     uy0 = PtDrawSegment->m_Start.y * conv_unit;
+
     /* coord d'arrivee */
     dx = PtDrawSegment->m_End.x * conv_unit;
     dy = PtDrawSegment->m_End.y * conv_unit;
@@ -455,41 +479,45 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
     {
     case S_CIRCLE:
         rayon = hypot( dx - ux0, dy - uy0 );
-        sprintf( Line, "$CIRCLE \n" ); fputs( Line, rptfile );
-        sprintf( Line, "centre %.6lf %.6lf\n", ux0, uy0 );
-        sprintf( Line, "radius %.6lf\n", rayon );
-        sprintf( Line, "width %.6lf\n", width );
-        sprintf( Line, "$EndCIRCLE \n" );
-        fputs( Line, rptfile );
+        sprintf( line, "$CIRCLE \n" ); fputs( line, rptfile );
+        sprintf( line, "centre %.6lf %.6lf\n", ux0, uy0 );
+        sprintf( line, "radius %.6lf\n", rayon );
+        sprintf( line, "width %.6lf\n", width );
+        sprintf( line, "$EndCIRCLE \n" );
+        fputs( line, rptfile );
         break;
 
     case S_ARC:
-    {
-        int endx = PtDrawSegment->m_End.x, endy = PtDrawSegment->m_End.y;
-        rayon = hypot( dx - ux0, dy - uy0 );
-        RotatePoint( &endx,
-                     &endy,
-                     PtDrawSegment->m_Start.x,
-                     PtDrawSegment->m_Start.y,
-                     PtDrawSegment->m_Angle );
-        sprintf( Line, "$ARC \n" ); fputs( Line, rptfile );
-        sprintf( Line, "centre %.6lf %.6lf\n", ux0, uy0 );
-        sprintf( Line, "start %.6lf %.6lf\n", endx * conv_unit, endy * conv_unit );
-        sprintf( Line, "end %.6lf %.6lf\n", dx, dy );
-        sprintf( Line, "width %.6lf\n", width );
-        sprintf( Line, "$EndARC \n" );
-        fputs( Line, rptfile );
-    }
+        {
+            int endx = PtDrawSegment->m_End.x, endy = PtDrawSegment->m_End.y;
+            rayon = hypot( dx - ux0, dy - uy0 );
+            RotatePoint( &endx,
+                         &endy,
+                         PtDrawSegment->m_Start.x,
+                         PtDrawSegment->m_Start.y,
+                         PtDrawSegment->m_Angle );
+
+            // @todo this is a bug, cannot sprintf into line more than once, should use fprintf instead
+            sprintf( line, "$ARC \n" ); fputs( line, rptfile );
+            sprintf( line, "centre %.6lf %.6lf\n", ux0, uy0 );
+            sprintf( line, "start %.6lf %.6lf\n", endx * conv_unit, endy * conv_unit );
+            sprintf( line, "end %.6lf %.6lf\n", dx, dy );
+            sprintf( line, "width %.6lf\n", width );
+            sprintf( line, "$EndARC \n" );
+            fputs( line, rptfile );
+        }
         break;
 
     default:
-        sprintf( Line, "$LINE \n" );
-        fputs( Line, rptfile );
-        sprintf( Line, "start %.6lf %.6lf\n", ux0, uy0 );
-        sprintf( Line, "end %.6lf %.6lf\n", dx, dy );
-        sprintf( Line, "width %.6lf\n", width );
-        sprintf( Line, "$EndLINE \n" );
-        fputs( Line, rptfile );
+        sprintf( line, "$LINE \n" );
+        fputs( line, rptfile );
+
+        // @todo this is a bug, cannot sprintf into line more than once, should use fprintf instead
+        sprintf( line, "start %.6lf %.6lf\n", ux0, uy0 );
+        sprintf( line, "end %.6lf %.6lf\n", dx, dy );
+        sprintf( line, "width %.6lf\n", width );
+        sprintf( line, "$EndLINE \n" );
+        fputs( line, rptfile );
         break;
     }
 }
