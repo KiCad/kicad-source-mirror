@@ -79,6 +79,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     wxString    Title;
     FILE*       fpFront = NULL;
     FILE*       fpBack = NULL;
+    bool        switchedLocale = false;
 
     /* Calcul des echelles de conversion */
     float conv_unit = 0.0001; /* unites = INCHES */
@@ -159,6 +160,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     SetLocaleTo_C_standard( );
+    switchedLocale = true;
 
     /* Affichage du bilan : */
     MsgPanel->EraseMsgBox();
@@ -264,7 +266,6 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         fputs( "## End\n", fpBack );
 
     MyFree( Liste );
-    SetLocaleTo_Default( );      // revert to the current  locale
 
     msg = frontLayerName + wxT( " File: " ) + fnFront;
 
@@ -274,6 +275,9 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     DisplayInfo( this, msg );
 
 exit:
+    if( switchedLocale )
+        SetLocaleTo_Default( );      // revert to the current  locale
+
     if( fpFront )
         fclose( fpFront );
 
