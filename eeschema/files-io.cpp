@@ -178,7 +178,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName ) && !LibCacheExist )   // Nouveau projet prpbablement
     {
         Zoom_Automatique( FALSE );
-        msg.Printf( _( "File %s not found (new project ?)" ),
+        msg.Printf( _( "File <%s> not found." ),
             g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
         DisplayInfo( this, msg, 20 );
         return -1;

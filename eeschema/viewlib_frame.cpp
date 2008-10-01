@@ -77,8 +77,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
         m_LibList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxPoint( 0, 0 ),
             m_LibListSize, 0, NULL, wxLB_HSCROLL );
         m_LibList->SetFont( *g_DialogFont );
-        m_LibList->SetBackgroundColour( wxColour( 150, 255, 255 ) );
-        m_LibList->SetForegroundColour( wxColour( 0, 0, 0 ) );
+        m_LibList->SetBackgroundColour( wxColour( 255, 255, 255 ) ); // Library background listbox color (white)
+        m_LibList->SetForegroundColour( wxColour( 0, 0, 0 ) ); // Library foreground listbox color (black)
     }
     else
         g_CurrentViewLibraryName = Library->m_Name;
@@ -88,8 +88,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
     m_CmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxPoint( m_LibListSize.x, 0 ),
         m_CmpListSize, 0, NULL, wxLB_HSCROLL );
     m_CmpList->SetFont( *g_DialogFont );
-    m_CmpList->SetBackgroundColour( wxColour( 255, 255, 200 ) );
-    m_CmpList->SetForegroundColour( wxColour( 0, 0, 0 ) );
+    m_CmpList->SetBackgroundColour( wxColour( 255, 255, 255 ) ); // Component background listbox color (white)
+    m_CmpList->SetForegroundColour( wxColour( 0, 0, 0 ) ); // Component foreground listbox color (black)
 
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );

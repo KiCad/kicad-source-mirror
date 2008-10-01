@@ -38,7 +38,6 @@ bool WinEDA_App::OnInit()
             return false;
     }
 
-
     g_DrawBgColor = BLACK;
 
     Read_Hotkey_Config( m_PcbFrame, false );  /* Must be called before creating the main frame
@@ -48,14 +47,15 @@ bool WinEDA_App::OnInit()
     m_GerberFrame = new  WinEDA_GerberFrame( NULL, this, wxT( "GerbView" ),
                                              wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
+    /* Gerbview mainframe title */
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
     m_GerberFrame->SetTitle( Title );
-    m_GerberFrame->m_Pcb = new  BOARD( NULL, m_GerberFrame );
+    m_GerberFrame->m_Pcb = new BOARD( NULL, m_GerberFrame );
 
-    SetTopWindow( m_GerberFrame );
-    m_GerberFrame->Show( TRUE );
+    SetTopWindow( m_GerberFrame ); // Set GerbView mainframe on top
 
-    m_GerberFrame->Zoom_Automatique( TRUE );
+    m_GerberFrame->Show( TRUE );              // Show GerbView mainframe
+    m_GerberFrame->Zoom_Automatique( TRUE );  // Zoomfit drawing in frame
 
     if( argc > 1 )
     {

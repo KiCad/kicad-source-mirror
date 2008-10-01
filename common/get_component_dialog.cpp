@@ -131,7 +131,7 @@ wxStaticText * Text;
 	{
 		
 		Button = new wxButton(this, ID_EXTRA_TOOL, _("By Lib Browser"));
-		Button->SetForegroundColour(wxColor(80, 0, 80));
+		Button->SetForegroundColour(wxColor(0, 0, 0)); // Listbox Color
 		RightBoxSizer->Add(Button, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 	}
 #endif	

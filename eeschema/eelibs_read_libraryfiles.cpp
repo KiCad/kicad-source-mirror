@@ -140,13 +140,13 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
 
 		FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
 
-        msg = wxT( "Loading " ) + FullLibName;
+        msg = _( "Loading library " ) + FullLibName;
         frame->PrintMsg( msg );
 
         if( LoadLibraryName( frame, FullLibName, LibName ) )
-            msg += wxT( " OK" );
+            msg += _( " OK" );
         else
-            msg += wxT( " ->Error" );
+            msg += _( " ->Error" );
 
         frame->PrintMsg( msg );
     }
@@ -281,11 +281,14 @@ int LibraryEntryCompare( EDA_LibComponentStruct* LE1, EDA_LibComponentStruct* LE
 }
 
 
-/*****************************************************************************
-* Routine to load a library from given open file.							 *
-*****************************************************************************/
-PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, LibraryStruct* Library, FILE* libfile,
+/**************************************************/
+/* Routine to load a library from given open file */
+/**************************************************/
+PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, 
+                          LibraryStruct* Library,
+                          FILE* libfile,
                           int* NumOfParts )
+/**************************************************/
 {
     int                     LineNum = 0;
     char                    Line[1024];

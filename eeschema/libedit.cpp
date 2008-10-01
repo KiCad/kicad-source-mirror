@@ -328,7 +328,7 @@ wxString msg;
 
 	ListBox = new WinEDAListBox(this, msg,
 						ListNames, wxEmptyString, NULL /*DisplayCmpDoc*/,
-						wxColour(255,255,200));
+						wxColour(255,255,255)); // Component listbox background color
 
 
 	int ii = ListBox->ShowModal(); ListBox->Destroy();
