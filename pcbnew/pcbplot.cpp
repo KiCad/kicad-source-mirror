@@ -277,7 +277,7 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     button->SetForegroundColour( wxColour( 0, 80, 0 ) );
     RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
 
-    button = new    wxButton( this, ID_CREATE_DRILL_FILE, _( "Create Drill File" ) );
+    button = new    wxButton( this, ID_CREATE_DRILL_FILE, _( "Generate drill file" ) );
     button->SetForegroundColour( wxColour( 0, 80, 80 ) );
     RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
 

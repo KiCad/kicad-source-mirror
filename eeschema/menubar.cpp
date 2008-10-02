@@ -355,7 +355,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         // Menu Configuration:
         wxMenu* configmenu = new wxMenu;
         item = new wxMenuItem( configmenu, ID_CONFIG_REQ,
-                              _( "&Libs and Dir" ),
+                              _( "&Library settings" ),
                               _( "Setting Libraries, Directories and others..." ) );
         item->SetBitmap( library_xpm );
         configmenu->Append( item );

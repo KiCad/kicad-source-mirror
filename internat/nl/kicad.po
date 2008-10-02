@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-01 23:05+0100\n"
-"PO-Revision-Date: 2008-10-01 23:05+0100\n"
+"POT-Creation-Date: 2008-10-02 22:31+0100\n"
+"PO-Revision-Date: 2008-10-02 22:31+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -401,9 +401,9 @@ msgstr "Module [%s] niet gevonden"
 #: pcbnew/librairi.cpp:454
 #: pcbnew/librairi.cpp:604
 #: pcbnew/librairi.cpp:808
-#: pcbnew/gen_modules_placefile.cpp:139
-#: pcbnew/gen_modules_placefile.cpp:155
-#: pcbnew/gen_modules_placefile.cpp:318
+#: pcbnew/gen_modules_placefile.cpp:145
+#: pcbnew/gen_modules_placefile.cpp:161
+#: pcbnew/gen_modules_placefile.cpp:330
 #: pcbnew/files.cpp:352
 #: pcbnew/plothpgl.cpp:67
 #: pcbnew/export_gencad.cpp:83
@@ -549,7 +549,7 @@ msgstr "3D instellingen"
 #: pcbnew/sel_layer.cpp:318
 #: pcbnew/muonde.cpp:348
 #: pcbnew/pcbtexte.cpp:114
-#: pcbnew/dialog_zones_by_polygon.cpp:204
+#: pcbnew/dialog_zones_by_polygon.cpp:203
 #: eeschema/sheetlab.cpp:94
 #: eeschema/eelayer.cpp:251
 #: gerbview/set_color.cpp:325
@@ -853,7 +853,7 @@ msgstr "&OK"
 #: pcbnew/dialog_display_options.cpp:286
 #: pcbnew/set_grid.cpp:176
 #: pcbnew/dialog_graphic_items_options.cpp:267
-#: pcbnew/dialog_zones_by_polygon.cpp:207
+#: pcbnew/dialog_zones_by_polygon.cpp:206
 #: eeschema/dialog_options.cpp:293
 #: eeschema/sheet.cpp:194
 #: eeschema/netlist_control.cpp:144
@@ -970,19 +970,19 @@ msgstr "Geen Verandering"
 msgid "Deselect this layer to select the No Change state"
 msgstr ""
 
-#: pcbnew/gen_modules_placefile.cpp:125
+#: pcbnew/gen_modules_placefile.cpp:131
 msgid "No Modules for Automated Placement"
 msgstr "Geen Modules voor Automatisch Plaatsen"
 
-#: pcbnew/gen_modules_placefile.cpp:167
+#: pcbnew/gen_modules_placefile.cpp:173
 msgid "Component side place file:"
 msgstr ""
 
-#: pcbnew/gen_modules_placefile.cpp:170
+#: pcbnew/gen_modules_placefile.cpp:176
 msgid "Copper side place file:"
 msgstr ""
 
-#: pcbnew/gen_modules_placefile.cpp:173
+#: pcbnew/gen_modules_placefile.cpp:179
 msgid "Module count"
 msgstr "Module teller"
 
@@ -1548,8 +1548,8 @@ msgid "Save Options"
 msgstr "Opties Opslaan"
 
 #: pcbnew/pcbplot.cpp:280
-msgid "Create Drill File"
-msgstr "Creëer Boor Bestand"
+msgid "Generate drill file"
+msgstr "Genereer boor bestand"
 
 #: pcbnew/pcbplot.cpp:284
 #: pcbnew/dialog_netlist.cpp:232
@@ -1674,7 +1674,7 @@ msgstr "Schaal Opt"
 #: pcbnew/dialog_display_options.cpp:221
 #: pcbnew/dialog_display_options.cpp:229
 #: pcbnew/dialog_display_options.cpp:266
-#: pcbnew/dialog_zones_by_polygon.cpp:170
+#: pcbnew/dialog_zones_by_polygon.cpp:169
 #: gerbview/options.cpp:321
 msgid "Line"
 msgstr "Lijn"
@@ -1753,7 +1753,7 @@ msgid "Apply"
 msgstr "Toepassen"
 
 #: pcbnew/zones_non_copper_type_functions.cpp:152
-#: pcbnew/dialog_zones_by_polygon.cpp:537
+#: pcbnew/dialog_zones_by_polygon.cpp:557
 msgid "Error : you must choose a layer"
 msgstr ""
 
@@ -1801,7 +1801,7 @@ msgid "Display"
 msgstr "Weergave"
 
 #: pcbnew/cotation.cpp:133
-#: pcbnew/dialog_zones_by_polygon.cpp:238
+#: pcbnew/dialog_zones_by_polygon.cpp:237
 #: gerbview/affiche.cpp:37
 msgid "Layer:"
 msgstr "Laag:"
@@ -2405,12 +2405,12 @@ msgid "Yes"
 msgstr "Ja"
 
 #: pcbnew/dialog_non_copper_zones_properties.cpp:28
-#: pcbnew/dialog_zones_by_polygon.cpp:171
+#: pcbnew/dialog_zones_by_polygon.cpp:170
 msgid "Hatched Outline"
 msgstr ""
 
 #: pcbnew/dialog_non_copper_zones_properties.cpp:28
-#: pcbnew/dialog_zones_by_polygon.cpp:172
+#: pcbnew/dialog_zones_by_polygon.cpp:171
 msgid "Full Hatched"
 msgstr ""
 
@@ -2419,7 +2419,7 @@ msgid "Outlines Appearence"
 msgstr ""
 
 #: pcbnew/dialog_non_copper_zones_properties.cpp:34
-#: pcbnew/dialog_zones_by_polygon.cpp:193
+#: pcbnew/dialog_zones_by_polygon.cpp:192
 #: eeschema/dialog_options.cpp:273
 msgid "Any"
 msgstr ""
@@ -3863,7 +3863,7 @@ msgstr "Afbeelding"
 
 #: pcbnew/class_board_item.cpp:134
 #: pcbnew/class_board_item.cpp:205
-#: pcbnew/dialog_zones_by_polygon.cpp:231
+#: pcbnew/dialog_zones_by_polygon.cpp:230
 msgid "Net:"
 msgstr "Net:"
 
@@ -4862,12 +4862,12 @@ msgstr "A&fsluiten"
 
 #: pcbnew/menubarpcb.cpp:156
 msgid "Quit pcbnew"
-msgstr "Sluit PCBnew"
+msgstr "&Libs and Dir"
 
 #: pcbnew/menubarpcb.cpp:174
 #: eeschema/menubar.cpp:358
-msgid "&Libs and Dir"
-msgstr "&Bibliotheek Instellingen"
+msgid "&Library settings"
+msgstr "&Bibliotheek instellingen"
 
 #: pcbnew/menubarpcb.cpp:175
 #: eeschema/menubar.cpp:359
@@ -4967,25 +4967,24 @@ msgid "Save options in current directory"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:249
-#, fuzzy
-msgid "Create &Modules Pos"
-msgstr "Creëer &Modules Pos"
+msgid "Generate &modules position"
+msgstr "Module positie bestand"
 
 #: pcbnew/menubarpcb.cpp:250
-msgid "Gen Position modules file"
-msgstr ""
+msgid "Generate modules position file"
+msgstr "Genereer module positioneer bestand"
 
 #: pcbnew/menubarpcb.cpp:254
-msgid "Create &Drill file"
-msgstr "Creëer &Boor bestand"
+msgid "Create &drill file"
+msgstr "Creëer &boor bestand"
 
 #: pcbnew/menubarpcb.cpp:255
-msgid "Gen Drill (EXCELLON] file and/or Drill sheet"
-msgstr "Genereer EXCELLION boor bestand"
+msgid "Generate drill file (Excellion)"
+msgstr "Genereer boor bestand (Excellion)"
 
 #: pcbnew/menubarpcb.cpp:259
-msgid "Create &Cmp file"
-msgstr "Creëer &Cmp bestand"
+msgid "Create &component file"
+msgstr "Creëer &component bestand"
 
 #: pcbnew/menubarpcb.cpp:260
 msgid "Recreate .cmp file for CvPcb"
@@ -5062,8 +5061,8 @@ msgstr "3D Display"
 
 #: pcbnew/menubarpcb.cpp:304
 #: pcbnew/menubarmodedit.cpp:72
-msgid "Show Board in 3D Mode"
-msgstr ""
+msgid "Show board in 3D viewer"
+msgstr "Toon bord in 3D viewer"
 
 #: pcbnew/menubarpcb.cpp:308
 #: eeschema/menubar.cpp:407
@@ -5205,7 +5204,7 @@ msgstr "Lijn Toevoegen"
 
 #: pcbnew/muwave_command.cpp:56
 msgid "Add Gap"
-msgstr ""
+msgstr "Gat plaatsen"
 
 #: pcbnew/muwave_command.cpp:60
 msgid "Add Stub"
@@ -5348,78 +5347,82 @@ msgstr ""
 msgid "Normal Contrast Mode Display"
 msgstr "Weergave: Normaal Contrast"
 
+#: pcbnew/dialog_zones_by_polygon.cpp:153
+#: pcbnew/dialog_zones_by_polygon.cpp:154
 #: pcbnew/dialog_zones_by_polygon.cpp:155
 #: pcbnew/dialog_zones_by_polygon.cpp:156
-#: pcbnew/dialog_zones_by_polygon.cpp:157
-#: pcbnew/dialog_zones_by_polygon.cpp:158
 msgid "0.00000"
 msgstr "0.00000"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:159
+#: pcbnew/dialog_zones_by_polygon.cpp:157
+msgid "No Grid (For tests only!)"
+msgstr ""
+
+#: pcbnew/dialog_zones_by_polygon.cpp:158
 msgid "Grid Size for Filling:"
 msgstr "Raster Grote voor Vullen:"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:163
+#: pcbnew/dialog_zones_by_polygon.cpp:162
 msgid "Zone clearance value (mm):"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:173
+#: pcbnew/dialog_zones_by_polygon.cpp:172
 msgid "Outlines Appearance"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:183
+#: pcbnew/dialog_zones_by_polygon.cpp:182
 msgid "Include Pads"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:184
+#: pcbnew/dialog_zones_by_polygon.cpp:183
 msgid "Thermal"
 msgstr "Thermische"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:185
+#: pcbnew/dialog_zones_by_polygon.cpp:184
 msgid "Exclude Pads"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:186
+#: pcbnew/dialog_zones_by_polygon.cpp:185
 msgid "Pad options:"
 msgstr "Pad opties:"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:194
+#: pcbnew/dialog_zones_by_polygon.cpp:193
 msgid "H , V and 45 deg"
 msgstr "H , V en 45 graden"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:195
+#: pcbnew/dialog_zones_by_polygon.cpp:194
 msgid "Zone edges orient:"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:214
+#: pcbnew/dialog_zones_by_polygon.cpp:213
 msgid "Alphabetic"
 msgstr "Alfabetisch"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:215
+#: pcbnew/dialog_zones_by_polygon.cpp:214
 msgid "Advanced"
 msgstr "Geavanceerd"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:216
+#: pcbnew/dialog_zones_by_polygon.cpp:215
 msgid "Net sorting:"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:220
+#: pcbnew/dialog_zones_by_polygon.cpp:219
 msgid "Filter"
 msgstr "Filter"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:225
+#: pcbnew/dialog_zones_by_polygon.cpp:224
 msgid "Do not list net names which match with this text, in advanced mode"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:250
+#: pcbnew/dialog_zones_by_polygon.cpp:261
 msgid "Zone clearance value:"
 msgstr ""
 
-#: pcbnew/dialog_zones_by_polygon.cpp:253
+#: pcbnew/dialog_zones_by_polygon.cpp:264
 msgid "Grid :"
 msgstr "Raster :"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:546
+#: pcbnew/dialog_zones_by_polygon.cpp:566
 msgid "Error : you must choose a net name"
 msgstr ""
 
@@ -11175,6 +11178,17 @@ msgstr "Pagina Instellingen"
 #: share/dialog_print.h:52
 msgid "Print"
 msgstr "Printen"
+
+#~ msgid "&Libs and Dir"
+#~ msgstr "&Libs and Dir"
+#~ msgid "Create Drill File"
+#~ msgstr "Creëer Boor Bestand"
+
+#, fuzzy
+#~ msgid "Create &Modules Pos"
+#~ msgstr "Creëer &Modules Pos"
+#~ msgid "Gen Drill (EXCELLON] file and/or Drill sheet"
+#~ msgstr "Genereer EXCELLION boor bestand"
 
 #, fuzzy
 #~ msgid "No Doc"

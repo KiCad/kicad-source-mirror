@@ -69,7 +69,7 @@ wxMenuItem * item;
 		// Menu Display 3D: //
 		//////////////////////
 		wxMenu *Display3DMenu = new wxMenu;
-		item = new wxMenuItem(Display3DMenu , ID_MENU_PCB_SHOW_3D_FRAME, _("3D Display"), _("Show Board in 3D Mode"));
+		item = new wxMenuItem(Display3DMenu , ID_MENU_PCB_SHOW_3D_FRAME, _("3D Display"), _("Show board in 3D viewer"));
 	    item->SetBitmap(show_3d_xpm);
 		Display3DMenu->Append(item);
 

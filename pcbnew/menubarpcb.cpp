@@ -171,7 +171,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         // Configuration et preferences: //
         ///////////////////////////////////
         wxMenu * configmenu = new wxMenu;
-        item = new wxMenuItem(configmenu, ID_CONFIG_REQ, _("&Libs and Dir"),
+        item = new wxMenuItem(configmenu, ID_CONFIG_REQ, _("&Library settings"),
             _("Setting Libraries, Directories and others..."));
         item->SetBitmap(library_xpm);
         configmenu->Append(item);
@@ -246,17 +246,17 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         //////////////////////////////////////////////////////////////////
         wxMenu *postprocess_menu = new wxMenu;
         item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_POS_MODULES_FILE,
-                    _("Create &Modules Pos"),
-                    _("Gen Position modules file"));
+                    _("Generate &modules position"),
+                    _("Generate modules position file"));
         item->SetBitmap(post_compo_xpm);
         postprocess_menu->Append(item);
 
-        item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_DRILL_FILE, _("Create &Drill file"),
-                    _("Gen Drill (EXCELLON] file and/or Drill sheet"));
+        item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_DRILL_FILE, _("Create &drill file"),
+                    _("Generate drill file (Excellion)"));
         item->SetBitmap(post_drill_xpm);
         postprocess_menu->Append(item);
 
-        item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_CMP_FILE, _("Create &Cmp file"),
+        item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_CMP_FILE, _("Create &component file"),
                     _("Recreate .cmp file for CvPcb"));
         item->SetBitmap(save_cmpstuff_xpm);
         postprocess_menu->Append(item);
@@ -301,7 +301,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         // Menu Display 3D: //
         //////////////////////
         wxMenu *Display3DMenu = new wxMenu;
-        item = new wxMenuItem(Display3DMenu , ID_MENU_PCB_SHOW_3D_FRAME, _("3D Display"), _("Show Board in 3D Mode"));
+        item = new wxMenuItem(Display3DMenu , ID_MENU_PCB_SHOW_3D_FRAME, _("3D Display"), _("Show board in 3D viewer"));
         item->SetBitmap(show_3d_xpm);
         Display3DMenu->Append(item);
 
