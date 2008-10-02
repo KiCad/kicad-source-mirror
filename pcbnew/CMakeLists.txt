@@ -139,9 +139,11 @@ set(PCBNEW_SRCS
     via_edit.cpp
     work.cpp
     xchgmod.cpp
-    zone_filling_algorithm.cpp
     zones_by_polygon.cpp
-    zones_test_and_combine_areas.cpp)
+    zones_convert_brd_items_to_polygons.cpp
+    zone_filling_algorithm.cpp
+    zones_test_and_combine_areas.cpp
+    )
 
 set(PCBNEW_EXTRA_SRCS
     ../share/drawframe.cpp

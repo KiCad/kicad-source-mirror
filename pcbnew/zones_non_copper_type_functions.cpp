@@ -166,19 +166,23 @@ void DialogNonCopperZonesEditor::OnCancelClick( wxCommandEvent& event )
 
 
 
-/***************************************************/
-int ZONE_CONTAINER::BuildFilledPolysListData( void )
-/***************************************************/
+/***********************************************************/
+int ZONE_CONTAINER::BuildFilledPolysListData( BOARD * aPcb )
+/***********************************************************/
 /** function BuildFilledPolysListData
  * Build m_FilledPolysList data from real outlines (m_Poly)
  * in order to have drawable (and plottable) filled polygons
  * drawable filled polygons are polygons without hole
+ * @param aPcb: the current board (can be NULL for non copper zones)
  * @return number of polygons
- * Currently useable only for non copper zones
+ * This function does not add holes for pads and tracks but calls
+ * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
  */
 {
-    /* Currently only for non copper zones */
-    if ( IsOnCopperLayer() )
+
+    // Currently, for copper zones,  we can use segment filling or filling by polygon areas
+    // if m_GridFillValue == 0 polygon areas will be used (No Grid)
+    if ( IsOnCopperLayer() && ( m_GridFillValue != 0 ) )
         return 0;
 
     m_FilledPolysList.clear();
@@ -205,6 +209,13 @@ int ZONE_CONTAINER::BuildFilledPolysListData( void )
     }
 
     m_Poly->FreeKboolEngine();
+    
+    /* For copper layers, we now must add holes in the Polygon list.
+    holes are pads and tracks with their clearance area
+    */
+    
+    if ( IsOnCopperLayer() )
+        AddClearanceAreasPolygonsToPolysList( aPcb );
 
     return count;
 }

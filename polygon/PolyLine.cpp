@@ -199,7 +199,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
 
 
 /** Function AddPolygonsToBoolEng
- * and edges contours to a kbool engine, preparing a boolean op between polygons
+ * Add a CPolyLine to a kbool engine, preparing a boolean op between polygons
  * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
  * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
  * @param arc_array: arc converted to poly segments (NULL if not exists)
@@ -217,8 +217,10 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
     if( (aGroup != GROUP_A) && (aGroup != GROUP_B ) )
         return 0; //Error !
 
+    /* Convert the current polyline contour to a kbool polygon: */
     MakeKboolPoly( aStart_contour, aEnd_contour, arc_array );
 
+    /* add the resulting kbool set of polygons to the current kcool engine */
     while( m_Kbool_Poly_Engine->StartPolygonGet() )
     {
         if( aBooleng->StartPolygonAdd( GROUP_A ) )

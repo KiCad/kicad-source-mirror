@@ -518,7 +518,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             zone->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
-                WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
+                WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this, zone  );
                 diag = frame->ShowModal();
                 frame->Destroy();
             }
@@ -758,7 +758,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     if( zone_container->GetLayer() < FIRST_NO_COPPER_LAYER )
     {   // edit a zone on a copper layer
-        WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this );
+        WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this, zone_container );
         diag = frame->ShowModal();
         frame->Destroy();
     }
@@ -889,8 +889,18 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
-    zone_container->m_GridFillValue = g_GridRoutingSize;
-    int          error_level = zone_container->Fill_Zone( this, DC, verbose );
+    int          error_level = 0;
+    if( zone_container->m_GridFillValue == 0 )
+    {
+        zone_container->BuildFilledPolysListData( m_Pcb );
+        if ( DC )
+            DrawPanel->Refresh();
+    }
+    else
+    {
+        zone_container->m_GridFillValue = g_GridRoutingSize;
+        error_level = zone_container->Fill_Zone( this, DC, verbose );
+    }
 
     GetScreen()->SetModify();
 

@@ -343,7 +343,7 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
         {
             for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
                 if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
-                    m_ZoneDescriptorList[ia]->BuildFilledPolysListData( );
+                    m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
         }
     }
     return test;

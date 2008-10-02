@@ -77,7 +77,7 @@ public:
     /// Constructors
     WinEDA_ZoneFrame( );
     WinEDA_ZoneFrame( WinEDA_PcbFrame* parent,
-						ZONE_CONTAINER * zone_container = NULL,
+						ZONE_CONTAINER * zone_container,
 						wxWindowID id = SYMBOL_WINEDA_ZONEFRAME_IDNAME,
 						const wxString& caption = SYMBOL_WINEDA_ZONEFRAME_TITLE,
 						const wxPoint& pos = SYMBOL_WINEDA_ZONEFRAME_POSITION,
@@ -91,6 +91,9 @@ public:
     void CreateControls();
 
 ////@begin WinEDA_ZoneFrame event handler declarations
+
+    /// wxEVT_INIT_DIALOG event handler for ID_DIALOG
+    void OnInitDialog( wxInitDialogEvent& event );
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );

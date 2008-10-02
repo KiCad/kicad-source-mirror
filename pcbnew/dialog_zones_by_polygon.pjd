@@ -136,6 +136,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -177,6 +178,8 @@
         <string name="wxWidgets build command">"%AUTO%"</string>
         <string name="wxWidgets clean command">"%AUTO%"</string>
         <string name="PATH variable">"%AUTO%"</string>
+        <bool name="Suppress source rules">0</bool>
+        <bool name="Enable makefile generation">1</bool>
       </document>
     </document>
   </data>
@@ -218,6 +221,7 @@
           <string name="id-suffix">""</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
+          <string name="event-handler-0">"wxEVT_INIT_DIALOG|OnInitDialog|NONE||WinEDA_ZoneFrame"</string>
           <string name="proxy-Id name">"ID_DIALOG"</string>
           <long name="proxy-Id value">10000</long>
           <string name="proxy-Class">"WinEDA_ZoneFrame"</string>
@@ -248,7 +252,6 @@
           <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">0</bool>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
           <bool name="proxy-wxSTAY_ON_TOP">0</bool>
           <bool name="proxy-wxDIALOG_NO_PARENT">0</bool>
@@ -369,7 +372,7 @@
                   <string name="proxy-Member variable name">"m_GridCtrl"</string>
                   <string name="proxy-Label">"Grid Size for Filling:"</string>
                   <long name="proxy-Major dimension count">1</long>
-                  <string name="proxy-Items">"0.00000|0.00000|0.00000|0.00000"</string>
+                  <string name="proxy-Items">"0.00000|0.00000|0.00000|0.00000|No Grid (For tests only!)"</string>
                   <long name="proxy-Initial value">0</long>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>

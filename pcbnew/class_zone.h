@@ -143,9 +143,24 @@ public:
      * Build m_FilledPolysList data from real outlines (m_Poly)
      * in order to have drawable (and plottable) filled polygons
      * drawable filled polygons are polygons without hole
+     * @param aPcb: the current board (can be NULL for non copper zones)
      * @return number of polygons
+     * This function does not add holes for pads and tracks but calls
+     * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
      */
-    int  BuildFilledPolysListData( void );
+    int  BuildFilledPolysListData( BOARD * aPcb );
+
+    /** function AddClearanceAreasPolygonsToPolysList
+     * Add non copper areas polygons (pads and tracks with clearence)
+     * to a filled copper area
+     * used in BuildFilledPolysListData when calculating filled areas in a zone
+     * Non copper areas are pads and track and their clearance area
+     * The filled copper area must be computed before
+     * BuildFilledPolysListData() call this function just after creating the 
+     *  filled copper area polygon (without clearence areas
+     * @param aPcb: the current board
+     */
+    void AddClearanceAreasPolygonsToPolysList( BOARD * aPcb );
 
     /**
      * Function HitTestForCorner
