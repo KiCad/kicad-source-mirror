@@ -82,6 +82,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         {
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;
+            if ( pad->GetNet() == GetNet() )
+                continue;
             AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance,
                                         false, 0 );
         }
@@ -94,6 +96,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     for( TRACK* track = aPcb->m_Track;  track;  track = track->Next() )
     {
         if( !track->IsOnLayer( GetLayer() ) )
+            continue;
+        if ( track->GetNet() == GetNet() )
             continue;
         AddTrackWithClearancePolygon( booleng, *track, m_ZoneClearance );
     }
