@@ -124,7 +124,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         else
         {
             ADD_MENUITEM( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
-                _( "End Tool" ), cancel_tool_xpm );
+                _( "End tool" ), cancel_tool_xpm );
         }
         aPopMenu->AppendSeparator();
     }
@@ -591,7 +591,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACK,
             msg, delete_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
-            _( "Delete Net" ), delete_net_xpm );
+            _( "Delete net" ), delete_net_xpm );
     }
     track_mnu = new wxMenu;
 

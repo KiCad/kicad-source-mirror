@@ -360,13 +360,13 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, _( "Center" ), zoom_center_xpm );
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, _( "Zoom in" ), zoom_in_xpm );
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, _( "Zoom out" ), zoom_out_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_AUTO, _( "Zoom auto" ), zoom_auto_xpm );
 
     wxMenu* zoom_choice = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( MasterMenu, zoom_choice,
-                               ID_POPUP_ZOOM_SELECT, _( "Zoom Select" ), zoom_select_xpm );
+                               ID_POPUP_ZOOM_SELECT, _( "Zoom select" ), zoom_select_xpm );
 
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_AUTO, _( "Auto" ), zoom_auto_xpm );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_REDRAW, _( "Redraw" ), zoom_redraw_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_REDRAW, _( "Redraw view" ), zoom_redraw_xpm );
 
     /* Create the basic zoom list: */
     zoom = GetScreen()->GetZoom();

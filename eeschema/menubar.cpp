@@ -190,7 +190,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         viewMenu->AppendSeparator();
 
-        msg = AddHotkeyName( _( "redraw" ), s_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Redraw view" ), s_Schematic_Hokeys_Descr,
                              HK_ZOOM_REDRAW );
         item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW_BUTT,
                                msg, _( "Zoom auto" ),
@@ -355,7 +355,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         // Menu Configuration:
         wxMenu* configmenu = new wxMenu;
         item = new wxMenuItem( configmenu, ID_CONFIG_REQ,
-                              _( "&Library settings" ),
+                              _( "&Library" ),
                               _( "Setting Libraries, Directories and others..." ) );
         item->SetBitmap( library_xpm );
         configmenu->Append( item );

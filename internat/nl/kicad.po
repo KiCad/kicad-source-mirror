@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-02 22:31+0100\n"
-"PO-Revision-Date: 2008-10-02 22:31+0100\n"
+"POT-Creation-Date: 2008-10-03 15:54+0100\n"
+"PO-Revision-Date: 2008-10-03 15:54+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -30,8 +30,9 @@ msgstr "Boor bestand"
 #: pcbnew/gendrill.cpp:810
 #: pcbnew/xchgmod.cpp:637
 #: pcbnew/plotps.cpp:51
+#, fuzzy
 msgid "Unable to create file "
-msgstr ""
+msgstr "Kan bestand niet creeren"
 
 #: pcbnew/gendrill.cpp:378
 #: pcbnew/dialog_gendrill.cpp:184
@@ -121,7 +122,7 @@ msgstr "%s pin %s gevonden"
 
 #: pcbnew/onleftclick.cpp:176
 msgid "Graphic not authorized on Copper layers"
-msgstr ""
+msgstr "Tekenen niet toegestaan op koper lagen"
 
 #: pcbnew/onleftclick.cpp:199
 msgid "Tracks on Copper layers only "
@@ -1255,16 +1256,16 @@ msgid "Zeros Format"
 msgstr ""
 
 #: pcbnew/dialog_gendrill.cpp:180
-msgid "Choose EXCELLON numbers notation"
-msgstr ""
+msgid "Choose excellon numbers notation"
+msgstr "Kies excellon nummer notatie"
 
 #: pcbnew/dialog_gendrill.cpp:186
 msgid "Precision"
 msgstr "Precisie"
 
 #: pcbnew/dialog_gendrill.cpp:189
-msgid "Choose EXCELLON numbers precision"
-msgstr ""
+msgid "Choose excellon numbers precision"
+msgstr "Kies excellon nummer precisie"
 
 #: pcbnew/dialog_gendrill.cpp:193
 msgid "absolute"
@@ -1346,7 +1347,7 @@ msgid "minimal header"
 msgstr "minimale header"
 
 #: pcbnew/dialog_gendrill.cpp:250
-msgid "If checked, the EXCELLON header is minimal"
+msgid "If checked, the excellon header is minimal"
 msgstr ""
 
 #: pcbnew/dialog_gendrill.cpp:256
@@ -1755,7 +1756,7 @@ msgstr "Toepassen"
 #: pcbnew/zones_non_copper_type_functions.cpp:152
 #: pcbnew/dialog_zones_by_polygon.cpp:557
 msgid "Error : you must choose a layer"
-msgstr ""
+msgstr "Fout: u moet een laag selecteren"
 
 #: pcbnew/class_marker.cpp:133
 #: pcbnew/class_board_item.cpp:220
@@ -1817,11 +1818,11 @@ msgstr ""
 
 #: pcbnew/clean.cpp:370
 msgid "Clean Null Segments"
-msgstr ""
+msgstr "Schoon nul segmenten"
 
 #: pcbnew/clean.cpp:462
 msgid "Merging Segments:"
-msgstr ""
+msgstr "Segmenten samenvoegen:"
 
 #: pcbnew/clean.cpp:464
 msgid "Merge"
@@ -1874,25 +1875,28 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tool_pcb.cpp:224
-msgid "New Board"
-msgstr "Nieuw Bord"
+#, fuzzy
+msgid "New board"
+msgstr "&Nieuw bord"
 
 #: pcbnew/tool_pcb.cpp:226
-msgid "Open existing Board"
+#, fuzzy
+msgid "Open existing board"
 msgstr "Open bestaand bord"
 
 #: pcbnew/tool_pcb.cpp:227
-msgid "Save Board"
+#, fuzzy
+msgid "Save board"
 msgstr "Bord Opslaan"
 
 #: pcbnew/tool_pcb.cpp:231
-#: eeschema/tool_sch.cpp:49
-#: gerbview/tool_gerber.cpp:232
-msgid "page settings (size, texts)"
+#, fuzzy
+msgid "Page settings (size, texts)"
 msgstr "Pagina instellingen (grote, teksten)"
 
 #: pcbnew/tool_pcb.cpp:235
-msgid "Open Module Editor"
+#, fuzzy
+msgid "Open module editor"
 msgstr "Open Module Editor"
 
 #: pcbnew/tool_pcb.cpp:238
@@ -1911,7 +1915,7 @@ msgstr "Kopieer geselecteerd onderdeel"
 #: eeschema/tool_sch.cpp:71
 #: gerbview/tool_gerber.cpp:254
 msgid "Paste"
-msgstr "Plak Onderdeel"
+msgstr "Plakken"
 
 #: pcbnew/tool_pcb.cpp:247
 #: gerbview/tool_gerber.cpp:261
@@ -1919,7 +1923,8 @@ msgid "Undelete"
 msgstr "Ongedaan maken"
 
 #: pcbnew/tool_pcb.cpp:250
-msgid "Print Board"
+#, fuzzy
+msgid "Print board"
 msgstr "Print Bord"
 
 #: pcbnew/tool_pcb.cpp:252
@@ -1928,46 +1933,64 @@ msgstr "Plot (HPGL, PostScript, of GERBER formaat)"
 
 #: pcbnew/tool_pcb.cpp:255
 #: pcbnew/tool_modedit.cpp:106
+#: eeschema/tool_viewlib.cpp:67
 #: eeschema/tool_lib.cpp:167
+#: eeschema/menubar.cpp:169
+#: eeschema/menubar.cpp:172
 #: eeschema/tool_sch.cpp:92
 #: gerbview/tool_gerber.cpp:271
-msgid "zoom +"
+#: 3d-viewer/3d_toolbar.cpp:43
+#: share/zoom.cpp:361
+msgid "Zoom in"
 msgstr "Inzoomen"
 
 #: pcbnew/tool_pcb.cpp:259
 #: pcbnew/tool_modedit.cpp:110
+#: eeschema/tool_viewlib.cpp:71
 #: eeschema/tool_lib.cpp:171
+#: eeschema/menubar.cpp:177
+#: eeschema/menubar.cpp:180
 #: eeschema/tool_sch.cpp:96
 #: gerbview/tool_gerber.cpp:278
-msgid "zoom -"
+#: 3d-viewer/3d_toolbar.cpp:46
+#: share/zoom.cpp:362
+msgid "Zoom out"
 msgstr "Uitzoomen"
 
 #: pcbnew/tool_pcb.cpp:263
 #: pcbnew/tool_modedit.cpp:114
+#: eeschema/tool_viewlib.cpp:75
 #: eeschema/tool_lib.cpp:175
 #: eeschema/menubar.cpp:193
 #: eeschema/tool_sch.cpp:100
 #: gerbview/tool_gerber.cpp:285
-msgid "redraw"
-msgstr "Tekening Verversen"
+#: 3d-viewer/3d_toolbar.cpp:49
+#: share/zoom.cpp:369
+#, fuzzy
+msgid "Redraw view"
+msgstr "Hertekenen"
 
 #: pcbnew/tool_pcb.cpp:268
 #: pcbnew/tool_modedit.cpp:119
 #: eeschema/tool_lib.cpp:181
+#: eeschema/menubar.cpp:186
+#: eeschema/menubar.cpp:196
 #: eeschema/tool_sch.cpp:105
 #: gerbview/tool_gerber.cpp:296
 #: 3d-viewer/3d_toolbar.cpp:52
-msgid "auto zoom"
+#: share/zoom.cpp:363
+msgid "Zoom auto"
 msgstr "Automatisch Zoomen"
 
 #: pcbnew/tool_pcb.cpp:272
 #: eeschema/menubar.cpp:154
 #: eeschema/tool_sch.cpp:109
 msgid "Find components and texts"
-msgstr "Zoeken (Componenten & Tekst)"
+msgstr "Zoek componenten & tekst"
 
 #: pcbnew/tool_pcb.cpp:279
-msgid "Read Netlist"
+#, fuzzy
+msgid "Read netlist"
 msgstr "Lees Netlijst"
 
 #: pcbnew/tool_pcb.cpp:281
@@ -2152,7 +2175,6 @@ msgstr ""
 #: pcbnew/tool_pcb.cpp:577
 #: pcbnew/tool_modedit.cpp:276
 #: eeschema/plotps.cpp:189
-#: share/zoom.cpp:368
 msgid "Auto"
 msgstr "Automatisch"
 
@@ -2161,6 +2183,7 @@ msgid "Zoom "
 msgstr "Zoom "
 
 #: pcbnew/tool_pcb.cpp:595
+#: pcbnew/menubarpcb.cpp:223
 #: eeschema/eelayer.cpp:223
 #: pcbnew/set_color.h:414
 #: eeschema/eelayer.h:214
@@ -2364,6 +2387,7 @@ msgstr "Net Code"
 
 #: pcbnew/affiche.cpp:53
 #: pcbnew/class_module.cpp:1092
+#: pcbnew/menubarpcb.cpp:233
 #: pcbnew/class_board.cpp:551
 msgid "Pads"
 msgstr ""
@@ -2571,11 +2595,8 @@ msgid "Via %.3f"
 msgstr "Doormetalisering %.3f"
 
 #: pcbnew/onrightclick.cpp:127
-#: pcbnew/modedit_onclick.cpp:196
-#: eeschema/libedit_onrightclick.cpp:47
-#: eeschema/onrightclick.cpp:102
-#: gerbview/onrightclick.cpp:41
-msgid "End Tool"
+#, fuzzy
+msgid "End tool"
 msgstr "Gereedschap Verwerpen"
 
 #: pcbnew/onrightclick.cpp:195
@@ -2786,7 +2807,7 @@ msgstr "Verwijder Block (shift+ctrl + drag mouse)"
 
 #: pcbnew/onrightclick.cpp:479
 msgid "Drag Via"
-msgstr ""
+msgstr "Sleep via"
 
 #: pcbnew/onrightclick.cpp:483
 #, fuzzy
@@ -2843,11 +2864,11 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:526
 msgid "Break Track"
-msgstr ""
+msgstr "Breek spoor"
 
 #: pcbnew/onrightclick.cpp:533
 msgid "Place Node"
-msgstr ""
+msgstr "Plaats node"
 
 #: pcbnew/onrightclick.cpp:540
 msgid "End Track"
@@ -2909,7 +2930,7 @@ msgstr "Verwijder Spoor"
 
 #: pcbnew/onrightclick.cpp:594
 #, fuzzy
-msgid "Delete Net"
+msgid "Delete net"
 msgstr "Verwijder Net"
 
 #: pcbnew/onrightclick.cpp:599
@@ -2998,11 +3019,11 @@ msgstr "Bewerk Zone Parameters"
 
 #: pcbnew/onrightclick.cpp:683
 msgid "Delete Cutout"
-msgstr ""
+msgstr "Verwijder uitsnede"
 
 #: pcbnew/onrightclick.cpp:686
 msgid "Delete Zone Outline"
-msgstr ""
+msgstr "Verwijder zone omlijning"
 
 #: pcbnew/onrightclick.cpp:708
 #: pcbnew/onrightclick.cpp:753
@@ -3116,15 +3137,15 @@ msgstr ""
 
 #: pcbnew/edit_track_width.cpp:130
 msgid "Edit All Tracks and Vias Sizes"
-msgstr ""
+msgstr "Bewerk alle spoor en via grotes"
 
 #: pcbnew/edit_track_width.cpp:135
 msgid "Edit All Via Sizes"
-msgstr ""
+msgstr "Bewerk alle via grotes"
 
 #: pcbnew/edit_track_width.cpp:140
 msgid "Edit All Track Sizes"
-msgstr ""
+msgstr "Bewerk alle spoor grotes"
 
 #: pcbnew/sel_layer.cpp:92
 msgid "Select Layer:"
@@ -3173,7 +3194,7 @@ msgstr "Bord Hoeken Breedte"
 
 #: pcbnew/edgemod.cpp:253
 msgid "Incorrect number, no change"
-msgstr ""
+msgstr "Fout nummer, geen verandering"
 
 #: pcbnew/modedit.cpp:268
 msgid "Unable to find the footprint source on the main board"
@@ -3205,7 +3226,6 @@ msgstr "Pad Toevoegen"
 
 #: pcbnew/modedit.cpp:399
 #: pcbnew/tool_modedit.cpp:124
-#: pcbnew/menubarpcb.cpp:233
 #: pcbnew/menubarmodedit.cpp:45
 msgid "Pad Settings"
 msgstr "Pad Instellingen"
@@ -3236,7 +3256,7 @@ msgid "Scan Lib: %s"
 msgstr "Scan Bibliotheek: %s"
 
 #: pcbnew/loadcmp.cpp:229
-msgid "File is Not a library"
+msgid "File is not a library"
 msgstr "Bestand is geen bibliotheek"
 
 #: pcbnew/loadcmp.cpp:298
@@ -3293,6 +3313,13 @@ msgstr "FreeRouting.net URL"
 #: pcbnew/dialog_freeroute_exchange.cpp:216
 msgid "The URL of the FreeRouting.net website"
 msgstr "De URL van de FreeRouting.net website"
+
+#: pcbnew/modedit_onclick.cpp:196
+#: eeschema/libedit_onrightclick.cpp:47
+#: eeschema/onrightclick.cpp:102
+#: gerbview/onrightclick.cpp:41
+msgid "End Tool"
+msgstr "Gereedschap Verwerpen"
 
 #: pcbnew/modedit_onclick.cpp:215
 msgid "Mirror Block (alt + drag mouse)"
@@ -3400,7 +3427,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:298
 msgid "Save board files:"
-msgstr ""
+msgstr "Opslaan bord bestanden:"
 
 #: pcbnew/files.cpp:337
 msgid "Warning: unable to create bakfile "
@@ -3784,9 +3811,10 @@ msgid "Net ext: "
 msgstr "Net ext: "
 
 #: pcbnew/dialog_setup_libs.cpp:367
+#: eeschema/dialog_eeschema_config.cpp:368
 #: cvpcb/menucfg.cpp:202
-msgid "Library Files:"
-msgstr "Bibliotheek Bestanden:"
+msgid "Library files:"
+msgstr "Bibliotheek bestanden:"
 
 #: pcbnew/dialog_setup_libs.cpp:392
 #: eeschema/dialog_eeschema_config.cpp:394
@@ -4703,7 +4731,8 @@ msgid "Delete Layer "
 msgstr "Verwijder Laag"
 
 #: pcbnew/menubarpcb.cpp:38
-msgid "Load Board    Ctrl-O"
+#, fuzzy
+msgid "Load board    Ctrl-O"
 msgstr "Laad Bord    Ctrl-O"
 
 #: pcbnew/menubarpcb.cpp:39
@@ -4751,7 +4780,8 @@ msgid "Save current board"
 msgstr "Opslaan huidige bord"
 
 #: pcbnew/menubarpcb.cpp:76
-msgid "Save Board as.."
+#, fuzzy
+msgid "Save board as.."
 msgstr "Bord Opslaan als.."
 
 #: pcbnew/menubarpcb.cpp:77
@@ -4866,8 +4896,8 @@ msgstr "&Libs and Dir"
 
 #: pcbnew/menubarpcb.cpp:174
 #: eeschema/menubar.cpp:358
-msgid "&Library settings"
-msgstr "&Bibliotheek instellingen"
+msgid "&Library"
+msgstr "Bib&liotheek"
 
 #: pcbnew/menubarpcb.cpp:175
 #: eeschema/menubar.cpp:359
@@ -4886,16 +4916,16 @@ msgid "Select Colors and Display for PCB items"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:184
-msgid "&General Options"
-msgstr "&Algemene Opties"
+msgid "&General"
+msgstr "Al&gemeen"
 
 #: pcbnew/menubarpcb.cpp:185
 msgid "Select general options for pcbnew"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:189
-msgid "&Display Options"
-msgstr "&Weergave Opties"
+msgid "&Display"
+msgstr "&Weergave"
 
 #: pcbnew/menubarpcb.cpp:190
 msgid "Select what items are displayed"
@@ -4923,7 +4953,6 @@ msgid "Read application preferences"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:218
-#, fuzzy
 msgid "Tracks and Vias"
 msgstr "Sporen en Vias"
 
@@ -4931,20 +4960,13 @@ msgstr "Sporen en Vias"
 msgid "Adjust size and width for tracks, vias"
 msgstr ""
 
-#: pcbnew/menubarpcb.cpp:223
-#: pcbnew/menubarmodedit.cpp:50
-#: pcbnew/set_grid.h:39
-msgid "User Grid Size"
-msgstr "Gebruikers Raster Grote"
-
 #: pcbnew/menubarpcb.cpp:224
 #: pcbnew/menubarmodedit.cpp:51
 msgid "Adjust User Grid"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:228
-#: pcbnew/dialog_graphic_items_options.h:47
-msgid "Texts and Drawings"
+msgid "Texts and drawings"
 msgstr "Teksten en Tekeningen"
 
 #: pcbnew/menubarpcb.cpp:229
@@ -4979,8 +5001,8 @@ msgid "Create &drill file"
 msgstr "Creëer &boor bestand"
 
 #: pcbnew/menubarpcb.cpp:255
-msgid "Generate drill file (Excellion)"
-msgstr "Genereer boor bestand (Excellion)"
+msgid "Generate excellon drill file"
+msgstr "Genereer excellon boor bestand"
 
 #: pcbnew/menubarpcb.cpp:259
 msgid "Create &component file"
@@ -5140,7 +5162,6 @@ msgid "Filter for net names:"
 msgstr ""
 
 #: pcbnew/surbrill.cpp:37
-#, fuzzy
 msgid "Net Filter"
 msgstr "Filter"
 
@@ -5151,6 +5172,11 @@ msgstr "Verbinding Lijst"
 #: pcbnew/menubarmodedit.cpp:40
 msgid "Sizes and Widths"
 msgstr "Grotes en Breedtes"
+
+#: pcbnew/menubarmodedit.cpp:50
+#: pcbnew/set_grid.h:39
+msgid "User Grid Size"
+msgstr "Gebruikers Raster Grote"
 
 #: pcbnew/pcbtexte.cpp:88
 msgid "TextPCB properties"
@@ -5848,6 +5874,7 @@ msgstr ""
 
 #: eeschema/viewlibs.cpp:118
 #: eeschema/viewlib_frame.cpp:53
+#: eeschema/tool_sch.cpp:56
 msgid "Library browser"
 msgstr "Bibliotheek verkenner"
 
@@ -6637,27 +6664,10 @@ msgstr "Toon vorige onderdeel"
 msgid "Display next part"
 msgstr "Toon volgende onderdeel"
 
-#: eeschema/tool_viewlib.cpp:67
-#: cvpcb/displayframe.cpp:123
-#: 3d-viewer/3d_toolbar.cpp:43
-msgid "zoom + (F1)"
-msgstr "zoom + (F1)"
-
-#: eeschema/tool_viewlib.cpp:71
-#: cvpcb/displayframe.cpp:126
-#: 3d-viewer/3d_toolbar.cpp:46
-msgid "zoom - (F2)"
-msgstr "zoom - (F2)"
-
-#: eeschema/tool_viewlib.cpp:75
-#: cvpcb/displayframe.cpp:129
-#: 3d-viewer/3d_toolbar.cpp:49
-msgid "redraw (F3)"
-msgstr "Hertekenen (F3)"
-
 #: eeschema/tool_viewlib.cpp:79
-msgid "best zoom"
-msgstr ""
+#, fuzzy
+msgid "Best zoom"
+msgstr "Automatisch Zoomen"
 
 #: eeschema/tool_viewlib.cpp:84
 msgid "Show as \"De Morgan\" normal part"
@@ -6750,10 +6760,6 @@ msgstr ""
 #: eeschema/dialog_eeschema_config.cpp:252
 msgid "Schematic file Ext: "
 msgstr ""
-
-#: eeschema/dialog_eeschema_config.cpp:368
-msgid "Library files:"
-msgstr "Bibliotheek bestanden:"
 
 #: eeschema/dialog_eeschema_config.cpp:470
 msgid " Default Path for libraries"
@@ -7630,23 +7636,6 @@ msgstr ""
 "\n"
 "Kan voetprint niet updaten"
 
-#: eeschema/menubar.cpp:169
-#: eeschema/menubar.cpp:172
-#: share/zoom.cpp:361
-msgid "Zoom in"
-msgstr "Inzoomen"
-
-#: eeschema/menubar.cpp:177
-#: eeschema/menubar.cpp:180
-#: share/zoom.cpp:362
-msgid "Zoom out"
-msgstr "Uitzoomen"
-
-#: eeschema/menubar.cpp:186
-#: eeschema/menubar.cpp:196
-msgid "Zoom auto"
-msgstr "Automatisch Zoomen"
-
 #: eeschema/menubar.cpp:206
 msgid "&Component"
 msgstr "&Component"
@@ -7843,16 +7832,16 @@ msgstr "Nieuw schema project"
 msgid "Open schematic project"
 msgstr "Open schema project"
 
-#: eeschema/tool_sch.cpp:53
-msgid "go to library editor"
-msgstr "Bibliotheek Editor"
+#: eeschema/tool_sch.cpp:49
+msgid "Page settings"
+msgstr "Pagina instellingen"
 
-#: eeschema/tool_sch.cpp:56
-msgid "go to library browse"
-msgstr "Bibliotheek Verkenner"
+#: eeschema/tool_sch.cpp:53
+msgid "Library editor"
+msgstr "Bibliotheek editor"
 
 #: eeschema/tool_sch.cpp:60
-msgid "Schematic Hierarchy Navigator"
+msgid "Schematic hierarchy navigator"
 msgstr ""
 
 #: eeschema/tool_sch.cpp:82
@@ -7864,8 +7853,8 @@ msgid "Run Cvpcb"
 msgstr "Start CvPCB"
 
 #: eeschema/tool_sch.cpp:89
-msgid "Run Pcbnew"
-msgstr "Start PCBnew"
+msgid "Run pcbnew"
+msgstr "Start pcbnew"
 
 #: eeschema/tool_sch.cpp:113
 #, fuzzy
@@ -8976,8 +8965,9 @@ msgstr "Statusbalk lettertype"
 
 #: cvpcb/cvframe.cpp:431
 #: share/drawframe.cpp:141
-msgid "&Font selection"
-msgstr "&Lettertype"
+#, fuzzy
+msgid "&Font"
+msgstr "&Plot"
 
 #: cvpcb/cvframe.cpp:433
 #: share/drawframe.cpp:142
@@ -9014,6 +9004,18 @@ msgstr "Bibliotheek bestand <%s> is geen module bibliotheek"
 #: cvpcb/dialog_display_options.h:51
 msgid "Display Options"
 msgstr "Weergave Opties"
+
+#: cvpcb/displayframe.cpp:123
+msgid "zoom + (F1)"
+msgstr "zoom + (F1)"
+
+#: cvpcb/displayframe.cpp:126
+msgid "zoom - (F2)"
+msgstr "zoom - (F2)"
+
+#: cvpcb/displayframe.cpp:129
+msgid "redraw (F3)"
+msgstr "Hertekenen (F3)"
 
 #: cvpcb/displayframe.cpp:132
 #: cvpcb/displayframe.cpp:136
@@ -9627,12 +9629,13 @@ msgid "Load D-Codes File"
 msgstr ""
 
 #: gerbview/tool_gerber.cpp:57
-msgid "Load Drill"
-msgstr ""
+#, fuzzy
+msgid "Load drill"
+msgstr "Echte boor"
 
 #: gerbview/tool_gerber.cpp:58
-msgid "Load Drill File (EXCELLON Format)"
-msgstr ""
+msgid "Load excellon drill file"
+msgstr "Laad excellon boor bestand"
 
 #: gerbview/tool_gerber.cpp:64
 msgid "Clear all layers"
@@ -9695,8 +9698,9 @@ msgid "&List DCodes"
 msgstr ""
 
 #: gerbview/tool_gerber.cpp:140
-msgid "List and Edit DCodes"
-msgstr ""
+#, fuzzy
+msgid "List and edit D-codes"
+msgstr "Laad DCodes"
 
 #: gerbview/tool_gerber.cpp:141
 msgid "&Show source"
@@ -9707,7 +9711,8 @@ msgid "Show source file for the current layer"
 msgstr ""
 
 #: gerbview/tool_gerber.cpp:144
-msgid "&Delete Layer"
+#, fuzzy
+msgid "&Delete layer"
 msgstr "Laag V&erwijderen"
 
 #: gerbview/tool_gerber.cpp:145
@@ -9730,13 +9735,18 @@ msgstr "Open bestaande Laag"
 msgid "Save World"
 msgstr ""
 
+#: gerbview/tool_gerber.cpp:232
+msgid "page settings (size, texts)"
+msgstr "Pagina instellingen (grote, teksten)"
+
 #: gerbview/tool_gerber.cpp:268
 msgid "Print World"
 msgstr ""
 
 #: gerbview/tool_gerber.cpp:303
-msgid "Find D Codes"
-msgstr ""
+#, fuzzy
+msgid "Find D-codes"
+msgstr "Laad DCodes"
 
 #: gerbview/tool_gerber.cpp:310
 #: gerbview/affiche.cpp:34
@@ -9801,7 +9811,7 @@ msgstr "Block verwijderen?"
 
 #: gerbview/edit.cpp:246
 msgid "No layer selected"
-msgstr "Geen lagen geselecteerd"
+msgstr "Geen laag geselecteerd"
 
 #: gerbview/set_color.cpp:279
 msgid "Switch on all of the Gerber layers"
@@ -9825,11 +9835,13 @@ msgid "Tool"
 msgstr "Gereedschap"
 
 #: gerbview/affiche.cpp:102
-msgid "D CODE"
-msgstr "D CODE"
+#, fuzzy
+msgid "D-code"
+msgstr "Laad DCodes"
 
 #: gerbview/affiche.cpp:104
-msgid "D type"
+#, fuzzy
+msgid "D-type"
 msgstr "D type"
 
 #: gerbview/affiche.cpp:105
@@ -10693,13 +10705,10 @@ msgstr "Zoom: "
 msgid "Grid: "
 msgstr "Raster:"
 
-#: share/zoom.cpp:366
-msgid "Zoom Select"
+#: share/zoom.cpp:367
+#, fuzzy
+msgid "Zoom select"
 msgstr "Zoom Selecteren"
-
-#: share/zoom.cpp:369
-msgid "Redraw"
-msgstr "Hertekenen"
 
 #: share/zoom.cpp:385
 msgid "Grid Select"
@@ -10855,6 +10864,10 @@ msgstr ""
 #: pcbnew/dialog_initpcb.h:38
 msgid "Global Delete"
 msgstr ""
+
+#: pcbnew/dialog_graphic_items_options.h:47
+msgid "Texts and Drawings"
+msgstr "Teksten en Tekeningen"
 
 #: pcbnew/dialog_orient_footprints.h:42
 #, fuzzy
@@ -11179,6 +11192,42 @@ msgstr "Pagina Instellingen"
 msgid "Print"
 msgstr "Printen"
 
+#~ msgid "Library Files:"
+#~ msgstr "Bibliotheek Bestanden:"
+#~ msgid "&Library settings"
+#~ msgstr "&Bibliotheek instellingen"
+#~ msgid "go to library browse"
+#~ msgstr "Bibliotheek Verkenner"
+
+#, fuzzy
+#~ msgid "Zoom in (F1)"
+#~ msgstr "zoom + (F1)"
+
+#, fuzzy
+#~ msgid "Zoom out (F2)"
+#~ msgstr "Uitzoomen"
+
+#, fuzzy
+#~ msgid "Redraw (F3)"
+#~ msgstr "Hertekenen (F3)"
+#~ msgid "D CODE"
+#~ msgstr "D CODE"
+#~ msgid "zoom +"
+#~ msgstr "Inzoomen"
+#~ msgid "zoom -"
+#~ msgstr "Uitzoomen"
+#~ msgid "redraw"
+#~ msgstr "Tekening Verversen"
+#~ msgid "New Board"
+#~ msgstr "Nieuw Bord"
+#~ msgid "&Font selection"
+#~ msgstr "&Lettertype"
+#~ msgid "&General Options"
+#~ msgstr "&Algemene Opties"
+#~ msgid "&Display Options"
+#~ msgstr "&Weergave Opties"
+#~ msgid "Generate drill file (Excellion)"
+#~ msgstr "Genereer boor bestand (Excellon)"
 #~ msgid "&Libs and Dir"
 #~ msgstr "&Libs and Dir"
 #~ msgid "Create Drill File"

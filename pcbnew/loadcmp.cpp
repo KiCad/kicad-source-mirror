@@ -226,7 +226,7 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
         StrPurge( Line );
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            DisplayError( winaff, _( "File is Not a library" ) );
+            DisplayError( winaff, _( "File is not a library" ) );
             return NULL;
         }
 

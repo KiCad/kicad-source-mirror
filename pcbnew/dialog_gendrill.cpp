@@ -177,7 +177,7 @@ void WinEDA_DrillFrame::CreateControls()
     m_Choice_Zeros_Format = new wxRadioBox( itemDialog1, ID_SEL_ZEROS_FMT, _("Zeros Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Zeros_FormatStrings, 1, wxRA_SPECIFY_COLS );
     m_Choice_Zeros_Format->SetSelection(0);
     if (WinEDA_DrillFrame::ShowToolTips())
-        m_Choice_Zeros_Format->SetToolTip(_("Choose EXCELLON numbers notation"));
+        m_Choice_Zeros_Format->SetToolTip(_("Choose excellon numbers notation"));
     m_LeftBoxSizer->Add(m_Choice_Zeros_Format, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxArrayString m_Choice_PrecisionStrings;
@@ -186,7 +186,7 @@ void WinEDA_DrillFrame::CreateControls()
     m_Choice_Precision = new wxRadioBox( itemDialog1, ID_SEL_PRECISION, _("Precision"), wxDefaultPosition, wxDefaultSize, m_Choice_PrecisionStrings, 1, wxRA_SPECIFY_COLS );
     m_Choice_Precision->SetSelection(0);
     if (WinEDA_DrillFrame::ShowToolTips())
-        m_Choice_Precision->SetToolTip(_("Choose EXCELLON numbers precision"));
+        m_Choice_Precision->SetToolTip(_("Choose excellon numbers precision"));
     m_LeftBoxSizer->Add(m_Choice_Precision, 0, wxGROW|wxALL, 5);
 
     wxArrayString m_Choice_Drill_OffsetStrings;
@@ -247,7 +247,7 @@ void WinEDA_DrillFrame::CreateControls()
     m_Check_Minimal = new wxCheckBox( itemDialog1, ID_CHECKBOX3, _("minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
     m_Check_Minimal->SetValue(false);
     if (WinEDA_DrillFrame::ShowToolTips())
-        m_Check_Minimal->SetToolTip(_("If checked, the EXCELLON header is minimal"));
+        m_Check_Minimal->SetToolTip(_("If checked, the excellon header is minimal"));
     itemStaticBoxSizer16->Add(m_Check_Minimal, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxVERTICAL);

@@ -35,7 +35,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         //////////////////
         m_FilesMenu = new wxMenu;
         wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_MENU_LOAD_FILE,
-                     _("Load Board    Ctrl-O"),
+                     _("Load board    Ctrl-O"),
                     _("Delete old Board and Load new Board"));
         item->SetBitmap(open_xpm);
         m_FilesMenu->Append(item);
@@ -73,7 +73,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         m_FilesMenu->Append(item);
 
         item = new wxMenuItem(m_FilesMenu, ID_MENU_SAVE_BOARD_AS,
-                     _("Save Board as.."),
+                     _("Save board as.."),
                      _("Save current board as..") );
         item->SetBitmap(save_as_xpm);
         m_FilesMenu->Append(item);
@@ -171,7 +171,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         // Configuration et preferences: //
         ///////////////////////////////////
         wxMenu * configmenu = new wxMenu;
-        item = new wxMenuItem(configmenu, ID_CONFIG_REQ, _("&Library settings"),
+        item = new wxMenuItem(configmenu, ID_CONFIG_REQ, _("&Library"),
             _("Setting Libraries, Directories and others..."));
         item->SetBitmap(library_xpm);
         configmenu->Append(item);
@@ -181,12 +181,12 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         item->SetBitmap(palette_xpm);
         configmenu->Append(item);
 
-        item = new wxMenuItem(configmenu, ID_OPTIONS_SETUP, _("&General Options"),
+        item = new wxMenuItem(configmenu, ID_OPTIONS_SETUP, _("&General"),
             _("Select general options for pcbnew"));
         item->SetBitmap(preference_xpm);
         configmenu->Append(item);
 
-        item = new wxMenuItem(configmenu, ID_PCB_LOOK_SETUP, _("&Display Options"),
+        item = new wxMenuItem(configmenu, ID_PCB_LOOK_SETUP, _("&Display"),
             _("Select what items are displayed"));
         item->SetBitmap(display_options_xpm);
         configmenu->Append(item);
@@ -220,17 +220,17 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         item->SetBitmap(showtrack_xpm);
         sizes_menu->Append(item);
 
-        item = new wxMenuItem(sizes_menu, ID_PCB_USER_GRID_SETUP, _("User Grid Size"),
+        item = new wxMenuItem(sizes_menu, ID_PCB_USER_GRID_SETUP, _("Grid"),
             _("Adjust User Grid"));
         item->SetBitmap(grid_xpm);
         sizes_menu->Append(item);
 
-        item = new wxMenuItem(sizes_menu, ID_PCB_DRAWINGS_WIDTHS_SETUP, _("Texts and Drawings"),
+        item = new wxMenuItem(sizes_menu, ID_PCB_DRAWINGS_WIDTHS_SETUP, _("Texts and drawings"),
             _("Adjust width for texts and drawings"));
         item->SetBitmap(options_text_xpm);
         sizes_menu->Append(item);
 
-        item = new wxMenuItem(sizes_menu, ID_PCB_PAD_SETUP, _("Pad Settings"),
+        item = new wxMenuItem(sizes_menu, ID_PCB_PAD_SETUP, _("Pads"),
             _("Adjust size,shape,layers... for Pads"));
         item->SetBitmap(pad_xpm);
         sizes_menu->Append(item);
@@ -252,7 +252,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         postprocess_menu->Append(item);
 
         item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_DRILL_FILE, _("Create &drill file"),
-                    _("Generate drill file (Excellion)"));
+                    _("Generate excellon drill file"));
         item->SetBitmap(post_drill_xpm);
         postprocess_menu->Append(item);
 

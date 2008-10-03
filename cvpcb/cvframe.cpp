@@ -428,7 +428,7 @@ void WinEDA_CvpcbFrame::AddFontSelectionMenu( wxMenu* main_menu )
     ADD_MENUITEM( fontmenu, ID_PREFERENCES_FONT_STATUS, _( "font for Status Line" ),
                   fonts_xpm );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( main_menu, fontmenu,
-                                        ID_PREFERENCES_FONT, _( "&Font selection" ),
+                                        ID_PREFERENCES_FONT, _( "&Font" ),
                                         _(
                                             "Choose font type and size for dialogs, infos and status box" ),
                                         fonts_xpm );

@@ -221,18 +221,18 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     SetToolBar( m_HToolBar );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, BITMAP( new_xpm ), _( "New Board" ) );
+    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, BITMAP( new_xpm ), _( "New board" ) );
     m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, BITMAP( open_xpm ),
-                        _( "Open existing Board" ) );
-    m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, BITMAP( save_xpm ), _( "Save Board" ) );
+                        _( "Open existing board" ) );
+    m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, BITMAP( save_xpm ), _( "Save board" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, BITMAP( sheetset_xpm ),
-                        _( "page settings (size, texts)" ) );
+                        _( "Page settings (size, texts)" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, BITMAP( modedit_xpm ),
-                        _( "Open Module Editor" ) );
+                        _( "Open module editor" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_CUT, wxEmptyString, BITMAP( cut_button ), _( "Cut selected item" ) );
@@ -247,25 +247,25 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_UNDO_BUTT, wxEmptyString, BITMAP( undelete_xpm ), _( "Undelete" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, BITMAP( print_button ), _( "Print Board" ) );
+    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, BITMAP( print_button ), _( "Print board" ) );
     m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, BITMAP( plot_xpm ),
                         _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "zoom +" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "Zoom in" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_IN );
     m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "zoom -" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT );
+    msg = AddHotkeyName( _( "Zoom out" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT );
     m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "redraw" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "Redraw view" ), s_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( zoom_redraw_xpm ),
                          msg );
 
     m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP( zoom_auto_xpm ),
-                        _( "auto zoom" ) );
+                        _( "Zoom auto" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _(
@@ -276,7 +276,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, BITMAP( netlist_xpm ),
-                        _( "Read Netlist" ) );
+                        _( "Read netlist" ) );
     m_HToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, BITMAP( erc_xpm ),
                         _( "Pcb Design Rules Check" ) );
 

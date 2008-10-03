@@ -46,18 +46,18 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, BITMAP( sheetset_xpm ),
-                        _( "page settings (size, texts)" ) );
+                        _( "Page settings" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, BITMAP( libedit_xpm ),
-                        _( "go to library editor" ) );
+                        _( "Library editor" ) );
 
     m_HToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, BITMAP( library_browse_xpm ),
-                        _( "go to library browse" ) );
+                        _( "Library browser" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_HIERARCHY, wxEmptyString, BITMAP( hierarchy_nav_xpm ),
-                        _( "Schematic Hierarchy Navigator" ) );
+                        _( "Schematic hierarchy navigator" ) );
 
     m_HToolBar->AddSeparator();
 
@@ -86,23 +86,23 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
                         _( "Run Cvpcb" ) );
 
     m_HToolBar->AddTool( ID_TO_PCB, wxEmptyString, BITMAP( pcbnew_xpm ),
-                        _( "Run Pcbnew" ) );
+                        _( "Run pcbnew" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "zoom +" ), s_Schematic_Hokeys_Descr, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "Zoom in" ), s_Schematic_Hokeys_Descr, HK_ZOOM_IN );
     m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "zoom -" ), s_Schematic_Hokeys_Descr, HK_ZOOM_OUT );
+    msg = AddHotkeyName( _( "Zoom out" ), s_Schematic_Hokeys_Descr, HK_ZOOM_OUT );
     m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "Redraw view" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( zoom_redraw_xpm ),
                          msg );
 
     m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP( zoom_auto_xpm ),
-                        _( "auto zoom" ) );
+                        _( "Zoom auto" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, BITMAP( find_xpm ),

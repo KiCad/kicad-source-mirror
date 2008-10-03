@@ -364,7 +364,7 @@ wxString mask = wxT("*");
 	mask += LibExtBuffer;
 	g_RealLibDirBuffer.Replace( wxT("\\"), wxT("/"));
 
-	wxFileDialog FilesDialog(this, _("Library Files:"), g_RealLibDirBuffer,
+	wxFileDialog FilesDialog(this, _("Library files:"), g_RealLibDirBuffer,
 		wxEmptyString, mask,
 		wxFD_DEFAULT_STYLE | wxFD_MULTIPLE);
 

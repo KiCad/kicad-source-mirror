@@ -99,9 +99,9 @@ void Affiche_Infos_Piste( WinEDA_BasePcbFrame* frame, TRACK* pt_piste )
     if( pt_D_code )
     {
         msg.Printf( wxT( "D%d" ), d_index );
-        Affiche_1_Parametre( frame, 20, _( "D CODE" ), msg, BLUE );
+        Affiche_1_Parametre( frame, 20, _( "D-code" ), msg, BLUE );
 
-        Affiche_1_Parametre( frame, 30, _( "D type" ),
+        Affiche_1_Parametre( frame, 30, _( "D-type" ),
                              pt_D_code ? g_GERBER_Tool_Type[pt_D_code->m_Shape] : _( "????" ),
                              BLUE );
     }
