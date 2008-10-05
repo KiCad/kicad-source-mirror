@@ -365,7 +365,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
             continue;
         }
 
-        msg = _( "Library: " ); msg << FullLibName;
+        // Statusbar library loaded message
+        msg = _( "Library " ); msg << FullLibName; msg << _(" loaded");
         Affiche_Message( msg );
 
         /* lecture entete */

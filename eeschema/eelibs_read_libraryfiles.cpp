@@ -140,13 +140,14 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
 
 		FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
 
-        msg = _( "Loading library " ) + FullLibName;
+        // Loaded library statusbar message
+        msg = _( "Library " ) + FullLibName;
         frame->PrintMsg( msg );
 
         if( LoadLibraryName( frame, FullLibName, LibName ) )
-            msg += _( " OK" );
+            msg += _( " loaded" );
         else
-            msg += _( " ->Error" );
+            msg += _( " error!" );
 
         frame->PrintMsg( msg );
     }

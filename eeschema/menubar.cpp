@@ -362,7 +362,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         item = new wxMenuItem( configmenu, ID_COLORS_SETUP,
                               _( "&Colors" ),
-                              _( "Setting colors..." ) );
+                              _( "Color preferences" ) );
         item->SetBitmap( palette_xpm );
         configmenu->Append( item );
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-03 15:54+0100\n"
-"PO-Revision-Date: 2008-10-03 15:54+0100\n"
+"POT-Creation-Date: 2008-10-05 13:54+0100\n"
+"PO-Revision-Date: 2008-10-05 13:55+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -375,8 +375,10 @@ msgid "Ok to delete module %s in library %s"
 msgstr ""
 
 #: pcbnew/librairi.cpp:256
+#: pcbnew/loadcmp.cpp:369
+#: eeschema/eelibs_read_libraryfiles.cpp:144
 msgid "Library "
-msgstr "Bibliotheek"
+msgstr "Bibliotheek "
 
 #: pcbnew/librairi.cpp:256
 #: pcbnew/files.cpp:56
@@ -436,14 +438,14 @@ msgid "Library %s not found"
 msgstr "Bibliotheek %s niet gevonden"
 
 #: pcbnew/librairi.cpp:527
+#: pcbnew/modules.cpp:81
 #: common/get_component_dialog.cpp:98
 msgid "Name:"
 msgstr "Naam:"
 
 #: pcbnew/librairi.cpp:527
-#, fuzzy
 msgid "Save module"
-msgstr "Wijzig module"
+msgstr "Module opslaan"
 
 #: pcbnew/librairi.cpp:537
 #, c-format
@@ -749,13 +751,8 @@ msgid "Delete [%s]"
 msgstr "Verwijder [%s]"
 
 #: pcbnew/modules.cpp:81
-msgid "Footprint name:"
-msgstr "Voetprint naam:"
-
-#: pcbnew/modules.cpp:81
-#, fuzzy
-msgid "Search Footprint"
-msgstr "Voetprint"
+msgid "Search footprint"
+msgstr "Vindt voetprint"
 
 #: pcbnew/modules.cpp:305
 #: pcbnew/onrightclick.cpp:730
@@ -1875,7 +1872,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tool_pcb.cpp:224
-#, fuzzy
 msgid "New board"
 msgstr "&Nieuw bord"
 
@@ -1885,9 +1881,8 @@ msgid "Open existing board"
 msgstr "Open bestaand bord"
 
 #: pcbnew/tool_pcb.cpp:227
-#, fuzzy
 msgid "Save board"
-msgstr "Bord Opslaan"
+msgstr "Bord opslaan"
 
 #: pcbnew/tool_pcb.cpp:231
 #, fuzzy
@@ -1923,9 +1918,8 @@ msgid "Undelete"
 msgstr "Ongedaan maken"
 
 #: pcbnew/tool_pcb.cpp:250
-#, fuzzy
 msgid "Print board"
-msgstr "Print Bord"
+msgstr "Print bord"
 
 #: pcbnew/tool_pcb.cpp:252
 msgid "Plot (HPGL, PostScript, or GERBER format)"
@@ -1966,9 +1960,8 @@ msgstr "Uitzoomen"
 #: gerbview/tool_gerber.cpp:285
 #: 3d-viewer/3d_toolbar.cpp:49
 #: share/zoom.cpp:369
-#, fuzzy
 msgid "Redraw view"
-msgstr "Hertekenen"
+msgstr "Tekening verversen"
 
 #: pcbnew/tool_pcb.cpp:268
 #: pcbnew/tool_modedit.cpp:119
@@ -2595,9 +2588,8 @@ msgid "Via %.3f"
 msgstr "Doormetalisering %.3f"
 
 #: pcbnew/onrightclick.cpp:127
-#, fuzzy
 msgid "End tool"
-msgstr "Gereedschap Verwerpen"
+msgstr "Gereedschap annuleren"
 
 #: pcbnew/onrightclick.cpp:195
 msgid "Lock Module"
@@ -3264,12 +3256,13 @@ msgstr "Bestand is geen bibliotheek"
 msgid "Module <%s> not found"
 msgstr "Module <%s> niet gevonden"
 
-#: pcbnew/loadcmp.cpp:368
-msgid "Library: "
-msgstr "Bibliotheek:"
+#: pcbnew/loadcmp.cpp:369
+#: eeschema/eelibs_read_libraryfiles.cpp:148
+msgid " loaded"
+msgstr " geladen"
 
-#: pcbnew/loadcmp.cpp:433
-#: pcbnew/loadcmp.cpp:584
+#: pcbnew/loadcmp.cpp:434
+#: pcbnew/loadcmp.cpp:585
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Modules [%d items]"
@@ -5051,7 +5044,7 @@ msgstr ""
 #: kicad/buildmnu.cpp:190
 #: gerbview/tool_gerber.cpp:149
 msgid "&Contents"
-msgstr "&Inhoud..."
+msgstr "&Helpinhoud"
 
 #: pcbnew/menubarpcb.cpp:292
 #: pcbnew/menubarmodedit.cpp:60
@@ -5065,7 +5058,7 @@ msgstr "Open de pcbnew handleiding"
 #: kicad/buildmnu.cpp:195
 #: gerbview/tool_gerber.cpp:151
 msgid "&About"
-msgstr "&Over..."
+msgstr "&Info"
 
 #: pcbnew/menubarpcb.cpp:296
 #: pcbnew/menubarmodedit.cpp:64
@@ -5603,38 +5596,29 @@ msgstr "U"
 msgid "Start loading schematic libs"
 msgstr "Start laden van schema bibliotheken"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:143
-msgid "Loading library "
-msgstr "Bibliotheek laden "
-
-#: eeschema/eelibs_read_libraryfiles.cpp:147
+#: eeschema/eelibs_read_libraryfiles.cpp:150
 #, fuzzy
-msgid " OK"
-msgstr "OKE\n"
+msgid " error!"
+msgstr " fout"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:149
-#, fuzzy
-msgid " ->Error"
-msgstr "Fout"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:305
-#: eeschema/eelibs_read_libraryfiles.cpp:312
+#: eeschema/eelibs_read_libraryfiles.cpp:306
+#: eeschema/eelibs_read_libraryfiles.cpp:313
 msgid "File <"
 msgstr "Bestand <"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:305
+#: eeschema/eelibs_read_libraryfiles.cpp:306
 msgid "> is empty!"
 msgstr "> is leeg!"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:312
+#: eeschema/eelibs_read_libraryfiles.cpp:313
 msgid "> is NOT EESCHEMA library!"
 msgstr "> is GEEN EESCHEMA bibliotheek!"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:331
+#: eeschema/eelibs_read_libraryfiles.cpp:332
 msgid "Library <"
 msgstr "Bibliotheek <"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:331
+#: eeschema/eelibs_read_libraryfiles.cpp:332
 msgid "> header read error"
 msgstr ""
 
@@ -7773,9 +7757,8 @@ msgid "Place the graphic text (comment)"
 msgstr ""
 
 #: eeschema/menubar.cpp:365
-#, fuzzy
-msgid "Setting colors..."
-msgstr "Kleuren instellen..."
+msgid "Color preferences"
+msgstr "Kleuren voorkeuren"
 
 #: eeschema/menubar.cpp:371
 #: gerbview/tool_gerber.cpp:110
@@ -11192,6 +11175,23 @@ msgstr "Pagina Instellingen"
 msgid "Print"
 msgstr "Printen"
 
+#, fuzzy
+#~ msgid "Setting colors..."
+#~ msgstr "Kleuren instellen..."
+#~ msgid "Loading library "
+#~ msgstr "Bibliotheek laden "
+
+#, fuzzy
+#~ msgid " OK"
+#~ msgstr "OKE\n"
+
+#, fuzzy
+#~ msgid " ->Error"
+#~ msgstr "Fout"
+#~ msgid "Library: "
+#~ msgstr "Bibliotheek: "
+#~ msgid "Footprint name:"
+#~ msgstr "Voetprint naam:"
 #~ msgid "Library Files:"
 #~ msgstr "Bibliotheek Bestanden:"
 #~ msgid "&Library settings"
