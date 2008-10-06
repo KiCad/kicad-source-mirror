@@ -158,8 +158,8 @@ public:
 
     /**
      * Function AddField
-     * adds a field to the component.  The component takes over ownership
-     * of the field.
+     * adds a field to the component.  The field is copied as it is put into
+     * the component.
      * @param aField A const reference to the SCH_CMP_FIELD to add.
      */
     void AddField( const SCH_CMP_FIELD& aField );

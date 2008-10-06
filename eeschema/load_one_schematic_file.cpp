@@ -516,6 +516,8 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
     SCH_COMPONENT* component;
     int            Failed = 0, newfmt = 0;
     char*          ptcar;
+    wxString       fieldName;
+
 
     component = new SCH_COMPONENT();
 
@@ -671,8 +673,6 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             int  hjustify = GR_TEXT_HJUSTIFY_CENTER;
             int  vjustify = GR_TEXT_VJUSTIFY_CENTER;
 
-            wxString    fieldName;
-
             FieldUserName[0] = 0;
 
             /* Lecture du champ */
@@ -712,12 +712,10 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
 
             ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
 
-            if( 0 == strlen(FieldUserName) )
+            if( !FieldUserName[0] )
                 fieldName = ReturnDefaultFieldName( fieldNdx );
             else
                 fieldName = CONV_FROM_UTF8( FieldUserName );
-
-            D(printf("FiledUserName=\"%s\"\n", FieldUserName );)
 
             if( fieldNdx >= component->GetFieldCount() )
             {
