@@ -382,11 +382,11 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetPath* sheet )
 
             BaseListeCmp[NbrCmp].m_NumRef = -1;
 
-            if( DrawLibItem->m_Field[VALUE].m_Text.IsEmpty() )
-                DrawLibItem->m_Field[VALUE].m_Text = wxT( "~" );
+            if( DrawLibItem->GetField(VALUE)->m_Text.IsEmpty() )
+                DrawLibItem->GetField(VALUE)->m_Text = wxT( "~" );
 
             strncpy( BaseListeCmp[NbrCmp].m_TextValue,
-                CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), 32 );
+                CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ), 32 );
             NbrCmp++;
         }
     }

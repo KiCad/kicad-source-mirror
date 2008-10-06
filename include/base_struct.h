@@ -474,10 +474,11 @@ typedef enum {
 
 #define DEFAULT_SIZE_TEXT 60        /* default text height (in mils or  1/1000") */
 
-/** class EDA_TextStruct
- * basic class to handle texts (labels, texts on components or footprints ..)
+/**
+ * Class EDA_TextStruct
+ * is a basic class to handle texts (labels, texts on components or footprints ..)
  * not used directly.
- * the text classes are derived from EDA_BaseStruct and EDA_TextStruct
+ * The text classes are derived from EDA_BaseStruct and EDA_TextStruct
  */
 class EDA_TextStruct
 {
@@ -492,7 +493,8 @@ public:
     int      m_CharType;                /* normal, bold, italic ... */
     int      m_HJustify, m_VJustify;    /* Horiz and  Vert Justifications */
     int      m_ZoomLevelDrawable;       /* zoom level to draw text.
-                                          * if zoom < m_ZoomLevelDrawable: the text is drawn as a single line */
+                                         * if zoom < m_ZoomLevelDrawable: the text is drawn as a single line
+                                         */
     int*     m_TextDrawings;            /* list of segments to draw, for the Draw function */
     int      m_TextDrawingsSize;        /* segment count */
 
@@ -503,10 +505,12 @@ public:
 
     int     GetLength() const { return m_Text.Length(); };
 
-    /** Function Pitch()
-     * @return distance between 2 caracteres
+    /**
+     * Function Pitch
+     * @return distance between 2 characters
      */
     int     Pitch();
+
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                   const wxPoint& offset, int color,
                   int draw_mode, int display_mode = FILAIRE, int anchor_color = -1 );

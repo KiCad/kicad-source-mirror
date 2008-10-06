@@ -8,7 +8,7 @@ LibEDA_BaseStruct * LocatePin(const wxPoint & RefPos,
             int Unit, int Convert, SCH_COMPONENT * DrawItem = NULL);
         /* Routine de localisation d'une PIN de la PartLib pointee par Entry */
 
-const wxString& ReturnDefaultFieldName( int aFieldNdx );
+wxString ReturnDefaultFieldName( int aFieldNdx );
 
 
 /****************/

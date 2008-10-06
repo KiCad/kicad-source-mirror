@@ -185,7 +185,8 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     bool dummy = FALSE;
 
     if( ( Entry = FindLibPart( m_ChipName.GetData(), wxEmptyString, FIND_ROOT ) ) == NULL )
-    {   /* composant non trouve, on affiche un composant "dummy" */
+    {
+        /* composant non trouve, on affiche un composant "dummy" */
         dummy = TRUE;
         if( DummyCmp == NULL )
             CreateDummyCmp();
@@ -202,26 +203,31 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
      *  composant
      */
 
-    if( ( (m_Field[REFERENCE].m_Attributs & TEXT_NO_VISIBLE) == 0 )
-       && !(m_Field[REFERENCE].m_Flags & IS_MOVED) )
+    SCH_CMP_FIELD* field = GetField( REFERENCE );
+
+    if( ( (field->m_Attributs & TEXT_NO_VISIBLE) == 0 )
+       && !(field->m_Flags & IS_MOVED) )
     {
         if( Entry->m_UnitCount > 1 )
         {
-            m_Field[REFERENCE].m_AddExtraText = true;
-            m_Field[REFERENCE].Draw( panel, DC, offset, DrawMode );
+            field->m_AddExtraText = true;
+            field->Draw( panel, DC, offset, DrawMode );
         }
         else
         {
-            m_Field[REFERENCE].m_AddExtraText = false;
-            m_Field[REFERENCE].Draw( panel, DC, offset, DrawMode );
+            field->m_AddExtraText = false;
+            field->Draw( panel, DC, offset, DrawMode );
         }
     }
 
-    for( ii = VALUE; ii < NUMBER_OF_FIELDS; ii++ )
+    for( ii = VALUE; ii < GetFieldCount(); ii++ )
     {
-        if( m_Field[ii].m_Flags & IS_MOVED )
+        field = GetField( ii );
+
+        if( field->m_Flags & IS_MOVED )
             continue;
-        m_Field[ii].Draw( panel, DC, offset, DrawMode );
+
+        field->Draw( panel, DC, offset, DrawMode );
     }
 }
 
@@ -248,6 +254,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
 
     if( m_Attributs & TEXT_NO_VISIBLE )
         return;
+
     if( IsVoid() )
         return;
 
@@ -290,6 +297,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
         color = ReturnLayerColor( LAYER_VALUEPART );
     else
         color = ReturnLayerColor( LAYER_FIELDS );
+
     if( !m_AddExtraText || (m_FieldId != REFERENCE) )
     {
         DrawGraphicText( panel, DC, pos, color, m_Text.GetData(),
@@ -302,6 +310,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
         /* On ajoute alors A ou B ... a la reference */
         wxString fulltext = m_Text;
         fulltext.Append( 'A' - 1 + DrawLibItem->m_Multi );
+
         DrawGraphicText( panel, DC, pos, color, fulltext.GetData(),
             orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
             m_Size,
@@ -446,13 +455,13 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         int x2 = BoundaryBox.GetRight();
         int y2 = BoundaryBox.GetBottom();
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-        BoundaryBox = Component->m_Field[REFERENCE].GetBoundaryBox();
+        BoundaryBox = Component->GetField( REFERENCE )->GetBoundaryBox();
         x1 = BoundaryBox.GetX();
         y1 = BoundaryBox.GetY();
         x2 = BoundaryBox.GetRight();
         y2 = BoundaryBox.GetBottom();
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-        BoundaryBox = Component->m_Field[VALUE].GetBoundaryBox();
+        BoundaryBox = Component->GetField( VALUE )->GetBoundaryBox();
         x1 = BoundaryBox.GetX();
         y1 = BoundaryBox.GetY();
         x2 = BoundaryBox.GetRight();

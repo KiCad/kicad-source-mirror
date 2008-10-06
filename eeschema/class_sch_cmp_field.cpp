@@ -15,14 +15,18 @@
 
 
 /***************************************************************************/
-SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, DRAW_PART_TEXT_STRUCT_TYPE ),
-    EDA_TextStruct( text )
+SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
+    SCH_ITEM( aParent, DRAW_PART_TEXT_STRUCT_TYPE ),
+    EDA_TextStruct()
 /***************************************************************************/
 {
-    m_Pos          = pos;
-    m_FieldId      = 0;
+    m_Pos          = aPos;
+    m_FieldId      = aFieldId;
     m_AddExtraText = false;
+    m_Attributs    = TEXT_NO_VISIBLE;
+    m_Name         = aName;
+
+    SetLayer( LAYER_FIELDS );
 }
 
 
@@ -58,6 +62,7 @@ void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
 }
 
 
+#if 0
 /***********************************************************/
 void SCH_CMP_FIELD::PartTextCopy( SCH_CMP_FIELD* target )
 /***********************************************************/
@@ -75,6 +80,7 @@ void SCH_CMP_FIELD::PartTextCopy( SCH_CMP_FIELD* target )
     target->m_VJustify  = m_VJustify;
     target->m_Flags     = m_Flags;
 }
+#endif
 
 
 /*********************************/
@@ -200,26 +206,22 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool SCH_CMP_FIELD::Save( FILE* aFile ) const
 {
     char hjustify = 'C';
-
     if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
         hjustify = 'L';
     else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
         hjustify = 'R';
+
     char vjustify = 'C';
     if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
-    if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c", m_FieldId,
+
+    if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c",
+            m_FieldId,
             CONV_TO_UTF8( m_Text ),
             m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
             m_Pos.x, m_Pos.y,
@@ -230,17 +232,12 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
         return false;
     }
 
-
-    // Save field name, if necessary
-    if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() )
+    // Save field name, if the name is user definable
+    if( m_FieldId >= FIELD1 )
     {
-        wxString fieldname = ReturnDefaultFieldName( m_FieldId );
-        if( fieldname != m_Name )
+        if( fprintf( aFile, " \"%s\"", CONV_TO_UTF8( m_Name ) ) == EOF )
         {
-            if( fprintf( aFile, " \"%s\"", CONV_TO_UTF8( m_Name ) ) == EOF )
-            {
-                return false;
-            }
+            return false;
         }
     }
 

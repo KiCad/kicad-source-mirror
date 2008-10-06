@@ -109,14 +109,14 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
         {
             if( LibItem == NULL )
                 break;
-            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
+            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField(REFERENCE)->m_Text ) );
             SendCommand( MSG_TO_PCB, Line );
         }
         break;
 
     case TYPE_SCH_COMPONENT:
         LibItem = (SCH_COMPONENT*) objectToSync;
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
+        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
         break;
 
@@ -130,10 +130,10 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
             wxString pinnum;
             Pin->ReturnPinStringNum( pinnum );
             sprintf( Line, "$PIN: %s $PART: %s", CONV_TO_UTF8( pinnum ),
-                    CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
+                    CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         }
         else
-            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->m_Field[REFERENCE].m_Text ) );
+            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
 
         SendCommand( MSG_TO_PCB, Line );
         break;

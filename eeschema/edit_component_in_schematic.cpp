@@ -75,7 +75,7 @@ void WinEDA_ComponentPropertiesFrame::InitBuffers()
     m_CurrentFieldId = REFERENCE;
 
     /* Init default values */
-    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
+    for( ii = 0; ii <  NUMBER_OF_FIELDS; ii++ )
     {
         m_FieldSize[ii]   = DEFAULT_SIZE_TEXT;
         m_FieldFlags[ii]  = 1;
@@ -88,20 +88,21 @@ void WinEDA_ComponentPropertiesFrame::InitBuffers()
     for( ii = REFERENCE; ii < NUMBER_OF_FIELDS; ii++ )
     {
         m_FieldName[ii]  = m_Cmp->ReturnFieldName( ii );
-        if(ii == REFERENCE)
-            m_FieldText[ii] = m_Cmp->GetRef(m_Parent->GetSheet());
-        else
-            m_FieldText[ii]  = m_Cmp->m_Field[ii].m_Text;
-        m_FieldSize[ii]  = m_Cmp->m_Field[ii].m_Size.x;
-        m_FieldFlags[ii] =
-            (m_Cmp->m_Field[ii].m_Attributs & TEXT_NO_VISIBLE) ? 0 : 1;
-        m_FieldOrient[ii] = m_Cmp->m_Field[ii].m_Orient == TEXT_ORIENT_VERT ? 1 : 0;
 
-        if( m_Cmp->m_Field[ii].m_Text.IsEmpty() )
+        if(ii == REFERENCE)
+            m_FieldText[ii] = m_Cmp->GetRef( m_Parent->GetSheet() );
+        else
+            m_FieldText[ii]  = m_Cmp->GetField( ii )->m_Text;
+
+        m_FieldSize[ii]   = m_Cmp->GetField( ii )->m_Size.x;
+        m_FieldFlags[ii]  = (m_Cmp->GetField( ii )->m_Attributs & TEXT_NO_VISIBLE) ? 0 : 1;
+        m_FieldOrient[ii] = m_Cmp->GetField( ii )->m_Orient == TEXT_ORIENT_VERT ? 1 : 0;
+
+        if( m_Cmp->GetField( ii )->m_Text.IsEmpty() )
             continue;
 
         // These values have meaning only if this field is not void:
-        m_FieldPosition[ii]    = m_Cmp->m_Field[ii].m_Pos;
+        m_FieldPosition[ii]    = m_Cmp->GetField( ii )->m_Pos;
         m_FieldPosition[ii].x -= m_Cmp->m_Pos.x;
         m_FieldPosition[ii].y -= m_Cmp->m_Pos.y;
     }
@@ -403,30 +404,30 @@ void WinEDA_ComponentPropertiesFrame::ComponentPropertiesAccept( wxCommandEvent&
             EDA_LibComponentStruct* Entry = FindLibPart( m_Cmp->m_ChipName.GetData(
                                                              ), wxEmptyString, FIND_ROOT );
             if( Entry && (Entry->m_Options == ENTRY_POWER) )
-                m_Cmp->m_Field[ii].m_Text = m_Cmp->m_ChipName;
+                m_Cmp->GetField( ii )->m_Text = m_Cmp->m_ChipName;
             else if( !m_FieldText[ii].IsEmpty() )
             {
-                m_Cmp->m_Field[ii].m_Text = m_FieldText[ii];
+                m_Cmp->GetField( ii )->m_Text = m_FieldText[ii];
             }
         }
         else
-            m_Cmp->m_Field[ii].m_Text = m_FieldText[ii];
+            m_Cmp->GetField( ii )->m_Text = m_FieldText[ii];
 
         if( ii >= FIELD1 && m_FieldName[ii] != ReturnDefaultFieldName( ii ) )
-            m_Cmp->m_Field[ii].m_Name = m_FieldName[ii];
+            m_Cmp->GetField( ii )->m_Name = m_FieldName[ii];
         else
-            m_Cmp->m_Field[ii].m_Name.Empty();
+            m_Cmp->GetField( ii )->m_Name.Empty();
 
-        m_Cmp->m_Field[ii].m_Size.x     =
-            m_Cmp->m_Field[ii].m_Size.y = m_FieldSize[ii];
+        m_Cmp->GetField( ii )->m_Size.x     =
+            m_Cmp->GetField( ii )->m_Size.y = m_FieldSize[ii];
         if( m_FieldFlags[ii] )
-            m_Cmp->m_Field[ii].m_Attributs &= ~TEXT_NO_VISIBLE;
+            m_Cmp->GetField( ii )->m_Attributs &= ~TEXT_NO_VISIBLE;
         else
-            m_Cmp->m_Field[ii].m_Attributs |= TEXT_NO_VISIBLE;
-        m_Cmp->m_Field[ii].m_Orient = m_FieldOrient[ii] ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
-        m_Cmp->m_Field[ii].m_Pos    = m_FieldPosition[ii];
-        m_Cmp->m_Field[ii].m_Pos.x += cmp_pos.x;
-        m_Cmp->m_Field[ii].m_Pos.y += cmp_pos.y;
+            m_Cmp->GetField( ii )->m_Attributs |= TEXT_NO_VISIBLE;
+        m_Cmp->GetField( ii )->m_Orient = m_FieldOrient[ii] ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
+        m_Cmp->GetField( ii )->m_Pos    = m_FieldPosition[ii];
+        m_Cmp->GetField( ii )->m_Pos.x += cmp_pos.x;
+        m_Cmp->GetField( ii )->m_Pos.y += cmp_pos.y;
     }
 
     m_Parent->GetScreen()->SetModify();
@@ -764,10 +765,10 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
             SaveCopyInUndoList( Cmp, IS_CHANGED );
         Cmp->SetRef(GetSheet(), ref);
 
-        Cmp->m_Field[REFERENCE].m_AddExtraText = flag;
-        Cmp->m_Field[REFERENCE].Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
+        Cmp->GetField( REFERENCE )->m_AddExtraText = flag;
+        Cmp->GetField( REFERENCE )->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
         Cmp->SetRef(GetSheet(), ref );
-        Cmp->m_Field[REFERENCE].Draw( DrawPanel, DC, wxPoint(0,0),
+        Cmp->GetField( REFERENCE )->Draw( DrawPanel, DC, wxPoint(0,0),
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
         GetScreen()->SetModify();
     }
@@ -790,7 +791,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     if( Entry == NULL )
         return;
 
-    SCH_CMP_FIELD* TextField = &Cmp->m_Field[VALUE];
+    SCH_CMP_FIELD* TextField = Cmp->GetField( VALUE );
 
     message = TextField->m_Text;
     if( Get_Message( _( "Value" ), _("Component Value"), message, this ) )
@@ -827,35 +828,39 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     if( Entry == NULL )
         return;
 
-    SCH_CMP_FIELD* TextField = &Cmp->m_Field[FOOTPRINT];
+    SCH_CMP_FIELD* TextField = Cmp->GetField( FOOTPRINT );
 
     message = TextField->m_Text;
     if(message.IsEmpty() )
         wasEmpty = true;
-    if( Get_Message( _( "Footprint" ), _("Component Footprint"), message, this ) )
-        message.Empty(); //allow the user to remove the value.
 
-    /* save old cmp in undo list if not already in edit, or moving ... */
+    if( Get_Message( _( "Footprint" ), _("Component Footprint"), message, this ) )
+        message.Empty();    // allow the user to remove the value.
+
+    // save old cmp in undo list if not already in edit, or moving ...
     if( Cmp->m_Flags == 0 )
         SaveCopyInUndoList( Cmp, IS_CHANGED );
-    Cmp->m_Field[FOOTPRINT].Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
-    //move the field if it was new.
-    if(wasEmpty && !message.IsEmpty())
-    {
-        Cmp->m_Field[FOOTPRINT].m_Pos = Cmp->m_Field[REFERENCE].m_Pos;
-        //add offset here - ? suitable heuristic below?
-        Cmp->m_Field[FOOTPRINT].m_Pos.x +=
-            (Cmp->m_Field[REFERENCE].m_Pos.x - Cmp->m_Pos.x) > 0 ?
-            (Cmp->m_Field[REFERENCE].m_Size.x) : (-1*Cmp->m_Field[REFERENCE].m_Size.x);
-        Cmp->m_Field[FOOTPRINT].m_Pos.y +=
-            (Cmp->m_Field[REFERENCE].m_Pos.y - Cmp->m_Pos.y) > 0 ?
-            (Cmp->m_Field[REFERENCE].m_Size.y) : (-1*Cmp->m_Field[REFERENCE].m_Size.y);
+    Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
 
-        Cmp->m_Field[FOOTPRINT].m_Orient = Cmp->m_Field[REFERENCE].m_Orient;
+    // move the field if it was new.
+    if( wasEmpty && !message.IsEmpty() )
+    {
+        Cmp->GetField( FOOTPRINT )->m_Pos = Cmp->GetField( REFERENCE )->m_Pos;
+
+        // add offset here - ? suitable heuristic below?
+        Cmp->GetField( FOOTPRINT )->m_Pos.x +=
+            (Cmp->GetField( REFERENCE )->m_Pos.x - Cmp->m_Pos.x) > 0 ?
+            (Cmp->GetField( REFERENCE )->m_Size.x) : (-1*Cmp->GetField( REFERENCE )->m_Size.x);
+
+        Cmp->GetField( FOOTPRINT )->m_Pos.y +=
+            (Cmp->GetField( REFERENCE )->m_Pos.y - Cmp->m_Pos.y) > 0 ?
+            (Cmp->GetField( REFERENCE )->m_Size.y) : (-1*Cmp->GetField( REFERENCE )->m_Size.y);
+
+        Cmp->GetField( FOOTPRINT )->m_Orient = Cmp->GetField( REFERENCE )->m_Orient;
     }
     TextField->m_Text = message;
 
-    Cmp->m_Field[FOOTPRINT].Draw( DrawPanel, DC, wxPoint(0,0),
+    Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint(0,0),
                    Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
     GetScreen()->SetModify();
 
@@ -885,23 +890,23 @@ void WinEDA_ComponentPropertiesFrame::SetInitCmp( wxCommandEvent& event )
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
 
     /* Mise aux valeurs par defaut des champs et orientation */
-    m_Cmp->m_Field[REFERENCE].m_Pos.x =
+    m_Cmp->GetField( REFERENCE )->m_Pos.x =
         Entry->m_Prefix.m_Pos.x + m_Cmp->m_Pos.x;
-    m_Cmp->m_Field[REFERENCE].m_Pos.y =
+    m_Cmp->GetField( REFERENCE )->m_Pos.y =
         Entry->m_Prefix.m_Pos.y + m_Cmp->m_Pos.y;
-    m_Cmp->m_Field[REFERENCE].m_Orient   = Entry->m_Prefix.m_Orient;
-    m_Cmp->m_Field[REFERENCE].m_Size     = Entry->m_Prefix.m_Size;
-    m_Cmp->m_Field[REFERENCE].m_HJustify = Entry->m_Prefix.m_HJustify;
-    m_Cmp->m_Field[REFERENCE].m_VJustify = Entry->m_Prefix.m_VJustify;
+    m_Cmp->GetField( REFERENCE )->m_Orient   = Entry->m_Prefix.m_Orient;
+    m_Cmp->GetField( REFERENCE )->m_Size     = Entry->m_Prefix.m_Size;
+    m_Cmp->GetField( REFERENCE )->m_HJustify = Entry->m_Prefix.m_HJustify;
+    m_Cmp->GetField( REFERENCE )->m_VJustify = Entry->m_Prefix.m_VJustify;
 
-    m_Cmp->m_Field[VALUE].m_Pos.x =
+    m_Cmp->GetField( VALUE )->m_Pos.x =
         Entry->m_Name.m_Pos.x + m_Cmp->m_Pos.x;
-    m_Cmp->m_Field[VALUE].m_Pos.y =
+    m_Cmp->GetField( VALUE )->m_Pos.y =
         Entry->m_Name.m_Pos.y + m_Cmp->m_Pos.y;
-    m_Cmp->m_Field[VALUE].m_Orient   = Entry->m_Name.m_Orient;
-    m_Cmp->m_Field[VALUE].m_Size     = Entry->m_Name.m_Size;
-    m_Cmp->m_Field[VALUE].m_HJustify = Entry->m_Name.m_HJustify;
-    m_Cmp->m_Field[VALUE].m_VJustify = Entry->m_Name.m_VJustify;
+    m_Cmp->GetField( VALUE )->m_Orient   = Entry->m_Name.m_Orient;
+    m_Cmp->GetField( VALUE )->m_Size     = Entry->m_Name.m_Size;
+    m_Cmp->GetField( VALUE )->m_HJustify = Entry->m_Name.m_HJustify;
+    m_Cmp->GetField( VALUE )->m_VJustify = Entry->m_Name.m_VJustify;
 
     m_Cmp->SetRotationMiroir( CMP_NORMAL );
 

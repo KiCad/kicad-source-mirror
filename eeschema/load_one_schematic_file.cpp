@@ -3,6 +3,7 @@
 /****************************************/
 
 #include "fctsys.h"
+
 //#include "gr_basic.h"
 
 #include "common.h"
@@ -58,7 +59,7 @@
 
 /* Fonctions locales */
 static int  ReadPartDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window );
-static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window);
+static int  ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window );
 static int  ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Window );
 static void LoadLayers( FILE* f, int* linecnt );
 
@@ -118,20 +119,24 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         fclose( f );
         return FALSE;
     }
+
     //get the file version here. TODO: Support version numbers > 9
     char version = Line[9 + sizeof(SCHEMATIC_HEAD_STRING)];
-    int ver = version - '0';
-    if ( ver > EESCHEMA_VERSION )
+    int  ver = version - '0';
+    if( ver > EESCHEMA_VERSION )
     {
-        MsgDiag = FullFileName + _( " was created by a more recent version of EESchema and may not load correctly. Please consider updating!");
-        DisplayInfo( this, MsgDiag);
+        MsgDiag = FullFileName + _(
+            " was created by a more recent version of EESchema and may not load correctly. Please consider updating!" );
+        DisplayInfo( this, MsgDiag );
     }
 #if 0
+
     // Compile it if the new versiopn is unreadable by previous eeschema versions
-    else if ( ver < EESCHEMA_VERSION )
+    else if( ver < EESCHEMA_VERSION )
     {
-        MsgDiag = FullFileName + _( " was created by an older version of EESchema. It will be stored in the new file format when you save this file again.");
-        DisplayInfo( this, MsgDiag);
+        MsgDiag = FullFileName + _(
+            " was created by an older version of EESchema. It will be stored in the new file format when you save this file again." );
+        DisplayInfo( this, MsgDiag );
     }
 #endif
 
@@ -194,14 +199,14 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             LineCount++;
             if( fgets( Line, 256 - 1, f ) == NULL
                 || sscanf( Line, "%d %d %d %d ",
-                           &SegmentStruct->m_Start.x, &SegmentStruct->m_Start.y,
-                           &SegmentStruct->m_End.x, &SegmentStruct->m_End.y ) != 4 )
+                    &SegmentStruct->m_Start.x, &SegmentStruct->m_Start.y,
+                    &SegmentStruct->m_End.x, &SegmentStruct->m_End.y ) != 4 )
             {
                 MsgDiag.Printf(
                     wxT( "EESchema file Segment struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
-                SAFE_DELETE( SegmentStruct ) ;
+                SAFE_DELETE( SegmentStruct );
                 break;
             }
 
@@ -227,17 +232,18 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             if( Name1[0] == 'B' )
                 ii = BUS_TO_BUS;
             RaccordStruct = new DrawBusEntryStruct( wxPoint( 0, 0 ), '\\', ii );
+
             LineCount++;
             if( fgets( Line, 256 - 1, f ) == NULL
                 || sscanf( Line, "%d %d %d %d ",
-                           &RaccordStruct->m_Pos.x, &RaccordStruct->m_Pos.y,
-                           &RaccordStruct->m_Size.x, &RaccordStruct->m_Size.y ) != 4 )
+                    &RaccordStruct->m_Pos.x, &RaccordStruct->m_Pos.y,
+                    &RaccordStruct->m_Size.x, &RaccordStruct->m_Size.y ) != 4 )
             {
                 MsgDiag.Printf(
                     wxT( "EESchema file Raccord struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
-                SAFE_DELETE( RaccordStruct ) ;
+                SAFE_DELETE( RaccordStruct );
                 break;
             }
 
@@ -269,19 +275,19 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
             PolylineStruct->m_NumOfPoints = ii;
             PolylineStruct->m_Points = (int*) MyZMalloc( sizeof(int) * 2 *
-                                                         PolylineStruct->m_NumOfPoints );
+                PolylineStruct->m_NumOfPoints );
             for( ii = 0; ii < PolylineStruct->m_NumOfPoints; ii++ )
             {
                 LineCount++;
                 if( fgets( Line, 256 - 1, f ) == NULL
                     || sscanf( Line, "%d %d", &PolylineStruct->m_Points[ii * 2],
-                               &PolylineStruct->m_Points[ii * 2 + 1] ) != 2 )
+                        &PolylineStruct->m_Points[ii * 2 + 1] ) != 2 )
                 {
                     MsgDiag.Printf(
                         wxT( "EESchema file polyline struct error at line %d, aborted" ),
                         LineCount );
                     Failed = TRUE;
-                    SAFE_DELETE( PolylineStruct )  ;
+                    SAFE_DELETE( PolylineStruct );
                     break;
                 }
             }
@@ -295,15 +301,16 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
         case 'C':                       /* Its a connection item. */
             ConnectionStruct = new DrawJunctionStruct( wxPoint( 0, 0 ) );
+
             if( sscanf( SLine, "%s %d %d", Name1,
-                        &ConnectionStruct->m_Pos.x,
-                        &ConnectionStruct->m_Pos.y ) != 3 )
+                    &ConnectionStruct->m_Pos.x,
+                    &ConnectionStruct->m_Pos.y ) != 3 )
             {
                 MsgDiag.Printf(
                     wxT( "EESchema file connection struct error at line %d, aborted" ),
                     LineCount );
                 Failed = TRUE;
-                SAFE_DELETE( ConnectionStruct ) ;
+                SAFE_DELETE( ConnectionStruct );
             }
             else
             {
@@ -323,6 +330,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             else
             {
                 NoConnectStruct = new DrawNoConnectStruct( pos );
+
                 NoConnectStruct->Pnext = screen->EEDrawList;
                 screen->EEDrawList = NoConnectStruct;
             }
@@ -341,6 +349,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                 char* text;
                 char  BufLine[1024];
                 MarkerStruct = new DrawMarkerStruct( pos, wxEmptyString );
+
                 ii = ReadDelimitedText( BufLine, Line, 256 );
                 MarkerStruct->m_Type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
                 if( MarkerStruct->m_Type < 0 )
@@ -363,7 +372,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             SCH_ITEM* Struct = NULL;
             *Name1 = *Name2 = 0;
             ii = sscanf( SLine, "%s %d %d %d %d %s",
-                         Name1, &pos.x, &pos.y, &orient, &size, Name2 );
+                Name1, &pos.x, &pos.y, &orient, &size, Name2 );
 
             if( ii < 4 )
             {
@@ -392,18 +401,20 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                 if( Name1[0] == 'L' )
                 {
                     SCH_LABEL* TextStruct =
-                        new SCH_LABEL( pos, CONV_FROM_UTF8( text ) );
+                        new SCH_LABEL( pos, CONV_FROM_UTF8 ( text ) );
+
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
                     Struct = TextStruct;
                 }
-                else if( Name1[0] == 'G' && version > '1')
+                else if( Name1[0] == 'G' && version > '1' )
                 {
-                    SCH_GLOBALLABEL* TextStruct = new SCH_GLOBALLABEL(pos, CONV_FROM_UTF8( text ) );
+                    SCH_GLOBALLABEL* TextStruct = new SCH_GLOBALLABEL( pos, CONV_FROM_UTF8 ( text ) );
+
                     Struct = TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
-                    TextStruct->m_Shape = NET_INPUT;
+                    TextStruct->m_Shape  = NET_INPUT;
                     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
                         TextStruct->m_Shape = NET_OUTPUT;
                     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
@@ -413,13 +424,14 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
                         TextStruct->m_Shape = NET_UNSPECIFIED;
                 }
-                else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == '1'))
+                else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == '1') )
                 { //in schematic file version 1, glabels were actually hierarchal labels.
-                    SCH_HIERLABEL* TextStruct = new SCH_HIERLABEL(pos, CONV_FROM_UTF8( text ) );
+                    SCH_HIERLABEL* TextStruct = new SCH_HIERLABEL( pos, CONV_FROM_UTF8 ( text ) );
+
                     Struct = TextStruct;
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
-                    TextStruct->m_Shape = NET_INPUT;
+                    TextStruct->m_Shape  = NET_INPUT;
                     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
                         TextStruct->m_Shape = NET_OUTPUT;
                     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
@@ -432,7 +444,8 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                 else
                 {
                     SCH_TEXT* TextStruct =
-                        new SCH_TEXT( pos, CONV_FROM_UTF8( text ) );
+                        new SCH_TEXT( pos, CONV_FROM_UTF8 ( text ) );
+
                     TextStruct->m_Size.x = TextStruct->m_Size.y = size;
                     TextStruct->m_Orient = orient;
                     Struct = TextStruct;
@@ -473,7 +486,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
     screen->EEDrawList = Phead;
 
-#if 0 && defined(DEBUG)
+#if 0 && defined (DEBUG)
     screen->Show( 0, std::cout );
 #endif
 
@@ -481,7 +494,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
     TestDanglingEnds( screen->EEDrawList, NULL );
 
-    MsgDiag = _( "Done Loading " ) +  screen->m_FileName;
+    MsgDiag = _( "Done Loading " ) + screen->m_FileName;
     PrintMsg( MsgDiag );
 
     return TRUE;    /* Although it may be that file is only partially loaded. */
@@ -497,15 +510,16 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
  *  Lit les lignes relatives a la description d'un composant en schema
  */
 {
-    int   ii, fieldref;
-    char  Name1[256], Name2[256],
-          Char1[256], Char2[256], Char3[256];
-    SCH_COMPONENT* LibItemStruct;
-    int   Failed = 0, newfmt = 0;
-    char* ptcar;
+    int            ii;
+    char           Name1[256], Name2[256],
+                   Char1[256], Char2[256], Char3[256];
+    SCH_COMPONENT* component;
+    int            Failed = 0, newfmt = 0;
+    char*          ptcar;
 
-    LibItemStruct = new SCH_COMPONENT();
-    LibItemStruct->m_Convert = 1;
+    component = new SCH_COMPONENT();
+
+    component->m_Convert = 1;
 
     if( Line[0] == '$' )
     {
@@ -531,49 +545,60 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             if( Name1[ii] == '~' )
                 Name1[ii] = ' ';
 
-        LibItemStruct->m_ChipName = CONV_FROM_UTF8( Name1 );
+        component->m_ChipName = CONV_FROM_UTF8( Name1 );
         if( !newfmt )
-            LibItemStruct->m_Field[VALUE].m_Text = CONV_FROM_UTF8( Name1 );
+            component->GetField( VALUE )->m_Text = CONV_FROM_UTF8( Name1 );
     }
     else
     {
-        LibItemStruct->m_ChipName.Empty();
-        LibItemStruct->m_Field[VALUE].m_Text.Empty();
-        LibItemStruct->m_Field[VALUE].m_Orient    = TEXT_ORIENT_HORIZ;
-        LibItemStruct->m_Field[VALUE].m_Attributs = TEXT_NO_VISIBLE;
+        component->m_ChipName.Empty();
+        component->GetField( VALUE )->m_Text.Empty();
+        component->GetField( VALUE )->m_Orient    = TEXT_ORIENT_HORIZ;
+        component->GetField( VALUE )->m_Attributs = TEXT_NO_VISIBLE;
     }
 
     if( strcmp( Name2, NULL_STRING ) != 0 )
     {
         bool isDigit = false;
-        for( ii = 0; ii < (int) strlen( Name2 ); ii++ ){
+        for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
+        {
             if( Name2[ii] == '~' )
                 Name2[ii] = ' ';
-            //get RefBase from this, too. store in Name1.
-            if(Name2[ii] >= '0' && Name2[ii] <= '9'){
-                isDigit = true;
+
+            // get RefBase from this, too. store in Name1.
+            if( Name2[ii] >= '0' && Name2[ii] <= '9' )
+            {
+                isDigit   = true;
                 Name1[ii] = 0;  //null-terminate.
             }
-            if(!isDigit){
+            if( !isDigit )
+            {
                 Name1[ii] = Name2[ii];
             }
         }
+
         Name1[ii] = 0; //just in case
-        int jj;
-        for(jj=0; jj<ii && Name1[jj] == ' '; jj++);
-        if(jj == ii){
-            //blank string.
-            LibItemStruct->m_PrefixString = wxT("U");
-        }else{
-            LibItemStruct->m_PrefixString = CONV_FROM_UTF8(&Name1[jj]);
-            //printf("prefix: %s\n", CONV_TO_UTF8(LibItemStruct->m_PrefixString));
+        int  jj;
+        for( jj = 0; jj<ii && Name1[jj] == ' '; jj++ )
+            ;
+
+        if( jj == ii )
+        {
+            // blank string.
+            component->m_PrefixString = wxT( "U" );
+        }
+        else
+        {
+            component->m_PrefixString = CONV_FROM_UTF8( &Name1[jj] );
+
+            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_PrefixString));
         }
         if( !newfmt )
-            LibItemStruct->m_Field[REFERENCE].m_Text = CONV_FROM_UTF8( Name2 );
+            component->GetField( REFERENCE )->m_Text = CONV_FROM_UTF8( Name2 );
     }
     else
     {
-        LibItemStruct->m_Field[REFERENCE].m_Attributs = TEXT_NO_VISIBLE;
+        component->GetField( REFERENCE )->m_Attributs = TEXT_NO_VISIBLE;
     }
 
     /* Traitement des autres lignes de description */
@@ -592,70 +617,68 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
         LineCount++;
         if( fgets( Line, 256 - 1, f ) == NULL )
             return TRUE;
-        if( (Line[0] != 'F' )
-           && (Line[0] != 'P' )
-           && (Line[0] != 'A' )
-           && (Line[0] != 'U' ) )
-            break;
 
         if( Line[0] == 'U' ) /* Lecture num multi, conversion et time stamp */
         {
             sscanf( Line + 1, "%d %d %lX",
-                    &LibItemStruct->m_Multi, &LibItemStruct->m_Convert,
-                    &LibItemStruct->m_TimeStamp );
+                &component->m_Multi, &component->m_Convert,
+                &component->m_TimeStamp );
         }
 
-        if( Line[0] == 'P' )
+        else if( Line[0] == 'P' )
         {
             sscanf( Line + 1, "%d %d",
-                    &LibItemStruct->m_Pos.x, &LibItemStruct->m_Pos.y );
+                &component->m_Pos.x, &component->m_Pos.y );
         }
-        if( Line[0] == 'A' && Line[1] == 'R' )
+
+        else if( Line[0] == 'A' && Line[1] == 'R' )
         {
-            /*format:
-            AR Path="/9086AF6E/67452AA0" Ref="C99" Part="1"
-            where 9086AF6E is the unique timestamp of the containing sheet
-            and 67452AA0 is the timestamp of this component.
-            C99 is the reference given this path.
-            */
+            /* format:
+             * AR Path="/9086AF6E/67452AA0" Ref="C99" Part="1"
+             * where 9086AF6E is the unique timestamp of the containing sheet
+             * and 67452AA0 is the timestamp of this component.
+             * C99 is the reference given this path.
+             */
             int ii;
             ptcar = Line + 2;
+
             //copy the path.
-            ii = ReadDelimitedText(Name1, ptcar, 255 );
-            ptcar += ii+1;
-            wxString path = CONV_FROM_UTF8(Name1);
+            ii     = ReadDelimitedText( Name1, ptcar, 255 );
+            ptcar += ii + 1;
+            wxString path = CONV_FROM_UTF8( Name1 );
+
             // copy the reference
-            ii = ReadDelimitedText(Name1, ptcar, 255 );
-            ptcar += ii+1;
-            wxString ref = CONV_FROM_UTF8(Name1);
+            ii     = ReadDelimitedText( Name1, ptcar, 255 );
+            ptcar += ii + 1;
+            wxString ref = CONV_FROM_UTF8( Name1 );
 
             // copy the multi, if exists
-            ii = ReadDelimitedText(Name1, ptcar, 255 );
-            if ( Name1[0] == 0 ) // Nothing read, put a default value
-                sprintf( Name1, "%d", LibItemStruct->m_Multi );
-            int multi = atoi(Name1);
-            if ( multi < 0 || multi > 25 ) multi = 1;
-            LibItemStruct->AddHierarchicalReference(path, ref, multi);
-            LibItemStruct->m_Field[REFERENCE].m_Text = ref;
+            ii = ReadDelimitedText( Name1, ptcar, 255 );
+            if( Name1[0] == 0 )  // Nothing read, put a default value
+                sprintf( Name1, "%d", component->m_Multi );
+            int multi = atoi( Name1 );
+            if( multi < 0 || multi > 25 )
+                multi = 1;
+            component->AddHierarchicalReference( path, ref, multi );
+            component->GetField( REFERENCE )->m_Text = ref;
         }
-        if( Line[0] == 'F' )
+
+        else if( Line[0] == 'F' )
         {
+            int  fieldNdx;
+
             char FieldUserName[1024];
             int  hjustify = GR_TEXT_HJUSTIFY_CENTER;
             int  vjustify = GR_TEXT_VJUSTIFY_CENTER;
 
+            wxString    fieldName;
+
             FieldUserName[0] = 0;
 
-            sscanf( Line + 1, "%d", &fieldref );
-            if( fieldref >= NUMBER_OF_FIELDS )
-            {
-                MsgDiag.Printf(
-                    wxT( "Component Field number error at line %d, aborted" ),
-                    LineCount );
-                return TRUE;
-            }
             /* Lecture du champ */
-            ptcar = Line; while( *ptcar && (*ptcar != '"') )
+            ptcar = Line;
+
+            while( *ptcar && (*ptcar != '"') )
                 ptcar++;
 
             if( *ptcar != '"' )
@@ -676,23 +699,50 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                         LineCount );
                     return TRUE;
                 }
+
                 if( *ptcar == '"' )
                 {
-                    Name1[ii] = 0; ptcar++;
+                    Name1[ii] = 0;
+                    ptcar++;
                     break;
                 }
             }
 
-            if( LibItemStruct->m_Field[fieldref].m_Text.IsEmpty() )
-                LibItemStruct->m_Field[fieldref].m_Text = CONV_FROM_UTF8( Name1 );
+            fieldNdx = atoi( Line+2 );
 
-            /* Lecture des coordonnees */
+            ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
+
+            if( 0 == strlen(FieldUserName) )
+                fieldName = ReturnDefaultFieldName( fieldNdx );
+            else
+                fieldName = CONV_FROM_UTF8( FieldUserName );
+
+            D(printf("FiledUserName=\"%s\"\n", FieldUserName );)
+
+            if( fieldNdx >= component->GetFieldCount() )
+            {
+                // add as many fields as needed so the m_FieldId's are contiguous, no gaps.
+                while( fieldNdx >= component->GetFieldCount() )
+                {
+                    int newNdx = component->GetFieldCount();
+
+                    SCH_CMP_FIELD   f( wxPoint(0,0), newNdx, component, fieldName );
+                    component->AddField( f );
+                }
+            }
+            else
+            {
+                component->GetField( fieldNdx )->m_Name = fieldName;
+            }
+
+            component->GetField( fieldNdx )->m_Text = CONV_FROM_UTF8( Name1 );
+
             if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
-                               &LibItemStruct->m_Field[fieldref].m_Pos.x,
-                               &LibItemStruct->m_Field[fieldref].m_Pos.y,
-                               &LibItemStruct->m_Field[fieldref].m_Size.x,
-                               &LibItemStruct->m_Field[fieldref].m_Attributs,
-                               Char2, Char3 ) ) < 4 )
+                     &component->GetField( fieldNdx )->m_Pos.x,
+                     &component->GetField( fieldNdx )->m_Pos.y,
+                     &component->GetField( fieldNdx )->m_Size.x,
+                     &component->GetField( fieldNdx )->m_Attributs,
+                     Char2, Char3 ) ) < 4 )
             {
                 MsgDiag.Printf(
                     wxT( "Component Field error line %d, aborted" ),
@@ -701,13 +751,15 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                 continue;
             }
 
-            ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
-            if( (LibItemStruct->m_Field[fieldref].m_Size.x == 0 ) || (ii == 4) )
-                LibItemStruct->m_Field[fieldref].m_Size.x = DEFAULT_SIZE_TEXT;
-            LibItemStruct->m_Field[fieldref].m_Orient = TEXT_ORIENT_HORIZ;
-            LibItemStruct->m_Field[fieldref].m_Size.y = LibItemStruct->m_Field[fieldref].m_Size.x;
+            if( (component->GetField( fieldNdx )->m_Size.x == 0 ) || (ii == 4) )
+                component->GetField( fieldNdx )->m_Size.x = DEFAULT_SIZE_TEXT;
+
+            component->GetField( fieldNdx )->m_Orient = TEXT_ORIENT_HORIZ;
+            component->GetField( fieldNdx )->m_Size.y = component->GetField( fieldNdx )->m_Size.x;
+
             if( Char1[0] == 'V' )
-                LibItemStruct->m_Field[fieldref].m_Orient = TEXT_ORIENT_VERT;
+                component->GetField( fieldNdx )->m_Orient = TEXT_ORIENT_VERT;
+
             if( ii >= 7 )
             {
                 if( *Char2 == 'L' )
@@ -718,25 +770,23 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                     vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
                 else if( *Char3 == 'T' )
                     vjustify = GR_TEXT_VJUSTIFY_TOP;
-                LibItemStruct->m_Field[fieldref].m_HJustify = hjustify;
-                LibItemStruct->m_Field[fieldref].m_VJustify = vjustify;
+
+                component->GetField( fieldNdx )->m_HJustify = hjustify;
+                component->GetField( fieldNdx )->m_VJustify = vjustify;
             }
 
-            if( fieldref >= FIELD1 )
-            {
-                LibItemStruct->m_Field[fieldref].m_Name = CONV_FROM_UTF8( FieldUserName );
-            }
-
-            if( fieldref == REFERENCE )
-                if( LibItemStruct->m_Field[fieldref].m_Text[0] == '#' )
-                    LibItemStruct->m_Field[fieldref].m_Attributs |= TEXT_NO_VISIBLE;
+            if( fieldNdx == REFERENCE )
+                if( component->GetField( fieldNdx )->m_Text[0] == '#' )
+                    component->GetField( fieldNdx )->m_Attributs |= TEXT_NO_VISIBLE;
         }
+        else
+            break;
     }
 
     /* Lecture multi et position du composant */
     if( sscanf( Line, "%d %d %d",
-                &LibItemStruct->m_Multi,
-                &LibItemStruct->m_Pos.x, &LibItemStruct->m_Pos.y ) != 3 )
+            &component->m_Multi,
+            &component->m_Pos.x, &component->m_Pos.y ) != 3 )
     {
         MsgDiag.Printf(
             wxT( "Component unit & pos error at line %d, aborted" ),
@@ -749,10 +799,10 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
     LineCount++;
     if( (fgets( Line, 256 - 1, f ) == NULL)
        || (sscanf( Line, "%d %d %d %d",
-                   &LibItemStruct->m_Transform[0][0],
-                   &LibItemStruct->m_Transform[0][1],
-                   &LibItemStruct->m_Transform[1][0],
-                   &LibItemStruct->m_Transform[1][1] ) != 4) )
+               &component->m_Transform[0][0],
+               &component->m_Transform[0][1],
+               &component->m_Transform[1][0],
+               &component->m_Transform[1][1] ) != 4) )
     {
         MsgDiag.Printf(
             wxT( "Component orient error at line %d, aborted" ),
@@ -777,9 +827,9 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
 
     if( !Failed )
     {
-        LibItemStruct->Pnext = Window->EEDrawList;
-        Window->EEDrawList   = LibItemStruct;
-        LibItemStruct->m_Parent = Window;
+        component->Pnext    = Window->EEDrawList;
+        Window->EEDrawList      = component;
+        component->m_Parent = Window;
     }
 
     return Failed;   /* Fin lecture 1 composant */
@@ -794,15 +844,17 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
  *  Lit les lignes relatives a la description d'une feuille de hierarchie
  */
 {
-    int                   ii, fieldref, size;
-    char                  Name1[256], Char1[256], Char2[256];
-    DrawSheetStruct*      SheetStruct;
+    int              ii, fieldNdx, size;
+    char             Name1[256], Char1[256], Char2[256];
+    DrawSheetStruct* SheetStruct;
     Hierarchical_PIN_Sheet_Struct* SheetLabelStruct, * OldSheetLabel = NULL;
-    int                   Failed = FALSE;
-    char*                 ptcar;
+    int              Failed = FALSE;
+    char*            ptcar;
 
     SheetStruct = new DrawSheetStruct();
+
     SheetStruct->m_TimeStamp = GetTimeStamp();
+
     //sheets are added to the EEDrawList like other schematic components.
     //however, in order to preserve the heirarchy (through m_Parent pointers),
     //a duplicate of the sheet is added to m_SubSheet array.
@@ -821,8 +873,8 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
     /* Next line: must be "S xx yy nn mm" with xx, yy = sheet position
      *  ( upper left corner  ) et nn,mm = sheet size */
     if( (sscanf( &Line[1], "%d %d %d %d",
-                 &SheetStruct->m_Pos.x, &SheetStruct->m_Pos.y,
-                 &SheetStruct->m_Size.x, &SheetStruct->m_Size.y ) != 4)
+             &SheetStruct->m_Pos.x, &SheetStruct->m_Pos.y,
+             &SheetStruct->m_Size.x, &SheetStruct->m_Size.y ) != 4)
        || (Line[0] != 'S' ) )
     {
         MsgDiag.Printf(
@@ -838,18 +890,19 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
         LineCount++;
         if( fgets( Line, 256 - 1, f ) == NULL )
             return TRUE;
-        if( Line[0] == 'U' ){
+        if( Line[0] == 'U' )
+        {
             sscanf( Line + 1, "%lX", &(SheetStruct->m_TimeStamp) );
-            if(SheetStruct->m_TimeStamp == 0) //zero is not unique!
+            if( SheetStruct->m_TimeStamp == 0 )  //zero is not unique!
                 SheetStruct->m_TimeStamp = GetTimeStamp();
             continue;
         }
         if( Line[0] != 'F' )
             break;
-        sscanf( Line + 1, "%d", &fieldref );
+        sscanf( Line + 1, "%d", &fieldNdx );
 
         /* Lecture du champ :
-         *  si fieldref >= 2 :  Fn "texte" t s posx posy
+         *  si fieldNdx >= 2 :  Fn "texte" t s posx posy
          *  sinon F0 "texte" pour sheetname
          *  et F1 "texte" pour filename */
 
@@ -860,7 +913,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
         {
             MsgDiag.Printf(
                 wxT( " ** EESchema file sheet label F%d at line %d, aborted" ),
-                fieldref, LineCount );
+                fieldNdx, LineCount );
             return TRUE;
         }
 
@@ -880,7 +933,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
             }
         }
 
-        if( ( fieldref == 0 ) || ( fieldref == 1 ) )
+        if( ( fieldNdx == 0 ) || ( fieldNdx == 1 ) )
         {
             if( sscanf( ptcar, "%d", &size ) != 1 )
             {
@@ -891,23 +944,26 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
             }
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
-            if( fieldref == 0 )
+            if( fieldNdx == 0 )
             {
                 SheetStruct->m_SheetName     = CONV_FROM_UTF8( Name1 );
                 SheetStruct->m_SheetNameSize = size;
             }
             else
             {
-                SheetStruct->SetFileName(CONV_FROM_UTF8( Name1 ));
+                SheetStruct->SetFileName( CONV_FROM_UTF8( Name1 ) );
+
                 //printf("in ReadSheetDescr : SheetStruct->m_FileName = %s \n", Name1);
                 SheetStruct->m_FileNameSize = size;
             }
         }
 
-        if( fieldref > 1 )
+        if( fieldNdx > 1 )
         {
             SheetLabelStruct = new Hierarchical_PIN_Sheet_Struct( SheetStruct,
-                                                        wxPoint( 0, 0 ), CONV_FROM_UTF8( Name1 ) );
+                                                                 wxPoint( 0,
+                                                                     0 ), CONV_FROM_UTF8 ( Name1 ) );
+
             if( SheetStruct->m_Label == NULL )
                 OldSheetLabel = SheetStruct->m_Label = SheetLabelStruct;
             else
@@ -916,8 +972,8 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
 
             /* Lecture des coordonnees */
             if( sscanf( ptcar, "%s %s %d %d %d", Char1, Char2,
-                        &SheetLabelStruct->m_Pos.x, &SheetLabelStruct->m_Pos.y,
-                        &size ) != 5 )
+                    &SheetLabelStruct->m_Pos.x, &SheetLabelStruct->m_Pos.y,
+                    &size ) != 5 )
             {
                 MsgDiag.Printf(
                     wxT(
@@ -963,8 +1019,8 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
     }
     if( !Failed )
     {
-        SheetStruct->Pnext = Window->EEDrawList;
-        Window->EEDrawList   = SheetStruct;
+        SheetStruct->Pnext    = Window->EEDrawList;
+        Window->EEDrawList    = SheetStruct;
         SheetStruct->m_Parent = Window;
     }
     return Failed;   /* Fin lecture 1 composant */
@@ -1025,7 +1081,7 @@ static int ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* W
 
         if( strnicmp( Line, "Sheet", 2 ) == 0 )
             sscanf( Line + 5, " %d %d",
-                    &Window->m_ScreenNumber, &Window->m_NumberOfScreen );
+                &Window->m_ScreenNumber, &Window->m_NumberOfScreen );
 
         if( strnicmp( Line, "Title", 2 ) == 0 )
         {

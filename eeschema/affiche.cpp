@@ -41,7 +41,8 @@ void SCH_COMPONENT::Display_Infos( WinEDA_DrawFrame* frame )
         msg = _( "Pwr Symb" );
     else
         msg = _( "Val" );
-    Affiche_1_Parametre( frame, 10, msg, m_Field[VALUE].m_Text, DARKCYAN );
+
+    Affiche_1_Parametre( frame, 10, msg, GetField(VALUE)->m_Text, DARKCYAN );
 
     Affiche_1_Parametre( frame, 28, _( "RefLib" ), m_ChipName.GetData(), BROWN );
 

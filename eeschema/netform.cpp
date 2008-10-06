@@ -297,9 +297,9 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
                 break; // No component left
 
             FootprintName.Empty();
-            if( !Component->m_Field[FOOTPRINT].IsVoid() )
+            if( !Component->GetField( FOOTPRINT )->IsVoid() )
             {
-                FootprintName = Component->m_Field[FOOTPRINT].m_Text;
+                FootprintName = Component->GetField( FOOTPRINT )->m_Text;
                 FootprintName.Replace( wxT( " " ), wxT( "_" ) );
             }
 
@@ -310,7 +310,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
             Line.Replace( wxT( " " ), wxT( "_" ) );
             fprintf( tmpfile, CONV_TO_UTF8( Line ) );
 
-            Line = Component->m_Field[VALUE].m_Text;
+            Line = Component->GetField( VALUE )->m_Text;
             Line.Replace( wxT( " " ), wxT( "_" ) );
             fprintf( tmpfile, "Value=%s\n", CONV_TO_UTF8( Line ) );
 
@@ -496,7 +496,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                 }
             }
 
-            fprintf( f, " %s\n", CONV_TO_UTF8( Component->m_Field[VALUE].m_Text ) );
+            fprintf( f, " %s\n", CONV_TO_UTF8( Component->GetField( VALUE )->m_Text ) );
         }
     }
 
@@ -587,9 +587,9 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                 }
             }
 
-            if( !Component->m_Field[FOOTPRINT].IsVoid() )
+            if( !Component->GetField( FOOTPRINT )->IsVoid() )
             {
-                FootprintName = Component->m_Field[FOOTPRINT].m_Text;
+                FootprintName = Component->GetField( FOOTPRINT )->m_Text;
                 FootprintName.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
@@ -601,7 +601,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                     CONV_TO_UTF8( FootprintName ) );
             fprintf( f, "  %s", CONV_TO_UTF8( Line ) );
 
-            Line = Component->m_Field[VALUE].m_Text;
+            Line = Component->GetField( VALUE )->m_Text;
             Line.Replace( wxT( " " ), wxT( "_" ) );
             fprintf( f, " %s", CONV_TO_UTF8( Line ) );
 
@@ -968,9 +968,9 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
             if( Component == NULL )
                 break;
 
-            if( !Component->m_Field[FOOTPRINT].IsVoid() )
+            if( !Component->GetField( FOOTPRINT )->IsVoid() )
             {
-                FootprintName = Component->m_Field[FOOTPRINT].m_Text;
+                FootprintName = Component->GetField( FOOTPRINT )->m_Text;
                 FootprintName.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
@@ -980,7 +980,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
             fprintf( f, "%s     ", CONV_TO_UTF8( StartCmpDesc ) );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
 
-            msg = Component->m_Field[VALUE].m_Text;
+            msg = Component->GetField( VALUE )->m_Text;
             msg.Replace( wxT( " " ), wxT( "_" ) );
             fprintf( f, "     \"%s\"", CONV_TO_UTF8( msg ) );
             fprintf( f, "\n" );

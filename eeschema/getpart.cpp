@@ -186,16 +186,16 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawLibItem->m_Flags = IS_NEW | IS_MOVED;
 
     /* Init champ Valeur */
-    DrawLibItem->m_Field[VALUE].m_Pos.x =
+    DrawLibItem->GetField( VALUE )->m_Pos.x =
         Entry->m_Name.m_Pos.x + DrawLibItem->m_Pos.x;
-    DrawLibItem->m_Field[VALUE].m_Pos.y =
+    DrawLibItem->GetField( VALUE )->m_Pos.y =
         Entry->m_Name.m_Pos.y + DrawLibItem->m_Pos.y;
-    DrawLibItem->m_Field[VALUE].m_Orient    = Entry->m_Name.m_Orient;
-    DrawLibItem->m_Field[VALUE].m_Size      = Entry->m_Name.m_Size;
-    DrawLibItem->m_Field[VALUE].m_Text      = DrawLibItem->m_ChipName;
-    DrawLibItem->m_Field[VALUE].m_Attributs = Entry->m_Name.m_Attributs;
-    DrawLibItem->m_Field[VALUE].m_HJustify  = Entry->m_Name.m_HJustify;
-    DrawLibItem->m_Field[VALUE].m_VJustify  = Entry->m_Name.m_VJustify;
+    DrawLibItem->GetField( VALUE )->m_Orient    = Entry->m_Name.m_Orient;
+    DrawLibItem->GetField( VALUE )->m_Size      = Entry->m_Name.m_Size;
+    DrawLibItem->GetField( VALUE )->m_Text      = DrawLibItem->m_ChipName;
+    DrawLibItem->GetField( VALUE )->m_Attributs = Entry->m_Name.m_Attributs;
+    DrawLibItem->GetField( VALUE )->m_HJustify  = Entry->m_Name.m_HJustify;
+    DrawLibItem->GetField( VALUE )->m_VJustify  = Entry->m_Name.m_VJustify;
 
     msg = Entry->m_Prefix.m_Text;
     if( msg.IsEmpty() )
@@ -206,36 +206,41 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawLibItem->SetRef(GetSheet(), msg );
 
     /* Init champ Reference */
-    DrawLibItem->m_Field[REFERENCE].m_Pos.x =
+    DrawLibItem->GetField( REFERENCE )->m_Pos.x =
         Entry->m_Prefix.m_Pos.x + DrawLibItem->m_Pos.x;
-    DrawLibItem->m_Field[REFERENCE].m_Pos.y =
+    DrawLibItem->GetField( REFERENCE )->m_Pos.y =
         Entry->m_Prefix.m_Pos.y + DrawLibItem->m_Pos.y;
-    DrawLibItem->m_Field[REFERENCE].m_Orient    = Entry->m_Prefix.m_Orient;
-    DrawLibItem->m_Field[REFERENCE].m_Size      = Entry->m_Prefix.m_Size;
+    DrawLibItem->GetField( REFERENCE )->m_Orient    = Entry->m_Prefix.m_Orient;
+    DrawLibItem->GetField( REFERENCE )->m_Size      = Entry->m_Prefix.m_Size;
     DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
-    DrawLibItem->m_Field[REFERENCE].m_Attributs = Entry->m_Prefix.m_Attributs;
-    DrawLibItem->m_Field[REFERENCE].m_HJustify  = Entry->m_Prefix.m_HJustify;
-    DrawLibItem->m_Field[REFERENCE].m_VJustify  = Entry->m_Prefix.m_VJustify;
+    DrawLibItem->GetField( REFERENCE )->m_Attributs = Entry->m_Prefix.m_Attributs;
+    DrawLibItem->GetField( REFERENCE )->m_HJustify  = Entry->m_Prefix.m_HJustify;
+    DrawLibItem->GetField( REFERENCE )->m_VJustify  = Entry->m_Prefix.m_VJustify;
 
     /* Init des autres champs si predefinis dans la librairie */
     for( Field = Entry->Fields; Field != NULL; Field = (LibDrawField*) Field->Pnext )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;
+
         ii = Field->m_FieldId;
         if( ii < 2 )
             continue;
-        if( ii >= NUMBER_OF_FIELDS )
+
+        if( ii >= DrawLibItem->GetFieldCount() )
             continue;
-        DrawLibItem->m_Field[ii].m_Pos.x    += Field->m_Pos.x;
-        DrawLibItem->m_Field[ii].m_Pos.y    += Field->m_Pos.y;
-        DrawLibItem->m_Field[ii].m_Size      = Field->m_Size;
-        DrawLibItem->m_Field[ii].m_Attributs = Field->m_Attributs;
-        DrawLibItem->m_Field[ii].m_Orient    = Field->m_Orient;
-        DrawLibItem->m_Field[ii].m_Text     = Field->m_Text;
-        DrawLibItem->m_Field[ii].m_Name     = Field->m_Name;
-        DrawLibItem->m_Field[ii].m_HJustify = Field->m_HJustify;
-        DrawLibItem->m_Field[ii].m_VJustify = Field->m_VJustify;
+
+        SCH_CMP_FIELD* f = DrawLibItem->GetField( ii );
+
+        f->m_Pos.x    += Field->m_Pos.x;
+        f->m_Pos.y    += Field->m_Pos.y;
+        f->m_Size      = Field->m_Size;
+        f->m_Attributs = Field->m_Attributs;
+        f->m_Orient    = Field->m_Orient;
+        f->m_Text      = Field->m_Text;
+        f->m_Name      = Field->m_Name;
+        f->m_HJustify  = Field->m_HJustify;
+        f->m_VJustify  = Field->m_VJustify;
     }
 
     DrawStructsInGhost( DrawPanel, DC, DrawLibItem, 0, 0 );

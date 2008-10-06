@@ -625,24 +625,24 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
     switch( g_ItemToRepeat->Type() )
     {
     case DRAW_JUNCTION_STRUCT_TYPE:
-            #undef STRUCT
-            #define STRUCT ( (DrawJunctionStruct*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (DrawJunctionStruct*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
         break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
-            #undef STRUCT
-            #define STRUCT ( (DrawNoConnectStruct*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (DrawNoConnectStruct*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
         break;
 
     case TYPE_SCH_TEXT:
-            #undef STRUCT
-            #define STRUCT ( (SCH_TEXT*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (SCH_TEXT*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -652,8 +652,8 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
 
 
     case TYPE_SCH_LABEL:
-            #undef STRUCT
-            #define STRUCT ( (SCH_LABEL*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (SCH_LABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -663,8 +663,8 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
 
 
     case TYPE_SCH_HIERLABEL:
-            #undef STRUCT
-            #define STRUCT ( (SCH_HIERLABEL*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (SCH_HIERLABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -673,8 +673,8 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
     case TYPE_SCH_GLOBALLABEL:
-            #undef STRUCT
-            #define STRUCT ( (SCH_GLOBALLABEL*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (SCH_GLOBALLABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
         STRUCT->m_Pos += g_RepeatStep;
         new_pos = STRUCT->m_Pos;
@@ -683,8 +683,8 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
     case DRAW_SEGMENT_STRUCT_TYPE:
-            #undef STRUCT
-            #define STRUCT ( (EDA_DrawLineStruct*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (EDA_DrawLineStruct*) g_ItemToRepeat )
         g_ItemToRepeat   = STRUCT->GenCopy();
         STRUCT->m_Start += g_RepeatStep;
         new_pos = STRUCT->m_Start;
@@ -700,8 +700,8 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         break;
 
     case TYPE_SCH_COMPONENT:     // In repeat command the new component is put in move mode
-            #undef STRUCT
-            #define STRUCT ( (SCH_COMPONENT*) g_ItemToRepeat )
+        #undef STRUCT
+        #define STRUCT ( (SCH_COMPONENT*) g_ItemToRepeat )
 
         // Create the duplicate component, position = mouse cursor
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -710,9 +710,10 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         STRUCT->m_Pos       = GetScreen()->m_Curseur;
         STRUCT->m_Flags     = IS_NEW;
         STRUCT->m_TimeStamp = GetTimeStamp();
-        for( int ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
+
+        for( int ii = 0; ii < STRUCT->GetFieldCount(); ii++ )
         {
-            STRUCT->m_Field[ii].m_Pos += new_pos;
+            STRUCT->GetField(ii)->m_Pos += new_pos;
         }
 
         RedrawOneStruct( DrawPanel, DC, STRUCT, g_XorMode );

@@ -375,23 +375,23 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 
 {
     wxPoint         textpos; /* Position des textes */
-    SCH_CMP_FIELD* Field = &DrawLibItem->m_Field[FieldNumber];
+    SCH_CMP_FIELD*  field = DrawLibItem->GetField( FieldNumber );
     int             hjustify, vjustify;
     int             orient, color = -1;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-        color = ReturnLayerColor( Field->GetLayer() );
+        color = ReturnLayerColor( field->GetLayer() );
 
     DrawMode = 0;   /* Unused */
-    if( Field->m_Attributs & TEXT_NO_VISIBLE )
+    if( field->m_Attributs & TEXT_NO_VISIBLE )
         return;
-    if( Field->IsVoid() )
+    if( field->IsVoid() )
         return;
 
     /* Calcul de la position des textes, selon orientation du composant */
-    orient   = Field->m_Orient;
-    hjustify = Field->m_HJustify; vjustify = Field->m_VJustify;
-    textpos = Field->m_Pos - DrawLibItem->m_Pos;    // textpos is the text position relative to the component anchor
+    orient   = field->m_Orient;
+    hjustify = field->m_HJustify; vjustify = field->m_VJustify;
+    textpos = field->m_Pos - DrawLibItem->m_Pos;    // textpos is the text position relative to the component anchor
 
     textpos = TransformCoordinate( DrawLibItem->m_Transform, textpos ) + DrawLibItem->m_Pos;
 
@@ -423,20 +423,20 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
     //not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
-        PlotGraphicText( g_PlotFormat, textpos, color, Field->m_Text,
+        PlotGraphicText( g_PlotFormat, textpos, color, field->m_Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         Field->m_Size,
+                         field->m_Size,
                          hjustify, vjustify );
     }
     else    /* We plt the reference, for a multiple parts per package */
     {
             /* Adding A, B ... to the reference */
         wxString Text;
-        Text = Field->m_Text;
+        Text = field->m_Text;
         Text.Append( 'A' - 1 + DrawLibItem->m_Multi );
         PlotGraphicText( g_PlotFormat, textpos, color, Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         Field->m_Size, hjustify, vjustify );
+                         field->m_Size, hjustify, vjustify );
     }
 }
 

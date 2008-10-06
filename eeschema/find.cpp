@@ -117,15 +117,15 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
 
                     case 2:     // find reference
                         NotFound = FALSE;
-                        pos = pSch->m_Field[REFERENCE].m_Pos;
+                        pos = pSch->GetField( REFERENCE )->m_Pos;
                         break;
 
                     case 3:     // find value
                         pos = pSch->m_Pos;
-                        if( text_to_find.CmpNoCase( pSch->m_Field[VALUE].m_Text ) != 0 )
+                        if( text_to_find.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
                             break;
                         NotFound = FALSE;
-                        pos = pSch->m_Field[VALUE].m_Pos;
+                        pos = pSch->GetField( VALUE )->m_Pos;
                         break;
                     }
                 }
@@ -469,13 +469,13 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
                 if( WildCompareString( WildText, pSch->GetRef(Sheet), FALSE ) )
                 {
                     NotFound = FALSE;
-                    pos = pSch->m_Field[REFERENCE].m_Pos;
+                    pos = pSch->GetField( REFERENCE )->m_Pos;
                     break;
                 }
-                if( WildCompareString( WildText, pSch->m_Field[VALUE].m_Text, FALSE ) )
+                if( WildCompareString( WildText, pSch->GetField( VALUE )->m_Text, FALSE ) )
                 {
                     NotFound = FALSE;
-                    pos = pSch->m_Field[VALUE].m_Pos;
+                    pos = pSch->GetField( VALUE )->m_Pos;
                 }
                 break;
 

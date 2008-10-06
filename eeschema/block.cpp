@@ -711,11 +711,12 @@ void MirrorOneStruct( SCH_ITEM * DrawStruct, wxPoint& Center )
                                                          NULL, CMP_MIROIR_Y );
         MirrorYPoint( DrawLibItem->m_Pos, Center );
         dx -= DrawLibItem->m_Pos.x;
-        for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-        {       /* move the fields to the new position because the component itself has moved */
-            DrawLibItem->m_Field[ii].m_Pos.x -= dx;
-        }
 
+        for( ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
+        {
+            /* move the fields to the new position because the component itself has moved */
+            DrawLibItem->GetField(ii)->m_Pos.x -= dx;
+        }
         break;
 
     case DRAW_SHEET_STRUCT_TYPE:
@@ -1232,9 +1233,9 @@ void MoveOneStruct( SCH_ITEM * DrawStruct, const wxPoint& move_vector )
     case TYPE_SCH_COMPONENT:
         DrawLibItem = (SCH_COMPONENT*) DrawStruct;
         DrawLibItem->m_Pos += move_vector;
-        for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
+        for( ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
         {
-            DrawLibItem->m_Field[ii].m_Pos += move_vector;
+            DrawLibItem->GetField(ii)->m_Pos += move_vector;
         }
 
         break;

@@ -422,19 +422,21 @@ bool SnapPoint2( const wxPoint& PosRef, int SearchMask,
 
             if( SearchMask & FIELDCMPITEM )
             {
-                SCH_CMP_FIELD* Field;
                 SCH_COMPONENT*  DrawLibItem = (SCH_COMPONENT*) DrawList;
-                for( i = REFERENCE; i < NUMBER_OF_FIELDS; i++ )
+                for( i = REFERENCE; i < DrawLibItem->GetFieldCount(); i++ )
                 {
-                    Field = &DrawLibItem->m_Field[i];
-                    if( (Field->m_Attributs & TEXT_NO_VISIBLE) )
+                    SCH_CMP_FIELD* field = DrawLibItem->GetField(i);
+
+                    if( field->m_Attributs & TEXT_NO_VISIBLE )
                         continue;
-                    if( Field->IsVoid() )
+
+                    if( field->IsVoid() )
                         continue;
-                    EDA_Rect BoundaryBox = Field->GetBoundaryBox();
+
+                    EDA_Rect BoundaryBox = field->GetBoundaryBox();
                     if( BoundaryBox.Inside( x, y ) )
                     {
-                        LastSnappedStruct = Field;
+                        LastSnappedStruct = field;
                         return TRUE;
                     }
                 }

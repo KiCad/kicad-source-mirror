@@ -138,11 +138,12 @@ public:
 /* class to handle a series of sheets *********/
 /* a 'path' so to speak.. *********************/
 /**********************************************/
-#define DSLSZ 32    // Max number of levels for a sheet path
 class DrawSheetPath
 {
 public:
     int m_numSheets;
+
+#define DSLSZ       32    // Max number of levels for a sheet path
     DrawSheetStruct* m_sheets[DSLSZ];
 
     DrawSheetPath();
@@ -168,9 +169,10 @@ public:
      */
     wxString         PathHumanReadable();
 
-    /** Function UpdateAllScreenReferences
-     * Update the reference and the m_Multi parameter (part selection) for all components on a screen
-     * depending on the actual sheet path.
+    /**
+     * Function UpdateAllScreenReferences
+     * updates the reference and the m_Multi parameter (part selection) for all
+     * components on a screen depending on the actual sheet path.
      * Mandatory in complex hierarchies because sheets use the same screen (basic schematic)
      * but with different references and part selection according to the displayed sheet
      */

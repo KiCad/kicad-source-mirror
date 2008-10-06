@@ -380,7 +380,7 @@ int DrawSheetStruct::ComponentCount()
             if( bs->Type() == TYPE_SCH_COMPONENT )
             {
                 SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
-                if( Cmp->m_Field[VALUE].m_Text.GetChar( 0 ) != '#' )
+                if( Cmp->GetField(VALUE)->m_Text.GetChar( 0 ) != '#' )
                     n++;
             }
             if( bs->Type() == DRAW_SHEET_STRUCT_TYPE )
@@ -776,12 +776,6 @@ wxString DrawSheetPath::PathHumanReadable()
 /***********************************************/
 void DrawSheetPath::UpdateAllScreenReferences()
 /***********************************************/
-/** Function UpdateAllScreenReferences
- * Update the reference and the m_Multi parameter (part selection) for all components on a screen
- * depending on the actual sheet path.
- * Mandatory in complex hierarchies sheets use the same screen (basic schematic)
- * but with different references and part selection according to the displayed sheet
-*/
 {
     EDA_BaseStruct* t = LastDrawList();
 
@@ -790,7 +784,7 @@ void DrawSheetPath::UpdateAllScreenReferences()
         if( t->Type() == TYPE_SCH_COMPONENT )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
-            component->m_Field[REFERENCE].m_Text = component->GetRef( this );
+            component->GetField(REFERENCE)->m_Text = component->GetRef( this );
             component->m_Multi = component->GetUnitSelection( this );
         }
         t = t->Pnext;

@@ -420,8 +420,8 @@ static int ListTriComposantByVal( ListComponent* obj1,
     if( obj2->m_Comp == NULL )
         return 1;
 
-    Text1 = &(obj1->m_Comp->m_Field[VALUE].m_Text);
-    Text2 = &(obj2->m_Comp->m_Field[VALUE].m_Text);
+    Text1 = &(obj1->m_Comp->GetField(VALUE)->m_Text);
+    Text2 = &(obj2->m_Comp->GetField(VALUE)->m_Text);
     ii    = Text1->CmpNoCase( *Text2 );
 
     if( ii == 0 )
@@ -471,8 +471,8 @@ static int ListTriComposantByRef( ListComponent* obj1,
 
     if( ii == 0 )
     {
-        Text1 = &( obj1->m_Comp->m_Field[VALUE].m_Text );
-        Text2 = &( obj2->m_Comp->m_Field[VALUE].m_Text );
+        Text1 = &( obj1->m_Comp->GetField(VALUE)->m_Text );
+        Text2 = &( obj2->m_Comp->GetField(VALUE)->m_Text );
         ii    = Text1->CmpNoCase( *Text2 );
     }
 
@@ -594,7 +594,8 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
                                              bool CompactForm )
 /*******************************************************************************************/
 {
-    const wxCheckBox* FieldListCtrl[] = {
+    // @todo make this variable length
+    static const wxCheckBox* FieldListCtrl[] = {
         m_AddField1,
         m_AddField2,
         m_AddField3,
@@ -613,24 +614,26 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
         if( CompactForm )
         {
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[FOOTPRINT].m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField(FOOTPRINT)->m_Text ) );
         }
         else
-            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->m_Field[FOOTPRINT].m_Text ) );
+            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField(FOOTPRINT)->m_Text ) );
     }
 
-    for( ii = FIELD1; ii <= FIELD8; ii++ )
+    for( ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
     {
         FieldCtrl = FieldListCtrl[ii - FIELD1];
         if( FieldCtrl == NULL )
             continue;
+
         if( !FieldCtrl->IsChecked() )
             continue;
+
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[ii].m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField(ii)->m_Text ) );
         else
-            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->m_Field[ii].m_Text ) );
+            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField(ii)->m_Text ) );
     }
 }
 
@@ -655,7 +658,8 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
 
     if( CompactForm )
     {
-        const wxCheckBox* FieldListCtrl[FIELD8 - FIELD1 + 1] = {
+        // @todo make this variable length
+        static const wxCheckBox* FieldListCtrl[FIELD8 - FIELD1 + 1] = {
             m_AddField1,
             m_AddField2,
             m_AddField3,
@@ -673,7 +677,6 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
         {
             fprintf( f, "%csheet path", s_ExportSeparatorSymbol );
             fprintf( f, "%clocation", s_ExportSeparatorSymbol );
-
         }
 
         if( m_AddFootprintField->IsChecked() )
@@ -732,10 +735,10 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
 
         if( CompactForm )
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ) );
         else
             fprintf( f, "| %-10s %-12s", CmpName,
-                    CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ) );
 
         if( aIncludeSubComponents )
         {
@@ -816,7 +819,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
         }
 
         sprintf( CmpName, "%s%c", aList[ii].m_Ref, Unit );
-        fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->m_Field[VALUE].m_Text ), CmpName );
+        fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ), CmpName );
 
         // print the sheet path
         if( aIncludeSubComponents )

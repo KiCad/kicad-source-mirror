@@ -22,8 +22,47 @@ WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 /* class SCH_COMPONENT */
 /***************************/
 
-/** Function AddHierarchicalReference
- * Add a full hierachical reference (path + local reference)
+
+/*******************************************************************/
+SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
+    SCH_ITEM( aParent, TYPE_SCH_COMPONENT )
+/*******************************************************************/
+{
+    m_Multi = 0;    /* In multi unit chip - which unit to draw. */
+
+    m_Pos = aPos;
+
+    m_Convert = 0;  /* De Morgan Handling  */
+
+    /* The rotation/mirror transformation matrix. pos normal */
+    m_Transform[0][0] = 1;
+    m_Transform[0][1] = 0;
+    m_Transform[1][0] = 0;
+    m_Transform[1][1] = -1;
+
+    m_Fields.reserve( NUMBER_OF_FIELDS );
+
+    for( int i=0;  i<NUMBER_OF_FIELDS;  ++i )
+    {
+        SCH_CMP_FIELD field( aPos, i, this, ReturnDefaultFieldName(i) );
+
+        if( i==REFERENCE )
+            field.SetLayer( LAYER_REFERENCEPART );
+        else if( i==VALUE )
+            field.SetLayer( LAYER_VALUEPART );
+        // else keep LAYER_FIELDS from SCH_CMP_FIELD constructor
+
+        // SCH_CMP_FIELD's implicitly created copy constructor is called in here
+        AddField( field );
+    }
+
+    m_PrefixString = wxString( _( "U" ) );
+}
+
+
+/**
+ * Function AddHierarchicalReference
+ * adds a full hierachical reference (path + local reference)
  * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp> like /05678E50/A23EF560)
  * @param aRef = local reference like C45, R56
  * @param aMulti = part selection, used in multi part per package (0 or 1 for non multi)
@@ -56,7 +95,7 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 
 
 /****************************************************************/
-const wxString& ReturnDefaultFieldName( int aFieldNdx )
+wxString ReturnDefaultFieldName( int aFieldNdx )
 /****************************************************************/
 
 /* Return the default field name from its index (REFERENCE, VALUE ..)
@@ -65,42 +104,40 @@ const wxString& ReturnDefaultFieldName( int aFieldNdx )
  */
 {
     // avoid unnecessarily copying wxStrings at runtime.
-    static const wxString FieldDefaultNameList[] = {
-        _( "Ref" ),                             /* Reference of part, i.e. "IC21" */
-        _( "Value" ),                           /* Value of part, i.e. "3.3K" */
-        _( "Footprint" ),                       /* Footprint, used by cvpcb or pcbnew, i.e. "16DIP300" */
-        _( "Sheet" ),                           /* for components which are a schematic file, schematic file name, i.e. "cnt16.sch" */
-        wxString( _( "Field" ) ) + wxT( "1" ),
-        wxString( _( "Field" ) ) + wxT( "2" ),
-        wxString( _( "Field" ) ) + wxT( "3" ),
-        wxString( _( "Field" ) ) + wxT( "4" ),
-        wxString( _( "Field" ) ) + wxT( "5" ),
-        wxString( _( "Field" ) ) + wxT( "6" ),
-        wxString( _( "Field" ) ) + wxT( "7" ),
-        wxString( _( "Field" ) ) + wxT( "8" ),
-        wxT( "badFieldNdx!" )               // error, and "sentinel" value
+    static const wxString defaults[] = {
+        _( "Ref" ),             // Reference of part, i.e. "IC21"
+        _( "Value" ),           // Value of part, i.e. "3.3K"
+        _( "Footprint" ),       // Footprint, used by cvpcb or pcbnew, i.e. "16DIP300"
+        _( "Datasheet" ),
     };
 
-    if( (unsigned) aFieldNdx > FIELD8 )     // catches < 0 also
-        aFieldNdx = FIELD8 + 1;             // return the sentinel text
+    if( (unsigned) aFieldNdx <= DATASHEET )
+        return defaults[ aFieldNdx ];
 
-    return FieldDefaultNameList[aFieldNdx];
+    else
+    {
+        wxString ret = _("Field");
+        ret << ( aFieldNdx - FIELD1 + 1);
+        return ret;
+    }
 }
 
 
 /****************************************************************/
-const wxString& SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
+wxString SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
 /****************************************************************/
-
-/* Return the Field name from its index (REFERENCE, VALUE ..)
- */
 {
-    // avoid unnecessarily copying wxStrings.
+    SCH_CMP_FIELD* field = GetField( aFieldNdx );
 
-    if( aFieldNdx < FIELD1  ||  m_Field[aFieldNdx].m_Name.IsEmpty() )
-        return ReturnDefaultFieldName( aFieldNdx );
+    if( field )
+    {
+        if( !field->m_Name.IsEmpty() )
+            return field->m_Name;
+        else
+            return ReturnDefaultFieldName( aFieldNdx );
+    }
 
-    return m_Field[aFieldNdx].m_Name;
+    return wxEmptyString;
 }
 
 
@@ -137,15 +174,15 @@ const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
         }
     }
 
-    //if it was not found in m_Paths array, then see if it is in
+    // if it was not found in m_Paths array, then see if it is in
     // m_Field[REFERENCE] -- if so, use this as a default for this path.
     // this will happen if we load a version 1 schematic file.
     // it will also mean that multiple instances of the same sheet by default
     // all have the same component references, but perhaps this is best.
-    if( !m_Field[REFERENCE].m_Text.IsEmpty() )
+    if( !GetField(REFERENCE)->m_Text.IsEmpty() )
     {
-        SetRef( sheet, m_Field[REFERENCE].m_Text );
-        return m_Field[REFERENCE].m_Text;
+        SetRef( sheet, GetField(REFERENCE)->m_Text );
+        return GetField(REFERENCE)->m_Text;
     }
     return m_PrefixString;
 }
@@ -184,16 +221,19 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     if( notInArray )
         AddHierarchicalReference( path, ref, m_Multi );
 
-    if( m_Field[REFERENCE].m_Text.IsEmpty()
-       || ( abs( m_Field[REFERENCE].m_Pos.x - m_Pos.x ) +
-            abs( m_Field[REFERENCE].m_Pos.y - m_Pos.y ) > 10000) )
+    SCH_CMP_FIELD* rf = GetField( REFERENCE );
+
+    if( rf->m_Text.IsEmpty()
+       || ( abs( rf->m_Pos.x - m_Pos.x ) +
+            abs( rf->m_Pos.y - m_Pos.y ) > 10000) )
     {
-        //move it to a reasonable position..
-        m_Field[REFERENCE].m_Pos    = m_Pos;
-        m_Field[REFERENCE].m_Pos.x += 50; //a slight offset..
-        m_Field[REFERENCE].m_Pos.y += 50;
+        // move it to a reasonable position
+        rf->m_Pos    = m_Pos;
+        rf->m_Pos.x += 50;         // a slight offset
+        rf->m_Pos.y += 50;
     }
-    m_Field[REFERENCE].m_Text = ref; //for drawing.
+
+    rf->m_Text = ref;  // for drawing.
 }
 
 
@@ -266,51 +306,28 @@ void SCH_COMPONENT::SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection 
 
 
 /******************************************************************/
-const wxString& SCH_COMPONENT::GetFieldValue( int aFieldNdx ) const
+SCH_CMP_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 /******************************************************************/
 {
-    // avoid unnecessarily copying wxStrings.
-    static const wxString myEmpty = wxEmptyString;
+    const SCH_CMP_FIELD* field;
 
-    if( (unsigned) aFieldNdx > FIELD8  ||  m_Field[aFieldNdx].m_Text.IsEmpty() )
-        return myEmpty;
+    if( (unsigned) aFieldNdx < m_Fields.size() )
+        field = &m_Fields[aFieldNdx];
+    else
+        field = NULL;
 
-    return m_Field[aFieldNdx].m_Text;
+    wxASSERT( field );
+
+    // use case to remove const-ness
+    return (SCH_CMP_FIELD*) field;
 }
 
 
-/*******************************************************************/
-SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos ) :
-    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
-/*******************************************************************/
+/******************************************************************/
+void SCH_COMPONENT::AddField( const SCH_CMP_FIELD& aField )
+/******************************************************************/
 {
-    int ii;
-
-    m_Multi = 0;    /* In multi unit chip - which unit to draw. */
-
-    m_Pos = aPos;
-
-    m_Convert = 0;  /* De Morgan Handling  */
-
-    /* The rotation/mirror transformation matrix. pos normal*/
-    m_Transform[0][0] = 1;
-    m_Transform[0][1] = 0;
-    m_Transform[1][0] = 0;
-    m_Transform[1][1] = -1;
-
-    /* initialisation des Fields */
-    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        m_Field[ii].m_Pos = m_Pos;
-        m_Field[ii].SetLayer( LAYER_FIELDS );
-        m_Field[ii].m_FieldId = REFERENCE + ii;
-        m_Field[ii].m_Parent  = this;
-    }
-
-    m_Field[VALUE].SetLayer( LAYER_VALUEPART );
-    m_Field[REFERENCE].SetLayer( LAYER_REFERENCEPART );
-
-    m_PrefixString = wxString( _( "U" ) );
+    m_Fields.push_back( aField );
 }
 
 
@@ -380,10 +397,10 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     EXCHG( m_Transform[0][1], copyitem->m_Transform[0][1] );
     EXCHG( m_Transform[1][0], copyitem->m_Transform[1][0] );
     EXCHG( m_Transform[1][1], copyitem->m_Transform[1][1] );
-    for( int ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        m_Field[ii].SwapData( &copyitem->m_Field[ii] );
-    }
+
+    SCH_CMP_FIELDS tmp = copyitem->m_Fields;
+    copyitem->m_Fields = m_Fields;
+    m_Fields = tmp;
 }
 
 
@@ -471,7 +488,7 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
-    m_Field[REFERENCE].m_Text = defRef; //for drawing.
+    m_Fields[REFERENCE].m_Text = defRef; //for drawing.
 
 }
 
@@ -480,9 +497,9 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
 SCH_COMPONENT* SCH_COMPONENT::GenCopy()
 /**************************************************************/
 {
-    SCH_COMPONENT* new_item = new SCH_COMPONENT( m_Pos );
 
-    int            ii;
+#if 0
+    SCH_COMPONENT* new_item = new SCH_COMPONENT( m_Pos );
 
     new_item->m_Multi        = m_Multi;
     new_item->m_ChipName     = m_ChipName;
@@ -495,12 +512,11 @@ SCH_COMPONENT* SCH_COMPONENT::GenCopy()
     new_item->m_Transform[1][1] = m_Transform[1][1];
     new_item->m_TimeStamp = m_TimeStamp;
 
+    new_item->m_Fields = m_Fields;
+#else
+    SCH_COMPONENT* new_item = new SCH_COMPONENT( *this );
 
-    /* initialisation des Fields */
-    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        m_Field[ii].PartTextCopy( &new_item->m_Field[ii] );
-    }
+#endif
 
     return new_item;
 }
@@ -752,9 +768,9 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
     "/>\n";
 
     // skip the reference, it's been output already.
-    for( int i = 1;  i<NUMBER_OF_FIELDS;  ++i )
+    for( int i = 1;  i<GetFieldCount();  ++i )
     {
-        wxString value = GetFieldValue( i );
+        wxString value = GetField( i )->m_Text;
 
         if( !value.IsEmpty() )
         {
@@ -775,17 +791,11 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 /****************************************/
 bool SCH_COMPONENT::Save( FILE* f ) const
 /****************************************/
-
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 {
     int             ii, Success = true;
     char            Name1[256], Name2[256];
     wxArrayString   reference_fields;
+
     static wxString delimiters( wxT( " " ) );
 
     //this is redundant with the AR entries below, but it makes the
@@ -797,10 +807,10 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
     else
     {
-        if( m_Field[REFERENCE].m_Text.IsEmpty() )
+        if( GetField(REFERENCE)->m_Text.IsEmpty() )
             strncpy( Name1, CONV_TO_UTF8( m_PrefixString ), sizeof(Name1) );
         else
-            strncpy( Name1, CONV_TO_UTF8( m_Field[REFERENCE].m_Text ), sizeof(Name1) );
+            strncpy( Name1, CONV_TO_UTF8( GetField(REFERENCE)->m_Text ), sizeof(Name1) );
     }
     for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
     {
@@ -870,14 +880,25 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         }
     }
 
-    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
+    for( int fieldNdx=0; fieldNdx<GetFieldCount();  ++fieldNdx )
     {
-        const SCH_CMP_FIELD* field = &m_Field[ii];
-        if( field->m_Text.IsEmpty() )
+        SCH_CMP_FIELD* field = GetField( fieldNdx );
+
+        wxString defaultName = ReturnDefaultFieldName( fieldNdx );
+
+        // only save the field if there is a value in the field or if field name
+        // is different than the default field name
+        if( field->m_Text.IsEmpty() && defaultName == field->m_Name )
             continue;
+
+        // re-number the fields on disk so they are contiguously numbered.
+        // The field index is probably not needed long term.
+        field->m_FieldId = fieldNdx;
+
         if( !field->Save( f ) )
         {
-            Success = false; break;
+            Success = false;
+            break;
         }
     }
 
@@ -914,9 +935,9 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
     EDA_Rect  bbox = GetBoundaryBox();
 
     // Include BoundingBoxes of fields
-    for( int ii = REFERENCE; ii < NUMBER_OF_FIELDS; ii++ )
+    for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        bbox.Merge( m_Field[ii].GetBoundaryBox() );
+        bbox.Merge( GetField(ii)->GetBoundaryBox() );
     }
 
     // ... add padding
