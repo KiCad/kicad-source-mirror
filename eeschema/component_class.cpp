@@ -891,10 +891,6 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         if( field->m_Text.IsEmpty() && defaultName == field->m_Name )
             continue;
 
-        // re-number the fields on disk so they are contiguously numbered.
-        // The field index is probably not needed long term.
-        field->m_FieldId = fieldNdx;
-
         if( !field->Save( f ) )
         {
             Success = false;
