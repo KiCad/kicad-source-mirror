@@ -111,6 +111,20 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 /********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
+    /* Draw areas (i.e. zones) */
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea(ii);
+
+        // Areas must be drawn here only if not moved or dragged,
+        // because these areas are drawn by ManageCursor() in a specific manner
+        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        {
+            zone->Draw( aPanel, DC, aDrawMode );
+            zone->DrawFilledArea( aPanel, DC, aDrawMode );
+        }
+    }
+
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
         bool display = true;
@@ -174,20 +188,6 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         zone->Draw( aPanel, DC, aDrawMode );
     }
 
-
-    /* Draw areas (i.e. zones) */
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* zone = GetArea(ii);
-
-        // Areas must be drawn here only if not moved or dragged,
-        // because these areas are drawn by ManageCursor() in a specific manner
-        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
-        {
-            zone->Draw( aPanel, DC, aDrawMode );
-            zone->DrawFilledArea( aPanel, DC, aDrawMode );
-        }
-    }
 
     // draw the BOARD's markers.
     for( unsigned i=0; i < m_markers.size();  ++i )

@@ -30,7 +30,7 @@ void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 
 // Local Variables:
 /* how many segments are used to create a polygon from a circle: */
-static int s_CircleToSegmentsCount = 16;
+static int s_CircleToSegmentsCount = 32;
 
 /** function AddClearanceAreasPolygonsToPolysList
  * Add non copper areas polygons (pads and tracks with clearence)
@@ -253,7 +253,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
                                     int          aThermalGap,
                                     int          aCopperTickness )
 {
-    wxPoint corner, corner_start, corner_end;
+    wxPoint corner, corner_end;
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     int     angle = 0;
@@ -270,39 +270,29 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
     {
     case PAD_CIRCLE:    // Add 4 similar holes
     {
+         /* we create 4 copper holes and put them in position 1, 2, 3 and 4
+         * here is the area of the rectangular pad + its thermal gap
+         * the 4 copper holes remove the copper in order to create the thermal gap
+         * 4 ------ 1
+         * |       |
+         * |       |
+         * |       |
+         * |       |
+         * 3 ------ 2
+         * holes 2, 3, 4 are the same as hole 1, rotated 90, 180, 270 deg
+         */
         // Build the hole pattern, for the hole in the X >0, Y > 0 plane:
         std::vector <int> corners_buffer;
 
-        // calculate the starting point of the inner arc
-        corner.y = copper_tickness.x / 2;   // note dx is the pad radius, so copper_tickness.x is the value to use
-        double dtmp = ( (double) dx * dx ) - ( (double) corner.y * corner.y );
-        corner.x = (int) sqrt( dtmp );
-        corner_start = corner;
-
-        // calculate the ending point of the inner arc
-        corner_end.x = corner.y;
-        corner_end.y = corner.x;
-
-        // calculate intermediate points (y coordinate from corner.y to corner_end.y)
-        while( (corner.y < corner_end.y) && (corner.x > corner_end.x) )
-        {
-            corners_buffer.push_back( corner.x );
-            corners_buffer.push_back( corner.y );
-            RotatePoint( &corner, -delta );
-        }
-
-        corners_buffer.push_back( corner_end.x );
-        corners_buffer.push_back( corner_end.y );
-
         // calculate the starting point of the outter arc
         dx      += aThermalGap;     // The radius of the outter arc is dx = pad radius + aThermalGap
-        corner.x = corner_end.x;
-        dtmp = ( (double) dx * dx ) - ( (double) corner.x * corner.x );
+        corner.x = aThermalGap / 2;
+        double dtmp = ( (double) dx * dx ) - ( (double) corner.x * corner.x );
         corner.y = (int) sqrt( dtmp );
 
         // calculate the ending point of the outter arc
         corner_end.x = corner.y;
-        corner_end.y = corner_start.y;
+        corner_end.y = aThermalGap / 2;
 
         // calculate intermediate points (y coordinate from corner.y to corner_end.y
         while( (corner.y > corner_end.y)  && (corner.x < corner_end.x))
@@ -311,9 +301,14 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
             corners_buffer.push_back( corner.y );
             RotatePoint( &corner, delta );
         }
-
         corners_buffer.push_back( corner_end.x );
         corners_buffer.push_back( corner_end.y );
+        
+        /* add the radius lines */
+        corner.x = corner.y = aThermalGap / 2;
+        corners_buffer.push_back( corner.x );
+        corners_buffer.push_back( corner.y );
+        
 
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
         angle = 0;
@@ -340,38 +335,41 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
     case PAD_OVAL:
     case PAD_RECT:       // draw 4 Holes
     {
-        // First, create an hole like:
-        // 1 ------- 2
-        // 0 -----  |
-        //      5 | |
-        //        | |
-        //      4 | | 3
-        wxPoint corners_hole[6];            // buffer for 6 corners
-        // Create 1 hole, for a pad centered at0,0, orient 0
-        // Calculate coordinates for corner 0 to corner 5:
-        corners_hole[0] = wxPoint( (copper_tickness.x / 2), -dy );
-        corners_hole[1] = wxPoint( (copper_tickness.x / 2), -dy - aThermalGap );
-        corners_hole[2] = wxPoint(   dx + aThermalGap, -dy - aThermalGap );
-        corners_hole[3] = wxPoint( dx + aThermalGap, -(copper_tickness.y / 2) );
-        corners_hole[4] = wxPoint( dx, -(copper_tickness.y / 2) );
-        corners_hole[5] = wxPoint(    dx, -dy );
-
-        /* Create 2 holes, rotated by pad rotation.
-         * corners_hole[6] is the hole 1
-         * hole 3 is the same as hole 1, rotated 180 deg
+         /* we create 4 copper holes and put them in position 1, 2, 3 and 4
+         * here is the area of the rectangular pad + its thermal gap
+         * the 4 copper holes remove the copper in order to create the thermal gap
          * 4 ------ 1
          * |       |
          * |       |
          * |       |
          * |       |
          * 3 ------ 2
+         * hole 3 is the same as hole 1, rotated 180 deg
+         * hole 4 is the same as hole 2, rotated 180 deg and is the same as hole 1, mirrored
          */
+
+        // First, create a rectangular hole for position 1 :
+        // 2 ------- 3
+        //  |       |
+        //  |       |
+        //  |       |
+        // 1 ------- 4
+        wxPoint corners_hole[4];            // buffer for 6 corners
+        // Create 1 hole, for a pad centered at0,0, orient 0
+        // Calculate coordinates for corner 1 to corner 4:
+        corners_hole[0] = wxPoint( copper_tickness.x / 2, - copper_tickness.x / 2 );
+        corners_hole[1] = wxPoint( (copper_tickness.x / 2), -dy - aThermalGap );
+        corners_hole[2] = wxPoint(   dx + aThermalGap, -dy - aThermalGap );
+        corners_hole[3] = wxPoint( dx + aThermalGap, -(copper_tickness.y / 2) );
+
+        /* Create 2 holes, rotated by pad rotation.
+        */
         angle = aPad.m_Orient;
         for( int irect = 0; irect < 2; irect++ )
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                for( int ic = 0; ic < 6; ic++ )
+                for( int ic = 0; ic < 4; ic++ )
                 {
                     wxPoint cpos = corners_hole[ic];
                     RotatePoint( &cpos, angle );
@@ -386,19 +384,11 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
             }
         }
 
-        // Create a holes, like:
-        // -------
-        // | -----
-        // | |
-        // | |
-        // | |
-        // this is the mirrored of the previous hole
+        // Create a holes, that is the mirrored of the previous hole
         corners_hole[0].x = -corners_hole[0].x;
         corners_hole[1].x = -corners_hole[1].x;
         corners_hole[2].x = -corners_hole[2].x;
         corners_hole[3].x = -corners_hole[3].x;
-        corners_hole[4].x = -corners_hole[4].x;
-        corners_hole[5].x = -corners_hole[5].x;
 
         // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
         angle = aPad.m_Orient;
@@ -406,7 +396,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                for( int ic = 0; ic < 6; ic++ )
+                for( int ic = 0; ic < 4; ic++ )
                 {
                     wxPoint cpos = corners_hole[ic];
                     RotatePoint( &cpos, angle );
