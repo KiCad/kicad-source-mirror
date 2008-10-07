@@ -42,6 +42,9 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     wxString    msg;
     BOARD*      Pcb    = frame->m_Pcb;
 
+    if( g_GridRoutingSize < 25 )
+        g_GridRoutingSize = 25;
+
 	// Set the g_DesignSettings.m_TrackClearence (used to fill board map) to the max of m_TrackClearence and m_ZoneClearence
     g_DesignSettings.m_TrackClearence = max ( g_DesignSettings.m_TrackClearence, g_DesignSettings.m_ZoneClearence);
 
@@ -59,8 +62,6 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
     // calculate the fixed step of the routing matrix as 25 mils or more
     E_scale = g_GridRoutingSize / 25;
 
-    if( g_GridRoutingSize < 1 )
-        g_GridRoutingSize = 1;
 
     // calculate the Ncols and Nrows, size of the routing matrix
     ComputeMatriceSize( frame, g_GridRoutingSize );

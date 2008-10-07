@@ -136,6 +136,11 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
+    ret = fprintf( aFile, "ZOptions %d\n", m_GridFillValue);
+    if( ret < 1 )
+        return false;
+
+
     // Save the corner list
     for( item_pos = 0; item_pos < corners_count; item_pos++ )
     {
@@ -246,7 +251,17 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                 }
             }
         }
-        if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // aux info found
+        if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
+        {
+            int gridsize = 50;
+            text = Line + 8;
+            ret = sscanf( text, "%d", &gridsize );
+            if( ret < 1 )
+                return false;
+            else
+                m_GridFillValue = gridsize;
+        }
+        if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
             int  clearance = 200;
             char padoption;
@@ -737,6 +752,12 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     text_pos += 8;
     msg.Printf( wxT( "%d" ), m_Poly->corner.size() );
     Affiche_1_Parametre( frame, text_pos, _( "Corners" ), msg, BLUE );
+
+    text_pos += 8;
+    if ( m_GridFillValue )
+        msg.Printf( wxT( "%d" ), m_GridFillValue );
+    else msg = _("No Grid");
+    Affiche_1_Parametre( frame, text_pos, _( "Fill Grid" ), msg, BROWN );
 
     text_pos += 8;
     msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );

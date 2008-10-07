@@ -13,15 +13,22 @@ using namespace std;
 
 #include "PolyLine.h"
 
+// Local Functions:
 void    AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
                                       TRACK& aTrack, int aClearanceValue );
-void    AddPadWithClearancePolygon( Bool_Engine* aBooleng,
-                                    D_PAD& aPad, int aClearanceValue,
-                                    bool bThermal, int spoke_w );
+void    AddPadWithClearancePolygon( Bool_Engine* aBooleng, D_PAD& aPad, int aClearanceValue );
+void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
+                                    D_PAD&       aPad,
+                                    int          aThermalGap,
+                                    int          aCopperTickness );
 void    AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
                                       wxPoint aStart, wxPoint aEnd,
                                       int aWidth );
+void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
+                                        TEXTE_PCB* aText, int aClearanceValue );
 
+
+// Local Variables:
 /* how many segments are used to create a polygon from a circle: */
 static int s_CircleToSegmentsCount = 16;
 
@@ -82,10 +89,26 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         {
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;
-            if ( pad->GetNet() == GetNet() )
+
+            if( pad->GetNet() != GetNet() )
+            {
+                AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
                 continue;
-            AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance,
-                                        false, 0 );
+            }
+
+            switch( m_PadOption )
+            {
+            case PAD_NOT_IN_ZONE:
+                AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
+                break;
+
+            case THERMAL_PAD:
+                AddThermalReliefPadPolygon( booleng, *pad, 100, 100 );
+                break;
+
+            case PAD_IN_ZONE:
+                break;
+            }
         }
     }
 
@@ -97,7 +120,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         if( !track->IsOnLayer( GetLayer() ) )
             continue;
-        if ( track->GetNet() == GetNet() )
+        if( track->GetNet() == GetNet() )
             continue;
         AddTrackWithClearancePolygon( booleng, *track, m_ZoneClearance );
     }
@@ -105,16 +128,22 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     // Draw graphic items (copper texts) and board edges
     for( BOARD_ITEM* item = aPcb->m_Drawings;  item;  item = item->Next() )
     {
+        if( item->GetLayer() != GetLayer() && item->GetLayer() != EDGE_N )
+            continue;
+
         switch( item->Type() )
         {
         case TYPEDRAWSEGMENT:
-
-            // TODO: add segment
+            AddRoundedEndsSegmentPolygon( booleng,
+                                         ( (DRAWSEGMENT*) item )->m_Start,
+                                         ( (DRAWSEGMENT*) item )->m_End,
+                                         ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
             break;
 
         case TYPETEXTE:
-
-            // TODO: add rectangular area
+            if( ( (TEXTE_PCB*) item )->GetLength() == 0 )
+                break;
+            AddTextBoxWithClearancePolygon( booleng, (TEXTE_PCB*) item, m_ZoneClearance );
             break;
 
         default:
@@ -153,155 +182,247 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
  * Convert arcs and circles to multiple straight lines
  */
 void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
-                                 D_PAD& aPad, int aClearanceValue,
-                                 bool bThermal, int spoke_w )
+                                 D_PAD& aPad, int aClearanceValue )
 {
+    if( aBooleng->StartPolygonAdd( GROUP_B ) == 0 )
+        return;
     wxPoint corner_position;
     int     ii, angle;
     int     dx = (aPad.m_Size.x / 2) + aClearanceValue;
     int     dy = (aPad.m_Size.y / 2) + aClearanceValue;
 
     int     delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
+    wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
+                                                     * the pad position is NOT the shape position */
 
-    if( !bThermal )
+    switch( aPad.m_PadShape )
     {
-        switch( aPad.m_PadShape )
+    case PAD_CIRCLE:
+        for( ii = 0; ii < s_CircleToSegmentsCount; ii++ )
         {
-        case PAD_CIRCLE:
+            corner_position = wxPoint( dx, 0 );
+            angle = ii * delta;
+            RotatePoint( &corner_position, angle );
+            corner_position += PadShapePos;
+            aBooleng->AddPoint( corner_position.x, corner_position.y );
+        }
+
+        break;
+
+    case PAD_OVAL:
+    case PAD_RECT:
+        angle = aPad.m_Orient;
+        corner_position = wxPoint( -dx, -dy );
+        RotatePoint( &corner_position, angle );
+        corner_position += PadShapePos;
+        aBooleng->AddPoint( corner_position.x, corner_position.y );
+
+        corner_position = wxPoint( -dx, +dy );
+        RotatePoint( &corner_position, angle );
+        corner_position += aPad.ReturnShapePos();
+        aBooleng->AddPoint( corner_position.x, corner_position.y );
+
+        corner_position = wxPoint( +dx, +dy );
+        RotatePoint( &corner_position, angle );
+        corner_position += PadShapePos;
+        aBooleng->AddPoint( corner_position.x, corner_position.y );
+
+        corner_position = wxPoint( +dx, -dy );
+        RotatePoint( &corner_position, angle );
+        corner_position += PadShapePos;
+        aBooleng->AddPoint( corner_position.x, corner_position.y );
+        break;
+    }
+
+    aBooleng->EndPolygonAdd();
+}
+
+
+/** function AddThermalReliefPadPolygon
+ * Add holes around a pad to create a thermal relief
+ * copper tickness is min (dx/2, aCopperWitdh) or min (dy/2, aCopperWitdh)
+ * gap is aThermalGap
+ */
+
+/* thermal reliefs are created as 4 polygons.
+ * each corner of a polygon if calculated for a pad at position 0, 0, orient 0,
+ * and then moved and rotated acroding to the pad position and orientation
+ */
+void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
+                                    D_PAD&       aPad,
+                                    int          aThermalGap,
+                                    int          aCopperTickness )
+{
+    wxPoint corner, corner_start, corner_end;
+    wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
+                                                     * the pad position is NOT the shape position */
+    int     angle = 0;
+    wxSize  copper_tickness;
+    int     dx = aPad.m_Size.x / 2;
+    int     dy = aPad.m_Size.y / 2;
+
+    int     delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
+
+    copper_tickness.x = min( dx, aCopperTickness );
+    copper_tickness.y = min( dy, aCopperTickness );
+
+    switch( aPad.m_PadShape )
+    {
+    case PAD_CIRCLE:    // Add 4 similar holes
+    {
+        // Build the hole pattern, for the hole in the X >0, Y > 0 plane:
+        std::vector <int> corners_buffer;
+
+        // calculate the starting point of the inner arc
+        corner.y = copper_tickness.x / 2;   // note dx is the pad radius, so copper_tickness.x is the value to use
+        double dtmp = ( (double) dx * dx ) - ( (double) corner.y * corner.y );
+        corner.x = (int) sqrt( dtmp );
+        corner_start = corner;
+
+        // calculate the ending point of the inner arc
+        corner_end.x = corner.y;
+        corner_end.y = corner.x;
+
+        // calculate intermediate points (y coordinate from corner.y to corner_end.y)
+        while( (corner.y < corner_end.y) && (corner.x > corner_end.x) )
+        {
+            corners_buffer.push_back( corner.x );
+            corners_buffer.push_back( corner.y );
+            RotatePoint( &corner, -delta );
+        }
+
+        corners_buffer.push_back( corner_end.x );
+        corners_buffer.push_back( corner_end.y );
+
+        // calculate the starting point of the outter arc
+        dx      += aThermalGap;     // The radius of the outter arc is dx = pad radius + aThermalGap
+        corner.x = corner_end.x;
+        dtmp = ( (double) dx * dx ) - ( (double) corner.x * corner.x );
+        corner.y = (int) sqrt( dtmp );
+
+        // calculate the ending point of the outter arc
+        corner_end.x = corner.y;
+        corner_end.y = corner_start.y;
+
+        // calculate intermediate points (y coordinate from corner.y to corner_end.y
+        while( (corner.y > corner_end.y)  && (corner.x < corner_end.x))
+        {
+            corners_buffer.push_back( corner.x );
+            corners_buffer.push_back( corner.y );
+            RotatePoint( &corner, delta );
+        }
+
+        corners_buffer.push_back( corner_end.x );
+        corners_buffer.push_back( corner_end.y );
+
+        // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
+        angle = 0;
+        for( unsigned ihole = 0; ihole < 4; ihole++ )
+        {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                for( ii = 0; ii < s_CircleToSegmentsCount; ii++ )
+                for( unsigned ii = 0; ii < corners_buffer.size(); ii += 2 )
                 {
-                    corner_position = wxPoint( dx, 0 );
-                    angle = ii * delta;
-                    RotatePoint( &corner_position, angle );
-                    corner_position += aPad.ReturnShapePos();
-                    aBooleng->AddPoint( corner_position.x, corner_position.y );
+                    corner = wxPoint( corners_buffer[ii], corners_buffer[ii+1] );
+                    RotatePoint( &corner, angle );
+                    corner += PadShapePos;
+                    aBooleng->AddPoint( corner.x, corner.y );
                 }
 
                 aBooleng->EndPolygonAdd();
-            }
-            break;
 
-        case PAD_OVAL:
-        case PAD_RECT:
+                angle += 900;   // Note: angle in in 0.1 deg.
+            }
+        }
+    }
+        break;
+
+    case PAD_OVAL:
+    case PAD_RECT:       // draw 4 Holes
+    {
+        // First, create an hole like:
+        // 1 ------- 2
+        // 0 -----  |
+        //      5 | |
+        //        | |
+        //      4 | | 3
+        wxPoint corners_hole[6];            // buffer for 6 corners
+        // Create 1 hole, for a pad centered at0,0, orient 0
+        // Calculate coordinates for corner 0 to corner 5:
+        corners_hole[0] = wxPoint( (copper_tickness.x / 2), -dy );
+        corners_hole[1] = wxPoint( (copper_tickness.x / 2), -dy - aThermalGap );
+        corners_hole[2] = wxPoint(   dx + aThermalGap, -dy - aThermalGap );
+        corners_hole[3] = wxPoint( dx + aThermalGap, -(copper_tickness.y / 2) );
+        corners_hole[4] = wxPoint( dx, -(copper_tickness.y / 2) );
+        corners_hole[5] = wxPoint(    dx, -dy );
+
+        /* Create 2 holes, rotated by pad rotation.
+         * corners_hole[6] is the hole 1
+         * hole 3 is the same as hole 1, rotated 180 deg
+         * 4 ------ 1
+         * |       |
+         * |       |
+         * |       |
+         * |       |
+         * 3 ------ 2
+         */
+        angle = aPad.m_Orient;
+        for( int irect = 0; irect < 2; irect++ )
+        {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                angle = aPad.m_Orient;
-                corner_position = wxPoint( -dx, -dy );
-                RotatePoint( &corner_position, angle );
-                corner_position += aPad.ReturnShapePos();
-                aBooleng->AddPoint( corner_position.x, corner_position.y );
-
-                corner_position = wxPoint( -dx, +dy );
-                RotatePoint( &corner_position, angle );
-                corner_position += aPad.ReturnShapePos();
-                aBooleng->AddPoint( corner_position.x, corner_position.y );
-
-                corner_position = wxPoint( +dx, +dy );
-                RotatePoint( &corner_position, angle );
-                corner_position += aPad.ReturnShapePos();
-                aBooleng->AddPoint( corner_position.x, corner_position.y );
-
-                corner_position = wxPoint( +dx, -dy );
-                RotatePoint( &corner_position, angle );
-                corner_position += aPad.ReturnShapePos();
-                aBooleng->AddPoint( corner_position.x, corner_position.y );
+                for( int ic = 0; ic < 6; ic++ )
+                {
+                    wxPoint cpos = corners_hole[ic];
+                    RotatePoint( &cpos, angle );
+                    cpos += PadShapePos;
+                    aBooleng->AddPoint( cpos.x, cpos.y );
+                }
 
                 aBooleng->EndPolygonAdd();
+                angle += 1800;  // this is calculate hole 3
+                if( angle >= 3600 )
+                    angle -= 3600;
             }
-            break;
         }
-    }
-    else
-    {
-        // thermal relief (from FreePCB: must be converted to pcbnew data)
-#if 0
-        if( type == PAD_ROUND || (type == PAD_NONE && hole_w > 0) )
+
+        // Create a holes, like:
+        // -------
+        // | -----
+        // | |
+        // | |
+        // | |
+        // this is the mirrored of the previous hole
+        corners_hole[0].x = -corners_hole[0].x;
+        corners_hole[1].x = -corners_hole[1].x;
+        corners_hole[2].x = -corners_hole[2].x;
+        corners_hole[3].x = -corners_hole[3].x;
+        corners_hole[4].x = -corners_hole[4].x;
+        corners_hole[5].x = -corners_hole[5].x;
+
+        // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
+        angle = aPad.m_Orient;
+        for( int irect = 0; irect < 2; irect++ )
         {
-            // draw 4 "wedges"
-            double r = max( w / 2 + fill_clearance, hole_w / 2 + hole_clearance );
-            double start_angle = asin( spoke_w / (2.0 * r) );
-            double th1, th2, corner_x, corner_y;
-            th1 = th2 = corner_x = corner_y = 0; // gcc warning fix
-            for( int i = 0; i<4; i++ )
+            if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                if( i == 0 )
+                for( int ic = 0; ic < 6; ic++ )
                 {
-                    corner_x = spoke_w / 2;
-                    corner_y = spoke_w / 2;
-                    th1 = start_angle;
-                    th2 = pi / 2.0 - start_angle;
+                    wxPoint cpos = corners_hole[ic];
+                    RotatePoint( &cpos, angle );
+                    cpos += PadShapePos;
+                    aBooleng->AddPoint( cpos.x, cpos.y );
                 }
-                else if( i == 1 )
-                {
-                    corner_x = -spoke_w / 2;
-                    corner_y = spoke_w / 2;
-                    th1 = pi / 2.0 + start_angle;
-                    th2 = pi - start_angle;
-                }
-                else if( i == 2 )
-                {
-                    corner_x = -spoke_w / 2;
-                    corner_y = -spoke_w / 2;
-                    th1 = -pi + start_angle;
-                    th2 = -pi / 2.0 - start_angle;
-                }
-                else if( i == 3 )
-                {
-                    corner_x = spoke_w / 2;
-                    corner_y = -spoke_w / 2;
-                    th1 = -pi / 2.0 + start_angle;
-                    th2 = -start_angle;
-                }
-                AppendCorner( to_int( x + corner_x ), to_int( y + corner_y ), STRAIGHT, 0 );
-                AppendCorner( to_int( x + r * cos( th1 ) ), to_int( y + r * sin(
-                                                                       th1 ) ), STRAIGHT, 0 );
-                AppendCorner( to_int( x + r * cos( th2 ) ), to_int( y + r * sin(
-                                                                       th2 ) ), ARC_CCW, 0 );
-                Close( STRAIGHT );
+
+                aBooleng->EndPolygonAdd();
+                angle += 1800;
+                if( angle >= 3600 )
+                    angle -= 3600;
             }
         }
-        else if( type == PAD_SQUARE || type == PAD_RECT
-                 || type == PAD_RRECT || type == PAD_OVAL )
-        {
-            // draw 4 rectangles
-            int xL = x - dx;
-            int xR = x - spoke_w / 2;
-            int yB = y - dy;
-            int yT = y - spoke_w / 2;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-            xL = x + spoke_w / 2;
-            xR = x + dx;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-            xL = x - dx;
-            xR = x - spoke_w / 2;
-            yB = y + spoke_w / 2;
-            yT = y + dy;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-            xL = x + spoke_w / 2;
-            xR = x + dx;
-            AppendCorner( xL, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yB, STRAIGHT, 0 );
-            AppendCorner( xR, yT, STRAIGHT, 0 );
-            AppendCorner( xL, yT, STRAIGHT, 0 );
-            Close( STRAIGHT );
-        }
-#endif
     }
-    return;
+        break;
+    }
 }
 
 
@@ -391,7 +512,7 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
         RotatePoint( &corner, ii );
         corner.x += seg_len;
         RotatePoint( &corner, -delta_angle );
-        corner   += startp;
+        corner += startp;
         aBooleng->AddPoint( corner.x, corner.y );
     }
 
@@ -411,8 +532,52 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
         corner = wxPoint( 0, -rayon );
         RotatePoint( &corner, ii );
         RotatePoint( &corner, -delta_angle );
-        corner   += startp;
+        corner += startp;
         aBooleng->AddPoint( corner.x, corner.y );
     }
+
     aBooleng->EndPolygonAdd();
+}
+
+
+/** function AddTextBoxWithClearancePolygon
+ * creates a polygon containing the text and add it to bool engine
+ */
+void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
+                                        TEXTE_PCB* aText, int aClearanceValue )
+{
+    int corners[8];     // Buffer of coordinates
+    int ii;
+
+    int dx = aText->Pitch() * aText->GetLength();
+    int dy = aText->m_Size.y + aText->m_Width;
+
+    /* Creates bounding box (rectangle) for an horizontal text */
+    dx /= 2; dy /= 2;    /* dx et dy = demi dimensionx X et Y */
+    dx += aClearanceValue;
+    dy += aClearanceValue;
+    corners[0] = aText->m_Pos.x - dx;
+    corners[1] = aText->m_Pos.y - dy;
+    corners[2] = aText->m_Pos.x + dx;
+    corners[3] = aText->m_Pos.y - dy;
+    corners[4] = aText->m_Pos.x + dx;
+    corners[5] = aText->m_Pos.y + dy;
+    corners[6] = aText->m_Pos.x - dx;
+    corners[7] = aText->m_Pos.y + dy;
+
+    // Rotate rectangle
+    RotatePoint( &corners[0], &corners[1], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
+    RotatePoint( &corners[2], &corners[3], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
+    RotatePoint( &corners[4], &corners[5], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
+    RotatePoint( &corners[6], &corners[7], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
+
+    if( aBooleng->StartPolygonAdd( GROUP_B ) )
+    {
+        for( ii = 0; ii < 8; ii += 2 )
+        {
+            aBooleng->AddPoint( corners[ii], corners[ii + 1] );
+        }
+
+        aBooleng->EndPolygonAdd();
+    }
 }

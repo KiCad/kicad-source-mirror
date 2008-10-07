@@ -257,6 +257,8 @@ void WinEDA_ZoneFrame::OnInitDialog( wxInitDialogEvent& event )
     BOARD*  board = m_Parent->m_Pcb;
 
     SetFont( *g_DialogFont );
+    
+    SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
     wxString title = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
     m_ClearanceValueTitle->SetLabel( title );
@@ -277,16 +279,23 @@ void WinEDA_ZoneFrame::OnInitDialog( wxInitDialogEvent& event )
     static const int GridList[4] = { 25, 50, 100, 250 };
     int selection = 0;
 
+    int grid_routing = g_GridRoutingSize;
+
+    if( m_Zone_Container )
+        grid_routing = m_Zone_Container->m_GridFillValue;
+
     for( unsigned ii = 0; ii < 4; ii++ )
     {
         wxString msg = ReturnStringFromValue( g_UnitMetric,
                                               GridList[ii],
                                               m_Parent->m_InternalUnits );
         m_GridCtrl->SetString( ii, msg );
-        if( g_GridRoutingSize == GridList[ii] )
+        if( grid_routing == GridList[ii] )
             selection = ii;
     }
-
+    if( grid_routing == 0 )    // No Grid: fill with polygons
+         selection = 4;
+ 
     m_GridCtrl->SetSelection( selection );
 
     if( m_Zone_Container )
@@ -536,9 +545,9 @@ bool WinEDA_ZoneFrame::AcceptOptions(bool aPromptForErrors)
         g_GridRoutingSize = 250;
         break;
     case 4:
+        g_GridRoutingSize = 0;
         wxMessageBox( wxT(
 "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production"));
-        g_GridRoutingSize = 0;
         break;
     }
 
