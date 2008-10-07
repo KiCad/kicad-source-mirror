@@ -257,7 +257,7 @@ void WinEDA_ZoneFrame::OnInitDialog( wxInitDialogEvent& event )
     BOARD*  board = m_Parent->m_Pcb;
 
     SetFont( *g_DialogFont );
-    
+
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
     wxString title = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
@@ -295,7 +295,7 @@ void WinEDA_ZoneFrame::OnInitDialog( wxInitDialogEvent& event )
     }
     if( grid_routing == 0 )    // No Grid: fill with polygons
          selection = 4;
- 
+
     m_GridCtrl->SetSelection( selection );
 
     if( m_Zone_Container )
@@ -353,13 +353,14 @@ void WinEDA_ZoneFrame::OnInitDialog( wxInitDialogEvent& event )
         break;
     }
 
+    /* build copper layers list */
     int layer_cnt = board->GetCopperLayerCount();
     for( int ii = 0; ii < board->GetCopperLayerCount(); ii++ )
     {
         wxString msg;
         int      layer_number = COPPER_LAYER_N;
 
-        if( layer_cnt == 0 || ii < layer_cnt - 1 )
+        if( layer_cnt <= 1 || ii < layer_cnt - 1 )
             layer_number = ii;
         else if( ii == layer_cnt - 1 )
             layer_number = LAYER_CMP_N;

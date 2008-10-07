@@ -898,6 +898,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     }
     else
     {
+        zone_container->m_FilledPolysList.clear();
         zone_container->m_GridFillValue = g_GridRoutingSize;
         error_level = zone_container->Fill_Zone( this, DC, verbose );
     }
@@ -935,6 +936,7 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         zone_container = m_Pcb->GetArea( ii );
+        zone_container->m_FilledPolysList.clear();
         error_level    = Fill_Zone( NULL, zone_container, verbose );
         if( error_level && !verbose )
             break;
