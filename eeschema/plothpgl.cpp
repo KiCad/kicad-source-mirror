@@ -280,12 +280,12 @@ void WinEDA_PlotHPGLFrame::CreateControls()
     wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer3->Add(itemBoxSizer20, 0, wxALIGN_TOP|wxLEFT|wxTOP|wxBOTTOM, 5);
 
-    wxButton* itemButton21 = new wxButton( itemDialog1, ID_PLOT_HPGL_CURRENT_EXECUTE, _("&Plot Page"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton21 = new wxButton( itemDialog1, ID_PLOT_HPGL_CURRENT_EXECUTE, _("&Plot page"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton21->SetDefault();
     itemButton21->SetForegroundColour(wxColour(0, 128, 0));
     itemBoxSizer20->Add(itemButton21, 0, wxGROW|wxALL, 5);
 
-    wxButton* itemButton22 = new wxButton( itemDialog1, ID_PLOT_HPGL_ALL_EXECUTE, _("Plot A&LL"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton22 = new wxButton( itemDialog1, ID_PLOT_HPGL_ALL_EXECUTE, _("Plot a&LL"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton22->SetForegroundColour(wxColour(0, 0, 255));
     itemBoxSizer20->Add(itemButton22, 0, wxGROW|wxALL, 5);
 

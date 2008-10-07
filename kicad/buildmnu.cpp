@@ -192,7 +192,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
         helpMenu->Append(item);
 
         item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT,
-                _("&About"), _("About this application"));
+                _("&About kicad"), _("About kicad project manager"));
         item->SetBitmap(info_xpm);
         helpMenu->Append(item);
 

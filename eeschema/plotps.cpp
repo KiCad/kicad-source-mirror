@@ -215,16 +215,16 @@ void WinEDA_PlotPSFrame::CreateControls()
     wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer3->Add(itemBoxSizer10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton11 = new wxButton( itemDialog1, ID_PLOT_PS_CURRENT_EXECUTE, _("&Plot Page"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton11 = new wxButton( itemDialog1, ID_PLOT_PS_CURRENT_EXECUTE, _("&Plot page"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton11->SetDefault();
     itemButton11->SetForegroundColour(wxColour(0, 128, 0));
     itemBoxSizer10->Add(itemButton11, 0, wxGROW|wxALL, 5);
 
-    wxButton* itemButton12 = new wxButton( itemDialog1, ID_PLOT_PS_ALL_EXECUTE, _("Plot A&LL"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton12 = new wxButton( itemDialog1, ID_PLOT_PS_ALL_EXECUTE, _("Plot a&LL"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton12->SetForegroundColour(wxColour(179, 0, 0));
     itemBoxSizer10->Add(itemButton12, 0, wxGROW|wxALL, 5);
 
-    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
     m_btClose->SetForegroundColour(wxColour(0, 0, 255));
     itemBoxSizer10->Add(m_btClose, 0, wxGROW|wxALL, 5);
 

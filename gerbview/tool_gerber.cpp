@@ -148,8 +148,10 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
         wxMenu* helpMenu = new wxMenu;
         ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                                 _( "Open the gerbview manual" ), help_xpm );
-        ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About" ),
-                                _( "About this application" ), info_xpm );
+        ADD_MENUITEM_WITH_HELP(helpMenu,
+                               ID_KICAD_ABOUT, _( "&About gerbview" ),
+                               _( "About gerbview gerber and drill viewer" ), 
+                               info_xpm );
 
         menuBar->Append( m_FilesMenu, _( "&File" ) );
         menuBar->Append( configmenu, _( "&Preferences" ) );

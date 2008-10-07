@@ -79,6 +79,7 @@ LibName5=divers
 LibName6=libcms
 LibName7=display
 LibName8=valves
+LibName9=led
 [eeschema]
 version=1
 LibDir=

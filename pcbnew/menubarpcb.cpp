@@ -73,7 +73,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         m_FilesMenu->Append(item);
 
         item = new wxMenuItem(m_FilesMenu, ID_MENU_SAVE_BOARD_AS,
-                     _("Save board as.."),
+                     _("Save board as..."),
                      _("Save current board as..") );
         item->SetBitmap(save_as_xpm);
         m_FilesMenu->Append(item);
@@ -293,7 +293,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         item->SetBitmap(help_xpm);
         helpMenu->Append(item);
 
-        item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT, _("&About"), _("About this application"));
+        item = new wxMenuItem(helpMenu , ID_KICAD_ABOUT, _("&About pcbnew"), _("About pcbnew PCB designer"));
         item->SetBitmap(info_xpm);
         helpMenu->Append(item);
 

@@ -335,8 +335,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item = new wxMenuItem(
             placeMenu,
             ID_LINE_COMMENT_BUTT,
-            _( "Graphic line or poligon" ),
-            _( "Place the graphic line or poligon" ),
+            _( "Graphic line or polygon" ),
+            _( "Place graphic lines or polygons" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_dashed_line_xpm );
@@ -346,7 +346,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_TEXT_COMMENT_BUTT,
             _( "Graphic text (comment)" ),
-            _( "Place the graphic text (comment)" ),
+            _( "Place graphic text (comment)" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_text_xpm );
@@ -356,7 +356,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         wxMenu* configmenu = new wxMenu;
         item = new wxMenuItem( configmenu, ID_CONFIG_REQ,
                               _( "&Library" ),
-                              _( "Setting Libraries, Directories and others..." ) );
+                              _( "Library preferences" ) );
         item->SetBitmap( library_xpm );
         configmenu->Append( item );
 
@@ -366,10 +366,10 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         item->SetBitmap( palette_xpm );
         configmenu->Append( item );
 
-//		ADD_MENUITEM(configmenu, ID_OPTIONS_SETUP, _("&Options"), preference_xpm);
+        // Options
         item = new wxMenuItem( configmenu, ID_OPTIONS_SETUP,
                               _( "&Options" ),
-                              _( "Select general options..." ) );
+                              _( "General options..." ) );
         item->SetBitmap( preference_xpm );
         configmenu->Append( item );
 
@@ -399,7 +399,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         helpMenu->Append( item );
 
         item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT,
-                              _( "&About" ), _( "About this application" ) );
+                              _( "&About eeschema" ), _( "About eeschema schematic designer" ) );
         item->SetBitmap( info_xpm );
         helpMenu->Append( item );
 

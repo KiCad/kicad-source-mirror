@@ -756,7 +756,7 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
         flag = 1;
 
     wxString ref = Cmp->GetRef(GetSheet());
-    Get_Message( _( "Reference" ), _("Component Reference"), ref, this );
+    Get_Message( _( "Reference" ), _("Component reference"), ref, this );
 
     if( !ref.IsEmpty() ) // New text entered
     {
@@ -794,7 +794,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     SCH_CMP_FIELD* TextField = Cmp->GetField( VALUE );
 
     message = TextField->m_Text;
-    if( Get_Message( _( "Value" ), _("Component Value"), message, this ) )
+    if( Get_Message( _( "Value" ), _("Component value"), message, this ) )
         message.Empty(); //allow the user to remove the value.
 
     if( !message.IsEmpty() && !message.IsEmpty())
@@ -834,7 +834,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     if(message.IsEmpty() )
         wasEmpty = true;
 
-    if( Get_Message( _( "Footprint" ), _("Component Footprint"), message, this ) )
+    if( Get_Message( _( "Footprint" ), _("Component footprint"), message, this ) )
         message.Empty();    // allow the user to remove the value.
 
     // save old cmp in undo list if not already in edit, or moving ...

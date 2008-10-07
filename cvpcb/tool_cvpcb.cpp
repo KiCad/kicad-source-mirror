@@ -156,8 +156,8 @@ wxMenuBar * menuBar = GetMenuBar();
                         _("Open the cvpcb manual"));
 	    item->SetBitmap(help_xpm);
 		helpMenu->Append(item);
-		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_LICENCE, _("&About"),
-                        _("About this application"));
+		item = new wxMenuItem(helpMenu , ID_CVPCB_DISPLAY_LICENCE, _("&About cvpcb"),
+                        _("About cvpcb schematic to pcb converter"));
 	    item->SetBitmap(info_xpm);
 		helpMenu->Append(item);
 
