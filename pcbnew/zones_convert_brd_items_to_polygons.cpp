@@ -311,7 +311,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         
 
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
-        angle = 0;
+        angle = 450;    // TODO: problems with kbool if angle = 0 (bad filled polygon on some pads, but not alls)
         for( unsigned ihole = 0; ihole < 4; ihole++ )
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
