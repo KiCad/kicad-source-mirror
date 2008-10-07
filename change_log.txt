@@ -9,7 +9,7 @@ email address.
 ================================================================================
 +pcbnew:
     More about copper zones filled without grid (by polygons)
-    Currently for eyes and tests only.
+    Currently for eyes and tests only (work in progress).
     now working
         thermal reliefs.
         texts on copper zones.

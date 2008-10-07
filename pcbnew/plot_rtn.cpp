@@ -21,7 +21,6 @@
 /* Fonctions locales */
 static void Plot_Edges_Modules( BOARD* pcb, int format_plot, int masque_layer );
 static void PlotTextModule( TEXTE_MODULE* pt_texte );
-static void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat);
 
 
 /**********************************************************/
@@ -299,8 +298,8 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
-            if( ( (1 << edge_zone->GetLayer()) & masque_layer ) == 0 )
-                continue;
+        if( ( (1 << edge_zone->GetLayer()) & masque_layer ) == 0 )
+            continue;
         PlotFilledAreas(edge_zone, format_plot);
     }
 

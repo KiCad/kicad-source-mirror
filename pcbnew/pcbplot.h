@@ -161,6 +161,8 @@ void PlotMirePcb( MIREPCB* PtMire, int format_plot,int masque_layer );
 
 void Plot_1_EdgeModule(int format_plot, EDGE_MODULE * PtEdge);
 
+void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat);
+
 /* PLOTGERB.CPP */
 void PlotGERBERLine(wxPoint start, wxPoint end, int width);
 void PlotCircle_GERBER( wxPoint centre, int rayon, int width);

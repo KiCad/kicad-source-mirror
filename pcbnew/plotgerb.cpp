@@ -350,6 +350,15 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         msg.Printf( wxT( "%d" ), nb_items );
         Affiche_1_Parametre( this, 72, wxEmptyString, msg, YELLOW );
     }
+
+    /* Plot filled ares */
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
+        if( ( (1 << edge_zone->GetLayer()) & masque_layer ) == 0 )
+            continue;
+        PlotFilledAreas(edge_zone, PLOT_FORMAT_GERBER);
+    }
 }
 
 

@@ -392,6 +392,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
 {
     static int*     CornersBuffer     = NULL;
     static unsigned CornersBufferSize = 0;
+    bool sketch_mode = false;     // true to show areas outlines only (test and debug purposes)
 
     if( DC == NULL )
         return;
@@ -454,7 +455,12 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         corners_count++;
         if( corner->end_contour )
         {   // Draw the current filled area
-            GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer, true, 0, color, color );
+            if ( sketch_mode )
+                GRClosedPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
+                    false, 0, color, color );
+            else
+                GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
+                    true , 0, color, color );
             corners_count = 0;
             ii = 0;
         }

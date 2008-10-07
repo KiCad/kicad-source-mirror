@@ -425,6 +425,15 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
         Affiche_1_Parametre( this, 64, wxEmptyString, msg, YELLOW );
     }
 
+    /* Plot filled ares */
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
+        if( ( (1 << edge_zone->GetLayer()) & masque_layer ) == 0 )
+            continue;
+        PlotFilledAreas(edge_zone, PLOT_FORMAT_POST);
+    }
+
     // Trace des trous de percage
     if( modetrace == FILLED )
         PrintDrillMark( m_Pcb );
