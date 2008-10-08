@@ -30,7 +30,7 @@ void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 
 // Local Variables:
 /* how many segments are used to create a polygon from a circle: */
-static int s_CircleToSegmentsCount = 32;
+static int s_CircleToSegmentsCount = 16;
 
 /** function AddClearanceAreasPolygonsToPolysList
  * Add non copper areas polygons (pads and tracks with clearence)

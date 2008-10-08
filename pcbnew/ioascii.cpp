@@ -1010,13 +1010,6 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     BestZoom();
 
 #ifdef PCBNEW
-    if( m_Pcb->m_ZoneDescriptorList.size() > 0 )
-    {
-        // Build filled areas
-        for( unsigned ia = 0; ia < m_Pcb->m_ZoneDescriptorList.size(); ia++ )
-            m_Pcb->m_ZoneDescriptorList[ia]->BuildFilledPolysListData( m_Pcb );
-    }
-
     // Build connectivity info
     Compile_Ratsnest( NULL, TRUE );
 #endif

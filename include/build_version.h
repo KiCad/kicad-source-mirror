@@ -9,7 +9,7 @@ COMMON_GLOBL wxString g_BuildVersion
 #    include "config.h"
      (wxT(KICAD_SVN_VERSION))
 #  else
-     (wxT("(20081002-unstable)")) /* main program version */
+     (wxT("(20081008-unstable)")) /* main program version */
 #  endif
 #endif
 ;
@@ -20,7 +20,7 @@ COMMON_GLOBL wxString g_BuildAboutVersion
 #    include "config.h"
      (wxT(KICAD_ABOUT_VERSION))
 #  else
-     (wxT("(20081002-unstable)")) /* svn date & rev (normally overridden) */
+     (wxT("(20081008-unstable)")) /* svn date & rev (normally overridden) */
 #  endif
 #endif
 ;

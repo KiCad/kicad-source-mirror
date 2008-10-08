@@ -379,7 +379,6 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
                                int DrawMode, int Color )
 {
     int color;
-    int Width = DRAWJUNCTION_SIZE;
 
     if( Color >= 0 )
         color = Color;
@@ -387,8 +386,8 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
         color = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    GRFilledRect( &panel->m_ClipBox, DC, m_Pos.x - Width + offset.x, m_Pos.y - Width + offset.y,
-        m_Pos.x + Width + offset.x, m_Pos.y + Width + offset.y, color, color );
+    GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
+       DRAWJUNCTION_SIZE, 0, color, color );
 }
 
 

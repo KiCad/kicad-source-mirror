@@ -84,8 +84,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 
     // Save the outline main info
     ret = fprintf( aFile, "ZInfo %8.8lX %d \"%s\"\n",
-        m_TimeStamp, m_NetCode,
-        CONV_TO_UTF8( m_Netname ) );
+                  m_TimeStamp, m_NetCode,
+                  CONV_TO_UTF8( m_Netname ) );
     if( ret < 3 )
         return false;
 
@@ -136,7 +136,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
-    ret = fprintf( aFile, "ZOptions %d\n", m_GridFillValue);
+    ret = fprintf( aFile, "ZOptions %d\n", m_GridFillValue );
     if( ret < 1 )
         return false;
 
@@ -145,10 +145,25 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     for( item_pos = 0; item_pos < corners_count; item_pos++ )
     {
         ret = fprintf( aFile, "ZCorner %d %d %d\n",
-            m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
-            m_Poly->corner[item_pos].end_contour );
+                       m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
+                       m_Poly->corner[item_pos].end_contour );
         if( ret < 3 )
             return false;
+    }
+
+    // Save the PolysList
+    if( m_FilledPolysList.size() )
+    {
+        fprintf( aFile, "$POLYSCORNERS\n" );
+        for( item_pos = 0; item_pos < m_FilledPolysList.size(); item_pos++ )
+        {
+            const CPolyPt* corner = &m_FilledPolysList[item_pos];
+            ret = fprintf( aFile, "%d %d %d\n", corner->x, corner->y, corner->end_contour );
+            if( ret < 3 )
+                return false;
+        }
+
+        fprintf( aFile, "$endPOLYSCORNERS\n" );
     }
 
     fprintf( aFile, "$endCZONE_OUTLINE\n" );
@@ -255,7 +270,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         {
             int gridsize = 50;
             text = Line + 8;
-            ret = sscanf( text, "%d", &gridsize );
+            ret  = sscanf( text, "%d", &gridsize );
             if( ret < 1 )
                 return false;
             else
@@ -292,6 +307,24 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                 }
             }
         }
+
+
+        if( strnicmp( Line, "$POLYSCORNERS", 13 ) == 0  )  // Read the PolysList (polygons used for fill areas in the zone)
+        {
+            while( GetLine( aFile, Line, aLineNum, sizeof(Line) - 1 ) != NULL )
+            {
+                if( strnicmp( Line, "$endPOLYSCORNERS", 4 ) == 0  )
+                    break;
+                CPolyPt corner;
+                int     itmp;
+                ret = sscanf( Line, "%d %d %d", &corner.x, &corner.y, &itmp );
+                if( ret < 3 )
+                    return false;
+                corner.end_contour = itmp ? true : false;
+                m_FilledPolysList.push_back( corner );
+            }
+        }
+
         if( strnicmp( Line, "$end", 4 ) == 0 )    // end of description
         {
             break;
@@ -392,7 +425,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
 {
     static int*     CornersBuffer     = NULL;
     static unsigned CornersBufferSize = 0;
-    bool sketch_mode = false;     // true to show areas outlines only (test and debug purposes)
+    bool            sketch_mode = false; // true to show areas outlines only (test and debug purposes)
 
     if( DC == NULL )
         return;
@@ -455,12 +488,12 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         corners_count++;
         if( corner->end_contour )
         {   // Draw the current filled area
-            if ( sketch_mode )
+            if( sketch_mode )
                 GRClosedPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
-                    false, 0, color, color );
+                              false, 0, color, color );
             else
                 GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
-                    true , 0, color, color );
+                        true, 0, color, color );
             corners_count = 0;
             ii = 0;
         }
@@ -655,11 +688,11 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 
         /* test the dist between segment and ref point */
         dist = (int) GetPointToLineSegmentDistance( refPos.x,
-            refPos.y,
-            m_Poly->corner[item_pos].x,
-            m_Poly->corner[item_pos].y,
-            m_Poly->corner[end_segm].x,
-            m_Poly->corner[end_segm].y );
+                                                    refPos.y,
+                                                    m_Poly->corner[item_pos].x,
+                                                    m_Poly->corner[item_pos].y,
+                                                    m_Poly->corner[end_segm].x,
+                                                    m_Poly->corner[end_segm].y );
         if( dist <= min_dist )
         {
             m_CornerSelection = item_pos;
@@ -751,7 +784,7 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     msg.Printf( wxT( "%d" ), GetNet() );
     Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
 
-    text_pos += 8;
+    text_pos += 6;
     msg = board->GetLayerName( m_Layer );
     Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
 
@@ -759,15 +792,24 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     msg.Printf( wxT( "%d" ), m_Poly->corner.size() );
     Affiche_1_Parametre( frame, text_pos, _( "Corners" ), msg, BLUE );
 
-    text_pos += 8;
-    if ( m_GridFillValue )
+    text_pos += 6;
+    if( m_GridFillValue )
         msg.Printf( wxT( "%d" ), m_GridFillValue );
-    else msg = _("No Grid");
+    else
+        msg = _( "No Grid" );
     Affiche_1_Parametre( frame, text_pos, _( "Fill Grid" ), msg, BROWN );
 
-    text_pos += 8;
+    // Useful for statistics :
+    text_pos += 9;
     msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );
     Affiche_1_Parametre( frame, text_pos, _( "Hatch lines" ), msg, BLUE );
+
+    if( m_FilledPolysList.size() )
+    {
+        text_pos += 9;
+        msg.Printf( wxT( "%d" ), m_FilledPolysList.size() );
+        Affiche_1_Parametre( frame, text_pos, _( "Corners in DrawList" ), msg, BLUE );
+    }
 }
 
 
