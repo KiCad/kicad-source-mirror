@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-07 20:39+0100\n"
-"PO-Revision-Date: 2008-10-07 20:47+0100\n"
+"POT-Creation-Date: 2008-10-09 22:04+0100\n"
+"PO-Revision-Date: 2008-10-09 22:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -347,7 +347,7 @@ msgstr "dimension"
 #: pcbnew/class_marker.cpp:133
 #: pcbnew/class_text_mod.cpp:503
 #: pcbnew/class_track.cpp:852
-#: pcbnew/class_zone.cpp:722
+#: pcbnew/class_zone.cpp:758
 msgid "Type"
 msgstr "Type"
 
@@ -370,7 +370,7 @@ msgstr "Segment"
 #: pcbnew/class_pcb_text.cpp:190
 #: pcbnew/class_text_mod.cpp:516
 #: pcbnew/class_track.cpp:909
-#: pcbnew/class_zone.cpp:756
+#: pcbnew/class_zone.cpp:792
 msgid "Layer"
 msgstr "Couche"
 
@@ -571,12 +571,12 @@ msgid "Display"
 msgstr "Affichage"
 
 #: pcbnew/class_track.cpp:868
-#: pcbnew/class_zone.cpp:744
+#: pcbnew/class_zone.cpp:780
 msgid "NetName"
 msgstr "NetName"
 
 #: pcbnew/class_track.cpp:873
-#: pcbnew/class_zone.cpp:752
+#: pcbnew/class_zone.cpp:788
 msgid "NetCode"
 msgstr "NetCode"
 
@@ -588,25 +588,29 @@ msgstr "Standard"
 msgid "Diam"
 msgstr "Diam"
 
-#: pcbnew/class_zone.cpp:747
+#: pcbnew/class_zone.cpp:783
 msgid "Non Copper Zone"
 msgstr "Zone non Cuivre"
 
-#: pcbnew/class_zone.cpp:760
+#: pcbnew/class_zone.cpp:796
 msgid "Corners"
 msgstr "Sommets"
 
-#: pcbnew/class_zone.cpp:765
+#: pcbnew/class_zone.cpp:802
 msgid "No Grid"
 msgstr "Pas de Grille"
 
-#: pcbnew/class_zone.cpp:766
+#: pcbnew/class_zone.cpp:803
 msgid "Fill Grid"
 msgstr "Grille de Remplissage"
 
-#: pcbnew/class_zone.cpp:770
+#: pcbnew/class_zone.cpp:808
 msgid "Hatch lines"
 msgstr "Lignes de Hachure"
+
+#: pcbnew/class_zone.cpp:814
+msgid "Corners in DrawList"
+msgstr ""
 
 #: pcbnew/clean.cpp:179
 msgid "Delete unconnected tracks:"
@@ -1841,101 +1845,6 @@ msgstr "Epais. Piste"
 msgid "Mask clearance"
 msgstr "Retrait Masque"
 
-#: pcbnew/dialog_zones_by_polygon.cpp:153
-#: pcbnew/dialog_zones_by_polygon.cpp:154
-#: pcbnew/dialog_zones_by_polygon.cpp:155
-#: pcbnew/dialog_zones_by_polygon.cpp:156
-msgid "0.00000"
-msgstr "0.00000"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:157
-msgid "No Grid (For tests only!)"
-msgstr ""
-
-#: pcbnew/dialog_zones_by_polygon.cpp:158
-msgid "Grid Size for Filling:"
-msgstr "Taille de Grille pour Remplissage:"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:162
-msgid "Zone clearance value (mm):"
-msgstr "Valeur isolation zone (mm):"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:170
-msgid "Hatched Outline"
-msgstr "Contour Hachuré"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:171
-msgid "Full Hatched"
-msgstr "Pleinement Hachuré"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:172
-msgid "Outlines Appearance"
-msgstr "Aspect des Contours"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:182
-msgid "Include Pads"
-msgstr "Inclure Pads"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:183
-msgid "Thermal"
-msgstr "Thermique"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:184
-msgid "Exclude Pads"
-msgstr "Exclure Pads"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:185
-msgid "Pad options:"
-msgstr "Options pads"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:192
-msgid "Any"
-msgstr "Tout"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:193
-msgid "H , V and 45 deg"
-msgstr "H, V et 45  deg"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:194
-msgid "Zone edges orient:"
-msgstr "Direction contours zone:"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:213
-msgid "Alphabetic"
-msgstr "Alphabetique"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:214
-msgid "Advanced"
-msgstr "Avancé"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:215
-msgid "Net sorting:"
-msgstr "Tri des Equipotentielles:"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:219
-msgid "Filter"
-msgstr "Filtre"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:224
-msgid "Do not list net names which match with this text, in advanced mode"
-msgstr "Ne liste pas les noms de nets qui correspondent à ce texte, en mode avancé"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:263
-msgid "Zone clearance value:"
-msgstr "Valeur isolation zone:"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:266
-msgid "Grid :"
-msgstr "Grille:"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:566
-msgid "Error : you must choose a layer"
-msgstr "Erreur. Vous devez choisir une couche"
-
-#: pcbnew/dialog_zones_by_polygon.cpp:575
-msgid "Error : you must choose a net name"
-msgstr "Erreur. Vous devez choisir une équipotentielle"
-
 #: pcbnew/pcbplot.cpp:147
 #: pcbnew/pcbplot.cpp:272
 msgid "Plot"
@@ -2303,7 +2212,6 @@ msgid "GenCAD file:"
 msgstr "Fichier GenCAD:"
 
 #: pcbnew/export_gencad.cpp:83
-#: pcbnew/files.cpp:352
 msgid "Unable to create "
 msgstr "Impossible de créer "
 
@@ -2649,6 +2557,7 @@ msgid "Search footprint"
 msgstr "Cherche Module"
 
 #: pcbnew/modules.cpp:305
+#: pcbnew/onrightclick.cpp:730
 msgid "Delete Module"
 msgstr "Supprimer Module"
 
@@ -2845,22 +2754,18 @@ msgid "Read Global AutoRouter Data"
 msgstr "Lire Données de L'autorouteur global"
 
 #: pcbnew/onrightclick.cpp:447
-#: pcbnew/modedit_onclick.cpp:206
 msgid "Cancel Block"
 msgstr "Annuler Bloc"
 
 #: pcbnew/onrightclick.cpp:449
-#: pcbnew/modedit_onclick.cpp:208
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Zoom Bloc (drag bouton du milieu souris)"
 
 #: pcbnew/onrightclick.cpp:452
-#: pcbnew/modedit_onclick.cpp:211
 msgid "Place Block"
 msgstr "Place Bloc"
 
 #: pcbnew/onrightclick.cpp:454
-#: pcbnew/modedit_onclick.cpp:213
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Copie Bloc (shift + drag mouse)"
 
@@ -2869,12 +2774,10 @@ msgid "Flip Block (alt + drag mouse)"
 msgstr "Inversion Bloc (alt + drag mouse)"
 
 #: pcbnew/onrightclick.cpp:458
-#: pcbnew/modedit_onclick.cpp:217
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Rotation Bloc (ctrl + drag mouse)"
 
 #: pcbnew/onrightclick.cpp:460
-#: pcbnew/modedit_onclick.cpp:219
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
 
@@ -3113,23 +3016,19 @@ msgstr "Change côté"
 #: pcbnew/onrightclick.cpp:724
 #: pcbnew/onrightclick.cpp:758
 #: pcbnew/onrightclick.cpp:862
-#: pcbnew/modedit_onclick.cpp:306
 msgid "Edit"
 msgstr "Editer"
 
 #: pcbnew/onrightclick.cpp:756
 #: pcbnew/onrightclick.cpp:860
-#: pcbnew/modedit_onclick.cpp:241
 msgid "Rotate"
 msgstr "Rotation"
 
 #: pcbnew/onrightclick.cpp:795
-#: pcbnew/modedit_onclick.cpp:263
 msgid "Edit Pad"
 msgstr "Edit Pad"
 
 #: pcbnew/onrightclick.cpp:799
-#: pcbnew/modedit_onclick.cpp:265
 msgid "New Pad Settings"
 msgstr "Nouvelles Caract. Pads"
 
@@ -3138,7 +3037,6 @@ msgid "Copy current pad settings to this pad"
 msgstr "Copier les réglages courants pour ce pad"
 
 #: pcbnew/onrightclick.cpp:803
-#: pcbnew/modedit_onclick.cpp:267
 msgid "Export Pad Settings"
 msgstr "Exporte Caract. Pads"
 
@@ -3147,7 +3045,6 @@ msgid "Copy this pad settings to current pad settings"
 msgstr "Copier les caractéristiques de ce pad vers les caractéristiques courantes"
 
 #: pcbnew/onrightclick.cpp:810
-#: pcbnew/modedit_onclick.cpp:274
 msgid "Global Pad Settings"
 msgstr "Edition Globale des pads"
 
@@ -3593,6 +3490,7 @@ msgstr "Impossible de créer  fichier "
 
 #: pcbnew/plotgerb.cpp:82
 #: pcbnew/plothpgl.cpp:74
+#: pcbnew/plotps.cpp:58
 msgid "File"
 msgstr "Fichier"
 
@@ -3825,21 +3723,21 @@ msgstr "Change module %s (%s)  "
 msgid "Cmp files:"
 msgstr "Fichiers Cmp: "
 
-#: pcbnew/zones_by_polygon.cpp:330
-#: pcbnew/zones_by_polygon.cpp:386
-#: pcbnew/zones_by_polygon.cpp:703
+#: pcbnew/zones_by_polygon.cpp:328
+#: pcbnew/zones_by_polygon.cpp:384
+#: pcbnew/zones_by_polygon.cpp:701
 msgid "Area: DRC outline error"
 msgstr "Zone; Erreur DRC sur contour"
 
-#: pcbnew/zones_by_polygon.cpp:586
+#: pcbnew/zones_by_polygon.cpp:584
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Erreur DRC: ce point de départ est a l'intérieur d'une autre zone ou trop proche"
 
-#: pcbnew/zones_by_polygon.cpp:648
+#: pcbnew/zones_by_polygon.cpp:646
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Erreur DRC: la fermeture de cette zone crée une erreur DRC avec une autre zone"
 
-#: pcbnew/zones_by_polygon.cpp:887
+#: pcbnew/zones_by_polygon.cpp:885
 msgid "No Net"
 msgstr "No Net"
 
@@ -4283,12 +4181,10 @@ msgid "Sizes and Widths"
 msgstr "Dims. et Epaiss."
 
 #: pcbnew/menubarmodedit.cpp:41
-#: pcbnew/menubarpcb.cpp:229
 msgid "Adjust width for texts and drawings"
 msgstr "Ajuster dims pour textes et graphiques"
 
 #: pcbnew/menubarmodedit.cpp:46
-#: pcbnew/menubarpcb.cpp:234
 msgid "Adjust size,shape,layers... for Pads"
 msgstr "Ajuster taille, forme, couches... pour pads"
 
@@ -4297,52 +4193,42 @@ msgid "User Grid Size"
 msgstr "Dim Grille utilisteur"
 
 #: pcbnew/menubarmodedit.cpp:51
-#: pcbnew/menubarpcb.cpp:224
 msgid "Adjust User Grid"
 msgstr "Ajuster Grille utilisateur"
 
 #: pcbnew/menubarmodedit.cpp:64
-#: pcbnew/menubarpcb.cpp:292
 msgid "&Contents"
 msgstr "&Contenu"
 
 #: pcbnew/menubarmodedit.cpp:65
-#: pcbnew/menubarpcb.cpp:292
 msgid "Open the pcbnew manual"
 msgstr "Ouvrir la documentation de pcbnew"
 
 #: pcbnew/menubarmodedit.cpp:73
-#: pcbnew/menubarpcb.cpp:296
 msgid "&About pcbnew"
 msgstr "&Au sujet de r Pcbnew"
 
 #: pcbnew/menubarmodedit.cpp:74
-#: pcbnew/menubarpcb.cpp:296
 msgid "About pcbnew PCB designer"
 msgstr "Au sujet de Pcbnew, concption de PCB"
 
 #: pcbnew/menubarmodedit.cpp:82
-#: pcbnew/menubarpcb.cpp:304
 msgid "3D Display"
 msgstr "3D Visu"
 
 #: pcbnew/menubarmodedit.cpp:82
-#: pcbnew/menubarpcb.cpp:304
 msgid "Show board in 3D viewer"
 msgstr "Visualisation du circuit en 3D"
 
 #: pcbnew/menubarmodedit.cpp:86
-#: pcbnew/menubarpcb.cpp:310
 msgid "&Dimensions"
 msgstr "&Dimensions"
 
 #: pcbnew/menubarmodedit.cpp:87
-#: pcbnew/menubarpcb.cpp:313
 msgid "&3D Display"
 msgstr "&3D Visu"
 
 #: pcbnew/menubarmodedit.cpp:88
-#: pcbnew/menubarpcb.cpp:314
 msgid "&Help"
 msgstr "&Aide"
 
@@ -4638,9 +4524,27 @@ msgstr "&Divers"
 msgid "P&ostprocess"
 msgstr "P&ostprocesseurs"
 
+#: pcbnew/dialog_non_copper_zones_properties.cpp:28
+#: pcbnew/dialog_copper_zones_frame.cpp:67
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:45
+msgid "Hatched Outline"
+msgstr "Contour Hachuré"
+
+#: pcbnew/dialog_non_copper_zones_properties.cpp:28
+#: pcbnew/dialog_copper_zones_frame.cpp:67
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:45
+msgid "Full Hatched"
+msgstr "Pleinement Hachuré"
+
 #: pcbnew/dialog_non_copper_zones_properties.cpp:30
 msgid "Outlines Appearence"
 msgstr "Aspect des Contours"
+
+#: pcbnew/dialog_non_copper_zones_properties.cpp:34
+#: pcbnew/dialog_copper_zones_frame.cpp:76
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:65
+msgid "Any"
+msgstr "Tout"
 
 #: pcbnew/dialog_non_copper_zones_properties.cpp:34
 msgid "H, V and 45 deg"
@@ -4653,6 +4557,23 @@ msgstr "Direction contours zone"
 #: pcbnew/dialog_non_copper_zones_properties.cpp:54
 msgid "Layer selection:"
 msgstr "Sélection couche:"
+
+#: pcbnew/zones_non_copper_type_functions.cpp:152
+#: pcbnew/dialog_copper_zones.cpp:329
+msgid "Error : you must choose a layer"
+msgstr "Erreur. Vous devez choisir une couche"
+
+#: pcbnew/dialog_copper_zones.cpp:64
+msgid "Zone clearance value:"
+msgstr "Valeur isolation zone:"
+
+#: pcbnew/dialog_copper_zones.cpp:67
+msgid "Grid :"
+msgstr "Grille:"
+
+#: pcbnew/dialog_copper_zones.cpp:338
+msgid "Error : you must choose a net name"
+msgstr "Erreur. Vous devez choisir une équipotentielle"
 
 #: pcbnew/dialog_setup_libs.cpp:97
 msgid "from "
@@ -4729,6 +4650,90 @@ msgstr "Fichier placement coté cuivre:"
 #: pcbnew/gen_modules_placefile.cpp:179
 msgid "Module count"
 msgstr "Nb Modules"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:33
+msgid "Zone Fill Options:"
+msgstr "Options de Remplissage de Zone:"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:35
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:32
+msgid "0.00000"
+msgstr "0.00000"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:35
+msgid "No Grid (For tests only!)"
+msgstr ""
+
+#: pcbnew/dialog_copper_zones_frame.cpp:37
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:34
+msgid "Grid Size for Filling:"
+msgstr "Taille de Grille pour Remplissage:"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:41
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:38
+msgid "Zone clearance value (mm):"
+msgstr "Valeur isolation zone (mm):"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:48
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:56
+msgid "Include Pads"
+msgstr "Inclure Pads"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:48
+msgid "Thermal Relief"
+msgstr "Frein Thermique"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:48
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:56
+msgid "Exclude Pads"
+msgstr "Exclure Pads"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:50
+msgid "Pad in Zone:"
+msgstr "Pads en Zone:"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:65
+msgid "Outlines Options:"
+msgstr "Options des Contours:"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:69
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:47
+msgid "Outlines Appearance"
+msgstr "Aspect des Contours"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:76
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:65
+msgid "H , V and 45 deg"
+msgstr "H, V et 45  deg"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:78
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:67
+msgid "Zone edges orient:"
+msgstr "Direction contours zone:"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:102
+msgid "Nets Display Options:"
+msgstr "Options d'Affichage des Nets"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:104
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:88
+msgid "Alphabetic"
+msgstr "Alphabetique"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:104
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:88
+msgid "Advanced"
+msgstr "Avancé"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:106
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:90
+msgid "Net sorting:"
+msgstr "Tri des Equipotentielles:"
+
+#: pcbnew/dialog_copper_zones_frame.cpp:110
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:94
+msgid "Filter"
+msgstr "Filtre"
 
 #: pcbnew/dialog_pad_edit.cpp:157
 msgid "Pad Num :"
@@ -4838,6 +4843,18 @@ msgstr "couche E.C.O.2"
 #: pcbnew/dialog_pad_edit.cpp:277
 msgid "Draft layer"
 msgstr "Couche dessin"
+
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:32
+msgid "|No Grid (For tests only!)"
+msgstr ""
+
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:56
+msgid "Thermal"
+msgstr "Thermique"
+
+#: pcbnew/dialog_copper_zones_frame.cpp.cpp:58
+msgid "Pad options:"
+msgstr "Options pads"
 
 #: pcbnew/pcbframe.cpp:280
 msgid "Board modified, Save before exit ?"
@@ -7374,7 +7391,6 @@ msgid "Edit pins part per part (Carefully use!)"
 msgstr "Editer pins unité par unité (Utiliser en connaissance de cause)"
 
 #: eeschema/tool_lib.cpp:238
-#: eeschema/tool_viewlib.cpp:128
 #, c-format
 msgid "Part %c"
 msgstr "Composant %c"
@@ -8312,6 +8328,7 @@ msgid "1:1 zoom"
 msgstr "1:1 zoom"
 
 #: cvpcb/genorcad.cpp:134
+#: cvpcb/writenetlistpcbnew.cpp:168
 #, c-format
 msgid "%s %s pin %s : Different Nets"
 msgstr "%s %s pin %s :  Nets Differents"
@@ -8322,6 +8339,7 @@ msgid "Components: %d (free: %d)"
 msgstr "Composants: %d (libres: %d)"
 
 #: cvpcb/init.cpp:112
+#: cvpcb/cvframe.cpp:340
 #, c-format
 msgid "Componants: %d (free: %d)"
 msgstr "Composants: %d (libres: %d)"
@@ -10190,10 +10208,6 @@ msgstr "Dialog"
 msgid "Tracks and Vias Sizes"
 msgstr "Dims Pistes et Vias"
 
-#: pcbnew/dialog_zones_by_polygon.h:53
-msgid "Fill Zones Options"
-msgstr "Options de Remplissage de Zone"
-
 #: pcbnew/drc_stuff.h:147
 #, c-format
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
@@ -10297,6 +10311,10 @@ msgstr "Propriétés des Zones sur couches non cuivre"
 #: pcbnew/dialog_pad_edit.h:62
 msgid "Pad properties"
 msgstr "Propriétés des Pads"
+
+#: pcbnew/dialog_copper_zones_frame.h:83
+msgid "Fill Zones Options"
+msgstr "Options de Remplissage de Zone"
 
 #: pcbnew/dialog_gendrill.h:50
 msgid "Drill Files Generation"
@@ -10606,6 +10624,9 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Do not list net names which match with this text, in advanced mode"
+#~ msgstr ""
+#~ "Ne liste pas les noms de nets qui correspondent à ce texte, en mode avancé"
 #~ msgid "About this application"
 #~ msgstr "Au sujet de cette application"
 #~ msgid "Place the graphic line or poligon"

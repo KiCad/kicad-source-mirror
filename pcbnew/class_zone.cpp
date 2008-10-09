@@ -332,7 +332,10 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
     }
 
     if( !IsOnCopperLayer() )
+    {
+        m_GridFillValue = 0;
         SetNet( 0 );
+    }
 
     return error ? 0 : 1;
 }

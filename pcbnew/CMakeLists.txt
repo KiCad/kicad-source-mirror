@@ -41,6 +41,8 @@ set(PCBNEW_SRCS
     cotation.cpp
     cross-probing.cpp
     deltrack.cpp
+    dialog_copper_zones.cpp
+    dialog_copper_zones_frame.cpp
 #   dialog_display_options.cpp
 #   dialog_drc.cpp
     dialog_edit_mod_text.cpp
@@ -57,7 +59,6 @@ set(PCBNEW_SRCS
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp
 #   dialog_track_options.cpp
-#   dialog_zones_by_polygon.cpp
     dist.cpp
     dragsegm.cpp
     drc.cpp

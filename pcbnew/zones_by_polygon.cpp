@@ -48,15 +48,13 @@ static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* pane
                                                           bool              erase );
 
 /* Local variables */
-static ZONE_CONTAINER::m_PadInZone s_Zone_Pad_Options = ZONE_CONTAINER::THERMAL_PAD;
-static int             s_NetcodeSelection;                      // Net code selection for the current zone
 static wxPoint         s_CornerInitialPosition;                 // Used to abort a move corner command
 static bool            s_CornerIsNew;                           // Used to abort a move corner command (if it is a new corner, it must be deleted)
 static bool            s_AddCutoutToCurrentZone;                // if true, the next outline will be addes to s_CurrentZone
 static ZONE_CONTAINER* s_CurrentZone;                           // if != NULL, these ZONE_CONTAINER params will be used for the next zone
 static wxPoint         s_CursorLastPosition;                    // in move zone outline, last cursor position. Used to calculate the move vector
 
-#include "dialog_zones_by_polygon.cpp"
+#include "dialog_copper_zones.h"
 
 /**********************************************************************************/
 void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container )
@@ -225,7 +223,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
             Hight_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
+        g_HightLigth_NetCode = g_NetcodeSelection = zone_container->GetNet();
         if( DC )
             Hight_Light( DC );
     }
@@ -278,7 +276,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
             Hight_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HightLigth_NetCode = s_NetcodeSelection = zone_container->GetNet();
+        g_HightLigth_NetCode = g_NetcodeSelection = zone_container->GetNet();
         Hight_Light( DC );
     }
 
@@ -518,14 +516,14 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             zone->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
-                WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this, zone  );
+                dialog_copper_zone* frame = new dialog_copper_zone( this, zone  );
                 diag = frame->ShowModal();
                 frame->Destroy();
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
                 diag = InstallDialogNonCopperZonesEditor( this, zone );
-                s_NetcodeSelection = 0;     // No net for non copper zones
+                g_NetcodeSelection = 0;     // No net for non copper zones
             }
             DrawPanel->MouseToCursorSchema();
             DrawPanel->m_IgnoreMouseEvents = FALSE;
@@ -545,14 +543,14 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         /* Show the Net for zones on copper layers */
         if( g_CurrentZone_Layer  < FIRST_NO_COPPER_LAYER )
         {
-            if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection) )
+            if( g_HightLigt_Status && (g_HightLigth_NetCode != g_NetcodeSelection) )
             {
                 Hight_Light( DC ); // Remove old hightlight selection
             }
 
             if( s_CurrentZone )
-                s_NetcodeSelection = s_CurrentZone->GetNet();
-            g_HightLigth_NetCode = s_NetcodeSelection;
+                g_NetcodeSelection = s_CurrentZone->GetNet();
+            g_HightLigth_NetCode = g_NetcodeSelection;
             Hight_Light( DC );
         }
         if( !s_AddCutoutToCurrentZone )
@@ -564,9 +562,9 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
     {
         zone->m_Flags = IS_NEW;
         zone->SetLayer( g_CurrentZone_Layer );
-        zone->SetNet( s_NetcodeSelection );
+        zone->SetNet( g_NetcodeSelection );
         zone->m_TimeStamp     = GetTimeStamp();
-        zone->m_PadOption     = s_Zone_Pad_Options;
+        zone->m_PadOption     = g_Zone_Pad_Options;
         zone->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
         zone->m_GridFillValue = g_GridRoutingSize;
         zone->m_Poly->Start( g_CurrentZone_Layer,
@@ -758,7 +756,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     if( zone_container->GetLayer() < FIRST_NO_COPPER_LAYER )
     {   // edit a zone on a copper layer
-        WinEDA_ZoneFrame* frame = new WinEDA_ZoneFrame( this, zone_container );
+        dialog_copper_zone* frame = new dialog_copper_zone( this, zone_container );
         diag = frame->ShowModal();
         frame->Destroy();
     }
@@ -779,12 +777,12 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     }
 
     zone_container->SetLayer( g_CurrentZone_Layer );
-    zone_container->SetNet( s_NetcodeSelection );
-    EQUIPOT* net = m_Pcb->FindNet( s_NetcodeSelection );
+    zone_container->SetNet( g_NetcodeSelection );
+    EQUIPOT* net = m_Pcb->FindNet( g_NetcodeSelection );
     if( net )
         zone_container->m_Netname = net->m_Netname;
     zone_container->m_Poly->SetHatch( g_Zone_Hatching );
-    zone_container->m_PadOption     = s_Zone_Pad_Options;
+    zone_container->m_PadOption     = g_Zone_Pad_Options;
     zone_container->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
     zone_container->m_GridFillValue = g_GridRoutingSize;
 
@@ -858,13 +856,13 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     }
 
     /* Show the Net */
-    s_NetcodeSelection = zone_container->GetNet();
-    if( g_HightLigt_Status && (g_HightLigth_NetCode != s_NetcodeSelection)  && DC )
+    g_NetcodeSelection = zone_container->GetNet();
+    if( g_HightLigt_Status && (g_HightLigth_NetCode != g_NetcodeSelection)  && DC )
     {
         Hight_Light( DC );      // Remove old hightlight selection
     }
 
-    g_HightLigth_NetCode = s_NetcodeSelection;
+    g_HightLigth_NetCode = g_NetcodeSelection;
     if( DC )
         Hight_Light( DC );
 
@@ -892,6 +890,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     int          error_level = 0;
     if( zone_container->m_GridFillValue == 0 )
     {
+        zone_container->m_FilledPolysList.clear();
         zone_container->BuildFilledPolysListData( m_Pcb );
         if ( DC )
             DrawPanel->Refresh();
@@ -936,7 +935,6 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         zone_container = m_Pcb->GetArea( ii );
-        zone_container->m_FilledPolysList.clear();
         error_level    = Fill_Zone( NULL, zone_container, verbose );
         if( error_level && !verbose )
             break;

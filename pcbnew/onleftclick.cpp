@@ -400,6 +400,12 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         case TYPEDRAWSEGMENT:
             break;
 
+        case TYPEZONE_CONTAINER:
+            if( DrawStruct->m_Flags )
+                break;
+            Edit_Zone_Params( &dc, (ZONE_CONTAINER*) DrawStruct );
+            break;
+
         default:
             break;
         }

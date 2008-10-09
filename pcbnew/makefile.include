@@ -22,6 +22,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		$(SPECCTRA_TOOLS)\
 		lay2plot.o\
 		dialog_freeroute_exchange.o\
+        dialog_copper_zones_frame.o\
+        dialog_copper_zones.o\
 		dialog_non_copper_zones_properties.o\
 		zones_non_copper_type_functions.o\
 		modedit_undo_redo.o\
@@ -297,7 +299,9 @@ graphpcb.o: graphpcb.cpp cell.h autorout.h $(COMMON)
 
 zones.o: zones.cpp cell.h $(COMMON)
 
-zones_by_polygon.o: zones_by_polygon.cpp dialog_zones_by_polygon.cpp dialog_zones_by_polygon.h $(COMMON)
+
+
+zones_by_polygon.o: zones_by_polygon.cpp $(COMMON)
 
 
 undelete.o: undelete.cpp $(COMMON)
