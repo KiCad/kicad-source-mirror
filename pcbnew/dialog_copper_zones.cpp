@@ -64,7 +64,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     wxString title = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
     m_ClearanceValueTitle->SetLabel( title );
 
-    title = _( "Grid :" ) + ReturnUnitSymbol( g_UnitMetric );;
+    title = _( "Grid :" ) + ReturnUnitSymbol( g_UnitMetric );
     m_GridCtrl->SetLabel( title );
 
     if( g_DesignSettings.m_ZoneClearence == 0 )
@@ -119,6 +119,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
             break;
         }
         g_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
+        g_Zone_Arc_Approximation = m_Zone_Container->m_ArcToSegmentsCount;
 
     }
     else
@@ -153,6 +154,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         m_OutlineAppearanceCtrl->SetSelection(2);
         break;
     }
+    
+    m_ArcApproximationOpt->SetSelection( g_Zone_Arc_Approximation == 32 ? 1 : 0 );
 
     /* build copper layers list */
     int layer_cnt = board->GetCopperLayerCount();
@@ -282,6 +285,8 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors)
         g_Zone_Hatching = CPolyLine::DIAGONAL_FULL;
         break;
     }
+    
+    g_Zone_Arc_Approximation = m_ArcApproximationOpt->GetSelection() == 1 ? 32 : 16;
 
     if( m_Parent->m_Parent->m_EDA_Config )
     {
@@ -394,5 +399,13 @@ void dialog_copper_zone::OnButtonOkClick( wxCommandEvent& event )
         EndModal( ZONE_OK );
 }
 
+/****************************************************************************/
+void dialog_copper_zone::OnRemoveFillZoneButtonClick( wxCommandEvent& event )
+/****************************************************************************/
+{
+    m_Parent->Delete_Zone_Fill( NULL, NULL, m_Zone_Container->m_TimeStamp );
+    m_Zone_Container->m_FilledPolysList.clear();
+    m_Parent->DrawPanel->Refresh();
+}
 
 

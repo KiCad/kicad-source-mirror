@@ -38,6 +38,7 @@ class dialog_copper_zone_frame : public wxDialog
 		void _wxFB_OnInitDialog( wxInitDialogEvent& event ){ OnInitDialog( event ); }
 		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
+		void _wxFB_OnRemoveFillZoneButtonClick( wxCommandEvent& event ){ OnRemoveFillZoneButtonClick( event ); }
 		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
 		
 	
@@ -46,6 +47,7 @@ class dialog_copper_zone_frame : public wxDialog
 		{
 			 ID_RADIOBOX_GRID_SELECTION = 1000,
 			ID_RADIOBOX_OUTLINES_OPTION,
+			wxID_ARC_APPROX,
 			ID_NET_SORTING_OPTION,
 			ID_TEXTCTRL_NETNAMES_FILTER,
 			ID_NETNAME_SELECTION,
@@ -57,12 +59,14 @@ class dialog_copper_zone_frame : public wxDialog
 		wxTextCtrl* m_ZoneClearanceCtrl;
 		wxRadioBox* m_FillOpt;
 		
-		wxRadioBox* m_OutlineAppearanceCtrl;
-		
 		wxRadioBox* m_OrientEdgesOpt;
+		
+		wxRadioBox* m_OutlineAppearanceCtrl;
+		wxRadioBox* m_ArcApproximationOpt;
 		
 		wxButton* m_OkButton;
 		wxButton* m_ButtonCancel;
+		wxButton* m_UnFillZoneButton;
 		
 		wxRadioBox* m_NetSortingOption;
 		wxStaticText* m_staticText5;
@@ -76,11 +80,12 @@ class dialog_copper_zone_frame : public wxDialog
 		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRemoveFillZoneButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		dialog_copper_zone_frame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 452,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER );
+		dialog_copper_zone_frame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 452,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~dialog_copper_zone_frame();
 	
 };

@@ -31,9 +31,11 @@ eda_global bool g_Zone_45_Only
 = FALSE
 #endif
 ;
-eda_global int             g_NetcodeSelection;                      // Net code selection for the current zone
+eda_global int g_NetcodeSelection;                  // Net code selection for the current zone
 eda_global int g_CurrentZone_Layer;                 // Layer used to create the current zone
 eda_global int g_Zone_Hatching;                     // Option to show the zone area (outlines only, short hatches or full hatches
+eda_global int g_Zone_Arc_Approximation;            // Option to select number of segments to approximate a circle
+                                                    // 16 or 32 segments
 
 eda_global ZONE_CONTAINER::m_PadInZone g_Zone_Pad_Options
 #ifdef MAIN

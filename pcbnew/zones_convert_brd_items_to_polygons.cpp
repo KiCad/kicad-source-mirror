@@ -30,7 +30,9 @@ void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 
 // Local Variables:
 /* how many segments are used to create a polygon from a circle: */
-static int s_CircleToSegmentsCount = 16;
+static int s_CircleToSegmentsCount = 16;   /* default value. the real value will be changed to 32
+if g_Zone_Arc_Approximation == 1
+*/
 
 /** function AddClearanceAreasPolygonsToPolysList
  * Add non copper areas polygons (pads and tracks with clearence)
@@ -49,6 +51,12 @@ static int s_CircleToSegmentsCount = 16;
  */
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 {
+    // Set the number of segments in arc approximations
+    if ( m_ArcToSegmentsCount == 32  )
+        s_CircleToSegmentsCount = 32;
+    else
+        s_CircleToSegmentsCount = 16;
+
     /* Uses a kbool engine to add holes in the m_FilledPolysList polygon.
      * Because this function is called just after creating the m_FilledPolysList,
      * only one polygon is in list.
@@ -56,8 +64,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * after adding holes, many polygons could be exist in this list.
      */
 
-
-    Bool_Engine* booleng = new Bool_Engine();
+    Bool_Engine * booleng = new Bool_Engine();
 
     ArmBoolEng( booleng, true );
 

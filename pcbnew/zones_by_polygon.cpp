@@ -785,6 +785,8 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     zone_container->m_PadOption     = g_Zone_Pad_Options;
     zone_container->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
     zone_container->m_GridFillValue = g_GridRoutingSize;
+    zone_container->m_ArcToSegmentsCount = g_Zone_Arc_Approximation;
+
 
     // Combine zones if possible :
     m_Pcb->AreaPolygonModified( zone_container, true, verbose );

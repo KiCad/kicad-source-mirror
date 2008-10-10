@@ -31,7 +31,8 @@ public:
     CPolyLine*            m_Poly;               // outlines
     int                   m_CornerSelection;    // For corner moving, corner index to drag, or -1 if no selection
     int                   m_ZoneClearance;      // clearance value
-    int                   m_GridFillValue;      // Grid used for filling
+    int                   m_GridFillValue;      // Grid used for filling, 0 = use polygonal areas to fill
+    int                   m_ArcToSegmentsCount; // number of segments to convert a cirlce to a polygon (uses 16 or 32)
     m_PadInZone           m_PadOption;          // see m_PadInZone
     int                   utility, utility2;    // flags used in polygon calculations
     std::vector <CPolyPt> m_FilledPolysList;  /* set of filled polygons used to draw a zone as a filled area.

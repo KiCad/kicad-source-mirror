@@ -13,6 +13,7 @@ BEGIN_EVENT_TABLE( dialog_copper_zone_frame, wxDialog )
 	EVT_INIT_DIALOG( dialog_copper_zone_frame::_wxFB_OnInitDialog )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_frame::_wxFB_OnButtonOkClick )
 	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_frame::_wxFB_OnButtonCancelClick )
+	EVT_BUTTON( wxID_ANY, dialog_copper_zone_frame::_wxFB_OnRemoveFillZoneButtonClick )
 	EVT_RADIOBOX( ID_NET_SORTING_OPTION, dialog_copper_zone_frame::_wxFB_OnNetSortingOptionSelected )
 END_EVENT_TABLE()
 
@@ -35,7 +36,7 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No Grid (For tests only!)") };
 	int m_GridCtrlNChoices = sizeof( m_GridCtrlChoices ) / sizeof( wxString );
 	m_GridCtrl = new wxRadioBox( this,  ID_RADIOBOX_GRID_SELECTION, _("Grid Size for Filling:"), wxDefaultPosition, wxDefaultSize, m_GridCtrlNChoices, m_GridCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_GridCtrl->SetSelection( 4 );
+	m_GridCtrl->SetSelection( 1 );
 	m_FillOptionsBox->Add( m_GridCtrl, 0, wxALL, 5 );
 	
 	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -64,20 +65,30 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* m_OutilinesBoxOpt;
 	m_OutilinesBoxOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outlines Options:") ), wxVERTICAL );
 	
-	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
-	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
-	m_OutlineAppearanceCtrl = new wxRadioBox( this, ID_RADIOBOX_OUTLINES_OPTION, _("Outlines Appearance"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OutlineAppearanceCtrl->SetSelection( 0 );
-	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	m_OutilinesBoxOpt->Add( 5, 5, 0, 0, 5 );
-	
 	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("H , V and 45 deg") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
 	m_OrientEdgesOpt = new wxRadioBox( this, wxID_ANY, _("Zone edges orient:"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientEdgesOpt->SetSelection( 0 );
-	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL, 5 );
+	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	m_OutilinesBoxOpt->Add( 5, 5, 0, 0, 5 );
+	
+	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
+	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
+	m_OutlineAppearanceCtrl = new wxRadioBox( this, ID_RADIOBOX_OUTLINES_OPTION, _("Outlines Appearance"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_OutlineAppearanceCtrl->SetSelection( 1 );
+	m_OutlineAppearanceCtrl->SetToolTip( _("How a zone outline is shoved:\nSingle line\nShort hatching\nFull area hatched") );
+	
+	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	wxString m_ArcApproximationOptChoices[] = { _("16 segments / 360 deg"), _("32 segments / 360 deg") };
+	int m_ArcApproximationOptNChoices = sizeof( m_ArcApproximationOptChoices ) / sizeof( wxString );
+	m_ArcApproximationOpt = new wxRadioBox( this, wxID_ARC_APPROX, _("Arcs Approximation:"), wxDefaultPosition, wxDefaultSize, m_ArcApproximationOptNChoices, m_ArcApproximationOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_ArcApproximationOpt->SetSelection( 1 );
+	m_ArcApproximationOpt->SetToolTip( _("Number of segments to approximate a circle in filling calculations.\n16 segment is faster to calculate and when redraw screen.\n32 segment give a better quality") );
+	
+	m_OutilinesBoxOpt->Add( m_ArcApproximationOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	m_MiddleBoxSizer->Add( m_OutilinesBoxOpt, 1, wxEXPAND, 5 );
 	
@@ -90,10 +101,14 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_OkButton = new wxButton( this, wxID_OK, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OkButton->SetDefault(); 
 	m_RightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_UnFillZoneButton = new wxButton( this, wxID_ANY, _("UnFill Zone"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RightBoxSizer->Add( m_UnFillZoneButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	m_RightBoxSizer->Add( 5, 20, 0, wxEXPAND, 5 );
@@ -104,7 +119,9 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxString m_NetSortingOptionChoices[] = { _("Alphabetic"), _("Advanced") };
 	int m_NetSortingOptionNChoices = sizeof( m_NetSortingOptionChoices ) / sizeof( wxString );
 	m_NetSortingOption = new wxRadioBox( this, ID_NET_SORTING_OPTION, _("Net sorting:"), wxDefaultPosition, wxDefaultSize, m_NetSortingOptionNChoices, m_NetSortingOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_NetSortingOption->SetSelection( 0 );
+	m_NetSortingOption->SetSelection( 1 );
+	m_NetSortingOption->SetToolTip( _("Nets can be sorted:\nBy alphabetic order\nBy number of pads in the net (advanced)") );
+	
 	m_NetSortOptSizer->Add( m_NetSortingOption, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Filter"), wxDefaultPosition, wxDefaultSize, 0 );

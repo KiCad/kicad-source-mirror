@@ -39,7 +39,7 @@
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
-            <property name="window_style">wxSUNKEN_BORDER</property>
+            <property name="window_style"></property>
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
             <event name="OnChar"></event>
@@ -125,7 +125,7 @@
                                                 <property name="name">m_GridCtrl</property>
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
-                                                <property name="selection">4</property>
+                                                <property name="selection">1</property>
                                                 <property name="size"></property>
                                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                                 <property name="subclass"></property>
@@ -360,18 +360,18 @@
                                             <property name="proportion">0</property>
                                             <object class="wxRadioBox" expanded="1">
                                                 <property name="bg"></property>
-                                                <property name="choices">&quot;Line&quot; &quot;Hatched Outline&quot; &quot;Full Hatched&quot;</property>
+                                                <property name="choices">&quot;Any&quot; &quot;H , V and 45 deg&quot;</property>
                                                 <property name="context_help"></property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="font"></property>
                                                 <property name="hidden">0</property>
-                                                <property name="id">ID_RADIOBOX_OUTLINES_OPTION</property>
-                                                <property name="label">Outlines Appearance</property>
+                                                <property name="id">wxID_ANY</property>
+                                                <property name="label">Zone edges orient:</property>
                                                 <property name="majorDimension">1</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="minimum_size"></property>
-                                                <property name="name">m_OutlineAppearanceCtrl</property>
+                                                <property name="name">m_OrientEdgesOpt</property>
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="selection">0</property>
@@ -420,29 +420,83 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="wxRadioBox" expanded="1">
                                                 <property name="bg"></property>
-                                                <property name="choices">&quot;Any&quot; &quot;H , V and 45 deg&quot;</property>
+                                                <property name="choices">&quot;Line&quot; &quot;Hatched Outline&quot; &quot;Full Hatched&quot;</property>
                                                 <property name="context_help"></property>
                                                 <property name="enabled">1</property>
                                                 <property name="fg"></property>
                                                 <property name="font"></property>
                                                 <property name="hidden">0</property>
-                                                <property name="id">wxID_ANY</property>
-                                                <property name="label">Zone edges orient:</property>
+                                                <property name="id">ID_RADIOBOX_OUTLINES_OPTION</property>
+                                                <property name="label">Outlines Appearance</property>
                                                 <property name="majorDimension">1</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="minimum_size"></property>
-                                                <property name="name">m_OrientEdgesOpt</property>
+                                                <property name="name">m_OutlineAppearanceCtrl</property>
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
-                                                <property name="selection">0</property>
+                                                <property name="selection">1</property>
                                                 <property name="size"></property>
                                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                                 <property name="subclass"></property>
-                                                <property name="tooltip"></property>
+                                                <property name="tooltip">How a zone outline is shoved:&#x0A;Single line&#x0A;Short hatching&#x0A;Full area hatched</property>
+                                                <property name="window_extra_style"></property>
+                                                <property name="window_name"></property>
+                                                <property name="window_style"></property>
+                                                <event name="OnChar"></event>
+                                                <event name="OnEnterWindow"></event>
+                                                <event name="OnEraseBackground"></event>
+                                                <event name="OnKeyDown"></event>
+                                                <event name="OnKeyUp"></event>
+                                                <event name="OnKillFocus"></event>
+                                                <event name="OnLeaveWindow"></event>
+                                                <event name="OnLeftDClick"></event>
+                                                <event name="OnLeftDown"></event>
+                                                <event name="OnLeftUp"></event>
+                                                <event name="OnMiddleDClick"></event>
+                                                <event name="OnMiddleDown"></event>
+                                                <event name="OnMiddleUp"></event>
+                                                <event name="OnMotion"></event>
+                                                <event name="OnMouseEvents"></event>
+                                                <event name="OnMouseWheel"></event>
+                                                <event name="OnPaint"></event>
+                                                <event name="OnRadioBox"></event>
+                                                <event name="OnRightDClick"></event>
+                                                <event name="OnRightDown"></event>
+                                                <event name="OnRightUp"></event>
+                                                <event name="OnSetFocus"></event>
+                                                <event name="OnSize"></event>
+                                                <event name="OnUpdateUI"></event>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
+                                            <property name="proportion">0</property>
+                                            <object class="wxRadioBox" expanded="1">
+                                                <property name="bg"></property>
+                                                <property name="choices">&quot;16 segments / 360 deg&quot; &quot;32 segments / 360 deg&quot;</property>
+                                                <property name="context_help"></property>
+                                                <property name="enabled">1</property>
+                                                <property name="fg"></property>
+                                                <property name="font"></property>
+                                                <property name="hidden">0</property>
+                                                <property name="id">wxID_ARC_APPROX</property>
+                                                <property name="label">Arcs Approximation:</property>
+                                                <property name="majorDimension">1</property>
+                                                <property name="maximum_size"></property>
+                                                <property name="minimum_size"></property>
+                                                <property name="name">m_ArcApproximationOpt</property>
+                                                <property name="permission">protected</property>
+                                                <property name="pos"></property>
+                                                <property name="selection">1</property>
+                                                <property name="size"></property>
+                                                <property name="style">wxRA_SPECIFY_COLS</property>
+                                                <property name="subclass"></property>
+                                                <property name="tooltip">Number of segments to approximate a circle in filling calculations.&#x0A;16 segment is faster to calculate and when redraw screen.&#x0A;32 segment give a better quality</property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
@@ -502,7 +556,7 @@
                                     <object class="wxButton" expanded="1">
                                         <property name="bg"></property>
                                         <property name="context_help"></property>
-                                        <property name="default">0</property>
+                                        <property name="default">1</property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="font"></property>
@@ -601,6 +655,58 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
+                                    <property name="flag">wxALL|wxALIGN_CENTER_HORIZONTAL</property>
+                                    <property name="proportion">0</property>
+                                    <object class="wxButton" expanded="1">
+                                        <property name="bg"></property>
+                                        <property name="context_help"></property>
+                                        <property name="default">0</property>
+                                        <property name="enabled">1</property>
+                                        <property name="fg"></property>
+                                        <property name="font"></property>
+                                        <property name="hidden">0</property>
+                                        <property name="id">wxID_ANY</property>
+                                        <property name="label">UnFill Zone</property>
+                                        <property name="maximum_size"></property>
+                                        <property name="minimum_size"></property>
+                                        <property name="name">m_UnFillZoneButton</property>
+                                        <property name="permission">protected</property>
+                                        <property name="pos"></property>
+                                        <property name="size"></property>
+                                        <property name="style"></property>
+                                        <property name="subclass"></property>
+                                        <property name="tooltip"></property>
+                                        <property name="window_extra_style"></property>
+                                        <property name="window_name"></property>
+                                        <property name="window_style"></property>
+                                        <event name="OnButtonClick">OnRemoveFillZoneButtonClick</event>
+                                        <event name="OnChar"></event>
+                                        <event name="OnEnterWindow"></event>
+                                        <event name="OnEraseBackground"></event>
+                                        <event name="OnKeyDown"></event>
+                                        <event name="OnKeyUp"></event>
+                                        <event name="OnKillFocus"></event>
+                                        <event name="OnLeaveWindow"></event>
+                                        <event name="OnLeftDClick"></event>
+                                        <event name="OnLeftDown"></event>
+                                        <event name="OnLeftUp"></event>
+                                        <event name="OnMiddleDClick"></event>
+                                        <event name="OnMiddleDown"></event>
+                                        <event name="OnMiddleUp"></event>
+                                        <event name="OnMotion"></event>
+                                        <event name="OnMouseEvents"></event>
+                                        <event name="OnMouseWheel"></event>
+                                        <event name="OnPaint"></event>
+                                        <event name="OnRightDClick"></event>
+                                        <event name="OnRightDown"></event>
+                                        <event name="OnRightUp"></event>
+                                        <event name="OnSetFocus"></event>
+                                        <event name="OnSize"></event>
+                                        <event name="OnUpdateUI"></event>
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">0</property>
                                     <object class="spacer" expanded="1">
@@ -641,11 +747,11 @@
                                                 <property name="name">m_NetSortingOption</property>
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
-                                                <property name="selection">0</property>
+                                                <property name="selection">1</property>
                                                 <property name="size"></property>
                                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                                 <property name="subclass"></property>
-                                                <property name="tooltip"></property>
+                                                <property name="tooltip">Nets can be sorted:&#x0A;By alphabetic order&#x0A;By number of pads in the net (advanced)</property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>

@@ -29,6 +29,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     utility  = 0;               // flags used in polygon calculations
     utility2 = 0;               // flags used in polygon calculations
     m_Poly   = new CPolyLine(); // Outlines
+    m_ArcToSegmentsCount = 16;   // Use 16 segment to convert a circle to a polygon
 }
 
 
@@ -136,8 +137,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
-    ret = fprintf( aFile, "ZOptions %d\n", m_GridFillValue );
-    if( ret < 1 )
+    ret = fprintf( aFile, "ZOptions %d %d\n", m_GridFillValue, m_ArcToSegmentsCount );
+    if( ret < 2 )
         return false;
 
 
@@ -269,12 +270,15 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {
             int gridsize = 50;
+            int arcsegmentcount = 16;
             text = Line + 8;
-            ret  = sscanf( text, "%d", &gridsize );
-            if( ret < 1 )
+            ret  = sscanf( text, "%d %d", &gridsize, &arcsegmentcount );
+            if( ret < 1 )   // Must find 1 or 2 args.
                 return false;
             else
                 m_GridFillValue = gridsize;
+            if ( arcsegmentcount >= 32 )
+                m_ArcToSegmentsCount = 32;
         }
         if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {

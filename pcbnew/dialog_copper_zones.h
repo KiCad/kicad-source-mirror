@@ -21,6 +21,7 @@ public:
 	void OnButtonOkClick( wxCommandEvent& event );
 	void OnButtonCancelClick( wxCommandEvent& event );
     bool AcceptOptions(bool aPromptForErrors);
+	void OnRemoveFillZoneButtonClick( wxCommandEvent& event );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
 };
 
