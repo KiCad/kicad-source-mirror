@@ -338,8 +338,11 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     case ID_PCB_ZONES_BUTT:
         if(  m_Pcb->m_ZoneDescriptorList.size() > 0 )
         {
+            aPopMenu->AppendSeparator();
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
                 _( "Fill or Refill All Zones" ), fill_zone_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS,
+                _( "Remove Filled Areas" ), fill_zone_xpm );
             aPopMenu->AppendSeparator();
         }
 

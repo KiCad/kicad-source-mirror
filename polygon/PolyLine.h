@@ -96,13 +96,15 @@ public:
 class CPolyPt
 {
 public:
-    CPolyPt( int qx = 0, int qy = 0, bool qf = FALSE )
+    CPolyPt( int qx = 0, int qy = 0, bool qf = false )
     { x = qx; y = qy; end_contour = qf; utility = 0; };
     int  x;
     int  y;
     bool end_contour;
     int  utility;
 };
+
+#include "polygon_test_point_inside.h"
 
 class CPolyLine
 {
@@ -116,11 +118,11 @@ public:
 
     // functions for modifying polyline
     void       Start( int layer, int x, int y, int hatch );
-    void       AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw = TRUE );
+    void       AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw = false );
     void       InsertCorner( int ic, int x, int y );
-    void       DeleteCorner( int ic, bool bDraw = TRUE );
+    void       DeleteCorner( int ic, bool bDraw = false );
     void       MoveCorner( int ic, int x, int y );
-    void       Close( int style = STRAIGHT, bool bDraw = TRUE );
+    void       Close( int style = STRAIGHT, bool bDraw = false );
     void       RemoveContour( int icont );
 
     void       RemoveAllContours( void );
@@ -170,7 +172,7 @@ public:
     int        RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa = NULL );
 
     int NormalizeAreaOutlines( std::vector<CPolyLine*> * pa = NULL,
-                               bool                      bRetainArcs = FALSE );
+                               bool                      bRetainArcs = false );
 
     // KBOOL functions
 
@@ -214,7 +216,7 @@ public:
      * because copper areas have only one outside contour
      * Therefore, if this results in new CPolyLines, return them as std::vector pa
      * @param aExtraPolys: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
-     * @param bRetainArcs == TRUE, try to retain arcs in polys
+     * @param bRetainArcs == false, try to retain arcs in polys
      * @return number of external contours, or -1 if error
      */
     int NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs );

@@ -4,10 +4,6 @@
 // Licence:     GPL License
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined (__GNUG__) && !defined (NO_GCC_PRAGMA)
-#pragma implementation "dialog_zones_by_polygon.h"
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif

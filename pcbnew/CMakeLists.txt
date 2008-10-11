@@ -143,6 +143,7 @@ set(PCBNEW_SRCS
     zones_by_polygon.cpp
     zones_convert_brd_items_to_polygons.cpp
     zone_filling_algorithm.cpp
+    zones_polygons_insulated_copper_islands.cpp
     zones_test_and_combine_areas.cpp
     )
 

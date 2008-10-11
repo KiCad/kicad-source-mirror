@@ -13,6 +13,9 @@ using namespace std;
 
 #include "PolyLine.h"
 
+extern void Test_For_Copper_Island_And_Remove( BOARD* aPcb, ZONE_CONTAINER* aZone_container );
+
+
 // Local Functions:
 void    AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
                                       TRACK& aTrack, int aClearanceValue );
@@ -181,6 +184,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
     delete booleng;
+
+    // Remove insulated islands:
+    if ( GetNet() > 0 )
+        Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 }
 
 
@@ -310,12 +317,12 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         }
         corners_buffer.push_back( corner_end.x );
         corners_buffer.push_back( corner_end.y );
-        
+
         /* add the radius lines */
         corner.x = corner.y = aThermalGap / 2;
         corners_buffer.push_back( corner.x );
         corners_buffer.push_back( corner.y );
-        
+
 
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
         angle = 450;    // TODO: problems with kbool if angle = 0 (bad filled polygon on some pads, but not alls)

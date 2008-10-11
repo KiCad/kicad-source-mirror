@@ -6,7 +6,9 @@ COMMON =
 
 OBJECTS= \
 		PolyLine.o\
-		math_for_graphics.o
+		math_for_graphics.o\
+        polygon_test_point_inside.o
+
 
 PolyLine.o: PolyLine.cpp PolyLine.h
 

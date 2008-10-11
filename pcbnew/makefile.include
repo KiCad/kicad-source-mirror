@@ -13,7 +13,8 @@ LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 
 ZONE_FILES = zones_by_polygon.o zones_test_and_combine_areas.o\
         zone_filling_algorithm.o\
-        zones_convert_brd_items_to_polygons.o
+        zones_convert_brd_items_to_polygons.o\
+        zones_polygons_insulated_copper_islands.o
 
 SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o specctra_import.o
 

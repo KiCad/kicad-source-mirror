@@ -101,6 +101,12 @@ public:
 
     EDA_Rect GetBoundingBox();
 
+    /**
+     * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
+     * Remove insulated copper islands found in m_FilledPolysList.
+     * @param aPcb = the board to analyse
+     */
+    void Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
 
     /**
      * Function DrawWhileCreateOutline
@@ -157,7 +163,7 @@ public:
      * used in BuildFilledPolysListData when calculating filled areas in a zone
      * Non copper areas are pads and track and their clearance area
      * The filled copper area must be computed before
-     * BuildFilledPolysListData() call this function just after creating the 
+     * BuildFilledPolysListData() call this function just after creating the
      *  filled copper area polygon (without clearence areas
      * @param aPcb: the current board
      */

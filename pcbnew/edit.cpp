@@ -68,6 +68,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE:
     case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
     case ID_POPUP_PCB_FILL_ALL_ZONES:
+    case ID_POPUP_PCB_REMOVE_FILLED_AREAS:
     case ID_POPUP_PCB_PLACE_ZONE_CORNER:
     case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
@@ -541,6 +542,22 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         DrawPanel->MouseToCursorSchema();
         Fill_All_Zones( &dc );
+        break;
+    
+    case ID_POPUP_PCB_REMOVE_FILLED_AREAS: // Remove all zones :
+        if( m_Pcb->m_Zone )
+        {
+            m_Pcb->m_Zone->DeleteStructList();
+            m_Pcb->m_Zone = NULL;
+            m_Pcb->m_NbSegmZone = 0;
+        }
+        for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        {
+            ZONE_CONTAINER* zone_container = m_Pcb->GetArea( ii );
+            zone_container->m_FilledPolysList.clear();;
+        }
+        GetScreen()->SetModify();
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_FILL_ZONE:
