@@ -12,7 +12,7 @@ using namespace std;
   * It run a semi-infinite line horizontally (increasing x, fixed y)
   * out from the test point, and count how many edges it crosses.
   * At each crossing, the ray switches between inside and outside.
-  * If odd nimber, the test point is inside the polygon
+  * If odd count, the test point is inside the polygon
   * This is called the Jordan curve theorem, or sometimes referred to as the "even-odd" test.
  */
 
