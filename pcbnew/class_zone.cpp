@@ -266,6 +266,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                     break;
                 }
             }
+            /* Set hatch later, afer reading outlines corners data */
         }
         if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {
@@ -340,6 +341,9 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         m_GridFillValue = 0;
         SetNet( 0 );
     }
+
+    /* Set hatch here, when outlines corners are read */
+    m_Poly->SetHatch(outline_hatch);
 
     return error ? 0 : 1;
 }
