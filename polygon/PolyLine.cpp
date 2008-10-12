@@ -30,9 +30,10 @@ CPolyLine::CPolyLine()
 CPolyLine::~CPolyLine()
 {
     Undraw();
-    if ( m_Kbool_Poly_Engine )
+    if( m_Kbool_Poly_Engine )
         delete m_Kbool_Poly_Engine;
 }
+
 
 /** Function NormalizeWithKbool
  * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
@@ -83,8 +84,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             hole_array.push_back( hole );
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // store hole
             {
-                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
                 hole->push_back( x );
                 hole->push_back( y );
             }
@@ -99,8 +100,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             bool first = true;
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
             {       // foreach point in the polygon
-                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
                 if( first )
                 {
                     first = false;
@@ -116,13 +117,13 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
         }
         else if( aExtraPolyList )                                               // a new outside contour is found: create a new CPolyLine
         {
-            polyline = new CPolyLine;                               // create new poly
+            polyline = new CPolyLine;                                           // create new poly
             aExtraPolyList->push_back( polyline );                              // put it in array
             bool first = true;
-            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // read next external contour
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )                // read next external contour
             {
-                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
                 if( first )
                 {
                     first = false;
@@ -227,8 +228,8 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
         {
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
             {
-                int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
+                int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
                 aBooleng->AddPoint( x, y );
                 count++;
             }
@@ -259,7 +260,7 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
  * @return error: 0 if Ok, 1 if error
  */
 int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<CArc> * arc_array,
-                       bool aConvertHoles )
+                              bool aConvertHoles )
 {
     if( m_Kbool_Poly_Engine )
     {
@@ -300,8 +301,8 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                 {
                     while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
                     {
-                        int x = (int)m_Kbool_Poly_Engine->GetPolygonXPoint();
-                        int y = (int)m_Kbool_Poly_Engine->GetPolygonYPoint();
+                        int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                        int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
                         booleng->AddPoint( x, y );
                     }
 
@@ -563,11 +564,11 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 }
 
 
-
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*> * pa, bool bRetainArcs )
 {
     return NormalizeWithKbool( pa, bRetainArcs );
 }
+
 
 // Restore arcs to a polygon where they were replaced with steps
 // If pa != NULL, also use polygons in pa array
@@ -1215,20 +1216,20 @@ void CPolyLine::Hatch()
                     if( corner[ic].end_contour || ( ic == (int) (corner.size() - 1) ) )
                     {
                         ok = FindLineSegmentIntersection( a, slope,
-                                                          corner[ic].x, corner[ic].y,
-                                                          corner[i_start_contour].x,
-                                                          corner[i_start_contour].y,
-                                                          side_style[ic],
-                                                          &x, &y, &x2, &y2 );
+                            corner[ic].x, corner[ic].y,
+                            corner[i_start_contour].x,
+                            corner[i_start_contour].y,
+                            side_style[ic],
+                            &x, &y, &x2, &y2 );
                         i_start_contour = ic + 1;
                     }
                     else
                     {
                         ok = FindLineSegmentIntersection( a, slope,
-                                                          corner[ic].x, corner[ic].y,
-                                                          corner[ic + 1].x, corner[ic + 1].y,
-                                                          side_style[ic],
-                                                          &x, &y, &x2, &y2 );
+                            corner[ic].x, corner[ic].y,
+                            corner[ic + 1].x, corner[ic + 1].y,
+                            side_style[ic],
+                            &x, &y, &x2, &y2 );
                     }
                     if( ok )
                     {
@@ -1302,7 +1303,7 @@ void CPolyLine::Hatch()
                     double y2 = yy[ip + 1] - dx * slope;
                     m_HatchLines.push_back( CSegment( xx[ip], yy[ip], to_int( x1 ), to_int( y1 ) ) );
                     m_HatchLines.push_back( CSegment( xx[ip + 1], yy[ip + 1], to_int( x2 ),
-                                                     to_int( y2 ) ) );
+                            to_int( y2 ) ) );
                 }
             }
         }
@@ -1314,27 +1315,26 @@ void CPolyLine::Hatch()
 
 // test to see if a point is inside polyline
 //
-bool CPolyLine::TestPointInside( int x, int y )
+bool CPolyLine::TestPointInside( int px, int py )
 {
-    enum {
-        MAXPTS = 100
-    };
     if( !GetClosed() )
         wxASSERT( 0 );
 
     // define line passing through (x,y), with slope = 2/3;
     // get intersection points
-    double xx[MAXPTS], yy[MAXPTS];
+    int    xx, yy;
     double slope = (double) 2.0 / 3.0;
-    double a      = y - slope * x;
+    double a      = py - slope * px;
     int    nloops = 0;
     int    npts;
+    bool   inside = false;
 
     // make this a loop so if my homebrew algorithm screws up, we try it again
     do
     {
         // now find all intersection points of line with polyline sides
-        npts = 0;
+        npts   = 0;
+        inside = false;
         for( int icont = 0; icont<GetNumContours(); icont++ )
         {
             int istart = GetContourStart( icont );
@@ -1345,29 +1345,35 @@ bool CPolyLine::TestPointInside( int x, int y )
                 int    ok;
                 if( ic == istart )
                     ok = FindLineSegmentIntersection( a, slope,
-                                                      corner[iend].x, corner[iend].y,
-                                                      corner[istart].x, corner[istart].y,
-                                                      side_style[corner.size() - 1],
-                                                      &x, &y, &x2, &y2 );
+                        corner[iend].x, corner[iend].y,
+                        corner[istart].x, corner[istart].y,
+                        side_style[iend],
+                        &x, &y, &x2, &y2 );
                 else
                     ok = FindLineSegmentIntersection( a, slope,
-                                                      corner[ic - 1].x, corner[ic - 1].y,
-                                                      corner[ic].x, corner[ic].y,
-                                                      side_style[ic - 1],
-                                                      &x, &y, &x2, &y2 );
+                        corner[ic - 1].x, corner[ic - 1].y,
+                        corner[ic].x, corner[ic].y,
+                        side_style[ic - 1],
+                        &x, &y, &x2, &y2 );
                 if( ok )
                 {
-                    xx[npts] = (int) x;
-                    yy[npts] = (int) y;
+                    xx = (int) x;
+                    yy = (int) y;
+                    if( xx == px && yy == py )
+                        return FALSE; // (x,y) is on a side, call it outside
+                    else if( xx > px )
+                        inside = not inside;
                     npts++;
-                    wxASSERT( npts<MAXPTS );    // overflow
                 }
                 if( ok == 2 )
                 {
-                    xx[npts] = (int) x2;
-                    yy[npts] = (int) y2;
+                    xx = (int) x2;
+                    yy = (int) y2;
+                    if( xx == px && yy == py )
+                        return FALSE; // (x,y) is on a side, call it outside
+                    else if( xx > px )
+                        inside = not inside;
                     npts++;
-                    wxASSERT( npts<MAXPTS );    // overflow
                 }
             }
         }
@@ -1378,49 +1384,34 @@ bool CPolyLine::TestPointInside( int x, int y )
 
     wxASSERT( npts % 2==0 );  // odd number of intersection points, error
 
-    // count intersection points to right of (x,y), if odd (x,y) is inside polyline
-    int ncount = 0;
-    for( int ip = 0; ip<npts; ip++ )
-    {
-        if( xx[ip] == x && yy[ip] == y )
-            return FALSE; // (x,y) is on a side, call it outside
-        else if( xx[ip] > x )
-            ncount++;
-    }
-
-    if( ncount % 2 )
-        return TRUE;
-    else
-        return FALSE;
+    return inside;
 }
 
 
 // test to see if a point is inside polyline contour
 //
-bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
+bool CPolyLine::TestPointInsideContour( int icont, int px, int py )
 {
     if( icont >= GetNumContours() )
         return FALSE;
-
-    enum {
-        MAXPTS = 100
-    };
     if( !GetClosed() )
         wxASSERT( 0 );
 
-    // define line passing through (x,y), with slope = 2/3;
-    // get intersection points
-    double xx[MAXPTS], yy[MAXPTS];
+// define line passing through (x,y), with slope = 2/3;
+// get intersection points
+    int    xx, yy;
     double slope = (double) 2.0 / 3.0;
-    double a      = y - slope * x;
+    double a      = py - slope * px;
     int    nloops = 0;
     int    npts;
+    bool   inside = false;
 
-    // make this a loop so if my homebrew algorithm screws up, we try it again
+// make this a loop so if my homebrew algorithm screws up, we try it again
     do
     {
         // now find all intersection points of line with polyline sides
-        npts = 0;
+        npts   = 0;
+        inside = false;
         int istart = GetContourStart( icont );
         int iend   = GetContourEnd( icont );
         for( int ic = istart; ic<=iend; ic++ )
@@ -1429,29 +1420,35 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
             int    ok;
             if( ic == istart )
                 ok = FindLineSegmentIntersection( a, slope,
-                                                  corner[iend].x, corner[iend].y,
-                                                  corner[istart].x, corner[istart].y,
-                                                  side_style[corner.size() - 1],
-                                                  &x, &y, &x2, &y2 );
+                    corner[iend].x, corner[iend].y,
+                    corner[istart].x, corner[istart].y,
+                    side_style[iend],
+                    &x, &y, &x2, &y2 );
             else
                 ok = FindLineSegmentIntersection( a, slope,
-                                                  corner[ic - 1].x, corner[ic - 1].y,
-                                                  corner[ic].x, corner[ic].y,
-                                                  side_style[ic - 1],
-                                                  &x, &y, &x2, &y2 );
+                    corner[ic - 1].x, corner[ic - 1].y,
+                    corner[ic].x, corner[ic].y,
+                    side_style[ic - 1],
+                    &x, &y, &x2, &y2 );
             if( ok )
             {
-                xx[npts] = (int) x;
-                yy[npts] = (int) y;
+                xx = (int) x;
+                yy = (int) y;
                 npts++;
-                wxASSERT( npts<MAXPTS );    // overflow
+                if( xx == px && yy == py )
+                    return FALSE; // (x,y) is on a side, call it outside
+                else if( xx > px )
+                    inside = not inside;
             }
             if( ok == 2 )
             {
-                xx[npts] = (int) x2;
-                yy[npts] = (int) y2;
+                xx = (int) x2;
+                yy = (int) y2;
                 npts++;
-                wxASSERT( npts<MAXPTS );    // overflow
+                if( xx == px && yy == py )
+                    return FALSE; // (x,y) is on a side, call it outside
+                else if( xx > px )
+                    inside = not inside;
             }
         }
 
@@ -1461,20 +1458,7 @@ bool CPolyLine::TestPointInsideContour( int icont, int x, int y )
 
     wxASSERT( npts % 2==0 );  // odd number of intersection points, error
 
-    // count intersection points to right of (x,y), if odd (x,y) is inside polyline
-    int ncount = 0;
-    for( int ip = 0; ip<npts; ip++ )
-    {
-        if( xx[ip] == x && yy[ip] == y )
-            return FALSE; // (x,y) is on a side, call it outside
-        else if( xx[ip] > x )
-            ncount++;
-    }
-
-    if( ncount % 2 )
-        return TRUE;
-    else
-        return FALSE;
+    return inside;
 }
 
 
@@ -1543,7 +1527,6 @@ void CPolyLine::SetEndContour( int ic, bool end_contour )
 {
     corner[ic].end_contour = end_contour;
 }
-
 
 
 void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num )

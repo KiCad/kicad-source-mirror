@@ -639,7 +639,6 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
 									   int * x, int * y, double * d )
 {
 	double a, b, dist;
-
 	// first, test for intersection
 	if( x1i == x1f && x2i == x2f )
 	{

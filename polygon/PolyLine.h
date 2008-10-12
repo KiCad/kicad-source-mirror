@@ -47,10 +47,10 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 
 #define to_int( x ) (int) round( (x) )
 #ifndef min
-#define min( x1, x2 ) ( (x1) > (x2) ) ? (x2) : (x1)
+#define min( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )
 #endif
 #ifndef max
-#define max( x1, x2 ) ( (x1) > (x2) ) ? (x1) : (x2)
+#define max( x1, x2 ) ( (x1) > (x2) ? (x1) : (x2) )
 #endif
 
 class CRect

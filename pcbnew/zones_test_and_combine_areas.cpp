@@ -169,16 +169,8 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
                             int y2i    = p->GetY( is2 );
                             int x2f    = p->GetX( is2_next );
                             int y2f    = p->GetY( is2_next );
-                            int ret    = FindSegmentIntersections( x1i,
-                                                                   y1i,
-                                                                   x1f,
-                                                                   y1f,
-                                                                   style,
-                                                                   x2i,
-                                                                   y2i,
-                                                                   x2f,
-                                                                   y2f,
-                                                                   style2 );
+                            int ret    = FindSegmentIntersections( x1i, y1i, x1f, y1f, style,
+                                                                   x2i, y2i, x2f, y2f, style2 );
                             if( ret )
                             {
                                 // intersection between non-adjacent sides
@@ -246,8 +238,6 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
             str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
             str += wxT( "Manual correction is recommended." );
             wxMessageBox( str );
-
-//          bDontShowSelfIntersectionArcsWarning = dlg.bDontShowBoxState;
         }
         return -1;  // arcs intersect with other sides, error
     }
@@ -427,8 +417,6 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
                                         curr_area->m_Netname.GetData() );
                                     str += wxT( "Therefore, these areas can't be combined." );
                                     wxMessageBox( str );
-
-//                                    bDontShowIntersectionArcsWarning = dlg.bDontShowBoxState;
                                 }
                             }
                         }
