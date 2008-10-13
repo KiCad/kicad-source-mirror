@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:        polygon_test_point_inside.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,18 +10,18 @@
 using namespace std;
 
 /* this algo uses the the Jordan curve theorem to find if a point is inside or outside a polygon:
-  * It run a semi-infinite line horizontally (increasing x, fixed y)
-  * out from the test point, and count how many edges it crosses.
-  * At each crossing, the ray switches between inside and outside.
-  * If odd count, the test point is inside the polygon
-  * This is called the Jordan curve theorem, or sometimes referred to as the "even-odd" test.
+ * It run a semi-infinite line horizontally (increasing x, fixed y)
+ * out from the test point, and count how many edges it crosses.
+ * At each crossing, the ray switches between inside and outside.
+ * If odd count, the test point is inside the polygon
+ * This is called the Jordan curve theorem, or sometimes referred to as the "even-odd" test.
  */
 
 /* 2 versions are given.
  * the second version is GPL (currently used)
  * the first version is for explanations and tests (used to test the second version)
  * both use the same algorithm.
-*/
+ */
 #if 0
 
 /* This text and the algorithm come from http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -282,9 +283,6 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
 
 #else
 
-/* this algo come from freePCB.
- */
-
 bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
                              int                   istart,
                              int                   iend,
@@ -294,12 +292,13 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
 /** Function TestPointInsidePolygon
  * test if a point is inside or outside a polygon.
  * if a point is on a  outline segment, it is considered outside the polygon
+ * the polygon must have only lines (not arcs) for outlines.
+ * Use TestPointInside or TestPointInsideContour for more complex polygons
  * @param aPolysList: the list of polygons
  * @param istart: the starting point of a given polygon in m_FilledPolysList.
  * @param iend: the ending point of the polygon in m_FilledPolysList.
  * @param refx,refy: the point coordinate to test
  * @return true if the point is inside, false for outside
- * this algorithm come from FreePCB.
  */
 {
     #define OUTSIDE_IF_ON_SIDE 0    // = 1 if we consider point on a side outside the polygon
@@ -307,37 +306,31 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
     // get intersection points
     // count intersection points to right of (x,y), if odd (x,y) is inside polyline
     int    xx, yy;
-    double slope = 0;
-    double a      = refy - slope * refx;
+    double slope = 0;       // Using an horizontal line.
+    double a = refy - slope * refx;
     int    ics, ice;
     bool   inside = false;
 
     // find all intersection points of line with polyline sides
     for( ics = istart, ice = iend; ics <= iend; ice = ics++ )
     {
-        double x, y, x2, y2;
-        int    ok = FindLineSegmentIntersection( a, slope,
-            aPolysList[ics].x, aPolysList[ics].y,
-            aPolysList[ice].x, aPolysList[ice].y,
-            0,
-            &x, &y,
-            &x2, &y2 );
-        if( ok )
+        double intersectx1, intersecty1, intersectx2, intersecty2;
+        int    ok;
+        ok = FindLineSegmentIntersection( a, slope,
+                                          aPolysList[ics].x, aPolysList[ics].y,
+                                          aPolysList[ice].x, aPolysList[ice].y,
+                                          CPolyLine::STRAIGHT,
+                                          &intersectx1, &intersecty1,
+                                          &intersectx2, &intersecty2 );
+
+        /* FindLineSegmentIntersection() returns 0, 1 or 2 coordinates (ok = 0, 1, 2)
+         * for straight line segments, only 0 or 1 are possible
+         * (2 intersections points are possible only with arcs
+         */
+        if( ok )    // Intersection found
         {
-            xx = (int) x;
-            yy = (int) y;
-#if OUTSIDE_IF_ON_SIDE
-            if( xx == refx && yy == refy )
-                return false; // (x,y) is on a side, call it outside
-            else
-#endif
-            if( xx > refx )
-                inside = not inside;
-        }
-        if( ok == 2 )
-        {
-            xx = (int) x2;
-            yy = (int) y2;
+            xx = (int) intersectx1;
+            yy = (int) intersecty1;
 #if OUTSIDE_IF_ON_SIDE
             if( xx == refx && yy == refy )
                 return false; // (x,y) is on a side, call it outside

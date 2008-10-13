@@ -229,6 +229,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
                 if( ListNetName[ii] == equipot->m_Netname )
                 {
                     m_ListNetNameSelection->SetSelection( ii );
+                    m_ListNetNameSelection->EnsureVisible( ii );
                     break;
                 }
             }
@@ -388,6 +389,29 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_FILTER_STRING_KEY, m_NetNameFilter->GetValue() );
     }
+    
+    // Select and isplay current zone net name in listbox:
+    int net_select = g_HightLigth_NetCode;
+    if( m_Zone_Container )
+        net_select = m_Zone_Container->GetNet();
+
+    if( net_select > 0 )
+    {
+        EQUIPOT* equipot = m_Parent->m_Pcb->FindNet( net_select );
+        if( equipot )  // Search net in list and select it
+        {
+            for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
+            {
+                if( ListNetName[ii] == equipot->m_Netname )
+                {
+                    m_ListNetNameSelection->SetSelection( ii );
+                    m_ListNetNameSelection->EnsureVisible( ii );
+                    break;
+                }
+            }
+        }
+    }
+
 }
 
 

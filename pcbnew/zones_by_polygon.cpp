@@ -508,11 +508,23 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         if( s_CurrentZone == NULL )     // A new outline is created
         {
             int diag;
-            DrawPanel->m_IgnoreMouseEvents = TRUE;
+            // Init zone params to reasonnable values
             zone->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+
+            // Prompt user fro exact parameters:
+            DrawPanel->m_IgnoreMouseEvents = TRUE;
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
-                dialog_copper_zone* frame = new dialog_copper_zone( this, zone  );
+                if ( g_HightLigth_NetCode )
+                {
+                    g_NetcodeSelection = g_HightLigth_NetCode;
+                    zone->SetNet( g_NetcodeSelection );
+                    EQUIPOT* net = m_Pcb->FindNet( g_NetcodeSelection );
+                    if( net )
+                        zone->m_Netname = net->m_Netname;
+                }
+
+               dialog_copper_zone* frame = new dialog_copper_zone( this, zone  );
                 diag = frame->ShowModal();
                 frame->Destroy();
             }

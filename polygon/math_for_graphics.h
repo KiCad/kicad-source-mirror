@@ -106,7 +106,3 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
 						double * x2=NULL, double * y2=NULL );
 CPoint GetInflectionPoint( CPoint pi, CPoint pf, int mode );
 
-// quicksort (2-way or 3-way)
-void quickSort(int numbers[], int index[], int array_size);
-void q_sort(int numbers[], int index[], int left, int right);
-void q_sort_3way( int a[], int b[], int left, int right );
