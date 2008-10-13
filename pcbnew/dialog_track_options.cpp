@@ -157,7 +157,7 @@ void WinEDA_PcbTracksDialog::CreateControls()
     itemBoxSizer2->Add( itemStaticBoxSizer3, 0, wxGROW | wxALL, 5 );
 
     m_ViaSizeTitle = new                                wxStaticText( itemDialog1, wxID_STATIC, _(
-                                                                          "Via Size" ),
+                                                                          "Via size" ),
                                                                       wxDefaultPosition,
                                                                       wxDefaultSize, 0 );
 

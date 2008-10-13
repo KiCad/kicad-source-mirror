@@ -122,7 +122,7 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
                         _( "Bill of material and/or Crossreferences" ) );
 
     m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, BITMAP( backanno_xpm ),
-                        _( "BackAnnotate Footprint" ) );
+                        _( "Backannotate footprint" ) );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_HToolBar->Realize();
@@ -166,7 +166,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_BUS_BUTT, wxEmptyString,
                          BITMAP( add_bus_xpm ),
-                         _( "Place the bus" ), wxITEM_CHECK );
+                         _( "Place bus" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_WIRETOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_line2bus_xpm ),
@@ -174,16 +174,16 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_BUSTOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_bus2bus_xpm ),
-                         _( "Place the bus to bus entry" ), wxITEM_CHECK );
+                         _( "Place bus to bus entry" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString,
                          BITMAP( noconn_button ),
-                         _( "Place the no connect flag" ), wxITEM_CHECK );
+                         _( "Place no connect flag" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_line_label_xpm ),
-                         _( "Place the net name" ), wxITEM_CHECK );
+                         _( "Place net name" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString,
                          BITMAP( add_glabel_xpm ),
@@ -192,7 +192,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
-                         _( "Place the junction" ), wxITEM_CHECK );
+                         _( "Place junction" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
 	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
@@ -202,7 +202,7 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_SHEET_SYMBOL_BUTT, wxEmptyString,
                          BITMAP( add_hierarchical_subsheet_xpm ),
-                         _( "Place the hierarchical sheet" ), wxITEM_CHECK );
+                         _( "Place hierarchical sheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_IMPORT_GLABEL_BUTT, wxEmptyString,
                          BITMAP( import_hierarchical_label_xpm ),
@@ -211,16 +211,16 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,
                          BITMAP( add_hierar_pin_xpm ),
-                         _( "Place the hierachical pin to sheet" ), wxITEM_CHECK );
+                         _( "Place hierachical pin to sheet" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
                          BITMAP( add_dashed_line_xpm ),
-                         _( "Place the graphic line or polygon" ), wxITEM_CHECK );
+                         _( "Place graphic line or polygon" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
                          BITMAP( add_text_xpm ),
-                         _( "Place the graphic text (comment)" ), wxITEM_CHECK );
+                         _( "Place graphic text (comment)" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString,

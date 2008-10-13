@@ -33,24 +33,31 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         //////////////////
         // Menu "Files" //
         //////////////////
+
+        // New wxMenu (FilesMenu)
         m_FilesMenu = new wxMenu;
-        wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_MENU_LOAD_FILE,
-                     _("Load board    Ctrl-O"),
+
+        // New board
+        wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_MENU_NEW_BOARD,
+                     _("&New board"),
+                     _("Clear old PCB and init a new one"));
+        item->SetBitmap(new_xpm);
+        m_FilesMenu->Append(item);
+
+        // Load board
+        item = new wxMenuItem(m_FilesMenu, ID_MENU_LOAD_FILE,
+                     _("&Load board"),
                     _("Delete old Board and Load new Board"));
         item->SetBitmap(open_xpm);
         m_FilesMenu->Append(item);
 
+        // Append board
         item = new wxMenuItem(m_FilesMenu, ID_MENU_APPEND_FILE,
                      _("Append Board"),
                      _("Add Board to old Board"));
         item->SetBitmap(import_xpm);
         m_FilesMenu->Append(item);
 
-        item = new wxMenuItem(m_FilesMenu, ID_MENU_NEW_BOARD,
-                     _("&New board"),
-                     _("Clear old PCB and init a new one"));
-        item->SetBitmap(new_xpm);
-        m_FilesMenu->Append(item);
 
         item = new wxMenuItem(m_FilesMenu, ID_MENU_RECOVER_BOARD,
                      _("&Rescue"),

@@ -53,7 +53,7 @@ class DialogNonCopperZonesProperties : public wxDialog
 		
 	
 	public:
-		DialogNonCopperZonesProperties( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non Copper Zones Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 366,221 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
+		DialogNonCopperZonesProperties( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non copper zones properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 366,221 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER );
 		~DialogNonCopperZonesProperties();
 	
 };

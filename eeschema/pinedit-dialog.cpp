@@ -187,10 +187,10 @@ void WinEDA_PinPropertiesFrame::CreateControls()
     m_PinSizeIncDecButton->SetValue(0);
     itemBoxSizer10->Add(m_PinSizeIncDecButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
 
-    m_PinSizeText = new wxStaticText( itemDialog1, wxID_STATIC, _("Pin Lenght"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_PinSizeText = new wxStaticText( itemDialog1, wxID_STATIC, _("Pin lenght"), wxDefaultPosition, wxDefaultSize, 0 );
     itemStaticBoxSizer9->Add(m_PinSizeText, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
-    m_CommonUnit = new wxCheckBox( itemDialog1, ID_CHECKBOX_COMMON_UNITS, _("Common to Units"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_CommonUnit = new wxCheckBox( itemDialog1, ID_CHECKBOX_COMMON_UNITS, _("Common to units"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
     m_CommonUnit->SetValue(false);
     itemStaticBoxSizer9->Add(m_CommonUnit, 0, wxALIGN_LEFT|wxALL, 5);
 

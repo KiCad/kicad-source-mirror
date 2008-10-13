@@ -220,7 +220,7 @@ void WinEDA_PlotPSFrame::CreateControls()
     itemButton11->SetForegroundColour(wxColour(0, 128, 0));
     itemBoxSizer10->Add(itemButton11, 0, wxGROW|wxALL, 5);
 
-    wxButton* itemButton12 = new wxButton( itemDialog1, ID_PLOT_PS_ALL_EXECUTE, _("Plot a&LL"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton12 = new wxButton( itemDialog1, ID_PLOT_PS_ALL_EXECUTE, _("Plot a&ll"), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton12->SetForegroundColour(wxColour(179, 0, 0));
     itemBoxSizer10->Add(itemButton12, 0, wxGROW|wxALL, 5);
 

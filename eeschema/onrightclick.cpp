@@ -270,12 +270,12 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     if( !Component->m_Flags )
     {
-        msg = _( "Move Component" );
+        msg = _( "Move component" );
         msg << wxT(" ") << Component->GetField( REFERENCE )->m_Text;
         msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
                       msg, move_xpm );
-        msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG_COMPONENT );
+        msg = AddHotkeyName( _( "Drag component" ), s_Schematic_Hokeys_Descr, HK_DRAG_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST,
                       msg, move_xpm );
     }
@@ -294,7 +294,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ORIENT_NORMAL_CMP, msg, normal_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, orientmenu,
                                ID_POPUP_SCH_GENERIC_ORIENT_CMP, _(
-                                   "Orient Component" ), orient_xpm );
+                                   "Orient component" ), orient_xpm );
 
     wxMenu* editmenu = new wxMenu;
     ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CMP, _( "Edit" ), edit_component_xpm );
@@ -330,12 +330,12 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, editmenu,
                                ID_POPUP_SCH_GENERIC_EDIT_CMP, _(
-                                   "Edit Component" ), edit_component_xpm );
+                                   "Edit component" ), edit_component_xpm );
 
     if( !Component->m_Flags )
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_COPY_COMPONENT_CMP, _( "Copy Component" ), import_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CMP, _( "Delete Component" ), delete_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_COPY_COMPONENT_CMP, _( "Copy component" ), import_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CMP, _( "Delete component" ), delete_xpm );
     }
 
     LibEntry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ALIAS );
@@ -355,19 +355,19 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
 
     if( !GLabel->m_Flags )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Glabel" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate GLabel  (R)" ), rotate_glabel_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate GLabel" ), rotate_glabel_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit GLabel" ), edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Glabel" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                  _( "Change to Hierarchical Label" ), label2glabel_xpm );
+                  _( "Change to hierarchical label" ), label2glabel_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                  _( "Change to Label" ), glabel2label_xpm );
+                  _( "Change to label" ), glabel2label_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                  _( "Change to Text" ), glabel2text_xpm );
+                  _( "Change to text" ), glabel2text_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
-                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change type" ), gl_change_xpm );
 }
 
 
@@ -382,19 +382,19 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 
     if( !HLabel->m_Flags )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Hlabel" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate HLabel  (R)" ), rotate_glabel_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate HLabel" ), rotate_glabel_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit HLabel" ), edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Hlabel" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                  _( "Change to Label" ), glabel2label_xpm );
+                  _( "Change to label" ), glabel2label_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                  _( "Change to Text" ), glabel2text_xpm );
+                  _( "Change to text" ), glabel2text_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                  _( "Change to Global Label" ), label2glabel_xpm );
+                  _( "Change to global label" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
-                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change type" ), gl_change_xpm );
 }
 
 
@@ -408,20 +408,20 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
     wxMenu* menu_change_type = new wxMenu;
 
     if( !Label->m_Flags )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Label" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate Label  (R)" ), rotate_pos_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit Label" ), edit_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Label" ), delete_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move label" ), move_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate label" ), rotate_pos_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit label" ), edit_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete label" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                  _( "Change to Hierarchical Label" ), label2glabel_xpm );
+                  _( "Change to hierarchical label" ), label2glabel_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                  _( "Change to Text" ), label2text_xpm );
+                  _( "Change to text" ), label2text_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                  _( "Change to Global Label" ), label2glabel_xpm );
+                  _( "Change to global label" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
-                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change type" ), gl_change_xpm );
 }
 
 
@@ -435,20 +435,20 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     wxMenu* menu_change_type = new wxMenu;
 
     if( !Text->m_Flags )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Text" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate Text (R)" ), rotate_pos_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit Text" ), edit_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Text" ), delete_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move text" ), move_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate text" ), rotate_pos_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit text" ), edit_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete text" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                  _( "Change to Label" ), label2text_xpm );
+                  _( "Change to label" ), label2text_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                  _( "Change to Hierarchical Label" ), label2glabel_xpm );
+                  _( "Change to hierarchical label" ), label2glabel_xpm );
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
                   _( "Change to Glabel" ), label2glabel_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
-                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change type" ), gl_change_xpm );
 }
 
 
@@ -466,17 +466,17 @@ void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
     {
         if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                         WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
-            ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break wire" ), break_line_xpm );
     }
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Junction" ), delete_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete junction" ), delete_xpm );
 
     if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                     WIREITEM | BUSITEM ) )
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete node" ), delete_node_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _(
-                          "Delete Connection" ), delete_connection_xpm );
+                          "Delete connection" ), delete_connection_xpm );
     }
 }
 
@@ -493,30 +493,30 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
     wxPoint pos    = frame->GetScreen()->m_Curseur;
 
     if( is_new )
-        ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "End Wire" ), apply_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "Wire end" ), apply_xpm );
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Wire" ), delete_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete wire" ), delete_xpm );
 
     if( is_new )
         return;
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete node" ), delete_node_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _(
-                      "Delete Connection" ), delete_connection_xpm );
+                      "Delete connection" ), delete_connection_xpm );
 
     if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
                     WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break wire" ), break_line_xpm );
 
     PopMenu->AppendSeparator();
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add Label" ), add_line_label_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add junction" ), add_junction_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add label" ), add_line_label_xpm );
 
     // Place Global label command only if the cursor is over one end of the Wire:
     if( ( pos.x == Wire->m_Start.x && pos.y == Wire->m_Start.y)
        || ( pos.x == Wire->m_End.x && pos.y == Wire->m_End.y ) )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ), add_glabel_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add global label" ), add_glabel_xpm );
 }
 
 
@@ -532,23 +532,23 @@ void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
     wxPoint pos    = frame->GetScreen()->m_Curseur;
 
     if( is_new )
-        ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "End Bus" ), apply_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "Bus end" ), apply_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
-                  _( "Delete Bus" ), delete_bus_xpm );
+                  _( "Delete bus" ), delete_bus_xpm );
 
     if( !is_new )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE,
-                      _( "Break Bus" ), break_bus_xpm );
+                      _( "Break bus" ), break_bus_xpm );
 
     PopMenu->AppendSeparator();
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add Label" ), add_line_label_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add junction" ), add_junction_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add label" ), add_line_label_xpm );
 
     // Place Global label command only if the cursor is over one end of the Bus:
     if( ( pos.x == Bus->m_Start.x && pos.y == Bus->m_Start.y)
        || ( pos.x == Bus->m_End.x && pos.y == Bus->m_End.y ) )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ), add_glabel_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add global label" ), add_glabel_xpm );
 }
 
 
@@ -561,23 +561,23 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, DrawSheetStruct* Sheet )
 {
     if( !Sheet->m_Flags )
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ENTER_SHEET, _( "Enter Sheet" ), enter_sheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ENTER_SHEET, _( "Enter sheet" ), enter_sheet_xpm );
         PopMenu->AppendSeparator();
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Sheet" ), move_sheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move sheet" ), move_sheet_xpm );
     }
 
     if( Sheet->m_Flags )
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_END_SHEET, _( "Place Sheet" ), apply_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_END_SHEET, _( "Place sheet" ), apply_xpm );
     }
     else
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_SHEET, _( "Edit Sheet" ), edit_sheet_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize Sheet" ), resize_sheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_SHEET, _( "Edit sheet" ), edit_sheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize sheet" ), resize_sheet_xpm );
         if( Sheet->m_Label )  // Sheet has pin labels, and can be cleaned
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_CLEANUP_SHEET,
                           _( "Cleanup PinSheets" ), options_pinsheet_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Sheet" ), delete_sheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete sheet" ), delete_sheet_xpm );
     }
 }
 
@@ -606,28 +606,28 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 /* Add menu commands for block
  */
 {
-    ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ), cancel_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel block" ), cancel_xpm );
 
     PopMenu->AppendSeparator();
 
     if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
         ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                      _( "Zoom Block (Drag Middle Mouse)" ), zoom_selected_xpm );
+                      _( "Zoom block" ), zoom_selected_xpm );
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place block" ), apply_xpm );
 
     if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
     {
         wxMenu* menu_other_block_commands = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_other_block_commands,
-                                   -1, _( "Other Block Commands" ), right_xpm );
-        ADD_MENUITEM( menu_other_block_commands, wxID_COPY, _( "Save Block" ), copy_button );
+                                   -1, _( "Other block commands" ), right_xpm );
+        ADD_MENUITEM( menu_other_block_commands, wxID_COPY, _( "Save block" ), copy_button );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_COPY_BLOCK,
-                      _( "Copy Block (shift + drag mouse)" ), copyblock_xpm );
+                      _( "Copy block" ), copyblock_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DRAG_BLOCK,
-                      _( "Drag Block (ctrl + drag mouse)" ), move_xpm );
+                      _( "Drag block" ), move_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DELETE_BLOCK,
-                      _( "Delete Block (shift+ctrl + drag mouse)" ), delete_xpm );
+                      _( "Delete block" ), delete_xpm );
         ADD_MENUITEM( menu_other_block_commands, ID_POPUP_MIRROR_Y_BLOCK, _(
                           "Mirror Block ||" ), mirror_H_xpm );
 #if 0

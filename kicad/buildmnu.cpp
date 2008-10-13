@@ -89,26 +89,26 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
         m_FilesMenu = new wxMenu;
         wxMenuItem *item = new wxMenuItem(m_FilesMenu, ID_LOAD_PROJECT,
-                     _("&Open Project Descr"),
-                     _("Select an existing project descriptor") );
+                     _("&Open project"),
+                     _("Select an existing project") );
         item->SetBitmap(open_project_xpm);
         m_FilesMenu->Append(item);
 
         item = new wxMenuItem(m_FilesMenu, ID_NEW_PROJECT,
-                     _("&New Project Descr"),
-                     _("Create new project descriptor") );
+                     _("&New project"),
+                     _("Create new project") );
         item->SetBitmap(new_project_xpm);
         m_FilesMenu->Append(item);
 
         item = new wxMenuItem(m_FilesMenu, ID_SAVE_PROJECT,
-                     _("&Save Project Descr"),
-                     _("Save current project descriptor") );
+                     _("&Save project"),
+                     _("Save current project") );
         item->SetBitmap(save_project_xpm);
         m_FilesMenu->Append(item);
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem(m_FilesMenu, ID_SAVE_AND_ZIP_FILES,
-                     _("Save &Project Files"),
+                     _("Save &project files"),
                      _("Save and Zip all project files") );
         item->SetBitmap(zip_xpm);
         m_FilesMenu->Append(item);
@@ -119,7 +119,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
         m_FilesMenu->Append(item);
 
         m_FilesMenu->AppendSeparator();
-        item = new wxMenuItem(m_FilesMenu, ID_EXIT, _("E&xit"), _("Quit Kicad") );
+        item = new wxMenuItem(m_FilesMenu, ID_EXIT, _("E&xit"), _("Quit KiCad") );
         item->SetBitmap(exit_xpm);
         m_FilesMenu->Append(item);
 
@@ -138,19 +138,19 @@ void WinEDA_MainFrame::ReCreateMenuBar()
         item->SetBitmap(editor_xpm);
         browseMenu->Append(item);
         item = new wxMenuItem(browseMenu, ID_BROWSE_AN_SELECT_FILE,
-                _("&Browse Files"), _("Read or edit files") );
+                _("&Browse files"), _("Read or edit files") );
         item->SetBitmap(browse_files_xpm);
         browseMenu->Append(item);
         browseMenu->AppendSeparator();
         item = new wxMenuItem(browseMenu, ID_SELECT_PREFERED_EDITOR,
-                _("&Select Editor"), _("Select your prefered editor for file browsing") );
+                _("&Select editor"), _("Select your prefered editor for file browsing") );
         item->SetBitmap(editor_xpm);
         browseMenu->Append(item);
 
         // Preferences menu:
         wxMenu *PreferencesMenu = new wxMenu;
         item = new wxMenuItem(PreferencesMenu , ID_PREFERENCES_FONT_INFOSCREEN,
-                _("Select Fonts"), _("Select Fonts and  Font sizes"));
+                _("Select fonts"), _("Font preferences"));
         item->SetBitmap(fonts_xpm);
         PreferencesMenu->Append(item);
 

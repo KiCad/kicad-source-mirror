@@ -473,9 +473,9 @@ void WinEDA_PartPropertiesFrame::BuildPanelEditField()
  */
 {
     wxString Hjustify_list[] =
-    { _( "Left justify" ), _( "Center" ), _( "Right justify" ) };
+    { _( "Align left" ), _( "Align center" ), _( "Align right" ) };
     wxString Vjustify_list[] =
-    { _( "Bottom justify" ), _( "Center" ), _( "Top justify" ) };
+    { _( "Align bottom" ), _( "Align center" ), _( "Align top" ) };
     int      FieldId = m_CurrentFieldId;
 
     m_PanelField = new                      wxPanel( m_NoteBook, ID_PANEL_FIELD );

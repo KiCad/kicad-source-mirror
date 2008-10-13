@@ -145,8 +145,8 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     {
         menu = m_ContextMenus[i];
         item = new wxMenuItem( menu, ID_PROJECT_RENAME,
-                              TREE_DIRECTORY != i ? _ ("&Rename File") : _( "&Rename Directory" ),
-                              TREE_DIRECTORY != i ? _ ("Rename the File") : _( "&Rename the Directory" ) );
+                              TREE_DIRECTORY != i ? _ ("&Rename file") : _( "&Rename directory" ),
+                              TREE_DIRECTORY != i ? _ ("Rename file") : _( "&Rename directory" ) );
 
         item->SetBitmap( right_xpm );
         menu->Append( item );

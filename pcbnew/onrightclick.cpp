@@ -342,7 +342,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
                 _( "Fill or Refill All Zones" ), fill_zone_xpm );
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS,
-                _( "Remove Filled Areas" ), fill_zone_xpm );
+                _( "Remove filled areas" ), fill_zone_xpm );
             aPopMenu->AppendSeparator();
         }
 
@@ -412,7 +412,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES, _( "Autoroute All Modules" ) );
             commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
+            commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset unrouted" ) );
             if( m_Pcb->m_Modules )
             {
                 commands->AppendSeparator();
@@ -447,20 +447,20 @@ void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
  */
 {
     ADD_MENUITEM( menu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-        _( "Cancel Block" ), cancel_xpm );
+        _( "Cancel block" ), cancel_xpm );
     ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK,
-        _( "Zoom Block (drag middle mouse)" ), zoom_selected_xpm );
+        _( "Zoom block" ), zoom_selected_xpm );
     menu->AppendSeparator();
     ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK,
-        _( "Place Block" ), apply_xpm );
+        _( "Place block" ), apply_xpm );
     ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK,
-        _( "Copy Block (shift + drag mouse)" ), copyblock_xpm );
+        _( "Copy block" ), copyblock_xpm );
     ADD_MENUITEM( menu, ID_POPUP_INVERT_BLOCK,
-        _( "Flip Block (alt + drag mouse)" ), invert_module_xpm );
+        _( "Flip block" ), invert_module_xpm );
     ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK,
-        _( "Rotate Block (ctrl + drag mouse)" ), rotate_pos_xpm );
+        _( "Rotate block" ), rotate_pos_xpm );
     ADD_MENUITEM( menu, ID_POPUP_DELETE_BLOCK,
-        _( "Delete Block (shift+ctrl + drag mouse)" ), delete_xpm );
+        _( "Delete block" ), delete_xpm );
 }
 
 
@@ -479,7 +479,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( Track->Type() == TYPEVIA )
         {
-            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), move_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag via" ), move_xpm );
             wxMenu* via_mnu = new wxMenu();
 
             ADD_MENUITEM_WITH_SUBMENU( PopMenu, via_mnu,
@@ -520,13 +520,13 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
                     _( "Drag Segments, keep slope" ), drag_segment_withslope_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
-                    _( "Drag Segment" ), drag_track_segment_xpm );
+                    _( "Drag segment" ), drag_track_segment_xpm );
 #if 0
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_SEGMENT,
                     _( "Move Segment" ), move_track_segment_xpm );
 #endif
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
-                    _( "Break Track" ), break_line_xpm );
+                    _( "Break track" ), break_line_xpm );
             }
         }
     }
@@ -562,14 +562,14 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         track_mnu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-                                   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
+                                   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
                  Track->Type()==TYPEVIA ? _( "Change Via Size" ) : _( "Change Segment Width" ), width_segment_xpm );
 
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
             _( "Change Track Width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
-            _( "Change Net" ), width_net_xpm );
+            _( "Change net" ), width_net_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
             _( "Change ALL Tracks and Vias" ), width_track_via_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE,
@@ -590,7 +590,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         msg, delete_line_xpm );
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Delete Track" ), s_Board_Editor_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete track" ), s_Board_Editor_Hokeys_Descr, HK_DELETE );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACK,
             msg, delete_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
@@ -599,7 +599,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     track_mnu = new wxMenu;
 
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-        ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ), flag_xpm );
+        ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set flags" ), flag_xpm );
     track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, TRUE );
     track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, TRUE );
 
@@ -611,11 +611,11 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     if( !flags )
     {
         track_mnu->AppendSeparator();
-        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track Locked: Yes" ) );
-        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track Locked: No" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track locked: Yes" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track locked: No" ) );
         track_mnu->AppendSeparator();
-        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net Locked: Yes" ) );
-        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net Locked: No" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net locked: Yes" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net locked: No" ) );
     }
 }
 
@@ -636,10 +636,10 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
     {
         if( (edge_zone->m_Flags & IN_EDIT ) )
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
-                _( "Place Corner" ), apply_xpm );
+                _( "Place corner" ), apply_xpm );
         else
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_OUTLINES,
-                _( "Place Zone" ), apply_xpm );
+                _( "Place zone" ), apply_xpm );
     }
     else
     {
@@ -651,9 +651,9 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         if( ( index = edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) >= 0 )
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
-                _( "Move Corner" ), move_xpm );
+                _( "Move corner" ), move_xpm );
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
-                _( "Delete Corner" ), delete_xpm );
+                _( "Delete corner" ), delete_xpm );
         }
         else if( ( index = edge_zone->HitTestForEdge( GetScreen()->RefPos( true ) ) ) >= 0 )
         {

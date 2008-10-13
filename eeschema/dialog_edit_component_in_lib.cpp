@@ -158,7 +158,7 @@ void WinEDA_PartPropertiesFrame::CreateControls()
     m_SetSkew = new wxSpinCtrl( m_PanelBasic, ID_SPINCTRL, _T("0"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
     itemBoxSizer11->Add(m_SetSkew, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
-    m_OptionPower = new wxCheckBox( m_PanelBasic, ID_CHECKBOX, _("Power Symbol"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_OptionPower = new wxCheckBox( m_PanelBasic, ID_CHECKBOX, _("Power symbol"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
     m_OptionPower->SetValue(false);
     m_PanelBasicBoxSizer->Add(m_OptionPower, 0, wxGROW|wxALL, 5);
 

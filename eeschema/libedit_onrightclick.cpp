@@ -165,7 +165,7 @@ bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
 		case COMPONENT_FIELD_DRAW_TYPE:
 			if( DrawEntry->m_Flags == 0 )
 			{
-				msg = AddHotkeyName( _( "Move Field " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
+				msg = AddHotkeyName( _( "Move field " ), s_Libedit_Hokeys_Descr, HK_MOVE_PIN );
 				ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_field_xpm);
 			}
 			ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM,
@@ -241,10 +241,10 @@ void AddMenusForBlock(wxMenu * PopMenu, WinEDA_LibeditFrame * frame)
 	{
 		ADD_MENUITEM(PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _("Select items"), green_xpm);
 		ADD_MENUITEM(PopMenu, ID_POPUP_COPY_BLOCK,
-			_("Copy Block (shift + drag mouse)"), copyblock_xpm);
-		ADD_MENUITEM(PopMenu, ID_POPUP_INVERT_BLOCK, _("Mirror Block (ctrl + drag mouse)"), mirror_H_xpm );
+			_("Copy block"), copyblock_xpm);
+		ADD_MENUITEM(PopMenu, ID_POPUP_INVERT_BLOCK, _("Mirror block"), mirror_H_xpm );
 		ADD_MENUITEM(PopMenu, ID_POPUP_DELETE_BLOCK,
-			_("Del. Block (shift+ctrl + drag mouse)"), delete_xpm );
+			_("Delete block"), delete_xpm );
 	}
 }
 

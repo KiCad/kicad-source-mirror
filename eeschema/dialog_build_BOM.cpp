@@ -245,7 +245,7 @@ void WinEDA_Build_BOM_Frame::CreateControls()
     wxStaticBoxSizer* itemStaticBoxSizer5 = new wxStaticBoxSizer(itemStaticBoxSizer5Static, wxVERTICAL);
     itemBoxSizer4->Add(itemStaticBoxSizer5, 0, wxGROW|wxALL, 5);
 
-    m_ListCmpbyRefItems = new wxCheckBox( itemDialog1, ID_CHECKBOX1, _("Components by Reference"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_ListCmpbyRefItems = new wxCheckBox( itemDialog1, ID_CHECKBOX1, _("Components by reference"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
     m_ListCmpbyRefItems->SetValue(true);
     itemStaticBoxSizer5->Add(m_ListCmpbyRefItems, 0, wxALIGN_LEFT|wxALL, 5);
 
@@ -253,7 +253,7 @@ void WinEDA_Build_BOM_Frame::CreateControls()
     m_ListSubCmpItems->SetValue(false);
     itemStaticBoxSizer5->Add(m_ListSubCmpItems, 0, wxALIGN_LEFT|wxALL, 5);
 
-    m_ListCmpbyValItems = new wxCheckBox( itemDialog1, ID_CHECKBOX3, _("Components by Value"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_ListCmpbyValItems = new wxCheckBox( itemDialog1, ID_CHECKBOX3, _("Components by value"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
     m_ListCmpbyValItems->SetValue(true);
     itemStaticBoxSizer5->Add(m_ListCmpbyValItems, 0, wxALIGN_LEFT|wxALL, 5);
 

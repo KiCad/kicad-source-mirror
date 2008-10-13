@@ -159,7 +159,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         editMenu->AppendSeparator();
 
         item = new wxMenuItem( editMenu, ID_BACKANNO_ITEMS,
-                               _( "BackAnno" ), _( "Back Annotated Footprint Fields" ),
+                               _( "Backannotate" ), _( "Back annotated footprint fields" ),
                                wxITEM_NORMAL );
         item->SetBitmap( backanno_xpm );
         editMenu->Append( item );
@@ -224,7 +224,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_BUS_BUTT,
             _( "&Bus" ),
-            _( "Place a bus" ),
+            _( "Place bus" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_bus_xpm );
@@ -264,7 +264,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_LABEL_BUTT,
             _( "Net name" ),
-            _( "Place a net name" ),
+            _( "Place net name" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_line_label_xpm );
@@ -282,7 +282,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
             placeMenu,
             ID_JUNCTION_BUTT,
             _( "Junction" ),
-            _( "Place a junction" ),
+            _( "Place junction" ),
             wxITEM_NORMAL
             );
         item->SetBitmap( add_junction_xpm );

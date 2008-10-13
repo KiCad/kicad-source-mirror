@@ -203,7 +203,7 @@ void dialog_freeroute_exchange::CreateControls()
     wxStaticBoxSizer* itemStaticBoxSizer9 = new wxStaticBoxSizer(itemStaticBoxSizer9Static, wxVERTICAL);
     itemBoxSizer4->Add(itemStaticBoxSizer9, 1, wxGROW|wxALL, 5);
 
-    wxButton* itemButton10 = new wxButton( itemPanel3, ID_BUTTON7, _("Visit the FreeRouting.net Website with your Browser"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton* itemButton10 = new wxButton( itemPanel3, ID_BUTTON7, _("Visit FreeRouting.net website"), wxDefaultPosition, wxDefaultSize, 0 );
     if (dialog_freeroute_exchange::ShowToolTips())
         itemButton10->SetToolTip(_("Launch your browser and go to the FreeRouting.net website"));
     itemStaticBoxSizer9->Add(itemButton10, 0, wxGROW|wxALL, 5);

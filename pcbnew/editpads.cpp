@@ -108,7 +108,7 @@ void WinEDA_PadPropertiesFrame::SetOthersControls()
     /* In second column */
 
     m_PadDrillCtrl = new WinEDA_SizeCtrl( this, _(
-                                              "Pad Drill" ),
+                                              "Pad drill" ),
                                           CurrentPad ? CurrentPad->m_Drill : g_Pad_Master.m_Drill,
                                           g_UnitMetric, m_DrillShapeBoxSizer,
                                           m_Parent->m_InternalUnits );

@@ -18,8 +18,8 @@ Thanks, Dick Hollenbeck dick@softplc.com.
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2004-2007 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
- * Copyright (C) 2004-2007 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2008 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+ * Copyright (C) 1992-2008 Kicad Developers, see change_log.txt for contributors.
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

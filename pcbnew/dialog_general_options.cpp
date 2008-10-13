@@ -412,7 +412,7 @@ void WinEDA_PcbGeneralOptionsFrame::CreateControls()
     itemStaticBoxSizer15->Add( m_TrackAutodel, 0, wxALIGN_LEFT | wxALL, 5 );
 
     m_Track_45_Only_Ctrl = new      wxCheckBox( itemDialog1, ID_CHECKBOX4, _(
-                                                    "Track 45 Only" ), wxDefaultPosition,
+                                                    "Track only 45 degrees" ), wxDefaultPosition,
                                                 wxDefaultSize, wxCHK_2STATE );
 
     m_Track_45_Only_Ctrl->SetValue( false );
