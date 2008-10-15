@@ -317,11 +317,11 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
         double intersectx1, intersecty1, intersectx2, intersecty2;
         int    ok;
         ok = FindLineSegmentIntersection( a, slope,
-                                          aPolysList[ics].x, aPolysList[ics].y,
-                                          aPolysList[ice].x, aPolysList[ice].y,
-                                          CPolyLine::STRAIGHT,
-                                          &intersectx1, &intersecty1,
-                                          &intersectx2, &intersecty2 );
+            aPolysList[ics].x, aPolysList[ics].y,
+            aPolysList[ice].x, aPolysList[ice].y,
+            CPolyLine::STRAIGHT,
+            &intersectx1, &intersecty1,
+            &intersectx2, &intersecty2 );
 
         /* FindLineSegmentIntersection() returns 0, 1 or 2 coordinates (ok = 0, 1, 2)
          * for straight line segments, only 0 or 1 are possible
@@ -331,6 +331,13 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
         {
             xx = (int) intersectx1;
             yy = (int) intersecty1;
+
+            /* if the intersection point is on the start point of the current segment,
+              * do not count it,
+              * because it was already counted, as ending point of the previous segment
+             */
+            if( xx == aPolysList[ics].x && yy == aPolysList[ics].y )
+                continue;
 #if OUTSIDE_IF_ON_SIDE
             if( xx == refx && yy == refy )
                 return false; // (x,y) is on a side, call it outside

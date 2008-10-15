@@ -41,16 +41,19 @@ public:
                                                * In less simple cases (when m_Poly has holes) m_FilledPolysList is a polygon equivalent to m_Poly, without holes
                                                * In complex cases an ouline decribed by m_Poly can have many filled areas
                                                */
+    int                   m_DrawOptions;        /* used to pass some draw options (draw filled areas in sketch mode for instance ...)
+                                                  * currently useful when testing filling zones algos
+                                                 */
 
 private:
-    int m_NetCode;     // Net number for fast comparisons
+    int                   m_NetCode; // Net number for fast comparisons
 
 public:
     ZONE_CONTAINER( BOARD* parent );
     ~ZONE_CONTAINER();
 
-    bool Save( FILE* aFile ) const;
-    int  ReadDescr( FILE* aFile, int* aLineNum = NULL );
+    bool    Save( FILE* aFile ) const;
+    int     ReadDescr( FILE* aFile, int* aLineNum = NULL );
 
     wxPoint& GetPosition()
     {
@@ -69,9 +72,9 @@ public:
      * copy usefull data from the source.
      * flags and linked list pointers are NOT copied
      */
-    void Copy( ZONE_CONTAINER* src );
+    void    Copy( ZONE_CONTAINER* src );
 
-    void Display_Infos( WinEDA_DrawFrame* frame );
+    void    Display_Infos( WinEDA_DrawFrame* frame );
 
     /**
      * Function Draw
@@ -81,10 +84,10 @@ public:
      * @param offset = Draw offset (usually wxPoint(0,0))
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      */
-    void Draw( WinEDA_DrawPanel* panel,
-               wxDC*             DC,
-               int               aDrawMode,
-               const wxPoint&    offset = ZeroOffset );
+    void    Draw( WinEDA_DrawPanel* panel,
+                  wxDC*                DC,
+                  int                  aDrawMode,
+                  const wxPoint&       offset = ZeroOffset );
 
     /**
      * Function DrawDrawFilledArea
@@ -94,19 +97,19 @@ public:
      * @param offset = Draw offset (usually wxPoint(0,0))
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      */
-    void     DrawFilledArea( WinEDA_DrawPanel* panel,
-                             wxDC*             DC,
-                             int               aDrawMode,
-                             const wxPoint&    offset = ZeroOffset );
+    void        DrawFilledArea( WinEDA_DrawPanel* panel,
+                                wxDC*                DC,
+                                int                  aDrawMode,
+                                const wxPoint&       offset = ZeroOffset );
 
-    EDA_Rect GetBoundingBox();
+    EDA_Rect    GetBoundingBox();
 
     /**
      * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
      * Remove insulated copper islands found in m_FilledPolysList.
      * @param aPcb = the board to analyse
      */
-    void Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
+    void        Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
 
     /**
      * Function DrawWhileCreateOutline
@@ -117,7 +120,7 @@ public:
      * @param DC = current Device Context
      * @param draw_mode = draw mode: OR, XOR ..
      */
-    void     DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode = GR_OR );
+    void        DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode = GR_OR );
 
 
     /**
@@ -136,7 +139,7 @@ public:
     }
 
 
-    void SetNet( int anet_code );
+    void    SetNet( int anet_code );
 
     /**
      * Function HitTest
@@ -144,7 +147,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& refPos );
+    bool    HitTest( const wxPoint& refPos );
 
     /** function BuildFilledPolysListData
      * Build m_FilledPolysList data from real outlines (m_Poly)
@@ -155,7 +158,7 @@ public:
      * This function does not add holes for pads and tracks but calls
      * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
      */
-    int  BuildFilledPolysListData( BOARD * aPcb );
+    int     BuildFilledPolysListData( BOARD* aPcb );
 
     /** function AddClearanceAreasPolygonsToPolysList
      * Add non copper areas polygons (pads and tracks with clearence)
@@ -167,7 +170,7 @@ public:
      *  filled copper area polygon (without clearence areas
      * @param aPcb: the current board
      */
-    void AddClearanceAreasPolygonsToPolysList( BOARD * aPcb );
+    void    AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
 
     /**
      * Function HitTestForCorner
@@ -175,7 +178,7 @@ public:
      * @return -1 if none, corner index in .corner <vector>
      * @param refPos : A wxPoint to test
      */
-    int  HitTestForCorner( const wxPoint& refPos );
+    int     HitTestForCorner( const wxPoint& refPos );
 
     /**
      * Function HitTestForEdge
@@ -183,7 +186,7 @@ public:
      * @return -1 if none,  or index of the starting corner in .corner <vector>
      * @param refPos : A wxPoint to test
      */
-    int  HitTestForEdge( const wxPoint& refPos );
+    int     HitTestForEdge( const wxPoint& refPos );
 
     /**
      * Function HitTest (overlayed)
@@ -191,7 +194,7 @@ public:
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
-    bool HitTest( EDA_Rect& refArea );
+    bool    HitTest( EDA_Rect& refArea );
 
     /**
      * Function Fill_Zone()
@@ -204,7 +207,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int  Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
+    int     Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
 
     /* Geometric transformations: */
 
@@ -213,14 +216,14 @@ public:
      * Move the outlines
      * @param offset = moving vector
      */
-    void Move( const wxPoint& offset );
+    void    Move( const wxPoint& offset );
 
     /**
      * Function MoveEdge
      * Move the outline Edge. m_CornerSelection is the start point of the outline edge
      * @param offset = moving vector
      */
-    void MoveEdge( const wxPoint& offset );
+    void    MoveEdge( const wxPoint& offset );
 
     /**
      * Function Rotate
@@ -228,7 +231,7 @@ public:
      * @param centre = rot centre
      * @param angle = in 0.1 degree
      */
-    void Rotate( const wxPoint& centre, int angle );
+    void    Rotate( const wxPoint& centre, int angle );
 
     /**
      * Function Mirror
@@ -236,7 +239,7 @@ public:
      * the layer is not changed
      * @param mirror_ref = vertical axis position
      */
-    void Mirror( const wxPoint& mirror_ref );
+    void    Mirror( const wxPoint& mirror_ref );
 
     /**
      * Function GetClass

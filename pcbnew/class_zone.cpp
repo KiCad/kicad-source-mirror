@@ -30,6 +30,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     utility2 = 0;               // flags used in polygon calculations
     m_Poly   = new CPolyLine(); // Outlines
     m_ArcToSegmentsCount = 16;   // Use 16 segment to convert a circle to a polygon
+    m_DrawOptions = 0;
 }
 
 
@@ -137,8 +138,9 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
-    ret = fprintf( aFile, "ZOptions %d %d\n", m_GridFillValue, m_ArcToSegmentsCount );
-    if( ret < 2 )
+    ret = fprintf( aFile, "ZOptions %d %d %c\n", m_GridFillValue, m_ArcToSegmentsCount,
+                m_DrawOptions ? 'S' : 'F' );
+    if( ret < 3 )
         return false;
 
 
@@ -266,20 +268,26 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                     break;
                 }
             }
-            /* Set hatch later, afer reading outlines corners data */
+            /* Set hatch mode later, after reading outlines corners data */
         }
         if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {
             int gridsize = 50;
             int arcsegmentcount = 16;
+            int drawopt = 'F';
             text = Line + 8;
-            ret  = sscanf( text, "%d %d", &gridsize, &arcsegmentcount );
-            if( ret < 1 )   // Must find 1 or 2 args.
+            ret  = sscanf( text, "%d %d %c", &gridsize, &arcsegmentcount, &drawopt );
+            if( ret < 1 )   // Must find 1 or more args.
                 return false;
             else
                 m_GridFillValue = gridsize;
+
             if ( arcsegmentcount >= 32 )
                 m_ArcToSegmentsCount = 32;
+            
+            if ( drawopt == 'S' )       // Sketch mode for filled areas in this zone selected
+                m_DrawOptions = 1;
+
         }
         if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
@@ -436,7 +444,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
 {
     static int*     CornersBuffer     = NULL;
     static unsigned CornersBufferSize = 0;
-    bool            sketch_mode = false; // true to show areas outlines only (test and debug purposes)
+    bool            sketch_mode = m_DrawOptions; // false to show filled polys, true to show polygons outlines only (test and debug purposes)
 
     if( DC == NULL )
         return;

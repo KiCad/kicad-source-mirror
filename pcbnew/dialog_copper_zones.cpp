@@ -81,7 +81,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     int selection = 0;
 
     int grid_routing = g_GridRoutingSize;
-
+    
     if( m_Zone_Container )
         grid_routing = m_Zone_Container->m_GridFillValue;
 
@@ -120,6 +120,12 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         }
         g_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
         g_Zone_Arc_Approximation = m_Zone_Container->m_ArcToSegmentsCount;
+        
+        g_FilledAreasShowMode = m_Zone_Container->m_DrawOptions;
+        if ( g_FilledAreasShowMode == 1)
+            m_ShowFilledAreasInSketchOpt->SetValue(true);
+
+
 
     }
     else
@@ -242,19 +248,21 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 }
 
 
-/*************************************************************/
+/********************************************************************/
 void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
-/*************************************************************/
+/********************************************************************/
 {
     EndModal( ZONE_ABORT );
 }
 
 
-/**********************************************************/
-bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors)
-/**********************************************************/
+/********************************************************************************************/
+bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors, bool aUseExportableSetupOnly)
+/********************************************************************************************/
 /** Function dialog_copper_zone::AcceptOptions(
  * @return false if incorrect options, true if Ok.
+ * @param aPromptForErrors = true to prompt user on incorrectparams
+ * @param aUseExportableSetupOnly = true to use exportable parametres only (used to export this setup to other zones)
  */
 {
     switch( m_FillOpt->GetSelection() )
@@ -315,7 +323,7 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors)
 
     case 4:
         g_GridRoutingSize = 0;
-        wxMessageBox( wxT(
+        DisplayInfo( this, wxT(
 "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production"));
         break;
     }
@@ -328,6 +336,12 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors)
     else
         g_Zone_45_Only = TRUE;
 
+    g_FilledAreasShowMode = m_ShowFilledAreasInSketchOpt->IsChecked() ? 1 : 0;
+
+    // If we use only exportable to others zones parameters, exit here:
+    if ( aUseExportableSetupOnly )
+        return true;
+
     /* Get the layer selection for this zone */
     int ii = m_LayerSelectionCtrl->GetSelection();
     if( ii < 0 && aPromptForErrors )
@@ -335,7 +349,10 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors)
         DisplayError( this, _( "Error : you must choose a layer" ) );
         return false;
     }
+    
+
     g_CurrentZone_Layer = m_LayerId[ii];
+    
 
     /* Get the net name selection for this zone */
     ii = m_ListNetNameSelection->GetSelection();
@@ -432,4 +449,25 @@ void dialog_copper_zone::OnRemoveFillZoneButtonClick( wxCommandEvent& event )
     m_Parent->DrawPanel->Refresh();
 }
 
+/******************************************************************************/
+void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
+/******************************************************************************/
+{
+    if ( !AcceptOptions(true, true) )
+        return;
+    
+    // Export to others zones:
+    BOARD * pcb = m_Parent->m_Pcb;
+    for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = pcb->GetArea(ii);
+        zone->m_Poly->SetHatch( g_Zone_Hatching );
+        zone->m_PadOption     = g_Zone_Pad_Options;
+        zone->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
+        zone->m_GridFillValue = g_GridRoutingSize;
+        zone->m_ArcToSegmentsCount = g_Zone_Arc_Approximation;
+        zone->m_DrawOptions = g_FilledAreasShowMode;
+        m_Parent->GetScreen()->SetModify();;
+    }
+}
 

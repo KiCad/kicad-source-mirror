@@ -36,6 +36,7 @@ eda_global int g_CurrentZone_Layer;                 // Layer used to create the 
 eda_global int g_Zone_Hatching;                     // Option to show the zone area (outlines only, short hatches or full hatches
 eda_global int g_Zone_Arc_Approximation;            // Option to select number of segments to approximate a circle
                                                     // 16 or 32 segments
+eda_global int g_FilledAreasShowMode;               // Used to select draw options for filled areas in a zone (currently normal =0, sketch = 1)
 
 eda_global ZONE_CONTAINER::m_PadInZone g_Zone_Pad_Options
 #ifdef MAIN

@@ -18,6 +18,7 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
@@ -36,6 +37,7 @@ class dialog_copper_zone_frame : public wxDialog
 		
 		// Private event handlers
 		void _wxFB_OnInitDialog( wxInitDialogEvent& event ){ OnInitDialog( event ); }
+		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
 		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
 		void _wxFB_OnRemoveFillZoneButtonClick( wxCommandEvent& event ){ OnRemoveFillZoneButtonClick( event ); }
@@ -48,6 +50,8 @@ class dialog_copper_zone_frame : public wxDialog
 			 ID_RADIOBOX_GRID_SELECTION = 1000,
 			ID_RADIOBOX_OUTLINES_OPTION,
 			wxID_ARC_APPROX,
+			wxID_BUTTON_EXPORT,
+			wxID_BUTTON_UNFILL,
 			ID_NET_SORTING_OPTION,
 			ID_TEXTCTRL_NETNAMES_FILTER,
 			ID_NETNAME_SELECTION,
@@ -58,11 +62,13 @@ class dialog_copper_zone_frame : public wxDialog
 		wxStaticText* m_ClearanceValueTitle;
 		wxTextCtrl* m_ZoneClearanceCtrl;
 		wxRadioBox* m_FillOpt;
+		wxCheckBox* m_ShowFilledAreasInSketchOpt;
 		
 		wxRadioBox* m_OrientEdgesOpt;
 		
 		wxRadioBox* m_OutlineAppearanceCtrl;
 		wxRadioBox* m_ArcApproximationOpt;
+		wxButton* m_ExportSetupBuuton;
 		
 		wxButton* m_OkButton;
 		wxButton* m_ButtonCancel;
@@ -78,6 +84,7 @@ class dialog_copper_zone_frame : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
+		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveFillZoneButtonClick( wxCommandEvent& event ){ event.Skip(); }

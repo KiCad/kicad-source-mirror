@@ -11,9 +11,10 @@
 
 BEGIN_EVENT_TABLE( dialog_copper_zone_frame, wxDialog )
 	EVT_INIT_DIALOG( dialog_copper_zone_frame::_wxFB_OnInitDialog )
+	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_frame::_wxFB_ExportSetupToOtherCopperZones )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_frame::_wxFB_OnButtonOkClick )
 	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_frame::_wxFB_OnButtonCancelClick )
-	EVT_BUTTON( wxID_ANY, dialog_copper_zone_frame::_wxFB_OnRemoveFillZoneButtonClick )
+	EVT_BUTTON( wxID_BUTTON_UNFILL, dialog_copper_zone_frame::_wxFB_OnRemoveFillZoneButtonClick )
 	EVT_RADIOBOX( ID_NET_SORTING_OPTION, dialog_copper_zone_frame::_wxFB_OnNetSortingOptionSelected )
 END_EVENT_TABLE()
 
@@ -27,6 +28,9 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxBoxSizer* m_OptionsBoxSizer;
 	m_OptionsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
+	wxStaticBoxSizer* m_ExportableSetupSizer;
+	m_ExportableSetupSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Zone Setup:") ), wxHORIZONTAL );
+	
 	wxBoxSizer* m_LeftBoxSizer;
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -36,8 +40,8 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No Grid (For tests only!)") };
 	int m_GridCtrlNChoices = sizeof( m_GridCtrlChoices ) / sizeof( wxString );
 	m_GridCtrl = new wxRadioBox( this,  ID_RADIOBOX_GRID_SELECTION, _("Grid Size for Filling:"), wxDefaultPosition, wxDefaultSize, m_GridCtrlNChoices, m_GridCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_GridCtrl->SetSelection( 1 );
-	m_FillOptionsBox->Add( m_GridCtrl, 0, wxALL, 5 );
+	m_GridCtrl->SetSelection( 0 );
+	m_FillOptionsBox->Add( m_GridCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ClearanceValueTitle->Wrap( -1 );
@@ -49,15 +53,24 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxString m_FillOptChoices[] = { _("Include Pads"), _("Thermal Relief"), _("Exclude Pads") };
 	int m_FillOptNChoices = sizeof( m_FillOptChoices ) / sizeof( wxString );
 	m_FillOpt = new wxRadioBox( this, wxID_ANY, _("Pad in Zone:"), wxDefaultPosition, wxDefaultSize, m_FillOptNChoices, m_FillOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_FillOpt->SetSelection( 1 );
+	m_FillOpt->SetSelection( 2 );
 	m_FillOptionsBox->Add( m_FillOpt, 0, wxALL|wxEXPAND, 5 );
+	
+	m_ShowFilledAreasInSketchOpt = new wxCheckBox( this, wxID_ANY, _("Show filled areas in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_ShowFilledAreasInSketchOpt->SetToolTip( _("If enabled, filled areas in is this zone will be displayed as non filled polygons.\nIf disabled, filled areas in is this zone will be displayed as \"solid\" areas (normal mode).") );
+	
+	m_FillOptionsBox->Add( m_ShowFilledAreasInSketchOpt, 0, wxALL, 5 );
 	
 	m_LeftBoxSizer->Add( m_FillOptionsBox, 1, wxEXPAND, 5 );
 	
-	m_OptionsBoxSizer->Add( m_LeftBoxSizer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_ExportableSetupSizer->Add( m_LeftBoxSizer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	m_OptionsBoxSizer->Add( 5, 5, 0, wxEXPAND, 5 );
+	m_ExportableSetupSizer->Add( 5, 5, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* m_MiddleBox;
+	m_MiddleBox = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* m_MiddleBoxSizer;
 	m_MiddleBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -92,7 +105,16 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	
 	m_MiddleBoxSizer->Add( m_OutilinesBoxOpt, 1, wxEXPAND, 5 );
 	
-	m_OptionsBoxSizer->Add( m_MiddleBoxSizer, 0, 0, 5 );
+	m_ExportSetupBuuton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportSetupBuuton->SetToolTip( _("Export this zone setup to all others copper zones") );
+	
+	m_MiddleBoxSizer->Add( m_ExportSetupBuuton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_MiddleBox->Add( m_MiddleBoxSizer, 0, 0, 5 );
+	
+	m_ExportableSetupSizer->Add( m_MiddleBox, 1, wxEXPAND, 5 );
+	
+	m_OptionsBoxSizer->Add( m_ExportableSetupSizer, 1, wxEXPAND, 5 );
 	
 	
 	m_OptionsBoxSizer->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -107,7 +129,7 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_UnFillZoneButton = new wxButton( this, wxID_ANY, _("UnFill Zone"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnFillZoneButton = new wxButton( this, wxID_BUTTON_UNFILL, _("UnFill Zone"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_UnFillZoneButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	

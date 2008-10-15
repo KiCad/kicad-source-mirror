@@ -20,9 +20,10 @@ public:
     void OnInitDialog( wxInitDialogEvent& event );
 	void OnButtonOkClick( wxCommandEvent& event );
 	void OnButtonCancelClick( wxCommandEvent& event );
-    bool AcceptOptions(bool aPromptForErrors);
+    bool AcceptOptions(bool aPromptForErrors, bool aUseExportableSetupOnly = false);
 	void OnRemoveFillZoneButtonClick( wxCommandEvent& event );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
+	void ExportSetupToOtherCopperZones( wxCommandEvent& event );
 };
 
 #endif      // #ifndef DIALOG_COPPER_ZONES
