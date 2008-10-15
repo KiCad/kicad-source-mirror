@@ -354,10 +354,10 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
     wxMenu* menu_change_type = new wxMenu;
 
     if( !GLabel->m_Flags )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Glabel" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate GLabel" ), rotate_glabel_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit GLabel" ), edit_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Glabel" ), delete_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move global label" ), move_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate global label" ), rotate_glabel_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit global label" ), edit_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete global label" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
@@ -375,16 +375,16 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
 void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 /*******************************************************************/
 
-/* Add menu commands for a hierarchal Label
+/* Add menu commands for a hierarchical Label
  */
 {
     wxMenu* menu_change_type = new wxMenu;
 
     if( !HLabel->m_Flags )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move Hlabel" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate HLabel" ), rotate_glabel_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit HLabel" ), edit_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Hlabel" ), delete_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, _( "Move hierarchical label" ), move_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate hierarchical Label" ), rotate_glabel_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit hierarchical Label" ), edit_text_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete hierarchical label" ), delete_text_xpm );
 
     // add menu change type text (to label, glabel, text):
     ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,

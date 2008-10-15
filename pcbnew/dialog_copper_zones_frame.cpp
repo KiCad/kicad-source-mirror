@@ -31,7 +31,7 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* m_FillOptionsBox;
-	m_FillOptionsBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Zone fill options") ), wxVERTICAL );
+	m_FillOptionsBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Zone Fill Options:") ), wxVERTICAL );
 	
 	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No Grid (For tests only!)") };
 	int m_GridCtrlNChoices = sizeof( m_GridCtrlChoices ) / sizeof( wxString );
@@ -46,9 +46,9 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_ZoneClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_FillOptionsBox->Add( m_ZoneClearanceCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_FillOptChoices[] = { _("Include pads"), _("Thermal relief"), _("Exclude pads") };
+	wxString m_FillOptChoices[] = { _("Include Pads"), _("Thermal Relief"), _("Exclude Pads") };
 	int m_FillOptNChoices = sizeof( m_FillOptChoices ) / sizeof( wxString );
-	m_FillOpt = new wxRadioBox( this, wxID_ANY, _("Pad in zone:"), wxDefaultPosition, wxDefaultSize, m_FillOptNChoices, m_FillOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_FillOpt = new wxRadioBox( this, wxID_ANY, _("Pad in Zone:"), wxDefaultPosition, wxDefaultSize, m_FillOptNChoices, m_FillOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_FillOpt->SetSelection( 1 );
 	m_FillOptionsBox->Add( m_FillOpt, 0, wxALL|wxEXPAND, 5 );
 	
@@ -77,8 +77,8 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
 	m_OutlineAppearanceCtrl = new wxRadioBox( this, ID_RADIOBOX_OUTLINES_OPTION, _("Outlines Appearance"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OutlineAppearanceCtrl->SetSelection( 1 );
-	m_OutlineAppearanceCtrl->SetToolTip( _("How a zone outline is shoved:\nSingle line\nShort hatching\nFull area hatched") );
+	m_OutlineAppearanceCtrl->SetSelection( 0 );
+	m_OutlineAppearanceCtrl->SetToolTip( _("Choose how a zone outline is displayed\n- Single line\n- Short hatching\n- Full zone area hatched") );
 	
 	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
 	
@@ -107,7 +107,7 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_UnFillZoneButton = new wxButton( this, wxID_ANY, _("Unfill zone"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnFillZoneButton = new wxButton( this, wxID_ANY, _("UnFill Zone"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_UnFillZoneButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
