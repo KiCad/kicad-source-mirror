@@ -21,16 +21,18 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     BOARD_ITEM( parent, TYPEZONE_CONTAINER )
 
 {
-    m_NetCode = -1;             // Net number for fast comparisons
+    m_NetCode = -1;                             // Net number for fast comparisons
     m_CornerSelection = -1;
-    m_ZoneClearance   = 200;    // a reasonnable clerance value
-    m_GridFillValue   = 50;     // a reasonnable grid used for filling
+    m_ZoneClearance   = 200;                    // a reasonnable clerance value
+    m_GridFillValue   = 50;                     // a reasonnable grid used for filling
     m_PadOption = THERMAL_PAD;
-    utility  = 0;               // flags used in polygon calculations
-    utility2 = 0;               // flags used in polygon calculations
-    m_Poly   = new CPolyLine(); // Outlines
-    m_ArcToSegmentsCount = 16;   // Use 16 segment to convert a circle to a polygon
+    utility  = 0;                               // flags used in polygon calculations
+    utility2 = 0;                               // flags used in polygon calculations
+    m_Poly   = new CPolyLine();                 // Outlines
+    m_ArcToSegmentsCount = 16;                  // Use 16 segment to convert a circle to a polygon
     m_DrawOptions = 0;
+    m_ThermalReliefGapValue = 200;              // tickness of the gap in thermal reliefs
+    m_ThermalReliefCopperBridgeValue = 200;     // tickness of the copper bridge in thermal reliefs
 }
 
 
@@ -86,8 +88,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 
     // Save the outline main info
     ret = fprintf( aFile, "ZInfo %8.8lX %d \"%s\"\n",
-                  m_TimeStamp, m_NetCode,
-                  CONV_TO_UTF8( m_Netname ) );
+        m_TimeStamp, m_NetCode,
+        CONV_TO_UTF8( m_Netname ) );
     if( ret < 3 )
         return false;
 
@@ -138,8 +140,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
-    ret = fprintf( aFile, "ZOptions %d %d %c\n", m_GridFillValue, m_ArcToSegmentsCount,
-                m_DrawOptions ? 'S' : 'F' );
+    ret = fprintf( aFile, "ZOptions %d %d %c %d %d\n", m_GridFillValue, m_ArcToSegmentsCount,
+        m_DrawOptions ? 'S' : 'F' , m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue);
     if( ret < 3 )
         return false;
 
@@ -148,8 +150,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     for( item_pos = 0; item_pos < corners_count; item_pos++ )
     {
         ret = fprintf( aFile, "ZCorner %d %d %d\n",
-                       m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
-                       m_Poly->corner[item_pos].end_contour );
+            m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
+            m_Poly->corner[item_pos].end_contour );
         if( ret < 3 )
             return false;
     }
@@ -274,20 +276,20 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         {
             int gridsize = 50;
             int arcsegmentcount = 16;
-            int drawopt = 'F';
+            char drawopt = 'F';
             text = Line + 8;
-            ret  = sscanf( text, "%d %d %c", &gridsize, &arcsegmentcount, &drawopt );
-            if( ret < 1 )   // Must find 1 or more args.
+            ret  = sscanf( text, "%d %d %c %d %d", &gridsize, &arcsegmentcount, &drawopt,
+                &m_ThermalReliefGapValue, &m_ThermalReliefCopperBridgeValue );
+            if( ret < 1 )  // Must find 1 or more args.
                 return false;
             else
                 m_GridFillValue = gridsize;
 
-            if ( arcsegmentcount >= 32 )
+            if( arcsegmentcount >= 32 )
                 m_ArcToSegmentsCount = 32;
-            
-            if ( drawopt == 'S' )       // Sketch mode for filled areas in this zone selected
-                m_DrawOptions = 1;
 
+            if( drawopt == 'S' )  // Sketch mode for filled areas in this zone selected
+                m_DrawOptions = 1;
         }
         if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
@@ -351,7 +353,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
     }
 
     /* Set hatch here, when outlines corners are read */
-    m_Poly->SetHatch(outline_hatch);
+    m_Poly->SetHatch( outline_hatch );
 
     return error ? 0 : 1;
 }
@@ -509,10 +511,10 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         {   // Draw the current filled area
             if( sketch_mode )
                 GRClosedPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
-                              false, 0, color, color );
+                    false, 0, color, color );
             else
                 GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
-                        true, 0, color, color );
+                    true, 0, color, color );
             corners_count = 0;
             ii = 0;
         }
@@ -571,7 +573,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
     if( DC == NULL )
         return;
     int     curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    int     color = g_DesignSettings.m_LayerColor[m_Layer] & MASKCOLOR;
+    int     color = g_DesignSettings.m_LayerColor[m_Layer & 31] & MASKCOLOR;
 
     if( DisplayOpt.ContrastModeDisplay )
     {
@@ -585,28 +587,31 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
 
     // draw the lines
     wxPoint start_contour_pos = GetCornerPosition( 0 );
-    for( int ic = 0; ic < GetNumCorners(); ic++ )
+    int icmax = GetNumCorners() - 1;
+    for( int ic = 0; ic <= icmax; ic++ )
     {
         int xi = GetCornerPosition( ic ).x;
         int yi = GetCornerPosition( ic ).y;
         int xf, yf;
-        if( m_Poly->corner[ic].end_contour == FALSE && ic < GetNumCorners() - 1 )
+        if( m_Poly->corner[ic].end_contour == FALSE && ic < icmax )
         {
             is_close_segment = false;
             xf = GetCornerPosition( ic + 1 ).x;
             yf = GetCornerPosition( ic + 1 ).y;
-            if( (m_Poly->corner[ic + 1].end_contour) || (ic == GetNumCorners() - 2) )
+            if( (m_Poly->corner[ic + 1].end_contour) || (ic == icmax - 1) )
                 current_gr_mode = GR_XOR;
             else
                 current_gr_mode = draw_mode;
         }
-        else
+        else    // Draw the line from last corner to the first corner of the current coutour
         {
             is_close_segment = true;
             current_gr_mode  = GR_XOR;
             xf = start_contour_pos.x;
             yf = start_contour_pos.y;
-            start_contour_pos = GetCornerPosition( ic + 1 );
+            // Prepare the next contour for drawing, if exists
+            if ( ic < icmax )
+                start_contour_pos = GetCornerPosition( ic + 1 );
         }
         GRSetDrawMode( DC, current_gr_mode );
         if( is_close_segment )
@@ -707,11 +712,11 @@ int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 
         /* test the dist between segment and ref point */
         dist = (int) GetPointToLineSegmentDistance( refPos.x,
-                                                    refPos.y,
-                                                    m_Poly->corner[item_pos].x,
-                                                    m_Poly->corner[item_pos].y,
-                                                    m_Poly->corner[end_segm].x,
-                                                    m_Poly->corner[end_segm].y );
+            refPos.y,
+            m_Poly->corner[item_pos].x,
+            m_Poly->corner[item_pos].y,
+            m_Poly->corner[end_segm].x,
+            m_Poly->corner[end_segm].y );
         if( dist <= min_dist )
         {
             m_CornerSelection = item_pos;

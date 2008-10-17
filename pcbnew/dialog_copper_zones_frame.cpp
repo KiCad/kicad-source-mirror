@@ -11,6 +11,7 @@
 
 BEGIN_EVENT_TABLE( dialog_copper_zone_frame, wxDialog )
 	EVT_INIT_DIALOG( dialog_copper_zone_frame::_wxFB_OnInitDialog )
+	EVT_RADIOBOX( wxID_PADS_IN_ZONE_OPTIONS, dialog_copper_zone_frame::_wxFB_OnPadsInZoneClick )
 	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_frame::_wxFB_ExportSetupToOtherCopperZones )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_frame::_wxFB_OnButtonOkClick )
 	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_frame::_wxFB_OnButtonCancelClick )
@@ -37,30 +38,40 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* m_FillOptionsBox;
 	m_FillOptionsBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Zone Fill Options:") ), wxVERTICAL );
 	
-	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No Grid (For tests only!)") };
+	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No grid (For tests only!)") };
 	int m_GridCtrlNChoices = sizeof( m_GridCtrlChoices ) / sizeof( wxString );
 	m_GridCtrl = new wxRadioBox( this,  ID_RADIOBOX_GRID_SELECTION, _("Grid Size for Filling:"), wxDefaultPosition, wxDefaultSize, m_GridCtrlNChoices, m_GridCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_GridCtrl->SetSelection( 0 );
+	m_GridCtrl->SetSelection( 4 );
 	m_FillOptionsBox->Add( m_GridCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ClearanceValueTitle->Wrap( -1 );
-	m_FillOptionsBox->Add( m_ClearanceValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxString m_PadInZoneOptChoices[] = { _("Include pads"), _("Thermal relief"), _("Exclude pads") };
+	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
+	m_PadInZoneOpt = new wxRadioBox( this, wxID_PADS_IN_ZONE_OPTIONS, _("Pad in Zone:"), wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_PadInZoneOpt->SetSelection( 1 );
+	m_FillOptionsBox->Add( m_PadInZoneOpt, 0, wxALL|wxEXPAND, 5 );
 	
-	m_ZoneClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FillOptionsBox->Add( m_ZoneClearanceCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* m_ThermalShapesParamsSizer;
+	m_ThermalShapesParamsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Thermal Reliefs Parameters") ), wxVERTICAL );
 	
-	wxString m_FillOptChoices[] = { _("Include Pads"), _("Thermal Relief"), _("Exclude Pads") };
-	int m_FillOptNChoices = sizeof( m_FillOptChoices ) / sizeof( wxString );
-	m_FillOpt = new wxRadioBox( this, wxID_ANY, _("Pad in Zone:"), wxDefaultPosition, wxDefaultSize, m_FillOptNChoices, m_FillOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_FillOpt->SetSelection( 2 );
-	m_FillOptionsBox->Add( m_FillOpt, 0, wxALL|wxEXPAND, 5 );
+	m_AntipadSizeText = new wxStaticText( this, wxID_ANY, _("Antipad Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AntipadSizeText->Wrap( -1 );
+	m_ThermalShapesParamsSizer->Add( m_AntipadSizeText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ShowFilledAreasInSketchOpt = new wxCheckBox( this, wxID_ANY, _("Show filled areas in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AntipadSizeValue = new wxTextCtrl( this, wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_AntipadSizeValue->SetToolTip( _("Define the gap around the pad") );
 	
-	m_ShowFilledAreasInSketchOpt->SetToolTip( _("If enabled, filled areas in is this zone will be displayed as non filled polygons.\nIf disabled, filled areas in is this zone will be displayed as \"solid\" areas (normal mode).") );
+	m_ThermalShapesParamsSizer->Add( m_AntipadSizeValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_FillOptionsBox->Add( m_ShowFilledAreasInSketchOpt, 0, wxALL, 5 );
+	m_CopperBridgeWidthText = new wxStaticText( this, wxID_ANY, _("Copper Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CopperBridgeWidthText->Wrap( -1 );
+	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_CopperWidthValue = new wxTextCtrl( this, wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CopperWidthValue->SetToolTip( _("Define the tickness of copper in therma reliefs") );
+	
+	m_ThermalShapesParamsSizer->Add( m_CopperWidthValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_FillOptionsBox->Add( m_ThermalShapesParamsSizer, 0, wxEXPAND, 5 );
 	
 	m_LeftBoxSizer->Add( m_FillOptionsBox, 1, wxEXPAND, 5 );
 	
@@ -84,13 +95,10 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_OrientEdgesOpt->SetSelection( 0 );
 	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL|wxEXPAND, 5 );
 	
-	
-	m_OutilinesBoxOpt->Add( 5, 5, 0, 0, 5 );
-	
-	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
+	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched outline"), _("Full hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
 	m_OutlineAppearanceCtrl = new wxRadioBox( this, ID_RADIOBOX_OUTLINES_OPTION, _("Outlines Appearance"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OutlineAppearanceCtrl->SetSelection( 0 );
+	m_OutlineAppearanceCtrl->SetSelection( 1 );
 	m_OutlineAppearanceCtrl->SetToolTip( _("Choose how a zone outline is displayed\n- Single line\n- Short hatching\n- Full zone area hatched") );
 	
 	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
@@ -103,12 +111,30 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	
 	m_OutilinesBoxOpt->Add( m_ArcApproximationOpt, 0, wxALL|wxEXPAND, 5 );
 	
+	wxStaticBoxSizer* m_OthersOptionsSizer;
+	m_OthersOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Others Options:") ), wxVERTICAL );
+	
+	m_ShowFilledAreasInSketchOpt = new wxCheckBox( this, wxID_ANY, _("Show filled areas in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_ShowFilledAreasInSketchOpt->SetToolTip( _("If enabled, filled areas in is this zone will be displayed as non filled polygons.\nIf disabled, filled areas in is this zone will be displayed as \"solid\" areas (normal mode).") );
+	
+	m_OthersOptionsSizer->Add( m_ShowFilledAreasInSketchOpt, 0, wxALL, 5 );
+	
+	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ClearanceValueTitle->Wrap( -1 );
+	m_OthersOptionsSizer->Add( m_ClearanceValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_ZoneClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_OthersOptionsSizer->Add( m_ZoneClearanceCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_OutilinesBoxOpt->Add( m_OthersOptionsSizer, 1, wxEXPAND, 5 );
+	
 	m_MiddleBoxSizer->Add( m_OutilinesBoxOpt, 1, wxEXPAND, 5 );
 	
-	m_ExportSetupBuuton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ExportSetupBuuton->SetToolTip( _("Export this zone setup to all others copper zones") );
+	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all others copper zones") );
 	
-	m_MiddleBoxSizer->Add( m_ExportSetupBuuton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_MiddleBoxSizer->Add( m_ExportSetupButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_MiddleBox->Add( m_MiddleBoxSizer, 0, 0, 5 );
 	
@@ -129,7 +155,7 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_UnFillZoneButton = new wxButton( this, wxID_BUTTON_UNFILL, _("UnFill Zone"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnFillZoneButton = new wxButton( this, wxID_BUTTON_UNFILL, _("Remove Filling"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_UnFillZoneButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	

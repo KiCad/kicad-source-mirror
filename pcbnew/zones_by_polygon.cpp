@@ -64,6 +64,8 @@ void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container
  * @param zone_container = parent zone outline
  */
 {
+    if ( zone_container == NULL )
+        return;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = zone_container;
     wxCommandEvent evt;
@@ -83,6 +85,8 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
  * @param zone_container = parent zone outline
  */
 {
+    if ( zone_container == NULL )
+        return;
     s_AddCutoutToCurrentZone = true;
     s_CurrentZone = zone_container;
     wxCommandEvent evt;
@@ -479,39 +483,40 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
  * Function Begin_Zone
  * either initializes the first segment of a new zone, or adds an
  * intermediate segment.
+ * A new zone can be:
+ * created from scratch: the user will be prompted to define parameters (layer, clearence ...)
+ * created from a similar zone (s_CurrentZone is used): parameters are copied from s_CurrentZone
+ * created as a cutout (an hole) inside s_CurrentZone
  */
 {
-    // verify if s_CurrentZone exists:
+    // verify if s_CurrentZone exists (could be deleted since last selection) :
     int ii;
-
     for( ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         if( s_CurrentZone == m_Pcb->GetArea( ii ) )
             break;
     }
 
-    if( ii == m_Pcb->GetAreaCount() ) // Not found: could be deleted since last selection
+    if( ii >= m_Pcb->GetAreaCount() ) // Not found: could be deleted since last selection
     {
         s_AddCutoutToCurrentZone = false;
         s_CurrentZone = NULL;
     }
 
-
-    ZONE_CONTAINER* zone;
-
+    // If no zone contour in progress, a new zone is beeing created:
     if( m_Pcb->m_CurrentZoneContour == NULL )
         m_Pcb->m_CurrentZoneContour = new ZONE_CONTAINER( m_Pcb );
 
-    zone = m_Pcb->m_CurrentZoneContour;
-    if( zone->GetNumCorners() == 0 )    /* Start a new contour: init zone params (net and layer) */
+    ZONE_CONTAINER* zone = m_Pcb->m_CurrentZoneContour;
+    if( zone->GetNumCorners() == 0 )    /* Start a new contour: init zone params (net, layer ...) */
     {
-        if( s_CurrentZone == NULL )     // A new outline is created
+        if( s_CurrentZone == NULL )     // A new outline is created, from scratch
         {
             int diag;
             // Init zone params to reasonnable values
             zone->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
 
-            // Prompt user fro exact parameters:
+            // Prompt user for parameters:
             DrawPanel->m_IgnoreMouseEvents = TRUE;
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
@@ -541,7 +546,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_CurrentZone_Layer;    // Set by the dialog frame
         }
-        else                                                                        /* Start a new contour: init zone params (net and layer) from an existing zone */
+        else  // Start a new contour: init zone params (net and layer) from an existing zone (add cutout or similar zone)
         {
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_CurrentZone_Layer =
                                                                 s_CurrentZone->GetLayer();
@@ -551,18 +556,18 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         /* Show the Net for zones on copper layers */
         if( g_CurrentZone_Layer  < FIRST_NO_COPPER_LAYER )
         {
-            if( g_HightLigt_Status && (g_HightLigth_NetCode != g_NetcodeSelection) )
+            if( s_CurrentZone )
+                g_NetcodeSelection = s_CurrentZone->GetNet();
+            if( g_HightLigt_Status )
             {
                 Hight_Light( DC ); // Remove old hightlight selection
             }
 
-            if( s_CurrentZone )
-                g_NetcodeSelection = s_CurrentZone->GetNet();
             g_HightLigth_NetCode = g_NetcodeSelection;
             Hight_Light( DC );
         }
         if( !s_AddCutoutToCurrentZone )
-            s_CurrentZone = NULL; // the zone is used only once
+            s_CurrentZone = NULL; // the zone is used only once ("add similar zone" command)
     }
 
     // if first segment
@@ -574,6 +579,8 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         zone->m_TimeStamp     = GetTimeStamp();
         zone->m_PadOption     = g_Zone_Pad_Options;
         zone->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
+        zone->m_ThermalReliefGapValue = g_ThermalReliefGapValue;
+        zone->m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;
         zone->m_GridFillValue = g_GridRoutingSize;
         zone->m_Poly->Start( g_CurrentZone_Layer,
             GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y,
@@ -729,6 +736,8 @@ static void Show_New_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, b
         return;
 
     int icorner = zone->GetNumCorners() - 1;
+    if ( icorner < 1 )
+        return;     // We must have 2 (or more) corners
 
     if( erase )    /* Undraw edge in old position*/
     {
@@ -760,7 +769,6 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
  */
 {
     int diag;
-
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     if( zone_container->GetLayer() < FIRST_NO_COPPER_LAYER )
     {   // edit a zone on a copper layer
@@ -795,6 +803,8 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     zone_container->m_GridFillValue = g_GridRoutingSize;
     zone_container->m_ArcToSegmentsCount = g_Zone_Arc_Approximation;
     zone_container->m_DrawOptions = g_FilledAreasShowMode;
+    zone_container->m_ThermalReliefGapValue = g_ThermalReliefGapValue;
+    zone_container->m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;
 
 
     // Combine zones if possible :

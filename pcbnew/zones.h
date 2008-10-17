@@ -15,6 +15,8 @@
 #define ZONE_NET_OUTLINES_HATCH_OPTION_KEY wxT( "Zone_Ouline_Hatch_Opt" )
 #define ZONE_NET_SORT_OPTION_KEY           wxT( "Zone_NetSort_Opt" )
 #define ZONE_NET_FILTER_STRING_KEY         wxT( "Zone_Filter_Opt" )
+#define ZONE_THERMAL_RELIEF_GAP_STRING_KEY wxT( "Zone_TH_Gap" )
+#define ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY wxT( "Zone_TH_Copper_Width" )
 
 enum zone_cmd {
     ZONE_ABORT,
@@ -37,6 +39,16 @@ eda_global int g_Zone_Hatching;                     // Option to show the zone a
 eda_global int g_Zone_Arc_Approximation;            // Option to select number of segments to approximate a circle
                                                     // 16 or 32 segments
 eda_global int g_FilledAreasShowMode;               // Used to select draw options for filled areas in a zone (currently normal =0, sketch = 1)
+eda_global long g_ThermalReliefGapValue             // tickness of the gap in thermal reliefs
+#ifdef MAIN
+= 200
+#endif
+;
+eda_global long g_ThermalReliefCopperBridgeValue     // tickness of the copper bridge in thermal reliefs
+#ifdef MAIN
+= 200
+#endif
+;
 
 eda_global ZONE_CONTAINER::m_PadInZone g_Zone_Pad_Options
 #ifdef MAIN

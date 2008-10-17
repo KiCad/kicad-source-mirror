@@ -8,6 +8,14 @@ email address.
 2008-oct-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 +pcbnew:
+    Solved a bug when creating a new zone outline that could crash pcbnew
+    More about copper zones filled without grid (by polygons)
+    Currently for tests only (work in progress).
+    now working: Thermal reliefs parameters can be set.
+
+2008-oct-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
     More about copper zones filled without grid (by polygons)
     Currently for tests only (work in progress).
     now working

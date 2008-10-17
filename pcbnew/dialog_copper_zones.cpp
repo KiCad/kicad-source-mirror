@@ -53,7 +53,7 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_CONTAINER 
 /*****************************************************************/
 void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 /*****************************************************************/
-// Initialise dialog options
+// Initialise all dialog options and values in wxTextCtrl
 {
     BOARD*  board = m_Parent->m_Pcb;
 
@@ -81,7 +81,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     int selection = 0;
 
     int grid_routing = g_GridRoutingSize;
-    
+
     if( m_Zone_Container )
         grid_routing = m_Zone_Container->m_GridFillValue;
 
@@ -109,18 +109,18 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         switch( m_Zone_Container->m_PadOption )
         {
         case ZONE_CONTAINER::PAD_NOT_IN_ZONE:		// Pads are not covered
-            m_FillOpt->SetSelection( 2 );
+            m_PadInZoneOpt->SetSelection( 2 );
             break;
         case ZONE_CONTAINER::THERMAL_PAD:			// Use thermal relief for pads
-            m_FillOpt->SetSelection( 1 );
+            m_PadInZoneOpt->SetSelection( 1 );
             break;
         case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
-            m_FillOpt->SetSelection( 0 );
+            m_PadInZoneOpt->SetSelection( 0 );
             break;
         }
         g_Zone_Hatching = m_Zone_Container->m_Poly->GetHatchStyle();
         g_Zone_Arc_Approximation = m_Zone_Container->m_ArcToSegmentsCount;
-        
+
         g_FilledAreasShowMode = m_Zone_Container->m_DrawOptions;
         if ( g_FilledAreasShowMode == 1)
             m_ShowFilledAreasInSketchOpt->SetValue(true);
@@ -133,18 +133,44 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         switch( g_Zone_Pad_Options )
         {
         case ZONE_CONTAINER::PAD_NOT_IN_ZONE:		// Pads are not covered
-            m_FillOpt->SetSelection( 2 );
+            m_PadInZoneOpt->SetSelection( 2 );
             break;
         case ZONE_CONTAINER::THERMAL_PAD:			// Use thermal relief for pads
-            m_FillOpt->SetSelection( 1 );
+            m_PadInZoneOpt->SetSelection( 1 );
             break;
         case ZONE_CONTAINER::PAD_IN_ZONE:			// pads are covered by copper
-            m_FillOpt->SetSelection( 0 );
+            m_PadInZoneOpt->SetSelection( 0 );
             break;
         }
         g_Zone_Hatching = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
             (long) CPolyLine::DIAGONAL_EDGE );
     }
+
+    if ( g_Zone_Pad_Options != ZONE_CONTAINER::THERMAL_PAD )
+    {
+        m_AntipadSizeValue->Enable(false);
+        m_CopperWidthValue->Enable(false);
+    }
+    else
+    {
+        m_AntipadSizeValue->Enable(true);
+        m_CopperWidthValue->Enable(true);
+    }
+
+    if( m_Zone_Container )
+    {
+        g_ThermalReliefGapValue = m_Zone_Container->m_ThermalReliefGapValue;
+        g_ThermalReliefCopperBridgeValue = m_Zone_Container->m_ThermalReliefCopperBridgeValue;
+    }
+    else
+    {
+        m_Parent->m_Parent->m_EDA_Config->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, &g_ThermalReliefGapValue );
+        m_Parent->m_Parent->m_EDA_Config->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY, &g_ThermalReliefCopperBridgeValue );
+    }
+    AddUnitSymbol( *m_AntipadSizeText, g_UnitMetric );
+    AddUnitSymbol( *m_CopperBridgeWidthText, g_UnitMetric );
+    PutValueInLocalUnits( *m_AntipadSizeValue, g_ThermalReliefGapValue, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_CopperWidthValue, g_ThermalReliefCopperBridgeValue, PCB_INTERNAL_UNIT );
 
     switch( g_Zone_Hatching )
     {
@@ -160,7 +186,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         m_OutlineAppearanceCtrl->SetSelection(2);
         break;
     }
-    
+
     m_ArcApproximationOpt->SetSelection( g_Zone_Arc_Approximation == 32 ? 1 : 0 );
 
     /* build copper layers list */
@@ -245,6 +271,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     {
         GetSizer()->SetSizeHints(this);
     }
+    Center();
 }
 
 
@@ -265,7 +292,7 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors, bool aUseExportabl
  * @param aUseExportableSetupOnly = true to use exportable parametres only (used to export this setup to other zones)
  */
 {
-    switch( m_FillOpt->GetSelection() )
+    switch( m_PadInZoneOpt->GetSelection() )
     {
     case 2:
         g_Zone_Pad_Options = ZONE_CONTAINER::PAD_NOT_IN_ZONE;		// Pads are not covered
@@ -280,7 +307,7 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors, bool aUseExportabl
         break;
     }
 
-    switch( m_OutlineAppearanceCtrl->GetSelection() )
+   switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
         g_Zone_Hatching = CPolyLine::NO_HATCH;
@@ -294,7 +321,7 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors, bool aUseExportabl
         g_Zone_Hatching = CPolyLine::DIAGONAL_FULL;
         break;
     }
-    
+
     g_Zone_Arc_Approximation = m_ArcApproximationOpt->GetSelection() == 1 ? 32 : 16;
 
     if( m_Parent->m_Parent->m_EDA_Config )
@@ -338,6 +365,12 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors, bool aUseExportabl
 
     g_FilledAreasShowMode = m_ShowFilledAreasInSketchOpt->IsChecked() ? 1 : 0;
 
+    g_ThermalReliefGapValue = ReturnValueFromTextCtrl( *m_AntipadSizeValue, PCB_INTERNAL_UNIT );
+    g_ThermalReliefCopperBridgeValue = ReturnValueFromTextCtrl( *m_CopperWidthValue, PCB_INTERNAL_UNIT );
+
+    m_Parent->m_Parent->m_EDA_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, (long) g_ThermalReliefGapValue );
+    m_Parent->m_Parent->m_EDA_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY, (long)g_ThermalReliefCopperBridgeValue );
+
     // If we use only exportable to others zones parameters, exit here:
     if ( aUseExportableSetupOnly )
         return true;
@@ -349,10 +382,10 @@ bool dialog_copper_zone::AcceptOptions(bool aPromptForErrors, bool aUseExportabl
         DisplayError( this, _( "Error : you must choose a layer" ) );
         return false;
     }
-    
+
 
     g_CurrentZone_Layer = m_LayerId[ii];
-    
+
 
     /* Get the net name selection for this zone */
     ii = m_ListNetNameSelection->GetSelection();
@@ -406,7 +439,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_FILTER_STRING_KEY, m_NetNameFilter->GetValue() );
     }
-    
+
     // Select and isplay current zone net name in listbox:
     int net_select = g_HightLigth_NetCode;
     if( m_Zone_Container )
@@ -455,7 +488,7 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 {
     if ( !AcceptOptions(true, true) )
         return;
-    
+
     // Export to others zones:
     BOARD * pcb = m_Parent->m_Pcb;
     for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
@@ -467,7 +500,28 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
         zone->m_GridFillValue = g_GridRoutingSize;
         zone->m_ArcToSegmentsCount = g_Zone_Arc_Approximation;
         zone->m_DrawOptions = g_FilledAreasShowMode;
+        zone->m_ThermalReliefGapValue = g_ThermalReliefGapValue;
+        zone->m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;
         m_Parent->GetScreen()->SetModify();;
     }
 }
 
+
+/******************************************************************/
+void dialog_copper_zone::OnPadsInZoneClick( wxCommandEvent& event )
+/******************************************************************/
+{
+    switch ( m_PadInZoneOpt->GetSelection() )
+    {
+        default:
+            m_AntipadSizeValue->Enable(false);
+            m_CopperWidthValue->Enable(false);
+            break;
+
+        case 1:
+            m_AntipadSizeValue->Enable(true);
+            m_CopperWidthValue->Enable(true);
+            break;
+
+    }
+}

@@ -113,7 +113,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 break;
 
             case THERMAL_PAD:
-                AddThermalReliefPadPolygon( booleng, *pad, 100, 100 );
+                AddThermalReliefPadPolygon( booleng, *pad,
+                    m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
                 break;
 
             case PAD_IN_ZONE:

@@ -18,9 +18,9 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/listbox.h>
 #include <wx/dialog.h>
@@ -37,6 +37,7 @@ class dialog_copper_zone_frame : public wxDialog
 		
 		// Private event handlers
 		void _wxFB_OnInitDialog( wxInitDialogEvent& event ){ OnInitDialog( event ); }
+		void _wxFB_OnPadsInZoneClick( wxCommandEvent& event ){ OnPadsInZoneClick( event ); }
 		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
 		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
@@ -48,6 +49,9 @@ class dialog_copper_zone_frame : public wxDialog
 		enum
 		{
 			 ID_RADIOBOX_GRID_SELECTION = 1000,
+			wxID_PADS_IN_ZONE_OPTIONS,
+			wxID_ANTIPAD_SIZE,
+			wxID_COPPER_BRIDGE_VALUE,
 			ID_RADIOBOX_OUTLINES_OPTION,
 			wxID_ARC_APPROX,
 			wxID_BUTTON_EXPORT,
@@ -59,16 +63,19 @@ class dialog_copper_zone_frame : public wxDialog
 		};
 		
 		wxRadioBox* m_GridCtrl;
-		wxStaticText* m_ClearanceValueTitle;
-		wxTextCtrl* m_ZoneClearanceCtrl;
-		wxRadioBox* m_FillOpt;
-		wxCheckBox* m_ShowFilledAreasInSketchOpt;
+		wxRadioBox* m_PadInZoneOpt;
+		wxStaticText* m_AntipadSizeText;
+		wxTextCtrl* m_AntipadSizeValue;
+		wxStaticText* m_CopperBridgeWidthText;
+		wxTextCtrl* m_CopperWidthValue;
 		
 		wxRadioBox* m_OrientEdgesOpt;
-		
 		wxRadioBox* m_OutlineAppearanceCtrl;
 		wxRadioBox* m_ArcApproximationOpt;
-		wxButton* m_ExportSetupBuuton;
+		wxCheckBox* m_ShowFilledAreasInSketchOpt;
+		wxStaticText* m_ClearanceValueTitle;
+		wxTextCtrl* m_ZoneClearanceCtrl;
+		wxButton* m_ExportSetupButton;
 		
 		wxButton* m_OkButton;
 		wxButton* m_ButtonCancel;
@@ -84,6 +91,7 @@ class dialog_copper_zone_frame : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
+		virtual void OnPadsInZoneClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
@@ -92,7 +100,7 @@ class dialog_copper_zone_frame : public wxDialog
 		
 	
 	public:
-		dialog_copper_zone_frame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 452,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		dialog_copper_zone_frame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 545,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~dialog_copper_zone_frame();
 	
 };

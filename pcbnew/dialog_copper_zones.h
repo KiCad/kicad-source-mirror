@@ -24,6 +24,7 @@ public:
 	void OnRemoveFillZoneButtonClick( wxCommandEvent& event );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
 	void ExportSetupToOtherCopperZones( wxCommandEvent& event );
+	void OnPadsInZoneClick( wxCommandEvent& event );
 };
 
 #endif      // #ifndef DIALOG_COPPER_ZONES
