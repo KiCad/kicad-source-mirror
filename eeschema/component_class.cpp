@@ -398,9 +398,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     EXCHG( m_Transform[1][0], copyitem->m_Transform[1][0] );
     EXCHG( m_Transform[1][1], copyitem->m_Transform[1][1] );
 
-    SCH_CMP_FIELDS tmp = copyitem->m_Fields;
-    copyitem->m_Fields = m_Fields;
-    m_Fields = tmp;
+    m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
 }
 
 
