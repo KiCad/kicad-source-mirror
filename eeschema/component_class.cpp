@@ -42,14 +42,15 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 
     m_Fields.reserve( NUMBER_OF_FIELDS );
 
-    for( int i=0;  i<NUMBER_OF_FIELDS;  ++i )
+    for( int i = 0;  i<NUMBER_OF_FIELDS;  ++i )
     {
-        SCH_CMP_FIELD field( aPos, i, this, ReturnDefaultFieldName(i) );
+        SCH_CMP_FIELD field( aPos, i, this, ReturnDefaultFieldName( i ) );
 
         if( i==REFERENCE )
             field.SetLayer( LAYER_REFERENCEPART );
         else if( i==VALUE )
             field.SetLayer( LAYER_VALUEPART );
+
         // else keep LAYER_FIELDS from SCH_CMP_FIELD constructor
 
         // SCH_CMP_FIELD's implicitly created copy constructor is called in here
@@ -58,7 +59,6 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 
     m_PrefixString = wxString( _( "U" ) );
 }
-
 
 /**
  * Function AddHierarchicalReference
@@ -105,9 +105,9 @@ wxString ReturnDefaultFieldName( int aFieldNdx )
 {
     // avoid unnecessarily copying wxStrings at runtime.
     static const wxString defaults[] = {
-        _( "Ref" ),             // Reference of part, i.e. "IC21"
-        _( "Value" ),           // Value of part, i.e. "3.3K"
-        _( "Footprint" ),       // Footprint, used by cvpcb or pcbnew, i.e. "16DIP300"
+        _( "Ref" ),         // Reference of part, i.e. "IC21"
+        _( "Value" ),       // Value of part, i.e. "3.3K"
+        _( "Footprint" ),   // Footprint, used by cvpcb or pcbnew, i.e. "16DIP300"
         _( "Datasheet" ),
     };
 
@@ -116,7 +116,7 @@ wxString ReturnDefaultFieldName( int aFieldNdx )
 
     else
     {
-        wxString ret = _("Field");
+        wxString ret = _( "Field" );
         ret << ( aFieldNdx - FIELD1 + 1);
         return ret;
     }
@@ -179,10 +179,10 @@ const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
     // this will happen if we load a version 1 schematic file.
     // it will also mean that multiple instances of the same sheet by default
     // all have the same component references, but perhaps this is best.
-    if( !GetField(REFERENCE)->m_Text.IsEmpty() )
+    if( !GetField( REFERENCE )->m_Text.IsEmpty() )
     {
-        SetRef( sheet, GetField(REFERENCE)->m_Text );
-        return GetField(REFERENCE)->m_Text;
+        SetRef( sheet, GetField( REFERENCE )->m_Text );
+        return GetField( REFERENCE )->m_Text;
     }
     return m_PrefixString;
 }
@@ -399,6 +399,17 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     EXCHG( m_Transform[1][1], copyitem->m_Transform[1][1] );
 
     m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
+
+    // Reparent items after copying data (after swap() m_Pareny member does not points the right parent):
+    for( int ii = 0; ii < copyitem->GetFieldCount();  ++ii )
+    {
+       copyitem->GetField(ii)->m_Parent = copyitem;
+    }
+    for( int ii = 0; ii < GetFieldCount();  ++ii )
+    {
+       GetField(ii)->m_Parent = this;
+    }
+
 }
 
 
@@ -455,7 +466,7 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
 
     wxString multi = wxT( "1" );
 
-    if ( KeepMulti )        // We cannot remove all annotations: part selection must be kept
+    if( KeepMulti )        // We cannot remove all annotations: part selection must be kept
     {
         wxString NewHref;
         wxString path;
@@ -487,7 +498,6 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
     m_Fields[REFERENCE].m_Text = defRef; //for drawing.
-
 }
 
 
@@ -495,27 +505,14 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
 SCH_COMPONENT* SCH_COMPONENT::GenCopy()
 /**************************************************************/
 {
-
-#if 0
-    SCH_COMPONENT* new_item = new SCH_COMPONENT( m_Pos );
-
-    new_item->m_Multi        = m_Multi;
-    new_item->m_ChipName     = m_ChipName;
-    new_item->m_PrefixString = m_PrefixString;
-
-    new_item->m_Convert = m_Convert;
-    new_item->m_Transform[0][0] = m_Transform[0][0];
-    new_item->m_Transform[0][1] = m_Transform[0][1];
-    new_item->m_Transform[1][0] = m_Transform[1][0];
-    new_item->m_Transform[1][1] = m_Transform[1][1];
-    new_item->m_TimeStamp = m_TimeStamp;
-
-    new_item->m_Fields = m_Fields;
-#else
     SCH_COMPONENT* new_item = new SCH_COMPONENT( *this );
-
-#endif
-
+    // Reset chain pointers:
+    new_item->Pback = new_item->Pnext = new_item->m_Son = NULL;
+    // Reparent items after copy:
+    for( int ii = 0; ii < new_item->GetFieldCount();  ++ii )
+    {
+       new_item->GetField(ii)->m_Parent = new_item;
+    }
     return new_item;
 }
 
@@ -785,7 +782,6 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-
 /****************************************/
 bool SCH_COMPONENT::Save( FILE* f ) const
 /****************************************/
@@ -805,10 +801,10 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
     else
     {
-        if( GetField(REFERENCE)->m_Text.IsEmpty() )
+        if( GetField( REFERENCE )->m_Text.IsEmpty() )
             strncpy( Name1, CONV_TO_UTF8( m_PrefixString ), sizeof(Name1) );
         else
-            strncpy( Name1, CONV_TO_UTF8( GetField(REFERENCE)->m_Text ), sizeof(Name1) );
+            strncpy( Name1, CONV_TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof(Name1) );
     }
     for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
     {
@@ -878,11 +874,11 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         }
     }
 
-    for( int fieldNdx=0; fieldNdx<GetFieldCount();  ++fieldNdx )
+    for( int fieldNdx = 0; fieldNdx<GetFieldCount();  ++fieldNdx )
     {
         SCH_CMP_FIELD* field = GetField( fieldNdx );
 
-        wxString defaultName = ReturnDefaultFieldName( fieldNdx );
+        wxString       defaultName = ReturnDefaultFieldName( fieldNdx );
 
         // only save the field if there is a value in the field or if field name
         // is different than the default field name
@@ -931,7 +927,7 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
     // Include BoundingBoxes of fields
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        bbox.Merge( GetField(ii)->GetBoundaryBox() );
+        bbox.Merge( GetField( ii )->GetBoundaryBox() );
     }
 
     // ... add padding
