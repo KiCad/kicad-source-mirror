@@ -472,10 +472,12 @@ void WinEDA_PartPropertiesFrame::BuildPanelEditField()
  *  of the component
  */
 {
-    wxString Hjustify_list[] =
+    static const wxString Hjustify_list[] =
     { _( "Align left" ), _( "Align center" ), _( "Align right" ) };
-    wxString Vjustify_list[] =
+
+    static const wxString Vjustify_list[] =
     { _( "Align bottom" ), _( "Align center" ), _( "Align top" ) };
+
     int      FieldId = m_CurrentFieldId;
 
     m_PanelField = new                      wxPanel( m_NoteBook, ID_PANEL_FIELD );
@@ -548,7 +550,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelEditField()
         else
             fieldnamelist[ii] = m_FieldName[ii];
     }
-	fieldnamelist[VALUE] << wxT("/") << _("Chip Name");
+    fieldnamelist[VALUE] << wxT("/") << _("Chip Name");
 
     m_FieldSelection = new wxRadioBox( m_PanelField, ID_ON_SELECT_FIELD,
                                        _( "Field to edit" ), wxDefaultPosition, wxDefaultSize,
@@ -653,7 +655,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
         Close(); return;
     }
 
-	m_Parent->GetScreen()->SetModify();
+    m_Parent->GetScreen()->SetModify();
     m_Parent->SaveCopyInUndoList( CurrentLibEntry );
 
     CopyPanelFieldToData();
@@ -761,7 +763,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
                 {
                     if( ii < FIELD1 || Field->m_Name.IsEmpty() )
                     {
-						SAFE_DELETE( Field );
+                        SAFE_DELETE( Field );
                         if( previousField )
                             previousField->Pnext = NextField;
                         else

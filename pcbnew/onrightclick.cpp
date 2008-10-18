@@ -124,7 +124,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         else
         {
             ADD_MENUITEM( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
-                _( "End tool" ), cancel_tool_xpm );
+                _( "End Tool" ), cancel_tool_xpm );
         }
         aPopMenu->AppendSeparator();
     }
@@ -208,7 +208,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( !flags )
                     aPopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,
-                        _( "Auto place Module" ) );
+                        _( "Auto Place Module" ) );
             }
 
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
@@ -358,7 +358,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
             _( "Select Working Layer" ), select_w_layer_xpm );
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
-            _( "Select layer pair for vias" ), select_layer_pair_xpm );
+            _( "Select Layer Pair for Vias" ), select_layer_pair_xpm );
         aPopMenu->AppendSeparator();
         break;
 
@@ -374,7 +374,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     case ID_COMPONENT_BUTT:
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC,
-            _( "Footprint documentation" ), book_xpm );
+            _( "Footprint Documentation" ), book_xpm );
         aPopMenu->AppendSeparator();
         break;
 
@@ -408,11 +408,11 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             wxMenu* commands = new wxMenu;
             aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_COMMANDS, _( "Global Autoroute" ), commands );
             ADD_MENUITEM( commands, ID_POPUP_PCB_SELECT_LAYER_PAIR,
-                _( "Select layer pair" ), select_layer_pair_xpm );
+                _( "Select Layer Pair" ), select_layer_pair_xpm );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES, _( "Autoroute All Modules" ) );
             commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset unrouted" ) );
+            commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
             if( m_Pcb->m_Modules )
             {
                 commands->AppendSeparator();
@@ -447,20 +447,20 @@ void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
  */
 {
     ADD_MENUITEM( menu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-        _( "Cancel block" ), cancel_xpm );
+        _( "Cancel Block" ), cancel_xpm );
     ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK,
-        _( "Zoom block" ), zoom_selected_xpm );
+        _( "Zoom Block" ), zoom_selected_xpm );
     menu->AppendSeparator();
     ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK,
-        _( "Place block" ), apply_xpm );
+        _( "Place Block" ), apply_xpm );
     ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK,
-        _( "Copy block" ), copyblock_xpm );
+        _( "Copy Block" ), copyblock_xpm );
     ADD_MENUITEM( menu, ID_POPUP_INVERT_BLOCK,
-        _( "Flip block" ), invert_module_xpm );
+        _( "Flip Block" ), invert_module_xpm );
     ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK,
-        _( "Rotate block" ), rotate_pos_xpm );
+        _( "Rotate Block" ), rotate_pos_xpm );
     ADD_MENUITEM( menu, ID_POPUP_DELETE_BLOCK,
-        _( "Delete block" ), delete_xpm );
+        _( "Delete Block" ), delete_xpm );
 }
 
 
@@ -479,28 +479,28 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( Track->Type() == TYPEVIA )
         {
-            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag via" ), move_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), move_xpm );
             wxMenu* via_mnu = new wxMenu();
 
             ADD_MENUITEM_WITH_SUBMENU( PopMenu, via_mnu,
                 ID_POPUP_PCB_VIA_EDITING, _( "Edit Via Drill" ), edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
-                          _( "Set via hole to Default" ), apply_xpm );
+                          _( "Set Via Hole to Default" ), apply_xpm );
             msg = _( "Set via hole to a specific value. This specfic value is currently" );
             msg << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
-                                _( "Set via hole to alt value" ), msg,
+                                _( "Set Via Hole to Alt Value" ), msg,
                                 options_new_pad_xpm );
             msg = _( "Set a specific via hole value. This value is currently" );
             msg  << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
-                _( "Set the via hole alt value" ), msg, edit_xpm );
+                _( "Set the Via Hole Alt Value" ), msg, edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT, _(
-                    "Export Via hole to alt value" ), export_options_pad_xpm );
+                    "Export Via Hole to Alt Value" ), export_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS,
-                _( "Export via hole to others id vias" ), global_options_pad_xpm );
+                _( "Export Via Hole to Others id Vias" ), global_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
-                _( "Set ALL via holes to default" ), apply_xpm );
+                _( "Set ALL Via Holes to Default" ), apply_xpm );
             if( Track->IsDrillDefault() )   // Can't export the drill value, because this value is 0
             {
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
@@ -518,15 +518,15 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             else
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
-                    _( "Drag Segments, keep slope" ), drag_segment_withslope_xpm );
+                    _( "Drag Segments, Keep Slope" ), drag_segment_withslope_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
-                    _( "Drag segment" ), drag_track_segment_xpm );
+                    _( "Drag Segment" ), drag_track_segment_xpm );
 #if 0
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_SEGMENT,
                     _( "Move Segment" ), move_track_segment_xpm );
 #endif
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
-                    _( "Break track" ), break_line_xpm );
+                    _( "Break Track" ), break_line_xpm );
             }
         }
     }
@@ -562,20 +562,20 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         track_mnu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-                                   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change width" ), width_track_xpm );
+                                   ID_POPUP_PCB_EDIT_TRACK_MNU, _( "Change Width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
                  Track->Type()==TYPEVIA ? _( "Change Via Size" ) : _( "Change Segment Width" ), width_segment_xpm );
 
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
             _( "Change Track Width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
-            _( "Change net" ), width_net_xpm );
+            _( "Change Net" ), width_net_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
             _( "Change ALL Tracks and Vias" ), width_track_via_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE,
-            _( "Change ALL Vias (no track)" ), width_vias_xpm );
+            _( "Change ALL Vias (No Track)" ), width_vias_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE,
-            _( "Change ALL Tracks (no via)" ), width_track_xpm );
+            _( "Change ALL Tracks (No Via)" ), width_track_xpm );
     }
 
     // Delete control:
@@ -590,16 +590,16 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         msg, delete_line_xpm );
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Delete track" ), s_Board_Editor_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete Track" ), s_Board_Editor_Hokeys_Descr, HK_DELETE );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACK,
             msg, delete_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
-            _( "Delete net" ), delete_net_xpm );
+            _( "Delete Net" ), delete_net_xpm );
     }
     track_mnu = new wxMenu;
 
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-        ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set flags" ), flag_xpm );
+        ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ), flag_xpm );
     track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, TRUE );
     track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, TRUE );
 
@@ -611,11 +611,11 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     if( !flags )
     {
         track_mnu->AppendSeparator();
-        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track locked: Yes" ) );
-        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track locked: No" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track Locked: Yes" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track Locked: No" ) );
         track_mnu->AppendSeparator();
-        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net locked: Yes" ) );
-        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net locked: No" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_ON_NET, _( "Net Locked: Yes" ) );
+        track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_NET, _( "Net Locked: No" ) );
     }
 }
 
@@ -636,10 +636,10 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
     {
         if( (edge_zone->m_Flags & IN_EDIT ) )
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
-                _( "Place corner" ), apply_xpm );
+                _( "Place Corner" ), apply_xpm );
         else
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_OUTLINES,
-                _( "Place zone" ), apply_xpm );
+                _( "Place Zone" ), apply_xpm );
     }
     else
     {
@@ -651,9 +651,9 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         if( ( index = edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) >= 0 )
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
-                _( "Move corner" ), move_xpm );
+                _( "Move Corner" ), move_xpm );
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
-                _( "Delete corner" ), delete_xpm );
+                _( "Delete Corner" ), delete_xpm );
         }
         else if( ( index = edge_zone->HitTestForEdge( GetScreen()->RefPos( true ) ) ) >= 0 )
         {
