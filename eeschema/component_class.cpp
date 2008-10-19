@@ -400,7 +400,8 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 
     m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
 
-    // Reparent items after copying data (after swap() m_Pareny member does not points the right parent):
+    // Reparent items after copying data
+    // (after swap(), m_Parent member does not points the right parent):
     for( int ii = 0; ii < copyitem->GetFieldCount();  ++ii )
     {
        copyitem->GetField(ii)->m_Parent = copyitem;

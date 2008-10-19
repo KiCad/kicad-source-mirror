@@ -34,7 +34,7 @@ void        AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 // Local Variables:
 /* how many segments are used to create a polygon from a circle: */
 static int s_CircleToSegmentsCount = 16;   /* default value. the real value will be changed to 32
-                                             * if g_Zone_Arc_Approximation == 1
+                                            * if g_Zone_Arc_Approximation == 1
                                             */
 
 /** function AddClearanceAreasPolygonsToPolysList
@@ -380,13 +380,13 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         corners_buffer.push_back( corner_end.y );
 
         /* add the radius lines */
-        corners_buffer.push_back( copper_tickness.x / 2);
-        corners_buffer.push_back( copper_tickness.y / 2);
+        corners_buffer.push_back( copper_tickness.x / 2 );
+        corners_buffer.push_back( copper_tickness.y / 2 );
 
 
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
-        angle = 450;    // TODO: problems with kbool if angle = 0 (bad filled polygon on some pads, but not alls)
-        int	angle_pad = aPad.m_Orient;				// Pad orientation
+        angle = 450;                                // TODO: problems with kbool if angle = 0 (bad filled polygon on some pads, but not alls)
+        int angle_pad = aPad.m_Orient;              // Pad orientation
         for( unsigned ihole = 0; ihole < 4; ihole++ )
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
@@ -394,7 +394,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
                 for( unsigned ii = 0; ii < corners_buffer.size(); ii += 2 )
                 {
                     corner = wxPoint( corners_buffer[ii], corners_buffer[ii + 1] );
-                    RotatePoint( &corner, angle + angle_pad );		// Rotate by segment angle and pad orientation
+                    RotatePoint( &corner, angle + angle_pad );      // Rotate by segment angle and pad orientation
                     corner += PadShapePos;
                     aBooleng->AddPoint( corner.x, corner.y );
                 }
@@ -408,6 +408,145 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         break;
 
     case PAD_OVAL:
+    {
+        // Oval pad support along the lines of round and rectangular pads
+
+        std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
+
+        int     dx = (aPad.m_Size.x / 2) + aThermalGap;     // Cutout radius x
+        int     dy = (aPad.m_Size.y / 2) + aThermalGap;     // Cutout radius y
+
+        wxPoint shape_offset;
+
+        if( dx > dy )   // Some coordinate fiddling, depending on the shape offset direction
+        {
+            shape_offset = wxPoint( (dx - dy), 0 );
+
+            // Crosspoint of thermal spoke sides, the first point of polygon buffer
+            corners_buffer.push_back( wxPoint( copper_tickness.x / 2, copper_tickness.y / 2 ) );
+
+            // Arc start point calculation, the intersecting point of cutout arc and thermal spoke edge
+            if( copper_tickness.x > dx - dy )      // If copper thickness is more than shape offset, we need to calculate arc intercept point.
+            {
+                corner.x = copper_tickness.x / 2;
+                corner.y =
+                    (int) sqrt( (double) ( dy * dy ) -
+                        ( ( corner.x - (dx - dy) ) * ( corner.x - (dx - dy) ) ) );
+                corner.x -= (dx - dy);
+            }
+            else
+            {
+                corner.x = copper_tickness.x / 2;
+                corner.y = dy;
+                corners_buffer.push_back( corner );
+                corner.x = ( (dx - dy) - copper_tickness.x ) / 2;
+            }
+
+            // Arc stop point calculation, the intersecting point of cutout arc and thermal spoke edge
+            corner_end.y = copper_tickness.y / 2;
+            corner_end.x = (int) sqrt( (double) ( ( dx * dx ) - ( corner_end.y * corner_end.y ) ) );
+        }
+        else
+        {
+            shape_offset = wxPoint( 0, (dx - dy) );
+            corners_buffer.push_back( wxPoint( copper_tickness.x / 2, -copper_tickness.y / 2 ) );
+
+            if( copper_tickness.y > dy - dx )
+            {
+                corner.y = copper_tickness.y / 2;
+                corner.x =
+                    (int) sqrt( (double) ( dx *
+                                           dx ) -
+                        ( ( corner.y - (dy - dx) ) * ( corner.y - (dy - dx) ) ) );
+                corner.y = ( -copper_tickness.y / 2 ) + (dy - dx);
+            }
+            else
+            {
+                corner.y = -copper_tickness.y / 2;
+                corner.x = dx;
+                corners_buffer.push_back( corner );
+                corner.y = ( (dy - dx) - copper_tickness.y ) / 2;
+            }
+            corner_end.x = copper_tickness.x / 2;
+            corner_end.y = -(int) sqrt( (double) ( ( dy * dy ) - ( corner_end.x * corner_end.x ) ) );
+        }
+
+
+        // calculate intermediate points till limit is reached
+        if( dx > dy )
+        {
+            while( (corner.y > corner_end.y)  && (corner.x < corner_end.x) )
+            {
+                corners_buffer.push_back( corner + shape_offset );
+                RotatePoint( &corner, delta );
+            }
+        }
+        else
+        {
+            while( (corner.y > corner_end.y)  && (corner.x > corner_end.x) )
+            {
+                corners_buffer.push_back( corner + shape_offset );
+                RotatePoint( &corner, delta );
+            }
+        }
+
+        //corners_buffer.push_back(corner + shape_offset);		// TODO: about one mil geometry error forms somewhere.
+        corners_buffer.push_back( corner_end );                   // Enabling the line above shows intersection point.
+
+
+        /* Create 2 holes, rotated by pad rotation.
+         */
+        angle = aPad.m_Orient;
+        for( int irect = 0; irect < 2; irect++ )
+        {
+            if( aBooleng->StartPolygonAdd( GROUP_B ) )
+            {
+                for( int ic = 0; ic < corners_buffer.size(); ic++ )
+                {
+                    wxPoint cpos = corners_buffer[ic];
+                    RotatePoint( &cpos, angle );
+                    cpos += PadShapePos;
+                    aBooleng->AddPoint( cpos.x, cpos.y );
+                }
+
+                aBooleng->EndPolygonAdd();
+                angle += 1800;   // this is calculate hole 3
+                if( angle >= 3600 )
+                    angle -= 3600;
+            }
+        }
+
+        // Create holes, that are the mirrored from the previous holes
+        for( int i = 0; i < corners_buffer.size(); i++ )
+        {
+            wxPoint swap = corners_buffer[i];
+            swap = wxPoint( -swap.x, swap.y );
+            corners_buffer[i] = swap;
+        }
+
+        // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
+        angle = aPad.m_Orient;
+        for( int irect = 0; irect < 2; irect++ )
+        {
+            if( aBooleng->StartPolygonAdd( GROUP_B ) )
+            {
+                for( int ic = 0; ic < corners_buffer.size(); ic++ )
+                {
+                    wxPoint cpos = corners_buffer[ic];
+                    RotatePoint( &cpos, angle );
+                    cpos += PadShapePos;
+                    aBooleng->AddPoint( cpos.x, cpos.y );
+                }
+
+                aBooleng->EndPolygonAdd();
+                angle += 1800;
+                if( angle >= 3600 )
+                    angle -= 3600;
+            }
+        }
+    }
+        break;
+
     case PAD_RECT:       // draw 4 Holes
     {
         /* we create 4 copper holes and put them in position 1, 2, 3 and 4
@@ -552,7 +691,7 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
         startp = aEnd;
     }
     int delta_angle = ArcTangente( endp.y, endp.x );    // delta_angle is in 0.1 degrees
-    seg_len = (int) sqrt( ((double)endp.y * endp.y) + ((double)endp.x * endp.x) );
+    seg_len = (int) sqrt( ( (double) endp.y * endp.y ) + ( (double) endp.x * endp.x ) );
 
     if( !aBooleng->StartPolygonAdd( GROUP_B ) )
         return;                                 // error!
