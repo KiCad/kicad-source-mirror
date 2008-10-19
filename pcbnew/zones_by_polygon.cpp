@@ -68,6 +68,16 @@ void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container
         return;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = zone_container;
+
+    /* set zones setup to the current zone */
+    g_Zone_Hatching = zone_container->m_Poly->GetHatchStyle();
+    g_Zone_Arc_Approximation = zone_container->m_ArcToSegmentsCount;
+    g_ThermalReliefGapValue = zone_container->m_ThermalReliefGapValue;
+    g_ThermalReliefCopperBridgeValue = zone_container->m_ThermalReliefCopperBridgeValue;
+    g_GridRoutingSize = zone_container->m_GridFillValue;
+    g_Zone_Pad_Options = zone_container->m_PadOption;
+
+    // Use the general event handle to set others params (like toolbar) */
     wxCommandEvent evt;
     evt.SetId( ID_PCB_ZONES_BUTT );
     Process_Special_Functions( evt );
@@ -89,6 +99,16 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
         return;
     s_AddCutoutToCurrentZone = true;
     s_CurrentZone = zone_container;
+
+    /* set zones setup to the current zone */
+    g_Zone_Hatching = zone_container->m_Poly->GetHatchStyle();
+    g_Zone_Arc_Approximation = zone_container->m_ArcToSegmentsCount;
+    g_ThermalReliefGapValue = zone_container->m_ThermalReliefGapValue;
+    g_ThermalReliefCopperBridgeValue = zone_container->m_ThermalReliefCopperBridgeValue;
+    g_GridRoutingSize = zone_container->m_GridFillValue;
+    g_Zone_Pad_Options = zone_container->m_PadOption;
+
+    // Use the general event handle to set others params (like toolbar) */
     wxCommandEvent evt;
     evt.SetId( ID_PCB_ZONES_BUTT );
     Process_Special_Functions( evt );
@@ -909,17 +929,16 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
     int          error_level = 0;
+    zone_container->m_FilledPolysList.clear();
     if( zone_container->m_GridFillValue == 0 )
     {
-        zone_container->m_FilledPolysList.clear();
         zone_container->BuildFilledPolysListData( m_Pcb );
         if ( DC )
             DrawPanel->Refresh();
     }
     else
     {
-        zone_container->m_FilledPolysList.clear();
-        zone_container->m_GridFillValue = g_GridRoutingSize;
+        g_GridRoutingSize = zone_container->m_GridFillValue;
         error_level = zone_container->Fill_Zone( this, DC, verbose );
     }
 

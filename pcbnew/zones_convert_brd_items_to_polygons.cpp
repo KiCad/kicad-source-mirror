@@ -91,6 +91,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
      * in GroupB in Bool_Engine
+     */
+    /* items ouside the zone bounding box are skipped */
+    EDA_Rect item_boundingbox;
+    EDA_Rect zone_boundingbox = GetBoundingBox();
+    zone_boundingbox.Inflate(m_ZoneClearance, m_ZoneClearance);
+    /*
      * First : Add pads
      */
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
@@ -102,19 +108,26 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
             if( pad->GetNet() != GetNet() )
             {
-                AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
+                item_boundingbox = pad->GetBoundingBox();
+                if ( item_boundingbox.Intersects( zone_boundingbox ) )
+                    AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
                 continue;
             }
 
             switch( m_PadOption )
             {
             case PAD_NOT_IN_ZONE:
-                AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
+                item_boundingbox = pad->GetBoundingBox();
+                if ( item_boundingbox.Intersects( zone_boundingbox ) )
+                    AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
                 break;
 
             case THERMAL_PAD:
-                AddThermalReliefPadPolygon( booleng, *pad,
-                    m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
+                item_boundingbox = pad->GetBoundingBox();
+                item_boundingbox.Inflate(m_ThermalReliefGapValue, m_ThermalReliefGapValue);
+                if ( item_boundingbox.Intersects( zone_boundingbox ) )
+                    AddThermalReliefPadPolygon( booleng, *pad,
+                        m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
                 break;
 
             case PAD_IN_ZONE:
@@ -133,7 +146,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             continue;
         if( track->GetNet() == GetNet() )
             continue;
-        AddTrackWithClearancePolygon( booleng, *track, m_ZoneClearance );
+        item_boundingbox = track->GetBoundingBox();
+        if ( item_boundingbox.Intersects( zone_boundingbox ) )
+            AddTrackWithClearancePolygon( booleng, *track, m_ZoneClearance );
     }
 
     // Draw graphic items (copper texts) and board edges
@@ -501,7 +516,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                for( int ic = 0; ic < corners_buffer.size(); ic++ )
+                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
@@ -517,11 +532,11 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         }
 
         // Create holes, that are the mirrored from the previous holes
-        for( int i = 0; i < corners_buffer.size(); i++ )
+        for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
         {
-            wxPoint swap = corners_buffer[i];
+            wxPoint swap = corners_buffer[ic];
             swap = wxPoint( -swap.x, swap.y );
-            corners_buffer[i] = swap;
+            corners_buffer[ic] = swap;
         }
 
         // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
@@ -530,7 +545,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                for( int ic = 0; ic < corners_buffer.size(); ic++ )
+                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );

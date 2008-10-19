@@ -174,8 +174,8 @@ public:
 
     /**
      * Function GetBoundingBox
-     * returns the bounding box of this Footprint
-     * Mainly used to redraw the screen area occuped by the footprint
+     * returns the bounding box of this pad
+     * Mainly used to redraw the screen area occuped by the pad
      */
     EDA_Rect GetBoundingBox();
 

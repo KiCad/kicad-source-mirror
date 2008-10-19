@@ -11,6 +11,8 @@
 #include "PolyLine.h"
 #include "pcbnew.h"
 #include "trigo.h"
+#include "zones.h"
+#include "autorout.h"
 
 
 /************************/
@@ -21,18 +23,18 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     BOARD_ITEM( parent, TYPEZONE_CONTAINER )
 
 {
-    m_NetCode = -1;                             // Net number for fast comparisons
+    m_NetCode = -1;                                                             // Net number for fast comparisons
     m_CornerSelection = -1;
-    m_ZoneClearance   = 200;                    // a reasonnable clerance value
-    m_GridFillValue   = 50;                     // a reasonnable grid used for filling
-    m_PadOption = THERMAL_PAD;
-    utility  = 0;                               // flags used in polygon calculations
-    utility2 = 0;                               // flags used in polygon calculations
-    m_Poly   = new CPolyLine();                 // Outlines
-    m_ArcToSegmentsCount = 16;                  // Use 16 segment to convert a circle to a polygon
+    m_ZoneClearance   = g_DesignSettings.m_ZoneClearence;                       // a reasonnable clerance value
+    m_GridFillValue   = g_GridRoutingSize;                                      // a reasonnable grid used for filling
+    m_PadOption = g_Zone_Pad_Options;
+    utility  = 0;                                                               // flags used in polygon calculations
+    utility2 = 0;                                                               // flags used in polygon calculations
+    m_Poly   = new CPolyLine();                                                 // Outlines
+    m_ArcToSegmentsCount = g_Zone_Arc_Approximation;                            // Use 16 or 32segment to convert a circle to a polygon
     m_DrawOptions = 0;
-    m_ThermalReliefGapValue = 200;              // tickness of the gap in thermal reliefs
-    m_ThermalReliefCopperBridgeValue = 200;     // tickness of the copper bridge in thermal reliefs
+    m_ThermalReliefGapValue = g_ThermalReliefGapValue;                          // tickness of the gap in thermal reliefs
+    m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;        // tickness of the copper bridge in thermal reliefs
 }
 
 
@@ -141,7 +143,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
         return false;
 
     ret = fprintf( aFile, "ZOptions %d %d %c %d %d\n", m_GridFillValue, m_ArcToSegmentsCount,
-        m_DrawOptions ? 'S' : 'F' , m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue);
+        m_DrawOptions ? 'S' : 'F', m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
     if( ret < 3 )
         return false;
 
@@ -274,8 +276,8 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         }
         if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {
-            int gridsize = 50;
-            int arcsegmentcount = 16;
+            int  gridsize = 50;
+            int  arcsegmentcount = 16;
             char drawopt = 'F';
             text = Line + 8;
             ret  = sscanf( text, "%d %d %c %d %d", &gridsize, &arcsegmentcount, &drawopt,
@@ -587,7 +589,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
 
     // draw the lines
     wxPoint start_contour_pos = GetCornerPosition( 0 );
-    int icmax = GetNumCorners() - 1;
+    int     icmax = GetNumCorners() - 1;
     for( int ic = 0; ic <= icmax; ic++ )
     {
         int xi = GetCornerPosition( ic ).x;
@@ -609,8 +611,9 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
             current_gr_mode  = GR_XOR;
             xf = start_contour_pos.x;
             yf = start_contour_pos.y;
+
             // Prepare the next contour for drawing, if exists
-            if ( ic < icmax )
+            if( ic < icmax )
                 start_contour_pos = GetCornerPosition( ic + 1 );
         }
         GRSetDrawMode( DC, current_gr_mode );

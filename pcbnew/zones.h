@@ -28,6 +28,7 @@ enum zone_cmd {
 /* variables used in zone dialogs and functions */
 /************************************************/
 
+// @todo: make a class like ZONE_GENERAL_SETTING instead of many global variables
 eda_global bool g_Zone_45_Only
 #ifdef MAIN
 = FALSE

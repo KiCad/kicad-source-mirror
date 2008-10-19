@@ -61,18 +61,18 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
-    wxString title = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
-    m_ClearanceValueTitle->SetLabel( title );
+    wxString msg = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
+    m_ClearanceValueTitle->SetLabel( msg );
 
-    title = _( "Grid :" ) + ReturnUnitSymbol( g_UnitMetric );
-    m_GridCtrl->SetLabel( title );
+    msg = _( "Grid :" ) + ReturnUnitSymbol( g_UnitMetric );
+    m_GridCtrl->SetLabel( msg );
 
     if( g_DesignSettings.m_ZoneClearence == 0 )
         g_DesignSettings.m_ZoneClearence = g_DesignSettings.m_TrackClearence;
-    title = ReturnStringFromValue( g_UnitMetric,
+    msg = ReturnStringFromValue( g_UnitMetric,
                                    g_DesignSettings.m_ZoneClearence,
                                    m_Parent->m_InternalUnits );
-    m_ZoneClearanceCtrl->SetValue( title );
+    m_ZoneClearanceCtrl->SetValue( msg );
 
     if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
@@ -87,7 +87,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     for( unsigned ii = 0; ii < 4; ii++ )
     {
-        wxString msg = ReturnStringFromValue( g_UnitMetric,
+        msg = ReturnStringFromValue( g_UnitMetric,
                                               GridList[ii],
                                               m_Parent->m_InternalUnits );
         m_GridCtrl->SetString( ii, msg );
@@ -101,10 +101,10 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     if( m_Zone_Container )
     {
-        title = ReturnStringFromValue( g_UnitMetric,
+        msg = ReturnStringFromValue( g_UnitMetric,
                                     m_Zone_Container->m_ZoneClearance,
                                     m_Parent->m_InternalUnits );
-        m_ZoneClearanceCtrl->SetValue( title );
+        m_ZoneClearanceCtrl->SetValue( msg );
 
         switch( m_Zone_Container->m_PadOption )
         {
@@ -193,7 +193,6 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     int layer_cnt = board->GetCopperLayerCount();
     for( int ii = 0; ii < board->GetCopperLayerCount(); ii++ )
     {
-        wxString msg;
         int      layer_number = COPPER_LAYER_N;
 
         if( layer_cnt <= 1 || ii < layer_cnt - 1 )
