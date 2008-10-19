@@ -60,6 +60,26 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     m_PrefixString = wxString( _( "U" ) );
 }
 
+
+SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
+    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
+{
+    // assignment of all fields, including field vector elements, and linked list pointers
+    *this = aTemplate;
+
+    // set linked list pointers to null, before this they were copies of aTemplate's
+    Pback = NULL;
+    Pnext = NULL;
+    m_Son = NULL;
+
+    // Re-parent the fields, which before this were aTemplate's parent
+    for( int i=0; i<GetFieldCount();  ++i )
+    {
+        GetField( i )->m_Parent = this;
+    }
+}
+
+
 /**
  * Function AddHierarchicalReference
  * adds a full hierachical reference (path + local reference)
@@ -401,7 +421,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
 
     // Reparent items after copying data
-    // (after swap(), m_Parent member does not points the right parent):
+    // (after swap(), m_Parent member does not point to the right parent):
     for( int ii = 0; ii < copyitem->GetFieldCount();  ++ii )
     {
        copyitem->GetField(ii)->m_Parent = copyitem;
@@ -499,22 +519,6 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
     m_Fields[REFERENCE].m_Text = defRef; //for drawing.
-}
-
-
-/**************************************************************/
-SCH_COMPONENT* SCH_COMPONENT::GenCopy()
-/**************************************************************/
-{
-    SCH_COMPONENT* new_item = new SCH_COMPONENT( *this );
-    // Reset chain pointers:
-    new_item->Pback = new_item->Pnext = new_item->m_Son = NULL;
-    // Reparent items after copy:
-    for( int ii = 0; ii < new_item->GetFieldCount();  ++ii )
-    {
-       new_item->GetField(ii)->m_Parent = new_item;
-    }
-    return new_item;
 }
 
 

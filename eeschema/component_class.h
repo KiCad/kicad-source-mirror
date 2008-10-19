@@ -98,6 +98,16 @@ private:
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
+
+    /**
+     * Copy Constructor
+     * clones \a aTemplate into this object.  All fields are copied as is except
+     * for the linked list management pointers which are set to NULL, and the
+     * SCH_CMP_FIELD's m_Parent pointers which are set to the new parent,
+     * i.e. this new object.
+     */
+    SCH_COMPONENT( const SCH_COMPONENT& aTemplate );
+
     ~SCH_COMPONENT() { }
 
     virtual wxString GetClass() const
@@ -125,7 +135,17 @@ public:
     void            Load( FILE* aFile ) throw( Error );
      */
 
-    SCH_COMPONENT*  GenCopy();
+    /**
+     * Function GenCopy
+     * returns a copy of this object but with the linked list pointers
+     * set to NULL.
+     * @return SCH_COMPONENT* - a copy of me.
+     */
+    SCH_COMPONENT*  GenCopy()
+    {
+        return new SCH_COMPONENT( *this );
+    }
+
     void            SetRotationMiroir( int type );
     int             GetRotationMiroir();
     wxPoint         GetScreenCoord( const wxPoint& coord );
