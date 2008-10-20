@@ -15,6 +15,7 @@
 #ifdef PCBNEW
 #include "pcbnew.h"
 #include "autorout.h"
+#include "zones.h"
 #endif
 
 #ifdef CVPCB
