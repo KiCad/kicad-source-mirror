@@ -96,13 +96,6 @@ enum CommandOpt {
     ROUTE_PAD
 };
 
-/* parametre Pas de routage pour routage automatique et generation des zones */
-
-#if defined MAIN
-int        g_GridRoutingSize = 250;
-#else
-extern int g_GridRoutingSize;
-#endif
 
 /* Variables et structures d'autoroutage */
 

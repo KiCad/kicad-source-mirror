@@ -28,6 +28,13 @@ enum zone_cmd {
 /* variables used in zone dialogs and functions */
 /************************************************/
 
+/* parametre grid size for automatic routing and zone filling  */
+#if defined MAIN
+int        g_GridRoutingSize = 250;
+#else
+extern int g_GridRoutingSize;
+#endif
+
 // @todo: make a class like ZONE_GENERAL_SETTING instead of many global variables
 eda_global bool g_Zone_45_Only
 #ifdef MAIN

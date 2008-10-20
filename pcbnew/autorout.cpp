@@ -8,6 +8,7 @@
 #include "pcbnew.h"
 #include "autorout.h"
 #include "cell.h"
+#include "zones.h"
 
 #include "protos.h"
 

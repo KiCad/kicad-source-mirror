@@ -9,6 +9,7 @@
 #include "common.h"
 #include "pcbnew.h"
 #include "autorout.h"
+#include "zones.h"
 #include "cell.h"
 
 #include "protos.h"

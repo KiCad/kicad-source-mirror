@@ -14,6 +14,7 @@
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "trigo.h"
+#include "zones.h"
 #include "bitmaps.h"
 #include "protos.h"
 

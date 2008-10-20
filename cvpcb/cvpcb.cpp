@@ -10,6 +10,7 @@
 #include "cvpcb.h"
 #include "trigo.h"
 #include "gr_basic.h"
+#include "zones.h"
 
 #include "bitmaps.h"
 
