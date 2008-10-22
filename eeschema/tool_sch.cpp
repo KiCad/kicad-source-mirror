@@ -251,11 +251,11 @@ void WinEDA_SchematicFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                BITMAP( unit_inch_xpm ),
-                               _( "Units = Inch" ), wxITEM_CHECK );
+                               _( "Units in inches" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                BITMAP( unit_mm_xpm ),
-                               _( "Units = mm" ), wxITEM_CHECK );
+                               _( "Units in millimeters" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                BITMAP( cursor_shape_xpm ),

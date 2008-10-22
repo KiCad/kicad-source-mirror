@@ -408,14 +408,14 @@ void WinEDA_PcbFrame::SetToolbars()
                                       g_Show_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
                                            g_Show_Ratsnest ?
-                                           _( "General ratsnest not show" ) : _(
-                                               "Show General ratsnest" ) );
+                                             _( "Hide General ratsnest" ):
+                                             _( "Show General ratsnest" ));
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                       g_Show_Module_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                            g_Show_Module_Ratsnest ?
-                                           _( "Module ratsnest not show" ) :
+                                           _( "Hide Module ratsnest" ) :
                                            _( "Show Module ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_AUTO_DEL_TRACK,

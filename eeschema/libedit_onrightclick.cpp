@@ -242,7 +242,7 @@ void AddMenusForBlock(wxMenu * PopMenu, WinEDA_LibeditFrame * frame)
         ADD_MENUITEM(PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _("Select Items"), green_xpm);
         ADD_MENUITEM(PopMenu, ID_POPUP_COPY_BLOCK,
             _("Copy Block"), copyblock_xpm);
-        ADD_MENUITEM(PopMenu, ID_POPUP_INVERT_BLOCK, _("Mirror Block"), mirror_H_xpm );
+        ADD_MENUITEM(PopMenu, ID_POPUP_INVERT_BLOCK, _("Mirror Block ||"), mirror_H_xpm );
         ADD_MENUITEM(PopMenu, ID_POPUP_DELETE_BLOCK,
             _("Delete Block"), delete_xpm );
     }

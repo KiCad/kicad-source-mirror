@@ -108,13 +108,13 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem(m_FilesMenu, ID_SAVE_AND_ZIP_FILES,
-                     _("Save &Project Files"),
-                     _("Save and Zip all project files") );
+                     _("&Archive project"),
+                     _("Archive project files in zip file") );
         item->SetBitmap(zip_xpm);
         m_FilesMenu->Append(item);
         item = new wxMenuItem(m_FilesMenu, ID_READ_ZIP_ARCHIVE,
-                     _("&Unzip Archive"),
-                     _("UnZip archive file") );
+                     _("&Unarchive project"),
+                     _("Unarchive project files from zip file") );
         item->SetBitmap(unzip_xpm);
         m_FilesMenu->Append(item);
 
@@ -150,7 +150,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
         // Preferences menu:
         wxMenu *PreferencesMenu = new wxMenu;
         item = new wxMenuItem(PreferencesMenu , ID_PREFERENCES_FONT_INFOSCREEN,
-                _("Select Fonts"), _("Font preferences"));
+                _("Fonts"), _("Font preferences"));
         item->SetBitmap(fonts_xpm);
         PreferencesMenu->Append(item);
 
