@@ -983,45 +983,65 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
         int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
 
-        // The +5 is to give freerouter a little extra room, this is 0.5 mils.
+        // The 0.5 is to give freerouter a little extra room, this is 0.5 mils.
         // If we export without this, then on import freerouter violates our
         // DRC checks with track to via spacing, although this could be a
         // result of > testing vs. >= testing in PCBNEW's DRC.
-        double  clearance = scale(curTrackClear+5);
+//       double  safetyMargin = 0.5;
+
+        // recent freerouter code adds .1 to the requested clearances, and I want .5
+        // so subtract .1 so we actually get 0.5.
+        double  safetyMargin = 0.4;
+
+        double  clearance = scale(curTrackClear);
 
         STRINGS& rules = pcb->structure->rules->rules;
 
         sprintf( rule, "(width %.6g)", scale( curTrackWidth ) );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g)", clearance );
+        sprintf( rule, "(clearance %.6g)", clearance+safetyMargin );
+        rules.push_back( rule );
+
+        // On a high density board, a typical solder mask clearance will be 2-3 mils.
+        // This exposes 2 to 3 mils of bare board around each pad.  So we need at least
+        // 2 mils *extra* clearance for tracks which would come near a pad on
+        // a different net.  So if the baseline trace to trace clearance was say 4 mils, then
+        // the SMD to track clearance should be at least 6 mils.  Then, because
+        // freerouter seems to be off about a 1/2 mil on clearance tests, add
+        // another .5 mil for this test discrepancy as a safety margin.
+        sprintf( rule, "(clearance %.6g (type default_smd))", clearance + safetyMargin + 2.0 );
         rules.push_back( rule );
 
         /* see: http://www.freerouting.net/usren/viewtopic.php?f=5&t=339#p474
-        sprintf( rule, "(clearance %.6g (type pad_to_turn_gap))", clearance );
+        sprintf( rule, "(clearance %.6g (type pad_to_turn_gap))", clearance + safetyMargin );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type smd_to_turn_gap))", clearance );
+        sprintf( rule, "(clearance %.6g (type smd_to_turn_gap))", clearance + safetyMargin );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type via_via))", clearance );
+        sprintf( rule, "(clearance %.6g (type via_via))", clearance + safetyMargin );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type via_smd))", clearance );
+        sprintf( rule, "(clearance %.6g (type via_smd))", clearance + safetyMargin );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type via_pin))", clearance );
+        sprintf( rule, "(clearance %.6g (type via_pin))", clearance + safetyMargin );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type pin_pin))", clearance );
+        sprintf( rule, "(clearance %.6g (type pin_pin))", clearance + safetyMargin );
         rules.push_back( rule );
 
-        sprintf( rule, "(clearance %.6g (type smd_pin))", clearance );
+        sprintf( rule, "(clearance %.6g (type smd_pin))", clearance + safetyMargin );
         rules.push_back( rule );
         */
 
         // well, the user is going to text edit these in the DSN file anyway,
         // at least until we have an export dialog.
+
+        // Pad to pad spacing on a single SMT part can be closer than our
+        // clearance, we don't want freerouter complaining about that, so
+        // output a significantly smaller pad to pad clearance to freerouter.
         clearance = scale(curTrackClear)/4;
 
         sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );
