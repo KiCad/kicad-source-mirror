@@ -352,7 +352,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "ZoneClearence" ) == 0 )
         {
-            g_DesignSettings.m_ZoneClearence = atoi( data );
+            g_Zone_Default_Setting.m_ZoneClearance = atoi( data );
             continue;
         }
 
@@ -543,7 +543,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     }
 
     fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearence );
-    fprintf( aFile, "ZoneClearence %d\n", g_DesignSettings.m_ZoneClearence );
+    fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
 
     fprintf( aFile, "DrawSegmWidth %d\n", g_DesignSettings.m_DrawSegmentWidth );
     fprintf( aFile, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );

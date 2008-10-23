@@ -32,6 +32,7 @@ set(PCBNEW_SRCS
     class_text_mod.cpp
     class_track.cpp
     class_zone.cpp
+    class_zone_setting.cpp
     clean.cpp
 #   cleaningoptions_dialog.cpp
     collectors.cpp

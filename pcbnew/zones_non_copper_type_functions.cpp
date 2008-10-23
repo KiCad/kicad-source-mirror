@@ -74,7 +74,7 @@ void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
     if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
 
-    switch( g_Zone_Hatching )
+    switch( g_Zone_Default_Setting.m_Zone_HatchingStyle )
     {
     case CPolyLine::NO_HATCH:
         m_OutlineAppearanceCtrl->SetSelection( 0 );
@@ -122,22 +122,22 @@ void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
-        g_Zone_Hatching = CPolyLine::NO_HATCH;
+        g_Zone_Default_Setting.m_Zone_HatchingStyle = CPolyLine::NO_HATCH;
         break;
 
     case 1:
-        g_Zone_Hatching = CPolyLine::DIAGONAL_EDGE;
+        g_Zone_Default_Setting.m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;
         break;
 
     case 2:
-        g_Zone_Hatching = CPolyLine::DIAGONAL_FULL;
+        g_Zone_Default_Setting.m_Zone_HatchingStyle = CPolyLine::DIAGONAL_FULL;
         break;
     }
 
     if( m_Parent->m_Parent->m_EDA_Config )
     {
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-            (long) g_Zone_Hatching );
+            (long) g_Zone_Default_Setting.m_Zone_HatchingStyle );
     }
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
@@ -152,7 +152,7 @@ void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
         DisplayError( this, _( "Error : you must choose a layer" ) );
         return;
     }
-    g_CurrentZone_Layer = ii + FIRST_NO_COPPER_LAYER;
+    g_Zone_Default_Setting.m_CurrentZone_Layer = ii + FIRST_NO_COPPER_LAYER;
     EndModal( ZONE_OK );
 }
 
@@ -209,11 +209,11 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD * aPcb )
     }
 
     m_Poly->FreeKboolEngine();
-    
+
     /* For copper layers, we now must add holes in the Polygon list.
     holes are pads and tracks with their clearance area
     */
-    
+
     if ( IsOnCopperLayer() )
         AddClearanceAreasPolygonsToPolysList( aPcb );
 

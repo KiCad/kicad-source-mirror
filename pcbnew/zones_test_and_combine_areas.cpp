@@ -1059,6 +1059,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
     {
         ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ia2 );
+        int zone_clearance = max(Area_To_Test->m_ZoneClearance, aArea->m_ZoneClearance);
 
         // test for same layer
         if( Area_To_Test->GetLayer() != aArea->GetLayer() )
@@ -1111,9 +1112,9 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
                                                        0,
                                                        ax1, ay1, ax2, ay2, astyle,
                                                        0,
-                                                       g_DesignSettings.m_ZoneClearence,
+                                                       zone_clearance,
                                                        &x, &y );
-                if( d < g_DesignSettings.m_ZoneClearence )
+                if( d < zone_clearance )
                 {
                     // COPPERAREA_COPPERAREA error : edge intersect or too close
                     m_currentMarker = fillMarker( aArea, wxPoint( x, y ),

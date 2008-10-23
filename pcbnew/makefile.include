@@ -57,6 +57,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		class_drc_item.o\
 		class_board.o\
 		class_zone.o\
+        class_zone_setting.o\
 		drawframe.o\
 		drawpanel.o\
 		track.o \

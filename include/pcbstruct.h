@@ -158,7 +158,6 @@ public:
     int    m_PcbTextWidth;                      // current Pcb (not module) Text width
     wxSize m_PcbTextSize;                       // current Pcb (not module) Text size
     int    m_TrackClearence;                    // track to track and track to pads clearance
-    int    m_ZoneClearence;                     // zone to track and zone to pads clearance
     int    m_MaskMargin;                        // Solder mask margin
 
     // Color options for screen display of the Printed Board:

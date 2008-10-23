@@ -157,7 +157,6 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_PcbTextWidth   = 100;                 // current Pcb (not module) Text width
     m_PcbTextSize    = wxSize( 500, 500 );  // current Pcb (not module) Text size
     m_TrackClearence = 100;                 // track to track and track to pads clearance
-    m_ZoneClearence  = 150;                 // zone to track and zone to pads clearance
     m_MaskMargin = 150;                     // Solder mask margin
     /* Color options for screen display of the Printed Board: */
     m_PcbGridColor = DARKGRAY;              // Grid color

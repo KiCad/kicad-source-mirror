@@ -19,17 +19,14 @@
 using namespace std;
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
-#include "autorout.h"
+#include "zones.h"
 
 #include "id.h"
 
 #include "protos.h"
-
-#include "zones.h"
 
 bool verbose = false;       // false if zone outline diags must not be shown
 
@@ -70,12 +67,7 @@ void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container
     s_CurrentZone = zone_container;
 
     /* set zones setup to the current zone */
-    g_Zone_Hatching = zone_container->m_Poly->GetHatchStyle();
-    g_Zone_Arc_Approximation = zone_container->m_ArcToSegmentsCount;
-    g_ThermalReliefGapValue = zone_container->m_ThermalReliefGapValue;
-    g_ThermalReliefCopperBridgeValue = zone_container->m_ThermalReliefCopperBridgeValue;
-    g_GridRoutingSize = zone_container->m_GridFillValue;
-    g_Zone_Pad_Options = zone_container->m_PadOption;
+    g_Zone_Default_Setting.ImportSetting( *zone_container );
 
     // Use the general event handle to set others params (like toolbar) */
     wxCommandEvent evt;
@@ -101,12 +93,7 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
     s_CurrentZone = zone_container;
 
     /* set zones setup to the current zone */
-    g_Zone_Hatching = zone_container->m_Poly->GetHatchStyle();
-    g_Zone_Arc_Approximation = zone_container->m_ArcToSegmentsCount;
-    g_ThermalReliefGapValue = zone_container->m_ThermalReliefGapValue;
-    g_ThermalReliefCopperBridgeValue = zone_container->m_ThermalReliefCopperBridgeValue;
-    g_GridRoutingSize = zone_container->m_GridFillValue;
-    g_Zone_Pad_Options = zone_container->m_PadOption;
+    g_Zone_Default_Setting.ImportSetting( *zone_container );
 
     // Use the general event handle to set others params (like toolbar) */
     wxCommandEvent evt;
@@ -243,7 +230,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
             Hight_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HightLigth_NetCode = g_NetcodeSelection = zone_container->GetNet();
+        g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
         if( DC )
             Hight_Light( DC );
     }
@@ -296,7 +283,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
             Hight_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HightLigth_NetCode = g_NetcodeSelection = zone_container->GetNet();
+        g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
         Hight_Light( DC );
     }
 
@@ -542,21 +529,24 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             {   // Put a zone on a copper layer
                 if ( g_HightLigth_NetCode )
                 {
-                    g_NetcodeSelection = g_HightLigth_NetCode;
-                    zone->SetNet( g_NetcodeSelection );
-                    EQUIPOT* net = m_Pcb->FindNet( g_NetcodeSelection );
-                    if( net )
-                        zone->m_Netname = net->m_Netname;
+                    g_Zone_Default_Setting.m_NetcodeSelection = g_HightLigth_NetCode;
+                    zone->SetNet( g_Zone_Default_Setting.m_NetcodeSelection );
+                    zone->SetNetNameFromNetCode( );
                 }
 
-               dialog_copper_zone* frame = new dialog_copper_zone( this, zone  );
+                m_Parent->m_EDA_Config->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+                    &g_Zone_Default_Setting.m_ThermalReliefGapValue );
+                m_Parent->m_EDA_Config->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+                    &g_Zone_Default_Setting.m_ThermalReliefCopperBridgeValue );
+
+                dialog_copper_zone* frame = new dialog_copper_zone( this, &g_Zone_Default_Setting  );
                 diag = frame->ShowModal();
                 frame->Destroy();
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
                 diag = InstallDialogNonCopperZonesEditor( this, zone );
-                g_NetcodeSelection = 0;     // No net for non copper zones
+                g_Zone_Default_Setting.m_NetcodeSelection = 0;     // No net for non copper zones
             }
             DrawPanel->MouseToCursorSchema();
             DrawPanel->m_IgnoreMouseEvents = FALSE;
@@ -564,26 +554,27 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             if( diag ==  ZONE_ABORT )
                 return 0;
 
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_CurrentZone_Layer;    // Set by the dialog frame
+            // Switch active layer to the selectec zonz layer
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_Zone_Default_Setting.m_CurrentZone_Layer;
         }
         else  // Start a new contour: init zone params (net and layer) from an existing zone (add cutout or similar zone)
         {
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_CurrentZone_Layer =
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_Zone_Default_Setting.m_CurrentZone_Layer =
                                                                 s_CurrentZone->GetLayer();
-            g_Zone_Hatching = s_CurrentZone->m_Poly->GetHatchStyle();
+            g_Zone_Default_Setting.ImportSetting( * s_CurrentZone);
         }
 
         /* Show the Net for zones on copper layers */
-        if( g_CurrentZone_Layer  < FIRST_NO_COPPER_LAYER )
+        if( g_Zone_Default_Setting.m_CurrentZone_Layer  < FIRST_NO_COPPER_LAYER )
         {
             if( s_CurrentZone )
-                g_NetcodeSelection = s_CurrentZone->GetNet();
+                g_Zone_Default_Setting.m_NetcodeSelection = s_CurrentZone->GetNet();
             if( g_HightLigt_Status )
             {
                 Hight_Light( DC ); // Remove old hightlight selection
             }
 
-            g_HightLigth_NetCode = g_NetcodeSelection;
+            g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection;
             Hight_Light( DC );
         }
         if( !s_AddCutoutToCurrentZone )
@@ -594,17 +585,11 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
     if(  zone->GetNumCorners() == 0 )
     {
         zone->m_Flags = IS_NEW;
-        zone->SetLayer( g_CurrentZone_Layer );
-        zone->SetNet( g_NetcodeSelection );
         zone->m_TimeStamp     = GetTimeStamp();
-        zone->m_PadOption     = g_Zone_Pad_Options;
-        zone->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
-        zone->m_ThermalReliefGapValue = g_ThermalReliefGapValue;
-        zone->m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;
-        zone->m_GridFillValue = g_GridRoutingSize;
-        zone->m_Poly->Start( g_CurrentZone_Layer,
+        g_Zone_Default_Setting.ExportSetting( *zone );
+        zone->m_Poly->Start( g_Zone_Default_Setting.m_CurrentZone_Layer,
             GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y,
-            g_Zone_Hatching );
+            zone->GetHatchStyle() );
         zone->AppendCorner( GetScreen()->m_Curseur );
         if( Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {
@@ -792,7 +777,8 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     if( zone_container->GetLayer() < FIRST_NO_COPPER_LAYER )
     {   // edit a zone on a copper layer
-        dialog_copper_zone* frame = new dialog_copper_zone( this, zone_container );
+        g_Zone_Default_Setting.ImportSetting(*zone_container);
+        dialog_copper_zone* frame = new dialog_copper_zone( this, &g_Zone_Default_Setting );
         diag = frame->ShowModal();
         frame->Destroy();
     }
@@ -812,19 +798,10 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
         edge_zone->Draw( DrawPanel, DC, GR_XOR );
     }
 
-    zone_container->SetLayer( g_CurrentZone_Layer );
-    zone_container->SetNet( g_NetcodeSelection );
-    EQUIPOT* net = m_Pcb->FindNet( g_NetcodeSelection );
-    if( net )
+    g_Zone_Default_Setting.ExportSetting( *zone_container);
+    EQUIPOT* net = m_Pcb->FindNet( g_Zone_Default_Setting.m_NetcodeSelection );
+    if( net )   // net === NULL should not occur
         zone_container->m_Netname = net->m_Netname;
-    zone_container->m_Poly->SetHatch( g_Zone_Hatching );
-    zone_container->m_PadOption     = g_Zone_Pad_Options;
-    zone_container->m_ZoneClearance = g_DesignSettings.m_ZoneClearence;
-    zone_container->m_GridFillValue = g_GridRoutingSize;
-    zone_container->m_ArcToSegmentsCount = g_Zone_Arc_Approximation;
-    zone_container->m_DrawOptions = g_FilledAreasShowMode;
-    zone_container->m_ThermalReliefGapValue = g_ThermalReliefGapValue;
-    zone_container->m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;
 
 
     // Combine zones if possible :
@@ -897,13 +874,13 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     }
 
     /* Show the Net */
-    g_NetcodeSelection = zone_container->GetNet();
-    if( g_HightLigt_Status && (g_HightLigth_NetCode != g_NetcodeSelection)  && DC )
+    g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+    if( g_HightLigt_Status && (g_HightLigth_NetCode != g_Zone_Default_Setting.m_NetcodeSelection)  && DC )
     {
         Hight_Light( DC );      // Remove old hightlight selection
     }
 
-    g_HightLigth_NetCode = g_NetcodeSelection;
+    g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection;
     if( DC )
         Hight_Light( DC );
 
@@ -988,7 +965,7 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
 /**
  * Function SetAreasNetCodesFromNetNames
  * Set the .m_NetCode member of all copper areas, according to the area Net Name
- * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.
+ * The SetNetCodesFromNetNames is an equivalent to net name, for fast comparisons.
  * However the Netcode is an arbitrary equivalence, it must be set after each netlist read
  * or net change
  * Must be called after pad netcodes are calculated

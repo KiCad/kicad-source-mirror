@@ -15,7 +15,6 @@ BEGIN_EVENT_TABLE( dialog_copper_zone_frame, wxDialog )
 	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_frame::_wxFB_ExportSetupToOtherCopperZones )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_frame::_wxFB_OnButtonOkClick )
 	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_frame::_wxFB_OnButtonCancelClick )
-	EVT_BUTTON( wxID_BUTTON_UNFILL, dialog_copper_zone_frame::_wxFB_OnRemoveFillZoneButtonClick )
 	EVT_RADIOBOX( ID_NET_SORTING_OPTION, dialog_copper_zone_frame::_wxFB_OnNetSortingOptionSelected )
 END_EVENT_TABLE()
 
@@ -154,9 +153,6 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	m_UnFillZoneButton = new wxButton( this, wxID_BUTTON_UNFILL, _("Remove Filling"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_RightBoxSizer->Add( m_UnFillZoneButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	m_RightBoxSizer->Add( 5, 20, 0, wxEXPAND, 5 );

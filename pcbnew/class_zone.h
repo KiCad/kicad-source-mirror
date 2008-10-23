@@ -9,6 +9,7 @@
 
 #include "PolyLine.h"
 
+
 /************************/
 /* class ZONE_CONTAINER */
 /************************/
@@ -21,19 +22,13 @@
 class ZONE_CONTAINER : public BOARD_ITEM
 {
 public:
-    enum m_PadInZone {              // How pads are covered by copper in zone
-        PAD_NOT_IN_ZONE,            // Pads are not covered
-        THERMAL_PAD,                // Use thermal relief for pads
-        PAD_IN_ZONE                 // pads are covered by copper
-    };
-
     wxString              m_Netname;                        // Net Name
     CPolyLine*            m_Poly;                           // outlines
     int                   m_CornerSelection;                // For corner moving, corner index to drag, or -1 if no selection
     int                   m_ZoneClearance;                  // clearance value
     int                   m_GridFillValue;                  // Grid used for filling, 0 = use polygonal areas to fill
     int                   m_ArcToSegmentsCount;             // number of segments to convert a cirlce to a polygon (uses 16 or 32)
-    m_PadInZone           m_PadOption;                      // see m_PadInZone
+    int                   m_PadOption;                      //
     int                   m_ThermalReliefGapValue;          // tickness of the gap in thermal reliefs
     int                   m_ThermalReliefCopperBridgeValue; // tickness of the copper bridge in thermal reliefs
     int                   utility, utility2;                // flags used in polygon calculations
@@ -142,6 +137,13 @@ public:
 
 
     void SetNet( int anet_code );
+
+    /**
+     * Function SetNetNameFromNetCode
+     * Fin the nat name corresponding to the net code.
+     * @return bool - true if net found, else false
+     */
+    bool SetNetNameFromNetCode( void);
 
     /**
      * Function HitTest
@@ -285,6 +287,11 @@ public:
     void AppendCorner( wxPoint position )
     {
         m_Poly->AppendCorner( position.x, position.y );
+    }
+
+    int GetHatchStyle() const
+    {
+        return m_Poly->GetHatchStyle();
     }
 };
 

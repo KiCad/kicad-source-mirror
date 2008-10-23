@@ -419,8 +419,8 @@ void WinEDA_SchematicFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT,
             g_HVLines );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT,
-            g_HVLines ? _( "Snap Grid (OFF)" ) :
-            _( "Snap Grid (ON)" ) );
+            g_HVLines ? _( "Allows any direction for wires and busses" ) :
+            _( "Allows horizontal and vertical wires and busses only" ) );
     }
 
     DisplayUnitsMsg();

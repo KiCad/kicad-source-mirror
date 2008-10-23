@@ -47,7 +47,7 @@ int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
         g_GridRoutingSize = 25;
 
 	// Set the g_DesignSettings.m_TrackClearence (used to fill board map) to the max of m_TrackClearence and m_ZoneClearence
-    g_DesignSettings.m_TrackClearence = max ( g_DesignSettings.m_TrackClearence, g_DesignSettings.m_ZoneClearence);
+    g_DesignSettings.m_TrackClearence = max ( g_DesignSettings.m_TrackClearence, m_ZoneClearance);
 
 	// In order to avoid ends of segments used to fill the zone, and to the clearence the radius of ends
 	// which is g_GridRoutingSize/2

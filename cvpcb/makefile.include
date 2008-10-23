@@ -17,6 +17,7 @@ LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 OBJECTS = $(TARGET).o \
 			class_cvpcb.o\
 			class_zone.o\
+			class_zone_setting.o\
             memoire.o \
 			cvframe.o\
 			listboxes.o\
@@ -79,6 +80,9 @@ class_mire.o: ../pcbnew/class_mire.cpp ../pcbnew/class_mire.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h $(COMMON)
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_zone_setting.o: ../pcbnew/class_zone_setting.cpp ../pcbnew/class_zone_setting.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_cotation.o: ../pcbnew/class_cotation.cpp ../pcbnew/class_cotation.h $(COMMON)

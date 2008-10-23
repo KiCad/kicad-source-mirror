@@ -12,7 +12,6 @@
 #include "pcbnew.h"
 #include "trigo.h"
 #include "zones.h"
-#include "autorout.h"
 
 
 /************************/
@@ -25,16 +24,10 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
 {
     m_NetCode = -1;                                                             // Net number for fast comparisons
     m_CornerSelection = -1;
-    m_ZoneClearance   = g_DesignSettings.m_ZoneClearence;                       // a reasonnable clerance value
-    m_GridFillValue   = g_GridRoutingSize;                                      // a reasonnable grid used for filling
-    m_PadOption = g_Zone_Pad_Options;
     utility  = 0;                                                               // flags used in polygon calculations
     utility2 = 0;                                                               // flags used in polygon calculations
     m_Poly   = new CPolyLine();                                                 // Outlines
-    m_ArcToSegmentsCount = g_Zone_Arc_Approximation;                            // Use 16 or 32segment to convert a circle to a polygon
-    m_DrawOptions = 0;
-    m_ThermalReliefGapValue = g_ThermalReliefGapValue;                          // tickness of the gap in thermal reliefs
-    m_ThermalReliefCopperBridgeValue = g_ThermalReliefCopperBridgeValue;        // tickness of the copper bridge in thermal reliefs
+    g_Zone_Default_Setting.ExportSetting(*this);
 }
 
 
@@ -940,4 +933,22 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_GridFillValue   = src->m_GridFillValue;   // Grid used for filling
     m_PadOption = src->m_PadOption;
     m_Poly->SetHatch( src->m_Poly->GetHatchStyle() );
+}
+
+/**
+ * Function SetNetNameFromNetCode
+ * Fin the nat name corresponding to the net code.
+ * @param aPcb: the curren board
+ * @return bool - true if net found, else false
+ */
+bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
+{
+    EQUIPOT* net;
+    if ( m_Parent && (net = ((BOARD*)m_Parent)->FindNet( GetNet()) ) )
+    {
+        m_Netname = net->m_Netname;
+        return true;
+    }
+
+    return false;
 }

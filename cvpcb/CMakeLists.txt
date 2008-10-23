@@ -43,6 +43,7 @@ set(CVPCB_EXTRA_SRCS
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp
     ../pcbnew/class_zone.cpp
+    ../pcbnew/class_zone_setting.cpp
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/ioascii.cpp
