@@ -1,6 +1,6 @@
-/****************************************************/
-/* class_module.cpp : fonctions de la classe MODULE */
-/****************************************************/
+/**********************************************************************/
+/* Import functions to import footprints from a gpcb (Newlib) library */
+/**********************************************************************/
 
 #include "fctsys.h"
 
@@ -227,7 +227,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     // Calculate size: default is 40 mils (400 pcb units)
     // real size is:  default * ibuf[5] / 100 (size in gpcb is given in percent of defalut size
     ibuf[5] *= TEXT_DEFAULT_SIZE; ibuf[5] /= 100;
-    m_Reference->m_Size.x = m_Reference->m_Size.y = max( 20, ibuf[5] );
+    m_Reference->m_Size.x = m_Reference->m_Size.y = MAX( 20, ibuf[5] );
     m_Reference->m_Width  = m_Reference->m_Size.x / 10;
     m_Value->m_Orient = m_Reference->m_Orient;
     m_Value->m_Size   = m_Reference->m_Size;

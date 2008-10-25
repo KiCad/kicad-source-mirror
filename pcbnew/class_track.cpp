@@ -66,6 +66,7 @@ TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
     start   = end = NULL;
     SetNet( 0 );
     SetSubNet( 0 );
+    SetZoneSubNet( 0 );
     SetDrillDefault();
     m_Param = 0;
 }

@@ -46,11 +46,11 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 #define NM_PER_MIL   10 // 25400
 
 #define to_int( x ) (int) round( (x) )
-#ifndef min
-#define min( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )
+#ifndef MIN
+#define MIN( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )
 #endif
-#ifndef max
-#define max( x1, x2 ) ( (x1) > (x2) ? (x1) : (x2) )
+#ifndef MAX
+#define MAX( x1, x2 ) ( (x1) > (x2) ? (x1) : (x2) )
 #endif
 
 class CRect

@@ -65,8 +65,8 @@ public:
 
     int     m_physical_connexion;   // variable used in rastnest computations
                                     // handle block number in track connection
-
-    int     m_zone_connexion;   	// variable used in rastnest computations
+protected:
+    int     m_ZoneSubnet;   	    // variable used in rastnest computations
                                     // handle block number in zone connection
 
 public:
@@ -131,6 +131,12 @@ public:
     int GetNet() const { return m_NetCode; }
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
 
+    /**
+     * Function GetZoneSubNet
+     * @return int - the sub net code in zone connections.
+     */
+    int GetZoneSubNet() const { return m_ZoneSubnet; }
+    void SetZoneSubNet( int aSubNetCode ) { m_ZoneSubnet = aSubNetCode; }
 
     /**
      * Function Display_Infos

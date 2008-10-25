@@ -30,7 +30,7 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
  * Used by propage_equipot()
  * Change a subnet value to a new value, for tracks ans pads which are connected to corresponding track
  * for pads, this is the .m_physical_connexion member which is tested and modified
- * for tracks, this is the .m_Sous_Netcode member which is tested and modified
+ * for tracks, this is the .m_Subnet member which is tested and modified
  * these members are block numbers (or cluster numbers) for a given net
  * @return modification count
  * @param old_val = subnet value to modify
@@ -93,7 +93,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
  * the track list must be sorted by nets, and all segments from pt_start_conn to pt_end_conn have the save net
  * When 2 items are connected (a track to a pad, or a track to an other track) they are grouped in a cluster.
  * for pads, this is the .m_physical_connexion member which is a cluster identifier
- * for tracks, this is the .m_Sous_Netcode member which is a cluster identifier
+ * for tracks, this is the .m_Subnet member which is a cluster identifier
  * For a given net, if all tracks are created, there is only one cluster.
  * but if not all tracks are created, there are are more than one cluster, and some ratsnets will be shown.
  * @param pt_start_conn = first track to test

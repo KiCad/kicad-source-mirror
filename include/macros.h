@@ -11,14 +11,6 @@
 #define CONV_FROM_UTF8( utf8string ) (utf8string)
 #endif
 
-/* violation of C++ standard, cannot use min() and max(), i.e. in lowercase
- #ifndef min
- #define min(x, y)		((x) > (y) ? (y) : (x))
- #endif
- #ifndef max
- #define max(x, y)		((x) > (y) ? (x) : (y))
- #endif
- */
 
 #ifndef MIN
 #define MIN( x, y )       ( (x) > (y) ? (y) : (x) )

@@ -344,7 +344,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                 // style is ARC_CW or ARC_CCW
                 int n;                          // number of steps for arcs
                 n = ( abs( x2 - x1 ) + abs( y2 - y1 ) ) / (CArc::MAX_STEP);
-                n = max( n, CArc::MIN_STEPS );  // or at most 5 degrees of arc
+                n = MAX( n, CArc::MIN_STEPS );  // or at most 5 degrees of arc
                 n_vertices += n;
                 n_arcs++;
             }
@@ -378,7 +378,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                 // style is arc_cw or arc_ccw
                 int    n;                       // number of steps for arcs
                 n = ( abs( x2 - x1 ) + abs( y2 - y1 ) ) / (CArc::MAX_STEP);
-                n = max( n, CArc::MIN_STEPS );  // or at most 5 degrees of arc
+                n = MAX( n, CArc::MIN_STEPS );  // or at most 5 degrees of arc
                 double xo, yo, theta1, theta2, a, b;
                 a = fabs( (double) (x1 - x2) );
                 b = fabs( (double) (y1 - y2) );
@@ -966,10 +966,10 @@ CRect CPolyLine::GetCornerBounds()
     r.right = r.top = INT_MIN;
     for( unsigned i = 0; i<corner.size(); i++ )
     {
-        r.left   = min( r.left, corner[i].x );
-        r.right  = max( r.right, corner[i].x );
-        r.bottom = min( r.bottom, corner[i].y );
-        r.top    = max( r.top, corner[i].y );
+        r.left   = MIN( r.left, corner[i].x );
+        r.right  = MAX( r.right, corner[i].x );
+        r.bottom = MIN( r.bottom, corner[i].y );
+        r.top    = MAX( r.top, corner[i].y );
     }
 
     return r;
@@ -986,10 +986,10 @@ CRect CPolyLine::GetCornerBounds( int icont )
     int iend   = GetContourEnd( icont );
     for( int i = istart; i<=iend; i++ )
     {
-        r.left   = min( r.left, corner[i].x );
-        r.right  = max( r.right, corner[i].x );
-        r.bottom = min( r.bottom, corner[i].y );
-        r.top    = max( r.top, corner[i].y );
+        r.left   = MIN( r.left, corner[i].x );
+        r.right  = MAX( r.right, corner[i].x );
+        r.bottom = MIN( r.bottom, corner[i].y );
+        r.top    = MAX( r.top, corner[i].y );
     }
 
     return r;

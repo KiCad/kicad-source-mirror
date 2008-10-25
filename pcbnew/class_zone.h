@@ -44,6 +44,7 @@ public:
 
 private:
     int m_NetCode; // Net number for fast comparisons
+    int m_ZoneSubnet;  // variable used in rastnest computations:handle block number in zone connection calculations
 
 public:
     ZONE_CONTAINER( BOARD* parent );
@@ -129,6 +130,13 @@ public:
         return ( GetLayer() < FIRST_NO_COPPER_LAYER ) ? true : false;
     }
 
+
+    /**
+     * Function GetZoneSubNet
+     * @return int - the sub net code in zone connections.
+     */
+    int GetZoneSubNet() const { return m_ZoneSubnet; }
+    void SetZoneSubNet( int aSubNetCode ) { m_ZoneSubnet = aSubNetCode; }
 
     int GetNet( void ) const
     {

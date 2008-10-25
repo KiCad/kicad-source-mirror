@@ -38,10 +38,10 @@ public:
 	my_rect(){};
 	my_rect( int xi, int yi, int xf, int yf )
 	{
-		xlo = min(xi,xf);
-		xhi = max(xi,xf);
-		ylo = min(yi,yf);
-		yhi = max(yi,yf);
+		xlo = MIN(xi,xf);
+		xhi = MAX(xi,xf);
+		ylo = MIN(yi,yf);
+		yhi = MAX(yi,yf);
 	};
 	int xlo, ylo, xhi, yhi;
 };

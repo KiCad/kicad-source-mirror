@@ -62,7 +62,7 @@ SYSWXLIB = `$(WXWIN)/wx-config --libs gl`\
 CC = gcc
 
 .cpp.o:
-	gcc -c -Wall $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS) -o $@ $*.cpp
+	g++ -c -Wall $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS) -o $@ $*.cpp
 
 # Settings for Cyginw/Mingw32
 # Some versions of windres cannot cope with the --preprocessor

@@ -862,18 +862,16 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
             NetcodeName += wxT( "\"" );
             if( !NetName.IsEmpty() )
             {
-                NetcodeName += NetName;
                 if( g_TabObjNet[jj].m_Type != NET_PINLABEL )
                 {
-                    // usual net name, add in the sheet path
-                    NetcodeName = g_TabObjNet[jj].m_SheetList.PathHumanReadable()
-                                  + NetcodeName;
-
-                    //NetcodeName << wxT("_") <<
-                    //		g_TabObjNet[jj].m_SheetList.PathHumanReadable();
+                    // usual net name, prefix it by the sheet path
+                    NetcodeName += g_TabObjNet[jj].m_SheetList.PathHumanReadable();
                 }
+                NetcodeName += NetName;
             }
             NetcodeName += wxT( "\"" );
+            // Add the netname without prefix, in cases we need only the "short" netname
+            NetcodeName += wxT( " \"" ) + NetName + wxT( "\"" );
             LastNetCode  = NetCode;
         }
 

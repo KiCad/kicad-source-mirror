@@ -42,8 +42,11 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
                                          bool PlotOriginIsAuxAxis )
 /********************************************************************************/
 
-/* Genere les divers fichiers de trace:
- * Pour chaque couche  1 fichier xxxc.PHO au format RS274X
+/* Creates the output files, one per board layer:
+ * filenames are like xxxc.PHO and use the RS274X format
+ * Units = inches
+ * format 3.4, Leading zero omitted, Abs format
+ * format 3.4 uses the native pcbnew units (1/10000 inch).
  */
 {
     int tracevia = 1;
@@ -142,7 +145,8 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
                                              int garde, int tracevia )
 /***********************************************************************/
 
-/* Trace en format GERBER. d'une couche cuivre ou masque
+/* Creates one GERBER file for a copper layer or a technical layer
+ * the silkscreen layers are plotted by Plot_Serigraphie() because they have special features
  */
 {
     wxPoint         pos;
@@ -156,7 +160,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
 //	(Following command has been superceded by new command on lines 93 and 94.)
 //	masque_layer |= EDGE_LAYER;	/* Les elements de la couche EDGE sont tj traces */
 
-    /* trace des elements type Drawings Pcb : */
+    /* Draw items type Drawings Pcb : */
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
     {
@@ -191,7 +195,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         }
     }
 
-    /* Trace des Elements des modules autres que pads */
+    /* Draw footprints shapes without pads (pads will plotted later) */
     nb_items = 0;
     Affiche_1_Parametre( this, 38, wxT( "DrawMod" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
@@ -213,7 +217,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         }
     }
 
-    /* Trace des Elements des modules : Pastilles */
+    /* Plot footprint pads */
     nb_items = 0;
     Affiche_1_Parametre( this, 48, wxT( "Pads" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
@@ -271,7 +275,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         }
     }
 
-    /* trace des VIAS : */
+    /* Plot vias : */
     if( tracevia )
     {
         nb_items = 0;
@@ -304,7 +308,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
             Affiche_1_Parametre( this, 56, wxEmptyString, msg, RED );
         }
     }
-    /* trace des pistes : */
+    /* Plot tracks (not vias) : */
     nb_items = 0;
     Affiche_1_Parametre( this, 64, wxT( "Tracks" ), wxEmptyString, YELLOW );
 
@@ -328,7 +332,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         Affiche_1_Parametre( this, 64, wxEmptyString, msg, YELLOW );
     }
 
-    /* trace des zones: */
+    /* Plot zones: */
     nb_items = 0;
     if( m_Pcb->m_Zone )
         Affiche_1_Parametre( this, 72, wxT( "Zones  " ), wxEmptyString, YELLOW );
@@ -452,11 +456,10 @@ void Plot_1_CIRCLE_pad_GERBER( wxPoint pos, int diametre )
 void PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient )
 /**************************************************************************/
 
-/* Trace 1 pad rectangulaire d'orientation quelconque
+/* Plot 1 rectangular pad
  * donne par son centre, ses dimensions, et son orientation
- * Pour une orientation verticale ou horizontale, la forme est flashee
- * Pour une orientation quelconque la forme est tracee par 4 segments
- * de largeur 1/2 largeur pad
+ * For a vertical or horizontal shape, the shape is an aperture (Dcode) and it is flashed
+ * For others orientations the shape is plotted as a polygon
  */
 {
     D_CODE* dcode_ptr;
@@ -487,7 +490,7 @@ void PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient )
         fputs( cbuf, dest );
         break;
 
-    default: /* Forme tracee par remplissage */
+    default: /* plot pad shape as polygon */
         trace_1_pad_TRAPEZE_GERBER( pos, size, wxSize( 0, 0 ), orient, FILLED );
         break;
     }
@@ -587,7 +590,7 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
 {
     int     ii, jj;
     int     dx, dy;
-    wxPoint polygone[4]; /* coord sommets */
+    wxPoint polygon[4]; /* polygon corners */
     int     coord[8];
     int     ddx, ddy;
 
@@ -600,33 +603,33 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
     ddx = delta.x / 2;
     ddy = delta.y / 2;
 
-    polygone[0].x = -dx - ddy;
-    polygone[0].y = +dy + ddx;
-    polygone[1].x = -dx + ddy;
-    polygone[1].y = -dy - ddx;
-    polygone[2].x = +dx - ddy;
-    polygone[2].y = -dy + ddx;
-    polygone[3].x = +dx + ddy;
-    polygone[3].y = +dy - ddx;
+    polygon[0].x = -dx - ddy;
+    polygon[0].y = +dy + ddx;
+    polygon[1].x = -dx + ddy;
+    polygon[1].y = -dy - ddx;
+    polygon[2].x = +dx - ddy;
+    polygon[2].y = -dy + ddx;
+    polygon[3].x = +dx + ddy;
+    polygon[3].y = +dy - ddx;
 
     /* Dessin du polygone et Remplissage eventuel de l'interieur */
 
     for( ii = 0, jj = 0; ii < 4; ii++ )
     {
-        RotatePoint( &polygone[ii].x, &polygone[ii].y, orient );
-        coord[jj] = polygone[ii].x += pos.x;
+        RotatePoint( &polygon[ii].x, &polygon[ii].y, orient );
+        coord[jj] = polygon[ii].x += pos.x;
         jj++;
-        coord[jj] = polygone[ii].y += pos.y;
+        coord[jj] = polygon[ii].y += pos.y;
         jj++;
     }
 
     if( modetrace != FILLED )
     {
         int plotLine_width = (int) (10 * g_PlotLine_Width * Gerb_scale_plot);
-        PlotGERBERLine( polygone[0], polygone[1], plotLine_width );
-        PlotGERBERLine( polygone[1], polygone[2], plotLine_width );
-        PlotGERBERLine( polygone[2], polygone[3], plotLine_width );
-        PlotGERBERLine( polygone[3], polygone[0], plotLine_width );
+        PlotGERBERLine( polygon[0], polygon[1], plotLine_width );
+        PlotGERBERLine( polygon[1], polygon[2], plotLine_width );
+        PlotGERBERLine( polygon[2], polygon[3], plotLine_width );
+        PlotGERBERLine( polygon[3], polygon[0], plotLine_width );
     }
     else
         PlotPolygon_GERBER( 4, coord, TRUE );
@@ -664,7 +667,7 @@ void PlotGERBERLine( wxPoint start, wxPoint end, int width )
 void PlotCircle_GERBER( wxPoint centre, int rayon, int epaisseur )
 /********************************************************************/
 
-/* routine de trace de 1 cercle de centre centre par approximation de segments
+/* Plot one cercle as segments (6 to 16 depending on its radius
  */
 {
     int ii;
@@ -702,7 +705,7 @@ void PlotPolygon_GERBER( int nb_segm, int* coord, bool fill )
 /***************************************************************/
 {
     int     ii;
-    wxPoint pos;
+    wxPoint pos, startpos;
 
     fputs( "G36*\n", dest );
     pos.x = *coord;
@@ -710,6 +713,7 @@ void PlotPolygon_GERBER( int nb_segm, int* coord, bool fill )
     pos.y = *coord;
     coord++;
     UserToDeviceCoordinate( pos );
+    startpos = pos;
     fprintf( dest, "X%5.5dY%5.5dD02*\n", pos.x, pos.y );
     for( ii = 1; ii < nb_segm; ii++ )
     {
@@ -721,6 +725,7 @@ void PlotPolygon_GERBER( int nb_segm, int* coord, bool fill )
         fprintf( dest, "X%5.5dY%5.5dD01*\n", pos.x, pos.y );
     }
 
+    fprintf( dest, "X%5.5dY%5.5dD01*\n", startpos.x, startpos.y );
     fputs( "G37*\n", dest );
 }
 
@@ -914,9 +919,6 @@ int WinEDA_BasePcbFrame::Gen_D_CODE_File( FILE* penfile )
             DisplayError( this, wxT( "Gen_D_CODE_File(): Dcode Type err" ) );
             break;
         }
-
-        // compensation localisation printf (float x.y généré x,y)
-        to_point( text + 2 );
 
         fputs( cbuf, penfile );
         ptr_tool = ptr_tool->m_Pnext;

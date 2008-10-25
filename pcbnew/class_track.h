@@ -36,8 +36,10 @@ public:
 
 protected:
     int         m_NetCode;          // Net number
-    int         m_Sous_Netcode;     /* In rastnest routines : for the current net,
+    int         m_Subnet;           /* In rastnest routines : for the current net,
                                      *  block number (number common to the current connected items found) */
+    int         m_ZoneSubnet;   	// variable used in rastnest computations : for the current net,
+                                    // handle block number in zone connection
 
     TRACK( const TRACK& track );    // protected so Copy() is used instead.
 
@@ -127,9 +129,15 @@ public:
      * Function GetSubNet
      * @return int - the sub net code.
      */
-    int GetSubNet() const { return m_Sous_Netcode; }
-    void SetSubNet( int aSubNetCode ) { m_Sous_Netcode = aSubNetCode; }
+    int GetSubNet() const { return m_Subnet; }
+    void SetSubNet( int aSubNetCode ) { m_Subnet = aSubNetCode; }
 
+    /**
+     * Function GetZoneSubNet
+     * @return int - the sub net code in zone connections.
+     */
+    int GetZoneSubNet() const { return m_ZoneSubnet; }
+    void SetZoneSubNet( int aSubNetCode ) { m_ZoneSubnet = aSubNetCode; }
 
     /**
      * Function GetLength
