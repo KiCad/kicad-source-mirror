@@ -301,10 +301,6 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
         Set3DModuleOnOff();
         return;
 
-    case ID_MENU3D_PLACE_ONOFF:
-        Set3DPlaceOnOff();
-        return;
-
     case ID_MENU3D_ZONE_ONOFF:
         Set3DZoneOnOff();
         return;
@@ -385,18 +381,10 @@ void WinEDA3D_DrawFrame::Set3DModuleOnOff()
 /******************************************/
 {
 	if (g_Parm_3D_Visu.m_Draw3DModule) g_Parm_3D_Visu.m_Draw3DModule = FALSE;
-	else 							   g_Parm_3D_Visu.m_Draw3DModule = TRUE;	
+	else 							   g_Parm_3D_Visu.m_Draw3DModule = TRUE;
 	NewDisplay();
 }
 
-/******************************************/
-void WinEDA3D_DrawFrame::Set3DPlaceOnOff()
-/******************************************/
-{
-	if (g_Parm_3D_Visu.m_Draw3DPlace) g_Parm_3D_Visu.m_Draw3DPlace = FALSE;
-	else 							  g_Parm_3D_Visu.m_Draw3DPlace = TRUE;	
-	NewDisplay();
-}
 
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DZoneOnOff()
@@ -412,7 +400,7 @@ void WinEDA3D_DrawFrame::Set3DCommentsOnOff()
 /******************************************/
 {
 	if (g_Parm_3D_Visu.m_Draw3DComments) g_Parm_3D_Visu.m_Draw3DComments = FALSE;
-	else 							     g_Parm_3D_Visu.m_Draw3DComments = TRUE;	
+	else 							     g_Parm_3D_Visu.m_Draw3DComments = TRUE;
 	NewDisplay();
 }
 
@@ -421,7 +409,7 @@ void WinEDA3D_DrawFrame::Set3DDrawingsOnOff()
 /******************************************/
 {
 	if (g_Parm_3D_Visu.m_Draw3DDrawings) g_Parm_3D_Visu.m_Draw3DDrawings = FALSE;
-	else 							     g_Parm_3D_Visu.m_Draw3DDrawings = TRUE;	
+	else 							     g_Parm_3D_Visu.m_Draw3DDrawings = TRUE;
 	NewDisplay();
 }
 
@@ -430,7 +418,7 @@ void WinEDA3D_DrawFrame::Set3DEco1OnOff()
 /******************************************/
 {
 	if (g_Parm_3D_Visu.m_Draw3DEco1) g_Parm_3D_Visu.m_Draw3DEco1 = FALSE;
-	else 							 g_Parm_3D_Visu.m_Draw3DEco1 = TRUE;	
+	else 							 g_Parm_3D_Visu.m_Draw3DEco1 = TRUE;
 	NewDisplay();
 }
 
@@ -439,6 +427,6 @@ void WinEDA3D_DrawFrame::Set3DEco2OnOff()
 /******************************************/
 {
 	if (g_Parm_3D_Visu.m_Draw3DEco2) g_Parm_3D_Visu.m_Draw3DEco2 = FALSE;
-	else 							 g_Parm_3D_Visu.m_Draw3DEco2 = TRUE;	
+	else 							 g_Parm_3D_Visu.m_Draw3DEco2 = TRUE;
 	NewDisplay();
 }

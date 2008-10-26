@@ -134,11 +134,6 @@ bool full_options = true;
     ADD_MENUITEM( referencesMenu, ID_MENU3D_MODULE_ONOFF,
                   _( "3D Footprints Shapes On/Off" ), shape_3d_xpm );
 
-#if 0
-    ADD_MENUITEM( referencesMenu, ID_MENU3D_PLACE_ONOFF,
-                  _( "PCB place 3D On/off" ), select_w_layer_xpm );
-#endif
-
     ADD_MENUITEM( referencesMenu, ID_MENU3D_ZONE_ONOFF,
                   _( "Zone Filling On/Off" ), add_zone_xpm );
 

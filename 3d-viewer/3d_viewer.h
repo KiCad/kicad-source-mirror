@@ -30,7 +30,7 @@
 #include "3d_struct.h"
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS
-	
+
 
 #define LIB3D_PATH wxT("packages3d/")
 
@@ -56,7 +56,6 @@ public:
 	S3D_Color m_BgColor;
 	bool m_Draw3DAxis;
 	bool m_Draw3DModule;
-	bool m_Draw3DPlace;
 	bool m_Draw3DZone;
 	bool m_Draw3DComments;
 	bool m_Draw3DDrawings;
