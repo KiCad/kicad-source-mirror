@@ -343,6 +343,7 @@ void WinEDA3D_DrawFrame::NewDisplay()
     m_Canvas->Refresh( true );
 }
 
+
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DBgColor()
 /******************************************/
@@ -367,22 +368,28 @@ void WinEDA3D_DrawFrame::Set3DBgColor()
     }
 }
 
+
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DAxisOnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DAxis) g_Parm_3D_Visu.m_Draw3DAxis = FALSE;
-	else							 g_Parm_3D_Visu.m_Draw3DAxis = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DAxis )
+        g_Parm_3D_Visu.m_Draw3DAxis = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DAxis = TRUE;
+    NewDisplay();
 }
+
 
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DModuleOnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DModule) g_Parm_3D_Visu.m_Draw3DModule = FALSE;
-	else 							   g_Parm_3D_Visu.m_Draw3DModule = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DModule )
+        g_Parm_3D_Visu.m_Draw3DModule = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DModule = TRUE;
+    NewDisplay();
 }
 
 
@@ -390,43 +397,57 @@ void WinEDA3D_DrawFrame::Set3DModuleOnOff()
 void WinEDA3D_DrawFrame::Set3DZoneOnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DZone) g_Parm_3D_Visu.m_Draw3DZone = FALSE;
-	else 					         g_Parm_3D_Visu.m_Draw3DZone = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DZone )
+        g_Parm_3D_Visu.m_Draw3DZone = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DZone = TRUE;
+    NewDisplay();
 }
+
 
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DCommentsOnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DComments) g_Parm_3D_Visu.m_Draw3DComments = FALSE;
-	else 							     g_Parm_3D_Visu.m_Draw3DComments = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DComments )
+        g_Parm_3D_Visu.m_Draw3DComments = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DComments = TRUE;
+    NewDisplay();
 }
+
 
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DDrawingsOnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DDrawings) g_Parm_3D_Visu.m_Draw3DDrawings = FALSE;
-	else 							     g_Parm_3D_Visu.m_Draw3DDrawings = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DDrawings )
+        g_Parm_3D_Visu.m_Draw3DDrawings = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DDrawings = TRUE;
+    NewDisplay();
 }
+
 
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DEco1OnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DEco1) g_Parm_3D_Visu.m_Draw3DEco1 = FALSE;
-	else 							 g_Parm_3D_Visu.m_Draw3DEco1 = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DEco1 )
+        g_Parm_3D_Visu.m_Draw3DEco1 = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DEco1 = TRUE;
+    NewDisplay();
 }
+
 
 /******************************************/
 void WinEDA3D_DrawFrame::Set3DEco2OnOff()
 /******************************************/
 {
-	if (g_Parm_3D_Visu.m_Draw3DEco2) g_Parm_3D_Visu.m_Draw3DEco2 = FALSE;
-	else 							 g_Parm_3D_Visu.m_Draw3DEco2 = TRUE;
-	NewDisplay();
+    if( g_Parm_3D_Visu.m_Draw3DEco2 )
+        g_Parm_3D_Visu.m_Draw3DEco2 = FALSE;
+    else
+        g_Parm_3D_Visu.m_Draw3DEco2 = TRUE;
+    NewDisplay();
 }

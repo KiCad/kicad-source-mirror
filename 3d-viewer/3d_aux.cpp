@@ -171,14 +171,14 @@ Info_3D_Visu::Info_3D_Visu()
         m_Rot[ii] = 0.0;
 
     m_Layers = 1;
-    m_BoardSettings = NULL;
-	m_Draw3DAxis = TRUE;
-	m_Draw3DModule = TRUE;
-	m_Draw3DZone = TRUE;
-	m_Draw3DComments = TRUE;
-	m_Draw3DDrawings = TRUE;
-	m_Draw3DEco1 = TRUE;
-	m_Draw3DEco2 = TRUE;
+    m_BoardSettings  = NULL;
+    m_Draw3DAxis     = TRUE;
+    m_Draw3DModule   = TRUE;
+    m_Draw3DZone     = TRUE;
+    m_Draw3DComments = TRUE;
+    m_Draw3DDrawings = TRUE;
+    m_Draw3DEco1 = TRUE;
+    m_Draw3DEco2 = TRUE;
 }
 
 
@@ -209,8 +209,8 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
     text += ReturnUnitSymbol( units );
 
     msgtitle = new                      wxStaticText( parent, -1, text, wxDefaultPosition, wxSize(
-                                                          -1,
-                                                          -1 ), 0 );
+            -1,
+            -1 ), 0 );
 
     BoxSizer->Add( msgtitle, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM | wxADJUST_MINSIZE );
 
@@ -225,11 +225,11 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
         5 );
     m_XValueCtrl = new                  wxTextCtrl( parent,
-                                                    -1,
-                                                    wxEmptyString,
-                                                    wxDefaultPosition,
-                                                    wxSize( -1, -1 ),
-                                                    0 );
+        -1,
+        wxEmptyString,
+        wxDefaultPosition,
+        wxSize( -1, -1 ),
+        0 );
 
     GridSizer->Add( m_XValueCtrl,
         0,
@@ -237,19 +237,19 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
         5 );
 
     msgtitle = new                      wxStaticText( parent, -1, wxT(
-                                                          "Y:" ), wxDefaultPosition, wxSize( -1,
-                                                          -1 ), 0 );
+            "Y:" ), wxDefaultPosition, wxSize( -1,
+            -1 ), 0 );
 
     GridSizer->Add( msgtitle,
         0,
         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
         5 );
     m_YValueCtrl = new                  wxTextCtrl( parent,
-                                                    -1,
-                                                    wxEmptyString,
-                                                    wxDefaultPosition,
-                                                    wxSize( -1, -1 ),
-                                                    0 );
+        -1,
+        wxEmptyString,
+        wxDefaultPosition,
+        wxSize( -1, -1 ),
+        0 );
 
     GridSizer->Add( m_YValueCtrl,
         0,
@@ -257,19 +257,19 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
         5 );
 
     msgtitle = new                      wxStaticText( parent, -1, wxT(
-                                                          "Z:" ), wxDefaultPosition, wxSize( -1,
-                                                          -1 ), 0 );
+            "Z:" ), wxDefaultPosition, wxSize( -1,
+            -1 ), 0 );
 
     GridSizer->Add( msgtitle,
         0,
         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
         5 );
     m_ZValueCtrl = new                  wxTextCtrl( parent,
-                                                    -1,
-                                                    wxEmptyString,
-                                                    wxDefaultPosition,
-                                                    wxSize( -1, -1 ),
-                                                    0 );
+        -1,
+        wxEmptyString,
+        wxDefaultPosition,
+        wxSize( -1, -1 ),
+        0 );
 
     GridSizer->Add( m_ZValueCtrl,
         0,
