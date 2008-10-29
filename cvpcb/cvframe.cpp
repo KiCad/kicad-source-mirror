@@ -231,7 +231,7 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
             {
                 if( !IsOK( this, _( "Problem when saving files, exit anyway ?" ) ) )
                 {
-                    Event.Veto(); 
+                    Event.Veto();
                     return;
                 }
             }
@@ -281,6 +281,7 @@ void WinEDA_CvpcbFrame::ToFirstNA( wxCommandEvent& event )
     selection = m_ListCmp->GetSelection();
     if( selection < 0 )
         selection = 0;
+
     for( ii = 0; Composant != NULL; Composant = Composant->Pnext )
     {
         if( Composant->m_Module.IsEmpty() && (ii > selection) )
@@ -396,20 +397,19 @@ void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
 
     switch( id )
     {
-      case ID_LOAD_FILE_1:
-      case ID_LOAD_FILE_2:
-      case ID_LOAD_FILE_3:
-      case ID_LOAD_FILE_4:
-      case ID_LOAD_FILE_5:
-      case ID_LOAD_FILE_6:
-      case ID_LOAD_FILE_7:
-      case ID_LOAD_FILE_8:
-      case ID_LOAD_FILE_9:
-      case ID_LOAD_FILE_10:
+    case ID_LOAD_FILE_1:
+    case ID_LOAD_FILE_2:
+    case ID_LOAD_FILE_3:
+    case ID_LOAD_FILE_4:
+    case ID_LOAD_FILE_5:
+    case ID_LOAD_FILE_6:
+    case ID_LOAD_FILE_7:
+    case ID_LOAD_FILE_8:
+    case ID_LOAD_FILE_9:
+    case ID_LOAD_FILE_10:
         id -= ID_LOAD_FILE_1;
         fullfilename = GetLastProject( id );
-       
-      break;
+        break;
     }
 
     newfile = ReadInputNetList( fullfilename );
@@ -460,7 +460,7 @@ void WinEDA_CvpcbFrame::AddFontSelectionMenu( wxMenu* main_menu )
                   ID_PREFERENCES_FONT_DIALOG,
                   _( "Dialog boxes" ),
                   fonts_xpm );
-    
+
     ADD_MENUITEM( fontmenu,
                   ID_PREFERENCES_FONT_INFOSCREEN,
                   _( "Lists" ),
@@ -517,30 +517,24 @@ void WinEDA_CvpcbFrame::ProcessFontPreferences( wxCommandEvent& event )
 
     switch( id )
     {
-      case ID_PREFERENCES_FONT:
-      case ID_PREFERENCES_FONT_DIALOG:
-      case ID_PREFERENCES_FONT_STATUS:
-      
+    case ID_PREFERENCES_FONT:
+    case ID_PREFERENCES_FONT_DIALOG:
+    case ID_PREFERENCES_FONT_STATUS:
         WinEDA_BasicFrame::ProcessFontPreferences( id );
-    
-      break;
+        break;
 
 
     case ID_PREFERENCES_FONT_INFOSCREEN:
-    {
-      font = wxGetFontFromUser( this, *g_FixedFont );
-
-      if( font.Ok() )
-      {
-        int pointsize = font.GetPointSize();
-        *g_FixedFont = font;
-        g_FixedFontPointSize = pointsize;
-        m_FootprintList->SetFont( *g_FixedFont );
-        m_ListCmp->SetFont( *g_FixedFont );
-      }
-
-      break;
-    }
+        font = wxGetFontFromUser( this, *g_FixedFont );
+        if( font.Ok() )
+        {
+            int pointsize = font.GetPointSize();
+            *g_FixedFont = font;
+            g_FixedFontPointSize = pointsize;
+            m_FootprintList->SetFont( *g_FixedFont );
+            m_ListCmp->SetFont( *g_FixedFont );
+        }
+        break;
 
     default:
         DisplayError( this, wxT( "WinEDA_DrawFrame::ProcessFontPreferences Internal Error" ) );
