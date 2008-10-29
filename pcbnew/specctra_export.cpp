@@ -983,15 +983,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
         int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
 
-        // The 0.5 is to give freerouter a little extra room, this is 0.5 mils.
-        // If we export without this, then on import freerouter violates our
-        // DRC checks with track to via spacing, although this could be a
-        // result of > testing vs. >= testing in PCBNEW's DRC.
-//       double  safetyMargin = 0.5;
-
-        // recent freerouter code adds .1 to the requested clearances, and I want .5
-        // so subtract .1 so we actually get 0.5.
-        double  safetyMargin = 0.4;
+        // Add .1 mil to the requested clearances as a safety margin.
+        // There has been disagreement about interpretation of clearance in the past
+        // between Kicad and Freerouter, so keep this safetyMargin until the
+        // disagreement is resolved and stable.  Recently Kicad started adding
+        // 0.1 mils to what it is given, so we can use zero for now.
+        const double  safetyMargin = 0.0;
 
         double  clearance = scale(curTrackClear);
 
@@ -1004,13 +1001,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         rules.push_back( rule );
 
         // On a high density board, a typical solder mask clearance will be 2-3 mils.
-        // This exposes 2 to 3 mils of bare board around each pad.  So we need at least
-        // 2 mils *extra* clearance for tracks which would come near a pad on
+        // This exposes 2 to 3 mils of bare board around each pad, and would
+        // leave only 1 to 2 mils of solder mask between the solder mask's boundary
+        // to the edge of any trace within "clearance" of the pad.  So we need at least
+        // 2 mils *extra* clearance for traces which would come near a pad on
         // a different net.  So if the baseline trace to trace clearance was say 4 mils, then
-        // the SMD to track clearance should be at least 6 mils.  Then, because
-        // freerouter seems to be off about a 1/2 mil on clearance tests, add
-        // another .5 mil for this test discrepancy as a safety margin.
-        sprintf( rule, "(clearance %.6g (type default_smd))", clearance + safetyMargin + 2.0 );
+        // the SMD to trace clearance should be at least 6 mils.  Also add our safetyMargin.
+        sprintf( rule, "(clearance %.6g (type default_smd))", clearance + 2.0 + safetyMargin );
         rules.push_back( rule );
 
         /* see: http://www.freerouting.net/usren/viewtopic.php?f=5&t=339#p474
