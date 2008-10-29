@@ -28,10 +28,10 @@ using namespace std;
 #include "zones.h"
 
 
-static void CalculateSubAreaBoundaryBox( EDA_Rect&       aBbox,
+static void CalculateSubAreaBoundaryBox( EDA_Rect&             aBbox,
                                          std::vector <CPolyPt> aPolysList,
-                                         int             aIndexStart,
-                                         int             aIndexEnd );
+                                         int                   aIndexStart,
+                                         int                   aIndexEnd );
 
 /* Local variables */
 std::vector <wxPoint> s_ListPoints;  // list of coordinates of pads and vias on this layer and on this net.
@@ -116,10 +116,20 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD*
 }
 
 
-void CalculateSubAreaBoundaryBox( EDA_Rect&       aBbox,
+/******************************************************************/
+void CalculateSubAreaBoundaryBox( EDA_Rect&             aBbox,
                                   std::vector <CPolyPt> aPolysList,
-                                  int             aIndexStart,
-                                  int             aIndexEnd )
+                                  int                   aIndexStart,
+                                  int                   aIndexEnd )
+/******************************************************************/
+
+/** function CalculateSubAreaBoundaryBox
+  * Calculates the bounding box of a polygon stored in a vector <CPolyPt>
+  * @param aBbox = EDA_Rect to init as bounding box
+  * @param aPolysList =  set of CPolyPt that are the corners of one or more polygons
+  * @param aIndexStart = index of the first corner of a polygon in aPolysList
+  * @param aIndexEnd = index of the last corner of a polygon in aPolysList
+ */
 {
     CPolyPt start_point, end_point;
 

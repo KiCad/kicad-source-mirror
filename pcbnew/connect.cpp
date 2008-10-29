@@ -267,9 +267,9 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 /***************************************************/
 
 /** Function testing the connections relative to all nets
- *  This function update le status du chevelu ( flag CH_ACTIF = 0 if a connection is found, = 1 else)
+ *  This function update the status of the ratsnest ( flag CH_ACTIF = 0 if a connection is found, = 1 else)
  * track segments are assumed to be sorted by net codes.
- * This is the case because when a new track is added, it is put in the linked link according to its net code.
+ * This is the case because when a new track is added, it is inserted in the linked list according to its net code.
  * and when nets are changed (when a new netlist is read) tracks are sorted before using this function
  * @param DC = current Device Context
  */
@@ -443,18 +443,18 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
 #define POS_AFF_CHREF 62
 
 /******************************************************************************/
-static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
-                                             int px, int py, int masque_layer )
+static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
+                                             const wxPoint & posref, int masque_layer )
 /******************************************************************************/
 
 /** Function SuperFast_Locate_Pad_Connecte
  * Locate the pad connected to a track ended at coord px, py
  * A track is seen as connected if the px, py position is same as the pad position
- * @param px = reference X coordinate
- * @param py = reference Y coordinate
- * @param masque_layer = Layers (bit to bit) to consider
+ * @param aPcb = the board.
  * @param pt_liste = Pointers to pads buffer
  *      This buffer is a list like the list created by build_liste_pad, but sorted by increasing X pad coordinate
+ * @param posref = reference coordinate
+ * @param masque_layer = Layers (bit to bit) to consider
  * @return : pointer on the connected pad
  *  This function uses a fast search in this sorted pad list and it is faster than Fast_Locate_Pad_connecte(),
  *  But this sorted pad list must be built before calling this function.
@@ -464,10 +464,10 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
 {
     D_PAD*     pad;
     LISTE_PAD* ptr_pad, * lim;
-    int        nb_pad = pcb->m_NbPads;
+    int        nb_pad = aPcb->m_NbPads;
     int        ii;
 
-    lim     = pt_liste + (pcb->m_NbPads - 1 );
+    lim     = pt_liste + (aPcb->m_NbPads - 1 );
     ptr_pad = pt_liste;
     while( nb_pad )
     {
@@ -478,14 +478,14 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
         if( (ii & 1) && ( ii > 1 ) )
             nb_pad++;
 
-        if( pad->m_Pos.x < px ) /* Must search after this item */
+        if( pad->m_Pos.x < posref.x ) /* Must search after this item */
         {
             ptr_pad += nb_pad;
             if( ptr_pad > lim )
                 ptr_pad = lim;
             continue;
         }
-        if( pad->m_Pos.x > px ) /* Must search before this item */
+        if( pad->m_Pos.x > posref.x ) /* Must search before this item */
         {
             ptr_pad -= nb_pad;
             if( ptr_pad < pt_liste )
@@ -493,13 +493,13 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
             continue;
         }
 
-        if( pad->m_Pos.x == px )  /* A suitable block is found (X coordinate matches the px reference: but wue must matches the Y coordinate */
+        if( pad->m_Pos.x == posref.x )  /* A suitable block is found (X coordinate matches the px reference: but wue must matches the Y coordinate */
         {
             /* Search the beginning of the block */
             while( ptr_pad >= pt_liste )
             {
                 pad = *ptr_pad;
-                if( pad->m_Pos.x == px )
+                if( pad->m_Pos.x == posref.x )
                     ptr_pad--;
                 else
                     break;
@@ -513,10 +513,10 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* pcb, LISTE_PAD* pt_liste,
                     return NULL; /* outside suitable block */
 
                 pad = *ptr_pad;
-                if( pad->m_Pos.x != px )
+                if( pad->m_Pos.x != posref.x )
                     return NULL; /* outside suitable block */
 
-                if( pad->m_Pos.y != py )
+                if( pad->m_Pos.y != posref.y )
                     continue;
 
                 /* A Pad if found here: but it must mach the layer */
@@ -615,8 +615,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         /* Search for a pad on the segment starting point */
         pt_piste->start = SuperFast_Locate_Pad_Connecte( m_Pcb,
                                                          &sortedPads[0],
-                                                         pt_piste->m_Start.x,
-                                                         pt_piste->m_Start.y,
+                                                         pt_piste->m_Start,
                                                          masque_layer );
         if( pt_piste->start != NULL )
         {
@@ -627,8 +626,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
         /* Search for a pad on the segment ending point */
         pt_piste->end = SuperFast_Locate_Pad_Connecte( m_Pcb,
                                                        &sortedPads[0],
-                                                       pt_piste->m_End.x,
-                                                       pt_piste->m_End.y,
+                                                       pt_piste->m_End,
                                                        masque_layer );
 
         if( pt_piste->end != NULL )

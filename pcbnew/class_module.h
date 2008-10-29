@@ -20,13 +20,13 @@ class Struct3D_Master;
 
 /* Flags :*/
 
-enum Mod_Attribut       /* Attributs d'un module */
+enum Mod_Attribut       /* Attributs used for modules */
 {
     MOD_DEFAULT = 0,    /* Type default */
-    MOD_CMS = 1,        /* Pour module apparaissant dans les
-                         *  fichiers de placement automatique (principalement modules CMS */
-    MOD_VIRTUAL = 2     /* Module virtuel constitue par un dessin sur circuit
-                         *  (connecteur, trou de percage..) */
+    MOD_CMS = 1,        /* Set for modules listed in the automatic insertion list
+                         *  (usually SMD footprints) */
+    MOD_VIRTUAL = 2     /* Virtuel component: when created by copper shapes on board
+                         *  (Like edge card connectors, mounting hole...) */
 };
 
 
@@ -41,34 +41,33 @@ public:
     wxPoint          m_Pos;             // Real coord on board
     D_PAD*           m_Pads;            /* Pad list (linked list) */
     BOARD_ITEM*      m_Drawings;        /* Graphic items list (linked list) */
-    Struct3D_Master* m_3D_Drawings;     /* Pointeur sur la liste des elements de trace 3D*/
-    TEXTE_MODULE*    m_Reference;       // texte reference du composant (U34, R18..)
-    TEXTE_MODULE*    m_Value;           // texte valeur du composant (74LS00, 22K..)
-    wxString         m_LibRef;          /* nom du module en librairie */
+    Struct3D_Master* m_3D_Drawings;     /* First item of the 3D shapes (linked list)*/
+    TEXTE_MODULE*    m_Reference;       // Component reference (U34, R18..)
+    TEXTE_MODULE*    m_Value;           // Component value (74LS00, 22K..)
+    wxString         m_LibRef;          /* Name of the module in library (and the default value when loading amodule from the library) */
     wxString         m_AlternateReference;  /* Used when m_Reference cannot be used to
                                               * identify the footprint ( after a full reannotation of the schematic */
 
-    int           m_Attributs;          /* Flags bits a bit ( voir enum Mod_Attribut ) */
-    int           m_Orient;             /* orientation en 1/10 degres */
+    int           m_Attributs;          /* Flags(ORed bits) ( see Mod_Attribut ) */
+    int           m_Orient;             /* orientation in 0.1 degrees */
     int           flag;                 /* flag utilise en trace rastnest et routage auto */
     int           m_ModuleStatus;       /* For autoplace: flags (LOCKED, AUTOPLACED) */
-    EDA_Rect      m_BoundaryBox;        /* position/taille du cadre de reperage (coord locales)*/
-    EDA_Rect      m_RealBoundaryBox;    /* position/taille du module (coord relles) */
-    int           m_PadNum;             // Nombre total de pads
-    int           m_AltPadNum;          // en placement auto Nombre de pads actifs pour
-                                        // les calculs
+    EDA_Rect      m_BoundaryBox;        /* Bounding box coordinates relatives to the anchor, orient 0*/
+    EDA_Rect      m_RealBoundaryBox;    /* Bounding box : coordinates on board, real orientation */
+    int           m_PadNum;             // Pad count
+    int           m_AltPadNum;          // Pad with netcode > 0 (active pads)count
 
-    int           m_CntRot90;           // Placement auto: cout ( 0..10 ) de la rotation 90 degre
-    int           m_CntRot180;          // Placement auto: cout ( 0..10 ) de la rotation 180 degre
-    wxSize        m_Ext;                // marges de "garde": utilise en placement auto.
-    float         m_Surface;            // surface du rectangle d'encadrement
+    int           m_CntRot90;           // Automatic placement : cost ( 0..10 ) for 90 degrees rotaion (Horiz<->Vertical)
+    int           m_CntRot180;          // Automatic placement : cost ( 0..10 ) for 180 degrees rotaion (UP <->Down)
+    wxSize        m_Ext;                // Automatic placement margin around the module
+    float         m_Surface;            // Bounding box area
 
-    unsigned long m_Link;               // variable temporaire ( pour editions, ...)
+    unsigned long m_Link;               // Temporary variable ( used in editions, ...)
     long          m_LastEdit_Time;      // Date de la derniere modification du module (gestion de librairies)
     wxString      m_Path;
 
-    wxString      m_Doc;                // Texte de description du module
-    wxString      m_KeyWord;            // Liste des mots cles relatifs au module
+    wxString      m_Doc;                // Module Description (info for users)
+    wxString      m_KeyWord;            // Keywords to select the module in lib
 
 public:
     MODULE( BOARD* parent );
@@ -79,11 +78,17 @@ public:
 
     MODULE* Next()  { return (MODULE*) Pnext; }
 
-    void    Set_Rectangle_Encadrement(); /* mise a jour du rect d'encadrement
-                                         *  en coord locales (orient 0 et origine = pos  module) */
+    /** Function Set_Rectangle_Encadrement()
+     * Calculates the bounding box
+     *  for orient 0 et origin = module anchor)
+    */
+    void    Set_Rectangle_Encadrement();
 
-    void    SetRectangleExinscrit(); /* mise a jour du rect d'encadrement
-                                     *   et de la surface en coord reelles */
+    /** function SetRectangleExinscrit()
+     * Calculates the real bounding box accordint to theboard position, and real orientaion
+     *  and also calculates the area value (used in automatic placement)
+     */
+    void    SetRectangleExinscrit();
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Footprint
@@ -103,11 +108,11 @@ public:
     }
 
 
-    // deplacements
+    // Moves
     void    SetPosition( const wxPoint& newpos );
     void    SetOrientation( int newangle );
 
-    /* supprime du chainage la structure Struct */
+    /* Remove this from the linked list */
     void    UnLink();
 
 
@@ -151,7 +156,7 @@ public:
 
     /**
      * Function Read_GPCB_Descr
-     * Read a footprint description in GPCB format
+     * Read a footprint description in GPCB format (newlib version)
      * @param CmpFullFileName = Full file name (there is one footprint per file.
      * this is also the footprint name
      * @return bool - true if success reading else false.

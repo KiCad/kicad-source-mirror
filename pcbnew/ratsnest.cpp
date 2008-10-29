@@ -28,7 +28,7 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  *  Building the general ratsnest:
  *  I used the "lee algoritm".
  *  This is a 2 steps algoritm.
- *  the m_logical_connexion member of pads handle a "block number" or a "cluster number"
+ *  the m_logical_connexion member of pads handle a "block number" or a "cluster number" or a "subnet number"
  *  initially, m_logical_connexion = 0 (pad not connected).
  *  Build_Board_Ratsnest( wxDC* DC )  Create this rastnest
  *  for each net:
@@ -39,7 +39,7 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  *  link these 2 pads (i.e. create a ratsnest item)
  *  the pads are grouped in a logical block ( a cluster).
  *  until no pad without link found.
- *  Each logical block has a number called block number,
+ *  Each logical block has a number called block number or "subnet number",
  *  stored in m_logical_connexion member for each pad of the block.
  *  The first block has its block number = 1, the second is 2 ...
  *  the function to do thas is gen_rats_pad_to_pad()
@@ -1155,8 +1155,8 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
            tri_par_net );
 
     /* Compute the internal ratsnet:
-     *  this is the same as general ratsnest, but considers onluy tje currant footprint pads
-	* it is therefore not time consumming, and it is made onlu once
+     *  this is the same as general ratsnest, but considers only the current footprint pads
+	 * it is therefore not time consuming, and it is made only once
 	*/
     local_liste_chevelu = (CHEVELU*) pt_liste_pad; // buffer chevelu a la suite de la liste des pads
     nb_local_chevelu    = 0;
@@ -1282,7 +1282,7 @@ calcul_chevelu_ext:
         local_chevelu++;
     }
 
-    /* return the newt free memory buffer address, in the general buffer */
+    /* return the new free memory buffer address, in the general buffer */
     adr_max = MAX( adr_max, (char*) (local_chevelu + 1) );
 
     return (char*) (local_chevelu + 1);   /* the struct pointed by local_chevelu is used

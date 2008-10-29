@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-26 17:23+0100\n"
-"PO-Revision-Date: 2008-10-26 17:24+0100\n"
+"POT-Creation-Date: 2008-10-27 13:41+0100\n"
+"PO-Revision-Date: 2008-10-27 13:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -347,7 +347,7 @@ msgstr "dimension"
 #: pcbnew/class_marker.cpp:133
 #: pcbnew/class_text_mod.cpp:503
 #: pcbnew/class_track.cpp:853
-#: pcbnew/class_zone.cpp:775
+#: pcbnew/class_zone.cpp:789
 msgid "Type"
 msgstr "Type"
 
@@ -370,7 +370,7 @@ msgstr "Segment"
 #: pcbnew/class_pcb_text.cpp:190
 #: pcbnew/class_text_mod.cpp:516
 #: pcbnew/class_track.cpp:910
-#: pcbnew/class_zone.cpp:809
+#: pcbnew/class_zone.cpp:823
 msgid "Layer"
 msgstr "Couche"
 
@@ -571,12 +571,12 @@ msgid "Display"
 msgstr "Affichage"
 
 #: pcbnew/class_track.cpp:869
-#: pcbnew/class_zone.cpp:797
+#: pcbnew/class_zone.cpp:811
 msgid "NetName"
 msgstr "NetName"
 
 #: pcbnew/class_track.cpp:874
-#: pcbnew/class_zone.cpp:805
+#: pcbnew/class_zone.cpp:819
 msgid "NetCode"
 msgstr "NetCode"
 
@@ -588,27 +588,27 @@ msgstr "Standard"
 msgid "Diam"
 msgstr "Diam"
 
-#: pcbnew/class_zone.cpp:800
+#: pcbnew/class_zone.cpp:814
 msgid "Non Copper Zone"
 msgstr "Zone non Cuivre"
 
-#: pcbnew/class_zone.cpp:813
+#: pcbnew/class_zone.cpp:827
 msgid "Corners"
 msgstr "Sommets"
 
-#: pcbnew/class_zone.cpp:819
+#: pcbnew/class_zone.cpp:833
 msgid "No Grid"
 msgstr "Pas de Grille"
 
-#: pcbnew/class_zone.cpp:820
+#: pcbnew/class_zone.cpp:834
 msgid "Fill Grid"
 msgstr "Grille de Remplissage"
 
-#: pcbnew/class_zone.cpp:825
+#: pcbnew/class_zone.cpp:839
 msgid "Hatch lines"
 msgstr "Lignes de Hachure"
 
-#: pcbnew/class_zone.cpp:831
+#: pcbnew/class_zone.cpp:845
 msgid "Corners in DrawList"
 msgstr "Sommets en Liste de dessin"
 
@@ -1822,8 +1822,8 @@ msgid "Fill or Refill All Zones"
 msgstr "Remplir ou Re-remplir Toutes les Zones"
 
 #: pcbnew/onrightclick.cpp:345
-msgid "Remove filled areas"
-msgstr "Suppimer zones remplies"
+msgid "Remove Filled Areas in All Zones"
+msgstr "Supprimer le Remplissage de toutes les Zones"
 
 #: pcbnew/onrightclick.cpp:350
 #: pcbnew/onrightclick.cpp:359
@@ -2113,94 +2113,98 @@ msgstr "Addition d'une Zone Interdite"
 msgid "Fill Zone"
 msgstr "Remplir Zone"
 
-#: pcbnew/onrightclick.cpp:678
+#: pcbnew/onrightclick.cpp:680
+msgid "Remove Filled Areas in Zone"
+msgstr "Supprimer le Remplissage de la Zone"
+
+#: pcbnew/onrightclick.cpp:684
 msgid "Move Zone"
 msgstr "Déplace Zone"
 
-#: pcbnew/onrightclick.cpp:681
+#: pcbnew/onrightclick.cpp:687
 msgid "Edit Zone Params"
 msgstr "Editer Paramètres de la Zone"
 
-#: pcbnew/onrightclick.cpp:686
+#: pcbnew/onrightclick.cpp:692
 msgid "Delete Cutout"
 msgstr "Supprimer Zone Interdite"
 
-#: pcbnew/onrightclick.cpp:689
+#: pcbnew/onrightclick.cpp:695
 msgid "Delete Zone Outline"
 msgstr "Supprimer Contour de Zone"
 
-#: pcbnew/onrightclick.cpp:711
-#: pcbnew/onrightclick.cpp:756
-#: pcbnew/onrightclick.cpp:794
-#: pcbnew/onrightclick.cpp:860
+#: pcbnew/onrightclick.cpp:717
+#: pcbnew/onrightclick.cpp:762
+#: pcbnew/onrightclick.cpp:800
+#: pcbnew/onrightclick.cpp:866
 msgid "Move"
 msgstr "Move"
 
-#: pcbnew/onrightclick.cpp:714
-#: pcbnew/onrightclick.cpp:796
+#: pcbnew/onrightclick.cpp:720
+#: pcbnew/onrightclick.cpp:802
 msgid "Drag"
 msgstr "Drag"
 
-#: pcbnew/onrightclick.cpp:718
+#: pcbnew/onrightclick.cpp:724
 msgid "Rotate  +"
 msgstr "Rotation +"
 
-#: pcbnew/onrightclick.cpp:722
+#: pcbnew/onrightclick.cpp:728
 msgid "Rotate -"
 msgstr "Rotation -"
 
-#: pcbnew/onrightclick.cpp:723
+#: pcbnew/onrightclick.cpp:729
 msgid "Flip"
 msgstr "Change côté"
 
-#: pcbnew/onrightclick.cpp:727
-#: pcbnew/onrightclick.cpp:761
-#: pcbnew/onrightclick.cpp:865
+#: pcbnew/onrightclick.cpp:733
+#: pcbnew/onrightclick.cpp:767
+#: pcbnew/onrightclick.cpp:871
 msgid "Edit"
 msgstr "Editer"
 
-#: pcbnew/onrightclick.cpp:733
+#: pcbnew/onrightclick.cpp:739
 msgid "Delete Module"
 msgstr "Supprimer Module"
 
-#: pcbnew/onrightclick.cpp:759
-#: pcbnew/onrightclick.cpp:863
+#: pcbnew/onrightclick.cpp:765
+#: pcbnew/onrightclick.cpp:869
 msgid "Rotate"
 msgstr "Rotation"
 
-#: pcbnew/onrightclick.cpp:798
+#: pcbnew/onrightclick.cpp:804
 msgid "Edit Pad"
 msgstr "Edit Pad"
 
-#: pcbnew/onrightclick.cpp:802
+#: pcbnew/onrightclick.cpp:808
 msgid "New Pad Settings"
 msgstr "Nouvelles Caract. Pads"
 
-#: pcbnew/onrightclick.cpp:803
+#: pcbnew/onrightclick.cpp:809
 msgid "Copy current pad settings to this pad"
 msgstr "Copier les réglages courants pour ce pad"
 
-#: pcbnew/onrightclick.cpp:806
+#: pcbnew/onrightclick.cpp:812
 msgid "Export Pad Settings"
 msgstr "Exporte Caract. Pads"
 
-#: pcbnew/onrightclick.cpp:807
+#: pcbnew/onrightclick.cpp:813
 msgid "Copy this pad settings to current pad settings"
 msgstr "Copier les caractéristiques de ce pad vers les caractéristiques courantes"
 
-#: pcbnew/onrightclick.cpp:813
+#: pcbnew/onrightclick.cpp:819
 msgid "Global Pad Settings"
 msgstr "Edition Globale des pads"
 
-#: pcbnew/onrightclick.cpp:815
+#: pcbnew/onrightclick.cpp:821
 msgid "Copy this pad settings to all pads in this footprint (or similar footprints)"
 msgstr "Copier les caractéristiques de ce pad vers tous les autres pads de ce module( ou modules similaires)"
 
-#: pcbnew/onrightclick.cpp:827
+#: pcbnew/onrightclick.cpp:833
 msgid "Autoroute Pad"
 msgstr "Autoroute Pad"
 
-#: pcbnew/onrightclick.cpp:828
+#: pcbnew/onrightclick.cpp:834
 msgid "Autoroute Net"
 msgstr "Autoroute Net"
 
@@ -2436,56 +2440,56 @@ msgstr "Erreur système sur écriture fichier \"%s\""
 msgid "Error writing to STRINGFORMATTER"
 msgstr "Error writing to STRINGFORMATTER"
 
-#: pcbnew/edit.cpp:180
+#: pcbnew/edit.cpp:181
 #: pcbnew/editmod.cpp:45
 msgid "Module Editor"
 msgstr "Ouvrir Editeur de modules"
 
-#: pcbnew/edit.cpp:260
+#: pcbnew/edit.cpp:261
 msgid "Add Tracks"
 msgstr "Addition de Pistes"
 
-#: pcbnew/edit.cpp:269
+#: pcbnew/edit.cpp:270
 msgid "Add Zones"
 msgstr "Addition de Zones"
 
-#: pcbnew/edit.cpp:271
+#: pcbnew/edit.cpp:272
 msgid "Warning: Display Zone is OFF!!!"
 msgstr "Attention: Affichage zones désactivé !!!"
 
-#: pcbnew/edit.cpp:277
+#: pcbnew/edit.cpp:278
 msgid "Add Layer Alignment Target"
 msgstr "Ajouter Mire de superposition"
 
-#: pcbnew/edit.cpp:281
+#: pcbnew/edit.cpp:282
 msgid "Adjust Zero"
 msgstr "Ajuster Zéro"
 
-#: pcbnew/edit.cpp:287
+#: pcbnew/edit.cpp:288
 msgid "Add Graphic"
 msgstr "Addition éléments graphiques"
 
-#: pcbnew/edit.cpp:291
+#: pcbnew/edit.cpp:292
 msgid "Add Text"
 msgstr "Ajout de Texte"
 
-#: pcbnew/edit.cpp:295
+#: pcbnew/edit.cpp:296
 msgid "Add Modules"
 msgstr "Addition de Modules"
 
-#: pcbnew/edit.cpp:299
+#: pcbnew/edit.cpp:300
 msgid "Add Dimension"
 msgstr "Ajout de cotes"
 
-#: pcbnew/edit.cpp:307
+#: pcbnew/edit.cpp:308
 msgid "Net Highlight"
 msgstr "Surbrillance des équipotentielles"
 
-#: pcbnew/edit.cpp:311
+#: pcbnew/edit.cpp:312
 msgid "Local Ratsnest"
 msgstr "Montrer le chevelu général"
 
-#: pcbnew/edit.cpp:569
+#: pcbnew/edit.cpp:579
 msgid "Delete item"
 msgstr "Suppression d'éléments"
 
@@ -9869,7 +9873,7 @@ msgstr "Hollandais"
 msgid "Language"
 msgstr "Langage"
 
-#: 3d-viewer/3d_aux.cpp:207
+#: 3d-viewer/3d_aux.cpp:206
 msgid "Vertex "
 msgstr "Vertex "
 

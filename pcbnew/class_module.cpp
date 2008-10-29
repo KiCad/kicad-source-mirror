@@ -1060,7 +1060,8 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     pos += 6;
     if( flag ) // Affichage date de modification (utile en Module Editor)
     {
-        strcpy( Line, ctime( &m_LastEdit_Time ) );
+        time_t edit_time = m_LastEdit_Time;
+        strcpy( Line, ctime( &edit_time ) );
         strtok( Line, " \n\r" );
         strcpy( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, " " );
         strcat( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, ", " );

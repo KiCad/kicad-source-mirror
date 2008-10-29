@@ -834,7 +834,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
                 break;
             dx = px - Arc->m_Pos.x;
             dy = py + Arc->m_Pos.y;
-            ii = (int) sqrt( dx * dx + dy * dy );
+            ii = (int) sqrt( ((double)dx * dx) + ((double)dy * dy) );
             if( abs( ii - Arc->m_Rayon ) <= seuil )
                 return DrawItem;
         }
@@ -1015,7 +1015,7 @@ int distance( int dx, int dy, int spot_cX, int spot_cY, int seuil )
          *  de piste soit horizontal dans le nouveau repere */
         int angle;
 
-        angle = (int) ( atan2( (float) segY, (float) segX ) * 1800 / M_PI);
+        angle = (int) ( atan2( (double) segY, (double) segX ) * 1800 / M_PI);
         cXrot = pointX; cYrot = pointY;
         RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
         RotatePoint( &segX, &segY, angle );     /* Rotation du segment */

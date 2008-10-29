@@ -53,13 +53,10 @@ public:
     bool Save( FILE* aFile ) const;
     int  ReadDescr( FILE* aFile, int* aLineNum = NULL );
 
-    wxPoint& GetPosition()
-    {
-        static wxPoint pos;
-
-        return pos;
-    }
-
+    /** virtual function GetPosition
+    * @return a wxPoint, position of the first point of the outline
+    */
+    wxPoint& GetPosition();
 
     void UnLink( void )
     {

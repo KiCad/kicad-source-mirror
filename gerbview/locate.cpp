@@ -436,7 +436,7 @@ int distance( int seuil )
          *  de piste soit horizontal dans le nouveau repere */
         int angle;
 
-        angle = (int) ( atan2( (float) segY, (float) segX ) * 1800 / M_PI);
+        angle = (int) ( atan2( (double) segY, (double) segX ) * 1800 / M_PI);
         cXrot = pointX; cYrot = pointY;
         RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
         RotatePoint( &segX, &segY, angle );     /* Rotation du segment */

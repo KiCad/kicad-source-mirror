@@ -133,7 +133,7 @@ bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
          * de piste soit horizontal dans le nouveau repere */
         int angle;
 
-        angle = (int) ( atan2( (float) segY, (float) segX ) * 1800 / M_PI);
+        angle = (int) ( atan2( (double) segY, (double) segX ) * 1800 / M_PI);
         cXrot = pointX; cYrot = pointY;
 
         RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
@@ -224,7 +224,7 @@ void RotatePoint( int* pX, int* pY, int angle )
  *  pour une rotation de centre 0, 0, et d'angle angle ( en 1/10 degre)
  */
 {
-    float fpx, fpy;
+    double fpx, fpy;
     int   tmp;
 
     while( angle < 0 )
@@ -262,7 +262,7 @@ void RotatePoint( int* pX, int* pY, int angle )
         fpx = (*pY * fsinus[angle])   + (*pX * fcosinus[angle]);
         fpy = (*pY * fcosinus[angle]) - (*pX * fsinus[angle]);
 
-        *pX = (int) round( fpx ); 
+        *pX = (int) round( fpx );
         *pY = (int) round( fpy );
     }
 }
@@ -280,9 +280,9 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
 {
     int ox, oy;
 
-    ox = *pX - cx; 
+    ox = *pX - cx;
     oy = *pY - cy;
-    
+
     RotatePoint( &ox, &oy, angle );
 
     *pX = ox + cx;
@@ -302,9 +302,9 @@ void RotatePoint( wxPoint* point, int angle )
 {
     int ox, oy;
 
-    ox = point->x; 
+    ox = point->x;
     oy = point->y;
-    
+
     RotatePoint( &ox, &oy, angle );
     point->x = ox;
     point->y = oy;
@@ -323,9 +323,9 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
 {
     int ox, oy;
 
-    ox = point->x - centre.x; 
+    ox = point->x - centre.x;
     oy = point->y - centre.y;
-    
+
     RotatePoint( &ox, &oy, angle );
     point->x = ox + centre.x;
     point->y = oy + centre.y;
@@ -339,11 +339,11 @@ void RotatePoint( double* pX, double* pY, double cx, double cy, int angle )
 {
     double ox, oy;
 
-    ox = *pX - cx; 
+    ox = *pX - cx;
     oy = *pY - cy;
-    
+
     RotatePoint( &ox, &oy, angle );
-    
+
     *pX = ox + cx;
     *pY = oy + cy;
 }
@@ -390,8 +390,8 @@ void RotatePoint( double* pX, double* pY, int angle )
     {
         double fpx = (*pY * fsinus[angle])   + (*pX * fcosinus[angle]);
         double fpy = (*pY * fcosinus[angle]) - (*pX * fsinus[angle]);
-        
-        *pX = fpx; 
+
+        *pX = fpx;
         *pY = fpy;
     }
 }

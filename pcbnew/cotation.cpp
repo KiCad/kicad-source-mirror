@@ -330,7 +330,7 @@ static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, boo
 
         /* Calcul de la direction de deplacement
          *  ( perpendiculaire a l'axe de la cote ) */
-        angle = atan2( deltay, deltax ) + (M_PI / 2);
+        angle = atan2( (double)deltay, (double)deltax ) + (M_PI / 2);
 
         deltax = pos.x - Cotation->TraitD_ox;
         deltay = pos.y - Cotation->TraitD_oy;
@@ -405,10 +405,10 @@ static void Ajuste_Details_Cotation( COTATION* Cotation )
     deltay = Cotation->TraitD_oy - Cotation->TraitG_oy;
 
     /* Calcul de la cote */
-    mesure = (int) (hypot( (float) deltax, (float) deltay ) + 0.5 );
+    mesure = (int) (hypot( (double) deltax, (double) deltay ) + 0.5 );
 
     if( deltax || deltay )
-        angle = atan2( (float) deltay, (float) deltax );
+        angle = atan2( (double) deltay, (double) deltax );
     else
         angle = 0.0;
 

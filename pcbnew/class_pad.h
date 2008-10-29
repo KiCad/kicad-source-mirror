@@ -61,10 +61,10 @@ public:
     int     m_Orient;               // in 1/10 degrees
 
     int     m_logical_connexion;    // variable used in rastnest computations
-                                    // handle block number in ratsnet connection
+                                    // handle subnet (block) number in ratsnet connection
 
     int     m_physical_connexion;   // variable used in rastnest computations
-                                    // handle block number in track connection
+                                    // handle physical subnet (block)number in track connection
 protected:
     int     m_ZoneSubnet;   	    // variable used in rastnest computations
                                     // handle block number in zone connection

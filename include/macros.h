@@ -49,7 +49,7 @@
 
 
 /* exchange 2 items */
-#define EXCHG( a, b ) { typeof(a)__temp__ = (a); (a) = (b); (b) = __temp__; }
+#define EXCHG( a, b ) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }
 
 /* inline functions to insert menuitems with a icon: */
 static inline void ADD_MENUITEM( wxMenu* menu, int id,

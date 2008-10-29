@@ -38,6 +38,20 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 }
 
 
+/** virtual function GetPosition
+* @return a wxPoint, position of the first point of the outline
+*/
+wxPoint& ZONE_CONTAINER::GetPosition()
+{
+    static wxPoint pos;
+    if ( m_Poly )
+    {
+        pos = GetCornerPosition(0);
+    }
+    else pos = wxPoint(0,0);
+    return pos;
+}
+
 /*******************************************/
 void ZONE_CONTAINER::SetNet( int anet_code )
 /*******************************************/

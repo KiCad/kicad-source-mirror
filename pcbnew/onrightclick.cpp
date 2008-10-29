@@ -341,8 +341,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             aPopMenu->AppendSeparator();
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
                 _( "Fill or Refill All Zones" ), fill_zone_xpm );
-            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS,
-                _( "Remove filled areas" ), fill_zone_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
+                _( "Remove Filled Areas in All Zones" ), fill_zone_xpm );
             aPopMenu->AppendSeparator();
         }
 
@@ -673,6 +673,12 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_FILL_ZONE,
             _( "Fill Zone" ), fill_zone_xpm );
+
+        if (edge_zone->m_FilledPolysList.size() > 0 )
+        {
+            ADD_MENUITEM( zones_menu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE,
+                _( "Remove Filled Areas in Zone" ), fill_zone_xpm );
+        }
 
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES,
             _( "Move Zone" ), move_xpm );

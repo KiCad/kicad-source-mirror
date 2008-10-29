@@ -283,7 +283,7 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
 				mask_layer = 1 << Route_Layer_TOP;
 			else mask_layer = -1;
 		}
-	
+
 		if( color == VIA_IMPOSSIBLE )
 			mask_layer = -1;
 
@@ -464,7 +464,7 @@ void TraceFilledRectangle( BOARD* Pcb,
 /*****************************************************************/
 
 /*  Fonction Surchargee.
- * 
+ *
  *   Met a la valeur color l'ensemble des cellules du board inscrites dans
  *  le rectangle de coord ux0,uy0 ( angle haut a gauche )
  *  a ux1,uy1 ( angle bas a droite )
@@ -545,7 +545,7 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int a
 /***********************************************************************************/
 
 /*  Fonction Surchargee.
- * 
+ *
  *  Met a la valeur color l'ensemble des cellules du board inscrites dans
  *  le rectangle de coord ux0,uy0 ( angle haut a droite )
  *  a ux1,uy1 ( angle bas a gauche )
@@ -595,8 +595,8 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int a
     ux1 -= Pcb->m_BoundaryBox.m_Pos.x; uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
     cx    = (ux0 + ux1) / 2; cy = (uy0 + uy1) / 2;
-    rayon = (int) sqrt( (float) (cx - ux0) * (cx - ux0)
-                       + (float) (cy - uy0) * (cy - uy0) );
+    rayon = (int) sqrt( (double) (cx - ux0) * (cx - ux0)
+                       + (double) (cy - uy0) * (cy - uy0) );
 
     /* Calcul des coord limites des cellules appartenant au rectangle */
     row_max = (cy + rayon) / g_GridRoutingSize;
@@ -719,7 +719,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
 
     dx = ux1 - ux0; dy = uy1 - uy0;
     if( dx )
-        angle = (int) (atan2( dy, dx ) * 1800 / M_PI);
+        angle = (int) (atan2( (double)dy, (double)dx ) * 1800 / M_PI);
     else
     {
         angle = 900; if( dy < 0 )

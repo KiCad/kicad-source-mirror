@@ -693,13 +693,13 @@ void trace_1_pad_TRAPEZE_HPGL( wxPoint padpos, wxSize size, wxSize delta,
     /* Calcul du demi angle d'inclinaison des cotes du trapeze */
     if( delta.y ) /* Trapeze horizontal */
     {
-        fangle = atan2( (float) (polygone[1].y - polygone[0].y),
-                       (float) (polygone[1].x - polygone[0].x) ) / 2;
+        fangle = atan2( (double) (polygone[1].y - polygone[0].y),
+                       (double) (polygone[1].x - polygone[0].x) ) / 2;
     }
     else
     {
-        fangle = atan2( (float) (polygone[3].y - polygone[0].y),
-                       (float) (polygone[3].x - polygone[0].x) ) / 2;
+        fangle = atan2( (double) (polygone[3].y - polygone[0].y),
+                       (double) (polygone[3].x - polygone[0].x) ) / 2;
     }
 
     /* Trace du contour */
@@ -871,7 +871,7 @@ void trace_1_segment_HPGL( int pos_X0, int pos_Y0, int pos_X1, int pos_Y1,
         }
         else
         {
-            alpha     = atan2( (float) size.y, (float) size.x );
+            alpha     = atan2( (double) size.y, (double) size.x );
             sin_alpha = sin( alpha );
             cos_alpha = cos( alpha );
         }

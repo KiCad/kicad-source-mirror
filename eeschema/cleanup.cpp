@@ -256,9 +256,10 @@ static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
     }
     else
     {
-        if( atan2( RefSegm->m_Start.x - RefSegm->m_End.x, RefSegm->m_Start.y -
-                   RefSegm->m_End.y ) ==
-           atan2( TstSegm->m_Start.x - TstSegm->m_End.x, TstSegm->m_Start.y - TstSegm->m_End.y ) )
+        if( atan2( (double)(RefSegm->m_Start.x - RefSegm->m_End.x),
+                    (double)(RefSegm->m_Start.y - RefSegm->m_End.y) ) ==
+           atan2( (double)(TstSegm->m_Start.x - TstSegm->m_End.x),
+                (double)(TstSegm->m_Start.y - TstSegm->m_End.y) ) )
         {
             RefSegm->m_End = TstSegm->m_End;
             return 1;

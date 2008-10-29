@@ -1535,8 +1535,8 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
     double r = sqrt( (double) (xi - xc) * (xi - xc) + (double) (yi - yc) * (yi - yc) );
 
     // get angles of start and finish
-    double th_i  = atan2( (double) yi - yc, (double) xi - xc );
-    double th_f  = atan2( (double) yf - yc, (double) xf - xc );
+    double th_i  = atan2( (double) (yi - yc), (double) (xi - xc) );
+    double th_f  = atan2( (double) (yf - yc), (double) (xf - xc) );
     double th_d  = (th_f - th_i) / (num - 1);
     double theta = th_i;
 

@@ -575,7 +575,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     case COMPONENT_CIRCLE_DRAW_TYPE:
         dx = ( (LibDrawCircle*) CurrentDrawItem )->m_Pos.x - mx;
         dy = ( (LibDrawCircle*) CurrentDrawItem )->m_Pos.y + my;
-        ( (LibDrawCircle*) CurrentDrawItem )->m_Rayon = (int) sqrt( (dx * dx) + (dy * dy) );
+        ( (LibDrawCircle*) CurrentDrawItem )->m_Rayon = (int) sqrt( ((double)dx * dx) + ((double)dy * dy) );
         ( (LibDrawCircle*) CurrentDrawItem )->m_Fill  = FlSymbol_Fill;
         break;
 
@@ -745,7 +745,7 @@ static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
     /* calcul de cX et cY pour que l'arc passe par ArcStartX,Y et ArcEndX,Y */
     dx    = ArcEndX - ArcStartX; dy = ArcEndY - ArcStartY;
     cX   -= ArcStartX; cY -= ArcStartY;
-    angle = (int) (atan2( dy, dx ) * 1800 / M_PI);
+    angle = (int) (atan2( (double)dy, (double)dx ) * 1800 / M_PI);
     RotatePoint( &dx, &dy, angle );  /* Le segment dx, dy est horizontal */
                                      /* -> dx = longueur, dy = 0 */
     RotatePoint( &cX, &cY, angle );
@@ -759,14 +759,14 @@ static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
     dx = ArcStartX - DrawItem->m_Pos.x;
     dy = ArcStartY - DrawItem->m_Pos.y;
 
-    DrawItem->m_Rayon = (int) sqrt( (dx * dx) + (dy * dy) );
+    DrawItem->m_Rayon = (int) sqrt( ((double)dx * dx) + ((double)dy * dy) );
 
-    DrawItem->t1 = (int) (atan2( dy, dx ) * 1800 / M_PI);
+    DrawItem->t1 = (int) (atan2( (double)dy, (double)dx ) * 1800 / M_PI);
 
     dx = ArcEndX - DrawItem->m_Pos.x;
     dy = ArcEndY - DrawItem->m_Pos.y;
 
-    DrawItem->t2 = (int) (atan2( dy, dx ) * 1800 / M_PI);
+    DrawItem->t2 = (int) (atan2( (double)dy, (double)dx ) * 1800 / M_PI);
 
     DrawItem->m_ArcStart.x = ArcStartX;
     DrawItem->m_ArcStart.y = ArcStartY;
