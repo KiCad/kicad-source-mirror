@@ -1,6 +1,7 @@
 add_definitions(-DGERBVIEW -DPCBNEW)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../cvpcb
                     ../pcbnew

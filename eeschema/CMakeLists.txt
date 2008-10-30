@@ -1,7 +1,7 @@
 add_definitions(-DEESCHEMA)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-#                    ${Boost_INCLUDE_DIR}
+                    ${Boost_INCLUDE_DIR}
                    )
 
 set(EESCHEMA_SRCS

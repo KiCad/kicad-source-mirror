@@ -10,6 +10,10 @@ email address.
 ================================================================================
 ++All
     Use double instead float when possible, ande code cleaning.
+    Some changes for a better code compatibility with others compliers (MSVC)
+    (__MSVC__ must be defined when using MSVC)
+    (double round(double) and typeof unkown in MSVC)
+    Note: I cannot test kicad under MSVC.
 
 
 2008-Oct-19 UPDATE Dick Hollenbeck <dick@softplc.com>

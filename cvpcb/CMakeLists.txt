@@ -1,6 +1,7 @@
 add_definitions(-DCVPCB)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../pcbnew
                     ../polygon)

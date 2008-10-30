@@ -405,12 +405,20 @@ wxString& operator  <<( wxString& aString, const wxPoint& aPoint );
 bool                ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
 
 
+
+/**
+ * Function ReturnPcbLayerName
+ * @return a wxString containing the name of the layer number "layer_number".
+ * @param layer_number the layer number of the layer
+ * @param is_filename if TRUE,  the name can be used for a file name (not internatinalized, no space)
+ */
 wxString            ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
 
-/* Return the name of the layer number "layer_number".
- *  if "is_filename" == TRUE,  the name can be used for a file name
- *  (not internatinalized, no space)*/
-
+#ifdef __MSVC__     // compilers that does not have the round function (posix)
+/* return the near rounded (like the equivalent integer value) from aNumber
+*/
+double round( double aNumber );
+#endif
 
 /**************/
 /* DRAWTXT.CPP */

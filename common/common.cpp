@@ -555,3 +555,15 @@ wxString& operator <<( wxString& aString, const wxPoint& aPos )
 
     return aString;
 }
+
+
+#ifdef __MSVC__     // compilers that does not have the round function (posix)
+/* return the nearest rounded ( equivalent to the nearest integer value)
+ * from aNumber
+ */
+double round( double aNumber )
+{
+    return floor( aNumber + 0.5 );
+}
+#endif
+

@@ -1,5 +1,9 @@
 add_definitions(-DKICAD)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${Boost_INCLUDE_DIR}
+                    )
+
 set(KICAD_SRCS
     buildmnu.cpp
     commandframe.cpp

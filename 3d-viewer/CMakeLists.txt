@@ -1,6 +1,7 @@
 add_definitions(-DPCBNEW)
 
-include_directories(../pcbnew
+include_directories(${Boost_INCLUDE_DIR}
+                    ../pcbnew
                     ../polygon)
 
 set(3D-VIEWER_SRCS

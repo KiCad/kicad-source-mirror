@@ -7,14 +7,11 @@
 /* Fichier base_struct.cpp */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "trigo.h"
-#include "macros.h"
 #include "common.h"
 #include "wxstruct.h"
 #include "base_struct.h"
 #include "grfonte.h"
-
 #include "macros.h"
 
 enum textbox {
