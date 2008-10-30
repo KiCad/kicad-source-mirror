@@ -57,40 +57,6 @@
 #define EXCHG( a, b ) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }
 
 
-class Hierarchical_PIN_Sheet_Struct;
-static inline void EXCHG( const Hierarchical_PIN_Sheet_Struct* a, const Hierarchical_PIN_Sheet_Struct* b )
-{
-    const Hierarchical_PIN_Sheet_Struct* temp = a;
-    a = b;
-    b = temp;
-};
-
-class SCH_CMP_FIELD;
-static inline void EXCHG( const SCH_CMP_FIELD* a, const SCH_CMP_FIELD* b )
-{
-    const SCH_CMP_FIELD* temp = a;
-    a = b;
-    b = temp;
-};
-
-class BOARD_ITEM;
-static inline void EXCHG( const BOARD_ITEM* a, const BOARD_ITEM* b )
-{
-    const BOARD_ITEM* temp = a;
-    a = b;
-    b = temp;
-};
-
-class D_PAD;
-static inline void EXCHG( const D_PAD* a, const D_PAD* b )
-{
-    const D_PAD* temp = a;
-    a = b;
-    b = temp;
-};
-
-#endif
-
 /*****************************************************/
 /* inline functions to insert menuitems with a icon: */
 /*****************************************************/
