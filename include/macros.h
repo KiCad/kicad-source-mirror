@@ -53,6 +53,11 @@
 /****************************************/
 /* inline functions to exchange 2 items */
 /****************************************/
+
+#if 1
+#define EXCHG( a, b ) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }
+
+#else
 static inline void EXCHG( int a, int b )
 {
     int temp = a;
@@ -126,6 +131,9 @@ static inline void EXCHG( const D_PAD* a, const D_PAD* b )
     a = b;
     b = temp;
 };
+
+#endif
+
 /*****************************************************/
 /* inline functions to insert menuitems with a icon: */
 /*****************************************************/
