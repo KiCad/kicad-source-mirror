@@ -119,6 +119,7 @@ public:
 public:
     WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent );
 private:
+    void OnInitDialog( wxInitDialogEvent& event );
     void Plot( wxCommandEvent& event );
     void OnQuit( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
@@ -130,6 +131,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_PlotFrame, wxDialog )
+EVT_INIT_DIALOG( WinEDA_PlotFrame::OnInitDialog )
 EVT_CLOSE( WinEDA_PlotFrame::OnClose )
 EVT_BUTTON( wxID_CANCEL, WinEDA_PlotFrame::OnQuit )
 EVT_BUTTON( ID_EXEC_PLOT, WinEDA_PlotFrame::Plot )
@@ -149,18 +151,25 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
               wxDEFAULT_DIALOG_STYLE )
 /********************************************************************/
 {
+    m_Parent = parent;
+    Centre();
+
+}
+
+
+/**************************************************************/
+void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
+/**************************************************************/
+{
+
     wxButton* button;
 
-    m_Parent = parent;
-
-    BOARD*    board = parent->m_Pcb;
+    BOARD*    board = m_Parent->m_Pcb;
 
     wxConfig* config = m_Parent->m_Parent->m_EDA_Config;  //  Current config used by application
 
 
     SetFont( *g_DialogFont );
-    Centre();
-
     m_Plot_Sheet_Ref = NULL;
 
     wxBoxSizer* MainBoxSizer = new      wxBoxSizer( wxHORIZONTAL );
@@ -443,16 +452,15 @@ WinEDA_PlotFrame::WinEDA_PlotFrame( WinEDA_BasePcbFrame* parent ) :
     MidLeftBoxSizer->Add( m_HPGL_PlotCenter_Opt, 0, wxGROW | wxALL, 5 );
 
     // Mise a jour des activations des menus:
-    wxCommandEvent event;
-    SetCommands( event );
+    wxCommandEvent cmd_event;
+    SetCommands( cmd_event );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 
     // without this line, the ESC key does not work
-    m_PlotButton->SetFocus();
+    SetFocus();
 }
-
 
 /***************************************************************/
 void WinEDA_PlotFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )

@@ -65,7 +65,8 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
     bool swap = MapAngles( &pt1, &pt2, aTransformMatrix );
     if( swap )
     {
-        EXCHG( pos1.x, pos2.x ); EXCHG( pos1.y, pos2.y )
+        EXCHG( pos1.x, pos2.x );
+        EXCHG( pos1.y, pos2.y );
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -76,24 +77,24 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-            m_Rayon, linewidth, color,
-            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                    m_Rayon, linewidth, color,
+                    ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-            m_Rayon, color, color );
+                     m_Rayon, color, color );
     else
 #ifdef DRAW_ARC_WITH_ANGLE
 
 
 
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-            m_Rayon, linewidth, color );
+               m_Rayon, linewidth, color );
 #else
 
 
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            posc.x, posc.y, linewidth, color );
+                posc.x, posc.y, linewidth, color );
 #endif
 }
 
@@ -125,14 +126,14 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-            m_Rayon, linewidth, color,
-            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                       m_Rayon, linewidth, color,
+                       ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-            m_Rayon, 0, color, color );
+                        m_Rayon, 0, color, color );
     else
         GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-            m_Rayon, linewidth, color );
+                  m_Rayon, linewidth, color );
 }
 
 
@@ -161,9 +162,9 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOff
     int t1 = (aTransformMatrix[0][0] != 0) ^ (m_Horiz != 0);
 
     DrawGraphicText( aPanel, aDC, pos1, color, m_Text,
-        t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-        m_Size,
-        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
+                     t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
+                     m_Size,
+                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
 }
 
 
@@ -194,14 +195,14 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            color, linewidth,
-            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                     color, linewidth,
+                     ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            color, color );
+                      color, color );
     else
         GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            linewidth, color );
+                linewidth, color );
 }
 
 
@@ -262,7 +263,7 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     {
         Buf_Poly_Size     = m_CornersCount;
         Buf_Poly_Drawings = (int*) realloc( Buf_Poly_Drawings,
-            sizeof(int) * 2 * Buf_Poly_Size );
+                                            sizeof(int) * 2 * Buf_Poly_Size );
     }
 
     for( int ii = 0, jj = 0; ii < m_CornersCount; ii++, jj += 2 )
@@ -282,14 +283,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 1, linewidth, color,
-            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+               Buf_Poly_Drawings, 1, linewidth, color,
+               ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 1, linewidth, color, color );
+                Buf_Poly_Drawings, 1, linewidth, color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 0, linewidth, color, color );
+                Buf_Poly_Drawings, 0, linewidth, color, color );
 }
 
 
@@ -297,13 +298,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
                          int aDrawMode, void* aData, int aTransformMatrix[2][2] )
 /*************************************************************************************************/
-/* if aData not NULL, adat must point a wxString which is used instead of the m_Text
-*/
-{
-    wxPoint     text_pos;
 
-    int         color     = aColor;
-    int         linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+/* if aData not NULL, adat must point a wxString which is used instead of the m_Text
+ */
+{
+    wxPoint text_pos;
+
+    int     color     = aColor;
+    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( aColor < 0 )                                    // Used normal color or selected color
     {
@@ -332,11 +334,11 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOf
     }
     text_pos = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
 
-    wxString * text = aData ? (wxString *) aData : &m_Text;
+    wxString* text = aData ? (wxString*) aData : &m_Text;
     GRSetDrawMode( aDC, aDrawMode );
     DrawGraphicText( aPanel, aDC, text_pos,
-        color, text->GetData(),
-        m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-        m_Size,
-        m_HJustify, m_VJustify, linewidth );
+                     color, text->GetData(),
+                     m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+                     m_Size,
+                     m_HJustify, m_VJustify, linewidth );
 }

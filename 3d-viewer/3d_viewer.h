@@ -49,10 +49,10 @@ class SEGVIA;
 class Info_3D_Visu
 {
 public:
-    float m_Beginx, m_Beginy;	/* position of mouse */
-    float m_Quat[4];			/* orientation of object */
-    float m_Rot[4];				/* man rotation of object */
-    float m_Zoom;				/* field of view in degrees */
+    double m_Beginx, m_Beginy;	/* position of mouse */
+    double m_Quat[4];			/* orientation of object */
+    double m_Rot[4];				/* man rotation of object */
+    double m_Zoom;				/* field of view in degrees */
 	S3D_Color m_BgColor;
 	bool m_Draw3DAxis;
 	bool m_Draw3DModule;
@@ -65,11 +65,11 @@ public:
 	wxSize m_BoardSize;
 	int m_Layers;
 	EDA_BoardDesignSettings * m_BoardSettings;	// Link to current board design settings
-	float m_Epoxy_Width;		/* Epoxy tickness (normalized) */
+	double m_Epoxy_Width;		/* Epoxy tickness (normalized) */
 
-	float m_BoardScale;			/* Normalisation scale for coordinates:
+	double m_BoardScale;			/* Normalisation scale for coordinates:
 								when scaled tey are between -1.0 and +1.0 */
-	float m_LayerZcoord[32];
+	double m_LayerZcoord[32];
 public:
 	Info_3D_Visu();
 	~Info_3D_Visu();

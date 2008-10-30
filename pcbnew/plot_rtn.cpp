@@ -613,7 +613,7 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
 
     /* calcul de la position du debut du texte */
     if( centreX )
-        sx = cX - ( (espacement * nbcodes) / 2 ) + (espacement / 9);
+        sx = cX - ( (espacement * nbcodes) / 2 );
     else
         sx = cX;
     if( centreY )

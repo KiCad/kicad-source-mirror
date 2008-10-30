@@ -1,4 +1,6 @@
-/* Macros utiles */
+/**************************************/
+/* Useful macros and inline functions */
+/**************************************/
 
 #ifndef MACROS_H
 #define MACROS_H
@@ -48,10 +50,85 @@
                                             Angle -= 1800; }
 
 
-/* exchange 2 items */
-#define EXCHG( a, b ) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }
+/****************************************/
+/* inline functions to exchange 2 items */
+/****************************************/
+static inline void EXCHG( int a, int b )
+{
+    int temp = a;
+    a = b;
+    b = temp;
+};
 
+static inline void EXCHG( int* a, int* b )
+{
+    int* temp = a;
+    a = b;
+    b = temp;
+};
+
+static inline void EXCHG( double a, double b )
+{
+    double temp = a;
+    a = b;
+    b = temp;
+};
+
+static inline void EXCHG( wxPoint a, wxPoint b )
+{
+    wxPoint temp = a;
+    a = b;
+    b = temp;
+};
+
+static inline void EXCHG( wxSize a, wxSize b )
+{
+    wxSize temp = a;
+    a = b;
+    b = temp;
+};
+
+static inline void EXCHG( const wxChar* a, const wxChar* b )
+{
+    const wxChar* temp = a;
+    a = b;
+    b = temp;
+};
+
+class Hierarchical_PIN_Sheet_Struct;
+static inline void EXCHG( const Hierarchical_PIN_Sheet_Struct* a, const Hierarchical_PIN_Sheet_Struct* b )
+{
+    const Hierarchical_PIN_Sheet_Struct* temp = a;
+    a = b;
+    b = temp;
+};
+
+class SCH_CMP_FIELD;
+static inline void EXCHG( const SCH_CMP_FIELD* a, const SCH_CMP_FIELD* b )
+{
+    const SCH_CMP_FIELD* temp = a;
+    a = b;
+    b = temp;
+};
+
+class BOARD_ITEM;
+static inline void EXCHG( const BOARD_ITEM* a, const BOARD_ITEM* b )
+{
+    const BOARD_ITEM* temp = a;
+    a = b;
+    b = temp;
+};
+
+class D_PAD;
+static inline void EXCHG( const D_PAD* a, const D_PAD* b )
+{
+    const D_PAD* temp = a;
+    a = b;
+    b = temp;
+};
+/*****************************************************/
 /* inline functions to insert menuitems with a icon: */
+/*****************************************************/
 static inline void ADD_MENUITEM( wxMenu* menu, int id,
                                  const wxString& text,
 								 const wxBitmap& icon )

@@ -21,8 +21,6 @@
 #include "pcbstruct.h"
 #include "macros.h"
 
-// #include "pcbnew.h"
-
 #include "3d_viewer.h"
 #include "trackball.h"
 
@@ -111,7 +109,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_Layers     = pcb->m_BoardSettings->m_CopperLayerCount;
     g_Parm_3D_Visu.m_BoardScale = 2.0 / MAX( g_Parm_3D_Visu.m_BoardSize.x,
         g_Parm_3D_Visu.m_BoardSize.y );
-    float epoxy_width = 1.6;    // epoxy width in mm
+    double epoxy_width = 1.6;    // epoxy width in mm
     g_Parm_3D_Visu.m_Epoxy_Width = epoxy_width / 2.54 * 1000
                                    * g_Parm_3D_Visu.m_BoardScale;
 
@@ -591,7 +589,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
     int     angle, delta_angle;
     int     coord[4][2];
     double  fcoord[8][2], f_hole_coord[8][2];
-    float   scale;
+    double   scale;
     double  zpos;
     wxPoint shape_pos;
     double  x, y, r, w, hole, holeX, holeY;

@@ -230,7 +230,7 @@ void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
 /********************************************************/
 {
     wxSize size( GetClientSize() );
-    float  spin_quat[4];
+    double  spin_quat[4];
 
 
     if( event.RightDown() )
@@ -298,7 +298,7 @@ void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
         {
             /* middle button drag -> pan */
             /* Current zoom and an additional factor are taken into account for the amount of panning. */
-            const float PAN_FACTOR = 8.0 * g_Parm_3D_Visu.m_Zoom;
+            const double PAN_FACTOR = 8.0 * g_Parm_3D_Visu.m_Zoom;
             g_Draw3d_dx -= PAN_FACTOR * ( g_Parm_3D_Visu.m_Beginx - event.GetX() ) / size.x;
             g_Draw3d_dy -= PAN_FACTOR * (event.GetY() - g_Parm_3D_Visu.m_Beginy) / size.y;
         }

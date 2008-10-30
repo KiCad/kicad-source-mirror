@@ -75,7 +75,7 @@ public:
                                          * determined, upon placement, from the library component.
                                          * determined, upon file load, by the first non-digits in the reference fields. */
 
-    int               m_Convert;                    /* Gestion (management) des mutiples representations (ex: conversion De Morgan) */
+    int               m_Convert;                    /* Handle mutiple shape (for instance De Morgan conversion) */
     int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
 
 private:
