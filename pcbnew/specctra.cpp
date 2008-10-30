@@ -3747,6 +3747,13 @@ int PADSTACK::Compare( PADSTACK* lhs, PADSTACK* rhs )
         rhs->hash = rhs->makeHash();
 
     int result = lhs->hash.compare( rhs->hash );
+    if( result )
+        return result;
+
+    // Via names hold the drill diameters, so we have to include those to discern
+    // between two vias with same copper size but with different drill sizes.
+    result = lhs->padstack_id.compare( rhs->padstack_id );
+
     return result;
 }
 
