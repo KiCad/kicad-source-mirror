@@ -10,8 +10,6 @@ email address.
 ================================================================================
 ++All
     Use double instead float when possible, ande code cleaning.
-    change EXCHG macro to equivalent inline functions
-        (better code compatibility with some compilers)
 
 
 2008-Oct-19 UPDATE Dick Hollenbeck <dick@softplc.com>
