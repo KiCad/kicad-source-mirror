@@ -54,51 +54,8 @@
 /* inline functions to exchange 2 items */
 /****************************************/
 
-#if 1
 #define EXCHG( a, b ) { typeof(a) __temp__ = (a); (a) = (b); (b) = __temp__; }
 
-#else
-static inline void EXCHG( int a, int b )
-{
-    int temp = a;
-    a = b;
-    b = temp;
-};
-
-static inline void EXCHG( int* a, int* b )
-{
-    int* temp = a;
-    a = b;
-    b = temp;
-};
-
-static inline void EXCHG( double a, double b )
-{
-    double temp = a;
-    a = b;
-    b = temp;
-};
-
-static inline void EXCHG( wxPoint a, wxPoint b )
-{
-    wxPoint temp = a;
-    a = b;
-    b = temp;
-};
-
-static inline void EXCHG( wxSize a, wxSize b )
-{
-    wxSize temp = a;
-    a = b;
-    b = temp;
-};
-
-static inline void EXCHG( const wxChar* a, const wxChar* b )
-{
-    const wxChar* temp = a;
-    a = b;
-    b = temp;
-};
 
 class Hierarchical_PIN_Sheet_Struct;
 static inline void EXCHG( const Hierarchical_PIN_Sheet_Struct* a, const Hierarchical_PIN_Sheet_Struct* b )
