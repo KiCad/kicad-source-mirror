@@ -660,7 +660,7 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
     char        name[48];
     PADSTACK*   padstack = new PADSTACK();
 
-    double      dsnDiameter = scale(aCopperDiameter);
+    double      dsnDiameter = scale( aCopperDiameter );
 
     for( int layer=aTopLayer;  layer<=aBotLayer;  ++layer )
     {
@@ -986,9 +986,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // Add .1 mil to the requested clearances as a safety margin.
         // There has been disagreement about interpretation of clearance in the past
         // between Kicad and Freerouter, so keep this safetyMargin until the
-        // disagreement is resolved and stable.  Recently Kicad started adding
-        // 0.1 mils to what it is given, so we can use zero for now.
-        const double  safetyMargin = 0.0;
+        // disagreement is resolved and stable.  Freerouter seems to be moving
+        // (protected) traces upon loading the DSN file, and even though it seems to sometimes
+        // add its own 0.1 to the clearances, I believe this is happening after
+        // the load process (and moving traces) so I am of the opinion this is
+        // still needed.
+        const double  safetyMargin = 0.1;
 
         double  clearance = scale(curTrackClear);
 
@@ -1322,6 +1325,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
             PADSTACK* padstack = makeVia( via );
             PADSTACK* registered = pcb->library->LookupVia( padstack );
+
+            // if the one looked up is not our padstack, then delete our padstack
+            // since it was a duplicate of one already registered.
             if( padstack != registered )
             {
                 delete padstack;
