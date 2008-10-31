@@ -869,8 +869,6 @@ static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, int* Points )
 void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, int Fill,
               int width, int Color, int BgColor )
 {
-    int startx, starty;
-
     if( !IsGRSPolyDrawable( ClipBox, n, Points ) )
         return;
 
@@ -883,11 +881,15 @@ void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, int Fill,
     }
     else
     {
-        startx = Points[n * 2 - 2];
-        starty = Points[n * 2 - 1];
+        int endx = Points[n * 2 - 2];
+        int endy = Points[n * 2 - 1];
 
         GRSetBrush( DC, Color );
         DC->DrawLines( n, (wxPoint*) Points );
+        // The last point is not drawn by DrawLine and DrawLines
+        // Add it if the polygon is not closed
+        if ( endx != Points[0] || endy != Points[1] )
+            DC->DrawPoint(endx, endy);
     }
 }
 

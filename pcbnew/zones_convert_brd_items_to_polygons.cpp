@@ -36,7 +36,10 @@ void        AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 static int s_CircleToSegmentsCount = 16;   /* default value. the real value will be changed to 32
                                             * if g_Zone_Arc_Approximation == 1
                                             */
-
+double s_Correction;    /* mult coeff used to enlarge rouded and oval pads
+                        * because the segment approximation for arcs and circles
+                        * create a smaler gap than a trur circle
+                        */
 /** function AddClearanceAreasPolygonsToPolysList
  * Add non copper areas polygons (pads and tracks with clearence)
  * to a filled copper area
@@ -59,6 +62,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         s_CircleToSegmentsCount = 32;
     else
         s_CircleToSegmentsCount = 16;
+
+    /* calculates the coeff to compensate radius reduction of holes clearance
+    * due to the segment approx.
+    * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
+    * s_Correction is 1 /cos( PI/s_CircleToSegmentsCount  )
+    */
+    s_Correction = 1.0 / cos(3.14159265 / s_CircleToSegmentsCount);
 
     /* Uses a kbool engine to add holes in the m_FilledPolysList polygon.
      * Because this function is called just after creating the m_FilledPolysList,
@@ -89,13 +99,16 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         booleng->EndPolygonAdd();
     }
 
+    // Calculates the clearance value that meet DRC requirements
+    int clearance = max( m_ZoneClearance,g_DesignSettings.m_TrackClearence);
+
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
      * in GroupB in Bool_Engine
      */
     /* items ouside the zone bounding box are skipped */
     EDA_Rect item_boundingbox;
     EDA_Rect zone_boundingbox = GetBoundingBox();
-    zone_boundingbox.Inflate(m_ZoneClearance, m_ZoneClearance);
+    zone_boundingbox.Inflate(m_ZoneClearance, clearance);
     /*
      * First : Add pads
      */
@@ -110,7 +123,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if ( item_boundingbox.Intersects( zone_boundingbox ) )
-                    AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
+                    AddPadWithClearancePolygon( booleng, *pad, clearance );
                 continue;
             }
 
@@ -119,7 +132,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             case PAD_NOT_IN_ZONE:
                 item_boundingbox = pad->GetBoundingBox();
                 if ( item_boundingbox.Intersects( zone_boundingbox ) )
-                    AddPadWithClearancePolygon( booleng, *pad, m_ZoneClearance );
+                    AddPadWithClearancePolygon( booleng, *pad, clearance );
                 break;
 
             case THERMAL_PAD:
@@ -148,10 +161,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             continue;
         item_boundingbox = track->GetBoundingBox();
         if ( item_boundingbox.Intersects( zone_boundingbox ) )
-            AddTrackWithClearancePolygon( booleng, *track, m_ZoneClearance );
+            AddTrackWithClearancePolygon( booleng, *track, clearance );
     }
 
     // Draw graphic items (copper texts) and board edges
+    // zone clearance is used here regardless of the g_DesignSettings.m_TrackClearence value
     for( BOARD_ITEM* item = aPcb->m_Drawings;  item;  item = item->Next() )
     {
         if( item->GetLayer() != GetLayer() && item->GetLayer() != EDGE_N )
@@ -228,6 +242,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
     switch( aPad.m_PadShape )
     {
     case PAD_CIRCLE:
+        dx = (int) (dx * s_Correction);
         for( ii = 0; ii < s_CircleToSegmentsCount; ii++ )
         {
             corner_position = wxPoint( dx, 0 );
@@ -243,6 +258,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
         angle = aPad.m_Orient;
         if( dy > dx )                                                   // Oval pad X/Y ratio for choosing translation axles
         {
+            dy = (int) (dy * s_Correction);
             int     angle_pg;                                           // Polygon angle
             wxPoint shape_offset = wxPoint( 0, (dy - dx) );
             RotatePoint( &shape_offset, angle );                        // Rotating shape offset vector with component
@@ -269,8 +285,9 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
 
             break;
         }
-        else
+        else    //if( dy <= dx )
         {
+            dx = (int) (dx * s_Correction);
             int     angle_pg; // Polygon angle
             wxPoint shape_offset = wxPoint( (dy - dx), 0 );
             RotatePoint( &shape_offset, angle );
@@ -663,6 +680,7 @@ void AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
     case TYPEVIA:
         if( aBooleng->StartPolygonAdd( GROUP_B ) )
         {
+            dx = (int) (dx * s_Correction);
             for( ii = 0; ii < s_CircleToSegmentsCount; ii++ )
             {
                 corner_position = wxPoint( dx, 0 );
