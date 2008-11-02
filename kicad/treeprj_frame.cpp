@@ -1,9 +1,11 @@
-/*********************/
-/* treeprj_frame.cpp */
-/*********************/
+/**
+ * @file treeprj_frame.cpp
+ * @brief TODO
+ */
+
 
 #ifdef KICAD_PYTHON
-#include <pyhandler.h>
+  #include <pyhandler.h>
 #endif
 
 #include "fctsys.h"
@@ -45,32 +47,45 @@ const wxChar * s_AllowedExtensionsToList[] =
     NULL                    // end of list
 };
 
+
+
+/**
+ * @brief TODO
+ */
 /******************************************************************/
 WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
                                   const wxPoint&    pos,
                                   const wxSize&     size ) :
-    wxSashLayoutWindow( parent, ID_LEFT_FRAME, pos, size,
-                        wxNO_BORDER | wxSW_3D )
+              wxSashLayoutWindow( parent,
+                                  ID_LEFT_FRAME,
+                                  pos,
+                                  size,
+                                  wxNO_BORDER | wxSW_3D )
 /******************************************************************/
 {
-    m_Parent      = parent;
-    m_TreeProject = NULL;
-    wxMenuItem* item;
-    m_PopupMenu = NULL;
+  m_Parent      = parent;
+  m_TreeProject = NULL;
+  wxMenu* menu = m_ContextMenus[TREE_PY];
+  wxMenuItem* item;
+  m_PopupMenu = NULL;
 
-    /* Filtering is now inverted: the filters are actually used to _enable_ support
-     * for a given file type.
-     */
-    m_Filters.push_back( wxT( "^.*\\.sch$" ) );     // note: sch filter must be first because of a test in AddFile() below
-    for ( int ii = 0; s_AllowedExtensionsToList[ii] != NULL; ii++ )
-    {
-        m_Filters.push_back( s_AllowedExtensionsToList[ii] );
-    }
-    m_Filters.push_back( wxT( "^no kicad files found" ) );
-    
-#ifdef KICAD_PYTHON
+  /* 
+   * Filtering is now inverted: the filters are actually used to _enable_ support
+   * for a given file type.
+   */
+
+  // NOTE: sch filter must be first because of a test in AddFile() below
+  m_Filters.push_back( wxT( "^.*\\.sch$" ) );
+  for ( int ii = 0; s_AllowedExtensionsToList[ii] != NULL; ii++ )
+  {
+    m_Filters.push_back( s_AllowedExtensionsToList[ii] );
+  }
+  m_Filters.push_back( wxT( "^no kicad files found" ) );
+
+
+  #ifdef KICAD_PYTHON
     m_Filters.push_back( wxT( "^.*\\.py$" ) );
-    
+
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RunScript" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::EditScript" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::TreeContextMenu" ) );
@@ -80,99 +95,127 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::DeleteFile" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RenameFile" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::MoveFile" ) );
-#endif
+  #endif /* KICAD_PYTHON */
 
-    for( int i = 0; i < TREE_MAX; i++ )
-        m_ContextMenus.push_back( new wxMenu() );
 
-    // Python script context menu:
+  for( int i = 0; i < TREE_MAX; i++ )
+    m_ContextMenus.push_back( new wxMenu() );
 
-    wxMenu* menu = m_ContextMenus[TREE_PY];
 
-#ifdef KICAD_PYTHON
+  // Python script context menu
+  #ifdef KICAD_PYTHON
     item = new wxMenuItem( menu, ID_PROJECT_RUNPY,
-                          _( "&Run" ),
-                          _( "Run the Python Script" ) );
-
+                           _( "&Run" ),
+                           _( "Run the Python Script" ) );
     item->SetBitmap( icon_python_small_xpm );
     menu->Append( item );
-#endif
+  #endif /* KICAD_PYTHON */
 
-    item = new wxMenuItem( menu, ID_PROJECT_TXTEDIT,
-                          _( "&Edit in a text editor" ),
-                          _( "&Open the file in a Text Editor" ) );
 
-    item->SetBitmap( icon_txt_xpm );
-    menu->Append( item );
+  // ID_PROJECT_TXTEDIT
+  item = new wxMenuItem( menu,
+                         ID_PROJECT_TXTEDIT, 
+                         _( "&Edit in a text editor" ), 
+                         _( "&Open the file in a Text Editor" ) ); 
+  item->SetBitmap( icon_txt_xpm ); 
+  menu->Append( item ); 
 
-    // New files context menu:
-    wxMenu* menus[2];
-    menus[0] = m_ContextMenus[TREE_DIRECTORY];
-    menus[1] = m_ContextMenus[TREE_PROJECT];
+
+  // New files context menu:
+  wxMenu* menus[2];
+  menus[0] = m_ContextMenus[TREE_DIRECTORY];
+  menus[1] = m_ContextMenus[TREE_PROJECT];
 
     for( int i = 0; i < 2; i++ )
     {
-        menu = menus[i];
+      menu = menus[i];
 
-        item = new wxMenuItem( menu, ID_PROJECT_NEWDIR, _( "New D&irectory" ), _(
-                                  "Create a New Directory" ) );
+      // ID_PROJECT_NEWDIR
+      item = new wxMenuItem( menu,
+                             ID_PROJECT_NEWDIR,
+                             _( "New D&irectory" ),
+                             _( "Create a New Directory" ) );
+      item->SetBitmap( directory_xpm );
+      menu->Append( item );
 
-        item->SetBitmap( directory_xpm );
-        menu->Append( item );
 
-#ifdef KICAD_PYTHON
-        item = new wxMenuItem( menu, ID_PROJECT_NEWPY, _( "New P&ython Script" ), _(
-                                  "Create a New Python Script" ) );
-
+      // ID_PROJECT_NEWPY
+      #ifdef KICAD_PYTHON
+        item = new wxMenuItem( menu,
+                               ID_PROJECT_NEWPY,
+                               _( "New P&ython Script" ),
+                               _( "Create a New Python Script" ) );
         item->SetBitmap( new_python_xpm );
         menu->Append( item );
-#endif
+      #endif /* KICAD_PYTHON */
 
-        item = new  wxMenuItem( menu, ID_PROJECT_NEWTXT, _( "New &Text File" ), _(
-                                   "Create a New Txt File" ) );
 
-        item->SetBitmap( new_txt_xpm );
-        menu->Append( item );
+      // ID_PROJECT_NEWTXT
+      item = new wxMenuItem( menu,
+                             ID_PROJECT_NEWTXT,
+                             _( "New &Text File" ),
+                             _( "Create a New Txt File" ) );
+      item->SetBitmap( new_txt_xpm );
+      menu->Append( item );
 
-        item = new  wxMenuItem( menu, ID_PROJECT_NEWFILE, _( "New &File" ), _( "Create a New File" ) );
 
-        item->SetBitmap( new_xpm );
-        menu->Append( item );
+      // ID_PROJECT_NEWFILE 
+      item = new wxMenuItem( menu,
+                             ID_PROJECT_NEWFILE,
+                             _( "New &File" ),
+                             _( "Create a New File" ) );
+      item->SetBitmap( new_xpm );
+      menu->Append( item );
     }
+
 
     // Put the Rename and Delete file menu commands:
     for( int i = TREE_PROJECT + 1; i < TREE_MAX; i++ )
     {
-        menu = m_ContextMenus[i];
-        item = new wxMenuItem( menu, ID_PROJECT_RENAME,
-                              TREE_DIRECTORY != i ? _ ("&Rename file") : _( "&Rename directory" ),
-                              TREE_DIRECTORY != i ? _ ("Rename file") : _( "&Rename directory" ) );
+       menu = m_ContextMenus[i];
 
+
+       // ID_PROJECT_RENAME
+       item = new wxMenuItem( menu,
+                               ID_PROJECT_RENAME,
+                               TREE_DIRECTORY != i ? _ ("&Rename file") :
+                                                    _( "&Rename directory" ),
+                               TREE_DIRECTORY != i ? _ ("Rename file") :
+                                                    _( "&Rename directory" ) );
         item->SetBitmap( right_xpm );
         menu->Append( item );
+
+
         if( TREE_DIRECTORY != i )
         {
-            item = new wxMenuItem( menu, ID_PROJECT_TXTEDIT,
-                                  _( "&Edit in a text editor" ),
-                                  _( "Open the file in a Text Editor" ) );
-
+            // ID_PROJECT_TXTEDIT
+            item = new wxMenuItem( menu,
+                                   ID_PROJECT_TXTEDIT,
+                                   _( "&Edit in a text editor" ),
+                                   _( "Open the file in a Text Editor" ) );
             item->SetBitmap( icon_txt_xpm );
             menu->Append( item );
         }
-        item = new wxMenuItem( menu, ID_PROJECT_DELETE,
-                              TREE_DIRECTORY != i ? _ ("&Delete File") : _( "&Delete Directory" ),
-                              TREE_DIRECTORY != i ? _ ("Delete the File") : _(
-                                  "&Delete the Directory and its content" ) );
 
+        // ID_PROJECT_DELETE
+        item = new wxMenuItem( menu,
+                               ID_PROJECT_DELETE,
+                               TREE_DIRECTORY != i ? _( "&Delete File" ) :
+                                                     _( "&Delete Directory" ),
+                               TREE_DIRECTORY != i ? _( "Delete the File" ) :
+                                                     _( "&Delete the Directory and its content" ) );
         item->SetBitmap( delete_xpm );
         menu->Append( item );
     }
 
-    ReCreateTreePrj();
+  ReCreateTreePrj();
 }
 
 
+
+/*****************************************************************************/
 BEGIN_EVENT_TABLE( WinEDA_PrjFrame, wxSashLayoutWindow )
+/*****************************************************************************/
 
 EVT_TREE_BEGIN_LABEL_EDIT( ID_PROJECT_TREE, WinEDA_PrjFrame::OnRenameAsk )
 EVT_TREE_END_LABEL_EDIT( ID_PROJECT_TREE, WinEDA_PrjFrame::OnRename )
@@ -188,25 +231,35 @@ EVT_MENU( ID_PROJECT_NEWTXT, WinEDA_PrjFrame::OnNewTxtFile )
 EVT_MENU( ID_PROJECT_DELETE, WinEDA_PrjFrame::OnDeleteFile )
 EVT_MENU( ID_PROJECT_RENAME, WinEDA_PrjFrame::OnRenameFile )
 
-#ifdef KICAD_PYTHON
-EVT_MENU( ID_PROJECT_RUNPY, WinEDA_PrjFrame::OnRunPy )
-#endif
-END_EVENT_TABLE()
 
-/********************************/
+#ifdef KICAD_PYTHON
+  EVT_MENU( ID_PROJECT_RUNPY, WinEDA_PrjFrame::OnRunPy )
+#endif /* KICAD_PYTHON */
+
+
+/*****************************************************************************/
+END_EVENT_TABLE()
+/*****************************************************************************/
+
+
+
+/*****************************************************************************/
 WinEDA_TreePrj::~WinEDA_TreePrj()
-/********************************/
+/*****************************************************************************/
 {
 }
 
 
-/*******************************************************/
-void WinEDA_PrjFrame::OnDragStart( wxTreeEvent& event )
-/*******************************************************/
 
-// Allowing drag&drop of file other than the currently opened project
+/**
+ * @brief Allowing drag & drop of file other than the currently opened project
+ */
+/*****************************************************************************/
+void WinEDA_PrjFrame::OnDragStart( wxTreeEvent& event )
+/*****************************************************************************/
 {
-    /* Ensure item is selected (Under Windows start drag does not activate the item) */
+    /* Ensure item is selected 
+       (Under Windows start drag does not activate the item) */
     wxTreeItemId     curr_item = event.GetItem();
 
     m_TreeProject->SelectItem( curr_item );
@@ -224,9 +277,10 @@ void WinEDA_PrjFrame::OnDragStart( wxTreeEvent& event )
 }
 
 
-/*******************************************************/
+
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnDragEnd( wxTreeEvent& event )
-/*******************************************************/
+/*****************************************************************************/
 {
     m_Parent->SetCursor( wxNullCursor );
 
@@ -261,17 +315,18 @@ void WinEDA_PrjFrame::OnDragEnd( wxTreeEvent& event )
 }
 
 
-/************************************/
+
+/*****************************************************************************/
 void WinEDA_PrjFrame::ClearFilters()
-/************************************/
+/*****************************************************************************/
 {
-    m_Filters.clear();
+  m_Filters.clear();
 }
 
 
-/*************************************************************/
+/*****************************************************************************/
 void WinEDA_PrjFrame::RemoveFilter( const wxString& filter )
-/*************************************************************/
+/*****************************************************************************/
 {
     for( unsigned int i = 0; i < m_Filters.size(); i++ )
     {
@@ -284,13 +339,17 @@ void WinEDA_PrjFrame::RemoveFilter( const wxString& filter )
 }
 
 
+
 #ifdef KICAD_PYTHON
 
-/********************************************************************************/
-TreePrjItemData* WinEDA_PrjFrame::FindItemData( const boost::python::str& name )
-/********************************************************************************/
 
-// Return the data corresponding to the file, or NULL
+
+/**
+ * @brief Return the data corresponding to the file, or NULL
+ */
+/*****************************************************************************/
+TreePrjItemData* WinEDA_PrjFrame::FindItemData(const boost::python::str& name)
+/*****************************************************************************/
 {
     // (Interative tree parsing)
     std::vector< wxTreeItemId >   roots1, roots2;
@@ -345,88 +404,140 @@ TreePrjItemData* WinEDA_PrjFrame::FindItemData( const boost::python::str& name )
         reserve = tmp;
     }
 
-    return NULL;
+  return NULL;
 }
 
 
-/******************************************************************/
-void WinEDA_PrjFrame::RemoveFilterPy( const boost::python::str& filter )
-/******************************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
+void WinEDA_PrjFrame::RemoveFilterPy(const boost::python::str& filter)
+/*****************************************************************************/
 {
-    RemoveFilter( PyHandler::MakeStr( filter ) );
+  RemoveFilter( PyHandler::MakeStr( filter ) );
 }
 
 
-/******************************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::AddFilter( const boost::python::str& filter )
-/******************************************************************/
+/*****************************************************************************/
 {
-    wxRegEx  reg;
-    wxString text = PyHandler::MakeStr( filter );
+  wxRegEx  reg;
+  wxString text = PyHandler::MakeStr( filter );
 
-    if( !reg.Compile( text ) )
-        return;
-    m_Filters.push_back( text );
+  if( !reg.Compile( text ) )
+    return;
+  m_Filters.push_back( text );
 }
 
-#endif
+#endif /* KICAD_PYTHON */
 
-/******************************************************************/
+
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 const std::vector<wxString>& WinEDA_PrjFrame::GetFilters()
-/******************************************************************/
+/*****************************************************************************/
 {
-    return m_Filters;
+  return m_Filters;
 }
 
 
-/******************************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 wxMenu* WinEDA_PrjFrame::GetContextMenu( int type )
-/******************************************************************/
+/*****************************************************************************/
 {
-    return m_ContextMenus[type];
+  return m_ContextMenus[type];
 }
 
 
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnNewDirectory( wxCommandEvent& event )
+/*****************************************************************************/
 {
     NewFile( TREE_DIRECTORY );
 }
+
+
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnNewFile( wxCommandEvent& event )
+/*****************************************************************************/
 {
-    NewFile( TREE_UNKNOWN );
+  NewFile( TREE_UNKNOWN );
 }
+
+
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnNewPyFile( wxCommandEvent& event )
+/*****************************************************************************/
 {
-    NewFile( TREE_PY );
+  NewFile( TREE_PY );
 }
+
+
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnNewTxtFile( wxCommandEvent& event )
+/*****************************************************************************/
 {
-    NewFile( TREE_TXT );
+  NewFile( TREE_TXT );
 }
 
-/******************************************************************/
+
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::NewFile( TreeFileType type )
-/******************************************************************/
+/*****************************************************************************/
 {
-    wxString         filename;
-    wxString         mask = GetFileExt( type );
-    const wxString   sep  = wxFileName().GetPathSeparator();
+  wxString         filename;
+  wxString         mask = GetFileExt( type );
+  const wxString   sep  = wxFileName().GetPathSeparator();
 
-    // Get the directory:
-    wxString         dir;
+  // Get the directory:
+  wxString         dir;
 
-    TreePrjItemData* treeData;
-    wxString         FullFileName;
+  TreePrjItemData* treeData;
+  wxString         FullFileName;
 
-    treeData = GetSelectedData();
-    if( !treeData )
-        return;
 
-    dir = treeData->GetDir();
+  treeData = GetSelectedData();
+  if( !treeData )
+    return;
 
-    // Ask for the new file name
+  dir = treeData->GetDir();
 
-    filename = EDA_FileSelector( TREE_DIRECTORY !=
+  // Ask for the new file name
+  filename = EDA_FileSelector( TREE_DIRECTORY !=
                                  type ? _( "Create New File:" ) : _( "Create New Directory" ),
                                  wxGetCwd() + sep + dir,    /* Chemin par defaut */
                                  _( "noname" ) + mask,      /* nom fichier par defaut */
@@ -436,63 +547,75 @@ void WinEDA_PrjFrame::NewFile( TreeFileType type )
                                  wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
                                  TRUE
                                  );
-    if( filename.IsEmpty() )
-        return;
+  if( filename.IsEmpty() )
+    return;
 
-    TreeFileType rootType = treeData->GetType();
-    wxTreeItemId      root;
+  TreeFileType rootType = treeData->GetType();
+  wxTreeItemId      root;
 
-    if( TREE_DIRECTORY == rootType )
-    {
-        root = m_TreeProject->GetSelection();
-    }
-    else
-    {
-        root = m_TreeProject->GetItemParent( m_TreeProject->GetSelection() );
-        if( !root.IsOk() )
-            root = m_TreeProject->GetSelection();
-    }
+  if( TREE_DIRECTORY == rootType )
+  {
+    root = m_TreeProject->GetSelection();
+  }
+  else
+  {
+    root = m_TreeProject->GetItemParent( m_TreeProject->GetSelection() );
 
-    NewFile( filename, type, root );
+    if( !root.IsOk() )
+      root = m_TreeProject->GetSelection();
+  }
+
+  NewFile( filename, type, root );
 }
 
 
-/******************************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::NewFile( const wxString& name,
-                               TreeFileType type, wxTreeItemId& root )
-/******************************************************************/
+                               TreeFileType type,
+                               wxTreeItemId& root )
+/*****************************************************************************/
 {
-    if( TREE_DIRECTORY != type )
-    {
-        wxFile( name, wxFile::write );
-#ifdef KICAD_PYTHON
-        PyHandler::GetInstance()->TriggerEvent( 
-                   wxT( "kicad::NewFile" ), PyHandler::Convert( name ) );
-#endif
-    }
-    else
-    {
-        wxMkdir( name );
-#ifdef KICAD_PYTHON
-        PyHandler::GetInstance()->TriggerEvent( 
-                   wxT( "kicad::NewDirectory" ), PyHandler::Convert( name ) );
-#endif
-    }
+  if( TREE_DIRECTORY != type )
+  {
+    wxFile( name, wxFile::write );
 
-    AddFile( name, root );
+    #ifdef KICAD_PYTHON
+      PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::NewFile" ),
+                                              PyHandler::Convert( name ) );
+    #endif /* KICAD_PYTHON */
+  }
+  else
+  {
+    wxMkdir( name );
+
+    #ifdef KICAD_PYTHON
+      PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::NewDirectory" ), 
+                                              PyHandler::Convert( name ) );
+    #endif /* KICAD_PYTHON */
+  }
+
+  AddFile( name, root );
 }
 
 
-/******************************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 wxString WinEDA_PrjFrame::GetFileExt( TreeFileType type )
-/******************************************************************/
+/*****************************************************************************/
 {
     wxString ext;
 
     switch( type )
     {
-    case 0:
-        break;                  // 0 is not used
+    case 0:                    // 0 is not used
+        break;
 
     case TREE_PROJECT:
         ext = wxT( ".pro" );
@@ -534,13 +657,15 @@ wxString WinEDA_PrjFrame::GetFileExt( TreeFileType type )
 }
 
 
-/**************************************************************************/
-bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
-/**************************************************************************/
 
-/* add filename "name" to the tree
- *  if name is a directory, add the sub directory file names
+/**
+ * @brief  Add filename "name" to the tree \n
+ *         if name is a directory, add the sub directory file names
+ * @return TODO
  */
+/*****************************************************************************/
+bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
+/*****************************************************************************/
 {
     wxTreeItemId cellule;
 
@@ -549,7 +674,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
 
     if( wxDirExists( name ) )
     {
-        type = TREE_DIRECTORY;
+      type = TREE_DIRECTORY;
     }
     else
     {
@@ -586,8 +711,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
             fp = wxFopen( FullFileName, wxT( "rt" ) );
             if( fp == NULL )
             {
-                //printf("Unable to open \"%s\"\n", (const char*) FullFileName.mb_str() );
-                return false;             // why show a file we cannot open?
+                return false;
             }
 
             addFile = false;
@@ -640,8 +764,8 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
 		}
 		kid = m_TreeProject->GetNextChild(root, cookie); 
 	}
-    // Append the item (only appending the filename not the full path):
 
+    // Append the item (only appending the filename not the full path):
     wxString         file = wxFileNameFromPath( name );
     cellule = m_TreeProject->AppendItem( root, file );
     TreePrjItemData* data = new TreePrjItemData( type, name, m_TreeProject );
@@ -659,41 +783,49 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
     else
         data->m_IsRootFile = false;
 
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ), PyHandler::Convert( name ) );
-#endif
 
-#ifdef ADD_FILES_IN_SUBDIRS
+    #ifdef KICAD_PYTHON
+      PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ),
+                                              PyHandler::Convert( name ) );
+    #endif /* KICAD_YTHON */
+
+
     // When enabled This section adds dirs and files found in the subdirs
     // in this case AddFile is recursive.
-    if( TREE_DIRECTORY == type )
-    {
+    #ifdef ADD_FILES_IN_SUBDIRS
+      if( TREE_DIRECTORY == type )
+      {
         const wxString sep = wxFileName().GetPathSeparator();
         wxDir dir( name );
-
         wxString       dir_filename;
+
         if( dir.GetFirst( &dir_filename ) )
         {
-            do
-            {
-                AddFile( name + sep + dir_filename, cellule );
-            } while( dir.GetNext( &dir_filename ) );
+         do
+         {
+           AddFile( name + sep + dir_filename, cellule );
+         }
+          while( dir.GetNext( &dir_filename ) );
         }
 
         /* Sort filenames by alphabetic order */
         m_TreeProject->SortChildren( cellule );
-    }
-#endif
-	return true; 
+      }
+    #endif /* ADD_FILES_IN_SUBDIRS */
+
+
+  return true; 
 }
 
 
-/******************************************/
-void WinEDA_PrjFrame::ReCreateTreePrj()
-/******************************************/
 
-/* Create or modify the tree showing project file names
+/**
+ * @brief  Create or modify the tree showing project file names
+ * @return TODO
  */
+/*****************************************************************************/
+void WinEDA_PrjFrame::ReCreateTreePrj()
+/*****************************************************************************/
 {
     wxTreeItemId rootcellule;
     wxString     Text;
@@ -760,11 +892,13 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
 }
 
 
-/**************************************************/
-void WinEDA_PrjFrame::OnRight( wxTreeEvent& Event )
-/**************************************************/
 
-// Opens (popup) the context menu
+/**
+ * @brief  Opens *popup* the context menu
+ */
+/*****************************************************************************/
+void WinEDA_PrjFrame::OnRight( wxTreeEvent& Event )
+/*****************************************************************************/
 {
     int              tree_id;
     TreePrjItemData* tree_data;
@@ -819,19 +953,25 @@ void WinEDA_PrjFrame::OnRight( wxTreeEvent& Event )
 
     // At last, call python to let python add menu items "on the fly"
 
-#ifdef KICAD_PYTHON
+
+  #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeContextMenu" ),
                                            PyHandler::Convert( FullFileName ) );
-#endif
+  #endif /* KICAD_PYTHON */
 
-    if( m_PopupMenu )
-        PopupMenu( m_PopupMenu );
+
+  if( m_PopupMenu )
+    PopupMenu( m_PopupMenu );
 }
 
 
-/*******************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnTxtEdit( wxCommandEvent& event )
-/*******************************************************/
+/*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
 
@@ -841,55 +981,70 @@ void WinEDA_PrjFrame::OnTxtEdit( wxCommandEvent& event )
     wxString FullFileName = tree_data->GetFileName();
     AddDelimiterString( FullFileName );
     wxString editorname = GetEditorName();
+
     if( !editorname.IsEmpty() )
     {
-#ifdef KICAD_PYTHON
+
+      #ifdef KICAD_PYTHON
         PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::EditScript" ),
-                                               PyHandler::Convert( FullFileName ) );
-#endif
-        ExecuteFile( this, editorname, FullFileName );
+                                                PyHandler::Convert( FullFileName ) );
+      #endif
+
+      ExecuteFile( this, editorname, FullFileName );
     }
 }
 
 
-/***************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnDeleteFile( wxCommandEvent& )
-/***************************************************/
+/*****************************************************************************/
 {
-    TreePrjItemData* tree_data = GetSelectedData();
+  TreePrjItemData* tree_data = GetSelectedData();
 
-    if( !tree_data )
-        return;
-    tree_data->Delete();
+  if( !tree_data )
+    return;
+  tree_data->Delete();
 }
 
 
-/***************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnRenameFile( wxCommandEvent& )
-/***************************************************/
+/*****************************************************************************/
 {
-    wxTreeItemId     curr_item = m_TreeProject->GetSelection();
-    TreePrjItemData* tree_data = GetSelectedData();
+  wxTreeItemId     curr_item = m_TreeProject->GetSelection();
+  TreePrjItemData* tree_data = GetSelectedData();
 
-    if( !tree_data )
-        return;
+  if( !tree_data )
+    return;
 
-    wxString buffer = m_TreeProject->GetItemText( curr_item );
-    wxString msg    = _( "Change filename: " ) + tree_data->m_FileName;
-    if( Get_Message(msg, _("Change filename"), buffer, this ) != 0 )
-        return; //Abort command
+  wxString buffer = m_TreeProject->GetItemText( curr_item );
+  wxString msg    = _( "Change filename: " ) + tree_data->m_FileName;
 
-    if( tree_data->Rename( buffer, true ) )
-    {
-        m_TreeProject->SetItemText( curr_item, buffer );
-    }
+  if( Get_Message(msg, _("Change filename"), buffer, this ) != 0 )
+    return; //Abort command
+
+  if( tree_data->Rename( buffer, true ) )
+    m_TreeProject->SetItemText( curr_item, buffer );
 }
+
 
 
 #ifdef KICAD_PYTHON
-/***************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnRunPy( wxCommandEvent& event )
-/***************************************************/
+/*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
 
@@ -898,19 +1053,22 @@ void WinEDA_PrjFrame::OnRunPy( wxCommandEvent& event )
 
     wxString FullFileName = tree_data->GetFileName();
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::RunScript" ),
-                                           PyHandler::Convert( FullFileName ) );
+                                            PyHandler::Convert( FullFileName ) );
     PyHandler::GetInstance()->RunScript( FullFileName );
 }
 
 
-/****************************************************************/
-int WinEDA_PrjFrame::AddStatePy( boost::python::object& bitmap )
-/****************************************************************/
 
-// Add a state to the image list ...
+/**
+ * @brief Add a state to the image list
+ */
+/*****************************************************************************/
+int WinEDA_PrjFrame::AddStatePy( boost::python::object& bitmap )
+/*****************************************************************************/
 {
     wxBitmap* image;
-    bool      success = wxPyConvertSwigPtr( bitmap.ptr(), (void**) &image, _T( "wxBitmap" ) );
+    bool      success = wxPyConvertSwigPtr( bitmap.ptr(),
+                        (void**) &image, _T( "wxBitmap" ) );
 
     if( !success )
         return -1;
@@ -931,13 +1089,16 @@ int WinEDA_PrjFrame::AddStatePy( boost::python::object& bitmap )
     return ret;
 }
 
+#endif /* KICAD_PYTHON */
 
-#endif
 
-/***************************************************/
+
+/**
+ * @brief Prevent the main project to be renamed
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnRenameAsk( wxTreeEvent& event )
-/***************************************************/
-/* Prevent the main project to be renamed */
+/*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
 
@@ -948,10 +1109,13 @@ void WinEDA_PrjFrame::OnRenameAsk( wxTreeEvent& event )
 }
 
 
-/***************************************************/
+
+/**
+ * @brief Rename a tree item on demand of the context menu
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnRename( wxTreeEvent& event )
-/***************************************************/
-/* rename a tree item on demand of the context menu */
+/*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
 
@@ -962,15 +1126,19 @@ void WinEDA_PrjFrame::OnRename( wxTreeEvent& event )
 }
 
 
-/**************************************************/
+
+/**
+ * @brief TODO
+ */
+/*****************************************************************************/
 void WinEDA_PrjFrame::OnSelect( wxTreeEvent& Event )
-/**************************************************/
+/*****************************************************************************/
 {
-    wxString         FullFileName;
+  wxString FullFileName;
 
-    TreePrjItemData* tree_data = GetSelectedData();
+  TreePrjItemData* tree_data = GetSelectedData();
 
-    if( !tree_data )
-        return;
-    tree_data->Activate(this);
+  if( !tree_data )
+    return;
+  tree_data->Activate(this);
 }
