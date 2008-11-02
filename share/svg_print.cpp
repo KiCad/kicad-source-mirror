@@ -475,7 +475,7 @@ bool WinEDA_PrintSVGFrame::DrawPage( const wxString& FullFileName, BASE_SCREEN* 
 
         g_IsPrinting = TRUE;
         SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-        panel->PrintPage( &dc, m_Print_Sheet_Ref, m_PrintMaskLayer );
+        panel->PrintPage( &dc, m_Print_Sheet_Ref, m_PrintMaskLayer, false );
         SetLocaleTo_Default( );    // revert to the current  locale
         g_IsPrinting     = FALSE;
         panel->m_ClipBox = tmp;

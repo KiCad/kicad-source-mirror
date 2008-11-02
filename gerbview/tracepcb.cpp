@@ -22,9 +22,9 @@
 /* Variables Locales */
 
 
-/**********************************************************************************/
-void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer )
-/**********************************************************************************/
+/************************************************************************************************************/
+void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer, bool aPrintMirrorMode )
+/*************************************************************************************************************/
 /* routine de trace du pcb, avec selection des couches */
 {
     DISPLAY_OPTIONS save_opt;
@@ -47,10 +47,14 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 	DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
 	g_DisplayPolygonsModeSketch = 0;
 
+    m_PrintIsMirrored = aPrintMirrorMode;
+
     ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
 
     if( Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
+
+    m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
 	g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;

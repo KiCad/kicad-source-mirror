@@ -19,9 +19,9 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
                          int draw_mode, int masklayer );
 
 
-/**********************************************************************************/
-void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer )
-/**********************************************************************************/
+/************************************************************************************************************/
+void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer, bool aPrintMirrorMode )
+/************************************************************************************************************/
 
 /* Used to print the board.
  *  Draw the board, but only layers allowed by printmasklayer
@@ -50,6 +50,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayTrackIsol  = FALSE;
     DisplayOpt.DisplayDrawItems  = FILLED;
     DisplayOpt.DisplayZones      = TRUE;
+
+    m_PrintIsMirrored = aPrintMirrorMode;
 
     /* Draw the pcb graphic items (texts, ...) */
     for( BOARD_ITEM* item = Pcb->m_Drawings;  item;  item = item->Next() )
@@ -137,6 +139,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 
     if( Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( DC, ActiveScreen, 0 );
+
+    m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
     frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;

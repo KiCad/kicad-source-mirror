@@ -87,6 +87,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     m_Block_Enable       = FALSE;
     m_PanelDefaultCursor = m_PanelCursor = wxCURSOR_ARROW;
     m_CursorLevel = 0;
+    m_PrintIsMirrored = false;
 }
 
 

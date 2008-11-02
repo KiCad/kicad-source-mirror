@@ -244,8 +244,17 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
             EndAngle = StAngle + m_Angle;
 
-            if( StAngle > EndAngle )
-                EXCHG( StAngle, EndAngle );
+            if ( ! panel->m_PrintIsMirrored)
+            {
+                if( StAngle > EndAngle )
+                    EXCHG( StAngle, EndAngle );
+            }
+            else    //Mirrored mode: arc orientation is reversed
+            {
+                if( StAngle < EndAngle )
+                    EXCHG( StAngle, EndAngle );
+            }
+
 
             if( mode == FILAIRE )
                 GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, color );

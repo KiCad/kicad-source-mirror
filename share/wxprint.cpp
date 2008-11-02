@@ -830,10 +830,10 @@ void EDA_Printout::DrawPage()
         s_PrintMaskLayer |= EDGE_LAYER;
 #endif
 
-    panel->PrintPage( dc, 0, s_PrintMaskLayer );
+    panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
 
 #else
-    panel->PrintPage( dc, m_Print_Sheet_Ref, s_PrintMaskLayer );
+    panel->PrintPage( dc, m_Print_Sheet_Ref, s_PrintMaskLayer, s_PrintMirror );
 #endif
 
     g_IsPrinting     = FALSE;

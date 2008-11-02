@@ -36,9 +36,9 @@ void        AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 static int s_CircleToSegmentsCount = 16;   /* default value. the real value will be changed to 32
                                             * if g_Zone_Arc_Approximation == 1
                                             */
-double s_Correction;    /* mult coeff used to enlarge rouded and oval pads
+double s_Correction;    /* mult coeff used to enlarge rounded and oval pads (and vias)
                         * because the segment approximation for arcs and circles
-                        * create a smaler gap than a trur circle
+                        * create a smaller gap than a true circle
                         */
 /** function AddClearanceAreasPolygonsToPolysList
  * Add non copper areas polygons (pads and tracks with clearence)

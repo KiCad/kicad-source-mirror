@@ -43,6 +43,8 @@ public:
 
     bool              m_Block_Enable;       // TRUE to accept Block Commands
     int               m_CanStartBlock;      // >= 0 (or >= n) if a block can start
+    bool              m_PrintIsMirrored;    // True when drawing in mirror mode. Used in draw arc function,
+                                            // because arcs are oriented, and in mirror mode, orientations are reversed
     // usefull to avoid false start block in certain cases (like switch from a sheet to an other scheet
     int               m_PanelDefaultCursor; // Current mouse cursor default shape id for this window
     int               m_PanelCursor;        // Current mouse cursor shape id for this window
@@ -71,7 +73,7 @@ public:
     void    OnSize( wxSizeEvent& event );
     void    SetBoundaryBox();
     void    ReDraw( wxDC* DC, bool erasebg = TRUE );
-    void    PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask );
+    void    PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask, bool aPrintMirrorMode );
     void    DrawBackGround( wxDC* DC );
     void    m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode );
     void    OnEraseBackground( wxEraseEvent& event );
