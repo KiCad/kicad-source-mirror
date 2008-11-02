@@ -65,7 +65,6 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
 {
   m_Parent      = parent;
   m_TreeProject = NULL;
-  wxMenu* menu = m_ContextMenus[TREE_PY];
   wxMenuItem* item;
   m_PopupMenu = NULL;
 
@@ -101,6 +100,7 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
   for( int i = 0; i < TREE_MAX; i++ )
     m_ContextMenus.push_back( new wxMenu() );
 
+  wxMenu* menu = m_ContextMenus[TREE_PY];
 
   // Python script context menu
   #ifdef KICAD_PYTHON

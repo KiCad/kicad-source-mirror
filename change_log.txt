@@ -6,6 +6,17 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-nov-2 CLEANUP Jerry Jacobs <jerkejacobs@gmail.com>
+================================================================================
+++kicad:
+   Cleanup comment/codestyle to make things more clear for newbie codeviewer
+   and developers.
+    + buildmnu.cpp
+    + commandframe.cpp
+    + kicad.cpp
+    + treeprj_frame.cpp
+
+
 2008-oct-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++All
