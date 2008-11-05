@@ -61,6 +61,11 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     xg   = Sheet->m_Size.x - Sheet->m_RightMargin;
     yg   = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
 
+#if defined(KICAD_GOST)
+    GRRect( &DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
+	xg * scale, yg * scale, width, Color );
+
+#else
     for( ii = 0; ii < 2; ii++ )
     {
         GRRect( &DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
@@ -69,9 +74,52 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
         refx += GRID_REF_W; refy += GRID_REF_W;
         xg   -= GRID_REF_W; yg -= GRID_REF_W;
     }
+#endif
 
     /* trace des reperes */
     refx = Sheet->m_LeftMargin;
+#if defined(KICAD_GOST)
+    refy = Sheet->m_Size.y - Sheet->m_BottomMargin; /* Lower left corner */
+    for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
+    {
+	pos.x = (refx - WsItem->m_Posx)* scale;
+	pos.y = (refy - WsItem->m_Posy)* scale;
+	msg.Empty();
+	switch( WsItem->m_Type )
+	{
+	    case WS_CADRE:
+		break;
+	    case WS_PODPIS_LU:
+		if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		DrawGraphicText(DrawPanel, DC, pos, Color,
+				msg, TEXT_ORIENT_VERT, size,
+				GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,width);
+		break;
+	    case WS_SEGMENT_LU:
+		xg = Sheet->m_LeftMargin - WsItem->m_Endx;
+		yg = Sheet->m_Size.y - Sheet->m_BottomMargin - WsItem->m_Endy;
+		GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+			xg * scale, yg * scale, width, Color);
+		break;
+	}
+    }
+    refy = Sheet->m_BottomMargin; /* Left Top corner */
+    for( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
+    {
+	pos.x = (refx + WsItem->m_Posx)* scale;
+	pos.y = (refy + WsItem->m_Posy)* scale;
+	msg.Empty();
+	switch( WsItem->m_Type )
+	{
+	    case WS_SEGMENT_LT:
+		xg = Sheet->m_LeftMargin + WsItem->m_Endx;
+		yg = Sheet->m_BottomMargin + WsItem->m_Endy;
+		GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+			xg * scale, yg * scale, width, Color);
+		break;
+	}
+    }
+#else
     refy = Sheet->m_TopMargin;                      /* Upper left corner */
     xg   = Sheet->m_Size.x - Sheet->m_RightMargin;
     yg   = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
@@ -135,8 +183,114 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             Line, TEXT_ORIENT_HORIZ, size_ref,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width );
     }
+#endif
 
     /* Trace du cartouche */
+#if defined(KICAD_GOST)
+    refx = Sheet->m_Size.x - Sheet->m_RightMargin;
+    refy = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
+    if (screen->m_ScreenNumber == 1)
+    {
+	for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
+	{
+	    pos.x = (refx - WsItem->m_Posx)* scale;
+	    pos.y = (refy - WsItem->m_Posy)* scale;
+	    msg.Empty();
+	    switch( WsItem->m_Type )
+	    {
+		case WS_DATE:
+		    break;
+		case WS_REV:
+		    break;
+		case WS_KICAD_VERSION:
+		    break;
+		case WS_PODPIS:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    DrawGraphicText(DrawPanel, DC, pos, Color,
+				    msg, TEXT_ORIENT_HORIZ, size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
+		    break;
+		case WS_SIZESHEET:
+		    break;
+		case WS_IDENTSHEET:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    msg << screen->m_ScreenNumber;
+		    DrawGraphicText(DrawPanel, DC, pos, Color,
+				    msg, TEXT_ORIENT_HORIZ, size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
+		    break;
+		case WS_SHEETS:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    msg << screen->m_NumberOfScreen;
+		    DrawGraphicText(DrawPanel, DC, pos, Color,
+				    msg, TEXT_ORIENT_HORIZ, size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
+		    break;
+		case WS_COMPANY_NAME:
+		    break;
+		case WS_TITLE:
+		    break;
+		case WS_COMMENT1:
+		    break;
+		case WS_COMMENT2:
+		    break;
+		case WS_COMMENT3:
+		    break;
+		case WS_COMMENT4:
+		    break;
+		case WS_UPPER_SEGMENT:
+		case WS_LEFT_SEGMENT:
+		    WS_MostUpperLine.m_Posy = 
+		    WS_MostUpperLine.m_Endy = 
+		    WS_MostLeftLine.m_Posy = STAMP_OY;
+		    pos.y = (refy - WsItem->m_Posy)* scale;
+		case WS_SEGMENT:
+		    xg = Sheet->m_Size.x -
+		    Sheet->m_RightMargin - WsItem->m_Endx;
+		    yg = Sheet->m_Size.y -
+		    Sheet->m_BottomMargin - WsItem->m_Endy;
+		    GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+			    xg * scale, yg * scale, width, Color);
+		    break;
+	    }
+	}
+    } else {
+	for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
+	{
+	    pos.x = (refx - WsItem->m_Posx)* scale;
+	    pos.y = (refy - WsItem->m_Posy)* scale;
+	    msg.Empty();
+	    switch( WsItem->m_Type )
+	    {
+		case WS_CADRE:
+		/* Begin list number > 1 */
+		case WS_PODPIS_D:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    DrawGraphicText(DrawPanel, DC, pos, Color,
+				    msg, TEXT_ORIENT_HORIZ, size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
+		    break;
+		case WS_IDENTSHEET_D:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    msg << screen->m_ScreenNumber;
+		    DrawGraphicText(DrawPanel, DC, pos, Color,
+				    msg, TEXT_ORIENT_HORIZ, size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
+		    break;
+		case WS_LEFT_SEGMENT_D:
+		    pos.y = (refy - WsItem->m_Posy)* scale;
+		case WS_SEGMENT_D:
+		    xg = Sheet->m_Size.x -
+			    Sheet->m_RightMargin - WsItem->m_Endx;
+		    yg = Sheet->m_Size.y -
+			    Sheet->m_BottomMargin - WsItem->m_Endy;
+		    GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+			    xg * scale, yg * scale, width, Color);
+		    break;
+	    }
+	}
+    }
+#else
     refx = Sheet->m_Size.x - Sheet->m_RightMargin - GRID_REF_W;
     refy = Sheet->m_Size.y - Sheet->m_BottomMargin - GRID_REF_W; /* lower right corner */
 
@@ -312,6 +466,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             break;
         }
     }
+#endif
 }
 
 

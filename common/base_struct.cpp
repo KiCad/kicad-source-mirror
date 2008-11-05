@@ -535,7 +535,15 @@ void EDA_TextStruct::CreateDrawData()
     while( kk++ < nbchar )
     {
         x0 = 0; y0 = 0;
-        AsciiCode = (*ptr) & 255;
+#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
+	AsciiCode = (*ptr) & 0x7FF;
+	if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
+	    AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
+	else
+	    AsciiCode = AsciiCode & 0xFF;
+#else
+         AsciiCode = (*ptr) & 255;
+#endif
         ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
                                                   *  du caractere a dessiner */
 

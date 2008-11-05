@@ -158,6 +158,15 @@ Build the "minizip" executable. Use OFF to disable it building.
 -DKICAD_PYTHON=ON
 Build the KiCad with Python support.
 
+-DKICAD_CYRILLIC=ON
+Build the KiCad with cyrillic fonts support.
+
+-DwxUSE_UNICODE=ON
+Require on locale utf8 for build the KiCad with cyrillic fonts support.
+
+-DKICAD_GOST=ON
+Build the KiCad with russian GOST support.
+
 -DCMAKE_CXX_FLAGS=<some extra flags>
 Extra flags for the c++ compiler for your system required.
 

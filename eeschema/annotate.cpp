@@ -839,6 +839,16 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
             nextcmpref   = CONV_FROM_UTF8( ListeCmp[ii + 1].m_TextRef );
             cmpvalue     = CONV_FROM_UTF8( ListeCmp[ii].m_TextValue );
             nextcmpvalue = CONV_FROM_UTF8( ListeCmp[ii + 1].m_TextValue );
+#if defined(KICAD_GOST)
+            msg.Printf( _( "Diff values for %s%d.%c (%s) and %s%d.%c (%s)" ),
+                cmpref.GetData(),
+                ListeCmp[ii].m_NumRef,
+                ListeCmp[ii].m_Unit + '1' - 1,
+                cmpvalue.GetData(), nextcmpref.GetData(),
+                ListeCmp[ii + 1].m_NumRef,
+                ListeCmp[ii + 1].m_Unit + '1' - 1,
+                nextcmpvalue.GetData() );
+#else
             msg.Printf( _( "Diff values for %s%d%c (%s) and %s%d%c (%s)" ),
                 cmpref.GetData(),
                 ListeCmp[ii].m_NumRef,
@@ -847,6 +857,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
                 ListeCmp[ii + 1].m_NumRef,
                 ListeCmp[ii + 1].m_Unit + 'A' - 1,
                 nextcmpvalue.GetData() );
+#endif
 
             DisplayError( frame, msg );
             error++;

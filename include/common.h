@@ -75,6 +75,13 @@ enum pseudokeys {
 #define MILLIMETRE 1
 #define CENTIMETRE 2
 
+#if defined(KICAD_GOST)
+#define LEFTMARGIN 800 /* 20mm */
+#define RIGHTMARGIN 200 /* 5mm */
+#define TOPMARGIN 200 /* 5mm */
+#define BOTTOMMARGIN 200 /* 5mm */
+
+#endif
 /* forward declarations: */
 class LibNameList;
 

@@ -624,7 +624,15 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
     /* trace du texte */
     for( ; kk < nbcodes; kk++ )
     {
-        int code = Text.GetChar( kk ) & 0xFF;
+#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
+	int code = Text.GetChar(kk) & 0x7FF;
+	if ( code > 0x40F && code < 0x450 ) // big small Cyr
+	    code = utf8_to_ascii[code - 0x410] & 0xFF;
+        else
+	    code = code & 0xFF;
+#else
+	int code = Text.GetChar( kk ) & 0xFF;
+#endif
         ptcar = graphic_fonte_shape[code];  /* ptcar pointe la description
                                              *  du caractere a dessiner */
 

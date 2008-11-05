@@ -5,6 +5,11 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-nov-5 UPDATE Andrey Fedorushkov <andrf@mail.ru>
+================================================================================
++all:
+   Add cyrillic font support.
+   Add russian GOST worksheet support.
 
 2008-nov-2 CLEANUP Jerry Jacobs <jerkejacobs@gmail.com>
 ================================================================================

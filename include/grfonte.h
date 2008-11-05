@@ -45,6 +45,10 @@ ___ 0  ----------
 #define SH_CODE signed char
 extern const SH_CODE *graphic_fonte_shape[256];
 
+#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
+extern const int utf8_to_ascii[64];
+#endif
+
 #ifdef EDA_DRAWBASE
 
 #define Up (SH_CODE)'U'
@@ -174,6 +178,65 @@ const SH_CODE char_shape_o_circ[] = {Up,0,2,Dn,1,1,5,1,6,2,6,7,5,8,1,8,0,7,0,2,U
 const SH_CODE char_shape_u_circ[] = {Up,6,1,Dn,2,1,0,3,0,6,2,8,6,8,Up,7,1,Dn,9,4,7,7,Up,X};
 const SH_CODE char_shape_u_trema[] = {Up,6,1,Dn,2,1,0,3,0,6,2,8,6,8,Up,9,2,Dn,9,3,Up,9,5,Dn,9,6,Up,X};
 
+#if defined(KICAD_CYRILLIC)
+const SH_CODE char_shape_yu[] = {Up,6,0,Dn,0,0,Up,3,0,Dn,3,2,Up,0,3,Dn,1,2,5,2,6,3,6,7,5,8,1,8,0,7,0,3,Up,X}; // ю
+const SH_CODE char_shape_YU[] = {Up,9,0,Dn,0,0,Up,4,0,Dn,4,2,Up,0,3,Dn,1,2,8,2,9,3,9,7,8,8,1,8,0,7,0,3,Up,X}; // Ю
+const SH_CODE char_shape_be[] = {Up,6,7,Dn,6,2,5,1,1,1,0,2,0,7,1,8,5,8,6,7,9,1,9,8,Up,X}; // б
+const SH_CODE char_shape_BE[] = {Up,9,8,Dn,9,1,0,1,0,7,1,8,4,8,5,7,5,1,Up,X}; // Б
+const SH_CODE char_shape_tse[] = {Up,6,1,Dn,1,1,0,2,0,8,6,8,Up,0,8,Dn,0,9,-2,9,Up,X}; // ц
+const SH_CODE char_shape_TSE[] = {Up,9,1,Dn,0,1,0,9,-2,9,Up,9,8,Dn,0,8,Up,X}; // Ц
+const SH_CODE char_shape_de[] = {Up,9,3,Dn,9,7,8,8,1,8,0,7,0,2,1,1,5,1,6,2,6,8,Up,X}; // д
+const SH_CODE char_shape_DE[] = {Up,0,2,Dn,9,3,9,7,0,7,Up,-1,1,Dn,0,1,0,8,-1,8,Up,X}; // Д
+const SH_CODE char_shape_ee[] = {Up,3,1,Dn,3,8,5,8,6,7,6,2,5,1,1,1,0,2,0,8,Up,X}; //e
+const SH_CODE char_shape_EE[] = {Up,9,8,Dn,9,1,0,1,0,8,Up,5,1,Dn,5,7,Up,X}; //E
+const SH_CODE char_shape_ef[] = {Up,7,4,Dn,-3,4,Up,5,1,Dn,6,2,6,6,5,7,1,7,0,6,0,2,1,1,5,1,Up,X}; // ф
+const SH_CODE char_shape_EF[] = {Up,9,4,Dn,0,4,Up,7,0,Dn,8,1,8,7,7,8,3,8,2,7,2,1,3,0,7,0,Up,X}; // Ф
+const SH_CODE char_shape_ghe[] = {Up,5,1,Dn,6,2,6,7,5,8,4,8,3,7,3,2,2,1,1,1,0,2,0,7,1,8,Up,X}; // г
+const SH_CODE char_shape_GHE[] = {Up,0,1,Dn,9,1,9,8,Up,X}; // Г
+const SH_CODE char_shape_xe[] = {Up,0,1,Dn,6,8,Up,6,1,Dn,0,8,Up,X}; // x
+const SH_CODE char_shape_XE[] = {Up,0,1,Dn,9,8,Up,9,1,Dn,0,8,Up,X}; // X
+const SH_CODE char_shape_ii[] = {Up,6,1,Dn,1,1,0,2,0,3,1,8,Up,0,8,Dn,6,8,Up,X}; // и
+const SH_CODE char_shape_II[] = {Up,0,1,Dn,9,1,Up,1,1,Dn,8,8,Up,9,8,Dn,0,8,Up,X}; // И
+const SH_CODE char_shape_shorti[] = {Up,6,1,Dn,1,1,0,2,0,3,1,8,Up,0,8,Dn,6,8,Up,8,3,Dn,8,6,Up,X}; // й
+const SH_CODE char_shape_SHORTI[] = {Up,9,1,Dn,0,1,Up,1,1,Dn,8,8,Up,9,8,Dn,0,8,Up,9,3,Dn,9,6,Up,X}; // Й
+const SH_CODE char_shape_ka[] = {Up,6,1,Dn,0,1,Up,3,1,Dn,6,8,Up,4,3,Dn,0,8,Up,X}; //к
+const SH_CODE char_shape_KA[] = {Up,9,1,Dn,0,1,Up,4,1,Dn,9,8,Up,5,3,Dn,0,8,Up,X}; //K
+const SH_CODE char_shape_letterel[] = {Up,0,1,Dn,6,5,6,8,0,8,Up,X}; // л
+const SH_CODE char_shape_EL[] = {Up,0,1,Dn,9,5,9,8,0,8,Up,X}; // Л
+const SH_CODE char_shape_em[] = {Up,0,0,Dn,6,0,3,4,6,8,0,8,Up,X}; // м
+//const SH_CODE char_shape_M[] = {X}; // М
+const SH_CODE char_shape_en[] = {Up,6,1,Dn,0,1,Up,6,8,Dn,0,8,Up,3,1,Dn,3,8,Up,X}; // н
+const SH_CODE char_shape_EN[] = {Up,9,1,Dn,0,1,Up,9,8,Dn,0,8,Up,5,1,Dn,5,8,Up,X}; // H
+const SH_CODE char_shape_pe[] = {Up,0,1,Dn,6,1,6,7,5,8,0,8,Up,X}; // п
+const SH_CODE char_shape_PE[] = {Up,0,1,Dn,9,1,9,8,0,8,Up,X}; // П
+const SH_CODE char_shape_ya[] = {Up,0,8,Dn,6,8,6,2,5,1,4,1,3,2,3,8,Up,3,3,Dn,0,1,Up,X}; // я
+const SH_CODE char_shape_YA[] = {Up,0,8,Dn,9,8,9,2,8,1,5,1,4,2,4,8,Up,4,3,Dn,0,1,Up,X}; // Я
+const SH_CODE char_shape_te[] = {Up,0,1,Dn,6,1,6,6,5,7,0,7,Up,6,4,Dn,0,4,Up,X}; // т == m
+const SH_CODE char_shape_TE[] = {Up,0,4,Dn,9,4,Up,9,1,Dn,9,7,Up,X}; // Т
+const SH_CODE char_shape_uu[] = {Up,6,1,Dn,1,1,0,2,0,8,6,8,Up,0,8,Dn,-2,8,-3,7,-3,1,Up,X}; // у - latin y
+const SH_CODE char_shape_UU[] = {Up,9,1,Dn,5,1,4,2,4,8,Up,9,8,Dn,1,8,0,7,0,1,Up,X}; // У
+const SH_CODE char_shape_zhe[] = {Up,0,0,Dn,6,8,Up,6,0,Dn,0,8,Up,6,4,Dn,0,4,Up,X}; // ж
+const SH_CODE char_shape_ZHE[] = {Up,0,0,Dn,9,8,Up,9,0,Dn,0,8,Up,9,4,Dn,0,4,Up,X}; // Ж
+const SH_CODE char_shape_ve[] = {Up,5,1,Dn,6,2,6,7,5,8,1,8,0,7,0,2,1,1,8,1,9,2,9,4,8,5,7,5,6,4,Up,X}; // в
+const SH_CODE char_shape_VE[] = {Up,5,1,Dn,5,7,4,8,1,8,0,7,0,1,9,1,9,7,8,8,6,8,5,7,Up,X}; // В
+const SH_CODE char_shape_softsign[] = {Up,6,1,Dn,0,1,0,7,1,8,2,8,3,7,3,1,Up,X}; // ь
+const SH_CODE char_shape_SOFTSIGN[] = {Up,9,1,Dn,0,1,0,7,1,8,4,8,5,7,5,1,Up,X}; // Ь
+const SH_CODE char_shape_yeru[] = {Up,6,1,Dn,0,1,0,6,1,7,2,7,3,6,3,1,Up,6,8,Dn,0,8,Up,X}; // ы
+const SH_CODE char_shape_YERU[] = {Up,9,1,Dn,0,1,0,6,1,7,3,7,4,6,4,1,Up,9,8,Dn,0,8,Up,X}; // Ы
+const SH_CODE char_shape_ze[] = {Up,5,1,Dn,6,2,6,7,5,8,4,8,3,7,3,5,Up,3,7,Dn,2,8,1,8,0,7,0,2,1,1,Up,X}; // з
+const SH_CODE char_shape_ZE[] = {Up,8,1,Dn,9,2,9,7,8,8,6,8,5,7,5,4,Up,5,7,Dn,4,8,1,8,0,7,0,2,1,1,Up,X}; // З
+const SH_CODE char_shape_sha[] = {Up,6,0,Dn,1,0,0,1,0,8,6,8,Up,6,4,Dn,0,4,Up,X}; // ш
+const SH_CODE char_shape_SHA[] = {Up,9,0,Dn,0,0,0,8,9,8,Up,9,4,Dn,0,4,Up,X}; // Ш
+const SH_CODE char_shape_ye[] = {Up,0,1,Dn,0,7,1,8,5,8,6,7,6,1,Up,3,4,Dn,3,8,Up,X}; // э
+const SH_CODE char_shape_YE[] = {Up,0,1,Dn,0,7,1,8,8,8,9,7,9,1,Up,5,4,Dn,5,8,Up,X}; // Э
+const SH_CODE char_shape_shcha[] = {Up,6,0,Dn,1,0,0,1,0,8,6,8,Up,6,4,Dn,0,4,Up,0,8,Dn,0,9,-2,9,Up,X}; // щ
+const SH_CODE char_shape_SHCHA[] = {Up,9,0,Dn,0,0,0,8,9,8,Up,9,4,Dn,0,4,Up,0,8,Dn,0,9,-2,9,Up,X}; // Щ
+const SH_CODE char_shape_che[] = {Up,6,1,Dn,4,1,3,2,3,8,Up,6,8,Dn,0,8,Up,X}; // ч
+const SH_CODE char_shape_CHE[] = {Up,9,1,Dn,5,1,4,2,4,8,Up,9,8,Dn,0,8,Up,X}; // Ч
+const SH_CODE char_shape_hardsign[] = {Up,6,0,Dn,6,1,0,1,0,7,1,8,2,8,3,7,3,1,Up,X}; // ъ
+const SH_CODE char_shape_HARDSIGN[] = {Up,9,0,Dn,9,1,0,1,0,7,1,8,4,8,5,7,5,1,Up,X}; // Ъ
+#endif
+
 const SH_CODE *graphic_fonte_shape[256] =
 	{
 	// codes 0..31:
@@ -246,6 +309,24 @@ const SH_CODE *graphic_fonte_shape[256] =
 	noshape, noshape, noshape, noshape,	//184..187
 	noshape, noshape, noshape, noshape,	//188..191
 
+#if defined(KICAD_CYRILLIC)
+	char_shape_yu, char_shape_a, char_shape_be, char_shape_tse,
+	char_shape_de, char_shape_ee, char_shape_ef, char_shape_ghe,    //196..199
+	char_shape_xe, char_shape_ii, char_shape_shorti, char_shape_ka, // 200..203
+	char_shape_letterel, char_shape_em, char_shape_en, char_shape_o,        //204..207
+	char_shape_pe, char_shape_ya, char_shape_p, char_shape_c,       //208..211
+	char_shape_te, char_shape_uu, char_shape_zhe, char_shape_ve,    //212..215
+	char_shape_softsign, char_shape_yeru, char_shape_ze, char_shape_sha,    //216..219
+	char_shape_ye, char_shape_shcha, char_shape_che, char_shape_hardsign,   //220..223
+	char_shape_YU, char_shape_A, char_shape_BE, char_shape_TSE,             //0xE0..0xE3 224..227
+	char_shape_DE, char_shape_EE, char_shape_EF, char_shape_GHE,            //228..231
+	char_shape_XE, char_shape_II, char_shape_SHORTI, char_shape_KA,         //232..235
+	char_shape_EL, char_shape_M, char_shape_EN, char_shape_O,               //236..239
+	char_shape_PE, char_shape_YA, char_shape_P, char_shape_C,               //240..243
+	char_shape_TE, char_shape_UU, char_shape_ZHE, char_shape_VE,            //244..247
+	char_shape_SOFTSIGN, char_shape_YERU, char_shape_ZE, char_shape_SHA,    //248..251
+	char_shape_YE, char_shape_SHCHA, char_shape_CHE, char_shape_HARDSIGN,   //252..255
+#else
 	noshape, noshape, noshape, noshape,	//192..195
 	noshape, noshape, noshape, char_shape_C_Cedille,	//196..199
 	noshape, noshape, noshape, noshape,	// 200..203
@@ -263,8 +344,22 @@ const SH_CODE *graphic_fonte_shape[256] =
 	char_shape_o_circ, noshape, char_shape_o_trema, noshape,	//244..247
 	noshape, char_shape_u_grave, noshape, char_shape_u_circ,	//248..251
 	char_shape_u_trema, noshape, noshape, noshape,	//252..255
+#endif
 
 	} ;
+#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
+const int utf8_to_ascii[] =
+	{
+	0xE1, 0xE2, 0xF7, 0xE7, 0xE4, 0xE5, 0xF6, 0xFA,
+	0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF, 0xF0,
+	0xF2, 0xF3, 0xF4, 0xF5, 0xE6, 0xE8, 0xE3, 0xFE,
+	0xFB, 0xFD, 0xFF, 0xF9, 0xF8, 0xFC, 0xE0, 0xF1,
+	0xC1, 0xC2, 0xD7, 0xC7, 0xC4, 0xC5, 0xD6, 0xDA,
+	0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, 0xD0,
+	0xD2, 0xD3, 0xD4, 0xD5, 0xC6, 0xC8, 0xC3, 0xDE,
+	0xDB, 0xDD, 0xDF, 0xD9, 0xD8, 0xDC, 0xC0, 0xD1
+	};
+#endif
 #endif
 #endif	// ifndef _GRFONTE_H_
 

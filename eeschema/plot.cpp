@@ -433,7 +433,12 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
             /* Adding A, B ... to the reference */
         wxString Text;
         Text = field->m_Text;
+#if defined(KICAD_GOST)
+	Text.Append( '.' );
+        Text.Append( '1' - 1 + DrawLibItem->m_Multi );
+#else
         Text.Append( 'A' - 1 + DrawLibItem->m_Multi );
+#endif
         PlotGraphicText( g_PlotFormat, textpos, color, Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size, hjustify, vjustify );

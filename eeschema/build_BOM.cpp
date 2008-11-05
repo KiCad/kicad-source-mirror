@@ -727,7 +727,11 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
             Multi = Entry->m_UnitCount;
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
+#if defined(KICAD_GOST)
+            Unit = aList[ii].m_Unit + '1' - 1;
+#else
             Unit = aList[ii].m_Unit + 'A' - 1;
+#endif
 
         sprintf( CmpName, "%s", aList[ii].m_Ref );
         if( !CompactForm || Unit != ' ' )
@@ -815,10 +819,17 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
         {
+#if defined(KICAD_GOST)        
+            Unit = aList[ii].m_Unit + '1' - 1;
+        }
+
+        sprintf( CmpName, "%s.%c", aList[ii].m_Ref, Unit );
+#else
             Unit = aList[ii].m_Unit + 'A' - 1;
         }
 
         sprintf( CmpName, "%s%c", aList[ii].m_Ref, Unit );
+#endif
         fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ), CmpName );
 
         // print the sheet path

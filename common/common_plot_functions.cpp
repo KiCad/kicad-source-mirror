@@ -127,6 +127,17 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     xg    = (PageSize.x - Sheet->m_RightMargin) * conv_unit;
     yg    = (PageSize.y - Sheet->m_BottomMargin) * conv_unit;   /* lower right corner */
 
+#if defined(KICAD_GOST)
+    FctPlume(ref,'U');
+    pos.x = xg; pos.y = ref.y;
+    FctPlume(pos,'D');
+    pos.x = xg; pos.y = yg;
+    FctPlume(pos,'D');
+    pos.x = ref.x; pos.y = yg;
+    FctPlume( pos,'D' );
+    FctPlume(ref,'D');
+#else
+
     for( ii = 0; ii < 2; ii++ )
     {
         FctPlume( ref, 'U' );
@@ -140,6 +151,7 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         ref.x += GRID_REF_W * conv_unit; ref.y += GRID_REF_W * conv_unit;
         xg -= GRID_REF_W * conv_unit; yg -= GRID_REF_W * conv_unit;
     }
+#endif
 
     /* trace des reperes */
     text_size.x = WSTEXTSIZE * conv_unit;
@@ -149,6 +161,48 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     ref.y = Sheet->m_TopMargin;                     /* Upper left corner in 1/1000 inch */
     xg    = (PageSize.x - Sheet->m_RightMargin);
     yg    = (PageSize.y - Sheet->m_BottomMargin);   /* lower right corner in 1/1000 inch */
+
+#if defined(KICAD_GOST)
+    for ( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
+    {
+	pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
+	pos.y = (yg - WsItem->m_Posy) * conv_unit;
+	msg.Empty();
+	switch( WsItem->m_Type )
+	{
+	    case WS_CADRE:
+		break;
+	    case WS_PODPIS_LU:
+		if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		PlotGraphicText(format_plot, pos, color,
+				msg, TEXT_ORIENT_VERT, text_size,
+                        	GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
+
+        	break;
+    	    case WS_SEGMENT_LU:
+    		FctPlume(pos, 'U');
+    		pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
+    		pos.y = (yg - WsItem->m_Endy) * conv_unit;
+		FctPlume(pos, 'D');
+    		break;
+	}
+    }
+    for ( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
+    {
+	pos.x = (ref.x + WsItem->m_Posx) * conv_unit;
+	pos.y = (ref.y + WsItem->m_Posy) * conv_unit;
+	msg.Empty();
+	switch( WsItem->m_Type )
+	{
+    	    case WS_SEGMENT_LT:
+    		FctPlume(pos, 'U');
+        	pos.x = (ref.x + WsItem->m_Endx) * conv_unit;
+        	pos.y = (ref.y + WsItem->m_Endy) * conv_unit;
+        	FctPlume(pos, 'D');
+        	break;
+	}
+    }
+#else
 
     /* Trace des reperes selon l'axe X */
     ipas  = (xg - ref.x) / PAS_REF;
@@ -214,10 +268,102 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         PlotGraphicText( format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
     }
+#endif
 
     /* Trace du cartouche */
     text_size.x = SIZETEXT * conv_unit;
     text_size.y = SIZETEXT * conv_unit;
+#if defined(KICAD_GOST)
+    ref.x = PageSize.x - Sheet->m_RightMargin;
+    ref.y = PageSize.y - Sheet->m_BottomMargin;
+    if (screen->m_ScreenNumber == 1)
+    {
+	for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
+	{
+	    pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
+	    pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
+	    msg.Empty();
+	    switch( WsItem->m_Type )
+	    {
+		case WS_DATE:
+		    break;
+		case WS_REV:
+		    break;
+		case WS_KICAD_VERSION:
+		    break;
+		case WS_PODPIS:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+		    break;
+		case WS_SIZESHEET:
+		    break;
+		case WS_IDENTSHEET:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    msg << screen->m_ScreenNumber;
+		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+		    break;
+		case WS_SHEETS:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    msg << screen->m_NumberOfScreen;
+		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+		    break;
+		case WS_COMPANY_NAME:
+		    break;
+		case WS_TITLE:
+		    break;
+		case WS_COMMENT1:
+		    break;
+		case WS_COMMENT2:
+		    break;
+		case WS_COMMENT3:
+		    break;
+		case WS_COMMENT4:
+		    break;
+		case WS_UPPER_SEGMENT:
+		case WS_LEFT_SEGMENT:
+		case WS_SEGMENT:
+		    FctPlume(pos, 'U');
+		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
+		    pos.y = (ref.y - WsItem->m_Endy)  * conv_unit;
+		    FctPlume(pos, 'D');
+		    break;
+	    }
+	}
+    } else {
+	for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
+	{
+	    pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
+	    pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
+	    msg.Empty();
+	    switch( WsItem->m_Type )
+	    {
+		case WS_CADRE:
+		/* Begin list number > 1 */
+		case WS_PODPIS_D:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+		    break;
+		case WS_IDENTSHEET_D:
+		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
+		    msg << screen->m_ScreenNumber;
+		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+		    break;
+		case WS_LEFT_SEGMENT_D:
+		case WS_SEGMENT_D:
+		    FctPlume(pos, 'U');
+		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
+		    pos.y = (ref.y - WsItem->m_Endy) * conv_unit;
+		    FctPlume(pos, 'D');
+		    break;
+	    }
+	}
+    }
+#else
     ref.x = PageSize.x - GRID_REF_W - Sheet->m_RightMargin;
     ref.y = PageSize.y - GRID_REF_W - Sheet->m_BottomMargin;
 
@@ -327,6 +473,7 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER );
         }
     }
+#endif
 
     switch( format_plot )
     {

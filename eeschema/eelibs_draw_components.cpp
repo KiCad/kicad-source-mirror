@@ -130,7 +130,11 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
     else color = Color;
 
     if( LibEntry->m_UnitCount > 1 )
+#if defined(KICAD_GOST)
+        Prefix.Printf( wxT( "%s?.%c" ), LibEntry->m_Prefix.m_Text.GetData(), Multi + '1' - 1);
+#else
         Prefix.Printf( wxT( "%s?%c" ), LibEntry->m_Prefix.m_Text.GetData(), Multi + 'A' - 1 );
+#endif
     else
         Prefix = LibEntry->m_Prefix.m_Text + wxT( "?" );
 
@@ -309,7 +313,12 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
     {
         /* On ajoute alors A ou B ... a la reference */
         wxString fulltext = m_Text;
+#if defined(KICAD_GOST)
+        fulltext.Append( '.');
+        fulltext.Append( '1' - 1 + DrawLibItem->m_Multi );
+#else
         fulltext.Append( 'A' - 1 + DrawLibItem->m_Multi );
+#endif
 
         DrawGraphicText( panel, DC, pos, color, fulltext.GetData(),
             orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
