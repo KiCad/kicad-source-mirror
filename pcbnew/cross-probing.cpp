@@ -3,6 +3,12 @@
 /*****************************************************************/
 
 /* cross-probing.cpp */
+/** Handle messages between pcbnew and eeschema via a socket,
+ *  the port number is
+ * KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242) (eeschema to pcbnew)
+ * KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243) (pcbnew to eeschema)
+ * Note: these ports must be enabled for firewall protection
+ */
 
 #include "fctsys.h"
 
@@ -53,21 +59,12 @@ void RemoteCommand(  const char* cmdline )
         if( module )
             msg.Printf( _( "%s found" ), modName.GetData() );
         else
-            msg.Printf( _( "%s not found"), modName.GetData() );
+            msg.Printf( _( "%s not found" ), modName.GetData() );
 
         frame->Affiche_Message( msg );
         if( module )
-        {
-            wxClientDC dc( frame->DrawPanel );
-
-            frame->DrawPanel->PrepareGraphicContext( &dc );
-            frame->DrawPanel->CursorOff( &dc );
             frame->GetScreen()->m_Curseur = module->GetPosition();
-            frame->DrawPanel->CursorOn( &dc );
-            frame->SetCurItem( module );
-        }
     }
-
     else if( strcmp( idcmd, "$PIN:" ) == 0 )
     {
         wxString pinName;
@@ -80,30 +77,28 @@ void RemoteCommand(  const char* cmdline )
         if( text && strcmp( text, "$PART:" ) == 0 )
             text = strtok( NULL, "\n\r" );
 
-        wxClientDC dc( frame->DrawPanel );
-
-        frame->DrawPanel->PrepareGraphicContext( &dc );
-
         modName = CONV_FROM_UTF8( text );
 
-        module  = frame->m_Pcb->FindModuleByReference( modName );
+        module = frame->m_Pcb->FindModuleByReference( modName );
         if( module )
             pad = module->FindPadByName( pinName );
 
         if( pad )
-            netcode = pad->GetNet();
-
-        if( netcode > 0 )               /* hightlighted the net selected net*/
         {
-            if( g_HightLigt_Status )    /* erase the old hightlighted net */
-                frame->Hight_Light( &dc );
-
-            g_HightLigth_NetCode = netcode;
-            frame->Hight_Light( &dc );      /* hightlighted the new one */
-
-            frame->DrawPanel->CursorOff( &dc );
+            netcode = pad->GetNet();
+            // put cursor on the pad:
             frame->GetScreen()->m_Curseur = pad->GetPosition();
-            frame->DrawPanel->CursorOn( &dc );
+        }
+
+        if( netcode > 0 )               /* highlight the pad net*/
+        {
+            g_HightLigt_Status = 1;
+            g_HightLigth_NetCode = netcode;
+        }
+        else
+        {
+            g_HightLigt_Status = 0;
+            g_HightLigth_NetCode = 0;
         }
 
         if( module == NULL )
@@ -122,7 +117,7 @@ void RemoteCommand(  const char* cmdline )
         frame->Affiche_Message( msg );
     }
 
-    if( module )  // if found, center the module on screen.
+    if( module )  // if found, center the module on screen, and redraw the screen.
         frame->Recadre_Trace( false );
 }
 
@@ -156,7 +151,7 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
     case TYPEMODULE:
         module = (MODULE*) objectToSync;
         sprintf( cmd, "$PART: \"%s\"",
-                CONV_TO_UTF8( module->m_Reference->m_Text ) );
+            CONV_TO_UTF8( module->m_Reference->m_Text ) );
         break;
 
     case TYPEPAD:
@@ -164,13 +159,13 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         pad    = (D_PAD*) objectToSync;
         msg    = pad->ReturnStringPadName();
         sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
-                CONV_TO_UTF8( module->m_Reference->m_Text ),
-                CONV_TO_UTF8( msg ) );
+            CONV_TO_UTF8( module->m_Reference->m_Text ),
+            CONV_TO_UTF8( msg ) );
         break;
 
     case TYPETEXTEMODULE:
-            #define REFERENCE 0
-            #define VALUE     1
+        #define REFERENCE 0
+        #define VALUE     1
         module   = (MODULE*) objectToSync->m_Parent;
         text_mod = (TEXTE_MODULE*) objectToSync;
         if( text_mod->m_Type == REFERENCE )
@@ -181,9 +176,9 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
             break;
 
         sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
-                CONV_TO_UTF8( module->m_Reference->m_Text ),
-                text_key,
-                CONV_TO_UTF8( text_mod->m_Text ) );
+            CONV_TO_UTF8( module->m_Reference->m_Text ),
+            text_key,
+            CONV_TO_UTF8( text_mod->m_Text ) );
         break;
 
     default:
