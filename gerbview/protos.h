@@ -124,16 +124,3 @@ void Trace_1_texte_pcb(WinEDA_DrawPanel * panel, wxDC * DC,
 void Affiche_DCodes_Pistes(WinEDA_DrawPanel * panel, wxDC * DC,
             BOARD * Pcb, int drawmode);
 
-/*************/
-/* dcode.cpp */
-/*************/
-class D_CODE;
-
-D_CODE * ReturnToolDescr(int layer, int Dcode, int * index = NULL);
-
-/**************/
-/* rs274x.cpp */
-/**************/
-bool GetEndOfBlock( char * buff, char * &text, FILE *gerber_file);
-
-

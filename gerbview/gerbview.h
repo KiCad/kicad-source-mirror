@@ -92,7 +92,10 @@ enum Gerb_Analyse_Cmd {
 
 class D_CODE;
 
-/* Structure de Description d'option d'une layer GERBER : */
+/**
+ * Class GERBER_Descr
+ * holds the data for one gerber file or layer
+ */
 class GERBER_Descr
 {
 public:
@@ -152,14 +155,32 @@ public:
     bool    Execute_G_Command( char*& text, int G_commande );
     bool    Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                    char*& text, int D_commande );
+
+   /**
+    * size of single line of a text line from a gerber file.
+    * warning: some files can have very long lines, so the buffer must be large
+    */
+#define GERBER_BUFZ     4000
+
+    /**
+     * Function ReadRS274XCommand
+     * reads a single RS274X command terminated with a %
+     */
     bool    ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
-                               char* buff, char*& text );
-    bool    ExecuteRS274XCommand( int command, char* buff, char*& text );
+                               char aBuff[GERBER_BUFZ], char*& text );
+
+    /**
+     * Function ExecuteRS274XCommand
+     * executes 1 commande
+     */
+    bool    ExecuteRS274XCommand( int command, char aBuff[GERBER_BUFZ], char*& text );
 };
 
 
-/* Structure de Description d'un D_CODE GERBER : */
-
+/**
+ * Class D_CODE
+ * holds a gerber DCODE definition.
+ */
 class D_CODE
 {
 public:
@@ -178,10 +199,23 @@ public:
     void Clear_D_CODE_Data();
 };
 
+
+
+/**************/
+/* rs274x.cpp */
+/**************/
+bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
+
+/*************/
+/* dcode.cpp */
+/*************/
+D_CODE * ReturnToolDescr( int layer, int Dcode, int * index = NULL );
+
+
 eda_global const wxChar* g_GERBER_Tool_Type[6]
 #ifdef MAIN
 = {
-    wxT( "????" ), wxT( "Rond" ), wxT( "Rect" ), wxT( "Line" ), wxT( "Oval" ), wxT( "Macro" )
+    wxT( "????" ), wxT( "Round" ), wxT( "Rect" ), wxT( "Line" ), wxT( "Oval" ), wxT( "Macro" )
 }
 
 

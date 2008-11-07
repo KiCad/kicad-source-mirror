@@ -10,130 +10,96 @@
 
 #include "protos.h"
 
-#define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
-                       || ( (x) == '-' ) || ( (x) == '+' ) || ( (x) == '.' ) || ( (x) == ',' ) )
-
-#define CODE( x, y ) ( (x << 8) + (y) )
+#define CODE( x, y ) ( ((x) << 8) + (y) )
 
 enum rs274x_parameters {
-    FORMAT_STATEMENT_COMMAND = CODE( 'F', 'S' ),
-    AXIS_SELECT   = CODE( 'A', 'S' ),
-    MIRROR_IMAGE  = CODE( 'M', 'I' ),
-    MODE_OF_UNITS = CODE( 'M', 'O' ),
-    INCH   = CODE( 'I', 'N' ),
-    MILLIMETER = CODE( 'M', 'M' ),
-    OFFSET = CODE( 'O', 'F' ),
-    SCALE_FACTOR   = CODE( 'S', 'F' ),
+    FORMAT_STATEMENT    = CODE( 'F', 'S' ),
+    AXIS_SELECT         = CODE( 'A', 'S' ),
+    MIRROR_IMAGE        = CODE( 'M', 'I' ),
+    MODE_OF_UNITS       = CODE( 'M', 'O' ),
+    INCH                = CODE( 'I', 'N' ),
+    MILLIMETER          = CODE( 'M', 'M' ),
+    OFFSET              = CODE( 'O', 'F' ),
+    SCALE_FACTOR        = CODE( 'S', 'F' ),
 
-    IMAGE_NAME = CODE( 'I', 'N' ),
-    IMAGE_JUSTIFY  = CODE( 'I', 'J' ),
-    IMAGE_OFFSET   = CODE( 'I', 'O' ),
-    IMAGE_POLARITY = CODE( 'I', 'P' ),
-    IMAGE_ROTATION = CODE( 'I', 'R' ),
-    PLOTTER_FILM    = CODE( 'P', 'M' ),
-    INCLUDE_FILE    = CODE( 'I', 'F' ),
+    IMAGE_NAME          = CODE( 'I', 'N' ),
+    IMAGE_JUSTIFY       = CODE( 'I', 'J' ),
+    IMAGE_OFFSET        = CODE( 'I', 'O' ),
+    IMAGE_POLARITY      = CODE( 'I', 'P' ),
+    IMAGE_ROTATION      = CODE( 'I', 'R' ),
+    PLOTTER_FILM        = CODE( 'P', 'M' ),
+    INCLUDE_FILE        = CODE( 'I', 'F' ),
 
-    APERTURE_DESCR  = CODE( 'A', 'D' ),
-    APERTURE_MACRO  = CODE( 'A', 'M' ),
-    LAYER_NAME = CODE( 'L', 'N' ),
-    LAYER_POLARITY  = CODE( 'L', 'P' ),
-    KNOCKOUT = CODE( 'K', 'O' ),
-    STEP_AND_REPEAT = CODE( 'S', 'P' ),
-    ROTATE = CODE( 'R', 'O' )
+    APERTURE_DESCR      = CODE( 'A', 'D' ),
+    APERTURE_MACRO      = CODE( 'A', 'M' ),
+    LAYER_NAME          = CODE( 'L', 'N' ),
+    LAYER_POLARITY      = CODE( 'L', 'P' ),
+    KNOCKOUT            = CODE( 'K', 'O' ),
+    STEP_AND_REPEAT     = CODE( 'S', 'P' ),
+    ROTATE              = CODE( 'R', 'O' )
 };
 
-/* Variables locales : */
 
-/* Routines Locales */
-static bool ReadApertureMacro( char* buff, char*& text, FILE* gerber_file );
+/* Local Functions */
+static bool ReadApertureMacro( char aBuff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 
-/* Lit 2 codes ascii du texte pointé par text
- *  retourne le code correspondant ou -1 si erreur
+
+/**
+ * Function ReadXCommand
+ * reads int two bytes of data and assembles them into an int with the first
+ * byte in the sequence put into the most significant part of a 16 bit value
+ * and the second byte put into the least significant part of the 16 bit value.
+ * @param text A reference to a pointer to read bytes from and to advance as they are read.
+ * @return int - with 16 bits of data in the ls bits, upper bits zeroed.
  */
 static int ReadXCommand( char*& text )
 {
     int result;
 
     if( text && *text )
-    {
-        result = (*text) << 8; text++;
-    }
+        result = *text++ << 8;
     else
         return -1;
+
     if( text && *text )
-    {
-        result += (*text) & 255; text++;
-    }
+        result += *text++;
     else
         return -1;
+
     return result;
 }
 
 
-/********************************/
+/**
+ * Function ReadInt
+ * reads an int from an ASCII character buffer.
+ * @param text A reference to a character pointer from which bytes are read
+ *    and the pointer is advanced for each byte read.
+ * @param int - The int read in.
+ */
 static int ReadInt( char*& text )
-/********************************/
 {
-    int nb = 0;
-
-    while( text && *text == ' ' )
-        text++;
-
-    // Skip blanks before number
-
-    while( text && *text )
-    {
-        if( (*text >= '0') && (*text <='9') )
-        {
-            nb *= 10; nb += *text & 0x0F;
-            text++;
-        }
-        else
-            break;
-    }
-
-    return nb;
+    return (int) strtol( text, &text, 10 );
 }
 
 
-/************************************/
+/**
+ * Function ReadDouble
+ * reads a double in from a character buffer.
+ * @param text A reference to a character pointer from which the ASCII double
+ *          is read from and the pointer advanced for each character read.
+ * @return double
+ */
 static double ReadDouble( char*& text )
-/************************************/
 {
-    double nb = 0.0;
-    char   buf[256], * ptchar;
-
-    ptchar = buf;
-    while( text && *text == ' ' )
-        text++;
-
-    // Skip blanks before number
-    while( text && *text )
-    {
-        if( IsNumber( *text ) )
-        {
-            *ptchar = *text;
-            text++; ptchar++;
-        }
-        else
-            break;
-    }
-
-    *ptchar = 0;
-
-    nb = atof( buf );
-    return nb;
+    return strtod( text, &text );
 }
 
 
 /****************************************************************************/
 bool GERBER_Descr::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
-                                      char* buff, char*& text )
+                                      char buff[GERBER_BUFZ], char*& text )
 /****************************************************************************/
-
-/* Lit toutes les commandes RS274X jusqu'a trouver de code de fin %
- *  appelle ExecuteRS274XCommand() pour chaque commande trouvée
- */
 {
     bool ok = true;
     int  code_command;
@@ -171,12 +137,12 @@ bool GERBER_Descr::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
         }
 
         // End of current line
-        if( fgets( buff, 255, m_Current_File ) == NULL )
+        if( fgets( buff, GERBER_BUFZ, m_Current_File ) == NULL )
         {
             ok = false;
             break;
         }
-        
+
         text = buff;
     }
 
@@ -186,28 +152,24 @@ exit:
 
 
 /*******************************************************************************/
-bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
+bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& text )
 /*******************************************************************************/
-
-/* Execute 1 commande RS274X
- */
 {
     int      code;
     int      xy_seq_len, xy_seq_char;
     char     ctmp;
     bool     ok = TRUE;
     D_CODE*  dcode;
-    char     Line[1024];
+    char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
     double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
 
-
     switch( command )
     {
-    case FORMAT_STATEMENT_COMMAND:
+    case FORMAT_STATEMENT:
         xy_seq_len = 2;
-        
+
         while( *text != '*' )
         {
             switch( *text )
@@ -227,23 +189,26 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                 break;
 
             case 'A':           // Absolute coord
-                m_Relative = FALSE; text++;
+                m_Relative = FALSE;
+                text++;
                 break;
 
             case 'I':           // Absolute coord
-                m_Relative = TRUE; text++;
+                m_Relative = TRUE;
+                text++;
                 break;
 
             case 'N':           // Sequence code (followed by the number of digits for the X,Y command
                 text++;
-                xy_seq_char = *text; text++;
+                xy_seq_char = *text++;
                 if( (xy_seq_char >= '0') && (xy_seq_char <= '9') )
                     xy_seq_len = -'0';
                 break;
 
             case 'X':
             case 'Y':           // Valeurs transmises :2 (really xy_seq_len : FIX ME) digits
-                code = *(text++); ctmp = *(text++) - '0';
+                code = *(text++);
+                ctmp = *(text++) - '0';
                 if( code == 'X' )
                 {
                     m_FmtScale.x = *text - '0';                 // = nb chiffres apres la virgule
@@ -266,7 +231,6 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                 break;
             }
         }
-
         break;
 
     case AXIS_SELECT:
@@ -324,7 +288,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
         m_Name.Empty();
         while( *text != '*' )
         {
-            m_Name.Append( *text ); text++;
+            m_Name.Append( *text++ );
         }
 
         break;
@@ -354,14 +318,15 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
             DisplayError( NULL, _( "Too many include files!!" ) );
             break;
         }
-        strcpy( Line, text );
-        strtok( Line, "*%%\n\r" );
+        strcpy( line, text );
+        strtok( line, "*%%\n\r" );
         m_FilesList[m_FilesPtr] = m_Current_File;
-        m_Current_File = fopen( Line, "rt" );
+
+        m_Current_File = fopen( line, "rt" );
         if( m_Current_File == 0 )
         {
             wxString msg;
-            msg.Printf( wxT( "fichier <%s> non trouve" ), Line );
+            msg.Printf( wxT( "fichier <%s> non trouve" ), line );
             DisplayError( NULL, msg, 10 );
             ok = FALSE;
             m_Current_File = m_FilesList[m_FilesPtr];
@@ -373,15 +338,19 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
     case APERTURE_DESCR:
         if( *text != 'D' )
         {
-            ok = FALSE; break;
+            ok = FALSE;
+            break;
         }
         m_As_DCode = TRUE;
         text++;
+
         code  = ReadInt( text );
         ctmp  = *text;
+
         dcode = ReturnToolDescr( m_Layer, code );
         if( dcode == NULL )
             break;
+
         if( text[1] == ',' )        // Tool usuel (C,R,O,P)
         {
             text += 2;              // text pointe size ( 1er modifier)
@@ -402,6 +371,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                                            (int) round( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = 1;
                 }
+
                 while( *text == ' ' )
                     text++;
 
@@ -410,6 +380,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                     text++;
                     dcode->m_Drill.y =
                         (int) round( ReadDouble( text ) * conv_scale );
+
                     dcode->m_DrillShape = 2;
                 }
                 dcode->m_Defined = TRUE;
@@ -418,6 +389,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
             case 'O':               // ovale
             case 'R':               // rect
                 dcode->m_Shape = (ctmp == 'O') ? GERB_OVALE : GERB_RECT;
+
                 while( *text == ' ' )
                     text++;
 
@@ -427,6 +399,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                     dcode->m_Size.y =
                         (int) round( ReadDouble( text ) * conv_scale );
                 }
+
                 while( *text == ' ' )
                     text++;
 
@@ -437,6 +410,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                                            (int) round( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = 1;
                 }
+
                 while( *text == ' ' )
                     text++;
 
@@ -451,7 +425,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
                 break;
 
             case 'P':               // Polygone
-// A modifier: temporairement la forme ronde est utilisée
+                // A modifier: temporairement la forme ronde est utilisée
                 dcode->m_Shape   = GERB_CIRCLE;
                 dcode->m_Defined = TRUE;
                 break;
@@ -465,29 +439,31 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char* buff, char*& text )
     }
 
     ok = GetEndOfBlock( buff, text, m_Current_File );
-    
+
     return ok;
 }
 
 
 /*****************************************************************/
-bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
+bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 /*****************************************************************/
 {
     for(;;)
     {
-        while( (text < buff + 255) && *text )
+        while( (text < buff + GERBER_BUFZ) && *text )
         {
             if( *text == '*' )
                 return TRUE;
+
             if( *text == '%' )
                 return TRUE;
+
             text++;
         }
 
-        if( fgets( buff, 255, gerber_file ) == NULL )
+        if( fgets( buff, GERBER_BUFZ, gerber_file ) == NULL )
             break;
-        
+
         text = buff;
     }
 
@@ -496,35 +472,39 @@ bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
 
 
 /*******************************************************************/
-bool ReadApertureMacro( char* buff, char*& text, FILE* gerber_file )
+bool ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 /*******************************************************************/
 {
     wxString macro_name;
     int      macro_type = 0;
 
     // Read macro name
-    while( (text < buff + 255) && *text )
+    while( (text < buff + GERBER_BUFZ) && *text )
     {
         if( *text == '*' )
             break;
+
         macro_name.Append( *text );
         text++;
     }
 
     if( g_DebugLevel > 0 )
         wxMessageBox( macro_name, wxT( "macro name" ) );
+
     text = buff;
-    fgets( buff, 255, gerber_file );
+    fgets( buff, GERBER_BUFZ, gerber_file );
 
     // Read parameters
     macro_type = ReadInt( text );
 
-    while( (text < buff + 255) && *text )
+    while( (text < buff + GERBER_BUFZ) && *text )
     {
         if( *text == '*' )
             return TRUE;
+
         text++;
     }
 
     return FALSE;
 }
+

@@ -115,10 +115,10 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
  */
 {
     int           G_commande = 0,
-                  D_commande = 0;   /* command number for G et D commands (like G04 or D02) */
-    char          Line[4000];       /* Buffer to read 1 line of the gerber file
-                                     * warning: some files can have very long lines, so the buffer must be large
-                                     */
+                  D_commande = 0;       /* command number for G et D commands (like G04 or D02) */
+
+    char          Line[GERBER_BUFZ];
+
     wxString      msg;
     char*         text;
     int           layer;    /* current layer used in gerbview */
@@ -158,7 +158,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
 
     while( TRUE )
     {
-        if( fgets( Line, sizeof(Line) - 1, gerber_layer->m_Current_File ) == NULL ) // E.O.F
+        if( fgets( Line, sizeof(Line), gerber_layer->m_Current_File ) == NULL ) // E.O.F
         {
             if( gerber_layer->m_FilesPtr == 0 )
                 break;
