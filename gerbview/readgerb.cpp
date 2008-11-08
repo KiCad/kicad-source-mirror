@@ -117,37 +117,37 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     int           G_commande = 0,
                   D_commande = 0;       /* command number for G et D commands (like G04 or D02) */
 
-    char          Line[GERBER_BUFZ];
+    char          line[GERBER_BUFZ];
 
     wxString      msg;
     char*         text;
     int           layer;    /* current layer used in gerbview */
-    GERBER_Descr* gerber_layer;
+    GERBER*       gerber;
     wxPoint       pos;
     int           error = 0;
 
     layer = GetScreen()->m_Active_Layer;
 
-    if( g_GERBER_Descr_List[layer] == NULL )
+    if( g_GERBER_List[layer] == NULL )
     {
-        g_GERBER_Descr_List[layer] = new GERBER_Descr( layer );
+        g_GERBER_List[layer] = new GERBER( layer );
     }
 
-    gerber_layer = g_GERBER_Descr_List[layer];
+    gerber = g_GERBER_List[layer];
 
     /* Set the gerber scale: */
-    gerber_layer->ResetDefaultValues();
+    gerber->ResetDefaultValues();
 
     /* Read the gerber file */
-    gerber_layer->m_Current_File = wxFopen( GERBER_FullFileName, wxT( "rt" ) );
-    if( gerber_layer->m_Current_File == 0 )
+    gerber->m_Current_File = wxFopen( GERBER_FullFileName, wxT( "rt" ) );
+    if( gerber->m_Current_File == 0 )
     {
         msg = _( "File " ) + GERBER_FullFileName + _( " not found" );
         DisplayError( this, msg, 10 );
         return FALSE;
     }
 
-    gerber_layer->m_FileName = GERBER_FullFileName;
+    gerber->m_FileName = GERBER_FullFileName;
 
     wxString path = wxPathOnly( GERBER_FullFileName );
     if( path != wxEmptyString )
@@ -158,21 +158,21 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
 
     while( TRUE )
     {
-        if( fgets( Line, sizeof(Line), gerber_layer->m_Current_File ) == NULL ) // E.O.F
+        if( fgets( line, sizeof(line), gerber->m_Current_File ) == NULL ) // E.O.F
         {
-            if( gerber_layer->m_FilesPtr == 0 )
+            if( gerber->m_FilesPtr == 0 )
                 break;
 
-            fclose( gerber_layer->m_Current_File );
+            fclose( gerber->m_Current_File );
 
-            gerber_layer->m_FilesPtr--;
-            gerber_layer->m_Current_File =
-                gerber_layer->m_FilesList[gerber_layer->m_FilesPtr];
+            gerber->m_FilesPtr--;
+            gerber->m_Current_File =
+                gerber->m_FilesList[gerber->m_FilesPtr];
 
             continue;
         }
 
-        text = StrPurge( Line );
+        text = StrPurge( line );
 
         while( text && *text )
         {
@@ -185,49 +185,49 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 break;
 
             case '*':       // End commande
-                gerber_layer->m_CommandState = END_BLOCK;
+                gerber->m_CommandState = END_BLOCK;
                 text++;
                 break;
 
             case 'M':       // End file
-                gerber_layer->m_CommandState = CMD_IDLE;
+                gerber->m_CommandState = CMD_IDLE;
                 while( *text )
                     text++;
 
                 break;
 
             case 'G':    /* Line type Gxx : command */
-                G_commande = gerber_layer->ReturnGCodeNumber( text );
-                gerber_layer->Execute_G_Command( text, G_commande );
+                G_commande = gerber->ReturnGCodeNumber( text );
+                gerber->Execute_G_Command( text, G_commande );
                 break;
 
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or command if xx = 0..9*/
-                D_commande = gerber_layer->ReturnDCodeNumber( text );
-                gerber_layer->Execute_DCODE_Command( this, DC,
+                D_commande = gerber->ReturnDCodeNumber( text );
+                gerber->Execute_DCODE_Command( this, DC,
                                                      text, D_commande );
                 break;
 
             case 'X':
             case 'Y':                   /* Move or draw command */
-                pos = gerber_layer->ReadXYCoord( text );
+                pos = gerber->ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
-                    gerber_layer->Execute_DCODE_Command( this, DC, text,
-                                                         gerber_layer->m_Last_Pen_Command );
+                    gerber->Execute_DCODE_Command( this, DC, text,
+                                                         gerber->m_Last_Pen_Command );
                 }
                 break;
 
             case 'I':
             case 'J':       /* Auxiliary Move command */
-                pos = gerber_layer->ReadIJCoord( text );
+                pos = gerber->ReadIJCoord( text );
                 break;
 
             case '%':
-                if( gerber_layer->m_CommandState != ENTER_RS274X_CMD )
+                if( gerber->m_CommandState != ENTER_RS274X_CMD )
                 {
-                    gerber_layer->m_CommandState = ENTER_RS274X_CMD;
+                    gerber->m_CommandState = ENTER_RS274X_CMD;
 
-                    if( !gerber_layer->ReadRS274XCommand( this, DC, Line, text ) )
+                    if( !gerber->ReadRS274XCommand( this, DC, line, text ) )
                     {
                         error++;
                     }
@@ -235,7 +235,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 else        //Error
                 {
                     error++;
-                    gerber_layer->m_CommandState = CMD_IDLE;
+                    gerber->m_CommandState = CMD_IDLE;
                     text++;
                 }
                 break;
@@ -254,14 +254,14 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                    error, GERBER_FullFileName.GetData() );
         DisplayError( this, msg );
     }
-    fclose( gerber_layer->m_Current_File );
+    fclose( gerber->m_Current_File );
 
     SetLocaleTo_Default( );
 
     /* Init  DCodes list and perhaps read a DCODES file,
      * if the gerber file is only a RS274D file (without any aperture information)
      */
-    if( !gerber_layer->m_As_DCode )
+    if( !gerber->m_As_DCode )
     {
         wxString DCodeFileName;
         if( D_Code_FullFileName.IsEmpty() )

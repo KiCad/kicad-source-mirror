@@ -302,7 +302,7 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
  */
 
 /***********************************************/
-wxPoint GERBER_Descr::ReadXYCoord( char*& Text )
+wxPoint GERBER::ReadXYCoord( char*& Text )
 /***********************************************/
 
 /* Retourne la coord courante pointee par Text (XnnnnYmmmm)
@@ -432,7 +432,7 @@ wxPoint GERBER_Descr::ReadXYCoord( char*& Text )
 
 
 /************************************************/
-wxPoint GERBER_Descr::ReadIJCoord( char*& Text )
+wxPoint GERBER::ReadIJCoord( char*& Text )
 /************************************************/
 
 /* Retourne la coord type InnJnn courante pointee par Text (InnnnJmmmm)
@@ -553,7 +553,7 @@ wxPoint GERBER_Descr::ReadIJCoord( char*& Text )
 
 
 /*****************************************************/
-int GERBER_Descr::ReturnGCodeNumber( char*& Text )
+int GERBER::ReturnGCodeNumber( char*& Text )
 /*****************************************************/
 
 /* Lit la sequence Gnn et retourne la valeur nn
@@ -579,7 +579,7 @@ int GERBER_Descr::ReturnGCodeNumber( char*& Text )
 
 
 /**************************************************/
-int GERBER_Descr::ReturnDCodeNumber( char*& Text )
+int GERBER::ReturnDCodeNumber( char*& Text )
 /**************************************************/
 
 /* Lit la sequence Dnn et retourne la valeur nn
@@ -603,7 +603,7 @@ int GERBER_Descr::ReturnDCodeNumber( char*& Text )
 
 
 /******************************************************************/
-bool GERBER_Descr::Execute_G_Command( char*& text, int G_commande )
+bool GERBER::Execute_G_Command( char*& text, int G_commande )
 /******************************************************************/
 
 {
@@ -699,15 +699,17 @@ bool GERBER_Descr::Execute_G_Command( char*& text, int G_commande )
 
 
 /*****************************************************************************/
-bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
+bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                           char*& text, int D_commande )
 /*****************************************************************************/
 {
-    wxSize size( 15, 15 );
+    wxSize      size( 15, 15 );
 
-    int      shape   = 1, dcode = 0;
-    D_CODE*  pt_Tool = NULL;
-    wxString msg;
+    APERTURE_T  aperture = APT_CIRCLE;
+
+    int         dcode = 0;
+    D_CODE*     pt_Tool = NULL;
+    wxString    msg;
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
     {
@@ -769,9 +771,9 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             pt_Tool = ReturnToolDescr( m_Layer, m_Current_Tool );
             if( pt_Tool )
             {
-                size  = pt_Tool->m_Size;
-                dcode = pt_Tool->m_Num_Dcode;
-                shape = pt_Tool->m_Shape;
+                size     = pt_Tool->m_Size;
+                dcode    = pt_Tool->m_Num_Dcode;
+                aperture = pt_Tool->m_Shape;
             }
 
             switch( m_Iterpolation )
@@ -821,29 +823,29 @@ bool GERBER_Descr::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             pt_Tool = ReturnToolDescr( m_Layer, m_Current_Tool );
             if( pt_Tool )
             {
-                size  = pt_Tool->m_Size;
-                dcode = pt_Tool->m_Num_Dcode;
-                shape = pt_Tool->m_Shape;
+                size     = pt_Tool->m_Size;
+                dcode    = pt_Tool->m_Num_Dcode;
+                aperture = pt_Tool->m_Shape;
             }
 
-            switch( shape )
+            switch( aperture )
             {
-            case GERB_LINE:
-            case GERB_CIRCLE:
+            case APT_LINE:
+            case APT_CIRCLE:
                 Append_1_Flash_ROND_GERBER( dcode,
                                             frame, DC,
                                             m_CurrentPos,
                                             size.x );
                 break;
 
-            case GERB_OVALE:
+            case APT_OVAL:
                 Append_1_Flash_GERBER( dcode,
                                        frame, DC, m_CurrentPos,
                                        size,
                                        PAD_OVAL );
                 break;
 
-            case GERB_RECT:
+            case APT_RECT:
                 Append_1_Flash_GERBER( dcode,
                                        frame, DC, m_CurrentPos,
                                        size,

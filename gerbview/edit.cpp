@@ -85,7 +85,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int           id    = event.GetId();
     int           layer = GetScreen()->m_Active_Layer;
-    GERBER_Descr* gerber_layer = g_GERBER_Descr_List[layer];
+    GERBER*       gerber_layer = g_GERBER_List[layer];
     wxPoint       pos;
     wxClientDC    dc( DrawPanel );
 

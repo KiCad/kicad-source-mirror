@@ -31,11 +31,11 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
 {
     TRACK*        Track;
     int           layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    GERBER_Descr* gerber_layer     = g_GERBER_Descr_List[layer];
+    GERBER*       gerber     = g_GERBER_List[layer];
     int           dcode_hightlight = 0;
 
-    if( gerber_layer )
-        dcode_hightlight = gerber_layer->m_Selected_Tool;
+    if( gerber )
+        dcode_hightlight = gerber->m_Selected_Tool;
 
     Track = Pcb->m_Track;
     for( ; Track != NULL; Track = (TRACK*) Track->Pnext )

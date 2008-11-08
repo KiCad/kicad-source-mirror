@@ -12,7 +12,8 @@
 
 #define CODE( x, y ) ( ((x) << 8) + (y) )
 
-enum rs274x_parameters {
+enum RS274X_PARAMETERS
+{
     FORMAT_STATEMENT    = CODE( 'F', 'S' ),
     AXIS_SELECT         = CODE( 'A', 'S' ),
     MIRROR_IMAGE        = CODE( 'M', 'I' ),
@@ -30,8 +31,9 @@ enum rs274x_parameters {
     PLOTTER_FILM        = CODE( 'P', 'M' ),
     INCLUDE_FILE        = CODE( 'I', 'F' ),
 
-    APERTURE_DESCR      = CODE( 'A', 'D' ),
-    APERTURE_MACRO      = CODE( 'A', 'M' ),
+    AP_DEFINITION       = CODE( 'A', 'D' ),
+
+    AP_MACRO            = CODE( 'A', 'M' ),
     LAYER_NAME          = CODE( 'L', 'N' ),
     LAYER_POLARITY      = CODE( 'L', 'P' ),
     KNOCKOUT            = CODE( 'K', 'O' ),
@@ -41,7 +43,6 @@ enum rs274x_parameters {
 
 
 /* Local Functions */
-static bool ReadApertureMacro( char aBuff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 
 
 /**
@@ -79,7 +80,19 @@ static int ReadXCommand( char*& text )
  */
 static int ReadInt( char*& text )
 {
-    return (int) strtol( text, &text, 10 );
+    char*   start = text;
+
+    int ret = (int) strtol( text, &text, 10 );
+
+/*
+    if( text == start ) // no conversion was performed, skip one character forward
+        ++text;
+*/
+
+    if( *text == ',' )
+        ++text;
+
+    return ret;
 }
 
 
@@ -92,12 +105,24 @@ static int ReadInt( char*& text )
  */
 static double ReadDouble( char*& text )
 {
-    return strtod( text, &text );
+    char*   start = text;
+
+    double ret = strtod( text, &text );
+
+/*
+    if( text == start )     // no conversion was performed, skip one character forward
+        ++text;
+*/
+
+    if( *text == ',' )
+        ++text;
+
+    return ret;
 }
 
 
 /****************************************************************************/
-bool GERBER_Descr::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
+bool GERBER::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
                                       char buff[GERBER_BUFZ], char*& text )
 /****************************************************************************/
 {
@@ -112,7 +137,7 @@ bool GERBER_Descr::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
         {
             switch( *text )
             {
-            case '%':       // End commande
+            case '%':       // end of command
                 text++;
                 m_CommandState = CMD_IDLE;
                 goto exit;  // success completion
@@ -136,9 +161,10 @@ bool GERBER_Descr::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
             }
         }
 
-        // End of current line
+        // end of current line, read another one.
         if( fgets( buff, GERBER_BUFZ, m_Current_File ) == NULL )
         {
+            // end of file
             ok = false;
             break;
         }
@@ -152,7 +178,7 @@ exit:
 
 
 /*******************************************************************************/
-bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& text )
+bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& text )
 /*******************************************************************************/
 {
     int      code;
@@ -307,7 +333,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], ch
             m_LayerNegative = FALSE;
         break;
 
-    case APERTURE_MACRO:
+    case AP_MACRO:
         ReadApertureMacro( buff, text, m_Current_File );
         break;
 
@@ -335,7 +361,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], ch
         m_FilesPtr++;
         break;
 
-    case APERTURE_DESCR:
+    case AP_DEFINITION:
         if( *text != 'D' )
         {
             ok = FALSE;
@@ -360,7 +386,7 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], ch
             switch( ctmp )
             {
             case 'C':               // Circle
-                dcode->m_Shape = GERB_CIRCLE;
+                dcode->m_Shape = APT_CIRCLE;
                 while( *text == ' ' )
                     text++;
 
@@ -386,9 +412,9 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], ch
                 dcode->m_Defined = TRUE;
                 break;
 
-            case 'O':               // ovale
+            case 'O':               // oval
             case 'R':               // rect
-                dcode->m_Shape = (ctmp == 'O') ? GERB_OVALE : GERB_RECT;
+                dcode->m_Shape = (ctmp == 'O') ? APT_OVAL : APT_RECT;
 
                 while( *text == ' ' )
                     text++;
@@ -424,9 +450,8 @@ bool GERBER_Descr::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], ch
                 dcode->m_Defined = TRUE;
                 break;
 
-            case 'P':               // Polygone
-                // A modifier: temporairement la forme ronde est utilisée
-                dcode->m_Shape   = GERB_CIRCLE;
+            case 'P':               // Polygon
+                dcode->m_Shape   = APT_POLYGON;
                 dcode->m_Defined = TRUE;
                 break;
             }
@@ -472,39 +497,125 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 
 
 /*******************************************************************/
-bool ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
+bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 /*******************************************************************/
 {
-    wxString macro_name;
-    int      macro_type = 0;
+    APERTURE_MACRO  am;
 
-    // Read macro name
-    while( (text < buff + GERBER_BUFZ) && *text )
+    // read macro name
+    while( *text )
     {
         if( *text == '*' )
+        {
+            ++text;
             break;
+        }
 
-        macro_name.Append( *text );
-        text++;
+        am.name.Append( *text++ );
     }
 
     if( g_DebugLevel > 0 )
-        wxMessageBox( macro_name, wxT( "macro name" ) );
+        wxMessageBox( am.name, wxT( "macro name" ) );
 
-    text = buff;
-    fgets( buff, GERBER_BUFZ, gerber_file );
-
-    // Read parameters
-    macro_type = ReadInt( text );
-
-    while( (text < buff + GERBER_BUFZ) && *text )
+    for(;;)
     {
-        if( *text == '*' )
-            return TRUE;
+        AM_PRIMITIVE    prim;
 
-        text++;
+        if( *text == '*' )
+            ++text;
+
+        if( *text == '\n' )
+            ++text;
+
+        if( !*text )
+        {
+            text = buff;
+            if( fgets( buff, GERBER_BUFZ, gerber_file ) == NULL )
+                return false;
+        }
+
+        if( *text == '%' )
+            break;      // exit with text still pointing at %
+
+        prim.primitive_id = (AM_PRIMITIVE_ID) ReadInt( text );
+
+        int paramCount;
+
+        switch( prim.primitive_id )
+        {
+        default:
+        case AMP_CIRCLE:
+            paramCount = 4;
+            break;
+        case AMP_LINE2:
+        case AMP_LINE20:
+            paramCount = 7;
+            break;
+        case AMP_LINE_CENTER:
+        case AMP_LINE_LOWER_LEFT:
+            paramCount = 6;
+            break;
+        case AMP_EOF:
+            paramCount = 0;
+            break;
+        case AMP_OUTLINE:
+            paramCount = 4;
+            break;
+        case AMP_POLYGON:
+            paramCount = 4;
+            break;
+        case AMP_MOIRE:
+            paramCount = 9;
+            break;
+        case AMP_THERMAL:
+            paramCount = 6;
+            break;
+        }
+
+        DCODE_PARAM param;
+
+        for( int i=0;  i<paramCount && *text && *text!='*';  ++i )
+        {
+            if( *text == '$' )
+            {
+                ++text;
+                param.isImmediate = false;
+            }
+            else
+            {
+                param.isImmediate = true;
+            }
+
+            param.value = ReadDouble( text );
+            prim.params.push_back( param );
+        }
+
+        if( prim.primitive_id == AMP_OUTLINE )
+        {
+            paramCount = (int) prim.params[1].value * 2 + 1;
+
+            for( int i=0; i<paramCount && *text && *text!='*';  ++i )
+            {
+                if( *text == '$' )
+                {
+                    ++text;
+                    param.isImmediate = false;
+                }
+                else
+                {
+                    param.isImmediate = true;
+                }
+
+                param.value = ReadDouble( text );
+                prim.params.push_back( param );
+            }
+        }
+
+        am.primitives.push_back( prim );
     }
 
-    return FALSE;
+    m_aperture_macros.insert( am );
+
+    return true;
 }
 

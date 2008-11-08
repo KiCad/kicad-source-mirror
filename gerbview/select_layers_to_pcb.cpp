@@ -129,7 +129,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
     g_DesignSettings.m_CopperLayerCount = 0;
     for( ii = 0; ii < 32; ii++ )
     {
-        if( g_GERBER_Descr_List[ii] != NULL )
+        if( g_GERBER_List[ii] != NULL )
             g_DesignSettings.m_CopperLayerCount++;
 
         // Specify the default value for each member of these arrays.
@@ -140,7 +140,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame(WinEDA_GerberFrame *parent) :
     int pcb_layer_number = 0;
     for( nb_items = 0, ii = 0; ii < 32; ii++ )
     {
-        if( g_GERBER_Descr_List[ii] == NULL )
+        if( g_GERBER_List[ii] == NULL )
             continue;
 
         if( (pcb_layer_number == g_DesignSettings.m_CopperLayerCount - 1)

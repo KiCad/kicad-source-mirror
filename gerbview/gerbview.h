@@ -5,6 +5,10 @@
 #ifndef GERBVIEW_H
 #define GERBVIEW_H
 
+#include <vector>
+#include <set>
+
+
 #ifndef eda_global
 #define eda_global extern
 #endif
@@ -20,6 +24,7 @@ typedef enum {
     FORMAT_GERBER,
     FORMAT_POST
 } PlotFormat;
+
 
 //eda_global wxString g_Plot_FileName;
 eda_global wxString g_PhotoFilenameExt;
@@ -38,7 +43,22 @@ eda_global int g_Plot_Spot_Mini;            /* Diametre mini de l'ouverture pour
 /* Constantes utiles en trace GERBER */
 /*************************************/
 
-/* codes de type de forme d'outils */
+/**
+ * Enum APERTURE_T
+ * is the set of all gerber aperture types allowed, according to page 16 of
+ * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
+ */
+enum APERTURE_T
+{
+    APT_CIRCLE = 'C',
+    APT_LINE = 'L',
+    APT_RECT = 'R',
+    APT_OVAL = '0',
+    APT_POLYGON = 'P',
+    APT_MACRO = 'M'
+};
+
+/* replaced by APERTURE_T
 enum Gerb_StandardShape {
     GERB_CIRCLE = 1,
     GERB_RECT,
@@ -46,6 +66,8 @@ enum Gerb_StandardShape {
     GERB_OVALE,
     GERB_SPECIAL_SHAPE
 };
+*/
+
 
 // Interpolation type
 enum Gerb_Interpolation {
@@ -90,18 +112,132 @@ enum Gerb_Analyse_Cmd {
 };
 
 
-class D_CODE;
+/**
+ * Struct DCODE_PARAM
+ * holds a parameter for a DCODE or an "aperture macro" as defined within standard RS274X.
+ * The \a value field can be either a constant or a place holder for a DCODE
+ * parameter.
+ */
+struct DCODE_PARAM
+{
+    DCODE_PARAM() :
+        isImmediate(true),
+        value(0.0)
+    {}
+
+    bool    isImmediate;    ///< the \a value field is an actual value, not a parameter place holder.
+    double  value;          ///< if immediate then the value, else an integer index into D_CODE.m_am_params.
+};
+
 
 /**
- * Class GERBER_Descr
- * holds the data for one gerber file or layer
+ * Enum AM_PRIMITIVE_ID
+ * is the set of all "aperture macro primitives" (primitive numbers).  See
+ * Table 3 in http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
  */
-class GERBER_Descr
+enum AM_PRIMITIVE_ID
+{
+    AMP_CIRCLE  = 1,
+    AMP_LINE2 = 2,
+    AMP_LINE20 = 20,
+    AMP_LINE_CENTER = 21,
+    AMP_LINE_LOWER_LEFT = 22,
+    AMP_EOF = 3,
+    AMP_OUTLINE = 4,
+    AMP_POLYGON = 5,
+    AMP_MOIRE = 6,
+    AMP_THERMAL = 7,
+};
+
+
+typedef std::vector<DCODE_PARAM>   DCODE_PARAMS;
+
+/**
+ * Struct AM_PRIMITIVE
+ * holds an aperture macro primitive as given in Table 3 of
+ * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
+ */
+struct AM_PRIMITIVE
+{
+    AM_PRIMITIVE_ID     primitive_id;
+    DCODE_PARAMS        params;
+};
+
+
+typedef std::vector<AM_PRIMITIVE>   AM_PRIMITIVES;
+
+/**
+ * Struct APERTURE_MACRO
+ * helps support the "aperture macro" defined within standard RS274X.
+ */
+struct APERTURE_MACRO
+{
+    wxString        name;
+    AM_PRIMITIVES   primitives;
+};
+
+
+/**
+ * Struct APERTURE_MACRO_less_than
+ * is used by std:set<APERTURE_MACRO> instantiation which uses APERTURE_MACRO.name as its key.
+ */
+struct APERTURE_MACRO_less_than
+{
+    // a "less than" test on two wxStrings
+    bool operator()( const APERTURE_MACRO& am1, const APERTURE_MACRO& am2) const
+    {
+        return am1.name.Cmp( am2.name ) < 0;  // case specific wxString compare
+    }
+};
+
+
+/**
+ * Type APERTURE_MACRO_SET
+ * is a sorted collection of APERTURE_MACROS whose key is the name field in
+ * the APERTURE_MACRO.
+ */
+typedef std::set<APERTURE_MACRO, APERTURE_MACRO_less_than>  APERTURE_MACRO_SET;
+typedef std::pair<APERTURE_MACRO_SET::iterator, bool> APERTURE_MACRO_SET_PAIR;
+
+
+/**
+ * Class D_CODE
+ * holds a gerber DCODE definition.
+ */
+class D_CODE
 {
 public:
-    GERBER_Descr* m_Parent;                                     // Pointeur sur la racine pour layers imbriquées
-    GERBER_Descr* m_Pback;                                      // Pointeur de chainage arriere pour layers imbriquées
-    GERBER_Descr* m_Pnext;                                      // Pointeur de chainage avant pour layers imbriquées
+    wxSize      m_Size;        /* Dimensions horiz et Vert */
+    APERTURE_T  m_Shape;       /* shape ( Line, rect , circulaire , ovale .. ) */
+    int         m_Num_Dcode;   /* numero de code ( >= 10 ) */
+    wxSize      m_Drill;       /* dimension du trou central (s'il existe) */
+    int         m_DrillShape;  /* forme du trou central ( rond = 1, rect = 2 ) */
+    bool        m_InUse;       /* FALSE si non utilisé */
+    bool        m_Defined;     /* FALSE si non defini */
+    wxString    m_SpecialDescr;
+
+    APERTURE_MACRO* m_Macro;    ///< no ownership, points to GERBER.m_aperture_macros element
+
+    /**
+     * parameters used only when this D_CODE holds a reference to an aperture
+     * macro, and these parameters would customize the macro.
+     */
+    DCODE_PARAMS   m_am_params;
+
+public:
+    D_CODE( int num_dcode );
+    ~D_CODE();
+    void Clear_D_CODE_Data();
+};
+
+
+/**
+ * Class GERBER
+ * holds the data for one gerber file or layer
+ */
+class GERBER
+{
+public:
     wxString      m_FileName;                                   // Full File Name for this layer
     wxString      m_Name;                                       // Layer name
     int           m_Layer;                                      // Layer Number
@@ -139,10 +275,12 @@ public:
     bool          m_PolygonFillMode;                            // Enbl polygon mode (read coord as a polygone descr)
     int           m_PolygonFillModeState;                       // In polygon mode: 0 = first segm, 1 = next segm
 
+    APERTURE_MACRO_SET   m_aperture_macros;
+
 public:
-    GERBER_Descr( int layer );
-    ~GERBER_Descr();
-    void    Clear_GERBER_Descr();
+    GERBER( int layer );
+    ~GERBER();
+    void    Clear_GERBER();
     int     ReturnUsedDcodeNumber();
     void    ResetDefaultValues();
     void    InitToolTable();
@@ -174,29 +312,18 @@ public:
      * executes 1 commande
      */
     bool    ExecuteRS274XCommand( int command, char aBuff[GERBER_BUFZ], char*& text );
-};
 
 
-/**
- * Class D_CODE
- * holds a gerber DCODE definition.
- */
-class D_CODE
-{
-public:
-    wxSize   m_Size;        /* Dimensions horiz et Vert */
-    int      m_Shape;       /* shape ( Line, rect , circulaire , ovale .. ) */
-    int      m_Num_Dcode;   /* numero de code ( >= 10 ) */
-    wxSize   m_Drill;       /* dimension du trou central (s'il existe) */
-    int      m_DrillShape;  /* forme du trou central ( rond = 1, rect = 2 ) */
-    bool     m_InUse;       /* FALSE si non utilisé */
-    bool     m_Defined;     /* FALSE si non defini */
-    wxString m_SpecialDescr;
-
-public:
-    D_CODE( int num_dcode );
-    ~D_CODE();
-    void Clear_D_CODE_Data();
+    /**
+     * Function ReadApertureMacro
+     * reads in an aperture macro and saves it in m_aperture_macros.
+     * @param aBuff a character buffer at least GERBER_BUFZ long that can be
+     *          used to read successive lines from the gerber file.
+     * @param text A reference to a character pointer which gives the initial text to read from.
+     * @param gerber_file Which file to read from for continuation.
+     * @return bool - true if a macro was read in successfully, else false.
+     */
+    bool    ReadApertureMacro( char aBuff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 };
 
 
@@ -206,9 +333,15 @@ public:
 /**************/
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 
-/*************/
-/* dcode.cpp */
-/*************/
+
+/**
+ * Function ReturnToolDescr
+ * returns a D_CODE given a global layer index and Dcode value.
+ * @param aLayer The index into the global array of GERBER called g_GERBER_List[].
+ * @param aDcode The dcode value to look up.
+ * @param aIndex If not null, where to put a one basedindex into the GERBER's m_Aperture_List[] array.
+ * @return D_CODE* - the looked up D_CODE or NULL if none was encountered in the gerber file for given \a aDcode.
+ */
 D_CODE * ReturnToolDescr( int layer, int Dcode, int * index = NULL );
 
 
@@ -222,11 +355,15 @@ eda_global const wxChar* g_GERBER_Tool_Type[6]
 #endif
 ;
 
-eda_global GERBER_Descr* g_GERBER_Descr_List[32];
-eda_global int           g_DisplayPolygonsModeSketch; /* How to show filled polygons :
-                                        * 0 = filled
-                                        * 1 = Sketch mode
-                                        */
+eda_global GERBER* g_GERBER_List[32];
+
+
+/**
+ * How to show filled polygons :
+ * 0 = filled
+ * 1 = Sketch mode
+ */
+eda_global int           g_DisplayPolygonsModeSketch;
 
 
 #include "pcbnew.h"

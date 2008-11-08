@@ -209,7 +209,7 @@ void WinEDA_GerberFrame::SetToolbars()
  */
 {
     int           layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    GERBER_Descr* Gerber_layer_descr = g_GERBER_Descr_List[layer];
+    GERBER*       gerber = g_GERBER_List[layer];
 
     if( m_HToolBar == NULL )
         return;
@@ -242,14 +242,14 @@ void WinEDA_GerberFrame::SetToolbars()
         m_SelLayerBox->SetSelection( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     }
 
-    if( Gerber_layer_descr )
+    if( gerber )
     {
         int sel_index;
         m_SelLayerTool->Enable( TRUE );
-        if( Gerber_layer_descr->m_Selected_Tool < FIRST_DCODE )  // No tool selected
+        if( gerber->m_Selected_Tool < FIRST_DCODE )  // No tool selected
             sel_index = 0;
         else
-            sel_index = Gerber_layer_descr->m_Selected_Tool - FIRST_DCODE + 1;
+            sel_index = gerber->m_Selected_Tool - FIRST_DCODE + 1;
 
         if( sel_index != m_SelLayerTool->GetSelection() )
         {

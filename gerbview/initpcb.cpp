@@ -56,8 +56,8 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     /* init pointeurs  et variables */
     for( layer = 0; layer < 32; layer++ )
     {
-        if( g_GERBER_Descr_List[layer] )
-            g_GERBER_Descr_List[layer]->InitToolTable();
+        if( g_GERBER_List[layer] )
+            g_GERBER_List[layer]->InitToolTable();
     }
 
     /* remise a 0 ou a une valeur initiale des variables de la structure */

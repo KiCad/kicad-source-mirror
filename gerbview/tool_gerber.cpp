@@ -150,7 +150,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                                 _( "Open the gerbview manual" ), help_xpm );
         ADD_MENUITEM_WITH_HELP(helpMenu,
                                ID_KICAD_ABOUT, _( "&About gerbview" ),
-                               _( "About gerbview gerber and drill viewer" ), 
+                               _( "About gerbview gerber and drill viewer" ),
                                info_xpm );
 
         menuBar->Append( m_FilesMenu, _( "&File" ) );
@@ -192,7 +192,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 /***********************************************/
 {
     int           layer = 0;
-    GERBER_Descr* gerber_layer = NULL;
+    GERBER*       gerber = NULL;
     int           ii;
     wxString      msg;
 
@@ -203,7 +203,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     if( GetScreen() )
     {
         layer = GetScreen()->m_Active_Layer;
-        gerber_layer = g_GERBER_Descr_List[layer];
+        gerber = g_GERBER_List[layer];
     }
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
