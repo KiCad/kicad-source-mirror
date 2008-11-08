@@ -800,6 +800,28 @@ public:
                                       const wxString& GERBER_FullFileName,
                                       const wxString& D_Code_FullFileName );
     bool            SaveGerberFile( const wxString& FileName, wxDC* DC );
+
+
+    /**
+     * Function Read_D_Code_File
+     * reads in a dcode file assuming ALSPCB file format with ';' indicating comments.
+     * <p>
+     * Format is like CSV but with optional ';' delineated comments:<br>
+     * tool,	 Horiz,		  Vert,	  drill, vitesse, acc. ,Type ; [DCODE (commentaire)]<br>
+     * ex:	   1,		  12,		12,		0,		  0,	 0,	  3 ; D10
+     * <p>
+     * Format:<br>
+     * Ver,  Hor, Type, Tool [,Drill]<br>
+     * example:	0.012, 0.012,  L   , D10<br>
+     *
+     * Categorize all found dcodes into a table of D_CODE instantiations.
+     * @param D_CodeFullFileName The name of the file to read from.
+     * @return int - <br>
+     *                 -1 = file not found<br>
+     *                 -2 = parsing problem<br>
+     *                  0 = the \a D_Code_FullFileName is empty, no reading is done but an empty GERBER is put into g_GERBER_List[]<br>
+     *                  1 = read OK<br>
+     */
     int             Read_D_Code_File( const wxString& D_Code_FullFileName );
     void            CopyDCodesSizeToItems();
     void            Liste_D_Codes( wxDC* DC );
