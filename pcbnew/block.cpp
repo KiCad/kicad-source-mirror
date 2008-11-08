@@ -140,7 +140,7 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     m_Include_Draw_Items->SetValue( Block_Include_Draw_Items );
     fgSizer1->Add( m_Include_Draw_Items, 0, wxALL, 5 );
 
-    m_Include_Edges_Items = new wxCheckBox( this, -1, _( "Include egde layer" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_Include_Edges_Items = new wxCheckBox( this, -1, _( "Include board outline layer" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Edges_Items->SetValue( Block_Include_Edges_Items );
     fgSizer1->Add( m_Include_Edges_Items, 0, wxALL, 5 );
 

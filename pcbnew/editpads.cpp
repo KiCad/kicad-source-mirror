@@ -120,7 +120,7 @@ void WinEDA_PadPropertiesFrame::SetOthersControls()
     else
         tmp = g_Pad_Master.m_Orient;
     m_DrillShapeBoxSizer->Add( 5, 5, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
-    m_PadOrientCtrl = new WinEDA_ValueCtrl( this, _( "Pad Orient (0.1 deg)" ),
+    m_PadOrientCtrl = new WinEDA_ValueCtrl( this, _( "Pad Orientation (in 0.1 degrees)" ),
                                             tmp, 2, m_DrillShapeBoxSizer, 1 );
 
 

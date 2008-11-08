@@ -303,7 +303,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
 
         StaticText = new wxStaticText( m_PanelProperties,
                                        wxID_STATIC, _(
-                                           "Orient (0.1 deg)" ), wxDefaultPosition, wxDefaultSize,
+                                           "Orientation (in 0.1 degrees)" ), wxDefaultPosition, wxDefaultSize,
                                        0 );
         PropLeftSizer->Add( StaticText, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
         msg << m_CurrentModule->m_Orient;

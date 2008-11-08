@@ -573,7 +573,7 @@ int WinEDA_BasePcbFrame::Save_1_Module( const wxString& LibName,
                 newmodule = 0;
                 if( DisplayDialog )
                 {
-                    msg = _( "Module exists Line " );
+                    msg = _( "Module exists\n Line: " );
                     msg << LineNum;
                     Affiche_Message( msg );
                 }

@@ -217,7 +217,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     {
         DisplayError( this,
                       _(
-                          "Autoplace modules: No boad edges detected, unable to place modules" ),
+                          "Autoplace modules: No board edges detected. Unable to place modules" ),
                       20 );
         return;
     }

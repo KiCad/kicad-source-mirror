@@ -71,7 +71,7 @@ END_EVENT_TABLE()
 /********************************************************************************/
 WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* parent,
                                                       D_PAD* Pad ) :
-    wxDialog( parent, -1, _( "Pads Global Edit" ), wxDefaultPosition, wxSize( 310, 235 ),
+    wxDialog( parent, -1, _( "Edit Pads Global" ), wxDefaultPosition, wxSize( 310, 235 ),
               DIALOG_STYLE )
 /********************************************************************************/
 {
@@ -100,7 +100,7 @@ WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* paren
 
     pos.y += Button->GetDefaultSize().y + 10;
     Button = new wxButton( this, ID_CHANGE_ID_MODULES,
-                           _( "Change Id Modules" ), pos );
+                           _( "Change ID Modules" ), pos );
 
     Button->SetForegroundColour( *wxRED );
 
@@ -152,7 +152,7 @@ WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* paren
     m_Pad_Drill_Change->SetValue( Pad_Drill_Change );
 
     pos.y += 18;
-    m_Pad_Orient_Change = new   wxCheckBox( this, -1, _( "Change Orient" ), pos );
+    m_Pad_Orient_Change = new   wxCheckBox( this, -1, _( "Change Orientation" ), pos );
 
     m_Pad_Orient_Change->SetValue( Pad_Orient_Change );
 }

@@ -259,7 +259,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         postprocess_menu->Append(item);
 
         item = new wxMenuItem(postprocess_menu, ID_PCB_GEN_DRILL_FILE, _("Create &Drill File"),
-                    _("Generate excellon drill file"));
+                    _("Generate excellon2 drill file"));
         item->SetBitmap(post_drill_xpm);
         postprocess_menu->Append(item);
 

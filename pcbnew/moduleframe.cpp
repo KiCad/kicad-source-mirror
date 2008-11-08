@@ -180,7 +180,7 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        if( !IsOK( this, _( "Module Editor: module modified!, Continue ?" ) ) )
+        if( !IsOK( this, _( "Module Editor: Module modified! Continue?" ) ) )
         {
             Event.Veto(); return;
         }
