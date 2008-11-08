@@ -275,7 +275,7 @@ public:
     bool          m_PolygonFillMode;                            // Enbl polygon mode (read coord as a polygone descr)
     int           m_PolygonFillModeState;                       // In polygon mode: 0 = first segm, 1 = next segm
 
-    APERTURE_MACRO_SET   m_aperture_macros;
+    APERTURE_MACRO_SET   m_aperture_macros;                     ///< a collection of APERTURE_MACROS, sorted by name
 
 public:
     GERBER( int layer );

@@ -73,21 +73,15 @@ static int ReadXCommand( char*& text )
 
 /**
  * Function ReadInt
- * reads an int from an ASCII character buffer.
+ * reads an int from an ASCII character buffer.  If there is a comma after the
+ * int, then skip over that.
  * @param text A reference to a character pointer from which bytes are read
  *    and the pointer is advanced for each byte read.
  * @param int - The int read in.
  */
 static int ReadInt( char*& text )
 {
-    char*   start = text;
-
     int ret = (int) strtol( text, &text, 10 );
-
-/*
-    if( text == start ) // no conversion was performed, skip one character forward
-        ++text;
-*/
 
     if( *text == ',' )
         ++text;
@@ -98,21 +92,15 @@ static int ReadInt( char*& text )
 
 /**
  * Function ReadDouble
- * reads a double in from a character buffer.
+ * reads a double in from a character buffer. If there is a comma after the double,
+ * then skip over that.
  * @param text A reference to a character pointer from which the ASCII double
  *          is read from and the pointer advanced for each character read.
  * @return double
  */
 static double ReadDouble( char*& text )
 {
-    char*   start = text;
-
     double ret = strtod( text, &text );
-
-/*
-    if( text == start )     // no conversion was performed, skip one character forward
-        ++text;
-*/
 
     if( *text == ',' )
         ++text;
