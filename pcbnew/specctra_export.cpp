@@ -255,8 +255,7 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 
 /**
  * Struct wxString_less_than
- * is used by the std:set<> and std::map<> instantiations below.
- * See STRINGSET typedef and PINMAP typedef below.
+ * is used by std:set<> and std::map<> instantiations which use wxString as their key.
  */
 struct wxString_less_than
 {
