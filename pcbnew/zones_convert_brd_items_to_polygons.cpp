@@ -421,23 +421,23 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // The pattern roughtly is a 90 deg arc pie
         std::vector <wxPoint> corners_buffer;
 
+        // Radius of outer arcs of the shape:
+        int outer_radius = dx + aThermalGap;     // The radius of the outer arc is pad radius + aThermalGap
+
         // Crosspoint of thermal spoke sides, the first point of polygon buffer
         corners_buffer.push_back( wxPoint( copper_tickness.x / 2, copper_tickness.y / 2 ) );
 
         // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
         corner.x = copper_tickness.x / 2;
-        int y = dx + aThermalGap - (aThermalGap / 3);
+        int y = outer_radius - (aThermalGap / 4);
         corner.y = (int) sqrt( ( ( (double) y * y ) - (double) corner.x * corner.x ) );
         corners_buffer.push_back( corner );
 
         // calculate the starting point of the outter arc
-        dx      += aThermalGap;     // The radius of the outter arc is dx = pad radius + aThermalGap
         corner.x = copper_tickness.x / 2;
-        double dtmp = sqrt( ( (double) dx * dx ) - ( (double) corner.x * corner.x ) );
+        double dtmp = sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner.x * corner.x ) );
         corner.y = (int) dtmp;
-
-        // calculates the position of the first point of the arc section
-        RotatePoint( &corner, delta );
+        RotatePoint( &corner, 90 );
 
         // calculate the ending point of the outter arc
         corner_end.x = corner.y;
@@ -464,7 +464,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // this seems a bug in kbool polygon
         // angle = 450 (45.0 degrees orientation) seems work fine.
         // angle = 0 with thermal shapes without angle < 90 deg seems works fine also
-        angle = 450;
+        angle = 0;
         int angle_pad = aPad.m_Orient;              // Pad orientation
         for( unsigned ihole = 0; ihole < 4; ihole++ )
         {
@@ -505,8 +505,11 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
             supp_angle = 900;
             EXCHG( copper_tickness.x, copper_tickness.y);
         }
-        int deltasize = dx - dy;
+        int deltasize = dx - dy;        // = distance between shape position and the 2 demi-circle ends centre
         // here we have dx > dy
+        // Radius of outer arcs of the shape:
+        int outer_radius = dy;     // The radius of the outer arc is radius end + aThermalGap
+
         // Some coordinate fiddling, depending on the shape offset direction
         shape_offset = wxPoint( deltasize, 0 );
 
@@ -518,31 +521,38 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             corner.x = copper_tickness.x / 2;
             corner.y =
-                (int) sqrt( (double) ( dy * dy ) -
-                    ( ( corner.x - delta ) * ( corner.x - deltasize ) ) );
+                (int) sqrt( ((double)outer_radius * outer_radius ) -
+                    ( (double)( corner.x - delta ) * ( corner.x - deltasize ) ) );
             corner.x -= deltasize;
 
             /* creates an intermediate point, to have a > 90 deg angle
             * between the side and the first segment of arc approximation
             */
             wxPoint intpoint = corner;
-            intpoint.y -= aThermalGap/3;
+            intpoint.y -= aThermalGap/4;
             corners_buffer.push_back( intpoint + shape_offset );
-            RotatePoint( &corner, delta );
+            RotatePoint( &corner, 90 );
         }
         else
         {
             corner.x = copper_tickness.x / 2;
-            corner.y = dy;
+            corner.y = outer_radius;
             corners_buffer.push_back( corner );
             corner.x = ( deltasize - copper_tickness.x ) / 2;
         }
 
+        // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
+        wxPoint last_corner;
+        last_corner.y = copper_tickness.y / 2;
+        int px = outer_radius - (aThermalGap / 4);
+        last_corner.x = (int) sqrt( ( ( (double) px * px ) - (double) last_corner.y * last_corner.y ) );
+
         // Arc stop point calculation, the intersecting point of cutout arc and thermal spoke edge
         corner_end.y = copper_tickness.y / 2;
-        corner_end.x = (int) sqrt( (double) ( ( dx * dx ) - ( corner_end.y * corner_end.y ) ) );
+        corner_end.x = (int) sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner_end.y * corner_end.y ) );
+        RotatePoint( &corner_end, -90 );
 
-        // calculate intermediate points till limit is reached
+        // calculate intermediate arc points till limit is reached
         while( (corner.y > corner_end.y)  && (corner.x < corner_end.x) )
         {
             corners_buffer.push_back( corner + shape_offset );
@@ -550,14 +560,8 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         }
 
         //corners_buffer.push_back(corner + shape_offset);		// TODO: about one mil geometry error forms somewhere.
-        /* Moves the last point, to have a > 90 deg angle
-        *  between the side and the last segment of arc approximation
-        */
-        // TODO: calculate a better point, in order to have to have
-        // a best shape.
-        corner_end.x -= aThermalGap/3;
-        corners_buffer.pop_back();
-        corners_buffer.push_back( corner_end );         // Enabling the line above shows intersection point.
+        corners_buffer.push_back( corner_end + shape_offset );
+        corners_buffer.push_back( last_corner + shape_offset );         // Enabling the line above shows intersection point.
 
         /* Create 2 holes, rotated by pad rotation.
          */
