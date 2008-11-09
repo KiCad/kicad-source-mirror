@@ -645,7 +645,7 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
         if( D_commande > (MAX_TOOLS - 1) )
             D_commande = MAX_TOOLS - 1;
         m_Current_Tool = D_commande;
-        D_CODE* pt_Dcode = ReturnToolDescr( m_Layer, D_commande );
+        D_CODE* pt_Dcode = GetDCODE( D_commande, false );
         if( pt_Dcode )
             pt_Dcode->m_InUse = TRUE;
         break;
@@ -716,7 +716,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         if( D_commande > (MAX_TOOLS - 1) )
             D_commande = MAX_TOOLS - 1;
         m_Current_Tool = D_commande;
-        D_CODE* pt_Dcode = ReturnToolDescr( m_Layer, D_commande );
+        D_CODE* pt_Dcode = GetDCODE( D_commande, false );
         if( pt_Dcode )
             pt_Dcode->m_InUse = TRUE;
         return TRUE;
@@ -768,7 +768,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         switch( D_commande )
         {
         case 1: //code D01 Draw line, exposure ON
-            pt_Tool = ReturnToolDescr( m_Layer, m_Current_Tool );
+            pt_Tool = GetDCODE( m_Current_Tool, false );
             if( pt_Tool )
             {
                 size     = pt_Tool->m_Size;
@@ -820,7 +820,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             break;
 
         case 3: // code D3: flash aperture
-            pt_Tool = ReturnToolDescr( m_Layer, m_Current_Tool );
+            pt_Tool = GetDCODE( m_Current_Tool, false );
             if( pt_Tool )
             {
                 size     = pt_Tool->m_Size;
