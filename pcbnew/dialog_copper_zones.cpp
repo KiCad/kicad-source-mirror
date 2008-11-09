@@ -36,7 +36,7 @@
 
 /************************************************************************************************/
 dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting ) :
-    dialog_copper_zone_frame( parent )
+    dialog_copper_zone_base( parent )
 /************************************************************************************************/
 {
     m_Parent = parent;
@@ -311,8 +311,10 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     case 4:
         m_Zone_Setting->m_GridFillValue = 0;
+#if 0   // I hope this feature works fine ( JP Charras)
         DisplayInfo( this, wxT(
                 "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production" ) );
+#endif
         break;
     }
 

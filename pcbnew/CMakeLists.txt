@@ -43,7 +43,7 @@ set(PCBNEW_SRCS
     cross-probing.cpp
     deltrack.cpp
     dialog_copper_zones.cpp
-    dialog_copper_zones_frame.cpp
+    dialog_copper_zones_base.cpp
 #   dialog_display_options.cpp
 #   dialog_drc.cpp
     dialog_edit_mod_text.cpp
@@ -55,7 +55,7 @@ set(PCBNEW_SRCS
 #   dialog_initpcb.cpp
 #   dialog_netlist.cpp
     zones_non_copper_type_functions.cpp
-    dialog_non_copper_zones_properties.cpp
+    dialog_non_copper_zones_properties_base.cpp
 #   dialog_pad_edit.cpp
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp

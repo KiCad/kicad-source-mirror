@@ -7,7 +7,7 @@
 
 #include "zones.h"
 
-#include "dialog_non_copper_zones_properties.h"
+#include "dialog_non_copper_zones_properties_base.h"
 
 /* Local functions */
 
@@ -15,9 +15,9 @@
 
 /* Class DialogNonCopperZonesEditor
  * Dialog editor for non copper zones properties
- * Derived from DialogNonCopperZonesProperties, created by wxFormBuilder
+ * Derived from DialogNonCopperZonesPropertiesBase, created by wxFormBuilder
  */
-class DialogNonCopperZonesEditor : public DialogNonCopperZonesProperties
+class DialogNonCopperZonesEditor : public DialogNonCopperZonesPropertiesBase
 {
 private:
     WinEDA_PcbFrame* m_Parent;
@@ -38,7 +38,7 @@ public:
 /*******************************************************************************************/
 DialogNonCopperZonesEditor::DialogNonCopperZonesEditor( WinEDA_PcbFrame* parent,
                                                         ZONE_CONTAINER*  zone_container ) :
-    DialogNonCopperZonesProperties( parent )
+    DialogNonCopperZonesPropertiesBase( parent )
 /*******************************************************************************************/
 {
     m_Parent = parent;

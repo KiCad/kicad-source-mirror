@@ -60,11 +60,14 @@ double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (an
  * BuildFilledPolysListData() call this function just after creating the
  *  filled copper area polygon (without clearence areas
  * to do that this function:
- * 1 - creates aBool_Engine,with option: holes are linked into outer contours by double overlapping segments
+ * 1 - creates a Bool_Engine,with option: holes are linked to outer contours by double overlapping segments
+ *       this means the created polygons have no holes (hole are linked to outer outline by double overlapped segments
+ *       and are therefore compatible with draw functions (DC draw polygons and Gerber or PS outputs)
  * 2 - Add the main outline (zone outline) in group A
  * 3 - Add all non filled areas (pads, tracks) in group B
  * 4 - calculates the polygon A - B
  * 5 - put resulting list of polygons (filled areas) in m_FilledPolysList
+ * 6 - Remove insulated copper islands
  */
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 {

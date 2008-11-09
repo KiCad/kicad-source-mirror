@@ -3,11 +3,11 @@
 #ifndef DIALOG_COPPER_ZONES
 #define DIALOG_COPPER_ZONES
 
-#include "dialog_copper_zones_frame.h"
+#include "dialog_copper_zones_base.h"
 
 /* here is the derivated class from dialog_copper_zone_frame created by wxFormBuilder
 */
-class dialog_copper_zone: public dialog_copper_zone_frame
+class dialog_copper_zone: public dialog_copper_zone_base
 {
 public:
     WinEDA_PcbFrame* m_Parent;

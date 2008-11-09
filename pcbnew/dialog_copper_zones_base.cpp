@@ -5,20 +5,20 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_copper_zones_frame.h"
+#include "dialog_copper_zones_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( dialog_copper_zone_frame, wxDialog )
-	EVT_INIT_DIALOG( dialog_copper_zone_frame::_wxFB_OnInitDialog )
-	EVT_RADIOBOX( wxID_PADS_IN_ZONE_OPTIONS, dialog_copper_zone_frame::_wxFB_OnPadsInZoneClick )
-	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_frame::_wxFB_ExportSetupToOtherCopperZones )
-	EVT_BUTTON( wxID_OK, dialog_copper_zone_frame::_wxFB_OnButtonOkClick )
-	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_frame::_wxFB_OnButtonCancelClick )
-	EVT_RADIOBOX( ID_NET_SORTING_OPTION, dialog_copper_zone_frame::_wxFB_OnNetSortingOptionSelected )
+BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
+	EVT_INIT_DIALOG( dialog_copper_zone_base::_wxFB_OnInitDialog )
+	EVT_RADIOBOX( wxID_PADS_IN_ZONE_OPTIONS, dialog_copper_zone_base::_wxFB_OnPadsInZoneClick )
+	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_base::_wxFB_ExportSetupToOtherCopperZones )
+	EVT_BUTTON( wxID_OK, dialog_copper_zone_base::_wxFB_OnButtonOkClick )
+	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_base::_wxFB_OnButtonCancelClick )
+	EVT_RADIOBOX( ID_NET_SORTING_OPTION, dialog_copper_zone_base::_wxFB_OnNetSortingOptionSelected )
 END_EVENT_TABLE()
 
-dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -204,6 +204,6 @@ dialog_copper_zone_frame::dialog_copper_zone_frame( wxWindow* parent, wxWindowID
 	this->Layout();
 }
 
-dialog_copper_zone_frame::~dialog_copper_zone_frame()
+dialog_copper_zone_base::~dialog_copper_zone_base()
 {
 }

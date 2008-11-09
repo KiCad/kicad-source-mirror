@@ -7,11 +7,11 @@
         <property name="disconnect_events">1</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">table</property>
-        <property name="file">dialog_copper_zones_frame</property>
+        <property name="file">dialog_copper_zones_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
-        <property name="name">dialog_copper_zones_frame</property>
+        <property name="name">dialog_copper_zones_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -30,7 +30,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">dialog_copper_zone_frame</property>
+            <property name="name">dialog_copper_zone_base</property>
             <property name="pos"></property>
             <property name="size">545,493</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>

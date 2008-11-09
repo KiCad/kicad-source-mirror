@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_copper_zones_frame__
-#define __dialog_copper_zones_frame__
+#ifndef __dialog_copper_zones_base__
+#define __dialog_copper_zones_base__
 
 #include <wx/intl.h>
 
@@ -28,9 +28,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class dialog_copper_zone_frame
+/// Class dialog_copper_zone_base
 ///////////////////////////////////////////////////////////////////////////////
-class dialog_copper_zone_frame : public wxDialog 
+class dialog_copper_zone_base : public wxDialog 
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -96,9 +96,9 @@ class dialog_copper_zone_frame : public wxDialog
 		
 	
 	public:
-		dialog_copper_zone_frame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 545,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~dialog_copper_zone_frame();
+		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 545,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~dialog_copper_zone_base();
 	
 };
 
-#endif //__dialog_copper_zones_frame__
+#endif //__dialog_copper_zones_base__
