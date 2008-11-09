@@ -63,34 +63,64 @@
     D10 ... = Indentification d'outils ( d'ouvertures )
 */
 
+
 /*********************************/
 /* class GERBER : Methodes */
 /*********************************/
 
-GERBER::GERBER( int layer )
+GERBER::GERBER( int aLayer )
 {
-    int ii;
+    m_Layer = aLayer;            // Layer Number
 
-    m_Layer = layer;            // Layer Number
     m_Selected_Tool = FIRST_DCODE;
+
     ResetDefaultValues();
-    for( ii = 0; ii <= MAX_TOOLS; ii++ )
-        m_Aperture_List[ii] = new D_CODE( ii + FIRST_DCODE );
+
+    for( unsigned ii = 0; ii < DIM( m_Aperture_List );  ii++ )
+        m_Aperture_List[ii] = 0;
 }
 
 
 GERBER::~GERBER()
 {
-    int ii;
-
-    if( m_Aperture_List )
+    for( unsigned ii = 0; ii < DIM(m_Aperture_List); ii++ )
     {
-        for( ii = 0; ii < MAX_TOOLS; ii++ )
-        {
-            delete m_Aperture_List[ii];
-            m_Aperture_List[ii] = NULL;
-        }
+        delete m_Aperture_List[ii];
+        // m_Aperture_List[ii] = NULL;
     }
+}
+
+
+D_CODE* GERBER::GetDCODE( int aDCODE, bool create )
+{
+    unsigned ndx = aDCODE - FIRST_DCODE;
+
+    if( ndx < (unsigned) DIM(m_Aperture_List) )
+    {
+        // lazily create the D_CODE if it does not exist.
+        if( create )
+        {
+            if( m_Aperture_List[ndx] == NULL )
+                m_Aperture_List[ndx] = new D_CODE( ndx + FIRST_DCODE );
+        }
+
+        return m_Aperture_List[ndx];
+    }
+    return NULL;
+}
+
+
+APERTURE_MACRO* GERBER::FindApertureMacro( const APERTURE_MACRO& aLookup )
+{
+    APERTURE_MACRO_SET::iterator iter = m_aperture_macros.find( aLookup );
+
+    if( iter != m_aperture_macros.end() )
+    {
+        APERTURE_MACRO* pam = (APERTURE_MACRO*) &(*iter);
+        return pam;
+    }
+
+    return NULL;    // not found
 }
 
 
@@ -107,8 +137,9 @@ void GERBER::ResetDefaultValues()
     m_NoTrailingZeros = FALSE;          // True: zeros a droite supprim�s
     m_MirorA   = FALSE;                 // True: miror / axe A (X)
     m_MirorB   = FALSE;                 // True: miror / axe B (Y)
-    m_As_DCode = FALSE;                 // TRUE = DCodes in file (FALSE = no DCode->
-                                // separate DCode file
+    m_Has_DCode = FALSE;                // TRUE = DCodes in file (FALSE = no DCode->
+                                        // separate DCode file
+
     m_Offset.x = m_Offset.y = 0;        // Coord Offset
 
     m_FmtScale.x = m_FmtScale.y = g_Default_GERBER_Format % 10;
@@ -136,36 +167,27 @@ void GERBER::ResetDefaultValues()
 int GERBER::ReturnUsedDcodeNumber()
 /********************************************/
 {
-    int ii, jj;
+    int count = 0;
 
-    jj = 0;
-    if( m_Aperture_List )
+    for( unsigned ii = 0; ii < DIM(m_Aperture_List); ii++ )
     {
-        for( ii = 0; ii < MAX_TOOLS; ii++ )
-        {
+        if( m_Aperture_List[ii] )
             if( m_Aperture_List[ii]->m_InUse || m_Aperture_List[ii]->m_Defined )
-                jj++;
-        }
+                ++count;
     }
-    return jj;
+    return count;
 }
 
 
 /******************************/
 void GERBER::InitToolTable()
 /******************************/
-
-/* Creation du tableau des MAX_TOOLS DCodes utilisables, si il n'existe pas,
-  * et Init des DCodes � une valeur raisonnable
- */
 {
-    int count;
-
-    /* Init du buffer des D_CODES a des valeurs raisonnables */
-    for( count = 0; count < MAX_TOOLS; count++ )
+    for( int count = 0; count < MAX_TOOLS; count++ )
     {
         if( m_Aperture_List[count] == NULL )
             continue;
+
         m_Aperture_List[count]->m_Num_Dcode = count + FIRST_DCODE;
         m_Aperture_List[count]->Clear_D_CODE_Data();
     }
@@ -184,7 +206,6 @@ void GERBER::InitToolTable()
 D_CODE::D_CODE( int num_dcode )
 {
     m_Num_Dcode = num_dcode;
-    m_Macro = 0;
     Clear_D_CODE_Data();
 }
 
@@ -203,6 +224,25 @@ void D_CODE::Clear_D_CODE_Data()
     m_DrillShape = 0;
     m_InUse   = FALSE;
     m_Defined = FALSE;
+    m_Macro = 0;
+}
+
+const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
+{
+    const wxChar* ret;
+
+    switch( aType )
+    {
+    case APT_CIRCLE:    ret = wxT( "Round" );   break;
+    case APT_LINE:      ret = wxT( "Line" );    break;
+    case APT_RECT:      ret = wxT( "Rect" );    break;
+    case APT_OVAL:      ret = wxT( "Oval" );    break;
+    case APT_POLYGON:   ret = wxT( "Poly" );    break;
+    case APT_MACRO:     ret = wxT( "Macro" );   break;
+    default:            ret = wxT( "???" );     break;
+    }
+
+    return ret;
 }
 
 
@@ -217,7 +257,7 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
     char     c_type_outil[256];
     char     line[GERBER_BUFZ];
     wxString msg;
-    D_CODE*  pt_Dcode;
+    D_CODE*  dcode;
     FILE*    dest;
     int      layer = GetScreen()->m_Active_Layer;
     int      type_outil;
@@ -226,6 +266,9 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
     {
         g_GERBER_List[layer] = new GERBER( layer );
     }
+
+    GERBER* gerber = g_GERBER_List[layer];
+
 
     /* Mise a jour de l'echelle gerber : */
     dcode_scale   = 10; /* ici unit dcode = mil, unit interne = 0.1 mil
@@ -243,16 +286,18 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
         return -1;
     }
 
-    g_GERBER_List[layer]->InitToolTable();
+    gerber->InitToolTable();
 
     while( fgets( line, sizeof(line) - 1, dest ) != NULL )
     {
         if( *line == ';' )
             continue;                       /* Commentaire */
+
         if( strlen( line ) < 10 )
             continue;                       /* Probablemant ligne vide */
 
-        pt_Dcode = NULL; current_Dcode = 0;
+        dcode = NULL;
+        current_Dcode = 0;
 
         /* Determination du type de fichier D_Code */
         ptcar = line;
@@ -277,7 +322,9 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
         }
         else        /* valeurs en inches a convertir en mils */
         {
-            fdrill = 0; current_Dcode = 0; fdrill = 0;
+            fdrill = 0;
+            current_Dcode = 0;
+
             sscanf( line, "%f,%f,%1s", &fdimV, &fdimH, c_type_outil );
             ptcar = line;
             while( *ptcar )
@@ -311,12 +358,12 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
         if( current_Dcode >= MAX_TOOLS )
             continue;
 
-        pt_Dcode = ReturnToolDescr( layer, current_Dcode );
-        pt_Dcode->m_Size.x  = dimH;
-        pt_Dcode->m_Size.y  = dimV;
-        pt_Dcode->m_Shape   = (APERTURE_T) type_outil;
-        pt_Dcode->m_Drill.x = pt_Dcode->m_Drill.y = drill;
-        pt_Dcode->m_Defined = TRUE;
+        dcode = gerber->GetDCODE( current_Dcode );
+        dcode->m_Size.x  = dimH;
+        dcode->m_Size.y  = dimV;
+        dcode->m_Shape   = (APERTURE_T) type_outil;
+        dcode->m_Drill.x = dcode->m_Drill.y = drill;
+        dcode->m_Defined = TRUE;
     }
 
     fclose( dest );
@@ -332,14 +379,15 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 /* Set Size Items (Lines, Flashes) from DCodes List
  */
 {
-    TRACK*  track;
-    D_CODE* pt_Dcode; /* Pointeur sur le D code*/
-
-    track = m_Pcb->m_Track;
-    for( ; track != NULL; track = (TRACK*) track->Pnext )
+    for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
     {
-        pt_Dcode = ReturnToolDescr( track->GetLayer(), track->GetNet() );
-        pt_Dcode->m_InUse = TRUE;
+        GERBER* gerber = g_GERBER_List[track->GetLayer()];
+        wxASSERT( gerber );
+
+        D_CODE* dcode  = gerber->GetDCODE( track->GetNet(), false );
+        wxASSERT( dcode );
+
+        dcode->m_InUse = TRUE;
 
         if(                                     // Line Item
             (track->m_Shape == S_SEGMENT )      /* segment rectiligne */
@@ -349,12 +397,12 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
             || (track->m_Shape == S_ARC_RECT )  /* segment en arc de cercle (bouts droits) (GERBER)*/
             )
         {
-            track->m_Width = pt_Dcode->m_Size.x;
+            track->m_Width = dcode->m_Size.x;
         }
         else        // Spots ( Flashed Items )
         {
             int    width, len;
-            wxSize size = pt_Dcode->m_Size;
+            wxSize size = dcode->m_Size;
 
             width = MIN( size.x, size.y );
             len   = MAX( size.x, size.y ) - width;
@@ -365,7 +413,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
             track->m_Start.y = (track->m_Start.y + track->m_End.y) / 2;
             track->m_End = track->m_Start;  // m_Start = m_End = Spot center
 
-            switch( pt_Dcode->m_Shape )
+            switch( dcode->m_Shape )
             {
             case APT_LINE:          // ne devrait pas etre utilis� ici
             case APT_CIRCLE:        /* spot round (for GERBER)*/
@@ -397,26 +445,6 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 }
 
 
-/*********************************************************/
-D_CODE* ReturnToolDescr( int layer, int Dcode, int* index )
-/*********************************************************/
-{
-    GERBER*     gerber = g_GERBER_List[layer];
-    D_CODE*     pt_dcode  = NULL;
-
-    if( index )
-        *index = 0;
-
-    if( gerber && Dcode >= FIRST_DCODE && Dcode < MAX_TOOLS )
-    {
-        pt_dcode = gerber->m_Aperture_List[Dcode - FIRST_DCODE];
-        if( index )
-            *index = Dcode - FIRST_DCODE + 1;
-    }
-    return pt_dcode;
-}
-
-
 /************************************************/
 void WinEDA_GerberFrame::Liste_D_Codes( wxDC* DC )
 /************************************************/
@@ -427,15 +455,13 @@ void WinEDA_GerberFrame::Liste_D_Codes( wxDC* DC )
     WinEDA_TextFrame*   List;
     int                 scale      = 10000;
     int                 curr_layer = GetScreen()->m_Active_Layer;
-    int                 layer;
-    GERBER*             gerber;
 
     /* Construction de la liste des messages */
     List = new WinEDA_TextFrame( this, _( "List D codes" ) );
 
-    for( layer = 0; layer < 32; layer++ )
+    for( int layer = 0; layer < 32; layer++ )
     {
-        gerber = g_GERBER_List[layer];
+        GERBER* gerber = g_GERBER_List[layer];
         if( gerber == NULL )
             continue;
 
@@ -450,7 +476,7 @@ void WinEDA_GerberFrame::Liste_D_Codes( wxDC* DC )
 
         for( ii = 0, jj = 1; ii < MAX_TOOLS; ii++ )
         {
-            pt_D_code = gerber->m_Aperture_List[ii];
+            pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
             if( pt_D_code == NULL )
                 continue;
 
@@ -463,7 +489,8 @@ void WinEDA_GerberFrame::Liste_D_Codes( wxDC* DC )
                 pt_D_code->m_Num_Dcode,
                 (float) pt_D_code->m_Size.y / scale,
                 (float) pt_D_code->m_Size.x / scale,
-                g_GERBER_Tool_Type[pt_D_code->m_Shape] );
+                D_CODE::ShowApertureType( pt_D_code->m_Shape )
+                );
 
             if( !pt_D_code->m_Defined )
                 Line += wxT( " ?" );

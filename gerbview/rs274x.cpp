@@ -92,7 +92,7 @@ static int ReadInt( char*& text )
 
 /**
  * Function ReadDouble
- * reads a double in from a character buffer. If there is a comma after the double,
+ * reads a double from an ASCII character buffer. If there is a comma after the double,
  * then skip over that.
  * @param text A reference to a character pointer from which the ASCII double
  *          is read from and the pointer advanced for each character read.
@@ -171,9 +171,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
 {
     int      code;
     int      xy_seq_len, xy_seq_char;
-    char     ctmp;
     bool     ok = TRUE;
-    D_CODE*  dcode;
     char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
@@ -221,19 +219,21 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
 
             case 'X':
             case 'Y':           // Valeurs transmises :2 (really xy_seq_len : FIX ME) digits
-                code = *(text++);
-                ctmp = *(text++) - '0';
-                if( code == 'X' )
                 {
-                    m_FmtScale.x = *text - '0';                 // = nb chiffres apres la virgule
-                    m_FmtLen.x   = ctmp + m_FmtScale.x;         // = nb total de chiffres
+                    code = *(text++);
+                    char ctmp = *(text++) - '0';
+                    if( code == 'X' )
+                    {
+                        m_FmtScale.x = *text - '0';                 // = nb chiffres apres la virgule
+                        m_FmtLen.x   = ctmp + m_FmtScale.x;         // = nb total de chiffres
+                    }
+                    else
+                    {
+                        m_FmtScale.y = *text - '0';
+                        m_FmtLen.y   = ctmp + m_FmtScale.y;
+                    }
+                    text++;
                 }
-                else
-                {
-                    m_FmtScale.y = *text - '0';
-                    m_FmtLen.y   = ctmp + m_FmtScale.y;
-                }
-                text++;
                 break;
 
             case '*':
@@ -321,10 +321,6 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
             m_LayerNegative = FALSE;
         break;
 
-    case AP_MACRO:
-        ReadApertureMacro( buff, text, m_Current_File );
-        break;
-
     case INCLUDE_FILE:
         if( m_FilesPtr >= 10 )
         {
@@ -349,29 +345,45 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
         m_FilesPtr++;
         break;
 
+    case AP_MACRO:
+        ok = ReadApertureMacro( buff, text, m_Current_File );
+        if( !ok )
+            break;
+        break;
+
     case AP_DEFINITION:
-        if( *text != 'D' )
+
+        // input example:  %ADD30R,0.081800X0.101500*%
+        // at this point, text points to 2nd 'D'
+
+        if( *text++ != 'D' )
         {
             ok = FALSE;
             break;
         }
-        m_As_DCode = TRUE;
-        text++;
+
+        m_Has_DCode = TRUE;
 
         code  = ReadInt( text );
-        ctmp  = *text;
 
-        dcode = ReturnToolDescr( m_Layer, code );
+        D_CODE*  dcode;
+        dcode = GetDCODE( code );
         if( dcode == NULL )
             break;
 
-        if( text[1] == ',' )        // Tool usuel (C,R,O,P)
+        // at this point, text points to character after the ADD<num>, i.e. R in example above
+
+        // if text[0] is one of the usual apertures: (C,R,O,P), there is a comma after it.
+        if( text[1] == ',' )
         {
-            text += 2;              // text pointe size ( 1er modifier)
+            char     stdAperture = *text;
+
+            text += 2;              // skip "C," for example
+
             dcode->m_Size.x = dcode->m_Size.y =
                                   (int) round( ReadDouble( text ) * conv_scale );
 
-            switch( ctmp )
+            switch( stdAperture )
             {
             case 'C':               // Circle
                 dcode->m_Shape = APT_CIRCLE;
@@ -402,7 +414,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
 
             case 'O':               // oval
             case 'R':               // rect
-                dcode->m_Shape = (ctmp == 'O') ? APT_OVAL : APT_RECT;
+                dcode->m_Shape = (stdAperture == 'O') ? APT_OVAL : APT_RECT;
 
                 while( *text == ' ' )
                     text++;
@@ -443,6 +455,40 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 dcode->m_Defined = TRUE;
                 break;
             }
+        }
+
+        else    // text[0] starts an aperture macro name
+        {
+            APERTURE_MACRO  am_lookup;
+
+            while( *text && *text!='*' && *text!=',' )
+                am_lookup.name.Append( *text++ );
+
+            if( *text && *text==',' )
+            {
+                while( *text && *text!='*' )
+                {
+                    double param = ReadDouble( text );
+                    if( *text == 'X' )
+                        ++text;
+
+                    dcode->AppendParam( param );
+                }
+            }
+
+            // lookup the aperture macro here.
+            APERTURE_MACRO* pam = FindApertureMacro( am_lookup );
+            if( !pam )
+            {
+                // @todo not found, don't know how to report an error
+                D( printf("aperture macro %s not found\n", CONV_TO_UTF8(am_lookup.name) );)
+                ok = false;
+                break;
+            }
+
+            D(printf("pam has %d parameters\n", pam->primitives.size() );)
+
+            dcode->SetMacro( (APERTURE_MACRO*) pam );
         }
         break;
 
@@ -531,7 +577,6 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
 
         switch( prim.primitive_id )
         {
-        default:
         case AMP_CIRCLE:
             paramCount = 4;
             break;
@@ -558,43 +603,48 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
         case AMP_THERMAL:
             paramCount = 6;
             break;
+        default:
+            // @todo, there needs to be a way of reporting the line number and character offset.
+            D(printf("Invalid primitive id code %d\n", prim.primitive_id );)
+            return false;
         }
-
-        DCODE_PARAM param;
 
         for( int i=0;  i<paramCount && *text && *text!='*';  ++i )
         {
+            DCODE_PARAM param;      // construct it on each loop iteration
+
             if( *text == '$' )
             {
                 ++text;
-                param.isImmediate = false;
+                param.SetIndex( ReadInt( text ) );
             }
             else
-            {
-                param.isImmediate = true;
-            }
+                param.SetValue( ReadDouble( text ) );
 
-            param.value = ReadDouble( text );
             prim.params.push_back( param );
         }
 
+        // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )
         {
-            paramCount = (int) prim.params[1].value * 2 + 1;
+            // params[1] is a count of polygon points, so it must be given
+            // in advance, i.e. be immediate.
+            wxASSERT( prim.params[1].IsImmediate() );
+
+            paramCount = (int) prim.params[1].GetValue(0) * 2 + 1;
 
             for( int i=0; i<paramCount && *text && *text!='*';  ++i )
             {
+                DCODE_PARAM param;      // construct it on each loop
+
                 if( *text == '$' )
                 {
                     ++text;
-                    param.isImmediate = false;
+                    param.SetIndex( ReadInt( text ) );
                 }
                 else
-                {
-                    param.isImmediate = true;
-                }
+                    param.SetValue( ReadDouble( text ) );
 
-                param.value = ReadDouble( text );
                 prim.params.push_back( param );
             }
         }

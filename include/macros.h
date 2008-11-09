@@ -25,6 +25,10 @@
 #define ABS( y ) ( (y) >= 0 ? (y) : ( -(y) ) )
 #endif
 
+/// # of elements in an arrray
+#define DIM(x)           (sizeof(x)/sizeof((x)[0]))
+
+
 #define DEG2RAD( Deg ) ( (Deg) * M_PI / 180.0 )
 #define RAD2DEG( Rad ) ( (Rad) * 180.0 / M_PI )
 

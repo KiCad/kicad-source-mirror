@@ -261,7 +261,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     /* Init  DCodes list and perhaps read a DCODES file,
      * if the gerber file is only a RS274D file (without any aperture information)
      */
-    if( !gerber->m_As_DCode )
+    if( !gerber->m_Has_DCode )
     {
         wxString DCodeFileName;
         if( D_Code_FullFileName.IsEmpty() )

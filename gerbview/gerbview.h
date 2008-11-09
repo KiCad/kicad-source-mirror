@@ -58,16 +58,6 @@ enum APERTURE_T
     APT_MACRO = 'M'
 };
 
-/* replaced by APERTURE_T
-enum Gerb_StandardShape {
-    GERB_CIRCLE = 1,
-    GERB_RECT,
-    GERB_LINE,
-    GERB_OVALE,
-    GERB_SPECIAL_SHAPE
-};
-*/
-
 
 // Interpolation type
 enum Gerb_Interpolation {
@@ -111,22 +101,50 @@ enum Gerb_Analyse_Cmd {
     ENTER_RS274X_CMD
 };
 
+class D_CODE;
+
 
 /**
- * Struct DCODE_PARAM
+ * Class DCODE_PARAM
  * holds a parameter for a DCODE or an "aperture macro" as defined within standard RS274X.
  * The \a value field can be either a constant or a place holder for a DCODE
  * parameter.
  */
-struct DCODE_PARAM
+class DCODE_PARAM
 {
+public:
     DCODE_PARAM() :
-        isImmediate(true),
+        index(-1),
         value(0.0)
     {}
 
-    bool    isImmediate;    ///< the \a value field is an actual value, not a parameter place holder.
-    double  value;          ///< if immediate then the value, else an integer index into D_CODE.m_am_params.
+    double  GetValue( const D_CODE* aDcode );
+    void SetValue( double aValue )
+    {
+        value = aValue;
+        index = -1;
+    }
+
+    /**
+     * Function IsImmediate
+     * tests if this DCODE_PARAM holds an immediate parameter or is a pointer into
+     * a parameter held by an owning D_CODE.
+     */
+    bool IsImmediate() { return index == -1; }
+
+    int GetIndex()
+    {
+        return index;
+    }
+
+    void SetIndex( int aIndex )
+    {
+        index = aIndex;
+    }
+
+private:
+    int     index;      ///< if -1, then \a value field is an immediate value, else this is an index into a D_CODE parameter.
+    double  value;      ///< if immediate then the value, else an integer index into D_CODE.m_am_params.
 };
 
 
@@ -183,7 +201,7 @@ struct APERTURE_MACRO
  */
 struct APERTURE_MACRO_less_than
 {
-    // a "less than" test on two wxStrings
+    // a "less than" test on two APERTURE_MACROs (.name wxStrings)
     bool operator()( const APERTURE_MACRO& am1, const APERTURE_MACRO& am2) const
     {
         return am1.name.Cmp( am2.name ) < 0;  // case specific wxString compare
@@ -206,6 +224,14 @@ typedef std::pair<APERTURE_MACRO_SET::iterator, bool> APERTURE_MACRO_SET_PAIR;
  */
 class D_CODE
 {
+    APERTURE_MACRO* m_Macro;    ///< no ownership, points to GERBER.m_aperture_macros element
+
+    /**
+     * parameters used only when this D_CODE holds a reference to an aperture
+     * macro, and these parameters would customize the macro.
+     */
+    DCODE_PARAMS   m_am_params;
+
 public:
     wxSize      m_Size;        /* Dimensions horiz et Vert */
     APERTURE_T  m_Shape;       /* shape ( Line, rect , circulaire , ovale .. ) */
@@ -216,19 +242,44 @@ public:
     bool        m_Defined;     /* FALSE si non defini */
     wxString    m_SpecialDescr;
 
-    APERTURE_MACRO* m_Macro;    ///< no ownership, points to GERBER.m_aperture_macros element
-
-    /**
-     * parameters used only when this D_CODE holds a reference to an aperture
-     * macro, and these parameters would customize the macro.
-     */
-    DCODE_PARAMS   m_am_params;
-
 public:
     D_CODE( int num_dcode );
     ~D_CODE();
     void Clear_D_CODE_Data();
+
+    void AppendParam( double aValue )
+    {
+        DCODE_PARAM param;
+
+        param.SetValue( aValue );
+
+        m_am_params.push_back( param );
+    }
+
+    void SetMacro( APERTURE_MACRO* aMacro )
+    {
+        m_Macro = aMacro;
+    }
+
+    /**
+     * Function ShowApertureType
+     * returns a character string telling what type of aperture type \a aType is.
+     * @param aType The aperture type to show.
+     */
+    static const wxChar* ShowApertureType( APERTURE_T aType );
 };
+
+
+inline double DCODE_PARAM::GetValue( const D_CODE* aDcode )
+{
+    if( IsImmediate() )
+        return value;
+    else
+    {
+        // get the parameter from aDcode
+        return 0.0;
+    }
+}
 
 
 /**
@@ -237,6 +288,9 @@ public:
  */
 class GERBER
 {
+    D_CODE*       m_Aperture_List[MAX_TOOLS];                   ///< Dcode (Aperture) List for this layer
+
+
 public:
     wxString      m_FileName;                                   // Full File Name for this layer
     wxString      m_Name;                                       // Layer name
@@ -247,7 +301,7 @@ public:
     bool          m_NoTrailingZeros;                            // True: zeros a droite supprimés
     bool          m_MirorA;                                     // True: miror / axe A (X)
     bool          m_MirorB;                                     // True: miror / axe B (Y)
-    bool          m_As_DCode;                                   // TRUE = DCodes in file (FALSE = no DCode->
+    bool          m_Has_DCode;                                  // TRUE = DCodes in file (FALSE = no DCode->
     // separate DCode file
     wxPoint       m_Offset;                                     // Coord Offset
     wxSize        m_FmtScale;                                   // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
@@ -262,7 +316,6 @@ public:
     wxPoint       m_CurrentPos;                                 // current specified coord for plot
     wxPoint       m_PreviousPos;                                // old current specified coord for plot
     wxPoint       m_IJPos;                                      // IJ coord (for arcs & circles )
-    D_CODE*       m_Aperture_List[MAX_TOOLS + FIRST_DCODE + 1]; // Dcode (Aperture) List for this layer
 
     FILE*         m_Current_File;                               // Current file to read
     FILE*         m_FilesList[12];                              // Files list
@@ -283,6 +336,11 @@ public:
     void    Clear_GERBER();
     int     ReturnUsedDcodeNumber();
     void    ResetDefaultValues();
+
+
+    /**
+     * Function InitToolTable
+     */
     void    InitToolTable();
 
     // Routines utilisées en lecture de ficher gerber
@@ -324,6 +382,26 @@ public:
      * @return bool - true if a macro was read in successfully, else false.
      */
     bool    ReadApertureMacro( char aBuff[GERBER_BUFZ], char*& text, FILE* gerber_file );
+
+
+    /**
+     * Function GetDCODE
+     * returns a pointer to the D_CODE within this GERBER for the given
+     * \a aDCODE.
+     * @param aDCODE The numeric value of the D_CODE to look up.
+     * @param createIfNoExist If true, then create the D_CODE if it does not exist.
+     * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
+     *            if the requested \a aDCODE is out of range.
+     */
+    D_CODE* GetDCODE( int aDCODE, bool createIfNoExist=true );
+
+    /**
+     * Function FindApertureMacro
+     * looks up a previously read in aperture macro.
+     * @param aLookup A dummy APERTURE_MACRO with [only] the name field set.
+     * @return APERTURE_MACRO* - the one with a matching name, or NULL if not found.
+     */
+    APERTURE_MACRO* FindApertureMacro( const APERTURE_MACRO& aLookup );
 };
 
 
@@ -333,27 +411,6 @@ public:
 /**************/
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 
-
-/**
- * Function ReturnToolDescr
- * returns a D_CODE given a global layer index and Dcode value.
- * @param aLayer The index into the global array of GERBER called g_GERBER_List[].
- * @param aDcode The dcode value to look up.
- * @param aIndex If not null, where to put a one basedindex into the GERBER's m_Aperture_List[] array.
- * @return D_CODE* - the looked up D_CODE or NULL if none was encountered in the gerber file for given \a aDcode.
- */
-D_CODE * ReturnToolDescr( int layer, int Dcode, int * index = NULL );
-
-
-eda_global const wxChar* g_GERBER_Tool_Type[6]
-#ifdef MAIN
-= {
-    wxT( "????" ), wxT( "Round" ), wxT( "Rect" ), wxT( "Line" ), wxT( "Oval" ), wxT( "Macro" )
-}
-
-
-#endif
-;
 
 eda_global GERBER* g_GERBER_List[32];
 

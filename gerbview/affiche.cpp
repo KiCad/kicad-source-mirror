@@ -31,14 +31,14 @@ void Affiche_Infos_PCB_Texte( WinEDA_BasePcbFrame* frame, TEXTE_PCB* pt_texte )
     else
         Affiche_1_Parametre( frame, 1, _( "PCB Text" ), pt_texte->m_Text, DARKGREEN );
 
-    Line = _( "Layer " ); 
+    Line = _( "Layer " );
     Line << pt_texte->GetLayer() + 1;
-    
+
     Affiche_1_Parametre( frame, 28, _( "Layer:" ), Line,
                          g_DesignSettings.m_LayerColor[pt_texte->GetLayer()] );
 
     Affiche_1_Parametre( frame, 36, _( "Mirror" ), wxEmptyString, GREEN );
-    
+
     if( (pt_texte->m_Miroir & 1) )
         Affiche_1_Parametre( frame, -1, wxEmptyString, _( "No" ), DARKGREEN );
     else
@@ -58,58 +58,3 @@ void Affiche_Infos_PCB_Texte( WinEDA_BasePcbFrame* frame, TEXTE_PCB* pt_texte )
     Affiche_1_Parametre( frame, 70, _( "V Size" ), Line, RED );
 }
 
-
-/*********************************************************************/
-void Affiche_Infos_Piste( WinEDA_BasePcbFrame* frame, TRACK* pt_piste )
-/*********************************************************************/
-/* Affiche les caract principales d'un segment de piste en bas d'ecran */
-{
-    int      d_index, ii = -1;
-    D_CODE*  pt_D_code;
-	
-    int      layer = ((PCB_SCREEN*)(frame->GetScreen()))->m_Active_Layer; 
-    wxString msg;
-
-    frame->MsgPanel->EraseMsgBox();
-
-    d_index   = pt_piste->GetNet();
-    pt_D_code = ReturnToolDescr( layer, d_index, &ii );
-
-    switch( pt_piste->Type() )
-    {
-    case TYPETRACK:
-        if( pt_piste->m_Shape < S_SPOT_CIRCLE )
-            msg = wxT( "LINE" );
-        else
-            msg = wxT( "FLASH" );
-        break;
-
-    case TYPEZONE:
-        msg = wxT( "ZONE" ); break;
-
-    default:
-        msg = wxT( "????" ); break;
-    }
-
-    Affiche_1_Parametre( frame, 1, _( "Type" ), msg, DARKCYAN );
-
-    msg.Printf( wxT( "%d" ), ii + 1 );
-    Affiche_1_Parametre( frame, 10, _( "Tool" ), msg, RED );
-
-    if( pt_D_code )
-    {
-        msg.Printf( wxT( "D%d" ), d_index );
-        Affiche_1_Parametre( frame, 20, _( "D-code" ), msg, BLUE );
-
-        Affiche_1_Parametre( frame, 30, _( "D-type" ),
-                             pt_D_code ? g_GERBER_Tool_Type[pt_D_code->m_Shape] : _( "????" ),
-                             BLUE );
-    }
-
-    msg.Printf( wxT( "%d" ), pt_piste->GetLayer() + 1 );
-    Affiche_1_Parametre( frame, 40, _( "Layer" ), msg, BROWN );
-
-    /* Affiche Epaisseur */
-    valeur_param( (unsigned) (pt_piste->m_Width), msg );
-    Affiche_1_Parametre( frame, 50, _( "Width" ), msg, DARKCYAN );
-}

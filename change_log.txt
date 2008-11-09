@@ -5,6 +5,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Nov-8 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++gerview
+    Added support for reading in aperture macros embedded in a RS274X compatible file.
+    Cannot display them yet.
+    General cleanup of gerbview.  GERBER_Descr replaced with class GERBER.
+    ReturnToolDescr() replaced with GERBER::GetDCODE().
+    D_CODEs are created lazily now.  pcbnew's gerber plotting needs testing, might
+    have broke something there, accidentally.
+
+
 2008-nov-5 UPDATE Andrey Fedorushkov <andrf@mail.ru>
 ================================================================================
 +all:
