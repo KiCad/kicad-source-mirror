@@ -522,11 +522,29 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
 void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 {
     // set some global vals to arm the boolean engine
-    double DGRID = 1000;    // round coordinate X or Y value in calculations to this
-    double MARGE = 0.001;   // snap with in this range points to lines in the intersection routines
-                            // should always be > DGRID  a  MARGE >= 10*DGRID is oke
+
+    // input points are scaled up with GetDGrid() * GetGrid()
+
+    // DGRID is only meant to make fractional parts of input data which
+   /*
+      The input data scaled up with DGrid is related to the accuracy the user has in his input data.
+      User data with a minimum accuracy of 0.001, means set the DGrid to 1000.
+      The input data may contain data with a minimum accuracy much smaller, but by setting the DGrid
+      everything smaller than 1/DGrid is rounded.
+
+      DGRID is only meant to make fractional parts of input data which can be
+      doubles, part of the integers used in vertexes within the boolean algorithm.
+      And therefore DGRID bigger than 1 is not usefull, you would only loose accuracy.
+      Within the algorithm all input data is multiplied with DGRID, and the result
+      is rounded to an integer.
+   */
+    double DGRID = 1.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
+                            // Note: in kicad, coordinates are already integer so DGRID can be set to 1
+
+    double MARGE = 2.0;     // snap with in this range points to lines in the intersection routines
+                            // should always be > DGRID  a  MARGE >= 10*DGRID is ok
                             // this is also used to remove small segments and to decide when
-                            // two segments are in line.
+                            // two segments are in line. ( initial value = 0.001 )
     double CORRECTIONFACTOR = 500.0;    // correct the polygons by this number
     double CORRECTIONABER   = 1.0;      // the accuracy for the rounded shapes used in correction
     double ROUNDFACTOR  = 1.5;          // when will we round the correction shape to a circle
@@ -534,13 +552,14 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
     double MAXLINEMERGE = 1000.0;       // leave as is, segments of this length in smoothen
 
 
-    // DGRID is only meant to make fractional parts of input data which
-    // are doubles, part of the integers used in vertexes within the boolean algorithm.
-    // Within the algorithm all input data is multiplied with DGRID
-
-    // space for extra intersection inside the boolean algorithms
-    // only change this if there are problems
-    int GRID = 10000;
+   /*
+		Grid makes sure that the integer data used within the algorithm has room for extra intersections
+		smaller than the smallest number within the input data.
+		The input data scaled up with DGrid is related to the accuracy the user has in his input data.
+        Another scaling with Grid is applied on top of it to create space in the integer number for
+		even smaller numbers.
+   */
+    int GRID = 100;       // initial value = 10000 in kbool example
 
     aBooleng->SetMarge( MARGE );
     aBooleng->SetGrid( GRID );

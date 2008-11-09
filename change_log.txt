@@ -5,6 +5,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Nov-8 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    Thermal shapes modification for round and oblong pads.
+    This is a workaround for a bug (i believe) of kbool.
+    New thermal shapes have NO angle < 90 degrees between 2 adjacent segments.
+    For shapes that have angle < 90 degrees between 2 adjacent segments,
+    under certains circumstances kbool drops some holes and creates a bad filled area.
+    (see zones_convert_brd_items_to_polygons.cpp)
+
+
+
 2008-Nov-8 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +gerview
