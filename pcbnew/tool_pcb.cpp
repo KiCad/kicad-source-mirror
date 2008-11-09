@@ -298,7 +298,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     // Fast call to FreeROUTE Web Bases router
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString, BITMAP( web_support_xpm ),
-                         _( "Fast access to theWeb Based FreeROUTE advanced routed" ));
+                         _( "Fast access to theWeb Based FreeROUTE advanced router" ));
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes

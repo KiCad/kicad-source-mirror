@@ -218,7 +218,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Wire to Bus Entry" ) );
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add Wire to Bus entry" ) );
         break;
 
     case ID_BUSTOBUS_ENTRY_BUTT:

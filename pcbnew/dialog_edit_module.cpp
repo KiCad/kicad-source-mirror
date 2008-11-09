@@ -357,7 +357,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
 #endif
     PropRightSizer->Add( m_AutoPlaceCtrl, 0, wxGROW | wxALL, 5 );
 
-    StaticText = new wxStaticText( m_PanelProperties, -1, _( "Rot 90" ) );
+    StaticText = new wxStaticText( m_PanelProperties, -1, _( "Rotation 90 degree" ) );
     PropRightSizer->Add( StaticText, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
     m_CostRot90Ctrl = new wxSlider( m_PanelProperties, -1,
                                     m_CurrentModule->m_CntRot90, 0, 10, wxDefaultPosition,
@@ -365,7 +365,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
                                     wxSL_HORIZONTAL + wxSL_AUTOTICKS + wxSL_LABELS );
     PropRightSizer->Add( m_CostRot90Ctrl, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    StaticText = new wxStaticText( m_PanelProperties, -1, _( "Rot 180" ) );
+    StaticText = new wxStaticText( m_PanelProperties, -1, _( "Rotation 180 degree" ) );
     PropRightSizer->Add( StaticText, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
     m_CostRot180Ctrl = new wxSlider( m_PanelProperties,
                                      -1,

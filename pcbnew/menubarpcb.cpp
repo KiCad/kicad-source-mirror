@@ -223,7 +223,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         wxMenu * sizes_menu = new wxMenu;
 
         item = new wxMenuItem(sizes_menu, ID_PCB_TRACK_SIZE_SETUP, _("Tracks and Vias"),
-            _("Adjust size and width for tracks, vias"));
+            _("Adjust size and width for tracks and vias"));
         item->SetBitmap(showtrack_xpm);
         sizes_menu->Append(item);
 

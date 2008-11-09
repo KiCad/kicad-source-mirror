@@ -486,7 +486,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                 ID_POPUP_PCB_VIA_EDITING, _( "Edit Via Drill" ), edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
                           _( "Set Via Hole to Default" ), apply_xpm );
-            msg = _( "Set via hole to a specific value. This specfic value is currently" );
+            msg = _( "Set via hole to a specific value. This specific value is currently" );
             msg << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
                                 _( "Set Via Hole to Alt Value" ), msg,
