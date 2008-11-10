@@ -177,8 +177,8 @@ typedef std::vector<DCODE_PARAM>   DCODE_PARAMS;
  */
 struct AM_PRIMITIVE
 {
-    AM_PRIMITIVE_ID     primitive_id;
-    DCODE_PARAMS        params;
+    AM_PRIMITIVE_ID     primitive_id;   ///< The primitive type
+    DCODE_PARAMS        params;         ///< A sequence of parameters used by the primitive
 };
 
 
@@ -190,8 +190,8 @@ typedef std::vector<AM_PRIMITIVE>   AM_PRIMITIVES;
  */
 struct APERTURE_MACRO
 {
-    wxString        name;
-    AM_PRIMITIVES   primitives;
+    wxString        name;           ///< The name of the aperture macro
+    AM_PRIMITIVES   primitives;     ///< A sequence of AM_PRIMITIVEs
 };
 
 
@@ -260,6 +260,7 @@ public:
     {
         m_Macro = aMacro;
     }
+    APERTURE_MACRO* GetMacro() { return m_Macro; }
 
     /**
      * Function ShowApertureType

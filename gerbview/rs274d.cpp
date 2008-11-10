@@ -330,7 +330,8 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
         {
             type_coord = *Text;
             Text++;
-            text = line; nbchar = 0;
+            text = line;
+            nbchar = 0;
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
@@ -356,7 +357,8 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
                     int min_digit = (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
                     while( nbchar < min_digit )
                     {
-                        *(text++) = '0'; nbchar++;
+                        *(text++) = '0';
+                        nbchar++;
                     }
 
                     *text = 0;
@@ -408,12 +410,15 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
 
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
+
                 current_coord = (int) round( current_coord * real_scale );
             }
+
             if( type_coord == 'X' )
                 pos.x = current_coord;
             else if( type_coord == 'Y' )
                 pos.y = current_coord;
+
             continue;
         }
         else
@@ -715,10 +720,12 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
     {
         if( D_commande > (MAX_TOOLS - 1) )
             D_commande = MAX_TOOLS - 1;
+
         m_Current_Tool = D_commande;
         D_CODE* pt_Dcode = GetDCODE( D_commande, false );
         if( pt_Dcode )
             pt_Dcode->m_InUse = TRUE;
+
         return TRUE;
     }
     else // D_commande = 0..9:	this is a pen command (usualy D1, D2 or D3)
@@ -730,7 +737,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
     {
         switch( D_commande )
         {
-        case 1:     //code D01 Draw line, exposure ON
+        case 1:     // code D01 Draw line, exposure ON
         {
             SEGZONE* edge_poly, * last;
 
@@ -755,7 +762,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             break;
         }
 
-        case 2:     //code D2: exposure OFF (i.e. "move to")
+        case 2:     // code D2: exposure OFF (i.e. "move to")
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 0;
             break;
@@ -767,7 +774,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
     else
         switch( D_commande )
         {
-        case 1: //code D01 Draw line, exposure ON
+        case 1:     // code D01 Draw line, exposure ON
             pt_Tool = GetDCODE( m_Current_Tool, false );
             if( pt_Tool )
             {
@@ -815,11 +822,11 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             m_PreviousPos = m_CurrentPos;
             break;
 
-        case 2: //code D2: exposure OFF (i.e. "move to")
+        case 2:     // code D2: exposure OFF (i.e. "move to")
             m_PreviousPos = m_CurrentPos;
             break;
 
-        case 3: // code D3: flash aperture
+        case 3:     // code D3: flash aperture
             pt_Tool = GetDCODE( m_Current_Tool, false );
             if( pt_Tool )
             {
@@ -852,7 +859,43 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                        PAD_RECT );
                 break;
 
-            default:        // Special (Macro) : Non implant�
+            case APT_MACRO:
+                {
+                    APERTURE_MACRO* macro = pt_Tool->GetMacro();
+                    wxASSERT( macro );
+
+                    // split the macro primitives up into multiple normal TRACK elements
+                    for( AM_PRIMITIVES::iterator i=macro->primitives.begin();  i!=macro->primitives.end();  ++i )
+                    {
+                        switch( i->primitive_id )
+                        {
+                        case AMP_CIRCLE:
+                            /*
+                            Append_1_Flash_ROND_GERBER( dcode,
+                                                        frame, DC,
+                                                        m_CurrentPos,
+                                                        size.x );
+                            */
+                            break;
+
+                        case AMP_LINE2:
+                        case AMP_LINE20:
+                            break;
+                        case AMP_LINE_CENTER:
+                        case AMP_LINE_LOWER_LEFT:
+                        case AMP_EOF:
+                        case AMP_OUTLINE:
+                        case AMP_POLYGON:
+                        case AMP_MOIRE:
+                        case AMP_THERMAL:
+                        default:
+                            break;
+                        }
+                    }
+                }
+                break;
+
+            default:
                 break;
             }
 
