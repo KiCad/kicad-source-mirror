@@ -215,12 +215,13 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->m_Curseur = wxPoint( 0, 0 );
 
             MODULE* module = Create_1_Module( &dc, wxEmptyString );
-            wxASSERT( module );
-            module->SetPosition( wxPoint(0, 0) );
-
-            if( m_Pcb->m_Modules )
-                m_Pcb->m_Modules->m_Flags = 0;
-            Zoom_Automatique( TRUE );
+            if ( module )       // i.e. if create module command not aborted
+            {
+                module->SetPosition( wxPoint(0, 0) );
+                if( m_Pcb->m_Modules )
+                    m_Pcb->m_Modules->m_Flags = 0;
+                Zoom_Automatique( TRUE );
+            }
         }
         break;
 

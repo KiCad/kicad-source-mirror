@@ -706,10 +706,10 @@ int WinEDA_BasePcbFrame::Save_1_Module( const wxString& LibName,
 MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_name )
 /************************************************************************************/
 
-/* Creation d'un module : On place d'office les 2ers textes :
- *          1er = type REF: nom du module
- *          2eme = type VALEUR: "VAL**"
- *  Le module est insere en debut de liste des modules
+/* Create a new module or footprint : A new module is tartted with 2 texts :
+ *          First = REFERENCE
+ *          Second = VALUE: "VAL**"
+ *  the new module is added on begining of the linked list of modules
  */
 
 {
@@ -717,7 +717,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     wxString Line;
     wxPoint  newpos;
 
-    /* Demande du nom du nouveau module */
+    /* Ask fo the new module reference */
     if( module_name.IsEmpty() )
     {
         if( Get_Message( _( "Module Reference:" ), _("Create module"), Line, this ) != 0 )
@@ -728,6 +728,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     Line.Trim( TRUE );
     Line.Trim( FALSE );
 
+    // Creates the new module and add it to te bigenning of the linked list of modules
     Module = new MODULE( m_Pcb );
 
     Module->Pnext = m_Pcb->m_Modules;
@@ -738,27 +739,25 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     }
     m_Pcb->m_Modules = Module;
 
-    /* Creation du module : On place d'office les 2 textes ref et val :
-     *      1er = type REF: nom du module
-     *      2eme = type VALEUR: "VAL**" */
-
-    /* Mise a jour des caract du nouveau module */
+    /* Update parameters: position, timestamp ... */
     newpos = GetScreen()->m_Curseur;
     Module->SetPosition( newpos );
     Module->m_LastEdit_Time = time( NULL );
 
-    /* Mise a jour du nom de Librairie (reference libr) */
+    /* Update its name in lib */
     Module->m_LibRef = Line;
 
-    /* Mise a jour de la reference: */
+    /* Update reference: */
     Module->m_Reference->m_Text = Line;
     Module->m_Reference->SetWidth( ModuleTextWidth );
     Module->m_Reference->m_Size = ModuleTextSize;
 
-    /* mise a jour de la valeurs */
+    /* Set the value field to a default value */
     Module->m_Value->m_Text = wxT( "VAL**" );
     Module->m_Value->SetWidth( ModuleTextWidth );
     Module->m_Value->m_Size = ModuleTextSize;
+
+    Module->SetPosition( wxPoint(0, 0) );
 
     Module->Display_Infos( this );
     return Module;
