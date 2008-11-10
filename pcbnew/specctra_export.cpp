@@ -287,61 +287,35 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
     int         reportedLayers = 0;              // how many in reported padstack
     const char* layerName[NB_COPPER_LAYERS];
 
-    if( aPad->m_Attribut==PAD_SMD || aPad->m_Attribut==PAD_CONN )
+    uniqifier = '[';
+
+    bool onAllCopperLayers = ( (aPad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS );
+
+    if( onAllCopperLayers )
+        uniqifier += 'A';               // A for all layers
+
+    const int copperCount = aBoard->GetCopperLayerCount();
+    for( int layer=0;  layer<copperCount;  ++layer )
     {
-        // PAD_SMD and PAD_CONN are reported on each layer for which
-        // they are present.
-        uniqifier = '[';
+        int kilayer = pcbLayer2kicad[layer];
 
-        if( aPad->IsOnLayer( LAYER_CMP_N ) )
+        if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
-            layerName[reportedLayers++] = layerIds[0].c_str();
-            uniqifier += 'T';   // T for top, could have used a layer index here alternatively
-        }
-        if( aPad->IsOnLayer( COPPER_LAYER_N ) )
-        {
-            int pcbLayerNdx = kicadLayer2pcb[COPPER_LAYER_N];
-            layerName[reportedLayers++] = layerIds[ pcbLayerNdx ].c_str();
-            uniqifier += 'B';   // B for bottom
-        }
+            layerName[reportedLayers++] = layerIds[layer].c_str();
 
-        uniqifier += ']';
-    }
-
-    else        // through hole pad
-    {
-        uniqifier = '[';
-
-        bool onAllCopperLayers = false;
-        if( (aPad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
-        {
-            onAllCopperLayers = true;
-            uniqifier += 'A';               // A for all layers
-        }
-
-        const int copperCount = aBoard->GetCopperLayerCount();
-        for( int layer=0;  layer<copperCount;  ++layer )
-        {
-            int kilayer = pcbLayer2kicad[layer];
-
-            if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
+            if( !onAllCopperLayers )
             {
-                layerName[reportedLayers++] = layerIds[layer].c_str();
-
-                if( !onAllCopperLayers )
-                {
-                    if( layer == 0 )
-                        uniqifier += 'T';
-                    else if( layer == copperCount-1 )
-                        uniqifier += 'B';
-                    else
-                        uniqifier += char('0' + layer);  // layer index char
-                }
+                if( layer == 0 )
+                    uniqifier += 'T';
+                else if( layer == copperCount-1 )
+                    uniqifier += 'B';
+                else
+                    uniqifier += char('0' + layer);  // layer index char
             }
         }
-
-        uniqifier += ']';
     }
+
+    uniqifier += ']';
 
     POINT   dsnOffset;
 
