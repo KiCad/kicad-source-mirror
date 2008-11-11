@@ -66,7 +66,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CopperWidthValue = new wxTextCtrl( this, wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_CopperWidthValue->SetToolTip( _("Define the tickness of copper in therma reliefs") );
+	m_CopperWidthValue->SetToolTip( _("Define the tickness of copper in thermal reliefs") );
 	
 	m_ThermalShapesParamsSizer->Add( m_CopperWidthValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
