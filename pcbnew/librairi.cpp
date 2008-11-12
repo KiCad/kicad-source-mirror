@@ -724,7 +724,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
         {
             DisplayInfo(this, _("No reference, aborted"));
             return NULL;
-        
+        }
     }
     else
         Line = module_name;
