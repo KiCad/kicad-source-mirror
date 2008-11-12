@@ -77,24 +77,24 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                    m_Rayon, linewidth, color,
-                    ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+            m_Rayon, linewidth, color,
+            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                     m_Rayon, color, color );
+            m_Rayon, color, color );
     else
 #ifdef DRAW_ARC_WITH_ANGLE
 
 
 
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-               m_Rayon, linewidth, color );
+            m_Rayon, linewidth, color );
 #else
 
 
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                posc.x, posc.y, linewidth, color );
+            posc.x, posc.y, linewidth, color );
 #endif
 }
 
@@ -126,14 +126,14 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                       m_Rayon, linewidth, color,
-                       ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+            m_Rayon, linewidth, color,
+            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                        m_Rayon, 0, color, color );
+            m_Rayon, 0, color, color );
     else
         GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                  m_Rayon, linewidth, color );
+            m_Rayon, linewidth, color );
 }
 
 
@@ -162,9 +162,9 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOff
     int t1 = (aTransformMatrix[0][0] != 0) ^ (m_Horiz != 0);
 
     DrawGraphicText( aPanel, aDC, pos1, color, m_Text,
-                     t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                     m_Size,
-                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
+        t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
+        m_Size,
+        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
 }
 
 
@@ -195,14 +195,14 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                     color, linewidth,
-                     ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+            color, linewidth,
+            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                      color, color );
+            color, color );
     else
         GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                linewidth, color );
+            linewidth, color );
 }
 
 
@@ -263,7 +263,7 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     {
         Buf_Poly_Size     = m_CornersCount;
         Buf_Poly_Drawings = (int*) realloc( Buf_Poly_Drawings,
-                                            sizeof(int) * 2 * Buf_Poly_Size );
+            sizeof(int) * 2 * Buf_Poly_Size );
     }
 
     for( int ii = 0, jj = 0; ii < m_CornersCount; ii++, jj += 2 )
@@ -283,14 +283,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-               Buf_Poly_Drawings, 1, linewidth, color,
-               ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+            Buf_Poly_Drawings, 1, linewidth, color,
+            ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-                Buf_Poly_Drawings, 1, linewidth, color, color );
+            Buf_Poly_Drawings, 1, linewidth, color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-                Buf_Poly_Drawings, 0, linewidth, color, color );
+            Buf_Poly_Drawings, 0, linewidth, color, color );
 }
 
 
@@ -337,8 +337,53 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOf
     wxString* text = aData ? (wxString*) aData : &m_Text;
     GRSetDrawMode( aDC, aDrawMode );
     DrawGraphicText( aPanel, aDC, text_pos,
-                     color, text->GetData(),
-                     m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                     m_Size,
-                     m_HJustify, m_VJustify, linewidth );
+        color, text->GetData(),
+        m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+        m_Size,
+        m_HJustify, m_VJustify, linewidth );
+}
+
+
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param refPos A wxPoint to test, in Field coordinate system
+ * @return bool - true if a hit, else false
+ */
+bool LibDrawField::HitTest( const wxPoint& refPos )
+{
+    EDA_Rect bbox;             // bounding box for the text
+
+    bbox.SetOrigin( m_Pos );
+    int      dx;                // X size for the full text
+    if ( m_FieldId == REFERENCE )
+        dx = m_Size.x * (m_Text.Len( ) + 1);   // The displayed text has one char more (U is displayed U?)
+    else
+        dx = m_Size.x * m_Text.Len( );
+    dx = (int) ((double) dx * 10.0/9);      // spacing between char is 0.1 the char size
+    int dy = m_Size.y;
+
+    if( m_Orient )
+        EXCHG( dx, dy );            // Swap X and Y size for a vertical text
+
+    // adjust position of the left bottom corner according to the justification
+    // pos is at this point correct for a left and top justified text
+    // Horizontal justification
+    if( m_HJustify == GR_TEXT_HJUSTIFY_CENTER )
+        bbox.Offset( -dx / 2, 0 );
+    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+        bbox.Offset( -dx, 0 );
+
+    // Vertical justification
+    if( m_VJustify == GR_TEXT_VJUSTIFY_CENTER )
+        bbox.Offset( 0, -dy / 2 );
+    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        bbox.Offset( 0, -dy );
+
+    bbox.SetSize( dx, dy );
+
+    if( bbox.Inside( refPos ) )
+        return true;
+
+    return false;
 }

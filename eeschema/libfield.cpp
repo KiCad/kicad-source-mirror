@@ -83,8 +83,6 @@ LibDrawField *Field = (LibDrawField *)CurrentDrawItem;
 
     if( (CurrentLibEntry == NULL) || (Field == NULL) ) return;
 
-    GRSetDrawMode(DC, g_XorMode);
-
     switch (Field->m_FieldId)
         {
         case VALUE:
@@ -100,15 +98,19 @@ LibDrawField *Field = (LibDrawField *)CurrentDrawItem;
             break;
         }
 
-int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
+    wxString text = Field->m_Text;
+    if ( Field->m_FieldId == REFERENCE )
+        text << wxT("?");
+
+    int           TransMat[2][2];
+    TransMat[0][0] = 1; TransMat[1][1] = -1;
+    TransMat[1][0] = TransMat[0][1] = 0;
+
     if( Field->m_Attributs & TEXT_NO_VISIBLE ) color = DARKGRAY;
     if( erase )
-        DrawGraphicText(panel, DC,
-                wxPoint(LastTextPosition.x, - LastTextPosition.y),
-                color, Field->m_Text,
-                Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                Field->m_Size,
-                Field->m_HJustify, Field->m_VJustify, LineWidth);
+        Field->Draw( panel, DC, wxPoint(0,0),
+               color,
+               g_XorMode, &text, TransMat );
 
 
     LastTextPosition.x = panel->GetScreen()->m_Curseur.x;
@@ -116,12 +118,9 @@ int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 
     Field->m_Pos = LastTextPosition;
 
-    DrawGraphicText(panel, DC,
-            wxPoint(LastTextPosition.x, - LastTextPosition.y),
-            color, Field->m_Text,
-            Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-            Field->m_Size,
-            Field->m_HJustify, Field->m_VJustify, LineWidth);
+    Field->Draw( panel, DC, wxPoint(0,0),
+           color,
+           g_XorMode, &text, TransMat );
 }
 
 /*******************************************************************/
@@ -289,68 +288,29 @@ int LineWidth = MAX(Field->m_Width, g_DrawMinimunLineWidth);
 /****************************************************************************/
 LibDrawField * WinEDA_LibeditFrame::LocateField(EDA_LibComponentStruct *LibEntry)
 /****************************************************************************/
-/* Localise le champ (ref ou name) pointe par la souris
-     retourne:
-        pointeur sur le champ (NULL= Pas de champ)
+/* Locate the component fiels (ref, name or auxiliary fields) under the mouse cursor
+   return:
+        pointer on the field (or NULL )
 */
 {
-int x0, y0, x1, y1;	/* Rectangle d'encadrement des textes a localiser */
-int dx, dy;			/* Dimensions du texte */
-LibDrawField *Field;
-int hjustify, vjustify;
 
-    /* Localisation du Nom */
-    x0 = LibEntry->m_Name.m_Pos.x;
-    y0 = - LibEntry->m_Name.m_Pos.y;
-    dx = LibEntry->m_Name.m_Size.x * LibEntry->m_Name.m_Text.Len(),
-    dy = LibEntry->m_Name.m_Size.y;
-    hjustify = LibEntry->m_Name.m_HJustify; vjustify = LibEntry->m_Name.m_VJustify;
-    if (LibEntry->m_Name.m_Orient) EXCHG(dx, dy);
-    if ( hjustify == GR_TEXT_HJUSTIFY_CENTER ) x0 -= dx/2;
-    else if ( hjustify == GR_TEXT_HJUSTIFY_RIGHT ) x0 -= dx;
-    if ( vjustify == GR_TEXT_VJUSTIFY_CENTER ) y0 -= dy/2;
-    else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 += dy;
-    x1 = x0 + dx; y1 = y0 + dy;
-
-    if( (GetScreen()->m_Curseur.x >= x0) && ( GetScreen()->m_Curseur.x <= x1) &&
-            (GetScreen()->m_Curseur.y >= y0) && ( GetScreen()->m_Curseur.y <= y1) )
+    wxPoint refpos;
+    refpos.x = GetScreen()->m_Curseur.x;
+    refpos.y = - GetScreen()->m_Curseur.y;  // Y axis is from bottom to top in library
+    /* Test reference */
+    if ( LibEntry->m_Name.HitTest(refpos) )
         return &LibEntry->m_Name;
 
-    /* Localisation du Prefix */
-    x0 = LibEntry->m_Prefix.m_Pos.x;
-    y0 = - LibEntry->m_Prefix.m_Pos.y;
-    dx = LibEntry->m_Prefix.m_Size.x *LibEntry->m_Prefix.m_Text.Len(),
-    dy = LibEntry->m_Prefix.m_Size.y;
-    hjustify = LibEntry->m_Prefix.m_HJustify; vjustify = LibEntry->m_Prefix.m_VJustify;
-    if (LibEntry->m_Prefix.m_Orient) EXCHG(dx, dy);
-    if ( hjustify == GR_TEXT_HJUSTIFY_CENTER ) x0 -= dx/2;
-    else if ( hjustify == GR_TEXT_HJUSTIFY_RIGHT ) x0 -= dx;
-    if ( vjustify == GR_TEXT_VJUSTIFY_CENTER ) y0 -= dy/2;
-    else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 -= dy;
-    x1 = x0 + dx; y1 = y0 + dy;
-
-    if( (GetScreen()->m_Curseur.x >= x0) && ( GetScreen()->m_Curseur.x <= x1) &&
-        (GetScreen()->m_Curseur.y >= y0) && ( GetScreen()->m_Curseur.y <= y1) )
+    /* Test Prefix */
+    if( LibEntry->m_Prefix.HitTest(refpos) )
         return &LibEntry->m_Prefix;
 
     /* Localisation des autres fields */
-    for (Field = LibEntry->Fields; Field != NULL;
+    for (LibDrawField * Field = LibEntry->Fields; Field != NULL;
                         Field = (LibDrawField*)Field->Pnext)
         {
         if ( Field->m_Text.IsEmpty() ) continue;
-        x0 = Field->m_Pos.x; y0 = - Field->m_Pos.y;
-        dx = Field->m_Size.x * Field->m_Text.Len(),
-        dy = Field->m_Size.y;
-        hjustify = Field->m_HJustify; vjustify = Field->m_VJustify;
-        if (Field->m_Orient) EXCHG(dx, dy);
-        if (LibEntry->m_Prefix.m_Orient) EXCHG(dx, dy);
-        if ( hjustify == GR_TEXT_HJUSTIFY_CENTER ) x0 -= dx/2;
-        else if ( hjustify == GR_TEXT_HJUSTIFY_RIGHT ) x0 -= dx;
-        if ( vjustify == GR_TEXT_VJUSTIFY_CENTER ) y0 -= dy/2;
-        else if ( vjustify == GR_TEXT_VJUSTIFY_BOTTOM ) y0 -= dy;
-        x1 = x0 + dx; y1 = y0 + dy;
-        if( (GetScreen()->m_Curseur.x >= x0) && ( GetScreen()->m_Curseur.x <= x1) &&
-            (GetScreen()->m_Curseur.y >= y0) && ( GetScreen()->m_Curseur.y <= y1) )
+        if (Field->HitTest(refpos) )
             return(Field);
         }
 

@@ -720,15 +720,18 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     /* Ask fo the new module reference */
     if( module_name.IsEmpty() )
     {
-        if( Get_Message( _( "Module Reference:" ), _("Create module"), Line, this ) != 0 )
+        if( Get_Message( _( "Module Reference:" ), _("Module Creation:"), Line, this ) != 0 )
+        {
+            DisplayInfo(this, _("No reference, aborted"));
             return NULL;
+        
     }
     else
         Line = module_name;
     Line.Trim( TRUE );
     Line.Trim( FALSE );
 
-    // Creates the new module and add it to te bigenning of the linked list of modules
+    // Creates the new module and add it to the head of the linked list of modules
     Module = new MODULE( m_Pcb );
 
     Module->Pnext = m_Pcb->m_Modules;

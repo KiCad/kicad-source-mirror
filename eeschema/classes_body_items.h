@@ -469,6 +469,13 @@ public:
     void          Copy( LibDrawField* Target );
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void * aData, int aTransformMatrix[2][2] );
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test, in Field coordinate system
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTest( const wxPoint& refPos );
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H
