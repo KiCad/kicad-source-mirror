@@ -80,22 +80,25 @@ static wxPoint LastPosition;
 
 static void Append_1_Line_GERBER( int Dcode_index, WinEDA_GerberFrame* frame, wxDC* DC,
                                   const wxPoint& startpoint, const wxPoint& endpoint,
-                                  int largeur );
+                                  int largeur, bool isDark );
+
 static void Append_1_Flash_GERBER( int Dcode_index, WinEDA_GerberFrame* frame, wxDC* DC,
-                                   const wxPoint& pos, const wxSize& size, int forme );
+                                   const wxPoint& pos, const wxSize& size, int form, bool isDark );
+
 static void Append_1_Flash_ROND_GERBER( int Dcode_index, WinEDA_GerberFrame* frame, wxDC* DC,
-                                        const wxPoint& pos, int diametre );
+                                        const wxPoint& pos, int diameter, bool isDark );
+
 static void Append_1_SEG_ARC_GERBER( int Dcode_index,
                                      WinEDA_GerberFrame* frame, wxDC* DC,
                                      const wxPoint& startpoint, const wxPoint& endpoint,
                                      const wxPoint& rel_center, int largeur,
-                                     bool trigo_sens, bool multiquadrant );
+                                     bool trigo_sens, bool multiquadrant, bool isDark );
 
 
 /****************************************************************/
 static void Append_1_Flash_ROND_GERBER( int Dcode_tool,
                                         WinEDA_GerberFrame* frame,
-                                        wxDC* DC, const wxPoint& pos, int diametre )
+                                        wxDC* DC, const wxPoint& pos, int diameter, bool isDark )
 /****************************************************************/
 
 /* Trace 1 flash ROND en position pos
@@ -108,7 +111,7 @@ static void Append_1_Flash_ROND_GERBER( int Dcode_tool,
     track->Insert( frame->m_Pcb, NULL );
 
     track->SetLayer( frame->GetScreen()->m_Active_Layer );
-    track->m_Width = diametre;
+    track->m_Width = diameter;
     track->m_Start = track->m_End = pos;
     NEGATE( track->m_Start.y );
     NEGATE( track->m_End.y );
@@ -122,7 +125,7 @@ static void Append_1_Flash_ROND_GERBER( int Dcode_tool,
 /**********************************************************************/
 static void Append_1_Flash_GERBER( int Dcode_index,
                                    WinEDA_GerberFrame* frame, wxDC* DC,
-                                   const wxPoint& pos, const wxSize& size, int forme )
+                                   const wxPoint& pos, const wxSize& size, int forme, bool isDark )
 /*********************************************************************/
 
 /*
@@ -172,10 +175,13 @@ static void Append_1_Flash_GERBER( int Dcode_index,
 static void Append_1_Line_GERBER( int Dcode_index,
                                   WinEDA_GerberFrame* frame, wxDC* DC,
                                   const wxPoint& startpoint, const wxPoint& endpoint,
-                                  int largeur )
+                                  int largeur, bool isDark )
 /********************************************************************/
 {
     TRACK* track;
+
+    // @todo: need to handle isDark = false case.  This means using the background color.
+    // Best way to do this?
 
     track = new TRACK( frame->m_Pcb );
 
@@ -198,7 +204,7 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
                                      WinEDA_GerberFrame* frame, wxDC* DC,
                                      const wxPoint& startpoint, const wxPoint& endpoint,
                                      const wxPoint& rel_center, int largeur,
-                                     bool trigo_sens, bool multiquadrant )
+                                     bool trigo_sens, bool multiquadrant, bool isDark )
 /*****************************************************************/
 
 /* creation d'un arc:
@@ -462,7 +468,8 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
         {
             type_coord = *Text;
             Text++;
-            text = line; nbchar = 0;
+            text = line;
+            nbchar = 0;
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
@@ -488,7 +495,8 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
                     int min_digit = (type_coord == 'I') ? m_FmtLen.x : m_FmtLen.y;
                     while( nbchar < min_digit )
                     {
-                        *(text++) = '0'; nbchar++;
+                        *(text++) = '0';
+                        nbchar++;
                     }
 
                     *text = 0;
@@ -703,6 +711,59 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
 }
 
 
+/**
+ * Function scale
+ * converts a distance given in floating point to our deci-mils
+ */
+static int scale( double aCoord, bool isMetric )
+{
+    int ret;
+
+    if( isMetric )
+        ret = (int) round( aCoord / 0.00254 );
+    else
+        ret = (int) round( aCoord * PCB_INTERNAL_UNIT );
+
+    return ret;
+}
+
+
+/**
+ * Function mapPt
+ * translates a point from the aperture macro coordinate system to our
+ * deci-mils coordinate system.
+ * @return wxSize - The gerbview coordinate system vector.
+ */
+static wxSize mapPt( double x, double y, bool isMetric )
+{
+    wxSize  ret(  scale( x, isMetric ),
+                  scale( y, isMetric ) );
+
+    return ret;
+}
+
+
+static bool mapExposure( int param1, bool curExposure )
+{
+    bool    exposure;
+
+    switch( param1 )
+    {
+    case 0:
+        exposure = false;
+        break;
+    default:
+    case 1:
+        exposure = true;
+        break;
+    case 2:
+        exposure = !curExposure;
+    }
+
+    return exposure;
+}
+
+
 /*****************************************************************************/
 bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                           char*& text, int D_commande )
@@ -713,7 +774,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
     APERTURE_T  aperture = APT_CIRCLE;
 
     int         dcode = 0;
-    D_CODE*     pt_Tool = NULL;
+    D_CODE*     tool = NULL;
     wxString    msg;
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
@@ -721,7 +782,9 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         if( D_commande > (MAX_TOOLS - 1) )
             D_commande = MAX_TOOLS - 1;
 
+        // remember which tool it selected, nothing is done with it in this call
         m_Current_Tool = D_commande;
+
         D_CODE* pt_Dcode = GetDCODE( D_commande, false );
         if( pt_Dcode )
             pt_Dcode->m_InUse = TRUE;
@@ -739,6 +802,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         {
         case 1:     // code D01 Draw line, exposure ON
         {
+            m_Exposure = true;
             SEGZONE* edge_poly, * last;
 
             edge_poly = new SEGZONE( frame->m_Pcb );
@@ -763,6 +827,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         }
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
+            m_Exposure = false;
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 0;
             break;
@@ -775,12 +840,14 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         switch( D_commande )
         {
         case 1:     // code D01 Draw line, exposure ON
-            pt_Tool = GetDCODE( m_Current_Tool, false );
-            if( pt_Tool )
+            m_Exposure = true;
+
+            tool = GetDCODE( m_Current_Tool, false );
+            if( tool )
             {
-                size     = pt_Tool->m_Size;
-                dcode    = pt_Tool->m_Num_Dcode;
-                aperture = pt_Tool->m_Shape;
+                size     = tool->m_Size;
+                dcode    = tool->m_Num_Dcode;
+                aperture = tool->m_Shape;
             }
 
             switch( m_Iterpolation )
@@ -789,7 +856,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                 Append_1_Line_GERBER( dcode,
                                       frame, DC,
                                       m_PreviousPos, m_CurrentPos,
-                                      size.x );
+                                      size.x, m_Exposure ^ m_ImageNegative );
                 break;
 
             case GERB_INTERPOL_LINEAR_01X:
@@ -802,14 +869,16 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                 Append_1_SEG_ARC_GERBER( dcode,
                                          frame, DC,
                                          m_PreviousPos, m_CurrentPos, m_IJPos,
-                                         size.x, FALSE, m_360Arc_enbl );
+                                         size.x, FALSE, m_360Arc_enbl,
+                                         m_Exposure ^ m_ImageNegative );
                 break;
 
             case GERB_INTERPOL_ARC_POS:
                 Append_1_SEG_ARC_GERBER( dcode,
                                          frame, DC,
                                          m_PreviousPos, m_CurrentPos, m_IJPos,
-                                         size.x, TRUE, m_360Arc_enbl );
+                                         size.x, TRUE, m_360Arc_enbl,
+                                         m_Exposure ^ m_ImageNegative );
                 break;
 
             default:
@@ -823,16 +892,17 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
+            m_Exposure = false;
             m_PreviousPos = m_CurrentPos;
             break;
 
         case 3:     // code D3: flash aperture
-            pt_Tool = GetDCODE( m_Current_Tool, false );
-            if( pt_Tool )
+            tool = GetDCODE( m_Current_Tool, false );
+            if( tool )
             {
-                size     = pt_Tool->m_Size;
-                dcode    = pt_Tool->m_Num_Dcode;
-                aperture = pt_Tool->m_Shape;
+                size     = tool->m_Size;
+                dcode    = tool->m_Num_Dcode;
+                aperture = tool->m_Shape;
             }
 
             switch( aperture )
@@ -842,47 +912,61 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                 Append_1_Flash_ROND_GERBER( dcode,
                                             frame, DC,
                                             m_CurrentPos,
-                                            size.x );
+                                            size.x, true ^ m_ImageNegative );
                 break;
 
             case APT_OVAL:
                 Append_1_Flash_GERBER( dcode,
                                        frame, DC, m_CurrentPos,
                                        size,
-                                       PAD_OVAL );
+                                       PAD_OVAL, true ^ m_ImageNegative );
                 break;
 
             case APT_RECT:
                 Append_1_Flash_GERBER( dcode,
                                        frame, DC, m_CurrentPos,
                                        size,
-                                       PAD_RECT );
+                                       PAD_RECT, true ^ m_ImageNegative );
                 break;
 
             case APT_MACRO:
                 {
-                    APERTURE_MACRO* macro = pt_Tool->GetMacro();
+                    wxPoint curPos = m_CurrentPos;
+                    APERTURE_MACRO* macro = tool->GetMacro();
                     wxASSERT( macro );
 
                     // split the macro primitives up into multiple normal TRACK elements
-                    for( AM_PRIMITIVES::iterator i=macro->primitives.begin();  i!=macro->primitives.end();  ++i )
+                    for( AM_PRIMITIVES::iterator p=macro->primitives.begin();  p!=macro->primitives.end();  ++p )
                     {
-                        switch( i->primitive_id )
+                        bool    exposure;
+
+                        switch( p->primitive_id )
                         {
                         case AMP_CIRCLE:
-                            /*
-                            Append_1_Flash_ROND_GERBER( dcode,
-                                                        frame, DC,
-                                                        m_CurrentPos,
-                                                        size.x );
-                            */
+                            exposure = mapExposure( p->GetExposure(), m_Exposure );
+                            curPos += mapPt( p->params[2].GetValue( tool ), p->params[3].GetValue( tool ), m_GerbMetric );
+                            Append_1_Flash_ROND_GERBER( dcode, frame, DC,
+                                            curPos,
+                                            scale( p->params[1].GetValue( tool ), m_GerbMetric ),   // diameter
+                                            exposure ^ m_ImageNegative
+                                            );
                             break;
 
                         case AMP_LINE2:
                         case AMP_LINE20:
                             break;
                         case AMP_LINE_CENTER:
+                            break;
+
                         case AMP_LINE_LOWER_LEFT:
+                            exposure = mapExposure( p->GetExposure(), m_Exposure );
+                            curPos += mapPt( p->params[3].GetValue( tool ), p->params[4].GetValue( tool ), m_GerbMetric );
+                            size = mapPt( p->params[1].GetValue( tool ), p->params[2].GetValue( tool ), m_GerbMetric );
+                            Append_1_Flash_GERBER( dcode, frame, DC, curPos,
+                                           size,
+                                           PAD_RECT, exposure ^ m_ImageNegative );
+                            break;
+
                         case AMP_EOF:
                         case AMP_OUTLINE:
                         case AMP_POLYGON:
@@ -908,3 +992,4 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
     return TRUE;
 }
+

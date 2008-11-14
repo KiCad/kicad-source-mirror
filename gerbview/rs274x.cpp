@@ -486,6 +486,8 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 break;
             }
 
+            dcode->m_Shape = APT_MACRO;
+
             D(printf("pam has %d parameters\n", pam->primitives.size() );)
 
             dcode->SetMacro( (APERTURE_MACRO*) pam );

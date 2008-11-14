@@ -179,6 +179,17 @@ struct AM_PRIMITIVE
 {
     AM_PRIMITIVE_ID     primitive_id;   ///< The primitive type
     DCODE_PARAMS        params;         ///< A sequence of parameters used by the primitive
+
+    /**
+     * Function GetExposure
+     * returns the first parameter in integer form.  Some but not all primitives
+     * use the first parameter as an exposure control.
+     */
+    int GetExposure()
+    {
+        wxASSERT( params.size() && params[0].IsImmediate() );    // we have no D_CODE* for GetValue()
+        return (int) params[0].GetValue( NULL );
+    }
 };
 
 
@@ -290,6 +301,7 @@ inline double DCODE_PARAM::GetValue( const D_CODE* aDcode )
 class GERBER
 {
     D_CODE*       m_Aperture_List[MAX_TOOLS];                   ///< Dcode (Aperture) List for this layer
+    bool          m_Exposure;                                   ///< whether an aperture macro tool is flashed on or off
 
 
 public:
