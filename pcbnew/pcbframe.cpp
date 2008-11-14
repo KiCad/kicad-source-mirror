@@ -12,7 +12,7 @@
 #include "protos.h"
 #include "id.h"
 #include "drc_stuff.h"
-#include "kbool/include/booleng.h"
+#include "kbool/include/kbool/booleng.h"
 
 /*******************************/
 /* class WinEDA_PcbFrame */

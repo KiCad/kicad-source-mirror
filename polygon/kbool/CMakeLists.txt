@@ -1,3 +1,3 @@
 project(kbool)
 
-subdirs(src samples)
+subdirs(src)

@@ -1,3 +1,7 @@
+# makefile.include for kbool
+.cpp.o:
+	g++ -c -Wall -O2 -I../include -o $@ $*.cpp
+
 OBJECTS =\
     booleng.o\
     graph.o\

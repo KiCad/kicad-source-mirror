@@ -6,6 +6,17 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2008-Nov-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+kbool:
+    Using the last version (1.9) of kbool, downloaded from the wxArt2D project site
+    (see www.wxart2d.org)
+    But the version 1.8 bug still is here.
+    So using the workaround remains mandatory.
+    (this is not a problem because thermal shapes are better...)
+
+
+
 2008-Nov-14 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +gerview

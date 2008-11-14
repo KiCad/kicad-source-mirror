@@ -17,7 +17,7 @@
 
 #include <vector>
 
-#include "kbool/include/booleng.h"
+#include "kbool/include/kbool/booleng.h"
 #include "pad_shapes.h"
 
 // inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp

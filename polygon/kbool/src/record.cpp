@@ -1,20 +1,16 @@
-/*! \file ../src/record.cpp
-    \author Probably Klaas Holwerda or Julian Smart
-
-    Copyright: 2001-2004 (C) Probably Klaas Holwerda
-
-    Licence: wxWidgets Licence
-
-    RCS-ID: $Id: record.cpp,v 1.5 2005/05/24 19:13:39 titato Exp $
+/*! \file src/record.cpp
+    \author Klaas Holwerda or Julian Smart
+ 
+    Copyright: 2001-2004 (C) Klaas Holwerda
+ 
+    Licence: see kboollicense.txt 
+ 
+    RCS-ID: $Id: record.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
 */
 
-#ifdef __GNUG__
-#pragma implementation 
-#endif
-
-#include "../include/booleng.h"
-#include "../include/record.h"
-#include "../include/node.h"
+#include "kbool/booleng.h"
+#include "kbool/record.h"
+#include "kbool/node.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -33,8 +29,7 @@
 //}
 
 Record::~Record()
-{
-}
+{}
 
 
 //void* Record::operator new(size_t size)
@@ -57,7 +52,7 @@ Record::~Record()
 //     return;
 //   }
 //
-//	free (recordptr);
+// free (recordptr);
 //}
 
 //void Record::deletepool()
@@ -69,289 +64,289 @@ Record::~Record()
 //   }
 //}
 
-Record::Record(KBoolLink* link,Bool_Engine* GC)
-   :_line(GC)
+Record::Record( KBoolLink* link, Bool_Engine* GC )
+        : _line( GC )
 {
-   _GC=GC;
-	_dir=GO_RIGHT;
-   _a=0;
-   _b=0;
-	_line.Set(link);
-	_line.CalculateLineParameters();
+    _GC = GC;
+    _dir = GO_RIGHT;
+    _a = 0;
+    _b = 0;
+    _line.Set( link );
+    _line.CalculateLineParameters();
 }
 
 
 //when the dimensions of a link for a record changes, its line parameters need to be recalculated
-void Record::SetNewLink(KBoolLink* link)
+void Record::SetNewLink( KBoolLink* link )
 {
-	_line.Set(link);
-   _line.CalculateLineParameters();
+    _line.Set( link );
+    _line.CalculateLineParameters();
 }
 
 //for beams calculate the ysp on the low scanline
-void Record::Calc_Ysp(Node* low)
+void Record::Calc_Ysp( Node* low )
 {
-	if ((LNK->GetEndNode() == low) || (LNK->GetBeginNode() == low))
-   {
-      _ysp=low->GetY();
-      return;
-   }
+    if ( ( LNK->GetEndNode() == low ) || ( LNK->GetBeginNode() == low ) )
+    {
+        _ysp = low->GetY();
+        return;
+    }
 
-   if	(LNK->GetEndNode()->GetX() == LNK->GetBeginNode()->GetX())
-         _ysp=low->GetY(); //flatlink only in flatbeams
-   else if (LNK->GetEndNode()->GetX() == low->GetX())
-         _ysp=LNK->GetEndNode()->GetY();
-   else if (LNK->GetBeginNode()->GetX() == low->GetX())
-         _ysp=LNK->GetBeginNode()->GetY();
-   else
-      	_ysp=_line.Calculate_Y_from_X(low->GetX());
+    if ( LNK->GetEndNode()->GetX() == LNK->GetBeginNode()->GetX() )
+        _ysp = low->GetY(); //flatlink only in flatbeams
+    else if ( LNK->GetEndNode()->GetX() == low->GetX() )
+        _ysp = LNK->GetEndNode()->GetY();
+    else if ( LNK->GetBeginNode()->GetX() == low->GetX() )
+        _ysp = LNK->GetBeginNode()->GetY();
+    else
+        _ysp = _line.Calculate_Y_from_X( low->GetX() );
 }
 
 //to set the _dir for new links in the beam
 void Record::Set_Flags()
 {
-	if (LNK->GetEndNode()->GetX()==LNK->GetBeginNode()->GetX()) //flatlink ?
-	{  //only happens in flat beams
-		if (LNK->GetEndNode()->GetY() < LNK->GetBeginNode()->GetY())
-			_dir=GO_RIGHT;
-		else
-			_dir=GO_LEFT;
-	}
-	else
-	{
-		if (LNK->GetEndNode()->GetX() > LNK->GetBeginNode()->GetX())
-			_dir=GO_RIGHT;
-		else
-			_dir=GO_LEFT;
-	}
+    if ( LNK->GetEndNode()->GetX() == LNK->GetBeginNode()->GetX() ) //flatlink ?
+    {  //only happens in flat beams
+        if ( LNK->GetEndNode()->GetY() < LNK->GetBeginNode()->GetY() )
+            _dir = GO_RIGHT;
+        else
+            _dir = GO_LEFT;
+    }
+    else
+    {
+        if ( LNK->GetEndNode()->GetX() > LNK->GetBeginNode()->GetX() )
+            _dir = GO_RIGHT;
+        else
+            _dir = GO_LEFT;
+    }
 }
 
 KBoolLink* Record::GetLink()
 {
-	return LNK;
+    return LNK;
 }
 
 B_INT Record::Ysp()
 {
-	return _ysp;
+    return _ysp;
 }
 
-void Record::SetYsp(B_INT ysp)
+void Record::SetYsp( B_INT ysp )
 {
-	_ysp=ysp;
+    _ysp = ysp;
 }
 
 DIRECTION Record::Direction()
 {
-	return DIRECTION(_dir);
+    return DIRECTION( _dir );
 }
 
-bool Record::Calc_Left_Right(Record* record_above_me)
+bool Record::Calc_Left_Right( Record* record_above_me )
 {
-   bool par=false;
+    bool par = false;
 
-   if (!record_above_me)   //null if no record above
-   { 	_a=0;_b=0;  }
-   else
-   {
-   	_a=record_above_me->_a;
-   	_b=record_above_me->_b;
-   }
+    if ( !record_above_me )   //null if no record above
+    {  _a = 0;_b = 0;  }
+    else
+    {
+        _a = record_above_me->_a;
+        _b = record_above_me->_b;
+    }
 
-   switch (_dir&1)
-   {
-      case GO_LEFT	:	if (LNK->Group() == GROUP_A)
-                        {
-                           LNK->SetRightA((bool)(_a>0));
+    switch ( _dir & 1 )
+    {
+        case GO_LEFT : if ( LNK->Group() == GROUP_A )
+            {
+                LNK->SetRightA( ( bool )( _a > 0 ) );
 
-                           if (_GC->GetWindingRule())
-                              LNK->GetInc() ? _a++ : _a--;
-                           else
-                           {  //ALTERNATE
-                              if (_a)
-                                 _a=0;
-                              else
-                                 _a=1;
-                           }
+                if ( _GC->GetWindingRule() )
+                    LNK->GetInc() ? _a++ : _a--;
+                else
+                {  //ALTERNATE
+                    if ( _a )
+                        _a = 0;
+                    else
+                        _a = 1;
+                }
 
-                           LNK->SetLeftA((bool)(_a>0));
-                           LNK->SetLeftB((bool)(_b>0));
-                           LNK->SetRightB((bool)(_b>0));
-                        }
-                        else
-                        {
-                           LNK->SetRightA((bool)(_a > 0));
-                           LNK->SetLeftA((bool)(_a>0));
-                           LNK->SetRightB((bool)(_b>0));
+                LNK->SetLeftA( ( bool )( _a > 0 ) );
+                LNK->SetLeftB( ( bool )( _b > 0 ) );
+                LNK->SetRightB( ( bool )( _b > 0 ) );
+            }
+            else
+            {
+                LNK->SetRightA( ( bool )( _a > 0 ) );
+                LNK->SetLeftA( ( bool )( _a > 0 ) );
+                LNK->SetRightB( ( bool )( _b > 0 ) );
 
-                           if (_GC->GetWindingRule())
-                              LNK->GetInc() ? _b++ : _b--;
-                           else //ALTERNATE
-                           {
-                               if (_b)
-                                    _b=0;
-                               else
-                                    _b=1;
-                           }
+                if ( _GC->GetWindingRule() )
+                    LNK->GetInc() ? _b++ : _b--;
+                else //ALTERNATE
+                {
+                    if ( _b )
+                        _b = 0;
+                    else
+                        _b = 1;
+                }
 
-                           LNK->SetLeftB((bool)(_b>0));
-                        }
-                           break;
-      case	GO_RIGHT	:	if (LNK->Group() == GROUP_A)
-                        {
-                           LNK->SetLeftA((bool)(_a>0));
+                LNK->SetLeftB( ( bool )( _b > 0 ) );
+            }
+            break;
+        case GO_RIGHT : if ( LNK->Group() == GROUP_A )
+            {
+                LNK->SetLeftA( ( bool )( _a > 0 ) );
 
-                           if (_GC->GetWindingRule())
-                              LNK->GetInc() ? _a++ : _a--;
-                           else
-                           {  //ALTERNATE
-                              if (_a)
-                                 _a=0;
-                              else
-                                 _a=1;
-                           }
+                if ( _GC->GetWindingRule() )
+                    LNK->GetInc() ? _a++ : _a--;
+                else
+                {  //ALTERNATE
+                    if ( _a )
+                        _a = 0;
+                    else
+                        _a = 1;
+                }
 
-                           LNK->SetRightA((bool)(_a>0));
-                           LNK->SetLeftB((bool)(_b>0));
-                           LNK->SetRightB((bool)(_b>0));
-                        }
-                        else
-                        {
-                           LNK->SetRightA((bool)(_a>0));
-                           LNK->SetLeftA((bool)(_a>0));
-                           LNK->SetLeftB((bool)(_b>0));
+                LNK->SetRightA( ( bool )( _a > 0 ) );
+                LNK->SetLeftB( ( bool )( _b > 0 ) );
+                LNK->SetRightB( ( bool )( _b > 0 ) );
+            }
+            else
+            {
+                LNK->SetRightA( ( bool )( _a > 0 ) );
+                LNK->SetLeftA( ( bool )( _a > 0 ) );
+                LNK->SetLeftB( ( bool )( _b > 0 ) );
 
-                           if (_GC->GetWindingRule())
-                              LNK->GetInc() ? _b++ : _b--;
-                           else
-                           {  //ALTERNATE
-                              if (_b)
-                                 _b=0;
-                              else
-                                 _b=1;
-                           }
+                if ( _GC->GetWindingRule() )
+                    LNK->GetInc() ? _b++ : _b--;
+                else
+                {  //ALTERNATE
+                    if ( _b )
+                        _b = 0;
+                    else
+                        _b = 1;
+                }
 
-                           LNK->SetRightB((bool)(_b>0));
-                        }
-                        break;
-      default			:  _GC->error("Undefined Direction of link","function IScanBeam::Calc_Set_Left_Right()");
-                        break;
-   }
+                LNK->SetRightB( ( bool )( _b > 0 ) );
+            }
+            break;
+        default   :  _GC->error( "Undefined Direction of link", "function IScanBeam::Calc_Set_Left_Right()" );
+            break;
+    }
 
 //THE NEXT WILL WORK for MOST windingrule polygons,
 //even when not taking into acount windingrule
 // not all
-/*
-   switch (_dir&1)
-   {
-      case GO_LEFT	:	if (LNK->Group() == GROUP_A)
-                        {
-                           LNK->SetRightA((bool)(_a>0));
-
-                           if (booleng->Get_WindingRule())
-                              LNK->GetInc() ? _a++ : _a--;
-                           else
-                              _a--;
-
-                           LNK->SetLeftA((bool)(_a>0));
-                           LNK->SetLeftB((bool)(_b>0));
-                           LNK->SetRightB((bool)(_b>0));
-                        }
-                        else
-                        {
-                           LNK->SetRightA((bool)(_a > 0));
-                           LNK->SetLeftA((bool)(_a>0));
-                           LNK->SetRightB((bool)(_b>0));
-
-                           if (booleng->Get_WindingRule())
-                              LNK->GetInc() ? _b++ : _b--;
-                           else
-                              _b--;
-
-                           LNK->SetLeftB((bool)(_b>0));
-                        }
-                           break;
-      case	GO_RIGHT	:	if (LNK->Group() == GROUP_A)
-                           {
-                              LNK->SetLeftA((bool)(_a>0));
-
-                              if (booleng->Get_WindingRule())
-                                 LNK->GetInc() ? _a++ : _a--;
-                              else
-                                 _a++;
-
-                              LNK->SetRightA((bool)(_a>0));
-                              LNK->SetLeftB((bool)(_b>0));
-                              LNK->SetRightB((bool)(_b>0));
-                           }
-                        else
-                           {
-                              LNK->SetRightA((bool)(_a>0));
-                              LNK->SetLeftA((bool)(_a>0));
-                              LNK->SetLeftB((bool)(_b>0));
-
-                              if (booleng->Get_WindingRule())
-                                 LNK->GetInc() ? _b++ : _b--;
-                              else
-                                 _b++;
-
-                              LNK->SetRightB((bool)(_b>0));
-                           }
-                        break;
-      default			:  _messagehandler->error("Undefined Direction of link","function IScanBeam::Calc_Set_Left_Right()");
-                        break;
-   }
-*/
-   //if the records are parallel (same begin/endnodes)
-   //the above link a/b flag are adjusted to the current a/b depth
-   if (record_above_me && Equal(record_above_me))
-   {
-      par=true;
-		LNK->Mark();
-   	record_above_me->_a=_a;
-   	record_above_me->_b=_b;
-		if (Direction()== GO_LEFT)
-		{
-         //set the bottom side  of the above link
-         if (record_above_me->Direction()== GO_LEFT)
-         {
-            record_above_me->LNK->SetLeftA(LNK->GetLeftA());
-            record_above_me->LNK->SetLeftB(LNK->GetLeftB());
-         }
-         else
-         {
-            record_above_me->LNK->SetRightA(LNK->GetLeftA());
-            record_above_me->LNK->SetRightB(LNK->GetLeftB());
-         }
-		}
-		else
-		{
-         //set the bottom side  of the above link
-         if (record_above_me->Direction()== GO_LEFT)
-         {
-            record_above_me->LNK->SetLeftA(LNK->GetRightA());
-            record_above_me->LNK->SetLeftB(LNK->GetRightB());
-         }
-         else
-         {
-            record_above_me->LNK->SetRightA(LNK->GetRightA());
-            record_above_me->LNK->SetRightB(LNK->GetRightB());
-         }
-		}
-   }
-   return par;
+    /*
+       switch (_dir&1)
+       {
+          case GO_LEFT : if (LNK->Group() == GROUP_A)
+                            {
+                               LNK->SetRightA((bool)(_a>0));
+     
+                               if (booleng->Get_WindingRule())
+                                  LNK->GetInc() ? _a++ : _a--;
+                               else
+                                  _a--;
+     
+                               LNK->SetLeftA((bool)(_a>0));
+                               LNK->SetLeftB((bool)(_b>0));
+                               LNK->SetRightB((bool)(_b>0));
+                            }
+                            else
+                            {
+                               LNK->SetRightA((bool)(_a > 0));
+                               LNK->SetLeftA((bool)(_a>0));
+                               LNK->SetRightB((bool)(_b>0));
+     
+                               if (booleng->Get_WindingRule())
+                                  LNK->GetInc() ? _b++ : _b--;
+                               else
+                                  _b--;
+     
+                               LNK->SetLeftB((bool)(_b>0));
+                            }
+                               break;
+          case GO_RIGHT : if (LNK->Group() == GROUP_A)
+                               {
+                                  LNK->SetLeftA((bool)(_a>0));
+     
+                                  if (booleng->Get_WindingRule())
+                                     LNK->GetInc() ? _a++ : _a--;
+                                  else
+                                     _a++;
+     
+                                  LNK->SetRightA((bool)(_a>0));
+                                  LNK->SetLeftB((bool)(_b>0));
+                                  LNK->SetRightB((bool)(_b>0));
+                               }
+                            else
+                               {
+                                  LNK->SetRightA((bool)(_a>0));
+                                  LNK->SetLeftA((bool)(_a>0));
+                                  LNK->SetLeftB((bool)(_b>0));
+     
+                                  if (booleng->Get_WindingRule())
+                                     LNK->GetInc() ? _b++ : _b--;
+                                  else
+                                     _b++;
+     
+                                  LNK->SetRightB((bool)(_b>0));
+                               }
+                            break;
+          default   :  _messagehandler->error("Undefined Direction of link","function IScanBeam::Calc_Set_Left_Right()");
+                            break;
+       }
+    */
+    //if the records are parallel (same begin/endnodes)
+    //the above link a/b flag are adjusted to the current a/b depth
+    if ( record_above_me && Equal( record_above_me ) )
+    {
+        par = true;
+        LNK->Mark();
+        record_above_me->_a = _a;
+        record_above_me->_b = _b;
+        if ( Direction() == GO_LEFT )
+        {
+            //set the bottom side  of the above link
+            if ( record_above_me->Direction() == GO_LEFT )
+            {
+                record_above_me->LNK->SetLeftA( LNK->GetLeftA() );
+                record_above_me->LNK->SetLeftB( LNK->GetLeftB() );
+            }
+            else
+            {
+                record_above_me->LNK->SetRightA( LNK->GetLeftA() );
+                record_above_me->LNK->SetRightB( LNK->GetLeftB() );
+            }
+        }
+        else
+        {
+            //set the bottom side  of the above link
+            if ( record_above_me->Direction() == GO_LEFT )
+            {
+                record_above_me->LNK->SetLeftA( LNK->GetRightA() );
+                record_above_me->LNK->SetLeftB( LNK->GetRightB() );
+            }
+            else
+            {
+                record_above_me->LNK->SetRightA( LNK->GetRightA() );
+                record_above_me->LNK->SetRightB( LNK->GetRightB() );
+            }
+        }
+    }
+    return par;
 }
 
-bool Record::Equal(Record *a)
+bool Record::Equal( Record *a )
 {
-	return((bool)( ( LNK->GetOther(a->LNK->GetBeginNode()) == a->LNK->GetEndNode())  &&
-						  ( LNK->GetOther(a->LNK->GetEndNode())   == a->LNK->GetBeginNode())  ));
+    return( ( bool )( ( LNK->GetOther( a->LNK->GetBeginNode() ) == a->LNK->GetEndNode() )  &&
+                      ( LNK->GetOther( a->LNK->GetEndNode() )   == a->LNK->GetBeginNode() )  ) );
 }
 
 
 KBoolLine* Record::GetLine()
 {
-	return &_line;
+    return & _line;
 }
 
 

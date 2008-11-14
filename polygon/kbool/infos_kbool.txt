@@ -1,0 +1,7 @@
+Boolean: GDSII viewer/editor + (boolean) operations on sets of 2d polygons.
+Boolean Web Site:
+http://boolean.klaasholwerda.nl/bool.html
+
+kbool is also used in wxArt2D
+see www.wxart2d.org
+the last version of kbool can be found on this site.

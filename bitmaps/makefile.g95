@@ -8,3 +8,7 @@ include makefile.include
 libbitmaps.a: $(OBJECTS)
 	ar ruv $@ $(OBJECTS)
 	ranlib $@
+
+clean:
+	rm -f *.o
+	rm -f *.a

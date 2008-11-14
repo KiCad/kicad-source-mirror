@@ -1,25 +1,25 @@
-/*! \file ../src/instonly.cpp
+/*! \file kbool/src/instonly.cpp
     \author Probably Klaas Holwerda
-
+ 
     Copyright: 2001-2004 (C) Probably Klaas Holwerda
-
+ 
     Licence: wxWidgets Licence
-
-    RCS-ID: $Id: instonly.cpp,v 1.5 2005/05/24 19:13:38 titato Exp $
+ 
+    RCS-ID: $Id: instonly.cpp,v 1.2 2006/11/05 14:59:31 titato Exp $
 */
 
 #ifdef __GNUG__
 #pragma option -Jgd
 
-#include "../include/_dl_itr.h"
-#include "../include/node.h"
-#include "../include/record.h"
-#include "../include/link.h"
-#include "../include/_lnk_itr.h"
-#include "../include/scanbeam.h"
-#include "../include/graph.h"
-#include "../include/graphlst.h"
-//#include "../include/misc.h"
+#include "kbool/_dl_itr.h"
+#include "kbool/node.h"
+#include "kbool/record.h"
+#include "kbool/link.h"
+#include "kbool/_lnk_itr.h"
+#include "kbool/scanbeam.h"
+#include "kbool/graph.h"
+#include "kbool/graphlst.h"
+//#include "kbool/misc.h"
 
 template class DL_Node<void *>;
 template class DL_Iter<void *>;

@@ -1,4 +1,4 @@
-/*! \file kbool/include/kbool/_dl_itr.cpp
+/*! \file kbool/_dl_itr.cpp
     \brief Double Linked list with Iterators on list
     \author Probably Klaas Holwerda
 
@@ -6,15 +6,11 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: _dl_itr.cpp,v 1.1 2005/05/24 19:13:35 titato Exp $
+    RCS-ID: $Id: _dl_itr.cpp,v 1.3 2006/12/13 21:43:33 titato Exp $
 */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #ifdef __UNIX__
-#include "../include/_dl_itr.h"
+#include "kbool/_dl_itr.h"
 #endif
 
 //=======================================================================
@@ -34,8 +30,8 @@ Construct a node for a list object
 \param it Item the node will contain
 */
 template <class Dtype>
-DL_Node<Dtype>::DL_Node(Dtype it)	// + init nodeitem
-:_item(it)
+DL_Node<Dtype>::DL_Node( Dtype it ) // + init nodeitem
+        : _item( it )
 {}
 
 /*!
@@ -44,7 +40,7 @@ DL_Node<Dtype>::DL_Node(Dtype it)	// + init nodeitem
 */
 template <class Dtype>
 DL_Node<Dtype>::DL_Node()
-:_item(0)
+        : _item( 0 )
 {}
 
 /*!
@@ -52,8 +48,7 @@ Destruct a node object
 */
 template <class Dtype>
 DL_Node<Dtype>::~DL_Node()
-{
-}
+{}
 
 
 //=======================================================================
@@ -73,16 +68,16 @@ Construct a node object
 \par Example:
     How to construct a list of type integer:
 \code
-	DL_List<int> * a_list = new DL_List<int>();
+ DL_List<int> * a_list = new DL_List<int>();
 \endcode
 */
 template <class Dtype>
 DL_List<Dtype>::DL_List()
-:_nbitems(0), _iterlevel(0)
+        : _nbitems( 0 ), _iterlevel( 0 )
 {
-	_root = new DL_Node<Dtype>();
-   _root->_next=_root;
-   _root->_prev=_root;
+    _root = new DL_Node<Dtype>();
+    _root->_next = _root;
+    _root->_prev = _root;
 }
 
 
@@ -98,12 +93,12 @@ DL_List<Dtype>::DL_List()
 template <class Dtype>
 DL_List<Dtype>::~DL_List()
 {
-	if (_iterlevel != 0)
-      throw Bool_Engine_Error("DL_List::~DL_List()\n_iterlevel > 0 ","list error", 0, 1); 
+    if ( _iterlevel != 0 )
+        throw Bool_Engine_Error( "DL_List::~DL_List()\n_iterlevel > 0 ", "list error", 0, 1 );
 
-   remove_all(false);
-	delete _root;
-	_root=0;_nbitems=0; //reset memory used (no lost pointers)
+    remove_all( false );
+    delete _root;
+    _root = 0;_nbitems = 0; //reset memory used (no lost pointers)
 }
 
 /*!
@@ -121,23 +116,23 @@ Error("remove_all",ITER_GT_O);
 \param error code to generate a message for
 */
 template <class Dtype>
-void DL_List<Dtype>::Error(const char* function,Lerror a_error)
+void DL_List<Dtype>::Error( const char* function, Lerror a_error )
 {
-   char buf[100];
-   strcpy(buf,"DL_List<Dtype>::");
-   strcat(buf,function);
-   switch (a_error)
-   {
-		case NO_MES:             strcat(buf,""); break;
-		case EMPTY:              strcat(buf,"list is empty"); break;
-		case ITER_GT_0:          strcat(buf,"more then zero iter"); break;
-		case NO_LIST:            strcat(buf,"no list attached"); break;
-		case SAME_LIST:          strcat(buf,"same list not allowed"); break;
-		case AC_ITER_LIST_OTHER: strcat(buf,"iter not allowed on other list"); break;
-		default:						 strcat(buf,"unhandled error"); break;
-   }
+    char buf[100];
+    strcpy( buf, "DL_List<Dtype>::" );
+    strcat( buf, function );
+    switch ( a_error )
+    {
+        case NO_MES:             strcat( buf, "" ); break;
+        case EMPTY:              strcat( buf, "list is empty" ); break;
+        case ITER_GT_0:          strcat( buf, "more then zero iter" ); break;
+        case NO_LIST:            strcat( buf, "no list attached" ); break;
+        case SAME_LIST:          strcat( buf, "same list not allowed" ); break;
+        case AC_ITER_LIST_OTHER: strcat( buf, "iter not allowed on other list" ); break;
+        default:       strcat( buf, "unhandled error" ); break;
+    }
 
-	throw Bool_Engine_Error(buf,"list error", 0, 1); 
+    throw Bool_Engine_Error( buf, "list error", 0, 1 );
 }
 
 /*!
@@ -157,7 +152,7 @@ DL_List<int> _intlist; #create a list of integers
 template <class Dtype>
 bool DL_List<Dtype>::empty()
 {
-	return(bool)(_nbitems==0);
+    return( bool )( _nbitems == 0 );
 }
 
 /*!
@@ -177,7 +172,7 @@ DL_List <int> _intlist; #create a list of integers
 template <class Dtype>
 int DL_List<Dtype>::count()
 {
-	return _nbitems;
+    return _nbitems;
 }
 
 /*!
@@ -212,25 +207,25 @@ int DL_List<Dtype>::count()
 template <class Dtype>
 void DL_List<Dtype>::remove_all( bool deleteObject )
 {
-	if (_iterlevel > 0 )
-		Error("remove_all()",ITER_GT_0);
+    if ( _iterlevel > 0 )
+        Error( "remove_all()", ITER_GT_0 );
 
-   Dtype* obj; 
+    Dtype* obj;
 
-	DL_Node<Dtype> *node;
-	for (int i=0; i<_nbitems; i++)
-	{
-		node = _root->_next;
-		_root->_next = node->_next;
-      if ( deleteObject == true )
-      {    
-         obj=(Dtype*)(node->_item);
-         delete obj; 
-      }
-		delete node;
-	}
-	_nbitems=0;_iterlevel=0;  //reset memory used (no lost pointers)
-   _root->_prev=_root;
+    DL_Node<Dtype> *node;
+    for ( int i = 0; i < _nbitems; i++ )
+    {
+        node = _root->_next;
+        _root->_next = node->_next;
+        if ( deleteObject == true )
+        {
+            obj = ( Dtype* )( node->_item );
+            delete obj;
+        }
+        delete node;
+    }
+    _nbitems = 0;_iterlevel = 0;  //reset memory used (no lost pointers)
+    _root->_prev = _root;
 }
 
 /*!
@@ -265,18 +260,18 @@ DL_List<int> _intlist; #create a list of integers
 template <class Dtype>
 void DL_List<Dtype>::removehead()
 {
-	if (_iterlevel > 0 )
-		Error("removehead()",ITER_GT_0);
-	if(_nbitems==0)
-		Error("removehead()",EMPTY);
+    if ( _iterlevel > 0 )
+        Error( "removehead()", ITER_GT_0 );
+    if( _nbitems == 0 )
+        Error( "removehead()", EMPTY );
 
-	DL_Node<Dtype>* node=_root->_next;
+    DL_Node<Dtype>* node = _root->_next;
 
-	node->_prev->_next = node->_next; // update forward link
-	node->_next->_prev = node->_prev; // update backward link
+    node->_prev->_next = node->_next; // update forward link
+    node->_next->_prev = node->_prev; // update backward link
 
-	_nbitems--;
-	delete node;                      // delete list node
+    _nbitems--;
+    delete node;                      // delete list node
 }
 
 
@@ -308,18 +303,18 @@ DL_List<int> _intlist; #create a list of integers
 template <class Dtype>
 void DL_List<Dtype>::removetail()
 {
-	if (_iterlevel > 0)
-		Error("removetail()",ITER_GT_0);
-	if (_nbitems==0)
-		Error("removehead()",EMPTY);
+    if ( _iterlevel > 0 )
+        Error( "removetail()", ITER_GT_0 );
+    if ( _nbitems == 0 )
+        Error( "removehead()", EMPTY );
 
-	DL_Node<Dtype>* node=_root->_prev;
+    DL_Node<Dtype>* node = _root->_prev;
 
-   node->_prev->_next = node->_next; // update forward link
-   node->_next->_prev = node->_prev; // update backward link
+    node->_prev->_next = node->_next; // update forward link
+    node->_next->_prev = node->_prev; // update backward link
 
-   _nbitems--;
-   delete node;                      // delete list node
+    _nbitems--;
+    delete node;                      // delete list node
 }
 
 /*!
@@ -334,7 +329,7 @@ This will save time, since the iterator does not have to be created.
 \par Example:
 too insert integer a at end of list
 \code
-			DL_List<int> _intlist; #create a list of integers
+   DL_List<int> _intlist; #create a list of integers
 
          int a=123;
 
@@ -343,20 +338,20 @@ too insert integer a at end of list
 \param newitem an object for which the template list was generated
 */
 template <class Dtype>
-DL_Node<Dtype>* DL_List<Dtype>::insend(Dtype newitem)
+DL_Node<Dtype>* DL_List<Dtype>::insend( Dtype newitem )
 {
-	if (_iterlevel > 0)
-		Error("insend()",ITER_GT_0);
+    if ( _iterlevel > 0 )
+        Error( "insend()", ITER_GT_0 );
 
-	DL_Node<Dtype>* newnode = new DL_Node<Dtype>(newitem);
+    DL_Node<Dtype>* newnode = new DL_Node<Dtype>( newitem );
 
-   newnode ->_next = _root;
-   newnode ->_prev = _root->_prev;
-   _root->_prev->_next = newnode;
-   _root->_prev = newnode;
+    newnode ->_next = _root;
+    newnode ->_prev = _root->_prev;
+    _root->_prev->_next = newnode;
+    _root->_prev = newnode;
 
-	_nbitems++;
-    
+    _nbitems++;
+
     return newnode;
 }
 
@@ -373,7 +368,7 @@ This will save time, since the iterator does not have to be created.
 \par Example:
 too insert integer a at begin of list
 \code
-			DL_List<int> _intlist; #create a list of integers
+   DL_List<int> _intlist; #create a list of integers
 
          int a=123;
 
@@ -382,19 +377,19 @@ too insert integer a at begin of list
 \param newitem an object for which the template list was generated
 */
 template <class Dtype>
-DL_Node<Dtype>* DL_List<Dtype>::insbegin(Dtype newitem)
+DL_Node<Dtype>* DL_List<Dtype>::insbegin( Dtype newitem )
 {
-	if (_iterlevel > 0)
-		Error("insbegin()",ITER_GT_0);
+    if ( _iterlevel > 0 )
+        Error( "insbegin()", ITER_GT_0 );
 
-	DL_Node<Dtype>* newnode = new DL_Node<Dtype>(newitem);
+    DL_Node<Dtype>* newnode = new DL_Node<Dtype>( newitem );
 
-   newnode ->_prev = _root;
-   newnode ->_next = _root->_next;
-   _root->_next->_prev = newnode;
-   _root->_next = newnode;
+    newnode ->_prev = _root;
+    newnode ->_next = _root->_next;
+    _root->_next->_prev = newnode;
+    _root->_next = newnode;
 
-	_nbitems++;
+    _nbitems++;
     return newnode;
 }
 
@@ -405,7 +400,7 @@ get head item
    too insert integer a and b into list and make c be the value of b
    which is at head of list|
 \code
-				DL_List<int> _intlist; #create a list of integers
+    DL_List<int> _intlist; #create a list of integers
 
           int a=123;
 
@@ -422,7 +417,7 @@ get head item
 template <class Dtype>
 Dtype DL_List<Dtype>::headitem()
 {
-	return _root->_next->_item;
+    return _root->_next->_item;
 }
 
 /*!
@@ -432,7 +427,7 @@ get tail item
    too insert integer a and b into list and make c be the value of b which
    is at the tail of list
 \code
-				DL_List<int> _intlist; #create a list of integers
+    DL_List<int> _intlist; #create a list of integers
 
           int a=123;
 
@@ -448,7 +443,7 @@ get tail item
 template <class Dtype>
 Dtype DL_List<Dtype>::tailitem()
 {
-	return _root->_prev->_item;
+    return _root->_prev->_item;
 }
 
 /*!
@@ -459,31 +454,31 @@ Dtype DL_List<Dtype>::tailitem()
 * \param otherlist the list to take the items from
 */
 template <class Dtype>
-void DL_List<Dtype>::takeover(DL_List<Dtype>* otherlist)
+void DL_List<Dtype>::takeover( DL_List<Dtype>* otherlist )
 {
-	if (otherlist==0)
-		Error("takeover(DL_List*)",NO_LIST);
-	// no iterators allowed on otherlist
-	if (otherlist->_iterlevel > 0)
-		Error("takeover(DL_List*)",AC_ITER_LIST_OTHER);
-	// otherlist not this list
-	else if (otherlist == this)
-		Error("takeover(DL_List*)",SAME_LIST);
+    if ( otherlist == 0 )
+        Error( "takeover(DL_List*)", NO_LIST );
+    // no iterators allowed on otherlist
+    if ( otherlist->_iterlevel > 0 )
+        Error( "takeover(DL_List*)", AC_ITER_LIST_OTHER );
+    // otherlist not this list
+    else if ( otherlist == this )
+        Error( "takeover(DL_List*)", SAME_LIST );
 
-	if (otherlist->_nbitems == 0)
-		return;
+    if ( otherlist->_nbitems == 0 )
+        return;
 
-	//link other list into this list at the end
-   _root->_prev->_next=otherlist->_root->_next;
-   otherlist->_root->_next->_prev=_root->_prev;
-   otherlist->_root->_prev->_next=_root;
-   _root->_prev=otherlist->_root->_prev;
+    //link other list into this list at the end
+    _root->_prev->_next = otherlist->_root->_next;
+    otherlist->_root->_next->_prev = _root->_prev;
+    otherlist->_root->_prev->_next = _root;
+    _root->_prev = otherlist->_root->_prev;
 
-	//empty other list
-	_nbitems+=otherlist->_nbitems;
-	otherlist->_nbitems=0;
-	otherlist->_root->_next=otherlist->_root;
-	otherlist->_root->_prev=otherlist->_root;
+    //empty other list
+    _nbitems += otherlist->_nbitems;
+    otherlist->_nbitems = 0;
+    otherlist->_root->_next = otherlist->_root;
+    otherlist->_root->_prev = otherlist->_root;
 }
 
 //=======================================================================
@@ -537,30 +532,30 @@ void DL_List<Dtype>::takeover(DL_List<Dtype>* otherlist)
  \param a_error:  error code to generate a message for
 */
 template <class Dtype>
-void DL_Iter<Dtype>::Error(const char* function,Lerror a_error)
+void DL_Iter<Dtype>::Error( const char* function, Lerror a_error )
 {
-   char buf[100];
-   strcpy(buf,"DL_Iter<Dtype>::");
-   strcat(buf,function);
-   switch (a_error)
-   {
-		case NO_MES:             strcat(buf,""); break;
-		case NO_LIST:            strcat(buf,"no list attached"); break;
-		case NO_LIST_OTHER:      strcat(buf,"no list on other iter"); break;
-		case AC_ITER_LIST_OTHER: strcat(buf,"iter not allowed on other list"); break;
-		case SAME_LIST:          strcat(buf,"same list not allowed"); break;
-		case NOT_SAME_LIST:      strcat(buf,"must be same list"); break;
-		case ITER_GT_1:          strcat(buf,"more then one iter"); break;
-		case ITER_HITROOT:          strcat(buf,"iter at root"); break;
-		case NO_ITEM:            strcat(buf,"no item at current"); break;
-		case NO_NEXT:            strcat(buf,"no next after current"); break;
-		case NO_PREV:            strcat(buf,"no prev before current"); break;
-		case EMPTY:              strcat(buf,"list is empty"); break;
-		case NOT_ALLOW:          strcat(buf,"not allowed"); break;
-		case ITER_NEG:           strcat(buf,"to much iters deleted"); break;
-		default:						 strcat(buf,"unhandled error"); break;
-   }
-   throw Bool_Engine_Error(buf,"list error", 0, 1); 
+    char buf[100];
+    strcpy( buf, "DL_Iter<Dtype>::" );
+    strcat( buf, function );
+    switch ( a_error )
+    {
+        case NO_MES:             strcat( buf, "" ); break;
+        case NO_LIST:            strcat( buf, "no list attached" ); break;
+        case NO_LIST_OTHER:      strcat( buf, "no list on other iter" ); break;
+        case AC_ITER_LIST_OTHER: strcat( buf, "iter not allowed on other list" ); break;
+        case SAME_LIST:          strcat( buf, "same list not allowed" ); break;
+        case NOT_SAME_LIST:      strcat( buf, "must be same list" ); break;
+        case ITER_GT_1:          strcat( buf, "more then one iter" ); break;
+        case ITER_HITROOT:          strcat( buf, "iter at root" ); break;
+        case NO_ITEM:            strcat( buf, "no item at current" ); break;
+        case NO_NEXT:            strcat( buf, "no next after current" ); break;
+        case NO_PREV:            strcat( buf, "no prev before current" ); break;
+        case EMPTY:              strcat( buf, "list is empty" ); break;
+        case NOT_ALLOW:          strcat( buf, "not allowed" ); break;
+        case ITER_NEG:           strcat( buf, "to much iters deleted" ); break;
+        default:       strcat( buf, "unhandled error" ); break;
+    }
+    throw Bool_Engine_Error( buf, "list error", 0, 1 );
 }
 
 /*!
@@ -576,10 +571,10 @@ void DL_Iter<Dtype>::Error(const char* function,Lerror a_error)
 \param newlist: list for the iterator
 */
 template <class Dtype>
-DL_Iter<Dtype>:: DL_Iter(DL_List<Dtype>* newlist)
-:_list(newlist), _current(RT)
+DL_Iter<Dtype>:: DL_Iter( DL_List<Dtype>* newlist )
+        : _list( newlist ), _current( RT )
 {
-	_list->_iterlevel++;                    // add 1 to  DL_Iters on list
+    _list->_iterlevel++;                    // add 1 to  DL_Iters on list
 }
 
 /*!
@@ -589,7 +584,7 @@ tcarg: class | Dtype | list item object
 \par Example
    How to construct a list of type integer and a second iterator for it:|
 \code
-	DL_List<int>* IntegerList;
+ DL_List<int>* IntegerList;
 
   IntegerList = new DL_List<int>();
 
@@ -600,13 +595,13 @@ tcarg: class | Dtype | list item object
 \param otheriter other iterator on same list
 */
 template <class Dtype>
-DL_Iter<Dtype>:: DL_Iter(DL_Iter* otheriter)
+DL_Iter<Dtype>:: DL_Iter( DL_Iter* otheriter )
 {
-	if (otheriter->_current==0)
-		Error("DL_Iter(otheriter)",NO_LIST_OTHER);
-	_list=otheriter->_list;
-	_list->_iterlevel++;                    // add 1 to DL_Iters on List
-	_current=otheriter->_current;
+    if ( otheriter->_current == 0 )
+        Error( "DL_Iter(otheriter)", NO_LIST_OTHER );
+    _list = otheriter->_list;
+    _list->_iterlevel++;                    // add 1 to DL_Iters on List
+    _current = otheriter->_current;
 }
 
 /*!
@@ -635,9 +630,8 @@ tcarg: class | Dtype | list item object
 */
 template <class Dtype>
 DL_Iter<Dtype>:: DL_Iter()
-:_list(0), _current(0)
-{
-}
+        : _list( 0 ), _current( 0 )
+{}
 
 /*!
 destruct an iterator for a list of a given type.
@@ -645,11 +639,11 @@ destruct an iterator for a list of a given type.
 template <class Dtype>
 DL_Iter<Dtype>::~DL_Iter()
 {
-	if (_current==0)
-      return;
-	_list->_iterlevel--;              // decrease iterators
-	if (_list->_iterlevel < 0)
-		Error("~DL_Iter()",ITER_NEG);
+    if ( _current == 0 )
+        return;
+    _list->_iterlevel--;              // decrease iterators
+    if ( _list->_iterlevel < 0 )
+        Error( "~DL_Iter()", ITER_NEG );
 }
 
 /*!
@@ -675,13 +669,13 @@ a_iter.Detach();
 \param newlist the list to attached the iterator to
 */
 template <class Dtype>
-void DL_Iter<Dtype>::Attach(DL_List<Dtype>* newlist)
+void DL_Iter<Dtype>::Attach( DL_List<Dtype>* newlist )
 {
-	if (_current!=0)
-		Error("Attach(list)",NOT_ALLOW);
-   _list=newlist;
-   _current=HD;
-	_list->_iterlevel++;                    // add 1 to  DL_Iters on list
+    if ( _current != 0 )
+        Error( "Attach(list)", NOT_ALLOW );
+    _list = newlist;
+    _current = HD;
+    _list->_iterlevel++;                    // add 1 to  DL_Iters on list
 }
 
 /*!
@@ -709,23 +703,23 @@ a_iter.Detach();
 template <class Dtype>
 void DL_Iter<Dtype>::Detach()
 {
-	if (_current==0)
-		Error("Attach()",NO_LIST);
-	_list->_iterlevel--;                    // subtract 1 from DL_Iters on list
-   _list=0;
-   _current=0;
+    if ( _current == 0 )
+        Error( "Attach()", NO_LIST );
+    _list->_iterlevel--;                    // subtract 1 from DL_Iters on list
+    _list = 0;
+    _current = 0;
 }
 
 /*
 // copy pointers to items from other list
 template <class Dtype> void DL_Iter<Dtype>::merge(DL_List<Dtype>* otherlist)
 {
-	DL_Node* node=otherlist->HD; //can be 0 if empty
-	for(int i=0; i<otherlist->NB; i++)
-	{
-	  insend(node->new_item);  // insert item at end
-	  node=node->_next;        // next item of otherlist
-	}
+ DL_Node* node=otherlist->HD; //can be 0 if empty
+ for(int i=0; i<otherlist->NB; i++)
+ {
+   insend(node->new_item);  // insert item at end
+   node=node->_next;        // next item of otherlist
+ }
 }
 */
 /*
@@ -733,7 +727,7 @@ template <class Dtype> void DL_Iter<Dtype>::merge(DL_List<Dtype>* otherlist)
 template <class Dtype>
 void DL_Iter<Dtype>::foreach_mf(void (Dtype::*mfp)())
 {
-	DL_Node<Dtype>* node=HD; //can be 0 if empty
+ DL_Node<Dtype>* node=HD; //can be 0 if empty
    for(int i=0; i< NB; i++)
    {
      ((node->_item).*mfp)();
@@ -745,14 +739,14 @@ void DL_Iter<Dtype>::foreach_mf(void (Dtype::*mfp)())
 
 /*! call given function for each item*/
 template <class Dtype>
-void DL_Iter<Dtype>::foreach_f(void (*fp) (Dtype n) )
+void DL_Iter<Dtype>::foreach_f( void ( *fp ) ( Dtype n ) )
 {
-	DL_Node<Dtype>* node=HD; //can be 0 if empty
-   for(int i=0; i< NB; i++)
-   {
-     fp (node->_item);
-     node=node->_next;
-   }
+    DL_Node<Dtype>* node = HD; //can be 0 if empty
+    for( int i = 0; i < NB; i++ )
+    {
+        fp ( node->_item );
+        node = node->_next;
+    }
 }
 
 
@@ -782,31 +776,31 @@ a_listiter2->takeover(_intlist)
 \param otherlist  the list to take the items from
 */
 template <class Dtype>
-void DL_Iter<Dtype>::takeover(DL_List<Dtype>* otherlist)
+void DL_Iter<Dtype>::takeover( DL_List<Dtype>* otherlist )
 {
-	if (_current==0)
-		Error("takeover(DL_List*)",NO_LIST);
-	// no iterators allowed on otherlist
-	if (otherlist->_iterlevel > 0)
-		Error("takeover(DL_List*)",AC_ITER_LIST_OTHER);
-	// otherlist not this list
-	else if (otherlist == _list)
-		Error("takeover(DL_List*)",SAME_LIST);
+    if ( _current == 0 )
+        Error( "takeover(DL_List*)", NO_LIST );
+    // no iterators allowed on otherlist
+    if ( otherlist->_iterlevel > 0 )
+        Error( "takeover(DL_List*)", AC_ITER_LIST_OTHER );
+    // otherlist not this list
+    else if ( otherlist == _list )
+        Error( "takeover(DL_List*)", SAME_LIST );
 
-	if (otherlist->_nbitems == 0)
-		return;
+    if ( otherlist->_nbitems == 0 )
+        return;
 
-	//link other list into this list at the end
-   TL->_next=otherlist->_root->_next;
-   otherlist->_root->_next->_prev=TL;
-   otherlist->_root->_prev->_next=RT;
-   TL=otherlist->_root->_prev;
+    //link other list into this list at the end
+    TL->_next = otherlist->_root->_next;
+    otherlist->_root->_next->_prev = TL;
+    otherlist->_root->_prev->_next = RT;
+    TL = otherlist->_root->_prev;
 
-	//empty other list
-	NB+=otherlist->_nbitems;
-	otherlist->_nbitems=0;
-	otherlist->_root->_next=otherlist->_root;
-	otherlist->_root->_prev=otherlist->_root;
+    //empty other list
+    NB += otherlist->_nbitems;
+    otherlist->_nbitems = 0;
+    otherlist->_root->_next = otherlist->_root;
+    otherlist->_root->_prev = otherlist->_root;
 }
 
 
@@ -842,35 +836,35 @@ a_listiter2->takeover(a_listiter1)
 \param otheriter: the iterator to take the items from
 */
 template <class Dtype>
-void DL_Iter<Dtype>::takeover(DL_Iter* otheriter)
+void DL_Iter<Dtype>::takeover( DL_Iter* otheriter )
 {
-	if (otheriter->_current==0)
-		Error(" DL_Iter",NO_LIST_OTHER);
-	if (_current==0)
-		Error(" DL_Iter",NO_LIST);
+    if ( otheriter->_current == 0 )
+        Error( " DL_Iter", NO_LIST_OTHER );
+    if ( _current == 0 )
+        Error( " DL_Iter", NO_LIST );
 
-	// only one iterator allowed on other list?
-	if (otheriter->_list->_iterlevel > 1)
-		Error("takeover(DL_Iter*)",AC_ITER_LIST_OTHER);
-	// otherlist not this list?
-	else if (otheriter->_list == _list)
-		Error("takeover(DL_Iter*)",SAME_LIST);
+    // only one iterator allowed on other list?
+    if ( otheriter->_list->_iterlevel > 1 )
+        Error( "takeover(DL_Iter*)", AC_ITER_LIST_OTHER );
+    // otherlist not this list?
+    else if ( otheriter->_list == _list )
+        Error( "takeover(DL_Iter*)", SAME_LIST );
 
-	if (otheriter->NB == 0)
-		return;
+    if ( otheriter->NB == 0 )
+        return;
 
-   //link other list into this list at the end
-   TL->_next=otheriter->HD;
-   otheriter->HD->_prev=TL;
-   otheriter->TL->_next=RT;
-   TL=otheriter->TL;
+    //link other list into this list at the end
+    TL->_next = otheriter->HD;
+    otheriter->HD->_prev = TL;
+    otheriter->TL->_next = RT;
+    TL = otheriter->TL;
 
-	//empty other iter & list
-	NB+=otheriter->NB;
-	otheriter->NB=0;
-	otheriter->HD=otheriter->RT;
-	otheriter->TL=otheriter->RT;
-	otheriter->_current=otheriter->RT;
+    //empty other iter & list
+    NB += otheriter->NB;
+    otheriter->NB = 0;
+    otheriter->HD = otheriter->RT;
+    otheriter->TL = otheriter->RT;
+    otheriter->_current = otheriter->RT;
 }
 
 /*!
@@ -906,85 +900,85 @@ a_listiter2->takeover(a_listiter1,1);
 \param maxcount  maximum number of objects to take over
 */
 template <class Dtype>
-void DL_Iter<Dtype>::takeover(DL_Iter* otheriter, int maxcount)
+void DL_Iter<Dtype>::takeover( DL_Iter* otheriter, int maxcount )
 {
-	if (otheriter->_current==0)
-		Error("takeover(DL_Iter*,int)",NO_LIST_OTHER);
-	if (_current==0)
-		Error("takeover(DL_Iter*,int)",NO_LIST);
+    if ( otheriter->_current == 0 )
+        Error( "takeover(DL_Iter*,int)", NO_LIST_OTHER );
+    if ( _current == 0 )
+        Error( "takeover(DL_Iter*,int)", NO_LIST );
 
-	if (otheriter->_list->_iterlevel > 1)
-		Error("takeover(DL_Iter*,int)",AC_ITER_LIST_OTHER);
-	else if (otheriter->_list == _list)
-		Error("takeover(DL_Iter*,int)",SAME_LIST);
+    if ( otheriter->_list->_iterlevel > 1 )
+        Error( "takeover(DL_Iter*,int)", AC_ITER_LIST_OTHER );
+    else if ( otheriter->_list == _list )
+        Error( "takeover(DL_Iter*,int)", SAME_LIST );
 
-	if (maxcount<0)
-		Error("takeover(DL_Iter*,int), maxcount < 0",NO_MES);
+    if ( maxcount < 0 )
+        Error( "takeover(DL_Iter*,int), maxcount < 0", NO_MES );
 
-	if (otheriter->NB == 0)
-		return;
+    if ( otheriter->NB == 0 )
+        return;
 
 
-	if (otheriter->NB <= maxcount)
-	{  //take it all
-      //link other list into this list at the end
-      TL->_next=otheriter->HD;
-      otheriter->HD->_prev=TL;
-      otheriter->TL->_next=RT;
-      TL=otheriter->TL;
+    if ( otheriter->NB <= maxcount )
+    {  //take it all
+        //link other list into this list at the end
+        TL->_next = otheriter->HD;
+        otheriter->HD->_prev = TL;
+        otheriter->TL->_next = RT;
+        TL = otheriter->TL;
 
-      //empty other iter & list
-      NB+=otheriter->NB;
-      otheriter->NB=0;
-      otheriter->HD=otheriter->RT;
-      otheriter->TL=otheriter->RT;
-      otheriter->_current=otheriter->RT;
-	}
-	else
-	{  //take maxcount elements from otheriter
-      //set cursor in otherlist to element maxcount
-		DL_Node<Dtype>* node;
+        //empty other iter & list
+        NB += otheriter->NB;
+        otheriter->NB = 0;
+        otheriter->HD = otheriter->RT;
+        otheriter->TL = otheriter->RT;
+        otheriter->_current = otheriter->RT;
+    }
+    else
+    {  //take maxcount elements from otheriter
+        //set cursor in otherlist to element maxcount
+        DL_Node<Dtype>* node;
 
-  		if (NB/2 < maxcount)
-      {	// this is faster (1st half)
-			node=otheriter->HD;
-         for(int i=1; i<maxcount; i++)
-           node=node->_next;
-		}
-		else
-		{	// no, this is faster (2nd half)
-			node=otheriter->TL;
-         for(int i=NB; i>maxcount+1; i--)
-           node=node->_prev;
-		}
+        if ( NB / 2 < maxcount )
+        { // this is faster (1st half)
+            node = otheriter->HD;
+            for( int i = 1; i < maxcount; i++ )
+                node = node->_next;
+        }
+        else
+        { // no, this is faster (2nd half)
+            node = otheriter->TL;
+            for( int i = NB; i > maxcount + 1; i-- )
+                node = node->_prev;
+        }
 
-		// link this->tail to other->head
-		if (NB>0)
-		{
-         TL->_next=otheriter->HD;
-         otheriter->HD->_prev=TL;
-		}
-		else	// target is empty
-      {
-			HD=otheriter->HD;
-			otheriter->HD->_prev=RT;
-      }
+        // link this->tail to other->head
+        if ( NB > 0 )
+        {
+            TL->_next = otheriter->HD;
+            otheriter->HD->_prev = TL;
+        }
+        else // target is empty
+        {
+            HD = otheriter->HD;
+            otheriter->HD->_prev = RT;
+        }
 
-		// set other root to node-> next (after last to copy)
-		otheriter->HD=node->_next;
-		otheriter->HD->_prev=otheriter->RT;
+        // set other root to node-> next (after last to copy)
+        otheriter->HD = node->_next;
+        otheriter->HD->_prev = otheriter->RT;
 
-		// set this->tail to other->item()->prev (last element to be copied)
-		TL=node;
-      node->_next=RT;
+        // set this->tail to other->item()->prev (last element to be copied)
+        TL = node;
+        node->_next = RT;
 
-		// still need to update element counter
-		NB+=maxcount;
+        // still need to update element counter
+        NB += maxcount;
 
-		// update other list
-		otheriter->NB-=maxcount;
-		otheriter->_current=otheriter->HD;	// other->current is moved to this!
-	}
+        // update other list
+        otheriter->NB -= maxcount;
+        otheriter->_current = otheriter->HD; // other->current is moved to this!
+    }
 }
 
 
@@ -1011,24 +1005,24 @@ a_listiter->tohead(); //the new head will be at object 3456
 template <class Dtype>
 void DL_Iter<Dtype>::reset_head()
 {
-	if (_current==0)
-		Error("reset_head()",NO_LIST);
-	if (_list->_iterlevel > 1 )
-		Error("reset_head()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "reset_head()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "reset_head()", ITER_GT_1 );
 
-	if(_current==RT)
-		Error("reset head()",ITER_HITROOT);
+    if( _current == RT )
+        Error( "reset head()", ITER_HITROOT );
 
-   //link out RT
-   HD->_prev=TL;
-   TL->_next=HD;
+    //link out RT
+    HD->_prev = TL;
+    TL->_next = HD;
 
-   //link in RT before current
-   HD=_current;
-   TL=_current->_prev;
+    //link in RT before current
+    HD = _current;
+    TL = _current->_prev;
 
-   TL->_next=RT;
-   HD->_prev=RT;
+    TL->_next = RT;
+    HD->_prev = RT;
 }
 
 /*!
@@ -1054,24 +1048,24 @@ a_listiter->totail(); //the new tail will be at object 1234
 template <class Dtype>
 void DL_Iter<Dtype>::reset_tail()
 {
-	if (_current==0)
-		Error("reset_tail()",NO_LIST);
-	if (_list->_iterlevel > 1 )
-		Error("reset_tail()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "reset_tail()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "reset_tail()", ITER_GT_1 );
 
-	if(_current==RT)
-		Error("reset head()",ITER_HITROOT);
+    if( _current == RT )
+        Error( "reset head()", ITER_HITROOT );
 
-   //link out RT
-   HD->_prev=TL;
-   TL->_next=HD;
+    //link out RT
+    HD->_prev = TL;
+    TL->_next = HD;
 
-   //link in RT after current
-   TL=_current;
-   HD=_current->_next;
+    //link in RT after current
+    TL = _current;
+    HD = _current->_next;
 
-   HD->_prev=RT;
-   TL->_next=RT;
+    HD->_prev = RT;
+    TL->_next = RT;
 }
 
 /*!
@@ -1090,10 +1084,10 @@ if (a_listiter->Empty())
 template <class Dtype>
 bool DL_Iter<Dtype>::empty()
 {
-	if (_current==0)
-		Error("empty()",NO_LIST);
+    if ( _current == 0 )
+        Error( "empty()", NO_LIST );
 
-	return(bool)(NB==0);
+    return( bool )( NB == 0 );
 }
 
 /*!
@@ -1111,26 +1105,26 @@ a_listiter->tohead();
 //traverse forwards
 while ( ! a_listiter->hitroot())
 {
-	cout << "The item =" << a_listiter->item();
-	a_listiter++; //goto next object
+ cout << "The item =" << a_listiter->item();
+ a_listiter++; //goto next object
 }
 
 a_listiter->totail();
 //traverse backwards
 while ( ! a_listiter->hitroot())
 {
- 	cout << "The item =" << a_listiter->item();
- 	a_listiter--; //goto next object
+  cout << "The item =" << a_listiter->item();
+  a_listiter--; //goto next object
 }
 \endcode
 */
 template <class Dtype>
 bool DL_Iter<Dtype>::hitroot()
 {
-	if (_current==0)
-		Error("hitroot()",NO_LIST);
+    if ( _current == 0 )
+        Error( "hitroot()", NO_LIST );
 
-	return(bool)(_current == RT);
+    return( bool )( _current == RT );
 }
 
 /*!
@@ -1150,10 +1144,10 @@ if (a_listiter->athead())
 template <class Dtype>
 bool DL_Iter<Dtype>::athead()
 {
-	if (_current==0)
-		Error("athead()",NO_LIST);
+    if ( _current == 0 )
+        Error( "athead()", NO_LIST );
 
-	return(bool)(_current == HD);
+    return( bool )( _current == HD );
 }
 
 /*!
@@ -1174,10 +1168,10 @@ if (a_listiter->attail())
 template <class Dtype>
 bool DL_Iter<Dtype>::attail()
 {
-	if (_current==0)
-		Error("attail()",NO_LIST);
+    if ( _current == 0 )
+        Error( "attail()", NO_LIST );
 
-	return(bool)(_current == TL);
+    return( bool )( _current == TL );
 }
 
 /*!
@@ -1196,18 +1190,19 @@ if (a_listiter->has(1234))
 \param otheritem item to search for
 */
 template <class Dtype>
-bool DL_Iter<Dtype>::has(Dtype otheritem)
+bool DL_Iter<Dtype>::has( Dtype otheritem )
 {
-	if (_current==0)
-		Error("has()",NO_LIST);
+    if ( _current == 0 )
+        Error( "has()", NO_LIST );
 
-	DL_Node<Dtype>* node=HD; //can be 0 if empty
-	for(int i=0; i<NB; i++)
-	{ if (node->_item == otheritem)
-			return true;
-	  node=node->_next;
-	}
-	return false;
+    DL_Node<Dtype>* node = HD; //can be 0 if empty
+    for( int i = 0; i < NB; i++ )
+    {
+        if ( node->_item == otheritem )
+            return true;
+        node = node->_next;
+    }
+    return false;
 }
 
 /*!
@@ -1225,10 +1220,10 @@ if (a_listiter->count() == 1)
 template <class Dtype>
 int DL_Iter<Dtype>::count()
 {
-	if (_current==0)
-		Error("count()",NO_LIST);
+    if ( _current == 0 )
+        Error( "count()", NO_LIST );
 
-	return NB;
+    return NB;
 }
 
 /*!
@@ -1246,10 +1241,10 @@ a_listiter->tohead();
 template <class Dtype>
 void DL_Iter<Dtype>::tohead()
 {
-	if (_current==0)
-		Error("tohead()",NO_LIST);
+    if ( _current == 0 )
+        Error( "tohead()", NO_LIST );
 
-	_current=HD;
+    _current = HD;
 }
 
 /*!
@@ -1267,10 +1262,10 @@ a_listiter->totail();
 template <class Dtype>
 void DL_Iter<Dtype>::totail()
 {
-	if (_current==0)
-		Error("totail()",NO_LIST);
+    if ( _current == 0 )
+        Error( "totail()", NO_LIST );
 
-	_current=TL;
+    _current = TL;
 }
 
 /*!
@@ -1290,10 +1285,10 @@ while (a_listiter->iterate())
 template <class Dtype>
 void DL_Iter<Dtype>::toroot()
 {
-	if (_current==0)
-		Error("toroot()",NO_LIST);
+    if ( _current == 0 )
+        Error( "toroot()", NO_LIST );
 
-  _current=RT;
+    _current = RT;
 }
 
 /*!
@@ -1314,12 +1309,12 @@ while (!a_listiter->hitroot())
 \endcode
 */
 template <class Dtype>
-void DL_Iter<Dtype>::operator++(void)
+void DL_Iter<Dtype>::operator++( void )
 {
-	if (_current==0)
-		Error("operator++()",NO_LIST);
+    if ( _current == 0 )
+        Error( "operator++()", NO_LIST );
 
-	_current=_current->_next;
+    _current = _current->_next;
 }
 
 /*!
@@ -1340,12 +1335,12 @@ while (!a_listiter->hitroot())
 \endcode
 */
 template <class Dtype>
-void DL_Iter<Dtype>::operator++(int)
+void DL_Iter<Dtype>::operator++( int )
 {
-	if (_current==0)
-		Error("operator++(int)",NO_LIST);
+    if ( _current == 0 )
+        Error( "operator++(int)", NO_LIST );
 
-	_current=_current->_next;
+    _current = _current->_next;
 }
 
 
@@ -1367,12 +1362,12 @@ while (!a_listiter->hitroot())
 \endcode
 */
 template <class Dtype>
-void DL_Iter<Dtype>::operator--(void)
+void DL_Iter<Dtype>::operator--( void )
 {
-	if (_current==0)
-		Error("operator++()",NO_LIST);
+    if ( _current == 0 )
+        Error( "operator++()", NO_LIST );
 
-	_current=_current->_prev;
+    _current = _current->_prev;
 }
 
 
@@ -1394,12 +1389,12 @@ while (!a_listiter->hitroot())
 \endcode
 */
 template <class Dtype>
-void DL_Iter<Dtype>::operator--(int)
+void DL_Iter<Dtype>::operator--( int )
 {
-	if (_current==0)
-		Error("operator++(int)",NO_LIST);
+    if ( _current == 0 )
+        Error( "operator++(int)", NO_LIST );
 
-	_current=_current->_prev;
+    _current = _current->_prev;
 }
 
 
@@ -1417,13 +1412,13 @@ a_listiter>>2;//at root now
 \param n go n places forward
 */
 template <class Dtype>
-void DL_Iter<Dtype>::operator>>(int n)
+void DL_Iter<Dtype>::operator>>( int n )
 {
-	if (_current==0)
-		Error("operator>>()",NO_LIST);
+    if ( _current == 0 )
+        Error( "operator>>()", NO_LIST );
 
-	for(int i=0; i<n; i++)
- 	   _current=_current->_next;
+    for( int i = 0; i < n; i++ )
+        _current = _current->_next;
 }
 
 
@@ -1441,13 +1436,13 @@ a_listiter<<2;//at root now
 \param n go n places back
 */
 template <class Dtype>
-void DL_Iter<Dtype>::operator<<(int n)
+void DL_Iter<Dtype>::operator<<( int n )
 {
-	if (_current==0)
-		Error("operator<<()",NO_LIST);
+    if ( _current == 0 )
+        Error( "operator<<()", NO_LIST );
 
-	for(int i=0; i<n; i++)
-		_current=_current->_prev;
+    for( int i = 0; i < n; i++ )
+        _current = _current->_prev;
 }
 
 
@@ -1468,20 +1463,21 @@ a_listiter->toitem(2345); template <class Dtype>
 \endcode
 */
 template <class Dtype>
-bool DL_Iter<Dtype>::toitem(Dtype item)
+bool DL_Iter<Dtype>::toitem( Dtype item )
 {
-	if (_current==0)
-		Error("toitem(item)",NO_LIST);
-	DL_Node<Dtype>* node=HD; //can be 0 if empty
-	for(int i=0; i<NB; i++)
-	{ if (node->_item == item)
-	  {
-		  _current = node;
-			return true;
-	  }
-	  node=node->_next;
-	}
-	return false;
+    if ( _current == 0 )
+        Error( "toitem(item)", NO_LIST );
+    DL_Node<Dtype>* node = HD; //can be 0 if empty
+    for( int i = 0; i < NB; i++ )
+    {
+        if ( node->_item == item )
+        {
+            _current = node;
+            return true;
+        }
+        node = node->_next;
+    }
+    return false;
 }
 
 /*!
@@ -1502,15 +1498,15 @@ a_listiter2->toiter(a_listiter2);
 \param otheriter other iterator to let this iterator point to.
 */
 template <class Dtype>
-void DL_Iter<Dtype>::toiter(DL_Iter *otheriter)
+void DL_Iter<Dtype>::toiter( DL_Iter *otheriter )
 {
-	if (otheriter->_current==0)
-		Error("toiter(otheriter)",NO_LIST);
-	// both iters must have the same list
-	if (_list != otheriter->_list)
-		Error("toiter(otheriter)",NOT_SAME_LIST);
+    if ( otheriter->_current == 0 )
+        Error( "toiter(otheriter)", NO_LIST );
+    // both iters must have the same list
+    if ( _list != otheriter->_list )
+        Error( "toiter(otheriter)", NOT_SAME_LIST );
 
-	_current = otheriter->_current;
+    _current = otheriter->_current;
 }
 
 
@@ -1521,18 +1517,19 @@ put the iterator at the position of the given object in the list.
 \param othernode a node to let this iterator point to.
 */
 template <class Dtype>
-bool DL_Iter<Dtype>::tonode(DL_Node<Dtype> *othernode)
+bool DL_Iter<Dtype>::tonode( DL_Node<Dtype> *othernode )
 {
-	DL_Node<Dtype>* node=HD; //can be 0 if empty  //node is a temporary cursor
-	for(int i=0; i<NB; i++)
-	{ if (node == othernode)
-	  {
-		  _current = othernode;
-			return true;
-	  }
-	  node=node->_next;
-	}
-	return false;
+    DL_Node<Dtype>* node = HD; //can be 0 if empty  //node is a temporary cursor
+    for( int i = 0; i < NB; i++ )
+    {
+        if ( node == othernode )
+        {
+            _current = othernode;
+            return true;
+        }
+        node = node->_next;
+    }
+    return false;
 }
 
 /*!
@@ -1564,15 +1561,15 @@ while (a_listiter->iterate())
 \endcode
 */
 template <class Dtype>
-bool DL_Iter<Dtype>::iterate(void)
+bool DL_Iter<Dtype>::iterate( void )
 {
-	if (_current==0)
-		Error("iterate()",NO_LIST);
+    if ( _current == 0 )
+        Error( "iterate()", NO_LIST );
 
-   _current=_current->_next;
-	if (_current==RT)
-		return false;
-	return true;
+    _current = _current->_next;
+    if ( _current == RT )
+        return false;
+    return true;
 }
 
 /*!
@@ -1595,24 +1592,24 @@ int theitem=a_listiter->item();
 template <class Dtype>
 Dtype DL_Iter<Dtype>::item()
 {
-	if (_current==0)
-		Error("item()",NO_LIST);
-	if (_current==RT)
-		Error("item()",NO_ITEM);
+    if ( _current == 0 )
+        Error( "item()", NO_LIST );
+    if ( _current == RT )
+        Error( "item()", NO_ITEM );
 
-	return _current->_item;
+    return _current->_item;
 }
 
 //! get the node at iterater position
 template <class Dtype>
 DL_Node<Dtype>* DL_Iter<Dtype>::node()
 {
-	if (_current==0)
-		Error("item()",NO_LIST);
-	if (_current==RT)
-		Error("item()",NO_ITEM);
+    if ( _current == 0 )
+        Error( "item()", NO_LIST );
+    if ( _current == RT )
+        Error( "item()", NO_ITEM );
 
-	return _current;
+    return _current;
 }
 
 /*!
@@ -1622,10 +1619,10 @@ set the iterator position to next object in the list ( can be the root also).
 template <class Dtype>
 void DL_Iter<Dtype>::next()
 {
-	if (_current==0)
-		Error("item()",NO_LIST);
+    if ( _current == 0 )
+        Error( "item()", NO_LIST );
 
-   _current=_current->_next;
+    _current = _current->_next;
 }
 
 
@@ -1654,12 +1651,12 @@ while (count)
 template <class Dtype>
 void DL_Iter<Dtype>::next_wrap()
 {
-	if (_current==0)
-		Error("item()",NO_LIST);
+    if ( _current == 0 )
+        Error( "item()", NO_LIST );
 
-   _current=_current->_next;
-	if (_current==RT)
-	   _current=_current->_next;
+    _current = _current->_next;
+    if ( _current == RT )
+        _current = _current->_next;
 }
 
 
@@ -1670,10 +1667,10 @@ set the iterator position to previous object in the list ( can be the root also)
 template <class Dtype>
 void DL_Iter<Dtype>::prev()
 {
-	if (_current==0)
-		Error("item()",NO_LIST);
+    if ( _current == 0 )
+        Error( "item()", NO_LIST );
 
-   _current=_current->_prev;
+    _current = _current->_prev;
 }
 
 /*!
@@ -1701,26 +1698,26 @@ while (count)
 template <class Dtype>
 void DL_Iter<Dtype>::prev_wrap()
 {
-	if (_current==0)
-		Error("item()",NO_LIST);
+    if ( _current == 0 )
+        Error( "item()", NO_LIST );
 
-   _current=_current->_prev;
-	if (_current==RT)
-	   _current=_current->_prev;
+    _current = _current->_prev;
+    if ( _current == RT )
+        _current = _current->_prev;
 }
 
 template <class Dtype>
 void DL_Iter<Dtype>::remove_all()
 {
-	if (_current==0)
-		Error("remove_all()",NO_LIST);
-	if (_list->_iterlevel > 1 )
-		Error("remove_all()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "remove_all()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "remove_all()", ITER_GT_1 );
 
-	_list->_iterlevel--;
-   _list->remove_all();
-	_list->_iterlevel++;
-	_current=RT;
+    _list->_iterlevel--;
+    _list->remove_all();
+    _list->_iterlevel++;
+    _current = RT;
 }
 
 /*!
@@ -1749,22 +1746,22 @@ a_listiter->remove();
 template <class Dtype>
 void DL_Iter<Dtype>::remove()
 {
-	if (_current==0)
-		Error("remove()",NO_LIST);
-	if (_list->_iterlevel > 1 )
-		Error("remove()",ITER_GT_1);
-   if (_current==RT)
-		Error("remove()",ITER_HITROOT);
+    if ( _current == 0 )
+        Error( "remove()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "remove()", ITER_GT_1 );
+    if ( _current == RT )
+        Error( "remove()", ITER_HITROOT );
 
-	DL_Node<Dtype>* node=_current;
+    DL_Node<Dtype>* node = _current;
 
-	_current=_current->_next;
+    _current = _current->_next;
 
-   node->_prev->_next = node->_next; // update forward link
-   node->_next->_prev = node->_prev; // update backward link
+    node->_prev->_next = node->_next; // update forward link
+    node->_next->_prev = node->_prev; // update backward link
 
-	NB--;
-	delete node;                      // delete list node
+    NB--;
+    delete node;                      // delete list node
 }
 
 /*!
@@ -1792,19 +1789,19 @@ a_listiter->removehead();
 template <class Dtype>
 void DL_Iter<Dtype>::removehead()
 {
-	if (_current==0)
-		Error("removehead()",NO_LIST);
-	if (_list->_iterlevel > 1 )
-		Error("removehead()",ITER_GT_1);
-	if(NB==0)
-		Error("removehead()",EMPTY);
+    if ( _current == 0 )
+        Error( "removehead()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "removehead()", ITER_GT_1 );
+    if( NB == 0 )
+        Error( "removehead()", EMPTY );
 
-   if (_current==HD)
-		_current=_current->_next;
+    if ( _current == HD )
+        _current = _current->_next;
 
-	_list->_iterlevel--;
-   _list->removehead();
-	_list->_iterlevel++;
+    _list->_iterlevel--;
+    _list->removehead();
+    _list->_iterlevel++;
 }
 
 
@@ -1833,19 +1830,19 @@ a_listiter->removetail();
 template <class Dtype>
 void DL_Iter<Dtype>::removetail()
 {
-	if (_current==0)
-		Error("removetail()",NO_LIST);
-	if (_list->_iterlevel > 1 )
-		Error("removetail()",ITER_GT_1);
-	if (NB==0)
-		Error("removehead()",EMPTY);
+    if ( _current == 0 )
+        Error( "removetail()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "removetail()", ITER_GT_1 );
+    if ( NB == 0 )
+        Error( "removehead()", EMPTY );
 
-   if (_current==TL)
-		_current=_current->_prev;
+    if ( _current == TL )
+        _current = _current->_prev;
 
-	_list->_iterlevel--;
-   _list->removetail();
-	_list->_iterlevel++;
+    _list->_iterlevel--;
+    _list->removetail();
+    _list->_iterlevel++;
 
 }
 
@@ -1868,16 +1865,16 @@ a_listiter->insend(a);
 \endcode
 */
 template <class Dtype>
-DL_Node<Dtype>* DL_Iter<Dtype>::insend(Dtype newitem)
+DL_Node<Dtype>* DL_Iter<Dtype>::insend( Dtype newitem )
 {
-	if (_current==0)
-		Error("insend()",NO_LIST);
-	if (_list->_iterlevel > 1)
-		Error("insend()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "insend()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "insend()", ITER_GT_1 );
 
-	_list->_iterlevel--;
-   DL_Node<Dtype>* ret = _list->insend(newitem);
-	_list->_iterlevel++;
+    _list->_iterlevel--;
+    DL_Node<Dtype>* ret = _list->insend( newitem );
+    _list->_iterlevel++;
     return ret;
 }
 
@@ -1902,17 +1899,17 @@ a_listiter->insbegin(a);
 \param newitem an object for which the template list/iterator was generated
 */
 template <class Dtype>
-DL_Node<Dtype>* DL_Iter<Dtype>::insbegin(Dtype newitem)
+DL_Node<Dtype>* DL_Iter<Dtype>::insbegin( Dtype newitem )
 {
-	if (_current==0)
-		Error("insbegin()",NO_LIST);
-	if (_list->_iterlevel > 1)
-		Error("insbegin()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "insbegin()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "insbegin()", ITER_GT_1 );
 
-	_list->_iterlevel--;
-   DL_Node<Dtype>* ret = _list->insbegin(newitem);
-	_list->_iterlevel++;
-    return ret;    
+    _list->_iterlevel--;
+    DL_Node<Dtype>* ret = _list->insbegin( newitem );
+    _list->_iterlevel++;
+    return ret;
 }
 
 /*!
@@ -1932,21 +1929,21 @@ a_listiter->insbefore(a);   // insert before tail
 \param newitem an object for which the template list/iterator was generated
 */
 template <class Dtype>
-DL_Node<Dtype>* DL_Iter<Dtype>::insbefore(Dtype newitem)
+DL_Node<Dtype>* DL_Iter<Dtype>::insbefore( Dtype newitem )
 {
-	if (_current==0)
-		Error("insbefore()",NO_LIST);
-	if (_list->_iterlevel > 1)
-		Error("insbefore()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "insbefore()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "insbefore()", ITER_GT_1 );
 
-	DL_Node<Dtype>* newnode = new DL_Node<Dtype>(newitem);
+    DL_Node<Dtype>* newnode = new DL_Node<Dtype>( newitem );
 
-   newnode ->_next = _current;
-   _current->_prev->_next = newnode;
-   newnode ->_prev = _current->_prev;
-   _current->_prev = newnode;
+    newnode ->_next = _current;
+    _current->_prev->_next = newnode;
+    newnode ->_prev = _current->_prev;
+    _current->_prev = newnode;
 
-	NB++;
+    NB++;
     return newnode;
 }
 
@@ -1967,21 +1964,21 @@ a_listiter->insafter(a);   // insert after head
 \param newitem an object for which the template list/iterator was generated
 */
 template <class Dtype>
-DL_Node<Dtype>* DL_Iter<Dtype>::insafter(Dtype newitem)
+DL_Node<Dtype>* DL_Iter<Dtype>::insafter( Dtype newitem )
 {
-	if (_current==0)
-		Error("insafter()",NO_LIST);
-	if (_list->_iterlevel > 1)
-		Error("insafter()",ITER_GT_1);
+    if ( _current == 0 )
+        Error( "insafter()", NO_LIST );
+    if ( _list->_iterlevel > 1 )
+        Error( "insafter()", ITER_GT_1 );
 
-	DL_Node<Dtype>* newnode = new DL_Node<Dtype>(newitem);
+    DL_Node<Dtype>* newnode = new DL_Node<Dtype>( newitem );
 
-   newnode ->_next = _current->_next;
-   newnode ->_prev = _current;
-   _current->_next->_prev = newnode;
-   _current->_next = newnode;
+    newnode ->_next = _current->_next;
+    newnode ->_prev = _current;
+    _current->_next->_prev = newnode;
+    _current->_next = newnode;
 
-	NB++;
+    NB++;
     return newnode;
 }
 
@@ -2038,76 +2035,76 @@ a_listiter->cocktailsort(numbersorter,NULL);
 \param fswap swapfunction
 */
 template <class Dtype>
-int DL_Iter<Dtype>::cocktailsort(int (*fcmp) (Dtype, Dtype), bool (*fswap)(Dtype, Dtype))
+int DL_Iter<Dtype>::cocktailsort( int ( *fcmp ) ( Dtype, Dtype ), bool ( *fswap )( Dtype, Dtype ) )
 {
-	if (_current==0)
-		Error("cocktailsort()",NO_LIST);
-	if (NB <= 1)
-		return 0;
+    if ( _current == 0 )
+        Error( "cocktailsort()", NO_LIST );
+    if ( NB <= 1 )
+        return 0;
 
-	DL_Node<Dtype>* cursor;
-	Dtype swap;
-    
+    DL_Node<Dtype>* cursor;
+    Dtype swap;
+
     int swapResult = 0;
 
-	// boven/ondergrens setten
-	DL_Node<Dtype> *bg = TL, *bgold = TL;
-	DL_Node<Dtype> *og = HD, *ogold = HD;
+    // boven/ondergrens setten
+    DL_Node<Dtype> *bg = TL, *bgold = TL;
+    DL_Node<Dtype> *og = HD, *ogold = HD;
 
-	bool swapped = true;
+    bool swapped = true;
 
-	// while swaping is done  &  lowerborder upperborder don't touch
-	while (swapped && (og!=bg))
-	{
-		swapped = false;
+    // while swaping is done  &  lowerborder upperborder don't touch
+    while ( swapped && ( og != bg ) )
+    {
+        swapped = false;
 
-		// BUBBELSLAG  lowerborder--->> upperborder
-		cursor=og;
-		while(!(cursor == bgold))
-		{
-			// (current.next < current)?
-			if( fcmp(cursor->_next->_item, cursor->_item)==1)
-			{
-				// user function
-				if ( fswap != NULL )
-					if ( fswap(cursor->_item, cursor->_next->_item) )
-                    swapResult++;
-				// update swap-flag en upperborder
-				swapped = true;
-				bg = cursor;
-				// swap the items of the nodes
-				swap = cursor->_item;
-				cursor->_item = cursor->_next->_item;
-				cursor->_next->_item = swap;
-			}
-			cursor=cursor->_next;
-		}// end bubbelslag
-		bgold = bg;
-
-		// BRICKSLAG   lowerborder <<---upperborder
-		cursor=bg;
-		while(!(cursor == ogold))
-		{
-			// (current < current.next)?
-			if( fcmp(cursor->_item, cursor->_prev->_item)==1)
-			{
-				// user function
-				if ( fswap != NULL )
-					if (  fswap(cursor->_item, cursor->_prev->_item) )
+        // BUBBELSLAG  lowerborder--->> upperborder
+        cursor = og;
+        while( !( cursor == bgold ) )
+        {
+            // (current.next < current)?
+            if( fcmp( cursor->_next->_item, cursor->_item ) == 1 )
+            {
+                // user function
+                if ( fswap != NULL )
+                    if ( fswap( cursor->_item, cursor->_next->_item ) )
                         swapResult++;
-				// update swap-flag and lowerborder
-				swapped = true;
-				og = cursor;
-				// swap de items van de nodes
-				swap = cursor->_item;
-				cursor->_item = cursor->_prev->_item;
-				cursor->_prev->_item = swap;
-			}
-			cursor=cursor->_prev;
-		}// end brickslag
-		ogold = og;
-	}// end while(ongesorteerd)
-    
+                // update swap-flag en upperborder
+                swapped = true;
+                bg = cursor;
+                // swap the items of the nodes
+                swap = cursor->_item;
+                cursor->_item = cursor->_next->_item;
+                cursor->_next->_item = swap;
+            }
+            cursor = cursor->_next;
+        }// end bubbelslag
+        bgold = bg;
+
+        // BRICKSLAG   lowerborder <<---upperborder
+        cursor = bg;
+        while( !( cursor == ogold ) )
+        {
+            // (current < current.next)?
+            if( fcmp( cursor->_item, cursor->_prev->_item ) == 1 )
+            {
+                // user function
+                if ( fswap != NULL )
+                    if (  fswap( cursor->_item, cursor->_prev->_item ) )
+                        swapResult++;
+                // update swap-flag and lowerborder
+                swapped = true;
+                og = cursor;
+                // swap de items van de nodes
+                swap = cursor->_item;
+                cursor->_item = cursor->_prev->_item;
+                cursor->_prev->_item = swap;
+            }
+            cursor = cursor->_prev;
+        }// end brickslag
+        ogold = og;
+    }// end while(ongesorteerd)
+
     return swapResult;
 }
 
@@ -2163,66 +2160,68 @@ a_listiter->mergesort(numbersorter);
 \endcode
 */
 template <class Dtype>
-void DL_Iter<Dtype>::mergesort(int (*fcmp) (Dtype, Dtype))
+void DL_Iter<Dtype>::mergesort( int ( *fcmp ) ( Dtype, Dtype ) )
 {
-	if (_current==0)
-		Error("mergesort()",NO_LIST);
- 	mergesort_rec(fcmp, RT, NB);
+    if ( _current == 0 )
+        Error( "mergesort()", NO_LIST );
+    mergesort_rec( fcmp, RT, NB );
 }
 
 
 template <class Dtype>
-void DL_Iter<Dtype>::mergesort_rec(int (*fcmp)(Dtype,Dtype), DL_Node<Dtype> *RT1, int n1)
+void DL_Iter<Dtype>::mergesort_rec( int ( *fcmp )( Dtype, Dtype ), DL_Node<Dtype> *RT1, int n1 )
 {
-   if (n1 > 1)  //one element left then stop
-   {
-		DL_Node<Dtype>       RT2;
-	   int n2;
+    if ( n1 > 1 )  //one element left then stop
+    {
+        DL_Node<Dtype>       RT2;
+        int n2;
 
-      RT2._prev=RT1->_prev;
-      RT2._next=RT1->_next;
-      // goto middle
-      n2=n1;n1>>=1;n2-=n1;
-      for (int i=0; i <n1;i++)
-         RT2._next=RT2._next->_next;
+        RT2._prev = RT1->_prev;
+        RT2._next = RT1->_next;
+        // goto middle
+        n2 = n1;n1 >>= 1;n2 -= n1;
+        for ( int i = 0; i < n1;i++ )
+            RT2._next = RT2._next->_next;
 
-      //RT2 is at half
-      RT1->_prev->_next=&RT2;
-      RT2._prev=RT1->_prev;
-      RT1->_prev=RT2._next->_prev;
-      RT2._next->_prev->_next=RT1;
+        //RT2 is at half
+        RT1->_prev->_next = &RT2;
+        RT2._prev = RT1->_prev;
+        RT1->_prev = RT2._next->_prev;
+        RT2._next->_prev->_next = RT1;
 
-     	mergesort_rec(fcmp,RT1,n1);
-     	mergesort_rec(fcmp,&RT2,n2);
-     	mergetwo(fcmp,RT1,&RT2);
-   }
+        mergesort_rec( fcmp, RT1, n1 );
+        mergesort_rec( fcmp, &RT2, n2 );
+        mergetwo( fcmp, RT1, &RT2 );
+    }
 }
 
 template <class Dtype>
-void DL_Iter<Dtype>::mergetwo(int (*fcmp)(Dtype,Dtype), DL_Node<Dtype> *RT1,DL_Node<Dtype> *RT2)
+void DL_Iter<Dtype>::mergetwo( int ( *fcmp )( Dtype, Dtype ), DL_Node<Dtype> *RT1, DL_Node<Dtype> *RT2 )
 {
-	DL_Node<Dtype>       *c,*a,*b;
-   a=RT1->_next;b=RT2->_next;
-   c=RT1;
-   do
-   {
-      if (fcmp(a->_item , b->_item) > -1)
-      { c->_next=a;a->_prev=c;c=a;a=a->_next;}
-      else
-      { c->_next=b;b->_prev=c;c=b;b=b->_next;}
-      if (a == RT1)
-      { 	c->_next=
-          b;b->_prev=c; //connect list b to the list made sofar
-         RT1->_prev=RT2->_prev;
-         RT1->_prev->_next=RT1;
-      	break;
-      }
-      if (b == RT2)
-      { 	c->_next=a;a->_prev=c; //connect list a to the list made sofar
-      	break;
-      }
-   }
-   while (true);
+    DL_Node<Dtype>       *c, *a, *b;
+    a = RT1->_next;b = RT2->_next;
+    c = RT1;
+    do
+    {
+        if ( fcmp( a->_item , b->_item ) > -1 )
+        { c->_next = a;a->_prev = c;c = a;a = a->_next;}
+        else
+        { c->_next = b;b->_prev = c;c = b;b = b->_next;}
+        if ( a == RT1 )
+        {
+            c->_next =
+                b;b->_prev = c; //connect list b to the list made sofar
+            RT1->_prev = RT2->_prev;
+            RT1->_prev->_next = RT1;
+            break;
+        }
+        if ( b == RT2 )
+        {
+            c->_next = a;a->_prev = c; //connect list a to the list made sofar
+            break;
+        }
+    }
+    while ( true );
 }
 
 
@@ -2266,55 +2265,54 @@ void DL_Iter<Dtype>::mergetwo(int (*fcmp)(Dtype,Dtype), DL_Node<Dtype> *RT1,DL_N
 
 // constructor
 template <class Dtype>
-DL_StackIter<Dtype>::DL_StackIter(DL_List<Dtype> *newlist)
-:DL_Iter<Dtype>(newlist)  // initialiseer BaseIter
+DL_StackIter<Dtype>::DL_StackIter( DL_List<Dtype> *newlist )
+        : DL_Iter<Dtype>( newlist )  // initialiseer BaseIter
 {}
 
 
 // destructor
 template <class Dtype>
 DL_StackIter<Dtype>::~DL_StackIter()
-{
-}
+{}
 
 // plaats nieuw item op stack
 template <class Dtype>
-void DL_StackIter<Dtype>::push(Dtype newitem)
+void DL_StackIter<Dtype>::push( Dtype newitem )
 {
-	DL_Iter<Dtype>::insbegin(newitem);
+    DL_Iter<Dtype>::insbegin( newitem );
 }
 // remove current item
 template <class Dtype>
 void DL_StackIter<Dtype>::remove_all()
 {
-	DL_Iter<Dtype>::remove_all();
+    DL_Iter<Dtype>::remove_all();
 }
 
 // is stack leeg?
 template <class Dtype>
 bool DL_StackIter<Dtype>::empty()
 {
-	return DL_Iter<Dtype>::empty();
+    return DL_Iter<Dtype>::empty();
 }
 
 // aantal items op stack
 template <class Dtype>
 int  DL_StackIter<Dtype>::count()
 {
-	return DL_Iter<Dtype>::count();
+    return DL_Iter<Dtype>::count();
 }
 
 // haal bovenste item van stack
 template <class Dtype>
 Dtype DL_StackIter<Dtype>::pop()
 {
-	if(DL_Iter<Dtype>::empty())
-		this->Error("pop()",EMPTY);
+    if( DL_Iter<Dtype>::empty() )
+        this->Error( "pop()", EMPTY );
 
-	DL_Iter<Dtype>::tohead();
-	Dtype temp = DL_Iter<Dtype>::item();
-	DL_Iter<Dtype>::removehead();
-	return temp;
+    DL_Iter<Dtype>::tohead();
+    Dtype temp = DL_Iter<Dtype>::item();
+    DL_Iter<Dtype>::removehead();
+    return temp;
 }
 
 //=======================================================================
@@ -2331,8 +2329,8 @@ Dtype DL_StackIter<Dtype>::pop()
 
 // constructor
 template <class DType>
-DL_SortIter<DType>::DL_SortIter(DL_List<DType>* nw_list, int (*new_func)(DType ,DType ))
-:DL_Iter<DType>(nw_list), comparef(new_func)
+DL_SortIter<DType>::DL_SortIter( DL_List<DType>* nw_list, int ( *new_func )( DType , DType ) )
+        : DL_Iter<DType>( nw_list ), comparef( new_func )
 {}
 
 // destructor
@@ -2342,37 +2340,37 @@ DL_SortIter<DType>::~DL_SortIter()
 
 // general function to insert item
 template <class DType>
-void DL_SortIter<DType>::insert(DType new_item)
+void DL_SortIter<DType>::insert( DType new_item )
 {
-	DL_Node<DType>* cursor=this->_current; //can be 0 if empty  //node is a temporary cursor
+    DL_Node<DType>* cursor = this->_current; //can be 0 if empty  //node is a temporary cursor
 
-	// if list is empty directly insert
-	if (DL_Iter<DType>::empty())
-	{
-		DL_Iter<DType>::insend(new_item);
-	}
-	else
-	{
-		// put new item left of item
-		DL_Iter<DType>::tohead();
-		while(!DL_Iter<DType>::hitroot())
-		{
-			if (!(*comparef)(DL_Iter<DType>::item(), new_item))
-				break;
-			DL_Iter<DType>::next();
-		}
+    // if list is empty directly insert
+    if ( DL_Iter<DType>::empty() )
+    {
+        DL_Iter<DType>::insend( new_item );
+    }
+    else
+    {
+        // put new item left of item
+        DL_Iter<DType>::tohead();
+        while( !DL_Iter<DType>::hitroot() )
+        {
+            if ( !( *comparef )( DL_Iter<DType>::item(), new_item ) )
+                break;
+            DL_Iter<DType>::next();
+        }
 
-		//if at root
-		DL_Iter<DType>::insbefore(new_item);
-	}
+        //if at root
+        DL_Iter<DType>::insbefore( new_item );
+    }
 
-	this->_current=cursor; //set to old cursor position
+    this->_current = cursor; //set to old cursor position
 }
 
 template <class DType>
 void DL_SortIter<DType>::sortitererror()
 {
- 		this->Error("sortiter()",NOT_ALLOW);
+    this->Error( "sortiter()", NOT_ALLOW );
 }
 
 

@@ -464,7 +464,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
         // WARNING: problems with kbool if angle = 0 (in fact when angle < 200):
         // bad filled polygon on some cases, when pads are on a same vertical line
-        // this seems a bug in kbool polygon
+        // this seems a bug in kbool polygon (exists in 1.9 kbool version)
         // angle = 450 (45.0 degrees orientation) seems work fine.
         // angle = 0 with thermal shapes without angle < 90 deg seems works fine also
         angle = 0;

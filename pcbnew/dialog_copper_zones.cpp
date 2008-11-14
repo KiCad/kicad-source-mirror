@@ -70,8 +70,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     m_GridCtrl->SetLabel( msg );
 
     msg = ReturnStringFromValue( g_UnitMetric,
-        m_Zone_Setting->m_ZoneClearance,
-        m_Parent->m_InternalUnits );
+                                 m_Zone_Setting->m_ZoneClearance,
+                                 m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     if( g_Zone_45_Only )
@@ -85,8 +85,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     for( unsigned ii = 0; ii < 4; ii++ )
     {
         msg = ReturnStringFromValue( g_UnitMetric,
-            GridList[ii],
-            m_Parent->m_InternalUnits );
+                                     GridList[ii],
+                                     m_Parent->m_InternalUnits );
         m_GridCtrl->SetString( ii, msg );
         if( grid_routing == GridList[ii] )
             selection = ii;
@@ -98,8 +98,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     m_GridCtrl->SetSelection( selection );
 
     msg = ReturnStringFromValue( g_UnitMetric,
-        m_Zone_Setting->m_ZoneClearance,
-        m_Parent->m_InternalUnits );
+                                 m_Zone_Setting->m_ZoneClearance,
+                                 m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     switch( m_Zone_Setting->m_Zone_Pad_Options )
@@ -135,11 +135,11 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     AddUnitSymbol( *m_AntipadSizeText, g_UnitMetric );
     AddUnitSymbol( *m_CopperBridgeWidthText, g_UnitMetric );
     PutValueInLocalUnits( *m_AntipadSizeValue,
-        m_Zone_Setting->m_ThermalReliefGapValue,
-        PCB_INTERNAL_UNIT );
+                          m_Zone_Setting->m_ThermalReliefGapValue,
+                          PCB_INTERNAL_UNIT );
     PutValueInLocalUnits( *m_CopperWidthValue,
-        m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
-        PCB_INTERNAL_UNIT );
+                          m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
+                          PCB_INTERNAL_UNIT );
 
     switch( m_Zone_Setting->m_Zone_HatchingStyle )
     {
@@ -189,8 +189,10 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     m_NetNameFilter->SetValue( NetNameFilter );
     wxArrayString ListNetName;
-    m_Parent->m_Pcb->ReturnSortedNetnamesList( ListNetName,
-        m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+    m_Parent->m_Pcb->ReturnSortedNetnamesList(
+        ListNetName,
+        m_NetSorting ==
+        0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
 
     if( m_NetSorting != 0 )
     {
@@ -287,7 +289,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if( m_Parent->m_Parent->m_EDA_Config )
     {
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-            (long) m_Zone_Setting->m_Zone_HatchingStyle );
+                                                 (long) m_Zone_Setting->m_Zone_HatchingStyle );
     }
 
     switch( m_GridCtrl->GetSelection() )
@@ -313,7 +315,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         m_Zone_Setting->m_GridFillValue = 0;
 #if 0   // I hope this feature works fine ( JP Charras)
         DisplayInfo( this, wxT(
-                "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production" ) );
+                        "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production" ) );
 #endif
         break;
     }
@@ -329,15 +331,17 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_Zone_Setting->m_FilledAreasShowMode = m_ShowFilledAreasInSketchOpt->IsChecked() ? 1 : 0;
 
     m_Zone_Setting->m_ThermalReliefGapValue = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
-        PCB_INTERNAL_UNIT );
+                                                                       PCB_INTERNAL_UNIT );
     m_Zone_Setting->m_ThermalReliefCopperBridgeValue = ReturnValueFromTextCtrl(
         *m_CopperWidthValue,
         PCB_INTERNAL_UNIT );
 
     m_Parent->m_Parent->m_EDA_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-        (long) m_Zone_Setting->m_ThermalReliefGapValue );
-    m_Parent->m_Parent->m_EDA_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-        (long) m_Zone_Setting->m_ThermalReliefCopperBridgeValue );
+                                             (long) m_Zone_Setting->m_ThermalReliefGapValue );
+    m_Parent->m_Parent->m_EDA_Config->Write(
+        ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+        (long) m_Zone_Setting->
+        m_ThermalReliefCopperBridgeValue );
 
     // If we use only exportable to others zones parameters, exit here:
     if( aUseExportableSetupOnly )
@@ -388,8 +392,10 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
     wxArrayString ListNetName;
 
     m_NetSorting = m_NetSortingOption->GetSelection();
-    m_Parent->m_Pcb->ReturnSortedNetnamesList( ListNetName,
-        m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+    m_Parent->m_Pcb->ReturnSortedNetnamesList(
+        ListNetName,
+        m_NetSorting ==
+        0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
     if( m_NetSorting != 0 )
     {
         wxString Filter = m_NetNameFilter->GetValue();
@@ -408,7 +414,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
     {
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
         m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_FILTER_STRING_KEY,
-            m_NetNameFilter->GetValue() );
+                                                m_NetNameFilter->GetValue() );
     }
 
     // Select and isplay current zone net name in listbox:
@@ -448,12 +454,14 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     if( !AcceptOptions( true, true ) )
         return;
 
-    // Export to others zones:
+    // Export settings ( but layer ) to others zones:
     BOARD* pcb = m_Parent->m_Pcb;
     for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = pcb->GetArea( ii );
+        int             zone_layer = zone->GetLayer();
         m_Zone_Setting->ExportSetting( *zone );
+        zone->SetLayer( zone_layer );
         m_Parent->GetScreen()->SetModify();
     }
 }
