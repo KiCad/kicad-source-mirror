@@ -132,9 +132,9 @@ public:
      */
     bool IsImmediate() const { return index == -1; }
 
-    int GetIndex() const
+    unsigned GetIndex() const
     {
-        return index;
+        return (unsigned) index;
     }
 
     void SetIndex( int aIndex )
@@ -235,6 +235,8 @@ typedef std::pair<APERTURE_MACRO_SET::iterator, bool> APERTURE_MACRO_SET_PAIR;
  */
 class D_CODE
 {
+    friend class DCODE_PARAM;
+
     APERTURE_MACRO* m_Macro;    ///< no ownership, points to GERBER.m_aperture_macros element
 
     /**
@@ -288,8 +290,17 @@ inline double DCODE_PARAM::GetValue( const D_CODE* aDcode ) const
         return value;
     else
     {
-        // get the parameter from aDcode
-        return 0.0;
+        // the first one was numbered 1, not zero, as in $1, see page 19 of spec.
+        unsigned ndx = GetIndex() - 1;
+
+        // get the parameter from the aDcode
+        if( ndx < aDcode->m_am_params.size() )
+            return aDcode->m_am_params[ndx].GetValue( NULL );
+        else
+        {
+            wxASSERT( GetIndex()-1 < aDcode->m_am_params.size() );
+            return 0.0;
+        }
     }
 }
 

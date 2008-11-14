@@ -967,11 +967,11 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 if( start.x == end.x )
                                 {
                                     size.x = width;
-                                    size.y = ABS( end.y - start.y );
+                                    size.y = ABS( end.y - start.y ) + 1;
                                 }
                                 else
                                 {
-                                    size.x = ABS( end.x - start.x );
+                                    size.x = ABS( end.x - start.x ) + 1;
                                     size.y = width;
                                 }
 
