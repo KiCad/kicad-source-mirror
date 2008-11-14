@@ -536,7 +536,7 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 /*******************************************************************/
 {
-    APERTURE_MACRO  am;
+    APERTURE_MACRO am;
 
     // read macro name
     while( *text )
@@ -555,7 +555,9 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
 
     for(;;)
     {
-        AM_PRIMITIVE    prim;
+        am.primitives.push_back( AM_PRIMITIVE() );
+
+        AM_PRIMITIVE& prim = am.primitives.back();
 
         if( *text == '*' )
             ++text;
@@ -613,7 +615,9 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
 
         for( int i=0;  i<paramCount && *text && *text!='*';  ++i )
         {
-            DCODE_PARAM param;      // construct it on each loop iteration
+            prim.params.push_back( DCODE_PARAM() );
+
+            DCODE_PARAM& param = prim.params.back();
 
             if( *text == '$' )
             {
@@ -622,8 +626,6 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
             }
             else
                 param.SetValue( ReadDouble( text ) );
-
-            prim.params.push_back( param );
         }
 
         // there are more parameters to read if this is an AMP_OUTLINE
@@ -637,7 +639,9 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
 
             for( int i=0; i<paramCount && *text && *text!='*';  ++i )
             {
-                DCODE_PARAM param;      // construct it on each loop
+                prim.params.push_back( DCODE_PARAM() );
+
+                DCODE_PARAM& param = prim.params.back();
 
                 if( *text == '$' )
                 {
@@ -647,11 +651,8 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
                 else
                     param.SetValue( ReadDouble( text ) );
 
-                prim.params.push_back( param );
             }
         }
-
-        am.primitives.push_back( prim );
     }
 
     m_aperture_macros.insert( am );
