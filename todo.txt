@@ -25,6 +25,14 @@ understanding by new developers.
 Need to do this using DialogBlocks.
 
 
+2008-Nov-14 Assigned To:
+asked by: Dick Hollenbeck
+================================================================================
+discuss best option to handle the isDark support in rs274d.cpp which is an erasure
+of any positive exposure under the current G or D code.  I'm thinking a flag
+bit might be best in the TRACK, but we should discuss if there is a better way.
+
+
 
 2008-Feb-8 Assigned To: Jean-Pierre, per his email
 asked by: Dick Hollenbeck
