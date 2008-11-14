@@ -5,6 +5,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Nov-14 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++gerview
+  + Added support for displaying most aperture macros embedded in a RS274X compatible file.
+    Cleanup of rs274d.cpp and added the beginning of the isDark support, which we
+    need to discuss. GERBER::m_ImageNegative can toggle during the course of reading
+    a rs274x file and sometimes this means erasing things.
+  + Tested pcbnew's gerber plotting, still working.  Done
+    with aperture macros for now, but we need to handle the isDark support to
+    top it off after discussion.
+
+
 2008-Nov-8 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew
@@ -14,7 +27,6 @@ email address.
     For shapes that have angle < 90 degrees between 2 adjacent segments,
     under certains circumstances kbool drops some holes and creates a bad filled area.
     (see zones_convert_brd_items_to_polygons.cpp)
-
 
 
 2008-Nov-8 UPDATE Dick Hollenbeck <dick@softplc.com>
