@@ -118,7 +118,7 @@ public:
         value(0.0)
     {}
 
-    double  GetValue( const D_CODE* aDcode );
+    double  GetValue( const D_CODE* aDcode ) const;
     void SetValue( double aValue )
     {
         value = aValue;
@@ -130,9 +130,9 @@ public:
      * tests if this DCODE_PARAM holds an immediate parameter or is a pointer into
      * a parameter held by an owning D_CODE.
      */
-    bool IsImmediate() { return index == -1; }
+    bool IsImmediate() const { return index == -1; }
 
-    int GetIndex()
+    int GetIndex() const
     {
         return index;
     }
@@ -143,8 +143,8 @@ public:
     }
 
 private:
-    int     index;      ///< if -1, then \a value field is an immediate value, else this is an index into a D_CODE parameter.
-    double  value;      ///< if immediate then the value, else an integer index into D_CODE.m_am_params.
+    int     index;      ///< if -1, then \a value field is an immediate value, else this is an index into parent's D_CODE.m_am_params.
+    double  value;      ///< if IsImmediate()==true then the value, else not used.
 };
 
 
@@ -185,7 +185,7 @@ struct AM_PRIMITIVE
      * returns the first parameter in integer form.  Some but not all primitives
      * use the first parameter as an exposure control.
      */
-    int GetExposure()
+    int GetExposure() const
     {
         wxASSERT( params.size() && params[0].IsImmediate() );    // we have no D_CODE* for GetValue()
         return (int) params[0].GetValue( NULL );
@@ -282,7 +282,7 @@ public:
 };
 
 
-inline double DCODE_PARAM::GetValue( const D_CODE* aDcode )
+inline double DCODE_PARAM::GetValue( const D_CODE* aDcode ) const
 {
     if( IsImmediate() )
         return value;
