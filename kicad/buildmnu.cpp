@@ -127,8 +127,8 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // Open project
     wxMenuItem *item = new wxMenuItem(m_FilesMenu,
                                       ID_LOAD_PROJECT,
-                                      _("&Open Project"),
-                                      _("Select an existing project") );
+                                      _("&Open"),
+                                      _("Open an existing project") );
     item->SetBitmap(open_project_xpm);
     m_FilesMenu->Append(item);
 
@@ -136,8 +136,8 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // New project
     item = new wxMenuItem(m_FilesMenu,
                           ID_NEW_PROJECT,
-                          _("&New Project"),
-                          _("Create new project") );
+                          _("&New"),
+                          _("Start a new project") );
     item->SetBitmap(new_project_xpm);
     m_FilesMenu->Append(item);
 
@@ -145,7 +145,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // Save project
     item = new wxMenuItem(m_FilesMenu,
                           ID_SAVE_PROJECT,
-                          _("&Save Project"),
+                          _("&Save"),
                           _("Save current project") );
     item->SetBitmap(save_project_xpm);
     m_FilesMenu->Append(item);
@@ -158,7 +158,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // Archive project
     item = new wxMenuItem(m_FilesMenu,
                           ID_SAVE_AND_ZIP_FILES,
-                          _("&Archive project"),
+                          _("&Archive"),
                           _("Archive project files in zip archive") );
     item->SetBitmap(zip_xpm);
     m_FilesMenu->Append(item);
@@ -167,7 +167,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // Unarchive project
     item = new wxMenuItem(m_FilesMenu,
                           ID_READ_ZIP_ARCHIVE,
-                          _("&Unarchive project"),
+                          _("&Unarchive"),
                           _("Unarchive project files from zip file") );
     item->SetBitmap(unzip_xpm);
     m_FilesMenu->Append(item);
@@ -181,7 +181,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     item = new wxMenuItem(m_FilesMenu,
                           ID_EXIT,
                           _("E&xit"),
-                          _("Quit KiCad") );
+                          _("Quit kicad") );
     item->SetBitmap(exit_xpm);
     m_FilesMenu->Append(item);
 
@@ -311,14 +311,14 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // About Kicad
     item = new wxMenuItem(helpMenu ,
                           ID_KICAD_ABOUT,
-                          _("&About Kicad"),
+                          _("&About"),
                           _("About kicad project manager"));
     item->SetBitmap(info_xpm);
     helpMenu->Append(item);
 
 
     // Append menus to menuBar
-    menuBar->Append(m_FilesMenu, _("&Projects"));
+    menuBar->Append(m_FilesMenu, _("&File"));
     menuBar->Append(browseMenu, _("&Browse"));
     menuBar->Append(PreferencesMenu, _("&Preferences"));
     menuBar->Append(helpMenu, _("&Help"));
@@ -380,7 +380,7 @@ void WinEDA_MainFrame::RecreateBaseHToolbar()
                       FALSE,
                       -1, -1,
                       (wxObject *) NULL,
-                      _("Create new project"));          // Tooltip
+                      _("Start a new project"));          // Tooltip
 
 
   // Load project

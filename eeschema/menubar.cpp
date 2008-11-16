@@ -72,24 +72,24 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         // Print and Plot section:
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_GEN_PRINT,
-                              _( "P&rint" ), _( "Print on current printer" ) );
+                              _( "P&rint" ), _( "Print schematic" ) );
         item->SetBitmap( print_button );
         m_FilesMenu->Append( item );
 
         /* Plot Submenu */
         wxMenu* choice_plot_fmt = new wxMenu;
         item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_PS,
-                              _( "Plot PostScript" ), _( "Plotting in PostScript format" ) );
+                              _( "Plot PostScript" ), _( "Plot schematic in PostScript format" ) );
         item->SetBitmap( plot_PS_xpm );
         choice_plot_fmt->Append( item );
 
         item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_HPGL,
-                              _( "Plot HPGL" ), _( "Plotting in HPGL format" ) );
+                              _( "Plot HPGL" ), _( "Plot schematic in HPGL format" ) );
         item->SetBitmap( plot_HPG_xpm );
         choice_plot_fmt->Append( item );
 
         item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_SVG,
-                              _( "Plot SVG" ), _( "Plotting in SVG format" ) );
+                              _( "Plot SVG" ), _( "Plot schematic in SVG format" ) );
         item->SetBitmap( plot_xpm );
         choice_plot_fmt->Append( item );
 
@@ -103,7 +103,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU( m_FilesMenu, choice_plot_fmt,
                                             ID_GEN_PLOT, _( "&Plot" ),
-                                            _( "Plot HPGL, PostScript, SVG" ), plot_xpm );
+                                            _( "Plot schematic in HPGL, PostScript or SVG format" ), plot_xpm );
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_EXIT, _( "E&xit" ), _( "Quit Eeschema" ) );
@@ -281,7 +281,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
        item = new wxMenuItem(
             placeMenu,
             ID_JUNCTION_BUTT,
-            _( "Junction" ),
+            _( "Place Junction" ),
             _( "Place junction" ),
             wxITEM_NORMAL
             );
@@ -399,7 +399,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         helpMenu->Append( item );
 
         item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT,
-                              _( "&About eeschema" ), _( "About eeschema schematic designer" ) );
+                              _( "&About" ), _( "About eeschema schematic designer" ) );
         item->SetBitmap( info_xpm );
         helpMenu->Append( item );
 

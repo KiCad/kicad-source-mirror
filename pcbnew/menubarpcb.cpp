@@ -88,7 +88,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         // Add print menu
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem(m_FilesMenu, ID_GEN_PRINT,
-                    _("P&rint"), _("Print on current printer"));
+                    _("P&rint"), _("Print pcb board"));
         item->SetBitmap(print_button);
         m_FilesMenu->Append(item);
 

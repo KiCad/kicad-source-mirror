@@ -85,7 +85,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
         m_FilesMenu->AppendSeparator();
 
-        m_FilesMenu->Append( ID_GEN_PRINT, _( "P&rint" ), _( "Print on current printer" ) );
+        m_FilesMenu->Append( ID_GEN_PRINT, _( "P&rint" ), _( "Print gerber" ) );
         m_FilesMenu->Append( ID_GEN_PLOT,
                             _( "Plot" ), _( "Plotting in various formats" ) );
 

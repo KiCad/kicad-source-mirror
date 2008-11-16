@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-10 19:54+0100\n"
-"PO-Revision-Date: 2008-11-10 20:54+0100\n"
+"POT-Creation-Date: 2008-11-16 11:10+0100\n"
+"PO-Revision-Date: 2008-11-16 11:10+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -30,9 +30,8 @@ msgstr "Boor bestand"
 #: pcbnew/gendrill.cpp:810
 #: pcbnew/xchgmod.cpp:637
 #: pcbnew/plotps.cpp:51
-#, fuzzy
 msgid "Unable to create file "
-msgstr "Kan bestand niet creeren"
+msgstr "Kan bestand niet creëren "
 
 #: pcbnew/gendrill.cpp:378
 #: pcbnew/dialog_gendrill.cpp:184
@@ -41,9 +40,8 @@ msgstr "2:3"
 
 #: pcbnew/gendrill.cpp:379
 #: pcbnew/dialog_gendrill.cpp:185
-#, fuzzy
 msgid "2:4"
-msgstr "Onbekend MIME type voor DOC Bestand [%s] (%s)"
+msgstr "2:4"
 
 #: pcbnew/gendrill.cpp:384
 msgid "3:2"
@@ -67,9 +65,8 @@ msgstr "Boor "
 
 #: pcbnew/controle.cpp:172
 #: pcbnew/modedit.cpp:76
-#, fuzzy
 msgid "Selection Clarification"
-msgstr "Selectie Clarification"
+msgstr "Selection Clarification"
 
 #: pcbnew/initpcb.cpp:125
 msgid "Current Board will be lost ?"
@@ -137,9 +134,8 @@ msgstr "is niet toegestaan op Koper lagen"
 
 #: pcbnew/class_zone.cpp:782
 #: pcbnew/class_board_item.cpp:139
-#, fuzzy
 msgid "Zone Outline"
-msgstr "Zone Omtrek"
+msgstr "Zone Outline"
 
 #: pcbnew/class_zone.cpp:786
 #: pcbnew/class_board_item.cpp:144
@@ -166,9 +162,8 @@ msgid "NetName"
 msgstr "NetNaam"
 
 #: pcbnew/class_zone.cpp:814
-#, fuzzy
 msgid "Non Copper Zone"
-msgstr "Geen Component gevonden"
+msgstr "Geen Koper Zone"
 
 #: pcbnew/class_zone.cpp:819
 #: pcbnew/class_track.cpp:874
@@ -192,24 +187,20 @@ msgid "Corners"
 msgstr "Hoeken"
 
 #: pcbnew/class_zone.cpp:833
-#, fuzzy
 msgid "No Grid"
-msgstr "Raster Tonen"
+msgstr "Geen Raster"
 
 #: pcbnew/class_zone.cpp:834
-#, fuzzy
 msgid "Fill Grid"
-msgstr "Gevuld"
+msgstr "Fill Grid"
 
 #: pcbnew/class_zone.cpp:839
-#, fuzzy
 msgid "Hatch lines"
-msgstr "Streep lijnen"
+msgstr "Hatch lines"
 
 #: pcbnew/class_zone.cpp:845
-#, fuzzy
 msgid "Corners in DrawList"
-msgstr "Hoeken in DrawLijst"
+msgstr "Corners in DrawList"
 
 #: pcbnew/plot_rtn.cpp:215
 #, c-format
@@ -221,27 +212,27 @@ msgstr ""
 " %s's \"referentie\" tekst."
 
 #: pcbnew/plot_rtn.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
 " %s's \"value\" text."
 msgstr ""
-"Jouw BORD heeft een slecht number of %u voor module\n"
-" %s's \"waarde\" tekst."
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"value\" text."
 
 #: pcbnew/plot_rtn.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
 " %s's \"module text\" text of %s."
 msgstr ""
-"Jouw BORD heeft een slecht laag number of %u voor module\n"
-" %s's \"module tekst\" tekst of %s."
+"Your BOARD has a bad layer number of %u for module\n"
+" %s's \"module text\" text of %s."
 
 #: pcbnew/editrack-part2.cpp:32
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s   Vias Size : %s"
-msgstr "Spoort Breedte: %s   Vias Grote : %s"
+msgstr "Track Width: %s   Vias Size : %s"
 
 #: pcbnew/editrack-part2.cpp:136
 msgid "Drc error, cancelled"
@@ -254,9 +245,8 @@ msgid "Area: DRC outline error"
 msgstr "Oppervlakte: DRC omlijnings fout"
 
 #: pcbnew/zones_by_polygon.cpp:604
-#, fuzzy
 msgid "DRC error: this start point is inside or too close an other area"
-msgstr "DRC fout: dit startpunt is te dicht of in een oppervlakte"
+msgstr "DRC error: this start point is inside or too close an other area"
 
 #: pcbnew/zones_by_polygon.cpp:666
 msgid "DRC error: closing this area creates a drc error with an other area"
@@ -429,7 +419,7 @@ msgstr "Module [%s] niet gevonden"
 #: pcbnew/librairi.cpp:308
 #: pcbnew/librairi.cpp:454
 #: pcbnew/librairi.cpp:604
-#: pcbnew/librairi.cpp:808
+#: pcbnew/librairi.cpp:810
 #: pcbnew/gen_modules_placefile.cpp:145
 #: pcbnew/gen_modules_placefile.cpp:161
 #: pcbnew/gen_modules_placefile.cpp:330
@@ -507,22 +497,26 @@ msgid "Module Reference:"
 msgstr "Module Referentie:"
 
 #: pcbnew/librairi.cpp:723
-msgid "Create module"
-msgstr "Creeer module"
+msgid "Module Creation:"
+msgstr "Module Creatie:"
 
-#: pcbnew/librairi.cpp:775
+#: pcbnew/librairi.cpp:725
+msgid "No reference, aborted"
+msgstr "Geen referentie, Afgebroken"
+
+#: pcbnew/librairi.cpp:777
 msgid "Active Lib:"
 msgstr "Actieve Bibliotheek:"
 
-#: pcbnew/librairi.cpp:786
+#: pcbnew/librairi.cpp:788
 msgid "Module Editor (lib: "
 msgstr "Module Editor (bib: "
 
-#: pcbnew/librairi.cpp:801
+#: pcbnew/librairi.cpp:803
 msgid "Library exists "
 msgstr "Bibliotheek bestaat"
 
-#: pcbnew/librairi.cpp:816
+#: pcbnew/librairi.cpp:818
 msgid "Create error "
 msgstr "Creëer fout"
 
@@ -835,12 +829,10 @@ msgid "Track Filter"
 msgstr "Spoor Filter"
 
 #: pcbnew/dialog_initpcb.cpp:148
-#, fuzzy
 msgid "Include AutoRouted Tracks"
-msgstr "Autogeroute Sporen Inbegrepen"
+msgstr "Autogeroute Sporen Inbegrijpen"
 
 #: pcbnew/dialog_initpcb.cpp:152
-#, fuzzy
 msgid "Include Locked Tracks"
 msgstr "Vergrendelde Sporen Inbegrijpen"
 
@@ -960,14 +952,12 @@ msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Beginwaarde"
 
 #: pcbnew/editpads.cpp:394
-#, fuzzy
 msgid "Incorrect value for pad offset"
-msgstr "Onjuist pad beginwaarde"
+msgstr "Beginwaarde pad onjuist"
 
 #: pcbnew/editpads.cpp:491
-#, fuzzy
 msgid "Unknown netname, no change"
-msgstr "Onbekende netnaam, geen verandering"
+msgstr "Unknown netname, no change"
 
 #: pcbnew/automove.cpp:207
 #: pcbnew/xchgmod.cpp:612
@@ -979,9 +969,8 @@ msgid "Move Modules ?"
 msgstr "Verplaats Modules?"
 
 #: pcbnew/automove.cpp:220
-#, fuzzy
 msgid "Autoplace modules: No board edges detected. Unable to place modules"
-msgstr "Autoplaats modules: Geen bord hoeken aangetroffen. Kan modules niet plaatsen."
+msgstr "Autoplace modules: No board edges detected. Unable to place modules"
 
 #: pcbnew/ioascii.cpp:168
 msgid "Error: Unexpected end of file !"
@@ -998,23 +987,20 @@ msgid "No Change"
 msgstr "Geen Verandering"
 
 #: pcbnew/swap_layers.cpp:269
-#, fuzzy
 msgid "Deselect this layer to select the No Change state"
-msgstr "Deselecteer deze laag om de Geen verandering staat te selecteren"
+msgstr "Deselect this layer to select the No Change state"
 
 #: pcbnew/gen_modules_placefile.cpp:131
 msgid "No Modules for Automated Placement"
 msgstr "Geen Modules voor Automatisch Plaatsen"
 
 #: pcbnew/gen_modules_placefile.cpp:173
-#, fuzzy
 msgid "Component side place file:"
-msgstr "Component zijde plaats bestand:"
+msgstr "Component side place file:"
 
 #: pcbnew/gen_modules_placefile.cpp:176
-#, fuzzy
 msgid "Copper side place file:"
-msgstr "Koper zijde plaats bestand:"
+msgstr "Copper side place file:"
 
 #: pcbnew/gen_modules_placefile.cpp:179
 msgid "Module count"
@@ -1033,14 +1019,12 @@ msgid "Unable to find data file "
 msgstr "Kan data bestand niet vinden"
 
 #: pcbnew/router.cpp:572
-#, fuzzy
 msgid "Reading autorouter data file "
-msgstr "Lezen autorouter data bestand "
+msgstr "Reading autorouter data file "
 
 #: pcbnew/find.cpp:114
-#, fuzzy
 msgid "Marker found"
-msgstr "Marker gevonden"
+msgstr "Marker found"
 
 #: pcbnew/find.cpp:116
 #, c-format
@@ -1190,7 +1174,7 @@ msgid "Local Ratsnest"
 msgstr "Lokaal Ratsnest"
 
 #: pcbnew/edit.cpp:579
-#: pcbnew/modedit.cpp:427
+#: pcbnew/modedit.cpp:428
 #: eeschema/schedit.cpp:366
 #: eeschema/libframe.cpp:577
 msgid "Delete item"
@@ -1275,9 +1259,8 @@ msgid "decimal format"
 msgstr "decimaal formaat"
 
 #: pcbnew/dialog_gendrill.cpp:174
-#, fuzzy
 msgid "suppress leading zeros"
-msgstr "Onderdruk overtollige nullen"
+msgstr "suppress leading zeros"
 
 #: pcbnew/dialog_gendrill.cpp:175
 msgid "suppress trailing zeros"
@@ -1308,9 +1291,8 @@ msgid "absolute"
 msgstr "absoluut"
 
 #: pcbnew/dialog_gendrill.cpp:194
-#, fuzzy
 msgid "auxiliary axis"
-msgstr "Aanvullende as"
+msgstr "auxiliary axis"
 
 #: pcbnew/dialog_gendrill.cpp:195
 msgid "Drill Origin:"
@@ -1384,9 +1366,8 @@ msgid "minimal header"
 msgstr "minimale header"
 
 #: pcbnew/dialog_gendrill.cpp:250
-#, fuzzy
 msgid "If checked, the excellon header is minimal"
-msgstr "Als aangevinkt, de excellon header is dan minimaal"
+msgstr "If checked, the excellon header is minimal"
 
 #: pcbnew/dialog_gendrill.cpp:256
 msgid "Info:"
@@ -1397,19 +1378,16 @@ msgid "Default Vias Drill:"
 msgstr "Standaard Vias Boor:"
 
 #: pcbnew/dialog_gendrill.cpp:264
-#, fuzzy
 msgid "Via Drill Value"
 msgstr "Via Boor Waarde"
 
 #: pcbnew/dialog_gendrill.cpp:267
-#, fuzzy
 msgid "Micro Vias Drill:"
-msgstr "Micro Vias Boor:"
+msgstr "Micro Via Boor:"
 
 #: pcbnew/dialog_gendrill.cpp:271
-#, fuzzy
 msgid "Micro Via Drill Value"
-msgstr "Micro Via Boor Waarde"
+msgstr "Micro Via Boor Dikte"
 
 #: pcbnew/dialog_gendrill.cpp:274
 msgid "Holes Count:"
@@ -1420,36 +1398,32 @@ msgid "Pads:"
 msgstr "Pads:"
 
 #: pcbnew/dialog_gendrill.cpp:281
-#, fuzzy
 msgid "Through Vias:"
-msgstr "Er doorheen Vias:"
+msgstr "Doorheen Vias:"
 
 #: pcbnew/dialog_gendrill.cpp:284
 #: pcbnew/dialog_track_options.cpp:223
-#, fuzzy
 msgid "Micro Vias:"
 msgstr "Micro Vias:"
 
 #: pcbnew/dialog_gendrill.cpp:287
-#, fuzzy
 msgid "Buried Vias:"
 msgstr "Verborgen Vias:"
 
 #: pcbnew/dialog_copper_zones.cpp:66
-#, fuzzy
 msgid "Zone clearance value:"
-msgstr "Zone tussenruimte waarde:"
+msgstr "Zone tussenruimte:"
 
 #: pcbnew/dialog_copper_zones.cpp:69
 msgid "Grid :"
 msgstr "Raster :"
 
-#: pcbnew/dialog_copper_zones.cpp:350
+#: pcbnew/dialog_copper_zones.cpp:354
 #: pcbnew/zones_non_copper_type_functions.cpp:152
 msgid "Error : you must choose a layer"
 msgstr "Fout: u moet een laag selecteren"
 
-#: pcbnew/dialog_copper_zones.cpp:362
+#: pcbnew/dialog_copper_zones.cpp:366
 msgid "Error : you must choose a net name"
 msgstr "Fout: Je moet een netnaam kiezen"
 
@@ -1503,29 +1477,25 @@ msgid "*"
 msgstr "*"
 
 #: pcbnew/dialog_orient_footprints.cpp:160
-#, fuzzy
 msgid "Filter to select footprints by reference"
 msgstr "Filter de geselecteerde voetprinten bij referentie"
 
 #: pcbnew/dialog_orient_footprints.cpp:165
-#, fuzzy
 msgid "Include Locked Footprints"
-msgstr "Selecteer en Verplaats Voetprint"
+msgstr "Vergrendelde Voetprinten Inbegrijpen"
 
 #: pcbnew/dialog_orient_footprints.cpp:168
-#, fuzzy
 msgid "Force locked footprints to be modified"
 msgstr "Forceer vergrendelde voetprinten voor wijziging"
 
 #: pcbnew/dialog_orient_footprints.cpp:255
-#, fuzzy, c-format
+#, c-format
 msgid "Ok to set footprints orientation to %g degrees ?"
 msgstr "Ok om voetprinten orientatie in te stellen naar %g graden ?"
 
 #: pcbnew/dialog_orient_footprints.cpp:289
-#, fuzzy
 msgid "Bad value for footprints orientation"
-msgstr "Voetprint documentatie"
+msgstr "Foutieve waarde voor voetprint orientatie"
 
 #: pcbnew/pcbplot.cpp:149
 #: pcbnew/pcbplot.cpp:281
@@ -1538,16 +1508,14 @@ msgid "Plot Format"
 msgstr "Plot Formaat"
 
 #: pcbnew/pcbplot.cpp:214
-#, fuzzy
 msgid "HPGL Options:"
-msgstr "Pad Opties:"
+msgstr "HPGL Opties:"
 
 #: pcbnew/pcbplot.cpp:218
 msgid "Pen Size"
 msgstr "Pen grote"
 
 #: pcbnew/pcbplot.cpp:223
-#, fuzzy
 msgid "Pen Speed (cm/s)"
 msgstr "Pen Snelheid (cm/s)"
 
@@ -1556,19 +1524,16 @@ msgid "Set pen speed in cm/s"
 msgstr "Zet pen snelheid in cm/s"
 
 #: pcbnew/pcbplot.cpp:229
-#, fuzzy
 msgid "Pen ovr"
 msgstr "Pen ovr"
 
 #: pcbnew/pcbplot.cpp:233
-#, fuzzy
 msgid "Set plot overlay for filling"
 msgstr "Zet plot bedekking voor vulling"
 
 #: pcbnew/pcbplot.cpp:235
-#, fuzzy
 msgid "Lines Width"
-msgstr "Lijnen breedte"
+msgstr "Lijn breedte"
 
 #: pcbnew/pcbplot.cpp:239
 msgid "Set lines width used to plot in sketch mode and plot pads outlines on silk screen layers"
@@ -1583,18 +1548,15 @@ msgid "Auxiliary axis"
 msgstr ""
 
 #: pcbnew/pcbplot.cpp:246
-#, fuzzy
 msgid "Plot Origin"
-msgstr "Plot origin"
+msgstr "Plot Origin"
 
 #: pcbnew/pcbplot.cpp:266
-#, fuzzy
 msgid "X scale adjust"
 msgstr "X-as schaal aanpassen"
 
 #: pcbnew/pcbplot.cpp:268
 #: share/wxprint.cpp:189
-#, fuzzy
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Zet X schaal aanpassen voor exact schaal plotten"
 
@@ -1604,7 +1566,6 @@ msgstr "X-as schaal aanpassen"
 
 #: pcbnew/pcbplot.cpp:273
 #: share/wxprint.cpp:190
-#, fuzzy
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Zet X schaal aanpassen voor exact schaal plotten"
 
@@ -1629,37 +1590,31 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: pcbnew/pcbplot.cpp:337
-#, fuzzy
 msgid "Exclude Edges_Pcb layer"
 msgstr "Edges_Pcb laag uitsluiten"
 
 #: pcbnew/pcbplot.cpp:341
 #: share/dialog_print.cpp:149
-#, fuzzy
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
-msgstr "Uitsluiten van inhoud Edges_Pcb laag van alle andere lagen"
+msgstr "Uitsluiten van laag inhoud Edges_Pcb op alle andere lagen"
 
 #: pcbnew/pcbplot.cpp:347
-#, fuzzy
 msgid "Print sheet ref"
-msgstr "Print layout ref"
+msgstr "Print blad referentie"
 
 #: pcbnew/pcbplot.cpp:357
 msgid "Print pads on silkscreen"
 msgstr "Print pads op silkscreen"
 
 #: pcbnew/pcbplot.cpp:362
-#, fuzzy
 msgid "Enable/disable print/plot pads on silkscreen layers"
 msgstr "Inschakelen/uitschakelen print/plot pads op silkscreen lagen"
 
 #: pcbnew/pcbplot.cpp:366
-#, fuzzy
 msgid "Always print pads"
 msgstr "Paden altijd printen"
 
 #: pcbnew/pcbplot.cpp:370
-#, fuzzy
 msgid "Force print/plot pads on ALL layers"
 msgstr "Forceer print/plot pads op ALLE lagen"
 
@@ -1668,7 +1623,6 @@ msgid "Print module value"
 msgstr "Print module waarde"
 
 #: pcbnew/pcbplot.cpp:378
-#, fuzzy
 msgid "Enable/disable print/plot module value on silkscreen layers"
 msgstr "Inschakelen/uitschakelen print/plot module waardes op silkscreen lagen"
 
@@ -1677,7 +1631,6 @@ msgid "Print module reference"
 msgstr "Print module referentie"
 
 #: pcbnew/pcbplot.cpp:385
-#, fuzzy
 msgid "Enable/disable print/plot module reference on silkscreen layers"
 msgstr "Inschakelen/Uitschakelen print/plot module referentie op silkscreen lagen"
 
@@ -1700,24 +1653,20 @@ msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr "Forceer print/plot module onzichtbare teksten op silkscreen lagen"
 
 #: pcbnew/pcbplot.cpp:406
-#, fuzzy
 msgid "No drill mark"
 msgstr "Geen boor markering"
 
 #: pcbnew/pcbplot.cpp:406
-#, fuzzy
 msgid "Small mark"
 msgstr "Kleine markering"
 
 #: pcbnew/pcbplot.cpp:406
-#, fuzzy
 msgid "Real drill"
 msgstr "Echte boor"
 
 #: pcbnew/pcbplot.cpp:408
-#, fuzzy
 msgid "Pads Drill Opt"
-msgstr "Pads Boor Opt"
+msgstr "Pads Boor Opt."
 
 #: pcbnew/pcbplot.cpp:415
 msgid "Auto scale"
@@ -2056,9 +2005,8 @@ msgid "Find components and texts"
 msgstr "Zoek componenten & tekst"
 
 #: pcbnew/tool_pcb.cpp:279
-#, fuzzy
 msgid "Read netlist"
-msgstr "Lees Netlijst"
+msgstr "Lees netlijst"
 
 #: pcbnew/tool_pcb.cpp:281
 msgid "Pcb Design Rules Check"
@@ -2070,7 +2018,6 @@ msgid "Mode Module: Manual and Automatic Move or Place for modules"
 msgstr "Modus Module: Handmatig en Automatisch Verplaatsen of Plaatsen voor modules"
 
 #: pcbnew/tool_pcb.cpp:296
-#, fuzzy
 msgid "Mode Track and Autorouting"
 msgstr "Modus Spoor en Autorouten"
 
@@ -2224,9 +2171,8 @@ msgid "Offset adjust for drill and place files"
 msgstr "Beginwaarde afstelling voor boor en plaats bestanden"
 
 #: pcbnew/tool_pcb.cpp:486
-#, fuzzy
 msgid "Create line of specified length for microwave applications"
-msgstr "Creeer lijn of gespecificeerde lengte voor magnetron applicaties"
+msgstr "Creëer lijn of gespecificeerde lengte voor magnetron applicaties"
 
 #: pcbnew/tool_pcb.cpp:492
 #, fuzzy
@@ -2844,9 +2790,8 @@ msgid "Place Block"
 msgstr "Plaats Block"
 
 #: pcbnew/onrightclick.cpp:459
-#, fuzzy
 msgid "Flip Block"
-msgstr "Kopieer Block"
+msgstr "Block Spiegelen"
 
 #: pcbnew/onrightclick.cpp:482
 msgid "Drag Via"
@@ -2883,14 +2828,12 @@ msgid "Export Via Hole to Alt Value"
 msgstr "Exporteer Via Gat naar Alternatieve Waarde"
 
 #: pcbnew/onrightclick.cpp:501
-#, fuzzy
 msgid "Export Via Hole to Others id Vias"
 msgstr "Exporteer Via Gat naar Andere id Vias"
 
 #: pcbnew/onrightclick.cpp:503
-#, fuzzy
 msgid "Set ALL Via Holes to Default"
-msgstr "Zet ALLE Via Gaten naar Standaardwaarde"
+msgstr "Zet ALLE Via Gaten naar Standaard"
 
 #: pcbnew/onrightclick.cpp:516
 msgid "Move Node"
@@ -2922,7 +2865,7 @@ msgstr "Spoor Einde"
 
 #: pcbnew/onrightclick.cpp:546
 msgid "Place Via"
-msgstr "Plaats Doormetalisering"
+msgstr "Plaats Via"
 
 #: pcbnew/onrightclick.cpp:553
 msgid "Place Micro Via"
@@ -2962,7 +2905,7 @@ msgstr "Verander ALLE Sporen (Geen Via)"
 
 #: pcbnew/onrightclick.cpp:586
 msgid "Delete Via"
-msgstr "Verwijder Doormetalisering"
+msgstr "Verwijder Via"
 
 #: pcbnew/onrightclick.cpp:586
 msgid "Delete Segment"
@@ -3005,17 +2948,14 @@ msgid "Net Locked: No"
 msgstr "Net Vergrendeld: Nee"
 
 #: pcbnew/onrightclick.cpp:633
-#, fuzzy
 msgid "Place Edge Outline"
 msgstr "Plaats Hoek Omtrek"
 
 #: pcbnew/onrightclick.cpp:639
-#, fuzzy
 msgid "Place Corner"
 msgstr "Plaats Hoek"
 
 #: pcbnew/onrightclick.cpp:642
-#, fuzzy
 msgid "Place Zone"
 msgstr "Plaats Zone"
 
@@ -3025,12 +2965,10 @@ msgid "Zones"
 msgstr "Zones"
 
 #: pcbnew/onrightclick.cpp:654
-#, fuzzy
 msgid "Move Corner"
 msgstr "Verplaats Hoek"
 
 #: pcbnew/onrightclick.cpp:656
-#, fuzzy
 msgid "Delete Corner"
 msgstr "Verwijder Hoek"
 
@@ -3039,7 +2977,6 @@ msgid "Create Corner"
 msgstr "Creëer Hoek"
 
 #: pcbnew/onrightclick.cpp:663
-#, fuzzy
 msgid "Drag Outline Segment"
 msgstr "Versleep Segment Contour"
 
@@ -3048,7 +2985,6 @@ msgid "Add Similar Zone"
 msgstr "Vergelijkbare Zone Plaatsen"
 
 #: pcbnew/onrightclick.cpp:671
-#, fuzzy
 msgid "Add Cutout Area"
 msgstr "Uitsnij Vlak toevoegen"
 
@@ -3250,12 +3186,12 @@ msgstr "Bord Hoeken Breedte"
 msgid "Incorrect number, no change"
 msgstr "Fout nummer, geen verandering"
 
-#: pcbnew/modedit.cpp:268
+#: pcbnew/modedit.cpp:269
 #, fuzzy
 msgid "Unable to find the footprint source on the main board"
 msgstr "Kan voetprint bron niet vinden op het hoofd bord"
 
-#: pcbnew/modedit.cpp:269
+#: pcbnew/modedit.cpp:270
 msgid ""
 "\n"
 "Cannot update the footprint"
@@ -3263,12 +3199,12 @@ msgstr ""
 "\n"
 "Kan voetprint niet updaten"
 
-#: pcbnew/modedit.cpp:277
+#: pcbnew/modedit.cpp:278
 #, fuzzy
 msgid "A footprint source was found on the main board"
 msgstr "Een voetprint bron was gevonden op het hoofd bord"
 
-#: pcbnew/modedit.cpp:278
+#: pcbnew/modedit.cpp:279
 msgid ""
 "\n"
 "Cannot insert this footprint"
@@ -3276,22 +3212,22 @@ msgstr ""
 "\n"
 "Kan voetprint niet invoegen"
 
-#: pcbnew/modedit.cpp:396
+#: pcbnew/modedit.cpp:397
 msgid "Add Pad"
 msgstr "Pad Toevoegen"
 
-#: pcbnew/modedit.cpp:399
+#: pcbnew/modedit.cpp:400
 #: pcbnew/tool_modedit.cpp:124
 #: pcbnew/menubarmodedit.cpp:45
 msgid "Pad Settings"
 msgstr "Pad Instellingen"
 
-#: pcbnew/modedit.cpp:409
+#: pcbnew/modedit.cpp:410
 #: eeschema/schedit.cpp:197
 msgid "Add Drawing"
 msgstr "Tekening Toevoegen"
 
-#: pcbnew/modedit.cpp:413
+#: pcbnew/modedit.cpp:414
 #: pcbnew/tool_modedit.cpp:176
 msgid "Place anchor"
 msgstr "Plaats anker"
@@ -3597,7 +3533,6 @@ msgid "3D-Shape"
 msgstr "3D-Vorm"
 
 #: pcbnew/class_module.cpp:1115
-#, fuzzy
 msgid "Doc:  "
 msgstr "Doc:  "
 
@@ -3769,13 +3704,11 @@ msgid "Micro Via Drill"
 msgstr "Micro Via Boor"
 
 #: pcbnew/dialog_track_options.cpp:260
-#, fuzzy
 msgid "Allows Micro Vias"
 msgstr "Toestaan Micro Vias"
 
 #: pcbnew/dialog_track_options.cpp:265
 #: pcbnew/dialog_track_options.cpp:268
-#, fuzzy
 msgid ""
 "Allows use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour\n"
@@ -3793,7 +3726,6 @@ msgid "Clearance"
 msgstr "Afstand"
 
 #: pcbnew/dialog_track_options.cpp:304
-#, fuzzy
 msgid "Mask clearance"
 msgstr "Masker tussenruimte"
 
@@ -3911,14 +3843,12 @@ msgid "Library already in use"
 msgstr "Bibliotheek al in gebruik"
 
 #: pcbnew/dialog_copper_zones_base.cpp:32
-#, fuzzy
 msgid "Zone Setup:"
-msgstr "Instellingen &Opslaan"
+msgstr "Zone Instellingen:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:38
-#, fuzzy
 msgid "Zone Fill Options:"
-msgstr " Pen Opties :"
+msgstr "Zone Vul Opties:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:40
 msgid "0.00000"
@@ -3946,9 +3876,8 @@ msgid "Exclude pads"
 msgstr "Pads uitsluiten"
 
 #: pcbnew/dialog_copper_zones_base.cpp:48
-#, fuzzy
 msgid "Pad in Zone:"
-msgstr "Pad Opties:"
+msgstr "Pad in Zone:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:53
 #, fuzzy
@@ -3969,13 +3898,12 @@ msgid "Copper Width"
 msgstr "Koper Breedte"
 
 #: pcbnew/dialog_copper_zones_base.cpp:69
-msgid "Define the tickness of copper in therma reliefs"
+msgid "Define the tickness of copper in thermal reliefs"
 msgstr ""
 
 #: pcbnew/dialog_copper_zones_base.cpp:89
-#, fuzzy
 msgid "Outlines Options:"
-msgstr "Netlijst opties:"
+msgstr "Omlijning Opties:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:91
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:34
@@ -4032,9 +3960,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialog_copper_zones_base.cpp:114
-#, fuzzy
 msgid "Others Options:"
-msgstr "Netlijst opties:"
+msgstr "Andere Opties:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:116
 #, fuzzy
@@ -4101,9 +4028,8 @@ msgstr "Net:"
 
 #: pcbnew/class_board_item.cpp:24
 #: pcbnew/dialog_pad_edit.cpp:198
-#, fuzzy
 msgid "Rect"
-msgstr "Vier."
+msgstr "Vierkant"
 
 #: pcbnew/class_board_item.cpp:25
 #: pcbnew/class_drawsegment.cpp:320
@@ -4174,7 +4100,7 @@ msgstr "Niet op koper lagen"
 #: pcbnew/class_board_item.cpp:191
 #: pcbnew/pcbframe.cpp:499
 msgid "Via"
-msgstr "Doormetalisering"
+msgstr "Via"
 
 #: pcbnew/class_board_item.cpp:195
 msgid "Blind/Buried"
@@ -4266,32 +4192,26 @@ msgid "Comp layer"
 msgstr "Comp laag"
 
 #: pcbnew/dialog_pad_edit.cpp:237
-#, fuzzy
 msgid "Adhesive Cmp"
 msgstr "Lijm Cmp"
 
 #: pcbnew/dialog_pad_edit.cpp:241
-#, fuzzy
 msgid "Adhesive Copper"
 msgstr "Klevend Koper"
 
 #: pcbnew/dialog_pad_edit.cpp:245
-#, fuzzy
 msgid "Solder paste Cmp"
 msgstr "Soldeer pasta Componenten"
 
 #: pcbnew/dialog_pad_edit.cpp:249
-#, fuzzy
 msgid "Solder paste Copper"
 msgstr "Soldeer pasta Koper"
 
 #: pcbnew/dialog_pad_edit.cpp:253
-#, fuzzy
 msgid "Silkscreen Cmp"
 msgstr "Silkscreen Componenten"
 
 #: pcbnew/dialog_pad_edit.cpp:257
-#, fuzzy
 msgid "Silkscreen Copper"
 msgstr "Silkscreen Koper"
 
@@ -4313,7 +4233,6 @@ msgid "E.C.O.2 layer"
 msgstr "E.C.O.2 laag"
 
 #: pcbnew/dialog_pad_edit.cpp:277
-#, fuzzy
 msgid "Draft layer"
 msgstr "Klad laag"
 
@@ -4354,12 +4273,10 @@ msgid "Cursor"
 msgstr "Cursor"
 
 #: pcbnew/dialog_general_options.cpp:324
-#, fuzzy
 msgid "Number of Layers:"
-msgstr "Hoeveelheid Lagen:"
+msgstr "Aantal Lagen:"
 
 #: pcbnew/dialog_general_options.cpp:340
-#, fuzzy
 msgid "Max Links:"
 msgstr "Maximale Links:"
 
@@ -4372,7 +4289,6 @@ msgid "Drc ON"
 msgstr "DRC aan"
 
 #: pcbnew/dialog_general_options.cpp:394
-#, fuzzy
 msgid "Show Ratsnest"
 msgstr "Ratsnest Weergeven"
 
@@ -4410,9 +4326,8 @@ msgstr "Nooit"
 
 #: pcbnew/dialog_general_options.cpp:450
 #: pcbnew/dialog_general_options.cpp:465
-#, fuzzy
 msgid "When creating tracks"
-msgstr "Als sporen creeeren"
+msgstr "Als sporen creëren"
 
 #: pcbnew/dialog_general_options.cpp:451
 #: pcbnew/dialog_general_options.cpp:466
@@ -4446,12 +4361,10 @@ msgid "Create Report File"
 msgstr "Creëer rapport bestand"
 
 #: pcbnew/dialog_drc.cpp:455
-#, fuzzy
 msgid "Enable writing report to this file"
-msgstr "Inschakelen schrijven van rapport naar dit bestand"
+msgstr "Inschakelen voor schrijven van rapport naar dit bestand"
 
 #: pcbnew/dialog_drc.cpp:460
-#, fuzzy
 msgid "Enter the report filename"
 msgstr "Invullen van rapport bestandsnaam"
 
@@ -4517,12 +4430,10 @@ msgid "Delete Current Marker"
 msgstr "Verwijder Huidige Marker"
 
 #: pcbnew/dialog_drc.cpp:513
-#, fuzzy
 msgid "Delete the marker selected in the listBox below"
 msgstr "Verwijder de marker geselecteerd in de lijst hieronder"
 
 #: pcbnew/dialog_drc.cpp:517
-#, fuzzy
 msgid "Error Messages:"
 msgstr "Fout Berichten:"
 
@@ -4531,7 +4442,6 @@ msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
 msgstr ""
 
 #: pcbnew/dialog_drc.cpp:529
-#, fuzzy
 msgid "Distance Problem Markers"
 msgstr "Afstand Probleem Markers"
 
@@ -4551,7 +4461,6 @@ msgstr "Reporteer bestand \"%s\" gecreerd"
 
 #: pcbnew/dialog_drc.cpp:666
 #: pcbnew/dialog_drc.cpp:744
-#, fuzzy
 msgid "Disk File Report Completed"
 msgstr "Schijf Bestand Rapport Compleet"
 
@@ -4578,7 +4487,7 @@ msgid "Unable to open file \"%s\""
 msgstr "Can bestand \"%s\" niet openen"
 
 #: pcbnew/specctra.cpp:3468
-#, fuzzy, c-format
+#, c-format
 msgid "System file error writing to file \"%s\""
 msgstr "Systeem bestand fout schrijven naar bestand \"%s\""
 
@@ -4640,7 +4549,7 @@ msgstr "Pad naast pad"
 
 #: pcbnew/class_drc_item.cpp:67
 msgid "Via hole > diameter"
-msgstr "Doormetalisering gat > diameter"
+msgstr "Via gat > diameter"
 
 #: pcbnew/class_drc_item.cpp:69
 msgid "Micro Via: incorrect layer pairs (not adjacent)"
@@ -4679,14 +4588,12 @@ msgid "Select working library"
 msgstr "Selecteer werkende bibliotheek"
 
 #: pcbnew/tool_modedit.cpp:47
-#, fuzzy
 msgid "Save Module in working library"
 msgstr "Opslaan van Module in huidige bibliotheek"
 
 #: pcbnew/tool_modedit.cpp:51
-#, fuzzy
 msgid "Create new library and save current module"
-msgstr "Creeer nieuwe bibliotheek en opslaan van huidige module"
+msgstr "Creëer nieuwe bibliotheek en opslaan van huidige module"
 
 #: pcbnew/tool_modedit.cpp:56
 msgid "Delete part in current library"
@@ -4701,12 +4608,10 @@ msgid "Load module from current board"
 msgstr "Laad module van huidige bord"
 
 #: pcbnew/tool_modedit.cpp:74
-#, fuzzy
 msgid "Update module in current board"
 msgstr "Update module in huidige bord"
 
 #: pcbnew/tool_modedit.cpp:78
-#, fuzzy
 msgid "Insert module into current board"
 msgstr "Module in huidige bord invoegen"
 
@@ -4749,12 +4654,10 @@ msgid "Add Pads"
 msgstr "Pads Toevoegen"
 
 #: pcbnew/tool_modedit.cpp:236
-#, fuzzy
 msgid "Show Texts Sketch"
 msgstr "Tekst Schetsen Weergeven"
 
 #: pcbnew/tool_modedit.cpp:243
-#, fuzzy
 msgid "Show Edges Sketch"
 msgstr "Hoeken Schets Weergeven"
 
@@ -4774,7 +4677,6 @@ msgid "Grid %.3f"
 msgstr "Raster %.3f"
 
 #: pcbnew/dialog_display_options.cpp:186
-#, fuzzy
 msgid "Tracks and vias"
 msgstr "Sporen en vias"
 
@@ -4787,7 +4689,6 @@ msgid "New track"
 msgstr "Nieuw spoor"
 
 #: pcbnew/dialog_display_options.cpp:201
-#, fuzzy
 msgid "Show Track Clearance"
 msgstr "Spoor Tussenruimte Weergeven"
 
@@ -4796,7 +4697,6 @@ msgid "defined holes"
 msgstr "gedefinieerde gaten"
 
 #: pcbnew/dialog_display_options.cpp:209
-#, fuzzy
 msgid "Show Via Holes"
 msgstr "Via Gaten Weergeven"
 
@@ -4821,7 +4721,6 @@ msgid "Pad Shapes:"
 msgstr "Pad Vormen:"
 
 #: pcbnew/dialog_display_options.cpp:250
-#, fuzzy
 msgid "Show Pad Clearance"
 msgstr "Pad Tussenruimte Weergeven"
 
@@ -4855,25 +4754,25 @@ msgstr "BORD export OK."
 msgid "Unable to export, please fix and try again."
 msgstr "Kan niet exporteren, verhelp probleem en probeer opnieuw."
 
-#: pcbnew/specctra_export.cpp:804
+#: pcbnew/specctra_export.cpp:778
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr ""
 
-#: pcbnew/specctra_export.cpp:839
+#: pcbnew/specctra_export.cpp:813
 msgid "Unable to find the next segment with an endpoint of "
 msgstr ""
 
-#: pcbnew/specctra_export.cpp:842
+#: pcbnew/specctra_export.cpp:816
 msgid "Edit Edges_Pcb segments, making them contiguous."
 msgstr ""
 
-#: pcbnew/specctra_export.cpp:894
+#: pcbnew/specctra_export.cpp:868
 #, c-format
 msgid "Component with value of \"%s\" has empty reference id."
 msgstr ""
 
-#: pcbnew/specctra_export.cpp:902
+#: pcbnew/specctra_export.cpp:876
 #, c-format
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr ""
@@ -4902,9 +4801,8 @@ msgstr " (mm):"
 #: pcbnew/muonde.cpp:176
 #: pcbnew/muonde.cpp:183
 #: pcbnew/muonde.cpp:199
-#, fuzzy
 msgid "Create microwave module"
-msgstr "Creeer magnetron module"
+msgstr "Creëer magnetron module"
 
 #: pcbnew/muonde.cpp:182
 msgid " (inch):"
@@ -5050,9 +4948,8 @@ msgid "Clear old board and get last rescue file"
 msgstr "Oud bord schonen en verkrijg laatste reddings bestand"
 
 #: pcbnew/menubarpcb.cpp:69
-#, fuzzy
 msgid "&Previous Version"
-msgstr "&Vorige versie"
+msgstr "&Vorige Versie"
 
 #: pcbnew/menubarpcb.cpp:70
 msgid "Clear old board and get old version of board"
@@ -5081,10 +4978,9 @@ msgid "P&rint"
 msgstr "P&rinten"
 
 #: pcbnew/menubarpcb.cpp:91
-#: eeschema/menubar.cpp:75
-#: gerbview/tool_gerber.cpp:88
-msgid "Print on current printer"
-msgstr "Print met huidige printer"
+#, fuzzy
+msgid "Print pcb board"
+msgstr "Print bord"
 
 #: pcbnew/menubarpcb.cpp:96
 #: eeschema/menubar.cpp:105
@@ -5178,7 +5074,6 @@ msgid "E&xit"
 msgstr "A&fsluiten"
 
 #: pcbnew/menubarpcb.cpp:163
-#, fuzzy
 msgid "Quit PCBNEW"
 msgstr "PCBNEW Afsluiten"
 
@@ -5188,9 +5083,8 @@ msgid "&Library"
 msgstr "Bib&liotheek"
 
 #: pcbnew/menubarpcb.cpp:182
-#, fuzzy
 msgid "Setting libraries, directories and others..."
-msgstr "Instellingen:  Bibliotheken, Directories..."
+msgstr "Voorkeuren: Bibliotheken, Mappen..."
 
 #: pcbnew/menubarpcb.cpp:186
 #: eeschema/menubar.cpp:364
@@ -5199,9 +5093,8 @@ msgid "&Colors"
 msgstr "&Kleuren"
 
 #: pcbnew/menubarpcb.cpp:187
-#, fuzzy
 msgid "Select colors and display for board items"
-msgstr "Selecteer kleuren en bord items weergeven"
+msgstr "Selecteer kleuren en display voor bord items"
 
 #: pcbnew/menubarpcb.cpp:191
 msgid "&General"
@@ -5222,7 +5115,6 @@ msgid "Select what items are displayed"
 msgstr "Selecteer items die worden weergegeven"
 
 #: pcbnew/menubarpcb.cpp:207
-#, fuzzy
 msgid "&Save Preferences"
 msgstr "Instellingen O&pslaan"
 
@@ -5230,31 +5122,27 @@ msgstr "Instellingen O&pslaan"
 #: eeschema/menubar.cpp:383
 #: gerbview/tool_gerber.cpp:123
 msgid "Save application preferences"
-msgstr "Applicatie instellingen opslaan"
+msgstr "Applicatie voorkeuren opslaan"
 
 #: pcbnew/menubarpcb.cpp:212
-#, fuzzy
 msgid "&Read Preferences"
 msgstr "Instellingen L&aden"
 
 #: pcbnew/menubarpcb.cpp:213
 #: eeschema/menubar.cpp:387
-#, fuzzy
 msgid "Read application preferences"
-msgstr "Lees applicatie voorkeuren"
+msgstr "Applicatie voorkeuren Laden"
 
 #: pcbnew/menubarpcb.cpp:225
 msgid "Tracks and Vias"
 msgstr "Sporen en Vias"
 
 #: pcbnew/menubarpcb.cpp:226
-#, fuzzy
 msgid "Adjust size and width for tracks and vias"
 msgstr "Instellen grote en breedte voor sporen en vias"
 
 #: pcbnew/menubarpcb.cpp:231
 #: pcbnew/menubarmodedit.cpp:51
-#, fuzzy
 msgid "Adjust User Grid"
 msgstr "Instellen Gebruikers Raster"
 
@@ -5292,7 +5180,6 @@ msgid "Generate modules position file"
 msgstr "Genereer module positioneer bestand"
 
 #: pcbnew/menubarpcb.cpp:261
-#, fuzzy
 msgid "Create &Drill File"
 msgstr "Creëer Boor Bestand"
 
@@ -5301,47 +5188,40 @@ msgid "Generate excellon2 drill file"
 msgstr "Genereer excellon2 boor bestand"
 
 #: pcbnew/menubarpcb.cpp:266
-#, fuzzy
 msgid "Create &Component File"
-msgstr "Creëer &component bestand"
+msgstr "Creëer &Component bestand"
 
 #: pcbnew/menubarpcb.cpp:267
 msgid "Recreate .cmp file for CvPcb"
 msgstr "Hercreeeren .cmp bestand voor Cvpcb"
 
 #: pcbnew/menubarpcb.cpp:275
-#, fuzzy
 msgid "Global &Deletions"
 msgstr "Globale &Verwijderingen"
 
 #: pcbnew/menubarpcb.cpp:276
-#, fuzzy
 msgid "Delete tracks, modules, texts... on board"
 msgstr "Verwijder sporen, modules, teksten... op bord"
 
 #: pcbnew/menubarpcb.cpp:280
-#, fuzzy
 msgid "&List Nets"
-msgstr "Verbinding Lijst"
+msgstr "&Netten weergeven in Lijst"
 
 #: pcbnew/menubarpcb.cpp:281
-#, fuzzy
 msgid "List nets (names and id)"
 msgstr "Lijst netten (namen en id)"
 
 #: pcbnew/menubarpcb.cpp:285
-#, fuzzy
 msgid "&Track Operations"
-msgstr "Boog Opties"
+msgstr "S&poor Operaties"
 
 #: pcbnew/menubarpcb.cpp:286
 msgid "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias"
 msgstr ""
 
 #: pcbnew/menubarpcb.cpp:290
-#, fuzzy
 msgid "&Swap Layers"
-msgstr "Lagen Omwisselen"
+msgstr "Lagen O&mwisselen"
 
 #: pcbnew/menubarpcb.cpp:291
 msgid "Swap tracks on copper layers or drawings on others layers"
@@ -5357,9 +5237,8 @@ msgid "&Contents"
 msgstr "I&nhoud"
 
 #: pcbnew/menubarpcb.cpp:299
-#, fuzzy
 msgid "Open the PCBNEW manual"
-msgstr "Open de CvPCB handleiding"
+msgstr "Open de PCBNEW handleiding"
 
 #: pcbnew/menubarpcb.cpp:303
 msgid "&About PCBNEW"
@@ -5382,6 +5261,7 @@ msgstr "Toon bord in 3D viewer"
 #: pcbnew/menubarpcb.cpp:315
 #: eeschema/menubar.cpp:407
 #: cvpcb/tool_cvpcb.cpp:164
+#: kicad/buildmnu.cpp:321
 #: gerbview/tool_gerber.cpp:156
 #: 3d-viewer/3d_toolbar.cpp:116
 msgid "&File"
@@ -5403,7 +5283,6 @@ msgstr "&Afmetingen"
 
 #: pcbnew/menubarpcb.cpp:318
 #: gerbview/tool_gerber.cpp:158
-#, fuzzy
 msgid "&Miscellaneous"
 msgstr "&Diverse"
 
@@ -5446,7 +5325,6 @@ msgid "Outlines Appearence"
 msgstr ""
 
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:34
-#, fuzzy
 msgid "H, V and 45 deg"
 msgstr "H , V en 45 graden"
 
@@ -5478,7 +5356,6 @@ msgid "Save preferences"
 msgstr "Voorkeuren opslaan"
 
 #: pcbnew/surbrill.cpp:37
-#, fuzzy
 msgid "Filter for net names:"
 msgstr "Filter voor net namen:"
 
@@ -5495,9 +5372,8 @@ msgid "Sizes and Widths"
 msgstr "Grotes en Breedtes"
 
 #: pcbnew/menubarmodedit.cpp:46
-#, fuzzy
 msgid "Adjust size,shape,layers... for Pads"
-msgstr "Instellen grote,vorm,lagen... voor Pads"
+msgstr "Instellen grote, vorm, lagen... voor Pads"
 
 #: pcbnew/menubarmodedit.cpp:50
 #: pcbnew/set_grid.h:39
@@ -5513,12 +5389,10 @@ msgid "&About pcbnew"
 msgstr "Pcbnew I&nfo"
 
 #: pcbnew/menubarmodedit.cpp:74
-#, fuzzy
 msgid "About pcbnew PCB designer"
 msgstr "Over pcbnew PCB ontwerper"
 
 #: pcbnew/pcbtexte.cpp:88
-#, fuzzy
 msgid "TextPCB properties"
 msgstr "TextPCB instellingen"
 
@@ -5527,7 +5401,6 @@ msgid "Static"
 msgstr "Statisch"
 
 #: pcbnew/cleaningoptions_dialog.cpp:150
-#, fuzzy
 msgid "Delete redundant vias"
 msgstr "Verwijder redundante vias"
 
@@ -5560,7 +5433,6 @@ msgid "Extend dangling tracks which partially cover a pad or via, all the way to
 msgstr ""
 
 #: pcbnew/cleaningoptions_dialog.cpp:177
-#, fuzzy
 msgid "Clean pcb"
 msgstr "Schoon PCB"
 
@@ -5671,7 +5543,6 @@ msgid "Hide General ratsnest"
 msgstr "Verberg Algemeen ratsnest"
 
 #: pcbnew/pcbframe.cpp:412
-#, fuzzy
 msgid "Show General ratsnest"
 msgstr "Generaal ratsnest weergeven"
 
@@ -5720,17 +5591,14 @@ msgid "Delete NET ?"
 msgstr "Verwijder Net?"
 
 #: pcbnew/class_board.cpp:564
-#, fuzzy
 msgid "Nodes"
 msgstr "Verbindingen"
 
 #: pcbnew/class_board.cpp:567
-#, fuzzy
 msgid "Links"
 msgstr "Links"
 
 #: pcbnew/class_board.cpp:570
-#, fuzzy
 msgid "Nets"
 msgstr "Netten"
 
@@ -5792,7 +5660,6 @@ msgstr "Bus Toevoegen"
 #: eeschema/schedit.cpp:201
 #: eeschema/onrightclick.cpp:513
 #: eeschema/onrightclick.cpp:545
-#, fuzzy
 msgid "Add Junction"
 msgstr "Kruising Plaatsen"
 
@@ -5803,7 +5670,6 @@ msgid "Add Label"
 msgstr "Label Toevoegen"
 
 #: eeschema/schedit.cpp:209
-#, fuzzy
 msgid "Add Global label"
 msgstr "Globaal label Plaatsen"
 
@@ -5888,7 +5754,6 @@ msgid "Library <"
 msgstr "Bibliotheek <"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:332
-#, fuzzy
 msgid "> header read error"
 msgstr "> header lees fout"
 
@@ -5988,19 +5853,16 @@ msgid "As Convert"
 msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:407
-#, fuzzy
 msgid "Show Pin Num"
 msgstr "Pin Nummer Weergeven"
 
 #: eeschema/edit_component_in_lib.cpp:418
 #: eeschema/dialog_create_component.cpp:254
-#, fuzzy
 msgid "Show Pin Name"
 msgstr "Pin Naam Weergeven"
 
 #: eeschema/edit_component_in_lib.cpp:429
 #: eeschema/dialog_create_component.cpp:258
-#, fuzzy
 msgid "Pin Name Inside"
 msgstr "Pin Naam Binnen"
 
@@ -6054,9 +5916,8 @@ msgstr "Veld Tekst:"
 
 #: eeschema/edit_component_in_lib.cpp:526
 #: eeschema/edit_component_in_schematic.cpp:224
-#, fuzzy
 msgid "Pos"
-msgstr "Positioneer"
+msgstr "Positie"
 
 #: eeschema/edit_component_in_lib.cpp:531
 msgid "Hor Justify"
@@ -6097,7 +5958,6 @@ msgid "Already in use"
 msgstr "Is al in gebruik"
 
 #: eeschema/edit_component_in_lib.cpp:959
-#, fuzzy
 msgid " is Current Selected Alias!"
 msgstr " is Huidig Geselecteerde Alias!"
 
@@ -6622,9 +6482,8 @@ msgstr ""
 #: eeschema/netform.cpp:60
 #: eeschema/netform.cpp:278
 #: eeschema/save_schemas.cpp:86
-#, fuzzy
 msgid "Failed to create file "
-msgstr "Can bestand niet creeeren"
+msgstr "Can bestand niet creëren "
 
 #: eeschema/lib_export.cpp:39
 msgid "Import component:"
@@ -6635,7 +6494,6 @@ msgid "File is empty"
 msgstr "Bestand is leeg"
 
 #: eeschema/lib_export.cpp:94
-#, fuzzy
 msgid "No Part to Save"
 msgstr "Geen onderdeel op te slaan"
 
@@ -6893,9 +6751,8 @@ msgid "PinSheet Shape:"
 msgstr "PinBlad Vorm:"
 
 #: eeschema/sheetlab.cpp:328
-#, fuzzy
 msgid "PinSheet"
-msgstr "PinLayout Toevoegen"
+msgstr "PinBlad"
 
 #: eeschema/sheetlab.cpp:388
 msgid "No New Hierarchal Label found"
@@ -6906,11 +6763,11 @@ msgstr ""
 msgid "Sheet"
 msgstr "Layout"
 
-#: eeschema/libfield.cpp:206
+#: eeschema/libfield.cpp:205
 msgid "Edit field"
 msgstr "Veld Bewerken"
 
-#: eeschema/libfield.cpp:221
+#: eeschema/libfield.cpp:220
 msgid "No new text: no change"
 msgstr "Geen nieuwe tekst: geen verandering"
 
@@ -6974,7 +6831,6 @@ msgid "save current configuration setting in the local .pro file"
 msgstr "opslaan van huidige configuratie in lokale .pro bestand"
 
 #: eeschema/dialog_eeschema_config.cpp:169
-#, fuzzy
 msgid "NetList Formats:"
 msgstr "NetLijst Formaten:"
 
@@ -7300,9 +7156,8 @@ msgid "Leave Sheet"
 msgstr "Verlaat Blad"
 
 #: eeschema/onrightclick.cpp:135
-#, fuzzy
 msgid "Delete Noconn"
-msgstr "Verwijder Zones"
+msgstr "Verwijder GeenCon"
 
 #: eeschema/onrightclick.cpp:145
 msgid "Move Bus Entry"
@@ -7317,9 +7172,8 @@ msgid "Set Bus Entry \\"
 msgstr "Zet Bus Entry \\"
 
 #: eeschema/onrightclick.cpp:151
-#, fuzzy
 msgid "Delete Bus Entry"
-msgstr "Verwijder Laatste Rand"
+msgstr "Verwijder Bus Entry"
 
 #: eeschema/onrightclick.cpp:246
 msgid "Move Field"
@@ -7448,33 +7302,28 @@ msgid "Move Label"
 msgstr "Verplaats Label"
 
 #: eeschema/onrightclick.cpp:412
-#, fuzzy
 msgid "Rotate Label"
-msgstr "Roteer GLabel  (R)"
+msgstr "Roteer Label"
 
 #: eeschema/onrightclick.cpp:413
-#, fuzzy
 msgid "Edit Label"
-msgstr "Bewerk GLabel"
+msgstr "Bewerk Label"
 
 #: eeschema/onrightclick.cpp:414
 msgid "Delete Label"
 msgstr "Verwijder Label"
 
 #: eeschema/onrightclick.cpp:438
-#, fuzzy
 msgid "Move Text"
 msgstr "Verplaats Tekst"
 
 #: eeschema/onrightclick.cpp:440
-#, fuzzy
 msgid "Edit Text"
-msgstr "Bewerk tekst"
+msgstr "Bewerk Tekst"
 
 #: eeschema/onrightclick.cpp:441
-#, fuzzy
 msgid "Delete Text"
-msgstr "Verwijder Teksten"
+msgstr "Verwijder Tekst"
 
 #: eeschema/onrightclick.cpp:449
 msgid "Change to Glabel"
@@ -7482,31 +7331,26 @@ msgstr "Verander naar Glabel"
 
 #: eeschema/onrightclick.cpp:469
 #: eeschema/onrightclick.cpp:509
-#, fuzzy
 msgid "Break Wire"
-msgstr "Breek draad"
+msgstr "Breek Draad"
 
 #: eeschema/onrightclick.cpp:472
-#, fuzzy
 msgid "Delete Junction"
-msgstr "Verwijder selecties"
+msgstr "Verwijder Kruising"
 
 #: eeschema/onrightclick.cpp:477
 #: eeschema/onrightclick.cpp:503
-#, fuzzy
 msgid "Delete Node"
-msgstr "Verwijder Module"
+msgstr "Verwijder Verbinding"
 
 #: eeschema/onrightclick.cpp:479
 #: eeschema/onrightclick.cpp:505
-#, fuzzy
 msgid "Delete Connection"
-msgstr "Verwijder connectie"
+msgstr "Verwijder Connectie"
 
 #: eeschema/onrightclick.cpp:496
-#, fuzzy
 msgid "Wire End"
-msgstr "Draad einde"
+msgstr "Draad Einde"
 
 #: eeschema/onrightclick.cpp:498
 msgid "Delete Wire"
@@ -7514,9 +7358,8 @@ msgstr "Verwijder Draad"
 
 #: eeschema/onrightclick.cpp:519
 #: eeschema/onrightclick.cpp:551
-#, fuzzy
 msgid "Add Global Label"
-msgstr "Globlaal label plaatsen"
+msgstr "Globlaal Label Plaatsen"
 
 #: eeschema/onrightclick.cpp:535
 msgid "Bus End"
@@ -7559,34 +7402,28 @@ msgid "Delete Sheet"
 msgstr "Verwijder Blad"
 
 #: eeschema/onrightclick.cpp:593
-#, fuzzy
 msgid "Move PinSheet"
-msgstr "Verplaats PinSheet"
+msgstr "Verplaats PinBlad"
 
 #: eeschema/onrightclick.cpp:595
-#, fuzzy
 msgid "Edit PinSheet"
-msgstr "Bewerk PinSheet"
+msgstr "Bewerk PinBlad"
 
 #: eeschema/onrightclick.cpp:598
-#, fuzzy
 msgid "Delete PinSheet"
-msgstr "Verwijder PinSheet"
+msgstr "Verwijder PinBlad"
 
 #: eeschema/onrightclick.cpp:623
-#, fuzzy
 msgid "Other Block Commands"
-msgstr "Ongedaan Maken (CTRL+Z)"
+msgstr "Andere Block Commandos"
 
 #: eeschema/onrightclick.cpp:624
-#, fuzzy
 msgid "Save Block"
-msgstr "Block opslaan"
+msgstr "Block Opslaan"
 
 #: eeschema/onrightclick.cpp:628
-#, fuzzy
 msgid "Drag Block"
-msgstr "Block verslepen"
+msgstr "Block Slepen"
 
 #: eeschema/onrightclick.cpp:636
 msgid "Copy to Clipboard"
@@ -7717,9 +7554,8 @@ msgid "Export current drawing"
 msgstr "Exporteer huidige tekening"
 
 #: eeschema/tool_lib.cpp:117
-#, fuzzy
 msgid "Save current loaded library on disk (file update)"
-msgstr "Opslaan van huidig geladen bibliotheek op de harddisk (bestand update)"
+msgstr "Opslaan van huidig geladen bibliotheek op de schijf (bestand update)"
 
 #: eeschema/tool_lib.cpp:123
 msgid "Delete component in current library"
@@ -7778,6 +7614,7 @@ msgid "File write operation failed."
 msgstr "Bestand schrijf operatie mislukt."
 
 #: eeschema/menubar.cpp:41
+#: kicad/buildmnu.cpp:139
 #: gerbview/tool_gerber.cpp:63
 msgid "&New"
 msgstr "&Nieuw"
@@ -7788,6 +7625,7 @@ msgstr "Nieuw schema"
 
 #: eeschema/menubar.cpp:47
 #: cvpcb/tool_cvpcb.cpp:109
+#: kicad/buildmnu.cpp:130
 msgid "&Open"
 msgstr "Op&enen"
 
@@ -7796,6 +7634,7 @@ msgid "Open a schematic"
 msgstr "Open een schema"
 
 #: eeschema/menubar.cpp:54
+#: kicad/buildmnu.cpp:148
 msgid "&Save"
 msgstr "&Opslaan"
 
@@ -7818,31 +7657,36 @@ msgstr "Opslaan als (huidige tekening)"
 
 #: eeschema/menubar.cpp:68
 msgid "Save current sheet as.."
-msgstr "Opslaan huidige sheet als.."
+msgstr "Huidig blad opslaan als..."
+
+#: eeschema/menubar.cpp:75
+#: eeschema/tool_sch.cpp:82
+msgid "Print schematic"
+msgstr "Print schema"
 
 #: eeschema/menubar.cpp:82
 msgid "Plot PostScript"
 msgstr "Plot PostScript"
 
 #: eeschema/menubar.cpp:82
-msgid "Plotting in PostScript format"
-msgstr "Plotten in PostScript formaat"
+msgid "Plot schematic in PostScript format"
+msgstr "Plot schema in PostScript formaat"
 
 #: eeschema/menubar.cpp:87
 msgid "Plot HPGL"
 msgstr "Plot HPGL"
 
 #: eeschema/menubar.cpp:87
-msgid "Plotting in HPGL format"
-msgstr "Plotten in HPGL formaat"
+msgid "Plot schematic in HPGL format"
+msgstr "Plot schema in HPGL formaat"
 
 #: eeschema/menubar.cpp:92
 msgid "Plot SVG"
 msgstr "Plot SVG"
 
 #: eeschema/menubar.cpp:92
-msgid "Plotting in SVG format"
-msgstr "Plotten in SVG formaat"
+msgid "Plot schematic in SVG format"
+msgstr "Plot schema in SVG formaat"
 
 #: eeschema/menubar.cpp:99
 msgid "Plot to Clipboard"
@@ -7853,12 +7697,12 @@ msgid "Export drawings to clipboard"
 msgstr "Exporteer tekeningen naar klembord"
 
 #: eeschema/menubar.cpp:106
-msgid "Plot HPGL, PostScript, SVG"
-msgstr "Plot HPGL, PostScript, SVG"
+msgid "Plot schematic in HPGL, PostScript or SVG format"
+msgstr "Plot schema in HPGL, PostScript of SVG formaat"
 
 #: eeschema/menubar.cpp:109
 msgid "Quit Eeschema"
-msgstr "Sluit Eeschema"
+msgstr "Eeschema afsluiten"
 
 #: eeschema/menubar.cpp:127
 msgid "&Undo\t"
@@ -7901,7 +7745,7 @@ msgstr "&Stroom aansluiting"
 #: eeschema/menubar.cpp:212
 #: eeschema/tool_sch.cpp:160
 msgid "Place the power port"
-msgstr "Plaats stroom aansluiting"
+msgstr "Stroom aansluiting plaatsen"
 
 #: eeschema/menubar.cpp:218
 msgid "&Wire"
@@ -7930,9 +7774,8 @@ msgid "Place a wire to bus entry"
 msgstr "Plaats een draad naar bus entry"
 
 #: eeschema/menubar.cpp:246
-#, fuzzy
 msgid "B&us to bus entry"
-msgstr "&Bus naar bus"
+msgstr "&Bus naar bus entry"
 
 #: eeschema/menubar.cpp:247
 msgid "Place a bus to bus entry"
@@ -7964,9 +7807,9 @@ msgid "Place a global label. Warning: all global labels with the same name are c
 msgstr ""
 
 #: eeschema/menubar.cpp:284
-#: eeschema/eelayer.h:85
-msgid "Junction"
-msgstr "Kruising"
+#, fuzzy
+msgid "Place Junction"
+msgstr "Junction plaatsen"
 
 #: eeschema/menubar.cpp:285
 #: eeschema/tool_sch.cpp:195
@@ -8052,8 +7895,9 @@ msgid "Open the eeschema manual"
 msgstr "Open de eeschema handleiding"
 
 #: eeschema/menubar.cpp:402
-msgid "&About eeschema"
-msgstr "Eeschema I&nfo"
+#: kicad/buildmnu.cpp:314
+msgid "&About"
+msgstr "&Over"
 
 #: eeschema/menubar.cpp:402
 msgid "About eeschema schematic designer"
@@ -8113,10 +7957,6 @@ msgstr "Bibliotheek editor"
 msgid "Schematic hierarchy navigator"
 msgstr "Schema hiërarchie navigatie"
 
-#: eeschema/tool_sch.cpp:82
-msgid "Print schematic"
-msgstr "Print Tekening"
-
 #: eeschema/tool_sch.cpp:86
 msgid "Run Cvpcb"
 msgstr "Start CvPCB"
@@ -8149,7 +7989,6 @@ msgstr ""
 "Kan voetprint niet updaten"
 
 #: eeschema/tool_sch.cpp:151
-#, fuzzy
 msgid "Hierarchy Push/Pop"
 msgstr "Hiërarchie Push/Pop"
 
@@ -8176,7 +8015,6 @@ msgid "Place the hierarchical label. This label will be seen as a pin sheet in t
 msgstr ""
 
 #: eeschema/tool_sch.cpp:205
-#, fuzzy
 msgid "Place hierarchical sheet"
 msgstr "Plaat hiërarchie blad"
 
@@ -8185,7 +8023,6 @@ msgid "Place a pin sheet , imported from a hierarchical label in sheet"
 msgstr ""
 
 #: eeschema/tool_sch.cpp:214
-#, fuzzy
 msgid "Place hierarchical pin to sheet"
 msgstr "Plaats hiërarchie pin naar blad"
 
@@ -8392,7 +8229,6 @@ msgid "No component"
 msgstr "Geen component"
 
 #: eeschema/netlist.cpp:238
-#, fuzzy
 msgid "NbItems"
 msgstr "NbItems"
 
@@ -8576,7 +8412,6 @@ msgid " Pin Options :"
 msgstr " Pen Opties :"
 
 #: eeschema/pinedit-dialog.cpp:190
-#, fuzzy
 msgid "Pin length"
 msgstr "Pin lengte"
 
@@ -8619,7 +8454,6 @@ msgid "Bidi"
 msgstr "Bidi"
 
 #: eeschema/pinedit-dialog.cpp:267
-#, fuzzy
 msgid "3 States"
 msgstr "3 States"
 
@@ -8633,12 +8467,10 @@ msgid "Unspecified"
 msgstr "Ongespecificeerd"
 
 #: eeschema/pinedit-dialog.cpp:270
-#, fuzzy
 msgid "Power In"
 msgstr "Power In"
 
 #: eeschema/pinedit-dialog.cpp:271
-#, fuzzy
 msgid "Power Out"
 msgstr "Power Out"
 
@@ -8680,9 +8512,8 @@ msgstr "Plot Kleur:"
 #: eeschema/plotps.cpp:209
 #: share/svg_print.cpp:218
 #: share/dialog_print.cpp:194
-#, fuzzy
 msgid "Print Sheet Ref"
-msgstr "Print Sheet Referentie"
+msgstr "Print Blad Referentie"
 
 #: eeschema/plotps.cpp:234
 msgid "Messages :"
@@ -8702,9 +8533,8 @@ msgid "Failed to create doc lib file "
 msgstr "Kan doc lib niet creëren"
 
 #: eeschema/class_drawsheet.cpp:250
-#, fuzzy
 msgid "Ok to cleanup this sheet"
-msgstr "OK voor opschonen van sheet"
+msgstr "OK voor opschonen van dit blad"
 
 #: eeschema/class_drawsheet.cpp:560
 #, c-format
@@ -8735,9 +8565,8 @@ msgstr ""
 
 #: eeschema/dialog_create_component.cpp:187
 #: eeschema/dialog_edit_component_in_lib.cpp:161
-#, fuzzy
 msgid "Power symbol"
-msgstr "&Stroom aansluiting"
+msgstr "Stroom symbool"
 
 #: eeschema/dialog_create_component.cpp:214
 msgid "&1"
@@ -8852,7 +8681,6 @@ msgid "Draw options"
 msgstr "Teken opties"
 
 #: eeschema/dialog_create_component.cpp:250
-#, fuzzy
 msgid "Show Pin Number"
 msgstr "Pin Nummer Weergeven"
 
@@ -8881,9 +8709,8 @@ msgid "List items:"
 msgstr "Lijst items:"
 
 #: eeschema/dialog_build_BOM.cpp:248
-#, fuzzy
 msgid "Components by reference"
-msgstr "Components by Reference"
+msgstr "Componenten bij referentie"
 
 #: eeschema/dialog_build_BOM.cpp:252
 msgid "Sub Components (i.e. U2A, U2B ...)"
@@ -8927,7 +8754,6 @@ msgid "Field separator for spreadsheet import:"
 msgstr ""
 
 #: eeschema/dialog_build_BOM.cpp:287
-#, fuzzy
 msgid "Launch list browser"
 msgstr "Start lijst browser"
 
@@ -9035,7 +8861,6 @@ msgid "General :"
 msgstr "Algemeen :"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:147
-#, fuzzy
 msgid "Number of units:"
 msgstr "Aantal Onderdelen:"
 
@@ -9048,7 +8873,6 @@ msgid "Keywords:"
 msgstr "Zoekwoorden:"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:189
-#, fuzzy
 msgid "DocFileName:"
 msgstr "DocBestNaam:"
 
@@ -9057,7 +8881,6 @@ msgid "Copy Doc"
 msgstr "Kopieer Doc"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:202
-#, fuzzy
 msgid "Browse DocFiles"
 msgstr "Verken DocBestanden"
 
@@ -9102,12 +8925,10 @@ msgid "Options :"
 msgstr "Opties :"
 
 #: eeschema/dialog_cmp_graphic_properties.cpp:168
-#, fuzzy
 msgid "Void"
 msgstr "Void"
 
 #: eeschema/dialog_cmp_graphic_properties.cpp:170
-#, fuzzy
 msgid "BgFilled"
 msgstr "BgGevuld"
 
@@ -9243,13 +9064,11 @@ msgstr "Dialogen"
 
 #: cvpcb/cvframe.cpp:466
 #: share/drawframe.cpp:141
-#, fuzzy
 msgid "Lists"
 msgstr "Lijst"
 
 #: cvpcb/cvframe.cpp:471
 #: share/drawframe.cpp:146
-#, fuzzy
 msgid "Status box"
 msgstr "Status balk"
 
@@ -9329,12 +9148,10 @@ msgid "Net Input Ext:"
 msgstr ""
 
 #: cvpcb/menucfg.cpp:68
-#, fuzzy
 msgid "Cmp ext:"
 msgstr "Cmp ext:"
 
 #: cvpcb/menucfg.cpp:72
-#, fuzzy
 msgid "Lib ext:"
 msgstr "Bib ext:"
 
@@ -9486,26 +9303,15 @@ msgstr "Python Script Uitvoeren:"
 msgid "Load file:"
 msgstr "Bestand laden:"
 
-#: kicad/buildmnu.cpp:130
-msgid "&Open Project"
-msgstr "&Open Project"
-
 #: kicad/buildmnu.cpp:131
-msgid "Select an existing project"
-msgstr "Selecteer een bestaand project"
-
-#: kicad/buildmnu.cpp:139
-msgid "&New Project"
-msgstr "&Nieuw Project"
+#, fuzzy
+msgid "Open an existing project"
+msgstr "Een project laden"
 
 #: kicad/buildmnu.cpp:140
 #: kicad/buildmnu.cpp:383
-msgid "Create new project"
-msgstr "Creëer een nieuwe project"
-
-#: kicad/buildmnu.cpp:148
-msgid "&Save Project"
-msgstr "Project &Opslaan"
+msgid "Start a new project"
+msgstr "Een nieuw project starten"
 
 #: kicad/buildmnu.cpp:149
 #: kicad/buildmnu.cpp:402
@@ -9513,26 +9319,26 @@ msgid "Save current project"
 msgstr "Huidige project opslaan"
 
 #: kicad/buildmnu.cpp:161
-msgid "&Archive project"
-msgstr "&Archiveer Project"
+#, fuzzy
+msgid "&Archive"
+msgstr "Project &Uitpakken"
 
 #: kicad/buildmnu.cpp:162
-#, fuzzy
 msgid "Archive project files in zip archive"
-msgstr "Archiveer Project bestanden:"
+msgstr "Archiveer project bestanden in zip archief"
 
 #: kicad/buildmnu.cpp:170
-msgid "&Unarchive project"
-msgstr "&Dearchiveer Project"
+#, fuzzy
+msgid "&Unarchive"
+msgstr "Project &Uitpakken"
 
 #: kicad/buildmnu.cpp:171
-#, fuzzy
 msgid "Unarchive project files from zip file"
-msgstr "Archiveer alle project bestanden"
+msgstr "Dearchiveer project bestanden van zip archief"
 
 #: kicad/buildmnu.cpp:184
-msgid "Quit KiCad"
-msgstr "KiCAD &Afsluiten"
+msgid "Quit kicad"
+msgstr "Kicad afsluiten"
 
 #: kicad/buildmnu.cpp:209
 msgid "&Editor"
@@ -9551,7 +9357,6 @@ msgid "Read or edit files"
 msgstr "Lees of bewerk bestanden"
 
 #: kicad/buildmnu.cpp:231
-#, fuzzy
 msgid "&Select Editor"
 msgstr "&Selecteer editor"
 
@@ -9560,16 +9365,14 @@ msgid "Select your prefered editor for file browsing"
 msgstr "Een tekst editor selecteren van het systeem"
 
 #: kicad/buildmnu.cpp:244
-#, fuzzy
 msgid "Fonts"
-msgstr "&Lettertype"
+msgstr "Lettertype"
 
 #: kicad/buildmnu.cpp:245
 msgid "Font preferences"
 msgstr "Lettertype voorkeuren"
 
 #: kicad/buildmnu.cpp:259
-#, fuzzy
 msgid "Default PDF Viewer"
 msgstr "Standaard PDF Programma"
 
@@ -9578,7 +9381,6 @@ msgid "Use the default (system) PDF viewer used to browse datasheets"
 msgstr ""
 
 #: kicad/buildmnu.cpp:271
-#, fuzzy
 msgid "Favourite PDF Viewer"
 msgstr "Favoriete PDF Programma"
 
@@ -9592,7 +9394,7 @@ msgstr "Selecteer PDF Programma"
 
 #: kicad/buildmnu.cpp:284
 msgid "Select your favourite PDF viewer used to browse datasheets"
-msgstr "Selecteer uw favoriete pdf viewer om datasheets te bekijken"
+msgstr "Selecteer favoriet pdf programma om databladen te bekijken"
 
 #: kicad/buildmnu.cpp:290
 msgid "Pdf Browser"
@@ -9600,29 +9402,19 @@ msgstr "PDF Instellingen"
 
 #: kicad/buildmnu.cpp:306
 msgid "Open the kicad manual"
-msgstr "Open de KiCad Handleiding"
-
-#: kicad/buildmnu.cpp:314
-msgid "&About Kicad"
-msgstr "Kicad I&nfo"
+msgstr "Open de kicad handleiding"
 
 #: kicad/buildmnu.cpp:315
-#, fuzzy
 msgid "About kicad project manager"
 msgstr "Over kicad project manager"
-
-#: kicad/buildmnu.cpp:321
-msgid "&Projects"
-msgstr "&Projecten"
 
 #: kicad/buildmnu.cpp:322
 msgid "&Browse"
 msgstr "&Verkennen"
 
 #: kicad/buildmnu.cpp:392
-#, fuzzy
 msgid "Load existing project"
-msgstr "Selecteer een bestaand project"
+msgstr "Laad een bestaand project"
 
 #: kicad/buildmnu.cpp:415
 msgid "Archive all project files"
@@ -9775,9 +9567,8 @@ msgid "Delete the File"
 msgstr "Verwijder het Bestand"
 
 #: kicad/treeprj_frame.cpp:206
-#, fuzzy
 msgid "&Delete the Directory and its content"
-msgstr "&Verwijder map inclusief inhoud"
+msgstr "&Verwijder Map inclusief inhoud"
 
 #: kicad/treeprj_frame.cpp:541
 msgid "Create New File:"
@@ -9845,7 +9636,7 @@ msgstr "CvPCB (Componenten naar modules)"
 
 #: kicad/commandframe.cpp:66
 msgid "PCBnew (PCB editor)"
-msgstr "PCBnew (Printplaat editor)"
+msgstr "PCBnew (Printplaat ontwerper)"
 
 #: kicad/commandframe.cpp:70
 msgid "GerbView (Gerber viewer)"
@@ -9964,6 +9755,10 @@ msgstr "Sla laag op als.."
 msgid "Save current layers as.."
 msgstr "Sla huidige laag op als.."
 
+#: gerbview/tool_gerber.cpp:88
+msgid "Print gerber"
+msgstr "Print gerber"
+
 #: gerbview/tool_gerber.cpp:90
 msgid "Plotting in various formats"
 msgstr "Plotten in verschillende formaten"
@@ -9997,9 +9792,8 @@ msgid "&List DCodes"
 msgstr ""
 
 #: gerbview/tool_gerber.cpp:140
-#, fuzzy
 msgid "List and edit D-codes"
-msgstr "Laad DCodes"
+msgstr "Lijst en bewerk D-codes"
 
 #: gerbview/tool_gerber.cpp:141
 msgid "&Show source"
@@ -10031,7 +9825,6 @@ msgid "About gerbview gerber and drill viewer"
 msgstr "GerbView (Gerber Viewer)"
 
 #: gerbview/tool_gerber.cpp:216
-#, fuzzy
 msgid "New World"
 msgstr "Nieuwe wereld"
 
@@ -10040,7 +9833,6 @@ msgid "Open existing Layer"
 msgstr "Open bestaande Laag"
 
 #: gerbview/tool_gerber.cpp:227
-#, fuzzy
 msgid "Save World"
 msgstr "Wereld opslaan"
 
@@ -10049,7 +9841,6 @@ msgid "page settings (size, texts)"
 msgstr "Pagina instellingen (grote, teksten)"
 
 #: gerbview/tool_gerber.cpp:270
-#, fuzzy
 msgid "Print World"
 msgstr "Print wereld"
 
@@ -10111,7 +9902,6 @@ msgid "Save config file"
 msgstr "Configuratie opslaan in bestand"
 
 #: gerbview/dcode.cpp:460
-#, fuzzy
 msgid "List D codes"
 msgstr "Lijst D codes"
 
@@ -10240,7 +10030,6 @@ msgid "Polygons:"
 msgstr "Polygonen"
 
 #: gerbview/options.cpp:328
-#, fuzzy
 msgid "Show D codes"
 msgstr "D codes weergeven"
 
@@ -10615,6 +10404,10 @@ msgstr "Nederlands"
 msgid "Language"
 msgstr "Taal"
 
+#: common/edaappl.cpp:605
+msgid "Select application language (only for testing!)"
+msgstr "Selecteer applicatie taal (alleen voor te testen!)"
+
 #: common/wxwineda.cpp:169
 #: common/wxwineda.cpp:178
 msgid "Pos "
@@ -10733,18 +10526,16 @@ msgid "3D Axis On/Off"
 msgstr "3D Assen Aan/Uit"
 
 #: 3d-viewer/3d_toolbar.cpp:135
-#, fuzzy
 msgid "3D Footprints Shapes On/Off"
-msgstr "Voetprint Test"
+msgstr "3D Voetprinten Vormen Aan/Uit"
 
 #: 3d-viewer/3d_toolbar.cpp:138
 msgid "Zone Filling On/Off"
 msgstr "Zone Vulling Aan/Uit"
 
 #: 3d-viewer/3d_toolbar.cpp:141
-#, fuzzy
 msgid "Comments Layer On/Off"
-msgstr "Commentaar"
+msgstr "Commentaar Laag Aan/Uit"
 
 #: 3d-viewer/3d_toolbar.cpp:144
 #, fuzzy
@@ -11039,17 +10830,14 @@ msgid "Tech Layers"
 msgstr "Tech Lagen"
 
 #: pcbnew/set_color.h:357
-#, fuzzy
 msgid "Ratsnest"
-msgstr "Rattennest"
+msgstr "Ratsnest"
 
 #: pcbnew/set_color.h:366
-#, fuzzy
 msgid "Pad Cu"
-msgstr "Pap Cu"
+msgstr "Pad Kop."
 
 #: pcbnew/set_color.h:374
-#, fuzzy
 msgid "Pad Cmp"
 msgstr "Pad Cmp"
 
@@ -11070,9 +10858,8 @@ msgid "Anchors"
 msgstr "Ankers"
 
 #: pcbnew/set_color.h:432
-#, fuzzy
 msgid "Show Noconnect"
-msgstr "Geenconnec. weergeven"
+msgstr "GeenCon. weergeven"
 
 #: pcbnew/set_color.h:441
 msgid "Show Modules Cmp"
@@ -11087,9 +10874,8 @@ msgid "Fill Zones Options"
 msgstr "Vul Zone Opties"
 
 #: pcbnew/dialog_drc.h:63
-#, fuzzy
 msgid "DRC Control"
-msgstr "DRC Controlle"
+msgstr "DRC Controle"
 
 #: pcbnew/gen_self.h:217
 msgid "Length(inch):"
@@ -11122,7 +10908,6 @@ msgid "TextMod properties"
 msgstr ""
 
 #: pcbnew/dialog_gendrill.h:50
-#, fuzzy
 msgid "Drill Files Generation"
 msgstr "Boor Bestanden Genereren"
 
@@ -11143,9 +10928,8 @@ msgid "dialog_freeroute_exchange"
 msgstr ""
 
 #: pcbnew/dialog_non_copper_zones_properties_base.h:56
-#, fuzzy
 msgid "Non Copper Zones Properties"
-msgstr "Component instellingen"
+msgstr "Geen Koper Zones Instellingen"
 
 #: pcbnew/dialog_setup_libs.h:43
 #: eeschema/dialog_eeschema_config.h:50
@@ -11204,9 +10988,8 @@ msgid "EESchema Annotation"
 msgstr ""
 
 #: eeschema/dialog_edit_component_in_schematic.h:52
-#, fuzzy
 msgid "Component Properties"
-msgstr "Component instellingen"
+msgstr "Component Instellingen"
 
 #: eeschema/dialog_create_component.h:55
 msgid "Component Creation"
@@ -11228,6 +11011,10 @@ msgstr "Draad"
 msgid "Bus"
 msgstr "Bus"
 
+#: eeschema/eelayer.h:85
+msgid "Junction"
+msgstr "Kruising"
+
 #: eeschema/eelayer.h:91
 msgid "Label"
 msgstr "Label"
@@ -11237,7 +11024,6 @@ msgid "GlobLabel"
 msgstr ""
 
 #: eeschema/eelayer.h:103
-#, fuzzy
 msgid "Netname"
 msgstr "Netnaam"
 
@@ -11470,7 +11256,6 @@ msgid "Layer 32"
 msgstr "Laag 32"
 
 #: gerbview/set_color.h:318
-#, fuzzy
 msgid "Others"
 msgstr "Andere"
 
@@ -11490,6 +11275,28 @@ msgstr "Pagina Instellingen"
 msgid "Print"
 msgstr "Printen"
 
+#~ msgid "Plot HPGL, PostScript, SVG"
+#~ msgstr "Plot HPGL, PostScript, SVG"
+#~ msgid "Print on current printer"
+#~ msgstr "Print met huidige printer"
+#~ msgid "&About eeschema"
+#~ msgstr "&Over"
+#~ msgid "&Open Project"
+#~ msgstr "&Open Project"
+#~ msgid "&New Project"
+#~ msgstr "&Nieuw Project"
+#~ msgid "&Save Project"
+#~ msgstr "Project &Opslaan"
+#~ msgid "&Archive project"
+#~ msgstr "&Archiveer Project"
+#~ msgid "&Unarchive project"
+#~ msgstr "&Dearchiveer Project"
+#~ msgid "&About Kicad"
+#~ msgstr "Inf&o"
+#~ msgid "&Projects"
+#~ msgstr "&Projecten"
+#~ msgid "Create module"
+#~ msgstr "Creeer module"
 #~ msgid "Tool"
 #~ msgstr "Gereedschap"
 #~ msgid "D-code"
@@ -11530,8 +11337,6 @@ msgstr "Printen"
 #~ msgstr "Project &Inpakken"
 #~ msgid "Save and Zip all project files"
 #~ msgstr "Project opslaan en inpakken"
-#~ msgid "&Unzip Archive"
-#~ msgstr "Project &Uitpakken"
 #~ msgid "UnZip archive file"
 #~ msgstr "Project openen en uitpakken"
 

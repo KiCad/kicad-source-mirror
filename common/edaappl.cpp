@@ -602,7 +602,7 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
     {
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU( MasterMenu, m_Language_Menu,
             ID_LANGUAGE_CHOICE, _( "Language" ),
-            wxT( "For test only, use Default setup for normal use" ),
+            _( "Select application language (only for testing!)" ),
             language_xpm );
     }
     return m_Language_Menu;
