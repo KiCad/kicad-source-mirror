@@ -621,6 +621,18 @@ void LEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 }
 
 
+/**
+ * Function isspace
+ * strips the upper bits of the int to ensure the value passed to ::isspace() is
+ * in the range of 0-255
+ */
+static inline bool isSpace( int cc )
+{
+    // make sure int passed to ::isspace() is 0-255
+    return ::isspace( cc & 0xff );
+}
+
+
 DSN_T LEXER::NextTok() throw (IOError)
 {
     char*   cur  = next;
@@ -643,7 +655,7 @@ L_read:
             cur = start;
 
             // skip leading whitespace
-            while( cur<limit && isspace(*cur) )
+            while( cur<limit && isSpace(*cur) )
                 ++cur;
 
             // if the first non-blank character is #, this line is a comment.
@@ -653,7 +665,7 @@ L_read:
         else
         {
             // skip leading whitespace
-            while( cur<limit && isspace(*cur) )
+            while( cur<limit && isSpace(*cur) )
                 ++cur;
         }
 
@@ -681,7 +693,7 @@ L_read:
 
             head = cur+1;
 
-            if( head<limit && *head!=')' && *head!='(' && !isspace(*head) )
+            if( head<limit && *head!=')' && *head!='(' && !isSpace(*head) )
             {
                 ThrowIOError( errtxt, CurOffset() );
             }
@@ -714,7 +726,7 @@ L_read:
             like:  U2-14 or "U2"-"14"
             This is detectable by a non-space immediately preceeding the dash.
         */
-        if( *cur == '-' && cur>start && !isspace( cur[-1] ) )
+        if( *cur == '-' && cur>start && !isSpace( cur[-1] ) )
         {
             head = cur+1;
             curText.clear();
@@ -730,7 +742,7 @@ L_read:
             while( head<limit && strchr( ".0123456789", *head )  )
                 ++head;
 
-            if( (head<limit && isspace(*head)) || *head==')' || *head=='(' || head==limit )
+            if( (head<limit && isSpace(*head)) || *head==')' || *head=='(' || head==limit )
             {
                 curText.clear();
                 curText.append( cur, head );
@@ -770,7 +782,7 @@ L_read:
         // call it a T_SYMBOL.
         {
             head = cur+1;
-            while( head<limit && !isspace( *head ) && *head!=')' && *head!='(' )
+            while( head<limit && !isSpace( *head ) && *head!=')' && *head!='(' )
                 ++head;
 
             curText.clear();
