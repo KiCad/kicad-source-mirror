@@ -977,8 +977,8 @@ void Build_PlacedPads_List( BOARD* Pcb )
         for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
         {
             *pt_liste_pad = PtPad;
-            PtPad->m_physical_connexion = 0;
-            PtPad->m_logical_connexion  = 0;
+            PtPad->SetSubNet( 0 );
+            PtPad->SetSubRatsnest( 0 );
             PtPad->m_Parent = Module;
             if( PtPad->GetNet() )
                 Pcb->m_NbNodes++;

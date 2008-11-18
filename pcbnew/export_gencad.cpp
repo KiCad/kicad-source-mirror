@@ -23,7 +23,7 @@ static void CreateShapesSection( FILE* file, BOARD* pcb );
 static void CreatePadsShapesSection( FILE* file, BOARD* pcb );
 static void ModuleWriteShape( FILE* File, MODULE* module );
 
-// layer name pour extensions fichiers de tracewxString 
+// layer name pour extensions fichiers de tracewxString
 static const wxString GenCAD_Layer_Name[32] = {
     wxT( "BOTTOM" ),            wxT( "INNER1" ),         wxT( "INNER2" ),             wxT("INNER3" ),
     wxT( "INNER4" ),            wxT( "INNER5" ),         wxT( "INNER6" ),             wxT("INNER7" ),
@@ -149,7 +149,7 @@ static int Pad_list_Sort_by_Shapes( const void* refptr, const void* objptr )
     const D_PAD* padref = *(D_PAD**)refptr;
     const D_PAD* padcmp = *(D_PAD**)objptr;
 
-    return D_PAD::Compare( padref, padcmp );     
+    return D_PAD::Compare( padref, padcmp );
 }
 
 
@@ -158,14 +158,14 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 /*****************************************************/
 
 /* Cree la liste des formes des pads ( 1 forme par pad )
- *  initialise le membre .m_logical_connexion de la struct pad, la valeur 1 ..n
+ *  initialise le membre .GetSubRatsnest de la struct pad, la valeur 1 ..n
  *  pour les formes de pad PAD1 a PADn
  */
 {
     D_PAD*      pad;
     D_PAD**     padlist;
     D_PAD**     pad_list_base = NULL;
-    
+
     const  char*  pad_type;
     int    memsize, ii, dx, dy;
     D_PAD* old_pad = NULL;
@@ -186,7 +186,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
     for( padlist = pad_list_base, ii = 0; ii < pcb->m_NbPads; padlist++, ii++ )
     {
         pad = *padlist;
-        pad->m_logical_connexion = pad_name_number;
+        pad->SetSubRatsnest( pad_name_number );
 
         if( old_pad && 0==D_PAD::Compare( old_pad, pad ) )
             continue; // Forme deja generee
@@ -194,11 +194,11 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
         old_pad = pad;
 
         pad_name_number++;
-        pad->m_logical_connexion = pad_name_number;
+        pad->SetSubRatsnest( pad_name_number );
 
-        fprintf( file, "PAD PAD%d", pad->m_logical_connexion );
+        fprintf( file, "PAD PAD%d", pad->GetSubRatsnest() );
 
-        dx = pad->m_Size.x / 2; 
+        dx = pad->m_Size.x / 2;
         dy = pad->m_Size.y / 2;
 
         switch( pad->m_PadShape )
@@ -273,7 +273,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
     }
 
     fputs( "$ENDPADS\n\n", file );
-    
+
     MyFree( pad_list_base );
 }
 
@@ -287,13 +287,13 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
  *  une forme est creee par composant
  *  La forme est donnee normalisee, c'est a dire orientation 0, position 0 non miroir
  *  Il y aura donc des formes indentiques redondantes
- * 
+ *
  *  Syntaxe:
  *  $SHAPES
  *  SHAPE <shape_name>
  *  shape_descr (line, arc ..)
  *  PIN <pin_name> <pad_name> <x_y_ref> <layer> <rot> <mirror>
- * 
+ *
  *  SHAPE <shape_name>
  *  ..
  *  $ENDSHAPES
@@ -336,7 +336,7 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
             orient = pad->m_Orient - module->m_Orient;
             NORMALIZE_ANGLE_POS( orient );
             fprintf( file, "PIN %s PAD%d %d %d %s %d %s",
-                     CONV_TO_UTF8( pinname ), pad->m_logical_connexion,
+                     CONV_TO_UTF8( pinname ), pad->GetSubRatsnest(),
                      pad->m_Pos0.x, -pad->m_Pos0.y,
                      layer, orient / 10, mirror );
             if( orient % 10 )
@@ -459,8 +459,8 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
             continue;
 
         msg = wxT( "\nSIGNAL " ) + equipot->m_Netname;
-        
-        fputs( CONV_TO_UTF8( msg ), file ); 
+
+        fputs( CONV_TO_UTF8( msg ), file );
         fputs( "\n", file );
 
         for( module = pcb->m_Modules; module != NULL; module = (MODULE*) module->Pnext )
@@ -470,12 +470,12 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
                 wxString padname;
                 if( pad->GetNet() != equipot->GetNet() )
                     continue;
-                
+
                 pad->ReturnStringPadName( padname );
                 msg.Printf( wxT( "NODE %s %.4s" ),
                            module->m_Reference->m_Text.GetData(), padname.GetData() );
-                
-                fputs( CONV_TO_UTF8( msg ), file ); 
+
+                fputs( CONV_TO_UTF8( msg ), file );
                 fputs( "\n", file );
             }
         }
@@ -706,7 +706,7 @@ int* CreateTracksInfoData( FILE* file, BOARD* pcb )
  *  $TRACK
  *  TRACK <name> <width>
  *  $ENDTRACK
- * 
+ *
  *  on attribut ici comme nom l'epaisseur des traits precede de "TRACK": ex
  *  pour une largeur de 120 : nom = "TRACK120".
  */

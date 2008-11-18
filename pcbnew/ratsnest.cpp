@@ -28,8 +28,8 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  *  Building the general ratsnest:
  *  I used the "lee algoritm".
  *  This is a 2 steps algoritm.
- *  the m_logical_connexion member of pads handle a "block number" or a "cluster number" or a "subnet number"
- *  initially, m_logical_connexion = 0 (pad not connected).
+ *  the m_SubRatsnest member of pads handle a "block number" or a "cluster number" or a "subnet number"
+ *  initially, m_SubRatsnest = 0 (pad not connected).
  *  Build_Board_Ratsnest( wxDC* DC )  Create this rastnest
  *  for each net:
  *  First:
@@ -40,7 +40,7 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  *  the pads are grouped in a logical block ( a cluster).
  *  until no pad without link found.
  *  Each logical block has a number called block number or "subnet number",
- *  stored in m_logical_connexion member for each pad of the block.
+ *  stored in m_SubRatsnest member for each pad of the block.
  *  The first block has its block number = 1, the second is 2 ...
  *  the function to do thas is gen_rats_pad_to_pad()
  *
@@ -72,7 +72,7 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  * (no physical track exists) or not (a physical track exists)
  * if a track is added or deleted only the corresponding net is tested.
  *
- *  the m_logical_connexion member of pads is set to 0 (no blocks), and alls links are set to INACTIVE (ratsnest not show).
+ *  the m_SubRatsnest member of pads is set to 0 (no blocks), and alls links are set to INACTIVE (ratsnest not show).
  *  Before running this fast lee algorithm, we create blocks (and their corresponding block number)
  *  by grouping pads connected by tracks.
  *  So, when tracks exists, the fast lee algorithm is started with some blocks already created.
@@ -81,7 +81,7 @@ static bool DisplayRastnestInProgress;      // Enable the display of the ratsnes
  * when a track is created without noticeable computing time
  *  First:
  * for all links (in this step, all are inactive):
- * search for a link which have 1 (or 2) pad having the m_logical_connexion member = 0.
+ * search for a link which have 1 (or 2) pad having the m_SubRatsnest member = 0.
  * if found the link is set to ACTIVE (i.e. the ratsnest will be showed) and the pad is meged with the block
  * or a new block is created ( see tst_rats_pad_to_pad() ).
  * Secondly:
@@ -192,7 +192,7 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
  *  The search is made between the pads in block 1 (the reference block) and other blocks
  *  the block n ( n > 1 ) it connected to block 1 by their 2 nearest pads.
  *  When the block is found, it is merged with the block 1
- *  the D_PAD member m_logical_connexion handles the block number
+ *  the D_PAD member m_SubRatsnest handles the block number
  *  @param  pt_liste_pad = starting address (within the pad list) for search
  *  @param  pt_limite	  = ending address (within the pad list) for search
  *      return in global variables:
@@ -223,7 +223,7 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
         D_PAD* ref_pad = *pt_liste_pad;
 
         /* search a pad which is in the block 1 */
-        if( ref_pad->m_logical_connexion != 1 )
+        if( ref_pad->GetSubRatsnest() != 1 )
             continue;
 
         /* pad is found, search its nearest neighbour in other blocks */
@@ -234,7 +234,7 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
             if( pt_liste_pad_aux >= pt_limite )
                 break;
 
-            if( curr_pad->m_logical_connexion == 1 )  // not in an other block
+            if( curr_pad->GetSubRatsnest() == 1 )  // not in an other block
                 continue;
 
             /* Compare distance between pads ("Manhattan" distance) */
@@ -245,7 +245,7 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
             {
                 // The tested block can be a good candidate for merging
                 // we memorise the "best" current values for merging
-                current_num_block = curr_pad->m_logical_connexion;
+                current_num_block = curr_pad->GetSubRatsnest();
                 dist_min = current_dist;
 
                 pt_liste_pad_tmp    = pt_liste_pad_aux;
@@ -262,12 +262,12 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     if( current_num_block > 1 )
     {
         /* The block n is merged with the bloc 1 :
-         *  to do that, we set the m_logical_connexion member to 1 for all pads in block n
+         *  to do that, we set the m_SubRatsnest member to 1 for all pads in block n
          */
         for( pt_liste_pad = pt_start_liste; pt_liste_pad < pt_limite; pt_liste_pad++ )
         {
-            if( (*pt_liste_pad)->m_logical_connexion == current_num_block )
-                (*pt_liste_pad)->m_logical_connexion = 1;
+            if( (*pt_liste_pad)->GetSubRatsnest() == current_num_block )
+                (*pt_liste_pad)->SetSubRatsnest( 1 );
         }
 
         pt_liste_pad = pt_liste_pad_block1;
@@ -336,7 +336,7 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     {
         ref_pad = *pt_liste_pad;
 
-        if( ref_pad->m_logical_connexion )
+        if( ref_pad->GetSubRatsnest() )
             continue; // Pad already connected
 
         pt_liste_pad_tmp = NULL;
@@ -370,16 +370,16 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
             /* Update the block number
              *  if the 2 pads are not already created : a new block is created
              */
-            if( (pad->m_logical_connexion == 0) && (ref_pad->m_logical_connexion == 0) )
+            if( (pad->GetSubRatsnest() == 0) && (ref_pad->GetSubRatsnest() == 0) )
             {
                 current_num_block++;
-                pad->m_logical_connexion     = current_num_block;
-                ref_pad->m_logical_connexion = current_num_block;
+                pad->SetSubRatsnest( current_num_block);
+                ref_pad->SetSubRatsnest( current_num_block);
             }
             /* If a pad is already connected connected : merge the other pad in the block */
             else
             {
-                ref_pad->m_logical_connexion = pad->m_logical_connexion;
+                ref_pad->SetSubRatsnest( pad->GetSubRatsnest());
             }
 
             (*nblinks)++;
@@ -456,7 +456,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     for( ii = m_Pcb->m_NbPads; ii > 0;  pt_liste_pad++, ii-- )
     {
         pad = *pt_liste_pad;
-        pad->m_logical_connexion = 0;
+        pad->SetSubRatsnest( 0 );
     }
 
     /* Sort the pad list by nets */
@@ -503,7 +503,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         }
 
         /* Search the end of pad list des pads for the current net */
-        num_block = pad->m_logical_connexion;
+        num_block = pad->GetSubRatsnest();
         nbpads    = 0;
         for( pt_end_liste = pt_liste_pad + 1; ; pt_end_liste++ )
         {
@@ -515,8 +515,8 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
                 break;
 
             nbpads++;
-            if( num_block < pad->m_logical_connexion )
-                num_block = pad->m_logical_connexion;
+            if( num_block < pad->GetSubRatsnest() )
+                num_block = pad->GetSubRatsnest();
         }
 
         m_Pcb->m_NbLinks += nbpads;
@@ -668,7 +668,7 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     min_chevelu = NULL;
     for( chevelu = start_rat_list; chevelu < end_rat_list; chevelu++ )
     {
-        if( chevelu->pad_start->m_logical_connexion == chevelu->pad_end->m_logical_connexion )  // Same block
+        if( chevelu->pad_start->GetSubRatsnest() == chevelu->pad_end->GetSubRatsnest() )  // Same block
             continue;
 
         if( min_chevelu == NULL )
@@ -684,8 +684,8 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
      * we must set its status to ACTIVE and merge the 2 blocks
      */
     min_chevelu->status |= CH_ACTIF;
-    current_num_block    = min_chevelu->pad_start->m_logical_connexion;
-    min_block = min_chevelu->pad_end->m_logical_connexion;
+    current_num_block    = min_chevelu->pad_start->GetSubRatsnest();
+    min_block = min_chevelu->pad_end->GetSubRatsnest();
 
     if( min_block > current_num_block )
         EXCHG( min_block, current_num_block );
@@ -693,9 +693,9 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
     /* Merging the 2 blocks in one cluster */
     for( pt_liste_pad = pt_liste_pad_start; pt_liste_pad < pt_liste_pad_end; pt_liste_pad++ )
     {
-        if( (*pt_liste_pad)->m_logical_connexion == current_num_block )
+        if( (*pt_liste_pad)->GetSubRatsnest() == current_num_block )
         {
-            (*pt_liste_pad)->m_logical_connexion = min_block;
+            (*pt_liste_pad)->SetSubRatsnest( min_block);
         }
     }
 
@@ -723,7 +723,7 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
  *
  *      output:
  *          ratsnest list (status member set)
- *          and pad list (m_logical_connexion set)
+ *          and pad list (m_SubRatsnest set)
  *
  * @return new block number
  */
@@ -738,22 +738,22 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 
         /* Update the block if the 2 pads are not connected : a new block is created
          */
-        if( (pad_start->m_logical_connexion == 0) && (pad_end->m_logical_connexion == 0) )
+        if( (pad_start->GetSubRatsnest() == 0) && (pad_end->GetSubRatsnest() == 0) )
         {
             current_num_block++;
-            pad_start->m_logical_connexion = current_num_block;
-            pad_end->m_logical_connexion   = current_num_block;
+            pad_start->SetSubRatsnest( current_num_block);
+            pad_end->SetSubRatsnest( current_num_block);
             chevelu->status |= CH_ACTIF;
         }
         /* If a pad is already connected : the other is merged in the current block */
-        else if( pad_start->m_logical_connexion == 0 )
+        else if( pad_start->GetSubRatsnest() == 0 )
         {
-            pad_start->m_logical_connexion = pad_end->m_logical_connexion;
+            pad_start->SetSubRatsnest( pad_end->GetSubRatsnest() );
             chevelu->status |= CH_ACTIF;
         }
-        else if( pad_end->m_logical_connexion == 0 )
+        else if( pad_end->GetSubRatsnest() == 0 )
         {
-            pad_end->m_logical_connexion = pad_start->m_logical_connexion;
+            pad_end->SetSubRatsnest( pad_start->GetSubRatsnest() );
             chevelu->status |= CH_ACTIF;
         }
     }
@@ -795,8 +795,8 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
         for( ; pt_liste_pad < equipot->m_PadzoneEnd; pt_liste_pad++ )
         {
             pad = *pt_liste_pad;
-            pad->m_logical_connexion = pad->m_physical_connexion;
-            num_block = MAX( num_block, pad->m_logical_connexion );
+            pad->SetSubRatsnest( pad->GetSubNet() );
+            num_block = MAX( num_block, pad->GetSubRatsnest() );
         }
 
         for( chevelu = equipot->m_RatsnestStart; chevelu < equipot->m_RatsnestEnd; chevelu++ )
@@ -981,7 +981,7 @@ void WinEDA_BasePcbFrame::build_liste_pads()
  *   m_Pcb->m_NbPads = pad count
  *   m_Pcb->m_NbNodes = node count
  * set m_Pcb->m_Status_Pcb = LISTE_PAD_OK;
- * and clear for all pad their m_logical_connexion member;
+ * and clear for all pad their m_SubRatsnest member;
  * delete ( free memory) m_Pcb->m_Ratsnest and set m_Pcb->m_Ratsnest to NULL
  */
 {
@@ -1025,7 +1025,7 @@ void WinEDA_BasePcbFrame::build_liste_pads()
         for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
         {
             *pt_liste_pad = PtPad;
-            PtPad->m_logical_connexion = 0;
+            PtPad->SetSubRatsnest( 0 );
             PtPad->m_Parent = Module;   // Just in case
 
             if( PtPad->GetNet() )
@@ -1106,8 +1106,8 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
             continue;
 
         *pt_liste_pad = pad_ref;
-        pad_ref->m_logical_connexion  = 0;
-        pad_ref->m_physical_connexion = 0;
+        pad_ref->SetSubRatsnest( 0 );
+        pad_ref->SetSubNet( 0 );
         pt_liste_pad++; nb_pads_ref++;
     }
 
@@ -1140,8 +1140,8 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
             if( pad_externe->m_Parent == Module )
                 continue;
 
-            pad_externe->m_logical_connexion  = 0;
-            pad_externe->m_physical_connexion = 0;
+            pad_externe->SetSubRatsnest(0);
+            pad_externe->SetSubNet( 0 );
 
             *pt_liste_pad = pad_externe;
             pt_liste_pad++;
@@ -1154,7 +1154,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     qsort( pt_liste_ref + nb_pads_ref, nb_pads_externes, sizeof(D_PAD*),
            tri_par_net );
 
-    /* Compute the internal ratsnet:
+    /* Compute the internal rats nest:
      *  this is the same as general ratsnest, but considers only the current footprint pads
 	 * it is therefore not time consuming, and it is made only once
 	*/
@@ -1413,7 +1413,7 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
         case TYPEPAD:
             pad_ref = (D_PAD*) ref;
             current_net_code = pad_ref->GetNet();
-            conn_number = pad_ref->m_physical_connexion;
+            conn_number = pad_ref->GetSubNet();
             break;
 
         case TYPETRACK:
@@ -1448,7 +1448,7 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
             if( pad == pad_ref )
                 continue;
 
-            if( !pad->m_physical_connexion || (pad->m_physical_connexion != conn_number) )
+            if( !pad->GetSubNet() || (pad->GetSubNet() != conn_number) )
             {
                 *pt_coord = pad->m_Pos.x; pt_coord++;
                 *pt_coord = pad->m_Pos.y; pt_coord++;

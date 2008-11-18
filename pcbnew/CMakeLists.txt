@@ -18,6 +18,7 @@ set(PCBNEW_SRCS
     board.cpp
     class_board.cpp
     class_board_item.cpp
+    class_board_connected_item.cpp
     class_cotation.cpp
     class_drawsegment.cpp
     class_drc_item.cpp
@@ -145,6 +146,7 @@ set(PCBNEW_SRCS
     zones_convert_brd_items_to_polygons.cpp
     zone_filling_algorithm.cpp
     zones_polygons_insulated_copper_islands.cpp
+    zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
     )
 

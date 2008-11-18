@@ -97,15 +97,6 @@ public:
                              int               aDrawMode,
                              const wxPoint&    offset = ZeroOffset );
 
-    EDA_Rect GetBoundingBox();
-
-    /**
-     * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
-     * Remove insulated copper islands found in m_FilledPolysList.
-     * @param aPcb = the board to analyse
-     */
-    void     Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
-
     /**
      * Function DrawWhileCreateOutline
      * Draws the zone outline when ir is created.
@@ -117,6 +108,27 @@ public:
      */
     void     DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode = GR_OR );
 
+
+    /* Function GetBoundingBox
+     * @return an EDA_Rect that is the bounding box of the zone outline
+     */
+    EDA_Rect GetBoundingBox();
+
+    /**
+     * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
+     * Remove insulated copper islands found in m_FilledPolysList.
+     * @param aPcb = the board to analyse
+     */
+    void Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
+
+    /** function CalculateSubAreaBoundaryBox
+     * Calculates the bounding box of a a filled area ( list of CPolyPt )
+     * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
+     * @return an EDA_Rect as bounding box
+     * @param aIndexStart = index of the first corner of a polygon (filled area) in m_FilledPolysList
+     * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
+     */
+    EDA_Rect CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd );
 
     /**
      * Function IsOnCopperLayer

@@ -544,6 +544,16 @@ public:
      * @return errors count
     */
     int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,bool aCreate_Markers );
+
+    /****** function relative to ratsnest calculations: */
+
+    /**
+     * Function Test_Connection_To_Copper_Areas
+     * init .m_ZoneSubnet parameter in tracks and pads according to the connections to areas found
+     * @param aNetcode = netcode to analyse. if -1, analyse all nets
+     */
+    void Test_Connections_To_Copper_Areas( int aNetcode = -1 );
+
 };
 
 #endif		// #ifndef CLASS_BOARD_H

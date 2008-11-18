@@ -26,12 +26,10 @@
 /* classe D_PAD : constructeur */
 /*******************************/
 
-D_PAD::D_PAD( MODULE* parent ) :
-    BOARD_ITEM( parent, TYPEPAD )
+D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPEPAD )
 {
     m_NumPadName   = 0;
     m_Masque_Layer = CUIVRE_LAYER;
-    SetNet( 0 );                    /* Numero de net pour comparaisons rapides */
     m_DrillShape = PAD_CIRCLE;          // Drill shape = circle
 
     m_Size.x = m_Size.y = 500;
@@ -45,8 +43,7 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_Attribut = PAD_STANDARD;          // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
     m_Orient   = 0;                 // en 1/10 degres
 
-    m_logical_connexion  = 0;
-    m_physical_connexion = 0;       // variables utilisee lors du calcul du chevelu
+    SetSubRatsnest(0);
     ComputeRayon();
 }
 
@@ -199,8 +196,8 @@ void D_PAD::Copy( D_PAD* source )
     m_Attribut = source->m_Attribut;                            // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
     m_Orient   = source->m_Orient;                              // en 1/10 degres
 
-    m_logical_connexion  = 0;                                   // variable utilisee lors du calcul du chevelu
-    m_physical_connexion = 0;                                   // variable utilisee lors du calcul de la connexit�
+    SetSubRatsnest( 0 );
+    SetSubNet( 0 );
     m_Netname = source->m_Netname;
 }
 
@@ -890,7 +887,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     };
 
     static const wxString Msg_Pad_Attribut[5] =
-    { wxT( "norm" ), wxT( "smd " ), wxT( "conn" ), wxT( "hole" ), wxT( "????" ) };
+    { wxT( "norm" ), wxT( "smd " ), wxT( "conn" ), wxT( "????" ) };
 
 
     frame->MsgPanel->EraseMsgBox();
@@ -910,9 +907,9 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 
     /* For test and debug only: display m_physical_connexion and m_logical_connexion */
     pos += 10;
-#if 0
-    Line.Printf( wxT( "%d.%d " ), m_logical_connexion, m_physical_connexion );
-    Affiche_1_Parametre( frame, pos, "L.P", Line, WHITE );
+#if 1   // Used only to debug connectivity calculations
+    Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), m_ZoneSubnet );
+    Affiche_1_Parametre( frame, pos, wxT("L-P-Z"), Line, DARKGREEN );
 #endif
 
     wxString LayerInfo;
@@ -993,13 +990,9 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, pos, _( "Layer" ), LayerInfo, DARKGREEN );
 
     pos += 6;
-    Affiche_1_Parametre( frame, pos, Msg_Pad_Shape[m_PadShape], wxEmptyString, DARKGREEN );
-
-    Affiche_1_Parametre( frame,
-                         -1,
-                         wxEmptyString,
-                         Msg_Pad_Attribut[m_Attribut & 15],
-                         DARKGREEN );
+    int attribut = m_Attribut & 15;
+    if ( attribut > 3 )  attribut = 3;
+    Affiche_1_Parametre( frame, pos, Msg_Pad_Shape[m_PadShape],Msg_Pad_Attribut[attribut], DARKGREEN );
 
     valeur_param( m_Size.x, Line );
     pos += 6;

@@ -7,8 +7,6 @@ EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing\
 	-I../polygon
 
 
-#COMMON = pcbnew.h struct.h
-
 OBJECTS= \
 		$(TARGET).o\
 		classpcb.o\
@@ -27,6 +25,7 @@ OBJECTS= \
 		class_drawsegment.o\
 		class_track.o \
 		class_drc_item.o \
+        class_board_connected_item.o\
 		drawframe.o\
 		drawpanel.o\
 		set_color.o \
@@ -65,132 +64,135 @@ drawpanel.o: ../share/drawpanel.cpp
 drawframe.o: ../share/drawframe.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-controle.o: controle.cpp $(COMMON)
+controle.o: controle.cpp
 
-hotkeys.o: hotkeys.cpp hotkeys.h $(COMMON)
+hotkeys.o: hotkeys.cpp hotkeys.h
 
-set_color.o: set_color.cpp set_color.h $(COMMON)
+set_color.o: set_color.cpp set_color.h
 
-files.o: files.cpp $(COMMON)
+files.o: files.cpp
 
-class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h $(COMMON)
+class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h $(COMMON)
+class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-class_zone_setting.o: ../pcbnew/class_zone_setting.cpp ../pcbnew/class_zone_setting.h $(COMMON)
+class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_zone_setting.o: ../pcbnew/class_zone_setting.cpp ../pcbnew/class_zone_setting.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_drawsegment.o: ../pcbnew/class_drawsegment.cpp ../pcbnew/class_drawsegment.h $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-class_drc_item.o: ../pcbnew/class_drc_item.cpp $(COMMON)
+class_drc_item.o: ../pcbnew/class_drc_item.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-sel_layer.o: ../pcbnew/sel_layer.cpp $(COMMON)
+sel_layer.o: ../pcbnew/sel_layer.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h $(COMMON)
+wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-lay2plot.o: lay2plot.cpp $(COMMON)
+lay2plot.o: lay2plot.cpp
 
-classpcb.o: ../pcbnew/classpcb.cpp $(COMMON)
+classpcb.o: ../pcbnew/classpcb.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-class_pcb_text.o: ../pcbnew/class_pcb_text.cpp ../pcbnew/class_pcb_text.h $(COMMON)
+class_pcb_text.o: ../pcbnew/class_pcb_text.cpp ../pcbnew/class_pcb_text.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board.o: ../pcbnew/class_board.cpp $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-basepcbframe.o: ../pcbnew/basepcbframe.cpp $(COMMON)
+basepcbframe.o: ../pcbnew/basepcbframe.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-collectors.o: ../pcbnew/collectors.cpp $(COMMON)
+collectors.o: ../pcbnew/collectors.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-class_track.o: ../pcbnew/class_track.cpp $(COMMON)
+class_track.o: ../pcbnew/class_track.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-$(TARGET).o: $(TARGET).cpp $(COMMON)
+$(TARGET).o: $(TARGET).cpp
 
-gerbview_config.o: gerbview_config.cpp gerbview_config.h $(COMMON)
+gerbview_config.o: gerbview_config.cpp gerbview_config.h
 
-tracepcb.o: tracepcb.cpp $(COMMON)
+tracepcb.o: tracepcb.cpp
 
-block.o: block.cpp $(COMMON)
+block.o: block.cpp
 
-trpiste.o: trpiste.cpp $(COMMON)
+trpiste.o: trpiste.cpp
 
-surbrill.o: surbrill.cpp $(COMMON)
+surbrill.o: surbrill.cpp
 
-pcbtexte.o: pcbtexte.cpp $(COMMON)
+pcbtexte.o: pcbtexte.cpp
 
-zoom.o: ../share/zoom.cpp $(COMMON)
+zoom.o: ../share/zoom.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-affiche.o: affiche.cpp $(COMMON)
+affiche.o: affiche.cpp
 
-reglage.o: reglage.cpp $(COMMON)
+reglage.o: reglage.cpp
 
-editrack.o: editrack.cpp $(COMMON)
+editrack.o: editrack.cpp
 
-deltrack.o: deltrack.cpp $(COMMON)
+deltrack.o: deltrack.cpp
 
-track.o: track.cpp $(COMMON)
+track.o: track.cpp
 
-editrout.o: editrout.cpp autorout.h $(COMMON)
+editrout.o: editrout.cpp autorout.h
 
-editmod.o: editmod.cpp autorout.h $(COMMON)
+editmod.o: editmod.cpp autorout.h
 
-editpads.o: editpads.cpp $(COMMON)
+editpads.o: editpads.cpp
 
-editedge.o: editedge.cpp $(COMMON)
+editedge.o: editedge.cpp
 
-cotation.o: cotation.cpp $(COMMON)
+cotation.o: cotation.cpp
 
-editexte.o: editexte.cpp $(COMMON)
+editexte.o: editexte.cpp
 
-clean.o: clean.cpp autorout.h $(COMMON)
+clean.o: clean.cpp autorout.h
 
-pcbplot.o: pcbplot.cpp $(COMMON)
+pcbplot.o: pcbplot.cpp
 
-plothpgl.o: plothpgl.cpp $(COMMON)
+plothpgl.o: plothpgl.cpp
 
-plotgerb.o: plotgerb.cpp pcbplot.h $(COMMON)
+plotgerb.o: plotgerb.cpp pcbplot.h
 
-printps.o: printps.cpp pcbplot.h $(COMMON)
+printps.o: printps.cpp pcbplot.h
 
-readgerb.o: readgerb.cpp pcbplot.h $(COMMON)
+readgerb.o: readgerb.cpp pcbplot.h
 
-plot_rtn.o: plot_rtn.cpp pcbplot.h $(COMMON)
+plot_rtn.o: plot_rtn.cpp pcbplot.h
 
-gendrill.o: gendrill.cpp pcbplot.h $(COMMON)
+gendrill.o: gendrill.cpp pcbplot.h
 
-librairi.o: librairi.cpp autorout.h librairi.h $(COMMON)
+librairi.o: librairi.cpp autorout.h librairi.h
 
-docedit.o: docedit.cpp $(COMMON)
+docedit.o: docedit.cpp
 
-edgemod.o: edgemod.cpp $(COMMON)
+edgemod.o: edgemod.cpp
 
-autorout.o: autorout.cpp cell.h autorout.fct autorout.h $(COMMON)
+autorout.o: autorout.cpp cell.h autorout.fct autorout.h
 
-setlayer.o: setlayer.cpp $(COMMON)
+setlayer.o: setlayer.cpp
 
-dist.o: dist.cpp cell.h autorout.fct $(COMMON)
+dist.o: dist.cpp cell.h autorout.fct
 
-zones.o: zones.cpp cell.h autorout.fct $(COMMON)
+zones.o: zones.cpp cell.h autorout.fct
 
-undelete.o: undelete.cpp $(COMMON)
+undelete.o: undelete.cpp
 
-ioascii.o: ioascii.cpp $(COMMON)
+ioascii.o: ioascii.cpp
 
 chrono.o: chrono.cpp pcbnew.h
 
-coordbox.o: coordbox.cpp $(COMMON)
+coordbox.o: coordbox.cpp
 
-mirepcb.o: mirepcb.cpp $(COMMON)
+mirepcb.o: mirepcb.cpp
 
-dragsegm.o: dragsegm.cpp drag.h $(COMMON)
+dragsegm.o: dragsegm.cpp drag.h

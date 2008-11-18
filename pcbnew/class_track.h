@@ -16,7 +16,7 @@
 
 /***/
 
-class TRACK : public BOARD_ITEM
+class TRACK : public BOARD_CONNECTED_ITEM
 {
 public:
     int         m_Width;            // 0 = line, > 0 = tracks, bus ...
@@ -35,12 +35,6 @@ public:
     int         m_Param;            // Auxiliary variable ( used in some computations )
 
 protected:
-    int         m_NetCode;          // Net number
-    int         m_Subnet;           /* In rastnest routines : for the current net,
-                                     *  block number (number common to the current connected items found) */
-    int         m_ZoneSubnet;   	// variable used in rastnest computations : for the current net,
-                                    // handle block number in zone connection
-
     TRACK( const TRACK& track );    // protected so Copy() is used instead.
 
 public:
@@ -72,7 +66,7 @@ public:
     EDA_Rect GetBoundingBox();
 
 
-    /* supprime du chainage la structure Struct */
+    /* Remove "this" from the linked list */
     void    UnLink();
 
 
@@ -116,28 +110,6 @@ public:
      * ( the linked list is always sorted by net codes )
      */
     TRACK*  GetEndNetCode( int NetCode );
-
-    /**
-     * Function GetNet
-     * @return int - the net code.
-     */
-    int GetNet() const { return m_NetCode; }
-    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
-
-
-    /**
-     * Function GetSubNet
-     * @return int - the sub net code.
-     */
-    int GetSubNet() const { return m_Subnet; }
-    void SetSubNet( int aSubNetCode ) { m_Subnet = aSubNetCode; }
-
-    /**
-     * Function GetZoneSubNet
-     * @return int - the sub net code in zone connections.
-     */
-    int GetZoneSubNet() const { return m_ZoneSubnet; }
-    void SetZoneSubNet( int aSubNetCode ) { m_ZoneSubnet = aSubNetCode; }
 
     /**
      * Function GetLength

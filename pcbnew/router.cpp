@@ -199,7 +199,7 @@ void Out_Pads( BOARD* Pcb, FILE* outfile )
         {
             pt_pad  = *pt_liste_pad;
             netcode = pt_pad->GetNet();
-            plink   = pt_pad->m_physical_connexion;
+            plink   = pt_pad->GetSubNet();
             /* plink = numero unique si pad non deja connecte a une piste */
             if( plink <= 0 )
                 plink = no_conn++;

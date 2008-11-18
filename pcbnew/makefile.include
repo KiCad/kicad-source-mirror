@@ -18,7 +18,8 @@ ZONE_FILES = zones_by_polygon.o zones_test_and_combine_areas.o\
 		dialog_non_copper_zones_properties_base.o\
 		zones_non_copper_type_functions.o\
         zones_convert_brd_items_to_polygons.o\
-        zones_polygons_insulated_copper_islands.o
+        zones_polygons_insulated_copper_islands.o\
+        zones_polygons_test_connections.o
 
 SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o specctra_import.o
 
@@ -54,6 +55,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		class_text_mod.o\
 		class_pcb_text.o\
 		class_board_item.o\
+        class_board_connected_item.o\
 		class_drc_item.o\
 		class_board.o\
 		class_zone.o\

@@ -33,6 +33,7 @@ set(CVPCB_EXTRA_SRCS
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_item.cpp
+    ../pcbnew/class_board_connected_item.cpp
     ../pcbnew/class_cotation.cpp
     ../pcbnew/class_drawsegment.cpp
     ../pcbnew/class_edge_mod.cpp

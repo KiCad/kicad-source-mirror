@@ -1,22 +1,39 @@
-/*********************************************************************/
-/*  board_item_struct.h :  Basic classes for BOARD_ITEM descriptions */
-/*********************************************************************/
+/**********************************************************************************************/
+/*  board_item_struct.h :  Basic classes for BOARD_ITEM and BOARD_CONNECTED_ITEM descriptions */
+/**********************************************************************************************/
 
 #ifndef BOARD_ITEM_STRUCT_H
 #define BOARD_ITEM_STRUCT_H
 
 
-/* Forme des segments (pistes, contours ..) ( parametre .shape ) */
+/**
+ * Class BOARD_ITEM
+ * is a base class for any item which can be embedded within the BOARD
+ * container class, and therefore instances of derived classes should only be
+ * found in PCBNEW or other programs that use class BOARD and its contents.
+ * The corresponding class in EESCHEMA is SCH_ITEM.
+ */
+
+/**
+ * Class BOARD_CONNECTED_ITEM
+ * This is a base class derived from BOARD_ITEM for items that can be connected
+ * mainly: tracks and pads
+ * Handle connection info 
+ * 
+ */
+
+
+/* Shapes for segments (graphic segments and tracks) ( .shape member ) */
 enum Track_Shapes {
-    S_SEGMENT = 0,      /* segment rectiligne */
-    S_RECT,             /* segment forme rect (i.e. bouts non arrondis) */
-    S_ARC,              /* segment en arc de cercle (bouts arrondis)*/
-    S_CIRCLE,           /* segment en cercle (anneau)*/
-    S_ARC_RECT,         /* segment en arc de cercle (bouts droits) (GERBER)*/
-    S_SPOT_OVALE,       /* spot ovale (for GERBER)*/
-    S_SPOT_CIRCLE,      /* spot rond (for GERBER)*/
-    S_SPOT_RECT,        /* spot rect (for GERBER)*/
-    S_POLYGON           /* polygon shape */
+    S_SEGMENT = 0,      /* usual segment : line with rounded ends */
+    S_RECT,             /* segment with non rounded ends */
+    S_ARC,              /* Arcs (with rounded ends)*/
+    S_CIRCLE,           /* ring*/
+    S_ARC_RECT,         /* Arcs (with non rounded ends) (GERBER)*/
+    S_SPOT_OVALE,       /* Oblong spot (for GERBER)*/
+    S_SPOT_CIRCLE,      /* rounded spot (for GERBER)*/
+    S_SPOT_RECT,        /* Rectangular spott (for GERBER)*/
+    S_POLYGON           /* polygonal shape */
 };
 
 
@@ -163,6 +180,41 @@ public:
      * @return bool - true if success writing else false.
      */
     virtual bool    Save( FILE* aFile ) const = 0;
+};
+
+
+class BOARD_CONNECTED_ITEM: public BOARD_ITEM
+{
+protected:
+    int         m_NetCode;          // Net number
+    int         m_Subnet;           /* In rastnest routines : for the current net,
+                                     *  block number (number common to the current connected items found) */
+    int         m_ZoneSubnet;   	// variable used in rastnest computations : for the current net,
+                                    // handle block number in zone connection
+public:
+    BOARD_CONNECTED_ITEM( BOARD_ITEM* StructFather, KICAD_T idtype );
+    BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& src );
+
+    /**
+     * Function GetNet
+     * @return int - the net code.
+     */
+    int GetNet() const;
+    void SetNet( int aNetCode );
+
+    /**
+     * Function GetSubNet
+     * @return int - the sub net code.
+     */
+    int GetSubNet() const;
+    void SetSubNet( int aSubNetCode );
+
+    /**
+     * Function GetZoneSubNet
+     * @return int - the sub net code in zone connections.
+     */
+    int GetZoneSubNet() const;
+    void SetZoneSubNet( int aSubNetCode );
 };
 
 #endif /* BOARD_ITEM_STRUCT_H */

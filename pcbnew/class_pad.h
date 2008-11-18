@@ -8,7 +8,7 @@ class Pcb3D_GLCanvas;
 
 
 /* Definition type Structure d'un pad */
-class D_PAD : public BOARD_ITEM
+class D_PAD : public BOARD_CONNECTED_ITEM
 {
 private:
     int m_NetCode;              // Net number for fast comparisons
@@ -60,14 +60,9 @@ public:
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
     int     m_Orient;               // in 1/10 degrees
 
-    int     m_logical_connexion;    // variable used in rastnest computations
+private:
+    int     m_SubRatsnest;           // variable used in rats nest computations
                                     // handle subnet (block) number in ratsnet connection
-
-    int     m_physical_connexion;   // variable used in rastnest computations
-                                    // handle physical subnet (block)number in track connection
-protected:
-    int     m_ZoneSubnet;   	    // variable used in rastnest computations
-                                    // handle block number in zone connection
 
 public:
     D_PAD( MODULE* parent );
@@ -128,15 +123,9 @@ public:
      * Function GetNet
      * @return int - the netcode
      */
-    int GetNet() const { return m_NetCode; }
-    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
+    int GetSubRatsnest() const { return m_SubRatsnest; }
+    void SetSubRatsnest( int aSubRatsnest ) { m_SubRatsnest = aSubRatsnest; }
 
-    /**
-     * Function GetZoneSubNet
-     * @return int - the sub net code in zone connections.
-     */
-    int GetZoneSubNet() const { return m_ZoneSubnet; }
-    void SetZoneSubNet( int aSubNetCode ) { m_ZoneSubnet = aSubNetCode; }
 
     /**
      * Function Display_Infos

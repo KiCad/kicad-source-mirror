@@ -19,7 +19,6 @@
 using namespace std;
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -28,17 +27,8 @@ using namespace std;
 #include "zones.h"
 
 
-static void CalculateSubAreaBoundaryBox( EDA_Rect&             aBbox,
-                                         std::vector <CPolyPt> aPolysList,
-                                         int                   aIndexStart,
-                                         int                   aIndexEnd );
-
-/* Local variables */
-std::vector <wxPoint> s_ListPoints;  // list of coordinates of pads and vias on this layer and on this net.
-
-
 /***************************************************************************************/
-void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb )
+void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD * aPcb )
 /***************************************************************************************/
 
 /**
@@ -50,11 +40,15 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD*
     if( m_FilledPolysList.size() == 0 )
         return;
 
-    // Build the list:
-    s_ListPoints.clear();
-    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    // Build a list of points connected to the net:
+    std::vector <wxPoint> ListPointsCandidates;                                         // list of coordinates of pads and vias on this layer and on this net.
+    for( MODULE* module = aPcb->m_Modules;
+        module;
+        module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->m_Pads;
+            pad != NULL;
+            pad = pad->Next() )
         {
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;
@@ -62,82 +56,91 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD*
             if( pad->GetNet() != GetNet() )
                 continue;
 
-            s_ListPoints.push_back( pad->m_Pos );
+            ListPointsCandidates.push_back( pad->m_Pos );
         }
     }
 
-    for( TRACK* track = aPcb->m_Track;  track;  track = track->Next() )
+    for( TRACK* track = aPcb->m_Track;
+        track;
+        track = track->Next() )
     {
         if( !track->IsOnLayer( GetLayer() ) )
             continue;
         if( track->GetNet() != GetNet() )
             continue;
-        s_ListPoints.push_back( track->m_Start );
+        ListPointsCandidates.push_back( track->m_Start );
         if( track->Type() != TYPEVIA )
-            s_ListPoints.push_back( track->m_End );
+            ListPointsCandidates.push_back( track->m_End );
     }
 
     // test if a point is inside
     unsigned indexstart = 0, indexend;
     bool     connected  = false;
-    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
+    for( indexend = 0;
+         indexend < m_FilledPolysList.size();
+         indexend++ )
     {
-        if( m_FilledPolysList[indexend].end_contour )   // end of area found
+        if( m_FilledPolysList[indexend].end_contour )                                         // end of a filled sub-area found
         {
-            EDA_Rect bbox;
-            CalculateSubAreaBoundaryBox( bbox, m_FilledPolysList, indexstart, indexend );
-            for( unsigned ic = 0; ic < s_ListPoints.size(); ic++ )
-            {
-                wxPoint pos = s_ListPoints[ic];
+            EDA_Rect bbox =
+                CalculateSubAreaBoundaryBox( indexstart,
+                    indexend );
+            for( unsigned ic = 0;
+                 ic < ListPointsCandidates.size();
+                 ic++ )
+            {                                         // test if this area is connected to a board item:
+                wxPoint pos = ListPointsCandidates[ic];
                 if( !bbox.Inside( pos ) )
                     continue;
-                if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend, pos.x, pos.y ) )
+                if( TestPointInsidePolygon(
+                       m_FilledPolysList, indexstart,
+                       indexend, pos.x,
+                       pos.y ) )
                 {
                     connected = true;
                     break;
                 }
             }
 
-            if( connected )                 // this polygon is connected: analyse next polygon
+            if( connected )                                                         // this polygon is connected: analyse next polygon
             {
-                indexstart = indexend + 1;  // indexstart points the first point of the next polygon
+                indexstart = indexend + 1;                                          // indexstart points the first point of the next polygon
                 connected  = false;
             }
-            else // Not connected: remove this polygon
+            else                                         // Not connected: remove this polygon
             {
                 m_FilledPolysList.erase(
                     m_FilledPolysList.begin() + indexstart,
-                    m_FilledPolysList.begin() + indexend + 1 );
-                indexend = indexstart;  /* indexstart points the first point of the next polygon
-                                         * because the current poly is removed */
+                    m_FilledPolysList.begin() + indexend +
+                    1 );
+                indexend = indexstart;                                         /* indexstart points the first point of the next polygon
+                                                                                * because the current poly is removed */
             }
         }
     }
 }
 
 
-/******************************************************************/
-void CalculateSubAreaBoundaryBox( EDA_Rect&             aBbox,
-                                  std::vector <CPolyPt> aPolysList,
-                                  int                   aIndexStart,
-                                  int                   aIndexEnd )
-/******************************************************************/
+/**************************************************************************************/
+EDA_Rect ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
+/**************************************************************************************/
 
 /** function CalculateSubAreaBoundaryBox
-  * Calculates the bounding box of a polygon stored in a vector <CPolyPt>
-  * @param aBbox = EDA_Rect to init as bounding box
-  * @param aPolysList =  set of CPolyPt that are the corners of one or more polygons
-  * @param aIndexStart = index of the first corner of a polygon in aPolysList
-  * @param aIndexEnd = index of the last corner of a polygon in aPolysList
+ * Calculates the bounding box of a a filled area ( list of CPolyPt )
+ * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
+ * @return an EDA_Rect as bounding box
+ * @param aIndexStart = index of the first corner of a polygon (filled area) in m_FilledPolysList
+ * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
  */
 {
-    CPolyPt start_point, end_point;
+    CPolyPt  start_point, end_point;
+    EDA_Rect bbox;
 
-    start_point = aPolysList[aIndexStart];
+    start_point = m_FilledPolysList[aIndexStart];
     end_point   = start_point;
     for( int ii = aIndexStart; ii <= aIndexEnd; ii++ )
     {
-        CPolyPt ptst = aPolysList[ii];
+        CPolyPt ptst = m_FilledPolysList[ii];
         if( start_point.x > ptst.x )
             start_point.x = ptst.x;
         if( start_point.y > ptst.y )
@@ -148,6 +151,8 @@ void CalculateSubAreaBoundaryBox( EDA_Rect&             aBbox,
             end_point.y = ptst.y;
     }
 
-    aBbox.SetOrigin( start_point.x, start_point.y );
-    aBbox.SetEnd( wxPoint( end_point.x, end_point.y ) );
+    bbox.SetOrigin( start_point.x, start_point.y );
+    bbox.SetEnd( wxPoint( end_point.x, end_point.y ) );
+
+    return bbox;
 }

@@ -956,7 +956,7 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
         if( error_level && !verbose )
             break;
     }
-
+    m_Pcb->Test_Connections_To_Copper_Areas( );
     DrawPanel->Refresh( true );
     return error_level;
 }

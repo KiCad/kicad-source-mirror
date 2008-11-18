@@ -58,15 +58,12 @@ static bool ShowClearance( const TRACK* aTrack )
 
 /**********************************************************/
 TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
-    BOARD_ITEM( StructFather, idtype )
+    BOARD_CONNECTED_ITEM( StructFather, idtype )
 /**********************************************************/
 {
     m_Width = 0;
     m_Shape = S_SEGMENT;
     start   = end = NULL;
-    SetNet( 0 );
-    SetSubNet( 0 );
-    SetZoneSubNet( 0 );
     SetDrillDefault();
     m_Param = 0;
 }
@@ -98,7 +95,7 @@ SEGVIA::SEGVIA( BOARD_ITEM* StructFather ) :
 
 // Copy constructor
 TRACK::TRACK( const TRACK& Source ) :
-    BOARD_ITEM( Source )
+    BOARD_CONNECTED_ITEM( Source )
 {
     m_Shape = Source.m_Shape;
     SetNet( Source.GetNet() );

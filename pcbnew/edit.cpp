@@ -548,7 +548,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 	case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
         if ( ( GetCurItem())->Type() == TYPEZONE_CONTAINER)
         {
-            ((ZONE_CONTAINER* )GetCurItem())->m_FilledPolysList.clear();
+            ZONE_CONTAINER* zone_container = (ZONE_CONTAINER* )GetCurItem();
+            zone_container->m_FilledPolysList.clear();
+            test_1_net_connexion( NULL, zone_container->GetNet( ));
             GetScreen()->SetModify();
             DrawPanel->Refresh();
         }
@@ -566,13 +568,16 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             ZONE_CONTAINER* zone_container = m_Pcb->GetArea( ii );
             zone_container->m_FilledPolysList.clear();;
         }
+        test_connexions( NULL );
         GetScreen()->SetModify();
         DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_FILL_ZONE:
         DrawPanel->MouseToCursorSchema();
-        Fill_Zone( &dc, (ZONE_CONTAINER*) GetCurItem() );
+        Fill_Zone( NULL, (ZONE_CONTAINER*) GetCurItem() );
+        test_1_net_connexion( NULL, ((ZONE_CONTAINER* )GetCurItem())->GetNet( ));
+        DrawPanel->Refresh();
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:

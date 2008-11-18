@@ -22,7 +22,7 @@ using namespace std;
  * the first version is for explanations and tests (used to test the second version)
  * both use the same algorithm.
  */
-#if 0
+#if 1
 
 /* This text and the algorithm come from http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
  *

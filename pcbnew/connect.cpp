@@ -12,26 +12,28 @@
 #include "protos.h"
 
 
-/* Loca functions */
-static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn );
-static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn );
+extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
+extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
+
+/* Local functions */
+static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn );
+static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* pt_end_conn );
 static void RebuildTrackChain( BOARD* pcb );
 static int  Sort_By_NetCode( TRACK** pt_ref, TRACK** pt_compare );
 
 /*..*/
 
 
-/*****************************************************************/
-static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
-                           int old_val, int new_val )
-/*****************************************************************/
+/**************************************************************************************************/
+static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_val, int new_val )
+/**************************************************************************************************/
 
-/** Function change_equipot()
- * Used by propage_equipot()
+/** Function Merge_Two_SubNets()
+ * Used by Propagate_SubNet()
  * Change a subnet value to a new value, for tracks ans pads which are connected to corresponding track
- * for pads, this is the .m_physical_connexion member which is tested and modified
- * for tracks, this is the .m_Subnet member which is tested and modified
+ * for pads and tracks, this is the .m_Subnet member that is tested and modified
  * these members are block numbers (or cluster numbers) for a given net
+ * The result is merging 2 blocks (or subnets)
  * @return modification count
  * @param old_val = subnet value to modify
  * @param new_val = new subnet value for each item whith have old_val as subnet value
@@ -66,15 +68,15 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
         if( pt_conn->start && ( pt_conn->start->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->start);
-            if( pt_pad->m_physical_connexion == old_val )
-                pt_pad->m_physical_connexion = pt_conn->GetSubNet();
+            if( pt_pad->GetSubNet() == old_val )
+                pt_pad->SetSubNet(pt_conn->GetSubNet());
         }
 
         if( pt_conn->end && (pt_conn->end->Type() == TYPEPAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->end);
-            if( pt_pad->m_physical_connexion == old_val )
-                pt_pad->m_physical_connexion = pt_conn->GetSubNet();
+            if( pt_pad->GetSubNet() == old_val )
+                pt_pad->SetSubNet(pt_conn->GetSubNet());
         }
         if( pt_conn == pt_end_conn )
             break;
@@ -85,23 +87,23 @@ static int change_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn,
 
 
 /******************************************************************/
-static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
+static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 /******************************************************************/
 
-/** Function propage_equipot
+/** Function Propagate_SubNet
  * Test a list of track segment, to create or propagate a sub netcode to pads and segments connected together
- * the track list must be sorted by nets, and all segments from pt_start_conn to pt_end_conn have the save net
+ * the track list must be sorted by nets, and all segments from pt_start_conn to pt_end_conn have the same net
  * When 2 items are connected (a track to a pad, or a track to an other track) they are grouped in a cluster.
  * for pads, this is the .m_physical_connexion member which is a cluster identifier
  * for tracks, this is the .m_Subnet member which is a cluster identifier
  * For a given net, if all tracks are created, there is only one cluster.
- * but if not all tracks are created, there are are more than one cluster, and some ratsnets will be shown.
+ * but if not all tracks are created, there are more than one cluster, and some ratsnets will be shown.
  * @param pt_start_conn = first track to test
  * @param pt_end_conn = last segment to test
  */
 {
     TRACK*      pt_conn;
-    int         sous_net_code;
+    int         sub_netcode;
     D_PAD*      pt_pad;
     TRACK*      pt_autre_piste;
     BOARD_ITEM* PtStruct;
@@ -113,18 +115,18 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
         pt_conn->SetSubNet( 0 );
         PtStruct = pt_conn->start;
         if( PtStruct && (PtStruct->Type() == TYPEPAD) )
-            ( (D_PAD*) PtStruct )->m_physical_connexion = 0;
+            ( (D_PAD*) PtStruct )->SetSubNet( 0);
 
         PtStruct = pt_conn->end;
         if( PtStruct && (PtStruct->Type() == TYPEPAD) )
-            ( (D_PAD*) PtStruct )->m_physical_connexion = 0;
+            ( (D_PAD*) PtStruct )->SetSubNet( 0);
 
         if( pt_conn == pt_end_conn )
             break;
     }
 
-    sous_net_code = 1;
-    pt_start_conn->SetSubNet( sous_net_code );
+    sub_netcode = 1;
+    pt_start_conn->SetSubNet( sub_netcode );
 
     /* Start of calculation */
     pt_conn = pt_start_conn;
@@ -139,25 +141,25 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             pt_pad = (D_PAD*) PtStruct;
             if( pt_conn->GetSubNet() )                  /* the track segment is already a cluster member */
             {
-                if( pt_pad->m_physical_connexion > 0 )  /* The pad is already a cluster member, so we can merge the 2 clusters */
+                if( pt_pad->GetSubNet() > 0 )  /* The pad is already a cluster member, so we can merge the 2 clusters */
                 {
-                    change_equipot( pt_start_conn, pt_end_conn,
-                                   pt_pad->m_physical_connexion, pt_conn->GetSubNet() );
+                    Merge_Two_SubNets( pt_start_conn, pt_end_conn,
+                                   pt_pad->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else  /* The pad is not yet attached to a cluster , so we can add this pad to the cluster */
-                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
+                    pt_pad->SetSubNet( pt_conn->GetSubNet() );
             }
             else                                        /* the track segment is not attached to a cluster */
             {
-                if( pt_pad->m_physical_connexion > 0 )  /* it is connected to a pad in a cluster, merge this track */
+                if( pt_pad->GetSubNet() > 0 )  /* it is connected to a pad in a cluster, merge this track */
                 {
-                    pt_conn->SetSubNet( pt_pad->m_physical_connexion );
+                    pt_conn->SetSubNet( pt_pad->GetSubNet() );
                 }
                 else    /* it is connected to a pad not in a cluster, so we must create a new cluster (only with the 2 items: the track and the pad) */
                 {
-                    sous_net_code++;
-                    pt_conn->SetSubNet( sous_net_code );
-                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
+                    sub_netcode++;
+                    pt_conn->SetSubNet( sub_netcode );
+                    pt_pad->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
         }
@@ -169,25 +171,25 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             pt_pad = (D_PAD*) PtStruct;
             if( pt_conn->GetSubNet() )
             {
-                if( pt_pad->m_physical_connexion > 0 )
+                if( pt_pad->GetSubNet() > 0 )
                 {
-                    change_equipot( pt_start_conn, pt_end_conn,
-                                   pt_pad->m_physical_connexion, pt_conn->GetSubNet() );
+                    Merge_Two_SubNets( pt_start_conn, pt_end_conn,
+                                   pt_pad->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
-                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
+                    pt_pad->SetSubNet( pt_conn->GetSubNet() );
             }
             else
             {
-                if( pt_pad->m_physical_connexion > 0 )
+                if( pt_pad->GetSubNet() > 0 )
                 {
-                    pt_conn->SetSubNet( pt_pad->m_physical_connexion );
+                    pt_conn->SetSubNet( pt_pad->GetSubNet() );
                 }
                 else
                 {
-                    sous_net_code++;
-                    pt_conn->SetSubNet( sous_net_code );
-                    pt_pad->m_physical_connexion = pt_conn->GetSubNet();
+                    sub_netcode++;
+                    pt_conn->SetSubNet( sub_netcode );
+                    pt_pad->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
         }
@@ -204,7 +206,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             {
                 if( pt_autre_piste->GetSubNet() )   /* The other track is already a cluster member, so we can merge the 2 clusters */
                 {
-                    change_equipot( pt_start_conn, pt_end_conn,
+                    Merge_Two_SubNets( pt_start_conn, pt_end_conn,
                                    pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else /* The other track is not yet attached to a cluster , so we can add this other track to the cluster */
@@ -220,8 +222,8 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
                 }
                 else    /* it is connected to an other segment not in a cluster, so we must create a new cluster (only with the 2 track segments) */
                 {
-                    sous_net_code++;
-                    pt_conn->SetSubNet( sous_net_code );
+                    sub_netcode++;
+                    pt_conn->SetSubNet( sub_netcode );
                     pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
@@ -236,7 +238,7 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
             {
                 if( pt_autre_piste->GetSubNet() )
                 {
-                    change_equipot( pt_start_conn, pt_end_conn,
+                    Merge_Two_SubNets( pt_start_conn, pt_end_conn,
                                    pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
@@ -250,8 +252,8 @@ static void propage_equipot( TRACK* pt_start_conn, TRACK* pt_end_conn )
                 }
                 else
                 {
-                    sous_net_code++;
-                    pt_conn->SetSubNet( sous_net_code );
+                    sub_netcode++;
+                    pt_conn->SetSubNet( sub_netcode );
                     pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
@@ -283,8 +285,11 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
     pt_pad = m_Pcb->m_Pads;
     for( ii = 0; ii < m_Pcb->m_NbPads; ii++, pt_pad++ )
     {
-        (*pt_pad)->m_physical_connexion = 0;
+        (*pt_pad)->SetZoneSubNet( 0 );
+        (*pt_pad)->SetSubNet( 0 );
     }
+
+    m_Pcb->Test_Connections_To_Copper_Areas( );
 
     /* Test existing connections net by net */
     pt_start_conn = m_Pcb->m_Track;     // this is the first segment of the first net
@@ -293,10 +298,12 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
         current_net_code = pt_start_conn->GetNet();                         // this is the current net because pt_start_conn is the first segment of the net
         pt_end_conn = pt_start_conn->GetEndNetCode( current_net_code );     // this is the last segment of the current net
 
-        calcule_connexite_1_net( pt_start_conn, pt_end_conn );
+        Build_Pads_Info_Connections_By_Tracks( pt_start_conn, pt_end_conn );
 
         pt_start_conn = (TRACK*) pt_end_conn->Pnext;    // this is now the first segment of the next net
     }
+
+    Merge_SubNets_Connected_By_CopperAreas( m_Pcb );
 
     return;
 }
@@ -333,8 +340,10 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
         if( pad_net_code > net_code )
             break;
 
-        (*pt_pad)->m_physical_connexion = 0;
+        (*pt_pad)->SetSubNet( 0 );
     }
+
+    m_Pcb->Test_Connections_To_Copper_Areas( net_code );
 
     /* Search for the first and the last segment relative to the given net code */
     if( m_Pcb->m_Track )
@@ -347,9 +356,10 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 
         if( pt_start_conn && pt_end_conn ) // c.a.d. s'il y a des segments
         {
-            calcule_connexite_1_net( pt_start_conn, pt_end_conn );
+            Build_Pads_Info_Connections_By_Tracks( pt_start_conn, pt_end_conn );
         }
     }
+    Merge_SubNets_Connected_By_CopperAreas( m_Pcb, net_code );
 
     /* Test the rastnest for this net */
     nb_net_noconnect = Test_1_Net_Ratsnest( DC, net_code );
@@ -364,9 +374,9 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 }
 
 
-/***************************************************************************/
-static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
-/***************************************************************************/
+/*******************************************************************************************/
+static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* pt_end_conn )
+/*******************************************************************************************/
 
 /**  Used after a track change (delete a track ou add a track)
  * Compute connections (initialize the .start and .end members) for a single net.
@@ -435,8 +445,8 @@ static void calcule_connexite_1_net( TRACK* pt_start_conn, TRACK* pt_end_conn )
             break;
     }
 
-    /* Generation des sous equipots du net */
-    propage_equipot( pt_start_conn, pt_end_conn );
+    /* Creates sub nets (cluster) for the current net: */
+    Propagate_SubNet( pt_start_conn, pt_end_conn );
 }
 
 
@@ -600,6 +610,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
     {
         pt_piste->SetState( BUSY | EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
+        pt_piste->SetZoneSubNet( 0 );
         pt_piste->SetNet( 0 );  // net code = 0 means not connected
     }
 
