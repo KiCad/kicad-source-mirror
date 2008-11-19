@@ -206,8 +206,8 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // Editor
     item = new wxMenuItem(browseMenu,          // Entry in menu
                           ID_TO_EDITOR,        // Entry ID
-                          _("&Editor"),        // Entry text
-                          _("Text editor") );  // Status bar text
+                          _("Text E&ditor"),        // Entry text
+                          _("Open prefered text editor") );  // Status bar text
     item->SetBitmap(editor_xpm);               // Entry XPM Bitmap
     browseMenu->Append(item);                  // Append wxMenuItem to menu
 
@@ -216,21 +216,8 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     item = new wxMenuItem(browseMenu,
                           ID_BROWSE_AN_SELECT_FILE,
                           _("&Browse Files"),
-                          _("Read or edit files") );
+                          _("Read or edit files with text editor") );
     item->SetBitmap(browse_files_xpm);
-    browseMenu->Append(item);
-
-
-    // Separator 
-    browseMenu->AppendSeparator();
-
-
-    // Select editor
-    item = new wxMenuItem(browseMenu,
-                          ID_SELECT_PREFERED_EDITOR,
-                          _("&Select Editor"),
-                          _("Select your prefered editor for file browsing") );
-    item->SetBitmap(editor_xpm);
     browseMenu->Append(item);
 
 
@@ -244,6 +231,15 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                           _("Fonts"),
                           _("Font preferences"));
     item->SetBitmap(fonts_xpm);
+    PreferencesMenu->Append(item);
+
+
+    // Prefered text editor
+    item = new wxMenuItem(PreferencesMenu,
+                          ID_SELECT_PREFERED_EDITOR,
+                          _("&Text Editor"),
+                          _("Select your prefered text editor") );
+    item->SetBitmap(editor_xpm);
     PreferencesMenu->Append(item);
 
 
@@ -287,8 +283,8 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU(PreferencesMenu,
                                        SubMenuPdfBrowserChoice,
-                                       -1,  _("Pdf Browser"),
-                          wxT("Pdf Browser choice: default or user selection"),
+                                       -1,  _("Pdf Viewer"),
+                          _("Pdf viewer preferences"),
                                        datasheet_xpm);
 
     PreferencesMenu->AppendSeparator();

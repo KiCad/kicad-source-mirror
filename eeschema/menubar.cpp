@@ -39,57 +39,57 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         // Menu File:
         wxMenuItem* item = new wxMenuItem( m_FilesMenu, ID_NEW_PROJECT,
                                           _( "&New" ),
-                                          _( "New schematic" ) );
+                                          _( "New schematic sheet" ) );
         item->SetBitmap( new_xpm );
         m_FilesMenu->Append( item );
 
         item = new wxMenuItem( m_FilesMenu, ID_LOAD_PROJECT,
                               _( "&Open" ),
-                              _( "Open a schematic" ) );
+                              _( "Open a schematic sheet" ) );
         item->SetBitmap( open_xpm );
         m_FilesMenu->Append( item );
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_SAVE_PROJECT,
-                              _( "&Save" ),
-                              _( "Save schematic project" ) );
+                              _( "&Save Project" ),
+                              _( "Save project" ) );
         item->SetBitmap( save_project_xpm );
         m_FilesMenu->Append( item );
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_SAVE_ONE_SHEET,
-                              _( "Save &Current sheet" ),
-                              _( "Save current sheet only" ) );
+                              _( "&Save" ),
+                              _( "Save only current schematic sheet" ) );
         item->SetBitmap( save_xpm );
         m_FilesMenu->Append( item );
 
         item = new wxMenuItem( m_FilesMenu, ID_SAVE_ONE_SHEET_AS,
-                              _( "Save Current sheet &as.." ),
-                              _( "Save current sheet as.." ) );
+                              _( "Save &as.." ),
+                              _( "Save current schematic sheet as.." ) );
         item->SetBitmap( save_as_xpm );
         m_FilesMenu->Append( item );
 
         // Print and Plot section:
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_GEN_PRINT,
-                              _( "P&rint" ), _( "Print schematic" ) );
+                              _( "P&rint" ), _( "Print schematic sheet" ) );
         item->SetBitmap( print_button );
         m_FilesMenu->Append( item );
 
         /* Plot Submenu */
         wxMenu* choice_plot_fmt = new wxMenu;
         item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_PS,
-                              _( "Plot PostScript" ), _( "Plot schematic in PostScript format" ) );
+                              _( "Plot PostScript" ), _( "Plot schematic sheet in PostScript format" ) );
         item->SetBitmap( plot_PS_xpm );
         choice_plot_fmt->Append( item );
 
         item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_HPGL,
-                              _( "Plot HPGL" ), _( "Plot schematic in HPGL format" ) );
+                              _( "Plot HPGL" ), _( "Plot schematic sheet in HPGL format" ) );
         item->SetBitmap( plot_HPG_xpm );
         choice_plot_fmt->Append( item );
 
         item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_SVG,
-                              _( "Plot SVG" ), _( "Plot schematic in SVG format" ) );
+                              _( "Plot SVG" ), _( "Plot schematic sheet in SVG format" ) );
         item->SetBitmap( plot_xpm );
         choice_plot_fmt->Append( item );
 
@@ -103,7 +103,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU( m_FilesMenu, choice_plot_fmt,
                                             ID_GEN_PLOT, _( "&Plot" ),
-                                            _( "Plot schematic in HPGL, PostScript or SVG format" ), plot_xpm );
+                                            _( "Plot schematic sheet in HPGL, PostScript or SVG format" ), plot_xpm );
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_EXIT, _( "E&xit" ), _( "Quit Eeschema" ) );

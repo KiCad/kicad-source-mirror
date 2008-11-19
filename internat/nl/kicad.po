@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-16 11:10+0100\n"
-"PO-Revision-Date: 2008-11-16 11:10+0100\n"
+"POT-Creation-Date: 2008-11-19 20:07+0100\n"
+"PO-Revision-Date: 2008-11-19 20:15+0100\n"
 "Last-Translator: Jerry Jacobs <jerkejacobs@gmail.com>\n"
 "Language-Team: KiCad Team <jerkejacobs@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -143,7 +143,7 @@ msgid "(Cutout)"
 msgstr "(Uitsnede)"
 
 #: pcbnew/class_zone.cpp:789
-#: pcbnew/class_track.cpp:853
+#: pcbnew/class_track.cpp:850
 #: pcbnew/class_marker.cpp:133
 #: pcbnew/class_text_mod.cpp:503
 #: pcbnew/class_drawsegment.cpp:311
@@ -157,7 +157,7 @@ msgstr "Niet Gevonden"
 
 #: pcbnew/class_zone.cpp:811
 #: pcbnew/zones_by_polygon.cpp:905
-#: pcbnew/class_track.cpp:869
+#: pcbnew/class_track.cpp:866
 msgid "NetName"
 msgstr "NetNaam"
 
@@ -166,14 +166,14 @@ msgid "Non Copper Zone"
 msgstr "Geen Koper Zone"
 
 #: pcbnew/class_zone.cpp:819
-#: pcbnew/class_track.cpp:874
+#: pcbnew/class_track.cpp:871
 msgid "NetCode"
 msgstr "NetCode"
 
 #: pcbnew/class_zone.cpp:823
 #: pcbnew/dialog_edit_module.cpp:262
-#: pcbnew/class_track.cpp:910
-#: pcbnew/class_pad.cpp:993
+#: pcbnew/class_track.cpp:907
+#: pcbnew/class_pad.cpp:990
 #: pcbnew/class_pcb_text.cpp:190
 #: pcbnew/class_text_mod.cpp:516
 #: pcbnew/sel_layer.cpp:146
@@ -662,7 +662,7 @@ msgid "User"
 msgstr "Gebruiker"
 
 #: pcbnew/dialog_edit_module.cpp:273
-#: pcbnew/class_pad.cpp:1035
+#: pcbnew/class_pad.cpp:1028
 #: pcbnew/class_pcb_text.cpp:201
 #: pcbnew/class_text_mod.cpp:525
 #: pcbnew/class_module.cpp:1105
@@ -1173,30 +1173,30 @@ msgstr "Net Accentueren"
 msgid "Local Ratsnest"
 msgstr "Lokaal Ratsnest"
 
-#: pcbnew/edit.cpp:579
+#: pcbnew/edit.cpp:584
 #: pcbnew/modedit.cpp:428
 #: eeschema/schedit.cpp:366
 #: eeschema/libframe.cpp:577
 msgid "Delete item"
 msgstr "Verwijder item"
 
-#: pcbnew/class_track.cpp:842
+#: pcbnew/class_track.cpp:839
 #: pcbnew/class_board_item.cpp:127
 #: pcbnew/pcbframe.cpp:467
 msgid "Track"
 msgstr "Spoor"
 
-#: pcbnew/class_track.cpp:846
+#: pcbnew/class_track.cpp:843
 #: pcbnew/class_board_item.cpp:173
 msgid "Zone"
 msgstr "Zone"
 
-#: pcbnew/class_track.cpp:878
+#: pcbnew/class_track.cpp:875
 #: pcbnew/class_drawsegment.cpp:326
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_track.cpp:880
+#: pcbnew/class_track.cpp:877
 #: pcbnew/class_board_item.cpp:26
 #: pcbnew/dialog_pad_edit.cpp:176
 #: pcbnew/dialog_pad_edit.cpp:196
@@ -1204,27 +1204,27 @@ msgstr "Segment"
 msgid "Circle"
 msgstr "Cirkel"
 
-#: pcbnew/class_track.cpp:882
+#: pcbnew/class_track.cpp:879
 #: pcbnew/dialog_pad_edit.cpp:205
 msgid "Standard"
 msgstr "Standaard"
 
-#: pcbnew/class_track.cpp:894
+#: pcbnew/class_track.cpp:891
 #: pcbnew/class_module.cpp:1101
 msgid "Stat"
 msgstr "Stat"
 
-#: pcbnew/class_track.cpp:918
+#: pcbnew/class_track.cpp:915
 msgid "Diam"
 msgstr "Diam"
 
-#: pcbnew/class_track.cpp:925
-#: pcbnew/class_track.cpp:930
-#: pcbnew/class_pad.cpp:1016
+#: pcbnew/class_track.cpp:922
+#: pcbnew/class_track.cpp:927
+#: pcbnew/class_pad.cpp:1009
 msgid "Drill"
 msgstr "Boor"
 
-#: pcbnew/class_track.cpp:933
+#: pcbnew/class_track.cpp:930
 #: pcbnew/mirepcb.cpp:113
 #: pcbnew/cotation.cpp:129
 #: pcbnew/class_pcb_text.cpp:204
@@ -1446,7 +1446,7 @@ msgstr "Doel Instellingen"
 #: eeschema/pinedit-dialog.cpp:214
 #: common/wxwineda.cpp:91
 msgid "Size"
-msgstr "Grote"
+msgstr "Grootte"
 
 #: pcbnew/mirepcb.cpp:118
 msgid "shape +"
@@ -1513,7 +1513,7 @@ msgstr "HPGL Opties:"
 
 #: pcbnew/pcbplot.cpp:218
 msgid "Pen Size"
-msgstr "Pen grote"
+msgstr "Pen grootte"
 
 #: pcbnew/pcbplot.cpp:223
 msgid "Pen Speed (cm/s)"
@@ -1639,7 +1639,6 @@ msgid "Print other module texts"
 msgstr "Print andere module teksten"
 
 #: pcbnew/pcbplot.cpp:393
-#, fuzzy
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr "Inschakelen/Uitschakelen print/plot module veld tekst op silkscreen lagen"
 
@@ -1648,7 +1647,6 @@ msgid "Force print invisible texts"
 msgstr "Forceer printen van onzichtbare teksten"
 
 #: pcbnew/pcbplot.cpp:402
-#, fuzzy
 msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr "Forceer print/plot module onzichtbare teksten op silkscreen lagen"
 
@@ -1741,7 +1739,6 @@ msgid "Vias on mask"
 msgstr "Vias op masker"
 
 #: pcbnew/pcbplot.cpp:444
-#, fuzzy
 msgid "Print/plot vias on mask layers. They are in this case not protected"
 msgstr "Print/plot vias op masker lagen. In dit geval zijn deze niet beschermd"
 
@@ -1911,7 +1908,7 @@ msgstr "Bord opslaan"
 
 #: pcbnew/tool_pcb.cpp:231
 msgid "Page settings (size, texts)"
-msgstr "Pagina instellingen (grote, teksten)"
+msgstr "Pagina instellingen (grootte, teksten)"
 
 #: pcbnew/tool_pcb.cpp:235
 msgid "Open module editor"
@@ -2066,7 +2063,6 @@ msgid "Change Cursor Shape"
 msgstr "Wijzig Cursor"
 
 #: pcbnew/tool_pcb.cpp:343
-#, fuzzy
 msgid "Show General Ratsnest"
 msgstr "Algemeen Ratsnest Weergeven"
 
@@ -2075,7 +2071,6 @@ msgid "Show Module Ratsnest when moving"
 msgstr "Module Ratsnest weergeven tijdens verplaatsen"
 
 #: pcbnew/tool_pcb.cpp:351
-#, fuzzy
 msgid "Enable Auto Del Track"
 msgstr "Inschakelen Auto Verwijd. Spoor"
 
@@ -2153,7 +2148,6 @@ msgstr "Afmetingen plaatsen"
 
 #: pcbnew/tool_pcb.cpp:450
 #: gerbview/tool_gerber.cpp:380
-#, fuzzy
 msgid "Add layer alignment target"
 msgstr "Laag uitlijnings doel toevoegen"
 
@@ -2185,7 +2179,6 @@ msgid "Create stub of specified length for microwave applications"
 msgstr "Creeer strookje van gespecifeerde lengte voor magnetron applicaties"
 
 #: pcbnew/tool_pcb.cpp:506
-#, fuzzy
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr "Creeer strookje (boog) van gespecifeerde lengte voor magnetron applicaties"
 
@@ -2361,11 +2354,11 @@ msgstr "&Sluiten"
 msgid "Netlist Selection:"
 msgstr "Netlijst Selectie:"
 
-#: pcbnew/class_pad.cpp:820
+#: pcbnew/class_pad.cpp:817
 msgid "Unknown Pad shape"
 msgstr "Onbekende Pad vorm"
 
-#: pcbnew/class_pad.cpp:903
+#: pcbnew/class_pad.cpp:900
 #: pcbnew/class_text_mod.cpp:494
 #: pcbnew/class_module.cpp:1108
 #: pcbnew/class_edge_mod.cpp:286
@@ -2373,38 +2366,38 @@ msgstr "Onbekende Pad vorm"
 msgid "Module"
 msgstr "Module"
 
-#: pcbnew/class_pad.cpp:906
+#: pcbnew/class_pad.cpp:903
 msgid "RefP"
 msgstr ""
 
-#: pcbnew/class_pad.cpp:909
+#: pcbnew/class_pad.cpp:906
 #: pcbnew/class_board_item.cpp:57
 msgid "Net"
 msgstr "Net"
 
-#: pcbnew/class_pad.cpp:1006
+#: pcbnew/class_pad.cpp:999
 #: pcbnew/class_pcb_text.cpp:207
 #: pcbnew/class_text_mod.cpp:531
 #: gerbview/affiche.cpp:55
 msgid "H Size"
-msgstr "H Grote"
+msgstr "H Grootte"
 
-#: pcbnew/class_pad.cpp:1010
+#: pcbnew/class_pad.cpp:1003
 #: pcbnew/class_pcb_text.cpp:210
 #: pcbnew/class_text_mod.cpp:534
 #: gerbview/affiche.cpp:58
 msgid "V Size"
-msgstr "V Grote"
+msgstr "V Grootte"
 
-#: pcbnew/class_pad.cpp:1024
+#: pcbnew/class_pad.cpp:1017
 msgid "Drill X / Y"
 msgstr "Boor X / Y"
 
-#: pcbnew/class_pad.cpp:1039
+#: pcbnew/class_pad.cpp:1032
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:1043
+#: pcbnew/class_pad.cpp:1036
 msgid "Y pos"
 msgstr "Y Pos"
 
@@ -2479,11 +2472,11 @@ msgstr "op lijn"
 msgid "at offset"
 msgstr "bij beginwaarde"
 
-#: pcbnew/dsn.cpp:666
+#: pcbnew/dsn.cpp:678
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr ""
 
-#: pcbnew/dsn.cpp:756
+#: pcbnew/dsn.cpp:768
 msgid "Un-terminated delimited string"
 msgstr ""
 
@@ -2764,7 +2757,6 @@ msgid "Global AutoRouter"
 msgstr "Globale AutoRouter"
 
 #: pcbnew/onrightclick.cpp:422
-#, fuzzy
 msgid "Read Global AutoRouter Data"
 msgstr "Lees Globale Autorouter Data"
 
@@ -2806,7 +2798,6 @@ msgid "Set Via Hole to Default"
 msgstr "Zet Via Gat naar Standaard"
 
 #: pcbnew/onrightclick.cpp:489
-#, fuzzy
 msgid "Set via hole to a specific value. This specific value is currently"
 msgstr "Zet via gat naar gespecificeerde waarde. Deze gespecificeerde waarde is de huidige"
 
@@ -2815,7 +2806,6 @@ msgid "Set Via Hole to Alt Value"
 msgstr "Zet Via Gat naar Alternatieve Waarde"
 
 #: pcbnew/onrightclick.cpp:494
-#, fuzzy
 msgid "Set a specific via hole value. This value is currently"
 msgstr "Zet een specifiek via gat waarde. Deze waarde is de huidige"
 
@@ -2877,7 +2867,7 @@ msgstr "Verander Breedte"
 
 #: pcbnew/onrightclick.cpp:567
 msgid "Change Via Size"
-msgstr "Verander Via Grote"
+msgstr "Verander Via Grootte"
 
 #: pcbnew/onrightclick.cpp:567
 msgid "Change Segment Width"
@@ -2993,9 +2983,8 @@ msgid "Fill Zone"
 msgstr "Vul Zone"
 
 #: pcbnew/onrightclick.cpp:680
-#, fuzzy
 msgid "Remove Filled Areas in Zone"
-msgstr "Recovery bestand"
+msgstr "Verwijder Gevulde Vlakken in Zone"
 
 #: pcbnew/onrightclick.cpp:684
 msgid "Move Zone"
@@ -3125,15 +3114,15 @@ msgstr "Verander spoor breedte (geheel NET)?"
 
 #: pcbnew/edit_track_width.cpp:130
 msgid "Edit All Tracks and Vias Sizes"
-msgstr "Bewerk alle spoor en via grotes"
+msgstr "Bewerk alle spoor en via groottes"
 
 #: pcbnew/edit_track_width.cpp:135
 msgid "Edit All Via Sizes"
-msgstr "Bewerk alle via grotes"
+msgstr "Bewerk alle via groottes"
 
 #: pcbnew/edit_track_width.cpp:140
 msgid "Edit All Track Sizes"
-msgstr "Bewerk alle spoor grotes"
+msgstr "Bewerk alle spoor groottes"
 
 #: pcbnew/sel_layer.cpp:92
 msgid "Select Layer:"
@@ -3178,16 +3167,14 @@ msgid "New Width (1/10000\"):"
 msgstr "Nieuwe Breedte (1/10000\"):"
 
 #: pcbnew/edgemod.cpp:246
-#, fuzzy
 msgid "Edge Width"
-msgstr "Bord Hoeken Breedte"
+msgstr "Hoeken Breedte"
 
 #: pcbnew/edgemod.cpp:253
 msgid "Incorrect number, no change"
 msgstr "Fout nummer, geen verandering"
 
 #: pcbnew/modedit.cpp:269
-#, fuzzy
 msgid "Unable to find the footprint source on the main board"
 msgstr "Kan voetprint bron niet vinden op het hoofd bord"
 
@@ -3200,7 +3187,6 @@ msgstr ""
 "Kan voetprint niet updaten"
 
 #: pcbnew/modedit.cpp:278
-#, fuzzy
 msgid "A footprint source was found on the main board"
 msgstr "Een voetprint bron was gevonden op het hoofd bord"
 
@@ -3439,7 +3425,6 @@ msgid "Save board files:"
 msgstr "Opslaan bord bestanden:"
 
 #: pcbnew/files.cpp:337
-#, fuzzy
 msgid "Warning: unable to create bakfile "
 msgstr "Waarschuwing: kan bakbestand niet creeeren"
 
@@ -3461,16 +3446,14 @@ msgid "Merge Specctra Session file:"
 msgstr "Samenvoegen Specctra Sessie bestand:"
 
 #: pcbnew/specctra_import.cpp:100
-#, fuzzy
 msgid "BOARD may be corrupted, do not save it."
-msgstr "BORD kan beschadigd zijn, niet opslaan."
+msgstr "BORD kan beschadigd zijn, bord niet opslaan."
 
 #: pcbnew/specctra_import.cpp:102
 msgid "Fix problem and try again."
 msgstr "Repareer probleem en probeer opnieuw."
 
 #: pcbnew/specctra_import.cpp:116
-#, fuzzy
 msgid "Session file imported and merged OK."
 msgstr "Sessie bestand geimporteerd en samengevoegd OK."
 
@@ -3488,7 +3471,7 @@ msgstr "Sessie via padstapel heeft geen vormen"
 #: pcbnew/specctra_import.cpp:248
 #: pcbnew/specctra_import.cpp:266
 #: pcbnew/specctra_import.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: \"%s\""
 msgstr "Niet ondersteunde via vorm: \"%s\""
 
@@ -3551,11 +3534,11 @@ msgstr "Referentie:"
 
 #: pcbnew/dialog_edit_mod_text.cpp:205
 msgid "Size X"
-msgstr "Grote X"
+msgstr "Grootte X"
 
 #: pcbnew/dialog_edit_mod_text.cpp:216
 msgid "Size Y"
-msgstr "Grote Y"
+msgstr "Grootte Y"
 
 #: pcbnew/dialog_edit_mod_text.cpp:229
 msgid "Offset X"
@@ -3672,7 +3655,7 @@ msgstr "Vias:"
 
 #: pcbnew/dialog_track_options.cpp:160
 msgid "Via size"
-msgstr "Via grote"
+msgstr "Via grootte"
 
 #: pcbnew/dialog_track_options.cpp:176
 msgid "Default Via Drill"
@@ -3730,7 +3713,6 @@ msgid "Mask clearance"
 msgstr "Masker tussenruimte"
 
 #: pcbnew/class_edge_mod.cpp:284
-#, fuzzy
 msgid "Seg"
 msgstr "Seg"
 
@@ -3743,7 +3725,6 @@ msgid "Mod Layer"
 msgstr "Mod Laag"
 
 #: pcbnew/class_edge_mod.cpp:294
-#, fuzzy
 msgid "Seg Layer"
 msgstr "Seg Laag"
 
@@ -3860,7 +3841,7 @@ msgstr "Geen raster (Alleen voor testen!)"
 
 #: pcbnew/dialog_copper_zones_base.cpp:42
 msgid "Grid Size for Filling:"
-msgstr "Raster Grote voor Vullen:"
+msgstr "Raster Grootte voor Vullen:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:46
 msgid "Include pads"
@@ -3964,9 +3945,8 @@ msgid "Others Options:"
 msgstr "Andere Opties:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:116
-#, fuzzy
 msgid "Show filled areas in sketch mode"
-msgstr "Lijnen tonen in Schets Modus"
+msgstr "Gevulde vlakken in Schets Modus weergeven"
 
 #: pcbnew/dialog_copper_zones_base.cpp:118
 msgid ""
@@ -3979,9 +3959,8 @@ msgid "Zone clearance value (mm):"
 msgstr ""
 
 #: pcbnew/dialog_copper_zones_base.cpp:133
-#, fuzzy
 msgid "Export to others zones"
-msgstr "Exporteer naar andere tekeningen"
+msgstr "Exporteer naar andere zones"
 
 #: pcbnew/dialog_copper_zones_base.cpp:134
 msgid "Export this zone setup to all others copper zones"
@@ -3993,9 +3972,8 @@ msgid "Ok"
 msgstr "Oke"
 
 #: pcbnew/dialog_copper_zones_base.cpp:161
-#, fuzzy
 msgid "Nets Display Options:"
-msgstr "Weergave Opties"
+msgstr "Netten Weergave Opties:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:163
 msgid "Alphabetic"
@@ -4056,7 +4034,6 @@ msgid "???"
 msgstr "???"
 
 #: pcbnew/class_board_item.cpp:77
-#, fuzzy
 msgid ") of "
 msgstr ") of "
 
@@ -4121,7 +4098,7 @@ msgstr "Doel"
 
 #: pcbnew/class_board_item.cpp:231
 msgid "size"
-msgstr "grote"
+msgstr "grootte"
 
 #: pcbnew/dialog_pad_edit.cpp:157
 msgid "Pad Num :"
@@ -4216,9 +4193,8 @@ msgid "Silkscreen Copper"
 msgstr "Silkscreen Koper"
 
 #: pcbnew/dialog_pad_edit.cpp:261
-#, fuzzy
 msgid "Solder mask Cmp"
-msgstr "Soldeer masker Componenten"
+msgstr "Soldeer masker Cmp"
 
 #: pcbnew/dialog_pad_edit.cpp:265
 msgid "Solder mask Copper"
@@ -4492,7 +4468,6 @@ msgid "System file error writing to file \"%s\""
 msgstr "Systeem bestand fout schrijven naar bestand \"%s\""
 
 #: pcbnew/specctra.cpp:3644
-#, fuzzy
 msgid "Error writing to STRINGFORMATTER"
 msgstr "Fout met schrijven naar STRINGFORMATTER"
 
@@ -4560,7 +4535,6 @@ msgid "Copper area inside copper area"
 msgstr "Koper vlak binnen koper vlak"
 
 #: pcbnew/class_drc_item.cpp:73
-#, fuzzy
 msgid "Copper areas intersect or are too close"
 msgstr "Koper vlakken snijden of zijn te dichtbij"
 
@@ -4887,11 +4861,11 @@ msgstr "Raster Grote"
 
 #: pcbnew/set_grid.cpp:156
 msgid "User Grid Size X"
-msgstr "Gebruikers Raster Grote X"
+msgstr "Gebruikers Raster Grootte X"
 
 #: pcbnew/set_grid.cpp:162
 msgid "User Grid Size Y"
-msgstr "Gebruikers Raster Grote Y"
+msgstr "Gebruikers Raster Grootte Y"
 
 #: pcbnew/via_edit.cpp:54
 msgid "Incorrect value for Via drill. No via drill change"
@@ -4935,7 +4909,6 @@ msgid "Append Board"
 msgstr "Bord Toevoegen"
 
 #: pcbnew/menubarpcb.cpp:57
-#, fuzzy
 msgid "Add board to old board"
 msgstr "Voeg Bord toe aan oud Bord"
 
@@ -4978,9 +4951,8 @@ msgid "P&rint"
 msgstr "P&rinten"
 
 #: pcbnew/menubarpcb.cpp:91
-#, fuzzy
 msgid "Print pcb board"
-msgstr "Print bord"
+msgstr "Print printplaat bord"
 
 #: pcbnew/menubarpcb.cpp:96
 #: eeschema/menubar.cpp:105
@@ -5061,9 +5033,8 @@ msgid "Archive Footprints"
 msgstr "Archiveer Voetprint"
 
 #: pcbnew/menubarpcb.cpp:159
-#, fuzzy
 msgid "Archive or add footprints in a library file"
-msgstr "Archiveer of voetprinten Toevoegen aan bibliotheek bestand"
+msgstr "Archiveer of Toevoegen van voetprinten aan bibliotheek bestand"
 
 #: pcbnew/menubarpcb.cpp:163
 #: eeschema/menubar.cpp:109
@@ -5101,9 +5072,8 @@ msgid "&General"
 msgstr "Al&gemeen"
 
 #: pcbnew/menubarpcb.cpp:192
-#, fuzzy
 msgid "Select general options for PCBNEW"
-msgstr "Selecteer algemene instellingen..."
+msgstr "Selecteer algemene instellingen voor pcbnew..."
 
 #: pcbnew/menubarpcb.cpp:196
 msgid "&Display"
@@ -5139,7 +5109,7 @@ msgstr "Sporen en Vias"
 
 #: pcbnew/menubarpcb.cpp:226
 msgid "Adjust size and width for tracks and vias"
-msgstr "Instellen grote en breedte voor sporen en vias"
+msgstr "Instellen grootte en breedte voor sporen en vias"
 
 #: pcbnew/menubarpcb.cpp:231
 #: pcbnew/menubarmodedit.cpp:51
@@ -5158,7 +5128,7 @@ msgstr "Afstellen breedte voor tekst en tekeningen"
 
 #: pcbnew/menubarpcb.cpp:241
 msgid "Adjust size,shape,layers... for pads"
-msgstr "Afstellen grote,vorm,lagen... voor pads"
+msgstr "Afstellen grootte,vorm,lagen... voor pads"
 
 #: pcbnew/menubarpcb.cpp:246
 #: gerbview/tool_gerber.cpp:122
@@ -5231,7 +5201,7 @@ msgstr ""
 #: pcbnew/menubarmodedit.cpp:64
 #: eeschema/menubar.cpp:397
 #: cvpcb/tool_cvpcb.cpp:155
-#: kicad/buildmnu.cpp:305
+#: kicad/buildmnu.cpp:301
 #: gerbview/tool_gerber.cpp:149
 msgid "&Contents"
 msgstr "I&nhoud"
@@ -5261,7 +5231,7 @@ msgstr "Toon bord in 3D viewer"
 #: pcbnew/menubarpcb.cpp:315
 #: eeschema/menubar.cpp:407
 #: cvpcb/tool_cvpcb.cpp:164
-#: kicad/buildmnu.cpp:321
+#: kicad/buildmnu.cpp:317
 #: gerbview/tool_gerber.cpp:156
 #: 3d-viewer/3d_toolbar.cpp:116
 msgid "&File"
@@ -5270,7 +5240,7 @@ msgstr "&Bestand"
 #: pcbnew/menubarpcb.cpp:316
 #: eeschema/menubar.cpp:411
 #: cvpcb/tool_cvpcb.cpp:165
-#: kicad/buildmnu.cpp:323
+#: kicad/buildmnu.cpp:319
 #: gerbview/tool_gerber.cpp:157
 #: 3d-viewer/3d_toolbar.cpp:124
 msgid "&Preferences"
@@ -5299,7 +5269,7 @@ msgstr "&3D Display"
 #: pcbnew/menubarmodedit.cpp:88
 #: eeschema/menubar.cpp:412
 #: cvpcb/tool_cvpcb.cpp:166
-#: kicad/buildmnu.cpp:324
+#: kicad/buildmnu.cpp:320
 #: gerbview/tool_gerber.cpp:161
 msgid "&Help"
 msgstr "&Hulp"
@@ -5369,16 +5339,16 @@ msgstr "Verbinding Lijst"
 
 #: pcbnew/menubarmodedit.cpp:40
 msgid "Sizes and Widths"
-msgstr "Grotes en Breedtes"
+msgstr "Groottes en Breedtes"
 
 #: pcbnew/menubarmodedit.cpp:46
 msgid "Adjust size,shape,layers... for Pads"
-msgstr "Instellen grote, vorm, lagen... voor Pads"
+msgstr "Instellen grootte, vorm, lagen... voor Pads"
 
 #: pcbnew/menubarmodedit.cpp:50
 #: pcbnew/set_grid.h:39
 msgid "User Grid Size"
-msgstr "Gebruikers Raster Grote"
+msgstr "Gebruikers Raster Grootte"
 
 #: pcbnew/menubarmodedit.cpp:65
 msgid "Open the pcbnew manual"
@@ -5475,11 +5445,11 @@ msgstr "Koper Tekst Breedte"
 
 #: pcbnew/dialog_graphic_items_options.cpp:216
 msgid "Text Size V"
-msgstr "Tekst Grote V"
+msgstr "Tekst Grootte V"
 
 #: pcbnew/dialog_graphic_items_options.cpp:222
 msgid "Text Size H"
-msgstr "Tekst Grote H"
+msgstr "Tekst Grootte H"
 
 #: pcbnew/dialog_graphic_items_options.cpp:230
 msgid "Modules:"
@@ -5495,11 +5465,11 @@ msgstr "Tekst Module Breedte"
 
 #: pcbnew/dialog_graphic_items_options.cpp:246
 msgid "Text Module Size V"
-msgstr "Tekst Module Grote V"
+msgstr "Tekst Module Grootte V"
 
 #: pcbnew/dialog_graphic_items_options.cpp:252
 msgid "Text Module Size H"
-msgstr "Tekst Module Grote H"
+msgstr "Tekst Module Grootte H"
 
 #: pcbnew/pcbframe.cpp:280
 msgid "Board modified, Save before exit ?"
@@ -6160,19 +6130,19 @@ msgstr "Globaal"
 
 #: eeschema/libedit_onrightclick.cpp:214
 msgid "Pin Size to selected pins"
-msgstr "Pin Grote naar geselecteerde pinnen"
+msgstr "Pin Grootte naar geselecteerde pinnen"
 
 #: eeschema/libedit_onrightclick.cpp:214
 msgid "Pin Size to Others"
-msgstr "Pin Grote naar Andere"
+msgstr "Pin Grootte naar Andere"
 
 #: eeschema/libedit_onrightclick.cpp:217
 msgid "Pin Name Size to selected pin"
-msgstr "Pin Naam Grote naar geselecteerde pin"
+msgstr "Pin Naam Grootte naar geselecteerde pin"
 
 #: eeschema/libedit_onrightclick.cpp:217
 msgid "Pin Name Size to Others"
-msgstr "Pin Naam Grote naar Andere"
+msgstr "Pin Naam Grootte naar Andere"
 
 #: eeschema/libedit_onrightclick.cpp:220
 msgid "Pin Num Size to selected pin"
@@ -6180,7 +6150,7 @@ msgstr "Pin Num Groote naar geselecteerde pin"
 
 #: eeschema/libedit_onrightclick.cpp:220
 msgid "Pin Num Size to Others"
-msgstr "Pin Num Grote naar Andere"
+msgstr "Pin Num Grootte naar Andere"
 
 #: eeschema/libedit_onrightclick.cpp:242
 msgid "Select Items"
@@ -6323,7 +6293,7 @@ msgstr "Speciaal (1 mil)"
 
 #: eeschema/dialog_options.cpp:242
 msgid "Grid Size"
-msgstr "Raster Grote"
+msgstr "Raster Grootte"
 
 #: eeschema/dialog_options.cpp:248
 msgid "Show alls"
@@ -6364,7 +6334,7 @@ msgstr "Standaard Lijn breedte"
 
 #: eeschema/dialog_options.cpp:332
 msgid "Default Label Size"
-msgstr "Standaard Label Grote"
+msgstr "Standaard Label Grootte"
 
 #: eeschema/backanno.cpp:135
 #, fuzzy
@@ -7620,8 +7590,8 @@ msgid "&New"
 msgstr "&Nieuw"
 
 #: eeschema/menubar.cpp:42
-msgid "New schematic"
-msgstr "Nieuw schema"
+msgid "New schematic sheet"
+msgstr "Nieuw schema blad"
 
 #: eeschema/menubar.cpp:47
 #: cvpcb/tool_cvpcb.cpp:109
@@ -7630,63 +7600,61 @@ msgid "&Open"
 msgstr "Op&enen"
 
 #: eeschema/menubar.cpp:48
-msgid "Open a schematic"
-msgstr "Open een schema"
+msgid "Open a schematic sheet"
+msgstr "Open een schema blad"
 
 #: eeschema/menubar.cpp:54
+msgid "&Save Project"
+msgstr "Project &Opslaan"
+
+#: eeschema/menubar.cpp:55
+msgid "Save project"
+msgstr "Project opslaan"
+
+#: eeschema/menubar.cpp:61
 #: kicad/buildmnu.cpp:148
 msgid "&Save"
 msgstr "&Opslaan"
 
-#: eeschema/menubar.cpp:55
-#: eeschema/tool_sch.cpp:45
-msgid "Save schematic project"
-msgstr "Opslaan van schema project"
-
-#: eeschema/menubar.cpp:61
-msgid "Save &Current sheet"
-msgstr "&Opslaan (huidige tekening)"
-
 #: eeschema/menubar.cpp:62
-msgid "Save current sheet only"
-msgstr "Alleen huidige blad opslaan"
+msgid "Save only current schematic sheet"
+msgstr "Huidig schema blad opslaan als..."
 
 #: eeschema/menubar.cpp:67
-msgid "Save Current sheet &as.."
-msgstr "Opslaan als (huidige tekening)"
+msgid "Save &as.."
+msgstr "&Opslaan als..."
 
 #: eeschema/menubar.cpp:68
-msgid "Save current sheet as.."
-msgstr "Huidig blad opslaan als..."
+msgid "Save current schematic sheet as.."
+msgstr "Opslaan van huidig schema blad als.."
 
 #: eeschema/menubar.cpp:75
-#: eeschema/tool_sch.cpp:82
-msgid "Print schematic"
-msgstr "Print schema"
+msgid "Print schematic sheet"
+msgstr "Print schema blad"
 
 #: eeschema/menubar.cpp:82
 msgid "Plot PostScript"
 msgstr "Plot PostScript"
 
 #: eeschema/menubar.cpp:82
-msgid "Plot schematic in PostScript format"
-msgstr "Plot schema in PostScript formaat"
+msgid "Plot schematic sheet in PostScript format"
+msgstr "Plot schema blad in PostScript formaat"
 
 #: eeschema/menubar.cpp:87
 msgid "Plot HPGL"
 msgstr "Plot HPGL"
 
 #: eeschema/menubar.cpp:87
-msgid "Plot schematic in HPGL format"
-msgstr "Plot schema in HPGL formaat"
+msgid "Plot schematic sheet in HPGL format"
+msgstr "Plot schema blad in HPGL formaat"
 
 #: eeschema/menubar.cpp:92
 msgid "Plot SVG"
 msgstr "Plot SVG"
 
 #: eeschema/menubar.cpp:92
-msgid "Plot schematic in SVG format"
-msgstr "Plot schema in SVG formaat"
+msgid "Plot schematic sheet in SVG format"
+msgstr "Plot schema blad in SVG formaat"
 
 #: eeschema/menubar.cpp:99
 msgid "Plot to Clipboard"
@@ -7697,8 +7665,8 @@ msgid "Export drawings to clipboard"
 msgstr "Exporteer tekeningen naar klembord"
 
 #: eeschema/menubar.cpp:106
-msgid "Plot schematic in HPGL, PostScript or SVG format"
-msgstr "Plot schema in HPGL, PostScript of SVG formaat"
+msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
+msgstr "Plot schema blad in HPGL, PostScript of SVG formaat"
 
 #: eeschema/menubar.cpp:109
 msgid "Quit Eeschema"
@@ -7895,7 +7863,7 @@ msgid "Open the eeschema manual"
 msgstr "Open de eeschema handleiding"
 
 #: eeschema/menubar.cpp:402
-#: kicad/buildmnu.cpp:314
+#: kicad/buildmnu.cpp:310
 msgid "&About"
 msgstr "&Over"
 
@@ -7945,6 +7913,10 @@ msgstr "Nieuw schema project"
 msgid "Open schematic project"
 msgstr "Open schema project"
 
+#: eeschema/tool_sch.cpp:45
+msgid "Save schematic project"
+msgstr "Opslaan van schema project"
+
 #: eeschema/tool_sch.cpp:49
 msgid "Page settings"
 msgstr "Pagina instellingen"
@@ -7956,6 +7928,10 @@ msgstr "Bibliotheek editor"
 #: eeschema/tool_sch.cpp:60
 msgid "Schematic hierarchy navigator"
 msgstr "Schema hiërarchie navigatie"
+
+#: eeschema/tool_sch.cpp:82
+msgid "Print schematic"
+msgstr "Print schema"
 
 #: eeschema/tool_sch.cpp:86
 msgid "Run Cvpcb"
@@ -8304,12 +8280,12 @@ msgstr "Component voetprint"
 
 #: eeschema/plothpgl.cpp:222
 msgid "Sheet Size"
-msgstr "Pagina Grote"
+msgstr "Pagina Grootte"
 
 #: eeschema/plothpgl.cpp:223
 #: eeschema/plotps.cpp:190
 msgid "Page Size A4"
-msgstr "Pagina Grote A4"
+msgstr "Pagina Grootte A4"
 
 #: eeschema/plothpgl.cpp:224
 msgid "Page Size A3"
@@ -8330,7 +8306,7 @@ msgstr "A0"
 #: eeschema/plothpgl.cpp:228
 #: eeschema/plotps.cpp:191
 msgid "Page Size A"
-msgstr "Pagina Grote A"
+msgstr "Pagina Grootte A"
 
 #: eeschema/plothpgl.cpp:229
 msgid "Page Size B"
@@ -8351,7 +8327,7 @@ msgstr "E"
 #: eeschema/plothpgl.cpp:233
 #: eeschema/plotps.cpp:192
 msgid "Plot page size:"
-msgstr "Plot pagina grote:"
+msgstr "Plot pagina grootte:"
 
 #: eeschema/plothpgl.cpp:240
 msgid "Pen control:"
@@ -8837,7 +8813,7 @@ msgstr "Component naam:"
 
 #: eeschema/symbtext.cpp:152
 msgid "Size:"
-msgstr "Grote:"
+msgstr "Grootte:"
 
 #: eeschema/symbtext.cpp:158
 msgid " Text Options : "
@@ -8918,7 +8894,7 @@ msgstr "Glabel Vorm:"
 
 #: eeschema/dialog_edit_label.cpp:173
 msgid "Size "
-msgstr "Grote"
+msgstr "Grootte"
 
 #: eeschema/dialog_cmp_graphic_properties.cpp:152
 msgid "Options :"
@@ -9043,9 +9019,8 @@ msgid ""
 msgstr "Schema gewijzigd, opslaan voor afsluiten?"
 
 #: cvpcb/cvframe.cpp:232
-#, fuzzy
 msgid "Problem when saving files, exit anyway ?"
-msgstr "Probleem met bestanden opslaan, Toch afsluiten"
+msgstr "Probleem met bestanden opslaan, toch afsluiten ?"
 
 #: cvpcb/cvframe.cpp:361
 msgid "Delete selections"
@@ -9078,9 +9053,8 @@ msgid "&Font"
 msgstr "&Lettertype"
 
 #: cvpcb/cvframe.cpp:478
-#, fuzzy
 msgid "Choose font type and size for dialogs, information and status box"
-msgstr "Kies lettertype en lettertype grote voor dialogen, informatie en status balk"
+msgstr "Kies lettertype en lettertype grootte voor dialogen, informatie en status balk"
 
 #: cvpcb/autosel.cpp:68
 #, c-format
@@ -9257,9 +9231,8 @@ msgid "Unable to create component file (.cmp)"
 msgstr ""
 
 #: cvpcb/init.cpp:165
-#, fuzzy
 msgid "Unable to create netlist file"
-msgstr "Kan netlijst bestand niet creeeren"
+msgstr "Kan netlijst bestand niet creëren"
 
 #: cvpcb/init.cpp:188
 msgid "Load Net List"
@@ -9275,7 +9248,7 @@ msgstr "Equiv"
 
 #: kicad/preferences.cpp:33
 msgid "Prefered Pdf Browser:"
-msgstr "Voorkeur PDF Browser:"
+msgstr "Standaard PDF Browser:"
 
 #: kicad/preferences.cpp:74
 msgid "You must choose a PDF viewer before use this option"
@@ -9304,33 +9277,30 @@ msgid "Load file:"
 msgstr "Bestand laden:"
 
 #: kicad/buildmnu.cpp:131
-#, fuzzy
 msgid "Open an existing project"
-msgstr "Een project laden"
+msgstr "Open een bestaand project"
 
 #: kicad/buildmnu.cpp:140
-#: kicad/buildmnu.cpp:383
+#: kicad/buildmnu.cpp:379
 msgid "Start a new project"
 msgstr "Een nieuw project starten"
 
 #: kicad/buildmnu.cpp:149
-#: kicad/buildmnu.cpp:402
+#: kicad/buildmnu.cpp:398
 msgid "Save current project"
 msgstr "Huidige project opslaan"
 
 #: kicad/buildmnu.cpp:161
-#, fuzzy
 msgid "&Archive"
-msgstr "Project &Uitpakken"
+msgstr "&Inpakken"
 
 #: kicad/buildmnu.cpp:162
 msgid "Archive project files in zip archive"
 msgstr "Archiveer project bestanden in zip archief"
 
 #: kicad/buildmnu.cpp:170
-#, fuzzy
 msgid "&Unarchive"
-msgstr "Project &Uitpakken"
+msgstr "&Uitpakken"
 
 #: kicad/buildmnu.cpp:171
 msgid "Unarchive project files from zip file"
@@ -9341,86 +9311,90 @@ msgid "Quit kicad"
 msgstr "Kicad afsluiten"
 
 #: kicad/buildmnu.cpp:209
-msgid "&Editor"
-msgstr "&Editor"
+msgid "Text E&ditor"
+msgstr "Text E&ditor"
 
 #: kicad/buildmnu.cpp:210
-msgid "Text editor"
-msgstr "Tekstbestanden editor"
+msgid "Open prefered text editor"
+msgstr "Open voorkeur tekst editor"
 
 #: kicad/buildmnu.cpp:218
 msgid "&Browse Files"
 msgstr "&Bestanden Verkennen"
 
 #: kicad/buildmnu.cpp:219
-msgid "Read or edit files"
-msgstr "Lees of bewerk bestanden"
+msgid "Read or edit files with text editor"
+msgstr "Lees of bewerk bestanden met tekst editor"
 
 #: kicad/buildmnu.cpp:231
-msgid "&Select Editor"
-msgstr "&Selecteer editor"
-
-#: kicad/buildmnu.cpp:232
-msgid "Select your prefered editor for file browsing"
-msgstr "Een tekst editor selecteren van het systeem"
-
-#: kicad/buildmnu.cpp:244
 msgid "Fonts"
 msgstr "Lettertype"
 
-#: kicad/buildmnu.cpp:245
+#: kicad/buildmnu.cpp:232
 msgid "Font preferences"
 msgstr "Lettertype voorkeuren"
 
-#: kicad/buildmnu.cpp:259
+#: kicad/buildmnu.cpp:240
+msgid "&Text Editor"
+msgstr "&Tekst Editor"
+
+#: kicad/buildmnu.cpp:241
+msgid "Select your prefered text editor"
+msgstr "Selecteer voorkeur tekst editor"
+
+#: kicad/buildmnu.cpp:255
 msgid "Default PDF Viewer"
 msgstr "Standaard PDF Programma"
 
-#: kicad/buildmnu.cpp:260
+#: kicad/buildmnu.cpp:256
 msgid "Use the default (system) PDF viewer used to browse datasheets"
-msgstr ""
+msgstr "Gebruik systeem standaard Pdf viewer om databladen te bekijken"
 
-#: kicad/buildmnu.cpp:271
+#: kicad/buildmnu.cpp:267
 msgid "Favourite PDF Viewer"
 msgstr "Favoriete PDF Programma"
 
-#: kicad/buildmnu.cpp:272
+#: kicad/buildmnu.cpp:268
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr ""
 
-#: kicad/buildmnu.cpp:283
+#: kicad/buildmnu.cpp:279
 msgid "Select Pdf Viewer"
 msgstr "Selecteer PDF Programma"
 
-#: kicad/buildmnu.cpp:284
+#: kicad/buildmnu.cpp:280
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr "Selecteer favoriet pdf programma om databladen te bekijken"
 
-#: kicad/buildmnu.cpp:290
-msgid "Pdf Browser"
-msgstr "PDF Instellingen"
+#: kicad/buildmnu.cpp:286
+msgid "Pdf Viewer"
+msgstr "Pdf Viewer"
 
-#: kicad/buildmnu.cpp:306
+#: kicad/buildmnu.cpp:287
+msgid "Pdf viewer preferences"
+msgstr "Pdf viewer voorkeuren"
+
+#: kicad/buildmnu.cpp:302
 msgid "Open the kicad manual"
 msgstr "Open de kicad handleiding"
 
-#: kicad/buildmnu.cpp:315
+#: kicad/buildmnu.cpp:311
 msgid "About kicad project manager"
 msgstr "Over kicad project manager"
 
-#: kicad/buildmnu.cpp:322
+#: kicad/buildmnu.cpp:318
 msgid "&Browse"
 msgstr "&Verkennen"
 
-#: kicad/buildmnu.cpp:392
+#: kicad/buildmnu.cpp:388
 msgid "Load existing project"
 msgstr "Laad een bestaand project"
 
-#: kicad/buildmnu.cpp:415
+#: kicad/buildmnu.cpp:411
 msgid "Archive all project files"
 msgstr "Archiveer alle project bestanden"
 
-#: kicad/buildmnu.cpp:428
+#: kicad/buildmnu.cpp:424
 msgid "Refresh project tree"
 msgstr "Projectenlijst verversen"
 
@@ -9604,7 +9578,7 @@ msgstr "Permissie fout?"
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
-msgstr ""
+msgstr "Pdf viewer voorkeuren"
 
 #: kicad/treeprj_datas.cpp:284
 msgid "Rename File"
@@ -9820,9 +9794,8 @@ msgid "&About gerbview"
 msgstr "Gerbview I&nfo"
 
 #: gerbview/tool_gerber.cpp:153
-#, fuzzy
 msgid "About gerbview gerber and drill viewer"
-msgstr "GerbView (Gerber Viewer)"
+msgstr "Over gerbview gerber viewer"
 
 #: gerbview/tool_gerber.cpp:216
 msgid "New World"
@@ -9838,7 +9811,7 @@ msgstr "Wereld opslaan"
 
 #: gerbview/tool_gerber.cpp:234
 msgid "page settings (size, texts)"
-msgstr "Pagina instellingen (grote, teksten)"
+msgstr "Pagina instellingen (grootte, teksten)"
 
 #: gerbview/tool_gerber.cpp:270
 msgid "Print World"
@@ -9870,9 +9843,8 @@ msgid "Add Lines"
 msgstr "Lijnen Toevoegen"
 
 #: gerbview/tool_gerber.cpp:447
-#, fuzzy
 msgid "Show Spots in Sketch Mode"
-msgstr "Spots weergeven in schets modus"
+msgstr "Spots Weergeven in Schets Modus"
 
 #: gerbview/tool_gerber.cpp:454
 msgid "Show Lines in Sketch Mode"
@@ -9914,12 +9886,10 @@ msgid "No layer selected"
 msgstr "Geen laag geselecteerd"
 
 #: gerbview/set_color.cpp:279
-#, fuzzy
 msgid "Switch on all of the Gerber layers"
 msgstr "Inschakelen van alle Gerber lagen"
 
 #: gerbview/set_color.cpp:288
-#, fuzzy
 msgid "Switch off all of the Gerber layers"
 msgstr "Uitschakelen van alle Gerber lagen"
 
@@ -10538,9 +10508,8 @@ msgid "Comments Layer On/Off"
 msgstr "Commentaar Laag Aan/Uit"
 
 #: 3d-viewer/3d_toolbar.cpp:144
-#, fuzzy
 msgid "Drawings Layer On/Off"
-msgstr "Tekeningen"
+msgstr "Tekening Lagen Aan/Uit"
 
 #: 3d-viewer/3d_toolbar.cpp:147
 msgid "Eco1 Layer On/Off"
@@ -10659,15 +10628,15 @@ msgstr "Aangepast"
 
 #: share/setpage.cpp:287
 msgid "Page Size:"
-msgstr "Pagina Grote:"
+msgstr "Pagina Grootte:"
 
 #: share/setpage.cpp:294
 msgid "User Page Size X: "
-msgstr "Pagina Grote X:"
+msgstr "Pagina Grootte X:"
 
 #: share/setpage.cpp:303
 msgid "User Page Size Y: "
-msgstr "Pagina Grote Y:"
+msgstr "Pagina Grootte Y:"
 
 #: share/setpage.cpp:330
 #, c-format
@@ -10799,7 +10768,7 @@ msgstr "Zoom selecteren"
 
 #: share/zoom.cpp:385
 msgid "Grid Select"
-msgstr "Raster Grote"
+msgstr "Raster Grootte"
 
 #: share/zoom.cpp:407
 msgid "grid user"
@@ -10807,7 +10776,7 @@ msgstr "gebruikers raster"
 
 #: share/drawframe.cpp:154
 msgid "Choose font type and size for dialogs, infos and status box"
-msgstr "Kies lettertype en lettertype grote voor dialogen, informatie en status balk"
+msgstr "Kies lettertype en lettertype grootte voor dialogen, informatie en status balk"
 
 #: share/drawframe.cpp:384
 msgid "Inch"
@@ -10913,7 +10882,7 @@ msgstr "Boor Bestanden Genereren"
 
 #: pcbnew/dialog_track_options.h:53
 msgid "Tracks and Vias Sizes"
-msgstr "Sporen en Vias Grotes"
+msgstr "Sporen en Vias Groottes"
 
 #: pcbnew/cleaningoptions_dialog.h:48
 msgid "Cleaning options"
@@ -11275,6 +11244,26 @@ msgstr "Pagina Instellingen"
 msgid "Print"
 msgstr "Printen"
 
+#~ msgid "Read or edit files"
+#~ msgstr "Lees of bewerk bestanden"
+#~ msgid "Save &Current sheet"
+#~ msgstr "&Opslaan (huidige tekening)"
+#~ msgid "Save current sheet only"
+#~ msgstr "Alleen huidige blad opslaan"
+#~ msgid "Save Current sheet &as.."
+#~ msgstr "Opslaan als (huidige tekening)"
+#~ msgid "&Editor"
+#~ msgstr "&Editor"
+#~ msgid "Text editor"
+#~ msgstr "Tekstbestanden editor"
+#~ msgid "&Select Editor"
+#~ msgstr "&Selecteer editor"
+#~ msgid "Pdf"
+#~ msgstr "Pdf"
+#~ msgid "Pdf Browser choice: default or user selection"
+#~ msgstr "Pdf viewer voorkeuren"
+#~ msgid "Pdf Browser"
+#~ msgstr "PDF Instellingen"
 #~ msgid "Plot HPGL, PostScript, SVG"
 #~ msgstr "Plot HPGL, PostScript, SVG"
 #~ msgid "Print on current printer"
@@ -11285,8 +11274,6 @@ msgstr "Printen"
 #~ msgstr "&Open Project"
 #~ msgid "&New Project"
 #~ msgstr "&Nieuw Project"
-#~ msgid "&Save Project"
-#~ msgstr "Project &Opslaan"
 #~ msgid "&Archive project"
 #~ msgstr "&Archiveer Project"
 #~ msgid "&Unarchive project"
