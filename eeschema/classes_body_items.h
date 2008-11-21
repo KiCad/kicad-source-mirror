@@ -450,6 +450,11 @@ public:
     wxString m_Name;                    /* Field Name */
 
 public:
+
+    LibDrawField*   Next() { return (LibDrawField*) Pnext; }
+    LibDrawField*   Prev() { return (LibDrawField*) Pback; }
+
+
     LibDrawField( int idfield = 2 );
     ~LibDrawField();
     virtual wxString GetClass() const
