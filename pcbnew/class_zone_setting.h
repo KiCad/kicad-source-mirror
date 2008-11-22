@@ -17,17 +17,18 @@
 class ZONE_SETTING
 {
 public:
-    int  m_GridFillValue;                           // Grid value for filling zone by segments, 0 to used polygons to fill
-    int m_ZoneClearance;                            // Clearance value
-    int  m_NetcodeSelection;                        // Net code selection for the current zone
-    int  m_CurrentZone_Layer;                       // Layer used to create the current zone
-    int  m_Zone_HatchingStyle;                      // Option to show the zone area (outlines only, short hatches or full hatches
+    int  m_GridFillValue;                               // Grid value for filling zone by segments, 0 to used polygons to fill
+    int  m_ZoneClearance;                               // Clearance value
+    int  m_ZoneMinThickness;                            // Min thickness value in filled areas
+    int  m_NetcodeSelection;                            // Net code selection for the current zone
+    int  m_CurrentZone_Layer;                           // Layer used to create the current zone
+    int  m_Zone_HatchingStyle;                          // Option to show the zone area (outlines only, short hatches or full hatches
     int  m_ArcToSegmentsCount;                  /* Option to select number of segments to approximate a circle
-                                                     * 16 or 32 segments */
-    int  m_FilledAreasShowMode;                     // Used to select draw options for filled areas in a zone (currently normal =0, sketch = 1)
-    long m_ThermalReliefGapValue;                   // tickness of the gap in thermal reliefs
-    long m_ThermalReliefCopperBridgeValue;          // tickness of the copper bridge in thermal reliefs
-    int  m_Zone_Pad_Options;                        // How pads are covered by copper in zone
+                                                 * 16 or 32 segments */
+    int  m_FilledAreasShowMode;                         // Used to select draw options for filled areas in a zone (currently normal =0, sketch = 1)
+    long m_ThermalReliefGapValue;                       // tickness of the gap in thermal reliefs
+    long m_ThermalReliefCopperBridgeValue;              // tickness of the copper bridge in thermal reliefs
+    int  m_Zone_Pad_Options;                            // How pads are covered by copper in zone
 public:
     ZONE_SETTING( void );
 

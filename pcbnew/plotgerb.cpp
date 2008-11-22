@@ -632,7 +632,7 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
         PlotGERBERLine( polygon[3], polygon[0], plotLine_width );
     }
     else
-        PlotPolygon_GERBER( 4, coord, TRUE );
+        PlotFilledPolygon_GERBER( 4, coord );
 }
 
 
@@ -701,7 +701,7 @@ void PlotCircle_GERBER( wxPoint centre, int rayon, int epaisseur )
 
 
 /***************************************************************/
-void PlotPolygon_GERBER( int nb_segm, int* coord, bool fill )
+void PlotFilledPolygon_GERBER( int nb_segm, int* coord )
 /***************************************************************/
 {
     int     ii;
@@ -727,6 +727,30 @@ void PlotPolygon_GERBER( int nb_segm, int* coord, bool fill )
 
     fprintf( dest, "X%5.5dY%5.5dD01*\n", startpos.x, startpos.y );
     fputs( "G37*\n", dest );
+}
+
+
+/***************************************************************/
+void PlotPolygon_GERBER( int nb_segm, int* coord, int width )
+/***************************************************************/
+{
+    wxPoint start, end, startpoint;
+    startpoint.x = *coord++;
+    startpoint.y = *coord++;
+    start = startpoint;
+    for( int ii = 0; ii < nb_segm-1; ii++ )
+    {
+        end.x = *coord;
+        coord++;
+        end.y = *coord;
+        coord++;
+        PlotGERBERLine(start, end, width );
+        start = end;
+    }
+
+    if ( startpoint != end )    // Close poly
+        PlotGERBERLine(end, startpoint, width );
+
 }
 
 

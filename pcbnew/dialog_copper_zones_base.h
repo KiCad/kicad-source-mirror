@@ -73,6 +73,8 @@ class dialog_copper_zone_base : public wxDialog
 		wxCheckBox* m_ShowFilledAreasInSketchOpt;
 		wxStaticText* m_ClearanceValueTitle;
 		wxTextCtrl* m_ZoneClearanceCtrl;
+		wxStaticText* m_MinThicknessValueTitle;
+		wxTextCtrl* m_ZoneMinThicknessCtrl;
 		wxButton* m_ExportSetupButton;
 		
 		wxButton* m_OkButton;

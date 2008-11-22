@@ -149,6 +149,10 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
+    ret = fprintf( aFile, "ZMinThickness %d\n", m_ZoneMinThickness );
+    if( ret < 1 )
+        return false;
+
     ret = fprintf( aFile, "ZOptions %d %d %c %d %d\n", m_GridFillValue, m_ArcToSegmentsCount,
         m_DrawOptions ? 'S' : 'F', m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
     if( ret < 3 )
@@ -332,6 +336,16 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             }
         }
 
+        if( strnicmp( Line, "ZMinThickness", 13 ) == 0 )    // Min Thickness info found
+        {
+            int thickness;
+            text = Line + 13;
+            ret  = sscanf( text, "%d", &thickness );
+            if( ret < 1 )
+                error = true;
+            else
+               m_ZoneMinThickness = thickness;
+        }
 
         if( strnicmp( Line, "$POLYSCORNERS", 13 ) == 0  )  // Read the PolysList (polygons used for fill areas in the zone)
         {
@@ -522,8 +536,26 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
                 GRClosedPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
                     false, 0, color, color );
             else
+            {
+                // Draw outlines:
+                if ( m_ZoneMinThickness > 1 )
+                {
+                    int ilim = corners_count * 2;
+                    for (  int is = 0, ie = ilim-2; is < ilim; ie = is, is+=2 )
+                    {
+                        int x0 = CornersBuffer[is];
+                        int y0 = CornersBuffer[is+1];
+                        int x1 = CornersBuffer[ie];
+                        int y1 = CornersBuffer[ie+1];
+                        GRFillCSegm( &panel->m_ClipBox, DC,
+                                x0, y0, x1 , y1,
+                                m_ZoneMinThickness, color );
+                    }
+                }
+                // Draw areas:
                 GRPoly( &panel->m_ClipBox, DC, corners_count, CornersBuffer,
                     true, 0, color, color );
+            }
             corners_count = 0;
             ii = 0;
         }

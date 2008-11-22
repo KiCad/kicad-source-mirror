@@ -39,8 +39,8 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No grid (For tests only!)") };
 	int m_GridCtrlNChoices = sizeof( m_GridCtrlChoices ) / sizeof( wxString );
-	m_GridCtrl = new wxRadioBox( this,  ID_RADIOBOX_GRID_SELECTION, _("Grid Size for Filling:"), wxDefaultPosition, wxDefaultSize, m_GridCtrlNChoices, m_GridCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_GridCtrl->SetSelection( 4 );
+	m_GridCtrl = new wxRadioBox( this,  ID_RADIOBOX_GRID_SELECTION, _("Grid Size for Filling"), wxDefaultPosition, wxDefaultSize, m_GridCtrlNChoices, m_GridCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_GridCtrl->SetSelection( 1 );
 	m_FillOptionsBox->Add( m_GridCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_PadInZoneOptChoices[] = { _("Include pads"), _("Thermal relief"), _("Exclude pads") };
@@ -119,12 +119,21 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_OthersOptionsSizer->Add( m_ShowFilledAreasInSketchOpt, 0, wxALL, 5 );
 	
-	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ClearanceValueTitle->Wrap( -1 );
 	m_OthersOptionsSizer->Add( m_ClearanceValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ZoneClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_OthersOptionsSizer->Add( m_ZoneClearanceCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_MinThicknessValueTitle = new wxStaticText( this, wxID_ANY, _("Zone min thickness value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MinThicknessValueTitle->Wrap( -1 );
+	m_OthersOptionsSizer->Add( m_MinThicknessValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_ZoneMinThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoneMinThicknessCtrl->SetToolTip( _("Value of minimun thickness of filled areas") );
+	
+	m_OthersOptionsSizer->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_OutilinesBoxOpt->Add( m_OthersOptionsSizer, 1, wxEXPAND, 5 );
 	
@@ -173,6 +182,8 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_NetSortOptSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_NetNameFilter = new wxTextCtrl( this, ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_NetNameFilter->SetToolTip( _("Pattern in advanced mode, to filter net names in list\nNet names matching this pattern are not displayed") );
+	
 	m_NetSortOptSizer->Add( m_NetNameFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_RightBoxSizer->Add( m_NetSortOptSizer, 1, wxEXPAND, 5 );

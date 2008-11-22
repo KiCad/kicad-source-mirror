@@ -541,7 +541,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
     double DGRID = 1.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
                             // Note: in kicad, coordinates are already integer so DGRID can be set to 1
 
-    double MARGE = 0.1;     // snap with in this range points to lines in the intersection routines
+    double MARGE = 0.001;     // snap with in this range points to lines in the intersection routines
                             // should always be > DGRID  a  MARGE >= 10*DGRID is ok
                             // this is also used to remove small segments and to decide when
                             // two segments are in line. ( initial value = 0.001 )
@@ -559,7 +559,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
         Another scaling with Grid is applied on top of it to create space in the integer number for
 		even smaller numbers.
    */
-    int GRID = 100;       // initial value = 10000 in kbool example
+    int GRID = 10000;       // initial value = 10000 in kbool example
 
     aBooleng->SetMarge( MARGE );
     aBooleng->SetGrid( GRID );

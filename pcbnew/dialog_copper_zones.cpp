@@ -64,16 +64,10 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
-    wxString msg = _( "Zone clearance value:" ) + ReturnUnitSymbol( g_UnitMetric );
-    m_ClearanceValueTitle->SetLabel( msg );
+    wxString msg;
 
-    msg = _( "Grid :" ) + ReturnUnitSymbol( g_UnitMetric );
+    msg = m_GridCtrl->GetLabel() + ReturnUnitSymbol( g_UnitMetric );
     m_GridCtrl->SetLabel( msg );
-
-    msg = ReturnStringFromValue( g_UnitMetric,
-        m_Zone_Setting->m_ZoneClearance,
-        m_Parent->m_InternalUnits );
-    m_ZoneClearanceCtrl->SetValue( msg );
 
     if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
@@ -98,10 +92,17 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     m_GridCtrl->SetSelection( selection );
 
+    AddUnitSymbol( *m_ClearanceValueTitle, g_UnitMetric );
     msg = ReturnStringFromValue( g_UnitMetric,
         m_Zone_Setting->m_ZoneClearance,
         m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
+
+    AddUnitSymbol( *m_MinThicknessValueTitle, g_UnitMetric );
+    msg = ReturnStringFromValue( g_UnitMetric,
+        m_Zone_Setting->m_ZoneMinThickness,
+        m_Parent->m_InternalUnits );
+    m_ZoneMinThicknessCtrl->SetValue( msg );
 
     switch( m_Zone_Setting->m_Zone_Pad_Options )
     {
@@ -324,6 +325,11 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
     m_Zone_Setting->m_ZoneClearance =
         ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+
+    txtvalue = m_ZoneMinThicknessCtrl->GetValue();
+    m_Zone_Setting->m_ZoneMinThickness =
+        ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+
     if( m_OrientEdgesOpt->GetSelection() == 0 )
         g_Zone_45_Only = FALSE;
     else

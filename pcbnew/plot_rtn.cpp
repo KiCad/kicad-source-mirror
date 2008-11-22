@@ -550,7 +550,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
             *ptr++ = y;
         }
 
-        PlotPolygon( format_plot, TRUE, PtEdge->m_PolyCount, ptr_base );
+        PlotFilledPolygon( format_plot, PtEdge->m_PolyCount, ptr_base );
         free( ptr_base );
         break;
     }
@@ -748,7 +748,9 @@ void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat )
         corners_count++;
         if( corner->end_contour )
         {   // Plot the current filled area
-            PlotPolygon( aFormat, true, corners_count, CornersBuffer );
+            PlotFilledPolygon( aFormat, corners_count, CornersBuffer );
+            if ( aZone->m_ZoneMinThickness > 0 )
+                PlotPolygon( aFormat, corners_count, CornersBuffer, aZone->m_ZoneMinThickness );
             corners_count = 0;
             ii = 0;
         }
@@ -848,22 +850,43 @@ void PlotCircle( int format_plot, int thickness, wxPoint centre, int radius )
 
 
 /**********************************************************************/
-void PlotPolygon( int format_plot, bool Filled, int nbpoints, int* coord )
+void PlotFilledPolygon( int format_plot, int nbpoints, int* coord )
 /**********************************************************************/
 /* plot a polygon */
 {
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
-        PlotPolygon_GERBER( nbpoints, coord, Filled );
+        PlotFilledPolygon_GERBER( nbpoints, coord );
         break;
 
     case PLOT_FORMAT_HPGL:
-        PlotPolyHPGL( nbpoints, coord, Filled );
+        PlotPolyHPGL( nbpoints, coord, true );
         break;
 
     case PLOT_FORMAT_POST:
-        PlotPolyPS( nbpoints, coord, Filled );
+        PlotPolyPS( nbpoints, coord, true );
+        break;
+    }
+}
+
+/**********************************************************************/
+void PlotPolygon( int format_plot, int nbpoints, int* coord, int width )
+/**********************************************************************/
+/* plot a polygon */
+{
+    switch( format_plot )
+    {
+    case PLOT_FORMAT_GERBER:
+        PlotPolygon_GERBER( nbpoints, coord, width );
+        break;
+
+    case PLOT_FORMAT_HPGL:
+        PlotPolyHPGL( nbpoints, coord, false, width );
+        break;
+
+    case PLOT_FORMAT_POST:
+        PlotPolyPS( nbpoints, coord, false, width );
         break;
     }
 }

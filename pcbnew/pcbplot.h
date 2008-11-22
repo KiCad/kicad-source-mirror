@@ -146,7 +146,8 @@ void PlotTextePcb( TEXTE_PCB * pt_texte,int format_plot,int masque_layer);
 void PlotArc(int format_plot, wxPoint centre, int start_angle,int end_angle,
                     int rayon,int width);
 void PlotCircle(int format_plot,int width, wxPoint centre, int rayon);
-void PlotPolygon(int format_plot, bool filled, int nbpoints, int * coord);
+void PlotFilledPolygon(int format_plot, int nbpoints, int * coord);
+void PlotPolygon(int format_plot, int nbpoints, int * coord, int width);
 void Plot_1_texte( int format_plot,
                         const wxString & Text, int t_orient,
                         int width, int ox,int oy,int size_h,int size_v,
@@ -166,7 +167,8 @@ void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat);
 /* PLOTGERB.CPP */
 void PlotGERBERLine(wxPoint start, wxPoint end, int width);
 void PlotCircle_GERBER( wxPoint centre, int rayon, int width);
-void PlotPolygon_GERBER(int nb_segm, int * coord, bool fill);
+void PlotFilledPolygon_GERBER(int nb_segm, int * coord);
+void PlotPolygon_GERBER(int nb_segm, int * coord, int width);
 void trace_1_contour_GERBER(wxPoint pos, wxSize size, wxSize delta,
                                         int penwidth, int orient);
     /* Trace 1 contour rectangulaire ou trapezoidal d'orientation quelconque

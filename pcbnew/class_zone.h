@@ -26,6 +26,7 @@ public:
     CPolyLine*            m_Poly;                           // outlines
     int                   m_CornerSelection;                // For corner moving, corner index to drag, or -1 if no selection
     int                   m_ZoneClearance;                  // clearance value
+    int                   m_ZoneMinThickness;               // Min thickness value in filled areas
     int                   m_GridFillValue;                  // Grid used for filling, 0 = use polygonal areas to fill
     int                   m_ArcToSegmentsCount;             // number of segments to convert a cirlce to a polygon (uses 16 or 32)
     int                   m_PadOption;                      //

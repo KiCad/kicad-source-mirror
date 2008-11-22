@@ -9,6 +9,11 @@ email address.
 ================================================================================
 ++pcbnew
     Some cleanup in dialog pad edition.
+    Added:
+    Zones now have a min thickness filled area parameter
+    that ensure a minimun width for filled copper areas
+    (areas below this min thickness are removed)
+    Shapes also are better
 
 
 2008-Nov-19 UPDATE Jerry Jacobs <jerkejacobs@gmail.com>

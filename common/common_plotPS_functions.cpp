@@ -184,7 +184,7 @@ void PlotPolyPS( int nb_segm, int* coord, bool fill, int width )
 /* Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
  * @param nb_segm = corner count
  * @param coord = corner list (a corner uses 2 int = X coordinate followed by Y  coordinate
- * @param fill :if == 0 : filled polygon
+ * @param fill :if true : filled polygon
  * @param  width = line width
  */
 {

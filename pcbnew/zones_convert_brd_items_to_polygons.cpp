@@ -52,10 +52,11 @@ double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (an
                           */
 
 /** function AddClearanceAreasPolygonsToPolysList
+ * Supports a min thickness area constraint.
  * Add non copper areas polygons (pads and tracks with clearence)
- * to a filled copper area
- * used in BuildFilledPolysListData when calculating filled areas in a zone
- * Non copper areas are pads and track and their clearance area
+ * to the filled copper area found
+ * in BuildFilledPolysListData after calculating filled areas in a zone
+ * Non filled copper areas are pads and track and their clearance areas
  * The filled copper area must be computed just before.
  * BuildFilledPolysListData() call this function just after creating the
  *  filled copper area polygon (without clearence areas
@@ -64,10 +65,17 @@ double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (an
  *       this means the created polygons have no holes (hole are linked to outer outline by double overlapped segments
  *       and are therefore compatible with draw functions (DC draw polygons and Gerber or PS outputs)
  * 2 - Add the main outline (zone outline) in group A
- * 3 - Add all non filled areas (pads, tracks) in group B
- * 4 - calculates the polygon A - B
- * 5 - put resulting list of polygons (filled areas) in m_FilledPolysList
- * 6 - Remove insulated copper islands
+ * 3 - Creates a correction using BOOL_CORRECTION operation to inflate the resulting area
+ *     with m_ZoneMinThickness/2 value.
+ *     The result is areas with a margin of m_ZoneMinThickness/2
+ *     When drawing outline with segments having a thickness of m_ZoneMinThickness, the outlines wilm
+ *     match exactly the initial outlines
+ * 4 - recreates the same Bool_Engine, with no correction
+ * 3 - Add the main outline (zone outline) in group A
+ * 4 - Add all non filled areas (pads, tracks) in group B with a clearance of m_Clearance + m_ZoneMinThickness/2
+ * 5 - calculates the polygon A - B
+ * 6 - put resulting list of polygons (filled areas) in m_FilledPolysList
+ * 7 - Remove insulated copper islands
  */
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 {
@@ -87,16 +95,19 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     /* Uses a kbool engine to add holes in the m_FilledPolysList polygon.
      * Because this function is called just after creating the m_FilledPolysList,
      * only one polygon is in list.
-     * (initial holes in zonesare linked into outer contours by double overlapping segments).
-     * after adding holes, many polygons could be exist in this list.
+     * (initial holes in zones are linked into outer contours by double overlapping segments).
+     * because after adding holes, many polygons could be exist in this list.
      */
 
     Bool_Engine* booleng = new Bool_Engine();
-
     ArmBoolEng( booleng, true );
 
-    /* Add the main polygon (i.e. the filled area using only one outline)
-     * in GroupA in Bool_Engine
+    /* First, Add the main polygon (i.e. the filled area using only one outline)
+     * in GroupA in Bool_Engine to do a BOOL_CORRECTION operation
+     * to reserve a m_ZoneMinThickness/2 margind around the outlines and holes
+     * the margind will be filled when redraw outilnes with segments having a whidth set to
+     * m_ZoneMinThickness
+     * so m_ZoneMinThickness is the min thickness of the filled zones areas
      */
     unsigned corners_count = m_FilledPolysList.size();
     unsigned ic = 0;
@@ -112,9 +123,59 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         booleng->EndPolygonAdd();
     }
+    booleng->SetCorrectionFactor( (double) -m_ZoneMinThickness/2 );
+    booleng->Do_Operation( BOOL_CORRECTION );
+
+    /* No copy the new outline in m_FilledPolysList */
+    m_FilledPolysList.clear();
+    while( booleng->StartPolygonGet() )
+    {
+        CPolyPt corner( 0, 0, false );
+        while( booleng->PolygonHasMorePoints() )
+        {
+            corner.x = (int) booleng->GetPolygonXPoint();
+            corner.y = (int) booleng->GetPolygonYPoint();
+            corner.end_contour = false;
+            m_FilledPolysList.push_back( corner );
+        }
+
+        corner.end_contour = true;
+        m_FilledPolysList.pop_back();
+        m_FilledPolysList.push_back( corner );
+        booleng->EndPolygonGet();
+    }
+    delete booleng;
+
+    /* Second, Add the main (corrected) polygon (i.e. the filled area using only one outline)
+     * in GroupA in Bool_Engine to do a BOOL_A_SUB_B operation
+     * All areas to remove will be put in GroupB in Bool_Engine
+     */
+    booleng = new Bool_Engine();
+    ArmBoolEng( booleng, true );
+
+    /* Add the main corrected polygon (i.e. the filled area using only one outline)
+     * in GroupA in Bool_Engine
+     */
+    corners_count = m_FilledPolysList.size();
+    ic = 0;
+    if( booleng->StartPolygonAdd( GROUP_A ) )
+    {
+        for( ; ic < corners_count; ic++ )
+        {
+            CPolyPt* corner = &m_FilledPolysList[ic];
+            booleng->AddPoint( corner->x, corner->y );
+            if( corner->end_contour )
+                break;
+        }
+
+        booleng->EndPolygonAdd();
+    }
+
 
     // Calculates the clearance value that meet DRC requirements
     int      clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearence );
+    clearance += m_ZoneMinThickness/2;
+
 
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
      * in GroupB in Bool_Engine
@@ -155,7 +216,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                     AddThermalReliefPadPolygon( booleng, *pad,
-                        m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
+                        m_ThermalReliefGapValue/* + (m_ZoneMinThickness/2)*/,
+                        m_ThermalReliefCopperBridgeValue /*- m_ZoneMinThickness*/ );
                 break;
 
             case PAD_IN_ZONE:
@@ -400,6 +462,9 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
     int     dy = aPad.m_Size.y / 2;
 
     int     delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
+
+    if ( aCopperThickness < 0 )
+        aCopperThickness = 0;
 
     copper_tickness.x = min( dx, aCopperThickness );
     copper_tickness.y = min( dy, aCopperThickness );
