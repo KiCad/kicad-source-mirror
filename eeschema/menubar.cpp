@@ -39,20 +39,20 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         // Menu File:
         wxMenuItem* item = new wxMenuItem( m_FilesMenu, ID_NEW_PROJECT,
                                           _( "&New" ),
-                                          _( "New schematic sheet" ) );
+                                          _( "New schematic project" ) );
         item->SetBitmap( new_xpm );
         m_FilesMenu->Append( item );
 
         item = new wxMenuItem( m_FilesMenu, ID_LOAD_PROJECT,
                               _( "&Open" ),
-                              _( "Open a schematic sheet" ) );
+                              _( "Open an existing schematic project" ) );
         item->SetBitmap( open_xpm );
         m_FilesMenu->Append( item );
 
         m_FilesMenu->AppendSeparator();
         item = new wxMenuItem( m_FilesMenu, ID_SAVE_PROJECT,
                               _( "&Save Project" ),
-                              _( "Save project" ) );
+                              _( "Save all sheets in the schematic project" ) );
         item->SetBitmap( save_project_xpm );
         m_FilesMenu->Append( item );
 

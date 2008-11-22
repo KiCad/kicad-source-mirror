@@ -1,4 +1,4 @@
-update=23/9/2008-19:07:03
+update=20/11/2008-19:07:03
 version=1
 last_client=eeschema
 [general]
@@ -71,7 +71,7 @@ ShowRat=0
 ShowMRa=1
 [pcbnew/libraries]
 LibDir=
-LibName1=supports
+LibName1=sockets
 LibName2=connect
 LibName3=discret
 LibName4=pin_array
@@ -145,4 +145,3 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
-LibName31=atmel

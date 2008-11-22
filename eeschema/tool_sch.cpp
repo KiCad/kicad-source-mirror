@@ -153,28 +153,28 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_COMPONENT_BUTT, wxEmptyString,
                          BITMAP( add_component_xpm ),
-                         _( "Place the component" ), wxITEM_CHECK );
+                         _( "Place a component" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PLACE_POWER_BUTT, wxEmptyString,
                          BITMAP( add_power_xpm ),
-                         _( "Place the power port" ), wxITEM_CHECK );
+                         _( "Place a power port" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_WIRE_BUTT, wxEmptyString,
                          BITMAP( add_line_xpm ),
-                         _( "Place the wire" ), wxITEM_CHECK );
+                         _( "Place a wire" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_BUS_BUTT, wxEmptyString,
                          BITMAP( add_bus_xpm ),
-                         _( "Place bus" ), wxITEM_CHECK );
+                         _( "Place a bus" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_WIRETOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_line2bus_xpm ),
-                         _( "Place the wire to bus entry" ), wxITEM_CHECK );
+                         _( "Place a wire to bus entry" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_BUSTOBUS_ENTRY_BUTT, wxEmptyString,
                          BITMAP( add_bus2bus_xpm ),
-                         _( "Place bus to bus entry" ), wxITEM_CHECK );
+                         _( "Place a bus to bus entry" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString,
@@ -187,17 +187,17 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString,
                          BITMAP( add_glabel_xpm ),
-                         _( "Place the global label.\nWarning: all global labels with the same name are connected in whole hierarchy" ),
+                         _( "Place a global label.\nWarning: all global labels with the same name are connected in whole hierarchy" ),
 						 wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          BITMAP( add_junction_xpm ),
-                         _( "Place junction" ), wxITEM_CHECK );
+                         _( "Place a junction" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
 	m_VToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
 						 BITMAP( add_hierarchical_label_xpm ),
-								 _( "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
+								 _( "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
 								 wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_SYMBOL_BUTT, wxEmptyString,

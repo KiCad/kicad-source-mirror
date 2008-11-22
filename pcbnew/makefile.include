@@ -30,6 +30,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		dialog_freeroute_exchange.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
+        dialog_pad_properties.o\
+        dialog_pad_properties_base.o\
 		onrightclick.o\
 		onleftclick.o\
 		modedit_onclick.o\
@@ -87,7 +89,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		editrack-part2.o \
 		deltrack.o edit_track_width.o \
 		editmod.o\
-		editpads.o \
 		move-drag_pads.o\
 		globaleditpad.o \
 		editedge.o\
@@ -244,8 +245,6 @@ track.o: track.cpp $(COMMON)
 edit_track_width.o: edit_track_width.cpp $(COMMON)
 
 editmod.o: editmod.cpp dialog_edit_module.cpp dialog_edit_module.h $(COMMON)
-
-editpads.o: editpads.cpp dialog_pad_edit.cpp dialog_pad_edit.h $(COMMON)
 
 move-drag_pads.o: move-drag_pads.cpp drag.h $(COMMON)
 

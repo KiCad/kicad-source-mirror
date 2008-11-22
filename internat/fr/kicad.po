@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-16 12:50+0100\n"
-"PO-Revision-Date: 2008-11-16 12:53+0100\n"
+"POT-Creation-Date: 2008-11-22 11:36+0100\n"
+"PO-Revision-Date: 2008-11-22 11:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -286,7 +286,7 @@ msgstr "dimension"
 #: pcbnew/class_drawsegment.cpp:311
 #: pcbnew/class_marker.cpp:133
 #: pcbnew/class_text_mod.cpp:503
-#: pcbnew/class_track.cpp:853
+#: pcbnew/class_track.cpp:850
 #: pcbnew/class_zone.cpp:789
 msgid "Type"
 msgstr "Type"
@@ -300,16 +300,16 @@ msgid "Angle"
 msgstr "Angle"
 
 #: pcbnew/class_drawsegment.cpp:326
-#: pcbnew/class_track.cpp:878
+#: pcbnew/class_track.cpp:875
 msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:336
 #: pcbnew/class_module.cpp:1081
-#: pcbnew/class_pad.cpp:993
+#: pcbnew/class_pad.cpp:990
 #: pcbnew/class_pcb_text.cpp:190
 #: pcbnew/class_text_mod.cpp:516
-#: pcbnew/class_track.cpp:910
+#: pcbnew/class_track.cpp:907
 #: pcbnew/class_zone.cpp:823
 msgid "Layer"
 msgstr "Couche"
@@ -318,7 +318,7 @@ msgstr "Couche"
 #: pcbnew/class_edge_mod.cpp:297
 #: pcbnew/class_pcb_text.cpp:204
 #: pcbnew/class_text_mod.cpp:528
-#: pcbnew/class_track.cpp:933
+#: pcbnew/class_track.cpp:930
 msgid "Width"
 msgstr "Epaisseur"
 
@@ -388,7 +388,7 @@ msgstr "Seg"
 
 #: pcbnew/class_edge_mod.cpp:286
 #: pcbnew/class_module.cpp:1108
-#: pcbnew/class_pad.cpp:903
+#: pcbnew/class_pad.cpp:900
 #: pcbnew/class_text_mod.cpp:494
 msgid "Module"
 msgstr "Module"
@@ -418,12 +418,12 @@ msgid "Netlist path"
 msgstr "Chemin Netliste "
 
 #: pcbnew/class_module.cpp:1101
-#: pcbnew/class_track.cpp:894
+#: pcbnew/class_track.cpp:891
 msgid "Stat"
 msgstr "Stat"
 
 #: pcbnew/class_module.cpp:1105
-#: pcbnew/class_pad.cpp:1035
+#: pcbnew/class_pad.cpp:1028
 #: pcbnew/class_pcb_text.cpp:201
 #: pcbnew/class_text_mod.cpp:525
 msgid "Orient"
@@ -441,41 +441,41 @@ msgstr "Doc: "
 msgid "KeyW: "
 msgstr "KeyW: "
 
-#: pcbnew/class_pad.cpp:820
+#: pcbnew/class_pad.cpp:817
 msgid "Unknown Pad shape"
 msgstr "Forme Pad inconnue"
 
-#: pcbnew/class_pad.cpp:906
+#: pcbnew/class_pad.cpp:903
 msgid "RefP"
 msgstr "RefP"
 
-#: pcbnew/class_pad.cpp:1006
+#: pcbnew/class_pad.cpp:999
 #: pcbnew/class_pcb_text.cpp:207
 #: pcbnew/class_text_mod.cpp:531
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_pad.cpp:1010
+#: pcbnew/class_pad.cpp:1003
 #: pcbnew/class_pcb_text.cpp:210
 #: pcbnew/class_text_mod.cpp:534
 msgid "V Size"
 msgstr "Taille V"
 
-#: pcbnew/class_pad.cpp:1016
-#: pcbnew/class_track.cpp:925
-#: pcbnew/class_track.cpp:930
+#: pcbnew/class_pad.cpp:1009
+#: pcbnew/class_track.cpp:922
+#: pcbnew/class_track.cpp:927
 msgid "Drill"
 msgstr "Perçage"
 
-#: pcbnew/class_pad.cpp:1024
+#: pcbnew/class_pad.cpp:1017
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
 
-#: pcbnew/class_pad.cpp:1039
+#: pcbnew/class_pad.cpp:1032
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:1043
+#: pcbnew/class_pad.cpp:1036
 msgid "Y pos"
 msgstr "Y pos"
 
@@ -510,21 +510,21 @@ msgstr "Ref."
 msgid "Display"
 msgstr "Affichage"
 
-#: pcbnew/class_track.cpp:869
+#: pcbnew/class_track.cpp:866
 #: pcbnew/class_zone.cpp:811
 msgid "NetName"
 msgstr "NetName"
 
-#: pcbnew/class_track.cpp:874
+#: pcbnew/class_track.cpp:871
 #: pcbnew/class_zone.cpp:819
 msgid "NetCode"
 msgstr "NetCode"
 
-#: pcbnew/class_track.cpp:882
+#: pcbnew/class_track.cpp:879
 msgid "Standard"
 msgstr "Standard"
 
-#: pcbnew/class_track.cpp:918
+#: pcbnew/class_track.cpp:915
 msgid "Diam"
 msgstr "Diam"
 
@@ -1799,6 +1799,38 @@ msgstr "Ok pour ajuster l'orientation des modules à %g degrés ?"
 msgid "Bad value for footprints orientation"
 msgstr "Mauvaise valeur pour l'orientation des empreintes"
 
+#: pcbnew/dialog_pad_properties.cpp:120
+msgid "Pad Position"
+msgstr "Position Pad"
+
+#: pcbnew/dialog_pad_properties.cpp:125
+msgid "Pad Size"
+msgstr "Taille Pad"
+
+#: pcbnew/dialog_pad_properties.cpp:130
+msgid "Delta"
+msgstr "Delta"
+
+#: pcbnew/dialog_pad_properties.cpp:135
+msgid "Offset"
+msgstr "Offset"
+
+#: pcbnew/dialog_pad_properties.cpp:141
+msgid "Pad drill"
+msgstr "Diam perçage"
+
+#: pcbnew/dialog_pad_properties.cpp:427
+msgid "Incorrect value for pad drill: pad drill bigger than pad size"
+msgstr "Valeur incorrecte pour diamètre de perçage.perçage plus grand que la taille du pad"
+
+#: pcbnew/dialog_pad_properties.cpp:433
+msgid "Incorrect value for pad offset"
+msgstr "Valeur incorrecte pour offset du pad"
+
+#: pcbnew/dialog_pad_properties.cpp:528
+msgid "Unknown netname, no change"
+msgstr "Net inconnu, pas de changement"
+
 #: pcbnew/pcbplot.cpp:149
 #: pcbnew/pcbplot.cpp:281
 msgid "Plot"
@@ -2053,7 +2085,7 @@ msgstr "Surbrillance des équipotentielles"
 msgid "Local Ratsnest"
 msgstr "Montrer le chevelu général"
 
-#: pcbnew/edit.cpp:579
+#: pcbnew/edit.cpp:584
 msgid "Delete item"
 msgstr "Suppression d'éléments"
 
@@ -2818,7 +2850,7 @@ msgstr "L'élément graphique sera sur une couche cuivre. C'est très dangereux.
 
 #: pcbnew/edgemod.cpp:246
 msgid "New Width (1/10000\"):"
-msgstr "Novelle largeur (1/10000\"):"
+msgstr "Nouvelle largeur (1/10000\"):"
 
 #: pcbnew/edgemod.cpp:246
 msgid "Edge Width"
@@ -2978,19 +3010,19 @@ msgstr " chargé"
 msgid "Modules [%d items]"
 msgstr "Modules [%d éléments]"
 
-#: pcbnew/dialog_copper_zones.cpp:66
+#: pcbnew/dialog_copper_zones.cpp:67
 msgid "Zone clearance value:"
 msgstr "Valeur isolation zone:"
 
-#: pcbnew/dialog_copper_zones.cpp:69
+#: pcbnew/dialog_copper_zones.cpp:70
 msgid "Grid :"
 msgstr "Grille:"
 
-#: pcbnew/dialog_copper_zones.cpp:354
+#: pcbnew/dialog_copper_zones.cpp:355
 msgid "Error : you must choose a layer"
 msgstr "Erreur. Vous devez choisir une couche"
 
-#: pcbnew/dialog_copper_zones.cpp:366
+#: pcbnew/dialog_copper_zones.cpp:367
 msgid "Error : you must choose a net name"
 msgstr "Erreur. Vous devez choisir une équipotentielle"
 
@@ -3156,6 +3188,30 @@ msgstr "Référence ou Valeur ne peut etre effacée"
 #, c-format
 msgid "Delete [%s]"
 msgstr "Supprimer [%s]"
+
+#: pcbnew/dsn.cpp:502
+msgid "Line length exceeded"
+msgstr "Longueur de ligne dépassée"
+
+#: pcbnew/dsn.cpp:616
+msgid "in file"
+msgstr "dans le fichier"
+
+#: pcbnew/dsn.cpp:617
+msgid "on line"
+msgstr "en ligne"
+
+#: pcbnew/dsn.cpp:618
+msgid "at offset"
+msgstr "a l'offset"
+
+#: pcbnew/dsn.cpp:678
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
+
+#: pcbnew/dsn.cpp:768
+msgid "Un-terminated delimited string"
+msgstr "Ligne délimitée non terminée"
 
 #: pcbnew/tool_pcb.cpp:33
 msgid ""
@@ -3620,42 +3676,6 @@ msgstr "Bloc Miroir"
 msgid "Move Block"
 msgstr "Déplacer Bloc"
 
-#: pcbnew/editpads.cpp:81
-msgid "Pad Position"
-msgstr "Position Pad"
-
-#: pcbnew/editpads.cpp:88
-msgid "Pad Size"
-msgstr "Taille Pad"
-
-#: pcbnew/editpads.cpp:95
-msgid "Delta"
-msgstr "Delta"
-
-#: pcbnew/editpads.cpp:102
-msgid "Offset"
-msgstr "Offset"
-
-#: pcbnew/editpads.cpp:111
-msgid "Pad drill"
-msgstr "Diam perçage"
-
-#: pcbnew/editpads.cpp:123
-msgid "Pad Orientation (in 0.1 degrees)"
-msgstr "Orientation Pad  en (0.1 degrés)"
-
-#: pcbnew/editpads.cpp:388
-msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr "Valeur incorrecte pour diamètre de perçage.perçage plus grand que la taille du pad"
-
-#: pcbnew/editpads.cpp:394
-msgid "Incorrect value for pad offset"
-msgstr "Valeur incorrecte pour offset du pad"
-
-#: pcbnew/editpads.cpp:491
-msgid "Unknown netname, no change"
-msgstr "Net inconnu, pas de changement"
-
 #: pcbnew/specctra.cpp:133
 #: pcbnew/specctra.cpp:140
 msgid "Expecting"
@@ -3787,14 +3807,14 @@ msgstr "Le Fichier Session utilise une couche invalide n° \"%s\""
 
 #: pcbnew/specctra_import.cpp:241
 msgid "Session via padstack has no shapes"
-msgstr "Manque dans le Fichier Session file la section "
+msgstr "Dans le fichier Session une via n'a pas de forme"
 
 #: pcbnew/specctra_import.cpp:248
 #: pcbnew/specctra_import.cpp:266
 #: pcbnew/specctra_import.cpp:290
 #, c-format
 msgid "Unsupported via shape: \"%s\""
-msgstr "Forme via inconnue: \"%s\""
+msgstr "Forme via non supportée: \"%s\""
 
 #: pcbnew/specctra_import.cpp:347
 msgid "Session file is missing the \"session\" section"
@@ -3821,30 +3841,6 @@ msgstr "Le fichier Session a une 'reference' a un composant non existant \"%s\""
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "Une piste ou via  a une référence vers un  pad \"%s\" manquant"
-
-#: pcbnew/dsn.cpp:502
-msgid "Line length exceeded"
-msgstr "Longueur de ligne dépassée"
-
-#: pcbnew/dsn.cpp:616
-msgid "in file"
-msgstr "dans le fichier"
-
-#: pcbnew/dsn.cpp:617
-msgid "on line"
-msgstr "en ligne"
-
-#: pcbnew/dsn.cpp:618
-msgid "at offset"
-msgstr "a l'offset"
-
-#: pcbnew/dsn.cpp:666
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
-
-#: pcbnew/dsn.cpp:756
-msgid "Un-terminated delimited string"
-msgstr "Ligne délimitée non terminée"
 
 #: pcbnew/pcbnew.cpp:44
 msgid "Pcbnew is already running, Continue?"
@@ -4380,7 +4376,7 @@ msgstr " Pads magnétiques"
 
 #: pcbnew/dialog_general_options.cpp:460
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
-msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur le pad"
+msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur un pad"
 
 #: pcbnew/dialog_general_options.cpp:468
 msgid "Magnetic Tracks"
@@ -4388,7 +4384,7 @@ msgstr "Pistes Magnétiques"
 
 #: pcbnew/dialog_general_options.cpp:475
 msgid "control the capture of the pcb cursor when the mouse cursor enters a track"
-msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur la piste"
+msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur une piste"
 
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:28
 msgid "Hatched Outline"
@@ -4418,115 +4414,6 @@ msgstr "Direction contours zone"
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Layer selection:"
 msgstr "Sélection couche:"
-
-#: pcbnew/dialog_pad_edit.cpp:157
-msgid "Pad Num :"
-msgstr "Num Pad :"
-
-#: pcbnew/dialog_pad_edit.cpp:163
-msgid "Pad Net Name :"
-msgstr "NetName Pad:"
-
-#: pcbnew/dialog_pad_edit.cpp:177
-#: pcbnew/dialog_pad_edit.cpp:197
-msgid "Oval"
-msgstr "Ovale"
-
-#: pcbnew/dialog_pad_edit.cpp:178
-msgid "Drill Shape:"
-msgstr "Forme du perçage:"
-
-#: pcbnew/dialog_pad_edit.cpp:187
-msgid "90"
-msgstr "90"
-
-#: pcbnew/dialog_pad_edit.cpp:188
-msgid "-90"
-msgstr "-90"
-
-#: pcbnew/dialog_pad_edit.cpp:189
-msgid "180"
-msgstr "180"
-
-#: pcbnew/dialog_pad_edit.cpp:191
-msgid "Pad Orient:"
-msgstr "Orient pad:"
-
-#: pcbnew/dialog_pad_edit.cpp:199
-msgid "Trapezoidal"
-msgstr "Trapezoidal"
-
-#: pcbnew/dialog_pad_edit.cpp:200
-msgid "Pad Shape:"
-msgstr "Forme Pad:"
-
-#: pcbnew/dialog_pad_edit.cpp:206
-msgid "SMD"
-msgstr "CMS"
-
-#: pcbnew/dialog_pad_edit.cpp:207
-msgid "Conn"
-msgstr "Conn"
-
-#: pcbnew/dialog_pad_edit.cpp:208
-msgid "Pad Type:"
-msgstr "Type Pad:"
-
-#: pcbnew/dialog_pad_edit.cpp:223
-msgid "Layers:"
-msgstr "Couches:"
-
-#: pcbnew/dialog_pad_edit.cpp:227
-msgid "Copper layer"
-msgstr "Couches Cuivre"
-
-#: pcbnew/dialog_pad_edit.cpp:231
-msgid "Comp layer"
-msgstr "Couche Cmp"
-
-#: pcbnew/dialog_pad_edit.cpp:237
-msgid "Adhesive Cmp"
-msgstr "Adhesive Cmp"
-
-#: pcbnew/dialog_pad_edit.cpp:241
-msgid "Adhesive Copper"
-msgstr "Adhesive Cu"
-
-#: pcbnew/dialog_pad_edit.cpp:245
-msgid "Solder paste Cmp"
-msgstr "Pate à souder Cmp"
-
-#: pcbnew/dialog_pad_edit.cpp:249
-msgid "Solder paste Copper"
-msgstr "Pate à souder cuivre"
-
-#: pcbnew/dialog_pad_edit.cpp:253
-msgid "Silkscreen Cmp"
-msgstr "Sérigr Cmp"
-
-#: pcbnew/dialog_pad_edit.cpp:257
-msgid "Silkscreen Copper"
-msgstr "Sérigr Cu "
-
-#: pcbnew/dialog_pad_edit.cpp:261
-msgid "Solder mask Cmp"
-msgstr "Masque soudure Cmp"
-
-#: pcbnew/dialog_pad_edit.cpp:265
-msgid "Solder mask Copper"
-msgstr "Masque soudure cuivre"
-
-#: pcbnew/dialog_pad_edit.cpp:269
-msgid "E.C.O.1 layer"
-msgstr "couche E.C.O.1"
-
-#: pcbnew/dialog_pad_edit.cpp:273
-msgid "E.C.O.2 layer"
-msgstr "couche E.C.O.2"
-
-#: pcbnew/dialog_pad_edit.cpp:277
-msgid "Draft layer"
-msgstr "Couche dessin"
 
 #: pcbnew/dialog_copper_zones_base.cpp:32
 msgid "Zone Setup:"
@@ -4566,7 +4453,7 @@ msgstr "Pad en Zone:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:53
 msgid "Thermal Reliefs Parameters"
-msgstr "Pramètres FreinsThermiques"
+msgstr "Paramètres FreinsThermiques"
 
 #: pcbnew/dialog_copper_zones_base.cpp:55
 msgid "Antipad Size"
@@ -5059,6 +4946,119 @@ msgstr "&Divers"
 #: pcbnew/menubarpcb.cpp:319
 msgid "P&ostprocess"
 msgstr "P&ostprocesseurs"
+
+#: pcbnew/dialog_pad_properties_base.cpp:22
+msgid "Pad Num :"
+msgstr "Num Pad :"
+
+#: pcbnew/dialog_pad_properties_base.cpp:29
+msgid "Pad Net Name :"
+msgstr "NetName Pad:"
+
+#: pcbnew/dialog_pad_properties_base.cpp:44
+#: pcbnew/dialog_pad_properties_base.cpp:53
+msgid "Oval"
+msgstr "Ovale"
+
+#: pcbnew/dialog_pad_properties_base.cpp:44
+msgid "Trapezoidal"
+msgstr "Trapezoidal"
+
+#: pcbnew/dialog_pad_properties_base.cpp:46
+msgid "Pad Shape:"
+msgstr "Forme Pad:"
+
+#: pcbnew/dialog_pad_properties_base.cpp:55
+msgid "Drill Shape:"
+msgstr "Forme du perçage:"
+
+#: pcbnew/dialog_pad_properties_base.cpp:64
+msgid "90"
+msgstr "90"
+
+#: pcbnew/dialog_pad_properties_base.cpp:64
+msgid "-90"
+msgstr "-90"
+
+#: pcbnew/dialog_pad_properties_base.cpp:64
+msgid "180"
+msgstr "180"
+
+#: pcbnew/dialog_pad_properties_base.cpp:66
+msgid "Pad Orient:"
+msgstr "Orient pad:"
+
+#: pcbnew/dialog_pad_properties_base.cpp:70
+msgid "Pad Orient (0.1 deg)"
+msgstr "Orient. Pad  (0.1 deg)"
+
+#: pcbnew/dialog_pad_properties_base.cpp:80
+msgid "SMD"
+msgstr "CMS"
+
+#: pcbnew/dialog_pad_properties_base.cpp:80
+msgid "Conn"
+msgstr "Conn"
+
+#: pcbnew/dialog_pad_properties_base.cpp:82
+msgid "Pad Type:"
+msgstr "Type Pad:"
+
+#: pcbnew/dialog_pad_properties_base.cpp:106
+msgid "Layers:"
+msgstr "Couches:"
+
+#: pcbnew/dialog_pad_properties_base.cpp:108
+msgid "Copper layer"
+msgstr "Couches Cuivre"
+
+#: pcbnew/dialog_pad_properties_base.cpp:112
+msgid "Component layer"
+msgstr "Couche composant"
+
+#: pcbnew/dialog_pad_properties_base.cpp:119
+msgid "Adhesive Cmp"
+msgstr "Adhesive Cmp"
+
+#: pcbnew/dialog_pad_properties_base.cpp:123
+msgid "Adhesive Copper"
+msgstr "Adhesive Cu"
+
+#: pcbnew/dialog_pad_properties_base.cpp:127
+msgid "Solder paste Cmp"
+msgstr "Pate à souder Cmp"
+
+#: pcbnew/dialog_pad_properties_base.cpp:131
+msgid "Solder paste Copper"
+msgstr "Pate à souder cuivre"
+
+#: pcbnew/dialog_pad_properties_base.cpp:135
+msgid "Silkscreen Cmp"
+msgstr "Sérigr Cmp"
+
+#: pcbnew/dialog_pad_properties_base.cpp:139
+msgid "Silkscreen Copper"
+msgstr "Sérigr Cu "
+
+#: pcbnew/dialog_pad_properties_base.cpp:143
+msgid "Solder mask Cmp"
+msgstr "Masque soudure Cmp"
+
+#: pcbnew/dialog_pad_properties_base.cpp:147
+msgid "Solder mask Copper"
+msgstr "Masque soudure cuivre"
+
+#: pcbnew/dialog_pad_properties_base.cpp:151
+msgid "E.C.O.1 layer"
+msgstr "couche E.C.O.1"
+
+#: pcbnew/dialog_pad_properties_base.cpp:155
+msgid "E.C.O.2 layer"
+msgstr "couche E.C.O.2"
+
+#: pcbnew/dialog_pad_properties_base.cpp:159
+msgid "Draft layer"
+msgstr "Couche dessin"
 
 #: eeschema/backanno.cpp:135
 msgid "Load Stuff File"
@@ -6267,7 +6267,7 @@ msgstr "Incrément Label:"
 
 #: eeschema/dialog_options.cpp:332
 msgid "Default Label Size"
-msgstr "Taille Label par défaut:"
+msgstr "Taille Label par défaut"
 
 #: eeschema/libfield.cpp:205
 msgid "Edit field"
@@ -7088,32 +7088,6 @@ msgstr "Cette opération changera l'annotation actuelle et ne pourra être annul
 msgid "Ok to continue renaming?"
 msgstr "Ok pour continuer le changement de nom?"
 
-#: eeschema/symbedit.cpp:52
-msgid "Import symbol drawings:"
-msgstr "Importer les symboles:"
-
-#: eeschema/symbedit.cpp:74
-#, c-format
-msgid "Failed to open Symbol File <%s>"
-msgstr "Ne peut pas ouvrir fichier <%s>"
-
-#: eeschema/symbedit.cpp:87
-msgid "Warning: more than 1 part in Symbol File"
-msgstr "Attention: plus de 1élément dans le fichier symbole"
-
-#: eeschema/symbedit.cpp:92
-msgid "Symbol File is void"
-msgstr "Fichier Symbole vide"
-
-#: eeschema/symbedit.cpp:150
-msgid "Export symbol drawings:"
-msgstr "Exporter le symbole"
-
-#: eeschema/symbedit.cpp:170
-#, c-format
-msgid "Save Symbol in [%s]"
-msgstr "Symbole sauvé en  [%s]"
-
 #: eeschema/libedit.cpp:38
 msgid " Part:   "
 msgstr "Composant   "
@@ -7321,6 +7295,7 @@ msgid "Part %c"
 msgstr "Composant %c"
 
 #: eeschema/tool_sch.cpp:39
+#: eeschema/menubar.cpp:42
 msgid "New schematic project"
 msgstr "Nouveau Projet schématique"
 
@@ -7329,7 +7304,6 @@ msgid "Open schematic project"
 msgstr "Ouvrir un Projet schématique"
 
 #: eeschema/tool_sch.cpp:45
-#: eeschema/menubar.cpp:55
 msgid "Save schematic project"
 msgstr "Sauver le Projet schématique"
 
@@ -7346,7 +7320,6 @@ msgid "Schematic hierarchy navigator"
 msgstr "Navigation dans la hiérarchie"
 
 #: eeschema/tool_sch.cpp:82
-#: eeschema/menubar.cpp:75
 msgid "Print schematic"
 msgstr "Impression des feuilles de schéma"
 
@@ -7383,32 +7356,30 @@ msgid "Hierarchy Push/Pop"
 msgstr "Navigation dans la hiérarchie"
 
 #: eeschema/tool_sch.cpp:156
-#: eeschema/menubar.cpp:206
-msgid "Place the component"
-msgstr "Placer le Composant"
+msgid "Place a component"
+msgstr "Placer un Composant"
 
 #: eeschema/tool_sch.cpp:160
-#: eeschema/menubar.cpp:212
-msgid "Place the power port"
-msgstr "Placer le Symbole Power"
+msgid "Place a power port"
+msgstr "Placer un Symbole Power"
 
 #: eeschema/tool_sch.cpp:165
-#: eeschema/menubar.cpp:218
-msgid "Place the wire"
-msgstr "Place fil"
+msgid "Place a wire"
+msgstr "Placer un fil"
 
 #: eeschema/tool_sch.cpp:169
-#: eeschema/menubar.cpp:227
-msgid "Place bus"
-msgstr "Place bus"
+msgid "Place a bus"
+msgstr "Placer un bus"
 
 #: eeschema/tool_sch.cpp:173
-msgid "Place the wire to bus entry"
-msgstr "Placer des entrées de bus (type fil vers bus)"
+#: eeschema/menubar.cpp:237
+msgid "Place a wire to bus entry"
+msgstr "Placer une Entrée de Bus (type fil vers bus)"
 
 #: eeschema/tool_sch.cpp:177
-msgid "Place bus to bus entry"
-msgstr "Placer entrée de bus (type bus vers bus)"
+#: eeschema/menubar.cpp:247
+msgid "Place a bus to bus entry"
+msgstr "Placer une Entrée de Bus (type bus vers bus)"
 
 #: eeschema/tool_sch.cpp:182
 msgid "Place no connect flag"
@@ -7421,20 +7392,20 @@ msgstr "Place  nom de net"
 
 #: eeschema/tool_sch.cpp:190
 msgid ""
-"Place the global label.\n"
+"Place a global label.\n"
 "Warning: all global labels with the same name are connected in whole hierarchy"
 msgstr ""
-"Placer le label global.\n"
-"Attention: tous les labels globaux de même nom sont connecté dans toute la hiérarchie"
+"Placer un label global.\n"
+"Attention: tous les labels globaux avec le même nom sont connectés dans toute la hiérarchie"
 
 #: eeschema/tool_sch.cpp:195
-#: eeschema/menubar.cpp:285
-msgid "Place junction"
-msgstr "Place jonction"
+msgid "Place a junction"
+msgstr "Placer une jonction"
 
 #: eeschema/tool_sch.cpp:200
-msgid "Place the hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
-msgstr "Placer le label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
+#: eeschema/menubar.cpp:297
+msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
+msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
 
 #: eeschema/tool_sch.cpp:205
 msgid "Place hierarchical sheet"
@@ -7570,6 +7541,262 @@ msgstr ""
 #, c-format
 msgid "File <%s> not found."
 msgstr "Fichier <%s> non trouvé"
+
+#: eeschema/menubar.cpp:41
+msgid "&New"
+msgstr "&Nouveau"
+
+#: eeschema/menubar.cpp:47
+msgid "&Open"
+msgstr "&Ouvrir "
+
+#: eeschema/menubar.cpp:48
+msgid "Open an existing schematic project"
+msgstr "Ouvrir un projet schématique existant"
+
+#: eeschema/menubar.cpp:54
+msgid "&Save Project"
+msgstr "&Sauver Projet"
+
+#: eeschema/menubar.cpp:55
+msgid "Save all sheets in the schematic project"
+msgstr "Sauver toutes les feuilles du projet schématique"
+
+#: eeschema/menubar.cpp:61
+msgid "&Save"
+msgstr "&Sauver"
+
+#: eeschema/menubar.cpp:62
+msgid "Save only current schematic sheet"
+msgstr "Sauver seulement la feuille active"
+
+#: eeschema/menubar.cpp:67
+msgid "Save &as.."
+msgstr "S&auver Sous..."
+
+#: eeschema/menubar.cpp:68
+msgid "Save current schematic sheet as.."
+msgstr "Sauver la feuille active sous un autre nom"
+
+#: eeschema/menubar.cpp:75
+msgid "Print schematic sheet"
+msgstr "Impression des feuilles de schéma"
+
+#: eeschema/menubar.cpp:82
+msgid "Plot PostScript"
+msgstr "Tracé Postscript"
+
+#: eeschema/menubar.cpp:82
+msgid "Plot schematic sheet in PostScript format"
+msgstr "Tracer les feuilles schématiques en format Postscript"
+
+#: eeschema/menubar.cpp:87
+msgid "Plot HPGL"
+msgstr "Tracé HPGL"
+
+#: eeschema/menubar.cpp:87
+msgid "Plot schematic sheet in HPGL format"
+msgstr "Tracer les feuilles schématiques en format HPGL"
+
+#: eeschema/menubar.cpp:92
+msgid "Plot SVG"
+msgstr "Tracé  SVG"
+
+#: eeschema/menubar.cpp:92
+msgid "Plot schematic sheet in SVG format"
+msgstr "Tracer les feuilles schématiques en format SVG"
+
+#: eeschema/menubar.cpp:99
+msgid "Plot to Clipboard"
+msgstr "Tracé dans Presse papier"
+
+#: eeschema/menubar.cpp:99
+msgid "Export drawings to clipboard"
+msgstr " Export du dessin dans le presse-papier"
+
+#: eeschema/menubar.cpp:106
+msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
+msgstr "Tracer les feuilles schématiques en format HPGL,  POSTSCRIPT ou SVG"
+
+#: eeschema/menubar.cpp:109
+msgid "Quit Eeschema"
+msgstr "Quitter Eeschema"
+
+#: eeschema/menubar.cpp:127
+msgid "&Undo\t"
+msgstr "&Undo\t"
+
+#: eeschema/menubar.cpp:135
+msgid "&Redo\t"
+msgstr "&Redo\t"
+
+#: eeschema/menubar.cpp:154
+msgid "Find"
+msgstr "Chercher"
+
+#: eeschema/menubar.cpp:162
+msgid "Backannotate"
+msgstr "Rétro Annotation"
+
+#: eeschema/menubar.cpp:162
+msgid "Back annotated footprint fields"
+msgstr "Rétroannotation des champs modules"
+
+#: eeschema/menubar.cpp:206
+msgid "&Component"
+msgstr "&Composant"
+
+#: eeschema/menubar.cpp:206
+msgid "Place the component"
+msgstr "Placer le Composant"
+
+#: eeschema/menubar.cpp:212
+msgid "&Power port"
+msgstr "Power Symbole"
+
+#: eeschema/menubar.cpp:212
+msgid "Place the power port"
+msgstr "Placer le Symbole Power"
+
+#: eeschema/menubar.cpp:218
+msgid "&Wire"
+msgstr "&Fil"
+
+#: eeschema/menubar.cpp:218
+msgid "Place the wire"
+msgstr "Place fil"
+
+#: eeschema/menubar.cpp:226
+msgid "&Bus"
+msgstr "&Bus"
+
+#: eeschema/menubar.cpp:227
+msgid "Place bus"
+msgstr "Place bus"
+
+#: eeschema/menubar.cpp:236
+msgid "W&ire to bus entry"
+msgstr "Entrées de bus (type fil vers bus)"
+
+#: eeschema/menubar.cpp:246
+msgid "B&us to bus entry"
+msgstr "Entrées de bus (type bus vers bus)"
+
+#: eeschema/menubar.cpp:256
+msgid "No connect flag"
+msgstr "Symbole de Non Connexion"
+
+#: eeschema/menubar.cpp:257
+msgid "Place a no connect flag"
+msgstr "Placer un Symbole de Non Connexion"
+
+#: eeschema/menubar.cpp:266
+msgid "Net name"
+msgstr "Net Name"
+
+#: eeschema/menubar.cpp:274
+msgid "Global label"
+msgstr "Label Global"
+
+#: eeschema/menubar.cpp:275
+msgid "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy"
+msgstr "Placer un label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hiérarchie"
+
+#: eeschema/menubar.cpp:284
+msgid "Place Junction"
+msgstr "Place Jonction"
+
+#: eeschema/menubar.cpp:285
+msgid "Place junction"
+msgstr "Place jonction"
+
+#: eeschema/menubar.cpp:296
+msgid "Hierarchical label"
+msgstr "Label Hiérarchique"
+
+#: eeschema/menubar.cpp:306
+msgid "Hierarchical sheet"
+msgstr "Feuille Hiérrachique"
+
+#: eeschema/menubar.cpp:307
+msgid "Create a hierarchical sheet"
+msgstr "Créer une Feuille Hiérachique"
+
+#: eeschema/menubar.cpp:316
+msgid "Import Hierarchical Label"
+msgstr "Importer Label Hiérarchique"
+
+#: eeschema/menubar.cpp:317
+msgid "Place a pin sheet created by importing a hierarchical label from sheet"
+msgstr "Placer une pin hiérarchique créée par importation d'un label hiérarchique de la feuille"
+
+#: eeschema/menubar.cpp:326
+msgid "Add Hierarchical Pin to Sheet"
+msgstr "Ajouter Pins de Hiérarchie dans feuille"
+
+#: eeschema/menubar.cpp:327
+msgid "Place a hierarchical pin to sheet"
+msgstr "Addition de pins de hiérarchie dans les feuilles symboles de hiérarchie"
+
+#: eeschema/menubar.cpp:338
+msgid "Graphic line or polygon"
+msgstr "Ligne ou polygone graphique"
+
+#: eeschema/menubar.cpp:339
+msgid "Place graphic lines or polygons"
+msgstr "Placer lignes ou  polygones graphiques"
+
+#: eeschema/menubar.cpp:348
+msgid "Graphic text (comment)"
+msgstr "Ttextes graphiques (commentaires)"
+
+#: eeschema/menubar.cpp:359
+msgid "Library preferences"
+msgstr "Préférences pour Librairie"
+
+#: eeschema/menubar.cpp:365
+msgid "Color preferences"
+msgstr "Préférences de couleurs"
+
+#: eeschema/menubar.cpp:371
+msgid "&Options"
+msgstr "&Options"
+
+#: eeschema/menubar.cpp:372
+msgid "General options..."
+msgstr "Options Générales..."
+
+#: eeschema/menubar.cpp:382
+msgid "&Save preferences"
+msgstr "&Sauver Préférences"
+
+#: eeschema/menubar.cpp:386
+msgid "&Read preferences"
+msgstr "&Lire Préférences"
+
+#: eeschema/menubar.cpp:397
+msgid "Open the eeschema manual"
+msgstr "Ouvrir la documentation de eeschema"
+
+#: eeschema/menubar.cpp:402
+msgid "&About"
+msgstr "&Au Sujet de"
+
+#: eeschema/menubar.cpp:402
+msgid "About eeschema schematic designer"
+msgstr "Au sujet de Eeschema (outil de conception schématique)"
+
+#: eeschema/menubar.cpp:408
+msgid "&Edit"
+msgstr "&Editer"
+
+#: eeschema/menubar.cpp:409
+msgid "&View"
+msgstr "&Voir"
+
+#: eeschema/menubar.cpp:410
+msgid "&Place"
+msgstr "&Placer"
 
 #: eeschema/component_class.cpp:131
 msgid "Datasheet"
@@ -7726,249 +7953,31 @@ msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enreg
 msgid "Done Loading "
 msgstr "Chargement terminé"
 
-#: eeschema/menubar.cpp:41
-msgid "&New"
-msgstr "&Nouveau"
+#: eeschema/symbedit.cpp:52
+msgid "Import symbol drawings:"
+msgstr "Importer les symboles:"
 
-#: eeschema/menubar.cpp:42
-msgid "New schematic"
-msgstr "Nouvelle schématique"
+#: eeschema/symbedit.cpp:74
+#, c-format
+msgid "Failed to open Symbol File <%s>"
+msgstr "Ne peut pas ouvrir fichier <%s>"
 
-#: eeschema/menubar.cpp:47
-msgid "&Open"
-msgstr "&Ouvrir "
+#: eeschema/symbedit.cpp:87
+msgid "Warning: more than 1 part in Symbol File"
+msgstr "Attention: plus de 1élément dans le fichier symbole"
 
-#: eeschema/menubar.cpp:48
-msgid "Open a schematic"
-msgstr "Ouvrir un Projet schématique"
+#: eeschema/symbedit.cpp:92
+msgid "Symbol File is void"
+msgstr "Fichier Symbole vide"
 
-#: eeschema/menubar.cpp:54
-msgid "&Save"
-msgstr "&Sauver"
+#: eeschema/symbedit.cpp:150
+msgid "Export symbol drawings:"
+msgstr "Exporter le symbole"
 
-#: eeschema/menubar.cpp:61
-msgid "Save &Current sheet"
-msgstr "Sauver &Feuille active"
-
-#: eeschema/menubar.cpp:62
-msgid "Save current sheet only"
-msgstr "Sauver la feuille active uniquement"
-
-#: eeschema/menubar.cpp:67
-msgid "Save Current sheet &as.."
-msgstr "Sauver la feuille &active sous.."
-
-#: eeschema/menubar.cpp:68
-msgid "Save current sheet as.."
-msgstr "Sauver la feuille active sous un autre nom"
-
-#: eeschema/menubar.cpp:82
-msgid "Plot PostScript"
-msgstr "Tracé Postscript"
-
-#: eeschema/menubar.cpp:82
-msgid "Plot schematic in PostScript format"
-msgstr "Générer un tracé en format Postscript"
-
-#: eeschema/menubar.cpp:87
-msgid "Plot HPGL"
-msgstr "Tracé HPGL"
-
-#: eeschema/menubar.cpp:87
-msgid "Plot schematic in HPGL format"
-msgstr "Générer un tracé en format HPGL"
-
-#: eeschema/menubar.cpp:92
-msgid "Plot SVG"
-msgstr "Tracé  SVG"
-
-#: eeschema/menubar.cpp:92
-msgid "Plot schematic in SVG format"
-msgstr "Générer un tracé en format SVG"
-
-#: eeschema/menubar.cpp:99
-msgid "Plot to Clipboard"
-msgstr "Tracé dans Presse papier"
-
-#: eeschema/menubar.cpp:99
-msgid "Export drawings to clipboard"
-msgstr " Export du dessin dans le presse-papier"
-
-#: eeschema/menubar.cpp:106
-msgid "Plot schematic in HPGL, PostScript or SVG format"
-msgstr "Tracer schématique ( format HPGL,  POSTSCRIPT ou SVG)"
-
-#: eeschema/menubar.cpp:109
-msgid "Quit Eeschema"
-msgstr "Quitter Eeschema"
-
-#: eeschema/menubar.cpp:127
-msgid "&Undo\t"
-msgstr "&Undo\t"
-
-#: eeschema/menubar.cpp:135
-msgid "&Redo\t"
-msgstr "&Redo\t"
-
-#: eeschema/menubar.cpp:154
-msgid "Find"
-msgstr "Chercher"
-
-#: eeschema/menubar.cpp:162
-msgid "Backannotate"
-msgstr "Rétro Annotation"
-
-#: eeschema/menubar.cpp:162
-msgid "Back annotated footprint fields"
-msgstr "Rétroannotation des champs modules"
-
-#: eeschema/menubar.cpp:206
-msgid "&Component"
-msgstr "&Composant"
-
-#: eeschema/menubar.cpp:212
-msgid "&Power port"
-msgstr "Power Symbole"
-
-#: eeschema/menubar.cpp:218
-msgid "&Wire"
-msgstr "&Fil"
-
-#: eeschema/menubar.cpp:226
-msgid "&Bus"
-msgstr "&Bus"
-
-#: eeschema/menubar.cpp:236
-msgid "W&ire to bus entry"
-msgstr "Entrées de bus (type fil vers bus)"
-
-#: eeschema/menubar.cpp:237
-msgid "Place a wire to bus entry"
-msgstr "Placer une Entrée de Bus (type fil vers bus)"
-
-#: eeschema/menubar.cpp:246
-msgid "B&us to bus entry"
-msgstr "Entrées de bus (type bus vers bus)"
-
-#: eeschema/menubar.cpp:247
-msgid "Place a bus to bus entry"
-msgstr "Placer une Entrée de Bus (type bus vers bus)"
-
-#: eeschema/menubar.cpp:256
-msgid "No connect flag"
-msgstr "Symbole de Non Connexion"
-
-#: eeschema/menubar.cpp:257
-msgid "Place a no connect flag"
-msgstr "Placer un Symbole de Non Connexion"
-
-#: eeschema/menubar.cpp:266
-msgid "Net name"
-msgstr "Net Name"
-
-#: eeschema/menubar.cpp:274
-msgid "Global label"
-msgstr "Label Global"
-
-#: eeschema/menubar.cpp:275
-msgid "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy"
-msgstr "Placer un label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hiérarchie"
-
-#: eeschema/menubar.cpp:284
-msgid "Place Junction"
-msgstr "Place Jonction"
-
-#: eeschema/menubar.cpp:296
-msgid "Hierarchical label"
-msgstr "Label Hiérarchique"
-
-#: eeschema/menubar.cpp:297
-msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
-msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
-
-#: eeschema/menubar.cpp:306
-msgid "Hierarchical sheet"
-msgstr "Feuille Hiérrachique"
-
-#: eeschema/menubar.cpp:307
-msgid "Create a hierarchical sheet"
-msgstr "Créer une Feuille Hiérachique"
-
-#: eeschema/menubar.cpp:316
-msgid "Import Hierarchical Label"
-msgstr "Importer Label Hiérarchique"
-
-#: eeschema/menubar.cpp:317
-msgid "Place a pin sheet created by importing a hierarchical label from sheet"
-msgstr "Placer une pin hiérarchique créée par importation d'un label hiérarchique de la feuille"
-
-#: eeschema/menubar.cpp:326
-msgid "Add Hierarchical Pin to Sheet"
-msgstr "Ajouter Pins de Hiérarchie dans feuille"
-
-#: eeschema/menubar.cpp:327
-msgid "Place a hierarchical pin to sheet"
-msgstr "Addition de pins de hiérarchie dans les feuilles symboles de hiérarchie"
-
-#: eeschema/menubar.cpp:338
-msgid "Graphic line or polygon"
-msgstr "Ligne ou polygone graphique"
-
-#: eeschema/menubar.cpp:339
-msgid "Place graphic lines or polygons"
-msgstr "Placer lignes ou  polygones graphiques"
-
-#: eeschema/menubar.cpp:348
-msgid "Graphic text (comment)"
-msgstr "Ttextes graphiques (commentaires)"
-
-#: eeschema/menubar.cpp:359
-msgid "Library preferences"
-msgstr "Préférences pour Librairie"
-
-#: eeschema/menubar.cpp:365
-msgid "Color preferences"
-msgstr "Préférences de couleurs"
-
-#: eeschema/menubar.cpp:371
-msgid "&Options"
-msgstr "&Options"
-
-#: eeschema/menubar.cpp:372
-msgid "General options..."
-msgstr "Options Générales..."
-
-#: eeschema/menubar.cpp:382
-msgid "&Save preferences"
-msgstr "&Sauver Préférences"
-
-#: eeschema/menubar.cpp:386
-msgid "&Read preferences"
-msgstr "&Lire Préférences"
-
-#: eeschema/menubar.cpp:397
-msgid "Open the eeschema manual"
-msgstr "Ouvrir la documentation de eeschema"
-
-#: eeschema/menubar.cpp:402
-msgid "&About"
-msgstr "&Au Sujet de"
-
-#: eeschema/menubar.cpp:402
-msgid "About eeschema schematic designer"
-msgstr "Au sujet de Eeschema (outil de conception schématique)"
-
-#: eeschema/menubar.cpp:408
-msgid "&Edit"
-msgstr "&Editer"
-
-#: eeschema/menubar.cpp:409
-msgid "&View"
-msgstr "&Voir"
-
-#: eeschema/menubar.cpp:410
-msgid "&Place"
-msgstr "&Placer"
+#: eeschema/symbedit.cpp:170
+#, c-format
+msgid "Save Symbol in [%s]"
+msgstr "Symbole sauvé en  [%s]"
 
 #: eeschema/edit_component_in_schematic.cpp:331
 msgid "No Component Name!"
@@ -8887,12 +8896,12 @@ msgid "Open an existing project"
 msgstr "Ouvrir un projet  existant"
 
 #: kicad/buildmnu.cpp:140
-#: kicad/buildmnu.cpp:383
+#: kicad/buildmnu.cpp:379
 msgid "Start a new project"
 msgstr "Créer un nouveau projet"
 
 #: kicad/buildmnu.cpp:149
-#: kicad/buildmnu.cpp:402
+#: kicad/buildmnu.cpp:398
 msgid "Save current project"
 msgstr "Sauver le projet courrant"
 
@@ -8917,86 +8926,90 @@ msgid "Quit kicad"
 msgstr "Quitter KiCad"
 
 #: kicad/buildmnu.cpp:209
-msgid "&Editor"
-msgstr "&Editeur"
+msgid "Text E&ditor"
+msgstr "&Editeur de Texte"
 
 #: kicad/buildmnu.cpp:210
-msgid "Text editor"
-msgstr "Editeur de Texte"
+msgid "Open prefered text editor"
+msgstr "Lancer l'éditeur de texte préféré"
 
 #: kicad/buildmnu.cpp:218
 msgid "&Browse Files"
 msgstr "&Examen Fichiers"
 
 #: kicad/buildmnu.cpp:219
-msgid "Read or edit files"
-msgstr "Lire ou Editer fichiers"
+msgid "Read or edit files with text editor"
+msgstr "Lire ou éditer des fichiers avec l'éditeur de texte"
 
 #: kicad/buildmnu.cpp:231
-msgid "&Select Editor"
-msgstr "&Sélection Editeur"
-
-#: kicad/buildmnu.cpp:232
-msgid "Select your prefered editor for file browsing"
-msgstr "Choisir son  pour examen de fichiers"
-
-#: kicad/buildmnu.cpp:244
 msgid "Fonts"
 msgstr "Fonte"
 
-#: kicad/buildmnu.cpp:245
+#: kicad/buildmnu.cpp:232
 msgid "Font preferences"
 msgstr "Préférences de fontes"
 
-#: kicad/buildmnu.cpp:259
+#: kicad/buildmnu.cpp:240
+msgid "&Text Editor"
+msgstr "&Editeur de Texte"
+
+#: kicad/buildmnu.cpp:241
+msgid "Select your prefered text editor"
+msgstr "Choisir son  éditeur de texte préféré"
+
+#: kicad/buildmnu.cpp:255
 msgid "Default PDF Viewer"
 msgstr "Visualisateur PDF par défaut"
 
-#: kicad/buildmnu.cpp:260
+#: kicad/buildmnu.cpp:256
 msgid "Use the default (system) PDF viewer used to browse datasheets"
 msgstr "Utiliser le visualisateur PDF par défaut pour afficher les documentations"
 
-#: kicad/buildmnu.cpp:271
+#: kicad/buildmnu.cpp:267
 msgid "Favourite PDF Viewer"
 msgstr "Visualisateur PDF préféré"
 
-#: kicad/buildmnu.cpp:272
+#: kicad/buildmnu.cpp:268
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr "Utiliser le visualisateur PDF préférét pour afficher les documentations"
 
-#: kicad/buildmnu.cpp:283
+#: kicad/buildmnu.cpp:279
 msgid "Select Pdf Viewer"
 msgstr "Sélection Visualisateur PDF"
 
-#: kicad/buildmnu.cpp:284
+#: kicad/buildmnu.cpp:280
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr "Sélectionner le visualisateur PDF favori pour afficher les documents"
 
-#: kicad/buildmnu.cpp:290
-msgid "Pdf Browser"
+#: kicad/buildmnu.cpp:286
+msgid "Pdf Viewer"
 msgstr "Visualisateur PDF"
 
-#: kicad/buildmnu.cpp:306
+#: kicad/buildmnu.cpp:287
+msgid "Pdf viewer preferences"
+msgstr "Préférences pour le visualisateur PDF"
+
+#: kicad/buildmnu.cpp:302
 msgid "Open the kicad manual"
 msgstr "Ouvrir la documentation de kicad"
 
-#: kicad/buildmnu.cpp:315
+#: kicad/buildmnu.cpp:311
 msgid "About kicad project manager"
 msgstr "Au sujet de Kicad, gestionnaire de projet"
 
-#: kicad/buildmnu.cpp:322
+#: kicad/buildmnu.cpp:318
 msgid "&Browse"
 msgstr "&Examiner"
 
-#: kicad/buildmnu.cpp:392
+#: kicad/buildmnu.cpp:388
 msgid "Load existing project"
 msgstr "Ouvrir un projet  existant"
 
-#: kicad/buildmnu.cpp:415
+#: kicad/buildmnu.cpp:411
 msgid "Archive all project files"
 msgstr "Archiver les fichiers du projet"
 
-#: kicad/buildmnu.cpp:428
+#: kicad/buildmnu.cpp:424
 msgid "Refresh project tree"
 msgstr "Mettre a jour l'affichage du projet"
 
@@ -9153,6 +9166,7 @@ msgid "Layer modified,  Continue ?"
 msgstr "Couche modifiée,  Continuer ?"
 
 #: gerbview/gerbview_config.cpp:147
+#: gerbview/process_config.cpp:117
 msgid "Save config file"
 msgstr "Sauver config"
 
@@ -9713,7 +9727,7 @@ msgstr "Langage"
 
 #: common/edaappl.cpp:605
 msgid "Select application language (only for testing!)"
-msgstr ""
+msgstr "Choisir le langage (seulement pour tests!)"
 
 #: common/common.cpp:105
 msgid " (\"):"
@@ -10412,10 +10426,6 @@ msgstr "Afficher Modules Cmp"
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
-#: pcbnew/dialog_pad_edit.h:62
-msgid "Pad properties"
-msgstr "Propriétés des Pads"
-
 #: pcbnew/dialog_copper_zones_base.h:99
 msgid "Fill Zones Options"
 msgstr "Options de Remplissage de Zone"
@@ -10423,6 +10433,10 @@ msgstr "Options de Remplissage de Zone"
 #: pcbnew/dialog_non_copper_zones_properties_base.h:56
 msgid "Non Copper Zones Properties"
 msgstr "Propriétés des Zones sur couches non cuivre"
+
+#: pcbnew/dialog_pad_properties_base.h:90
+msgid "Pad Properties"
+msgstr "Propriétés du Pad"
 
 #: pcbnew/dialog_gendrill.h:50
 msgid "Drill Files Generation"
@@ -10736,6 +10750,48 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Comp layer"
+#~ msgstr "Couche Cmp"
+#~ msgid "New schematic sheet"
+#~ msgstr "Nouvelle feuille schématique"
+
+#, fuzzy
+#~ msgid "Open a schematic sheet"
+#~ msgstr "Ouvrir un Projet schématique"
+#~ msgid "Save project"
+#~ msgstr "Sauver projet"
+#~ msgid "Save &Current sheet"
+#~ msgstr "Sauver &Feuille active"
+#~ msgid "Save current sheet only"
+#~ msgstr "Sauver la feuille active uniquement"
+#~ msgid "Save Current sheet &as.."
+#~ msgstr "Sauver la feuille &active sous.."
+#~ msgid "&Editor"
+#~ msgstr "&Editeur"
+#~ msgid "Text editor"
+#~ msgstr "Editeur de Texte"
+#~ msgid "&Select Editor"
+#~ msgstr "&Sélection Editeur"
+#~ msgid "Pdf Browser"
+#~ msgstr "Visualisateur PDF"
+#~ msgid "Place the wire to bus entry"
+#~ msgstr "Placer des entrées de bus (type fil vers bus)"
+#~ msgid "Place bus to bus entry"
+#~ msgstr "Placer entrée de bus (type bus vers bus)"
+#~ msgid ""
+#~ "Place the global label.\n"
+#~ "Warning: all global labels with the same name are connected in whole "
+#~ "hierarchy"
+#~ msgstr ""
+#~ "Placer un label global.\n"
+#~ "Attention: tous les labels globaux de même nom sont connecté dans toute "
+#~ "la hiérarchie"
+#~ msgid ""
+#~ "Place the hierarchical label. This label will be seen as a pin sheet in "
+#~ "the sheet symbol"
+#~ msgstr ""
+#~ "Placer un label hiérachique. Ce label sera vu comme une pin dans la "
+#~ "feuille mère symbole"
 #~ msgid "Print on current printer"
 #~ msgstr "Imprimer sur l'imprimante par défaut"
 #~ msgid "Plot HPGL, PostScript, SVG"
@@ -10746,8 +10802,6 @@ msgstr "Créer Fichier SVG"
 #~ msgstr "&Ouvrir Projet"
 #~ msgid "&New Project"
 #~ msgstr "&Nouveau Projet"
-#~ msgid "&Save Project"
-#~ msgstr "&Sauver Projet"
 #~ msgid "&About Kicad"
 #~ msgstr "&Au Sujet de Kicad"
 #~ msgid "&Projects"

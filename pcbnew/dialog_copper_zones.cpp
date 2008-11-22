@@ -40,11 +40,12 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
 /************************************************************************************************/
 {
     m_Parent = parent;
+    m_Config = m_Parent->m_Parent->m_EDA_Config;
     m_Zone_Setting = zone_setting;
     m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort
-    if( m_Parent->m_Parent->m_EDA_Config )
+    if( m_Config )
     {
-        m_NetSorting = m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
+        m_NetSorting = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
     }
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
@@ -70,8 +71,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     m_GridCtrl->SetLabel( msg );
 
     msg = ReturnStringFromValue( g_UnitMetric,
-                                 m_Zone_Setting->m_ZoneClearance,
-                                 m_Parent->m_InternalUnits );
+        m_Zone_Setting->m_ZoneClearance,
+        m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     if( g_Zone_45_Only )
@@ -85,8 +86,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     for( unsigned ii = 0; ii < 4; ii++ )
     {
         msg = ReturnStringFromValue( g_UnitMetric,
-                                     GridList[ii],
-                                     m_Parent->m_InternalUnits );
+            GridList[ii],
+            m_Parent->m_InternalUnits );
         m_GridCtrl->SetString( ii, msg );
         if( grid_routing == GridList[ii] )
             selection = ii;
@@ -98,8 +99,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     m_GridCtrl->SetSelection( selection );
 
     msg = ReturnStringFromValue( g_UnitMetric,
-                                 m_Zone_Setting->m_ZoneClearance,
-                                 m_Parent->m_InternalUnits );
+        m_Zone_Setting->m_ZoneClearance,
+        m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     switch( m_Zone_Setting->m_Zone_Pad_Options )
@@ -135,11 +136,11 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     AddUnitSymbol( *m_AntipadSizeText, g_UnitMetric );
     AddUnitSymbol( *m_CopperBridgeWidthText, g_UnitMetric );
     PutValueInLocalUnits( *m_AntipadSizeValue,
-                          m_Zone_Setting->m_ThermalReliefGapValue,
-                          PCB_INTERNAL_UNIT );
+        m_Zone_Setting->m_ThermalReliefGapValue,
+        PCB_INTERNAL_UNIT );
     PutValueInLocalUnits( *m_CopperWidthValue,
-                          m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
-                          PCB_INTERNAL_UNIT );
+        m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
+        PCB_INTERNAL_UNIT );
 
     switch( m_Zone_Setting->m_Zone_HatchingStyle )
     {
@@ -180,19 +181,17 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     m_NetSortingOption->SetSelection( m_NetSorting );
 
-    wxString      NetNameFilter;
-    if( m_Parent->m_Parent->m_EDA_Config )
+    wxString      NetNameFilter = wxT( "N_0*" );
+    if( m_Config )
     {
         NetNameFilter =
-            m_Parent->m_Parent->m_EDA_Config->Read( ZONE_NET_FILTER_STRING_KEY, wxT( "N_0*" ) );
+            m_Config->Read( ZONE_NET_FILTER_STRING_KEY );
     }
 
     m_NetNameFilter->SetValue( NetNameFilter );
     wxArrayString ListNetName;
-    m_Parent->m_Pcb->ReturnSortedNetnamesList(
-        ListNetName,
-        m_NetSorting ==
-        0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+    m_Parent->m_Pcb->ReturnSortedNetnamesList( ListNetName,
+        m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
 
     if( m_NetSorting != 0 )
     {
@@ -286,10 +285,12 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     m_Zone_Setting->m_ArcToSegmentsCount = m_ArcApproximationOpt->GetSelection() == 1 ? 32 : 16;
 
-    if( m_Parent->m_Parent->m_EDA_Config )
+    if( m_Config )
     {
-        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-                                                 (long) m_Zone_Setting->m_Zone_HatchingStyle );
+        m_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
+            (long) m_Zone_Setting->m_Zone_HatchingStyle );
+        wxString Filter = m_NetNameFilter->GetValue();
+        m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
 
     switch( m_GridCtrl->GetSelection() )
@@ -315,7 +316,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         m_Zone_Setting->m_GridFillValue = 0;
 #if 0   // I hope this feature works fine ( JP Charras)
         DisplayInfo( this, wxT(
-                        "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production" ) );
+                "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production" ) );
 #endif
         break;
     }
@@ -331,14 +332,14 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_Zone_Setting->m_FilledAreasShowMode = m_ShowFilledAreasInSketchOpt->IsChecked() ? 1 : 0;
 
     m_Zone_Setting->m_ThermalReliefGapValue = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
-                                                                       PCB_INTERNAL_UNIT );
+        PCB_INTERNAL_UNIT );
     m_Zone_Setting->m_ThermalReliefCopperBridgeValue = ReturnValueFromTextCtrl(
         *m_CopperWidthValue,
         PCB_INTERNAL_UNIT );
 
-    m_Parent->m_Parent->m_EDA_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-                                             (long) m_Zone_Setting->m_ThermalReliefGapValue );
-    m_Parent->m_Parent->m_EDA_Config->Write(
+    m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+        (long) m_Zone_Setting->m_ThermalReliefGapValue );
+    m_Config->Write(
         ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
         (long) m_Zone_Setting->
         m_ThermalReliefCopperBridgeValue );
@@ -410,11 +411,11 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
     }
     m_ListNetNameSelection->Clear();
     m_ListNetNameSelection->InsertItems( ListNetName, 0 );
-    if( m_Parent->m_Parent->m_EDA_Config )
+    if( m_Config )
     {
-        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
-        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_FILTER_STRING_KEY,
-                                                m_NetNameFilter->GetValue() );
+        m_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
+        wxString Filter = m_NetNameFilter->GetValue();
+        m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
 
     // Select and isplay current zone net name in listbox:

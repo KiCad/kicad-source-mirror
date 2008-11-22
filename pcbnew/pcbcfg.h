@@ -56,21 +56,6 @@ static PARAM_CFG_INT PadDimVCfg
 );
 
 
-static PARAM_CFG_INT PadFormeCfg
-(
-    wxT( "PadForm" ),               /* Keyword */
-    &g_Pad_Master.m_PadShape,       /* Parameter address */
-    PAD_CIRCLE,                     /* Default value */
-    0, 0x7F                         /* Min and max values*/
-);
-
-static PARAM_CFG_INT PadMasqueLayerCfg
-(
-    wxT( "PadMask" ),                   /* Keyword */
-    &g_Pad_Master.m_Masque_Layer,       /* Parameter address */
-    0x0000FFFF                          /* Default value */
-);
-
 static PARAM_CFG_INT ViaDiametreCfg
 (
     wxT( "ViaDiam" ),                           /* Keyword */
@@ -770,6 +755,7 @@ static PARAM_CFG_INT DivGrillePcbCfg
 
 static PARAM_CFG_INT TimeOutCfg     //Duree entre Sauvegardes auto en secondes
 (
+    INSETUP,
     wxT( "TimeOut" ),               /* Keyword */
     &g_TimeOut,                     /* Parameter address */
     600,                            /* Default value */
@@ -804,6 +790,7 @@ static PARAM_CFG_INT PrmMaxLinksShowed
 
 static PARAM_CFG_BOOL ShowRatsnestCfg
 (
+    INSETUP,
     wxT( "ShowRat" ),               /* Keyword */
     &g_Show_Ratsnest,               /* Parameter address */
     FALSE                           /* Default value */
@@ -811,6 +798,7 @@ static PARAM_CFG_BOOL ShowRatsnestCfg
 
 static PARAM_CFG_BOOL ShowModuleRatsnestCfg
 (
+    INSETUP,
     wxT( "ShowMRa" ),               /* Keyword */
     &g_Show_Module_Ratsnest,        /* Parameter address */
     TRUE                            /* Default value */
@@ -831,8 +819,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadDrillCfg,
     &PadDimHCfg,
     &PadDimVCfg,
-    &PadFormeCfg,
-    &PadMasqueLayerCfg,
     &ViaDiametreCfg,
     &ViaDrillCfg,
     &MicroViaDiametreCfg,

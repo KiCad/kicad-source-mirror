@@ -57,7 +57,8 @@ set(PCBNEW_SRCS
 #   dialog_netlist.cpp
     zones_non_copper_type_functions.cpp
     dialog_non_copper_zones_properties_base.cpp
-#   dialog_pad_edit.cpp
+    dialog_pad_properties.cpp
+    dialog_pad_properties_base.cpp
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp
 #   dialog_track_options.cpp
@@ -70,7 +71,6 @@ set(PCBNEW_SRCS
     edit.cpp
     editedge.cpp
     editmod.cpp
-    editpads.cpp
     editrack.cpp
     editrack-part2.cpp
     edit_track_width.cpp

@@ -195,11 +195,11 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            color, linewidth,
+            linewidth, color,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            color, color );
+            linewidth, color, color );
     else
         GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
             linewidth, color );

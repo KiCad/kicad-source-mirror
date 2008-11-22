@@ -11,6 +11,7 @@ class dialog_copper_zone: public dialog_copper_zone_base
 {
 public:
     WinEDA_PcbFrame* m_Parent;
+    wxConfig*  m_Config;            // Current config
     ZONE_SETTING * m_Zone_Setting;
     long m_NetSorting;
 	int m_LayerId[LAYER_COUNT];		// Handle the real layer number from layer name position in m_LayerSelectionCtrl
