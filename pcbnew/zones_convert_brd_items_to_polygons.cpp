@@ -33,7 +33,7 @@ void        AddPadWithClearancePolygon( Bool_Engine* aBooleng, D_PAD& aPad, int 
 void        AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
                                         D_PAD&       aPad,
                                         int          aThermalGap,
-                                        int          aCopperThickness );
+                                        int          aCopperThickness, int aMinThicknessValue );
 void        AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
                                           wxPoint aStart, wxPoint aEnd,
                                           int aWidth );
@@ -216,8 +216,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                     AddThermalReliefPadPolygon( booleng, *pad,
-                        m_ThermalReliefGapValue/* + (m_ZoneMinThickness/2)*/,
-                        m_ThermalReliefCopperBridgeValue /*- m_ZoneMinThickness*/ );
+                        m_ThermalReliefGapValue,
+                        m_ThermalReliefCopperBridgeValue,
+                        m_ZoneMinThickness);
                 break;
 
             case PAD_IN_ZONE:
@@ -423,7 +424,10 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
 /** function AddThermalReliefPadPolygon
  * Add holes around a pad to create a thermal relief
  * copper tickness is min (dx/2, aCopperWitdh) or min (dy/2, aCopperWitdh)
- * gap is aThermalGap
+ * @param aBooleng = current Bool_Engine
+ * @param aPad     = the current pad used to create the thermal shape
+ * @param aThermalGap = gap in thermal shape
+ * @param aMinThicknessValue = min copper thickness allowed
  */
 
 /* thermal reliefs are created as 4 polygons.
@@ -447,11 +451,14 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
  * So to avoid this, the workaround is do not use holes outlines that include
  * angles less than 90 deg between 2 consecutive lines
  * this is made in round and oblong thermal reliefs
+ *
+ * Note: polygons are drawm using outlines witk a thickness = aMinThicknessValue
+ * so shapes must keep in account this outline thickness
  */
 void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
                                     D_PAD&       aPad,
                                     int          aThermalGap,
-                                    int          aCopperThickness )
+                                    int          aCopperThickness, int aMinThicknessValue )
 {
     wxPoint corner, corner_end;
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
@@ -463,11 +470,27 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
 
     int     delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
 
+    /* Keep in account the polygon outline thickness
+    * aThermalGap must be increased by aMinThicknessValue/2 because drawing external outline
+    * with a thickness of aMinThicknessValue will reduce gap by aMinThicknessValue/2
+    */
+    aThermalGap += aMinThicknessValue/2;
+
+    /* Keep in account the polygon outline thickness
+    * copper_tickness must be decreased by aMinThicknessValue because drawing outlines
+    * with a thickness of aMinThicknessValue will increase thickness by aMinThicknessValue
+    */
+    aCopperThickness -= aMinThicknessValue;
     if ( aCopperThickness < 0 )
         aCopperThickness = 0;
 
     copper_tickness.x = min( dx, aCopperThickness );
     copper_tickness.y = min( dy, aCopperThickness );
+
+    if ( copper_tickness.x < aMinThicknessValue )
+        copper_tickness.x = 0;
+    if ( copper_tickness.y < aMinThicknessValue )
+        copper_tickness.y = 0;
 
     switch( aPad.m_PadShape )
     {
@@ -531,8 +554,8 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // bad filled polygon on some cases, when pads are on a same vertical line
         // this seems a bug in kbool polygon (exists in 1.9 kbool version)
         // angle = 450 (45.0 degrees orientation) seems work fine.
-        // angle = 0 with thermal shapes without angle < 90 deg seems works fine also
-        angle = 0;
+        // angle = 0 with thermal shapes without angle < 90 deg has problems in rare circumstances
+        angle = 450;
         int angle_pad = aPad.m_Orient;              // Pad orientation
         for( unsigned ihole = 0; ihole < 4; ihole++ )
         {
