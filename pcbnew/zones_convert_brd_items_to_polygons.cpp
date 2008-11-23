@@ -65,7 +65,7 @@ double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (an
  *       this means the created polygons have no holes (hole are linked to outer outline by double overlapped segments
  *       and are therefore compatible with draw functions (DC draw polygons and Gerber or PS outputs)
  * 2 - Add the main outline (zone outline) in group A
- * 3 - Creates a correction using BOOL_CORRECTION operation to inflate the resulting area
+ * 3 - Creates a correction using BOOL_CORRECTION operation to shrink the resulting area
  *     with m_ZoneMinThickness/2 value.
  *     The result is areas with a margin of m_ZoneMinThickness/2
  *     When drawing outline with segments having a thickness of m_ZoneMinThickness, the outlines wilm
@@ -109,41 +109,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * m_ZoneMinThickness
      * so m_ZoneMinThickness is the min thickness of the filled zones areas
      */
-    unsigned corners_count = m_FilledPolysList.size();
-    unsigned ic = 0;
-    if( booleng->StartPolygonAdd( GROUP_A ) )
-    {
-        for( ; ic < corners_count; ic++ )
-        {
-            CPolyPt* corner = &m_FilledPolysList[ic];
-            booleng->AddPoint( corner->x, corner->y );
-            if( corner->end_contour )
-                break;
-        }
-
-        booleng->EndPolygonAdd();
-    }
+    CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
     booleng->SetCorrectionFactor( (double) -m_ZoneMinThickness/2 );
     booleng->Do_Operation( BOOL_CORRECTION );
 
     /* No copy the new outline in m_FilledPolysList */
     m_FilledPolysList.clear();
-    while( booleng->StartPolygonGet() )
-    {
-        CPolyPt corner( 0, 0, false );
-        while( booleng->PolygonHasMorePoints() )
-        {
-            corner.x = (int) booleng->GetPolygonXPoint();
-            corner.y = (int) booleng->GetPolygonYPoint();
-            corner.end_contour = false;
-            m_FilledPolysList.push_back( corner );
-        }
-
-        corner.end_contour = true;
-        m_FilledPolysList.pop_back();
-        m_FilledPolysList.push_back( corner );
-        booleng->EndPolygonGet();
-    }
+    CopyPolygonsFromBoolengineToFilledPolysList( booleng );
     delete booleng;
 
     /* Second, Add the main (corrected) polygon (i.e. the filled area using only one outline)
@@ -156,21 +128,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     /* Add the main corrected polygon (i.e. the filled area using only one outline)
      * in GroupA in Bool_Engine
      */
-    corners_count = m_FilledPolysList.size();
-    ic = 0;
-    if( booleng->StartPolygonAdd( GROUP_A ) )
-    {
-        for( ; ic < corners_count; ic++ )
-        {
-            CPolyPt* corner = &m_FilledPolysList[ic];
-            booleng->AddPoint( corner->x, corner->y );
-            if( corner->end_contour )
-                break;
-        }
-
-        booleng->EndPolygonAdd();
-    }
-
+    CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
 
     // Calculates the clearance value that meet DRC requirements
     int      clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearence );
@@ -274,23 +232,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     /* put these areas in m_FilledPolysList */
     m_FilledPolysList.clear();
-    while( booleng->StartPolygonGet() )
-    {
-        CPolyPt corner( 0, 0, false );
-        while( booleng->PolygonHasMorePoints() )
-        {
-            corner.x = (int) booleng->GetPolygonXPoint();
-            corner.y = (int) booleng->GetPolygonYPoint();
-            corner.end_contour = false;
-            m_FilledPolysList.push_back( corner );
-        }
-
-        corner.end_contour = true;
-        m_FilledPolysList.pop_back();
-        m_FilledPolysList.push_back( corner );
-        booleng->EndPolygonGet();
-    }
-
+    CopyPolygonsFromBoolengineToFilledPolysList( booleng );
     delete booleng;
 
     // Remove insulated islands:
@@ -945,4 +887,65 @@ void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 
         aBooleng->EndPolygonAdd();
     }
+}
+
+
+/***********************************************************************************************************/
+int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aBoolengine, GroupType aGroup )
+/************************************************************************************************************/
+/** Function CopyPolygonsFromFilledPolysListToBoolengine
+ * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
+ * @param aBoolengine = kbool engine
+ * @param aGroup = group in kbool engine (GROUP_A or GROUP_B only)
+ * @return the corner count
+*/
+{
+    unsigned corners_count = m_FilledPolysList.size();
+    int count = 0;
+    unsigned ic = 0;
+    if( aBoolengine->StartPolygonAdd( aGroup ) )
+    {
+        for( ; ic < corners_count; ic++ )
+        {
+            CPolyPt* corner = &m_FilledPolysList[ic];
+            aBoolengine->AddPoint( corner->x, corner->y );
+            count++;
+            if( corner->end_contour )
+                break;
+        }
+
+        aBoolengine->EndPolygonAdd();
+    }
+
+    return count;
+}
+/*****************************************************************************************/
+int ZONE_CONTAINER::CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine )
+/*****************************************************************************************/
+/** Function CopyPolygonsFromBoolengineToFilledPolysList
+ * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
+ * @param aBoolengine = kbool engine
+ * @return the corner count
+*/
+{
+    int count = 0;
+    while( aBoolengine->StartPolygonGet() )
+    {
+        CPolyPt corner( 0, 0, false );
+        while( aBoolengine->PolygonHasMorePoints() )
+        {
+            corner.x = (int) aBoolengine->GetPolygonXPoint();
+            corner.y = (int) aBoolengine->GetPolygonYPoint();
+            corner.end_contour = false;
+            m_FilledPolysList.push_back( corner );
+            count++;
+        }
+
+        corner.end_contour = true;
+        m_FilledPolysList.pop_back();
+        m_FilledPolysList.push_back( corner );
+        aBoolengine->EndPolygonGet();
+    }
+
+    return count;
 }

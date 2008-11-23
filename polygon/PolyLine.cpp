@@ -545,7 +545,10 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
                             // should always be > DGRID  a  MARGE >= 10*DGRID is ok
                             // this is also used to remove small segments and to decide when
                             // two segments are in line. ( initial value = 0.001 )
-    double CORRECTIONFACTOR = 500.0;    // correct the polygons by this number
+    double CORRECTIONFACTOR = 0.0;      // correct the polygons by this number: used in BOOL_CORRECTION operation
+                                        // this operation shrinks a polygon if CORRECTIONFACTOR < 0
+                                        // or stretch it if CORRECTIONFACTOR > 0
+                                        // the size change is CORRECTIONFACTOR (holes are correctly handled)
     double CORRECTIONABER   = 1.0;      // the accuracy for the rounded shapes used in correction
     double ROUNDFACTOR  = 1.5;          // when will we round the correction shape to a circle
     double SMOOTHABER   = 10.0;         // accuracy when smoothing a polygon

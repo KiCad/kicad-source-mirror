@@ -194,7 +194,22 @@ public:
      */
     void AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
 
-    /**
+    /** Function CopyPolygonsFromBoolengineToFilledPolysList
+     * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
+     * @param aBoolengine = the kbool engine used in Do_Operation
+     * @return the corner count
+    */
+    int CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine );
+
+    /** Function CopyPolygonsFromFilledPolysListToBoolengine
+     * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
+     * @param aBoolengine = kbool engine
+     * @param aGroup = group in kbool engine (GROUP_A or GROUP_B only)
+     * @return the corner count
+    */
+    int CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aBoolengine, GroupType aGroup = GROUP_A);
+
+        /**
      * Function HitTestForCorner
      * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
      * @return -1 if none, corner index in .corner <vector>
