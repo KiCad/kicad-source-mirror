@@ -15,6 +15,10 @@ using namespace std;
  * At each crossing, the ray switches between inside and outside.
  * If odd count, the test point is inside the polygon
  * This is called the Jordan curve theorem, or sometimes referred to as the "even-odd" test.
+ * Take care to starting and ending points of segments outlines:
+ * Only one must be used because the startingpoint of a segemnt is also the ending point of the previous.
+ * And we do no use twice the same segment, so we do NOT use both starting and ending points of segments.
+ * So we must use starting point but not ending point of each segment when calculating intersections
  */
 
 /* 2 versions are given.
@@ -22,7 +26,7 @@ using namespace std;
  * the first version is for explanations and tests (used to test the second version)
  * both use the same algorithm.
  */
-#if 1
+#if 0
 
 /* This text and the algorithm come from http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
  *
@@ -291,7 +295,6 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
 
 /** Function TestPointInsidePolygon
  * test if a point is inside or outside a polygon.
- * if a point is on a  outline segment, it is considered outside the polygon
  * the polygon must have only lines (not arcs) for outlines.
  * Use TestPointInside or TestPointInsideContour for more complex polygons
  * @param aPolysList: the list of polygons
@@ -301,55 +304,54 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
  * @return true if the point is inside, false for outside
  */
 {
-    #define OUTSIDE_IF_ON_SIDE 0    // = 1 if we consider point on a side outside the polygon
-    // define line passing through (x,y), with slope = 0 (horizontal line)
-    // get intersection points
-    // count intersection points to right of (x,y), if odd (x,y) is inside polyline
-    int    xx, yy;
-    double slope = 0;       // Using an horizontal line.
-    double a = refy - slope * refx;
+    // count intersection points to right of (refx,refy), if odd (refx,refy) is inside polyline
     int    ics, ice;
     bool   inside = false;
 
     // find all intersection points of line with polyline sides
     for( ics = istart, ice = iend; ics <= iend; ice = ics++ )
     {
-        double intersectx1, intersecty1, intersectx2, intersecty2;
-        int    ok;
-        ok = FindLineSegmentIntersection( a, slope,
-            aPolysList[ics].x, aPolysList[ics].y,
-            aPolysList[ice].x, aPolysList[ice].y,
-            CPolyLine::STRAIGHT,
-            &intersectx1, &intersecty1,
-            &intersectx2, &intersecty2 );
+        int seg_startX = aPolysList[ics].x;
+        int seg_startY = aPolysList[ics].y;
+        int seg_endX = aPolysList[ice].x;
+        int seg_endY = aPolysList[ice].y;
 
-        /* FindLineSegmentIntersection() returns 0, 1 or 2 coordinates (ok = 0, 1, 2)
-         * for straight line segments, only 0 or 1 are possible
-         * (2 intersections points are possible only with arcs
-         */
-        if( ok )    // Intersection found
-        {
-            xx = (int) intersectx1;
-            yy = (int) intersecty1;
+        /* Trivial cases: skip if ref above or below the segment to test
+         * Note: end point segment is skipped, because we do not test twice the same point:
+         * If the start point of segments is tested, the end point must be skipped, because
+         * this is also the starting point of the next segment
+        */
+        // segment above ref point: skip
+        if( ( seg_startY > refy ) && (seg_endY > refy ) )
+            continue;
 
-            /* if the intersection point is on the start point of the current segment,
-              * do not count it,
-              * because it was already counted, as ending point of the previous segment
-             */
-            if( xx == aPolysList[ics].x && yy == aPolysList[ics].y )
-                continue;
-#if OUTSIDE_IF_ON_SIDE
-            if( xx == refx && yy == refy )
-                return false; // (x,y) is on a side, call it outside
-            else
-#endif
-            if( xx > refx )
-                inside = not inside;
-        }
+        // segment below ref point, or its end on ref point: skip
+        // Note: also we skip vertical segments
+        // So points on vertical segments outlines are seen as outside the polygon
+        if( ( seg_startY <= refy ) && (seg_endY <= refy ) )
+            continue;
+
+        /* refy is between seg_startY and seg_endY.
+         * see if an horizontal line from refx is intersecting the segment
+        */
+
+        // calculate the x position of the intersection of this segment and the semi infinite line
+        // this is more easier if we move the X,Y axis origin to the segment start point:
+        seg_endX -= seg_startX;
+        seg_endY -= seg_startY;
+        double newrefx = (double)(refx - seg_startX);
+        double newrefy = (double) (refy - seg_startY);
+        // Now calculate the x intersection coordinate of the line from (0,0) to (seg_endX,seg_endY)
+        // with the horizontal line at the new refy position
+        // the line slope is slope = seg_endY/seg_endX;
+        // and the x pos relative to the new origin is intersec_x = refy/slope
+        // Note: because vertical segments are skipped, slope exists (seg_end_y not O)
+        double intersec_x = newrefy * seg_endX / seg_endY;
+        if( newrefx < intersec_x )    // Intersection found with the semi-infinite line from -infinite to refx
+            inside = not inside;
     }
 
     return inside;
 }
-
 
 #endif

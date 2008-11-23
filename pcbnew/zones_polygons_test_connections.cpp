@@ -153,7 +153,6 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
                         if( (old_subnet > 0) && (old_subnet != subnet) )      // Merge previous subnet with the current
                         {
-//printf("        merge subnets: %d et %d (%d)\n", old_subnet, subnet,item->Type());
                             for( unsigned jj = 0; jj < Candidates.size(); jj++ )
                             {
                                 BOARD_CONNECTED_ITEM* item_to_merge = Candidates[jj];
@@ -233,7 +232,6 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 
     if( !found )  // No zone with this netcode, therefore no connection by zone
         return;
-printf(" Merge_SubNets net = %d\n", aNetcode);
 
     std::vector <BOARD_CONNECTED_ITEM*> Candidates;  // list of pads and tracks candidates to test.
     // Build a list of candidates connected to the net:
