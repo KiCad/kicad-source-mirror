@@ -58,32 +58,32 @@ protected:
     ~DHEAD();
 
     /**
-     * Function Append
+     * Function append
      * adds \a aNewElement to the end of the list.
      */
-    void Append( EDA_BaseStruct* aNewElement );
+    void append( EDA_BaseStruct* aNewElement );
 
     /**
-     * Function Insert
+     * Function insert
      * puts aNewElement just in front of aElementAfterMe in the list sequence.
      * If aElementAfterMe is NULL, then simply Append()
      */
-    void Insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aElementAfterMe );
+    void insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aElementAfterMe );
 
     /**
-     * Function Insert
+     * Function insert
      * puts aNewElement in front of list sequence.
      */
-    void Insert( EDA_BaseStruct* aNewElement )
+    void insert( EDA_BaseStruct* aNewElement )
     {
-        Insert( aNewElement, first );
+        insert( aNewElement, first );
     }
 
     /**
-     * Function Remove
+     * Function remove
      * removes \a aElement from the list, but does not delete it.
      */
-    void Remove( EDA_BaseStruct* aElement );
+    void remove( EDA_BaseStruct* aElement );
 
 
 public:
@@ -147,7 +147,7 @@ public:
      */
     void Append( T* aNewElement )
     {
-        DHEAD::Append( aNewElement );
+        append( aNewElement );
     }
 
     /**
@@ -157,7 +157,7 @@ public:
      */
     void Insert( T* aNewElement, T* aElementAfterMe )
     {
-        DHEAD::Insert( aNewElement, aElementAfterMe );
+        insert( aNewElement, aElementAfterMe );
     }
 
     /**
@@ -166,16 +166,18 @@ public:
      */
     void Insert( T* aNewElement )
     {
-        DHEAD::Insert( aNewElement );
+        insert( aNewElement );
     }
 
     /**
      * Function Remove
      * removes \a aElement from the list, but does not delete it.
+     * @return T* - the removed element, so you can easily delete it upon return.
      */
-    void Remove( T* aElement )
+    T* Remove( T* aElement )
     {
-        DHEAD::Remove( aElement );
+        remove( aElement );
+        return aElement;
     }
 
 };

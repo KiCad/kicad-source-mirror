@@ -56,7 +56,7 @@ void DHEAD::DestructAll()
 }
 
 
-void DHEAD::Append( EDA_BaseStruct* aNewElement )
+void DHEAD::append( EDA_BaseStruct* aNewElement )
 {
     wxASSERT( aNewElement != NULL );
 
@@ -85,12 +85,12 @@ void DHEAD::Append( EDA_BaseStruct* aNewElement )
 }
 
 
-void DHEAD::Insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
+void DHEAD::insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
 {
     wxASSERT( aNewElement != NULL );
 
     if( !aAfterMe )
-        Append( aNewElement );
+        append( aNewElement );
     else
     {
         wxASSERT( aAfterMe->GetList() == this );
@@ -126,7 +126,7 @@ void DHEAD::Insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
 }
 
 
-void DHEAD::Remove( EDA_BaseStruct* aElement )
+void DHEAD::remove( EDA_BaseStruct* aElement )
 {
     wxASSERT( aElement );
     wxASSERT( aElement->GetList() == this );
