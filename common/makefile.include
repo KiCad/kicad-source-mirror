@@ -5,37 +5,37 @@ COMMON = ../include/colors.h
 
 
 OBJECTS= \
-        confirm.o \
-        base_struct.o\
-        copy_to_clipboard.o\
-        basicframe.o\
-        class_drawpickedstruct.o\
-        common_plot_functions.o\
-        common_plotPS_functions.o\
-        common_plotHPGL_functions.o\
-        dlist.o \
-        hotkeys_basic.o\
-        drawtxt.o \
-        about_kicad.o\
-        wxwineda.o \
-        string.o \
-        gr_basic.o\
-        gestfich.o\
-        trigo.o\
-        selcolor.o\
-        common.o\
-        eda_doc.o\
-        toolbars.o\
-        displlst.o \
-        edaappl.o\
-        block_commande.o\
-        msgpanel.o\
-        projet_config.o\
-        get_component_dialog.o\
-        eda_dde.o\
-        worksheet.o\
-        base_screen.o\
-        dcsvg.o
+	confirm.o \
+	base_struct.o\
+	copy_to_clipboard.o\
+	basicframe.o\
+	class_drawpickedstruct.o\
+	common_plot_functions.o\
+	common_plotPS_functions.o\
+	common_plotHPGL_functions.o\
+	dlist.o \
+	hotkeys_basic.o\
+	drawtxt.o \
+	about_kicad.o\
+	wxwineda.o \
+	string.o \
+	gr_basic.o\
+	gestfich.o\
+	trigo.o\
+	selcolor.o\
+	common.o\
+	eda_doc.o\
+	toolbars.o\
+	displlst.o \
+	edaappl.o\
+	block_commande.o\
+	msgpanel.o\
+	projet_config.o\
+	get_component_dialog.o\
+	eda_dde.o\
+	worksheet.o\
+	base_screen.o\
+	dcsvg.o
 
 ifdef KICAD_PYTHON
 OBJECTS += pyhandler.o
@@ -87,8 +87,8 @@ trigo.o: trigo.cpp ../include/trigo.h
 bitmaps.o: bitmaps.cpp ../include/bitmaps.h
 
 edaappl.o: edaappl.cpp $(COMMON) ../include/worksheet.h\
-    ../include/common.h ../include/gr_basic.h\
-    ../include/build_version.h
+	../include/common.h ../include/gr_basic.h\
+	../include/build_version.h
 
 eda_dde.o: eda_dde.cpp $(COMMON) ../include/eda_dde.h
 

@@ -9,94 +9,97 @@ EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a
 # DEPEND = program.h general.h
 
 OBJECTS = eeschema.o\
-		schedit.o\
-		load_one_schematic_file.o\
-		libedit_undo_redo.o\
-		schematic_undo_redo.o\
-		dialog_create_component.o\
-		libedit_onrightclick.o\
-		libedit_onleftclick.o\
-		dangling_ends.o\
-		cross-probing.o\
-		setpage.o\
-		class_schematic_items.o\
-		class_sch_cmp_field.o\
-        classes_body_items.o\
-		class_drawsheet.o\
-		class_pin.o\
-        class_hierarchical_PIN_sheet.o\
-		class_text-label.o\
-		component_class.o\
-		class_library.o\
-		dialog_options.o\
-		tool_lib.o\
-		tool_sch.o\
-		tool_viewlib.o\
-		drawframe.o\
-		schframe.o\
-		viewlib_frame.o\
-		drawpanel.o\
-		wxprint.o\
-		lib_export.o \
-		busentry.o \
-		bus-wire-junction.o \
-		eelibs_read_libraryfiles.o \
-		eelibs_draw_components.o \
-		block.o\
-		block_libedit.o\
-		eeredraw.o\
-		dialog_eeschema_config.o\
-		eelayer.o \
-		priorque.o eeconfig.o \
-		affiche.o \
-		zoom.o \
-		getpart.o\
-		netlist.o\
-		netlist_control.o\
-		edit_label.o\
-		edit_component_in_schematic.o\
-		locate.o \
-		save_schemas.o sheet.o \
-		viewlibs.o \
-		libedit.o \
-		libframe.o \
-		symbedit.o \
-		pinedit.o \
-		libfield.o \
-		edit_component_in_lib.o \
-		menubar.o \
-		savelib.o symbtext.o \
-		symbdraw.o \
-		hierarch.o files-io.o \
-		annotate.o\
-		annotate_dialog.o\
-		plothpgl.o \
-		plot.o libalias.o \
-		plotps.o netform.o \
-		delsheet.o \
-		delete.o\
-        build_BOM.o \
-        dialog_build_BOM.o \
-		erc.o\
-		dialog_erc.o\
-		selpart.o \
-		libarch.o \
-		cleanup.o\
-		sheetlab.o \
-		class_screen.o \
-		database.o\
-		onrightclick.o \
-		onleftclick.o \
-		find.o \
-		backanno.o \
-		controle.o\
-		hotkeys.o\
-		svg_print.o
+	schedit.o\
+	load_one_schematic_file.o\
+	libedit_undo_redo.o\
+	schematic_undo_redo.o\
+	dialog_create_component.o\
+	libedit_onrightclick.o\
+	libedit_onleftclick.o\
+	dangling_ends.o\
+	cross-probing.o\
+	setpage.o\
+	class_schematic_items.o\
+	class_sch_cmp_field.o\
+	classes_body_items.o\
+	class_drawsheet.o\
+	class_pin.o\
+	class_hierarchical_PIN_sheet.o\
+	class_text-label.o\
+	component_class.o\
+	class_library.o\
+	dialog_options.o\
+	tool_lib.o\
+	tool_sch.o\
+	tool_viewlib.o\
+	drawframe.o\
+	schframe.o\
+	viewlib_frame.o\
+	drawpanel.o\
+	wxprint.o\
+	lib_export.o \
+	busentry.o \
+	bus-wire-junction.o \
+	eelibs_read_libraryfiles.o \
+	eelibs_draw_components.o \
+	block.o\
+	block_libedit.o\
+	eeredraw.o\
+	dialog_eeschema_config.o\
+	eelayer.o \
+	priorque.o eeconfig.o \
+	affiche.o \
+	zoom.o \
+	getpart.o\
+	netlist.o\
+	netlist_control.o\
+	edit_label.o\
+	edit_component_in_schematic.o\
+	dialog_edit_component_in_schematic_fbp.o \
+	dialog_edit_component_in_schematic.o \
+	locate.o \
+	save_schemas.o sheet.o \
+	viewlibs.o \
+	libedit.o \
+	libframe.o \
+	symbedit.o \
+	pinedit.o \
+	libfield.o \
+	edit_component_in_lib.o \
+	menubar.o \
+	savelib.o symbtext.o \
+	symbdraw.o \
+	hierarch.o files-io.o \
+	annotate.o\
+	annotate_dialog.o\
+	plothpgl.o \
+	plot.o libalias.o \
+	plotps.o netform.o \
+	delsheet.o \
+	delete.o\
+	build_BOM.o \
+	dialog_build_BOM.o \
+	erc.o\
+	dialog_erc.o\
+	selpart.o \
+	libarch.o \
+	cleanup.o\
+	sheetlab.o \
+	class_screen.o \
+	database.o\
+	onrightclick.o \
+	onleftclick.o \
+	find.o \
+	backanno.o \
+	controle.o\
+	hotkeys.o\
+	svg_print.o
+
 
 eeschema.o: eeschema.cpp program.h general.h $(DEPEND)
 
-edit_component_in_lib.o: edit_component_in_lib.cpp\
-	dialog_edit_component_in_lib.cpp dialog_edit_component_in_lib.h $(DEPEND)
+#edit_component_in_lib.o: edit_component_in_lib.cpp\
+#	dialog_edit_component_in_lib.cpp dialog_edit_component_in_lib.h $(DEPEND)
 
 edit_component_in_schematic.o: edit_component_in_schematic.cpp\
 	dialog_edit_component_in_schematic.cpp dialog_edit_component_in_schematic.h $(DEPEND)
