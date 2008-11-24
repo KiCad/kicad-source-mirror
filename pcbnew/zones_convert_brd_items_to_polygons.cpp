@@ -3,10 +3,21 @@
 /*******************************************/
 
 /* Functions to convert some board items to polygons
-(pads, tracks ..)
-This is used to calculate filled areas in copper zones.
-Filled areas are the full zone area sub all polygons calculated from these items and the clearance area
-*/
+  * (pads, tracks ..)
+  * This is used to calculate filled areas in copper zones.
+  * Filled areas are areas remainder of the full zone area after removed all polygons
+  * calculated from these items shapes and the clearance area
+  *
+  * Important note:
+  * Because filled areas must have a minimum thickness to match with Design rule, they are draw in 2 step:
+  * 1 - filled polygons are drawn
+  * 2 - polygon outlines are drawn with a "minimum thickness width" ( or with a minimum thickness pen )
+  * So outlines of filled polygons are calculated with the constraint they match with clearance,
+  * taking in account outlines have thickness
+  * This ensures:
+  *      - areas meet the minimum thickness requirement.
+  *      - shapes are smoothed.
+ */
 
 using namespace std;
 
@@ -31,9 +42,9 @@ void        AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
                                           TRACK& aTrack, int aClearanceValue );
 void        AddPadWithClearancePolygon( Bool_Engine* aBooleng, D_PAD& aPad, int aClearanceValue );
 void        AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
-                                        D_PAD&       aPad,
-                                        int          aThermalGap,
-                                        int          aCopperThickness, int aMinThicknessValue );
+                                        D_PAD& aPad,
+                                        int aThermalGap,
+                                        int aCopperThickness, int aMinThicknessValue );
 void        AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
                                           wxPoint aStart, wxPoint aEnd,
                                           int aWidth );
@@ -110,7 +121,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * so m_ZoneMinThickness is the min thickness of the filled zones areas
      */
     CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
-    booleng->SetCorrectionFactor( (double) -m_ZoneMinThickness/2 );
+    booleng->SetCorrectionFactor( (double) -m_ZoneMinThickness / 2 );
     booleng->Do_Operation( BOOL_CORRECTION );
 
     /* No copy the new outline in m_FilledPolysList */
@@ -131,8 +142,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
 
     // Calculates the clearance value that meet DRC requirements
-    int      clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearence );
-    clearance += m_ZoneMinThickness/2;
+    int clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearence );
+    clearance += m_ZoneMinThickness / 2;
 
 
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
@@ -176,7 +187,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                     AddThermalReliefPadPolygon( booleng, *pad,
                         m_ThermalReliefGapValue,
                         m_ThermalReliefCopperBridgeValue,
-                        m_ZoneMinThickness);
+                        m_ZoneMinThickness );
                 break;
 
             case PAD_IN_ZONE:
@@ -398,9 +409,9 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
  * so shapes must keep in account this outline thickness
  */
 void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
-                                    D_PAD&       aPad,
-                                    int          aThermalGap,
-                                    int          aCopperThickness, int aMinThicknessValue )
+                                    D_PAD& aPad,
+                                    int aThermalGap,
+                                    int aCopperThickness, int aMinThicknessValue )
 {
     wxPoint corner, corner_end;
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
@@ -413,26 +424,21 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
     int     delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
 
     /* Keep in account the polygon outline thickness
-    * aThermalGap must be increased by aMinThicknessValue/2 because drawing external outline
-    * with a thickness of aMinThicknessValue will reduce gap by aMinThicknessValue/2
-    */
-    aThermalGap += aMinThicknessValue/2;
+     * aThermalGap must be increased by aMinThicknessValue/2 because drawing external outline
+     * with a thickness of aMinThicknessValue will reduce gap by aMinThicknessValue/2
+     */
+    aThermalGap += aMinThicknessValue / 2;
 
     /* Keep in account the polygon outline thickness
-    * copper_tickness must be decreased by aMinThicknessValue because drawing outlines
-    * with a thickness of aMinThicknessValue will increase thickness by aMinThicknessValue
-    */
+     * copper_tickness must be decreased by aMinThicknessValue because drawing outlines
+     * with a thickness of aMinThicknessValue will increase real thickness by aMinThicknessValue
+     */
     aCopperThickness -= aMinThicknessValue;
-    if ( aCopperThickness < 0 )
+    if( aCopperThickness < 0 )
         aCopperThickness = 0;
 
     copper_tickness.x = min( dx, aCopperThickness );
     copper_tickness.y = min( dy, aCopperThickness );
-
-    if ( copper_tickness.x < aMinThicknessValue )
-        copper_tickness.x = 0;
-    if ( copper_tickness.y < aMinThicknessValue )
-        copper_tickness.y = 0;
 
     switch( aPad.m_PadShape )
     {
@@ -468,7 +474,8 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
 
         // calculate the starting point of the outter arc
         corner.x = copper_tickness.x / 2;
-        double dtmp = sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner.x * corner.x ) );
+        double dtmp =
+            sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner.x * corner.x ) );
         corner.y = (int) dtmp;
         RotatePoint( &corner, 90 );
 
@@ -536,7 +543,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             EXCHG( dx, dy );
             supp_angle = 900;
-            EXCHG( copper_tickness.x, copper_tickness.y);
+            EXCHG( copper_tickness.x, copper_tickness.y );
         }
         int deltasize = dx - dy;        // = distance between shape position and the 2 demi-circle ends centre
         // here we have dx > dy
@@ -554,15 +561,15 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             corner.x = copper_tickness.x / 2;
             corner.y =
-                (int) sqrt( ((double)outer_radius * outer_radius ) -
-                    ( (double)( corner.x - delta ) * ( corner.x - deltasize ) ) );
+                (int) sqrt( ( (double) outer_radius * outer_radius ) -
+                    ( (double) ( corner.x - delta ) * ( corner.x - deltasize ) ) );
             corner.x -= deltasize;
 
             /* creates an intermediate point, to have a > 90 deg angle
-            * between the side and the first segment of arc approximation
-            */
+             * between the side and the first segment of arc approximation
+             */
             wxPoint intpoint = corner;
-            intpoint.y -= aThermalGap/4;
+            intpoint.y -= aThermalGap / 4;
             corners_buffer.push_back( intpoint + shape_offset );
             RotatePoint( &corner, 90 );
         }
@@ -577,12 +584,15 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
         wxPoint last_corner;
         last_corner.y = copper_tickness.y / 2;
-        int px = outer_radius - (aThermalGap / 4);
-        last_corner.x = (int) sqrt( ( ( (double) px * px ) - (double) last_corner.y * last_corner.y ) );
+        int     px = outer_radius - (aThermalGap / 4);
+        last_corner.x =
+            (int) sqrt( ( ( (double) px * px ) - (double) last_corner.y * last_corner.y ) );
 
         // Arc stop point calculation, the intersecting point of cutout arc and thermal spoke edge
         corner_end.y = copper_tickness.y / 2;
-        corner_end.x = (int) sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner_end.y * corner_end.y ) );
+        corner_end.x =
+            (int) sqrt( ( (double) outer_radius *
+                         outer_radius ) - ( (double) corner_end.y * corner_end.y ) );
         RotatePoint( &corner_end, -90 );
 
         // calculate intermediate arc points till limit is reached
@@ -891,18 +901,21 @@ void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 
 
 /***********************************************************************************************************/
-int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aBoolengine, GroupType aGroup )
+int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aBoolengine,
+                                                                 GroupType    aGroup )
 /************************************************************************************************************/
+
 /** Function CopyPolygonsFromFilledPolysListToBoolengine
  * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
  * @param aBoolengine = kbool engine
  * @param aGroup = group in kbool engine (GROUP_A or GROUP_B only)
  * @return the corner count
-*/
+ */
 {
     unsigned corners_count = m_FilledPolysList.size();
-    int count = 0;
-    unsigned ic = 0;
+    int      count = 0;
+    unsigned ic    = 0;
+
     if( aBoolengine->StartPolygonAdd( aGroup ) )
     {
         for( ; ic < corners_count; ic++ )
@@ -919,16 +932,20 @@ int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aB
 
     return count;
 }
+
+
 /*****************************************************************************************/
 int ZONE_CONTAINER::CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine )
 /*****************************************************************************************/
+
 /** Function CopyPolygonsFromBoolengineToFilledPolysList
  * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
  * @param aBoolengine = kbool engine
  * @return the corner count
-*/
+ */
 {
     int count = 0;
+
     while( aBoolengine->StartPolygonGet() )
     {
         CPolyPt corner( 0, 0, false );

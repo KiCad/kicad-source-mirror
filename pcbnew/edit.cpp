@@ -569,6 +569,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             zone_container->m_FilledPolysList.clear();;
         }
         test_connexions( NULL );
+        Tst_Ratsnest( NULL, 0 );    // Recalculate the active ratsnest, i.e. the unconnected links */
         GetScreen()->SetModify();
         DrawPanel->Refresh();
         break;

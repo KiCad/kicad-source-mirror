@@ -856,7 +856,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
  *  Calculate the zone filling for the outline zone_container
  *  The zone outline is a frontier, and can be complex (with holes)
  *  The filling starts from starting points like pads, tracks.
- * If exists the old filling is removed
+ * If exists, the old filling is removed
  * @param DC = current Device Context
  * @param zone_container = zone to fill
  * @param verbose = true to show error messages
@@ -873,11 +873,11 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
         return -1;
     }
 
-    /* Show the Net */
+    /* Shows the Net */
     g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
     if( g_HightLigt_Status && (g_HightLigth_NetCode != g_Zone_Default_Setting.m_NetcodeSelection)  && DC )
     {
-        Hight_Light( DC );      // Remove old hightlight selection
+        Hight_Light( DC );      // Remove old highlight selection
     }
 
     g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection;
@@ -956,7 +956,8 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
         if( error_level && !verbose )
             break;
     }
-    m_Pcb->Test_Connections_To_Copper_Areas( );
+    test_connexions( NULL );
+    Tst_Ratsnest( NULL, 0 );    // Recalculate the active ratsnest, i.e. the unconnected links */
     DrawPanel->Refresh( true );
     return error_level;
 }

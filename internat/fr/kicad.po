@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-22 11:36+0100\n"
-"PO-Revision-Date: 2008-11-22 11:37+0100\n"
+"POT-Creation-Date: 2008-11-24 21:41+0100\n"
+"PO-Revision-Date: 2008-11-24 21:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -287,7 +287,7 @@ msgstr "dimension"
 #: pcbnew/class_marker.cpp:133
 #: pcbnew/class_text_mod.cpp:503
 #: pcbnew/class_track.cpp:850
-#: pcbnew/class_zone.cpp:789
+#: pcbnew/class_zone.cpp:821
 msgid "Type"
 msgstr "Type"
 
@@ -310,7 +310,7 @@ msgstr "Segment"
 #: pcbnew/class_pcb_text.cpp:190
 #: pcbnew/class_text_mod.cpp:516
 #: pcbnew/class_track.cpp:907
-#: pcbnew/class_zone.cpp:823
+#: pcbnew/class_zone.cpp:855
 msgid "Layer"
 msgstr "Couche"
 
@@ -511,12 +511,12 @@ msgid "Display"
 msgstr "Affichage"
 
 #: pcbnew/class_track.cpp:866
-#: pcbnew/class_zone.cpp:811
+#: pcbnew/class_zone.cpp:843
 msgid "NetName"
 msgstr "NetName"
 
 #: pcbnew/class_track.cpp:871
-#: pcbnew/class_zone.cpp:819
+#: pcbnew/class_zone.cpp:851
 msgid "NetCode"
 msgstr "NetCode"
 
@@ -528,27 +528,27 @@ msgstr "Standard"
 msgid "Diam"
 msgstr "Diam"
 
-#: pcbnew/class_zone.cpp:814
+#: pcbnew/class_zone.cpp:846
 msgid "Non Copper Zone"
 msgstr "Zone non Cuivre"
 
-#: pcbnew/class_zone.cpp:827
+#: pcbnew/class_zone.cpp:859
 msgid "Corners"
 msgstr "Sommets"
 
-#: pcbnew/class_zone.cpp:833
+#: pcbnew/class_zone.cpp:865
 msgid "No Grid"
 msgstr "Pas de Grille"
 
-#: pcbnew/class_zone.cpp:834
+#: pcbnew/class_zone.cpp:866
 msgid "Fill Grid"
 msgstr "Grille de Remplissage"
 
-#: pcbnew/class_zone.cpp:839
+#: pcbnew/class_zone.cpp:871
 msgid "Hatch lines"
 msgstr "Lignes de Hachure"
 
-#: pcbnew/class_zone.cpp:845
+#: pcbnew/class_zone.cpp:877
 msgid "Corners in DrawList"
 msgstr "Sommets en Liste de dessin"
 
@@ -2085,7 +2085,7 @@ msgstr "Surbrillance des équipotentielles"
 msgid "Local Ratsnest"
 msgstr "Montrer le chevelu général"
 
-#: pcbnew/edit.cpp:584
+#: pcbnew/edit.cpp:585
 msgid "Delete item"
 msgstr "Suppression d'éléments"
 
@@ -2702,7 +2702,7 @@ msgstr "Impossible de créer  fichier "
 msgid "File"
 msgstr "Fichier"
 
-#: pcbnew/plotgerb.cpp:841
+#: pcbnew/plotgerb.cpp:865
 #, c-format
 msgid "unable to reopen file <%s>"
 msgstr "Ne peut pas réouvrir fichier <%s>"
@@ -3010,19 +3010,19 @@ msgstr " chargé"
 msgid "Modules [%d items]"
 msgstr "Modules [%d éléments]"
 
-#: pcbnew/dialog_copper_zones.cpp:67
-msgid "Zone clearance value:"
-msgstr "Valeur isolation zone:"
+#: pcbnew/dialog_copper_zones.cpp:350
+msgid ""
+"Error :\n"
+"you must choose a copper bridge value for thermal reliefs bigger than the min zone thickness"
+msgstr ""
+"Erreur :\n"
+"vous devez choisir une valeur pour l'épaisseur de cuivre dans les freins thermiques plus grande que l'épaisseur de cuivre minimum des zones"
 
-#: pcbnew/dialog_copper_zones.cpp:70
-msgid "Grid :"
-msgstr "Grille:"
-
-#: pcbnew/dialog_copper_zones.cpp:355
+#: pcbnew/dialog_copper_zones.cpp:362
 msgid "Error : you must choose a layer"
 msgstr "Erreur. Vous devez choisir une couche"
 
-#: pcbnew/dialog_copper_zones.cpp:367
+#: pcbnew/dialog_copper_zones.cpp:374
 msgid "Error : you must choose a net name"
 msgstr "Erreur. Vous devez choisir une équipotentielle"
 
@@ -4432,8 +4432,8 @@ msgid "No grid (For tests only!)"
 msgstr "Pas de grille (pour tests)"
 
 #: pcbnew/dialog_copper_zones_base.cpp:42
-msgid "Grid Size for Filling:"
-msgstr "Taille de Grille pour Remplissage:"
+msgid "Grid Size for Filling"
+msgstr "Taille de Grille pour Remplissage"
 
 #: pcbnew/dialog_copper_zones_base.cpp:46
 msgid "Include pads"
@@ -4546,34 +4546,42 @@ msgstr ""
 "Si désactivé, les surfaces remplies dans cette zone seront affichées comme des surfaces \"solides\"."
 
 #: pcbnew/dialog_copper_zones_base.cpp:122
-msgid "Zone clearance value (mm):"
-msgstr "Valeur isolation zone (mm):"
+msgid "Zone clearance value"
+msgstr "Valeur isolation zone"
 
-#: pcbnew/dialog_copper_zones_base.cpp:133
+#: pcbnew/dialog_copper_zones_base.cpp:129
+msgid "Zone min thickness value"
+msgstr "Valeur épaisseur min pour zone"
+
+#: pcbnew/dialog_copper_zones_base.cpp:134
+msgid "Value of minimun thickness of filled areas"
+msgstr "Valeur de l'épaisseur minimum des zones remplies"
+
+#: pcbnew/dialog_copper_zones_base.cpp:142
 msgid "Export to others zones"
 msgstr "Exporter vers autres zones"
 
-#: pcbnew/dialog_copper_zones_base.cpp:134
+#: pcbnew/dialog_copper_zones_base.cpp:143
 msgid "Export this zone setup to all others copper zones"
 msgstr "Exporter ces options vers les autres zones de cuivre"
 
-#: pcbnew/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialog_copper_zones_base.cpp:170
 msgid "Nets Display Options:"
 msgstr "Options d'Affichage des Nets"
 
-#: pcbnew/dialog_copper_zones_base.cpp:163
+#: pcbnew/dialog_copper_zones_base.cpp:172
 msgid "Alphabetic"
 msgstr "Alphabetique"
 
-#: pcbnew/dialog_copper_zones_base.cpp:163
+#: pcbnew/dialog_copper_zones_base.cpp:172
 msgid "Advanced"
 msgstr "Avancé"
 
-#: pcbnew/dialog_copper_zones_base.cpp:165
+#: pcbnew/dialog_copper_zones_base.cpp:174
 msgid "Net sorting:"
 msgstr "Tri des Equipotentielles:"
 
-#: pcbnew/dialog_copper_zones_base.cpp:167
+#: pcbnew/dialog_copper_zones_base.cpp:176
 msgid ""
 "Nets can be sorted:\n"
 "By alphabetic order\n"
@@ -4583,9 +4591,17 @@ msgstr ""
 "Paur ordre alphabétique\n"
 "Par nombre de pads dans les équipotentielles  (avancé)"
 
-#: pcbnew/dialog_copper_zones_base.cpp:171
+#: pcbnew/dialog_copper_zones_base.cpp:180
 msgid "Filter"
 msgstr "Filtre"
+
+#: pcbnew/dialog_copper_zones_base.cpp:185
+msgid ""
+"Pattern in advanced mode, to filter net names in list\n"
+"Net names matching this pattern are not displayed"
+msgstr ""
+"Modèle en mode avancé, pour filtrer les noms de net en liste\n"
+"Les noms de net correspondant à ce modèle ne sont pas listés"
 
 #: pcbnew/globaleditpad.cpp:74
 msgid "Edit Pads Global"
@@ -10426,7 +10442,7 @@ msgstr "Afficher Modules Cmp"
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
-#: pcbnew/dialog_copper_zones_base.h:99
+#: pcbnew/dialog_copper_zones_base.h:101
 msgid "Fill Zones Options"
 msgstr "Options de Remplissage de Zone"
 
@@ -10750,6 +10766,10 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Grid :"
+#~ msgstr "Grille:"
+#~ msgid "Zone clearance value (mm):"
+#~ msgstr "Valeur isolation zone (mm):"
 #~ msgid "Comp layer"
 #~ msgstr "Couche Cmp"
 #~ msgid "New schematic sheet"

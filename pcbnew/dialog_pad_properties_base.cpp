@@ -53,7 +53,7 @@ DialogPadPropertiesBase::DialogPadPropertiesBase( wxWindow* parent, wxWindowID i
 	wxString m_DrillShapeCtrlChoices[] = { _("Circle"), _("Oval") };
 	int m_DrillShapeCtrlNChoices = sizeof( m_DrillShapeCtrlChoices ) / sizeof( wxString );
 	m_DrillShapeCtrl = new wxRadioBox( this, ID_RADIOBOX_DRILL_SHAPE, _("Drill Shape:"), wxDefaultPosition, wxDefaultSize, m_DrillShapeCtrlNChoices, m_DrillShapeCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_DrillShapeCtrl->SetSelection( 1 );
+	m_DrillShapeCtrl->SetSelection( 0 );
 	m_DrillShapeBoxSizer->Add( m_DrillShapeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_MainSizer->Add( m_DrillShapeBoxSizer, 1, wxBOTTOM, 5 );

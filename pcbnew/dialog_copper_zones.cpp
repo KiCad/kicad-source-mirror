@@ -42,7 +42,7 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     m_Parent = parent;
     m_Config = m_Parent->m_Parent->m_EDA_Config;
     m_Zone_Setting = zone_setting;
-    m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort
+    m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort, and filtering net names
     if( m_Config )
     {
         m_NetSorting = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
@@ -315,10 +315,6 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     case 4:
         m_Zone_Setting->m_GridFillValue = 0;
-#if 0   // I hope this feature works fine ( JP Charras)
-        DisplayInfo( this, wxT(
-                "You are using No grid for filling zones\nThis is currently in development and for tests only.\n Do not use for production" ) );
-#endif
         break;
     }
 
@@ -347,8 +343,13 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         (long) m_Zone_Setting->m_ThermalReliefGapValue );
     m_Config->Write(
         ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-        (long) m_Zone_Setting->
-        m_ThermalReliefCopperBridgeValue );
+        (long) m_Zone_Setting->m_ThermalReliefCopperBridgeValue );
+
+    if( m_Zone_Setting->m_ThermalReliefCopperBridgeValue <= m_Zone_Setting->m_ZoneMinThickness )
+    {
+        DisplayError( this, _( "Error :\nyou must choose a copper bridge value for thermal reliefs bigger than the min zone thickness" ) );
+        return false;
+    }
 
     // If we use only exportable to others zones parameters, exit here:
     if( aUseExportableSetupOnly )
