@@ -15,10 +15,6 @@
 #include "dialog_edit_component_in_schematic.h"
 
 
-#define ID_ON_SELECT_FIELD 3000
-
-
-
 /**********************************************************************/
 void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                           SCH_COMPONENT* aComponent )
@@ -38,6 +34,9 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
             new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( parent );
 
         frame->InitBuffers( aComponent );
+
+//        frame->Layout();
+
         frame->ShowModal();
         frame->Destroy();
     }
@@ -93,46 +92,55 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 {
     m_Parent = (WinEDA_SchematicFrame*) parent;
 
-//    fieldGrid->SetDefaultColSize( 160, true );
-//    fieldGrid->SetColLabelValue( 0, _("Field Text") );
+    m_SelectedRow = 0;
 
-    // set grid as read only.
-    fieldGrid->EnableEditing( false );
+    wxListItem  columnLabel;
 
-    // @todo make this conditional on 2.8.8 wxWidgets
-    fieldGrid->SetRowLabelSize( wxGRID_AUTOSIZE );
+    columnLabel.SetImage(-1);
 
-    // else fieldGrid->SetRowLabelSize( 140 ) or so
+    columnLabel.SetText( _("Name") );
+    fieldListCtrl->InsertColumn( 0, columnLabel );
 
-    // select only a single row, and since table is only a single column wide
-    // this means only one cell.
-    fieldGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    columnLabel.SetText( _("Value") );
+    fieldListCtrl->InsertColumn( 1, columnLabel );
+
+    // these must go here late in the game.
+    fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+
+    copySelectedFieldToPanel();
 
     wxToolTip::Enable( true );
 }
 
 
-/*
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellLeftClick( wxGridEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& event )
 {
-    // TODO: Implement OnGridCellLeftClick
+    D(printf("OnListItemDeselected()\n");)
+    copyPanelToSelectedField();
 }
-*/
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event )
+{
+    D(printf("OnListItemSelected()\n");)
+
+    m_SelectedRow = event.GetIndex();
+
+    copySelectedFieldToPanel();
+}
+
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setSelectedFieldNdx( int aFieldNdx )
 {
-    fieldGrid->SelectCol( 0 );
-    fieldGrid->SelectRow( aFieldNdx );
+    fieldListCtrl->SetItemState( aFieldNdx, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    fieldListCtrl->EnsureVisible( aFieldNdx );
 }
 
 
 int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::getSelectedFieldNdx()
 {
-    wxArrayInt array = fieldGrid->GetSelectedRows();
-    if( !array.IsEmpty() )
-        return array.Item(0);
-    else
-        return -1;
+    return m_SelectedRow;
 }
 
 
@@ -193,98 +201,138 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 #endif
 
 
-/********************************************************************************/
+/*******************************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent )
-/********************************************************************************/
+/*******************************************************************************/
 {
     m_Cmp = aComponent;
 
-    setSelectedFieldNdx( REFERENCE );
+    // copy all the fields to a work area
+    m_FieldsBuf = aComponent->m_Fields;
 
-    m_FieldBuf = aComponent->m_Fields;
-
-    m_FieldBuf[REFERENCE].m_Text = m_Cmp->GetRef( m_Parent->GetSheet() );
+    m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( m_Parent->GetSheet() );
 
     for( int ii = 0;  ii < aComponent->GetFieldCount();  ++ii )
     {
         // make the editable field position relative to the component
-        m_FieldBuf[ii].m_Pos -= m_Cmp->m_Pos;
+        m_FieldsBuf[ii].m_Pos -= m_Cmp->m_Pos;
+
+        setRowItem( ii, m_FieldsBuf[ii] );
     }
+
+    setSelectedFieldNdx( REFERENCE );
 }
 
 
-#if 0
-
-/****************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyDataToPanel()
-/****************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_CMP_FIELD& aField )
 {
-    int fieldNdx = GetSelectedFieldNdx();
+    wxASSERT( aFieldNdx >= 0 );
 
-    if( fieldNdx == -1 )
-        return;
-
-    for( int ii = FIELD1; ii < NUMBER_OF_FIELDS; ii++ )
+    // insert blanks if aFieldNdx is referencing a yet to be defined row
+    while( aFieldNdx >= fieldListCtrl->GetItemCount() )
     {
-        m_FieldSelection->SetString( ii, m_FieldName[ii] );
+        long ndx = fieldListCtrl->InsertItem( fieldListCtrl->GetItemCount(),  wxEmptyString );
+
+        wxASSERT( ndx >= 0 );
+
+        fieldListCtrl->SetItem( ndx, 1, wxEmptyString );
     }
 
+    fieldListCtrl->SetItem( aFieldNdx, 0, aField.m_Name );
+    fieldListCtrl->SetItem( aFieldNdx, 1, aField.m_Text );
+
+    // recompute the column widths here, after setting texts
+    fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+}
+
+
+
+/****************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
+/****************************************************************/
+{
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
+        return;
+
+    SCH_CMP_FIELD&  field = m_FieldsBuf[fieldNdx];
+
+    fieldNameTextCtrl->SetValue( field.m_Name );
+
+    // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
+    fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
+
+    fieldValueTextCtrl->SetValue( field.m_Text );
+
+/*
     if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->m_Options == ENTRY_POWER )
         m_FieldTextCtrl->Enable( FALSE );
+*/
 
-    if( m_FieldFlags[fieldNdx] )
-        m_ShowFieldTextCtrl->SetValue( TRUE );
-    else
-        m_ShowFieldTextCtrl->SetValue( FALSE );
+    showCheckBox->SetValue( !(field.m_Attributs & TEXT_NO_VISIBLE) );
 
     // If the field value is empty and the position is zero, we set the
     // initial position as a small offset from the ref field, and orient
     // it the same as the ref field.  That is likely to put it at least
     // close to the desired position.
-    if( m_FieldBuf[fieldNdx].m_Pos == wxPoint( 0, 0 )
-       && m_FieldBuf[fieldNdx].m_Text.IsEmpty() )
+    if( field.m_Pos == wxPoint( 0, 0 ) && field.m_Text.IsEmpty() )
     {
-        m_VorientFieldText->SetValue( m_FieldOrient[REFERENCE] != 0 );
-        m_FieldPositionCtrl->SetValue( m_FieldPosition[REFERENCE].x + 100,
-                                       m_FieldPosition[REFERENCE].y + 100 );
+        wxString dim;
+
+        // @todo look at the dedicated position control for this.
+        dim.Printf( wxT("%d"), m_FieldsBuf[REFERENCE].m_Pos.x + (fieldNdx-FIELD1+1)*100 );
+        posXTextCtrl->SetValue( dim );
+
+        dim.Printf( wxT("%d"), m_FieldsBuf[REFERENCE].m_Pos.y + (fieldNdx-FIELD1+1)*100 );
+        posYTextCtrl->SetValue( dim );
     }
     else
     {
-        m_FieldPositionCtrl->SetValue( m_FieldPosition[fieldNdx].x, m_FieldPosition[fieldNdx].y );
-        m_VorientFieldText->SetValue( m_FieldOrient[fieldNdx] != 0 );
+        wxString dim;
+
+        dim.Printf( wxT("%d"), field.m_Pos.x );
+        posXTextCtrl->SetValue( dim );
+
+        dim.Printf( wxT("%d"), field.m_Pos.y );
+        posYTextCtrl->SetValue( dim );
     }
+
+    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
+
+#if 0
 
     m_FieldNameCtrl->SetValue( m_FieldName[fieldNdx] );
 
-    if( fieldNdx < FIELD1 )
-        m_FieldNameCtrl->Enable( FALSE );
-    else
-        m_FieldNameCtrl->Enable( TRUE );
-
     m_FieldTextCtrl->SetValue( m_FieldText[fieldNdx] );
     m_FieldTextCtrl->SetValue( m_FieldSize[fieldNdx] );
+#endif
 }
 
 
-
-/****************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelFieldToData()
-/****************************************************************/
-
-/* Copy the values displayed on the panel field to the buffers according to
- *  the current field number
- */
+/*****************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
+/*****************************************************************/
 {
-    int id = m_CurrentFieldId;
+    unsigned fieldNdx = getSelectedFieldNdx();
 
-    m_FieldFlags[id]    = m_ShowFieldTextCtrl->GetValue();
-    m_FieldOrient[id]   = m_VorientFieldText->GetValue();
-    m_FieldText[id]     = m_FieldTextCtrl->GetText();
-    m_FieldName[id]     = m_FieldNameCtrl->GetValue();
-    m_FieldPosition[id] = m_FieldPositionCtrl->GetValue();
-    m_FieldSize[id] = m_FieldTextCtrl->GetTextSize();
+    if( fieldNdx >= m_FieldsBuf.size() )
+        return;
+
+    SCH_CMP_FIELD&  field = m_FieldsBuf[fieldNdx];
+
+    field.m_Name = fieldNameTextCtrl->GetValue();
+    field.m_Text = fieldValueTextCtrl->GetValue();
+
+//    field.m_Size =
+
+//    m_FieldPosition[id] = m_FieldPositionCtrl->GetValue();
+//    m_FieldSize[id] = m_FieldTextCtrl->GetTextSize();
 }
 
+
+#if 0
 
 /*************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::fillTableModel()

@@ -16,28 +16,41 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     SCH_COMPONENT*          m_Cmp;
     EDA_LibComponentStruct* m_LibEntry;
 
+    int                     m_SelectedRow;
+
     /// a copy of the edited component's SCH_CMP_FIELDs
-    SCH_CMP_FIELDS          m_FieldBuf;
+    SCH_CMP_FIELDS          m_FieldsBuf;
 
     void setSelectedFieldNdx( int aFieldNdx );
 
     int getSelectedFieldNdx();
 
+    /**
+     * Function copySelectedFieldToPanel
+     * sets the values displayed on the panel according to
+     * the currently selected field row
+     */
+    void copySelectedFieldToPanel();
+
 
     /**
-     * Function CopyDataToPanel
-     * sets the values displayed on the panel according to
-     * the current field number
+     * Function copyPanelToSelectedField
+     * copies the values displayed on the panel fields to the currently selected field
      */
-    void copyDataToPanel();
+    void copyPanelToSelectedField();
 
 
     void fillTableModel();
 
+    void setRowItem( int aFieldNdx, const SCH_CMP_FIELD& aField );
+
+    // event handlers
+    void OnListItemDeselected( wxListEvent& event );
+    void OnListItemSelected( wxListEvent& event );
+
+
 protected:
 
-    // Handlers for DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP events.
-//    void OnGridCellLeftClick( wxGridEvent& event );
 
 public:
     /** Constructor */

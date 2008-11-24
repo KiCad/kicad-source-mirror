@@ -52,7 +52,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxString mirrorRadioBoxChoices[] = { _("Normal"), _("Mirror ---"), _("Mirror |") };
 	int mirrorRadioBoxNChoices = sizeof( mirrorRadioBoxChoices ) / sizeof( wxString );
 	mirrorRadioBox = new wxRadioBox( this, wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, mirrorRadioBoxNChoices, mirrorRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	mirrorRadioBox->SetSelection( 0 );
+	mirrorRadioBox->SetSelection( 1 );
 	mirrorRadioBox->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
 	
 	mirrorSizer->Add( mirrorRadioBox, 1, wxALL, 8 );
@@ -83,60 +83,25 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxStaticBoxSizer* gridStaticBoxSizer;
 	gridStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
 	
-	fieldGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxVSCROLL );
-	
-	// Grid
-	fieldGrid->CreateGrid( 8, 1 );
-	fieldGrid->EnableEditing( true );
-	fieldGrid->EnableGridLines( true );
-	fieldGrid->EnableDragGridSize( false );
-	fieldGrid->SetMargins( 0, 0 );
-	
-	// Columns
-	fieldGrid->SetColSize( 0, 170 );
-	fieldGrid->EnableDragColMove( false );
-	fieldGrid->EnableDragColSize( false );
-	fieldGrid->SetColLabelSize( 30 );
-	fieldGrid->SetColLabelValue( 0, _("Field Text") );
-	fieldGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
-	// Rows
-	fieldGrid->EnableDragRowSize( true );
-	fieldGrid->SetRowLabelSize( 80 );
-	fieldGrid->SetRowLabelValue( 0, _("Reference") );
-	fieldGrid->SetRowLabelValue( 1, _("Value") );
-	fieldGrid->SetRowLabelValue( 2, _("Footprint") );
-	fieldGrid->SetRowLabelValue( 3, _("Datasheet") );
-	fieldGrid->SetRowLabelValue( 4, _("Field1") );
-	fieldGrid->SetRowLabelValue( 5, _("Field2") );
-	fieldGrid->SetRowLabelValue( 6, _("Field3") );
-	fieldGrid->SetRowLabelValue( 7, _("Field4") );
-	fieldGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
-	
-	// Label Appearance
-	
-	// Cell Defaults
-	fieldGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	fieldGrid->SetToolTip( _("The list of component fields") );
-	
-	gridStaticBoxSizer->Add( fieldGrid, 1, wxALL|wxEXPAND, 5 );
+	fieldListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	gridStaticBoxSizer->Add( fieldListCtrl, 1, wxALL|wxEXPAND, 8 );
 	
 	addFieldButton = new wxButton( this, wxID_ANY, _("Add Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	addFieldButton->SetToolTip( _("Add a new custom field") );
 	
-	gridStaticBoxSizer->Add( addFieldButton, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	gridStaticBoxSizer->Add( addFieldButton, 0, wxALL|wxEXPAND, 5 );
 	
 	deleteFieldButton = new wxButton( this, wxID_ANY, _("Delete Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	deleteFieldButton->SetToolTip( _("Delete one of the optional fields") );
 	
-	gridStaticBoxSizer->Add( deleteFieldButton, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	gridStaticBoxSizer->Add( deleteFieldButton, 0, wxALL|wxEXPAND, 5 );
 	
 	moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	moveUpButton->SetToolTip( _("Move the selected optional fields up one position") );
 	
-	gridStaticBoxSizer->Add( moveUpButton, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	gridStaticBoxSizer->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
 	
-	fieldsSizer->Add( gridStaticBoxSizer, 1, wxALL|wxEXPAND, 8 );
+	fieldsSizer->Add( gridStaticBoxSizer, 4, wxALL|wxEXPAND, 8 );
 	
 	wxBoxSizer* fieldEditBoxSizer;
 	fieldEditBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -154,67 +119,91 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	visibilitySizer->Add( rotateCheckBox, 1, wxALL, 5 );
 	
-	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	fieldEditBoxSizer->Add( visibilitySizer, 0, wxALL|wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* fieldNameStaticBoxSizer;
-	fieldNameStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Field Name") ), wxVERTICAL );
+	wxBoxSizer* fieldNameBoxSizer;
+	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
+	
+	fieldNameLabel = new wxStaticText( this, wxID_ANY, _("Field Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldNameLabel->Wrap( -1 );
+	fieldNameBoxSizer->Add( fieldNameLabel, 0, 0, 5 );
 	
 	fieldNameTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldNameTextCtrl->SetToolTip( _("The name of the currently selected field") );
+	fieldNameTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
 	
-	fieldNameStaticBoxSizer->Add( fieldNameTextCtrl, 0, wxALL|wxEXPAND, 5 );
+	fieldNameBoxSizer->Add( fieldNameTextCtrl, 0, wxEXPAND, 5 );
 	
-	fieldEditBoxSizer->Add( fieldNameStaticBoxSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	fieldEditBoxSizer->Add( fieldNameBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* fieldTextStaticBoxSizer;
-	fieldTextStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Field Text") ), wxVERTICAL );
+	wxBoxSizer* fieldTextBoxSizer;
+	fieldTextBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_textCtrl3 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrl3->SetToolTip( _("The text (or value) of the currently selected field") );
+	fieldValueLabel = new wxStaticText( this, wxID_ANY, _("Field Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldValueLabel->Wrap( -1 );
+	fieldTextBoxSizer->Add( fieldValueLabel, 0, 0, 5 );
 	
-	fieldTextStaticBoxSizer->Add( m_textCtrl3, 0, wxALL|wxEXPAND, 5 );
+	fieldValueTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldValueTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
 	
-	fieldEditBoxSizer->Add( fieldTextStaticBoxSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	fieldTextBoxSizer->Add( fieldValueTextCtrl, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* textSizeStaticBoxSizer;
-	textSizeStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Size (\")") ), wxVERTICAL );
+	fieldEditBoxSizer->Add( fieldTextBoxSizer, 0, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* textSizeBoxSizer;
+	textSizeBoxSizer = new wxBoxSizer( wxVERTICAL );
+	
+	textSizeLabel = new wxStaticText( this, wxID_ANY, _("Size(\")"), wxDefaultPosition, wxDefaultSize, 0 );
+	textSizeLabel->Wrap( -1 );
+	textSizeBoxSizer->Add( textSizeLabel, 0, 0, 5 );
 	
 	textSizeTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	textSizeTextCtrl->SetToolTip( _("The vertical height of the currently selected field's text in the schematic") );
 	
-	textSizeStaticBoxSizer->Add( textSizeTextCtrl, 0, wxALL|wxEXPAND, 5 );
+	textSizeBoxSizer->Add( textSizeTextCtrl, 0, wxEXPAND, 5 );
 	
-	fieldEditBoxSizer->Add( textSizeStaticBoxSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	fieldEditBoxSizer->Add( textSizeBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* positionBoxSizer;
 	positionBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxStaticBoxSizer* posXStaticBoxSizer;
-	posXStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PosX(\")") ), wxHORIZONTAL );
+	wxBoxSizer* posXBoxSizer;
+	posXBoxSizer = new wxBoxSizer( wxVERTICAL );
+	
+	posXLabel = new wxStaticText( this, wxID_ANY, _("PosX(\")"), wxDefaultPosition, wxDefaultSize, 0 );
+	posXLabel->Wrap( -1 );
+	posXBoxSizer->Add( posXLabel, 0, 0, 5 );
 	
 	posXTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	posXTextCtrl->SetToolTip( _("The x coordinate of the text relative to the component") );
+	posXBoxSizer->Add( posXTextCtrl, 0, wxEXPAND, 5 );
 	
-	posXStaticBoxSizer->Add( posXTextCtrl, 1, wxALL|wxEXPAND, 5 );
+	positionBoxSizer->Add( posXBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
-	positionBoxSizer->Add( posXStaticBoxSizer, 1, wxALL|wxEXPAND, 8 );
+	wxBoxSizer* posYBoxSizer;
+	posYBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* poxYStaticBoxSizer;
-	poxYStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PosY(\")") ), wxVERTICAL );
+	posYLabel = new wxStaticText( this, wxID_ANY, _("PosY(\")"), wxDefaultPosition, wxDefaultSize, 0 );
+	posYLabel->Wrap( -1 );
+	posYBoxSizer->Add( posYLabel, 0, 0, 5 );
 	
 	posYTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	posYTextCtrl->SetToolTip( _("The Y coordinate of the text relative to the component") );
 	
-	poxYStaticBoxSizer->Add( posYTextCtrl, 1, wxALL|wxEXPAND, 5 );
+	posYBoxSizer->Add( posYTextCtrl, 0, wxEXPAND, 5 );
 	
-	positionBoxSizer->Add( poxYStaticBoxSizer, 1, wxALL|wxEXPAND, 8 );
+	positionBoxSizer->Add( posYBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
-	fieldEditBoxSizer->Add( positionBoxSizer, 0, wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( positionBoxSizer, 1, wxEXPAND, 5 );
+	
+	
+	fieldEditBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	defaultsButton = new wxButton( this, wxID_ANY, _("Reset to Library Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldEditBoxSizer->Add( defaultsButton, 0, wxALL|wxEXPAND, 5 );
 	
-	fieldsSizer->Add( fieldEditBoxSizer, 1, wxEXPAND, 5 );
+	
+	fieldEditBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	fieldsSizer->Add( fieldEditBoxSizer, 3, wxEXPAND, 5 );
 	
 	upperSizer->Add( fieldsSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -230,8 +219,15 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	
+	// Connect Events
+	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemDeselected ), NULL, this );
+	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemSelected ), NULL, this );
 }
 
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP()
 {
+	// Disconnect Events
+	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemDeselected ), NULL, this );
+	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnListItemSelected ), NULL, this );
 }

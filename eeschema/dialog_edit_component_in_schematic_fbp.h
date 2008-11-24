@@ -21,8 +21,9 @@
 #include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include <wx/grid.h>
+#include <wx/listctrl.h>
 #include <wx/button.h>
+#include <wx/stattext.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,25 +42,37 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		wxRadioBox* mirrorRadioBox;
 		wxTextCtrl* chipnameTxtControl;
 		wxCheckBox* convertCheckBox;
-		wxGrid* fieldGrid;
+		wxListCtrl* fieldListCtrl;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
 		wxButton* moveUpButton;
 		wxCheckBox* showCheckBox;
 		wxCheckBox* rotateCheckBox;
+		wxStaticText* fieldNameLabel;
 		wxTextCtrl* fieldNameTextCtrl;
-		wxTextCtrl* m_textCtrl3;
+		wxStaticText* fieldValueLabel;
+		wxTextCtrl* fieldValueTextCtrl;
+		wxStaticText* textSizeLabel;
 		wxTextCtrl* textSizeTextCtrl;
+		wxStaticText* posXLabel;
 		wxTextCtrl* posXTextCtrl;
+		wxStaticText* posYLabel;
 		wxTextCtrl* posYTextCtrl;
+		
 		wxButton* defaultsButton;
+		
 		wxStdDialogButtonSizer* stdDialogButtonSizer;
 		wxButton* stdDialogButtonSizerOK;
 		wxButton* stdDialogButtonSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnListItemDeselected( wxListEvent& event ){ event.Skip(); }
+		virtual void OnListItemSelected( wxListEvent& event ){ event.Skip(); }
+		
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 864,540 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
+		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 864,550 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP();
 	
 };

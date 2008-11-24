@@ -5,6 +5,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Nov-24 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    edit component in schematic editor.  It is not complete but further.
+    Keep your old eeschema binary, this one does not fully work yet, another day or so.
+    Switched away from wxGrid to wxListCtrl, and that class is poorly documented
+    so much time pioneering how to use it. Should go faster now.
+
+
 2008-Nov-23 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +all
@@ -25,8 +34,7 @@ email address.
 +eeschema
     Started on the edit component in schematic editor.  It is not complete and
     breaks the usefulness of the editor at this moment.  Do not build this version
-    if you want to fully use eeschema.  I will get something working in another day,
-    even if it is the old editor.
+    if you want to fully use eeschema.
 
 
 2008-Nov-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
