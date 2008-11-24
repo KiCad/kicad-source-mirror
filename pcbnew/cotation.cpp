@@ -280,10 +280,11 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
     Cotation->m_Flags = 0;
 
     /* Insertion de la structure dans le Chainage .Drawings du PCB */
-    Cotation->Pback = m_Pcb;
-    Cotation->Pnext = m_Pcb->m_Drawings;
+    Cotation->SetBack( m_Pcb );
+    Cotation->SetNext( m_Pcb->m_Drawings );
+
     if( m_Pcb->m_Drawings )
-        m_Pcb->m_Drawings->Pback = Cotation;
+        m_Pcb->m_Drawings->SetBack( Cotation );
     m_Pcb->m_Drawings = Cotation;
 
     GetScreen()->SetModify();

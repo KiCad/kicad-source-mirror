@@ -378,7 +378,7 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
     /* add the new text in linked list if old text is in list */
     if( (flags & IS_NEW) == 0 )
     {
-        newtext->Pnext = GetScreen()->EEDrawList;
+        newtext->SetNext( GetScreen()->EEDrawList );
         GetScreen()->EEDrawList = newtext;
         GetScreen()->SetModify();
     }

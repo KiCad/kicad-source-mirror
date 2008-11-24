@@ -84,23 +84,24 @@ void EDGE_MODULE::UnLink()
 /********************************/
 {
     /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() != TYPEMODULE )
+        if( Back()->Type() != TYPEMODULE )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (MODULE*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
+            ( (MODULE*) Back() )->m_Drawings = Next();
         }
     }
 
     /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
 
 
@@ -275,7 +276,7 @@ void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     if( !module )
         return;
 
-    BOARD* board = (BOARD*) module->m_Parent;
+    BOARD* board = (BOARD*) module->GetParent();
     if( !board )
         return;
 

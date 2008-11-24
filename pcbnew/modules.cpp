@@ -45,7 +45,7 @@ void Show_Pads_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
     pad_fill_tmp = DisplayOpt.DisplayPadFill;
     DisplayOpt.DisplayPadFill = FALSE; /* Trace en SKETCH */
     pt_pad = module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
     }
@@ -239,7 +239,7 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
     m_Pcb->m_Status_Pcb = 0;
     newmodule = new MODULE( m_Pcb );
     newmodule->Copy( module );
-    newmodule->m_Parent = m_Pcb;
+    newmodule->SetParent( m_Pcb );
     newmodule->AddToChain( module );
     newmodule->m_Flags = IS_NEW;
 
@@ -320,18 +320,18 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
         DrawGeneralRatsnest( DC );
 
     /* Suppression du chainage */
-    PtBack = module->Pback;
-    PtNext = module->Pnext;
+    PtBack = module->Back();
+    PtNext = module->Next();
     if( PtBack == (EDA_BaseStruct*) m_Pcb )
     {
         m_Pcb->m_Modules = (MODULE*) PtNext;
     }
     else
     {
-        PtBack->Pnext = PtNext;
+        PtBack->SetNext( PtNext );
     }
     if( PtNext )
-        PtNext->Pback = PtBack;
+        PtNext->SetBack( PtBack );
 
     /* Sauvegarde en buffer des undelete */
     SaveItemEfface( module, 1 );
@@ -411,7 +411,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     /* Inversion miroir + layers des pastilles */
     pt_pad = Module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->m_Pos.y      -= Module->m_Pos.y;
         pt_pad->m_Pos.y       = -pt_pad->m_Pos.y;
@@ -469,7 +469,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     /* Inversion miroir des dessins de l'empreinte : */
     PtStruct = Module->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -805,7 +805,7 @@ void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
         DisplayOpt.DisplayPadFill = SKETCH;  /* Trace en SKETCH en deplacement */
 
         pt_pad = module->m_Pads;
-        for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+        for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         {
             pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
         }

@@ -177,7 +177,7 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
  *  Pour Routage 1 seule face:
  *      le plan BOTTOM est utilise
  *      et Route_Layer_BOTTOM = Route_Layer_TOP
- * 
+ *
  *  Selon les bits = 1 du parametre flag:
  *      si FORCE_PADS : tous les pads seront places meme ceux de meme net_code
  */
@@ -312,18 +312,18 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
 
     /* Put tracks and vias on matrix */
     pt_segm = Pcb->m_Track;
-    for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         if( net_code == pt_segm->GetNet() )
             continue;
-				
-		TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
-		TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+
+        TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     /* Put zone filling on matrix */
     pt_segm = (TRACK*) Pcb->m_Zone;
-    for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         if( net_code == pt_segm->GetNet() )
             continue;

@@ -428,7 +428,7 @@ void WinEDA_ErcFrame::DelERCMarkers( wxCommandEvent& event )
 
     // Delete markers for the current screen
     DrawStruct = m_Parent->GetScreen()->EEDrawList;
-    for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
+    for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
             continue;
@@ -533,7 +533,7 @@ static void Diagnose( WinEDA_DrawPanel* panel, wxDC* DC,
     Marker->m_Type      = MARQ_ERC;
     Marker->m_MarkFlags = WAR;
     screen = NetItemRef->m_SheetList.LastScreen();
-    Marker->Pnext      = screen->EEDrawList;
+    Marker->SetNext( screen->EEDrawList );
     screen->EEDrawList = Marker;
     g_EESchemaVar.NbErrorErc++;
     g_EESchemaVar.NbWarningErc++;
@@ -741,7 +741,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
         fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
 
         DrawStruct = Sheet->LastDrawList();
-        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
+        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
                 continue;

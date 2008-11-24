@@ -330,7 +330,7 @@ void ReturnNbViasAndTracks( BOARD* Pcb, int netcode, int* nb_vias,
     if( track == NULL )
         return;
 
-    for( ; track != NULL; track = (TRACK*) track->Pnext )
+    for( ; track != NULL; track = track->Next() )
     {
         if( track->GetNet() > netcode )
             return;
@@ -360,7 +360,7 @@ void GenExistantTracks( BOARD* Pcb, FILE* outfile,
         return;
 
 
-    for( ; track != NULL; track = (TRACK*) track->Pnext )
+    for( ; track != NULL; track = track->Next() )
     {
         netcode = track->GetNet();
         if( netcode > current_net_code )
@@ -447,7 +447,7 @@ int GenEdges( BOARD* Pcb, FILE* outfile )
     int             NbItems = 0;
 
     /* impression des contours  */
-    for( PtStruct = Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( PtStruct = Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;

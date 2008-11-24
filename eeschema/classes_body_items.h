@@ -193,10 +193,15 @@ public:
 public:
     LibDrawPin();
     ~LibDrawPin() { }
+
+    LibDrawPin* Next() const { return (LibDrawPin*) Pnext; }
+    LibDrawPin* Back() const { return (LibDrawPin*) Pback; }
+
     virtual wxString GetClass() const
     {
         return wxT( "LibDrawPin" );
     }
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
@@ -451,8 +456,8 @@ public:
 
 public:
 
-    LibDrawField*   Next() { return (LibDrawField*) Pnext; }
-    LibDrawField*   Prev() { return (LibDrawField*) Pback; }
+    LibDrawField*   Next() const { return (LibDrawField*) Pnext; }
+    LibDrawField*   Back() const { return (LibDrawField*) Pback; }
 
 
     LibDrawField( int idfield = 2 );

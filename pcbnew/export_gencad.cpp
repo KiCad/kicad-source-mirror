@@ -308,10 +308,10 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
 
     fputs( "$SHAPES\n", file );
 
-    for( module = pcb->m_Modules; module != NULL; module = (MODULE*) module->Pnext )
+    for( module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
         ModuleWriteShape( file, module );
-        for( pad = module->m_Pads; pad != NULL; pad = (D_PAD*) pad->Pnext )
+        for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             layer = "ALL";
             if( (pad->m_Masque_Layer & ALL_CU_LAYERS) == CUIVRE_LAYER )
@@ -368,7 +368,7 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
 
     fputs( "$COMPONENTS\n", file );
 
-    for( ; module != NULL; module = (MODULE*) module->Pnext )
+    for( ; module != NULL; module = module->Next() )
     {
         int orient = module->m_Orient;
         if( module->flag )
@@ -448,7 +448,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
     fputs( "$SIGNALS\n", file );
 
-    for( equipot = pcb->m_Equipots; equipot != NULL; equipot = (EQUIPOT*) equipot->Pnext )
+    for( equipot = pcb->m_Equipots; equipot != NULL; equipot = equipot->Next() )
     {
         if( equipot->m_Netname == wxEmptyString )  // dummy equipot (non connexion)
         {
@@ -463,9 +463,9 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
         fputs( CONV_TO_UTF8( msg ), file );
         fputs( "\n", file );
 
-        for( module = pcb->m_Modules; module != NULL; module = (MODULE*) module->Pnext )
+        for( module = pcb->m_Modules; module != NULL; module = module->Next() )
         {
-            for( pad = module->m_Pads; pad != NULL; pad = (D_PAD*) pad->Pnext )
+            for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
             {
                 wxString padname;
                 if( pad->GetNet() != equipot->GetNet() )
@@ -493,7 +493,7 @@ bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
  */
 {
     wxString    msg;
-	PCB_SCREEN* screen = (PCB_SCREEN*)(frame->GetScreen());
+    PCB_SCREEN* screen = (PCB_SCREEN*)(frame->GetScreen());
 
     fputs( "$HEADER\n", file );
     fputs( "GENCAD 1.4\n", file );
@@ -559,10 +559,10 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     // Calcul du nombre de segments a ecrire
     nbitems = 0;
-    for( track = pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = pcb->m_Track; track != NULL; track = track->Next() )
         nbitems++;
 
-    for( track = pcb->m_Zone; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
         if( track->Type() == TYPEZONE )
             nbitems++;
@@ -571,10 +571,10 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
     tracklist = (TRACK**) MyMalloc( (nbitems + 1) * sizeof(TRACK *) );
 
     nbitems = 0;
-    for( track = pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = pcb->m_Track; track != NULL; track = track->Next() )
         tracklist[nbitems++] = track;
 
-    for( track = pcb->m_Zone; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
         if( track->Type() == TYPEZONE )
             tracklist[nbitems++] = track;
@@ -649,12 +649,12 @@ void CreateDevicesSection( FILE* file, BOARD* pcb )
 
     fputs( "$DEVICES\n", file );
 
-    for( module = pcb->m_Modules; module != NULL; module = (MODULE*) module->Pnext )
+    for( module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
         fprintf( file, "DEVICE %s\n", CONV_TO_UTF8( module->m_Reference->m_Text ) );
         fprintf( file, "PART %s\n", CONV_TO_UTF8( module->m_LibRef ) );
         fprintf( file, "TYPE %s\n", "UNKNOWN" );
-        for( pad = module->m_Pads; pad != NULL; pad = (D_PAD*) pad->Pnext )
+        for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             fprintf( file, "PINDESCR %.4s", pad->m_Padname );
             if( pad->m_Netname == wxEmptyString )
@@ -719,7 +719,7 @@ int* CreateTracksInfoData( FILE* file, BOARD* pcb )
     trackinfo  = (int*) adr_lowmem;
     *trackinfo = -1;
 
-    for( track = pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = pcb->m_Track; track != NULL; track = track->Next() )
     {
         if( *trackinfo != track->m_Width ) // recherche d'une epaisseur deja utilisee
         {
@@ -741,7 +741,7 @@ int* CreateTracksInfoData( FILE* file, BOARD* pcb )
         }
     }
 
-    for( track = pcb->m_Zone; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
         if( *trackinfo != track->m_Width ) // recherche d'une epaisseur deja utilisee
         {
@@ -812,7 +812,7 @@ void ModuleWriteShape( FILE* file, MODULE* module )
 
     /* Generation des elements Drawing modules */
     PtStruct = module->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {

@@ -167,14 +167,14 @@ DrawPickedStruct* BreakSegment( SCH_SCREEN* screen,
                 wrapper->m_PickedStruct = segment->GenCopy();
                 wrapper->m_Image = segment;
                 wrapper->m_PickedStruct->m_Image = segment;
-                wrapper->Pnext = List;
+                wrapper->SetNext( List );
                 List = wrapper;
             }
             NewSegment = segment->GenCopy();
             NewSegment->m_Start = breakpoint;
             segment->m_End    = NewSegment->m_Start;
-            NewSegment->Pnext = segment->Pnext;
-            segment->Pnext    = NewSegment;
+            NewSegment->SetNext( segment->Next() );
+            segment->SetNext( NewSegment );
             DrawList = NewSegment;
             if( PutInUndoList )
             {
@@ -182,7 +182,7 @@ DrawPickedStruct* BreakSegment( SCH_SCREEN* screen,
 
                 wrapper->m_Flags = IS_NEW;
                 wrapper->m_Image = NewSegment;
-                wrapper->Pnext   = List;
+                wrapper->SetNext( List );
                 List = wrapper;
             }
             break;
@@ -196,7 +196,7 @@ DrawPickedStruct* BreakSegment( SCH_SCREEN* screen,
             break;
         }
 
-        DrawList = DrawList->Pnext;
+        DrawList = DrawList->Next();
     }
 
     return List;

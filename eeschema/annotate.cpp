@@ -64,7 +64,7 @@ void ReAnnotatePowerSymbolsOnly( void )
         sheet = SheetList.GetNext() )
     {
         EDA_BaseStruct* DrawList = sheet->LastDrawList();
-        for( ; DrawList != NULL; DrawList = DrawList->Pnext )
+        for( ; DrawList != NULL; DrawList = DrawList->Next() )
         {
             if( DrawList->Type() != TYPE_SCH_COMPONENT )
                 continue;
@@ -207,7 +207,7 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedr
     while( screen )
     {
         strct = screen->EEDrawList;
-        for( ; strct; strct = strct->Pnext )
+        for( ; strct; strct = strct->Next() )
         {
             if( strct->Type() == TYPE_SCH_COMPONENT )
             {
@@ -348,7 +348,7 @@ int ListeComposants( CmpListStruct* BaseListeCmp, DrawSheetPath* sheet )
     SCH_COMPONENT*          DrawLibItem;
     EDA_LibComponentStruct* Entry;
 
-    for(  ; DrawList;   DrawList = DrawList->Pnext )
+    for(  ; DrawList;   DrawList = DrawList->Next() )
     {
         if( DrawList->Type() == TYPE_SCH_COMPONENT )
         {

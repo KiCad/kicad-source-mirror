@@ -5,6 +5,30 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Nov-23 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+  + Made _protected_ EDA_BaseStruct's:
+    EDA_BaseStruct* Pnext;              /* Linked list: Link (next struct) */
+    EDA_BaseStruct* Pback;              /* Linked list: Link (previous struct) */
+    EDA_BaseStruct* m_Parent;           /* Linked list: Link (parent struct) */
+    EDA_BaseStruct* m_Son;              /* Linked list: Link (son struct) */
+  + Split TRACK::Draw() out for SEGVIA
+  + Added dlist.h & dlist.cpp for DLIST<> template.  All the _inline_ list manipulation
+    code throughout the package is rediculous.  I don't mind list traversal, only
+    list manipulation.  DLIST<> templates can be used to consolidate reliable
+    list manipulation operations and get this code out of the mainline.
+    These functions are shared/inherited for any derivation, so only one copy exists
+    in the final program image.  To use, simply declare e.g. DLIST<D_PAD> or similar.
+    See dlist.h, template class DLIST for function comments.
+  + added EDA_BaseStruct::m_List to assist in debugging list manipulation functions.
++eeschema
+    Started on the edit component in schematic editor.  It is not complete and
+    breaks the usefulness of the editor at this moment.  Do not build this version
+    if you want to fully use eeschema.  I will get something working in another day,
+    even if it is the old editor.
+
+
 2008-Nov-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew

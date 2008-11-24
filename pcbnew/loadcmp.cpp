@@ -69,8 +69,10 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
     NewModule->m_Link = Module->m_TimeStamp;
 
     Module = NewModule;
-    Module->m_Parent = m_Pcb;
-    Module->Pback    = m_Pcb->m_Modules; Module->Pnext = NULL;
+    Module->SetParent( m_Pcb );
+    Module->SetBack( m_Pcb->m_Modules );
+    Module->SetNext( NULL );
+
     m_Pcb->m_Modules = Module;
 
     Module->m_Flags = 0;
@@ -200,8 +202,8 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
     /* Calcul de l'adresse du dernier module: */
     Module = m_Pcb->m_Modules;
     if( Module )
-        while( Module->Pnext )
-            Module = (MODULE*) Module->Pnext;
+        while( Module->Next() )
+            Module = (MODULE*) Module->Next();
 
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
@@ -274,12 +276,12 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
                 if( Module == NULL )                /* 1er Module */
                 {
                     m_Pcb->m_Modules = NewModule;
-                    NewModule->Pback = m_Pcb;
+                    NewModule->SetBack( m_Pcb );
                 }
                 else
                 {
-                    Module->Pnext    = NewModule;
-                    NewModule->Pback = Module;
+                    Module->SetNext( NewModule );
+                    NewModule->SetBack( Module );
                 }
                 fclose( lib_module );
                 Affiche_Message( wxEmptyString );
@@ -576,7 +578,7 @@ MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
     /* Recherche des composants en BOARD */
     ii     = 0;
     Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         ii++;
         ListBox->Append( Module->m_Reference->m_Text );
@@ -602,7 +604,7 @@ MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
 
     // Recherche du pointeur sur le module
     Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         if( CmpName.CmpNoCase( Module->m_Reference->m_Text ) == 0 )
             break;

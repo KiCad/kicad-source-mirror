@@ -218,7 +218,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     if( aPad == NULL )
         return;
 
-    Module = (MODULE*) aPad->m_Parent;
+    Module = (MODULE*) aPad->GetParent();
 
     if( Module == NULL )
     {
@@ -246,7 +246,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     /* Mise a jour des modules ou du module */
 
     Module = (MODULE*) m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         if( !Edit_Same_Modules )
             if( Module != Module_Ref )
@@ -258,15 +258,15 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         Module->Display_Infos( this );
 
         /* Effacement du module */
-		if ( aDraw )
-		{
-			Module->m_Flags |= DO_NOT_DRAW;
-			DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
-			Module->m_Flags &= ~DO_NOT_DRAW;
-		}
+        if ( aDraw )
+        {
+            Module->m_Flags |= DO_NOT_DRAW;
+            DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+            Module->m_Flags &= ~DO_NOT_DRAW;
+        }
 
-		D_PAD*  pt_pad = (D_PAD*) Module->m_Pads;
-        for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+        D_PAD*  pt_pad = (D_PAD*) Module->m_Pads;
+        for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         {
             /* Filtrage des modifications interdites */
             if( Pad_Shape_Filter )
@@ -342,8 +342,8 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         }
 
         Module->Set_Rectangle_Encadrement();
-		if ( aDraw )
-			DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+        if ( aDraw )
+            DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
     }
 
     GetScreen()->SetModify();

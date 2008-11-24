@@ -489,7 +489,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
     DrawSheetPath                  list;
 
     DrawList = sheetlist->LastScreen()->EEDrawList;
-    for( ; DrawList;  DrawList = DrawList->Pnext )
+    for( ; DrawList;  DrawList = DrawList->Next() )
     {
         switch( DrawList->Type() )
         {
@@ -678,7 +678,7 @@ static int ListeObjetConnection( DrawSheetPath* sheetlist, ObjetNetListStruct* O
             list.Push( STRUCT );
             SheetLabel = STRUCT->m_Label;
             for( ; SheetLabel != NULL;
-                 SheetLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext )
+                 SheetLabel = SheetLabel->Next() )
             {
                 ii = IsBusLabel( SheetLabel->m_Text );
                 if( ObjNet )

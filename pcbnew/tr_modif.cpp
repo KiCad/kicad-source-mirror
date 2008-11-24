@@ -46,13 +46,13 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
      *  une via est souvent sur un carrefour de segments, et ne caracterise pas
      *  une piste */
     if( pt_new_track->Type() == TYPEVIA && (nbptnewpiste > 1 ) )
-        pt_new_track = (TRACK*) pt_new_track->Pnext;
+        pt_new_track = pt_new_track->Next();
     pt_new_track = Marque_Une_Piste( frame, DC, pt_new_track, &nbptnewpiste, 0 );
 
     EndNewTrack = pt_new_track;
     for( ii = 1;  ii < nbptnewpiste; ii++ )
     {
-        EndNewTrack = (TRACK*) EndNewTrack->Pnext;
+        EndNewTrack = EndNewTrack->Next();
     }
 
     /* Calcul des limites de recherche des segments de piste */
@@ -63,7 +63,7 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     BufEnd = BufDeb->GetEndNetCode( pt_new_track->GetNet() );
 
     /* nettoyage des flags pour tout le net */
-    for( pt_del = BufDeb; pt_del != NULL; pt_del = (TRACK*) pt_del->Pnext )
+    for( pt_del = BufDeb; pt_del != NULL; pt_del = pt_del->Next() )
     {
         pt_del->SetState( BUSY | EDIT | CHAIN, OFF );
         if( pt_del == BufEnd )
@@ -143,13 +143,13 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
         }
         if( pt_del == BufEnd )
             break;
-        pt_del = (TRACK*) pt_segm->Pnext;
+        pt_del = pt_segm->Next();
     }
 
     if( nbconnect == 0 )
     {
         /* nettoyage des flags */
-        for( pt_del = BufDeb; pt_del != NULL; pt_del = (TRACK*) pt_del->Pnext )
+        for( pt_del = BufDeb; pt_del != NULL; pt_del = pt_del->Next() )
         {
             pt_del->SetState( DELETED | EDIT | CHAIN, OFF );
             if( pt_del == BufEnd )
@@ -168,7 +168,7 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     /* Examen de tous les segments marques */
     while( nbconnect )
     {
-        for( pt_del = BufDeb; pt_del != NULL; pt_del = (TRACK*) pt_del->Pnext )
+        for( pt_del = BufDeb; pt_del != NULL; pt_del = pt_del->Next() )
         {
             if( pt_del->GetState( CHAIN ) )
                 break;
@@ -183,7 +183,7 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
          *  segments marques est connecte au point de depart de la piste nouvelle
          */
         ii = 0; pt_segm = pt_del;
-        for( ; pt_segm && (ii < nb_segm); pt_segm = (TRACK*) pt_segm->Pnext, ii++ )
+        for( ; pt_segm && (ii < nb_segm); pt_segm = pt_segm->Next(), ii++ )
         {
             if( ( pt_segm->GetState( BUSY ) ) == 0 )
                 break;
@@ -194,12 +194,12 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
                 Trace_Une_Piste( frame->DrawPanel, DC, pt_del, nb_segm, GR_XOR | GR_SURBRILL );
                 for( jj = 0; jj < nb_segm; jj++, pt_del = NextS )
                 {
-                    NextS = (TRACK*) pt_del->Pnext;
+                    NextS = pt_del->Next();
                     pt_del->DeleteStructure();
                 }
 
                 /* nettoyage des flags */
-                for( pt_del = Pcb->m_Track; pt_del != NULL; pt_del = (TRACK*) pt_del->Pnext )
+                for( pt_del = Pcb->m_Track; pt_del != NULL; pt_del = pt_del->Next() )
                 {
                     if( pt_del->GetState( EDIT ) )
                     {
@@ -219,7 +219,7 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     }
 
     /* nettoyage des flags */
-    for( pt_del = Pcb->m_Track; pt_del != NULL; pt_del = (TRACK*) pt_del->Pnext )
+    for( pt_del = Pcb->m_Track; pt_del != NULL; pt_del = pt_del->Next() )
     {
         pt_del->SetState( DELETED | EDIT | CHAIN, OFF );
         if( pt_del == BufEnd )

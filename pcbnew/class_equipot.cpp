@@ -55,23 +55,24 @@ wxPoint& EQUIPOT::GetPosition()
 void EQUIPOT::UnLink()
 {
     /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() != TYPEPCB )
+        if( Back()->Type() != TYPEPCB )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Equipots = (EQUIPOT*) Pnext;
+            ( (BOARD*) Back() )->m_Equipots = Next();
         }
     }
 
     /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
 
 
@@ -120,20 +121,20 @@ bool EQUIPOT::Save( FILE* aFile ) const
         return true;
 
     bool rc = false;
-    
+
     fprintf( aFile, "$EQUIPOT\n" );
     fprintf( aFile, "Na %d \"%.16s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
     fprintf( aFile, "St %s\n", "~" );
-    
+
     if( m_ForceWidth )
         fprintf( aFile, "Lw %d\n", m_ForceWidth );
-    
+
     if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n")-1 )
         goto out;
 
     rc = true;
-    
-out:    
+
+out:
     return rc;
 }
 
@@ -142,14 +143,14 @@ out:
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level 
+ * @param nestLevel An aid to prettier tree indenting, and is the level
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
 void EQUIPOT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << 
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
        " name=\"" <<  m_Netname.mb_str() << '"' <<
        " netcode=\"" << GetNet() << "\"/>\n";
 }

@@ -817,8 +817,8 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
             last = (SEGZONE*) frame->m_Pcb->m_Zone;
             if( last )
-                while( last->Pnext )
-                    last = (SEGZONE*) last->Pnext;
+                while( last->Next() )
+                    last = (SEGZONE*) last->Next();
 
             edge_poly->Insert( frame->m_Pcb, last );
 

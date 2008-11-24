@@ -53,7 +53,7 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
         EXCHG( old_val, new_val );
 
     pt_conn = pt_start_conn;
-    for( ; pt_conn != NULL; pt_conn = (TRACK*) pt_conn->Pnext )
+    for( ; pt_conn != NULL; pt_conn = pt_conn->Next() )
     {
         if( pt_conn->GetSubNet() != old_val )
         {
@@ -110,7 +110,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
     /* Clear variables used in computations */
     pt_conn = pt_start_conn;
-    for( ; pt_conn != NULL; pt_conn = (TRACK*) pt_conn->Pnext )
+    for( ; pt_conn != NULL; pt_conn = pt_conn->Next() )
     {
         pt_conn->SetSubNet( 0 );
         PtStruct = pt_conn->start;
@@ -130,7 +130,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
     /* Start of calculation */
     pt_conn = pt_start_conn;
-    for( ; pt_conn != NULL; pt_conn = (TRACK*) pt_conn->Pnext )
+    for( ; pt_conn != NULL; pt_conn = pt_conn->Next() )
     {
         /* First: handling connections to pads */
         PtStruct = pt_conn->start;
@@ -300,7 +300,7 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 
         Build_Pads_Info_Connections_By_Tracks( pt_start_conn, pt_end_conn );
 
-        pt_start_conn = (TRACK*) pt_end_conn->Pnext;    // this is now the first segment of the next net
+        pt_start_conn = pt_end_conn->Next();    // this is now the first segment of the next net
     }
 
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb );
@@ -391,7 +391,7 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
     TRACK* Track;
 
     /* Reset the old connections type track to track */
-    for( Track = pt_start_conn; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( Track = pt_start_conn; Track != NULL; Track = Track->Next() )
     {
         Track->SetSubNet( 0 );
 
@@ -406,13 +406,13 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
     }
 
     /* Update connections type track to track */
-    for( Track = pt_start_conn; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( Track = pt_start_conn; Track != NULL; Track = Track->Next() )
     {
         if( Track->Type() == TYPEVIA )  // A via can connect many tracks, we must search for all track segments in this net
         {
             TRACK* pt_segm;
             int    layermask = Track->ReturnMaskLayer();
-            for( pt_segm = pt_start_conn; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+            for( pt_segm = pt_start_conn; pt_segm != NULL; pt_segm = pt_segm->Next() )
             {
                 int curlayermask = pt_segm->ReturnMaskLayer();
 
@@ -607,7 +607,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
 
     /* Reset variables and flags used in computation */
     pt_piste = m_Pcb->m_Track;
-    for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
+    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         pt_piste->SetState( BUSY | EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
         pt_piste->SetZoneSubNet( 0 );
@@ -618,7 +618,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
      * if found, set the track net code to the pad netcode
      */
     pt_piste = m_Pcb->m_Track;
-    for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
+    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         flag = 0;
         masque_layer = g_TabOneLayerMask[pt_piste->GetLayer()];
@@ -821,7 +821,7 @@ static void RebuildTrackChain( BOARD* pcb )
     Liste = (TRACK**) MyZMalloc( (nbsegm + 1) * sizeof(TRACK*) );
 
     ii = 0; Track = pcb->m_Track;
-    for( ; Track != NULL; ii++, Track = (TRACK*) Track->Pnext )
+    for( ; Track != NULL; ii++, Track = Track->Next() )
     {
         Liste[ii] = Track;
     }
@@ -832,13 +832,15 @@ static void RebuildTrackChain( BOARD* pcb )
     /* Update the linked list pointers */
 
     Track = Liste[0];
-    Track->Pback = pcb; Track->Pnext = Liste[1];
+    Track->SetBack( pcb );
+    Track->SetNext( Liste[1] );
+
     pcb->m_Track = Track;
     for( ii = 1; ii < nbsegm; ii++ )
     {
         Track = Liste[ii];
-        Track->Pback = Liste[ii - 1];
-        Track->Pnext = Liste[ii + 1];
+        Track->SetBack( Liste[ii - 1] );
+        Track->SetNext( Liste[ii + 1] );
     }
 
     MyFree( Liste );

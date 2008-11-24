@@ -20,6 +20,8 @@ public:
     DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype = TYPEDRAWSEGMENT );
     ~DRAWSEGMENT();
 
+    DRAWSEGMENT* Next() const { return (DRAWSEGMENT*) Pnext; }
+    DRAWSEGMENT* Back() const { return (DRAWSEGMENT*) Pback; }
 
     /**
      * Function GetPosition
@@ -55,7 +57,10 @@ public:
 
     bool    ReadDrawSegmentDescr( FILE* File, int* LineNum );
 
-    /* remove this from the linked list */
+    /**
+     * Function UnLink
+     * remove item from linked list.
+     */
     void    UnLink();
 
     void    Copy( DRAWSEGMENT* source );

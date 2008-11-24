@@ -915,9 +915,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         NewTrack = new SEGVIA( pcb );
 
         g_TrackSegmentCount++;
-        NewTrack->Pback = g_CurrentTrackSegment;
+        NewTrack->SetBack( g_CurrentTrackSegment );
         if( g_CurrentTrackSegment )
-            g_CurrentTrackSegment->Pnext = NewTrack;
+            g_CurrentTrackSegment->SetNext( NewTrack );
         else
             g_FirstTrackSegment = NewTrack;
 
@@ -940,9 +940,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         NewTrack = new TRACK( pcb );
 
         g_TrackSegmentCount++;
-        NewTrack->Pback = g_CurrentTrackSegment;
+        NewTrack->SetBack( g_CurrentTrackSegment );
         if( g_CurrentTrackSegment )
-            g_CurrentTrackSegment->Pnext = NewTrack;
+            g_CurrentTrackSegment->SetNext( NewTrack );
         else
             g_FirstTrackSegment = NewTrack;
 
@@ -957,7 +957,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
         g_CurrentTrackSegment->SetNet( current_net_code );
 
-        if( g_CurrentTrackSegment->Pback == NULL ) /* Start Piste */
+        if( g_CurrentTrackSegment->Back() == NULL ) /* Start Piste */
         {
             g_CurrentTrackSegment->m_Start.x = segm_fX;
             g_CurrentTrackSegment->m_Start.y = segm_fY;
@@ -988,12 +988,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         }
         else
         {
-            if( g_CurrentTrackSegment->Pback )
+            if( g_CurrentTrackSegment->Back() )
             {
-                g_CurrentTrackSegment->m_Start.x = ( (TRACK*) g_CurrentTrackSegment->Pback )->
-                                                   m_End.x;
-                g_CurrentTrackSegment->m_Start.y = ( (TRACK*) g_CurrentTrackSegment->Pback )->
-                                                   m_End.y;
+                g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->Back()->m_End;
             }
         }
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
@@ -1002,7 +999,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
            || (g_CurrentTrackSegment->m_Start.y != g_CurrentTrackSegment->m_End.y) )
         {
             /* Reduction des segments alignes a 1 seul */
-            OldTrack = (TRACK*) g_CurrentTrackSegment->Pback;
+            OldTrack = g_CurrentTrackSegment->Back();
             if( OldTrack && (OldTrack->Type() != TYPEVIA) )
             {
                 dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
@@ -1015,7 +1012,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                     OldTrack->m_End.y = g_CurrentTrackSegment->m_End.y;
                     delete g_CurrentTrackSegment;
                     g_CurrentTrackSegment = OldTrack;
-                    g_CurrentTrackSegment->Pnext = NULL;
+                    g_CurrentTrackSegment->SetNext( NULL );
                     g_TrackSegmentCount--;
                 }
             }
@@ -1086,7 +1083,7 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     pcbframe->test_1_net_connexion( DC, g_FirstTrackSegment->GetNet() );
 
     /* Trace de la forme exacte de la piste en BOARD */
-    for( pt_track = g_FirstTrackSegment; ; pt_track = (TRACK*) pt_track->Pnext )
+    for( pt_track = g_FirstTrackSegment; ; pt_track = (TRACK*) pt_track->Next() )
     {
         TraceSegmentPcb( pcbframe->m_Pcb, pt_track, HOLE, marge, WRITE_CELL );
         TraceSegmentPcb( pcbframe->m_Pcb, pt_track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );

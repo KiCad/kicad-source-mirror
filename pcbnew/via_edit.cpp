@@ -64,7 +64,7 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
         if( via->GetDrillValue() > 0 )
             g_DesignSettings.m_ViaDrillCustomValue = via->GetDrillValue();
         via_struct = m_Pcb->m_Track;
-        for( ; via_struct != NULL; via_struct = (TRACK*) via_struct->Pnext )
+        for( ; via_struct != NULL; via_struct = via_struct->Next() )
         {
             if( via_struct->Type() == TYPEVIA )     /* mise a jour du diametre de la via */
             {

@@ -233,7 +233,7 @@ void WinEDA_HierFrame::BuildSheetList( DrawSheetPath* list,
             m_Tree->Expand( menu );
             list->Pop();
         }
-        bs = bs->Pnext;
+        bs = bs->Next();
     }
 
     maxposx -= m_Tree->GetIndent();

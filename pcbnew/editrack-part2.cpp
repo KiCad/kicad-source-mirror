@@ -105,14 +105,14 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     /* effacement du flag BUSY et sauvegarde en membre .param de la couche
      *  initiale */
     ii = nb_segm; pt_segm = pt_track;
-    for( ; ii > 0; ii--, pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ; ii > 0; ii--, pt_segm = (TRACK*) pt_segm->Next() )
     {
         pt_segm->SetState( BUSY, OFF );
         pt_segm->m_Param = pt_segm->GetLayer();    /* pour sauvegarde */
     }
 
     ii = 0; pt_segm = pt_track;
-    for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Next() )
     {
         if( pt_segm->Type() == TYPEVIA )
             continue;
@@ -127,7 +127,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
         {
             /* Annulation du changement */
             ii = 0; pt_segm = pt_track;
-            for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
+            for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Next() )
             {
                 pt_segm->SetLayer( pt_segm->m_Param );
             }
@@ -141,7 +141,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_OR | GR_SURBRILL );
     /* controle des extremites de segments: sont-ils sur un pad */
     ii = 0; pt_segm = pt_track;
-    for( ; ii < nb_segm; pt_segm = (TRACK*) pt_segm->Pnext, ii++ )
+    for( ; ii < nb_segm; pt_segm = (TRACK*) pt_segm->Next(), ii++ )
     {
         pt_segm->start = Locate_Pad_Connecte( m_Pcb, pt_segm, START );
         pt_segm->end   = Locate_Pad_Connecte( m_Pcb, pt_segm, END );
@@ -179,7 +179,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         return false;
 
     pt_segm = g_FirstTrackSegment;
-    for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ii = 0; ii < g_TrackSegmentCount - 1; ii++, pt_segm = (TRACK*) pt_segm->Next() )
     {
         if( (pt_segm->Type() == TYPEVIA)
            && (g_CurrentTrackSegment->m_End == pt_segm->m_Start) )
@@ -274,8 +274,8 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     /* A new via was created. It was Ok.
      *  Put it in linked list, after the g_CurrentTrackSegment */
-    Via->Pback = g_CurrentTrackSegment;
-    g_CurrentTrackSegment->Pnext = Via;
+    Via->SetBack( g_CurrentTrackSegment );
+    g_CurrentTrackSegment->SetNext( Via );
     g_TrackSegmentCount++;
 
     /* The g_CurrentTrackSegment is now in linked list and we need a new track segment
@@ -295,9 +295,9 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
 
     g_TrackSegmentCount++;
 
-    g_CurrentTrackSegment->Pback = Via;
+    g_CurrentTrackSegment->SetBack( Via );
 
-    Via->Pnext = g_CurrentTrackSegment;
+    Via->SetNext( g_CurrentTrackSegment );
 
     if( g_TwoSegmentTrackBuild )
     {
@@ -307,8 +307,8 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* track, wxDC* DC )
         g_CurrentTrackSegment = track->Copy();
 
         g_TrackSegmentCount++;
-        g_CurrentTrackSegment->Pback = track;
-        track->Pnext = g_CurrentTrackSegment;
+        g_CurrentTrackSegment->SetBack( track );
+        track->SetNext( g_CurrentTrackSegment );
     }
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -371,7 +371,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         if( item->Type() == TYPEPAD )
         {
             pt_pad = (D_PAD*) item;
-            Module = (MODULE*) pt_pad->m_Parent;
+            Module = (MODULE*) pt_pad->GetParent();
         }
 
         if( pt_pad ) /* Affichage du chevelu du net correspondant */
@@ -402,8 +402,8 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         {
             if( item->Type() == TYPETEXTEMODULE )
             {
-                if( item->m_Parent && (item->m_Parent->Type()  == TYPEMODULE) )
-                    Module = (MODULE*) item->m_Parent;
+                if( item->GetParent() && (item->GetParent()->Type()  == TYPEMODULE) )
+                    Module = (MODULE*) item->GetParent();
             }
             else if( item->Type() == TYPEMODULE )
             {
@@ -414,7 +414,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
             {
                 Module->Display_Infos( this );
                 pt_pad = Module->m_Pads;
-                for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+                for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
                 {
                     pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
                     for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )

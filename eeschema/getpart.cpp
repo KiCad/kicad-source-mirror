@@ -218,7 +218,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawLibItem->GetField( REFERENCE )->m_VJustify  = Entry->m_Prefix.m_VJustify;
 
     /* Init des autres champs si predefinis dans la librairie */
-    for( Field = Entry->Fields; Field != NULL; Field = (LibDrawField*) Field->Pnext )
+    for( Field = Entry->Fields; Field != NULL; Field = Field->Next() )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;

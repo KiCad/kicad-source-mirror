@@ -39,7 +39,11 @@ struct Error
     }
 };
 
-/* Fields identifiers */
+
+/**
+ * Enum NumFieldType
+ * is the numbered set of all fields a SCH_COMPONENT can hold
+ */
 enum  NumFieldType {
     REFERENCE = 0,          ///< Field Reference of part, i.e. "IC21"
     VALUE,                  ///< Field Value of part, i.e. "3.3K"
@@ -59,31 +63,36 @@ enum  NumFieldType {
 };
 
 
+/// A container for several SCH_CMP_FIELD items
+typedef std::vector<SCH_CMP_FIELD>  SCH_CMP_FIELDS;
+
+
 /**
  * Class SCH_COMPONENT
  * describes a real schematic component
  */
 class SCH_COMPONENT : public SCH_ITEM
 {
+    friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
+
 public:
-    int               m_Multi; /* In multi unit chip - which unit to draw. */
+    int               m_Multi;          ///< In multi unit chip - which unit to draw.
 
     wxPoint           m_Pos;
 
-    wxString          m_ChipName;  /* Key to look for in the library, i.e. "74LS00". */
+    wxString          m_ChipName;       ///< Key to look for in the library, i.e. "74LS00".
+
     wxString          m_PrefixString;   /* C, R, U, Q etc - the first character which typically indicates what the component is.
                                          * determined, upon placement, from the library component.
-                                         * determined, upon file load, by the first non-digits in the reference fields. */
+                                         * determined, upon file load, by the first non-digits in the reference fields.
+                                         */
 
     int               m_Convert;                    /* Handle mutiple shape (for instance De Morgan conversion) */
     int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
 
 private:
 
-/** how many fields are fixed, or automatic and pre-made in the SCH_COMPONENT class */
-
-    typedef std::vector<SCH_CMP_FIELD>  SCH_CMP_FIELDS;
-    SCH_CMP_FIELDS    m_Fields;
+    SCH_CMP_FIELDS    m_Fields;         ///< variable length list of fields
 
 
     /* Hierarchical references.
@@ -200,14 +209,16 @@ public:
 
     void                    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
-
-    //returns a unique ID, in the form of a path.
+    // returns a unique ID, in the form of a path.
     wxString                GetPath( DrawSheetPath* sheet );
-    //returns the reference, for the given sheet path.
 
+    /**
+     * Function GetRef
+     * returns the reference, for the given sheet path.
+     */
     const wxString          GetRef( DrawSheetPath* sheet );
 
-    //Set the reference, for the given sheet path.
+    // Set the reference, for the given sheet path.
     void                    SetRef( DrawSheetPath* sheet, const wxString& ref );
 
     /**

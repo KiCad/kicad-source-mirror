@@ -64,15 +64,15 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
     {
         D_PAD* pad;
         pad = new D_PAD( Module );
-        pad->Pback = Module;
+        pad->SetBack( Module );
         if( Module->m_Pads == NULL )
         {
             Module->m_Pads = pad;
         }
         else
         {
-            Module->m_Pads->Pback = pad;
-            pad->Pnext     = Module->m_Pads;
+            Module->m_Pads->SetBack( pad );
+            pad->SetNext( Module->m_Pads );
             Module->m_Pads = pad;
         }
         pad->m_Size.x       = pad->m_Size.y = g_DesignSettings.m_CurrentTrackWidth;
@@ -222,14 +222,14 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
         oX = pt_pad->m_Pos0.x = -(gap_size + pt_pad->m_Size.x) / 2;
         pt_pad->m_Pos.x += pt_pad->m_Pos0.x;
 
-        pt_pad = (D_PAD*) pt_pad->Pnext;
+        pt_pad = (D_PAD*) pt_pad->Next();
         pt_pad->m_Pos0.x = oX + gap_size + pt_pad->m_Size.x;
         pt_pad->m_Pos.x += pt_pad->m_Pos0.x;
         break;
 
     case 1:     //Stub :
         pt_pad->SetPadName( wxT( "1" ) );
-        pt_pad = (D_PAD*) pt_pad->Pnext;
+        pt_pad = (D_PAD*) pt_pad->Next();
         pt_pad->m_Pos0.y = -(gap_size + pt_pad->m_Size.y) / 2;
         pt_pad->m_Size.y = gap_size;
         pt_pad->m_Pos.y += pt_pad->m_Pos0.y;
@@ -241,7 +241,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
         ii   = angle / 50;
         edge = new EDGE_MODULE( Module );
         Module->m_Drawings = edge;
-        edge->Pback       = Module;
+        edge->SetBack( Module );
         edge->m_Shape     = S_POLYGON;
         edge->SetLayer( LAYER_CMP_N );
         edge->m_PolyCount = ii + 3;
@@ -562,13 +562,13 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
     pad1->m_Pos0.x = -ShapeSize.x / 2;
     pad1->m_Pos.x += pad1->m_Pos0.x;
 
-    pad2 = (D_PAD*) pad1->Pnext;
+    pad2 = (D_PAD*) pad1->Next();
     pad2->m_Pos0.x = pad1->m_Pos0.x + ShapeSize.x;
     pad2->m_Pos.x += pad2->m_Pos0.x;
 
     edge = new EDGE_MODULE( Module );
     Module->m_Drawings = edge;
-    edge->Pback   = Module;
+    edge->SetBack( Module );
     edge->m_Shape = S_POLYGON;
     edge->SetLayer( LAYER_CMP_N );
     npoints = PolyEdgesCount;
@@ -678,7 +678,7 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     {
         DisplayError( this, _( "No pad for this module" ) ); return;
     }
-    next_pad = (D_PAD*) pad->Pnext;
+    next_pad = (D_PAD*) pad->Next();
     if( next_pad == NULL )
     {
         DisplayError( this, _( "Only one pad for this module" ) ); return;

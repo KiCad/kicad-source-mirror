@@ -102,7 +102,7 @@ WinEDA_TextModPropertiesFrame::WinEDA_TextModPropertiesFrame( WinEDA_BasePcbFram
     m_CurrentTextMod = TextMod;
     if( m_CurrentTextMod )
     {
-        m_Module = (MODULE*) m_CurrentTextMod->m_Parent;
+        m_Module = (MODULE*) m_CurrentTextMod->GetParent();
     }
 
     Create( parent, id, caption, pos, size, style );
@@ -469,6 +469,6 @@ void WinEDA_TextModPropertiesFrame::TextModPropertiesAccept( wxCommandEvent& eve
             (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
     }
     m_Parent->GetScreen()->SetModify();
-    ( (MODULE*) m_CurrentTextMod->m_Parent )->m_LastEdit_Time = time( NULL );
+    ( (MODULE*) m_CurrentTextMod->GetParent() )->m_LastEdit_Time = time( NULL );
     Close( TRUE );
 }

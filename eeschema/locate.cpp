@@ -165,12 +165,12 @@ SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
             /* Put this structure in the picked list: */
             PickedItem = new DrawPickedStruct( DrawStruct );
 
-            PickedItem->Pnext = PickedList;
+            PickedItem->SetNext( PickedList );
             PickedList = PickedItem;
         }
     }
 
-    if( PickedList && PickedList->Pnext == NULL )
+    if( PickedList && PickedList->Next() == NULL )
     {
         /* Only one item was picked - convert to scalar form (no list): */
         PickedItem = PickedList;
@@ -1192,7 +1192,7 @@ Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet, const w
            && (pos.x <= maxx)
            && (pos.x >= minx) )
             return SheetLabel;
-        SheetLabel = (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Pnext;
+        SheetLabel = SheetLabel->Next();
     }
 
     return NULL;

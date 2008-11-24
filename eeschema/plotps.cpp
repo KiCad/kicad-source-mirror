@@ -401,7 +401,7 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
 
         PlotOneSheetPS( PlotFileName, screen, RealSheet, BBox, plot_offset );
 
-        screen = (BASE_SCREEN*) screen->Pnext;
+        screen = screen->Next();
 
         if( AllPages == FALSE )
             break;

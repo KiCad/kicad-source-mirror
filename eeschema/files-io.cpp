@@ -216,7 +216,7 @@ SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen(
         NewScreen->m_Company = OldScreen->m_Company;
     NewScreen->m_TimeStamp = TimeStamp;
 
-    NewScreen->Pback = OldScreen;
+    NewScreen->SetBack( OldScreen );
 
     return NewScreen;
 }

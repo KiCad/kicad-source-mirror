@@ -125,10 +125,10 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     /* Insert footprint in list*/
     if( m_Pcb->m_Modules )
     {
-        m_Pcb->m_Modules->Pback = module;
+        m_Pcb->m_Modules->SetBack( module );
     }
-    module->Pnext    = m_Pcb->m_Modules;
-    module->Pback    = m_Pcb;
+    module->SetNext( m_Pcb->m_Modules );
+    module->SetBack( m_Pcb );
     m_Pcb->m_Modules = module;
 
     /* Display info : */
@@ -465,14 +465,14 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
 
     /* Calcul du nombre de modules */
     Module = (MODULE*) m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         NbModules++;
 
     Pas = (float) 100 / NbModules;
     DisplayActivity( 0, wxEmptyString );
 
     Module = (MODULE*) m_Pcb->m_Modules;
-    for( ii = 1; Module != NULL; ii++, Module = (MODULE*) Module->Pnext )
+    for( ii = 1; Module != NULL; ii++, Module = (MODULE*) Module->Next() )
     {
         if( Save_1_Module( FullFileName, Module,
                            NewModulesOnly ? FALSE : TRUE, FALSE ) == 0 )
@@ -734,11 +734,11 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     // Creates the new module and add it to the head of the linked list of modules
     Module = new MODULE( m_Pcb );
 
-    Module->Pnext = m_Pcb->m_Modules;
-    Module->Pback = m_Pcb;
+    Module->SetNext( m_Pcb->m_Modules );
+    Module->SetBack( m_Pcb );
     if( m_Pcb->m_Modules )
     {
-        m_Pcb->m_Modules->Pback = Module;
+        m_Pcb->m_Modules->SetBack( Module );
     }
     m_Pcb->m_Modules = Module;
 

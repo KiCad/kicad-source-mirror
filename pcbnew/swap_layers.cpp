@@ -332,8 +332,8 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
         return; // (Cancelled dialog box returns -1 instead)
 
     /* Modifications des pistes */
-    pt_segm = (TRACK*) m_Pcb->m_Track;
-    for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    pt_segm = m_Pcb->m_Track;
+    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         GetScreen()->SetModify();
         if( pt_segm->Type() == TYPEVIA )
@@ -358,8 +358,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     }
 
     /* Modifications des zones */
-    pt_segm = (TRACK*) m_Pcb->m_Zone;
-    for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    for( pt_segm = m_Pcb->m_Zone;  pt_segm;  pt_segm = pt_segm->Next() )
     {
         GetScreen()->SetModify();
         jj = pt_segm->GetLayer();
@@ -369,7 +368,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
 
     /* Modifications des autres segments */
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() == TYPEDRAWSEGMENT )
         {

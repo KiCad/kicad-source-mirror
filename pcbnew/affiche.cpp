@@ -40,9 +40,9 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     Affiche_1_Parametre( frame, 30, _( "Net Code" ), txt, RED );
 
     for( ii = 0, module = frame->m_Pcb->m_Modules; module != 0;
-         module = (MODULE*) module->Pnext )
+         module = module->Next() )
     {
-        for( pad = module->m_Pads; pad != 0; pad = (D_PAD*) pad->Pnext )
+        for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
         {
             if( pad->GetNet() == netcode )
                 ii++;
@@ -52,15 +52,15 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     txt.Printf( wxT( "%d" ), ii );
     Affiche_1_Parametre( frame, 40, _( "Pads" ), txt, DARKGREEN );
 
-    for( ii = 0, Struct = frame->m_Pcb->m_Track; Struct != NULL; Struct = Struct->Pnext )
+    for( ii = 0, Struct = frame->m_Pcb->m_Track; Struct != NULL; Struct = Struct->Next() )
     {
         ii++;
         if( Struct->Type() == TYPEVIA )
             if( ( (SEGVIA*) Struct )->GetNet() == netcode )
                 nb_vias++;
-	if( Struct->Type() == TYPETRACK )
+    if( Struct->Type() == TYPETRACK )
             if( ( (TRACK*) Struct )->GetNet() == netcode )
-    		lengthnet += ( (TRACK*) Struct )->GetLength();
+            lengthnet += ( (TRACK*) Struct )->GetLength();
     }
 
     txt.Printf( wxT( "%d" ), nb_vias );

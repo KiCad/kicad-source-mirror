@@ -125,8 +125,9 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
             if( nbitems <= 1 )
                 NextS = NULL;                       /* fin de chaine */
 
-            PtStruct->Pnext = NextS;
-            PtStruct->Pback = Back; Back = PtStruct;
+            PtStruct->SetNext( NextS );
+            PtStruct->SetBack( Back );
+            Back = PtStruct;
             if( NextS == NULL )
                 break;
         }

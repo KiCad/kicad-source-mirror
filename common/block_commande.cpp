@@ -254,7 +254,7 @@ void InitBlockLocateDatas( WinEDA_DrawPanel* Panel, const wxPoint& startpos )
     screen->BlockLocate.m_State = STATE_BLOCK_INIT;
     screen->BlockLocate.SetOrigin( startpos );
     screen->BlockLocate.SetSize( wxSize( 0, 0 ) );
-    screen->BlockLocate.Pnext = NULL;
+    screen->BlockLocate.SetNext( NULL );
     screen->BlockLocate.m_BlockDrawStruct = NULL;
     Panel->ManageCurseur = DrawAndSizingBlockOutlines;
     Panel->ForceCloseManageCurseur = AbortBlockCurrentCommand;

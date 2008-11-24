@@ -49,9 +49,17 @@ class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
     WinEDAChoiceBox* m_SelPartBox;
-    DrawSheetPath*   m_CurrentSheet; //which sheet we are presently working on.
+    DrawSheetPath*   m_CurrentSheet;    ///< which sheet we are presently working on.
+    int              m_Multiflag;
+    wxPoint          m_OldPos;
+
+
 private:
     wxMenu*          m_FilesMenu;
+
+    SCH_CMP_FIELD*   m_CurrentField;
+    int              m_TextFieldSize;
+
 
 public:
     WinEDA_SchematicFrame( wxWindow* father, WinEDA_App* parent,
@@ -81,6 +89,13 @@ public:
                                       int                      hotkey,
                                       EDA_BaseStruct*          DrawStruct );
 
+    SCH_CMP_FIELD*          GetCurrentField() { return m_CurrentField; }
+
+    void                    SetCurrentField( SCH_CMP_FIELD* aCurrentField )
+    {
+        m_CurrentField = aCurrentField;
+    }
+
     DrawSheetPath*          GetSheet();
 
     SCH_SCREEN*             GetScreen() const;
@@ -105,8 +120,9 @@ public:
         bool
         IncludePin );
 
-    /** function FillFootprintFieldForAllInstancesofComponent
-     * Search for component "aReference", and place a Footprint in Footprint field
+    /**
+     * Function FillFootprintFieldForAllInstancesofComponent
+     * searches for component "aReference", and places a Footprint in Footprint field
      * @param aReference = reference of the component to initialise
      * @param aFootPrint = new value for the filed Fottprint component
      * @param aSetVisible = true to have the field visible, false to set the invisible flag
@@ -119,6 +135,7 @@ public:
     bool FillFootprintFieldForAllInstancesofComponent( const wxString& aReference,
                                                        const wxString& aFootPrint,
                                                     bool            aSetVisible );
+
     SCH_ITEM*               FindComponentAndItem( const wxString& component_reference,
                                                   bool                          Find_in_hierarchy,
                                                   int                           SearchType,
@@ -131,7 +148,9 @@ public:
 
     /* netlist generation */
     void*                   BuildNetListBase();
-    /** Function DeleteAnnotation
+
+    /**
+     * Function DeleteAnnotation
      * Remove current component annotations
      * @param aCurrentSheetOnly : if false: remove all annotations, else remove annotation relative to the current sheet only
      * @param aRedraw : true to refresh display
@@ -142,7 +161,8 @@ public:
     void                    InstallPreviousSheet();
     void                    InstallNextScreen( DrawSheetStruct* Sheet );
 
-    /** Function SetSheetNumberAndCount
+    /**
+     * Function SetSheetNumberAndCount
      * Set the m_ScreenNumber and m_NumberOfScreen members for screens
      * must be called after a delete or add sheet command, and when entering a sheet
      */

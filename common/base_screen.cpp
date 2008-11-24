@@ -446,14 +446,14 @@ void BASE_SCREEN::ClearUndoRedoList()
 
     while( m_UndoList )
     {
-        nextitem = m_UndoList->Pnext;
+        nextitem = m_UndoList->Next();
         delete m_UndoList;
         m_UndoList = nextitem;
     }
 
     while( m_RedoList )
     {
-        nextitem = m_RedoList->Pnext;
+        nextitem = m_RedoList->Next();
         delete m_RedoList;
         m_RedoList = nextitem;
     }
@@ -469,32 +469,33 @@ void BASE_SCREEN::AddItemToUndoList( EDA_BaseStruct* newitem )
  */
 {
     int             ii;
-    EDA_BaseStruct* item, * nextitem;
+    EDA_BaseStruct* item;
+    EDA_BaseStruct* nextitem;
 
     if( newitem == NULL )
         return;
 
-    newitem->Pnext = m_UndoList;
+    newitem->SetNext( m_UndoList );
     m_UndoList = newitem;
 
     /* Free first items, if count max reached */
     for( ii = 0, item = m_UndoList; ii < m_UndoRedoCountMax; ii++ )
     {
-        if( item->Pnext == NULL )
+        if( item->Next() == NULL )
             return;
-        item = item->Pnext;
+        item = item->Next();
     }
 
     if( item == NULL )
         return;
 
-    nextitem    = item->Pnext;
-    item->Pnext = NULL; // Set end of chain
+    nextitem    = item->Next();
+    item->SetNext( NULL ); // Set end of chain
 
     // Delete the extra  items
     for( item = nextitem; item != NULL; item = nextitem )
     {
-        nextitem = item->Pnext;
+        nextitem = item->Next();
         delete item;
     }
 }
@@ -510,26 +511,26 @@ void BASE_SCREEN::AddItemToRedoList( EDA_BaseStruct* newitem )
     if( newitem == NULL )
         return;
 
-    newitem->Pnext = m_RedoList;
+    newitem->SetNext( m_RedoList );
     m_RedoList = newitem;
     /* Free first items, if count max reached */
     for( ii = 0, item = m_RedoList; ii < m_UndoRedoCountMax; ii++ )
     {
-        if( item->Pnext == NULL )
+        if( item->Next() == NULL )
             break;
-        item = item->Pnext;
+        item = item->Next();
     }
 
     if( item == NULL )
         return;
 
-    nextitem    = item->Pnext;
-    item->Pnext = NULL; // Set end of chain
+    nextitem    = item->Next();
+    item->SetNext( NULL );      // Set end of chain
 
     // Delete the extra items
     for( item = nextitem; item != NULL; item = nextitem )
     {
-        nextitem = item->Pnext;
+        nextitem = item->Next();
         delete item;
     }
 }
@@ -542,7 +543,7 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromUndoList()
     EDA_BaseStruct* item = m_UndoList;
 
     if( item )
-        m_UndoList = item->Pnext;
+        m_UndoList = item->Next();
     return item;
 }
 
@@ -554,7 +555,7 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
     EDA_BaseStruct* item = m_RedoList;
 
     if( item )
-        m_RedoList = item->Pnext;
+        m_RedoList = item->Next();
     return item;
 }
 

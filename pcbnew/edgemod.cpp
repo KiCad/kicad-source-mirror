@@ -76,7 +76,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
     GetScreen()->SetModify();
-    MODULE* Module = (MODULE*) Edge->m_Parent;
+    MODULE* Module = (MODULE*) Edge->GetParent();
     Module->Set_Rectangle_Encadrement();
 }
 
@@ -92,7 +92,7 @@ static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( Edge == NULL )
         return;
 
-    MODULE* Module = (MODULE*) Edge->m_Parent;
+    MODULE* Module = (MODULE*) Edge->GetParent();
 
     if( erase )
     {
@@ -121,7 +121,7 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( Edge == NULL )
         return;
 
-    MODULE* Module = (MODULE*) Edge->m_Parent;
+    MODULE* Module = (MODULE*) Edge->GetParent();
 
     //	if( erase )
     {
@@ -160,7 +160,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
     if( Edge == NULL )
     {
         Edge = (EDGE_MODULE*) Module->m_Drawings;
-        for( ; Edge != NULL; Edge = (EDGE_MODULE*) Edge->Pnext )
+        for( ; Edge != NULL; Edge = Edge->Next() )
         {
             if( Edge->Type() != TYPEEDGEMODULE )
                 continue;
@@ -210,7 +210,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
     if( Edge == NULL )
     {
         Edge = (EDGE_MODULE*) Module->m_Drawings;
-        for( ; Edge != NULL; Edge = (EDGE_MODULE*) Edge->Pnext )
+        for( ; Edge != NULL; Edge = Edge->Next() )
         {
             if( Edge->Type() != TYPEEDGEMODULE )
                 continue;
@@ -282,7 +282,7 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
         return;
     }
 
-    MODULE* Module = (MODULE*) Edge->m_Parent;
+    MODULE* Module = (MODULE*) Edge->GetParent();
     Edge->Draw( DrawPanel, DC, GR_XOR );
 
     /* suppression d'un segment */
@@ -305,7 +305,7 @@ static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         if( Edge->m_Flags & IS_NEW )                        /* effacement du nouveau contour */
         {
-            MODULE* Module = (MODULE*) Edge->m_Parent;
+            MODULE* Module = (MODULE*) Edge->GetParent();
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );
             Edge ->DeleteStructure();
             Module->Set_Rectangle_Encadrement();
@@ -348,10 +348,10 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         MoveVector.x = MoveVector.y = 0;
 
         /* Add the new item to the Drawings list head*/
-        Edge->Pback = Module;
-        Edge->Pnext = Module->m_Drawings;
+        Edge->SetBack( Module );
+        Edge->SetNext( Module->m_Drawings );
         if( Module->m_Drawings )
-            Module->m_Drawings->Pback = Edge;
+            Module->m_Drawings->SetBack( Edge );
         Module->m_Drawings = Edge;
 
         /* Mise a jour des caracteristiques du segment ou de l'arc */

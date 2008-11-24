@@ -51,23 +51,24 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
 void TEXTE_PCB::UnLink()
 {
     /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() != TYPEPCB )
+        if( Back()->Type() != TYPEPCB )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
+            ( (BOARD*) Back() )->m_Drawings = Next();
         }
     }
 
     /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
 
 
@@ -175,7 +176,7 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
     wxASSERT( parent );
 
     if( parent->Type() == TYPECOTATION )
-        board = (BOARD*) parent->m_Parent;
+        board = (BOARD*) parent->GetParent();
     else
         board = (BOARD*) parent;
     wxASSERT( board );

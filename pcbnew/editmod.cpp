@@ -89,14 +89,15 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
 
     /* Mise a jour des coord relatives des pads */
     pt_pad = (D_PAD*) pt_mod->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        pt_pad->m_Pos0.x += deltaX; pt_pad->m_Pos0.y += deltaY;
+        pt_pad->m_Pos0.x += deltaX;
+        pt_pad->m_Pos0.y += deltaY;
     }
 
     /* Mise a jour des coord relatives contours .. */
     PtStruct = pt_mod->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {

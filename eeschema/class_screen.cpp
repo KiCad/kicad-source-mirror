@@ -28,7 +28,7 @@ void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
     case DRAW_SHEET_STRUCT_TYPE:
     case DRAW_MARKER_STRUCT_TYPE:
     case DRAW_NOCONNECT_STRUCT_TYPE:
-        Struct->m_Parent = Screen;
+        Struct->SetParent( Screen );
         break;
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
@@ -138,9 +138,9 @@ void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
         EDA_BaseStruct* DrawList = EEDrawList;
         while( DrawList && DrawList->Next() )
         {
-            if( DrawList->Pnext == DrawStruct )
+            if( DrawList->Next() == DrawStruct )
             {
-                DrawList->Pnext = DrawList->Pnext->Pnext;
+                DrawList->SetNext( DrawList->Next()->Next() );
                 break;
             }
             DrawList = DrawList->Next();
@@ -170,7 +170,7 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
 /**************************************************************/
 { //simple function to add to the head of the drawlist.
-    st->Pnext  = EEDrawList;
+    st->SetNext( EEDrawList );
     EEDrawList = st;
 }
 
@@ -262,7 +262,7 @@ void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
             {
                 BuildScreenList( strct );
             }
-            strct = strct->Pnext;
+            strct = strct->Next();
         }
     }
 }
@@ -335,7 +335,7 @@ void EDA_SheetList::BuildSheetList( DrawSheetStruct* sheet )
                 DrawSheetStruct* sht = (DrawSheetStruct*) strct;
                 BuildSheetList( sht );
             }
-            strct = strct->Pnext;
+            strct = strct->Next();
         }
     }
     m_currList.Pop();

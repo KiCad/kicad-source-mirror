@@ -59,7 +59,7 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
             Track = TrackLocate;
             if( TrackLocate->Type() == TYPEVIA )
                 break;
-            TrackLocate = (TRACK*) TrackLocate->Pnext;
+            TrackLocate = TrackLocate->Next();
         }
 
         Track->Display_Infos( this );
@@ -185,7 +185,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
     TRACK* Track;               /* pointeur sur les pistes */
     int    l_piste;             /* demi-largeur de la piste */
 
-    for( Track = start_adresse; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( Track = start_adresse; Track != NULL; Track = Track->Next() )
     {
         if( Track->GetState( BUSY | DELETED ) )
             continue;
@@ -249,7 +249,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, wxPoint ref, int layer )
     TRACK* Zone;                /* pointeur sur les pistes */
     int    l_segm;              /* demi-largeur de la piste */
 
-    for( Zone = start_adresse; Zone != NULL; Zone = (TRACK*) Zone->Pnext )
+    for( Zone = start_adresse; Zone != NULL; Zone = Zone->Next() )
     {
         /* calcul des coordonnees du segment teste */
         l_segm = Zone->m_Width >> 1;                        /* l_piste = demi largeur piste */
@@ -287,7 +287,7 @@ TEXTE_PCB* Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc )
 
     SET_REF_POS( ref );
     PtStruct = (EDA_BaseStruct*) pt_txt_pcb;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() != TYPETEXTE )
             continue;

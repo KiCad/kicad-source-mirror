@@ -103,9 +103,9 @@ void WinEDA_LibeditFrame::LoadOneSymbol( wxDC* DC )
             DrawEntry->m_Flags    = IS_NEW;
             DrawEntry->m_Selected = IS_SELECTED;
 
-            if( DrawEntry->Pnext == NULL )
+            if( DrawEntry->Next() == NULL )
             {   /* Fin de liste trouvee */
-                DrawEntry->Pnext = CurrentLibEntry->m_Drawings;
+                DrawEntry->SetNext( CurrentLibEntry->m_Drawings );
                 CurrentLibEntry->m_Drawings = LibEntry->m_Drawings;
                 LibEntry->m_Drawings = NULL;
                 break;
@@ -235,7 +235,7 @@ void SuppressDuplicateDrawItem( EDA_LibComponentStruct* LibEntry )
     DEntryRef = LibEntry->m_Drawings;
     while( DEntryRef )
     {
-        if( DEntryRef->Pnext == NULL )
+        if( DEntryRef->Next() == NULL )
             return;
         DEntryCompare = DEntryRef->Next();
         if( DEntryCompare == NULL )

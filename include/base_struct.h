@@ -92,6 +92,7 @@ class WinEDA_DrawFrame;
 class BOARD;
 class EDA_Rect;
 
+
 /**
  * Class INSPECTOR
  * is an abstract class that is used to inspect and possibly collect the
@@ -209,9 +210,11 @@ public:
 /* Basic Classes : used classes are derived from them */
 /******************************************************/
 
-/** class EDA_BaseStruct
- * Basic class, not directly used.
- * All the kicad classes used to describe a shematic or a board item are derived from.
+class DHEAD;
+
+/**
+ * Class EDA_BaseStruct
+ * is a base class for most all the kicad significant classes, used in schematics and boards.
  */
 class EDA_BaseStruct
 {
@@ -223,13 +226,15 @@ private:
      */
     KICAD_T         m_StructType;
 
-public:
+protected:
     EDA_BaseStruct* Pnext;              /* Linked list: Link (next struct) */
     EDA_BaseStruct* Pback;              /* Linked list: Link (previous struct) */
     EDA_BaseStruct* m_Parent;           /* Linked list: Link (parent struct) */
     EDA_BaseStruct* m_Son;              /* Linked list: Link (son struct) */
-    EDA_BaseStruct* m_Image;            /* Link to an image copy for undelete or abort command */
+    DHEAD*          m_List;             ///< which DLIST I am on.
 
+
+public:
     int             m_Flags;            // flags for editing and other misc. uses
 #define IS_CHANGED      (1 << 0)
 #define IS_LINKED       (1 << 1)
@@ -248,6 +253,10 @@ public:
 #define CANDIDATE       (1 << 14)           ///< flag indiquant que la structure est connectee
 #define SKIP_STRUCT     (1 << 15)           ///< flag indiquant que la structure ne doit pas etre traitee
 #define DO_NOT_DRAW     (1 << 16)           ///< Used to disable draw function
+#define DRAW_ERASED     (1 << 17)           ///< draw in background color, used by classs TRACK in gerbview
+
+
+    EDA_BaseStruct* m_Image;            /* Link to an image copy for undelete or abort command */
 
     unsigned long m_TimeStamp;          // Time stamp used for logical links
     int           m_Selected;           /* Used by block commands, and selective editing */
@@ -274,10 +283,17 @@ public:
     KICAD_T Type()  const { return m_StructType; }
 
 
-    EDA_BaseStruct* Next() const { return (EDA_BaseStruct*) Pnext; }
-    EDA_BaseStruct* Back() const { return (EDA_BaseStruct*) Pback; }
-    EDA_BaseStruct* GetParent() const { return (EDA_BaseStruct*) m_Parent; }
+    EDA_BaseStruct* Next() const        { return (EDA_BaseStruct*) Pnext; }
+    EDA_BaseStruct* Back() const        { return (EDA_BaseStruct*) Pback; }
+    EDA_BaseStruct* GetParent() const   { return m_Parent; }
+    EDA_BaseStruct* GetSon() const      { return m_Son; }
+    DHEAD*          GetList() const     { return m_List; }
 
+    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
+    void SetParent( EDA_BaseStruct* aParent )   { m_Parent = aParent; }
+    void SetSon( EDA_BaseStruct* aSon )         { m_Son = aSon; }
+    void SetList( DHEAD* aList )                { m_List = aList; }
 
     /* Gestion de l'etat (status) de la structure (active, deleted..) */
 

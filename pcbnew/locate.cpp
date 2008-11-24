@@ -239,7 +239,7 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
     ref_pos = RefPos( typeloc );
 
     pt_module = Pcb->m_Modules;
-    for(  ;  pt_module;  pt_module = (MODULE*) pt_module->Pnext )
+    for(  ;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
     {
         // is the ref point within the module's bounds?
         if( !pt_module->HitTest( ref_pos ) )
@@ -400,7 +400,7 @@ suite:
             if( PtSegmN == pt_lim )
                 PtSegmN = NULL;
             else
-                PtSegmN = (TRACK*) PtSegmN->Pnext;
+                PtSegmN =  PtSegmN->Next();
         }
 
         if( PtSegmB )
@@ -427,14 +427,14 @@ suite1:
             if( PtSegmB == pt_base )
                 PtSegmB = NULL;
             else if( PtSegmB->Type() != TYPEPCB )
-                PtSegmB = (TRACK*) PtSegmB->Pback;
+                PtSegmB =  PtSegmB->Back();
             else
                 PtSegmB = NULL;
         }
     }
 
     /* Recherche generale */
-    for( PtSegmN = pt_base; PtSegmN != NULL; PtSegmN = (TRACK*) PtSegmN->Pnext )
+    for( PtSegmN = pt_base; PtSegmN != NULL; PtSegmN =  PtSegmN->Next() )
     {
         if( PtSegmN->GetState( DELETED | BUSY ) )
         {
@@ -495,7 +495,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, int MasqueLayer, int typeloc )
 
 TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLayer )
 {
-    for( TRACK* Track = start_adresse;   Track;  Track = (TRACK*) Track->Pnext )
+    for( TRACK* Track = start_adresse;   Track;  Track =  Track->Next() )
     {
         if( Track->GetState( BUSY | DELETED ) )
             continue;
@@ -549,7 +549,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
 
 TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
 {
-    for( TRACK* Zone = start_adresse;  Zone;   Zone = (TRACK*) Zone->Pnext )
+    for( TRACK* Zone = start_adresse;  Zone;   Zone =  Zone->Next() )
     {
         if( (layer != -1) && (Zone->GetLayer() != layer) )
             continue;
@@ -615,7 +615,7 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
     if( start_adr == NULL )
         return NULL;
 
-    for( PtSegm = start_adr; PtSegm != NULL; PtSegm = (TRACK*) PtSegm->Pnext )
+    for( PtSegm = start_adr; PtSegm != NULL; PtSegm =  PtSegm->Next() )
     {
         if( PtSegm->GetState( DELETED | BUSY ) == 0 )
         {
@@ -655,7 +655,7 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
 {
     TRACK* PtSegm;
 
-    for( PtSegm = start_adr; PtSegm != NULL; PtSegm = (TRACK*) PtSegm->Pnext )
+    for( PtSegm = start_adr; PtSegm != NULL; PtSegm = PtSegm->Next() )
     {
         if( PtSegm->Type() == TYPEVIA )
         {

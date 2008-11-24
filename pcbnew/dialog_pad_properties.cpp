@@ -145,7 +145,7 @@ void DialogPadProperties::InitDialog( wxInitDialogEvent& event )
 
     if( m_CurrentPad )
     {
-        MODULE* Module = (MODULE*) m_CurrentPad->m_Parent;
+        MODULE* Module = (MODULE*) m_CurrentPad->GetParent();
         tmp = m_CurrentPad->m_Orient - Module->m_Orient;
     }
     else
@@ -475,7 +475,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
     if( m_CurrentPad )   // Set Pad Name & Num
     {
         m_Parent->SaveCopyInUndoList( m_Parent->m_Pcb->m_Modules );
-        MODULE* Module = (MODULE*) m_CurrentPad->m_Parent;
+        MODULE* Module = (MODULE*) m_CurrentPad->GetParent();
         Module->m_LastEdit_Time = time( NULL );
 
         if( m_DC ) // redraw the area where the pad was, without pad (delete pad on screen)

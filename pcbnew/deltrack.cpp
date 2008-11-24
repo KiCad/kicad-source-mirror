@@ -49,19 +49,19 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
             // modification du trace
             Track = g_CurrentTrackSegment;
-            g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+            g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
             delete Track;
             g_TrackSegmentCount--;
 
             if( g_TwoSegmentTrackBuild )
             {
-                // g_CurrentTrackSegment->Pback must not be a via, or we want delete also the via
+                // g_CurrentTrackSegment->Back() must not be a via, or we want delete also the via
                 if( (g_TrackSegmentCount >= 2)
                    && (g_CurrentTrackSegment->Type() != TYPEVIA)
-                   && (g_CurrentTrackSegment->Pback->Type() == TYPEVIA) )
+                   && (g_CurrentTrackSegment->Back()->Type() == TYPEVIA) )
                 {
                     Track = g_CurrentTrackSegment;
-                    g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+                    g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
                     delete Track;
                     g_TrackSegmentCount--;
                 }
@@ -71,7 +71,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
                   && (g_CurrentTrackSegment->Type() == TYPEVIA) )
             {
                 Track = g_CurrentTrackSegment;
-                g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+                g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
                 delete Track;
                 g_TrackSegmentCount--;
                 if( g_CurrentTrackSegment && (g_CurrentTrackSegment->Type() != TYPEVIA) )
@@ -79,7 +79,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             }
 
             if( g_CurrentTrackSegment )
-                g_CurrentTrackSegment->Pnext = NULL;
+                g_CurrentTrackSegment->SetNext( NULL );
 
             // Rectification couche active qui a pu changer si une via
             // a ete effacee

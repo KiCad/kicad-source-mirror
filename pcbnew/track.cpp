@@ -75,12 +75,12 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
                                    pt_segm->m_Start, masque_layer );
         if( Segm1 )
         {
-            Segm2 = Fast_Locate_Piste( (TRACK*) Segm1->Pnext, NULL,
+            Segm2 = Fast_Locate_Piste( Segm1->Next(), NULL,
                                       pt_segm->m_Start, masque_layer );
         }
         if( Segm2 )
         {
-            Segm3 = Fast_Locate_Piste( (TRACK*) Segm2->Pnext, NULL,
+            Segm3 = Fast_Locate_Piste( Segm2->Next(), NULL,
                                       pt_segm->m_Start, masque_layer );
         }
         if( Segm3 )
@@ -127,7 +127,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
         /* Test des connexions: si via utile: suppression marquage */
         layer = Track->GetLayer();
 
-        while( ( Track = Fast_Locate_Piste( (TRACK*) Track->Pnext, NULL,
+        while( ( Track = Fast_Locate_Piste( (TRACK*) Track->Next(), NULL,
                                            Segm->RefTrack->m_Start,
                                            masque_layer ) ) != NULL )
         {
@@ -150,7 +150,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
     /* Reclassement des segments marques en une chaine */
     FirstTrack = frame->m_Pcb->m_Track; NbSegmBusy = 0;
-    for( ; FirstTrack != NULL; FirstTrack = (TRACK*) FirstTrack->Pnext )
+    for( ; FirstTrack != NULL; FirstTrack = (TRACK*) FirstTrack->Next() )
     {
         /* recherche du debut de la liste des segments marques a BUSY */
         if( FirstTrack->GetState( BUSY ) )
@@ -162,10 +162,10 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
     /* Reclassement de la chaine debutant a FirstTrack et finissant
      *  au dernier segment marque. FirstTrack n'est pas modifie */
-    Track = (TRACK*) FirstTrack->Pnext;
+    Track = (TRACK*) FirstTrack->Next();
     for( ; Track != NULL; Track = NextTrack )
     {
-        NextTrack = (TRACK*) Track->Pnext;
+        NextTrack = (TRACK*) Track->Next();
         if( Track->GetState( BUSY ) )
         {
             NbSegmBusy++;
@@ -240,13 +240,13 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
 
             if( pt_segm->GetState( BUSY ) )
             {
-                pt_segm = (TRACK*) pt_segm->Pnext;
+                pt_segm = (TRACK*) pt_segm->Next();
                 continue;
             }
 
             if( pt_segm == pt_via )  /* deja traite */
             {
-                pt_segm = (TRACK*) pt_segm->Pnext;
+                pt_segm = (TRACK*) pt_segm->Next();
                 continue;
             }
 
@@ -254,7 +254,7 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
             if( NbSegm == 1 ) /* 1ere detection de segment de piste */
             {
                 MarqSegm = pt_segm;
-                pt_segm  = (TRACK*) pt_segm->Pnext;
+                pt_segm  = (TRACK*) pt_segm->Next();
             }
             else /* 2eme detection de segment -> fin de piste */
             {
@@ -316,7 +316,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
     /* calcul de la limite d'analyse */
     *StartTrack  = *EndTrack = NULL;
     TrackListEnd = Track = RefTrack; ii = 0;
-    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Pnext )
+    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Next() )
     {
         TrackListEnd   = Track;
         Track->m_Param = 0;
@@ -324,7 +324,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
     /* Calcul des extremites */
     NbEnds = 0; Track = RefTrack; ii = 0;
-    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Pnext )
+    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Next() )
     {
         if( Track->Type() == TYPEVIA )
             continue;
@@ -424,7 +424,7 @@ void ListSetState( EDA_BaseStruct* Start, int NbItem, int State, int onoff )
 {
     if( Start == NULL )
         return;
-    for( ; (Start != NULL) && (NbItem > 0); NbItem--, Start = Start->Pnext )
+    for( ; (Start != NULL) && (NbItem > 0); NbItem--, Start = Start->Next() )
     {
         Start->SetState( State, onoff );
     }

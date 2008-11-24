@@ -615,7 +615,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
         int Angle_Rot_Module   = 900;
         module = m_Pcb->m_Modules;
-        for( ; module != NULL; module = (MODULE*) module->Pnext )
+        for( ; module != NULL; module = module->Next() )
         {
             if( ! module->HitTest( GetScreen()->BlockLocate ) )
                 continue;
@@ -684,7 +684,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
 
     /* Move and rotate the graphic items */
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -780,7 +780,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
     {
         bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
         module = m_Pcb->m_Modules;
-        for( ; module != NULL; module = (MODULE*) module->Pnext )
+        for( ; module != NULL; module = module->Next() )
         {
             if( ! module->HitTest( GetScreen()->BlockLocate ) )
                 continue;
@@ -823,7 +823,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                     track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
                 }
             }
-            track = (TRACK*) track->Pnext;
+            track = track->Next();
         }
     }
 
@@ -841,7 +841,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                 INVERT( track->m_End.y );
                 track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
             }
-            track = (TRACK*) track->Pnext;
+            track = track->Next();
         }
         for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
@@ -860,7 +860,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         masque_layer &= ~EDGE_LAYER;
 
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -967,7 +967,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         module = m_Pcb->m_Modules;
         oldpos = GetScreen()->m_Curseur;
 
-        for( ; module != NULL; module = (MODULE*) module->Pnext )
+        for( ; module != NULL; module = module->Next() )
         {
             if( ! module->HitTest( GetScreen()->BlockLocate ) )
                 continue;
@@ -995,7 +995,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
                 track->m_Start += MoveVector;
                 track->m_End   += MoveVector;
             }
-            track = (TRACK*) track->Pnext;
+            track = track->Next();
         }
     }
 
@@ -1011,7 +1011,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
                 track->m_Start += MoveVector;
                 track->m_End   += MoveVector;
             }
-            track = (TRACK*) track->Pnext;
+            track = track->Next();
         }
         for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
@@ -1029,7 +1029,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         masque_layer &= ~EDGE_LAYER;
 
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -1123,7 +1123,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         module = m_Pcb->m_Modules;
         oldpos = GetScreen()->m_Curseur;
 
-        for( ; module != NULL; module = (MODULE*) module->Pnext )
+        for( ; module != NULL; module = module->Next() )
         {
             MODULE* new_module;
             if( ! module->HitTest( GetScreen()->BlockLocate ) )
@@ -1134,9 +1134,9 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             new_module = new MODULE( m_Pcb );
             new_module->Copy( module );
             new_module->m_TimeStamp = GetTimeStamp();
-            new_module->Pnext = m_Pcb->m_Modules;
-            new_module->Pback = m_Pcb;
-            m_Pcb->m_Modules->Pback = new_module;
+            new_module->SetNext( m_Pcb->m_Modules );
+            new_module->SetBack( m_Pcb );
+            m_Pcb->m_Modules->SetBack( new_module );
             m_Pcb->m_Modules = new_module;
             GetScreen()->m_Curseur = module->m_Pos + MoveVector;
             Place_Module( new_module, DC );
@@ -1208,7 +1208,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         masque_layer &= ~EDGE_LAYER;
 
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -1225,9 +1225,9 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
             new_drawsegment->Copy( STRUCT );
 
-            new_drawsegment->Pnext   = m_Pcb->m_Drawings;
-            new_drawsegment->Pback   = m_Pcb;
-            m_Pcb->m_Drawings->Pback = new_drawsegment;
+            new_drawsegment->SetNext( m_Pcb->m_Drawings );
+            new_drawsegment->SetBack( m_Pcb );
+            m_Pcb->m_Drawings->SetBack( new_drawsegment );
             m_Pcb->m_Drawings = new_drawsegment;
             new_drawsegment->m_Start += MoveVector;
             new_drawsegment->m_End   += MoveVector;
@@ -1246,9 +1246,9 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             /* le texte est ici bon a etre deplace */
             TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
             new_pcbtext->Copy( STRUCT );
-            new_pcbtext->Pnext = m_Pcb->m_Drawings;
-            new_pcbtext->Pback = m_Pcb;
-            m_Pcb->m_Drawings->Pback = new_pcbtext;
+            new_pcbtext->SetNext( m_Pcb->m_Drawings );
+            new_pcbtext->SetBack( m_Pcb );
+            m_Pcb->m_Drawings->SetBack( new_pcbtext );
             m_Pcb->m_Drawings = new_pcbtext;
             /* Redessin du Texte */
             new_pcbtext->m_Pos += MoveVector;
@@ -1267,9 +1267,9 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             /* l'element est ici bon a etre efface */
             MIREPCB* new_mire = new MIREPCB( m_Pcb );
             new_mire->Copy( STRUCT );
-            new_mire->Pnext = m_Pcb->m_Drawings;
-            new_mire->Pback = m_Pcb;
-            m_Pcb->m_Drawings->Pback = new_mire;
+            new_mire->SetNext( m_Pcb->m_Drawings );
+            new_mire->SetBack( m_Pcb );
+            m_Pcb->m_Drawings->SetBack( new_mire );
             m_Pcb->m_Drawings  = new_mire;
             new_mire->m_Pos += MoveVector;
             new_mire->Draw( DrawPanel, DC, GR_OR );
@@ -1287,9 +1287,9 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             /* l'element est ici bon a etre copie */
             COTATION* new_cotation = new COTATION( m_Pcb );
             new_cotation->Copy( STRUCT );
-            new_cotation->Pnext      = m_Pcb->m_Drawings;
-            new_cotation->Pback      = m_Pcb;
-            m_Pcb->m_Drawings->Pback = new_cotation;
+            new_cotation->SetNext( m_Pcb->m_Drawings );
+            new_cotation->SetBack( m_Pcb );
+            m_Pcb->m_Drawings->SetBack( new_cotation );
             m_Pcb->m_Drawings      = new_cotation;
             new_cotation->Move( MoveVector );
             new_cotation->Draw( DrawPanel, DC, GR_OR );

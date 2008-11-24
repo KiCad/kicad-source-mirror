@@ -212,7 +212,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
             if( !Failed )
             {
-                SegmentStruct->Pnext = screen->EEDrawList;
+                SegmentStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList   = SegmentStruct;
             }
             break;
@@ -251,7 +251,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             {
                 RaccordStruct->m_Size.x -= RaccordStruct->m_Pos.x;
                 RaccordStruct->m_Size.y -= RaccordStruct->m_Pos.y;
-                RaccordStruct->Pnext = screen->EEDrawList;
+                RaccordStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList   = RaccordStruct;
             }
             break;
@@ -294,7 +294,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 
             if( !Failed )
             {
-                PolylineStruct->Pnext = screen->EEDrawList;
+                PolylineStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList    = PolylineStruct;
             }
             break;
@@ -314,7 +314,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             }
             else
             {
-                ConnectionStruct->Pnext = screen->EEDrawList;
+                ConnectionStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList = ConnectionStruct;
             }
             break;
@@ -331,7 +331,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
             {
                 NoConnectStruct = new DrawNoConnectStruct( pos );
 
-                NoConnectStruct->Pnext = screen->EEDrawList;
+                NoConnectStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList = NoConnectStruct;
             }
             break;
@@ -362,7 +362,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     sscanf( text + 3, "%X", &ii );
                     MarkerStruct->m_MarkFlags = ii;
                 }
-                MarkerStruct->Pnext = screen->EEDrawList;
+                MarkerStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList  = MarkerStruct;
             }
             break;
@@ -452,7 +452,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                 }
                 if( Struct )
                 {
-                    Struct->Pnext      = screen->EEDrawList;
+                    Struct->SetNext( screen->EEDrawList );
                     screen->EEDrawList = Struct;
                 }
             }
@@ -480,7 +480,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
     {
         Pnext = screen->EEDrawList;
         screen->EEDrawList = screen->EEDrawList->Next();
-        Pnext->Pnext = Phead;
+        Pnext->SetNext( Phead );
         Phead = Pnext;
     }
 
@@ -825,9 +825,9 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
 
     if( !Failed )
     {
-        component->Pnext    = Window->EEDrawList;
-        Window->EEDrawList      = component;
-        component->m_Parent = Window;
+        component->SetNext( Window->EEDrawList );
+        Window->EEDrawList = component;
+        component->SetParent( Window );
     }
 
     return Failed;   /* Fin lecture 1 composant */
@@ -965,7 +965,7 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
             if( SheetStruct->m_Label == NULL )
                 OldSheetLabel = SheetStruct->m_Label = SheetLabelStruct;
             else
-                OldSheetLabel->Pnext = (EDA_BaseStruct*) SheetLabelStruct;
+                OldSheetLabel->SetNext( (EDA_BaseStruct*) SheetLabelStruct );
             OldSheetLabel = SheetLabelStruct;
 
             /* Lecture des coordonnees */
@@ -1017,9 +1017,9 @@ static int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, BASE_SCREEN* Wi
     }
     if( !Failed )
     {
-        SheetStruct->Pnext    = Window->EEDrawList;
+        SheetStruct->SetNext( Window->EEDrawList );
         Window->EEDrawList    = SheetStruct;
-        SheetStruct->m_Parent = Window;
+        SheetStruct->SetParent( Window );
     }
     return Failed;   /* Fin lecture 1 composant */
 }

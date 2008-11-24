@@ -76,7 +76,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 
     /* Draw the tracks */
     pt_piste = Pcb->m_Track;
-    for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
+    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
@@ -93,7 +93,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     }
 
     pt_piste = Pcb->m_Zone;
-    for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
+    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
@@ -103,7 +103,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     // Draw footprints, this is done at last in order to print the pad holes in while
     // after the tracks
     Module = (MODULE*) Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         Plot_Module( this, DC, Module, drawmode, printmasklayer );
     }
@@ -114,7 +114,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     int color = WHITE;
     bool blackpenstate = GetGRForceBlackPenState( );
     GRForceBlackPen( FALSE );
-    for( ; pt_piste != NULL; pt_piste = (TRACK*) pt_piste->Pnext )
+    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
@@ -161,21 +161,21 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
 
     /* Draw pads */
     pt_pad = Module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         if( (pt_pad->m_Masque_Layer & masklayer ) == 0 )
             continue;
-		// Usually we draw pads in sketch mode on non copper layers:
-		if ( (masklayer & ALL_CU_LAYERS) == 0 )
-		{
-			int tmp_fill = ((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill;
-			// Switch in sketch mode
-			((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = 0;
-			pt_pad->Draw( panel, DC, draw_mode );
-			((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = tmp_fill;
-		}
-		else	// on copper layer, draw pads according to current options
-			pt_pad->Draw( panel, DC, draw_mode );
+        // Usually we draw pads in sketch mode on non copper layers:
+        if ( (masklayer & ALL_CU_LAYERS) == 0 )
+        {
+            int tmp_fill = ((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill;
+            // Switch in sketch mode
+            ((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = 0;
+            pt_pad->Draw( panel, DC, draw_mode );
+            ((WinEDA_BasePcbFrame*)panel->m_Parent)->m_DisplayPadFill = tmp_fill;
+        }
+        else	// on copper layer, draw pads according to current options
+            pt_pad->Draw( panel, DC, draw_mode );
     }
 
     /* draw footprint graphic shapes */

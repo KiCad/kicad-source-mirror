@@ -80,6 +80,9 @@ public:
     EDA_DrawLineStruct( const wxPoint& pos, int layer );
     ~EDA_DrawLineStruct() { }
 
+    EDA_DrawLineStruct* Next() const { return (EDA_DrawLineStruct*) Pnext; }
+    EDA_DrawLineStruct* Back() const { return (EDA_DrawLineStruct*) Pback; }
+
     virtual wxString GetClass() const
     {
         return wxT( "EDA_DrawLine" );

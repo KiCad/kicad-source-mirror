@@ -28,7 +28,8 @@ public:
     EQUIPOT( BOARD_ITEM* StructFather );
     ~EQUIPOT();
 
-    EQUIPOT*    Next() { return (EQUIPOT*) Pnext; }
+    EQUIPOT*    Next() const { return (EQUIPOT*) Pnext; }
+    EQUIPOT*    Back() const { return (EQUIPOT*) Pback; }
 
     /**
      * Function GetPosition

@@ -360,17 +360,17 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
      */
 
     PtModule = m_Parent->m_Pcb->m_Modules;
-    for( ; PtModule != NULL; PtModule = (MODULE*) PtModule->Pnext )
+    for( ; PtModule != NULL; PtModule = PtModule->Next() )
     {
-        if( PtModule->Pnext == NULL )
+        if( PtModule->Next() == NULL )
             break;
     }
 
     /* Ici PtModule pointe le dernier module de la liste */
-    for( ; PtModule != (MODULE*) m_Parent->m_Pcb; PtModule = PtBack )
+    for( ; (BOARD*) PtModule != m_Parent->m_Pcb; PtModule = PtBack )
     {
         MODULE* module;
-        PtBack = (MODULE*) PtModule->Pback;
+        PtBack = PtModule->Back();
         if( lib_reference.CmpNoCase( PtModule->m_LibRef ) != 0 )
             continue;
         if( check_module_value )
@@ -419,17 +419,17 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    PtModule = (MODULE*) m_Parent->m_Pcb->m_Modules;
-    for( ; PtModule != NULL; PtModule = (MODULE*) PtModule->Pnext )
+    PtModule = m_Parent->m_Pcb->m_Modules;
+    for( ; PtModule != NULL; PtModule = PtModule->Next() )
     {
-        if( PtModule->Pnext == NULL )
+        if( PtModule->Next() == NULL )
             break;
     }
 
     /* Ici PtModule pointe le dernier module de la liste */
-    for( ; PtModule != (MODULE*) (m_Parent->m_Pcb); PtModule = PtBack )
+    for( ; (BOARD*) PtModule != m_Parent->m_Pcb;  PtModule = PtBack )
     {
-        PtBack = (MODULE*) PtModule->Pback;
+        PtBack = PtModule->Back();
         if( Change_1_Module( PtModule, PtModule->m_LibRef.GetData(), ShowErr ) )
             change = TRUE;
         else if( ShowErr )
@@ -524,7 +524,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
         DisplayError( winaff, wxT( "WinEDA_BasePcbFrame::Exchange_Module() StuctType error" ) );
     }
 
-    NewModule->m_Parent = m_Pcb;
+    NewModule->SetParent( m_Pcb );
 
     m_Pcb->m_Status_Pcb = 0;
     oldpos = GetScreen()->m_Curseur;
@@ -554,12 +554,12 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
 
     /* mise a jour des netnames ( lorsque c'est possible) */
     pt_pad = NewModule->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->m_Netname = wxEmptyString;
         pt_pad->SetNet( 0 );
         pt_old_pad = OldModule->m_Pads;
-        for( ; pt_old_pad != NULL; pt_old_pad = (D_PAD*) pt_old_pad->Pnext )
+        for( ; pt_old_pad != NULL; pt_old_pad = pt_old_pad->Next() )
         {
             if( strnicmp( pt_pad->m_Padname, pt_old_pad->m_Padname,
                          sizeof(pt_pad->m_Padname) ) == 0 )
@@ -642,7 +642,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     fgets( Line, sizeof(Line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n", DateAndTime( Line ) );
 
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
         fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->m_TimeStamp );

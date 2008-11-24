@@ -74,14 +74,25 @@ public:
     MODULE( MODULE* module );
     ~MODULE();
 
+    MODULE*    Next() const { return (MODULE*) Pnext; }
+    MODULE*    Back() const { return (MODULE*) Pback; }
+
     void    Copy( MODULE* Module );     // Copy structure
 
-    MODULE* Next()  { return (MODULE*) Pnext; }
 
-    /** Function Set_Rectangle_Encadrement()
-     * Calculates the bounding box
-     *  for orient 0 et origin = module anchor)
-    */
+    /**
+     * Function Add
+     * adds the given item to this MODULE and takes ownership of its memory.
+     * @param aBoardItem The item to add to this board.
+     * @param doInsert If true, then insert, else append
+    void    Add( BOARD_ITEM* aBoardItem, bool doInsert = true );
+     */
+
+
+    /**
+     * Function Set_Rectangle_Encadrement()
+     * calculates the bounding box for orient 0 et origin = module anchor)
+     */
     void    Set_Rectangle_Encadrement();
 
     /** function SetRectangleExinscrit()
@@ -89,6 +100,7 @@ public:
      *  and also calculates the area value (used in automatic placement)
      */
     void    SetRectangleExinscrit();
+
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Footprint
@@ -156,12 +168,12 @@ public:
 
     /**
      * Function Read_GPCB_Descr
-     * Read a footprint description in GPCB format (newlib version)
+     * reads a footprint description in GPCB format (newlib version)
      * @param CmpFullFileName = Full file name (there is one footprint per file.
      * this is also the footprint name
      * @return bool - true if success reading else false.
      */
-    bool        Read_GPCB_Descr(const wxString & CmpFullFileName);
+    bool    Read_GPCB_Descr(const wxString & CmpFullFileName);
     int     Read_3D_Descr( FILE* File, int* LineNum = NULL );
 
     /* drawing functions */

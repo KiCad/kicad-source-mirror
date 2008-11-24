@@ -161,7 +161,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
             drawitem->m_Start = track->m_Start;
             drawitem->m_End   = track->m_End;
             drawitem->m_Width = track->m_Width;
-            drawitem->Pnext   = pcb->m_Drawings;
+            drawitem->SetNext( pcb->m_Drawings );
             pcb->m_Drawings   = drawitem;
         }
         else

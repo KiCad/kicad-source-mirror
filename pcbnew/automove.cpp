@@ -223,7 +223,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     }
 
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext ) // remise a jour du rect d'encadrement
+    for( ; Module != NULL; Module = Module->Next() ) // remise a jour du rect d'encadrement
     {
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();
@@ -315,7 +315,7 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
     else
     {
         Module = m_Pcb->m_Modules;
-        for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+        for( ; Module != NULL; Module = Module->Next() )
         {
             if( WildCompareString( ModulesMaskSelection, Module->m_Reference->m_Text ) )
             {
@@ -346,7 +346,7 @@ MODULE** GenListeModules( BOARD* Pcb, int* NbModules )
      *  peut deplacer */
     Module = Pcb->m_Modules;
     NbMod  = 0;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
         NbMod++;
 
     ListeMod = (MODULE**) MyZMalloc( (NbMod + 1) * sizeof(MODULE *) );
@@ -359,7 +359,7 @@ MODULE** GenListeModules( BOARD* Pcb, int* NbModules )
 
     PtList = ListeMod;
     Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         *PtList = Module; PtList++;
         Module->SetRectangleExinscrit();

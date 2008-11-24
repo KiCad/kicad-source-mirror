@@ -208,10 +208,11 @@ MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
 {
     MIREPCB* MirePcb = new MIREPCB( m_Pcb );
 
-    MirePcb->Pnext = m_Pcb->m_Drawings;
-    MirePcb->Pback = m_Pcb;
+    MirePcb->SetNext( m_Pcb->m_Drawings );
+    MirePcb->SetBack( m_Pcb );
+
     if( m_Pcb->m_Drawings )
-        m_Pcb->m_Drawings->Pback = MirePcb;
+        m_Pcb->m_Drawings->SetBack( MirePcb );
     m_Pcb->m_Drawings = MirePcb;
 
     MirePcb->SetLayer( EDGE_N );

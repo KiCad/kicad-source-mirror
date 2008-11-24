@@ -29,7 +29,6 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  */
 
 {
-    MODULE*     Module;
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
     if( !m_Pcb || !screen )
@@ -45,10 +44,9 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, screen, 0 );
 
     /* Redraw the footprint */
-    Module = (MODULE*) m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
-        Module->Draw( DrawPanel, DC, GR_OR );
+        module->Draw( DrawPanel, DC, GR_OR );
     }
 
     Affiche_Status_Box();

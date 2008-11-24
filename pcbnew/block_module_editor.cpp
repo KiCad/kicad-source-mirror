@@ -404,9 +404,9 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         D_PAD* NewPad = new D_PAD( module );
         NewPad->Copy( pad );
         NewPad->m_Selected = IS_SELECTED;
-        NewPad->Pnext = module->m_Pads;
-        NewPad->Pback = module;
-        module->m_Pads->Pback = NewPad;
+        NewPad->SetNext( module->m_Pads );
+        NewPad->SetBack( module );
+        module->m_Pads->SetBack( NewPad );
         module->m_Pads = NewPad;
     }
 
@@ -438,9 +438,9 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         if( NewStruct == NULL )
             break;
         NewStruct->m_Selected = IS_SELECTED;
-        NewStruct->Pnext = module->m_Drawings;
-        NewStruct->Pback = module;
-        module->m_Drawings->Pback = module;
+        NewStruct->SetNext( module->m_Drawings );
+        NewStruct->SetBack( module );
+        module->m_Drawings->SetBack( module );
         module->m_Drawings = NewStruct;
     }
 

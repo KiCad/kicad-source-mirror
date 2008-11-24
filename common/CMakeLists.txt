@@ -16,6 +16,7 @@ set(COMMON_SRCS
     copy_to_clipboard.cpp
     dcsvg.cpp
     displlst.cpp
+    dlist.cpp
     drawtxt.cpp
     edaappl.cpp
     eda_dde.cpp

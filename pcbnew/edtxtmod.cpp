@@ -38,11 +38,11 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
     Text = new TEXTE_MODULE( Module );
 
     /* Chainage de la nouvelle structure en tete de liste drawings */
-    Text->Pnext = Module->m_Drawings;
-    Text->Pback = Module;
+    Text->SetNext( Module->m_Drawings );
+    Text->SetBack( Module );
 
     if( Module->m_Drawings )
-        Module->m_Drawings->Pback = Text;
+        Module->m_Drawings->SetBack( Text );
     Module->m_Drawings = Text;
     Text->m_Flags = IS_NEW;
 
@@ -72,7 +72,7 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     if( Text == NULL )
         return;
 
-    MODULE* module = (MODULE*) Text->m_Parent;
+    MODULE* module = (MODULE*) Text->GetParent();
 
     // we expect MoveVector to be (0,0) if there is no move in progress
     Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
@@ -104,7 +104,7 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC )
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->m_Parent;
+    Module = (MODULE*) Text->GetParent();
 
     if( Text->m_Type == TEXT_is_DIVERS )
     {
@@ -138,7 +138,7 @@ static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->m_Parent;
+    Module = (MODULE*) Text->GetParent();
 
     Text->Draw( Panel, DC, GR_XOR, MoveVector );
 
@@ -168,7 +168,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->m_Parent;
+    Module = (MODULE*) Text->GetParent();
 
     Text->m_Flags   |= IS_MOVED;
     Module->m_Flags |= IN_EDIT;
@@ -201,7 +201,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
         Text->m_Pos = GetScreen()->m_Curseur;
         /* mise a jour des coordonnées relatives a l'ancre */
-        MODULE* Module = (MODULE*) Text->m_Parent;
+        MODULE* Module = (MODULE*) Text->GetParent();
         if( Module )
         {
             int px = Text->m_Pos.x - Module->m_Pos.x;
@@ -239,7 +239,7 @@ static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     if( Text == NULL )
         return;
 
-    Module = (MODULE*) Text->m_Parent;
+    Module = (MODULE*) Text->GetParent();
     /* effacement du texte : */
 
     if( erase )

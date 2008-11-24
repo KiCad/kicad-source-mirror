@@ -664,7 +664,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     if( CurrentDrawItem->m_Flags & IS_NEW )
     {
         SaveCopyInUndoList( CurrentLibEntry );
-        CurrentDrawItem->Pnext      = CurrentLibEntry->m_Drawings;
+        CurrentDrawItem->SetNext( CurrentLibEntry->m_Drawings );
         CurrentLibEntry->m_Drawings = CurrentDrawItem;
 
         switch( CurrentDrawItem->Type() )

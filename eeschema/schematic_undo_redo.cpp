@@ -217,7 +217,9 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
             break;
 
         case IS_CHANGED:        /* Create a copy of schematic */
-            NewList->m_Son = CopyItem = DuplicateStruct( ItemToCopy );
+            CopyItem = DuplicateStruct( ItemToCopy );
+            NewList->SetSon( CopyItem );
+
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) CopyItem;
@@ -239,7 +241,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
         case IS_NEW:
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
-                NewList->m_Son = ItemToCopy;
+                NewList->SetSon( ItemToCopy );
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
@@ -258,11 +260,11 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
 
         case IS_NEW | IS_CHANGED:
         case IS_WIRE_IMAGE:
-            NewList->m_Son = ItemToCopy;
+            NewList->SetSon( ItemToCopy );
             break;
 
         case IS_DELETED:
-            NewList->m_Son      = ItemToCopy;
+            NewList->SetSon( ItemToCopy );
             ItemToCopy->m_Flags = flag_type_command;
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
@@ -327,7 +329,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
  *  Put data pointed by List in the previous state, i.e. the state memorised by List
  */
 {
-    SCH_ITEM*   FirstItem = (SCH_ITEM*) List->m_Son;
+    SCH_ITEM*   FirstItem = (SCH_ITEM*) List->GetSon();
     SCH_ITEM*   item;
     DrawPickedStruct* PickedList;
 
@@ -374,7 +376,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
             FirstItem = (SCH_ITEM*)List->m_Image;
             ( (SCH_SCREEN*) GetScreen() )->RemoveFromDrawList( FirstItem );
             FirstItem->m_Flags = IS_DELETED;
-            List->m_Son = FirstItem;
+            List->SetSon( FirstItem );
         }
         break;
 
@@ -386,7 +388,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
             while( PickedList )
             {
                 item = PickedList->m_PickedStruct;
-                item->Pnext = GetScreen()->EEDrawList;
+                item->SetNext( GetScreen()->EEDrawList );
                 GetScreen()->EEDrawList = item;
                 item->m_Flags = 0;
                 PickedList->m_PickedStruct = NULL;
@@ -397,21 +399,21 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
         }
         else
         {
-            FirstItem->Pnext = GetScreen()->EEDrawList;
+            FirstItem->SetNext( GetScreen()->EEDrawList );
             GetScreen()->EEDrawList = FirstItem;
             FirstItem->m_Flags = 0;
-            List->m_Image = List->m_Son;
-            List->m_Son   = NULL;
+            List->m_Image = List->GetSon();
+            List->SetSon( NULL );
         }
         break;
 
     case IS_WIRE_IMAGE:
         /* Exchange the current wires and the oild wires */
-        List->m_Son = ( (SCH_SCREEN*) GetScreen() )->ExtractWires( FALSE );
+        List->SetSon( ( (SCH_SCREEN*) GetScreen() )->ExtractWires( FALSE ) );
         while( FirstItem )
         {
             SCH_ITEM* nextitem = FirstItem->Next();
-            FirstItem->Pnext = GetScreen()->EEDrawList;
+            FirstItem->SetNext( GetScreen()->EEDrawList );
             GetScreen()->EEDrawList = FirstItem;
             FirstItem->m_Flags = 0;
             FirstItem = nextitem;
@@ -445,7 +447,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
 
             case IS_DELETED:
                 item = PickedList->m_PickedStruct;
-                item->Pnext = GetScreen()->EEDrawList;
+                item->SetNext( GetScreen()->EEDrawList );
                 GetScreen()->EEDrawList = item;
                 item->m_Flags = 0;
                 PickedList->m_PickedStruct = NULL;
@@ -513,8 +515,8 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
 
     for( ; List != NULL; List = nextitem )
     {
-        nextitem  = List->Pnext;
-        FirstItem = List->m_Son;
+        nextitem  = List->Next();
+        FirstItem = List->GetSon();
         CmdType   = List->m_Flags;
 
         SAFE_DELETE( List );
@@ -571,7 +573,7 @@ void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
             {
                 while( FirstItem )
                 {
-                    EDA_BaseStruct* nextitem = FirstItem->Pnext;
+                    EDA_BaseStruct* nextitem = FirstItem->Next();
                     delete          FirstItem;
                     FirstItem = nextitem;
                 }
@@ -638,24 +640,25 @@ void SCH_SCREEN::AddItemToUndoList( EDA_BaseStruct* newitem )
         return;
 
     if( m_UndoList )
-        m_UndoList->Pback = newitem;
-    newitem->Pnext = m_UndoList;
-    newitem->Pback = NULL;
+        m_UndoList->SetBack( newitem );
+
+    newitem->SetNext( m_UndoList );
+    newitem->SetBack( NULL );
     m_UndoList = newitem;
 
     /* Free oldest items, if count max reached */
     for( ii = 0, item = m_UndoList; ii < m_UndoRedoCountMax; ii++ )
     {
-        if( item->Pnext == NULL )
+        if( item->Next() == NULL )
             return;
-        item = item->Pnext;
+        item = item->Next();
     }
 
     if( item == NULL )
         return;
 
-    nextitem    = item->Pnext;
-    item->Pnext = NULL; // Set end of chain
+    nextitem    = item->Next();
+    item->SetNext( NULL ); // Set end of chain
 
     // Delete the extra  items
     ClearUndoORRedoList( nextitem );
@@ -672,22 +675,23 @@ void SCH_SCREEN::AddItemToRedoList( EDA_BaseStruct* newitem )
     if( newitem == NULL )
         return;
 
-    newitem->Pback = NULL;
-    newitem->Pnext = m_RedoList;
+    newitem->SetBack( NULL );
+    newitem->SetNext( m_RedoList );
     m_RedoList = newitem;
+
     /* Free first items, if count max reached */
     for( ii = 0, item = m_RedoList; ii < m_UndoRedoCountMax; ii++ )
     {
-        if( item->Pnext == NULL )
+        if( item->Next() == NULL )
             break;
-        item = item->Pnext;
+        item = item->Next();
     }
 
     if( item == NULL )
         return;
 
-    nextitem    = item->Pnext;
-    item->Pnext = NULL; // Set end of chain
+    nextitem    = item->Next();
+    item->SetNext( NULL ); // Set end of chain
 
     // Delete the extra items
     ClearUndoORRedoList( nextitem );

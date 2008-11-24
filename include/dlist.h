@@ -40,7 +40,7 @@ protected:
     EDA_BaseStruct*     first;          ///< first element in list, or NULL if list empty
     EDA_BaseStruct*     last;           ///< last elment in list, or NULL if empty
     unsigned            count;          ///< how many elements are in the list
-    bool                meOwner;        ///< I must delete the objects in my destructor
+    bool                meOwner;        ///< I must delete the objects I hold in my destructor
 
     /**
      * Constructor DHEAD
@@ -113,6 +113,7 @@ public:
  * is the head of a doubly linked list.  It contains pointers to the first
  * and last elements in a doubly linked list.  The elements in the list must
  * be of class T or derived from T, and T must be derived from EDA_BaseStruct.
+ * @see DHEAD for additional public functions.
  */
 template <class T>
 class DLIST : public DHEAD

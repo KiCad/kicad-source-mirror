@@ -19,6 +19,9 @@ public:
     MIREPCB( BOARD_ITEM* StructFather );
     ~MIREPCB();
 
+    MIREPCB*    Next() const { return (MIREPCB*) Pnext; }
+    MIREPCB*    Back() const { return (MIREPCB*) Pnext; }
+
     wxPoint& GetPosition()
     {
         return m_Pos;

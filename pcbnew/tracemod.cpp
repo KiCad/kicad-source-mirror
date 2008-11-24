@@ -42,7 +42,6 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
  */
 {
     int                  tmp;
-    D_PAD*               pt_pad;
     PCB_SCREEN*          screen;
     WinEDA_BasePcbFrame* frame;
 
@@ -53,12 +52,12 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
     frame->m_DisplayPadFill = FALSE;
 
     /* trace des pastilles */
-    pt_pad = Module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( (pt_pad->m_Masque_Layer & MasqueLayer) == 0 )
+        if( (pad->m_Masque_Layer & MasqueLayer) == 0 )
             continue;
-        pt_pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );
+
+        pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );
     }
 
     frame->m_DisplayPadFill = tmp;

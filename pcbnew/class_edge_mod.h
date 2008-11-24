@@ -29,6 +29,14 @@ public:
     EDGE_MODULE( EDGE_MODULE* edge );
     ~EDGE_MODULE();
 
+    EDGE_MODULE* Next() const { return (EDGE_MODULE*) Pnext; }
+    EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
+
+
+/**
+ * Function UnLink
+ * remove item from linked list.
+ */
 
     /**
      * Function GetPosition

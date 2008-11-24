@@ -45,7 +45,7 @@ public:
                   int             timestamp,
                   const wxString& path );
     ~MODULEtoLOAD() { };
-    MODULEtoLOAD* Next() { return (MODULEtoLOAD*) Pnext; }
+    MODULEtoLOAD* Next() const { return (MODULEtoLOAD*) Pnext; }
 };
 
 /* Fonctions locales : */
@@ -293,7 +293,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
             else /* Raz netnames sur pads */
             {
                 PtPad = Module->m_Pads;
-                for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+                for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Next() )
                 {
                     PtPad->m_Netname = wxEmptyString;
                 }
@@ -590,7 +590,7 @@ int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module )
 
     /* recherche du pad */
     pad = Module->m_Pads; trouve = FALSE;
-    for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+    for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
     {
         if( strnicmp( TextPinName, pad->m_Padname, 4 ) == 0 )
         { /* trouve */
@@ -637,12 +637,12 @@ MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
 
     /* Calcul du nombre des modules */
     nb_empr = 0; Module = (MODULE*) m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         nb_empr++;
 
     ListNames = (const wxChar**) MyZMalloc( (nb_empr + 1) * sizeof(wxChar*) );
     Module    = (MODULE*) m_Pcb->m_Modules;
-    for( ii = 0; Module != NULL; Module = (MODULE*) Module->Pnext, ii++ )
+    for( ii = 0; Module != NULL; Module = (MODULE*) Module->Next(), ii++ )
     {
         ListNames[ii] = Module->m_Reference->m_Text.GetData();
     }
@@ -659,7 +659,7 @@ MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
     else /* Recherche du module selectionne */
     {
         Module = (MODULE*) m_Pcb->m_Modules;
-        for( jj = 0; Module != NULL; Module = (MODULE*) Module->Pnext, jj++ )
+        for( jj = 0; Module != NULL; Module = (MODULE*) Module->Next(), jj++ )
         {
             if( Module->m_Reference->m_Text.Cmp( ListNames[ii] ) == 0 )
                 break;
@@ -984,7 +984,7 @@ void AddToList( const wxString& NameLibCmp, const wxString& CmpName,
     MODULEtoLOAD* NewMod;
 
     NewMod = new MODULEtoLOAD( NameLibCmp, CmpName, TimeStamp, path );
-    NewMod->Pnext = s_ModuleToLoad_List;
+    NewMod->SetNext( s_ModuleToLoad_List );
     s_ModuleToLoad_List = NewMod;
     s_NbNewModules++;
 }
@@ -1101,12 +1101,12 @@ void SortListModulesToLoadByLibname( int NbModules )
     for( ii = 0; ii < NbModules - 1; ii++ )
     {
         item = base_list[ii];
-        item->Pnext = base_list[ii + 1];
+        item->SetNext( base_list[ii + 1] );
     }
 
     // Dernier item: Pnext = NULL:
     item = base_list[ii];
-    item->Pnext = NULL;
+    item->SetNext( NULL );
 
     free( base_list );
 }

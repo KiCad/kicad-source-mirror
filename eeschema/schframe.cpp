@@ -140,6 +140,10 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
     m_Draw_Grid      = g_ShowGrid;      // TRUE to show a grid
     m_Draw_Sheet_Ref = TRUE;            // TRUE to show sheet references
     m_CurrentSheet   = new DrawSheetPath();
+    m_CurrentField   = NULL;
+    m_Multiflag      = 0;
+    m_TextFieldSize  = DEFAULT_SIZE_TEXT;
+
 
     CreateScreens();
 

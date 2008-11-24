@@ -314,7 +314,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
     DanglingEndHandle* StartList = NULL, * item, * lastitem = NULL;
     EDA_BaseStruct* DrawItem;
 
-    for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Pnext )
+    for( DrawItem = DrawList; DrawItem != NULL; DrawItem = DrawItem->Next() )
     {
         switch( DrawItem->Type() )
         {

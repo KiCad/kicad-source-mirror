@@ -301,7 +301,7 @@ int BuildComponentsListFromSchematic( ListComponent* aList )
 
             itemCount++;
             DrawLibItem = (SCH_COMPONENT*) SchItem;
-            DrawLibItem->m_Parent = sheet->LastScreen();
+            DrawLibItem->SetParent( sheet->LastScreen() );
             if( aList )
             {
                 aList->m_Comp      = DrawLibItem;
@@ -362,29 +362,29 @@ static int GenListeGLabels( ListLabel* list )
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:
-            {
-                #define Sheet ( (DrawSheetStruct*) DrawList )
-                SheetLabel = Sheet->m_Label;
-                while( SheetLabel != NULL )
                 {
-                    if( list )
+                    #define Sheet ( (DrawSheetStruct*) DrawList )
+                    SheetLabel = Sheet->m_Label;
+                    while( SheetLabel != NULL )
                     {
-                        list->m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
-                        snprintf( list->m_SheetPath, sizeof(list->m_SheetPath),
-                                 "%s", CONV_TO_UTF8( path ) );
-                        list->m_Label = SheetLabel;
-                        list++;
+                        if( list )
+                        {
+                            list->m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
+                            snprintf( list->m_SheetPath, sizeof(list->m_SheetPath),
+                                     "%s", CONV_TO_UTF8( path ) );
+                            list->m_Label = SheetLabel;
+                            list++;
+                        }
+                        itemCount++;
+                        SheetLabel = SheetLabel->Next();
                     }
-                    itemCount++;
-                    SheetLabel = (Hierarchical_PIN_Sheet_Struct*) (SheetLabel->Pnext);
                 }
-            }
                 break;
 
             default:
                 break;
             }
-            DrawList = DrawList->Pnext;
+            DrawList = DrawList->Next();
         }
     }
 
@@ -750,13 +750,13 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
             if( CompactForm )
             {
                 fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->m_Parent, DrawLibItem->m_Pos );
+                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->GetParent(), DrawLibItem->m_Pos );
                 fprintf( f, "%c%s)", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
             }
             else
             {
                 fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->m_Parent, DrawLibItem->m_Pos );
+                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->GetParent(), DrawLibItem->m_Pos );
                 fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
             }
         }
@@ -819,7 +819,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
         {
-#if defined(KICAD_GOST)        
+#if defined(KICAD_GOST)
             Unit = aList[ii].m_Unit + '1' - 1;
         }
 
@@ -837,7 +837,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
         {
             msg = aList[ii].m_SheetList.PathHumanReadable();
             fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-            msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->m_Parent, DrawLibItem->m_Pos );
+            msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->GetParent(), DrawLibItem->m_Pos );
             fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
         }
 

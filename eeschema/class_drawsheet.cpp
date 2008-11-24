@@ -146,7 +146,7 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
 
 
     newitem->m_Size      = m_Size;
-    newitem->m_Parent    = m_Parent;
+    newitem->SetParent( m_Parent );
     newitem->m_TimeStamp = GetTimeStamp();
 
     newitem->m_FileName      = m_FileName;
@@ -161,15 +161,15 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
     if( label )
     {
         Slabel = newitem->m_Label = label->GenCopy();
-        Slabel->m_Parent = newitem;
+        Slabel->SetParent( newitem );
         label = label->Next();
     }
 
     while( label )
     {
-        Slabel->Pnext = label->GenCopy();
-        Slabel = (Hierarchical_PIN_Sheet_Struct*) Slabel->Pnext;
-        Slabel->m_Parent = newitem;
+        Slabel->SetNext( label->GenCopy() );
+        Slabel = Slabel->Next();
+        Slabel->SetParent( newitem );
         label = label->Next();
     }
 
@@ -202,14 +202,14 @@ void DrawSheetStruct::SwapData( DrawSheetStruct* copyitem )
     Hierarchical_PIN_Sheet_Struct* label = m_Label;
     while( label )
     {
-        label->m_Parent = this;
+        label->SetParent( this );
         label = label->Next();
     }
 
     label = copyitem->m_Label;
     while( label )
     {
-        label->m_Parent = copyitem;
+        label->SetParent( copyitem );
         label = label->Next();
     }
 }
@@ -257,13 +257,15 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw 
 
         EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
         SCH_HIERLABEL*  HLabel = NULL;
-        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Pnext )
+        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
                 continue;
+
             HLabel = (SCH_HIERLABEL*) DrawStruct;
             if( Pinsheet->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
                 break; // Found!
+
             HLabel = NULL;
         }
 
@@ -375,7 +377,7 @@ int DrawSheetStruct::ComponentCount()
     if( m_AssociatedScreen )
     {
         EDA_BaseStruct* bs;
-        for( bs = m_AssociatedScreen->EEDrawList; bs != NULL; bs = bs->Pnext )
+        for( bs = m_AssociatedScreen->EEDrawList; bs != NULL; bs = bs->Next() )
         {
             if( bs->Type() == TYPE_SCH_COMPONENT )
             {
@@ -416,7 +418,7 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
                 if( ss->SearchHierarchy( filename, screen ) )
                     return true;
             }
-            strct = strct->Pnext;
+            strct = strct->Next();
         }
     }
     return false;
@@ -446,7 +448,7 @@ bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* lis
                 if( ss->LocatePathOfScreen( screen, list ) )
                     return true;
             }
-            strct = strct->Pnext;
+            strct = strct->Next();
         }
 
         list->Pop();
@@ -488,7 +490,7 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
                         if( !sheetstruct->Load( frame ) )
                             success = false;
                     }
-                    bs = bs->Pnext;
+                    bs = bs->Next();
                 }
             }
         }
@@ -506,7 +508,7 @@ int DrawSheetStruct::CountSheets()
     if( m_AssociatedScreen )
     {
         EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
-        for( ; strct; strct = strct->Pnext )
+        for( ; strct; strct = strct->Next() )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
@@ -787,7 +789,7 @@ void DrawSheetPath::UpdateAllScreenReferences()
             component->GetField(REFERENCE)->m_Text = component->GetRef( this );
             component->m_Multi = component->GetUnitSelection( this );
         }
-        t = t->Pnext;
+        t = t->Next();
     }
 }
 

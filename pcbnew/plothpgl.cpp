@@ -248,7 +248,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 48, wxT( "DrawMod" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         PtStruct = Module->m_Drawings;
         for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
@@ -271,10 +271,10 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 48, wxT( "Pads    " ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Next() )
         {
             wxPoint shape_pos;
             if( (PtPad->m_Masque_Layer & masque_layer) == 0 )
@@ -328,7 +328,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
         nb_items = 0;
         Affiche_1_Parametre( this, 56, wxT( "Vias" ), wxEmptyString, RED );
 
-        for( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
+        for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
         {
             if( pts->Type() != TYPEVIA )
                 continue;
@@ -360,7 +360,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     /* trace des segments pistes */
     nb_items = 0;
     Affiche_1_Parametre( this, 64, wxT( "Tracks  " ), wxEmptyString, YELLOW );
-    for( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
+    for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
         if( pts->Type() == TYPEVIA )
             continue;
@@ -397,7 +397,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     /* trace des segments pistes et zones */
     nb_items = 0;
     Affiche_1_Parametre( this, 64, wxT( "Zones  " ), wxEmptyString, YELLOW );
-    for( pts = m_Pcb->m_Zone; pts != NULL; pts = (TRACK*) pts->Pnext )
+    for( pts = m_Pcb->m_Zone; pts != NULL; pts = pts->Next() )
     {
         if( g_TabOneLayerMask[pts->GetLayer()] & masque_layer )
         {

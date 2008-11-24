@@ -911,7 +911,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
 
         /* No problem if pads are from the same footprint
          *  and have the same pad number ( equivalent pads  )  */
-        if( (pad->m_Parent == aRefPad->m_Parent) && (pad->m_NumPadName == aRefPad->m_NumPadName) )
+        if( (pad->GetParent() == aRefPad->GetParent()) && (pad->m_NumPadName == aRefPad->m_NumPadName) )
             continue;
 
         if( !checkClearancePadToPad( aRefPad, pad, g_DesignSettings.m_TrackClearence ) )

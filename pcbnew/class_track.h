@@ -50,8 +50,8 @@ public:
     TRACK* Copy() const;
 
     TRACK* Next() const { return (TRACK*) Pnext; }
-
     TRACK* Back() const { return (TRACK*) Pback; }
+
 
     /**
      * Function GetPosition
@@ -89,7 +89,7 @@ public:
      * @param aPcb The BOARD to insert into.
      * @param InsertPoint See above
      */
-    void    Insert( BOARD* aPcb, BOARD_ITEM* InsertPoint );
+    void    Insert( BOARD* aPcb, TRACK* InsertPoint );
 
     /**
      * Function GetBestInsertPoint
@@ -275,6 +275,9 @@ public:
         TRACK( source )
     {
     }
+
+
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
 
 
     /**

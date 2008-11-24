@@ -162,7 +162,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
 
     /* Draw items type Drawings Pcb : */
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -199,10 +199,10 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 38, wxT( "DrawMod" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         PtStruct = Module->m_Drawings;
-        for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+        for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
             switch( PtStruct->Type() )
             {
@@ -221,10 +221,10 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 48, wxT( "Pads" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Next() )
         {
             wxPoint shape_pos;
             if( (PtPad->m_Masque_Layer & masque_layer) == 0 )
@@ -280,7 +280,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     {
         nb_items = 0;
         Affiche_1_Parametre( this, 56, wxT( "Vias" ), wxEmptyString, RED );
-        for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
+        for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
         {
             if( track->Type() != TYPEVIA )
                 continue;
@@ -312,7 +312,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 64, wxT( "Tracks" ), wxEmptyString, YELLOW );
 
-    for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
     {
         wxPoint end;
 
@@ -337,7 +337,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     if( m_Pcb->m_Zone )
         Affiche_1_Parametre( this, 72, wxT( "Zones  " ), wxEmptyString, YELLOW );
 
-    for( track = m_Pcb->m_Zone; track != NULL; track = (TRACK*) track->Pnext )
+    for( track = m_Pcb->m_Zone; track != NULL; track = (TRACK*) track->Next() )
     {
         wxPoint end;
 

@@ -310,10 +310,10 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
 
     /* Copie des champs */
     for( OldField = OldEntry->Fields; OldField != NULL;
-         OldField = (LibDrawField*) OldField->Pnext )
+         OldField = (LibDrawField*) OldField->Next() )
     {
         NewField = OldField->GenCopy();
-        NewField->Pnext   = NewStruct->Fields;
+        NewField->SetNext( NewStruct->Fields );
         NewStruct->Fields = NewField;
     }
 
@@ -330,10 +330,10 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
             if( LastItem == NULL )
                 NewStruct->m_Drawings = NewDrawings;
             else
-                LastItem->Pnext = NewDrawings;
+                LastItem->SetNext( NewDrawings );
 
             LastItem = NewDrawings;
-            NewDrawings->Pnext = NULL;
+            NewDrawings->SetNext( NULL );
         }
         else	// Should nevers occurs, just in case...
         {       // CopyDrawEntryStruct() was not able to duplicate the type of OldDrawings
@@ -395,7 +395,7 @@ bool EDA_LibComponentStruct::Save( FILE* aFile )
     m_Name.Save( aFile );
 
     for( Field = Fields; Field!= NULL;
-         Field = (LibDrawField*) Field->Pnext )
+         Field = (LibDrawField*) Field->Next() )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;

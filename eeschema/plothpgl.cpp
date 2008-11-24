@@ -572,7 +572,7 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
         InitPlotParametresHPGL( PlotOffset, g_PlotScaleX, g_PlotScaleY );
         Plot_1_Page_HPGL( PlotFileName, screen );
         SetLocaleTo_Default( );
-        screen = (BASE_SCREEN*) screen->Pnext;
+        screen = screen->Next();
         if( Select_PlotAll == FALSE )
             break;
     }
@@ -721,7 +721,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
         }
 
         Plume( 'U' );
-        DrawList = DrawList->Pnext;
+        DrawList = DrawList->Next();
     }
 
     /* fin */

@@ -51,7 +51,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
     {
         Track->SetState( SEGM_FIXE, Flag_On );
         Track->SetState( BUSY, OFF );
-        Track = (TRACK*) Track->Pnext;
+        Track = Track->Next();
     }
 
     DrawPanel->CursorOn( DC );    // Display cursor shape
@@ -74,7 +74,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
     /* search the first segment for the selected net_code */
     if( net_code >= 0 )
     {
-        for( ; Track != NULL; Track = (TRACK*) Track->Pnext )
+        for( ; Track != NULL; Track = Track->Next() )
         {
             if( net_code == Track->GetNet() )
                 break;

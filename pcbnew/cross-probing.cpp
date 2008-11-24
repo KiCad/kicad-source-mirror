@@ -155,7 +155,7 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         break;
 
     case TYPEPAD:
-        module = (MODULE*) objectToSync->m_Parent;
+        module = (MODULE*) objectToSync->GetParent();
         pad    = (D_PAD*) objectToSync;
         msg    = pad->ReturnStringPadName();
         sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
@@ -166,7 +166,7 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
     case TYPETEXTEMODULE:
         #define REFERENCE 0
         #define VALUE     1
-        module   = (MODULE*) objectToSync->m_Parent;
+        module   = (MODULE*) objectToSync->GetParent();
         text_mod = (TEXTE_MODULE*) objectToSync;
         if( text_mod->m_Type == REFERENCE )
             text_key = "$REF:";

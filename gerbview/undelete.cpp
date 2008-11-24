@@ -101,8 +101,11 @@ BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
             PtStruct->SetState( DELETED, ON );
             if( nbitems <= 1 )
                 NextS = NULL;                       /* fin de chaine */
-            PtStruct->Pnext = NextS;
-            PtStruct->Pback = Back; Back = PtStruct;
+
+            PtStruct->SetNext( NextS );
+            PtStruct->SetBack( Back );
+            Back = PtStruct;
+
             if( NextS == NULL )
                 break;
         }

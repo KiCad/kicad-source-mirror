@@ -40,7 +40,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
 
     /* Trace du contour du PCB et des Elements du  type Drawings Pcb */
     PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -81,7 +81,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         for( MODULE* Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
         {
             pt_pad = (D_PAD*) Module->m_Pads;
-            for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+            for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
             {
                 /* Tst si layer OK */
                 if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )
@@ -262,7 +262,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         }
 
         pt_texte = (TEXTE_MODULE*) Module->m_Drawings;
-        for( ; pt_texte != NULL; pt_texte = (TEXTE_MODULE*) pt_texte->Pnext )
+        for( ; pt_texte != NULL; pt_texte = pt_texte->Next() )
         {
             if( pt_texte->Type() != TYPETEXTEMODULE )
                 continue;
@@ -445,10 +445,10 @@ void Plot_Edges_Modules( BOARD* pcb, int format_plot, int masque_layer )
 
     nb_items = 0;
     Module   = pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         PtEdge = (EDGE_MODULE*) Module->m_Drawings;
-        for( ; PtEdge != NULL; PtEdge = (EDGE_MODULE*) PtEdge->Pnext )
+        for( ; PtEdge != NULL; PtEdge = PtEdge->Next() )
         {
             if( PtEdge->Type() != TYPEEDGEMODULE )
                 continue;
@@ -527,8 +527,8 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         // which are relative to module position, orientation 0
         int     ii, * source, * ptr, * ptr_base;
         MODULE* Module = NULL;
-        if( PtEdge->m_Parent && (PtEdge->m_Parent->Type() == TYPEMODULE) )
-            Module = (MODULE*) PtEdge->m_Parent;
+        if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPEMODULE) )
+            Module = (MODULE*) PtEdge->GetParent();
         ptr    = ptr_base = (int*) MyMalloc( 2 * PtEdge->m_PolyCount * sizeof(int) );
         source = PtEdge->m_PolyList;
         for( ii = 0; ii < PtEdge->m_PolyCount; ii++ )
@@ -625,13 +625,13 @@ void Plot_1_texte( int format_plot, const wxString& Text, int angle,
     for( ; kk < nbcodes; kk++ )
     {
 #if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-	int code = Text.GetChar(kk) & 0x7FF;
-	if ( code > 0x40F && code < 0x450 ) // big small Cyr
-	    code = utf8_to_ascii[code - 0x410] & 0xFF;
+    int code = Text.GetChar(kk) & 0x7FF;
+    if ( code > 0x40F && code < 0x450 ) // big small Cyr
+        code = utf8_to_ascii[code - 0x410] & 0xFF;
         else
-	    code = code & 0xFF;
+        code = code & 0xFF;
 #else
-	int code = Text.GetChar( kk ) & 0xFF;
+    int code = Text.GetChar( kk ) & 0xFF;
 #endif
         ptcar = graphic_fonte_shape[code];  /* ptcar pointe la description
                                              *  du caractere a dessiner */

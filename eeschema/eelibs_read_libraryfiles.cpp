@@ -92,8 +92,8 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
         LoadDocLib( frame, FullFileName, NewLib->m_Name );
     }
     else{
-		SAFE_DELETE( NewLib );
-	}
+        SAFE_DELETE( NewLib );
+    }
     fclose( f );
     return NewLib;
 }
@@ -138,7 +138,7 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
         if( LibName.IsEmpty() )
             continue;
 
-		FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
+        FullLibName = MakeFileName( g_RealLibDirBuffer, LibName, g_LibExtBuffer );
 
         // Loaded library statusbar message
         msg = _( "Library " ) + FullLibName;
@@ -238,7 +238,7 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
         TempLib->m_Pnext = TempLib->m_Pnext->m_Pnext;
     }
 
-	SAFE_DELETE( Lib );
+    SAFE_DELETE( Lib );
 
     /* The removed librairy can be the current library in libedit.
       * If so, clear the current library in libedit */
@@ -285,7 +285,7 @@ int LibraryEntryCompare( EDA_LibComponentStruct* LE1, EDA_LibComponentStruct* LE
 /**************************************************/
 /* Routine to load a library from given open file */
 /**************************************************/
-PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, 
+PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame,
                           LibraryStruct* Library,
                           FILE* libfile,
                           int* NumOfParts )
@@ -487,7 +487,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
             Msg.Printf( wxT( " Error at line %d of library \n\"%s\",\nlibrary not loaded" ),
                        *LineNum, currentLibraryName.GetData() );
             DisplayError( frame, Msg );
-			SAFE_DELETE( LibEntry );
+            SAFE_DELETE( LibEntry );
             return NULL;
         }
     }
@@ -784,7 +784,7 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
             MsgLine.Printf( wxT( "Error in %c DRAW command in line %d, aborted." ),
                             Line[0], *LineNum );
             DisplayError( frame, MsgLine );
-			SAFE_DELETE( New );
+            SAFE_DELETE( New );
 
             /* FLush till end of draw: */
             do  {
@@ -803,7 +803,8 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
                 Head = Tail = New;
             else
             {
-                Tail->Pnext = New; Tail = New;
+                Tail->SetNext( New );
+                Tail = New;
             }
         }
     }
@@ -935,7 +936,7 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
         Field = new LibDrawField( NumOfField );
 
-        Field->Pnext     = LibEntry->Fields;
+        Field->SetNext( LibEntry->Fields );
         LibEntry->Fields = Field;
         break;
     }
@@ -1154,7 +1155,7 @@ void EDA_LibComponentStruct::SortDrawItems()
     Bufentry   = BufentryBase;
     for( ii = 0; ii < nbitems; ii++ )
     {
-        (*Bufentry)->Pnext = *(Bufentry + 1);
+        (*Bufentry)->SetNext( *(Bufentry + 1) );
         Bufentry++;
     }
 

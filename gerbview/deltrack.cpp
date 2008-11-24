@@ -59,21 +59,21 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
         {
             // modification du trace
             Track = g_CurrentTrackSegment;
-            g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
-            
-            delete Track; 
-            
+            g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
+
+            delete Track;
+
             g_TrackSegmentCount--;
 
             if( g_TrackSegmentCount && (g_CurrentTrackSegment->Type() == TYPEVIA) )
             {
                 Track = g_CurrentTrackSegment;
-                g_CurrentTrackSegment = (TRACK*) g_CurrentTrackSegment->Pback;
+                g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
                 delete Track;
                 g_TrackSegmentCount--;
             }
             if( g_CurrentTrackSegment )
-                g_CurrentTrackSegment->Pnext = NULL;
+                g_CurrentTrackSegment->SetNext( NULL );
 
             Affiche_Status_Box();
 
@@ -90,7 +90,7 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
                 return g_CurrentTrackSegment;
             }
         }
-        
+
         return NULL;
     } // Fin traitement si trace en cours
 

@@ -43,15 +43,16 @@ void EDA_BaseStruct::InitVars()
 /********************************************/
 {
     m_StructType = TYPE_NOT_INIT;
-    Pnext       = NULL; /* Linked list: Link (next struct)  */
-    Pback       = NULL; /* Linked list: Link (previous struct) */
-    m_Parent    = NULL; /* Linked list: Link (parent struct) */
-    m_Son       = NULL; /* Linked list: Link (son struct) */
-    m_Image     = NULL; /* Link to an image copy for undelete or abort command */
-    m_Flags     = 0;    /* flags for editions and other */
-    m_TimeStamp = 0;    // Time stamp used for logical links
+    Pnext       = NULL;     // Linked list: Link (next struct)
+    Pback       = NULL;     // Linked list: Link (previous struct)
+    m_Parent    = NULL;     // Linked list: Link (parent struct)
+    m_Son       = NULL;     // Linked list: Link (son struct)
+    m_List      = NULL;     // I am not on any list yet
+    m_Image     = NULL;     // Link to an image copy for undelete or abort command
+    m_Flags     = 0;        // flags for editions and other
+    m_TimeStamp = 0;        // Time stamp used for logical links
     m_Status    = 0;
-    m_Selected  = 0;    /* Used by block commands, and selective editing */
+    m_Selected  = 0;        // Used by block commands, and selective editing
 }
 
 
@@ -536,11 +537,11 @@ void EDA_TextStruct::CreateDrawData()
     {
         x0 = 0; y0 = 0;
 #if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-	AsciiCode = (*ptr) & 0x7FF;
-	if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
-	    AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
-	else
-	    AsciiCode = AsciiCode & 0xFF;
+    AsciiCode = (*ptr) & 0x7FF;
+    if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
+        AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
+    else
+        AsciiCode = AsciiCode & 0xFF;
 #else
          AsciiCode = (*ptr) & 255;
 #endif

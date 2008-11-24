@@ -89,10 +89,10 @@ EDA_Rect D_PAD::GetBoundingBox()
     // Calculate area:
     ComputeRayon();		// calculate the radius of the area, considered as a circle
     EDA_Rect      area;
-	area.SetOrigin(m_Pos);
-	area.Inflate(m_Rayon, m_Rayon);
+    area.SetOrigin(m_Pos);
+    area.Inflate(m_Rayon, m_Rayon);
 
-	return area;
+    return area;
 }
 
 
@@ -211,23 +211,24 @@ void D_PAD::UnLink()
  */
 {
     /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() != TYPEMODULE )
+        if( Back()->Type() != TYPEMODULE )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (MODULE*) Pback )->m_Pads = (D_PAD*) Pnext;
+            ( (MODULE*) Back() )->m_Pads = Next();
         }
     }
 
     /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
 
 
@@ -254,8 +255,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     int                  fillpad = 0;
     wxPoint              shape_pos;
 
-	if ( m_Flags & DO_NOT_DRAW )
-		return;
+    if ( m_Flags & DO_NOT_DRAW )
+        return;
 
     wxASSERT( panel );
 

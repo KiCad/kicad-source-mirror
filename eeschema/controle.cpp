@@ -54,7 +54,7 @@ SCH_ITEM * WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Includ
     {
     case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
-        LibItem = (SCH_COMPONENT*) DrawStruct->m_Parent;
+        LibItem = (SCH_COMPONENT*) DrawStruct->GetParent();
         SendMessageToPCBNEW( DrawStruct,LibItem );
         break;
 
@@ -168,7 +168,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     if( DrawStruct )
     {
         SCH_CMP_FIELD* Field = (SCH_CMP_FIELD*) DrawStruct;
-        LibItem = (SCH_COMPONENT*) Field->m_Parent;
+        LibItem = (SCH_COMPONENT*) Field->GetParent();
         LibItem->Display_Infos( this );
 
         return DrawStruct;

@@ -447,7 +447,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 
     /* Write board Edges */
     EDA_BaseStruct* PtStruct;
-    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;

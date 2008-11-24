@@ -127,7 +127,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
 
     /* Compute module parmeters used in auto place */
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext ) // remise a jour du rect d'encadrement
+    for( ; Module != NULL; Module = Module->Next() ) // remise a jour du rect d'encadrement
     {
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();
@@ -143,7 +143,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
 
     /* Placement des modules fixes sur le plan de placement */
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         Module->m_ModuleStatus &= ~MODULE_to_PLACE;
 
@@ -306,7 +306,7 @@ end_of_tst:
     g_GridRoutingSize  = OldPasRoute;
 
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
     }
@@ -452,7 +452,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
     TmpSegm.m_Width   = g_GridRoutingSize / 2;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         DRAWSEGMENT* DrawSegm;
 
@@ -548,7 +548,7 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
     /* Trace des pads et leur surface de securite */
     marge = g_DesignSettings.m_TrackClearence + g_DesignSettings.m_CurrentTrackWidth;
 
-    for( Pad = Module->m_Pads; Pad != NULL; Pad = (D_PAD*) Pad->Pnext )
+    for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
     {
         Place_1_Pad_Board( m_Pcb, Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
     }
@@ -619,7 +619,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         if( Module->GetLayer() == COPPER_LAYER_N )
             masque_otherlayer = CMP_LAYER;
 
-        for( Pad = Module->m_Pads; Pad != NULL; Pad = (D_PAD*) Pad->Pnext )
+        for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
         {
             if( (Pad->m_Masque_Layer & masque_otherlayer) == 0 )
                 continue;
@@ -949,12 +949,12 @@ void Build_PlacedPads_List( BOARD* Pcb )
 
     /* Calcul du nombre de pads utiles */
     Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         if( Module->m_ModuleStatus & MODULE_to_PLACE )
             continue;
         PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        for( ; PtPad != NULL; PtPad = PtPad->Next() )
         {
             Pcb->m_NbPads++;
         }
@@ -969,17 +969,17 @@ void Build_PlacedPads_List( BOARD* Pcb )
 
     /* Initialisation du buffer et des variables de travail */
     Module = Pcb->m_Modules;
-    for( ; (Module != NULL) && (pt_liste_pad != NULL); Module = (MODULE*) Module->Pnext )
+    for( ; (Module != NULL) && (pt_liste_pad != NULL); Module = Module->Next() )
     {
         if( Module->m_ModuleStatus & MODULE_to_PLACE )
             continue;
         PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        for( ; PtPad != NULL; PtPad = PtPad->Next() )
         {
             *pt_liste_pad = PtPad;
             PtPad->SetSubNet( 0 );
             PtPad->SetSubRatsnest( 0 );
-            PtPad->m_Parent = Module;
+            PtPad->SetParent( Module );
             if( PtPad->GetNet() )
                 Pcb->m_NbNodes++;
             pt_liste_pad++;

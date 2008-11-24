@@ -18,8 +18,8 @@
  * Class BOARD_CONNECTED_ITEM
  * This is a base class derived from BOARD_ITEM for items that can be connected
  * mainly: tracks and pads
- * Handle connection info 
- * 
+ * Handle connection info
+ *
  */
 
 
@@ -183,14 +183,18 @@ public:
 };
 
 
-class BOARD_CONNECTED_ITEM: public BOARD_ITEM
+class BOARD_CONNECTED_ITEM : public BOARD_ITEM
 {
 protected:
     int         m_NetCode;          // Net number
+
     int         m_Subnet;           /* In rastnest routines : for the current net,
-                                     *  block number (number common to the current connected items found) */
-    int         m_ZoneSubnet;   	// variable used in rastnest computations : for the current net,
+                                     *  block number (number common to the current connected items found)
+                                     */
+
+    int         m_ZoneSubnet;   	   // variable used in rastnest computations : for the current net,
                                     // handle block number in zone connection
+
 public:
     BOARD_CONNECTED_ITEM( BOARD_ITEM* StructFather, KICAD_T idtype );
     BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& src );

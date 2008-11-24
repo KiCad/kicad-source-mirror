@@ -33,6 +33,9 @@ public:
     TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     ~TEXTE_MODULE();
 
+    TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
+    TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
+
     /**
      * Function GetPosition
      * returns the position of this object.

@@ -57,7 +57,7 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         TRACK* previoustrack;
         for(  ;   track;   track = previoustrack )
         {
-            previoustrack = (TRACK*) track->Pback;
+            previoustrack = track->Back();
             delete track;
         }
     }
@@ -163,8 +163,8 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
             // Create 2 segments
             g_CurrentTrackSegment = g_CurrentTrackSegment->Copy();
             g_TrackSegmentCount++;
-            g_CurrentTrackSegment->Pback = g_FirstTrackSegment;
-            g_FirstTrackSegment->Pnext   = g_CurrentTrackSegment;
+            g_CurrentTrackSegment->SetBack( g_FirstTrackSegment );
+            g_FirstTrackSegment->SetNext( g_CurrentTrackSegment );
             g_CurrentTrackSegment->start = g_FirstTrackSegment;
             g_FirstTrackSegment->end = g_CurrentTrackSegment;
             g_FirstTrackSegment->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
@@ -271,7 +271,7 @@ int WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm )
     if( g_TrackSegmentCount < 2 )
         return 0;                               /* il faut au moins 2 segments */
 
-    Previous = (TRACK*) pt_segm->Pback;         // pointe le segment precedent
+    Previous = pt_segm->Back();         // pointe le segment precedent
 
     // Test s'il y a 2 segments consecutifs a raccorder
     if( (pt_segm->Type() != TYPETRACK )
@@ -413,10 +413,10 @@ void WinEDA_PcbFrame::End_Route( TRACK* track, wxDC* DC )
 
 
     // cleanup
-    if( g_CurrentTrackSegment->Pnext != NULL )
+    if( g_CurrentTrackSegment->Next() != NULL )
     {
-        delete g_CurrentTrackSegment->Pnext;
-        g_CurrentTrackSegment->Pnext = NULL;
+        delete g_CurrentTrackSegment->Next();
+        g_CurrentTrackSegment->SetNext( NULL );
     }
 
 
@@ -647,7 +647,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
     if( g_TwoSegmentTrackBuild )
     {
-        TRACK* previous_track = (TRACK*) g_CurrentTrackSegment->Pback;
+        TRACK* previous_track = g_CurrentTrackSegment->Back();
         if( previous_track && (previous_track->Type() == TYPETRACK) )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
@@ -767,7 +767,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
         return;
 
     TRACK* NewTrack = track;
-    track = (TRACK*) track->Pback;
+    track = track->Back();
     SegmentCount--;
     if( track )
     {
@@ -778,7 +778,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
         iDy = abs( iDy );
     }
 
-    TRACK* LastTrack = track ? (TRACK*) track->Pback : NULL;
+    TRACK* LastTrack = track ? track->Back() : NULL;
     if( LastTrack )
     {
         if( (LastTrack->m_End.x == LastTrack->m_Start.x)
@@ -944,8 +944,8 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
         /* Must create a new segment, from track end to pad center */
         g_CurrentTrackSegment = lasttrack->Copy();
         g_TrackSegmentCount++;
-        lasttrack->Pnext = g_CurrentTrackSegment;
-        g_CurrentTrackSegment->Pback = lasttrack;
+        lasttrack->SetNext( g_CurrentTrackSegment );
+        g_CurrentTrackSegment->SetBack( lasttrack );
         lasttrack->end = g_CurrentTrackSegment;
     }
 

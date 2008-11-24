@@ -38,7 +38,7 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
         dcode_hightlight = gerber->m_Selected_Tool;
 
     Track = Pcb->m_Track;
-    for( ; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( ; Track != NULL; Track = Track->Next() )
     {
         if( printmasklayer != -1 )
             if( (Track->ReturnMaskLayer() & printmasklayer) == 0 )
@@ -226,7 +226,7 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
 
     GRSetDrawMode( DC, drawmode );
     track = Pcb->m_Track;
-    for( ; track != NULL; track = (TRACK*) track->Pnext )
+    for( ; track != NULL; track = track->Next() )
     {
         if( (track->m_Shape == S_ARC)
            || (track->m_Shape == S_CIRCLE)

@@ -252,7 +252,7 @@ void WinEDA_PcbFrame::Erase_Pistes( wxDC * DC, int masque_type, bool query )
     /* Marquage des pistes a effacer */
     for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
     {
-        PtNext = (TRACK*) pt_segm->Pnext;
+        PtNext = pt_segm->Next();
 
         if( pt_segm->GetState( SEGM_FIXE | SEGM_AR ) & masque_type )
             continue;

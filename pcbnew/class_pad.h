@@ -37,7 +37,7 @@ public:
     wxSize  m_Drill;                // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
                                     // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
 
-    wxSize  m_Offset;  /*This parameter is usefull only for oblong pads (it can be used for other
+    wxSize  m_Offset;   /* This parameter is usefull only for oblong pads (it can be used for other
                          * shapes, but without any interest).
                          * this is the offset between the pad hole and the pad shape (you must
                          * understand here pad shape = copper area around the hole)

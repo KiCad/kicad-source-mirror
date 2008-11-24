@@ -28,6 +28,9 @@ public:
     COTATION( BOARD_ITEM* StructFather );
     ~COTATION();
 
+    COTATION* Next() const { return (COTATION*) Pnext; }
+    COTATION* Back() const { return (COTATION*) Pback; }
+
     wxPoint& GetPosition()
     {
         return m_Pos;

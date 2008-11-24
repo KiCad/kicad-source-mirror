@@ -67,7 +67,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
             {
                 if( NewTrack == NULL )
                     break;
-                NextS = (TRACK*) NewTrack->Pnext;
+                NextS = (TRACK*) NewTrack->Next();
                 delete NewTrack;
             }
         }
@@ -76,7 +76,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
             TRACK* Track = NewTrack;
             int    dx    = s_LastPos.x - PosInit.x;
             int    dy    = s_LastPos.y - PosInit.y;
-            for( ii = 0; ii < NbPtNewTrack; ii++, Track = (TRACK*) Track->Pnext )
+            for( ii = 0; ii < NbPtNewTrack; ii++, Track = (TRACK*) Track->Next() )
             {
                 if( Track == NULL )
                     break;
@@ -95,7 +95,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem(NULL);    
+    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem(NULL);
 
     /* Annulation deplacement et Redessin des segments dragges */
     DRAG_SEGM* pt_drag = g_DragSegmentList;
@@ -234,8 +234,8 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
 
     if( TrackSegWrapper == NULL )
         return;
-    
-    Track = TrackSegWrapper->m_Segm; 
+
+    Track = TrackSegWrapper->m_Segm;
     if( Track == NULL )
         return;
 
@@ -262,7 +262,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
         Track->Draw( panel, DC, draw_mode );
         if( tSegmentToStart )
             tSegmentToStart->Draw( panel, DC, draw_mode );
-        
+
         if( tSegmentToEnd )
             tSegmentToEnd->Draw( panel, DC, draw_mode );
     }
@@ -389,12 +389,12 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
     // update the segment coordinates (if possible)
     if( tSegmentToStart == NULL )
     {
-        xi1 = tx1; 
+        xi1 = tx1;
         yi1 = ty1;
     }
     if( tSegmentToEnd == NULL )
     {
-        xi2 = tx2; 
+        xi2 = tx2;
         yi2 = ty2;
     }
 
@@ -464,8 +464,8 @@ bool InitialiseDragParameters()
                 tSegmentToStart = TrackSegWrapper->m_Segm; // Get the segment connected to the start point
         }
     }
-	//would be nice to eliminate collinear segments here, so we don't 
-	//have to deal with that annoying "Unable to drag this segment: two collinear segments"
+    //would be nice to eliminate collinear segments here, so we don't
+    //have to deal with that annoying "Unable to drag this segment: two collinear segments"
 
     s_StartPointVertical      = false;
     s_EndPointVertical        = false;
@@ -674,64 +674,64 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
 }
 void SortTrackEndPoints(TRACK* track)
 {
-	//sort the track endpoints -- should not matter in terms of drawing 
-	//or producing the pcb -- but makes doing comparisons easier. 
-	wxPoint tmp; 
-	int dx = track->m_End.x - track->m_Start.x;
-	if(dx){
-		if( track->m_Start.x > track->m_End.x ){
-			tmp = track->m_Start;
-			track->m_Start = track->m_End; 
-			track->m_End = tmp; 
-		}
-	}else{
-		if( track->m_Start.y > track->m_End.y ){
-			tmp = track->m_Start;
-			track->m_Start = track->m_End; 
-			track->m_End = tmp; 
-		}
-	}
+    //sort the track endpoints -- should not matter in terms of drawing
+    //or producing the pcb -- but makes doing comparisons easier.
+    wxPoint tmp;
+    int dx = track->m_End.x - track->m_Start.x;
+    if(dx){
+        if( track->m_Start.x > track->m_End.x ){
+            tmp = track->m_Start;
+            track->m_Start = track->m_End;
+            track->m_End = tmp;
+        }
+    }else{
+        if( track->m_Start.y > track->m_End.y ){
+            tmp = track->m_Start;
+            track->m_Start = track->m_End;
+            track->m_End = tmp;
+        }
+    }
 }
 /***********************************************************************************/
 bool WinEDA_PcbFrame::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 /***********************************************************************************/
 {
-	TRACK* testtrack = NULL; 
-	
-	testtrack = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, end );
-	if( testtrack )
-	{
-		SortTrackEndPoints(track); 
-		SortTrackEndPoints(testtrack);
-		int dx = track->m_End.x - track->m_Start.x;
-		int dy = track->m_End.y - track->m_Start.y;
-		int tdx = testtrack->m_End.x - testtrack->m_Start.x;
-		int tdy = testtrack->m_End.y - testtrack->m_Start.y;
-		
-		if( (dy * tdx == dx * tdy && dy != 0 && dx != 0 && tdy != 0 && tdx != 0) /*angle, same slope*/
-			   || (dy == 0 && tdy == 0 && dx*tdx )/*horizontal*/
-		  	   || (dx == 0 && tdx == 0 && dy*tdy )/*vertical*/ ) {
-			if(track->m_Start == testtrack->m_Start || track->m_End == testtrack->m_Start){
-				if( ( dx*tdx && testtrack->m_End.x > track->m_End.x )
-				  ||( dy*tdy && testtrack->m_End.y > track->m_End.y )){
-					track->m_End = testtrack->m_End; 
-					
-					Delete_Segment( DC, testtrack );
-					return true; 
-				}
-			}
-			if(track->m_Start == testtrack->m_End || track->m_End == testtrack->m_End){
-				if( ( dx*tdx && testtrack->m_Start.x < track->m_Start.x ) 
-				  ||( dy*tdy && testtrack->m_Start.y < track->m_Start.y )){
-					track->m_Start = testtrack->m_Start; 
-					
-					Delete_Segment( DC, testtrack );
-					return true; 
-				}
-			}
-		}
-	}
-	return false; 
+    TRACK* testtrack = NULL;
+
+    testtrack = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, end );
+    if( testtrack )
+    {
+        SortTrackEndPoints(track);
+        SortTrackEndPoints(testtrack);
+        int dx = track->m_End.x - track->m_Start.x;
+        int dy = track->m_End.y - track->m_Start.y;
+        int tdx = testtrack->m_End.x - testtrack->m_Start.x;
+        int tdy = testtrack->m_End.y - testtrack->m_Start.y;
+
+        if( (dy * tdx == dx * tdy && dy != 0 && dx != 0 && tdy != 0 && tdx != 0) /*angle, same slope*/
+               || (dy == 0 && tdy == 0 && dx*tdx )/*horizontal*/
+               || (dx == 0 && tdx == 0 && dy*tdy )/*vertical*/ ) {
+            if(track->m_Start == testtrack->m_Start || track->m_End == testtrack->m_Start){
+                if( ( dx*tdx && testtrack->m_End.x > track->m_End.x )
+                  ||( dy*tdy && testtrack->m_End.y > track->m_End.y )){
+                    track->m_End = testtrack->m_End;
+
+                    Delete_Segment( DC, testtrack );
+                    return true;
+                }
+            }
+            if(track->m_Start == testtrack->m_End || track->m_End == testtrack->m_End){
+                if( ( dx*tdx && testtrack->m_Start.x < track->m_Start.x )
+                  ||( dy*tdy && testtrack->m_Start.y < track->m_Start.y )){
+                    track->m_Start = testtrack->m_Start;
+
+                    Delete_Segment( DC, testtrack );
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 /***********************************************************************************/
 void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC )
@@ -743,9 +743,9 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
 
     if( !track )
         return;
-	
-	while(MergeCollinearTracks(track, DC, START)){}; 
-	while(MergeCollinearTracks(track, DC, END)){}; 
+
+    while(MergeCollinearTracks(track, DC, START)){};
+    while(MergeCollinearTracks(track, DC, END)){};
 
     s_StartSegmentPresent = s_EndSegmentPresent = TRUE;
 
@@ -805,7 +805,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
         AddSegmentToDragList( DrawPanel, DC, flag, TrackToStartPoint );
         track->m_Flags |= STARTPOINT;
     }
-    
+
     if( TrackToEndPoint )
     {
         int flag = STARTPOINT;
@@ -924,7 +924,7 @@ EDA_BaseStruct* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
     /* detection du point type PAD */
     pt_pad = NULL;
     Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         pt_pad = Locate_Pads( Module, pos, LayerMask );
         if( pt_pad )

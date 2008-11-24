@@ -54,8 +54,6 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 /*************************************************/
 /* Class MODULE : description d'un composant pcb */
 /*************************************************/
-
-/* Constructeur de la classe MODULE */
 MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM( parent, TYPEMODULE )
 {
@@ -71,53 +69,51 @@ MODULE::MODULE( BOARD* parent ) :
     m_Surface  = 0;
     m_Link = 0;
     m_LastEdit_Time = time( NULL );
+
     m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
-    m_Reference->Pback = this;
+    m_Reference->SetBack( this );
+
     m_Value = new TEXTE_MODULE( this, TEXT_is_VALUE );
-    m_Value->Pback = this;
+    m_Value->SetBack( this );
+
     m_3D_Drawings  = new Struct3D_Master( this );
 }
 
 
-/* Destructeur */
 MODULE::~MODULE()
 {
-    D_PAD*          Pad;
-    EDA_BaseStruct* Struct, * NextStruct;
+    EDA_BaseStruct* item;
+    EDA_BaseStruct* next;
 
     delete m_Reference;
     delete m_Value;
-    for( Struct = m_3D_Drawings;  Struct != NULL;  Struct = NextStruct )
+    for( item = m_3D_Drawings;  item;  item = next )
     {
-        NextStruct = Struct->Pnext;
-        delete Struct;
+        next = item->Next();
+        delete item;
     }
 
-    /* effacement des pads */
-    for( Pad = m_Pads; Pad != NULL; Pad = (D_PAD*) NextStruct )
+    for( item = m_Pads;  item;   item = next )
     {
-        NextStruct = Pad->Pnext;
-        delete Pad;
+        next = item->Next();
+        delete item;
     }
 
     /* effacement des elements de trace */
-    for( Struct = m_Drawings; Struct != NULL; Struct = NextStruct )
+    for( item = m_Drawings;  item;  item = next )
     {
-        NextStruct = Struct->Pnext;
+        next = item->Next();
 
-        switch( ( Struct->Type() ) )
+        switch( item->Type() )
         {
         case TYPEEDGEMODULE:
-            delete (EDGE_MODULE*) Struct;
-            break;
-
         case TYPETEXTEMODULE:
-            delete (TEXTE_MODULE*) Struct;
+            delete item;
             break;
 
         default:
-            DisplayError( NULL, wxT( "Warn: ItemType not handled in delete MODULE" ) );
-            NextStruct = NULL;
+            DisplayError( NULL, wxT( "Warning: Item Type not handled in delete MODULE" ) );
+            next = NULL;
             break;
         }
     }
@@ -128,7 +124,7 @@ MODULE::~MODULE()
 void MODULE::Copy( MODULE* Module )
 /*********************************/
 {
-    D_PAD* pad, * lastpad;
+    D_PAD*  lastpad;
 
     m_Pos           = Module->m_Pos;
     m_Layer         = Module->m_Layer;
@@ -148,28 +144,30 @@ void MODULE::Copy( MODULE* Module )
     m_Value->Copy( Module->m_Value );
 
     /* Copie des structures auxiliaires: Pads */
-    lastpad = NULL; pad = Module->m_Pads;
-    for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+    lastpad = NULL;
+
+    for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( this );
         newpad->Copy( pad );
 
         if( m_Pads == NULL )
         {
-            newpad->Pback = this;
-            m_Pads = (D_PAD*) newpad;
+            newpad->SetBack( this );
+            m_Pads = newpad;
         }
         else
         {
-            newpad->Pback  = lastpad;
-            lastpad->Pnext = newpad;
+            newpad->SetBack( lastpad );
+            lastpad->SetNext( newpad );
         }
         lastpad = newpad;
     }
 
     /* Copy des structures auxiliaires: Drawings */
-    BOARD_ITEM* OldStruct = Module->m_Drawings;
     BOARD_ITEM* NewStruct, * LastStruct = NULL;
+
+    BOARD_ITEM* OldStruct = Module->m_Drawings;
     for( ; OldStruct; OldStruct = OldStruct->Next() )
     {
         NewStruct = NULL;
@@ -193,15 +191,16 @@ void MODULE::Copy( MODULE* Module )
 
         if( NewStruct == NULL )
             break;
+
         if( m_Drawings == NULL )
         {
-            NewStruct->Pback = this;
+            NewStruct->SetBack( this );
             m_Drawings = NewStruct;
         }
         else
         {
-            NewStruct->Pback  = LastStruct;
-            LastStruct->Pnext = NewStruct;
+            NewStruct->SetBack( LastStruct );
+            LastStruct->SetNext( NewStruct );
         }
         LastStruct = NewStruct;
     }
@@ -211,14 +210,14 @@ void MODULE::Copy( MODULE* Module )
 
     Struct3D_Master* Struct3D, * NewStruct3D, * CurrStruct3D;
 
-    Struct3D     = (Struct3D_Master*) Module->m_3D_Drawings->Pnext;
+    Struct3D     = Module->m_3D_Drawings->Next();
     CurrStruct3D = m_3D_Drawings;
-    for( ; Struct3D != NULL; Struct3D = (Struct3D_Master*) Struct3D->Pnext )
+    for( ; Struct3D != NULL;  Struct3D = Struct3D->Next() )
     {
         NewStruct3D = new Struct3D_Master( this );
         NewStruct3D->Copy( Struct3D );
-        CurrStruct3D->Pnext = NewStruct3D;
-        NewStruct3D->Pback  = CurrStruct3D;
+        CurrStruct3D->SetNext( NewStruct3D );
+        NewStruct3D->SetBack( CurrStruct3D );
         CurrStruct3D = NewStruct3D;
     }
 
@@ -233,12 +232,11 @@ void MODULE::Copy( MODULE* Module )
  */
 void MODULE::UnLink()
 {
-    /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() != TYPEPCB )
+        if( Back()->Type() != TYPEPCB )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else                                /* Le chainage arriere pointe sur la structure "Pere" */
         {
@@ -248,16 +246,18 @@ void MODULE::UnLink()
                     g_UnDeleteStack[g_UnDeleteStackPtr - 1] = Next();
             }
             else
-                ( (BOARD*) Pback )->m_Modules = (MODULE*) Pnext;
+                ( (BOARD*) Back() )->m_Modules = Next();
         }
     }
 
     /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
+
 
 
 /**********************************************************/
@@ -276,13 +276,12 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( (m_Flags & DO_NOT_DRAW) )
         return;
 
-    /* Draw pads */
-    D_PAD*  pt_pad = m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pt_pad->m_Flags & IS_MOVED )
+        if( pad->m_Flags & IS_MOVED )
             continue;
-        pt_pad->Draw( panel, DC, draw_mode, offset );
+
+        pad->Draw( panel, DC, draw_mode, offset );
     }
 
     // Draws foootprint anchor
@@ -453,7 +452,7 @@ int MODULE::Write_3D_Descr( FILE* File ) const
     char             buf[512];
     Struct3D_Master* Struct3D = m_3D_Drawings;
 
-    for( ; Struct3D != NULL; Struct3D = (Struct3D_Master*) Struct3D->Pnext )
+    for( ; Struct3D != NULL; Struct3D = Struct3D->Next() )
     {
         if( !Struct3D->m_Shape3DName.IsEmpty() )
         {
@@ -503,11 +502,12 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
     if( !Struct3D->m_Shape3DName.IsEmpty() )
     {
         Struct3D_Master* NewStruct3D;
-        while( Struct3D->Pnext )
-            Struct3D = (Struct3D_Master*) Struct3D->Pnext;
+        while( Struct3D->Next() )
+            Struct3D = Struct3D->Next();
 
-        Struct3D->Pnext    = NewStruct3D = new Struct3D_Master( this );
-        NewStruct3D->Pback = Struct3D;
+        NewStruct3D = new Struct3D_Master( this );
+        Struct3D->SetNext( NewStruct3D );
+        NewStruct3D->SetBack( Struct3D );
         Struct3D = NewStruct3D;
     }
 
@@ -590,13 +590,13 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
                 if( LastPad == NULL )
                 {
-                    ptpad->Pback = (EDA_BaseStruct*) this;
+                    ptpad->SetBack( this );
                     m_Pads = ptpad;
                 }
                 else
                 {
-                    ptpad->Pback   = (EDA_BaseStruct*) LastPad;
-                    LastPad->Pnext = (EDA_BaseStruct*) ptpad;
+                    ptpad->SetBack( LastPad );
+                    LastPad->SetNext( ptpad );
                 }
                 LastPad = ptpad;
                 continue;
@@ -683,13 +683,13 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 DrawText = new TEXTE_MODULE( this );
                 if( LastModStruct == NULL )
                 {
-                    DrawText->Pback = this;
+                    DrawText->SetBack( this );
                     m_Drawings = DrawText;
                 }
                 else
                 {
-                    DrawText->Pback      = LastModStruct;
-                    LastModStruct->Pnext = DrawText;
+                    DrawText->SetBack( LastModStruct );
+                    LastModStruct->SetNext( DrawText );
                 }
                 LastModStruct = DrawText;
             }
@@ -702,13 +702,13 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
             if( LastModStruct == NULL )
             {
-                DrawSegm->Pback = this;
+                DrawSegm->SetBack( this );
                 m_Drawings = DrawSegm;
             }
             else
             {
-                DrawSegm->Pback      = LastModStruct;
-                LastModStruct->Pnext = DrawSegm;
+                DrawSegm->SetBack( LastModStruct );
+                LastModStruct->SetNext( DrawSegm );
             }
 
             LastModStruct = DrawSegm;
@@ -757,8 +757,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
     m_Value->m_Pos.y += deltaY;
 
     /* deplacement des pastilles */
-    D_PAD*          pad = m_Pads;
-    for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         pad->m_Pos.x += deltaX;
         pad->m_Pos.y += deltaY;
@@ -766,7 +765,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
 
     /* deplacement des dessins de l'empreinte : */
     EDA_BaseStruct* PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -809,8 +808,7 @@ void MODULE::SetOrientation( int newangle )
     NORMALIZE_ANGLE_POS( m_Orient );
 
     /* deplacement et rotation des pastilles */
-    D_PAD* pad = m_Pads;
-    for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         px = pad->m_Pos0.x;
         py = pad->m_Pos0.y;
@@ -829,7 +827,7 @@ void MODULE::SetOrientation( int newangle )
 
     /* deplacement des contours et textes de l'empreinte : */
     EDA_BaseStruct* PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() == TYPEEDGEMODULE )
         {
@@ -862,25 +860,23 @@ void MODULE::Set_Rectangle_Encadrement()
  *      en coord relatives / position ancre
  */
 {
-    EDGE_MODULE* pt_edge_mod;
-    D_PAD*       pad;
     int          width;
     int          cx, cy, uxf, uyf, rayon;
     int          xmax, ymax;
 
 
     /* Init des pointeurs */
-    pt_edge_mod = (EDGE_MODULE*) m_Drawings;
-
     /* Init des coord du cadre a une valeur limite non nulle */
     m_BoundaryBox.m_Pos.x = -500; xmax = 500;
     m_BoundaryBox.m_Pos.y = -500; ymax = 500;
 
     /* Contours: Recherche des coord min et max et mise a jour du cadre */
-    for( ; pt_edge_mod != NULL; pt_edge_mod = (EDGE_MODULE*) pt_edge_mod->Pnext )
+    for( EDGE_MODULE* pt_edge_mod = (EDGE_MODULE*) m_Drawings;
+        pt_edge_mod; pt_edge_mod = pt_edge_mod->Next() )
     {
         if( pt_edge_mod->Type() != TYPEEDGEMODULE )
             continue;
+
         width = pt_edge_mod->m_Width / 2;
 
         switch( pt_edge_mod->m_Shape )
@@ -913,7 +909,7 @@ void MODULE::Set_Rectangle_Encadrement()
     }
 
     /* Pads:  Recherche des coord min et max et mise a jour du cadre */
-    for( pad = m_Pads; pad != NULL; pad = (D_PAD*) pad->Pnext )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         rayon = pad->m_Rayon;
         cx    = pad->m_Pos0.x; cy = pad->m_Pos0.y;
@@ -940,8 +936,6 @@ void MODULE::SetRectangleExinscrit()
  *  Met egalement a jour la surface (.m_Surface) du module.
  */
 {
-    EDGE_MODULE* EdgeMod;
-    D_PAD*       Pad;
     int          width;
     int          cx, cy, uxf, uyf, rayon;
     int          xmax, ymax;
@@ -950,20 +944,20 @@ void MODULE::SetRectangleExinscrit()
     m_RealBoundaryBox.m_Pos.y = ymax = m_Pos.y;
 
     /* Contours: Recherche des coord min et max et mise a jour du cadre */
-    EdgeMod = (EDGE_MODULE*) m_Drawings;
-    for( ; EdgeMod != NULL; EdgeMod = (EDGE_MODULE*) EdgeMod->Pnext )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings;  edge; edge = edge->Next() )
     {
-        if( EdgeMod->Type() != TYPEEDGEMODULE )
+        if( edge->Type() != TYPEEDGEMODULE )
             continue;
-        width = EdgeMod->m_Width / 2;
 
-        switch( EdgeMod->m_Shape )
+        width = edge->m_Width / 2;
+
+        switch( edge->m_Shape )
         {
         case S_ARC:
         case S_CIRCLE:
         {
-            cx     = EdgeMod->m_Start.x; cy = EdgeMod->m_Start.y;  // centre
-            uxf    = EdgeMod->m_End.x; uyf = EdgeMod->m_End.y;
+            cx     = edge->m_Start.x; cy = edge->m_Start.y;  // centre
+            uxf    = edge->m_End.x; uyf = edge->m_End.y;
             rayon  = (int) hypot( (double) (cx - uxf), (double) (cy - uyf) );
             rayon += width;
             m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, cx - rayon );
@@ -974,25 +968,29 @@ void MODULE::SetRectangleExinscrit()
         }
 
         default:
-            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, EdgeMod->m_Start.x - width );
-            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, EdgeMod->m_End.x - width );
-            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, EdgeMod->m_Start.y - width );
-            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, EdgeMod->m_End.y - width );
-            xmax = MAX( xmax, EdgeMod->m_Start.x + width );
-            xmax = MAX( xmax, EdgeMod->m_End.x + width );
-            ymax = MAX( ymax, EdgeMod->m_Start.y + width );
-            ymax = MAX( ymax, EdgeMod->m_End.y + width );
+            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, edge->m_Start.x - width );
+            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, edge->m_End.x - width );
+            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, edge->m_Start.y - width );
+            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, edge->m_End.y - width );
+            xmax = MAX( xmax, edge->m_Start.x + width );
+            xmax = MAX( xmax, edge->m_End.x + width );
+            ymax = MAX( ymax, edge->m_Start.y + width );
+            ymax = MAX( ymax, edge->m_End.y + width );
             break;
         }
     }
 
     /* Pads:  Recherche des coord min et max et mise a jour du cadre */
-    for( Pad = m_Pads; Pad != NULL; Pad = (D_PAD*) Pad->Pnext )
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        rayon = Pad->m_Rayon;
-        cx    = Pad->m_Pos.x; cy = Pad->m_Pos.y;
+        rayon = pad->m_Rayon;
+
+        cx = pad->m_Pos.x;
+        cy = pad->m_Pos.y;
+
         m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, cx - rayon );
         m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, cy - rayon );
+
         xmax = MAX( xmax, cx + rayon );
         ymax = MAX( ymax, cy + rayon );
     }
@@ -1022,12 +1020,11 @@ EDA_Rect MODULE::GetBoundingBox()
     text_area = m_Value->GetBoundingBox();
     area.Merge( text_area );
 
-    EDGE_MODULE* EdgeMod = (EDGE_MODULE*) m_Drawings;
-    for( ; EdgeMod != NULL; EdgeMod = (EDGE_MODULE*) EdgeMod->Pnext )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings;  edge; edge = edge->Next() )
     {
-        if( EdgeMod->Type() != TYPETEXTEMODULE )
+        if( edge->Type() != TYPETEXTEMODULE )
             continue;
-        text_area = ((TEXTE_MODULE*)EdgeMod)->GetBoundingBox();
+        text_area = ((TEXTE_MODULE*)edge)->GetBoundingBox();
         area.Merge( text_area );
     }
 
@@ -1086,7 +1083,7 @@ void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
     while( PtStruct )
     {
         nbpad++;
-        PtStruct = PtStruct->Pnext;
+        PtStruct = PtStruct->Next();
     }
 
     msg.Printf( wxT( "%d" ), nbpad );
@@ -1288,20 +1285,20 @@ void MODULE::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel + 1, os ) << "<mpads>\n";
     p = m_Pads;
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
 
     NestedSpace( nestLevel + 1, os ) << "</mpads>\n";
 
     NestedSpace( nestLevel + 1, os ) << "<mdrawings>\n";
     p = m_Drawings;
-    for( ; p; p = p->Pnext )
+    for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
 
     NestedSpace( nestLevel + 1, os ) << "</mdrawings>\n";
 
     p = m_Son;
-    for( ; p;  p = p->Pnext )
+    for( ; p;  p = p->Next() )
     {
         p->Show( nestLevel + 1, os );
     }

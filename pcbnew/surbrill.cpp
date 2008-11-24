@@ -41,7 +41,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
     List = new WinEDA_TextFrame( this, _( "List Nets" ) );
 
     Equipot = (EQUIPOT*) m_Pcb->m_Equipots;
-    for( ; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Pnext )
+    for( ; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
     {
         wxString Line;
         /* calcul adr relative du nom de la pastille reference de la piste */
@@ -62,7 +62,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
 
     /* Recherche du numero de net rellement selectionn�*/
     Equipot = (EQUIPOT*) m_Pcb->m_Equipots;
-    for( jj = 0; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Pnext )
+    for( jj = 0; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
     {
         /* calcul adr relative du nom de la pastille reference de la piste */
         if( !WildCompareString( msg, Equipot->m_Netname, FALSE ) )
@@ -220,7 +220,7 @@ static void Pad_Surbrillance( WinEDA_DrawPanel* panel,
     D_PAD* pt_pad;
 
     /* trace des pastilles */
-    for( pt_pad = Module->m_Pads; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( pt_pad = Module->m_Pads;  pt_pad;  pt_pad = pt_pad->Next() )
     {
         if( pt_pad->GetNet() == NetCode )
         {

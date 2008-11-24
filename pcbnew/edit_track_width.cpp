@@ -34,8 +34,8 @@ int WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* pt_segm )
     if( pt_segm->Type() == TYPEVIA )
     {
         consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentViaSize;
-		if ( pt_segm->m_Shape == VIA_MICROVIA )
-			consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentMicroViaSize;
+        if ( pt_segm->m_Shape == VIA_MICROVIA )
+            consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentMicroViaSize;
     }
 
     if( old_w < consigne ) /* DRC utile puisque augm de dimension */
@@ -69,7 +69,7 @@ void WinEDA_PcbFrame::Edit_Track_Width( wxDC* DC, TRACK* pt_segm )
         return;
 
     pt_track = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, 0 );
-    for( ii = 0; ii < nb_segm; ii++, pt_track = (TRACK*) pt_track->Pnext )
+    for( ii = 0; ii < nb_segm; ii++, pt_track = pt_track->Next() )
     {
         pt_track->SetState( BUSY, OFF );
         errdrc = Edit_TrackSegm_Width( DC, pt_track );
@@ -97,7 +97,7 @@ void WinEDA_PcbFrame::Edit_Net_Width( wxDC* DC, int Netcode )
         return;
 
     /* balayage des segments */
-    for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         if( Netcode != pt_segm->GetNet() ) /* mauvaise piste */
             continue;
@@ -142,7 +142,7 @@ bool WinEDA_PcbFrame::Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via )
     }
 
     pt_segm = m_Pcb->m_Track;
-    for( ; pt_segm != NULL; pt_segm = (TRACK*) pt_segm->Pnext )
+    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         if( pt_segm->Type() == TYPEVIA ) /* mise a jour du diametre de la via */
         {

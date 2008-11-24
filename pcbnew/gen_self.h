@@ -290,18 +290,18 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     /* Generation des elements speciaux: drawsegments */
     LastSegm = (EDGE_MODULE*) Module->m_Drawings;
     if( LastSegm )
-        while( LastSegm->Pnext )
-            LastSegm = (EDGE_MODULE*) LastSegm->Pnext;
+        while( LastSegm->Next() )
+            LastSegm = (EDGE_MODULE*) LastSegm->Next();
 
     FirstSegm = PtSegm = new EDGE_MODULE( Module );
     if( LastSegm )
     {
-        LastSegm->Pnext = PtSegm;
-        PtSegm->Pback   = LastSegm;
+        LastSegm->SetNext( PtSegm );
+        PtSegm->SetBack( LastSegm );
     }
     else
     {
-        Module->m_Drawings = PtSegm; PtSegm->Pback = Module;
+        Module->m_Drawings = PtSegm; PtSegm->SetBack( Module );
     }
     PtSegm->m_Start = Mself.m_Start;
     PtSegm->m_End.x = Mself.m_Start.x;
@@ -404,13 +404,13 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     PtSegm = newedge;
     PtSegm->m_Start = PtSegm->m_End;
     PtSegm->m_End   = Mself.m_End;
-    PtSegm->Pnext   = NULL;
+    PtSegm->SetNext( NULL );
 
     /* Rotation de la self si le trace doit etre horizontal : */
     LastSegm = PtSegm;
     if( Mself.orient == 0 )
     {
-        for( PtSegm = FirstSegm; PtSegm != NULL; PtSegm = (EDGE_MODULE*) PtSegm->Pnext )
+        for( PtSegm = FirstSegm; PtSegm != NULL; PtSegm = (EDGE_MODULE*) PtSegm->Next() )
         {
             RotatePoint( &PtSegm->m_Start.x, &PtSegm->m_Start.y,
                          FirstSegm->m_Start.x, FirstSegm->m_Start.y, 900 );
@@ -421,12 +421,15 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     }
 
     /* Modif  position ancre  */
-    Module->m_Pos.x = LastSegm->m_End.x; Module->m_Pos.y = LastSegm->m_End.y;
+    Module->m_Pos.x = LastSegm->m_End.x;
+    Module->m_Pos.y = LastSegm->m_End.y;
 
     /* Placement des 2 pads sur extremite */
     PtPad = new D_PAD( Module );
 
-    Module->m_Pads = PtPad; PtPad->Pback = Module;
+    Module->m_Pads = PtPad;
+    PtPad->SetBack( Module );
+
     PtPad->SetPadName( wxT( "1" ) );
     PtPad->m_Pos.x  = LastSegm->m_End.x; PtPad->m_Pos.y = LastSegm->m_End.y;
     PtPad->m_Pos0.x = PtPad->m_Pos.x - Module->m_Pos.x;
@@ -462,7 +465,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Module->m_Value->m_Pos0.y = Module->m_Value->m_Pos.y - Module->m_Pos.y;
 
     /* Init des Coord locales des segments */
-    for( PtSegm = FirstSegm; PtSegm != NULL; PtSegm = (EDGE_MODULE*) PtSegm->Pnext )
+    for( PtSegm = FirstSegm; PtSegm != NULL; PtSegm = (EDGE_MODULE*) PtSegm->Next() )
     {
         PtSegm->m_Start0.x = PtSegm->m_Start.x - Module->m_Pos.x;
         PtSegm->m_Start0.y = PtSegm->m_Start.y - Module->m_Pos.y;
@@ -508,7 +511,7 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
         {
             newedge = new EDGE_MODULE( (MODULE*) NULL );
             newedge->Copy( PtSegm );
-            newedge->m_Parent = PtSegm->m_Parent;
+            newedge->SetParent( PtSegm->GetParent() );
             newedge->AddToChain( PtSegm );
             PtSegm = newedge;
             PtSegm->m_Start.x = PtSegm->m_End.x; PtSegm->m_Start.y = PtSegm->m_End.y;

@@ -253,13 +253,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             if( LastModStruct == NULL )
             {
-                DrawSegm->Pback = this;
+                DrawSegm->SetBack( this );
                 m_Drawings = DrawSegm;
             }
             else
             {
-                DrawSegm->Pback      = LastModStruct;
-                LastModStruct->Pnext = DrawSegm;
+                DrawSegm->SetBack( LastModStruct );
+                LastModStruct->SetNext( DrawSegm );
             }
             int* list[5] = {
                 &DrawSegm->m_Start0.x, &DrawSegm->m_Start0.y,
@@ -290,13 +290,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             if( LastModStruct == NULL )
             {
-                DrawSegm->Pback = this;
+                DrawSegm->SetBack( this );
                 m_Drawings = DrawSegm;
             }
             else
             {
-                DrawSegm->Pback      = LastModStruct;
-                LastModStruct->Pnext = DrawSegm;
+                DrawSegm->SetBack( LastModStruct );
+                LastModStruct->SetNext( DrawSegm );
             }
             for( unsigned ii = 0; ii < 7; ii++ )
             {
@@ -379,13 +379,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             if( LastPad == NULL )
             {
-                Pad->Pback = (EDA_BaseStruct*) this;
+                Pad->SetBack( (EDA_BaseStruct*) this );
                 m_Pads = Pad;
             }
             else
             {
-                Pad->Pback     = (EDA_BaseStruct*) LastPad;
-                LastPad->Pnext = (EDA_BaseStruct*) Pad;
+                Pad->SetBack( (EDA_BaseStruct*) LastPad );
+                LastPad->SetNext( (EDA_BaseStruct*) Pad );
             }
             LastPad = Pad;
             continue;
@@ -433,13 +433,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             if( LastPad == NULL )
             {
-                Pad->Pback = (EDA_BaseStruct*) this;
+                Pad->SetBack( (EDA_BaseStruct*) this );
                 m_Pads = Pad;
             }
             else
             {
-                Pad->Pback     = (EDA_BaseStruct*) LastPad;
-                LastPad->Pnext = (EDA_BaseStruct*) Pad;
+                Pad->SetBack( (EDA_BaseStruct*) LastPad );
+                LastPad->SetNext( (EDA_BaseStruct*) Pad );
             }
             LastPad = Pad;
             continue;

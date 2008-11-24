@@ -101,8 +101,8 @@ void WinEDA_ModulePropertiesFrame::CreateControls()
     /* creation des autres formes 3D */
     Panel3D_Ctrl*    panel3D = m_Panel3D, * nextpanel3D;
     Struct3D_Master* draw3D  = m_CurrentModule->m_3D_Drawings;
-    draw3D = (Struct3D_Master*) draw3D->Pnext;
-    for( ; draw3D != NULL; draw3D = (Struct3D_Master*) draw3D->Pnext )
+    draw3D = (Struct3D_Master*) draw3D->Next();
+    for( ; draw3D != NULL; draw3D = (Struct3D_Master*) draw3D->Next() )
     {
         nextpanel3D = new Panel3D_Ctrl( this, m_NoteBook, -1, draw3D );
         m_NoteBook->AddPage( nextpanel3D, _( "3D settings" ), FALSE );
@@ -427,7 +427,7 @@ Panel3D_Ctrl::Panel3D_Ctrl( WinEDA_ModulePropertiesFrame* parentframe,
     button->SetForegroundColour( *wxRED );
     PropRightSizer->Add( button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
-    if( (struct3D == NULL) || (struct3D->Pback != NULL) )
+    if( (struct3D == NULL) || (struct3D->Back() != NULL) )
     {
         button = new wxButton( this, ID_REMOVE_3D_SHAPE, _( "Remove 3D Shape" ) );
         button->SetForegroundColour( *wxRED );
@@ -605,19 +605,19 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
         if( ( draw3D->m_Shape3DName.IsEmpty() )
            && (draw3D != m_CurrentModule->m_3D_Drawings) )
             continue;
-        if( (draw3D->Pnext == NULL) && panel3D->m_Pnext )
+        if( (draw3D->Next() == NULL) && panel3D->m_Pnext )
         {
             nextdraw3D = new Struct3D_Master( draw3D );
-            nextdraw3D->Pback = draw3D;
-            draw3D->Pnext = nextdraw3D;
+            nextdraw3D->SetBack( draw3D );
+            draw3D->SetNext( nextdraw3D );
         }
-        draw3D = (Struct3D_Master*) draw3D->Pnext;
+        draw3D = (Struct3D_Master*) draw3D->Next();
     }
 
     for( ; draw3D != NULL; draw3D = nextdraw3D )
     {
-        nextdraw3D = (Struct3D_Master*) draw3D->Pnext;
-        (draw3D->Pback)->Pnext = NULL;
+        nextdraw3D = (Struct3D_Master*) draw3D->Next();
+        (draw3D->Back())->SetNext( NULL );
         delete draw3D;
     }
 
@@ -737,7 +737,7 @@ void WinEDA_ModulePropertiesFrame::ReCreateFieldListBox()
     {
         if( item->Type() == TYPETEXTEMODULE )
             m_TextListBox->Append( ( (TEXTE_MODULE*) item )->m_Text );
-        item = item->Pnext;
+        item = item->Next();
     }
 
     SetTextListButtons();
@@ -797,7 +797,7 @@ void WinEDA_ModulePropertiesFrame::EditOrDelTextModule( wxCommandEvent& event )
                     break;
                 }
             }
-            item = item->Pnext; jj++;
+            item = item->Next(); jj++;
         }
     }
 

@@ -100,7 +100,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         case ROUTE_MODULE:
         {
             D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
-            for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+            for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
             {
                 if( ptmp->pad_start == pt_pad )
                     ptmp->status |= CH_ROUTE_REQ;
@@ -216,7 +216,7 @@ void DisplayBoard( WinEDA_DrawPanel* panel, wxDC* DC )
         {
             color  = 0;
             dcell0 = GetCell( row, col, BOTTOM );
-			if( dcell0 & HOLE )
+            if( dcell0 & HOLE )
                 color = GREEN;
 //            if( Nb_Sides )
 //                dcell1 = GetCell( row, col, TOP );
@@ -225,20 +225,20 @@ void DisplayBoard( WinEDA_DrawPanel* panel, wxDC* DC )
 //            dcell0 |= dcell1;
             if( !color && (dcell0 & VIA_IMPOSSIBLE) )
                 color = BLUE;
-			if( dcell0 & CELL_is_EDGE )
+            if( dcell0 & CELL_is_EDGE )
                 color = YELLOW;
-			else if( dcell0 & CELL_is_ZONE )
+            else if( dcell0 & CELL_is_ZONE )
                 color = YELLOW;
-			
-			#define DRAW_OFFSET_X -20
-			#define DRAW_OFFSET_Y 20
+
+            #define DRAW_OFFSET_X -20
+            #define DRAW_OFFSET_Y 20
 //            if( color )
             {
                 for( i = 0; i < maxi; i++ )
                     for( j = 0; j < maxi; j++ )
                         GRSPutPixel( &panel->m_ClipBox, DC,
                                      (col * maxi) + i + DRAW_OFFSET_X,
-									 (row * maxi) + j + DRAW_OFFSET_Y, color );
+                                     (row * maxi) + j + DRAW_OFFSET_Y, color );
 
             }
         }

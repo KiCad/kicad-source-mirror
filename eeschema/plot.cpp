@@ -434,7 +434,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
         wxString Text;
         Text = field->m_Text;
 #if defined(KICAD_GOST)
-	Text.Append( '.' );
+    Text.Append( '.' );
         Text.Append( '1' - 1 + DrawLibItem->m_Multi );
 #else
         Text.Append( 'A' - 1 + DrawLibItem->m_Multi );
@@ -772,20 +772,26 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
 
     Move_Plume( Struct->m_Pos, 'U' );
     pos = Struct->m_Pos; pos.x += Struct->m_Size.x;
+
     Move_Plume( pos, 'D' );
     pos.y += Struct->m_Size.y;
+
     Move_Plume( pos, 'D' );
     pos = Struct->m_Pos; pos.y += Struct->m_Size.y;
+
     Move_Plume( pos, 'D' );
     Move_Plume( Struct->m_Pos, 'D' );
+
     Plume( 'U' );
 
     /* Trace des textes : SheetName */
     Text = Struct->m_SheetName;
     size = wxSize( Struct->m_SheetNameSize, Struct->m_SheetNameSize );
     pos  = Struct->m_Pos; pos.y -= 4;
+
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETNAME ) );
+
     PlotGraphicText( g_PlotFormat, pos, txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM );
@@ -793,8 +799,10 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     /* Trace des textes : FileName */
     Text = Struct->GetFileName();
     size = wxSize( Struct->m_FileNameSize, Struct->m_FileNameSize );
+
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETFILENAME ) );
+
     PlotGraphicText( g_PlotFormat,
                      wxPoint( Struct->m_Pos.x, Struct->m_Pos.y + Struct->m_Size.y + 4 ),
                      txtcolor,
@@ -805,9 +813,10 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     SheetLabelStruct = Struct->m_Label;
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( Struct->m_Layer ) );
+
     while( SheetLabelStruct != NULL )
     {
         PlotSheetLabelStruct( SheetLabelStruct );
-        SheetLabelStruct = (Hierarchical_PIN_Sheet_Struct*) (SheetLabelStruct->Pnext);
+        SheetLabelStruct = SheetLabelStruct->Next();
     }
 }

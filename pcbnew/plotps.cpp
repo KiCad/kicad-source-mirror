@@ -289,7 +289,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 48, wxT( "DrawMod" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         PtStruct = Module->m_Drawings;
         for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
@@ -311,10 +311,10 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 48, wxT( "Pads   " ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Next() )
         {
             if( (PtPad->m_Masque_Layer & masque_layer) == 0 )
                 continue;
@@ -391,7 +391,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 64, _( "Tracks" ), wxEmptyString, YELLOW );
 
-    for( pts = m_Pcb->m_Track; pts != NULL; pts = (TRACK*) pts->Pnext )
+    for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
         if( pts->Type() == TYPEVIA )
             continue;
@@ -412,7 +412,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
     nb_items = 0;
     Affiche_1_Parametre( this, 64, wxT( "Zones  " ), wxEmptyString, YELLOW );
 
-    for( pts = m_Pcb->m_Zone; pts != NULL; pts = (TRACK*) pts->Pnext )
+    for( pts = m_Pcb->m_Zone; pts != NULL; pts = pts->Next() )
     {
         if( (g_TabOneLayerMask[pts->GetLayer()] & masque_layer) == 0 )
             continue;
@@ -481,7 +481,7 @@ static void PrintDrillMark( BOARD* Pcb )
     }
 
     Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
         PtPad = Module->m_Pads;
         for( ; PtPad != NULL; PtPad = PtPad->Next() )

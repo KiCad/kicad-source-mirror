@@ -64,7 +64,7 @@ wxPoint TransformCoordinate( int aTransformMatrix[2][2], wxPoint& aPosition )
 void CreateDummyCmp()
 /******************************/
 {
-    DummyCmp = new              EDA_LibComponentStruct( NULL );
+    DummyCmp = new EDA_LibComponentStruct( NULL );
 
     LibDrawSquare* Square = new LibDrawSquare();
 
@@ -78,7 +78,7 @@ void CreateDummyCmp()
     Text->m_Text   = wxT( "??" );
 
     DummyCmp->m_Drawings = Square;
-    Square->Pnext = Text;
+    Square->SetNext( Text );
 }
 
 
@@ -153,7 +153,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
     if( (LibEntry->m_Name.m_Flags & IS_MOVED) == 0 )
        LibEntry->m_Name.Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
 
-    for( Field = LibEntry->Fields; Field != NULL; Field = (LibDrawField*) Field->Pnext )
+    for( Field = LibEntry->Fields; Field != NULL; Field = Field->Next() )
     {
         if( Field->m_Text.IsEmpty() )
             return;

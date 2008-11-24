@@ -128,7 +128,7 @@ void DHEAD::Insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
 
 void DHEAD::Remove( EDA_BaseStruct* aElement )
 {
-    wxASSERT( aElement )
+    wxASSERT( aElement );
     wxASSERT( aElement->GetList() == this );
 
     if( aElement->Next() )

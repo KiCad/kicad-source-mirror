@@ -108,7 +108,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         /* effacement du segment en cours de trace */
         DisplayOpt.DisplayDrawItems = SKETCH;
         Segment->Draw( DrawPanel, DC, GR_XOR );
-        PtStruct = Segment->Pback;
+        PtStruct = Segment->Back();
         Segment ->DeleteStructure();
         if( PtStruct && (PtStruct->Type() == TYPEDRAWSEGMENT ) )
             Segment = (DRAWSEGMENT*) PtStruct;
@@ -270,10 +270,10 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
         {
             if( Segment->m_Shape == S_SEGMENT )
             {
-                Segment->Pnext = m_Pcb->m_Drawings;
-                Segment->Pback = m_Pcb;
+                Segment->SetNext( m_Pcb->m_Drawings );
+                Segment->SetBack( m_Pcb );
                 if( m_Pcb->m_Drawings )
-                    m_Pcb->m_Drawings->Pback = Segment;
+                    m_Pcb->m_Drawings->SetBack( Segment );
                 m_Pcb->m_Drawings = Segment;
                 GetScreen()->SetModify();
                 Segment->m_Flags = 0;
@@ -320,10 +320,10 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     else
     {
         Segment->m_Flags = 0;
-        Segment->Pnext   = m_Pcb->m_Drawings;
-        Segment->Pback   = m_Pcb;
+        Segment->SetNext( m_Pcb->m_Drawings );
+        Segment->SetBack( m_Pcb );
         if( m_Pcb->m_Drawings )
-            m_Pcb->m_Drawings->Pback = Segment;
+            m_Pcb->m_Drawings->SetBack( Segment );
         m_Pcb->m_Drawings = Segment;
         GetScreen()->SetModify();
     }

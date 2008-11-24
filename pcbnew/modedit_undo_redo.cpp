@@ -22,17 +22,17 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 
     CopyItem = new MODULE( m_Pcb );
     CopyItem->Copy( (MODULE*) ItemToCopy );
-    CopyItem->m_Parent = m_Pcb;
+    CopyItem->SetParent( m_Pcb );
 
     GetScreen()->AddItemToUndoList( (EDA_BaseStruct*) CopyItem );
     /* Clear current flags (which can be temporary set by a current edit command) */
-    for( item = CopyItem->m_Drawings; item != NULL; item = item->Pnext )
+    for( item = CopyItem->m_Drawings; item != NULL; item = item->Next() )
         item->m_Flags = 0;
 
     /* Clear redo list, because after new save there is no redo to do */
     while( GetScreen()->m_RedoList )
     {
-        item = GetScreen()->m_RedoList->Pnext;
+        item = GetScreen()->m_RedoList->Next();
         delete GetScreen()->m_RedoList;
         GetScreen()->m_RedoList = item;
     }
@@ -55,7 +55,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
     m_Pcb->m_Modules =
         (MODULE*) GetScreen()->GetItemFromRedoList();
     if( m_Pcb->m_Modules )
-        m_Pcb->m_Modules->Pnext = NULL;
+        m_Pcb->m_Modules->SetNext( NULL );
     SetCurItem( NULL );;
     GetScreen()->SetModify();
     ReCreateHToolbar();
@@ -80,7 +80,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
         (MODULE*) GetScreen()->GetItemFromUndoList();
 
     if( m_Pcb->m_Modules )
-        m_Pcb->m_Modules->Pnext = NULL;
+        m_Pcb->m_Modules->SetNext( NULL );
     GetScreen()->SetModify();
     SetCurItem( NULL );;
     ReCreateHToolbar();

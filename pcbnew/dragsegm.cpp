@@ -67,8 +67,8 @@ void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
         {
             px = pt_pad->m_Pos.x - g_Offset_Module.x;
             py = pt_pad->m_Pos.y - g_Offset_Module.y;
-            
-            Track->m_Start.x = px; 
+
+            Track->m_Start.x = px;
             Track->m_Start.y = py;
         }
 
@@ -77,11 +77,11 @@ void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
         {
             px = pt_pad->m_Pos.x - g_Offset_Module.x;
             py = pt_pad->m_Pos.y - g_Offset_Module.y;
-            
-            Track->m_End.x = px; 
+
+            Track->m_End.x = px;
             Track->m_End.y = py;
         }
-        
+
         Track->Draw( panel, DC, GR_XOR );
     }
 }
@@ -102,7 +102,7 @@ void Build_Drag_Liste( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module )
     D_PAD* pt_pad;
 
     pt_pad = Module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
     {
         Build_1_Pad_SegmentsToDrag( panel, DC, pt_pad );
     }
@@ -133,16 +133,16 @@ void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad
     {
         if( Track->GetNet() != net_code )
             break;                                                      /* hors zone */
-        
+
         if( ( MasqueLayer & Track->ReturnMaskLayer() ) == 0 )
             continue;                                                   /* couches differentes */
-        
+
         if( pos == Track->m_Start )
         {
             AddSegmentToDragList( panel, DC, STARTPOINT, Track );
             g_DragSegmentList->m_Pad_Start = PtPad;
         }
-        
+
         if( pos == Track->m_End )
         {
             AddSegmentToDragList( panel, DC, ENDPOINT, Track );
@@ -165,24 +165,24 @@ void AddSegmentToDragList( WinEDA_DrawPanel* panel, wxDC* DC,
 
     pt_drag = new DRAG_SEGM( Track );
 
-    pt_drag->Pnext    = g_DragSegmentList;
+    pt_drag->Pnext = g_DragSegmentList;
     g_DragSegmentList = pt_drag;
-    
+
     if( (flag & STARTPOINT) )
         pt_drag->m_Flag |= 1;
-    
+
     if( (flag & ENDPOINT) )
         pt_drag->m_Flag |= 2;
-    
+
     Track->Draw( panel, DC, GR_XOR );
     Track->SetState( EDIT, ON );
-    
+
     if( (flag & STARTPOINT) )
         Track->m_Flags |= STARTPOINT;
-    
+
     if( (flag & ENDPOINT) )
         Track->m_Flags |= ENDPOINT;
-    
+
     Track->Draw( panel, DC, GR_XOR );
 }
 
@@ -203,18 +203,18 @@ void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         if( Track->GetNet() != net_code )
             break;                                                      /* hors zone */
-        
+
         if( ( MasqueLayer & Track->ReturnMaskLayer() ) == 0 )
             continue;                                                   /* couches differentes */
-        
+
         if( Track->m_Flags & IS_DRAGGED )
             continue;                                                   // already in list
-        
+
         if( Track->m_Start == point )
         {
             AddSegmentToDragList( panel, DC, STARTPOINT, Track );
         }
-        
+
         if( Track->m_End == point )
         {
             AddSegmentToDragList( panel, DC, ENDPOINT, Track );
@@ -241,7 +241,7 @@ void EraseDragListe()
     for( ; pt_drag != NULL; pt_drag = NextStruct )
     {
         NextStruct = pt_drag->Pnext;
-        pt_drag->m_Segm->m_Flags = 0;        
+        pt_drag->m_Segm->m_Flags = 0;
         delete pt_drag;
     }
 

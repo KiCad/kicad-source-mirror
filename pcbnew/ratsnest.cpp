@@ -919,14 +919,14 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
             if( ii == 0 )
             {
                 m_Pcb->m_Equipots = pt_equipot;
-                pt_equipot->Pback = m_Pcb;
+                pt_equipot->SetBack( m_Pcb );
             }
             else
             {
-                PtStruct->Pnext   = pt_equipot;
-                pt_equipot->Pback = PtStruct;
+                PtStruct->SetNext( pt_equipot );
+                pt_equipot->SetBack( PtStruct );
             }
-            pt_equipot->Pnext = NULL;
+            pt_equipot->SetNext( NULL );
         }
 
         // Set the net_code for this equipot and reset other values
@@ -936,14 +936,14 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
 
         BufPtEquipot[ii] = pt_equipot;
         PtStruct   = (EDA_BaseStruct*) pt_equipot;
-        pt_equipot = (EQUIPOT*) pt_equipot->Pnext;
+        pt_equipot = pt_equipot->Next();
     }
 
     /* Delete the unused equipots in the old list */
 
     while( pt_equipot )
     {
-        PtStruct = pt_equipot->Pnext;
+        PtStruct = pt_equipot->Next();
         pt_equipot->DeleteStructure();
         pt_equipot = (EQUIPOT*) PtStruct;
     }
@@ -966,7 +966,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     MyFree( BufPtEquipot );
     m_Pcb->m_Status_Pcb |= NET_CODES_OK;
 
-	m_Pcb->SetAreasNetCodesFromNetNames();
+    m_Pcb->SetAreasNetCodesFromNetNames();
 }
 
 
@@ -1002,10 +1002,10 @@ void WinEDA_BasePcbFrame::build_liste_pads()
     /* Set the pad count */
     m_Pcb->m_NbPads = 0;
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        PtPad = Module->m_Pads;
+        for( ; PtPad != NULL; PtPad = PtPad->Next() )
             m_Pcb->m_NbPads++;
     }
 
@@ -1019,14 +1019,14 @@ void WinEDA_BasePcbFrame::build_liste_pads()
 
     /* Clear variables used in rastnest computation */
     Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Pnext )
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Pnext )
+        PtPad = Module->m_Pads;
+        for( ; PtPad != NULL; PtPad = PtPad->Next() )
         {
             *pt_liste_pad = PtPad;
             PtPad->SetSubRatsnest( 0 );
-            PtPad->m_Parent = Module;   // Just in case
+            PtPad->SetParent( Module );
 
             if( PtPad->GetNet() )
                 m_Pcb->m_NbNodes++;
@@ -1089,9 +1089,9 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
         build_liste_pads();
 
     /* Compute the "local" ratsnest if needed (when this footprint starts move)
-	and the list of external pads to consider, i.e pads in others footprints which are "connected" to
-	a pad in the current footprint
-	*/
+    and the list of external pads to consider, i.e pads in others footprints which are "connected" to
+    a pad in the current footprint
+    */
     if( (m_Pcb->m_Status_Pcb & CHEVELU_LOCAL_OK) != 0 )
         goto calcul_chevelu_ext;
 
@@ -1100,7 +1100,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     nb_pads_ref  = 0;
 
     pad_ref = Module->m_Pads;
-    for( ; pad_ref != NULL; pad_ref = (D_PAD*) pad_ref->Pnext )
+    for( ; pad_ref != NULL; pad_ref = pad_ref->Next() )
     {
         if( pad_ref->GetNet() == 0 )
             continue;
@@ -1137,7 +1137,7 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
             if( pad_externe->GetNet() != current_net_code )
                 continue;
 
-            if( pad_externe->m_Parent == Module )
+            if( pad_externe->GetParent() == Module )
                 continue;
 
             pad_externe->SetSubRatsnest(0);
@@ -1156,8 +1156,8 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
     /* Compute the internal rats nest:
      *  this is the same as general ratsnest, but considers only the current footprint pads
-	 * it is therefore not time consuming, and it is made only once
-	*/
+     * it is therefore not time consuming, and it is made only once
+    */
     local_liste_chevelu = (CHEVELU*) pt_liste_pad; // buffer chevelu a la suite de la liste des pads
     nb_local_chevelu    = 0;
     pt_liste_ref = (LISTE_PAD*) adr_lowmem;
@@ -1286,8 +1286,8 @@ calcul_chevelu_ext:
     adr_max = MAX( adr_max, (char*) (local_chevelu + 1) );
 
     return (char*) (local_chevelu + 1);   /* the struct pointed by local_chevelu is used
-	in temporary computations, so we skip it
-	*/
+    in temporary computations, so we skip it
+    */
 }
 
 

@@ -72,10 +72,10 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
     Pnext = NULL;
     m_Son = NULL;
 
-    // Re-parent the fields, which before this were aTemplate's parent
+    // Re-parent the fields, which before this had aTemplate as parent
     for( int i=0; i<GetFieldCount();  ++i )
     {
-        GetField( i )->m_Parent = this;
+        GetField( i )->SetParent( this );
     }
 }
 
@@ -424,11 +424,11 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     // (after swap(), m_Parent member does not point to the right parent):
     for( int ii = 0; ii < copyitem->GetFieldCount();  ++ii )
     {
-       copyitem->GetField(ii)->m_Parent = copyitem;
+       copyitem->GetField(ii)->SetParent( copyitem );
     }
     for( int ii = 0; ii < GetFieldCount();  ++ii )
     {
-       GetField(ii)->m_Parent = this;
+       GetField(ii)->SetParent( this );
     }
 
 }

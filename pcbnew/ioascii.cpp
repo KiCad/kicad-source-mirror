@@ -607,11 +607,11 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 
     /* Write segment count for footprints, drawings, track and zones */
     /* Calculate the footprint count */
-    for( NbModules = 0; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( NbModules = 0; PtStruct != NULL; PtStruct = PtStruct->Next() )
         NbModules++;
 
     PtStruct = m_Pcb->m_Drawings; NbDrawItem = 0;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         NbDrawItem++;
 
     fprintf( File, "Ndraw %d\n", NbDrawItem );
@@ -783,23 +783,23 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     if( Append )
     {
         LastModule = m_Pcb->m_Modules;
-        for( ; LastModule != NULL; LastModule = (MODULE*) LastModule->Pnext )
+        for( ; LastModule != NULL; LastModule = (MODULE*) LastModule->Next() )
         {
-            if( LastModule->Pnext == NULL )
+            if( LastModule->Next() == NULL )
                 break;
         }
 
         LastStructPcb = m_Pcb->m_Drawings;
         for( ; LastStructPcb != NULL; LastStructPcb = LastStructPcb->Next() )
         {
-            if( LastStructPcb->Pnext == NULL )
+            if( LastStructPcb->Next() == NULL )
                 break;
         }
 
         LastEquipot = m_Pcb->m_Equipots;
-        for( ; LastEquipot != NULL; LastEquipot = (EQUIPOT*) LastEquipot->Pnext )
+        for( ; LastEquipot != NULL; LastEquipot = (EQUIPOT*) LastEquipot->Next() )
         {
-            if( LastEquipot->Pnext == NULL )
+            if( LastEquipot->Next() == NULL )
                 break;
         }
     }
@@ -843,12 +843,12 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             if( LastEquipot == NULL )
             {
                 m_Pcb->m_Equipots = Equipot;
-                Equipot->Pback    = m_Pcb;
+                Equipot->SetBack( m_Pcb );
             }
             else
             {
-                Equipot->Pback     = LastEquipot;
-                LastEquipot->Pnext = Equipot;
+                Equipot->SetBack( LastEquipot );
+                LastEquipot->SetNext( Equipot );
             }
             LastEquipot = Equipot;
             m_Pcb->m_NbNets++;
@@ -873,12 +873,12 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             if( LastModule == NULL )
             {
                 m_Pcb->m_Modules = Module;
-                Module->Pback    = m_Pcb;
+                Module->SetBack( m_Pcb );
             }
             else
             {
-                Module->Pback     = LastModule;
-                LastModule->Pnext = Module;
+                Module->SetBack( LastModule );
+                LastModule->SetNext( Module );
             }
             LastModule = Module;
             nbmod++;
@@ -893,12 +893,12 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             if( LastStructPcb == NULL )
             {
                 m_Pcb->m_Drawings = StructPcb;
-                StructPcb->Pback  = m_Pcb;
+                StructPcb->SetBack( m_Pcb );
             }
             else
             {
-                StructPcb->Pback     = LastStructPcb;
-                LastStructPcb->Pnext = StructPcb;
+                StructPcb->SetBack( LastStructPcb );
+                LastStructPcb->SetNext( StructPcb );
             }
             LastStructPcb = StructPcb;
             continue;
@@ -911,12 +911,12 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             if( LastStructPcb == NULL )
             {
                 m_Pcb->m_Drawings = DrawSegm;
-                DrawSegm->Pback   = m_Pcb;
+                DrawSegm->SetBack( m_Pcb );
             }
             else
             {
-                DrawSegm->Pback      = LastStructPcb;
-                LastStructPcb->Pnext = DrawSegm;
+                DrawSegm->SetBack( LastStructPcb );
+                LastStructPcb->SetNext( DrawSegm );
             }
             LastStructPcb = DrawSegm;
             continue;
@@ -930,12 +930,12 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             if( LastStructPcb == NULL )
             {
                 m_Pcb->m_Drawings = Cotation;
-                Cotation->Pback   = m_Pcb;
+                Cotation->SetBack( m_Pcb );
             }
             else
             {
-                Cotation->Pback      = LastStructPcb;
-                LastStructPcb->Pnext = Cotation;
+                Cotation->SetBack( LastStructPcb );
+                LastStructPcb->SetNext( Cotation );
             }
             LastStructPcb = Cotation;
             continue;
@@ -949,12 +949,12 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             if( LastStructPcb == NULL )
             {
                 m_Pcb->m_Drawings = Mire;
-                Mire->Pback = m_Pcb;
+                Mire->SetBack( m_Pcb );
             }
             else
             {
-                Mire->Pback = LastStructPcb;
-                LastStructPcb->Pnext = Mire;
+                Mire->SetBack( LastStructPcb );
+                LastStructPcb->SetNext( Mire );
             }
             LastStructPcb = Mire;
             continue;
@@ -969,7 +969,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             {
                 for( ; StartTrack != NULL; StartTrack = StartTrack->Next() )
                 {
-                    if( StartTrack->Pnext == NULL )
+                    if( StartTrack->Next() == NULL )
                         break;
                 }
             }
@@ -990,7 +990,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             {
                 for( ; StartZone != NULL; StartZone = StartZone->Next() )
                 {
-                    if( StartZone->Pnext == NULL )
+                    if( StartZone->Next() == NULL )
                         break;
                 }
             }

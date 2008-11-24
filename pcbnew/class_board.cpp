@@ -217,11 +217,11 @@ wxPoint& BOARD::GetPosition()
 void BOARD::UnLink()
 {
     /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() == TYPEPCB )
+        if( Back()->Type() == TYPEPCB )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
@@ -230,10 +230,11 @@ void BOARD::UnLink()
     }
 
     /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
 
 
@@ -249,13 +250,13 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     {
     // this one uses a vector
     case TYPEMARKER:
-        aBoardItem->m_Parent = this;
+        aBoardItem->SetParent( this );
         m_markers.push_back( (MARKER*) aBoardItem );
         break;
 
     // this one uses a vector
     case TYPEZONE_CONTAINER:
-        aBoardItem->m_Parent = this;
+        aBoardItem->SetParent( this );
         m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
         break;
 
@@ -270,11 +271,11 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     case TYPEMODULE:
         // this is an insert, not an append which may also be needed.
         {
-            aBoardItem->Pback = this;
+            aBoardItem->SetBack( this );
             BOARD_ITEM* next = m_Modules;
-            aBoardItem->Pnext = next;
+            aBoardItem->SetNext( next );
             if( next )
-                next->Pback = aBoardItem;
+                next->SetBack( aBoardItem );
             m_Modules = (MODULE*) aBoardItem;
         }
         break;
@@ -408,17 +409,16 @@ bool BOARD::ComputeBoundaryBox()
  */
 {
     int             rayon, cx, cy, d, xmin, ymin, xmax, ymax;
-    bool            Has_Items = FALSE;
+    bool            hasItems = FALSE;
     EDA_BaseStruct* PtStruct;
     DRAWSEGMENT*    ptr;
-    TRACK*          Track;
 
     xmin = ymin = 0x7FFFFFFFl;
     xmax = ymax = -0x7FFFFFFFl;
 
     /* Analyse PCB edges*/
     PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() != TYPEDRAWSEGMENT )
             continue;
@@ -435,7 +435,7 @@ bool BOARD::ComputeBoundaryBox()
             ymin      = MIN( ymin, cy - rayon );
             xmax      = MAX( xmax, cx + rayon );
             ymax      = MAX( ymax, cy + rayon );
-            Has_Items = TRUE;
+            hasItems = TRUE;
         }
         else
         {
@@ -447,22 +447,22 @@ bool BOARD::ComputeBoundaryBox()
             cy        = MAX( ptr->m_Start.y, ptr->m_End.y );
             xmax      = MAX( xmax, cx + d );
             ymax      = MAX( ymax, cy + d );
-            Has_Items = TRUE;
+            hasItems = TRUE;
         }
     }
 
     /* Analyse footprints  */
-    MODULE* module = m_Modules;
-    for( ; module != NULL; module = (MODULE*) module->Pnext )
+
+    for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
-        Has_Items = TRUE;
+        hasItems = TRUE;
         xmin = MIN( xmin, ( module->m_Pos.x + module->m_BoundaryBox.GetX() ) );
         ymin = MIN( ymin, ( module->m_Pos.y + module->m_BoundaryBox.GetY() ) );
         xmax = MAX( xmax, module->m_Pos.x + module->m_BoundaryBox.GetRight() );
         ymax = MAX( ymax, module->m_Pos.y + module->m_BoundaryBox.GetBottom() );
 
-        D_PAD* pt_pad = module->m_Pads;
-        for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Pnext )
+
+        for( D_PAD* pt_pad = module->m_Pads;  pt_pad;  pt_pad = pt_pad->Next() )
         {
             const wxPoint& pos = pt_pad->GetPosition();
 
@@ -475,35 +475,35 @@ bool BOARD::ComputeBoundaryBox()
     }
 
     /* Analyse track and zones */
-    for( Track = m_Track; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( TRACK* track = m_Track;  track;  track = track->Next() )
     {
-        d         = (Track->m_Width / 2) + 1;
-        cx        = MIN( Track->m_Start.x, Track->m_End.x );
-        cy        = MIN( Track->m_Start.y, Track->m_End.y );
+        d         = (track->m_Width / 2) + 1;
+        cx        = MIN( track->m_Start.x, track->m_End.x );
+        cy        = MIN( track->m_Start.y, track->m_End.y );
         xmin      = MIN( xmin, cx - d );
         ymin      = MIN( ymin, cy - d );
-        cx        = MAX( Track->m_Start.x, Track->m_End.x );
-        cy        = MAX( Track->m_Start.y, Track->m_End.y );
+        cx        = MAX( track->m_Start.x, track->m_End.x );
+        cy        = MAX( track->m_Start.y, track->m_End.y );
         xmax      = MAX( xmax, cx + d );
         ymax      = MAX( ymax, cy + d );
-        Has_Items = TRUE;
+        hasItems = TRUE;
     }
 
-    for( Track = m_Zone; Track != NULL; Track = (TRACK*) Track->Pnext )
+    for( TRACK* track = m_Zone;  track;  track = track->Next() )
     {
-        d         = (Track->m_Width / 2) + 1;
-        cx        = MIN( Track->m_Start.x, Track->m_End.x );
-        cy        = MIN( Track->m_Start.y, Track->m_End.y );
+        d         = (track->m_Width / 2) + 1;
+        cx        = MIN( track->m_Start.x, track->m_End.x );
+        cy        = MIN( track->m_Start.y, track->m_End.y );
         xmin      = MIN( xmin, cx - d );
         ymin      = MIN( ymin, cy - d );
-        cx        = MAX( Track->m_Start.x, Track->m_End.x );
-        cy        = MAX( Track->m_Start.y, Track->m_End.y );
+        cx        = MAX( track->m_Start.x, track->m_End.x );
+        cy        = MAX( track->m_Start.y, track->m_End.y );
         xmax      = MAX( xmax, cx + d );
         ymax      = MAX( ymax, cy + d );
-        Has_Items = TRUE;
+        hasItems = TRUE;
     }
 
-    if( !Has_Items && m_PcbFrame )
+    if( !hasItems && m_PcbFrame )
     {
         if( m_PcbFrame->m_Draw_Sheet_Ref )
         {
@@ -525,7 +525,7 @@ bool BOARD::ComputeBoundaryBox()
     m_BoundaryBox.SetWidth( xmax - xmin );
     m_BoundaryBox.SetHeight( ymax - ymin );
 
-    return Has_Items;
+    return hasItems;
 }
 
 
@@ -541,8 +541,6 @@ void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
 #define POS_AFF_NBCONNECT   40
 #define POS_AFF_NBNOCONNECT 48
 
-    int             nb_vias = 0, ii;
-    EDA_BaseStruct* Struct;
     wxString        txt;
 
     frame->MsgPanel->EraseMsgBox();
@@ -550,10 +548,10 @@ void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
     txt.Printf( wxT( "%d" ), m_NbPads );
     Affiche_1_Parametre( frame, POS_AFF_NBPADS, _( "Pads" ), txt, DARKGREEN );
 
-    for( ii = 0, Struct = m_Track; Struct != NULL; Struct = Struct->Pnext )
+    int  nb_vias = 0;
+    for( BOARD_ITEM* item = m_Track;  item;  item = item->Next() )
     {
-        ii++;
-        if( Struct->Type() == TYPEVIA )
+        if( item->Type() == TYPEVIA )
             nb_vias++;
     }
 

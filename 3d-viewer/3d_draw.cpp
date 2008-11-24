@@ -214,7 +214,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 
     /* draw graphic items */
     EDA_BaseStruct* PtStruct;
-    for( PtStruct = pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+    for( PtStruct = pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -466,7 +466,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     /* Draw pads */
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
-    for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+    for( ; pad != NULL; pad = pad->Next() )
     {
         pad->Draw3D( glcanvas );
     }
@@ -477,9 +477,11 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     if( g_Parm_3D_Visu.m_Draw3DModule )
     {
         glPushMatrix();
+
         glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BoardScale,
             -m_Pos.y * g_Parm_3D_Visu.m_BoardScale,
             g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
+
         if( m_Orient )
         {
             glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
@@ -491,7 +493,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         }
         DataScale3D = g_Parm_3D_Visu.m_BoardScale * UNITS3D_TO_UNITSPCB;
 
-        for( ; Struct3D != NULL; Struct3D = (Struct3D_Master*) Struct3D->Pnext )
+        for( ; Struct3D != NULL; Struct3D = Struct3D->Next() )
         {
             if( !Struct3D->m_Shape3DName.IsEmpty() )
             {
@@ -507,7 +509,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     {
         EDA_BaseStruct* Struct = m_Drawings;
         glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
-        for( ; Struct != NULL; Struct = Struct->Pnext )
+        for( ; Struct != NULL; Struct = Struct->Next() )
         {
             switch( Struct->Type() )
             {

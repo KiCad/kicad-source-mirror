@@ -289,7 +289,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( SchItem = sheet->LastDrawList(); SchItem != NULL; SchItem = SchItem->Pnext )
+        for( SchItem = sheet->LastDrawList(); SchItem != NULL; SchItem = SchItem->Next() )
         {
             SchItem = Component = FindNextComponentAndCreatPinList( SchItem, sheet );
 
@@ -413,7 +413,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
             wxChar ident;
             if( DrawList->Type() != TYPE_SCH_TEXT )
@@ -467,7 +467,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
     ClearUsedFlags();  /* Reset the flags FlagControlMulti in all schematic files*/
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
             DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
             if( Component == NULL )
@@ -556,7 +556,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
             DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
             if( Component == NULL )
@@ -771,7 +771,7 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT*          Component_in,
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( SchItem = sheet->LastDrawList(); SchItem; SchItem = SchItem->Pnext )
+        for( SchItem = sheet->LastDrawList(); SchItem; SchItem = SchItem->Next() )
         {
             if( SchItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
@@ -960,7 +960,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Pnext )
+        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
             DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
             if( Component == NULL )

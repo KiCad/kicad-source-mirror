@@ -35,24 +35,23 @@ COTATION::~COTATION()
  */
 void COTATION::UnLink()
 {
-    /* Modification du chainage arriere */
-    if( Pback )
+    if( Back() )
     {
-        if( Pback->Type() != TYPEPCB )
+        if( Back()->Type() != TYPEPCB )
         {
-            Pback->Pnext = Pnext;
+            Back()->SetNext( Next() );
         }
         else /* Le chainage arriere pointe sur la structure "Pere" */
         {
-            ( (BOARD*) Pback )->m_Drawings = (BOARD_ITEM*) Pnext;
+            ((BOARD*) Back() )->m_Drawings = Next();
         }
     }
 
-    /* Modification du chainage avant */
-    if( Pnext )
-        Pnext->Pback = Pback;
+    if( Next() )
+        Next()->SetBack( Back() );
 
-    Pnext = Pback = NULL;
+    SetNext( 0 );
+    SetBack( 0 );
 }
 
 

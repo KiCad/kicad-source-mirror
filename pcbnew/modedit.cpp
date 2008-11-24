@@ -257,7 +257,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( module_in_edit->m_Link )        // this is not a new module ...
         {
             source_module = mainpcb->m_Modules;
-            for(  ; source_module != NULL; source_module = (MODULE*) source_module->Pnext )
+            for(  ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
             {
                 if( module_in_edit->m_Link == source_module->m_TimeStamp )
                     break;
@@ -284,15 +284,15 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         // Create the "new" module
         MODULE* newmodule = new MODULE( mainpcb );
         newmodule->Copy( module_in_edit );
-        newmodule->m_Parent = mainpcb;      // modifie par la copie
+        newmodule->SetParent( mainpcb );      // modifie par la copie
         newmodule->m_Link   = 0;
 
         // Put the footprint in the main pcb linked list.
-        newmodule->Pnext   = mainpcb->m_Modules;
+        newmodule->SetNext( mainpcb->m_Modules );
         mainpcb->m_Modules = newmodule;
-        newmodule->Pback   = mainpcb;
-        if( newmodule->Pnext )
-            newmodule->Pnext->Pback = newmodule;
+        newmodule->SetBack( mainpcb );
+        if( newmodule->Next() )
+            newmodule->Next()->SetBack( newmodule );
 
         if( source_module )         // this is an update command
         {
@@ -672,7 +672,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
     case ID_MODEDIT_MODULE_ROTATE:
         module->SetOrientation( angle );
 
-        for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+        for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
         {
             pad->m_Pos0    = pad->m_Pos;
             pad->m_Orient -= angle;
@@ -691,7 +691,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
             module->m_Value->m_Orient -= 1800;
 
         /* Rectification des contours et textes de l'empreinte : */
-        for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+        for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
             if( PtStruct->Type() == TYPEEDGEMODULE )
             {
@@ -711,7 +711,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
         break;
 
     case ID_MODEDIT_MODULE_MIRROR:
-        for( ; pad != NULL; pad = (D_PAD*) pad->Pnext )
+        for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
         {
             pad->m_Pos.y       = -pad->m_Pos.y;
             pad->m_Pos0.y      = -pad->m_Pos0.y;
@@ -737,7 +737,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
 
         /* Inversion miroir des dessins de l'empreinte : */
         PtStruct = module->m_Drawings;
-        for( ; PtStruct != NULL; PtStruct = PtStruct->Pnext )
+        for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
             switch( PtStruct->Type() )
             {

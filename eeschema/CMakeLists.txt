@@ -36,7 +36,8 @@ set(EESCHEMA_SRCS
 #   dialog_cmp_graphic_properties.cpp
     dialog_create_component.cpp
 #   dialog_edit_component_in_lib.cpp
-#   dialog_edit_component_in_schematic.cpp
+    dialog_edit_component_in_schematic_fbp.cpp
+    dialog_edit_component_in_schematic.cpp
 #   dialog_edit_label.cpp
     dialog_eeschema_config.cpp
     dialog_erc.cpp

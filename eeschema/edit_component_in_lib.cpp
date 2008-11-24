@@ -191,7 +191,7 @@ void WinEDA_PartPropertiesFrame::InitBuffers()
     while( Field )
     {
         CopyFieldDataToBuffer( Field );
-        Field = (LibDrawField*) Field->Pnext;
+        Field = Field->Next();
     }
 }
 
@@ -753,7 +753,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
         LibDrawField* NextField, * previousField = NULL;
         while( Field )
         {
-            NextField = (LibDrawField*) Field->Pnext;
+            NextField = Field->Next();
             if( Field->m_FieldId == ii )
             {
                 CopyBufferToFieldData( Field );
@@ -765,7 +765,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
                     {
                         SAFE_DELETE( Field );
                         if( previousField )
-                            previousField->Pnext = NextField;
+                            previousField->SetNext( NextField );
                         else
                             CurrentLibEntry->Fields = NextField;
                     }
@@ -789,7 +789,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
                 Field = new LibDrawField( ii );
 
                 CopyBufferToFieldData( Field );
-                Field->Pnext = CurrentLibEntry->Fields;
+                Field->SetNext( CurrentLibEntry->Fields );
                 CurrentLibEntry->Fields = Field;
             }
         }
@@ -805,7 +805,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
             if( Field->m_FieldId >= FIELD1 )
                 if( Field->m_Text.IsEmpty() )
                     Field->m_Text = wxT( "~" );
-            Field = (LibDrawField*) Field->Pnext;
+            Field = Field->Next();
         }
     }
 
@@ -1043,7 +1043,7 @@ bool WinEDA_PartPropertiesFrame::ChangeNbUnitsPerPackage( int MaxUnit )
                 for( ii = OldNumUnits + 1; ii <= MaxUnit; ii++ )
                 {
                     NextDrawItem = CopyDrawEntryStruct( this, DrawItem );
-                    NextDrawItem->Pnext = CurrentLibEntry->m_Drawings;
+                    NextDrawItem->SetNext( CurrentLibEntry->m_Drawings );
                     CurrentLibEntry->m_Drawings = NextDrawItem;
                     NextDrawItem->m_Unit = ii;
                 }
@@ -1090,7 +1090,7 @@ bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
                     }
                 }
                 NextDrawItem = CopyDrawEntryStruct( this, DrawItem );
-                NextDrawItem->Pnext = CurrentLibEntry->m_Drawings;
+                NextDrawItem->SetNext( CurrentLibEntry->m_Drawings );
                 CurrentLibEntry->m_Drawings = NextDrawItem;
                 NextDrawItem->m_Convert = 2;
             }
