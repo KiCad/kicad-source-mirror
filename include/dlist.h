@@ -57,21 +57,6 @@ protected:
 
     ~DHEAD();
 
-public:
-
-    /**
-     * Function DestructAll
-     * deletes all items on the list and leaves the list empty.
-     */
-    void DestructAll();
-
-    /**
-     * Function SetOwnership
-     * controls whether the list owns the objects and is responsible for
-     * deleteing their memory at time of this object's destruction.
-     */
-    void SetOwnership( bool Iown ) { meOwner = Iown; }
-
     /**
      * Function Append
      * adds \a aNewElement to the end of the list.
@@ -99,6 +84,23 @@ public:
      * removes \a aElement from the list, but does not delete it.
      */
     void Remove( EDA_BaseStruct* aElement );
+
+
+public:
+
+    /**
+     * Function DestructAll
+     * deletes all items on the list and leaves the list empty.
+     */
+    void DestructAll();
+
+    /**
+     * Function SetOwnership
+     * controls whether the list owns the objects and is responsible for
+     * deleteing their memory at time of this object's destruction.
+     */
+    void SetOwnership( bool Iown ) { meOwner = Iown; }
+
 
     /**
      * Function GetCount
@@ -137,6 +139,45 @@ public:
      * returns the last T* in the list, or NULL if the list is empty.
      */
     T*  GetLast() const { return (T*) last; }
+
+
+    /**
+     * Function Append
+     * adds \a aNewElement to the end of the list.
+     */
+    void Append( T* aNewElement )
+    {
+        DHEAD::Append( aNewElement );
+    }
+
+    /**
+     * Function Insert
+     * puts aNewElement just in front of aElementAfterMe in the list sequence.
+     * If aElementAfterMe is NULL, then simply Append()
+     */
+    void Insert( T* aNewElement, T* aElementAfterMe )
+    {
+        DHEAD::Insert( aNewElement, aElementAfterMe );
+    }
+
+    /**
+     * Function Insert
+     * puts aNewElement in front of list sequence.
+     */
+    void Insert( T* aNewElement )
+    {
+        DHEAD::Insert( aNewElement );
+    }
+
+    /**
+     * Function Remove
+     * removes \a aElement from the list, but does not delete it.
+     */
+    void Remove( T* aElement )
+    {
+        DHEAD::Remove( aElement );
+    }
+
 };
 
 #endif      // DLIST_H_
