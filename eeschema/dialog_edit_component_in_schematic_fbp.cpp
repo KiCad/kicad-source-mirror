@@ -39,7 +39,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxString orientationRadioBoxChoices[] = { _("0"), _("+90"), _("180"), _("-90") };
 	int orientationRadioBoxNChoices = sizeof( orientationRadioBoxChoices ) / sizeof( wxString );
 	orientationRadioBox = new wxRadioBox( this, wxID_ANY, _("Orientation (Degrees)"), wxDefaultPosition, wxDefaultSize, orientationRadioBoxNChoices, orientationRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	orientationRadioBox->SetSelection( 3 );
+	orientationRadioBox->SetSelection( 0 );
 	orientationRadioBox->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
 	orientationSizer->Add( orientationRadioBox, 1, wxALL, 8 );

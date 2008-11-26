@@ -440,13 +440,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
     int orientation = m_Cmp->GetRotationMiroir() & ~(CMP_MIROIR_X | CMP_MIROIR_Y);
 
-    // if we don't change it, the default selection of the radio box is "0".
     if( orientation == CMP_ORIENT_90 )
         orientationRadioBox->SetSelection( 1 );
     else if( orientation == CMP_ORIENT_180 )
         orientationRadioBox->SetSelection( 2 );
     else if( orientation == CMP_ORIENT_270 )
         orientationRadioBox->SetSelection( 3 );
+    else
+        orientationRadioBox->SetSelection( 0 );
 
     int mirror = m_Cmp->GetRotationMiroir() & (CMP_MIROIR_X | CMP_MIROIR_Y);
 
@@ -460,6 +461,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         mirrorRadioBox->SetSelection( 2 );
         D(printf("mirror=Y,2\n");)
     }
+    else
+        mirrorRadioBox->SetSelection( 0 );
 
     // Positionnement de la selection normal/convert
     if( m_Cmp->m_Convert > 1 )
