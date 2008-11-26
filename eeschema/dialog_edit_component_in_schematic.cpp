@@ -52,6 +52,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     m_Parent = (WinEDA_SchematicFrame*) parent;
 
     m_LibEntry = 0;
+    m_skipCopyFromPanel = false;
 
     wxListItem  columnLabel;
 
@@ -86,8 +87,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& even
 {
     D(printf("OnListItemDeselected()\n");)
 
-    if( !copyPanelToSelectedField() )
-        event.Skip();   // do not go to the next row
+    if( !m_skipCopyFromPanel )
+    {
+        if( !copyPanelToSelectedField() )
+            event.Skip();   // do not go to the next row
+    }
 }
 
 
@@ -226,6 +230,89 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     m_Parent->DrawPanel->Refresh( TRUE );
 
     EndModal( 0 );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& event )
+{
+     // in case m_FieldsBuf[REFERENCE].m_Orient has changed on screen only, grab
+     // screen contents.
+    if( !copyPanelToSelectedField() )
+        return;
+
+    unsigned fieldNdx = m_FieldsBuf.size();
+
+    SCH_CMP_FIELD blank( wxPoint(), fieldNdx, m_Cmp );
+
+    blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
+
+    m_FieldsBuf.push_back( blank );
+
+    setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
+
+    m_skipCopyFromPanel = true;
+    setSelectedFieldNdx( fieldNdx );
+    m_skipCopyFromPanel = false;
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEvent& event )
+{
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
+        return;
+
+    if( fieldNdx < FIELD1 )
+    {
+        wxBell();
+        return;
+    }
+
+    m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
+    fieldListCtrl->DeleteItem( fieldNdx );
+
+    if( fieldNdx >= m_FieldsBuf.size() )
+        --fieldNdx;
+
+    m_skipCopyFromPanel = true;
+    setSelectedFieldNdx( fieldNdx );
+    m_skipCopyFromPanel = false;
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC:: moveUpButtonHandler( wxCommandEvent& event )
+{
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
+        return;
+
+    if( fieldNdx <= FIELD1 )
+    {
+        wxBell();
+        return;
+    }
+
+    if( !copyPanelToSelectedField() )
+        return;
+
+    // swap the fieldNdx field with the one before it, in both the vector
+    // and in the fieldListCtrl
+    SCH_CMP_FIELD tmp = m_FieldsBuf[fieldNdx-1];
+
+    D(printf("tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
+             CONV_TO_UTF8(tmp.m_Text), CONV_TO_UTF8(tmp.m_Name) ); )
+
+    m_FieldsBuf[fieldNdx-1] = m_FieldsBuf[fieldNdx];
+    setRowItem( fieldNdx-1, m_FieldsBuf[fieldNdx] );
+
+    m_FieldsBuf[fieldNdx] = tmp;
+    setRowItem( fieldNdx, tmp );
+
+    m_skipCopyFromPanel = true;
+    setSelectedFieldNdx( fieldNdx - 1 );
+    m_skipCopyFromPanel = false;
 }
 
 

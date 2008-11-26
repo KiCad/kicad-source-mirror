@@ -8,7 +8,7 @@ email address.
 2008-Nov-25 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +eeschema
-    edit component in schematic editor.  works except for field add, remove, move up.
+    edit component in schematic editor.  works pretty well, I'm done.
 
 
 2008-Nov-24 UPDATE Dick Hollenbeck <dick@softplc.com>

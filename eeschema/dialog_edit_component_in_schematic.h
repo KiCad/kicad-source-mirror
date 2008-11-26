@@ -15,6 +15,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     WinEDA_SchematicFrame*  m_Parent;
     SCH_COMPONENT*          m_Cmp;
     EDA_LibComponentStruct* m_LibEntry;
+    bool                    m_skipCopyFromPanel;
 
     static int              s_SelectedRow;
 
@@ -53,7 +54,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOKButtonClick( wxCommandEvent& event );
     void SetInitCmp( wxCommandEvent& event );
-
+    void addFieldButtonHandler( wxCommandEvent& event );
+    void deleteFieldButtonHandler( wxCommandEvent& event );
+    void moveUpButtonHandler( wxCommandEvent& event );
 
 
 protected:

@@ -69,6 +69,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnListItemDeselected( wxListEvent& event ){ event.Skip(); }
 		virtual void OnListItemSelected( wxListEvent& event ){ event.Skip(); }
+		virtual void addFieldButtonHandler( wxCommandEvent& event ){ event.Skip(); }
+		virtual void deleteFieldButtonHandler( wxCommandEvent& event ){ event.Skip(); }
+		virtual void moveUpButtonHandler( wxCommandEvent& event ){ event.Skip(); }
 		virtual void SetInitCmp( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ){ event.Skip(); }
