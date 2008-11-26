@@ -683,7 +683,8 @@ int SCH_COMPONENT::GetRotationMiroir()
     {
         if( memcmp( TempMat, m_Transform, sizeof(MatNormal) ) == 0 )
         {
-            found = TRUE; break;
+            found = TRUE;
+            break;
         }
         SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
     }
@@ -697,7 +698,8 @@ int SCH_COMPONENT::GetRotationMiroir()
         {
             if( memcmp( TempMat, m_Transform, sizeof(MatNormal) ) == 0 )
             {
-                found = TRUE; break;
+                found = TRUE;
+                break;
             }
             SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
         }
@@ -712,7 +714,8 @@ int SCH_COMPONENT::GetRotationMiroir()
         {
             if( memcmp( TempMat, m_Transform, sizeof(MatNormal) ) == 0 )
             {
-                found = TRUE; break;
+                found = TRUE;
+                break;
             }
             SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
         }
@@ -726,7 +729,8 @@ int SCH_COMPONENT::GetRotationMiroir()
     }
     else
     {
-        wxBell(); return CMP_NORMAL;
+        wxBell();
+        return CMP_NORMAL;
     }
 }
 

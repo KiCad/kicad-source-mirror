@@ -469,6 +469,14 @@ public:
     void SetFocus() { m_FrameText->SetFocus(); }
     void        SetValue( const wxString& value );
     void        SetValue( int value );
+
+    /**
+     * Function FormatSize
+     * formats a string containing the size in the desired units.
+     */
+    static wxString FormatSize( int internalUnit, int units, int textSize );
+
+    static int ParseSize( const wxString& sizeText, int internalUnit, int units );
 };
 
 

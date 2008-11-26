@@ -193,6 +193,12 @@ public:
      */
     void AddField( const SCH_CMP_FIELD& aField );
 
+    void SetFields( const SCH_CMP_FIELDS& aFields )
+    {
+        m_Fields = aFields;     // vector copying, length is changed possibly
+    }
+
+
     /**
      * Function GetFieldCount
      * returns the number of fields in this component.

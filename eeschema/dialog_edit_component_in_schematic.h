@@ -16,7 +16,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     SCH_COMPONENT*          m_Cmp;
     EDA_LibComponentStruct* m_LibEntry;
 
-    int                     m_SelectedRow;
+    static int              s_SelectedRow;
 
     /// a copy of the edited component's SCH_CMP_FIELDs
     SCH_CMP_FIELDS          m_FieldsBuf;
@@ -36,17 +36,24 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     /**
      * Function copyPanelToSelectedField
      * copies the values displayed on the panel fields to the currently selected field
+     * @return bool - true if all fields are OK, else false if the user has put
+     *   bad data into a field, and this value can be used to deny a row change.
      */
-    void copyPanelToSelectedField();
+    bool copyPanelToSelectedField();
 
+    void copyOptionsToPanel();
 
-    void fillTableModel();
+    void copyPanelToOptions();
 
     void setRowItem( int aFieldNdx, const SCH_CMP_FIELD& aField );
 
     // event handlers
     void OnListItemDeselected( wxListEvent& event );
     void OnListItemSelected( wxListEvent& event );
+    void OnCancelButtonClick( wxCommandEvent& event );
+    void OnOKButtonClick( wxCommandEvent& event );
+    void SetInitCmp( wxCommandEvent& event );
+
 
 
 protected:

@@ -15,6 +15,9 @@
 #include "dialog_edit_component_in_schematic.h"
 
 
+int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
+
+
 /**********************************************************************/
 void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                           SCH_COMPONENT* aComponent )
@@ -35,8 +38,6 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
 
         frame->InitBuffers( aComponent );
 
-//        frame->Layout();
-
         frame->ShowModal();
         frame->Destroy();
     }
@@ -45,54 +46,12 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
     parent->DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
 
-
-#if 0
-/*********************************************************************/
-void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
-/*********************************************************************/
-{
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
-
-    SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
-
-    // save old component in undo list
-    if( g_ItemToUndoCopy && g_ItemToUndoCopy->Type() == component->Type() )
-    {
-        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-
-        frame->SaveCopyInUndoList( component, IS_CHANGED );
-
-        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-    }
-
-    m_AddExtraText = 0;
-    if( m_FieldId == REFERENCE )
-    {
-        EDA_LibComponentStruct* part;
-
-        part = FindLibPart( component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
-        if( part )
-        {
-            if( part->m_UnitCount > 1 )
-                m_AddExtraText = 1;
-        }
-    }
-
-    Draw( frame->DrawPanel, DC, wxPoint(0,0), GR_DEFAULT_DRAWMODE );
-    m_Flags = 0;
-    frame->GetScreen()->SetCurItem( NULL );
-    frame->GetScreen()->SetModify();
-}
-#endif
-
-
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* parent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( parent )
 {
     m_Parent = (WinEDA_SchematicFrame*) parent;
 
-    m_SelectedRow = 0;
+    m_LibEntry = 0;
 
     wxListItem  columnLabel;
 
@@ -104,9 +63,18 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     columnLabel.SetText( _("Value") );
     fieldListCtrl->InsertColumn( 1, columnLabel );
 
-    // these must go here late in the game.
-    fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UnitMetric );
+    textSizeLabel->SetLabel( label );
+
+    label =  _( "Pos " );
+    label += _( "X" );
+    label += ReturnUnitSymbol( g_UnitMetric );
+    posXLabel->SetLabel( label );
+
+    label =  _( "Pos " );
+    label += _( "Y" );
+    label += ReturnUnitSymbol( g_UnitMetric );
+    posYLabel->SetLabel( label );
 
     copySelectedFieldToPanel();
 
@@ -117,7 +85,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& event )
 {
     D(printf("OnListItemDeselected()\n");)
-    copyPanelToSelectedField();
+
+    if( !copyPanelToSelectedField() )
+        event.Skip();   // do not go to the next row
 }
 
 
@@ -125,315 +95,22 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event 
 {
     D(printf("OnListItemSelected()\n");)
 
-    m_SelectedRow = event.GetIndex();
+    // remember the selected row, statically
+    s_SelectedRow = event.GetIndex();
 
     copySelectedFieldToPanel();
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setSelectedFieldNdx( int aFieldNdx )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& event )
 {
-    fieldListCtrl->SetItemState( aFieldNdx, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-    fieldListCtrl->EnsureVisible( aFieldNdx );
-}
-
-
-int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::getSelectedFieldNdx()
-{
-    return m_SelectedRow;
-}
-
-
-#if 0
-/*****************************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
-/*****************************************************************************/
-
-/* Replace le composant en position normale, dimensions et positions
- *  fields comme definies en librairie
- */
-{
-    EDA_LibComponentStruct* Entry;
-
-    if( m_Cmp == NULL )
-        return;
-
-    Entry = FindLibPart( m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
-
-    if( Entry == NULL )
-        return;
-
-    wxClientDC dc( m_Parent->DrawPanel );
-    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
-
-    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
-
-    /* Mise aux valeurs par defaut des champs et orientation */
-    m_Cmp->GetField( REFERENCE )->m_Pos.x =
-        Entry->m_Prefix.m_Pos.x + m_Cmp->m_Pos.x;
-
-    m_Cmp->GetField( REFERENCE )->m_Pos.y =
-        Entry->m_Prefix.m_Pos.y + m_Cmp->m_Pos.y;
-
-    m_Cmp->GetField( REFERENCE )->m_Orient   = Entry->m_Prefix.m_Orient;
-    m_Cmp->GetField( REFERENCE )->m_Size     = Entry->m_Prefix.m_Size;
-    m_Cmp->GetField( REFERENCE )->m_HJustify = Entry->m_Prefix.m_HJustify;
-    m_Cmp->GetField( REFERENCE )->m_VJustify = Entry->m_Prefix.m_VJustify;
-
-    m_Cmp->GetField( VALUE )->m_Pos.x =
-        Entry->m_Name.m_Pos.x + m_Cmp->m_Pos.x;
-
-    m_Cmp->GetField( VALUE )->m_Pos.y =
-        Entry->m_Name.m_Pos.y + m_Cmp->m_Pos.y;
-
-    m_Cmp->GetField( VALUE )->m_Orient   = Entry->m_Name.m_Orient;
-    m_Cmp->GetField( VALUE )->m_Size     = Entry->m_Name.m_Size;
-    m_Cmp->GetField( VALUE )->m_HJustify = Entry->m_Name.m_HJustify;
-    m_Cmp->GetField( VALUE )->m_VJustify = Entry->m_Name.m_VJustify;
-
-    m_Cmp->SetRotationMiroir( CMP_NORMAL );
-
-    m_Parent->GetScreen()->SetModify();
-
-    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
     EndModal( 1 );
 }
-#endif
 
 
-/*******************************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent )
-/*******************************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 {
-    m_Cmp = aComponent;
-
-    // copy all the fields to a work area
-    m_FieldsBuf = aComponent->m_Fields;
-
-    m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( m_Parent->GetSheet() );
-
-    for( int ii = 0;  ii < aComponent->GetFieldCount();  ++ii )
-    {
-        // make the editable field position relative to the component
-        m_FieldsBuf[ii].m_Pos -= m_Cmp->m_Pos;
-
-        setRowItem( ii, m_FieldsBuf[ii] );
-    }
-
-    setSelectedFieldNdx( REFERENCE );
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_CMP_FIELD& aField )
-{
-    wxASSERT( aFieldNdx >= 0 );
-
-    // insert blanks if aFieldNdx is referencing a yet to be defined row
-    while( aFieldNdx >= fieldListCtrl->GetItemCount() )
-    {
-        long ndx = fieldListCtrl->InsertItem( fieldListCtrl->GetItemCount(),  wxEmptyString );
-
-        wxASSERT( ndx >= 0 );
-
-        fieldListCtrl->SetItem( ndx, 1, wxEmptyString );
-    }
-
-    fieldListCtrl->SetItem( aFieldNdx, 0, aField.m_Name );
-    fieldListCtrl->SetItem( aFieldNdx, 1, aField.m_Text );
-
-    // recompute the column widths here, after setting texts
-    fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
-}
-
-
-
-/****************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
-/****************************************************************/
-{
-    unsigned fieldNdx = getSelectedFieldNdx();
-
-    if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
-        return;
-
-    SCH_CMP_FIELD&  field = m_FieldsBuf[fieldNdx];
-
-    fieldNameTextCtrl->SetValue( field.m_Name );
-
-    // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
-    fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
-
-    fieldValueTextCtrl->SetValue( field.m_Text );
-
-/*
-    if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->m_Options == ENTRY_POWER )
-        m_FieldTextCtrl->Enable( FALSE );
-*/
-
-    showCheckBox->SetValue( !(field.m_Attributs & TEXT_NO_VISIBLE) );
-
-    // If the field value is empty and the position is zero, we set the
-    // initial position as a small offset from the ref field, and orient
-    // it the same as the ref field.  That is likely to put it at least
-    // close to the desired position.
-    if( field.m_Pos == wxPoint( 0, 0 ) && field.m_Text.IsEmpty() )
-    {
-        wxString dim;
-
-        // @todo look at the dedicated position control for this.
-        dim.Printf( wxT("%d"), m_FieldsBuf[REFERENCE].m_Pos.x + (fieldNdx-FIELD1+1)*100 );
-        posXTextCtrl->SetValue( dim );
-
-        dim.Printf( wxT("%d"), m_FieldsBuf[REFERENCE].m_Pos.y + (fieldNdx-FIELD1+1)*100 );
-        posYTextCtrl->SetValue( dim );
-    }
-    else
-    {
-        wxString dim;
-
-        dim.Printf( wxT("%d"), field.m_Pos.x );
-        posXTextCtrl->SetValue( dim );
-
-        dim.Printf( wxT("%d"), field.m_Pos.y );
-        posYTextCtrl->SetValue( dim );
-    }
-
-    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
-
-#if 0
-
-    m_FieldNameCtrl->SetValue( m_FieldName[fieldNdx] );
-
-    m_FieldTextCtrl->SetValue( m_FieldText[fieldNdx] );
-    m_FieldTextCtrl->SetValue( m_FieldSize[fieldNdx] );
-#endif
-}
-
-
-/*****************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
-/*****************************************************************/
-{
-    unsigned fieldNdx = getSelectedFieldNdx();
-
-    if( fieldNdx >= m_FieldsBuf.size() )
-        return;
-
-    SCH_CMP_FIELD&  field = m_FieldsBuf[fieldNdx];
-
-    field.m_Name = fieldNameTextCtrl->GetValue();
-    field.m_Text = fieldValueTextCtrl->GetValue();
-
-//    field.m_Size =
-
-//    m_FieldPosition[id] = m_FieldPositionCtrl->GetValue();
-//    m_FieldSize[id] = m_FieldTextCtrl->GetTextSize();
-}
-
-
-#if 0
-
-/*************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::fillTableModel()
-/*************************************************************/
-{
-}
-
-
-/**********************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::buildPanelBasic()
-/**********************************************************/
-
-/* create the basic panel for component properties editing
- */
-{
-    int Nb_Max_Unit = m_SelectUnit->GetCount();
-    int ii;
-
-    int nb_units = m_LibEntry ? MAX( m_LibEntry->m_UnitCount, 1 ) : 0;
-
-    // Disable non existant units selection buttons
-    for( ii = nb_units; ii < Nb_Max_Unit; ii++ )
-    {
-        m_SelectUnit->Enable( ii, FALSE );
-    }
-
-    if( m_Cmp->m_Multi <= Nb_Max_Unit )
-        m_SelectUnit->SetSelection( m_Cmp->m_Multi - 1 );
-
-    ii = m_Cmp->GetRotationMiroir() & ~(CMP_MIROIR_X | CMP_MIROIR_Y);
-
-    if( ii == CMP_ORIENT_90 )
-        m_OrientUnit->SetSelection( 1 );
-    else if( ii == CMP_ORIENT_180 )
-        m_OrientUnit->SetSelection( 2 );
-    else if( ii == CMP_ORIENT_270 )
-        m_OrientUnit->SetSelection( 3 );
-
-    ii = m_Cmp->GetRotationMiroir() & (CMP_MIROIR_X | CMP_MIROIR_Y);
-    if( ii == CMP_MIROIR_X )
-        m_MirrorUnit->SetSelection( 1 );
-    else if( ii == CMP_MIROIR_Y )
-        m_MirrorUnit->SetSelection( 2 );
-
-    // Positionnement de la selection normal/convert
-    if( m_Cmp->m_Convert > 1 )
-        m_ConvertButt->SetValue( TRUE );
-
-    if( (m_LibEntry == NULL) || LookForConvertPart( m_LibEntry ) <= 1 )
-    {
-        m_ConvertButt->Enable( FALSE );
-    }
-
-    // Show the "Parts Locked" option:
-    if( !m_LibEntry || !m_LibEntry->m_UnitSelectionLocked )
-    {
-        m_MsgPartLocked->Show( false );
-    }
-
-    // Positionnement de la reference en librairie
-    m_RefInLib->SetValue( m_Cmp->m_ChipName );
-}
-
-
-/*************************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::selectNewField( wxCommandEvent& event )
-/*************************************************************************/
-
-/* called when changing the current field selected
- *  Save the current field settings in buffer and display the new one
- */
-{
-    CopyPanelFieldToData();
-    m_CurrentFieldId = m_FieldSelection->GetSelection();
-    CopyDataToPanelField();
-}
-
-
-/***********************************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::ComponentPropertiesAccept( wxCommandEvent& event )
-/***********************************************************************************/
-
-/* Update the new parameters for the current edited component
- */
-{
-    wxPoint    cmp_pos = m_Cmp->m_Pos;
-    wxClientDC dc( m_Parent->DrawPanel );
-    wxString   newname;
-
-    /* save old cmp in undo list if not already in edit, or moving ... */
-    if( m_Cmp->m_Flags == 0 )
-        m_Parent->SaveCopyInUndoList( m_Cmp, IS_CHANGED );
-
-    CopyPanelFieldToData();
-
-    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
-
-
-    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
-
-    newname = m_RefInLib->GetValue();
+    wxString   newname = chipnameTextCtrl->GetValue();
     newname.MakeUpper();
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
@@ -455,20 +132,20 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::ComponentPropertiesAccept( wxCommandEve
     }
 
     // Mise a jour de la representation:
-    if( m_ConvertButt->IsEnabled() )
-        (m_ConvertButt->GetValue() == TRUE) ?
-        m_Cmp->m_Convert = 2 : m_Cmp->m_Convert = 1;
+    if( convertCheckBox->IsEnabled() )
+    {
+        m_Cmp->m_Convert = convertCheckBox->GetValue() ? 2 : 1;
+    }
 
     //Set the part selection in multiple part per pakcage
     if( m_Cmp->m_Multi )
     {
-        int unit_selection = m_SelectUnit->GetSelection() + 1;
+        int unit_selection = unitChoice->GetCurrentSelection() + 1;
         m_Cmp->SetUnitSelection( m_Parent->GetSheet(), unit_selection );
         m_Cmp->m_Multi = unit_selection;
     }
 
-    //Mise a jour de l'orientation:
-    switch( m_OrientUnit->GetSelection() )
+    switch( orientationRadioBox->GetSelection() )
     {
     case 0:
         m_Cmp->SetRotationMiroir( CMP_ORIENT_0 );
@@ -487,7 +164,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::ComponentPropertiesAccept( wxCommandEve
         break;
     }
 
-    switch( m_MirrorUnit->GetSelection() )
+    int mirror = mirrorRadioBox->GetSelection();
+    switch( mirror )
     {
     case 0:
         break;
@@ -500,53 +178,353 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::ComponentPropertiesAccept( wxCommandEve
         m_Cmp->SetRotationMiroir( CMP_MIROIR_Y );
         break;
     }
+}
 
 
-    // Mise a jour des textes (update the texts)
-    for( int ii = REFERENCE; ii < NUMBER_OF_FIELDS; ii++ )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event )
+{
+    if( !copyPanelToSelectedField() )
+        return;
+
+    copyPanelToOptions();
+
+    /* save old cmp in undo list if not already in edit, or moving ... */
+    if( m_Cmp->m_Flags == 0 )
+        m_Parent->SaveCopyInUndoList( m_Cmp, IS_CHANGED );
+
+    // change all field positions from relative to absolute
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
     {
-        if( ii == REFERENCE )   // la reference ne peut etre vide
-        {
-            if( !m_FieldText[ii].IsEmpty() )
-                m_Cmp->SetRef(m_Parent->GetSheet(), m_FieldText[ii]);
-        }
-        else if( ii == VALUE )  // la valeur ne peut etre vide et ne peut etre change sur un POWER
-        {
-            EDA_LibComponentStruct* Entry = FindLibPart( m_Cmp->m_ChipName.GetData(
-                                                             ), wxEmptyString, FIND_ROOT );
-            if( Entry && (Entry->m_Options == ENTRY_POWER) )
-                m_Cmp->GetField( ii )->m_Text = m_Cmp->m_ChipName;
-            else if( !m_FieldText[ii].IsEmpty() )
-            {
-                m_Cmp->GetField( ii )->m_Text = m_FieldText[ii];
-            }
-        }
-        else
-            m_Cmp->GetField( ii )->m_Text = m_FieldText[ii];
-
-        if( ii >= FIELD1 && m_FieldName[ii] != ReturnDefaultFieldName( ii ) )
-            m_Cmp->GetField( ii )->m_Name = m_FieldName[ii];
-        else
-            m_Cmp->GetField( ii )->m_Name.Empty();
-
-        m_Cmp->GetField( ii )->m_Size.x     =
-            m_Cmp->GetField( ii )->m_Size.y = m_FieldSize[ii];
-        if( m_FieldFlags[ii] )
-            m_Cmp->GetField( ii )->m_Attributs &= ~TEXT_NO_VISIBLE;
-        else
-            m_Cmp->GetField( ii )->m_Attributs |= TEXT_NO_VISIBLE;
-        m_Cmp->GetField( ii )->m_Orient = m_FieldOrient[ii] ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
-        m_Cmp->GetField( ii )->m_Pos    = m_FieldPosition[ii];
-        m_Cmp->GetField( ii )->m_Pos.x += cmp_pos.x;
-        m_Cmp->GetField( ii )->m_Pos.y += cmp_pos.y;
+        m_FieldsBuf[i].m_Pos += m_Cmp->m_Pos;
     }
+
+    // delete any fields with no name
+    for( unsigned i=FIELD1;  i<m_FieldsBuf.size(); )
+    {
+        if( m_FieldsBuf[i].m_Name.IsEmpty() )
+        {
+            m_FieldsBuf.erase( m_FieldsBuf.begin() + i );
+            continue;
+        }
+
+        ++i;
+    }
+
+    EDA_LibComponentStruct* entry = FindLibPart(
+                m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+
+    if( entry &&  entry->m_Options == ENTRY_POWER )
+        m_FieldsBuf[VALUE].m_Text = m_Cmp->m_ChipName;
+
+    // copy all the fields back, and change the length of m_Fields.
+    m_Cmp->SetFields( m_FieldsBuf );
 
     m_Parent->GetScreen()->SetModify();
 
-    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
-    m_Parent->TestDanglingEnds( m_Parent->GetScreen()->EEDrawList, &dc );
+    m_Parent->TestDanglingEnds( m_Parent->GetScreen()->EEDrawList, NULL );
+
+    m_Parent->DrawPanel->Refresh( TRUE );
 
     EndModal( 0 );
 }
 
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setSelectedFieldNdx( int aFieldNdx )
+{
+    /* deselect old selection, but I think this is done by single selection flag within fieldListCtrl
+    fieldListCtrl->SetItemState( s_SelectedRow, 0, wxLIST_STATE_SELECTED|wxLIST_STATE_FOCUSED);
+    */
+
+    if( aFieldNdx >= (int) m_FieldsBuf.size() )
+        aFieldNdx = m_FieldsBuf.size() - 1;
+
+    if( aFieldNdx < 0 )
+        aFieldNdx = 0;
+
+    fieldListCtrl->SetItemState( aFieldNdx, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    fieldListCtrl->EnsureVisible( aFieldNdx );
+
+    s_SelectedRow = aFieldNdx;
+}
+
+
+int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::getSelectedFieldNdx()
+{
+    return s_SelectedRow;
+}
+
+
+/*******************************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent )
+/*******************************************************************************/
+{
+    m_Cmp = aComponent;
+
+    m_LibEntry = FindLibPart( m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+
+#if 0 && defined(DEBUG)
+    for( int i=0;  i<aComponent->GetFieldCount();  ++i )
+    {
+        printf("Orig[%d] (x=%d, y=%d)\n", i, aComponent->m_Fields[i].m_Pos.x,
+                                         aComponent->m_Fields[i].m_Pos.y );
+    }
 #endif
+
+    // copy all the fields to a work area
+    m_FieldsBuf = aComponent->m_Fields;
+
+#if 0 && defined(DEBUG)
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    {
+        printf("m_FieldsBuf[%d] (x=%d, y=%d)\n", i, m_FieldsBuf[i].m_Pos.x,
+                                         m_FieldsBuf[i].m_Pos.y );
+    }
+#endif
+
+    m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( m_Parent->GetSheet() );
+
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    {
+        // make the editable field position relative to the component
+        m_FieldsBuf[i].m_Pos -= m_Cmp->m_Pos;
+
+        setRowItem( i, m_FieldsBuf[i] );
+    }
+
+#if 0 && defined(DEBUG)
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    {
+        printf("after[%d] (x=%d, y=%d)\n", i, m_FieldsBuf[i].m_Pos.x,
+                                         m_FieldsBuf[i].m_Pos.y );
+    }
+#endif
+
+    copyOptionsToPanel();
+
+    // put focus on the list ctrl
+    fieldListCtrl->SetFocus();
+
+    // resume editing at the last row edited, last time dialog was up.
+    setSelectedFieldNdx( s_SelectedRow );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_CMP_FIELD& aField )
+{
+    wxASSERT( aFieldNdx >= 0 );
+
+    // insert blanks if aFieldNdx is referencing a "yet to be defined" row
+    while( aFieldNdx >= fieldListCtrl->GetItemCount() )
+    {
+        long ndx = fieldListCtrl->InsertItem( fieldListCtrl->GetItemCount(),  wxEmptyString );
+
+        wxASSERT( ndx >= 0 );
+
+        fieldListCtrl->SetItem( ndx, 1, wxEmptyString );
+    }
+
+    fieldListCtrl->SetItem( aFieldNdx, 0, aField.m_Name );
+    fieldListCtrl->SetItem( aFieldNdx, 1, aField.m_Text );
+
+    // recompute the column widths here, after setting texts
+    fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+}
+
+
+/****************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
+/****************************************************************/
+{
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
+        return;
+
+    SCH_CMP_FIELD&  field = m_FieldsBuf[fieldNdx];
+
+    showCheckBox->SetValue( !(field.m_Attributs & TEXT_NO_VISIBLE) );
+
+    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
+
+    fieldNameTextCtrl->SetValue( field.m_Name );
+
+    // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
+    // fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
+    fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
+
+    fieldValueTextCtrl->SetValue( field.m_Text );
+
+    if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->m_Options == ENTRY_POWER )
+        fieldValueTextCtrl->Enable( FALSE );
+
+    textSizeTextCtrl->SetValue(
+       WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT, g_UnitMetric, field.m_Size.x ) );
+
+    wxPoint coord = field.m_Pos;
+    wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
+
+    // If the field value is empty and the position is at relative zero, we set the
+    // initial position as a small offset from the ref field, and orient
+    // it the same as the ref field.  That is likely to put it at least
+    // close to the desired position.
+    if( coord == zero && field.m_Text.IsEmpty() )
+    {
+        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].m_Orient == TEXT_ORIENT_VERT );
+
+        coord.x = m_FieldsBuf[REFERENCE].m_Pos.x + (fieldNdx-FIELD1+1)*100;
+        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y + (fieldNdx-FIELD1+1)*100;
+
+        // coord can compute negative if field is < FIELD1, e.g. FOOTPRINT.
+        // That is ok, we basically don't want all the new empty fields on
+        // top of each other.
+    }
+
+    wxString coordText = ReturnStringFromValue( g_UnitMetric, coord.x, EESCHEMA_INTERNAL_UNIT );
+    posXTextCtrl->SetValue( coordText );
+
+    coordText = ReturnStringFromValue( g_UnitMetric, coord.y, EESCHEMA_INTERNAL_UNIT );
+    posYTextCtrl->SetValue( coordText );
+}
+
+
+/*****************************************************************/
+bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
+/*****************************************************************/
+{
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    if( fieldNdx >= m_FieldsBuf.size() )        // traps the -1 case too
+        return true;
+
+    SCH_CMP_FIELD&  field = m_FieldsBuf[fieldNdx];
+
+    if( showCheckBox->GetValue() )
+        field.m_Attributs &= ~TEXT_NO_VISIBLE;
+    else
+        field.m_Attributs |= TEXT_NO_VISIBLE;
+
+    if( rotateCheckBox->GetValue() )
+        field.m_Orient = TEXT_ORIENT_VERT;
+    else
+        field.m_Orient = TEXT_ORIENT_HORIZ;
+
+    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
+
+    field.m_Name = fieldNameTextCtrl->GetValue();
+    field.m_Text = fieldValueTextCtrl->GetValue();
+
+    setRowItem( fieldNdx, field );  // update fieldListCtrl
+
+    field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize( textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UnitMetric );
+    field.m_Size.y = field.m_Size.x;
+
+    double value;
+
+    posXTextCtrl->GetValue().ToDouble( &value );
+    field.m_Pos.x = From_User_Unit( g_UnitMetric, value, EESCHEMA_INTERNAL_UNIT );
+
+    posYTextCtrl->GetValue().ToDouble( &value );
+    field.m_Pos.y = From_User_Unit( g_UnitMetric, value, EESCHEMA_INTERNAL_UNIT );
+
+    return true;
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
+{
+    int choiceCount = unitChoice->GetCount();
+
+    if( m_Cmp->m_Multi <= choiceCount )
+        unitChoice->SetSelection( m_Cmp->m_Multi - 1 );
+
+    int orientation = m_Cmp->GetRotationMiroir() & ~(CMP_MIROIR_X | CMP_MIROIR_Y);
+
+    // if we don't change it, the default selection of the radio box is "0".
+    if( orientation == CMP_ORIENT_90 )
+        orientationRadioBox->SetSelection( 1 );
+    else if( orientation == CMP_ORIENT_180 )
+        orientationRadioBox->SetSelection( 2 );
+    else if( orientation == CMP_ORIENT_270 )
+        orientationRadioBox->SetSelection( 3 );
+
+    int mirror = m_Cmp->GetRotationMiroir() & (CMP_MIROIR_X | CMP_MIROIR_Y);
+
+    if( mirror == CMP_MIROIR_X )
+    {
+        mirrorRadioBox->SetSelection( 1 );
+        D(printf("mirror=X,1\n");)
+    }
+    else if( mirror == CMP_MIROIR_Y )
+    {
+        mirrorRadioBox->SetSelection( 2 );
+        D(printf("mirror=Y,2\n");)
+    }
+
+    // Positionnement de la selection normal/convert
+    if( m_Cmp->m_Convert > 1 )
+        convertCheckBox->SetValue( true );
+
+    if( m_LibEntry == NULL || LookForConvertPart( m_LibEntry ) <= 1 )
+    {
+        convertCheckBox->Enable( false );
+    }
+
+    // Show the "Parts Locked" option?
+    if( !m_LibEntry || !m_LibEntry->m_UnitSelectionLocked )
+    {
+        D(printf("partsAreLocked->false\n");)
+        partsAreLockedLabel->Show( false );
+    }
+
+    // Positionnement de la reference en librairie
+    chipnameTextCtrl->SetValue( m_Cmp->m_ChipName );
+}
+
+
+/*****************************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
+/*****************************************************************************/
+{
+    EDA_LibComponentStruct* entry;
+
+    if( m_Cmp == NULL )
+        return;
+
+    entry = FindLibPart( m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+
+    if( entry == NULL )
+        return;
+
+    wxClientDC dc( m_Parent->DrawPanel );
+    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
+
+    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
+
+    /* Mise aux valeurs par defaut des champs et orientation */
+    m_Cmp->GetField( REFERENCE )->m_Pos.x =
+        entry->m_Prefix.m_Pos.x + m_Cmp->m_Pos.x;
+    m_Cmp->GetField( REFERENCE )->m_Pos.y =
+        entry->m_Prefix.m_Pos.y + m_Cmp->m_Pos.y;
+    m_Cmp->GetField( REFERENCE )->m_Orient   = entry->m_Prefix.m_Orient;
+    m_Cmp->GetField( REFERENCE )->m_Size     = entry->m_Prefix.m_Size;
+    m_Cmp->GetField( REFERENCE )->m_HJustify = entry->m_Prefix.m_HJustify;
+    m_Cmp->GetField( REFERENCE )->m_VJustify = entry->m_Prefix.m_VJustify;
+
+    m_Cmp->GetField( VALUE )->m_Pos.x =
+        entry->m_Name.m_Pos.x + m_Cmp->m_Pos.x;
+    m_Cmp->GetField( VALUE )->m_Pos.y =
+        entry->m_Name.m_Pos.y + m_Cmp->m_Pos.y;
+    m_Cmp->GetField( VALUE )->m_Orient   = entry->m_Name.m_Orient;
+    m_Cmp->GetField( VALUE )->m_Size     = entry->m_Name.m_Size;
+    m_Cmp->GetField( VALUE )->m_HJustify = entry->m_Name.m_HJustify;
+    m_Cmp->GetField( VALUE )->m_VJustify = entry->m_Name.m_VJustify;
+
+    m_Cmp->SetRotationMiroir( CMP_NORMAL );
+
+    m_Parent->GetScreen()->SetModify();
+
+    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
+    EndModal( 1 );
+}
+

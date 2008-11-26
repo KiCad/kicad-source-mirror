@@ -21,9 +21,9 @@
 #include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
-#include <wx/stattext.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,8 +40,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		wxChoice* unitChoice;
 		wxRadioBox* orientationRadioBox;
 		wxRadioBox* mirrorRadioBox;
-		wxTextCtrl* chipnameTxtControl;
+		wxTextCtrl* chipnameTextCtrl;
 		wxCheckBox* convertCheckBox;
+		wxStaticText* partsAreLockedLabel;
 		wxListCtrl* fieldListCtrl;
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
@@ -68,6 +69,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnListItemDeselected( wxListEvent& event ){ event.Skip(); }
 		virtual void OnListItemSelected( wxListEvent& event ){ event.Skip(); }
+		virtual void SetInitCmp( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
