@@ -169,6 +169,7 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
     TRACK*          other;
     TRACK*          startNetcode;
     TRACK*          next;
+    ZONE_CONTAINER* zone;
 
     int             nbpoints_supprimes = 0;
     int             masklayer, oldnetcode;
@@ -234,7 +235,7 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
             oldnetcode = segment->GetNet();
         }
 
-        flag_erase = 0;
+        flag_erase = 0; //Not connected indicator
         type_end = 0;
 
         /* Is a pad found on a track end ? */
@@ -258,27 +259,51 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
         }
 
         // if not connected to a pad, test if segment's START is connected to another track
+        // For via tests, an enhancement could to test if connected to 2 items on different layers.
+        // Currently a via must be connected to 2 items, taht can be on the same layer
+        int top_layer, bottom_layer;
         if( (type_end & START_ON_PAD ) == 0 )
         {
-            other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
-                                               NULL, START );
-            if( other == NULL )
+            other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track, NULL, START );
+
+            if( other == NULL )     // Test a connection to zones
+            {
+                if( segment->Type() != TYPEVIA )
+                {
+                    zone = frame->m_Pcb->HitTestForAnyFilledArea(segment->m_Start, segment->GetLayer() );
+                }
+
+                else
+                {
+                    ((SEGVIA*)segment)->ReturnLayerPair( &top_layer, &bottom_layer );
+                    zone = frame->m_Pcb->HitTestForAnyFilledArea(segment->m_Start, top_layer, bottom_layer );
+                }
+            }
+
+            if( (other == NULL) && (zone == NULL) )
                 flag_erase |= 1;
 
-            else    // segment or via connected to this end
+            else    // segment, via or zone connected to this end
             {
                 segment->start = other;
-
-                if( other->Type() == TYPEVIA )
+                // If a via is connected to this end, test if this via has a second item connected
+                // if no, remove it with the current segment
+                if( other && other->Type() == TYPEVIA )
                 {
                     // search for another segment following the via
 
                     segment->SetState( BUSY, ON );
 
-                    TRACK* via = other;
+                    SEGVIA* via = (SEGVIA*) other;
                     other = Locate_Piste_Connectee( via, frame->m_Pcb->m_Track,
                                                        NULL, START );
                     if( other == NULL )
+                    {
+                        via->ReturnLayerPair( &top_layer, &bottom_layer );
+                        zone = frame->m_Pcb->HitTestForAnyFilledArea(via->m_Start, bottom_layer, top_layer );
+                    }
+
+                    if( (other == NULL) && (zone == NULL) )
                         flag_erase |= 2;
 
                     segment->SetState( BUSY, OFF );
@@ -291,22 +316,42 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
         {
             other = Locate_Piste_Connectee( segment, frame->m_Pcb->m_Track,
                                                NULL, END );
-            if( other == NULL )
+            if( other == NULL )     // Test a connection to zones
+            {
+                if( segment->Type() != TYPEVIA )
+                    zone = frame->m_Pcb->HitTestForAnyFilledArea(segment->m_End, segment->GetLayer() );
+
+                else
+                {
+                    ((SEGVIA*)segment)->ReturnLayerPair( &top_layer, &bottom_layer );
+                    zone = frame->m_Pcb->HitTestForAnyFilledArea(segment->m_End,top_layer, bottom_layer  );
+                }
+            }
+
+            if ( (other == NULL) && (zone == NULL) )
                 flag_erase |= 0x10;
 
-            else     // segment or via connected to this end
+            else     // segment, via or zone connected to this end
             {
                 segment->end = other;
-                if( other->Type() == TYPEVIA )
+                // If a via is connected to this end, test if this via has a second item connected
+                // if no, remove it with the current segment
+                if( other && other->Type() == TYPEVIA )
                 {
                     // search for another segment following the via
 
                     segment->SetState( BUSY, ON );
 
-                    TRACK* via = other;
+                    SEGVIA* via = (SEGVIA*) other;
                     other = Locate_Piste_Connectee( via, frame->m_Pcb->m_Track,
                                                        NULL, END );
                     if( other == NULL )
+                    {
+                        via->ReturnLayerPair( &top_layer, &bottom_layer );
+                        zone = frame->m_Pcb->HitTestForAnyFilledArea(via->m_End, bottom_layer, top_layer );
+                    }
+
+                    if( (other == NULL) && (zone == NULL) )
                         flag_erase |= 0x20;
 
                     segment->SetState( BUSY, OFF );

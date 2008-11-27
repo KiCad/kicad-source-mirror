@@ -216,16 +216,12 @@ wxPoint& BOARD::GetPosition()
 
 void BOARD::UnLink()
 {
-    /* Modification du chainage arriere */
+    /* Update back link */
     if( Back() )
     {
         if( Back()->Type() == TYPEPCB )
         {
             Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-//			Pback-> = Pnext;
         }
     }
 
@@ -1079,6 +1075,39 @@ void BOARD::RedrawFilledAreas(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode
         if( (aLayer < 0) || (aLayer == edge_zone->GetLayer()) )
             edge_zone->DrawFilledArea( panel, aDC, aDrawMode );
     }
+}
+
+
+/**
+ * Function HitTestForAnyFilledArea
+ * tests if the given wxPoint is within the bounds of a filled area of this zone.
+ * the test is made on zones on layer from aStartLayer to aEndLayer
+ * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
+ * @param refPos A wxPoint to test
+ * @param aStartLayer the first layer to test
+ * @param aEndLayer the last layer (-1 to ignore it) to test
+ * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
+ */
+ZONE_CONTAINER*  BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos, int aStartLayer, int aEndLayer )
+{
+    if( aEndLayer < 0 )
+        aEndLayer = aStartLayer;
+    if( aEndLayer <  aStartLayer)
+        EXCHG (aEndLayer, aStartLayer);
+
+    for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
+    {
+        ZONE_CONTAINER* area = m_ZoneDescriptorList[ia];
+        int layer = area->GetLayer();
+        if ( (layer < aStartLayer) || (layer > aEndLayer) )
+                continue;
+        if ( area->GetState( BUSY ) )     // In locate functions we must skip tagged items with BUSY flag set.
+            continue;
+        if( area->HitTestFilledArea( aRefPos ) )
+            return area;
+    }
+
+    return NULL;
 }
 
 

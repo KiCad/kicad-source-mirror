@@ -99,7 +99,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
 
     if( track == NULL )  /* Starting a new track  */
     {
-        /* undrw old hightlight */
+        /* erase old highlight */
         OldNetCodeSurbrillance = g_HightLigth_NetCode;
         OldEtatSurbrillance    = g_HightLigt_Status;
 
@@ -131,6 +131,13 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* track, wxDC* DC )
                 g_HightLigth_NetCode = TrackOnStartPoint->GetNet();
                 CreateLockPoint( &pos.x, &pos.y, TrackOnStartPoint, NULL );
             }
+        }
+
+        else    // no starting point, but a filled zone area can exist. This is also a good starting point.
+        {
+            ZONE_CONTAINER* zone = m_Pcb->HitTestForAnyFilledArea(pos, GetScreen()->m_Active_Layer );
+            if ( zone )
+                g_HightLigth_NetCode = zone->GetNet();
         }
 
         build_ratsnest_pad( LockPoint, wxPoint( 0, 0 ), TRUE );

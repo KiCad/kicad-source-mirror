@@ -797,6 +797,31 @@ bool ZONE_CONTAINER::HitTest( EDA_Rect& refArea )
     return is_out_of_box ? false : true;
 }
 
+/**
+ * Function HitTestFilledArea
+ * tests if the given wxPoint is within the bounds of a filled area of this zone.
+ * @param aRefPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
+{
+    unsigned indexstart = 0, indexend;
+    bool     inside  = false;
+    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
+    {
+        if( m_FilledPolysList[indexend].end_contour )       // end of a filled sub-area found
+        {
+            if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend, aRefPos.x, aRefPos.y ) )
+            {
+                inside = true;
+                break;
+            }
+        }
+    }
+    return inside;
+}
+
+
 
 /************************************************************/
 void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )

@@ -166,10 +166,19 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
+     * For zones, this means near an ouline segment
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
     bool HitTest( const wxPoint& refPos );
+
+    /**
+     * Function HitTestFilledArea
+     * tests if the given wxPoint is within the bounds of a filled area of this zone.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTestFilledArea( const wxPoint& aRefPos );
 
     /** function BuildFilledPolysListData
      * Build m_FilledPolysList data from real outlines (m_Poly)

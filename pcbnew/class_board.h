@@ -355,6 +355,17 @@ public:
     /*************************/
     /* Copper Areas handling */
     /*************************/
+    /**
+     * Function HitTestForAnyFilledArea
+     * tests if the given wxPoint is within the bounds of a filled area of this zone.
+     * the test is made on zones on layer from aStartLayer to aEndLayer
+     * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
+     * @param refPos A wxPoint to test
+     * @param aStartLayer the first layer to test
+     * @param aEndLayer the last layer (-1 to ignore it) to test
+     * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
+     */
+    ZONE_CONTAINER*  HitTestForAnyFilledArea( const wxPoint& aRefPos, int aStartLayer, int aEndLayer = -1 );
 
     /**
      * Function RedrawAreasOutlines
