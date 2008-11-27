@@ -29,6 +29,8 @@ endif
 endif
 LIBVERSION = 2.8
 
+BOOST_PATH=/f/boost/boost
+
 
 # You must comment or uncomment this line to disable/enable python support
 #KICAD_PYTHON = 1
@@ -48,7 +50,6 @@ EDACPPFLAGS = $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS)
 EDALIBS = $(EXTRALIBS)
 
 ifdef KICAD_PYTHON
-BOOST_PATH=/d/boost
 PYTHON_PATH=/c/Python25
 PYLIBS= -L$(PYTHON_PATH)/libs
 PYLIBS+= -L $(PYTHON_PATH)/Lib

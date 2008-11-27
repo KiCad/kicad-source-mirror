@@ -23,6 +23,9 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                           SCH_COMPONENT* aComponent )
 /*********************************************************************/
 {
+    if ( aComponent == NULL )   // Null component not accepted
+        return;
+
     parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
     if( aComponent->Type() != TYPE_SCH_COMPONENT )
     {
@@ -31,8 +34,6 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
     }
     else
     {
-        wxASSERT( aComponent );     // this is no longer callable with NULL
-
         DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* frame =
             new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( parent );
 
@@ -129,13 +130,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
             message.Printf( _( "Component [%s] not found!" ), newname.GetData() );
             DisplayError( this, message );
         }
-        else    // Changement de composant!
+        else    // Change component from lib!
         {
             m_Cmp->m_ChipName = newname;
         }
     }
 
-    // Mise a jour de la representation:
+    // For components with multiple shames (De Morgan representation) Set the selected shape:
     if( convertCheckBox->IsEnabled() )
     {
         m_Cmp->m_Convert = convertCheckBox->GetValue() ? 2 : 1;
@@ -522,8 +523,27 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 {
     int choiceCount = unitChoice->GetCount();
 
+    // Remove non existing choices (choiceCount must be <= number for parts)
+    int unitcount = m_LibEntry->m_UnitCount;
+    if ( unitcount < 1 )
+        unitcount = 1;
+    if( m_LibEntry && ( unitcount < choiceCount) )
+    {
+        while ( unitcount < choiceCount )
+        {
+            choiceCount--;
+            unitChoice->Delete ( choiceCount );
+        }
+    }
+
+    // For components with multiple parts per package, set the unit selection
+    choiceCount = unitChoice->GetCount();
     if( m_Cmp->m_Multi <= choiceCount )
         unitChoice->SetSelection( m_Cmp->m_Multi - 1 );
+
+    // Disable unit selection if only one unit exists:
+    if ( choiceCount <= 1 )
+        unitChoice->Enable(false);
 
     int orientation = m_Cmp->GetRotationMiroir() & ~(CMP_MIROIR_X | CMP_MIROIR_Y);
 
@@ -551,9 +571,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     else
         mirrorRadioBox->SetSelection( 0 );
 
-    // Positionnement de la selection normal/convert
+    // Activate/Desactivate the normal/convert option ? (activated only if the component has more than one shape)
     if( m_Cmp->m_Convert > 1 )
+    {
         convertCheckBox->SetValue( true );
+    }
 
     if( m_LibEntry == NULL || LookForConvertPart( m_LibEntry ) <= 1 )
     {
@@ -575,6 +597,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 /*****************************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 /*****************************************************************************/
+/* reinitialise components parametres to default values found in lib
+*/
 {
     EDA_LibComponentStruct* entry;
 
@@ -591,7 +615,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
 
-    /* Mise aux valeurs par defaut des champs et orientation */
+    /* Initialise fields values to default values found in library:  */
     m_Cmp->GetField( REFERENCE )->m_Pos.x =
         entry->m_Prefix.m_Pos.x + m_Cmp->m_Pos.x;
     m_Cmp->GetField( REFERENCE )->m_Pos.y =
