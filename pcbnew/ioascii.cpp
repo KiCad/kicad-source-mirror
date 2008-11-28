@@ -7,7 +7,6 @@
 /* ioascii.cpp */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -21,8 +20,6 @@
 #ifdef CVPCB
 #include "cvpcb.h"
 #endif
-
-#include "protos.h"
 
 /* Format des structures de sauvegarde type ASCII :
 
@@ -859,7 +856,9 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(m_Pcb);
             zone_descr->ReadDescr( File, &LineNum );
-            m_Pcb->Add(zone_descr);
+            if ( zone_descr->GetNumCorners( ) > 2 )     // should not occur
+                m_Pcb->Add(zone_descr);
+            else delete zone_descr;
             continue;
         }
 

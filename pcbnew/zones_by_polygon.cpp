@@ -356,7 +356,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
     {
         DrawPanel->PostDirtyRect( zone_container->GetBoundingBox() );
         if( DC )
-        {
+        {  // Remove the full zone because this is no more an area
             Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
             zone_container->DrawFilledArea( DrawPanel, DC, GR_XOR );
         }

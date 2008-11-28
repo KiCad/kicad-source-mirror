@@ -21,6 +21,68 @@ static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code
 static bool          Zone_Debug = false;
 static unsigned long s_TimeStamp; /* Time stamp common to all segments relative to the new created zone */
 
+
+
+
+/***********************************************************/
+int ZONE_CONTAINER::BuildFilledPolysListData( BOARD * aPcb )
+/***********************************************************/
+/** function BuildFilledPolysListData
+ * Build m_FilledPolysList data from real outlines (m_Poly)
+ * in order to have drawable (and plottable) filled polygons
+ * drawable filled polygons are polygons without hole
+ * @param aPcb: the current board (can be NULL for non copper zones)
+ * @return number of polygons
+ * This function does not add holes for pads and tracks but calls
+ * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
+ */
+{
+
+    // Currently, for copper zones,  we can use segment filling or filling by polygon areas
+    // if m_GridFillValue == 0 polygon areas will be used (No Grid)
+    if ( IsOnCopperLayer() && ( m_GridFillValue != 0 ) )
+        return 0;
+
+    m_FilledPolysList.clear();
+    /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
+    * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building this zone
+    */
+
+    if ( GetNumCorners( ) <= 2 )    // malformed zone. Kbool does not like it ...
+        return 0;
+
+    m_Poly->MakeKboolPoly( -1, -1, NULL, true );
+    int count = 0;
+    while( m_Poly->GetKboolEngine()->StartPolygonGet() )
+    {
+        CPolyPt corner(0,0,false);
+        while( m_Poly->GetKboolEngine()->PolygonHasMorePoints() )
+        {
+            corner.x = (int)m_Poly->GetKboolEngine()->GetPolygonXPoint();
+            corner.y = (int)m_Poly->GetKboolEngine()->GetPolygonYPoint();
+            corner.end_contour = false;
+            m_FilledPolysList.push_back(corner);
+            count ++;
+        }
+        corner.end_contour = true;
+        m_FilledPolysList.pop_back();
+        m_FilledPolysList.push_back(corner);
+        m_Poly->GetKboolEngine()->EndPolygonGet();
+    }
+
+    m_Poly->FreeKboolEngine();
+
+    /* For copper layers, we now must add holes in the Polygon list.
+    holes are pads and tracks with their clearance area
+    */
+
+    if ( IsOnCopperLayer() )
+        AddClearanceAreasPolygonsToPolysList( aPcb );
+
+    return count;
+}
+
+
 /*****************************************************************************/
 int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
 /*****************************************************************************/

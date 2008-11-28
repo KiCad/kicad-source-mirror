@@ -336,7 +336,18 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
                     m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
         }
     }
-    return test;
+    // Test for bad areas: all zones must have more than 2 corners:
+    // Note: should not happen, but just in case.
+    for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; )
+    {
+        ZONE_CONTAINER* zone = m_ZoneDescriptorList[ia1];
+        if( zone->GetNumCorners( ) >= 3 )
+            ia1++;
+        // Remove zone because it is incorrect:
+        else
+            RemoveArea( zone );
+    }
+     return test;
 }
 
 
@@ -387,21 +398,6 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
                                 ret = CombineAreas( curr_area, area2 );
                             if( ret == 1 )
                             {
-                                if( bMessageBox && bDontShowIntersectionWarning == false )
-                                {
-                                    wxString str;
-                                    str.Printf(
-                                        wxT(
-                                            "Areas %d and %d of net \"%s\" intersect and will be combined.\n" ),
-                                        ia1 + 1,
-                                        ia2 + 1,
-                                        curr_area->m_Netname.GetData() );
-                                    str += wxT(
-                                        "If they are complex, this may take a few seconds." );
-                                    wxMessageBox( str );
-
-//                                    bDontShowIntersectionWarning = dlg.bDontShowBoxState;
-                                }
                                 mod_ia1 = true;
                             }
                             else if( ret == 2 )
@@ -428,7 +424,8 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
                 ia1--; // if modified, we need to check it again
         }
     }
-    return 0;
+
+   return 0;
 }
 
 
@@ -683,13 +680,6 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
 {
     if( area_ref == area_to_combine )
         ASSERT( 0 );
-#if 0
-
-    // test for intersection
-    int test = TestAreaIntersection( area_ref, area_to_combine );
-    if( test != 1 )
-        return test; // no intersection
-#endif
 
     // polygons intersect, combine them
     std::vector<CArc> arc_array1;
@@ -796,64 +786,6 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
     delete booleng;
     return 1;
 }
-
-
-#if 0   // Currently not used: work in progress
-
-/**
- * Function Is_Area_Inside_Area
- * Test a given area to see if it is inside an other area, or an other area is inside the given area
- * an area is inside an other are if ALL its edges are inside the other area
- * @param Area_Ref: the given area to compare with other areas
- * used to remove redundant areas
- */
-ZONE_CONTAINER* BOARD::Is_Area_Inside_Area( ZONE_CONTAINER* Area_Ref )
-{
-    int corners_inside_count;
-
-    for( int ia = 0; ia < GetAreaCount(); ia++ )
-    {
-        ZONE_CONTAINER* Area_To_Test = GetArea( ia );
-
-        if( Area_Ref == Area_To_Test )
-            continue;
-
-        // test for same layer
-        if( Area_Ref->GetLayer() != Area_To_Test->GetLayer() )
-            continue;
-
-        // test if Area_Ref inside Area_To_Test
-        corners_inside_count = Area_Ref->m_Poly->GetNumCorners();
-        for( int ic = 0; ic < Area_Ref->m_Poly->GetNumCorners(); ic++ )
-        {
-            int x = Area_Ref->m_Poly->GetX( ic );
-            int y = Area_Ref->m_Poly->GetY( ic );
-            if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
-                corners_inside_count--;
-        }
-
-        if( corners_inside_count == 0 )
-            return Area_Ref;
-
-        // test if Area_To_Test inside Area_Ref
-        corners_inside_count = Area_To_Test->m_Poly->GetNumCorners();
-        for( int ic2 = 0; ic2 < Area_To_Test->m_Poly->GetNumCorners(); ic2++ )
-        {
-            int x = Area_To_Test->m_Poly->GetX( ic2 );
-            int y = Area_To_Test->m_Poly->GetY( ic2 );
-            if( Area_Ref->m_Poly->TestPointInside( x, y ) )
-                corners_inside_count--;
-        }
-
-        if( corners_inside_count == 0 )
-            return Area_Ref;
-    }
-
-    return NULL;
-}
-
-
-#endif
 
 
 /**
