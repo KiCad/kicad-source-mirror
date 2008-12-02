@@ -5,6 +5,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-02 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++build fixes
+  * Changed wxWidgets library find order so monolithic build is no longer
+    required (at least on MinGW).
+  * Changed CreateSVNVersionHeader.cmake to fall back to "build_version.h"
+    when 'svn info' command fails.  The default macro that ships with CMake
+    will not create build files when 'svn info' fails.
+
+
 2008-Nov-25 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 +eeschema

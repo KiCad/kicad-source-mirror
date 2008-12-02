@@ -117,7 +117,7 @@ check_find_package_result(Boost_FOUND "Boost")
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
-find_package(wxWidgets COMPONENTS base core adv gl html net QUIET)
+find_package(wxWidgets COMPONENTS gl html adv core net base QUIET)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
 
@@ -129,11 +129,8 @@ include(${wxWidgets_USE_FILE})
 include(MinGWResourceCompiler)
 
 # Automagically create version header file.
-# does not work with mingw for me (jpc)
-if(UNIX)
-    include(CreateSVNVersionHeader)
-    create_svn_version_header()
-endif(UNIX)
+include(CreateSVNVersionHeader)
+create_svn_version_header()
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
     # This file may exist (created by an alternate process to the svn test above),
