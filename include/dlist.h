@@ -89,10 +89,11 @@ protected:
 public:
 
     /**
-     * Function DestructAll
-     * deletes all items on the list and leaves the list empty.
+     * Function DeleteAll
+     * deletes all items on the list and leaves the list empty.  The destructor
+     * for each item is called.
      */
-    void DestructAll();
+    void DeleteAll();
 
     /**
      * Function SetOwnership
@@ -124,22 +125,29 @@ public:
 
     /**
      * operator T*
-     * is a casting operator that returns \a first casted to a T*
+     * is a casting operator that returns \a GetFirst(), a T*
      */
     operator T* () const { return GetFirst(); }
 
     /**
+     * operator ->
+     * is a dereferencing operator that returns \a GetFirst(), a T*
+     */
+    T* operator -> () const { return GetFirst(); }
+
+    /**
      * Function GetFirst
-     * returns the first T* in the list, or NULL if the list is empty.
+     * returns the first T* in the list without removing it, or NULL if
+     * the list is empty.
      */
     T*  GetFirst() const { return (T*) first; }
 
     /**
      * Function GetLast
-     * returns the last T* in the list, or NULL if the list is empty.
+     * returns the last T* in the list without removing it,
+     * or NULL if the list is empty.
      */
     T*  GetLast() const { return (T*) last; }
-
 
     /**
      * Function Append
@@ -161,15 +169,6 @@ public:
     }
 
     /**
-     * Function Insert
-     * puts aNewElement in front of list sequence.
-     */
-    void Insert( T* aNewElement )
-    {
-        insert( aNewElement );
-    }
-
-    /**
      * Function Remove
      * removes \a aElement from the list, but does not delete it.
      * @return T* - the removed element, so you can easily delete it upon return.
@@ -180,6 +179,40 @@ public:
         return aElement;
     }
 
+
+    //-----< STL like functions >---------------------------------------
+    T* begin() const { return GetFirst(); }
+    T* end() const { return NULL; }
+
+    T* PopFront()
+    {
+        if( GetFirst() )
+            return Remove( GetFirst() );
+        return NULL;
+    }
+
+    T* PopBack()
+    {
+        if( GetLast() )
+            return Remove( GetLast() );
+        return NULL;
+    }
+
+    /**
+     * Function PushFront
+     * puts aNewElement at front of list sequence.
+     */
+    void PushFront( T* aNewElement )
+    {
+        insert( aNewElement );
+    }
+
+    void PushBack( T* aElement )
+    {
+        append( aElement );
+    }
+
+    //-----</ STL like functions >--------------------------------------
 };
 
 #endif      // DLIST_H_

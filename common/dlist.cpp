@@ -34,11 +34,11 @@
 DHEAD::~DHEAD()
 {
     if( meOwner )
-        DestructAll();
+        DeleteAll();
 }
 
 
-void DHEAD::DestructAll()
+void DHEAD::DeleteAll()
 {
     EDA_BaseStruct* next;
     EDA_BaseStruct* item = first;
