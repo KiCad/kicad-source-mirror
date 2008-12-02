@@ -108,6 +108,10 @@ public:
      * returns the number of elements in the list.
      */
     unsigned GetCount() { return count; }
+
+#if defined(DEBUG)
+    void VerifyListIntegrity();
+#endif
 };
 
 
@@ -178,7 +182,6 @@ public:
         remove( aElement );
         return aElement;
     }
-
 
     //-----< STL like functions >---------------------------------------
     T* begin() const { return GetFirst(); }

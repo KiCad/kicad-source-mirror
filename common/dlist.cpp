@@ -135,7 +135,7 @@ void DHEAD::remove( EDA_BaseStruct* aElement )
     {
         aElement->Next()->SetBack( aElement->Back() );
     }
-    else
+    else  // element being removed is last
     {
         wxASSERT( last == aElement );
         last = aElement->Back();
@@ -143,9 +143,9 @@ void DHEAD::remove( EDA_BaseStruct* aElement )
 
     if( aElement->Back() )
     {
-        aElement->Back()->SetNext( aElement->Back() );
+        aElement->Back()->SetNext( aElement->Next() );
     }
-    else
+    else    // element being removed is first
     {
         wxASSERT( first == aElement );
         first = aElement->Next();
@@ -156,5 +156,42 @@ void DHEAD::remove( EDA_BaseStruct* aElement )
     aElement->SetList( 0 );
 
     --count;
+
+    D( VerifyListIntegrity(); );
 }
+
+#if defined(DEBUG)
+
+void DHEAD::VerifyListIntegrity()
+{
+    EDA_BaseStruct* item;
+    unsigned i = 0;
+
+    for( item = first;  item && i<count;  ++i, item = item->Next() )
+    {
+        if( i < count-1 )
+        {
+            wxASSERT( item->Next() );
+        }
+
+        wxASSERT( item->GetList() == this );
+    }
+
+    wxASSERT( item == NULL );
+    wxASSERT( i == count );
+
+    i = 0;
+    for( item = last;  item && i<count;  ++i, item = item->Back() )
+    {
+        if( i < count-1 )
+        {
+            wxASSERT( item->Back() );
+        }
+    }
+
+    wxASSERT( item == NULL );
+    wxASSERT( i == count );
+}
+
+#endif
 
