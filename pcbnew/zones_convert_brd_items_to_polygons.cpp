@@ -954,6 +954,8 @@ int ZONE_CONTAINER::CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aB
             corner.x = (int) aBoolengine->GetPolygonXPoint();
             corner.y = (int) aBoolengine->GetPolygonYPoint();
             corner.end_contour = false;
+            // Flag this corner if starting a hole connection segment:
+            corner.utility = (aBoolengine->GetPolygonPointEdgeType() == KB_FALSE_EDGE) ? 1 : 0;
             m_FilledPolysList.push_back( corner );
             count++;
         }

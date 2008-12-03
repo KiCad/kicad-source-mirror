@@ -5,6 +5,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    Switch to polygons in zones (old way no more supported)
+    areas can be now filled using solid polygons, or using segments to fill areas inside polygons.
+    results are same, but using segments can be better (faster redraw time) for polygons having a lot
+    of segments (more than 10000)
+
 2008-Dec-02 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++build fixes

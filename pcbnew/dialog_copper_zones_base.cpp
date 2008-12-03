@@ -37,24 +37,34 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* m_FillOptionsBox;
 	m_FillOptionsBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Zone Fill Options:") ), wxVERTICAL );
 	
-	wxString m_GridCtrlChoices[] = { _("0.00000"), _("0.00000"), _("0.00000"), _("0.00000"), _("No grid (For tests only!)") };
-	int m_GridCtrlNChoices = sizeof( m_GridCtrlChoices ) / sizeof( wxString );
-	m_GridCtrl = new wxRadioBox( this,  ID_RADIOBOX_GRID_SELECTION, _("Grid Size for Filling"), wxDefaultPosition, wxDefaultSize, m_GridCtrlNChoices, m_GridCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_GridCtrl->SetSelection( 1 );
-	m_FillOptionsBox->Add( m_GridCtrl, 0, wxALL|wxEXPAND, 5 );
+	wxString m_FillModeCtrlChoices[] = { _("Use polygons"), _("Use segments") };
+	int m_FillModeCtrlNChoices = sizeof( m_FillModeCtrlChoices ) / sizeof( wxString );
+	m_FillModeCtrl = new wxRadioBox( this,  ID_RADIOBOX_FILL_MODE_SELECTION, _("Filling Mode:"), wxDefaultPosition, wxDefaultSize, m_FillModeCtrlNChoices, m_FillModeCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_FillModeCtrl->SetSelection( 1 );
+	m_FillModeCtrl->SetToolTip( _("Filled areas can use solid polygons or segments.\nDepending on the complexity and the size of the zone,\nsometime polygons are better and sometime segments are better") );
+	
+	m_FillOptionsBox->Add( m_FillModeCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	wxString m_ArcApproximationOptChoices[] = { _("16 segments / 360 deg"), _("32 segments / 360 deg") };
+	int m_ArcApproximationOptNChoices = sizeof( m_ArcApproximationOptChoices ) / sizeof( wxString );
+	m_ArcApproximationOpt = new wxRadioBox( this, wxID_ARC_APPROX, _("Arcs Approximation:"), wxDefaultPosition, wxDefaultSize, m_ArcApproximationOptNChoices, m_ArcApproximationOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_ArcApproximationOpt->SetSelection( 1 );
+	m_ArcApproximationOpt->SetToolTip( _("Number of segments to approximate a circle in filling calculations.\n16 segment is faster to calculate and when redraw screen.\n32 segment give a better quality") );
+	
+	m_FillOptionsBox->Add( m_ArcApproximationOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_PadInZoneOptChoices[] = { _("Include pads"), _("Thermal relief"), _("Exclude pads") };
 	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
 	m_PadInZoneOpt = new wxRadioBox( this, wxID_PADS_IN_ZONE_OPTIONS, _("Pad in Zone:"), wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_PadInZoneOpt->SetSelection( 1 );
-	m_FillOptionsBox->Add( m_PadInZoneOpt, 0, wxALL|wxEXPAND, 5 );
+	m_PadInZoneOpt->SetSelection( 0 );
+	m_FillOptionsBox->Add( m_PadInZoneOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* m_ThermalShapesParamsSizer;
-	m_ThermalShapesParamsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Thermal Reliefs Parameters") ), wxVERTICAL );
+	m_ThermalShapesParamsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Thermal Reliefs:") ), wxVERTICAL );
 	
 	m_AntipadSizeText = new wxStaticText( this, wxID_ANY, _("Antipad Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AntipadSizeText->Wrap( -1 );
-	m_ThermalShapesParamsSizer->Add( m_AntipadSizeText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_ThermalShapesParamsSizer->Add( m_AntipadSizeText, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_AntipadSizeValue = new wxTextCtrl( this, wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_AntipadSizeValue->SetToolTip( _("Define the gap around the pad") );
@@ -63,7 +73,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_CopperBridgeWidthText = new wxStaticText( this, wxID_ANY, _("Copper Width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperBridgeWidthText->Wrap( -1 );
-	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_CopperWidthValue = new wxTextCtrl( this, wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperWidthValue->SetToolTip( _("Define the tickness of copper in thermal reliefs") );
@@ -97,18 +107,10 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched outline"), _("Full hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
 	m_OutlineAppearanceCtrl = new wxRadioBox( this, ID_RADIOBOX_OUTLINES_OPTION, _("Outlines Appearance"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OutlineAppearanceCtrl->SetSelection( 1 );
+	m_OutlineAppearanceCtrl->SetSelection( 0 );
 	m_OutlineAppearanceCtrl->SetToolTip( _("Choose how a zone outline is displayed\n- Single line\n- Short hatching\n- Full zone area hatched") );
 	
 	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxEXPAND, 5 );
-	
-	wxString m_ArcApproximationOptChoices[] = { _("16 segments / 360 deg"), _("32 segments / 360 deg") };
-	int m_ArcApproximationOptNChoices = sizeof( m_ArcApproximationOptChoices ) / sizeof( wxString );
-	m_ArcApproximationOpt = new wxRadioBox( this, wxID_ARC_APPROX, _("Arcs Approximation:"), wxDefaultPosition, wxDefaultSize, m_ArcApproximationOptNChoices, m_ArcApproximationOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_ArcApproximationOpt->SetSelection( 1 );
-	m_ArcApproximationOpt->SetToolTip( _("Number of segments to approximate a circle in filling calculations.\n16 segment is faster to calculate and when redraw screen.\n32 segment give a better quality") );
-	
-	m_OutilinesBoxOpt->Add( m_ArcApproximationOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* m_OthersOptionsSizer;
 	m_OthersOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Others Options:") ), wxVERTICAL );
@@ -139,11 +141,6 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_MiddleBoxSizer->Add( m_OutilinesBoxOpt, 1, wxEXPAND, 5 );
 	
-	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all others copper zones") );
-	
-	m_MiddleBoxSizer->Add( m_ExportSetupButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
 	m_MiddleBox->Add( m_MiddleBoxSizer, 0, 0, 5 );
 	
 	m_ExportableSetupSizer->Add( m_MiddleBox, 1, wxEXPAND, 5 );
@@ -156,12 +153,17 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_RightBoxSizer;
 	m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
+	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Setup to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all others copper zones") );
+	
+	m_RightBoxSizer->Add( m_ExportSetupButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	
 	m_OkButton = new wxButton( this, wxID_OK, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OkButton->SetDefault(); 
-	m_RightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_RightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	
 	m_RightBoxSizer->Add( 5, 20, 0, wxEXPAND, 5 );
@@ -172,7 +174,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxString m_NetSortingOptionChoices[] = { _("Alphabetic"), _("Advanced") };
 	int m_NetSortingOptionNChoices = sizeof( m_NetSortingOptionChoices ) / sizeof( wxString );
 	m_NetSortingOption = new wxRadioBox( this, ID_NET_SORTING_OPTION, _("Net sorting:"), wxDefaultPosition, wxDefaultSize, m_NetSortingOptionNChoices, m_NetSortingOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_NetSortingOption->SetSelection( 1 );
+	m_NetSortingOption->SetSelection( 0 );
 	m_NetSortingOption->SetToolTip( _("Nets can be sorted:\nBy alphabetic order\nBy number of pads in the net (advanced)") );
 	
 	m_NetSortOptSizer->Add( m_NetSortingOption, 0, wxALL|wxEXPAND, 5 );

@@ -96,15 +96,11 @@ void GRSMoveRel(int x, int y);
 void GRLineRel(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int width, int Color);
 void GRSLineRel(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int width, int Color);
 void GRPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points,
-        int Fill, int width, int Color, int BgColor);
-void GRClosedPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points,
-        int Fill, int Color, int BgColor);
-void GRClosedPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points,
-        int Fill, int width, int Color, int BgColor);
-void GRSPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points,
-        int Fill, int width, int Color, int BgColor);
-void GRSClosedPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points,
-        int Fill, int width, int Color, int BgColor);
+        bool Fill, int width, int Color, int BgColor);
+void GRClosedPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points, bool Fill, int Color, int BgColor);
+void GRClosedPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points, bool Fill, int width, int Color, int BgColor);
+void GRSPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points, bool Fill, int width, int Color, int BgColor);
+void GRSClosedPoly(EDA_Rect * ClipBox, wxDC * DC, int n, int *Points, bool Fill, int width, int Color, int BgColor);
 void GRCircle(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int r, int Color);
 void GRCircle(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int r, int width, int Color);
 void GRFilledCircle(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int r,

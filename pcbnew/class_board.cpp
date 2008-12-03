@@ -53,7 +53,7 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_Pads             = NULL;          // pointeur liste d'acces aux pads
     m_Ratsnest         = NULL;          // pointeur liste rats
     m_LocalRatsnest    = NULL;          // pointeur liste rats local
-    m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour cuurently in progress
+    m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour currently in progress
                                         // de determination des contours de zone
 
     for( int layer=0; layer<NB_COPPER_LAYERS;  ++layer )
@@ -83,6 +83,13 @@ BOARD::~BOARD()
 
     m_Zone->DeleteStructList();
     m_Zone = 0;
+    
+    while ( m_ZoneDescriptorList.size() )
+    {
+        ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
+        Delete( area_to_remove );
+    }
+
 
     MyFree( m_Pads );
     m_Pads = 0;
@@ -264,7 +271,19 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         }
         break;
 
-    case TYPEMODULE:
+    case TYPEZONE:
+        {   // Add item to head of list (starting in m_Zone)
+            aBoardItem->SetParent( this );
+            aBoardItem->SetBack( this );        // item will be the first item: back chain to the board
+            BOARD_ITEM* next_item = m_Zone;     // Remember old the first item
+            aBoardItem->SetNext( next_item );   // Chain the new one ton the old item
+            if( next_item )                     // Back chain the old item to the new one
+                next_item->SetBack( aBoardItem );
+            m_Zone = (SEGZONE*) aBoardItem;     // Add to head of list
+        }
+        break;
+
+   case TYPEMODULE:
         // this is an insert, not an append which may also be needed.
         {
             aBoardItem->SetBack( this );
@@ -278,7 +297,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     // other types may use linked list
     default:
-        wxFAIL_MSG( wxT("BOARD::Add() needs work") );
+        wxFAIL_MSG( wxT("BOARD::Add() needs work: BOARD_ITEM type not handled") );
     }
 }
 

@@ -17,7 +17,7 @@
 class ZONE_SETTING
 {
 public:
-    int  m_GridFillValue;                               // Grid value for filling zone by segments, 0 to used polygons to fill
+    int  m_FillMode;                                    // Mode for filling zone : 1 use segments, 0 use polygons
     int  m_ZoneClearance;                               // Clearance value
     int  m_ZoneMinThickness;                            // Min thickness value in filled areas
     int  m_NetcodeSelection;                            // Net code selection for the current zone
@@ -41,8 +41,12 @@ public:
     /** function ExportSetting
      * copy settings to a given zone
      * @param aTarget: the given zone
+     * @param aFullExport: if false: some parameters are NOT exported
+     *   because they must not be  exported when export settings from a zone to others zones
+     *   Currently:
+     *      m_NetcodeSelection
      */
-    void ExportSetting( ZONE_CONTAINER& aTarget );
+    void ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport = true);
 };
 
 

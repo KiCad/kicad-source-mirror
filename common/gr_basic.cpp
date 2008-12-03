@@ -866,7 +866,7 @@ static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, int* Points )
 /************************************************************************/
 /* Routine to draw a new polyline and fill it if Fill, in screen space. */
 /************************************************************************/
-void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, int Fill,
+void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, bool Fill,
               int width, int Color, int BgColor )
 {
     if( !IsGRSPolyDrawable( ClipBox, n, Points ) )
@@ -898,14 +898,14 @@ void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, int Fill,
 /* Routine to draw a new closed polyline and fill it if Fill, in screen space */
 /******************************************************************************/
 void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
-                    int Fill, int Color, int BgColor )
+                    bool Fill, int Color, int BgColor )
 {
     GRSClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
 }
 
 
 void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
-                    int Fill, int width, int Color, int BgColor )
+                    bool Fill, int width, int Color, int BgColor )
 {
     int startx, starty;
 
@@ -939,7 +939,7 @@ void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
 /* Routine to draw a new polyline and fill it if Fill, in drawing space. */
 /************************************************************************/
 void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
-             int Fill, int width, int Color, int BgColor )
+             bool Fill, int width, int Color, int BgColor )
 {
     int ii, jj;
 
@@ -960,14 +960,14 @@ void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
 /* Routine to draw a closed polyline and fill it if Fill, in object space */
 /**************************************************************************/
 void GRClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
-                   int Fill, int Color, int BgColor )
+                   bool Fill, int Color, int BgColor )
 {
     GRClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
 }
 
 
 void GRClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
-                   int Fill, int width, int Color, int BgColor )
+                   bool Fill, int width, int Color, int BgColor )
 {
     int ii, jj;
 

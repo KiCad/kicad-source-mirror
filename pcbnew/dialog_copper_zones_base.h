@@ -47,12 +47,12 @@ class dialog_copper_zone_base : public wxDialog
 	protected:
 		enum
 		{
-			 ID_RADIOBOX_GRID_SELECTION = 1000,
+			 ID_RADIOBOX_FILL_MODE_SELECTION = 1000,
+			wxID_ARC_APPROX,
 			wxID_PADS_IN_ZONE_OPTIONS,
 			wxID_ANTIPAD_SIZE,
 			wxID_COPPER_BRIDGE_VALUE,
 			ID_RADIOBOX_OUTLINES_OPTION,
-			wxID_ARC_APPROX,
 			wxID_BUTTON_EXPORT,
 			ID_NET_SORTING_OPTION,
 			ID_TEXTCTRL_NETNAMES_FILTER,
@@ -60,7 +60,8 @@ class dialog_copper_zone_base : public wxDialog
 			ID_LAYER_CHOICE,
 		};
 		
-		wxRadioBox* m_GridCtrl;
+		wxRadioBox* m_FillModeCtrl;
+		wxRadioBox* m_ArcApproximationOpt;
 		wxRadioBox* m_PadInZoneOpt;
 		wxStaticText* m_AntipadSizeText;
 		wxTextCtrl* m_AntipadSizeValue;
@@ -69,14 +70,13 @@ class dialog_copper_zone_base : public wxDialog
 		
 		wxRadioBox* m_OrientEdgesOpt;
 		wxRadioBox* m_OutlineAppearanceCtrl;
-		wxRadioBox* m_ArcApproximationOpt;
 		wxCheckBox* m_ShowFilledAreasInSketchOpt;
 		wxStaticText* m_ClearanceValueTitle;
 		wxTextCtrl* m_ZoneClearanceCtrl;
 		wxStaticText* m_MinThicknessValueTitle;
 		wxTextCtrl* m_ZoneMinThicknessCtrl;
-		wxButton* m_ExportSetupButton;
 		
+		wxButton* m_ExportSetupButton;
 		wxButton* m_OkButton;
 		wxButton* m_ButtonCancel;
 		
@@ -98,7 +98,7 @@ class dialog_copper_zone_base : public wxDialog
 		
 	
 	public:
-		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 545,493 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 566,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~dialog_copper_zone_base();
 	
 };

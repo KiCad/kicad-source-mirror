@@ -24,9 +24,9 @@
 
 ZONE_SETTING::ZONE_SETTING( void )
 {
-    m_GridFillValue         = 250;                                  // Grid value for filling zone by segments, 0 to used polygons to fill
+    m_FillMode         = 1;                                         // Mode for filling zone : 1 use segments, 0 use polygons
     m_ZoneClearance         = 200;                                  // Clearance value
-    m_ZoneMinThickness      = 0;                                    // Min thickness value in filled areas
+    m_ZoneMinThickness      = 100;                                  // Min thickness value in filled areas
     m_NetcodeSelection      = 0;                                    // Net code selection for the current zone
     m_CurrentZone_Layer     = 0;                                    // Layer used to create the current zone
     m_Zone_HatchingStyle    = CPolyLine::DIAGONAL_EDGE;             // Option to show the zone area (outlines only, short hatches or full hatches
@@ -46,7 +46,7 @@ ZONE_SETTING::ZONE_SETTING( void )
  */
 void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
 {
-    m_GridFillValue         = aSource.m_GridFillValue;
+    m_FillMode         = aSource.m_FillMode;
     m_ZoneClearance         = aSource.m_ZoneClearance;
     m_ZoneMinThickness      = aSource.m_ZoneMinThickness;
     m_NetcodeSelection      = aSource.GetNet();
@@ -63,20 +63,25 @@ void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
 /** function ExportSetting
  * copy settings to a given zone
  * @param aTarget: the given zone
- * Note: parameters NOT exported (because they cannot be safely exported):
- * m_NetcodeSelection
+ * @param aFullExport: if false: some parameters are NOT exported
+ *   because they must not be  exported when export settings from a zone to others zones
+ *   Currently:
+ *      m_NetcodeSelection
  */
-void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget )
+void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport )
 {
-    aTarget.m_GridFillValue = m_GridFillValue;
+    aTarget.m_FillMode = m_FillMode;
     aTarget.m_ZoneClearance = m_ZoneClearance;
     aTarget.m_ZoneMinThickness = m_ZoneMinThickness;
-    aTarget.SetNet( m_NetcodeSelection );
-    aTarget.SetLayer( m_CurrentZone_Layer );
     aTarget.m_Poly->SetHatch( m_Zone_HatchingStyle );
     aTarget.m_ArcToSegmentsCount = m_ArcToSegmentsCount;
     aTarget.m_DrawOptions = m_FilledAreasShowMode;
     aTarget.m_ThermalReliefGapValue = m_ThermalReliefGapValue;
     aTarget.m_ThermalReliefCopperBridgeValue = m_ThermalReliefCopperBridgeValue;
     aTarget.m_PadOption = m_Zone_Pad_Options;
+    if ( aFullExport )
+    {
+        aTarget.SetNet( m_NetcodeSelection );
+        aTarget.SetLayer( m_CurrentZone_Layer );
+    }
 }

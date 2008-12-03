@@ -27,7 +27,7 @@ public:
     int                   m_CornerSelection;                // For corner moving, corner index to drag, or -1 if no selection
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
-    int                   m_GridFillValue;                  // Grid used for filling, 0 = use polygonal areas to fill
+    int                   m_FillMode;                       // How to fillingareas: 0 = use polygonal areas , != 0 fill with segments
     int                   m_ArcToSegmentsCount;             // number of segments to convert a cirlce to a polygon (uses 16 or 32)
     int                   m_PadOption;                      //
     int                   m_ThermalReliefGapValue;          // tickness of the gap in thermal reliefs
@@ -254,6 +254,17 @@ public:
      * @return error level (0 = no error)
      */
     int  Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
+
+    /** Function Fill_Zone_Areas_With_Segments()
+     *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
+     * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
+     * all intersecting points with the horizontal infinite line and polygons to fill are calculated
+     * a list of SEGZONE items is built, line per line
+     * @param aFrame = reference to the main frame
+     * @return number of segments created
+     */
+    int Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame );
+
 
     /* Geometric transformations: */
 

@@ -2,6 +2,9 @@
  * Algos used to fill a zone defined by a polygon and a filling starting point
  */
 
+
+#include <algorithm> // sort
+
 #include "fctsys.h"
 #include "gr_basic.h"
 
@@ -15,18 +18,14 @@
 #include "protos.h"
 
 /* Local functions */
-static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code, int layer );
 
 /* Local variables */
-static bool          Zone_Debug = false;
-static unsigned long s_TimeStamp; /* Time stamp common to all segments relative to the new created zone */
-
-
 
 
 /***********************************************************/
-int ZONE_CONTAINER::BuildFilledPolysListData( BOARD * aPcb )
+int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
 /***********************************************************/
+
 /** function BuildFilledPolysListData
  * Build m_FilledPolysList data from real outlines (m_Poly)
  * in order to have drawable (and plottable) filled polygons
@@ -37,486 +36,186 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD * aPcb )
  * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
  */
 {
-
-    // Currently, for copper zones,  we can use segment filling or filling by polygon areas
-    // if m_GridFillValue == 0 polygon areas will be used (No Grid)
-    if ( IsOnCopperLayer() && ( m_GridFillValue != 0 ) )
-        return 0;
-
     m_FilledPolysList.clear();
-    /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
-    * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building this zone
-    */
 
-    if ( GetNumCorners( ) <= 2 )    // malformed zone. Kbool does not like it ...
+    /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
+     * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building this zone
+     */
+
+    if( GetNumCorners() <= 2 )  // malformed zone. Kbool does not like it ...
         return 0;
 
     m_Poly->MakeKboolPoly( -1, -1, NULL, true );
     int count = 0;
     while( m_Poly->GetKboolEngine()->StartPolygonGet() )
     {
-        CPolyPt corner(0,0,false);
+        CPolyPt corner( 0, 0, false );
         while( m_Poly->GetKboolEngine()->PolygonHasMorePoints() )
         {
-            corner.x = (int)m_Poly->GetKboolEngine()->GetPolygonXPoint();
-            corner.y = (int)m_Poly->GetKboolEngine()->GetPolygonYPoint();
+            corner.x = (int) m_Poly->GetKboolEngine()->GetPolygonXPoint();
+            corner.y = (int) m_Poly->GetKboolEngine()->GetPolygonYPoint();
             corner.end_contour = false;
-            m_FilledPolysList.push_back(corner);
-            count ++;
+            m_FilledPolysList.push_back( corner );
+            count++;
         }
+
         corner.end_contour = true;
         m_FilledPolysList.pop_back();
-        m_FilledPolysList.push_back(corner);
+        m_FilledPolysList.push_back( corner );
         m_Poly->GetKboolEngine()->EndPolygonGet();
     }
 
     m_Poly->FreeKboolEngine();
 
     /* For copper layers, we now must add holes in the Polygon list.
-    holes are pads and tracks with their clearance area
-    */
+     * holes are pads and tracks with their clearance area
+     */
 
-    if ( IsOnCopperLayer() )
+    if( IsOnCopperLayer() )
         AddClearanceAreasPolygonsToPolysList( aPcb );
+
+    if ( m_FillMode )   // if fill mode uses segments, create them:
+        Fill_Zone_Areas_With_Segments( (WinEDA_PcbFrame*) aPcb->m_PcbFrame );
 
     return count;
 }
 
-
-/*****************************************************************************/
-int ZONE_CONTAINER::Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose )
-/*****************************************************************************/
-
-/** Function Fill_Zone()
- *  Calculate the zone filling
- *  The zone outline is a frontier, and can be complex (with holes)
- *  The filling starts from starting points like pads, tracks.
- * @param frame = reference to the main frame
- * @param DC = current Device Context (can be NULL)
- * @param verbose = true to show error messages
- * @return error level (0 = no error)
- */
+// Sort function to build filled zones
+static bool SortByXValues( const int& a, const int &b)
 {
-    int         ii, jj;
-    int         error_level = 0;
-    int         lp_tmp, lay_tmp_TOP, lay_tmp_BOTTOM;
-    int         save_isol = g_DesignSettings.m_TrackClearence;
-    wxPoint     ZoneStartFill;
-    wxString    msg;
-    BOARD*      Pcb    = frame->m_Pcb;
-
-    if( g_GridRoutingSize < 25 )
-        g_GridRoutingSize = 25;
-
-	// Set the g_DesignSettings.m_TrackClearence (used to fill board map) to the max of m_TrackClearence and m_ZoneClearence
-    g_DesignSettings.m_TrackClearence = max ( g_DesignSettings.m_TrackClearence, m_ZoneClearance);
-
-	// In order to avoid ends of segments used to fill the zone, and to the clearence the radius of ends
-	// which is g_GridRoutingSize/2
-	g_DesignSettings.m_TrackClearence += g_GridRoutingSize/2;
-
-    g_HightLigth_NetCode = m_NetCode;
-
-    s_TimeStamp = m_TimeStamp;
-
-    // Delete the old filling, if any :
-    frame->Delete_Zone_Fill( DC, NULL, m_TimeStamp );
-
-    // calculate the fixed step of the routing matrix as 25 mils or more
-    E_scale = g_GridRoutingSize / 25;
-
-
-    // calculate the Ncols and Nrows, size of the routing matrix
-    ComputeMatriceSize( frame, g_GridRoutingSize );
-
-    // create the routing matrix in autorout.h's eda_global BOARDHEAD Board
-    Nb_Sides = ONE_SIDE;
-    if( Board.InitBoard() < 0 )
-    {
-        if( verbose )
-            DisplayError( frame, wxT( "Mo memory for creating zones" ) );
-        error_level = 1;
-        return error_level;
-    }
-
-    msg.Printf( wxT( "%d" ), Ncols );
-    Affiche_1_Parametre( frame, 1, wxT( "Cols" ), msg, GREEN );
-
-    msg.Printf( wxT( "%d" ), Nrows );
-    Affiche_1_Parametre( frame, 7, wxT( "Lines" ), msg, GREEN );
-
-    msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
-    Affiche_1_Parametre( frame, 14, wxT( "Mem(Ko)" ), msg, CYAN );
-
-    lay_tmp_BOTTOM = Route_Layer_BOTTOM;
-    lay_tmp_TOP    = Route_Layer_TOP;
-
-    Route_Layer_BOTTOM = Route_Layer_TOP = m_Layer;
-    lp_tmp = g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_CurrentTrackWidth = g_GridRoutingSize;
-
-
-    // trace the pcb edges (pcb contour) into the routing matrix
-    Route_Layer_BOTTOM = Route_Layer_TOP = EDGE_N;
-    PlaceCells( Pcb, -1, 0 );
-    Route_Layer_BOTTOM = Route_Layer_TOP = m_Layer;
-
-    /* Create the starting point for the zone:
-     * The starting point and all the tracks are suitable "starting points" */
-    TRACK* pt_segm = Pcb->m_Track;
-    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
-    {
-        if( g_HightLigth_NetCode != pt_segm->GetNet() )
-            continue;
-
-        if( ! pt_segm->IsOnLayer( m_Layer ) )
-            continue;
-
-//        if( pt_segm->Type() != TYPETRACK )
-//            continue;
-
-        TraceSegmentPcb( Pcb, pt_segm, CELL_is_FRIEND, 0, WRITE_CELL );
-    }
-    // trace the zone edges into the routing matrix
-    int        i_start_contour = 0;
-    for( unsigned ic = 0; ic < m_Poly->corner.size(); ic++ )
-    {
-        int xi = m_Poly->corner[ic].x - Pcb->m_BoundaryBox.m_Pos.x;
-        int yi = m_Poly->corner[ic].y - Pcb->m_BoundaryBox.m_Pos.y;
-        int xf, yf;
-        if( m_Poly->corner[ic].end_contour == FALSE && ic < m_Poly->corner.size() - 1 )
-        {
-            xf = m_Poly->corner[ic + 1].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = m_Poly->corner[ic + 1].y - Pcb->m_BoundaryBox.m_Pos.y;
-        }
-        else
-        {
-            xf = m_Poly->corner[i_start_contour].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = m_Poly->corner[i_start_contour].y - Pcb->m_BoundaryBox.m_Pos.y;
-            i_start_contour = ic + 1;
-        }
-        TraceLignePcb( xi, yi, xf, yf, -1, HOLE | CELL_is_EDGE, WRITE_CELL );
-    }
-
-    /* Create a starting point to create the zone filling, from pads */
-    LISTE_PAD* pad;
-    int        cells_count = 0;
-    for( ii = 0, pad = frame->m_Pcb->m_Pads; ii < frame->m_Pcb->m_NbPads; ii++, pad++ )
-    {
-		if ( ! (*pad)->IsOnLayer( GetLayer() ) ) continue;
-		if ( (*pad)->GetNet() != GetNet() ) continue;
-        wxPoint pos = (*pad)->m_Pos;
-        if( m_Poly->TestPointInside( pos.x, pos.y ) )
-        {
-			pos -= Pcb->m_BoundaryBox.m_Pos;
-			ZoneStartFill.x = pos.x / g_GridRoutingSize;
-
-            ZoneStartFill.y = pos.y / g_GridRoutingSize;
-			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
-			if ( (cell & CELL_is_EDGE) == 0 )
-			{
-				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
-				cells_count++;
-			}
-        }
-    }
-
-    /* Create a starting point to create the zone filling, from vias and tracks */
-    TRACK* track;
-    for( track = frame->m_Pcb->m_Track; track != NULL; track = track->Next() )
-    {
-		if ( ! track->IsOnLayer( GetLayer() ) ) continue;
-		if ( track->GetNet() != GetNet() ) continue;
-        wxPoint pos = track->m_Start;
-        if( m_Poly->TestPointInside( pos.x, pos.y ) )
-        {
-			pos -= Pcb->m_BoundaryBox.m_Pos;
-			ZoneStartFill.x = pos.x / g_GridRoutingSize;
-
-            ZoneStartFill.y = pos.y / g_GridRoutingSize;
-			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
-			if ( (cell & CELL_is_EDGE) == 0 )
-			{
-				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
-				cells_count++;
-			}
-        }
-        pos = track->m_End;
-        if( m_Poly->TestPointInside( pos.x, pos.y ) )
-        {
-			pos -= Pcb->m_BoundaryBox.m_Pos;
-			ZoneStartFill.x = pos.x / g_GridRoutingSize;
-
-            ZoneStartFill.y = pos.y / g_GridRoutingSize;
-			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
-			if ( (cell & CELL_is_EDGE) == 0 )
-			{
-				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
-				cells_count++;
-			}
-        }
-    }
-
-    if( cells_count == 0 )
-    {
-        if( verbose )
-		{
-			msg = _( "No pads or starting point found to fill this zone outline" );
-			msg << wxT("\n");
-			msg << MenuText( frame->m_Pcb );
-            DisplayError( frame, msg );
-		}
-        error_level = 2;
-        goto end_of_zone_fill;
-    }
-
-    // mark the cells forming part of the zone
-    ii = 1; jj = 1;
-    while( ii )
-    {
-        msg.Printf( wxT( "%d" ), jj++ );
-        Affiche_1_Parametre( frame, 50, wxT( "Iter." ), msg, CYAN );
-        ii = Propagation( frame );
-    }
-
-    // selection of the suitable cells for the points of anchoring of the zone
-    for( ii = 0; ii < Nrows; ii++ )
-    {
-        for( jj = 0; jj < Ncols; jj++ )
-        {
-            long cell = GetCell( ii, jj, BOTTOM );
-            if( (cell & CELL_is_ZONE) )
-            {
-                if( (cell & CELL_is_FRIEND) == 0 )
-                    AndCell( ii, jj, BOTTOM, (BoardCell) ~(CELL_is_FRIEND | CELL_is_ZONE) );
-            }
-        }
-    }
-
-    if( Zone_Debug && DC )
-    {
-        DisplayBoard( frame->DrawPanel, DC );
-    }
-    // now, all the cell candidates are marked
-
-    // place all the obstacles into the matrix, such as (pads, tracks, vias,
-    // pcb edges or segments)
-    ii = 0;
-    if( m_PadOption == PAD_NOT_IN_ZONE )
-        ii = FORCE_PADS;
-
-    Affiche_1_Parametre( frame, 42, wxT( "GenZone" ), wxEmptyString, RED );
-    PlaceCells( Pcb, g_HightLigth_NetCode, ii );
-    Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Ok" ), RED );
-
-    /* Recreate zone limits on the routing matrix
-     *  (could be deleted by PlaceCells()) : */
-    i_start_contour = 0;
-    for( unsigned ic = 0; ic < m_Poly->corner.size(); ic++ )
-    {
-        int xi = m_Poly->corner[ic].x - Pcb->m_BoundaryBox.m_Pos.x;
-        int yi = m_Poly->corner[ic].y - Pcb->m_BoundaryBox.m_Pos.y;
-        int xf, yf;
-        if( m_Poly->corner[ic].end_contour == FALSE && ic < m_Poly->corner.size() - 1 )
-        {
-            xf = m_Poly->corner[ic + 1].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = m_Poly->corner[ic + 1].y - Pcb->m_BoundaryBox.m_Pos.y;
-        }
-        else
-        {
-            xf = m_Poly->corner[i_start_contour].x - Pcb->m_BoundaryBox.m_Pos.x;
-            yf = m_Poly->corner[i_start_contour].y - Pcb->m_BoundaryBox.m_Pos.y;
-            i_start_contour = ic + 1;
-        }
-        TraceLignePcb( xi, yi, xf, yf, -1, HOLE | CELL_is_EDGE, WRITE_CELL );
-    }
-
-    /* Init the starting point for zone filling : this is the mouse position
-     *  (could be deleted by PlaceCells()) : */
-    for( ii = 0, pad = frame->m_Pcb->m_Pads; ii < frame->m_Pcb->m_NbPads; ii++, pad++ )
-    {
-		if ( ! (*pad)->IsOnLayer( GetLayer() ) ) continue;
-		if ( (*pad)->GetNet() != GetNet() ) continue;
-        wxPoint pos = (*pad)->m_Pos;
-        if( m_Poly->TestPointInside( pos.x, pos.y ) )
-        {
-			pos -= Pcb->m_BoundaryBox.m_Pos;
-            ZoneStartFill.x = pos.x / g_GridRoutingSize;
-
-            ZoneStartFill.y = pos.y / g_GridRoutingSize;
-			BoardCell cell = GetCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM );
-			if ( (cell & CELL_is_EDGE) == 0 )
-				OrCell( ZoneStartFill.y, ZoneStartFill.x, BOTTOM, CELL_is_ZONE );
-        }
-    }
-
-
-    /* Filling the cells of the matrix (this is the zone building)*/
-    ii = 1; jj = 1;
-    while( ii )
-    {
-        msg.Printf( wxT( "%d" ), jj++ );
-        Affiche_1_Parametre( frame, 50, wxT( "Iter." ), msg, CYAN );
-        ii = Propagation( frame );
-    }
-
-    if( Zone_Debug && DC )
-	{
-        DisplayBoard( frame->DrawPanel, DC );
-	}
-
-    // replace obstacles into the matrix(pads)
-    if( m_PadOption == THERMAL_PAD )
-        PlaceCells( Pcb, g_HightLigth_NetCode, FORCE_PADS );
-
-    if( Zone_Debug && DC )
-        DisplayBoard( frame->DrawPanel, DC );
-
-    /* Convert the matrix information (cells) to segments which are actually the zone */
-    if( g_HightLigth_NetCode < 0 )
-        Genere_Segments_Zone( frame, DC, 0, m_Layer );
-    else
-        Genere_Segments_Zone( frame, DC, g_HightLigth_NetCode, m_Layer );
-
-    /* Create the thermal reliefs */
-    g_DesignSettings.m_CurrentTrackWidth = lp_tmp;
-    if( m_PadOption == THERMAL_PAD )
-        frame->Genere_Pad_Connexion( DC, m_Layer );
-
-end_of_zone_fill:
-    g_DesignSettings.m_TrackClearence = save_isol;
-
-    // free the memory
-    Board.UnInitBoard();
-
-    // restore original values unchanged
-    Route_Layer_TOP    = lay_tmp_TOP;
-    Route_Layer_BOTTOM = lay_tmp_BOTTOM;
-
-    return error_level;
+    return a < b;
 }
 
+/***********************************************************************************/
+int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
+/***********************************************************************************/
 
-/*******************************************************************************************/
-static void Genere_Segments_Zone( WinEDA_PcbFrame* frame, wxDC* DC, int net_code, int layer )
-/*******************************************************************************************/
-
-/** Function Genere_Segments_Zone()
- * Create the zone segments from the routing matrix structure
- *  Algorithm:
- * Search for consecutive cells (flagged "zone") , and create segments
- *  from the first cell to the last cell in the matrix
- *      2 searchs are made
- *          1 - From left to right and create horizontal zone segments
- *          2 - From top to bottom, and create vertical zone segmùents
- * @param net_code = net_code common to all segment zone created
- * @param DC = current device context ( can be NULL )
- * @param frame = current WinEDA_PcbFrame
- * global: parameter TimeStamp: time stamp common to all segment zone created
+/** Function Fill_Zone_Areas_With_Segments()
+ *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
+ * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
+ * all intersecting points with the horizontal infinite line and polygons to fill are calculated
+ * a list of SEGZONE items is built, line per line
+ * @param aFrame = reference to the main frame
+ * @return number of segments created
  */
 {
-    int      row, col;
-    long     current_cell, old_cell;
-    int      ux0  = 0, uy0 = 0, ux1 = 0, uy1 = 0;
-    int      Xmin = frame->m_Pcb->m_BoundaryBox.m_Pos.x;
-    int      Ymin = frame->m_Pcb->m_BoundaryBox.m_Pos.y;
-    SEGZONE* pt_track;
-    int      nbsegm = 0;
-    wxString msg;
+    int      ics, ice;
+    int count = 0;
+    std::vector <int> x_coordinates;
+    bool error = false;
 
-    /* Create horizontal segments */
-    Affiche_1_Parametre( frame, 64, wxT( "Segm H" ), wxT( "0" ), BROWN );
-    for( row = 0; row < Nrows; row++ )
+    int      istart, iend;      // index od the starting and the endif corner of one filled area in m_FilledPolysList
+
+    int margin = m_ZoneMinThickness * 2 / 10;
+    margin = max (2, margin);
+    int step = m_ZoneMinThickness - margin;
+    step = max(step, 2);
+
+    // Read all filled areas in m_FilledPolysList
+    istart = 0;
+    int end_list =  m_FilledPolysList.size()-1;
+    for( int ic = 0; ic <= end_list; ic++ )
     {
-        old_cell = 0;
-        uy0 = uy1 = (row * g_GridRoutingSize) + Ymin;
-        for( col = 0; col < Ncols; col++ )
+        CPolyPt* corner = &m_FilledPolysList[ic];
+        if ( corner->end_contour || (ic == end_list) )
         {
-            current_cell = GetCell( row, col, BOTTOM ) & CELL_is_ZONE;
-            if( current_cell ) /* ce point doit faire partie d'un segment */
-            {
-                ux1 = (col * g_GridRoutingSize) + Xmin;
-                if( old_cell == 0 )
-                    ux0 = ux1;
-            }
+            iend = ic;
+            EDA_Rect rect = CalculateSubAreaBoundaryBox( istart, iend );
 
-            if( !current_cell || (col == Ncols - 1) ) /* peut etre fin d'un segment */
+            // Calculate the y limits of the zone
+            int refy = rect.GetY();
+            int endy = rect.GetBottom();
+
+            for( ; refy < endy; refy += step )
             {
-                if( (old_cell) && (ux0 != ux1) )
+                // find all intersection points of an infinite line with polyline sides
+                x_coordinates.clear();
+                for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
                 {
-                    /* un segment avait debute de longueur > 0 */
-                    pt_track = new SEGZONE( frame->m_Pcb );
-                    pt_track->SetLayer( layer );
-                    pt_track->SetNet( net_code );
+                    if ( m_FilledPolysList[ice].utility )
+                        continue;
+                    int seg_startX = m_FilledPolysList[ics].x;
+                    int seg_startY = m_FilledPolysList[ics].y;
+                    int seg_endX   = m_FilledPolysList[ice].x;
+                    int seg_endY   = m_FilledPolysList[ice].y;
+                    
 
-                    pt_track->m_Width = g_GridRoutingSize;
+                    /* Trivial cases: skip if ref above or below the segment to test */
+                    if( ( seg_startY > refy ) && (seg_endY > refy ) )
+                        continue;
 
-                    pt_track->m_Start.x = ux0;
-                    pt_track->m_Start.y = uy0;
+                    // segment below ref point, or its Y end pos on Y coordinate ref point: skip
+                    if( ( seg_startY <= refy ) && (seg_endY <= refy ) )
+                        continue;
 
-                    pt_track->m_End.x = ux1;
-                    pt_track->m_End.y = uy1;
-
-                    pt_track->m_TimeStamp = s_TimeStamp;
-
-                    pt_track->Insert( frame->m_Pcb, NULL );
-                    if ( DC )
-						pt_track->Draw( frame->DrawPanel, DC, GR_OR );
-                    nbsegm++;
+                    /* at this point refy is between seg_startY and seg_endY
+                     * see if an horizontal line at Y = refy is intersecting this segment
+                    */
+                    // calculate the x position of the intersection of this segment and the infinite line
+                    // this is more easier if we move the X,Y axis origin to the segment start point:
+                    seg_endX -= seg_startX;
+                    seg_endY -= seg_startY;
+                    double newrefy = (double) (refy - seg_startY);
+                    double intersec_x;
+                    if ( seg_endY == 0 )    // horizontal segment on the same line: skip
+                        continue;
+                    // Now calculate the x intersection coordinate of the horizontal line at y = newrefy
+                    // and the segment from (0,0) to (seg_endX,seg_endY)
+                    // with the horizontal line at the new refy position
+                    // the line slope is slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
+                    // and the x pos relative to the new origin is intersec_x = refy/slope = refy * inv_slope
+                    // Note: because horizontal segments are already tested and skipped, slope exists (seg_end_y not O)
+                    double inv_slope      = (double)seg_endX / seg_endY;
+                    intersec_x = newrefy * inv_slope;
+                    x_coordinates.push_back((int) intersec_x + seg_startX);
                 }
-            }
-            old_cell = current_cell;
-        }
 
-        msg.Printf( wxT( "%d" ), nbsegm );
-        Affiche_1_Parametre( frame, -1, wxEmptyString, msg, BROWN );
-    }
+                // A line scan is finished: build list of segments
 
-    /* Create vertical segments */
-    Affiche_1_Parametre( frame, 72, wxT( "Segm V" ), wxT( "0" ), BROWN );
-    for( col = 0; col < Ncols; col++ )
-    {
-        old_cell = 0;
-        ux0 = ux1 = (col * g_GridRoutingSize) + Xmin;
-        for( row = 0; row < Nrows; row++ )
-        {
-            current_cell = GetCell( row, col, BOTTOM ) & CELL_is_ZONE;
-            if( current_cell ) /* ce point doit faire partie d'un segment */
-            {
-                uy1 = (row * g_GridRoutingSize) + Ymin;
-                if( old_cell == 0 )
-                    uy0 = uy1;
-            }
-            if( !current_cell || (row == Nrows - 1) )    /* peut etre fin d'un segment */
-            {
-                if( (old_cell) && (uy0 != uy1) )
+                // Sort intersection points by increasing x value:
+                // So 2 consecutive points are the ends of a segment
+                sort( x_coordinates.begin(), x_coordinates.end(), SortByXValues );
+
+                // Create segments
+
+                if ( !error && ( x_coordinates.size() & 1 ) != 0 )
+                {   // An even number of coordinates is expected, because a segment has 2 ends.
+                    // An if this algorithm always works, it must always find an even count.
+                    wxString msg = wxT("Fill Zone: odd number of points at y = ");
+                    msg << refy;
+                    wxMessageBox(msg );
+                    error = true;
+                }
+                
+                if ( error ) break;
+                int iimax = x_coordinates.size()-1;
+                for (int ii = 0; ii < iimax; ii +=2 )
                 {
-                    /* un segment avait debute de longueur > 0 */
-                    pt_track = new SEGZONE( frame->m_Pcb );
-                    pt_track->SetLayer( layer );
-                    pt_track->m_Width = g_GridRoutingSize;
-                    pt_track->SetNet( net_code );
-
-                    pt_track->m_Start.x = ux0;
-                    pt_track->m_Start.y = uy0;
-
-                    pt_track->m_End.x = ux1;
-                    pt_track->m_End.y = uy1;
-
-                    pt_track->m_TimeStamp = s_TimeStamp;
-                    pt_track->Insert( frame->m_Pcb, NULL );
-                    if( DC )
-                        pt_track->Draw( frame->DrawPanel, DC, GR_OR );
-                    nbsegm++;
+                    wxPoint  seg_start, seg_end;
+                    count++;
+                    seg_start.x = x_coordinates[ii];
+                    seg_start.y = refy;
+                    seg_end.x = x_coordinates[ii+1];
+                    seg_end.y = refy;
+                    SEGZONE* segment = new SEGZONE( aFrame->m_Pcb );
+                    segment->m_Start = seg_start;
+                    segment->m_End   = seg_end;
+                    segment->SetNet( GetNet() );
+                    segment->m_TimeStamp = m_TimeStamp;
+                    segment->m_Width = m_ZoneMinThickness;
+                    segment->SetLayer( GetLayer() );
+                    aFrame->m_Pcb->Add( segment );
                 }
-            }
-            old_cell = current_cell;
-        }
+            }   //End examine segments in one area
+            if ( error ) break;
+            istart = iend + 1;  // istart points the first corner of the next area
+        }   // End find one end of outline
+        if ( error ) break;
+    }   // End examine all areas
 
-        msg.Printf( wxT( "%d" ), nbsegm );
-        Affiche_1_Parametre( frame, -1, wxEmptyString, msg, BROWN );
-    }
+    return count;
 }
+
 
 
 /********************************************/
@@ -658,133 +357,3 @@ int Propagation( WinEDA_PcbFrame* frame )
     return nbpoints;
 }
 
-
-/*****************************************************************************/
-bool WinEDA_PcbFrame::Genere_Pad_Connexion( wxDC* DC, int layer )
-/*****************************************************************************/
-
-/* Create the thermal relief for each pad in the zone:
- *  this is 4 small segments from the pad to the zone
- */
-{
-    int        ii, jj, Npads;
-    D_PAD*     pt_pad;
-    LISTE_PAD* pt_liste_pad;
-    TRACK*     pt_track, * loctrack;
-    int        angle;
-    int        cX, cY, dx, dy;
-    int        sommet[4][2];
-    wxString   msg;
-
-    if( m_Pcb->m_Zone == NULL )
-        return FALSE;                                   /* error: no zone */
-
-    if( m_Pcb->m_Zone->m_TimeStamp != s_TimeStamp )     /* error: this is not the new zone */
-        return FALSE;
-
-    /* Count the pads, i.e. the thermal relief to create count, and displays it */
-    Affiche_1_Parametre( this, 50, wxT( "NPads" ), wxT( "    " ), CYAN );
-    pt_liste_pad = (LISTE_PAD*) m_Pcb->m_Pads;
-    for( ii = 0, Npads = 0; ii < m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
-    {
-        pt_pad = *pt_liste_pad;
-
-        /* Search pads relative to the selected net code */
-        if( pt_pad->GetNet() != g_HightLigth_NetCode )
-            continue;
-
-        /* Is the pad on the active layer ? */
-        if( (pt_pad->m_Masque_Layer & g_TabOneLayerMask[layer]) == 0 )
-            continue;
-        Npads++;
-    }
-
-    msg.Printf( wxT( "%d" ), Npads );
-    Affiche_1_Parametre( this, -1, wxEmptyString, msg, CYAN );
-
-    /* Create the thermal reliefs */
-    Affiche_1_Parametre( this, 57, wxT( "Pads" ), wxT( "     " ), CYAN );
-    pt_liste_pad = (LISTE_PAD*) m_Pcb->m_Pads;
-    for( ii = 0, Npads = 0; ii < m_Pcb->m_NbPads; ii++, pt_liste_pad++ )
-    {
-        pt_pad = *pt_liste_pad;
-
-        /* Search pads relative to the selected net code */
-        if( pt_pad->GetNet() != g_HightLigth_NetCode )
-            continue;
-        /* Is the pad on the active layer ? */
-        if( (pt_pad->m_Masque_Layer & g_TabOneLayerMask[layer]) == 0 )
-            continue;
-
-        /* Create the theram relief for the current pad */
-        Npads++;
-
-        msg.Printf( wxT( "%d" ), Npads );
-        Affiche_1_Parametre( this, -1, wxEmptyString, msg, CYAN );
-
-        cX = pt_pad->GetPosition().x;
-        cY = pt_pad->GetPosition().y;
-
-        dx = pt_pad->m_Size.x / 2;
-        dy = pt_pad->m_Size.y / 2;
-
-        dx += g_DesignSettings.m_TrackClearence + g_GridRoutingSize;
-        dy += g_DesignSettings.m_TrackClearence + g_GridRoutingSize;
-
-        if( pt_pad->m_PadShape == PAD_TRAPEZOID )
-        {
-            dx += abs( pt_pad->m_DeltaSize.y ) / 2;
-            dy += abs( pt_pad->m_DeltaSize.x ) / 2;
-        }
-
-        /* calculate the 4 segment coordinates (starting from the pad centre cX,cY) */
-        sommet[0][0] = 0; sommet[0][1] = -dy;
-        sommet[1][0] = -dx; sommet[1][1] = 0;
-        sommet[2][0] = 0; sommet[2][1] = dy;
-        sommet[3][0] = dx; sommet[3][1] = 0;
-
-        angle = pt_pad->m_Orient;
-        for( jj = 0; jj < 4; jj++ )
-        {
-            RotatePoint( &sommet[jj][0], &sommet[jj][1], angle );
-
-            pt_track = new SEGZONE( m_Pcb );
-
-            pt_track->SetLayer( layer );
-            pt_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
-            pt_track->SetNet( g_HightLigth_NetCode );
-            pt_track->start       = pt_pad;
-            pt_track->m_Start.x   = cX; pt_track->m_Start.y = cY;
-            pt_track->m_End.x     = cX + sommet[jj][0];
-            pt_track->m_End.y     = cY + sommet[jj][1];
-            pt_track->m_TimeStamp = s_TimeStamp;
-
-            /* Test if the segment is allowed */
-            if( BAD_DRC==m_drc->DrcBlind( pt_track, m_Pcb->m_Track ) )
-            {
-                // Drc error, retry with a smaller width
-                // because some drc errors are due to a track width > filling zone size.
-                pt_track->m_Width = g_GridRoutingSize;
-                if( BAD_DRC==m_drc->DrcBlind( pt_track, m_Pcb->m_Track ) )
-                {
-                    delete pt_track;
-                    continue;
-                }
-            }
-
-            /* Search for a zone segment */
-            loctrack = Locate_Zone( m_Pcb->m_Zone, pt_track->m_End, layer );
-            if( (loctrack == NULL) || (loctrack->m_TimeStamp != s_TimeStamp) )
-            {
-                delete pt_track;
-                continue;
-            }
-
-            pt_track->Insert( m_Pcb, NULL );
-            if( DC )
-                pt_track->Draw( DrawPanel, DC, GR_OR );
-        }
-    }
-
-    return TRUE;
-}

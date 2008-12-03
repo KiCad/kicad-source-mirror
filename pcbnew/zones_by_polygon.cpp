@@ -907,17 +907,10 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     int          error_level = 0;
     zone_container->m_FilledPolysList.clear();
-    if( zone_container->m_GridFillValue == 0 )
-    {
-        zone_container->BuildFilledPolysListData( m_Pcb );
-        if ( DC )
-            DrawPanel->Refresh();
-    }
-    else
-    {
-        g_GridRoutingSize = zone_container->m_GridFillValue;
-        error_level = zone_container->Fill_Zone( this, DC, verbose );
-    }
+    Delete_Zone_Fill( NULL, NULL, zone_container->m_TimeStamp );
+    zone_container->BuildFilledPolysListData( m_Pcb );
+    if ( DC )
+        DrawPanel->Refresh();
 
     GetScreen()->SetModify();
 

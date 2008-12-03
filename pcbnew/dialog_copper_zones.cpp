@@ -66,31 +66,10 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     wxString msg;
 
-    msg = m_GridCtrl->GetLabel() + ReturnUnitSymbol( g_UnitMetric );
-    m_GridCtrl->SetLabel( msg );
-
     if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
 
-    static const int GridList[4] = { 25, 50, 100, 250 };
-    int selection = 0;
-
-    int grid_routing = m_Zone_Setting->m_GridFillValue;
-
-    for( unsigned ii = 0; ii < 4; ii++ )
-    {
-        msg = ReturnStringFromValue( g_UnitMetric,
-            GridList[ii],
-            m_Parent->m_InternalUnits );
-        m_GridCtrl->SetString( ii, msg );
-        if( grid_routing == GridList[ii] )
-            selection = ii;
-    }
-
-    if( grid_routing == 0 )  // No Grid: fill with polygons
-        selection = 4;
-
-    m_GridCtrl->SetSelection( selection );
+    m_FillModeCtrl->SetSelection(m_Zone_Setting->m_FillMode ? 1 : 0);
 
     AddUnitSymbol( *m_ClearanceValueTitle, g_UnitMetric );
     msg = ReturnStringFromValue( g_UnitMetric,
@@ -294,29 +273,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
 
-    switch( m_GridCtrl->GetSelection() )
-    {
-    case 0:
-        m_Zone_Setting->m_GridFillValue = 25;
-        break;
-
-    case 1:
-        m_Zone_Setting->m_GridFillValue = 50;
-        break;
-
-    default:
-    case 2:
-        m_Zone_Setting->m_GridFillValue = 100;
-        break;
-
-    case 3:
-        m_Zone_Setting->m_GridFillValue = 250;
-        break;
-
-    case 4:
-        m_Zone_Setting->m_GridFillValue = 0;
-        break;
-    }
+    m_Zone_Setting->m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
     m_Zone_Setting->m_ZoneClearance =
@@ -325,6 +282,12 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
         ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+    if ( m_Zone_Setting->m_ZoneMinThickness < 10 )
+    {
+        DisplayError( this,
+        _( "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch or 0.00254 mm)" ) );
+        return false;
+    }
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
         g_Zone_45_Only = FALSE;
@@ -462,14 +425,12 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     if( !AcceptOptions( true, true ) )
         return;
 
-    // Export settings ( but layer ) to others zones:
+    // Export settings ( but layer and netcode ) to others zones:
     BOARD* pcb = m_Parent->m_Pcb;
     for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = pcb->GetArea( ii );
-        int             zone_layer = zone->GetLayer();
-        m_Zone_Setting->ExportSetting( *zone );
-        zone->SetLayer( zone_layer );
+        m_Zone_Setting->ExportSetting( *zone, false );  // false = partiel export
         m_Parent->GetScreen()->SetModify();
     }
 }

@@ -748,7 +748,8 @@ void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat )
         corners_count++;
         if( corner->end_contour )
         {   // Plot the current filled area
-            PlotFilledPolygon( aFormat, corners_count, CornersBuffer );
+            if( aZone->m_FillMode == 0) // We are using solid polygons (if != 0: using segments in m_Zone)
+                PlotFilledPolygon( aFormat, corners_count, CornersBuffer );
             if ( aZone->m_ZoneMinThickness > 0 )
                 PlotPolygon( aFormat, corners_count, CornersBuffer, aZone->m_ZoneMinThickness );
             corners_count = 0;
