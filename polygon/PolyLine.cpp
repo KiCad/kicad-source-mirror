@@ -515,9 +515,8 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
  * Initialise parameters used in kbool
  * @param aBooleng = pointer to the Bool_Engine to initialise
  * @param aConvertHoles = mode for holes when a boolean operation is made
- *   true: holes are linked into outer contours by double overlapping segments
- *   false: holes are not linked: in this mode contours are added clockwise
- *          and polygons added counter clockwise are holes
+ *   true: in resulting polygon, holes are linked into outer contours by double overlapping segments
+ *   false: in resulting polygons, holes are not linked: they are separate polygons
  */
 void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 {
