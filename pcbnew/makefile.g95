@@ -6,7 +6,6 @@ TARGET=pcbnew
 
 include ../libs.win
 
-EXTRACPPFLAGS += -I /f/kicad-sourceforge/trunk/kicad -I $(BOOST_PATH)
 all: $(TARGET).exe
 
 include makefile.include
@@ -15,7 +14,7 @@ $(TARGET).exe: $(OBJECTS) $(TARGET)_resources.o\
 		$(EDALIBS) $(LIBVIEWER3D) makefile.g95
 	$(CXX) $(ALL_LDFLAGS) -o $(TARGET).exe\
 		$(OBJECTS) $(LIBVIEWER3D) $(TARGET)_resources.o $(EDALIBS) $(SYSWXLIB)
-		
+
 install: $(TARGET).exe
 	cp $(TARGET).exe $(KICAD_BIN)
 

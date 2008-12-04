@@ -542,7 +542,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         DrawPanel->MouseToCursorSchema();
-        Fill_All_Zones( &dc );
+        Fill_All_Zones( );
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:

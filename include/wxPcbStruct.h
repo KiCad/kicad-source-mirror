@@ -564,12 +564,10 @@ public:
     /** Function Fill_All_Zones()
      *  Fill all zones on the board
      * The old fillings are removed
-     * @param frame = reference to the main frame
-     * @param DC = current Device Context
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int                 Fill_All_Zones( wxDC* DC, bool verbose = TRUE );
+    int                 Fill_All_Zones( bool verbose = TRUE );
 
 
     /**

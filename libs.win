@@ -45,6 +45,8 @@ ALL_LDFLAGS = -s #-v
 FINAL = 1
 endif
 
+CPPFLAGS += -I $(BOOST_PATH)
+
 ALL_CPPFLAGS = `$(WXWIN)/wx-config --cppflags` $(CPPFLAGS)
 EDACPPFLAGS = $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS)
 EDALIBS = $(EXTRALIBS)
@@ -54,7 +56,7 @@ PYTHON_PATH=/c/Python25
 PYLIBS= -L$(PYTHON_PATH)/libs
 PYLIBS+= -L $(PYTHON_PATH)/Lib
 PYLIBS+= -lpython2.5
-EXTRACPPFLAGS+=-I $(PYTHON_PATH)/include -DKICAD_PYTHON -I $(BOOST_PATH) -fno-strict-aliasing -ggdb
+EXTRACPPFLAGS+=-I $(PYTHON_PATH)/include -DKICAD_PYTHON -ggdb
 endif
 
 SYSWXLIB = `$(WXWIN)/wx-config --libs gl`\

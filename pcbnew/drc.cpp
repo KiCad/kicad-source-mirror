@@ -30,7 +30,6 @@
 /****************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -195,6 +194,10 @@ void DRC::RunTests()
 
     // test track and via clearances to other tracks, pads, and vias
     testTracks();
+
+    // Before testing segments and unconnected, refill all zones:
+    // this is a good caution, and mandatory if using filling zones by solid polygons
+    m_mainWindow->Fill_All_Zones( false );
 
     // test zone clearances to other zones, pads, tracks, and vias
     testZones( m_doZonesTest );

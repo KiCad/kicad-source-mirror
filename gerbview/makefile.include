@@ -76,6 +76,9 @@ files.o: files.cpp
 class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
+class_board_item.o: ../pcbnew/class_board_item.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
 class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 

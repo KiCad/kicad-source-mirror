@@ -919,14 +919,12 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
 
 /************************************************************/
-int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
+int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
 /************************************************************/
 
 /** Function Fill_All_Zones()
  *  Fill all zones on the board
  * The old fillings are removed
- * @param frame = reference to the main frame
- * @param DC = current Device Context
  * @param verbose = true to show error messages
  * @return error level (0 = no error)
  */

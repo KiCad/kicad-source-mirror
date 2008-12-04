@@ -30,7 +30,7 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
     if( aComponent->Type() != TYPE_SCH_COMPONENT )
     {
         DisplayError( parent,
-                     wxT( "InstallCmpeditFrame() error: This struct is not a component" ) );
+                     wxT( "InstallCmpeditFrame() error: This item is not a component" ) );
     }
     else
     {
@@ -52,7 +52,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 {
     m_Parent = (WinEDA_SchematicFrame*) parent;
 
-    m_LibEntry = 0;
+    m_LibEntry = NULL;
     m_skipCopyFromPanel = false;
 
     wxListItem  columnLabel;
@@ -524,10 +524,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     int choiceCount = unitChoice->GetCount();
 
     // Remove non existing choices (choiceCount must be <= number for parts)
-    int unitcount = m_LibEntry->m_UnitCount;
+    int unitcount = m_LibEntry ? m_LibEntry->m_UnitCount : 1;
     if ( unitcount < 1 )
         unitcount = 1;
-    if( m_LibEntry && ( unitcount < choiceCount) )
+    if( unitcount < choiceCount )
     {
         while ( unitcount < choiceCount )
         {

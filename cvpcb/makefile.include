@@ -1,9 +1,8 @@
 # makefile pour cvpcb (mingw)
 OBJSUFF = o
 
-EXTRACPPFLAGS += -DCVPCB -fno-strict-aliasing\
-	-I./ -I../cvpcb -I../include -Ibitmaps\
-	-I../pcbnew -I../3d-viewer -I ../polygon
+EXTRACPPFLAGS += -DCVPCB -I../include -Ibitmaps\
+	-I../pcbnew -I../cvpcb  -I../share -I../3d-viewer -I ../polygon
 
 EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a\
     ../polygon/lib_polygon.a\
@@ -17,6 +16,7 @@ OBJECTS = $(TARGET).o \
 			class_zone.o\
 			class_zone_setting.o\
             class_board_connected_item.o\
+            class_board_item.o\
             memoire.o \
 			cvframe.o\
 			listboxes.o\
@@ -79,6 +79,9 @@ class_mire.o: ../pcbnew/class_mire.cpp ../pcbnew/class_mire.h $(COMMON)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_board_item.o: ../pcbnew/class_board_item.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h $(COMMON)
