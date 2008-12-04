@@ -32,7 +32,8 @@ static wxString currentLibraryName;     // If this code was written in C++ then 
 
 /*************************************************************************************/
 LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
-                                const wxString& FullLibName, const wxString& LibName )
+                                const wxString& FullLibName,
+                                const wxString& LibName )
 /*************************************************************************************/
 
 /** Function LoadLibraryName
@@ -100,7 +101,8 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
 
 
 /******************************************/
-void LoadLibraries( WinEDA_DrawFrame* frame )
+void
+LoadLibraries (WinEDA_DrawFrame* frame)
 /******************************************/
 
 /* Function LoadLibraries
@@ -202,7 +204,9 @@ void LoadLibraries( WinEDA_DrawFrame* frame )
 
 
 /**************************************************************/
-void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
+void
+FreeCmpLibrary (wxWindow* frame,
+                const wxString& LibName)
 /**************************************************************/
 
 /** Function FreeCmpLibrary
@@ -248,7 +252,8 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 
 
 /******************************/
-const wxChar** GetLibNames()
+const
+wxChar** GetLibNames()
 /******************************/
 
 /** GetLibNames()
@@ -276,7 +281,9 @@ const wxChar** GetLibNames()
  * Routine to compare two EDA_LibComponentStruct for the PriorQue module.
  * Comparison (insensitive  case) is based on Part name.
  */
-int LibraryEntryCompare( EDA_LibComponentStruct* LE1, EDA_LibComponentStruct* LE2 )
+int
+LibraryEntryCompare (EDA_LibComponentStruct* LE1,
+                     EDA_LibComponentStruct* LE2)
 {
     return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
 }
@@ -355,8 +362,10 @@ PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame,
 
 
 /*********************************************************************************************/
-EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char* Line,
-                                                   FILE* f, int* LineNum )
+EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame,
+                                                   char* Line,
+                                                   FILE* f,
+                                                   int* LineNum )
 /*********************************************************************************************/
 
 /* Routine to Read a DEF/ENDDEF part entry from given open file.
@@ -503,7 +512,11 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame, char
 * been read already. Reads upto and include ENDDRAW, or an error (NULL ret). *
 *****************************************************************************/
 
-static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* Line, int* LineNum )
+static
+LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame,
+                                 FILE* f,
+                                 char* Line,
+                                 int* LineNum)
 {
     int                i = 0, jj, ll, Unit, Convert, size1, size2;
     char*              p, Buffer[1024], BufName[256],
@@ -814,9 +827,9 @@ static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f, char* 
 
 
 /*****************************************************************************
-* Routine to find the library given its name.								 *
+* Routine to find the library given its name.		                     *
 *****************************************************************************/
-LibraryStruct* FindLibrary( const wxString& Name )
+LibraryStruct* FindLibrary (const wxString& Name)
 {
     LibraryStruct* Lib = g_LibraryList;
 
@@ -832,9 +845,10 @@ LibraryStruct* FindLibrary( const wxString& Name )
 
 
 /*****************************************************************************
-* Routine to find the number of libraries currently loaded.					 *
+* Routine to find the number of libraries currently loaded.	             *
 *****************************************************************************/
-int NumOfLibraries()
+int
+NumOfLibraries()
 {
     int            ii;
     LibraryStruct* Lib = g_LibraryList;
@@ -847,7 +861,9 @@ int NumOfLibraries()
 
 
 /*****************************************************************************/
-static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
+static bool
+GetLibEntryField (EDA_LibComponentStruct* LibEntry,
+                  char* line)
 /*****************************************************************************/
 
 /* Analyse la ligne de description du champ de la forme:
@@ -966,7 +982,9 @@ static bool GetLibEntryField( EDA_LibComponentStruct* LibEntry, char* line )
 
 
 /********************************************************************/
-static bool AddAliasNames( EDA_LibComponentStruct* LibEntry, char* line )
+static bool
+AddAliasNames (EDA_LibComponentStruct* LibEntry,
+               char* line )
 /********************************************************************/
 
 /* Read the alias names (in buffer line) and add them in alias list
@@ -990,8 +1008,10 @@ static bool AddAliasNames( EDA_LibComponentStruct* LibEntry, char* line )
 
 
 /********************************************************************/
-static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
-                         int* NumOfParts )
+static void
+InsertAlias (PriorQue** PQ,
+             EDA_LibComponentStruct* LibEntry,
+             int* NumOfParts)
 /********************************************************************/
 /* create in library (in list PQ) aliases of the "root" component LibEntry*/
 {
@@ -1017,7 +1037,10 @@ static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
 /*******************************************************/
 
 /**********************************************************************************************/
-int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName, const wxString& Libname )
+int
+LoadDocLib (WinEDA_DrawFrame* frame,
+            const wxString& FullDocLibName,
+            const wxString& Libname)
 /**********************************************************************************************/
 /* Routine to load a library from given open file.*/
 {
@@ -1091,7 +1114,9 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName, const w
 
 
 /*********************************************************************************/
-static bool ReadLibEntryDateAndTime( EDA_LibComponentStruct* LibEntry, char* Line )
+static bool
+ReadLibEntryDateAndTime (EDA_LibComponentStruct* LibEntry,
+                         char* Line )
 /*********************************************************************************/
 
 /* lit date et time de modif composant sous le format:
@@ -1119,12 +1144,15 @@ static bool ReadLibEntryDateAndTime( EDA_LibComponentStruct* LibEntry, char* Lin
 
 
 /*******************************************/
-static int SortItemsFct( const void* ref, const void* item );
+static int
+SortItemsFct (const void* ref,
+              const void* item );
 
-void EDA_LibComponentStruct::SortDrawItems()
+void
+EDA_LibComponentStruct::SortDrawItems()
 /*******************************************/
-
-/* Trie les �l�ments graphiques d'un composant lib pour am�liorer
+/* TODO translate comment to english TODO
+ * Trie les �l�ments graphiques d'un composant lib pour am�liorer
  *  le trac�:
  *  items remplis en premier, pins en dernier
  *  En cas de superposition d'items, c'est plus lisible
@@ -1163,7 +1191,9 @@ void EDA_LibComponentStruct::SortDrawItems()
 }
 
 
-int SortItemsFct( const void* ref, const void* item )
+int
+SortItemsFct(const void* ref,
+             const void* item)
 {
 #define Ref    ( *(LibEDA_BaseStruct**) (ref) )
 #define Item   ( *(LibEDA_BaseStruct**) (item) )
@@ -1292,8 +1322,11 @@ int SortItemsFct( const void* ref, const void* item )
 
 
 /*****************************************************************************/
-int AddFootprintFilterList( EDA_LibComponentStruct* LibEntryLibEntry, FILE* f,
-                            char* Line, int* LineNum )
+int
+AddFootprintFilterList(EDA_LibComponentStruct* LibEntryLibEntry,
+                       FILE* f,
+                       char* Line,
+                       int* LineNum)
 /******************************************************************************/
 
 /* read the FootprintFilter List stating with:
