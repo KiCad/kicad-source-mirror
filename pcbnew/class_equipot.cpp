@@ -22,8 +22,8 @@
 /*********************************************************/
 
 /* Constructeur de la classe EQUIPOT */
-EQUIPOT::EQUIPOT( BOARD_ITEM* StructFather ) :
-    BOARD_ITEM( StructFather, PCB_EQUIPOT_STRUCT_TYPE )
+EQUIPOT::EQUIPOT( BOARD_ITEM* aParent ) :
+    BOARD_ITEM( aParent, TYPE_EQUIPOT )
 {
     SetNet( 0 );
     m_NbNodes       = m_NbLink = m_NbNoconn = 0;
@@ -50,31 +50,6 @@ wxPoint& EQUIPOT::GetPosition()
     static wxPoint dummy;
     return dummy;
 }
-
-
-void EQUIPOT::UnLink()
-{
-    /* Modification du chainage arriere */
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (BOARD*) Back() )->m_Equipots = Next();
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
-}
-
 
 /*********************************************************/
 int EQUIPOT:: ReadEquipotDescr( FILE* File, int* LineNum )

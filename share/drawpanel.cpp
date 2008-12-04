@@ -300,8 +300,7 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 
 void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
 {
-    D( printf( "1) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
-               aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
+    // D( printf( "1) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n", aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
 
     // Convert the rect coordinates and size to pixels (make a draw clip box):
     ConvertPcbUnitsToPixelsUnits( &aRect );
@@ -313,8 +312,7 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
     aRect.m_Size.x += 2;  // += 1 is not enough!
     aRect.m_Size.y += 2;
 
-    D( printf( "2) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",
-               aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
+    // D( printf( "2) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",  aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
 
     // pass wxRect() via EDA_Rect::operator wxRect() overload
     RefreshRect( aRect, TRUE );

@@ -55,10 +55,10 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     for( ii = 0, Struct = frame->m_Pcb->m_Track; Struct != NULL; Struct = Struct->Next() )
     {
         ii++;
-        if( Struct->Type() == TYPEVIA )
+        if( Struct->Type() == TYPE_VIA )
             if( ( (SEGVIA*) Struct )->GetNet() == netcode )
                 nb_vias++;
-    if( Struct->Type() == TYPETRACK )
+    if( Struct->Type() == TYPE_TRACK )
             if( ( (TRACK*) Struct )->GetNet() == netcode )
             lengthnet += ( (TRACK*) Struct )->GetLength();
     }

@@ -5,6 +5,36 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Dec-3 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew & gerbview
+  * added g_CurrentTrackList, and made g_CurrentTrackSegment and g_FirstTrackSegment
+    be #defines into this DLIST<TRACK>, see pcbnew.h.
+  * Switched datatype of BOARD::m_Track, BOARD::m_Zone, etc to DLIST<>.
+    This simplifies BOARD::~BOARD() somewhat, and adds automatic counting of list elements and encapsulation
+    of all list operations into DHEAD member functions, see common/dlist.cpp.
+  * Removed TRACK::Insert() since it no long fits with the new BOARD::m_Track and BOARD::m_Zone datatypes.
+  * Removed the g_UnDeleteStack support from <any>::UnLink(), this may leave a deficiency, but this code needs
+    to be external to UnLink() anyway.
+  * Made TRACK::SetNext() and TRACK::SetBack() private so they may not be used,
+    the only way to put a TRACK on a list is through DLIST<TRACK>::PushFront()
+    and other member functions of DLIST<TRACK>.
+  * Switched to std::vector<TRACK*> in track.cpp to hold the temporary static list.
+  * Made g_UnDeleteStack be a DLIST<TRACK>.
+  * renamed some KICAD_T to more closely match the corresponding classname.
+  * Changed to DLIST<> for almost all the list heads in BOARD.
+++gerbview
+  * switched to GR_COPY mode for drawing so we can see the erasures.  debugged
+    erasures in rs274d.cpp.
+  * Now using order specific TRACK loading, so erasures come after objects they
+    are intended to erase.  Still need layer ordering and polygon ordering support, my todo.
+
+    I do not like DeleteStructList() and plan to migrate away from it, DLIST<>:DeletAll()
+    does something like it.
+
+
+=======
 2008-Dec-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew
@@ -13,6 +43,7 @@ email address.
     results are same, but using segments can be better (faster redraw time) for polygons having a lot
     of segments (more than 10000)
 
+>>>>>>> .r1441
 2008-Dec-02 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++build fixes

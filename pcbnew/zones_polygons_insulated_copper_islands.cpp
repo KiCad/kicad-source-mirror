@@ -69,7 +69,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
         if( track->GetNet() != GetNet() )
             continue;
         ListPointsCandidates.push_back( track->m_Start );
-        if( track->Type() != TYPEVIA )
+        if( track->Type() != TYPE_VIA )
             ListPointsCandidates.push_back( track->m_End );
     }
 

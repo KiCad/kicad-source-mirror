@@ -69,11 +69,8 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
     NewModule->m_Link = Module->m_TimeStamp;
 
     Module = NewModule;
-    Module->SetParent( m_Pcb );
-    Module->SetBack( m_Pcb->m_Modules );
-    Module->SetNext( NULL );
 
-    m_Pcb->m_Modules = Module;
+    m_Pcb->Add( Module );
 
     Module->m_Flags = 0;
 
@@ -192,18 +189,11 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
     char     Line[512];
     wxString Name;
     wxString ComponentName, msg;
-    MODULE*  Module;
     MODULE*  NewModule;
     FILE*    lib_module = NULL;
     unsigned ii;
 
     ComponentName = ModuleName;
-
-    /* Calcul de l'adresse du dernier module: */
-    Module = m_Pcb->m_Modules;
-    if( Module )
-        while( Module->Next() )
-            Module = (MODULE*) Module->Next();
 
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
@@ -273,16 +263,8 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
                 SetLocaleTo_C_standard( );
                 NewModule->ReadDescr( lib_module, &LineNum );
                 SetLocaleTo_Default( );        // revert to the current  locale
-                if( Module == NULL )                /* 1er Module */
-                {
-                    m_Pcb->m_Modules = NewModule;
-                    NewModule->SetBack( m_Pcb );
-                }
-                else
-                {
-                    Module->SetNext( NewModule );
-                    NewModule->SetBack( Module );
-                }
+
+                m_Pcb->Add( NewModule, ADD_APPEND );
                 fclose( lib_module );
                 Affiche_Message( wxEmptyString );
                 return NewModule;

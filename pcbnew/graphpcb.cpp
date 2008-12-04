@@ -272,23 +272,23 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     uy1 = pt_segm->m_End.y - Pcb->m_BoundaryBox.m_Pos.y;
 
     /* Test si VIA (cercle plein a tracer) */
-    if( pt_segm->Type() == TYPEVIA )
+    if( pt_segm->Type() == TYPE_VIA )
     {
-		int mask_layer = 0;
-		if ( pt_segm->IsOnLayer(Route_Layer_BOTTOM) )
-			mask_layer = 1 << Route_Layer_BOTTOM;
-		if ( pt_segm->IsOnLayer(Route_Layer_TOP) )
-		{
-			if ( mask_layer == 0 )
-				mask_layer = 1 << Route_Layer_TOP;
-			else mask_layer = -1;
-		}
+        int mask_layer = 0;
+        if ( pt_segm->IsOnLayer(Route_Layer_BOTTOM) )
+            mask_layer = 1 << Route_Layer_BOTTOM;
+        if ( pt_segm->IsOnLayer(Route_Layer_TOP) )
+        {
+            if ( mask_layer == 0 )
+                mask_layer = 1 << Route_Layer_TOP;
+            else mask_layer = -1;
+        }
 
-		if( color == VIA_IMPOSSIBLE )
-			mask_layer = -1;
+        if( color == VIA_IMPOSSIBLE )
+            mask_layer = -1;
 
-		if ( mask_layer )
-			TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y, demi_largeur,
+        if ( mask_layer )
+            TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y, demi_largeur,
                            mask_layer, color, op_logique );
         return;
     }

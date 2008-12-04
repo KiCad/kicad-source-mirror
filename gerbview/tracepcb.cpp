@@ -28,7 +28,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 /* routine de trace du pcb, avec selection des couches */
 {
     DISPLAY_OPTIONS save_opt;
-	int DisplayPolygonsModeImg;
+    int DisplayPolygonsModeImg;
 
     save_opt = DisplayOpt;
     if( printmasklayer & ALL_CU_LAYERS )
@@ -44,8 +44,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayTrackIsol    = 0;
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZones = 1;
-	DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
-	g_DisplayPolygonsModeSketch = 0;
+    DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
+    g_DisplayPolygonsModeSketch = 0;
 
     m_PrintIsMirrored = aPrintMirrorMode;
 
@@ -57,7 +57,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
-	g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;
+    g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;
 }
 
 
@@ -80,7 +80,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    Trace_Gerber( DC, GR_OR, -1 );
+    Trace_Gerber( DC, GR_COPY, -1 );
     TraceWorkSheet( DC, screen, 0 );
     Affiche_Status_Box();
 
@@ -117,32 +117,35 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 
     // Draw filled polygons
     #define NBMAX 20000
-    TRACK* track;
     int    nbpoints    = 0;
     int    nbpointsmax = NBMAX;
     int*   coord   = (int*) malloc( nbpointsmax * sizeof(int) * 2 );
     int*   ptcoord = coord;
-    track = m_Pcb->m_Zone;
-    for( ; track != NULL; track = track->Next() )
+
+    for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
     {
-		if ( printmasklayer != -1 )
-			if ( (track->ReturnMaskLayer() & printmasklayer) == 0 ) continue;
+        if( printmasklayer != -1  &&  !(track->ReturnMaskLayer() & printmasklayer) )
+            continue;
 
         if( track->GetNet() == 0 )  // StartPoint
         {
             if( nbpoints )			// we have found a new polygon: Draw the old polygon
             {
                 int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-				int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+                int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+
                 GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
                               filled, Color, Color );
             }
+
             nbpoints = 2;
             ptcoord  = coord;
-            *ptcoord = track->m_Start.x; ptcoord++;
-            *ptcoord = track->m_Start.y; ptcoord++;
-            *ptcoord = track->m_End.x; ptcoord++;
-            *ptcoord = track->m_End.y; ptcoord++;
+
+            *ptcoord++ = track->m_Start.x;
+            *ptcoord++ = track->m_Start.y;
+
+            *ptcoord++ = track->m_End.x;
+            *ptcoord++ = track->m_End.y;
         }
         else
         {
@@ -153,13 +156,16 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
                 ptcoord = coord + nbpointsmax;
             }
             nbpoints++;
-            *ptcoord = track->m_End.x; ptcoord++;
-            *ptcoord = track->m_End.y; ptcoord++;
+
+            *ptcoord++ = track->m_End.x;
+            *ptcoord++ = track->m_End.y;
         }
+
         if( track->Next() == NULL )    // Last point
         {
             int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-			int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+            int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+
             GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
                           filled, Color, Color );
         }

@@ -133,7 +133,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 namespace DSN {
 
 
-const KICAD_T SPECCTRA_DB::scanPADs[] = { TYPEPAD, EOT };
+const KICAD_T SPECCTRA_DB::scanPADs[] = { TYPE_PAD, EOT };
 
 
 /**
@@ -187,7 +187,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
     {
         DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
-        wxASSERT( graphic->Type() == TYPEDRAWSEGMENT );
+        wxASSERT( graphic->Type() == TYPE_DRAWSEGMENT );
 
         if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
         {
@@ -553,7 +553,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
     }
 
 #if 1   // enable image (outline) scopes.
-    static const KICAD_T scanEDGEs[] = { TYPEEDGEMODULE, EOT };
+    static const KICAD_T scanEDGEs[] = { TYPE_EDGE_MODULE, EOT };
 
     // get all the MODULE's EDGE_MODULEs and convert those to DSN outlines.
     moduleItems.Collect( aModule, scanEDGEs );
@@ -683,7 +683,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
     // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
     // and those segments comprise the board's perimeter.
 
-    static const KICAD_T  scanDRAWSEGMENTS[] = { TYPEDRAWSEGMENT, EOT };
+    static const KICAD_T  scanDRAWSEGMENTS[] = { TYPE_DRAWSEGMENT, EOT };
 
     items.Collect( aBoard, scanDRAWSEGMENTS );
 
@@ -693,7 +693,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
     {
         DRAWSEGMENT* item = (DRAWSEGMENT*) items[i];
 
-        wxASSERT( item->Type() == TYPEDRAWSEGMENT );
+        wxASSERT( item->Type() == TYPE_DRAWSEGMENT );
 
         if( item->GetLayer() != EDGE_N )
         {
@@ -847,7 +847,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 {
     TYPE_COLLECTOR          items;
 
-    static const KICAD_T    scanMODULEs[] = { TYPEMODULE, EOT };
+    static const KICAD_T    scanMODULEs[] = { TYPE_MODULE, EOT };
 
     // Not all boards are exportable.  Check that all reference Ids are unique.
     // Unless they are unique, we cannot import the session file which comes
@@ -1024,7 +1024,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<zone containers become planes>--------------------------------
     {
-        static const KICAD_T  scanZONEs[] = { TYPEZONE_CONTAINER, EOT };
+        static const KICAD_T  scanZONEs[] = { TYPE_ZONE_CONTAINER, EOT };
         items.Collect( aBoard, scanZONEs );
 
         for( int i=0;  i<items.GetCount();  ++i )
@@ -1218,7 +1218,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     {
         // export all of them for now, later we'll decide what controls we need
         // on this.
-        static const KICAD_T scanTRACKs[] = { TYPETRACK, EOT };
+        static const KICAD_T scanTRACKs[] = { TYPE_TRACK, EOT };
 
         items.Collect( aBoard, scanTRACKs );
 
@@ -1283,14 +1283,14 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     {
         // export all of them for now, later we'll decide what controls we need
         // on this.
-        static const KICAD_T scanVIAs[] = { TYPEVIA, EOT };
+        static const KICAD_T scanVIAs[] = { TYPE_VIA, EOT };
 
         items.Collect( aBoard, scanVIAs );
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
             SEGVIA* via = (SEGVIA*) items[i];
-            wxASSERT( via->Type() == TYPEVIA );
+            wxASSERT( via->Type() == TYPE_VIA );
 
             int netcode = via->GetNet();
             if( netcode == 0 )

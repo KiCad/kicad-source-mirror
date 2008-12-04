@@ -22,10 +22,11 @@ OBJECTS= \
 		gerberframe.o\
 		onrightclick.o\
 		class_board.o\
+		class_board_item.o\
 		class_drawsegment.o\
 		class_track.o \
 		class_drc_item.o \
-        class_board_connected_item.o\
+		class_board_connected_item.o\
 		drawframe.o\
 		drawpanel.o\
 		set_color.o \
@@ -53,7 +54,7 @@ OBJECTS= \
 		controle.o\
 		basepcbframe.o\
 		export_to_pcbnew.o\
-        collectors.o
+		collectors.o
 
 setpage.o: ../share/setpage.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp

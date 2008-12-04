@@ -17,8 +17,8 @@
 #include "trigo.h"
 
 /* DRAWSEGMENT: constructor */
-DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype ) :
-    BOARD_ITEM( StructFather, idtype )
+DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
+    BOARD_ITEM( aParent, idtype )
 {
     m_Width = m_Flags = m_Shape = m_Type = m_Angle = 0;
 }
@@ -27,29 +27,6 @@ DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype ) :
 /* destructor */
 DRAWSEGMENT:: ~DRAWSEGMENT()
 {
-}
-
-
-void DRAWSEGMENT::UnLink()
-{
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (BOARD*) Back() )->m_Drawings = Next();
-        }
-    }
-
-    /* erase forward link */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
 }
 
 

@@ -197,7 +197,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     /* draw tracks and vias : */
     for( track = pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPEVIA )
+        if( track->Type() == TYPE_VIA )
             Draw3D_Via( (SEGVIA*) track );
         else
             Draw3D_Track( track );
@@ -207,7 +207,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     {
         for( segzone = pcb->m_Zone; segzone != NULL; segzone = segzone->Next() )
         {
-            if( segzone->Type() == TYPEZONE )
+            if( segzone->Type() == TYPE_ZONE )
                 Draw3D_Track( segzone );
         }
     }
@@ -218,11 +218,11 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     {
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             Draw3D_DrawSegment( (DRAWSEGMENT*) PtStruct );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
             Draw3D_DrawText( (TEXTE_PCB*) PtStruct );
             break;
 
@@ -513,10 +513,10 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         {
             switch( Struct->Type() )
             {
-            case TYPETEXTEMODULE:
+            case TYPE_TEXTE_MODULE:
                 break;
 
-            case TYPEEDGEMODULE:
+            case TYPE_EDGE_MODULE:
                 ( (EDGE_MODULE*) Struct )->Draw3D( glcanvas );
                 break;
 

@@ -166,27 +166,27 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     {
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
             PlotTextePcb( (TEXTE_PCB*) PtStruct, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
-        case TYPECOTATION:
+        case TYPE_COTATION:
             PlotCotation( (COTATION*) PtStruct, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
-        case TYPEMIRE:
+        case TYPE_MIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
-        case TYPEMARKER:
+        case TYPE_MARKER:
             break;
 
         default:
@@ -206,7 +206,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         {
             switch( PtStruct->Type() )
             {
-            case TYPEEDGEMODULE:
+            case TYPE_EDGE_MODULE:
                 if( masque_layer & g_TabOneLayerMask[( (EDGE_MODULE*) PtStruct )->GetLayer()] )
                     Plot_1_EdgeModule( PLOT_FORMAT_GERBER, (EDGE_MODULE*) PtStruct );
                 break;
@@ -282,7 +282,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         Affiche_1_Parametre( this, 56, wxT( "Vias" ), wxEmptyString, RED );
         for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
         {
-            if( track->Type() != TYPEVIA )
+            if( track->Type() != TYPE_VIA )
                 continue;
             SEGVIA* Via = (SEGVIA*) track;
 
@@ -316,7 +316,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     {
         wxPoint end;
 
-        if( track->Type() == TYPEVIA )
+        if( track->Type() == TYPE_VIA )
             continue;
         if( (g_TabOneLayerMask[track->GetLayer()] & masque_layer) == 0 )
             continue;

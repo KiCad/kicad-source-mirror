@@ -62,19 +62,10 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
     /* Creation des pastilles formant le gap */
     while( pad_count-- )
     {
-        D_PAD* pad;
-        pad = new D_PAD( Module );
-        pad->SetBack( Module );
-        if( Module->m_Pads == NULL )
-        {
-            Module->m_Pads = pad;
-        }
-        else
-        {
-            Module->m_Pads->SetBack( pad );
-            pad->SetNext( Module->m_Pads );
-            Module->m_Pads = pad;
-        }
+        D_PAD* pad= new D_PAD( Module );
+
+        Module->m_Pads.PushFront( pad );
+
         pad->m_Size.x       = pad->m_Size.y = g_DesignSettings.m_CurrentTrackWidth;
         pad->m_Pos          = Module->m_Pos;
         pad->m_PadShape     = PAD_RECT;
@@ -239,9 +230,10 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
     {
         EDGE_MODULE* edge; int* ptr, theta;
         ii   = angle / 50;
+
         edge = new EDGE_MODULE( Module );
-        Module->m_Drawings = edge;
-        edge->SetBack( Module );
+        Module->m_Drawings.PushFront( edge );
+
         edge->m_Shape     = S_POLYGON;
         edge->SetLayer( LAYER_CMP_N );
         edge->m_PolyCount = ii + 3;
@@ -567,8 +559,9 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
     pad2->m_Pos.x += pad2->m_Pos0.x;
 
     edge = new EDGE_MODULE( Module );
-    Module->m_Drawings = edge;
-    edge->SetBack( Module );
+
+    Module->m_Drawings.PushFront( edge );
+
     edge->m_Shape = S_POLYGON;
     edge->SetLayer( LAYER_CMP_N );
     npoints = PolyEdgesCount;

@@ -180,15 +180,13 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->Affiche_Message( _( "Delete unconnected tracks:" ) );
     frame->DrawPanel->m_AbortRequest = FALSE;
 
-    // correct via m_End defects and count number of segments
-    frame->m_Pcb->m_NbSegmTrack = 0;
+    // correct via m_End defects
     ii = 0;
     for( segment = frame->m_Pcb->m_Track;  segment;  segment = next )
     {
-        frame->m_Pcb->m_NbSegmTrack++;
         next = segment->Next();
 
-        if( segment->Type() == TYPEVIA )
+        if( segment->Type() == TYPE_VIA )
         {
             if( segment->m_Start != segment->m_End )
             {
@@ -213,13 +211,13 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
         next = segment->Next();
 
         // display activity
-        percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
+        percent = (100 * ii) / frame->m_Pcb->m_Track.GetCount();
         if( percent != oldpercent )
         {
             oldpercent = percent;
             frame->DisplayActivity( percent, wxT( "No Conn: " ) );
 
-            msg.Printf( wxT( "%d " ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d " ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
             msg.Printf( wxT( "%d " ), ii );
@@ -268,7 +266,7 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
 
             if( other == NULL )     // Test a connection to zones
             {
-                if( segment->Type() != TYPEVIA )
+                if( segment->Type() != TYPE_VIA )
                 {
                     zone = frame->m_Pcb->HitTestForAnyFilledArea(segment->m_Start, segment->GetLayer() );
                 }
@@ -288,7 +286,7 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
                 segment->start = other;
                 // If a via is connected to this end, test if this via has a second item connected
                 // if no, remove it with the current segment
-                if( other && other->Type() == TYPEVIA )
+                if( other && other->Type() == TYPE_VIA )
                 {
                     // search for another segment following the via
 
@@ -318,7 +316,7 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
                                                NULL, END );
             if( other == NULL )     // Test a connection to zones
             {
-                if( segment->Type() != TYPEVIA )
+                if( segment->Type() != TYPE_VIA )
                     zone = frame->m_Pcb->HitTestForAnyFilledArea(segment->m_End, segment->GetLayer() );
 
                 else
@@ -334,9 +332,10 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
             else     // segment, via or zone connected to this end
             {
                 segment->end = other;
+
                 // If a via is connected to this end, test if this via has a second item connected
                 // if no, remove it with the current segment
-                if( other && other->Type() == TYPEVIA )
+                if( other && other->Type() == TYPE_VIA )
                 {
                     // search for another segment following the via
 
@@ -442,13 +441,13 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
     for( segment  = frame->m_Pcb->m_Track, ii = 0;  segment;  segment = segment->Next(), ii++ )
     {
         /* Display activity */
-        percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
+        percent = (100 * ii) / frame->m_Pcb->m_Track.GetCount();
         if( percent != oldpercent )
         {
             frame->DisplayActivity( percent, wxT( "Id segm: " ) );
             oldpercent = percent;
 
-            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
             msg.Printf( wxT( "%d" ), ii );
@@ -519,13 +518,13 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
         next = segment->Next();
 
         ii++;
-        percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
+        percent = (100 * ii) / frame->m_Pcb->m_Track.GetCount();
         if( percent != oldpercent )
         {
             frame->DisplayActivity( percent, _( "Merge: " ) );
             oldpercent = percent;
 
-            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
             msg.Printf( wxT( "%d" ), ii );
@@ -535,7 +534,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 return -1;
         }
 
-        if( segment->Type() != TYPETRACK )
+        if( segment->Type() != TYPE_TRACK )
             continue;
 
         flag = no_inc = 0;
@@ -552,7 +551,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                     break;
 
                 // it cannot be a via
-                if( segStart->Type() != TYPETRACK )
+                if( segStart->Type() != TYPE_TRACK )
                     break;
 
                 /* We must have only one segment connected */
@@ -588,7 +587,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
                 if( segment->m_Width != segEnd->m_Width )
                     break;
 
-                if( segEnd->Type() != TYPETRACK )
+                if( segEnd->Type() != TYPE_TRACK )
                     break;
 
                 /* We must have only one segment connected */
@@ -764,16 +763,16 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
     {
         // display activity
         ii++;
-        percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
+        percent = (100 * ii) / frame->m_Pcb->m_Track.GetCount();
         if( percent != oldpercent )
         {
             frame->DisplayActivity( percent, wxT( "Drc: " ) );
             oldpercent = percent;
 
-            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
-            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
 
             if( frame->DrawPanel->m_AbortRequest )
@@ -784,7 +783,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
 
         // find the netcode for segment using anything connected to the "start" of "segment"
         net_code_s = -1;
-        if( segment->start  &&  segment->start->Type()==TYPEPAD )
+        if( segment->start  &&  segment->start->Type()==TYPE_PAD )
         {
             // get the netcode of the pad to propagate.
             net_code_s = ((D_PAD*)(segment->start))->GetNet();
@@ -802,7 +801,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
 
         // find the netcode for segment using anything connected to the "end" of "segment"
         net_code_e = -1;
-        if( segment->end  &&  segment->end->Type()==TYPEPAD )
+        if( segment->end  &&  segment->end->Type()==TYPE_PAD )
         {
             net_code_e = ((D_PAD*)(segment->end))->GetNet();
         }
@@ -885,13 +884,13 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
     {
         // display activity
         ii++;
-        percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
+        percent = (100 * ii) / frame->m_Pcb->m_Track.GetCount();
         if( percent != oldpercent )
         {
             frame->DisplayActivity( percent, wxT( "Tracks: " ) );
             oldpercent = percent;
 
-            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
             msg.Printf( wxT( "%d" ), ii );
@@ -915,7 +914,7 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
             if( other == segment )
                 continue;
 
-            if( other->Type() == TYPEVIA )
+            if( other->Type() == TYPE_VIA )
                 continue;
 
             if( segment->m_Start == other->m_Start )
@@ -937,11 +936,10 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
             msg.Printf( wxT( "%d" ), nn );
             Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "New <" ), msg, YELLOW );
 
-            frame->m_Pcb->m_NbSegmTrack++;
-
             // create a new segment and insert it next to "other", then shorten other.
             newTrack = other->Copy();
-            newTrack->Insert( frame->m_Pcb, other );
+
+            frame->m_Pcb->m_Track.Insert( newTrack, other->Next() );
 
             other->m_End      = segment->m_Start;
             newTrack->m_Start = segment->m_Start;
@@ -964,7 +962,7 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
             if( other == segment )
                 continue;
 
-            if( other->Type() == TYPEVIA )
+            if( other->Type() == TYPE_VIA )
                 continue;
 
             if( segment->m_End == other->m_Start )
@@ -985,11 +983,9 @@ static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
             msg.Printf( wxT( "%d" ), nn );
             Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "New >" ), msg, YELLOW );
 
-            frame->m_Pcb->m_NbSegmTrack++;
-
             // create a new segment and insert it next to "other", then shorten other.
             newTrack = other->Copy();
-            newTrack->Insert( frame->m_Pcb, other );
+            frame->m_Pcb->m_Track.Insert( newTrack, other->Next() );
 
             other->m_End      = segment->m_End;
             newTrack->m_Start = segment->m_End;
@@ -1023,7 +1019,7 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
     {
         SEGVIA* via;
 
-        if( track->Type()!=TYPEVIA  || (via = (SEGVIA*)track)->GetNet()!=0 )
+        if( track->Type()!=TYPE_VIA  || (via = (SEGVIA*)track)->GetNet()!=0 )
             continue;
 
         for( TRACK* other = pcb->m_Track;  other;  other = other->Next() )
@@ -1039,7 +1035,8 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
             if( other->m_End!=via->GetPosition() && via->HitTest( other->m_Start ) && !other->start )
             {
                 TRACK* newTrack = other->Copy();
-                newTrack->Insert( pcb, other );
+
+                pcb->m_Track.Insert( newTrack, other->Next() );
 
                 newTrack->m_End = via->GetPosition();
 
@@ -1061,7 +1058,8 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
             else if( other->m_Start!=via->GetPosition() && via->HitTest( other->m_End ) && !other->end )
             {
                 TRACK* newTrack = other->Copy();
-                newTrack->Insert( pcb, other );
+
+                pcb->m_Track.Insert( newTrack, other->Next() );
 
                 newTrack->m_Start = via->GetPosition();
 
@@ -1111,13 +1109,13 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
         D_PAD*          pad;
 
         ii++;
-        percent = (100 * ii) / frame->m_Pcb->m_NbSegmTrack;
+        percent = (100 * ii) / frame->m_Pcb->m_Track.GetCount();
         if( percent != oldpercent )
         {
             frame->DisplayActivity( percent, _( "Pads: " ) );
             oldpercent = percent;
 
-            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_NbSegmTrack );
+            msg.Printf( wxT( "%d" ), frame->m_Pcb->m_Track.GetCount() );
             Affiche_1_Parametre( frame, POS_AFF_MAX, _( "Max" ), msg, GREEN );
 
             msg.Printf( wxT( "%d" ), ii );
@@ -1137,7 +1135,8 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
                                             NULL, START ) == NULL )
                 {
                     TRACK* newTrack = segment->Copy();
-                    newTrack->Insert( frame->m_Pcb, segment );
+
+                    frame->m_Pcb->m_Track.Insert( newTrack, segment->Next() );
 
                     newTrack->m_End = pad->m_Pos;
 
@@ -1162,7 +1161,8 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
                                             NULL, END ) == NULL )
                 {
                     TRACK* newTrack = segment->Copy();
-                    newTrack->Insert( frame->m_Pcb, segment );
+
+                    frame->m_Pcb->m_Track.Insert( newTrack, segment->Next() );
 
                     newTrack->m_Start = pad->m_Pos;
 

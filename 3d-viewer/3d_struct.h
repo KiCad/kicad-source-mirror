@@ -70,7 +70,7 @@ public:
 
 public:
 
-    Struct3D_Master( EDA_BaseStruct * StructFather );
+    Struct3D_Master( EDA_BaseStruct * aParent );
     ~Struct3D_Master();
 
     Struct3D_Master* Next() const { return (Struct3D_Master*) Pnext; }
@@ -105,7 +105,7 @@ public:
 
 public:
 
-    Struct3D_Shape( EDA_BaseStruct * StructFather );
+    Struct3D_Shape( EDA_BaseStruct * aParent );
     ~Struct3D_Shape();
 
     Struct3D_Shape* Next() const { return (Struct3D_Shape*) Pnext; }

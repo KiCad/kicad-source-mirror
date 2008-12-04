@@ -36,86 +36,86 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // there are some restrictions on the order of items in the general case.
     // all items in m_Drawings for instance should be contiguous.
     //  *** all items in a same list (shown here) must be contiguous ****
-    TYPEMARKER,                 // in m_markers
-    TYPETEXTE,                  // in m_Drawings
-    TYPEDRAWSEGMENT,            // in m_Drawings
-    TYPECOTATION,               // in m_Drawings
-    TYPEMIRE,                   // in m_Drawings
-    TYPEVIA,                    // in m_Tracks
-    TYPETRACK,                  // in m_Tracks
-    TYPEPAD,                    // in modules
-    TYPETEXTEMODULE,            // in modules
-    TYPEMODULE,                 // in m_Modules
-    TYPEZONE,                   // in m_Zones
-    TYPEZONE_CONTAINER,         // in m_ZoneDescriptorList
+    TYPE_MARKER,                 // in m_markers
+    TYPE_TEXTE,                  // in m_Drawings
+    TYPE_DRAWSEGMENT,            // in m_Drawings
+    TYPE_COTATION,               // in m_Drawings
+    TYPE_MIRE,                   // in m_Drawings
+    TYPE_VIA,                    // in m_Tracks
+    TYPE_TRACK,                  // in m_Tracks
+    TYPE_PAD,                    // in modules
+    TYPE_TEXTE_MODULE,            // in modules
+    TYPE_MODULE,                 // in m_Modules
+    TYPE_ZONE,                   // in m_Zones
+    TYPE_ZONE_CONTAINER,         // in m_ZoneDescriptorList
     EOT
 };
 
 
 /*
   * const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
-  * TYPETEXTE,
-  * TYPEDRAWSEGMENT,
-  * TYPECOTATION,
-  * TYPEVIA,
-  * TYPETRACK,
-  * TYPEMODULE,
+  * TYPE_TEXTE,
+  * TYPE_DRAWSEGMENT,
+  * TYPE_COTATION,
+  * TYPE_VIA,
+  * TYPE_TRACK,
+  * TYPE_MODULE,
   * EOT
   * };
  */
 
 
 const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
-    TYPEMARKER,
-    TYPETEXTE,
-    TYPEDRAWSEGMENT,
-    TYPECOTATION,
-    TYPEMIRE,
-    TYPEVIA,
-    TYPETRACK,
-    TYPEPAD,
-    TYPETEXTEMODULE,
-    TYPEMODULE,
-    TYPEZONE_CONTAINER,         // if it is visible on screen, it should be selectable
+    TYPE_MARKER,
+    TYPE_TEXTE,
+    TYPE_DRAWSEGMENT,
+    TYPE_COTATION,
+    TYPE_MIRE,
+    TYPE_VIA,
+    TYPE_TRACK,
+    TYPE_PAD,
+    TYPE_TEXTE_MODULE,
+    TYPE_MODULE,
+    TYPE_ZONE_CONTAINER,         // if it is visible on screen, it should be selectable
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
-    TYPEMODULE,
+    TYPE_MODULE,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
-    TYPEPAD,
-    TYPEMODULE,
+    TYPE_PAD,
+    TYPE_MODULE,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::PadsTracksOrZones[] = {
-    TYPEPAD,
-    TYPEVIA,
-    TYPETRACK,
-    TYPEZONE,
-    TYPEZONE_CONTAINER,
+    TYPE_PAD,
+    TYPE_VIA,
+    TYPE_TRACK,
+    TYPE_ZONE,
+    TYPE_ZONE_CONTAINER,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
-    TYPETEXTEMODULE,
-    TYPEEDGEMODULE,
-    TYPEPAD,
-    TYPEMODULE,
+    TYPE_TEXTE_MODULE,
+    TYPE_EDGE_MODULE,
+    TYPE_PAD,
+    TYPE_MODULE,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
-    TYPETRACK,
-    TYPEVIA,
+    TYPE_TRACK,
+    TYPE_VIA,
     EOT
 };
 
@@ -142,7 +142,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
     switch( item->Type() )
     {
-    case TYPEPAD:
+    case TYPE_PAD:
     {
         MODULE* m = (MODULE*) item->GetParent();
         if( m->GetReference() == wxT( "Y2" ) )
@@ -152,31 +152,31 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     }
         break;
 
-    case TYPEVIA:
+    case TYPE_VIA:
         breakhere++;
         break;
 
-    case TYPETRACK:
+    case TYPE_TRACK:
         breakhere++;
         break;
 
-    case TYPEZONE:
+    case TYPE_ZONE:
         breakhere++;
         break;
 
-    case TYPETEXTE:
+    case TYPE_TEXTE:
         breakhere++;
         break;
 
-    case TYPEDRAWSEGMENT:
+    case TYPE_DRAWSEGMENT:
         breakhere++;
         break;
 
-    case TYPECOTATION:
+    case TYPE_COTATION:
         breakhere++;
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
     {
         TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
         if( tm->m_Text == wxT( "10uH" ) )
@@ -186,7 +186,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     }
         break;
 
-    case TYPEMODULE:
+    case TYPE_MODULE:
     {
         MODULE* m = (MODULE*) item;
         if( m->GetReference() == wxT( "C98" ) )
@@ -206,7 +206,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
     switch( item->Type() )
     {
-    case TYPEPAD:
+    case TYPE_PAD:
 
         // if pad is a thru hole, then it can be visible when its parent module is not.
         if( ( (D_PAD*) item )->m_Attribut != PAD_SMD )    // a hole is present, so multiple layers
@@ -219,31 +219,31 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
             module = (MODULE*) item->GetParent();
         break;
 
-    case TYPEVIA:
+    case TYPE_VIA:
         break;
 
-    case TYPETRACK:
+    case TYPE_TRACK:
         break;
 
-    case TYPEZONE:
+    case TYPE_ZONE:
         break;
 
-    case TYPEZONE_CONTAINER:
+    case TYPE_ZONE_CONTAINER:
         break;
 
-    case TYPETEXTE:
+    case TYPE_TEXTE:
         break;
 
-    case TYPEDRAWSEGMENT:
+    case TYPE_DRAWSEGMENT:
         break;
 
-    case TYPECOTATION:
+    case TYPE_COTATION:
         break;
 
-    case TYPEMIRE:
+    case TYPE_MIRE:
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
         module = (MODULE*) item->GetParent();
 
         if( m_Guide->IgnoreMTextsMarkedNoShow() && ( (TEXTE_MODULE*) item )->m_NoShow )
@@ -259,7 +259,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         }
         break;
 
-    case TYPEMODULE:
+    case TYPE_MODULE:
         module = (MODULE*) item;
         break;
 
@@ -269,7 +269,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
     // common tests:
 
-    if( module )    // true from case TYPEPAD, TYPETEXTEMODULE, or TYPEMODULE
+    if( module )    // true from case TYPE_PAD, TYPE_TEXTE_MODULE, or TYPE_MODULE
     {
         if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==COPPER_LAYER_N )
             goto exit;

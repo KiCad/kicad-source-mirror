@@ -28,7 +28,7 @@
 
 /* Constructeur de TEXTE_MODULE */
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    BOARD_ITEM( parent, TYPETEXTEMODULE )
+    BOARD_ITEM( parent, TYPE_TEXTE_MODULE )
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -43,7 +43,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Unused = 0;
 
     SetLayer( SILKSCREEN_N_CMP );
-    if( Module && (Module->Type() == TYPEMODULE) )
+    if( Module && (Module->Type() == TYPE_MODULE) )
     {
         m_Pos = Module->m_Pos;
 
@@ -202,33 +202,6 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
     m_Width = source->m_Width;
 
     m_Text = source->m_Text;
-}
-
-
-/* Remove this from the linked list
- * Update Pback and Pnext pointers
- */
-void TEXTE_MODULE::UnLink()
-{
-    /* Modification du chainage arriere */
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEMODULE )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (MODULE*) Back() )->m_Drawings = Next();
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
 }
 
 

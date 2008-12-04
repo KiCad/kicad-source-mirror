@@ -51,15 +51,13 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
 
         DrawFrame->SetStatusText( msg, 0 );
 
-        if( DrawFrame->m_Pcb->m_Modules )
+        if( DrawFrame->m_Pcb->m_Modules.GetCount() )
         {
             // there is only one module in the list
-            DrawFrame->m_Pcb->m_Modules->DeleteStructure();
-
-            DrawFrame->m_Pcb->m_Modules = NULL;
+            DrawFrame->m_Pcb->m_Modules.DeleteAll();
         }
 
-        DrawFrame->m_Pcb->m_Modules = DrawFrame->Get_Module( FootprintName );
+        DrawFrame->m_Pcb->m_Modules.PushBack( DrawFrame->Get_Module( FootprintName ) );
 
         DrawFrame->Zoom_Automatique( FALSE );
         if( DrawFrame->m_Draw3DFrame )

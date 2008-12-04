@@ -511,7 +511,7 @@ public:
     bool				MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
     void                Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void                SwitchLayer( wxDC* DC, int layer );
-    int                 Add_45_degrees_Segment( wxDC* DC, TRACK* pt_segm );
+    bool                Add_45_degrees_Segment( wxDC* DC );
     bool                Genere_Pad_Connexion( wxDC* DC, int layer );
 
     // zone handling

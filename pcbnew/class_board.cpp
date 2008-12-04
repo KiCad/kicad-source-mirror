@@ -30,30 +30,20 @@ void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 
 /* Constructor */
 BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
-    BOARD_ITEM( (BOARD_ITEM*) parent, TYPEPCB )
+    BOARD_ITEM( (BOARD_ITEM*) parent, TYPE_PCB )
 {
     m_PcbFrame   = frame;
     m_Status_Pcb = 0;                   // Mot d'etat: Bit 1 = Chevelu calcule
-    m_NbNets = 0;                       // Nombre de nets (equipotentielles)
     m_BoardSettings = &g_DesignSettings;
-    m_NbPads  = 0;                      // nombre total de pads
     m_NbNodes = 0;                      // nombre de pads connectes
     m_NbLinks = 0;                      // nombre de chevelus (donc aussi nombre
                                         // minimal de pistes a tracer
-    m_NbSegmTrack = 0;                  // nombre d'elements de type segments de piste
-    m_NbSegmZone  = 0;                  // nombre d'elements de type segments de zone
     m_NbNoconnect = 0;                  // nombre de chevelus actifs
     m_NbLoclinks  = 0;                  // nb ratsnest local
 
-    m_Drawings = NULL;                  // pointeur sur liste drawings
-    m_Modules  = NULL;                  // pointeur sur liste zone modules
-    m_Equipots = NULL;                  // pointeur liste zone equipot
-    m_Track    = NULL;                  // pointeur relatif zone piste
-    m_Zone             = NULL;          // pointeur tableau zone zones de cuivre
-    m_Pads             = NULL;          // pointeur liste d'acces aux pads
     m_Ratsnest         = NULL;          // pointeur liste rats
     m_LocalRatsnest    = NULL;          // pointeur liste rats local
-    m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour currently in progress
+    m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour cuurently in progress
                                         // de determination des contours de zone
 
     for( int layer=0; layer<NB_COPPER_LAYERS;  ++layer )
@@ -69,30 +59,11 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 /***************/
 BOARD::~BOARD()
 {
-    m_Drawings->DeleteStructList();
-    m_Drawings = 0;
-
-    m_Modules->DeleteStructList();
-    m_Modules = 0;
-
-    m_Equipots->DeleteStructList();
-    m_Equipots = 0;
-
-    m_Track->DeleteStructList();
-    m_Track = 0;
-
-    m_Zone->DeleteStructList();
-    m_Zone = 0;
-    
     while ( m_ZoneDescriptorList.size() )
     {
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
         Delete( area_to_remove );
     }
-
-
-    MyFree( m_Pads );
-    m_Pads = 0;
 
     MyFree( m_Ratsnest );
     m_Ratsnest = 0;
@@ -226,7 +197,7 @@ void BOARD::UnLink()
     /* Update back link */
     if( Back() )
     {
-        if( Back()->Type() == TYPEPCB )
+        if( Back()->Type() == TYPE_PCB )
         {
             Back()->SetNext( Next() );
         }
@@ -252,47 +223,59 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     switch( aBoardItem->Type() )
     {
     // this one uses a vector
-    case TYPEMARKER:
+    case TYPE_MARKER:
         aBoardItem->SetParent( this );
         m_markers.push_back( (MARKER*) aBoardItem );
         break;
 
     // this one uses a vector
-    case TYPEZONE_CONTAINER:
+    case TYPE_ZONE_CONTAINER:
         aBoardItem->SetParent( this );
         m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
         break;
 
-    case TYPETRACK:
-    case TYPEVIA:
+    case TYPE_TRACK:
+    case TYPE_VIA:
         {
             TRACK* insertAid = ((TRACK*)aBoardItem)->GetBestInsertPoint( this );
-            ((TRACK*)aBoardItem)->Insert( this, insertAid );
+            m_Track.Insert( (TRACK*)aBoardItem, insertAid );
         }
         break;
 
-    case TYPEZONE:
-        {   // Add item to head of list (starting in m_Zone)
-            aBoardItem->SetParent( this );
-            aBoardItem->SetBack( this );        // item will be the first item: back chain to the board
-            BOARD_ITEM* next_item = m_Zone;     // Remember old the first item
-            aBoardItem->SetNext( next_item );   // Chain the new one ton the old item
-            if( next_item )                     // Back chain the old item to the new one
-                next_item->SetBack( aBoardItem );
-            m_Zone = (SEGZONE*) aBoardItem;     // Add to head of list
-        }
+    case TYPE_ZONE:
+        if( aControl & ADD_APPEND )
+            m_Zone.PushBack( (SEGZONE*) aBoardItem );
+        else
+            m_Zone.PushFront( (SEGZONE*) aBoardItem );
+        aBoardItem->SetParent( this );
         break;
 
-   case TYPEMODULE:
-        // this is an insert, not an append which may also be needed.
-        {
-            aBoardItem->SetBack( this );
-            BOARD_ITEM* next = m_Modules;
-            aBoardItem->SetNext( next );
-            if( next )
-                next->SetBack( aBoardItem );
-            m_Modules = (MODULE*) aBoardItem;
-        }
+    case TYPE_MODULE:
+        if( aControl & ADD_APPEND )
+            m_Modules.PushBack( (MODULE*) aBoardItem );
+        else
+            m_Modules.PushFront( (MODULE*) aBoardItem );
+        aBoardItem->SetParent( this );
+        break;
+
+    case TYPE_COTATION:
+    case TYPE_DRAWSEGMENT:
+    case TYPE_TEXTE:
+    case TYPE_EDGE_MODULE:
+    case TYPE_MIRE:
+        if( aControl & ADD_APPEND )
+            m_Drawings.PushBack( aBoardItem );
+        else
+            m_Drawings.PushFront( aBoardItem );
+        aBoardItem->SetParent( this );
+        break;
+
+    case TYPE_EQUIPOT:
+        if( aControl & ADD_APPEND )
+            m_Equipots.PushBack( (EQUIPOT*) aBoardItem );
+        else
+            m_Equipots.PushFront( (EQUIPOT*) aBoardItem );
+        aBoardItem->SetParent( this );
         break;
 
     // other types may use linked list
@@ -308,7 +291,7 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
 
     switch( aBoardItem->Type() )
     {
-    case TYPEMARKER:    // this one uses a vector
+    case TYPE_MARKER:    // this one uses a vector
         // find the item in the vector, then delete then erase it.
         for( unsigned i=0;  i<m_markers.size();  ++i )
         {
@@ -320,7 +303,7 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
         }
         break;
 
-    case TYPEZONE_CONTAINER:    // this one uses a vector
+    case TYPE_ZONE_CONTAINER:    // this one uses a vector
         // find the item in the vector, then delete then erase it.
         for( unsigned i=0;  i<m_ZoneDescriptorList.size();  ++i )
         {
@@ -372,28 +355,14 @@ void BOARD::DeleteZONEOutlines()
 /* Calculate the track segment count */
 int BOARD::GetNumSegmTrack()
 {
-    TRACK* CurTrack = m_Track;
-    int    ii = 0;
-
-    for( ; CurTrack != NULL; CurTrack = CurTrack->Next() )
-        ii++;
-
-    m_NbSegmTrack = ii;
-    return ii;
+    return m_Track.GetCount();
 }
 
 
 /* Calculate the zone segment count */
 int BOARD::GetNumSegmZone()
 {
-    TRACK* CurTrack = m_Zone;
-    int    ii = 0;
-
-    for( ; CurTrack != NULL; CurTrack = CurTrack->Next() )
-        ii++;
-
-    m_NbSegmZone = ii;
-    return ii;
+    return m_Zone.GetCount();
 }
 
 
@@ -435,7 +404,7 @@ bool BOARD::ComputeBoundaryBox()
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;
 
         ptr = (DRAWSEGMENT*) PtStruct;
@@ -560,13 +529,13 @@ void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
-    txt.Printf( wxT( "%d" ), m_NbPads );
+    txt.Printf( wxT( "%d" ), m_Pads.size() );
     Affiche_1_Parametre( frame, POS_AFF_NBPADS, _( "Pads" ), txt, DARKGREEN );
 
     int  nb_vias = 0;
     for( BOARD_ITEM* item = m_Track;  item;  item = item->Next() )
     {
-        if( item->Type() == TYPEVIA )
+        if( item->Type() == TYPE_VIA )
             nb_vias++;
     }
 
@@ -579,7 +548,7 @@ void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
     txt.Printf( wxT( "%d" ), m_NbLinks );
     Affiche_1_Parametre( frame, POS_AFF_NBLINKS, _( "Links" ), txt, DARKGREEN );
 
-    txt.Printf( wxT( "%d" ), m_NbNets );
+    txt.Printf( wxT( "%d" ), m_Equipots.GetCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBNETS, _( "Nets" ), txt, RED );
 
     txt.Printf( wxT( "%d" ), m_NbLinks - GetNumNoconnect() );
@@ -608,7 +577,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         stype = *p;
         switch( stype )
         {
-        case TYPEPCB:
+        case TYPE_PCB:
             result = inspector->Inspect( this, testData );  // inspect me
             // skip over any types handled in the above call.
             ++p;
@@ -621,10 +590,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             IterateForward( m_Modules, ... ) call.
         */
 
-        case TYPEMODULE:
-        case TYPEPAD:
-        case TYPETEXTEMODULE:
-        case TYPEEDGEMODULE:
+        case TYPE_MODULE:
+        case TYPE_PAD:
+        case TYPE_TEXTE_MODULE:
+        case TYPE_EDGE_MODULE:
             // this calls MODULE::Visit() on each module.
             result = IterateForward( m_Modules, inspector, testData, p );
             // skip over any types handled in the above call.
@@ -632,10 +601,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             {
                 switch( stype = *++p )
                 {
-                case TYPEMODULE:
-                case TYPEPAD:
-                case TYPETEXTEMODULE:
-                case TYPEEDGEMODULE:
+                case TYPE_MODULE:
+                case TYPE_PAD:
+                case TYPE_TEXTE_MODULE:
+                case TYPE_EDGE_MODULE:
                     continue;
                 default:;
                 }
@@ -643,20 +612,20 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             }
             break;
 
-        case TYPEDRAWSEGMENT:
-        case TYPETEXTE:
-        case TYPECOTATION:
-        case TYPEMIRE:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_TEXTE:
+        case TYPE_COTATION:
+        case TYPE_MIRE:
             result = IterateForward( m_Drawings, inspector, testData, p );
             // skip over any types handled in the above call.
             for(;;)
             {
                 switch( stype = *++p )
                 {
-                case TYPEDRAWSEGMENT:
-                case TYPETEXTE:
-                case TYPECOTATION:
-                case TYPEMIRE:
+                case TYPE_DRAWSEGMENT:
+                case TYPE_TEXTE:
+                case TYPE_COTATION:
+                case TYPE_MIRE:
                     continue;
                 default:;
                 }
@@ -678,16 +647,16 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         // Usually, because of this sort, a connected item (if exists) is found.
         // If not found (and only in this case) an exhaustive (and time consumming) search is made,
         // but this case is statistically rare.
-        case TYPEVIA:
-        case TYPETRACK:
+        case TYPE_VIA:
+        case TYPE_TRACK:
             result = IterateForward( m_Track, inspector, testData, p );
             // skip over any types handled in the above call.
             for(;;)
             {
                 switch( stype = *++p )
                 {
-                case TYPEVIA:
-                case TYPETRACK:
+                case TYPE_VIA:
+                case TYPE_TRACK:
                     continue;
                 default:;
                 }
@@ -695,18 +664,18 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             }
             break;
 #else
-        case TYPEVIA:
+        case TYPE_VIA:
             result = IterateForward( m_Track, inspector, testData, p );
             ++p;
             break;
 
-        case TYPETRACK:
+        case TYPE_TRACK:
             result = IterateForward( m_Track, inspector, testData, p );
             ++p;
             break;
 #endif
 
-        case TYPEMARKER:
+        case TYPE_MARKER:
             // MARKERS are in the m_markers std::vector
             for( unsigned i=0;  i<m_markers.size();  ++i )
             {
@@ -717,8 +686,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 
-        case TYPEZONE_CONTAINER:
-            // TYPEZONE_CONTAINER are in the m_ZoneDescriptorList std::vector
+        case TYPE_ZONE_CONTAINER:
+            // TYPE_ZONE_CONTAINER are in the m_ZoneDescriptorList std::vector
             for( unsigned i=0;  i< m_ZoneDescriptorList.size();  ++i )
             {
                 result = m_ZoneDescriptorList[i]->Visit( inspector, testData, p );
@@ -728,17 +697,17 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 
-        case PCB_EQUIPOT_STRUCT_TYPE:
+        case TYPE_EQUIPOT:
             result = IterateForward( m_Equipots, inspector, testData, p );
             ++p;
             break;
 
-        case TYPEZONE:
+        case TYPE_ZONE:
             result = IterateForward( m_Zone, inspector, testData, p );
             ++p;
             break;
 
-        case TYPEZONE_UNUSED:	// Unused type
+        case TYPE_ZONE_UNUSED:	// Unused type
             break;
 
         default:        // catch EOT or ANY OTHER type here and return.
@@ -775,7 +744,7 @@ BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
             BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
             const wxPoint&  refPos = *(const wxPoint*) testData;
 
-            if( item->Type() == TYPEPAD )
+            if( item->Type() == TYPE_PAD )
             {
                 D_PAD*  pad = (D_PAD*) item;
                 if( pad->HitTest( refPos ) )
@@ -794,7 +763,7 @@ BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
                 }
             }
 
-            else if( item->Type() == TYPEMODULE )
+            else if( item->Type() == TYPE_MODULE )
             {
                 MODULE* module = (MODULE*) item;
 
@@ -823,7 +792,7 @@ BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
     PadOrModule inspector( layer );
 
     // search only for PADs first, then MODULES, and preferably a layer match
-    static const KICAD_T scanTypes[] = { TYPEPAD, TYPEMODULE, EOT };
+    static const KICAD_T scanTypes[] = { TYPE_PAD, TYPE_MODULE, EOT };
 
     // visit this BOARD with the above inspector
     Visit( &inspector, &refPos, scanTypes );
@@ -900,7 +869,7 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
     } inspector;
 
     // search only for MODULES
-    static const KICAD_T scanTypes[] = { TYPEMODULE, EOT };
+    static const KICAD_T scanTypes[] = { TYPE_MODULE, EOT };
 
     // visit this BOARD with the above inspector
     BOARD* nonconstMe = (BOARD*) this;
@@ -1008,10 +977,10 @@ bool BOARD::Save( FILE* aFile ) const
     {
         switch( item->Type() )
         {
-        case TYPETEXTE:
-        case TYPEDRAWSEGMENT:
-        case TYPEMIRE:
-        case TYPECOTATION:
+        case TYPE_TEXTE:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_MIRE:
+        case TYPE_COTATION:
             if( !item->Save( aFile ) )
                 goto out;
             break;

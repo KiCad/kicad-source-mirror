@@ -458,7 +458,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
 
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             DrawSegm = (DRAWSEGMENT*) PtStruct;
             if( DrawSegm->GetLayer() != EDGE_N )
                 break;
@@ -471,7 +471,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
             TraceSegmentPcb( m_Pcb, &TmpSegm, HOLE | CELL_is_EDGE, g_GridRoutingSize, WRITE_CELL );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
         default:
             break;
         }
@@ -919,7 +919,7 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
 
 /********************************************/
-void Build_PlacedPads_List( BOARD* Pcb )
+void Build_PlacedPads_List( BOARD* aPcb )
 /********************************************/
 
 /*
@@ -937,57 +937,29 @@ void Build_PlacedPads_List( BOARD* Pcb )
  *  m_Status_Pcb |= LISTE_PAD_OK
  */
 {
-    LISTE_PAD* pt_liste_pad;
-    MODULE*    Module;
-    D_PAD*     PtPad;
+    aPcb->m_Pads.clear();
 
-    if( Pcb->m_Pads )
-        MyFree( Pcb->m_Pads );
+    aPcb->m_NbNodes = 0;
 
-    pt_liste_pad  = Pcb->m_Pads = NULL;
-    Pcb->m_NbPads = Pcb->m_NbNodes = 0;
-
-    /* Calcul du nombre de pads utiles */
-    Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
+    // Initialisation du buffer et des variables de travail
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        if( Module->m_ModuleStatus & MODULE_to_PLACE )
+        if( module->m_ModuleStatus & MODULE_to_PLACE )
             continue;
-        PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = PtPad->Next() )
+
+        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
         {
-            Pcb->m_NbPads++;
+            aPcb->m_Pads.push_back( pad );
+            pad->SetSubNet( 0 );
+            pad->SetSubRatsnest( 0 );
+            pad->SetParent( module );
+            if( pad->GetNet() )
+                aPcb->m_NbNodes++;
         }
     }
 
-    /* Allocation memoire du buffer */
-    if( Pcb->m_NbPads > 0 )
-    {
-        pt_liste_pad   = Pcb->m_Pads
-                         = (D_PAD**) MyMalloc( Pcb->m_NbPads * sizeof(D_PAD *) );
-    }
-
-    /* Initialisation du buffer et des variables de travail */
-    Module = Pcb->m_Modules;
-    for( ; (Module != NULL) && (pt_liste_pad != NULL); Module = Module->Next() )
-    {
-        if( Module->m_ModuleStatus & MODULE_to_PLACE )
-            continue;
-        PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = PtPad->Next() )
-        {
-            *pt_liste_pad = PtPad;
-            PtPad->SetSubNet( 0 );
-            PtPad->SetSubRatsnest( 0 );
-            PtPad->SetParent( Module );
-            if( PtPad->GetNet() )
-                Pcb->m_NbNodes++;
-            pt_liste_pad++;
-        }
-    }
-
-    Pcb->m_Status_Pcb |= LISTE_PAD_OK;
-    Pcb->m_Status_Pcb &= ~(LISTE_CHEVELU_OK | CHEVELU_LOCAL_OK);
+    aPcb->m_Status_Pcb |= LISTE_PAD_OK;
+    aPcb->m_Status_Pcb &= ~(LISTE_CHEVELU_OK | CHEVELU_LOCAL_OK);
     adr_lowmem = buf_work;
 }
 
@@ -1217,7 +1189,7 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;
         succes = TRUE;
         ptr    = (DRAWSEGMENT*) PtStruct;

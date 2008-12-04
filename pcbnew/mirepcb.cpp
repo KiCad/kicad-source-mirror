@@ -208,12 +208,7 @@ MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
 {
     MIREPCB* MirePcb = new MIREPCB( m_Pcb );
 
-    MirePcb->SetNext( m_Pcb->m_Drawings );
-    MirePcb->SetBack( m_Pcb );
-
-    if( m_Pcb->m_Drawings )
-        m_Pcb->m_Drawings->SetBack( MirePcb );
-    m_Pcb->m_Drawings = MirePcb;
+    m_Pcb->Add( MirePcb );
 
     MirePcb->SetLayer( EDGE_N );
     MirePcb->m_Width = g_DesignSettings.m_EdgeSegmentWidth;

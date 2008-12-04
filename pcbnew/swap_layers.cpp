@@ -336,7 +336,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         GetScreen()->SetModify();
-        if( pt_segm->Type() == TYPEVIA )
+        if( pt_segm->Type() == TYPE_VIA )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
             if( Via->Shape() == VIA_THROUGH )
@@ -370,7 +370,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() == TYPEDRAWSEGMENT )
+        if( PtStruct->Type() == TYPE_DRAWSEGMENT )
         {
             GetScreen()->SetModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;

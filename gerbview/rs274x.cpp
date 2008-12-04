@@ -309,16 +309,28 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
 
     case IMAGE_POLARITY:
         if( strnicmp( text, "NEG", 3 ) == 0 )
+        {
+            D(printf("%s: m_ImageNegative=true\n", __func__);)
             m_ImageNegative = TRUE;
+        }
         else
+        {
+            D(printf("%s: m_ImageNegative=false\n", __func__);)
             m_ImageNegative = FALSE;
+        }
         break;
 
     case LAYER_POLARITY:
         if( *text == 'C' )
+        {
+            D(printf("%s: m_LayerNegative=true\n", __func__);)
             m_LayerNegative = TRUE;
+        }
         else
+        {
+            D(printf("%s: m_LayerNegative=false\n", __func__);)
             m_LayerNegative = FALSE;
+        }
         break;
 
     case INCLUDE_FILE:

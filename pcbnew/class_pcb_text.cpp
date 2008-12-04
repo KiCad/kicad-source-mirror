@@ -16,7 +16,7 @@
 /*******************/
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
-    BOARD_ITEM( parent, TYPETEXTE ),
+    BOARD_ITEM( parent, TYPE_TEXTE ),
     EDA_TextStruct()
 {
 }
@@ -45,30 +45,6 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_VJustify  = source->m_VJustify;
 
     m_Text = source->m_Text;
-}
-
-
-void TEXTE_PCB::UnLink()
-{
-    /* Modification du chainage arriere */
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (BOARD*) Back() )->m_Drawings = Next();
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
 }
 
 
@@ -175,7 +151,7 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
     BOARD_ITEM* parent = (BOARD_ITEM*) m_Parent;
     wxASSERT( parent );
 
-    if( parent->Type() == TYPECOTATION )
+    if( parent->Type() == TYPE_COTATION )
         board = (BOARD*) parent->GetParent();
     else
         board = (BOARD*) parent;
@@ -183,7 +159,7 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
-    if( m_Parent && m_Parent->Type() == TYPECOTATION )
+    if( m_Parent && m_Parent->Type() == TYPE_COTATION )
         Affiche_1_Parametre( frame, 1, _( "COTATION" ), m_Text, DARKGREEN );
     else
         Affiche_1_Parametre( frame, 1, _( "PCB Text" ), m_Text, DARKGREEN );

@@ -55,29 +55,19 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
     if( Track->m_Flags & IS_NEW )  // Trace en cours, on peut effacer le dernier segment
     {
-        if( g_TrackSegmentCount > 0 )
+        if( g_CurrentTrackList.GetCount() > 0 )
         {
             // modification du trace
-            Track = g_CurrentTrackSegment;
-            g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
+            delete g_CurrentTrackList.PopBack();
 
-            delete Track;
-
-            g_TrackSegmentCount--;
-
-            if( g_TrackSegmentCount && (g_CurrentTrackSegment->Type() == TYPEVIA) )
+            if( g_CurrentTrackList.GetCount() && g_CurrentTrackSegment->Type() == TYPE_VIA )
             {
-                Track = g_CurrentTrackSegment;
-                g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
-                delete Track;
-                g_TrackSegmentCount--;
+                delete g_CurrentTrackList.PopBack();
             }
-            if( g_CurrentTrackSegment )
-                g_CurrentTrackSegment->SetNext( NULL );
 
             Affiche_Status_Box();
 
-            if( g_TrackSegmentCount == 0 )
+            if( g_CurrentTrackList.GetCount() == 0 )
             {
                 DrawPanel->ManageCurseur = NULL;
                 DrawPanel->ForceCloseManageCurseur = NULL;

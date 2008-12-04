@@ -290,7 +290,6 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
  * @param aPromptBeforeDeleting : if true: ask for confirmation before deleting
  */
 {
-    EDA_BaseStruct* PtBack, * PtNext;
     wxString        msg;
 
     /* Si l'empreinte est selectee , on ne peut pas l'effacer ! */
@@ -318,20 +317,6 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
      */
     if( g_Show_Ratsnest )
         DrawGeneralRatsnest( DC );
-
-    /* Suppression du chainage */
-    PtBack = module->Back();
-    PtNext = module->Next();
-    if( PtBack == (EDA_BaseStruct*) m_Pcb )
-    {
-        m_Pcb->m_Modules = (MODULE*) PtNext;
-    }
-    else
-    {
-        PtBack->SetNext( PtNext );
-    }
-    if( PtNext )
-        PtNext->SetBack( PtBack );
 
     /* Sauvegarde en buffer des undelete */
     SaveItemEfface( module, 1 );
@@ -473,7 +458,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     {
         switch( PtStruct->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             pt_edgmod = (EDGE_MODULE*) PtStruct;
             pt_edgmod->m_Start.y -= Module->m_Pos.y;
             pt_edgmod->m_Start.y  = -pt_edgmod->m_Start.y;
@@ -492,7 +477,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
             pt_edgmod->SetLayer( ChangeSideNumLayer( pt_edgmod->GetLayer() ) );
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             /* Inversion miroir de la position et mise en miroir : */
             pt_texte = (TEXTE_MODULE*) PtStruct;
             pt_texte->m_Pos.y -= Module->m_Pos.y;

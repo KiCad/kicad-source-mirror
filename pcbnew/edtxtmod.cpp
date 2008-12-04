@@ -38,12 +38,8 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
     Text = new TEXTE_MODULE( Module );
 
     /* Chainage de la nouvelle structure en tete de liste drawings */
-    Text->SetNext( Module->m_Drawings );
-    Text->SetBack( Module );
+    Module->m_Drawings.PushFront( Text );
 
-    if( Module->m_Drawings )
-        Module->m_Drawings->SetBack( Text );
-    Module->m_Drawings = Text;
     Text->m_Flags = IS_NEW;
 
     Text->m_Text = wxT( "text" );

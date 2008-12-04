@@ -36,6 +36,8 @@ wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
 }
 
 
+#if !defined(GERBVIEW)
+
 /********************************************************/
 wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 /********************************************************/
@@ -53,17 +55,17 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 
     switch( item->Type() )
     {
-    case PCB_EQUIPOT_STRUCT_TYPE:
+    case TYPE_EQUIPOT:
         text << _( "Net" ) << ( (EQUIPOT*) item )->m_Netname << wxT( " " ) <<
         ( (EQUIPOT*) item )->GetNet();
         break;
 
-    case TYPEMODULE:
+    case TYPE_MODULE:
         text << _( "Footprint" ) << wxT( " " ) << ( (MODULE*) item )->GetReference();
         text << wxT( " (" ) << aPcb->GetLayerName( item->m_Layer ).Trim() << wxT( ")" );
         break;
 
-    case TYPEPAD:
+    case TYPE_PAD:
         pad = (D_PAD *) this;
         text << _( "Pad" ) << wxT( " \"" ) << pad->ReturnStringPadName()
                 << wxT( "\" (" );
@@ -77,14 +79,14 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
         break;
 
-    case TYPEDRAWSEGMENT:
+    case TYPE_DRAWSEGMENT:
         text << _( "Pcb Graphic" ) << wxT(": ")
             << ShowShape( (Track_Shapes) ((DRAWSEGMENT*)item)->m_Shape )
             << wxChar(' ') << _("Length:") << valeur_param( (int) ((DRAWSEGMENT*)item)->GetLength(), temp )
             << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();
         break;
 
-    case TYPETEXTE:
+    case TYPE_TEXTE:
         text << _( "Pcb Text" ) << wxT( " " );;
         if( ( (TEXTE_PCB*) item )->m_Text.Len() < 12 )
             text << ( (TEXTE_PCB*) item )->m_Text;
@@ -93,7 +95,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
         switch( ( (TEXTE_MODULE*) item )->m_Type )
         {
         case TEXT_is_REFERENCE:
@@ -113,7 +115,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         }
         break;
 
-    case TYPEEDGEMODULE:
+    case TYPE_EDGE_MODULE:
         text << _( "Graphic" ) << wxT( " " );
         text << ShowShape( (Track_Shapes) ( (EDGE_MODULE*) item )->m_Shape );
         text << wxT( " (" ) << aPcb->GetLayerName( ((EDGE_MODULE*) item )->m_Layer ).Trim() << wxT( ")" );
@@ -121,7 +123,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
              << ( (MODULE*) GetParent() )->GetReference();
         break;
 
-    case TYPETRACK:
+    case TYPE_TRACK:
         // deleting tracks requires all the information we can get to
         // disambiguate all the choices under the cursor!
         text << _( "Track" ) << wxT( " " ) << ((TRACK*)item)->ShowWidth();
@@ -135,7 +137,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
              << wxT("  ") << _("Length:") << valeur_param( (int) ((TRACK*)item)->GetLength(), temp );
         break;
 
-    case TYPEZONE_CONTAINER:
+    case TYPE_ZONE_CONTAINER:
         text = _( "Zone Outline" );
         {
             ZONE_CONTAINER* area = (ZONE_CONTAINER*) this;
@@ -169,7 +171,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();
         break;
 
-    case TYPEZONE:
+    case TYPE_ZONE:
         text = _( "Zone" );
         text << wxT( " " );
         {
@@ -185,7 +187,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();
         break;
 
-    case TYPEVIA:
+    case TYPE_VIA:
         {
             SEGVIA* via = (SEGVIA*) item;
             text << _( "Via" ) << wxT( " " ) << via->ShowWidth();
@@ -216,23 +218,23 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         }
         break;
 
-    case TYPEMARKER:
+    case TYPE_MARKER:
         text << _( "Marker" ) << wxT( " @(" ) << ((MARKER*)item)->GetPos().x
              << wxT(",") << ((MARKER*)item)->GetPos().y << wxT(")");
         break;
 
-    case TYPECOTATION:
+    case TYPE_COTATION:
         text << _( "Dimension" ) << wxT( " \"" ) << ( (COTATION*) item )->GetText() << wxT( "\"" );
         break;
 
-    case TYPEMIRE:
+    case TYPE_MIRE:
         valeur_param( ((MIREPCB*)item)->m_Size, msg );
         text << _( "Target" ) << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim()
             << wxT( " " ) << _( "size" ) << wxT( " " ) << msg
             ;
         break;
 
-    case TYPEZONE_UNUSED:
+    case TYPE_ZONE_UNUSED:
         text << wxT( "Unused" );
         break;
 
@@ -258,60 +260,60 @@ const char** BOARD_ITEM::MenuIcon() const
 
     switch( item->Type() )
     {
-    case PCB_EQUIPOT_STRUCT_TYPE:
+    case TYPE_EQUIPOT:
         xpm = general_ratsnet_xpm;
         break;
 
-    case TYPEMODULE:
+    case TYPE_MODULE:
         xpm = module_xpm;
         break;
 
-    case TYPEPAD:
+    case TYPE_PAD:
         xpm = pad_xpm;
         break;
 
-    case TYPEDRAWSEGMENT:
+    case TYPE_DRAWSEGMENT:
         xpm = add_dashed_line_xpm;
         break;
 
-    case TYPETEXTE:
+    case TYPE_TEXTE:
         xpm = add_text_xpm;
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
         xpm = footprint_text_xpm;
         break;
 
-    case TYPEEDGEMODULE:
+    case TYPE_EDGE_MODULE:
         xpm = show_mod_edge_xpm;
         break;
 
-    case TYPETRACK:
+    case TYPE_TRACK:
         xpm = showtrack_xpm;
         break;
 
-    case TYPEZONE_CONTAINER:
-    case TYPEZONE:
+    case TYPE_ZONE_CONTAINER:
+    case TYPE_ZONE:
         xpm = add_zone_xpm;
         break;
 
-    case TYPEVIA:
+    case TYPE_VIA:
         xpm = pad_sketch_xpm;
         break;
 
-    case TYPEMARKER:
+    case TYPE_MARKER:
         xpm = pad_xpm;              // @todo: create and use marker xpm
         break;
 
-    case TYPECOTATION:
+    case TYPE_COTATION:
         xpm = add_cotation_xpm;
         break;
 
-    case TYPEMIRE:
+    case TYPE_MIRE:
         xpm = add_mires_xpm;
         break;
 
-    case TYPEZONE_UNUSED:
+    case TYPE_ZONE_UNUSED:
         xpm = 0;    // unused
         break;
 
@@ -321,5 +323,15 @@ const char** BOARD_ITEM::MenuIcon() const
     }
 
     return (const char**) xpm;
+}
+
+#endif  // !defined(GERBVIEW)
+
+void BOARD_ITEM::UnLink()
+{
+    DLIST<BOARD_ITEM>* list = (DLIST<BOARD_ITEM>*) GetList();
+    wxASSERT( list );
+    if( list )
+        list->Remove( this );
 }
 

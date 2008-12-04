@@ -48,15 +48,17 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     TRACK* NextS;
     int    ii;
 
-
     /* Erase the current drawings */
     wxPoint             oldpos = Panel->GetScreen()->m_Curseur;
 
     Panel->GetScreen()->m_Curseur = PosInit;
+
     if( Panel->ManageCurseur )
         Panel->ManageCurseur( Panel, DC, TRUE );
+
     Panel->GetScreen()->m_Curseur = oldpos;
     g_HightLigt_Status = FALSE;
+
     ( (WinEDA_PcbFrame*) Panel->m_Parent )->DrawHightLight( DC, g_HightLigth_NetCode );
 
     if( NewTrack )
@@ -67,7 +69,8 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
             {
                 if( NewTrack == NULL )
                     break;
-                NextS = (TRACK*) NewTrack->Next();
+
+                NextS = NewTrack->Next();
                 delete NewTrack;
             }
         }
@@ -76,14 +79,17 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
             TRACK* Track = NewTrack;
             int    dx    = s_LastPos.x - PosInit.x;
             int    dy    = s_LastPos.y - PosInit.y;
-            for( ii = 0; ii < NbPtNewTrack; ii++, Track = (TRACK*) Track->Next() )
+            for( ii = 0; ii < NbPtNewTrack; ii++, Track = Track->Next() )
             {
                 if( Track == NULL )
                     break;
+
                 Track->m_Start.x -= dx;
                 Track->m_Start.y -= dy;
+
                 Track->m_End.x   -= dx;
                 Track->m_End.y   -= dy;
+
                 Track->m_Flags    = 0;
             }
 
@@ -141,19 +147,25 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     /* set the new track coordinates */
     wxPoint Pos = screen->m_Curseur;
+
     dx = Pos.x - s_LastPos.x;
     dy = Pos.y - s_LastPos.y;
+
     s_LastPos = Pos;
-    ii = NbPtNewTrack, Track = NewTrack;
+
+    ii = NbPtNewTrack;
+    Track = NewTrack;
     for( ; (ii > 0) && (Track != NULL); ii--, Track = Track->Next() )
     {
         if( Track->m_Flags & STARTPOINT )
         {
-            Track->m_Start.x += dx; Track->m_Start.y += dy;
+            Track->m_Start.x += dx;
+            Track->m_Start.y += dy;
         }
         if( Track->m_Flags & ENDPOINT )
         {
-            Track->m_End.x += dx; Track->m_End.y += dy;
+            Track->m_End.x += dx;
+            Track->m_End.y += dy;
         }
     }
 
@@ -166,14 +178,19 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         Track = pt_drag->m_Segm;
         if( erase )
             Track->Draw( panel, DC, draw_mode );
+
         if( Track->m_Flags & STARTPOINT )
         {
-            Track->m_Start.x += dx; Track->m_Start.y += dy;
+            Track->m_Start.x += dx;
+            Track->m_Start.y += dy;
         }
+
         if( Track->m_Flags & ENDPOINT )
         {
-            Track->m_End.x += dx; Track->m_End.y += dy;
+            Track->m_End.x += dx;
+            Track->m_End.y += dy;
         }
+
         Track->Draw( panel, DC, draw_mode );
     }
 
@@ -619,7 +636,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
         Hight_Light( DC );
     PosInit = GetScreen()->m_Curseur;
 
-    if( track->Type() == TYPEVIA )
+    if( track->Type() == TYPE_VIA )
     {
         track->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
         if( command != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
@@ -749,7 +766,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
 
     s_StartSegmentPresent = s_EndSegmentPresent = TRUE;
 
-    if( (track->start == NULL) || (track->start->Type() == TYPETRACK) )
+    if( (track->start == NULL) || (track->start->Type() == TYPE_TRACK) )
         TrackToStartPoint = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
@@ -761,7 +778,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
-    if( (track->end == NULL) || (track->end->Type() == TYPETRACK) )
+    if( (track->end == NULL) || (track->end->Type() == TYPE_TRACK) )
         TrackToEndPoint = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
@@ -779,10 +796,10 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
         return;
     }
 
-    if( !TrackToStartPoint || (TrackToStartPoint->Type() != TYPETRACK) )
+    if( !TrackToStartPoint || (TrackToStartPoint->Type() != TYPE_TRACK) )
         s_StartSegmentPresent = FALSE;
 
-    if( !TrackToEndPoint || (TrackToEndPoint->Type() != TYPETRACK) )
+    if( !TrackToEndPoint || (TrackToEndPoint->Type() != TYPE_TRACK) )
         s_EndSegmentPresent = FALSE;
 
     /* Change hight light net: the new one will be hightlighted */
@@ -917,25 +934,19 @@ EDA_BaseStruct* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
  *   masque des couches a tester
  */
 {
-    D_PAD*  pt_pad;
-    TRACK*  ptsegm;
-    MODULE* Module;
-
-    /* detection du point type PAD */
-    pt_pad = NULL;
-    Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
+    for( MODULE* module = Pcb->m_Modules;  module;  module = module->Next() )
     {
-        pt_pad = Locate_Pads( Module, pos, LayerMask );
-        if( pt_pad )
-            return pt_pad;
+        D_PAD* pad = Locate_Pads( module, pos, LayerMask );
+        if( pad )
+            return pad;
     }
 
     /* ici aucun pad n'a ete localise: detection d'un segment de piste */
 
-    ptsegm = Fast_Locate_Piste( Pcb->m_Track, NULL, pos, LayerMask );
+    TRACK*  ptsegm = Fast_Locate_Piste( Pcb->m_Track, NULL, pos, LayerMask );
     if( ptsegm == NULL )
         ptsegm = Locate_Pistes( Pcb->m_Track, pos, LayerMask );
+
     return ptsegm;
 }
 
@@ -963,28 +974,31 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
     int    cX, cY;
     int    dx, dy;          /* Coord de l'extremite du segm ptsegm / origine */
     int    ox, oy, fx, fy;  /* coord de refsegm / origine de prsegm */
-    TRACK* NewTrack;
 
     if( (ptsegm->m_Start.x == *pX) && (ptsegm->m_Start.y == *pY) )
         return NULL;
+
     if( (ptsegm->m_End.x == *pX) && (ptsegm->m_End.y == *pY) )
         return NULL;
 
     /* le point n'est pas sur une extremite de piste */
-    if( ptsegm->Type() == TYPEVIA )
+    if( ptsegm->Type() == TYPE_VIA )
     {
-        *pX = ptsegm->m_Start.x; *pY = ptsegm->m_Start.y;
+        *pX = ptsegm->m_Start.x;
+        *pY = ptsegm->m_Start.y;
         return ptsegm;
     }
 
     /* calcul des coord vraies du point intermediaire dans le repere d'origine
-     *  = origine de ptsegm */
+     *  = origine de ptsegm
+     */
     cX = *pX - ptsegm->m_Start.x;
     cY = *pY - ptsegm->m_Start.y;
+
     dx = ptsegm->m_End.x - ptsegm->m_Start.x;
     dy = ptsegm->m_End.y - ptsegm->m_Start.y;
 
-// ***** A COMPLETER : non utilise
+    // ***** A COMPLETER : non utilise
     if( refsegm )
     {
         ox = refsegm->m_Start.x - ptsegm->m_Start.x;
@@ -995,29 +1009,40 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
 
     /* pour que le point soit sur le segment ptsegm: cY/cX = dy/dx */
     if( dx == 0 )
-        cX = 0;/* segm horizontal */
+        cX = 0;         /* segm horizontal */
     else
         cY = (cX * dy) / dx;
 
     /* creation du point intermediaire ( c'est a dire creation d'un nouveau
-     *  segment, debutant au point intermediaire */
+     * segment, debutant au point intermediaire
+     */
 
-    cX      += ptsegm->m_Start.x; cY += ptsegm->m_Start.y;
-    NewTrack = ptsegm->Copy();
+    cX += ptsegm->m_Start.x;
+    cY += ptsegm->m_Start.y;
 
-    NewTrack->Insert( NULL, ptsegm );
+    TRACK* newTrack = ptsegm->Copy();
+
+    DLIST<TRACK>*   list = (DLIST<TRACK>*)ptsegm->GetList();
+    wxASSERT( list );
+    list->Insert( newTrack, ptsegm->Next() );
+
     /* correction du pointeur de fin du nouveau segment */
-    NewTrack->end = ptsegm->end;
+    newTrack->end = ptsegm->end;
 
     /* le segment primitif finit au nouveau point : */
-    ptsegm->m_End.x = cX; ptsegm->m_End.y = cY;
+    ptsegm->m_End.x = cX;
+    ptsegm->m_End.y = cY;
+
     ptsegm->SetState( END_ONPAD, OFF );
 
     /* le nouveau segment debute au nouveau point : */
-    ptsegm = NewTrack;;
-    ptsegm->m_Start.x = cX; ptsegm->m_Start.y = cY;
+    ptsegm = newTrack;;
+    ptsegm->m_Start.x = cX;
+    ptsegm->m_Start.y = cY;
     ptsegm->SetState( BEGIN_ONPAD, OFF );
-    *pX = cX; *pY = cY;
+
+    *pX = cX;
+    *pY = cY;
 
     return ptsegm;
 }

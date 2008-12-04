@@ -72,7 +72,7 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
 
     switch( DrawStruct->Type() )
     {
-    case TYPETRACK:
+    case TYPE_TRACK:
 
 //			PopMenu->AppendSeparator();
 //			PopMenu->Append(ID_POPUP_PCB_EDIT_TRACK, _("Edit"));

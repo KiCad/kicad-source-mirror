@@ -15,7 +15,7 @@
 
 
 /************************************************************************/
-void Trace_Une_Piste( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* Track,
+void Trace_Une_Piste( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* aTrackList,
                       int nbsegment, int draw_mode )
 /************************************************************************/
 
@@ -31,10 +31,10 @@ void Trace_Une_Piste( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* Track,
  *  donc mis a 0 avant appel a la routine si la piste a tracer est la derniere
  */
 {
-    for(  ;   nbsegment > 0  && Track;   nbsegment--, Track = Track->Next() )
+    // preserve the start of the list for debugging.
+    for( TRACK* track = aTrackList; nbsegment > 0  && track;   nbsegment--, track = track->Next() )
     {
-        Track->Draw( panel, DC, draw_mode );
+        track->Draw( panel, DC, draw_mode );
     }
 }
-
 

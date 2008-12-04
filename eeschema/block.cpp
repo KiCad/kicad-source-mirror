@@ -851,7 +851,7 @@ static SCH_ITEM * CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREEN* sc
                 ;
             }
 
-            SetStructFather( Struct, screen );
+            SetaParent( Struct, screen );
             PickedList = (DrawPickedStruct*) PickedList->Next();
         }
 
@@ -900,7 +900,7 @@ static SCH_ITEM * CopyStruct( WinEDA_DrawPanel* panel, wxDC* DC, BASE_SCREEN* sc
 
         RedrawOneStruct( panel, DC, NewDrawStruct, GR_DEFAULT_DRAWMODE );
 
-        SetStructFather( NewDrawStruct, screen );
+        SetaParent( NewDrawStruct, screen );
         NewDrawStruct->SetNext( screen->EEDrawList );
         screen->EEDrawList   = NewDrawStruct;
     }
@@ -1052,7 +1052,7 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
             {
                 ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
                 ( (SCH_COMPONENT*) Struct )->ClearAnnotation(NULL);
-                SetStructFather( Struct, GetScreen() );
+                SetaParent( Struct, GetScreen() );
             }
             PickedList = (DrawPickedStruct*) PickedList->Next();
         }
@@ -1062,7 +1062,7 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
         {
             SCH_ITEM * Struct = PickedList->m_PickedStruct;
             Struct->SetNext( GetScreen()->EEDrawList );
-            SetStructFather( Struct, GetScreen() );
+            SetaParent( Struct, GetScreen() );
             GetScreen()->EEDrawList = Struct;
             PickedList = PickedList->Next();
         }
@@ -1077,7 +1077,7 @@ void WinEDA_SchematicFrame::PasteStruct( wxDC* DC )
             ( (SCH_COMPONENT*) DrawStruct )->m_TimeStamp = GetTimeStamp();
             ( (SCH_COMPONENT*) DrawStruct )->ClearAnnotation(NULL);
         }
-        SetStructFather( DrawStruct, GetScreen() );
+        SetaParent( DrawStruct, GetScreen() );
         RedrawOneStruct( DrawPanel, DC, DrawStruct, GR_DEFAULT_DRAWMODE );
         DrawStruct->SetNext( GetScreen()->EEDrawList );
         GetScreen()->EEDrawList = DrawStruct;

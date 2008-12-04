@@ -295,7 +295,7 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
     {
         aItem->Display_Infos( this );
 
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
     aItem->Show( 0, std::cout );
 #endif
 

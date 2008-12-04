@@ -23,7 +23,7 @@ protected:
 
 public:
 
-    MARKER( BOARD_ITEM* StructFather );
+    MARKER( BOARD_ITEM* aParent );
 
     /**
      * Constructor

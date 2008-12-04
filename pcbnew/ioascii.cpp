@@ -79,7 +79,7 @@ int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 
 /**********************************************************************/
 int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
-       TRACK* PtSegm, int StructType, int* LineNum, int NumSegm )
+       TRACK* insertBeforeMe, int StructType, int* LineNum, int NumSegm )
 /**********************************************************************/
 
 /** Read a list of segments (Tracks, zones)
@@ -91,7 +91,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
     char            line1[256];
     char            line2[256];
 
-    TRACK* NewTrack;
+    TRACK*          newTrack;
 
     while( GetLine( File, line1, LineNum ) )
     {
@@ -104,9 +104,9 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
         }
 
         // Read the 2nd line to determine the exact type, one of:
-        // TYPETRACK, TYPEVIA, or TYPEZONE.  The type field in 2nd line
-        // differentiates between TYPETRACK and TYPEVIA.  With virtual
-        // functions in use, it is critical to instantiate the TYPEVIA exactly.
+        // TYPE_TRACK, TYPE_VIA, or TYPE_ZONE.  The type field in 2nd line
+        // differentiates between TYPE_TRACK and TYPE_VIA.  With virtual
+        // functions in use, it is critical to instantiate the TYPE_VIA exactly.
         if( GetLine( File, line2, LineNum ) == NULL )
             break;
 
@@ -117,49 +117,48 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
         sscanf( line2 + 2, " %d %d %d %lX %X", &layer, &type, &net_code,
                 &timeStamp, &flags );
 
-        if( StructType==TYPETRACK && type==1 )
-            makeType = TYPEVIA;
+        if( StructType==TYPE_TRACK && type==1 )
+            makeType = TYPE_VIA;
         else
             makeType = StructType;
 
         switch( makeType )
         {
         default:
-        case TYPETRACK:
-            NewTrack = new TRACK( m_Pcb );
+        case TYPE_TRACK:
+            newTrack = new TRACK( m_Pcb );
+            m_Pcb->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
-        case TYPEVIA:
-            NewTrack = new SEGVIA( m_Pcb );
+        case TYPE_VIA:
+            newTrack = new SEGVIA( m_Pcb );
+            m_Pcb->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
-        case TYPEZONE:
-            NewTrack = new SEGZONE( m_Pcb );
+        case TYPE_ZONE:
+            newTrack = new SEGZONE( m_Pcb );
+            m_Pcb->m_Zone.Insert( (SEGZONE*)newTrack, (SEGZONE*)insertBeforeMe );
             break;
         }
 
-        NewTrack->Insert( m_Pcb, PtSegm );
-
-        PtSegm = NewTrack;
-
-        PtSegm->m_TimeStamp = timeStamp;
+        newTrack->m_TimeStamp = timeStamp;
 
         int arg_count = sscanf( line1 + 2, " %d %d %d %d %d %d %d", &shape,
-                                &PtSegm->m_Start.x, &PtSegm->m_Start.y,
-                                &PtSegm->m_End.x, &PtSegm->m_End.y, &width,
+                                &newTrack->m_Start.x, &newTrack->m_Start.y,
+                                &newTrack->m_End.x, &newTrack->m_End.y, &width,
                                 &drill );
 
-        PtSegm->m_Width = width;
-        PtSegm->m_Shape = shape;
+        newTrack->m_Width = width;
+        newTrack->m_Shape = shape;
 
         if( arg_count < 7 || drill <= 0 )
-            PtSegm->SetDrillDefault();
+            newTrack->SetDrillDefault();
         else
-            PtSegm->SetDrillValue(drill);
+            newTrack->SetDrillValue(drill);
 
-        PtSegm->SetLayer( layer );
-        PtSegm->SetNet( net_code );
-        PtSegm->SetState( flags, ON );
+        newTrack->SetLayer( layer );
+        newTrack->SetNet( net_code );
+        newTrack->SetState( flags, ON );
     }
 
     DisplayError( this, _( "Error: Unexpected end of file !" ) );
@@ -330,14 +329,14 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "TrackWidth" ) == 0 )
         {
             g_DesignSettings.m_CurrentTrackWidth = atoi( data );
-            AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPETRACK );
+            AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
             continue;
         }
 
         if( stricmp( Line, "TrackWidthHistory" ) == 0 )
         {
             int tmp = atoi( data );
-            AddHistory( tmp, TYPETRACK );
+            AddHistory( tmp, TYPE_TRACK );
             continue;
         }
 
@@ -407,7 +406,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "ViaSize" ) == 0 )
         {
             g_DesignSettings.m_CurrentViaSize = atoi( data );
-            AddHistory( g_DesignSettings.m_CurrentViaSize, TYPEVIA );
+            AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
             continue;
         }
 
@@ -420,7 +419,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "ViaSizeHistory" ) == 0 )
         {
             int tmp = atoi( data );
-            AddHistory( tmp, TYPEVIA );
+            AddHistory( tmp, TYPE_VIA );
             continue;
         }
 
@@ -616,7 +615,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Nzone %d\n", m_Pcb->GetNumSegmZone() );
 
     fprintf( File, "Nmodule %d\n", NbModules );
-    fprintf( File, "Nnets %d\n", m_Pcb->m_NbNets );
+    fprintf( File, "Nnets %d\n", m_Pcb->m_Equipots.GetCount() );
 
     fprintf( File, "$EndGENERAL\n\n" );
     return TRUE;
@@ -762,10 +761,6 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 {
     char            Line[1024];
     int             LineNum = 0;
-    int             nbsegm, nbmod;
-    BOARD_ITEM*     LastStructPcb = NULL, * StructPcb;
-    MODULE*         LastModule    = NULL, * Module;
-    EQUIPOT*        LastEquipot   = NULL, * Equipot;
 
     wxBusyCursor    dummy;
 
@@ -773,33 +768,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     SetLocaleTo_C_standard( );
 
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
-    m_Pcb->m_NbNets     = 0;
     m_Pcb->m_Status_Pcb = 0;
-    nbmod = 0;
-
-    if( Append )
-    {
-        LastModule = m_Pcb->m_Modules;
-        for( ; LastModule != NULL; LastModule = (MODULE*) LastModule->Next() )
-        {
-            if( LastModule->Next() == NULL )
-                break;
-        }
-
-        LastStructPcb = m_Pcb->m_Drawings;
-        for( ; LastStructPcb != NULL; LastStructPcb = LastStructPcb->Next() )
-        {
-            if( LastStructPcb->Next() == NULL )
-                break;
-        }
-
-        LastEquipot = m_Pcb->m_Equipots;
-        for( ; LastEquipot != NULL; LastEquipot = (EQUIPOT*) LastEquipot->Next() )
-        {
-            if( LastEquipot->Next() == NULL )
-                break;
-        }
-    }
 
     while( GetLine( File, Line, &LineNum ) != NULL )
     {
@@ -835,20 +804,9 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( strnicmp( Line, "$EQUIPOT", 7 ) == 0 )
         {
-            Equipot = new EQUIPOT( m_Pcb );
+            EQUIPOT* Equipot = new EQUIPOT( m_Pcb );
+            m_Pcb->m_Equipots.PushBack( Equipot );
             Equipot->ReadEquipotDescr( File, &LineNum );
-            if( LastEquipot == NULL )
-            {
-                m_Pcb->m_Equipots = Equipot;
-                Equipot->SetBack( m_Pcb );
-            }
-            else
-            {
-                Equipot->SetBack( LastEquipot );
-                LastEquipot->SetNext( Equipot );
-            }
-            LastEquipot = Equipot;
-            m_Pcb->m_NbNets++;
             continue;
         }
 
@@ -864,140 +822,67 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
-            Module = new MODULE( m_Pcb );
+            MODULE* Module = new MODULE( m_Pcb );
+
             if( Module == NULL )
                 continue;
-            Module->ReadDescr( File, &LineNum );
 
-            if( LastModule == NULL )
-            {
-                m_Pcb->m_Modules = Module;
-                Module->SetBack( m_Pcb );
-            }
-            else
-            {
-                Module->SetBack( LastModule );
-                LastModule->SetNext( Module );
-            }
-            LastModule = Module;
-            nbmod++;
+            m_Pcb->Add( Module, ADD_APPEND );
+            Module->ReadDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$TEXTPCB", 8 ) == 0 )
         {
             TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_Pcb );
-            StructPcb = pcbtxt;
+            m_Pcb->Add( pcbtxt, ADD_APPEND );
             pcbtxt->ReadTextePcbDescr( File, &LineNum );
-            if( LastStructPcb == NULL )
-            {
-                m_Pcb->m_Drawings = StructPcb;
-                StructPcb->SetBack( m_Pcb );
-            }
-            else
-            {
-                StructPcb->SetBack( LastStructPcb );
-                LastStructPcb->SetNext( StructPcb );
-            }
-            LastStructPcb = StructPcb;
             continue;
         }
 
         if( strnicmp( Line, "$DRAWSEGMENT", 10 ) == 0 )
         {
             DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( m_Pcb );
+            m_Pcb->Add( DrawSegm, ADD_APPEND );
             DrawSegm->ReadDrawSegmentDescr( File, &LineNum );
-            if( LastStructPcb == NULL )
-            {
-                m_Pcb->m_Drawings = DrawSegm;
-                DrawSegm->SetBack( m_Pcb );
-            }
-            else
-            {
-                DrawSegm->SetBack( LastStructPcb );
-                LastStructPcb->SetNext( DrawSegm );
-            }
-            LastStructPcb = DrawSegm;
             continue;
         }
-
 
         if( strnicmp( Line, "$COTATION", 9 ) == 0 )
         {
             COTATION* Cotation = new COTATION( m_Pcb );
+            m_Pcb->Add( Cotation, ADD_APPEND );
             Cotation->ReadCotationDescr( File, &LineNum );
-            if( LastStructPcb == NULL )
-            {
-                m_Pcb->m_Drawings = Cotation;
-                Cotation->SetBack( m_Pcb );
-            }
-            else
-            {
-                Cotation->SetBack( LastStructPcb );
-                LastStructPcb->SetNext( Cotation );
-            }
-            LastStructPcb = Cotation;
             continue;
         }
 
         if( strnicmp( Line, "$MIREPCB", 8 ) == 0 )
         {
             MIREPCB* Mire = new MIREPCB( m_Pcb );
+            m_Pcb->Add( Mire, ADD_APPEND );
             Mire->ReadMirePcbDescr( File, &LineNum );
-
-            if( LastStructPcb == NULL )
-            {
-                m_Pcb->m_Drawings = Mire;
-                Mire->SetBack( m_Pcb );
-            }
-            else
-            {
-                Mire->SetBack( LastStructPcb );
-                LastStructPcb->SetNext( Mire );
-            }
-            LastStructPcb = Mire;
             continue;
         }
 
         if( strnicmp( Line, "$TRACK", 6 ) == 0 )
         {
-            TRACK* StartTrack = m_Pcb->m_Track;
-            nbsegm = 0;
-
-            if( Append )
-            {
-                for( ; StartTrack != NULL; StartTrack = StartTrack->Next() )
-                {
-                    if( StartTrack->Next() == NULL )
-                        break;
-                }
-            }
-
 #ifdef PCBNEW
-            int ii = ReadListeSegmentDescr( File, StartTrack, TYPETRACK,
+            TRACK* insertBeforeMe = Append ? NULL : m_Pcb->m_Track.GetFirst();
+            ReadListeSegmentDescr( File, insertBeforeMe, TYPE_TRACK,
                                             &LineNum, NbTrack );
-            m_Pcb->m_NbSegmTrack += ii;
+            D( m_Pcb->m_Track.VerifyListIntegrity(); )
 #endif
             continue;
         }
 
         if( strnicmp( Line, "$ZONE", 5 ) == 0 )
         {
-            SEGZONE* StartZone = m_Pcb->m_Zone;
-
-            if( Append )
-            {
-                for( ; StartZone != NULL; StartZone = StartZone->Next() )
-                {
-                    if( StartZone->Next() == NULL )
-                        break;
-                }
-            }
-
 #ifdef PCBNEW
-            int ii = ReadListeSegmentDescr( File, StartZone, TYPEZONE,
+            SEGZONE* insertBeforeMe = Append ? NULL : m_Pcb->m_Zone.GetFirst();
+
+            ReadListeSegmentDescr( File, insertBeforeMe, TYPE_ZONE,
                                             &LineNum, NbZone );
-            m_Pcb->m_NbSegmZone += ii;
+            D( m_Pcb->m_Zone.VerifyListIntegrity(); )
 #endif
             continue;
         }

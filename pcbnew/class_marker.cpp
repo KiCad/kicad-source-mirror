@@ -48,8 +48,8 @@ void MARKER::init()
     m_Size.y = Default_MarkerBitmap[1];
 }
 
-MARKER::MARKER( BOARD_ITEM* StructFather ) :
-    BOARD_ITEM( StructFather, TYPEMARKER ),
+MARKER::MARKER( BOARD_ITEM* aParent ) :
+    BOARD_ITEM( aParent, TYPE_MARKER ),
     m_drc()
 {
     init();
@@ -59,7 +59,7 @@ MARKER::MARKER( BOARD_ITEM* StructFather ) :
 MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
                const wxString& aText, const wxPoint& aPos,
                const wxString& bText, const wxPoint& bPos ) :
-    BOARD_ITEM( NULL, TYPEMARKER )  // parent set during BOARD::Add()
+    BOARD_ITEM( NULL, TYPE_MARKER )  // parent set during BOARD::Add()
 {
     init();
 
@@ -70,7 +70,7 @@ MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
 
 MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos ) :
-    BOARD_ITEM( NULL, TYPEMARKER )  // parent set during BOARD::Add()
+    BOARD_ITEM( NULL, TYPE_MARKER )  // parent set during BOARD::Add()
 {
     init();
 

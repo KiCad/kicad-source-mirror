@@ -162,30 +162,24 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
  *  pour les formes de pad PAD1 a PADn
  */
 {
-    D_PAD*      pad;
-    D_PAD**     padlist;
-    D_PAD**     pad_list_base = NULL;
+    std::vector<D_PAD*> pads;
 
     const  char*  pad_type;
-    int    memsize, ii, dx, dy;
-    D_PAD* old_pad = NULL;
-    int    pad_name_number;
 
     fputs( "$PADS\n", file );
 
-    if( pcb->m_NbPads > 0 )     // pcb->m_Pads is NULL unless this is true
+    if( pcb->m_Pads.size() > 0 )
     {
-        // Generation de la liste des pads tries par forme et dimensions:
-        memsize = (pcb->m_NbPads + 1) * sizeof(D_PAD *);
-        pad_list_base = (D_PAD**) MyZMalloc( memsize );
-        memcpy( pad_list_base, pcb->m_Pads, memsize );
-        qsort( pad_list_base, pcb->m_NbPads, sizeof(D_PAD *), Pad_list_Sort_by_Shapes );
+        pads.insert( pads.end(), pcb->m_Pads.begin(), pcb->m_Pads.end() );
+        qsort( &pads[0], pcb->m_Pads.size(), sizeof( D_PAD* ), Pad_list_Sort_by_Shapes );
     }
 
-    pad_name_number = 0;
-    for( padlist = pad_list_base, ii = 0; ii < pcb->m_NbPads; padlist++, ii++ )
+    D_PAD*  old_pad = NULL;
+    int     pad_name_number = 0;
+    for( unsigned i=0;  i<pads.size();  ++i )
     {
-        pad = *padlist;
+        D_PAD* pad = pads[i];
+
         pad->SetSubRatsnest( pad_name_number );
 
         if( old_pad && 0==D_PAD::Compare( old_pad, pad ) )
@@ -198,8 +192,8 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
         fprintf( file, "PAD PAD%d", pad->GetSubRatsnest() );
 
-        dx = pad->m_Size.x / 2;
-        dy = pad->m_Size.y / 2;
+        int dx = pad->m_Size.x / 2;
+        int dy = pad->m_Size.y / 2;
 
         switch( pad->m_PadShape )
         {
@@ -273,8 +267,6 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
     }
 
     fputs( "$ENDPADS\n\n", file );
-
-    MyFree( pad_list_base );
 }
 
 
@@ -564,7 +556,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPEZONE )
+        if( track->Type() == TYPE_ZONE )
             nbitems++;
     }
 
@@ -576,7 +568,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPEZONE )
+        if( track->Type() == TYPE_ZONE )
             tracklist[nbitems++] = track;
     }
 
@@ -608,7 +600,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             fprintf( file, "TRACK TRACK%d\n", track->m_Width );
         }
 
-        if( (track->Type() == TYPETRACK) || (track->Type() == TYPEZONE) )
+        if( (track->Type() == TYPE_TRACK) || (track->Type() == TYPE_ZONE) )
         {
             if( old_layer != track->GetLayer() )
             {
@@ -621,7 +613,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
                     mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
                     mapXto( track->m_End.x ), mapYto( track->m_End.y ) );
         }
-        if( track->Type() == TYPEVIA )
+        if( track->Type() == TYPE_VIA )
         {
             fprintf( file, "VIA viapad%d %d %d ALL %d via%d\n",
                      track->m_Width,
@@ -816,10 +808,10 @@ void ModuleWriteShape( FILE* file, MODULE* module )
     {
         switch( PtStruct->Type() )
         {
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             break;
 
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             PtEdge = (EDGE_MODULE*) PtStruct;
 
             switch( PtEdge->m_Shape )

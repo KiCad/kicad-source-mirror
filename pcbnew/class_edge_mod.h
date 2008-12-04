@@ -33,11 +33,6 @@ public:
     EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
 
 
-/**
- * Function UnLink
- * remove item from linked list.
- */
-
     /**
      * Function GetPosition
      * returns the position of this object.
@@ -47,10 +42,6 @@ public:
     {
         return m_Start;
     }
-
-
-    /* supprime du chainage la structure Struct */
-    void    UnLink();
 
     void    Copy( EDGE_MODULE* source );    // copy structure
 

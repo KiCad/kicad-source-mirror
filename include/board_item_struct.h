@@ -1,26 +1,12 @@
 /**********************************************************************************************/
-/*  board_item_struct.h :  Basic classes for BOARD_ITEM and BOARD_CONNECTED_ITEM descriptions */
+/*  board_item_struct.h :  Classes BOARD_ITEM and BOARD_CONNECTED_ITEM                        */
 /**********************************************************************************************/
 
 #ifndef BOARD_ITEM_STRUCT_H
 #define BOARD_ITEM_STRUCT_H
 
 
-/**
- * Class BOARD_ITEM
- * is a base class for any item which can be embedded within the BOARD
- * container class, and therefore instances of derived classes should only be
- * found in PCBNEW or other programs that use class BOARD and its contents.
- * The corresponding class in EESCHEMA is SCH_ITEM.
- */
-
-/**
- * Class BOARD_CONNECTED_ITEM
- * This is a base class derived from BOARD_ITEM for items that can be connected
- * mainly: tracks and pads
- * Handle connection info
- *
- */
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 /* Shapes for segments (graphic segments and tracks) ( .shape member ) */
@@ -51,8 +37,8 @@ protected:
 
 public:
 
-    BOARD_ITEM( BOARD_ITEM* StructFather, KICAD_T idtype ) :
-        EDA_BaseStruct( StructFather, idtype )
+    BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
+        EDA_BaseStruct( aParent, idtype )
         , m_Layer( 0 )
     {
     }
@@ -62,6 +48,7 @@ public:
         EDA_BaseStruct( src.m_Parent, src.Type() )
         , m_Layer( src.m_Layer )
     {
+        m_Flags = src.m_Flags;
     }
 
 
@@ -130,9 +117,10 @@ public:
 
     /**
      * Function UnLink
-     * detaches this object from its owner.
+     * detaches this object from its owner.  This base class implementation
+     * should work for all derived classes which are held in a DLIST<>.
      */
-    virtual void UnLink() = 0;
+    virtual void UnLink();
 
 
     /**
@@ -183,6 +171,12 @@ public:
 };
 
 
+/**
+ * Class BOARD_CONNECTED_ITEM
+ * This is a base class derived from BOARD_ITEM for items that can be connected
+ * mainly: tracks and pads
+ * Handle connection info
+ */
 class BOARD_CONNECTED_ITEM : public BOARD_ITEM
 {
 protected:
@@ -196,7 +190,7 @@ protected:
                                     // handle block number in zone connection
 
 public:
-    BOARD_CONNECTED_ITEM( BOARD_ITEM* StructFather, KICAD_T idtype );
+    BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype );
     BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& src );
 
     /**
@@ -220,6 +214,118 @@ public:
     int GetZoneSubNet() const;
     void SetZoneSubNet( int aSubNetCode );
 };
+
+
+class BOARD_ITEM_LIST : public BOARD_ITEM
+{
+    typedef boost::ptr_vector<BOARD_ITEM>   ITEM_ARRAY;
+
+    ITEM_ARRAY   myItems;
+
+    BOARD_ITEM_LIST( const BOARD_ITEM_LIST& other ) :
+        BOARD_ITEM( NULL, TYPE_BOARD_ITEM_LIST )
+    {
+        // copy constructor is not supported, is private to cause compiler error
+    }
+
+public:
+
+    BOARD_ITEM_LIST( BOARD_ITEM* aParent = NULL ) :
+        BOARD_ITEM( aParent, TYPE_BOARD_ITEM_LIST )
+    {}
+
+    //-----< satisfy some virtual functions >------------------------------
+    wxPoint& GetPosition()
+    {
+        static wxPoint dummy;
+        return dummy;
+    }
+
+    void Draw( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
+               int aDrawMode, const wxPoint& offset = ZeroOffset )
+    {
+    }
+
+    void UnLink()
+    {
+        /* if it were needed:
+        DHEAD* list = GetList();
+
+        wxASSERT( list );
+
+        list->remove( this );
+        */
+    }
+
+    bool Save( FILE* aFile ) const
+    {
+        return true;
+    }
+
+    //-----</ satisfy some virtual functions >-----------------------------
+
+
+    /**
+     * Function GetCount
+     * returns the number of BOARD_ITEMs.
+     */
+    int GetCount() const
+    {
+        return myItems.size();
+    }
+
+    void    Append( BOARD_ITEM* aItem )
+    {
+        myItems.push_back( aItem );
+    }
+
+    BOARD_ITEM*   Replace( int aIndex, BOARD_ITEM* aItem )
+    {
+        ITEM_ARRAY::auto_type ret = myItems.replace( aIndex, aItem );
+        return ret.release();
+    }
+
+    BOARD_ITEM*   Remove( int aIndex )
+    {
+        ITEM_ARRAY::auto_type ret = myItems.release( myItems.begin()+aIndex );
+        return ret.release();
+    }
+
+    void    Insert( int aIndex, BOARD_ITEM* aItem )
+    {
+        myItems.insert( myItems.begin()+aIndex, aItem );
+    }
+
+    BOARD_ITEM*   At( int aIndex ) const
+    {
+        // we have varying sized objects and are using polymorphism, so we
+        // must return a pointer not a reference.
+        return (BOARD_ITEM*) &myItems[aIndex];
+    }
+
+    BOARD_ITEM* operator[]( int aIndex ) const
+    {
+        return At( aIndex );
+    }
+
+    void    Delete( int aIndex )
+    {
+        myItems.erase( myItems.begin()+aIndex );
+    }
+
+    void PushBack( BOARD_ITEM* aItem )
+    {
+        Append( aItem );
+    }
+
+    BOARD_ITEM* PopBack()
+    {
+        if( GetCount() )
+            return Remove( GetCount()-1 );
+        return NULL;
+    }
+};
+
 
 #endif /* BOARD_ITEM_STRUCT_H */
 

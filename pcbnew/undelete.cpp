@@ -22,8 +22,7 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
  */
 {
     BOARD_ITEM*     item;
-    BOARD_ITEM*     next;
-    int             net_code;
+    int             net_code = 0;
 
     if( !g_UnDeleteStackPtr )
         return;
@@ -35,37 +34,53 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 
     switch( item->Type() )
     {
-    case TYPEVIA:
-    case TYPETRACK:
-        for( ; item; item = next )
-        {
-            next = item->Next();
-            item->SetState( DELETED, OFF );     /* Effacement du bit DELETED */
-            ((TRACK*) item)->Draw( DrawPanel, DC, GR_OR );
-        }
+    case TYPE_VIA:
+    case TYPE_TRACK:
+        TRACK* track;
+        track = (TRACK*) item;
 
-        item = g_UnDeleteStack[g_UnDeleteStackPtr];
-        net_code = ((TRACK*) item)->GetNet();
+        D(printf("%s: track %p status=\"%s\"\n", __func__, track,
+                 CONV_TO_UTF8( TRACK::ShowState( track->GetState(-1)) )
+                 );)
 
-        m_Pcb->Add( item );
+        track->SetState( DELETED, OFF );
+        DrawPanel->PostDirtyRect( track->GetBoundingBox() );
+        m_Pcb->Add( track );
+
+        net_code = track->GetNet();
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
-
         test_1_net_connexion( DC, net_code );
         m_Pcb->Display_Infos( this );
         break;
 
-    case TYPEMODULE:
+    case TYPE_BOARD_ITEM_LIST:
+        BOARD_ITEM_LIST*  list;
+        list = (BOARD_ITEM_LIST*) item;
+        while( list->GetCount() )
+        {
+            TRACK* t = (TRACK*) list->Remove( 0 );
+            wxASSERT( t->Type()==TYPE_TRACK || t->Type()==TYPE_VIA );
+            t->SetState( DELETED, OFF );
+            DrawPanel->PostDirtyRect( t->GetBoundingBox() );
+            m_Pcb->Add( t );
+            net_code = t->GetNet();
+        }
+        delete list;
+        g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
+        test_1_net_connexion( DC, net_code );
+        m_Pcb->Display_Infos( this );
+        break;
+
+    case TYPE_MODULE:
         /* Erase general rastnest if needed */
         if( g_Show_Ratsnest )
             DrawGeneralRatsnest( DC );
 
-        /* Reinsertion du module dans la liste chainee des modules,
-         *  en debut de chaine */
         m_Pcb->Add( item );
 
         g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
 
-        ((MODULE*) item)->Draw( DrawPanel, DC, GR_OR );
+        item->Draw( DrawPanel, DC, GR_OR );
 
         item->SetState( DELETED, OFF );     /* Creal DELETED flag */
         item->m_Flags   = 0;
@@ -81,26 +96,20 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 }
 
 
-/**************************************************************/
-/* void * SaveItemEfface(int type, void * PtItem, int nbitems) */
-/**************************************************************/
-
 /* Sauvegarde d'un element aux fins de restitution par Undelete
  *  Supporte actuellement : Module et segments de piste
  */
-BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
+BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems )
 {
-    BOARD_ITEM* NextS, * PtStruct = PtItem;
-    int             ii;
-
-    if( (PtItem == NULL) || (nbitems == 0) )
+    if( aItem == NULL || nbitems == 0 )
         return NULL;
 
     if( g_UnDeleteStackPtr >= UNDELETE_STACK_SIZE )
     {
-        /* Delete last deleted item, and shift stack. */
-        g_UnDeleteStack[0]->DeleteStructList();
-        for( ii = 0; ii < (g_UnDeleteStackPtr - 1); ii++ )
+        // Delete last deleted item, and shift stack.
+        delete g_UnDeleteStack[0];
+
+        for( int ii = 0; ii < (g_UnDeleteStackPtr - 1); ii++ )
         {
             g_UnDeleteStack[ii] = g_UnDeleteStack[ii + 1];
         }
@@ -108,40 +117,43 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
         g_UnDeleteStackPtr--;;
     }
 
-    switch( PtStruct->Type() )
+    switch( aItem->Type() )
     {
-    case TYPEVIA:
-    case TYPETRACK:
-    {
-        BOARD_ITEM* Back = NULL;
-        g_UnDeleteStack[g_UnDeleteStackPtr++] = PtStruct;
-
-        for( ; nbitems > 0; nbitems--, PtStruct = NextS )
+    case TYPE_VIA:
+    case TYPE_TRACK:
         {
-            NextS = PtStruct->Next();
-            ( (TRACK*) PtStruct )->UnLink();
+            DLIST<TRACK>* container = (DLIST<TRACK>*) aItem->GetList();
+            wxASSERT( container );
 
-            PtStruct->SetState( DELETED, ON );
-            if( nbitems <= 1 )
-                NextS = NULL;                       /* fin de chaine */
+            if( nbitems == 1 )
+            {
+                container->Remove( (TRACK*) aItem );
+                g_UnDeleteStack[g_UnDeleteStackPtr++] = aItem;
+            }
+            else
+            {
+                BOARD_ITEM_LIST* list = new BOARD_ITEM_LIST();
+                g_UnDeleteStack[g_UnDeleteStackPtr++] = list;
 
-            PtStruct->SetNext( NextS );
-            PtStruct->SetBack( Back );
-            Back = PtStruct;
-            if( NextS == NULL )
-                break;
+                int i = 0;
+                TRACK* next;
+                for( TRACK* track = (TRACK*) aItem;  track && i<nbitems;  track = next, ++i )
+                {
+                    next = track->Next();
+                    list->PushBack( container->Remove( track ) );
+                }
+            }
         }
-    }
         break;
 
-    case TYPEMODULE:
-    {
-        MODULE* Module = (MODULE*) PtItem;
-        Module->UnLink();
-        Module->SetState( DELETED, ON );
-        g_UnDeleteStack[g_UnDeleteStackPtr++] = Module;
-        build_liste_pads();
-    }
+    case TYPE_MODULE:
+        {
+            MODULE* module = (MODULE*) aItem;
+            m_Pcb->m_Modules.Remove( module );
+            module->SetState( DELETED, ON );
+            g_UnDeleteStack[g_UnDeleteStackPtr++] = module;
+            build_liste_pads();
+        }
         break;
 
     default:

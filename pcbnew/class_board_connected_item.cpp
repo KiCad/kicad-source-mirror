@@ -12,8 +12,8 @@
 #include "cvpcb.h"
 #endif
 
-BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* StructFather, KICAD_T idtype ) :
-    BOARD_ITEM( StructFather, idtype )
+BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
+    BOARD_ITEM( aParent, idtype )
 {
     m_NetCode    = 0;
     m_Subnet     = 0;

@@ -101,14 +101,14 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
     {
         switch( PtStruct->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
                 #undef STRUCT
                 #define STRUCT ( (EDGE_MODULE*) PtStruct )
             STRUCT->m_Start0.x += deltaX; STRUCT->m_Start0.y += deltaY;
             STRUCT->m_End0.x   += deltaX; STRUCT->m_End0.y += deltaY;
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
                 #undef STRUCT
                 #define STRUCT ( (TEXTE_MODULE*) PtStruct )
             STRUCT->m_Pos0.x += deltaX; STRUCT->m_Pos0.y += deltaY;
@@ -133,11 +133,11 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
 
     switch( Item->Type() )
     {
-    case TYPEPAD:
+    case TYPE_PAD:
         DeletePad( (D_PAD*) Item, DC );
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
     {
         TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
         if( text->m_Type == TEXT_is_REFERENCE )
@@ -154,11 +154,11 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
     }
         break;
 
-    case TYPEEDGEMODULE:
+    case TYPE_EDGE_MODULE:
         Delete_Edge_Module( (EDGE_MODULE*) Item, DC );
         break;
 
-    case TYPEMODULE:
+    case TYPE_MODULE:
         break;
 
     default:

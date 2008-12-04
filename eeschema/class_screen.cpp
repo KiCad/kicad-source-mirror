@@ -11,7 +11,7 @@
 
 
 /******************************************************************/
-void SetStructFather( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
+void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
 /******************************************************************/
 {
     switch( Struct->Type() )

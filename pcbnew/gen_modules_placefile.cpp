@@ -449,7 +449,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     EDA_BaseStruct* PtStruct;
     for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;
         if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != EDGE_N )
             continue;

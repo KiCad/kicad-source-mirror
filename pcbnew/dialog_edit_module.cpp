@@ -735,7 +735,7 @@ void WinEDA_ModulePropertiesFrame::ReCreateFieldListBox()
     EDA_BaseStruct* item = m_CurrentModule->m_Drawings;
     while( item )
     {
-        if( item->Type() == TYPETEXTEMODULE )
+        if( item->Type() == TYPE_TEXTE_MODULE )
             m_TextListBox->Append( ( (TEXTE_MODULE*) item )->m_Text );
         item = item->Next();
     }
@@ -789,7 +789,7 @@ void WinEDA_ModulePropertiesFrame::EditOrDelTextModule( wxCommandEvent& event )
         int             jj   = 2;
         while( item )
         {
-            if( item->Type() == TYPETEXTEMODULE )
+            if( item->Type() == TYPE_TEXTE_MODULE )
             {
                 if( jj == TextType )   // Texte trouvé
                 {

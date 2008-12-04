@@ -545,8 +545,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         Fill_All_Zones( &dc );
         break;
 
-	case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
-        if ( ( GetCurItem())->Type() == TYPEZONE_CONTAINER)
+    case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
+        if ( ( GetCurItem())->Type() == TYPE_ZONE_CONTAINER)
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER* )GetCurItem();
             zone_container->m_FilledPolysList.clear();
@@ -557,12 +557,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        if( m_Pcb->m_Zone )
-        {
-            m_Pcb->m_Zone->DeleteStructList();
-            m_Pcb->m_Zone = NULL;
-            m_Pcb->m_NbSegmZone = 0;
-        }
+        m_Pcb->m_Zone.DeleteAll();
         for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
             ZONE_CONTAINER* zone_container = m_Pcb->GetArea( ii );
@@ -596,9 +591,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
 
         // If the current Item is a pad, text module ...: Get the parent
-        if( GetCurItem()->Type() != TYPEMODULE )
+        if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
-        if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
         {
             g_Drag_Pistes_On = FALSE;
             break;
@@ -620,10 +615,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
 
         // If the current Item is a pad, text module ...: Get the parent
-        if( GetCurItem()->Type() != TYPEMODULE )
+        if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
         if( Delete_Module( (MODULE*) GetCurItem(), &dc, true ) )
         {
@@ -635,10 +630,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
 
         // If the current Item is a pad, text module ...: Get the parent
-        if( GetCurItem()->Type() != TYPEMODULE )
+        if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
         Rotate_Module( &dc, (MODULE*) GetCurItem(), -900, TRUE );
         break;
@@ -647,10 +642,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
 
         // If the current Item is a pad, text module ...: Get the parent
-        if( GetCurItem()->Type() != TYPEMODULE )
+        if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
         Rotate_Module( &dc, (MODULE*) GetCurItem(), 900, TRUE );
         break;
@@ -659,9 +654,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
 
         // If the current Item is a pad, text module ...: Get the parent
-        if( GetCurItem()->Type() != TYPEMODULE )
+        if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
-        if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
         m_Pcb->Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
@@ -669,9 +664,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_MODULE:
 
         // If the current Item is a pad, text module ...: Get the parent
-        if( GetCurItem()->Type() != TYPEMODULE )
+        if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
-        if( !GetCurItem() || GetCurItem()->Type() != TYPEMODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
         InstallModuleOptionsFrame( (MODULE*) GetCurItem(), &dc, pos );
         DrawPanel->MouseToCursorSchema();
@@ -1031,7 +1026,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
 
     switch( DrawStruct->Type() )
     {
-    case  TYPETEXTE:
+    case  TYPE_TEXTE:
         frame->StartMoveTextePcb( (TEXTE_PCB*) DrawStruct, DC );
         break;
 
@@ -1055,39 +1050,39 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 
     switch( Item->Type() )
     {
-    case TYPEMODULE:
+    case TYPE_MODULE:
         Delete_Module( (MODULE*) Item, DC, true );
         break;
 
-    case TYPECOTATION:
+    case TYPE_COTATION:
         Delete_Cotation( (COTATION*) Item, DC );
         break;
 
-    case TYPEMIRE:
+    case TYPE_MIRE:
         Delete_Mire( (MIREPCB*) Item, DC );
         break;
 
-    case TYPEDRAWSEGMENT:
+    case TYPE_DRAWSEGMENT:
         Delete_Segment_Edge( (DRAWSEGMENT*) Item, DC );
         break;
 
-    case TYPETEXTE:
+    case TYPE_TEXTE:
         Delete_Texte_Pcb( (TEXTE_PCB*) Item, DC );
         break;
 
-    case TYPETRACK:
+    case TYPE_TRACK:
         Delete_Track( DC, (TRACK*) Item );
         break;
 
-    case TYPEVIA:
+    case TYPE_VIA:
         Delete_Segment( DC, (TRACK*) Item );
         break;
 
-    case TYPEZONE:
+    case TYPE_ZONE:
         Delete_Zone_Fill( DC, (SEGZONE*) Item );
         break;
 
-    case TYPEMARKER:
+    case TYPE_MARKER:
         if( Item == GetCurItem() )
             SetCurItem( NULL );
         ( (MARKER*) Item )->Draw( DrawPanel, DC, GR_XOR );
@@ -1096,14 +1091,14 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         m_Pcb->Delete( Item );
         break;
 
-    case TYPEPAD:
-    case TYPETEXTEMODULE:
-    case TYPEEDGEMODULE:
+    case TYPE_PAD:
+    case TYPE_TEXTE_MODULE:
+    case TYPE_EDGE_MODULE:
         break;
 
     case TYPE_NOT_INIT:
-    case PCB_EQUIPOT_STRUCT_TYPE:
-    case TYPEPCB:
+    case TYPE_EQUIPOT:
+    case TYPE_PCB:
     default:
     {
         wxString Line;
@@ -1168,7 +1163,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // See if we are drawing a segment; if so, add a via?
         if( m_ID_current_state == ID_TRACK_BUTT && current != NULL )
         {
-            if( current->Type() == TYPETRACK && (current->m_Flags & IS_NEW) )
+            if( current->Type() == TYPE_TRACK && (current->m_Flags & IS_NEW) )
             {
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working

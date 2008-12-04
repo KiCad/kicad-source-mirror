@@ -29,7 +29,7 @@
 /******************************************/
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
-    BOARD_ITEM( parent, TYPEEDGEMODULE )
+    BOARD_ITEM( parent, TYPE_EDGE_MODULE )
 {
     m_Width     = 0;
     m_Shape     = S_SEGMENT;
@@ -78,33 +78,6 @@ void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
     }
 }
 
-
-/********************************/
-void EDGE_MODULE::UnLink()
-/********************************/
-{
-    /* Modification du chainage arriere */
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEMODULE )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (MODULE*) Back() )->m_Drawings = Next();
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
-}
-
-
 /***********************************/
 void EDGE_MODULE::SetDrawCoord()
 /***********************************/
@@ -148,7 +121,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     WinEDA_BasePcbFrame* frame;
     MODULE*              Module = NULL;
 
-    if( m_Parent && (m_Parent->Type() == TYPEMODULE) )
+    if( m_Parent && (m_Parent->Type() == TYPE_MODULE) )
         Module = (MODULE*) m_Parent;
 
     color = g_DesignSettings.m_LayerColor[m_Layer];

@@ -17,7 +17,7 @@
 
 
 /***************************************************************/
-TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
+TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
 /***************************************************************/
 
 /* Supprime 1 segment de piste.
@@ -29,57 +29,48 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 {
     int current_net_code;
 
-    if( Track == NULL )
+    if( aTrack == NULL )
         return NULL;
 
-    if( Track->GetState( DELETED ) )
+    if( aTrack->GetState( DELETED ) )
     {
         D( printf( "WinEDA_PcbFrame::Delete_Segment(): bug deleted already deleted TRACK\n" ); )
         return NULL;
     }
 
-    if( Track->m_Flags & IS_NEW )  // Trace en cours, on peut effacer le dernier segment
+    if( aTrack->m_Flags & IS_NEW )  // Trace in progress, erase the last segment
     {
-        if( g_TrackSegmentCount > 0 )
+        if( g_CurrentTrackList.GetCount() > 0 )
         {
             int previous_layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+
+            D( g_CurrentTrackList.VerifyListIntegrity(); )
 
             // effacement de la piste en cours
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
 
-            // modification du trace
-            Track = g_CurrentTrackSegment;
-            g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
-            delete Track;
-            g_TrackSegmentCount--;
+            // delete the most recently entered
+            delete g_CurrentTrackList.PopBack();
 
             if( g_TwoSegmentTrackBuild )
             {
-                // g_CurrentTrackSegment->Back() must not be a via, or we want delete also the via
-                if( (g_TrackSegmentCount >= 2)
-                   && (g_CurrentTrackSegment->Type() != TYPEVIA)
-                   && (g_CurrentTrackSegment->Back()->Type() == TYPEVIA) )
+                // if in 2 track mode, and the next most recent is a segment not a via,
+                // and the one previous to that is a via, then delete up to the via.
+                if( g_CurrentTrackList.GetCount() >= 2
+                   && g_CurrentTrackSegment->Type() != TYPE_VIA
+                   && g_CurrentTrackSegment->Back()->Type() == TYPE_VIA )
                 {
-                    Track = g_CurrentTrackSegment;
-                    g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
-                    delete Track;
-                    g_TrackSegmentCount--;
+                    delete g_CurrentTrackList.PopBack();
                 }
             }
 
-            while( g_TrackSegmentCount && g_CurrentTrackSegment
-                  && (g_CurrentTrackSegment->Type() == TYPEVIA) )
+            while( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() == TYPE_VIA )
             {
-                Track = g_CurrentTrackSegment;
-                g_CurrentTrackSegment = g_CurrentTrackSegment->Back();
-                delete Track;
-                g_TrackSegmentCount--;
-                if( g_CurrentTrackSegment && (g_CurrentTrackSegment->Type() != TYPEVIA) )
+                delete g_CurrentTrackList.PopBack();
+
+                if( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() != TYPE_VIA )
                     previous_layer = g_CurrentTrackSegment->GetLayer();
             }
-
-            if( g_CurrentTrackSegment )
-                g_CurrentTrackSegment->SetNext( NULL );
 
             // Rectification couche active qui a pu changer si une via
             // a ete effacee
@@ -88,21 +79,20 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             Affiche_Status_Box();
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
             {
-                if( ( g_TrackSegmentCount == 1 )
-                   && (g_CurrentTrackSegment->Type() != TYPEVIA) )
+                if( g_CurrentTrackList.GetCount()==1 && g_CurrentTrackSegment->Type() != TYPE_VIA )
                 {
-                    delete g_CurrentTrackSegment;
-                    g_TrackSegmentCount = 0;
+                    delete g_CurrentTrackList.PopBack();
                 }
             }
-            if( g_TrackSegmentCount == 0 )
+
+            if( g_CurrentTrackList.GetCount() == 0 )
             {
                 DrawPanel->ManageCurseur = NULL;
                 DrawPanel->ForceCloseManageCurseur = NULL;
+
                 if( g_HightLigt_Status )
                     Hight_Light( DC );
-                g_CurrentTrackSegment = NULL;
-                g_FirstTrackSegment   = NULL;
+
                 SetCurItem( NULL );
                 return NULL;
             }
@@ -110,19 +100,19 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
             {
                 if( DrawPanel->ManageCurseur )
                     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+
                 return g_CurrentTrackSegment;
             }
         }
         return NULL;
-    } // Fin traitement si trace en cours
+    }
 
-
-    current_net_code = Track->GetNet();
+    current_net_code = aTrack->GetNet();
 
     // redraw the area where the track was
-    DrawPanel->PostDirtyRect( Track->GetBoundingBox() );
+    DrawPanel->PostDirtyRect( aTrack->GetBoundingBox() );
 
-    SaveItemEfface( Track, 1 );
+    SaveItemEfface( aTrack, 1 );
     GetScreen()->SetModify();
 
     test_1_net_connexion( DC, current_net_code );
@@ -132,13 +122,13 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 
 
 /**********************************************************/
-void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
+void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* aTrack )
 /**********************************************************/
 {
-    if( Track != NULL )
+    if( aTrack != NULL )
     {
-        int current_net_code = Track->GetNet();
-        Remove_One_Track( DC, Track );
+        int current_net_code = aTrack->GetNet();
+        Remove_One_Track( DC, aTrack );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, current_net_code );
     }
@@ -146,24 +136,23 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* Track )
 
 
 /********************************************************/
-void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track )
+void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
 /********************************************************/
 {
-    if( Track == NULL )
+    if( aTrack == NULL )
         return;
 
     if( IsOK( this, _( "Delete NET ?" ) ) )
     {
-        int    net_code_delete = Track->GetNet();
+        int    net_code_delete = aTrack->GetNet();
 
         /* Recherche du debut de la zone des pistes du net_code courant */
         TRACK* trackList = m_Pcb->m_Track->GetStartNetCode( net_code_delete );
 
         /* Decompte du nombre de segments de la sous-chaine */
 
-        int    ii;
-        TRACK* segm = trackList;
-        for( ii = 0;  segm; segm = segm->Next(), ++ii )
+        int    ii = 0;
+        for( TRACK* segm = trackList;  segm; segm = segm->Next(), ++ii )
         {
             if( segm->GetNet() != net_code_delete )
                 break;
@@ -188,21 +177,23 @@ void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
  *  jusqu'a un pad ou un point de jonction de plus de 2 segments
  */
 {
-    TRACK*  trackList;
     int     nb_segm;
 
     if( pt_segm == NULL )
         return;
 
-    trackList = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, 0 );
+    TRACK*  trackList = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, 0 );
 
     if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
     {
-        TRACK*  t;
-        int     ii;
-        for( t = trackList, ii=0;  ii<nb_segm;  ii++, t = t->Next() )
+        int ii = 0;
+        for( TRACK* t = trackList;  ii<nb_segm;  ii++, t = t->Next() )
         {
             t->SetState( BUSY, OFF );
+
+            D(printf("%s: track %p status=\"%s\"\n", __func__, t,
+                     CONV_TO_UTF8( TRACK::ShowState( t->GetState(-1)) )
+                     );)
 
             DrawPanel->PostDirtyRect( t->GetBoundingBox() );
         }

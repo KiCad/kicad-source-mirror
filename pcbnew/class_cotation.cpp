@@ -11,8 +11,8 @@
 #include "wxstruct.h"
 
 
-COTATION::COTATION( BOARD_ITEM* StructFather ) :
-    BOARD_ITEM( StructFather, TYPECOTATION )
+COTATION::COTATION( BOARD_ITEM* aParent ) :
+    BOARD_ITEM( aParent, TYPE_COTATION )
 {
     m_Layer = DRAW_LAYER;
     m_Width = 50;
@@ -27,31 +27,6 @@ COTATION::COTATION( BOARD_ITEM* StructFather ) :
 COTATION::~COTATION()
 {
     delete m_Text;
-}
-
-
-/* supprime du chainage la structure Struct
- *  les structures arrieres et avant sont chainees directement
- */
-void COTATION::UnLink()
-{
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ((BOARD*) Back() )->m_Drawings = Next();
-        }
-    }
-
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
 }
 
 

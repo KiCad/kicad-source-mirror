@@ -156,8 +156,6 @@ void DHEAD::remove( EDA_BaseStruct* aElement )
     aElement->SetList( 0 );
 
     --count;
-
-    D( VerifyListIntegrity(); );
 }
 
 #if defined(DEBUG)
@@ -191,6 +189,8 @@ void DHEAD::VerifyListIntegrity()
 
     wxASSERT( item == NULL );
     wxASSERT( i == count );
+
+    // printf("list %p has %d items.\n", this, count );
 }
 
 #endif

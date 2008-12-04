@@ -8,7 +8,6 @@
 #include "common.h"
 #include "pcbnew.h"
 
-
 #ifdef CVPCB
 #include "cvpcb.h"
 #endif
@@ -39,8 +38,8 @@ void DbgDisplayTrackInfos( TRACK* track )
     wxMessageBox( msg );
 }
 
-
 #endif
+
 
 /**
  * Function ShowClearance
@@ -49,16 +48,18 @@ void DbgDisplayTrackInfos( TRACK* track )
  */
 static bool ShowClearance( const TRACK* aTrack )
 {
-    // maybe return true for (for tracks and vias, not for zone segments
-    return ( DisplayOpt.DisplayTrackIsol && ( aTrack->GetLayer() <= LAST_COPPER_LAYER )
-       && ( aTrack->Type() == TYPETRACK || aTrack->Type() == TYPEVIA) );
+    // maybe return true for tracks and vias, not for zone segments
+    return !(aTrack->m_Flags & DRAW_ERASED)
+       &&  DisplayOpt.DisplayTrackIsol
+       &&  aTrack->GetLayer() <= LAST_COPPER_LAYER
+       && ( aTrack->Type() == TYPE_TRACK || aTrack->Type() == TYPE_VIA );
 }
 
 
 
 /**********************************************************/
-TRACK::TRACK( BOARD_ITEM* StructFather, KICAD_T idtype ) :
-    BOARD_CONNECTED_ITEM( StructFather, idtype )
+TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
+    BOARD_CONNECTED_ITEM( aParent, idtype )
 /**********************************************************/
 {
     m_Width = 0;
@@ -81,14 +82,14 @@ wxString TRACK::ShowWidth()
 }
 
 
-SEGZONE::SEGZONE( BOARD_ITEM* StructFather ) :
-    TRACK( StructFather, TYPEZONE )
+SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
+    TRACK( aParent, TYPE_ZONE )
 {
 }
 
 
-SEGVIA::SEGVIA( BOARD_ITEM* StructFather ) :
-    TRACK( StructFather, TYPEVIA )
+SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
+    TRACK( aParent, TYPE_VIA )
 {
 }
 
@@ -99,6 +100,7 @@ TRACK::TRACK( const TRACK& Source ) :
 {
     m_Shape = Source.m_Shape;
     SetNet( Source.GetNet() );
+
     m_Flags     = Source.m_Flags;
     m_TimeStamp = Source.m_TimeStamp;
     SetStatus( Source.ReturnStatus() );
@@ -119,13 +121,13 @@ TRACK::TRACK( const TRACK& Source ) :
  */
 TRACK* TRACK::Copy() const
 {
-    if( Type() == TYPETRACK )
+    if( Type() == TYPE_TRACK )
         return new TRACK( *this );
 
-    if( Type() == TYPEVIA )
+    if( Type() == TYPE_VIA )
         return new SEGVIA( (const SEGVIA &) * this );
 
-    if( Type() == TYPEZONE )
+    if( Type() == TYPE_ZONE )
         return new SEGZONE( (const SEGZONE &) * this );
 
     return NULL;    // should never happen
@@ -139,7 +141,7 @@ TRACK* TRACK::Copy() const
 */
 int TRACK::GetDrillValue() const
 {
-    if ( Type() != TYPEVIA )
+    if ( Type() != TYPE_VIA )
         return 0;
 
     if ( m_Drill >= 0 )
@@ -158,7 +160,7 @@ bool TRACK::IsNull()
 
 // return TRUE if segment length = 0
 {
-    if( ( Type() != TYPEVIA ) && ( m_Start == m_End ) )
+    if( ( Type() != TYPE_VIA ) && ( m_Start == m_End ) )
         return TRUE;
     else
         return FALSE;
@@ -228,7 +230,7 @@ EDA_Rect TRACK::GetBoundingBox()
     int ymin;
     int xmin;
 
-    if( Type() == TYPEVIA )
+    if( Type() == TYPE_VIA )
     {
         // Because vias are sometimes drawn larger than their m_Width would
         // provide, erasing them using a dirty rect must also compensate for this
@@ -323,7 +325,7 @@ int TRACK::ReturnMaskLayer()
  *  for a via, there is more than one layer used
  */
 {
-    if( Type() == TYPEVIA )
+    if( Type() == TYPE_VIA )
     {
         int via_type = Shape();
 
@@ -404,94 +406,6 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 }
 
 
-/* Remove this from the track or zone linked list
- */
-void TRACK::UnLink()
-{
-    /* Remove the back link */
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else                                /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            if( GetState( DELETED ) )       // A REVOIR car Pback = NULL si place en undelete
-            {
-                if( g_UnDeleteStackPtr )
-                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = (BOARD_ITEM*) Pnext;
-            }
-            else
-            {
-                if( Type() == TYPEZONE )
-                {
-                    ( (BOARD*) Back() )->m_Zone = (SEGZONE*) Next();
-                }
-                else
-                {
-                    ( (BOARD*) Back() )->m_Track = Next();
-                }
-            }
-        }
-    }
-
-    /* Remove the forward link */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
-}
-
-
-/************************************************************/
-void TRACK::Insert( BOARD* Pcb, TRACK* InsertPoint )
-/************************************************************/
-
-/* insert this (and its linked segments is exists)
- * in the track linked list
- * @param InsertPoint = insert point within the linked list
- * if NULL: insert as first element of Pcb->m_Tracks
- */
-{
-    TRACK* track;
-    TRACK* NextS;
-
-    if( InsertPoint == NULL )
-    {
-        Pback = Pcb;
-
-        if( Type() == TYPEZONE )    // put SEGZONE on front of m_Zone list
-        {
-            NextS = Pcb->m_Zone;
-            Pcb->m_Zone = (SEGZONE*) this;
-        }
-        else    // put TRACK or SEGVIA on front of m_Track list
-        {
-            NextS = Pcb->m_Track;
-            Pcb->m_Track = this;
-        }
-    }
-    else
-    {
-        NextS = InsertPoint->Next();
-        Pback = InsertPoint;
-        InsertPoint->SetNext( this );
-    }
-
-    /* Set the forward link */
-    track = this;
-    while( track->Next() )  // Search the end of added chain
-        track = track->Next();
-
-    /* Link the end of chain */
-    track->SetNext( NextS );
-    if( NextS )
-        NextS->SetBack( track );
-}
-
-
 /***********************************************/
 TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
 /***********************************************/
@@ -502,29 +416,20 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
  *  @return the item found in the linked list (or NULL if no track)
  */
 {
-    TRACK* track, * NextTrack;
+    TRACK*  track;
 
-    if( Type() == TYPEZONE )
+    if( Type() == TYPE_ZONE )
         track = Pcb->m_Zone;
     else
         track = Pcb->m_Track;
 
-    /* Traitement du debut de liste */
-    if( track == NULL )
-        return NULL;                    /* No tracks ! */
-
-    if( GetNet() < track->GetNet() )    /* no net code or net code = 0 (track not connected) */
-        return NULL;
-
-    while( (NextTrack = (TRACK*) track->Pnext) != NULL )
+    for(  ; track;  track = track->Next() )
     {
-        if( NextTrack->GetNet() > this->GetNet() )
-            break;
-
-        track = NextTrack;
+        if( GetNet() <= track->GetNet() )
+            return track;
     }
 
-    return track;
+    return NULL;
 }
 
 
@@ -606,7 +511,7 @@ bool TRACK::Save( FILE* aFile ) const
 {
     int     type = 0;
 
-    if( Type() == TYPEVIA )
+    if( Type() == TYPE_VIA )
         type = 1;
 
     if( GetState( DELETED ) )
@@ -634,37 +539,46 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
-    if( Type() == TYPEZONE && !DisplayOpt.DisplayZones )
+    if( Type() == TYPE_ZONE && !DisplayOpt.DisplayZones )
         return;
+
+    if( m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
+    {
+        color = g_DrawBgColor;
+        D(printf("DRAW_ERASED in Track::Draw, g_DrawBgColor=%04X\n", g_DrawBgColor );)
+    }
+
+    else
+    {
+        color = g_DesignSettings.m_LayerColor[m_Layer];
+
+        if( ( color & (ITEM_NOT_SHOW | HIGHT_LIGHT_FLAG) ) == ITEM_NOT_SHOW )
+            return;
+
+        if( DisplayOpt.ContrastModeDisplay )
+        {
+            if( !IsOnLayer( curr_layer ) )
+            {
+                color &= ~MASKCOLOR;
+                color |= DARKDARKGRAY;
+            }
+        }
+
+        if( draw_mode & GR_SURBRILL )
+        {
+            if( draw_mode & GR_AND )
+                color &= ~HIGHT_LIGHT_FLAG;
+            else
+                color |= HIGHT_LIGHT_FLAG;
+        }
+
+        if( color & HIGHT_LIGHT_FLAG )
+            color = ColorRefs[color & MASKCOLOR].m_LightColor;
+
+        SetAlpha( &color, 150 );
+    }
 
     GRSetDrawMode( DC, draw_mode );
-
-    color = g_DesignSettings.m_LayerColor[m_Layer];
-
-    if( ( color & (ITEM_NOT_SHOW | HIGHT_LIGHT_FLAG) ) == ITEM_NOT_SHOW )
-        return;
-
-    if( DisplayOpt.ContrastModeDisplay )
-    {
-        if( !IsOnLayer( curr_layer ) )
-        {
-            color &= ~MASKCOLOR;
-            color |= DARKDARKGRAY;
-        }
-    }
-
-    if( draw_mode & GR_SURBRILL )
-    {
-        if( draw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
-        else
-            color |= HIGHT_LIGHT_FLAG;
-    }
-
-    if( color & HIGHT_LIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
-
-    SetAlpha( &color, 150 );
 
     zoom = panel->GetZoom();
 
@@ -705,7 +619,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         return;
     }
 
-    if( (!DisplayOpt.DisplayPcbTrackFill) || GetState( FORCE_SKETCH ) )
+    if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                  m_End.x, m_End.y, m_Width, color );
@@ -734,9 +648,6 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     int zoom;
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-    if( Type() == TYPEZONE && !DisplayOpt.DisplayZones )
-        return;
 
     GRSetDrawMode( DC, draw_mode );
 
@@ -874,15 +785,15 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
 
     switch( Type() )
     {
-    case TYPEVIA:
+    case TYPE_VIA:
         msg = g_ViaType_Name[Shape()];
         break;
 
-    case TYPETRACK:
+    case TYPE_TRACK:
         msg = _( "Track" );
         break;
 
-    case TYPEZONE:
+    case TYPE_ZONE:
         msg = _( "Zone" ); break;
 
     default:
@@ -890,15 +801,17 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     }
 
     text_pos = 1;
+
     Affiche_1_Parametre( frame, text_pos, _( "Type" ), msg, DARKCYAN );
+    text_pos += 10;
 
-    /* Display NetName pour les segments de piste type cuivre */
-    text_pos += 15;
 
-    if(  Type() == TYPETRACK
-         || Type() == TYPEZONE
-         || Type() == TYPEVIA )
+    if(  Type() == TYPE_TRACK
+      || Type() == TYPE_ZONE
+      || Type() == TYPE_VIA )
     {
+        /* Display NetName pour les segments de piste type cuivre */
+
         EQUIPOT* equipot = board->FindNet( GetNet() );
 
         if( equipot )
@@ -907,11 +820,13 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
             msg = wxT( "<noname>" );
 
         Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
+        text_pos += 20;
 
         /* Display net code : (usefull in test or debug) */
         msg.Printf( wxT( "%d .%d" ), GetNet(), GetSubNet() );
-        text_pos += 18;
+
         Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
+        text_pos += 8;
     }
     else
     {
@@ -920,9 +835,19 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
             Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Circle" ), RED );
         else
             Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Standard" ), RED );
+        text_pos += 8;
     }
 
-    /* Display the Status flags */
+#if defined(DEBUG)
+
+    /* Display the flags */
+    msg.Printf( wxT("0x%08X"), m_Flags );
+    Affiche_1_Parametre( frame, text_pos, _( "Flags" ), msg, BLUE );
+    text_pos += 8;
+
+#endif
+
+    /* Display the State member */
     msg = wxT( ". . " );
     if( GetState( SEGM_FIXE ) )
         msg[0] = 'F';
@@ -930,11 +855,11 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     if( GetState( SEGM_AR ) )
         msg[2] = 'A';
 
-    text_pos = 42;
     Affiche_1_Parametre( frame, text_pos, _( "Stat" ), msg, MAGENTA );
+    text_pos += 6;
 
     /* Display layer or layer pair) */
-    if( Type() == TYPEVIA )
+    if( Type() == TYPE_VIA )
     {
         SEGVIA* Via = (SEGVIA*) this;
         int     top_layer, bottom_layer;
@@ -946,22 +871,21 @@ void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
     else
         msg = board->GetLayerName( m_Layer );
 
-    text_pos += 5;
     Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
+    text_pos += 15;
 
     /* Display width */
     valeur_param( (unsigned) m_Width, msg );
-    text_pos += 11;
 
-    if( Type() == TYPEVIA )      // Display Diam and Drill values
+    if( Type() == TYPE_VIA )      // Display Diam and Drill values
     {
         Affiche_1_Parametre( frame, text_pos, _( "Diam" ), msg, DARKCYAN );
+        text_pos += 8;
 
         int drill_value = GetDrillValue();
 
         valeur_param( (unsigned) drill_value, msg );
 
-        text_pos += 8;
         wxString title = _( "Drill" );
 
         if( g_DesignSettings.m_ViaDrill >= 0 )
@@ -992,7 +916,7 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     int spot_cX = ref_pos.x - m_Start.x;
     int spot_cY = ref_pos.y - m_Start.y;
 
-    if( Type() == TYPEVIA )   /* VIA rencontree */
+    if( Type() == TYPE_VIA )   /* VIA rencontree */
     {
         return (double) spot_cX * spot_cX + (double) spot_cY * spot_cY <=
                 (double) radius * radius;
@@ -1037,8 +961,11 @@ void TRACK::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 
 //        " shape=\""     << m_Shape      << '"' <<
+    " addr=\"" << std::hex << this << std::dec << '"' <<
     " layer=\"" << m_Layer << '"' <<
     " width=\"" << m_Width << '"' <<
+    " flags=\"" << m_Flags << '"' <<
+    " status=\"" << GetState(-1) << '"' <<
 
 //        " drill=\""     << GetDrillValue()   << '"' <<
     " netcode=\"" << GetNet() << "\">" <<
@@ -1102,5 +1029,39 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
     os << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
+
+wxString TRACK::ShowState( int stateBits )
+{
+    wxString ret;
+
+    if( stateBits & CHAIN )
+        ret << wxT(" | CHAIN");
+    if( stateBits & SEGM_AR )
+        ret << wxT(" | SEGM_AR");
+    if( stateBits & SEGM_FIXE )
+        ret << wxT(" | SEGM_FIXE");
+    if( stateBits & EDIT )
+        ret << wxT(" | EDIT");
+    if( stateBits & DRAG )
+        ret << wxT(" | DRAG");
+    if( stateBits & SURBRILL )
+        ret << wxT(" | SURBRILL");
+    if( stateBits & NO_TRACE )
+        ret << wxT(" | NO_TRACE");
+    if( stateBits & DELETED )
+        ret << wxT(" | DELETED");
+    if( stateBits & BUSY )
+        ret << wxT(" | BUSY");
+    if( stateBits & END_ONPAD)
+        ret << wxT(" | END_ONPAD");
+    if( stateBits & BEGIN_ONPAD)
+        ret << wxT(" | BEGIN_ONPAD");
+    if( stateBits & FLAG0)
+        ret << wxT(" | FLAG0");
+    if( stateBits & FLAG1 )
+        ret << wxT(" | FLAG1");
+
+    return ret;
+}
 
 #endif

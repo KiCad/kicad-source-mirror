@@ -355,12 +355,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
     if( !session->route->library )
         ThrowIOError( _("Session file is missing the \"library_out\" section") );
 
-#if 1
     // delete all the old tracks and vias
-    aBoard->m_Track->DeleteStructList();
-    aBoard->m_Track = NULL;
-    aBoard->m_NbSegmTrack = 0;
-#endif
+    aBoard->m_Track.DeleteAll();
 
     aBoard->DeleteMARKERs();
 

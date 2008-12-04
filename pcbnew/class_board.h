@@ -5,6 +5,10 @@
 #ifndef CLASS_BOARD_H
 #define CLASS_BOARD_H
 
+
+#include "dlist.h"
+
+
 class ZONE_CONTAINER;
 class EDA_BoardDesignSettings;
 
@@ -80,27 +84,27 @@ public:
     int                     m_Unused;
     int                     m_Status_Pcb;       // Flags used in ratsnet calculation and update
     EDA_BoardDesignSettings* m_BoardSettings;   // Link to current design settings
-    int             m_NbNets;                   // Nets (equipotentielles) count
     int             m_NbNodes;                  // Active pads (pads attached to a net ) count
     int             m_NbLinks;                  // Ratsnet count
     int             m_NbLoclinks;               // Rastests to shew while creating a track
     int             m_NbNoconnect;              // Active ratsnet count (rastnest not alraedy connected by tracks
-    int             m_NbSegmTrack;              // Track items count
-    int             m_NbSegmZone;               // Zone items count
 
-    BOARD_ITEM*     m_Drawings;                 // linked list of lines & texts
-    MODULE*         m_Modules;                  // linked list of MODULEs
-    EQUIPOT*        m_Equipots;                 // linked list of nets
-    TRACK*          m_Track;                    // linked list of TRACKs and SEGVIAs
-    SEGZONE*        m_Zone;                     // linked list of SEGZONEs
-    D_PAD**         m_Pads;                     // Entry for a sorted pad list (used in ratsnest calculations)
-    int             m_NbPads;                   // Pad count
+    DLIST<BOARD_ITEM> m_Drawings;               // linked list of lines & texts
+    DLIST<MODULE>   m_Modules;                  // linked list of MODULEs
+    DLIST<EQUIPOT>  m_Equipots;                 // linked list of nets
+
+    DLIST<TRACK>    m_Track;                    // linked list of TRACKs and SEGVIAs
+
+    DLIST<SEGZONE>  m_Zone;                     // linked list of SEGZONEs
+
+    std::vector<D_PAD*> m_Pads;                 // Entry for a sorted pad list (used in ratsnest calculations)
+
     CHEVELU*        m_Ratsnest;                 // Rastnest list
     CHEVELU*        m_LocalRatsnest;            // Rastnest list used while moving a footprint
 
     ZONE_CONTAINER* m_CurrentZoneContour;     	// zone contour currently in progress
 
-    BOARD( EDA_BaseStruct* StructFather, WinEDA_BasePcbFrame* frame );
+    BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
 
     /**

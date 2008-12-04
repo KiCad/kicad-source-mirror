@@ -25,7 +25,7 @@ void Affiche_Infos_PCB_Texte( WinEDA_BasePcbFrame* frame, TEXTE_PCB* pt_texte )
 
     frame->MsgPanel->EraseMsgBox();
 
-    if( pt_texte->Type() == TYPECOTATION )
+    if( pt_texte->Type() == TYPE_COTATION )
         Affiche_1_Parametre( frame, 1, _( "COTATION" ), pt_texte->m_Text, DARKGREEN );
 
     else

@@ -55,7 +55,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
         {
             item = (*m_Collector)[ii];
-            if( item->Type() != TYPEMODULE )
+            if( item->Type() != TYPE_MODULE )
                 continue;
             m_Collector->Remove( ii );
             ii--;
@@ -284,15 +284,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         // Create the "new" module
         MODULE* newmodule = new MODULE( mainpcb );
         newmodule->Copy( module_in_edit );
-        newmodule->SetParent( mainpcb );      // modifie par la copie
         newmodule->m_Link   = 0;
 
         // Put the footprint in the main pcb linked list.
-        newmodule->SetNext( mainpcb->m_Modules );
-        mainpcb->m_Modules = newmodule;
-        newmodule->SetBack( mainpcb );
-        if( newmodule->Next() )
-            newmodule->Next()->SetBack( newmodule );
+        mainpcb->Add( newmodule );
 
         if( source_module )         // this is an update command
         {
@@ -525,7 +520,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             EDGE_MODULE* edge = NULL;
             if( GetScreen()->GetCurItem()
                && ( GetScreen()->GetCurItem()->m_Flags & IS_NEW)
-               && (GetScreen()->GetCurItem()->Type() == TYPEEDGEMODULE) )
+               && (GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE) )
             {
                 edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
             }
@@ -579,7 +574,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             BOARD_ITEM* item = GetCurItem();
             if( item )
             {
-                if( item->Type() != TYPEPAD )
+                if( item->Type() != TYPE_PAD )
                     item = NULL;
             }
             InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
@@ -693,13 +688,13 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
         /* Rectification des contours et textes de l'empreinte : */
         for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
-            if( PtStruct->Type() == TYPEEDGEMODULE )
+            if( PtStruct->Type() == TYPE_EDGE_MODULE )
             {
                 edgemod = (EDGE_MODULE*) PtStruct;
                 edgemod->m_Start0 = edgemod->m_Start;
                 edgemod->m_End0   = edgemod->m_End;
             }
-            if( PtStruct->Type() == TYPETEXTEMODULE )
+            if( PtStruct->Type() == TYPE_TEXTE_MODULE )
             {
                 /* deplacement des inscriptions : */
                 textmod = (TEXTE_MODULE*) PtStruct;
@@ -741,7 +736,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
         {
             switch( PtStruct->Type() )
             {
-            case TYPEEDGEMODULE:
+            case TYPE_EDGE_MODULE:
                 edgemod = (EDGE_MODULE*) PtStruct;
                 edgemod->m_Start.y = -edgemod->m_Start.y;
                 edgemod->m_End.y   = -edgemod->m_End.y;
@@ -750,7 +745,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
                 edgemod->m_End0.y   = -edgemod->m_End0.y;
                 break;
 
-            case TYPETEXTEMODULE:
+            case TYPE_TEXTE_MODULE:
                 /* Inversion miroir de la position et mise en miroir : */
                 textmod = (TEXTE_MODULE*) PtStruct;
                 textmod->m_Pos.y  = -textmod->m_Pos.y;

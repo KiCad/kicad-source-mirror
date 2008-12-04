@@ -279,11 +279,17 @@ eda_global int  g_HightLigth_NetCode
 #endif
 ;
 
-/* used in track creation : */
-eda_global TRACK*   g_CurrentTrackSegment;      // current created segment
-eda_global TRACK*   g_FirstTrackSegment;        // first segment created
-eda_global int      g_TrackSegmentCount;        // New created segment count
 
+/**
+ * Used in track creation, a list of track segments currently being created,
+ * with the newest track at the end of the list, sorted by new-ness.  e.g. use
+ * TRACK->Back() to get the next older track, TRACK->Next() to get the next
+ * newer track.
+ */
+eda_global DLIST<TRACK> g_CurrentTrackList;
+
+#define g_CurrentTrackSegment   g_CurrentTrackList.GetLast()    ///< most recently created segment
+#define g_FirstTrackSegment     g_CurrentTrackList.GetFirst()   ///< first segment created
 
 eda_global wxString g_ViaType_Name[4]
 #if defined MAIN

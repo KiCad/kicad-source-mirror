@@ -47,10 +47,6 @@ public:
         return m_Pos;
     }
 
-
-    /* supprime du chainage la structure Struct */
-    void     UnLink();
-
     void     Copy( TEXTE_MODULE* source ); // copy structure
 
     /* Gestion du texte */

@@ -198,26 +198,26 @@ void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     BOARD* pcb = ( (WinEDA_BasePcbFrame*) (panel->m_Parent) )->m_Pcb;
 
-    TRACK* Track = pcb->m_Track->GetStartNetCode( net_code );
-    for( ; Track; Track = Track->Next() )
+    TRACK* track = pcb->m_Track->GetStartNetCode( net_code );
+    for( ; track; track = track->Next() )
     {
-        if( Track->GetNet() != net_code )
+        if( track->GetNet() != net_code )
             break;                                                      /* hors zone */
 
-        if( ( MasqueLayer & Track->ReturnMaskLayer() ) == 0 )
+        if( ( MasqueLayer & track->ReturnMaskLayer() ) == 0 )
             continue;                                                   /* couches differentes */
 
-        if( Track->m_Flags & IS_DRAGGED )
+        if( track->m_Flags & IS_DRAGGED )
             continue;                                                   // already in list
 
-        if( Track->m_Start == point )
+        if( track->m_Start == point )
         {
-            AddSegmentToDragList( panel, DC, STARTPOINT, Track );
+            AddSegmentToDragList( panel, DC, STARTPOINT, track );
         }
 
-        if( Track->m_End == point )
+        if( track->m_End == point )
         {
-            AddSegmentToDragList( panel, DC, ENDPOINT, Track );
+            AddSegmentToDragList( panel, DC, ENDPOINT, track );
         }
     }
 }

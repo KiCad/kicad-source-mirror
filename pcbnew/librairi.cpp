@@ -123,13 +123,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     }
 
     /* Insert footprint in list*/
-    if( m_Pcb->m_Modules )
-    {
-        m_Pcb->m_Modules->SetBack( module );
-    }
-    module->SetNext( m_Pcb->m_Modules );
-    module->SetBack( m_Pcb );
-    m_Pcb->m_Modules = module;
+    m_Pcb->Add( module );
 
     /* Display info : */
     module->Display_Infos( this );
@@ -734,13 +728,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     // Creates the new module and add it to the head of the linked list of modules
     Module = new MODULE( m_Pcb );
 
-    Module->SetNext( m_Pcb->m_Modules );
-    Module->SetBack( m_Pcb );
-    if( m_Pcb->m_Modules )
-    {
-        m_Pcb->m_Modules->SetBack( Module );
-    }
-    m_Pcb->m_Modules = Module;
+    m_Pcb->Add( Module );
 
     /* Update parameters: position, timestamp ... */
     newpos = GetScreen()->m_Curseur;

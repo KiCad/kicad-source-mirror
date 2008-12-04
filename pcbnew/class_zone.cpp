@@ -19,7 +19,7 @@
 /************************/
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
-    BOARD_ITEM( parent, TYPEZONE_CONTAINER )
+    BOARD_ITEM( parent, TYPE_ZONE_CONTAINER )
 
 {
     m_NetCode = -1;                                                             // Net number for fast comparisons

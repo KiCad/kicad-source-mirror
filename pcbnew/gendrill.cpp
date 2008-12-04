@@ -108,7 +108,7 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
     m_BlindOrBuriedViasCount = 0;
     for( TRACK* track = m_Parent->m_Pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() != TYPEVIA )
+        if( track->Type() != TYPE_VIA )
             continue;
         if( track->Shape() == VIA_THROUGH )
             m_ThroughViasCount++;

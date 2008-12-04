@@ -9,8 +9,8 @@
 #include "pcbnew.h"
 
 
-MIREPCB::MIREPCB( BOARD_ITEM* StructFather ) :
-    BOARD_ITEM( StructFather, TYPEMIRE )
+MIREPCB::MIREPCB( BOARD_ITEM* aParent ) :
+    BOARD_ITEM( aParent, TYPE_MIRE )
 {
     m_Shape = 0;
     m_Size  = 5000;
@@ -19,30 +19,6 @@ MIREPCB::MIREPCB( BOARD_ITEM* StructFather ) :
 
 MIREPCB::~MIREPCB()
 {
-}
-
-
-/***************************/
-void MIREPCB::UnLink()
-/***************************/
-{
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (BOARD*) Back() )->m_Drawings = Next();
-        }
-    }
-
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
 }
 
 

@@ -55,10 +55,8 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 /* Class MODULE : description d'un composant pcb */
 /*************************************************/
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( parent, TYPEMODULE )
+    BOARD_ITEM( parent, TYPE_MODULE )
 {
-    m_Pads         = NULL;
-    m_Drawings     = NULL;
     m_3D_Drawings  = NULL;
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = CMP_N;
@@ -92,31 +90,6 @@ MODULE::~MODULE()
         next = item->Next();
         delete item;
     }
-
-    for( item = m_Pads;  item;   item = next )
-    {
-        next = item->Next();
-        delete item;
-    }
-
-    /* effacement des elements de trace */
-    for( item = m_Drawings;  item;  item = next )
-    {
-        next = item->Next();
-
-        switch( item->Type() )
-        {
-        case TYPEEDGEMODULE:
-        case TYPETEXTEMODULE:
-            delete item;
-            break;
-
-        default:
-            DisplayError( NULL, wxT( "Warning: Item Type not handled in delete MODULE" ) );
-            next = NULL;
-            break;
-        }
-    }
 }
 
 
@@ -124,8 +97,6 @@ MODULE::~MODULE()
 void MODULE::Copy( MODULE* Module )
 /*********************************/
 {
-    D_PAD*  lastpad;
-
     m_Pos           = Module->m_Pos;
     m_Layer         = Module->m_Layer;
     m_LibRef        = Module->m_LibRef;
@@ -144,65 +115,37 @@ void MODULE::Copy( MODULE* Module )
     m_Value->Copy( Module->m_Value );
 
     /* Copie des structures auxiliaires: Pads */
-    lastpad = NULL;
-
     for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( this );
         newpad->Copy( pad );
 
-        if( m_Pads == NULL )
-        {
-            newpad->SetBack( this );
-            m_Pads = newpad;
-        }
-        else
-        {
-            newpad->SetBack( lastpad );
-            lastpad->SetNext( newpad );
-        }
-        lastpad = newpad;
+        m_Pads.PushBack( newpad );
     }
 
     /* Copy des structures auxiliaires: Drawings */
-    BOARD_ITEM* NewStruct, * LastStruct = NULL;
-
-    BOARD_ITEM* OldStruct = Module->m_Drawings;
-    for( ; OldStruct; OldStruct = OldStruct->Next() )
+    for( BOARD_ITEM* item = Module->m_Drawings;  item;  item = item->Next() )
     {
-        NewStruct = NULL;
-
-        switch( OldStruct->Type() )
+        switch( item->Type() )
         {
-        case TYPETEXTEMODULE:
-            NewStruct = new TEXTE_MODULE( this );
-            ( (TEXTE_MODULE*) NewStruct )->Copy( (TEXTE_MODULE*) OldStruct );
+        case TYPE_TEXTE_MODULE:
+            TEXTE_MODULE* textm;
+            textm = new TEXTE_MODULE( this );
+            textm->Copy( (TEXTE_MODULE*) item );
+            m_Drawings.PushBack( textm );
             break;
 
-        case TYPEEDGEMODULE:
-            NewStruct = new EDGE_MODULE( this );
-            ( (EDGE_MODULE*) NewStruct )->Copy( (EDGE_MODULE*) OldStruct );
+        case TYPE_EDGE_MODULE:
+            EDGE_MODULE* edge;
+            edge = new EDGE_MODULE( this );
+            edge->Copy( (EDGE_MODULE*) item );
+            m_Drawings.PushBack( edge );
             break;
 
         default:
             DisplayError( NULL, wxT( "Internal Err: CopyModule: type indefini" ) );
             break;
         }
-
-        if( NewStruct == NULL )
-            break;
-
-        if( m_Drawings == NULL )
-        {
-            NewStruct->SetBack( this );
-            m_Drawings = NewStruct;
-        }
-        else
-        {
-            NewStruct->SetBack( LastStruct );
-            LastStruct->SetNext( NewStruct );
-        }
-        LastStruct = NewStruct;
     }
 
     /* Copy des elements complementaires Drawings 3D */
@@ -225,39 +168,6 @@ void MODULE::Copy( MODULE* Module )
     m_Doc     = Module->m_Doc;
     m_KeyWord = Module->m_KeyWord;
 }
-
-
-/* supprime du chainage la structure Struct
- *  les structures arrieres et avant sont chainees directement
- */
-void MODULE::UnLink()
-{
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEPCB )
-        {
-            Back()->SetNext( Next() );
-        }
-        else                                /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            if( GetState( DELETED ) )       // A REVOIR car Pback = NULL si place en undelete
-            {
-                if( g_UnDeleteStackPtr )
-                    g_UnDeleteStack[g_UnDeleteStackPtr - 1] = Next();
-            }
-            else
-                ( (BOARD*) Back() )->m_Modules = Next();
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
-}
-
 
 
 /**********************************************************/
@@ -301,8 +211,8 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
         switch( item->Type() )
         {
-        case TYPETEXTEMODULE:
-        case TYPEEDGEMODULE:
+        case TYPE_TEXTE_MODULE:
+        case TYPE_EDGE_MODULE:
             item->Draw( panel, DC, draw_mode, offset );
             break;
 
@@ -330,7 +240,7 @@ void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         switch( item->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             item->Draw( panel, DC, draw_mode, offset );
             break;
 
@@ -412,8 +322,8 @@ bool MODULE::Save( FILE* aFile ) const
     {
         switch( item->Type() )
         {
-        case TYPETEXTEMODULE:
-        case TYPEEDGEMODULE:
+        case TYPE_TEXTE_MODULE:
+        case TYPE_EDGE_MODULE:
             if( !item->Save( aFile ) )
                 goto out;
             break;
@@ -567,10 +477,6 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
  *  retourne 0 si OK
  */
 {
-    D_PAD*          LastPad = NULL, * ptpad;
-    EDA_BaseStruct* LastModStruct = NULL;
-    EDGE_MODULE*    DrawSegm;
-    TEXTE_MODULE*   DrawText;
     char            Line[256], BufLine[256], BufCar1[128], * PtLine;
     int             itmp1, itmp2;
 
@@ -582,23 +488,13 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 break;
             if( Line[1] == 'P' )
             {
-                ptpad = new D_PAD( this );
-                ptpad->ReadDescr( File, LineNum );
-                RotatePoint( &ptpad->m_Pos.x, &ptpad->m_Pos.y, m_Orient );
-                ptpad->m_Pos.x += m_Pos.x;
-                ptpad->m_Pos.y += m_Pos.y;
+                D_PAD* pad = new D_PAD( this );
+                pad->ReadDescr( File, LineNum );
+                RotatePoint( &pad->m_Pos.x, &pad->m_Pos.y, m_Orient );
+                pad->m_Pos.x += m_Pos.x;
+                pad->m_Pos.y += m_Pos.y;
 
-                if( LastPad == NULL )
-                {
-                    ptpad->SetBack( this );
-                    m_Pads = ptpad;
-                }
-                else
-                {
-                    ptpad->SetBack( LastPad );
-                    LastPad->SetNext( ptpad );
-                }
-                LastPad = ptpad;
+                m_Pads.PushBack( pad );
                 continue;
             }
             if( Line[1] == 'S' )
@@ -673,47 +569,26 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             break;
 
         case 'T':    /* Read a footprint text description (ref, value, or drawing */
+            TEXTE_MODULE* textm;
             sscanf( Line + 1, "%d", &itmp1 );
             if( itmp1 == TEXT_is_REFERENCE )
-                DrawText = m_Reference;
+                textm = m_Reference;
             else if( itmp1 == TEXT_is_VALUE )
-                DrawText = m_Value;
+                textm = m_Value;
             else        /* text is a drawing */
             {
-                DrawText = new TEXTE_MODULE( this );
-                if( LastModStruct == NULL )
-                {
-                    DrawText->SetBack( this );
-                    m_Drawings = DrawText;
-                }
-                else
-                {
-                    DrawText->SetBack( LastModStruct );
-                    LastModStruct->SetNext( DrawText );
-                }
-                LastModStruct = DrawText;
+                textm = new TEXTE_MODULE( this );
+                m_Drawings.PushBack( textm );
             }
-
-            DrawText->ReadDescr( Line, File, LineNum );
+            textm->ReadDescr( Line, File, LineNum );
             break;
 
         case 'D':    /* lecture du contour */
-            DrawSegm = new EDGE_MODULE( this );
-
-            if( LastModStruct == NULL )
-            {
-                DrawSegm->SetBack( this );
-                m_Drawings = DrawSegm;
-            }
-            else
-            {
-                DrawSegm->SetBack( LastModStruct );
-                LastModStruct->SetNext( DrawSegm );
-            }
-
-            LastModStruct = DrawSegm;
-            DrawSegm->ReadDescr( Line, File, LineNum );
-            DrawSegm->SetDrawCoord();
+            EDGE_MODULE* edge;
+            edge = new EDGE_MODULE( this );
+            m_Drawings.PushBack( edge );
+            edge->ReadDescr( Line, File, LineNum );
+            edge->SetDrawCoord();
             break;
 
         case 'C':    /* Lecture de la doc */
@@ -769,14 +644,14 @@ void MODULE::SetPosition( const wxPoint& newpos )
     {
         switch( PtStruct->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
         {
             EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) PtStruct;
             pt_edgmod->SetDrawCoord();
             break;
         }
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
         {
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
             pt_texte->m_Pos.x += deltaX;
@@ -829,12 +704,12 @@ void MODULE::SetOrientation( int newangle )
     EDA_BaseStruct* PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() == TYPEEDGEMODULE )
+        if( PtStruct->Type() == TYPE_EDGE_MODULE )
         {
             EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) PtStruct;
             pt_edgmod->SetDrawCoord();
         }
-        if( PtStruct->Type() == TYPETEXTEMODULE )
+        if( PtStruct->Type() == TYPE_TEXTE_MODULE )
         {
             /* deplacement des inscriptions : */
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
@@ -871,10 +746,10 @@ void MODULE::Set_Rectangle_Encadrement()
     m_BoundaryBox.m_Pos.y = -500; ymax = 500;
 
     /* Contours: Recherche des coord min et max et mise a jour du cadre */
-    for( EDGE_MODULE* pt_edge_mod = (EDGE_MODULE*) m_Drawings;
+    for( EDGE_MODULE* pt_edge_mod = (EDGE_MODULE*) m_Drawings.GetFirst();
         pt_edge_mod; pt_edge_mod = pt_edge_mod->Next() )
     {
-        if( pt_edge_mod->Type() != TYPEEDGEMODULE )
+        if( pt_edge_mod->Type() != TYPE_EDGE_MODULE )
             continue;
 
         width = pt_edge_mod->m_Width / 2;
@@ -944,9 +819,9 @@ void MODULE::SetRectangleExinscrit()
     m_RealBoundaryBox.m_Pos.y = ymax = m_Pos.y;
 
     /* Contours: Recherche des coord min et max et mise a jour du cadre */
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings;  edge; edge = edge->Next() )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();  edge; edge = edge->Next() )
     {
-        if( edge->Type() != TYPEEDGEMODULE )
+        if( edge->Type() != TYPE_EDGE_MODULE )
             continue;
 
         width = edge->m_Width / 2;
@@ -1020,9 +895,9 @@ EDA_Rect MODULE::GetBoundingBox()
     text_area = m_Value->GetBoundingBox();
     area.Merge( text_area );
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings;  edge; edge = edge->Next() )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();  edge; edge = edge->Next() )
     {
-        if( edge->Type() != TYPETEXTEMODULE )
+        if( edge->Type() != TYPE_TEXTE_MODULE )
             continue;
         text_area = ((TEXTE_MODULE*)edge)->GetBoundingBox();
         area.Merge( text_area );
@@ -1201,17 +1076,17 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
         switch( stype )
         {
-        case TYPEMODULE:
+        case TYPE_MODULE:
             result = inspector->Inspect( this, testData );  // inspect me
             ++p;
             break;
 
-        case TYPEPAD:
+        case TYPE_PAD:
             result = IterateForward( m_Pads, inspector, testData, p );
             ++p;
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             result = inspector->Inspect( m_Reference, testData );
             if( result == SEARCH_QUIT )
                 break;
@@ -1222,7 +1097,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
             // m_Drawings can hold TYPETEXTMODULE also, so fall thru
 
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             result = IterateForward( m_Drawings, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -1230,8 +1105,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             {
                 switch( stype = *++p )
                 {
-                case TYPETEXTEMODULE:
-                case TYPEEDGEMODULE:
+                case TYPE_TEXTE_MODULE:
+                case TYPE_EDGE_MODULE:
                     continue;
 
                 default:

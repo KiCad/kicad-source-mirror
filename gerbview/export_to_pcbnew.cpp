@@ -155,14 +155,14 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
 
         if( pcb_layer_number > LAST_COPPER_LAYER )
         {
-            DRAWSEGMENT* drawitem = new DRAWSEGMENT( pcb, TYPEDRAWSEGMENT );
+            DRAWSEGMENT* drawitem = new DRAWSEGMENT( pcb, TYPE_DRAWSEGMENT );
 
             drawitem->SetLayer( pcb_layer_number );
             drawitem->m_Start = track->m_Start;
             drawitem->m_End   = track->m_End;
             drawitem->m_Width = track->m_Width;
-            drawitem->SetNext( pcb->m_Drawings );
-            pcb->m_Drawings   = drawitem;
+
+            pcb->Add( drawitem );
         }
         else
         {
@@ -195,7 +195,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
                 newtrack->SetLayer( pcb_layer_number );
             }
 
-            newtrack->Insert( pcb, NULL );
+            pcb->Add( newtrack );
         }
     }
 

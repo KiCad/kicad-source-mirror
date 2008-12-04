@@ -39,7 +39,7 @@ class DHEAD
 protected:
     EDA_BaseStruct*     first;          ///< first element in list, or NULL if list empty
     EDA_BaseStruct*     last;           ///< last elment in list, or NULL if empty
-    unsigned            count;          ///< how many elements are in the list
+    unsigned            count;          ///< how many elements are in the list, automatically maintained.
     bool                meOwner;        ///< I must delete the objects I hold in my destructor
 
     /**
@@ -66,7 +66,10 @@ protected:
     /**
      * Function insert
      * puts aNewElement just in front of aElementAfterMe in the list sequence.
-     * If aElementAfterMe is NULL, then simply Append()
+     * If aElementAfterMe is NULL, then simply append().
+     * @param aNewElement The element to insert.
+     * @param aElementAfterMe The element to insert \a aNewElement before,
+     *  if NULL then append aNewElement onto end of list.
      */
     void insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aElementAfterMe );
 
@@ -210,9 +213,13 @@ public:
         insert( aNewElement );
     }
 
-    void PushBack( T* aElement )
+    /**
+     * Function PushBack
+     * puts aNewElement at the end of the list sequence.
+     */
+    void PushBack( T* aNewElement )
     {
-        append( aElement );
+        append( aNewElement );
     }
 
     //-----</ STL like functions >--------------------------------------

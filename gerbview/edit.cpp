@@ -60,7 +60,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawStruct = GerberGeneralLocateAndDisplay();
         if( DrawStruct == NULL )
             break;
-        if( DrawStruct->Type() == TYPETRACK )
+        if( DrawStruct->Type() == TYPE_TRACK )
         {
             Delete_Segment( DC, (TRACK*) DrawStruct );
             GetScreen()->SetCurItem( NULL );

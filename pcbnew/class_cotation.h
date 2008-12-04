@@ -25,7 +25,7 @@ public:
     int        FlecheG2_ox, FlecheG2_oy, FlecheG2_fx, FlecheG2_fy;
 
 public:
-    COTATION( BOARD_ITEM* StructFather );
+    COTATION( BOARD_ITEM* aParent );
     ~COTATION();
 
     COTATION* Next() const { return (COTATION*) Pnext; }
@@ -46,9 +46,6 @@ public:
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile ) const;
-
-    /* supprime du chainage la structure Struct */
-    void    UnLink();
 
     /* Modification du texte de la cotation */
     void    SetText( const wxString& NewText );

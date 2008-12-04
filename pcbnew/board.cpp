@@ -167,7 +167,7 @@ void BOARDHEAD::UnInitBoard()
 
 
 /*****************************************************/
-void PlaceCells( BOARD* Pcb, int net_code, int flag )
+void PlaceCells( BOARD* aPcb, int net_code, int flag )
 /*****************************************************/
 
 /* Initialise les cellules du board a la valeur HOLE et VIA_IMPOSSIBLE
@@ -182,12 +182,6 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
  *      si FORCE_PADS : tous les pads seront places meme ceux de meme net_code
  */
 {
-    int             ii;
-    LISTE_PAD*      ptr;
-    TRACK*          pt_segm;
-    TEXTE_PCB*      PtText;
-    DRAWSEGMENT*    DrawSegm;
-    BOARD_ITEM*     PtStruct;
     int             ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
     int             marge, via_marge;
     int             masque_layer;
@@ -198,47 +192,50 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     /////////////////////////////////////
     // Placement des PADS sur le board //
     /////////////////////////////////////
-    ptr = (LISTE_PAD*) Pcb->m_Pads; ii = Pcb->m_NbPads;
-    for( ; ii > 0; ii--, ptr++ )
+
+    for( unsigned i=0;  i<aPcb->m_Pads.size(); ++i )
     {
-        if( (net_code != (*ptr)->GetNet() ) || (flag & FORCE_PADS) )
+        D_PAD* pad = aPcb->m_Pads[i];
+
+        if( net_code != pad->GetNet() || (flag & FORCE_PADS) )
         {
-            Place_1_Pad_Board( Pcb, *ptr, HOLE, marge, WRITE_CELL );
+            Place_1_Pad_Board( aPcb, pad, HOLE, marge, WRITE_CELL );
         }
-        Place_1_Pad_Board( Pcb, *ptr, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+        Place_1_Pad_Board( aPcb, pad, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     ///////////////////////////////////////////////
     // Placement des elements de modules sur PCB //
     ///////////////////////////////////////////////
-    PtStruct = Pcb->m_Modules;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        BOARD_ITEM* PtModStruct = ( (MODULE*) PtStruct )->m_Drawings;
-        for( ; PtModStruct != NULL; PtModStruct = PtModStruct->Next() )
+        for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
         {
-            switch( PtModStruct->Type() )
+            switch( item->Type() )
             {
-            case TYPEEDGEMODULE:
-            {
-                TRACK* TmpSegm = new TRACK( NULL );
-                TmpSegm->SetLayer( ( (EDGE_MODULE*) PtModStruct )->GetLayer() );
-                if( TmpSegm->GetLayer() == EDGE_N )
-                    TmpSegm->SetLayer( -1 );
+            case TYPE_EDGE_MODULE:
+                {
+                    EDGE_MODULE* edge = (EDGE_MODULE*) item;
 
-                TmpSegm->m_Start   = ( (EDGE_MODULE*) PtModStruct )->m_Start;
-                TmpSegm->m_End     = ( (EDGE_MODULE*) PtModStruct )->m_End;
-                TmpSegm->m_Shape   = ( (EDGE_MODULE*) PtModStruct )->m_Shape;
-                TmpSegm->m_Width   = ( (EDGE_MODULE*) PtModStruct )->m_Width;
-                TmpSegm->m_Param   = ( (EDGE_MODULE*) PtModStruct )->m_Angle;
-                TmpSegm->SetNet( -1 );
+                    TRACK* TmpSegm = new TRACK( NULL );
 
-                TraceSegmentPcb( Pcb, TmpSegm, HOLE, marge, WRITE_CELL );
-                TraceSegmentPcb( Pcb, TmpSegm, VIA_IMPOSSIBLE, via_marge,
-                                 WRITE_OR_CELL );
-                delete TmpSegm;
+                    TmpSegm->SetLayer( edge->GetLayer() );
+                    if( TmpSegm->GetLayer() == EDGE_N )
+                        TmpSegm->SetLayer( -1 );
+
+                    TmpSegm->m_Start   = edge->m_Start;
+                    TmpSegm->m_End     = edge->m_End;
+                    TmpSegm->m_Shape   = edge->m_Shape;
+                    TmpSegm->m_Width   = edge->m_Width;
+                    TmpSegm->m_Param   = edge->m_Angle;
+                    TmpSegm->SetNet( -1 );
+
+                    TraceSegmentPcb( aPcb, TmpSegm, HOLE, marge, WRITE_CELL );
+                    TraceSegmentPcb( aPcb, TmpSegm, VIA_IMPOSSIBLE, via_marge,
+                                     WRITE_OR_CELL );
+                    delete TmpSegm;
+                }
                 break;
-            }
 
             default:
                 break;
@@ -249,57 +246,67 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     ////////////////////////////////////////////
     // Placement des contours et segments PCB //
     ////////////////////////////////////////////
-    PtStruct = Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* item = aPcb->m_Drawings;  item;  item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
-        case TYPEDRAWSEGMENT:
-        {
-            int    type_cell = HOLE;
-            TRACK* TmpSegm   = new TRACK( NULL );
-            DrawSegm = (DRAWSEGMENT*) PtStruct;
-            TmpSegm->SetLayer( DrawSegm->GetLayer() );
-            if( DrawSegm->GetLayer() == EDGE_N )
+        case TYPE_DRAWSEGMENT:
             {
-                TmpSegm->SetLayer( -1 );
-                type_cell |= CELL_is_EDGE;
+                DRAWSEGMENT*    DrawSegm;
+
+                int    type_cell = HOLE;
+                TRACK* TmpSegm   = new TRACK( NULL );
+                DrawSegm = (DRAWSEGMENT*) item;
+                TmpSegm->SetLayer( DrawSegm->GetLayer() );
+                if( DrawSegm->GetLayer() == EDGE_N )
+                {
+                    TmpSegm->SetLayer( -1 );
+                    type_cell |= CELL_is_EDGE;
+                }
+
+                TmpSegm->m_Start   = DrawSegm->m_Start;
+                TmpSegm->m_End     = DrawSegm->m_End;
+                TmpSegm->m_Shape   = DrawSegm->m_Shape;
+                TmpSegm->m_Width   = DrawSegm->m_Width;
+                TmpSegm->m_Param   = DrawSegm->m_Angle;
+                TmpSegm->SetNet( -1 );
+
+                TraceSegmentPcb( aPcb, TmpSegm, type_cell, marge, WRITE_CELL );
+
+    //				TraceSegmentPcb(Pcb, TmpSegm, VIA_IMPOSSIBLE, via_marge,WRITE_OR_CELL );
+                delete TmpSegm;
             }
-
-            TmpSegm->m_Start   = DrawSegm->m_Start;
-            TmpSegm->m_End     = DrawSegm->m_End;
-            TmpSegm->m_Shape   = DrawSegm->m_Shape;
-            TmpSegm->m_Width   = DrawSegm->m_Width;
-            TmpSegm->m_Param   = DrawSegm->m_Angle;
-            TmpSegm->SetNet( -1 );
-
-            TraceSegmentPcb( Pcb, TmpSegm, type_cell, marge, WRITE_CELL );
-
-//				TraceSegmentPcb(Pcb, TmpSegm, VIA_IMPOSSIBLE, via_marge,WRITE_OR_CELL );
-            delete TmpSegm;
             break;
-        }
 
-        case TYPETEXTE:
-            PtText = (TEXTE_PCB*) PtStruct;
+        case TYPE_TEXTE:
+            TEXTE_PCB*      PtText;
+            PtText = (TEXTE_PCB*) item;
+
             if( PtText->GetLength() == 0 )
                 break;
+
             ux0 = PtText->m_Pos.x; uy0 = PtText->m_Pos.y;
 
             dx = PtText->Pitch() * PtText->GetLength();
             dy = PtText->m_Size.y + PtText->m_Width;
 
             /* Put bounding box (rectangle) on matrix */
-            dx  /= 2; dy /= 2;    /* dx et dy = demi dimensionx X et Y */
-            ux1  = ux0 + dx; uy1 = uy0 + dy;
-            ux0 -= dx; uy0 -= dy;
+            dx /= 2;
+            dy /= 2;    /* dx et dy = demi dimensionx X et Y */
+
+            ux1 = ux0 + dx;
+            uy1 = uy0 + dy;
+
+            ux0 -= dx;
+            uy0 -= dy;
 
             masque_layer = g_TabOneLayerMask[PtText->GetLayer()];
 
-            TraceFilledRectangle( Pcb, ux0 - marge, uy0 - marge, ux1 + marge, uy1 + marge,
+            TraceFilledRectangle( aPcb, ux0 - marge, uy0 - marge, ux1 + marge, uy1 + marge,
                                   (int) (PtText->m_Orient),
                                   masque_layer, HOLE, WRITE_CELL );
-            TraceFilledRectangle( Pcb, ux0 - via_marge, uy0 - via_marge,
+
+            TraceFilledRectangle( aPcb, ux0 - via_marge, uy0 - via_marge,
                                   ux1 + via_marge, uy1 + via_marge,
                                   (int) (PtText->m_Orient),
                                   masque_layer, VIA_IMPOSSIBLE, WRITE_OR_CELL );
@@ -311,24 +318,23 @@ void PlaceCells( BOARD* Pcb, int net_code, int flag )
     }
 
     /* Put tracks and vias on matrix */
-    pt_segm = Pcb->m_Track;
-    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
+    for( TRACK* track = aPcb->m_Track;  track;  track = track->Next() )
     {
-        if( net_code == pt_segm->GetNet() )
+        if( net_code == track->GetNet() )
             continue;
 
-        TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+        TraceSegmentPcb( aPcb, track, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( aPcb, track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
-    /* Put zone filling on matrix */
-    pt_segm = (TRACK*) Pcb->m_Zone;
-    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
+    // Put zone filling on matrix
+    for( SEGZONE* zone = aPcb->m_Zone;  zone;  zone = zone->Next() )
     {
-        if( net_code == pt_segm->GetNet() )
+        if( net_code == zone->GetNet() )
             continue;
-        TraceSegmentPcb( Pcb, pt_segm, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( Pcb, pt_segm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+
+        TraceSegmentPcb( aPcb, zone, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( aPcb, zone, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 }
 

@@ -89,10 +89,6 @@ public:
         m_Pos = aPos;
     }
 
-
-    /* remove from linked list */
-    void            UnLink();
-
     /* Reading and writing data on files */
     int             ReadDescr( FILE* File, int* LineNum = NULL );
 

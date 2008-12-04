@@ -36,16 +36,11 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
         }
     }
 
-    m_Pcb->m_Drawings->DeleteStructList();
-    m_Pcb->m_Drawings = NULL;
+    m_Pcb->m_Drawings.DeleteAll();
 
-    m_Pcb->m_Track->DeleteStructList();
-    m_Pcb->m_Track = NULL;
-    m_Pcb->m_NbSegmTrack = 0;
+    m_Pcb->m_Track.DeleteAll();
 
-    m_Pcb->m_Zone->DeleteStructList();
-    m_Pcb->m_Zone = NULL;
-    m_Pcb->m_NbSegmZone = 0;
+    m_Pcb->m_Zone.DeleteAll();
 
     for( ; g_UnDeleteStackPtr != 0; )
     {
@@ -66,12 +61,8 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     m_Pcb->m_Status_Pcb = 0;
     m_Pcb->m_NbLoclinks = 0;
     m_Pcb->m_NbLinks    = 0;
-    m_Pcb->m_NbPads      = 0;
-    m_Pcb->m_NbNets      = 0;
     m_Pcb->m_NbNodes     = 0;
     m_Pcb->m_NbNoconnect = 0;
-    m_Pcb->m_NbSegmTrack = 0;
-    m_Pcb->m_NbSegmZone  = 0;
 
     /* Init parametres de gestion des ecrans PAD et PCB */
     SetBaseScreen( ActiveScreen = ScreenPcb );
@@ -88,12 +79,8 @@ void WinEDA_GerberFrame::Erase_Zones( bool query )
     if( query && !IsOK( this, _( "Delete zones ?" ) ) )
         return;
 
-    if( m_Pcb->m_Zone )
-    {
-        m_Pcb->m_Zone->DeleteStructList( );
-        m_Pcb->m_Zone = NULL;
-        m_Pcb->m_NbSegmZone = 0;
-    }
+    m_Pcb->m_Zone.DeleteAll();
+
     ScreenPcb->SetModify();
 }
 
@@ -116,10 +103,10 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( bool all_layers, bool query )
 
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
-        case TYPETEXTE:
-        case TYPECOTATION:
-        case TYPEMIRE:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_TEXTE:
+        case TYPE_COTATION:
+        case TYPE_MIRE:
             if( PtStruct->GetLayer() == layer  || layer < 0 )
                 PtStruct->DeleteStructure();
             break;
@@ -177,7 +164,7 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( bool query )
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
         PtNext = PtStruct->Next();
-        if( PtStruct->Type() == TYPETEXTE )
+        if( PtStruct->Type() == TYPE_TEXTE )
             PtStruct->DeleteStructure();
     }
 

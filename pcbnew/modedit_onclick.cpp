@@ -31,17 +31,17 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             switch( DrawStruct->Type() )
             {
-            case TYPETEXTEMODULE:
+            case TYPE_TEXTE_MODULE:
                 SaveCopyInUndoList( m_Pcb->m_Modules );
                 PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, DC );
                 break;
 
-            case TYPEEDGEMODULE:
+            case TYPE_EDGE_MODULE:
                 SaveCopyInUndoList( m_Pcb->m_Modules );
                 Place_EdgeMod( (EDGE_MODULE*) DrawStruct, DC );
                 break;
 
-            case TYPEPAD:
+            case TYPE_PAD:
                 PlacePad( (D_PAD*) DrawStruct, DC );
                 break;
 
@@ -234,7 +234,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
 
     switch( DrawStruct->Type() )
     {
-    case TYPEMODULE:
+    case TYPE_MODULE:
     {
         wxMenu* transform_choice = new wxMenu;
         ADD_MENUITEM( transform_choice, ID_MODEDIT_MODULE_ROTATE,
@@ -254,7 +254,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         break;
     }
 
-    case TYPEPAD:
+    case TYPE_PAD:
         if( !flags )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST,
@@ -275,7 +275,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         }
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
         if( !flags )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
@@ -290,7 +290,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                           _( "Delete Text Mod." ), delete_text_xpm );
         break;
 
-    case TYPEEDGEMODULE:
+    case TYPE_EDGE_MODULE:
     {
         if( (flags & IS_NEW) )
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING,
@@ -318,20 +318,20 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     }
         break;
 
-    case TYPEDRAWSEGMENT:
-    case TYPETEXTE:
-    case TYPEVIA:
-    case TYPETRACK:
-    case TYPEZONE:
-    case TYPEMARKER:
-    case TYPECOTATION:
-    case TYPEMIRE:
+    case TYPE_DRAWSEGMENT:
+    case TYPE_TEXTE:
+    case TYPE_VIA:
+    case TYPE_TRACK:
+    case TYPE_ZONE:
+    case TYPE_MARKER:
+    case TYPE_COTATION:
+    case TYPE_MIRE:
         break;
 
-    case TYPESCREEN:
+    case TYPE_SCREEN:
     case TYPE_NOT_INIT:
-    case TYPEPCB:
-    case PCB_EQUIPOT_STRUCT_TYPE:
+    case TYPE_PCB:
+    case TYPE_EQUIPOT:
         msg.Printf(
             wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
             DrawStruct->Type() );
@@ -392,19 +392,19 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         switch( DrawStruct->Type() )
         {
-        case TYPEPAD:
+        case TYPE_PAD:
             InstallPadOptionsFrame(
                 (D_PAD*) DrawStruct, &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
-        case TYPEMODULE:
+        case TYPE_MODULE:
             InstallModuleOptionsFrame( (MODULE*) DrawStruct,
                                       &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct,
                                        &dc, pos );
             DrawPanel->MouseToCursorSchema();

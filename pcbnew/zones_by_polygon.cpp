@@ -935,12 +935,7 @@ int WinEDA_PcbFrame::Fill_All_Zones( wxDC* DC, bool verbose )
     int             error_level = 0;
 
     // Remove all zones :
-    if( m_Pcb->m_Zone )
-    {
-        m_Pcb->m_Zone->DeleteStructList();
-        m_Pcb->m_Zone = NULL;
-        m_Pcb->m_NbSegmZone = 0;
-    }
+    m_Pcb->m_Zone.DeleteAll();
 
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {

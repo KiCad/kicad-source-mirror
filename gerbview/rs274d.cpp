@@ -102,6 +102,13 @@ static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     NEGATE( aTrack->m_End.y );
     aTrack->SetNet( Dcode_index );
     aTrack->m_Shape   = S_SPOT_CIRCLE;
+
+    D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
+
+    if( !isDark )
+    {
+        aTrack->m_Flags |= DRAW_ERASED;
+    }
 }
 
 
@@ -148,6 +155,12 @@ static void fillOvalOrRectFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLaye
         aTrack->m_Start.y -= len;
         aTrack->m_End.y   += len;
     }
+
+    D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
+    if( !isDark )
+    {
+        aTrack->m_Flags |= DRAW_ERASED;
+    }
 }
 
 
@@ -178,6 +191,12 @@ static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     NEGATE( aTrack->m_End.y );
 
     aTrack->SetNet( Dcode_index );
+
+    D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
+    if( !isDark )
+    {
+        aTrack->m_Flags |= DRAW_ERASED;
+    }
 }
 
 
@@ -190,16 +209,17 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
                                      bool trigo_sens, bool multiquadrant, bool isDark )
 /*****************************************************************/
 
-/* creation d'un arc:
- *  si multiquadrant == true arc de 0 a 360 degres
- *      et rel_center est la coordonn�e du centre relativement au startpoint
- *
- *  si multiquadrant == false arc de 0 � 90 entierement contenu dans le meme quadrant
- *      et rel_center est la coordonn�e du centre relativement au startpoint,
- *      mais en VALEUR ABSOLUE et le signe des valeurs x et y de rel_center doit
- *      etre deduit de cette limite de 90 degres
- *
- */
+/*
+ creation d'un arc:
+  si multiquadrant == true arc de 0 a 360 degres
+      et rel_center est la coordonn�e du centre relativement au startpoint
+
+  si multiquadrant == false arc de 0 � 90 entierement contenu dans le meme quadrant
+      et rel_center est la coordonn�e du centre relativement au startpoint,
+      mais en VALEUR ABSOLUE et le signe des valeurs x et y de rel_center doit
+      etre deduit de cette limite de 90 degres
+*/
+
 #endif
 
 
@@ -291,6 +311,12 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     NEGATE( aTrack->m_End.y );
 
     aTrack->SetSubNet( -aTrack->GetSubNet() );
+
+    if( !isDark )
+    {
+        D(printf("%s: isDark=false\n", __func__ );)
+        aTrack->m_Flags |= DRAW_ERASED;
+    }
 }
 
 
@@ -811,16 +837,9 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         case 1:     // code D01 Draw line, exposure ON
         {
             m_Exposure = true;
-            SEGZONE* edge_poly, * last;
 
-            edge_poly = new SEGZONE( frame->m_Pcb );
-
-            last = (SEGZONE*) frame->m_Pcb->m_Zone;
-            if( last )
-                while( last->Next() )
-                    last = (SEGZONE*) last->Next();
-
-            edge_poly->Insert( frame->m_Pcb, last );
+            SEGZONE* edge_poly = new SEGZONE( frame->m_Pcb );
+            frame->m_Pcb->m_Zone.Append( edge_poly );
 
             edge_poly->SetLayer( activeLayer );
             edge_poly->m_Width = 1;
@@ -829,6 +848,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             edge_poly->m_End = m_CurrentPos;
             NEGATE( edge_poly->m_End.y );
             edge_poly->SetNet( m_PolygonFillModeState );
+
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 1;
             break;
@@ -862,10 +882,10 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             {
             case GERB_INTERPOL_LINEAR_1X:
                 track = new TRACK( frame->m_Pcb );
-                track->Insert( frame->m_Pcb, NULL );
+                frame->m_Pcb->m_Track.Append( track );
                 fillLineTRACK(  track, dcode, activeLayer,
                                 m_PreviousPos, m_CurrentPos,
-                                size.x, m_Exposure ^ m_ImageNegative );
+                                size.x, !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             case GERB_INTERPOL_LINEAR_01X:
@@ -877,11 +897,11 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 track = new TRACK( frame->m_Pcb );
-                track->Insert( frame->m_Pcb, NULL );
+                frame->m_Pcb->m_Track.Append( track );
                 fillArcTRACK(  track, dcode, activeLayer,
                      m_PreviousPos, m_CurrentPos, m_IJPos,
                      size.x, m_Iterpolation==GERB_INTERPOL_ARC_NEG ? false : true,
-                     m_360Arc_enbl, m_Exposure ^ m_ImageNegative );
+                     m_360Arc_enbl, !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             default:
@@ -913,20 +933,20 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case APT_LINE:  // APT_LINE is not in the spec, don't know why it's here
             case APT_CIRCLE:
                 track = new TRACK( frame->m_Pcb );
-                track->Insert( frame->m_Pcb, NULL );
+                frame->m_Pcb->m_Track.Append( track );
                 fillRoundFlashTRACK( track, dcode, activeLayer,
                                 m_CurrentPos,
-                                size.x, true ^ m_ImageNegative );
+                                size.x, !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             case APT_OVAL:
             case APT_RECT:
                 track = new TRACK( frame->m_Pcb );
-                track->Insert( frame->m_Pcb, NULL );
+                frame->m_Pcb->m_Track.Append( track );
                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                 m_CurrentPos, size,
                                 aperture == APT_RECT ? S_SPOT_RECT : S_SPOT_OVALE,
-                                true ^ m_ImageNegative );
+                                !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             case APT_MACRO:
@@ -949,7 +969,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 int diameter = scale( p->params[1].GetValue( tool ), m_GerbMetric );
 
                                 track = new TRACK( frame->m_Pcb );
-                                track->Insert( frame->m_Pcb, NULL );
+                                frame->m_Pcb->m_Track.Append( track );
                                 fillRoundFlashTRACK( track, dcode, activeLayer,
                                                 m_CurrentPos,
                                                 diameter, exposure );
@@ -978,7 +998,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 wxPoint midPoint( (start.x + end.x)/2, (start.y+end.y)/2 );
                                 curPos += midPoint;
                                 track = new TRACK( frame->m_Pcb );
-                                track->Insert( frame->m_Pcb, NULL );
+                                frame->m_Pcb->m_Track.Append( track );
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                                curPos, size, S_SPOT_RECT,
                                                exposure );
@@ -993,7 +1013,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 size.y = msize.y;
                                 curPos += mapPt( p->params[3].GetValue( tool ), p->params[4].GetValue( tool ), m_GerbMetric );
                                 track = new TRACK( frame->m_Pcb );
-                                track->Insert( frame->m_Pcb, NULL );
+                                frame->m_Pcb->m_Track.Append( track );
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                                curPos, size, S_SPOT_RECT,
                                                exposure );
@@ -1012,7 +1032,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 curPos.y += size.y/2;
                                 curPos.x += size.x/2;
                                 track = new TRACK( frame->m_Pcb );
-                                track->Insert( frame->m_Pcb, NULL );
+                                frame->m_Pcb->m_Track.Append( track );
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                                curPos, size, S_SPOT_RECT,
                                                exposure );

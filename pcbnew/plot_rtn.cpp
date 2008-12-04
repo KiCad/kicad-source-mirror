@@ -44,23 +44,23 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     {
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format_plot, masque_layer );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
             PlotTextePcb( (TEXTE_PCB*) PtStruct, format_plot, masque_layer );
             break;
 
-        case TYPECOTATION:
+        case TYPE_COTATION:
             PlotCotation( (COTATION*) PtStruct, format_plot, masque_layer );
             break;
 
-        case TYPEMIRE:
+        case TYPE_MIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, format_plot, masque_layer );
             break;
 
-        case TYPEMARKER:
+        case TYPE_MARKER:
             break;
 
         default:
@@ -261,10 +261,10 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
             Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
         }
 
-        pt_texte = (TEXTE_MODULE*) Module->m_Drawings;
+        pt_texte = (TEXTE_MODULE*) Module->m_Drawings.GetFirst();
         for( ; pt_texte != NULL; pt_texte = pt_texte->Next() )
         {
-            if( pt_texte->Type() != TYPETEXTEMODULE )
+            if( pt_texte->Type() != TYPE_TEXTE_MODULE )
                 continue;
 
             if( !Sel_Texte_Divers )
@@ -447,10 +447,10 @@ void Plot_Edges_Modules( BOARD* pcb, int format_plot, int masque_layer )
     Module   = pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        PtEdge = (EDGE_MODULE*) Module->m_Drawings;
+        PtEdge = (EDGE_MODULE*) Module->m_Drawings.GetFirst();
         for( ; PtEdge != NULL; PtEdge = PtEdge->Next() )
         {
-            if( PtEdge->Type() != TYPEEDGEMODULE )
+            if( PtEdge->Type() != TYPE_EDGE_MODULE )
                 continue;
             if( (g_TabOneLayerMask[PtEdge->GetLayer()] & masque_layer) == 0 )
                 continue;
@@ -475,7 +475,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
     int     StAngle, EndAngle;
     wxPoint pos, end;       /* Coord des segments a tracer */
 
-    if( PtEdge->Type() != TYPEEDGEMODULE )
+    if( PtEdge->Type() != TYPE_EDGE_MODULE )
         return;
     type_trace = PtEdge->m_Shape;
     thickness  = PtEdge->m_Width;
@@ -527,7 +527,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         // which are relative to module position, orientation 0
         int     ii, * source, * ptr, * ptr_base;
         MODULE* Module = NULL;
-        if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPEMODULE) )
+        if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPE_MODULE) )
             Module = (MODULE*) PtEdge->GetParent();
         ptr    = ptr_base = (int*) MyMalloc( 2 * PtEdge->m_PolyCount * sizeof(int) );
         source = PtEdge->m_PolyList;

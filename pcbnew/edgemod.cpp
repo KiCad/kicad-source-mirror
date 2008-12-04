@@ -159,10 +159,10 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 
     if( Edge == NULL )
     {
-        Edge = (EDGE_MODULE*) Module->m_Drawings;
+        Edge = (EDGE_MODULE*)(BOARD_ITEM*) Module->m_Drawings;
         for( ; Edge != NULL; Edge = Edge->Next() )
         {
-            if( Edge->Type() != TYPEEDGEMODULE )
+            if( Edge->Type() != TYPE_EDGE_MODULE )
                 continue;
             Edge->m_Width = ModuleSegmentWidth;
         }
@@ -209,10 +209,10 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
 
     if( Edge == NULL )
     {
-        Edge = (EDGE_MODULE*) Module->m_Drawings;
+        Edge = (EDGE_MODULE*)(BOARD_ITEM*) Module->m_Drawings;
         for( ; Edge != NULL; Edge = Edge->Next() )
         {
-            if( Edge->Type() != TYPEEDGEMODULE )
+            if( Edge->Type() != TYPE_EDGE_MODULE )
                 continue;
             Edge->SetLayer( new_layer );
         }
@@ -276,9 +276,9 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 {
     if( Edge == NULL )
         return;
-    if( Edge->Type() != TYPEEDGEMODULE )
+    if( Edge->Type() != TYPE_EDGE_MODULE )
     {
-        DisplayError( this, wxT( "StructType error: TYPEEDGEMODULE expected" ) );
+        DisplayError( this, wxT( "StructType error: TYPE_EDGE_MODULE expected" ) );
         return;
     }
 
@@ -301,7 +301,7 @@ static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     EDGE_MODULE* Edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
 
-    if( Edge && (Edge->Type() == TYPEEDGEMODULE) )    /* error si non */
+    if( Edge && (Edge->Type() == TYPE_EDGE_MODULE) )    /* error si non */
     {
         if( Edge->m_Flags & IS_NEW )                        /* effacement du nouveau contour */
         {
@@ -348,11 +348,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         MoveVector.x = MoveVector.y = 0;
 
         /* Add the new item to the Drawings list head*/
-        Edge->SetBack( Module );
-        Edge->SetNext( Module->m_Drawings );
-        if( Module->m_Drawings )
-            Module->m_Drawings->SetBack( Edge );
-        Module->m_Drawings = Edge;
+        Module->m_Drawings.PushFront( Edge );
 
         /* Mise a jour des caracteristiques du segment ou de l'arc */
         Edge->m_Flags = IS_NEW;

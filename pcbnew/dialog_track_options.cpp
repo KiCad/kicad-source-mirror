@@ -445,8 +445,8 @@ void WinEDA_PcbTracksDialog::AcceptPcbOptions( wxCommandEvent& event )
 
     m_Parent->DisplayTrackSettings();
 
-    m_Parent->AddHistory( g_DesignSettings.m_CurrentViaSize, TYPEVIA );
-    m_Parent->AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPETRACK );
+    m_Parent->AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
+    m_Parent->AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
     EndModal( 1 );
 }
 
@@ -462,19 +462,19 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
 
     switch( type )
     {
-    case TYPETRACK:
+    case TYPE_TRACK:
         for( ii = 0; ii < HISTORY_NUMBER; ii++ )
         {
             if( g_DesignSettings.m_TrackWidthHistory[ii] == value )
             {
-                addhistory = FALSE; 
+                addhistory = FALSE;
                 break;
             }
         }
 
         if( !addhistory )
             break;
-        
+
         for( ii = HISTORY_NUMBER-1;   ii > 0;  ii-- )
         {
             g_DesignSettings.m_TrackWidthHistory[ii] = g_DesignSettings.m_TrackWidthHistory[ii-1];
@@ -487,7 +487,7 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
         {
             if( g_DesignSettings.m_TrackWidthHistory[ii+1] == 0 )
                 break;                                                          // Fin de liste
-            
+
             if( g_DesignSettings.m_TrackWidthHistory[ii] >
                 g_DesignSettings.m_TrackWidthHistory[ii+1]  )
             {
@@ -498,12 +498,12 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
 
         break;
 
-    case TYPEVIA:
+    case TYPE_VIA:
         for( ii = 0; ii < HISTORY_NUMBER; ii++ )
         {
             if( g_DesignSettings.m_ViaSizeHistory[ii] == value )
             {
-                addhistory = FALSE; 
+                addhistory = FALSE;
                 break;
             }
         }
@@ -523,7 +523,7 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
         {
             if( g_DesignSettings.m_ViaSizeHistory[ii+1] == 0 )
                 break;                                                      // Fin de liste
-            
+
             if( g_DesignSettings.m_ViaSizeHistory[ii] > g_DesignSettings.m_ViaSizeHistory[ii+1]  )
             {
                 EXCHG( g_DesignSettings.m_ViaSizeHistory[ii],

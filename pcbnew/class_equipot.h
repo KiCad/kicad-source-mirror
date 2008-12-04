@@ -25,7 +25,7 @@ public:
     CHEVELU*   m_RatsnestStart; // pointeur sur debut de liste ratsnests du net
     CHEVELU*   m_RatsnestEnd;   // pointeur sur fin de liste ratsnests du net
 
-    EQUIPOT( BOARD_ITEM* StructFather );
+    EQUIPOT( BOARD_ITEM* aParent );
     ~EQUIPOT();
 
     EQUIPOT*    Next() const { return (EQUIPOT*) Pnext; }
@@ -39,10 +39,6 @@ public:
      * A dummy to satisfy pure virtual BOARD::GetPosition()
      */
     wxPoint& GetPosition();
-
-
-    /* Effacement memoire de la structure */
-    void  UnLink();
 
     /* Readind and writing data on files */
     int   ReadEquipotDescr( FILE* File, int* LineNum );

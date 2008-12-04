@@ -117,22 +117,22 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
     {
         switch( item->Type() )
         {
-        case TYPEPAD:
+        case TYPE_PAD:
             g_HightLigth_NetCode = ((D_PAD*)item)->GetNet();
             Hight_Light( DC );
             SendMessageToEESCHEMA( item );
             return g_HightLigth_NetCode;
 
-        case TYPETRACK:
-        case TYPEVIA:
-        case TYPEZONE:
+        case TYPE_TRACK:
+        case TYPE_VIA:
+        case TYPE_ZONE:
             // since these classes are all derived from TRACK, use a common
             // GetNet() function:
             g_HightLigth_NetCode = ((TRACK*)item)->GetNet();
             Hight_Light( DC );
             return g_HightLigth_NetCode;
 
-        case TYPEZONE_CONTAINER:
+        case TYPE_ZONE_CONTAINER:
             g_HightLigth_NetCode = ((ZONE_CONTAINER*)item)->GetNet();
             Hight_Light( DC );
             return g_HightLigth_NetCode;

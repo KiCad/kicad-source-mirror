@@ -46,7 +46,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         {
             switch( GetScreen()->GetCurItem()->Type() )
             {
-            case TYPEPAD:
+            case TYPE_PAD:
                 Pad = (D_PAD*) GetScreen()->GetCurItem();
                 autoroute_net_code = Pad->GetNet();
                 break;
@@ -63,7 +63,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
 
     case ROUTE_MODULE:
         Module = (MODULE*) GetScreen()->GetCurItem();
-        if( (Module == NULL) || (Module->Type() != TYPEMODULE) )
+        if( (Module == NULL) || (Module->Type() != TYPE_MODULE) )
         {
             DisplayError( this, _( "Module not selected" ) ); return;
         }
@@ -71,7 +71,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
 
     case ROUTE_PAD:
         Pad = (D_PAD*) GetScreen()->GetCurItem();
-        if( (Pad == NULL)  || (Pad->Type() != TYPEPAD) )
+        if( (Pad == NULL)  || (Pad->Type() != TYPE_PAD) )
         {
             DisplayError( this, _( "Pad not selected" ) ); return;
         }

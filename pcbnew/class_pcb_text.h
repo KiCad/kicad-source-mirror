@@ -13,7 +13,6 @@ public:
     TEXTE_PCB( TEXTE_PCB* textepcb );
     ~TEXTE_PCB();
 
-
     /**
      * Function GetPosition
      * returns the position of this object.
@@ -24,10 +23,6 @@ public:
     {
         return m_Pos;   // within EDA_TextStruct
     }
-
-
-    /* supprime du chainage la structure Struct */
-    void UnLink();
 
     /* duplicate structure */
     void Copy( TEXTE_PCB* source );

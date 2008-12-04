@@ -31,7 +31,7 @@ int WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* pt_segm )
     /* Test DRC and width change */
     old_w    = pt_segm->m_Width;
     consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentTrackWidth;
-    if( pt_segm->Type() == TYPEVIA )
+    if( pt_segm->Type() == TYPE_VIA )
     {
         consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentViaSize;
         if ( pt_segm->m_Shape == VIA_MICROVIA )
@@ -144,7 +144,7 @@ bool WinEDA_PcbFrame::Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via )
     pt_segm = m_Pcb->m_Track;
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        if( pt_segm->Type() == TYPEVIA ) /* mise a jour du diametre de la via */
+        if( pt_segm->Type() == TYPE_VIA ) /* mise a jour du diametre de la via */
         {
             if( Via )
             {

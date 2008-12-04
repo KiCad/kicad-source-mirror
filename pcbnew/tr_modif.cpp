@@ -26,9 +26,8 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
 {
     TRACK*  StartTrack, * EndTrack;/* Pointeurs des segments de debut et fin
                                  *  (extremites) de la nouvelle piste */
-    TRACK*  EndNewTrack,    /* Pointeur sur le dernier segment de la liste
-                             *  chainee de la mouvelle piste */
-    * pt_segm, * pt_del;
+    TRACK*  pt_segm;
+    TRACK*  pt_del;
     int     ii, jj, nb_segm, nbconnect;
     wxPoint start;                          /* coord du point de depart de la piste */
     wxPoint end;                            /* coord du point de fin de la piste */
@@ -36,8 +35,12 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     TRACK*  BufDeb, * BufEnd;   /* Pointeurs de debut et de fin de la zone
                                  *  des pistes equipotentielles */
 
+    int     netcode = pt_new_track->GetNet();
+
+
     /* Reconstitution de la piste complete ( la nouvelle piste
-     *  a pu demarrer sur un segment de piste en l'air */
+     * a pu demarrer sur un segment de piste en l'air
+     */
 
     ListSetState( pt_new_track, nbptnewpiste, BUSY, OFF );
 
@@ -45,29 +48,43 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
      *  la piste complete en utilisant le segment suivant comme reference, car
      *  une via est souvent sur un carrefour de segments, et ne caracterise pas
      *  une piste */
-    if( pt_new_track->Type() == TYPEVIA && (nbptnewpiste > 1 ) )
+    if( pt_new_track->Type() == TYPE_VIA && (nbptnewpiste > 1 ) )
         pt_new_track = pt_new_track->Next();
+
     pt_new_track = Marque_Une_Piste( frame, DC, pt_new_track, &nbptnewpiste, 0 );
+    wxASSERT( pt_new_track );
+
+#if 0 && defined(DEBUG)
+    TRACK*  EndNewTrack;    /* Pointeur sur le dernier segment de la liste
+                             *  chainee de la mouvelle piste */
 
     EndNewTrack = pt_new_track;
     for( ii = 1;  ii < nbptnewpiste; ii++ )
     {
+        wxASSERT( EndNewTrack->GetState(-1) != 0 );
+        D(printf("track %p is newly part of net %d\n", EndNewTrack, netcode );)
         EndNewTrack = EndNewTrack->Next();
     }
 
+    wxASSERT( EndNewTrack->GetState(-1) != 0 );
+    D(printf("track %p is newly part of net %d\n", EndNewTrack, netcode );)
+
+    for( TRACK* track = Pcb->m_Track;  track;  track = track->Next() )
+        track->Show( 0, std::cout );
+#endif
+
     /* Calcul des limites de recherche des segments de piste */
     /* BufDeb pointe le 1er segment utile */
-    BufDeb = Pcb->m_Track->GetStartNetCode( pt_new_track->GetNet() );
+    BufDeb = Pcb->m_Track->GetStartNetCode( netcode );
 
     /* BufEnd Pointe le dernier segment */
-    BufEnd = BufDeb->GetEndNetCode( pt_new_track->GetNet() );
+    BufEnd = BufDeb->GetEndNetCode( netcode );
 
     /* nettoyage des flags pour tout le net */
-    for( pt_del = BufDeb; pt_del != NULL; pt_del = pt_del->Next() )
+    for( pt_del = BufDeb;  pt_del && pt_del != BufEnd;  pt_del = pt_del->Next() )
     {
+        D(printf("track %p turning off BUSY | EDIT | CHAIN\n", pt_del );)
         pt_del->SetState( BUSY | EDIT | CHAIN, OFF );
-        if( pt_del == BufEnd )
-            break;
     }
 
     /* Calcul des points limites de la nouvelle piste */
@@ -89,12 +106,15 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     /* Determinations des couches interconnectees a ces points */
     startmasklayer = StartTrack->ReturnMaskLayer();
     endmasklayer   = EndTrack->ReturnMaskLayer();
+
     /* Il peut y avoir une via ou un pad sur les extremites: */
     pt_segm = Fast_Locate_Via( Pcb->m_Track, NULL, start, startmasklayer );
     if( pt_segm )
         startmasklayer |= pt_segm->ReturnMaskLayer();
-    if( StartTrack->start && (StartTrack->start->Type() == TYPEPAD) )
-    {       /* start sur pad */
+
+    if( StartTrack->start && (StartTrack->start->Type() == TYPE_PAD) )
+    {
+        /* start sur pad */
         D_PAD* pt_pad = (D_PAD*) (StartTrack->start);
         startmasklayer |= pt_pad->m_Masque_Layer;
     }
@@ -102,18 +122,21 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     pt_segm = Fast_Locate_Via( Pcb->m_Track, NULL, end, endmasklayer );
     if( pt_segm )
         endmasklayer |= pt_segm->ReturnMaskLayer();
-    if( EndTrack->end && ( EndTrack->end->Type() == TYPEPAD) )
+
+    if( EndTrack->end && ( EndTrack->end->Type() == TYPE_PAD) )
     {
         D_PAD* pt_pad = (D_PAD*) (EndTrack->end);
         endmasklayer |= pt_pad->m_Masque_Layer;
     }
 
     /* Marquage a DELETED de la piste nouvelle (qui ne doit pas intervenir
-     *  dans la recherche d'autres connexions) */
+     * dans la recherche d'autres connexions)
+     */
     ListSetState( pt_new_track, nbptnewpiste, DELETED, ON );
 
     /* test : un segment doit etre connecte au point de depart car sinon
-     *  il est inutile d'analyser l'autre point */
+     * il est inutile d'analyser l'autre point
+     */
 
     pt_segm = Fast_Locate_Piste( BufDeb, BufEnd, start, startmasklayer );
 
@@ -133,8 +156,9 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
         if( pt_segm == NULL )
             break;
 
-        if( pt_segm->Type() != TYPEVIA )
-        {       /* Segment trouve */
+        if( pt_segm->Type() != TYPE_VIA )
+        {
+            /* Segment trouve */
             if( pt_segm->GetState( CHAIN ) == 0 )
             {
                 pt_segm->SetState( CHAIN, ON );
@@ -143,17 +167,16 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
         }
         if( pt_del == BufEnd )
             break;
+
         pt_del = pt_segm->Next();
     }
 
     if( nbconnect == 0 )
     {
         /* nettoyage des flags */
-        for( pt_del = BufDeb; pt_del != NULL; pt_del = pt_del->Next() )
+        for( pt_del = BufDeb; pt_del && pt_del != BufEnd; pt_del = pt_del->Next() )
         {
             pt_del->SetState( DELETED | EDIT | CHAIN, OFF );
-            if( pt_del == BufEnd )
-                break;
         }
 
         return 0;
@@ -168,30 +191,33 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     /* Examen de tous les segments marques */
     while( nbconnect )
     {
-        for( pt_del = BufDeb; pt_del != NULL; pt_del = pt_del->Next() )
+        for( pt_del = BufDeb; pt_del && pt_del != BufEnd; pt_del = pt_del->Next() )
         {
             if( pt_del->GetState( CHAIN ) )
                 break;
-            if( pt_del == BufEnd )
-                break;
         }
 
-        nbconnect--; pt_del->SetState( CHAIN, OFF );
+        nbconnect--;
+        pt_del->SetState( CHAIN, OFF );
+
         pt_del = Marque_Une_Piste( frame, DC, pt_del, &nb_segm, 0 );
 
         /* Test si La piste marquee est redondante, c'est a dire si l'un des
-         *  segments marques est connecte au point de depart de la piste nouvelle
+         * segments marques est connecte au point de depart de la piste nouvelle
          */
-        ii = 0; pt_segm = pt_del;
+        ii = 0;
+        pt_segm = pt_del;
         for( ; pt_segm && (ii < nb_segm); pt_segm = pt_segm->Next(), ii++ )
         {
-            if( ( pt_segm->GetState( BUSY ) ) == 0 )
+            if( pt_segm->GetState( BUSY ) == 0 )
                 break;
 
-            if( (pt_segm->m_Start == start) || (pt_segm->m_End == start) )
-            {       /* la piste marquee peut etre effacee */
+            if( pt_segm->m_Start == start || pt_segm->m_End == start )
+            {
+                /* la piste marquee peut etre effacee */
                 TRACK* NextS;
                 Trace_Une_Piste( frame->DrawPanel, DC, pt_del, nb_segm, GR_XOR | GR_SURBRILL );
+
                 for( jj = 0; jj < nb_segm; jj++, pt_del = NextS )
                 {
                     NextS = pt_del->Next();
@@ -219,11 +245,9 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     }
 
     /* nettoyage des flags */
-    for( pt_del = Pcb->m_Track; pt_del != NULL; pt_del = pt_del->Next() )
+    for( pt_del = Pcb->m_Track; pt_del && pt_del != BufEnd; pt_del = pt_del->Next() )
     {
         pt_del->SetState( DELETED | EDIT | CHAIN, OFF );
-        if( pt_del == BufEnd )
-            break;
     }
 
     return 0;

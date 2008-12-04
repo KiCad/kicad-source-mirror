@@ -10,33 +10,19 @@
 
 #include "protos.h"
 
-class TSTSEGM   /* memorisation des segments marques */
-{
-public:
-    TSTSEGM* Pnext, * Pback;
-    TRACK*   RefTrack;
 
-public:
-    TSTSEGM( TRACK * Father ) {
-        Pback    = Pnext = NULL;
-        RefTrack = Father;
-    }
-};
+typedef std::vector<TRACK*> TRACK_PTRS;
+
 
 /* Routines externes : */
 void        Montre_Position_New_Piste( int flag );/* defini dans editrack.cc */
 
 
 /* Routines Locales */
-static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masklayer );
+static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masklayer, TRACK_PTRS* aList );
 
 /* Variables locales */
-TSTSEGM* ListSegm = NULL;
 
-/****************************************************************************/
-TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
-                         TRACK* pt_segm, int* nb_segm, int flagcolor )
-/****************************************************************************/
 
 /* Routine de Marquage de 1 piste, a partir du segment pointe par pt_segm.
  *  le segment pointe est marque puis les segments connectes
@@ -47,144 +33,163 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
  *      adresse du 1er segment de la chaine creee
  *      nombre de segments
  */
+
+/**
+ * Function Marque_Une_Piste
+ * marks a chain of track segments, starting at aTrackList.
+ * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical continuity
+ * is detected by walking each segment, and finally the segments are rearranged
+ * into a contiguous chain within the given list.
+ * @param aTrackList The first interesting segment within a list of many
+ *  interesting and uninteresting segments.
+ * @return TRACK* the first in the chain of interesting segments.
+ */
+TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
+                         TRACK* aTrackList, int* nb_segm, int flagcolor )
 {
-    int      NbSegmBusy, masque_layer;
-    TRACK*   Track, * FirstTrack, * NextTrack;
-    TSTSEGM* Segm, * NextSegm;
+    int         NbSegmBusy;
+
+    TRACK_PTRS  trackList;
 
     *nb_segm = 0;
-    if( pt_segm == NULL )
+    if( aTrackList == NULL )
         return NULL;
 
     /* Marquage du segment pointe */
     if( flagcolor )
-        pt_segm->Draw( frame->DrawPanel, DC, flagcolor );
+        aTrackList->Draw( frame->DrawPanel, DC, flagcolor );
 
-    pt_segm->SetState( BUSY, ON );
-    masque_layer = pt_segm->ReturnMaskLayer();
-    ListSegm = new TSTSEGM( pt_segm );
+    aTrackList->SetState( BUSY, ON );
+    int masque_layer = aTrackList->ReturnMaskLayer();
+
+    trackList.push_back( aTrackList );
 
     /* Traitement du segment pointe : si c'est un segment, le cas est simple.
      *  Si c'est une via, on doit examiner le nombre de segments connectes.
      *  Si <=2, on doit detecter une piste, si > 2 seule la via est marquee
      */
-    if( pt_segm->Type() == TYPEVIA )
+    if( aTrackList->Type() == TYPE_VIA )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
         Segm1 = Fast_Locate_Piste( frame->m_Pcb->m_Track, NULL,
-                                   pt_segm->m_Start, masque_layer );
+                                   aTrackList->m_Start, masque_layer );
         if( Segm1 )
         {
             Segm2 = Fast_Locate_Piste( Segm1->Next(), NULL,
-                                      pt_segm->m_Start, masque_layer );
+                                      aTrackList->m_Start, masque_layer );
         }
         if( Segm2 )
         {
             Segm3 = Fast_Locate_Piste( Segm2->Next(), NULL,
-                                      pt_segm->m_Start, masque_layer );
+                                      aTrackList->m_Start, masque_layer );
         }
         if( Segm3 )
         {
-            *nb_segm = 1; return pt_segm;
+            *nb_segm = 1;
+            return aTrackList;
         }
         if( Segm1 )
         {
             masque_layer = Segm1->ReturnMaskLayer();
-            Marque_Chaine_segments( frame->m_Pcb, pt_segm->m_Start, masque_layer );
+            Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_Start, masque_layer, &trackList );
         }
         if( Segm2 )
         {
             masque_layer = Segm2->ReturnMaskLayer();
-            Marque_Chaine_segments( frame->m_Pcb, pt_segm->m_Start, masque_layer );
+            Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_Start, masque_layer, &trackList );
         }
     }
-    else /* Marquage de la chaine connectee aux extremites du segment */
+
+    else    // mark the chain using both ends of the initial segment
     {
-        Marque_Chaine_segments( frame->m_Pcb, pt_segm->m_Start, masque_layer );
-        Marque_Chaine_segments( frame->m_Pcb, pt_segm->m_End, masque_layer );
+        Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_Start, masque_layer, &trackList );
+        Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_End, masque_layer, &trackList );
     }
 
-    /* marquage des vias (vias non connectees ou inutiles */
-    for( Segm = ListSegm; Segm != NULL; Segm = Segm->Pnext )
+    //  marquage des vias (vias non connectees ou inutiles
+    // go through the list backwards.
+    for( int i = trackList.size()-1;  i>=0;  --i )
     {
-        int layer;
-        if( Segm->RefTrack->Type() != TYPEVIA )
+        TRACK*  via = trackList[i];
+
+        if( via->Type() != TYPE_VIA )
             continue;
 
-        if( Segm->RefTrack == pt_segm )
+        if( via == aTrackList )
             continue;
 
-        Segm->RefTrack->SetState( BUSY, ON );
+        via->SetState( BUSY, ON );
 
-        masque_layer = Segm->RefTrack->ReturnMaskLayer();
+        masque_layer = via->ReturnMaskLayer();
 
-        Track = Fast_Locate_Piste( frame->m_Pcb->m_Track, NULL,
-                                   Segm->RefTrack->m_Start,
-                                   masque_layer );
-        if( Track == NULL )
+        TRACK* track = Fast_Locate_Piste( frame->m_Pcb->m_Track,
+                                         NULL, via->m_Start, masque_layer );
+        if( track == NULL )
             continue;
 
         /* Test des connexions: si via utile: suppression marquage */
-        layer = Track->GetLayer();
+        int layer = track->GetLayer();
 
-        while( ( Track = Fast_Locate_Piste( (TRACK*) Track->Next(), NULL,
-                                           Segm->RefTrack->m_Start,
-                                           masque_layer ) ) != NULL )
+        while( ( track = Fast_Locate_Piste( track->Next(), NULL,
+                         via->m_Start, masque_layer ) ) != NULL )
         {
-            if( layer != Track->GetLayer() )
+            if( layer != track->GetLayer() )
             {
-                Segm->RefTrack->SetState( BUSY, OFF );
+                via->SetState( BUSY, OFF );
                 break;
             }
         }
     }
 
-    /* liberation memoire */
-    for( Segm = ListSegm; Segm != NULL; Segm = NextSegm )
-    {
-        NextSegm = Segm->Pnext;
-        delete Segm;
-    }
-
-    ListSegm = NULL;
-
     /* Reclassement des segments marques en une chaine */
-    FirstTrack = frame->m_Pcb->m_Track; NbSegmBusy = 0;
-    for( ; FirstTrack != NULL; FirstTrack = (TRACK*) FirstTrack->Next() )
+    NbSegmBusy = 0;
+    TRACK* firstTrack;
+    for( firstTrack = frame->m_Pcb->m_Track;  firstTrack;  firstTrack = firstTrack->Next() )
     {
-        /* recherche du debut de la liste des segments marques a BUSY */
-        if( FirstTrack->GetState( BUSY ) )
+        // recherche du debut de la liste des segments marques a BUSY
+        if( firstTrack->GetState( BUSY ) )
         {
             NbSegmBusy = 1;
             break;
         }
     }
 
-    /* Reclassement de la chaine debutant a FirstTrack et finissant
-     *  au dernier segment marque. FirstTrack n'est pas modifie */
-    Track = (TRACK*) FirstTrack->Next();
-    for( ; Track != NULL; Track = NextTrack )
+    wxASSERT( firstTrack );
+
+    if( firstTrack )
     {
-        NextTrack = (TRACK*) Track->Next();
-        if( Track->GetState( BUSY ) )
+        DLIST<TRACK>* list = (DLIST<TRACK>*)firstTrack->GetList();
+        wxASSERT(list);
+
+        /* Reclassement de la chaine debutant a FirstTrack et finissant
+         * au dernier segment marque. FirstTrack n'est pas modifie
+         */
+        TRACK* next;
+        for( TRACK* track = firstTrack->Next(); track; track = next )
         {
-            NbSegmBusy++;
-            Track->UnLink();
-            Track->Insert( frame->m_Pcb, FirstTrack );
+            next = track->Next();
+            if( track->GetState( BUSY ) )
+            {
+                NbSegmBusy++;
+
+                track->UnLink();
+
+                list->Insert( track, firstTrack->Next() );
+            }
         }
     }
 
     *nb_segm = NbSegmBusy;
 
     if( flagcolor )
-        Trace_Une_Piste( frame->DrawPanel, DC, FirstTrack, NbSegmBusy, flagcolor );
+        Trace_Une_Piste( frame->DrawPanel, DC, firstTrack, NbSegmBusy, flagcolor );
 
-    return FirstTrack;
+    return firstTrack;
 }
 
 
 /********************************************************************************/
-static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_layer )
+static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_layer, TRACK_PTRS* aList )
 /********************************************************************************/
 
 /*
@@ -200,7 +205,6 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
     * pt_via,           // pointe la via reperee, eventuellement a detruire
     * MarqSegm;         // pointe le segment a detruire (= NULL ou pt_segm
     int      NbSegm;
-    TSTSEGM* Segm;
 
     if( Pcb->m_Track == NULL )
         return;
@@ -217,12 +221,10 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
         {
             if( pt_via->GetState( EDIT ) )
                 return;
-            masque_layer = pt_via->ReturnMaskLayer();
-            Segm = new TSTSEGM( pt_via );
 
-            Segm->Pnext     = ListSegm;
-            ListSegm->Pback = Segm;
-            ListSegm = Segm;
+            masque_layer = pt_via->ReturnMaskLayer();
+
+            aList->push_back( pt_via );
         }
 
         /* Recherche des segments connectes au point ref_pos
@@ -240,13 +242,13 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
 
             if( pt_segm->GetState( BUSY ) )
             {
-                pt_segm = (TRACK*) pt_segm->Next();
+                pt_segm = pt_segm->Next();
                 continue;
             }
 
             if( pt_segm == pt_via )  /* deja traite */
             {
-                pt_segm = (TRACK*) pt_segm->Next();
+                pt_segm = pt_segm->Next();
                 continue;
             }
 
@@ -254,7 +256,7 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
             if( NbSegm == 1 ) /* 1ere detection de segment de piste */
             {
                 MarqSegm = pt_segm;
-                pt_segm  = (TRACK*) pt_segm->Next();
+                pt_segm  = pt_segm->Next();
             }
             else /* 2eme detection de segment -> fin de piste */
             {
@@ -266,6 +268,7 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
         {
             /* preparation de la nouvelle recherche */
             masque_layer = MarqSegm->ReturnMaskLayer();
+
             if( ref_pos == MarqSegm->m_Start )
             {
                 ref_pos = MarqSegm->m_End;
@@ -278,11 +281,7 @@ static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masque_laye
             pt_segm = Pcb->m_Track; /* reinit recherche des segments */
 
             /* Marquage et mise en liste du segment */
-            Segm = new TSTSEGM( MarqSegm );
-
-            Segm->Pnext     = ListSegm;
-            ListSegm->Pback = Segm;
-            ListSegm = Segm;
+            aList->push_back( MarqSegm );
             MarqSegm->SetState( BUSY, ON );
         }
         else
@@ -316,7 +315,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
     /* calcul de la limite d'analyse */
     *StartTrack  = *EndTrack = NULL;
     TrackListEnd = Track = RefTrack; ii = 0;
-    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Next() )
+    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = Track->Next() )
     {
         TrackListEnd   = Track;
         Track->m_Param = 0;
@@ -324,9 +323,9 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
     /* Calcul des extremites */
     NbEnds = 0; Track = RefTrack; ii = 0;
-    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = (TRACK*) Track->Next() )
+    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = Track->Next() )
     {
-        if( Track->Type() == TYPEVIA )
+        if( Track->Type() == TYPE_VIA )
             continue;
 
         masque_layer = Track->ReturnMaskLayer();
@@ -356,17 +355,22 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
             case 1:
                 int BeginPad, EndPad;
                 *EndTrack = Track;
+
                 /* permutation de ox,oy avec fx,fy */
                 BeginPad = Track->GetState( BEGIN_ONPAD );
                 EndPad   = Track->GetState( END_ONPAD );
+
                 Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+
                 if( BeginPad )
                     Track->SetState( END_ONPAD, ON );
                 if( EndPad )
                     Track->SetState( BEGIN_ONPAD, ON );
+
                 EXCHG( Track->m_Start, Track->m_End );
                 EXCHG( Track->start, Track->end );
-                ok = 1; return ok;
+                ok = 1;
+                return ok;
             }
         }
 
@@ -391,22 +395,28 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
             {
             case 0:
                 int BeginPad, EndPad;
-                *StartTrack = Track; NbEnds++;
+                *StartTrack = Track;
+                NbEnds++;
+
                 /* permutation de ox,oy avec fx,fy */
                 BeginPad = Track->GetState( BEGIN_ONPAD );
                 EndPad   = Track->GetState( END_ONPAD );
+
                 Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+
                 if( BeginPad )
                     Track->SetState( END_ONPAD, ON );
                 if( EndPad )
                     Track->SetState( BEGIN_ONPAD, ON );
+
                 EXCHG( Track->m_Start, Track->m_End );
                 EXCHG( Track->start, Track->end );
                 break;
 
             case 1:
                 *EndTrack = Track;
-                ok = 1; return ok;
+                ok = 1;
+                return ok;
             }
         }
     }
@@ -424,6 +434,7 @@ void ListSetState( EDA_BaseStruct* Start, int NbItem, int State, int onoff )
 {
     if( Start == NULL )
         return;
+
     for( ; (Start != NULL) && (NbItem > 0); NbItem--, Start = Start->Next() )
     {
         Start->SetState( State, onoff );

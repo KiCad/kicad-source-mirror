@@ -26,7 +26,7 @@
 /* classe D_PAD : constructeur */
 /*******************************/
 
-D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPEPAD )
+D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 {
     m_NumPadName   = 0;
     m_Masque_Layer = CUIVRE_LAYER;
@@ -34,7 +34,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPEPAD )
 
     m_Size.x = m_Size.y = 500;
 
-    if( m_Parent && (m_Parent->Type()  == TYPEMODULE) )
+    if( m_Parent && (m_Parent->Type()  == TYPE_MODULE) )
     {
         m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }
@@ -199,36 +199,6 @@ void D_PAD::Copy( D_PAD* source )
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
     m_Netname = source->m_Netname;
-}
-
-
-/**************************/
-void D_PAD::UnLink()
-/**************************/
-
-/* supprime du chainage la structure Struct
- *  les structures arrieres et avant sont chainees directement
- */
-{
-    /* Modification du chainage arriere */
-    if( Back() )
-    {
-        if( Back()->Type() != TYPEMODULE )
-        {
-            Back()->SetNext( Next() );
-        }
-        else /* Le chainage arriere pointe sur la structure "Pere" */
-        {
-            ( (MODULE*) Back() )->m_Pads = Next();
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
 }
 
 

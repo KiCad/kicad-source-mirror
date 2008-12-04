@@ -319,8 +319,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 
                 switch( item->Type() )
                 {
-                case TYPETEXTEMODULE:
-                case TYPEEDGEMODULE:
+                case TYPE_TEXTE_MODULE:
+                case TYPE_EDGE_MODULE:
                     item->Draw( panel, DC, g_XorMode, move_offset );
                     break;
 
@@ -361,8 +361,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 
             switch( item->Type() )
             {
-            case TYPETEXTEMODULE:
-            case TYPEEDGEMODULE:
+            case TYPE_TEXTE_MODULE:
+            case TYPE_EDGE_MODULE:
                 item->Draw( panel, DC, g_XorMode, move_offset );
                 break;
 
@@ -389,14 +389,10 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
 /* Copy marked items, at new position = old position + offset
  */
 {
-    BOARD_ITEM* item;
-    BOARD_ITEM* NewStruct;
-
     if( module == NULL )
         return;
 
-    D_PAD* pad = module->m_Pads;
-    for( ; pad != NULL; pad = pad->Next() )
+    for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
         if( pad->m_Selected == 0 )
             continue;
@@ -404,44 +400,38 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         D_PAD* NewPad = new D_PAD( module );
         NewPad->Copy( pad );
         NewPad->m_Selected = IS_SELECTED;
-        NewPad->SetNext( module->m_Pads );
-        NewPad->SetBack( module );
-        module->m_Pads->SetBack( NewPad );
-        module->m_Pads = NewPad;
+        module->m_Pads.PushBack( NewPad );
     }
 
-    item = module->m_Drawings;
-    for( ; item != NULL; item = item->Next() )
+    for( BOARD_ITEM* item = module->m_Drawings;  item;  item->Next() )
     {
         if( item->m_Selected == 0 )
             continue;
+
         item->m_Selected = 0;
-        NewStruct = NULL;
 
         switch( item->Type() )
         {
-        case TYPETEXTEMODULE:
-            NewStruct = new TEXTE_MODULE( module );
-            ( (TEXTE_MODULE*) NewStruct )->Copy( (TEXTE_MODULE*) item );
+        case TYPE_TEXTE_MODULE:
+            TEXTE_MODULE* textm;
+            textm = new TEXTE_MODULE( module );
+            textm->Copy( (TEXTE_MODULE*) item );
+            textm->m_Selected = IS_SELECTED;
+            module->m_Drawings.PushFront( textm );
             break;
 
-        case TYPEEDGEMODULE:
-            NewStruct = new EDGE_MODULE( module );
-            ( (EDGE_MODULE*) NewStruct )->Copy( (EDGE_MODULE*) item );
+        case TYPE_EDGE_MODULE:
+            EDGE_MODULE* edge;
+            edge = new EDGE_MODULE( module );
+            edge->Copy( (EDGE_MODULE*) item );
+            edge->m_Selected = IS_SELECTED;
+            module->m_Drawings.PushFront( edge );
             break;
 
         default:
             DisplayError( NULL, wxT( "Internal Err: CopyMarkedItems: type indefini" ) );
             break;
         }
-
-        if( NewStruct == NULL )
-            break;
-        NewStruct->m_Selected = IS_SELECTED;
-        NewStruct->SetNext( module->m_Drawings );
-        NewStruct->SetBack( module );
-        module->m_Drawings->SetBack( module );
-        module->m_Drawings = NewStruct;
     }
 
     MoveMarkedItems( module, offset );
@@ -479,14 +469,14 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             ( (TEXTE_MODULE*) item )->GetPosition().x  += offset.x;
             ( (TEXTE_MODULE*) item )->GetPosition().y  += offset.y;
             ( (TEXTE_MODULE*) item )->m_Pos0.x += offset.x;
             ( (TEXTE_MODULE*) item )->m_Pos0.y += offset.y;
             break;
 
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             ( (EDGE_MODULE*) item )->m_Start.x  += offset.x;
             ( (EDGE_MODULE*) item )->m_Start.y  += offset.y;
 
@@ -578,7 +568,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             SETMIRROR( ( (EDGE_MODULE*) item )->m_Start.x );
             ( (EDGE_MODULE*) item )->m_Start0.x = ( (EDGE_MODULE*) item )->m_Start.x;
             SETMIRROR( ( (EDGE_MODULE*) item )->m_End.x );
@@ -586,7 +576,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             ( (EDGE_MODULE*) item )->m_Angle  = -( (EDGE_MODULE*) item )->m_Angle;
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             SETMIRROR( ( (TEXTE_MODULE*) item )->GetPosition().x );
             ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->GetPosition().x;
             break;
@@ -632,14 +622,14 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             ROTATE( ( (EDGE_MODULE*) item )->m_Start );
             ( (EDGE_MODULE*) item )->m_Start0 = ( (EDGE_MODULE*) item )->m_Start;
             ROTATE( ( (EDGE_MODULE*) item )->m_End );
             ( (EDGE_MODULE*) item )->m_End0 = ( (EDGE_MODULE*) item )->m_End;
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             ROTATE( ( (TEXTE_MODULE*) item )->GetPosition() );
             ( (TEXTE_MODULE*) item )->m_Pos0    = ( (TEXTE_MODULE*) item )->GetPosition();
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
@@ -708,7 +698,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
 
         switch( item->Type() )
         {
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
             pos = ( (EDGE_MODULE*) item )->m_Start;
             if( Rect.Inside( pos ) )
             {
@@ -723,7 +713,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
             }
             break;
 
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             pos = ( (TEXTE_MODULE*) item )->GetPosition();
             if( Rect.Inside( pos ) )
             {

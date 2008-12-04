@@ -38,14 +38,14 @@ enum Mod_Attribut       /* Attributs used for modules */
 class MODULE : public BOARD_ITEM
 {
 public:
-    wxPoint          m_Pos;             // Real coord on board
-    D_PAD*           m_Pads;            /* Pad list (linked list) */
-    BOARD_ITEM*      m_Drawings;        /* Graphic items list (linked list) */
-    Struct3D_Master* m_3D_Drawings;     /* First item of the 3D shapes (linked list)*/
-    TEXTE_MODULE*    m_Reference;       // Component reference (U34, R18..)
-    TEXTE_MODULE*    m_Value;           // Component value (74LS00, 22K..)
-    wxString         m_LibRef;          /* Name of the module in library (and the default value when loading amodule from the library) */
-    wxString         m_AlternateReference;  /* Used when m_Reference cannot be used to
+    wxPoint             m_Pos;             // Real coord on board
+    DLIST<D_PAD>        m_Pads;            /* Pad list (linked list) */
+    DLIST<BOARD_ITEM>   m_Drawings;        /* Graphic items list (linked list) */
+    Struct3D_Master*    m_3D_Drawings;     /* First item of the 3D shapes (linked list)*/
+    TEXTE_MODULE*       m_Reference;       // Component reference (U34, R18..)
+    TEXTE_MODULE*       m_Value;           // Component value (74LS00, 22K..)
+    wxString            m_LibRef;          /* Name of the module in library (and the default value when loading amodule from the library) */
+    wxString            m_AlternateReference;  /* Used when m_Reference cannot be used to
                                               * identify the footprint ( after a full reannotation of the schematic */
 
     int           m_Attributs;          /* Flags(ORed bits) ( see Mod_Attribut ) */
@@ -123,9 +123,6 @@ public:
     // Moves
     void    SetPosition( const wxPoint& newpos );
     void    SetOrientation( int newangle );
-
-    /* Remove this from the linked list */
-    void    UnLink();
 
 
     /**

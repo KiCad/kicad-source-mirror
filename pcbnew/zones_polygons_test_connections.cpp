@@ -114,15 +114,15 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                     if( !item->IsOnLayer( curr_zone->GetLayer() ) )
                         continue;
                     wxPoint pos1, pos2;
-                    if( item->Type() == TYPEPAD )
+                    if( item->Type() == TYPE_PAD )
                     {
                         pos1 = pos2 = ( (D_PAD*) item )->m_Pos;
                     }
-                    else if( item->Type() == TYPEVIA )
+                    else if( item->Type() == TYPE_VIA )
                     {
                         pos1 = pos2 = ( (SEGVIA*) item )->m_Start;
                     }
-                    else if( item->Type() == TYPETRACK )
+                    else if( item->Type() == TYPE_TRACK )
                     {
                         pos1 = ( (TRACK*) item )->m_Start;
                         pos2 = ( (TRACK*) item )->m_End;

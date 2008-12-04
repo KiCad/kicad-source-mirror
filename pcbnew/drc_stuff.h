@@ -428,10 +428,11 @@ private:
      * tests the current segment.
      * @param aRefSeg The segment to test
      * @param aStart The head of a list of tracks to test against (usually BOARD::m_Track)
+     * @param doPads true if should do pads test
      * @return bool - true if no poblems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool    doTrackDrc( TRACK* aRefSeg, TRACK* aStart );
+    bool    doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
 
 
     /**
@@ -443,7 +444,6 @@ private:
      * @param aCornerIndex The first corner of the segment to test.
      * @return bool - false if DRC error  or true if OK
      */
-
     bool doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex );
 
     //-----<single tests>----------------------------------------------

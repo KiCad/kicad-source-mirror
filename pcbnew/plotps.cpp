@@ -255,27 +255,27 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
     {
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_POST,
                 masque_layer );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
             PlotTextePcb( (TEXTE_PCB*) PtStruct, PLOT_FORMAT_POST,
                 masque_layer );
             break;
 
-        case TYPECOTATION:
+        case TYPE_COTATION:
             PlotCotation( (COTATION*) PtStruct, PLOT_FORMAT_POST,
                 masque_layer );
             break;
 
-        case TYPEMIRE:
+        case TYPE_MIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, PLOT_FORMAT_POST,
                 masque_layer );
             break;
 
-        case TYPEMARKER:
+        case TYPE_MARKER:
             break;
 
         default:
@@ -296,7 +296,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
         {
             switch( PtStruct->Type() )
             {
-            case TYPEEDGEMODULE:
+            case TYPE_EDGE_MODULE:
                 if( masque_layer & g_TabOneLayerMask[ PtStruct->GetLayer() ] )
                     Plot_1_EdgeModule( PLOT_FORMAT_POST, (EDGE_MODULE*) PtStruct );
                 break;
@@ -363,7 +363,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
         Affiche_1_Parametre( this, 56, _( "Vias" ), wxEmptyString, RED );
         for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
         {
-            if( pts->Type() != TYPEVIA )
+            if( pts->Type() != TYPE_VIA )
                 continue;
             SEGVIA* Via = (SEGVIA*) pts;
 
@@ -393,7 +393,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_PS( FILE* File, int masque_layer,
 
     for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
-        if( pts->Type() == TYPEVIA )
+        if( pts->Type() == TYPE_VIA )
             continue;
 
         if( (g_TabOneLayerMask[pts->GetLayer()] & masque_layer) == 0 )
@@ -469,7 +469,7 @@ static void PrintDrillMark( BOARD* Pcb )
 
     for( pts = Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
-        if( pts->Type() != TYPEVIA )
+        if( pts->Type() != TYPE_VIA )
             continue;
         pos = pts->m_Start;
         if( g_DrillShapeOpt == DRILL_MARK )

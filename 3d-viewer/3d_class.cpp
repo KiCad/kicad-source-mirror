@@ -70,8 +70,8 @@ void Struct3D_Master::Copy( Struct3D_Master* pattern )
 
 
 /***************************************************************/
-Struct3D_Master::Struct3D_Master( EDA_BaseStruct* StructFather ) :
-    EDA_BaseStruct( StructFather, NOT_USED )
+Struct3D_Master::Struct3D_Master( EDA_BaseStruct* aParent ) :
+    EDA_BaseStruct( aParent, NOT_USED )
 /***************************************************************/
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
@@ -102,8 +102,8 @@ Struct3D_Master:: ~Struct3D_Master()
 
 
 /***************************************************************/
-Struct3D_Shape::Struct3D_Shape( EDA_BaseStruct* StructFather ) :
-    EDA_BaseStruct( StructFather, NOT_USED )
+Struct3D_Shape::Struct3D_Shape( EDA_BaseStruct* aParent ) :
+    EDA_BaseStruct( aParent, NOT_USED )
 /***************************************************************/
 {
     m_3D_Coord      = NULL;

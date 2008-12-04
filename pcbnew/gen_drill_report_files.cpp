@@ -131,23 +131,23 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
     {
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             PlotDrawSegment( (DRAWSEGMENT*) PtStruct, format, EDGE_LAYER );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
             PlotTextePcb( (TEXTE_PCB*) PtStruct, format, EDGE_LAYER );
             break;
 
-        case TYPECOTATION:
+        case TYPE_COTATION:
             PlotCotation( (COTATION*) PtStruct, format, EDGE_LAYER );
             break;
 
-        case TYPEMIRE:
+        case TYPE_MIRE:
             PlotMirePcb( (MIREPCB*) PtStruct, format, EDGE_LAYER );
             break;
 
-        case TYPEMARKER:     // do not draw
+        case TYPE_MARKER:     // do not draw
             break;
 
         default:

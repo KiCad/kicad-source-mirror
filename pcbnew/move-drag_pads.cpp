@@ -193,7 +193,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 /***********************************************************/
 /* Routine d'ajout d'un pad sur l'module selectionnee */
 {
-    D_PAD* Pad, * ptliste;
+    D_PAD* Pad;
     int    rX, rY;
 
     m_Pcb->m_Status_Pcb     = 0;
@@ -202,24 +202,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
     Pad = new D_PAD( Module );
 
     /* Chainage de la structure en fin de liste des pads : */
-    ptliste = Module->m_Pads;
-    if( ptliste == NULL ) /* 1er pad */
-    {
-        Module->m_Pads = Pad;
-        Pad->SetBack( Module );
-    }
-    else
-    {
-        while( ptliste )
-        {
-            if( ptliste->Next() == NULL )
-                break;
-            ptliste = (D_PAD*) ptliste->Next();
-        }
-
-        Pad->SetBack( ptliste );
-        ptliste->SetNext( Pad );
-    }
+    Module->m_Pads.PushBack( Pad );
 
     /* Mise a jour des caract de la pastille : */
     Import_Pad_Settings( Pad, false );

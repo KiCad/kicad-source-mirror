@@ -288,21 +288,10 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Module->Draw( DrawPanel, DC, GR_XOR );
 
     /* Generation des elements speciaux: drawsegments */
-    LastSegm = (EDGE_MODULE*) Module->m_Drawings;
-    if( LastSegm )
-        while( LastSegm->Next() )
-            LastSegm = (EDGE_MODULE*) LastSegm->Next();
 
     FirstSegm = PtSegm = new EDGE_MODULE( Module );
-    if( LastSegm )
-    {
-        LastSegm->SetNext( PtSegm );
-        PtSegm->SetBack( LastSegm );
-    }
-    else
-    {
-        Module->m_Drawings = PtSegm; PtSegm->SetBack( Module );
-    }
+    Module->m_Drawings.PushBack( PtSegm );
+
     PtSegm->m_Start = Mself.m_Start;
     PtSegm->m_End.x = Mself.m_Start.x;
     PtSegm->m_End.y = PtSegm->m_Start.y + Mself.delta;
@@ -336,6 +325,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
         newedge->AddToChain( PtSegm );
         PtSegm = newedge;
         PtSegm->m_Start = PtSegm->m_End;
+
         if( ii & 1 ) /* brin d'ordre impair : cercles de sens > 0 */
             arc_angle = 1800;
         else
@@ -427,8 +417,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     /* Placement des 2 pads sur extremite */
     PtPad = new D_PAD( Module );
 
-    Module->m_Pads = PtPad;
-    PtPad->SetBack( Module );
+    Module->m_Pads.PushFront( PtPad );
 
     PtPad->SetPadName( wxT( "1" ) );
     PtPad->m_Pos.x  = LastSegm->m_End.x; PtPad->m_Pos.y = LastSegm->m_End.y;

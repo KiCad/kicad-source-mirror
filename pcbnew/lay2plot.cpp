@@ -58,17 +58,17 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     {
         switch( item->Type() )
         {
-        case TYPEDRAWSEGMENT:
-        case TYPECOTATION:
-        case TYPETEXTE:
-        case TYPEMIRE:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_COTATION:
+        case TYPE_TEXTE:
+        case TYPE_MIRE:
             if( ((1<<item->GetLayer()) & printmasklayer) == 0 )
                 break;
 
             item->Draw( this, DC, drawmode );
             break;
 
-        case TYPEMARKER:       /* Trace des marqueurs */
+        case TYPE_MARKER:       /* Trace des marqueurs */
         default:
             break;
         }
@@ -80,7 +80,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
-        if( pt_piste->Type() == TYPEVIA ) /* VIA rencontree */
+        if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
         {
             int rayon = pt_piste->m_Width >> 1;
             int color = g_DesignSettings.m_ViaColor[pt_piste->m_Shape];
@@ -118,7 +118,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
-        if( pt_piste->Type() == TYPEVIA ) /* VIA rencontree */
+        if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
         {
             GRSetDrawMode( DC, drawmode );
             GRFilledCircle( &m_ClipBox, DC, pt_piste->m_Start.x, pt_piste->m_Start.y,
@@ -206,7 +206,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         switch( PtStruct->Type() )
         {
-        case TYPETEXTEMODULE:
+        case TYPE_TEXTE_MODULE:
             if( (mlayer & masklayer ) == 0 )
                 break;
 
@@ -214,7 +214,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
             TextMod->Draw( panel, DC, draw_mode );
             break;
 
-        case TYPEEDGEMODULE:
+        case TYPE_EDGE_MODULE:
         {
             EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
             if( (g_TabOneLayerMask[edge->GetLayer()] & masklayer ) == 0 )

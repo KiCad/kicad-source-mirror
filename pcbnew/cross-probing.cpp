@@ -148,13 +148,13 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 
     switch( objectToSync->Type() )
     {
-    case TYPEMODULE:
+    case TYPE_MODULE:
         module = (MODULE*) objectToSync;
         sprintf( cmd, "$PART: \"%s\"",
             CONV_TO_UTF8( module->m_Reference->m_Text ) );
         break;
 
-    case TYPEPAD:
+    case TYPE_PAD:
         module = (MODULE*) objectToSync->GetParent();
         pad    = (D_PAD*) objectToSync;
         msg    = pad->ReturnStringPadName();
@@ -163,7 +163,7 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
             CONV_TO_UTF8( msg ) );
         break;
 
-    case TYPETEXTEMODULE:
+    case TYPE_TEXTE_MODULE:
         #define REFERENCE 0
         #define VALUE     1
         module   = (MODULE*) objectToSync->GetParent();

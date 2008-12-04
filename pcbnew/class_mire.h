@@ -16,7 +16,7 @@ public:
     int     m_Size;
 
 public:
-    MIREPCB( BOARD_ITEM* StructFather );
+    MIREPCB( BOARD_ITEM* aParent );
     ~MIREPCB();
 
     MIREPCB*    Next() const { return (MIREPCB*) Pnext; }
@@ -37,9 +37,6 @@ public:
     bool Save( FILE* aFile ) const;
 
     bool    ReadMirePcbDescr( FILE* File, int* LineNum );
-
-    /* supprime du chainage la structure Struct */
-    void    UnLink();
 
     void    Copy( MIREPCB* source );
 

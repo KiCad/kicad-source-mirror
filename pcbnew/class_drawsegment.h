@@ -17,7 +17,7 @@ public:
     int     m_Angle;            // Used only for Arcs: Arc angle in 1/10 deg
 
 public:
-    DRAWSEGMENT( BOARD_ITEM* StructFather, KICAD_T idtype = TYPEDRAWSEGMENT );
+    DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype = TYPE_DRAWSEGMENT );
     ~DRAWSEGMENT();
 
     DRAWSEGMENT* Next() const { return (DRAWSEGMENT*) Pnext; }
@@ -56,12 +56,6 @@ public:
     bool    Save( FILE* aFile ) const;
 
     bool    ReadDrawSegmentDescr( FILE* File, int* LineNum );
-
-    /**
-     * Function UnLink
-     * remove item from linked list.
-     */
-    void    UnLink();
 
     void    Copy( DRAWSEGMENT* source );
 

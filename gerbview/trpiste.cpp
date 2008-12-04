@@ -29,29 +29,27 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
  * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
  */
 {
-    TRACK*        Track;
     int           layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    GERBER*       gerber     = g_GERBER_List[layer];
+    GERBER*       gerber = g_GERBER_List[layer];
     int           dcode_hightlight = 0;
 
     if( gerber )
         dcode_hightlight = gerber->m_Selected_Tool;
 
-    Track = Pcb->m_Track;
-    for( ; Track != NULL; Track = Track->Next() )
+    for( TRACK* track = Pcb->m_Track;  track;  track = track->Next() )
     {
-        if( printmasklayer != -1 )
-            if( (Track->ReturnMaskLayer() & printmasklayer) == 0 )
-                continue;
+        if( !(track->ReturnMaskLayer() & printmasklayer) )
+            continue;
 
-        if( (dcode_hightlight == Track->GetNet())
-           && (Track->GetLayer() == layer) )
-            Trace_Segment( panel, DC, Track, draw_mode | GR_SURBRILL );
+        if( dcode_hightlight == track->GetNet() && track->GetLayer()==layer )
+            Trace_Segment( panel, DC, track, draw_mode | GR_SURBRILL );
         else
-            Trace_Segment( panel, DC, Track, draw_mode );
+            Trace_Segment( panel, DC, track, draw_mode );
     }
 }
 
+
+#if 1
 
 /***********************************************************************************/
 void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mode )
@@ -70,22 +68,30 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
     int         fillopt;
     static bool show_err;
 
-    color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-    if( color & ITEM_NOT_SHOW )
-        return;
+    if( track->m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
+    {
+        color = g_DrawBgColor;
+    }
+    else
+    {
+        color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+        if( color & ITEM_NOT_SHOW )
+            return;
 
-    zoom = panel->GetZoom();
+        if( draw_mode & GR_SURBRILL )
+        {
+            if( draw_mode & GR_AND )
+                color &= ~HIGHT_LIGHT_FLAG;
+            else
+                color |= HIGHT_LIGHT_FLAG;
+        }
+        if( color & HIGHT_LIGHT_FLAG )
+            color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    }
 
     GRSetDrawMode( DC, draw_mode );
-    if( draw_mode & GR_SURBRILL )
-    {
-        if( draw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
-        else
-            color |= HIGHT_LIGHT_FLAG;
-    }
-    if( color & HIGHT_LIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+
+    zoom = panel->GetZoom();
 
     rayon = l_piste = track->m_Width >> 1;
 
@@ -151,8 +157,8 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         }
         break;
 
-    case  S_SPOT_RECT:
-    case  S_RECT:
+    case S_SPOT_RECT:
+    case S_RECT:
         fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
         if( (l_piste / zoom) < L_MIN_DESSIN )
         {
@@ -179,10 +185,10 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         }
         break;
 
-    case  S_SPOT_OVALE:
+    case S_SPOT_OVALE:
         fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
 
-    case  S_SEGMENT:
+    case S_SEGMENT:
         if( (l_piste / zoom) < L_MIN_DESSIN )
         {
             GRLine( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
@@ -213,6 +219,8 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         break;
     }
 }
+
+#endif
 
 
 /*****************************************************************************************/

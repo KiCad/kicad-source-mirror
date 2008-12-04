@@ -57,7 +57,7 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
         while( ( TrackLocate = Locate_Pistes( TrackLocate, layer, typeloc ) ) != NULL )
         {
             Track = TrackLocate;
-            if( TrackLocate->Type() == TYPEVIA )
+            if( TrackLocate->Type() == TYPE_VIA )
                 break;
             TrackLocate = TrackLocate->Next();
         }
@@ -67,7 +67,7 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
     }
 
 
-    pt_texte_pcb = Locate_Texte_Pcb( (TEXTE_PCB*) m_Pcb->m_Drawings, typeloc );
+    pt_texte_pcb = Locate_Texte_Pcb( (TEXTE_PCB*) m_Pcb->m_Drawings.GetFirst(), typeloc );
     if( pt_texte_pcb ) // texte type PCB localise
     {
         pt_texte_pcb->Display_Infos( this );
@@ -79,7 +79,7 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
         return DrawSegm;
     }
 
-    if( ( TrackLocate = Locate_Zone( (TRACK*) m_Pcb->m_Zone,
+    if( ( TrackLocate = Locate_Zone( m_Pcb->m_Zone,
                                     GetScreen()->m_Active_Layer, typeloc ) ) != NULL )
     {
         TrackLocate->Display_Infos( this );
@@ -112,7 +112,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
     PtStruct = Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() != TYPEDRAWSEGMENT )
+        if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;
         pts = (DRAWSEGMENT*) PtStruct;
         ux0 = pts->m_Start.x; uy0 = pts->m_Start.y;
@@ -198,7 +198,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
         dx     -= ux0; dy -= uy0;
         spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
 
-        if( Track->Type() == TYPEVIA ) /* VIA rencontree */
+        if( Track->Type() == TYPE_VIA ) /* VIA rencontree */
         {
             if( (abs( spot_cX ) <= l_piste ) && (abs( spot_cY ) <=l_piste) )
             {
@@ -289,7 +289,7 @@ TEXTE_PCB* Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc )
     PtStruct = (EDA_BaseStruct*) pt_txt_pcb;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() != TYPETEXTE )
+        if( PtStruct->Type() != TYPE_TEXTE )
             continue;
         pt_txt_pcb = (TEXTE_PCB*) PtStruct;
 

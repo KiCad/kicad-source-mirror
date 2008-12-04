@@ -131,10 +131,10 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     // layer names are put into the BOARD.
     SetBOARD( new BOARD( NULL, this ) );
 
-    for( ; g_UnDeleteStackPtr != 0; )
+    while( g_UnDeleteStackPtr > 0 )
     {
         g_UnDeleteStackPtr--;
-         g_UnDeleteStack[g_UnDeleteStackPtr]->DeleteStructList();
+        g_UnDeleteStack[g_UnDeleteStackPtr]->DeleteStructList();
     }
 
     /* init pointeurs  et variables */
@@ -175,13 +175,7 @@ void WinEDA_PcbFrame::Erase_Zones( bool query )
     if( query && !IsOK( this, _( "Delete Zones ?" ) ) )
         return;
 
-    if( m_Pcb->m_Zone )
-    {
-        m_Pcb->m_Zone->DeleteStructList();
-        m_Pcb->m_Zone = NULL;
-        m_Pcb->m_NbSegmZone = 0;
-    }
-
+    m_Pcb->m_Zone.DeleteAll();
     m_Pcb->DeleteZONEOutlines();
 
     GetScreen()->SetModify();
@@ -215,10 +209,10 @@ void WinEDA_PcbFrame::Erase_Segments_Pcb( bool is_edges, bool query )
 
         switch( PtStruct->Type() )
         {
-        case TYPEDRAWSEGMENT:
-        case TYPETEXTE:
-        case TYPECOTATION:
-        case TYPEMIRE:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_TEXTE:
+        case TYPE_COTATION:
+        case TYPE_MIRE:
             if( g_TabOneLayerMask[ PtStruct->GetLayer()] & masque_layer )
                 PtStruct->DeleteStructure();
             break;
@@ -272,12 +266,9 @@ void WinEDA_PcbFrame::Erase_Modules( bool query )
     if( query && !IsOK( this, _( "Delete Modules?" ) ) )
         return;
 
-    m_Pcb->m_Modules->DeleteStructList();
-    m_Pcb->m_Modules = 0;
+    m_Pcb->m_Modules.DeleteAll();
 
     m_Pcb->m_Status_Pcb = 0;
-    m_Pcb->m_NbNets      = 0;
-    m_Pcb->m_NbPads      = 0;
     m_Pcb->m_NbNodes     = 0;
     m_Pcb->m_NbLinks     = 0;
     m_Pcb->m_NbNoconnect = 0;
@@ -299,8 +290,10 @@ void WinEDA_PcbFrame::Erase_Textes_Pcb( bool query )
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
         PtNext = PtStruct->Next();
-        if( PtStruct->Type() == TYPETEXTE )
-            PtStruct ->DeleteStructure();
+        if( PtStruct->Type() == TYPE_TEXTE )
+        {
+            PtStruct->DeleteStructure();
+        }
     }
 
     GetScreen()->SetModify();

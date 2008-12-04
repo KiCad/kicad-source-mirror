@@ -371,7 +371,7 @@ DrawPickedStruct * BreakSegment(SCH_SCREEN * screen, wxPoint breakpoint,
     /* EECLASS.CPP */
     /**************/
 
-void SetStructFather(EDA_BaseStruct * Struct, BASE_SCREEN * Screen);
+void SetaParent(EDA_BaseStruct * Struct, BASE_SCREEN * Screen);
 
     /***************/
     /* LIBALIAS.CPP */

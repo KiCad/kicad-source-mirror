@@ -110,7 +110,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         Segment->Draw( DrawPanel, DC, GR_XOR );
         PtStruct = Segment->Back();
         Segment ->DeleteStructure();
-        if( PtStruct && (PtStruct->Type() == TYPEDRAWSEGMENT ) )
+        if( PtStruct && (PtStruct->Type() == TYPE_DRAWSEGMENT ) )
             Segment = (DRAWSEGMENT*) PtStruct;
         DisplayOpt.DisplayDrawItems = track_fill_copy;
         SetCurItem( NULL );
@@ -181,9 +181,9 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
 
         switch( item->Type() )
         {
-        case TYPEDRAWSEGMENT:
-        case TYPETEXTE:
-        case TYPECOTATION:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_TEXTE:
+        case TYPE_COTATION:
             if( item->GetLayer() == layer )
             {
                 item->Draw( DrawPanel, DC, GR_XOR );
@@ -265,16 +265,12 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
     else    /* trace en cours : les coord du point d'arrivee ont ete mises
              *  a jour par la routine Montre_Position_NewSegment*/
     {
-        if( (Segment->m_Start.x != Segment->m_End.x )
-           || (Segment->m_Start.y != Segment->m_End.y ) )
+        if( Segment->m_Start != Segment->m_End )
         {
             if( Segment->m_Shape == S_SEGMENT )
             {
-                Segment->SetNext( m_Pcb->m_Drawings );
-                Segment->SetBack( m_Pcb );
-                if( m_Pcb->m_Drawings )
-                    m_Pcb->m_Drawings->SetBack( Segment );
-                m_Pcb->m_Drawings = Segment;
+                m_Pcb->Add( Segment );
+
                 GetScreen()->SetModify();
                 Segment->m_Flags = 0;
 
@@ -320,11 +316,9 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     else
     {
         Segment->m_Flags = 0;
-        Segment->SetNext( m_Pcb->m_Drawings );
-        Segment->SetBack( m_Pcb );
-        if( m_Pcb->m_Drawings )
-            m_Pcb->m_Drawings->SetBack( Segment );
-        m_Pcb->m_Drawings = Segment;
+
+        m_Pcb->Add( Segment );
+
         GetScreen()->SetModify();
     }
 

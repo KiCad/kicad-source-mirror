@@ -59,9 +59,6 @@ public:
     */
     wxPoint& GetPosition();
 
-    void UnLink( void )
-    {
-    };
 
     /**
      * Function copy

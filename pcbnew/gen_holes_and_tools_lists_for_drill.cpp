@@ -66,7 +66,7 @@ void Build_Holes_List( BOARD* aPcb,
     TRACK* track = aPcb->m_Track;
     for( ; track != NULL; track = track->Next() )
     {
-        if( track->Type() != TYPEVIA )
+        if( track->Type() != TYPE_VIA )
             continue;
         SEGVIA* via = (SEGVIA*) track;
         hole_value = via->GetDrillValue();

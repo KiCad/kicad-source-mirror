@@ -220,14 +220,14 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         switch( item->Type() )
         {
-        case TYPEDRAWSEGMENT:
+        case TYPE_DRAWSEGMENT:
             AddRoundedEndsSegmentPolygon( booleng,
                 ( (DRAWSEGMENT*) item )->m_Start,
                 ( (DRAWSEGMENT*) item )->m_End,
                 ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
             break;
 
-        case TYPETEXTE:
+        case TYPE_TEXTE:
             if( ( (TEXTE_PCB*) item )->GetLength() == 0 )
                 break;
             AddTextBoxWithClearancePolygon( booleng, (TEXTE_PCB*) item, m_ZoneClearance );
@@ -757,7 +757,7 @@ void AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
 
     switch( aTrack.Type() )
     {
-    case TYPEVIA:
+    case TYPE_VIA:
         if( aBooleng->StartPolygonAdd( GROUP_B ) )
         {
             dx = (int) (dx * s_Correction);

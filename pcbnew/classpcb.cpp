@@ -22,7 +22,7 @@
 /* Class SCREEN: classe de gestion d'un affichage */
 /***************************************************/
 /* Constructeur de SCREEN */
-PCB_SCREEN::PCB_SCREEN( int idscreen ) : BASE_SCREEN( TYPESCREEN )
+PCB_SCREEN::PCB_SCREEN( int idscreen ) : BASE_SCREEN( TYPE_SCREEN )
 {
     // a zero terminated list
     static const int zoom_list[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 0 };

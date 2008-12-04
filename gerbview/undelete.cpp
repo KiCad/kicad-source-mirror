@@ -34,8 +34,8 @@ void WinEDA_GerberFrame::UnDeleteItem( wxDC* DC )
 
     switch( item->Type() )
     {
-    case TYPEVIA:
-    case TYPETRACK:
+    case TYPE_VIA:
+    case TYPE_TRACK:
         for( ; item; item = next )
         {
             next = item->Next();
@@ -87,8 +87,8 @@ BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems )
 
     switch( PtStruct->Type() )
     {
-    case TYPEVIA:
-    case TYPETRACK:
+    case TYPE_VIA:
+    case TYPE_TRACK:
     {
         EDA_BaseStruct* Back = NULL;
         g_UnDeleteStack[g_UnDeleteStackPtr - 1] = PtStruct;
