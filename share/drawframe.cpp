@@ -40,7 +40,8 @@
 
 WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
                                     WinEDA_App* parent, const wxString& title,
-                                    const wxPoint& pos, const wxSize& size, long style ) :
+                                    const wxPoint& pos, const wxSize& size,
+                                    long style ) :
     WinEDA_BasicFrame( father, idtype, parent, title, pos, size, style )
 {
     wxSize minsize;
@@ -118,7 +119,8 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 /****************************************/
 {
     if( DrawPanel )  // Required: in WinEDA3D_DrawFrame, DrawPanel == NULL !
-        m_Parent->m_EDA_Config->Write( wxT( "AutoPAN" ), DrawPanel->m_AutoPAN_Enable );
+        m_Parent->m_EDA_Config->Write( wxT( "AutoPAN" ),
+                                       DrawPanel->m_AutoPAN_Enable );
 }
 
 
@@ -135,7 +137,7 @@ void WinEDA_DrawFrame::AddFontSelectionMenu( wxMenu* main_menu )
                   ID_PREFERENCES_FONT_DIALOG,
                   _( "Dialog boxes" ),
                   fonts_xpm );
-    
+
     ADD_MENUITEM( fontmenu,
                   ID_PREFERENCES_FONT_INFOSCREEN,
                   _( "Lists" ),
@@ -150,8 +152,7 @@ void WinEDA_DrawFrame::AddFontSelectionMenu( wxMenu* main_menu )
                                         fontmenu,
                                         ID_PREFERENCES_FONT,
                                         _( "&Font" ),
-                                        _(
-                                            "Choose font type and size for dialogs, infos and status box" ),
+                                        _( "Choose font type and size for dialogs, infos and status box" ),
                                         fonts_xpm );
 }
 
@@ -273,17 +274,14 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
     if( m_SelGridBox == NULL )
         return;                        // Should not occurs
 
-    int id = m_SelGridBox->GetChoice();
-    if( id < 0 )
-        return;
-
-    BASE_SCREEN*    screen = GetBaseScreen();
+    BASE_SCREEN* screen = GetBaseScreen();
 
     screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-    wxSize grid = screen->GetGrid();
-    screen->SetGrid( g_GridList[id] );
-    wxSize newgrid = screen->GetGrid();
-    if( newgrid.x != grid.x || newgrid.y != grid.y )
+    wxSize current_grid = screen->GetGrid();
+    screen->SetGrid( event.GetSelection() + ID_POPUP_GRID_LEVEL_1000 );
+    wxSize selected_grid = screen->GetGrid();
+
+    if( selected_grid != current_grid )
         Recadre_Trace( FALSE );
 }
 
@@ -464,19 +462,22 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
         {
             opt_size.x = 0;
             opt_size.y = m_OptionsToolBar->GetSize().y;
-            m_OptionsToolBar->SetSize( Auxtoolbar_size.x, 0, size.x, opt_size.y );
+            m_OptionsToolBar->SetSize( Auxtoolbar_size.x, 0,
+                                       size.x, opt_size.y );
         }
         else
         {
             opt_size.x = m_OptionsToolBar->GetSize().x;
             opt_size.y = 0;
-            m_OptionsToolBar->SetSize( 0, Auxtoolbar_size.y, opt_size.x, size.y );
+            m_OptionsToolBar->SetSize( 0, Auxtoolbar_size.y,
+                                       opt_size.x, size.y );
         }
     }
 
     if( DrawPanel )
     {
-        DrawPanel->SetSize( size.x - Vtoolbar_size.x - opt_size.x, size.y - opt_size.y - 1 );
+        DrawPanel->SetSize( size.x - Vtoolbar_size.x - opt_size.x,
+                            size.y - opt_size.y - 1 );
         DrawPanel->Move( opt_size.x, opt_size.y + Auxtoolbar_size.y + 1 );
     }
 
@@ -515,8 +516,8 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
 
 #ifdef PCBNEW
     // handle color changes for transitions in and out of ID_TRACK_BUTT
-    if( (m_ID_current_state==ID_TRACK_BUTT && id!=ID_TRACK_BUTT)
-     || (m_ID_current_state!=ID_TRACK_BUTT && id==ID_TRACK_BUTT) )
+    if( ( m_ID_current_state==ID_TRACK_BUTT && id!=ID_TRACK_BUTT )
+     || ( m_ID_current_state!=ID_TRACK_BUTT && id==ID_TRACK_BUTT ) )
     {
         if( DisplayOpt.ContrastModeDisplay )
             redraw = true;
@@ -826,9 +827,9 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     DrawPanel->SetScrollbars( DrawPanel->m_Scroll_unit,
                               DrawPanel->m_Scroll_unit,
                               screen->m_ScrollbarNumber.x,
-                            screen->m_ScrollbarNumber.y,
-                            screen->m_ScrollbarPos.x,
-                            screen->m_ScrollbarPos.y, TRUE );
+                              screen->m_ScrollbarNumber.y,
+                              screen->m_ScrollbarPos.x,
+                              screen->m_ScrollbarPos.y, TRUE );
 }
 
 

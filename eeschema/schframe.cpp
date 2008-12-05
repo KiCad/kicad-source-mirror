@@ -270,7 +270,7 @@ void WinEDA_SchematicFrame::CreateScreens()
     }
     if( g_RootSheet->m_AssociatedScreen == NULL )
     {
-        g_RootSheet->m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+        g_RootSheet->m_AssociatedScreen = new SCH_SCREEN();
         g_RootSheet->m_AssociatedScreen->m_RefCount++;
     }
     g_RootSheet->m_AssociatedScreen->m_FileName = g_DefaultSchematicFileName;
@@ -279,7 +279,7 @@ void WinEDA_SchematicFrame::CreateScreens()
     m_CurrentSheet->Push( g_RootSheet );
 
     if( g_ScreenLib == NULL )
-        g_ScreenLib = new SCH_SCREEN( LIBEDITOR_FRAME );
+        g_ScreenLib = new SCH_SCREEN();
     g_ScreenLib->SetZoom( 4 );
     g_ScreenLib->m_UndoRedoCountMax = 10;
 }

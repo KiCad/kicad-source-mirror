@@ -208,7 +208,7 @@ public:
     int m_Route_Layer_BOTTOM;       /* pour placement vias et routage 2 couches */
 
 public:
-    PCB_SCREEN( int idscreen );
+    PCB_SCREEN();
     ~PCB_SCREEN();
 
     PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
@@ -216,6 +216,8 @@ public:
     void        SetNextZoom();
     void        SetPreviousZoom();
     void        SetLastZoom();
+
+    virtual int GetInternalUnits( void );
 
     /**
      * Function GetCurItem

@@ -10,23 +10,34 @@
 #include "common.h"
 
 
+/* Implement wxSize array for grid list implementation. */
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY( GridArray );
+
+
 /* defines locaux */
 #define CURSOR_SIZE 12  /* taille de la croix du curseur PCB */
 
 /*******************************************************/
 /* Class BASE_SCREEN: classe de gestion d'un affichage */
 /*******************************************************/
-BASE_SCREEN::BASE_SCREEN( int idscreen, KICAD_T aType ) :
-    EDA_BaseStruct( aType )
+BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 {
-    EEDrawList = NULL;   /* Schematic items list */
-    m_Type     = idscreen;
-    m_ZoomList = NULL;
-    m_GridList = NULL;
-    m_UndoList = NULL;
-    m_RedoList = NULL;
+    EEDrawList         = NULL;   /* Schematic items list */
+    m_ZoomList         = NULL;
+    m_UndoList         = NULL;
+    m_RedoList         = NULL;
     m_UndoRedoCountMax = 1;
-    m_FirstRedraw = TRUE;
+    m_FirstRedraw      = TRUE;
+    m_ScreenNumber     = 1;
+    m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
+    m_Zoom             = 32;
+    m_Grid             = wxSize( 50, 50 );   /* Default grid size */
+    m_UserGridIsON     = FALSE;
+    m_Diviseur_Grille  = 1;
+    m_Center           = true;
+    m_CurrentSheetDesc = &g_Sheet_A4;
+
     InitDatas();
 }
 
@@ -38,9 +49,6 @@ BASE_SCREEN::~BASE_SCREEN()
     if( m_ZoomList )
         free( m_ZoomList );
 
-    if( m_GridList )
-        free( m_GridList );
-
     ClearUndoRedoList();
 }
 
@@ -49,35 +57,6 @@ BASE_SCREEN::~BASE_SCREEN()
 void BASE_SCREEN::InitDatas()
 /*******************************/
 {
-    m_ScreenNumber = m_NumberOfScreen = 1;    /* Hierarchy: Root: ScreenNumber = 1 */
-    m_Zoom            = 32;
-    m_Grid            = wxSize( 50, 50 );   /* Default grid size */
-    m_UserGrid        = g_UserGrid;         /* User Default grid size */
-    m_UserGridIsON    = FALSE;
-    m_UserGridUnit    = g_UserGrid_Unit;
-    m_Diviseur_Grille = 1;
-    m_Center          = TRUE;
-
-    /* Init draw offset and default page size */
-    switch( m_Type )
-    {
-    case SCHEMATIC_FRAME:
-        m_Center = FALSE;
-        m_CurrentSheetDesc = &g_Sheet_A4;
-        break;
-
-    default:
-    case CVPCB_DISPLAY_FRAME:
-    case MODULE_EDITOR_FRAME:
-    case PCB_FRAME:
-        m_CurrentSheetDesc = &g_Sheet_A4;
-        break;
-
-    case GERBER_FRAME:
-        m_CurrentSheetDesc = &g_Sheet_GERBER;
-        break;
-    }
-
     if( m_Center )
     {
         m_Curseur.x = m_Curseur.y = 0;
@@ -100,11 +79,30 @@ void BASE_SCREEN::InitDatas()
     SetCurItem( NULL );
 
     /* indicateurs divers */
-    m_FlagRefreshReq = 0;               /* Redraw screen requste flag */
-    m_FlagModified   = 0;               // Set when any change is made on borad
-    m_FlagSave = 1;                     // Used in auto save: set when an auto save is made
+    m_FlagRefreshReq = 0;   /* Redraw screen requste flag */
+    m_FlagModified   = 0;   // Set when any change is made on borad
+    m_FlagSave = 1;         // Used in auto save: set when an auto save is made
 }
 
+/*
+ * Get screen units scalar.
+ *
+ * Default implimentation returns scalar used for schematic screen.  The
+ * internal units used by the schematic screen is 1 mil (0.001").  Override
+ * this in derived classes that require internal units other than 1 mil.
+ */
+int BASE_SCREEN::GetInternalUnits( void )
+{
+    return EESCHEMA_INTERNAL_UNIT;
+}
+
+wxSize BASE_SCREEN::ReturnPageSize( void )
+{
+    int internal_units = GetInternalUnits();
+
+    return wxSize( m_CurrentSheetDesc->m_Size.x * (internal_units / 1000),
+                   m_CurrentSheetDesc->m_Size.y * (internal_units / 1000) );
+}
 
 /******************************************************************/
 wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
@@ -121,56 +119,6 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
     curpos.y += m_DrawOrg.y;
 
     return curpos;
-}
-
-
-/***************************************/
-int BASE_SCREEN::GetInternalUnits()
-/***************************************/
-{
-    switch( m_Type )
-    {
-    default:
-    case SCHEMATIC_FRAME:
-        return EESCHEMA_INTERNAL_UNIT;
-        break;
-
-    case GERBER_FRAME:
-    case CVPCB_DISPLAY_FRAME:
-    case MODULE_EDITOR_FRAME:
-    case PCB_FRAME:
-        return PCB_INTERNAL_UNIT;
-    }
-}
-
-
-/*****************************************/
-wxSize BASE_SCREEN::ReturnPageSize()
-/*****************************************/
-
-/* Return in internal units the page size
- *  Note: the page size is handled in 1/1000 ", not in internal units
- */
-{
-    wxSize PageSize;
-
-    switch( m_Type )
-    {
-    default:
-    case SCHEMATIC_FRAME:
-        PageSize = m_CurrentSheetDesc->m_Size;
-        break;
-
-    case GERBER_FRAME:
-    case CVPCB_DISPLAY_FRAME:
-    case MODULE_EDITOR_FRAME:
-    case PCB_FRAME:
-        PageSize.x = m_CurrentSheetDesc->m_Size.x * (PCB_INTERNAL_UNIT / 1000);
-        PageSize.y = m_CurrentSheetDesc->m_Size.y * (PCB_INTERNAL_UNIT / 1000);
-        break;
-    }
-
-    return PageSize;
 }
 
 
@@ -281,31 +229,16 @@ void BASE_SCREEN::SetLastZoom()
 
 
 /********************************************/
-void BASE_SCREEN::SetGridList( wxSize* gridlist )
+void BASE_SCREEN::SetGridList( GridArray& gridlist )
 /********************************************/
 
 /* init liste des zoom (NULL terminated)
  */
 {
-    int     ii, nbitems;
-    wxSize* grid;
+    if( !m_GridList.IsEmpty() )
+        m_GridList.Clear();
 
-    // Decompte des items
-    for( nbitems = 0, grid = gridlist;  ; grid++, nbitems++ )
-    {
-        if( (grid->x <= 0) || (grid->y <= 0) )
-            break;
-    }
-
-    // Init liste
-    if( m_GridList )
-        free( m_GridList );
-    m_GridList = (wxSize*) MyZMalloc( nbitems * sizeof(wxSize) );
-
-    for( ii = 0, grid = gridlist; ii < nbitems; grid++, ii++ )
-    {
-        m_GridList[ii] = *grid;
-    }
+    m_GridList = gridlist;
 }
 
 
@@ -313,125 +246,121 @@ void BASE_SCREEN::SetGridList( wxSize* gridlist )
 void BASE_SCREEN::SetGrid( const wxSize& size )
 /**********************************************/
 {
-    if( m_GridList == NULL )
-        return;
+    wxASSERT( !m_GridList.IsEmpty() );
 
-    if( (size.x <= 0) || (size.y <= 0) )
+    size_t i;
+
+    for( i = 0; i < m_GridList.GetCount(); i++ )
     {
-        m_UserGrid     = g_UserGrid;
-        m_UserGridIsON = TRUE;
+        if( m_GridList[i].m_Size == size )
+        {
+            m_Grid = m_GridList[i].m_Size;
+            return;
+        }
+    }
+
+    m_Grid = m_GridList[0].m_Size;
+
+    wxLogWarning( _( "Grid size( %d, %d ) not in grid list, falling back to " \
+                     "grid size( %d, %d )." ),
+                  size.x, size.y, m_Grid.x, m_Grid.y );
+}
+
+/* Set grid size from command ID. */
+void BASE_SCREEN::SetGrid( int id  )
+{
+    wxASSERT( !m_GridList.IsEmpty() );
+
+    size_t i;
+
+    for( i = 0; i < m_GridList.GetCount(); i++ )
+    {
+        if( m_GridList[i].m_Id == id )
+        {
+            m_Grid = m_GridList[i].m_Size;
+            return;
+        }
+    }
+
+    m_Grid = m_GridList[0].m_Size;
+
+    wxLogWarning( _( "Grid ID %d not in grid list, falling back to " \
+                     "grid size( %d, %d )." ), id, m_Grid.x, m_Grid.y );
+}
+
+void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
+{
+    size_t i;
+
+    for( i = 0; i < m_GridList.GetCount(); i++ )
+    {
+        if( m_GridList[i].m_Size == grid.m_Size )
+        {
+            wxLogDebug( wxT( "Discarding duplicate grid size( %d, %d )." ),
+                        grid.m_Size.x, grid.m_Size.y );
+            return;
+        }
+        if( m_GridList[i].m_Id == grid.m_Id )
+        {
+            wxLogDebug( wxT( "Changing grid ID %d from size( %d, %d ) to " \
+                             "size( %d, %d )." ),
+                        grid.m_Id, m_GridList[i].m_Size.x,
+                        m_GridList[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
+            m_GridList[i].m_Size = grid.m_Size;
+            return;
+        }
+    }
+
+    wxLogDebug( wxT( "Adding grid ID %d size( %d, %d ) to grid list." ),
+                grid.m_Id, grid.m_Size.x, grid.m_Size.y );
+
+    m_GridList.Add( grid );
+}
+
+void BASE_SCREEN::AddGrid( const wxSize& size, int id )
+{
+    GRID_TYPE grid;
+
+    grid.m_Size = size;
+    grid.m_Id = id;
+    AddGrid( grid );
+}
+
+void BASE_SCREEN::AddGrid( const wxRealPoint& size, int units, int id )
+{
+    double x, y;
+    wxSize new_size;
+    GRID_TYPE new_grid;
+
+    if( units == MILLIMETRE )
+    {
+        x = size.x / 25.4;
+        y = size.y / 25.4;
+    }
+    else if( units == CENTIMETRE )
+    {
+        x = size.x / 2.54;
+        y = size.y / 2.54;
     }
     else
     {
-        m_Grid = size;
-        m_UserGridIsON = FALSE;
+        x = size.x;
+        y = size.y;
     }
-}
 
+    new_size = wxSize( (int) round( x * (double) GetInternalUnits() ),
+                       (int) round( y * (double) GetInternalUnits() ) );
+
+    new_grid.m_Id = id;
+    new_grid.m_Size = new_size;
+    AddGrid( new_grid );
+}
 
 /*********************************/
 wxSize BASE_SCREEN::GetGrid()
 /*********************************/
 {
-    wxSize grid = m_Grid;
-    double xx, scale;
-
-    if( m_GridList == NULL )
-        return wxSize( 1, 1 );
-
-    if( m_UserGridIsON || m_Grid.x < 0 || m_Grid.y < 0 )
-    {
-        if( m_UserGridUnit == INCHES )
-            scale = 10000;
-        else
-            scale = 10000 / 25.4;
-        xx     = m_UserGrid.x * scale;
-        grid.x = (int) (xx + 0.5);
-        xx     = m_UserGrid.y * scale;
-        grid.y = (int) (xx + 0.5);
-    }
-    return grid;
-}
-
-
-/*********************************/
-void BASE_SCREEN::SetNextGrid()
-/*********************************/
-
-/* Selectionne la prochaine grille
- */
-{
-    int ii;
-
-    if( m_GridList == NULL )
-        return;
-
-    for( ii = 0; ; ii++ )
-    {
-        if( m_GridList[ii].x <= 0 )
-            break;
-        if( (m_Grid.x == m_GridList[ii].x) && (m_Grid.y == m_GridList[ii].y) )
-            break;
-    }
-
-    if( (m_GridList[ii].x > 0) && (ii > 0) )
-        m_Grid = m_GridList[ii - 1];
-}
-
-
-/*************************************/
-void BASE_SCREEN::SetPreviousGrid()
-/*************************************/
-
-/* Selectionne le precedent coeff de grille
- */
-{
-    int ii;
-
-    if( m_GridList == NULL )
-        return;
-
-    for( ii = 0; ; ii++ )
-    {
-        if( m_GridList[ii].x <= 0 )
-            break;
-        if( (m_Grid.x == m_GridList[ii].x) && (m_Grid.y == m_GridList[ii].y) )
-            break;
-    }
-
-    if( (m_GridList[ii].x > 0) && (m_GridList[ii + 1].x > 0) )
-        m_Grid = m_GridList[ii + 1];
-}
-
-
-/**********************************/
-void BASE_SCREEN::SetFirstGrid()
-/**********************************/
-
-/* ajuste le coeff de grille a 1
- */
-{
-    if( m_GridList == NULL )
-        return;
-
-    int ii = 0;
-    while( m_GridList[ii].x > 0 )
-        ii++;
-
-    m_Grid = m_GridList[ii - 1];
-}
-
-
-/**********************************/
-void BASE_SCREEN::SetLastGrid()
-/**********************************/
-
-/* ajuste le coeff de grille au max
- */
-{
-    if( m_GridList == NULL )
-        return;
-    m_Grid = m_GridList[0];
+    return m_Grid;
 }
 
 

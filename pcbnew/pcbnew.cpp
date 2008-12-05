@@ -45,7 +45,7 @@ bool WinEDA_App::OnInit()
             return false;
     }
 
-    ScreenPcb = new PCB_SCREEN( PCB_FRAME );
+    ScreenPcb = new PCB_SCREEN();
     GetSettings();
 
     if( argc > 1 )

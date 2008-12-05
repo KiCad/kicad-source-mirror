@@ -174,8 +174,7 @@ bool Read_Config( const wxString& project_name )
     if( ScreenPcb )
     {
         ScreenPcb->m_Diviseur_Grille = Pcbdiv_grille;
-        ScreenPcb->m_UserGrid     = g_UserGrid;
-        ScreenPcb->m_UserGridUnit = g_UserGrid_Unit;
+        ScreenPcb->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
     }
 
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;

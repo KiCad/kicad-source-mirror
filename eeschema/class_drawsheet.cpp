@@ -23,7 +23,6 @@
 #endif
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -104,7 +103,8 @@ bool DrawSheetStruct::Save( FILE* f ) const
     /* Generation de la liste des 2 textes (sheetname et filename) */
     if( !m_SheetName.IsEmpty() )
     {
-        if( fprintf( f, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ), m_SheetNameSize ) == EOF )
+        if( fprintf( f, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ),
+                     m_SheetNameSize ) == EOF )
         {
             Success = false; return Success;
         }
@@ -112,7 +112,8 @@ bool DrawSheetStruct::Save( FILE* f ) const
 
     if( !m_FileName.IsEmpty() )
     {
-        if( fprintf( f, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ), m_FileNameSize ) == EOF )
+        if( fprintf( f, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ),
+                     m_FileNameSize ) == EOF )
         {
             Success = false; return Success;
         }
@@ -285,7 +286,8 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw 
 
 
 /**************************************************************************************/
-void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                            const wxPoint& offset,
                             int DrawMode, int Color )
 /**************************************************************************************/
 /* Draw the hierarchical sheet shape */
@@ -335,7 +337,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& of
     SheetLabelStruct = m_Label;
     while( SheetLabelStruct != NULL )
     {
-        if( !(SheetLabelStruct->m_Flags & IS_MOVED) )
+        if( !( SheetLabelStruct->m_Flags & IS_MOVED ) )
             SheetLabelStruct->Draw( panel, DC, offset, DrawMode, Color );
         SheetLabelStruct = SheetLabelStruct->Next();
     }
@@ -426,7 +428,8 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
 
 
 /*******************************************************************************/
-bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen, DrawSheetPath* list )
+bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen,
+                                          DrawSheetPath* list )
 /*******************************************************************************/
 {
     //search the existing hierarchy for an instance of screen "FileName".
@@ -476,7 +479,7 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
         }
         else
         {
-            m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+            m_AssociatedScreen = new SCH_SCREEN();
             m_AssociatedScreen->m_RefCount++;
             success = frame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
             if( success )
@@ -544,7 +547,8 @@ void DrawSheetStruct::SetFileName( const wxString& aFilename )
  * - if new filename is already used (a complex hierarchy) : reference the sheet.
  */
 
-bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxString& aFileName )
+bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
+                                      const wxString& aFileName )
 {
     if( (GetFileName() == aFileName) && m_AssociatedScreen )
         return true;
@@ -629,7 +633,7 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame, const wxStr
     //just make a new screen if needed.
     if( !m_AssociatedScreen )
     {
-        m_AssociatedScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+        m_AssociatedScreen = new SCH_SCREEN();
         m_AssociatedScreen->m_RefCount++;         //be careful with these
     }
     m_AssociatedScreen->m_FileName = aFileName;

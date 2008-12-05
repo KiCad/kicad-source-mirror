@@ -3,7 +3,6 @@
 /****************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -47,7 +46,8 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
 
 
 /************************************************************************************/
-int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
+int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
+                                             bool IsNew )
 /************************************************************************************/
 {
     /*
@@ -209,7 +209,7 @@ SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen(
 {
     SCH_SCREEN* NewScreen;
 
-    NewScreen = new SCH_SCREEN( SCHEMATIC_FRAME );
+    NewScreen = new SCH_SCREEN();
 
     NewScreen->SetRefreshReq();
     if( OldScreen )

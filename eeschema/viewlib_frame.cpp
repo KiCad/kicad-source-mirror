@@ -23,25 +23,25 @@
 /* class WinEDA_ViewlibFrame */
 /*****************************/
 BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, wxFrame )
-COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
-EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+    COMMON_EVENTS_DRAWFRAME
+    EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
+    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
 
-EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
-    WinEDA_ViewlibFrame::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
+                    WinEDA_ViewlibFrame::Process_Special_Functions )
 
-EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-    WinEDA_DrawFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
+                    WinEDA_DrawFrame::Process_Zoom )
 
-EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-    WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
+    EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
+              WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
 
-EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
-    WinEDA_ViewlibFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
+                         WinEDA_ViewlibFrame::Process_Special_Functions )
 
-EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
-EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
-
+    EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
+    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
 END_EVENT_TABLE()
 
 
@@ -49,7 +49,8 @@ END_EVENT_TABLE()
 /* Constructeur */
 /****************/
 WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
-                                          LibraryStruct* Library, wxSemaphore* semaphore ) :
+                                          LibraryStruct* Library,
+                                          wxSemaphore* semaphore ) :
     WinEDA_DrawFrame( father, VIEWER_FRAME, parent, _( "Library browser" ),
                       wxDefaultPosition, wxDefaultSize )
 {
@@ -67,7 +68,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
     if( m_Semaphore )
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
 
-    SetBaseScreen( new SCH_SCREEN( VIEWER_FRAME ) );
+    SetBaseScreen( new SCH_SCREEN() );
     GetScreen()->SetZoom( 16 );
 
     if( Library == NULL )

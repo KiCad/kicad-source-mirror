@@ -29,7 +29,9 @@ bool WinEDA_App::OnInit()
 
     InitEDA_Appl( wxT( "gerbview" ) );
 
-    ScreenPcb = new PCB_SCREEN( PCB_FRAME );
+    ScreenPcb = new PCB_SCREEN();
+    ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
+
 
     ActiveScreen = ScreenPcb;
     GetSettings();

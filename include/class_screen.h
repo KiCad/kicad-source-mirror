@@ -21,7 +21,7 @@ class SCH_SCREEN : public BASE_SCREEN
 public:
     int m_RefCount;                             /*how many sheets reference this screen?
                                                   * delete when it goes to zero. */
-    SCH_SCREEN( int idtype, KICAD_T aType = SCREEN_STRUCT_TYPE );
+    SCH_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~SCH_SCREEN();
 
     /**
@@ -44,10 +44,9 @@ public:
         return wxT( "SCH_SCREEN" );
     }
 
-
     void         FreeDrawList();    // Free EESchema drawing list (does not delete the sub hierarchies)
 
-    void            Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
+    void         Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
 
     void         RemoveFromDrawList( SCH_ITEM* DrawStruct );    /* remove DrawStruct from EEDrawList. */
     bool         CheckIfOnDrawList( SCH_ITEM* st );

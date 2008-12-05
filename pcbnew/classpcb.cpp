@@ -6,31 +6,49 @@
 #include "fctsys.h"
 #include "wxstruct.h"
 
-#include "gr_basic.h"
-
 #include "common.h"
 #include "pcbnew.h"
 
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
-
 #include "trigo.h"
+#include "id.h"
+
+
+/* Default grid sizes for PCB editor screens. */
+static GRID_TYPE PcbGridList[] = {
+    { ID_POPUP_GRID_LEVEL_1000, wxSize( 1000, 1000 ) },
+    { ID_POPUP_GRID_LEVEL_500, wxSize( 500, 500 ) },
+    { ID_POPUP_GRID_LEVEL_250, wxSize( 250, 250 ) },
+    { ID_POPUP_GRID_LEVEL_200, wxSize( 200, 200 ) },
+    { ID_POPUP_GRID_LEVEL_100, wxSize( 100, 100 ) },
+    { ID_POPUP_GRID_LEVEL_50, wxSize( 50, 50 ) },
+    { ID_POPUP_GRID_LEVEL_25, wxSize( 25, 25 ) },
+    { ID_POPUP_GRID_LEVEL_20, wxSize( 20, 20 ) },
+    { ID_POPUP_GRID_LEVEL_10, wxSize( 10, 10 ) },
+    { ID_POPUP_GRID_LEVEL_5, wxSize( 5, 5 ) },
+    { ID_POPUP_GRID_LEVEL_2, wxSize( 2, 2 ) },
+    { ID_POPUP_GRID_LEVEL_1, wxSize( 1, 1 ) }
+};
+
+#define PCB_GRID_LIST_CNT ( sizeof( PcbGridList ) / sizeof( GRID_TYPE ) )
 
 
 /**************************************************/
 /* Class SCREEN: classe de gestion d'un affichage */
 /***************************************************/
 /* Constructeur de SCREEN */
-PCB_SCREEN::PCB_SCREEN( int idscreen ) : BASE_SCREEN( TYPE_SCREEN )
+PCB_SCREEN::PCB_SCREEN( ) : BASE_SCREEN( TYPE_SCREEN )
 {
-    // a zero terminated list
-    static const int zoom_list[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 0 };
+    size_t i;
 
-    m_Type = idscreen;
-    SetGridList( g_GridList );
+    // a zero terminated list
+    static const int zoom_list[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256,
+                                     512, 1024, 2048, 0 };
+
+    for( i = 0; i < PCB_GRID_LIST_CNT; i++ )
+        AddGrid( PcbGridList[i] );
+
+    SetGrid( wxSize( 500, 500 ) );        /* pas de la grille en 1/10000 "*/
     SetZoomList( zoom_list );
-    m_Grid = wxSize( 500, 500 );                /* pas de la grille en 1/10000 "*/
     Init();
 }
 
@@ -41,7 +59,6 @@ PCB_SCREEN::~PCB_SCREEN()
 {
 }
 
-
 /*************************/
 void PCB_SCREEN::Init()
 /*************************/
@@ -50,9 +67,13 @@ void PCB_SCREEN::Init()
     m_Active_Layer       = COPPER_LAYER_N;      /* ref couche active 0.. 31 */
     m_Route_Layer_TOP    = CMP_N;               /* ref couches par defaut pour vias (Cu.. Cmp) */
     m_Route_Layer_BOTTOM = COPPER_LAYER_N;
-    m_Zoom = 128;                               /* valeur */
+    m_Zoom               = 128;                               /* valeur */
 }
 
+int PCB_SCREEN::GetInternalUnits( void )
+{
+    return PCB_INTERNAL_UNIT;
+}
 
 /* Return true if a microvia can be put on board
  * A microvia ia a small via restricted to 2 near neighbour layers
@@ -68,10 +89,10 @@ bool PCB_SCREEN::IsMicroViaAcceptable( void )
         return false;   // Obvious..
     if( copperlayercnt < 4 )
         return false;   // Only on multilayer boards..
-    if( (m_Active_Layer == COPPER_LAYER_N)
-       || (m_Active_Layer == LAYER_CMP_N)
-       || (m_Active_Layer == g_DesignSettings.m_CopperLayerCount - 2)
-       || (m_Active_Layer == LAYER_N_2) )
+    if( ( m_Active_Layer == COPPER_LAYER_N )
+       || ( m_Active_Layer == LAYER_CMP_N )
+       || ( m_Active_Layer == g_DesignSettings.m_CopperLayerCount - 2 )
+       || ( m_Active_Layer == LAYER_N_2 ) )
         return true;
 
     return false;
@@ -187,7 +208,7 @@ int EDA_BoardDesignSettings::GetVisibleLayers() const
 
     for( int i = 0, mask = 1;  i< 32;   ++i, mask <<= 1 )
     {
-        if( !(m_LayerColor[i] & ITEM_NOT_SHOW) )
+        if( !( m_LayerColor[i] & ITEM_NOT_SHOW ) )
             layerMask |= mask;
     }
 

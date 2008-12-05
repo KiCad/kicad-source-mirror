@@ -21,6 +21,9 @@
 #include "cvpcb.h"
 #endif
 
+#include "id.h"
+
+
 /* Format des structures de sauvegarde type ASCII :
 
  Structure PAD:
@@ -378,7 +381,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             else
                 g_UserGrid.y = g_UserGrid.x;
 
-            GetScreen()->m_UserGrid = g_UserGrid;
             data = strtok( NULL, " =\n\r" );
             if( data )
             {
@@ -386,7 +388,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
                     g_UserGrid_Unit = MILLIMETRE;
                 else
                     g_UserGrid_Unit = INCHES;
-                GetScreen()->m_UserGridUnit = g_UserGrid_Unit;
+                GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit,
+                                      ID_POPUP_GRID_USER );
             }
             continue;
         }
@@ -508,8 +511,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
     fprintf( aFile, text );
 
-    sprintf( text, "UserGridSize %lf %lf %s\n",
-             aFrame->GetScreen()->m_UserGrid.x, aFrame->GetScreen()->m_UserGrid.y,
+    sprintf( text, "UserGridSize %lf %lf %s\n", g_UserGrid.x, g_UserGrid.y,
              ( g_UserGrid_Unit == 0 ) ? "INCH" : "mm" );
     fprintf( aFile, text );
 

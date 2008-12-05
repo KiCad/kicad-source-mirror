@@ -52,7 +52,6 @@ set(CVPCB_EXTRA_SRCS
     ../pcbnew/tracemod.cpp
 
     ../share/drawframe.cpp
-    ../share/drawpanel.cpp
     ../share/zoom.cpp)
 
 if(WIN32)

@@ -33,29 +33,29 @@ public:
     WinEDA_ViewlibFrame*     m_ViewlibFrame;      // Visualisation des composants
     WinEDA_CvpcbFrame*       m_CvpcbFrame;
 
-    wxPoint               m_HelpPos;
-    wxSize                m_HelpSize;
-    wxHtmlHelpController* m_HtmlCtrl;
-    wxConfig*             m_EDA_Config;         // Config courante (tailles et positions fenetres ...*/
-    wxConfig*             m_EDA_CommonConfig;   // common setup (language ...) */
-    wxString              m_HelpFileName;
-    wxString              m_CurrentOptionFile;  // dernier fichier .cnf utilisé
-    wxString              m_CurrentOptionFileDateAndTime;
+    wxPoint                  m_HelpPos;
+    wxSize                   m_HelpSize;
+    wxHtmlHelpController*    m_HtmlCtrl;
+    wxConfig*                m_EDA_Config;        // Config courante (tailles et positions fenetres ...*/
+    wxConfig*                m_EDA_CommonConfig;  // common setup (language ...) */
+    wxString                 m_HelpFileName;
+    wxString                 m_CurrentOptionFile; // dernier fichier .cnf utilisé
+    wxString                 m_CurrentOptionFileDateAndTime;
 
-    wxString              m_BinDir; /* Chemin ou reside l'executable
-                                     *  (utilisé si KICAD non défini)*/
-    wxArrayString         m_LastProject;            /* liste des derniers projets chargés */
-    unsigned int          m_LastProjectMaxCount;    /* Max histhory file length */
-    wxString              m_KicadEnv;/* Chemin de kicad défini dans la variable
-                                     *  d'environnement KICAD,
-                                     *  typiquement /usr/local/kicad ou c:\kicad */
-    bool m_Env_Defined;                             // TRUE si variable d'environnement KICAD definie
+    wxString                 m_BinDir; /* Chemin ou reside l'executable
+                                        *  (utilisé si KICAD non défini)*/
+    wxArrayString            m_LastProject;   /* liste des derniers projets chargés */
+    unsigned int             m_LastProjectMaxCount; /* Max histhory file length */
+    wxString                 m_KicadEnv;  /* Chemin de kicad défini dans la variable
+                                        *  d'environnement KICAD,
+                                        *  typiquement /usr/local/kicad ou c:\kicad */
+    bool                     m_Env_Defined; // TRUE si variable d'environnement KICAD definie
 
-    wxLocale*             m_Locale;                 // Gestion de la localisation
-    int m_LanguageId;                               // indicateur de choix du langage ( 0 = defaut)
-    wxMenu*               m_Language_Menu;          // List menu for languages
-    wxString              m_PdfBrowser;             // Name of the selected browser, for browsing pdf datasheets
-    bool m_PdfBrowserIsDefault;                     // True if the pdf browser is the default (m_PdfBrowser not used)
+    wxLocale*                m_Locale;      // Gestion de la localisation
+    int                      m_LanguageId;  // indicateur de choix du langage ( 0 = defaut)
+    wxMenu*                  m_Language_Menu;  // List menu for languages
+    wxString                 m_PdfBrowser;     // Name of the selected browser, for browsing pdf datasheets
+    bool                     m_PdfBrowserIsDefault;  // True if the pdf browser is the default (m_PdfBrowser not used)
 
 public:
     WinEDA_App();
@@ -75,7 +75,8 @@ public:
     void    SaveSettings();
     void    SetLastProject( const wxString& FullFileName );
     void    WriteProjectConfig( const wxString& local_config_filename,
-                                const wxString& GroupName, PARAM_CFG_BASE** List );
+                                const wxString& GroupName,
+                                PARAM_CFG_BASE** List );
 
     bool    ReadProjectConfig( const wxString& local_config_filename,
                                const wxString& GroupName, PARAM_CFG_BASE** List,
@@ -85,5 +86,11 @@ public:
     void    WritePdfBrowserInfos();
 };
 
+/*
+ * Use wxGetApp() to access WinEDA_App.  It is not necessary to keep copies
+ * of the application pointer all over the place or worse yet in a global
+ * variable.
+ */
+DECLARE_APP(WinEDA_App);
 
 #endif  /* APPL_WXSTRUCT_H */

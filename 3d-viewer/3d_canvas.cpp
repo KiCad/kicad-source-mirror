@@ -504,7 +504,6 @@ void Pcb3D_GLCanvas::OnSize( wxSizeEvent& event )
     if( GetContext() )
 #endif
     {
-        SetCurrent();
         glViewport( 0, 0, (GLint) w, (GLint) h );
     }
 
@@ -535,8 +534,6 @@ void Pcb3D_GLCanvas::InitGL()
         g_Parm_3D_Visu.m_Zoom = 1.0;
         ZBottom = 1.0; ZTop = 10.0;
     }
-
-    SetCurrent();
 
     /* set viewing projection */
     double ratio_HV = (double) size.x / size.y; // Ratio largeur /hauteur de la fenetre d'affichage
@@ -594,8 +591,6 @@ void Pcb3D_GLCanvas::SetLights()
 {
     double  light;
     GLfloat light_color[4];
-
-    SetCurrent();
 
     /* set viewing projection */
     light_color[3] = 1.0;

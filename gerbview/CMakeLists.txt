@@ -57,7 +57,6 @@ set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/sel_layer.cpp
 
     ../share/drawframe.cpp
-    ../share/drawpanel.cpp
     ../share/setpage.cpp
     ../share/wxprint.cpp
     ../share/zoom.cpp)

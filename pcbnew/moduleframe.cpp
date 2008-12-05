@@ -19,86 +19,125 @@
 /* class WinEDA_ModuleEditFrame */
 /********************************/
 BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, wxFrame )
-COMMON_EVENTS_DRAWFRAME
-EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
-                ID_POPUP_PCB_ITEM_SELECTION_END,
-                WinEDA_BasePcbFrame::ProcessItemSelection )
-EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
+    COMMON_EVENTS_DRAWFRAME
+    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
+                    ID_POPUP_PCB_ITEM_SELECTION_END,
+                    WinEDA_BasePcbFrame::ProcessItemSelection )
+    EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
 
-EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )
-EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_PcbFrame::OnSelectGrid )
+    EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )
+    EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_PcbFrame::OnSelectGrid )
 
-EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                WinEDA_ModuleEditFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
+                    WinEDA_ModuleEditFrame::Process_Zoom )
 
-EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_LIBEDIT_DELETE_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_NEW_MODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_LOAD_MODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_LIBEDIT_IMPORT_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_LIBEDIT_EXPORT_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-          WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_SHEET_SET, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_GEN_PRINT, WinEDA_DrawFrame::ToPrinter )
-EVT_TOOL( ID_MODEDIT_LOAD_MODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_CHECK, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_PAD_SETTINGS, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_UNDO, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_REDO, WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_DELETE_PART,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_NEW_MODULE,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_LOAD_MODULE,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_IMPORT_PART,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_EXPORT_PART,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SHEET_SET,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_GEN_PRINT, WinEDA_DrawFrame::ToPrinter )
+    EVT_TOOL( ID_MODEDIT_LOAD_MODULE,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_CHECK,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_PAD_SETTINGS,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_UNDO,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_REDO,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
 
 // Vertical toolbar (left click):
-EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_ADD_PAD, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_PCB_ARC_BUTT, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_PCB_CIRCLE_BUTT, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_TEXT_COMMENT_BUTT, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_LINE_COMMENT_BUTT, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_DELETE_ITEM_BUTT, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_MODEDIT_PLACE_ANCHOR, WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_NO_SELECT_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_ADD_PAD,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_ARC_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_CIRCLE_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_TEXT_COMMENT_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LINE_COMMENT_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_DELETE_ITEM_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_PLACE_ANCHOR,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
 
 // Vertical toolbar (right click):
-EVT_TOOL_RCLICKED( ID_MODEDIT_ADD_PAD, WinEDA_ModuleEditFrame::ToolOnRightClick )
-EVT_TOOL_RCLICKED( ID_TRACK_BUTT, WinEDA_ModuleEditFrame::ToolOnRightClick )
-EVT_TOOL_RCLICKED( ID_PCB_CIRCLE_BUTT, WinEDA_ModuleEditFrame::ToolOnRightClick )
-EVT_TOOL_RCLICKED( ID_PCB_ARC_BUTT, WinEDA_ModuleEditFrame::ToolOnRightClick )
-EVT_TOOL_RCLICKED( ID_TEXT_COMMENT_BUTT, WinEDA_ModuleEditFrame::ToolOnRightClick )
-EVT_TOOL_RCLICKED( ID_LINE_COMMENT_BUTT, WinEDA_ModuleEditFrame::ToolOnRightClick )
-EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT, WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_MODEDIT_ADD_PAD,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_TRACK_BUTT,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_CIRCLE_BUTT,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_ARC_BUTT,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_TEXT_COMMENT_BUTT,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_LINE_COMMENT_BUTT,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT,
+                       WinEDA_ModuleEditFrame::ToolOnRightClick )
 
 // Options Toolbar
-EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
-                WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
+    EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
 
-EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
-                WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
+                    WinEDA_ModuleEditFrame::Process_Special_Functions )
 
 // Annulation de commande en cours
-EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
+                    WinEDA_PcbFrame::Process_Special_Functions )
 
 // Transformations du module
-EVT_MENU( ID_MODEDIT_MODULE_ROTATE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_MENU( ID_MODEDIT_MODULE_MIRROR, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_MENU( ID_MODEDIT_MODULE_SCALE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_MENU( ID_MODEDIT_MODULE_SCALEX, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_MENU( ID_MODEDIT_MODULE_SCALEY, WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_ROTATE,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_MIRROR,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_SCALE,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_SCALEX,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_SCALEY,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
 
-EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_PAD_SETUP,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_USER_GRID_SETUP,
+              WinEDA_PcbFrame::Process_Special_Functions )
 
 // Menu 3D Frame
-EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_ModuleEditFrame::Show3D_Frame )
+    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_ModuleEditFrame::Show3D_Frame )
 
 // PopUp Menu Zoom trait�s dans drawpanel.cpp
-
 END_EVENT_TABLE()
 
 
@@ -106,11 +145,14 @@ END_EVENT_TABLE()
 /* Constructeur */
 /****************/
 
-WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* parent,
+WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
+                                                WinEDA_App* parent,
                                                 const wxString& title,
-                                                const wxPoint& pos, const wxSize& size,
+                                                const wxPoint& pos,
+                                                const wxSize& size,
                                                 long style ) :
-    WinEDA_BasePcbFrame( father, parent, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
+    WinEDA_BasePcbFrame( father, parent, MODULE_EDITOR_FRAME,
+                         wxEmptyString, pos, size, style )
 {
     m_FrameName      = wxT( "ModEditFrame" );
     m_Draw_Axis      = TRUE;    // TRUE pour avoir les axes dessines
@@ -125,7 +167,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* pa
 
     if( ScreenModule == NULL )
     {
-        ScreenModule = new PCB_SCREEN( PCB_FRAME );
+        ScreenModule = new PCB_SCREEN();
         ActiveScreen = ScreenModule;
     }
     ScreenModule->m_UndoRedoCountMax = 10;
@@ -190,8 +232,10 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
     if( m_Parent && m_Parent->m_EDA_Config )
     {
         wxSize GridSize = GetScreen()->GetGrid();
-        m_Parent->m_EDA_Config->Write( wxT( "ModEditGrid_X" ), (long) GridSize.x );
-        m_Parent->m_EDA_Config->Write( wxT( "ModEditGrid_Y" ), (long) GridSize.y );
+        m_Parent->m_EDA_Config->Write( wxT( "ModEditGrid_X" ),
+                                       (long) GridSize.x );
+        m_Parent->m_EDA_Config->Write( wxT( "ModEditGrid_Y" ),
+                                       (long) GridSize.y );
     }
     Destroy();
 }
@@ -201,6 +245,7 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
 void WinEDA_ModuleEditFrame::SetToolbars()
 /*********************************************/
 {
+    size_t i;
     bool active, islib = TRUE;
 
     if( m_HToolBar == NULL )
@@ -218,7 +263,8 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         active = TRUE;
 
     m_HToolBar->EnableTool( ID_LIBEDIT_EXPORT_PART, active );
-    m_HToolBar->EnableTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, active );
+    m_HToolBar->EnableTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
+                            active );
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, active && islib );
     MODULE* module_in_edit = m_Pcb->m_Modules;
     if( module_in_edit && module_in_edit->m_Link ) // this is not a new module ...
@@ -300,7 +346,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 
     if( m_AuxiliaryToolBar )
     {
-        int ii, jj;
+        int jj;
         if( m_SelZoomBox )
         {
             int old_choice = m_SelZoomBox->GetChoice();
@@ -320,21 +366,16 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         if( m_SelGridBox && GetScreen() )
         {
             int kk = m_SelGridBox->GetChoice();
-            for( ii = 0; g_GridList[ii].x > 0; ii++ )
+            for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
             {
-                if( !GetScreen()->m_UserGridIsON
-                   && (GetScreen()->GetGrid().x == g_GridList[ii].x)
-                   && (GetScreen()->GetGrid().y == g_GridList[ii].y) )
+                if( ( GetScreen()->GetGrid() == GetScreen()->m_GridList[i].m_Size ) )
                 {
-                    if( kk != ii )
-                        m_SelGridBox->SetSelection( ii );
-                    kk = ii;
+                    if( kk != ( int ) i )
+                        m_SelGridBox->SetSelection( ( int ) i );
+                    kk = ( int ) i;
                     break;
                 }
             }
-
-            if( kk != ii )
-                m_SelGridBox->SetSelection( ii );/* User Grid */
         }
     }
 

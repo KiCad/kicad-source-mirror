@@ -13,14 +13,6 @@
 #include "macros.h"
 #include "id.h"
 
-#ifdef PCBNEW
-#include "pcbstruct.h"
-#endif
-
-#ifdef EESCHEMA
-#include "program.h"
-#endif
-
 // Local defines
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
@@ -36,18 +28,20 @@ static bool s_IgnoreNextLeftButtonRelease = false;
 
 // Events used by WinEDA_DrawPanel
 BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
-EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
-EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
-EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
-EVT_CHAR_HOOK( WinEDA_DrawPanel::OnKeyEvent )
-EVT_PAINT( WinEDA_DrawPanel::OnPaint )
-EVT_SIZE( WinEDA_DrawPanel::OnSize )
-EVT_ERASE_BACKGROUND( WinEDA_DrawPanel::OnEraseBackground )
-EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
-EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
+    EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
+    EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
+    EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
+    EVT_CHAR_HOOK( WinEDA_DrawPanel::OnKeyEvent )
+    EVT_PAINT( WinEDA_DrawPanel::OnPaint )
+    EVT_SIZE( WinEDA_DrawPanel::OnSize )
+    EVT_ERASE_BACKGROUND( WinEDA_DrawPanel::OnEraseBackground )
+    EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
+    EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
 
-EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                WinEDA_DrawPanel::Process_Popup_Zoom )
+    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
+                    WinEDA_DrawPanel::Process_Popup_Zoom )
+    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
+                    WinEDA_DrawPanel::OnPopupGridSelect )
 END_EVENT_TABLE()
 
 /************************************************************************/
@@ -80,8 +74,9 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     ManageCurseur = NULL;
     ForceCloseManageCurseur = NULL;
 
-    if( m_Parent->m_Parent->m_EDA_Config )
-        m_AutoPAN_Enable = m_Parent->m_Parent->m_EDA_Config->Read( wxT( "AutoPAN" ), TRUE );
+    if( wxGetApp().m_EDA_Config )
+        m_AutoPAN_Enable = wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ),
+                                                          TRUE );
 
     m_AutoPAN_Request    = FALSE;
     m_Block_Enable       = FALSE;
@@ -666,7 +661,7 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
     if( Screen == NULL )
         return;
 
-    if( (g_DrawBgColor != WHITE) && (g_DrawBgColor != BLACK) )
+    if( ( g_DrawBgColor != WHITE ) && ( g_DrawBgColor != BLACK ) )
         g_DrawBgColor = BLACK;
 
     if( g_DrawBgColor == WHITE )
@@ -773,14 +768,8 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     size.x *= zoom;
     size.y *= zoom;
 
-    pasx = screen->m_UserGrid.x * m_Parent->m_InternalUnits;
-    pasy = screen->m_UserGrid.y * m_Parent->m_InternalUnits;
-
-    if( screen->m_UserGridUnit != INCHES )
-    {
-        pasx /= 25.4;
-        pasy /= 25.4;
-    }
+    pasx = screen->m_Grid.x * m_Parent->m_InternalUnits;
+    pasy = screen->m_Grid.y * m_Parent->m_InternalUnits;
 
     if( drawgrid )
     {
@@ -789,15 +778,12 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         GRSetColorPen( DC, color );
         for( ii = 0; ; ii++ )
         {
-            xg = screen->m_UserGridIsON ? (int) ( (ii * pasx) + 0.5 )
-                 : ii * pas_grille_affichee.x;
-
+            xg =  ii * pas_grille_affichee.x;
             int xpos = org.x + xg;
 
             for( jj = 0; ; jj++ )
             {
-                yg = screen->m_UserGridIsON ? (int) ( (jj * pasy) + 0.5 )
-                     : jj * pas_grille_affichee.y;
+                yg = jj * pas_grille_affichee.y;
                 GRPutPixel( &m_ClipBox, DC, xpos, org.y + yg, color );
                 if( yg > size.y )
                     break;
@@ -848,14 +834,18 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
 
     /* Draw the Y axis */
     GRDashedLine( &m_ClipBox, DC,
-                  m_Parent->m_Auxiliary_Axis_Position.x, -screen->ReturnPageSize().y,
-                  m_Parent->m_Auxiliary_Axis_Position.x, screen->ReturnPageSize().y,
+                  m_Parent->m_Auxiliary_Axis_Position.x,
+                  -screen->ReturnPageSize().y,
+                  m_Parent->m_Auxiliary_Axis_Position.x,
+                  screen->ReturnPageSize().y,
                   0, Color );
 
     /* Draw the X axis */
     GRDashedLine( &m_ClipBox, DC,
-                  -screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
-                  screen->ReturnPageSize().x, m_Parent->m_Auxiliary_Axis_Position.y,
+                  -screen->ReturnPageSize().x,
+                  m_Parent->m_Auxiliary_Axis_Position.y,
+                  screen->ReturnPageSize().x,
+                  m_Parent->m_Auxiliary_Axis_Position.y,
                   0, Color );
 }
 

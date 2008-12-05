@@ -282,7 +282,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 LibDrawPin* Pin = (LibDrawPin*) DEntry;
                 if( Pin->m_Attributs & PINNOTDRAW )
                 {
-                    if( ActiveScreen->m_Type == SCHEMATIC_FRAME )
+//                    if( ActiveScreen->m_Type == SCHEMATIC_FRAME )
                         break;
                 }
 

@@ -50,18 +50,6 @@
 
 eda_global wxArrayString g_LibName_List;    // library list to load
 
-eda_global wxSize        g_GridList[]
-#ifdef MAIN
-= {
-    wxSize( 1000, 1000 ), wxSize( 500, 500 ), wxSize( 250, 250 ), wxSize( 200, 200 ),
-    wxSize( 100,  100 ),  wxSize( 50,  50 ),  wxSize( 25,  25 ),  wxSize( 20,  20 ),
-    wxSize( 10,   10 ),   wxSize( 5,   5 ),   wxSize( 2,   2 ),   wxSize( 1,   1 ),
-    wxSize( -1,   -1 ),   wxSize( 0,   0 )
-}
-
-
-#endif
-;
 
 #define UNDELETE_STACK_SIZE 10
 eda_global BOARD_ITEM* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Linked list of deleted items

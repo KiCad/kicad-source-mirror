@@ -101,7 +101,6 @@ set(EESCHEMA_SRCS
 
 set(EESCHEMA_EXTRA_SRCS
     ../share/drawframe.cpp
-    ../share/drawpanel.cpp
     ../share/setpage.cpp
     ../share/svg_print.cpp
     ../share/wxprint.cpp

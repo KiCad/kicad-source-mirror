@@ -104,17 +104,6 @@ typedef enum {
     FILE_SAVE_NEW
 } FileSaveType;
 
-eda_global wxSize g_GridList[]
-#ifdef MAIN
-= {
-    wxSize( 50, 50 ), wxSize( 20, 20 ), wxSize( 10, 10 ),
-    wxSize( -1, -1 ), wxSize( 0,  0 )
-}
-
-
-#endif
-;
-
 
 /* variables generales */
 eda_global wxArrayString  g_LibName_List;   // library list (short filenames) to load

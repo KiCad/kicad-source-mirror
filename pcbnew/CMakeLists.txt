@@ -152,7 +152,6 @@ set(PCBNEW_SRCS
 
 set(PCBNEW_EXTRA_SRCS
     ../share/drawframe.cpp
-    ../share/drawpanel.cpp
     ../share/setpage.cpp
     ../share/wxprint.cpp
     ../share/zoom.cpp)

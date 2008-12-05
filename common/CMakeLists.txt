@@ -17,6 +17,7 @@ set(COMMON_SRCS
     dcsvg.cpp
     displlst.cpp
     dlist.cpp
+    drawpanel.cpp
     drawtxt.cpp
     edaappl.cpp
     eda_dde.cpp

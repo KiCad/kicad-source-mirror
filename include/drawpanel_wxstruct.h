@@ -19,6 +19,20 @@
 
 class SCH_ITEM;
 
+/* Simple class for handling grid arrays. */
+class GRID_TYPE
+{
+public:
+    int      m_Id;
+    wxSize   m_Size;
+};
+
+
+/* Declare array of wxSize for grid list implementation. */
+#include <wx/dynarray.h>
+WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
+
+
 /****************************************************/
 /* classe representant un ecran graphique de dessin */
 /****************************************************/
@@ -98,6 +112,7 @@ public:
     void    AddMenuZoom( wxMenu* MasterMenu );
     bool    OnRightClick( wxMouseEvent& event );
     void    Process_Popup_Zoom( wxCommandEvent& event );
+    void    OnPopupGridSelect( wxCommandEvent& event );
     void    Process_Special_Functions( wxCommandEvent& event );
     wxPoint CursorRealPosition( const wxPoint& ScreenPos );
     wxPoint CursorScreenPosition();
@@ -206,7 +221,6 @@ public:
 class BASE_SCREEN : public EDA_BaseStruct
 {
 public:
-    int             m_Type;                     /* indicateur: type d'ecran */
     wxPoint         m_DrawOrg;                  /* offsets pour tracer le circuit sur l'ecran */
     wxPoint         m_Curseur;                  /* Screen cursor coordinate (on grid) in user units. */
     wxPoint         m_MousePosition;            /* Mouse cursor coordinate (off grid) in user units. */
@@ -235,8 +249,9 @@ public:
 
     /* Page description */
     Ki_PageDescr*   m_CurrentSheetDesc;
-    int             m_ScreenNumber, m_NumberOfScreen;/* gestion hierarchie: numero de sousfeuille
-                                                    *  et nombre de feuilles. Root: SheetNumber = 1 */
+    int             m_ScreenNumber;
+    int             m_NumberOfScreen;
+
     wxString        m_FileName;
     wxString        m_Title;            /* titre de la feuille */
     wxString        m_Date;             /* date de mise a jour */
@@ -256,17 +271,16 @@ private:
 
     /* Valeurs du pas de grille et du zoom */
 public:
-    wxSize      m_Grid;         /* pas de la grille (peut differer en X et Y) */
-    wxSize*     m_GridList;     /* Liste des valeurs standard de grille */
-    wxRealPoint m_UserGrid;     /* pas de la grille utilisateur */
-    int         m_UserGridUnit; /* unit�grille utilisateur (0 = inch, 1 = mm */
-    int         m_Diviseur_Grille;
-    bool        m_UserGridIsON;
-    int*        m_ZoomList;     /* Liste des coefficients standard de zoom */
-    int         m_Zoom;         /* coeff de ZOOM */
+    wxSize          m_Grid;         /* Current grid. */
+    GridArray       m_GridList;
+    bool            m_UserGridIsON;
+
+    int             m_Diviseur_Grille;
+    int*            m_ZoomList;     /* Liste des coefficients standard de zoom */
+    int             m_Zoom;         /* coeff de ZOOM */
 
 public:
-    BASE_SCREEN( int idscreen, KICAD_T aType = SCREEN_STRUCT_TYPE );
+    BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~BASE_SCREEN();
 
     BASE_SCREEN* Next() const { return (BASE_SCREEN*) Pnext; }
@@ -281,9 +295,10 @@ public:
     void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
     EDA_BaseStruct* GetCurItem() const { return m_CurrentItem; }
 
-    void                    InitDatas();        /* Inits completes des variables */
-    wxSize                  ReturnPageSize();
-    int                     GetInternalUnits();
+    void                    InitDatas();    /* Inits completes des variables */
+
+    wxSize                  ReturnPageSize( void );
+    virtual int             GetInternalUnits( void );
 
     wxPoint                 CursorRealPosition( const wxPoint& ScreenPos );
 
@@ -334,11 +349,11 @@ public:
     //----<grid stuff>----------------------------------------------------------
     wxSize  GetGrid();                    /* retourne la grille */
     void    SetGrid( const wxSize& size );
-    void    SetGridList( wxSize* sizelist );    /* init liste des grilles (NULL terminated) */
-    void    SetNextGrid();                /* ajuste le prochain coeff de grille */
-    void    SetPreviousGrid();            /* ajuste le precedent coeff de grille */
-    void    SetFirstGrid();               /* ajuste la grille au mini*/
-    void    SetLastGrid();                /* ajuste la grille au max */
+    void    SetGrid( int );
+    void    SetGridList( GridArray& sizelist );
+    void    AddGrid( const GRID_TYPE& grid );
+    void    AddGrid( const wxSize& size, int id );
+    void    AddGrid( const wxRealPoint& size, int units, int id );
 
 
     /**

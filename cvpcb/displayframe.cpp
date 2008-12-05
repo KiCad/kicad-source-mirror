@@ -12,20 +12,19 @@
 
 #include "protos.h"
 
-#define BITMAP wxBitmap
 
 /*****************************************************************/
 /* Construction de la table des evenements pour WinEDA_DrawFrame */
 /*****************************************************************/
 
 BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, wxFrame )
-
-COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_DrawFrame::OnSize )
-EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                WinEDA_DisplayFrame::Process_Zoom )
-EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_DisplayFrame::InstallOptionsDisplay )
-EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_BasePcbFrame::Show3D_Frame )
+    COMMON_EVENTS_DRAWFRAME
+    EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_DrawFrame::OnSize )
+    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
+                    WinEDA_DisplayFrame::Process_Zoom )
+    EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_DisplayFrame::InstallOptionsDisplay )
+    EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_BasePcbFrame::Show3D_Frame )
 END_EVENT_TABLE()
 
 
@@ -35,13 +34,15 @@ END_EVENT_TABLE()
 
 WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
                                           const wxString& title,
-                                          const wxPoint& pos, const wxSize& size, long style ) :
-    WinEDA_BasePcbFrame( father, parent, CVPCB_DISPLAY_FRAME, title, pos, size, style )
+                                          const wxPoint& pos,
+                                          const wxSize& size, long style ) :
+    WinEDA_BasePcbFrame( father, parent, CVPCB_DISPLAY_FRAME, title, pos,
+                         size, style )
 {
     m_FrameName      = wxT( "CmpFrame" );
-    m_Draw_Axis      = TRUE;                    // TRUE if we want the axis
-    m_Draw_Grid      = TRUE;                    // TRUE if we want the grid
-    m_Draw_Sheet_Ref = FALSE;                   // TRUE if we want the sheet references
+    m_Draw_Axis      = TRUE;             // TRUE if we want the axis
+    m_Draw_Grid      = TRUE;             // TRUE if we want the grid
+    m_Draw_Sheet_Ref = FALSE;            // TRUE if we want the sheet references
 
     // Give an icon
     #ifdef __WINDOWS__
@@ -53,7 +54,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
 
     m_Pcb = new BOARD( NULL, this );
 
-    SetBaseScreen( new PCB_SCREEN( CVPCB_DISPLAY_FRAME ) );
+    SetBaseScreen( new PCB_SCREEN() );
 
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -114,26 +115,31 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
     SetToolBar( m_HToolBar );
 
     m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString,
-                        BITMAP( display_options_xpm ),
-                        _( "Display Options" ) );
+                         wxBitmap( display_options_xpm ),
+                         _( "Display Options" ) );
 
     m_HToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, BITMAP( zoom_in_xpm ),
-                        _( "zoom + (F1)" ) );
+    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString,
+                         wxBitmap( zoom_in_xpm ),
+                         _( "zoom + (F1)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString, BITMAP( zoom_out_xpm ),
-                        _( "zoom - (F2)" ) );
+    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString,
+                         wxBitmap( zoom_out_xpm ),
+                         _( "zoom - (F2)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString, BITMAP( zoom_redraw_xpm ),
-                        _( "redraw (F3)" ) );
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString,
+                         wxBitmap( zoom_redraw_xpm ),
+                         _( "redraw (F3)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString, BITMAP( zoom_auto_xpm ),
-                        _( "1:1 zoom" ) );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString,
+                         wxBitmap( zoom_auto_xpm ),
+                         _( "1:1 zoom" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, BITMAP( show_3d_xpm ),
-                        _( "1:1 zoom" ) );
+    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString,
+                         wxBitmap( show_3d_xpm ),
+                         _( "1:1 zoom" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -260,8 +266,8 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         RedrawActiveWindow( DC, TRUE );
     }
 
-    if( (oldpos.x != GetScreen()->m_Curseur.x)
-       || (oldpos.y != GetScreen()->m_Curseur.y) )
+    if( ( oldpos.x != GetScreen()->m_Curseur.x )
+       || ( oldpos.y != GetScreen()->m_Curseur.y ) )
     {
         if( flagcurseur != 2 )
         {
