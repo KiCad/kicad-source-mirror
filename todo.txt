@@ -25,13 +25,18 @@ understanding by new developers.
 Need to do this using DialogBlocks.
 
 
-2008-Nov-14 Assigned To:
+2008-Dec-6 Assigned To:
 asked by: Dick Hollenbeck
 ================================================================================
-discuss best option to handle the isDark support in rs274d.cpp which is an erasure
-of any positive exposure under the current G or D code.  I'm thinking a flag
-bit might be best in the TRACK, but we should discuss if there is a better way.
-
+1) Gerbview needs to work at least as well as gerv, that means adding named layers,
+   and a list control to sort the layer stack on the fly.  There seems to be a polygon bug
+   of some kind, don't know how long that's been in there.  (Dick)
+2) Add net class suppport to PCBNEW, so the round tripping to freerouter
+   is a dream (Dick)
+3) Document the specctra round tripper, and fix up the english translation
+   of help.  (Dick, native english speaker)
+4) Expose layer name editing in pcbnew (anyone), should dove tail with net
+   class editor from a UI perspective.
 
 
 2008-Feb-8 Assigned To: Jean-Pierre, per his email
