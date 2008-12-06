@@ -37,8 +37,7 @@ set(GERBVIEW_SRCS
 #   struct.cpp <-- not used
     tool_gerber.cpp
     tracepcb.cpp
-    trpiste.cpp
-    undelete.cpp)
+    trpiste.cpp )
 
 set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/basepcbframe.cpp
@@ -55,6 +54,7 @@ set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
+    ../pcbnew/undelete.cpp
 
     ../share/drawframe.cpp
     ../share/setpage.cpp

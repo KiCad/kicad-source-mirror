@@ -407,9 +407,9 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     newedge->Copy( PtSegm );
     Module->m_Drawings.Insert( newedge, PtSegm->Next() );
     PtSegm = newedge;
+
     PtSegm->m_Start = PtSegm->m_End;
     PtSegm->m_End   = Mself.m_End;
-    PtSegm->SetNext( NULL );
 
     /* Rotation de la self si le trace doit etre horizontal : */
     LastSegm = PtSegm;
@@ -426,8 +426,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     }
 
     /* Modif  position ancre  */
-    Module->m_Pos.x = LastSegm->m_End.x;
-    Module->m_Pos.y = LastSegm->m_End.y;
+    Module->m_Pos = LastSegm->m_End;
 
     /* Placement des 2 pads sur extremite */
     PtPad = new D_PAD( Module );
@@ -512,7 +511,8 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
     wxASSERT( list );
 
     angle = -angle;
-    y0    = PtSegm->m_Start.x - cX; x0 = PtSegm->m_Start.y - cY;
+    y0 = PtSegm->m_Start.x - cX;
+    x0 = PtSegm->m_Start.y - cY;
 
     nb_seg = ( abs( angle ) ) / 225; if( nb_seg == 0 )
         nb_seg = 1;

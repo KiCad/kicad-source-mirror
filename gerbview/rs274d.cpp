@@ -103,7 +103,7 @@ static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     aTrack->SetNet( Dcode_index );
     aTrack->m_Shape   = S_SPOT_CIRCLE;
 
-    D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
+    // D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
 
     if( !isDark )
     {
@@ -156,7 +156,7 @@ static void fillOvalOrRectFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLaye
         aTrack->m_End.y   += len;
     }
 
-    D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
+    // D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
     if( !isDark )
     {
         aTrack->m_Flags |= DRAW_ERASED;
@@ -192,7 +192,7 @@ static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 
     aTrack->SetNet( Dcode_index );
 
-    D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
+    //D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
     if( !isDark )
     {
         aTrack->m_Flags |= DRAW_ERASED;

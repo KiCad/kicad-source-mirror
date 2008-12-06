@@ -265,19 +265,20 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 }
 
 
-void BOARD::Delete( BOARD_ITEM* aBoardItem )
+BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 {
-    if ( aBoardItem == NULL ) return;
+    // find these calls and fix them!  Don't send me no stinkin' NULL.
+    wxASSERT( aBoardItem );
 
     switch( aBoardItem->Type() )
     {
-    case TYPE_MARKER:    // this one uses a vector
-        // find the item in the vector, then delete then erase it.
+    case TYPE_MARKER:
+        // find the item in the vector, then remove it
         for( unsigned i=0;  i<m_markers.size();  ++i )
         {
             if( m_markers[i] == (MARKER*) aBoardItem )
             {
-                DeleteMARKER( i );
+                m_markers.erase( m_markers.begin() + i );
                 break;
             }
         }
@@ -289,24 +290,23 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
         {
             if( m_ZoneDescriptorList[i] == (ZONE_CONTAINER*) aBoardItem )
             {
-                delete m_ZoneDescriptorList[i];
-                m_ZoneDescriptorList.erase(m_ZoneDescriptorList.begin() + i);
+                m_ZoneDescriptorList.erase( m_ZoneDescriptorList.begin() + i );
                 break;
             }
         }
         break;
 
     case TYPE_MODULE:
-        delete m_Modules.Remove( (MODULE*) aBoardItem );
+        m_Modules.Remove( (MODULE*) aBoardItem );
         break;
 
     case TYPE_TRACK:
     case TYPE_VIA:
-        delete m_Track.Remove( (TRACK*) aBoardItem );
+        m_Track.Remove( (TRACK*) aBoardItem );
         break;
 
     case TYPE_ZONE:
-        delete m_Zone.Remove( (SEGZONE*) aBoardItem );
+        m_Zone.Remove( (SEGZONE*) aBoardItem );
         break;
 
     case TYPE_COTATION:
@@ -314,27 +314,19 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
     case TYPE_TEXTE:
     case TYPE_EDGE_MODULE:
     case TYPE_MIRE:
-        delete m_Drawings.Remove( aBoardItem );
+        m_Drawings.Remove( aBoardItem );
         break;
 
     case TYPE_EQUIPOT:
-        delete m_Equipots.Remove( (EQUIPOT*) aBoardItem );
+        m_Equipots.Remove( (EQUIPOT*) aBoardItem );
         break;
 
     // other types may use linked list
     default:
-        wxFAIL_MSG( wxT("BOARD::Delete() needs work") );
+        wxFAIL_MSG( wxT("BOARD::Remove() needs more ::Type() support") );
     }
-}
 
-
-void BOARD::DeleteMARKER( int aIndex )
-{
-    if( (unsigned) aIndex < m_markers.size() )
-    {
-        delete m_markers[aIndex];
-        m_markers.erase( m_markers.begin() + aIndex );
-    }
+    return aBoardItem;
 }
 
 

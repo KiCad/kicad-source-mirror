@@ -5,12 +5,6 @@
 /***************************/
 int * InstallDialogLayerPairChoice(WinEDA_GerberFrame * parent);
 
-/****************/
-/* undelete.cpp */
-/****************/
-BOARD_ITEM* SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
-
-
 /***********************/
 /* gerbview_config.cpp */
 /***********************/

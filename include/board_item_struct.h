@@ -32,6 +32,13 @@ enum Track_Shapes {
  */
 class BOARD_ITEM : public EDA_BaseStruct
 {
+    // These are made private here so they may not be used.
+    // Instead everything derived from BOARD_ITEM is handled via DLIST<>'s
+    // use of DHEAD's member functions.
+    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
+
+
 protected:
     int m_Layer;
 

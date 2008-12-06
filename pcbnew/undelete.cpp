@@ -8,14 +8,13 @@
 #include "common.h"
 #include "pcbnew.h"
 
-#include "protos.h"
 
 /* Routines externes : */
 
 /* Routines Locales */
 
 /********************************************/
-void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
+void WinEDA_BasePcbFrame::UnDeleteItem( wxDC* DC )
 /********************************************/
 
 /* Restitution d'un element (MODULE ou TRACK ) Efface
@@ -31,6 +30,12 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
     item = g_UnDeleteStack[g_UnDeleteStackPtr];
     if( item == NULL )
         return;                     // Ne devrait pas se produire
+
+    // we decremented the stack pointer, so the stack no longer
+    // owns "item".  We do here, so we have to delete item if its
+    // not going back into the board, see default case below.
+    g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
+
 
     switch( item->Type() )
     {
@@ -48,8 +53,11 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
         m_Pcb->Add( track );
 
         net_code = track->GetNet();
-        g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
+
+#if !defined(GERBVIEW)
         test_1_net_connexion( DC, net_code );
+#endif
+
         m_Pcb->Display_Infos( this );
         break;
 
@@ -66,31 +74,35 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
             net_code = t->GetNet();
         }
         delete list;
-        g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
+
+#if !defined(GERBVIEW)
         test_1_net_connexion( DC, net_code );
+#endif
         m_Pcb->Display_Infos( this );
         break;
 
+#if !defined(GERBVIEW)
     case TYPE_MODULE:
-        /* Erase general rastnest if needed */
+        // Erase general rastnest if needed
         if( g_Show_Ratsnest )
             DrawGeneralRatsnest( DC );
 
         m_Pcb->Add( item );
-
-        g_UnDeleteStack[g_UnDeleteStackPtr] = NULL;
 
         item->Draw( DrawPanel, DC, GR_OR );
 
         item->SetState( DELETED, OFF );     /* Creal DELETED flag */
         item->m_Flags   = 0;
         m_Pcb->m_Status_Pcb = 0;
+
         build_liste_pads();
         ReCompile_Ratsnest_After_Changes( DC );
         break;
+#endif
 
     default:
         DisplayError( this, wxT( "WinEDA_PcbFrame::UnDeleteItem(): unexpected Struct type" ) );
+        delete item;
         break;
     }
 }
@@ -99,7 +111,7 @@ void WinEDA_PcbFrame::UnDeleteItem( wxDC* DC )
 /* Sauvegarde d'un element aux fins de restitution par Undelete
  *  Supporte actuellement : Module et segments de piste
  */
-BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems )
+BOARD_ITEM* WinEDA_BasePcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems )
 {
     if( aItem == NULL || nbitems == 0 )
         return NULL;
@@ -135,6 +147,7 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems )
                 BOARD_ITEM_LIST* list = new BOARD_ITEM_LIST();
                 g_UnDeleteStack[g_UnDeleteStackPtr++] = list;
 
+                // copy the numerous tracks into the list, which is already on stack
                 int i = 0;
                 TRACK* next;
                 for( TRACK* track = (TRACK*) aItem;  track && i<nbitems;  track = next, ++i )
@@ -146,6 +159,7 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems )
         }
         break;
 
+#if !defined(GERBVIEW)
     case TYPE_MODULE:
         {
             MODULE* module = (MODULE*) aItem;
@@ -155,10 +169,12 @@ BOARD_ITEM* WinEDA_PcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems )
             build_liste_pads();
         }
         break;
+#endif
 
     default:
         break;
     }
 
+    // don't know why this is not simply return aItem?
     return g_UnDeleteStack[g_UnDeleteStackPtr - 1];
 }

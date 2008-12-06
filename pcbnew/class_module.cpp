@@ -68,10 +68,10 @@ MODULE::MODULE( BOARD* parent ) :
     m_LastEdit_Time = time( NULL );
 
     m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
-    m_Reference->SetBack( this );
+//    m_Reference->SetBack( this );
 
     m_Value = new TEXTE_MODULE( this, TEXT_is_VALUE );
-    m_Value->SetBack( this );
+//    m_Value->SetBack( this );
 
     m_3D_Drawings.PushBack( new S3D_MASTER( this ) );
 }
@@ -342,32 +342,31 @@ int MODULE::Write_3D_Descr( FILE* File ) const
  */
 {
     char             buf[512];
-    S3D_MASTER* Struct3D = m_3D_Drawings;
 
-    for( ; Struct3D != NULL; Struct3D = Struct3D->Next() )
+    for( S3D_MASTER* t3D = m_3D_Drawings;  t3D;  t3D = t3D->Next() )
     {
-        if( !Struct3D->m_Shape3DName.IsEmpty() )
+        if( !t3D->m_Shape3DName.IsEmpty() )
         {
             fprintf( File, "$SHAPE3D\n" );
 
-            fprintf( File, "Na \"%s\"\n", CONV_TO_UTF8( Struct3D->m_Shape3DName ) );
+            fprintf( File, "Na \"%s\"\n", CONV_TO_UTF8( t3D->m_Shape3DName ) );
 
             sprintf( buf, "Sc %lf %lf %lf\n",
-                Struct3D->m_MatScale.x,
-                Struct3D->m_MatScale.y,
-                Struct3D->m_MatScale.z );
+                t3D->m_MatScale.x,
+                t3D->m_MatScale.y,
+                t3D->m_MatScale.z );
             fprintf( File, to_point( buf ) );
 
             sprintf( buf, "Of %lf %lf %lf\n",
-                Struct3D->m_MatPosition.x,
-                Struct3D->m_MatPosition.y,
-                Struct3D->m_MatPosition.z );
+                t3D->m_MatPosition.x,
+                t3D->m_MatPosition.y,
+                t3D->m_MatPosition.z );
             fprintf( File, to_point( buf ) );
 
             sprintf( buf, "Ro %lf %lf %lf\n",
-                Struct3D->m_MatRotation.x,
-                Struct3D->m_MatRotation.y,
-                Struct3D->m_MatRotation.z );
+                t3D->m_MatRotation.x,
+                t3D->m_MatRotation.y,
+                t3D->m_MatRotation.z );
             fprintf( File, to_point( buf ) );
 
             fprintf( File, "$EndSHAPE3D\n" );
@@ -390,15 +389,15 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
     char             Line[1024];
     char*            text = Line + 3;
 
-    S3D_MASTER* Struct3D = m_3D_Drawings;
+    S3D_MASTER* t3D = m_3D_Drawings;
 
-    if( !Struct3D->m_Shape3DName.IsEmpty() )
+    if( !t3D->m_Shape3DName.IsEmpty() )
     {
         S3D_MASTER* n3D = new S3D_MASTER( this );
 
         m_3D_Drawings.PushBack( n3D );
 
-        Struct3D = n3D;
+        t3D = n3D;
     }
 
     while( GetLine( File, Line, LineNum, sizeof(Line) - 1 ) != NULL )
@@ -414,29 +413,29 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
         {
             char buf[512];
             ReadDelimitedText( buf, text, 512 );
-            Struct3D->m_Shape3DName = CONV_FROM_UTF8( buf );
+            t3D->m_Shape3DName = CONV_FROM_UTF8( buf );
             break;
         }
 
         case 'S':       // Scale
             sscanf( text, "%lf %lf %lf\n",
-                &Struct3D->m_MatScale.x,
-                &Struct3D->m_MatScale.y,
-                &Struct3D->m_MatScale.z );
+                &t3D->m_MatScale.x,
+                &t3D->m_MatScale.y,
+                &t3D->m_MatScale.z );
             break;
 
         case 'O':       // Offset
             sscanf( text, "%lf %lf %lf\n",
-                &Struct3D->m_MatPosition.x,
-                &Struct3D->m_MatPosition.y,
-                &Struct3D->m_MatPosition.z );
+                &t3D->m_MatPosition.x,
+                &t3D->m_MatPosition.y,
+                &t3D->m_MatPosition.z );
             break;
 
         case 'R':       // Rotation
             sscanf( text, "%lf %lf %lf\n",
-                &Struct3D->m_MatRotation.x,
-                &Struct3D->m_MatRotation.y,
-                &Struct3D->m_MatRotation.z );
+                &t3D->m_MatRotation.x,
+                &t3D->m_MatRotation.y,
+                &t3D->m_MatRotation.z );
             break;
 
         default:
@@ -681,18 +680,18 @@ void MODULE::SetOrientation( int newangle )
     m_Value->SetDrawCoord();
 
     /* deplacement des contours et textes de l'empreinte : */
-    EDA_BaseStruct* PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( PtStruct->Type() == TYPE_EDGE_MODULE )
+        if( item->Type() == TYPE_EDGE_MODULE )
         {
-            EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) PtStruct;
+            EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) item;
             pt_edgmod->SetDrawCoord();
         }
-        if( PtStruct->Type() == TYPE_TEXTE_MODULE )
+
+        if( item->Type() == TYPE_TEXTE_MODULE )
         {
             /* deplacement des inscriptions : */
-            TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
+            TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) item;
             pt_texte->SetDrawCoord();
         }
     }

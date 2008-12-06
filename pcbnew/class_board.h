@@ -128,11 +128,26 @@ public:
 
     /**
      * Function Delete
-     * deletes the given single item from this BOARD and deletes its memory.  If you
-     * need the object after deletion, first copy it.
+     * removes the given single item from this BOARD and deletes its memory.
      * @param aBoardItem The item to remove from this board and delete
      */
-    void    Delete( BOARD_ITEM* aBoardItem );
+    void    Delete( BOARD_ITEM* aBoardItem )
+    {
+        wxASSERT( aBoardItem );  // developers should run DEBUG versions and fix such calls with NULL
+        if( aBoardItem )
+            delete Remove( aBoardItem );
+    }
+
+
+    /**
+     * Function Remove
+     * removes \a aBoardItem from this BOARD and returns it to caller without
+     * deleting it.
+     * @param aBoardItem The item to remove from this board.
+     * @return BOARD_ITEM* \a aBoardItem which was passed in.
+     */
+    BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
+
 
     /**
      * Function DeleteMARKERs
@@ -148,14 +163,6 @@ public:
 
 
     /**
-     * Function DeleteMARKER
-     * deletes one MARKER from the board.
-     * @param aIndex The index of the marker to delete.
-     */
-    void    DeleteMARKER( int aIndex );
-
-
-    /**
      * Function GetMARKER
      * returns the MARKER at a given index.
      * @param index The array type index into a collection of MARKERS.
@@ -167,7 +174,6 @@ public:
             return m_markers[index];
         return NULL;
     }
-
 
     /**
      * Function GetMARKERCount

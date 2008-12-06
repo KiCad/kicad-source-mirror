@@ -80,7 +80,9 @@ public:
 
     void DeleteItem( int aIndex )
     {
-        m_board->DeleteMARKER( aIndex );
+        MARKER* marker = m_board->GetMARKER( aIndex );
+        if( marker )
+            m_board->Delete( marker );
     }
 
 

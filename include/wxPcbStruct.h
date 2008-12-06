@@ -128,6 +128,10 @@ public:
     // PCB handling
     bool                        Clear_Pcb( bool query );
 
+    void            UnDeleteItem( wxDC* DC );
+    BOARD_ITEM*     SaveItemEfface( BOARD_ITEM* aItem, int nbitems );
+
+
     /**
      * Function PcbGeneralLocateAndDisplay
      * searches for an item under the mouse cursor.
@@ -465,7 +469,6 @@ public:
     void                Erase_Modules( bool query );
     void                Erase_Textes_Pcb( bool query );
     void                Erase_Marqueurs();
-    void                UnDeleteItem( wxDC* DC );
     void                RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
     void                Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via );
 
@@ -704,7 +707,6 @@ public:
     void                Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
     void                Ratsnest_On_Off( wxDC* DC );
     void                Clean_Pcb( wxDC* DC );
-    BOARD_ITEM*         SaveItemEfface( BOARD_ITEM* PtItem, int nbitems );
 
     void                InstallFindFrame( const wxPoint& pos, wxDC* DC );
 
@@ -841,7 +843,6 @@ public:
     void            Erase_Segments_Pcb( bool is_edges, bool query );
     void            Erase_Pistes( int masque_type, bool query );
     void            Erase_Textes_Pcb( bool query );
-    void            UnDeleteItem( wxDC* DC );
     void            Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
 
     TRACK*          Begin_Route( TRACK* track, wxDC* DC );
