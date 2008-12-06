@@ -230,21 +230,20 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     wxSize GridSize( 500, 500 );
-
+    wxConfig * config = NULL;
     if( m_Parent && m_Parent->m_EDA_Config )
     {
         long SizeX, SizeY;
+        config = m_Parent->m_EDA_Config;
 
-        if( m_Parent->m_EDA_Config->Read( wxT( "PcbEditGrid_X" ), &SizeX )
-           && m_Parent->m_EDA_Config->Read( wxT( "PcbEditGrid_Y" ), &SizeY ) )
+        if( config->Read( wxT( "PcbEditGrid_X" ), &SizeX )
+           && config->Read( wxT( "PcbEditGrid_Y" ), &SizeY ) )
         {
             GridSize.x = SizeX;
             GridSize.y = SizeY;
         }
-        m_Parent->m_EDA_Config->Read( wxT( "PcbMagPadOpt" ),
-                                      &g_MagneticPadOption );
-        m_Parent->m_EDA_Config->Read( wxT( "PcbMagTrackOpt" ),
-                                      &g_MagneticTrackOption );
+        config->Read( wxT( "PcbMagPadOpt" ), &g_MagneticPadOption );
+        config->Read( wxT( "PcbMagTrackOpt" ),  &g_MagneticTrackOption );
     }
     GetScreen()->SetGrid( GridSize );
 
@@ -254,6 +253,13 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
+    if( config )
+    {
+        long display_microwave_tools = 0;
+        config->Read( wxT( "ShowMicrowaveTools" ), &display_microwave_tools );
+        if ( display_microwave_tools )
+            ReCreateAuxVToolbar();
+    }
     ReCreateOptToolbar();
 }
 
@@ -325,17 +331,15 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
     SetBaseScreen( ActiveScreen = ScreenPcb );
 
     SaveSettings();
-    if( m_Parent && m_Parent->m_EDA_Config )
+   if( m_Parent && m_Parent->m_EDA_Config )
     {
+        wxConfig * config = m_Parent->m_EDA_Config;
         wxSize GridSize = GetScreen()->GetGrid();
-        m_Parent->m_EDA_Config->Write( wxT( "PcbEditGrid_X" ),
-                                       (long) GridSize.x );
-        m_Parent->m_EDA_Config->Write( wxT( "PcbEditGrid_Y" ),
-                                       (long) GridSize.y );
-        m_Parent->m_EDA_Config->Write( wxT( "PcbMagPadOpt" ),
-                                       (long) g_MagneticPadOption );
-        m_Parent->m_EDA_Config->Write( wxT( "PcbMagTrackOpt" ),
-                                       (long) g_MagneticTrackOption );
+        config->Write( wxT( "PcbEditGrid_X" ), (long) GridSize.x );
+        config->Write( wxT( "PcbEditGrid_Y" ), (long) GridSize.y );
+        config->Write( wxT( "PcbMagPadOpt" ), (long) g_MagneticPadOption );
+        config->Write( wxT( "PcbMagTrackOpt" ), (long) g_MagneticTrackOption );
+        config->Write( wxT( "ShowMicrowaveTools" ), (long) m_AuxVToolBar ? 1 : 0 );
     }
     Destroy();
 }
@@ -472,6 +476,7 @@ void WinEDA_PcbFrame::SetToolbars()
                                             DisplayOpt.ContrastModeDisplay ?
                                             _( "Normal Contrast Mode Display" ) :
                                             _( "Hight Contrast Mode Display" ) );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1, m_AuxVToolBar ? true : false );
     }
 
     if( m_AuxiliaryToolBar )

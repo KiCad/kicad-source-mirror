@@ -25,7 +25,6 @@ OBJECTS = $(TARGET).o \
 			class_cotation.o\
 			class_mire.o\
 			displayframe.o\
-			drawpanel.o \
 			init.o\
 			readschematicnetlist.o\
 			loadcmp.o\
@@ -59,9 +58,6 @@ cvpcb.o: cvpcb.cpp cvpcb.h
 displayframe.o: displayframe.cpp
 
 listboxes.o: listboxes.cpp
-
-drawpanel.o: ../share/drawpanel.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawframe.o: ../share/drawframe.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp

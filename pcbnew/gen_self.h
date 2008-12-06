@@ -172,7 +172,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     MODULE*      Module;
     D_PAD*       PtPad;
     int          ii, ll, lextbrin;
-    float        fcoeff;
+    double        fcoeff;
     bool         abort = FALSE;
     wxString     msg;
 
@@ -502,7 +502,7 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
  */
 {
     int          ii, nb_seg;
-    float        alpha, beta, fsin, fcos;
+    double        alpha, beta, fsin, fcos;
     int          x0, xr0, y0, yr0;
     EDGE_MODULE* newedge;
 
@@ -517,7 +517,7 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
     nb_seg = ( abs( angle ) ) / 225; if( nb_seg == 0 )
         nb_seg = 1;
 
-    alpha  = ( (float) angle * 3.14159 / 1800 ) / nb_seg;
+    alpha  = ( (double) angle * 3.14159 / 1800 ) / nb_seg;
 
     for( ii = 1; ii <= nb_seg; ii++ )
     {

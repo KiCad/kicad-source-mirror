@@ -395,7 +395,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                wxEmptyString,
                                wxBitmap( mw_toolbar_xpm ),
-                               _( "Display auxiliary vertical toolbar (tools for micro wave applications)\n This is a very experimental feature (under development)" ),
+                               _( "Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n This is a experimental feature (under development)" ),
                                wxITEM_CHECK );
 #endif
 
@@ -539,7 +539,6 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar()
 
     m_AuxVToolBar->Realize();
 
-    D(printf("ReCreateAuxVToolbar\n");)
     SetToolbars();
 }
 

@@ -2,22 +2,20 @@
 /* Gestion des composants specifiques aux microndes */
 /****************************************************/
 
-/* Fichier MUONDE.CPP */
+/* File MUONDE.CPP */
 
 #include "fctsys.h"
-#include "gr_basic.h"
+//#include "gr_basic.h"
 
 #include "common.h"
 #include "trigo.h"
 #include "pcbnew.h"
-#include "autorout.h"
+//#include "autorout.h"
 
-#include "drag.h"
+//#include "drag.h"
 
-#include <string.h>
+//#include <string.h>
 #include "protos.h"
-
-/* fonctions importees */
 
 /* Fonctions locales */
 
@@ -25,17 +23,16 @@
 
 /* Variables locales : */
 #define COEFF_COUNT 6
-double* PolyEdges;
-int     PolyEdgesCount;
-double  ShapeScaleX, ShapeScaleY;
-wxSize  ShapeSize;
-int     PolyShapeType;
+static double* PolyEdges;
+static int     PolyEdgesCount;
+static double  ShapeScaleX, ShapeScaleY;
+static wxSize  ShapeSize;
+static int     PolyShapeType;
 
 #include "gen_self.h"
 
 /***************************************************************************/
-MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
-                                                  const wxString& name, int pad_count )
+MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name, int pad_count )
 /***************************************************************************/
 
 /* Create a footprint with pad_count pads for micro wave applications
@@ -47,7 +44,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
     int      pad_num = 1;
     wxString Line;
 
-    Module = Create_1_Module( DC, name );
+    Module = Create_1_Module( NULL, name );
     if( Module == NULL )
         return NULL;
 
@@ -75,9 +72,6 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( wxDC* DC,
         pad->SetPadName( Line );
         pad_num++;
     }
-
-    if( DC )
-        Module->Draw( DrawPanel, DC, GR_OR );
     return Module;
 }
 
@@ -112,7 +106,7 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 
 
 /***************************************************************************/
-MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
+MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
 /***************************************************************************/
 
 /* Create a module "GAP" or "STUB"
@@ -124,14 +118,14 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
 {
     int      gap_size, oX, ii;
     float    fcoeff;
-    D_PAD*   pt_pad;
+    D_PAD*   pad;
     MODULE*  Module;
     wxString msg, cmp_name;
     int      pad_count = 2;
     int      angle = 0;
     bool     abort;
 
-    /* Entree de la longueur desiree du gap*/
+    /* Enter the size of the gap or stub*/
     gap_size = g_DesignSettings.m_CurrentTrackWidth;        // Valeur raisonnable
 
     switch( shape_type )
@@ -164,15 +158,14 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
         fcoeff = 10000.0 / 25.4;
         value.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
         msg  += _( " (mm):" );
-        abort = Get_Message( msg, _("Create microwave module"), value, this );
     }
     else
     {
         fcoeff = 10000.0;
         value.Printf( wxT( "%2.3f" ), gap_size / fcoeff );
         msg  += _( " (inch):" );
-        abort = Get_Message( msg, _("Create microwave module"), value, this );
     }
+    abort = Get_Message( msg, _("Create microwave module"), value, this );
 
     double   fval;
     if( !value.ToDouble( &fval ) )
@@ -204,32 +197,32 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
         return NULL;
     }
 
-    Module = Create_MuWaveBasicShape( NULL, cmp_name, pad_count );
-    pt_pad = Module->m_Pads;
+    Module = Create_MuWaveBasicShape( cmp_name, pad_count );
+    pad = Module->m_Pads;
 
     switch( shape_type )
     {
     case 0:     //Gap :
-        oX = pt_pad->m_Pos0.x = -(gap_size + pt_pad->m_Size.x) / 2;
-        pt_pad->m_Pos.x += pt_pad->m_Pos0.x;
+        oX = pad->m_Pos0.x = -(gap_size + pad->m_Size.x) / 2;
+        pad->m_Pos.x += pad->m_Pos0.x;
 
-        pt_pad = (D_PAD*) pt_pad->Next();
-        pt_pad->m_Pos0.x = oX + gap_size + pt_pad->m_Size.x;
-        pt_pad->m_Pos.x += pt_pad->m_Pos0.x;
+        pad = pad->Next();
+        pad->m_Pos0.x = oX + gap_size + pad->m_Size.x;
+        pad->m_Pos.x += pad->m_Pos0.x;
         break;
 
     case 1:     //Stub :
-        pt_pad->SetPadName( wxT( "1" ) );
-        pt_pad = (D_PAD*) pt_pad->Next();
-        pt_pad->m_Pos0.y = -(gap_size + pt_pad->m_Size.y) / 2;
-        pt_pad->m_Size.y = gap_size;
-        pt_pad->m_Pos.y += pt_pad->m_Pos0.y;
+        pad->SetPadName( wxT( "1" ) );
+        pad = pad->Next();
+        pad->m_Pos0.y = -(gap_size + pad->m_Size.y) / 2;
+        pad->m_Size.y = gap_size;
+        pad->m_Pos.y += pad->m_Pos0.y;
         break;
 
-    case 2:     //Arc Stub :
+    case 2:     //Arc Stub created by a polygonal approach:
     {
         EDGE_MODULE* edge; int* ptr, theta;
-        ii   = angle / 50;
+        ii   = angle / 50;      // Note : angles are in 0.1 degrees
 
         edge = new EDGE_MODULE( Module );
         Module->m_Drawings.PushFront( edge );
@@ -239,7 +232,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
         edge->m_PolyCount = ii + 3;
         edge->m_PolyList  = (int*) MyMalloc( edge->m_PolyCount * 2 * sizeof(int) );
         ptr = edge->m_PolyList;
-        edge->m_Start0.y = -pt_pad->m_Size.y / 2;
+        edge->m_Start0.y = -pad->m_Size.y / 2;
 
         *ptr  = 0; ptr++;
         *ptr  = 0; ptr++;
@@ -255,6 +248,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
                 theta = angle / 2;
         }
 
+        // Close the polygon:
         *ptr = edge->m_PolyList[0]; ptr++;
         *ptr = edge->m_PolyList[1];
         break;
@@ -265,8 +259,6 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent( wxDC* DC, int shape_type )
     }
 
     Module->Set_Rectangle_Encadrement();
-    Module->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->MouseToCursorSchema();
     m_Pcb->m_Status_Pcb = 0;
     GetScreen()->SetModify();
     return Module;
@@ -506,7 +498,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
 
 
 /*************************************************************/
-MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
+MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
 /*************************************************************/
 {
     D_PAD*       pad1, * pad2;
@@ -548,7 +540,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
 
     cmp_name = wxT( "POLY" );
 
-    Module = Create_MuWaveBasicShape( NULL, cmp_name, pad_count );
+    Module = Create_MuWaveBasicShape( cmp_name, pad_count );
     pad1   = Module->m_Pads;
 
     pad1->m_Pos0.x = -ShapeSize.x / 2;
@@ -637,7 +629,6 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( wxDC* DC )
     PolyEdges = NULL;
 
     Module->Set_Rectangle_Encadrement();
-    Module->Draw( DrawPanel, DC, GR_OR );
     m_Pcb->m_Status_Pcb = 0;
     GetScreen()->SetModify();
     return Module;

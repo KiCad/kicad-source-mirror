@@ -35,7 +35,6 @@ OBJECTS = eeschema.o\
 	drawframe.o\
 	schframe.o\
 	viewlib_frame.o\
-	drawpanel.o\
 	wxprint.o\
 	lib_export.o \
 	busentry.o \
@@ -147,9 +146,6 @@ zoom.o: ../share/zoom.cpp $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 treeprj.o: ../share/treeprj.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-drawpanel.o: ../share/drawpanel.cpp  $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 mdiframe.o: ../share/mdiframe.cpp $(DEPEND)

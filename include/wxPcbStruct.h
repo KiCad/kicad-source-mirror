@@ -718,9 +718,9 @@ public:
 
     /* Micro waves functions */
     void                Edit_Gap( wxDC* DC, MODULE* Module );
-    MODULE*             Create_MuWaveBasicShape( wxDC* DC, const wxString& name, int pad_count );
-    MODULE*             Create_MuWaveComponent( wxDC* DC, int shape_type );
-    MODULE*             Create_MuWavePolygonShape( wxDC* DC );
+    MODULE*             Create_MuWaveBasicShape( const wxString& name, int pad_count );
+    MODULE*             Create_MuWaveComponent( int shape_type );
+    MODULE*             Create_MuWavePolygonShape( );
     void                Begin_Self( wxDC* DC );
     MODULE*             Genere_Self( wxDC* DC );
 

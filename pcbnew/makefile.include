@@ -61,7 +61,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		class_zone.o\
         class_zone_setting.o\
 		drawframe.o\
-		drawpanel.o\
 		track.o \
 		set_color.o \
 		set_grid.o \
@@ -134,13 +133,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		gpcb_exchange.o
 
 
-PolyLine.o: ../polygon/PolyLine.cpp ../polygon/PolyLine.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../polygon/$*.cpp
-
 setpage.o: ../share/setpage.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-drawpanel.o: ../share/drawpanel.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 drawframe.o: ../share/drawframe.cpp

@@ -5,10 +5,11 @@ COMMON = ../include/colors.h
 
 
 OBJECTS= \
-	confirm.o \
+	about_kicad.o\
 	base_struct.o\
-	copy_to_clipboard.o\
 	basicframe.o\
+	confirm.o \
+	copy_to_clipboard.o\
 	class_drawpickedstruct.o\
 	common_plot_functions.o\
 	common_plotPS_functions.o\
@@ -16,7 +17,7 @@ OBJECTS= \
 	dlist.o \
 	hotkeys_basic.o\
 	drawtxt.o \
-	about_kicad.o\
+    drawpanel.o\
 	wxwineda.o \
 	string.o \
 	gr_basic.o\
