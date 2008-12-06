@@ -110,7 +110,7 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
     SetGrid( wxSize( 50, 50 ) );        /* pas de la grille */
     m_UndoRedoCountMax = 10;
     m_RefCount = 0;
-    m_Center = false;
+    m_Center = false;                   // Suitable for schematic only. for libedit and viewlib, must be set to true
     InitDatas();
 }
 

@@ -2,10 +2,6 @@
 /* viewlib_frame.cpp - fonctions des classes du type WinEDA_ViewlibFrame */
 /*************************************************************************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 
 #include "common.h"
@@ -23,41 +19,39 @@
 /* class WinEDA_ViewlibFrame */
 /*****************************/
 BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, wxFrame )
-    COMMON_EVENTS_DRAWFRAME
-    EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
-    EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
-    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
+EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
+EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
 
-    EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
-                    WinEDA_ViewlibFrame::Process_Special_Functions )
+EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
+    WinEDA_ViewlibFrame::Process_Special_Functions )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                    WinEDA_DrawFrame::Process_Zoom )
+EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
+    WinEDA_DrawFrame::Process_Zoom )
 
-    EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-              WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
+EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
+    WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
 
-    EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
-                         WinEDA_ViewlibFrame::Process_Special_Functions )
+EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
+    WinEDA_ViewlibFrame::Process_Special_Functions )
 
-    EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
-    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
+EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
+EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
 END_EVENT_TABLE()
 
 
-/****************/
-/* Constructeur */
-/****************/
+/******************************************************************************/
 WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
                                           LibraryStruct* Library,
                                           wxSemaphore* semaphore ) :
     WinEDA_DrawFrame( father, VIEWER_FRAME, parent, _( "Library browser" ),
                       wxDefaultPosition, wxDefaultSize )
+/******************************************************************************/
 {
     m_FrameName = wxT( "ViewlibFrame" );
 
-    m_Draw_Axis = TRUE;             // TRUE pour avoir les axes dessines
-    m_Draw_Grid = TRUE;             // TRUE pour avoir la axes dessinee
+    m_Draw_Axis = TRUE;             // TRUE to dispaly Axis
+    m_Draw_Grid = TRUE;             // TRUE to display grid
 
     // Give an icon
     SetIcon( wxIcon( library_browse_xpm ) );
@@ -69,7 +63,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
 
     SetBaseScreen( new SCH_SCREEN() );
-    GetScreen()->SetZoom( 16 );
+    GetScreen()->m_Center = true;       // set to true to have the coordinates origine -0,0) centered on screen
 
     if( Library == NULL )
     {
@@ -78,8 +72,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
         m_LibList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxPoint( 0, 0 ),
             m_LibListSize, 0, NULL, wxLB_HSCROLL );
         m_LibList->SetFont( *g_DialogFont );
-        m_LibList->SetBackgroundColour( wxColour( 255, 255, 255 ) ); // Library background listbox color (white)
-        m_LibList->SetForegroundColour( wxColour( 0, 0, 0 ) ); // Library foreground listbox color (black)
+        m_LibList->SetBackgroundColour( wxColour( 255, 255, 255 ) );    // Library background listbox color (white)
+        m_LibList->SetForegroundColour( wxColour( 0, 0, 0 ) );          // Library foreground listbox color (black)
     }
     else
         g_CurrentViewLibraryName = Library->m_Name;
@@ -89,8 +83,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
     m_CmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxPoint( m_LibListSize.x, 0 ),
         m_CmpListSize, 0, NULL, wxLB_HSCROLL );
     m_CmpList->SetFont( *g_DialogFont );
-    m_CmpList->SetBackgroundColour( wxColour( 255, 255, 255 ) ); // Component background listbox color (white)
-    m_CmpList->SetForegroundColour( wxColour( 0, 0, 0 ) ); // Component foreground listbox color (black)
+    m_CmpList->SetBackgroundColour( wxColour( 255, 255, 255 ) );    // Component background listbox color (white)
+    m_CmpList->SetForegroundColour( wxColour( 0, 0, 0 ) );          // Component foreground listbox color (black)
 
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -99,15 +93,14 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
     if( m_LibList )
         ReCreateListLib();
     DisplayLibInfos();
+    BestZoom();
     Show( TRUE );
 }
 
 
-/***************/
-/* Destructeur */
-/***************/
-
+/*******************************************/
 WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
+/*******************************************/
 {
     delete GetScreen();
     SetBaseScreen( 0 );
@@ -176,9 +169,9 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/*******************************************/
+/***********************************/
 int WinEDA_ViewlibFrame::BestZoom()
-/*******************************************/
+/***********************************/
 {
     int    bestzoom, ii, jj;
     wxSize size, itemsize;
@@ -198,28 +191,21 @@ int WinEDA_ViewlibFrame::BestZoom()
     EDA_Rect BoundaryBox = CurrentLibEntry->GetBoundaryBox( g_ViewUnit, g_ViewConvert );
     itemsize = BoundaryBox.GetSize();
 
-    size    = DrawPanel->GetClientSize();
-    size.x -= 60;   // Pour marges haut et bas
-    ii = itemsize.x / size.x;
-    jj = itemsize.y / size.y;
-    ii = MAX( ii, jj );
+    size     = DrawPanel->GetClientSize();
+    size.x  -= 60;  // sub a margin
+    ii       = itemsize.x / size.x;
+    jj       = itemsize.y / size.y;
+    bestzoom = MAX( ii, jj );
 
-    /* determination du zoom existant le plus proche */
-    for( bestzoom = 1;  bestzoom < 512;  bestzoom <<= 1 )
-    {
-        if( bestzoom > ii )
-            break;
-    }
-
-    GetScreen()->m_Curseur   = BoundaryBox.Centre();
+    GetScreen()->m_Curseur = BoundaryBox.Centre();
 
     return bestzoom;
 }
 
 
-/***************************************************/
+/******************************************/
 void WinEDA_ViewlibFrame::ReCreateListLib()
-/***************************************************/
+/*******************************************/
 {
     const wxChar** ListNames, ** names;
     int            ii;
@@ -243,8 +229,8 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
 
     free( ListNames );
 
-    /* Librairie courante peut etre non retrouv�e en liste
-      * (peut etre effac�e lors d'une modification de configuration) */
+    /* Clear current library because it can be deleted after a config change
+     */
     if( !found )
     {
         g_CurrentViewLibraryName.Empty();
@@ -269,8 +255,8 @@ void WinEDA_ViewlibFrame::ReCreateListCmp()
     m_CmpList->Clear();
     ii = 0;
     g_CurrentViewComponentName.Empty();
-    g_ViewConvert = 1;                      /* Vue normal / convert */
-    g_ViewUnit    = 1;                      /* unit� a afficher (A, B ..) */
+    g_ViewConvert = 1;                      /* Select normal/"de morgan" shape */
+    g_ViewUnit    = 1;                      /* Selec unit to display for multiple parts per package */
     if( Library )
         LibEntry = (EDA_LibComponentStruct*) PQFirst( &Library->m_Entries, FALSE );
     while( LibEntry )
@@ -325,7 +311,7 @@ void WinEDA_ViewlibFrame::ClickOnCmpList( wxCommandEvent& event )
 void WinEDA_ViewlibFrame::ExportToSchematicLibraryPart( wxCommandEvent& event )
 /****************************************************************************/
 
-/* Export to schematic the current viewed component, and close the library browser
+/* Export the current component to schematic and close the library browser
  */
 {
     int ii = m_CmpList->GetSelection();

@@ -72,6 +72,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
     SetBaseScreen( g_ScreenLib );
+    GetScreen()->m_Center = true;       // set to true to have the coordinates origine -0,0) centered on screen
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     if( DrawPanel )
@@ -79,6 +80,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     ReCreateHToolbar();
     ReCreateVToolbar();
     DisplayLibInfos();
+    BestZoom();
     Show( TRUE );
 }
 
