@@ -424,24 +424,6 @@ public:
     }
 
 
-    /**
-     * Function DeleteStructList
-     * deletes each item in a linked list of EDA_BaseStructs, starting with
-     * "this" object.
-     */
-    void DeleteStructList();
-
-
-    /**
-     * Function AddToChain
-     * adds this item just after laststruct in a linked list established
-     * by the Prev and Back pointers of my base EDA_BaseStruct.
-     * @deprecated
-     * @param laststruct The item to add after
-     */
-    void AddToChain( EDA_BaseStruct* laststruct );
-
-
 #if defined (DEBUG)
 
     /**

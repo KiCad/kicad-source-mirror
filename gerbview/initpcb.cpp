@@ -45,7 +45,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     for( ; g_UnDeleteStackPtr != 0; )
     {
         g_UnDeleteStackPtr--;
-        g_UnDeleteStack[ g_UnDeleteStackPtr]->DeleteStructList();
+        delete g_UnDeleteStack[ g_UnDeleteStackPtr];
     }
 
     /* init pointeurs  et variables */
@@ -89,26 +89,24 @@ void WinEDA_GerberFrame::Erase_Zones( bool query )
 void WinEDA_GerberFrame::Erase_Segments_Pcb( bool all_layers, bool query )
 /************************************************************************/
 {
-    BOARD_ITEM*     PtStruct;
-    BOARD_ITEM*     PtNext;
-    int             layer = GetScreen()->m_Active_Layer;
+    int  layer = GetScreen()->m_Active_Layer;
 
     if( all_layers )
         layer = -1;
 
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtNext )
+    BOARD_ITEM*  next;
+    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = next )
     {
-        PtNext = PtStruct->Next();
+        next = item->Next();
 
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_COTATION:
         case TYPE_MIRE:
-            if( PtStruct->GetLayer() == layer  || layer < 0 )
-                PtStruct->DeleteStructure();
+            if( item->GetLayer() == layer  || layer < 0 )
+                m_Pcb->Delete( item );
             break;
 
         default:

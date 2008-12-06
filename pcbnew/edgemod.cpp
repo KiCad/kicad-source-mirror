@@ -335,61 +335,75 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
  * @return the new created edge.
  */
 {
-    MODULE* Module = m_Pcb->m_Modules;
+    MODULE* module = m_Pcb->m_Modules;
     int     angle  = 0;
 
-    if( Module == NULL )
+    if( module == NULL )
         return NULL;
 
     if( Edge == NULL )       /* Start a new edge item */
     {
-        SaveCopyInUndoList( Module );
-        Edge = new EDGE_MODULE( Module );
+        SaveCopyInUndoList( module );
+
+        Edge = new EDGE_MODULE( module );
         MoveVector.x = MoveVector.y = 0;
 
         /* Add the new item to the Drawings list head*/
-        Module->m_Drawings.PushFront( Edge );
+        module->m_Drawings.PushFront( Edge );
 
         /* Mise a jour des caracteristiques du segment ou de l'arc */
         Edge->m_Flags = IS_NEW;
         Edge->m_Angle = angle;
         Edge->m_Shape = type_edge;
+
         if( Edge->m_Shape == S_ARC )
             Edge->m_Angle = ArcValue;
+
         Edge->m_Width = ModuleSegmentWidth;
-        Edge->SetLayer( Module->GetLayer() );
-        if( Module->GetLayer() == CMP_N )
+        Edge->SetLayer( module->GetLayer() );
+
+        if( module->GetLayer() == CMP_N )
             Edge->SetLayer( SILKSCREEN_N_CMP );
-        if( Module->GetLayer() == COPPER_LAYER_N )
+        if( module->GetLayer() == COPPER_LAYER_N )
             Edge->SetLayer( SILKSCREEN_N_CU );
+
         /* Initialise the starting point of the new segment or arc */
         Edge->m_Start = GetScreen()->m_Curseur;
+
         /* Initialise the ending point of the new segment or arc */
         Edge->m_End = Edge->m_Start;
 
         /* Initialise the relative coordinates */
-        Edge->m_Start0.x = Edge->m_Start.x - Module->m_Pos.x;
-        Edge->m_Start0.y = Edge->m_Start.y - Module->m_Pos.y;
-        RotatePoint( (int*) &(Edge->m_Start0.x),
-                    (int*) &(Edge->m_Start0.y), -Module->m_Orient );
+        Edge->m_Start0.x = Edge->m_Start.x - module->m_Pos.x;
+        Edge->m_Start0.y = Edge->m_Start.y - module->m_Pos.y;
+
+        RotatePoint( (int*) &Edge->m_Start0.x,
+                    (int*) &Edge->m_Start0.y, -module->m_Orient );
+
         Edge->m_End0 = Edge->m_Start0;
-        Module->Set_Rectangle_Encadrement();
+        module->Set_Rectangle_Encadrement();
 
         DrawPanel->ManageCurseur = ShowEdgeModule;
         DrawPanel->ForceCloseManageCurseur = Exit_EditEdge_Module;
     }
-    else    /* trace en cours : les coord du point d'arrivee ont ete mises
-             *  a jour par la routine Montre_Position_New_Edge_Module*/
+
+    /* trace en cours : les coord du point d'arrivee ont ete mises
+     * a jour par la routine Montre_Position_New_Edge_Module
+     */
+    else
     {
         if( type_edge == S_SEGMENT )
         {
-            if( (Edge->m_Start0.x) != (Edge->m_End0.x)
-               || (Edge->m_Start0.y) != (Edge->m_End0.y) )
+            if( Edge->m_Start0 != Edge->m_End0 )
             {
                 Edge->Draw( DrawPanel, DC, GR_OR );
-                EDGE_MODULE* newedge = new EDGE_MODULE( Module );
+
+                EDGE_MODULE* newedge = new EDGE_MODULE( module );
                 newedge->Copy( Edge );
-                newedge->AddToChain( Edge );
+
+                // insert _after_ Edge, which is the same as inserting _before_ Edge->Next()
+                module->m_Drawings.Insert( newedge, Edge->Next() );
+
                 Edge->m_Flags = 0;
                 Edge = newedge;
 
@@ -399,14 +413,16 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
                 Edge->m_End   = Edge->m_Start;
 
                 /* Mise a jour des coord relatives */
-                Edge->m_Start0.x = Edge->m_Start.x - Module->m_Pos.x;
-                Edge->m_Start0.y = Edge->m_Start.y - Module->m_Pos.y;
-                RotatePoint( (int*) &(Edge->m_Start0.x),
-                            (int*) &(Edge->m_Start0.y), -Module->m_Orient );
+                Edge->m_Start0.x = Edge->m_Start.x - module->m_Pos.x;
+                Edge->m_Start0.y = Edge->m_Start.y - module->m_Pos.y;
+
+                RotatePoint( (int*) &Edge->m_Start0.x,
+                            (int*) &Edge->m_Start0.y, -module->m_Orient );
+
                 Edge->m_End0 = Edge->m_Start0;
 
-                Module->Set_Rectangle_Encadrement();
-                Module->m_LastEdit_Time = time( NULL );
+                module->Set_Rectangle_Encadrement();
+                module->m_LastEdit_Time = time( NULL );
                 GetScreen()->SetModify();
             }
         }

@@ -192,26 +192,6 @@ wxPoint& BOARD::GetPosition()
 }
 
 
-void BOARD::UnLink()
-{
-    /* Update back link */
-    if( Back() )
-    {
-        if( Back()->Type() == TYPE_PCB )
-        {
-            Back()->SetNext( Next() );
-        }
-    }
-
-    /* Modification du chainage avant */
-    if( Next() )
-        Next()->SetBack( Back() );
-
-    SetNext( 0 );
-    SetBack( 0 );
-}
-
-
 void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 {
     if ( aBoardItem == NULL )
@@ -314,6 +294,31 @@ void BOARD::Delete( BOARD_ITEM* aBoardItem )
                 break;
             }
         }
+        break;
+
+    case TYPE_MODULE:
+        delete m_Modules.Remove( (MODULE*) aBoardItem );
+        break;
+
+    case TYPE_TRACK:
+    case TYPE_VIA:
+        delete m_Track.Remove( (TRACK*) aBoardItem );
+        break;
+
+    case TYPE_ZONE:
+        delete m_Zone.Remove( (SEGZONE*) aBoardItem );
+        break;
+
+    case TYPE_COTATION:
+    case TYPE_DRAWSEGMENT:
+    case TYPE_TEXTE:
+    case TYPE_EDGE_MODULE:
+    case TYPE_MIRE:
+        delete m_Drawings.Remove( aBoardItem );
+        break;
+
+    case TYPE_EQUIPOT:
+        delete m_Equipots.Remove( (EQUIPOT*) aBoardItem );
         break;
 
     // other types may use linked list

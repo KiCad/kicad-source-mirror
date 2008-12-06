@@ -115,8 +115,6 @@ public:
      */
     wxPoint& GetPosition();
 
-    /* supprime du chainage la structure Struct */
-    void    UnLink();
 
     /**
      * Function Add

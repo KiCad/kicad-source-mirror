@@ -57,7 +57,6 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM( parent, TYPE_MODULE )
 {
-    m_3D_Drawings  = NULL;
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = CMP_N;
     m_Orient       = 0;
@@ -74,48 +73,40 @@ MODULE::MODULE( BOARD* parent ) :
     m_Value = new TEXTE_MODULE( this, TEXT_is_VALUE );
     m_Value->SetBack( this );
 
-    m_3D_Drawings  = new Struct3D_Master( this );
+    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );
 }
 
 
 MODULE::~MODULE()
 {
-    EDA_BaseStruct* item;
-    EDA_BaseStruct* next;
-
     delete m_Reference;
     delete m_Value;
-    for( item = m_3D_Drawings;  item;  item = next )
-    {
-        next = item->Next();
-        delete item;
-    }
 }
 
 
 /*********************************/
-void MODULE::Copy( MODULE* Module )
+void MODULE::Copy( MODULE* aModule )
 /*********************************/
 {
-    m_Pos           = Module->m_Pos;
-    m_Layer         = Module->m_Layer;
-    m_LibRef        = Module->m_LibRef;
-    m_Attributs     = Module->m_Attributs;
-    m_Orient        = Module->m_Orient;
-    m_BoundaryBox   = Module->m_BoundaryBox;
-    m_PadNum        = Module->m_PadNum;
-    m_CntRot90      = Module->m_CntRot90;
-    m_CntRot180     = Module->m_CntRot180;
-    m_LastEdit_Time = Module->m_LastEdit_Time;
-    m_Path          = Module->m_Path; //is this correct behavior?
+    m_Pos           = aModule->m_Pos;
+    m_Layer         = aModule->m_Layer;
+    m_LibRef        = aModule->m_LibRef;
+    m_Attributs     = aModule->m_Attributs;
+    m_Orient        = aModule->m_Orient;
+    m_BoundaryBox   = aModule->m_BoundaryBox;
+    m_PadNum        = aModule->m_PadNum;
+    m_CntRot90      = aModule->m_CntRot90;
+    m_CntRot180     = aModule->m_CntRot180;
+    m_LastEdit_Time = aModule->m_LastEdit_Time;
+    m_Path          = aModule->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
 
     /* Copy des structures auxiliaires: Reference et value */
-    m_Reference->Copy( Module->m_Reference );
-    m_Value->Copy( Module->m_Value );
+    m_Reference->Copy( aModule->m_Reference );
+    m_Value->Copy( aModule->m_Value );
 
     /* Copie des structures auxiliaires: Pads */
-    for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( this );
         newpad->Copy( pad );
@@ -124,7 +115,7 @@ void MODULE::Copy( MODULE* Module )
     }
 
     /* Copy des structures auxiliaires: Drawings */
-    for( BOARD_ITEM* item = Module->m_Drawings;  item;  item = item->Next() )
+    for( BOARD_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -148,25 +139,16 @@ void MODULE::Copy( MODULE* Module )
         }
     }
 
-    /* Copy des elements complementaires Drawings 3D */
-    m_3D_Drawings->Copy( Module->m_3D_Drawings );
-
-    Struct3D_Master* Struct3D, * NewStruct3D, * CurrStruct3D;
-
-    Struct3D     = Module->m_3D_Drawings->Next();
-    CurrStruct3D = m_3D_Drawings;
-    for( ; Struct3D != NULL;  Struct3D = Struct3D->Next() )
+    for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
-        NewStruct3D = new Struct3D_Master( this );
-        NewStruct3D->Copy( Struct3D );
-        CurrStruct3D->SetNext( NewStruct3D );
-        NewStruct3D->SetBack( CurrStruct3D );
-        CurrStruct3D = NewStruct3D;
+        S3D_MASTER* t3d = new S3D_MASTER( this );
+        t3d->Copy( item );
+        m_3D_Drawings.PushBack( t3d );
     }
 
     /* Copie des elements complementaires */
-    m_Doc     = Module->m_Doc;
-    m_KeyWord = Module->m_KeyWord;
+    m_Doc     = aModule->m_Doc;
+    m_KeyWord = aModule->m_KeyWord;
 }
 
 
@@ -360,7 +342,7 @@ int MODULE::Write_3D_Descr( FILE* File ) const
  */
 {
     char             buf[512];
-    Struct3D_Master* Struct3D = m_3D_Drawings;
+    S3D_MASTER* Struct3D = m_3D_Drawings;
 
     for( ; Struct3D != NULL; Struct3D = Struct3D->Next() )
     {
@@ -406,19 +388,17 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
  */
 {
     char             Line[1024];
-    char*            text     = Line + 3;
-    Struct3D_Master* Struct3D = m_3D_Drawings;
+    char*            text = Line + 3;
+
+    S3D_MASTER* Struct3D = m_3D_Drawings;
 
     if( !Struct3D->m_Shape3DName.IsEmpty() )
     {
-        Struct3D_Master* NewStruct3D;
-        while( Struct3D->Next() )
-            Struct3D = Struct3D->Next();
+        S3D_MASTER* n3D = new S3D_MASTER( this );
 
-        NewStruct3D = new Struct3D_Master( this );
-        Struct3D->SetNext( NewStruct3D );
-        NewStruct3D->SetBack( Struct3D );
-        Struct3D = NewStruct3D;
+        m_3D_Drawings.PushBack( n3D );
+
+        Struct3D = n3D;
     }
 
     while( GetLine( File, Line, LineNum, sizeof(Line) - 1 ) != NULL )

@@ -301,16 +301,21 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     newedge = new EDGE_MODULE( Module );
     newedge->Copy( PtSegm );
-    newedge->AddToChain( PtSegm );
+
+    Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
     PtSegm = newedge;
     PtSegm->m_Start = PtSegm->m_End;
+
     PtSegm = gen_arc( PtSegm, PtSegm->m_End.x - Mself.rayon, PtSegm->m_End.y, -900 );
 
     if( lextbrin )
     {
         newedge = new EDGE_MODULE( Module );
         newedge->Copy( PtSegm );
-        newedge->AddToChain( PtSegm );
+
+        Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
         PtSegm = newedge;
         PtSegm->m_Start  = PtSegm->m_End;
         PtSegm->m_End.x -= lextbrin;
@@ -322,7 +327,9 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
         int arc_angle;
         newedge = new EDGE_MODULE( Module );
         newedge->Copy( PtSegm );
-        newedge->AddToChain( PtSegm );
+
+        Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
         PtSegm = newedge;
         PtSegm->m_Start = PtSegm->m_End;
 
@@ -338,7 +345,9 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
         {
             newedge = new EDGE_MODULE( Module );
             newedge->Copy( PtSegm );
-            newedge->AddToChain( PtSegm );
+
+            Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
             PtSegm = newedge;
             PtSegm->m_Start = PtSegm->m_End;
             if( ii & 1 )
@@ -356,7 +365,9 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
         {
             newedge = new EDGE_MODULE( Module );
             newedge->Copy( PtSegm );
-            newedge->AddToChain( PtSegm );
+
+            Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
             PtSegm = newedge;
             PtSegm->m_Start  = PtSegm->m_End;
             PtSegm->m_End.x -= lextbrin;
@@ -364,7 +375,8 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
         newedge = new EDGE_MODULE( Module );
         newedge->Copy( PtSegm );
-        newedge->AddToChain( PtSegm );
+        Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
         PtSegm = newedge;
         PtSegm->m_Start.x = PtSegm->m_End.x; PtSegm->m_Start.y = PtSegm->m_End.y;
         PtSegm = gen_arc( PtSegm, PtSegm->m_End.x, PtSegm->m_End.y + Mself.rayon, 900 );
@@ -375,14 +387,17 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
         {
             newedge = new EDGE_MODULE( Module );
             newedge->Copy( PtSegm );
-            newedge->AddToChain( PtSegm );
+
+            Module->m_Drawings.Insert( newedge, PtSegm->Next() );
+
             PtSegm = newedge;
             PtSegm->m_Start  = PtSegm->m_End;
             PtSegm->m_End.x += lextbrin;
         }
         newedge = new EDGE_MODULE( Module );
         newedge->Copy( PtSegm );
-        newedge->AddToChain( PtSegm );
+
+        Module->m_Drawings.Insert( newedge, PtSegm->Next() );
         PtSegm = newedge;
         PtSegm->m_Start = PtSegm->m_End;
         PtSegm = gen_arc( PtSegm, PtSegm->m_End.x, PtSegm->m_End.y + Mself.rayon, -900 );
@@ -390,7 +405,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     newedge = new EDGE_MODULE( Module );
     newedge->Copy( PtSegm );
-    newedge->AddToChain( PtSegm );
+    Module->m_Drawings.Insert( newedge, PtSegm->Next() );
     PtSegm = newedge;
     PtSegm->m_Start = PtSegm->m_End;
     PtSegm->m_End   = Mself.m_End;
@@ -420,9 +435,11 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Module->m_Pads.PushFront( PtPad );
 
     PtPad->SetPadName( wxT( "1" ) );
-    PtPad->m_Pos.x  = LastSegm->m_End.x; PtPad->m_Pos.y = LastSegm->m_End.y;
-    PtPad->m_Pos0.x = PtPad->m_Pos.x - Module->m_Pos.x;
-    PtPad->m_Pos0.y = PtPad->m_Pos.y - Module->m_Pos.y;
+
+    PtPad->m_Pos  = LastSegm->m_End;
+
+    PtPad->m_Pos0 = PtPad->m_Pos - Module->m_Pos;
+
     PtPad->m_Size.x = PtPad->m_Size.y = LastSegm->m_Width;
     PtPad->m_Masque_Layer = g_TabOneLayerMask[LastSegm->GetLayer()];
     PtPad->m_Attribut = PAD_SMD;
@@ -431,12 +448,15 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     D_PAD* newpad = new D_PAD( Module );
     newpad->Copy( PtPad );
-    newpad->AddToChain( PtPad );
+
+    Module->m_Pads.Insert( newpad, PtPad->Next() );
+
     PtPad = newpad;
     PtPad->SetPadName( wxT( "2" ) );
-    PtPad->m_Pos.x  = FirstSegm->m_Start.x; PtPad->m_Pos.y = FirstSegm->m_Start.y;
-    PtPad->m_Pos0.x = PtPad->m_Pos.x - Module->m_Pos.x;
-    PtPad->m_Pos0.y = PtPad->m_Pos.y - Module->m_Pos.y;
+
+    PtPad->m_Pos = FirstSegm->m_Start;
+
+    PtPad->m_Pos0 = PtPad->m_Pos - Module->m_Pos;
 
     /* Modif des positions textes */
     Module->Display_Infos( this );
@@ -446,20 +466,19 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
                                                                 LastSegm->m_End.y ) / 2;
 
     Module->m_Reference->m_Pos.y -= Module->m_Reference->m_Size.y;
+
     Module->m_Value->m_Pos.y += Module->m_Value->m_Size.y;
 
-    Module->m_Reference->m_Pos0.x = Module->m_Reference->m_Pos.x - Module->m_Pos.x;
-    Module->m_Reference->m_Pos0.y = Module->m_Reference->m_Pos.y - Module->m_Pos.y;
-    Module->m_Value->m_Pos0.x = Module->m_Value->m_Pos.x - Module->m_Pos.x;
-    Module->m_Value->m_Pos0.y = Module->m_Value->m_Pos.y - Module->m_Pos.y;
+    Module->m_Reference->m_Pos0 = Module->m_Reference->m_Pos - Module->m_Pos;
+
+    Module->m_Value->m_Pos0 = Module->m_Value->m_Pos - Module->m_Pos;
 
     /* Init des Coord locales des segments */
-    for( PtSegm = FirstSegm; PtSegm != NULL; PtSegm = (EDGE_MODULE*) PtSegm->Next() )
+    for( PtSegm = FirstSegm;  PtSegm;  PtSegm = PtSegm->Next() )
     {
-        PtSegm->m_Start0.x = PtSegm->m_Start.x - Module->m_Pos.x;
-        PtSegm->m_Start0.y = PtSegm->m_Start.y - Module->m_Pos.y;
-        PtSegm->m_End0.x   = PtSegm->m_End.x - Module->m_Pos.x;
-        PtSegm->m_End0.y   = PtSegm->m_End.y - Module->m_Pos.y;
+        PtSegm->m_Start0 = PtSegm->m_Start - Module->m_Pos;
+
+        PtSegm->m_End0   = PtSegm->m_End - Module->m_Pos;
     }
 
     Module->Set_Rectangle_Encadrement();
@@ -487,11 +506,17 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
     int          x0, xr0, y0, yr0;
     EDGE_MODULE* newedge;
 
+    // m_Drawings in the board
+    DLIST<BOARD_ITEM>*  list = (DLIST<BOARD_ITEM>*) PtSegm->GetList();
+
+    wxASSERT( list );
+
     angle = -angle;
     y0    = PtSegm->m_Start.x - cX; x0 = PtSegm->m_Start.y - cY;
 
     nb_seg = ( abs( angle ) ) / 225; if( nb_seg == 0 )
         nb_seg = 1;
+
     alpha  = ( (float) angle * 3.14159 / 1800 ) / nb_seg;
 
     for( ii = 1; ii <= nb_seg; ii++ )
@@ -501,9 +526,12 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
             newedge = new EDGE_MODULE( (MODULE*) NULL );
             newedge->Copy( PtSegm );
             newedge->SetParent( PtSegm->GetParent() );
-            newedge->AddToChain( PtSegm );
+
+            list->Insert( newedge, PtSegm->Next() );
+
             PtSegm = newedge;
-            PtSegm->m_Start.x = PtSegm->m_End.x; PtSegm->m_Start.y = PtSegm->m_End.y;
+
+            PtSegm->m_Start = PtSegm->m_End;
         }
 
         beta = (alpha * ii);
@@ -511,7 +539,9 @@ static EDGE_MODULE* gen_arc( EDGE_MODULE* PtSegm, int cX, int cY, int angle )
 
         xr0 = (int) (x0 * fcos + y0 * fsin);
         yr0 = (int) (y0 * fcos - x0 * fsin);
-        PtSegm->m_End.x = cX + yr0; PtSegm->m_End.y = cY + xr0;
+
+        PtSegm->m_End.x = cX + yr0;
+        PtSegm->m_End.y = cY + xr0;
     }
 
     return PtSegm;

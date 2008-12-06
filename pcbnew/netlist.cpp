@@ -45,6 +45,7 @@ public:
                   int             timestamp,
                   const wxString& path );
     ~MODULEtoLOAD() { };
+
     MODULEtoLOAD* Next() const { return (MODULEtoLOAD*) Pnext; }
 };
 
@@ -1027,7 +1028,8 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
     for( ii = 0; ii < s_NbNewModules; ii++, cmp = cmp->Next() )
     {
         if( (ii == 0) || ( ref->m_LibName != cmp->m_LibName) )
-        {   /* New footprint : must be loaded from a library */
+        {
+            /* New footprint : must be loaded from a library */
             Module = aPcbFrame->Get_Librairie_Module( NULL, wxEmptyString, cmp->m_LibName, FALSE );
             ref    = cmp;
             if( Module == NULL )
@@ -1051,9 +1053,12 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
             MODULE* newmodule;
             if( Module == NULL )
                 continue; /* module non existant en libr */
+
             newmodule = new MODULE( aPcbFrame->m_Pcb );
             newmodule->Copy( Module );
-            newmodule->AddToChain( Module );
+
+            aPcbFrame->m_Pcb->Add( newmodule, ADD_APPEND );
+
             Module = newmodule;
             Module->m_Reference->m_Text = cmp->m_CmpName;
             Module->m_TimeStamp = cmp->m_TimeStamp;

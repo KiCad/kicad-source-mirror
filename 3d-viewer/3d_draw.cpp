@@ -472,7 +472,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     }
 
     /* Draw module shape: 3D shape if exists (or module edge if not exists) */
-    Struct3D_Master* Struct3D  = m_3D_Drawings;
+    S3D_MASTER* Struct3D  = m_3D_Drawings;
     bool             As3dShape = FALSE;
     if( g_Parm_3D_Visu.m_Draw3DModule )
     {

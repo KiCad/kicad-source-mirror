@@ -56,37 +56,6 @@ void EDA_BaseStruct::InitVars()
 }
 
 
-/***********************************************************/
-void EDA_BaseStruct::DeleteStructList()
-/***********************************************************/
-{
-    EDA_BaseStruct* item = this;
-    EDA_BaseStruct* next;
-
-    while( item )
-    {
-        next = item->Next();
-        delete item;
-        item = next;
-    }
-}
-
-
-/*********************************************************/
-void EDA_BaseStruct::AddToChain( EDA_BaseStruct* laststruct )
-/*********************************************************/
-
-/*
- *  Add "this" to the linked list, after laststruct
- */
-{
-    Pnext = laststruct->Pnext;
-    Pback = laststruct;
-    laststruct->Pnext = this;
-}
-
-
-
 // see base_struct.h
 SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
                                               INSPECTOR*      inspector,

@@ -13,7 +13,7 @@
 #define UNITS3D_TO_UNITSPCB 1000
 
 
-class Struct3D_Master;
+class S3D_MASTER;
 class Struct3D_Shape;
 
 class S3D_Color     /* This is a 3D color (R, G, G) 3 floats range 0 to 1.0*/
@@ -34,7 +34,7 @@ public:
     S3D_Vertex();
 };
 
-class S3D_Material : public EDA_BaseStruct       /* openGL "material" data*/
+class S3D_MATERIAL : public EDA_BaseStruct       /* openGL "material" data*/
 {
 public:
     wxString   m_Name;
@@ -46,17 +46,17 @@ public:
     float      m_Shininess;
 
 public:
-    S3D_Material( Struct3D_Master * father, const wxString &name );
+    S3D_MATERIAL( S3D_MASTER * father, const wxString &name );
 
-    S3D_Material* Next() const { return (S3D_Material*) Pnext; }
-    S3D_Material* Back() const { return (S3D_Material*) Pback; }
+    S3D_MATERIAL* Next() const { return (S3D_MATERIAL*) Pnext; }
+    S3D_MATERIAL* Back() const { return (S3D_MATERIAL*) Pback; }
 
     void SetMaterial();
 };
 
 
 /*******************************************/
-class Struct3D_Master : public EDA_BaseStruct
+class S3D_MASTER : public EDA_BaseStruct
 /*******************************************/
 /* Master structure for a 3D item description */
 {
@@ -66,23 +66,23 @@ public:
     S3D_Vertex      m_MatRotation;
     S3D_Vertex      m_MatPosition;
     Struct3D_Shape* m_3D_Drawings;
-    S3D_Material*   m_Materials;
+    S3D_MATERIAL*   m_Materials;
 
 public:
 
-    Struct3D_Master( EDA_BaseStruct * aParent );
-    ~Struct3D_Master();
+    S3D_MASTER( EDA_BaseStruct * aParent );
+    ~S3D_MASTER();
 
-    Struct3D_Master* Next() const { return (Struct3D_Master*) Pnext; }
-    Struct3D_Master* Back() const { return (Struct3D_Master*) Pback; }
+    S3D_MASTER* Next() const { return (S3D_MASTER*) Pnext; }
+    S3D_MASTER* Back() const { return (S3D_MASTER*) Pback; }
 
-    void Insert( S3D_Material* aMaterial )
+    void Insert( S3D_MATERIAL* aMaterial )
     {
         aMaterial->SetNext( m_Materials );
         m_Materials = aMaterial;
     }
 
-    void    Copy( Struct3D_Master* pattern );
+    void    Copy( S3D_MASTER* pattern );
     int     ReadData();
     int     ReadMaterial( FILE* file, int* LineNum );
     int     ReadChildren( FILE* file, int* LineNum );

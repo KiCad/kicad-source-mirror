@@ -5,6 +5,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew & gerbview
+  * Renamed Struct3D_Master to S3D_MASTER.
+  * MODULE::m_3D_Drawings is now a DLIST<>
+  * Removed AddToChain(), DeleteStructList() and replaced with calls to DLIST<>
+    members so that list item counting stays accurate.
+
+
 2008-Dec-05 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++all

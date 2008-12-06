@@ -20,7 +20,7 @@
 
 
 /***********************************/
-int Struct3D_Master:: ReadData()
+int S3D_MASTER:: ReadData()
 /************************************/
 {
     char     line[1024], * text;
@@ -81,7 +81,7 @@ int Struct3D_Master:: ReadData()
 
 
 /*********************************************************/
-int Struct3D_Master:: ReadMaterial( FILE* file, int* LineNum )
+int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
 /*********************************************************/
 
 /*
@@ -100,7 +100,7 @@ int Struct3D_Master:: ReadMaterial( FILE* file, int* LineNum )
 {
     char          line[512], * text, * command;
     wxString      mat_name;
-    S3D_Material* material = NULL;
+    S3D_MATERIAL* material = NULL;
 
     // Lecture de la commande:
     command  = strtok( NULL, " \t\n\r" );
@@ -123,7 +123,7 @@ int Struct3D_Master:: ReadMaterial( FILE* file, int* LineNum )
 
     if( stricmp( command, "DEF" ) == 0 )
     {
-        material = new S3D_Material( this, mat_name );
+        material = new S3D_MATERIAL( this, mat_name );
 
         Insert( material );
 
@@ -186,7 +186,7 @@ int Struct3D_Master:: ReadMaterial( FILE* file, int* LineNum )
 
 
 /**********************************************************/
-int Struct3D_Master::ReadChildren( FILE* file, int* LineNum )
+int S3D_MASTER::ReadChildren( FILE* file, int* LineNum )
 /***********************************************************/
 {
     char line[1024], * text;
@@ -215,7 +215,7 @@ int Struct3D_Master::ReadChildren( FILE* file, int* LineNum )
 
 
 /********************************************************/
-int Struct3D_Master::ReadShape( FILE* file, int* LineNum )
+int S3D_MASTER::ReadShape( FILE* file, int* LineNum )
 /********************************************************/
 {
     char line[1024], * text;
@@ -250,7 +250,7 @@ int Struct3D_Master::ReadShape( FILE* file, int* LineNum )
 
 
 /*************************************************************/
-int Struct3D_Master::ReadAppearance( FILE* file, int* LineNum )
+int S3D_MASTER::ReadAppearance( FILE* file, int* LineNum )
 /*************************************************************/
 {
     char line[1024], * text;
@@ -381,7 +381,7 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize, int* LineNu
 
 
 /***********************************************************/
-int Struct3D_Master::ReadGeometry( FILE* file, int* LineNum )
+int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
 /***********************************************************/
 {
     char    line[1024], buffer[1024], * text;

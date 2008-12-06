@@ -26,7 +26,7 @@ S3D_Vertex::S3D_Vertex()
 
 
 /**************************************************************************/
-S3D_Material::S3D_Material( Struct3D_Master* father, const wxString& name ) :
+S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
     EDA_BaseStruct( father, NOT_USED )
 /**************************************************************************/
 {
@@ -40,7 +40,7 @@ S3D_Material::S3D_Material( Struct3D_Master* father, const wxString& name ) :
 
 
 /***********************************/
-void S3D_Material::SetMaterial()
+void S3D_MATERIAL::SetMaterial()
 /***********************************/
 {
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
@@ -57,7 +57,7 @@ void S3D_Material::SetMaterial()
 
 
 /****************************************************/
-void Struct3D_Master::Copy( Struct3D_Master* pattern )
+void S3D_MASTER::Copy( S3D_MASTER* pattern )
 /****************************************************/
 {
     m_Shape3DName = pattern->m_Shape3DName;
@@ -70,7 +70,7 @@ void Struct3D_Master::Copy( Struct3D_Master* pattern )
 
 
 /***************************************************************/
-Struct3D_Master::Struct3D_Master( EDA_BaseStruct* aParent ) :
+S3D_MASTER::S3D_MASTER( EDA_BaseStruct* aParent ) :
     EDA_BaseStruct( aParent, NOT_USED )
 /***************************************************************/
 {
@@ -81,11 +81,11 @@ Struct3D_Master::Struct3D_Master( EDA_BaseStruct* aParent ) :
 
 
 /***************************************/
-Struct3D_Master:: ~Struct3D_Master()
+S3D_MASTER:: ~S3D_MASTER()
 /***************************************/
 {
     Struct3D_Shape* next;
-    S3D_Material*   nextmat;
+    S3D_MATERIAL*   nextmat;
 
     for( ; m_3D_Drawings != NULL; m_3D_Drawings = next )
     {

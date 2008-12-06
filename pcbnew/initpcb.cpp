@@ -134,7 +134,8 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     while( g_UnDeleteStackPtr > 0 )
     {
         g_UnDeleteStackPtr--;
-        g_UnDeleteStack[g_UnDeleteStackPtr]->DeleteStructList();
+
+        delete g_UnDeleteStack[g_UnDeleteStackPtr];
     }
 
     /* init pointeurs  et variables */
@@ -214,7 +215,7 @@ void WinEDA_PcbFrame::Erase_Segments_Pcb( bool is_edges, bool query )
         case TYPE_COTATION:
         case TYPE_MIRE:
             if( g_TabOneLayerMask[ PtStruct->GetLayer()] & masque_layer )
-                PtStruct->DeleteStructure();
+                m_Pcb->Delete( PtStruct );
             break;
 
         default:

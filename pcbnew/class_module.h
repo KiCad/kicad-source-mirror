@@ -4,7 +4,7 @@
 
 
 class Pcb3D_GLCanvas;
-class Struct3D_Master;
+class S3D_MASTER;
 
 /************************************/
 /* Modules (footprints) description */
@@ -41,7 +41,7 @@ public:
     wxPoint             m_Pos;             // Real coord on board
     DLIST<D_PAD>        m_Pads;            /* Pad list (linked list) */
     DLIST<BOARD_ITEM>   m_Drawings;        /* Graphic items list (linked list) */
-    Struct3D_Master*    m_3D_Drawings;     /* First item of the 3D shapes (linked list)*/
+    DLIST<S3D_MASTER>   m_3D_Drawings;     /* First item of the 3D shapes (linked list)*/
     TEXTE_MODULE*       m_Reference;       // Component reference (U34, R18..)
     TEXTE_MODULE*       m_Value;           // Component value (74LS00, 22K..)
     wxString            m_LibRef;          /* Name of the module in library (and the default value when loading amodule from the library) */

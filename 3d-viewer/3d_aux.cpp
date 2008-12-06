@@ -25,7 +25,7 @@
 #include "trackball.h"
 
 /**************************************************************************/
-void Struct3D_Master::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
+void S3D_MASTER::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
 /**************************************************************************/
 {
     int ii;

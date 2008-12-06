@@ -76,10 +76,15 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
 
     GetScreen()->AddItemToRedoList( m_Pcb->m_Modules.PopFront() );
 
-    m_Pcb->Add( (MODULE*) GetScreen()->GetItemFromUndoList() );
+    MODULE* module = (MODULE*) GetScreen()->GetItemFromUndoList();
+    if( module )
+        m_Pcb->Add( module, ADD_APPEND );
 
+/*  Add() calls PushBack(), no need for this
     if( m_Pcb->m_Modules )
         m_Pcb->m_Modules->SetNext( NULL );
+*/
+
     GetScreen()->SetModify();
     SetCurItem( NULL );;
     ReCreateHToolbar();

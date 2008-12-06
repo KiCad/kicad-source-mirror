@@ -100,9 +100,9 @@ void WinEDA_ModulePropertiesFrame::CreateControls()
 
     /* creation des autres formes 3D */
     Panel3D_Ctrl*    panel3D = m_Panel3D, * nextpanel3D;
-    Struct3D_Master* draw3D  = m_CurrentModule->m_3D_Drawings;
-    draw3D = (Struct3D_Master*) draw3D->Next();
-    for( ; draw3D != NULL; draw3D = (Struct3D_Master*) draw3D->Next() )
+    S3D_MASTER* draw3D  = m_CurrentModule->m_3D_Drawings;
+    draw3D = (S3D_MASTER*) draw3D->Next();
+    for( ; draw3D != NULL; draw3D = (S3D_MASTER*) draw3D->Next() )
     {
         nextpanel3D = new Panel3D_Ctrl( this, m_NoteBook, -1, draw3D );
         m_NoteBook->AddPage( nextpanel3D, _( "3D settings" ), FALSE );
@@ -382,7 +382,7 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
 /**************************************************************/
 Panel3D_Ctrl::Panel3D_Ctrl( WinEDA_ModulePropertiesFrame* parentframe,
                             wxNotebook* parent,
-                            int id, Struct3D_Master* struct3D ) :
+                            int id, S3D_MASTER* struct3D ) :
     wxPanel( parent, id )
 /**************************************************************/
 
@@ -594,31 +594,34 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
 
     /* Mise a jour des parametres 3D */
     Panel3D_Ctrl*    panel3D = m_Panel3D;
-    Struct3D_Master* draw3D  = m_CurrentModule->m_3D_Drawings,
-    * nextdraw3D;
+    S3D_MASTER* draw3D  = m_CurrentModule->m_3D_Drawings;
+    S3D_MASTER* nextdraw3D;
     for( ; panel3D != NULL; panel3D = panel3D->m_Pnext )
     {
         draw3D->m_Shape3DName = panel3D->m_3D_ShapeName->GetValue();
         draw3D->m_MatScale    = panel3D->m_3D_Scale->GetValue();
         draw3D->m_MatRotation = panel3D->m_3D_Rotation->GetValue();
         draw3D->m_MatPosition = panel3D->m_3D_Offset->GetValue();
+
         if( ( draw3D->m_Shape3DName.IsEmpty() )
            && (draw3D != m_CurrentModule->m_3D_Drawings) )
             continue;
+
         if( (draw3D->Next() == NULL) && panel3D->m_Pnext )
         {
-            nextdraw3D = new Struct3D_Master( draw3D );
-            nextdraw3D->SetBack( draw3D );
-            draw3D->SetNext( nextdraw3D );
+            nextdraw3D = new S3D_MASTER( draw3D );
+
+            // insert after draw3D, therefore pass ->Next() to insert before the next.
+            m_CurrentModule->m_3D_Drawings.Insert( nextdraw3D, draw3D->Next() );
         }
-        draw3D = (Struct3D_Master*) draw3D->Next();
+        draw3D = (S3D_MASTER*) draw3D->Next();
     }
 
     for( ; draw3D != NULL; draw3D = nextdraw3D )
     {
-        nextdraw3D = (Struct3D_Master*) draw3D->Next();
-        (draw3D->Back())->SetNext( NULL );
-        delete draw3D;
+        nextdraw3D = (S3D_MASTER*) draw3D->Next();
+
+        delete m_CurrentModule->m_3D_Drawings.Remove( draw3D );
     }
 
     m_CurrentModule->Set_Rectangle_Encadrement();

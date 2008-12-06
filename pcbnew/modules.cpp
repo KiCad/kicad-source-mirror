@@ -239,8 +239,13 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
     m_Pcb->m_Status_Pcb = 0;
     newmodule = new MODULE( m_Pcb );
     newmodule->Copy( module );
+
+    /* no, Add() below does this
     newmodule->SetParent( m_Pcb );
-    newmodule->AddToChain( module );
+    */
+
+    m_Pcb->Add( newmodule, ADD_APPEND );
+
     newmodule->m_Flags = IS_NEW;
 
     build_liste_pads();
