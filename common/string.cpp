@@ -1,11 +1,12 @@
 /****************************************************************************/
-/*	 MODULE:					 string.cpp									*/
+/*	                             string.cpp									*/
 /*	 ROLE: fonctions complementaires de traitement de chaines de caracteres */
 /****************************************************************************/
 
 #include "fctsys.h"
 #include <time.h>
 #include "common.h"
+#include "macros.h"
 
 
 /*********************************************************************/
@@ -24,7 +25,7 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
     for( ii = 0, jj = 0; ii < NbMaxChar - 1; jj++, source++ )
     {
         if( *source == 0 )
-            break;                      /* fin de ligne */
+            break;                      /* E.O.L. */
         if( *source == '"' )            /* delimiteur trouve */
         {
             if( flag )
@@ -37,7 +38,7 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
         }
     }
 
-    *dest = 0;  /* Null terminaison */
+    *dest = 0;  /* Null termined */
     return jj;
 }
 
@@ -46,8 +47,8 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
 char* StrPurge( char* text )
 /********************************/
 
-/* Supprime les caracteres Space en debut de la ligne text
- *  retourne un pointeur sur le 1er caractere non Space de text
+/* Remove training space in text
+ *  return a pointer on the first not space char in text
  */
 {
     char* ptspace;
@@ -72,10 +73,10 @@ char* StrPurge( char* text )
 char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 /*****************************************************************/
 
-/* Routine de lecture de 1 ligne utile
- *  retourne la 1ere ligne utile lue.
- *  elimine lignes vides et commentaires
- *  incremente *LineNum a chaque ligne lue
+/* Read lines from File
+ *  Skip void lines and comments (starting by #)
+ *  return the first non void line.
+ *  increments *LineNum for ecah line
  */
 {
     do  {
@@ -92,39 +93,37 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 
 
 /*******************************/
-char* DateAndTime( char* Line )
+char* DateAndTime( char* aBuffer )
 /*******************************/
-/* Retourne la chaine de caractere donnant date+heure */
+
+/* return in aBuffer the date and time
+ *  time is the local time.
+ */
 {
-    time_t     Time_Buf;
-    struct tm* Date;
+    wxString datetime;
 
-    time( &Time_Buf );
-    Date = gmtime( &Time_Buf );
-    sprintf( Line, "%d/%d/%d-%2.2d:%2.2d:%2.2d",
-             Date->tm_mday, Date->tm_mon + 1, Date->tm_year + 1900,
-             Date->tm_hour, Date->tm_min, Date->tm_sec );
+    datetime = DateAndTime();
+    strcpy( aBuffer, CONV_TO_UTF8( datetime ) );
 
-    return Line;
+    return aBuffer;
 }
 
 
 /*******************************/
 wxString DateAndTime()
 /*******************************/
-/* Retourne la chaine de caractere donnant date+heure */
+
+/* return a wxString filled with the date and time
+ *  note: does the same thing than strftime()
+ *  time is the local time.
+ */
 {
-    time_t     Time_Buf;
-    struct tm* Date;
     wxString   Line;
 
-    time( &Time_Buf );
-    
-    Date = gmtime( &Time_Buf );
-    
-    Line.Printf( wxT( "%d/%d/%d-%2.2d:%2.2d:%2.2d" ),
-                 Date->tm_mday, Date->tm_mon + 1, Date->tm_year + 1900,
-                 Date->tm_hour, Date->tm_min, Date->tm_sec );
+    wxDateTime datetime = wxDateTime::Now();
+
+    datetime.SetCountry( wxDateTime::Country_Default );
+    Line = datetime.Format( wxDefaultDateTimeFormat, wxDateTime::Local );
 
     return Line;
 }
@@ -135,9 +134,9 @@ int StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax )
 /************************************************************/
 
 /*
- *  routine (compatible qsort() ) de comparaison pour classement alphab‚tique
- *  Analogue a strncmp() mais les nombres sont compar‚s selon leur valeur num‚rique
- *  et non pas par leur code ascii
+ *  sort() function
+ *  Same as strncmp() but numbers in strings
+ *  are compared according to the value, not the ascii value of each digit
  */
 {
     int i;
@@ -148,7 +147,7 @@ int StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax )
 
     for( i = 0; i < NbMax; i++ )
     {
-        if( isdigit( *str1 ) && isdigit( *str2 ) ) /* nombres en jeu */
+        if( isdigit( *str1 ) && isdigit( *str2 ) ) /* digit found */
         {
             nb1 = 0; nb2 = 0;
             while( isdigit( *str1 ) )
@@ -185,10 +184,9 @@ int StrNumICmp( const wxChar* str1, const wxChar* str2 )
 /***********************************************/
 
 /*
- *  routine (compatible qsort() ) de comparaison pour classement alphabétique,
- *  avec lower case == upper case.
- *  Analogue a stricmp() mais les nombres sont comparés selon leur valeur numérique
- *  et non pas par leur code ascii
+ *  sort() function
+ *  Same as stricmp() but numbers in strings
+ *  are compared according to the value, not the ascii value of each digit
  */
 {
     return StrLenNumICmp( str1, str2, 32735 );
@@ -200,10 +198,9 @@ int StrLenNumICmp( const wxChar* str1, const wxChar* str2, int NbMax )
 /**************************************************************/
 
 /*
- *  routine (compatible qsort() ) de comparaison pour classement alphabetique,
- *  avec lower case == upper case.
- *  Analogue a stricmp() mais les nombres sont compares selon leur valeur numerique
- *  et non pas par leur code ascii
+ *  sort() function
+ *  Same as strnicmp() but numbers in strings
+ *  are compared according to the value, not the ascii value of each digit
  */
 {
     int i;
@@ -214,7 +211,7 @@ int StrLenNumICmp( const wxChar* str1, const wxChar* str2, int NbMax )
 
     for( i = 0; i < NbMax; i++ )
     {
-        if( isdigit( *str1 ) && isdigit( *str2 ) ) /* nombres en jeu */
+        if( isdigit( *str1 ) && isdigit( *str2 ) ) /* find number */
         {
             nb1 = 0; nb2 = 0;
             while( isdigit( *str1 ) )
@@ -265,13 +262,17 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 
     if( case_sensitive )
     {
-        wild = pattern.GetData(); string = string_to_tst.GetData();
+        wild   = pattern.GetData();
+        string = string_to_tst.GetData();
     }
     else
     {
-        _pattern = pattern; _pattern.MakeUpper();
-        _string_to_tst = string_to_tst; _string_to_tst.MakeUpper();
-        wild = _pattern.GetData(); string = _string_to_tst.GetData();
+        _pattern = pattern;
+        _pattern.MakeUpper();
+        _string_to_tst = string_to_tst;
+        _string_to_tst.MakeUpper();
+        wild   = _pattern.GetData();
+        string = _string_to_tst.GetData();
     }
 
     while( (*string) && (*wild != '*') )
@@ -285,7 +286,7 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
     {
         if( *wild == '*' )
         {
-            if( ! * ++wild )
+            if( !*++wild )
                 return 1;
             mp = wild;
             cp = string + 1;
@@ -307,23 +308,7 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
         wild++;
     }
 
-    return ! * wild;
-}
-
-
-/***********************************************/
-void ChangeSpaces( char* Text, int NewChar )
-/***********************************************/
-/* Change dans un texte les espaces en NewChar */
-{
-    if( Text == NULL )
-        return;
-    while( *Text )
-    {
-        if( *Text == ' ' )
-            *Text = (char) NewChar;
-        Text++;
-    }
+    return !*wild;
 }
 
 
@@ -331,9 +316,10 @@ void ChangeSpaces( char* Text, int NewChar )
 char* to_point( char* Text )
 /**************************/
 
-/* convertit les , en . dans une chaine. utilisé pour compenser
- *  l'internalisationde la fct printf
+/* convertit les , en . dans une chaine. utilise pour compenser
+ *  l'internalisation de la fct printf
  *  qui genere les flottants avec une virgule au lieu du point
+ * Obsolete: use SetLocaleTo_C_standard insteed
  */
 {
     char* line = Text;
@@ -372,4 +358,3 @@ char* strupper( char* Text )
 
     return Text;
 }
-

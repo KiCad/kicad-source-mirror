@@ -61,14 +61,6 @@ setpage.o: ../share/setpage.cpp
 drawframe.o: ../share/drawframe.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-controle.o: controle.cpp
-
-hotkeys.o: hotkeys.cpp hotkeys.h
-
-set_color.o: set_color.cpp set_color.h
-
-files.o: files.cpp
-
 class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
@@ -96,8 +88,6 @@ sel_layer.o: ../pcbnew/sel_layer.cpp
 wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-lay2plot.o: lay2plot.cpp
-
 classpcb.o: ../pcbnew/classpcb.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
@@ -116,83 +106,8 @@ collectors.o: ../pcbnew/collectors.cpp
 class_track.o: ../pcbnew/class_track.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-$(TARGET).o: $(TARGET).cpp
-
-gerbview_config.o: gerbview_config.cpp gerbview_config.h
-
-tracepcb.o: tracepcb.cpp
-
-block.o: block.cpp
-
-trpiste.o: trpiste.cpp
-
-surbrill.o: surbrill.cpp
-
-pcbtexte.o: pcbtexte.cpp
-
 zoom.o: ../share/zoom.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-affiche.o: affiche.cpp
-
-reglage.o: reglage.cpp
-
-editrack.o: editrack.cpp
-
-deltrack.o: deltrack.cpp
-
-track.o: track.cpp
-
-editrout.o: editrout.cpp autorout.h
-
-editmod.o: editmod.cpp autorout.h
-
-editpads.o: editpads.cpp
-
-editedge.o: editedge.cpp
-
-cotation.o: cotation.cpp
-
-editexte.o: editexte.cpp
-
-clean.o: clean.cpp autorout.h
-
-pcbplot.o: pcbplot.cpp
-
-plothpgl.o: plothpgl.cpp
-
-plotgerb.o: plotgerb.cpp pcbplot.h
-
-printps.o: printps.cpp pcbplot.h
-
-readgerb.o: readgerb.cpp pcbplot.h
-
-plot_rtn.o: plot_rtn.cpp pcbplot.h
-
-gendrill.o: gendrill.cpp pcbplot.h
-
-librairi.o: librairi.cpp autorout.h librairi.h
-
-docedit.o: docedit.cpp
-
-edgemod.o: edgemod.cpp
-
-autorout.o: autorout.cpp cell.h autorout.fct autorout.h
-
-setlayer.o: setlayer.cpp
-
-dist.o: dist.cpp cell.h autorout.fct
-
-zones.o: zones.cpp cell.h autorout.fct
-
-undelete.o: undelete.cpp
-
-ioascii.o: ioascii.cpp
-
-chrono.o: chrono.cpp pcbnew.h
-
-coordbox.o: coordbox.cpp
-
-mirepcb.o: mirepcb.cpp
-
-dragsegm.o: dragsegm.cpp drag.h
+undelete.o: ../pcbnew/undelete.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp

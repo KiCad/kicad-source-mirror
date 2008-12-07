@@ -39,15 +39,6 @@ asked by: Dick Hollenbeck
    class editor from a UI perspective.
 
 
-2008-Feb-8 Assigned To: Jean-Pierre, per his email
-asked by: Dick Hollenbeck
-================================================================================
-1) Remove the requirement to route tracks or vias for situations where a zone is.
-2) Support connections from zones to vias, and zones to tracks, and zones to pads.
-Review the GEDA source code and other sources to gather ideas before doing 2).
-
-
-
 2008-Feb-8 Assigned To: dick
 asked by: dick
 ================================================================================
@@ -62,13 +53,6 @@ asked by: jp Charras
 ================================================================================
 Use the collector classes in eeschema.
 
-
-2007-Nov-30 Assigned To: nobody
-asked by: Dick Hollenbeck
-================================================================================
-wxString DateAndTime()
-It seems the above function should be using a more user friendly "local time",
-not gmtime.
 
 
 2008-Apr-29 Assigned To:
