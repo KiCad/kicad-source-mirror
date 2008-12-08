@@ -13,11 +13,9 @@
 int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
 /*********************************************************************/
 
-/* lit et place dans dest la chaine de caractere trouvee dans source,
- *  delimitee par " .
- *  transfere NbMaxChar max
- *  retourne le nombre de codes lus dans source
- *  dest est termine par NULL
+/* read a double-qute delimited text in source and put in in dest,
+ *  read NbMaxChar bytes max
+ *  return the byte count read in source
  */
 {
     int ii, jj, flag = 0;
@@ -47,8 +45,8 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
 char* StrPurge( char* text )
 /********************************/
 
-/* Remove training space in text
- *  return a pointer on the first not space char in text
+/* Remove training spaces in text
+ *  return a pointer on the first non space char in text
  */
 {
     char* ptspace;
@@ -113,7 +111,7 @@ char* DateAndTime( char* aBuffer )
 wxString DateAndTime()
 /*******************************/
 
-/* return a wxString filled with the date and time
+/* return the date and time in a wxString
  *  note: does the same thing than strftime()
  *  time is the local time.
  */
@@ -248,12 +246,10 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
                         bool case_sensitive )
 /***********************************************************************/
 
-/* compare 2 noms de composants, selon regles usuelles
- *  ( Jokers * , ? , autorisés).
- *  la chaine de reference est "pattern"
- *  si case_sensitive == TRUE, comparaison exacte
- *  retourne TRUE si match
- *  retourne FALSE si differences
+/* compare a string to a pattern
+ *  ( usual chars * and ? allowed).
+ *  if case_sensitive == true, comparison is case sensitive
+ *  return true if match else false
  */
 {
     const wxChar* cp = NULL, * mp = NULL;

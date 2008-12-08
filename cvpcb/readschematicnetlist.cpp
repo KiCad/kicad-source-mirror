@@ -91,18 +91,17 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     wxString  schematic_timestamp;                          /* buffer for component time stamp */
     wxString  footprint_name;                               /* buffer for component footprint field */
     wxString  component_value;                              /* buffer for component values (470K, 22nF ...) */
-    char*     ptchar;                                       /* pointeur de service */
+    char*     ptchar;
     STORECMP* Cmp;
 
     modified = 0;
     Rjustify = 0;
     g_FlagEESchema = FALSE;
 
-    /* Raz buffer et variable de gestion */
+    /* Clear components buffer */
     if( g_BaseListeCmp )
         FreeMemoryComponants();
 
-    /* Ouverture du fichier source */
     source = wxFopen( FFileName, wxT( "rt" ) );
     if( source == 0 )
     {
@@ -437,7 +436,7 @@ int CmpCompare( void* mod1, void* mod2 )
 /****************************************/
 
 /*
- * Function compare() for qsort() : alphabetic sorting, with numbering order
+ * Compare function for qsort() : alphabetic sorting, with numbering order
  */
 {
     int       ii;
@@ -446,7 +445,6 @@ int CmpCompare( void* mod1, void* mod2 )
     pt1 = *( (STORECMP**) mod1 );
     pt2 = *( (STORECMP**) mod2 );
 
-    //FIXME:
-    ii = StrNumICmp( (const wxChar*) pt1->m_Reference, (const wxChar*) pt2->m_Reference );
+    ii = StrNumICmp( pt1->m_Reference.GetData(), pt2->m_Reference.GetData() );
     return ii;
 }

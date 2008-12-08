@@ -41,9 +41,9 @@ END_EVENT_TABLE()
 
 
 /******************************************************************************/
-WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father,
+WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
                                           LibraryStruct* Library,
-                                          wxSemaphore* semaphore ) :
+                                          wxSemaphore*   semaphore ) :
     WinEDA_DrawFrame( father, VIEWER_FRAME, _( "Library browser" ),
                       wxDefaultPosition, wxDefaultSize )
 /******************************************************************************/
@@ -193,11 +193,11 @@ int WinEDA_ViewlibFrame::BestZoom()
     EDA_Rect BoundaryBox = CurrentLibEntry->GetBoundaryBox( g_ViewUnit, g_ViewConvert );
     itemsize = BoundaryBox.GetSize();
 
-    size     = DrawPanel->GetClientSize();
-    size.x  -= 60;  // sub a margin
-    ii       = itemsize.x / size.x;
-    jj       = itemsize.y / size.y;
-    bestzoom = MAX( ii, jj );
+    size  = DrawPanel->GetClientSize();
+    size -= wxSize( 100, 100 );  // reserve a 100 mils margin
+    ii    = (double) itemsize.x / size.x;
+    jj    = itemsize.y / size.y;
+    bestzoom  = MAX( ii, jj ) + 1;
 
     GetScreen()->m_Curseur = BoundaryBox.Centre();
 
@@ -207,7 +207,7 @@ int WinEDA_ViewlibFrame::BestZoom()
 
 /******************************************/
 void WinEDA_ViewlibFrame::ReCreateListLib()
-/*******************************************/
+/******************************************/
 {
     const wxChar** ListNames, ** names;
     int            ii;

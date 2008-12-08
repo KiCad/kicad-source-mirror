@@ -265,11 +265,10 @@ int WinEDA_LibeditFrame::BestZoom()
     }
 
     size    = DrawPanel->GetClientSize();
-    size.x -= 60;   // Pour marges haut et bas
+    size -= wxSize(100,100);   // reserve 100 mils margin
     ii = abs( dx / size.x );
     jj = abs( dy / size.y );
 
-    /* determination du zoom existant le plus proche */
     bestzoom = MAX( ii, jj ) + 1;
 
     if( CurrentLibEntry )
