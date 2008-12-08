@@ -10,7 +10,6 @@
 #include "protos.h"
 #include "eeconfig.h"
 #include "worksheet.h"
-#include "hotkeys_basic.h"
 #include "hotkeys.h"
 
 #include "id.h"
@@ -44,7 +43,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
 
     case ID_OPTIONS_SETUP:
         DisplayOptionFrame( this, pos );
-        DrawPanel->Refresh(TRUE);   // Redraw, because grid settings may have changed.
+        DrawPanel->Refresh( TRUE );   // Redraw, because grid settings may have changed.
         break;
 
     case ID_CONFIG_SAVE:
@@ -58,14 +57,14 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
         FullFileName = EDA_FileSelector( _( "Read config file" ),
-            wxGetCwd(),                         /* Chemin par defaut */
-            FullFileName,                       /* nom fichier par defaut */
-            g_Prj_Config_Filename_ext,          /* extension par defaut */
-            mask,                               /* Masque d'affichage */
-            this,
-            wxFD_OPEN,
-            TRUE                            /* ne change pas de repertoire courant */
-            );
+                                         wxGetCwd(),                /* Chemin par defaut */
+                                         FullFileName,              /* nom fichier par defaut */
+                                         g_Prj_Config_Filename_ext, /* extension par defaut */
+                                         mask,                      /* Masque d'affichage */
+                                         this,
+                                         wxFD_OPEN,
+                                         TRUE /* ne change pas de repertoire courant */
+                                         );
         if( FullFileName.IsEmpty() )
             break;
         if( !wxFileExists( FullFileName ) )
@@ -75,7 +74,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         }
         Read_Config( FullFileName, TRUE );
     }
-        break;
+    break;
 
     case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
@@ -93,12 +92,12 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-        AddDelimiterString(FullFileName);
+        AddDelimiterString( FullFileName );
         wxString editorname = GetEditorName();
         if( !editorname.IsEmpty() )
             ExecuteFile( this, editorname, FullFileName );
     }
-        break;
+    break;
 
     case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
     case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
@@ -110,7 +109,9 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_SchematicFrame::Process_Config internal error" ) );
+        DisplayError( this,
+                     wxT(
+                         "WinEDA_SchematicFrame::Process_Config internal error" ) );
     }
 }
 
@@ -123,11 +124,14 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
  * Read the hotkey files config for eeschema and libedit
  */
 {
-    wxString FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
+    wxString FullFileName = ReturnHotkeyConfigFilePath(
+        g_ConfigFileLocationChoice );
 
     FullFileName += HOTKEY_FILENAME;
     FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-    frame->ReadHotkeyConfigFile( FullFileName, s_Eeschema_Hokeys_Descr, verbose );
+    frame->ReadHotkeyConfigFile( FullFileName,
+                                 s_Eeschema_Hokeys_Descr,
+                                 verbose );
 
     return TRUE;
 }
@@ -138,16 +142,19 @@ bool Read_Config( const wxString& CfgFileName, bool ForceRereadConfig )
 /***********************************************************************/
 
 /* lit la configuration, si elle n'a pas deja ete lue
-  * 1 - lit <nom fichier root>.pro
-  * 2 - si non trouve lit <chemin des binaires>../template/kicad.pro
-  * 3 - si non trouve: init des variables aux valeurs par defaut
+ * 1 - lit <nom fichier root>.pro
+ * 2 - si non trouve lit <chemin des binaires>../template/kicad.pro
+ * 3 - si non trouve: init des variables aux valeurs par defaut
  *
-  * Retourne TRUE si lu, FALSE si config non lue
+ * Retourne TRUE si lu, FALSE si config non lue
  */
 {
-    wxString      FullFileName;
-    bool          IsRead      = TRUE;
-    wxArrayString liblist_tmp = g_LibName_List;
+    wxString                FullFileName;
+    bool                    IsRead = TRUE;
+    wxArrayString           liblist_tmp = g_LibName_List;
+    WinEDA_SchematicFrame*  frame;
+
+    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
 
     if( CfgFileName.IsEmpty() )
         FullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
@@ -155,8 +162,9 @@ bool Read_Config( const wxString& CfgFileName, bool ForceRereadConfig )
         FullFileName = CfgFileName;
     g_LibName_List.Clear();
 
-    if( !g_EDA_Appl->ReadProjectConfig( FullFileName,
-           GROUP, ParamCfgList, ForceRereadConfig ? FALSE : TRUE ) ) // Config non lue
+    if( !wxGetApp().ReadProjectConfig( FullFileName,
+                                       GROUP, ParamCfgList,
+                                       ForceRereadConfig ? FALSE : TRUE ) ) // Config non lue
     {
         g_LibName_List = liblist_tmp;
         IsRead = FALSE;
@@ -172,13 +180,13 @@ bool Read_Config( const wxString& CfgFileName, bool ForceRereadConfig )
         g_LibName_List.Add( wxT( "device" ) );
     }
 
-    if( g_EDA_Appl->m_SchematicFrame )
+    if( frame )
     {
-        g_EDA_Appl->m_SchematicFrame->SetDrawBgColor( g_DrawBgColor );
-        g_EDA_Appl->m_SchematicFrame->m_Draw_Grid = g_ShowGrid;
+        frame->SetDrawBgColor( g_DrawBgColor );
+        frame->m_Draw_Grid = g_ShowGrid;
     }
 
-    LoadLibraries( g_EDA_Appl->m_SchematicFrame );
+    LoadLibraries( frame );
 
     return IsRead;
 }
@@ -198,17 +206,17 @@ void WinEDA_SchematicFrame::Save_Config( wxWindow* displayframe )
 
     path = wxGetCwd();
     FullFileName = EDA_FileSelector( _( "Save preferences" ),
-        path,                                               /* Chemin par defaut */
-        FullFileName,                                       /* nom fichier par defaut */
-        g_Prj_Config_Filename_ext,                          /* extension par defaut */
-        mask,                                               /* Masque d'affichage */
-        displayframe,
-        wxFD_SAVE,
-        TRUE
-        );
+                                     path,                      /* Chemin par defaut */
+                                     FullFileName,              /* nom fichier par defaut */
+                                     g_Prj_Config_Filename_ext, /* extension par defaut */
+                                     mask,                      /* Masque d'affichage */
+                                     displayframe,
+                                     wxFD_SAVE,
+                                     TRUE
+                                     );
     if( FullFileName.IsEmpty() )
         return;
 
     /* ecriture de la configuration */
-    g_EDA_Appl->WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
+    wxGetApp().WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
 }

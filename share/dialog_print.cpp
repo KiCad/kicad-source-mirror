@@ -61,7 +61,7 @@ WinEDA_PrintFrame::WinEDA_PrintFrame( WinEDA_DrawFrame* parent, wxWindowID id, c
 	m_Parent = parent;
 	m_XScaleAdjust = m_YScaleAdjust = 1.0;
 	m_PagesOption = NULL;
-	wxConfig * Config = m_Parent->m_Parent->m_EDA_Config;
+	wxConfig * Config = wxGetApp().m_EDA_Config;
 	if ( Config )
 	{
 		Config->Read(wxT("PrintPenWidth"), &s_PrintPenMinWidth);

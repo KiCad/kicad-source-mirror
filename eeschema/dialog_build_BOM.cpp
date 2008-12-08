@@ -132,12 +132,15 @@ WinEDA_Build_BOM_Frame::WinEDA_Build_BOM_Frame( WinEDA_DrawFrame* parent,
                                                 const wxSize&     size,
                                                 long              style )
 {
+    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxASSERT( config != NULL );
+
     m_Parent = parent;
 
     /* Get options */
-    s_OutputFormOpt      = m_Parent->m_Parent->m_EDA_Config->Read( OPTION_BOM_FORMAT, (long) 0 );
-    s_OutputSeparatorOpt = m_Parent->m_Parent->m_EDA_Config->Read( OPTION_BOM_SEPARATOR, (long) 0 );
-    long addfields = m_Parent->m_Parent->m_EDA_Config->Read( OPTION_BOM_ADD_FIELD, (long) 0 );
+    s_OutputFormOpt      = config->Read( OPTION_BOM_FORMAT, (long) 0 );
+    s_OutputSeparatorOpt = config->Read( OPTION_BOM_SEPARATOR, (long) 0 );
+    long addfields = config->Read( OPTION_BOM_ADD_FIELD, (long) 0 );
     for( int ii = 0, bitmask = 1; s_AddFieldList[ii] != NULL; ii++ )
     {
         if( (addfields & bitmask) )
@@ -491,6 +494,9 @@ void WinEDA_Build_BOM_Frame::OnApplyClick( wxCommandEvent& event )
 void WinEDA_Build_BOM_Frame::SavePreferences()
 /**************************************************/
 {
+    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxASSERT( config != NULL );
+
     // Determine current settings of "List items" and "Options" checkboxes
     // (NOTE: These 6 settings are restored when the dialog box is next
     // invoked, but are *not* still saved after EESchema is next shut down.)
@@ -519,8 +525,8 @@ void WinEDA_Build_BOM_Frame::SavePreferences()
     s_Add_F8_state = m_AddField8->GetValue();
 
     // Now save current settings of both radiobutton groups
-    m_Parent->m_Parent->m_EDA_Config->Write( OPTION_BOM_FORMAT, (long) s_OutputFormOpt );
-    m_Parent->m_Parent->m_EDA_Config->Write( OPTION_BOM_SEPARATOR, (long) s_OutputSeparatorOpt );
+    config->Write( OPTION_BOM_FORMAT, (long) s_OutputFormOpt );
+    config->Write( OPTION_BOM_SEPARATOR, (long) s_OutputSeparatorOpt );
 
     // Now save current settings of all "Fields to add" checkboxes
     long addfields = 0;
@@ -531,5 +537,5 @@ void WinEDA_Build_BOM_Frame::SavePreferences()
         bitmask <<= 1;
     }
 
-    m_Parent->m_Parent->m_EDA_Config->Write( OPTION_BOM_ADD_FIELD, addfields );
+    config->Write( OPTION_BOM_ADD_FIELD, addfields );
 }

@@ -247,7 +247,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         // update module in the current board,
         // not just add it to the board with total disregard for the netlist...
-        WinEDA_PcbFrame* pcbframe       = m_Parent->m_PcbFrame;
+        WinEDA_PcbFrame* pcbframe       = (WinEDA_PcbFrame*) GetParent();
         BOARD*           mainpcb        = pcbframe->m_Pcb;
         MODULE*          source_module  = NULL;
         MODULE*          module_in_edit = m_Pcb->m_Modules;

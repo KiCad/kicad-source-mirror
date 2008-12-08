@@ -24,14 +24,6 @@ class WinEDA_App : public wxApp
 public:
     wxString                 m_Project;
     wxSingleInstanceChecker* m_Checker;
-    WinEDA_MainFrame*        m_MainFrame;
-    WinEDA_PcbFrame*         m_PcbFrame;
-    WinEDA_ModuleEditFrame*  m_ModuleEditFrame;
-    WinEDA_GerberFrame*      m_GerberFrame;
-    WinEDA_SchematicFrame*   m_SchematicFrame;    // Edition des Schemas
-    WinEDA_LibeditFrame*     m_LibeditFrame;      // Edition des composants
-    WinEDA_ViewlibFrame*     m_ViewlibFrame;      // Visualisation des composants
-    WinEDA_CvpcbFrame*       m_CvpcbFrame;
 
     wxPoint                  m_HelpPos;
     wxSize                   m_HelpSize;
@@ -46,9 +38,10 @@ public:
                                         *  (utilisé si KICAD non défini)*/
     wxArrayString            m_LastProject;   /* liste des derniers projets chargés */
     unsigned int             m_LastProjectMaxCount; /* Max histhory file length */
-    wxString                 m_KicadEnv;  /* Chemin de kicad défini dans la variable
-                                        *  d'environnement KICAD,
-                                        *  typiquement /usr/local/kicad ou c:\kicad */
+    wxString                 m_KicadEnv;  /* Chemin de kicad défini dans la
+                                           * variable d'environnement KICAD,
+                                           * typiquement /usr/local/kicad ou
+                                           * c:\kicad */
     bool                     m_Env_Defined; // TRUE si variable d'environnement KICAD definie
 
     wxLocale*                m_Locale;      // Gestion de la localisation

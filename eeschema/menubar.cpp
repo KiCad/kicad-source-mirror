@@ -112,7 +112,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         // Create the list of last edited schematic files
         m_FilesMenu->AppendSeparator();
-        int     max_file = m_Parent->m_LastProjectMaxCount;
+        int     max_file = wxGetApp().m_LastProjectMaxCount;
         for( ii = 0; ii < max_file; ii++ )
         {
             if( GetLastProject( ii ).IsEmpty() )
@@ -376,7 +376,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         // Font selection and setup
         AddFontSelectionMenu( configmenu );
 
-        m_Parent->SetLanguageList( configmenu );
+        wxGetApp().SetLanguageList( configmenu );
 
         configmenu->AppendSeparator();
         item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),
@@ -417,7 +417,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     else        // Update the list of last edited schematic files
     {
         wxMenuItem* item;
-        int         max_file = m_Parent->m_LastProjectMaxCount;
+        int         max_file = wxGetApp().m_LastProjectMaxCount;
         for( ii = max_file - 1; ii >=0; ii-- )
         {
             if( m_FilesMenu->FindItem( ID_LOAD_FILE_1 + ii ) )

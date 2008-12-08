@@ -36,7 +36,7 @@ void WinEDA_MainFrame::Process_Files( wxCommandEvent& event )
 {
     int      id   = event.GetId();
     wxString path = wxGetCwd();
-    
+
     wxString fullfilename;
     bool     IsNew = FALSE;
 
@@ -68,7 +68,7 @@ void WinEDA_MainFrame::Process_Files( wxCommandEvent& event )
     case ID_LOAD_PROJECT:
         SetLastProject( m_PrjFileName );
         fullfilename = EDA_FileSelector( IsNew ? _( "Create Project files:" ) :
-                                        _( "Load Project files:" ),
+                                         _( "Load Project files:" ),
                                          path,                                      /* Chemin par defaut */
                                          wxEmptyString,                             /* nom fichier par defaut */
                                          g_Prj_Config_Filename_ext,                 /* extension par defaut */
@@ -115,9 +115,9 @@ static void Create_NewPrj_Config( const wxString PrjFullFileName )
 
     // Init default config filename
     g_Prj_Config_LocalFilename.Empty();
-    
-    g_Prj_Default_Config_FullFilename = ReturnKicadDatasPath() + 
-        wxT( "template/kicad" ) + g_Prj_Config_Filename_ext;
+
+    g_Prj_Default_Config_FullFilename = ReturnKicadDatasPath() +
+                                        wxT( "template/kicad" ) + g_Prj_Config_Filename_ext;
 
     if( !wxFileExists( g_Prj_Default_Config_FullFilename ) )
     {
@@ -140,11 +140,12 @@ static void Create_NewPrj_Config( const wxString PrjFullFileName )
 
     g_SchematicRootFileName = wxFileNameFromPath( PrjFullFileName );
     ChangeFileNameExt( g_SchematicRootFileName, g_SchExtBuffer );
-    
+
     g_BoardFileName = wxFileNameFromPath( PrjFullFileName );
     ChangeFileNameExt( g_BoardFileName, g_BoardExtBuffer );
 
-    g_EDA_Appl->WriteProjectConfig( PrjFullFileName, wxT( "/general" ), CfgParamList );
+    wxGetApp().WriteProjectConfig( PrjFullFileName, wxT( "/general" ),
+                                   CfgParamList );
 }
 
 
@@ -176,7 +177,8 @@ void WinEDA_MainFrame::UnZipArchive( const wxString FullFileName )
     PrintMsg( msg );
 
     wxString target_dirname = wxDirSelector( _( "Target Directory" ),
-                                             wxEmptyString, 0, wxDefaultPosition, this );
+                                             wxEmptyString, 0,
+                                             wxDefaultPosition, this );
     if( target_dirname.IsEmpty() )
         return;
 
@@ -186,7 +188,7 @@ void WinEDA_MainFrame::UnZipArchive( const wxString FullFileName )
 
     wxFileSystem zipfilesys;
     zipfilesys.AddHandler( new wxZipFSHandler );
-    
+
     filename += wxT( "#zip:" );
     zipfilesys.ChangePathTo( filename );
 
@@ -201,15 +203,15 @@ void WinEDA_MainFrame::UnZipArchive( const wxString FullFileName )
             DisplayError( this, wxT( "Zip file read error" ) );
             break;
         }
-        
-        wxString             unzipfilename = localfilename.AfterLast( ':' );
-        
+
+        wxString unzipfilename = localfilename.AfterLast( ':' );
+
         msg = _( "Extract file " ) + unzipfilename;
         PrintMsg( msg );
-        
+
         wxInputStream*       stream = zipfile->GetStream();
-        
-        wxFFileOutputStream* ofile  = new wxFFileOutputStream( unzipfilename );
+
+        wxFFileOutputStream* ofile = new wxFFileOutputStream( unzipfilename );
 
         if( ofile->Ok() )
         {
@@ -269,20 +271,20 @@ void WinEDA_MainFrame::CreateZipArchive( const wxString FullFileName )
         wxT( "*.pdf" ), wxT( "*.txt" ),
         NULL
     };
-    
-    int      ii      = 0;
-    
+
+    int      ii = 0;
+
     wxString zip_cmd = wxT( "-O " ) + zip_file_fullname;
     filename = wxFindFirstFile( Ext_to_arch[ii] );
-    
+
     while( !filename.IsEmpty() )
     {
         wxFileName name( filename );
 
-        wxString fullname = name.GetFullName();
+        wxString   fullname = name.GetFullName();
         AddDelimiterString( fullname );
         zip_cmd += wxT( " " ) + fullname;
-        
+
         msg = _( "Compress file " ) + fullname + wxT( "\n" );
         PrintMsg( msg );
 

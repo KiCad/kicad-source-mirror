@@ -123,7 +123,6 @@ class WinEDA_BasicFrame : public wxFrame
 {
 public:
     int             m_Ident;        // Id Type (pcb, schematic, library..)
-    WinEDA_App*     m_Parent;
     wxPoint         m_FramePos;
     wxSize          m_FrameSize;
     int             m_MsgFrameHeight;
@@ -138,7 +137,7 @@ public:
 public:
 
     // Constructor and destructor
-    WinEDA_BasicFrame( wxWindow* father, int idtype, WinEDA_App* parent,
+    WinEDA_BasicFrame( wxWindow* father, int idtype,
                        const wxString& title,
                        const wxPoint& pos, const wxSize& size,
                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE);
@@ -216,7 +215,7 @@ protected:
 public:
 
     // Constructor and destructor
-    WinEDA_DrawFrame( wxWindow* father, int idtype, WinEDA_App* parent,
+    WinEDA_DrawFrame( wxWindow* father, int idtype,
                       const wxString& title,
                       const wxPoint& pos, const wxSize& size,
                       long style = KICAD_DEFAULT_DRAWFRAME_STYLE );

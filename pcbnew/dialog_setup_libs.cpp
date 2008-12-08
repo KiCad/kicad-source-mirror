@@ -94,12 +94,12 @@ wxString title;
 
     Create(parent, id, caption, pos, size, style);
 
-	title = _("from ") + g_EDA_Appl->m_CurrentOptionFile;
+	title = _("from ") + wxGetApp().m_CurrentOptionFile;
 	SetTitle(title);
 	m_ListLibr->InsertItems(g_LibName_List, 0);
 	wxString DocModuleFileName =
-		g_EDA_Appl->m_EDA_CommonConfig->Read( wxT("module_doc_file"),
-				wxT("pcbnew/footprints.pdf"));
+		wxGetApp().m_EDA_CommonConfig->Read( wxT("module_doc_file"),
+                                             wxT("pcbnew/footprints.pdf"));
 	m_TextHelpModulesFileName->SetValue(DocModuleFileName);
 }
 
@@ -318,8 +318,8 @@ void KiConfigPcbnewFrame::SetNewOptions()
 /********************************************/
 {
 	g_UserLibDirBuffer = m_TextLibDir->GetValue();
-	g_EDA_Appl->m_EDA_CommonConfig->Write( wxT("module_doc_file"),
-			m_TextHelpModulesFileName->GetValue());
+	wxGetApp().m_EDA_CommonConfig->Write( wxT("module_doc_file"),
+                                          m_TextHelpModulesFileName->GetValue());
 	SetRealLibraryPath( wxT("modules") );
 }
 

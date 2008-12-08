@@ -5,7 +5,6 @@
 /* Fichier LIBRAIRI.CPP */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -52,7 +51,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     bool Footprint_Is_GPCB_Format = false;
     wxString mask = wxT("*.*;"); mask += EXT_CMP_MASK;
     wxString LastOpenedPathForLoading;
-    wxConfig*          Config = m_Parent->m_EDA_Config;
+    wxConfig*          Config = wxGetApp().m_EDA_Config;
 
     if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
@@ -154,7 +153,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     char     Line[1025];
     FILE*    dest;
     wxString msg, path;
-    wxConfig*          Config = m_Parent->m_EDA_Config;
+    wxConfig*          Config = wxGetApp().m_EDA_Config;
 
     if( ptmod == NULL )
         return;

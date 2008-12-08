@@ -227,7 +227,7 @@ void dialog_freeroute_exchange::CreateControls()
 ////@end dialog_freeroute_exchange content construction
 
     wxString msg;
-    m_Parent->m_Parent->m_EDA_Config->Read( FREEROUTE_URL_KEY, &msg );
+    wxGetApp().m_EDA_Config->Read( FREEROUTE_URL_KEY, &msg );
     if( msg.IsEmpty() )
         m_FreerouteURLName->SetValue( wxT( "http://www.freerouting.net/" ) );
     else
@@ -348,8 +348,8 @@ void dialog_freeroute_exchange::OnCloseWindow( wxCloseEvent& event )
 
     if( m_FreeRouteSetupChanged )  // Save new config
     {
-        m_Parent->m_Parent->m_EDA_Config->Write( FREEROUTE_URL_KEY,
-                                                m_FreerouteURLName->GetValue() );
+        wxGetApp().m_EDA_Config->Write( FREEROUTE_URL_KEY,
+                                        m_FreerouteURLName->GetValue() );
     }
 
     Destroy();

@@ -4,7 +4,6 @@
 /************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -26,35 +25,35 @@ bool GoToEditor = FALSE;
 
 /*******************************************************************/
 void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module,
-                                                     wxDC* DC, const wxPoint& pos )
+                                                     wxDC* DC,
+                                                     const wxPoint& pos )
 /*******************************************************************/
 
 /* Fonction relai d'installation de la frame d'édition des proprietes
  *  du module*/
 {
-    WinEDA_ModulePropertiesFrame* frame = new WinEDA_ModulePropertiesFrame( this,
-                                                                            Module, DC, pos );
+    WinEDA_ModulePropertiesFrame* frame =
+        new WinEDA_ModulePropertiesFrame( this, Module, DC, pos );
 
     frame->ShowModal(); frame->Destroy();
 
     if( GoToEditor && GetScreen()->GetCurItem() )
     {
-        if( m_Parent->m_ModuleEditFrame == NULL )
+        if( m_ModuleEditFrame == NULL )
         {
-            m_Parent->m_ModuleEditFrame = new WinEDA_ModuleEditFrame( this,
-                                                                     m_Parent, _( "Module Editor" ),
-                                                                     wxPoint( -1,
-                                                                              -1 ),
-                                                                     wxSize( 600, 400 ) );
+            m_ModuleEditFrame = new WinEDA_ModuleEditFrame( this,
+                                                            _( "Module Editor" ),
+                                                            wxPoint( -1, -1 ),
+                                                            wxSize( 600, 400 ) );
         }
 
-        m_Parent->m_ModuleEditFrame->Load_Module_Module_From_BOARD(
+        m_ModuleEditFrame->Load_Module_Module_From_BOARD(
             (MODULE*) GetScreen()->GetCurItem() );
         SetCurItem( NULL );
 
         GoToEditor = FALSE;
-        m_Parent->m_ModuleEditFrame->Show( TRUE );
-        m_Parent->m_ModuleEditFrame->Iconize( FALSE );
+        m_ModuleEditFrame->Show( TRUE );
+        m_ModuleEditFrame->Iconize( FALSE );
     }
 }
 
@@ -75,7 +74,8 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
     if( pt_mod == NULL )
         return;
 
-    pt_mod->DrawAncre( DrawPanel, DC, wxPoint( 0, 0 ), DIM_ANCRE_MODULE, GR_XOR );
+    pt_mod->DrawAncre( DrawPanel, DC, wxPoint( 0, 0 ),
+                       DIM_ANCRE_MODULE, GR_XOR );
 
     deltaX = pt_mod->m_Pos.x - GetScreen()->m_Curseur.x;
     deltaY = pt_mod->m_Pos.y - GetScreen()->m_Curseur.y;

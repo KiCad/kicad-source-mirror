@@ -137,7 +137,7 @@ WinEDA_PrintSVGFrame::WinEDA_PrintSVGFrame( WinEDA_DrawFrame* parent,
 {
     m_Parent = parent;
     m_ImageXSize_mm = 270;
-    wxConfig* Config = m_Parent->m_Parent->m_EDA_Config;
+    wxConfig* Config = wxGetApp().m_EDA_Config;
     if( Config )
     {
         Config->Read( PLOTSVGPENWIDTH_KEY, &s_SVGPenMinWidth );
@@ -519,7 +519,7 @@ void WinEDA_PrintSVGFrame::OnCancelClick( wxCommandEvent& event )
 
 void WinEDA_PrintSVGFrame::OnCloseWindow( wxCloseEvent& event )
 {
-    wxConfig* Config = m_Parent->m_Parent->m_EDA_Config;
+    wxConfig* Config = wxGetApp().m_EDA_Config;
 
     if( Config )
     {

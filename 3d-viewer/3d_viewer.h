@@ -87,7 +87,7 @@ private:
 
 public:
 	Pcb3D_GLCanvas(WinEDA3D_DrawFrame *parent, const wxWindowID id = -1,
-			int* gl_attrib = NULL);
+                   int* gl_attrib = NULL);
 	~Pcb3D_GLCanvas();
 
 	void ClearLists();
@@ -125,7 +125,6 @@ class WinEDA3D_DrawFrame: public wxFrame
 {
 public:
 	WinEDA_BasePcbFrame * m_Parent;
-	WinEDA_App * m_ParentAppl;
     Pcb3D_GLCanvas * m_Canvas;
 	wxToolBar * m_HToolBar;
 	wxToolBar * m_VToolBar;
@@ -138,8 +137,9 @@ private:
 								// It is "Frame3D"
 
 public:
-	WinEDA3D_DrawFrame(WinEDA_BasePcbFrame * parent, WinEDA_App *app_parent,
-		const wxString& title, long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+	WinEDA3D_DrawFrame(WinEDA_BasePcbFrame * parent,
+                       const wxString& title,
+                       long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
 
     void Exit3DFrame(wxCommandEvent& event);
 	void OnCloseWindow(wxCloseEvent & Event);
@@ -169,7 +169,7 @@ public:
 	void Set3DEco1OnOff();
 	void Set3DEco2OnOff();
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 void SetGLColor(int color);

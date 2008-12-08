@@ -12,7 +12,6 @@
 #include "pcbcfg.h"
 #include "worksheet.h"
 #include "id.h"
-#include "hotkeys_basic.h"
 #include "hotkeys.h"
 
 #include "protos.h"
@@ -27,12 +26,12 @@
 void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 /***********************************************************/
 {
-    int     id = event.GetId();
-    wxPoint pos;
+    int        id = event.GetId();
+    wxPoint    pos;
 
     wxClientDC dc( DrawPanel );
 
-    wxString FullFileName;
+    wxString   FullFileName;
 
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -69,14 +68,14 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         FullFileName = GetScreen()->m_FileName.AfterLast( '/' );
         ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
         FullFileName = EDA_FileSelector( _( "Read config file" ),
-            wxPathOnly( GetScreen()->m_FileName ),      /* Chemin par defaut */
-            FullFileName,                               /* nom fichier par defaut */
-            g_Prj_Config_Filename_ext,                  /* extension par defaut */
-            FullFileName,                               /* Masque d'affichage */
-            this,
-            wxFD_OPEN,
-            TRUE                        /* ne change pas de repertoire courant */
-            );
+                                         wxPathOnly( GetScreen()->m_FileName ), /* Chemin par defaut */
+                                         FullFileName,                          /* nom fichier par defaut */
+                                         g_Prj_Config_Filename_ext,             /* extension par defaut */
+                                         FullFileName,                          /* Masque d'affichage */
+                                         this,
+                                         wxFD_OPEN,
+                                         TRUE /* ne change pas de repertoire courant */
+                                         );
         if( FullFileName.IsEmpty() )
             break;
         if( !wxFileExists( FullFileName ) )
@@ -92,7 +91,9 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-        WriteHotkeyConfigFile( FullFileName, s_Pcbnew_Editor_Hokeys_Descr, true );
+        WriteHotkeyConfigFile( FullFileName,
+                               s_Pcbnew_Editor_Hokeys_Descr,
+                               true );
         break;
 
     case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
@@ -104,7 +105,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-        AddDelimiterString(FullFileName);
+        AddDelimiterString( FullFileName );
         wxString editorname = GetEditorName();
         if( !editorname.IsEmpty() )
             ExecuteFile( this, editorname, FullFileName );
@@ -121,7 +122,8 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_PcbFrame::Process_Config internal error" ) );
+        DisplayError( this,
+                      wxT( "WinEDA_PcbFrame::Process_Config internal error" ) );
     }
 }
 
@@ -134,11 +136,14 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
  * Read the hotkey files config for pcbnew and module_edit
  */
 {
-    wxString FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
+    wxString FullFileName = ReturnHotkeyConfigFilePath(
+        g_ConfigFileLocationChoice );
 
     FullFileName += HOTKEY_FILENAME;
     FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-    return frame->ReadHotkeyConfigFile( FullFileName, s_Pcbnew_Editor_Hokeys_Descr, verbose );
+    return frame->ReadHotkeyConfigFile( FullFileName,
+                                        s_Pcbnew_Editor_Hokeys_Descr,
+                                        verbose );
 }
 
 
@@ -147,11 +152,11 @@ bool Read_Config( const wxString& project_name )
 /*************************************************************************/
 
 /* lit la configuration, si elle n'a pas deja ete lue
-  * 1 - lit <nom fichier brd>.pro
-  * 2 - si non trouve lit <chemin de *.exe>/kicad.pro
-  * 3 - si non trouve: init des variables aux valeurs par defaut
+ * 1 - lit <nom fichier brd>.pro
+ * 2 - si non trouve lit <chemin de *.exe>/kicad.pro
+ * 3 - si non trouve: init des variables aux valeurs par defaut
  *
-  * Retourne TRUE si lu, FALSE si config non lue ou non modifiée
+ * Retourne TRUE si lu, FALSE si config non lue ou non modifiée
  */
 {
     wxString FullFileName;
@@ -164,8 +169,8 @@ bool Read_Config( const wxString& project_name )
     /* Init des valeurs par defaut */
     g_LibName_List.Clear();
 
-    g_EDA_Appl->ReadProjectConfig( FullFileName,
-        GROUP, ParamCfgList, FALSE );
+    wxGetApp().ReadProjectConfig( FullFileName,
+                                  GROUP, ParamCfgList, FALSE );
 
     /* Traitement des variables particulieres: */
 
@@ -177,8 +182,10 @@ bool Read_Config( const wxString& project_name )
         ScreenPcb->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
     }
 
-    g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
+    g_DesignSettings.m_TrackWidthHistory[0] =
+        g_DesignSettings.m_CurrentTrackWidth;
+    g_DesignSettings.m_ViaSizeHistory[0] =
+        g_DesignSettings.m_CurrentViaSize;
     for( ii = 1; ii < HISTORY_NUMBER; ii++ )
     {
         g_DesignSettings.m_TrackWidthHistory[ii] = 0;
@@ -202,19 +209,20 @@ void WinEDA_PcbFrame::Update_config( wxWindow* displayframe )
     ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
     FullFileName = EDA_FileSelector( _( "Save preferences" ),
-        wxPathOnly( GetScreen()->m_FileName ),              /* Chemin par defaut */
-        FullFileName,                                       /* nom fichier par defaut */
-        g_Prj_Config_Filename_ext,                          /* extension par defaut */
-        mask,                                               /* Masque d'affichage */
-        displayframe,
-        wxFD_SAVE,
-        TRUE
-        );
+                                     wxPathOnly( GetScreen()->m_FileName ), /* Chemin par defaut */
+                                     FullFileName,                          /* nom fichier par defaut */
+                                     g_Prj_Config_Filename_ext,             /* extension par defaut */
+                                     mask,                                  /* Masque d'affichage */
+                                     displayframe,
+                                     wxFD_SAVE,
+                                     TRUE
+                                     );
     if( FullFileName.IsEmpty() )
         return;
 
     Pcbdiv_grille = GetScreen()->m_Diviseur_Grille;
 
     /* ecriture de la configuration */
-    g_EDA_Appl->WriteProjectConfig( FullFileName, wxT( "/pcbnew" ), ParamCfgList );
+    wxGetApp().WriteProjectConfig( FullFileName, wxT( "/pcbnew" ),
+                                   ParamCfgList );
 }

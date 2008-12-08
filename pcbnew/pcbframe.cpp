@@ -191,12 +191,14 @@ END_EVENT_TABLE()
 /* Constructeur */
 /****************/
 
-WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
+WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
                                   const wxString& title,
                                   const wxPoint& pos, const wxSize& size,
                                   long style ) :
-    WinEDA_BasePcbFrame( father, parent, PCB_FRAME, title, pos, size, style )
+    WinEDA_BasePcbFrame( father, PCB_FRAME, title, pos, size, style )
 {
+    wxConfig* config           = wxGetApp().m_EDA_Config;
+
     m_FrameName                = wxT( "PcbFrame" );
     //m_AboutTitle               = g_PcbnewAboutTitle;
     m_Draw_Axis                = TRUE;          // TRUE pour avoir les axes dessines
@@ -230,11 +232,10 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     wxSize GridSize( 500, 500 );
-    wxConfig * config = NULL;
-    if( m_Parent && m_Parent->m_EDA_Config )
+
+    if( config )
     {
         long SizeX, SizeY;
-        config = m_Parent->m_EDA_Config;
 
         if( config->Read( wxT( "PcbEditGrid_X" ), &SizeX )
            && config->Read( wxT( "PcbEditGrid_Y" ), &SizeY ) )
@@ -268,7 +269,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent,
 WinEDA_PcbFrame::~WinEDA_PcbFrame()
 /************************************/
 {
-    m_Parent->m_PcbFrame = NULL;
     SetBaseScreen( ScreenPcb );
 
     delete m_drc;
@@ -283,6 +283,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 /********************************************************/
 {
     PCB_SCREEN* screen;
+    wxConfig *  config = wxGetApp().m_EDA_Config;
 
     DrawPanel->m_AbortRequest = TRUE;
 
@@ -331,9 +332,8 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
     SetBaseScreen( ActiveScreen = ScreenPcb );
 
     SaveSettings();
-   if( m_Parent && m_Parent->m_EDA_Config )
+    if( config )
     {
-        wxConfig * config = m_Parent->m_EDA_Config;
         wxSize GridSize = GetScreen()->GetGrid();
         config->Write( wxT( "PcbEditGrid_X" ), (long) GridSize.x );
         config->Write( wxT( "PcbEditGrid_Y" ), (long) GridSize.y );

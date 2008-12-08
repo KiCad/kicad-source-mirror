@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "common.h"
 
-#include "wxstruct.h"
 #include "cvpcb.h"
 #include "id.h"
 #include "bitmaps.h"
@@ -32,11 +31,11 @@ END_EVENT_TABLE()
 /* WinEDA_DisplayFrame: the frame to display the current focused footprint */
 /***************************************************************************/
 
-WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father, WinEDA_App* parent,
+WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father,
                                           const wxString& title,
                                           const wxPoint& pos,
                                           const wxSize& size, long style ) :
-    WinEDA_BasePcbFrame( father, parent, CVPCB_DISPLAY_FRAME, title, pos,
+    WinEDA_BasePcbFrame( father, CVPCB_DISPLAY_FRAME, title, pos,
                          size, style )
 {
     m_FrameName      = wxT( "CmpFrame" );
@@ -73,7 +72,7 @@ WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 
     delete m_Pcb;
 
-    m_Parent->m_CvpcbFrame->DrawFrame = NULL;
+    ( (WinEDA_CvpcbFrame*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
 }
 
 

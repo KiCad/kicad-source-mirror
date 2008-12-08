@@ -3,7 +3,6 @@
 /*******************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -18,14 +17,16 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
 /**************************************************************************/
 
 /*  Free (delete) all schematic data (include the sub hierarchy sheets )
-  * for the hierarchical sheet FirstSheet
-  * FirstSheet is not deleted.
+ * for the hierarchical sheet FirstSheet
+ * FirstSheet is not deleted.
  */
 {
     EDA_BaseStruct*        DrawStruct;
     EDA_BaseStruct*        EEDrawList;
-    WinEDA_SchematicFrame* frame = g_EDA_Appl->m_SchematicFrame;
-    wxString msg;
+    wxString               msg;
+    WinEDA_SchematicFrame* frame;
+
+    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
 
     if( FirstSheet == NULL )
         return;
@@ -33,7 +34,7 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
     if( FirstSheet->Type() != DRAW_SHEET_STRUCT_TYPE )
     {
         DisplayError( NULL,
-            wxT( "DeleteSubHierarchy error(): NOT a Sheet" ) );
+                      wxT( "DeleteSubHierarchy error(): NOT a Sheet" ) );
         return;
     }
 
@@ -41,8 +42,8 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
     if( FirstSheet->m_AssociatedScreen->IsModify() && confirm_deletion )
     {
         msg.Printf( _( "Sheet %s (file %s) modified. Save it?" ),
-            FirstSheet->m_SheetName.GetData(),
-            FirstSheet->GetFileName().GetData() );
+                    FirstSheet->m_SheetName.GetData(),
+                    FirstSheet->GetFileName().GetData() );
         if( IsOK( NULL, msg ) )
         {
             frame->SaveEEFile( FirstSheet->m_AssociatedScreen, FILE_SAVE_AS );
@@ -59,7 +60,8 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
             EEDrawList = EEDrawList->Next();
             if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
-                DeleteSubHierarchy( (DrawSheetStruct*) DrawStruct, confirm_deletion );
+                DeleteSubHierarchy( (DrawSheetStruct*) DrawStruct,
+                                    confirm_deletion );
             }
         }
 
@@ -78,29 +80,29 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
 //this is redundant -- use FreeDrawList, a member of SCH_SCREEN
 
 /*
-  * {
-  * EDA_BaseStruct *DrawStruct;
+ * {
+ * EDA_BaseStruct *DrawStruct;
  *
-  * while (DrawList != NULL)
-  * {
-  *     DrawStruct = DrawList;
-  *     DrawList = DrawList->Pnext;
+ * while (DrawList != NULL)
+ * {
+ *     DrawStruct = DrawList;
+ *     DrawList = DrawList->Pnext;
  *
-  *     if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
-  *     {
-  *         DeleteSubHierarchy((DrawSheetStruct*) DrawStruct, confirm_deletion);
-  *     }
+ *     if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
+ *     {
+ *         DeleteSubHierarchy((DrawSheetStruct*) DrawStruct, confirm_deletion);
+ *     }
  *
-  *     delete DrawStruct;
-  * }
-  * }
+ *     delete DrawStruct;
+ * }
+ * }
  */
 /********************************************************************/
 bool ClearProjectDrawList( SCH_SCREEN* screen, bool confirm_deletion )
 /********************************************************************/
 
 /* free the draw list screen->EEDrawList and the subhierarchies
-  * clear the screen datas (filenames ..)
+ * clear the screen datas (filenames ..)
  */
 {
     if( screen == NULL )

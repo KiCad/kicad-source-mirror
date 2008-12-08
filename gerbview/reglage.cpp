@@ -51,9 +51,9 @@ private:
 };
 /* Construction de la table des evenements pour WinEDA_ConfigFrame */
 BEGIN_EVENT_TABLE( WinEDA_ConfigFrame, wxDialog )
-EVT_BUTTON( ID_SAVE_CFG, WinEDA_ConfigFrame::SaveCfg )
-EVT_BUTTON( wxID_OK, WinEDA_ConfigFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_ConfigFrame::OnCancelClick )
+    EVT_BUTTON( ID_SAVE_CFG, WinEDA_ConfigFrame::SaveCfg )
+    EVT_BUTTON( wxID_OK, WinEDA_ConfigFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_ConfigFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -87,7 +87,7 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
     SetFont( *g_DialogFont );
 
 	/* Shows the config filename currently used : */
-    title = _( "from " ) + g_EDA_Appl->m_CurrentOptionFile;
+    title = _( "from " ) + wxGetApp().m_CurrentOptionFile;
     SetTitle( title );
 
     LibModified = FALSE;
@@ -117,15 +117,18 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
     size.x = LEN_EXT;
     size.y = -1;
     TextDrillExt = new WinEDA_EnterText( this,
-                                         _( "Drill File Ext:" ), g_DrillFilenameExt,
+                                         _( "Drill File Ext:" ),
+                                         g_DrillFilenameExt,
                                          LeftBoxSizer, size );
 
     TextPhotoExt = new WinEDA_EnterText( this,
-                                         _( "Gerber File Ext:" ), g_PhotoFilenameExt,
+                                         _( "Gerber File Ext:" ),
+                                         g_PhotoFilenameExt,
                                          LeftBoxSizer, size );
 
     TextPenExt = new WinEDA_EnterText( this,
-                                       _( "D code File Ext:" ), g_PenFilenameExt,
+                                       _( "D code File Ext:" ),
+                                       g_PenFilenameExt,
                                        LeftBoxSizer, size );
 
     GetSizer()->Fit( this );

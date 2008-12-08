@@ -183,7 +183,7 @@ void WinEDA_PrintFrame::SetOthersDatas()
 #endif
 
 #if defined (PCBNEW)
-    wxConfig* config = m_Parent->m_Parent->m_EDA_Config;  //  Current config used by application
+    wxConfig* config = wxGetApp().m_EDA_Config;  //  Current config used by application
 #endif
 
     m_FineAdjustXscaleOpt->SetToolTip( _( "Set X scale adjust for exact scale plotting" ) );
@@ -307,7 +307,7 @@ void WinEDA_PrintFrame::OnClosePrintDialog()
 /* called when WinEDA_PrintFrame is closed
  */
 {
-    wxConfig* Config = m_Parent->m_Parent->m_EDA_Config;
+    wxConfig* Config = wxGetApp().m_EDA_Config;
 
     if( Config )
     {

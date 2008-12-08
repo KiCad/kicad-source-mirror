@@ -23,14 +23,14 @@
 /*******************************************************/
 
 WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father, int idtype,
-                                      WinEDA_App* parent, const wxString& title,
-                                      const wxPoint& pos, const wxSize& size, long style ) :
+                                      const wxString& title,
+                                      const wxPoint& pos, const wxSize& size,
+                                      long style ) :
     wxFrame( father, -1, title, pos, size, style )
 {
     wxSize minsize;
 
     m_Ident  = idtype;
-    m_Parent = parent;
     SetFont( *g_StdFont );
     m_MenuBar        = NULL; // menu du haut d'ecran
     m_HToolBar       = NULL;
@@ -57,9 +57,9 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father, int idtype,
 WinEDA_BasicFrame::~WinEDA_BasicFrame()
 /******************************************/
 {
-    if( m_Parent->m_HtmlCtrl )
-        delete m_Parent->m_HtmlCtrl;
-    m_Parent->m_HtmlCtrl = NULL;
+    if( wxGetApp().m_HtmlCtrl )
+        delete wxGetApp().m_HtmlCtrl;
+    wxGetApp().m_HtmlCtrl = NULL;
 }
 
 
@@ -76,19 +76,22 @@ void WinEDA_BasicFrame::ReCreateMenuBar()
 void WinEDA_BasicFrame::GetSettings()
 /*********************************************/
 {
-    wxString text;
-    int      Ypos_min;
+    wxString  text;
+    int       Ypos_min;
+    wxConfig* config;
 
-    if( m_Parent->m_EDA_Config )
+    config = wxGetApp().m_EDA_Config;
+
+    if( config )
     {
         text = m_FrameName + wxT( "Pos_x" );
-        m_Parent->m_EDA_Config->Read( text, &m_FramePos.x );
+        config->Read( text, &m_FramePos.x );
         text = m_FrameName + wxT( "Pos_y" );
-        m_Parent->m_EDA_Config->Read( text, &m_FramePos.y );
+        config->Read( text, &m_FramePos.y );
         text = m_FrameName + wxT( "Size_x" );
-        m_Parent->m_EDA_Config->Read( text, &m_FrameSize.x, 600 );
+        config->Read( text, &m_FrameSize.x, 600 );
         text = m_FrameName + wxT( "Size_y" );
-        m_Parent->m_EDA_Config->Read( text, &m_FrameSize.y, 400 );
+        config->Read( text, &m_FrameSize.y, 400 );
     }
 
     // Ensure Window title bar is visible
@@ -109,24 +112,24 @@ void WinEDA_BasicFrame::SaveSettings()
 /*****************************************/
 {
     wxString text;
+    wxConfig* config;
 
-    if( !m_Parent || !m_Parent->m_EDA_Config )
-        return;
+    config = wxGetApp().m_EDA_Config;
 
-    if( !m_Parent->m_EDA_Config || IsIconized() )
+    if( ( config == NULL ) || IsIconized() )
         return;
 
     m_FrameSize = GetSize();
     m_FramePos  = GetPosition();
 
     text = m_FrameName + wxT( "Pos_x" );
-    m_Parent->m_EDA_Config->Write( text, (long) m_FramePos.x );
+    config->Write( text, (long) m_FramePos.x );
     text = m_FrameName + wxT( "Pos_y" );
-    m_Parent->m_EDA_Config->Write( text, (long) m_FramePos.y );
+    config->Write( text, (long) m_FramePos.y );
     text = m_FrameName + wxT( "Size_x" );
-    m_Parent->m_EDA_Config->Write( text, (long) m_FrameSize.x );
+    config->Write( text, (long) m_FrameSize.x );
     text = m_FrameName + wxT( "Size_y" );
-    m_Parent->m_EDA_Config->Write( text, (long) m_FrameSize.y );
+    config->Write( text, (long) m_FrameSize.y );
 }
 
 
@@ -175,36 +178,28 @@ void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
         return;
 
     //suppression d'une ancienne trace eventuelle du meme fichier
-    for( ii = 0; ii < m_Parent->m_LastProject.GetCount(); )
+    for( ii = 0; ii < wxGetApp().m_LastProject.GetCount(); )
     {
-        if( m_Parent->m_LastProject[ii].IsEmpty() )
+        if( wxGetApp().m_LastProject[ii].IsEmpty() )
             break;
 #ifdef __WINDOWS__
-        if( m_Parent->m_LastProject[ii].CmpNoCase( FullFileName ) == 0 )
+        if( wxGetApp().m_LastProject[ii].CmpNoCase( FullFileName ) == 0 )
 #else
-        if( m_Parent->m_LastProject[ii] == FullFileName )
+        if( wxGetApp().m_LastProject[ii] == FullFileName )
 #endif
         {
-#if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION <= 4 )  ) )
-            m_Parent->m_LastProject.Remove( ii );
-#else
-            m_Parent->m_LastProject.RemoveAt( ii );
-#endif
+            wxGetApp().m_LastProject.RemoveAt( ii );
         }
         else
             ii++;
     }
 
-    while( m_Parent->m_LastProject.GetCount() >= m_Parent->m_LastProjectMaxCount )
+    while( wxGetApp().m_LastProject.GetCount() >= wxGetApp().m_LastProjectMaxCount )
     {
-#if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION <= 4 )  ) )
-        files.Remove( files.GetCount() - 1 );
-#else
-        m_Parent->m_LastProject.RemoveAt( m_Parent->m_LastProject.GetCount() - 1 );
-#endif
+        wxGetApp().m_LastProject.RemoveAt( wxGetApp().m_LastProject.GetCount() - 1 );
     }
 
-    m_Parent->m_LastProject.Insert( FullFileName, 0 );
+    wxGetApp().m_LastProject.Insert( FullFileName, 0 );
 
     ReCreateMenuBar();
 }
@@ -216,9 +211,9 @@ wxString WinEDA_BasicFrame::GetLastProject( int rang )
 {
     if( rang < 0 )
         rang = 0;
-    if( (unsigned) rang >= m_Parent->m_LastProject.GetCount() )
+    if( (unsigned) rang >= wxGetApp().m_LastProject.GetCount() )
         return wxEmptyString;
-    return m_Parent->m_LastProject[rang];
+    return wxGetApp().m_LastProject[rang];
 }
 
 
@@ -227,30 +222,30 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /**************************************************************/
 {
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-    if( m_Parent->m_HtmlCtrl == NULL )
+    if( wxGetApp().m_HtmlCtrl == NULL )
     {
-        m_Parent->InitOnLineHelp();
+        wxGetApp().InitOnLineHelp();
     }
 
 
-    if( m_Parent->m_HtmlCtrl )
+    if( wxGetApp().m_HtmlCtrl )
     {
-        m_Parent->m_HtmlCtrl->DisplayContents();
-        m_Parent->m_HtmlCtrl->Display( m_Parent->m_HelpFileName );
+        wxGetApp().m_HtmlCtrl->DisplayContents();
+        wxGetApp().m_HtmlCtrl->Display( wxGetApp().m_HelpFileName );
     }
     else
     {
         wxString msg;
-        msg.Printf( _( "Help file %s not found" ), m_Parent->m_HelpFileName.GetData() );
+        msg.Printf( _( "Help file %s not found" ), wxGetApp().m_HelpFileName.GetData() );
         DisplayError( this, msg );
     }
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    wxString fullfilename = FindKicadHelpPath() + m_Parent->m_HelpFileName;
+    wxString fullfilename = FindKicadHelpPath() + wxGetApp().m_HelpFileName;
     if ( wxFileExists(fullfilename) )
         GetAssociatedDocument( this, wxEmptyString, fullfilename );
     else    // Try to find file in English format:
     {
-        fullfilename = FindKicadHelpPath() + wxT("../en/") + m_Parent->m_HelpFileName;;
+        fullfilename = FindKicadHelpPath() + wxT("../en/") + wxGetApp().m_HelpFileName;;
         GetAssociatedDocument( this, wxEmptyString, fullfilename );
     }
 

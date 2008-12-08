@@ -14,14 +14,9 @@
 #endif
 
 #include "fctsys.h"
-#include <wx/image.h>
 #include "wx/html/htmlwin.h"
 #include "wx/fs_zip.h"
 
-
-#include "wxstruct.h"
-
-#include "gr_basic.h"
 #include "common.h"
 #include "worksheet.h"
 #include "id.h"
@@ -53,8 +48,7 @@ struct LANGUAGE_DESCR
     bool          m_DoNotTranslate;                     // set to true if the m_Lang_Label must not be translated
 };
 
-#define LANGUAGE_DESCR_COUNT 16
-static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
+static struct LANGUAGE_DESCR s_Language_List[] =
 {
     {
         wxLANGUAGE_DEFAULT,
@@ -155,30 +149,26 @@ static struct LANGUAGE_DESCR s_Language_List[LANGUAGE_DESCR_COUNT] =
     }
 };
 
+/* Just add new languages to the list.  This macro will properly recalculate
+ * the size of the array. */
+#define LANGUAGE_DESCR_COUNT ( sizeof( s_Language_List ) /     \
+                               sizeof( struct LANGUAGE_DESCR ) )
+
 /**************************/
 /* WinEDA_App Constructor */
 /**************************/
 
 WinEDA_App::WinEDA_App()
 {
-    m_Checker   = NULL;
-    m_MainFrame = NULL;
-    m_PcbFrame  = NULL;
-    m_ModuleEditFrame = NULL;       // Frame for footprint edition
-    m_SchematicFrame  = NULL;       // Frame for schematic edition
-    m_LibeditFrame    = NULL;       // Frame for component edition
-    m_ViewlibFrame    = NULL;       // Frame for browsing component libraries
-    m_CvpcbFrame  = NULL;
-    m_GerberFrame = NULL;           // Frame for the gerber viewer GERBVIEW
-
+    m_Checker             = NULL;
     m_LastProjectMaxCount = 10;
-    m_HtmlCtrl = NULL;
-    m_EDA_CommonConfig = NULL;
-    m_EDA_Config    = NULL;
-    m_Env_Defined   = FALSE;
-    m_LanguageId    = wxLANGUAGE_DEFAULT;
-    m_Language_Menu = NULL;
-    m_Locale = NULL;
+    m_HtmlCtrl            = NULL;
+    m_EDA_CommonConfig    = NULL;
+    m_EDA_Config          = NULL;
+    m_Env_Defined         = FALSE;
+    m_LanguageId          = wxLANGUAGE_DEFAULT;
+    m_Language_Menu       = NULL;
+    m_Locale              = NULL;
 
     m_PdfBrowserIsDefault = TRUE;
 }
@@ -230,7 +220,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     }
 
     /* Prepare On Line Help. Use only lower case for help filenames,
-    * in order to avoid problems with upper/lower case filenames under windows and unix */
+     * in order to avoid problems with upper/lower case filenames under windows and unix */
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
     m_HelpFileName = name.Lower() + wxT( ".html" );
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
@@ -250,14 +240,18 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     g_MsgFontPointSize    = FONT_DEFAULT_SIZE;
     g_DialogFontPointSize = FONT_DEFAULT_SIZE;
     g_FixedFontPointSize  = FONT_DEFAULT_SIZE;
-    g_StdFont    = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN, wxNORMAL, wxNORMAL );
-    g_MsgFont    = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN, wxNORMAL, wxNORMAL );
-    g_DialogFont = new wxFont( g_DialogFontPointSize, wxFONTFAMILY_ROMAN, wxNORMAL, wxNORMAL );
+    g_StdFont    = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN,
+                               wxNORMAL, wxNORMAL );
+    g_MsgFont    = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN,
+                               wxNORMAL, wxNORMAL );
+    g_DialogFont = new wxFont( g_DialogFontPointSize, wxFONTFAMILY_ROMAN,
+                               wxNORMAL, wxNORMAL );
     g_ItalicFont = new wxFont( g_DialogFontPointSize,
-        wxFONTFAMILY_ROMAN,
-        wxFONTSTYLE_ITALIC,
-        wxNORMAL );
-    g_FixedFont = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN, wxNORMAL, wxNORMAL );
+                               wxFONTFAMILY_ROMAN,
+                               wxFONTSTYLE_ITALIC,
+                               wxNORMAL );
+    g_FixedFont  = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN,
+                               wxNORMAL, wxNORMAL );
 
     /* installation des gestionnaires de visu d'images (pour help) */
     wxImage::AddHandler( new wxPNGHandler );
@@ -271,14 +265,15 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     ReadPdfBrowserInfos();
 
     // Internationalisation: loading the kicad suitable Dictionnary
-    m_EDA_CommonConfig->Read( wxT( "Language" ), &m_LanguageId, wxLANGUAGE_DEFAULT );
+    m_EDA_CommonConfig->Read( wxT( "Language" ), &m_LanguageId,
+                              wxLANGUAGE_DEFAULT );
 
     bool succes = SetLanguage( TRUE );
     if( !succes )
     {
     }
 
-    SetLocaleTo_Default( );     // Set locale option for separator used in float numbers
+    SetLocaleTo_Default();      // Set locale option for separator used in float numbers
 
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->SetAppName( name );
@@ -297,12 +292,12 @@ void WinEDA_App::InitOnLineHelp()
 
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
     m_HelpFileName = fullfilename + wxT( ".html" );
-    fullfilename += wxT( "kicad.hhp" );
+    fullfilename  += wxT( "kicad.hhp" );
     if( wxFileExists( fullfilename ) )
     {
-        m_HtmlCtrl = new wxHtmlHelpController( wxHF_TOOLBAR |
-            wxHF_CONTENTS | wxHF_PRINT | wxHF_OPEN_FILES
-            /*| wxHF_SEARCH */ );
+        m_HtmlCtrl = new wxHtmlHelpController( wxHF_TOOLBAR | wxHF_CONTENTS |
+                                               wxHF_PRINT | wxHF_OPEN_FILES
+                                               /*| wxHF_SEARCH */ );
         m_HtmlCtrl->UseConfig( m_EDA_CommonConfig );
         m_HtmlCtrl->SetTitleFormat( wxT( "Kicad Help" ) );
         m_HtmlCtrl->AddBook( fullfilename );
@@ -335,7 +330,7 @@ bool WinEDA_App::SetBinDir()
         return false;
     char*       native_str = NULL;
     int         len = CFStringGetMaximumSizeForEncoding( CFStringGetLength( str ),
-        kCFStringEncodingUTF8 ) + 1;
+                                                         kCFStringEncodingUTF8 ) + 1;
     native_str = new char[len];
     CFStringGetCString( str, native_str, len, kCFStringEncodingUTF8 );
     m_BinDir = CONV_FROM_UTF8( native_str );
@@ -396,7 +391,8 @@ void WinEDA_App::GetSettings()
 
     if( m_EDA_CommonConfig )
     {
-        m_LanguageId = m_EDA_CommonConfig->Read( wxT( "Language" ), wxLANGUAGE_DEFAULT );
+        m_LanguageId = m_EDA_CommonConfig->Read( wxT( "Language" ),
+                                                 wxLANGUAGE_DEFAULT );
         g_EditorName = m_EDA_CommonConfig->Read( wxT( "Editor" ) );
         g_ConfigFileLocationChoice = m_EDA_CommonConfig->Read( HOTKEY_CFG_PATH_OPT, 0L );
     }
@@ -416,10 +412,14 @@ void WinEDA_App::GetSettings()
             m_LastProject.Add( Line );
     }
 
-    g_StdFontPointSize    = m_EDA_Config->Read( wxT( "SdtFontSize" ), FONT_DEFAULT_SIZE );
-    g_MsgFontPointSize    = m_EDA_Config->Read( wxT( "MsgFontSize" ), FONT_DEFAULT_SIZE );
-    g_DialogFontPointSize = m_EDA_Config->Read( wxT( "DialogFontSize" ), FONT_DEFAULT_SIZE );
-    g_FixedFontPointSize  = m_EDA_Config->Read( wxT( "FixedFontSize" ), FONT_DEFAULT_SIZE );
+    g_StdFontPointSize    = m_EDA_Config->Read( wxT( "SdtFontSize" ),
+                                                FONT_DEFAULT_SIZE );
+    g_MsgFontPointSize    = m_EDA_Config->Read( wxT( "MsgFontSize" ),
+                                                FONT_DEFAULT_SIZE );
+    g_DialogFontPointSize = m_EDA_Config->Read( wxT( "DialogFontSize" ),
+                                                FONT_DEFAULT_SIZE );
+    g_FixedFontPointSize  = m_EDA_Config->Read( wxT( "FixedFontSize" ),
+                                                FONT_DEFAULT_SIZE );
 
     Line = m_EDA_Config->Read( wxT( "SdtFontType" ), wxEmptyString );
     if( !Line.IsEmpty() )
@@ -584,7 +584,7 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
                                  s_Language_List[ii].m_Lang_Label :
                                  wxGetTranslation( s_Language_List[ii].m_Lang_Label );
             item = new wxMenuItem( m_Language_Menu, s_Language_List[ii].m_KI_Lang_Identifier,
-                MenuLabel, wxEmptyString, wxITEM_CHECK );
+                                   MenuLabel, wxEmptyString, wxITEM_CHECK );
             SETBITMAPS( s_Language_List[ii].m_Lang_Icon );
             m_Language_Menu->Append( item );
         }
@@ -593,17 +593,19 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
         if( m_LanguageId == s_Language_List[ii].m_WX_Lang_Identifier )
-            m_Language_Menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, true );
+            m_Language_Menu->Check( s_Language_List[ii].m_KI_Lang_Identifier,
+                                    true );
         else
-            m_Language_Menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, false );
+            m_Language_Menu->Check( s_Language_List[ii].m_KI_Lang_Identifier,
+                                    false );
     }
 
     if( MasterMenu )
     {
         ADD_MENUITEM_WITH_HELP_AND_SUBMENU( MasterMenu, m_Language_Menu,
-            ID_LANGUAGE_CHOICE, _( "Language" ),
-            _( "Select application language (only for testing!)" ),
-            language_xpm );
+                                            ID_LANGUAGE_CHOICE, _( "Language" ),
+                                            _( "Select application language (only for testing!)" ),
+                                            language_xpm );
     }
     return m_Language_Menu;
 }

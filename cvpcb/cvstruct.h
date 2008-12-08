@@ -39,8 +39,8 @@ private:
 
     // Constructor and destructor
 public:
-    WinEDA_CvpcbFrame( WinEDA_App * parent, const wxString &title,
-        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    WinEDA_CvpcbFrame( const wxString &title,
+                       long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
     ~WinEDA_CvpcbFrame();
 
     void            OnLeftClick( wxListEvent& event );
@@ -180,10 +180,10 @@ class WinEDA_DisplayFrame : public WinEDA_BasePcbFrame
 public:
 
 public:
-    WinEDA_DisplayFrame( wxWindow * father, WinEDA_App * parent,
-        const wxString &title,
-        const wxPoint &pos, const wxSize &size,
-        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    WinEDA_DisplayFrame( wxWindow * father,
+                         const wxString &title,
+                         const wxPoint &pos, const wxSize &size,
+                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_DisplayFrame();
 

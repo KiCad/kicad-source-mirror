@@ -23,11 +23,10 @@
 /*******************************/
 
 BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, WinEDA_DrawFrame )
-
-COMMON_EVENTS_DRAWFRAME EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
-                                        ID_POPUP_PCB_ITEM_SELECTION_END,
-                                        WinEDA_BasePcbFrame::ProcessItemSelection )
-
+    COMMON_EVENTS_DRAWFRAME
+    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
+                    ID_POPUP_PCB_ITEM_SELECTION_END,
+                    WinEDA_BasePcbFrame::ProcessItemSelection )
 END_EVENT_TABLE()
 
 
@@ -36,13 +35,12 @@ END_EVENT_TABLE()
 /****************/
 
 WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
-                                          WinEDA_App*     parent,
                                           int             idtype,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
                                           long style) :
-    WinEDA_DrawFrame( father, idtype, parent, title, pos, size, style )
+    WinEDA_DrawFrame( father, idtype, title, pos, size, style )
 {
     m_InternalUnits = 10000;        // Internal unit = 1/10000 inch
     m_Pcb = NULL;
@@ -53,7 +51,8 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     m_DisplayModEdge      = FILLED; // How to show module drawings
     m_DisplayModText      = FILLED; // How to show module texts
     m_DisplayPcbTrackFill = TRUE;   /* FALSE = sketch , TRUE = filled */
-    m_Draw3DFrame = NULL;           // Display Window in 3D mode (OpenGL)
+    m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
+    m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
     m_Collector = new GENERAL_COLLECTOR();
 }
@@ -174,10 +173,10 @@ void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
     }
 
 #ifdef CVPCB
-    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, m_Parent, _( "3D Viewer" ),
+    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ),
     KICAD_DEFAULT_3D_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
 #else
-    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, m_Parent, _( "3D Viewer" ) );
+    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ) );
 #endif
     // Show the frame
     m_Draw3DFrame->Show( TRUE );

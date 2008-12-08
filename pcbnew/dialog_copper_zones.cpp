@@ -40,7 +40,7 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
 /************************************************************************************************/
 {
     m_Parent = parent;
-    m_Config = m_Parent->m_Parent->m_EDA_Config;
+    m_Config = wxGetApp().m_EDA_Config;
     m_Zone_Setting = zone_setting;
     m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort, and filtering net names
     if( m_Config )

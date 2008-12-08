@@ -48,21 +48,23 @@ enum fl_rot_cmp {
 class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
-    WinEDAChoiceBox* m_SelPartBox;
-    DrawSheetPath*   m_CurrentSheet;    ///< which sheet we are presently working on.
-    int              m_Multiflag;
-    wxPoint          m_OldPos;
+    WinEDAChoiceBox*     m_SelPartBox;
+    DrawSheetPath*       m_CurrentSheet;    ///< which sheet we are presently working on.
+    int                  m_Multiflag;
+    wxPoint              m_OldPos;
+    WinEDA_LibeditFrame* m_LibeditFrame;
+    WinEDA_ViewlibFrame* m_ViewlibFrame;
 
 
 private:
-    wxMenu*          m_FilesMenu;
+    wxMenu*              m_FilesMenu;
 
-    SCH_CMP_FIELD*   m_CurrentField;
-    int              m_TextFieldSize;
+    SCH_CMP_FIELD*       m_CurrentField;
+    int                  m_TextFieldSize;
 
 
 public:
-    WinEDA_SchematicFrame( wxWindow* father, WinEDA_App* parent,
+    WinEDA_SchematicFrame( wxWindow* father,
                            const wxString& title,
                            const wxPoint& pos, const wxSize& size,
                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
@@ -362,7 +364,7 @@ public:
     WinEDAChoiceBox* m_SelAliasBox;
 
 public:
-    WinEDA_LibeditFrame( wxWindow* father, WinEDA_App* parent,
+    WinEDA_LibeditFrame( wxWindow* father,
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size,
                          long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
@@ -473,7 +475,7 @@ public:
     wxSemaphore*     m_Semaphore; // != NULL if the frame must emulate a modal dialog
 
 public:
-    WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
+    WinEDA_ViewlibFrame( wxWindow* father,
                          LibraryStruct* Library = NULL,
                          wxSemaphore* semaphore = NULL );
 

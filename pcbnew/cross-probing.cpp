@@ -3,6 +3,7 @@
 /*****************************************************************/
 
 /* cross-probing.cpp */
+
 /** Handle messages between pcbnew and eeschema via a socket,
  *  the port number is
  * KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242) (eeschema to pcbnew)
@@ -40,7 +41,7 @@ void RemoteCommand(  const char* cmdline )
     char*            idcmd;
     char*            text;
     MODULE*          module = 0;
-    WinEDA_PcbFrame* frame  = g_EDA_Appl->m_PcbFrame;
+    WinEDA_PcbFrame* frame  = (WinEDA_PcbFrame*)wxGetApp().GetTopWindow();
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 
@@ -86,18 +87,19 @@ void RemoteCommand(  const char* cmdline )
         if( pad )
         {
             netcode = pad->GetNet();
+
             // put cursor on the pad:
             frame->GetScreen()->m_Curseur = pad->GetPosition();
         }
 
         if( netcode > 0 )               /* highlight the pad net*/
         {
-            g_HightLigt_Status = 1;
+            g_HightLigt_Status   = 1;
             g_HightLigth_NetCode = netcode;
         }
         else
         {
-            g_HightLigt_Status = 0;
+            g_HightLigt_Status   = 0;
             g_HightLigth_NetCode = 0;
         }
 
@@ -105,12 +107,14 @@ void RemoteCommand(  const char* cmdline )
             msg.Printf( _( "%s not found" ), modName.GetData() );
         else if( pad == NULL )
         {
-            msg.Printf( _( "%s pin %s not found" ), modName.GetData(), pinName.GetData() );
+            msg.Printf( _( "%s pin %s not found" ),
+                        modName.GetData(), pinName.GetData() );
             frame->SetCurItem( module );
         }
         else
         {
-            msg.Printf( _( "%s pin %s found" ), modName.GetData(), pinName.GetData() );
+            msg.Printf( _( "%s pin %s found" ),
+                        modName.GetData(), pinName.GetData() );
             frame->SetCurItem( pad );
         }
 
@@ -151,7 +155,7 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
     case TYPE_MODULE:
         module = (MODULE*) objectToSync;
         sprintf( cmd, "$PART: \"%s\"",
-            CONV_TO_UTF8( module->m_Reference->m_Text ) );
+                 CONV_TO_UTF8( module->m_Reference->m_Text ) );
         break;
 
     case TYPE_PAD:
@@ -159,8 +163,8 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         pad    = (D_PAD*) objectToSync;
         msg    = pad->ReturnStringPadName();
         sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
-            CONV_TO_UTF8( module->m_Reference->m_Text ),
-            CONV_TO_UTF8( msg ) );
+                 CONV_TO_UTF8( module->m_Reference->m_Text ),
+                 CONV_TO_UTF8( msg ) );
         break;
 
     case TYPE_TEXTE_MODULE:
@@ -176,9 +180,9 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
             break;
 
         sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
-            CONV_TO_UTF8( module->m_Reference->m_Text ),
-            text_key,
-            CONV_TO_UTF8( text_mod->m_Text ) );
+                 CONV_TO_UTF8( module->m_Reference->m_Text ),
+                 text_key,
+                 CONV_TO_UTF8( text_mod->m_Text ) );
         break;
 
     default:

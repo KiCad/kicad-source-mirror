@@ -6,7 +6,6 @@
 
 #include "fctsys.h"
 
-#include "wxstruct.h"
 #include "common.h"
 #include "cvpcb.h"
 #include "protos.h"
@@ -22,12 +21,12 @@ void Read_Config( const wxString& FileName )
 /**************************************************/
 
 /* lit la configuration
-  * 1 - lit cvpcb.cnf
-  * 2 - si non trouve lit <chemin de cvpcb.exe>/cvpcb.cnf
-  * 3 - si non trouve: init des variables aux valeurs par defaut
+ * 1 - lit cvpcb.cnf
+ * 2 - si non trouve lit <chemin de cvpcb.exe>/cvpcb.cnf
+ * 3 - si non trouve: init des variables aux valeurs par defaut
  *
-  * Remarque:
-  * le chemin de l'executable cvpcb.exe doit etre dans BinDir
+ * Remarque:
+ * le chemin de l'executable cvpcb.exe doit etre dans BinDir
  */
 {
     wxString FullFileName = FileName;
@@ -36,8 +35,8 @@ void Read_Config( const wxString& FileName )
     g_LibName_List.Clear();
     g_ListName_Equ.Clear();
 
-    g_EDA_Appl->ReadProjectConfig( FullFileName,
-        GROUP, ParamCfgList, FALSE );
+    wxGetApp().ReadProjectConfig( FullFileName,
+                                  GROUP, ParamCfgList, FALSE );
 
     if( NetInExtBuffer.IsEmpty() )
         NetInExtBuffer = wxT( ".net" );
@@ -52,7 +51,7 @@ void WinEDA_CvpcbFrame::Update_Config( wxCommandEvent& event )
 /************************************************************/
 
 /* fonction relai d'appel a Save_Config,
-  * la vraie fonction de sauvegarde de la config
+ * la vraie fonction de sauvegarde de la config
  */
 {
     Save_Config( this );
@@ -73,18 +72,18 @@ void Save_Config( wxWindow* parent )
 
     path = wxGetCwd();
     FullFileName = EDA_FileSelector( _( "Save preferences" ),
-        path,                                   /* Chemin par defaut */
-        FullFileName,                           /* nom fichier par defaut */
-        g_Prj_Config_Filename_ext,              /* extension par defaut */
-        mask,                                   /* Masque d'affichage */
-        parent,
-        wxFD_SAVE,
-        TRUE
-        );
+                                     path,                      /* Chemin par defaut */
+                                     FullFileName,              /* nom fichier par defaut */
+                                     g_Prj_Config_Filename_ext, /* extension par defaut */
+                                     mask,                      /* Masque d'affichage */
+                                     parent,
+                                     wxFD_SAVE,
+                                     TRUE
+                                     );
 
     if( FullFileName.IsEmpty() )
         return;
 
     /* ecriture de la configuration */
-    g_EDA_Appl->WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
+    wxGetApp().WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
 }

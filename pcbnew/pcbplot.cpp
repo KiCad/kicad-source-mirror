@@ -3,7 +3,6 @@
 /***********************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "plot_common.h"
@@ -166,7 +165,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
 
     BOARD*    board = m_Parent->m_Pcb;
 
-    wxConfig* config = m_Parent->m_Parent->m_EDA_Config;  //  Current config used by application
+    wxConfig* config = wxGetApp().m_EDA_Config;  //  Current config used by application
 
 
     SetFont( *g_DialogFont );
@@ -607,7 +606,8 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
     m_XScaleAdjust = m_FineAdjustXscaleOpt->GetValue();
     m_YScaleAdjust = m_FineAdjustYscaleOpt->GetValue();
 
-    wxConfig* config = m_Parent->m_Parent->m_EDA_Config;
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
     if( config )
     {
         config->Write( OPTKEY_EDGELAYER_GERBER, g_Exclude_Edges_Pcb );

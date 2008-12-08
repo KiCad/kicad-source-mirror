@@ -102,7 +102,7 @@ wxString msg;
 
     Create(parent, id, caption, pos, size, style);
 
-	msg = _("from ") + g_EDA_Appl->m_CurrentOptionFile;
+	msg = _("from ") + wxGetApp().m_CurrentOptionFile;
 	SetTitle(msg);
 	SetFormatsNetListes();
 	m_ListLibr->InsertItems(g_LibName_List, 0);
@@ -312,8 +312,8 @@ void KiConfigEeschemaFrame::OnCloseWindow(wxCloseEvent & event)
 	if ( m_LibListChanged )
 	{
 		LoadLibraries(m_Parent);
-		if ( m_Parent->m_Parent->m_ViewlibFrame )
-			m_Parent->m_Parent->m_ViewlibFrame->ReCreateListLib();
+		if ( m_Parent->m_ViewlibFrame )
+			m_Parent->m_ViewlibFrame->ReCreateListLib();
 	}
 	EndModal(0);
 }

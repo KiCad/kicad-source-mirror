@@ -167,7 +167,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
         // Creation des selections des anciens fichiers
         m_FilesMenu->AppendSeparator();
-        int max_file = m_Parent->m_LastProjectMaxCount;
+        int max_file = wxGetApp().m_LastProjectMaxCount;
         for ( ii = 0; ii < max_file; ii++ )
         {
             if ( GetLastProject(ii).IsEmpty() ) break;
@@ -201,7 +201,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         // Font selection and setup
         AddFontSelectionMenu(configmenu);
 
-        m_Parent->SetLanguageList(configmenu);
+        wxGetApp().SetLanguageList(configmenu);
 
         configmenu->AppendSeparator();
         item = new wxMenuItem(configmenu, ID_CONFIG_SAVE, _("&Save Preferences"),
@@ -327,7 +327,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     else		// simple mise a jour de la liste des fichiers anciens
     {
         wxMenuItem * item;
-        int max_file = m_Parent->m_LastProjectMaxCount;
+        int max_file = wxGetApp().m_LastProjectMaxCount;
         for ( ii = max_file-1; ii >=0 ; ii-- )
         {
             if( m_FilesMenu->FindItem(ID_LOAD_FILE_1 + ii) )

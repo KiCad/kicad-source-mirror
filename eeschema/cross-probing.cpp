@@ -36,8 +36,10 @@ void RemoteCommand( const char* cmdline )
     char     line[1024];
     char*    idcmd;
     char*    text;
-    WinEDA_SchematicFrame* frame = g_EDA_Appl->m_SchematicFrame;
     wxString part_ref, msg;
+    WinEDA_SchematicFrame* frame;
+
+    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 
@@ -83,8 +85,8 @@ void RemoteCommand( const char* cmdline )
 
 
 /*****************************************************************************/
-void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectToSync,
-                                                 SCH_COMPONENT* LibItem )
+void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
+                                                 SCH_COMPONENT*  LibItem )
 /*****************************************************************************/
 
 /** Send a remote command to eeschema via a socket,
@@ -106,17 +108,19 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
     {
     case DRAW_PART_TEXT_STRUCT_TYPE:
     case COMPONENT_FIELD_DRAW_TYPE:
-        {
-            if( LibItem == NULL )
-                break;
-            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField(REFERENCE)->m_Text ) );
-            SendCommand( MSG_TO_PCB, Line );
-        }
-        break;
+    {
+        if( LibItem == NULL )
+            break;
+        sprintf( Line, "$PART: %s",
+                 CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+        SendCommand( MSG_TO_PCB, Line );
+    }
+    break;
 
     case TYPE_SCH_COMPONENT:
         LibItem = (SCH_COMPONENT*) objectToSync;
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+        sprintf( Line, "$PART: %s",
+                 CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
         break;
 
@@ -130,10 +134,11 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct*         objectT
             wxString pinnum;
             Pin->ReturnPinStringNum( pinnum );
             sprintf( Line, "$PIN: %s $PART: %s", CONV_TO_UTF8( pinnum ),
-                    CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+                     CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         }
         else
-            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+            sprintf( Line, "$PART: %s",
+                     CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
 
         SendCommand( MSG_TO_PCB, Line );
         break;

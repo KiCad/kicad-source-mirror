@@ -53,24 +53,23 @@ wxString ReturnUserNetlistTypeName( bool first_item )
     msg = CUSTOM_NETLIST_TITLE;
     msg << index + 1;
 
-    if( g_EDA_Appl->m_EDA_Config )
-        name = g_EDA_Appl->m_EDA_Config->Read( msg );
+    if( wxGetApp().m_EDA_Config )
+        name = wxGetApp().m_EDA_Config->Read( msg );
 
     return name;
 }
 
 
-
 BEGIN_EVENT_TABLE( WinEDA_NetlistFrame, wxDialog )
-EVT_BUTTON( wxID_CANCEL, WinEDA_NetlistFrame::OnCancelClick )
-EVT_BUTTON( ID_CREATE_NETLIST, WinEDA_NetlistFrame::GenNetlist )
-EVT_BUTTON( ID_SETUP_PLUGIN, WinEDA_NetlistFrame::SetupPluginData )
-EVT_BUTTON( ID_DELETE_PLUGIN, WinEDA_NetlistFrame::DeletePluginPanel )
-EVT_BUTTON( ID_VALIDATE_PLUGIN, WinEDA_NetlistFrame::ValidatePluginPanel )
-EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT, WinEDA_NetlistFrame::SelectNetlistType )
-EVT_BUTTON( ID_RUN_SIMULATOR, WinEDA_NetlistFrame::RunSimulator )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_NetlistFrame::OnCancelClick )
+    EVT_BUTTON( ID_CREATE_NETLIST, WinEDA_NetlistFrame::GenNetlist )
+    EVT_BUTTON( ID_SETUP_PLUGIN, WinEDA_NetlistFrame::SetupPluginData )
+    EVT_BUTTON( ID_DELETE_PLUGIN, WinEDA_NetlistFrame::DeletePluginPanel )
+    EVT_BUTTON( ID_VALIDATE_PLUGIN, WinEDA_NetlistFrame::ValidatePluginPanel )
+    EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT,
+                  WinEDA_NetlistFrame::SelectNetlistType )
+    EVT_BUTTON( ID_RUN_SIMULATOR, WinEDA_NetlistFrame::RunSimulator )
 END_EVENT_TABLE()
-
 
 
 /*******************************/
@@ -79,9 +78,13 @@ END_EVENT_TABLE()
 
 
 /*****************************************************************************/
-EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
-                                    int id_NetType, int idCheckBox, int idCreateFile ) :
-    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxBORDER_SUNKEN )
+EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook*     parent,
+                                    const wxString& title,
+                                    int             id_NetType,
+                                    int             idCheckBox,
+                                    int             idCreateFile ) :
+    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL |
+             wxBORDER_SUNKEN )
 /*****************************************************************************/
 
 /** Contructor to create a setup page for one netlist format.
@@ -114,14 +117,18 @@ EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
     m_RightOptionsBoxSizer = new wxBoxSizer( wxVERTICAL );
     UpperBoxSizer->Add( m_LeftBoxSizer, 0, wxGROW | wxALL, 5 );
     UpperBoxSizer->Add( m_RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-    UpperBoxSizer->Add( m_RightOptionsBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+    UpperBoxSizer->Add( m_RightOptionsBoxSizer,
+                        0,
+                        wxALIGN_CENTER_VERTICAL | wxALL,
+                        5 );
 
     if( idCheckBox )
     {
         wxStaticText* text = new wxStaticText( this, -1, _( "Options:" ) );
         m_LeftBoxSizer->Add( text, 0, wxGROW | wxALL, 5 );
 
-        m_IsCurrentFormat = new wxCheckBox( this, idCheckBox, _( "Default format" ) );
+        m_IsCurrentFormat =
+            new wxCheckBox( this, idCheckBox, _( "Default format" ) );
         m_LeftBoxSizer->Add( m_IsCurrentFormat, 0, wxGROW | wxALL, 5 );
 
         if( g_NetFormat == m_IdNetType )
@@ -141,7 +148,7 @@ EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
         m_RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
         m_ButtonCancel =
-            Button = new wxButton( this, wxID_CANCEL, _( "&Cancel" ) );
+            Button     = new wxButton( this, wxID_CANCEL, _( "&Cancel" ) );
         Button->SetForegroundColour( *wxBLUE );
         m_RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -195,20 +202,23 @@ WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent ) :
     // Add notebook pages:
 
     // Add Panel FORMAT PCBNEW
-    m_PanelNetType[PANELPCBNEW] = new EDA_NoteBookPage( m_NoteBook, wxT(
-                                                            "Pcbnew" ), NET_TYPE_PCBNEW,
+    m_PanelNetType[PANELPCBNEW] = new EDA_NoteBookPage( m_NoteBook,
+                                                        wxT( "Pcbnew" ),
+                                                        NET_TYPE_PCBNEW,
                                                         ID_CURRENT_FORMAT_IS_DEFAULT,
                                                         ID_CREATE_NETLIST );
 
     // Add Panel FORMAT ORCADPCB2
-    m_PanelNetType[PANELORCADPCB2] = new EDA_NoteBookPage( m_NoteBook, wxT(
-                                                               "OrcadPCB2" ), NET_TYPE_ORCADPCB2,
+    m_PanelNetType[PANELORCADPCB2] = new EDA_NoteBookPage( m_NoteBook,
+                                                           wxT( "OrcadPCB2" ),
+                                                           NET_TYPE_ORCADPCB2,
                                                            ID_CURRENT_FORMAT_IS_DEFAULT,
                                                            ID_CREATE_NETLIST );
 
     // Add Panel FORMAT CADSTAR
-    m_PanelNetType[PANELCADSTAR] = new EDA_NoteBookPage( m_NoteBook, wxT(
-                                                             "CadStar" ), NET_TYPE_CADSTAR,
+    m_PanelNetType[PANELCADSTAR] = new EDA_NoteBookPage( m_NoteBook,
+                                                         wxT( "CadStar" ),
+                                                         NET_TYPE_CADSTAR,
                                                          ID_CURRENT_FORMAT_IS_DEFAULT,
                                                          ID_CREATE_NETLIST );
 
@@ -233,27 +243,31 @@ void WinEDA_NetlistFrame::InstallPageSpice()
     wxButton*         Button;
     EDA_NoteBookPage* page;
 
-    page = m_PanelNetType[PANELSPICE] = new EDA_NoteBookPage( m_NoteBook, wxT(
-                                                                  "Spice" ), NET_TYPE_SPICE, 0, 0 );
+    page = m_PanelNetType[PANELSPICE] = new EDA_NoteBookPage( m_NoteBook,
+                                                              wxT( "Spice" ),
+                                                              NET_TYPE_SPICE,
+                                                              0, 0 );
 
-    page->m_IsCurrentFormat = new wxCheckBox( page, ID_CURRENT_FORMAT_IS_DEFAULT,
-                                             _( "Default format" ) );
+    page->m_IsCurrentFormat =
+        new wxCheckBox( page, ID_CURRENT_FORMAT_IS_DEFAULT,
+                        _( "Default format" ) );
     page->m_IsCurrentFormat->SetValue( g_NetFormat == NET_TYPE_SPICE );
     page->m_LeftBoxSizer->Add( page->m_IsCurrentFormat, 0, wxGROW | wxALL, 5 );
 
     wxString netlist_opt[2] = { _( "Use Net Names" ), _( "Use Net Numbers" ) };
     m_UseNetNamesInNetlist = new wxRadioBox( page, -1, _( "Netlist Options:" ),
                                              wxDefaultPosition, wxDefaultSize,
-                                             2, netlist_opt, 1, wxRA_SPECIFY_COLS );
+                                             2, netlist_opt, 1,
+                                             wxRA_SPECIFY_COLS );
     if( !g_OptNetListUseNames )
         m_UseNetNamesInNetlist->SetSelection( 1 );
     page->m_LeftBoxSizer->Add( m_UseNetNamesInNetlist, 0, wxGROW | wxALL, 5 );
 
     page->m_CommandStringCtrl = new WinEDA_EnterText( page,
-                                                      _(
-                                                          "Simulator command:" ),
+                                                      _( "Simulator command:" ),
                                                       g_SimulatorCommandLine,
-                                                      page->m_LowBoxSizer, wxDefaultSize );
+                                                      page->m_LowBoxSizer,
+                                                      wxDefaultSize );
 
     // Add buttons
     Button = new wxButton( page, ID_CREATE_NETLIST, _( "Netlist" ) );
@@ -277,7 +291,7 @@ void WinEDA_NetlistFrame::InstallCustomPages()
 /* create the pages for custom netlist format selection:
  */
 {
-    int               ii, CustomCount;
+    int ii, CustomCount;
     wxString          title, previoustitle, msg;
     EDA_NoteBookPage* CurrPage;
 
@@ -296,19 +310,23 @@ void WinEDA_NetlistFrame::InstallCustomPages()
         if( title.IsEmpty() )
             CurrPage =
                 m_PanelNetType[PANELCUSTOMBASE + ii] =
-                    new EDA_NoteBookPage( m_NoteBook, _( "Add Plugin" ),
+                    new EDA_NoteBookPage( m_NoteBook,
+                                          _( "Add Plugin" ),
                                           NET_TYPE_CUSTOM1 + ii,
-                                          ID_CURRENT_FORMAT_IS_DEFAULT, ID_SETUP_PLUGIN );
+                                          ID_CURRENT_FORMAT_IS_DEFAULT,
+                                          ID_SETUP_PLUGIN );
         else  /* Install a plugin panel */
             CurrPage =
                 m_PanelNetType[PANELCUSTOMBASE + ii] =
-                    new EDA_NoteBookPage( m_NoteBook, title,
+                    new EDA_NoteBookPage( m_NoteBook,
+                                          title,
                                           NET_TYPE_CUSTOM1 + ii,
-                                          ID_CURRENT_FORMAT_IS_DEFAULT, ID_CREATE_NETLIST );
+                                          ID_CURRENT_FORMAT_IS_DEFAULT,
+                                          ID_CREATE_NETLIST );
 
         msg = CUSTOM_NETLIST_COMMAND;
         msg << ii + 1;
-        wxString Command = m_Parent->m_Parent->m_EDA_Config->Read( msg );
+        wxString Command = wxGetApp().m_EDA_Config->Read( msg );
         CurrPage->m_CommandStringCtrl =
             new WinEDA_EnterText( CurrPage,
                                   _( "Netlist command:" ), Command,
@@ -334,7 +352,7 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     wxString FullFileName, Mask, Path;
 
     Mask = wxT( "*" );
-    Path = g_EDA_Appl->m_BinDir;
+    Path = wxGetApp().m_BinDir;
     FullFileName = EDA_FileSelector( _( "Plugin files:" ),
                                      Path,          /* Chemin par defaut */
                                      FullFileName,  /* nom fichier par defaut */
@@ -358,16 +376,16 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     wxString title = CurrPage->m_TitleStringCtrl->GetValue();
     if( title.IsEmpty() )
         DisplayInfo( this,
-                    _(
-                        "Do not forget to choose a title for this netlist control page" ) );
+                    _( "Do not forget to choose a title for this netlist control page" ) );
 }
 
 
 /*****************************************************************/
 void WinEDA_NetlistFrame::SelectNetlistType( wxCommandEvent& event )
 /*****************************************************************/
+
 /* Called when the check box "default format" is clicked
-*/
+ */
 {
     int ii;
     EDA_NoteBookPage* CurrPage;
@@ -450,7 +468,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 
     Mask = wxT( "*" ) + FileExt + wxT( "*" );
     ChangeFileNameExt( FullFileName, FileExt );
-	FullFileName = FullFileName.AfterLast('/');
+    FullFileName = FullFileName.AfterLast( '/' );
     FullFileName = EDA_FileSelector( _( "Netlist files:" ),
                                      wxEmptyString, /* Defaut path */
                                      FullFileName,  /* Defaut filename */
@@ -473,8 +491,10 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     }
 
     /* Cleanup the entire hierarchy */
-	EDA_ScreenList ScreenList;
-    for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    EDA_ScreenList ScreenList;
+    for( SCH_SCREEN* screen = ScreenList.GetFirst();
+        screen != NULL;
+        screen = ScreenList.GetNext() )
     {
         bool ModifyWires;
         ModifyWires = screen->SchematicCleanUp( NULL );
@@ -559,6 +579,7 @@ void WinEDA_NetlistFrame::WriteCurrentNetlistSetup( void )
  */
 {
     wxString msg, Command;
+    wxConfig* config = wxGetApp().m_EDA_Config;
 
     NetlistUpdateOpt();
 
@@ -577,16 +598,16 @@ void WinEDA_NetlistFrame::WriteCurrentNetlistSetup( void )
             {
                 msg = CUSTOM_NETLIST_TITLE;
                 msg << ii + 1;
-                m_Parent->m_Parent->m_EDA_Config->Write( msg, title );
+                config->Write( msg, title );
             }
         }
 
         if( CurrPage->m_CommandStringCtrl )
         {
             Command = CurrPage->m_CommandStringCtrl->GetValue();
-            msg = CUSTOM_NETLIST_COMMAND;
+            msg     = CUSTOM_NETLIST_COMMAND;
             msg << ii + 1;
-            m_Parent->m_Parent->m_EDA_Config->Write( msg, Command );
+            config->Write( msg, Command );
         }
     }
 }
@@ -600,7 +621,8 @@ void WinEDA_NetlistFrame::DeletePluginPanel( wxCommandEvent& event )
  * Remove a panel relative to a netlist plugin
  */
 {
-    EDA_NoteBookPage* CurrPage = (EDA_NoteBookPage*) m_NoteBook->GetCurrentPage();
+    EDA_NoteBookPage* CurrPage =
+        (EDA_NoteBookPage*) m_NoteBook->GetCurrentPage();
 
     CurrPage->m_CommandStringCtrl->SetValue( wxEmptyString );
     CurrPage->m_TitleStringCtrl->SetValue( wxEmptyString );
@@ -622,7 +644,8 @@ void WinEDA_NetlistFrame::ValidatePluginPanel( wxCommandEvent& event )
  * Validate the panel info relative to a new netlist plugin
  */
 {
-    EDA_NoteBookPage* CurrPage = (EDA_NoteBookPage*) m_NoteBook->GetCurrentPage();
+    EDA_NoteBookPage* CurrPage =
+        (EDA_NoteBookPage*) m_NoteBook->GetCurrentPage();
 
     if( CurrPage->m_CommandStringCtrl->GetValue() == wxEmptyString )
     {

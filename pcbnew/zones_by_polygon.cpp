@@ -534,9 +534,9 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                     zone->SetNetNameFromNetCode( );
                 }
 
-                m_Parent->m_EDA_Config->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+                wxGetApp().m_EDA_Config->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
                     &g_Zone_Default_Setting.m_ThermalReliefGapValue );
-                m_Parent->m_EDA_Config->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+                wxGetApp().m_EDA_Config->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
                     &g_Zone_Default_Setting.m_ThermalReliefCopperBridgeValue );
 
                 dialog_copper_zone* frame = new dialog_copper_zone( this, &g_Zone_Default_Setting  );

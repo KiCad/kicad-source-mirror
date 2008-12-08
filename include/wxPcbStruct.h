@@ -60,14 +60,15 @@ public:
     int    m_DisplayModEdge;        // How show module drawings
     int    m_DisplayModText;        // How show module texts
     bool   m_DisplayPcbTrackFill;   /* FALSE : tracks are show in sketch mode, TRUE = filled */
-    WinEDA3D_DrawFrame* m_Draw3DFrame;
+    WinEDA3D_DrawFrame*      m_Draw3DFrame;
+    WinEDA_ModuleEditFrame*  m_ModuleEditFrame;
 
 protected:
     GENERAL_COLLECTOR*  m_Collector;
 
 
 public:
-    WinEDA_BasePcbFrame( wxWindow* father, WinEDA_App* parent, int idtype,
+    WinEDA_BasePcbFrame( wxWindow* father, int idtype,
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size,
                          long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
@@ -327,7 +328,7 @@ private:
     void    createPopUpBlockMenu( wxMenu* menu );
 
 public:
-    WinEDA_PcbFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
+    WinEDA_PcbFrame( wxWindow* father, const wxString& title,
                      const wxPoint& pos, const wxSize& size,
                      long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
@@ -743,7 +744,7 @@ private:
     wxMenu*          m_FilesMenu;
 
 public:
-    WinEDA_GerberFrame( wxWindow* father, WinEDA_App* parent, const wxString& title,
+    WinEDA_GerberFrame( wxWindow* father, const wxString& title,
                         const wxPoint& pos, const wxSize& size,
                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
@@ -869,7 +870,7 @@ public:
     wxString m_CurrentLib;
 
 public:
-    WinEDA_ModuleEditFrame( wxWindow* father, WinEDA_App* parent,
+    WinEDA_ModuleEditFrame( wxWindow* father,
                             const wxString& title,
                             const wxPoint& pos, const wxSize& size,
                             long style = KICAD_DEFAULT_DRAWFRAME_STYLE );

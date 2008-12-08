@@ -43,17 +43,14 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 /***************************************************************************/
 {
     MODULE* NewModule;
+    WinEDA_BasePcbFrame* parent = (WinEDA_BasePcbFrame*) GetParent();
 
     if( Module == NULL )
     {
-        if( m_Parent->m_PcbFrame == NULL )
-            return;
-        if( m_Parent->m_PcbFrame->m_Pcb == NULL )
-            return;
-        if( m_Parent->m_PcbFrame->m_Pcb->m_Modules == NULL )
+        if( parent->m_Pcb == NULL || parent->m_Pcb->m_Modules == NULL )
             return;
 
-        Module = Select_1_Module_From_BOARD( m_Parent->m_PcbFrame->m_Pcb );
+        Module = Select_1_Module_From_BOARD( parent->m_Pcb );
     }
 
     if( Module == NULL )

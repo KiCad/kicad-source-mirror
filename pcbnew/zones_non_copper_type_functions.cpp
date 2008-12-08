@@ -134,9 +134,9 @@ void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
         break;
     }
 
-    if( m_Parent->m_Parent->m_EDA_Config )
+    if( wxGetApp().m_EDA_Config )
     {
-        m_Parent->m_Parent->m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
+        wxGetApp().m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
             (long) g_Zone_Default_Setting.m_Zone_HatchingStyle );
     }
 

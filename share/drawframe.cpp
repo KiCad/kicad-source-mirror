@@ -39,10 +39,10 @@
 /*******************************************************/
 
 WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
-                                    WinEDA_App* parent, const wxString& title,
+                                    const wxString& title,
                                     const wxPoint& pos, const wxSize& size,
                                     long style ) :
-    WinEDA_BasicFrame( father, idtype, parent, title, pos, size, style )
+    WinEDA_BasicFrame( father, idtype, title, pos, size, style )
 {
     wxSize minsize;
 
@@ -119,7 +119,7 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 /****************************************/
 {
     if( DrawPanel )  // Required: in WinEDA3D_DrawFrame, DrawPanel == NULL !
-        m_Parent->m_EDA_Config->Write( wxT( "AutoPAN" ),
+        wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ),
                                        DrawPanel->m_AutoPAN_Enable );
 }
 
@@ -869,8 +869,8 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 {
     int id = event.GetId();
 
-    m_Parent->SetLanguageIdentifier( id );
-    m_Parent->SetLanguage();
+    wxGetApp().SetLanguageIdentifier( id );
+    wxGetApp().SetLanguage();
 }
 
 

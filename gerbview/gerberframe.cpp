@@ -22,99 +22,104 @@
 /****************************************/
 
 BEGIN_EVENT_TABLE( WinEDA_GerberFrame, wxFrame )
-COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_GerberFrame::OnSize )
+    COMMON_EVENTS_DRAWFRAME
+    EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_GerberFrame::OnSize )
 
-EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-    WinEDA_GerberFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
+                    WinEDA_GerberFrame::Process_Zoom )
 
-EVT_TOOL( ID_LOAD_FILE, WinEDA_GerberFrame::Files_io )
-EVT_TOOL( ID_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, WinEDA_GerberFrame::Files_io )
-EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, WinEDA_GerberFrame::Files_io )
-EVT_TOOL( ID_NEW_BOARD, WinEDA_GerberFrame::Files_io )
-EVT_TOOL( ID_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_LOAD_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_APPEND_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_NEW_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( ID_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
 
-EVT_MENU_RANGE( ID_PREFERENCES_FONT_INFOSCREEN, ID_PREFERENCES_FONT_END,
-    WinEDA_DrawFrame::ProcessFontPreferences )
+    EVT_MENU_RANGE( ID_PREFERENCES_FONT_INFOSCREEN, ID_PREFERENCES_FONT_END,
+                    WinEDA_DrawFrame::ProcessFontPreferences )
 
 // Menu Files:
-EVT_MENU( ID_MENU_LOAD_FILE, WinEDA_GerberFrame::Files_io )
-EVT_MENU( ID_MENU_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-EVT_MENU( ID_MENU_NEW_BOARD, WinEDA_GerberFrame::Files_io )
-EVT_MENU( ID_MENU_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
-EVT_MENU( ID_MENU_SAVE_BOARD_AS, WinEDA_GerberFrame::Files_io )
-EVT_MENU( ID_GEN_PLOT, WinEDA_GerberFrame::ToPlotter )
-EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, WinEDA_GerberFrame::ExportDataInPcbnewFormat )
+    EVT_MENU( ID_MENU_LOAD_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_MENU_APPEND_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_MENU_NEW_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_MENU_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_MENU_SAVE_BOARD_AS, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_GEN_PLOT, WinEDA_GerberFrame::ToPlotter )
+    EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW,
+              WinEDA_GerberFrame::ExportDataInPcbnewFormat )
 
-EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
-    WinEDA_GerberFrame::Files_io )
+    EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
+                    WinEDA_GerberFrame::Files_io )
 
-EVT_MENU( ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions )
 
 // menu Config
-EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START, ID_CONFIG_AND_PREFERENCES_END,
-    WinEDA_GerberFrame::Process_Config )
+    EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
+                    ID_CONFIG_AND_PREFERENCES_END,
+                    WinEDA_GerberFrame::Process_Config )
 
-EVT_MENU( ID_COLORS_SETUP, WinEDA_GerberFrame::Process_Config )
-EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config )
-EVT_MENU( ID_PCB_LOOK_SETUP, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_COLORS_SETUP, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_PCB_LOOK_SETUP, WinEDA_GerberFrame::Process_Config )
 
-EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-    WinEDA_DrawFrame::SetLanguage )
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
+                    WinEDA_DrawFrame::SetLanguage )
 
 // menu Postprocess
-EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_MENU( ID_GERBVIEW_SHOW_SOURCE,
-    WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES,
+              WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
+              WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_SHOW_SOURCE,
+              WinEDA_GerberFrame::Process_Special_Functions )
 
 
 // menu Miscellaneous
-EVT_MENU( ID_PCB_GLOBAL_DELETE, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_GLOBAL_DELETE,
+              WinEDA_GerberFrame::Process_Special_Functions )
 
 // Menu Help
-EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
-EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
+    EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
+    EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
 
-EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
-EVT_TOOL( wxID_CUT, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( wxID_COPY, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( wxID_PASTE, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( ID_UNDO_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( ID_GEN_PRINT, WinEDA_GerberFrame::ToPrinter )
-EVT_TOOL( ID_FIND_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( ID_DRC_CONTROL, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER,
-    WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
+    EVT_TOOL( wxID_CUT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( wxID_COPY, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( wxID_PASTE, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_UNDO_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_GEN_PRINT, WinEDA_GerberFrame::ToPrinter )
+    EVT_TOOL( ID_FIND_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_DRC_CONTROL, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER,
+                         WinEDA_GerberFrame::Process_Special_Functions )
 
-EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBER_SELECT_TOOL,
-    WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBER_SELECT_TOOL,
+                         WinEDA_GerberFrame::Process_Special_Functions )
 
 
 // Vertical toolbar:
-EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( ID_TRACK_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( ID_PCB_ZONES_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_TRACK_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_ZONES_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT,
+              WinEDA_GerberFrame::Process_Special_Functions )
 
 // Annulation de commande en cours
-EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-    WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
+                    WinEDA_PcbFrame::Process_Special_Functions )
 
 // Pop up menu
-EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
-    WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
+              WinEDA_GerberFrame::Process_Special_Functions )
 
 // Option toolbar
-EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
-    WinEDA_GerberFrame::OnSelectOptionToolbar )
-
+    EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+                    WinEDA_GerberFrame::OnSelectOptionToolbar )
 
 // PopUp Menu trait�s dans drawpanel.cpp
-
 END_EVENT_TABLE()
 
 
@@ -122,18 +127,18 @@ END_EVENT_TABLE()
 /* Constructeur */
 /****************/
 
-WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow* father,
-                                        WinEDA_App* parent,
+WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
                                         const wxString& title,
-                                        const wxPoint& pos,
-                                        const wxSize& size,
-                                        long style ) :
-    WinEDA_BasePcbFrame( father, parent, GERBER_FRAME, title, pos, size, style )
+                                        const wxPoint&  pos,
+                                        const wxSize&   size,
+                                        long            style ) :
+    WinEDA_BasePcbFrame( father, GERBER_FRAME, title, pos, size, style )
 {
-    m_FrameName      = wxT( "GerberFrame" );
+    m_FrameName = wxT( "GerberFrame" );
+
     //m_AboutTitle     = g_GerbviewAboutTitle;
-    m_Draw_Axis      = TRUE;    // TRUE pour avoir les axes dessines
-    m_Draw_Grid      = TRUE;    // TRUE pour avoir la axes dessinee
+    m_Draw_Axis = TRUE;         // TRUE pour avoir les axes dessines
+    m_Draw_Grid = TRUE;         // TRUE pour avoir la axes dessinee
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
     m_Ident = GERBER_FRAME;
     m_ZoomMaxValue = 1024;
@@ -160,7 +165,6 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow* father,
 
 WinEDA_GerberFrame::~WinEDA_GerberFrame()
 {
-    m_Parent->m_GerberFrame = NULL;
     SetBaseScreen( ScreenPcb );
 }
 
@@ -208,8 +212,8 @@ void WinEDA_GerberFrame::SetToolbars()
  * Set the tools state for the toolbars, accordint to display options
  */
 {
-    int           layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
-    GERBER*       gerber = g_GERBER_List[layer];
+    int     layer  = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    GERBER* gerber = g_GERBER_List[layer];
 
     if( m_HToolBar == NULL )
         return;
@@ -237,9 +241,11 @@ void WinEDA_GerberFrame::SetToolbars()
     }
 
 
-    if( m_SelLayerBox->GetSelection() != ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer )
+    if( m_SelLayerBox->GetSelection() !=
+        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer )
     {
-        m_SelLayerBox->SetSelection( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+        m_SelLayerBox->SetSelection(
+             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     }
 
     if( gerber )
@@ -264,31 +270,33 @@ void WinEDA_GerberFrame::SetToolbars()
 
     if( m_OptionsToolBar )
     {
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UnitMetric == MILLIMETRE ? TRUE : FALSE );
+        m_OptionsToolBar->ToggleTool(
+            ID_TB_OPTIONS_SELECT_UNIT_MM,
+            g_UnitMetric ==
+            MILLIMETRE ? TRUE : FALSE );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-            g_UnitMetric == INCHES ? TRUE : FALSE );
+                                      g_UnitMetric == INCHES ? TRUE : FALSE );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-            DisplayOpt.DisplayPolarCood );
+                                      DisplayOpt.DisplayPolarCood );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
-            m_Draw_Grid );
+                                      m_Draw_Grid );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-            g_CursorShape );
+                                      g_CursorShape );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-            !m_DisplayPadFill );
+                                      !m_DisplayPadFill );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-            !m_DisplayPcbTrackFill );
+                                      !m_DisplayPcbTrackFill );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-            g_DisplayPolygonsModeSketch == 0 ? 0 : 1 );
+                                      g_DisplayPolygonsModeSketch == 0 ? 0 : 1 );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_DCODES,
-            DisplayOpt.DisplayPadNum );
+                                      DisplayOpt.DisplayPadNum );
     }
 
     DisplayUnitsMsg();

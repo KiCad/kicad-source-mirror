@@ -207,7 +207,7 @@ void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
 /* This function displays and deletes the dialog frame for drill tools
  */
 {
-    wxConfig*          Config = m_Parent->m_EDA_Config;
+    wxConfig*          Config = wxGetApp().m_EDA_Config;
 
     if( Config )
     {
@@ -233,7 +233,7 @@ void WinEDA_DrillFrame::UpdateConfig()
 {
     SetParams();
 
-    wxConfig* Config = m_Parent->m_Parent->m_EDA_Config;
+    wxConfig* Config = wxGetApp().m_EDA_Config;
     if( Config )
     {
         Config->Write( ZerosFormatKey, s_Zeros_Format );

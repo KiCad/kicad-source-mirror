@@ -6,7 +6,6 @@
  */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -22,48 +21,46 @@
 /* class WinEDA_LibeditFrame */
 /*****************************/
 BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, wxFrame )
-COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_LibeditFrame::OnSize )
+    COMMON_EVENTS_DRAWFRAME
+    EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_LibeditFrame::OnSize )
 
-EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                WinEDA_LibeditFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
+                    WinEDA_LibeditFrame::Process_Zoom )
 
 // Tools et boutons de Libedit:
 
 /* Main horizontal toolbar */
-EVT_TOOL_RANGE( ID_LIBEDIT_START_H_TOOL, ID_LIBEDIT_END_H_TOOL,
-                WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_PART_NUMBER,
-                     WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS,
-                     WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_LIBEDIT_START_H_TOOL, ID_LIBEDIT_END_H_TOOL,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_PART_NUMBER,
+                         WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS,
+                         WinEDA_LibeditFrame::Process_Special_Functions )
 
 /* Right Vertical toolbar */
-EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_TOOL_RANGE( ID_LIBEDIT_START_V_TOOL, ID_LIBEDIT_END_V_TOOL,
-                WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_LIBEDIT_START_V_TOOL, ID_LIBEDIT_END_V_TOOL,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
 
 /* PopUp events and commands: */
-EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
-                WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
 
 // Annulation de commande en cours
-EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
 
 // PopUp Menus pour Zooms trait�s dans drawpanel.cpp
-
-
 END_EVENT_TABLE()
 
 
 WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
-                                          WinEDA_App*     parent,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
                                           long style ) :
-    WinEDA_DrawFrame( father, LIBEDITOR_FRAME, parent, title, pos, size, style )
+    WinEDA_DrawFrame( father, LIBEDITOR_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "LibeditFrame" );
     m_Draw_Axis = TRUE;             // TRUE pour avoir les axes dessines
@@ -89,7 +86,9 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
 WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 /**********************************************/
 {
-    m_Parent->m_LibeditFrame = NULL;
+    WinEDA_SchematicFrame* frame =
+        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    frame->m_LibeditFrame = NULL;
 }
 
 

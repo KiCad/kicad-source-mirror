@@ -6,6 +6,7 @@
 #ifdef KICAD_PYTHON
 #include <pyhandler.h>
 #endif
+
 #include "fctsys.h"
 #include "common.h"
 #include "kicad.h"
@@ -22,13 +23,15 @@ void WinEDA_MainFrame::Load_Prj_Config()
 {
     if( !wxFileExists( m_PrjFileName ) )
     {
-        wxString msg = _( "Project File <" ) + m_PrjFileName + _( "> not found" );
+        wxString msg = _( "Project File <" ) + m_PrjFileName +
+            _( "> not found" );
         DisplayError( this, msg );
         return;
     }
 
     wxSetWorkingDirectory( wxPathOnly( m_PrjFileName ) );
-    SetTitle( g_Main_Title + wxT( " " ) + GetBuildVersion() + wxT( " " ) + m_PrjFileName );
+    SetTitle( g_Main_Title + wxT( " " ) + GetBuildVersion() + wxT( " " ) +
+              m_PrjFileName );
     ReCreateMenuBar();
     m_LeftWin->ReCreateTreePrj();
 
@@ -38,7 +41,7 @@ void WinEDA_MainFrame::Load_Prj_Config()
 
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::LoadProject" ),
-        PyHandler::Convert( m_PrjFileName ) );
+                                            PyHandler::Convert( m_PrjFileName ) );
 #endif
 }
 
@@ -57,21 +60,19 @@ void WinEDA_MainFrame::Save_Prj_Config()
     ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
     FullFileName = EDA_FileSelector( _( "Save project file" ),
-        wxGetCwd(),                             /* Chemin par defaut */
-        FullFileName,                           /* nom fichier par defaut */
-        g_Prj_Config_Filename_ext,              /* extension par defaut */
-        mask,                                   /* Masque d'affichage */
-        this,
-        wxFD_SAVE,
-        TRUE
-        );
+                                     wxGetCwd(),                /* Chemin par defaut */
+                                     FullFileName,              /* nom fichier par defaut */
+                                     g_Prj_Config_Filename_ext, /* extension par defaut */
+                                     mask,                      /* Masque d'affichage */
+                                     this,
+                                     wxFD_SAVE,
+                                     TRUE
+                                     );
 
     if( FullFileName.IsEmpty() )
         return;
 
     /* ecriture de la configuration */
-    g_EDA_Appl->WriteProjectConfig( FullFileName, wxT( "/general" ), CfgParamList );
+    wxGetApp().WriteProjectConfig( FullFileName, wxT( "/general" ),
+                                   CfgParamList );
 }
-
-
-// vim: set tabstop=4 : noexpandtab :

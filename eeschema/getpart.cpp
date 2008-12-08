@@ -3,7 +3,6 @@
 /*************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 
@@ -27,21 +26,20 @@ static wxPoint OldPos;
 wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
 /*******************************************************/
 {
-    wxString             name;
-    WinEDA_ViewlibFrame* Viewer;
-    wxSemaphore          semaphore( 0, 1 );
+    wxString               name;
+    WinEDA_ViewlibFrame*   Viewer;
+    wxSemaphore            semaphore( 0, 1 );
+    WinEDA_SchematicFrame* frame;
 
-    Viewer = parent->m_Parent->m_ViewlibFrame;
+    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
+
+    Viewer = frame->m_ViewlibFrame;
     /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
     if( Viewer )
         Viewer->Destroy();
 
-    Viewer = parent->m_Parent->m_ViewlibFrame = new
-                                              WinEDA_ViewlibFrame(
-                 parent->m_Parent->m_SchematicFrame,
-                 parent->m_Parent,
-                 NULL,
-                 &semaphore );
+    Viewer = frame->m_ViewlibFrame =
+        new WinEDA_ViewlibFrame( frame, NULL, &semaphore );
     Viewer->AdjustScrollBars();
 
     // Show the library viewer frame until it is closed
@@ -57,10 +55,10 @@ wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
 
 
 /**************************************************************************/
-SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
-                                                               const wxString& libname,
-                                                               wxArrayString& HistoryList,
-                                                               bool UseLibBrowser )
+SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component(wxDC*           DC,
+                                                     const wxString& libname,
+                                                     wxArrayString&  HistoryList,
+                                                     bool            UseLibBrowser )
 /**************************************************************************/
 
 /* load from a library and place a component
@@ -68,11 +66,11 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
  *  else search in all loaded libs
  */
 {
-    int                     ii, CmpCount = 0;
+    int ii, CmpCount = 0;
     LibDrawField*           Field;
     EDA_LibComponentStruct* Entry = NULL;
-    SCH_COMPONENT* DrawLibItem = NULL;
-    LibraryStruct*          Library = NULL;
+    SCH_COMPONENT*          DrawLibItem = NULL;
+    LibraryStruct*          Library     = NULL;
     wxString                Name, keys, msg;
     bool                    AllowWildSeach = TRUE;
 
@@ -179,11 +177,11 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
 
     DrawLibItem = new SCH_COMPONENT( GetScreen()->m_Curseur );
-    DrawLibItem->m_Multi     = 1;/* Selection de l'unite 1 dans le boitier */
+    DrawLibItem->m_Multi     = 1; /* Selection de l'unite 1 dans le boitier */
     DrawLibItem->m_Convert   = 1;
     DrawLibItem->m_ChipName  = Name;
     DrawLibItem->m_TimeStamp = GetTimeStamp();
-    DrawLibItem->m_Flags = IS_NEW | IS_MOVED;
+    DrawLibItem->m_Flags     = IS_NEW | IS_MOVED;
 
     /* Init champ Valeur */
     DrawLibItem->GetField( VALUE )->m_Pos.x =
@@ -203,19 +201,22 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
     msg += wxT( "?" );
 
     //update the reference -- just the prefix for now.
-    DrawLibItem->SetRef(GetSheet(), msg );
+    DrawLibItem->SetRef( GetSheet(), msg );
 
     /* Init champ Reference */
     DrawLibItem->GetField( REFERENCE )->m_Pos.x =
         Entry->m_Prefix.m_Pos.x + DrawLibItem->m_Pos.x;
     DrawLibItem->GetField( REFERENCE )->m_Pos.y =
         Entry->m_Prefix.m_Pos.y + DrawLibItem->m_Pos.y;
-    DrawLibItem->GetField( REFERENCE )->m_Orient    = Entry->m_Prefix.m_Orient;
-    DrawLibItem->GetField( REFERENCE )->m_Size      = Entry->m_Prefix.m_Size;
+    DrawLibItem->GetField( REFERENCE )->m_Orient = Entry->m_Prefix.m_Orient;
+    DrawLibItem->GetField( REFERENCE )->m_Size   = Entry->m_Prefix.m_Size;
     DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
-    DrawLibItem->GetField( REFERENCE )->m_Attributs = Entry->m_Prefix.m_Attributs;
-    DrawLibItem->GetField( REFERENCE )->m_HJustify  = Entry->m_Prefix.m_HJustify;
-    DrawLibItem->GetField( REFERENCE )->m_VJustify  = Entry->m_Prefix.m_VJustify;
+    DrawLibItem->GetField( REFERENCE )->m_Attributs =
+        Entry->m_Prefix.m_Attributs;
+    DrawLibItem->GetField( REFERENCE )->m_HJustify =
+        Entry->m_Prefix.m_HJustify;
+    DrawLibItem->GetField( REFERENCE )->m_VJustify =
+        Entry->m_Prefix.m_VJustify;
 
     /* Init des autres champs si predefinis dans la librairie */
     for( Field = Entry->Fields; Field != NULL; Field = Field->Next() )
@@ -253,14 +254,14 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC* DC,
 
 
 /**************************************************************************/
-/*** 				Routine de deplacement du composant. 				***/
+/***                Routine de deplacement du composant.                ***/
 /***  Appele par GeneralControle grace a  ActiveScreen->ManageCurseur.  ***/
 /**************************************************************************/
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    wxPoint move_vector;
+    wxPoint        move_vector;
 
-    SCH_SCREEN* screen = (SCH_SCREEN*) panel->GetScreen();
+    SCH_SCREEN*    screen = (SCH_SCREEN*) panel->GetScreen();
 
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) screen->GetCurItem();
 
@@ -298,7 +299,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
             DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
         else
         {
-            DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox());
+            DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox() );
         }
     }
 
@@ -310,7 +311,9 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
         if( DrawComponent->m_Flags )
             DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
         else
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
+                                                         0 ),
+                                 GR_DEFAULT_DRAWMODE );
         DrawPanel->CursorOn( DC );
     }
 
@@ -326,7 +329,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 /* Routine de sortie de la fonction de placement de composant
  */
 {
-    SCH_SCREEN* screen = (SCH_SCREEN*) Panel->GetScreen();
+    SCH_SCREEN*    screen = (SCH_SCREEN*) Panel->GetScreen();
 
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) screen->GetCurItem();
 
@@ -369,7 +372,8 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = FindLibPart( DrawComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    LibEntry = FindLibPart(
+        DrawComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( LibEntry == NULL )
         return;
 
@@ -399,7 +403,8 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
     if( DrawComponent->m_Flags )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
+                                                     0 ), GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
@@ -408,7 +413,7 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 
 /************************************************************************/
 void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
-                                         wxDC*                   DC )
+                                         wxDC*          DC )
 /************************************************************************/
 {
     int ii;
@@ -417,7 +422,8 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = FindLibPart( DrawComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    LibEntry = FindLibPart(
+        DrawComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
     if( LibEntry == NULL )
         return;
 
@@ -440,7 +446,8 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
     if( DrawComponent->m_Flags & IS_MOVED )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
+                                                     0 ), GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
@@ -477,7 +484,7 @@ int LookForConvertPart( EDA_LibComponentStruct* LibEntry )
 
 /***********************************************************************************/
 void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
-                                           wxDC*                   DC )
+                                           wxDC*          DC )
 /***********************************************************************************/
 {
     if( Component == NULL )
@@ -487,7 +494,8 @@ void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
 
     if( Component->m_Flags == 0 )
     {
-        if( g_ItemToUndoCopy ){
+        if( g_ItemToUndoCopy )
+        {
             SAFE_DELETE( g_ItemToUndoCopy );
         }
         g_ItemToUndoCopy = Component->GenCopy();
@@ -504,6 +512,7 @@ void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
     memcpy( OldTransMat, Component->m_Transform, sizeof(OldTransMat) );
 
 #if 1
+
     // switch from normal mode to xor mode for the duration of the move, first
     // by erasing fully any "normal drawing mode" primitives with the PostDirtyRect(),
     // then by drawing the first time in xor mode so that subsequent xor

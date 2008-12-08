@@ -41,10 +41,10 @@ END_EVENT_TABLE()
 
 
 /******************************************************************************/
-WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father, WinEDA_App* parent,
+WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow* father,
                                           LibraryStruct* Library,
                                           wxSemaphore* semaphore ) :
-    WinEDA_DrawFrame( father, VIEWER_FRAME, parent, _( "Library browser" ),
+    WinEDA_DrawFrame( father, VIEWER_FRAME, _( "Library browser" ),
                       wxDefaultPosition, wxDefaultSize )
 /******************************************************************************/
 {
@@ -105,7 +105,9 @@ WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
     delete GetScreen();
     SetBaseScreen( 0 );
 
-    m_Parent->m_ViewlibFrame = NULL;
+    WinEDA_SchematicFrame* frame =
+        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    frame->m_ViewlibFrame = NULL;
 }
 
 

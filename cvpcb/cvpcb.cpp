@@ -1,6 +1,6 @@
-	/*******************/
-	/* File: cvpcb.cpp */
-	/*******************/
+/*******************/
+/* File: cvpcb.cpp */
+/*******************/
 #define MAIN
 #define eda_global
 
@@ -9,7 +9,6 @@
 
 #include "cvpcb.h"
 #include "trigo.h"
-#include "gr_basic.h"
 #include "zones.h"
 
 #include "bitmaps.h"
@@ -18,77 +17,76 @@
 
 #include "id.h"
 
-wxString g_Main_Title = wxT("CVpcb");
+wxString g_Main_Title = wxT( "CVpcb" );
 
 // Create a new application object
-IMPLEMENT_APP(WinEDA_App)
+IMPLEMENT_APP( WinEDA_App )
 
 /* fonctions locales */
 
-	/************************************/
-	/* Called to initialize the program */
-	/************************************/
+/************************************/
+/* Called to initialize the program */
+/************************************/
 
 bool WinEDA_App::OnInit()
 {
-wxString msg;
-wxString currCWD = wxGetCwd();
+    wxString           msg;
+    wxString           currCWD = wxGetCwd();
+    WinEDA_CvpcbFrame* frame   = NULL;
 
-	g_EDA_Appl = this;
-	InitEDA_Appl( wxT("cvpcb") );
+    InitEDA_Appl( wxT( "cvpcb" ) );
 
-    if ( m_Checker && m_Checker->IsAnotherRunning() ) 
-    { 
-        if ( ! IsOK(NULL, _("Cvpcb is already running, Continue?") ) )
-			return false; 
+    if( m_Checker && m_Checker->IsAnotherRunning() )
+    {
+        if( !IsOK( NULL, _( "Cvpcb is already running, Continue?" ) ) )
+            return false;
     }
-	
-	GetSettings();					// read current setup
 
-	wxSetWorkingDirectory(currCWD); // mofifie par GetSetting
-	SetRealLibraryPath( wxT("modules") );
+    GetSettings();                      // read current setup
 
-	if(argc > 1 )
-	{
-		NetInNameBuffer = argv[1];
-		NetNameBuffer = argv[1];
-	}
+    wxSetWorkingDirectory( currCWD );   // mofifie par GetSetting
+    SetRealLibraryPath( wxT( "modules" ) );
 
-	if ( ! NetInNameBuffer.IsEmpty() )
-		wxSetWorkingDirectory( wxPathOnly(NetInNameBuffer) );
-	g_DrawBgColor = BLACK;
+    if( argc > 1 )
+    {
+        NetInNameBuffer = argv[1];
+        NetNameBuffer   = argv[1];
+    }
 
-	Read_Config(NetInNameBuffer);
+    if( !NetInNameBuffer.IsEmpty() )
+        wxSetWorkingDirectory( wxPathOnly( NetInNameBuffer ) );
+    g_DrawBgColor = BLACK;
 
-	wxString Title = g_Main_Title + wxT(" ") + GetBuildVersion();
-	m_CvpcbFrame = new WinEDA_CvpcbFrame(this, Title);
+    Read_Config( NetInNameBuffer );
 
-	msg.Printf( wxT("Modules: %d"), nblib);
-	m_CvpcbFrame->SetStatusText(msg,2);
+    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    frame = new WinEDA_CvpcbFrame( Title );
 
-	// Show the frame
-	SetTopWindow(m_CvpcbFrame);
+    msg.Printf( wxT( "Modules: %d" ), nblib );
+    frame->SetStatusText( msg, 2 );
 
-	m_CvpcbFrame->Show(TRUE);
+    // Show the frame
+    SetTopWindow( frame );
 
-	listlib();
-	m_CvpcbFrame->BuildFootprintListBox();
+    frame->Show( TRUE );
 
-	if( ! NetInNameBuffer.IsEmpty() ) /* nom de fichier passe a la commande */
-		{
-		FFileName = MakeFileName(NetDirBuffer,
-							NetInNameBuffer, NetInExtBuffer);
+    listlib();
+    frame->BuildFootprintListBox();
 
-		m_CvpcbFrame->ReadNetListe();
-		}
-	else		/* Mise a jour du titre de la fenetre principale */
-		{
-		wxString Title = g_Main_Title + wxT(" ") + GetBuildVersion();
- 		msg.Printf( wxT("%s {%s%c} [no file]"),
-			Title.GetData(), wxGetCwd().GetData(), DIR_SEP);
-		m_CvpcbFrame->SetTitle(msg);
-		}
+    if( !NetInNameBuffer.IsEmpty() )  /* nom de fichier passe a la commande */
+    {
+        FFileName = MakeFileName( NetDirBuffer,
+                                  NetInNameBuffer, NetInExtBuffer );
 
-  return TRUE;
+        frame->ReadNetListe();
+    }
+    else        /* Mise a jour du titre de la fenetre principale */
+    {
+        wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+        msg.Printf( wxT( "%s {%s%c} [no file]" ),
+                    Title.GetData(), wxGetCwd().GetData(), DIR_SEP );
+        frame->SetTitle( msg );
+    }
+
+    return TRUE;
 }
-

@@ -14,17 +14,18 @@
 
 /*********************************************************************/
 static bool ReCreatePrjConfig( const wxString& local_config_filename,
-                               const wxString& GroupName, bool ForceUseLocalConfig )
+                               const wxString& GroupName,
+                               bool            ForceUseLocalConfig )
 /*********************************************************************/
 
 /* Cree ou recree la configuration locale de kicad (filename.pro)
-  * initialise:
-  *     g_Prj_Config
-  *     g_Prj_Config_LocalFilename
-  *     g_Prj_Default_Config_FullFilename
-  * return:
-  *     TRUE si config locale
-  *     FALSE si default config
+ * initialise:
+ *     g_Prj_Config
+ *     g_Prj_Config_LocalFilename
+ *     g_Prj_Default_Config_FullFilename
+ * return:
+ *     TRUE si config locale
+ *     FALSE si default config
  */
 {
     // free old config
@@ -44,8 +45,10 @@ static bool ReCreatePrjConfig( const wxString& local_config_filename,
     if( ForceUseLocalConfig || wxFileExists( g_Prj_Config_LocalFilename ) )
     {
         g_Prj_Default_Config_FullFilename.Empty();
-        g_Prj_Config = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                         g_Prj_Config_LocalFilename, wxEmptyString,
+        g_Prj_Config = new wxFileConfig( wxEmptyString,
+                                         wxEmptyString,
+                                         g_Prj_Config_LocalFilename,
+                                         wxEmptyString,
                                          wxCONFIG_USE_RELATIVE_PATH );
 
         g_Prj_Config->DontCreateOnDemand();
@@ -73,8 +76,10 @@ static bool ReCreatePrjConfig( const wxString& local_config_filename,
         g_Prj_Config_Filename_ext;
 
     // Recreate new config
-    g_Prj_Config = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                     wxEmptyString, g_Prj_Default_Config_FullFilename,
+    g_Prj_Config = new wxFileConfig( wxEmptyString,
+                                     wxEmptyString,
+                                     wxEmptyString,
+                                     g_Prj_Default_Config_FullFilename,
                                      wxCONFIG_USE_RELATIVE_PATH );
 
     g_Prj_Config->DontCreateOnDemand();
@@ -84,8 +89,9 @@ static bool ReCreatePrjConfig( const wxString& local_config_filename,
 
 
 /***************************************************************************************/
-void WinEDA_App::WriteProjectConfig( const wxString& local_config_filename,
-                                     const wxString& GroupName, PARAM_CFG_BASE** List )
+void WinEDA_App::WriteProjectConfig( const wxString&  local_config_filename,
+                                     const wxString&  GroupName,
+                                     PARAM_CFG_BASE** List )
 /***************************************************************************************/
 /* enregistrement de la config "projet"*/
 {
@@ -93,11 +99,11 @@ void WinEDA_App::WriteProjectConfig( const wxString& local_config_filename,
     wxString msg;
 
     ReCreatePrjConfig( local_config_filename, GroupName,
-        FORCE_LOCAL_CONFIG );
+                       FORCE_LOCAL_CONFIG );
 
     /* Write date ( surtout pour eviter bug de wxFileConfig
-      * qui se trompe de rubrique si declaration [xx] en premiere ligne
-      * (en fait si groupe vide) */
+     * qui se trompe de rubrique si declaration [xx] en premiere ligne
+     * (en fait si groupe vide) */
     g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
     msg = DateAndTime();
 
@@ -203,7 +209,8 @@ void WinEDA_App::WriteProjectConfig( const wxString& local_config_filename,
 
                 // We use indexlib+1 because first lib name is LibName1
                 cle_config << (indexlib + 1);
-                g_Prj_Config->Write( cle_config, libname_list->Item( indexlib ) );
+                g_Prj_Config->Write( cle_config,
+                                     libname_list->Item( indexlib ) );
             }
 
             break;
@@ -226,20 +233,21 @@ void WinEDA_App::WriteProjectConfig( const wxString& local_config_filename,
 
 
 /***************************************************************************************/
-bool WinEDA_App::ReadProjectConfig( const wxString& local_config_filename,
-                                    const wxString& GroupName, PARAM_CFG_BASE** List,
-                                    bool Load_Only_if_New )
+bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
+                                    const wxString&  GroupName,
+                                    PARAM_CFG_BASE** List,
+                                    bool             Load_Only_if_New )
 /***************************************************************************************/
 
 /* Lecture de la config "projet"
  *** si Load_Only_if_New == TRUE, elle n'est lue que si elle
  *** est differente de la config actuelle (dates differentes)
  *
-  * return:
-  *     TRUE si lue.
-  * Met a jour en plus:
-  *     g_EDA_Appl->m_CurrentOptionFileDateAndTime
-  *     g_EDA_Appl->m_CurrentOptionFile
+ * return:
+ *     TRUE si lue.
+ * Met a jour en plus:
+ *     wxGetApp().m_CurrentOptionFileDateAndTime
+ *     wxGetApp().m_CurrentOptionFile
  */
 {
     const PARAM_CFG_BASE* pt_cfg;
@@ -253,22 +261,22 @@ bool WinEDA_App::ReadProjectConfig( const wxString& local_config_filename,
     g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
     timestamp = g_Prj_Config->Read( wxT( "update" ) );
     if( Load_Only_if_New && ( !timestamp.IsEmpty() )
-       && (timestamp == g_EDA_Appl->m_CurrentOptionFileDateAndTime) )
+       && (timestamp == wxGetApp().m_CurrentOptionFileDateAndTime) )
     {
         return FALSE;
     }
 
-    g_EDA_Appl->m_CurrentOptionFileDateAndTime = timestamp;
+    wxGetApp().m_CurrentOptionFileDateAndTime = timestamp;
 
     if( !g_Prj_Default_Config_FullFilename.IsEmpty() )
-        g_EDA_Appl->m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
+        wxGetApp().m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
     else
     {
         if( wxPathOnly( g_Prj_Config_LocalFilename ).IsEmpty() )
-            g_EDA_Appl->m_CurrentOptionFile =
+            wxGetApp().m_CurrentOptionFile =
                 wxGetCwd() + STRING_DIR_SEP + g_Prj_Config_LocalFilename;
         else
-            g_EDA_Appl->m_CurrentOptionFile = g_Prj_Config_LocalFilename;
+            wxGetApp().m_CurrentOptionFile = g_Prj_Config_LocalFilename;
     }
 
     for( ; *List != NULL; List++ )
@@ -437,7 +445,8 @@ PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
 
 
 PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
-                                        int default_val, const wxChar* group ) :
+                                        int default_val,
+                                        const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_SETCOLOR, group )
 {
     m_Pt_param = ptparam;
@@ -445,8 +454,11 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
 }
 
 
-PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, int* ptparam,
-                                        int default_val, const wxChar* group ) :
+PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
+                                        const wxChar* ident,
+                                        int*          ptparam,
+                                        int           default_val,
+                                        const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_SETCOLOR, group )
 {
     m_Pt_param = ptparam;
@@ -467,8 +479,12 @@ PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
 }
 
 
-PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool Insetup, const wxChar* ident, double* ptparam,
-                                    double default_val, double min, double max,
+PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool          Insetup,
+                                    const wxChar* ident,
+                                    double*       ptparam,
+                                    double        default_val,
+                                    double        min,
+                                    double        max,
                                     const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_DOUBLE, group )
 {
@@ -489,8 +505,11 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
 }
 
 
-PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam,
-                                int default_val, const wxChar* group ) :
+PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
+                                const wxChar* ident,
+                                bool*         ptparam,
+                                int           default_val,
+                                const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_BOOL, group )
 {
     m_Pt_param = ptparam;
@@ -500,7 +519,8 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam
 
 
 PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxChar* ident,
-                                        wxString* ptparam, const wxChar* group ) :
+                                        wxString*     ptparam,
+                                        const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_WXSTRING, group )
 {
     m_Pt_param = ptparam;
@@ -508,7 +528,8 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxChar* ident,
 
 
 PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
-                                        wxString* ptparam, const wxChar* group ) :
+                                        wxString* ptparam,
+                                        const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_WXSTRING, group )
 {
     m_Pt_param = ptparam;
@@ -516,8 +537,9 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
 }
 
 
-PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar* ident,
-                                                wxArrayString* ptparam, const wxChar* group ) :
+PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
+                                                wxArrayString* ptparam,
+                                                const wxChar*  group ) :
     PARAM_CFG_BASE( ident, PARAM_LIBNAME_LIST, group )
 {
     m_Pt_param = ptparam;

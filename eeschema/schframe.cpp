@@ -30,8 +30,9 @@
 /*******************************/
 
 BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, wxFrame )
-    COMMON_EVENTS_DRAWFRAME EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV,
-                                        WinEDA_DrawFrame::OnSockRequestServer )
+    COMMON_EVENTS_DRAWFRAME
+    EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV,
+                WinEDA_DrawFrame::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, WinEDA_DrawFrame::OnSockRequest )
 
     EVT_CLOSE( WinEDA_SchematicFrame::OnCloseWindow )
@@ -128,13 +129,14 @@ END_EVENT_TABLE()
 /****************/
 
 WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
-                                              WinEDA_App* parent,
                                               const wxString& title,
                                               const wxPoint& pos,
                                               const wxSize& size,
                                               long style ) :
-    WinEDA_DrawFrame( father, SCHEMATIC_FRAME, parent, title, pos, size, style )
+    WinEDA_DrawFrame( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
     m_FrameName      = wxT( "SchematicFrame" );
     m_Draw_Axis      = FALSE;           // TRUE to show axis
     m_Draw_Grid      = g_ShowGrid;      // TRUE to show a grid
@@ -143,7 +145,8 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
     m_CurrentField   = NULL;
     m_Multiflag      = 0;
     m_TextFieldSize  = DEFAULT_SIZE_TEXT;
-
+    m_LibeditFrame   = NULL;     // Component editor frame.
+    m_ViewlibFrame   = NULL;     // Frame for browsing component libraries
 
     CreateScreens();
 
@@ -159,11 +162,13 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
     /* Get config */
     GetSettings();
 
-    g_DrawMinimunLineWidth =
-        m_Parent->m_EDA_Config->Read( MINI_DRAW_LINE_WIDTH_KEY, (long) 0 );
-
-    g_PlotPSMinimunLineWidth =
-        m_Parent->m_EDA_Config->Read( MINI_PLOTPS_LINE_WIDTH_KEY, (long) 4 );
+    if( config )
+    {
+        g_DrawMinimunLineWidth = config->Read( MINI_DRAW_LINE_WIDTH_KEY,
+                                               (long) 0 );
+        g_PlotPSMinimunLineWidth = config->Read( MINI_PLOTPS_LINE_WIDTH_KEY,
+                                                 (long) 4 );
+    }
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -183,7 +188,6 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow* father,
 
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
-    m_Parent->m_SchematicFrame = NULL;
     SAFE_DELETE( g_RootSheet );
     SAFE_DELETE( m_CurrentSheet ); //a DrawSheetPath, on the heap.
     m_CurrentSheet = NULL;
@@ -290,10 +294,11 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 /*****************************************************************/
 {
     DrawSheetPath* sheet;
+    wxConfig*      config = wxGetApp().m_EDA_Config;
 
-    if( m_Parent->m_LibeditFrame ) // Can close component editor ?
+    if( m_LibeditFrame ) // Can close component editor ?
     {
-        if( !m_Parent->m_LibeditFrame->Close() )
+        if( !m_LibeditFrame->Close() )
             return;
     }
 
@@ -349,10 +354,12 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 
     SaveSettings();
 
-    m_Parent->m_EDA_Config->Write( MINI_DRAW_LINE_WIDTH_KEY,
-        (long) g_DrawMinimunLineWidth );
-    m_Parent->m_EDA_Config->Write( MINI_PLOTPS_LINE_WIDTH_KEY,
-        (long) g_PlotPSMinimunLineWidth );
+    if( config )
+    {
+        config->Write( MINI_DRAW_LINE_WIDTH_KEY, (long) g_DrawMinimunLineWidth );
+        config->Write( MINI_PLOTPS_LINE_WIDTH_KEY,
+                       (long) g_PlotPSMinimunLineWidth );
+    }
 
     Destroy();
 }
@@ -576,16 +583,14 @@ void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
 /*************************************************************************/
 {
-    if( m_Parent->m_ViewlibFrame )
+    if( m_ViewlibFrame )
     {
-        m_Parent->m_ViewlibFrame->Show( TRUE );
+        m_ViewlibFrame->Show( TRUE );
     }
     else
     {
-        m_Parent->m_ViewlibFrame =
-            new WinEDA_ViewlibFrame( m_Parent->m_SchematicFrame,
-                                     m_Parent );
-        m_Parent->m_ViewlibFrame->AdjustScrollBars();
+        m_ViewlibFrame = new WinEDA_ViewlibFrame( this );
+        m_ViewlibFrame->AdjustScrollBars();
     }
 }
 
@@ -593,20 +598,18 @@ void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
 /*************************************************************************/
 {
-    if( m_Parent->m_LibeditFrame )
+    if( m_LibeditFrame )
     {
-        m_Parent->m_LibeditFrame->Show( TRUE );
+        m_LibeditFrame->Show( TRUE );
     }
     else
     {
-        m_Parent->m_LibeditFrame =
-            new WinEDA_LibeditFrame( m_Parent->m_SchematicFrame,
-                                     m_Parent,
-                                     wxT( "Library Editor" ),
-                                     wxPoint( -1, -1 ),
-                                     wxSize( 600, 400 ) );
+        m_LibeditFrame = new WinEDA_LibeditFrame( this,
+                                                  wxT( "Library Editor" ),
+                                                  wxPoint( -1, -1 ),
+                                                  wxSize( 600, 400 ) );
         ActiveScreen = g_ScreenLib;
-        m_Parent->m_LibeditFrame->AdjustScrollBars();
+        m_LibeditFrame->AdjustScrollBars();
     }
 }
 

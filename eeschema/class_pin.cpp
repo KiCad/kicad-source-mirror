@@ -3,7 +3,6 @@
 /*****************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -14,18 +13,25 @@
 
 
 /**********************************************************************************************/
-void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
-                       int aDrawMode, void* aData, int aTransformMatrix[2][2] )
+void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
+                       wxDC*             aDC,
+                       const wxPoint&    aOffset,
+                       int               aColor,
+                       int               aDrawMode,
+                       void*             aData,
+                       int               aTransformMatrix[2][2] )
 /**********************************************************************************************/
 {
-
     // Invisibles pins are only drawn on request.
     // But in libedit they are drawn in g_InvisibleItemColor because we must see them
+    WinEDA_SchematicFrame* frame =
+        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+
     if( ( m_Attributs & PINNOTDRAW ) )
     {
-        if ( g_EDA_Appl->m_LibeditFrame && g_EDA_Appl->m_LibeditFrame->IsActive() )
+        if( frame->m_LibeditFrame && frame->m_LibeditFrame->IsActive() )
             aColor = g_InvisibleItemColor;
-        else  if( !g_ShowAllPins )
+        else if( !g_ShowAllPins )
             return;
     }
 
@@ -45,16 +51,20 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffs
     if( DrawPinText )
     {
         DrawPinTexts( aPanel, aDC, pos1, orient,
-            Entry->m_TextInside,
-            Entry->m_DrawPinNum, Entry->m_DrawPinName,
-            aColor, aDrawMode );
+                      Entry->m_TextInside,
+                      Entry->m_DrawPinNum, Entry->m_DrawPinName,
+                      aColor, aDrawMode );
     }
 }
 
 
 /********************************************************************************/
-void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                                const wxPoint& aPinPos, int aOrient, int aDrawMode, int aColor )
+void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
+                                wxDC*             aDC,
+                                const wxPoint&    aPinPos,
+                                int               aOrient,
+                                int               aDrawMode,
+                                int               aColor )
 /*******************************************************************************/
 
 /* Draw the pin symbol (without texts)
@@ -102,11 +112,11 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( m_PinShape & INVERT )
     {
         GRCircle( &aPanel->m_ClipBox, aDC, MapX1 * INVERT_PIN_RADIUS + x1,
-            MapY1 * INVERT_PIN_RADIUS + y1,
-            INVERT_PIN_RADIUS, width, color );
+                  MapY1 * INVERT_PIN_RADIUS + y1,
+                  INVERT_PIN_RADIUS, width, color );
 
         GRMoveTo( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
-            MapY1 * INVERT_PIN_RADIUS * 2 + y1 );
+                  MapY1 * INVERT_PIN_RADIUS * 2 + y1 );
         GRLineTo( &aPanel->m_ClipBox, aDC, posX, posY, width, color );
     }
     else
@@ -120,14 +130,34 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
             GRMoveTo( x1, y1 + CLOCK_PIN_DIM );
-            GRLineTo( &aPanel->m_ClipBox, aDC, x1 - MapX1 * CLOCK_PIN_DIM, y1, width, color );
-            GRLineTo( &aPanel->m_ClipBox, aDC, x1, y1 - CLOCK_PIN_DIM, width, color );
+            GRLineTo( &aPanel->m_ClipBox,
+                      aDC,
+                      x1 - MapX1 * CLOCK_PIN_DIM,
+                      y1,
+                      width,
+                      color );
+            GRLineTo( &aPanel->m_ClipBox,
+                      aDC,
+                      x1,
+                      y1 - CLOCK_PIN_DIM,
+                      width,
+                      color );
         }
         else    /* MapX1 = 0 */
         {
             GRMoveTo( x1 + CLOCK_PIN_DIM, y1 );
-            GRLineTo( &aPanel->m_ClipBox, aDC, x1, y1 - MapY1 * CLOCK_PIN_DIM, width, color );
-            GRLineTo( &aPanel->m_ClipBox, aDC, x1 - CLOCK_PIN_DIM, y1, width, color );
+            GRLineTo( &aPanel->m_ClipBox,
+                      aDC,
+                      x1,
+                      y1 - MapY1 * CLOCK_PIN_DIM,
+                      width,
+                      color );
+            GRLineTo( &aPanel->m_ClipBox,
+                      aDC,
+                      x1 - CLOCK_PIN_DIM,
+                      y1,
+                      width,
+                      color );
         }
     }
 
@@ -136,15 +166,19 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
             GRMoveTo( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 );
-            GRLineTo( &aPanel->m_ClipBox, aDC, x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
-                y1 - IEEE_SYMBOL_PIN_DIM, width, color );
+            GRLineTo( &aPanel->m_ClipBox,
+                      aDC,
+                      x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+                      y1 - IEEE_SYMBOL_PIN_DIM,
+                      width,
+                      color );
             GRLineTo( &aPanel->m_ClipBox, aDC, x1, y1, width, color );
         }
         else    /* MapX1 = 0 */
         {
             GRMoveTo( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 );
             GRLineTo( &aPanel->m_ClipBox, aDC, x1 - IEEE_SYMBOL_PIN_DIM,
-                y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2, width, color );
+                      y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2, width, color );
             GRLineTo( &aPanel->m_ClipBox, aDC, x1, y1, width, color );
         }
     }
@@ -156,27 +190,33 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         {
             GRMoveTo( x1, y1 - IEEE_SYMBOL_PIN_DIM );
             GRLineTo( &aPanel->m_ClipBox,
-                aDC,
-                x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
-                y1,
-                width,
-                color );
+                      aDC,
+                      x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+                      y1,
+                      width,
+                      color );
         }
         else    /* MapX1 = 0 */
         {
             GRMoveTo( x1 - IEEE_SYMBOL_PIN_DIM, y1 );
             GRLineTo( &aPanel->m_ClipBox,
-                aDC,
-                x1,
-                y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2,
-                width,
-                color );
+                      aDC,
+                      x1,
+                      y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2,
+                      width,
+                      color );
         }
     }
 
     /* Draw the pin end target (active end of the pin) */
     if( !g_IsPrinting )  // Draw but do not print the pin end target 1 pixel width */
-        GRCircle( &aPanel->m_ClipBox, aDC, posX, posY, TARGET_PIN_DIAM, 0, color );
+        GRCircle( &aPanel->m_ClipBox,
+                  aDC,
+                  posX,
+                  posY,
+                  TARGET_PIN_DIAM,
+                  0,
+                  color );
 }
 
 
@@ -188,10 +228,15 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 *  If TextInside then the text is been put inside,otherwise all is drawn outside.
 *  Pin Name:	substring beteween '~' is negated
 *****************************************************************************/
-void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
-                               wxPoint& pin_pos, int orient,
-                               int TextInside, bool DrawPinNum, bool DrawPinName,
-                               int Color, int DrawMode )
+void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
+                               wxDC*             DC,
+                               wxPoint&          pin_pos,
+                               int               orient,
+                               int               TextInside,
+                               bool              DrawPinNum,
+                               bool              DrawPinName,
+                               int               Color,
+                               int               DrawMode )
 /* DrawMode = GR_OR, XOR ... */
 {
     int      ii, x, y, x1, y1, dx, dy, len;
@@ -244,7 +289,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         if( *textsrc == '~' )
         {
-            PinTextBarPos[PinTextBarCount++] = (int) (PinTxtLen * fPinTextPitch);
+            PinTextBarPos[PinTextBarCount++] =
+                (int) ( PinTxtLen * fPinTextPitch );
         }
         else
         {
@@ -255,7 +301,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
         textsrc++;
     }
 
-    PinTxtLen = (int) (fPinTextPitch * PinTxtLen);
+    PinTxtLen = (int) ( fPinTextPitch * PinTxtLen );
     PinTextBarPos[PinTextBarCount] = PinTxtLen; // Needed if no end '~'
 
     if( PinText[0] == 0 )
@@ -272,10 +318,13 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                 if( orient == PIN_RIGHT )
                 {
                     x = x1 + TextInside;
-                    DrawGraphicText( panel, DC, wxPoint( x, y1 ), NameColor, PinText,
-                        TEXT_ORIENT_HORIZ,
-                        PinNameSize,
-                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                    DrawGraphicText( panel, DC, wxPoint( x,
+                                                         y1 ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_HORIZ,
+                                     PinNameSize,
+                                     GR_TEXT_HJUSTIFY_LEFT,
+                                     GR_TEXT_VJUSTIFY_CENTER, LineWidth );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -285,16 +334,24 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                         dx = PinTextBarPos[ii++];       // Get the line pos
                         GRMoveRel( dx, 0 );
                         len = PinTextBarPos[ii++] - dx; // Get the line length
-                        GRLineRel( &panel->m_ClipBox, DC, len, 0, LineWidth, NameColor );
+                        GRLineRel( &panel->m_ClipBox,
+                                   DC,
+                                   len,
+                                   0,
+                                   LineWidth,
+                                   NameColor );
                     }
                 }
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - TextInside;
-                    DrawGraphicText( panel, DC, wxPoint( x, y1 ), NameColor, PinText,
-                        TEXT_ORIENT_HORIZ,
-                        PinNameSize,
-                        GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                    DrawGraphicText( panel, DC, wxPoint( x,
+                                                         y1 ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_HORIZ,
+                                     PinNameSize,
+                                     GR_TEXT_HJUSTIFY_RIGHT,
+                                     GR_TEXT_VJUSTIFY_CENTER, LineWidth );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -304,7 +361,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                         dx = PinTextBarPos[ii++];       // Get the line pos
                         GRMoveRel( dx - PinTxtLen, 0 );
                         len = PinTextBarPos[ii++] - dx; // Get the line length
-                        GRLineRel( &panel->m_ClipBox, DC, len, 0, LineWidth, NameColor );
+                        GRLineRel( &panel->m_ClipBox,
+                                   DC,
+                                   len,
+                                   0,
+                                   LineWidth,
+                                   NameColor );
                     }
                 }
             }
@@ -312,9 +374,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
             if( DrawPinNum )
             {
                 DrawGraphicText( panel, DC,
-                    wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ), NumColor, StringPinNum,
-                    TEXT_ORIENT_HORIZ, PinNumSize,
-                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                                 wxPoint( (x1 + pin_pos.x) / 2,
+                                         y1 - TXTMARGE ), NumColor,
+                                 StringPinNum,
+                                 TEXT_ORIENT_HORIZ, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_CENTER,
+                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
             }
         }
         else            /* Its a vertical line. */
@@ -326,9 +391,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                 {
                     y = y1 + TextInside;
 
-                    DrawGraphicText( panel, DC, wxPoint( x1, y ), NameColor, PinText,
-                        TEXT_ORIENT_VERT, PinNameSize,
-                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, LineWidth );
+                    DrawGraphicText( panel, DC, wxPoint( x1,
+                                                         y ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_VERT, PinNameSize,
+                                     GR_TEXT_HJUSTIFY_CENTER,
+                                     GR_TEXT_VJUSTIFY_TOP, LineWidth );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -338,16 +406,24 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                         dx = PinTextBarPos[ii++];       // Get the line pos
                         GRMoveRel( 0, PinTxtLen - dx );
                         len = PinTextBarPos[ii++] - dx; // Get the line length
-                        GRLineRel( &panel->m_ClipBox, DC, 0, -len, LineWidth, NameColor );
+                        GRLineRel( &panel->m_ClipBox,
+                                   DC,
+                                   0,
+                                   -len,
+                                   LineWidth,
+                                   NameColor );
                     }
                 }
                 else    /* PIN_UP */
                 {
                     y = y1 - TextInside;
 
-                    DrawGraphicText( panel, DC, wxPoint( x1, y ), NameColor, PinText,
-                        TEXT_ORIENT_VERT, PinNameSize,
-                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                    DrawGraphicText( panel, DC, wxPoint( x1,
+                                                         y ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_VERT, PinNameSize,
+                                     GR_TEXT_HJUSTIFY_CENTER,
+                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -357,7 +433,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                         dx = PinTextBarPos[ii++];       // Get the line pos
                         GRMoveRel( 0, -dx );
                         len = PinTextBarPos[ii++] - dx; // Get the line length
-                        GRLineRel( &panel->m_ClipBox, DC, 0, -len, LineWidth, NameColor );
+                        GRLineRel( &panel->m_ClipBox,
+                                   DC,
+                                   0,
+                                   -len,
+                                   LineWidth,
+                                   NameColor );
                     }
                 }
             }
@@ -365,9 +446,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
             if( DrawPinNum )
             {
                 DrawGraphicText( panel, DC,
-                    wxPoint( x1 - TXTMARGE, (y1 + pin_pos.y) / 2 ), NumColor, StringPinNum,
-                    TEXT_ORIENT_VERT, PinNumSize,
-                    GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                                 wxPoint( x1 - TXTMARGE,
+                                          (y1 + pin_pos.y) / 2 ), NumColor,
+                                 StringPinNum,
+                                 TEXT_ORIENT_VERT, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_RIGHT,
+                                 GR_TEXT_VJUSTIFY_CENTER, LineWidth );
             }
         }
     }
@@ -379,10 +463,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
             if( PinText && DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x, y1 - TXTMARGE ),
-                    NameColor, PinText,
-                    TEXT_ORIENT_HORIZ, PinNameSize,
-                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                DrawGraphicText( panel, DC, wxPoint( x,
+                                                     y1 - TXTMARGE ),
+                                 NameColor, PinText,
+                                 TEXT_ORIENT_HORIZ, PinNameSize,
+                                 GR_TEXT_HJUSTIFY_CENTER,
+                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
 
                 for( ii = 0; ii < PinTextBarCount; )
                 {
@@ -391,16 +477,23 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                     dx = PinTextBarPos[ii++];       // Get the line pos
                     GRMoveRel( dx, 0 );
                     len = PinTextBarPos[ii++] - dx; // Get the line length
-                    GRLineRel( &panel->m_ClipBox, DC, len, 0, LineWidth, NameColor );
+                    GRLineRel( &panel->m_ClipBox,
+                               DC,
+                               len,
+                               0,
+                               LineWidth,
+                               NameColor );
                 }
             }
             if( DrawPinNum )
             {
                 x = (x1 + pin_pos.x) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x, y1 + TXTMARGE ),
-                    NumColor, StringPinNum,
-                    TEXT_ORIENT_HORIZ, PinNumSize,
-                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, LineWidth );
+                DrawGraphicText( panel, DC, wxPoint( x,
+                                                     y1 + TXTMARGE ),
+                                 NumColor, StringPinNum,
+                                 TEXT_ORIENT_HORIZ, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
+                                 LineWidth );
             }
         }
         else     /* Its a vertical line. */
@@ -408,10 +501,12 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
             if( PinText && DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x1 - TXTMARGE, y ),
-                    NameColor, PinText,
-                    TEXT_ORIENT_VERT, PinNameSize,
-                    GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                DrawGraphicText( panel, DC, wxPoint( x1 - TXTMARGE,
+                                                     y ),
+                                 NameColor, PinText,
+                                 TEXT_ORIENT_VERT, PinNameSize,
+                                 GR_TEXT_HJUSTIFY_RIGHT,
+                                 GR_TEXT_VJUSTIFY_CENTER, LineWidth );
 
                 for( ii = 0; ii < PinTextBarCount; )
                 {
@@ -420,16 +515,24 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                     dx = PinTextBarPos[ii++];       // Get the line pos
                     GRMoveRel( 0, PinTxtLen - dx );
                     len = PinTextBarPos[ii++] - dx; // Get the line length
-                    GRLineRel( &panel->m_ClipBox, DC, 0, -len, LineWidth, NameColor );
+                    GRLineRel( &panel->m_ClipBox,
+                               DC,
+                               0,
+                               -len,
+                               LineWidth,
+                               NameColor );
                 }
             }
 
             if( DrawPinNum )
             {
-                DrawGraphicText( panel, DC, wxPoint( x1 + TXTMARGE, (y1 + pin_pos.y) / 2 ),
-                    NumColor, StringPinNum,
-                    TEXT_ORIENT_VERT, PinNumSize,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                DrawGraphicText( panel, DC,
+                                 wxPoint( x1 + TXTMARGE,
+                                          (y1 + pin_pos.y) / 2 ),
+                                 NumColor, StringPinNum,
+                                 TEXT_ORIENT_VERT, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_LEFT,
+                                 GR_TEXT_VJUSTIFY_CENTER, LineWidth );
             }
         }
     }
@@ -448,8 +551,11 @@ extern void Move_Plume( wxPoint pos, int plume ); // see plot.cpp
 * If TextInside then the text is been put inside (moving from x1, y1 in		 *
 * the opposite direction to x2,y2), otherwise all is drawn outside.		 *
 *****************************************************************************/
-void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
-                               int TextInside, bool DrawPinNum, bool DrawPinName )
+void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
+                               int      orient,
+                               int      TextInside,
+                               bool     DrawPinNum,
+                               bool     DrawPinName )
 {
     int      dx, len, start;
     int      ii, x, y, x1, y1, cte;
@@ -461,7 +567,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
     int      PinTxtLen   = 0;
     wxSize   PinNameSize = wxSize( m_PinNameSize, m_PinNameSize );
     wxSize   PinNumSize  = wxSize( m_PinNumSize, m_PinNumSize );
-    bool     plot_color  = (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt;
+    bool     plot_color  = (g_PlotFormat == PLOT_FORMAT_POST)
+                           && g_PlotPSColorOpt;
 
     /* Get the num and name colors */
     NameColor = plot_color ? ReturnLayerColor( LAYER_PINNAM ) : -1;
@@ -495,7 +602,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
     {
         if( *textsrc == '~' )
         {
-            PinTextBarPos[PinTextBarCount++] = (int) (fPinTextPitch * PinTxtLen);
+            PinTextBarPos[PinTextBarCount++] =
+                (int) ( fPinTextPitch * PinTxtLen );
         }
         else
         {
@@ -506,7 +614,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
         textsrc++;
     }
 
-    PinTxtLen = (int) (fPinTextPitch * PinTxtLen);
+    PinTxtLen = (int) ( fPinTextPitch * PinTxtLen );
     PinTextBarPos[PinTextBarCount] = PinTxtLen; // Needed if no end '~'
 
     if( PinText[0] == 0 )
@@ -521,10 +629,13 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
                 if( orient == PIN_RIGHT )
                 {
                     x = x1 + TextInside;
-                    PlotGraphicText( g_PlotFormat, wxPoint( x, y1 ), NameColor, PinText,
-                        TEXT_ORIENT_HORIZ,
-                        PinNameSize,
-                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER );
+                    PlotGraphicText( g_PlotFormat, wxPoint( x,
+                                                            y1 ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_HORIZ,
+                                     PinNameSize,
+                                     GR_TEXT_HJUSTIFY_LEFT,
+                                     GR_TEXT_VJUSTIFY_CENTER );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -538,10 +649,12 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
                 else    // orient == PIN_LEFT
                 {
                     x = x1 - TextInside;
-                    PlotGraphicText( g_PlotFormat, wxPoint( x, y1 ),
-                        NameColor, PinText, TEXT_ORIENT_HORIZ,
-                        PinNameSize,
-                        GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER );
+                    PlotGraphicText( g_PlotFormat, wxPoint( x,
+                                                            y1 ),
+                                     NameColor, PinText, TEXT_ORIENT_HORIZ,
+                                     PinNameSize,
+                                     GR_TEXT_HJUSTIFY_RIGHT,
+                                     GR_TEXT_VJUSTIFY_CENTER );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -556,10 +669,13 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
 
             if( DrawPinNum )
             {
-                PlotGraphicText( g_PlotFormat, wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ),
-                    NumColor, StringPinNum,
-                    TEXT_ORIENT_HORIZ, PinNumSize,
-                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM );
+                PlotGraphicText( g_PlotFormat,
+                                 wxPoint( (x1 + pin_pos.x) / 2,
+                                         y1 - TXTMARGE ),
+                                 NumColor, StringPinNum,
+                                 TEXT_ORIENT_HORIZ, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_CENTER,
+                                 GR_TEXT_VJUSTIFY_BOTTOM );
             }
         }
         else         /* Its a vertical line. */
@@ -570,9 +686,12 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
                 {
                     y = y1 + TextInside;
 
-                    PlotGraphicText( g_PlotFormat, wxPoint( x1, y ), NameColor, PinText,
-                        TEXT_ORIENT_VERT, PinNameSize,
-                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP );
+                    PlotGraphicText( g_PlotFormat, wxPoint( x1,
+                                                            y ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_VERT, PinNameSize,
+                                     GR_TEXT_HJUSTIFY_CENTER,
+                                     GR_TEXT_VJUSTIFY_TOP );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -587,9 +706,12 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
                 {
                     y = y1 - TextInside;
 
-                    PlotGraphicText( g_PlotFormat, wxPoint( x1, y ), NameColor, PinText,
-                        TEXT_ORIENT_VERT, PinNameSize,
-                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM );
+                    PlotGraphicText( g_PlotFormat, wxPoint( x1,
+                                                            y ), NameColor,
+                                     PinText,
+                                     TEXT_ORIENT_VERT, PinNameSize,
+                                     GR_TEXT_HJUSTIFY_CENTER,
+                                     GR_TEXT_VJUSTIFY_BOTTOM );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -604,10 +726,13 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
 
             if( DrawPinNum )
             {
-                PlotGraphicText( g_PlotFormat, wxPoint( x1 - TXTMARGE, (y1 + pin_pos.y) / 2 ),
-                    NumColor, StringPinNum,
-                    TEXT_ORIENT_VERT, PinNumSize,
-                    GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER );
+                PlotGraphicText( g_PlotFormat,
+                                 wxPoint( x1 - TXTMARGE,
+                                          (y1 + pin_pos.y) / 2 ),
+                                 NumColor, StringPinNum,
+                                 TEXT_ORIENT_VERT, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_RIGHT,
+                                 GR_TEXT_VJUSTIFY_CENTER );
             }
         }
     }
@@ -619,10 +744,12 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
             if( PinText && DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
-                PlotGraphicText( g_PlotFormat, wxPoint( x, y1 - TXTMARGE ),
-                    NameColor, PinText,
-                    TEXT_ORIENT_HORIZ, PinNameSize,
-                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM );
+                PlotGraphicText( g_PlotFormat, wxPoint( x,
+                                                        y1 - TXTMARGE ),
+                                 NameColor, PinText,
+                                 TEXT_ORIENT_HORIZ, PinNameSize,
+                                 GR_TEXT_HJUSTIFY_CENTER,
+                                 GR_TEXT_VJUSTIFY_BOTTOM );
 
                 for( ii = 0; ii < PinTextBarCount; )
                 {
@@ -638,9 +765,9 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
             {
                 x = (x1 + pin_pos.x) / 2;
                 PlotGraphicText( g_PlotFormat, wxPoint( x, y1 + TXTMARGE ),
-                    NumColor, StringPinNum,
-                    TEXT_ORIENT_HORIZ, PinNumSize,
-                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP );
+                                 NumColor, StringPinNum,
+                                 TEXT_ORIENT_HORIZ, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP );
             }
         }
         else     /* Its a vertical line. */
@@ -648,10 +775,12 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
             if( PinText && DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
-                PlotGraphicText( g_PlotFormat, wxPoint( x1 - TXTMARGE, y ),
-                    NameColor, PinText,
-                    TEXT_ORIENT_VERT, PinNameSize,
-                    GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER );
+                PlotGraphicText( g_PlotFormat, wxPoint( x1 - TXTMARGE,
+                                                        y ),
+                                 NameColor, PinText,
+                                 TEXT_ORIENT_VERT, PinNameSize,
+                                 GR_TEXT_HJUSTIFY_RIGHT,
+                                 GR_TEXT_VJUSTIFY_CENTER );
 
                 for( ii = 0; ii < PinTextBarCount; )
                 {
@@ -666,23 +795,25 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos, int orient,
 
             if( DrawPinNum )
             {
-                PlotGraphicText( g_PlotFormat, wxPoint( x1 + TXTMARGE, (y1 + pin_pos.y) / 2 ),
-                    NumColor, StringPinNum,
-                    TEXT_ORIENT_VERT, PinNumSize,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER );
+                PlotGraphicText( g_PlotFormat,
+                                 wxPoint( x1 + TXTMARGE,
+                                          (y1 + pin_pos.y) / 2 ),
+                                 NumColor, StringPinNum,
+                                 TEXT_ORIENT_VERT, PinNumSize,
+                                 GR_TEXT_HJUSTIFY_LEFT,
+                                 GR_TEXT_VJUSTIFY_CENTER );
             }
         }
     }
 }
 
 
-
 /***************************************************************/
 LibDrawPin::LibDrawPin() : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
 /***************************************************************/
 {
-    m_PinLen      = 300;                /* default Pin len */
-    m_Orient      = PIN_RIGHT;          /* Pin oprient: Up, Down, Left, Right */
+    m_PinLen = 300;                     /* default Pin len */
+    m_Orient = PIN_RIGHT;               /* Pin oprient: Up, Down, Left, Right */
     m_PinShape    = NONE;               /* Bit a bit: Pin shape (voir enum prec) */
     m_PinType     = PIN_UNSPECIFIED;    /* electrical type of pin */
     m_Attributs   = 0;                  /* bit 0 != 0: pin invisible */
@@ -733,7 +864,7 @@ int LibDrawPin::ReturnPinDrawOrient( int TransMat[2][2] )
  * @param  TransMat = transform matrix
  */
 {
-    int orient;
+    int     orient;
     wxPoint end;    // position of a end pin starting at 0,0 according to its orientation, lenght = 1
 
     switch( m_Orient )
@@ -780,7 +911,7 @@ void LibDrawPin::ReturnPinStringNum( wxString& buffer ) const
 {
     char ascii_buf[5];
 
-    memcpy(ascii_buf, &m_PinNum , 4);
+    memcpy( ascii_buf, &m_PinNum, 4 );
     ascii_buf[4] = 0;
 
     buffer = CONV_FROM_UTF8( ascii_buf );
@@ -817,9 +948,9 @@ LibDrawPin* LibDrawPin::GenCopy()
 {
     LibDrawPin* newpin = new LibDrawPin();
 
-    newpin->m_Pos         = m_Pos;
-    newpin->m_PinLen      = m_PinLen;
-    newpin->m_Orient      = m_Orient;
+    newpin->m_Pos    = m_Pos;
+    newpin->m_PinLen = m_PinLen;
+    newpin->m_Orient = m_Orient;
     newpin->m_PinShape    = m_PinShape;
     newpin->m_PinType     = m_PinType;
     newpin->m_Attributs   = m_Attributs;
@@ -835,4 +966,3 @@ LibDrawPin* LibDrawPin::GenCopy()
 
     return newpin;
 }
-

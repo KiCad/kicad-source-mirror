@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 
-#include "wxstruct.h"
 #include "common.h"
 #include "cvpcb.h"
 #include "3d_viewer.h"
@@ -28,9 +27,9 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
 
     if( DrawFrame == NULL )
     {
-        DrawFrame = new WinEDA_DisplayFrame( this, m_Parent, _( "Module" ),
-                                             wxPoint( 0, 0 ), wxSize( 600,
-                                                                      400 ),
+        DrawFrame = new WinEDA_DisplayFrame( this, _( "Module" ),
+                                             wxPoint( 0, 0 ),
+                                             wxSize( 600, 400 ),
                                              KICAD_DEFAULT_DRAWFRAME_STYLE |
                                              wxFRAME_FLOAT_ON_PARENT );
         IsNew = TRUE;

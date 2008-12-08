@@ -146,14 +146,15 @@ END_EVENT_TABLE()
 /****************/
 
 WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
-                                                WinEDA_App* parent,
                                                 const wxString& title,
                                                 const wxPoint& pos,
                                                 const wxSize& size,
                                                 long style ) :
-    WinEDA_BasePcbFrame( father, parent, MODULE_EDITOR_FRAME,
+    WinEDA_BasePcbFrame( father, MODULE_EDITOR_FRAME,
                          wxEmptyString, pos, size, style )
 {
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
     m_FrameName      = wxT( "ModEditFrame" );
     m_Draw_Axis      = TRUE;    // TRUE pour avoir les axes dessines
     m_Draw_Grid      = TRUE;    // TRUE pour avoir la axes dessinee
@@ -183,11 +184,11 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     GetSettings();
 
     wxSize GridSize( 500, 500 );
-    if( m_Parent && m_Parent->m_EDA_Config )
+    if( config )
     {
         long SizeX, SizeY;
-        if( m_Parent->m_EDA_Config->Read( wxT( "ModEditGrid_X" ), &SizeX )
-           && m_Parent->m_EDA_Config->Read( wxT( "ModEditGrid_Y" ), &SizeY ) )
+        if( config->Read( wxT( "ModEditGrid_X" ), &SizeX )
+            && config->Read( wxT( "ModEditGrid_Y" ), &SizeY ) )
         {
             GridSize.x = SizeX;
             GridSize.y = SizeY;
@@ -211,7 +212,8 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
 WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 /****************************************************/
 {
-    m_Parent->m_ModuleEditFrame = NULL;
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*)GetParent();
+    frame->m_ModuleEditFrame = NULL;
     SetBaseScreen( ScreenPcb );
 }
 
@@ -220,6 +222,8 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
 /**************************************************************/
 {
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
     if( GetScreen()->IsModify() )
     {
         if( !IsOK( this, _( "Module Editor: Module modified! Continue?" ) ) )
@@ -229,13 +233,11 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
     }
 
     SaveSettings();
-    if( m_Parent && m_Parent->m_EDA_Config )
+    if( config )
     {
         wxSize GridSize = GetScreen()->GetGrid();
-        m_Parent->m_EDA_Config->Write( wxT( "ModEditGrid_X" ),
-                                       (long) GridSize.x );
-        m_Parent->m_EDA_Config->Write( wxT( "ModEditGrid_Y" ),
-                                       (long) GridSize.y );
+        config->Write( wxT( "ModEditGrid_X" ), (long) GridSize.x );
+        config->Write( wxT( "ModEditGrid_Y" ), (long) GridSize.y );
     }
     Destroy();
 }
@@ -247,6 +249,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 {
     size_t i;
     bool active, islib = TRUE;
+    WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) wxGetApp().GetTopWindow();
 
     if( m_HToolBar == NULL )
         return;
@@ -269,9 +272,8 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     MODULE* module_in_edit = m_Pcb->m_Modules;
     if( module_in_edit && module_in_edit->m_Link ) // this is not a new module ...
     {
-        WinEDA_PcbFrame* pcbframe      = m_Parent->m_PcbFrame;
-        BOARD*           mainpcb       = pcbframe->m_Pcb;
-        MODULE*          source_module = mainpcb->m_Modules;
+        BOARD*   mainpcb       = frame->m_Pcb;
+        MODULE*  source_module = mainpcb->m_Modules;
 
         // search if the source module was not deleted:
         for(  ; source_module != NULL; source_module = source_module->Next() )
@@ -303,7 +305,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         m_HToolBar->EnableTool( ID_MODEDIT_REDO, GetScreen()->m_RedoList && active );
     }
 
-    if( m_Parent->m_PcbFrame->m_Pcb->m_Modules )
+    if( frame->m_Pcb->m_Modules )
     {
         m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, TRUE );
     }

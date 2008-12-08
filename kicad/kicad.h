@@ -52,7 +52,7 @@ private:
 public:
 
     // Constructor and destructor
-    WinEDA_MainFrame( WinEDA_App* eda_app, wxWindow* parent, const wxString& title,
+    WinEDA_MainFrame( wxWindow* parent, const wxString& title,
                       const wxPoint& pos, const wxSize& size );
 
     ~WinEDA_MainFrame();

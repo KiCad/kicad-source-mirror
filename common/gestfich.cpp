@@ -4,22 +4,9 @@
 /************************************************/
 
 // For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
+#include "fctsys.h"
+
 #include "wx/mimetype.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
-
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 
 #ifdef  __WINDOWS__
 #ifndef _MSC_VER
@@ -27,9 +14,7 @@
 #endif
 #endif
 
-#include "fctsys.h"
 #include "common.h"
-#include "wxstruct.h"
 #include "macros.h"
 
 /* List of default paths used to locate help files and kicad library files.
@@ -74,8 +59,8 @@ static wxString    s_HelpPathList[] = {
 #else
     wxT( "/usr/share/doc/kicad/help/" ),
     wxT( "/usr/local/share/doc/kicad/help/" ),
-    wxT( "/usr/local/kicad/doc/help/" ),             // default install for "universal tarballs" and build for a server (new)
-    wxT( "/usr/local/kicad/help/" ),                 // default install for "universal tarballs" and build for a server (old)
+    wxT( "/usr/local/kicad/doc/help/" ),        // default install for "universal tarballs" and build for a server (new)
+    wxT( "/usr/local/kicad/help/" ),            // default install for "universal tarballs" and build for a server (old)
 #endif
     wxT( "end_list" )                           // End of list symbol, do not change
 };
@@ -114,7 +99,6 @@ static wxString    s_KicadBinaryPathList[] = {
 #endif
     wxT( "end_list" )                               // End of list symbol, do not change
 };
-extern WinEDA_App* g_EDA_Appl;
 
 
 /***************************************************************************/
@@ -210,7 +194,7 @@ wxString MakeFileName( const wxString& dir,
         if( !wxIsAbsolutePath( shortname ) )
         {
             if( !shortname.StartsWith( wxT( "./" ) ) && !shortname.StartsWith( wxT( "../" ) ) )
-            { /* no absolute path in shortname, add dir to shortname */
+            {   /* no absolute path in shortname, add dir to shortname */
                 fullfilename = dir;
             }
         }
@@ -357,13 +341,13 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
 #endif
 
     fullfilename = wxFileSelector( wxString( Title ),
-        defaultpath,
-        defaultname,
-        Ext,
-        Mask,
-        flag,                           /* open mode wxFD_OPEN, wxFD_SAVE .. */
-        Frame,
-        Pos.x, Pos.y );
+                                   defaultpath,
+                                   defaultname,
+                                   Ext,
+                                   Mask,
+                                   flag, /* open mode wxFD_OPEN, wxFD_SAVE .. */
+                                   Frame,
+                                   Pos.x, Pos.y );
 
     if( keep_working_directory )
         wxSetWorkingDirectory( curr_cwd );
@@ -402,12 +386,12 @@ wxString FindKicadHelpPath()
     bool     PathFound = FALSE;
 
     /* find kicad/help/ */
-    tmp = g_EDA_Appl->m_BinDir;
+    tmp = wxGetApp().m_BinDir;
     if( tmp.Last() == '/' )
         tmp.RemoveLast();
     FullPath     = tmp.BeforeLast( '/' ); // cd ..
     FullPath    += wxT( "/doc/help/" );
-    LocaleString = g_EDA_Appl->m_Locale->GetCanonicalName();
+    LocaleString = wxGetApp().m_Locale->GetCanonicalName();
 
     wxString path_tmp = FullPath;
 #ifdef __WINDOWS__
@@ -420,9 +404,9 @@ wxString FindKicadHelpPath()
     }
 
     /* find kicad/help/ from environment variable  KICAD */
-    if( !PathFound && g_EDA_Appl->m_Env_Defined )
+    if( !PathFound && wxGetApp().m_Env_Defined )
     {
-        FullPath = g_EDA_Appl->m_KicadEnv + wxT( "/doc/help/" );
+        FullPath = wxGetApp().m_KicadEnv + wxT( "/doc/help/" );
         if( wxDirExists( FullPath ) )
             PathFound = TRUE;
     }
@@ -483,15 +467,15 @@ wxString FindKicadFile( const wxString& shortname )
 
     /* test de la presence du fichier shortname dans le repertoire de
      *  des binaires de kicad */
-    FullFileName = g_EDA_Appl->m_BinDir + shortname;
+    FullFileName = wxGetApp().m_BinDir + shortname;
     if( wxFileExists( FullFileName ) )
         return FullFileName;
 
     /* test de la presence du fichier shortname dans le repertoire
      *  defini par la variable d'environnement KICAD */
-    if( g_EDA_Appl->m_Env_Defined )
+    if( wxGetApp().m_Env_Defined )
     {
-        FullFileName = g_EDA_Appl->m_KicadEnv + shortname;
+        FullFileName = wxGetApp().m_KicadEnv + shortname;
         if( wxFileExists( FullFileName ) )
             return FullFileName;
     }
@@ -566,7 +550,7 @@ void SetRealLibraryPath( const wxString& shortlibname )
     else
     {
         g_RealLibDirBuffer = ReturnKicadDatasPath();
-        if( g_EDA_Appl->m_Env_Defined )  // Chemin impose par la variable d'environnement
+        if( wxGetApp().m_Env_Defined )  // Chemin impose par la variable d'environnement
         {
             PathFound = TRUE;
         }
@@ -599,35 +583,36 @@ wxString ReturnKicadDatasPath()
     bool     PathFound = FALSE;
     wxString data_path;
 
-    if( g_EDA_Appl->m_Env_Defined )  // Chemin impose par la variable d'environnement
+    if( wxGetApp().m_Env_Defined )  // Chemin impose par la variable d'environnement
     {
-        data_path = g_EDA_Appl->m_KicadEnv;
+        data_path = wxGetApp().m_KicadEnv;
         PathFound = TRUE;
     }
     else    // Chemin cherche par le chemin des executables
     {
         // le chemin est bindir../
-        wxString tmp = g_EDA_Appl->m_BinDir;
+        wxString tmp = wxGetApp().m_BinDir;
 #ifdef __WINDOWS__
         tmp.MakeLower();
 #endif
         if( tmp.Contains( wxT( "kicad" ) ) )
         {
 #ifdef __WINDOWS__
-            tmp = g_EDA_Appl->m_BinDir;
+            tmp = wxGetApp().m_BinDir;
 #endif
             if( tmp.Last() == '/' )
                 tmp.RemoveLast();
             data_path  = tmp.BeforeLast( '/' ); // id cd ../
             data_path += UNIX_STRING_DIR_SEP;
+
             // Old versions of kicad use kicad/ as default for data
             // and last versions kicad/share/
             // So we search for kicad/share/ first
             wxString old_path = data_path;
-            data_path += wxT("share/");
+            data_path += wxT( "share/" );
             if( wxDirExists( data_path ) )
                 PathFound = TRUE;
-            else if ( wxDirExists( old_path ) )
+            else if( wxDirExists( old_path ) )
             {
                 data_path = old_path;
                 PathFound = TRUE;
@@ -683,27 +668,29 @@ wxString GetEditorName()
         mask += wxT( ".exe" );
 #endif
         editorname = EDA_FileSelector( _( "Prefered Editor:" ),
-            wxEmptyString,                              /* Default path */
-            wxEmptyString,                              /* default filename */
-            wxEmptyString,                              /* default filename extension */
-            mask,                                       /* filter for filename list */
-            NULL,                                       /* parent frame */
-            wxFD_OPEN,                                  /* wxFD_SAVE, wxFD_OPEN ..*/
-            TRUE                                        /* true = keep the current path */
-            );
+                                       wxEmptyString,   /* Default path */
+                                       wxEmptyString,   /* default filename */
+                                       wxEmptyString,   /* default filename extension */
+                                       mask,            /* filter for filename list */
+                                       NULL,            /* parent frame */
+                                       wxFD_OPEN,       /* wxFD_SAVE, wxFD_OPEN ..*/
+                                       TRUE             /* true = keep the current path */
+                                       );
     }
 
-    if( ( !editorname.IsEmpty() ) && g_EDA_Appl->m_EDA_CommonConfig )
+    if( ( !editorname.IsEmpty() ) && wxGetApp().m_EDA_CommonConfig )
     {
         g_EditorName = editorname;
-        g_EDA_Appl->m_EDA_CommonConfig->Write( wxT( "Editor" ), g_EditorName );
+        wxGetApp().m_EDA_CommonConfig->Write( wxT( "Editor" ), g_EditorName );
     }
     return g_EditorName;
 }
 
+
 /***********************************/
 bool OpenPDF( const wxString& file )
 /***********************************/
+
 /** Function OpenPDF
  * run the PDF viewer and display a PDF file
  * @param file = PDF file to open
@@ -713,13 +700,13 @@ bool OpenPDF( const wxString& file )
     wxString command;
     wxString filename = file;
     wxString type;
-    bool     success  = false;
+    bool     success = false;
 
-    g_EDA_Appl->ReadPdfBrowserInfos();
-    if( !g_EDA_Appl->m_PdfBrowserIsDefault )    //  Run the prefered PDF Browser
+    wxGetApp().ReadPdfBrowserInfos();
+    if( !wxGetApp().m_PdfBrowserIsDefault )    //  Run the prefered PDF Browser
     {
         AddDelimiterString( filename );
-        command = g_EDA_Appl->m_PdfBrowser  + wxT( " " ) + filename;
+        command = wxGetApp().m_PdfBrowser + wxT( " " ) + filename;
     }
     else
     {
@@ -730,14 +717,15 @@ bool OpenPDF( const wxString& file )
             success = filetype->GetOpenCommand( &command, params );
         delete filetype;
 #ifndef __WINDOWS__
+
         // Bug ? under linux wxWidgets returns acroread as PDF viewer,even it not exists
-        if ( command.StartsWith(wxT("acroread")) )  // Workaround
+        if( command.StartsWith( wxT( "acroread" ) ) ) // Workaround
             success = false;
 #endif
         if( success && !command.IsEmpty() )
         {
             success = ProcessExecute( command );
-            if ( success )
+            if( success )
                 return success;
         }
 
@@ -770,6 +758,7 @@ bool OpenPDF( const wxString& file )
                     break;
                 }
             }
+
 #endif
         }
     }
@@ -777,23 +766,24 @@ bool OpenPDF( const wxString& file )
     if( !command.IsEmpty() )
     {
         success = ProcessExecute( command );
-        if ( !success )
+        if( !success )
         {
-            wxString msg = _("Problem while running the PDF viewer");
-            msg << _("\n command is ") << command;
+            wxString msg = _( "Problem while running the PDF viewer" );
+            msg << _( "\n command is " ) << command;
             DisplayError( NULL, msg );
         }
     }
     else
     {
-        wxString msg = _("Unable to find a PDF viewer for");
-        msg << wxT(" ") << filename;
+        wxString msg = _( "Unable to find a PDF viewer for" );
+        msg << wxT( " " ) << filename;
         DisplayError( NULL, msg );
         success = false;
     }
 
     return success;
 }
+
 
 /*************************************/
 void OpenFile( const wxString& file )
