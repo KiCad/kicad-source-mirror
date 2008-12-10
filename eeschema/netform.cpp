@@ -539,7 +539,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
     EDA_BaseStruct* DrawList;
     SCH_COMPONENT* Component;
     int ii;
-    ListComponent* CmpList = NULL;
+    OBJ_CMP_TO_LIST* CmpList = NULL;
     int CmpListCount = 0, CmpListSize = 1000;
 
     DateAndTime( Buf );
@@ -571,18 +571,18 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                 {
                     if( CmpList == NULL )
                     {
-                        CmpList = (ListComponent*)
-                                  MyZMalloc( sizeof(ListComponent) * CmpListSize );
+                        CmpList = (OBJ_CMP_TO_LIST*)
+                                  MyZMalloc( sizeof(OBJ_CMP_TO_LIST) * CmpListSize );
                     }
                     if( CmpListCount >= CmpListSize )
                     {
                         CmpListSize += 1000;
-                        CmpList = (ListComponent*) realloc(
+                        CmpList = (OBJ_CMP_TO_LIST*) realloc(
                             CmpList,
-                            sizeof(ListComponent) * CmpListSize );
+                            sizeof(OBJ_CMP_TO_LIST) * CmpListSize );
                     }
-                    CmpList[CmpListCount].m_Comp = Component;
-                    strcpy( CmpList[CmpListCount].m_Ref, Component->GetRef( sheet ).mb_str() );
+                    CmpList[CmpListCount].m_RootCmp = Component;
+                    strcpy( CmpList[CmpListCount].m_Reference, Component->GetRef( sheet ).mb_str() );
                     CmpListCount++;
                 }
             }
@@ -643,19 +643,19 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
         EDA_LibComponentStruct* Entry;
         for( ii = 0; ii < CmpListCount; ii++ )
         {
-            Component = CmpList[ii].m_Comp;
+            Component = CmpList[ii].m_RootCmp;
             Entry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
             //Line.Printf(_("%s"), CmpList[ii].m_Ref);
             //Line.Replace( wxT( " " ), wxT( "_" ) );
             unsigned int i;
-            for( i = 0; i<sizeof(CmpList[ii].m_Ref) && CmpList[ii].m_Ref[i]; i++ )
+            for( i = 0; i<sizeof(CmpList[ii].m_Reference) && CmpList[ii].m_Reference[i]; i++ )
             {
-                if( CmpList[ii].m_Ref[i] == ' ' )
-                    CmpList[ii].m_Ref[i] = '_';
+                if( CmpList[ii].m_Reference[i] == ' ' )
+                    CmpList[ii].m_Reference[i] = '_';
             }
 
-            fprintf( f, "$component %s\n", CmpList[ii].m_Ref );
+            fprintf( f, "$component %s\n", CmpList[ii].m_Reference );
             /* Write the footprint list */
             for( unsigned int jj = 0; jj < Entry->m_FootprintList.GetCount(); jj++ )
             {

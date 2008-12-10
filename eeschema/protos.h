@@ -40,7 +40,7 @@ void InstallCmpeditFrame(WinEDA_SchematicFrame * parent, wxPoint & pos,
     /******************************/
 int LibraryEntryCompare(EDA_LibComponentStruct *LE1, EDA_LibComponentStruct *LE2);
 int NumOfLibraries();
-EDA_LibComponentStruct *FindLibPart(const wxChar *Name, const wxString & LibName, int Alias);
+EDA_LibComponentStruct *FindLibPart(const wxChar *Name, const wxString & LibName, int Alias = FIND_ROOT);
 
 void DrawingLibInGhost(WinEDA_DrawPanel * panel, wxDC * DC, EDA_LibComponentStruct *LibEntry,
                         SCH_COMPONENT * DrawLibItem, int PartX, int PartY,

@@ -319,7 +319,7 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
 
     /* Reset du flag m_FlagOfConnection, utilise par la suite */
     for( NetItemRef = g_TabObjNet;  NetItemRef < Lim;   NetItemRef++ )
-        NetItemRef->m_FlagOfConnection = (IsConnectType) 0;
+        NetItemRef->m_FlagOfConnection = UNCONNECTED;
 
     NetNbItems = 0;
     MinConn    = NOC;
@@ -692,7 +692,7 @@ static void TestOthersItems( WinEDA_DrawPanel* panel, wxDC* DC,
                     if( NetItemTst->m_FlagOfConnection == 0 )
                     {
                         Diagnose( panel, DC, NetItemRef, NetItemTst, 0, erc );
-                        NetItemTst->m_FlagOfConnection = (IsConnectType) 1;
+                        NetItemTst->m_FlagOfConnection = NOCONNECT;
                     }
                 }
             }

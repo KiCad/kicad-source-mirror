@@ -52,8 +52,8 @@ enum NetObjetType {      /* Type des objets de Net */
 };
 
 
-enum  IsConnectType {       /* Valeur du Flag de connection */
-    UNCONNECT,              /* Pin ou Label non connecte */
+enum  ConnectType {         /* Valeur du Flag de connection */
+    UNCONNECTED = 0,        /* Pin ou Label non connecte */
     NOCONNECT,              /* Pin volontairement non connectee (Symb. NoConnect utilise) */
     PAD_CONNECT             /* connexion normale */
 };
@@ -76,7 +76,7 @@ public:
     int             m_BusNetCode;       /* pour connexions type bus */
     int             m_Member;        /* pour les labels type BUSWIRE ( labels de bus eclate )
                                       *  numero de membre */
-    IsConnectType   m_FlagOfConnection;
+    ConnectType     m_FlagOfConnection;
     DrawSheetPath   m_SheetListInclude;     /* sheet that the hierarchal label connects to.*/
     long            m_PinNum;               /* numero de pin( 4 octets -> 4 codes ascii) */
     const wxString* m_Label;                /* Tous types Labels:pointeur sur la wxString definissant le label */
@@ -92,44 +92,58 @@ public:
 };
 
 
-/* Structures pour memo et liste des elements */
-struct ListLabel
-{
-    int   m_LabelType;
-    void* m_Label;
-    char  m_SheetPath[256];
-};
-
-
-// Used to create lists of components BOM, netlist generation)
-struct ListComponent
-{
-    SCH_COMPONENT* m_Comp;      // pointer on the component in schematic
-    char           m_Ref[32];   // component reference
-    int            m_Unit;      // Unit value, for multiple parts per package
-    //have to store it here since the object references will be duplicated.
-    DrawSheetPath m_SheetList; //composed of UIDs
-};
-
-
-/* Structure decrivant 1 composant de la schematique (for annotation ) */
-struct CmpListStruct
+/* object used in annotation to handle a list of components in schematic
+ * because in a complex hierarchy, a component is used more than once,
+ * and its reference is depending on the sheet path
+ * for the same component, we must create a flat list of components
+ * used in nelist generation, BOM generation and annotation
+ */
+class OBJ_CMP_TO_LIST
 {
 public:
-    SCH_COMPONENT* m_Cmp;                               /* Pointeur sur le composant */
-    int            m_NbParts;                           /* Nombre de parts par boitier */
-    bool           m_PartsLocked;                       // For multi part components: True if the part cannot be changed
-    int            m_Unit;                              /* Numero de part */
-    DrawSheetPath  m_SheetList;
-    unsigned long  m_TimeStamp;                         /* unique identification number */
-    int            m_IsNew;                             /* != 0 pour composants non annotes */
-    char           m_TextValue[32];                     /* Valeur */
-    char           m_TextRef[32];                       /* Reference ( hors numero ) */
-    int            m_NumRef;                            /* Numero de reference */
-    int            m_Flag;                              /* flag pour calculs internes */
-    wxPoint        m_Pos;                               /* position components */
-    char           m_Path[256];                         // the 'path' of the object in the sheet hierarchy.
+    SCH_COMPONENT* m_RootCmp;                           // the component in schematic
+    EDA_LibComponentStruct* m_Entry;                    // the source component in library
+    int            m_Unit;                              /* Selected part (For multi parts per package) depending on sheet path */
+    DrawSheetPath  m_SheetPath;                         /* the sheet path for this component */
+    unsigned long  m_TimeStamp;                         /* unique identification number depending on sheet path */
+    bool           m_IsNew;                             /* true for not yet annotated components */
+    wxString*      m_Value;                             /* Component value (same for all instances) */
+    char           m_Reference[32];                     /* Component reference prefix, without number (for IC1, this is IC) ) */
+    int            m_NumRef;                            /* Reference number (for IC1, this is 1) ) depending on sheet path*/
+    int            m_Flag;                              /* flag for computations */
+public:
+
+    OBJ_CMP_TO_LIST()
+    {
+        m_RootCmp   = NULL;
+        m_Entry = NULL;
+        m_Unit = 0;
+        m_TimeStamp = 0;
+        m_IsNew = false;
+        m_Value = NULL;
+        m_Reference[0] = 0;
+        m_NumRef = 0;
+        m_Flag = 0;
+    }
+
+
+    int CompareValue( const OBJ_CMP_TO_LIST& item ) const
+    {
+        return m_Value->CmpNoCase( *item.m_Value );
+    }
+
+
+    int CompareRef( const OBJ_CMP_TO_LIST& item ) const
+    {
+        return strnicmp( m_Reference, item.m_Reference, 32 );
+    }
+
+    bool IsPartsLocked( )
+    {
+        return m_Entry->m_UnitSelectionLocked;
+    }
 };
+
 
 
 /* Global Variables */

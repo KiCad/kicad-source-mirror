@@ -1200,13 +1200,13 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
     ObjetNetListStruct* NetItemRef, * NetItemTst, * ItemPtr;
     ObjetNetListStruct* NetStart, * NetEnd, * Lim;
     int Nb;
-    IsConnectType StateFlag;
+    ConnectType StateFlag;
 
 
     NetStart   = NetEnd = ListObj;
     NetItemRef = NetStart;
     Nb = 0;
-    StateFlag = UNCONNECT;
+    StateFlag = UNCONNECTED;
 
     Lim = ListObj + NbItems;
     for( ; NetItemRef < Lim; NetItemRef++ )
@@ -1233,7 +1233,7 @@ static void SetUnconnectedFlag( ObjetNetListStruct* ListObj, int NbItems )
                 return;
 
             /* Start Analyse Nouveau Net */
-            StateFlag = UNCONNECT;
+            StateFlag = UNCONNECTED;
             NetStart  = NetItemTst;
             continue;
         }

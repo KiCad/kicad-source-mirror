@@ -66,7 +66,7 @@ public:
  */
 WX_DEFINE_ARRAY( DrawSheetStruct *, SheetGrowArray );
 
-class DrawSheetStruct : public SCH_ITEM    /* Gestion de la hierarchie */
+class DrawSheetStruct : public SCH_ITEM
 {
 public:
     wxString m_SheetName;               /*this is equivalent to C101 for components:
@@ -76,13 +76,13 @@ private:
                                          * but need it here for loading after
                                          * reading the sheet description from file. */
 public:
-    int         m_SheetNameSize;                        /* Size (height) of the text, used to draw the name */
-    int         m_FileNameSize;                         /* Size (height) of the text, used to draw the name */
+    int         m_SheetNameSize;                        /* Size (height) of the text, used to draw the sheet name */
+    int         m_FileNameSize;                         /* Size (height) of the text, used to draw the file name */
     wxPoint     m_Pos;
     wxSize      m_Size;                                 /* Position and Size of sheet symbol */
     int         m_Layer;
     Hierarchical_PIN_Sheet_Struct* m_Label;             /* Points de connection, linked list.*/
-    int         m_NbLabel;                              /* Nombre de points de connexion */
+    int         m_NbLabel;                              /* Pins sheet (corresponding to hierarchical labels) count */
     SCH_SCREEN* m_AssociatedScreen;             /* Associated Screen which handle the physical data
                                                  * In complex hierarchies we can have many DrawSheetStruct using the same data
                                                  */
@@ -149,7 +149,7 @@ public:
     DrawSheetPath();
     ~DrawSheetPath() { };
     void                Clear() { m_numSheets = 0; }
-    int              Cmp( DrawSheetPath& d );
+    int              Cmp( const DrawSheetPath& d ) const;
     DrawSheetStruct* Last();
     SCH_SCREEN*      LastScreen();
     EDA_BaseStruct*  LastDrawList();

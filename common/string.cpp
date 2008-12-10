@@ -1,7 +1,7 @@
-/****************************************************************************/
-/*	                             string.cpp									*/
-/*	 ROLE: fonctions complementaires de traitement de chaines de caracteres */
-/****************************************************************************/
+/*********************************************/
+/*	             string.cpp				  	 */
+/*	 some useful functions to handle strings */
+/*********************************************/
 
 #include "fctsys.h"
 #include <time.h>
@@ -13,9 +13,9 @@
 int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
 /*********************************************************************/
 
-/* read a double-qute delimited text in source and put in in dest,
+/* read a double-quote delimited text from source and put it in in dest,
  *  read NbMaxChar bytes max
- *  return the byte count read in source
+ *  return the char count read from source
  */
 {
     int ii, jj, flag = 0;

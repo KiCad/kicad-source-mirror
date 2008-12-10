@@ -5,6 +5,9 @@
 // Licence:   GPL license
 /////////////////////////////////////////////////////////////////////////////
 
+#include <algorithm> // to use sort vector
+#include <vector>
+
 #include "fctsys.h"
 
 
@@ -19,23 +22,43 @@
 
 #include "protos.h"
 
+
+/* object used in build BOM to handle the list of labels in schematic
+ * because in a complex hierarchy, a label is used more than once,
+ * and had more than one sheet path, so we must create a flat list of labels
+ */
+class LABEL_OBJECT
+{
+public:
+    int           m_LabelType;
+    SCH_ITEM*     m_Label;
+    //have to store it here since the object references will be duplicated.
+    DrawSheetPath m_SheetPath;  //composed of UIDs
+
+public:
+    LABEL_OBJECT()
+    {
+        m_Label     = NULL;
+        m_LabelType = 0;
+    }
+};
+
+
 // Filename extension for BOM list
 #define EXT_LIST wxT( ".lst" )
 
 // Exported functions
-int         BuildComponentsListFromSchematic( ListComponent* aList );
+int         BuildComponentsListFromSchematic( OBJ_CMP_TO_LIST * aList );
 
 /* fonctions locales */
-static int  GenListeGLabels( ListLabel* aList );
-static int  ListTriComposantByRef( ListComponent* obj1,
-                                   ListComponent* obj2 );
-static int  ListTriComposantByVal( ListComponent* obj1,
-                                   ListComponent* obj2 );
-static int  ListTriGLabelBySheet( ListLabel* obj1, ListLabel* obj2 );
-static int  ListTriGLabelByVal( ListLabel* obj1, ListLabel* obj2 );
-static void DeleteSubCmp( ListComponent* aList, int aItemCount );
+static int  GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
+static int  ListTriComposantByRef( OBJ_CMP_TO_LIST* obj1, OBJ_CMP_TO_LIST* obj2 );
+static int  ListTriComposantByVal( OBJ_CMP_TO_LIST* obj1, OBJ_CMP_TO_LIST* obj2 );
+static bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
+static bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
+static void DeleteSubCmp( OBJ_CMP_TO_LIST* aList, int aItemCount );
 
-static int  PrintListeGLabel( FILE* f, ListLabel* aList, int aItemCount );
+static int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
 
 int         RefDesStringCompare( char* obj1, char* obj2 );
 int         SplitString( wxString  strToSplit,
@@ -69,14 +92,14 @@ void WinEDA_Build_BOM_Frame::Create_BOM_Lists( bool aTypeFileIsExport,
     mask += EXT_LIST;
 
     filename = EDA_FileSelector( _( "Bill of materials:" ),
-                                 wxEmptyString,     /* Chemin par defaut (ici dir courante) */
-                                 m_ListFileName,    /* nom fichier par defaut, et resultat */
-                                 EXT_LIST,          /* extension par defaut */
-                                 mask,              /* Masque d'affichage */
-                                 this,
-                                 wxFD_SAVE,
-                                 TRUE
-                                 );
+        wxEmptyString,                              /* Chemin par defaut (ici dir courante) */
+        m_ListFileName,                             /* nom fichier par defaut, et resultat */
+        EXT_LIST,                                   /* extension par defaut */
+        mask,                                       /* Masque d'affichage */
+        this,
+        wxFD_SAVE,
+        TRUE
+        );
     if( filename.IsEmpty() )
         return;
     else
@@ -112,7 +135,7 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& aFullFileName,
  */
 {
     FILE*          f;
-    ListComponent* aList;
+    OBJ_CMP_TO_LIST* aList;
     int            itemCount;
     wxString       msg;
 
@@ -128,7 +151,7 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& aFullFileName,
     itemCount = BuildComponentsListFromSchematic( NULL );
     if( itemCount )
     {
-        aList = (ListComponent*) MyZMalloc( itemCount * sizeof(ListComponent) );
+        aList = (OBJ_CMP_TO_LIST*) MyZMalloc( itemCount * sizeof(OBJ_CMP_TO_LIST) );
         if( aList == NULL )
         {
             fclose( f );
@@ -138,8 +161,8 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& aFullFileName,
         BuildComponentsListFromSchematic( aList );
 
         /*  sort component list */
-        qsort( aList, itemCount, sizeof( ListComponent ),
-               ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
+        qsort( aList, itemCount, sizeof( OBJ_CMP_TO_LIST ),
+            ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
 
         if( !aIncludeSubComponents )
             DeleteSubCmp( aList, itemCount );
@@ -159,19 +182,17 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& aFullFileName,
                                                  bool            aIncludeSubComponents )
 /****************************************************************************/
 
-/*
- * Routine principale pour la creation des listings ( composants et/ou labels
- * globaux et "sheet labels" )
+/** GenereListeOfItems()
+ * Main function to create the list of components and/or labels
+ * (global labels and pin sheets" )
  */
 {
     FILE*          f;
-    ListComponent* list;
-    ListLabel*     listOfLabels;
+    OBJ_CMP_TO_LIST* list;
     int            itemCount;
     char           Line[1024];
     wxString       msg;
 
-    /* Creation de la liste des elements */
     if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
     {
         msg = _( "Failed to open file " );
@@ -183,7 +204,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& aFullFileName,
     itemCount = BuildComponentsListFromSchematic( NULL );
     if( itemCount )
     {
-        list = (ListComponent*) MyZMalloc( itemCount * sizeof(ListComponent) );
+        list = (OBJ_CMP_TO_LIST*) MyZMalloc( itemCount * sizeof(OBJ_CMP_TO_LIST) );
         if( list == NULL )  // Error memory alloc
         {
             fclose( f );
@@ -199,71 +220,53 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& aFullFileName,
 
         /* Tri et impression de la liste des composants */
 
-        qsort( list, itemCount, sizeof( ListComponent ),
-               ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
+        qsort( list, itemCount, sizeof( OBJ_CMP_TO_LIST ),
+            ( int( * ) ( const void*, const void* ) )ListTriComposantByRef );
 
         if( !aIncludeSubComponents )
             DeleteSubCmp( list, itemCount );
 
-//		if( s_ListByRef )
         if( m_ListCmpbyRefItems->GetValue() )
         {
             PrintComponentsListByRef( f, list, itemCount, false, aIncludeSubComponents );
         }
 
-//		if( s_ListByValue )
         if( m_ListCmpbyValItems->GetValue() )
         {
-            qsort( list, itemCount, sizeof( ListComponent ),
-                   ( int( * ) ( const void*, const void* ) )ListTriComposantByVal );
+            qsort( list, itemCount, sizeof( OBJ_CMP_TO_LIST ),
+                ( int( * ) ( const void*, const void* ) )ListTriComposantByVal );
             PrintComponentsListByVal( f, list, itemCount, aIncludeSubComponents );
         }
         MyFree( list );
     }
 
-    /***************************************/
-    /* Generation liste des Labels globaux */
-    /***************************************/
-    itemCount = GenListeGLabels( NULL );
-    if( itemCount )
+    /*************************************************/
+    /* Create list of  global labels and pins sheets */
+    /*************************************************/
+    std::vector <LABEL_OBJECT> listOfLabels;
+    GenListeGLabels( listOfLabels );
+    if( ( itemCount = listOfLabels.size() ) > 0 )
     {
-        listOfLabels = (ListLabel*) MyZMalloc( itemCount * sizeof(ListLabel) );
-        if( listOfLabels == NULL )
-        {
-            fclose( f );
-            return;
-        }
-
-        GenListeGLabels( listOfLabels );
-
-        /* Tri de la liste */
-
-//		if( s_ListBySheet )
         if( m_GenListLabelsbySheet->GetValue() )
         {
-            qsort( listOfLabels, itemCount, sizeof( ListLabel ),
-                   ( int( * ) ( const void*, const void* ) )ListTriGLabelBySheet );
-
+            sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsBySheet );
             msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ),
-                        itemCount );
+                    "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ),
+                itemCount );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
-            PrintListeGLabel( f, listOfLabels, itemCount );
+            PrintListeGLabel( f, listOfLabels );
         }
 
-//		if( s_ListHierarchicalPinByName )
         if( m_GenListLabelsbyVal->GetValue() )
         {
-            qsort( listOfLabels, itemCount, sizeof( ListLabel ),
-                   ( int( * ) ( const void*, const void* ) )ListTriGLabelByVal );
+            sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsByValue );
 
             msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ),
-                        itemCount );
+                    "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ),
+                itemCount );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
-            PrintListeGLabel( f, listOfLabels, itemCount );
+            PrintListeGLabel( f, listOfLabels );
         }
-        MyFree( listOfLabels );
     }
 
     msg = _( "\n#End List\n" );
@@ -273,7 +276,7 @@ void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& aFullFileName,
 
 
 /*********************************************************/
-int BuildComponentsListFromSchematic( ListComponent* aList )
+int BuildComponentsListFromSchematic( OBJ_CMP_TO_LIST* aList )
 /*********************************************************/
 
 /* Creates the list of components found in the whole schematic
@@ -281,7 +284,7 @@ int BuildComponentsListFromSchematic( ListComponent* aList )
  * if List == null, just returns the count. if not, fills the list.
  * goes through the sheets, not the screens, so that we account for
  * multiple instances of a given screen.
- * Also Initialise m_Father as pointer pointeur of the SCH_SCREN parent
+ * Also Initialise m_Father as pointerof the SCH_SCREN parent
  */
 {
     int             itemCount = 0;
@@ -304,16 +307,16 @@ int BuildComponentsListFromSchematic( ListComponent* aList )
             DrawLibItem->SetParent( sheet->LastScreen() );
             if( aList )
             {
-                aList->m_Comp      = DrawLibItem;
-                aList->m_SheetList = *sheet;
+                aList->m_RootCmp = DrawLibItem;
+                aList->m_SheetPath = *sheet;
                 aList->m_Unit = DrawLibItem->GetUnitSelection( sheet );
 
-                strncpy( aList->m_Ref,
-                        CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
-                        sizeof( aList->m_Ref ) );
+                strncpy( aList->m_Reference,
+                    CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
+                    sizeof( aList->m_Reference ) );
 
                 // Ensure always nul terminate m_Ref.
-                aList->m_Ref[sizeof( aList->m_Ref ) - 1 ] = 0;
+                aList->m_Reference[sizeof( aList->m_Reference ) - 1 ] = 0;
                 aList++;
             }
         }
@@ -323,27 +326,26 @@ int BuildComponentsListFromSchematic( ListComponent* aList )
 }
 
 
-/*********************************************/
-static int GenListeGLabels( ListLabel* list )
-/*********************************************/
+/****************************************************************/
+static int GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
+/****************************************************************/
 
-/* Count the Glabels, or fill the list Listwith Glabel pointers
- * If List == NULL: Item count only
- * Else fill list of Glabels
+/* Fill aList  with Glabel info
  */
 {
-    int             itemCount = 0;
-    EDA_BaseStruct* DrawList;
-    Hierarchical_PIN_Sheet_Struct* SheetLabel;
-    DrawSheetPath*  sheet;
+    int            itemCount = 0;
+    SCH_ITEM*      DrawList;
+    Hierarchical_PIN_Sheet_Struct* PinLabel;
+    DrawSheetPath* sheet;
 
     /* Build the screen list */
-    EDA_SheetList   SheetList( NULL );
+    EDA_SheetList  SheetList( NULL );
+
+    LABEL_OBJECT   labet_object;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
-        DrawList = sheet->LastDrawList();
-        wxString path = sheet->PathHumanReadable();
+        DrawList = (SCH_ITEM*) sheet->LastDrawList();
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -351,35 +353,26 @@ static int GenListeGLabels( ListLabel* list )
             case TYPE_SCH_HIERLABEL:
             case TYPE_SCH_GLOBALLABEL:
                 itemCount++;
-                if( list )
-                {
-                    list->m_LabelType = DrawList->Type();
-                    snprintf( list->m_SheetPath, sizeof(list->m_SheetPath),
-                             "%s", CONV_TO_UTF8( path ) );
-                    list->m_Label = DrawList;
-                    list++;
-                }
+                labet_object.m_LabelType = DrawList->Type();
+                labet_object.m_SheetPath = *sheet;
+                labet_object.m_Label     = DrawList;
+                aList.push_back( labet_object );
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:
+            {
+                PinLabel = ( (DrawSheetStruct*) DrawList )->m_Label;
+                while( PinLabel != NULL )
                 {
-                    #define Sheet ( (DrawSheetStruct*) DrawList )
-                    SheetLabel = Sheet->m_Label;
-                    while( SheetLabel != NULL )
-                    {
-                        if( list )
-                        {
-                            list->m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
-                            snprintf( list->m_SheetPath, sizeof(list->m_SheetPath),
-                                     "%s", CONV_TO_UTF8( path ) );
-                            list->m_Label = SheetLabel;
-                            list++;
-                        }
-                        itemCount++;
-                        SheetLabel = SheetLabel->Next();
-                    }
+                    itemCount++;
+                    labet_object.m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
+                    labet_object.m_SheetPath = *sheet;
+                    labet_object.m_Label     = PinLabel;
+                    aList.push_back( labet_object );
+                    PinLabel = PinLabel->Next();
                 }
-                break;
+            }
+            break;
 
             default:
                 break;
@@ -393,8 +386,7 @@ static int GenListeGLabels( ListLabel* list )
 
 
 /**********************************************************/
-static int ListTriComposantByVal( ListComponent* obj1,
-                                  ListComponent* obj2 )
+static int ListTriComposantByVal( OBJ_CMP_TO_LIST* obj1, OBJ_CMP_TO_LIST* obj2 )
 /**********************************************************/
 
 /* Routine de comparaison pour le tri du Tableau par qsort()
@@ -413,20 +405,20 @@ static int ListTriComposantByVal( ListComponent* obj1,
         return -1;
     if( obj2 == NULL )
         return 1;
-    if( ( obj1->m_Comp == NULL ) && ( obj2->m_Comp == NULL ) )
+    if( ( obj1->m_RootCmp == NULL ) && ( obj2->m_RootCmp == NULL ) )
         return 0;
-    if( obj1->m_Comp == NULL )
+    if( obj1->m_RootCmp == NULL )
         return -1;
-    if( obj2->m_Comp == NULL )
+    if( obj2->m_RootCmp == NULL )
         return 1;
 
-    Text1 = &(obj1->m_Comp->GetField(VALUE)->m_Text);
-    Text2 = &(obj2->m_Comp->GetField(VALUE)->m_Text);
+    Text1 = &(obj1->m_RootCmp->GetField( VALUE )->m_Text);
+    Text2 = &(obj2->m_RootCmp->GetField( VALUE )->m_Text);
     ii    = Text1->CmpNoCase( *Text2 );
 
     if( ii == 0 )
     {
-        ii = RefDesStringCompare( obj1->m_Ref, obj2->m_Ref );
+        ii = RefDesStringCompare( obj1->m_Reference, obj2->m_Reference );
     }
 
     if( ii == 0 )
@@ -438,12 +430,11 @@ static int ListTriComposantByVal( ListComponent* obj1,
 }
 
 
-/**********************************************************/
-static int ListTriComposantByRef( ListComponent* obj1,
-                                  ListComponent* obj2 )
-/**********************************************************/
+/*******************************************************************/
+int ListTriComposantByRef( OBJ_CMP_TO_LIST* obj1, OBJ_CMP_TO_LIST* obj2 )
+/*******************************************************************/
 
-/* Routine de comparaison pour le tri du Tableau par qsort()
+/* compare function for sorting
  * Les composants sont tries
  *     par reference
  *     si meme referenece: par valeur
@@ -460,19 +451,19 @@ static int ListTriComposantByRef( ListComponent* obj1,
     if( obj2 == NULL )
         return 1;
 
-    if( ( obj1->m_Comp == NULL ) && ( obj2->m_Comp == NULL ) )
+    if( ( obj1->m_RootCmp == NULL ) && ( obj2->m_RootCmp == NULL ) )
         return 0;
-    if( obj1->m_Comp == NULL )
+    if( obj1->m_RootCmp == NULL )
         return -1;
-    if( obj2->m_Comp == NULL )
+    if( obj2->m_RootCmp == NULL )
         return 1;
 
-    ii = RefDesStringCompare( obj1->m_Ref, obj2->m_Ref );
+    ii = RefDesStringCompare( obj1->m_Reference, obj2->m_Reference );
 
     if( ii == 0 )
     {
-        Text1 = &( obj1->m_Comp->GetField(VALUE)->m_Text );
-        Text2 = &( obj2->m_Comp->GetField(VALUE)->m_Text );
+        Text1 = &( obj1->m_RootCmp->GetField( VALUE )->m_Text );
+        Text2 = &( obj2->m_RootCmp->GetField( VALUE )->m_Text );
         ii    = Text1->CmpNoCase( *Text2 );
     }
 
@@ -486,76 +477,75 @@ static int ListTriComposantByRef( ListComponent* obj1,
 
 
 /******************************************************************/
-static int ListTriGLabelByVal( ListLabel* obj1, ListLabel* obj2 )
+bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
 /*******************************************************************/
 
-/* Routine de comparaison pour le tri du Tableau par qsort()
- * Les labels sont tries
- *     par comparaison ascii
- *     si meme valeur: par numero de sheet
+/* compare function for sorting labels
+ * sort by
+ *     value
+ *     if same value: by sheet
  */
 {
     int ii;
-    const wxString* Text1, * Text2;
+    wxString *Text1, *Text2;
 
-    if( obj1->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        Text1 = &( (Hierarchical_PIN_Sheet_Struct*) obj1->m_Label )->m_Text;
+    if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        Text1 = &( (Hierarchical_PIN_Sheet_Struct*) (obj1.m_Label) )->m_Text;
     else
-        Text1 = &( (SCH_TEXT*) obj1->m_Label )->m_Text;
+        Text1 = &( (SCH_TEXT*) (obj1.m_Label) )->m_Text;
 
-    if( obj2->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        Text2 = &( (Hierarchical_PIN_Sheet_Struct*) obj2->m_Label )->m_Text;
+    if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        Text2 = &( (Hierarchical_PIN_Sheet_Struct*) (obj2.m_Label) )->m_Text;
     else
-        Text2 = &( (SCH_TEXT*) obj2->m_Label )->m_Text;
+        Text2 = &( (SCH_TEXT*) (obj2.m_Label) )->m_Text;
 
     ii = Text1->CmpNoCase( *Text2 );
 
     if( ii == 0 )
     {
-        ii = strcmp( obj1->m_SheetPath, obj2->m_SheetPath );
+        ii = obj1.m_SheetPath.Cmp( obj2.m_SheetPath );
     }
 
-    return ii;
+    return ii < 0;
 }
 
 
-/*******************************************************************/
-static int ListTriGLabelBySheet( ListLabel* obj1, ListLabel* obj2 )
-/*******************************************************************/
+/*************************************************************************************/
+bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
+/*************************************************************************************/
 
-/* Routine de comparaison pour le tri du Tableau par qsort()
- * Les labels sont tries
- *     par sheet number
- *     si meme valeur, par ordre alphabetique
+/* compare function for sorting labels
+ *     by sheet
+ *     in a sheet, by alphabetic order
  */
 {
     int ii;
-    const wxString* Text1, * Text2;
+    wxString Text1, Text2;
 
 
-    ii = strcmp( obj1->m_SheetPath, obj2->m_SheetPath );
+    ii = obj1.m_SheetPath.Cmp( obj2.m_SheetPath );
 
     if( ii == 0 )
     {
-        if( obj1->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-            Text1 = &( (Hierarchical_PIN_Sheet_Struct*) obj1->m_Label )->m_Text;
+        if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+            Text1 = ( (Hierarchical_PIN_Sheet_Struct*) obj1.m_Label )->m_Text;
         else
-            Text1 = &( (SCH_TEXT*) obj1->m_Label )->m_Text;
+            Text1 = ( (SCH_TEXT*) obj1.m_Label )->m_Text;
 
-        if( obj2->m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-            Text2 = &( (Hierarchical_PIN_Sheet_Struct*) obj2->m_Label )->m_Text;
+        if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+            Text2 = ( (Hierarchical_PIN_Sheet_Struct*) obj2.m_Label )->m_Text;
         else
-            Text2 = &( (SCH_TEXT*) obj2->m_Label )->m_Text;
+            Text2 = ( (SCH_TEXT*) obj2.m_Label )->m_Text;
 
-        ii = Text1->CmpNoCase( *Text2 );
+        ii = Text1.CmpNoCase( Text2 );
     }
 
-    return ii;
+    return ii < 0;
 }
 
 
 /**************************************************************/
-static void DeleteSubCmp( ListComponent* aList, int aItemCount )
+static void DeleteSubCmp( OBJ_CMP_TO_LIST* aList, int aItemCount )
 /**************************************************************/
 
 /* Remove sub components from the list, when multiples parts per package are found in this list
@@ -569,19 +559,19 @@ static void DeleteSubCmp( ListComponent* aList, int aItemCount )
 
     for( int ii = 0; ii < aItemCount; ii++ )
     {
-        libItem = aList[ii].m_Comp;
+        libItem = aList[ii].m_RootCmp;
         if( libItem == NULL )
             continue;
 
-        currName = CONV_FROM_UTF8( aList[ii].m_Ref );
+        currName = CONV_FROM_UTF8( aList[ii].m_Reference );
 
         if( !oldName.IsEmpty() )
         {
             if( oldName == currName )   // currName is a subpart of oldName: remove it
             {
-                aList[ii].m_Comp = NULL;
-                aList[ii].m_SheetList.Clear();
-                aList[ii].m_Ref[0] = 0;
+                aList[ii].m_RootCmp = NULL;
+                aList[ii].m_SheetPath.Clear();
+                aList[ii].m_Reference[0] = 0;
             }
         }
         oldName = currName;
@@ -614,10 +604,10 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
         if( CompactForm )
         {
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField(FOOTPRINT)->m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
         else
-            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField(FOOTPRINT)->m_Text ) );
+            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
     }
 
     for( ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
@@ -631,19 +621,19 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
 
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField(ii)->m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
         else
-            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField(ii)->m_Text ) );
+            fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
     }
 }
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
-                                                      ListComponent* aList,
-                                                      int aItemCount,
-                                                      bool CompactForm,
-                                                      bool aIncludeSubComponents )
+int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE*          f,
+                                                      OBJ_CMP_TO_LIST* aList,
+                                                      int            aItemCount,
+                                                      bool           CompactForm,
+                                                      bool           aIncludeSubComponents )
 /*********************************************************************************************/
 
 /* Print the B.O.M sorted by reference
@@ -709,7 +699,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
     // Print list of items
     for( ii = 0; ii < aItemCount; ii++ )
     {
-        DrawList = aList[ii].m_Comp;
+        DrawList = aList[ii].m_RootCmp;
 
         if( DrawList == NULL )
             continue;
@@ -717,7 +707,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
             continue;
 
         DrawLibItem = (SCH_COMPONENT*) DrawList;
-        if( aList[ii].m_Ref[0] == '#' )
+        if( aList[ii].m_Reference[0] == '#' )
             continue;
 
         Multi = 0;
@@ -728,35 +718,41 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
 #if defined(KICAD_GOST)
+
+
             Unit = aList[ii].m_Unit + '1' - 1;
 #else
+
+
             Unit = aList[ii].m_Unit + 'A' - 1;
 #endif
 
-        sprintf( CmpName, "%s", aList[ii].m_Ref );
+        sprintf( CmpName, "%s", aList[ii].m_Reference );
         if( !CompactForm || Unit != ' ' )
             sprintf( CmpName + strlen( CmpName ), "%c", Unit );
 
         if( CompactForm )
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
         else
             fprintf( f, "| %-10s %-12s", CmpName,
-                    CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ) );
+                CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
 
         if( aIncludeSubComponents )
         {
-            msg = aList[ii].m_SheetList.PathHumanReadable();
+            msg = aList[ii].m_SheetPath.PathHumanReadable();
             if( CompactForm )
             {
                 fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->GetParent(), DrawLibItem->m_Pos );
+                msg = m_Parent->GetXYSheetReferences(
+                    (BASE_SCREEN*) DrawLibItem->GetParent(), DrawLibItem->m_Pos );
                 fprintf( f, "%c%s)", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
             }
             else
             {
                 fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->GetParent(), DrawLibItem->m_Pos );
+                msg = m_Parent->GetXYSheetReferences(
+                    (BASE_SCREEN*) DrawLibItem->GetParent(), DrawLibItem->m_Pos );
                 fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
             }
         }
@@ -776,10 +772,10 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef( FILE* f,
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
-                                                      ListComponent* aList,
-                                                      int aItemCount,
-                                                      bool aIncludeSubComponents )
+int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE*          f,
+                                                      OBJ_CMP_TO_LIST* aList,
+                                                      int            aItemCount,
+                                                      bool           aIncludeSubComponents )
 /**********************************************************************************************/
 {
     int Multi;
@@ -799,7 +795,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
 
     for( int ii = 0; ii < aItemCount; ii++ )
     {
-        DrawList = aList[ii].m_Comp;
+        DrawList = aList[ii].m_RootCmp;
 
         if( DrawList == NULL )
             continue;
@@ -808,7 +804,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
             continue;
 
         DrawLibItem = (SCH_COMPONENT*) DrawList;
-        if( aList[ii].m_Ref[0] == '#' )
+        if( aList[ii].m_Reference[0] == '#' )
             continue;
 
         Multi = 0;
@@ -828,16 +824,18 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
             Unit = aList[ii].m_Unit + 'A' - 1;
         }
 
-        sprintf( CmpName, "%s%c", aList[ii].m_Ref, Unit );
+        sprintf( CmpName, "%s%c", aList[ii].m_Reference, Unit );
 #endif
-        fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->GetField(VALUE)->m_Text ), CmpName );
+        fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->GetField(
+                    VALUE )->m_Text ), CmpName );
 
         // print the sheet path
         if( aIncludeSubComponents )
         {
-            msg = aList[ii].m_SheetList.PathHumanReadable();
+            msg = aList[ii].m_SheetPath.PathHumanReadable();
             fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-            msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*)DrawLibItem->GetParent(), DrawLibItem->m_Pos );
+            msg = m_Parent->GetXYSheetReferences(
+                (BASE_SCREEN*) DrawLibItem->GetParent(), DrawLibItem->m_Pos );
             fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
         }
 
@@ -852,33 +850,29 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal( FILE* f,
 }
 
 
-/******************************************************************/
-static int PrintListeGLabel( FILE* f, ListLabel* aList, int aItemCount )
-/******************************************************************/
+/************************************************************************/
+static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
+/************************************************************************/
 {
-    int ii, jj;
     SCH_LABEL* DrawTextItem;
     Hierarchical_PIN_Sheet_Struct* DrawSheetLabel;
-    ListLabel* LabelItem;
     wxString msg, sheetpath;
     wxString labeltype;
 
-    for( ii = 0; ii < aItemCount; ii++ )
+    for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
-        LabelItem = &aList[ii];
-
-        switch( LabelItem->m_LabelType )
+        switch( aList[ii].m_LabelType )
         {
         case TYPE_SCH_HIERLABEL:
         case TYPE_SCH_GLOBALLABEL:
-            DrawTextItem = (SCH_LABEL*) (LabelItem->m_Label);
+            DrawTextItem = (SCH_LABEL*)(aList[ii].m_Label);
 
-            if( LabelItem->m_LabelType == TYPE_SCH_HIERLABEL )
+            if( aList[ii].m_LabelType == TYPE_SCH_HIERLABEL )
                 labeltype = wxT( "Hierarchical" );
             else
                 labeltype = wxT( "Global      " );
 
-            sheetpath = CONV_FROM_UTF8( LabelItem->m_SheetPath );
+            sheetpath = aList[ii].m_SheetPath.PathHumanReadable();
             msg.Printf(
                 _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
                 DrawTextItem->m_Text.GetData(),
@@ -892,8 +886,8 @@ static int PrintListeGLabel( FILE* f, ListLabel* aList, int aItemCount )
 
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         {
-            DrawSheetLabel = (Hierarchical_PIN_Sheet_Struct*) LabelItem->m_Label;
-            jj = DrawSheetLabel->m_Shape;
+            DrawSheetLabel = (Hierarchical_PIN_Sheet_Struct*) aList[ii].m_Label;
+            int jj = DrawSheetLabel->m_Shape;
             if( jj < 0 )
                 jj = NET_TMAX;
             if( jj > NET_TMAX )
@@ -903,12 +897,12 @@ static int PrintListeGLabel( FILE* f, ListLabel* aList, int aItemCount )
                 _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
                 DrawSheetLabel->m_Text.GetData(),
                 labtype.GetData(),
-                LabelItem->m_SheetPath,
+                aList[ii].m_SheetPath.PathHumanReadable().GetData(),
                 (float) DrawSheetLabel->m_Pos.x / 1000,
                 (float) DrawSheetLabel->m_Pos.y / 1000 );
             fprintf( f, CONV_TO_UTF8( msg ) );
         }
-            break;
+        break;
 
         default:
             break;

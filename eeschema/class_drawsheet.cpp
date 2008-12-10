@@ -371,9 +371,6 @@ int DrawSheetStruct::ComponentCount()
 /*******************************************************************/
 {
     //count our own components, without the power components.
-
-    /* Routine retournant le nombre de composants dans le schema,
-     *  powers non comprises */
     int n = 0;
 
     if( m_AssociatedScreen )
@@ -678,7 +675,7 @@ DrawSheetPath::DrawSheetPath()
 }
 
 
-int DrawSheetPath::Cmp( DrawSheetPath& d )
+int DrawSheetPath::Cmp( const DrawSheetPath& d ) const
 {
     if( m_numSheets > d.m_numSheets )
         return 1;

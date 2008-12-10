@@ -134,9 +134,9 @@ public:
                           bool aRunBrowser);
     void GenereListeOfItems(const wxString & FullFileName, bool aIncludeSubComponents );
     void CreateExportList(const wxString & FullFileName, bool aIncludeSubComponents);
-    int PrintComponentsListByRef( FILE * f, ListComponent * List, int NbItems,
+    int PrintComponentsListByRef( FILE * f, OBJ_CMP_TO_LIST * List, int NbItems,
                             bool CompactForm, bool aIncludeSubComponents );
-    int PrintComponentsListByVal( FILE *f, ListComponent * List, int NbItems,
+    int PrintComponentsListByVal( FILE *f, OBJ_CMP_TO_LIST * List, int NbItems,
                             bool aIncludeSubComponents);
     void PrintFieldData(FILE * f, SCH_COMPONENT * DrawLibItem, bool CompactForm = FALSE);
     void SavePreferences();
