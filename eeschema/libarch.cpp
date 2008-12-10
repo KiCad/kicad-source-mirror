@@ -38,7 +38,9 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
 
     EDA_ScreenList s_list;
 
-    // examine all screens used and build the list of components found in lib
+    /* examine all screens (not scheets) used and build the list of components found in lib
+     * complex hierarchies are not a problem because we just want to know used components in librarires
+     */
     for( SCH_SCREEN* screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
     {
         for( SCH_ITEM* SchItem = screen->EEDrawList; SchItem; SchItem = SchItem->Next() )
