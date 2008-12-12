@@ -369,9 +369,15 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                _( "Enable Auto Del Track" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString,
-                               wxBitmap( show_zone_xpm ),
-                               _( "Show Zones" ), wxITEM_CHECK );
+    m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString,
+                               wxBitmap( show_zone_xpm ), wxNullBitmap,
+                               _( "Show filled areas in zones" ) );
+    m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
+                               wxBitmap( show_zone_disable_xpm ), wxNullBitmap,
+                               _( "Do not show filled areas in zones" ));
+    m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, wxEmptyString,
+                               wxBitmap( show_zone_outline_only_xpm ), wxNullBitmap,
+                               _( "Show outlines of filled areas only in zones" ) );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,

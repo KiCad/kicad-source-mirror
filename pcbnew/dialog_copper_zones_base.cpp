@@ -115,12 +115,6 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* m_OthersOptionsSizer;
 	m_OthersOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Others Options:") ), wxVERTICAL );
 	
-	m_ShowFilledAreasInSketchOpt = new wxCheckBox( this, wxID_ANY, _("Show filled areas in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	m_ShowFilledAreasInSketchOpt->SetToolTip( _("If enabled, filled areas in is this zone will be displayed as non filled polygons.\nIf disabled, filled areas in is this zone will be displayed as \"solid\" areas (normal mode).") );
-	
-	m_OthersOptionsSizer->Add( m_ShowFilledAreasInSketchOpt, 0, wxALL, 5 );
-	
 	m_ClearanceValueTitle = new wxStaticText( this, wxID_ANY, _("Zone clearance value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ClearanceValueTitle->Wrap( -1 );
 	m_OthersOptionsSizer->Add( m_ClearanceValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -154,15 +148,20 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Setup to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportSetupButton->SetForegroundColour( wxColour( 51, 111, 40 ) );
 	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all others copper zones") );
 	
 	m_RightBoxSizer->Add( m_ExportSetupButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_OkButton = new wxButton( this, wxID_OK, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OkButton->SetDefault(); 
+	m_OkButton->SetForegroundColour( wxColour( 140, 49, 47 ) );
+	
 	m_RightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ButtonCancel->SetForegroundColour( wxColour( 45, 38, 155 ) );
+	
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	

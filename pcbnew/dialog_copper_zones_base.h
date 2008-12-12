@@ -20,7 +20,6 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/listbox.h>
 #include <wx/dialog.h>
@@ -70,7 +69,6 @@ class dialog_copper_zone_base : public wxDialog
 		
 		wxRadioBox* m_OrientEdgesOpt;
 		wxRadioBox* m_OutlineAppearanceCtrl;
-		wxCheckBox* m_ShowFilledAreasInSketchOpt;
 		wxStaticText* m_ClearanceValueTitle;
 		wxTextCtrl* m_ZoneClearanceCtrl;
 		wxStaticText* m_MinThicknessValueTitle;

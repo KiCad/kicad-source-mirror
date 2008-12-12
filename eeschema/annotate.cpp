@@ -297,10 +297,14 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 }
 
 
-/*****************************************************************************
-*   Add a OBJ_CMP_TO_LIST object in aComponentsList for each component foun in sheet
-*****************************************************************************/
+/*******************************************************************************************************/
 int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList, DrawSheetPath* aSheet )
+/********************************************************************************************************/
+/** function AddComponentsInSheetToList()
+ * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found in sheet
+ * @param aComponentsList = a std::vector list to fill
+ * @param the DrawSheetPath sheet to analyse
+*/
 {
     int                     NbrCmp   = 0;
     EDA_BaseStruct*         DrawList = aSheet->LastDrawList();
@@ -595,7 +599,13 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
 /**
  * Function CheckAnnotate
- * @return component count ( which are not annotated or have the same reference (duplicates))
+ *  Check errors relatives to annotation:
+ *      components not annotated
+ *      components having the same reference (duplicates)
+ *      for multiple parts per package components :
+ *          part number > number of parts
+ *          different values between parts
+ * @return errors count
  * @param oneSheetOnly : true = search is made only in the current sheet
  *                       false = search in whole hierarchy (usual search).
  */

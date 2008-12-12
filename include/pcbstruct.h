@@ -285,7 +285,7 @@ public:
                                  * 2 show all via hole */
 
     bool DisplayPolarCood;
-    bool DisplayZones;
+    int  DisplayZonesMode;
     bool Show_Modules_Cmp;
     bool Show_Modules_Cu;
 

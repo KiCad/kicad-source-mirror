@@ -98,9 +98,6 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         break;
     }
 
-    if( m_Zone_Setting->m_FilledAreasShowMode == 1 )
-        m_ShowFilledAreasInSketchOpt->SetValue( true );
-
 
     if( m_Zone_Setting->m_Zone_Pad_Options != THERMAL_PAD )
     {
@@ -293,8 +290,6 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         g_Zone_45_Only = FALSE;
     else
         g_Zone_45_Only = TRUE;
-
-    m_Zone_Setting->m_FilledAreasShowMode = m_ShowFilledAreasInSketchOpt->IsChecked() ? 1 : 0;
 
     m_Zone_Setting->m_ThermalReliefGapValue = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
         PCB_INTERNAL_UNIT );

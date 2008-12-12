@@ -25,7 +25,8 @@
 /************************************************************************************************************/
 void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer, bool aPrintMirrorMode )
 /*************************************************************************************************************/
-/* routine de trace du pcb, avec selection des couches */
+/* Draw gerbview layers, for printing
+*/
 {
     DISPLAY_OPTIONS save_opt;
     int DisplayPolygonsModeImg;
@@ -43,7 +44,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayPcbTrackFill = FILLED;
     DisplayOpt.DisplayTrackIsol    = 0;
     DisplayOpt.DisplayDrawItems    = FILLED;
-    DisplayOpt.DisplayZones = 1;
+    DisplayOpt.DisplayZonesMode = 0;
     DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
     g_DisplayPolygonsModeSketch = 0;
 

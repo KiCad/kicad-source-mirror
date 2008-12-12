@@ -86,7 +86,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             break;
 
         default:
-            scanList = DisplayOpt.DisplayZones ?
+            scanList = DisplayOpt.DisplayZonesMode == 0 ?
                        GENERAL_COLLECTOR::AllBoardItems :
                        GENERAL_COLLECTOR::AllButZones;
             break;
@@ -109,7 +109,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             break;
 
         default:
-            scanList = DisplayOpt.DisplayZones ?
+            scanList = DisplayOpt.DisplayZonesMode == 0 ?
                        GENERAL_COLLECTOR::AllBoardItems :
                        GENERAL_COLLECTOR::AllButZones;
         }

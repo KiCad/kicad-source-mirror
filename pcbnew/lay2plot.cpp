@@ -49,7 +49,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
     DisplayOpt.DisplayTrackIsol  = FALSE;
     DisplayOpt.DisplayDrawItems  = FILLED;
-    DisplayOpt.DisplayZones      = TRUE;
+    DisplayOpt.DisplayZonesMode      = 0;
 
     m_PrintIsMirrored = aPrintMirrorMode;
 

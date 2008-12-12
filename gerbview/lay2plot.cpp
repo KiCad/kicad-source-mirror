@@ -30,7 +30,7 @@ void Print_PcbItems(BOARD * Pcb, wxDC *DC, int drawmode, int printmasklayer)
     DisplayOpt.DisplayPcbTrackFill = FILLED;
     DisplayOpt.DisplayTrackIsol = 0;
     DisplayOpt.DisplayDrawItems = FILLED;
-    DisplayOpt.DisplayZones = 1;
+    DisplayOpt.DisplayZonesMode = 0;
 
     /* trace des pistes */
     pt_piste = Pcb->m_Track;

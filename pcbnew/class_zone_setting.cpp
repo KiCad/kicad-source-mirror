@@ -24,15 +24,15 @@
 
 ZONE_SETTING::ZONE_SETTING( void )
 {
-    m_FillMode         = 1;                                         // Mode for filling zone : 1 use segments, 0 use polygons
-    m_ZoneClearance         = 200;                                  // Clearance value
-    m_ZoneMinThickness      = 100;                                  // Min thickness value in filled areas
-    m_NetcodeSelection      = 0;                                    // Net code selection for the current zone
-    m_CurrentZone_Layer     = 0;                                    // Layer used to create the current zone
-    m_Zone_HatchingStyle    = CPolyLine::DIAGONAL_EDGE;             // Option to show the zone area (outlines only, short hatches or full hatches
-    m_ArcToSegmentsCount    = 16;               /* Option to select number of segments to approximate a circle
+    m_FillMode = 1;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
+    m_ZoneClearance      = 200;                                     // Clearance value
+    m_ZoneMinThickness   = 100;                                     // Min thickness value in filled areas
+    m_NetcodeSelection   = 0;                                       // Net code selection for the current zone
+    m_CurrentZone_Layer  = 0;                                       // Layer used to create the current zone
+    m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;                // Option to show the zone area (outlines only, short hatches or full hatches
+    m_ArcToSegmentsCount = 16;                  /* Option to select number of segments to approximate a circle
                                                  * 16 or 32 segments */
-    m_FilledAreasShowMode   = 0;                                    // Used to select draw options for filled areas in a zone (currently normal =0, sketch = 1)
+    m_Unused = 0;
     m_ThermalReliefGapValue = 200;                                  // tickness of the gap in thermal reliefs
     m_ThermalReliefCopperBridgeValue = 200;                         // tickness of the copper bridge in thermal reliefs
 
@@ -46,14 +46,14 @@ ZONE_SETTING::ZONE_SETTING( void )
  */
 void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
 {
-    m_FillMode         = aSource.m_FillMode;
-    m_ZoneClearance         = aSource.m_ZoneClearance;
-    m_ZoneMinThickness      = aSource.m_ZoneMinThickness;
-    m_NetcodeSelection      = aSource.GetNet();
-    m_CurrentZone_Layer     = aSource.GetLayer();
-    m_Zone_HatchingStyle    = aSource.GetHatchStyle();
-    m_ArcToSegmentsCount    = aSource.m_ArcToSegmentsCount;
-    m_FilledAreasShowMode   = aSource.m_DrawOptions;
+    m_FillMode = aSource.m_FillMode;
+    m_ZoneClearance      = aSource.m_ZoneClearance;
+    m_ZoneMinThickness   = aSource.m_ZoneMinThickness;
+    m_NetcodeSelection   = aSource.GetNet();
+    m_CurrentZone_Layer  = aSource.GetLayer();
+    m_Zone_HatchingStyle = aSource.GetHatchStyle();
+    m_ArcToSegmentsCount = aSource.m_ArcToSegmentsCount;
+    m_Unused = aSource.m_Unused;
     m_ThermalReliefGapValue = aSource.m_ThermalReliefGapValue;
     m_ThermalReliefCopperBridgeValue = aSource.m_ThermalReliefCopperBridgeValue;
     m_Zone_Pad_Options = aSource.m_PadOption;
@@ -71,15 +71,15 @@ void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
 void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport )
 {
     aTarget.m_FillMode = m_FillMode;
-    aTarget.m_ZoneClearance = m_ZoneClearance;
+    aTarget.m_ZoneClearance    = m_ZoneClearance;
     aTarget.m_ZoneMinThickness = m_ZoneMinThickness;
     aTarget.m_Poly->SetHatch( m_Zone_HatchingStyle );
     aTarget.m_ArcToSegmentsCount = m_ArcToSegmentsCount;
-    aTarget.m_DrawOptions = m_FilledAreasShowMode;
+    aTarget.m_Unused = m_Unused;
     aTarget.m_ThermalReliefGapValue = m_ThermalReliefGapValue;
     aTarget.m_ThermalReliefCopperBridgeValue = m_ThermalReliefCopperBridgeValue;
     aTarget.m_PadOption = m_Zone_Pad_Options;
-    if ( aFullExport )
+    if( aFullExport )
     {
         aTarget.SetNet( m_NetcodeSelection );
         aTarget.SetLayer( m_CurrentZone_Layer );

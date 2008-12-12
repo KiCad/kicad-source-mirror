@@ -539,7 +539,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
-    if( Type() == TYPE_ZONE && !DisplayOpt.DisplayZones )
+    if( Type() == TYPE_ZONE && DisplayOpt.DisplayZonesMode != 0 )
         return;
 
     if( m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview

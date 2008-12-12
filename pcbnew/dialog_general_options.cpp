@@ -51,10 +51,6 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
 
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->CursorOff( &dc );
-    DrawPanel->PrepareGraphicContext( &dc );
 
     switch( id )
     {
@@ -64,12 +60,16 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_GRID:
         m_Draw_Grid = g_ShowGrid = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         g_Show_Ratsnest = m_OptionsToolBar->GetToolState( id );
+        {
+        wxClientDC dc( DrawPanel );
+        DrawPanel->PrepareGraphicContext( &dc );
         Ratsnest_On_Off( &dc );
+        }
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
@@ -103,26 +103,36 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES:
-        DisplayOpt.DisplayZones = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DisplayOpt.DisplayZonesMode = 0;
+        DrawPanel->Refresh( );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
+        DisplayOpt.DisplayZonesMode = 1;
+        DrawPanel->Refresh( );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
+        DisplayOpt.DisplayZonesMode = 2;
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
         m_DisplayPadFill = DisplayOpt.DisplayPadFill =
                                !m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill =
                                     !m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay =
             m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
@@ -147,7 +157,6 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 
     SetToolbars();
-    DrawPanel->CursorOn( &dc );
 }
 
 

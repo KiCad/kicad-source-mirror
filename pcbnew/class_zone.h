@@ -39,9 +39,7 @@ public:
                                                * In less simple cases (when m_Poly has holes) m_FilledPolysList is a polygon equivalent to m_Poly, without holes
                                                * In complex cases an ouline decribed by m_Poly can have many filled areas
                                                */
-    int m_DrawOptions;                          /* used to pass some draw options (draw filled areas in sketch mode for instance ...)
-                                                 * currently useful when testing filling zones algos
-                                                 */
+    int m_Unused;                           /* waiting for use */
 
 private:
     int m_NetCode; // Net number for fast comparisons

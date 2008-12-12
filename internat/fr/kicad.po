@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-08 19:48+0100\n"
-"PO-Revision-Date: 2008-12-08 19:49+0100\n"
+"POT-Creation-Date: 2008-12-11 17:20+0100\n"
+"PO-Revision-Date: 2008-12-11 18:52+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -4418,7 +4418,7 @@ msgstr "Utiliser des polygones"
 
 #: pcbnew/dialog_copper_zones_base.cpp:40
 msgid "Use segments"
-msgstr "Utiliser des egments"
+msgstr "Utiliser des segments"
 
 #: pcbnew/dialog_copper_zones_base.cpp:42
 msgid "Filling Mode:"
@@ -5628,44 +5628,44 @@ msgstr "Pas de composants trouvés"
 msgid "Selection"
 msgstr "Sélection"
 
-#: eeschema/annotate.cpp:738
+#: eeschema/annotate.cpp:656
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "item non numéroté: %s%s"
 
-#: eeschema/annotate.cpp:743
+#: eeschema/annotate.cpp:661
 #, c-format
 msgid "( unit %d)"
 msgstr "( Unité %d)"
 
-#: eeschema/annotate.cpp:760
+#: eeschema/annotate.cpp:678
 #, c-format
 msgid "Error item %s%s"
 msgstr "Erreur item %s%s"
 
-#: eeschema/annotate.cpp:763
+#: eeschema/annotate.cpp:681
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " unité %d et plus que %d parts"
 
-#: eeschema/annotate.cpp:797
-#: eeschema/annotate.cpp:820
+#: eeschema/annotate.cpp:713
+#: eeschema/annotate.cpp:736
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Multipleélément %s%s"
 
-#: eeschema/annotate.cpp:802
-#: eeschema/annotate.cpp:825
+#: eeschema/annotate.cpp:718
+#: eeschema/annotate.cpp:741
 #, c-format
 msgid " (unit %d)"
 msgstr " ( Unité %d)"
 
-#: eeschema/annotate.cpp:843
+#: eeschema/annotate.cpp:757
 #, c-format
 msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
 
-#: eeschema/annotate.cpp:852
+#: eeschema/annotate.cpp:766
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
@@ -6402,11 +6402,11 @@ msgstr "Ajout Composant"
 msgid "Add Wire"
 msgstr "Ajouter Fils"
 
-#: eeschema/libarch.cpp:78
+#: eeschema/libarch.cpp:66
 msgid "Failed to create archive lib file "
 msgstr "Impossible de créer le fichier librairie archive "
 
-#: eeschema/libarch.cpp:85
+#: eeschema/libarch.cpp:73
 msgid "Failed to create doc lib file "
 msgstr "Impossible de créer le fichier lib document"
 
@@ -7086,16 +7086,16 @@ msgstr "Placer textes graphiques (commentaires)"
 msgid "HV orientation for Wires and Bus"
 msgstr "Force direction H, V et X  pour les fils et bus"
 
-#: eeschema/build_BOM.cpp:71
+#: eeschema/build_BOM.cpp:94
 msgid "Bill of materials:"
 msgstr "Liste du materiel:"
 
-#: eeschema/build_BOM.cpp:122
-#: eeschema/build_BOM.cpp:177
+#: eeschema/build_BOM.cpp:143
+#: eeschema/build_BOM.cpp:182
 msgid "Failed to open file "
 msgstr "Erreur ouverture "
 
-#: eeschema/build_BOM.cpp:248
+#: eeschema/build_BOM.cpp:226
 #, c-format
 msgid ""
 "\n"
@@ -7104,7 +7104,7 @@ msgstr ""
 "\n"
 "#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
 
-#: eeschema/build_BOM.cpp:261
+#: eeschema/build_BOM.cpp:237
 #, c-format
 msgid ""
 "\n"
@@ -7115,7 +7115,7 @@ msgstr ""
 "##Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
 "\n"
 
-#: eeschema/build_BOM.cpp:269
+#: eeschema/build_BOM.cpp:244
 msgid ""
 "\n"
 "#End List\n"
@@ -7123,11 +7123,11 @@ msgstr ""
 "\n"
 "#End List\n"
 
-#: eeschema/build_BOM.cpp:694
+#: eeschema/build_BOM.cpp:619
 msgid "Field"
 msgstr "Champ"
 
-#: eeschema/build_BOM.cpp:702
+#: eeschema/build_BOM.cpp:627
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
@@ -7135,17 +7135,17 @@ msgstr ""
 "\n"
 "#Cmp ( ordre = Reference )"
 
-#: eeschema/build_BOM.cpp:705
-#: eeschema/build_BOM.cpp:796
+#: eeschema/build_BOM.cpp:630
+#: eeschema/build_BOM.cpp:726
 msgid " (with SubCmp)"
 msgstr "avec sub-composants"
 
-#: eeschema/build_BOM.cpp:771
-#: eeschema/build_BOM.cpp:849
+#: eeschema/build_BOM.cpp:700
+#: eeschema/build_BOM.cpp:781
 msgid "#End Cmp\n"
 msgstr "#End Cmp\n"
 
-#: eeschema/build_BOM.cpp:793
+#: eeschema/build_BOM.cpp:723
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -7153,17 +7153,17 @@ msgstr ""
 "\n"
 "#Cmp ( ordre = Valeur )"
 
-#: eeschema/build_BOM.cpp:883
+#: eeschema/build_BOM.cpp:811
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:903
+#: eeschema/build_BOM.cpp:831
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:918
+#: eeschema/build_BOM.cpp:846
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
@@ -7481,7 +7481,7 @@ msgstr "Placer lignes ou  polygones graphiques"
 
 #: eeschema/menubar.cpp:348
 msgid "Graphic text (comment)"
-msgstr "Ttextes graphiques (commentaires)"
+msgstr "Textes graphiques (commentaires)"
 
 #: eeschema/menubar.cpp:359
 msgid "Library preferences"
@@ -8332,29 +8332,29 @@ msgstr "Fichier <%s> non trouvé"
 msgid "Ok to cleanup this sheet"
 msgstr "Ok pour nettoyer cette feuille"
 
-#: eeschema/class_drawsheet.cpp:566
+#: eeschema/class_drawsheet.cpp:563
 #, c-format
 msgid "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?"
 msgstr "Une sous  Hiérarchie nommée %s existe, L'utiliser (Les données de cette page seront remplacées)?"
 
-#: eeschema/class_drawsheet.cpp:570
+#: eeschema/class_drawsheet.cpp:567
 msgid "Sheet Filename Renaming Aborted"
 msgstr " Renommage de Fichier de Feuille Abandonné"
 
-#: eeschema/class_drawsheet.cpp:578
+#: eeschema/class_drawsheet.cpp:575
 #, c-format
 msgid "A file named %s exists, load it (otherwise keep current sheet data if possible)?"
 msgstr "Un fichier %s existe, Le charger (autrement garder le contenu de la feuille active, si c'est possible) ?"
 
-#: eeschema/class_drawsheet.cpp:596
+#: eeschema/class_drawsheet.cpp:593
 msgid "This sheet uses shared data in a complex hierarchy"
 msgstr "Cette feuille utilise des données partagées dans une hiérarchie complexe"
 
-#: eeschema/class_drawsheet.cpp:599
+#: eeschema/class_drawsheet.cpp:596
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
 msgstr "Doit on la convertir en une feuille de hiérarchie simple (autrement supprimer les données courantes)"
 
-#: eeschema/class_drawsheet.cpp:758
+#: eeschema/class_drawsheet.cpp:755
 #, c-format
 msgid "%8.8lX/"
 msgstr "%8.8lX/"

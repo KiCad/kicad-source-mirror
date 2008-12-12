@@ -39,6 +39,8 @@ OBJECTS = \
     book.o\
     Break_Line.o\
     Browse_Files.o\
+    component_select_unit.o\
+    component_select_alternate_shape.o\
     cancel_tool.o\
     Cancel.o\
     config.o\
@@ -247,6 +249,8 @@ OBJECTS = \
     showmodedge.o\
     showtrack.o\
     Show_Zone.o\
+    Show_Zone_Disable.o\
+    Show_Zone_Outline_Only.o\
     Swap_Layer.o\
     shape_3d.o\
     Text_Sketch.o\

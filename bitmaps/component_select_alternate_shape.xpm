@@ -1,0 +1,33 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char * component_select_alternate_shape_xpm[];
+
+#else
+const char * component_select_alternate_shape_xpm[] = {
+"16 16 7 1",
+"X c Black",
+". c None",
+"o c Black",
+"= c Green",
+"+ c #008000",
+"' c Red",
+"* c Cyan",
+"....XXXXXXX.....",
+".oooooX====XX...",
+".......X=====X..",
+".......X=====Xoo",
+".......X=====X..",
+".oooooX====XX...",
+"...*XXXXXXX.....",
+".***............",
+"***.............",
+"*...XXXXXX......",
+"ooooX'''''X.....",
+"....X''''''X....",
+"....X'''''''Xooo",
+"....X''''''X....",
+"ooooX'''''X.....",
+"....XXXXXX......"
+};
+#endif
+

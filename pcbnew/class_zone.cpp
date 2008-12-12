@@ -154,7 +154,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
         return false;
 
     ret = fprintf( aFile, "ZOptions %d %d %c %d %d\n", m_FillMode, m_ArcToSegmentsCount,
-        m_DrawOptions ? 'S' : 'F', m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
+        m_Unused ? 'S' : 'F', m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
     if( ret < 3 )
         return false;
 
@@ -301,8 +301,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             if( arcsegmentcount >= 32 )
                 m_ArcToSegmentsCount = 32;
 
-            if( drawopt == 'S' )  // Sketch mode for filled areas in this zone selected
-                m_DrawOptions = 1;
+            m_Unused = 0;      // Waiting for a better use
         }
         if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
@@ -486,13 +485,14 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
 {
     static vector < char > CornersTypeBuffer;
     static vector < corner_coord > CornersBuffer;
-
-    bool            outline_mode = m_DrawOptions; // false to show filled polys, true to show polygons outlines only (test and debug purposes)
+    // outline_mode is false to show filled polys,
+    // and true to show polygons outlines only (test and debug purposes)
+    bool            outline_mode = DisplayOpt.DisplayZonesMode == 2 ? true : false;
 
     if( DC == NULL )
         return;
 
-    if( !DisplayOpt.DisplayZones )
+    if( DisplayOpt.DisplayZonesMode == 1 )     // Do not show filled areas
         return;
 
     if( m_FilledPolysList.size() == 0 )  // Nothing to draw

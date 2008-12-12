@@ -312,7 +312,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
         ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_FOOTPRINT_CMP, msg, edit_comp_footprint_xpm );
     }
     if( LibEntry && (LookForConvertPart( LibEntry ) >= 2) )
-        editmenu->Append( ID_POPUP_SCH_EDIT_CONVERT_CMP, _( "Convert" ) );
+        ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CONVERT_CMP,_( "Convert" ), component_select_alternate_shape_xpm );
+
     if( LibEntry && (LibEntry->m_UnitCount >= 2) )
     {
         wxMenu* sel_unit_menu = new wxMenu; int ii;
@@ -324,8 +325,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
             sel_unit_menu->Append( ID_POPUP_SCH_SELECT_UNIT1 + ii,
                                    num_unit );
         }
-
-        editmenu->Append( ID_POPUP_SCH_SELECT_UNIT_CMP, _( "Unit" ), sel_unit_menu );
+        ADD_MENUITEM_WITH_SUBMENU( editmenu, sel_unit_menu, ID_POPUP_SCH_SELECT_UNIT_CMP, _( "Unit" ), component_select_unit_xpm );
     }
 
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, editmenu,

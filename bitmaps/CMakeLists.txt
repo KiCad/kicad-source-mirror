@@ -59,6 +59,8 @@ set(BITMAP_SRCS
     Browse_Files.xpm
     cancel_tool.xpm
     Cancel.xpm
+    component_select_unit.xpm
+    component_select_alternate_shape.xpm
     config.xpm
     CopyBlock.xpm
     copy.xpm
@@ -338,6 +340,8 @@ set(BITMAP_SRCS
     showmodedge.xpm
     showtrack.xpm
     Show_Zone.xpm
+    Show_Zone_Disable.xpm
+    Show_Zone_Outline_Only.xpm
     Swap_Layer.xpm
     Text_Sketch.xpm
     tool_ratsnet.xpm

@@ -26,15 +26,12 @@ set(GERBVIEW_SRCS
     onrightclick.cpp
     options.cpp
     pcbplot.cpp
-#   pcbtexte.cpp
-#   process_config.cpp
     readgerb.cpp
     reglage.cpp
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp
     set_color.cpp
-#   struct.cpp <-- not used
     tool_gerber.cpp
     tracepcb.cpp
     trpiste.cpp )

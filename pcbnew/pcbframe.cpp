@@ -449,15 +449,9 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Disable Auto Delete old Track" ) :
                                             _( "Enable Auto Delete old Track" ) );
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES,
-                                      DisplayOpt.DisplayZones );
-
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_ZONES,
-                                           DisplayOpt.DisplayZones ?
-                                           _( "Do not Show Zones" ) : _( "Show Zones" ) );
-
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
+
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                             m_DisplayPadFill ?
                                             _( "Show Pads Sketch mode" ) :

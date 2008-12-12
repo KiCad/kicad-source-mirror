@@ -265,7 +265,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_PCB_ZONES_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Zones" ) );
-        if( !DisplayOpt.DisplayZones )
+        if( DisplayOpt.DisplayZonesMode != 0 )
             DisplayInfo( this, _( "Warning: Display Zone is OFF!!!" ) );
         if( !g_HightLigt_Status && (g_HightLigth_NetCode > 0 ) )
             Hight_Light( &dc );

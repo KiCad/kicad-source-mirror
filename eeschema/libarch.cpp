@@ -16,7 +16,7 @@
 #include "protos.h"
 
 /* Local functions*/
-static bool TriListEntry( const EDA_LibComponentStruct* Objet1,
+static bool SortCmpByName( const EDA_LibComponentStruct* Objet1,
                           const EDA_LibComponentStruct* Objet2 );
 
 
@@ -36,12 +36,12 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
 
     std::vector <EDA_LibComponentStruct*> ListEntry;
 
-    EDA_ScreenList s_list;
+    EDA_ScreenList ScreenList;
 
     /* examine all screens (not scheets) used and build the list of components found in lib
-     * complex hierarchies are not a problem because we just want to know used components in librarires
+     * complex hierarchies are not a problem because we just want to know used components in libraries
      */
-    for( SCH_SCREEN* screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
+    for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
         for( SCH_ITEM* SchItem = screen->EEDrawList; SchItem; SchItem = SchItem->Next() )
         {
@@ -55,7 +55,9 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
         }
     }
 
-    sort( ListEntry.begin(), ListEntry.end(), TriListEntry );
+    // Sort components (libraries entries) by name
+    // (they are components name in library, not in schematic) :
+    sort( ListEntry.begin(), ListEntry.end(), SortCmpByName );
 
     /* calculate the file name for the associated doc file */
     DocFileName = ArchFullFileName;
@@ -104,7 +106,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
 
 
 /***********************************************************************************************/
-bool TriListEntry( const EDA_LibComponentStruct* Objet1, const EDA_LibComponentStruct* Objet2 )
+bool SortCmpByName( const EDA_LibComponentStruct* Objet1, const EDA_LibComponentStruct* Objet2 )
 /***********************************************************************************************/
 
 /* Compare function for sort()
