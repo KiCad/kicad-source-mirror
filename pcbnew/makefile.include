@@ -49,6 +49,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		class_mire.o\
 		class_cotation.o\
 		class_pad.o \
+        class_pad_draw_functions.o\
 		class_equipot.o \
 		class_module.o \
 		class_edge_mod.o \

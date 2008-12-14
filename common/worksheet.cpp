@@ -26,7 +26,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     Ki_PageDescr*     Sheet = screen->m_CurrentSheetDesc;
     int               ii, jj, xg, yg, ipas, gxpas, gypas;
     wxPoint           pos;
-    int               refx, refy, Color;
+    int               refx, refy;
+    EDA_Colors        Color;
     wxString          Line;
     Ki_WorkSheetData* WsItem;
     int               scale = m_InternalUnits / 1000;
@@ -240,8 +241,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
 		    break;
 		case WS_UPPER_SEGMENT:
 		case WS_LEFT_SEGMENT:
-		    WS_MostUpperLine.m_Posy = 
-		    WS_MostUpperLine.m_Endy = 
+		    WS_MostUpperLine.m_Posy =
+		    WS_MostUpperLine.m_Endy =
 		    WS_MostLeftLine.m_Posy = STAMP_OY;
 		    pos.y = (refy - WsItem->m_Posy)* scale;
 		case WS_SEGMENT:

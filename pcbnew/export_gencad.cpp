@@ -442,15 +442,16 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
     for( equipot = pcb->m_Equipots; equipot != NULL; equipot = equipot->Next() )
     {
-        if( equipot->m_Netname == wxEmptyString )  // dummy equipot (non connexion)
+        if( equipot->GetNetname() == wxEmptyString )  // dummy equipot (non connexion)
         {
-            equipot->m_Netname << wxT( "NoConnection" ) << NbNoConn++;
+            wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;
+            equipot->SetNetname(msg); ;
         }
 
         if( equipot->GetNet() <= 0 )  // dummy equipot (non connexion)
             continue;
 
-        msg = wxT( "\nSIGNAL " ) + equipot->m_Netname;
+        msg = wxT( "\nSIGNAL " ) + equipot->GetNetname();
 
         fputs( CONV_TO_UTF8( msg ), file );
         fputs( "\n", file );
@@ -587,8 +588,8 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             old_netcode = track->GetNet();
             EQUIPOT* equipot = pcb->FindNet( track->GetNet() );
             wxString netname;
-            if( equipot && (equipot->m_Netname != wxEmptyString) )
-                netname = equipot->m_Netname;
+            if( equipot && (equipot->GetNetname() != wxEmptyString) )
+                netname = equipot->GetNetname();
             else
                 netname = wxT( "_noname_" );
             fprintf( file, "\nROUTE %s\n", CONV_TO_UTF8( netname ) );
@@ -649,7 +650,7 @@ void CreateDevicesSection( FILE* file, BOARD* pcb )
         for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             fprintf( file, "PINDESCR %.4s", pad->m_Padname );
-            if( pad->m_Netname == wxEmptyString )
+            if( pad->GetNetname() == wxEmptyString )
                 fputs( " NoConn\n", file );
             else
                 fprintf( file, " %.4s\n", pad->m_Padname );

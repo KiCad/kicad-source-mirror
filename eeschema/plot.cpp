@@ -183,7 +183,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
     LibEDA_BaseStruct*      DEntry;
     EDA_LibComponentStruct* Entry;
     int                     TransMat[2][2], Multi, convert;
-    int                     CharColor = -1;
+    EDA_Colors              CharColor = UNSPECIFIED_COLOR;
     wxPoint                 pos;
     bool                    draw_bgfill = false;
 
@@ -377,7 +377,8 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
     wxPoint         textpos; /* Position des textes */
     SCH_CMP_FIELD*  field = DrawLibItem->GetField( FieldNumber );
     int             hjustify, vjustify;
-    int             orient, color = -1;
+    int             orient;
+    EDA_Colors color = UNSPECIFIED_COLOR;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         color = ReturnLayerColor( field->GetLayer() );
@@ -454,7 +455,7 @@ static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape )
  */
 {
     int MapX1, MapY1, x1, y1;
-    int color;
+    EDA_Colors color = UNSPECIFIED_COLOR;
 
     color = ReturnLayerColor( LAYER_PIN );
 
@@ -567,7 +568,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     int      pX, pY, Shape = 0, Orient = 0, offset;
     wxSize   Size;
     wxString Text;
-    int      color = -1;
+    EDA_Colors color = UNSPECIFIED_COLOR;
 
     switch( Struct->Type() )
     {
@@ -680,12 +681,13 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 }
 
 
-/***********************************************************/
+/***********************************************************************/
 static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
-/***********************************************************/
+/***********************************************************************/
 /* Routine de dessin des Sheet Labels type hierarchie */
 {
-    int side, txtcolor = -1;
+    int side;
+    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     int posx, tposx, posy, size, size2;
     int coord[16];
 
@@ -760,7 +762,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
 /* Routine de dessin du bloc type hierarchie */
 {
     Hierarchical_PIN_Sheet_Struct* SheetLabelStruct;
-    int      txtcolor = -1;
+    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     wxSize   size;
     wxString Text;
     wxPoint  pos;

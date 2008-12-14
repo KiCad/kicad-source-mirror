@@ -72,14 +72,15 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
 /********************************************************************************************/
 /* Routine de dessin des Labels type hierarchie */
 {
-    int    side, txtcolor;
+    int    side;
+    EDA_Colors txtcolor;
     int    posx, tposx, posy, size2;
     wxSize size;
     int    NbSegm, coord[20];
     int    LineWidth = g_DrawMinimunLineWidth;
 
     if( Color >= 0 )
-        txtcolor = Color;
+        txtcolor = (EDA_Colors)Color;
     else
         txtcolor = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );

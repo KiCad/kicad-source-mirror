@@ -427,14 +427,37 @@ double round( double aNumber );
 /**************/
 /* DRAWTXT.CPP */
 /**************/
-void    DrawGraphicText( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos,
-                         int mode_color, const wxString& Text,
-                         int orient, const wxSize& char_size,
-                         int h_justify, int v_justify, int width = 0 );
+/** Function DrawGraphicText
+ * Draw a graphic text (like module texts)
+ *  @param aPanel = the current DrawPanel
+ *  @param aPos = text position (according to h_justify, v_justify)
+ *  @param aColor (enum EDA_Colors) = text color
+ *  @param aText = text to draw
+ *  @param aOrient = angle in 0.1 degree
+ *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
+ *  @param aH_justify = horizontal justification (Left, center, right)
+ *  @param aV_justify = vertical justification (bottom, center, top)
+ *  @param aWidth = line width (pen width) (default = 0)
+ *      if width < 0 : draw segments in sketch mode, width = abs(width)
+ */
+void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                      const wxPoint& aPos, enum EDA_Colors aColor, const wxString& aText,
+                      int aOrient, const wxSize& aSize, int aH_justify, int aV_justify, int aWidth = 0);
 
-void    PlotGraphicText( int format_plot, const wxPoint& Pos, int gcolor,
-                         const wxString& Text,
-                         int orient, const wxSize& Size, int h_justify, int v_justify );
+/** Function PlotGraphicText
+ *  same as DrawGraphicText, but plot graphic text insteed of draw it
+ *  @param aFormat_plot = plot format (PLOT_FORMAT_POST, PLOT_FORMAT_HPGL, PLOT_FORMAT_GERBER)
+ *  @param aPos = text position (according to aH_justify, aV_justify)
+ *  @param aColor (enum EDA_Colors) = text color
+ *  @param aText = text to draw
+ *  @param aOrient = angle in 0.1 degree
+ *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
+ *  @param aH_justify = horizontal justification (Left, center, right)
+ *  @param aV_justify = vertical justification (bottom, center, top)
+ */
+void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
+                      const wxString& aText,
+                      int aOrient, const wxSize& aSize, int aH_justify, int aV_justify );
 
 /***************/
 /* CONFIRM.CPP */

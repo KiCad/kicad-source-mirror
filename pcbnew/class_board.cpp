@@ -835,7 +835,7 @@ EQUIPOT* BOARD::FindNet( const wxString & aNetname ) const
     {
         for( EQUIPOT* net = m_Equipots;  net;  net=net->Next() )
         {
-            if( net->m_Netname == aNetname )
+            if( net->GetNetname() == aNetname )
                 return net;
         }
     }
@@ -882,7 +882,7 @@ int s_SortByNames(const void * ptr1, const void * ptr2)
 {
     EQUIPOT* item1 = * (EQUIPOT**) ptr1;
     EQUIPOT* item2 = * (EQUIPOT**) ptr2;
-    return  item1->m_Netname.CmpNoCase(item2->m_Netname);
+    return  item1->GetNetname().CmpNoCase(item2->GetNetname());
 }
 
 // Sort nets by decreasing pad count
@@ -892,7 +892,7 @@ int s_SortByNodes(const void * ptr1, const void * ptr2)
     EQUIPOT* item2 = * (EQUIPOT**) ptr2;
     if ( (item1->m_NbNodes - item2->m_NbNodes) != 0 )
         return  - (item1->m_NbNodes - item2->m_NbNodes);
-    return  item1->m_Netname.CmpNoCase(item2->m_Netname);
+    return  item1->GetNetname().CmpNoCase(item2->GetNetname());
 }
 
 
@@ -912,7 +912,7 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Typ
     /* count items to list and sort */
     for( net = m_Equipots; net;  net=net->Next() )
     {
-        if ( net->m_Netname.IsEmpty() ) continue;
+        if ( net->GetNetname().IsEmpty() ) continue;
         NetCount++;
     }
 
@@ -922,7 +922,7 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Typ
     EQUIPOT* * net_ptr_list = (EQUIPOT* *) MyMalloc( NetCount * sizeof(* net_ptr_list) );
     for( ii = 0, net = m_Equipots; net; net=net->Next() )
     {
-        if ( net->m_Netname.IsEmpty() ) continue;
+        if ( net->GetNetname().IsEmpty() ) continue;
         net_ptr_list[ii] = net;
         ii++;
     }
@@ -945,7 +945,7 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Typ
     for( ii = 0; ii < NetCount; ii++ )
     {
         net = net_ptr_list[ii];
-        aNames.Add(net->m_Netname);
+        aNames.Add(net->GetNetname());
     }
 
     MyFree(net_ptr_list);

@@ -516,7 +516,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
  */
 {
     wxPoint oldpos;/* memorisation temporaire pos curseur */
-    D_PAD*  pt_pad, * pt_old_pad;
+    D_PAD*  pad, * old_pad;
 
 
     if( (OldModule->Type() != TYPE_MODULE) || (NewModule->Type() != TYPE_MODULE) )
@@ -553,19 +553,19 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     NewModule->m_Path = OldModule->m_Path;
 
     /* mise a jour des netnames ( lorsque c'est possible) */
-    pt_pad = NewModule->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+    pad = NewModule->m_Pads;
+    for( ; pad != NULL; pad = pad->Next() )
     {
-        pt_pad->m_Netname = wxEmptyString;
-        pt_pad->SetNet( 0 );
-        pt_old_pad = OldModule->m_Pads;
-        for( ; pt_old_pad != NULL; pt_old_pad = pt_old_pad->Next() )
+        pad->SetNetname( wxEmptyString );
+        pad->SetNet( 0 );
+        old_pad = OldModule->m_Pads;
+        for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
-            if( strnicmp( pt_pad->m_Padname, pt_old_pad->m_Padname,
-                         sizeof(pt_pad->m_Padname) ) == 0 )
+            if( strnicmp( pad->m_Padname, old_pad->m_Padname,
+                         sizeof(pad->m_Padname) ) == 0 )
             {
-                pt_pad->m_Netname = pt_old_pad->m_Netname;
-                pt_pad->SetNet( pt_old_pad->GetNet() );
+                pad->SetNetname(old_pad->GetNetname() );
+                pad->SetNet( old_pad->GetNet() );
             }
         }
     }

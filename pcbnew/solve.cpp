@@ -245,7 +245,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         pt_equipot = m_Pcb->FindNet( current_net_code );
         if( pt_equipot )
         {
-            msg.Printf( wxT( "[%8.8s]" ), pt_equipot->m_Netname.GetData() );
+            msg.Printf( wxT( "[%8.8s]" ), pt_equipot->GetNetname().GetData() );
             Affiche_1_Parametre( this, 1, wxT( "Net route" ), msg, BROWN );
             msg.Printf( wxT( "%d / %d" ), Ncurrent, Ntotal );
             Affiche_1_Parametre( this, 12, wxT( "Activity" ), msg, BROWN );

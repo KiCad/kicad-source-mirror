@@ -16,7 +16,6 @@ set(CVPCB_SRCS
     dialog_display_options.cpp
     displayframe.cpp
     genequiv.cpp
-#   genorcad.cpp
     init.cpp
     listboxes.cpp
     listlib.cpp
@@ -41,6 +40,7 @@ set(CVPCB_EXTRA_SRCS
     ../pcbnew/class_mire.cpp
     ../pcbnew/class_module.cpp
     ../pcbnew/class_pad.cpp
+    ../pcbnew/class_pad_draw_functions.cpp
     ../pcbnew/class_pcb_text.cpp
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp

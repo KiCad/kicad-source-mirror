@@ -880,7 +880,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
     pad_courant = &m_Pcb->m_Pads[0];
     for( ; ii > 0; pad_courant++, ii-- )
     {
-        if( (*pad_courant)->m_Netname.IsEmpty() ) // pad not connected
+        if( (*pad_courant)->GetNetname().IsEmpty() ) // pad not connected
         {
             (*pad_courant)->SetNet( 0 );
             continue;
@@ -892,7 +892,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
         pad_ref = &m_Pcb->m_Pads[0];
         while( pad_ref < pad_courant )
         {
-            if( (*pad_ref)->m_Netname == (*pad_courant)->m_Netname )
+            if( (*pad_ref)->GetNetname() == (*pad_courant)->GetNetname() )
                 break; // sont du meme met
 
             pad_ref++;
@@ -926,7 +926,7 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
         // Set the net_code for this equipot and reset other values
         equipot->SetNet(ii);
         equipot->m_NbNodes = 0;
-        equipot->m_Netname.Empty();
+        equipot->SetNetname(wxEmptyString);
 
         BufPtEquipot[ii] = equipot;
     }
@@ -950,9 +950,9 @@ void WinEDA_BasePcbFrame::recalcule_pad_net_code()
         equipot = BufPtEquipot[net];
         equipot->m_NbNodes++;
 
-        if( equipot->m_Netname.IsEmpty() )
+        if( equipot->GetNetname().IsEmpty() )
         {
-            equipot->m_Netname = (*pad_courant)->m_Netname;
+            equipot->SetNetname((*pad_courant)->GetNetname());
         }
     }
 

@@ -71,7 +71,7 @@ void ZONE_CONTAINER::SetNet( int anet_code )
     {
         EQUIPOT* net = ( (BOARD*) m_Parent )->FindNet( anet_code );
         if( net )
-            m_Netname = net->m_Netname;
+            m_Netname = net->GetNetname();
         else
             m_Netname.Empty();
     }
@@ -875,7 +875,7 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
             EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->m_Pcb->FindNet( GetNet() );
 
             if( equipot )
-                msg = equipot->m_Netname;
+                msg = equipot->GetNetname();
             else
                 msg = wxT( "<noname>" );
         }
@@ -1047,7 +1047,7 @@ bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
     EQUIPOT* net;
     if ( m_Parent && (net = ((BOARD*)m_Parent)->FindNet( GetNet()) ) )
     {
-        m_Netname = net->m_Netname;
+        m_Netname = net->GetNetname();
         return true;
     }
 

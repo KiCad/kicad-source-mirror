@@ -1076,7 +1076,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         {
             int netcode = equipot->GetNet();
             if( netcode > 0 )
-                nets[ netcode ]->net_id = CONV_TO_UTF8( equipot->m_Netname );
+                nets[ netcode ]->net_id = CONV_TO_UTF8( equipot->GetNetname() );
         }
 
         items.Collect( aBoard, scanMODULEs );
@@ -1253,7 +1253,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
                     old_netcode = netcode;
                     EQUIPOT* equipot = aBoard->FindNet( netcode );
                     wxASSERT( equipot );
-                    netname = CONV_TO_UTF8( equipot->m_Netname );
+                    netname = CONV_TO_UTF8( equipot->GetNetname() );
                 }
 
                 WIRE* wire = new WIRE( wiring );
@@ -1315,7 +1315,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             EQUIPOT* equipot = aBoard->FindNet( netcode );
             wxASSERT( equipot );
 
-            dsnVia->net_id = CONV_TO_UTF8( equipot->m_Netname );
+            dsnVia->net_id = CONV_TO_UTF8( equipot->GetNetname() );
 
             dsnVia->via_type = T_protect;     // @todo, this should be configurable
         }

@@ -195,7 +195,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         {
             for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
             {
-                if( ListNetName[ii] == equipot->m_Netname )
+                if( ListNetName[ii] == equipot->GetNetname() )
                 {
                     m_ListNetNameSelection->SetSelection( ii );
                     m_ListNetNameSelection->EnsureVisible( ii );
@@ -340,7 +340,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     g_Zone_Default_Setting.m_NetcodeSelection = 0;
     for( net = m_Parent->m_Pcb->m_Equipots;   net;  net = net->Next() )
     {
-        if( net->m_Netname == net_name )
+        if( net->GetNetname() == net_name )
         {
             g_Zone_Default_Setting.m_NetcodeSelection = net->GetNet();
             break;
@@ -392,7 +392,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
         {
             for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
             {
-                if( ListNetName[ii] == equipot->m_Netname )
+                if( ListNetName[ii] == equipot->GetNetname() )
                 {
                     m_ListNetNameSelection->SetSelection( ii );
                     m_ListNetNameSelection->EnsureVisible( ii );

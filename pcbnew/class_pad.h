@@ -12,6 +12,8 @@ class D_PAD : public BOARD_CONNECTED_ITEM
 {
 private:
     int m_NetCode;              // Net number for fast comparisons
+    wxString   m_Netname;       // Full net name like /mysheet/mysubsheet/vout used by eeschema
+    wxString   m_ShortNetname;  // short net name, like vout from /mysheet/mysubsheet/vout
 
 
 public:
@@ -24,8 +26,6 @@ public:
                                      *  (used in pad name comparisons because  this is faster than string comparison)
                                      */
     };
-
-    wxString m_Netname;             /* Net Name */
 
     int      m_Masque_Layer;        // Bitwise layer :1= copper layer, 15= cmp,
                                     // 2..14 = internal layers
@@ -72,6 +72,30 @@ public:
     void            Copy( D_PAD* source );
 
     D_PAD* Next() { return (D_PAD*) Pnext; }
+
+
+    /**
+     * Function GetNetname
+     * @return const wxString * , a pointer to the full netname
+     */
+    wxString GetNetname() const { return m_Netname; }
+    /**
+     * Function GetShortNetname
+     * @return const wxString * , a pointer to the short netname
+     */
+    wxString GetShortNetname() const { return m_ShortNetname; }
+
+    /**
+     * Function SetNetname
+     * @param const wxString : the new netname
+     */
+    void SetNetname( const wxString & aNetname );
+
+    /**
+     * Function GetShape
+     * @return the shape of this pad.
+     */
+    int GetShape( ) { return (m_PadShape & 0xFF); }
 
     /**
      * Function GetPosition

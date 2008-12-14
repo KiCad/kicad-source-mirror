@@ -45,11 +45,11 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
     {
         wxString Line;
         /* calcul adr relative du nom de la pastille reference de la piste */
-        if( !WildCompareString( msg, Equipot->m_Netname, FALSE ) )
+        if( !WildCompareString( msg, Equipot->GetNetname(), FALSE ) )
             continue;
 
         Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), Equipot->GetNet(),
-                    Equipot->m_Netname.GetData() );
+                    Equipot->GetNetname().GetData() );
         List->Append( Line );
     }
 
@@ -65,7 +65,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
     for( jj = 0; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
     {
         /* calcul adr relative du nom de la pastille reference de la piste */
-        if( !WildCompareString( msg, Equipot->m_Netname, FALSE ) )
+        if( !WildCompareString( msg, Equipot->GetNetname(), FALSE ) )
             continue;
 
         if( ii == jj )

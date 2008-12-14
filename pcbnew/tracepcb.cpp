@@ -190,6 +190,13 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
     {
         m_markers[i]->Draw( aPanel, DC, aDrawMode );
     }
+
+    // Draw equipots info
+    for( EQUIPOT* net = m_Equipots;  net;  net = net->Next() )
+    {
+        if ( net->GetNet() != 0 )   // no net if 0
+            net->Draw( aPanel, DC, aDrawMode );
+    }
 }
 
 

@@ -249,8 +249,8 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
  *      DrawMode: mode de trace
  */
 {
-    int            orient, color;
-
+    int            orient;
+    EDA_Colors color;
     wxPoint        pos; /* Position des textes */
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
     int            hjustify, vjustify;
@@ -304,7 +304,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
 
     if( !m_AddExtraText || (m_FieldId != REFERENCE) )
     {
-        DrawGraphicText( panel, DC, pos, color, m_Text.GetData(),
+        DrawGraphicText( panel, DC, pos, color, m_Text,
             orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
             m_Size,
             hjustify, vjustify, LineWidth );

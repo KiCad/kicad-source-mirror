@@ -123,11 +123,11 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
 /* Texts type Comment (text on layer "NOTE") have 4 directions, and the Text origin is the first letter
  */
 {
-    int color;
+    EDA_Colors color;
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
-        color = Color;
+        color = (EDA_Colors)Color;
     else
         color = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
@@ -331,13 +331,14 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
  */
 {
     int     Poly[40];
-    int     ii, color;
+    int     ii;
+    EDA_Colors color;
     wxPoint AnchorPos = m_Pos + offset;;
 
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
-        color = Color;
+        color = (EDA_Colors)Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -464,13 +465,15 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& dr
  */
 {
     int     Poly[20];
-    int     offset, color, HalfSize;
+    int     offset;
+    EDA_Colors color;
+    int HalfSize;
     wxPoint AnchorPos = m_Pos + draw_offset;;
 
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
-        color = Color;
+        color = (EDA_Colors)Color;
     else
         color = ReturnLayerColor( m_Layer );
 

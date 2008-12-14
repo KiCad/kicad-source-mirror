@@ -46,6 +46,7 @@ OBJECTS = $(TARGET).o \
 			class_board.o \
 			class_module.o \
 			class_pad.o \
+            class_pad_draw_functions.o\
 			class_text_mod.o \
 			class_edge_mod.o \
 			class_equipot.o \
@@ -102,6 +103,9 @@ class_track.o: ../pcbnew/class_track.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_pad.o: ../pcbnew/class_pad.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_pad_draw_functions.o: ../pcbnew/class_pad_draw_functions.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_module.o: ../pcbnew/class_module.cpp

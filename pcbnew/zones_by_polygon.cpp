@@ -801,7 +801,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     g_Zone_Default_Setting.ExportSetting( *zone_container);
     EQUIPOT* net = m_Pcb->FindNet( g_Zone_Default_Setting.m_NetcodeSelection );
     if( net )   // net === NULL should not occur
-        zone_container->m_Netname = net->m_Netname;
+        zone_container->m_Netname = net->GetNetname();
 
 
     // Combine zones if possible :
@@ -897,7 +897,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
             }
         }
         else
-            msg = net->m_Netname;
+            msg = net->GetNetname();
     }
     else
         msg = _( "No Net" );

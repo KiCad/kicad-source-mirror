@@ -131,7 +131,7 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
 /*******************************************************************/
 {
-    int color;
+    EDA_Colors color;
 
     if( Field == NULL )
         return;
@@ -183,7 +183,7 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
 {
     wxString Text;
     wxString title;
-    int      color;
+    EDA_Colors      color;
     int      LineWidth = MAX( Field->m_Width, g_DrawMinimunLineWidth );
 
     if( Field == NULL )
@@ -253,7 +253,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
   * sinon Modif du champ pointe par la souris
  */
 {
-    int color;
+    EDA_Colors color;
 
     if( Field == NULL )
         return;

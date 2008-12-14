@@ -32,7 +32,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
 
     equipot = frame->m_Pcb->FindNet( netcode );
     if( equipot )
-        Affiche_1_Parametre( frame, 1, _( "Net Name" ), equipot->m_Netname, RED );
+        Affiche_1_Parametre( frame, 1, _( "Net Name" ), equipot->GetNetname(), RED );
     else
         Affiche_1_Parametre( frame, 1, _( "No Net (not connected)" ), wxEmptyString, RED );
 

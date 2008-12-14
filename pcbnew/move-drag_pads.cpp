@@ -206,7 +206,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 
     /* Mise a jour des caract de la pastille : */
     Import_Pad_Settings( Pad, false );
-    Pad->m_Netname.Empty();
+    Pad->SetNetname(wxEmptyString);
 
     Pad->m_Pos = GetScreen()->m_Curseur;
 

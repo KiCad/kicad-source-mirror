@@ -138,9 +138,6 @@ void WinEDA_BasicFrame::PrintMsg( const wxString& text )
 /******************************************************/
 {
     SetStatusText( text );
-#ifdef DEBUG
-    printf( "%s\n", (const char*) text.mb_str() );
-#endif
 }
 
 

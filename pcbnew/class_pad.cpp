@@ -3,24 +3,12 @@
 /************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
-#include "wxstruct.h"
 #include "common.h"
 #include "pcbnew.h"
 #include "trigo.h"
 #include "id.h"             // ID_TRACK_BUTT
 
-#ifdef PCBNEW
-#include "drag.h"
-#endif
-
-#ifdef CVPCB
-#include "cvpcb.h"
-
-#endif
-
-#include "protos.h"
 
 /*******************************/
 /* classe D_PAD : constructeur */
@@ -30,7 +18,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 {
     m_NumPadName   = 0;
     m_Masque_Layer = CUIVRE_LAYER;
-    m_DrillShape = PAD_CIRCLE;          // Drill shape = circle
+    m_DrillShape   = PAD_CIRCLE;        // Drill shape = circle
 
     m_Size.x = m_Size.y = 500;
 
@@ -41,9 +29,9 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 
     m_PadShape = PAD_CIRCLE;            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
     m_Attribut = PAD_STANDARD;          // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
-    m_Orient   = 0;                 // en 1/10 degres
+    m_Orient   = 0;                     // en 1/10 degres
 
-    SetSubRatsnest(0);
+    SetSubRatsnest( 0 );
     ComputeRayon();
 }
 
@@ -72,8 +60,8 @@ void D_PAD::ComputeRayon()
 
     case PAD_RECT:
     case PAD_TRAPEZOID:
-        m_Rayon = (int) (sqrt( (double) m_Size.y * m_Size.y
-                              + (double) m_Size.x * m_Size.x ) / 2);
+        m_Rayon = (int) ( sqrt( (double) m_Size.y * m_Size.y
+                + (double) m_Size.x * m_Size.x ) / 2 );
         break;
     }
 }
@@ -87,10 +75,10 @@ void D_PAD::ComputeRayon()
 EDA_Rect D_PAD::GetBoundingBox()
 {
     // Calculate area:
-    ComputeRayon();		// calculate the radius of the area, considered as a circle
-    EDA_Rect      area;
-    area.SetOrigin(m_Pos);
-    area.Inflate(m_Rayon, m_Rayon);
+    ComputeRayon();     // calculate the radius of the area, considered as a circle
+    EDA_Rect area;
+    area.SetOrigin( m_Pos );
+    area.Inflate( m_Rayon, m_Rayon );
 
     return area;
 }
@@ -171,6 +159,18 @@ void D_PAD::SetPadName( const wxString& name )
         m_Padname[ii] = 0;
 }
 
+/**************************************************/
+void D_PAD::SetNetname( const wxString & aNetname )
+/**************************************************/
+/**
+ * Function SetNetname
+ * @param const wxString : the new netname
+ */
+{
+    m_Netname = aNetname;
+    m_ShortNetname = m_Netname.AfterLast( '/' );
+}
+
 
 /********************************/
 void D_PAD::Copy( D_PAD* source )
@@ -184,10 +184,10 @@ void D_PAD::Copy( D_PAD* source )
 
     memcpy( m_Padname, source->m_Padname, sizeof(m_Padname) );  /* nom de la pastille */
     SetNet( source->GetNet() );                                 /* Numero de net pour comparaisons rapides */
-    m_Drill      = source->m_Drill;                             // Diametre de percage
+    m_Drill = source->m_Drill;                                  // Diametre de percage
     m_DrillShape = source->m_DrillShape;
     m_Offset     = source->m_Offset;                            // Offset de la forme
-    m_Size      = source->m_Size;                               // Dimension ( pour orient 0 )
+    m_Size = source->m_Size;                                    // Dimension ( pour orient 0 )
     m_DeltaSize = source->m_DeltaSize;                          // delta sur formes rectangle -> trapezes
     m_Pos0 = source->m_Pos0;                                    // Coord relatives a l'ancre du pad en
     //  orientation 0
@@ -199,416 +199,7 @@ void D_PAD::Copy( D_PAD* source )
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
     m_Netname = source->m_Netname;
-}
-
-
-/*******************************************************************************************/
-void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
-/*******************************************************************************************/
-
-/** Draw a pad:
- *  @param  DC = device context
- *  @param offset = draw offset
- *  @param draw_mode = mode: GR_OR, GR_XOR, GR_AND...
- */
-{
-    int ii;
-    int color = 0;
-    int ux0, uy0,
-        dx, dx0, dy, dy0,
-        rotdx,
-        delta_cx, delta_cy,
-        xc, yc;
-    int                  angle;
-    wxPoint              coord[4];
-    int                  zoom;
-    int                  fillpad = 0;
-    wxPoint              shape_pos;
-
-    if ( m_Flags & DO_NOT_DRAW )
-        return;
-
-    wxASSERT( panel );
-
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
-
-    PCB_SCREEN* screen = frame->GetScreen();
-
-    zoom = screen->GetZoom();
-
-    if( frame->m_DisplayPadFill == FILLED )
-        fillpad = 1;
-
-#ifdef PCBNEW
-    if( m_Flags & IS_MOVED )
-        fillpad = 0;
-#endif
-
-    if( m_Masque_Layer & CMP_LAYER )
-        color = g_PadCMPColor;
-
-    if( m_Masque_Layer & CUIVRE_LAYER )
-        color |= g_PadCUColor;
-
-    if( color == 0 ) /* Not on copper layer */
-    {
-        switch( m_Masque_Layer & ~ALL_CU_LAYERS )
-        {
-        case ADHESIVE_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_CU];
-            break;
-
-        case ADHESIVE_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_CMP];
-            break;
-
-        case SOLDERPASTE_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_CU];
-            break;
-
-        case SOLDERPASTE_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_CMP];
-            break;
-
-        case SILKSCREEN_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_CU];
-            break;
-
-        case SILKSCREEN_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_CMP];
-            break;
-
-        case SOLDERMASK_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_CU];
-            break;
-
-        case SOLDERMASK_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_CMP];
-            break;
-
-        case DRAW_LAYER:
-            color = g_DesignSettings.m_LayerColor[DRAW_N];
-            break;
-
-        case COMMENT_LAYER:
-            color = g_DesignSettings.m_LayerColor[COMMENT_N];
-            break;
-
-        case ECO1_LAYER:
-            color = g_DesignSettings.m_LayerColor[ECO1_N];
-            break;
-
-        case ECO2_LAYER:
-            color = g_DesignSettings.m_LayerColor[ECO2_N];
-            break;
-
-        case EDGE_LAYER:
-            color = g_DesignSettings.m_LayerColor[EDGE_N];
-            break;
-
-        default:
-            color = DARKGRAY;
-            break;
-        }
-    }
-
-
-    // if PAD_SMD pad and high contrast mode
-    if( (m_Attribut==PAD_SMD || m_Attribut==PAD_CONN) && DisplayOpt.ContrastModeDisplay )
-    {
-        // when routing tracks
-        if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )
-        {
-            int routeTop = screen->m_Route_Layer_TOP;
-            int routeBot = screen->m_Route_Layer_BOTTOM;
-
-            // if routing between copper and component layers,
-            // or the current layer is one of said 2 external copper layers,
-            // then highlight only the current layer.
-            if( ((1<<routeTop) | (1<<routeBot)) == (CUIVRE_LAYER | CMP_LAYER)
-             || ((1<<screen->m_Active_Layer) & (CUIVRE_LAYER | CMP_LAYER)) )
-            {
-                if( !IsOnLayer( screen->m_Active_Layer ) )
-                {
-                    color &= ~MASKCOLOR;
-                    color |= DARKDARKGRAY;
-                }
-            }
-
-            // else routing between an internal signal layer and some other layer.
-            // grey out all PAD_SMD pads not on current or the single selected
-            // external layer.
-            else if( !IsOnLayer( screen->m_Active_Layer )
-                  && !IsOnLayer( routeTop )
-                  && !IsOnLayer( routeBot ) )
-            {
-                color &= ~MASKCOLOR;
-                color |= DARKDARKGRAY;
-            }
-        }
-
-        // when not edting tracks, show PAD_SMD components not on active layer as greyed out
-        else
-        {
-            if( !IsOnLayer( screen->m_Active_Layer ) )
-            {
-                color &= ~MASKCOLOR;
-                color |= DARKDARKGRAY;
-            }
-        }
-    }
-
-    if( draw_mode & GR_SURBRILL )
-    {
-        if( draw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
-        else
-            color |= HIGHT_LIGHT_FLAG;
-    }
-
-    if( color & HIGHT_LIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
-
-    GRSetDrawMode( DC, draw_mode );  /* mode de trace */
-
-    /* calcul du centre des pads en coordonnees Ecran : */
-    shape_pos = ReturnShapePos();
-    ux0 = shape_pos.x - offset.x;
-    uy0 = shape_pos.y - offset.y;
-    xc  = ux0;
-    yc  = uy0;
-
-    /* le trace depend de la rotation de l'empreinte */
-
-    dx = dx0 = m_Size.x >> 1;
-    dy = dy0 = m_Size.y >> 1; /* demi dim  dx et dy */
-
-    angle = m_Orient;
-
-    bool DisplayIsol = DisplayOpt.DisplayPadIsol;
-    if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
-        DisplayIsol = FALSE;
-
-    switch( m_PadShape & 0x7F )
-    {
-    case PAD_CIRCLE:
-        if( fillpad )
-            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx, 0, color, color );
-        else
-            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx, 0, color );
-
-        if( DisplayIsol )
-        {
-            GRCircle( &panel->m_ClipBox,
-                      DC,
-                      xc,
-                      yc,
-                      dx + g_DesignSettings.m_TrackClearence,
-                      0,
-                      color );
-        }
-        break;
-
-    case PAD_OVAL:
-        /* calcul de l'entraxe de l'ellipse */
-        if( dx > dy )       /* ellipse horizontale */
-        {
-            delta_cx = dx - dy;
-            delta_cy = 0;
-            rotdx    = m_Size.y;
-        }
-        else                /* ellipse verticale */
-        {
-            delta_cx = 0;
-            delta_cy = dy - dx;
-            rotdx    = m_Size.x;
-        }
-        RotatePoint( &delta_cx, &delta_cy, angle );
-
-        if( fillpad )
-        {
-            GRFillCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                         ux0 - delta_cx, uy0 - delta_cy,
-                         rotdx, color );
-        }
-        else
-        {
-            GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                     ux0 - delta_cx, uy0 - delta_cy,
-                     rotdx, color );
-        }
-
-        /* Trace de la marge d'isolement */
-        if( DisplayIsol )
-        {
-            rotdx = rotdx + g_DesignSettings.m_TrackClearence + g_DesignSettings.m_TrackClearence;
-
-            GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                     ux0 - delta_cx, uy0 - delta_cy,
-                     rotdx, color );
-        }
-        break;
-
-    case PAD_RECT:
-    case PAD_TRAPEZOID:
-    {
-        int ddx, ddy;
-        ddx = m_DeltaSize.x >> 1;
-        ddy = m_DeltaSize.y >> 1;      /* demi dim  dx et dy */
-
-        coord[0].x = -dx - ddy;
-        coord[0].y = +dy + ddx;
-
-        coord[1].x = -dx + ddy;
-        coord[1].y = -dy - ddx;
-
-        coord[2].x = +dx - ddy;
-        coord[2].y = -dy + ddx;
-
-        coord[3].x = +dx + ddy;
-        coord[3].y = +dy - ddx;
-
-        for( ii = 0; ii < 4; ii++ )
-        {
-            RotatePoint( &coord[ii].x, &coord[ii].y, angle );
-            coord[ii].x = coord[ii].x + ux0;
-            coord[ii].y = coord[ii].y + uy0;
-        }
-
-        GRClosedPoly( &panel->m_ClipBox, DC, 4, (int*) coord, fillpad, color, color );
-
-        if( DisplayIsol )
-        {
-            dx += g_DesignSettings.m_TrackClearence;
-            dy += g_DesignSettings.m_TrackClearence;
-
-            coord[0].x = -dx - ddy;
-            coord[0].y = dy + ddx;
-
-            coord[1].x = -dx + ddy;
-            coord[1].y = -dy - ddx;
-
-            coord[2].x = dx - ddy;
-            coord[2].y = -dy + ddx;
-
-            coord[3].x = dx + ddy;
-            coord[3].y = dy - ddx;
-
-            for( ii = 0; ii < 4; ii++ )
-            {
-                RotatePoint( &coord[ii].x, &coord[ii].y, angle );
-                coord[ii].x = coord[ii].x + ux0;
-                coord[ii].y = coord[ii].y + uy0;
-            }
-
-            GRClosedPoly( &panel->m_ClipBox, DC, 4, (int*) coord, 0, color, color );
-        }
-    }
-        break;
-
-
-    default:
-        break;
-    }
-
-    /* Draw the pad hole */
-    int cx0  = m_Pos.x - offset.x;
-    int cy0  = m_Pos.y - offset.y;
-    int hole = m_Drill.x >> 1;
-
-    if( fillpad && hole )
-    {
-        bool blackpenstate = false;
-        if ( g_IsPrinting )
-        {
-            blackpenstate = GetGRForceBlackPenState( );
-            GRForceBlackPen( false );
-            color = WHITE;
-        }
-        else
-            color = BLACK; // or DARKGRAY;
-
-        if( draw_mode != GR_XOR )
-            GRSetDrawMode( DC, GR_COPY );
-        else
-            GRSetDrawMode( DC, GR_XOR );
-
-        switch( m_DrillShape )
-        {
-        case PAD_CIRCLE:
-            if( (hole / zoom) > 1 ) /* draw hole if its size is enought */
-                GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0, color, color );
-            break;
-
-        case PAD_OVAL:
-            dx = m_Drill.x >> 1;
-            dy = m_Drill.y >> 1;            /* demi dim  dx et dy */
-
-            /* calcul de l'entraxe de l'ellipse */
-            if( m_Drill.x > m_Drill.y )     /* ellipse horizontale */
-            {
-                delta_cx = dx - dy; delta_cy = 0;
-                rotdx    = m_Drill.y;
-            }
-            else                /* ellipse verticale */
-            {
-                delta_cx = 0; delta_cy = dy - dx;
-                rotdx    = m_Drill.x;
-            }
-            RotatePoint( &delta_cx, &delta_cy, angle );
-
-            GRFillCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                         ux0 - delta_cx, uy0 - delta_cy,
-                         rotdx, color );
-            break;
-
-        default:
-            break;
-        }
-        if ( g_IsPrinting )
-            GRForceBlackPen( blackpenstate );
-    }
-
-    GRSetDrawMode( DC, draw_mode );
-
-    /* Trace du symbole "No connect" ( / ou \ ou croix en X) si necessaire : */
-    if( m_Netname.IsEmpty() && DisplayOpt.DisplayPadNoConn )
-    {
-        dx0 = MIN( dx0, dy0 );
-        int nc_color = BLUE;
-
-        if( m_Masque_Layer & CMP_LAYER ) /* Trace forme \ */
-            GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
-                    cx0 + dx0, cy0 + dx0, 0, nc_color );
-
-        if( m_Masque_Layer & CUIVRE_LAYER ) /* Trace forme / */
-            GRLine( &panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
-                    cx0 - dx0, cy0 + dx0, 0, nc_color );
-    }
-
-    /* Draw the pad number */
-    if( frame && !frame->m_DisplayPadNum )
-        return;
-
-    dx = MIN( m_Size.x, m_Size.y );     /* dx = text size */
-    if( (dx / zoom) > 12 )              /* size must be enought to draw 2 chars */
-    {
-        wxString buffer;
-
-        ReturnStringPadName( buffer );
-        dy = buffer.Len();
-
-        /* Draw text with an angle between -90 deg and + 90 deg */
-        NORMALIZE_ANGLE_90( angle );
-        if( dy < 2 )
-            dy = 2;                     /* text min size is 2 char */
-
-        dx = (dx * 9 ) / (dy * 13 );    /* Text size ajusted to pad size */
-
-        DrawGraphicText( panel, DC, wxPoint( ux0, uy0 ),
-                         WHITE, buffer, angle, wxSize( dx, dx ),
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
-    }
+    m_ShortNetname = source->m_ShortNetname;
 }
 
 
@@ -668,9 +259,9 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
                 PtLine++;
 
             nn = sscanf( PtLine, " %s %d %d %d %d %d",
-                         BufCar, &m_Size.x, &m_Size.y,
-                         &m_DeltaSize.x, &m_DeltaSize.y,
-                         &m_Orient );
+                BufCar, &m_Size.x, &m_Size.y,
+                &m_DeltaSize.x, &m_DeltaSize.y,
+                &m_Orient );
 
             ll = 0xFF & BufCar[0];
 
@@ -698,7 +289,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
         case 'D':
             BufCar[0] = 0;
             nn = sscanf( PtLine, "%d %d %d %s %d %d", &m_Drill.x,
-                         &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
+                &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
             m_Drill.y    = m_Drill.x;
             m_DrillShape = PAD_CIRCLE;
 
@@ -714,7 +305,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 
         case 'A':
             nn = sscanf( PtLine, "%s %s %X", BufLine, BufCar,
-                         &m_Masque_Layer );
+                &m_Masque_Layer );
 
             /* Contenu de BufCar non encore utilise ( reserve pour evolutions
              *  ulterieures */
@@ -735,7 +326,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 
             /* Lecture du netname */
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
-            m_Netname = CONV_FROM_UTF8( StrPurge( BufLine ) );
+            SetNetname(CONV_FROM_UTF8( StrPurge( BufLine ) ));
             break;
 
         case 'P':
@@ -763,10 +354,10 @@ bool D_PAD::Save( FILE* aFile ) const
     if( GetState( DELETED ) )
         return true;
 
-    bool        rc = false;
+    bool rc = false;
 
     // check the return values for first and last fprints() in this function
-    if( fprintf( aFile, "$PAD\n" ) != sizeof("$PAD\n")-1 )
+    if( fprintf( aFile, "$PAD\n" ) != sizeof("$PAD\n") - 1 )
         goto out;
 
     switch( m_PadShape )
@@ -790,8 +381,8 @@ bool D_PAD::Save( FILE* aFile ) const
     }
 
     fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
-             m_Padname, cshape, m_Size.x, m_Size.y,
-             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
+        m_Padname, cshape, m_Size.x, m_Size.y,
+        m_DeltaSize.x, m_DeltaSize.y, m_Orient );
 
     fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
     if( m_DrillShape == PAD_OVAL )
@@ -826,7 +417,7 @@ bool D_PAD::Save( FILE* aFile ) const
 
     fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
 
-    if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n")-1 )
+    if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
         goto out;
 
     rc = true;
@@ -834,7 +425,6 @@ bool D_PAD::Save( FILE* aFile ) const
 out:
     return rc;
 }
-
 
 
 /******************************************************/
@@ -853,7 +443,8 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 
     static const wxString Msg_Pad_Layer[9] =
     {
-        wxT( "??? " ),     wxT( "cmp   " ),  wxT( "cu    " ),  wxT( "cmp+cu " ), wxT( "int    " ),
+        wxT( "??? " ),     wxT( "cmp   " ),  wxT( "cu    " ),  wxT( "cmp+cu " ), wxT(
+            "int    " ),
         wxT( "cmp+int " ), wxT( "cu+int " ), wxT( "all    " ), wxT( "No copp" )
     };
 
@@ -880,7 +471,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     pos += 10;
 #if 1   // Used only to debug connectivity calculations
     Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), m_ZoneSubnet );
-    Affiche_1_Parametre( frame, pos, wxT("L-P-Z"), Line, DARKGREEN );
+    Affiche_1_Parametre( frame, pos, wxT( "L-P-Z" ), Line, DARKGREEN );
 #endif
 
     wxString LayerInfo;
@@ -962,8 +553,13 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 
     pos += 6;
     int attribut = m_Attribut & 15;
-    if ( attribut > 3 )  attribut = 3;
-    Affiche_1_Parametre( frame, pos, Msg_Pad_Shape[m_PadShape],Msg_Pad_Attribut[attribut], DARKGREEN );
+    if( attribut > 3 )
+        attribut = 3;
+    Affiche_1_Parametre( frame,
+        pos,
+        Msg_Pad_Shape[m_PadShape],
+        Msg_Pad_Attribut[attribut],
+        DARKGREEN );
 
     valeur_param( m_Size.x, Line );
     pos += 6;
@@ -992,7 +588,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
     int module_orient = module ? module->m_Orient : 0;
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
-                     (float) (m_Orient - module_orient) / 10, (float) module_orient / 10 );
+            (float) ( m_Orient - module_orient ) / 10, (float) module_orient / 10 );
     else
         Line.Printf( wxT( "%3.1f" ), (float) m_Orient / 10 );
     pos += 8;
@@ -1011,7 +607,7 @@ void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
 // see class_pad.h
 bool D_PAD::IsOnLayer( int aLayer ) const
 {
-    return (1<<aLayer) & m_Masque_Layer;
+    return (1 << aLayer) & m_Masque_Layer;
 }
 
 
@@ -1066,7 +662,7 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
 int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 /************************************************************/
 {
-    int          diff;
+    int diff;
 
     if( (diff = padref->m_PadShape - padcmp->m_PadShape) )
         return diff;
@@ -1099,11 +695,20 @@ static const char* ShowPadType( int aPadType )
 {
     switch( aPadType )
     {
-    case PAD_CIRCLE:        return "circle";
-    case PAD_OVAL:          return "oval";
-    case PAD_RECT:          return "rect";
-    case PAD_TRAPEZOID:     return "trap";
-    default:                return "??unknown??";
+    case PAD_CIRCLE:
+        return "circle";
+
+    case PAD_OVAL:
+        return "oval";
+
+    case PAD_RECT:
+        return "rect";
+
+    case PAD_TRAPEZOID:
+        return "trap";
+
+    default:
+        return "??unknown??";
     }
 }
 
@@ -1112,11 +717,20 @@ static const char* ShowPadAttr( int aPadAttr )
 {
     switch( aPadAttr )
     {
-    case PAD_STANDARD:      return "STD";
-    case PAD_SMD:           return "SMD";
-    case PAD_CONN:          return "CONN";
-    case PAD_HOLE_NOT_PLATED:        return "HOLE";
-    default:                return "??unkown??";
+    case PAD_STANDARD:
+        return "STD";
+
+    case PAD_SMD:
+        return "SMD";
+
+    case PAD_CONN:
+        return "CONN";
+
+    case PAD_HOLE_NOT_PLATED:
+        return "HOLE";
+
+    default:
+        return "??unkown??";
     }
 }
 
@@ -1138,16 +752,17 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " shape=\""     << ShowPadType( m_PadShape ) << '"' <<
-    " attr=\""      << ShowPadAttr( m_Attribut ) << '"' <<
-    " num=\""       << padname << '"' <<
-    " net=\""       << m_Netname.mb_str() << '"' <<
-    " netcode=\""   << GetNet() << '"' <<
+    " shape=\"" << ShowPadType( m_PadShape ) << '"' <<
+    " attr=\"" << ShowPadAttr( m_Attribut ) << '"' <<
+    " num=\"" << padname << '"' <<
+    " net=\"" << m_Netname.mb_str() << '"' <<
+    " netcode=\"" << GetNet() << '"' <<
     " layerMask=\"" << layerMask << '"' << m_Pos << "/>\n";
 
 //    NestedSpace( nestLevel+1, os ) << m_Text.mb_str() << '\n';
 
 //    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
+
 
 #endif

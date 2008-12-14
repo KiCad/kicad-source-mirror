@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-11 17:20+0100\n"
-"PO-Revision-Date: 2008-12-11 18:52+0100\n"
+"POT-Creation-Date: 2008-12-12 22:29+0100\n"
+"PO-Revision-Date: 2008-12-12 22:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: pcbnew/clean.cpp:180
 msgid "Delete unconnected tracks:"
-msgstr "Suppression Pistes non connectées"
+msgstr "Suppression Pistes non connectées:"
 
 #: pcbnew/clean.cpp:197
 msgid "ViaDef"
@@ -1618,34 +1618,26 @@ msgid "Enable Auto Delete old Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
 #: pcbnew/pcbframe.cpp:457
-msgid "Do not Show Zones"
-msgstr "Ne pas montrer Zones"
-
-#: pcbnew/pcbframe.cpp:457
-msgid "Show Zones"
-msgstr "Montrer Zones"
-
-#: pcbnew/pcbframe.cpp:463
 msgid "Show Pads Sketch mode"
 msgstr "Afficher pastilles en contour"
 
-#: pcbnew/pcbframe.cpp:464
+#: pcbnew/pcbframe.cpp:458
 msgid "Show pads filled mode"
 msgstr "Afficher pastilles en mode plein"
 
-#: pcbnew/pcbframe.cpp:470
+#: pcbnew/pcbframe.cpp:464
 msgid "Show Tracks Sketch mode"
 msgstr "Afficher pistes en contour"
 
-#: pcbnew/pcbframe.cpp:471
+#: pcbnew/pcbframe.cpp:465
 msgid "Show Tracks filled mode"
 msgstr "Afficher pistes en mode plein"
 
-#: pcbnew/pcbframe.cpp:477
+#: pcbnew/pcbframe.cpp:471
 msgid "Normal Contrast Mode Display"
 msgstr "Mode d'affichage Contraste normal"
 
-#: pcbnew/pcbframe.cpp:478
+#: pcbnew/pcbframe.cpp:472
 msgid "Hight Contrast Mode Display"
 msgstr "Mode d'affichage Haut Contraste"
 
@@ -2457,15 +2449,27 @@ msgstr "Montrer le chevelu du module pendant déplacement"
 msgid "Enable Auto Del Track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/tool_pcb.cpp:379
+#: pcbnew/tool_pcb.cpp:374
+msgid "Show filled areas in zones"
+msgstr "Afficher les surfaces remplies dans les zones"
+
+#: pcbnew/tool_pcb.cpp:377
+msgid "Do not show filled areas in zones"
+msgstr "Ne pas fficher les surfaces remplies dans les zones"
+
+#: pcbnew/tool_pcb.cpp:380
+msgid "Show outlines of filled areas only in zones"
+msgstr "Afficher uniquement  les contours des surfaces remplies dans les zones"
+
+#: pcbnew/tool_pcb.cpp:385
 msgid "Show Pads Sketch"
 msgstr "Afficher pastilles en contour"
 
-#: pcbnew/tool_pcb.cpp:383
+#: pcbnew/tool_pcb.cpp:389
 msgid "Show Tracks Sketch"
 msgstr "Afficher Pistes en Contour"
 
-#: pcbnew/tool_pcb.cpp:398
+#: pcbnew/tool_pcb.cpp:404
 msgid ""
 "Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n"
 " This is a experimental feature (under development)"
@@ -2473,79 +2477,79 @@ msgstr ""
 "Affiche/supprime le toolbar vertical auxiliaire (outils pour applications micro-ondes)\n"
 "C'est un outil expérimental (en cours de développement)"
 
-#: pcbnew/tool_pcb.cpp:428
+#: pcbnew/tool_pcb.cpp:434
 msgid "Net highlight"
 msgstr "Surbrillance des équipotentielles"
 
-#: pcbnew/tool_pcb.cpp:433
+#: pcbnew/tool_pcb.cpp:439
 msgid "Display local ratsnest (pad or module)"
 msgstr "Afficher le chevelu local (pastilles ou modules)"
 
-#: pcbnew/tool_pcb.cpp:439
+#: pcbnew/tool_pcb.cpp:445
 msgid "Add modules"
 msgstr "Addition de Modules"
 
-#: pcbnew/tool_pcb.cpp:443
+#: pcbnew/tool_pcb.cpp:449
 msgid "Add tracks and vias"
 msgstr "Ajouter pistes et vias"
 
-#: pcbnew/tool_pcb.cpp:447
+#: pcbnew/tool_pcb.cpp:453
 msgid "Add zones"
 msgstr "Addition de Zones"
 
-#: pcbnew/tool_pcb.cpp:452
+#: pcbnew/tool_pcb.cpp:458
 msgid "Add graphic line or polygon"
 msgstr "Addition de lignes ou polygones graphiques"
 
-#: pcbnew/tool_pcb.cpp:456
+#: pcbnew/tool_pcb.cpp:462
 msgid "Add graphic circle"
 msgstr "Addition de graphiques (Cercle)"
 
-#: pcbnew/tool_pcb.cpp:460
+#: pcbnew/tool_pcb.cpp:466
 msgid "Add graphic arc"
 msgstr "Addition de graphiques (Arc de Cercle)"
 
-#: pcbnew/tool_pcb.cpp:464
+#: pcbnew/tool_pcb.cpp:470
 msgid "Add text"
 msgstr "Ajout de Texte"
 
-#: pcbnew/tool_pcb.cpp:469
+#: pcbnew/tool_pcb.cpp:475
 msgid "Add dimension"
 msgstr "Ajout des cotes"
 
-#: pcbnew/tool_pcb.cpp:473
+#: pcbnew/tool_pcb.cpp:479
 msgid "Add layer alignment target"
 msgstr "Ajouter Mire de superposition"
 
-#: pcbnew/tool_pcb.cpp:478
+#: pcbnew/tool_pcb.cpp:484
 msgid "Delete items"
 msgstr "Suppression d'éléments"
 
-#: pcbnew/tool_pcb.cpp:483
+#: pcbnew/tool_pcb.cpp:489
 msgid "Offset adjust for drill and place files"
 msgstr "Ajuste offset pour fichier de perçage et placement"
 
-#: pcbnew/tool_pcb.cpp:511
+#: pcbnew/tool_pcb.cpp:517
 msgid "Create line of specified length for microwave applications"
 msgstr "Creation de lignes de longueur spécifiée (pour applications micro-ondes)"
 
-#: pcbnew/tool_pcb.cpp:517
+#: pcbnew/tool_pcb.cpp:523
 msgid "Create gap of specified length for microwave applications"
 msgstr "Creation de gaps de longueur spécifiée (pour applications micro-ondes)"
 
-#: pcbnew/tool_pcb.cpp:525
+#: pcbnew/tool_pcb.cpp:531
 msgid "Create stub of specified length for microwave applications"
 msgstr "Creation de stub de longueur spécifiée (pour applications micro-ondes)"
 
-#: pcbnew/tool_pcb.cpp:531
+#: pcbnew/tool_pcb.cpp:537
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr "Creation de stub (arc) de longueur spécifiée (pour applications micro-ondes)"
 
-#: pcbnew/tool_pcb.cpp:538
+#: pcbnew/tool_pcb.cpp:544
 msgid "Create a polynomial shape for microwave applications"
 msgstr "Creation de formes polynomiales (pour applications micro-ondes)"
 
-#: pcbnew/tool_pcb.cpp:579
+#: pcbnew/tool_pcb.cpp:585
 msgid ""
 "Auto track width: when starting on an existing track use its width\n"
 "otherwise, use current width setting"
@@ -2553,19 +2557,19 @@ msgstr ""
 "Largeur de piste automatique: si on démarre sur une piste existante, utiliser sa largeur\n"
 " sinon utiliser la largeur  courante"
 
-#: pcbnew/tool_pcb.cpp:604
+#: pcbnew/tool_pcb.cpp:610
 msgid "Auto"
 msgstr "Auto"
 
-#: pcbnew/tool_pcb.cpp:608
+#: pcbnew/tool_pcb.cpp:614
 msgid "Zoom "
 msgstr "Zoom "
 
-#: pcbnew/tool_pcb.cpp:643
+#: pcbnew/tool_pcb.cpp:649
 msgid "User Grid"
 msgstr "Grille perso"
 
-#: pcbnew/tool_pcb.cpp:759
+#: pcbnew/tool_pcb.cpp:765
 msgid "+/- to switch"
 msgstr "+/- pour commuter"
 
@@ -3392,7 +3396,7 @@ msgstr "Grille %.1f"
 msgid "Grid %.3f"
 msgstr "Grille %.3f"
 
-#: pcbnew/dialog_copper_zones.cpp:288
+#: pcbnew/dialog_copper_zones.cpp:285
 msgid ""
 "Error :\n"
 "you must choose a copper min thickness value bigger than 0.001 inch or 0.00254 mm)"
@@ -3400,7 +3404,7 @@ msgstr ""
 "Erreur :\n"
 "vous devez choisir une valeur pour l'épaisseur de cuivre dans les freins thermiques plus grande que 0,001 pouce (ou 0,00254 mm)"
 
-#: pcbnew/dialog_copper_zones.cpp:313
+#: pcbnew/dialog_copper_zones.cpp:308
 msgid ""
 "Error :\n"
 "you must choose a copper bridge value for thermal reliefs bigger than the min zone thickness"
@@ -3408,11 +3412,11 @@ msgstr ""
 "Erreur :\n"
 "vous devez choisir une valeur pour l'épaisseur de cuivre dans les freins thermiques plus grande que l'épaisseur de cuivre minimum des zones"
 
-#: pcbnew/dialog_copper_zones.cpp:325
+#: pcbnew/dialog_copper_zones.cpp:320
 msgid "Error : you must choose a layer"
 msgstr "Erreur. Vous devez choisir une couche"
 
-#: pcbnew/dialog_copper_zones.cpp:337
+#: pcbnew/dialog_copper_zones.cpp:332
 msgid "Error : you must choose a net name"
 msgstr "Erreur. Vous devez choisir une équipotentielle"
 
@@ -4072,7 +4076,7 @@ msgid "Pen Number"
 msgstr "Numéro de plume"
 
 #: pcbnew/dialog_gendrill.cpp:239
-#: pcbnew/dialog_general_options.cpp:376
+#: pcbnew/dialog_general_options.cpp:385
 msgid "Options:"
 msgstr "Options :"
 
@@ -4282,96 +4286,96 @@ msgstr "Larg. piste: %s  Diam Vias : %s"
 msgid "Drc error, cancelled"
 msgstr "Erreur DRC, annulation"
 
-#: pcbnew/dialog_general_options.cpp:288
+#: pcbnew/dialog_general_options.cpp:297
 msgid "No Display"
 msgstr "Pas d'affichage"
 
-#: pcbnew/dialog_general_options.cpp:291
+#: pcbnew/dialog_general_options.cpp:300
 msgid "Display Polar Coord"
 msgstr "Affichage coord Polaires"
 
-#: pcbnew/dialog_general_options.cpp:300
+#: pcbnew/dialog_general_options.cpp:309
 msgid "millimeters"
 msgstr "millimètres"
 
-#: pcbnew/dialog_general_options.cpp:302
+#: pcbnew/dialog_general_options.cpp:311
 msgid "Units"
 msgstr "Unités"
 
-#: pcbnew/dialog_general_options.cpp:309
+#: pcbnew/dialog_general_options.cpp:318
 msgid "Small"
 msgstr "Petit"
 
-#: pcbnew/dialog_general_options.cpp:310
+#: pcbnew/dialog_general_options.cpp:319
 msgid "Big"
 msgstr "Grand"
 
-#: pcbnew/dialog_general_options.cpp:312
+#: pcbnew/dialog_general_options.cpp:321
 msgid "Cursor"
 msgstr "Curseur"
 
-#: pcbnew/dialog_general_options.cpp:324
+#: pcbnew/dialog_general_options.cpp:333
 msgid "Number of Layers:"
 msgstr "Nombre de Couches:"
 
-#: pcbnew/dialog_general_options.cpp:340
+#: pcbnew/dialog_general_options.cpp:349
 msgid "Max Links:"
 msgstr "Liens max:"
 
-#: pcbnew/dialog_general_options.cpp:356
+#: pcbnew/dialog_general_options.cpp:365
 msgid "Auto Save (minuts):"
 msgstr "Sauveg. Auto (min)"
 
-#: pcbnew/dialog_general_options.cpp:385
+#: pcbnew/dialog_general_options.cpp:394
 msgid "Drc ON"
 msgstr "Drc ACTIVE"
 
-#: pcbnew/dialog_general_options.cpp:394
+#: pcbnew/dialog_general_options.cpp:403
 msgid "Show Ratsnest"
 msgstr "Montrer le chevelu général"
 
-#: pcbnew/dialog_general_options.cpp:401
+#: pcbnew/dialog_general_options.cpp:410
 msgid "Show Mod Ratsnest"
 msgstr "Montrer le chevelu du module"
 
-#: pcbnew/dialog_general_options.cpp:408
+#: pcbnew/dialog_general_options.cpp:417
 msgid "Tracks Auto Del"
 msgstr "Auto Supp. Pistes"
 
-#: pcbnew/dialog_general_options.cpp:415
+#: pcbnew/dialog_general_options.cpp:424
 msgid "Track only 45 degrees"
 msgstr "Piste à 45° seulement"
 
-#: pcbnew/dialog_general_options.cpp:422
+#: pcbnew/dialog_general_options.cpp:431
 msgid "Segments 45 Only"
 msgstr "Segments 45 seulement"
 
-#: pcbnew/dialog_general_options.cpp:429
+#: pcbnew/dialog_general_options.cpp:438
 msgid "Auto PAN"
 msgstr "Auto PAN"
 
-#: pcbnew/dialog_general_options.cpp:437
+#: pcbnew/dialog_general_options.cpp:446
 msgid "Double Segm Track"
 msgstr "2 segments pour piste"
 
-#: pcbnew/dialog_general_options.cpp:450
-#: pcbnew/dialog_general_options.cpp:465
+#: pcbnew/dialog_general_options.cpp:459
+#: pcbnew/dialog_general_options.cpp:474
 msgid "When creating tracks"
 msgstr "En creation de pistes"
 
-#: pcbnew/dialog_general_options.cpp:453
+#: pcbnew/dialog_general_options.cpp:462
 msgid "Magnetic Pads"
 msgstr " Pads magnétiques"
 
-#: pcbnew/dialog_general_options.cpp:460
+#: pcbnew/dialog_general_options.cpp:469
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur un pad"
 
-#: pcbnew/dialog_general_options.cpp:468
+#: pcbnew/dialog_general_options.cpp:477
 msgid "Magnetic Tracks"
 msgstr "Pistes Magnétiques"
 
-#: pcbnew/dialog_general_options.cpp:475
+#: pcbnew/dialog_general_options.cpp:484
 msgid "control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur une piste"
 
@@ -4533,60 +4537,48 @@ msgid "Others Options:"
 msgstr "Autres Options:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:118
-msgid "Show filled areas in sketch mode"
-msgstr "Afficher les surfaces remplies en mode contour"
-
-#: pcbnew/dialog_copper_zones_base.cpp:120
-msgid ""
-"If enabled, filled areas in is this zone will be displayed as non filled polygons.\n"
-"If disabled, filled areas in is this zone will be displayed as \"solid\" areas (normal mode)."
-msgstr ""
-"Si activé, les surfaces remplies dans cette zone seront affichées comme des polygones non remplis.\n"
-"Si désactivé, les surfaces remplies dans cette zone seront affichées comme des surfaces \"solides\"."
-
-#: pcbnew/dialog_copper_zones_base.cpp:124
 msgid "Zone clearance value"
 msgstr "Valeur isolation zone"
 
-#: pcbnew/dialog_copper_zones_base.cpp:131
+#: pcbnew/dialog_copper_zones_base.cpp:125
 msgid "Zone min thickness value"
 msgstr "Valeur épaisseur min pour zone"
 
-#: pcbnew/dialog_copper_zones_base.cpp:136
+#: pcbnew/dialog_copper_zones_base.cpp:130
 msgid "Value of minimun thickness of filled areas"
 msgstr "Valeur de l'épaisseur minimum des zones remplies"
 
-#: pcbnew/dialog_copper_zones_base.cpp:156
+#: pcbnew/dialog_copper_zones_base.cpp:150
 msgid "Export Setup to others zones"
 msgstr "Exporter options vers autres zones"
 
-#: pcbnew/dialog_copper_zones_base.cpp:157
+#: pcbnew/dialog_copper_zones_base.cpp:152
 msgid "Export this zone setup to all others copper zones"
 msgstr "Exporter ces options vers les autres zones de cuivre"
 
-#: pcbnew/dialog_copper_zones_base.cpp:161
+#: pcbnew/dialog_copper_zones_base.cpp:156
 #: pcbnew/dialog_pad_properties_base.cpp:91
 #: pcbnew/zone_filling_deprecated_algorithm.cpp:310
 msgid "Ok"
 msgstr "Ok"
 
-#: pcbnew/dialog_copper_zones_base.cpp:172
+#: pcbnew/dialog_copper_zones_base.cpp:171
 msgid "Nets Display Options:"
 msgstr "Options d'Affichage des Nets"
 
-#: pcbnew/dialog_copper_zones_base.cpp:174
+#: pcbnew/dialog_copper_zones_base.cpp:173
 msgid "Alphabetic"
 msgstr "Alphabetique"
 
-#: pcbnew/dialog_copper_zones_base.cpp:174
+#: pcbnew/dialog_copper_zones_base.cpp:173
 msgid "Advanced"
 msgstr "Avancé"
 
-#: pcbnew/dialog_copper_zones_base.cpp:176
+#: pcbnew/dialog_copper_zones_base.cpp:175
 msgid "Net sorting:"
 msgstr "Tri des Equipotentielles:"
 
-#: pcbnew/dialog_copper_zones_base.cpp:178
+#: pcbnew/dialog_copper_zones_base.cpp:177
 msgid ""
 "Nets can be sorted:\n"
 "By alphabetic order\n"
@@ -4596,11 +4588,11 @@ msgstr ""
 "Paur ordre alphabétique\n"
 "Par nombre de pads dans les équipotentielles  (avancé)"
 
-#: pcbnew/dialog_copper_zones_base.cpp:182
+#: pcbnew/dialog_copper_zones_base.cpp:181
 msgid "Filter"
 msgstr "Filtre"
 
-#: pcbnew/dialog_copper_zones_base.cpp:187
+#: pcbnew/dialog_copper_zones_base.cpp:186
 msgid ""
 "Pattern in advanced mode, to filter net names in list\n"
 "Net names matching this pattern are not displayed"
@@ -6402,11 +6394,11 @@ msgstr "Ajout Composant"
 msgid "Add Wire"
 msgstr "Ajouter Fils"
 
-#: eeschema/libarch.cpp:66
+#: eeschema/libarch.cpp:68
 msgid "Failed to create archive lib file "
 msgstr "Impossible de créer le fichier librairie archive "
 
-#: eeschema/libarch.cpp:73
+#: eeschema/libarch.cpp:75
 msgid "Failed to create doc lib file "
 msgstr "Impossible de créer le fichier lib document"
 
@@ -6511,7 +6503,7 @@ msgstr "Oriente Composant"
 msgid "Footprint "
 msgstr "Empreinte: "
 
-#: eeschema/onrightclick.cpp:322
+#: eeschema/onrightclick.cpp:323
 #, c-format
 msgid "Unit %d %c"
 msgstr "Unité %d %c"
@@ -10426,15 +10418,15 @@ msgstr "Texte Module invisible"
 msgid "Anchors"
 msgstr "Ancres"
 
-#: pcbnew/set_color.h:432
+#: pcbnew/set_color.h:423
 msgid "Show Noconnect"
 msgstr "Montrer Non Conn"
 
-#: pcbnew/set_color.h:441
+#: pcbnew/set_color.h:432
 msgid "Show Modules Cmp"
 msgstr "Afficher Modules Cmp"
 
-#: pcbnew/set_color.h:450
+#: pcbnew/set_color.h:441
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
@@ -10474,7 +10466,7 @@ msgstr "Type Err(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 
-#: pcbnew/dialog_copper_zones_base.h:101
+#: pcbnew/dialog_copper_zones_base.h:99
 msgid "Fill Zones Options"
 msgstr "Options de Remplissage de Zone"
 
@@ -10798,6 +10790,20 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Do not Show Zones"
+#~ msgstr "Ne pas montrer Zones"
+#~ msgid "Show Zones"
+#~ msgstr "Montrer Zones"
+#~ msgid ""
+#~ "If enabled, filled areas in is this zone will be displayed as non filled "
+#~ "polygons.\n"
+#~ "If disabled, filled areas in is this zone will be displayed as \"solid\" "
+#~ "areas (normal mode)."
+#~ msgstr ""
+#~ "Si activé, les surfaces remplies dans cette zone seront affichées comme "
+#~ "des polygones non remplis.\n"
+#~ "Si désactivé, les surfaces remplies dans cette zone seront affichées "
+#~ "comme des surfaces \"solides\"."
 #~ msgid "grid user"
 #~ msgstr "grille user"
 

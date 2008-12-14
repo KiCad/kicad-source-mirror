@@ -92,7 +92,7 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     int               ii, jj, xg, yg, ipas, gxpas, gypas;
     wxSize            PageSize;
     wxPoint           pos, ref;
-    int               color;
+    EDA_Colors        color;
     Ki_WorkSheetData* WsItem;
     int               conv_unit = screen->GetInternalUnits() / 1000; /* Scale to convert dimension in 1/1000 in into internal units
                                                       * (1/1000 inc for EESchema, 1/10000 for pcbnew */

@@ -28,6 +28,7 @@ set(PCBNEW_SRCS
     class_mire.cpp
     class_module.cpp
     class_pad.cpp
+    class_pad_draw_functions.cpp
     classpcb.cpp
     class_pcb_text.cpp
     class_text_mod.cpp

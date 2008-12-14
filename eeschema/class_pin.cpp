@@ -244,7 +244,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     wxString PinText;
     int      PinTextBarPos[256];
     int      PinTextBarCount;
-    int      NameColor, NumColor;
+    EDA_Colors       NameColor, NumColor;
     int      PinTxtLen;
 
     wxSize   PinNameSize( m_PinNameSize, m_PinNameSize );
@@ -257,8 +257,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     /* Get the num and name colors */
     if( (Color < 0) && (m_Selected & IS_SELECTED) )
         Color = g_ItemSelectetColor;
-    NameColor = Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color;
-    NumColor  = Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color;
+    NameColor = (EDA_Colors) (Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color);
+    NumColor  = (EDA_Colors) (Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color);
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );
@@ -563,7 +563,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
     wxString PinText;
     int      PinTextBarPos[256];
     int      PinTextBarCount;
-    int      NameColor, NumColor;
+    EDA_Colors       NameColor, NumColor;
     int      PinTxtLen   = 0;
     wxSize   PinNameSize = wxSize( m_PinNameSize, m_PinNameSize );
     wxSize   PinNumSize  = wxSize( m_PinNumSize, m_PinNumSize );
@@ -571,8 +571,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                            && g_PlotPSColorOpt;
 
     /* Get the num and name colors */
-    NameColor = plot_color ? ReturnLayerColor( LAYER_PINNAM ) : -1;
-    NumColor  = plot_color ? ReturnLayerColor( LAYER_PINNUM ) : -1;
+    NameColor = (EDA_Colors) (plot_color ? ReturnLayerColor( LAYER_PINNAM ) : -1);
+    NumColor  = (EDA_Colors) (plot_color ? ReturnLayerColor( LAYER_PINNUM ) : -1);
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );

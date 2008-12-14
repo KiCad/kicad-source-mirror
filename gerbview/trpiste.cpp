@@ -21,7 +21,7 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
                         int printmasklayer )
 /***************************************************************************************************/
 
-/* Function to draw the tracks (i.e Sports or lines) in gerbview
+/* Function to draw the tracks (i.e Spots or lines) in gerbview
  *  Polygons are not handled here (there are in Pcb->m_Zone)
  * @param DC = device context to draw
  * @param Pcb = Board to draw (only Pcb->m_Track is used)
@@ -266,7 +266,7 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
         }
 
         DrawGraphicText( panel, DC,
-                         pos, g_DCodesColor, Line,
+                         pos, (EDA_Colors) g_DCodesColor, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
     }

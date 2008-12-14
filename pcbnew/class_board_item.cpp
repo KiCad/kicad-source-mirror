@@ -56,7 +56,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     switch( item->Type() )
     {
     case TYPE_EQUIPOT:
-        text << _( "Net" ) << ( (EQUIPOT*) item )->m_Netname << wxT( " " ) <<
+        text << _( "Net" ) << ( (EQUIPOT*) item )->GetNetname() << wxT( " " ) <<
         ( (EQUIPOT*) item )->GetNet();
         break;
 
@@ -130,7 +130,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         net = aPcb->FindNet( ((TRACK*)item)->GetNet() );
         if( net )
         {
-            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
         }
         text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim()
              << wxT("  ") << _("Net:") << ((TRACK*)item)->GetNet()
@@ -160,7 +160,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             net = aPcb->FindNet( ( (ZONE_CONTAINER*) item )->GetNet() );
             if( net )
             {
-                text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+                text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
             }
         }
         else    // A netcode < 0 is an error flag (Netname not found or area not initialised)
@@ -182,7 +182,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         net = aPcb->FindNet( ( (SEGZONE*) item )->GetNet() );
         if( net )
         {
-            text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
         }
         text << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim();
         break;
@@ -202,7 +202,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
             net = aPcb->FindNet( via->GetNet() );
             if( net )
             {
-                text << wxT( " [" ) << net->m_Netname << wxT( "]" );
+                text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
             }
             text << wxChar(' ') << _("Net:") << via->GetNet();
 

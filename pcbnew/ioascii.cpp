@@ -808,7 +808,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             EQUIPOT* Equipot = new EQUIPOT( m_Pcb );
             m_Pcb->m_Equipots.PushBack( Equipot );
-            Equipot->ReadEquipotDescr( File, &LineNum );
+            Equipot->ReadDescr( File, &LineNum );
             continue;
         }
 

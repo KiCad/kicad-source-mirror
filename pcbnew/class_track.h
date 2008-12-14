@@ -26,7 +26,7 @@ private:
 
 
 public:
-    int         m_Width;            // 0 = line, > 0 = tracks, bus ...
+    int         m_Width;            // Thickness of track, or via diameter
     wxPoint     m_Start;            // Line start point
     wxPoint     m_End;              // Line end point
     int         m_Shape;            // vias: shape and type, Track = shape..

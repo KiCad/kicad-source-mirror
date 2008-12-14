@@ -26,7 +26,7 @@ EQUIPOT::EQUIPOT( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, TYPE_EQUIPOT )
 {
     SetNet( 0 );
-    m_NbNodes       = m_NbLink = m_NbNoconn = 0;
+    m_NbNodes = m_NbLink = m_NbNoconn = 0;
     m_Masque_Layer  = 0;
     m_Masque_Plan   = 0;
     m_ForceWidth    = 0;
@@ -44,15 +44,16 @@ EQUIPOT::~EQUIPOT()
 }
 
 
-
 wxPoint& EQUIPOT::GetPosition()
 {
     static wxPoint dummy;
+
     return dummy;
 }
 
+
 /*********************************************************/
-int EQUIPOT:: ReadEquipotDescr( FILE* File, int* LineNum )
+int EQUIPOT:: ReadDescr( FILE* File, int* LineNum )
 /*********************************************************/
 
 /* Routine de lecture de 1 descr Equipotentielle.
@@ -90,31 +91,52 @@ int EQUIPOT:: ReadEquipotDescr( FILE* File, int* LineNum )
 }
 
 
+/**************************************/
 bool EQUIPOT::Save( FILE* aFile ) const
+/**************************************/
 {
     if( GetState( DELETED ) )
         return true;
 
-    bool rc = false;
+    bool success = false;
 
     fprintf( aFile, "$EQUIPOT\n" );
-    fprintf( aFile, "Na %d \"%.16s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
+    fprintf( aFile, "Na %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
     fprintf( aFile, "St %s\n", "~" );
 
     if( m_ForceWidth )
         fprintf( aFile, "Lw %d\n", m_ForceWidth );
 
-    if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n")-1 )
+    if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
         goto out;
 
-    rc = true;
+    success = true;
 
 out:
-    return rc;
+    return success;
+}
+
+/**
+ * Function SetNetname
+ * @param const wxString : the new netname
+ */
+void EQUIPOT::SetNetname( const wxString & aNetname )
+{
+    m_Netname = aNetname;
+    m_ShortNetname = m_Netname.AfterLast( '/' );
+}
+
+
+/** function Draw
+ * we actually could show a NET, simply show all the tracks and pads or net name on pad and vias
+ */
+void EQUIPOT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
+{
 }
 
 
 #if defined(DEBUG)
+
 /**
  * Function Show
  * is used to output the object tree, currently for debugging only.
@@ -126,9 +148,9 @@ void EQUIPOT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-       " name=\"" <<  m_Netname.mb_str() << '"' <<
-       " netcode=\"" << GetNet() << "\"/>\n";
+    " name=\"" << m_Netname.mb_str() << '"' <<
+    " netcode=\"" << GetNet() << "\"/>\n";
 }
+
+
 #endif
-
-

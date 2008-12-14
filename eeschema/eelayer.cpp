@@ -418,12 +418,12 @@ void SeedLayers()
 }
 
 
-/*******************************/
-int ReturnLayerColor( int Layer )
-/*******************************/
+/***************************************/
+EDA_Colors ReturnLayerColor( int Layer )
+/****************************************/
 {
     if( g_LayerDescr.Flags == 0 )
-        return g_LayerDescr.LayerColor[Layer];
+        return (EDA_Colors) g_LayerDescr.LayerColor[Layer];
     else
-        return g_LayerDescr.CommonColor;
+        return (EDA_Colors) g_LayerDescr.CommonColor;
 }

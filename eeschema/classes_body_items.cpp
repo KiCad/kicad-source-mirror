@@ -161,7 +161,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOff
      *  transformation matrix causes xy axes to be flipped. */
     int t1 = (aTransformMatrix[0][0] != 0) ^ (m_Horiz != 0);
 
-    DrawGraphicText( aPanel, aDC, pos1, color, m_Text,
+    DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
         t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
         m_Size,
         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
@@ -337,7 +337,7 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOf
     wxString* text = aData ? (wxString*) aData : &m_Text;
     GRSetDrawMode( aDC, aDrawMode );
     DrawGraphicText( aPanel, aDC, text_pos,
-        color, text->GetData(),
+        (EDA_Colors) color, text->GetData(),
         m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
         m_Size,
         m_HJustify, m_VJustify, linewidth );

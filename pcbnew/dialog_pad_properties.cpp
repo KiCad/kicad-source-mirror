@@ -84,7 +84,7 @@ DialogPadProperties::DialogPadProperties( WinEDA_BasePcbFrame* parent, D_PAD* Pa
 
     if( m_CurrentPad )
     {
-        Current_PadNetName = m_CurrentPad->m_Netname;
+        Current_PadNetName = m_CurrentPad->GetNetname();
         g_Current_PadName  = m_CurrentPad->ReturnStringPadName();
     }
 }
@@ -511,7 +511,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
         }
         m_CurrentPad->SetPadName( g_Current_PadName );
 
-        if( m_CurrentPad->m_Netname != Current_PadNetName )
+        if( m_CurrentPad->GetNetname() != Current_PadNetName )
         {
             if( Current_PadNetName.IsEmpty() )
                 m_CurrentPad->SetNet( 0 );
@@ -521,7 +521,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
                 if( net )
                 {
                     RastnestIsChanged = true;
-                    m_CurrentPad->m_Netname = Current_PadNetName;
+                    m_CurrentPad->SetNetname( Current_PadNetName );
                     m_CurrentPad->SetNet( net->GetNet() );
                 }
                 else

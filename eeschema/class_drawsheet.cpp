@@ -316,7 +316,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     Text = wxT( "Sheet: " ) + m_SheetName;
     DrawGraphicText( panel, DC,
-        wxPoint( pos.x, pos.y - 8 ), txtcolor,
+        wxPoint( pos.x, pos.y - 8 ), (EDA_Colors) txtcolor,
         Text, TEXT_ORIENT_HORIZ, wxSize( m_SheetNameSize, m_SheetNameSize ),
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
 
@@ -328,7 +328,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     Text = wxT( "File: " ) + m_FileName;
     DrawGraphicText( panel, DC,
         wxPoint( pos.x, pos.y + m_Size.y + 4 ),
-        txtcolor,
+        (EDA_Colors) txtcolor,
         Text, TEXT_ORIENT_HORIZ, wxSize( m_FileNameSize, m_FileNameSize ),
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth );
 

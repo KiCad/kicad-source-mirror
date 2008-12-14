@@ -296,7 +296,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
                 PtPad = Module->m_Pads;
                 for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Next() )
                 {
-                    PtPad->m_Netname = wxEmptyString;
+                    PtPad->SetNetname( wxEmptyString );
                 }
             }
             continue;
@@ -597,9 +597,9 @@ int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module )
         { /* trouve */
             trouve = TRUE;
             if( *TextNetName != '?' )
-                pad->m_Netname = CONV_FROM_UTF8( TextNetName );
+                pad->SetNetname( CONV_FROM_UTF8( TextNetName ) );
             else
-                pad->m_Netname.Empty();
+                pad->SetNetname( wxEmptyString);
         }
     }
 
