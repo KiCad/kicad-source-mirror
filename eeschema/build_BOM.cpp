@@ -753,7 +753,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByVal(
             Unit = aList[ii].m_Unit + '1' - 1;
         }
 
-        sprintf( CmpName, "%s.%c", aList[ii].m_Ref, Unit );
+        sprintf( CmpName, "%s.%c", aList[ii].m_Reference, Unit );
 #else
             Unit = aList[ii].m_Unit + 'A' - 1;
         }
