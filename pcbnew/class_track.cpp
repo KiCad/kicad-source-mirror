@@ -773,15 +773,17 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         return;
 
     int len = net->GetShortNetname().Len();
-
-    // calculate a good size for the text (fixed to 9 pixels, if possible)
-    int tsize = m_Width / len;
-    if( ( tsize / zoom) >= 6 )
+    if ( len > 0 )
     {
-        tsize = (tsize * 8) / 10;           // small reduction to give a better look, inside via
-        DrawGraphicText( panel, DC, m_Start,
-            WHITE, net->GetShortNetname(), 0, wxSize( tsize, tsize ),
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 8 );
+        // calculate a good size for the text
+        int tsize = m_Width / len;
+        if( ( tsize / zoom) >= 6 )
+        {
+            tsize = (tsize * 8) / 10;           // small reduction to give a better look, inside via
+            DrawGraphicText( panel, DC, m_Start,
+                WHITE, net->GetShortNetname(), 0, wxSize( tsize, tsize ),
+                GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+        }
     }
 }
 

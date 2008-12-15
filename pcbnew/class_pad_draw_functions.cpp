@@ -399,7 +399,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     wxPoint tpos0 = wxPoint( ux0, uy0 );        // Position of the centre of text
     wxPoint tpos  = tpos0;
     wxSize  AreaSize;                           // size of text area, normalized to AreaSize.y < AreaSize.x
-    int     len;
+    int     shortname_len   = m_ShortNetname.Len();
     if( GetShape() == PAD_CIRCLE )
         angle = 0;
     AreaSize = m_Size;
@@ -410,7 +410,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         AreaSize.y = m_Size.x;
     }
 
-    if( !m_Netname.IsEmpty() )          // if there is a netname, provides room to display this netname
+    if( shortname_len > 0 )          // if there is a netname, provides room to display this netname
     {
         AreaSize.y /= 2;                // Text used only the upper area of the pad. The lower area displays the net name
         tpos.y     -= AreaSize.y / 2;
@@ -424,32 +424,31 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     NORMALIZE_ANGLE_90( t_angle );
 
     /* Note: in next calculations, texte size is calculated for 3 or more chars.
-    Of course, pads nimbers and nets names can have less than 3 chars.
+    Of course, pads numbers and nets names can have less than 3 chars.
     but after some tries, i found this is gives the best look
     */
     #define MIN_CHAR_COUNT 3
     wxString buffer;
     ReturnStringPadName( buffer );
-    len = buffer.Len();
-    len = MAX( len, MIN_CHAR_COUNT);
+    int numpad_len = buffer.Len();
+    numpad_len = MAX( numpad_len, MIN_CHAR_COUNT);
 
-    int tsize = min( AreaSize.y, AreaSize.x / len );
+    int tsize = min( AreaSize.y, AreaSize.x / numpad_len );
      #define CHAR_SIZE_MIN 5
-    if( (tsize / zoom) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
+    if( (tsize / zoom) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
     {
         tsize = (int) (tsize * 0.8);             // reserve room for marges and segments thickness
 
         DrawGraphicText( panel, DC, tpos,
             WHITE, buffer, t_angle, wxSize( tsize, tsize ),
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 8 );
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
     }
 
-    // display the short netname
-    len   = m_ShortNetname.Len();
-    if (len == 0 )
+    // display the short netnam, if exists
+    if (shortname_len == 0 )
         return;
-    len = MAX( len, MIN_CHAR_COUNT);
-    tsize = min( AreaSize.y, AreaSize.x / len );
+    shortname_len = MAX( shortname_len, MIN_CHAR_COUNT);
+    tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
     if( (tsize / zoom) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
     {
@@ -460,7 +459,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         tsize = (int) (tsize * 0.8);         // reserve room for marges and segments thickness
         DrawGraphicText( panel, DC, tpos,
             WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 8 );
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
     }
 }
 
