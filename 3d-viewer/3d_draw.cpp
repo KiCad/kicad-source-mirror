@@ -421,9 +421,11 @@ static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
 /*************************************************************/
 {
+    int layer = text->GetLayer();
+
     if( !Get3DLayerEnable( layer ) )
         return;
-    int layer = text->GetLayer();
+
     int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
 
 
