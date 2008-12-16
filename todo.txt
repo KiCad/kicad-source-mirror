@@ -31,7 +31,7 @@ asked by: Dick Hollenbeck
 1) Gerbview needs to work at least as well as gerv, that means adding named layers,
    and a list control to sort the layer stack on the fly.  There seems to be a polygon bug
    of some kind, don't know how long that's been in there.  (Dick)
-2) Add net class suppport to PCBNEW, so the round tripping to freerouter
+2) Add net class support to PCBNEW, so the round tripping to freerouter
    is a dream (Dick)
 3) Document the specctra round tripper, and fix up the english translation
    of help.  (Dick, native english speaker)

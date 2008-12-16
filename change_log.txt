@@ -5,6 +5,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-15 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++gerbview
+    Implemented most of the "thermal" aperture macro, at least so that it
+    displays as concentric circles OK.  Still need to do the cross hairs.
+    Fixed a bug loading aperture macros from disk, could crash gerbview.
+    Switched TRACKs to after polygons in tracepcb.cpp, temporary solution until
+    I have more time.
+
+
 2008-Dec-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew

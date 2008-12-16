@@ -2,6 +2,7 @@
 /**** Routine de lecture et visu d'un fichier GERBER ****/
 /********************************************************/
 
+
 #include "fctsys.h"
 
 #include "common.h"
@@ -76,6 +77,7 @@
 /* Variables locales : */
 static wxPoint LastPosition;
 
+
 /* Local Functions (are lower case since they are private to this source file) */
 
 
@@ -102,8 +104,6 @@ static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     NEGATE( aTrack->m_End.y );
     aTrack->SetNet( Dcode_index );
     aTrack->m_Shape   = S_SPOT_CIRCLE;
-
-    // D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
 
     if( !isDark )
     {
@@ -156,7 +156,6 @@ static void fillOvalOrRectFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLaye
         aTrack->m_End.y   += len;
     }
 
-    // D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
     if( !isDark )
     {
         aTrack->m_Flags |= DRAW_ERASED;
@@ -192,7 +191,6 @@ static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 
     aTrack->SetNet( Dcode_index );
 
-    //D(printf("%s: isDark=%s\n", __func__, isDark ? "true" : "false" );)
     if( !isDark )
     {
         aTrack->m_Flags |= DRAW_ERASED;
@@ -314,7 +312,6 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 
     if( !isDark )
     {
-        D(printf("%s: isDark=false\n", __func__ );)
         aTrack->m_Flags |= DRAW_ERASED;
     }
 }
@@ -625,6 +622,7 @@ int GERBER::ReturnDCodeNumber( char*& Text )
 
     if( Text == NULL )
         return 0;
+
     Text++;
     text = line;
     while( IsNumber( *Text ) )
@@ -865,6 +863,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         }
     }
     else
+    {
         switch( D_commande )
         {
         case 1:     // code D01 Draw line, exposure ON
@@ -1039,11 +1038,33 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                             }
                             break;
 
+                        case AMP_THERMAL:
+                            {
+                                int outerDiam = scale( p->params[2].GetValue(tool), m_GerbMetric );
+                                int innerDiam = scale( p->params[3].GetValue(tool), m_GerbMetric );
+
+                                curPos += mapPt( p->params[0].GetValue( tool ), p->params[1].GetValue( tool ), m_GerbMetric );
+
+                                track = new TRACK( frame->m_Pcb );
+                                frame->m_Pcb->m_Track.Append( track );
+                                fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
+                                                outerDiam, !(m_LayerNegative ^ m_ImageNegative) );
+
+                                track = new TRACK( frame->m_Pcb );
+                                frame->m_Pcb->m_Track.Append( track );
+                                fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
+                                                innerDiam, (m_LayerNegative ^ m_ImageNegative) );
+
+                                // @todo: draw the cross hairs, see page 23 of rs274 spec.
+                                // this might be done with two lines, thickness from params[4], and drawing
+                                // darkness "(m_LayerNegative ^ m_ImageNegative)"
+                            }
+                            break;
+
                         case AMP_EOF:
                         case AMP_OUTLINE:
                         case AMP_POLYGON:
                         case AMP_MOIRE:
-                        case AMP_THERMAL:
                         default:
                             // not yet supported, waiting for you.
                             break;
@@ -1062,6 +1083,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
         default:
             return false;
         }
+    }
 
     return true;
 }

@@ -237,8 +237,8 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
     for( ; track != NULL; track = track->Next() )
     {
         if( (track->m_Shape == S_ARC)
-           || (track->m_Shape == S_CIRCLE)
-           || (track->m_Shape == S_ARC_RECT) )
+         || (track->m_Shape == S_CIRCLE)
+         || (track->m_Shape == S_ARC_RECT) )
         {
             pos.x = track->m_Start.x;
             pos.y = track->m_Start.y;
@@ -248,7 +248,9 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
             pos.x = (track->m_Start.x + track->m_End.x) / 2;
             pos.y = (track->m_Start.y + track->m_End.y) / 2;
         }
+
         Line.Printf( wxT( "D%d" ), track->GetNet() );
+
         width  = track->m_Width;
         orient = TEXT_ORIENT_HORIZ;
         if( track->m_Shape >= S_SPOT_CIRCLE )   // forme flash

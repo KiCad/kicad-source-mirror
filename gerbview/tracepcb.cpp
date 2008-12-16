@@ -113,9 +113,6 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     if( !m_Pcb )
         return;
 
-    // Draw tracks and flashes
-    Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
-
     // Draw filled polygons
     #define NBMAX 20000
     int    nbpoints    = 0;
@@ -125,7 +122,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 
     for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
     {
-        if( printmasklayer != -1  &&  !(track->ReturnMaskLayer() & printmasklayer) )
+        if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
 
         if( track->GetNet() == 0 )  // StartPoint
@@ -173,6 +170,9 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     }
 
     free( coord );
+
+    // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
+    Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
 
     if( DisplayOpt.DisplayPadNum )
         Affiche_DCodes_Pistes( DrawPanel, DC, m_Pcb, GR_COPY );

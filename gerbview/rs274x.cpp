@@ -177,6 +177,8 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
     double   fcoord;
     double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
 
+    //D(printf( "%s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF );)
+
     switch( command )
     {
     case FORMAT_STATEMENT:
@@ -567,9 +569,7 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
 
     for(;;)
     {
-        am.primitives.push_back( AM_PRIMITIVE() );
-
-        AM_PRIMITIVE& prim = am.primitives.back();
+        AM_PRIMITIVE    prim;
 
         if( *text == '*' )
             ++text;
@@ -625,7 +625,8 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
             return false;
         }
 
-        for( int i=0;  i<paramCount && *text && *text!='*';  ++i )
+        int i;
+        for( i=0;  i<paramCount && *text && *text!='*';  ++i )
         {
             prim.params.push_back( DCODE_PARAM() );
 
@@ -639,6 +640,9 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
             else
                 param.SetValue( ReadDouble( text ) );
         }
+
+        if( i<paramCount )  // maybe some day we can throw an exception and track a line number
+            printf("i=%d, insufficient parameters\n", i);
 
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )
@@ -665,6 +669,8 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ], char*& text, FILE* gerbe
 
             }
         }
+
+        am.primitives.push_back( prim );
     }
 
     m_aperture_macros.insert( am );
