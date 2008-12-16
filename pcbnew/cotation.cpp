@@ -178,8 +178,6 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
     CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
 
-    CurrentCotation->m_Text->CreateDrawData();
-
     if( m_DC )     // Affichage nouveau texte
     {
         /* Redessin du Texte */
@@ -482,5 +480,4 @@ static void Ajuste_Details_Cotation( COTATION* Cotation )
     Cotation->m_Value = mesure;
     valeur_param( Cotation->m_Value, msg );
     Cotation->SetText( msg );
-    Cotation->m_Text->CreateDrawData();
 }

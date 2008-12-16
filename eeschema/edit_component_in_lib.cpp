@@ -106,11 +106,11 @@ void WinEDA_PartPropertiesFrame::CopyBufferToFieldData( LibDrawField* Field )
  *  field "Field"
  */
 {
-    int hjustify[3] = {
+    GRTextHorizJustifyType hjustify[3] = {
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
         GR_TEXT_HJUSTIFY_RIGHT
     };
-    int vjustify[3] = {
+    GRTextVertJustifyType vjustify[3] = {
         GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
         GR_TEXT_VJUSTIFY_TOP
     };

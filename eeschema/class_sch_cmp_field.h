@@ -44,7 +44,6 @@ public:
     }
 
 
-    void     PartTextCopy( SCH_CMP_FIELD* target );
     void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     EDA_Rect GetBoundaryBox() const;

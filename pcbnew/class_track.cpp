@@ -635,6 +635,49 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             m_End.x, m_End.y,
             m_Width + (g_DesignSettings.m_TrackClearence * 2), color );
     }
+
+    /* Display the short netname:
+     *  we must filter tracks, to avoid a lot of texts.
+     *  - only horizontal or vertical tracks are eligible
+     *  - only  tracks with a length > 10 * thickness are eligible
+     */
+
+    #define THRESHOLD 10
+    if( (m_End.x - m_Start.x) != 0 &&  (m_End.y - m_Start.y) != 0 )
+        return;
+
+    int len = ABS( (m_End.x - m_Start.x) + (m_End.y - m_Start.y) );
+
+    if( len < THRESHOLD * m_Width )
+        return;
+
+    if( GetNet() == 0 )
+        return;
+    EQUIPOT* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
+    if( net == NULL )
+        return;
+
+    int textlen = net->GetShortNetname().Len();
+    if( textlen > 0 )
+    {
+        // calculate a good size for the text
+        int tsize = MIN( m_Width, len / textlen );
+        wxPoint tpos = m_Start + m_End;
+        tpos.x /= 2;
+        tpos.y /= 2;
+
+        // Calculate angle: if the track segment is vertical, angle = 90 degrees
+        int angle = 0;
+        if ( (m_End.x - m_Start.x) == 0 )   // Vertical segment
+            angle = 900;    // angle is in 0.1 degree
+        if( ( tsize / zoom) >= 6 )
+        {
+            tsize = (tsize * 8) / 10;           // small reduction to give a better look
+            DrawGraphicText( panel, DC, tpos,
+                WHITE, net->GetShortNetname(), angle, wxSize( tsize, tsize ),
+                GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+        }
+    }
 }
 
 
@@ -768,12 +811,12 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     // Display the short netname:
     if( GetNet() == 0 )
         return;
-    EQUIPOT* net = ((BOARD*)GetParent())->FindNet( GetNet() );
+    EQUIPOT* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
     if( net == NULL )
         return;
 
     int len = net->GetShortNetname().Len();
-    if ( len > 0 )
+    if( len > 0 )
     {
         // calculate a good size for the text
         int tsize = m_Width / len;

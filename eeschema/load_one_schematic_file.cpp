@@ -670,8 +670,8 @@ static int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             int  fieldNdx;
 
             char FieldUserName[1024];
-            int  hjustify = GR_TEXT_HJUSTIFY_CENTER;
-            int  vjustify = GR_TEXT_VJUSTIFY_CENTER;
+            GRTextHorizJustifyType  hjustify = GR_TEXT_HJUSTIFY_CENTER;
+            GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
 
             FieldUserName[0] = 0;
 

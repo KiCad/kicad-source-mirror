@@ -439,10 +439,17 @@ double round( double aNumber );
  *  @param aV_justify = vertical justification (bottom, center, top)
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
+ *  @param aItalic = true to simulate an italic font
+ *  @param aCallback() = function called (if non null) to draw each segment.
+ *                  used only to draw 3D texts
  */
 void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                       const wxPoint& aPos, enum EDA_Colors aColor, const wxString& aText,
-                      int aOrient, const wxSize& aSize, int aH_justify, int aV_justify, int aWidth = 0);
+                      int aOrient, const wxSize& aSize,
+                      enum GRTextHorizJustifyType aH_justify,
+                      enum GRTextVertJustifyType aV_justify,
+                      int aWidth = 0, bool aItalic = false,
+                      void (*aCallback)(int x0, int y0, int xf, int yf) = NULL);
 
 /** Function PlotGraphicText
  *  same as DrawGraphicText, but plot graphic text insteed of draw it
@@ -454,10 +461,14 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
  *  @param aH_justify = horizontal justification (Left, center, right)
  *  @param aV_justify = vertical justification (bottom, center, top)
+ *  @param aItalic = true to simulate an italic font
  */
 void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
                       const wxString& aText,
-                      int aOrient, const wxSize& aSize, int aH_justify, int aV_justify );
+                      int aOrient, const wxSize& aSize,
+                      enum GRTextHorizJustifyType aH_justify,
+                      enum GRTextVertJustifyType aV_justify,
+                      bool aItalic = false );
 
 /***************/
 /* CONFIRM.CPP */

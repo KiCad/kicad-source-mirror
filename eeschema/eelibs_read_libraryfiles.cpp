@@ -871,7 +871,7 @@ GetLibEntryField (EDA_LibComponentStruct* LibEntry,
  *  ou n = 0 (REFERENCE), 1 (VALUE) , 2 .. 11 = autres champs, facultatifs
  */
 {
-    int   posx, posy, size, orient, hjustify, vjustify;
+    int   posx, posy, size, orient;
     bool  draw;
     char* Text,
           Char1[256], Char2[256],
@@ -919,8 +919,8 @@ GetLibEntryField (EDA_LibComponentStruct* LibEntry,
     draw = TRUE; if( Char2[0] == 'I' )
         draw = FALSE;
 
-    hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    GRTextVertJustifyType vjustify = GR_TEXT_VJUSTIFY_CENTER;
 
     if( nbparam >= 6 )
     {

@@ -253,7 +253,8 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
     EDA_Colors color;
     wxPoint        pos; /* Position des textes */
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
-    int            hjustify, vjustify;
+    GRTextHorizJustifyType hjustify;
+    GRTextVertJustifyType vjustify;
     int            LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( m_Attributs & TEXT_NO_VISIBLE )
@@ -280,19 +281,61 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
         else
             orient = TEXT_ORIENT_HORIZ;
         /* Y a t-il rotation, miroir (pour les justifications)*/
-        EXCHG( hjustify, vjustify );
+        GRTextHorizJustifyType tmp = hjustify;
+        hjustify = (GRTextHorizJustifyType) vjustify;
+        vjustify = (GRTextVertJustifyType) tmp;
         if( DrawLibItem->m_Transform[1][0] < 0 )
-            vjustify = -vjustify;
+            switch ( vjustify )
+            {
+                case GR_TEXT_VJUSTIFY_BOTTOM:
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    break;
+                case GR_TEXT_VJUSTIFY_TOP:
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
         if( DrawLibItem->m_Transform[1][0] > 0 )
-            hjustify = -hjustify;
+            switch ( hjustify )
+            {
+                case GR_TEXT_HJUSTIFY_LEFT:
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    break;
+                case GR_TEXT_HJUSTIFY_RIGHT:
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    break;
+                default:
+                    break;
+            }
     }
     else
     {
         /* Texte horizontal: Y a t-il miroir (pour les justifications)*/
         if( DrawLibItem->m_Transform[0][0] < 0 )
-            hjustify = -hjustify;
+            switch ( hjustify )
+            {
+                case GR_TEXT_HJUSTIFY_LEFT:
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    break;
+                case GR_TEXT_HJUSTIFY_RIGHT:
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    break;
+                default:
+                    break;
+            }
         if( DrawLibItem->m_Transform[1][1] > 0 )
-            vjustify = -vjustify;
+            switch ( vjustify )
+            {
+                case GR_TEXT_VJUSTIFY_BOTTOM:
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    break;
+                case GR_TEXT_VJUSTIFY_TOP:
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
     }
 
     if( m_FieldId == REFERENCE )
@@ -309,9 +352,9 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
             m_Size,
             hjustify, vjustify, LineWidth );
     }
-    else // Si il y a plusieurs parts par boitier, ajouter a la reference l'identification de la selection ( A, B ... )
+    else // For more than one part per package, we must add the part selection to the reference )
     {
-        /* On ajoute alors A ou B ... a la reference */
+        /* Adding A ou B ... or .1 .2 ... to the reference */
         wxString fulltext = m_Text;
 #if defined(KICAD_GOST)
         fulltext.Append( '.');
@@ -320,7 +363,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
         fulltext.Append( 'A' - 1 + DrawLibItem->m_Multi );
 #endif
 
-        DrawGraphicText( panel, DC, pos, color, fulltext.GetData(),
+        DrawGraphicText( panel, DC, pos, color, fulltext,
             orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
             m_Size,
             hjustify, vjustify, LineWidth );

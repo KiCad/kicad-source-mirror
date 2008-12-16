@@ -132,8 +132,8 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-        << " Need ::Show() override for this class "
-        << "</" << s.Lower().mb_str() << ">\n";
+                                 << " Need ::Show() override for this class "
+                                 << "</" << s.Lower().mb_str() << ">\n";
 }
 
 
@@ -147,10 +147,13 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
 std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 {
     for( int i = 0; i<nestLevel; ++i )
-        os << "  "; // number of spaces here controls indent per nest level
+        os << "  ";
+
+    // number of spaces here controls indent per nest level
 
     return os;
 }
+
 
 #endif
 
@@ -160,28 +163,20 @@ std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
 /**************************************************/
 EDA_TextStruct::EDA_TextStruct( const wxString& text )
 {
-    m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT; /* XY size of font */
-    m_Orient    = 0;                            /* Orient in 0.1 degrees */
+    m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;     /* XY size of font */
+    m_Orient    = 0;                                /* Orient in 0.1 degrees */
     m_Attributs = 0;
-    m_Miroir    = 0;                            // vue normale / miroir
+    m_Miroir    = 0;                                // display mirror if 1
     m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
-    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;      /* Justifications Horiz et Vert du texte */
-    m_Width    = 0;                             /* epaisseur du trait */
-    m_CharType = 0;                             /* normal, bold, italic ... */
-    m_Text = text;
-    m_ZoomLevelDrawable = 0;                    /* Niveau de zoom acceptable pour affichage normal */
-    m_TextDrawings     = NULL;                  /* Pointeur sur le dessin du caractere */
-    m_TextDrawingsSize = 0;                     /* taille du tableau point�*/
+    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
+    m_Width  = 0;                                   /* thickness */
+    m_Italic = false;                               /* true = italic shape */
+    m_Text   = text;
 }
 
 
 EDA_TextStruct::~EDA_TextStruct()
 {
-    if( m_TextDrawings )    /* pointeur sur la liste des segments de dessin */
-    {
-        free( m_TextDrawings ); m_TextDrawings = NULL;
-    }
-    m_TextDrawingsSize = 0;         /* nombre de sommets a dessiner */
 }
 
 
@@ -259,337 +254,62 @@ int EDA_TextStruct::Pitch()
 
 
 /***************************************************************/
-void EDA_TextStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                           const wxPoint& offset, int color, int draw_mode,
-                           int display_mode, int anchor_color )
+void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                           const wxPoint& aOffset, EDA_Colors aColor,
+                           int aDrawMode,
+                           GRFillMode aDisplayMode, EDA_Colors aAnchor_color )
 /***************************************************************/
 
-/*
- *  Trace de 1 texte type EDA_TextStruct.
- *  offset = Offset de trace (usuellement (0,0)
- *  color = couleur du texte
- *  draw_mode = GR_OR, GR_XOR.., -1 si mode courant.
- *  display_mode = FILAIRE, FILLED ou SKETCH
- *  anchor_color = couleur de l'ancre ( -1 si pas d'ancre ).
+/** Function Draw
+ *  @param aPanel = the current DrawPanel
+ *  @param aDC = the current Device Context
+ *  @param aOffset = draw offset (usually (0,0))
+ *  @param EDA_Colors aColor = text color
+ *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
+ *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
+ *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
  */
 {
     int zoom;
-    int coord[104];
-    int ii, jj, kk, ll, nbpoints;
     int width;
 
-    if( m_TextDrawings == NULL )  /* pointeur sur la liste des segments de dessin */
-        CreateDrawData();
-
-    if( m_TextDrawings == NULL )
-        return;
-
-    zoom  = panel->GetZoom();
-    width = m_Width / zoom;
-    if( display_mode == FILAIRE )
+    zoom  = aPanel->GetZoom();
+    width = m_Width;
+    if( aDisplayMode == FILAIRE )
         width = 0;
 
-    /* choix de la couleur du texte : */
-    if( draw_mode != -1 )
-        GRSetDrawMode( DC, draw_mode );
+    if( aDrawMode != -1 )
+        GRSetDrawMode( aDC, aDrawMode );
 
-    /* trace du texte */
-    if( zoom > m_ZoomLevelDrawable )
+    /* Draw text anchor, if allowed */
+    if( aAnchor_color != UNSPECIFIED_COLOR )
     {
-        GRLine( &panel->m_ClipBox, DC,
-            m_TextDrawings[1] + offset.x + m_Pos.x,
-            m_TextDrawings[2] + offset.y + m_Pos.y,
-            m_TextDrawings[3] + offset.x + m_Pos.x,
-            m_TextDrawings[4] + offset.y + m_Pos.y,
-            width, color );
+        int anchor_size = 2 * zoom;
+        aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
+
+        int cX = m_Pos.x + aOffset.x;
+        int cY = m_Pos.y + aOffset.y;
+
+        GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
+                cX + anchor_size, cY, 0, aAnchor_color );
+
+        GRLine( &aPanel->m_ClipBox, aDC, cX, cY - anchor_size,
+                cX, cY + anchor_size, 0, aAnchor_color );
     }
-    else
-    {
-        /* trace ancre du texte ? */
-        if( anchor_color != -1 )
-        {
-            int anchor_size = 2 * zoom;
-            anchor_color &= MASKCOLOR;
 
-            /* calcul de la position du texte */
-            int cX = m_Pos.x - offset.x;
-            int cY = m_Pos.y - offset.y;
+    if( aDisplayMode == SKETCH )
+        width = -width;
 
-            /* trace ancre du texte */
-            GRLine( &panel->m_ClipBox, DC, cX - anchor_size, cY,
-                cX + anchor_size, cY, 0, anchor_color );
-
-            GRLine( &panel->m_ClipBox, DC, cX, cY - anchor_size,
-                cX, cY + anchor_size, 0, anchor_color );
-        }
-        jj = 5; ii = jj + 1;
-        while( ii < m_TextDrawingsSize )
-        {
-            nbpoints = m_TextDrawings[jj];
-            if( nbpoints > 50 )
-                nbpoints = 50;
-
-            for( kk = 0, ll = 0; (kk < nbpoints) && (ii < m_TextDrawingsSize); kk++ )
-            {
-                coord[ll++] = m_TextDrawings[ii++] + offset.x + m_Pos.x;
-                coord[ll++] = m_TextDrawings[ii++] + offset.y + m_Pos.y;
-            }
-
-            jj = ii++;
-
-            if( width > 2 )
-            {
-                for( kk = 0, ll = 0; kk < (nbpoints - 1); kk++, ll += 2 )
-                {
-                    if( display_mode == SKETCH )
-                        GRCSegm( &panel->m_ClipBox, DC,
-                            coord[ll], coord[ll + 1],
-                            coord[ll + 2], coord[ll + 3],
-                            m_Width, color );
-
-                    else
-                        GRFillCSegm( &panel->m_ClipBox, DC,
-                            coord[ll], coord[ll + 1],
-                            coord[ll + 2], coord[ll + 3],
-                            m_Width, color );
-                }
-            }
-            else
-                GRPoly( &panel->m_ClipBox, DC, nbpoints, coord, 0, 0, color, color );
-        }
-    }
+    DrawGraphicText( aPanel, aDC,
+                     aOffset + m_Pos, aColor, m_Text,
+                     m_Orient, m_Size,
+                     m_HJustify, m_VJustify, width, m_Italic );
 }
 
 
-/****************************************/
-void EDA_TextStruct::CreateDrawData()
-/****************************************/
-
-/* Cree le tableau de donn�s n�essaire au trace d'un texte (pcb, module..)
- *  Met a jour:
- *  m_ZoomLevelDrawable 	Niveau de zoom acceptable pour affichage normal
- *  m_TextDrawings 			Pointeur sur le tableau de donn�s
- *  m_TextDrawingsSize      taille (en int) du tableau
- *  Codage dans le tableau:
- *  Suite des coord des sommets des polygones a tracer pr���du nombre de sommets
- *  nn xx1 yy1 xx2 yy2 .. xxn yyn mm  xx1 yy1 xx2 yy2 .. xxm yym
- *  les 2 premiers sommets sont le segment symbolisant le texte pour les
- *  affichages a trop petite echelle
- */
-{
-    int            ii, jj, kk, nbchar, nbpoints, AsciiCode, endcar;
-    int            k1, k2, x0, y0;
-    int            size_h, size_v, espacement;
-    char           f_cod, plume = 'U';
-    const wxChar*  ptr;
-    const SH_CODE* ptcar;
-    int            ux0, uy0, dx, dy;    // Coord de trace des segments de texte & variables de calcul */
-    int            cX, cY;              // Centre du texte
-    int            ox, oy;              // coord de trace du caractere courant
-    int*           coord;               // liste des coord des segments a tracer
-    int            coord_count_max = 1000;
-
-    if( m_TextDrawings )    /* pointeur sur la liste des segments de dessin */
-    {
-        free( m_TextDrawings ); m_TextDrawings = 0;
-    }
-    m_TextDrawingsSize = 0;         /* nombre de segments a dessiner */
-
-    nbchar = m_Text.Length();
-    if( nbchar == 0 )
-        return;
-
-    size_h     = m_Size.x;
-    size_v     = m_Size.y;
-    espacement = Pitch();
-    if( m_Miroir == 0 )
-    {
-        size_h = -size_h; espacement = -espacement;
-    }
-
-    kk = 0; ptr = m_Text.GetData(); /* ptr pointe 1er caractere du texte */
-
-    /* calcul de la position du debut des textes: ox et oy */
-    ox = cX = 0; oy = cY = 0;
-
-    /* Calcul du cadrage du texte */
-    dx = (espacement * nbchar) / 2;
-    dy = size_v / 2;                            /* Decalage du debut du texte / centre */
-
-    ux0 = uy0 = 0;                              /* Decalage du centre du texte / ccord de ref */
-
-    if( (m_Orient == 0) || (m_Orient == 1800) ) /* Texte Horizontal */
-    {
-        switch( m_HJustify )
-        {
-        case GR_TEXT_HJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            ux0 = -dx;
-            break;
-
-        case GR_TEXT_HJUSTIFY_LEFT:
-            ux0 = dx;
-            break;
-        }
-
-        switch( m_VJustify )
-        {
-        case GR_TEXT_VJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_VJUSTIFY_TOP:
-            uy0 = dy;
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            uy0 = -dy;
-            break;
-        }
-    }
-    else    /* Texte Vertical */
-    {
-        switch( m_HJustify )
-        {
-        case GR_TEXT_HJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            ux0 = -dy;
-            break;
-
-        case GR_TEXT_HJUSTIFY_LEFT:
-            ux0 = dy;
-            break;
-        }
-
-        switch( m_VJustify )
-        {
-        case GR_TEXT_VJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_VJUSTIFY_TOP:
-            uy0 = dx;
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            uy0 = -dx;
-            break;
-        }
-    }
-    cX += ux0; cY += uy0;
-    ox  = cX - dx;; oy = cY + dy;
-
-    /* lorsque les chars sont trop petits pour etre dessines,
-     *  le texte est symbolise par une barre */
-    m_ZoomLevelDrawable = MAX( ABS(m_Size.x), ABS(m_Size.y) ) / 3;
-    dx = (espacement * nbchar) / 2;
-    dy = size_v / 2;    /* Decalage du debut du texte / centre */
-
-    ux0 = cX - dx;
-    uy0 = cY;
-
-    dx += cX;
-    dy  = cY;
-
-    RotatePoint( &ux0, &uy0, cX, cY, m_Orient );
-    RotatePoint( &dx, &dy, cX, cY, m_Orient );
-
-    coord    = (int*) MyMalloc( (coord_count_max + 2) * sizeof(int) );
-    coord[0] = 2;
-    coord[1] = ux0; coord[2] = uy0;
-    coord[3] = dx; coord[4] = dy;
-
-    jj = 5; ii = jj + 1; nbpoints = 0;
-    while( kk++ < nbchar )
-    {
-        x0 = 0; y0 = 0;
-#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-    AsciiCode = (*ptr) & 0x7FF;
-    if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
-        AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
-    else
-        AsciiCode = AsciiCode & 0xFF;
-#else
-         AsciiCode = (*ptr) & 255;
-#endif
-        ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
-                                                  *  du caractere a dessiner */
-
-        for( endcar = FALSE; !endcar; ptcar++ )
-        {
-            f_cod = *ptcar;
-
-            /* get code n de la forme selectionnee */
-            switch( f_cod )
-            {
-            case 'X':
-                endcar = TRUE;    /* fin du caractere */
-                break;
-
-            case 'U':
-                if( nbpoints && (plume == 'D' ) )
-                {
-                    if( jj >= coord_count_max )
-                    {
-                        coord_count_max *= 2;
-                        coord = (int*) realloc( coord, coord_count_max * sizeof(int) );
-                    }
-                    coord[jj] = nbpoints;
-                    jj = ii++;
-                }
-                plume    = f_cod;
-                nbpoints = 0;
-                break;
-
-            case 'D':
-                plume    = f_cod;
-                nbpoints = 1;       /* 1 point va suivre (origine du trac� */
-                break;
-
-            default:
-            {
-                k1 = f_cod;     /* trace sur axe V */
-                k1 = -( (k1 * size_v) / 9 );
-                ptcar++;
-                f_cod = *ptcar;
-                k2    = f_cod;  /* trace sur axe H */
-                k2    = (k2 * size_h) / 9;
-
-                dx = k2 + ox;
-                dy = k1 + oy;
-
-                RotatePoint( &dx, &dy, cX, cY, m_Orient );
-                if( ii >= coord_count_max )
-                {
-                    coord_count_max *= 2;
-                    coord = (int*) realloc( coord, coord_count_max * sizeof(int) );
-                }
-
-                coord[ii++] = dx;
-                coord[ii++] = dy;
-
-                nbpoints++;
-                break;
-            }
-            }
-
-            /* end switch */
-        }
-
-        /* end boucle for = end trace de 1 caractere */
-
-        ptr++;
-        ox += espacement;
-    }
-
-    /* end trace du texte */
-
-    m_TextDrawings     = (int*) realloc( coord, ii * sizeof(int) );
-    m_TextDrawingsSize = ii;    //taille (en int) du tableau
-}
-
+/******************/
+/* Class EDA_Rect */
+/******************/
 
 /******************************/
 void EDA_Rect::Normalize()
@@ -646,15 +366,6 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
     // this logic taken from wxWidgets' geometry.cpp file:
     bool rc;
 
-#if 0 && defined(DEBUG)
-
-    std::cout << "this: ";
-    std::cout << m_Pos << m_Size << '\n';
-    std::cout << "aRect: ";
-    std::cout << aRect.m_Pos << aRect.m_Size;
-
-#endif
-
     int left   = MAX( m_Pos.x, aRect.m_Pos.x );
     int right  = MIN( m_Pos.x + m_Size.x, aRect.m_Pos.x + aRect.m_Size.x );
     int top    = MAX( m_Pos.y, aRect.m_Pos.y );
@@ -664,8 +375,6 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
         rc = true;
     else
         rc = false;
-
-    //D( std::cout << "rc=" << rc << '\n'; )
 
     return rc;
 }
@@ -771,4 +480,3 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
     end.y   = MAX( end.y, rect_end.y );
     SetEnd( end );
 }
-

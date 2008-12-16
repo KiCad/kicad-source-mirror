@@ -233,7 +233,6 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentTextPCB->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;
     CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
-    CurrentTextPCB->CreateDrawData();
 
     if( m_DC )     // Affichage nouveau texte
     {
@@ -283,7 +282,6 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb == NULL )
         return;
 
-    TextePcb->CreateDrawData();
     TextePcb->Draw( DrawPanel, DC, GR_OR );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
@@ -406,8 +404,6 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         TextePcb->m_Orient -= 3600;
     if( TextePcb->m_Orient < 0 )
         TextePcb->m_Orient += 3600;
-
-    TextePcb->CreateDrawData();
 
     /* Redessin du Texte */
     TextePcb->Draw( DrawPanel, DC, drawmode );

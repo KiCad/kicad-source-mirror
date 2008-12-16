@@ -376,7 +376,6 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 {
     wxPoint         textpos; /* Position des textes */
     SCH_CMP_FIELD*  field = DrawLibItem->GetField( FieldNumber );
-    int             hjustify, vjustify;
     int             orient;
     EDA_Colors color = UNSPECIFIED_COLOR;
 
@@ -391,7 +390,8 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 
     /* Calcul de la position des textes, selon orientation du composant */
     orient   = field->m_Orient;
-    hjustify = field->m_HJustify; vjustify = field->m_VJustify;
+    GRTextHorizJustifyType hjustify = field->m_HJustify;
+    GRTextVertJustifyType vjustify = field->m_VJustify;
     textpos = field->m_Pos - DrawLibItem->m_Pos;    // textpos is the text position relative to the component anchor
 
     textpos = TransformCoordinate( DrawLibItem->m_Transform, textpos ) + DrawLibItem->m_Pos;
@@ -404,19 +404,62 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
         else
             orient = TEXT_ORIENT_HORIZ;
         /* Y a t-il rotation, miroir (pour les justifications)*/
-        EXCHG( hjustify, vjustify );
+        GRTextHorizJustifyType tmp = hjustify;
+        hjustify = (GRTextHorizJustifyType) vjustify;
+        vjustify = (GRTextVertJustifyType) tmp;
+
         if( DrawLibItem->m_Transform[1][0] < 0 )
-            vjustify = -vjustify;
+            switch ( vjustify )
+            {
+                case GR_TEXT_VJUSTIFY_BOTTOM:
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    break;
+                case GR_TEXT_VJUSTIFY_TOP:
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
         if( DrawLibItem->m_Transform[1][0] > 0 )
-            hjustify = -hjustify;
+            switch ( hjustify )
+            {
+                case GR_TEXT_HJUSTIFY_LEFT:
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    break;
+                case GR_TEXT_HJUSTIFY_RIGHT:
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    break;
+                default:
+                    break;
+            }
     }
     else
     {
         /* Texte horizontal: Y a t-il miroir (pour les justifications)*/
         if( DrawLibItem->m_Transform[0][0] < 0 )
-            hjustify = -hjustify;
+            switch ( hjustify )
+            {
+                case GR_TEXT_HJUSTIFY_LEFT:
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    break;
+                case GR_TEXT_HJUSTIFY_RIGHT:
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    break;
+                default:
+                    break;
+            }
         if( DrawLibItem->m_Transform[1][1] > 0 )
-            vjustify = -vjustify;
+            switch ( vjustify )
+            {
+                case GR_TEXT_VJUSTIFY_BOTTOM:
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    break;
+                case GR_TEXT_VJUSTIFY_TOP:
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
     }
 
     SetCurrentLineWidth( -1 );
@@ -686,7 +729,6 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
 /***********************************************************************/
 /* Routine de dessin des Sheet Labels type hierarchie */
 {
-    int side;
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     int posx, tposx, posy, size, size2;
     int coord[16];
@@ -695,6 +737,7 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
         txtcolor = ReturnLayerColor( Struct->GetLayer() );
 
     posx = Struct->m_Pos.x; posy = Struct->m_Pos.y; size = Struct->m_Size.x;
+    GRTextHorizJustifyType side;
     if( Struct->m_Edge )
     {
         tposx = posx - size;

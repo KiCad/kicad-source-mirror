@@ -40,7 +40,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Layer     = source->m_Layer;
     m_Width     = source->m_Width;
     m_Attributs = source->m_Attributs;
-    m_CharType  = source->m_CharType;
+    m_Italic  = source->m_Italic;
     m_HJustify  = source->m_HJustify;
     m_VJustify  = source->m_VJustify;
 
@@ -135,9 +135,9 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( color & ITEM_NOT_SHOW )
         return;
 
-    EDA_TextStruct::Draw( panel, DC, offset, color,
-                         DrawMode, DisplayOpt.DisplayDrawItems,
-                         (g_AnchorColor & ITEM_NOT_SHOW) ? -1 : (g_AnchorColor & MASKCOLOR) );
+    EDA_TextStruct::Draw( panel, DC, offset, (EDA_Colors) color,
+                         DrawMode, (GRFillMode)DisplayOpt.DisplayDrawItems,
+                         (g_AnchorColor & ITEM_NOT_SHOW) ? UNSPECIFIED_COLOR : (EDA_Colors)g_AnchorColor );
 }
 
 

@@ -710,8 +710,6 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
             STRUCT->m_Orient += 900;
             if( STRUCT->m_Orient >= 3600 )
                 STRUCT->m_Orient -= 3600;
-
-            STRUCT->CreateDrawData();
             break;
 
         case TYPE_MIRE:
@@ -896,7 +894,6 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
                 STRUCT->m_Miroir ^= 1;      /* inverse miroir */
             }
             STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
-            STRUCT->CreateDrawData();
             break;
 
         case TYPE_MIRE:

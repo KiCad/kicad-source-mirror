@@ -53,34 +53,10 @@ void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
     EXCHG( m_Orient, copyitem->m_Orient );
     EXCHG( m_Miroir, copyitem->m_Miroir );
     EXCHG( m_Attributs, copyitem->m_Attributs );
-    EXCHG( m_CharType, copyitem->m_CharType );
+    EXCHG( m_Italic, copyitem->m_Italic );
     EXCHG( m_HJustify, copyitem->m_HJustify );
     EXCHG( m_VJustify, copyitem->m_VJustify );
-    EXCHG( m_ZoomLevelDrawable, copyitem->m_ZoomLevelDrawable );
-    EXCHG( m_TextDrawings, copyitem->m_TextDrawings );
-    EXCHG( m_TextDrawingsSize, copyitem->m_TextDrawingsSize );
 }
-
-
-#if 0
-/***********************************************************/
-void SCH_CMP_FIELD::PartTextCopy( SCH_CMP_FIELD* target )
-/***********************************************************/
-{
-    target->m_Text = m_Text;
-    if( m_FieldId >= FIELD1 )
-        target->m_Name = m_Name;
-    target->m_Layer     = m_Layer;
-    target->m_Pos       = m_Pos;
-    target->m_Size      = m_Size;
-    target->m_Attributs = m_Attributs;
-    target->m_FieldId   = m_FieldId;
-    target->m_Orient    = m_Orient;
-    target->m_HJustify  = m_HJustify;
-    target->m_VJustify  = m_VJustify;
-    target->m_Flags     = m_Flags;
-}
-#endif
 
 
 /*********************************/
@@ -92,8 +68,8 @@ bool SCH_CMP_FIELD::IsVoid()
  */
 {
     if( m_Text.IsEmpty() || m_Text == wxT( "~" ) )
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 
@@ -142,7 +118,7 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     y2 = pos.y + (DrawLibItem->m_Transform[1][0] * x1)
          + (DrawLibItem->m_Transform[1][1] * y1);
 
-    /* If the component orientation is +/- 90 deg, the text orienation must be changed */
+    /* If the component orientation is +/- 90 deg, the text orientation must be changed */
     if( DrawLibItem->m_Transform[0][1] )
     {
         if( orient == TEXT_ORIENT_HORIZ )
@@ -206,7 +182,9 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
 }
 
 
+/*********************************************/
 bool SCH_CMP_FIELD::Save( FILE* aFile ) const
+/*********************************************/
 {
     char hjustify = 'C';
     if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
