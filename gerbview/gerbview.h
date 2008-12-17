@@ -83,6 +83,7 @@ enum Gerb_GCommand {
     GC_TURN_ON_POLY_FILL        = 36,
     GC_TURN_OFF_POLY_FILL       = 37,
     GC_SELECT_TOOL = 54,
+    GC_PHOTO_MODE = 55,                 // can starts a D03 flash command: redundant with D03
     GC_SPECIFY_INCHES = 70,
     GC_SPECIFY_MILLIMETERS      = 71,
     GC_TURN_OFF_360_INTERPOL    = 74,
@@ -292,7 +293,7 @@ inline double DCODE_PARAM::GetValue( const D_CODE* aDcode ) const
     {
         // the first one was numbered 1, not zero, as in $1, see page 19 of spec.
         unsigned ndx = GetIndex() - 1;
-
+        wxASSERT(aDcode);
         // get the parameter from the aDcode
         if( ndx < aDcode->m_am_params.size() )
             return aDcode->m_am_params[ndx].GetValue( NULL );

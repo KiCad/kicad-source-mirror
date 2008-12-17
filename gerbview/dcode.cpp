@@ -379,6 +379,8 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 /* Set Size Items (Lines, Flashes) from DCodes List
  */
 {
+    static D_CODE dummy(999);   //Used if D_CODE not found in list
+
     for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
     {
         GERBER* gerber = g_GERBER_List[track->GetLayer()];
@@ -386,6 +388,8 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 
         D_CODE* dcode  = gerber->GetDCODE( track->GetNet(), false );
         wxASSERT( dcode );
+        if ( dcode == NULL )
+            dcode = &dummy;
 
         dcode->m_InUse = TRUE;
 
@@ -415,7 +419,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 
             switch( dcode->m_Shape )
             {
-            case APT_LINE:          // ne devrait pas etre utilis� ici
+            case APT_LINE:          // might not appears here, but some broken gerber files use it
             case APT_CIRCLE:        /* spot round (for GERBER)*/
                 track->m_Shape = S_SPOT_CIRCLE;
                 break;

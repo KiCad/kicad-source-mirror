@@ -198,7 +198,7 @@ static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 }
 
 
-#if 0 // @todo finish translating comment and get it into the doxygen function comment for fillArcTRACK below
+#if 0 // @todo get it into the doxygen function comment for fillArcTRACK below
 /*****************************************************************/
 static void Append_1_SEG_ARC_GERBER( int Dcode_index,
                                      WinEDA_GerberFrame* frame, wxDC* DC,
@@ -208,15 +208,20 @@ static void Append_1_SEG_ARC_GERBER( int Dcode_index,
 /*****************************************************************/
 
 /*
- creation d'un arc:
-  si multiquadrant == true arc de 0 a 360 degres
-      et rel_center est la coordonn�e du centre relativement au startpoint
-
-  si multiquadrant == false arc de 0 � 90 entierement contenu dans le meme quadrant
-      et rel_center est la coordonn�e du centre relativement au startpoint,
-      mais en VALEUR ABSOLUE et le signe des valeurs x et y de rel_center doit
-      etre deduit de cette limite de 90 degres
-*/
+  * Creates an arc:
+  * if multiquadrant == true : arc can be 0 to 360 degres
+  *   and rel_center is the center coordiante relative to startpoint.
+ *
+  * if multiquadrant == false arc can be only 0 to 90 deg,
+  *     and only in the same quadrant :
+  *         absolute angle 0 to 90 (quadrant 1) or
+  *         absolute angle 90 to 180 (quadrant 2) or
+  *         absolute angle 180 to 270 (quadrant 3) or
+  *         absolute angle 270 to 0 (quadrant 4)
+  *   rel_center is the center coordiante relative to startpoint,
+  *   given in ABSOLUE VALUE and the signe of values x et y de rel_center
+  *   must be calculated from the previously given constraint: arc only in the same quadrant
+ */
 
 #endif
 
@@ -641,6 +646,9 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
 {
     switch( G_commande )
     {
+    case GC_PHOTO_MODE:                 // can starts a D03 flash command: redundant, can be safely ignored
+        break;
+
     case GC_LINEAR_INTERPOL_1X:
         m_Iterpolation = GERB_INTERPOL_LINEAR_1X;
         break;
