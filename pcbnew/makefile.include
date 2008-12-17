@@ -24,7 +24,7 @@ SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o specctra_import.o
 OBJECTS=	$(TARGET).o classpcb.o\
 		$(ZONE_FILES)\
 		$(SPECCTRA_TOOLS)\
-		lay2plot.o\
+		print_board_functions.o\
 		dialog_freeroute_exchange.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
@@ -160,7 +160,7 @@ export_gencad.o: export_gencad.cpp
 wxprint.o: ../share/wxprint.cpp ../share/dialog_print.cpp ../share/dialog_print.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-lay2plot.o: lay2plot.cpp
+print_board_functions.o: print_board_functions.cpp
 
 classpcb.o: classpcb.cpp
 

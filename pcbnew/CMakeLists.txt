@@ -89,7 +89,7 @@ set(PCBNEW_SRCS
     hotkeys.cpp
     initpcb.cpp
     ioascii.cpp
-    lay2plot.cpp
+    print_board_functions.cpp
     librairi.cpp
     loadcmp.cpp
     locate.cpp

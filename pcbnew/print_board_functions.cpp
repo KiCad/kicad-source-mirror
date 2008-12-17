@@ -1,5 +1,5 @@
 /**********************************************/
-/* Routine de selection de couches pour trace */
+/*lay2plot.cpp: some functions to plot boards */
 /**********************************************/
 
 #include "fctsys.h"
@@ -11,11 +11,8 @@
 
 #include "protos.h"
 
-
-/* Variables locales : */
-
-/* Routines Locales */
-static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
+/* Local functions */
+static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
                          int draw_mode, int masklayer );
 
 
@@ -24,7 +21,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 /************************************************************************************************************/
 
 /* Used to print the board.
- *  Draw the board, but only layers allowed by printmasklayer
+ *  Print the board, but only layers allowed by printmasklayer
  *  ( printmasklayer is a 32 bits mask: bit n = 1 -> layer n is printed)
  */
 {
@@ -41,19 +38,19 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     else
         DisplayOpt.DisplayPadFill = SKETCH;
     frame->m_DisplayPadFill      = DisplayOpt.DisplayPadFill;
-    frame->m_DisplayPadNum       = DisplayOpt.DisplayPadNum = FALSE;
-    DisplayOpt.DisplayPadNoConn  = FALSE;
-    DisplayOpt.DisplayPadIsol    = FALSE;
+    frame->m_DisplayPadNum       = DisplayOpt.DisplayPadNum = false;
+    DisplayOpt.DisplayPadNoConn  = false;
+    DisplayOpt.DisplayPadIsol    = false;
     DisplayOpt.DisplayModEdge    = FILLED;
     DisplayOpt.DisplayModText    = FILLED;
     frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
-    DisplayOpt.DisplayTrackIsol  = FALSE;
+    DisplayOpt.DisplayTrackIsol  = false;
     DisplayOpt.DisplayDrawItems  = FILLED;
     DisplayOpt.DisplayZonesMode      = 0;
 
     m_PrintIsMirrored = aPrintMirrorMode;
 
-    /* Draw the pcb graphic items (texts, ...) */
+    /* Print the pcb graphic items (texts, ...) */
     for( BOARD_ITEM* item = Pcb->m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
@@ -74,7 +71,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
         }
     }
 
-    /* Draw the tracks */
+    /* Print tracks */
     pt_piste = Pcb->m_Track;
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
@@ -105,15 +102,15 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     Module = (MODULE*) Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Plot_Module( this, DC, Module, drawmode, printmasklayer );
+        Print_Module( this, DC, Module, drawmode, printmasklayer );
     }
 
-    /* draw the via holes in white color*/
+    /* Print via holes in white color*/
     pt_piste = Pcb->m_Track;
     int rayon = g_DesignSettings.m_ViaDrill / 2;
     int color = WHITE;
     bool blackpenstate = GetGRForceBlackPenState( );
-    GRForceBlackPen( FALSE );
+    GRForceBlackPen( false );
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
@@ -127,7 +124,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     }
     GRForceBlackPen( blackpenstate );
 
-    /* Draw areas (i.e. zones) */
+    /* Draw filled areas (i.e. zones) */
     for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = Pcb->GetArea(ii);
@@ -150,7 +147,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 
 
 /***********************************************************/
-static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
+static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC,
                          MODULE* Module, int draw_mode, int masklayer )
 /***********************************************************/
 {
@@ -159,7 +156,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     TEXTE_MODULE*   TextMod;
     int             mlayer;
 
-    /* Draw pads */
+    /* Print pads */
     pt_pad = Module->m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
@@ -178,7 +175,7 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
             pt_pad->Draw( panel, DC, draw_mode );
     }
 
-    /* draw footprint graphic shapes */
+    /* Print footprint graphic shapes */
     PtStruct = Module->m_Drawings;
     mlayer   = g_TabOneLayerMask[Module->GetLayer()];
     if( Module->GetLayer() == COPPER_LAYER_N )
@@ -188,17 +185,9 @@ static void Plot_Module( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( mlayer & masklayer )
     {
-        /* Analyse des autorisations de trace pour les textes VALEUR et REF */
-        bool trace_val, trace_ref;
-        trace_val = trace_ref = TRUE; // les 2 autorisations de tracer sont donnees
-        if( Module->m_Reference->m_NoShow )
-            trace_ref = FALSE;
-        if( Module->m_Value->m_NoShow )
-            trace_val = FALSE;
-
-        if( trace_ref )
+        if( ! Module->m_Reference->m_NoShow )
             Module->m_Reference->Draw( panel, DC, draw_mode );
-        if( trace_val )
+        if( ! Module->m_Value->m_NoShow )
             Module->m_Value->Draw( panel, DC, draw_mode );
     }
 
