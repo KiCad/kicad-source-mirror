@@ -18,7 +18,7 @@ class wxStdDialogButtonSizer;
 
 
 // Specify how many elements are contained within laytool_list[]
-const int NB_BUTT = 44;
+const int NB_BUTT = 43;
 
 // Specify how many elements are contained within laytool_index[]
 const int BUTTON_GROUPS = 3;
