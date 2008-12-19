@@ -100,6 +100,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     wxSize            text_size;
     void              (*FctPlume)( wxPoint pos, int state );
     int               UpperLimit = VARIABLE_BLOCK_START_POSITION;
+    bool italic = false;
+    bool thickness = 0; //@todo : use current pen
 
     switch( format_plot )
     {
@@ -176,7 +178,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		PlotGraphicText(format_plot, pos, color,
 				msg, TEXT_ORIENT_VERT, text_size,
-                        	GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM);
+                        	GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
+                            thickness, italic );
 
         	break;
     	    case WS_SEGMENT_LU:
@@ -221,7 +224,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         pos.y = (ref.y + GRID_REF_W / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+            thickness, italic );
 
         if( ii < xg - PAS_REF / 2 )
         {
@@ -234,7 +238,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         pos.y = (yg - GRID_REF_W / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+            thickness, italic );
     }
 
     /* Trace des reperes selon l'axe Y */
@@ -254,7 +259,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         pos.y = (ii - gypas / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+            thickness, italic );
 
         if( ii < yg - PAS_REF / 2 )
         {
@@ -266,7 +272,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         pos.x = (xg - GRID_REF_W / 2) * conv_unit;
         pos.y = (ii - gypas / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+            thickness, italic );
     }
 #endif
 
@@ -294,7 +301,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		case WS_PODPIS:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                    thickness, italic );
 		    break;
 		case WS_SIZESHEET:
 		    break;
@@ -302,13 +310,15 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_ScreenNumber;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                    thickness, italic );
 		    break;
 		case WS_SHEETS:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_NumberOfScreen;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                    thickness, italic );
 		    break;
 		case WS_COMPANY_NAME:
 		    break;
@@ -345,13 +355,15 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		case WS_PODPIS_D:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                    thickness, italic );
 		    break;
 		case WS_IDENTSHEET_D:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_ScreenNumber;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER);
+				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                    thickness, italic );
 		    break;
 		case WS_LEFT_SEGMENT_D:
 		case WS_SEGMENT_D:
@@ -470,7 +482,8 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         {
             PlotGraphicText( format_plot, pos, color,
                 msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER );
+                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                thickness, italic );
         }
     }
 #endif

@@ -461,6 +461,8 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
  *  @param aH_justify = horizontal justification (Left, center, right)
  *  @param aV_justify = vertical justification (bottom, center, top)
+ *  @param aWidth = line width (pen width) (default = 0)
+ *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
  */
 void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
@@ -468,7 +470,7 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
                       int aOrient, const wxSize& aSize,
                       enum GRTextHorizJustifyType aH_justify,
                       enum GRTextVertJustifyType aV_justify,
-                      bool aItalic = false );
+                      int aWidth, bool aItalic = false );
 
 /***************/
 /* CONFIRM.CPP */

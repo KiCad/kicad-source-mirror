@@ -52,7 +52,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     int            ii, kk, char_count, AsciiCode, endcar;
     int            x0, y0;
     int            zoom;
-    int            size_h, size_v, espacement;
+    int            size_h, size_v, pitch;
     SH_CODE        f_cod, plume = 'U';
     const SH_CODE* ptcar;
     int            ptr;
@@ -83,11 +83,11 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     if( char_count == 0 )
         return;
 
-    espacement = (10 * size_h ) / 9;    // this is the pitch between chars
-    if ( espacement > 0 )
-        espacement += ABS(aWidth);
+    pitch = (10 * size_h ) / 9;    // this is the pitch between chars
+    if ( pitch > 0 )
+        pitch += ABS(aWidth);
     else
-        espacement -= ABS(aWidth);
+        pitch -= ABS(aWidth);
 
     ox = cX = aPos.x;
     oy = cY = aPos.y;
@@ -96,7 +96,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     if( aPanel )
     {
         int xm, ym, ll, xc, yc;
-        int textsize = ABS( espacement );
+        int textsize = ABS( pitch );
         ll = (textsize * char_count) / zoom;
 
         xc = GRMapX( cX );
@@ -119,7 +119,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
 
     /* Compute the position ux0, uy0 of the first letter , next */
-    dx = (espacement * char_count) / 2;
+    dx = (pitch * char_count) / 2;
     dy = size_v / 2;                        /* dx, dy = draw offset between first letter and text center */
 
     ux0 = uy0 = 0;                          /* Decalage du centre du texte / coord de ref */
@@ -196,7 +196,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
     if( ABS( (aSize.x / zoom) ) < 3 )    /* chars trop petits pour etre dessines */
     {                                   /* le texte est symbolise par une barre */
-        dx = (espacement * char_count) / 2;
+        dx = (pitch * char_count) / 2;
         dy = size_v / 2;                /* Decalage du debut du texte / centre */
 
         ux0 = cX - dx;
@@ -303,18 +303,54 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
         /* end draw 1 char */
 
-        ptr++; ox += espacement;
+        ptr++; ox += pitch;
     }
 }
 
 
+
+/* functions used to plot texts, using DrawGraphicText() with a call back function */
+static void  (*MovePenFct)( wxPoint pos, int state ); // a pointer to actual plot function (HPGL, PS, ..)
+static bool s_Plotbegin;        // Flag to init plot
+/* The call back function */
+static void s_Callback_plot(int x0, int y0, int xf, int yf)
+{
+    static wxPoint PenLastPos;
+    wxPoint pstart;
+    pstart.x = x0;
+    pstart.y = y0;
+    wxPoint pend;
+    pend.x = xf;
+    pend.y = yf;
+    if ( s_Plotbegin )      // First segment to plot
+    {
+        MovePenFct( pstart, 'U' );
+        MovePenFct( pend, 'D' );
+        s_Plotbegin = false;
+    }
+    
+    else
+    {
+        if ( PenLastPos == pstart )     // this is a next segment in a polyline
+        {
+            MovePenFct( pend, 'D' );
+        }
+        else                            // New segment to plot
+        {
+            MovePenFct( pstart, 'U' );
+            MovePenFct( pend, 'D' );
+        }
+    }
+    
+    PenLastPos = pend;
+}
 /******************************************************************************************/
 void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
                       const wxString& aText,
                       int aOrient, const wxSize& aSize,
                       enum GRTextHorizJustifyType aH_justify,
                       enum GRTextVertJustifyType aV_justify,
-                      bool aItalic )
+                      int aWidth, bool aItalic )
 /******************************************************************************************/
 
 /** Function PlotGraphicText
@@ -327,27 +363,21 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
  *  @param aH_justify = horizontal justification (Left, center, right)
  *  @param aV_justify = vertical justification (bottom, center, top)
+ *  @param aWidth = line width (pen width) (default = 0)
+ *      if width < 0 : draw segments in sketch mode, width = abs(width)
+ *  @param aItalic = true to simulate an italic font
  */
 {
-    int            kk, char_count, end, AsciiCode;
-    int            k1, k2, x0, y0, ox, oy;
-    int            size_h, size_v, espacement;
-    SH_CODE        f_cod, plume = 'U';
-    const SH_CODE* ptcar;
-    int            ptr;
-    int            ux0, uy0, dx, dy;    // Coord de trace des segments de texte & variables de calcul */
-    int            cX, cY;              // Centre du texte
 
-    void           (*FctPlume)( wxPoint pos, int state );
-
+    // Initialise the actual function used to plot lines:
     switch( aFormat_plot )
     {
     case PLOT_FORMAT_POST:
-        FctPlume = LineTo_PS;
+        MovePenFct = LineTo_PS;
         break;
 
     case PLOT_FORMAT_HPGL:
-        FctPlume = Move_Plume_HPGL;
+        MovePenFct = Move_Plume_HPGL;
         break;
 
     case PLOT_FORMAT_GERBER:
@@ -358,158 +388,13 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
     if( aColor >= 0 && IsPostScript( aFormat_plot ) )
         SetColorMapPS( aColor );
 
-    size_h = aSize.x;
-    size_v = aSize.y;
-    if( size_h == 0 )
-        size_h = DEFAULT_SIZE_TEXT;
-    if( size_v == 0 )
-        size_v = DEFAULT_SIZE_TEXT;
+    s_Plotbegin = true;
+    DrawGraphicText( NULL, NULL, aPos, aColor, aText,
+                      aOrient, aSize,
+                      aH_justify, aV_justify,
+                      aWidth,  aItalic,
+                      s_Callback_plot);
 
-    kk = 0;
-    ptr = 0; /* ptr = text index */
-
-    /* calcul de la position du debut des textes: ox et oy */
-    char_count = aText.Len();
-
-    espacement = (10 * size_h ) / 9;
-    ox = cX = aPos.x;
-    oy = cY = aPos.y;
-
-    /* Calcul du cadrage du texte */
-    dx = (espacement * char_count) / 2;
-    dy = size_v / 2;                        /* Decalage du debut du texte / centre */
-
-    ux0 = uy0 = 0;                          /* Decalage du centre du texte / ccord de ref */
-
-    if( (aOrient == 0) || (aOrient == 1800) ) /* Texte Horizontal */
-    {
-        switch( aH_justify )
-        {
-        case GR_TEXT_HJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            ux0 = -dx;
-            break;
-
-        case GR_TEXT_HJUSTIFY_LEFT:
-            ux0 = dx;
-            break;
-        }
-
-        switch( aV_justify )
-        {
-        case GR_TEXT_VJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_VJUSTIFY_TOP:
-            uy0 = dy;
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            uy0 = -dy;
-            break;
-        }
-    }
-    else    /* Texte Vertical */
-    {
-        switch( aH_justify )
-        {
-        case GR_TEXT_HJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            ux0 = -dy;
-            break;
-
-        case GR_TEXT_HJUSTIFY_LEFT:
-            ux0 = dy;
-            break;
-        }
-
-        switch( aV_justify )
-        {
-        case GR_TEXT_VJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_VJUSTIFY_TOP:
-            uy0 = dx;
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            uy0 = -dx;
-            break;
-        }
-    }
-
-    cX += ux0;
-    cY += uy0;   /* cX, cY = coord du centre du texte */
-
-    ox  = -dx;
-    oy = +dy;    /* ox, oy = coord debut texte, relativement au centre */
-
-    FctPlume( wxPoint( 0, 0 ), 'Z' );
-
-    while( kk++ < char_count )
-    {
-#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-	AsciiCode = aText.GetChar(ptr) & 0x7FF;
-	if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
-	    AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
-	else
-	    AsciiCode = AsciiCode & 0xFF;
-#else
-        AsciiCode = aText.GetChar( ptr ) & 0xFF;
-#endif
-        ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
-                                                  *  du caractere a dessiner */
-
-        for( end = 0; end == 0; ptcar++ )
-        {
-            f_cod = *ptcar;
-
-            /* get code n de la forme selectionnee */
-            switch( f_cod )
-            {
-            case 'X':
-                end = 1;           /* fin du caractere */
-
-            case 'U':
-            case 'D':
-                plume = f_cod; break;
-
-            default:
-                k1 = f_cod;      /* trace sur axe V */
-                k1 = -(k1 * size_v) / 9;
-                ptcar++;
-                f_cod = *ptcar;
-
-                k2    = f_cod;  /* trace sur axe H */
-                k2    = (k2 * size_h) / 9;
-                // To simulate an italic font, add a x offset depending on the y offset
-                if ( aItalic )
-                    k2 -= k1/8;
-
-                dx    = k2 + ox;
-                dy = k1 + oy;
-
-                RotatePoint( &dx, &dy, aOrient );
-                FctPlume( wxPoint( cX + dx, cY + dy ), plume );
-
-                x0 = k2;
-                y0 = k1;
-                break;
-            }
-
-            /* end switch */
-        }
-
-        /* end boucle for = end trace de 1 caractere */
-
-        FctPlume( wxPoint( 0, 0 ), 'Z' );
-        ptr++; ox += espacement;
-    }
-
-    /* end trace du texte */
-    FctPlume( wxPoint( 0, 0 ), 'Z' );
+    /* end text : pen UP ,no move */
+    MovePenFct( wxPoint( 0, 0 ), 'Z' );
 }

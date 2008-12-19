@@ -192,7 +192,7 @@ int EDA_TextStruct::Len_Size()
     if( nbchar == 0 )
         return 0;
 
-    len = ( (10 * m_Size.x ) / 9 ) * nbchar;
+    len = (( (10 * m_Size.x ) / 9 ) + m_Width) * nbchar;
     return len;
 }
 
@@ -210,7 +210,7 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
     int dx, dy;
     int spot_cX, spot_cY;
 
-    dx = ( Pitch() * GetLength() ) / 2;
+    dx = (int) (( Pitch() * GetLength() ) / 2);
     dy = m_Size.y / 2;
 
     /* Is the ref point inside the text area ?  */
@@ -243,13 +243,15 @@ bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
 
 
 /*******************************/
-int EDA_TextStruct::Pitch()
+int EDA_TextStruct::Pitch(int aMinTickness)
 /*******************************/
-
-/* retourne le pas entre 2 caracteres
+/**
+ * Function Pitch
+ * @return distance between 2 characters
+ * @param aMinTickness = min segments tickness
  */
 {
-    return ( (10 * m_Size.x ) / 9 ) + m_Width;
+    return ((m_Size.x * 10)/9) + MAX( m_Width, aMinTickness);
 }
 
 

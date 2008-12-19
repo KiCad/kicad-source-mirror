@@ -281,7 +281,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     }
 
     const wxChar* textsrc = m_PinName.GetData();
-    float         fPinTextPitch = PinNameSize.x * 1.1;
+    float         fPinTextPitch = (PinNameSize.x * 1.1) + LineWidth;
     /* Do we need to invert the string? Is this string has only "~"? */
     PinTextBarCount = 0; PinTxtLen = 0;
     ii = 0;
@@ -555,7 +555,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,
                                bool     DrawPinNum,
-                               bool     DrawPinName )
+                               bool     DrawPinName,
+                                int aWidth, bool aItalic )
 {
     int      dx, len, start;
     int      ii, x, y, x1, y1, cte;
@@ -594,7 +595,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
     }
 
     const wxChar* textsrc = m_PinName.GetData();
-    float         fPinTextPitch = PinNameSize.x * 1.1;
+    float         fPinTextPitch = (PinNameSize.x * 1.1) + aWidth;
     /* Do we need to invert the string? Is this string has only "~"? */
     PinTextBarCount = 0; PinTxtLen = 0;
     ii = 0;
@@ -635,7 +636,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      TEXT_ORIENT_HORIZ,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
-                                     GR_TEXT_VJUSTIFY_CENTER );
+                                     GR_TEXT_VJUSTIFY_CENTER,
+                                    aWidth, aItalic );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -654,7 +656,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      NameColor, PinText, TEXT_ORIENT_HORIZ,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
-                                     GR_TEXT_VJUSTIFY_CENTER );
+                                     GR_TEXT_VJUSTIFY_CENTER,
+                                    aWidth, aItalic );
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -675,7 +678,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM );
+                                 GR_TEXT_VJUSTIFY_BOTTOM,
+                                aWidth, aItalic );
             }
         }
         else         /* Its a vertical line. */
@@ -691,7 +695,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      PinText,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_TOP );
+                                     GR_TEXT_VJUSTIFY_TOP,
+                                    aWidth, aItalic);
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -711,7 +716,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      PinText,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM );
+                                     GR_TEXT_VJUSTIFY_BOTTOM,
+                                    aWidth, aItalic);
 
                     for( ii = 0; ii < PinTextBarCount; )
                     {
@@ -732,7 +738,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_RIGHT,
-                                 GR_TEXT_VJUSTIFY_CENTER );
+                                 GR_TEXT_VJUSTIFY_CENTER,
+                                aWidth, aItalic);
             }
         }
     }
@@ -749,7 +756,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  NameColor, PinText,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM );
+                                 GR_TEXT_VJUSTIFY_BOTTOM,
+                                aWidth, aItalic);
 
                 for( ii = 0; ii < PinTextBarCount; )
                 {
@@ -767,7 +775,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                 PlotGraphicText( g_PlotFormat, wxPoint( x, y1 + TXTMARGE ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
-                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP );
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
+                                aWidth, aItalic);
             }
         }
         else     /* Its a vertical line. */
@@ -780,7 +789,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  NameColor, PinText,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_RIGHT,
-                                 GR_TEXT_VJUSTIFY_CENTER );
+                                 GR_TEXT_VJUSTIFY_CENTER,
+                                aWidth, aItalic);
 
                 for( ii = 0; ii < PinTextBarCount; )
                 {
@@ -801,7 +811,8 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER );
+                                 GR_TEXT_VJUSTIFY_CENTER,
+                                aWidth, aItalic);
             }
         }
     }

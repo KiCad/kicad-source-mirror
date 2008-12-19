@@ -509,8 +509,9 @@ public:
     /**
      * Function Pitch
      * @return distance between 2 characters
+     * @param aMinTickness = min segments tickness
      */
-    int     Pitch();
+    int     Pitch(int aMinTickness = 0);
 
     /** Function Draw
      *  @param aPanel = the current DrawPanel

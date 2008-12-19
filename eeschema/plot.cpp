@@ -252,11 +252,13 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
                 pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
                 SetCurrentLineWidth( -1 );
+                int thickness = Text->m_Width;   // @todo: calcultae the pen tickness
                 PlotGraphicText( g_PlotFormat, pos, CharColor,
                                  Text->m_Text,
                                  t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                                  Text->m_Size,
-                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                thickness);
             }
             break;
 
@@ -282,7 +284,6 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 LibDrawPin* Pin = (LibDrawPin*) DEntry;
                 if( Pin->m_Attributs & PINNOTDRAW )
                 {
-//                    if( ActiveScreen->m_Type == SCHEMATIC_FRAME )
                         break;
                 }
 
@@ -294,9 +295,11 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 /* Dessin de la pin et du symbole special associe */
                 SetCurrentLineWidth( -1 );
                 PlotPinSymbol( pos, Pin->m_PinLen, orient, Pin->m_PinShape );
+                int thickness = 0;   // @todo: calcultae the pen tickness
                 Pin->PlotPinTexts( pos, orient,
                                    Entry->m_TextInside,
-                                   Entry->m_DrawPinNum, Entry->m_DrawPinName );
+                                   Entry->m_DrawPinNum, Entry->m_DrawPinName,
+                                    thickness, false);
             }
             break;
 
@@ -463,14 +466,16 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
     }
 
     SetCurrentLineWidth( -1 );
+    int thickness = field->m_Width;   // @todo: calculate the pen tickness
 
-    //not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
+    //@todo not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
         PlotGraphicText( g_PlotFormat, textpos, color, field->m_Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size,
-                         hjustify, vjustify );
+                         hjustify, vjustify,
+                        thickness, field->m_Italic);
     }
     else    /* We plt the reference, for a multiple parts per package */
     {
@@ -485,7 +490,8 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 #endif
         PlotGraphicText( g_PlotFormat, textpos, color, Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         field->m_Size, hjustify, vjustify );
+                         field->m_Size, hjustify, vjustify,
+                        thickness, field->m_Italic );
     }
 }
 
@@ -613,6 +619,9 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     wxString Text;
     EDA_Colors color = UNSPECIFIED_COLOR;
 
+    bool italic = false;
+    int thickness = 0;
+
     switch( Struct->Type() )
     {
     case TYPE_SCH_GLOBALLABEL:
@@ -621,6 +630,8 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     case TYPE_SCH_TEXT:
         Text   = ( (SCH_TEXT*) Struct )->m_Text;
         Size   = ( (SCH_TEXT*) Struct )->m_Size;
+        thickness = ( (SCH_TEXT*) Struct )->m_Width;
+        italic = ( (SCH_TEXT*) Struct )->m_Italic;
         Orient = ( (SCH_TEXT*) Struct )->m_Orient;
         Shape  = ( (SCH_TEXT*) Struct )->m_Shape;
         pX     = ( (SCH_TEXT*) Struct )->m_Pos.x;
@@ -641,7 +652,6 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         Size = wxSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 
     SetCurrentLineWidth( -1 );
-
     if ( Struct->Type() == TYPE_SCH_GLOBALLABEL )
     {
         offset =  ( (SCH_GLOBALLABEL*) Struct )->m_Width;
@@ -669,44 +679,52 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER );
+                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER,
+                            thickness, italic );
         else
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
+                            thickness, italic );
         break;
 
     case 1:         /* Orientation vert UP */
         if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY + offset ),
                              color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP );
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
+                            thickness, italic );
         else
             PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
                              color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM );
+                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM,
+                            thickness, italic );
         break;
 
     case 2:         /* Horiz Orientation - Right justified */
         if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX + offset, pY ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                            thickness, italic );
         else
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY + offset ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM );
+                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM,
+                            thickness, italic );
         break;
 
     case 3:         /* Orientation vert BOTTOM */
         if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
                              color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM );
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
+                            thickness, italic );
         else
             PlotGraphicText( g_PlotFormat, wxPoint( pX + offset, pY ),
                              color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP );
+                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP,
+                            thickness, italic );
         break;
     }
 
@@ -748,9 +766,12 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
         tposx = posx + size + (size / 8);
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
+    int thickness = Struct->m_Width;
+    bool italic = Struct->m_Italic;
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
                      Struct->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
-                     side, GR_TEXT_VJUSTIFY_CENTER );
+                     side, GR_TEXT_VJUSTIFY_CENTER,
+                    thickness, italic  );
     /* dessin du symbole de connexion */
 
     if( Struct->m_Edge )
@@ -837,9 +858,12 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETNAME ) );
 
+    int thickness = 0;      //@todo use current pen width
+    bool italic = false;
     PlotGraphicText( g_PlotFormat, pos, txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM );
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
+                    thickness, italic );
 
     /* Trace des textes : FileName */
     Text = Struct->GetFileName();
@@ -852,7 +876,8 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
                      wxPoint( Struct->m_Pos.x, Struct->m_Pos.y + Struct->m_Size.y + 4 ),
                      txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP );
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
+                    thickness, italic );
 
     /* Trace des textes : SheetLabel */
     SheetLabelStruct = Struct->m_Label;

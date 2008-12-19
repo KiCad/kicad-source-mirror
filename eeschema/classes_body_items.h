@@ -232,7 +232,7 @@ public:
                                   int TextInside, bool DrawPinNum, bool DrawPinName,
                                   int Color, int DrawMode );
     void            PlotPinTexts( wxPoint& pin_pos, int orient,
-                                  int TextInside, bool DrawPinNum, bool DrawPinName );
+                                  int TextInside, bool DrawPinNum, bool DrawPinNameint, int aWidth, bool aItalic );
 };
 
 

@@ -38,7 +38,8 @@ set(EESCHEMA_SRCS
 #   dialog_edit_component_in_lib.cpp
     dialog_edit_component_in_schematic_fbp.cpp
     dialog_edit_component_in_schematic.cpp
-#   dialog_edit_label.cpp
+    dialog_edit_label.cpp
+    dialog_edit_label_base.cpp
     dialog_eeschema_config.cpp
     dialog_erc.cpp
 #   dialog_find.cpp
@@ -82,6 +83,7 @@ set(EESCHEMA_SRCS
     plothpgl.cpp
     plotps.cpp
     priorque.cpp
+    read_from_file_schematic_items_descriptions.cpp
     savelib.cpp
     save_schemas.cpp
     schedit.cpp

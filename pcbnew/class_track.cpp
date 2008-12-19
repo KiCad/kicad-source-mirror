@@ -1,6 +1,7 @@
-/*******************************************************************/
-/* Functions relatives to tracks, vias and zones(see class_track.h */
-/*******************************************************************/
+/***********************************************************************/
+/* Functions relatives to tracks, vias and segments used to fill zones */
+/* (see class_track.h )                                                */
+/***********************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -636,11 +637,13 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             m_Width + (g_DesignSettings.m_TrackClearence * 2), color );
     }
 
-    /* Display the short netname:
+    /* Display the short netname for tracks, not for zone segments.
      *  we must filter tracks, to avoid a lot of texts.
      *  - only horizontal or vertical tracks are eligible
      *  - only  tracks with a length > 10 * thickness are eligible
      */
+    if( Type() == TYPE_ZONE )
+        return;
 
     #define THRESHOLD 10
     if( (m_End.x - m_Start.x) != 0 &&  (m_End.y - m_Start.y) != 0 )
@@ -649,6 +652,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     int len = ABS( (m_End.x - m_Start.x) + (m_End.y - m_Start.y) );
 
     if( len < THRESHOLD * m_Width )
+        return;
+
+    if( ( m_Width / zoom) < 6 )     // no room to display a text inside track
         return;
 
     if( GetNet() == 0 )

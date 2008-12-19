@@ -53,11 +53,14 @@ OBJECTS = eeschema.o\
 	netlist.o\
 	netlist_control.o\
 	edit_label.o\
+	dialog_edit_label.o\
+	dialog_edit_label_base.o\
 	edit_component_in_schematic.o\
 	dialog_edit_component_in_schematic_fbp.o \
 	dialog_edit_component_in_schematic.o \
 	locate.o \
 	save_schemas.o sheet.o \
+    read_from_file_schematic_items_descriptions.o\
 	viewlibs.o \
 	libedit.o \
 	libframe.o \
@@ -97,13 +100,18 @@ OBJECTS = eeschema.o\
 
 eeschema.o: eeschema.cpp program.h general.h $(DEPEND)
 
+read_from_file_schematic_items_descriptions.o: read_from_file_schematic_items_descriptions.cpp
+
+
 #edit_component_in_lib.o: edit_component_in_lib.cpp\
 #	dialog_edit_component_in_lib.cpp dialog_edit_component_in_lib.h $(DEPEND)
 
 edit_component_in_schematic.o: edit_component_in_schematic.cpp\
 	dialog_edit_component_in_schematic.cpp dialog_edit_component_in_schematic.h $(DEPEND)
 
-edit_label.o: edit_label.cpp dialog_edit_label.cpp dialog_edit_label.h $(DEPEND)
+edit_label.o: edit_label.cpp dialog_edit_label.h dialog_edit_label_base.h $(DEPEND)
+
+dialog_edit_label.o: dialog_edit_label.cpp dialog_edit_label.h dialog_edit_label_base.h $(DEPEND)
 
 dialog_create_component.o: dialog_create_component.cpp dialog_create_component.h $(DEPEND)
 

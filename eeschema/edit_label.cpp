@@ -10,6 +10,7 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "dialog_edit_label.h"
 
 #include "protos.h"
 
@@ -24,15 +25,11 @@ static wxSize  OldSize;
 static int     s_DefaultShapeGLabel  = (int) NET_INPUT;
 static int     s_DefaultOrientGLabel = 0;
 
-/************************************/
-/* class WinEDA_LabelPropertiesFrame */
-/************************************/
 
-#include "dialog_edit_label.cpp"
 
 
 /****************************************************************************/
-void WinEDA_LabelPropertiesFrame::TextPropertiesAccept( wxCommandEvent& event )
+void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
 /****************************************************************************/
 {
     wxString text;
@@ -54,6 +51,17 @@ void WinEDA_LabelPropertiesFrame::TextPropertiesAccept( wxCommandEvent& event )
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
     if( m_TextShape )
         m_CurrentText->m_Shape = m_TextShape->GetSelection();
+
+    int style = m_TextStyle->GetSelection();
+    if ( ( style & 1 ) )
+        m_CurrentText->m_Italic = 1;
+    else
+        m_CurrentText->m_Italic = 0;
+
+    if ( ( style & 2 ) )
+        m_CurrentText->m_Width = m_CurrentText->m_Size.x / 5;
+    else
+        m_CurrentText->m_Width = 0;
 
     m_Parent->GetScreen()->SetModify();
 
@@ -127,10 +135,8 @@ void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
     DrawPanel->CursorOff( DC );
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
-    WinEDA_LabelPropertiesFrame* frame = new WinEDA_LabelPropertiesFrame( this,
-        TextStruct,
-        wxPoint( 30, 30 ) );
-    frame->ShowModal(); frame->Destroy();
+    DialogLabelEditor* dialog = new DialogLabelEditor( this, TextStruct );
+    dialog->ShowModal(); dialog->Destroy();
 
     RedrawOneStruct( DrawPanel, DC, TextStruct, GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );
