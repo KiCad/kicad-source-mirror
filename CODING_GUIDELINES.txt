@@ -1,0 +1,30 @@
+== Spaces and Tabs ==
+
+Try to use as many as can TABS instead of spaces, this makes indenting
+much more easy.
+
+
+== Function prototypes ==
+
+The name of the function should be on a seperated line, this for easy
+ searching in long source files.
+Each parameter should use a own line, aligned under the first parameter.
+Below there is an example, this style is for reading and editing quick trough
+sourcecode. Also indenting can be set with a good programmers editor
+(visual spaces per tab, this because one tab is normaly 8 spaces on screen)
+
+Example:
+
+void
+foo( int x,
+     int y,
+     int z )
+{
+	function1();
+
+	if(var == 1)
+	{
+		dothis();
+		dothat();
+	}
+}

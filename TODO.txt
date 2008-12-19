@@ -1,0 +1,67 @@
+
+Here are some source code maintenance tasks that need to be done, and maybe some
+folks will see these items and volunteer to do them.
+
+
+*** @todo: grep for @todo and finish off those tasks, scattered throughout the source.
+
+
+*** use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
+
+
+*** Use DOXYGEN compatible comments on member functions.  As configured,
+Doxygen gives priority to comments in header files over *.cpp files.
+Review the generated docs and start to go through the source and make the
+generated doxygen docs readable and clear using the JavaDoc style comments,
+mostly in the header files.  The error and warning output of the doxygen
+compiler can help with this too.
+
+
+*** Translate comments that are in French to English so there can be a broader
+understanding by new developers.
+
+
+*** Add tooltip text to all non-obvious controls in every dialog window.
+Need to do this using DialogBlocks.
+
+
+2008-Dec-6 Assigned To:
+asked by: Dick Hollenbeck
+================================================================================
+1) Gerbview needs to work at least as well as gerv, that means adding named layers,
+   and a list control to sort the layer stack on the fly.  There seems to be a polygon bug
+   of some kind, don't know how long that's been in there.  (Dick)
+2) Add net class support to PCBNEW, so the round tripping to freerouter
+   is a dream (Dick)
+3) Document the specctra round tripper, and fix up the english translation
+   of help.  (Dick, native english speaker)
+4) Expose layer name editing in pcbnew (anyone), should dove tail with net
+   class editor from a UI perspective.
+
+
+2008-Feb-8 Assigned To: dick
+asked by: dick
+================================================================================
+specctra:
+Add net class support to pcbnew so that the export to specctra becomes richer.
+A netclass should hold a list of nets, track width, track spacing,
+via drill size and via copper diameter.
+
+
+2007-Nov-4 Assigned To: nobody
+asked by: jp Charras
+================================================================================
+Use the collector classes in eeschema.
+
+
+
+2008-Apr-29 Assigned To:
+asked by: Dick Hollenbeck
+================================================================================
++pcbnew
+    When picking new board from the menu, when an existing board is already
+    in memory, the number of layers in the new board is not set to the default
+    but rather to the number of layers in the previously loaded board, and with
+    the default layer names, rather than the layer names of the previously
+    loaded board.   I think the number of layers should be reduced to the
+    default and the default layer names should be used.
