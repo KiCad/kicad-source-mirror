@@ -100,11 +100,9 @@ set(EESCHEMA_SRCS
     viewlibs.cpp)
 
 set(EESCHEMA_EXTRA_SRCS
-    ../share/drawframe.cpp
     ../share/setpage.cpp
     ../share/svg_print.cpp
-    ../share/wxprint.cpp
-    ../share/zoom.cpp)
+    ../share/wxprint.cpp)
 
 if(WIN32)
     if(MINGW)

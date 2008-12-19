@@ -29,6 +29,7 @@ static bool s_IgnoreNextLeftButtonRelease = false;
 // Events used by WinEDA_DrawPanel
 BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
     EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
+    EVT_MOUSEWHEEL( WinEDA_DrawPanel::OnMouseWheel )
     EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
     EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
     EVT_CHAR_HOOK( WinEDA_DrawPanel::OnKeyEvent )
@@ -42,6 +43,7 @@ BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
                     WinEDA_DrawPanel::Process_Popup_Zoom )
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     WinEDA_DrawPanel::OnPopupGridSelect )
+    EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, WinEDA_DrawPanel::OnPan )
 END_EVENT_TABLE()
 
 /************************************************************************/
@@ -899,6 +901,47 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
 }
 
 
+/*
+ * Handle mouse wheel events.
+ *
+ * The mouse wheel is used to provide support for zooming and panning.  This
+ * is accomplished by converting mouse wheel events in psuedo menu command
+ * events.
+ */
+void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
+{
+    if( event.GetWheelRotation() == 0 )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxCommandEvent cmd(  wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
+    // This is a zoom in ou out command
+    if( event.GetWheelRotation() > 0 )
+    {
+        if( event.ShiftDown() && !event.ControlDown() )
+            cmd.SetId( ID_PAN_UP );
+        else if( event.ControlDown() && !event.ShiftDown() )
+            cmd.SetId( ID_PAN_LEFT );
+        else
+            cmd.SetId( ID_POPUP_ZOOM_IN );
+    }
+    else if ( event.GetWheelRotation() < 0 )
+    {
+        if( event.ShiftDown() && !event.ControlDown() )
+            cmd.SetId( ID_PAN_DOWN );
+        else if( event.ControlDown() && !event.ShiftDown() )
+            cmd.SetId( ID_PAN_RIGHT );
+        else
+            cmd.SetId( ID_POPUP_ZOOM_OUT );
+    }
+
+    GetEventHandler()->ProcessEvent( cmd );
+}
+
 /******************************************************/
 void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 /*******************************************************/
@@ -931,30 +974,6 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         SetFocus();
     else
         return;
-
-    // Mouse Wheel is a zoom command:
-    if( event.m_wheelRotation )
-    {
-        // This is a zoom in ou out command
-        if( event.GetWheelRotation() > 0 )
-        {
-            if( event.ShiftDown() )
-                localkey = EDA_PANNING_UP_KEY;
-            else if( event.ControlDown() )
-                localkey = EDA_PANNING_LEFT_KEY;
-            else
-                localkey = EDA_ZOOM_IN_FROM_MOUSE;
-        }
-        else
-        {
-            if( event.ShiftDown() )
-                localkey = EDA_PANNING_DOWN_KEY;
-            else if( event.ControlDown() )
-                localkey = EDA_PANNING_RIGHT_KEY;
-            else
-                localkey = EDA_ZOOM_OUT_FROM_MOUSE;
-        }
-    }
 
     if( !event.IsButton() && !event.Moving()
         && !event.Dragging() && !localkey )
@@ -1282,4 +1301,39 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 #if 0
     event.Skip();   // Allow menu shortcut processing
 #endif
+}
+
+void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
+{
+    int        x, y;
+    wxClientDC dc( this );
+
+    PrepareGraphicContext( &dc );
+    GetViewStart( &x, &y );       // x and y are in scroll units, not in pixels
+
+    switch( event.GetId() )
+    {
+    case ID_PAN_UP:
+        y -= m_ScrollButt_unit;
+        break;
+
+    case ID_PAN_DOWN:
+        y += m_ScrollButt_unit;
+        break;
+
+    case ID_PAN_LEFT:
+        x -= m_ScrollButt_unit;
+        break;
+
+    case ID_PAN_RIGHT:
+        x += m_ScrollButt_unit;
+        break;
+
+    default:
+        wxLogDebug( wxT( "Unknown ID %d in WinEDA_DrawPanel::OnPan()." ),
+                    event.GetId() );
+    }
+
+    Scroll( x, y );
+    MouseToCursorSchema();
 }

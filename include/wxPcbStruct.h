@@ -94,6 +94,9 @@ public:
     virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
     virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ReCreateMenuBar();
+    virtual void    SetToolID( int id, int new_cursor_id,
+                               const wxString& title );
+    virtual void    Affiche_Status_Box();
 
     PCB_SCREEN*     GetScreen() const { return (PCB_SCREEN*) WinEDA_DrawFrame::GetBaseScreen(); }
 

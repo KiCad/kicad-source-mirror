@@ -71,26 +71,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     switch( g_KeyPressed )
     {
-    case EDA_PANNING_UP_KEY:
-        OnZoom( ID_ZOOM_PANNING_UP );
-        curpos = GetScreen()->m_Curseur;
-        break;
-
-    case EDA_PANNING_DOWN_KEY:
-        OnZoom( ID_ZOOM_PANNING_DOWN );
-        curpos = GetScreen()->m_Curseur;
-        break;
-
-    case EDA_PANNING_LEFT_KEY:
-        OnZoom( ID_ZOOM_PANNING_LEFT );
-        curpos = GetScreen()->m_Curseur;
-        break;
-
-    case EDA_PANNING_RIGHT_KEY:
-        OnZoom( ID_ZOOM_PANNING_RIGHT );
-        curpos = GetScreen()->m_Curseur;
-        break;
-
     case EDA_ZOOM_IN_FROM_MOUSE:
         OnZoom( ID_ZOOM_IN_KEY );
         curpos = GetScreen()->m_Curseur;

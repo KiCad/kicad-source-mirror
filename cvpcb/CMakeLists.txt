@@ -49,10 +49,7 @@ set(CVPCB_EXTRA_SRCS
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/ioascii.cpp
-    ../pcbnew/tracemod.cpp
-
-    ../share/drawframe.cpp
-    ../share/zoom.cpp)
+    ../pcbnew/tracemod.cpp)
 
 if(WIN32)
     if(MINGW)

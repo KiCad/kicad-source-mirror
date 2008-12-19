@@ -53,10 +53,8 @@ set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/sel_layer.cpp
     ../pcbnew/undelete.cpp
 
-    ../share/drawframe.cpp
     ../share/setpage.cpp
-    ../share/wxprint.cpp
-    ../share/zoom.cpp)
+    ../share/wxprint.cpp)
 
 if(WIN32)
     if(MINGW)

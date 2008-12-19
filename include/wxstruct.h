@@ -248,7 +248,8 @@ public:
     virtual void    ReCreateVToolbar() = 0;
     virtual void    ReCreateMenuBar();
     virtual void    ReCreateAuxiliaryToolbar();
-    void            SetToolID( int id, int new_cursor_id, const wxString& title );
+    virtual void    SetToolID( int id, int new_cursor_id,
+                               const wxString& title );
 
     virtual void    OnSelectGrid( wxCommandEvent& event );
     virtual void    OnSelectZoom( wxCommandEvent& event );
@@ -260,7 +261,6 @@ public:
 //  void OnChar(wxKeyEvent& event);
     void            SetToolbarBgColor( int color_num );
     void            OnZoom( int zoom_type );
-    void            OnPanning( int direction );
     void            OnGrid( int grid_type );
     void            Recadre_Trace( bool ToMouse );
     void            PutOnGrid( wxPoint* coord ); /* set the coordiante "coord" to the nearest grid coordinate */
@@ -299,7 +299,7 @@ public:
     virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars();
-    void            Affiche_Status_Box(); /* Affichage des coord curseur, zoom .. */
+    virtual void    Affiche_Status_Box(); /* Affichage des coord curseur, zoom .. */
     void            DisplayUnitsMsg();
 
     /* Handlers for block commands */

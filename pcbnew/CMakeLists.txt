@@ -152,10 +152,8 @@ set(PCBNEW_SRCS
     )
 
 set(PCBNEW_EXTRA_SRCS
-    ../share/drawframe.cpp
     ../share/setpage.cpp
-    ../share/wxprint.cpp
-    ../share/zoom.cpp)
+    ../share/wxprint.cpp)
 
 if(WIN32)
     if(MINGW)

@@ -338,3 +338,60 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
 
     return guide;
 }
+
+void WinEDA_BasePcbFrame::SetToolID( int id, int new_cursor_id,
+                                     const wxString& title )
+{
+    bool redraw = false;
+
+    WinEDA_DrawFrame::SetToolID( id, new_cursor_id, title );
+
+    if( id < 0 )
+        return;
+
+    // handle color changes for transitions in and out of ID_TRACK_BUTT
+    if( ( m_ID_current_state == ID_TRACK_BUTT && id != ID_TRACK_BUTT )
+        || ( m_ID_current_state != ID_TRACK_BUTT && id == ID_TRACK_BUTT ) )
+    {
+        if( DisplayOpt.ContrastModeDisplay )
+            redraw = true;
+    }
+
+    // must do this after the tool has been set, otherwise pad::Draw() does
+    // not show proper color when DisplayOpt.ContrastModeDisplay is true.
+    if( redraw )
+        ReDrawPanel();
+}
+
+void WinEDA_BasePcbFrame::Affiche_Status_Box()
+{
+    wxString        Line;
+    int             dx, dy;
+    double          theta, ro;
+    BASE_SCREEN*    screen = GetBaseScreen();
+
+    if( !screen )
+        return;
+
+    WinEDA_DrawFrame::Affiche_Status_Box();
+
+    dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
+    dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
+
+    if( DisplayOpt.DisplayPolarCood )  /* Display coordonnee polaire */
+    {
+        if( (dx == 0) && (dy == 0) )
+            theta = 0.0;
+        else
+            theta = atan2( (double) -dy, (double) dx );
+
+        theta = theta * 180.0 / M_PI;
+
+        ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
+        Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) : wxT( "Ro %.4f Th %.1f" ),
+                     To_User_Unit( g_UnitMetric, (int) round( ro ), m_InternalUnits ),
+                     theta );
+    }
+
+    SetStatusText( Line, 0 );
+}

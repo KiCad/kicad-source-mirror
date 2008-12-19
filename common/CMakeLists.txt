@@ -17,6 +17,7 @@ set(COMMON_SRCS
     dcsvg.cpp
     displlst.cpp
     dlist.cpp
+    drawframe.cpp
     drawpanel.cpp
     drawtxt.cpp
     edaappl.cpp
@@ -34,6 +35,7 @@ set(COMMON_SRCS
     toolbars.cpp
     trigo.cpp
     worksheet.cpp
-    wxwineda.cpp)
+    wxwineda.cpp
+    zoom.cpp)
 
 add_library(common ${COMMON_SRCS})

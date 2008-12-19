@@ -7,31 +7,12 @@
 #endif
 
 #include "fctsys.h"
-
 #include "common.h"
-
-#ifdef PCBNEW
-#include "pcbnew.h"
-#endif
-
-#ifdef EESCHEMA
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
-#endif
-
-#ifdef CVPCB
-#include "pcbnew.h"
-#include "cvpcb.h"
-#endif
+#include "bitmaps.h"
+#include "macros.h"
+#include "id.h"
 
 #include <wx/fontdlg.h>
-
-#include "bitmaps.h"
-
-#include "protos.h"
-
-#include "id.h"
 
 
 /*******************************************************/
@@ -70,10 +51,9 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     // Internal units per inch
     // = 1000 for schema, = 10000 for PCB
     m_InternalUnits = EESCHEMA_INTERNAL_UNIT;
-    if( (m_Ident == PCB_FRAME) || (m_Ident == GERBER_FRAME)
-       || (m_Ident == CVPCB_DISPLAY_FRAME)
-       || (m_Ident == MODULE_EDITOR_FRAME)
-        )
+    if( ( m_Ident == PCB_FRAME ) || ( m_Ident == GERBER_FRAME )
+        || ( m_Ident == CVPCB_DISPLAY_FRAME )
+        || ( m_Ident == MODULE_EDITOR_FRAME ) )
         m_InternalUnits = PCB_INTERNAL_UNIT;
 
     minsize.x = 470;
@@ -81,7 +61,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
     /* Verification des parametres de creation */
-    if( (size.x < minsize.x) || (size.y < minsize.y) )
+    if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Creation de la ligne de status
@@ -104,9 +84,11 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 
     if( m_Ident != DISPLAY3D_FRAME )
     {
-        DrawPanel = new WinEDA_DrawPanel( this, -1, wxPoint( 0, 0 ), m_FrameSize );
+        DrawPanel = new WinEDA_DrawPanel( this, -1, wxPoint( 0, 0 ),
+                                          m_FrameSize );
         MsgPanel  = new WinEDA_MsgPanel( this, -1, wxPoint( 0, m_FrameSize.y ),
-                                        wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
+                                         wxSize( m_FrameSize.x,
+                                                 m_MsgFrameHeight ) );
         MsgPanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
                                                  ColorRefs[LIGHTGRAY].m_Green,
                                                  ColorRefs[LIGHTGRAY].m_Blue ) );
@@ -120,7 +102,7 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 {
     if( DrawPanel )  // Required: in WinEDA3D_DrawFrame, DrawPanel == NULL !
         wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ),
-                                       DrawPanel->m_AutoPAN_Enable );
+                                        DrawPanel->m_AutoPAN_Enable );
 }
 
 
@@ -500,8 +482,6 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
  *  Met a jour seulement les variables message et  curseur
  */
 {
-    bool redraw = false;
-
     // Change Cursor
     if( DrawPanel )
     {
@@ -513,16 +493,6 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
 
     if( id < 0 )
         return;
-
-#ifdef PCBNEW
-    // handle color changes for transitions in and out of ID_TRACK_BUTT
-    if( ( m_ID_current_state==ID_TRACK_BUTT && id!=ID_TRACK_BUTT )
-     || ( m_ID_current_state!=ID_TRACK_BUTT && id==ID_TRACK_BUTT ) )
-    {
-        if( DisplayOpt.ContrastModeDisplay )
-            redraw = true;
-    }
-#endif
 
     // Old Tool Inactif ou ID_NO_SELECT_BUTT actif si pas de nouveau Tool
     if( m_ID_current_state )
@@ -560,11 +530,6 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
         m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
     m_ID_current_state = id;
-
-    // must do this after the tool has been set, otherwise pad::Draw() does
-    // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw )
-        ReDrawPanel();
 }
 
 
@@ -634,83 +599,12 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
         Zoom_Automatique( FALSE );
         break;
 
-    case ID_ZOOM_PANNING_UP:
-        OnPanning( ID_ZOOM_PANNING_UP );
-        break;
-
-    case ID_ZOOM_PANNING_DOWN:
-        OnPanning( ID_ZOOM_PANNING_DOWN );
-        break;
-
-    case ID_ZOOM_PANNING_LEFT:
-        OnPanning( ID_ZOOM_PANNING_LEFT );
-        DrawPanel->CursorOn( NULL );
-        break;
-
-    case ID_ZOOM_PANNING_RIGHT:
-        OnPanning( ID_ZOOM_PANNING_RIGHT );
-        break;
-
-
     default:
         wxMessageBox( wxT( "WinEDA_DrawFrame::OnZoom switch Error" ) );
         break;
     }
 
     Affiche_Status_Box();
-}
-
-
-/**********************************************/
-void WinEDA_DrawFrame::OnPanning( int direction )
-/**********************************************/
-
-/* Fonction de traitement du zoom
- *  Modifie le facteur de zoom et reaffiche l'ecran
- *  Pour les commandes par menu Popup ou par le clavier, le curseur est
- *  replac� au centre de l'ecran
- */
-{
-    if( DrawPanel == NULL )
-        return;
-
-    int        delta;
-    wxClientDC dc( DrawPanel );
-
-    int        x, y;
-
-
-    DrawPanel->PrepareGraphicContext( &dc );
-    DrawPanel->GetViewStart( &x, &y );  // x and y are in scroll unit, not in pixels
-    delta = DrawPanel->m_ScrollButt_unit;
-
-    switch( direction )
-    {
-    case ID_ZOOM_PANNING_UP:
-        y -= delta;
-        break;
-
-    case ID_ZOOM_PANNING_DOWN:
-        y += delta;
-        break;
-
-    case ID_ZOOM_PANNING_LEFT:
-        x -= delta;
-        break;
-
-    case ID_ZOOM_PANNING_RIGHT:
-        x += delta;
-        break;
-
-    default:
-        wxMessageBox( wxT( "WinEDA_DrawFrame::OnPanning Error" ) );
-        break;
-    }
-
-    DrawPanel->Scroll( x, y );
-
-    /* Place le curseur souris sur le curseur SCHEMA*/
-    DrawPanel->MouseToCursorSchema();
 }
 
 
@@ -874,12 +768,14 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 }
 
 
-/***********************************************/
-void WinEDA_DrawFrame::Affiche_Status_Box()
-/***********************************************/
-
-/* Routine d'affichage du zoom et des coord curseur.
+/*
+ * Update the status bar information.
+ *
+ * The base method updates the absolute and relative cooridinates and the
+ * zoom information.  If you override this virtual method, make sure to call
+ * this subclassed method.
  */
+void WinEDA_DrawFrame::Affiche_Status_Box()
 {
     wxString        Line;
     int             dx, dy;
@@ -893,10 +789,10 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
     SetStatusText( Line, 1 );
 
     Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) : wxT( "X %.4f  Y %.4f" ),
-                To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
-                              m_InternalUnits ),
-                To_User_Unit( g_UnitMetric, screen->m_Curseur.y,
-                              m_InternalUnits ) );
+                 To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
+                               m_InternalUnits ),
+                 To_User_Unit( g_UnitMetric, screen->m_Curseur.y,
+                               m_InternalUnits ) );
     SetStatusText( Line, 2 );
 
     /* affichage des coordonnees relatives  */
@@ -904,26 +800,8 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
     dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
 
     Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) : wxT( "x %.4f  y %.4f" ),
-                To_User_Unit( g_UnitMetric, dx, m_InternalUnits ),
-                To_User_Unit( g_UnitMetric, dy, m_InternalUnits ) );
+                 To_User_Unit( g_UnitMetric, dx, m_InternalUnits ),
+                 To_User_Unit( g_UnitMetric, dy, m_InternalUnits ) );
 
     SetStatusText( Line, 3 );
-
-#ifdef PCBNEW
-    if( DisplayOpt.DisplayPolarCood )  /* Display coordonnee polaire */
-    {
-        double theta, ro;
-        if( (dx == 0) && (dy == 0) )
-            theta = 0.0;
-        else
-            theta = atan2( (double) -dy, (double) dx );
-        theta = theta * 180 / M_PI;
-
-        ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
-        Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) : wxT( "Ro %.4f Th %.1f" ),
-                     To_User_Unit( g_UnitMetric, (int) round( ro ), m_InternalUnits ),
-                     theta );
-        SetStatusText( Line, 0 );
-    }
-#endif
 }

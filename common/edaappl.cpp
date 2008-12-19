@@ -527,6 +527,10 @@ bool WinEDA_App::SetLanguage( bool first_time )
     m_Locale = new wxLocale();
     m_Locale->Init( m_LanguageId );
     dic_path = ReturnKicadDatasPath() + BaseDictionaryPath;
+
+    wxLogDebug( wxT( "Adding prefix <" ) + dic_path +
+                wxT( "> to language lookup path." ) );
+
     m_Locale->AddCatalogLookupPathPrefix( dic_path );
 
     if( !first_time )
@@ -553,6 +557,9 @@ void WinEDA_App::SetLanguageIdentifier( int menu_id )
  */
 {
     unsigned int ii;
+
+    wxLogDebug( wxT( "Select language ID %d from %d possible languages." ),
+                menu_id, LANGUAGE_DESCR_COUNT );
 
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {

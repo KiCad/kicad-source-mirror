@@ -244,26 +244,6 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
     case 0:
         break;
 
-    case EDA_PANNING_UP_KEY:
-        OnZoom( ID_ZOOM_PANNING_UP );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_DOWN_KEY:
-        OnZoom( ID_ZOOM_PANNING_DOWN );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_LEFT_KEY:
-        OnZoom( ID_ZOOM_PANNING_LEFT );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_RIGHT_KEY:
-        OnZoom( ID_ZOOM_PANNING_RIGHT );
-        curpos = screen->m_Curseur;
-        break;
-
     case EDA_ZOOM_IN_FROM_MOUSE:
         OnZoom( ID_ZOOM_IN_KEY );
         curpos = screen->m_Curseur;
@@ -375,26 +355,6 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     case 0:
         break;
 
-    case EDA_PANNING_UP_KEY:
-        OnZoom( ID_ZOOM_PANNING_UP );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_DOWN_KEY:
-        OnZoom( ID_ZOOM_PANNING_DOWN );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_LEFT_KEY:
-        OnZoom( ID_ZOOM_PANNING_LEFT );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_RIGHT_KEY:
-        OnZoom( ID_ZOOM_PANNING_RIGHT );
-        curpos = screen->m_Curseur;
-        break;
-
     case EDA_ZOOM_IN_FROM_MOUSE:
         OnZoom( ID_ZOOM_IN_KEY );
         curpos = screen->m_Curseur;
@@ -503,26 +463,6 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     switch( g_KeyPressed )
     {
     case 0:
-        break;
-
-    case EDA_PANNING_UP_KEY:
-        OnZoom( ID_ZOOM_PANNING_UP );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_DOWN_KEY:
-        OnZoom( ID_ZOOM_PANNING_DOWN );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_LEFT_KEY:
-        OnZoom( ID_ZOOM_PANNING_LEFT );
-        curpos = screen->m_Curseur;
-        break;
-
-    case EDA_PANNING_RIGHT_KEY:
-        OnZoom( ID_ZOOM_PANNING_RIGHT );
-        curpos = screen->m_Curseur;
         break;
 
     case EDA_ZOOM_IN_FROM_MOUSE:

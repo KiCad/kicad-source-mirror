@@ -94,9 +94,12 @@ public:
     void         OnActivate( wxActivateEvent& event );
 
     /* Mouse and keys events */
+    void         OnMouseWheel( wxMouseEvent& event );
     void         OnMouseEvent( wxMouseEvent& event );
     void         OnMouseLeaving( wxMouseEvent& event );
     void         OnKeyEvent( wxKeyEvent& event );
+
+    void         OnPan( wxCommandEvent& event );
 
     /*************************/
 
