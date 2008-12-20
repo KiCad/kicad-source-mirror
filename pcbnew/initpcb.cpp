@@ -99,7 +99,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
     if( redraw )
     {
         m_Parent->SetCurItem( NULL );
-        m_Parent->ReDrawPanel();
+        m_Parent->DrawPanel->Refresh();
     }
 
     EndModal( 1 );

@@ -32,7 +32,6 @@ OBJECTS = eeschema.o\
 	tool_lib.o\
 	tool_sch.o\
 	tool_viewlib.o\
-	drawframe.o\
 	schframe.o\
 	viewlib_frame.o\
 	wxprint.o\
@@ -48,7 +47,6 @@ OBJECTS = eeschema.o\
 	eelayer.o \
 	priorque.o eeconfig.o \
 	affiche.o \
-	zoom.o \
 	getpart.o\
 	netlist.o\
 	netlist_control.o\
@@ -103,9 +101,6 @@ eeschema.o: eeschema.cpp program.h general.h $(DEPEND)
 read_from_file_schematic_items_descriptions.o: read_from_file_schematic_items_descriptions.cpp
 
 
-#edit_component_in_lib.o: edit_component_in_lib.cpp\
-#	dialog_edit_component_in_lib.cpp dialog_edit_component_in_lib.h $(DEPEND)
-
 edit_component_in_schematic.o: edit_component_in_schematic.cpp\
 	dialog_edit_component_in_schematic.cpp dialog_edit_component_in_schematic.h $(DEPEND)
 
@@ -148,15 +143,6 @@ setpage.o: ../share/setpage.cpp $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 svg_print.o: ../share/svg_print.cpp ../share/svg_print.h $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-zoom.o: ../share/zoom.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-treeprj.o: ../share/treeprj.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-mdiframe.o: ../share/mdiframe.cpp $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 buildmnu.o: ../share/buildmnu.cpp $(DEPEND)

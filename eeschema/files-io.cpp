@@ -125,7 +125,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         Read_Config( wxEmptyString, TRUE );
         Zoom_Automatique( TRUE );
         SetSheetNumberAndCount();
-        ReDrawPanel();
+        DrawPanel->Refresh();
         return 1;
     }
 

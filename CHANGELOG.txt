@@ -10,8 +10,8 @@ email address.
 ++All
     Cleaning code to draw/plot texts (work in progress):
     Now only one function is used to draw and plot texts
-    (easier to maintain and ensure textes have the same size in ploting and drawing)
-    In eeschema, italic and bold texts allowed (in pcbenew, texts thicness is already adjustable)
+    (easier to maintain and ensure texts have the same size in ploting and drawing)
+    In eeschema, italic and bold texts allowed (in pcbenew, texts thickness is already adjustable)
 
 
 2008-Dec-18 UPDATE Wayne Stambaugh <stambaughw@verizon.net>

@@ -254,7 +254,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     // because the PAD_SMD pads may change color.
     if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
     {
-        ReDrawPanel();
+        DrawPanel->Refresh();
     }
 }
 

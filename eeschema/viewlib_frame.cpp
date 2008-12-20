@@ -242,7 +242,7 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
     ReCreateListCmp();
     ReCreateHToolbar();
     DisplayLibInfos();
-    ReDrawPanel();
+    DrawPanel->Refresh();
 }
 
 
@@ -283,7 +283,7 @@ void WinEDA_ViewlibFrame::ClickOnLibList( wxCommandEvent& event )
         return;
     g_CurrentViewLibraryName = name;
     ReCreateListCmp();
-    ReDrawPanel();
+    DrawPanel->Refresh();
     DisplayLibInfos();
     ReCreateHToolbar();
 }
@@ -305,7 +305,7 @@ void WinEDA_ViewlibFrame::ClickOnCmpList( wxCommandEvent& event )
     g_ViewConvert = 1;
     Zoom_Automatique( FALSE );
     ReCreateHToolbar();
-    ReDrawPanel();
+    DrawPanel->Refresh();
 }
 
 

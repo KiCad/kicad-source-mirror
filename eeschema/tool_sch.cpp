@@ -293,7 +293,7 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_SHOW_GRID:
         g_ShowGrid = m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
-        ReDrawPanel();
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:

@@ -75,6 +75,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
         aWidth = -aWidth;
         sketch_mode = TRUE;
     }
+    int thickness = aWidth;
 
     kk = 0;
     ptr = 0;   /* ptr = text index */
@@ -85,9 +86,9 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
     pitch = (10 * size_h ) / 9;    // this is the pitch between chars
     if ( pitch > 0 )
-        pitch += ABS(aWidth);
+        pitch += ABS(thickness);
     else
-        pitch -= ABS(aWidth);
+        pitch -= ABS(thickness);
 
     ox = cX = aPos.x;
     oy = cY = aPos.y;
@@ -194,10 +195,10 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     if( (aSize.x / zoom) == 0 )
         return;
 
-    if( ABS( (aSize.x / zoom) ) < 3 )    /* chars trop petits pour etre dessines */
-    {                                   /* le texte est symbolise par une barre */
+    if( ABS( (aSize.x / zoom) ) < 3 )    /* shapes are too small: connot be drawn */
+    {                                   /* insteed the text is drawn as a line */
         dx = (pitch * char_count) / 2;
-        dy = size_v / 2;                /* Decalage du debut du texte / centre */
+        dy = size_v / 2;                /* line is always centered */
 
         ux0 = cX - dx;
         uy0 = cY;
@@ -328,7 +329,7 @@ static void s_Callback_plot(int x0, int y0, int xf, int yf)
         MovePenFct( pend, 'D' );
         s_Plotbegin = false;
     }
-    
+
     else
     {
         if ( PenLastPos == pstart )     // this is a next segment in a polyline
@@ -341,7 +342,7 @@ static void s_Callback_plot(int x0, int y0, int xf, int yf)
             MovePenFct( pend, 'D' );
         }
     }
-    
+
     PenLastPos = pend;
 }
 /******************************************************************************************/

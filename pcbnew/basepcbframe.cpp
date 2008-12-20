@@ -359,8 +359,8 @@ void WinEDA_BasePcbFrame::SetToolID( int id, int new_cursor_id,
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw )
-        ReDrawPanel();
+    if( redraw && DrawPanel)
+        DrawPanel->Refresh();
 }
 
 void WinEDA_BasePcbFrame::Affiche_Status_Box()

@@ -33,7 +33,7 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
     char      Name1[256];
     char      Name2[256];
     char      Name3[256];
-    int       width = 0, size = 0, orient = 0;
+    int       thickness = 0, size = 0, orient = 0;
     wxPoint   pos;
 
     char*     SLine = aLine;
@@ -45,7 +45,7 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
 
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
     int ii = sscanf( SLine, "%s %d %d %d %d %s %s %d",
-                     Name1, &pos.x, &pos.y, &orient, &size, Name2, Name3, &width );
+                     Name1, &pos.x, &pos.y, &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
     {
@@ -75,7 +75,11 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;
-        TextStruct->m_Width  = width;
+		if ( isdigit(Name3[0]) )
+		{
+			thickness = atol(Name3);
+			TextStruct->m_Width  = thickness;
+		}
         Struct = TextStruct;
         if( stricmp( Name2, "Italic" ) == 0 )
             TextStruct->m_Italic = 1;
@@ -88,7 +92,7 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;
         TextStruct->m_Shape  = NET_INPUT;
-        TextStruct->m_Width  = width;
+        TextStruct->m_Width  = thickness;
 
         if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
             TextStruct->m_Shape = NET_OUTPUT;
@@ -109,7 +113,7 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;
         TextStruct->m_Shape  = NET_INPUT;
-        TextStruct->m_Width  = width;
+        TextStruct->m_Width  = thickness;
 
         if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
             TextStruct->m_Shape = NET_OUTPUT;
@@ -129,7 +133,11 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;
-        TextStruct->m_Width  = width;
+		if ( isdigit(Name3[0]) )
+		{
+			thickness = atol(Name3);
+			TextStruct->m_Width  = thickness;
+		}
 
         if( strnicmp( Name2, "Italic", 6 ) == 0 )
             TextStruct->m_Italic = 1;

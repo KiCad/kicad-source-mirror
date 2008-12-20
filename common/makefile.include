@@ -8,6 +8,7 @@ OBJECTS= \
 	about_kicad.o\
 	base_struct.o\
 	basicframe.o\
+	drawframe.o\
 	confirm.o \
 	copy_to_clipboard.o\
 	class_drawpickedstruct.o\
@@ -36,7 +37,8 @@ OBJECTS= \
 	eda_dde.o\
 	worksheet.o\
 	base_screen.o\
-	dcsvg.o
+	dcsvg.o\
+    zoom.o
 
 ifdef KICAD_PYTHON
 OBJECTS += pyhandler.o

@@ -351,7 +351,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         LibItemToRepeat    = NULL;
         CreateNewLibraryPart();
         GetScreen()->ClearUndoRedoList();
-        ReDrawPanel();
+        DrawPanel->Refresh();
         SetToolbars();
         break;
     }
@@ -368,7 +368,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->ClearUndoRedoList();
             SetToolbars();
         }
-        ReDrawPanel();
+        DrawPanel->Refresh();
         break;
 
     case ID_LIBEDIT_SAVE_CURRENT_PART:
@@ -388,7 +388,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         LibItemToRepeat = NULL;
         ImportOnePart();
         GetScreen()->ClearUndoRedoList();
-        ReDrawPanel();
+        DrawPanel->Refresh();
         break;
 
     case ID_LIBEDIT_EXPORT_PART:
@@ -410,7 +410,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         m_HToolBar->ToggleTool( ID_DE_MORGAN_CONVERT_BUTT, FALSE );
         LibItemToRepeat = NULL;
         CurrentConvert  = 1;
-        ReDrawPanel();
+        DrawPanel->Refresh();
         break;
 
     case ID_DE_MORGAN_CONVERT_BUTT:
@@ -418,7 +418,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         m_HToolBar->ToggleTool( ID_DE_MORGAN_CONVERT_BUTT, TRUE );
         LibItemToRepeat = NULL;
         CurrentConvert  = 2;
-        ReDrawPanel();
+        DrawPanel->Refresh();
         break;
 
     case ID_LIBEDIT_VIEW_DOC:
@@ -451,7 +451,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             return;
         LibItemToRepeat = NULL;
         CurrentUnit = ii + 1;
-        ReDrawPanel();
+        DrawPanel->Refresh();
     }
         break;
 
@@ -465,7 +465,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             CurrentAliasName = m_SelAliasBox->GetValue();
         else
             CurrentAliasName.Empty();
-        ReDrawPanel();
+        DrawPanel->Refresh();
     }
         break;
 

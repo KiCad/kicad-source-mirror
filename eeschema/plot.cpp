@@ -245,15 +245,17 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
             {
-                LibDrawText* Text = (LibDrawText*) DEntry;
+            LibDrawText* Text = (LibDrawText*) DEntry;
 
-                /* The text orientation may need to be flipped if the
-                  * transformation matrix causes xy axes to be flipped. */
-                t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
-                pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
-                SetCurrentLineWidth( -1 );
-                int thickness = Text->m_Width;   // @todo: calcultae the pen tickness
-                PlotGraphicText( g_PlotFormat, pos, CharColor,
+            /* The text orientation may need to be flipped if the
+              * transformation matrix causes xy axes to be flipped. */
+            t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
+            pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
+            SetCurrentLineWidth( -1 );
+            int thickness = Text->m_Width;
+			if( thickness == 0 )	//
+				thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+            PlotGraphicText( g_PlotFormat, pos, CharColor,
                                  Text->m_Text,
                                  t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                                  Text->m_Size,
@@ -465,8 +467,10 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
             }
     }
 
-    SetCurrentLineWidth( -1 );
-    int thickness = field->m_Width;   // @todo: calculate the pen tickness
+    int thickness = field->m_Width;
+	if( thickness == 0 )
+		thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+    SetCurrentLineWidth( thickness );
 
     //@todo not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
     if( !IsMulti || (FieldNumber != REFERENCE) )
@@ -651,7 +655,6 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     if( Size.x == 0 )
         Size = wxSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 
-    SetCurrentLineWidth( -1 );
     if ( Struct->Type() == TYPE_SCH_GLOBALLABEL )
     {
         offset =  ( (SCH_GLOBALLABEL*) Struct )->m_Width;
@@ -672,6 +675,9 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         }
     }
 
+	if( thickness == 0 )
+		thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+    SetCurrentLineWidth( thickness );
 
     switch( Orient )
     {
@@ -767,6 +773,10 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
     int thickness = Struct->m_Width;
+	if( thickness == 0 )
+		thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+    SetCurrentLineWidth( thickness );
+
     bool italic = Struct->m_Italic;
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
                      Struct->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
@@ -834,7 +844,8 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( Struct->m_Layer ) );
 
-    SetCurrentLineWidth( -1 );
+    int thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+    SetCurrentLineWidth( thickness );
 
     Move_Plume( Struct->m_Pos, 'U' );
     pos = Struct->m_Pos; pos.x += Struct->m_Size.x;
@@ -850,7 +861,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
 
     Plume( 'U' );
 
-    /* Trace des textes : SheetName */
+    /* Draw texts: SheetName */
     Text = Struct->m_SheetName;
     size = wxSize( Struct->m_SheetNameSize, Struct->m_SheetNameSize );
     pos  = Struct->m_Pos; pos.y -= 4;
@@ -858,14 +869,13 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETNAME ) );
 
-    int thickness = 0;      //@todo use current pen width
     bool italic = false;
     PlotGraphicText( g_PlotFormat, pos, txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
                     thickness, italic );
 
-    /* Trace des textes : FileName */
+    /*Draw texts : FileName */
     Text = Struct->GetFileName();
     size = wxSize( Struct->m_FileNameSize, Struct->m_FileNameSize );
 
@@ -879,7 +889,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                     thickness, italic );
 
-    /* Trace des textes : SheetLabel */
+    /* Draw texts : SheetLabel */
     SheetLabelStruct = Struct->m_Label;
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( Struct->m_Layer ) );

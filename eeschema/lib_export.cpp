@@ -64,7 +64,7 @@ void WinEDA_LibeditFrame::ImportOnePart()
         {
             ReCreateHToolbar();
             DisplayLibInfos();
-            ReDrawPanel();
+            DrawPanel->Refresh();
         }
     }
 

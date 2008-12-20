@@ -117,7 +117,7 @@ EDA_LibComponentStruct *LibEntry = NULL;
 	LoadOneLibraryPartAux(LibEntry, CurrentLib);
 	ReCreateHToolbar();
 	Zoom_Automatique(FALSE);
-	ReDrawPanel();
+	DrawPanel->Refresh();
 	return TRUE;
 }
 

@@ -27,7 +27,6 @@ OBJECTS= \
 		class_track.o \
 		class_drc_item.o \
 		class_board_connected_item.o\
-		drawframe.o\
 		set_color.o \
 		gerbview_config.o \
 		class_marker.o \
@@ -35,7 +34,6 @@ OBJECTS= \
 		tracepcb.o \
 		class_pcb_text.o\
 		trpiste.o \
-		zoom.o\
 		reglage.o \
 		options.o \
 		initpcb.o\
@@ -105,9 +103,6 @@ collectors.o: ../pcbnew/collectors.cpp
 
 class_track.o: ../pcbnew/class_track.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-zoom.o: ../share/zoom.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 undelete.o: ../pcbnew/undelete.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp

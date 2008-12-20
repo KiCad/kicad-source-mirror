@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-12 22:29+0100\n"
-"PO-Revision-Date: 2008-12-12 22:31+0100\n"
+"POT-Creation-Date: 2008-12-20 14:10+0100\n"
+"PO-Revision-Date: 2008-12-20 14:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1156,13 +1156,7 @@ msgstr "Le texte est la REFERENCE!"
 msgid "Text is VALUE!"
 msgstr "Le texte est la  VALEUR!"
 
-#: pcbnew/controle.cpp:172
-#: pcbnew/modedit.cpp:76
-msgid "Selection Clarification"
-msgstr "Clarification de la Sélection"
-
 #: pcbnew/class_marker.cpp:133
-#: pcbnew/class_track.cpp:805
 #: pcbnew/class_drawsegment.cpp:283
 msgid "Type"
 msgstr "Type"
@@ -1179,40 +1173,6 @@ msgstr "Impossible de drag ce segment: trop de segments connectés"
 msgid "Unable to drag this segment: two collinear segments"
 msgstr "Impossible de drag ce segment: 2 segments alignés"
 
-#: pcbnew/class_track.cpp:822
-msgid "NetName"
-msgstr "NetName"
-
-#: pcbnew/class_track.cpp:828
-msgid "NetCode"
-msgstr "NetCode"
-
-#: pcbnew/class_track.cpp:833
-#: pcbnew/class_drawsegment.cpp:298
-msgid "Segment"
-msgstr "Segment"
-
-#: pcbnew/class_track.cpp:837
-msgid "Standard"
-msgstr "Standard"
-
-#: pcbnew/class_track.cpp:845
-msgid "Flags"
-msgstr "Flags"
-
-#: pcbnew/class_track.cpp:858
-msgid "Stat"
-msgstr "Stat"
-
-#: pcbnew/class_track.cpp:882
-msgid "Diam"
-msgstr "Diam"
-
-#: pcbnew/class_track.cpp:889
-#: pcbnew/class_track.cpp:894
-msgid "Drill"
-msgstr "Perçage"
-
 #: pcbnew/class_drawsegment.cpp:285
 msgid "Shape"
 msgstr "Forme"
@@ -1220,6 +1180,14 @@ msgstr "Forme"
 #: pcbnew/class_drawsegment.cpp:295
 msgid "Angle"
 msgstr "Angle"
+
+#: pcbnew/class_drawsegment.cpp:298
+msgid "Segment"
+msgstr "Segment"
+
+#: pcbnew/modedit.cpp:76
+msgid "Selection Clarification"
+msgstr "Clarification de la Sélection"
 
 #: pcbnew/modedit.cpp:269
 msgid "Unable to find the footprint source on the main board"
@@ -1520,20 +1488,10 @@ msgid "Scale Opt"
 msgstr "Echelle"
 
 #: pcbnew/pcbplot.cpp:423
-#: pcbnew/dialog_display_options.cpp:192
-#: pcbnew/dialog_display_options.cpp:222
-#: pcbnew/dialog_display_options.cpp:230
-#: pcbnew/dialog_display_options.cpp:245
-#: pcbnew/dialog_display_options.cpp:267
 msgid "Filled"
 msgstr "Plein"
 
 #: pcbnew/pcbplot.cpp:423
-#: pcbnew/dialog_display_options.cpp:191
-#: pcbnew/dialog_display_options.cpp:223
-#: pcbnew/dialog_display_options.cpp:231
-#: pcbnew/dialog_display_options.cpp:244
-#: pcbnew/dialog_display_options.cpp:268
 msgid "Sketch"
 msgstr "Contour"
 
@@ -1755,6 +1713,10 @@ msgstr "Last Change"
 msgid "Netlist path"
 msgstr "Chemin Netliste "
 
+#: pcbnew/class_module.cpp:952
+msgid "Stat"
+msgstr "Stat"
+
 #: pcbnew/class_module.cpp:962
 msgid "3D-Shape"
 msgstr "Forme 3D"
@@ -1815,15 +1777,15 @@ msgstr "Rotation Bloc"
 msgid "Zone rotation"
 msgstr "Rotation Zones"
 
-#: pcbnew/block.cpp:767
+#: pcbnew/block.cpp:765
 msgid "Block mirroring"
 msgstr "Bloc Miroir"
 
-#: pcbnew/block.cpp:953
+#: pcbnew/block.cpp:950
 msgid "Move Block"
 msgstr "Déplacer Bloc"
 
-#: pcbnew/block.cpp:1099
+#: pcbnew/block.cpp:1096
 msgid "Copy Block"
 msgstr "Copie Bloc"
 
@@ -1967,6 +1929,7 @@ msgid "Keep or delete bad tracks after a netlist change"
 msgstr "Garder ou supprimer les mauvaises pistes après un chnagement de netliste"
 
 #: pcbnew/dialog_netlist.cpp:193
+#: pcbnew/dialog_drc.cpp:432
 msgid "Options"
 msgstr "Options"
 
@@ -2261,23 +2224,27 @@ msgstr "Impossible de créer  fichier "
 msgid "unable to reopen file <%s>"
 msgstr "Ne peut pas réouvrir fichier <%s>"
 
-#: pcbnew/class_pad.cpp:788
+#: pcbnew/class_pad.cpp:379
 msgid "Unknown Pad shape"
 msgstr "Forme Pad inconnue"
 
-#: pcbnew/class_pad.cpp:874
+#: pcbnew/class_pad.cpp:465
 msgid "RefP"
 msgstr "RefP"
 
-#: pcbnew/class_pad.cpp:988
+#: pcbnew/class_pad.cpp:576
+msgid "Drill"
+msgstr "Perçage"
+
+#: pcbnew/class_pad.cpp:584
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
 
-#: pcbnew/class_pad.cpp:1003
+#: pcbnew/class_pad.cpp:599
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:1007
+#: pcbnew/class_pad.cpp:603
 msgid "Y pos"
 msgstr "Y pos"
 
@@ -2582,10 +2549,12 @@ msgid "Layer:"
 msgstr "Couche:"
 
 #: pcbnew/modedit_onclick.cpp:196
+#: pcbnew/onrightclick.cpp:127
 msgid "End Tool"
 msgstr "Fin Outil"
 
 #: pcbnew/modedit_onclick.cpp:206
+#: pcbnew/onrightclick.cpp:450
 msgid "Cancel Block"
 msgstr "Annuler Bloc"
 
@@ -2594,6 +2563,7 @@ msgid "Zoom Block (drag middle mouse)"
 msgstr "Zoom Bloc (drag bouton du milieu souris)"
 
 #: pcbnew/modedit_onclick.cpp:211
+#: pcbnew/onrightclick.cpp:455
 msgid "Place Block"
 msgstr "Place Bloc"
 
@@ -2614,6 +2584,8 @@ msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Effacement Bloc (shift+ctrl + drag mouse)"
 
 #: pcbnew/modedit_onclick.cpp:241
+#: pcbnew/onrightclick.cpp:765
+#: pcbnew/onrightclick.cpp:869
 msgid "Rotate"
 msgstr "Rotation"
 
@@ -2642,14 +2614,17 @@ msgid "Move Pad"
 msgstr "Déplace Pad"
 
 #: pcbnew/modedit_onclick.cpp:263
+#: pcbnew/onrightclick.cpp:804
 msgid "Edit Pad"
 msgstr "Edit Pad"
 
 #: pcbnew/modedit_onclick.cpp:265
+#: pcbnew/onrightclick.cpp:808
 msgid "New Pad Settings"
 msgstr "Nouvelles Caract. Pads"
 
 #: pcbnew/modedit_onclick.cpp:267
+#: pcbnew/onrightclick.cpp:812
 msgid "Export Pad Settings"
 msgstr "Exporte Caract. Pads"
 
@@ -2658,6 +2633,7 @@ msgid "delete Pad"
 msgstr "Supprimer Pad"
 
 #: pcbnew/modedit_onclick.cpp:274
+#: pcbnew/onrightclick.cpp:819
 msgid "Global Pad Settings"
 msgstr "Edition Globale des pads"
 
@@ -2690,6 +2666,9 @@ msgid "Place edge"
 msgstr "Place contour"
 
 #: pcbnew/modedit_onclick.cpp:306
+#: pcbnew/onrightclick.cpp:733
+#: pcbnew/onrightclick.cpp:767
+#: pcbnew/onrightclick.cpp:871
 msgid "Edit"
 msgstr "Editer"
 
@@ -3275,15 +3254,6 @@ msgstr "Marqueur Suivant"
 msgid "GenCAD file:"
 msgstr "Fichier GenCAD:"
 
-#: pcbnew/basepcbframe.cpp:171
-msgid "3D Frame already opened"
-msgstr "Fenetre 3D déjà ouverte"
-
-#: pcbnew/basepcbframe.cpp:176
-#: pcbnew/basepcbframe.cpp:179
-msgid "3D Viewer"
-msgstr "Visu 3D"
-
 #: pcbnew/hotkeys.cpp:465
 #, c-format
 msgid "Footprint %s found, but locked"
@@ -3754,9 +3724,17 @@ msgstr "N'affiche pas les couches cuivre"
 msgid "Apply"
 msgstr "Appliquer"
 
+#: pcbnew/class_zone.cpp:889
+msgid "NetName"
+msgstr "NetName"
+
 #: pcbnew/class_zone.cpp:892
 msgid "Non Copper Zone"
 msgstr "Zone non Cuivre"
+
+#: pcbnew/class_zone.cpp:897
+msgid "NetCode"
+msgstr "NetCode"
 
 #: pcbnew/class_zone.cpp:905
 msgid "Corners"
@@ -3802,6 +3780,15 @@ msgstr "%s pin %s non trouvée"
 #, c-format
 msgid "%s pin %s found"
 msgstr "%s pin %s trouvée"
+
+#: pcbnew/basepcbframe.cpp:171
+msgid "3D Frame already opened"
+msgstr "Fenetre 3D déjà ouverte"
+
+#: pcbnew/basepcbframe.cpp:176
+#: pcbnew/basepcbframe.cpp:179
+msgid "3D Viewer"
+msgstr "Visu 3D"
 
 #: pcbnew/dialog_setup_libs.cpp:97
 msgid "from "
@@ -4799,6 +4786,10 @@ msgid "Pad Orient (0.1 deg)"
 msgstr "Orient. Pad  (0.1 deg)"
 
 #: pcbnew/dialog_pad_properties_base.cpp:80
+msgid "Standard"
+msgstr "Standard"
+
+#: pcbnew/dialog_pad_properties_base.cpp:80
 msgid "SMD"
 msgstr "CMS"
 
@@ -5028,6 +5019,14 @@ msgstr "Référence ou Valeur ne peut etre effacée"
 #, c-format
 msgid "Delete [%s]"
 msgstr "Supprimer [%s]"
+
+#: pcbnew/class_track.cpp:912
+msgid "Flags"
+msgstr "Flags"
+
+#: pcbnew/class_track.cpp:949
+msgid "Diam"
+msgstr "Diam"
 
 #: eeschema/backanno.cpp:135
 msgid "Load Stuff File"
@@ -5843,17 +5842,14 @@ msgid "Pin Shape:"
 msgstr "Forme Pin:"
 
 #: eeschema/pinedit-dialog.cpp:264
-#: eeschema/dialog_edit_label.cpp:160
 msgid "Input"
 msgstr "Entrée"
 
 #: eeschema/pinedit-dialog.cpp:265
-#: eeschema/dialog_edit_label.cpp:161
 msgid "Output"
 msgstr "Sortie"
 
 #: eeschema/pinedit-dialog.cpp:266
-#: eeschema/dialog_edit_label.cpp:162
 msgid "Bidi"
 msgstr "Bidi"
 
@@ -5862,7 +5858,6 @@ msgid "3 States"
 msgstr "3 Etats"
 
 #: eeschema/pinedit-dialog.cpp:268
-#: eeschema/dialog_edit_label.cpp:164
 msgid "Passive"
 msgstr "Passive"
 
@@ -6016,42 +6011,6 @@ msgstr "Racine"
 #, c-format
 msgid "Arc %.1f deg"
 msgstr "Arc %.1f deg"
-
-#: eeschema/dialog_edit_label.cpp:68
-msgid "Global Label properties"
-msgstr "Propriétés du Label Global"
-
-#: eeschema/dialog_edit_label.cpp:72
-msgid "Hierarchal Label properties"
-msgstr "Propriétés du Label Hiérarchique"
-
-#: eeschema/dialog_edit_label.cpp:76
-msgid "Label properties"
-msgstr "Propriétés du label"
-
-#: eeschema/dialog_edit_label.cpp:80
-msgid "Text properties"
-msgstr "Propriétés du texte"
-
-#: eeschema/dialog_edit_label.cpp:139
-msgid "Text "
-msgstr "Texte "
-
-#: eeschema/dialog_edit_label.cpp:153
-msgid "Text Orient:"
-msgstr "Orient:"
-
-#: eeschema/dialog_edit_label.cpp:163
-msgid "TriState"
-msgstr "3 états"
-
-#: eeschema/dialog_edit_label.cpp:165
-msgid "Glabel Shape:"
-msgstr "Forme GLabel:"
-
-#: eeschema/dialog_edit_label.cpp:173
-msgid "Size "
-msgstr "Taille "
 
 #: eeschema/netlist_control.cpp:131
 #: eeschema/netlist_control.cpp:253
@@ -7078,87 +7037,6 @@ msgstr "Placer textes graphiques (commentaires)"
 msgid "HV orientation for Wires and Bus"
 msgstr "Force direction H, V et X  pour les fils et bus"
 
-#: eeschema/build_BOM.cpp:94
-msgid "Bill of materials:"
-msgstr "Liste du materiel:"
-
-#: eeschema/build_BOM.cpp:143
-#: eeschema/build_BOM.cpp:182
-msgid "Failed to open file "
-msgstr "Erreur ouverture "
-
-#: eeschema/build_BOM.cpp:226
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
-msgstr ""
-"\n"
-"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
-
-#: eeschema/build_BOM.cpp:237
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"##Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
-"\n"
-
-#: eeschema/build_BOM.cpp:244
-msgid ""
-"\n"
-"#End List\n"
-msgstr ""
-"\n"
-"#End List\n"
-
-#: eeschema/build_BOM.cpp:619
-msgid "Field"
-msgstr "Champ"
-
-#: eeschema/build_BOM.cpp:627
-msgid ""
-"\n"
-"#Cmp ( order = Reference )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Reference )"
-
-#: eeschema/build_BOM.cpp:630
-#: eeschema/build_BOM.cpp:726
-msgid " (with SubCmp)"
-msgstr "avec sub-composants"
-
-#: eeschema/build_BOM.cpp:700
-#: eeschema/build_BOM.cpp:781
-msgid "#End Cmp\n"
-msgstr "#End Cmp\n"
-
-#: eeschema/build_BOM.cpp:723
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Valeur )"
-
-#: eeschema/build_BOM.cpp:811
-#, c-format
-msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
-
-#: eeschema/build_BOM.cpp:831
-#, c-format
-msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
-
-#: eeschema/build_BOM.cpp:846
-msgid "#End labels\n"
-msgstr "#End labels\n"
-
 #: eeschema/dialog_build_BOM.cpp:247
 msgid "List items:"
 msgstr " Liste éléments: "
@@ -7536,6 +7414,87 @@ msgstr "Impossible de trouver le composant  "
 msgid " in library"
 msgstr " en librairie"
 
+#: eeschema/build_BOM.cpp:94
+msgid "Bill of materials:"
+msgstr "Liste du materiel:"
+
+#: eeschema/build_BOM.cpp:143
+#: eeschema/build_BOM.cpp:182
+msgid "Failed to open file "
+msgstr "Erreur ouverture "
+
+#: eeschema/build_BOM.cpp:226
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
+msgstr ""
+"\n"
+"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
+
+#: eeschema/build_BOM.cpp:237
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+"\n"
+msgstr ""
+"\n"
+"##Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
+"\n"
+
+#: eeschema/build_BOM.cpp:244
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#End List\n"
+
+#: eeschema/build_BOM.cpp:619
+msgid "Field"
+msgstr "Champ"
+
+#: eeschema/build_BOM.cpp:627
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Reference )"
+
+#: eeschema/build_BOM.cpp:630
+#: eeschema/build_BOM.cpp:726
+msgid " (with SubCmp)"
+msgstr "avec sub-composants"
+
+#: eeschema/build_BOM.cpp:700
+#: eeschema/build_BOM.cpp:781
+msgid "#End Cmp\n"
+msgstr "#End Cmp\n"
+
+#: eeschema/build_BOM.cpp:723
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Valeur )"
+
+#: eeschema/build_BOM.cpp:811
+#, c-format
+msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
+
+#: eeschema/build_BOM.cpp:831
+#, c-format
+msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
+
+#: eeschema/build_BOM.cpp:846
+msgid "#End labels\n"
+msgstr "#End labels\n"
+
 #: eeschema/dialog_eeschema_config.cpp:163
 msgid "save current configuration setting in the local .pro file"
 msgstr "Sauve configuration courante dans le fichier .pro local"
@@ -7746,6 +7705,34 @@ msgstr "Ok pour effacer la LISTE des filtres de modules"
 msgid "New FootprintFilter:"
 msgstr "Nouveau Filtre de Modules:"
 
+#: eeschema/dialog_edit_label_base.cpp:34
+msgid "Direction"
+msgstr "Direction"
+
+#: eeschema/dialog_edit_label_base.cpp:38
+msgid "Italic"
+msgstr "Italique"
+
+#: eeschema/dialog_edit_label_base.cpp:38
+msgid "Bold"
+msgstr "Gras"
+
+#: eeschema/dialog_edit_label_base.cpp:38
+msgid "Bold Italic"
+msgstr "Gras Italique"
+
+#: eeschema/dialog_edit_label_base.cpp:40
+msgid "Style"
+msgstr "Style"
+
+#: eeschema/dialog_edit_label_base.cpp:44
+msgid "TriState"
+msgstr "3 états"
+
+#: eeschema/dialog_edit_label_base.cpp:46
+msgid "Glabel Shape:"
+msgstr "Forme GLabel:"
+
 #: eeschema/schedit.cpp:181
 msgid "Push/Pop Hierarchy"
 msgstr "Naviger dans Hiérarchie"
@@ -7790,34 +7777,9 @@ msgstr "Importer Connecteur de hiérarchie"
 msgid "Add Power"
 msgstr "Add Alims"
 
-#: eeschema/edit_label.cpp:49
+#: eeschema/edit_label.cpp:46
 msgid "Empty Text!"
 msgstr "Texte vide"
-
-#: eeschema/load_one_schematic_file.cpp:105
-msgid "Failed to open "
-msgstr "Erreur ouverture "
-
-#: eeschema/load_one_schematic_file.cpp:110
-msgid "Loading "
-msgstr "Chargement "
-
-#: eeschema/load_one_schematic_file.cpp:117
-#: eeschema/load_one_schematic_file.cpp:146
-msgid " is NOT an EESchema file!"
-msgstr " n'est PAS un fichier EESchema!"
-
-#: eeschema/load_one_schematic_file.cpp:129
-msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
-msgstr " a été créé par une version plus récente de Eeschema et peut ne pas être chargé correctement. SVP mettez a jour Eeschema!"
-
-#: eeschema/load_one_schematic_file.cpp:138
-msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
-msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
-
-#: eeschema/load_one_schematic_file.cpp:497
-msgid "Done Loading "
-msgstr "Chargement terminé"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "1"
@@ -8273,6 +8235,47 @@ msgstr "Pas de nom de composant!"
 #, c-format
 msgid "Component [%s] not found!"
 msgstr "Composant [%s] non trouvé!"
+
+#: eeschema/dialog_edit_label.cpp:39
+msgid "Global Label properties"
+msgstr "Propriétés du Label Global"
+
+#: eeschema/dialog_edit_label.cpp:43
+msgid "Hierarchal Label properties"
+msgstr "Propriétés du Label Hiérarchique"
+
+#: eeschema/dialog_edit_label.cpp:47
+msgid "Label properties"
+msgstr "Propriétés du label"
+
+#: eeschema/dialog_edit_label.cpp:51
+msgid "Text properties"
+msgstr "Propriétés du texte"
+
+#: eeschema/load_one_schematic_file.cpp:79
+msgid "Failed to open "
+msgstr "Erreur ouverture "
+
+#: eeschema/load_one_schematic_file.cpp:84
+msgid "Loading "
+msgstr "Chargement "
+
+#: eeschema/load_one_schematic_file.cpp:91
+#: eeschema/load_one_schematic_file.cpp:121
+msgid " is NOT an EESchema file!"
+msgstr " n'est PAS un fichier EESchema!"
+
+#: eeschema/load_one_schematic_file.cpp:103
+msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
+msgstr " a été créé par une version plus récente de Eeschema et peut ne pas être chargé correctement. SVP mettez a jour Eeschema!"
+
+#: eeschema/load_one_schematic_file.cpp:113
+msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
+msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
+
+#: eeschema/load_one_schematic_file.cpp:401
+msgid "Done Loading "
+msgstr "Chargement terminé"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:117
 msgid "Start loading schematic libs"
@@ -9424,12 +9427,12 @@ msgstr "Effacement Bloc (ctrl + drag mouse)"
 msgid "Delete Dcode items"
 msgstr "Suppression d'éléments par DCode"
 
-#: gerbview/rs274x.cpp:295
+#: gerbview/rs274x.cpp:297
 #, c-format
 msgid "Command <%c%c> ignored by Gerbview"
 msgstr "Commande <%c%c> ignorée par Gerbview"
 
-#: gerbview/rs274x.cpp:340
+#: gerbview/rs274x.cpp:342
 msgid "Too many include files!!"
 msgstr "Trop de fichiers inclus!!"
 
@@ -9470,7 +9473,6 @@ msgid "Show D codes"
 msgstr "Montrer DCodes"
 
 #: gerbview/process_config.cpp:117
-#: gerbview/gerbview_config.cpp:148
 msgid "Save config file"
 msgstr "Sauver config"
 
@@ -9496,7 +9498,7 @@ msgstr "%d erreurs pendant lecture fichier gerber [%s]"
 msgid "D codes files:"
 msgstr "Fichiers D-Codes:"
 
-#: gerbview/dcode.cpp:460
+#: gerbview/dcode.cpp:464
 msgid "List D codes"
 msgstr "Liste D-Codes"
 
@@ -9554,6 +9556,94 @@ msgstr "Infos:"
 msgid "Colors"
 msgstr "Couleurs"
 
+#: common/edaappl.cpp:57
+msgid "Default"
+msgstr "Defaut"
+
+#: common/edaappl.cpp:70
+msgid "French"
+msgstr "French"
+
+#: common/edaappl.cpp:76
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: common/edaappl.cpp:82
+msgid "Portuguese"
+msgstr "Portugais"
+
+#: common/edaappl.cpp:88
+msgid "Italian"
+msgstr "Italien"
+
+#: common/edaappl.cpp:94
+msgid "German"
+msgstr "Allemand"
+
+#: common/edaappl.cpp:100
+msgid "Slovenian"
+msgstr "Slovène"
+
+#: common/edaappl.cpp:106
+msgid "Hungarian"
+msgstr "Hongrois"
+
+#: common/edaappl.cpp:112
+msgid "Polish"
+msgstr "Polonais"
+
+#: common/edaappl.cpp:118
+msgid "Czech"
+msgstr "Tchèque"
+
+#: common/edaappl.cpp:124
+msgid "Russian"
+msgstr "Russe"
+
+#: common/edaappl.cpp:130
+msgid "Korean"
+msgstr "Coréen"
+
+#: common/edaappl.cpp:136
+msgid "Chinese simplified"
+msgstr "Chinois Simplifié"
+
+#: common/edaappl.cpp:142
+msgid "Catalan"
+msgstr "Catalan"
+
+#: common/edaappl.cpp:148
+msgid "Dutch"
+msgstr "Hollandais"
+
+#: common/edaappl.cpp:613
+msgid "Language"
+msgstr "Langage"
+
+#: common/edaappl.cpp:614
+msgid "Select application language (only for testing!)"
+msgstr "Choisir le langage (seulement pour tests!)"
+
+#: common/zoom.cpp:238
+msgid "Center"
+msgstr "Centrer"
+
+#: common/zoom.cpp:247
+msgid "Zoom select"
+msgstr "Sélection Zoom"
+
+#: common/zoom.cpp:260
+msgid "Zoom: "
+msgstr "Zoom:  "
+
+#: common/zoom.cpp:270
+msgid "Grid Select"
+msgstr "Sélection Grille"
+
+#: common/zoom.cpp:291
+msgid "Grid: "
+msgstr "Grille: "
+
 #: common/block_commande.cpp:57
 msgid "Block Move"
 msgstr "Move Bloc"
@@ -9593,6 +9683,18 @@ msgstr "Inversion Bloc"
 #: common/block_commande.cpp:94
 msgid "Block Mirror"
 msgstr "Bloc Miroir"
+
+#: common/drawframe.cpp:137
+msgid "Choose font type and size for dialogs, infos and status box"
+msgstr "Choisir les fontes et leur taille pour les dialogues, infos et ligne d'état"
+
+#: common/drawframe.cpp:364
+msgid "Inch"
+msgstr "Pouce"
+
+#: common/drawframe.cpp:372
+msgid "??"
+msgstr "??"
 
 #: common/common.cpp:105
 msgid " (\"):"
@@ -9858,78 +9960,10 @@ msgstr ""
 msgid "Unable to find a PDF viewer for"
 msgstr "Impossible de trouver un visualisateur PDF pour"
 
-#: common/basicframe.cpp:239
+#: common/basicframe.cpp:236
 #, c-format
 msgid "Help file %s not found"
 msgstr "Fichier d'aide %s non trouvé"
-
-#: common/edaappl.cpp:57
-msgid "Default"
-msgstr "Defaut"
-
-#: common/edaappl.cpp:70
-msgid "French"
-msgstr "French"
-
-#: common/edaappl.cpp:76
-msgid "Spanish"
-msgstr "Espagnol"
-
-#: common/edaappl.cpp:82
-msgid "Portuguese"
-msgstr "Portugais"
-
-#: common/edaappl.cpp:88
-msgid "Italian"
-msgstr "Italien"
-
-#: common/edaappl.cpp:94
-msgid "German"
-msgstr "Allemand"
-
-#: common/edaappl.cpp:100
-msgid "Slovenian"
-msgstr "Slovène"
-
-#: common/edaappl.cpp:106
-msgid "Hungarian"
-msgstr "Hongrois"
-
-#: common/edaappl.cpp:112
-msgid "Polish"
-msgstr "Polonais"
-
-#: common/edaappl.cpp:118
-msgid "Czech"
-msgstr "Tchèque"
-
-#: common/edaappl.cpp:124
-msgid "Russian"
-msgstr "Russe"
-
-#: common/edaappl.cpp:130
-msgid "Korean"
-msgstr "Coréen"
-
-#: common/edaappl.cpp:136
-msgid "Chinese simplified"
-msgstr "Chinois Simplifié"
-
-#: common/edaappl.cpp:142
-msgid "Catalan"
-msgstr "Catalan"
-
-#: common/edaappl.cpp:148
-msgid "Dutch"
-msgstr "Hollandais"
-
-#: common/edaappl.cpp:606
-msgid "Language"
-msgstr "Langage"
-
-#: common/edaappl.cpp:607
-msgid "Select application language (only for testing!)"
-msgstr "Choisir le langage (seulement pour tests!)"
 
 #: 3d-viewer/3d_toolbar.cpp:33
 msgid "Reload board"
@@ -10067,138 +10101,6 @@ msgstr "Non fichier Image 3D:"
 msgid "Vertex "
 msgstr "Vertex "
 
-#: share/setpage.cpp:276
-msgid "Size A4"
-msgstr "Format A4 "
-
-#: share/setpage.cpp:277
-msgid "Size A3"
-msgstr "Format A3"
-
-#: share/setpage.cpp:278
-msgid "Size A2"
-msgstr "Format A2"
-
-#: share/setpage.cpp:279
-msgid "Size A1"
-msgstr "Format A1"
-
-#: share/setpage.cpp:280
-msgid "Size A0"
-msgstr "Format A0"
-
-#: share/setpage.cpp:281
-msgid "Size A"
-msgstr "Format A"
-
-#: share/setpage.cpp:282
-msgid "Size B"
-msgstr "Format B"
-
-#: share/setpage.cpp:283
-msgid "Size C"
-msgstr "Format C"
-
-#: share/setpage.cpp:284
-msgid "Size D"
-msgstr "Format D"
-
-#: share/setpage.cpp:285
-msgid "Size E"
-msgstr "Format E"
-
-#: share/setpage.cpp:286
-msgid "User size"
-msgstr "Format libre"
-
-#: share/setpage.cpp:287
-msgid "Page Size:"
-msgstr "Dim Page:"
-
-#: share/setpage.cpp:294
-msgid "User Page Size X: "
-msgstr "Format libre dim X: "
-
-#: share/setpage.cpp:303
-msgid "User Page Size Y: "
-msgstr "Format libre dim Y: "
-
-#: share/setpage.cpp:330
-#, c-format
-msgid "Number of sheets: %d"
-msgstr "Nombre de feuilles: %d"
-
-#: share/setpage.cpp:336
-#, c-format
-msgid "Sheet number: %d"
-msgstr "Numéro feuille: %d"
-
-#: share/setpage.cpp:340
-msgid "Revision:"
-msgstr "Révision:"
-
-#: share/setpage.cpp:349
-#: share/setpage.cpp:363
-#: share/setpage.cpp:377
-#: share/setpage.cpp:391
-#: share/setpage.cpp:405
-#: share/setpage.cpp:419
-#: share/setpage.cpp:433
-msgid "Export to other sheets"
-msgstr "Exporter vers autres feuilles"
-
-#: share/setpage.cpp:368
-msgid "Company:"
-msgstr "Société:"
-
-#: share/setpage.cpp:382
-msgid "Comment1:"
-msgstr "Commentaire1: "
-
-#: share/setpage.cpp:396
-msgid "Comment2:"
-msgstr "Commentaire2:"
-
-#: share/setpage.cpp:410
-msgid "Comment3:"
-msgstr "Commentaire3:"
-
-#: share/setpage.cpp:424
-msgid "Comment4:"
-msgstr "Commentaire4:"
-
-#: share/zoom.cpp:238
-msgid "Center"
-msgstr "Centrer"
-
-#: share/zoom.cpp:247
-msgid "Zoom select"
-msgstr "Sélection Zoom"
-
-#: share/zoom.cpp:260
-msgid "Zoom: "
-msgstr "Zoom:  "
-
-#: share/zoom.cpp:270
-msgid "Grid Select"
-msgstr "Sélection Grille"
-
-#: share/zoom.cpp:291
-msgid "Grid: "
-msgstr "Grille: "
-
-#: share/drawframe.cpp:155
-msgid "Choose font type and size for dialogs, infos and status box"
-msgstr "Choisir les fontes et leur taille pour les dialogues, infos et ligne d'état"
-
-#: share/drawframe.cpp:382
-msgid "Inch"
-msgstr "Pouce"
-
-#: share/drawframe.cpp:390
-msgid "??"
-msgstr "??"
-
 #: share/dialog_print.cpp:146
 msgid "Exclude Edges_Pcb Layer"
 msgstr "Exclure Couche Contours PCB"
@@ -10330,6 +10232,106 @@ msgstr "Il y a un problème d'impression"
 msgid "Print page %d"
 msgstr "Print page %d"
 
+#: share/setpage.cpp:277
+msgid "Size A4"
+msgstr "Format A4 "
+
+#: share/setpage.cpp:278
+msgid "Size A3"
+msgstr "Format A3"
+
+#: share/setpage.cpp:279
+msgid "Size A2"
+msgstr "Format A2"
+
+#: share/setpage.cpp:280
+msgid "Size A1"
+msgstr "Format A1"
+
+#: share/setpage.cpp:281
+msgid "Size A0"
+msgstr "Format A0"
+
+#: share/setpage.cpp:282
+msgid "Size A"
+msgstr "Format A"
+
+#: share/setpage.cpp:283
+msgid "Size B"
+msgstr "Format B"
+
+#: share/setpage.cpp:284
+msgid "Size C"
+msgstr "Format C"
+
+#: share/setpage.cpp:285
+msgid "Size D"
+msgstr "Format D"
+
+#: share/setpage.cpp:286
+msgid "Size E"
+msgstr "Format E"
+
+#: share/setpage.cpp:287
+msgid "User size"
+msgstr "Format libre"
+
+#: share/setpage.cpp:288
+msgid "Page Size:"
+msgstr "Dim Page:"
+
+#: share/setpage.cpp:295
+msgid "User Page Size X: "
+msgstr "Format libre dim X: "
+
+#: share/setpage.cpp:304
+msgid "User Page Size Y: "
+msgstr "Format libre dim Y: "
+
+#: share/setpage.cpp:331
+#, c-format
+msgid "Number of sheets: %d"
+msgstr "Nombre de feuilles: %d"
+
+#: share/setpage.cpp:337
+#, c-format
+msgid "Sheet number: %d"
+msgstr "Numéro feuille: %d"
+
+#: share/setpage.cpp:341
+msgid "Revision:"
+msgstr "Révision:"
+
+#: share/setpage.cpp:350
+#: share/setpage.cpp:364
+#: share/setpage.cpp:378
+#: share/setpage.cpp:392
+#: share/setpage.cpp:406
+#: share/setpage.cpp:420
+#: share/setpage.cpp:434
+msgid "Export to other sheets"
+msgstr "Exporter vers autres feuilles"
+
+#: share/setpage.cpp:369
+msgid "Company:"
+msgstr "Société:"
+
+#: share/setpage.cpp:383
+msgid "Comment1:"
+msgstr "Commentaire1: "
+
+#: share/setpage.cpp:397
+msgid "Comment2:"
+msgstr "Commentaire2:"
+
+#: share/setpage.cpp:411
+msgid "Comment3:"
+msgstr "Commentaire3:"
+
+#: share/setpage.cpp:425
+msgid "Comment4:"
+msgstr "Commentaire4:"
+
 #: pcbnew/cleaningoptions_dialog.h:48
 msgid "Cleaning options"
 msgstr "Options de Nettoyage"
@@ -10377,58 +10379,6 @@ msgstr "??? Via"
 #: pcbnew/pcbnew.h:287
 msgid "Blind/Buried Via"
 msgstr "Via Aveugle/Enterrée"
-
-#: pcbnew/set_color.h:38
-msgid "Pcbnew Layer Colors:"
-msgstr "Pcbnew: Couleur des Couches"
-
-#: pcbnew/set_color.h:81
-msgid "Copper Layers"
-msgstr "Couches Cuivre."
-
-#: pcbnew/set_color.h:216
-msgid "Tech Layers"
-msgstr "Couches Tech."
-
-#: pcbnew/set_color.h:357
-msgid "Ratsnest"
-msgstr "Chevelu"
-
-#: pcbnew/set_color.h:366
-msgid "Pad Cu"
-msgstr "Pad Cu"
-
-#: pcbnew/set_color.h:374
-msgid "Pad Cmp"
-msgstr "Pad Cmp"
-
-#: pcbnew/set_color.h:382
-msgid "Text Module Cu"
-msgstr "Texte Module Cu"
-
-#: pcbnew/set_color.h:390
-msgid "Text Module Cmp"
-msgstr "Texte Module Cmp"
-
-#: pcbnew/set_color.h:398
-msgid "Text Module invisible"
-msgstr "Texte Module invisible"
-
-#: pcbnew/set_color.h:406
-msgid "Anchors"
-msgstr "Ancres"
-
-#: pcbnew/set_color.h:423
-msgid "Show Noconnect"
-msgstr "Montrer Non Conn"
-
-#: pcbnew/set_color.h:432
-msgid "Show Modules Cmp"
-msgstr "Afficher Modules Cmp"
-
-#: pcbnew/set_color.h:441
-msgid "Show Modules Cu"
-msgstr "Afficher Modules Cu"
 
 #: pcbnew/gen_self.h:217
 msgid "Length(inch):"
@@ -10481,6 +10431,58 @@ msgstr "Propriétés du Pad"
 #: pcbnew/dialog_gendrill.h:50
 msgid "Drill Files Generation"
 msgstr "Génération Fichiers de Perçagee"
+
+#: pcbnew/set_color.h:38
+msgid "Pcbnew Layer Colors:"
+msgstr "Pcbnew: Couleur des Couches"
+
+#: pcbnew/set_color.h:81
+msgid "Copper Layers"
+msgstr "Couches Cuivre."
+
+#: pcbnew/set_color.h:216
+msgid "Tech Layers"
+msgstr "Couches Tech."
+
+#: pcbnew/set_color.h:357
+msgid "Ratsnest"
+msgstr "Chevelu"
+
+#: pcbnew/set_color.h:366
+msgid "Pad Cu"
+msgstr "Pad Cu"
+
+#: pcbnew/set_color.h:374
+msgid "Pad Cmp"
+msgstr "Pad Cmp"
+
+#: pcbnew/set_color.h:382
+msgid "Text Module Cu"
+msgstr "Texte Module Cu"
+
+#: pcbnew/set_color.h:390
+msgid "Text Module Cmp"
+msgstr "Texte Module Cmp"
+
+#: pcbnew/set_color.h:398
+msgid "Text Module invisible"
+msgstr "Texte Module invisible"
+
+#: pcbnew/set_color.h:406
+msgid "Anchors"
+msgstr "Ancres"
+
+#: pcbnew/set_color.h:423
+msgid "Show Noconnect"
+msgstr "Montrer Non Conn"
+
+#: pcbnew/set_color.h:432
+msgid "Show Modules Cmp"
+msgstr "Afficher Modules Cmp"
+
+#: pcbnew/set_color.h:441
+msgid "Show Modules Cu"
+msgstr "Afficher Modules Cu"
 
 #: eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
@@ -10790,6 +10792,12 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Text "
+#~ msgstr "Texte "
+#~ msgid "Text Orient:"
+#~ msgstr "Orient:"
+#~ msgid "Size "
+#~ msgstr "Taille "
 #~ msgid "Do not Show Zones"
 #~ msgstr "Ne pas montrer Zones"
 #~ msgid "Show Zones"

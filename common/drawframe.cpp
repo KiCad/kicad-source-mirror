@@ -585,7 +585,7 @@ void WinEDA_DrawFrame::OnZoom( int zoom_type )
     case ID_POPUP_ZOOM_REDRAW:
     case ID_ZOOM_REDRAW_KEY:
     case ID_ZOOM_REDRAW_BUTT:
-        ReDrawPanel();
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_ZOOM_CENTER:

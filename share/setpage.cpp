@@ -70,7 +70,8 @@ void WinEDA_DrawFrame::Process_PageSettings(wxCommandEvent& event)
 {
     WinEDA_SetPageFrame frame(this);
     frame.ShowModal();
-    ReDrawPanel();
+    if ( DrawPanel )
+        DrawPanel->Refresh();
 }
 
 /*!

@@ -20,7 +20,6 @@ OBJECTS = $(TARGET).o \
             memoire.o \
 			cvframe.o\
 			listboxes.o\
-			drawframe.o\
 			class_pcb_text.o\
 			class_cotation.o\
 			class_mire.o\
@@ -39,7 +38,6 @@ OBJECTS = $(TARGET).o \
 			autosel.o \
 			setvisu.o\
 			dialog_display_options.o\
-			zoom.o \
 			tracemod.o \
  			classpcb.o \
 			class_drawsegment.o \
@@ -152,9 +150,6 @@ menucfg.o: menucfg.cpp dialog_cvpcb_config.cpp dialog_cvpcb_config.h
 autosel.o: autosel.cpp
 
 setvisu.o: setvisu.cpp
-
-zoom.o: ../share/zoom.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 tracemod.o: ../pcbnew/tracemod.cpp ../include/gr_basic.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp

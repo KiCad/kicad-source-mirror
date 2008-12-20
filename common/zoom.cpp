@@ -215,7 +215,7 @@ void WinEDA_DrawPanel::Process_Popup_Zoom( wxCommandEvent& event )
 void WinEDA_DrawPanel::OnPopupGridSelect( wxCommandEvent& event )
 {
     GetScreen()->SetGrid( event.GetId() );
-    m_Parent->ReDrawPanel();
+    Refresh();
 }
 
 /*************************************************************/

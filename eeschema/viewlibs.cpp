@@ -63,21 +63,21 @@ wxPoint pos;
 			m_HToolBar->ToggleTool(ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, TRUE);
 			m_HToolBar->ToggleTool(ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, FALSE);
 			g_ViewConvert = 1;
-			ReDrawPanel();
+			DrawPanel->Refresh();
 			break;
 
 		case ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT:
 			m_HToolBar->ToggleTool(ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, FALSE);
 			m_HToolBar->ToggleTool(ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, TRUE);
 			g_ViewConvert = 2;
-			ReDrawPanel();
+			DrawPanel->Refresh();
 			break;
 
 		case ID_LIBVIEW_SELECT_PART_NUMBER:
 			ii = SelpartBox->GetChoice();
 			if ( ii < 0 ) return;
 			g_ViewUnit = ii + 1;
-			ReDrawPanel();
+			DrawPanel->Refresh();
 			break;
 
 		default:
@@ -143,7 +143,7 @@ LibraryStruct * Lib;
 		if ( m_LibList )
 		{
 			ReCreateListCmp();
-			ReDrawPanel();
+			DrawPanel->Refresh();
 			DisplayLibInfos();
 			ReCreateHToolbar();
 			int id = m_LibList->FindString(g_CurrentViewLibraryName.GetData());

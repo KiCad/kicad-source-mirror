@@ -61,7 +61,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		class_board.o\
 		class_zone.o\
         class_zone_setting.o\
-		drawframe.o\
 		track.o \
 		set_color.o \
 		set_grid.o \
@@ -77,7 +76,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		locate.o \
 		modules.o \
 		loadcmp.o \
-		zoom.o\
 		dialog_setup_libs.o \
 		dialog_general_options.o \
         dialog_orient_footprints.o\
@@ -135,9 +133,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 
 
 setpage.o: ../share/setpage.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
-drawframe.o: ../share/drawframe.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 menubarpcb.o: menubarpcb.cpp
@@ -214,9 +209,6 @@ autoplac.o: autoplac.cpp autorout.h
 automove.o: automove.cpp autorout.h
 
 loadcmp.o: loadcmp.cpp
-
-zoom.o: ../share/zoom.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 affiche.o: affiche.cpp
 

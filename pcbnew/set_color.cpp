@@ -398,7 +398,7 @@ void WinEDA_SetColorsFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
     UpdateLayerSettings();
-    m_Parent->ReDrawPanel();
+    m_Parent->DrawPanel->Refresh();
     EndModal( 1 );
 }
 
@@ -416,7 +416,7 @@ void  WinEDA_SetColorsFrame::OnApplyClick(wxCommandEvent& WXUNUSED(event))
 /*******************************************************************/
 {
     UpdateLayerSettings();
-    m_Parent->ReDrawPanel();
+    m_Parent->DrawPanel->Refresh();
 }
 
 
