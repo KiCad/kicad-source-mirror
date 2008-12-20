@@ -179,7 +179,7 @@ add_subdirectory(template)
 #================================================
 # Installation parameters
 #================================================
-install(FILES install.txt
+install(FILES INSTALL.txt
         DESTINATION ${KICAD_DOCS}
         COMPONENT resources)
 install(FILES freeroute.jnlp
