@@ -494,7 +494,7 @@ public:
     wxSize   m_Size;                    /* XY size of text */
     int      m_Width;                   /* text width */
     int      m_Orient;                  /* Orient in 0.1 degrees */
-    int      m_Miroir;                  // Display Normal / mirror
+    bool     m_Mirror;                 // Display Normal / mirror
     int      m_Attributs;               /* flags (visible...) */
     bool     m_Italic;                  /* true to simulate an italic font... */
     GRTextHorizJustifyType m_HJustify;  /* Horiz Justify */

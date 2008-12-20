@@ -8,7 +8,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ../polygon)
 
 set(GERBVIEW_SRCS
-    affiche.cpp
     block.cpp
     controle.cpp
     dcode.cpp

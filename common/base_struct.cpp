@@ -166,7 +166,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;     /* XY size of font */
     m_Orient    = 0;                                /* Orient in 0.1 degrees */
     m_Attributs = 0;
-    m_Miroir    = 0;                                // display mirror if 1
+    m_Mirror    = false;                            // display mirror if true
     m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
     m_Width  = 0;                                   /* thickness */
@@ -301,10 +301,13 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( aDisplayMode == SKETCH )
         width = -width;
+	wxSize size = m_Size;
+	if ( m_Mirror )
+		size.x = -size.x;
 
     DrawGraphicText( aPanel, aDC,
                      aOffset + m_Pos, aColor, m_Text,
-                     m_Orient, m_Size,
+                     m_Orient, size,
                      m_HJustify, m_VJustify, width, m_Italic );
 }
 

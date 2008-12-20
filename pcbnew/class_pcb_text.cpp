@@ -33,7 +33,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
 {
     m_Parent    = source->m_Parent;
     Pback       = Pnext = NULL;
-    m_Miroir    = source->m_Miroir;
+    m_Mirror    = source->m_Mirror;
     m_Size      = source->m_Size;
     m_Orient    = source->m_Orient;
     m_Pos       = source->m_Pos;
@@ -78,8 +78,12 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
         if( strncmp( Line, "De", 2 ) == 0 )
         {
 			style[0] = 0;
-            sscanf( Line + 2, " %d %d %lX %s\n", &m_Layer, &m_Miroir,
+			int normal_display = 1;
+            sscanf( Line + 2, " %d %d %lX %s\n", &m_Layer, &normal_display,
                     &m_TimeStamp, style );
+
+			m_Mirror = normal_display ? false : true;
+
             if( m_Layer < FIRST_COPPER_LAYER )
                 m_Layer = FIRST_COPPER_LAYER;
             if( m_Layer > LAST_NO_COPPER_LAYER )
@@ -116,7 +120,9 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
     fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( m_Text ) );
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
              m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Width, m_Orient );
-    fprintf( aFile, "De %d %d %lX %s\n", m_Layer, m_Miroir, m_TimeStamp, style );
+    fprintf( aFile, "De %d %d %lX %s\n", m_Layer,
+		m_Mirror ? 0 : 1,
+		m_TimeStamp, style );
 
     if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n")-1 )
         goto out;
@@ -177,7 +183,7 @@ void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
                          g_DesignSettings.m_LayerColor[m_Layer] & MASKCOLOR );
 
     Affiche_1_Parametre( frame, 36, _( "Mirror" ), wxEmptyString, GREEN );
-    if( m_Miroir & 1 )
+    if( ! m_Mirror )
         Affiche_1_Parametre( frame, -1, wxEmptyString, _( "No" ), DARKGREEN );
     else
         Affiche_1_Parametre( frame, -1, wxEmptyString, _( "Yes" ), DARKGREEN );

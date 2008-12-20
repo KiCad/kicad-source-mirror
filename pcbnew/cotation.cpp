@@ -114,7 +114,7 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
     m_Mirror = new wxRadioBox( this, -1, _( "Display" ),
                                wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
                                1, wxRA_SPECIFY_COLS );
-    if( !Cotation->m_Text->m_Miroir )
+    if( Cotation->m_Text->m_Mirror )
         m_Mirror->SetSelection( 1 );;
     RightBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
@@ -173,7 +173,7 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentCotation->m_Text->m_Size  = m_TxtSizeCtrl->GetValue();
     CurrentCotation->m_Text->m_Width = CurrentCotation->m_Width =
                                            m_TxtWidthCtrl->GetValue();
-    CurrentCotation->m_Text->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
+    CurrentCotation->m_Text->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
 
     CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
     CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
@@ -254,7 +254,6 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation->FlecheD2_ox = Cotation->FlecheD2_fx = pos.x;
         Cotation->FlecheD2_oy = Cotation->FlecheD2_fy = pos.y;
 
-        Cotation->m_Text->m_Miroir = 1;
         Cotation->m_Text->m_Size   = g_DesignSettings.m_PcbTextSize;
         Cotation->m_Text->m_Width  = g_DesignSettings.m_PcbTextWidth;
 

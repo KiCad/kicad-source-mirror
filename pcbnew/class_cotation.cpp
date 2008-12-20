@@ -120,12 +120,14 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
 
         if( Line[0] == 'P' )
         {
+			int normal_display = 1;
             sscanf( Line + 2, " %d %d %d %d %d %d %d",
                     &m_Text->m_Pos.x, &m_Text->m_Pos.y,
                     &m_Text->m_Size.x, &m_Text->m_Size.y,
                     &m_Text->m_Width, &m_Text->m_Orient,
-                    &m_Text->m_Miroir );
+                    &normal_display );
 
+			m_Text->m_Mirror = normal_display ? false : true;
             m_Pos = m_Text->m_Pos;
             continue;
         }
@@ -325,7 +327,7 @@ bool COTATION::Save( FILE* aFile ) const
              m_Text->m_Pos.x, m_Text->m_Pos.y,
              m_Text->m_Size.x, m_Text->m_Size.y,
              m_Text->m_Width, m_Text->m_Orient,
-             m_Text->m_Miroir );
+             m_Text->m_Mirror ? 0 : 1 );
 
     fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
              Barre_ox, Barre_oy,

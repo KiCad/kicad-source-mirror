@@ -51,7 +51,7 @@ void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
     EXCHG( m_Size, copyitem->m_Size );
     EXCHG( m_Width, copyitem->m_Width );
     EXCHG( m_Orient, copyitem->m_Orient );
-    EXCHG( m_Miroir, copyitem->m_Miroir );
+    EXCHG( m_Mirror, copyitem->m_Mirror );
     EXCHG( m_Attributs, copyitem->m_Attributs );
     EXCHG( m_Italic, copyitem->m_Italic );
     EXCHG( m_HJustify, copyitem->m_HJustify );

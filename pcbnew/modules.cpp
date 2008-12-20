@@ -421,7 +421,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
     pt_texte->m_Pos.y += Module->m_Pos.y;
     pt_texte->m_Pos0.y = pt_texte->m_Pos0.y;
-    pt_texte->m_Miroir = 1;
+    pt_texte->m_Miroir = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->SetLayer( Module->GetLayer() );
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
@@ -434,7 +434,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     if( (Module->GetLayer() == SILKSCREEN_N_CU)
        || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == COPPER_LAYER_N) )
-        pt_texte->m_Miroir = 0;
+        pt_texte->m_Miroir = true;
 
     /* Inversion miroir de la Valeur et mise en miroir : */
     pt_texte = Module->m_Value;
@@ -442,7 +442,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
     pt_texte->m_Pos.y += Module->m_Pos.y;
     pt_texte->m_Pos0.y = pt_texte->m_Pos0.y;
-    pt_texte->m_Miroir = 1;
+    pt_texte->m_Miroir = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->SetLayer( Module->GetLayer() );
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
@@ -455,7 +455,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     if( (Module->GetLayer() == SILKSCREEN_N_CU)
        || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == COPPER_LAYER_N) )
-        pt_texte->m_Miroir = 0;
+        pt_texte->m_Miroir = true;
 
     /* Inversion miroir des dessins de l'empreinte : */
     PtStruct = Module->m_Drawings;
@@ -489,7 +489,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
             pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
             pt_texte->m_Pos.y += Module->m_Pos.y;
             pt_texte->m_Pos0.y = pt_texte->m_Pos0.y;
-            pt_texte->m_Miroir = 1;
+            pt_texte->m_Miroir = false;
             NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
 
             pt_texte->SetLayer( Module->GetLayer() );
@@ -505,7 +505,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
                  || Module->GetLayer() == ADHESIVE_N_CU
                  || Module->GetLayer() == COPPER_LAYER_N )
             {
-                pt_texte->m_Miroir = 0;
+                pt_texte->m_Miroir = true;
             }
 
             break;

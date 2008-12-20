@@ -30,7 +30,6 @@ OBJECTS= \
 		set_color.o \
 		gerbview_config.o \
 		class_marker.o \
-		affiche.o \
 		tracepcb.o \
 		class_pcb_text.o\
 		trpiste.o \

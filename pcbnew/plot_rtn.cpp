@@ -563,7 +563,7 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
 /****************************************************************************/
 /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules */
 {
-    int     no_miroir, orient, thickness;
+    int     orient, thickness;
     wxPoint pos;
     wxSize  size;
 
@@ -576,10 +576,9 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
     size      = pt_texte->m_Size;
     pos       = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
-    no_miroir = pt_texte->m_Miroir & 1;
     thickness = pt_texte->m_Width;
 
-    if( no_miroir == FALSE )
+    if( pt_texte->m_Mirror )
         size.x = -size.x;
 
     Plot_1_texte( format_plot, pt_texte->m_Text, orient,

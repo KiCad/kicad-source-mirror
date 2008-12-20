@@ -891,7 +891,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             INVERT_ANGLE( STRUCT->m_Orient );
             if( (STRUCT->GetLayer() == COPPER_LAYER_N) || (STRUCT->GetLayer() == CMP_N) )
             {
-                STRUCT->m_Miroir ^= 1;      /* inverse miroir */
+                STRUCT->m_Mirror = not STRUCT->m_Mirror;      /* inverse miroir */
             }
             STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
             break;

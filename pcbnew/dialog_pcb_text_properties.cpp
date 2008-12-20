@@ -166,7 +166,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
     m_Mirror = new wxRadioBox( this, -1, _( "Display" ),
                                wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
                                1, wxRA_SPECIFY_COLS );
-    if( !TextPCB->m_Miroir )
+    if( TextPCB->m_Mirror )
         m_Mirror->SetSelection( 1 );
     MiddleBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
@@ -227,7 +227,7 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     if ( CurrentTextPCB->m_Width > max_tickness)
         CurrentTextPCB->m_Width = max_tickness;
 
-    CurrentTextPCB->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
+    CurrentTextPCB->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;
     CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
 	CurrentTextPCB->m_Italic = m_Style->GetSelection() ? 1 : 0;

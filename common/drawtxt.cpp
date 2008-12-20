@@ -61,6 +61,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     int            ox, oy;              // Draw coordinates for the current char
     int            coord[100];          // Buffer coordinate used to draw polylines (char shapes)
     bool           sketch_mode = false;
+	bool			italic_reverse = false;		// true for mirrored texts with m_Size.x < 0
 
     if ( aPanel )
         zoom = aPanel->GetZoom();
@@ -76,6 +77,8 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
         sketch_mode = TRUE;
     }
     int thickness = aWidth;
+	if ( aSize.x < 0 )		// text is mirrored using size.x < 0 (mirror / Y axis)
+		italic_reverse = true;
 
     kk = 0;
     ptr = 0;   /* ptr = text index */
@@ -289,7 +292,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
                     k2    = (k2 * size_h) / 9;
                     // To simulate an italic font, add a x offset depending on the y offset
                     if ( aItalic )
-                        k2 -= k1/8;
+                        k2 -= italic_reverse ? - k1/8 : k1/8;
                     dx    = k2 + ox; dy = k1 + oy;
 
                     RotatePoint( &dx, &dy, cX, cY, aOrient );
