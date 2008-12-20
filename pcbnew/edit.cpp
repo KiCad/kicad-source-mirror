@@ -784,8 +784,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
-        InstallTextPCBOptionsFrame( (TEXTE_PCB*) GetCurItem(),
-                                   &dc, pos );
+        InstallTextPCBOptionsFrame( (TEXTE_PCB*) GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
         break;
 

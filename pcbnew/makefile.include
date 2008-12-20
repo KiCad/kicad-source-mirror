@@ -30,6 +30,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		block_module_editor.o\
         dialog_pad_properties.o\
         dialog_pad_properties_base.o\
+        dialog_pcb_text_properties.o\
 		onrightclick.o\
 		onleftclick.o\
 		modedit_onclick.o\
@@ -72,7 +73,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		tracemod.o \
 		trpiste.o \
 		surbrill.o \
-		pcbtexte.o \
+		edit_pcb_text.o \
 		locate.o \
 		modules.o \
 		loadcmp.o \
@@ -198,7 +199,7 @@ trpiste.o: trpiste.cpp
 
 surbrill.o: surbrill.cpp
 
-pcbtexte.o: pcbtexte.cpp
+edit_pcb_text.o: edit_pcb_text.cpp
 
 locate.o: locate.cpp
 

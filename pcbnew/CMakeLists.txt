@@ -56,6 +56,7 @@ set(PCBNEW_SRCS
 #   dialog_graphic_items_options.cpp
 #   dialog_initpcb.cpp
 #   dialog_netlist.cpp
+    dialog_pcb_text_properties.cpp
     zones_non_copper_type_functions.cpp
     dialog_non_copper_zones_properties_base.cpp
     dialog_pad_properties.cpp
@@ -74,6 +75,7 @@ set(PCBNEW_SRCS
     editmod.cpp
     editrack.cpp
     editrack-part2.cpp
+	edit_pcb_text.cpp
     edit_track_width.cpp
     edtxtmod.cpp
     export_gencad.cpp
@@ -114,7 +116,6 @@ set(PCBNEW_SRCS
     pcbframe.cpp
     pcbnew.cpp
     pcbplot.cpp
-    pcbtexte.cpp
     plotgerb.cpp
     plothpgl.cpp
     plotps.cpp

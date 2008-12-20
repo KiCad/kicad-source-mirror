@@ -26,6 +26,8 @@ void DialogLabelEditor::OnInitDialog( wxInitDialogEvent& event )
 {
 wxString msg;
 
+	SetFont(*g_DialogFont);
+
     m_TextLabel->SetValue(m_CurrentText->m_Text);
     m_TextLabel->SetFocus();
 
@@ -64,9 +66,7 @@ wxString msg;
 
     msg = ReturnStringFromValue(g_UnitMetric, m_CurrentText->m_Size.x, m_Parent->m_InternalUnits);
     m_TextSize->SetValue(msg);
-    
-    SetFocus();
-    
+
     if (m_CurrentText->Type() != TYPE_SCH_GLOBALLABEL  &&
         m_CurrentText->Type() != TYPE_SCH_HIERLABEL)
         m_TextShape->Show(false);

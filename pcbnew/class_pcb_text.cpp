@@ -1,6 +1,6 @@
-/************************************/
-/* fonctions de la classe TEXTE_PCB */
-/************************************/
+/*********************************************************/
+/* class TEXTE_PCB : texts on copper or technical layers */
+/*********************************************************/
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -40,7 +40,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Layer     = source->m_Layer;
     m_Width     = source->m_Width;
     m_Attributs = source->m_Attributs;
-    m_Italic  = source->m_Italic;
+    m_Italic    = source->m_Italic;
     m_HJustify  = source->m_HJustify;
     m_VJustify  = source->m_VJustify;
 
@@ -53,7 +53,7 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
 /****************************************************************/
 {
     char text[1024], Line[1024];
-    int  dummy;
+    char  style[256];
 
     while( GetLine( File, Line, LineNum ) != NULL )
     {
@@ -77,13 +77,18 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
         }
         if( strncmp( Line, "De", 2 ) == 0 )
         {
-            sscanf( Line + 2, " %d %d %lX %d\n", &m_Layer, &m_Miroir,
-                    &m_TimeStamp, &dummy );
+			style[0] = 0;
+            sscanf( Line + 2, " %d %d %lX %s\n", &m_Layer, &m_Miroir,
+                    &m_TimeStamp, style );
             if( m_Layer < FIRST_COPPER_LAYER )
                 m_Layer = FIRST_COPPER_LAYER;
             if( m_Layer > LAST_NO_COPPER_LAYER )
                 m_Layer = LAST_NO_COPPER_LAYER;
 
+			if ( strnicmp( style, "Italic", 6) == 0 )
+				m_Italic = 1;
+			else
+				m_Italic = 0;
             continue;
         }
     }
@@ -92,7 +97,9 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
 }
 
 
+/*****************************************/
 bool TEXTE_PCB::Save( FILE* aFile ) const
+/*****************************************/
 {
     if( GetState( DELETED ) )
         return true;
@@ -101,6 +108,7 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
         return true;
 
     bool rc = false;
+	const char * style = m_Italic ? "Italic" : "Normal";
 
     if( fprintf( aFile, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n")-1 )
         goto out;
@@ -108,7 +116,7 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
     fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( m_Text ) );
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
              m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Width, m_Orient );
-    fprintf( aFile, "De %d %d %lX %d\n", m_Layer, m_Miroir, m_TimeStamp, 0 );
+    fprintf( aFile, "De %d %d %lX %s\n", m_Layer, m_Miroir, m_TimeStamp, style );
 
     if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n")-1 )
         goto out;

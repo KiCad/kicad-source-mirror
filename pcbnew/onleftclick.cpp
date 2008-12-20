@@ -372,8 +372,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_TEXTE:
-            InstallTextPCBOptionsFrame( (TEXTE_PCB*) DrawStruct,
-                                       DC, ( (TEXTE_PCB*) DrawStruct )->m_Pos );
+            InstallTextPCBOptionsFrame( (TEXTE_PCB*) DrawStruct, DC );
             DrawPanel->MouseToCursorSchema();
             break;
 

@@ -1,24 +1,12 @@
-/**************************************************/
-/* traitement des editions des textes sur modules */
-/**************************************************/
+/***************************************************************************/
+/* Dialog editor for text on copper and technical layers (TEXTE_PCB class) */
+/***************************************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
-
-#include "protos.h"
-
-#define L_MIN_DESSIN 1 /* seuil de largeur des segments pour trace autre que filaire */
-
-/* Routines Locales */
-static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Exit_Texte_Pcb( WinEDA_DrawPanel* Panel, wxDC* DC );
-
-/* Variables locales : */
-static wxPoint old_pos; // position originelle du texte selecte
-
 
 enum id_TextPCB_properties {
     ID_TEXTPCB_SELECT_LAYER = 1900
@@ -41,13 +29,14 @@ private:
     WinEDA_ValueCtrl*    m_TxtWidthCtlr;
     wxRadioBox*          m_Orient;
     wxRadioBox*          m_Mirror;
+    wxRadioBox*          m_Style;
     WinEDAChoiceBox*     m_SelLayerBox;
 
 public:
 
     // Constructor and destructor
     WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* parent,
-                                   TEXTE_PCB* TextPCB, wxDC* DC, const wxPoint& pos );
+                                   TEXTE_PCB* TextPCB, wxDC* DC );
     ~WinEDA_TextPCBPropertiesFrame()
     {
     }
@@ -66,14 +55,12 @@ EVT_BUTTON( wxID_CANCEL, WinEDA_TextPCBPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
-/********************************************************************/
-void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB,
-                                                  wxDC* DC, const wxPoint& pos )
-/********************************************************************/
+/******************************************************************************/
+void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
+/*******************************************************************************/
 {
     DrawPanel->m_IgnoreMouseEvents = TRUE;
-    WinEDA_TextPCBPropertiesFrame* frame = new WinEDA_TextPCBPropertiesFrame( this,
-                                                                              TextPCB, DC, pos );
+    WinEDA_TextPCBPropertiesFrame* frame = new WinEDA_TextPCBPropertiesFrame( this, TextPCB, DC );
     frame->ShowModal();
     frame->Destroy();
     DrawPanel->MouseToCursorSchema();
@@ -83,17 +70,14 @@ void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB,
 
 /************************************************************************************/
 WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* parent,
-                                                              TEXTE_PCB* TextPCB, wxDC* DC,
-                                                              const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "TextPCB properties" ), framepos, wxSize( 390, 340 ),
-              DIALOG_STYLE )
+                                                              TEXTE_PCB* TextPCB, wxDC* DC ) :
+    wxDialog( parent, -1, _( "TextPCB properties" ), wxDefaultPosition, wxSize( 390, 340 ) )
 /************************************************************************************/
 {
     wxButton*   Button;
     BOARD*      board = parent->m_Pcb;
 
     m_Parent = parent;
-
 
     SetFont( *g_DialogFont );
     m_DC = DC;
@@ -109,6 +93,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
     MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
     MainBoxSizer->Add( MiddleBoxSizer, 0, wxGROW | wxALL, 5 );
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+
 
     /* Creation des boutons de commande */
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
@@ -185,6 +170,16 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
         m_Mirror->SetSelection( 1 );
     MiddleBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
+	int style = 0;
+	if (CurrentTextPCB->m_Italic )
+		style = 1;
+    wxString style_msg[] = { _( "Normal" ), _( "Italic" ) };
+    m_Style = new wxRadioBox( this, -1, _( "Style" ),
+                               wxDefaultPosition, wxSize( -1, -1 ), 2, style_msg,
+                               1, wxRA_SPECIFY_COLS );
+	m_Style->SetSelection(style);
+    MiddleBoxSizer->Add( m_Style, 0, wxGROW | wxALL, 5 );
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
@@ -213,7 +208,7 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     if ( newsize.y > TEXTS_MAX_WIDTH )
         newsize.y = TEXTS_MAX_WIDTH;
 
-    if( m_DC )     // Effacement ancien texte
+    if( m_DC )     // Erase old text on screen
     {
         CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
@@ -227,187 +222,21 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
 
     CurrentTextPCB->m_Width  = m_TxtWidthCtlr->GetValue();
     // test for acceptable values for parameters:
-    if ( CurrentTextPCB->m_Width > TEXTS_MAX_WIDTH)
-        CurrentTextPCB->m_Width = TEXTS_MAX_WIDTH;
+	int max_tickness = min( CurrentTextPCB->m_Size.x, CurrentTextPCB->m_Size.y);
+	max_tickness /= 4;
+    if ( CurrentTextPCB->m_Width > max_tickness)
+        CurrentTextPCB->m_Width = max_tickness;
 
     CurrentTextPCB->m_Miroir = (m_Mirror->GetSelection() == 0) ? 1 : 0;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;
     CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
+	CurrentTextPCB->m_Italic = m_Style->GetSelection() ? 1 : 0;
 
-    if( m_DC )     // Affichage nouveau texte
+    if( m_DC )     // Displya new text
     {
-        /* Redessin du Texte */
-        CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+       CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
     m_Parent->GetScreen()->SetModify();
     EndModal( 1 );
 }
 
-
-/******************************************************/
-void Exit_Texte_Pcb( WinEDA_DrawPanel* Panel, wxDC* DC )
-/*******************************************************/
-
-/*
- *  Routine de sortie du menu edit texte Pcb
- *  Si un texte est selectionne, ses coord initiales sont regenerees
- */
-{
-    TEXTE_PCB* TextePcb;
-
-    TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
-
-    if( TextePcb )
-    {
-        TextePcb->Draw( Panel, DC, GR_XOR );
-        TextePcb->m_Pos = old_pos;
-        TextePcb->Draw( Panel, DC, GR_OR );
-        TextePcb->m_Flags = 0;
-    }
-
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
-    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem( NULL );
-}
-
-
-/*********************************************************************/
-void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
-/*********************************************************************/
-
-/*
- *  Routine de placement du texte en cours de deplacement
- */
-{
-    if( TextePcb == NULL )
-        return;
-
-    TextePcb->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
-    SetCurItem( NULL );
-    GetScreen()->SetModify();
-    TextePcb->m_Flags = 0;
-}
-
-
-/***********************************************************************/
-void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
-/***********************************************************************/
-
-/* Routine de preparation du deplacement d'un texte
- */
-{
-    if( TextePcb == NULL )
-        return;
-    old_pos = TextePcb->m_Pos;
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
-    TextePcb->m_Flags |= IS_MOVED;
-    TextePcb->Display_Infos( this );
-    DrawPanel->ManageCurseur = Move_Texte_Pcb;
-    DrawPanel->ForceCloseManageCurseur = Exit_Texte_Pcb;
-    SetCurItem( TextePcb );
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-}
-
-
-/*************************************************************************/
-static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
-/*************************************************************************/
-/* Routine deplacant le texte PCB suivant le curseur de la souris */
-{
-    TEXTE_PCB* TextePcb = (TEXTE_PCB*) panel->GetScreen()->GetCurItem();
-
-    if( TextePcb == NULL )
-        return;
-
-    /* effacement du texte : */
-
-    if( erase )
-        TextePcb->Draw( panel, DC, GR_XOR );
-
-    TextePcb->m_Pos = panel->GetScreen()->m_Curseur;
-
-    /* Redessin du Texte */
-    TextePcb->Draw( panel, DC, GR_XOR );
-}
-
-
-/**********************************************************************/
-void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
-/**********************************************************************/
-{
-    if( TextePcb == NULL )
-        return;
-
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
-
-    /* Suppression du texte en Memoire*/
-    TextePcb ->DeleteStructure();
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
-    SetCurItem( NULL );
-}
-
-
-/*******************************************************/
-TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
-/*******************************************************/
-{
-    TEXTE_PCB* TextePcb;
-
-    TextePcb = new TEXTE_PCB( m_Pcb );
-
-    /* Chainage de la nouvelle structure en debut de liste */
-    m_Pcb->Add( TextePcb );
-
-    /* Mise a jour des caracteristiques */
-    TextePcb->m_Flags  = IS_NEW;
-    TextePcb->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
-    TextePcb->m_Miroir = 1;
-    if( TextePcb->GetLayer() == COPPER_LAYER_N )
-        TextePcb->m_Miroir = 0;
-
-    TextePcb->m_Size  = g_DesignSettings.m_PcbTextSize;
-    TextePcb->m_Pos   = GetScreen()->m_Curseur;
-    TextePcb->m_Width = g_DesignSettings.m_PcbTextWidth;
-
-    InstallTextPCBOptionsFrame( TextePcb, DC, TextePcb->m_Pos );
-    if( TextePcb->m_Text.IsEmpty() )
-    {
-        TextePcb ->DeleteStructure();
-        TextePcb = NULL;
-    }
-    else
-        StartMoveTextePcb( TextePcb, DC );
-
-    return TextePcb;
-}
-
-
-/***********************************************************************/
-void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
-/***********************************************************************/
-{
-    int angle    = 900;
-    int drawmode = GR_XOR;
-
-    if( TextePcb == NULL )
-        return;
-
-    /* effacement du texte : */
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
-
-
-    TextePcb->m_Orient += angle;
-    if( TextePcb->m_Orient >= 3600 )
-        TextePcb->m_Orient -= 3600;
-    if( TextePcb->m_Orient < 0 )
-        TextePcb->m_Orient += 3600;
-
-    /* Redessin du Texte */
-    TextePcb->Draw( DrawPanel, DC, drawmode );
-    TextePcb->Display_Infos( this );
-
-    GetScreen()->SetModify();
-}
