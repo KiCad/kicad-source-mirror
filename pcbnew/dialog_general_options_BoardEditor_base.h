@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_generaloptions_BoardEditor_base__
-#define __dialog_generaloptions_BoardEditor_base__
+#ifndef __dialog_general_options_BoardEditor_base__
+#define __dialog_general_options_BoardEditor_base__
 
 #include <wx/intl.h>
 
@@ -78,9 +78,9 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 		
 	
 	public:
-		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,272 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,280 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogGeneralOptionsBoardEditor_base();
 	
 };
 
-#endif //__dialog_generaloptions_BoardEditor_base__
+#endif //__dialog_general_options_BoardEditor_base__

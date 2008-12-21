@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-20 14:10+0100\n"
-"PO-Revision-Date: 2008-12-20 14:11+0100\n"
+"POT-Creation-Date: 2008-12-21 17:50+0100\n"
+"PO-Revision-Date: 2008-12-21 17:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -745,44 +745,44 @@ msgstr "Effacement des Modules?"
 msgid "Delete Pcb Texts"
 msgstr "Effacer Textes Pcb"
 
-#: pcbnew/class_pcb_text.cpp:163
+#: pcbnew/class_pcb_text.cpp:177
 msgid "COTATION"
 msgstr "COTATION"
 
-#: pcbnew/class_pcb_text.cpp:165
+#: pcbnew/class_pcb_text.cpp:179
 msgid "PCB Text"
 msgstr "Texte Pcb"
 
-#: pcbnew/class_pcb_text.cpp:167
+#: pcbnew/class_pcb_text.cpp:181
 msgid "Layer"
 msgstr "Couche"
 
-#: pcbnew/class_pcb_text.cpp:171
+#: pcbnew/class_pcb_text.cpp:185
 msgid "Mirror"
 msgstr "Miroir"
 
-#: pcbnew/class_pcb_text.cpp:173
+#: pcbnew/class_pcb_text.cpp:187
 msgid "No"
 msgstr "Non"
 
-#: pcbnew/class_pcb_text.cpp:175
+#: pcbnew/class_pcb_text.cpp:189
 msgid "Yes"
 msgstr "Oui"
 
-#: pcbnew/class_pcb_text.cpp:178
+#: pcbnew/class_pcb_text.cpp:192
 msgid "Orient"
 msgstr "Orient"
 
-#: pcbnew/class_pcb_text.cpp:181
+#: pcbnew/class_pcb_text.cpp:195
 #: pcbnew/class_edge_mod.cpp:271
 msgid "Width"
 msgstr "Epaisseur"
 
-#: pcbnew/class_pcb_text.cpp:184
+#: pcbnew/class_pcb_text.cpp:198
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_pcb_text.cpp:187
+#: pcbnew/class_pcb_text.cpp:201
 msgid "V Size"
 msgstr "Taille V"
 
@@ -1631,80 +1631,6 @@ msgstr "Segment en cours d'édition"
 msgid "Delete Layer "
 msgstr "Effacer Couche"
 
-#: pcbnew/dialog_display_options.cpp:186
-msgid "Tracks and vias"
-msgstr "Pistes et vias"
-
-#: pcbnew/dialog_display_options.cpp:193
-msgid "Tracks:"
-msgstr "Pistes:"
-
-#: pcbnew/dialog_display_options.cpp:198
-#: pcbnew/dialog_display_options.cpp:208
-msgid "Always"
-msgstr "Toujours"
-
-#: pcbnew/dialog_display_options.cpp:199
-msgid "New track"
-msgstr "Nouvelle piste"
-
-#: pcbnew/dialog_display_options.cpp:200
-#: pcbnew/dialog_display_options.cpp:206
-msgid "Never"
-msgstr "Jamais"
-
-#: pcbnew/dialog_display_options.cpp:201
-msgid "Show Track Clearance"
-msgstr "Montrer Isolation Piste"
-
-#: pcbnew/dialog_display_options.cpp:207
-msgid "defined holes"
-msgstr "Trous définis"
-
-#: pcbnew/dialog_display_options.cpp:209
-msgid "Show Via Holes"
-msgstr "Montrer trous pour vias"
-
-#: pcbnew/dialog_display_options.cpp:213
-msgid "Modules"
-msgstr "Modules"
-
-#: pcbnew/dialog_display_options.cpp:224
-msgid "Module Texts"
-msgstr "Texte module"
-
-#: pcbnew/dialog_display_options.cpp:232
-msgid "Module Edges:"
-msgstr "Contours modules:"
-
-#: pcbnew/dialog_display_options.cpp:239
-msgid "Pad Options:"
-msgstr "Options Pads:"
-
-#: pcbnew/dialog_display_options.cpp:246
-msgid "Pad Shapes:"
-msgstr "Forme Pads:"
-
-#: pcbnew/dialog_display_options.cpp:250
-msgid "Show Pad Clearance"
-msgstr "Montrer Isolation"
-
-#: pcbnew/dialog_display_options.cpp:254
-msgid "Show Pad Number"
-msgstr "Afficher le n° de pad"
-
-#: pcbnew/dialog_display_options.cpp:258
-msgid "Show Pad NoConnect"
-msgstr "Montrer non conn"
-
-#: pcbnew/dialog_display_options.cpp:269
-msgid "Display other items:"
-msgstr "Afficher autres éléments"
-
-#: pcbnew/dialog_display_options.cpp:276
-msgid "Show page limits"
-msgstr " Afficher limites de page"
-
 #: pcbnew/class_module.cpp:922
 msgid "Last Change"
 msgstr "Last Change"
@@ -2184,37 +2110,6 @@ msgstr "Impossible de créer le fichier "
 msgid "Drill Report file"
 msgstr "Fichier rapport de perçage:"
 
-#: pcbnew/pcbtexte.cpp:88
-msgid "TextPCB properties"
-msgstr "Propriétés des textes PCB"
-
-#: pcbnew/pcbtexte.cpp:123
-msgid "Text:"
-msgstr "Texte:"
-
-#: pcbnew/pcbtexte.cpp:129
-#: pcbnew/cotation.cpp:125
-msgid "Size"
-msgstr "Taille "
-
-#: pcbnew/pcbtexte.cpp:137
-msgid "Position"
-msgstr "Position"
-
-#: pcbnew/pcbtexte.cpp:156
-msgid "Orientation"
-msgstr "Orientation"
-
-#: pcbnew/pcbtexte.cpp:180
-#: pcbnew/cotation.cpp:113
-msgid "Normal"
-msgstr "Normal"
-
-#: pcbnew/pcbtexte.cpp:181
-#: pcbnew/cotation.cpp:114
-msgid "Display"
-msgstr "Affichage"
-
 #: pcbnew/plotgerb.cpp:73
 msgid "unable to create file "
 msgstr "Impossible de créer  fichier "
@@ -2543,6 +2438,18 @@ msgstr "+/- pour commuter"
 #: pcbnew/cotation.cpp:85
 msgid "Dimension properties"
 msgstr "Propriétés des Cotes"
+
+#: pcbnew/cotation.cpp:113
+msgid "Normal"
+msgstr "Normal"
+
+#: pcbnew/cotation.cpp:114
+msgid "Display"
+msgstr "Affichage"
+
+#: pcbnew/cotation.cpp:125
+msgid "Size"
+msgstr "Taille "
 
 #: pcbnew/cotation.cpp:133
 msgid "Layer:"
@@ -3487,6 +3394,10 @@ msgstr "horiz"
 msgid "vertical"
 msgstr "Vertical"
 
+#: pcbnew/dialog_edit_mod_text.cpp:282
+msgid "Orientation"
+msgstr "Orientation"
+
 #: pcbnew/dialog_edit_mod_text.cpp:287
 msgid "show"
 msgstr "Visible"
@@ -3498,6 +3409,10 @@ msgstr "Invisible"
 #: pcbnew/dialog_edit_mod_text.cpp:382
 msgid "Value:"
 msgstr "Valeur:"
+
+#: pcbnew/dialog_edit_mod_text.cpp:384
+msgid "Text:"
+msgstr "Texte:"
 
 #: pcbnew/muwave_command.cpp:50
 msgid "Add Line"
@@ -4063,7 +3978,6 @@ msgid "Pen Number"
 msgstr "Numéro de plume"
 
 #: pcbnew/dialog_gendrill.cpp:239
-#: pcbnew/dialog_general_options.cpp:385
 msgid "Options:"
 msgstr "Options :"
 
@@ -4273,99 +4187,6 @@ msgstr "Larg. piste: %s  Diam Vias : %s"
 msgid "Drc error, cancelled"
 msgstr "Erreur DRC, annulation"
 
-#: pcbnew/dialog_general_options.cpp:297
-msgid "No Display"
-msgstr "Pas d'affichage"
-
-#: pcbnew/dialog_general_options.cpp:300
-msgid "Display Polar Coord"
-msgstr "Affichage coord Polaires"
-
-#: pcbnew/dialog_general_options.cpp:309
-msgid "millimeters"
-msgstr "millimètres"
-
-#: pcbnew/dialog_general_options.cpp:311
-msgid "Units"
-msgstr "Unités"
-
-#: pcbnew/dialog_general_options.cpp:318
-msgid "Small"
-msgstr "Petit"
-
-#: pcbnew/dialog_general_options.cpp:319
-msgid "Big"
-msgstr "Grand"
-
-#: pcbnew/dialog_general_options.cpp:321
-msgid "Cursor"
-msgstr "Curseur"
-
-#: pcbnew/dialog_general_options.cpp:333
-msgid "Number of Layers:"
-msgstr "Nombre de Couches:"
-
-#: pcbnew/dialog_general_options.cpp:349
-msgid "Max Links:"
-msgstr "Liens max:"
-
-#: pcbnew/dialog_general_options.cpp:365
-msgid "Auto Save (minuts):"
-msgstr "Sauveg. Auto (min)"
-
-#: pcbnew/dialog_general_options.cpp:394
-msgid "Drc ON"
-msgstr "Drc ACTIVE"
-
-#: pcbnew/dialog_general_options.cpp:403
-msgid "Show Ratsnest"
-msgstr "Montrer le chevelu général"
-
-#: pcbnew/dialog_general_options.cpp:410
-msgid "Show Mod Ratsnest"
-msgstr "Montrer le chevelu du module"
-
-#: pcbnew/dialog_general_options.cpp:417
-msgid "Tracks Auto Del"
-msgstr "Auto Supp. Pistes"
-
-#: pcbnew/dialog_general_options.cpp:424
-msgid "Track only 45 degrees"
-msgstr "Piste à 45° seulement"
-
-#: pcbnew/dialog_general_options.cpp:431
-msgid "Segments 45 Only"
-msgstr "Segments 45 seulement"
-
-#: pcbnew/dialog_general_options.cpp:438
-msgid "Auto PAN"
-msgstr "Auto PAN"
-
-#: pcbnew/dialog_general_options.cpp:446
-msgid "Double Segm Track"
-msgstr "2 segments pour piste"
-
-#: pcbnew/dialog_general_options.cpp:459
-#: pcbnew/dialog_general_options.cpp:474
-msgid "When creating tracks"
-msgstr "En creation de pistes"
-
-#: pcbnew/dialog_general_options.cpp:462
-msgid "Magnetic Pads"
-msgstr " Pads magnétiques"
-
-#: pcbnew/dialog_general_options.cpp:469
-msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
-msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur un pad"
-
-#: pcbnew/dialog_general_options.cpp:477
-msgid "Magnetic Tracks"
-msgstr "Pistes Magnétiques"
-
-#: pcbnew/dialog_general_options.cpp:484
-msgid "control the capture of the pcb cursor when the mouse cursor enters a track"
-msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur une piste"
-
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:28
 msgid "Hatched Outline"
 msgstr "Contour Hachuré"
@@ -4379,7 +4200,6 @@ msgid "Outlines Appearence"
 msgstr "Aspect des Contours"
 
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:34
-#: pcbnew/dialog_copper_zones_base.cpp:101
 msgid "Any"
 msgstr "Tout"
 
@@ -4861,6 +4681,84 @@ msgstr "Couche dessin"
 msgid "No pads or starting point found to fill this zone outline"
 msgstr "Pas de pads ou de points de départ pour remplir ce contour de zone"
 
+#: pcbnew/dialog_display_options_base.cpp:20
+msgid "Tracks and vias:"
+msgstr "Pistes et vias:"
+
+#: pcbnew/dialog_display_options_base.cpp:24
+msgid "Tracks:"
+msgstr "Pistes:"
+
+#: pcbnew/dialog_display_options_base.cpp:28
+#: pcbnew/dialog_display_options_base.cpp:34
+msgid "Always"
+msgstr "Toujours"
+
+#: pcbnew/dialog_display_options_base.cpp:28
+msgid "New track"
+msgstr "Nouvelle piste"
+
+#: pcbnew/dialog_display_options_base.cpp:28
+#: pcbnew/dialog_display_options_base.cpp:34
+msgid "Never"
+msgstr "Jamais"
+
+#: pcbnew/dialog_display_options_base.cpp:30
+msgid "Show Tracks Clearance:"
+msgstr "Montrer Isolation Piste:"
+
+#: pcbnew/dialog_display_options_base.cpp:34
+msgid "defined holes"
+msgstr "Trous définis"
+
+#: pcbnew/dialog_display_options_base.cpp:36
+msgid "Show Via Holes:"
+msgstr "Montrer trous des vias:"
+
+#: pcbnew/dialog_display_options_base.cpp:43
+msgid "Footprints:"
+msgstr "Modules:"
+
+#: pcbnew/dialog_display_options_base.cpp:50
+msgid "Module Edges:"
+msgstr "Contours modules:"
+
+#: pcbnew/dialog_display_options_base.cpp:56
+msgid "Texts:"
+msgstr "Textes:"
+
+#: pcbnew/dialog_display_options_base.cpp:63
+msgid "Pad Options:"
+msgstr "Options Pads:"
+
+#: pcbnew/dialog_display_options_base.cpp:67
+msgid "Pad Shapes:"
+msgstr "Forme Pads:"
+
+#: pcbnew/dialog_display_options_base.cpp:71
+msgid "Show Pad Clearance"
+msgstr "Montrer Isolation"
+
+#: pcbnew/dialog_display_options_base.cpp:75
+msgid "Show Pad Number"
+msgstr "Afficher le n° de pad"
+
+#: pcbnew/dialog_display_options_base.cpp:80
+msgid "Show Pad NoConnect"
+msgstr "Montrer non conn"
+
+#: pcbnew/dialog_display_options_base.cpp:93
+msgid "Others:"
+msgstr "Autres:"
+
+#: pcbnew/dialog_display_options_base.cpp:97
+msgid "Display other items:"
+msgstr "Afficher autres éléments"
+
+#: pcbnew/dialog_display_options_base.cpp:103
+msgid "Show page limits"
+msgstr " Afficher limites de page"
+
 #: pcbnew/dialog_edit_module.cpp:40
 msgid "Module properties"
 msgstr "Propriétés du Module"
@@ -4886,6 +4784,11 @@ msgstr "Y"
 #: pcbnew/dialog_edit_module.cpp:187
 msgid "Change module(s)"
 msgstr "Change module(s)"
+
+#: pcbnew/dialog_edit_module.cpp:195
+#: pcbnew/dialog_pcb_text_properties.cpp:122
+msgid "Position"
+msgstr "Position"
 
 #: pcbnew/dialog_edit_module.cpp:220
 msgid "Doc"
@@ -5020,6 +4923,18 @@ msgstr "Référence ou Valeur ne peut etre effacée"
 msgid "Delete [%s]"
 msgstr "Supprimer [%s]"
 
+#: pcbnew/dialog_pcb_text_properties.cpp:74
+msgid "TextPCB properties"
+msgstr "Propriétés des textes PCB"
+
+#: pcbnew/dialog_pcb_text_properties.cpp:176
+msgid "Italic"
+msgstr "Italique"
+
+#: pcbnew/dialog_pcb_text_properties.cpp:177
+msgid "Style"
+msgstr "Style"
+
 #: pcbnew/class_track.cpp:912
 msgid "Flags"
 msgstr "Flags"
@@ -5027,6 +4942,189 @@ msgstr "Flags"
 #: pcbnew/class_track.cpp:949
 msgid "Diam"
 msgstr "Diam"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:22
+msgid "No Display"
+msgstr "Pas d'affichage"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:24
+msgid "Display Polar Coord"
+msgstr "Affichage coord Polaires"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:26
+msgid ""
+"Activates the display of relative coordinates from relative origin (set by the space key)\n"
+"to the cursor, in polar coordinates (angle and distance)"
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:32
+msgid "Units"
+msgstr "Unités"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:34
+msgid "Selection of units used to display dimensions and positions of items"
+msgstr "Sélection des unités pour afficher les dimensions et positions des items"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
+msgid "Smass cross"
+msgstr "Petite crois"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
+msgid "Full screen cursor"
+msgstr "Curseur plein écran"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:40
+msgid "Cursor"
+msgstr "Curseur"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:42
+msgid "Main cursor shape selection (small cross or large cursor)"
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "1"
+msgstr "1"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "2"
+msgstr "2"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "4"
+msgstr "4"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "6"
+msgstr "6"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "8"
+msgstr "8"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "10"
+msgstr "10"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "12"
+msgstr "12"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "14"
+msgstr "14"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
+msgid "16"
+msgstr "16"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:55
+msgid "Active copper layers count selection"
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:59
+msgid "Max Links:"
+msgstr "Liens max:"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:64
+msgid "Adjust the number of ratsnets shown from cursor to closest pads"
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:68
+msgid "Auto Save (minuts):"
+msgstr "Sauveg. Auto (min)"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:73
+msgid "Delay after the first change to create a backup file of the board on disk."
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:82
+msgid "Drc ON"
+msgstr "Drc ACTIVE"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:85
+msgid ""
+"Enable/disable the DRC control.\n"
+"When DRC is disable, all connections are allowed."
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:89
+msgid "Show Ratsnest"
+msgstr "Montrer le chevelu général"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:91
+msgid "Show (or not) the full rastnest."
+msgstr "Montrer(ou not)  le chevelu complet"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:95
+msgid "Show Mod Ratsnest"
+msgstr "Montrer le chevelu du module"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:97
+msgid ""
+"Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
+"This ratsnest is useful to place a footprint."
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:101
+msgid "Tracks Auto Del"
+msgstr "Auto Supp. Pistes"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:103
+msgid "Enable/disable the automatic track deletion when recreating a track."
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:107
+msgid "Track only 45 degrees"
+msgstr "Piste à 45° seulement"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:109
+msgid "If enabled, force tracks directions to H, V or 45 degrees, when creating a track."
+msgstr "Si activé, frorce la direction des pistes à H, V ou 45° en creation de piste"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:113
+msgid "Segments 45 Only"
+msgstr "Segments 45 seulement"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:115
+msgid "If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers."
+msgstr "Si activé, frorce la direction des segments à H, V ou 45° en creation de segments sur couches techniques"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:119
+msgid "Auto PAN"
+msgstr "Auto PAN"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:121
+msgid "Allows auto pan when creating a track, or moving an item."
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:125
+msgid "Double Segm Track"
+msgstr "2 segments pour piste"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:127
+msgid "If enabled, uses two track segments, with 45 degrees angle between them when creating a new track "
+msgstr ""
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:136
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:144
+msgid "When creating tracks"
+msgstr "En creation de pistes"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:138
+msgid "Magnetic Pads"
+msgstr " Pads magnétiques"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:140
+msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
+msgstr "Contrôle la capture du curseur pcb quand le curseuir souris est sur un pad"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:146
+msgid "Magnetic Tracks"
+msgstr "Pistes Magnétiques"
+
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:148
+msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
+msgstr "Contrôle la capture du curseur pcb quand le curseur souris passe sur une piste"
 
 #: eeschema/backanno.cpp:135
 msgid "Load Stuff File"
@@ -7571,7 +7669,6 @@ msgid "(alias of "
 msgstr "(alias de "
 
 #: eeschema/edit_component_in_lib.cpp:216
-#: eeschema/dialog_edit_component_in_lib.cpp:210
 msgid "Alias"
 msgstr "Alias"
 
@@ -7615,7 +7712,6 @@ msgid "Align top"
 msgstr "Alignement au sommet"
 
 #: eeschema/edit_component_in_lib.cpp:486
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:86
 msgid "Fields"
 msgstr "Champs"
 
@@ -7644,7 +7740,6 @@ msgid "Vert Justify"
 msgstr "Justifié Vert."
 
 #: eeschema/edit_component_in_lib.cpp:553
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:63
 msgid "Chip Name"
 msgstr "Nom en librairie"
 
@@ -7710,20 +7805,12 @@ msgid "Direction"
 msgstr "Direction"
 
 #: eeschema/dialog_edit_label_base.cpp:38
-msgid "Italic"
-msgstr "Italique"
-
-#: eeschema/dialog_edit_label_base.cpp:38
 msgid "Bold"
 msgstr "Gras"
 
 #: eeschema/dialog_edit_label_base.cpp:38
 msgid "Bold Italic"
 msgstr "Gras Italique"
-
-#: eeschema/dialog_edit_label_base.cpp:40
-msgid "Style"
-msgstr "Style"
 
 #: eeschema/dialog_edit_label_base.cpp:44
 msgid "TriState"
@@ -7782,68 +7869,32 @@ msgid "Empty Text!"
 msgstr "Texte vide"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "1"
-msgstr "1"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "2"
-msgstr "2"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "3"
 msgstr "3"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "4"
-msgstr "4"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "5"
 msgstr "5"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "6"
-msgstr "6"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "7"
 msgstr "7"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "8"
-msgstr "8"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "9"
 msgstr "9"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "10"
-msgstr "10"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "11"
 msgstr "11"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "12"
-msgstr "12"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "13"
 msgstr "13"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "14"
-msgstr "14"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "15"
 msgstr "15"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "16"
-msgstr "16"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "17"
@@ -8236,19 +8287,19 @@ msgstr "Pas de nom de composant!"
 msgid "Component [%s] not found!"
 msgstr "Composant [%s] non trouvé!"
 
-#: eeschema/dialog_edit_label.cpp:39
+#: eeschema/dialog_edit_label.cpp:41
 msgid "Global Label properties"
 msgstr "Propriétés du Label Global"
 
-#: eeschema/dialog_edit_label.cpp:43
+#: eeschema/dialog_edit_label.cpp:45
 msgid "Hierarchal Label properties"
 msgstr "Propriétés du Label Hiérarchique"
 
-#: eeschema/dialog_edit_label.cpp:47
+#: eeschema/dialog_edit_label.cpp:49
 msgid "Label properties"
 msgstr "Propriétés du label"
 
-#: eeschema/dialog_edit_label.cpp:51
+#: eeschema/dialog_edit_label.cpp:53
 msgid "Text properties"
 msgstr "Propriétés du texte"
 
@@ -8776,10 +8827,6 @@ msgstr "&Contour"
 msgid "Edges:"
 msgstr "Contours:"
 
-#: cvpcb/dialog_display_options.cpp:159
-msgid "Texts:"
-msgstr "Textes:"
-
 #: cvpcb/dialog_display_options.cpp:166
 msgid "&Pad Filled"
 msgstr "&Pad plein"
@@ -8940,7 +8987,6 @@ msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
 #: kicad/treeprj_frame.cpp:543
-#: kicad/kicad.cpp:381
 msgid "noname"
 msgstr "noname"
 
@@ -9444,6 +9490,18 @@ msgstr "Pas de couche sélectionnée"
 msgid "Gerbview Options"
 msgstr "Gerbview Options "
 
+#: gerbview/options.cpp:186
+msgid "millimeters"
+msgstr "millimètres"
+
+#: gerbview/options.cpp:193
+msgid "Small"
+msgstr "Petit"
+
+#: gerbview/options.cpp:193
+msgid "Big"
+msgstr "Grand"
+
 #: gerbview/options.cpp:200
 msgid "format: 2.3"
 msgstr "Format 2.3"
@@ -9472,10 +9530,6 @@ msgstr "Polygones:"
 msgid "Show D codes"
 msgstr "Montrer DCodes"
 
-#: gerbview/process_config.cpp:117
-msgid "Save config file"
-msgstr "Sauver config"
-
 #: gerbview/gerberframe.cpp:187
 msgid "Layer modified,  Continue ?"
 msgstr "Couche modifiée,  Continuer ?"
@@ -9487,6 +9541,10 @@ msgstr "Affiche toutes les couches Gerber"
 #: gerbview/set_color.cpp:288
 msgid "Switch off all of the Gerber layers"
 msgstr "N'affiche pas les couches Gerber"
+
+#: gerbview/gerbview_config.cpp:148
+msgid "Save config file"
+msgstr "Sauver config"
 
 #: gerbview/readgerb.cpp:253
 #, c-format
@@ -10348,10 +10406,6 @@ msgstr "Propriétés du Texte sur Module"
 msgid "dialog_freeroute_exchange"
 msgstr "dialog_freeroute_exchange"
 
-#: pcbnew/dialog_general_options.h:60
-msgid "General Options"
-msgstr "Options Générales"
-
 #: pcbnew/dialog_initpcb.h:38
 msgid "Global Delete"
 msgstr "Effacements Généraux"
@@ -10484,6 +10538,10 @@ msgstr "Afficher Modules Cmp"
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
+#: pcbnew/dialog_general_options_BoardEditor_base.h:81
+msgid "General settings"
+msgstr "Options Générales"
+
 #: eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
 msgstr "Annotation des composants"
@@ -10507,6 +10565,10 @@ msgstr "EESchema Erc"
 #: eeschema/dialog_find.h:39
 msgid "EESchema Locate"
 msgstr "Recherche"
+
+#: eeschema/dialog_options.h:55
+msgid "General Options"
+msgstr "Options Générales"
 
 #: eeschema/eelayer.h:35
 msgid "EESchema Colors"
@@ -10792,6 +10854,12 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "Modules"
+#~ msgstr "Modules"
+#~ msgid "Module Texts"
+#~ msgstr "Texte module"
+#~ msgid "Number of Layers:"
+#~ msgstr "Nombre de Couches:"
 #~ msgid "Text "
 #~ msgstr "Texte "
 #~ msgid "Text Orient:"

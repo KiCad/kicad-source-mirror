@@ -5,7 +5,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_generaloptions_BoardEditor_base.h"
+#include "dialog_general_options_BoardEditor_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -30,8 +30,8 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	wxString m_UnitsSelectionChoices[] = { _("Inches"), _("Millimeters") };
 	int m_UnitsSelectionNChoices = sizeof( m_UnitsSelectionChoices ) / sizeof( wxString );
 	m_UnitsSelection = new wxRadioBox( this, wxID_UNITS, _("Units"), wxDefaultPosition, wxDefaultSize, m_UnitsSelectionNChoices, m_UnitsSelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_UnitsSelection->SetSelection( 0 );
-	m_UnitsSelection->SetToolTip( _("Selection of units used for display diemsions and positions") );
+	m_UnitsSelection->SetSelection( 1 );
+	m_UnitsSelection->SetToolTip( _("Selection of units used to display dimensions and positions of items") );
 	
 	bLeftSizer->Add( m_UnitsSelection, 0, wxALL|wxEXPAND, 5 );
 	
@@ -106,13 +106,13 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	m_Track_45_Only_Ctrl = new wxCheckBox( this, wxID_TRACKS45, _("Track only 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_Track_45_Only_Ctrl->SetToolTip( _("If enabled, force tracks directions to H, V or 40 degrees, when creating a track.") );
+	m_Track_45_Only_Ctrl->SetToolTip( _("If enabled, force tracks directions to H, V or 45 degrees, when creating a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
 	
 	m_Segments_45_Only_Ctrl = new wxCheckBox( this, wxID_SEGMENTS45, _("Segments 45 Only"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_Segments_45_Only_Ctrl->SetToolTip( _("If enabled, force segments directions to H, V or 40 degrees, when creatine a segment on technical layers.") );
+	m_Segments_45_Only_Ctrl->SetToolTip( _("If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers.") );
 	
 	bMiddleRightBoxSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
 	

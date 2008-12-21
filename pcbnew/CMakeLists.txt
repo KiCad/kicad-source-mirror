@@ -46,14 +46,14 @@ set(PCBNEW_SRCS
     deltrack.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
-#   dialog_display_options.cpp
+    dialog_display_options_base.cpp
 #   dialog_drc.cpp
     dialog_edit_mod_text.cpp
 #   dialog_edit_module.cpp
     dialog_freeroute_exchange.cpp
 #   dialog_gendrill.cpp
     dialog_general_options.cpp
-	dialog_generaloptions_BoardEditor_base.cpp
+	dialog_general_options_BoardEditor_base.cpp
 #   dialog_graphic_items_options.cpp
 #   dialog_initpcb.cpp
 #   dialog_netlist.cpp
