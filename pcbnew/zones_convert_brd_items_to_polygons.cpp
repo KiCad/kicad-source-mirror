@@ -346,29 +346,54 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             break;
         }
 
-    case PAD_RECT:
-        angle = aPad.m_Orient;
-        corner_position = wxPoint( -dx, -dy );
-        RotatePoint( &corner_position, angle );
-        corner_position += PadShapePos;
-        aBooleng->AddPoint( corner_position.x, corner_position.y );
-
-        corner_position = wxPoint( -dx, +dy );
-        RotatePoint( &corner_position, angle );
-        corner_position += aPad.ReturnShapePos();
-        aBooleng->AddPoint( corner_position.x, corner_position.y );
-
-        corner_position = wxPoint( +dx, +dy );
-        RotatePoint( &corner_position, angle );
-        corner_position += PadShapePos;
-        aBooleng->AddPoint( corner_position.x, corner_position.y );
-
-        corner_position = wxPoint( +dx, -dy );
-        RotatePoint( &corner_position, angle );
-        corner_position += PadShapePos;
-        aBooleng->AddPoint( corner_position.x, corner_position.y );
-        break;
-    }
+    case PAD_RECT:					// Easy implementation for rectangular cutouts with rounded corners
+		angle = aPad.m_Orient;
+		int rounding_radius = (int) (aClearanceValue * s_Correction);			// Corner rounding radius
+		int angle_pg;															// Polygon increment angle
+ 
+		for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
+			{
+				corner_position = wxPoint( 0, -rounding_radius );
+				angle_pg = i * delta;
+				RotatePoint( &corner_position, angle_pg );						// Rounding vector rotation
+				corner_position -= aPad.m_Size/2 ;								// Rounding vector + Pad corner offset
+				RotatePoint( &corner_position, angle );							// Rotate according to module orientation
+				corner_position +=	PadShapePos;								// Shift origin to position
+				aBooleng->AddPoint( corner_position.x, corner_position.y );
+			}
+		for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
+			{
+				corner_position = wxPoint( -rounding_radius, 0 );
+				angle_pg = i * delta;
+				RotatePoint( &corner_position, angle_pg );
+				corner_position -= wxPoint( aPad.m_Size.x/2, -aPad.m_Size.y/2 );
+				RotatePoint( &corner_position, angle );
+				corner_position +=	PadShapePos;
+				aBooleng->AddPoint( corner_position.x, corner_position.y );
+			}
+		for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
+			{
+				corner_position = wxPoint( 0, rounding_radius );
+				angle_pg = i * delta;
+				RotatePoint( &corner_position, angle_pg );
+				corner_position += aPad.m_Size/2 ;
+				RotatePoint( &corner_position, angle );
+				corner_position +=	PadShapePos;
+				aBooleng->AddPoint( corner_position.x, corner_position.y );
+			}
+		for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
+			{
+				corner_position = wxPoint( rounding_radius, 0 );
+				angle_pg = i * delta;
+				RotatePoint( &corner_position, angle_pg );
+				corner_position -= wxPoint( -aPad.m_Size.x/2, aPad.m_Size.y/2 );
+				RotatePoint( &corner_position, angle );
+				corner_position +=	PadShapePos;
+				aBooleng->AddPoint( corner_position.x, corner_position.y );
+			}
+			
+		break;
+	}
 
     aBooleng->EndPolygonAdd();
 }
@@ -376,7 +401,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
 
 /** function AddThermalReliefPadPolygon
  * Add holes around a pad to create a thermal relief
- * copper tickness is min (dx/2, aCopperWitdh) or min (dy/2, aCopperWitdh)
+ * copper thickness is min (dx/2, aCopperWitdh) or min (dy/2, aCopperWitdh)
  * @param aBooleng = current Bool_Engine
  * @param aPad     = the current pad used to create the thermal shape
  * @param aThermalGap = gap in thermal shape
@@ -417,7 +442,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     int     angle = 0;
-    wxSize  copper_tickness;
+    wxSize  copper_thickness;
     int     dx = aPad.m_Size.x / 2;
     int     dy = aPad.m_Size.y / 2;
 
@@ -430,15 +455,15 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
     aThermalGap += aMinThicknessValue / 2;
 
     /* Keep in account the polygon outline thickness
-     * copper_tickness must be decreased by aMinThicknessValue because drawing outlines
+     * copper_thickness must be decreased by aMinThicknessValue because drawing outlines
      * with a thickness of aMinThicknessValue will increase real thickness by aMinThicknessValue
      */
     aCopperThickness -= aMinThicknessValue;
     if( aCopperThickness < 0 )
         aCopperThickness = 0;
 
-    copper_tickness.x = min( dx, aCopperThickness );
-    copper_tickness.y = min( dy, aCopperThickness );
+    copper_thickness.x = min( dx, aCopperThickness );
+    copper_thickness.y = min( dy, aCopperThickness );
 
     switch( aPad.m_PadShape )
     {
@@ -464,16 +489,16 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         int outer_radius = dx + aThermalGap;     // The radius of the outer arc is pad radius + aThermalGap
 
         // Crosspoint of thermal spoke sides, the first point of polygon buffer
-        corners_buffer.push_back( wxPoint( copper_tickness.x / 2, copper_tickness.y / 2 ) );
+        corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
 
         // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
-        corner.x = copper_tickness.x / 2;
+        corner.x = copper_thickness.x / 2;
         int y = outer_radius - (aThermalGap / 4);
         corner.y = (int) sqrt( ( ( (double) y * y ) - (double) corner.x * corner.x ) );
         corners_buffer.push_back( corner );
 
         // calculate the starting point of the outter arc
-        corner.x = copper_tickness.x / 2;
+        corner.x = copper_thickness.x / 2;
         double dtmp =
             sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner.x * corner.x ) );
         corner.y = (int) dtmp;
@@ -543,7 +568,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         {
             EXCHG( dx, dy );
             supp_angle = 900;
-            EXCHG( copper_tickness.x, copper_tickness.y );
+            EXCHG( copper_thickness.x, copper_thickness.y );
         }
         int deltasize = dx - dy;        // = distance between shape position and the 2 demi-circle ends centre
         // here we have dx > dy
@@ -554,12 +579,12 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         shape_offset = wxPoint( deltasize, 0 );
 
         // Crosspoint of thermal spoke sides, the first point of polygon buffer
-        corners_buffer.push_back( wxPoint( copper_tickness.x / 2, copper_tickness.y / 2 ) );
+        corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
 
         // Arc start point calculation, the intersecting point of cutout arc and thermal spoke edge
-        if( copper_tickness.x > deltasize )          // If copper thickness is more than shape offset, we need to calculate arc intercept point.
+        if( copper_thickness.x > deltasize )          // If copper thickness is more than shape offset, we need to calculate arc intercept point.
         {
-            corner.x = copper_tickness.x / 2;
+            corner.x = copper_thickness.x / 2;
             corner.y =
                 (int) sqrt( ( (double) outer_radius * outer_radius ) -
                     ( (double) ( corner.x - delta ) * ( corner.x - deltasize ) ) );
@@ -575,21 +600,21 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         }
         else
         {
-            corner.x = copper_tickness.x / 2;
+            corner.x = copper_thickness.x / 2;
             corner.y = outer_radius;
             corners_buffer.push_back( corner );
-            corner.x = ( deltasize - copper_tickness.x ) / 2;
+            corner.x = ( deltasize - copper_thickness.x ) / 2;
         }
 
         // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
         wxPoint last_corner;
-        last_corner.y = copper_tickness.y / 2;
+        last_corner.y = copper_thickness.y / 2;
         int     px = outer_radius - (aThermalGap / 4);
         last_corner.x =
             (int) sqrt( ( ( (double) px * px ) - (double) last_corner.y * last_corner.y ) );
 
         // Arc stop point calculation, the intersecting point of cutout arc and thermal spoke edge
-        corner_end.y = copper_tickness.y / 2;
+        corner_end.y = copper_thickness.y / 2;
         corner_end.x =
             (int) sqrt( ( (double) outer_radius *
                          outer_radius ) - ( (double) corner_end.y * corner_end.y ) );
@@ -680,67 +705,84 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         //  |        |
         //  |        |
         // 1  -------4
-        wxPoint corners_hole[4];            // buffer for 4 corners
-        // Create 1 hole, for a pad centered at 0,0, orient 0
-        // Calculate coordinates for corner 1 to corner 4:
-        corners_hole[0] = wxPoint( copper_tickness.x / 2, -copper_tickness.y / 2 );
-        corners_hole[1] = wxPoint( (copper_tickness.x / 2), -dy - aThermalGap );
-        corners_hole[2] = wxPoint(   dx + aThermalGap, -dy - aThermalGap );
-        corners_hole[3] = wxPoint( dx + aThermalGap, -(copper_tickness.y / 2) );
+        
+        // Modified rectangles with one corner rounded. TODO: merging with oval thermals and possibly round too.
+        
+        std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-        /* Create 2 holes, rotated by pad rotation.
-         */
-        angle = aPad.m_Orient;
-        for( int irect = 0; irect < 2; irect++ )
+        int     dx = (aPad.m_Size.x / 2) + aThermalGap;     // Cutout radius x
+        int     dy = (aPad.m_Size.y / 2) + aThermalGap;     // Cutout radius y
+        
+		// The first point of polygon buffer is left lower corner, second the crosspoint of thermal spoke sides,
+		// the third is upper right corner and the rest are rounding vertices going anticlockwise. Note the inveted Y-axis in CG.
+		corners_buffer.push_back( wxPoint( -dx, -copper_thickness.y / 2 ) );
+		corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -copper_thickness.y / 2 ) );
+		corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -dy ) );
+		
+		angle = aPad.m_Orient;
+		int rounding_radius = (int) (aThermalGap * s_Correction);				// Corner rounding radius
+		int angle_pg;															// Polygon increment angle
+
+		for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
+			{
+				wxPoint corner_position = wxPoint( 0, -rounding_radius );
+				angle_pg = i * delta;
+				RotatePoint( &corner_position, angle_pg );						// Rounding vector rotation
+				corner_position -= aPad.m_Size/2 ;								// Rounding vector + Pad corner offset
+				corners_buffer.push_back( wxPoint( corner_position.x, corner_position.y ) );
+			}
+
+		for( int irect = 0; irect < 2; irect++ )
+		{
+			if( aBooleng->StartPolygonAdd( GROUP_B ) )
+			{
+				for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
+				{
+					wxPoint cpos = corners_buffer[ic];
+					RotatePoint( &cpos, angle );								// Rotate according to module orientation
+					cpos += PadShapePos;										// Shift origin to position
+					aBooleng->AddPoint( cpos.x, cpos.y );
+				}
+
+				aBooleng->EndPolygonAdd();
+				angle += 1800;   // this is calculate hole 3
+				if( angle >= 3600 )
+					angle -= 3600;
+			}
+		}
+
+		// Create holes, that are the mirrored from the previous holes
+        for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
         {
-            if( aBooleng->StartPolygonAdd( GROUP_B ) )
-            {
-                for( int ic = 0; ic < 4; ic++ )
-                {
-                    wxPoint cpos = corners_hole[ic];
-                    RotatePoint( &cpos, angle );
-                    cpos += PadShapePos;
-                    aBooleng->AddPoint( cpos.x, cpos.y );
-                }
-
-                aBooleng->EndPolygonAdd();
-                angle += 1800;  // this is calculate hole 3
-                if( angle >= 3600 )
-                    angle -= 3600;
-            }
+            wxPoint swap = corners_buffer[ic];
+            swap.x = -swap.x;
+            corners_buffer[ic] = swap;
         }
-
-        // Create a holes, that is the mirrored of the previous hole
-        corners_hole[0].x = -corners_hole[0].x;
-        corners_hole[1].x = -corners_hole[1].x;
-        corners_hole[2].x = -corners_hole[2].x;
-        corners_hole[3].x = -corners_hole[3].x;
 
         // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
-        angle = aPad.m_Orient;
         for( int irect = 0; irect < 2; irect++ )
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
-                for( int ic = 0; ic < 4; ic++ )
+                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
                 {
-                    wxPoint cpos = corners_hole[ic];
-                    RotatePoint( &cpos, angle );
-                    cpos += PadShapePos;
-                    aBooleng->AddPoint( cpos.x, cpos.y );
-                }
+					wxPoint cpos = corners_buffer[ic];
+					RotatePoint( &cpos, angle );
+					cpos += PadShapePos;
+					aBooleng->AddPoint( cpos.x, cpos.y );
+				}
 
-                aBooleng->EndPolygonAdd();
-                angle += 1800;
-                if( angle >= 3600 )
-                    angle -= 3600;
-            }
-        }
-    }
-        break;
-    }
+				aBooleng->EndPolygonAdd();
+				angle += 1800;
+				if( angle >= 3600 )
+					angle -= 3600;
+			}
+		}
+		break;
+		}
+	}
 }
-
+	
 
 /** Function AddTrackWithClearancePolygon
  * Add a polygon cutout for a track in a zone area
