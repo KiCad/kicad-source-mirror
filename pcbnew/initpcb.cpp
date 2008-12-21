@@ -161,9 +161,9 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
+	g_DesignSettings.m_CopperLayerCount = 2;		// Default copper layers count set to 2: double layer board
 
     Zoom_Automatique( TRUE );
-    DrawPanel->Refresh( TRUE );
 
     return TRUE;
 }

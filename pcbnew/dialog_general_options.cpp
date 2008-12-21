@@ -46,13 +46,12 @@ void Dialog_GeneralOptions::OnInitDialog( wxInitDialogEvent& event )
 	m_LayerNumber->SetSelection(1);
 	for ( unsigned ii = 0; ii < sizeof(layer_count); ii++ )
 	{
-		if ( g_DesignSettings.m_CopperLayerCount == layer_count[ii] )
+		if ( g_DesignSettings.m_CopperLayerCount != layer_count[ii] )
 			continue;
 		m_LayerNumber->SetSelection(ii);
 		break;
 	}
 
-    m_LayerNumber->SetSelection( g_DesignSettings.m_CopperLayerCount );
     m_MaxShowLinks->SetValue( g_MaxLinksShowed );
 
     m_DrcOn->SetValue( Drc_On );
