@@ -79,6 +79,7 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		loadcmp.o \
 		dialog_setup_libs.o \
 		dialog_general_options.o \
+		dialog_generaloptions_BoardEditor_base.o\
         dialog_orient_footprints.o\
 		muwave_command.o \
 		initpcb.o\
@@ -139,7 +140,9 @@ setpage.o: ../share/setpage.cpp
 menubarpcb.o: menubarpcb.cpp
 
 dialog_general_options.o: dialog_general_options.cpp dialog_track_options.cpp dialog_display_options.cpp\
-		dialog_graphic_items_options.cpp
+		dialog_graphic_items_options.cpp dialog_generaloptions_BoardEditor_base.h
+
+dialog_generaloptions_BoardEditor_base.o: dialog_generaloptions_BoardEditor_base.cpp dialog_generaloptions_BoardEditor_base.h
 
 menubarmodedit.o: menubarmodedit.cpp
 

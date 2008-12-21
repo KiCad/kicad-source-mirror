@@ -53,6 +53,7 @@ set(PCBNEW_SRCS
     dialog_freeroute_exchange.cpp
 #   dialog_gendrill.cpp
     dialog_general_options.cpp
+	dialog_generaloptions_BoardEditor_base.cpp
 #   dialog_graphic_items_options.cpp
 #   dialog_initpcb.cpp
 #   dialog_netlist.cpp
