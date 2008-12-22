@@ -92,7 +92,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		globaleditpad.o \
 		editedge.o\
 		edtxtmod.o \
-		dialog_edit_mod_text.o\
+		dialog_edit_module_text.o\
+		dialog_edit_module_text_base.o\
 		ratsnest.o drc.o \
 		block.o\
 		clean.o \
@@ -243,7 +244,9 @@ cotation.o: cotation.cpp
 
 edtxtmod.o: edtxtmod.cpp
 
-dialog_edit_mod_text.o: dialog_edit_mod_text.cpp dialog_edit_mod_text.h
+dialog_edit_module_text.o: dialog_edit_module_text.cpp dialog_edit_module_text_base.h
+
+dialog_edit_module_text_base.o: dialog_edit_module_text_base.cpp dialog_edit_module_text_base.h
 
 ratsnest.o: ratsnest.cpp
 
@@ -259,7 +262,7 @@ pcbplot.o: pcbplot.cpp pcbplot.h
 
 plothpgl.o: plothpgl.cpp
 
-plotgerb.o: plotgerb.cpp pcbplot.h plotgerb.h
+plotgerb.o: plotgerb.cpp pcbplot.h
 
 plotps.o: plotps.cpp pcbplot.h
 

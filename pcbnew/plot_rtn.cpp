@@ -5,7 +5,6 @@
 /* Fichier PLOT_RTN.CPP*/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "plot_common.h"
@@ -13,14 +12,10 @@
 #include "pcbplot.h"
 #include "trigo.h"
 
-#include "grfonte.h"
-
-#include "protos.h"
-
 
 /* Fonctions locales */
 static void Plot_Edges_Modules( BOARD* pcb, int format_plot, int masque_layer );
-static void PlotTextModule( TEXTE_MODULE* pt_texte );
+static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot );
 
 
 /**********************************************************/
@@ -247,7 +242,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         /* Trace effectif des textes */
         if( trace_ref )
         {
-            PlotTextModule( Module->m_Reference );
+            PlotTextModule( Module->m_Reference, format_plot );
             nb_items++;
             msg.Printf( wxT( "%d" ), nb_items );
             Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
@@ -255,7 +250,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
 
         if( trace_val )
         {
-            PlotTextModule( Module->m_Value );
+            PlotTextModule( Module->m_Value, format_plot );
             nb_items++;
             msg.Printf( wxT( "%d" ), nb_items );
             Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
@@ -287,7 +282,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
             if( !( (1<<textLayer) & masque_layer ) )
                 continue;
 
-            PlotTextModule( pt_texte );
+            PlotTextModule( pt_texte, format_plot );
             nb_items++;
             msg.Printf( wxT( "%d" ), nb_items );
             Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
@@ -308,13 +303,13 @@ exit:
 }
 
 
-/**************************************************/
-static void PlotTextModule( TEXTE_MODULE* pt_texte )
-/**************************************************/
+/********************************************************************/
+static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
+/********************************************************************/
 {
     wxSize  size;
     wxPoint pos;
-    int     orient, thickness, no_miroir;
+    int     orient, thickness;
 
     /* calcul des parametres du texte :*/
     size = pt_texte->m_Size;
@@ -322,17 +317,21 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte )
 
     orient = pt_texte->GetDrawRotation();
 
-    no_miroir = pt_texte->m_Miroir & 1;
     thickness = pt_texte->m_Width;
     if( Plot_Mode == FILAIRE )
         thickness = g_PlotLine_Width;
 
-    if( no_miroir == 0 )
+    if( pt_texte->m_Mirror )
         size.x = -size.x;                       // Text is mirrored
 
-    Plot_1_texte( g_PlotFormat, pt_texte->m_Text,
-                  orient, thickness,
-                  pos.x, pos.y, size.x, size.y );
+    if ( format_plot == PLOT_FORMAT_GERBER )
+		SelectD_CODE_For_LineDraw(thickness);
+
+	PlotGraphicText( format_plot, pos, BLACK,
+                      pt_texte->m_Text,
+                      orient, size,
+                      pt_texte->m_HJustify, pt_texte->m_VJustify,
+                      thickness, pt_texte->m_Italic );
 }
 
 
@@ -347,8 +346,6 @@ void PlotCotation( COTATION* Cotation, int format_plot, int masque_layer )
 
     DrawTmp = new DRAWSEGMENT( NULL );
 
-//	(Following command has been superceded by new commands elsewhere.)
-//	masque_layer |= EDGE_LAYER;
     DrawTmp->m_Width = Cotation->m_Width;
     DrawTmp->SetLayer( Cotation->GetLayer() );
 
@@ -398,8 +395,6 @@ void PlotMirePcb( MIREPCB* Mire, int format_plot, int masque_layer )
 
     DrawTmp = new DRAWSEGMENT( NULL );
 
-//	(Following command has been superceded by new commands elsewhere.)
-//	masque_layer |= EDGE_LAYER;
     DrawTmp->m_Width = Mire->m_Width;
     DrawTmp->SetLayer( Mire->GetLayer() );
 
@@ -581,135 +576,16 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
     if( pt_texte->m_Mirror )
         size.x = -size.x;
 
-    Plot_1_texte( format_plot, pt_texte->m_Text, orient,
-                  thickness, pos.x, pos.y, size.x, size.y );
+    if ( format_plot == PLOT_FORMAT_GERBER )
+		SelectD_CODE_For_LineDraw(thickness);
+
+	PlotGraphicText( format_plot, pos, BLACK,
+                      pt_texte->m_Text,
+                      orient, size,
+                      pt_texte->m_HJustify, pt_texte->m_VJustify,
+                      thickness, pt_texte->m_Italic );
 }
 
-
-/**********************************************************************/
-void Plot_1_texte( int format_plot, const wxString& Text, int angle,
-                   int thickness, int cX, int cY, int size_h, int size_v,
-                   bool centreX, bool centreY )
-/***********************************************************************/
-
-/*
- *  Trace de 1 texte:
- *  ptr = pointeur sur le texte
- *  angle = angle d'orientation, dependant aussi du mode de trace (miroir..)
- *  cX, cY = position du centre du texte
- *  size_h , size_v = dimensions ( algebriques );
- */
-{
-    int            kk = 0, k1, k2, end;
-    int            espacement;
-    char           f_cod, plume;
-    const SH_CODE* ptcar;
-    int            ox, oy, fx, fy;  /* Coord de debut et fin des segments a tracer */
-    int            sx, sy;          /* coord du debut du caractere courant */
-    int            nbcodes = Text.Len();
-
-    espacement = ( (10 * size_h) / 9 ) + ( (size_h >= 0 ) ? thickness : -thickness );
-
-    /* calcul de la position du debut du texte */
-    if( centreX )
-        sx = cX - ( (espacement * nbcodes) / 2 );
-    else
-        sx = cX;
-    if( centreY )
-        sy = cY + (size_v / 2);
-    else
-        sy = cY;
-
-    /* trace du texte */
-    for( ; kk < nbcodes; kk++ )
-    {
-#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-    int code = Text.GetChar(kk) & 0x7FF;
-    if ( code > 0x40F && code < 0x450 ) // big small Cyr
-        code = utf8_to_ascii[code - 0x410] & 0xFF;
-        else
-        code = code & 0xFF;
-#else
-    int code = Text.GetChar( kk ) & 0xFF;
-#endif
-        ptcar = graphic_fonte_shape[code];  /* ptcar pointe la description
-                                             *  du caractere a dessiner */
-
-        plume = 'U';
-        ox = sx;
-        oy = sy;
-
-        RotatePoint( &ox, &oy, cX, cY, angle );
-        fx = ox; fy = oy;
-
-        for( end = 0; end == 0; ptcar++ )
-        {
-            f_cod = *ptcar;
-
-            /* get code n de la forme selectionnee */
-            switch( f_cod )
-            {
-            case 'X':
-                end = 1;          /* fin du caractere */
-                break;
-
-            case 'U':
-            case 'D':
-                plume = f_cod; break;
-
-            default:
-                k1 = f_cod;     // Coord X
-                k1 = (k1 * size_v) / 9;
-                ptcar++;
-                k2 = *ptcar;        // Coord Y
-                k2 = (k2 * size_h) / 8;
-
-                fx = k2 + sx; fy = -k1 + sy;
-                RotatePoint( &fx, &fy, cX, cY, angle );
-
-                /* Trace du segment */
-                if( plume == 'D' )
-                {
-                    switch( format_plot )
-                    {
-                    case PLOT_FORMAT_GERBER:
-                        PlotGERBERLine( wxPoint( ox, oy ), wxPoint( fx, fy ), thickness );
-                        break;
-
-                    case PLOT_FORMAT_HPGL:
-                        trace_1_segment_HPGL( ox, oy, fx, fy, thickness );
-                        break;
-
-                    case PLOT_FORMAT_POST:
-                        PlotFilledSegmentPS( wxPoint( ox, oy ), wxPoint( fx, fy ), thickness );
-                        break;
-                    }
-                }
-                ox = fx; oy = fy;
-            }
-
-            /* fin switch decodade matrice de forme */
-        }
-
-        /* end boucle for = end trace de 1 caractere */
-
-        sx += espacement;
-    }
-
-    /* end trace du texte */
-}
-
-
-/***********************************/
-void Affiche_erreur( int nb_err )
-/***********************************/
-
-/* Affiche le nombre d'erreurs commises ( segments traces avec plume trop grosse
- *  ou autres */
-{
-//	sprintf(msg,"%d",nb_err) ;
-//	Affiche_1_Parametre(this, 30,"Err",msg,GREEN) ;
-}
 
 /*********************************************************/
 void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat )
@@ -835,6 +711,7 @@ void PlotCircle( int format_plot, int thickness, wxPoint centre, int radius )
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
+		SelectD_CODE_For_LineDraw(thickness);
         PlotCircle_GERBER( centre, radius, thickness );
         break;
 
@@ -878,6 +755,7 @@ void PlotPolygon( int format_plot, int nbpoints, int* coord, int width )
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
+		SelectD_CODE_For_LineDraw(width);
         PlotPolygon_GERBER( nbpoints, coord, width );
         break;
 
@@ -933,6 +811,9 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
 
     RotatePoint( &ox, &oy, start_angle );
 
+    if ( format_plot == PLOT_FORMAT_GERBER )
+		SelectD_CODE_For_LineDraw(thickness);
+
     delta = 120;    /* un cercle sera trace en 3600/delta = 30 segments / cercle*/
     for( ii = start_angle + delta; ii < end_angle; ii += delta )
     {
@@ -944,7 +825,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
         switch( format_plot )
         {
         case PLOT_FORMAT_GERBER:
-            PlotGERBERLine( wxPoint( centre.x + ox, centre.y + oy ),
+           PlotGERBERLine( wxPoint( centre.x + ox, centre.y + oy ),
                             wxPoint( centre.x + fx, centre.y + fy ), thickness );
             break;
 

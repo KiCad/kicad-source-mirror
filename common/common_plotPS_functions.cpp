@@ -3,7 +3,6 @@
 /******************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "trigo.h"
 #include "wxstruct.h"
 #include "base_struct.h"
@@ -11,36 +10,26 @@
 #include "plot_common.h"
 #include "macros.h"
 
-#include "wx/defs.h"
-
-// Variables partagees avec Common plot Postscript Routines
-extern wxPoint       LastPenPosition;
-extern wxPoint       PlotOffset;
-extern FILE*         PlotOutputFile;
-extern double        XScale, YScale;
-extern int           g_DefaultPenWidth, g_CurrentPenWidth;
-extern int           PlotOrientOptions, etat_plume;
-
 // Locales
 static Ki_PageDescr* SheetPS;
 
 
 /*************************************************************************************/
 void InitPlotParametresPS( wxPoint offset, Ki_PageDescr* sheet,
-                           double xscale, double yscale, int orient )
+                           double aXScale, double aYScale, int orient )
 /*************************************************************************************/
 
 /* Set the plot offset for the current plotting
- * xscale,yscale = coordinate scale (scale coefficient for coordinates)
- * device_xscale,device_yscale = device coordinate scale (i.e scale used by plot device)
+ * g_Plot_XScale,g_Plot_YScale = coordinate scale (scale coefficient for coordinates)
+ * device_g_Plot_XScale,device_g_Plot_YScale = device coordinate scale (i.e scale used by plot device)
  */
 {
-    PlotOrientOptions = orient;
-    PlotOffset = offset;
+    g_Plot_PlotOrientOptions = orient;
+    g_Plot_PlotOffset = offset;
     SheetPS    = sheet;
-    XScale = xscale;
-    YScale = yscale;
-    g_CurrentPenWidth = -1;
+    g_Plot_XScale = aXScale;
+    g_Plot_YScale = aYScale;
+    g_Plot_CurrentPenWidth = -1;
 }
 
 
@@ -51,8 +40,8 @@ void SetDefaultLineWidthPS( int width )
 /* Set the default line width (in 1/1000 inch) for the current plotting
  */
 {
-    g_DefaultPenWidth = width;      // epaisseur du trait standard en 1/1000 pouce
-    g_CurrentPenWidth = -1;
+    g_Plot_DefaultPenWidth = width;      // epaisseur du trait standard en 1/1000 pouce
+    g_Plot_CurrentPenWidth = -1;
 }
 
 
@@ -68,12 +57,12 @@ void SetCurrentLineWidthPS( int width )
     if( width > 0 )
         pen_width = width;
     else
-        pen_width = g_DefaultPenWidth;
+        pen_width = g_Plot_DefaultPenWidth;
 
-    if( pen_width != g_CurrentPenWidth )
-        fprintf( PlotOutputFile, "%d setlinewidth\n", (int) (XScale * pen_width) );
+    if( pen_width != g_Plot_CurrentPenWidth )
+        fprintf( g_Plot_PlotOutputFile, "%d setlinewidth\n", (int) (g_Plot_XScale * pen_width) );
 
-    g_CurrentPenWidth = pen_width;
+    g_Plot_CurrentPenWidth = pen_width;
 }
 
 
@@ -95,7 +84,7 @@ void SetColorMapPS( int color )
         (float) ColorRefs[color].m_Green / 255,
         (float) ColorRefs[color].m_Blue / 255 );
     to_point( Line );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 }
 
 
@@ -110,7 +99,7 @@ void PlotFilledSegmentPS( wxPoint start, wxPoint end, int width )
     UserToDeviceCoordinate( end );
 
     SetCurrentLineWidthPS( width );
-    fprintf( PlotOutputFile, "%d %d %d %d line\n", start.x, start.y, end.x, end.y );
+    fprintf( g_Plot_PlotOutputFile, "%d %d %d %d line\n", start.x, start.y, end.x, end.y );
 }
 
 /***************************************************************/
@@ -121,7 +110,7 @@ void PlotRectPS( wxPoint p1, wxPoint p2, bool fill, int width )
     UserToDeviceCoordinate( p2 );
 
     SetCurrentLineWidthPS( width );
-    fprintf( PlotOutputFile, "%d %d %d %d rect%d\n", p1.x, p1.y,
+    fprintf( g_Plot_PlotOutputFile, "%d %d %d %d rect%d\n", p1.x, p1.y,
     p2.x-p1.x, p2.y-p1.y, fill );
 }
 
@@ -133,14 +122,14 @@ void PlotCirclePS( wxPoint pos, int diametre, bool fill, int width )
     char Line[256];
 
     UserToDeviceCoordinate( pos );
-    rayon = (int) (XScale * diametre / 2);
+    rayon = (int) (g_Plot_XScale * diametre / 2);
 
     if( rayon < 0 )
         rayon = 0;
 
     SetCurrentLineWidthPS( width );
     sprintf(Line, "%d %d %d cir%d\n", pos.x, pos.y, rayon, fill);
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 }
 
 
@@ -162,18 +151,18 @@ void PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill,
     // Calcul des coord du point de depart :
     UserToDeviceCoordinate( centre );
 
-    if( PlotOrientOptions == PLOT_MIROIR )
+    if( g_Plot_PlotOrientOptions == PLOT_MIROIR )
         sprintf( Line, "%d %d %d %f %f arc%d\n", centre.x, centre.y,
-            (int) (rayon * XScale), (float) StAngle / 10, (float) EndAngle / 10,
+            (int) (rayon * g_Plot_XScale), (float) StAngle / 10, (float) EndAngle / 10,
             fill);
     else
         sprintf( Line, "%d %d %d %f %f arc%d\n", centre.x, centre.y,
-            (int) (rayon * XScale), -(float) EndAngle / 10, -(float) StAngle / 10,
+            (int) (rayon * g_Plot_XScale), -(float) EndAngle / 10, -(float) StAngle / 10,
             fill);
 
     // Undo internationalization printf (float x.y printed x,y)
     to_point( Line );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 }
 
 
@@ -199,18 +188,18 @@ void PlotPolyPS( int nb_segm, int* coord, bool fill, int width )
     pos.x = coord[0];
     pos.y = coord[1];
     UserToDeviceCoordinate( pos );
-    fprintf( PlotOutputFile, "newpath %d %d moveto\n", pos.x, pos.y );
+    fprintf( g_Plot_PlotOutputFile, "newpath %d %d moveto\n", pos.x, pos.y );
 
     for( ii = 1; ii < nb_segm; ii++ )
     {
         pos.x = coord[2 * ii];
         pos.y = coord[2 * ii + 1];
         UserToDeviceCoordinate( pos );
-        fprintf( PlotOutputFile, "%d %d lineto\n", pos.x, pos.y );
+        fprintf( g_Plot_PlotOutputFile, "%d %d lineto\n", pos.x, pos.y );
     }
 
     // Fermeture du polygone
-    fprintf(PlotOutputFile, "poly%d\n", fill);
+    fprintf(g_Plot_PlotOutputFile, "poly%d\n", fill);
 }
 
 
@@ -229,10 +218,10 @@ void LineTo_PS( wxPoint pos, int plume )
     {
         char Line[256];
         sprintf( Line, "%d %d %d %d line\n",
-            LastPenPosition.x, LastPenPosition.y, pos.x, pos.y );
-        fputs( Line, PlotOutputFile );
+            g_Plot_LastPenPosition.x, g_Plot_LastPenPosition.y, pos.x, pos.y );
+        fputs( Line, g_Plot_PlotOutputFile );
     }
-    LastPenPosition = pos;
+    g_Plot_LastPenPosition = pos;
 }
 
 
@@ -294,26 +283,26 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
     int          ii;
     time_t       time1970 = time( NULL );
 
-    PlotOutputFile = file;
+    g_Plot_PlotOutputFile = file;
 
-    fputs( "%!PS-Adobe-3.0\n", PlotOutputFile );    // Print header
+    fputs( "%!PS-Adobe-3.0\n", g_Plot_PlotOutputFile );    // Print header
 
     sprintf( Line, "%%%%Creator: %s\n", CONV_TO_UTF8( Creator ) );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     // A "newline" character ("\n") is not included in the following string,
     // because it is provided by the ctime() function.
     sprintf( Line, "%%%%CreationDate: %s", ctime( &time1970 ) );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     sprintf( Line, "%%%%Title: %s\n", CONV_TO_UTF8( FileName ) );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     sprintf( Line, "%%%%Pages: %d\n", PageCount );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     sprintf( Line, "%%%%PageOrder: Ascend\n" );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     // Print boundary box en 1/72 pouce, box is in mils
     const double CONV_SCALE = MIL_TO_INCH * 72;
@@ -325,7 +314,7 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
         (int) floor( (BBox[1] * CONV_SCALE) ), (int) floor( (BBox[0] * CONV_SCALE) ),
         (int) ceil( (BBox[3] * CONV_SCALE) ), (int) ceil( (BBox[2] * CONV_SCALE) ) );
 
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     // Specify the size of the sheet and the name associated with that size.
     // (If the "User size" option has been selected for the sheet size,
@@ -349,17 +338,17 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
             CONV_TO_UTF8( SheetPS->m_Name ),
             (int) round( SheetPS->m_Size.y * CONV_SCALE ),
             (int) round( SheetPS->m_Size.x * CONV_SCALE ) );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     if( PaperOrientation == wxPORTRAIT )
         sprintf( Line, "%%%%Orientation: Portrait\n" );
     else
         sprintf( Line, "%%%%Orientation: Landscape\n" );
 
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     sprintf( Line, "%%%%EndComments\n" );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     // Now specify various other details.
 
@@ -368,11 +357,11 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
     // contents of the postscript file comply with the details specified
     // within the Document Structuring Convention.
     sprintf( Line, "%%%%Page: 1 1\n" );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     for( ii = 0; PSMacro[ii] != NULL; ii++ )
     {
-        fputs( PSMacro[ii], PlotOutputFile );
+        fputs( PSMacro[ii], g_Plot_PlotOutputFile );
     }
 
     if( PaperOrientation == wxLANDSCAPE )
@@ -386,15 +375,15 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
     // compensation internationalisation printf (float x.y généré x,y)
     to_point( Line );
 
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     sprintf( Line, "%f %f scale\t\t%% Move to User coordinates\n",
-        XScale, YScale );
+        g_Plot_XScale, g_Plot_YScale );
     to_point( Line );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
-    // Set default line width ( g_DefaultPenWidth is in user units )
-    fprintf( PlotOutputFile, "%d setlinewidth\n", g_DefaultPenWidth );
+    // Set default line width ( g_Plot_DefaultPenWidth is in user units )
+    fprintf( g_Plot_PlotOutputFile, "%d setlinewidth\n", g_Plot_DefaultPenWidth );
 }
 
 

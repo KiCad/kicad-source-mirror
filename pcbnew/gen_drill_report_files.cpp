@@ -232,10 +232,11 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
 
     case PLOT_FORMAT_POST:
         wxString Text = wxT( "Infos" );
-        Plot_1_texte( format, Text, 0, TextWidth,
-                      x, y,
-                      (int) (CharSize * CharScale), (int) (CharSize * CharScale),
-                      FALSE );
+		PlotGraphicText( format, wxPoint(x,y), BLACK,
+                      Text,
+                      0, wxSize((int)(CharSize * CharScale), (int)(CharSize * CharScale)),
+                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                      TextWidth );
         break;
     }
 
@@ -335,11 +336,11 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
                          aToolListBuffer[ii].m_TotalCount,
                          aToolListBuffer[ii].m_OvalCount );
             msg += CONV_FROM_UTF8( line );
-            Plot_1_texte( format, msg, 0, TextWidth,
-                          x, y,
-                          (int) (CharSize * CharScale),
-                          (int) (CharSize * CharScale),
-                          FALSE );
+			PlotGraphicText( format, wxPoint(x,y), BLACK,
+                      msg,
+                      0, wxSize((int)(CharSize * CharScale), (int)(CharSize * CharScale)),
+                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                      TextWidth );
             break;
         }
 

@@ -513,7 +513,7 @@ void trace_1_pastille_RONDE_HPGL( wxPoint pos, int diametre, int modetrace )
 
     if( rayon < 0 )
     {
-        rayon = 0; nb_plot_erreur++; Affiche_erreur( nb_plot_erreur );
+        rayon = 0; nb_plot_erreur++;
     }
     wxSize rsize( rayon, rayon );
 
@@ -563,7 +563,7 @@ void PlotRectangularPad_HPGL( wxPoint padpos, wxSize padsize,
 
     if( (size.x < 0 ) || (size.y < 0) )
     {
-        nb_plot_erreur++; Affiche_erreur( nb_plot_erreur );
+        nb_plot_erreur++;
     }
     if( size.x < 0 )
         size.x = 0;if( size.y < 0 )
@@ -810,7 +810,7 @@ void trace_1_segment_HPGL( int pos_X0, int pos_Y0, int pos_X1, int pos_Y1,
     dh = (epaisseur - (int) pen_diam ) / 2;
     if( dh < 0 )
     {
-        dh = 0; nb_plot_erreur++; Affiche_erreur( nb_plot_erreur );
+        dh = 0; nb_plot_erreur++;
     }
 
     if( (dh == 0) || (Plot_Mode == FILAIRE) )  /* Le trace se reduit a 1 trait */

@@ -5,11 +5,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++All
+    Cleaning code to draw/plot texts:
+    Now only one function is used to draw and plot texts in pcbnew in all formats
+	Italics texts are allowed in pcbnew (work in progress)
+
 2008-Dec-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++All
     Cleaning code to draw/plot texts (work in progress):
-    Now only one function is used to draw and plot texts
+    Now only one function is used to draw and plot texts (not for pcbnew)
     (easier to maintain and ensure texts have the same size in ploting and drawing)
     In eeschema, italic and bold texts allowed (in pcbenew, texts thickness is already adjustable)
 

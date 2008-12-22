@@ -14,68 +14,46 @@
 
 
 // Variables partagees avec Common plot Postscript et HPLG Routines
-wxPoint LastPenPosition;
-wxPoint PlotOffset;
-FILE*   PlotOutputFile;
-double  XScale, YScale;
-int     g_DefaultPenWidth;
-int     g_CurrentPenWidth = -1;
-int     PlotOrientOptions, etat_plume;
-
-
-// Locales
-static Ki_PageDescr* SheetPS;
+wxPoint g_Plot_LastPenPosition;
+wxPoint g_Plot_PlotOffset;
+FILE*   g_Plot_PlotOutputFile;
+double  g_Plot_XScale, g_Plot_YScale;
+int     g_Plot_DefaultPenWidth;
+int     g_Plot_CurrentPenWidth = -1;
+int     g_Plot_PlotOrientOptions, g_Plot_PenState;
 
 /*************************/
 void ForcePenReinit()
 /*************************/
 
-/* set the flag g_CurrentPenWidth to -1 in order to force a pen width redefinition
+/* set the flag g_Plot_CurrentPenWidth to -1 in order to force a pen width redefinition
   * for the next draw command
  */
 {
-    g_CurrentPenWidth = -1;
+    g_Plot_CurrentPenWidth = -1;
 }
 
 
 /**********************************************/
-void SetPlotScale( double xscale, double yscale )
+void SetPlotScale( double aXScale, double aYScale )
 /**********************************************/
 
 /* Set the plot scale for the current plotting)
  */
 {
-    XScale = xscale;
-    YScale = yscale;
+    g_Plot_XScale = aXScale;
+    g_Plot_YScale = aYScale;
 }
 
 
 /*********************************/
-void SetPlotOffset( wxPoint offset )
+void Setg_Plot_PlotOffset( wxPoint offset )
 /*********************************/
 
 /* Set the plot offset for the current plotting)
  */
 {
-    PlotOffset = offset;
-}
-
-
-/***************************************************************************/
-void InitPlotParametresGERBER( wxPoint offset, double xscale, double yscale )
-/***************************************************************************/
-
-/* Set the plot offset for the current plotting
-  * xscale,yscale = coordinate scale (scale coefficient for coordinates)
- */
-{
-    PlotOrientOptions = 0;
-    PlotOffset = offset;
-    SheetPS    = NULL;
-    XScale = xscale;
-    YScale = yscale;
-    g_DefaultPenWidth = 120;            /* epaisseur du trait standard en 1/1000 pouce */
-    g_CurrentPenWidth = -1;
+    g_Plot_PlotOffset = offset;
 }
 
 
@@ -114,6 +92,9 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         break;
 
     case PLOT_FORMAT_GERBER:
+		FctPlume = LineTo_GERBER;
+		break;
+
     default:
         return;
     }
@@ -507,17 +488,17 @@ void UserToDeviceCoordinate( wxPoint& pos )
 /* modifie les coord pos.x et pos.y pour le trace selon l'orientation,
   * l'echelle, les offsets de trace */
 {
-    pos.x = (int) (pos.x * XScale);
-    pos.y = (int) (pos.y * YScale);
+    pos.x = (int) (pos.x * g_Plot_XScale);
+    pos.y = (int) (pos.y * g_Plot_YScale);
 
-    switch( PlotOrientOptions ) /* Calcul du cadrage */
+    switch( g_Plot_PlotOrientOptions ) /* Calcul du cadrage */
     {
     default:
-        pos.x -= PlotOffset.x; pos.y = PlotOffset.y - pos.y;
+        pos.x -= g_Plot_PlotOffset.x; pos.y = g_Plot_PlotOffset.y - pos.y;
         break;
 
     case PLOT_MIROIR:
-        pos.x -= PlotOffset.x; pos.y = -PlotOffset.y + pos.y;
+        pos.x -= g_Plot_PlotOffset.x; pos.y = -g_Plot_PlotOffset.y + pos.y;
         break;
     }
 }
@@ -528,6 +509,6 @@ void UserToDeviceSize( wxSize& size )
 /************************************/
 /* modifie les dimension size.x et size.y pour le trace selon l'echelle */
 {
-    size.x = (int) (size.x * XScale);
-    size.y = (int) (size.y * YScale);
+    size.x = (int) (size.x * g_Plot_XScale);
+    size.y = (int) (size.y * g_Plot_YScale);
 }

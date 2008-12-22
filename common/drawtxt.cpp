@@ -348,6 +348,8 @@ static void s_Callback_plot(int x0, int y0, int xf, int yf)
 
     PenLastPos = pend;
 }
+
+
 /******************************************************************************************/
 void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
                       const wxString& aText,
@@ -372,7 +374,6 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
  *  @param aItalic = true to simulate an italic font
  */
 {
-
     // Initialise the actual function used to plot lines:
     switch( aFormat_plot )
     {
@@ -385,6 +386,9 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
         break;
 
     case PLOT_FORMAT_GERBER:
+        MovePenFct = LineTo_GERBER;
+        break;
+
     default:
         return;
     }

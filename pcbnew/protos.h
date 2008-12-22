@@ -326,12 +326,6 @@ void    Trace_Block( WinEDA_DrawPanel* panel, wxDC* DC, int ox, int oy, int fx, 
 /* Routine de trace d'un rectangle symbolisant un block
   *   (toujours en mode XOR) */
 
-/***************/
-/* PLOT_RTN.CPP */
-/***************/
-
-void Affiche_erreur( int nb_err );
-
 
 /*****************************************************************/
 /* AFFICHE.CPP: (Fonctions d'affichage de messages, parametres... */

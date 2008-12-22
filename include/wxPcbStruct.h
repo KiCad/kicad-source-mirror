@@ -275,7 +275,6 @@ public:
                                                  int garde, int tracevia, int modetrace );
     void                        Plot_Layer_GERBER( FILE* File, int masque_layer,
                                                    int garde, int tracevia );
-    int                         Gen_D_CODE_File( FILE* file );
     void                        Plot_Layer_PS( FILE* File, int masque_layer,
                                                int garde, int tracevia, int modetrace );
 

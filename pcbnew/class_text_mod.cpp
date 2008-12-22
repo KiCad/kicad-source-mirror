@@ -28,19 +28,16 @@
 
 /* Constructeur de TEXTE_MODULE */
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    BOARD_ITEM( parent, TYPE_TEXTE_MODULE )
+    BOARD_ITEM( parent, TYPE_TEXTE_MODULE ), EDA_TextStruct ()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
-    m_NoShow = 0;               /* visible */
     m_Type   = text_type;       /* Reference */
     if( (m_Type != TEXT_is_REFERENCE) && (m_Type != TEXT_is_VALUE) )
         m_Type = TEXT_is_DIVERS;
 
+	m_NoShow = false;
     m_Size.x = m_Size.y = 400; m_Width = 120;   /* dimensions raisonnables par defaut */
-    m_Orient = 0;                               /* en 1/10 degre */
-    m_Miroir = 1;                               // Mode normal (pas de miroir)
-    m_Unused = 0;
 
     SetLayer( SILKSCREEN_N_CMP );
     if( Module && (Module->Type() == TYPE_MODULE) )
@@ -60,7 +57,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
              || moduleLayer == ADHESIVE_N_CU
              || moduleLayer == COPPER_LAYER_N )
         {
-            m_Miroir = 0;
+            m_Mirror = true;
         }
     }
 }
@@ -85,17 +82,20 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
     MODULE* parent = (MODULE*) GetParent();
     int     orient = m_Orient;
 
+	// Due to the pcbnew history, m_Orient is saved in screen value
+	// but it is handled as relative to its parent footprint
     if( parent )
         orient += parent->m_Orient;
 
-    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d \"%s\"\n",
+    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c\"%s\"\n",
         m_Type,
         m_Pos0.x, m_Pos0.y,
         m_Size.y, m_Size.x,
         orient,
         m_Width,
-        m_Miroir ? 'N' : 'M', m_NoShow ? 'I' : 'V',
+        m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
         GetLayer(),
+		m_Italic ? 'I' : 'N',
         CONV_TO_UTF8( m_Text ) );
 
     return ret > 20;
@@ -117,33 +117,40 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
     int success = true;
     int  type;
     int  layer;
-    char BufCar1[128], BufCar2[128], BufLine[256];
+    char BufCar1[128], BufCar2[128], BufCar3[128], BufLine[256];
 
     layer      = SILKSCREEN_N_CMP;
     BufCar1[0] = 0;
     BufCar2[0] = 0;
-    if ( sscanf( aLine + 1, "%d %d %d %d %d %d %d %s %s %d",
+    BufCar3[0] = 0;
+    if ( sscanf( aLine + 1, "%d %d %d %d %d %d %d %s %s %d %s",
         &type,
         &m_Pos0.x, &m_Pos0.y,
         &m_Size.y, &m_Size.x,
         &m_Orient, &m_Width,
-        BufCar1, BufCar2, &layer ) < 10 )
+        BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
         success = true;
 
     if( (type != TEXT_is_REFERENCE) && (type != TEXT_is_VALUE) )
         type = TEXT_is_DIVERS;
     m_Type = type;
 
-    // .m_Orient member must be relative to the parent module
+ 	// Due to the pcbnew history, .m_Orient is saved in screen value
+	// but it is handled as relative to its parent footprint
     m_Orient -= ((MODULE * )m_Parent)->m_Orient;
     if( BufCar1[0] == 'M' )
-        m_Miroir = 0;
+        m_Mirror = true;
     else
-        m_Miroir = 1;
+        m_Mirror = false;
     if( BufCar2[0]  == 'I' )
-        m_NoShow = 1;
+        m_NoShow = true;
     else
-        m_NoShow = 0;
+        m_NoShow = false;
+
+    if( BufCar3[0]  == 'I' )
+        m_Italic = true;
+    else
+        m_Italic = false;
 
     // Test for a reasonnable layer:
     if( layer < 0 )
@@ -191,7 +198,7 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
     m_Pos = source->m_Pos;
     SetLayer( source->GetLayer() );
 
-    m_Miroir = source->m_Miroir;        // Show normal / mirror
+    m_Mirror = source->m_Mirror;        // Show normal / mirror
     m_NoShow = source->m_NoShow;        // 0: visible 1: invisible
     m_Type   = source->m_Type;          // 0: ref,1: val, others = 2..255
     m_Orient = source->m_Orient;        // orientation in 1/10 deg
@@ -347,7 +354,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
  */
 {
     int                  zoom;
-    int                  width, color, orient, miroir;
+    int                  width, color, orient;
     wxSize               size;
     wxPoint              pos; // Centre du texte
     PCB_SCREEN*          screen;
@@ -367,7 +374,6 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
 
     size   = m_Size;
     orient = GetDrawRotation();
-    miroir = m_Miroir & 1; // = 0 si vu en miroir
     width  = m_Width;
 
     if( (frame->m_DisplayModText == FILAIRE) || ( (width / zoom) < L_MIN_DESSIN ) )
@@ -406,13 +412,13 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
     if( (color & ITEM_NOT_SHOW) != 0 )
         return;
 
-    /* Si le texte doit etre mis en miroir: modif des parametres */
-    if( miroir == 0 )
+    /* If the text is mirrored : negate size.x (mirror / Y axis) */
+    if( m_Mirror )
         size.x = -size.x;
 
     /* Trace du texte */
     DrawGraphicText( panel, DC, pos, (enum EDA_Colors) color, m_Text,
-        orient, size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width );
+        orient, size, m_HJustify, m_VJustify, width, m_Italic );
 }
 
 
@@ -489,9 +495,9 @@ void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
         msg.Printf( wxT( "%d" ), ii );
     Affiche_1_Parametre( frame, 31, _( "Layer" ), msg, DARKGREEN );
 
-    msg = wxT( " Yes" );
-    if( m_Miroir & 1 )
-        msg = wxT( " No" );
+    msg = _( " No" );
+    if( m_Mirror )
+        msg = _( " Yes" );
 
     Affiche_1_Parametre( frame, 37, _( "Mirror" ), msg, DARKGREEN );
 

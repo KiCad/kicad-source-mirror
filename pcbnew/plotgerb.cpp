@@ -9,9 +9,25 @@
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "trigo.h"
-#include "plotgerb.h"
 
-#include "protos.h"
+/* Structure de Description d'un D_CODE GERBER : */
+#define FIRST_DCODE_VALUE 10
+
+class D_CODE
+{
+public:
+    D_CODE* m_Pnext, * m_Pback;     /* for  a linked list */
+    wxSize  m_Size;                 /* horiz and Vert size*/
+    int     m_Type;                 /* Type ( Line, rect , circulaire , ovale .. ); -1 = not used (free) descr */
+    int     m_NumDcode;             /* code number ( >= 10 ); 0 = not in use */
+
+    D_CODE()
+    {
+        m_Pnext    = m_Pback = NULL;
+        m_Type     = -1;
+        m_NumDcode = 0;
+    }
+};
 
 
 /* Variables locales : */
@@ -22,19 +38,20 @@ wxString       GerberFullFileName;
 static double  scale_x, scale_y;    // echelles de convertion en X et Y (compte tenu
                                     // des unites relatives du PCB et des traceurs
 static bool    ShowDcodeError = TRUE;
+static void    CloseFileGERBER( void );
+static int     Gen_D_CODE_File( FILE* penfile );
 
 /* Routines Locales */
 
-static void     Init_Trace_GERBER( WinEDA_BasePcbFrame* frame, FILE* gerbfile );
-static void     Init_ApertureList();
-static void     Fin_Trace_GERBER( WinEDA_BasePcbFrame* frame, FILE* gerbfile );
-static void     Plot_1_CIRCLE_pad_GERBER( wxPoint pos, int diametre );
-static void     trace_1_pastille_OVALE_GERBER( wxPoint pos, wxSize size, int orient );
-static void     PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient );
+static void    Init_ApertureList();
+static void    CloseFileGERBER();
+static void    Plot_1_CIRCLE_pad_GERBER( wxPoint pos, int diametre );
+static void    trace_1_pastille_OVALE_GERBER( wxPoint pos, wxSize size, int orient );
+static void    PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient );
 
-static D_CODE*  get_D_code( int dx, int dy, int type, int drill );
-static void     trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
-                                            int orient, int modetrace );
+static D_CODE* get_D_code( int dx, int dy, int type, int drill );
+static void    trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
+                                           int orient, int modetrace );
 
 
 /********************************************************************************/
@@ -67,15 +84,15 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     if( PlotOriginIsAuxAxis )
         g_PlotOffset = m_Auxiliary_Axis_Position;
 
-    dest = wxFopen( FullFileName, wxT( "wt" ) );
-    if( dest == NULL )
+    g_Plot_PlotOutputFile = wxFopen( FullFileName, wxT( "wt" ) );
+    if( g_Plot_PlotOutputFile == NULL )
     {
         wxString msg = _( "unable to create file " ) + FullFileName;
         DisplayError( this, msg );
         return;
     }
 
-    SetLocaleTo_C_standard( );
+    SetLocaleTo_C_standard();
 
     InitPlotParametresGERBER( g_PlotOffset, scale_x, scale_y );
 
@@ -84,7 +101,9 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 
     Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
 
-    Init_Trace_GERBER( this, dest );
+    s_Last_D_code = 0;
+
+    Write_Header_GERBER( g_Main_Title, g_Plot_PlotOutputFile );
 
     nb_plot_erreur = 0;
 
@@ -113,7 +132,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     case LAYER_N_14:
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
-        Plot_Layer_GERBER( dest, layer_mask, 0, 1 );
+        Plot_Layer_GERBER( g_Plot_PlotOutputFile, layer_mask, 0, 1 );
         break;
 
     case SOLDERMASK_N_CU:
@@ -122,21 +141,21 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
             tracevia = 1;
         else
             tracevia = 0;
-        Plot_Layer_GERBER( dest, layer_mask, g_DesignSettings.m_MaskMargin, tracevia );
+        Plot_Layer_GERBER( g_Plot_PlotOutputFile, layer_mask, g_DesignSettings.m_MaskMargin, tracevia );
         break;
 
     case SOLDERPASTE_N_CU:
     case SOLDERPASTE_N_CMP:  /* Trace du masque de pate de soudure */
-        Plot_Layer_GERBER( dest, layer_mask, 0, 0 );
+        Plot_Layer_GERBER( g_Plot_PlotOutputFile, layer_mask, 0, 0 );
         break;
 
     default:
-        Plot_Serigraphie( PLOT_FORMAT_GERBER, dest, layer_mask );
+        Plot_Serigraphie( PLOT_FORMAT_GERBER, g_Plot_PlotOutputFile, layer_mask );
         break;
     }
 
-    Fin_Trace_GERBER( this, dest );
-    SetLocaleTo_Default( );
+    CloseFileGERBER();
+    SetLocaleTo_Default();
 }
 
 
@@ -262,7 +281,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
                 trace_1_pad_TRAPEZE_GERBER( pos, size,
                     delta, PtPad->m_Orient, FILLED );
             }
-                break;
+            break;
 
             case PAD_RECT:
             default:
@@ -325,6 +344,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         pos    = track->m_Start;
         end    = track->m_End;
 
+        SelectD_CODE_For_LineDraw( size.x );
         PlotGERBERLine( pos, end, size.x );
 
         nb_items++;
@@ -348,6 +368,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         pos    = track->m_Start;
         end    = track->m_End;
 
+        SelectD_CODE_For_LineDraw( size.x );
         PlotGERBERLine( pos, end, size.x );
 
         nb_items++;
@@ -358,10 +379,10 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     /* Plot filled ares */
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone =  m_Pcb->GetArea(ii);
-        if( ( (1 << edge_zone->GetLayer()) & masque_layer ) == 0 )
+        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
+        if( ( ( 1 << edge_zone->GetLayer() ) & masque_layer ) == 0 )
             continue;
-        PlotFilledAreas(edge_zone, PLOT_FORMAT_GERBER);
+        PlotFilledAreas( edge_zone, PLOT_FORMAT_GERBER );
     }
 }
 
@@ -378,7 +399,7 @@ void trace_1_pastille_OVALE_GERBER( wxPoint pos, wxSize size, int orient )
  */
 {
     D_CODE* dcode_ptr;
-    char cbuf[256];
+    char    cbuf[256];
     int     x0, y0, x1, y1, delta;
 
     if( orient == 900 || orient == 2700 )  /* orient tournee de 90 deg */
@@ -394,11 +415,11 @@ void trace_1_pastille_OVALE_GERBER( wxPoint pos, wxSize size, int orient )
         if( dcode_ptr->m_NumDcode != s_Last_D_code )
         {
             sprintf( cbuf, "G54D%d*\n", dcode_ptr->m_NumDcode );
-            fputs( cbuf, dest );
+            fputs( cbuf, g_Plot_PlotOutputFile );
             s_Last_D_code = dcode_ptr->m_NumDcode;
         }
         sprintf( cbuf, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
-        fputs( cbuf, dest );
+        fputs( cbuf, g_Plot_PlotOutputFile );
     }
     else /* Forme tracee comme un segment */
     {
@@ -418,6 +439,7 @@ void trace_1_pastille_OVALE_GERBER( wxPoint pos, wxSize size, int orient )
         y1    = delta / 2;
         RotatePoint( &x0, &y0, orient );
         RotatePoint( &x1, &y1, orient );
+        SelectD_CODE_For_LineDraw( size.x );
         PlotGERBERLine( wxPoint( pos.x + x0, pos.y + y0 ),
             wxPoint( pos.x + x1, pos.y + y1 ), size.x );
     }
@@ -432,9 +454,9 @@ void Plot_1_CIRCLE_pad_GERBER( wxPoint pos, int diametre )
  */
 {
     D_CODE* dcode_ptr;
-    char cbuf[256];
+    char    cbuf[256];
 
-    wxSize size( diametre, diametre );
+    wxSize  size( diametre, diametre );
 
     UserToDeviceCoordinate( pos );
     UserToDeviceSize( size );
@@ -443,12 +465,12 @@ void Plot_1_CIRCLE_pad_GERBER( wxPoint pos, int diametre )
     if( dcode_ptr->m_NumDcode != s_Last_D_code )
     {
         sprintf( cbuf, "G54D%d*\n", dcode_ptr->m_NumDcode );
-        fputs( cbuf, dest );
+        fputs( cbuf, g_Plot_PlotOutputFile );
         s_Last_D_code = dcode_ptr->m_NumDcode;
     }
 
     sprintf( cbuf, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
-    fputs( cbuf, dest );
+    fputs( cbuf, g_Plot_PlotOutputFile );
 }
 
 
@@ -463,7 +485,7 @@ void PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient )
  */
 {
     D_CODE* dcode_ptr;
-    char cbuf[256];
+    char    cbuf[256];
 
     /* Trace de la forme flashee */
     switch( orient )
@@ -472,7 +494,7 @@ void PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient )
     case 2700: /* la rotation de 90 ou 270 degres revient a permutter des dimensions */
         EXCHG( size.x, size.y );
 
-        // Pass through
+    // Pass through
 
     case 0:
     case 1800:
@@ -483,11 +505,11 @@ void PlotRectangularPad_GERBER( wxPoint pos, wxSize size, int orient )
         if( dcode_ptr->m_NumDcode != s_Last_D_code )
         {
             sprintf( cbuf, "G54D%d*\n", dcode_ptr->m_NumDcode );
-            fputs( cbuf, dest );
+            fputs( cbuf, g_Plot_PlotOutputFile );
             s_Last_D_code = dcode_ptr->m_NumDcode;
         }
         sprintf( cbuf, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
-        fputs( cbuf, dest );
+        fputs( cbuf, g_Plot_PlotOutputFile );
         break;
 
     default: /* plot pad shape as polygon */
@@ -535,6 +557,7 @@ void trace_1_contour_GERBER( wxPoint pos, wxSize size, wxSize delta,
         RotatePoint( &coord[ii].x, &coord[ii].y, pos.x, pos.y, orient );
     }
 
+    SelectD_CODE_For_LineDraw( penwidth );
     PlotGERBERLine( coord[0], coord[1], penwidth );
     PlotGERBERLine( coord[1], coord[2], penwidth );
     PlotGERBERLine( coord[2], coord[3], penwidth );
@@ -625,7 +648,8 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
 
     if( modetrace != FILLED )
     {
-        int plotLine_width = (int) (10 * g_PlotLine_Width * Gerb_scale_plot);
+        int plotLine_width = (int) ( 10 * g_PlotLine_Width * Gerb_scale_plot );
+        SelectD_CODE_For_LineDraw( plotLine_width );
         PlotGERBERLine( polygon[0], polygon[1], plotLine_width );
         PlotGERBERLine( polygon[1], polygon[2], plotLine_width );
         PlotGERBERLine( polygon[2], polygon[3], plotLine_width );
@@ -637,120 +661,21 @@ void trace_1_pad_TRAPEZE_GERBER( wxPoint pos, wxSize size, wxSize delta,
 
 
 /**********************************************************/
-void PlotGERBERLine( wxPoint start, wxPoint end, int width )
+void SelectD_CODE_For_LineDraw( int aSize )
 /**********************************************************/
 
-/* Trace 1 segment de piste :
+/** Selects a D_Code nn to draw lines and writes G54Dnn to output file
+ * @param aSize = D_CODE diameter
  */
 {
     D_CODE* dcode_ptr;
-    char cbuf[256];
 
-    UserToDeviceCoordinate( start );
-    UserToDeviceCoordinate( end );
-
-    dcode_ptr = get_D_code( width, width, GERB_LINE, 0 );
+    dcode_ptr = get_D_code( aSize, aSize, GERB_LINE, 0 );
     if( dcode_ptr->m_NumDcode != s_Last_D_code )
     {
-        sprintf( cbuf, "G54D%d*\n", dcode_ptr->m_NumDcode );
-        fputs( cbuf, dest );
+        fprintf( g_Plot_PlotOutputFile, "G54D%d*\n", dcode_ptr->m_NumDcode );
         s_Last_D_code = dcode_ptr->m_NumDcode;
     }
-    sprintf( cbuf, "X%5.5dY%5.5dD02*\n", start.x, start.y );
-    fputs( cbuf, dest );
-    sprintf( cbuf, "X%5.5dY%5.5dD01*\n", end.x, end.y );
-    fputs( cbuf, dest );
-}
-
-
-/********************************************************************/
-void PlotCircle_GERBER( wxPoint centre, int rayon, int epaisseur )
-/********************************************************************/
-
-/* Plot one cercle as segments (6 to 16 depending on its radius
- */
-{
-    int ii;
-    int ox, oy, fx, fy;
-    int delta;      /* increment (en 0.1 degres) angulaire pour trace de cercles */
-
-    delta = 120;    /* un cercle sera trace en 3600/delta segments */
-    /* Correction pour petits cercles par rapport a l'epaisseur du trait */
-    if( rayon < (epaisseur * 10) )
-        delta = 225;    /* 16 segm pour 360 deg */
-    if( rayon < (epaisseur * 5) )
-        delta = 300;    /* 12 segm pour 360 deg */
-    if( rayon < (epaisseur * 2) )
-        delta = 600;    /* 6 segm pour 360 deg */
-
-    ox = centre.x + rayon;
-    oy = centre.y;
-    for( ii = delta; ii < 3600; ii += delta )
-    {
-        fx = centre.x + (int) (rayon * fcosinus[ii]);
-        fy = centre.y + (int) (rayon * fsinus[ii]);
-        PlotGERBERLine( wxPoint( ox, oy ), wxPoint( fx, fy ), epaisseur );
-        ox = fx;
-        oy = fy;
-    }
-
-    fx = centre.x + rayon;
-    fy = centre.y;
-    PlotGERBERLine( wxPoint( ox, oy ), wxPoint( fx, fy ), epaisseur );
-}
-
-
-/***************************************************************/
-void PlotFilledPolygon_GERBER( int nb_segm, int* coord )
-/***************************************************************/
-{
-    int     ii;
-    wxPoint pos, startpos;
-
-    fputs( "G36*\n", dest );
-    pos.x = *coord;
-    coord++;
-    pos.y = *coord;
-    coord++;
-    UserToDeviceCoordinate( pos );
-    startpos = pos;
-    fprintf( dest, "X%5.5dY%5.5dD02*\n", pos.x, pos.y );
-    for( ii = 1; ii < nb_segm; ii++ )
-    {
-        pos.x = *coord;
-        coord++;
-        pos.y = *coord;
-        coord++;
-        UserToDeviceCoordinate( pos );
-        fprintf( dest, "X%5.5dY%5.5dD01*\n", pos.x, pos.y );
-    }
-
-    fprintf( dest, "X%5.5dY%5.5dD01*\n", startpos.x, startpos.y );
-    fputs( "G37*\n", dest );
-}
-
-
-/***************************************************************/
-void PlotPolygon_GERBER( int nb_segm, int* coord, int width )
-/***************************************************************/
-{
-    wxPoint start, end, startpoint;
-    startpoint.x = *coord++;
-    startpoint.y = *coord++;
-    start = startpoint;
-    for( int ii = 0; ii < nb_segm-1; ii++ )
-    {
-        end.x = *coord;
-        coord++;
-        end.y = *coord;
-        coord++;
-        PlotGERBERLine(start, end, width );
-        start = end;
-    }
-
-    if ( startpoint != end )    // Close poly
-        PlotGERBERLine(end, startpoint, width );
-
 }
 
 
@@ -800,31 +725,6 @@ D_CODE* get_D_code( int dx, int dy, int type, int drill )
 }
 
 
-/******************************************************************/
-void Init_Trace_GERBER( WinEDA_BasePcbFrame* frame, FILE* gerbfile )
-/******************************************************************/
-{
-    char Line[1024];
-
-    s_Last_D_code = 0;
-
-    DateAndTime( Line );
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    fprintf( gerbfile, "G04 (Genere par %s) le %s*\n", CONV_TO_UTF8( Title ), Line );
-
-    // Specify linear interpol (G01), unit = INCH (G70), abs format (G90):
-    fputs( "G01*\nG70*\nG90*\n", gerbfile );
-    fputs( "%MOIN*%\n", gerbfile );     // set unites = INCHES
-
-    /* Set gerber format to 3.4 */
-    strcpy( Line, "G04 Gerber Fmt 3.4, Leading zero omitted, Abs format*\n%FSLAX34Y34*%\n" );
-
-    fputs( Line, gerbfile );
-
-    fputs( "G04 APERTURE LIST*\n", gerbfile );
-}
-
-
 /***********************************/
 static void Init_ApertureList()
 /***********************************/
@@ -847,57 +747,8 @@ static void Init_ApertureList()
 }
 
 
-/*****************************************************************/
-void Fin_Trace_GERBER( WinEDA_BasePcbFrame* frame, FILE* gerbfile )
-/*****************************************************************/
-{
-    char     line[1024];
-    wxString TmpFileName, msg;
-    FILE*    outfile;
-
-    fputs( "M02*\n", gerbfile );
-    fclose( gerbfile );
-
-    // Reouverture gerbfile pour ajout des Apertures
-    gerbfile = wxFopen( GerberFullFileName, wxT( "rt" ) );
-    if( gerbfile == NULL )
-    {
-        msg.Printf( _( "unable to reopen file <%s>" ), GerberFullFileName.GetData() );
-        DisplayError( frame, msg );
-        return;
-    }
-
-    // Ouverture tmpfile
-    TmpFileName = GerberFullFileName + wxT( ".$$$" );
-    outfile = wxFopen( TmpFileName, wxT( "wt" ) );
-    if( outfile == NULL )
-    {
-        fclose( gerbfile );
-        DisplayError( frame, wxT( "Fin_Trace_GERBER(): Can't Open tmp file" ) );
-        return;
-    }
-
-    // Placement des Apertures en RS274X
-    rewind( gerbfile );
-    while( fgets( line, 1024, gerbfile ) )
-    {
-        fputs( line, outfile );
-        if( strcmp( strtok( line, "\n\r" ), "G04 APERTURE LIST*" ) == 0 )
-        {
-            frame->Gen_D_CODE_File( outfile );
-            fputs( "G04 APERTURE END LIST*\n", outfile );
-        }
-    }
-
-    fclose( outfile );
-    fclose( gerbfile );
-    wxRemoveFile( GerberFullFileName );
-    wxRenameFile( TmpFileName, GerberFullFileName );
-}
-
-
 /******************************************************/
-int WinEDA_BasePcbFrame::Gen_D_CODE_File( FILE* penfile )
+int Gen_D_CODE_File( FILE* penfile )
 /******************************************************/
 
 /* Genere la liste courante des D_CODES
@@ -906,7 +757,7 @@ int WinEDA_BasePcbFrame::Gen_D_CODE_File( FILE* penfile )
  */
 {
     D_CODE* ptr_tool;
-    char cbuf[1024];
+    char    cbuf[1024];
     int     nb_dcodes = 0;
 
     /* Init : */
@@ -940,7 +791,7 @@ int WinEDA_BasePcbFrame::Gen_D_CODE_File( FILE* penfile )
             break;
 
         default:
-            DisplayError( this, wxT( "Gen_D_CODE_File(): Dcode Type err" ) );
+            DisplayError( NULL, wxT( "Gen_D_CODE_File(): Dcode Type err" ) );
             break;
         }
 
@@ -950,4 +801,56 @@ int WinEDA_BasePcbFrame::Gen_D_CODE_File( FILE* penfile )
     }
 
     return nb_dcodes;
+}
+
+
+/*****************************/
+void CloseFileGERBER( void )
+/****************************/
+
+/** Function CloseFileGERBER
+ */
+{
+    char     line[1024];
+    wxString TmpFileName, msg;
+    FILE*    tmpfile;
+
+    fputs( "M02*\n", g_Plot_PlotOutputFile );
+    fclose( g_Plot_PlotOutputFile );
+
+    // Reouverture g_Plot_PlotOutputFile pour ajout des Apertures
+    g_Plot_PlotOutputFile = wxFopen( GerberFullFileName, wxT( "rt" ) );
+    if( g_Plot_PlotOutputFile == NULL )
+    {
+        msg.Printf( _( "unable to reopen file <%s>" ), GerberFullFileName.GetData() );
+        DisplayError( NULL, msg );
+        return;
+    }
+
+    // Ouverture tmpfile
+    TmpFileName = GerberFullFileName + wxT( ".$$$" );
+    tmpfile     = wxFopen( TmpFileName, wxT( "wt" ) );
+    if( tmpfile == NULL )
+    {
+        fclose( g_Plot_PlotOutputFile );
+        DisplayError( NULL, wxT( "CloseFileGERBER(): Can't Open tmp file" ) );
+        return;
+    }
+
+    // Placement des Apertures en RS274X
+    rewind( g_Plot_PlotOutputFile );
+    while( fgets( line, 1024, g_Plot_PlotOutputFile ) )
+    {
+        fputs( line, tmpfile );
+        if( strcmp( strtok( line, "\n\r" ), "G04 APERTURE LIST*" ) == 0 )
+        {
+            Gen_D_CODE_File( tmpfile );
+            fputs( "G04 APERTURE END LIST*\n", tmpfile );
+        }
+    }
+
+    fclose( tmpfile );
+    fclose( g_Plot_PlotOutputFile );
+    wxRemoveFile( GerberFullFileName );
+    wxRenameFile( TmpFileName, GerberFullFileName );
 }

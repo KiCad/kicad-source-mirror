@@ -48,7 +48,8 @@ set(PCBNEW_SRCS
     dialog_copper_zones_base.cpp
     dialog_display_options_base.cpp
 #   dialog_drc.cpp
-    dialog_edit_mod_text.cpp
+    dialog_edit_module_text.cpp
+	dialog_edit_module_text_base.cpp
 #   dialog_edit_module.cpp
     dialog_freeroute_exchange.cpp
 #   dialog_gendrill.cpp

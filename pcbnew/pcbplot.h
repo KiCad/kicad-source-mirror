@@ -123,36 +123,15 @@ eda_global int g_DrillShapeOpt
 #define GERB_OVALE 4
 #define GERB_DONUT 5
 
-/* liste des D_CODES en fonction de leur numero d'ordre (numero d'outil)
-    (l'ordre 0 n'est pas utilise) ;
-    Tools have D_CODES >= 10
-    D_CODES <= 9 are used for commands only:
-        D01 ... D9 = command codes for photo plotting:
-        D01			= Light on
-        D02			= Light off
-        D03			= Flash
-        D04 .. D08	= ?
-        D09			= VAPE Flash
-*/
-
-
-    /* Routines generales de trace : */
-
-
 /* PLOT_RTN.CC */
 void PlotTextePcb( TEXTE_PCB * pt_texte,int format_plot,int masque_layer);
         /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
-        prepare les parametres de trace de Plot_1_texte */
+        prepare les parametres de trace de texte */
 void PlotArc(int format_plot, wxPoint centre, int start_angle,int end_angle,
                     int rayon,int width);
 void PlotCircle(int format_plot,int width, wxPoint centre, int rayon);
 void PlotFilledPolygon(int format_plot, int nbpoints, int * coord);
 void PlotPolygon(int format_plot, int nbpoints, int * coord, int width);
-void Plot_1_texte( int format_plot,
-                        const wxString & Text, int t_orient,
-                        int width, int ox,int oy,int size_h,int size_v,
-                        bool centreX = TRUE, bool centreY = TRUE);
-            /* Routine de base de trace de 1 chaine de caracteres */
 
 void PlotDrawSegment( DRAWSEGMENT* PtSegm, int format_plot,int masque_layer );
 
@@ -165,10 +144,7 @@ void Plot_1_EdgeModule(int format_plot, EDGE_MODULE * PtEdge);
 void PlotFilledAreas( ZONE_CONTAINER * aZone, int aFormat);
 
 /* PLOTGERB.CPP */
-void PlotGERBERLine(wxPoint start, wxPoint end, int width);
-void PlotCircle_GERBER( wxPoint centre, int rayon, int width);
-void PlotFilledPolygon_GERBER(int nb_segm, int * coord);
-void PlotPolygon_GERBER(int nb_segm, int * coord, int width);
+void SelectD_CODE_For_LineDraw( int aSize );
 void trace_1_contour_GERBER(wxPoint pos, wxSize size, wxSize delta,
                                         int penwidth, int orient);
     /* Trace 1 contour rectangulaire ou trapezoidal d'orientation quelconque

@@ -24,7 +24,6 @@
 #include "hotkeys_basic.h"
 #include "macros.h"
 #include "online_help.h"
-
 #include "bitmaps.h"
 
 

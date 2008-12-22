@@ -14,13 +14,6 @@
 /* parametre HPGL pour trace de cercle: */
 #define CHORD_ANGLE 10
 
-// Variables partagees avec Common plot Postscript Routines
-extern wxPoint LastPenPosition;
-extern wxPoint PlotOffset;
-extern FILE*   PlotOutputFile;
-extern double  XScale, YScale;
-extern int     g_DefaultPenWidth, g_CurrentPenWidth;
-extern int     PlotOrientOptions, etat_plume;
 
 //Variables locales
 void    Move_Plume_HPGL( wxPoint pos, int plume );
@@ -28,20 +21,20 @@ void    Plume_HPGL( int plume );
 
 
 /***********************************************************************************/
-void InitPlotParametresHPGL( wxPoint offset, double xscale, double yscale, int orient )
+void InitPlotParametresHPGL( wxPoint offset, double aXScale, double aYScale, int orient )
 /***********************************************************************************/
 
 /* Set the plot offset for the current plotting
-  * xscale,yscale = coordinate scale (scale coefficient for coordinates)
-  * device_xscale,device_yscale = device coordinate scale (i.e scale used by plot device)
+  * g_Plot_XScale,g_Plot_YScale = coordinate scale (scale coefficient for coordinates)
+  * device_g_Plot_XScale,device_g_Plot_YScale = device coordinate scale (i.e scale used by plot device)
  */
 {
-    PlotOffset = offset;
-    XScale = xscale;
-    YScale = yscale;
-    g_DefaultPenWidth = 6;          /* epaisseur du trait standard en 1/1000 pouce */
-    PlotOrientOptions = orient;
-    g_CurrentPenWidth = -1;
+    g_Plot_PlotOffset = offset;
+    g_Plot_XScale = aXScale;
+    g_Plot_YScale = aYScale;
+    g_Plot_DefaultPenWidth = 6;          /* epaisseur du trait standard en 1/1000 pouce */
+    g_Plot_PlotOrientOptions = orient;
+    g_Plot_CurrentPenWidth = -1;
 }
 
 
@@ -51,8 +44,8 @@ bool PrintHeaderHPGL( FILE* plot_file, int pen_speed, int pen_num )
 {
     char Line[256];
 
-    PlotOutputFile = plot_file;
-    etat_plume = 'U';
+    g_Plot_PlotOutputFile = plot_file;
+    g_Plot_PenState = 'U';
     sprintf( Line, "IN;VS%d;PU;PA;SP%d;\n", pen_speed, pen_num );
     fputs( Line, plot_file );
     return TRUE;
@@ -79,7 +72,7 @@ void PlotRectHPGL( wxPoint p1, wxPoint p2, bool fill, int width )
 
     Plume_HPGL( 'U' );
     sprintf( Line, "PA %d,%d;EA %d,%d;\n", p1.x, p1.y, p2.x, p2.y );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     Plume_HPGL( 'U' ); return;
 }
@@ -93,14 +86,14 @@ void PlotCircleHPGL( wxPoint centre, int diameter, bool fill, int width )
     char Line[256];
 
     UserToDeviceCoordinate( centre );
-    rayon = (int) (diameter / 2 * XScale);
+    rayon = (int) (diameter / 2 * g_Plot_XScale);
 
     if( rayon < 0 )
         rayon = 0;
 
     Plume_HPGL( 'U' );
     sprintf( Line, "PA %d,%d;CI %d,%d;\n", centre.x, centre.y, rayon, CHORD_ANGLE );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
 
     Plume_HPGL( 'U' ); return;
 }
@@ -129,7 +122,7 @@ void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fil
 
     cpos = centre; UserToDeviceCoordinate( cpos );
 
-    if( PlotOrientOptions == PLOT_MIROIR )
+    if( g_Plot_PlotOrientOptions == PLOT_MIROIR )
     {
         EndAngle = -EndAngle;
         StAngle  = -StAngle;
@@ -143,11 +136,11 @@ void PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fil
 
     Plume_HPGL( 'U' );
     sprintf( Line, "PU;PA %d,%d;PD;AA %d,%d, ", cmap.x, cmap.y, cpos.x, cpos.y );
-    fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
     sprintf( Line, "%f", -angle ); to_point( Line ); // Transforme , et . du separateur
-    fputs( Line, PlotOutputFile );
-    sprintf( Line, ", %d", CHORD_ANGLE ); fputs( Line, PlotOutputFile );
-    sprintf( Line, ";PU;\n" ); fputs( Line, PlotOutputFile );
+    fputs( Line, g_Plot_PlotOutputFile );
+    sprintf( Line, ", %d", CHORD_ANGLE ); fputs( Line, g_Plot_PlotOutputFile );
+    sprintf( Line, ";PU;\n" ); fputs( Line, g_Plot_PlotOutputFile );
     Plume_HPGL( 'U' );
 }
 
@@ -205,7 +198,7 @@ void Move_Plume_HPGL( wxPoint pos, int plume )
     Plume_HPGL( plume );
     UserToDeviceCoordinate( pos );
 
-    sprintf( Line, "PA %d,%d;\n", pos.x, pos.y ); fputs( Line, PlotOutputFile );
+    sprintf( Line, "PA %d,%d;\n", pos.x, pos.y ); fputs( Line, g_Plot_PlotOutputFile );
 }
 
 
@@ -218,14 +211,14 @@ void Plume_HPGL( int plume )
 {
     if( plume == 'U' )
     {
-        if( etat_plume != 'U' )
-            fputs( "PU;", PlotOutputFile );
-        etat_plume = 'U';
+        if( g_Plot_PenState != 'U' )
+            fputs( "PU;", g_Plot_PlotOutputFile );
+        g_Plot_PenState = 'U';
     }
     else
     {
-        if( etat_plume != 'D' )
-            fputs( "PD;", PlotOutputFile );
-        etat_plume = 'D';
+        if( g_Plot_PenState != 'D' )
+            fputs( "PD;", g_Plot_PlotOutputFile );
+        g_Plot_PenState = 'D';
     }
 }

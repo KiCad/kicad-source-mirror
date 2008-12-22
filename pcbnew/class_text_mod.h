@@ -13,21 +13,16 @@
 #define TEXT_is_DIVERS    2
 
 
-class TEXTE_MODULE : public BOARD_ITEM
+class TEXTE_MODULE : public BOARD_ITEM, public EDA_TextStruct
 {
+/* Note: orientation in 1/10 deg relative to the footprint
+ * Physical orient is m_Orient + m_Parent->m_Orient
+*/
 public:
-    wxPoint  m_Pos;         // Real (physical)coord
-    int      m_Width;
     wxPoint  m_Pos0;        // text coordinates relatives to the footprint ancre, orient 0
                             // Text coordinate ref point is the text centre
-    char     m_Unused;      // unused (reserved for future extensions)
-    char     m_Miroir;      // Show normal / mirror
-    char     m_NoShow;      // 0: visible 1: invisible  (bool)
     char     m_Type;        // 0: ref,1: val, others = 2..255
-    int      m_Orient;      // orientation in 1/10 deg relative to the footprint
-                            // Physical orient is m_Orient + m_Parent->m_Orient
-    wxSize   m_Size;        // text size
-    wxString m_Text;
+	bool	 m_NoShow;		// true = invisible
 
 public:
     TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
@@ -52,7 +47,6 @@ public:
     /* Gestion du texte */
     void     SetWidth( int new_width );
     int      GetLength();           /* text length */
-    int      Pitch();               /* retourne le pas entre 2 caracteres */
     int      GetDrawRotation();     // Return text rotation for drawings and plotting
 
     /** Function GetTextRect
