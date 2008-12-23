@@ -1,6 +1,7 @@
-/******************************************************/
-/* editpads.cpp: Pad editing functions and dialog box */
-/******************************************************/
+/*******************************************************************/
+/* dialog_pad_properties.cpp: Pad editing functions and dialog box */
+/* see also dialog_pad_properties.xxx (built with wxFormBuilder)   */
+/*******************************************************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -514,7 +515,10 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
         if( m_CurrentPad->GetNetname() != Current_PadNetName )
         {
             if( Current_PadNetName.IsEmpty() )
+			{
                 m_CurrentPad->SetNet( 0 );
+                m_CurrentPad->SetNetname( Current_PadNetName );
+			}
             else
             {
                 const EQUIPOT* net = m_Parent->m_Pcb->FindNet( Current_PadNetName );

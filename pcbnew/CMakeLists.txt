@@ -56,6 +56,8 @@ set(PCBNEW_SRCS
     dialog_general_options.cpp
 	dialog_general_options_BoardEditor_base.cpp
 #   dialog_graphic_items_options.cpp
+	dialog_graphic_item_properties.cpp
+	dialog_graphic_item_properties_base.cpp
 #   dialog_initpcb.cpp
 #   dialog_netlist.cpp
     dialog_pcb_text_properties.cpp

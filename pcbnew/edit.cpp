@@ -842,7 +842,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_DRAWING:
-        Drawing_SetNewWidth( (DRAWSEGMENT*) GetCurItem(), &dc );
+		InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*)GetCurItem(), &dc);
         DrawPanel->MouseToCursorSchema();
         break;
 

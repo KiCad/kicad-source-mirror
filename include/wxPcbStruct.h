@@ -209,8 +209,10 @@ public:
     void                        Place_Module( MODULE* module, wxDC* DC );
     void                        InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
                                                             wxDC* DC, const wxPoint& pos );
+	// Graphic items edition:
+	void 						InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC);
 
-    // module texts
+	// module texts
     void                        RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void                        DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void                        PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
@@ -661,7 +663,6 @@ public:
     // Graphic segments type DRAWSEGMENT handling:
     DRAWSEGMENT*        Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
     void                End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void                Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC );
     void                Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void                Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC );
 

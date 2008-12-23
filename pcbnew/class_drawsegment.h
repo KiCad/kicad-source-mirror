@@ -8,7 +8,7 @@
 class DRAWSEGMENT : public BOARD_ITEM
 {
 public:
-    int     m_Width;            // 0 = line. if > 0 = tracks, bus ...
+    int     m_Width;            // thickness of lines ...
     wxPoint m_Start;            // Line start point
     wxPoint m_End;              // Line end point
 

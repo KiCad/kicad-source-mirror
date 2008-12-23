@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-21 17:50+0100\n"
-"PO-Revision-Date: 2008-12-21 17:51+0100\n"
+"POT-Creation-Date: 2008-12-23 14:07+0100\n"
+"PO-Revision-Date: 2008-12-23 14:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1619,15 +1619,15 @@ msgstr "Long. Net"
 msgid "Abort routing?"
 msgstr "Arrêter le routage?"
 
-#: pcbnew/editedge.cpp:162
+#: pcbnew/editedge.cpp:137
 msgid "Copper layer global delete not allowed!"
 msgstr " Effacement global sur couche cuivre non autorisé"
 
-#: pcbnew/editedge.cpp:168
+#: pcbnew/editedge.cpp:143
 msgid "Segment is being edited"
 msgstr "Segment en cours d'édition"
 
-#: pcbnew/editedge.cpp:172
+#: pcbnew/editedge.cpp:147
 msgid "Delete Layer "
 msgstr "Effacer Couche"
 
@@ -2110,11 +2110,11 @@ msgstr "Impossible de créer le fichier "
 msgid "Drill Report file"
 msgstr "Fichier rapport de perçage:"
 
-#: pcbnew/plotgerb.cpp:73
+#: pcbnew/plotgerb.cpp:90
 msgid "unable to create file "
 msgstr "Impossible de créer  fichier "
 
-#: pcbnew/plotgerb.cpp:865
+#: pcbnew/plotgerb.cpp:825
 #, c-format
 msgid "unable to reopen file <%s>"
 msgstr "Ne peut pas réouvrir fichier <%s>"
@@ -3361,59 +3361,6 @@ msgstr "Change Perçage"
 msgid "Change Orientation"
 msgstr "Change Orientation"
 
-#: pcbnew/dialog_edit_mod_text.cpp:173
-#, c-format
-msgid "Module %s (%s) orient %.1f"
-msgstr "Module %s (%s) orient %.1f"
-
-#: pcbnew/dialog_edit_mod_text.cpp:188
-msgid "Reference:"
-msgstr "Référence:"
-
-#: pcbnew/dialog_edit_mod_text.cpp:205
-msgid "Size X"
-msgstr "Taille X"
-
-#: pcbnew/dialog_edit_mod_text.cpp:216
-msgid "Size Y"
-msgstr "Taille Y"
-
-#: pcbnew/dialog_edit_mod_text.cpp:229
-msgid "Offset X"
-msgstr "Offset X"
-
-#: pcbnew/dialog_edit_mod_text.cpp:240
-msgid "Offset Y"
-msgstr "Offset Y"
-
-#: pcbnew/dialog_edit_mod_text.cpp:278
-msgid "horiz"
-msgstr "horiz"
-
-#: pcbnew/dialog_edit_mod_text.cpp:279
-msgid "vertical"
-msgstr "Vertical"
-
-#: pcbnew/dialog_edit_mod_text.cpp:282
-msgid "Orientation"
-msgstr "Orientation"
-
-#: pcbnew/dialog_edit_mod_text.cpp:287
-msgid "show"
-msgstr "Visible"
-
-#: pcbnew/dialog_edit_mod_text.cpp:288
-msgid "no show"
-msgstr "Invisible"
-
-#: pcbnew/dialog_edit_mod_text.cpp:382
-msgid "Value:"
-msgstr "Valeur:"
-
-#: pcbnew/dialog_edit_mod_text.cpp:384
-msgid "Text:"
-msgstr "Texte:"
-
 #: pcbnew/muwave_command.cpp:50
 msgid "Add Line"
 msgstr "Addition de lignes"
@@ -3765,7 +3712,7 @@ msgstr "Fichiers Librairies:"
 msgid "Library already in use"
 msgstr "Librairie déjà en usage"
 
-#: pcbnew/plot_rtn.cpp:215
+#: pcbnew/plot_rtn.cpp:210
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
@@ -3774,7 +3721,7 @@ msgstr ""
 "Votre PCB a un mauvais numero de couche  %u pour le module\n"
 " %s's \"reference\"."
 
-#: pcbnew/plot_rtn.cpp:235
+#: pcbnew/plot_rtn.cpp:230
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
@@ -3783,7 +3730,7 @@ msgstr ""
 "Votre PCB a un mauvais numero de couche %u pour le module\n"
 " %s's \"valeur\"."
 
-#: pcbnew/plot_rtn.cpp:281
+#: pcbnew/plot_rtn.cpp:276
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
@@ -4029,7 +3976,7 @@ msgstr "Via Traversantes:"
 msgid "Buried Vias:"
 msgstr "Via Enterrées:"
 
-#: pcbnew/gen_drill_report_files.cpp:388
+#: pcbnew/gen_drill_report_files.cpp:389
 msgid ""
 " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\n"
 "Plot uses circle shape for some drill values"
@@ -4081,9 +4028,17 @@ msgstr "&Au sujet de r Pcbnew"
 msgid "About pcbnew PCB designer"
 msgstr "Au sujet de Pcbnew, concption de PCB"
 
-#: pcbnew/class_text_mod.cpp:462
+#: pcbnew/class_text_mod.cpp:468
 msgid "Ref."
 msgstr "Ref."
+
+#: pcbnew/class_text_mod.cpp:498
+msgid " No"
+msgstr "Non"
+
+#: pcbnew/class_text_mod.cpp:500
+msgid " Yes"
+msgstr "Oui"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:187
 msgid "Export a Specctra Design (*.dsn) File"
@@ -4200,6 +4155,7 @@ msgid "Outlines Appearence"
 msgstr "Aspect des Contours"
 
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:34
+#: pcbnew/dialog_copper_zones_base.cpp:101
 msgid "Any"
 msgstr "Tout"
 
@@ -4364,8 +4320,6 @@ msgid "Export this zone setup to all others copper zones"
 msgstr "Exporter ces options vers les autres zones de cuivre"
 
 #: pcbnew/dialog_copper_zones_base.cpp:156
-#: pcbnew/dialog_pad_properties_base.cpp:91
-#: pcbnew/zone_filling_deprecated_algorithm.cpp:310
 msgid "Ok"
 msgstr "Ok"
 
@@ -4503,35 +4457,35 @@ msgstr "Ok pour ajuster l'orientation des modules à %g degrés ?"
 msgid "Bad value for footprints orientation"
 msgstr "Mauvaise valeur pour l'orientation des empreintes"
 
-#: pcbnew/dialog_pad_properties.cpp:120
+#: pcbnew/dialog_pad_properties.cpp:121
 msgid "Pad Position"
 msgstr "Position Pad"
 
-#: pcbnew/dialog_pad_properties.cpp:125
+#: pcbnew/dialog_pad_properties.cpp:126
 msgid "Pad Size"
 msgstr "Taille Pad"
 
-#: pcbnew/dialog_pad_properties.cpp:130
+#: pcbnew/dialog_pad_properties.cpp:131
 msgid "Delta"
 msgstr "Delta"
 
-#: pcbnew/dialog_pad_properties.cpp:135
+#: pcbnew/dialog_pad_properties.cpp:136
 msgid "Offset"
 msgstr "Offset"
 
-#: pcbnew/dialog_pad_properties.cpp:141
+#: pcbnew/dialog_pad_properties.cpp:142
 msgid "Pad drill"
 msgstr "Diam perçage"
 
-#: pcbnew/dialog_pad_properties.cpp:427
+#: pcbnew/dialog_pad_properties.cpp:428
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Valeur incorrecte pour diamètre de perçage.perçage plus grand que la taille du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:433
+#: pcbnew/dialog_pad_properties.cpp:434
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:528
+#: pcbnew/dialog_pad_properties.cpp:532
 msgid "Unknown netname, no change"
 msgstr "Net inconnu, pas de changement"
 
@@ -4927,6 +4881,14 @@ msgstr "Supprimer [%s]"
 msgid "TextPCB properties"
 msgstr "Propriétés des textes PCB"
 
+#: pcbnew/dialog_pcb_text_properties.cpp:108
+msgid "Text:"
+msgstr "Texte:"
+
+#: pcbnew/dialog_pcb_text_properties.cpp:141
+msgid "Orientation"
+msgstr "Orientation"
+
 #: pcbnew/dialog_pcb_text_properties.cpp:176
 msgid "Italic"
 msgstr "Italique"
@@ -4942,6 +4904,77 @@ msgstr "Flags"
 #: pcbnew/class_track.cpp:949
 msgid "Diam"
 msgstr "Diam"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:19
+#, c-format
+msgid "Module %s (%s) orient %.1f"
+msgstr "Module %s (%s) orient %.1f"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:26
+msgid "Reference:"
+msgstr "Référence:"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:39
+msgid "Size X"
+msgstr "Taille X"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:46
+msgid "Size Y"
+msgstr "Taille Y"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:53
+msgid "Offset X"
+msgstr "Offset X"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:60
+msgid "Offset Y"
+msgstr "Offset Y"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:72
+msgid "Thickness"
+msgstr "Epaisseur"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:79
+msgid "horizontal"
+msgstr "horizontal"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:79
+msgid "vertical"
+msgstr "Vertical"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:85
+msgid "Visible"
+msgstr "Visible"
+
+#: pcbnew/dialog_edit_module_text_base.cpp:85
+msgid "Invisible"
+msgstr "Invisible"
+
+#: pcbnew/dialog_graphic_item_properties.cpp:77
+#: pcbnew/dialog_graphic_item_properties.cpp:86
+msgid "Center X"
+msgstr "Centre X"
+
+#: pcbnew/dialog_graphic_item_properties.cpp:78
+#: pcbnew/dialog_graphic_item_properties.cpp:87
+msgid "Center Y"
+msgstr "Centrer Y"
+
+#: pcbnew/dialog_graphic_item_properties.cpp:79
+msgid "Point X"
+msgstr "Point X"
+
+#: pcbnew/dialog_graphic_item_properties.cpp:80
+msgid "Point Y"
+msgstr "Point Y"
+
+#: pcbnew/dialog_graphic_item_properties.cpp:88
+msgid "Start Point X"
+msgstr "Start Point X"
+
+#: pcbnew/dialog_graphic_item_properties.cpp:89
+msgid "Start Point Y"
+msgstr "Start Point Y"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:22
 msgid "No Display"
@@ -5019,7 +5052,7 @@ msgstr "16"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:55
 msgid "Active copper layers count selection"
-msgstr ""
+msgstr "Sélection su nombre de couches cuivre actives"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:59
 msgid "Max Links:"
@@ -5125,6 +5158,10 @@ msgstr "Pistes Magnétiques"
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:148
 msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Contrôle la capture du curseur pcb quand le curseur souris passe sur une piste"
+
+#: pcbnew/dialog_edit_module_text.cpp:96
+msgid "Value:"
+msgstr "Valeur:"
 
 #: eeschema/backanno.cpp:135
 msgid "Load Stuff File"
@@ -5383,18 +5420,22 @@ msgid "Length"
 msgstr "Longueur"
 
 #: eeschema/affiche.cpp:102
+#: eeschema/pinedit-dialog.cpp:225
 msgid "Up"
 msgstr "Haut"
 
 #: eeschema/affiche.cpp:105
+#: eeschema/pinedit-dialog.cpp:226
 msgid "Down"
 msgstr "Bas"
 
 #: eeschema/affiche.cpp:108
+#: eeschema/pinedit-dialog.cpp:224
 msgid "Left"
 msgstr "Gauche"
 
 #: eeschema/affiche.cpp:111
+#: eeschema/pinedit-dialog.cpp:223
 msgid "Right"
 msgstr "Droite"
 
@@ -7004,6 +7045,7 @@ msgid "Part %c"
 msgstr "Composant %c"
 
 #: eeschema/tool_sch.cpp:39
+#: eeschema/menubar.cpp:42
 msgid "New schematic project"
 msgstr "Nouveau Projet schématique"
 
@@ -7080,10 +7122,12 @@ msgid "Place a bus"
 msgstr "Placer un bus"
 
 #: eeschema/tool_sch.cpp:173
+#: eeschema/menubar.cpp:237
 msgid "Place a wire to bus entry"
 msgstr "Placer une Entrée de Bus (type fil vers bus)"
 
 #: eeschema/tool_sch.cpp:177
+#: eeschema/menubar.cpp:247
 msgid "Place a bus to bus entry"
 msgstr "Placer une Entrée de Bus (type bus vers bus)"
 
@@ -7092,6 +7136,7 @@ msgid "Place no connect flag"
 msgstr "Placer symbole de non connexion"
 
 #: eeschema/tool_sch.cpp:186
+#: eeschema/menubar.cpp:267
 msgid "Place net name"
 msgstr "Place  nom de net"
 
@@ -7108,6 +7153,7 @@ msgid "Place a junction"
 msgstr "Placer une jonction"
 
 #: eeschema/tool_sch.cpp:200
+#: eeschema/menubar.cpp:297
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
 
@@ -7128,6 +7174,7 @@ msgid "Place graphic line or polygon"
 msgstr "Placer ligne ou  polygone graphique"
 
 #: eeschema/tool_sch.cpp:223
+#: eeschema/menubar.cpp:349
 msgid "Place graphic text (comment)"
 msgstr "Placer textes graphiques (commentaires)"
 
@@ -8547,7 +8594,6 @@ msgid "Delete selections"
 msgstr "Effacement des associations existantes"
 
 #: cvpcb/cvframe.cpp:376
-#: cvpcb/init.cpp:112
 #, c-format
 msgid "Componants: %d (free: %d)"
 msgstr "Composants: %d (libres: %d)"
@@ -8642,6 +8688,7 @@ msgid "1:1 zoom"
 msgstr "1:1 zoom"
 
 #: cvpcb/genorcad.cpp:134
+#: cvpcb/writenetlistpcbnew.cpp:168
 #, c-format
 msgid "%s %s pin %s : Different Nets"
 msgstr "%s %s pin %s :  Nets Differents"
@@ -9614,71 +9661,71 @@ msgstr "Infos:"
 msgid "Colors"
 msgstr "Couleurs"
 
-#: common/edaappl.cpp:57
+#: common/edaappl.cpp:56
 msgid "Default"
 msgstr "Defaut"
 
-#: common/edaappl.cpp:70
+#: common/edaappl.cpp:69
 msgid "French"
 msgstr "French"
 
-#: common/edaappl.cpp:76
+#: common/edaappl.cpp:75
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: common/edaappl.cpp:82
+#: common/edaappl.cpp:81
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: common/edaappl.cpp:88
+#: common/edaappl.cpp:87
 msgid "Italian"
 msgstr "Italien"
 
-#: common/edaappl.cpp:94
+#: common/edaappl.cpp:93
 msgid "German"
 msgstr "Allemand"
 
-#: common/edaappl.cpp:100
+#: common/edaappl.cpp:99
 msgid "Slovenian"
 msgstr "Slovène"
 
-#: common/edaappl.cpp:106
+#: common/edaappl.cpp:105
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: common/edaappl.cpp:112
+#: common/edaappl.cpp:111
 msgid "Polish"
 msgstr "Polonais"
 
-#: common/edaappl.cpp:118
+#: common/edaappl.cpp:117
 msgid "Czech"
 msgstr "Tchèque"
 
-#: common/edaappl.cpp:124
+#: common/edaappl.cpp:123
 msgid "Russian"
 msgstr "Russe"
 
-#: common/edaappl.cpp:130
+#: common/edaappl.cpp:129
 msgid "Korean"
 msgstr "Coréen"
 
-#: common/edaappl.cpp:136
+#: common/edaappl.cpp:135
 msgid "Chinese simplified"
 msgstr "Chinois Simplifié"
 
-#: common/edaappl.cpp:142
+#: common/edaappl.cpp:141
 msgid "Catalan"
 msgstr "Catalan"
 
-#: common/edaappl.cpp:148
+#: common/edaappl.cpp:147
 msgid "Dutch"
 msgstr "Hollandais"
 
-#: common/edaappl.cpp:613
+#: common/edaappl.cpp:612
 msgid "Language"
 msgstr "Langage"
 
-#: common/edaappl.cpp:614
+#: common/edaappl.cpp:613
 msgid "Select application language (only for testing!)"
 msgstr "Choisir le langage (seulement pour tests!)"
 
@@ -10398,7 +10445,7 @@ msgstr "Options de Nettoyage"
 msgid "DRC Control"
 msgstr "Contrôle DRC"
 
-#: pcbnew/dialog_edit_mod_text.h:43
+#: pcbnew/dialog_edit_module_text.h:43
 msgid "TextMod properties"
 msgstr "Propriétés du Texte sur Module"
 
@@ -10537,6 +10584,10 @@ msgstr "Afficher Modules Cmp"
 #: pcbnew/set_color.h:441
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
+
+#: pcbnew/dialog_edit_module_text_base.h:64
+msgid "Footprint text properties"
+msgstr "Propriétés du texts sur module"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.h:81
 msgid "General settings"
@@ -10854,6 +10905,10 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid "show"
+#~ msgstr "Visible"
+#~ msgid "no show"
+#~ msgstr "Invisible"
 #~ msgid "Modules"
 #~ msgstr "Modules"
 #~ msgid "Module Texts"

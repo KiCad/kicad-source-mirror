@@ -28,6 +28,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		dialog_freeroute_exchange.o\
 		modedit_undo_redo.o\
 		block_module_editor.o\
+		dialog_graphic_item_properties.o\
+		dialog_graphic_item_properties_base.o\
         dialog_pad_properties.o\
         dialog_pad_properties_base.o\
         dialog_pcb_text_properties.o\

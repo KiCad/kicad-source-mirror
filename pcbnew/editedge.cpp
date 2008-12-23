@@ -126,31 +126,6 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 }
 
 
-/*************************************************************************/
-void WinEDA_PcbFrame::Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC )
-/*************************************************************************/
-
-/* Met a la largeur courante le segment pointe part la souris
- */
-{
-    if( DrawSegm == NULL )
-        return;
-
-    DrawSegm->Draw( DrawPanel, DC, GR_XOR );
-
-    if( DrawSegm->GetLayer() == EDGE_N )
-        DrawSegm->m_Width = g_DesignSettings.m_EdgeSegmentWidth;
-    else
-        DrawSegm->m_Width = g_DesignSettings.m_DrawSegmentWidth;
-
-    DrawSegm->Draw( DrawPanel, DC, GR_OR );
-
-    DrawSegm->Display_Infos( this );
-
-    GetScreen()->SetModify();
-}
-
-
 /******************************************************************************/
 void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC )
 /******************************************************************************/

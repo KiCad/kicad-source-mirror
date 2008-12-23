@@ -391,13 +391,19 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DrawPanel->MouseToCursorSchema();
             break;
 
+        case TYPE_COTATION:
+            Install_Edit_Cotation( (COTATION*) DrawStruct, &dc, pos );
+            DrawPanel->MouseToCursorSchema();
+            break;
+
         case TYPE_TEXTE_MODULE:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_DRAWSEGMENT:
-            break;
+			InstallGraphicItemPropertiesDialog((DRAWSEGMENT*)DrawStruct, &dc);
+			break;
 
         case TYPE_ZONE_CONTAINER:
             if( DrawStruct->m_Flags )
