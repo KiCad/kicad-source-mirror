@@ -130,8 +130,6 @@ public:
                              *  0 if the item is common to all units */
     int     m_Convert;      /* Shape identification (for parts which have a convert shape)
                              *      0 if the item is common to all shapes */
-    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;        /* Tickness */
     FILL_T  m_Fill;         /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR. has meaning only for some items */
 
 public:
@@ -189,6 +187,8 @@ public:
     int      m_PinNumSize, m_PinNameSize; /* Pin num and Pin name sizes */
 
 //	int m_PinNumWidth, m_PinNameWidth;	/* (Currently Unused) Pin num and Pin name text width */
+    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
+    int     m_Width;        /* Tickness */
 
 public:
     LibDrawPin();
@@ -246,6 +246,8 @@ public:
     int     m_Rayon;
     int     t1, t2;                 /* position des 2 extremites de l'arc en 0.1 degres */
     wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
+    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
+    int     m_Width;        /* Tickness */
 
 public:
     LibDrawArc();
@@ -278,6 +280,8 @@ class LibDrawCircle   : public LibEDA_BaseStruct
 {
 public:
     int m_Rayon;
+    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
+    int     m_Width;        /* Tickness */
 
 public:
     LibDrawCircle();
@@ -311,12 +315,8 @@ public:
 /* they are a separate class                 */
 /*********************************************/
 class LibDrawText  : public LibEDA_BaseStruct
+			, public EDA_TextStruct
 {
-public:
-    int      m_Horiz;
-    wxSize   m_Size;
-    int      m_Type;
-    wxString m_Text;
 
 public:
     LibDrawText();
@@ -350,6 +350,8 @@ class LibDrawSquare  : public LibEDA_BaseStruct
 {
 public:
     wxPoint m_End;
+    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
+    int     m_Width;        /* Tickness */
 
 public:
     LibDrawSquare();
@@ -382,6 +384,8 @@ class LibDrawSegment  : public LibEDA_BaseStruct
 {
 public:
     wxPoint m_End;
+    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
+    int     m_Width;        /* Tickness */
 
 public:
     LibDrawSegment();
@@ -415,6 +419,7 @@ class LibDrawPolyline : public LibEDA_BaseStruct
 public:
     int  m_CornersCount;
     int* m_PolyList;
+    int     m_Width;        /* Tickness */
 
 public:
     LibDrawPolyline();
@@ -458,6 +463,7 @@ public:
  *     Name (74LS00..) used to find the component in libraries, and give the default value in schematic
  */
 class LibDrawField :  public LibEDA_BaseStruct
+		, public EDA_TextStruct
 {
 public:
     int      m_FieldId;         /* 0 a 11
@@ -465,13 +471,7 @@ public:
                                  * 2 = Default footprint, 3 = subsheet (not used, reserved)
                                  * .. 11 other fields
                                  */
-    wxSize   m_Size;
-    int      m_Orient;                          /* Orientation */
-    int      m_Attributs;                       /* Attributes (Non visible ...) */
-    enum GRTextHorizJustifyType m_HJustify;     /* Horizontal Text Justify  */
-    enum GRTextVertJustifyType m_VJustify;      /* Vertical Text Justify  */
-    wxString m_Text;                            /* Field Data */
-    wxString m_Name;                            /* Field Name */
+    wxString m_Name;                            /* Field Name (not the fielsd text itself, that is .m_Text) */
 
 public:
 

@@ -126,6 +126,7 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
  */
 {
     wxString msg;
+	int thickness = 0;
 
     frame->MsgPanel->EraseMsgBox();
 
@@ -135,21 +136,27 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
     switch( Type() )
     {
     case COMPONENT_ARC_DRAW_TYPE:
+		thickness = ( (LibDrawArc*) this )->m_Width;
         msg = wxT( "Arc" ); break;
 
     case COMPONENT_CIRCLE_DRAW_TYPE:
+		thickness = ( (LibDrawCircle*) this )->m_Width;
         msg = wxT( "Circle" ); break;
 
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+		thickness = ( (LibDrawText*) this )->m_Width;
         msg = wxT( "Text" ); break;
 
     case COMPONENT_RECT_DRAW_TYPE:
+		thickness = ( (LibDrawSquare*) this )->m_Width;
         msg = wxT( "Rect" ); break;
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
+		thickness = ( (LibDrawPolyline*) this )->m_Width;
         msg = wxT( "PolyLine" ); break;
 
     case COMPONENT_LINE_DRAW_TYPE:
+		thickness = ( (LibDrawSegment*) this )->m_Width;
         msg = wxT( "Segment" ); break;
 
     case COMPONENT_PIN_DRAW_TYPE:
@@ -181,9 +188,9 @@ void LibEDA_BaseStruct::Display_Infos_DrawEntry( WinEDA_DrawFrame* frame )
         msg = wxT( "?" );
     Affiche_1_Parametre( frame, 14, _( "Convert" ), msg, BROWN );
 
-    if( m_Width )
-        msg = ReturnStringFromValue( g_UnitMetric, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    if( thickness )
+        msg = ReturnStringFromValue( g_UnitMetric, thickness, EESCHEMA_INTERNAL_UNIT, true );
     else
         msg = _( "default" );
-    Affiche_1_Parametre( frame, 20, _( "Width" ), msg, BLUE );
+    Affiche_1_Parametre( frame, 20, _( "Thickness" ), msg, BLUE );
 }

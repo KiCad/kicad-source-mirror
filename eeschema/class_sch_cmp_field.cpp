@@ -198,14 +198,16 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
-    if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c",
+    if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c%c%c",
             m_FieldId,
             CONV_TO_UTF8( m_Text ),
             m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
             m_Pos.x, m_Pos.y,
             m_Size.x,
             m_Attributs,
-            hjustify, vjustify ) == EOF )
+            hjustify, vjustify,
+			m_Italic ? 'I' : 'N',
+			m_Width > 1 ? 'B' : 'N' ) == EOF )
     {
         return false;
     }

@@ -23,9 +23,7 @@ LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
                      *  0 if the item is common to all units */
     m_Convert = 0;  /* Shape identification (for parts which have a convert shape)
                      *  0 if the item is common to all shapes */
-    m_Width   = 0;       /* Default value to draw lines or arc ... */
-    m_Fill    = NO_FILL; /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
-                          * has meaning only for some items */
+    m_Fill  = NO_FILL;
 }
 
 
@@ -159,12 +157,12 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOff
 
     /* The text orientation may need to be flipped if the
      *  transformation matrix causes xy axes to be flipped. */
-    int t1 = (aTransformMatrix[0][0] != 0) ^ (m_Horiz != 0);
+    int t1 = (aTransformMatrix[0][0] != 0) ^ (m_Orient != 0);
 
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
         t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
         m_Size,
-        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth );
+        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, linewidth, m_Italic );
 }
 
 
@@ -299,7 +297,7 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOf
                          int aDrawMode, void* aData, int aTransformMatrix[2][2] )
 /*************************************************************************************************/
 
-/* if aData not NULL, adat must point a wxString which is used instead of the m_Text
+/* if aData not NULL, aData must point a wxString which is used instead of the m_Text
  */
 {
     wxPoint text_pos;
@@ -340,7 +338,7 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOf
         (EDA_Colors) color, text->GetData(),
         m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
         m_Size,
-        m_HJustify, m_VJustify, linewidth );
+        m_HJustify, m_VJustify, linewidth, m_Italic );
 }
 
 

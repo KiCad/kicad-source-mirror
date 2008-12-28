@@ -610,14 +610,21 @@ LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame,
 
             New = Text;
             Buffer[0] = 0;
-            Error = sscanf( &Line[2], "%d %d %d %d %d %d %d %s",
-                            &Text->m_Horiz,
+			chartmp[0] = 0;			// For italic option, Not in old versions
+			int thickness = 0;		// Not in old versions
+            Error = sscanf( &Line[2], "%d %d %d %d %d %d %d %s %s %d",
+                            &Text->m_Orient,
                             &Text->m_Pos.x, &Text->m_Pos.y,
-                            &Text->m_Size.x, &Text->m_Type,
-                            &Unit, &Convert, Buffer ) != 8;
+                            &Text->m_Size.x, &Text->m_Attributs,
+                            &Unit, &Convert, Buffer, chartmp, &thickness ) < 8;
 
             Text->m_Unit   = Unit; Text->m_Convert = Convert;
             Text->m_Size.y = Text->m_Size.x;
+			if ( strnicmp(chartmp, "Italic", 6) == 0 )
+				Text->m_Italic = true;
+
+			Text->m_Width = thickness;
+
             if( !Error )
             {                                                   /* Convert '~' to spaces. */
                 Text->m_Text = CONV_FROM_UTF8( Buffer );
@@ -909,8 +916,8 @@ GetLibEntryField (EDA_LibComponentStruct* LibEntry,
     line++;
 
     FieldUserName[0] = 0;
-
-    nbparam = sscanf( line, " %d %d %d %c %c %c %c",
+	memset( Char4, 0, sizeof(Char4));
+    nbparam = sscanf( line, " %d %d %d %c %c %c %s",
                       &posx, &posy, &size, Char1, Char2, Char3, Char4 );
     orient = TEXT_ORIENT_HORIZ;
 
@@ -928,10 +935,15 @@ GetLibEntryField (EDA_LibComponentStruct* LibEntry,
             hjustify = GR_TEXT_HJUSTIFY_LEFT;
         else if( *Char3 == 'R' )
             hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-        if( *Char4 == 'B' )
+        if( Char4[0] == 'B' )
             vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-        else if( *Char4 == 'T' )
+        else if( Char4[0] == 'T' )
             vjustify = GR_TEXT_VJUSTIFY_TOP;
+
+		if ( Char4[1] == 'I' )		// Italic
+				Field->m_Italic = true;
+		if ( Char4[2] == 'B' )		// Bold
+				Field->m_Width = size / 4;
     }
 
     switch( NumOfField )

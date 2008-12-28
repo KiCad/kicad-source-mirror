@@ -56,6 +56,7 @@ OBJECTS = eeschema.o\
 	edit_component_in_schematic.o\
 	dialog_edit_component_in_schematic_fbp.o \
 	dialog_edit_component_in_schematic.o \
+	dialog_bodygraphictext_properties_base.o\
 	locate.o \
 	save_schemas.o sheet.o \
     read_from_file_schematic_items_descriptions.o\
@@ -67,7 +68,8 @@ OBJECTS = eeschema.o\
 	libfield.o \
 	edit_component_in_lib.o \
 	menubar.o \
-	savelib.o symbtext.o \
+	savelib.o\
+	edit_graphic_bodyitem_text.o \
 	symbdraw.o \
 	hierarch.o files-io.o \
 	annotate.o\

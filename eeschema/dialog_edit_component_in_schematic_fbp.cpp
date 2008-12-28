@@ -114,19 +114,30 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxStaticBoxSizer* visibilitySizer;
 	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility") ), wxHORIZONTAL );
 	
+	wxBoxSizer* bShowRotateSizer;
+	bShowRotateSizer = new wxBoxSizer( wxVERTICAL );
+	
 	showCheckBox = new wxCheckBox( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	showCheckBox->SetToolTip( _("Check if you want this field visible") );
 	
-	visibilitySizer->Add( showCheckBox, 1, wxALL, 5 );
+	bShowRotateSizer->Add( showCheckBox, 0, wxALL, 5 );
 	
 	rotateCheckBox = new wxCheckBox( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
 	
-	visibilitySizer->Add( rotateCheckBox, 1, wxALL, 5 );
+	bShowRotateSizer->Add( rotateCheckBox, 0, wxALL, 5 );
 	
-	fieldEditBoxSizer->Add( visibilitySizer, 0, wxALL|wxEXPAND, 5 );
+	visibilitySizer->Add( bShowRotateSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxString m_StyleRadioBoxChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
+	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
+	m_StyleRadioBox = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
+	m_StyleRadioBox->SetSelection( 0 );
+	visibilitySizer->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* fieldNameBoxSizer;
 	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );

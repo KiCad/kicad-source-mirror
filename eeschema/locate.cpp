@@ -913,7 +913,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
                 ii = 2;
             dx = (Text->m_Size.x * ii) / 2;
             dy = Text->m_Size.y / 2;
-            if( Text->m_Horiz == TEXT_ORIENT_VERT )
+            if( Text->m_Orient == TEXT_ORIENT_VERT )
             {
                 EXCHG( dx, dy );
             }

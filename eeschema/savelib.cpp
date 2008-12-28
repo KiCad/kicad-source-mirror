@@ -68,15 +68,19 @@ bool LibDrawText::Save( FILE* ExportFile ) const
 /************************************************/
 {
     wxString text = m_Text;
+	// Spaces are not allowed in text because it is not double quoted: changed to '~'
+    text.Replace( wxT( " " ), wxT( "~" ) );
 
-    text.Replace( wxT( " " ), wxT( "~" ) );   // Spaces are not allowed: changed to '~'
-
-    fprintf( ExportFile, "T %d %d %d %d %d %d %d %s\n",
-            m_Horiz,
+    fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ",
+            m_Orient,
             m_Pos.x, m_Pos.y,
-            m_Size.x, m_Type,
+            m_Size.x, m_Attributs,
             m_Unit, m_Convert,
-            CONV_TO_UTF8( text ) );
+            CONV_TO_UTF8( text ));
+
+	fprintf( ExportFile, " %s %d",	m_Italic ? "Italic" : "Normal", m_Width );
+
+	fprintf( ExportFile, "\n");
     return true;
 }
 
@@ -200,13 +204,15 @@ bool LibDrawField::Save( FILE* ExportFile ) const
         vjustify = 'T';
     if( text.IsEmpty() )
         text = wxT( "~" );
-    fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c",
+    fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
              m_FieldId, CONV_TO_UTF8( text ),
              m_Pos.x, m_Pos.y,
              m_Size.x,
              m_Orient == 0 ? 'H' : 'V',
              (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
-             hjustify, vjustify );
+             hjustify, vjustify,
+			 m_Italic ? 'I' : 'N',
+			 m_Width > 1 ? 'B' : 'N');
 
     // Save field name, if necessary
     if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() )
@@ -222,7 +228,8 @@ LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
                                         LibEDA_BaseStruct* DrawItem )
 /**********************************************************/
 
-/* Duplicate a DrawLibItem
+/** Function CopyDrawEntryStruct
+ * Duplicate a DrawLibItem
  * the new item is only created, it is not put in the current component linked list
  * @param DrawEntry = DrawLibItem * item to duplicate
  * @return a pointer to the new item

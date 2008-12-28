@@ -304,7 +304,7 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( wxDC* DC )
 
         CurrentDrawItem = Text;
         Text->m_Size.x  = Text->m_Size.y = g_LastTextSize;
-        Text->m_Horiz   = g_LastTextOrient;
+        Text->m_Orient  = g_LastTextOrient;
         Text->m_Pos.x   = GetScreen()->m_Curseur.x;
         Text->m_Pos.y   = -( GetScreen()->m_Curseur.y );
         EditSymbolText( NULL, Text );

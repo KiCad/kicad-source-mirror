@@ -59,7 +59,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
         m_CurrentText->m_Italic = 0;
 
     if ( ( style & 2 ) )
-        m_CurrentText->m_Width = m_CurrentText->m_Size.x / 5;
+        m_CurrentText->m_Width = m_CurrentText->m_Size.x / 4;
     else
         m_CurrentText->m_Width = 0;
 

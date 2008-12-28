@@ -49,6 +49,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		wxButton* moveUpButton;
 		wxCheckBox* showCheckBox;
 		wxCheckBox* rotateCheckBox;
+		wxRadioBox* m_StyleRadioBox;
 		wxStaticText* fieldNameLabel;
 		wxTextCtrl* fieldNameTextCtrl;
 		wxStaticText* fieldValueLabel;

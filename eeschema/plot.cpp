@@ -249,7 +249,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 
             /* The text orientation may need to be flipped if the
               * transformation matrix causes xy axes to be flipped. */
-            t1    = (TransMat[0][0] != 0) ^ (Text->m_Horiz != 0);
+            t1    = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
             pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
             SetCurrentLineWidth( -1 );
             int thickness = Text->m_Width;

@@ -32,6 +32,7 @@ set(EESCHEMA_SRCS
     delete.cpp
     delsheet.cpp
 #   dialog_backanno.cpp
+	dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
 #   dialog_cmp_graphic_properties.cpp
     dialog_create_component.cpp
@@ -94,7 +95,7 @@ set(EESCHEMA_SRCS
     sheetlab.cpp
     symbdraw.cpp
     symbedit.cpp
-    symbtext.cpp
+    edit_graphic_bodyitem_text.cpp
     tool_lib.cpp
     tool_sch.cpp
     tool_viewlib.cpp

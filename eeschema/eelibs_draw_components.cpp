@@ -350,7 +350,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
         DrawGraphicText( panel, DC, pos, color, m_Text,
             orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
             m_Size,
-            hjustify, vjustify, LineWidth );
+            hjustify, vjustify, LineWidth, m_Italic );
     }
     else // For more than one part per package, we must add the part selection to the reference )
     {
@@ -366,7 +366,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel,
         DrawGraphicText( panel, DC, pos, color, fulltext,
             orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
             m_Size,
-            hjustify, vjustify, LineWidth );
+            hjustify, vjustify, LineWidth, m_Italic );
     }
 }
 

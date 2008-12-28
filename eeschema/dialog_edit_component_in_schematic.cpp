@@ -435,6 +435,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
+	int style = 0;
+	if ( field.m_Italic )
+		style = 1;
+	if ( field.m_Width > 1 )
+		style |= 2;
+	m_StyleRadioBox->SetSelection(style);
+
     fieldNameTextCtrl->SetValue( field.m_Name );
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
@@ -499,6 +506,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
+
     field.m_Name = fieldNameTextCtrl->GetValue();
     field.m_Text = fieldValueTextCtrl->GetValue();
 
@@ -506,6 +514,17 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
     field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize( textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UnitMetric );
     field.m_Size.y = field.m_Size.x;
+
+	int style = m_StyleRadioBox->GetSelection( );
+	if ( (style & 1 ) != 0 )
+		field.m_Italic = true;
+	else
+		field.m_Italic = false;
+
+	if ( (style & 2 ) != 0 )
+		field.m_Width = field.m_Size.x / 4;
+	else
+		field.m_Width = 0;
 
     double value;
 

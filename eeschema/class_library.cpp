@@ -12,11 +12,6 @@
 
 #include "protos.h"
 
-
-/*******************************************************/
-/* Methodes relatives a la manipulation des librairies */
-/*******************************************************/
-
 /***************************************************************************************/
 LibraryStruct::LibraryStruct( int type, const wxString& name, const wxString& fullname )
 /***************************************************************************************/
@@ -396,11 +391,6 @@ LibDrawField::LibDrawField( int idfield ) : LibEDA_BaseStruct( COMPONENT_FIELD_D
     if( m_FieldId >= NUMBER_OF_FIELDS )
         m_FieldId = NUMBER_OF_FIELDS - 1;
     m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;
-    m_Orient    = 0;                /* Orientation */
-    m_Attributs = 0;                /* Attributs = unvisible ... */
-    m_Width    = 0;
-    m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
-    m_VJustify = GR_TEXT_VJUSTIFY_CENTER;   /* Horizontal and vertical text justification */
 }
 
 
@@ -432,6 +422,7 @@ void LibDrawField::Copy( LibDrawField* Target )
     Target->m_Name      = m_Name;
     Target->m_HJustify  = m_HJustify;
     Target->m_VJustify  = m_VJustify;
+    Target->m_Italic    = m_Italic;
 }
 
 
@@ -494,13 +485,11 @@ LibDrawCircle* LibDrawCircle::GenCopy()
 
 
 /*****************************************************************/
-LibDrawText::LibDrawText() : LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
+LibDrawText::LibDrawText() : LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ),
+	EDA_TextStruct()
 /*****************************************************************/
 {
-    m_Horiz = TEXT_ORIENT_HORIZ;
     m_Size  = wxSize( 50, 50 );
-    m_Type  = 0;
-    m_Width = 0;
 }
 
 
@@ -511,14 +500,17 @@ LibDrawText* LibDrawText::GenCopy()
     LibDrawText* newitem = new LibDrawText();
 
     newitem->m_Pos     = m_Pos;
-    newitem->m_Horiz   = m_Horiz;
+    newitem->m_Orient   = m_Orient;
     newitem->m_Size    = m_Size;
-    newitem->m_Type    = m_Type;
+    newitem->m_Attributs    = m_Attributs;
     newitem->m_Unit    = m_Unit;
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Text    = m_Text;
     newitem->m_Width   = m_Width;
+    newitem->m_Italic    = m_Italic;
+	newitem->m_HJustify = m_HJustify;
+	newitem->m_VJustify = m_VJustify;
     return newitem;
 }
 
@@ -589,7 +581,6 @@ LibDrawPolyline* LibDrawPolyline::GenCopy()
         newitem->m_PolyList = (int*) MyMalloc( size );
         memcpy( newitem->m_PolyList, m_PolyList, size );
     }
-    newitem->m_Pos     = m_Pos;
     newitem->m_Width   = m_Width;
     newitem->m_Unit    = m_Unit;
     newitem->m_Convert = m_Convert;

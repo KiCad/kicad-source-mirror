@@ -695,8 +695,8 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                 {
                     int           newNdx = component->GetFieldCount();
 
-                    SCH_CMP_FIELD f( wxPoint( 0, 0 ), newNdx, component, fieldName );
-                    component->AddField( f );
+                    SCH_CMP_FIELD field( wxPoint( 0, 0 ), newNdx, component, fieldName );
+                    component->AddField( field );
                 }
             }
             else
@@ -705,7 +705,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             }
 
             component->GetField( fieldNdx )->m_Text = CONV_FROM_UTF8( Name1 );
-
+			memset(Char3, 0, sizeof(Char3) );
             if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
                      &component->GetField( fieldNdx )->m_Pos.x,
                      &component->GetField( fieldNdx )->m_Pos.y,
@@ -735,10 +735,18 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                     hjustify = GR_TEXT_HJUSTIFY_LEFT;
                 else if( *Char2 == 'R' )
                     hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-                if( *Char3 == 'B' )
+                if( Char3[0] == 'B' )
                     vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                else if( *Char3 == 'T' )
+                else if( Char3[0] == 'T' )
                     vjustify = GR_TEXT_VJUSTIFY_TOP;
+                if( Char3[1] == 'I' )
+                    component->GetField( fieldNdx )->m_Italic = true;
+                else
+                    component->GetField( fieldNdx )->m_Italic = false;
+                if( Char3[2] == 'B' )
+                    component->GetField( fieldNdx )->m_Width = component->GetField( fieldNdx )->m_Size.x / 4;
+                else
+                    component->GetField( fieldNdx )->m_Width = 0;
 
                 component->GetField( fieldNdx )->m_HJustify = hjustify;
                 component->GetField( fieldNdx )->m_VJustify = vjustify;
