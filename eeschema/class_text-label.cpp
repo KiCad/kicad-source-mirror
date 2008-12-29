@@ -393,15 +393,16 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
     }
 
     CreateGraphicShape( Poly, AnchorPos );
-    GRPoly( &panel->m_ClipBox, DC, Poly[0], Poly + 1, 0, width, color, color );
+    GRPoly( &panel->m_ClipBox, DC, Poly[0], (wxPoint*)(Poly + 1), 0, width, color, color );
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
 }
 
 
-/** function CreateGraphicShape
- * Calculates the graphic shape (a polygon) associated to the text
+/**
+ * Function CreateGraphicShape
+ * calculates the graphic shape (a polygon) associated to the text
  * @param corner_list = coordinates list fill with polygon corners ooordinates (size > 20)
  * @param Pos = Postion of the shape
  * format list is
@@ -414,13 +415,14 @@ void SCH_HIERLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 
     int  imax = *Template; Template++;
 
-    *corner_list = imax; corner_list++;
+    *corner_list++ = imax;
     for( int ii = 0; ii < imax; ii++ )
     {
-        *corner_list = ( HalfSize * (*Template) ) + Pos.x;
-        corner_list++; Template++;
-        *corner_list = ( HalfSize * (*Template) ) + Pos.y;
-        corner_list++; Template++;
+        *corner_list++ = ( HalfSize * (*Template) ) + Pos.x;
+        Template++;
+
+        *corner_list++ = ( HalfSize * (*Template) ) + Pos.y;
+        Template++;
     }
 }
 
@@ -546,7 +548,7 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& dr
     }
 
     CreateGraphicShape( Poly, AnchorPos );
-    GRPoly( &panel->m_ClipBox, DC, Poly[0], Poly + 1, 0, width, color, color );
+    GRPoly( &panel->m_ClipBox, DC, Poly[0], (wxPoint*) (Poly + 1), 0, width, color, color );
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, AnchorPos, color );

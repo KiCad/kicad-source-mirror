@@ -325,9 +325,9 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
         size.x = -size.x;                       // Text is mirrored
 
     if ( format_plot == PLOT_FORMAT_GERBER )
-		SelectD_CODE_For_LineDraw(thickness);
+        SelectD_CODE_For_LineDraw(thickness);
 
-	PlotGraphicText( format_plot, pos, BLACK,
+    PlotGraphicText( format_plot, pos, BLACK,
                       pt_texte->m_Text,
                       orient, size,
                       pt_texte->m_HJustify, pt_texte->m_VJustify,
@@ -472,6 +472,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
 
     if( PtEdge->Type() != TYPE_EDGE_MODULE )
         return;
+
     type_trace = PtEdge->m_Shape;
     thickness  = PtEdge->m_Width;
     if( Plot_Mode == FILAIRE )
@@ -517,38 +518,41 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         break;
 
     case S_POLYGON:
-    {
-        // We must compute true coordinates from m_PolyList
-        // which are relative to module position, orientation 0
-        int     ii, * source, * ptr, * ptr_base;
-        MODULE* Module = NULL;
-        if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPE_MODULE) )
-            Module = (MODULE*) PtEdge->GetParent();
-        ptr    = ptr_base = (int*) MyMalloc( 2 * PtEdge->m_PolyCount * sizeof(int) );
-        source = PtEdge->m_PolyList;
-        for( ii = 0; ii < PtEdge->m_PolyCount; ii++ )
         {
-            int x = *source++;
-            int y = *source++;
+            // We must compute true coordinates from m_PolyList
+            // which are relative to module position, orientation 0
+            MODULE* Module = NULL;
+            if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPE_MODULE) )
+                Module = (MODULE*) PtEdge->GetParent();
 
-            if( Module )
+            int* ptr_base = (int*) MyMalloc( 2 * PtEdge->m_PolyPoints.size() * sizeof(int) );
+            int* ptr = ptr_base;
+
+            int* source = (int*) &PtEdge->m_PolyPoints[0];
+
+            for( unsigned ii = 0; ii < PtEdge->m_PolyPoints.size(); ii++ )
             {
-                RotatePoint( &x, &y, Module->m_Orient );
-                x += Module->m_Pos.x;
-                y += Module->m_Pos.y;
+                int x = *source++;
+                int y = *source++;
+
+                if( Module )
+                {
+                    RotatePoint( &x, &y, Module->m_Orient );
+                    x += Module->m_Pos.x;
+                    y += Module->m_Pos.y;
+                }
+
+                x   += PtEdge->m_Start0.x;
+                y   += PtEdge->m_Start0.y;
+
+                *ptr++ = x;
+                *ptr++ = y;
             }
 
-            x   += PtEdge->m_Start0.x;
-            y   += PtEdge->m_Start0.y;
-
-            *ptr++ = x;
-            *ptr++ = y;
+            PlotFilledPolygon( format_plot, PtEdge->m_PolyPoints.size(), ptr_base );
+            free( ptr_base );
         }
-
-        PlotFilledPolygon( format_plot, PtEdge->m_PolyCount, ptr_base );
-        free( ptr_base );
         break;
-    }
     }
 }
 
@@ -577,9 +581,9 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
         size.x = -size.x;
 
     if ( format_plot == PLOT_FORMAT_GERBER )
-		SelectD_CODE_For_LineDraw(thickness);
+        SelectD_CODE_For_LineDraw(thickness);
 
-	PlotGraphicText( format_plot, pos, BLACK,
+    PlotGraphicText( format_plot, pos, BLACK,
                       pt_texte->m_Text,
                       orient, size,
                       pt_texte->m_HJustify, pt_texte->m_VJustify,
@@ -711,7 +715,7 @@ void PlotCircle( int format_plot, int thickness, wxPoint centre, int radius )
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
-		SelectD_CODE_For_LineDraw(thickness);
+        SelectD_CODE_For_LineDraw(thickness);
         PlotCircle_GERBER( centre, radius, thickness );
         break;
 
@@ -755,7 +759,7 @@ void PlotPolygon( int format_plot, int nbpoints, int* coord, int width )
     switch( format_plot )
     {
     case PLOT_FORMAT_GERBER:
-		SelectD_CODE_For_LineDraw(width);
+        SelectD_CODE_For_LineDraw(width);
         PlotPolygon_GERBER( nbpoints, coord, width );
         break;
 
@@ -812,7 +816,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
     RotatePoint( &ox, &oy, start_angle );
 
     if ( format_plot == PLOT_FORMAT_GERBER )
-		SelectD_CODE_For_LineDraw(thickness);
+        SelectD_CODE_For_LineDraw(thickness);
 
     delta = 120;    /* un cercle sera trace en 3600/delta = 30 segments / cercle*/
     for( ii = start_angle + delta; ii < end_angle; ii += delta )

@@ -280,7 +280,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             coord[ii].y = coord[ii].y + uy0;
         }
 
-        GRClosedPoly( &panel->m_ClipBox, DC, 4, (int*) coord, fillpad, color, color );
+        GRClosedPoly( &panel->m_ClipBox, DC, 4, coord, fillpad, color, color );
 
         if( DisplayIsol )
         {
@@ -306,7 +306,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
                 coord[ii].y = coord[ii].y + uy0;
             }
 
-            GRClosedPoly( &panel->m_ClipBox, DC, 4, (int*) coord, 0, color, color );
+            GRClosedPoly( &panel->m_ClipBox, DC, 4, coord, 0, color, color );
         }
     }
     break;

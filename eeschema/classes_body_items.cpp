@@ -281,14 +281,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 1, linewidth, color,
+            (wxPoint*) Buf_Poly_Drawings, 1, linewidth, color,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 1, linewidth, color, color );
+            (wxPoint*) Buf_Poly_Drawings, 1, linewidth, color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            Buf_Poly_Drawings, 0, linewidth, color, color );
+            (wxPoint*) Buf_Poly_Drawings, 0, linewidth, color, color );
 }
 
 

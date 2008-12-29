@@ -35,17 +35,11 @@ EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
     m_Shape     = S_SEGMENT;
     m_Angle     = 0;
     m_Width     = 120;
-    m_PolyCount = 0;        // For polygons : number of points (> 2)
-    m_PolyList  = NULL;     // For polygons: coord list (1 point = 2 coord)
 }
 
 
 EDGE_MODULE::~EDGE_MODULE()
 {
-    if( m_PolyList )
-        free( m_PolyList );
-    m_PolyList  = NULL;
-    m_PolyCount = 0;
 }
 
 
@@ -56,6 +50,7 @@ void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
     if( source == NULL )
         return;
 
+    // @todo why not just use "*this = source;"  ?
     m_Start  = source->m_Start;
     m_End    = source->m_End;
     m_Shape  = source->m_Shape;
@@ -64,18 +59,8 @@ void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
     m_Angle  = source->m_Angle;     // pour les arcs de cercle: longueur de l'arc en 0,1 degres
     m_Layer  = source->m_Layer;
     m_Width  = source->m_Width;
-    if( m_PolyList )
-        free( m_PolyList );
-    m_PolyCount = 0;
-    m_PolyList  = NULL;
-    if( source->m_PolyCount && source->m_PolyList )
-    {
-        int size;
-        m_PolyCount = source->m_PolyCount;      // For polygons : number of points
-        size = m_PolyCount * 2 * sizeof(int);   // For polygons: 1 point = 2 coord
-        m_PolyList = (int*) MyMalloc( size );
-        memcpy( m_PolyList, source->m_PolyList, size );
-    }
+
+    m_PolyPoints = source->m_PolyPoints;
 }
 
 /***********************************/
@@ -210,32 +195,31 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
 
     case S_POLYGON:
-    {
-        // We must compute true coordinates from m_PolyList
-        // which are relative to module position, orientation 0
-        int ii, * source, * ptr, * ptr_base;
-        ptr    = ptr_base = (int*) MyMalloc( 2 * m_PolyCount * sizeof(int) );
-        source = m_PolyList;
-        for( ii = 0; ii < m_PolyCount; ii++ )
         {
-            int x, y;
-            x = *source; source++; y = *source; source++;
-            if( Module )
-            {
-                RotatePoint( &x, &y, Module->m_Orient );
-                x += Module->m_Pos.x;
-                y += Module->m_Pos.y;
-            }
-            x   += m_Start0.x - offset.x;
-            y   += m_Start0.y - offset.y;
-            *ptr = x; ptr++; *ptr = y; ptr++;
-        }
+            // We must compute true coordinates from m_PolyPoints
+            // which are relative to module position, orientation 0
 
-        GRPoly( &panel->m_ClipBox, DC, m_PolyCount, ptr_base,
-                TRUE, m_Width, color, color );
-        free( ptr_base );
+            std::vector<wxPoint>		points = m_PolyPoints;
+
+            for( unsigned ii = 0; ii < points.size(); ii++ )
+            {
+                wxPoint& pt = points[ii];
+
+                if( Module )
+                {
+                    RotatePoint( &pt.x, &pt.y, Module->m_Orient );
+                    pt.x += Module->m_Pos.x;
+                    pt.y += Module->m_Pos.y;
+                }
+
+                pt.x   += m_Start0.x - offset.x;
+                pt.y   += m_Start0.y - offset.y;
+            }
+
+            GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],
+                    TRUE, m_Width, color, color );
+        }
         break;
-    }
     }
 }
 
@@ -306,13 +290,11 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
         ret = fprintf( aFile, "DP %d %d %d %d %d %d %d\n",
                  m_Start0.x, m_Start0.y,
                  m_End0.x, m_End0.y,
-                 m_PolyCount,
+                 m_PolyPoints.size(),
                  m_Width, m_Layer );
 
-        int*    pInt;
-        pInt = m_PolyList;
-        for( int i=0;  i<m_PolyCount;  ++i, pInt+=2 )
-            fprintf( aFile, "Dl %d %d\n",  pInt[0], pInt[1] );
+        for( unsigned i=0;  i<m_PolyPoints.size();  ++i )
+            fprintf( aFile, "Dl %d %d\n",  m_PolyPoints[i].x, m_PolyPoints[i].y );
         break;
 
     default:
@@ -345,10 +327,9 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
  *
  */
 {
-    int  ii, * ptr;
+    int  ii;
     int  error = 0;
     char Buf[1024];
-
 
     switch( Line[1] )
     {
@@ -394,26 +375,37 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
         break;
 
     case S_POLYGON:
+        int pointCount;
         sscanf( Line + 3, "%d %d %d %d %d %d %d",
                 &m_Start0.x, &m_Start0.y,
                 &m_End0.x, &m_End0.y,
-                &m_PolyCount, &m_Width, &m_Layer );
+                &pointCount, &m_Width, &m_Layer );
+
         (*LineNum)++;
-        m_PolyList = (int*) MyZMalloc( 2 * m_PolyCount * sizeof(int) );
-        for( ii = 0, ptr = m_PolyList; ii < m_PolyCount; ii++ )
+        m_PolyPoints.clear();
+        m_PolyPoints.reserve( pointCount );
+        for( ii = 0;  ii<pointCount;  ii++ )
         {
             if( GetLine( File, Buf, LineNum, sizeof(Buf) - 1 ) != NULL )
             {
                 if( strncmp( Buf, "Dl", 2 ) != 0 )
                 {
-                    error = 1; break;
+                    error = 1;
+                    break;
                 }
-                sscanf( Buf + 3, "%d %d\n", ptr, ptr + 1 );
-                (*LineNum)++; ptr += 2;
+
+                int x;
+                int y;
+                sscanf( Buf + 3, "%d %d\n", &x, &y );
+
+                m_PolyPoints.push_back( wxPoint(x,y) );
+
+                (*LineNum)++;
             }
             else
             {
-                error = 1; break;
+                error = 1;
+                break;
             }
         }
 

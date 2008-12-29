@@ -828,21 +828,19 @@ void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int 
 }
 
 
-static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, int* Points )
+static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, wxPoint Points[] )
 {
-    int ii;
     int Xmin, Xmax, Ymin, Ymax;
 
-    Xmin = Xmax = Points[0];
-    Ymin = Ymax = Points[1];
+    Xmin = Xmax = Points[0].x;
+    Ymin = Ymax = Points[0].y;
 
-    for( ii = 1; ii < n; ii++ )     // calcul du rectangle d'encadrement
+    for( int ii = 1; ii < n; ii++ )     // calcul du rectangle d'encadrement
     {
-        int jj = ii * 2;
-        Xmin = MIN( Xmin, Points[jj] );
-        Xmax = MAX( Xmax, Points[jj] );
-        Ymin = MIN( Ymin, Points[jj + 1] );
-        Ymax = MAX( Ymax, Points[jj + 1] );
+        Xmin = MIN( Xmin, Points[ii].x );
+        Xmax = MAX( Xmax, Points[ii].x );
+        Ymin = MIN( Ymin, Points[ii].y );
+        Ymax = MAX( Ymax, Points[ii].y );
     }
 
     xcliplo = ClipBox->GetX();
@@ -866,7 +864,7 @@ static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, int* Points )
 /************************************************************************/
 /* Routine to draw a new polyline and fill it if Fill, in screen space. */
 /************************************************************************/
-void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, bool Fill,
+static void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[], bool Fill,
               int width, int Color, int BgColor )
 {
     if( !IsGRSPolyDrawable( ClipBox, n, Points ) )
@@ -877,19 +875,19 @@ void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, bool Fill,
     if( Fill && ( n > 2 ) )
     {
         GRSetBrush( DC, BgColor, FILLED );
-        DC->DrawPolygon( n, (wxPoint*) Points );
+        DC->DrawPolygon( n, Points );
     }
     else
     {
-        int endx = Points[n * 2 - 2];
-        int endy = Points[n * 2 - 1];
+        wxPoint endPt = Points[n-1];
 
         GRSetBrush( DC, Color );
-        DC->DrawLines( n, (wxPoint*) Points );
+        DC->DrawLines( n, Points );
+
         // The last point is not drawn by DrawLine and DrawLines
         // Add it if the polygon is not closed
-        if ( endx != Points[0] || endy != Points[1] )
-            DC->DrawPoint(endx, endy);
+        if( endPt != Points[0] )
+            DC->DrawPoint(endPt.x, endPt.y);
     }
 }
 
@@ -897,61 +895,56 @@ void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points, bool Fill,
 /******************************************************************************/
 /* Routine to draw a new closed polyline and fill it if Fill, in screen space */
 /******************************************************************************/
-void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
-                    bool Fill, int Color, int BgColor )
-{
-    GRSClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
-}
-
-
-void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
+static void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int aPointCount, wxPoint aPoints[],
                     bool Fill, int width, int Color, int BgColor )
 {
-    int startx, starty;
-
-    if( !IsGRSPolyDrawable( ClipBox, n, Points ) )
+    if( !IsGRSPolyDrawable( ClipBox, aPointCount, aPoints ) )
         return;
 
     GRSetColorPen( DC, Color, width );
 
-    if( Fill && ( n > 2 ) )
+    if( Fill && ( aPointCount > 2 ) )
     {
-        GRSMoveTo( Points[n * 2 - 2], Points[n * 2 - 1] );
+        GRSMoveTo( aPoints[aPointCount-1].x, aPoints[aPointCount-1].y );
         GRSetBrush( DC, BgColor, FILLED );
-        DC->DrawPolygon( n, (wxPoint*) Points, 0, 0, wxODDEVEN_RULE );
+        DC->DrawPolygon( aPointCount, aPoints, 0, 0, wxODDEVEN_RULE );
     }
     else
     {
-        startx = Points[n * 2 - 2]; starty = Points[n * 2 - 1];
         GRSetBrush( DC, BgColor );
-        DC->DrawLines( n, (wxPoint*) Points );
+        DC->DrawLines( aPointCount, aPoints );
 
         /* Fermeture du polygone */
-        if( (startx != Points[0]) || (starty != Points[1]) )
+        if( aPoints[aPointCount-1] != aPoints[0] )
         {
-            GRSLine( ClipBox, DC, Points[0], Points[1], startx, starty, width, Color );
+            GRSLine( ClipBox, DC, aPoints[0].x, aPoints[0].y,
+                aPoints[aPointCount-1].x, aPoints[aPointCount-1].y, width, Color );
         }
     }
 }
+
+/* not used
+static void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[],
+                    bool Fill, int Color, int BgColor )
+{
+    GRSClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
+}
+*/
 
 
 /************************************************************************/
 /* Routine to draw a new polyline and fill it if Fill, in drawing space. */
 /************************************************************************/
-void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
+void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[],
              bool Fill, int width, int Color, int BgColor )
 {
-    int ii, jj;
-
-    width = ZoomValue( width );
-    for( ii = 0; ii < n; ii++ )
+    for( int i=0; i<n; ++i )
     {
-        jj = ii << 1;
-        Points[jj] = GRMapX( Points[jj] );
-        jj++;
-        Points[jj] = GRMapY( Points[jj] );
+        Points[i].x = GRMapX( Points[i].x );
+        Points[i].y = GRMapY( Points[i].y );
     }
 
+    width = ZoomValue( width );
     GRSPoly( ClipBox, DC, n, Points, Fill, width, Color, BgColor );
 }
 
@@ -959,27 +952,23 @@ void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
 /**************************************************************************/
 /* Routine to draw a closed polyline and fill it if Fill, in object space */
 /**************************************************************************/
-void GRClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
+void GRClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[],
                    bool Fill, int Color, int BgColor )
 {
     GRClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
 }
 
 
-void GRClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, int* Points,
+void GRClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[],
                    bool Fill, int width, int Color, int BgColor )
 {
-    int ii, jj;
-
-    width = ZoomValue( width );
-    for( ii = 0; ii < n; ii++ )
+    for( int i=0; i<n; ++i )
     {
-        jj = ii << 1;
-        Points[jj] = GRMapX( Points[jj] );
-        jj++;
-        Points[jj] = GRMapY( Points[jj] );
+        Points[i].x = GRMapX( Points[i].x );
+        Points[i].y = GRMapY( Points[i].y );
     }
 
+    width = ZoomValue( width );
     GRSClosedPoly( ClipBox, DC, n, Points, Fill, width, Color, BgColor );
 }
 

@@ -116,7 +116,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
  *  the "gap" is isolation created between this 2 pads
  */
 {
-    int      gap_size, oX, ii;
+    int      oX;
     float    fcoeff;
     D_PAD*   pad;
     MODULE*  Module;
@@ -126,7 +126,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
     bool     abort;
 
     /* Enter the size of the gap or stub*/
-    gap_size = g_DesignSettings.m_CurrentTrackWidth;        // Valeur raisonnable
+    int gap_size = g_DesignSettings.m_CurrentTrackWidth;        // Valeur raisonnable
 
     switch( shape_type )
     {
@@ -219,40 +219,39 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
         pad->m_Pos.y += pad->m_Pos0.y;
         break;
 
-    case 2:     //Arc Stub created by a polygonal approach:
-    {
-        EDGE_MODULE* edge; int* ptr, theta;
-        ii   = angle / 50;      // Note : angles are in 0.1 degrees
-
-        edge = new EDGE_MODULE( Module );
-        Module->m_Drawings.PushFront( edge );
-
-        edge->m_Shape     = S_POLYGON;
-        edge->SetLayer( LAYER_CMP_N );
-        edge->m_PolyCount = ii + 3;
-        edge->m_PolyList  = (int*) MyMalloc( edge->m_PolyCount * 2 * sizeof(int) );
-        ptr = edge->m_PolyList;
-        edge->m_Start0.y = -pad->m_Size.y / 2;
-
-        *ptr  = 0; ptr++;
-        *ptr  = 0; ptr++;
-        theta = -angle / 2;
-        for( ii = 1; ii < edge->m_PolyCount - 1; ii++ )
+    case 2:     // Arc Stub created by a polygonal approach:
         {
-            int x, y;
-            x = 0; y = -gap_size;
-            RotatePoint( &x, &y, theta );
-            *ptr   = x; ptr++; *ptr = y; ptr++;
-            theta += 50;
-            if( theta > angle / 2 )
-                theta = angle / 2;
-        }
+            EDGE_MODULE* edge = new EDGE_MODULE( Module );
+            Module->m_Drawings.PushFront( edge );
 
-        // Close the polygon:
-        *ptr = edge->m_PolyList[0]; ptr++;
-        *ptr = edge->m_PolyList[1];
+            edge->m_Shape = S_POLYGON;
+            edge->SetLayer( LAYER_CMP_N );
+
+            int numPoints = angle / 50 + 3;   // Note : angles are in 0.1 degrees
+            edge->m_PolyPoints.reserve( numPoints );
+
+            edge->m_Start0.y = -pad->m_Size.y / 2;
+
+            edge->m_PolyPoints.push_back( wxPoint(0,0) );
+
+            int theta = -angle / 2;
+            for( int ii=1;  ii<numPoints-1;  ii++ )
+            {
+                wxPoint pt(0, -gap_size);
+
+                RotatePoint( &pt.x, &pt.y, theta );
+
+                edge->m_PolyPoints.push_back( pt );
+
+                theta += 50;
+                if( theta > angle / 2 )
+                    theta = angle / 2;
+            }
+
+            // Close the polygon:
+            edge->m_PolyPoints.push_back( edge->m_PolyPoints[0] );
+        }
         break;
-    }
 
     default:
         break;
@@ -505,11 +504,13 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
     MODULE*      Module;
     wxString     cmp_name;
     int          pad_count = 2;
-    EDGE_MODULE* edge; int* ptr;
+    EDGE_MODULE* edge;
     int          ii, npoints;
 
     WinEDA_SetParamShapeFrame* frame = new WinEDA_SetParamShapeFrame( this, wxPoint( -1, -1 ) );
-    int          ok = frame->ShowModal(); frame->Destroy();
+
+    int ok = frame->ShowModal();
+    frame->Destroy();
 
     DrawPanel->MouseToCursorSchema();
 
@@ -524,6 +525,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
 
     if( PolyShapeType == 2 )  // mirrored
         ShapeScaleY = -ShapeScaleY;
+
     ShapeSize.x = (int) round( ShapeScaleX );
     ShapeSize.y = (int) round( ShapeScaleY );
 
@@ -558,69 +560,50 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
     edge->SetLayer( LAYER_CMP_N );
     npoints = PolyEdgesCount;
 
-    switch( PolyShapeType )
-    {
-    case 0:     // Single
-    case 2:     // Single, mirrored
-        edge->m_PolyCount = PolyEdgesCount + 2;
-        break;
-
-    case 1:     // Symetric
-        edge->m_PolyCount = (2 * PolyEdgesCount) + 2;
-        break;
-    }
-
-    edge->m_PolyList = (int*) MyMalloc( edge->m_PolyCount * 2 * sizeof(int) );
-
-    ptr = edge->m_PolyList;
+    edge->m_PolyPoints.reserve(2 * PolyEdgesCount + 2);
 
     // Init start point coord:
-    *ptr = pad1->m_Pos0.x; ptr++;
-    *ptr = 0; ptr++;
+    edge->m_PolyPoints.push_back( wxPoint( pad1->m_Pos0.x, 0) );
 
     double* dptr = PolyEdges;
-    wxPoint first_cordinate, last_cordinate;
+    wxPoint first_coordinate, last_coordinate;
     for( ii = 0; ii < npoints; ii++ )  // Copy points
     {
-        last_cordinate.x = *ptr = (int) round( *dptr * ShapeScaleX ) + pad1->m_Pos0.x;
-        dptr++; ptr++;
-        last_cordinate.y = *ptr = -(int) round( *dptr * ShapeScaleY );
-        dptr++; ptr++;
+        last_coordinate.x =  (int) round( *dptr++ * ShapeScaleX ) + pad1->m_Pos0.x;
+        last_coordinate.y = -(int) round( *dptr++ * ShapeScaleY );
+        edge->m_PolyPoints.push_back( last_coordinate );
     }
 
-    first_cordinate.y = edge->m_PolyList[3];
+    first_coordinate.y = edge->m_PolyPoints[1].y;
 
     switch( PolyShapeType )
     {
-        int* ptr1;
-
     case 0:     // Single
     case 2:     // Single mirrored
         // Init end point coord:
-        *ptr = pad2->m_Pos0.x = last_cordinate.x; ptr++;
-        *ptr = 0;
-        pad1->m_Size.x = pad1->m_Size.y = ABS( first_cordinate.y );
-        pad2->m_Size.x = pad2->m_Size.y = ABS( last_cordinate.y );
-        pad1->m_Pos0.y = first_cordinate.y / 2;
-        pad2->m_Pos0.y = last_cordinate.y / 2;
+        pad2->m_Pos0.x = last_coordinate.x;
+        edge->m_PolyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
+
+        pad1->m_Size.x = pad1->m_Size.y = ABS( first_coordinate.y );
+        pad2->m_Size.x = pad2->m_Size.y = ABS( last_coordinate.y );
+        pad1->m_Pos0.y = first_coordinate.y / 2;
+        pad2->m_Pos0.y = last_coordinate.y / 2;
         pad1->m_Pos.y  = pad1->m_Pos0.y + Module->m_Pos.y;
         pad2->m_Pos.y  = pad2->m_Pos0.y + Module->m_Pos.y;
         break;
 
     case 1:     // Symetric
-        ptr1 = ptr - 2;
-        for( ii = 0; ii <= npoints; ii++ )
+        for( int ndx = edge->m_PolyPoints.size()-1; ndx>=0;  --ndx )
         {
-            *ptr = *ptr1;           // Copy X coord
-            ptr++;
-            *ptr  = -*(ptr1 + 1);   // Copy Y coord, mirror X axis
-            ptr1 -= 2; ptr++;
+            wxPoint pt = edge->m_PolyPoints[ndx];
+
+            pt.y = -pt.y;   // mirror about X axis
+
+            edge->m_PolyPoints.push_back( pt );
         }
 
-        pad1->m_Size.x = pad1->m_Size.y = 2*    ABS( first_cordinate.y );
-
-        pad2->m_Size.x = pad2->m_Size.y = 2*    ABS( last_cordinate.y );
-
+        pad1->m_Size.x = pad1->m_Size.y = 2 * ABS( first_coordinate.y );
+        pad2->m_Size.x = pad2->m_Size.y = 2 * ABS( last_coordinate.y );
         break;
     }
 

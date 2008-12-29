@@ -28,37 +28,37 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 /* Draw gerbview layers, for printing
 */
 {
-    DISPLAY_OPTIONS save_opt;
-    int DisplayPolygonsModeImg;
+	DISPLAY_OPTIONS save_opt;
+	int DisplayPolygonsModeImg;
 
-    save_opt = DisplayOpt;
-    if( printmasklayer & ALL_CU_LAYERS )
-        DisplayOpt.DisplayPadFill = FILLED;
-    else
-        DisplayOpt.DisplayPadFill = SKETCH;
-    DisplayOpt.DisplayPadNum       = 0;
-    DisplayOpt.DisplayPadNoConn    = 0;
-    DisplayOpt.DisplayPadIsol      = 0;
-    DisplayOpt.DisplayModEdge      = FILLED;
-    DisplayOpt.DisplayModText      = FILLED;
-    DisplayOpt.DisplayPcbTrackFill = FILLED;
-    DisplayOpt.DisplayTrackIsol    = 0;
-    DisplayOpt.DisplayDrawItems    = FILLED;
-    DisplayOpt.DisplayZonesMode = 0;
-    DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
-    g_DisplayPolygonsModeSketch = 0;
+	save_opt = DisplayOpt;
+	if( printmasklayer & ALL_CU_LAYERS )
+		DisplayOpt.DisplayPadFill = FILLED;
+	else
+		DisplayOpt.DisplayPadFill = SKETCH;
+	DisplayOpt.DisplayPadNum       = 0;
+	DisplayOpt.DisplayPadNoConn    = 0;
+	DisplayOpt.DisplayPadIsol      = 0;
+	DisplayOpt.DisplayModEdge      = FILLED;
+	DisplayOpt.DisplayModText      = FILLED;
+	DisplayOpt.DisplayPcbTrackFill = FILLED;
+	DisplayOpt.DisplayTrackIsol    = 0;
+	DisplayOpt.DisplayDrawItems    = FILLED;
+	DisplayOpt.DisplayZonesMode = 0;
+	DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
+	g_DisplayPolygonsModeSketch = 0;
 
-    m_PrintIsMirrored = aPrintMirrorMode;
+	m_PrintIsMirrored = aPrintMirrorMode;
 
-    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
+	( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
 
-    if( Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
+	if( Print_Sheet_Ref )
+		m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
 
-    m_PrintIsMirrored = false;
+	m_PrintIsMirrored = false;
 
-    DisplayOpt = save_opt;
-    g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;
+	DisplayOpt = save_opt;
+	g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;
 }
 
 
@@ -69,31 +69,31 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /* Trace le PCB, et les elements complementaires ( axes, grille .. )
  */
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
+	PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
-    if( !m_Pcb )
-        return;
-    ActiveScreen = screen;
-    GRSetDrawMode( DC, GR_COPY );
+	if( !m_Pcb )
+		return;
+	ActiveScreen = screen;
+	GRSetDrawMode( DC, GR_COPY );
 
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
+	if( EraseBg )
+		DrawPanel->EraseScreen( DC );
 
-    DrawPanel->DrawBackGround( DC );
+	DrawPanel->DrawBackGround( DC );
 
-    Trace_Gerber( DC, GR_COPY, -1 );
-    TraceWorkSheet( DC, screen, 0 );
-    Affiche_Status_Box();
+	Trace_Gerber( DC, GR_COPY, -1 );
+	TraceWorkSheet( DC, screen, 0 );
+	Affiche_Status_Box();
 
-    if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+	if( DrawPanel->ManageCurseur )
+		DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-    DrawPanel->Trace_Curseur( DC );
+	DrawPanel->Trace_Curseur( DC );
 }
 
 /********************************************************************/
 void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
-                  int aDrawMode, const wxPoint& offset )
+				  int aDrawMode, const wxPoint& offset )
 /********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 // @todo: replace WinEDA_GerberFrame::Trace_Gerber() by this function
@@ -110,72 +110,72 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
 */
 {
-    if( !m_Pcb )
-        return;
+	if( !m_Pcb )
+		return;
 
-    // Draw filled polygons
-    #define NBMAX 20000
-    int    nbpoints    = 0;
-    int    nbpointsmax = NBMAX;
-    int*   coord   = (int*) malloc( nbpointsmax * sizeof(int) * 2 );
-    int*   ptcoord = coord;
+    bool    erase;
+    
+	// Draw filled polygons
+    std::vector<wxPoint>    coords;
 
-    for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
-    {
-        if( !(track->ReturnMaskLayer() & printmasklayer) )
-            continue;
+    // minimize reallocations of the vector's internal array by starting with a good sized one.
+    coords.reserve(20000);
+    
+	for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
+	{
+		if( !(track->ReturnMaskLayer() & printmasklayer) )
+			continue;
 
-        if( track->GetNet() == 0 )  // StartPoint
-        {
-            if( nbpoints )			// we have found a new polygon: Draw the old polygon
-            {
-                int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-                int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+		if( track->GetNet() == 0 )  // StartPoint
+		{
+			if( coords.size() )			// we have found a new polygon: Draw the old polygon
+			{
+				int Color;
+				int filled;
+                
+                if( erase )
+                {
+                    D(printf("erase\n");)
+                    Color = g_DrawBgColor;
+                    filled = true;
+                }
+                else
+                {
+                    D(printf("NO erase\n");)
+                    Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+                    filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+                }
 
-                GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
-                              filled, Color, Color );
-            }
+				GRClosedPoly( &DrawPanel->m_ClipBox, DC, coords.size(), &coords[0],
+							  filled, Color, Color );
+			}
 
-            nbpoints = 2;
-            ptcoord  = coord;
+            erase = ( track->m_Flags & DRAW_ERASED ) ? true : false;
+    
+            coords.clear();
+			coords.push_back( track->m_Start );
+            coords.push_back( track->m_End );
+		}
+		else
+		{
+			coords.push_back( track->m_End );
+		}
 
-            *ptcoord++ = track->m_Start.x;
-            *ptcoord++ = track->m_Start.y;
+		if( track->Next() == NULL )    // Last point
+		{
+			int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+			int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
 
-            *ptcoord++ = track->m_End.x;
-            *ptcoord++ = track->m_End.y;
-        }
-        else
-        {
-            if( nbpoints >= nbpointsmax )
-            {
-                nbpointsmax *= 2;
-                coord   = (int*) realloc( coord, nbpointsmax * sizeof(int) * 2 );
-                ptcoord = coord + nbpointsmax;
-            }
-            nbpoints++;
+			GRClosedPoly( &DrawPanel->m_ClipBox, DC, coords.size(), &coords[0],
+						  filled, Color, Color );
+		}
+	}
 
-            *ptcoord++ = track->m_End.x;
-            *ptcoord++ = track->m_End.y;
-        }
+	// Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
+	Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
 
-        if( track->Next() == NULL )    // Last point
-        {
-            int Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-            int filled = (g_DisplayPolygonsModeSketch == 0) ? 1 : 0;
+	if( DisplayOpt.DisplayPadNum )
+		Affiche_DCodes_Pistes( DrawPanel, DC, m_Pcb, GR_COPY );
 
-            GRClosedPoly( &DrawPanel->m_ClipBox, DC, nbpoints, coord,
-                          filled, Color, Color );
-        }
-    }
-
-    free( coord );
-
-    // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
-    Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
-
-    if( DisplayOpt.DisplayPadNum )
-        Affiche_DCodes_Pistes( DrawPanel, DC, m_Pcb, GR_COPY );
-
-    GetScreen()->ClrRefreshReq();
+	GetScreen()->ClrRefreshReq();
 }

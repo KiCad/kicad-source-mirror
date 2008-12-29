@@ -5,18 +5,29 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-29 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+  * gr_basic.h DOXYGEN comments.  made a couple functions static and removed
+    those from gr_basic.h since they are private to gr_basic.c.  changed the
+    polygon code to use wxPoints since that is what the underlying wxWidgets
+    API uses.
+++gerbview
+    More work on drawing polygons, erasure still work in progress.  Will
+    probably switch to ZONEs from SEG_ZONEs for polygons.
+
 
 2008-Dec-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++Eeschema:
-	More about italic and bold texts options in fields and graphic texts
+    More about italic and bold texts options in fields and graphic texts
 
 
 2008-Dec-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++Pcbnew:
-	Added dialog box to edit graphic items (graphic segments, circles, arcs)
-	properties
+    Added dialog box to edit graphic items (graphic segments, circles, arcs)
+    properties
 
 
 2008-Dec-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
@@ -24,7 +35,7 @@ email address.
 ++All
     Cleaning code to draw/plot texts:
     Now only one function is used to draw and plot texts in pcbnew in all formats
-	Italics texts are allowed in pcbnew (work in progress)
+    Italics texts are allowed in pcbnew (work in progress)
 
 2008-Dec-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

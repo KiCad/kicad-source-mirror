@@ -35,19 +35,20 @@
 
 /*******************************************************************/
 Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
-                                            const wxPoint& pos, const wxString& text ) :
+                                                              const wxPoint&   pos,
+                                                              const wxString&  text ) :
     SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ),
     EDA_TextStruct( text )
 /*******************************************************************/
 {
     wxASSERT( parent );
     wxASSERT( Pnext == NULL );
-    m_Layer      = LAYER_SHEETLABEL;
-    m_Pos        = pos;
-    m_Edge       = 0;
-    m_Shape      = NET_INPUT;
+    m_Layer = LAYER_SHEETLABEL;
+    m_Pos   = pos;
+    m_Edge  = 0;
+    m_Shape = NET_INPUT;
     m_IsDangling = TRUE;
-    m_Number = 2;
+    m_Number     = 2;
 }
 
 
@@ -58,8 +59,8 @@ Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
     Hierarchical_PIN_Sheet_Struct* newitem =
         new Hierarchical_PIN_Sheet_Struct( (DrawSheetStruct*) m_Parent, m_Pos, m_Text );
 
-    newitem->m_Edge  = m_Edge;
-    newitem->m_Shape = m_Shape;
+    newitem->m_Edge   = m_Edge;
+    newitem->m_Shape  = m_Shape;
     newitem->m_Number = m_Number;
 
     return newitem;
@@ -68,24 +69,31 @@ Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
 
 /********************************************************************************************/
 void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                 int DrawMode, int Color )
+                                          int DrawMode, int Color )
 /********************************************************************************************/
 /* Routine de dessin des Labels type hierarchie */
 {
-    GRTextHorizJustifyType    side;
-    EDA_Colors txtcolor;
+    GRTextHorizJustifyType side;
+    EDA_Colors             txtcolor;
     int    posx, tposx, posy, size2;
     wxSize size;
-    int    NbSegm, coord[20];
+    int    NbSegm;
+
+    // @todo use wxPoints here
+    int    coord[20];
+
     int    LineWidth = g_DrawMinimunLineWidth;
 
     if( Color >= 0 )
-        txtcolor = (EDA_Colors)Color;
+        txtcolor = (EDA_Colors) Color;
     else
         txtcolor = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    posx = m_Pos.x + offset.x; posy = m_Pos.y + offset.y; size = m_Size;
+    posx = m_Pos.x + offset.x;
+    posy = m_Pos.y + offset.y;
+    size = m_Size;
+
     if( !m_Text.IsEmpty() )
     {
         if( m_Edge )
@@ -99,8 +107,8 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
             side  = GR_TEXT_HJUSTIFY_LEFT;
         }
         DrawGraphicText( panel, DC, wxPoint( tposx, posy ), txtcolor,
-            m_Text, TEXT_ORIENT_HORIZ, size,
-            side, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                         m_Text, TEXT_ORIENT_HORIZ, size,
+                         side, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
     }
     /* dessin du symbole de connexion */
 
@@ -110,8 +118,11 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
         size.y = -size.y;
     }
 
-    coord[0] = posx; coord[1] = posy; size2 = size.x / 2;
-    NbSegm   = 0;
+    coord[0] = posx;
+    coord[1] = posy;
+
+    size2  = size.x / 2;
+    NbSegm = 0;
 
     switch( m_Shape )
     {
@@ -154,7 +165,8 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
     }
 
     int FillShape = FALSE;
-    GRPoly( &panel->m_ClipBox, DC, NbSegm, coord, FillShape, LineWidth, txtcolor, txtcolor ); /* Poly Non rempli */
+    GRPoly( &panel->m_ClipBox, DC, NbSegm, (wxPoint*) coord,
+            FillShape, LineWidth, txtcolor, txtcolor );     /* Poly Non rempli */
 }
 
 
@@ -192,15 +204,16 @@ bool Hierarchical_PIN_Sheet_Struct::Save( FILE* aFile ) const
     }
 
     if( fprintf( aFile, "F%d \"%s\" %c %c %-3d %-3d %-3d\n", m_Number,
-            CONV_TO_UTF8( m_Text ), type, side,
-            m_Pos.x, m_Pos.y,
-            m_Size.x ) == EOF )
+                 CONV_TO_UTF8( m_Text ), type, side,
+                 m_Pos.x, m_Pos.y,
+                 m_Size.x ) == EOF )
     {
         return false;
     }
 
     return true;
 }
+
 
 #if defined(DEBUG)
 void Hierarchical_PIN_Sheet_Struct::Show( int nestLevel, std::ostream& os )
@@ -209,12 +222,12 @@ void Hierarchical_PIN_Sheet_Struct::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-        << " pin_name=\"" << CONV_TO_UTF8( m_Text ) << '"'
-        << "/>\n"
-        << std::flush;
+                                 << " pin_name=\"" << CONV_TO_UTF8( m_Text ) << '"'
+                                 << "/>\n"
+                                 << std::flush;
 
 //    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
-
 }
+
 
 #endif

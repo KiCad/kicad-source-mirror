@@ -455,19 +455,6 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
     }
 }
 
-/* this is local class to handle 2 integers that are a corner coordinate
- * One could use wxPoint insteed.
- * However, this class has only 2 integers
- * if changes happen in wxPoint ( like virtual functions) they will be not suitable
- * So i prefer use this simple class to handle a coordinate.
- */
-class corner_coord
-{
-public:
-    int x;
-    int y;
-};
-
 
 /************************************************************************************/
 void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
@@ -483,8 +470,8 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
  * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
  */
 {
-    static vector < char > CornersTypeBuffer;
-    static vector < corner_coord > CornersBuffer;
+    static vector <char> CornersTypeBuffer;
+    static vector <wxPoint> CornersBuffer;
     // outline_mode is false to show filled polys,
     // and true to show polygons outlines only (test and debug purposes)
     bool            outline_mode = DisplayOpt.DisplayZonesMode == 2 ? true : false;
@@ -535,19 +522,21 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
     for( int ic = 0; ic <= imax; ic++ )
     {
         CPolyPt* corner = &m_FilledPolysList[ic];
-        corner_coord coord;
+        wxPoint coord;
         coord.x = corner->x + offset.x;
         coord.y = corner->y + offset.y;
         CornersBuffer.push_back(coord);
         CornersTypeBuffer.push_back((char) corner->utility);
+        
         if( (corner->end_contour) || (ic == imax) ) // the last corner of a filled area is found: draw it
-        {   /* Draw the current filled area: draw segments ouline first
-            * Curiously, draw segments ouline first and after draw filled polygons
-            * with oulines thickness = 0 is a faster than
-            * just draw filled polygons but with oulines thickness = m_ZoneMinThickness
-            * So DO NOT use draw filled polygons with oulines having a thickness  > 0
-            * Note: Extra segments ( added by kbool to joint holes with external outline) are not drawn
-            */
+        {   
+            /* Draw the current filled area: draw segments ouline first
+             * Curiously, draw segments ouline first and after draw filled polygons
+             * with oulines thickness = 0 is a faster than
+             * just draw filled polygons but with oulines thickness = m_ZoneMinThickness
+             * So DO NOT use draw filled polygons with oulines having a thickness  > 0
+             * Note: Extra segments ( added by kbool to joint holes with external outline) are not drawn
+             */
             {
                 // Draw outlines:
                 if ( (m_ZoneMinThickness > 1) || outline_mode )
@@ -559,6 +548,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
                         int y0 = CornersBuffer[is].y;
                         int x1 = CornersBuffer[ie].x;
                         int y1 = CornersBuffer[ie].y;
+                        
                         if ( CornersTypeBuffer[ie] == 0 )   // Draw only basic outlines, not extra segments
                         {
                             if( (!DisplayOpt.DisplayPcbTrackFill) || GetState( FORCE_SKETCH ) )
@@ -573,12 +563,12 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
                     }
                 }
                 // Draw areas:
-            if( (m_FillMode == 0 ) && ! outline_mode )
-                GRPoly( &panel->m_ClipBox, DC, CornersBuffer.size(), (int*)&CornersBuffer[0].x,
-                    true, 0, color, color );
+                if( (m_FillMode == 0 ) && ! outline_mode )
+                    GRPoly( &panel->m_ClipBox, DC, CornersBuffer.size(), &CornersBuffer[0],
+                        true, 0, color, color );
             }
-        CornersTypeBuffer.clear();
-        CornersBuffer.clear();
+            CornersTypeBuffer.clear();
+            CornersBuffer.clear();
         }
     }
 }

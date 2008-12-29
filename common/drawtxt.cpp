@@ -269,7 +269,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
                                      *(coordptr + 2), *(coordptr + 3), aWidth, aColor );
                     }
                     else
-                        GRPoly( &aPanel->m_ClipBox, DC, ii / 2, coord, 0,
+                        GRPoly( &aPanel->m_ClipBox, DC, ii / 2, (wxPoint*)coord, 0,
                                 aWidth, aColor, aColor );
                 }
                 plume = f_cod; ii = 0;
