@@ -22,7 +22,7 @@ SetMsg( const wxString& msg )
 {
 	wxString message;
 
-#if 1 /* Windows */
+#if 1	/* Windows */
 	message = wxT( "\n" );
 #endif
 	message << msg;
@@ -58,13 +58,19 @@ InitKiCadAbout( wxAboutDialogInfo& info )
 		<< ( wxT( " Ansi\n" ) );
 #endif
 
-	/* Check for wxMSW */
+
+
+#define FreeBSD
+
+	/**************************
+ 	 * Check Operating System *
+ 	 **************************/
 #if defined __WINDOWS__
     description << ( wxT( "on Windows" ) );
 
 	/* Check for wxMAC */
 #	elif defined __WXMAC__
-	description << ( wxT( "\non Macintosch" ) );
+	description << ( wxT( "on Macintosch" ) );
 
 	/* Linux 64 bits */
 #	elif defined _LP64 && __LINUX__
@@ -73,10 +79,19 @@ InitKiCadAbout( wxAboutDialogInfo& info )
 	/* Linux 32 bits */
 #	elif defined __LINUX__
 	description << ( wxT( "on 32 Bits GNU/Linux" ) );
+
+	/* OpenBSD */
+#	elif defined __OpenBSD__
+	description << ( wxT ("on OpenBSD") );
+
+	/* FreeBSD */
+#	elif defined __FreeBSD__
+	description << ( wxT ("on FreeBSD") );
+
 #endif
 
 	/* Websites */
-	description << wxT( "\n\nKiCad on the web\n" );
+	description << wxT( "\n\nKiCad on the web\n\n" );
 	description << wxT( "http://iut-tice.ujf-grenoble.fr/kicad \n" );
 	description << wxT( "http://kicad.sourceforge.net \n" );
 	description << wxT( "http://www.kicadlib.org" );
@@ -113,15 +128,15 @@ InitKiCadAbout( wxAboutDialogInfo& info )
 	info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowroński <skowri@gmail.com>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
+	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>" ) ) );
+	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Iñigo Zuluaga <inigo_zuluaga@yahoo.es>" ) ) );
 
 	/* TODO are these all russian translators, placed them here now              TODO
 		TODO or else align them below other language maintainer with mail adres   TODO*/
-	info.AddTranslator( SetMsg( wxT( "             Remy Halvick" ) ) );
-	info.AddTranslator( SetMsg( wxT( "             David Briscoe" ) ) );
-	info.AddTranslator( SetMsg( wxT( "             Dominique Laigle" ) ) );
-	info.AddTranslator( SetMsg( wxT( "             Paul Burke" ) ) );
-	info.AddTranslator( SetMsg( wxT( "             Pedro Martin del Valle" ) ) );
-	info.AddTranslator( SetMsg( wxT( "             Iñigo Zuluaga" ) ) );
+	info.AddTranslator( SetMsg( wxT( "\n\nRemy Halvick" ) ) );
+	info.AddTranslator( SetMsg( wxT( "David Briscoe" ) ) );
+	info.AddTranslator( SetMsg( wxT( "Dominique Laigle" ) ) );
+	info.AddTranslator( SetMsg( wxT( "Paul Burke" ) ) );
 
 	/* Add programm credits for icons */
 	info.AddArtist( wxT( "Icons by Iñigo Zuluaga" ) );
