@@ -878,6 +878,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             SEGZONE* edge_poly;
             edge_poly = new SEGZONE( pcb );
             pcb->m_Zone.Append( edge_poly );
+            D(printf("R:%p\n", edge_poly );)
 
             edge_poly->SetLayer( activeLayer );
             edge_poly->m_Width = 1;
@@ -933,6 +934,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case GERB_INTERPOL_LINEAR_1X:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
+                D(printf("R:%p\n", track );)
                 fillLineTRACK(  track, dcode, activeLayer,
                                 m_PreviousPos, m_CurrentPos,
                                 size.x, !(m_LayerNegative ^ m_ImageNegative) );
@@ -948,6 +950,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case GERB_INTERPOL_ARC_POS:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
+                D(printf("R:%p\n", track );)
                 fillArcTRACK(  track, dcode, activeLayer,
                      m_PreviousPos, m_CurrentPos, m_IJPos,
                      size.x, m_Iterpolation==GERB_INTERPOL_ARC_NEG ? false : true,
@@ -984,6 +987,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case APT_CIRCLE:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
+                D(printf("R:%p\n", track );)
                 fillRoundFlashTRACK( track, dcode, activeLayer,
                                 m_CurrentPos,
                                 size.x, !(m_LayerNegative ^ m_ImageNegative) );
@@ -993,6 +997,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case APT_RECT:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
+                D(printf("R:%p\n", track );)
                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                 m_CurrentPos, size,
                                 aperture == APT_RECT ? S_SPOT_RECT : S_SPOT_OVALE,
@@ -1020,6 +1025,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillRoundFlashTRACK( track, dcode, activeLayer,
                                                 m_CurrentPos,
                                                 diameter, exposure );
@@ -1049,6 +1055,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 curPos += midPoint;
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                                curPos, size, S_SPOT_RECT,
                                                exposure );
@@ -1064,6 +1071,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 curPos += mapPt( p->params[3].GetValue( tool ), p->params[4].GetValue( tool ), m_GerbMetric );
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                                curPos, size, S_SPOT_RECT,
                                                exposure );
@@ -1083,6 +1091,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 curPos.x += size.x/2;
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                                curPos, size, S_SPOT_RECT,
                                                exposure );
@@ -1098,11 +1107,13 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
                                                 outerDiam, !(m_LayerNegative ^ m_ImageNegative) );
 
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
                                                 innerDiam, (m_LayerNegative ^ m_ImageNegative) );
 
@@ -1130,18 +1141,22 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                 {
                                     track = new TRACK( pcb );
                                     pcb->m_Track.Append( track );
+                                    D(printf("R:%p\n", track );)
                                     fillCircularTRACK( track, dcode, activeLayer, curPos, outerDiam,
                                             penThickness, !(m_LayerNegative ^ m_ImageNegative) );
                                 }
 
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                         curPos, wxSize(crossHairThickness,crossHairLength),
                                         S_SPOT_RECT, !(m_LayerNegative ^ m_ImageNegative) );
 
                                 track = new TRACK( pcb );
                                 pcb->m_Track.Append( track );
+                                D(printf("R:%p\n", track );)
+
                                 // swap x and y in wxSize() for this one
                                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
                                         curPos, wxSize(crossHairLength,crossHairThickness),

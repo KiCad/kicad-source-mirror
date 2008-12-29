@@ -128,9 +128,11 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
 
+        D(printf("D:%p\n", track );)
+
         if( track->GetNet() == 0 )  // StartPoint
         {
-            if( points.size() )			// we have found a new polygon: Draw the old polygon
+            if( points.size() )     // we have found a new polygon: Draw the old polygon
             {
                 if( erase )
                 {
