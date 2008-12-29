@@ -40,8 +40,8 @@
 #define FONT_DEFAULT_SIZE 10    /* Default font size. */
 
 
-/***
- * @brief  The real font size will be computed at run time
+/**
+ * The real font size will be computed at run time
  *   A small class to handle the list od existing translations.
  *   the locale translation is automatic.
  *   the selection of languages is mainly for mainteners's convenience (tests...)\n
@@ -49,7 +49,7 @@
  *   create a new icon (flag of the country) (see Lang_Fr.xpm as an exemple)
  *   add a new item to s_Language_List[LANGUAGE_DESCR_COUNT]
  *   and set LANGUAGE_DESCR_COUNT to the new value
- ***/
+ */
 struct
 LANGUAGE_DESCR
 {
@@ -66,9 +66,9 @@ LANGUAGE_DESCR
 };
 
 
-/***
- * @brief Language list struct
- ***/
+/**
+ * Language list struct
+ */
 static struct
 LANGUAGE_DESCR s_Language_List[] =
 {
@@ -203,11 +203,9 @@ LANGUAGE_DESCR s_Language_List[] =
 };
 
 
-/***
- * @brief    WinEDA_App Constructor
- * @details  TODO
- * @return   none
- ***/
+/**
+ * WinEDA_App Constructor
+ */
 WinEDA_App::WinEDA_App()
 {
 	m_Checker             = NULL;
@@ -223,9 +221,9 @@ WinEDA_App::WinEDA_App()
 }
 
 
-/***
- * @brief WinEDA_App Destructor
- ***/
+/**
+ * WinEDA_App Destructor
+ */
 WinEDA_App::~WinEDA_App()
 {
 	SaveSettings();
@@ -246,11 +244,9 @@ WinEDA_App::~WinEDA_App()
 
 
 
-/***
- * @brief   TODO
- * @param   name  TODO
- * @return  none
- ***/
+/**
+ * TODO brief
+ */
 void 
 WinEDA_App::InitEDA_Appl( const wxString& name )
 {
@@ -353,10 +349,10 @@ WinEDA_App::InitEDA_Appl( const wxString& name )
 
 
 
-/***
- * @brief   Init online help
+/**
+ * Init online help
  * @return  none
- ***/
+ */
 /*****************************************/
 void
 WinEDA_App::InitOnLineHelp()
@@ -387,10 +383,10 @@ WinEDA_App::InitOnLineHelp()
 }
 
 
-/***
- * @brief  Find the path to the executable and store it in WinEDA_App::m_BinDir
+/**
+ * Find the path to the executable and store it in WinEDA_App::m_BinDir
  * @return TODO
- ***/
+ */
 /*******************************/
 bool
 WinEDA_App::SetBinDir()
@@ -462,10 +458,10 @@ WinEDA_App::SetBinDir()
 }
 
 
-/***
- * @brief   Get application settings
+/**
+ * Get application settings
  * @return  none
- ***/
+ */
 /*********************************/
 void
 WinEDA_App::GetSettings()
@@ -562,10 +558,10 @@ WinEDA_App::GetSettings()
 }
 
 
-/***
- * @brief   Save application settings
+/**
+ * Save application settings
  * @return  none
- ***/
+ */
 /**********************************/
 void
 WinEDA_App::SaveSettings()
@@ -631,21 +627,23 @@ WinEDA_App::SaveSettings()
 }
 
 
-/***
- * @brief  Set the dictionary file name for internationalization
- *          the files are in kicad/internat/xx or kicad/internat/xx_XX
- *          and are named kicad.mo
+/**
+ * Set the dictionary file name for internationalization
+ *  the files are in kicad/internat/xx or kicad/internat/xx_XX
+ *  and are named kicad.mo
  *
  * @param   first_time  TODO
  * @return  TODO
- ***/
+ */
 /*********************************************/
 bool
 WinEDA_App::SetLanguage( bool first_time )
 /*********************************************/
 {
-	wxString DictionaryName( wxT( "kicad" ) );          // dictionary file name without extend (full name is kicad.mo)
-	wxString BaseDictionaryPath( wxT( "internat" ) );   // Real path is kicad/internat/xx_XX or kicad/internat/xx
+	// dictionary file name without extend (full name is kicad.mo)
+	wxString DictionaryName( wxT( "kicad" ) );
+	// Real path is kicad/internat/xx_XX or kicad/internat/xx
+	wxString BaseDictionaryPath( wxT( "internat" ) );
 	wxString dic_path;
 
 	if( m_Locale != NULL )
@@ -674,12 +672,12 @@ WinEDA_App::SetLanguage( bool first_time )
 
 
 
-/***
- * @brief  Return in m_LanguageId the wxWidgets language identifier Id
- *          from the kicad menu id (internal menu identifier)
- * @param  menu_id TODO
- * @return none
- ***/
+/**
+ * Return in m_LanguageId the wxWidgets language identifier Id
+ *   from the kicad menu id (internal menu identifier)
+ * @param   menu_id TODO
+ * @return  none
+ */
 /**************************************************/
 void
 WinEDA_App::SetLanguageIdentifier( int menu_id )
@@ -703,11 +701,11 @@ WinEDA_App::SetLanguageIdentifier( int menu_id )
 
 
 
-/***
- * @brief   Create menu list for language choice.
+/**
+ * Create menu list for language choice.
  * @param   MasterMenu  TODO
  * @return  TODO
- ***/
+ */
 /*********************************************************/
 wxMenu*
 WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
@@ -754,10 +752,10 @@ WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
 }
 
 
-/***
- *  @brief   Run init scripts
- *  @return  TODO
- ***/
+/**
+ * Run init scripts
+ * @return  TODO
+ */
 /**********************/
 int
 WinEDA_App::OnRun()
