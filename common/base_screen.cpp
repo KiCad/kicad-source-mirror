@@ -311,8 +311,7 @@ void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
         }
     }
 
-    wxLogDebug( wxT( "Adding grid ID %d size( %d, %d ) to grid list." ),
-                grid.m_Id, grid.m_Size.x, grid.m_Size.y );
+    // wxLogDebug( wxT( "Adding grid ID %d size( %d, %d ) to grid list." ), grid.m_Id, grid.m_Size.x, grid.m_Size.y );
 
     m_GridList.Add( grid );
 }

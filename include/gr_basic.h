@@ -140,7 +140,7 @@ void GRClosedPoly(EDA_Rect * ClipBox, wxDC* aDC, int aPointCount, wxPoint aPoint
  * @param aDC the device context into which drawing should occur.
  * @param x The x coordinate in user space of the center of the circle.
  * @param x The y coordinate in user space of the center of the circle.
- * @param aRadius is the radis of the circle.
+ * @param aRadius is the radius of the circle.
  * @param aColor is an index into our color table of RGB colors.
  * @see EDA_Colors and colors.h
  */

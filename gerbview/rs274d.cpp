@@ -238,43 +238,31 @@ static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 }
 
 
-#if 0 // @todo get it into the doxygen function comment for fillArcTRACK below
-/*****************************************************************/
-static void Append_1_SEG_ARC_GERBER( int Dcode_index,
-                                     WinEDA_GerberFrame* frame, wxDC* DC,
-                                     const wxPoint& startpoint, const wxPoint& endpoint,
-                                     const wxPoint& rel_center, int largeur,
-                                     bool trigo_sens, bool multiquadrant, bool isDark )
-/*****************************************************************/
-
-/*
-  * Creates an arc:
-  * if multiquadrant == true : arc can be 0 to 360 degres
-  *   and rel_center is the center coordiante relative to startpoint.
- *
-  * if multiquadrant == false arc can be only 0 to 90 deg,
-  *     and only in the same quadrant :
-  *         absolute angle 0 to 90 (quadrant 1) or
-  *         absolute angle 90 to 180 (quadrant 2) or
-  *         absolute angle 180 to 270 (quadrant 3) or
-  *         absolute angle 270 to 0 (quadrant 4)
-  *   rel_center is the center coordiante relative to startpoint,
-  *   given in ABSOLUE VALUE and the signe of values x et y de rel_center
-  *   must be calculated from the previously given constraint: arc only in the same quadrant
- */
-
-#endif
-
-
 /**
  * Function fillArcTRACK
  * initializes a given TRACK so that it can draw an arc G code.
- *
- * @param aTrack The TRACK to fill in.
- * @param Dcode_index The DCODE value, like D14
- * @param aLayer The layer index to set into the TRACK
- * @param aPos The center point of the flash
+ * <p>
+ * if multiquadrant == true : arc can be 0 to 360 degres
+ *   and \a rel_center is the center coordiante relative to startpoint.
+ * <p>
+ * if multiquadrant == false arc can be only 0 to 90 deg,
+ *     and only in the same quadrant :
+ * <ul>
+ * <li> absolute angle 0 to 90 (quadrant 1) or
+ * <li> absolute angle 90 to 180 (quadrant 2) or
+ * <li> absolute angle 180 to 270 (quadrant 3) or
+ * <li> absolute angle 270 to 0 (quadrant 4)
+ * </ul><p>
+ * @param aTrack is the TRACK to fill in.
+ * @param Dcode_index is the DCODE value, like D14
+ * @param aLayer is the layer index to set into the TRACK
+ * @param aStart is the starting point
+ * @param aEnd is the ending point
+ * @param rel_center is the center coordiante relative to startpoint,
+ *   given in ABSOLUE VALUE and the signe of values x et y de rel_center
+ *   must be calculated from the previously given constraint: arc only in the same quadrant.
  * @param aDiameter The diameter of the round flash
+ * @param aWidth is the pen width.
  * @param isDark True if flash is positive and should use a drawing
  *   color other than the background color, else use the background color
  *   when drawing so that an erasure happens.
@@ -682,8 +670,9 @@ int GERBER::ReturnDCodeNumber( char*& Text )
 /******************************************************************/
 bool GERBER::Execute_G_Command( char*& text, int G_commande )
 /******************************************************************/
-
 {
+    D(printf( "%22s: G_CODE<%d>\n", __func__, G_commande );)
+
     switch( G_commande )
     {
     case GC_PHOTO_MODE:                 // can starts a D03 flash command: redundant, can be safely ignored
@@ -858,6 +847,8 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
     D_CODE*     tool = NULL;
     wxString    msg;
 
+    D(printf( "%22s: D_CODE<%d>\n", __func__, D_commande );)
+
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
     {
         if( D_commande > (MAX_TOOLS - 1) )
@@ -890,15 +881,15 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
             edge_poly->SetLayer( activeLayer );
             edge_poly->m_Width = 1;
-        
+
             edge_poly->m_Start = m_PreviousPos;
             NEGATE( edge_poly->m_Start.y );
-        
+
             edge_poly->m_End = m_CurrentPos;
             NEGATE( edge_poly->m_End.y );
-        
+
             edge_poly->SetNet( m_PolygonFillModeState );
-            
+
             // the first track of each polygon has a netcode of zero, otherwise one.
             // set the erasure flag in that special track, if a negative polygon.
             if( !m_PolygonFillModeState )
@@ -907,7 +898,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                     edge_poly->m_Flags |= DRAW_ERASED;
                 D(printf("\nm_Flags=0x%08X\n", edge_poly->m_Flags );)
             }
-        
+
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 1;
             break;

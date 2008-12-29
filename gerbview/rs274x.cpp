@@ -47,7 +47,7 @@ enum RS274X_PARAMETERS
 
 /**
  * Function ReadXCommand
- * reads int two bytes of data and assembles them into an int with the first
+ * reads in two bytes of data and assembles them into an int with the first
  * byte in the sequence put into the most significant part of a 16 bit value
  * and the second byte put into the least significant part of the 16 bit value.
  * @param text A reference to a pointer to read bytes from and to advance as they are read.
@@ -177,7 +177,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
     double   fcoord;
     double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
 
-    //D(printf( "%s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF );)
+    D(printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF );)
 
     switch( command )
     {
@@ -311,28 +311,18 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
 
     case IMAGE_POLARITY:
         if( strnicmp( text, "NEG", 3 ) == 0 )
-        {
-            D(printf("%s: m_ImageNegative=true\n", __func__);)
-            m_ImageNegative = TRUE;
-        }
+            m_ImageNegative = true;
         else
-        {
-            D(printf("%s: m_ImageNegative=false\n", __func__);)
-            m_ImageNegative = FALSE;
-        }
+            m_ImageNegative = false;
+        D(printf("%22s: IMAGE_POLARITY m_ImageNegative=%s\n", __func__, m_ImageNegative ? "true" : "false");)
         break;
 
     case LAYER_POLARITY:
         if( *text == 'C' )
-        {
-            D(printf("%s: m_LayerNegative=true\n", __func__);)
-            m_LayerNegative = TRUE;
-        }
+            m_LayerNegative = true;
         else
-        {
-            D(printf("%s: m_LayerNegative=false\n", __func__);)
-            m_LayerNegative = FALSE;
-        }
+            m_LayerNegative = false;
+        D(printf("%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__, m_LayerNegative ? "true" : "false");)
         break;
 
     case INCLUDE_FILE:
@@ -366,7 +356,6 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
         break;
 
     case AP_DEFINITION:
-
         // input example:  %ADD30R,0.081800X0.101500*%
         // at this point, text points to 2nd 'D'
 
@@ -501,9 +490,6 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
             }
 
             dcode->m_Shape = APT_MACRO;
-
-            D(printf("pam has %d parameters\n", pam->primitives.size() );)
-
             dcode->SetMacro( (APERTURE_MACRO*) pam );
         }
         break;

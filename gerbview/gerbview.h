@@ -108,8 +108,9 @@ class D_CODE;
 /**
  * Class DCODE_PARAM
  * holds a parameter for a DCODE or an "aperture macro" as defined within standard RS274X.
- * The \a value field can be either a constant or a place holder for a DCODE
- * parameter.
+ * The \a value field can be a constant, i.e. "immediate" parameter or it may not be used
+ * if this param is going to defer to the referencing aperture macro.  In that case, the
+ * \a index field is an index into the aperture macro's paramters.
  */
 class DCODE_PARAM
 {
@@ -145,7 +146,7 @@ public:
 
 private:
     int     index;      ///< if -1, then \a value field is an immediate value, else this is an index into parent's D_CODE.m_am_params.
-    double  value;      ///< if IsImmediate()==true then the value, else not used.
+    double  value;      ///< if IsImmediate()==true then use the value, else not used.
 };
 
 
@@ -378,8 +379,8 @@ public:
                                    char*& text, int D_commande );
 
    /**
-    * size of single line of a text line from a gerber file.
-    * warning: some files can have very long lines, so the buffer must be large
+    * size of single line of a text from a gerber file.
+    * warning: some files can have very long lines, so the buffer must be large.
     */
 #define GERBER_BUFZ     4000
 

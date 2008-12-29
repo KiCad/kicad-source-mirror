@@ -13,8 +13,10 @@ email address.
     polygon code to use wxPoints since that is what the underlying wxWidgets
     API uses.
 ++gerbview
-    More work on drawing polygons, erasure still work in progress.  Will
-    probably switch to ZONEs from SEG_ZONEs for polygons.
+  * More work on drawing polygons, erasure of polygons completed.
+  * Added full support for aperture macro 6, MOIRE.
+  * Example 2 in RS274xrevd_e.pdf almost draws properly now.  Need ARC support
+    in polygons, and need polygon aperture type support to complete.
 
 
 2008-Dec-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

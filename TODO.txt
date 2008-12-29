@@ -38,6 +38,10 @@ asked by: Dick Hollenbeck
 4) Expose layer name editing in pcbnew (anyone), should dove tail with net
    class editor from a UI perspective.
 
+** Should probably switch gerbview to use ZONE instead of SEGZONE for polygons.
+** Need to add ARC support to gerber polygons.
+** Need to add polygon aperture type.  Then example 2 in RS274xrevd_e.pdf will draw properly.
+
 
 2008-Feb-8 Assigned To: dick
 asked by: dick
