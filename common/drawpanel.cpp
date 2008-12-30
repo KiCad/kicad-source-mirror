@@ -580,11 +580,21 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 }
 
 
+//#define USE_GCDC_IN_KICAD
+#ifdef USE_GCDC_IN_KICAD
+#include <wx/dcgraph.h>
+#endif
 /***************************************************/
 void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 /***************************************************/
 {
+#ifdef USE_GCDC_IN_KICAD
+	wxPaintDC pDC( this );
+	wxGCDC paintDC(pDC);									// Following line should be disabled on MSW and OS X
+	paintDC.GetGraphicsContext()->Translate(0.5, 0.5);		// Fix for pixel offset bug http://trac.wxwidgets.org/ticket/4187
+#else
     wxPaintDC paintDC( this );
+#endif
     EDA_Rect  tmp;
     wxRect    PaintClipBox;
     wxPoint   org;

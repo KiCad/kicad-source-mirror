@@ -445,7 +445,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     fieldNameTextCtrl->SetValue( field.m_Name );
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
-    // fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
+    fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
     fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
 
     fieldValueTextCtrl->SetValue( field.m_Text );

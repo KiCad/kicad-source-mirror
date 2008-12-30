@@ -25,6 +25,7 @@
 #define ABS( y ) ( (y) >= 0 ? (y) : ( -(y) ) )
 #endif
 
+#define NEGATE(x) (x = -x)
 /// # of elements in an arrray
 #define DIM(x)           (sizeof(x)/sizeof((x)[0]))
 

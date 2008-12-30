@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-23 14:07+0100\n"
-"PO-Revision-Date: 2008-12-23 14:11+0100\n"
+"POT-Creation-Date: 2008-12-29 09:07+0100\n"
+"PO-Revision-Date: 2008-12-29 16:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -4989,6 +4989,8 @@ msgid ""
 "Activates the display of relative coordinates from relative origin (set by the space key)\n"
 "to the cursor, in polar coordinates (angle and distance)"
 msgstr ""
+"Active l'affichage des coordonnées relatives à l'origine relative(positionnée par la touche espace)\n"
+"au curseur, en coordonnées polaires (angle et distance)"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:32
 msgid "Units"
@@ -5000,7 +5002,7 @@ msgstr "Sélection des unités pour afficher les dimensions et positions des ite
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
 msgid "Smass cross"
-msgstr "Petite crois"
+msgstr "Petite croix"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
 msgid "Full screen cursor"
@@ -5012,7 +5014,7 @@ msgstr "Curseur"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:42
 msgid "Main cursor shape selection (small cross or large cursor)"
-msgstr ""
+msgstr "Sélection de l'aspect du curseur principal (petite croix ou grand curseur)"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
 msgid "1"
@@ -5060,7 +5062,7 @@ msgstr "Liens max:"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:64
 msgid "Adjust the number of ratsnets shown from cursor to closest pads"
-msgstr ""
+msgstr "Adjust the number of ratsnets shown from cursor to closest pads"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:68
 msgid "Auto Save (minuts):"
@@ -5068,7 +5070,7 @@ msgstr "Sauveg. Auto (min)"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:73
 msgid "Delay after the first change to create a backup file of the board on disk."
-msgstr ""
+msgstr "Délai après le premier changement pour créer un fichier de sauvegarde du circuit imprimé sur disque"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:82
 msgid "Drc ON"
@@ -5079,6 +5081,8 @@ msgid ""
 "Enable/disable the DRC control.\n"
 "When DRC is disable, all connections are allowed."
 msgstr ""
+"Active/désactive le contrôle DRC (Design Rule Check).\n"
+"Lorsque de DRC est désactivé, toutes les connexions sont autorisées."
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:89
 msgid "Show Ratsnest"
@@ -5097,6 +5101,8 @@ msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
 msgstr ""
+"Montre (ou non) le chevelu local relatif a un module, lorsque on le déplace.\n"
+"Ce chevelu est utile pour placer un module."
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:101
 msgid "Tracks Auto Del"
@@ -5104,7 +5110,7 @@ msgstr "Auto Supp. Pistes"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:103
 msgid "Enable/disable the automatic track deletion when recreating a track."
-msgstr ""
+msgstr "Active/désactive l'effacement de piste automatique lorsque l'on recrée une piste."
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:107
 msgid "Track only 45 degrees"
@@ -5128,7 +5134,7 @@ msgstr "Auto PAN"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:121
 msgid "Allows auto pan when creating a track, or moving an item."
-msgstr ""
+msgstr "Autorise l'autopan en création de piste, ou lorsque on déplace un élément."
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:125
 msgid "Double Segm Track"
@@ -5406,12 +5412,12 @@ msgid "PinType"
 msgstr "Type Pin"
 
 #: eeschema/affiche.cpp:89
-#: eeschema/affiche.cpp:177
+#: eeschema/affiche.cpp:184
 msgid "no"
 msgstr "non"
 
 #: eeschema/affiche.cpp:91
-#: eeschema/affiche.cpp:179
+#: eeschema/affiche.cpp:186
 msgid "yes"
 msgstr "oui"
 
@@ -5439,20 +5445,20 @@ msgstr "Gauche"
 msgid "Right"
 msgstr "Droite"
 
-#: eeschema/affiche.cpp:169
-#: eeschema/affiche.cpp:175
+#: eeschema/affiche.cpp:176
+#: eeschema/affiche.cpp:182
 msgid "All"
 msgstr "Tout"
 
-#: eeschema/affiche.cpp:172
+#: eeschema/affiche.cpp:179
 msgid "Unit"
 msgstr "Unité"
 
-#: eeschema/affiche.cpp:182
+#: eeschema/affiche.cpp:189
 msgid "Convert"
 msgstr "Convert"
 
-#: eeschema/affiche.cpp:187
+#: eeschema/affiche.cpp:194
 msgid "default"
 msgstr "Défaut"
 
@@ -6464,26 +6470,6 @@ msgstr "Pin de Feuille de Hiérarchie"
 msgid "No New Hierarchal Label found"
 msgstr "Pas de nouveau Label Hiérarchique trouvé"
 
-#: eeschema/symbtext.cpp:133
-msgid " Text : "
-msgstr " Texte : "
-
-#: eeschema/symbtext.cpp:143
-msgid "Component name:"
-msgstr "Nom du Composant:"
-
-#: eeschema/symbtext.cpp:152
-msgid "Size:"
-msgstr "Taille:"
-
-#: eeschema/symbtext.cpp:158
-msgid " Text Options : "
-msgstr "Options du Texte: "
-
-#: eeschema/symbtext.cpp:170
-msgid "Vertical"
-msgstr "Vertical"
-
 #: eeschema/hotkeys.cpp:249
 msgid "Add Component"
 msgstr "Ajout Composant"
@@ -7017,7 +7003,7 @@ msgstr "Créer une nouvelle librairie et y sauver le composant"
 
 #: eeschema/tool_lib.cpp:157
 msgid "Edit component properties"
-msgstr "Editer ropriétés du composant"
+msgstr "Editer propriétés du composant"
 
 #: eeschema/tool_lib.cpp:164
 msgid "Test duplicate pins"
@@ -7766,6 +7752,10 @@ msgstr "Champs"
 msgid "Show Text"
 msgstr "Texte visible"
 
+#: eeschema/edit_component_in_lib.cpp:504
+msgid "Vertical"
+msgstr "Vertical"
+
 #: eeschema/edit_component_in_lib.cpp:510
 msgid "Field Name:"
 msgstr "Nom Champ"
@@ -8039,58 +8029,62 @@ msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:117
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:120
 msgid "Show"
 msgstr "Visible"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:119
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:122
 msgid "Check if you want this field visible"
 msgstr "Activer si vous voulez avoir ce champ visible"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:125
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:128
 msgid "Check if you want this field's text rotated 90 degrees"
-msgstr "Activer si vous voulez avoir le texte de ce champ turné à 90°"
+msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
+msgid "Style:"
+msgstr "Style:"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:145
 msgid "Field Name"
 msgstr "Nom Champ"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:139
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:153
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:150
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:164
 msgid "The text (or value) of the currently selected field"
 msgstr "The texte (ou la valeur) du champ actuellement sélectionné"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:148
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:159
 msgid "Field Value"
 msgstr "Texte Champ"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:162
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:173
 msgid "Size(\")"
 msgstr "Taille(\")"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:167
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:178
 msgid "The vertical height of the currently selected field's text in the schematic"
 msgstr "La taille du texte du champ actuellement sélectionné"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:179
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:190
 msgid "PosX(\")"
 msgstr "PosX"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:191
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:202
 msgid "PosY(\")"
 msgstr "PosY"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:196
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:207
 msgid "The Y coordinate of the text relative to the component"
 msgstr "La position Y du texte relativement au composant"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:207
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:218
 msgid "Reset to Library Defaults"
 msgstr "Remettre aux Valeurs par Défaut en Librairie"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:139
 msgid "General :"
-msgstr " Général :"
+msgstr "Général :"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:147
 msgid "Number of units:"
@@ -8374,6 +8368,18 @@ msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enreg
 #: eeschema/load_one_schematic_file.cpp:401
 msgid "Done Loading "
 msgstr "Chargement terminé"
+
+#: eeschema/dialog_bodygraphictext_properties_base.cpp:32
+msgid " Text Options : "
+msgstr "Options du Texte: "
+
+#: eeschema/dialog_bodygraphictext_properties_base.cpp:53
+msgid "Size:"
+msgstr "Taille:"
+
+#: eeschema/dialog_bodygraphictext_properties_base.cpp:62
+msgid "Text Shape:"
+msgstr "Aspect Texte:"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:117
 msgid "Start loading schematic libs"
@@ -9034,6 +9040,7 @@ msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
 #: kicad/treeprj_frame.cpp:543
+#: kicad/kicad.cpp:381
 msgid "noname"
 msgstr "noname"
 
@@ -10721,11 +10728,7 @@ msgstr "EESchema Tracé HPGL"
 msgid "Sheet properties"
 msgstr "Propriétés de la feuille"
 
-#: eeschema/symbtext.h:47
-msgid "Graphic text properties"
-msgstr "Propriétés du texte"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.h:81
+#: eeschema/dialog_edit_component_in_schematic_fbp.h:82
 msgid "Component Properties"
 msgstr "Propriétés du Composant"
 
@@ -10736,6 +10739,10 @@ msgstr "Propriétés des Pins"
 #: eeschema/plotps.h:50
 msgid "EESchema Plot PS"
 msgstr "EESchema Tracé PS"
+
+#: eeschema/dialog_bodygraphictext_properties_base.h:55
+msgid "Graphic text properties:"
+msgstr "Propriétés du texte graphique:"
 
 #: eeschema/component_wizard/dialog_component_setup.h:55
 msgid "Component Builder"
@@ -10905,6 +10912,10 @@ msgstr "Imprimer"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
+#~ msgid " Text : "
+#~ msgstr " Texte : "
+#~ msgid "Component name:"
+#~ msgstr "Nom du Composant:"
 #~ msgid "show"
 #~ msgstr "Visible"
 #~ msgid "no show"

@@ -410,8 +410,11 @@ LibDrawField* LibDrawField::GenCopy()
 }
 
 
-// copie du field dans le field Target
-void LibDrawField::Copy( LibDrawField* Target )
+/** Function Copy
+ * copy parameters of this to Target. Pointers are not copied
+ * @param Target = the LibDrawField to set with "this" values
+ */
+void LibDrawField::Copy( LibDrawField* Target ) const
 {
     Target->m_Pos       = m_Pos;
     Target->m_Size      = m_Size;

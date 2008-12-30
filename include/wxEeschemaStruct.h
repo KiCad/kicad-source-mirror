@@ -408,6 +408,7 @@ private:
     // General editing
 public:
     void                SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
+    void                InstallFieldsEditorDialog( void );
 
 private:
     bool                GetComponentFromUndoList();

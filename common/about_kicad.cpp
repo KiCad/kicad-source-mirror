@@ -4,7 +4,6 @@
 #include "wx/generic/aboutdlgg.h"
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 
 extern wxString g_Main_Title; // Import program title

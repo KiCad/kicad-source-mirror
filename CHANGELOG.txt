@@ -5,6 +5,19 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2008-Dec-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Eeschema:
+    Note: this is a work in progress!
+    Change dialog to edit fields in libedit.
+    Most of code created by Dick to edit fields in shematic is reused (this was the goal).
+    Component dialog properties -in libedit) is not modified, and fields can be also edited with it.
+    New dialog box is similar to the component dialog box used in schematic.
+    But all features do not work (work in progress!)
+    TODO (by me):
+    use vector to handle fields in libraries, like schematic.
+    Finish work, and test it.
+
 2008-Dec-29 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++all

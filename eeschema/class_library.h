@@ -137,6 +137,12 @@ public:
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile );
+
+    /** Function SetFields
+     * initialize fields from a vector of fields
+     * @param aFields a std::vector <LibDrawField> to import.
+    */
+    void SetFields( const  std::vector <LibDrawField> aFields );
 };
 
 

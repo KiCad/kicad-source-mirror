@@ -29,6 +29,8 @@ OBJECTS = eeschema.o\
 	component_class.o\
 	class_library.o\
 	dialog_options.o\
+    dialog_edit_libentry_fields_in_lib.o\
+    dialog_edit_libentry_fields_in_lib_base.o\
 	tool_lib.o\
 	tool_sch.o\
 	tool_viewlib.o\

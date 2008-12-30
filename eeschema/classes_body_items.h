@@ -497,7 +497,14 @@ public:
 
 
     LibDrawField*   GenCopy();
-    void            Copy( LibDrawField* Target );
+
+    /** Function Copy
+     * copy parameters of this to Target. Pointers are not copied
+     * @param Target = the LibDrawField to set with "this" values
+     */
+    void            Copy( LibDrawField* Target ) const;
+
+    void SetFields( const  std::vector <LibDrawField> aFields );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void* aData, int aTransformMatrix[2][2] );
