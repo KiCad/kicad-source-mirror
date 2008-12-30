@@ -84,7 +84,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
     /* for a user field (FieldId >= FIELD1), if a field value is void,
      *  fill it with "~" because for a library component a void field is not a very good idea
      *  (we do not see anything...) and in schematic this text is like a void text
-     * and for not editable names, remove the name (thar is the default name
+     * and for non editable names, remove the name (set to the default name)
      */
     for( LibDrawField* Field = Fields; Field; Field = Field->Next() )
     {
@@ -147,7 +147,6 @@ private:
      * the currently selected field row
      */
     void copySelectedFieldToPanel();
-
 
     /**
      * Function copyPanelToSelectedField
@@ -535,6 +534,14 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
         style |= 2;
     m_StyleRadioBox->SetSelection( style );
 
+    // Copy the text justification
+    if( field.m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+        m_FieldHJustifyCtrl->SetSelection(0);
+    else if( field.m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+        m_FieldHJustifyCtrl->SetSelection(2);
+    else
+        m_FieldHJustifyCtrl->SetSelection(1);
+
     fieldNameTextCtrl->SetValue( field.m_Name );
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
@@ -599,6 +606,25 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         field.m_Orient = TEXT_ORIENT_VERT;
     else
         field.m_Orient = TEXT_ORIENT_HORIZ;
+
+    // Copy the text justification
+    GRTextHorizJustifyType hjustify[3] = {
+        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
+        GR_TEXT_HJUSTIFY_RIGHT
+    };
+    GRTextVertJustifyType vjustify[3] = {
+        GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
+        GR_TEXT_VJUSTIFY_TOP
+    };
+    field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
+    field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
+
+    if( field.m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        m_FieldVJustifyCtrl->SetSelection(0);
+    else if( field.m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        m_FieldVJustifyCtrl->SetSelection(2);
+    else
+        m_FieldVJustifyCtrl->SetSelection(1);
 
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 

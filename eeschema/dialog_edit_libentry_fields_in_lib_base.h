@@ -40,7 +40,7 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
 		wxButton* moveUpButton;
-		wxRadioBox* m_FieldPositionCtrl;
+		wxRadioBox* m_FieldHJustifyCtrl;
 		wxRadioBox* m_FieldVJustifyCtrl;
 		wxCheckBox* showCheckBox;
 		wxCheckBox* rotateCheckBox;

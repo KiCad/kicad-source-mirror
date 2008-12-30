@@ -51,13 +51,13 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxBoxSizer* orientationSizer;
 	orientationSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_FieldPositionCtrlChoices[] = { _("Align left"), _("Align center"), _("Align right") };
-	int m_FieldPositionCtrlNChoices = sizeof( m_FieldPositionCtrlChoices ) / sizeof( wxString );
-	m_FieldPositionCtrl = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldPositionCtrlNChoices, m_FieldPositionCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_FieldPositionCtrl->SetSelection( 1 );
-	m_FieldPositionCtrl->SetToolTip( _("Select if the component is to be rotated when drawn") );
+	wxString m_FieldHJustifyCtrlChoices[] = { _("Align left"), _("Align center"), _("Align right") };
+	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
+	m_FieldHJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_FieldHJustifyCtrl->SetSelection( 1 );
+	m_FieldHJustifyCtrl->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
-	orientationSizer->Add( m_FieldPositionCtrl, 1, wxALL, 8 );
+	orientationSizer->Add( m_FieldHJustifyCtrl, 1, wxALL, 8 );
 	
 	optionsSizer->Add( orientationSizer, 1, wxLEFT|wxRIGHT|wxTOP|wxEXPAND|wxALIGN_CENTER_VERTICAL, 0 );
 	

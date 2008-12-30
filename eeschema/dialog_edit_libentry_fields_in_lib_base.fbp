@@ -373,7 +373,7 @@
                                                         <property name="majorDimension">1</property>
                                                         <property name="maximum_size"></property>
                                                         <property name="minimum_size"></property>
-                                                        <property name="name">m_FieldPositionCtrl</property>
+                                                        <property name="name">m_FieldHJustifyCtrl</property>
                                                         <property name="permission">protected</property>
                                                         <property name="pos"></property>
                                                         <property name="selection">1</property>
