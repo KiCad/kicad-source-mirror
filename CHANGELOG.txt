@@ -5,6 +5,15 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2008-Dec-31 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Eeschema:
+    Note: this is a work in progress!
+    Files modification.
+    More about italic andf bold in fileds in libraries
+
+
 2008-Dec-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++Eeschema:

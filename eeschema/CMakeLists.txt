@@ -16,6 +16,8 @@ set(EESCHEMA_SRCS
     bus-wire-junction.cpp
     class_drawsheet.cpp
     class_hierarchical_PIN_sheet.cpp
+    class_libentry.cpp
+    class_libentry_fields.cpp
     class_library.cpp
     class_pin.cpp
     class_sch_cmp_field.cpp

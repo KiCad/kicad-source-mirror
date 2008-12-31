@@ -185,44 +185,6 @@ bool LibDrawSegment::Save( FILE* ExportFile ) const
 }
 
 
-/**************************************************/
-bool LibDrawField::Save( FILE* ExportFile ) const
-/**************************************************/
-{
-    int      hjustify, vjustify;
-    wxString text = m_Text;
-
-    hjustify = 'C';
-    if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
-        hjustify = 'L';
-    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
-        hjustify = 'R';
-    vjustify = 'C';
-    if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
-        vjustify = 'B';
-    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
-        vjustify = 'T';
-    if( text.IsEmpty() )
-        text = wxT( "~" );
-    fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
-             m_FieldId, CONV_TO_UTF8( text ),
-             m_Pos.x, m_Pos.y,
-             m_Size.x,
-             m_Orient == 0 ? 'H' : 'V',
-             (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
-             hjustify, vjustify,
-			 m_Italic ? 'I' : 'N',
-			 m_Width > 1 ? 'B' : 'N');
-
-    // Save field name, if necessary
-    if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() )
-        fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_Name ) );
-
-    fprintf( ExportFile, "\n" );
-    return true;
-}
-
-
 /**********************************************************/
 LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
                                         LibEDA_BaseStruct* DrawItem )

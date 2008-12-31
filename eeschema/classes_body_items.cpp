@@ -385,3 +385,188 @@ bool LibDrawField::HitTest( const wxPoint& refPos )
 
     return false;
 }
+
+
+/**************************************************************/
+LibDrawArc::LibDrawArc() : LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE )
+/**************************************************************/
+{
+    m_Rayon = 0;
+    t1      = t2 = 0;
+    m_Width = 0;
+    m_Fill  = NO_FILL;
+}
+
+
+/************************************/
+LibDrawArc* LibDrawArc::GenCopy()
+/************************************/
+{
+    LibDrawArc* newitem = new LibDrawArc();
+
+    newitem->m_Pos      = m_Pos;
+    newitem->m_ArcStart = m_ArcStart;
+    newitem->m_ArcEnd   = m_ArcEnd;
+    newitem->m_Rayon    = m_Rayon;
+    newitem->t1        = t1;
+    newitem->t2        = t2;
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Fill    = m_Fill;
+    return newitem;
+}
+
+
+/**********************************************************************/
+LibDrawCircle::LibDrawCircle() : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE )
+/**********************************************************************/
+{
+    m_Rayon = 0;
+    m_Fill  = NO_FILL;
+}
+
+
+/*******************************************/
+LibDrawCircle* LibDrawCircle::GenCopy()
+/*******************************************/
+{
+    LibDrawCircle* newitem = new LibDrawCircle();
+
+    newitem->m_Pos     = m_Pos;
+    newitem->m_Rayon   = m_Rayon;
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Fill    = m_Fill;
+    return newitem;
+}
+
+
+/*****************************************************************/
+LibDrawText::LibDrawText() : LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ),
+	EDA_TextStruct()
+/*****************************************************************/
+{
+    m_Size  = wxSize( 50, 50 );
+}
+
+
+/***************************************/
+LibDrawText* LibDrawText::GenCopy()
+/***************************************/
+{
+    LibDrawText* newitem = new LibDrawText();
+
+    newitem->m_Pos     = m_Pos;
+    newitem->m_Orient   = m_Orient;
+    newitem->m_Size    = m_Size;
+    newitem->m_Attributs    = m_Attributs;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Text    = m_Text;
+    newitem->m_Width   = m_Width;
+    newitem->m_Italic    = m_Italic;
+	newitem->m_HJustify = m_HJustify;
+	newitem->m_VJustify = m_VJustify;
+    return newitem;
+}
+
+
+LibDrawSquare::LibDrawSquare() : LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE )
+{
+    m_Width = 0;
+    m_Fill  = NO_FILL;
+}
+
+
+LibDrawSquare* LibDrawSquare::GenCopy()
+{
+    LibDrawSquare* newitem = new LibDrawSquare();
+
+    newitem->m_Pos     = m_Pos;
+    newitem->m_End     = m_End;
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Fill    = m_Fill;
+    return newitem;
+}
+
+
+LibDrawSegment::LibDrawSegment() : LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE )
+{
+    m_Width = 0;
+}
+
+
+LibDrawSegment* LibDrawSegment::GenCopy()
+{
+    LibDrawSegment* newitem = new LibDrawSegment();
+
+    newitem->m_Pos     = m_Pos;
+    newitem->m_End     = m_End;
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    return newitem;
+}
+
+
+LibDrawPolyline::LibDrawPolyline() : LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
+{
+    m_CornersCount = 0;
+    m_PolyList = NULL;
+    m_Fill   = NO_FILL;
+    m_Width  = 0;
+}
+
+
+/************************************************/
+LibDrawPolyline* LibDrawPolyline::GenCopy()
+/************************************************/
+{
+    LibDrawPolyline* newitem = new LibDrawPolyline();
+
+    int size;
+
+    newitem->m_CornersCount = m_CornersCount;
+    size = sizeof(int) * 2 * m_CornersCount;
+    if( size )
+    {
+        newitem->m_PolyList = (int*) MyMalloc( size );
+        memcpy( newitem->m_PolyList, m_PolyList, size );
+    }
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Fill    = m_Fill;
+    return newitem;
+}
+
+
+/***************************************************/
+void LibDrawPolyline::AddPoint( const wxPoint& point )
+/***************************************************/
+
+/* add a point to the polyline coordinate list, and realloc the memory
+ */
+{
+    int allocsize;
+
+    m_CornersCount++;
+    allocsize = 2 * sizeof(int) * m_CornersCount;
+    if( m_PolyList == NULL )
+        m_PolyList = (int*) MyMalloc( allocsize );
+    else
+        m_PolyList = (int*) realloc( m_PolyList, allocsize );
+
+    m_PolyList[(m_CornersCount * 2) - 2] = point.x;
+    m_PolyList[(m_CornersCount * 2) - 1] = -point.y;
+}

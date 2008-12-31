@@ -868,8 +868,7 @@ NumOfLibraries()
 
 
 /*****************************************************************************/
-static bool
-GetLibEntryField (EDA_LibComponentStruct* LibEntry,
+static bool GetLibEntryField (EDA_LibComponentStruct* LibEntry,
                   char* line)
 /*****************************************************************************/
 
@@ -939,11 +938,6 @@ GetLibEntryField (EDA_LibComponentStruct* LibEntry,
             vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
         else if( Char4[0] == 'T' )
             vjustify = GR_TEXT_VJUSTIFY_TOP;
-
-		if ( Char4[1] == 'I' )		// Italic
-				Field->m_Italic = true;
-		if ( Char4[2] == 'B' )		// Bold
-				Field->m_Width = size / 4;
     }
 
     switch( NumOfField )
@@ -974,6 +968,11 @@ GetLibEntryField (EDA_LibComponentStruct* LibEntry,
 
     Field->m_Pos.x  = posx; Field->m_Pos.y = posy;
     Field->m_Orient = orient;
+
+    if ( Char4[1] == 'I' )		// Italic
+            Field->m_Italic = true;
+    if ( Char4[2] == 'B' )		// Bold
+            Field->m_Width = size / 4;
 
     if( draw == FALSE )
         Field->m_Attributs |= TEXT_NO_VISIBLE;

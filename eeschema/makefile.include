@@ -19,6 +19,8 @@ OBJECTS = eeschema.o\
 	dangling_ends.o\
 	cross-probing.o\
 	setpage.o\
+    class_libentry.o\
+    class_libentry_fields.o\
 	class_schematic_items.o\
 	class_sch_cmp_field.o\
 	classes_body_items.o\
