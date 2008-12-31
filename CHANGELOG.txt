@@ -11,7 +11,9 @@ email address.
 ++Eeschema:
     Note: this is a work in progress!
     Files modification.
-    More about italic andf bold in fileds in libraries
+    More about italic and bold fields in libraries
+    Use DLIST to handle fields in lib entries
+    Bugs and problems solved in fields edition (some are windows only).
 
 
 2008-Dec-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

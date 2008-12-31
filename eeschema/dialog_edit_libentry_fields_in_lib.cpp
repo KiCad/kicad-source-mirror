@@ -18,86 +18,6 @@
 // Local variables:
 static int s_SelectedRow;
 
-/** @todo function to move in a file like class_libentry.cpp
- */
-
-/** Function SetFields
- * initialize fields from a vector of fields
- * @param aFields a std::vector <LibDrawField> to import.
- */
-void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields )
-{
-    // Init basic fields (Value = name in lib, and reference):
-    aFields[VALUE].Copy( &m_Name );
-    aFields[REFERENCE].Copy( &m_Prefix );
-
-    // Init others fields:
-    for( unsigned ii = FOOTPRINT; ii < aFields.size(); ii++ )
-    {
-        LibDrawField* Field = CurrentLibEntry->Fields;
-        LibDrawField* NextField, * previousField = NULL;
-        while( Field )
-        {
-            NextField = Field->Next();
-            if( Field->m_FieldId == (int) ii )
-            {
-                aFields[ii].Copy( Field );
-
-                // An old field exists; delete it if void
-                if( Field->m_Text.IsEmpty() )
-                {
-                    if( ii < FIELD1 || Field->m_Name.IsEmpty() )
-                    {
-                        SAFE_DELETE( Field );
-                        if( previousField )
-                            previousField->SetNext( NextField );
-                        else
-                            Fields = NextField;
-                    }
-                }
-                break;
-            }
-
-            previousField = Field;
-            Field = NextField;
-        }
-
-        if( Field == NULL ) // Do not exists: must be created if not void
-        {
-            bool create = FALSE;
-            if( !aFields[ii].m_Text.IsEmpty() )
-                create = TRUE;
-            if( !aFields[ii].m_Name.IsEmpty()
-               && ( aFields[ii].m_Name != ReturnDefaultFieldName( ii ) ) )
-                create = TRUE;
-            if( create )
-            {
-                Field = new LibDrawField( ii );
-
-                *Field = aFields[ii];
-                Field->SetNext( CurrentLibEntry->Fields );
-                Fields = Field;
-            }
-        }
-    }
-
-    /* for a user field (FieldId >= FIELD1), if a field value is void,
-     *  fill it with "~" because for a library component a void field is not a very good idea
-     *  (we do not see anything...) and in schematic this text is like a void text
-     * and for non editable names, remove the name (set to the default name)
-     */
-    for( LibDrawField* Field = Fields; Field; Field = Field->Next() )
-    {
-        if( Field->m_FieldId >= FIELD1 )
-        {
-            if( Field->m_Text.IsEmpty() )
-                Field->m_Text = wxT( "~" );
-        }
-        else
-            Field->m_Name.Empty();
-    }
-}
-
 
 /*****************************************************************************************/
 class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
@@ -156,6 +76,22 @@ private:
      */
     bool copyPanelToSelectedField();
     void setRowItem( int aFieldNdx, const LibDrawField& aField );
+
+    /** Function updateDisplay
+     * update the listbox showing fields, according to the fields texts
+     * must be called after a text change in fields, if this change is not an edition
+     */
+    void updateDisplay( )
+    {
+        for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
+            setRowItem( ii, m_FieldsBuf[ii] );
+    }
+
+    /** Function reinitializeFieldsIdAndDefaultNames
+     * Calculates  the field id and default name, after deleting a field
+     * or moving a field
+    */
+    void reinitializeFieldsIdAndDefaultNames();
 };
 
 /*****************************************************************/
@@ -168,10 +104,15 @@ void WinEDA_LibeditFrame::InstallFieldsEditorDialog( void )
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB* frame =
         new DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( this, CurrentLibEntry );
 
-    int IsModified = frame->ShowModal(); frame->Destroy();
+    int abort = frame->ShowModal(); frame->Destroy();
 
-    if( IsModified )
+    if( ! abort )
+    {
+        ReCreateHToolbar();
         Refresh();
+    }
+
+    DisplayLibInfos();
 }
 
 
@@ -180,10 +121,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
     WinEDA_LibeditFrame*    aParent,
     EDA_LibComponentStruct* aLibEntry ) :
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( aParent )
+/***********************************************************************/
 {
     m_Parent   = aParent;
     m_LibEntry = aLibEntry;
-/***********************************************************************/
 }
 
 
@@ -309,9 +250,24 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
 
     m_Parent->GetScreen()->SetModify();
 
-    m_Parent->DrawPanel->Refresh( TRUE );
-
     EndModal( 0 );
+}
+
+
+/******************************************************************************/
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::reinitializeFieldsIdAndDefaultNames( )
+/*****************************************************************************/
+{
+    for( unsigned new_id = FIELD1; new_id < m_FieldsBuf.size(); new_id++ )
+    {
+        unsigned old_id = m_FieldsBuf[new_id].m_FieldId;
+        if ( old_id != new_id )
+        {
+            if ( m_FieldsBuf[new_id].m_Name == ReturnDefaultFieldName( old_id ) )
+                 m_FieldsBuf[new_id].m_Name = ReturnDefaultFieldName( new_id );
+            m_FieldsBuf[new_id].m_FieldId = new_id;
+        }
+    }
 }
 
 
@@ -328,9 +284,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
 
     LibDrawField blank( fieldNdx );
 
-    blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
-
     m_FieldsBuf.push_back( blank );
+    m_FieldsBuf[fieldNdx].m_Name = ReturnDefaultFieldName(fieldNdx);
 
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
 
@@ -355,13 +310,18 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
         return;
     }
 
+    m_skipCopyFromPanel = true;
     m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
     fieldListCtrl->DeleteItem( fieldNdx );
 
     if( fieldNdx >= m_FieldsBuf.size() )
         --fieldNdx;
 
-    m_skipCopyFromPanel = true;
+    // Reinitialize fields IDs and default names:
+    reinitializeFieldsIdAndDefaultNames();
+    updateDisplay( );
+
+    setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
     setSelectedFieldNdx( fieldNdx );
     m_skipCopyFromPanel = false;
 }
@@ -394,6 +354,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 
     m_FieldsBuf[fieldNdx] = tmp;
     setRowItem( fieldNdx, tmp );
+
+    // Reinitialize fields IDs and default names:
+    reinitializeFieldsIdAndDefaultNames();
+    updateDisplay( );
 
     m_skipCopyFromPanel = true;
     setSelectedFieldNdx( fieldNdx - 1 );
@@ -443,7 +407,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
     m_FieldsBuf.push_back( m_LibEntry->m_Prefix );
     m_FieldsBuf.push_back( m_LibEntry->m_Name );
 
-    for( LibDrawField* field = m_LibEntry->Fields; field != NULL; field = field->Next() )
+    // Creates a working copy of fields
+    for( LibDrawField* field = m_LibEntry->m_Fields; field != NULL; field = field->Next() )
         m_FieldsBuf.push_back( *field );
 
     // Display 12 fields (or more), and add missing fields
@@ -483,6 +448,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
     fieldListCtrl->SetFocus();
 
     // resume editing at the last row edited, last time dialog was up.
+    if ( s_SelectedRow < (int) m_FieldsBuf.size() )
+        s_SelectedRow = 0;
     setSelectedFieldNdx( s_SelectedRow );
 }
 
@@ -544,7 +511,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     fieldNameTextCtrl->SetValue( field.m_Name );
 
-    // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
+    // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable filed name editing
     fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
     fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
 
@@ -629,7 +596,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
     /* Void fields for REFERENCE and VALUE are not allowed
-     * chnage therm only for a new non void value
+     * change therm only for a new non void value
      */
     if( !fieldValueTextCtrl->GetValue().IsEmpty() )
         field.m_Text = fieldValueTextCtrl->GetValue();

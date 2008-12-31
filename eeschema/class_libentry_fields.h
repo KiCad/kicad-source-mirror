@@ -13,15 +13,16 @@
  *     Name (74LS00..) used to find the component in libraries, and give the default value in schematic
  */
 
-class LibDrawField :  public LibEDA_BaseStruct
-		, public EDA_TextStruct
+class LibDrawField :  public LibEDA_BaseStruct,
+    public EDA_TextStruct
 {
 public:
-    int      m_FieldId;         /* 0 a 11
-                                 * 0 = Reference; 1 = Value
-                                 * 2 = Default footprint, 3 = subsheet (not used, reserved)
-                                 * 4 .. 11 other fields
-                                 */
+    int m_FieldId;                    /*  0 = REFERENCE
+                                       *  1 = VALUE
+                                       *  3 = FOOTPRINT (default Footprint)
+                                       *  4 = DOCUMENTATION (user doc link)
+                                       *  others = free fields
+                                       */
     wxString m_Name;             /* Field Name (not the field text itself, that is .m_Text) */
 
 public:
@@ -44,18 +45,18 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
+    virtual bool  Save( FILE* aFile ) const;
 
 
-    LibDrawField*   GenCopy();
+    LibDrawField* GenCopy();
 
     /** Function Copy
      * copy parameters of this to Target. Pointers are not copied
-     * @param Target = the LibDrawField to set with "this" values
+     * @param aTarget = the LibDrawField to set with "this" values
      */
-    void            Copy( LibDrawField* Target ) const;
+    void          Copy( LibDrawField* aTarget ) const;
 
-    void SetFields( const  std::vector <LibDrawField> aFields );
+    void          SetFields( const std::vector <LibDrawField> aFields );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void* aData, int aTransformMatrix[2][2] );
@@ -66,7 +67,7 @@ public:
      * @param refPos A wxPoint to test, in Field coordinate system
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& refPos );
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

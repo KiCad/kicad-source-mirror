@@ -27,12 +27,13 @@
  */
 LibDrawField::LibDrawField( int idfield ) : LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE )
 {
-    m_FieldId = idfield;                /* 0 a 11, 0 = REFERENCE, 1 = VALUE*/
-    if( m_FieldId < 0 )
-        m_FieldId = 0;
-    if( m_FieldId >= NUMBER_OF_FIELDS )
-        m_FieldId = NUMBER_OF_FIELDS - 1;
-    m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;
+    m_FieldId = idfield;                /*  0 = REFERENCE
+                                         *  1 = VALUE
+                                         *  3 = FOOTPRINT (default Footprint)
+                                         *  4 = DOCUMENTATION (user doc link)
+                                         *  others = free fields
+                                         */
+    m_Size.x  = m_Size.y = DEFAULT_SIZE_TEXT;
 }
 
 
@@ -97,8 +98,8 @@ bool LibDrawField::Save( FILE* ExportFile ) const
              m_Orient == 0 ? 'H' : 'V',
              (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
              hjustify, vjustify,
-			 m_Italic ? 'I' : 'N',
-			 m_Width > 1 ? 'B' : 'N');
+             m_Italic ? 'I' : 'N',
+             m_Width > 1 ? 'B' : 'N' );
 
     // Save field name, if necessary
     if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() )
@@ -106,5 +107,35 @@ bool LibDrawField::Save( FILE* ExportFile ) const
 
     fprintf( ExportFile, "\n" );
     return true;
+}
+
+
+/****************************************************************/
+wxString ReturnDefaultFieldName( int aFieldNdx )
+/****************************************************************/
+
+/** Function ReturnDefaultFieldName
+ * Return the default field name from its index (REFERENCE, VALUE ..)
+ * FieldDefaultNameList is not static, because we want the text translation for I18n
+ * @param aFieldNdx = Filed number (>= 0)
+ */
+{
+    // avoid unnecessarily copying wxStrings at runtime.
+    static const wxString defaults[] = {
+        _( "Reference" ),   // Reference of part, i.e. "IC21"
+        _( "Value" ),       // Value of part, i.e. "3.3K" and name in lib for lib entries
+        _( "Footprint" ),   // Footprint, used by cvpcb or pcbnew, i.e. "16DIP300"
+        _( "Datasheet" ),   // A link to an user document, if wanted
+    };
+
+    if( (unsigned) aFieldNdx <= DATASHEET )
+        return defaults[ aFieldNdx ];
+
+    else
+    {
+        wxString ret = _( "Field" );
+        ret << ( aFieldNdx - FIELD1 + 1);
+        return ret;
+    }
 }
 

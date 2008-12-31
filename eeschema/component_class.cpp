@@ -115,35 +115,6 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 
 
 /****************************************************************/
-wxString ReturnDefaultFieldName( int aFieldNdx )
-/****************************************************************/
-
-/* Return the default field name from its index (REFERENCE, VALUE ..)
- *  FieldDefaultNameList is not static, because we want the text translation
- *  for I18n
- */
-{
-    // avoid unnecessarily copying wxStrings at runtime.
-    static const wxString defaults[] = {
-        _( "Ref" ),         // Reference of part, i.e. "IC21"
-        _( "Value" ),       // Value of part, i.e. "3.3K"
-        _( "Footprint" ),   // Footprint, used by cvpcb or pcbnew, i.e. "16DIP300"
-        _( "Datasheet" ),
-    };
-
-    if( (unsigned) aFieldNdx <= DATASHEET )
-        return defaults[ aFieldNdx ];
-
-    else
-    {
-        wxString ret = _( "Field" );
-        ret << ( aFieldNdx - FIELD1 + 1);
-        return ret;
-    }
-}
-
-
-/****************************************************************/
 wxString SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
 /****************************************************************/
 {

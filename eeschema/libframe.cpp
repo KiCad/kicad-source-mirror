@@ -378,7 +378,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_GET_FRAME_EDIT_PART:
-        InstallLibeditFrame( pos );
+        InstallLibeditFrame( );
         break;
 
     case ID_LIBEDIT_GET_FRAME_EDIT_FIELDS:

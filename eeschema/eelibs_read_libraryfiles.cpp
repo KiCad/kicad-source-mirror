@@ -957,9 +957,7 @@ static bool GetLibEntryField (EDA_LibComponentStruct* LibEntry,
             break;
 
         Field = new LibDrawField( NumOfField );
-
-        Field->SetNext( LibEntry->Fields );
-        LibEntry->Fields = Field;
+        LibEntry->m_Fields.PushBack( Field );
         break;
     }
 

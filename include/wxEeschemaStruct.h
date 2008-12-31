@@ -403,7 +403,7 @@ private:
                                                LibraryStruct* Library, int noMsg = 0 );
 
     void                DisplayCmpDoc( const wxString& Name );
-    void                InstallLibeditFrame( const wxPoint& pos );
+    void                InstallLibeditFrame( );
 
     // General editing
 public:

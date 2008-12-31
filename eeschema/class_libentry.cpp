@@ -3,7 +3,6 @@
 /**********************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "program.h"
@@ -87,8 +86,6 @@ EDA_LibComponentStruct:: EDA_LibComponentStruct( const wxChar* CmpName ) :
     m_Options    = ENTRY_NORMAL;
     m_UnitSelectionLocked = FALSE;
     m_DrawPinNum = m_DrawPinName = 1;
-
-    Fields = NULL;
     m_Prefix.m_FieldId = REFERENCE;
 }
 
@@ -98,15 +95,6 @@ EDA_LibComponentStruct::~EDA_LibComponentStruct()
 /******************************************************/
 {
     LibEDA_BaseStruct* DrawItem, * NextDrawItem;
-    LibDrawField*      TempField, * field;
-
-    field = Fields; Fields = NULL;
-    while( field )
-    {
-        TempField = field;
-        field     = field->Next();
-        SAFE_DELETE( TempField );
-    }
 
     /* suppression des elements dependants */
     DrawItem = m_Drawings; m_Drawings = NULL;
@@ -278,4 +266,51 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
     BoundaryBox.SetY( ymin ); BoundaryBox.SetHeight( ymax - ymin );
 
     return BoundaryBox;
+}
+
+
+/** Function SetFields
+ * initialize fields from a vector of fields
+ * @param aFields a std::vector <LibDrawField> to import.
+ */
+void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields )
+{
+    // Init basic fields (Value = name in lib, and reference):
+    aFields[VALUE].Copy( &m_Name );
+    aFields[REFERENCE].Copy( &m_Prefix );
+
+    // Remove others fields:
+    CurrentLibEntry->m_Fields.DeleteAll();
+
+    for( unsigned ii = FOOTPRINT; ii < aFields.size(); ii++ )
+    {
+            bool create = FALSE;
+            if( !aFields[ii].m_Text.IsEmpty() )
+                create = TRUE;
+            if( !aFields[ii].m_Name.IsEmpty()
+               && ( aFields[ii].m_Name != ReturnDefaultFieldName( ii ) ) )
+                create = TRUE;
+            if( create )
+            {
+                LibDrawField*Field = new LibDrawField( ii );
+                aFields[ii].Copy( Field );
+                CurrentLibEntry->m_Fields.PushBack( Field );
+            }
+    }
+
+    /* for a user field (FieldId >= FIELD1), if a field value is void,
+     *  fill it with "~" because for a library component a void field is not a very good idea
+     *  (we do not see anything...) and in schematic this text is like a void text
+     * and for non editable names, remove the name (set to the default name)
+     */
+    for( LibDrawField* Field = CurrentLibEntry->m_Fields; Field; Field = Field->Next() )
+    {
+        if( Field->m_FieldId >= FIELD1 )
+        {
+            if( Field->m_Text.IsEmpty() )
+                Field->m_Text = wxT( "~" );
+        }
+        else
+            Field->m_Name.Empty();
+    }
 }

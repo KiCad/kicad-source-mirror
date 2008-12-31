@@ -278,12 +278,10 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame, EDA_LibComponentStr
     NewStruct->m_DocFile = OldEntry->m_DocFile;
 
     /* Copie des champs */
-    for( OldField = OldEntry->Fields; OldField != NULL;
-         OldField = (LibDrawField*) OldField->Next() )
+    for( OldField = OldEntry->m_Fields; OldField != NULL; OldField = OldField->Next() )
     {
         NewField = OldField->GenCopy();
-        NewField->SetNext( NewStruct->Fields );
-        NewStruct->Fields = NewField;
+        NewStruct->m_Fields.PushBack( NewField );
     }
 
     /* Copie des elements type Drawing */
@@ -363,8 +361,7 @@ bool EDA_LibComponentStruct::Save( FILE* aFile )
     m_Prefix.Save( aFile );
     m_Name.Save( aFile );
 
-    for( Field = Fields; Field!= NULL;
-         Field = (LibDrawField*) Field->Next() )
+    for( Field = m_Fields; Field != NULL; Field = Field->Next() )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;

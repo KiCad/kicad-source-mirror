@@ -5,6 +5,8 @@
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
 
+#include "dlist.h"
+
 #include "classes_body_items.h"
 #include "class_libentry_fields.h"
 
@@ -71,7 +73,7 @@ public:
                                                  *  with a distance of m_TextInside in mils */
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
-    LibDrawField*      Fields;                  /* Auxiliairy Field list (id = 2 a 11) */
+    DLIST<LibDrawField> m_Fields;                  /* Auxiliairy Field list (id >= 2 ) */
     LibEDA_BaseStruct* m_Drawings;              /* How to draw this part */
     long               m_LastDate;              // Last change Date
 

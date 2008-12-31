@@ -185,43 +185,30 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
 
     /* Init champ Valeur */
     DrawLibItem->GetField( VALUE )->m_Pos       = Entry->m_Name.m_Pos + DrawLibItem->m_Pos;
-    DrawLibItem->GetField( VALUE )->m_Orient    = Entry->m_Name.m_Orient;
-    DrawLibItem->GetField( VALUE )->m_Size      = Entry->m_Name.m_Size;
+    DrawLibItem->GetField( VALUE )->ImportValues( Entry->m_Name );
     DrawLibItem->GetField( VALUE )->m_Text      = DrawLibItem->m_ChipName;
-    DrawLibItem->GetField( VALUE )->m_Attributs = Entry->m_Name.m_Attributs;
-    DrawLibItem->GetField( VALUE )->m_HJustify  = Entry->m_Name.m_HJustify;
-    DrawLibItem->GetField( VALUE )->m_VJustify  = Entry->m_Name.m_VJustify;
-    DrawLibItem->GetField( VALUE )->m_Italic    = Entry->m_Name.m_Italic;
-    DrawLibItem->GetField( VALUE )->m_Width     = Entry->m_Name.m_Width;
 
     msg = Entry->m_Prefix.m_Text;
     if( msg.IsEmpty() )
         msg = wxT( "U" );
     msg += wxT( "?" );
 
-    //update the reference -- just the prefix for now.
+    // update the reference -- just the prefix for now.
     DrawLibItem->SetRef( GetSheet(), msg );
 
     /* Init champ Reference */
-    DrawLibItem->GetField( REFERENCE )->m_Pos =
-        Entry->m_Prefix.m_Pos + DrawLibItem->m_Pos;
-    DrawLibItem->GetField( REFERENCE )->m_Orient = Entry->m_Prefix.m_Orient;
-    DrawLibItem->GetField( REFERENCE )->m_Size   = Entry->m_Prefix.m_Size;
+    DrawLibItem->GetField( REFERENCE )->m_Pos = Entry->m_Prefix.m_Pos + DrawLibItem->m_Pos;
+    DrawLibItem->GetField( REFERENCE )->ImportValues( Entry->m_Prefix );
     DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
-    DrawLibItem->GetField( REFERENCE )->m_Attributs = Entry->m_Prefix.m_Attributs;
-    DrawLibItem->GetField( REFERENCE )->m_HJustify  = Entry->m_Prefix.m_HJustify;
-    DrawLibItem->GetField( REFERENCE )->m_VJustify  = Entry->m_Prefix.m_VJustify;
-    DrawLibItem->GetField( REFERENCE )->m_Italic    = Entry->m_Prefix.m_Italic;
-    DrawLibItem->GetField( REFERENCE )->m_Width     = Entry->m_Prefix.m_Width;
 
     /* Init des autres champs si predefinis dans la librairie */
-    for( Field = Entry->Fields; Field != NULL; Field = Field->Next() )
+    for( Field = Entry->m_Fields; Field != NULL; Field = Field->Next() )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;
 
         ii = Field->m_FieldId;
-        if( ii < 2 )
+        if( ii < 2 )        // Reference or value, already done
             continue;
 
         if( ii >= DrawLibItem->GetFieldCount() )
@@ -230,15 +217,9 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         SCH_CMP_FIELD* f = DrawLibItem->GetField( ii );
 
         f->m_Pos += Field->m_Pos;
-        f->m_Size = Field->m_Size;
-        f->m_Attributs = Field->m_Attributs;
-        f->m_Orient    = Field->m_Orient;
+        f->ImportValues( *Field );
         f->m_Text     = Field->m_Text;
         f->m_Name     = Field->m_Name;
-        f->m_HJustify = Field->m_HJustify;
-        f->m_VJustify = Field->m_VJustify;
-        f->m_Italic   = Field->m_Italic;
-        f->m_Width    = Field->m_Width;
     }
 
     DrawStructsInGhost( DrawPanel, DC, DrawLibItem, 0, 0 );

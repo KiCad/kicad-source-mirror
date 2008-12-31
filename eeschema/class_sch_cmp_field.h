@@ -9,7 +9,7 @@
  * Fields 0 and 1 are very important: reference and value
  * Field 2 is used as default footprint name.
  * Field 3 is reserved (not currently used
- * Fields 4 to 11 are user fields.
+ * Fields 4 and more are user fields.
  * They can be renamed and can appear in reports
  */
 
@@ -49,6 +49,13 @@ public:
     EDA_Rect GetBoundaryBox() const;
     bool     IsVoid();
     void     SwapData( SCH_CMP_FIELD* copyitem );
+
+    /** Function ImportValues
+     * copy parameters from a source.
+     * Pointers and specific values (position) are not copied
+     * @param aSource = the LibDrawField to read
+     */
+    void     ImportValues( const LibDrawField& aSource );
 
     /**
      * Function Draw

@@ -394,7 +394,7 @@ void WinEDA_LibeditFrame::PlaceAncre()
     LibEntry->m_Name.m_Pos   += offset;
     LibEntry->m_Prefix.m_Pos += offset;
 
-    for( LibDrawField* field = LibEntry->Fields;  field;  field = field->Next() )
+    for( LibDrawField* field = LibEntry->m_Fields;  field;  field = field->Next() )
     {
         field->m_Pos += offset;
     }

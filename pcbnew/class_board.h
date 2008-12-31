@@ -85,8 +85,8 @@ public:
     int                     m_Status_Pcb;       // Flags used in ratsnet calculation and update
     EDA_BoardDesignSettings* m_BoardSettings;   // Link to current design settings
     int             m_NbNodes;                  // Active pads (pads attached to a net ) count
-    int             m_NbLinks;                  // Ratsnet count
-    int             m_NbLoclinks;               // Rastests to shew while creating a track
+    int             m_NbLinks;                  // Ratsnest count
+    int             m_NbLoclinks;               // Ratsests to show while creating a track
     int             m_NbNoconnect;              // Active ratsnet count (rastnest not alraedy connected by tracks
 
     DLIST<BOARD_ITEM> m_Drawings;               // linked list of lines & texts

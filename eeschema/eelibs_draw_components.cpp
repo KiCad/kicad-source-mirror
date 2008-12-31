@@ -153,7 +153,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
     if( (LibEntry->m_Name.m_Flags & IS_MOVED) == 0 )
        LibEntry->m_Name.Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
 
-    for( Field = LibEntry->Fields; Field != NULL; Field = Field->Next() )
+    for( Field = LibEntry->m_Fields; Field != NULL; Field = Field->Next() )
     {
         if( Field->m_Text.IsEmpty() )
             return;

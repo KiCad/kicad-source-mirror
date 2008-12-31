@@ -1,6 +1,14 @@
-/***********************************************************************/
-/* component_class.cpp : handle the  class SCH_COMPONENT  */
-/***********************************************************************/
+/**************************************************************/
+/* class_sch_cmp_field.cpp : handle the  class SCH_CMP_FIELD  */
+/**************************************************************/
+
+/* Fields are texts attached to a component, having a specuial meaning
+ * Fields 0 and 1 are very important: reference and value
+ * Field 2 is used as default footprint name.
+ * Field 3 is reserved (not currently used
+ * Fields 4 and more are user fields.
+ * They can be renamed and can appear in reports
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -36,6 +44,23 @@ SCH_CMP_FIELD::~SCH_CMP_FIELD()
 {
 }
 
+/** Function ImportValues
+ * copy parameters from a source.
+ * Pointers and specific values (position, texts) are not copied
+ * used to init a field from the model read from a lib entry
+ * @param aSource = the LibDrawField to read
+ */
+void SCH_CMP_FIELD::ImportValues( const LibDrawField& aSource )
+{
+    m_Orient   = aSource.m_Orient;
+    m_Size     = aSource.m_Size;
+    m_HJustify = aSource.m_HJustify;
+    m_VJustify = aSource.m_VJustify;
+    m_Italic   = aSource.m_Italic;
+    m_Width    = aSource.m_Width;
+    m_Attributs = aSource.m_Attributs;
+    m_Mirror   = aSource.m_Mirror;
+}
 
 /**************************************************************************/
 void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )

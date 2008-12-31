@@ -220,9 +220,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         if( DrawEntry == NULL )
         {
-            wxPoint mpos;
-            wxGetMousePosition( &mpos.x, &mpos.y );
-            InstallLibeditFrame( mpos );
+            InstallLibeditFrame( );
         }
     }
 

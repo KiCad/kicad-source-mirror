@@ -327,7 +327,7 @@ LibDrawField* WinEDA_LibeditFrame::LocateField( EDA_LibComponentStruct* LibEntry
         return &LibEntry->m_Prefix;
 
     /* Localisation des autres fields */
-    for( LibDrawField* field = LibEntry->Fields;  field;  field = field->Next() )
+    for( LibDrawField* field = LibEntry->m_Fields;  field;  field = field->Next() )
     {
         if( field->m_Text.IsEmpty() )
             continue;

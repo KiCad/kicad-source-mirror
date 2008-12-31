@@ -14,7 +14,6 @@
 
 enum id_libedit {
     ID_PANEL_ALIAS,
-    ID_PANEL_FIELD,
     ID_COPY_DOC_TO_ALIAS,
     ID_BROWSE_DOC_FILES,
     ID_ADD_ALIAS,
@@ -24,31 +23,25 @@ enum id_libedit {
 };
 
 
-/* Routines locales */
-
-/* Variables locales */
 extern int CurrentUnit;
 
-/* Classe de la frame des propri�t�s d'un composant en librairie */
+/* Dialog box to edit a libentry (a component in library) properties */
 
-/* Cette classe genere une fenetre type NoteBook, pour l'edition des propri�t�s
- *  d'un composant le librairie.
- *  On peut �diter:
- *  Texte dimensions et justification de tous les champs (Ref, Val, et autres champs)
- *  Documentation et mots clefs
- *  Nombre de part par boitier
- *  et autres propri�r�s g�n�rales
+/* Creates a NoteBook dialog
+ *  Edition:
+ *  Doc and keys words
+ *  Parts per package
+ *  General properties
+ * Fileds are NOT edited here. There is a specific dialog box to do that
  */
 
 #include "dialog_edit_component_in_lib.cpp"
 
 
 /*****************************************************************/
-void WinEDA_LibeditFrame::InstallLibeditFrame( const wxPoint& pos )
+void WinEDA_LibeditFrame::InstallLibeditFrame( void )
 /*****************************************************************/
 {
-    wxPoint fpos = pos;
-
     WinEDA_PartPropertiesFrame* frame =
         new WinEDA_PartPropertiesFrame( this );
 
@@ -56,86 +49,6 @@ void WinEDA_LibeditFrame::InstallLibeditFrame( const wxPoint& pos )
 
     if( IsModified )
         Refresh();
-}
-
-
-/***************************************************************************/
-void WinEDA_PartPropertiesFrame::CopyFieldDataToBuffer( LibDrawField* Field )
-/***************************************************************************/
-
-/* copy the field data (name, attributes, size, position... to corresponding buffers
- *  for editing
- */
-{
-    int id = Field->m_FieldId;
-
-    m_FieldFlags[id]  = (Field->m_Attributs & TEXT_NO_VISIBLE) ? 0 : 1;
-    m_FieldOrient[id] = Field->m_Orient;
-
-    if( Field->m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
-        m_FieldHJustify[id] = 0;
-    else if( Field->m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
-        m_FieldHJustify[id] = 2;
-    else
-        m_FieldHJustify[id] = 1;
-
-    if( Field->m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
-        m_FieldVJustify[id] = 0;
-    else if( Field->m_VJustify == GR_TEXT_VJUSTIFY_TOP )
-        m_FieldVJustify[id] = 2;
-    else
-        m_FieldVJustify[id] = 1;
-
-    m_FieldText[id] = Field->m_Text;
-    if( id >= FIELD1 )
-        m_FieldName[id] = Field->m_Name;
-    m_FieldPosition[id] = Field->m_Pos;
-
-    // Note: the Y axis for components in lib is from bottom to top
-    // and the screen axis is top to bottom: we must change the y coord sign for editing
-    m_FieldPosition[id].y = -m_FieldPosition[id].y;
-    m_FieldSize[id] = Field->m_Size.x;
-}
-
-
-/***************************************************************************/
-void WinEDA_PartPropertiesFrame::CopyBufferToFieldData( LibDrawField* Field )
-/***************************************************************************/
-
-/* Copy data from buffers(name, attributes, size, position... )to the
- *  field "Field"
- */
-{
-    GRTextHorizJustifyType hjustify[3] = {
-        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
-        GR_TEXT_HJUSTIFY_RIGHT
-    };
-    GRTextVertJustifyType vjustify[3] = {
-        GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
-        GR_TEXT_VJUSTIFY_TOP
-    };
-    int ii = Field->m_FieldId;
-
-    Field->m_Text = m_FieldText[ii];
-
-    if( ii >= FIELD1 && m_FieldName[ii] != ReturnDefaultFieldName( ii ) )
-        Field->m_Name = m_FieldName[ii];
-    else
-        Field->m_Name.Empty();
-
-    Field->m_Size.x   = Field->m_Size.y = m_FieldSize[ii];
-    Field->m_HJustify = hjustify[m_FieldHJustify[ii]];
-    Field->m_VJustify = vjustify[m_FieldVJustify[ii]];
-    if( m_FieldFlags[ii] )
-        Field->m_Attributs &= ~TEXT_NO_VISIBLE;
-    else
-        Field->m_Attributs |= TEXT_NO_VISIBLE;
-    Field->m_Orient = m_FieldOrient[ii] ? 1 : 0;
-    Field->m_Pos    = m_FieldPosition[ii];
-
-    // Note: the Y axis for components in lib is from bottom to top
-    // and the screen axis is top to bottom: we must change the y coord sign after editing
-    Field->m_Pos.y = -Field->m_Pos.y;
 }
 
 
@@ -147,21 +60,6 @@ void WinEDA_PartPropertiesFrame::InitBuffers()
  *  or to values from CurrentLibEntry if CurrentLibEntry != NULL
  */
 {
-    int ii;
-
-    m_CurrentFieldId = REFERENCE;
-
-    for( ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        if( ii < FIELD1 )
-            m_FieldName[ii] = ReturnDefaultFieldName( ii );
-        m_FieldFlags[ii]    = 1;
-        m_FieldOrient[ii]   = 0;
-        m_FieldSize[ii]     = DEFAULT_TEXT_SIZE;
-        m_FieldHJustify[ii] = 1;
-        m_FieldVJustify[ii] = 1;
-    }
-
     m_AliasLocation = -1;
     if( CurrentLibEntry == NULL )
     {
@@ -182,16 +80,6 @@ void WinEDA_PartPropertiesFrame::InitBuffers()
     {
         m_Title = msg_text + CurrentLibEntry->m_Name.m_Text;
         CurrentAliasName.Empty();
-    }
-
-    CopyFieldDataToBuffer( &CurrentLibEntry->m_Prefix );
-    CopyFieldDataToBuffer( &CurrentLibEntry->m_Name );
-
-    LibDrawField* Field = CurrentLibEntry->Fields;
-    while( Field )
-    {
-        CopyFieldDataToBuffer( Field );
-        Field = Field->Next();
     }
 }
 
@@ -464,183 +352,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelBasic()
 }
 
 
-/*********************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelEditField()
-/*********************************************************/
-
-/* Create and build the panel managing the fields (REF, VALUE ...)
- *  of the component
- */
-{
-    static const wxString Hjustify_list[] =
-    { _( "Align left" ), _( "Align center" ), _( "Align right" ) };
-
-    static const wxString Vjustify_list[] =
-    { _( "Align bottom" ), _( "Align center" ), _( "Align top" ) };
-
-    int      FieldId = m_CurrentFieldId;
-
-    m_PanelField = new                      wxPanel( m_NoteBook, ID_PANEL_FIELD );
-
-    m_PanelField->SetFont( *g_DialogFont );
-    m_NoteBook->AddPage( m_PanelField, _( "Fields" ), FALSE );
-
-    wxBoxSizer* PanelFieldBoxSizer = new    wxBoxSizer( wxHORIZONTAL );
-
-    m_PanelField->SetSizer( PanelFieldBoxSizer );
-    wxBoxSizer* LeftBoxSizer = new          wxBoxSizer( wxVERTICAL );
-
-    PanelFieldBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-    wxBoxSizer* MiddleBoxSizer = new        wxBoxSizer( wxVERTICAL );
-
-    PanelFieldBoxSizer->Add( MiddleBoxSizer, 0, wxGROW | wxALL, 5 );
-
-    m_ShowFieldTextCtrl = new               wxCheckBox( m_PanelField, -1,
-                                                       _( "Show Text" ) );
-
-    LeftBoxSizer->Add( m_ShowFieldTextCtrl, 0, wxGROW | wxALL, 5 );
-
-    m_VorientFieldTextCtrl = new            wxCheckBox( m_PanelField, -1,
-                                                       _( "Vertical" ) );
-
-    LeftBoxSizer->Add( m_VorientFieldTextCtrl, 0, wxGROW | wxALL, 5 );
-
-    // Create the box for field name display or edition
-    m_FieldNameCtrl = new WinEDA_EnterText( m_PanelField,
-                                           _( "Field Name:" ), m_FieldName[FieldId],
-                                           LeftBoxSizer, wxSize( 200, -1 ) );
-
-    if( FieldId < FIELD1 )
-        m_FieldNameCtrl->Enable( FALSE );
-    else
-        m_FieldNameCtrl->Enable( TRUE );
-
-    // Create the box for text editing (text, size)
-    m_FieldTextCtrl = new WinEDA_GraphicTextCtrl( m_PanelField,
-                                                  _( "Field Text:" ),
-                                                  m_FieldText[FieldId], m_FieldSize[FieldId],
-                                                  g_UnitMetric, LeftBoxSizer, 200 );
-
-    // Create the box for text editing (position)
-    m_FieldPositionCtrl = new   WinEDA_PositionCtrl( m_PanelField,
-                                                     _( "Pos" ), m_FieldPosition[FieldId],
-                                                     g_UnitMetric, LeftBoxSizer );
-
-
-    m_FieldHJustifyCtrl = new   wxRadioBox( m_PanelField, -1,
-                                            _( "Hor Justify" ), wxDefaultPosition, wxDefaultSize,
-                                            3, Hjustify_list, 1, wxRA_SPECIFY_COLS );
-
-    m_FieldHJustifyCtrl->SetSelection( 1 );
-    MiddleBoxSizer->Add( m_FieldHJustifyCtrl, 0, wxGROW | wxALL, 5 );
-
-    m_FieldVJustifyCtrl = new wxRadioBox( m_PanelField, -1,
-                                          _( "Vert Justify" ), wxDefaultPosition, wxDefaultSize,
-                                          3, Vjustify_list, 1, wxRA_SPECIFY_COLS );
-
-    m_FieldVJustifyCtrl->SetSelection( 1 );
-    MiddleBoxSizer->Add( m_FieldVJustifyCtrl, 0, wxGROW | wxALL, 5 );
-
-    // Create the field list
-    wxString fieldnamelist[NUMBER_OF_FIELDS];
-    for( int ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        if( m_FieldName[ii].IsEmpty() )
-            fieldnamelist[ii] = ReturnDefaultFieldName( ii );
-        else
-            fieldnamelist[ii] = m_FieldName[ii];
-    }
-    fieldnamelist[VALUE] << wxT("/") << _("Chip Name");
-
-    m_FieldSelection = new wxRadioBox( m_PanelField, ID_ON_SELECT_FIELD,
-                                       _( "Field to edit" ), wxDefaultPosition, wxDefaultSize,
-                                       NUMBER_OF_FIELDS, fieldnamelist, 2, wxRA_SPECIFY_COLS );
-
-    PanelFieldBoxSizer->Add( m_FieldSelection, 0, wxGROW | wxALL, 5 );
-
-    CopyDataToPanelField();
-}
-
-
-/****************************************************************/
-void WinEDA_PartPropertiesFrame::CopyDataToPanelField()
-/****************************************************************/
-
-/* Set the values displayed on the panel field according to
- *  the current field number
- */
-{
-    int FieldId = m_CurrentFieldId;
-
-    for( int ii = FIELD1; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        if( !m_FieldName[ii].IsEmpty() )
-            m_FieldSelection->SetString( ii, m_FieldName[ii] );
-        else
-            m_FieldSelection->SetString( ii, ReturnDefaultFieldName( ii ) );
-    }
-
-    if( m_FieldFlags[FieldId] )
-        m_ShowFieldTextCtrl->SetValue( TRUE );
-    else
-        m_ShowFieldTextCtrl->SetValue( FALSE );
-
-    if( m_FieldOrient[FieldId] )
-        m_VorientFieldTextCtrl->SetValue( TRUE );
-    else
-        m_VorientFieldTextCtrl->SetValue( FALSE );
-
-    m_FieldHJustifyCtrl->SetSelection( m_FieldHJustify[FieldId] );
-
-    m_FieldVJustifyCtrl->SetSelection( m_FieldVJustify[FieldId] );
-
-    m_FieldPositionCtrl->SetValue( m_FieldPosition[FieldId].x, m_FieldPosition[FieldId].y );
-
-    m_FieldNameCtrl->SetValue( m_FieldName[FieldId] );
-    if( FieldId < FIELD1 )
-        m_FieldNameCtrl->Enable( FALSE );
-    else
-        m_FieldNameCtrl->Enable( TRUE );
-    m_FieldTextCtrl->SetValue( m_FieldText[FieldId] );      // display new text field
-    m_FieldTextCtrl->SetValue( m_FieldSize[FieldId] );      // display new size field
-}
-
-
-/****************************************************************/
-void WinEDA_PartPropertiesFrame::CopyPanelFieldToData()
-/****************************************************************/
-
-/* Copy the values displayed on the panel field to the buffers according to
- *  the current field number
- */
-{
-    int id = m_CurrentFieldId;
-
-    m_FieldFlags[id]    = m_ShowFieldTextCtrl->GetValue();
-    m_FieldOrient[id]   = m_VorientFieldTextCtrl->GetValue();
-    m_FieldHJustify[id] = m_FieldHJustifyCtrl->GetSelection();
-    m_FieldVJustify[id] = m_FieldVJustifyCtrl->GetSelection();
-    m_FieldText[id]     = m_FieldTextCtrl->GetText();
-    m_FieldName[id]     = m_FieldNameCtrl->GetValue();
-    m_FieldPosition[id] = m_FieldPositionCtrl->GetValue();
-    m_FieldSize[id] = m_FieldTextCtrl->GetTextSize();
-}
-
-
-/********************************************************************/
-void WinEDA_PartPropertiesFrame::SelectNewField( wxCommandEvent& event )
-/********************************************************************/
-
-/* called when changing the current field selected
- *  Save the current field settings in buffer and display the new one
- */
-{
-    CopyPanelFieldToData();
-    m_CurrentFieldId = m_FieldSelection->GetSelection();
-    CopyDataToPanelField();
-}
-
-
 /**************************************************************************/
 void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
 /**************************************************************************/
@@ -657,23 +368,6 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
 
     m_Parent->GetScreen()->SetModify();
     m_Parent->SaveCopyInUndoList( CurrentLibEntry );
-
-    CopyPanelFieldToData();
-
-    /* A new name could be entered in VALUE field.
-     *  Must not be an existing alias name in alias list box */
-    jj = m_PartAliasList->GetCount();
-    wxString newvalue = m_FieldText[VALUE];
-    for( ii = 0; ii < jj; ii++ )
-    {
-        if( newvalue.CmpNoCase( m_PartAliasList->GetString( ii ).GetData() ) == 0 )
-        {
-            wxString msg;
-            msg.Printf( wxT( "Alias %s exists!" ), newvalue.GetData() );
-            DisplayError( this, msg );
-            return;
-        }
-    }
 
     /* Update the doc, keyword and doc filename strings */
     if( m_AliasLocation < 0 )
@@ -724,88 +418,6 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
                 CurrentLibEntry->m_AliasList.RemoveAt( kk );
 
             kkmax = CurrentLibEntry->m_AliasList.GetCount();
-        }
-    }
-
-    // Void fields for REFERENCE and VALUE are not allowed
-    if( m_FieldText[REFERENCE].IsEmpty() )
-    {
-        m_FieldText[REFERENCE] = CurrentLibEntry->m_Prefix.m_Text;
-    }
-
-    if( m_FieldText[VALUE].IsEmpty() )
-    {
-        m_FieldText[VALUE] = CurrentLibEntry->m_Name.m_Text;
-    }
-    else
-    {
-        if( CurrentLibEntry->m_Name.m_Text != m_FieldText[VALUE] )
-            m_RecreateToolbar = TRUE;
-    }
-
-
-    CopyBufferToFieldData( &CurrentLibEntry->m_Prefix );
-    CopyBufferToFieldData( &CurrentLibEntry->m_Name );
-
-    for( ii = FOOTPRINT; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        LibDrawField* Field = CurrentLibEntry->Fields;
-        LibDrawField* NextField, * previousField = NULL;
-        while( Field )
-        {
-            NextField = Field->Next();
-            if( Field->m_FieldId == ii )
-            {
-                CopyBufferToFieldData( Field );
-
-                // An old field exists; delete it if void
-                if( Field->m_Text.IsEmpty() )
-                {
-                    if( ii < FIELD1 || Field->m_Name.IsEmpty() )
-                    {
-                        SAFE_DELETE( Field );
-                        if( previousField )
-                            previousField->SetNext( NextField );
-                        else
-                            CurrentLibEntry->Fields = NextField;
-                    }
-                }
-                break;
-            }
-
-            previousField = Field;
-            Field = NextField;
-        }
-
-        if( Field == NULL ) // Do not exists: must be created if not void
-        {
-            bool create = FALSE;
-            if( !m_FieldText[ii].IsEmpty() )
-                create = TRUE;
-            if( !m_FieldName[ii].IsEmpty() && ( m_FieldName[ii] != ReturnDefaultFieldName( ii ) ) )
-                create = TRUE;
-            if( create )
-            {
-                Field = new LibDrawField( ii );
-
-                CopyBufferToFieldData( Field );
-                Field->SetNext( CurrentLibEntry->Fields );
-                CurrentLibEntry->Fields = Field;
-            }
-        }
-    }
-
-    /* for a user field (FieldId >= FIELD1), if a field value is void,
-     *  fill it with "~" because for a library componenta void field is not a very good idea
-     *  (we do not see anything...) and in schematic this text is like a void text */
-    {
-        LibDrawField* Field = CurrentLibEntry->Fields;
-        while( Field )
-        {
-            if( Field->m_FieldId >= FIELD1 )
-                if( Field->m_Text.IsEmpty() )
-                    Field->m_Text = wxT( "~" );
-            Field = Field->Next();
         }
     }
 

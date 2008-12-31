@@ -160,7 +160,7 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                             wxNullBitmap,
                             FALSE,
                             -1, -1, (wxObject*) NULL,
-                            _( "Add, remove, edit fields properties" ) );
+                            _( "Add, remove fields and edit fields properties" ) );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, BITMAP( erc_xpm ),

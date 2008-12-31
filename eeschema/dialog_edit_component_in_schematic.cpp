@@ -85,6 +85,23 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 }
 
 
+/******************************************************************************/
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::reinitializeFieldsIdAndDefaultNames( )
+/*****************************************************************************/
+{
+    for( unsigned new_id = FIELD1; new_id < m_FieldsBuf.size(); new_id++ )
+    {
+        unsigned old_id = m_FieldsBuf[new_id].m_FieldId;
+        if ( old_id != new_id )
+        {
+            if ( m_FieldsBuf[new_id].m_Name == ReturnDefaultFieldName( old_id ) )
+                 m_FieldsBuf[new_id].m_Name = ReturnDefaultFieldName( new_id );
+            m_FieldsBuf[new_id].m_FieldId = new_id;
+        }
+    }
+}
+
+
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& event )
 {
     D( printf( "OnListItemDeselected()\n" ); )
@@ -251,10 +268,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& 
     blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
 
     m_FieldsBuf.push_back( blank );
-
-    setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
+    m_FieldsBuf[fieldNdx].m_Name = ReturnDefaultFieldName(fieldNdx);
 
     m_skipCopyFromPanel = true;
+    setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
+
     setSelectedFieldNdx( fieldNdx );
     m_skipCopyFromPanel = false;
 }
@@ -273,13 +291,17 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
         return;
     }
 
+    m_skipCopyFromPanel = true;
     m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
     fieldListCtrl->DeleteItem( fieldNdx );
 
     if( fieldNdx >= m_FieldsBuf.size() )
         --fieldNdx;
 
-    m_skipCopyFromPanel = true;
+    // Reinitialize fields IDs and default names:
+    reinitializeFieldsIdAndDefaultNames();
+    updateDisplay( );
+
     setSelectedFieldNdx( fieldNdx );
     m_skipCopyFromPanel = false;
 }
@@ -313,6 +335,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC:: moveUpButtonHandler( wxCommandEvent& e
 
     m_FieldsBuf[fieldNdx] = tmp;
     setRowItem( fieldNdx, tmp );
+
+    // Reinitialize fields IDs and default names:
+    reinitializeFieldsIdAndDefaultNames();
+    updateDisplay( );
 
     m_skipCopyFromPanel = true;
     setSelectedFieldNdx( fieldNdx - 1 );
@@ -645,20 +671,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     /* Initialise fields values to default values found in library:  */
     m_Cmp->GetField( REFERENCE )->m_Pos = entry->m_Prefix.m_Pos + m_Cmp->m_Pos;
-    m_Cmp->GetField( REFERENCE )->m_Orient   = entry->m_Prefix.m_Orient;
-    m_Cmp->GetField( REFERENCE )->m_Size     = entry->m_Prefix.m_Size;
-    m_Cmp->GetField( REFERENCE )->m_HJustify = entry->m_Prefix.m_HJustify;
-    m_Cmp->GetField( REFERENCE )->m_VJustify = entry->m_Prefix.m_VJustify;
-    m_Cmp->GetField( REFERENCE )->m_Italic   = entry->m_Prefix.m_Italic;
-    m_Cmp->GetField( REFERENCE )->m_Width    = entry->m_Prefix.m_Width;
+    m_Cmp->GetField( REFERENCE )->ImportValues( entry->m_Prefix );
 
     m_Cmp->GetField( VALUE )->m_Pos = entry->m_Name.m_Pos + m_Cmp->m_Pos;
-    m_Cmp->GetField( VALUE )->m_Orient   = entry->m_Name.m_Orient;
-    m_Cmp->GetField( VALUE )->m_Size     = entry->m_Name.m_Size;
-    m_Cmp->GetField( VALUE )->m_HJustify = entry->m_Name.m_HJustify;
-    m_Cmp->GetField( VALUE )->m_VJustify = entry->m_Name.m_VJustify;
-    m_Cmp->GetField( VALUE )->m_Italic   = entry->m_Name.m_Italic;
-    m_Cmp->GetField( VALUE )->m_Width    = entry->m_Name.m_Width;
+    m_Cmp->GetField( VALUE )->ImportValues( entry->m_Name );
 
     m_Cmp->SetRotationMiroir( CMP_NORMAL );
 

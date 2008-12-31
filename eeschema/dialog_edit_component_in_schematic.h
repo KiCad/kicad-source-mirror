@@ -73,6 +73,22 @@ public:
      */
     void InitBuffers( SCH_COMPONENT* aComponent );
 
+private:
+    /** Function updateDisplay
+     * update the listbox showing fields, according to the fields texts
+     * must be called after a text change in fields, if this change is not an edition
+     */
+    void updateDisplay( )
+    {
+        for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
+            setRowItem( ii, m_FieldsBuf[ii] );
+    }
+
+    /** Function reinitializeFieldsIdAndDefaultNames
+     * Calculates  the field id and default name, after deleting a field
+     * or moving a field
+    */
+    void reinitializeFieldsIdAndDefaultNames();
 };
 
 #endif // __dialog_edit_component_in_schematic__
