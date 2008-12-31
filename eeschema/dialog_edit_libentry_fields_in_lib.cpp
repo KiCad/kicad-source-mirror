@@ -392,7 +392,7 @@ int DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::getSelectedFieldNdx()
 }
 
 
-bool SortFieldsById(const LibDrawField& item1, const LibDrawField& item2)
+static bool SortFieldsById(const LibDrawField& item1, const LibDrawField& item2)
 {
     return item1.m_FieldId < item2.m_FieldId;
 }
@@ -428,7 +428,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
 
     m_FieldsBuf[VALUE].m_Name << wxT( "/" ) << _( "Chip Name" );
 
-     // Sort files by field id, because they are not entered by id
+    // Sort files by field id, because they are not entered by id
     sort(m_FieldsBuf.begin(), m_FieldsBuf.end(), SortFieldsById);
 
     // Now, all fields with Id  0 to NUMBER_OF_FIELDS-1 exist

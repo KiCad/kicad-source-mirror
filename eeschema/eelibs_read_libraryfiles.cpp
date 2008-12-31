@@ -101,8 +101,7 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
 
 
 /******************************************/
-void
-LoadLibraries (WinEDA_DrawFrame* frame)
+void LoadLibraries (WinEDA_DrawFrame* frame)
 /******************************************/
 
 /* Function LoadLibraries
@@ -204,9 +203,7 @@ LoadLibraries (WinEDA_DrawFrame* frame)
 
 
 /**************************************************************/
-void
-FreeCmpLibrary (wxWindow* frame,
-                const wxString& LibName)
+void FreeCmpLibrary (wxWindow* frame, const wxString& LibName)
 /**************************************************************/
 
 /** Function FreeCmpLibrary
@@ -252,8 +249,7 @@ FreeCmpLibrary (wxWindow* frame,
 
 
 /******************************/
-const
-wxChar** GetLibNames()
+const wxChar** GetLibNames()
 /******************************/
 
 /** GetLibNames()
@@ -281,9 +277,7 @@ wxChar** GetLibNames()
  * Routine to compare two EDA_LibComponentStruct for the PriorQue module.
  * Comparison (insensitive  case) is based on Part name.
  */
-int
-LibraryEntryCompare (EDA_LibComponentStruct* LE1,
-                     EDA_LibComponentStruct* LE2)
+int LibraryEntryCompare (EDA_LibComponentStruct* LE1, EDA_LibComponentStruct* LE2)
 {
     return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
 }
@@ -953,9 +947,6 @@ static bool GetLibEntryField (EDA_LibComponentStruct* LibEntry,
         break;
 
     default:
-        if( NumOfField >= NUMBER_OF_FIELDS )
-            break;
-
         Field = new LibDrawField( NumOfField );
         LibEntry->m_Fields.PushBack( Field );
         break;

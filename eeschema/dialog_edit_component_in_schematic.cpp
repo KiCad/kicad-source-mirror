@@ -371,6 +371,12 @@ int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::getSelectedFieldNdx()
 }
 
 
+
+static bool SortFieldsById(const SCH_CMP_FIELD& item1, const SCH_CMP_FIELD& item2)
+{
+    return item1.m_FieldId < item2.m_FieldId;
+}
+
 /*******************************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent )
 /*******************************************************************************/
@@ -390,6 +396,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
     // copy all the fields to a work area
     m_FieldsBuf = aComponent->m_Fields;
+
+    // Sort files by field id,if they are not entered by id
+    sort(m_FieldsBuf.begin(), m_FieldsBuf.end(), SortFieldsById);
 
 #if 0 && defined(DEBUG)
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )

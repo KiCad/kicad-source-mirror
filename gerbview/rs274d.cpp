@@ -72,8 +72,6 @@
 #define GERB_STOP_DRAW   2      // extinction de lumiere ( lever de plume)
 #define GERB_FLASH       3      // Flash
 
-#define NEGATE( nb ) (nb) = -(nb)
-
 /* Variables locales : */
 static wxPoint LastPosition;
 

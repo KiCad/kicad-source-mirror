@@ -67,10 +67,9 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
  */
 {
     int                     ii, CmpCount = 0;
-    LibDrawField*           Field;
-    EDA_LibComponentStruct* Entry = NULL;
-    SCH_COMPONENT*          DrawLibItem = NULL;
-    LibraryStruct*          Library     = NULL;
+    EDA_LibComponentStruct* Entry     = NULL;
+    SCH_COMPONENT*          Component = NULL;
+    LibraryStruct*          Library   = NULL;
     wxString                Name, keys, msg;
     bool                    AllowWildSeach = TRUE;
 
@@ -176,17 +175,17 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
 
-    DrawLibItem = new SCH_COMPONENT( GetScreen()->m_Curseur );
-    DrawLibItem->m_Multi     = 1; /* Selection de l'unite 1 dans le boitier */
-    DrawLibItem->m_Convert   = 1;
-    DrawLibItem->m_ChipName  = Name;
-    DrawLibItem->m_TimeStamp = GetTimeStamp();
-    DrawLibItem->m_Flags     = IS_NEW | IS_MOVED;
+    Component = new SCH_COMPONENT( GetScreen()->m_Curseur );
+    Component->m_Multi     = 1; /* Selection de l'unite 1 dans le boitier */
+    Component->m_Convert   = 1;
+    Component->m_ChipName  = Name;
+    Component->m_TimeStamp = GetTimeStamp();
+    Component->m_Flags     = IS_NEW | IS_MOVED;
 
     /* Init champ Valeur */
-    DrawLibItem->GetField( VALUE )->m_Pos       = Entry->m_Name.m_Pos + DrawLibItem->m_Pos;
-    DrawLibItem->GetField( VALUE )->ImportValues( Entry->m_Name );
-    DrawLibItem->GetField( VALUE )->m_Text      = DrawLibItem->m_ChipName;
+    Component->GetField( VALUE )->m_Pos = Entry->m_Name.m_Pos + Component->m_Pos;
+    Component->GetField( VALUE )->ImportValues( Entry->m_Name );
+    Component->GetField( VALUE )->m_Text = Component->m_ChipName;
 
     msg = Entry->m_Prefix.m_Text;
     if( msg.IsEmpty() )
@@ -194,40 +193,48 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     msg += wxT( "?" );
 
     // update the reference -- just the prefix for now.
-    DrawLibItem->SetRef( GetSheet(), msg );
+    Component->SetRef( GetSheet(), msg );
 
     /* Init champ Reference */
-    DrawLibItem->GetField( REFERENCE )->m_Pos = Entry->m_Prefix.m_Pos + DrawLibItem->m_Pos;
-    DrawLibItem->GetField( REFERENCE )->ImportValues( Entry->m_Prefix );
-    DrawLibItem->m_PrefixString = Entry->m_Prefix.m_Text;
+    Component->GetField( REFERENCE )->m_Pos = Entry->m_Prefix.m_Pos + Component->m_Pos;
+    Component->GetField( REFERENCE )->ImportValues( Entry->m_Prefix );
+    Component->m_PrefixString = Entry->m_Prefix.m_Text;
 
     /* Init des autres champs si predefinis dans la librairie */
-    for( Field = Entry->m_Fields; Field != NULL; Field = Field->Next() )
+    LibDrawField* EntryField;
+    for( EntryField = Entry->m_Fields; EntryField != NULL; EntryField = EntryField->Next() )
     {
-        if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
+        if( EntryField->m_Text.IsEmpty() && EntryField->m_Name.IsEmpty() )
             continue;
 
-        ii = Field->m_FieldId;
+        ii = EntryField->m_FieldId;
         if( ii < 2 )        // Reference or value, already done
             continue;
 
-        if( ii >= DrawLibItem->GetFieldCount() )
-            continue;
+        if( ii >= Component->GetFieldCount() )
+        {   // This entry has more than the default count: add extra fields
+            while( ii >= Component->GetFieldCount() )
+            {
+                int field_id = Component->GetFieldCount();
+                SCH_CMP_FIELD field( wxPoint( 0, 0 ), field_id, Component, ReturnDefaultFieldName( ii ) );
+                Component->AddField( field );
+            }
+        }
 
-        SCH_CMP_FIELD* f = DrawLibItem->GetField( ii );
+        SCH_CMP_FIELD* curr_field = Component->GetField( ii );
 
-        f->m_Pos += Field->m_Pos;
-        f->ImportValues( *Field );
-        f->m_Text     = Field->m_Text;
-        f->m_Name     = Field->m_Name;
+        curr_field->m_Pos = Component->m_Pos + EntryField->m_Pos;
+        curr_field->ImportValues( *EntryField );
+        curr_field->m_Text = EntryField->m_Text;
+        curr_field->m_Name = ( ii < FIELD1 ) ? ReturnDefaultFieldName( ii ) : EntryField->m_Name;
     }
 
-    DrawStructsInGhost( DrawPanel, DC, DrawLibItem, 0, 0 );
+    DrawStructsInGhost( DrawPanel, DC, Component, 0, 0 );
 
     MsgPanel->EraseMsgBox();
-    DrawLibItem->Display_Infos( this );
+    Component->Display_Infos( this );
 
-    return DrawLibItem;
+    return Component;
 }
 
 
@@ -241,19 +248,19 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     SCH_SCREEN*    screen = (SCH_SCREEN*) panel->GetScreen();
 
-    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) screen->GetCurItem();
+    SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
 
     /* Effacement du composant */
     if( erase )
     {
-        DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
+        DrawStructsInGhost( panel, DC, Component, 0, 0 );
     }
 
-    move_vector.x = screen->m_Curseur.x - DrawLibItem->m_Pos.x;
-    move_vector.y = screen->m_Curseur.y - DrawLibItem->m_Pos.y;
-    MoveOneStruct( DrawLibItem, move_vector );
+    move_vector.x = screen->m_Curseur.x - Component->m_Pos.x;
+    move_vector.y = screen->m_Curseur.y - Component->m_Pos.y;
+    MoveOneStruct( Component, move_vector );
 
-    DrawStructsInGhost( panel, DC, DrawLibItem, 0, 0 );
+    DrawStructsInGhost( panel, DC, Component, 0, 0 );
 }
 
 
@@ -309,25 +316,25 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     SCH_SCREEN*    screen = (SCH_SCREEN*) Panel->GetScreen();
 
-    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) screen->GetCurItem();
+    SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
 
-    if( DrawLibItem->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
+    if( Component->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
     {
-        DrawLibItem->m_Flags = 0;
-        SAFE_DELETE( DrawLibItem );
+        Component->m_Flags = 0;
+        SAFE_DELETE( Component );
     }
-    else if( DrawLibItem )   /* Deplacement ancien composant en cours */
+    else if( Component )   /* Deplacement ancien composant en cours */
     {
         wxPoint move_vector;
 
-        move_vector.x = OldPos.x - DrawLibItem->m_Pos.x;
-        move_vector.y = OldPos.y - DrawLibItem->m_Pos.y;
+        move_vector.x = OldPos.x - Component->m_Pos.x;
+        move_vector.y = OldPos.y - Component->m_Pos.y;
 
-        MoveOneStruct( DrawLibItem, move_vector );
+        MoveOneStruct( Component, move_vector );
 
-        memcpy( DrawLibItem->m_Transform, OldTransMat, sizeof(OldTransMat) );
+        memcpy( Component->m_Transform, OldTransMat, sizeof(OldTransMat) );
 
-        DrawLibItem->m_Flags = 0;
+        Component->m_Flags = 0;
     }
 
     Panel->Refresh( TRUE );
