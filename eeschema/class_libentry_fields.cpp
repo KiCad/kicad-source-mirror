@@ -10,6 +10,7 @@
 #include "libcmp.h"
 #include "general.h"
 
+#include "protos.h"
 
 /***************************/
 /* class LibraryFieldEntry */
@@ -17,7 +18,7 @@
 
 /* a Field is a string linked to a component.
  *  Unlike a pure graphic text, fields can be used in netlist generation
- *  and other things.
+ *  and other told (BOM).
  *
  *  4 fields have a special meaning:
  *      REFERENCE
@@ -101,8 +102,11 @@ bool LibDrawField::Save( FILE* ExportFile ) const
              m_Italic ? 'I' : 'N',
              m_Width > 1 ? 'B' : 'N' );
 
-    // Save field name, if necessary
-    if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() )
+    /* Save field name, if necessary
+     * Field name is saved only if it is not the default name.
+     * Just because default name depends on the language and can change from a country to an other
+     */
+    if( m_FieldId >= FIELD1 && !m_Name.IsEmpty() && m_Name != ReturnDefaultFieldName( m_FieldId ))
         fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_Name ) );
 
     fprintf( ExportFile, "\n" );

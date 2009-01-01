@@ -148,7 +148,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
         case COMPONENT_ARC_DRAW_TYPE:
         {
             // Arc is reduced to a line from m_Start to m_End.
-            // TO DO better.
+            // TODO better.
             LibDrawArc* Arc = (LibDrawArc*) DrawEntry;
             x1   = Arc->m_ArcStart.x;
             y1   = Arc->m_ArcStart.y;
@@ -202,7 +202,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
             xmax = MAX( xmax, x1 );
             ymin = MIN( ymin, y1 );
             ymax = MAX( ymax, y1 );
-#if 0 \
+#if 0
             // 0 pour englober le point origine de la pin, 1 pour englober toute la pin
             switch( Pin->Orient )
             {
@@ -255,8 +255,8 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
         }
     }
 
-    // Update the BoundaryBox. Remenber the fact the screen Y axis is the reverse */
-    ymax = -ymax; ymin = -ymin;    // Y is is screen axis sense
+    // Update the BoundaryBox. Remember the fact the screen Y axis is the reverse */
+    NEGATE(ymax); NEGATE(ymin);    // Y is not is screen axis sense
     // Ensure w and H > 0 (wxRect assume it)
     if( xmax < xmin )
         EXCHG( xmax, xmin );
