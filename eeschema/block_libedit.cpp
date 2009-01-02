@@ -1,5 +1,5 @@
 /****************************************************/
-/*	BLOCK.CPP										*/
+/*	block_libedt.cpp       							*/
 /* Gestion des Operations sur Blocks et Effacements */
 /****************************************************/
 
@@ -139,11 +139,11 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            int  ii, imax = ( (LibDrawPolyline*) item )->m_CornersCount * 2;
-            int* ptpoly = ( (LibDrawPolyline*) item )->m_PolyList;
-            for( ii = 0; ii < imax; ii += 2 )
+            int  ii, imax = ( (LibDrawPolyline*) item )->GetCornerCount();
+            for( ii = 0; ii < imax; ii ++ )
             {
-                pos.x = ptpoly[ii]; pos.y = -ptpoly[ii + 1];
+                pos = ( (LibDrawPolyline*) item )->m_PolyPoints[ii];
+                NEGATE( pos.y );
                 if( Rect.Inside( pos ) )
                 {
                     item->m_Selected = IS_SELECTED;
@@ -537,7 +537,7 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
     if( LibEntry == NULL )
         return;
 
-    offset.y = -offset.y;  // Y axis for lib items is Down to Up: reverse y offset value
+    NEGATE( offset.y );  // Y axis for lib items is Down to Up: reverse y offset value
     item = LibEntry->m_Drawings;
     for( ; item != NULL; item = item->Next() )
     {
@@ -547,42 +547,31 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         switch( item->Type() )
         {
         case COMPONENT_PIN_DRAW_TYPE:
-            ( (LibDrawPin*) item )->m_Pos.x += offset.x;
-            ( (LibDrawPin*) item )->m_Pos.y += offset.y;
+            ( (LibDrawPin*) item )->m_Pos += offset;
             break;
 
         case COMPONENT_ARC_DRAW_TYPE:
         {
-            ( (LibDrawArc*) item )->m_Pos.x      += offset.x;
-            ( (LibDrawArc*) item )->m_Pos.y      += offset.y;
-            ( (LibDrawArc*) item )->m_ArcStart.x += offset.x;
-            ( (LibDrawArc*) item )->m_ArcStart.y += offset.y;
-            ( (LibDrawArc*) item )->m_ArcEnd.x   += offset.x;
-            ( (LibDrawArc*) item )->m_ArcEnd.y   += offset.y;
+            ( (LibDrawArc*) item )->m_Pos     += offset;
+            ( (LibDrawArc*) item )->m_ArcStart += offset;
+            ( (LibDrawArc*) item )->m_ArcEnd   += offset;
             break;
         }
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
-            ( (LibDrawCircle*) item )->m_Pos.x += offset.x;
-            ( (LibDrawCircle*) item )->m_Pos.y += offset.y;
+            ( (LibDrawCircle*) item )->m_Pos += offset;
             break;
 
         case COMPONENT_RECT_DRAW_TYPE:
-            ( (LibDrawSquare*) item )->m_Pos.x += offset.x;
-            ( (LibDrawSquare*) item )->m_Pos.y += offset.y;
-            ( (LibDrawSquare*) item )->m_End.x += offset.x;
-            ( (LibDrawSquare*) item )->m_End.y += offset.y;
+            ( (LibDrawSquare*) item )->m_Pos += offset;
+            ( (LibDrawSquare*) item )->m_End += offset;
             break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            int ii, imax = ( (LibDrawPolyline*) item )->m_CornersCount * 2;
-            int* ptpoly = ( (LibDrawPolyline*) item )->m_PolyList;
-            for( ii = 0; ii < imax; ii += 2 )
-            {
-                ptpoly[ii]     += offset.x;
-                ptpoly[ii + 1] += offset.y;
-            }
+            unsigned ii, imax = ( (LibDrawPolyline*) item )->GetCornerCount();
+            for( ii = 0; ii < imax; ii ++ )
+                ( (LibDrawPolyline*) item )->m_PolyPoints[ii] += offset;
         }
             break;
 
@@ -590,8 +579,7 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
             break;
 
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-            ( (LibDrawText*) item )->m_Pos.x += offset.x;
-            ( (LibDrawText*) item )->m_Pos.y += offset.y;
+            ( (LibDrawText*) item )->m_Pos += offset;
             break;
 
         default:
@@ -688,11 +676,10 @@ void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            int ii, imax = ( (LibDrawPolyline*) item )->m_CornersCount * 2;
-            int* ptpoly = ( (LibDrawPolyline*) item )->m_PolyList;
-            for( ii = 0; ii < imax; ii += 2 )
+            unsigned ii, imax = ( (LibDrawPolyline*) item )->GetCornerCount();
+            for( ii = 0; ii < imax; ii ++ )
             {
-                SETMIRROR( ptpoly[ii] );
+                SETMIRROR( ( (LibDrawPolyline*) item )->m_PolyPoints[ii].x );
             }
         }
             break;

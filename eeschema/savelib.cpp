@@ -157,17 +157,14 @@ bool LibDrawPin::Save( FILE* ExportFile ) const
 bool LibDrawPolyline::Save( FILE* ExportFile ) const
 /****************************************************/
 {
-    int ii, * ptpoly;
-
+    int ccount = GetCornerCount();
     fprintf( ExportFile, "P %d %d %d %d",
-             m_CornersCount,
+             ccount,
              m_Unit, m_Convert,
              m_Width );
-    ptpoly = m_PolyList;
-    for( ii = m_CornersCount; ii > 0; ii-- )
+    for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        fprintf( ExportFile, "  %d %d", *ptpoly, *(ptpoly + 1) );
-        ptpoly += 2;
+        fprintf( ExportFile, "  %d %d", m_PolyPoints[ii].x, m_PolyPoints[ii].y );
     }
 
     fprintf( ExportFile, " %c\n", fill_tab[m_Fill] );

@@ -308,11 +308,10 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         case COMPONENT_POLYLINE_DRAW_TYPE:
             {
                 LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
-                Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->m_CornersCount );
-                for( ii = 0; ii < polyline->m_CornersCount; ii++ )
+                Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->GetCornerCount() );
+                for( ii = 0; ii < (int)polyline->GetCornerCount(); ii++ )
                 {
-                    pos.x = polyline->m_PolyList[ii * 2];
-                    pos.y = polyline->m_PolyList[ii * 2 + 1];
+                    pos = polyline->m_PolyPoints[ii];
                     pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
                     Poly[ii * 2] = pos.x;
                     Poly[ii * 2 + 1] = pos.y;

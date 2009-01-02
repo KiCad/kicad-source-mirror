@@ -18,6 +18,8 @@
 // Local variables:
 static int s_SelectedRow;
 
+#define COLUMN_FIELD_NAME 0
+#define COLUMN_TEXT 1
 
 /*****************************************************************************************/
 class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
@@ -146,10 +148,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event 
     columnLabel.SetImage( -1 );
 
     columnLabel.SetText( _( "Name" ) );
-    fieldListCtrl->InsertColumn( 0, columnLabel );
+    fieldListCtrl->InsertColumn( COLUMN_FIELD_NAME, columnLabel );
 
     columnLabel.SetText( _( "Value" ) );
-    fieldListCtrl->InsertColumn( 1, columnLabel );
+    fieldListCtrl->InsertColumn( COLUMN_TEXT, columnLabel );
 
     wxString label = _( "Size" ) + ReturnUnitSymbol( g_UnitMetric );
     textSizeLabel->SetLabel( label );
@@ -298,27 +300,41 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
 /*****************************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEvent& event )
 /*****************************************************************************************/
+/* Delete a field.
+ * Fields REFERENCE and VALUE are mandatory, and cannot be deleted.
+ * If a field is empty, it is removed.
+ * if not empty, the text is removed.
+ */
 {
     unsigned fieldNdx = getSelectedFieldNdx();
 
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx < FIELD1 )
+    if( fieldNdx <= VALUE )
     {
         wxBell();
         return;
     }
 
     m_skipCopyFromPanel = true;
-    m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
-    fieldListCtrl->DeleteItem( fieldNdx );
+    if( m_FieldsBuf[fieldNdx].m_Text.IsEmpty() )
+    {
+        m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
+        fieldListCtrl->DeleteItem( fieldNdx );
 
-    if( fieldNdx >= m_FieldsBuf.size() )
-        --fieldNdx;
+        if( fieldNdx >= m_FieldsBuf.size() )
+            --fieldNdx;
 
-    // Reinitialize fields IDs and default names:
-    reinitializeFieldsIdAndDefaultNames();
+        // Reinitialize fields IDs and default names:
+        reinitializeFieldsIdAndDefaultNames();
+    }
+    else
+    {
+        m_FieldsBuf[fieldNdx].m_Text.Empty();
+        copySelectedFieldToPanel();
+    }
+
     updateDisplay( );
 
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
@@ -467,15 +483,15 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LibDra
 
         wxASSERT( ndx >= 0 );
 
-        fieldListCtrl->SetItem( ndx, 1, wxEmptyString );
+        fieldListCtrl->SetItem( ndx, COLUMN_TEXT, wxEmptyString );
     }
 
-    fieldListCtrl->SetItem( aFieldNdx, 0, aField.m_Name );
-    fieldListCtrl->SetItem( aFieldNdx, 1, aField.m_Text );
+    fieldListCtrl->SetItem( aFieldNdx, COLUMN_FIELD_NAME, aField.m_Name );
+    fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aField.m_Text );
 
     // recompute the column widths here, after setting texts
-    fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    fieldListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( COLUMN_FIELD_NAME, wxLIST_AUTOSIZE );
+    fieldListCtrl->SetColumnWidth( COLUMN_TEXT, wxLIST_AUTOSIZE );
 }
 
 
@@ -514,6 +530,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable filed name editing
     fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
     fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
+     moveUpButton->Enable( fieldNdx >= FIELD1 );   // disable move up button for non moveable fields
+    // if fieldNdx == REFERENCE, VALUE, then disable delete button
+    deleteFieldButton->Enable( fieldNdx > VALUE );
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 

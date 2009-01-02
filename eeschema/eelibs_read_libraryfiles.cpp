@@ -748,28 +748,28 @@ LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame,
         case 'P':    /* Polyline */
         {
             LibDrawPolyline* Polyl = new LibDrawPolyline();
-
+            int ccount = 0;
             New = Polyl;
 
             if( sscanf( &Line[2], "%d %d %d %d",
-                        &Polyl->m_CornersCount, &Unit, &Convert,
+                        &ccount, &Unit, &Convert,
                         &Polyl->m_Width ) == 4
-                && Polyl->m_CornersCount > 0 )
+                && ccount > 0 )
             {
                 Polyl->m_Unit = Unit; Polyl->m_Convert = Convert;
-
-                Polyl->m_PolyList = (int*)
-                                  MyZMalloc( sizeof(int) * Polyl->m_CornersCount * 2 );
-
                 p = strtok( &Line[2], " \t\n" );
                 p = strtok( NULL, " \t\n" );
                 p = strtok( NULL, " \t\n" );
                 p = strtok( NULL, " \t\n" );
 
-                for( i = 0; i < Polyl->m_CornersCount * 2 && !Error; i++ )
+                for( i = 0; i < ccount && !Error; i++ )
                 {
+                    wxPoint point;
                     p     = strtok( NULL, " \t\n" );
-                    Error = sscanf( p, "%d", &Polyl->m_PolyList[i] ) != 1;
+                    Error = sscanf( p, "%d", &point.x ) != 1;
+                    p     = strtok( NULL, " \t\n" );
+                    Error = Error || sscanf( p, "%d", &point.y ) != 1;
+                    Polyl->AddPoint(point);
                 }
 
                 Polyl->m_Fill = NO_FILL;
@@ -787,8 +787,8 @@ LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame,
             break;
 
         default:
-            MsgLine.Printf( wxT( "Undefined DRAW command in line %d, aborted." ),
-                            *LineNum );
+            MsgLine.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
+                            *LineNum, Line );
             DisplayError( frame, MsgLine );
             return Head;
         }

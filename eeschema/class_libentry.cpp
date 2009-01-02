@@ -118,7 +118,6 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
  **/
 {
     int                xmin, xmax, ymin, ymax, x1, y1;
-    int*               pt, ii;
     LibEDA_BaseStruct* DrawEntry;
     EDA_Rect           BoundaryBox;
 
@@ -232,21 +231,15 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
         {
-            LibDrawPolyline* polyline = (LibDrawPolyline*) DrawEntry;
-            pt = polyline->m_PolyList;
-            for( ii = 0; ii < polyline->m_CornersCount; ii++ )
-            {
-                if( xmin > *pt )
-                    xmin = *pt;
-                if( xmax < *pt )
-                    xmax = *pt;
-                pt++;
-                if( ymin > *pt )
-                    ymin = *pt;
-                if( ymax < *pt )
-                    ymax = *pt;
-                pt++;
-            }
+            EDA_Rect rect = ((LibDrawPolyline*) DrawEntry)->GetBoundaryBox( );
+            xmin = MIN( xmin, rect.GetX() );
+            xmax = MAX( xmax, rect.GetX() );
+            ymin = MIN( ymin, rect.GetY() );
+            ymax = MAX( ymax, rect.GetY() );
+            xmin = MIN( xmin, rect.GetEnd().x );
+            xmax = MAX( xmax, rect.GetEnd().x );
+            ymin = MIN( ymin, rect.GetEnd().y );
+            ymax = MAX( ymax, rect.GetEnd().y );
         }
         break;
 
@@ -257,9 +250,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
 
     // Update the BoundaryBox. Remember the fact the screen Y axis is the reverse */
     NEGATE(ymax); NEGATE(ymin);    // Y is not is screen axis sense
-    // Ensure w and H > 0 (wxRect assume it)
-    if( xmax < xmin )
-        EXCHG( xmax, xmin );
+    // Ensure H > 0 (wxRect assume it)
     if( ymax < ymin )
         EXCHG( ymax, ymin );
     BoundaryBox.SetX( xmin ); BoundaryBox.SetWidth( xmax - xmin );

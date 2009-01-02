@@ -240,8 +240,8 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     int         color     = ReturnLayerColor( LAYER_DEVICE );
     int         linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
-    static int* Buf_Poly_Drawings = NULL;               // Buffer used to store current corners coordinates for drawings
-    static int  Buf_Poly_Size = 0;                      // Buffer used to store current corners coordinates for drawings
+    static wxPoint* Buf_Poly_Drawings = NULL;               // Buffer used to store current corners coordinates for drawings
+    static unsigned  Buf_Poly_Size = 0;                      // Buffer used to store current corners coordinates for drawings
 
     if( aColor < 0 )                                    // Used normal color or selected color
     {
@@ -254,25 +254,19 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     // Set the size of the buffer od coordinates
     if( Buf_Poly_Drawings == NULL )
     {
-        Buf_Poly_Size     = m_CornersCount;
-        Buf_Poly_Drawings = (int*) MyMalloc( sizeof(int) * 2 * Buf_Poly_Size );
+        Buf_Poly_Size     = m_PolyPoints.size();
+        Buf_Poly_Drawings = (wxPoint*) MyMalloc( sizeof(wxPoint) * Buf_Poly_Size );
     }
-    else if( Buf_Poly_Size < m_CornersCount )
+    else if( Buf_Poly_Size < m_PolyPoints.size() )
     {
-        Buf_Poly_Size     = m_CornersCount;
-        Buf_Poly_Drawings = (int*) realloc( Buf_Poly_Drawings,
-            sizeof(int) * 2 * Buf_Poly_Size );
+        Buf_Poly_Size     = m_PolyPoints.size();
+        Buf_Poly_Drawings = (wxPoint*) realloc( Buf_Poly_Drawings,
+            sizeof(wxPoint) * Buf_Poly_Size );
     }
 
-    for( int ii = 0, jj = 0; ii < m_CornersCount; ii++, jj += 2 )
+    for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
     {
-        pos1.x = m_PolyList[jj];
-        pos1.y = m_PolyList[jj + 1];
-
-        pos1 = TransformCoordinate( aTransformMatrix, pos1 ) + aOffset;
-
-        Buf_Poly_Drawings[jj]     = pos1.x;
-        Buf_Poly_Drawings[jj + 1] = pos1.y;
+        Buf_Poly_Drawings[ii] = TransformCoordinate( aTransformMatrix, m_PolyPoints[ii] ) + aOffset;
     }
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
@@ -280,15 +274,15 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         fill = NO_FILL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            (wxPoint*) Buf_Poly_Drawings, 1, linewidth, color,
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+            Buf_Poly_Drawings, 1, linewidth, color,
             ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            (wxPoint*) Buf_Poly_Drawings, 1, linewidth, color, color );
+        GRPoly( &aPanel->m_ClipBox, aDC,m_PolyPoints.size(),
+            Buf_Poly_Drawings, 1, linewidth, color, color );
     else
-        GRPoly( &aPanel->m_ClipBox, aDC, m_CornersCount,
-            (wxPoint*) Buf_Poly_Drawings, 0, linewidth, color, color );
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+            Buf_Poly_Drawings, 0, linewidth, color, color );
 }
 
 
@@ -520,8 +514,6 @@ LibDrawSegment* LibDrawSegment::GenCopy()
 
 LibDrawPolyline::LibDrawPolyline() : LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
 {
-    m_CornersCount = 0;
-    m_PolyList = NULL;
     m_Fill   = NO_FILL;
     m_Width  = 0;
 }
@@ -532,16 +524,7 @@ LibDrawPolyline* LibDrawPolyline::GenCopy()
 /************************************************/
 {
     LibDrawPolyline* newitem = new LibDrawPolyline();
-
-    int size;
-
-    newitem->m_CornersCount = m_CornersCount;
-    size = sizeof(int) * 2 * m_CornersCount;
-    if( size )
-    {
-        newitem->m_PolyList = (int*) MyMalloc( size );
-        memcpy( newitem->m_PolyList, m_PolyList, size );
-    }
+    newitem->m_PolyPoints = m_PolyPoints;   // Vector copy
     newitem->m_Width   = m_Width;
     newitem->m_Unit    = m_Unit;
     newitem->m_Convert = m_Convert;
@@ -555,18 +538,55 @@ LibDrawPolyline* LibDrawPolyline::GenCopy()
 void LibDrawPolyline::AddPoint( const wxPoint& point )
 /***************************************************/
 
-/* add a point to the polyline coordinate list, and realloc the memory
+/* add a point to the polyline coordinate list
  */
 {
-    int allocsize;
+    m_PolyPoints.push_back( point );
+}
 
-    m_CornersCount++;
-    allocsize = 2 * sizeof(int) * m_CornersCount;
-    if( m_PolyList == NULL )
-        m_PolyList = (int*) MyMalloc( allocsize );
-    else
-        m_PolyList = (int*) realloc( m_PolyList, allocsize );
 
-    m_PolyList[(m_CornersCount * 2) - 2] = point.x;
-    m_PolyList[(m_CornersCount * 2) - 1] = -point.y;
+/** Function HitTest
+ * @return true if the point aPosRef is near a segment
+ * @param aPosRef = a wxPoint to test
+ * @param aThreshold = max distance to a segment
+ * @param aTransMat = the transform matrix
+ */
+bool LibDrawPolyline::HitTest( wxPoint aPosRef, int aThreshold, int aTransMat[2][2] )
+{
+
+    aPosRef = TransformCoordinate( aTransMat, aPosRef);
+    /* Move origin coordinate to segment start point */
+    wxPoint end;
+    for ( unsigned ii = 0; ii < m_PolyPoints.size() -1; ii++ )
+    {
+    aPosRef -= m_PolyPoints[0];
+    end = m_PolyPoints[1] - m_PolyPoints[0];
+
+    if( distance( end.x, end.y, aPosRef.x, aPosRef.y, aThreshold ) )
+        return true;
+    }
+
+    return false;
+}
+
+/** Function GetBoundaryBox
+ * @return the boundary box for this, in library coordinates
+ */
+EDA_Rect LibDrawPolyline::GetBoundaryBox( )
+{
+    EDA_Rect           BoundaryBox;
+    int xmin, xmax, ymin, ymax;
+    xmin = xmax = m_PolyPoints[0].x;
+    ymin = ymax = m_PolyPoints[0].y;
+    for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
+    {
+        xmin = MIN( xmin, m_PolyPoints[0].x );
+        xmax = MAX( xmax, m_PolyPoints[0].x );
+        ymin = MIN( ymin, m_PolyPoints[0].y );
+        ymax = MAX( ymax, m_PolyPoints[0].y );
+    }
+    BoundaryBox.SetX( xmin ); BoundaryBox.SetWidth( xmax - xmin );
+    BoundaryBox.SetY( ymin ); BoundaryBox.SetHeight( ymax - ymin );
+
+    return BoundaryBox;
 }

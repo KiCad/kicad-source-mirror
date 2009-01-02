@@ -23,9 +23,9 @@ static SCH_ITEM*          CopyStruct( WinEDA_DrawPanel* panel,
                                       BASE_SCREEN*      screen,
                                       SCH_ITEM*         DrawStruct );
 static void               CollectStructsToDrag( SCH_SCREEN* screen );
-static void               AddPickedItem( SCH_SCREEN* screen, wxPoint position );
-static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* DrawLibItem,
-                                              wxPoint&       position );
+static void               AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
+static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                              wxPoint&       aPosition );
 static void               DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
                                                    wxDC*             DC,
                                                    bool              erase );
@@ -182,9 +182,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 
     /* clear struct.m_Flags  */
     SCH_ITEM* Struct;
-    for( Struct = GetScreen()->EEDrawList;
-        Struct != NULL;
-        Struct = Struct->Next() )
+    for( Struct = GetScreen()->EEDrawList; Struct != NULL; Struct = Struct->Next() )
         Struct->m_Flags = 0;
 
     DrawPanel->ManageCurseur = NULL;
@@ -203,9 +201,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
         block->m_BlockDrawStruct = NULL;
     }
 
-    SetToolID( m_ID_current_state,
-               DrawPanel->m_PanelDefaultCursor,
-               wxEmptyString );
+    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
 }
 
 
@@ -1152,10 +1148,7 @@ bool PlaceStruct( BASE_SCREEN* screen, SCH_ITEM* DrawStruct )
     if( !DrawStruct )
         return FALSE;
 
-    move_vector.x = screen->m_Curseur.x -
-                    screen->BlockLocate.m_BlockLastCursorPosition.x;
-    move_vector.y = screen->m_Curseur.y -
-                    screen->BlockLocate.m_BlockLastCursorPosition.y;
+    move_vector = screen->m_Curseur - screen->BlockLocate.m_BlockLastCursorPosition;
 
     switch( DrawStruct->Type() )
     {
@@ -1709,8 +1702,8 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
 
 /*********************************************************************************/
-static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* DrawLibItem,
-                                              wxPoint&       position )
+static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                              wxPoint&       aPosition )
 /*********************************************************************************/
 {
     EDA_LibComponentStruct* Entry;
@@ -1720,19 +1713,19 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* DrawLibItem,
     int orient;
     LibDrawPin* Pin;
 
-    if( DrawLibItem )
+    if( aDrawLibItem )
     {
         NextItem = NULL;
         if( ( Entry =
-                 FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString,
+                 FindLibPart( aDrawLibItem->m_ChipName.GetData(), wxEmptyString,
                               FIND_ROOT ) ) == NULL )
             return NULL;
         DEntry  = Entry->m_Drawings;
-        Multi   = DrawLibItem->m_Multi;
-        convert = DrawLibItem->m_Convert;
-        PartX   = DrawLibItem->m_Pos.x;
-        PartY   = DrawLibItem->m_Pos.y;
-        memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );
+        Multi   = aDrawLibItem->m_Multi;
+        convert = aDrawLibItem->m_Convert;
+        PartX   = aDrawLibItem->m_Pos.x;
+        PartY   = aDrawLibItem->m_Pos.y;
+        memcpy( TransMat, aDrawLibItem->m_Transform, sizeof(TransMat) );
     }
     else
         DEntry = NextItem;
@@ -1753,10 +1746,7 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* DrawLibItem,
         orient = Pin->ReturnPinDrawOrient( TransMat );
 
         /* Calcul de la position du point de reference */
-        position.x = PartX + (TransMat[0][0] *Pin->m_Pos.x)
-                     + (TransMat[0][1] *Pin->m_Pos.y);
-        position.y = PartY + (TransMat[1][0] *Pin->m_Pos.x)
-                     + (TransMat[1][1] *Pin->m_Pos.y);
+        aPosition = TransformCoordinate( TransMat, Pin->m_Pos);
         NextItem = DEntry->Next();
         return DEntry;
     }

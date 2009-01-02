@@ -168,18 +168,12 @@ LibDrawPin* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,  const wxPo
     pinpos = Pin->m_Pos;
 
     if( DrawLibItem == NULL )
-        pinpos.y = -pinpos.y;
+        NEGATE( pinpos.y );
 
     else
-    {
-        int x1 = pinpos.x, y1 = pinpos.y;
-        pinpos.x = DrawLibItem->m_Pos.x + DrawLibItem->m_Transform[0][0] * x1
-                   + DrawLibItem->m_Transform[0][1] * y1;
-        pinpos.y = DrawLibItem->m_Pos.y + DrawLibItem->m_Transform[1][0] * x1
-                   + DrawLibItem->m_Transform[1][1] * y1;
-    }
+        pinpos = TransformCoordinate( DrawLibItem->m_Transform, pinpos);
 
-    if( (pos.x == pinpos.x) && (pos.y == pinpos.y) )
+    if( pos == pinpos )
         return Pin;
     return NULL;
 }
@@ -292,16 +286,10 @@ wxPoint ReturnPinPhysicalPosition( LibDrawPin*             Pin,
     wxPoint PinPos = Pin->m_Pos;
 
     if( DrawLibItem == NULL )
-        PinPos.y = -PinPos.y;
+        NEGATE( PinPos.y );
 
     else
-    {
-        int x = Pin->m_Pos.x, y = Pin->m_Pos.y;
-        PinPos.x = DrawLibItem->m_Pos.x + DrawLibItem->m_Transform[0][0] * x
-                   + DrawLibItem->m_Transform[0][1] * y;
-        PinPos.y = DrawLibItem->m_Pos.y + DrawLibItem->m_Transform[1][0] * x
-                   + DrawLibItem->m_Transform[1][1] * y;
-    }
+        PinPos = TransformCoordinate( DrawLibItem->m_Transform, Pin->m_Pos);
 
     return PinPos;
 }

@@ -40,7 +40,6 @@ void WinEDA_SchematicFrame::StartMoveCmpField( SCH_CMP_FIELD* aField, wxDC* DC )
     }
 
     wxPoint pos, newpos;
-    int     x1, y1;
     SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
 
     SAFE_DELETE( g_ItemToUndoCopy );
@@ -50,19 +49,16 @@ void WinEDA_SchematicFrame::StartMoveCmpField( SCH_CMP_FIELD* aField, wxDC* DC )
 
     /* Les positions sont calculees par la matrice TRANSPOSEE de la matrice
      *  de rotation-miroir */
-    x1 = aField->m_Pos.x - pos.x;
-    y1 = aField->m_Pos.y - pos.y;
+    newpos = aField->m_Pos - pos;
 
     // Empirically this is necessary.  The Y coordinate appears to be inverted
     // under some circumstances, but that inversion is not preserved by all
     // combinations of mirroring and rotation.  The following clause is true
     // when the number of rotations and the number of mirrorings are both odd.
     if( comp->m_Transform[1][0] * comp->m_Transform[0][1] < 0 )
-    {
-        y1 = -y1;
-    }
-    newpos.x = pos.x + comp->m_Transform[0][0] * x1 + comp->m_Transform[1][0] * y1;
-    newpos.y = pos.y + comp->m_Transform[0][1] * x1 + comp->m_Transform[1][1] * y1;
+        NEGATE (newpos.y);
+
+    newpos = TransformCoordinate( comp->m_Transform, newpos) + pos;
 
     DrawPanel->CursorOff( DC );
     GetScreen()->m_Curseur = newpos;

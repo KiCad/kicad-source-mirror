@@ -413,24 +413,18 @@ public:
                int aDrawMode, void* aData, int aTransformMatrix[2][2] );
 };
 
-/*********************************************/
-/* Graphic Body Item: Polygon (set of lines) */
-/*********************************************/
+/**********************************************************/
+/* Graphic Body Item: Polygon and polyline (set of lines) */
+/**********************************************************/
 class LibDrawPolyline : public LibEDA_BaseStruct
 {
 public:
-    int  m_CornersCount;
-    int* m_PolyList;
     int     m_Width;        /* Tickness */
+    std::vector<wxPoint>		m_PolyPoints;   // list of points (>= 2)
 
 public:
     LibDrawPolyline();
-    ~LibDrawPolyline()
-    {
-        if( m_PolyList )
-            free( m_PolyList );
-    }
-
+    ~LibDrawPolyline() { }
 
     virtual wxString GetClass() const
     {
@@ -448,6 +442,24 @@ public:
 
     LibDrawPolyline*    GenCopy();
     void                AddPoint( const wxPoint& point );
+
+    /** Function GetCornerCount
+     * @return the number of corners
+     */
+    unsigned GetCornerCount() const { return m_PolyPoints.size(); }
+
+    /** Function HitTest
+     * @return true if the point aPosRef is near a segment
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to a segment
+     * @param aTransMat = the transform matrix
+     */
+    bool HitTest( wxPoint aPosRef, int aThreshold, int aTransMat[2][2] );
+
+    /** Function GetBoundaryBox
+     * @return the boundary box for this, in library coordinates
+     */
+    EDA_Rect GetBoundaryBox( );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
                int aDrawMode, void* aData, int aTransformMatrix[2][2] );

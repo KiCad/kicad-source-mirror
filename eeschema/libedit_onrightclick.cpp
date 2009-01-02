@@ -153,7 +153,7 @@ bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
             }
             else if( (DrawEntry->m_Flags & IS_NEW) )
             {
-                if( ((LibDrawPolyline*)DrawEntry)->m_CornersCount > 2 )
+                if( ((LibDrawPolyline*)DrawEntry)->GetCornerCount() > 2 )
                 {
                     msg = AddHotkeyName( _( "Delete Segment " ), s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
                     ADD_MENUITEM(PopMenu,
