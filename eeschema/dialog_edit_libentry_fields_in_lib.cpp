@@ -530,7 +530,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable filed name editing
     fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
     fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
-     moveUpButton->Enable( fieldNdx >= FIELD1 );   // disable move up button for non moveable fields
+    moveUpButton->Enable( fieldNdx >= FIELD1 );   // disable move up button for non moveable fields
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
     deleteFieldButton->Enable( fieldNdx > VALUE );
 
@@ -614,14 +614,13 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
 
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
-    /* Void fields for REFERENCE and VALUE are not allowed
-     * change therm only for a new non void value
+    /* Void fields texts for REFERENCE and VALUE (value is the name of the compinent in lib ! ) are not allowed
+     * change them only for a new non void value
      */
-    if( !fieldValueTextCtrl->GetValue().IsEmpty() )
+    if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
         field.m_Text = fieldValueTextCtrl->GetValue();
 
-    if( !fieldNameTextCtrl->GetValue().IsEmpty() )
-        field.m_Name = fieldNameTextCtrl->GetValue();
+    field.m_Name = fieldNameTextCtrl->GetValue();
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 

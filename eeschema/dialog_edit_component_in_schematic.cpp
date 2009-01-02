@@ -1,6 +1,7 @@
 
 #include <wx/checklst.h>
 #include <wx/tooltip.h>
+#include <algorithm>
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -155,7 +156,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         }
     }
 
-    // For components with multiple shames (De Morgan representation) Set the selected shape:
+    // For components with multiple shapes (De Morgan representation) Set the selected shape:
     if( convertCheckBox->IsEnabled() )
     {
         m_Cmp->m_Convert = convertCheckBox->GetValue() ? 2 : 1;
@@ -488,6 +489,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable editing
     fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
     fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
+    moveUpButton->Enable( fieldNdx >= FIELD1 );   // disable move up button for non moveable fields
+    // if fieldNdx == REFERENCE, VALUE, then disable delete button
+    deleteFieldButton->Enable( fieldNdx > VALUE );
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 
@@ -549,7 +553,12 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
 
     field.m_Name = fieldNameTextCtrl->GetValue();
-    field.m_Text = fieldValueTextCtrl->GetValue();
+    /* Void fields texts for REFERENCE and VALUE (value is the name of the compinent in lib ! ) are not allowed
+     * change them only for a new non void value
+     * When woid, usually netlists are broken
+     */
+    if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
+        field.m_Text = fieldValueTextCtrl->GetValue();
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
