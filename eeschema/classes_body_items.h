@@ -3,7 +3,7 @@
 /****************************************************************/
 
 /* Definitions of graphic items used to create shapes of component in libraries (libentry)
-*/
+ */
 #ifndef CLASSES_BODY_ITEMS_H
 #define CLASSES_BODY_ITEMS_H
 
@@ -56,7 +56,7 @@ enum ElectricPinType {      /* Type des Pins. si modif: modifier tableau des mgs
 /* Messages d'affichage du type electrique */
 eda_global const wxChar* MsgPinElectricType[]
 #ifdef MAIN
-= {
+    = {
     wxT( "input" ),
     wxT( "output" ),
     wxT( "BiDi" ),
@@ -68,7 +68,7 @@ eda_global const wxChar* MsgPinElectricType[]
     wxT( "openCol" ),
     wxT( "openEm" ),
     wxT( "?????" )
-}
+    }
 
 
 #endif
@@ -128,11 +128,11 @@ public:
 class LibEDA_BaseStruct : public EDA_BaseStruct
 {
 public:
-    int     m_Unit;         /* Unit identification (for multi part per parkage)
+    int    m_Unit;          /* Unit identification (for multi part per parkage)
                              *  0 if the item is common to all units */
-    int     m_Convert;      /* Shape identification (for parts which have a convert shape)
+    int    m_Convert;       /* Shape identification (for parts which have a convert shape)
                              *      0 if the item is common to all shapes */
-    FILL_T  m_Fill;         /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR. has meaning only for some items */
+    FILL_T m_Fill;          /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR. has meaning only for some items */
 
 public:
     LibEDA_BaseStruct* Next()
@@ -158,7 +158,7 @@ public:
      * @param aTransformMatrix = Transform Matrix (rotaion, mirror ..)
      */
     virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-                       int aDrawMode, void* aData, int aTransformMatrix[2][2] ) = 0;
+                       int aDrawMode, void* aData, const int aTransformMatrix[2][2] ) = 0;
 
     /**
      * Function Save
@@ -166,9 +166,9 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const = 0;
+    virtual bool Save( FILE* aFile ) const = 0;
 
-    void            Display_Infos_DrawEntry( WinEDA_DrawFrame* frame );
+    void         Display_Infos_DrawEntry( WinEDA_DrawFrame* frame );
 };
 
 
@@ -189,8 +189,8 @@ public:
     int      m_PinNumSize, m_PinNameSize; /* Pin num and Pin name sizes */
 
 //	int m_PinNumWidth, m_PinNameWidth;	/* (Currently Unused) Pin num and Pin name text width */
-    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;        /* Tickness */
+    wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start point (segments) */
+    int      m_Width;       /* Tickness */
 
 public:
     LibDrawPin();
@@ -211,30 +211,35 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile ) const;
 
 
-    LibDrawPin*     GenCopy();
-    void            Display_Infos( WinEDA_DrawFrame* frame );
-    wxPoint         ReturnPinEndPoint();
+    LibDrawPin*  GenCopy();
+    void         Display_Infos( WinEDA_DrawFrame* frame );
+    wxPoint      ReturnPinEndPoint();
 
-    int ReturnPinDrawOrient( int TransMat[2][2] );
-    void            ReturnPinStringNum( wxString& buffer ) const;
-    void            SetPinNumFromString( wxString& buffer );
+    int ReturnPinDrawOrient( const int TransMat[2][2] );
+    void         ReturnPinStringNum( wxString& buffer ) const;
+    void         SetPinNumFromString( wxString& buffer );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 
-    void            DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pin_pos,
-                                   int orient,
-                                   int DrawMode, int Color = -1 );
+    void         DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pin_pos,
+                                int orient,
+                                int DrawMode, int Color = -1 );
 
-    void            DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
-                                  wxPoint& pin_pos, int orient,
-                                  int TextInside, bool DrawPinNum, bool DrawPinName,
-                                  int Color, int DrawMode );
-    void            PlotPinTexts( wxPoint& pin_pos, int orient,
-                                  int TextInside, bool DrawPinNum, bool DrawPinNameint, int aWidth, bool aItalic );
+    void         DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
+                               wxPoint& pin_pos, int orient,
+                               int TextInside, bool DrawPinNum, bool DrawPinName,
+                               int Color, int DrawMode );
+    void         PlotPinTexts( wxPoint& pin_pos,
+                               int      orient,
+                               int      TextInside,
+                               bool     DrawPinNum,
+                               bool     DrawPinNameint,
+                               int      aWidth,
+                               bool     aItalic );
 };
 
 
@@ -248,8 +253,8 @@ public:
     int     m_Rayon;
     int     t1, t2;                 /* position des 2 extremites de l'arc en 0.1 degres */
     wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
-    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;        /* Tickness */
+    wxPoint m_Pos;                  /* Position or centre (Arc and Circle) or start point (segments) */
+    int     m_Width;                /* Tickness */
 
 public:
     LibDrawArc();
@@ -266,13 +271,13 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile ) const;
 
 
-    LibDrawArc*     GenCopy();
+    LibDrawArc*  GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 };
 
 /*****************************/
@@ -281,7 +286,7 @@ public:
 class LibDrawCircle   : public LibEDA_BaseStruct
 {
 public:
-    int m_Rayon;
+    int     m_Rayon;
     wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
     int     m_Width;        /* Tickness */
 
@@ -300,13 +305,13 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
+    virtual bool   Save( FILE* aFile ) const;
 
 
-    LibDrawCircle*  GenCopy();
+    LibDrawCircle* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 };
 
 
@@ -316,10 +321,9 @@ public:
 /* Fields like Ref , value... are not Text,  */
 /* they are a separate class                 */
 /*********************************************/
-class LibDrawText  : public LibEDA_BaseStruct
-			, public EDA_TextStruct
+class LibDrawText  : public LibEDA_BaseStruct,
+    public EDA_TextStruct
 {
-
 public:
     LibDrawText();
     ~LibDrawText() { }
@@ -335,13 +339,13 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile ) const;
 
 
-    LibDrawText*    GenCopy();
+    LibDrawText* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 };
 
 
@@ -370,13 +374,13 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
+    virtual bool   Save( FILE* aFile ) const;
 
 
-    LibDrawSquare*  GenCopy();
+    LibDrawSquare* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 };
 
 /**********************************/
@@ -410,7 +414,7 @@ public:
     LibDrawSegment* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 };
 
 /**********************************************************/
@@ -419,8 +423,8 @@ public:
 class LibDrawPolyline : public LibEDA_BaseStruct
 {
 public:
-    int     m_Width;        /* Tickness */
-    std::vector<wxPoint>		m_PolyPoints;   // list of points (>= 2)
+    int m_Width;                            /* Tickness */
+    std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
     LibDrawPolyline();
@@ -438,10 +442,10 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool        Save( FILE* aFile ) const;
+    virtual bool     Save( FILE* aFile ) const;
 
-    LibDrawPolyline*    GenCopy();
-    void                AddPoint( const wxPoint& point );
+    LibDrawPolyline* GenCopy();
+    void             AddPoint( const wxPoint& point );
 
     /** Function GetCornerCount
      * @return the number of corners
@@ -454,15 +458,15 @@ public:
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
      */
-    bool HitTest( wxPoint aPosRef, int aThreshold, int aTransMat[2][2] );
+    bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     /** Function GetBoundaryBox
      * @return the boundary box for this, in library coordinates
      */
-    EDA_Rect GetBoundaryBox( );
+    EDA_Rect GetBoundaryBox();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

@@ -59,7 +59,7 @@ public:
     void          SetFields( const std::vector <LibDrawField> aFields );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, int aTransformMatrix[2][2] );
+               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 
     /**
      * Function HitTest

@@ -626,7 +626,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
 /* Given a structure rotate it to 90 degrees refer to the Center point.
  */
 {
-    int dx, ii, * Points;
+    int dx;
     DrawPolylineStruct*            DrawPoly;
     DrawJunctionStruct*            DrawConnect;
     EDA_DrawLineStruct*            DrawSegment;
@@ -652,13 +652,12 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
 
     case DRAW_POLYLINE_STRUCT_TYPE:
         DrawPoly = (DrawPolylineStruct*) DrawStruct;
-        Points   = DrawPoly->m_Points;
-        for( ii = 0; ii < DrawPoly->m_NumOfPoints; ii++ )
+        for( unsigned ii = 0; ii < DrawPoly->GetCornerCount(); ii++ )
         {
             wxPoint point;
-            point.x = Points[ii * 2]; point.y = Points[ii * 2 + 1];
+            point = DrawPoly->m_PolyPoints[ii];
             MirrorYPoint( point, Center );
-            Points[ii * 2] = point.x; Points[ii * 2 + 1] = point.y;
+            DrawPoly->m_PolyPoints[ii] = point;
         }
 
         break;
@@ -740,7 +739,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
         MirrorYPoint( DrawLibItem->m_Pos, Center );
         dx -= DrawLibItem->m_Pos.x;
 
-        for( ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
+        for( int ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
         {
             /* move the fields to the new position because the component itself has moved */
             DrawLibItem->GetField( ii )->m_Pos.x -= dx;
@@ -1194,7 +1193,6 @@ void MoveOneStruct( SCH_ITEM* DrawStruct, const wxPoint& move_vector )
 /* Given a structure move it by Dx, Dy.
  */
 {
-    int ii, * Points;
     DrawPolylineStruct*            DrawPoly;
     DrawJunctionStruct*            DrawConnect;
     EDA_DrawLineStruct*            DrawSegment;
@@ -1215,11 +1213,9 @@ void MoveOneStruct( SCH_ITEM* DrawStruct, const wxPoint& move_vector )
 
     case DRAW_POLYLINE_STRUCT_TYPE:
         DrawPoly = (DrawPolylineStruct*) DrawStruct;
-        Points   = DrawPoly->m_Points;
-        for( ii = 0; ii < DrawPoly->m_NumOfPoints; ii++ )
+        for( unsigned ii = 0; ii < DrawPoly->GetCornerCount(); ii++ )
         {
-            Points[ii * 2]     += move_vector.x;
-            Points[ii * 2 + 1] += move_vector.y;
+            DrawPoly->m_PolyPoints[ii] += move_vector;
         }
 
         break;
@@ -1275,7 +1271,7 @@ void MoveOneStruct( SCH_ITEM* DrawStruct, const wxPoint& move_vector )
     case TYPE_SCH_COMPONENT:
         DrawLibItem = (SCH_COMPONENT*) DrawStruct;
         DrawLibItem->m_Pos += move_vector;
-        for( ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
+        for( int ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
         {
             DrawLibItem->GetField( ii )->m_Pos += move_vector;
         }

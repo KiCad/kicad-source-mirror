@@ -19,7 +19,7 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
                        int               aColor,
                        int               aDrawMode,
                        void*             aData,
-                       int               aTransformMatrix[2][2] )
+                       const int         aTransformMatrix[2][2] )
 /**********************************************************************************************/
 {
     // Invisibles pins are only drawn on request.
@@ -866,7 +866,7 @@ wxPoint LibDrawPin::ReturnPinEndPoint()
 
 
 /********************************************************/
-int LibDrawPin::ReturnPinDrawOrient( int TransMat[2][2] )
+int LibDrawPin::ReturnPinDrawOrient( const int TransMat[2][2] )
 /********************************************************/
 
 /** Function ReturnPinDrawOrient

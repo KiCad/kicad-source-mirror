@@ -427,8 +427,6 @@ DrawPolylineStruct::DrawPolylineStruct( int layer ) :
     SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
 /***********************************************************/
 {
-    m_NumOfPoints = 0;          /* Number of XY pairs in Points array. */
-    m_Points = NULL;            /* XY pairs that forms the polyline. */
     m_Width  = GR_NORM_WIDTH;
 
     switch( layer )
@@ -454,8 +452,6 @@ DrawPolylineStruct::DrawPolylineStruct( int layer ) :
 DrawPolylineStruct::~DrawPolylineStruct()
 /*********************************************/
 {
-    if( m_Points )
-        free( m_Points );
 }
 
 
@@ -463,16 +459,9 @@ DrawPolylineStruct::~DrawPolylineStruct()
 DrawPolylineStruct* DrawPolylineStruct::GenCopy()
 /*****************************************************/
 {
-    int memsize;
-
     DrawPolylineStruct* newitem =
         new DrawPolylineStruct( m_Layer );
-
-    memsize = sizeof(int) * 2 * m_NumOfPoints;
-    newitem->m_NumOfPoints = m_NumOfPoints;
-    newitem->m_Points = (int*) MyZMalloc( memsize );
-    memcpy( newitem->m_Points, m_Points, memsize );
-
+    newitem->m_PolyPoints = m_PolyPoints;   // std::vector copy
     return newitem;
 }
 
@@ -497,16 +486,15 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
     if( m_Width != GR_NORM_WIDTH )
         width = "Bus";
     if( fprintf( aFile, "Poly %s %s %d\n",
-            width, layer, m_NumOfPoints ) == EOF )
+            width, layer, GetCornerCount() ) == EOF )
     {
         success = false;
         return success;
     }
-    for( int ii = 0; ii < m_NumOfPoints; ii++ )
+    for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
         if( fprintf( aFile, "\t%-4d %-4d\n",
-                m_Points[ii * 2],
-                m_Points[ii * 2 + 1] ) == EOF )
+                m_PolyPoints[ii ].x, m_PolyPoints[ii].y ) == EOF )
         {
             success = false;
             break;

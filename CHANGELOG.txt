@@ -10,6 +10,7 @@ email address.
 ++Eeschema:
     Code cleaning.
     LibDrawPolyline uses now std::vector<wxPoint> to handle corners.
+    DrawPolylineStruct uses now std::vector<wxPoint> to handle corners.
 
 
 

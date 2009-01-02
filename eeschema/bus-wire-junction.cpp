@@ -474,24 +474,22 @@ static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool eras
 
     GRSetDrawMode( DC, g_XorMode );
 
+    int idx = NewPoly->GetCornerCount() - 1;
     if( g_HVLines )
     {
         /* Coerce the line to vertical or horizontal one: */
-        if( ABS( endpos.x - NewPoly->m_Points[NewPoly->m_NumOfPoints * 2 - 2] ) <
-           ABS( endpos.y - NewPoly->m_Points[NewPoly->m_NumOfPoints * 2 - 1] ) )
-            endpos.x = NewPoly->m_Points[NewPoly->m_NumOfPoints * 2 - 2];
+        if( ABS( endpos.x - NewPoly->m_PolyPoints[idx].x ) <
+           ABS( endpos.y - NewPoly->m_PolyPoints[idx].y ) )
+            endpos.x = NewPoly->m_PolyPoints[idx].x;
         else
-            endpos.y = NewPoly->m_Points[NewPoly->m_NumOfPoints * 2 - 1];
+            endpos.y = NewPoly->m_PolyPoints[idx].y;
     }
 
-    NewPoly->m_NumOfPoints++;
     if( erase )
         RedrawOneStruct( panel, DC, NewPoly, g_XorMode, color );
 
-    NewPoly->m_Points[NewPoly->m_NumOfPoints * 2 - 2] = endpos.x;
-    NewPoly->m_Points[NewPoly->m_NumOfPoints * 2 - 1] = endpos.y;
+    NewPoly->m_PolyPoints[idx] = endpos;
     RedrawOneStruct( panel, DC, NewPoly, g_XorMode, color );
-    NewPoly->m_NumOfPoints--;
 }
 
 

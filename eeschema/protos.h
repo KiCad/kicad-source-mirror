@@ -57,7 +57,7 @@ void DrawLibraryDrawStruct(WinEDA_DrawPanel * aPanel, wxDC * aDC,
                           LibEDA_BaseStruct *aDrawItem,
                           int aDrawMode, int aColor = -1);
 
-bool MapAngles(int *Angle1, int *Angle2, int TransMat[2][2]);
+bool MapAngles(int *Angle1, int *Angle2, const int TransMat[2][2]);
 
 EDA_LibComponentStruct * Read_Component_Definition(WinEDA_DrawFrame * frame, char * Line,
         FILE *f, int *LineNum);
@@ -69,7 +69,7 @@ EDA_LibComponentStruct * Read_Component_Definition(WinEDA_DrawFrame * frame, cha
  * @param aPosition = the position to transform
  * @return the new coordinate
  */
-wxPoint     TransformCoordinate( int aTransformMatrix[2][2], wxPoint & aPosition );
+wxPoint     TransformCoordinate( const int aTransformMatrix[2][2], const wxPoint & aPosition );
 
 LibraryStruct *FindLibrary(const wxString & Name);
 int LoadDocLib(WinEDA_DrawFrame * frame, const wxString & FullDocLibName, const wxString & Libname);

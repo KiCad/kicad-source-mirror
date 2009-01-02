@@ -249,16 +249,12 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                 layer = LAYER_BUS;
 
             PolylineStruct = new DrawPolylineStruct( layer );
-
-            PolylineStruct->m_NumOfPoints = ii;
-            PolylineStruct->m_Points = (int*) MyZMalloc( sizeof(int) * 2 *
-                PolylineStruct->m_NumOfPoints );
-            for( ii = 0; ii < PolylineStruct->m_NumOfPoints; ii++ )
+            for( unsigned jj = 0; jj < (unsigned)ii; jj++ )
             {
                 LineCount++;
+                wxPoint point;
                 if( fgets( Line, 256 - 1, f ) == NULL
-                    || sscanf( Line, "%d %d", &PolylineStruct->m_Points[ii * 2],
-                        &PolylineStruct->m_Points[ii * 2 + 1] ) != 2 )
+                    || sscanf( Line, "%d %d", &point.x, &point.y ) != 2 )
                 {
                     MsgDiag.Printf(
                         wxT( "EESchema file polyline struct error at line %d, aborted" ),
@@ -268,6 +264,8 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
                     SAFE_DELETE( PolylineStruct );
                     break;
                 }
+
+                PolylineStruct->AddPoint( point );
             }
 
             if( !Failed )

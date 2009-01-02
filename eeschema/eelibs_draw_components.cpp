@@ -34,7 +34,7 @@ static void DrawLibPartAux( WinEDA_DrawPanel * panel, wxDC * DC,
                             SCH_COMPONENT * Component,
                             EDA_LibComponentStruct * Entry,
                             const wxPoint &Pos,
-                            int TransMat[2][2],
+                            const int TransMat[2][2],
                             int Multi, int convert,
                             int DrawMode, int Color = -1, bool DrawPinText = TRUE );
 
@@ -42,7 +42,7 @@ static void DrawLibPartAux( WinEDA_DrawPanel * panel, wxDC * DC,
 static EDA_LibComponentStruct* DummyCmp;
 
 /***************************************************************************/
-wxPoint TransformCoordinate( int aTransformMatrix[2][2], wxPoint& aPosition )
+wxPoint TransformCoordinate( const int aTransformMatrix[2][2], const wxPoint& aPosition )
 /***************************************************************************/
 
 /** Function TransformCoordinate
@@ -102,17 +102,13 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
  */
 {
     int           color;
-    int           TransMat[2][2];
     wxString      Prefix;
     LibDrawField* Field;
     wxPoint       text_pos;
 
-    /* Orientation normale */
-    TransMat[0][0] = 1; TransMat[1][1] = -1;
-    TransMat[1][0] = TransMat[0][1] = 0;
 
     DrawLibPartAux( panel, DC, NULL, LibEntry, aOffset,
-        TransMat, Multi,
+        DefaultTransformMatrix, Multi,
         convert, DrawMode, Color );
 
     /* Trace des 2 champs ref et value (Attention aux coord: la matrice
@@ -139,7 +135,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
         Prefix = LibEntry->m_Prefix.m_Text + wxT( "?" );
 
     if( (LibEntry->m_Prefix.m_Flags & IS_MOVED) == 0 )
-        LibEntry->m_Prefix.Draw( panel, DC, aOffset, color, DrawMode, &Prefix, TransMat );
+        LibEntry->m_Prefix.Draw( panel, DC, aOffset, color, DrawMode, &Prefix, DefaultTransformMatrix );
 
     if( LibEntry->m_Name.m_Attributs & TEXT_NO_VISIBLE )
     {
@@ -151,7 +147,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
     else color = Color;
 
     if( (LibEntry->m_Name.m_Flags & IS_MOVED) == 0 )
-       LibEntry->m_Name.Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
+       LibEntry->m_Name.Draw( panel, DC, aOffset, color, DrawMode, NULL, DefaultTransformMatrix );
 
     for( Field = LibEntry->m_Fields; Field != NULL; Field = Field->Next() )
     {
@@ -167,7 +163,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
                 color = g_InvisibleItemColor;
         }
         else color = Color;
-        Field->Draw( panel, DC, aOffset, color, DrawMode, NULL, TransMat );
+        Field->Draw( panel, DC, aOffset, color, DrawMode, NULL, DefaultTransformMatrix );
     }
 
     // Trace de l'ancre
@@ -446,7 +442,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                      SCH_COMPONENT* Component,
                      EDA_LibComponentStruct* Entry,
                      const wxPoint& Pos,
-                     int TransMat[2][2],
+                     const int TransMat[2][2],
                      int Multi, int convert, int DrawMode,
                      int Color, bool DrawPinText )
 {
@@ -534,7 +530,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
 * transform (only mirror and rotate so it remains on the unit circle) to	 *
 * a new point which is used to detect new angle.							 *
 *****************************************************************************/
-bool MapAngles( int* Angle1, int* Angle2, int TransMat[2][2] )
+bool MapAngles( int* Angle1, int* Angle2, const int TransMat[2][2] )
 {
     int    Angle, Delta;
     double x, y, t;
