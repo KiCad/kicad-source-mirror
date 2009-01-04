@@ -1,12 +1,6 @@
 /******************************************/
 /* drawpanel.cpp - WinEDA_DrawPanel class */
 /******************************************/
-
-
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 
@@ -580,10 +574,14 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 }
 
 
-//#define USE_GCDC_IN_KICAD
-#ifdef USE_GCDC_IN_KICAD
-#include <wx/dcgraph.h>
+#if wxUSE_GRAPHICS_CONTEXT
+// note: wxUSE_GRAPHICS_CONTEXT must be set to 1 in wxWidgets
+// see setup.h in wx Widgets.
+// wxWidgets configure can need option  --enable-graphics_ctx
+// Currently, **only for tests**
+//#define USE_GCDC_IN_KICAD     // uncommment it to use wxGCDC
 #endif
+
 /***************************************************/
 void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 /***************************************************/

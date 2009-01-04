@@ -55,7 +55,7 @@ void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
  ****************************************************************************/
 void ReAnnotatePowerSymbolsOnly( void )
 {
-    /* Build the screen list (screen, not sheet) */
+    /* Build the sheet list (sheet, not screen) */
     EDA_SheetList  SheetList( NULL );
 
     DrawSheetPath* sheet;

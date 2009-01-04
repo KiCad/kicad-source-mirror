@@ -89,7 +89,7 @@ private:
 
 public:
     WinEDA_HierFrame( WinEDA_SchematicFrame* parent, wxDC* DC, const wxPoint& pos );
-    void BuildSheetList( DrawSheetPath* list, wxTreeItemId* previousmenu );
+    void BuildSheetsTree( DrawSheetPath* list, wxTreeItemId* previousmenu );
 
     ~WinEDA_HierFrame();
 
@@ -150,7 +150,7 @@ WinEDA_HierFrame::WinEDA_HierFrame( WinEDA_SchematicFrame* parent, wxDC* DC,
         m_Tree->SelectItem( cellule ); //root.
 
     maxposx = 15;
-    BuildSheetList( &list, &cellule );
+    BuildSheetsTree( &list, &cellule );
 
     if( m_nbsheets > 1 )
     {
@@ -180,7 +180,7 @@ void WinEDA_HierFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
 
 
 /********************************************************************/
-void WinEDA_HierFrame::BuildSheetList( DrawSheetPath* list,
+void WinEDA_HierFrame::BuildSheetsTree( DrawSheetPath* list,
                                        wxTreeItemId*  previousmenu )
 /********************************************************************/
 
@@ -196,7 +196,7 @@ void WinEDA_HierFrame::BuildSheetList( DrawSheetPath* list,
         if( m_nbsheets == (NB_MAX_SHEET + 1) )
         {
             wxString msg;
-            msg << wxT( "BuildSheetList: Error: nbsheets > " ) << NB_MAX_SHEET;
+            msg << wxT( "BuildSheetsTree: Error: nbsheets > " ) << NB_MAX_SHEET;
             DisplayError( this, msg );
             m_nbsheets++;
         }
@@ -229,7 +229,7 @@ void WinEDA_HierFrame::BuildSheetList( DrawSheetPath* list,
                 m_Tree->EnsureVisible( menu );
                 m_Tree->SelectItem( menu );
             }
-            BuildSheetList( list, &menu );
+            BuildSheetsTree( list, &menu );
             m_Tree->Expand( menu );
             list->Pop();
         }

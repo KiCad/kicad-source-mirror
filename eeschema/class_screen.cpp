@@ -107,8 +107,8 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
     for( i = 0; i < SCHEMATIC_GRID_LIST_CNT; i++ )
         AddGrid( SchematicGridList[i] );
 
-    SetGrid( wxSize( 50, 50 ) );        /* pas de la grille */
-    m_UndoRedoCountMax = 10;
+    SetGrid( wxSize( 50, 50 ) );        /* usual grid size */
+    m_UndoRedoCountMax = 10;            // Undo/redo levels count. 10 is a reasonnable value
     m_RefCount = 0;
     m_Center = false;                   // Suitable for schematic only. for libedit and viewlib, must be set to true
     InitDatas();
@@ -286,77 +286,3 @@ void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
     }
 }
 
-
-/*********************************************************************/
-/* Class EDA_SheetList to handle the list of Sheets in a hierarchy */
-/*********************************************************************/
-
-/*****************************************/
-DrawSheetPath* EDA_SheetList::GetFirst()
-/*****************************************/
-{
-    m_index = 0;
-    if( m_count > 0 )
-        return &( m_List[0] );
-    return NULL;
-}
-
-
-/*****************************************/
-DrawSheetPath* EDA_SheetList::GetNext()
-/*****************************************/
-{
-    if( m_index < m_count )
-        m_index++;
-    return GetSheet( m_index );
-}
-
-
-/************************************************/
-DrawSheetPath* EDA_SheetList::GetSheet( int index )
-/************************************************/
-
-/* return the m_List[index] item
- */
-{
-    if( index < m_count )
-        return &(m_List[index]);
-    return NULL;
-}
-
-
-/************************************************************************/
-void EDA_SheetList::BuildSheetList( DrawSheetStruct* sheet )
-/************************************************************************/
-{
-    if( m_List == NULL )
-    {
-        int count = sheet->CountSheets();
-        m_count = count;
-        m_index = 0;
-        if( m_List )
-            free( m_List );
-        m_List = NULL;
-        count *= sizeof(DrawSheetPath);
-        m_List = (DrawSheetPath*) MyZMalloc( count );
-        memset( (void*) m_List, 0, count );
-        m_currList.Clear();
-    }
-    m_currList.Push( sheet );
-    m_List[m_index] = m_currList;
-    m_index++;
-    if( sheet->m_AssociatedScreen != NULL )
-    {
-        EDA_BaseStruct* strct = m_currList.LastDrawList();
-        while( strct )
-        {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
-            {
-                DrawSheetStruct* sht = (DrawSheetStruct*) strct;
-                BuildSheetList( sht );
-            }
-            strct = strct->Next();
-        }
-    }
-    m_currList.Pop();
-}

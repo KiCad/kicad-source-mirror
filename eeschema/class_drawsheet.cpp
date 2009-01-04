@@ -37,10 +37,10 @@ DrawSheetStruct::DrawSheetStruct( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
 /***********************************************************/
 {
-    m_Label   = NULL;
-    m_NbLabel = 0;
-    m_Layer   = LAYER_SHEET;
-    m_Pos = pos;
+    m_Label            = NULL;
+    m_NbLabel          = 0;
+    m_Layer            = LAYER_SHEET;
+    m_Pos              = pos;
     m_TimeStamp        = GetTimeStamp();
     m_SheetNameSize    = m_FileNameSize = 60;
     m_AssociatedScreen = NULL;
@@ -74,28 +74,30 @@ DrawSheetStruct::~DrawSheetStruct()
 
 
 /**********************************************/
-bool DrawSheetStruct::Save( FILE* f ) const
+bool DrawSheetStruct::Save( FILE* aFile ) const
 /***********************************************/
 
-/* Routine utilisee dans la routine precedente.
- * Assure la sauvegarde de la structure LibItemStruct
+/** Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
  */
 {
     bool Success = true;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
 
-    fprintf( f, "$Sheet\n" );
+    fprintf( aFile, "$Sheet\n" );
 
-    if( fprintf( f, "S %-4d %-4d %-4d %-4d\n",
-            m_Pos.x, m_Pos.y,
-            m_Size.x, m_Size.y ) == EOF )
+    if( fprintf( aFile, "S %-4d %-4d %-4d %-4d\n",
+                 m_Pos.x, m_Pos.y,
+                 m_Size.x, m_Size.y ) == EOF )
     {
         Success = false;
         return Success;
     }
 
     //save the unique timestamp, like other shematic parts.
-    if( fprintf( f, "U %8.8lX\n", m_TimeStamp )  == EOF )
+    if( fprintf( aFile, "U %8.8lX\n", m_TimeStamp )  == EOF )
     {
         Success = false; return Success;
     }
@@ -103,7 +105,7 @@ bool DrawSheetStruct::Save( FILE* f ) const
     /* Generation de la liste des 2 textes (sheetname et filename) */
     if( !m_SheetName.IsEmpty() )
     {
-        if( fprintf( f, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ),
+        if( fprintf( aFile, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ),
                      m_SheetNameSize ) == EOF )
         {
             Success = false; return Success;
@@ -112,7 +114,7 @@ bool DrawSheetStruct::Save( FILE* f ) const
 
     if( !m_FileName.IsEmpty() )
     {
-        if( fprintf( f, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ),
+        if( fprintf( aFile, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ),
                      m_FileNameSize ) == EOF )
         {
             Success = false; return Success;
@@ -125,12 +127,12 @@ bool DrawSheetStruct::Save( FILE* f ) const
     while( SheetLabel != NULL )
     {
         SheetLabel->m_Number = l_id;
-        SheetLabel->Save( f );
+        SheetLabel->Save( aFile );
         l_id++;
         SheetLabel = SheetLabel->Next();
     }
 
-    fprintf( f, "$EndSheet\n" );
+    fprintf( aFile, "$EndSheet\n" );
     return Success;
 }
 
@@ -146,7 +148,7 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
     DrawSheetStruct* newitem = new DrawSheetStruct( m_Pos );
 
 
-    newitem->m_Size      = m_Size;
+    newitem->m_Size = m_Size;
     newitem->SetParent( m_Parent );
     newitem->m_TimeStamp = GetTimeStamp();
 
@@ -242,8 +244,10 @@ void DrawSheetStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw )
 /********************************************************************/
 
-/* Delete pinsheets which are not corresponding to a hierarchal label
- *  if aRedraw != NULL, redraw Sheet
+/** Function CleanupSheet
+ * Delete pinsheets which are not corresponding to a hierarchal label
+ * @param aRedraw = true to redraw Sheet
+ * @param aFrame = the schematic frame
  */
 {
     Hierarchical_PIN_Sheet_Struct* Pinsheet, * NextPinsheet;
@@ -257,7 +261,7 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw 
         /* Search Hlabel corresponding to this Pinsheet */
 
         EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
-        SCH_HIERLABEL*  HLabel = NULL;
+        SCH_HIERLABEL*  HLabel     = NULL;
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
@@ -279,58 +283,65 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw 
         Pinsheet = NextPinsheet;
     }
 
-        if( aRedraw )
-            aFrame->DrawPanel->PostDirtyRect( GetBoundingBox() );
-
+    if( aRedraw )
+        aFrame->DrawPanel->PostDirtyRect( GetBoundingBox() );
 }
 
 
 /**************************************************************************************/
-void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                            const wxPoint& offset,
-                            int DrawMode, int Color )
+void DrawSheetStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                            const wxPoint& aOffset,
+                            int aDrawMode, int aColor )
 /**************************************************************************************/
-/* Draw the hierarchical sheet shape */
+
+/** Function Draw
+ *  Draw the hierarchical sheet shape
+ *  @param aPanel = the current DrawPanel
+ *  @param aDc = the current Device Context
+ *  @param aOffset = draw offset (usually wxPoint(0,0))
+ *  @param aDrawMode = draw mode
+ *  @param aColor = color used to draw sheet. Usually -1 to use the normal color for sheet items
+ */
 {
     Hierarchical_PIN_Sheet_Struct* SheetLabelStruct;
     int      txtcolor;
     wxString Text;
     int      color;
-    wxPoint  pos = m_Pos + offset;
+    wxPoint  pos = m_Pos + aOffset;
     int      LineWidth = g_DrawMinimunLineWidth;
 
-    if( Color >= 0 )
-        color = Color;
+    if( aColor >= 0 )
+        color = aColor;
     else
         color = ReturnLayerColor( m_Layer );
-    GRSetDrawMode( DC, DrawMode );
+    GRSetDrawMode( aDC, aDrawMode );
 
-    GRRect( &panel->m_ClipBox, DC, pos.x, pos.y,
-        pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
+    GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
+            pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
 
     /* Draw text : SheetName */
-    if( Color > 0 )
-        txtcolor = Color;
+    if( aColor > 0 )
+        txtcolor = aColor;
     else
         txtcolor = ReturnLayerColor( LAYER_SHEETNAME );
 
     Text = wxT( "Sheet: " ) + m_SheetName;
-    DrawGraphicText( panel, DC,
-        wxPoint( pos.x, pos.y - 8 ), (EDA_Colors) txtcolor,
-        Text, TEXT_ORIENT_HORIZ, wxSize( m_SheetNameSize, m_SheetNameSize ),
-        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+    DrawGraphicText( aPanel, aDC,
+                     wxPoint( pos.x, pos.y - 8 ), (EDA_Colors) txtcolor,
+                     Text, TEXT_ORIENT_HORIZ, wxSize( m_SheetNameSize, m_SheetNameSize ),
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
 
     /* Draw text : FileName */
-    if( Color >= 0 )
-        txtcolor = Color;
+    if( aColor >= 0 )
+        txtcolor = aColor;
     else
         txtcolor = ReturnLayerColor( LAYER_SHEETFILENAME );
     Text = wxT( "File: " ) + m_FileName;
-    DrawGraphicText( panel, DC,
-        wxPoint( pos.x, pos.y + m_Size.y + 4 ),
-        (EDA_Colors) txtcolor,
-        Text, TEXT_ORIENT_HORIZ, wxSize( m_FileNameSize, m_FileNameSize ),
-        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth );
+    DrawGraphicText( aPanel, aDC,
+                     wxPoint( pos.x, pos.y + m_Size.y + 4 ),
+                     (EDA_Colors) txtcolor,
+                     Text, TEXT_ORIENT_HORIZ, wxSize( m_FileNameSize, m_FileNameSize ),
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth );
 
 
     /* Draw text : SheetLabel */
@@ -338,7 +349,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     while( SheetLabelStruct != NULL )
     {
         if( !( SheetLabelStruct->m_Flags & IS_MOVED ) )
-            SheetLabelStruct->Draw( panel, DC, offset, DrawMode, Color );
+            SheetLabelStruct->Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
         SheetLabelStruct = SheetLabelStruct->Next();
     }
 }
@@ -347,6 +358,10 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 /*****************************************/
 EDA_Rect DrawSheetStruct::GetBoundingBox()
 /*****************************************/
+
+/** Function GetBoundingBox
+ *  @return an EDA_Rect giving the bouding box of the sheet
+ */
 {
     int      dx, dy;
 
@@ -365,12 +380,15 @@ EDA_Rect DrawSheetStruct::GetBoundingBox()
 }
 
 
-
-/*******************************************************************/
+/************************************/
 int DrawSheetStruct::ComponentCount()
-/*******************************************************************/
+/************************************/
+
+/** Function ComponentCount
+ *  count our own components, without the power components.
+ *  @return the copponent count.
+ */
 {
-    //count our own components, without the power components.
     int n = 0;
 
     if( m_AssociatedScreen )
@@ -381,7 +399,7 @@ int DrawSheetStruct::ComponentCount()
             if( bs->Type() == TYPE_SCH_COMPONENT )
             {
                 SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
-                if( Cmp->GetField(VALUE)->m_Text.GetChar( 0 ) != '#' )
+                if( Cmp->GetField( VALUE )->m_Text.GetChar( 0 ) != '#' )
                     n++;
             }
             if( bs->Type() == DRAW_SHEET_STRUCT_TYPE )
@@ -396,10 +414,16 @@ int DrawSheetStruct::ComponentCount()
 
 
 /*******************************************************************************/
-bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
+bool DrawSheetStruct::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
 /*******************************************************************************/
+
+/** Function SearchHierarchy
+ *  search the existing hierarchy for an instance of screen "FileName".
+ *  @param aFilename = the filename to find
+ *  @param aFilename = a location to return a pointer to the screen (if found)
+ *  @return bool if found, and a pointer to the screen
+ */
 {
-    //search the existing hierarchy for an instance of screen "FileName".
     if( m_AssociatedScreen )
     {
         EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
@@ -409,12 +433,12 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
             {
                 DrawSheetStruct* ss = (DrawSheetStruct*) strct;
                 if( ss->m_AssociatedScreen
-                    && ss->m_AssociatedScreen->m_FileName.CmpNoCase( filename ) == 0 )
+                    && ss->m_AssociatedScreen->m_FileName.CmpNoCase( aFilename ) == 0 )
                 {
-                    *screen = ss->m_AssociatedScreen;
+                    *aScreen = ss->m_AssociatedScreen;
                     return true;
                 }
-                if( ss->SearchHierarchy( filename, screen ) )
+                if( ss->SearchHierarchy( aFilename, aScreen ) )
                     return true;
             }
             strct = strct->Next();
@@ -425,19 +449,24 @@ bool DrawSheetStruct::SearchHierarchy( wxString filename, SCH_SCREEN** screen )
 
 
 /*******************************************************************************/
-bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen,
-                                          DrawSheetPath* list )
+bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN*    aScreen,
+                                          DrawSheetPath* aList )
 /*******************************************************************************/
+
+/** Function LocatePathOfScreen
+ *  search the existing hierarchy for an instance of screen "FileName".
+ *  don't bother looking at the root sheet - it must be unique,
+ *  no other references to its m_AssociatedScreen otherwise there would be loops
+ *  in the hierarchy.
+ *  @param  aScreen = the SCH_SCREEN* screen that we search for
+ *  @param aList = the DrawSheetPath*  that must be used
+ *  @return true if found
+ */
 {
-    //search the existing hierarchy for an instance of screen "FileName".
-    //don't bother looking at the root sheet - it must be unique,
-    //no other references to its m_AssociatedScreen otherwise there would be loops
-    //in the hierarchy.
-    //search the existing hierarchy for an instance of screen "FileName".
     if( m_AssociatedScreen )
     {
-        list->Push( this );
-        if( m_AssociatedScreen == screen )
+        aList->Push( this );
+        if( m_AssociatedScreen == aScreen )
             return true;
         EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
         while( strct )
@@ -445,21 +474,30 @@ bool DrawSheetStruct::LocatePathOfScreen( SCH_SCREEN* screen,
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
                 DrawSheetStruct* ss = (DrawSheetStruct*) strct;
-                if( ss->LocatePathOfScreen( screen, list ) )
+                if( ss->LocatePathOfScreen( aScreen, aList ) )
                     return true;
             }
             strct = strct->Next();
         }
 
-        list->Pop();
+        aList->Pop();
     }
     return false;
 }
 
 
-/*******************************************************************************/
-bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
-/*******************************************************************************/
+/**********************************************************/
+bool DrawSheetStruct::Load( WinEDA_SchematicFrame* aFrame )
+/***********************************************************/
+
+/** Function Load.
+ *  for the sheet: load the file m_FileName
+ *  if a screen already exists, the file is already read.
+ *  m_AssociatedScreen point on the screen, and its m_RefCount is incremented
+ *  else creates a new associated screen and load the data file.
+ *  @param aFrame = a WinEDA_SchematicFrame pointer to the maim schematic frame
+ *  @return true if OK
+ */
 {
     bool success = true;
 
@@ -478,7 +516,7 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
         {
             m_AssociatedScreen = new SCH_SCREEN();
             m_AssociatedScreen->m_RefCount++;
-            success = frame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
+            success = aFrame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
             if( success )
             {
                 EDA_BaseStruct* bs = m_AssociatedScreen->EEDrawList;
@@ -487,7 +525,7 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* frame )
                     if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
                     {
                         DrawSheetStruct* sheetstruct = (DrawSheetStruct*) bs;
-                        if( !sheetstruct->Load( frame ) )
+                        if( !sheetstruct->Load( aFrame ) )
                             success = false;
                     }
                     bs = bs->Next();
@@ -529,23 +567,18 @@ wxString DrawSheetStruct::GetFileName( void )
 }
 
 
-/************************************************************/
-void DrawSheetStruct::SetFileName( const wxString& aFilename )
-/************************************************************/
-{
-    m_FileName = aFilename;
-}
-
-
+/************************************************************************/
+bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
+                                      const wxString&        aFileName )
+/************************************************************************/
 /** Function ChangeFileName
  * Set a new filename and manage data and associated screen
  * The main difficulty is the filename change in a complex hierarchy.
  * - if new filename is not already used: change to the new name (and if an existing file is found, load it on request)
  * - if new filename is already used (a complex hierarchy) : reference the sheet.
+ * @param aFileName = the new filename
+ * @param aFrame = the schematic frame
  */
-
-bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
-                                      const wxString& aFileName )
 {
     if( (GetFileName() == aFileName) && m_AssociatedScreen )
         return true;
@@ -560,8 +593,8 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
         if( m_AssociatedScreen )                                    //upon initial load, this will be null.
         {
             msg.Printf( _(
-                    "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
-                aFileName.GetData() );
+                           "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?" ),
+                       aFileName.GetData() );
             if( !IsOK( NULL, msg ) )
             {
                 DisplayInfo( NULL, _( "Sheet Filename Renaming Aborted" ) );
@@ -572,14 +605,14 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
     else if( wxFileExists( aFileName ) )         //do we reload the data from an existing file
     {
         msg.Printf( _(
-                "A file named %s exists, load it (otherwise keep current sheet data if possible)?" ),
-            aFileName.GetData() );
+                       "A file named %s exists, load it (otherwise keep current sheet data if possible)?" ),
+                   aFileName.GetData() );
         if( IsOK( NULL, msg ) )
         {
             LoadFromFile = true;
-            if ( m_AssociatedScreen )   // Can be NULL if loading a file when creating a new sheet
+            if( m_AssociatedScreen )                                // Can be NULL if loading a file when creating a new sheet
             {
-                m_AssociatedScreen->m_RefCount--;                 //be careful with these
+                m_AssociatedScreen->m_RefCount--;                   //be careful with these
                 if( m_AssociatedScreen->m_RefCount == 0 )
                     SAFE_DELETE( m_AssociatedScreen );
                 m_AssociatedScreen = NULL;         //will be created later
@@ -646,197 +679,19 @@ void DrawSheetStruct::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-        << " sheet_name=\"" << CONV_TO_UTF8( m_SheetName) << '"'
-        << ">\n";
+                                 << " sheet_name=\"" << CONV_TO_UTF8( m_SheetName ) << '"'
+                                 << ">\n";
 
     // show all the pins, and check the linked list integrity
     Hierarchical_PIN_Sheet_Struct* label;
-    for( label = m_Label;   label;   label=label->Next() )
+    for( label = m_Label;   label;   label = label->Next() )
     {
-        label->Show( nestLevel+1, os );
+        label->Show( nestLevel + 1, os );
     }
 
     NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n"
-        << std::flush;
+                                 << std::flush;
 }
+
+
 #endif
-
-
-/**********************************************/
-/* class to handle a series of sheets *********/
-/* a 'path' so to speak.. *********************/
-/**********************************************/
-DrawSheetPath::DrawSheetPath()
-{
-    for( int i = 0; i<DSLSZ; i++ )
-        m_sheets[i] = NULL;
-
-    m_numSheets = 0;
-}
-
-
-int DrawSheetPath::Cmp( const DrawSheetPath& d ) const
-{
-    if( m_numSheets > d.m_numSheets )
-        return 1;
-    if( m_numSheets < d.m_numSheets )
-        return -1;
-
-    //otherwise, same number of sheets.
-    for( int i = 0; i<m_numSheets; i++ )
-    {
-        if( m_sheets[i]->m_TimeStamp > d.m_sheets[i]->m_TimeStamp )
-            return 1;
-        if( m_sheets[i]->m_TimeStamp < d.m_sheets[i]->m_TimeStamp )
-            return -1;
-    }
-
-    return 0;
-}
-
-
-DrawSheetStruct* DrawSheetPath::Last()
-{
-    if( m_numSheets )
-        return m_sheets[m_numSheets - 1];
-    return NULL;
-}
-
-
-SCH_SCREEN* DrawSheetPath::LastScreen()
-{
-    if( m_numSheets )
-        return m_sheets[m_numSheets - 1]->m_AssociatedScreen;
-    return NULL;
-}
-
-
-EDA_BaseStruct* DrawSheetPath::LastDrawList()
-{
-    if( m_numSheets && m_sheets[m_numSheets - 1]->m_AssociatedScreen )
-        return m_sheets[m_numSheets - 1]->m_AssociatedScreen->EEDrawList;
-    return NULL;
-}
-
-
-void DrawSheetPath::Push( DrawSheetStruct* sheet )
-{
-    wxASSERT( m_numSheets <= DSLSZ );
-    if( m_numSheets < DSLSZ )
-    {
-        m_sheets[m_numSheets] = sheet;
-        m_numSheets++;
-    }
-}
-
-
-DrawSheetStruct* DrawSheetPath::Pop()
-{
-    if( m_numSheets > 0 )
-    {
-        m_numSheets--;
-        return m_sheets[m_numSheets];
-    }
-    return NULL;
-}
-
-
-wxString DrawSheetPath::Path()
-{
-    wxString s, t;
-
-    s = wxT( "/" );
-
-    //start at 1 to avoid the root sheet,
-    //which does not need to be added to the path
-    //it's timestamp changes anyway.
-    for( int i = 1; i< m_numSheets; i++ )
-    {
-        t.Printf( _( "%8.8lX/" ), m_sheets[i]->m_TimeStamp );
-        s = s + t;
-    }
-
-    return s;
-}
-
-
-wxString DrawSheetPath::PathHumanReadable()
-{
-    wxString s, t;
-
-    s = wxT( "/" );
-
-    //start at 1 to avoid the root sheet, as above.
-    for( int i = 1; i< m_numSheets; i++ )
-    {
-        s = s + m_sheets[i]->m_SheetName + wxT( "/" );
-    }
-
-    return s;
-}
-
-
-/***********************************************/
-void DrawSheetPath::UpdateAllScreenReferences()
-/***********************************************/
-{
-    EDA_BaseStruct* t = LastDrawList();
-
-    while( t )
-    {
-        if( t->Type() == TYPE_SCH_COMPONENT )
-        {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) t;
-            component->GetField(REFERENCE)->m_Text = component->GetRef( this );
-            component->m_Multi = component->GetUnitSelection( this );
-        }
-        t = t->Next();
-    }
-}
-
-
-bool DrawSheetPath::operator=( const DrawSheetPath& d1 )
-{
-    m_numSheets = d1.m_numSheets;
-    int i;
-    for( i = 0; i<m_numSheets; i++ )
-    {
-        m_sheets[i] = d1.m_sheets[i];
-    }
-
-    for( ; i<DSLSZ; i++ )
-    {
-        m_sheets[i] = 0;
-    }
-
-    return true;
-}
-
-
-bool DrawSheetPath::operator==( const DrawSheetPath& d1 )
-{
-    if( m_numSheets != d1.m_numSheets )
-        return false;
-    for( int i = 0; i<m_numSheets; i++ )
-    {
-        if( m_sheets[i] != d1.m_sheets[i] )
-            return false;
-    }
-
-    return true;
-}
-
-
-bool DrawSheetPath::operator!=( const DrawSheetPath& d1 )
-{
-    if( m_numSheets != d1.m_numSheets )
-        return true;
-    for( int i = 0; i<m_numSheets; i++ )
-    {
-        if( m_sheets[i] != d1.m_sheets[i] )
-            return true;
-    }
-
-    return false;
-}
-

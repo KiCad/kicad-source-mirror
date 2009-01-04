@@ -62,6 +62,7 @@ endif
 SYSWXLIB = `$(WXWIN)/wx-config --libs gl`\
 	-lwxpng-$(LIBVERSION) -lwxjpeg-$(LIBVERSION) -lwxzlib-$(LIBVERSION) $(PYLIBS)
 
+
 CC = gcc
 
 .cpp.o:

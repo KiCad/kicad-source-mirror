@@ -17,6 +17,7 @@
 #include "component_class.h"
 #include "class_screen.h"
 #include "class_drawsheet.h"
+#include "class_drawsheetpath.h"
 #include "class_text-label.h"
 #include "class_schematic_items.h"
 

@@ -25,6 +25,7 @@ OBJECTS = eeschema.o\
 	class_sch_cmp_field.o\
 	classes_body_items.o\
 	class_drawsheet.o\
+	class_drawsheetpath.o\
 	class_pin.o\
 	class_hierarchical_PIN_sheet.o\
 	class_text-label.o\
