@@ -188,7 +188,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
         aMessageWindow->AppendText( msg );
 
     aFrame->GetScreen()->SetModify();
-    aFrame->m_Pcb->m_Status_Pcb = 0; State = 0; LineNum = 0; Comment = 0;
+    aFrame->GetBoard()->m_Status_Pcb = 0; State = 0; LineNum = 0; Comment = 0;
     s_NbNewModules = 0;
 
     wxBusyCursor dummy;     // Shows an hourglass while calculating
@@ -323,7 +323,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
         if( NbModulesNetListe  )
         {
             MODULE * NextModule;
-            Module = aFrame->m_Pcb->m_Modules;
+            Module = aFrame->GetBoard()->m_Modules;
             bool ask_for_confirmation = true;
             for( ; Module != NULL; Module = NextModule )
             {
@@ -357,7 +357,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     /* Rebuild the connectivity */
     aFrame->Compile_Ratsnest( NULL, TRUE );
 
-    if( aFrame->m_Pcb->m_Track )
+    if( aFrame->GetBoard()->m_Track )
     {
         if( aDeleteBadTracks )    // Remove erroneous tracks
         {
@@ -367,7 +367,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     }
 
     aFrame->DrawPanel->Refresh();
-    aFrame->m_Pcb->Display_Infos( aFrame );
+    aFrame->GetBoard()->Display_Infos( aFrame );
 }
 
 
@@ -442,7 +442,7 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
     LocalTimeStamp.ToULong( &TimeStamp, 16 );
 
     /* Tst si composant deja charge */
-    Module = aFrame->m_Pcb->m_Modules;
+    Module = aFrame->GetBoard()->m_Modules;
     MODULE* NextModule;
     for( Found = FALSE; Module != NULL; Module = NextModule )
     {
@@ -631,18 +631,18 @@ MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
     WinEDAListBox* ListBox;
     const wxChar** ListNames = NULL;
 
-    if( m_Pcb->m_Modules == NULL )
+    if( GetBoard()->m_Modules == NULL )
     {
         DisplayError( this, _( "No Modules" ) ); return 0;
     }
 
     /* Calcul du nombre des modules */
-    nb_empr = 0; Module = (MODULE*) m_Pcb->m_Modules;
+    nb_empr = 0; Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         nb_empr++;
 
     ListNames = (const wxChar**) MyZMalloc( (nb_empr + 1) * sizeof(wxChar*) );
-    Module    = (MODULE*) m_Pcb->m_Modules;
+    Module    = (MODULE*) GetBoard()->m_Modules;
     for( ii = 0; Module != NULL; Module = (MODULE*) Module->Next(), ii++ )
     {
         ListNames[ii] = Module->m_Reference->m_Text.GetData();
@@ -659,7 +659,7 @@ MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
     }
     else /* Recherche du module selectionne */
     {
-        Module = (MODULE*) m_Pcb->m_Modules;
+        Module = (MODULE*) GetBoard()->m_Modules;
         for( jj = 0; Module != NULL; Module = (MODULE*) Module->Next(), jj++ )
         {
             if( Module->m_Reference->m_Text.Cmp( ListNames[ii] ) == 0 )
@@ -1015,9 +1015,9 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
     // Calculate the footprint "best" position:
     if( aPcbFrame->SetBoardBoundaryBoxFromEdgesOnly() )
     {
-        aPcbFrame->GetScreen()->m_Curseur.x = aPcbFrame->m_Pcb->m_BoundaryBox.GetRight() +
+        aPcbFrame->GetScreen()->m_Curseur.x = aPcbFrame->GetBoard()->m_BoundaryBox.GetRight() +
                                                   5000;
-        aPcbFrame->GetScreen()->m_Curseur.y = aPcbFrame->m_Pcb->m_BoundaryBox.GetBottom() +
+        aPcbFrame->GetScreen()->m_Curseur.y = aPcbFrame->GetBoard()->m_BoundaryBox.GetBottom() +
                                                   10000;
     }
     else
@@ -1054,10 +1054,10 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
             if( Module == NULL )
                 continue; /* module non existant en libr */
 
-            newmodule = new MODULE( aPcbFrame->m_Pcb );
+            newmodule = new MODULE( aPcbFrame->GetBoard() );
             newmodule->Copy( Module );
 
-            aPcbFrame->m_Pcb->Add( newmodule, ADD_APPEND );
+            aPcbFrame->GetBoard()->Add( newmodule, ADD_APPEND );
 
             Module = newmodule;
             Module->m_Reference->m_Text = cmp->m_CmpName;

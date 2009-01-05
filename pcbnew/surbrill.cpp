@@ -40,7 +40,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
 
     List = new WinEDA_TextFrame( this, _( "List Nets" ) );
 
-    Equipot = (EQUIPOT*) m_Pcb->m_Equipots;
+    Equipot = (EQUIPOT*) GetBoard()->m_Equipots;
     for( ; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
     {
         wxString Line;
@@ -61,7 +61,7 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
         return;
 
     /* Recherche du numero de net rellement selectionn�*/
-    Equipot = (EQUIPOT*) m_Pcb->m_Equipots;
+    Equipot = (EQUIPOT*) GetBoard()->m_Equipots;
     for( jj = 0; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
     {
         /* calcul adr relative du nom de la pastille reference de la piste */
@@ -108,7 +108,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
     // optionally, modify the "guide" here as needed using its member functions
 
 
-    m_Collector->Collect( m_Pcb, GENERAL_COLLECTOR::PadsTracksOrZones,
+    m_Collector->Collect( GetBoard(), GENERAL_COLLECTOR::PadsTracksOrZones,
                          GetScreen()->RefPos( true ), guide );
 
     BOARD_ITEM* item = (*m_Collector)[0];
@@ -175,7 +175,7 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
 
 #if 0   // does not unhighlight properly
     // redraw the zones with the NetCode
-    for( SEGZONE* zone = m_Pcb->m_Zone;   zone;   zone = zone->Next() )
+    for( SEGZONE* zone = GetBoard()->m_Zone;   zone;   zone = zone->Next() )
     {
         if( zone->GetNet() == NetCode )
         {
@@ -185,7 +185,7 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
 #endif
 
     // Redraw ZONE_CONTAINERS
-    BOARD::ZONE_CONTAINERS& zones = m_Pcb->m_ZoneDescriptorList;
+    BOARD::ZONE_CONTAINERS& zones = GetBoard()->m_ZoneDescriptorList;
     for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
     {
         if( (*zc)->GetNet() == NetCode )
@@ -195,13 +195,13 @@ void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
     }
 
     /* Redraw pads */
-    for( MODULE* module = m_Pcb->m_Modules;  module;   module = module->Next() )
+    for( MODULE* module = GetBoard()->m_Modules;  module;   module = module->Next() )
     {
         Pad_Surbrillance( DrawPanel, DC, module, NetCode );
     }
 
     /* Redraw track and vias: */
-    for( TRACK* pts = m_Pcb->m_Track;   pts;   pts = pts->Next() )
+    for( TRACK* pts = GetBoard()->m_Track;   pts;   pts = pts->Next() )
     {
         if( pts->GetNet() == NetCode )
         {

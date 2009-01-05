@@ -94,7 +94,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     /* Calcul du nombre de modules utiles ( Attribut CMS, non VIRTUAL ) ) */
     int moduleCount = 0;
 
-    for( module = m_Pcb->m_Modules;  module;  module = module->Next() )
+    for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
         if( module->m_Attributs & MOD_VIRTUAL )
         {
@@ -134,7 +134,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     fnFront = GetScreen()->m_FileName;
 
-    frontLayerName = m_Pcb->GetLayerName( CMP_N );
+    frontLayerName = GetBoard()->GetLayerName( CMP_N );
     extension.Printf( wxT("-%s.pos"), frontLayerName.GetData() );
 
     ChangeFileNameExt( fnFront, extension );
@@ -151,7 +151,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     {
         fnBack = GetScreen()->m_FileName;
 
-        backLayerName = m_Pcb->GetLayerName( COPPER_LAYER_N );
+        backLayerName = GetBoard()->GetLayerName( COPPER_LAYER_N );
         extension.Printf( wxT("-%s.pos"), backLayerName.GetData() );
 
         ChangeFileNameExt( fnBack, extension );
@@ -182,7 +182,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     /* Etablissement de la liste des modules par ordre alphabetique */
     Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );
 
-    module = m_Pcb->m_Modules;
+    module = GetBoard()->m_Modules;
     for( int ii = 0;  module;  module = module->Next() )
     {
         if( module->m_Attributs & MOD_VIRTUAL )
@@ -347,22 +347,22 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     fputs( "##\n", rptfile );
     fputs( "\n$BeginDESCRIPTION\n", rptfile );
 
-    m_Pcb->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundaryBox();
     fputs( "\n$BOARD\n", rptfile );
     fputs( "unit INCH\n", rptfile );
     sprintf( line, "upper_left_corner %9.6f %9.6f\n",
-             (float) m_Pcb->m_BoundaryBox.GetX() * conv_unit,
-             (float) m_Pcb->m_BoundaryBox.GetY() * conv_unit );
+             (float) GetBoard()->m_BoundaryBox.GetX() * conv_unit,
+             (float) GetBoard()->m_BoundaryBox.GetY() * conv_unit );
     fputs( line, rptfile );
 
     sprintf( line, "lower_right_corner %9.6f %9.6f\n",
-             (float) ( m_Pcb->m_BoundaryBox.GetRight() ) * conv_unit,
-             (float) ( m_Pcb->m_BoundaryBox.GetBottom() ) * conv_unit );
+             (float) ( GetBoard()->m_BoundaryBox.GetRight() ) * conv_unit,
+             (float) ( GetBoard()->m_BoundaryBox.GetBottom() ) * conv_unit );
     fputs( line, rptfile );
 
     fputs( "$EndBOARD\n\n", rptfile );
 
-    Module = (MODULE*) m_Pcb->m_Modules;
+    Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
         sprintf( line, "$MODULE \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
@@ -447,7 +447,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 
     /* Write board Edges */
     EDA_BaseStruct* PtStruct;
-    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( PtStruct = GetBoard()->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;

@@ -71,7 +71,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
     if( aTrackList->Type() == TYPE_VIA )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
-        Segm1 = Fast_Locate_Piste( frame->m_Pcb->m_Track, NULL,
+        Segm1 = Fast_Locate_Piste( frame->GetBoard()->m_Track, NULL,
                                    aTrackList->m_Start, masque_layer );
         if( Segm1 )
         {
@@ -91,19 +91,19 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
         if( Segm1 )
         {
             masque_layer = Segm1->ReturnMaskLayer();
-            Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_Start, masque_layer, &trackList );
+            Marque_Chaine_segments( frame->GetBoard(), aTrackList->m_Start, masque_layer, &trackList );
         }
         if( Segm2 )
         {
             masque_layer = Segm2->ReturnMaskLayer();
-            Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_Start, masque_layer, &trackList );
+            Marque_Chaine_segments( frame->GetBoard(), aTrackList->m_Start, masque_layer, &trackList );
         }
     }
 
     else    // mark the chain using both ends of the initial segment
     {
-        Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_Start, masque_layer, &trackList );
-        Marque_Chaine_segments( frame->m_Pcb, aTrackList->m_End, masque_layer, &trackList );
+        Marque_Chaine_segments( frame->GetBoard(), aTrackList->m_Start, masque_layer, &trackList );
+        Marque_Chaine_segments( frame->GetBoard(), aTrackList->m_End, masque_layer, &trackList );
     }
 
     //  marquage des vias (vias non connectees ou inutiles
@@ -122,7 +122,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
 
         masque_layer = via->ReturnMaskLayer();
 
-        TRACK* track = Fast_Locate_Piste( frame->m_Pcb->m_Track,
+        TRACK* track = Fast_Locate_Piste( frame->GetBoard()->m_Track,
                                          NULL, via->m_Start, masque_layer );
         if( track == NULL )
             continue;
@@ -144,7 +144,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
     /* Reclassement des segments marques en une chaine */
     NbSegmBusy = 0;
     TRACK* firstTrack;
-    for( firstTrack = frame->m_Pcb->m_Track;  firstTrack;  firstTrack = firstTrack->Next() )
+    for( firstTrack = frame->GetBoard()->m_Track;  firstTrack;  firstTrack = firstTrack->Next() )
     {
         // recherche du debut de la liste des segments marques a BUSY
         if( firstTrack->GetState( BUSY ) )

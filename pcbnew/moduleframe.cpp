@@ -176,9 +176,10 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     if( g_ModuleEditor_Pcb == NULL )
         g_ModuleEditor_Pcb = new BOARD( NULL, this );
 
-    m_Pcb = g_ModuleEditor_Pcb;
+    SetBoard( g_ModuleEditor_Pcb );
 
-    m_Pcb->m_PcbFrame = this;
+    GetBoard()->m_PcbFrame = this;
+
     SetBaseScreen( ScreenModule );
     GetScreen()->SetCurItem( NULL );
     GetSettings();
@@ -260,7 +261,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, islib );
     m_HToolBar->EnableTool( ID_LIBEDIT_DELETE_PART, islib );
 
-    if( m_Pcb->m_Modules == NULL )
+    if( GetBoard()->m_Modules == NULL )
         active = FALSE;
     else
         active = TRUE;
@@ -269,10 +270,10 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     m_HToolBar->EnableTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                             active );
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, active && islib );
-    MODULE* module_in_edit = m_Pcb->m_Modules;
+    MODULE* module_in_edit = GetBoard()->m_Modules;
     if( module_in_edit && module_in_edit->m_Link ) // this is not a new module ...
     {
-        BOARD*   mainpcb       = frame->m_Pcb;
+        BOARD*   mainpcb       = frame->GetBoard();
         MODULE*  source_module = mainpcb->m_Modules;
 
         // search if the source module was not deleted:
@@ -305,7 +306,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         m_HToolBar->EnableTool( ID_MODEDIT_REDO, GetScreen()->m_RedoList && active );
     }
 
-    if( frame->m_Pcb->m_Modules )
+    if( frame->GetBoard()->m_Modules )
     {
         m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, TRUE );
     }

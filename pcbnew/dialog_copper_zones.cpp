@@ -58,7 +58,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
 // Initialise all dialog options and values in wxTextCtrl
 {
-    BOARD* board = m_Parent->m_Pcb;
+    BOARD* board = m_Parent->GetBoard();
 
     SetFont( *g_DialogFont );
 
@@ -167,7 +167,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     m_NetNameFilter->SetValue( NetNameFilter );
     wxArrayString ListNetName;
-    m_Parent->m_Pcb->ReturnSortedNetnamesList( ListNetName,
+    m_Parent->GetBoard()->ReturnSortedNetnamesList( ListNetName,
         m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
 
     if( m_NetSorting != 0 )
@@ -190,7 +190,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     if( net_select > 0 )
     {
-        EQUIPOT* equipot = m_Parent->m_Pcb->FindNet( net_select );
+        EQUIPOT* equipot = m_Parent->GetBoard()->FindNet( net_select );
         if( equipot )  // Search net in list and select it
         {
             for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
@@ -338,7 +338,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     /* Search net_code for this net */
     EQUIPOT* net;
     g_Zone_Default_Setting.m_NetcodeSelection = 0;
-    for( net = m_Parent->m_Pcb->m_Equipots;   net;  net = net->Next() )
+    for( net = m_Parent->GetBoard()->m_Equipots;   net;  net = net->Next() )
     {
         if( net->GetNetname() == net_name )
         {
@@ -358,7 +358,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
     wxArrayString ListNetName;
 
     m_NetSorting = m_NetSortingOption->GetSelection();
-    m_Parent->m_Pcb->ReturnSortedNetnamesList(
+    m_Parent->GetBoard()->ReturnSortedNetnamesList(
         ListNetName,
         m_NetSorting ==
         0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
@@ -387,7 +387,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
     int net_select = m_Zone_Setting->m_NetcodeSelection;
     if( net_select > 0 )
     {
-        EQUIPOT* equipot = m_Parent->m_Pcb->FindNet( net_select );
+        EQUIPOT* equipot = m_Parent->GetBoard()->FindNet( net_select );
         if( equipot )  // Search net in list and select it
         {
             for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
@@ -421,7 +421,7 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
         return;
 
     // Export settings ( but layer and netcode ) to others zones:
-    BOARD* pcb = m_Parent->m_Pcb;
+    BOARD* pcb = m_Parent->GetBoard();
     for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = pcb->GetArea( ii );

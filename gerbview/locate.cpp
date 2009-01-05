@@ -49,7 +49,7 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
 
     /* Localistion des pistes et vias, avec priorite aux vias */
     layer = GetScreen()->m_Active_Layer;
-    Track = Locate_Pistes( m_Pcb->m_Track, -1, typeloc );
+    Track = Locate_Pistes( GetBoard()->m_Track, -1, typeloc );
     if( Track != NULL )
     {
         TrackLocate = Track;   /* Reperage d'une piste ou via */
@@ -67,19 +67,19 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
     }
 
 
-    pt_texte_pcb = Locate_Texte_Pcb( (TEXTE_PCB*) m_Pcb->m_Drawings.GetFirst(), typeloc );
+    pt_texte_pcb = Locate_Texte_Pcb( (TEXTE_PCB*) GetBoard()->m_Drawings.GetFirst(), typeloc );
     if( pt_texte_pcb ) // texte type PCB localise
     {
         pt_texte_pcb->Display_Infos( this );
         return pt_texte_pcb;
     }
 
-    if( ( DrawSegm = Locate_Segment_Pcb( m_Pcb, typeloc ) ) != NULL )
+    if( ( DrawSegm = Locate_Segment_Pcb( GetBoard(), typeloc ) ) != NULL )
     {
         return DrawSegm;
     }
 
-    if( ( TrackLocate = Locate_Zone( m_Pcb->m_Zone,
+    if( ( TrackLocate = Locate_Zone( GetBoard()->m_Zone,
                                     GetScreen()->m_Active_Layer, typeloc ) ) != NULL )
     {
         TrackLocate->Display_Infos( this );

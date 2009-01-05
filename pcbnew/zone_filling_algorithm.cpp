@@ -137,7 +137,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
                     int seg_startY = m_FilledPolysList[ics].y;
                     int seg_endX   = m_FilledPolysList[ice].x;
                     int seg_endY   = m_FilledPolysList[ice].y;
-                    
+
 
                     /* Trivial cases: skip if ref above or below the segment to test */
                     if( ( seg_startY > refy ) && (seg_endY > refy ) )
@@ -185,7 +185,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
                     wxMessageBox(msg );
                     error = true;
                 }
-                
+
                 if ( error ) break;
                 int iimax = x_coordinates.size()-1;
                 for (int ii = 0; ii < iimax; ii +=2 )
@@ -196,14 +196,14 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
                     seg_start.y = refy;
                     seg_end.x = x_coordinates[ii+1];
                     seg_end.y = refy;
-                    SEGZONE* segment = new SEGZONE( aFrame->m_Pcb );
+                    SEGZONE* segment = new SEGZONE( aFrame->GetBoard() );
                     segment->m_Start = seg_start;
                     segment->m_End   = seg_end;
                     segment->SetNet( GetNet() );
                     segment->m_TimeStamp = m_TimeStamp;
                     segment->m_Width = m_ZoneMinThickness;
                     segment->SetLayer( GetLayer() );
-                    aFrame->m_Pcb->Add( segment );
+                    aFrame->GetBoard()->Add( segment );
                 }
             }   //End examine segments in one area
             if ( error ) break;

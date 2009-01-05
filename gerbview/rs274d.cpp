@@ -837,7 +837,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
     APERTURE_T  aperture = APT_CIRCLE;
     TRACK*      track;
-    BOARD*		pcb = frame->m_Pcb;
+    BOARD*		pcb = frame->GetBoard();
 
     int         activeLayer = frame->GetScreen()->m_Active_Layer;
 

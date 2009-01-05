@@ -71,7 +71,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
               wxDefaultSize, wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER )
 /*************************************************************************/
 {
-    BOARD*  board = parent->m_Pcb;
+    BOARD*  board = parent->GetBoard();
 
     OuterBoxSizer = NULL;
     MainBoxSizer = NULL;
@@ -283,7 +283,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
         }
         else
         {
-            layer_list[ii]->SetLabel( m_Parent->m_Pcb->GetLayerName( jj ) );
+            layer_list[ii]->SetLabel( m_Parent->GetBoard()->GetLayerName( jj ) );
             // Change the text color to fushia (to highlight
             // that this layer *is* being swapped)
             layer_list[ii]->SetForegroundColour( wxColour(255, 0, 128) );
@@ -332,7 +332,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
         return; // (Cancelled dialog box returns -1 instead)
 
     /* Modifications des pistes */
-    pt_segm = m_Pcb->m_Track;
+    pt_segm = GetBoard()->m_Track;
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         GetScreen()->SetModify();
@@ -358,7 +358,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     }
 
     /* Modifications des zones */
-    for( pt_segm = m_Pcb->m_Zone;  pt_segm;  pt_segm = pt_segm->Next() )
+    for( pt_segm = GetBoard()->m_Zone;  pt_segm;  pt_segm = pt_segm->Next() )
     {
         GetScreen()->SetModify();
         jj = pt_segm->GetLayer();
@@ -367,7 +367,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     }
 
     /* Modifications des autres segments */
-    PtStruct = m_Pcb->m_Drawings;
+    PtStruct = GetBoard()->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() == TYPE_DRAWSEGMENT )

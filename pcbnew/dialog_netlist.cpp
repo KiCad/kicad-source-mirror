@@ -356,7 +356,7 @@ void WinEDA_NetlistFrame::OnReadNetlistFileClick( wxCommandEvent& event )
 
 void WinEDA_NetlistFrame::OnTestNetlistClick( wxCommandEvent& event )
 {
-    TestFor_Duplicate_Missing_And_Extra_Footprints( this, m_NetlistFilenameCtrl->GetValue(), m_Parent->m_Pcb);
+    TestFor_Duplicate_Missing_And_Extra_Footprints( this, m_NetlistFilenameCtrl->GetValue(), m_Parent->GetBoard() );
 }
 
 

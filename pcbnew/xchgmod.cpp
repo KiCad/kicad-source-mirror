@@ -302,7 +302,7 @@ void WinEDA_ExchangeModuleFrame::Change_Module( wxCommandEvent& event )
 
     if( Change_1_Module( m_CurrentModule, newmodulename, TRUE ) )
     {
-        m_Parent->m_Pcb->m_Status_Pcb = 0;
+        m_Parent->GetBoard()->m_Status_Pcb = 0;
         m_Parent->build_liste_pads();
     }
 }
@@ -331,7 +331,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
     bool     check_module_value = FALSE;
     int      ShowErr = 5;           // Affiche 5 messages d'err maxi
 
-    if( m_Parent->m_Pcb->m_Modules == NULL )
+    if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
     if( newmodulename == wxEmptyString )
         return;
@@ -359,7 +359,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    PtModule = m_Parent->m_Pcb->m_Modules;
+    PtModule = m_Parent->GetBoard()->m_Modules;
     for( ; PtModule != NULL; PtModule = PtModule->Next() )
     {
         if( PtModule->Next() == NULL )
@@ -367,7 +367,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
     }
 
     /* Ici PtModule pointe le dernier module de la liste */
-    for( ; (BOARD*) PtModule != m_Parent->m_Pcb; PtModule = PtBack )
+    for( ; (BOARD*) PtModule != m_Parent->GetBoard(); PtModule = PtBack )
     {
         MODULE* module;
         PtBack = PtModule->Back();
@@ -387,7 +387,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
 
     if( change )
     {
-        m_Parent->m_Pcb->m_Status_Pcb = 0;
+        m_Parent->GetBoard()->m_Status_Pcb = 0;
         m_Parent->build_liste_pads();
     }
 }
@@ -409,7 +409,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
     bool    change  = FALSE;
     int     ShowErr = 5; // Affiche 5 messages d'err maxi
 
-    if( m_Parent->m_Pcb->m_Modules == NULL )
+    if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
 
     if( !IsOK( this, _( "Change ALL modules ?" ) ) )
@@ -419,7 +419,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    PtModule = m_Parent->m_Pcb->m_Modules;
+    PtModule = m_Parent->GetBoard()->m_Modules;
     for( ; PtModule != NULL; PtModule = PtModule->Next() )
     {
         if( PtModule->Next() == NULL )
@@ -427,7 +427,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
     }
 
     /* Ici PtModule pointe le dernier module de la liste */
-    for( ; (BOARD*) PtModule != m_Parent->m_Pcb;  PtModule = PtBack )
+    for( ; (BOARD*) PtModule != m_Parent->GetBoard();  PtModule = PtBack )
     {
         PtBack = PtModule->Back();
         if( Change_1_Module( PtModule, PtModule->m_LibRef.GetData(), ShowErr ) )
@@ -438,7 +438,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
 
     if( change )
     {
-        m_Parent->m_Pcb->m_Status_Pcb = 0;
+        m_Parent->GetBoard()->m_Status_Pcb = 0;
         m_Parent->build_liste_pads();
     }
 }
@@ -524,9 +524,9 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
         DisplayError( winaff, wxT( "WinEDA_BasePcbFrame::Exchange_Module() StuctType error" ) );
     }
 
-    NewModule->SetParent( m_Pcb );
+    NewModule->SetParent( GetBoard() );
 
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     oldpos = GetScreen()->m_Curseur;
     GetScreen()->m_Curseur = OldModule->m_Pos;
     Place_Module( NewModule, NULL );
@@ -535,7 +535,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     /* Changement eventuel de couche */
     if( OldModule->GetLayer() != NewModule->GetLayer() )
     {
-        m_Pcb->Change_Side_Module( NewModule, NULL );
+        GetBoard()->Change_Side_Module( NewModule, NULL );
     }
 
     /* Rotation eventuelle du module */
@@ -573,7 +573,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     /* Effacement de l'ancien module */
     OldModule ->DeleteStructure();
 
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     NewModule->m_Flags  = 0;
     GetScreen()->SetModify();
 
@@ -604,7 +604,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     wxString FullFileNameCmp, mask;
     FILE*    FichCmp;
     char     Line[1024];
-    MODULE*  Module = m_Pcb->m_Modules;
+    MODULE*  Module = GetBoard()->m_Modules;
     wxString msg;
 
     if( Module == NULL )

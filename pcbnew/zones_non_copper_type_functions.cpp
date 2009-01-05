@@ -95,7 +95,7 @@ void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
     {
         wxString msg;
 
-        msg = m_Parent->m_Pcb->GetLayerName( layer_number ).Trim();
+        msg = m_Parent->GetBoard()->GetLayerName( layer_number ).Trim();
         m_LayerSelectionCtrl->InsertItems( 1, &msg, ii );
 
         if( m_Zone_Container )

@@ -214,7 +214,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
-    SetBOARD( new BOARD( NULL, this ) );
+    SetBoard( new BOARD( NULL, this ) );
 
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
@@ -273,8 +273,8 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
 
     delete m_drc;
 
-    if( m_Pcb != g_ModuleEditor_Pcb )
-        delete m_Pcb;
+    if( GetBoard() != g_ModuleEditor_Pcb )
+        delete GetBoard();
 }
 
 

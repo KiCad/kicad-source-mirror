@@ -90,7 +90,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     try
     {
         db.LoadSESSION( fullFileName );
-        db.FromSESSION( m_Pcb );
+        db.FromSESSION( GetBoard() );
     }
     catch( IOError ioe )
     {
@@ -111,7 +111,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     m_SelViaSizeBox_Changed    = TRUE;
 
     GetScreen()->SetModify();
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
 
     Affiche_Message( wxString( _("Session file imported and merged OK.")) );
 

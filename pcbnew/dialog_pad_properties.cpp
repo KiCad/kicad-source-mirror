@@ -475,7 +475,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
 
     if( m_CurrentPad )   // Set Pad Name & Num
     {
-        m_Parent->SaveCopyInUndoList( m_Parent->m_Pcb->m_Modules );
+        m_Parent->SaveCopyInUndoList( m_Parent->GetBoard()->m_Modules );
         MODULE* Module = (MODULE*) m_CurrentPad->GetParent();
         Module->m_LastEdit_Time = time( NULL );
 
@@ -515,13 +515,13 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
         if( m_CurrentPad->GetNetname() != Current_PadNetName )
         {
             if( Current_PadNetName.IsEmpty() )
-			{
+            {
                 m_CurrentPad->SetNet( 0 );
                 m_CurrentPad->SetNetname( Current_PadNetName );
-			}
+            }
             else
             {
-                const EQUIPOT* net = m_Parent->m_Pcb->FindNet( Current_PadNetName );
+                const EQUIPOT* net = m_Parent->GetBoard()->FindNet( Current_PadNetName );
                 if( net )
                 {
                     RastnestIsChanged = true;
@@ -585,5 +585,5 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
     if( m_DC )
         m_Parent->DrawPanel->CursorOn( m_DC );
     if( RastnestIsChanged )  // The net ratsnest must be recalculated
-        m_Parent->m_Pcb->m_Status_Pcb = 0;
+        m_Parent->GetBoard()->m_Status_Pcb = 0;
 }

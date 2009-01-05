@@ -138,7 +138,7 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
 
     for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
     {
-        m_SelLayerBox->Append( parent->m_Pcb->GetLayerName( layer ) );
+        m_SelLayerBox->Append( parent->GetBoard()->GetLayerName( layer ) );
     }
 
     m_SelLayerBox->SetSelection( Cotation->GetLayer() - FIRST_NO_COPPER_LAYER );
@@ -226,7 +226,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         status_cotation = 1;
         pos = GetScreen()->m_Curseur;
 
-        Cotation = new COTATION( m_Pcb );
+        Cotation = new COTATION( GetBoard() );
         Cotation->m_Flags = IS_NEW;
 
         Cotation->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
@@ -277,7 +277,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
     Cotation->m_Flags = 0;
 
     /* Insertion de la structure dans le Chainage .Drawings du PCB */
-    m_Pcb->Add( Cotation );
+    GetBoard()->Add( Cotation );
 
     GetScreen()->SetModify();
     DrawPanel->ManageCurseur = NULL;

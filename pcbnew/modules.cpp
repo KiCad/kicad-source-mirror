@@ -81,7 +81,7 @@ MODULE* WinEDA_BasePcbFrame::GetModuleByName()
     Get_Message( _( "Name:" ), _("Search footprint"), modulename, this );
     if( !modulename.IsEmpty() )
     {
-        module = m_Pcb->m_Modules;
+        module = GetBoard()->m_Modules;
         while( module )
         {
             if( module->m_Reference->m_Text.CmpNoCase( modulename ) == 0 )
@@ -101,7 +101,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
         return;
 
     SetCurItem( module );
-    m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+    GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     module->m_Flags |= IS_MOVED;
     ModuleInitOrient = module->m_Orient;
     ModuleInitLayer  = module->GetLayer();
@@ -120,7 +120,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
         Build_Drag_Liste( DrawPanel, DC, module );
     }
 
-    m_Pcb->m_Status_Pcb     |= DO_NOT_SHOW_GENERAL_RASTNEST;
+    GetBoard()->m_Status_Pcb     |= DO_NOT_SHOW_GENERAL_RASTNEST;
     DrawPanel->ManageCurseur = Montre_Position_Empreinte;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveOrCopyModule;
     DrawPanel->m_AutoPAN_Request = TRUE;
@@ -152,7 +152,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) Panel->m_Parent;
 
     module = (MODULE*) pcbframe->GetScreen()->GetCurItem();
-    pcbframe->m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+    pcbframe->GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
 
     if( module )
     {
@@ -192,7 +192,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
         {
             module->DeleteStructure();
             module = NULL;
-            pcbframe->m_Pcb->m_Status_Pcb = 0;
+            pcbframe->GetBoard()->m_Status_Pcb = 0;
             pcbframe->build_liste_pads();
         }
     }
@@ -203,7 +203,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
         if( ModuleInitOrient != module->m_Orient )
             pcbframe->Rotate_Module( NULL, module, ModuleInitOrient, FALSE );
         if( ModuleInitLayer != module->GetLayer() )
-            pcbframe->m_Pcb->Change_Side_Module( module, NULL );
+            pcbframe->GetBoard()->Change_Side_Module( module, NULL );
         module->Draw( Panel, DC, GR_OR );
     }
     g_Drag_Pistes_On     = FALSE;
@@ -211,7 +211,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->ForceCloseManageCurseur = NULL;
     pcbframe->SetCurItem( NULL );
 
-    pcbframe->m_Pcb->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;   // Display ratsnest is allowed
+    pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;   // Display ratsnest is allowed
     if( g_Show_Ratsnest )
         pcbframe->DrawGeneralRatsnest( DC );
 }
@@ -236,22 +236,22 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
     GetScreen()->SetModify();
 
     /* Duplication du module */
-    m_Pcb->m_Status_Pcb = 0;
-    newmodule = new MODULE( m_Pcb );
+    GetBoard()->m_Status_Pcb = 0;
+    newmodule = new MODULE( GetBoard() );
     newmodule->Copy( module );
 
     /* no, Add() below does this
-    newmodule->SetParent( m_Pcb );
+    newmodule->SetParent( GetBoard() );
     */
 
-    m_Pcb->Add( newmodule, ADD_APPEND );
+    GetBoard()->Add( newmodule, ADD_APPEND );
 
     newmodule->m_Flags = IS_NEW;
 
     build_liste_pads();
 
     newmodule->Display_Infos( this );
-    m_Pcb->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+    GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     return newmodule;
 }
 
@@ -326,7 +326,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
     /* Sauvegarde en buffer des undelete */
     SaveItemEfface( module, 1 );
 
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     build_liste_pads();
     ReCompile_Ratsnest_After_Changes( DC );
 
@@ -667,9 +667,9 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
         return;
 
     GetScreen()->SetModify();
-    m_Pcb->m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
+    GetBoard()->m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
 
-    if( g_Show_Module_Ratsnest && (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) && DC )
+    if( g_Show_Module_Ratsnest && (GetBoard()->m_Status_Pcb & LISTE_PAD_OK) && DC )
         trace_ratsnest_module( DC );
 
     newpos = GetScreen()->m_Curseur;
@@ -748,7 +748,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
         }
     }
 
-    m_Pcb->m_Status_Pcb &= ~(LISTE_CHEVELU_OK | CONNEXION_OK);
+    GetBoard()->m_Status_Pcb &= ~(LISTE_CHEVELU_OK | CONNEXION_OK);
 
     if( incremental )
         module->SetOrientation( module->m_Orient + angle );

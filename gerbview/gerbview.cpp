@@ -53,7 +53,7 @@ bool WinEDA_App::OnInit()
     /* Gerbview mainframe title */
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
     frame->SetTitle( Title );
-    frame->m_Pcb = new BOARD( NULL, frame );
+    frame->SetBoard( new BOARD( NULL, frame ) );
 
     SetTopWindow( frame );              // Set GerbView mainframe on top
     frame->Show( TRUE );                // Show GerbView mainframe

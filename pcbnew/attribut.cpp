@@ -69,7 +69,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
  *  if net_code < 0 all the segments are modified.
  */
 {
-    TRACK* Track = m_Pcb->m_Track;
+    TRACK* Track = GetBoard()->m_Track;
 
     /* search the first segment for the selected net_code */
     if( net_code >= 0 )
@@ -86,6 +86,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
     {
         if( (net_code >= 0 ) && (net_code != Track->GetNet()) )
             break;
+
         GetScreen()->SetModify();
         Track->SetState( SEGM_FIXE, Flag_On );
         Track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );

@@ -71,7 +71,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
-    if( !m_Pcb )
+    if( !GetBoard() )
         return;
     ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
@@ -110,7 +110,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
 */
 {
-    if( !m_Pcb )
+    if( !GetBoard() )
         return;
 
     bool    erase;
@@ -123,7 +123,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     // minimize reallocations of the vector's internal array by starting with a good sized one.
     points.reserve(10000);
 
-    for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
+    for( TRACK* track = GetBoard()->m_Zone;  track;  track = track->Next() )
     {
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
@@ -179,10 +179,10 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     }
 
     // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
-    Draw_Track_Buffer( DrawPanel, DC, m_Pcb, draw_mode, printmasklayer );
+    Draw_Track_Buffer( DrawPanel, DC, GetBoard(), draw_mode, printmasklayer );
 
     if( DisplayOpt.DisplayPadNum )
-        Affiche_DCodes_Pistes( DrawPanel, DC, m_Pcb, GR_COPY );
+        Affiche_DCodes_Pistes( DrawPanel, DC, GetBoard(), GR_COPY );
 
     GetScreen()->ClrRefreshReq();
 }

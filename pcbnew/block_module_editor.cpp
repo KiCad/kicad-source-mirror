@@ -97,7 +97,7 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
  */
 {
     int     ItemsCount    = 0, MustDoPlace = 0;
-    MODULE* Currentmodule = m_Pcb->m_Modules;
+    MODULE* Currentmodule = GetBoard()->m_Modules;
 
     if( GetScreen()->BlockLocate.m_BlockDrawStruct )
     {
@@ -216,7 +216,7 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
  */
 {
     bool    err = FALSE;
-    MODULE* Currentmodule = m_Pcb->m_Modules;
+    MODULE* Currentmodule = GetBoard()->m_Modules;
 
     if( DrawPanel->ManageCurseur == NULL )
     {
@@ -301,7 +301,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
     BOARD_ITEM*      item;
     wxPoint          move_offset;
     MODULE*          Currentmodule =
-        ( (WinEDA_BasePcbFrame*) wxGetApp().GetTopWindow() )->m_ModuleEditFrame->m_Pcb->m_Modules;
+        ( (WinEDA_BasePcbFrame*) wxGetApp().GetTopWindow() )->m_ModuleEditFrame->GetBoard()->m_Modules;
 
     PtBlock = &screen->BlockLocate;
     GRSetDrawMode( DC, g_XorMode );

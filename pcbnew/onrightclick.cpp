@@ -336,7 +336,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     switch(  m_ID_current_state )
     {
     case ID_PCB_ZONES_BUTT:
-        if(  m_Pcb->m_ZoneDescriptorList.size() > 0 )
+        if(  GetBoard()->m_ZoneDescriptorList.size() > 0 )
         {
             aPopMenu->AppendSeparator();
             ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
@@ -413,7 +413,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES, _( "Autoroute All Modules" ) );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
-            if( m_Pcb->m_Modules )
+            if( GetBoard()->m_Modules )
             {
                 commands->AppendSeparator();
                 commands->Append( ID_POPUP_PCB_AUTOROUTE_GET_AUTOROUTER,
@@ -710,7 +710,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
 
     sub_menu_footprint = new wxMenu;
 
-    msg = aModule->MenuText( m_Pcb );
+    msg = aModule->MenuText( GetBoard() );
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm );
     if( !flags )
     {
@@ -751,7 +751,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
     wxMenu*  sub_menu_Fp_text;
     int      flags = FpText->m_Flags;
 
-    wxString msg = FpText->MenuText( m_Pcb );
+    wxString msg = FpText->MenuText( GetBoard() );
 
     sub_menu_Fp_text = new wxMenu;
 
@@ -790,7 +790,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     wxMenu*  sub_menu_Pad;
     int      flags = Pad->m_Flags;
 
-    wxString msg = Pad->MenuText( m_Pcb );
+    wxString msg = Pad->MenuText( GetBoard() );
 
     sub_menu_Pad = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
@@ -854,7 +854,7 @@ void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
     wxMenu*  sub_menu_Text;
     int      flags = Text->m_Flags;
 
-    wxString msg = Text->MenuText( m_Pcb );
+    wxString msg = Text->MenuText( GetBoard() );
 
     sub_menu_Text = new wxMenu;
 

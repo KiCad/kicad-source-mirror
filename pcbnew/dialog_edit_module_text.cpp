@@ -27,13 +27,13 @@ private:
     TEXTE_MODULE* m_CurrentTextMod;
 
 public:
-	DialogEditModuleText( WinEDA_BasePcbFrame* parent, TEXTE_MODULE* TextMod, wxDC* DC );
-	~DialogEditModuleText() {};
+    DialogEditModuleText( WinEDA_BasePcbFrame* parent, TEXTE_MODULE* TextMod, wxDC* DC );
+    ~DialogEditModuleText() {};
 
 private:
-	void OnInitDialog( wxInitDialogEvent& event );
-	void OnOkClick( wxCommandEvent& event );
-	void OnCancelClick( wxCommandEvent& event );
+    void OnInitDialog( wxInitDialogEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
 };
 
 /***************************************************************************/
@@ -53,7 +53,7 @@ void WinEDA_BasePcbFrame::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
 DialogEditModuleText::DialogEditModuleText( WinEDA_BasePcbFrame* parent,
                                                               TEXTE_MODULE* TextMod,
                                                               wxDC* DC ) :
-	DialogEditModuleText_base(parent)
+    DialogEditModuleText_base(parent)
 
 {
     m_Parent = parent;
@@ -78,7 +78,7 @@ void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
 /********************************************************/
 {
     SetFont( *g_DialogFont );
-	SetFocus();
+    SetFocus();
 
     wxString msg;
 
@@ -123,8 +123,8 @@ void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_CurrentTextMod->m_Width,
         m_Parent->m_InternalUnits );
 
-	int text_orient = m_CurrentTextMod->m_Orient;
-	NORMALIZE_ANGLE_90(text_orient)
+    int text_orient = m_CurrentTextMod->m_Orient;
+    NORMALIZE_ANGLE_90(text_orient)
     if( (text_orient != 0) )
         m_Orient->SetSelection( 1 );
 
@@ -142,7 +142,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 {
     wxString msg;
 
-    m_Parent->SaveCopyInUndoList( m_Parent->m_Pcb->m_Modules );
+    m_Parent->SaveCopyInUndoList( m_Parent->GetBoard()->m_Modules );
     if( m_DC )     //Erase old text on screen
     {
         m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC, GR_XOR,
@@ -150,7 +150,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     }
     m_CurrentTextMod->m_Text = m_Name->GetValue();
 
-	m_CurrentTextMod->m_Italic = m_Style->GetSelection() == 1 ? true : false;
+    m_CurrentTextMod->m_Italic = m_Style->GetSelection() == 1 ? true : false;
 
 
     msg = m_TxtPosCtrlX->GetValue();
@@ -179,13 +179,13 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     // Test for a reasonnable width:
     if( width <= 1 )
         width = 1;
-	int minthickness = min(m_CurrentTextMod->m_Size.x, m_CurrentTextMod->m_Size.y) / 4;
+    int minthickness = min(m_CurrentTextMod->m_Size.x, m_CurrentTextMod->m_Size.y) / 4;
     if( width > minthickness )
         width = minthickness;
     m_CurrentTextMod->SetWidth( width );
 
     m_CurrentTextMod->m_NoShow = (m_Show->GetSelection() == 0) ? 0 : 1;
-	int text_orient = (m_Orient->GetSelection() == 0) ? 0 : 900;
+    int text_orient = (m_Orient->GetSelection() == 0) ? 0 : 900;
     m_CurrentTextMod->m_Orient = text_orient;
 
     m_CurrentTextMod->SetDrawCoord();

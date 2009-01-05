@@ -163,7 +163,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
 
     wxButton* button;
 
-    BOARD*    board = m_Parent->m_Pcb;
+    BOARD*    board = m_Parent->GetBoard();
 
     wxConfig* config = wxGetApp().m_EDA_Config;  //  Current config used by application
 
@@ -641,7 +641,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
     wxString FullFileName, BaseFileName;
     wxString ext;
 
-    BOARD*   board = m_Parent->m_Pcb;
+    BOARD*   board = m_Parent->GetBoard();
 
     SaveOptPlot( event );
 

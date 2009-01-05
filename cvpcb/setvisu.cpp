@@ -50,13 +50,13 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
 
         DrawFrame->SetStatusText( msg, 0 );
 
-        if( DrawFrame->m_Pcb->m_Modules.GetCount() )
+        if( DrawFrame->GetBoard()->m_Modules.GetCount() )
         {
             // there is only one module in the list
-            DrawFrame->m_Pcb->m_Modules.DeleteAll();
+            DrawFrame->GetBoard()->m_Modules.DeleteAll();
         }
 
-        DrawFrame->m_Pcb->m_Modules.PushBack( DrawFrame->Get_Module( FootprintName ) );
+        DrawFrame->GetBoard()->m_Modules.PushBack( DrawFrame->Get_Module( FootprintName ) );
 
         DrawFrame->Zoom_Automatique( FALSE );
         if( DrawFrame->m_Draw3DFrame )
@@ -77,7 +77,7 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*******************************************************************/
 /* Draws the current highlighted footprint */
 {
-    if( !m_Pcb )
+    if( !GetBoard() )
         return;
 
     ActiveScreen = (PCB_SCREEN*) GetScreen();
@@ -86,9 +86,9 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         DrawPanel->EraseScreen( DC );
 
     DrawPanel->DrawBackGround( DC );
-    m_Pcb->Draw( DrawPanel, DC, GR_COPY, wxPoint(0,0) );
+    GetBoard()->Draw( DrawPanel, DC, GR_COPY );
 
-    MODULE* Module = m_Pcb->m_Modules;
+    MODULE* Module = GetBoard()->m_Modules;
     if ( Module )
         Module->Display_Infos( this );
     Affiche_Status_Box();

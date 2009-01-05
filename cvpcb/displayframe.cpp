@@ -51,7 +51,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father,
     #endif
     SetTitle( title );
 
-    m_Pcb = new BOARD( NULL, this );
+    SetBoard( new BOARD( NULL, this ) );
 
     SetBaseScreen( new PCB_SCREEN() );
 
@@ -70,7 +70,7 @@ WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
     delete GetBaseScreen();
     SetBaseScreen( 0 );
 
-    delete m_Pcb;
+    delete GetBoard();
 
     ( (WinEDA_CvpcbFrame*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
 }

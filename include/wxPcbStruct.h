@@ -51,8 +51,9 @@ class ZONE_CONTAINER;
 
 class WinEDA_BasePcbFrame : public WinEDA_DrawFrame
 {
-public:
     BOARD* m_Pcb;
+
+public:
 
     bool   m_DisplayPadFill;        // How show pads
     bool   m_DisplayPadNum;         // show pads numbers
@@ -76,13 +77,18 @@ public:
     ~WinEDA_BasePcbFrame();
 
     /**
-     * Function SetBOARD
+     * Function SetBoard
      * sets the m_Pcb member in such as way as to ensure deleting any previous
      * BOARD.
      * @param aBoard The BOARD to put into the frame.
      */
-    void                SetBOARD( BOARD* aBoard );
+    void            SetBoard( BOARD* aBoard );
 
+    BOARD*          GetBoard()
+    {
+        wxASSERT( m_Pcb );  // phasing out m_Pcb for gerbview
+        return m_Pcb;
+    }
 
     // General
     virtual void    OnCloseWindow( wxCloseEvent& Event ) = 0;
@@ -209,10 +215,10 @@ public:
     void                        Place_Module( MODULE* module, wxDC* DC );
     void                        InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
                                                             wxDC* DC, const wxPoint& pos );
-	// Graphic items edition:
-	void 						InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC);
+    // Graphic items edition:
+    void 						InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC);
 
-	// module texts
+    // module texts
     void                        RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void                        DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void                        PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );

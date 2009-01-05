@@ -144,12 +144,12 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
         return;
     }
 
-    wxString msg = _( "Delete Layer " ) + m_Pcb->GetLayerName( layer );
+    wxString msg = _( "Delete Layer " ) + GetBoard()->GetLayerName( layer );
     if( !IsOK( this, msg ) )
         return;
 
     BOARD_ITEM*     PtNext;
-    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = PtNext )
+    for( BOARD_ITEM* item = GetBoard()->m_Drawings;  item;  item = PtNext )
     {
         GetScreen()->SetModify();
         PtNext = item->Next();
@@ -227,7 +227,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
 
     if( Segment == NULL )        /* debut reel du trace */
     {
-        SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
+        SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
         Segment->m_Flags = IS_NEW;
         Segment->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
         Segment->m_Width = s_large;
@@ -244,7 +244,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
         {
             if( Segment->m_Shape == S_SEGMENT )
             {
-                m_Pcb->Add( Segment );
+                GetBoard()->Add( Segment );
 
                 GetScreen()->SetModify();
                 Segment->m_Flags = 0;
@@ -253,7 +253,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
 
                 DrawItem = Segment;
 
-                SetCurItem( Segment = new DRAWSEGMENT( m_Pcb ) );
+                SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
 
                 Segment->m_Flags = IS_NEW;
                 Segment->SetLayer( DrawItem->GetLayer() );
@@ -292,7 +292,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     {
         Segment->m_Flags = 0;
 
-        m_Pcb->Add( Segment );
+        GetBoard()->Add( Segment );
 
         GetScreen()->SetModify();
     }

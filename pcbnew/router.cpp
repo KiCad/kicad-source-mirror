@@ -67,27 +67,27 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
     SetStatusText( msg );
 
     /* calcul ratsnest */
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     Compile_Ratsnest( DC, TRUE );
 
-    m_Pcb->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundaryBox();
     g_GridRoutingSize = GetScreen()->GetGrid().x;
 
     // Sortie de la dimension hors tout du pcb (dimensions + marge + g_GridRoutingSize)
 #define B_MARGE 1000       // en 1/10000 inch
     fprintf( outfile, "j %d %d %d %d",
-             ( -B_MARGE - g_GridRoutingSize + m_Pcb->m_BoundaryBox.GetX() ) / PSCALE,
-             ( -B_MARGE - g_GridRoutingSize + m_Pcb->m_BoundaryBox.GetY() ) / PSCALE,
-             ( B_MARGE + g_GridRoutingSize + m_Pcb->m_BoundaryBox.GetRight() ) / PSCALE,
-             ( B_MARGE + g_GridRoutingSize + m_Pcb->m_BoundaryBox.GetBottom() ) / PSCALE );
+             ( -B_MARGE - g_GridRoutingSize + GetBoard()->m_BoundaryBox.GetX() ) / PSCALE,
+             ( -B_MARGE - g_GridRoutingSize + GetBoard()->m_BoundaryBox.GetY() ) / PSCALE,
+             ( B_MARGE + g_GridRoutingSize + GetBoard()->m_BoundaryBox.GetRight() ) / PSCALE,
+             ( B_MARGE + g_GridRoutingSize + GetBoard()->m_BoundaryBox.GetBottom() ) / PSCALE );
 
     /* calcul du nombre de couches cuivre */
     min_layer = 1;  /* -> couche soudure = min layer */
-    max_layer = m_Pcb->m_BoardSettings->m_CopperLayerCount;
+    max_layer = GetBoard()->m_BoardSettings->m_CopperLayerCount;
 
     fprintf( outfile, " %d %d", min_layer, max_layer );
 
-    net_number = m_Pcb->m_Equipots.GetCount();
+    net_number = GetBoard()->m_Equipots.GetCount();
 
     fprintf( outfile, " %d", net_number );
 
@@ -126,8 +126,8 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
         fprintf( outfile, "l %d %d\n", ii, dir );       /* layer direction record */
     }
 
-    Out_Pads( m_Pcb, outfile );
-    GenEdges( m_Pcb, outfile );
+    Out_Pads( GetBoard(), outfile );
+    GenEdges( GetBoard(), outfile );
 
     fclose( outfile );
 
@@ -557,7 +557,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
     int      track_count, track_layer, image, track_width;
     int      via_layer1, via_layer2, via_size;
     wxPoint  track_start, track_end;
-    int      max_layer = m_Pcb->m_BoardSettings->m_CopperLayerCount;
+    int      max_layer = GetBoard()->m_BoardSettings->m_CopperLayerCount;
 
     /* Calcule du nom du fichier intermediaire de communication */
     FullFileName = GetScreen()->m_FileName;
@@ -600,7 +600,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
                 via_layer1 = CMP_N;
             if( via_layer2 == max_layer - 1 )
                 via_layer2 = CMP_N;
-            newVia = new SEGVIA( m_Pcb );
+            newVia = new SEGVIA( GetBoard() );
 
             newVia->m_Start = newVia->m_End = track_start;
             newVia->m_Width = via_size;
@@ -610,7 +610,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
             else
                 newVia->m_Shape = VIA_BLIND_BURIED;
 
-            m_Pcb->m_Track.PushFront( newVia );
+            GetBoard()->m_Track.PushFront( newVia );
             NbTrack++;
             break;
 
@@ -632,7 +632,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
                     else
                     {
                         sscanf( Line + 2, "%d %d", &track_end.x, &track_end.y );
-                        newTrack = new TRACK( m_Pcb );
+                        newTrack = new TRACK( GetBoard() );
 
                         newTrack->m_Width = track_width;
                         newTrack->SetLayer( track_layer );
@@ -640,7 +640,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
                         newTrack->m_End   = track_end;
                         track_start = track_end;
 
-                        m_Pcb->m_Track.PushFront( newTrack );
+                        GetBoard()->m_Track.PushFront( newTrack );
                         NbTrack++;
                     }
                 }
@@ -663,7 +663,7 @@ void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
         DisplayError( this, wxT( "Warning: No tracks" ), 10 );
     else
     {
-        m_Pcb->m_Status_Pcb = 0;
+        GetBoard()->m_Status_Pcb = 0;
         GetScreen()->SetModify();
     }
 

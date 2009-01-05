@@ -138,7 +138,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
 {
     char            line[256];
     TRACK*          track;
-    BOARD*          gerberPcb = frame->m_Pcb;
+    BOARD*          gerberPcb = frame->GetBoard();
     BOARD*          pcb;
 
     wxBeginBusyCursor();

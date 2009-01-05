@@ -42,7 +42,7 @@ bool ComputeMatriceSize( WinEDA_BasePcbFrame* frame, int g_GridRoutingSize )
  *  pour les routages automatiques et calculs de zone
  */
 {
-    BOARD* pcb = frame->m_Pcb;
+    BOARD* pcb = frame->GetBoard();
 
     pcb->ComputeBoundaryBox();
 

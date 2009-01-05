@@ -24,23 +24,23 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
 {
     int layer;
 
-    if( m_Pcb == NULL )
+    if( GetBoard() == NULL )
         return FALSE;
 
     if( query )
     {
-        if( m_Pcb->m_Drawings || m_Pcb->m_Track || m_Pcb->m_Zone )
+        if( GetBoard()->m_Drawings || GetBoard()->m_Track || GetBoard()->m_Zone )
         {
             if( !IsOK( this, _( "Current Data will be lost ?" ) ) )
                 return FALSE;
         }
     }
 
-    m_Pcb->m_Drawings.DeleteAll();
+    GetBoard()->m_Drawings.DeleteAll();
 
-    m_Pcb->m_Track.DeleteAll();
+    GetBoard()->m_Track.DeleteAll();
 
-    m_Pcb->m_Zone.DeleteAll();
+    GetBoard()->m_Zone.DeleteAll();
 
     for( ; g_UnDeleteStackPtr != 0; )
     {
@@ -56,13 +56,13 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     }
 
     /* remise a 0 ou a une valeur initiale des variables de la structure */
-    m_Pcb->m_BoundaryBox.SetOrigin( 0, 0 );
-    m_Pcb->m_BoundaryBox.SetSize( 0, 0 );
-    m_Pcb->m_Status_Pcb = 0;
-    m_Pcb->m_NbLoclinks = 0;
-    m_Pcb->m_NbLinks    = 0;
-    m_Pcb->m_NbNodes     = 0;
-    m_Pcb->m_NbNoconnect = 0;
+    GetBoard()->m_BoundaryBox.SetOrigin( 0, 0 );
+    GetBoard()->m_BoundaryBox.SetSize( 0, 0 );
+    GetBoard()->m_Status_Pcb = 0;
+    GetBoard()->m_NbLoclinks = 0;
+    GetBoard()->m_NbLinks    = 0;
+    GetBoard()->m_NbNodes     = 0;
+    GetBoard()->m_NbNoconnect = 0;
 
     /* Init parametres de gestion des ecrans PAD et PCB */
     SetBaseScreen( ActiveScreen = ScreenPcb );
@@ -79,7 +79,7 @@ void WinEDA_GerberFrame::Erase_Zones( bool query )
     if( query && !IsOK( this, _( "Delete zones ?" ) ) )
         return;
 
-    m_Pcb->m_Zone.DeleteAll();
+    GetBoard()->m_Zone.DeleteAll();
 
     ScreenPcb->SetModify();
 }
@@ -95,7 +95,7 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( bool all_layers, bool query )
         layer = -1;
 
     BOARD_ITEM*  next;
-    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = next )
+    for( BOARD_ITEM* item = GetBoard()->m_Drawings;  item;  item = next )
     {
         next = item->Next();
 
@@ -106,7 +106,7 @@ void WinEDA_GerberFrame::Erase_Segments_Pcb( bool all_layers, bool query )
         case TYPE_COTATION:
         case TYPE_MIRE:
             if( item->GetLayer() == layer  || layer < 0 )
-                m_Pcb->Delete( item );
+                GetBoard()->Delete( item );
             break;
 
         default:
@@ -136,7 +136,7 @@ void WinEDA_GerberFrame::Erase_Pistes( int masque_type, bool query )
         return;
 
     /* Marquage des pistes a effacer */
-    for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
+    for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
     {
         PtNext = pt_segm->Next();
         if( pt_segm->GetState( SEGM_FIXE | SEGM_AR ) & masque_type )
@@ -158,7 +158,7 @@ void WinEDA_GerberFrame::Erase_Textes_Pcb( bool query )
     if( query && !IsOK( this, _( "Delete Pcb Texts" ) ) )
         return;
 
-    PtStruct = m_Pcb->m_Drawings;
+    PtStruct = GetBoard()->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtNext )
     {
         PtNext = PtStruct->Next();
@@ -183,7 +183,7 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
 
     /* Delete tracks (spots and lines) */
     TRACK*     PtNext;
-    for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
+    for( TRACK* pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
     {
         PtNext = pt_segm->Next();
         if( pt_segm->GetLayer() != layer )
@@ -193,7 +193,7 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
 
     /* Delete polygons */
     SEGZONE*     Nextzone;
-    for( SEGZONE* zone = m_Pcb->m_Zone; zone != NULL; zone = Nextzone )
+    for( SEGZONE* zone = GetBoard()->m_Zone; zone != NULL; zone = Nextzone )
     {
         Nextzone = zone->Next();
         if( zone->GetLayer() != layer )

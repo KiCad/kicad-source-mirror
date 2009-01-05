@@ -280,7 +280,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     if( Create_1_Module( DC, wxEmptyString ) == NULL )
         return NULL;
 
-    Module = m_Pcb->m_Modules;
+    Module = GetBoard()->m_Modules;
     Module->m_LibRef    = wxT( "MuSelf" );
     Module->m_Attributs = MOD_VIRTUAL | MOD_CMS;
     Module->m_Flags = 0;

@@ -225,7 +225,7 @@ void WinEDA_SetColorsFrame::CreateControls()
             if( laytool_list[lyr]->m_Title == wxT( "*" ) )
                 msg = g_ViaType_Name[laytool_list[lyr]->m_LayerNumber];
             else
-                msg = m_Parent->m_Pcb->GetLayerName( laytool_list[lyr]->m_LayerNumber );
+                msg = m_Parent->GetBoard()->GetLayerName( laytool_list[lyr]->m_LayerNumber );
         }
         else
             msg = wxGetTranslation( laytool_list[lyr]->m_Title.GetData() );

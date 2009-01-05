@@ -108,7 +108,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
         }
     }
 
-    module = new MODULE( m_Pcb );
+    module = new MODULE( GetBoard() );
 
     if ( Footprint_Is_GPCB_Format )
     {
@@ -122,12 +122,12 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     }
 
     /* Insert footprint in list*/
-    m_Pcb->Add( module );
+    GetBoard()->Add( module );
 
     /* Display info : */
     module->Display_Infos( this );
     Place_Module( module, DC );
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     build_liste_pads();
 
     return module;
@@ -210,7 +210,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     fprintf( dest, "%s\n", CONV_TO_UTF8( ptmod->m_LibRef ) );
     fputs( "$EndINDEX\n", dest );
 
-    m_Pcb->m_Modules->Save( dest );
+    GetBoard()->m_Modules->Save( dest );
 
     fputs( "$EndLIBRARY\n", dest );
     fclose( dest );
@@ -404,7 +404,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     MODULE*  Module;
     wxString FullFileName = LibName;
 
-    if( m_Pcb->m_Modules == NULL )
+    if( GetBoard()->m_Modules == NULL )
     {
         DisplayInfo( this, _( " No modules to archive!" ) );
         return;
@@ -457,14 +457,14 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     }
 
     /* Calcul du nombre de modules */
-    Module = (MODULE*) m_Pcb->m_Modules;
+    Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         NbModules++;
 
     Pas = (float) 100 / NbModules;
     DisplayActivity( 0, wxEmptyString );
 
-    Module = (MODULE*) m_Pcb->m_Modules;
+    Module = (MODULE*) GetBoard()->m_Modules;
     for( ii = 1; Module != NULL; ii++, Module = (MODULE*) Module->Next() )
     {
         if( Save_1_Module( FullFileName, Module,
@@ -725,9 +725,9 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     Line.Trim( FALSE );
 
     // Creates the new module and add it to the head of the linked list of modules
-    Module = new MODULE( m_Pcb );
+    Module = new MODULE( GetBoard() );
 
-    m_Pcb->Add( Module );
+    GetBoard()->Add( Module );
 
     /* Update parameters: position, timestamp ... */
     newpos = GetScreen()->m_Curseur;

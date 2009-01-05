@@ -472,9 +472,10 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
 {
     static vector <char> CornersTypeBuffer;
     static vector <wxPoint> CornersBuffer;
+
     // outline_mode is false to show filled polys,
     // and true to show polygons outlines only (test and debug purposes)
-    bool            outline_mode = DisplayOpt.DisplayZonesMode == 2 ? true : false;
+    bool outline_mode = DisplayOpt.DisplayZonesMode == 2 ? true : false;
 
     if( DC == NULL )
         return;
@@ -522,14 +523,15 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
     for( int ic = 0; ic <= imax; ic++ )
     {
         CPolyPt* corner = &m_FilledPolysList[ic];
-        wxPoint coord;
-        coord.x = corner->x + offset.x;
-        coord.y = corner->y + offset.y;
+
+        wxPoint coord( corner->x + offset.x, corner->y + offset.y );
+
         CornersBuffer.push_back(coord);
+
         CornersTypeBuffer.push_back((char) corner->utility);
-        
+
         if( (corner->end_contour) || (ic == imax) ) // the last corner of a filled area is found: draw it
-        {   
+        {
             /* Draw the current filled area: draw segments ouline first
              * Curiously, draw segments ouline first and after draw filled polygons
              * with oulines thickness = 0 is a faster than
@@ -539,19 +541,19 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
              */
             {
                 // Draw outlines:
-                if ( (m_ZoneMinThickness > 1) || outline_mode )
+                if( (m_ZoneMinThickness > 1) || outline_mode )
                 {
                     int ilim = CornersBuffer.size()-1;
-                    for (  int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
+                    for(  int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
                     {
                         int x0 = CornersBuffer[is].x;
                         int y0 = CornersBuffer[is].y;
                         int x1 = CornersBuffer[ie].x;
                         int y1 = CornersBuffer[ie].y;
-                        
-                        if ( CornersTypeBuffer[ie] == 0 )   // Draw only basic outlines, not extra segments
+
+                        if( CornersTypeBuffer[ie] == 0 )   // Draw only basic outlines, not extra segments
                         {
-                            if( (!DisplayOpt.DisplayPcbTrackFill) || GetState( FORCE_SKETCH ) )
+                            if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                                 GRCSegm( &panel->m_ClipBox, DC,
                                         x0, y0, x1 , y1,
                                         m_ZoneMinThickness, color );
@@ -562,8 +564,9 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
                         }
                     }
                 }
+
                 // Draw areas:
-                if( (m_FillMode == 0 ) && ! outline_mode )
+                if( m_FillMode==0  && !outline_mode )
                     GRPoly( &panel->m_ClipBox, DC, CornersBuffer.size(), &CornersBuffer[0],
                         true, 0, color, color );
             }
@@ -862,7 +865,7 @@ void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
     {
         if( GetNet() >= 0 )
         {
-            EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->m_Pcb->FindNet( GetNet() );
+            EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->GetBoard()->FindNet( GetNet() );
 
             if( equipot )
                 msg = equipot->GetNetname();

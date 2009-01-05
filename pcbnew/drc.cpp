@@ -101,7 +101,7 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
 {
     m_mainWindow = aPcbWindow;
     m_drawPanel  = aPcbWindow->DrawPanel;
-    m_pcb        = aPcbWindow->m_Pcb;
+    m_pcb        = aPcbWindow->GetBoard();
     m_ui         = 0;
 
     // establish initial values for everything:
@@ -227,7 +227,7 @@ void DRC::updatePointers()
 {
     // update my pointers, m_mainWindow is the only unchangable one
     m_drawPanel = m_mainWindow->DrawPanel;
-    m_pcb = m_mainWindow->m_Pcb;
+    m_pcb = m_mainWindow->GetBoard();
 
     if ( m_ui ) // Use diag list boxes only in DRC dialog
     {

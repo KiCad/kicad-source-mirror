@@ -316,6 +316,7 @@ class GERBER
     D_CODE*       m_Aperture_List[MAX_TOOLS];                   ///< Dcode (Aperture) List for this layer
     bool          m_Exposure;                                   ///< whether an aperture macro tool is flashed on or off
 
+    BOARD*        m_Pcb;
 
 public:
     wxString      m_FileName;                                   // Full File Name for this layer

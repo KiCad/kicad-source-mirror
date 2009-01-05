@@ -92,7 +92,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
  */
 {
     WinEDA_BasePcbFrame* pcbframe = m_Parent->m_Parent;
-    BOARD* pcb = pcbframe->m_Pcb;
+    BOARD* pcb = pcbframe->GetBoard();
     TRACK* track;
     SEGZONE*             segzone;
     int ii;

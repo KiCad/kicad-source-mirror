@@ -715,7 +715,7 @@ bool WinEDA_PcbFrame::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 {
     TRACK* testtrack = NULL;
 
-    testtrack = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, end );
+    testtrack = (TRACK*) Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, end );
     if( testtrack )
     {
         SortTrackEndPoints(track);
@@ -767,25 +767,25 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
     s_StartSegmentPresent = s_EndSegmentPresent = TRUE;
 
     if( (track->start == NULL) || (track->start->Type() == TYPE_TRACK) )
-        TrackToStartPoint = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, START );
+        TrackToStartPoint = (TRACK*) Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
     if( TrackToStartPoint )
     {
         TrackToStartPoint->SetState( BUSY, ON );
-        if( Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, START ) )
+        if( Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, START ) )
             error = TRUE;
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
     if( (track->end == NULL) || (track->end->Type() == TYPE_TRACK) )
-        TrackToEndPoint = (TRACK*) Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, END );
+        TrackToEndPoint = (TRACK*) Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
     if( TrackToEndPoint )
     {
         TrackToEndPoint->SetState( BUSY, ON );
-        if( Locate_Piste_Connectee( track, m_Pcb->m_Track, NULL, END ) )
+        if( Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END ) )
             error = TRUE;
         TrackToEndPoint->SetState( BUSY, OFF );
     }
@@ -870,14 +870,14 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     // DRC control:
     if( Drc_On )
     {
-        errdrc = m_drc->Drc( Track, m_Pcb->m_Track );
+        errdrc = m_drc->Drc( Track, GetBoard()->m_Track );
         if( errdrc == BAD_DRC )
             return FALSE;
         /* Redraw the dragged segments */
         pt_drag = g_DragSegmentList;
         for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
         {
-            errdrc = m_drc->Drc( pt_drag->m_Segm, m_Pcb->m_Track );
+            errdrc = m_drc->Drc( pt_drag->m_Segm, GetBoard()->m_Track );
             if( errdrc == BAD_DRC )
                 return FALSE;
         }
@@ -902,8 +902,8 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
         /* Test the connections modified by the move
          *  (only pad connection must be tested, track connection will be tested by test_1_net_connexion() ) */
         int masque_layer = g_TabOneLayerMask[Track->GetLayer()];
-        Track->start = Fast_Locate_Pad_Connecte( m_Pcb, Track->m_Start, masque_layer );
-        Track->end   = Fast_Locate_Pad_Connecte( m_Pcb, Track->m_End, masque_layer );
+        Track->start = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_Start, masque_layer );
+        Track->end   = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_End, masque_layer );
     }
 
     EraseDragListe();

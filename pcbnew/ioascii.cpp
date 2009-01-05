@@ -129,18 +129,18 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
         {
         default:
         case TYPE_TRACK:
-            newTrack = new TRACK( m_Pcb );
-            m_Pcb->m_Track.Insert( newTrack, insertBeforeMe );
+            newTrack = new TRACK( GetBoard() );
+            GetBoard()->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
         case TYPE_VIA:
-            newTrack = new SEGVIA( m_Pcb );
-            m_Pcb->m_Track.Insert( newTrack, insertBeforeMe );
+            newTrack = new SEGVIA( GetBoard() );
+            GetBoard()->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
         case TYPE_ZONE:
-            newTrack = new SEGZONE( m_Pcb );
-            m_Pcb->m_Zone.Insert( (SEGZONE*)newTrack, (SEGZONE*)insertBeforeMe );
+            newTrack = new SEGZONE( GetBoard() );
+            GetBoard()->m_Zone.Insert( (SEGZONE*)newTrack, (SEGZONE*)insertBeforeMe );
             break;
         }
 
@@ -188,11 +188,11 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
             sscanf( data, "%X", &Masque_Layer );
 
             // Setup layer count
-            m_Pcb->m_BoardSettings->m_CopperLayerCount = 0;
+            GetBoard()->m_BoardSettings->m_CopperLayerCount = 0;
             for( ii = 0; ii < NB_COPPER_LAYERS; ii++ )
             {
                 if( Masque_Layer & 1 )
-                    m_Pcb->m_BoardSettings->m_CopperLayerCount++;
+                    GetBoard()->m_BoardSettings->m_CopperLayerCount++;
                 Masque_Layer >>= 1;
             }
 
@@ -202,14 +202,14 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
         if( strnicmp( data, "Links", 5 ) == 0 )
         {
             data = strtok( NULL, " =\n\r" );
-            m_Pcb->m_NbLinks = atoi( data );
+            GetBoard()->m_NbLinks = atoi( data );
             continue;
         }
 
         if( strnicmp( data, "NoConn", 6 ) == 0 )
         {
             data = strtok( NULL, " =\n\r" );
-            m_Pcb->m_NbNoconnect = atoi( data );
+            GetBoard()->m_NbNoconnect = atoi( data );
             continue;
         }
 
@@ -217,13 +217,13 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
         {
             wxSize pcbsize, screensize;
             data = strtok( NULL, " =\n\r" );
-            m_Pcb->m_BoundaryBox.SetX( atoi( data ) );
+            GetBoard()->m_BoundaryBox.SetX( atoi( data ) );
             data = strtok( NULL, " =\n\r" );
-            m_Pcb->m_BoundaryBox.SetY( atoi( data ) );
+            GetBoard()->m_BoundaryBox.SetY( atoi( data ) );
             data = strtok( NULL, " =\n\r" );
-            m_Pcb->m_BoundaryBox.SetWidth( atoi( data ) - m_Pcb->m_BoundaryBox.GetX() );
+            GetBoard()->m_BoundaryBox.SetWidth( atoi( data ) - GetBoard()->m_BoundaryBox.GetX() );
             data = strtok( NULL, " =\n\r" );
-            m_Pcb->m_BoundaryBox.SetHeight( atoi( data ) - m_Pcb->m_BoundaryBox.GetY() );
+            GetBoard()->m_BoundaryBox.SetHeight( atoi( data ) - GetBoard()->m_BoundaryBox.GetY() );
             continue;
         }
 
@@ -300,7 +300,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         {
             int tmp;
             sscanf( data, "%d", &tmp );
-            m_Pcb->m_BoardSettings->m_CopperLayerCount = tmp;
+            GetBoard()->m_BoardSettings->m_CopperLayerCount = tmp;
             continue;
         }
 
@@ -317,13 +317,13 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             if( data )
             {
                 wxString layerName = CONV_FROM_UTF8( data );
-                m_Pcb->SetLayerName( layer, layerName );
+                GetBoard()->SetLayerName( layer, layerName );
 
                 data = strtok( NULL, " " );
                 if( data )
                 {
                     LAYER_T type = LAYER::ParseType( data );
-                    m_Pcb->SetLayerType( layer, type );
+                    GetBoard()->SetLayerType( layer, type );
                 }
             }
             continue;
@@ -583,41 +583,41 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 /******************************************************/
 {
-    EDA_BaseStruct* PtStruct = m_Pcb->m_Modules;
+    EDA_BaseStruct* PtStruct = GetBoard()->m_Modules;
     int             NbModules, NbDrawItem, NbLayers;
 
     /* Write copper layer count */
-    NbLayers = m_Pcb->m_BoardSettings->m_CopperLayerCount;
+    NbLayers = GetBoard()->m_BoardSettings->m_CopperLayerCount;
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "LayerCount %d\n", NbLayers );
 
     // Write old format for Layer count (for compatibility with old versions of pcbnew
     fprintf( File, "Ly %8X\n", g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS ); // For compatibility with old version of pcbnew
-    fprintf( File, "Links %d\n", m_Pcb->m_NbLinks );
-    fprintf( File, "NoConn %d\n", m_Pcb->m_NbNoconnect );
+    fprintf( File, "Links %d\n", GetBoard()->m_NbLinks );
+    fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 
     /* Write Bounding box info */
-    m_Pcb->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundaryBox();
     fprintf( File, "Di %d %d %d %d\n",
-            m_Pcb->m_BoundaryBox.GetX(), m_Pcb->m_BoundaryBox.GetY(),
-            m_Pcb->m_BoundaryBox.GetRight(),
-            m_Pcb->m_BoundaryBox.GetBottom() );
+            GetBoard()->m_BoundaryBox.GetX(), GetBoard()->m_BoundaryBox.GetY(),
+            GetBoard()->m_BoundaryBox.GetRight(),
+            GetBoard()->m_BoundaryBox.GetBottom() );
 
     /* Write segment count for footprints, drawings, track and zones */
     /* Calculate the footprint count */
     for( NbModules = 0; PtStruct != NULL; PtStruct = PtStruct->Next() )
         NbModules++;
 
-    PtStruct = m_Pcb->m_Drawings; NbDrawItem = 0;
+    PtStruct = GetBoard()->m_Drawings; NbDrawItem = 0;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         NbDrawItem++;
 
     fprintf( File, "Ndraw %d\n", NbDrawItem );
-    fprintf( File, "Ntrack %d\n", m_Pcb->GetNumSegmTrack() );
-    fprintf( File, "Nzone %d\n", m_Pcb->GetNumSegmZone() );
+    fprintf( File, "Ntrack %d\n", GetBoard()->GetNumSegmTrack() );
+    fprintf( File, "Nzone %d\n", GetBoard()->GetNumSegmZone() );
 
     fprintf( File, "Nmodule %d\n", NbModules );
-    fprintf( File, "Nnets %d\n", m_Pcb->m_Equipots.GetCount() );
+    fprintf( File, "Nnets %d\n", GetBoard()->m_Equipots.GetCount() );
 
     fprintf( File, "$EndGENERAL\n\n" );
     return TRUE;
@@ -770,7 +770,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     SetLocaleTo_C_standard( );
 
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
 
     while( GetLine( File, Line, &LineNum ) != NULL )
     {
@@ -806,62 +806,62 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( strnicmp( Line, "$EQUIPOT", 7 ) == 0 )
         {
-            EQUIPOT* Equipot = new EQUIPOT( m_Pcb );
-            m_Pcb->m_Equipots.PushBack( Equipot );
+            EQUIPOT* Equipot = new EQUIPOT( GetBoard() );
+            GetBoard()->m_Equipots.PushBack( Equipot );
             Equipot->ReadDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$CZONE_OUTLINE", 7 ) == 0 )
         {
-            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(m_Pcb);
+            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(GetBoard());
             zone_descr->ReadDescr( File, &LineNum );
             if ( zone_descr->GetNumCorners( ) > 2 )     // should not occur
-                m_Pcb->Add(zone_descr);
+                GetBoard()->Add(zone_descr);
             else delete zone_descr;
             continue;
         }
 
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
-            MODULE* Module = new MODULE( m_Pcb );
+            MODULE* Module = new MODULE( GetBoard() );
 
             if( Module == NULL )
                 continue;
 
-            m_Pcb->Add( Module, ADD_APPEND );
+            GetBoard()->Add( Module, ADD_APPEND );
             Module->ReadDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$TEXTPCB", 8 ) == 0 )
         {
-            TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_Pcb );
-            m_Pcb->Add( pcbtxt, ADD_APPEND );
+            TEXTE_PCB* pcbtxt = new TEXTE_PCB( GetBoard() );
+            GetBoard()->Add( pcbtxt, ADD_APPEND );
             pcbtxt->ReadTextePcbDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$DRAWSEGMENT", 10 ) == 0 )
         {
-            DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( m_Pcb );
-            m_Pcb->Add( DrawSegm, ADD_APPEND );
+            DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( GetBoard() );
+            GetBoard()->Add( DrawSegm, ADD_APPEND );
             DrawSegm->ReadDrawSegmentDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$COTATION", 9 ) == 0 )
         {
-            COTATION* Cotation = new COTATION( m_Pcb );
-            m_Pcb->Add( Cotation, ADD_APPEND );
+            COTATION* Cotation = new COTATION( GetBoard() );
+            GetBoard()->Add( Cotation, ADD_APPEND );
             Cotation->ReadCotationDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$MIREPCB", 8 ) == 0 )
         {
-            MIREPCB* Mire = new MIREPCB( m_Pcb );
-            m_Pcb->Add( Mire, ADD_APPEND );
+            MIREPCB* Mire = new MIREPCB( GetBoard() );
+            GetBoard()->Add( Mire, ADD_APPEND );
             Mire->ReadMirePcbDescr( File, &LineNum );
             continue;
         }
@@ -869,10 +869,9 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         if( strnicmp( Line, "$TRACK", 6 ) == 0 )
         {
 #ifdef PCBNEW
-            TRACK* insertBeforeMe = Append ? NULL : m_Pcb->m_Track.GetFirst();
+            TRACK* insertBeforeMe = Append ? NULL : GetBoard()->m_Track.GetFirst();
             ReadListeSegmentDescr( File, insertBeforeMe, TYPE_TRACK,
                                             &LineNum, NbTrack );
-            D( m_Pcb->m_Track.VerifyListIntegrity(); )
 #endif
             continue;
         }
@@ -880,11 +879,10 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         if( strnicmp( Line, "$ZONE", 5 ) == 0 )
         {
 #ifdef PCBNEW
-            SEGZONE* insertBeforeMe = Append ? NULL : m_Pcb->m_Zone.GetFirst();
+            SEGZONE* insertBeforeMe = Append ? NULL : GetBoard()->m_Zone.GetFirst();
 
             ReadListeSegmentDescr( File, insertBeforeMe, TYPE_ZONE,
                                             &LineNum, NbZone );
-            D( m_Pcb->m_Zone.VerifyListIntegrity(); )
 #endif
             continue;
         }
@@ -918,7 +916,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     bool    rc;
     char    line[256];
 
-    m_Pcb->m_Status_Pcb &= ~CONNEXION_OK;
+    GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
 
     wxBeginBusyCursor();
 
@@ -931,9 +929,9 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
 
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( GetScreen(), aFile );
-    WriteSetup( aFile, this, m_Pcb );
+    WriteSetup( aFile, this, GetBoard() );
 
-    rc = m_Pcb->Save( aFile );
+    rc = GetBoard()->Save( aFile );
 
     SetLocaleTo_Default( );      // revert to the current locale
     wxEndBusyCursor();

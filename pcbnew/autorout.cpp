@@ -78,12 +78,12 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         break;
     }
 
-    if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK ) == 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK ) == 0 )
         Compile_Ratsnest( DC, TRUE );
 
     /* Placement du flag CH_ROUTE_REQ sur les chevelus demandes */
-    ptmp = (CHEVELU*) m_Pcb->m_Ratsnest;
-    for( ii = m_Pcb->GetNumRatsnests(); ii > 0; ii--, ptmp++ )
+    ptmp = (CHEVELU*) GetBoard()->m_Ratsnest;
+    for( ii = GetBoard()->GetNumRatsnests(); ii > 0; ii--, ptmp++ )
     {
         ptmp->status &= ~CH_ROUTE_REQ;
 
@@ -118,7 +118,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         }
     }
 
-    ptmp = (CHEVELU*) m_Pcb->m_Ratsnest;
+    ptmp = (CHEVELU*) GetBoard()->m_Ratsnest;
 
     start = time( NULL );
 
@@ -147,10 +147,10 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     }
 
     Affiche_Message( _( "Place Cells" ) );
-    PlaceCells( m_Pcb, -1, FORCE_PADS );
+    PlaceCells( GetBoard(), -1, FORCE_PADS );
 
     /* Construction de la liste des pistes a router */
-    Build_Work( m_Pcb, ptmp );
+    Build_Work( GetBoard(), ptmp );
 
     // DisplayBoard(DrawPanel, DC);
 
@@ -181,14 +181,14 @@ void WinEDA_PcbFrame::Reset_Noroutable( wxDC* DC )
     int      ii;
     CHEVELU* pt_rats;
 
-    if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK )== 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK )== 0 )
         Compile_Ratsnest( DC, TRUE );
 
-    pt_rats = (CHEVELU*) m_Pcb->m_Ratsnest;
+    pt_rats = (CHEVELU*) GetBoard()->m_Ratsnest;
     if( pt_rats == NULL )
         return;
 
-    for( ii = m_Pcb->GetNumRatsnests(); ii > 0; ii--, pt_rats++ )
+    for( ii = GetBoard()->GetNumRatsnests(); ii > 0; ii--, pt_rats++ )
     {
         pt_rats->status &= ~CH_UNROUTABLE;
     }

@@ -210,10 +210,10 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         ll = GetScreen()->m_Active_Layer;
         if( (ll <= COPPER_LAYER_N) || (ll > CMP_N) )
             break;
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
+        if( GetBoard()->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
             ll = COPPER_LAYER_N;
         else if( ll == CMP_N )
-            ll = MAX( COPPER_LAYER_N, m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 );
+            ll = MAX( COPPER_LAYER_N, GetBoard()->m_BoardSettings->m_CopperLayerCount - 2 );
         else
             ll--;
         SwitchLayer( DC, ll );
@@ -223,9 +223,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         ll = GetScreen()->m_Active_Layer;
         if( (ll < COPPER_LAYER_N) || (ll >= CMP_N) )
             break;
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
+        if( GetBoard()->m_BoardSettings->m_CopperLayerCount < 2 )  // Single layer
             ll = COPPER_LAYER_N;
-        else if( ll >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
+        else if( ll >= GetBoard()->m_BoardSettings->m_CopperLayerCount - 2 )
             ll = CMP_N;
         else
             ll++;
@@ -425,7 +425,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_LOCK_UNLOCK_FOOTPRINT:          // toggle module "MODULE_is_LOCKED" status:
         // get any module, locked or not locked and toggle its locked status
         if( ItemFree )
-            module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
+            module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
         else if( GetCurItem()->Type() == TYPE_MODULE )
             module = (MODULE*) GetCurItem();
         if( module )
@@ -445,7 +445,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_FLIP_FOOTPRINT:             // move to other side
         if( ItemFree )
         {
-            module = Locate_Prefered_Module( m_Pcb,
+            module = Locate_Prefered_Module( GetBoard(),
                                              CURSEUR_OFF_GRILLE | IGNORE_LOCKED | VISIBLE_ONLY
     #if defined (USE_MATCH_LAYER)
                                              | MATCH_LAYER
@@ -454,7 +454,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
 
             if( module == NULL )          // no footprint found
             {
-                module = Locate_Prefered_Module( m_Pcb, CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
+                module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
                 if( module )
                 {
                     // a footprint is found, but locked or on an other layer
@@ -504,7 +504,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             break;
 
         case HK_FLIP_FOOTPRINT:                  // move to other side
-            m_Pcb->Change_Side_Module( module, DC );
+            GetBoard()->Change_Side_Module( module, DC );
             break;
 
         case HK_DRAG_FOOTPRINT:                  // Start move (and drag) module
@@ -624,7 +624,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     case ID_COMPONENT_BUTT:
         if( ItemFree )
         {
-            MODULE* module = Locate_Prefered_Module( m_Pcb, CURSEUR_ON_GRILLE );
+            MODULE* module = Locate_Prefered_Module( GetBoard(), CURSEUR_ON_GRILLE );
             if( module == NULL )
                 return FALSE;
             if( !IsOK( this, _( "Delete module?" ) ) )

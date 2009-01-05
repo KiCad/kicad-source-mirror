@@ -133,7 +133,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             int netcode = Select_High_Light( DC );
             if( netcode < 0 )
-                m_Pcb->Display_Infos( this );
+                GetBoard()->Display_Infos( this );
             else
                 Affiche_Infos_Equipot( netcode, this );
         }
@@ -225,7 +225,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             if ( Begin_Zone( DC ) )
             {
-                DrawStruct = m_Pcb->m_CurrentZoneContour;
+                DrawStruct = GetBoard()->m_CurrentZoneContour;
                 GetScreen()->SetCurItem( DrawStruct );
             }
         }
@@ -234,7 +234,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
             Begin_Zone( DC );
-            DrawStruct = m_Pcb->m_CurrentZoneContour;
+            DrawStruct = GetBoard()->m_CurrentZoneContour;
             GetScreen()->SetCurItem( DrawStruct );
         }
         else
@@ -402,8 +402,8 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_DRAWSEGMENT:
-			InstallGraphicItemPropertiesDialog((DRAWSEGMENT*)DrawStruct, &dc);
-			break;
+            InstallGraphicItemPropertiesDialog((DRAWSEGMENT*)DrawStruct, &dc);
+            break;
 
         case TYPE_ZONE_CONTAINER:
             if( DrawStruct->m_Flags )

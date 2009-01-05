@@ -55,7 +55,7 @@ void RemoteCommand(  const char* cmdline )
     {
         modName = CONV_FROM_UTF8( text );
 
-        module = frame->m_Pcb->FindModuleByReference( modName );
+        module = frame->GetBoard()->FindModuleByReference( modName );
 
         if( module )
             msg.Printf( _( "%s found" ), modName.GetData() );
@@ -80,7 +80,7 @@ void RemoteCommand(  const char* cmdline )
 
         modName = CONV_FROM_UTF8( text );
 
-        module = frame->m_Pcb->FindModuleByReference( modName );
+        module = frame->GetBoard()->FindModuleByReference( modName );
         if( module )
             pad = module->FindPadByName( pinName );
 

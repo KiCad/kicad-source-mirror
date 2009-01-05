@@ -30,7 +30,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DISPLAY_OPTIONS      save_opt;
     TRACK*               pt_piste;
     WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) m_Parent;
-    BOARD*               Pcb   = frame->m_Pcb;
+    BOARD*               Pcb   = frame->GetBoard();
 
     save_opt = DisplayOpt;
     if( printmasklayer & ALL_CU_LAYERS )

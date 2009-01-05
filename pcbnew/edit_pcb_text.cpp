@@ -130,10 +130,10 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
 {
     TEXTE_PCB* TextePcb;
 
-    TextePcb = new TEXTE_PCB( m_Pcb );
+    TextePcb = new TEXTE_PCB( GetBoard() );
 
     /* Chainage de la nouvelle structure en debut de liste */
-    m_Pcb->Add( TextePcb );
+    GetBoard()->Add( TextePcb );
 
     /* Mise a jour des caracteristiques */
     TextePcb->m_Flags  = IS_NEW;

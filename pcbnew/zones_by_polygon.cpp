@@ -124,7 +124,7 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
         TimeStamp = aZone->m_TimeStamp; // Save reference time stamp (aZone will be deleted)
 
     SEGZONE* next;
-    for( SEGZONE* zone = m_Pcb->m_Zone; zone != NULL; zone = next )
+    for( SEGZONE* zone = GetBoard()->m_Zone; zone != NULL; zone = next )
     {
         next = zone->Next();
         if( zone->m_TimeStamp == TimeStamp )
@@ -157,7 +157,7 @@ int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
  * if no corner in list, close the outline creation
  */
 {
-    ZONE_CONTAINER* zone = m_Pcb->m_CurrentZoneContour;
+    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
 
     if( zone == NULL )
         return 0;
@@ -195,7 +195,7 @@ static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 {
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
-    ZONE_CONTAINER*  zone = pcbframe->m_Pcb->m_CurrentZoneContour;
+    ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( zone )
     {
@@ -321,15 +321,15 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
 
     /* Combine zones if possible */
     wxBusyCursor dummy;
-    m_Pcb->AreaPolygonModified( zone_container, true, verbose );
+    GetBoard()->AreaPolygonModified( zone_container, true, verbose );
     DrawPanel->Refresh();
 
 
-    int ii = m_Pcb->GetAreaIndex( zone_container );     // test if zone_container exists
+    int ii = GetBoard()->GetAreaIndex( zone_container );     // test if zone_container exists
     if( ii < 0 )
         zone_container = NULL;                          // was removed by combining zones
 
-    int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone_container, true );
+    int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone_container, true );
     if( error_count )
     {
         DisplayError( this, _( "Area: DRC outline error" ) );
@@ -360,7 +360,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
             Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
             zone_container->DrawFilledArea( DrawPanel, DC, GR_XOR );
         }
-        m_Pcb->Delete( zone_container );
+        GetBoard()->Delete( zone_container );
         return;
     }
 
@@ -368,24 +368,24 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
 
     if( DC )
     {
-        m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
-        m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_XOR, layer );
+        GetBoard()->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
+        GetBoard()->RedrawFilledAreas( DrawPanel, DC, GR_XOR, layer );
     }
 
     zone_container->m_Poly->DeleteCorner( zone_container->m_CornerSelection );
 
     // modify zones outlines according to the new zone_container shape
-    m_Pcb->AreaPolygonModified( zone_container, true, verbose );
+    GetBoard()->AreaPolygonModified( zone_container, true, verbose );
     if( DC )
     {
-        m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
-        m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_OR, layer );
+        GetBoard()->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+        GetBoard()->RedrawFilledAreas( DrawPanel, DC, GR_OR, layer );
     }
 
-    int ii = m_Pcb->GetAreaIndex( zone_container );     // test if zone_container exists
+    int ii = GetBoard()->GetAreaIndex( zone_container );     // test if zone_container exists
     if( ii < 0 )
         zone_container = NULL;                          // zone_container does not exist anymaore, after combining zones
-    int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone_container, true );
+    int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone_container, true );
     if( error_count )
     {
         DisplayError( this, _( "Area: DRC outline error" ) );
@@ -498,23 +498,23 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 {
     // verify if s_CurrentZone exists (could be deleted since last selection) :
     int ii;
-    for( ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    for( ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
-        if( s_CurrentZone == m_Pcb->GetArea( ii ) )
+        if( s_CurrentZone == GetBoard()->GetArea( ii ) )
             break;
     }
 
-    if( ii >= m_Pcb->GetAreaCount() ) // Not found: could be deleted since last selection
+    if( ii >= GetBoard()->GetAreaCount() ) // Not found: could be deleted since last selection
     {
         s_AddCutoutToCurrentZone = false;
         s_CurrentZone = NULL;
     }
 
     // If no zone contour in progress, a new zone is beeing created:
-    if( m_Pcb->m_CurrentZoneContour == NULL )
-        m_Pcb->m_CurrentZoneContour = new ZONE_CONTAINER( m_Pcb );
+    if( GetBoard()->m_CurrentZoneContour == NULL )
+        GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
 
-    ZONE_CONTAINER* zone = m_Pcb->m_CurrentZoneContour;
+    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
     if( zone->GetNumCorners() == 0 )    /* Start a new contour: init zone params (net, layer ...) */
     {
         if( s_CurrentZone == NULL )     // A new outline is created, from scratch
@@ -639,10 +639,10 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
  * terminates (if no DRC error ) the zone edge creation process
  * @param DC = current Device Context
  * @return true if Ok, false if DRC error
- * if ok, put it in the main list m_Pcb->m_ZoneDescriptorList (a vector<ZONE_CONTAINER*>)
+ * if ok, put it in the main list GetBoard()->m_ZoneDescriptorList (a vector<ZONE_CONTAINER*>)
  */
 {
-    ZONE_CONTAINER* zone = m_Pcb->m_CurrentZoneContour;
+    ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
 
     if( zone == NULL )
         return true;
@@ -678,15 +678,15 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
     // Undraw old drawings, because they can have important changes
     int layer = zone->GetLayer();
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
-    m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_XOR, layer );
+    GetBoard()->RedrawAreasOutlines( DrawPanel, DC, GR_XOR, layer );
+    GetBoard()->RedrawFilledAreas( DrawPanel, DC, GR_XOR, layer );
 
     /* Put edges in list */
     if( s_CurrentZone == NULL )
     {
         zone->m_Poly->Close(); // Close the current corner list
-        m_Pcb->Add( zone );
-        m_Pcb->m_CurrentZoneContour = NULL;
+        GetBoard()->Add( zone );
+        GetBoard()->m_CurrentZoneContour = NULL;
     }
     else    // Append this outline as a cutout to an existing zone
     {
@@ -706,16 +706,16 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
     GetScreen()->SetCurItem( NULL );       // This outine can be deleted when merging outlines
 
     // Combine zones if possible :
-    m_Pcb->AreaPolygonModified( zone, true, verbose );
+    GetBoard()->AreaPolygonModified( zone, true, verbose );
 
     // Redraw the real edge zone :
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
-    m_Pcb->RedrawFilledAreas( DrawPanel, DC, GR_OR, layer );
+    GetBoard()->RedrawAreasOutlines( DrawPanel, DC, GR_OR, layer );
+    GetBoard()->RedrawFilledAreas( DrawPanel, DC, GR_OR, layer );
 
-    int ii = m_Pcb->GetAreaIndex( zone );   // test if zone_container exists
+    int ii = GetBoard()->GetAreaIndex( zone );   // test if zone_container exists
     if( ii < 0 )
         zone = NULL;                        // was removed by combining zones
-    int error_count = m_Pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone, true );
+    int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone, true );
     if( error_count )
     {
         DisplayError( this, _( "Area: DRC outline error" ) );
@@ -735,7 +735,7 @@ static void Show_New_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, b
 {
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) panel->m_Parent;
     wxPoint          c_pos    = pcbframe->GetScreen()->m_Curseur;
-    ZONE_CONTAINER*  zone = pcbframe->m_Pcb->m_CurrentZoneContour;
+    ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( zone == NULL )
         return;
@@ -792,23 +792,23 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
         return;
 
     // Undraw old zone outlines
-    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
+        ZONE_CONTAINER* edge_zone = GetBoard()->GetArea( ii );
         edge_zone->Draw( DrawPanel, DC, GR_XOR );
     }
 
     g_Zone_Default_Setting.ExportSetting( *zone_container);
-    EQUIPOT* net = m_Pcb->FindNet( g_Zone_Default_Setting.m_NetcodeSelection );
+    EQUIPOT* net = GetBoard()->FindNet( g_Zone_Default_Setting.m_NetcodeSelection );
     if( net )   // net === NULL should not occur
         zone_container->m_Netname = net->GetNetname();
 
 
     // Combine zones if possible :
-    m_Pcb->AreaPolygonModified( zone_container, true, verbose );
+    GetBoard()->AreaPolygonModified( zone_container, true, verbose );
 
     // Redraw the real new zone outlines:
-    m_Pcb->RedrawAreasOutlines( DrawPanel, DC, GR_OR, -1 );
+    GetBoard()->RedrawAreasOutlines( DrawPanel, DC, GR_OR, -1 );
 
     GetScreen()->SetModify();
 }
@@ -835,7 +835,7 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
     Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );  // Remove fill segments
 
     if( ncont == 0 )                                            // This is the main outline: remove all
-        m_Pcb->Delete( zone_container );
+        GetBoard()->Delete( zone_container );
 
     else
     {
@@ -866,7 +866,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     wxString msg;
 
     MsgPanel->EraseMsgBox();
-    if( m_Pcb->ComputeBoundaryBox() == FALSE )
+    if( GetBoard()->ComputeBoundaryBox() == FALSE )
     {
         if( verbose )
             DisplayError( this, wxT( "Board is empty!" ), 10 );
@@ -886,7 +886,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     if( g_HightLigth_NetCode > 0 )
     {
-        EQUIPOT* net = m_Pcb->FindNet( g_HightLigth_NetCode );
+        EQUIPOT* net = GetBoard()->FindNet( g_HightLigth_NetCode );
         if( net == NULL )
         {
             if( g_HightLigth_NetCode > 0 )
@@ -908,7 +908,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
     int          error_level = 0;
     zone_container->m_FilledPolysList.clear();
     Delete_Zone_Fill( NULL, NULL, zone_container->m_TimeStamp );
-    zone_container->BuildFilledPolysListData( m_Pcb );
+    zone_container->BuildFilledPolysListData( GetBoard() );
     if ( DC )
         DrawPanel->Refresh();
 
@@ -933,11 +933,11 @@ int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
     int             error_level = 0;
 
     // Remove all zones :
-    m_Pcb->m_Zone.DeleteAll();
+    GetBoard()->m_Zone.DeleteAll();
 
-    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
-        zone_container = m_Pcb->GetArea( ii );
+        zone_container = GetBoard()->GetArea( ii );
         error_level    = Fill_Zone( NULL, zone_container, verbose );
         if( error_level && !verbose )
             break;

@@ -215,7 +215,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 
     Ncurrent = 0;
     MsgPanel->EraseMsgBox();
-    msg.Printf( wxT( "%d  " ), m_Pcb->m_NbNoconnect );
+    msg.Printf( wxT( "%d  " ), GetBoard()->m_NbNoconnect );
     Affiche_1_Parametre( this, 72, wxT( "NoConn" ), msg, CYAN );
 
 
@@ -242,7 +242,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         }
 
         Ncurrent++;
-        pt_equipot = m_Pcb->FindNet( current_net_code );
+        pt_equipot = GetBoard()->FindNet( current_net_code );
         if( pt_equipot )
         {
             msg.Printf( wxT( "[%8.8s]" ), pt_equipot->GetNetname().GetData() );
@@ -252,10 +252,10 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         }
 
         pt_cur_ch = pt_cur_ch;
-        segm_oX   = m_Pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * col_source);
-        segm_oY   = m_Pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * row_source);
-        segm_fX   = m_Pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * col_target);
-        segm_fY   = m_Pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * row_target);
+        segm_oX   = GetBoard()->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * col_source);
+        segm_oY   = GetBoard()->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * row_source);
+        segm_fX   = GetBoard()->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * col_target);
+        segm_fY   = GetBoard()->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * row_target);
 
         /* Affiche Liaison */
         GRLine( &DrawPanel->m_ClipBox, DC, segm_oX, segm_oY, segm_fX, segm_fY, 0, WHITE | GR_XOR );
@@ -289,7 +289,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         Affiche_1_Parametre( this, 22, wxT( "Ok" ), msg, GREEN );
         msg.Printf( wxT( "%d  " ), nbunsucces );
         Affiche_1_Parametre( this, 30, wxT( "Fail" ), msg, RED );
-        msg.Printf( wxT( "%d  " ), m_Pcb->m_NbNoconnect );
+        msg.Printf( wxT( "%d  " ), GetBoard()->m_NbNoconnect );
         Affiche_1_Parametre( this, 38, wxT( "NoConn" ), msg, CYAN );
 
         /* Effacement des affichages de routage sur l'ecran */
@@ -381,8 +381,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     /* Test 2 Si routage possible c.a.d si les pads sont accessibles
      *  sur la grille de routage ( 1 point de grille doit etre dans le pad)*/
     {
-        int cX = (g_GridRoutingSize * col_source) + pcbframe->m_Pcb->m_BoundaryBox.m_Pos.x;
-        int cY = (g_GridRoutingSize * row_source) + pcbframe->m_Pcb->m_BoundaryBox.m_Pos.y;
+        int cX = (g_GridRoutingSize * col_source) + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.x;
+        int cY = (g_GridRoutingSize * row_source) + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.y;
         int dx = pt_cur_ch->pad_start->m_Size.x / 2;
         int dy = pt_cur_ch->pad_start->m_Size.y / 2;
         int px = pt_cur_ch->pad_start->GetPosition().x;
@@ -393,8 +393,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
         if( (abs( cX - px ) > dx ) || (abs( cY - py ) > dy) )
             goto end_of_route;
 
-        cX = (g_GridRoutingSize * col_target) + pcbframe->m_Pcb->m_BoundaryBox.m_Pos.x;
-        cY = (g_GridRoutingSize * row_target) + pcbframe->m_Pcb->m_BoundaryBox.m_Pos.y;
+        cX = (g_GridRoutingSize * col_target) + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.x;
+        cY = (g_GridRoutingSize * row_target) + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.y;
         dx = pt_cur_ch->pad_end->m_Size.x / 2;
         dy = pt_cur_ch->pad_end->m_Size.y / 2;
         px = pt_cur_ch->pad_end->GetPosition().x;
@@ -419,18 +419,18 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     /* Placement du bit de suppression d'obstacle relative aux 2 pads a relier */
     pcbframe->Affiche_Message( wxT( "Gen Cells" ) );
 
-    Place_1_Pad_Board( pcbframe->m_Pcb, pt_cur_ch->pad_start, CURRENT_PAD, marge, WRITE_OR_CELL );
-    Place_1_Pad_Board( pcbframe->m_Pcb, pt_cur_ch->pad_end, CURRENT_PAD, marge, WRITE_OR_CELL );
+    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_start, CURRENT_PAD, marge, WRITE_OR_CELL );
+    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_end, CURRENT_PAD, marge, WRITE_OR_CELL );
 
     /* Regenere les barrieres restantes (qui peuvent empieter sur le placement
      *  des bits precedents) */
-    ptr = (LISTE_PAD*) &pcbframe->m_Pcb->m_Pads[0];
-    i = pcbframe->m_Pcb->m_Pads.size();
+    ptr = (LISTE_PAD*) &pcbframe->GetBoard()->m_Pads[0];
+    i = pcbframe->GetBoard()->m_Pads.size();
     for( ; i > 0; i--, ptr++ )
     {
         if( (pt_cur_ch->pad_start != *ptr) && (pt_cur_ch->pad_end != *ptr) )
         {
-            Place_1_Pad_Board( pcbframe->m_Pcb, *ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+            Place_1_Pad_Board( pcbframe->GetBoard(), *ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
         }
     }
 
@@ -678,8 +678,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     }
 
 end_of_route:
-    Place_1_Pad_Board( pcbframe->m_Pcb, pt_cur_ch->pad_start, ~CURRENT_PAD, marge, WRITE_AND_CELL );
-    Place_1_Pad_Board( pcbframe->m_Pcb, pt_cur_ch->pad_end, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_start, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_end, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
     return result;
 }
@@ -827,7 +827,7 @@ static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 return 0;
             }
 
-            OrCell_Trace( pcbframe->m_Pcb, r1, c1, s1, p_dir, current_net_code );
+            OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, p_dir, current_net_code );
         }
         else
         {
@@ -842,9 +842,9 @@ static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                    || x == FROM_OTHERSIDE)
                && ( (b = bit[y - 1][x - 1]) != 0 ) )
             {
-                OrCell_Trace( pcbframe->m_Pcb, r1, c1, s1, b, current_net_code );
+                OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, b, current_net_code );
                 if( b & HOLE )
-                    OrCell_Trace( pcbframe->m_Pcb, r2, c2, s2, HOLE, current_net_code );
+                    OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, HOLE, current_net_code );
             }
             else
             {
@@ -889,7 +889,7 @@ static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 return 0;
             }
 
-            OrCell_Trace( pcbframe->m_Pcb, r2, c2, s2, p_dir, current_net_code );
+            OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, p_dir, current_net_code );
         }
         /* move to next cell */
         r0 = r1; c0 = c1; s0 = s1;
@@ -1047,16 +1047,16 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = Locate_Pad_Connecte( pcbframe->m_Pcb, g_FirstTrackSegment, START );
+    g_FirstTrackSegment->start = Locate_Pad_Connecte( pcbframe->GetBoard(), g_FirstTrackSegment, START );
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, ON );
 
-    g_CurrentTrackSegment->end = Locate_Pad_Connecte( pcbframe->m_Pcb, g_CurrentTrackSegment, END );
+    g_CurrentTrackSegment->end = Locate_Pad_Connecte( pcbframe->GetBoard(), g_CurrentTrackSegment, END );
     if( g_CurrentTrackSegment->end )
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );
 
     /* recherche de la zone de rangement et insertion de la nouvelle piste */
-    pcbframe->m_Pcb->Add( g_FirstTrackSegment );
+    pcbframe->GetBoard()->Add( g_FirstTrackSegment );
 
     Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_OR );
 
@@ -1065,8 +1065,8 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     /* Trace de la forme exacte de la piste en BOARD */
     for( TRACK* track = g_FirstTrackSegment;  track;  track = track->Next() )
     {
-        TraceSegmentPcb( pcbframe->m_Pcb, track, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( pcbframe->m_Pcb, track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+        TraceSegmentPcb( pcbframe->GetBoard(), track, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( pcbframe->GetBoard(), track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     ActiveScreen->SetModify();

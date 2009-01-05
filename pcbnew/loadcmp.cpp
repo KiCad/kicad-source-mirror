@@ -47,10 +47,10 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 
     if( Module == NULL )
     {
-        if( parent->m_Pcb == NULL || parent->m_Pcb->m_Modules == NULL )
+        if( parent->GetBoard() == NULL || parent->GetBoard()->m_Modules == NULL )
             return;
 
-        Module = Select_1_Module_From_BOARD( parent->m_Pcb );
+        Module = Select_1_Module_From_BOARD( parent->GetBoard() );
     }
 
     if( Module == NULL )
@@ -60,14 +60,14 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 
     Clear_Pcb( TRUE );
 
-    m_Pcb->m_Status_Pcb = 0;
-    NewModule = new MODULE( m_Pcb );
+    GetBoard()->m_Status_Pcb = 0;
+    NewModule = new MODULE( GetBoard() );
     NewModule->Copy( Module );
     NewModule->m_Link = Module->m_TimeStamp;
 
     Module = NewModule;
 
-    m_Pcb->Add( Module );
+    GetBoard()->Add( Module );
 
     Module->m_Flags = 0;
 
@@ -76,7 +76,7 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Place_Module( Module, NULL );
     if( Module->GetLayer() != CMP_N )
-        m_Pcb->Change_Side_Module( Module, NULL );
+        GetBoard()->Change_Side_Module( Module, NULL );
     Rotate_Module( NULL, Module, 0, FALSE );
     GetScreen()->ClrModify();
     Zoom_Automatique( TRUE );
@@ -154,7 +154,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         module->m_Flags     = IS_NEW;
         module->m_Link      = 0;
         module->m_TimeStamp = GetTimeStamp();
-        m_Pcb->m_Status_Pcb = 0;
+        GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
         build_liste_pads();
 
@@ -254,14 +254,14 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
             Name = CONV_FROM_UTF8( Line + 8 );
             if( Name.CmpNoCase( ComponentName ) == 0 )  /* composant localise */
             {
-                NewModule = new MODULE( m_Pcb );
+                NewModule = new MODULE( GetBoard() );
 
                 // Switch the locale to standard C (needed to print floating point numbers like 1.3)
                 SetLocaleTo_C_standard( );
                 NewModule->ReadDescr( lib_module, &LineNum );
                 SetLocaleTo_Default( );        // revert to the current  locale
 
-                m_Pcb->Add( NewModule, ADD_APPEND );
+                GetBoard()->Add( NewModule, ADD_APPEND );
                 fclose( lib_module );
                 Affiche_Message( wxEmptyString );
                 return NewModule;

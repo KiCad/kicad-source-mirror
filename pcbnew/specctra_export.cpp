@@ -87,11 +87,11 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
     //  DSN Images (=Kicad MODULES and pads) must be presented from the
     //  top view.  So we temporarily flip any modules which are on the back
     //  side of the board to the front, and record this in the MODULE's flag field.
-    db.FlipMODULEs( m_Pcb );
+    db.FlipMODULEs( GetBoard() );
 
     try
     {
-        db.FromBOARD( m_Pcb );
+        db.FromBOARD( GetBoard() );
         db.ExportPCB(  fullFileName, true );
 
         // if an exception is thrown by FromBOARD or ExportPCB(), then
@@ -108,7 +108,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
     SetLocaleTo_Default( );      // revert to the current locale
 
     // done assuredly, even if an exception was thrown and caught.
-    db.RevertMODULEs( m_Pcb );
+    db.RevertMODULEs( GetBoard() );
 
 
     // The two calls below to BOARD::Change_Side_Module(), both set the

@@ -23,15 +23,18 @@ void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC, int dcode_value, int laye
 {
     if( dcode_value < FIRST_DCODE )  // No tool selected
         return;
-    BOARD* Pcb   = m_Pcb;
-    TRACK* track = Pcb->m_Track, * next_track;
-    for( ; track != NULL; track = next_track )
+
+    TRACK* next;
+    for( TRACK* track = GetBoard()->m_Track;  track;  track = next  )
     {
-        next_track = track->Next();
+        next = track->Next();
+
         if( dcode_value != track->GetNet() )
             continue;
+
         if( layer_number >= 0 && layer_number != track->GetLayer() )
             continue;
+
         Delete_Segment( DC, track );
     }
 

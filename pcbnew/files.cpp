@@ -149,7 +149,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     {
         GetScreen()->m_FileName = wxEmptyString;
         GetScreen()->SetModify();
-        m_Pcb->m_Status_Pcb = 0;
+        GetBoard()->m_Status_Pcb = 0;
     }
 
     wxString fileName;
@@ -253,7 +253,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     build_liste_pads();
 
-    m_Pcb->Display_Infos( this );
+    GetBoard()->Display_Infos( this );
     DrawPanel->Refresh( true);
 
     /* reset the auto save timer */
@@ -268,7 +268,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     // the pcbnew program when the pipe it is writing to gets full.
 
     // Output the board object tree to stdout, but please run from command prompt:
-    m_Pcb->Show( 0, std::cout );
+    GetBoard()->Show( 0, std::cout );
 #endif
 
     return 1;

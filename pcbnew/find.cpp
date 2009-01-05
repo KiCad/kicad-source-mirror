@@ -33,7 +33,7 @@ void WinEDA_PcbFrame::InstallFindFrame( const wxPoint& pos, wxDC* DC )
 {
     WinEDA_PcbFindFrame* frame = new WinEDA_PcbFindFrame( this, DC, pos );
 
-    frame->ShowModal(); 
+    frame->ShowModal();
     frame->Destroy();
 }
 
@@ -42,7 +42,7 @@ void WinEDA_PcbFrame::InstallFindFrame( const wxPoint& pos, wxDC* DC )
 void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
 /********************************************************/
 {
-	PCB_SCREEN* screen = (PCB_SCREEN*)(m_Parent->GetScreen());
+    PCB_SCREEN* screen = (PCB_SCREEN*)(m_Parent->GetScreen());
     wxPoint     locate_pos;
     wxString    msg;
     bool        FindMarker = FALSE;
@@ -69,7 +69,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
 
     if( FindMarker )
     {
-        MARKER* marker = m_Parent->m_Pcb->GetMARKER( s_MarkerCount++ );
+        MARKER* marker = m_Parent->GetBoard()->GetMARKER( s_MarkerCount++ );
         if( marker )
         {
             foundItem  = marker;
@@ -79,7 +79,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     else
     {
         int StartCount = 0;
-        for( MODULE* module = m_Parent->m_Pcb->m_Modules;   module;   module = module->Next() )
+        for( MODULE* module = m_Parent->GetBoard()->m_Modules;   module;   module = module->Next() )
         {
             if( WildCompareString( s_OldStringFound, module->GetReference().GetData(), FALSE ) )
             {
@@ -109,27 +109,27 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     if( foundItem )
     {
         m_Parent->SetCurItem( foundItem );
-        
+
         if( FindMarker )
             msg = _( "Marker found" );
         else
-            msg.Printf( _( "<%s> Found" ), s_OldStringFound.GetData() );        
+            msg.Printf( _( "<%s> Found" ), s_OldStringFound.GetData() );
 
         m_Parent->Affiche_Message( msg );
-        
+
         m_Parent->CursorGoto( locate_pos );
-        
+
         EndModal( 1 );
     }
     else
     {
         m_Parent->Affiche_Message( wxEmptyString );
-        
+
         if( FindMarker )
             msg = _( "Marker not found" );
         else
             msg.Printf( _( "<%s> Not Found" ), s_OldStringFound.GetData() );
-        
+
         DisplayError( this, msg, 10 );
         EndModal( 0 );
     }

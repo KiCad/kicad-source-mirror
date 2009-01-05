@@ -20,9 +20,9 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
     EDA_BaseStruct* item;
     MODULE*         CopyItem;
 
-    CopyItem = new MODULE( m_Pcb );
+    CopyItem = new MODULE( GetBoard() );
     CopyItem->Copy( (MODULE*) ItemToCopy );
-    CopyItem->SetParent( m_Pcb );
+    CopyItem->SetParent( GetBoard() );
 
     GetScreen()->AddItemToUndoList( (EDA_BaseStruct*) CopyItem );
     /* Clear current flags (which can be temporary set by a current edit command) */
@@ -51,9 +51,9 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
     if( GetScreen()->m_RedoList == NULL )
         return;
 
-    GetScreen()->AddItemToUndoList( m_Pcb->m_Modules.PopFront() );
+    GetScreen()->AddItemToUndoList( GetBoard()->m_Modules.PopFront() );
 
-    m_Pcb->Add( (MODULE*) GetScreen()->GetItemFromRedoList() );
+    GetBoard()->Add( (MODULE*) GetScreen()->GetItemFromRedoList() );
 
     SetCurItem( NULL );;
     GetScreen()->SetModify();
@@ -74,15 +74,15 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
     if( GetScreen()->m_UndoList == NULL )
         return;
 
-    GetScreen()->AddItemToRedoList( m_Pcb->m_Modules.PopFront() );
+    GetScreen()->AddItemToRedoList( GetBoard()->m_Modules.PopFront() );
 
     MODULE* module = (MODULE*) GetScreen()->GetItemFromUndoList();
     if( module )
-        m_Pcb->Add( module, ADD_APPEND );
+        GetBoard()->Add( module, ADD_APPEND );
 
 /*  Add() calls PushBack(), no need for this
-    if( m_Pcb->m_Modules )
-        m_Pcb->m_Modules->SetNext( NULL );
+    if( GetBoard()->m_Modules )
+        GetBoard()->m_Modules->SetNext( NULL );
 */
 
     GetScreen()->SetModify();

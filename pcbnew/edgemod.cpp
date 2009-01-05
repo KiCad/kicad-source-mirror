@@ -153,7 +153,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
  * @param DC = current Device Context
 */
 {
-    MODULE* Module = m_Pcb->m_Modules;
+    MODULE* Module = GetBoard()->m_Modules;
 
     SaveCopyInUndoList( Module );
 
@@ -187,7 +187,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
  * @param DC = current Device Context
 */
 {
-    MODULE* Module    = m_Pcb->m_Modules;
+    MODULE* Module    = GetBoard()->m_Modules;
     int     new_layer = SILKSCREEN_N_CMP;
     if( Edge != NULL )
         new_layer = Edge->GetLayer();
@@ -255,7 +255,7 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
     }
     if( Edge )
     {
-        MODULE* Module = m_Pcb->m_Modules;
+        MODULE* Module = GetBoard()->m_Modules;
         Module->DrawEdgesOnly( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
         Edge->m_Width = ModuleSegmentWidth;
         Module->DrawEdgesOnly( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
@@ -335,7 +335,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
  * @return the new created edge.
  */
 {
-    MODULE* module = m_Pcb->m_Modules;
+    MODULE* module = GetBoard()->m_Modules;
     int     angle  = 0;
 
     if( module == NULL )
@@ -439,7 +439,7 @@ void WinEDA_ModuleEditFrame::End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 /* Terminate a move or create edge function
 */
 {
-    MODULE* Module = m_Pcb->m_Modules;
+    MODULE* Module = GetBoard()->m_Modules;
 
     /* If last segment length is 0: deletion */
     if( Edge )

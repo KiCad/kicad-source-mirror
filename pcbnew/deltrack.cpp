@@ -116,7 +116,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
     GetScreen()->SetModify();
 
     test_1_net_connexion( DC, current_net_code );
-    m_Pcb->Display_Infos( this );
+    GetBoard()->Display_Infos( this );
     return NULL;
 }
 
@@ -147,7 +147,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
         int    net_code_delete = aTrack->GetNet();
 
         /* Recherche du debut de la zone des pistes du net_code courant */
-        TRACK* trackList = m_Pcb->m_Track->GetStartNetCode( net_code_delete );
+        TRACK* trackList = GetBoard()->m_Track->GetStartNetCode( net_code_delete );
 
         /* Decompte du nombre de segments de la sous-chaine */
 
@@ -163,7 +163,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
         SaveItemEfface( trackList, ii );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, net_code_delete );
-        m_Pcb->Display_Infos( this );
+        GetBoard()->Display_Infos( this );
     }
 }
 

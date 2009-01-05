@@ -78,6 +78,8 @@ GERBER::GERBER( int aLayer )
 
     for( unsigned ii = 0; ii < DIM( m_Aperture_List );  ii++ )
         m_Aperture_List[ii] = 0;
+
+    m_Pcb = 0;
 }
 
 
@@ -88,6 +90,8 @@ GERBER::~GERBER()
         delete m_Aperture_List[ii];
         // m_Aperture_List[ii] = NULL;
     }
+
+    delete m_Pcb;
 }
 
 
@@ -381,7 +385,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 {
     static D_CODE dummy(999);   //Used if D_CODE not found in list
 
-    for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
+    for( TRACK* track = GetBoard()->m_Track;  track;  track = track->Next() )
     {
         GERBER* gerber = g_GERBER_List[track->GetLayer()];
         wxASSERT( gerber );

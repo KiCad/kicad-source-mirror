@@ -32,12 +32,12 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             switch( DrawStruct->Type() )
             {
             case TYPE_TEXTE_MODULE:
-                SaveCopyInUndoList( m_Pcb->m_Modules );
+                SaveCopyInUndoList( GetBoard()->m_Modules );
                 PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, DC );
                 break;
 
             case TYPE_EDGE_MODULE:
-                SaveCopyInUndoList( m_Pcb->m_Modules );
+                SaveCopyInUndoList( GetBoard()->m_Modules );
                 Place_EdgeMod( (EDGE_MODULE*) DrawStruct, DC );
                 break;
 
@@ -119,7 +119,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct = ModeditLocateAndDisplay();
             if( DrawStruct && (DrawStruct->m_Flags == 0) )
             {
-                SaveCopyInUndoList( m_Pcb->m_Modules );
+                SaveCopyInUndoList( GetBoard()->m_Modules );
                 RemoveStruct( DrawStruct, DC );
                 SetCurItem( DrawStruct = NULL );
             }
@@ -127,27 +127,27 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_PLACE_ANCHOR:
-        SaveCopyInUndoList( m_Pcb->m_Modules );
-        Place_Ancre( m_Pcb->m_Modules, DC );
-        m_Pcb->m_Modules->m_Flags  = 0;
+        SaveCopyInUndoList( GetBoard()->m_Modules );
+        Place_Ancre( GetBoard()->m_Modules, DC );
+        GetBoard()->m_Modules->m_Flags  = 0;
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Recadre_Trace( TRUE );
-        Place_Module( m_Pcb->m_Modules, DC );
+        Place_Module( GetBoard()->m_Modules, DC );
         RedrawActiveWindow( DC, TRUE );
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         SetCurItem( NULL );
         break;
 
     case ID_TEXT_COMMENT_BUTT:
-        SaveCopyInUndoList( m_Pcb->m_Modules );
-        CreateTextModule( m_Pcb->m_Modules, DC );
+        SaveCopyInUndoList( GetBoard()->m_Modules );
+        CreateTextModule( GetBoard()->m_Modules, DC );
         break;
 
     case ID_MODEDIT_ADD_PAD:
-        if( m_Pcb->m_Modules )
+        if( GetBoard()->m_Modules )
         {
-            SaveCopyInUndoList( m_Pcb->m_Modules );
-            AddPad( m_Pcb->m_Modules, true );
+            SaveCopyInUndoList( GetBoard()->m_Modules );
+            AddPad( GetBoard()->m_Modules, true );
         }
         break;
 

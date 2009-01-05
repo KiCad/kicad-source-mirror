@@ -200,7 +200,7 @@ void WinEDA_PrintFrame::SetOthersDatas()
     {
         m_BoxSelecLayer[ii] = new wxCheckBox( this, -1,
 #if defined (PCBNEW)
-                                             ( (WinEDA_PcbFrame*) m_Parent )->m_Pcb->GetLayerName(
+                                             ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->GetLayerName(
                                                  ii ) );
          #else
                                              ReturnLayerName( ii ) );
@@ -690,22 +690,22 @@ void EDA_Printout::DrawPage()
 
 #ifdef PCBNEW
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
-    pcbframe->m_Pcb->ComputeBoundaryBox();
+    pcbframe->GetBoard()->ComputeBoundaryBox();
     /* Compute the PCB size in internal units*/
     userscale = s_ScaleList[s_Scale_Select];
     if( userscale == 0 )            //  fit in page
     {
         int extra_margin = 8000;    // Margin = 8000/2 units pcb = 0,4 inch
-        SheetSize.x = pcbframe->m_Pcb->m_BoundaryBox.GetWidth() + extra_margin;
-        SheetSize.y = pcbframe->m_Pcb->m_BoundaryBox.GetHeight() + extra_margin;
+        SheetSize.x = pcbframe->GetBoard()->m_BoundaryBox.GetWidth() + extra_margin;
+        SheetSize.y = pcbframe->GetBoard()->m_BoundaryBox.GetHeight() + extra_margin;
         userscale   = 0.99;
     }
 
     if( (s_ScaleList[s_Scale_Select] > 1.0)         //  scale > 1 -> Recadrage
        || (s_ScaleList[s_Scale_Select] == 0) )      //  fit in page
     {
-        DrawOffset.x += pcbframe->m_Pcb->m_BoundaryBox.Centre().x;
-        DrawOffset.y += pcbframe->m_Pcb->m_BoundaryBox.Centre().y;
+        DrawOffset.x += pcbframe->GetBoard()->m_BoundaryBox.Centre().x;
+        DrawOffset.y += pcbframe->GetBoard()->m_BoundaryBox.Centre().y;
     }
 #else
     userscale = 1;
@@ -818,7 +818,7 @@ void EDA_Printout::DrawPage()
          * for scales > 1, the DrawOffset was already computed to have the board centre
          * to the middle of the page.
          */
-        wxPoint pcb_centre = pcbframe->m_Pcb->m_BoundaryBox.Centre();
+        wxPoint pcb_centre = pcbframe->GetBoard()->m_BoundaryBox.Centre();
         if( userscale <= 1.0 )
             DrawOffset.y += pcb_centre.y - (ysize / 2);
         ActiveScreen->m_DrawOrg = DrawOffset;

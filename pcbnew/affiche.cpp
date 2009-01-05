@@ -30,7 +30,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
-    equipot = frame->m_Pcb->FindNet( netcode );
+    equipot = frame->GetBoard()->FindNet( netcode );
     if( equipot )
         Affiche_1_Parametre( frame, 1, _( "Net Name" ), equipot->GetNetname(), RED );
     else
@@ -39,7 +39,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     txt.Printf( wxT( "%d" ), netcode );
     Affiche_1_Parametre( frame, 30, _( "Net Code" ), txt, RED );
 
-    for( ii = 0, module = frame->m_Pcb->m_Modules; module != 0;
+    for( ii = 0, module = frame->GetBoard()->m_Modules; module != 0;
          module = module->Next() )
     {
         for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
@@ -52,7 +52,7 @@ void Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame )
     txt.Printf( wxT( "%d" ), ii );
     Affiche_1_Parametre( frame, 40, _( "Pads" ), txt, DARKGREEN );
 
-    for( ii = 0, Struct = frame->m_Pcb->m_Track; Struct != NULL; Struct = Struct->Next() )
+    for( ii = 0, Struct = frame->GetBoard()->m_Track; Struct != NULL; Struct = Struct->Next() )
     {
         ii++;
         if( Struct->Type() == TYPE_VIA )

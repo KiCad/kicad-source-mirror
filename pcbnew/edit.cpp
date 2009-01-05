@@ -257,7 +257,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_TRACK_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Tracks" ) );
         DisplayTrackSettings();
-        if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+        if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
         {
             Compile_Ratsnest( &dc, TRUE );
         }
@@ -307,7 +307,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
         SetToolID( id, wxCURSOR_HAND, _( "Local Ratsnest" ) );
-        if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+        if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
             Compile_Ratsnest( &dc, TRUE );
         break;
 
@@ -564,10 +564,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        m_Pcb->m_Zone.DeleteAll();
-        for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        GetBoard()->m_Zone.DeleteAll();
+        for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
         {
-            ZONE_CONTAINER* zone_container = m_Pcb->GetArea( ii );
+            ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
             zone_container->m_FilledPolysList.clear();;
         }
 
@@ -666,7 +666,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-        m_Pcb->Change_Side_Module( (MODULE*) GetCurItem(), &dc );
+        GetBoard()->Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE:
@@ -842,7 +842,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_DRAWING:
-		InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*)GetCurItem(), &dc);
+        InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*)GetCurItem(), &dc);
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -1107,7 +1107,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         ( (MARKER*) Item )->Draw( DrawPanel, DC, GR_XOR );
 
         // delete the marker, and free memory.  Don't use undelete stack.
-        m_Pcb->Delete( Item );
+        GetBoard()->Delete( Item );
         break;
 
     case TYPE_PAD:
@@ -1147,7 +1147,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the
         // selection of any other copper layer is disregarded).
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )
+        if( GetBoard()->m_BoardSettings->m_CopperLayerCount < 2 )
         {
             if( layer != COPPER_LAYER_N )
             {
@@ -1166,7 +1166,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         else
         {
             if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
-               && (layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1) )
+               && (layer >= GetBoard()->m_BoardSettings->m_CopperLayerCount - 1) )
             {
                 // Uncomment following command (and line 17) to beep
                 // the speaker. (Doing that would provide feedback to

@@ -312,10 +312,10 @@ int WinEDA_GerberFrame::BestZoom()
     wxSize size;
 
     /* calcul du zoom montrant tout le dessim */
-    m_Pcb->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundaryBox();
     size     = DrawPanel->GetClientSize();
-    ii       = m_Pcb->m_BoundaryBox.GetWidth() / size.x;
-    jj       = m_Pcb->m_BoundaryBox.GetHeight() / size.y;
+    ii       = GetBoard()->m_BoundaryBox.GetWidth() / size.x;
+    jj       = GetBoard()->m_BoundaryBox.GetHeight() / size.y;
     bestzoom = MAX( ii, jj ) + 1;
 
     /* determination du zoom existant le plus proche */
@@ -327,7 +327,7 @@ int WinEDA_GerberFrame::BestZoom()
 
     bestzoom = ii;
 
-    GetScreen()->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
+    GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
 
     return bestzoom;
 }

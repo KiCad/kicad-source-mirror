@@ -46,7 +46,7 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
     int      ii;
     CHEVELU* pt_chevelu;
 
-    if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
     {
         if( g_Show_Ratsnest )
             Compile_Ratsnest( DC, TRUE );
@@ -55,13 +55,13 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
 
     DrawGeneralRatsnest( DC, 0 ); /* effacement eventuel du chevelu affiche */
 
-    pt_chevelu = m_Pcb->m_Ratsnest;
+    pt_chevelu = GetBoard()->m_Ratsnest;
     if( pt_chevelu == NULL )
         return;
 
     if( g_Show_Ratsnest )
     {
-        for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+        for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
         {
             pt_chevelu->status |= CH_VISIBLE;
         }
@@ -70,7 +70,7 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
     }
     else
     {
-        for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+        for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
         {
             pt_chevelu->status &= ~CH_VISIBLE;
         }
@@ -123,7 +123,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
         else if( pt_segm->GetLayer() == l2 )
             pt_segm->SetLayer( l1 );
 
-        if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, m_Pcb->m_Track ) )
+        if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, GetBoard()->m_Track ) )
         {
             /* Annulation du changement */
             ii = 0; pt_segm = pt_track;
@@ -143,8 +143,8 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     ii = 0; pt_segm = pt_track;
     for( ; ii < nb_segm; pt_segm = pt_segm->Next(), ii++ )
     {
-        pt_segm->start = Locate_Pad_Connecte( m_Pcb, pt_segm, START );
-        pt_segm->end   = Locate_Pad_Connecte( m_Pcb, pt_segm, END );
+        pt_segm->start = Locate_Pad_Connecte( GetBoard(), pt_segm, START );
+        pt_segm->end   = Locate_Pad_Connecte( GetBoard(), pt_segm, END );
     }
 
     test_1_net_connexion( DC, pt_track->GetNet() );
@@ -173,7 +173,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     /* Avoid more than one via on the current location: */
-    if( Locate_Via( m_Pcb, g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
+    if( Locate_Via( GetBoard(), g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
         return false;
 
     for( TRACK* segm = g_FirstTrackSegment;  segm;  segm = segm->Next() )
@@ -185,13 +185,13 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     /* Is the current segment Ok (no DRC error) ? */
     if( Drc_On )
     {
-        if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, m_Pcb->m_Track ) )
+        if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
             /* DRC error, the change layer is not made */
             return false;
 
         if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )    // We must handle 2 segments
         {
-            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), m_Pcb->m_Track ) )
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), GetBoard()->m_Track ) )
                 return false;
         }
     }
@@ -205,7 +205,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
     /* create the via */
-    SEGVIA* via    = new SEGVIA( m_Pcb );
+    SEGVIA* via    = new SEGVIA( GetBoard() );
     via->m_Flags   = IS_NEW;
     via->m_Shape   = g_DesignSettings.m_CurrentViaType;
     via->m_Width   = g_DesignSettings.m_CurrentViaSize;
@@ -230,10 +230,10 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             if ( old_layer == COPPER_LAYER_N )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_N_2;
             else if ( old_layer == LAYER_CMP_N )
-                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_Pcb->m_BoardSettings->m_CopperLayerCount - 2;
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = GetBoard()->m_BoardSettings->m_CopperLayerCount - 2;
             else if ( old_layer == LAYER_N_2 )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = COPPER_LAYER_N;
-            else if ( old_layer == m_Pcb->m_BoardSettings->m_CopperLayerCount - 2 )
+            else if ( old_layer == GetBoard()->m_BoardSettings->m_CopperLayerCount - 2 )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
             // else error
             via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
@@ -246,7 +246,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             break;
     }
 
-    if( Drc_On &&  BAD_DRC==m_drc->Drc( via, m_Pcb->m_Track ) )
+    if( Drc_On &&  BAD_DRC==m_drc->Drc( via, GetBoard()->m_Track ) )
     {
         /* DRC fault: the Via cannot be placed here ... */
         delete via;
@@ -326,9 +326,9 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
     TRACK* pt_segm;
     int    masquelayer = g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
 
-    pt_segm = Locate_Pistes( m_Pcb->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
+    pt_segm = Locate_Pistes( GetBoard()->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
     if( pt_segm == NULL )
-        m_Pcb->Display_Infos( this );
+        GetBoard()->Display_Infos( this );
     else
         test_1_net_connexion( DC, pt_segm->GetNet() );
 }
@@ -352,7 +352,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     if( g_Show_Ratsnest )
         return; // Deja Affich�
 
-    if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
     {
         Compile_Ratsnest( DC, TRUE );
     }
@@ -368,8 +368,8 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         if( pt_pad ) /* Affichage du chevelu du net correspondant */
         {
             pt_pad->Display_Infos( this );
-            pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
-            for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+            pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+            for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
             {
                 if( pt_chevelu->GetNet() == pt_pad->GetNet() )
                 {
@@ -407,8 +407,8 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                 pt_pad = Module->m_Pads;
                 for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
                 {
-                    pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
-                    for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+                    pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+                    for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
                     {
                         if( (pt_chevelu->pad_start == pt_pad)
                            || (pt_chevelu->pad_end == pt_pad) )
@@ -441,9 +441,9 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     if( (pt_pad == NULL) && (Module == NULL) )
     {
         DrawGeneralRatsnest( DC );
-        pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
+        pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
 
-        for( ii = m_Pcb->GetNumRatsnests(); (ii > 0) && pt_chevelu; pt_chevelu++, ii-- )
+        for( ii = GetBoard()->GetNumRatsnests(); (ii > 0) && pt_chevelu; pt_chevelu++, ii-- )
             pt_chevelu->status &= ~CH_VISIBLE;
     }
 }
@@ -461,8 +461,8 @@ void WinEDA_PcbFrame::Affiche_PadsNoConnect( wxDC* DC )
     CHEVELU* pt_chevelu;
     D_PAD*   pt_pad;
 
-    pt_chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
-    for( ii = m_Pcb->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
+    pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+    for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
     {
         if( (pt_chevelu->status & CH_ACTIF) == 0 )
             continue;

@@ -225,11 +225,9 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-    {
         ((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_SelLayerBox->GetChoice();
         DrawPanel->Refresh( TRUE );
         break;
-    }
 
     case ID_TOOLBARH_GERBER_SELECT_TOOL:
         if( gerber_layer )

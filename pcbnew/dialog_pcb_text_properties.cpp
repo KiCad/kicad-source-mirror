@@ -75,7 +75,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
 /************************************************************************************/
 {
     wxButton*   Button;
-    BOARD*      board = parent->m_Pcb;
+    BOARD*      board = parent->GetBoard();
 
     m_Parent = parent;
 
@@ -170,14 +170,14 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
         m_Mirror->SetSelection( 1 );
     MiddleBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
-	int style = 0;
-	if (CurrentTextPCB->m_Italic )
-		style = 1;
+    int style = 0;
+    if (CurrentTextPCB->m_Italic )
+        style = 1;
     wxString style_msg[] = { _( "Normal" ), _( "Italic" ) };
     m_Style = new wxRadioBox( this, -1, _( "Style" ),
                                wxDefaultPosition, wxSize( -1, -1 ), 2, style_msg,
                                1, wxRA_SPECIFY_COLS );
-	m_Style->SetSelection(style);
+    m_Style->SetSelection(style);
     MiddleBoxSizer->Add( m_Style, 0, wxGROW | wxALL, 5 );
 
     GetSizer()->Fit( this );
@@ -222,15 +222,15 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
 
     CurrentTextPCB->m_Width  = m_TxtWidthCtlr->GetValue();
     // test for acceptable values for parameters:
-	int max_tickness = min( CurrentTextPCB->m_Size.x, CurrentTextPCB->m_Size.y);
-	max_tickness /= 4;
+    int max_tickness = min( CurrentTextPCB->m_Size.x, CurrentTextPCB->m_Size.y);
+    max_tickness /= 4;
     if ( CurrentTextPCB->m_Width > max_tickness)
         CurrentTextPCB->m_Width = max_tickness;
 
     CurrentTextPCB->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;
     CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
-	CurrentTextPCB->m_Italic = m_Style->GetSelection() ? 1 : 0;
+    CurrentTextPCB->m_Italic = m_Style->GetSelection() ? 1 : 0;
 
     if( m_DC )     // Displya new text
     {

@@ -85,7 +85,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     }
 
     /* Mise a jour des infos PCB: */
-    m_Pcb->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundaryBox();
 
     offsetX = m_Auxiliary_Axis_Position.x;
     offsetY = m_Auxiliary_Axis_Position.y;
@@ -98,44 +98,44 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
      *  (necessaire pour decrire les formes sous GenCAD,
      *  qui sont decrites en vue normale, orientation 0)) */
     MODULE* module;
-    for( module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
+    for( module = GetBoard()->m_Modules; module != NULL; module = module->Next() )
     {
         module->flag = 0;
         if( module->GetLayer() == COPPER_LAYER_N )
         {
-            m_Pcb->Change_Side_Module( module, NULL );
+            GetBoard()->Change_Side_Module( module, NULL );
             module->flag = 1;
         }
     }
 
     // Creation de l'entete:
     CreateHeaderInfoData( file, this );
-    CreateBoardSection( file, m_Pcb );
+    CreateBoardSection( file, GetBoard() );
 
     /* Creation liste des TRACKS
      *  (section $TRACK) id liste des outils de tracage de pistes */
-    CreateTracksInfoData( file, m_Pcb );
+    CreateTracksInfoData( file, GetBoard() );
 
     /* Creation de la liste des formes utilisees
      *  (formes des composants principalement */
-    CreatePadsShapesSection( file, m_Pcb );   // doit etre appele avant CreateShapesSection()
-    CreateShapesSection( file, m_Pcb );
+    CreatePadsShapesSection( file, GetBoard() );   // doit etre appele avant CreateShapesSection()
+    CreateShapesSection( file, GetBoard() );
 
     /* Creation de la liste des equipotentielles: */
-    CreateSignalsSection( file, m_Pcb );
+    CreateSignalsSection( file, GetBoard() );
 
-    CreateDevicesSection( file, m_Pcb );
-    CreateComponentsSection( file, m_Pcb );
-    CreateRoutesSection( file, m_Pcb );
+    CreateDevicesSection( file, GetBoard() );
+    CreateComponentsSection( file, GetBoard() );
+    CreateRoutesSection( file, GetBoard() );
 
     fclose( file );
 
     /* Remise en place des modules vus en miroir */
-    for( module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
+    for( module = GetBoard()->m_Modules; module != NULL; module = module->Next() )
     {
         if( module->flag )
         {
-            m_Pcb->Change_Side_Module( module, NULL );
+            GetBoard()->Change_Side_Module( module, NULL );
             module->flag = 0;
         }
     }

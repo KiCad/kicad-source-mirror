@@ -63,7 +63,7 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
     case ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS:    // Export the current drill value to via which héave the same size
         if( via->GetDrillValue() > 0 )
             g_DesignSettings.m_ViaDrillCustomValue = via->GetDrillValue();
-        via_struct = m_Pcb->m_Track;
+        via_struct = GetBoard()->m_Track;
         for( ; via_struct != NULL; via_struct = via_struct->Next() )
         {
             if( via_struct->Type() == TYPE_VIA )     /* mise a jour du diametre de la via */
@@ -87,7 +87,7 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
         break;
 
     case ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT:        // Reset all via hole to default value
-        via_struct = m_Pcb->m_Track;
+        via_struct = GetBoard()->m_Track;
         for( ; via_struct != NULL; via_struct = via_struct->Next() )
         {
             if( via_struct->Type() == TYPE_VIA )     /* mise a jour du diametre de la via */

@@ -101,7 +101,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
  * to the right of that radiobox.
  */
 {
-    BOARD*    board = parent->m_Pcb;
+    BOARD*    board = parent->GetBoard();
     wxButton* Button;
     int       ii;
     wxString  LayerList[NB_LAYERS + 1]; // One extra element for "(Deselect)" radiobutton
@@ -233,7 +233,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     // Check whether more than one copper layer has been enabled for the
     // current PCB file, as Layer Pairs can only meaningfully be defined
     // within PCB files which contain at least two copper layers.
-    if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )
+    if( GetBoard()->m_BoardSettings->m_CopperLayerCount < 2 )
     {
         wxString InfoMsg;
         InfoMsg = _( "Less than two copper layers are being used." );
@@ -265,7 +265,7 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
               wxSize( 470, 250 ), DIALOG_STYLE )
 /*******************************************************************************/
 {
-    BOARD*    board = parent->m_Pcb;
+    BOARD*    board = parent->GetBoard();
     wxButton* Button;
     int       ii, LayerCount;
     wxString  LayerList[NB_COPPER_LAYERS];

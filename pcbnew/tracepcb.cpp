@@ -31,7 +31,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
-    if( !m_Pcb || !screen )
+    if( !GetBoard() || !screen )
         return;
 
     ActiveScreen = screen;
@@ -44,7 +44,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, screen, 0 );
 
     /* Redraw the footprint */
-    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
         module->Draw( DrawPanel, DC, GR_OR );
     }
@@ -70,7 +70,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = GetScreen();
 
-    if( !m_Pcb || !screen )
+    if( !GetBoard() || !screen )
         return;
 
     ActiveScreen = screen;
@@ -83,7 +83,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), 0 );
 
-    m_Pcb->Draw( DrawPanel, DC, GR_OR );
+    GetBoard()->Draw( DrawPanel, DC, GR_OR );
     if( g_HightLigt_Status )
         DrawHightLight( DC, g_HightLigth_NetCode );
 

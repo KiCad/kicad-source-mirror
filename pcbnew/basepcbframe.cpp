@@ -58,7 +58,7 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
 }
 
 
-WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame( void )
+WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame()
 {
     delete m_Collector;
 }
@@ -70,9 +70,9 @@ BASE_SCREEN* WinEDA_BasePcbFrame::GetBaseScreen() const
 }
 
 
-void WinEDA_BasePcbFrame::SetBOARD( BOARD* aBoard )
+void WinEDA_BasePcbFrame::SetBoard( BOARD* aBoard )
 {
-    if(m_Pcb != g_ModuleEditor_Pcb)
+    if( m_Pcb != g_ModuleEditor_Pcb )
         delete m_Pcb;
     m_Pcb = aBoard;
 }

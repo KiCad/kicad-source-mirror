@@ -206,9 +206,9 @@ MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
 /* Routine de creation d'un Draw Symbole Pcb type MIRE
  */
 {
-    MIREPCB* MirePcb = new MIREPCB( m_Pcb );
+    MIREPCB* MirePcb = new MIREPCB( GetBoard() );
 
-    m_Pcb->Add( MirePcb );
+    GetBoard()->Add( MirePcb );
 
     MirePcb->SetLayer( EDGE_N );
     MirePcb->m_Width = g_DesignSettings.m_EdgeSegmentWidth;

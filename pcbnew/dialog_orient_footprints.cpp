@@ -248,7 +248,6 @@ void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
  * @param include_fixe = true to orient locked footprints
  */
 {
-    MODULE*  Module;
     wxString line;
     bool redraw = false;
 
@@ -256,17 +255,16 @@ void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
     if( !IsOK( this, line ) )
         return;
 
-    Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
+    for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
-        if( Module->IsLocked() && !include_fixe )
+        if( module->IsLocked() && !include_fixe )
             continue;
 
-        if( WildCompareString( ModuleMask, Module->m_Reference->m_Text, FALSE ) )
+        if( WildCompareString( ModuleMask, module->m_Reference->m_Text, FALSE ) )
         {
             GetScreen()->SetModify();
             redraw = true;
-            Rotate_Module( NULL, Module, Orient, FALSE );
+            Rotate_Module( NULL, module, Orient, FALSE );
         }
     }
 

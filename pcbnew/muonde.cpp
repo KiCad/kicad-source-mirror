@@ -258,7 +258,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
     }
 
     Module->Set_Rectangle_Encadrement();
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     GetScreen()->SetModify();
     return Module;
 }
@@ -612,7 +612,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
     PolyEdges = NULL;
 
     Module->Set_Rectangle_Encadrement();
-    m_Pcb->m_Status_Pcb = 0;
+    GetBoard()->m_Status_Pcb = 0;
     GetScreen()->SetModify();
     return Module;
 }
