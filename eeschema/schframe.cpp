@@ -227,7 +227,7 @@ void WinEDA_SchematicFrame::SetSheetNumberAndCount()
     int            sheet_count = g_RootSheet->CountSheets();
     int            SheetNumber = 1;
     wxString       current_sheetpath = m_CurrentSheet->Path();
-    EDA_SheetList  SheetList( NULL );
+    EDA_SheetList  SheetList;
 
     // Examine all sheets path to find the current sheets path,
     // and count them from root to the current scheet path:
@@ -317,9 +317,9 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
             return;
     }
 
-    EDA_SheetList sheets( g_RootSheet );
+    EDA_SheetList SheetList;
 
-    for( sheet = sheets.GetFirst(); sheet != NULL; sheet = sheets.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
             break;
@@ -350,7 +350,7 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    for( sheet = sheets.GetFirst(); sheet != NULL; sheet = sheets.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         if( sheet->LastScreen() )
         {

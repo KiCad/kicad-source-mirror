@@ -724,7 +724,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
 
     fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8( msg ), Line );
 
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     for( Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {

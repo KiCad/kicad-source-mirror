@@ -55,8 +55,8 @@ void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
  ****************************************************************************/
 void ReAnnotatePowerSymbolsOnly( void )
 {
-    /* Build the sheet list (sheet, not screen) */
-    EDA_SheetList  SheetList( NULL );
+    /* Build the whole sheet list in hierarchy (sheet, not screen) */
+    EDA_SheetList  SheetList;
 
     DrawSheetPath* sheet;
     int            CmpNumber = 1;
@@ -250,7 +250,7 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
         parent->DeleteAnnotation( !annotateSchematic, false );
 
     /* Build the sheet list */
-    EDA_SheetList SheetList( g_RootSheet );
+    EDA_SheetList SheetList;
 
     /* Update the sheet number, sheet count and date */
     parent->UpdateSheetNumberAndDate();
@@ -615,7 +615,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
     wxString      msg, cmpref;
 
     /* build the screen list */
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     std::vector <OBJ_CMP_TO_LIST> ComponentsList;
 

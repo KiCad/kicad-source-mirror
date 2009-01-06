@@ -43,19 +43,27 @@ DrawSheetPath::DrawSheetPath()
 }
 
 
-int DrawSheetPath::Cmp( const DrawSheetPath& d ) const
+/*******************************************************************/
+int DrawSheetPath::Cmp( const DrawSheetPath& aSheetPathToTest ) const
+/********************************************************************/
+
+/** Function Cmp
+ * Compare if this is the same sheet path as aSheetPathToTest
+ * @param aSheetPathToTest = sheet path to compare
+ * @return -1 if differents, 0 if same
+ */
 {
-    if( m_numSheets > d.m_numSheets )
+    if( m_numSheets > aSheetPathToTest.m_numSheets )
         return 1;
-    if( m_numSheets < d.m_numSheets )
+    if( m_numSheets < aSheetPathToTest.m_numSheets )
         return -1;
 
     //otherwise, same number of sheets.
     for( int i = 0; i<m_numSheets; i++ )
     {
-        if( m_sheets[i]->m_TimeStamp > d.m_sheets[i]->m_TimeStamp )
+        if( m_sheets[i]->m_TimeStamp > aSheetPathToTest.m_sheets[i]->m_TimeStamp )
             return 1;
-        if( m_sheets[i]->m_TimeStamp < d.m_sheets[i]->m_TimeStamp )
+        if( m_sheets[i]->m_TimeStamp < aSheetPathToTest.m_sheets[i]->m_TimeStamp )
             return -1;
     }
 
@@ -87,18 +95,31 @@ EDA_BaseStruct* DrawSheetPath::LastDrawList()
 }
 
 
-void DrawSheetPath::Push( DrawSheetStruct* sheet )
+/**************************************************/
+void DrawSheetPath::Push( DrawSheetStruct* aSheet )
+/**************************************************/
+
+/** Function Push
+ * store (push) aSheet in list
+ * @param aSheet = pointer to the DrawSheetStruct to store in list
+ */
 {
-    wxASSERT( m_numSheets <= DSLSZ );
+    if( m_numSheets > DSLSZ )
+        wxMessageBox( wxT( "DrawSheetPath::Push() error: no room in buffer to store sheet" ) );
     if( m_numSheets < DSLSZ )
     {
-        m_sheets[m_numSheets] = sheet;
+        m_sheets[m_numSheets] = aSheet;
         m_numSheets++;
     }
 }
 
 
 DrawSheetStruct* DrawSheetPath::Pop()
+
+/** Function Pop
+ * retrieves (pop) the last entered sheet and remove it from list
+ * @return a DrawSheetStruct* pointer to the removed sheet in list
+ */
 {
     if( m_numSheets > 0 )
     {
@@ -110,10 +131,15 @@ DrawSheetStruct* DrawSheetPath::Pop()
 
 
 wxString DrawSheetPath::Path()
+
+/** Function Path
+ * the path uses the time stamps which do not changes even when editing sheet parameters
+ * a path is something like / (root) or /34005677 or /34005677/00AE4523
+ */
 {
     wxString s, t;
 
-    s = wxT( "/" );
+    s = wxT( "/" );     // This is the root path
 
     //start at 1 to avoid the root sheet,
     //which does not need to be added to the path
@@ -128,7 +154,15 @@ wxString DrawSheetPath::Path()
 }
 
 
+/******************************************/
 wxString DrawSheetPath::PathHumanReadable()
+/******************************************/
+
+/** Function PathHumanReadable
+ * Return the sheet path in a readable form, i.e.
+ * as a path made from sheet names.
+ * (the "normal" path uses the time stamps which do not changes even when editing sheet parameters)
+ */
 {
     wxString s, t;
 
@@ -155,7 +189,7 @@ void DrawSheetPath::UpdateAllScreenReferences()
         if( t->Type() == TYPE_SCH_COMPONENT )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
-            component->GetField(REFERENCE)->m_Text = component->GetRef( this );
+            component->GetField( REFERENCE )->m_Text = component->GetRef( this );
             component->m_Multi = component->GetUnitSelection( this );
         }
         t = t->Next();
@@ -209,17 +243,39 @@ bool DrawSheetPath::operator!=( const DrawSheetPath& d1 )
 }
 
 
-
 /*********************************************************************/
 /* Class EDA_SheetList to handle the list of Sheets in a hierarchy */
 /*********************************************************************/
 
+
+/*******************************************************/
+EDA_SheetList::EDA_SheetList( DrawSheetStruct* aSheet )
+/*******************************************************/
+
+/* The constructor: build the list of sheets from aSheet.
+ * If aSheet == NULL (default) build the whole list of sheets in hierarchy
+ * So usually call it with no param.
+ */
+{
+    m_index = 0;
+    m_count = 0;
+    m_List  = NULL;
+    if( aSheet == NULL )
+        aSheet = g_RootSheet;
+    BuildSheetList( aSheet );
+}
+
+
 /*****************************************/
 DrawSheetPath* EDA_SheetList::GetFirst()
 /*****************************************/
+
+/** Function GetFirst
+ *  @return the first item (sheet) in m_List and prepare calls to GetNext()
+ */
 {
     m_index = 0;
-    if( m_count > 0 )
+    if( GetCount() > 0 )
         return &( m_List[0] );
     return NULL;
 }
@@ -228,51 +284,63 @@ DrawSheetPath* EDA_SheetList::GetFirst()
 /*****************************************/
 DrawSheetPath* EDA_SheetList::GetNext()
 /*****************************************/
+
+/** Function GetNext
+ *  @return the next item (sheet) in m_List or NULL if no more item in sheet list
+ */
 {
-    if( m_index < m_count )
+    if( m_index < GetCount() )
         m_index++;
     return GetSheet( m_index );
 }
 
 
 /************************************************/
-DrawSheetPath* EDA_SheetList::GetSheet( int index )
+DrawSheetPath* EDA_SheetList::GetSheet( int aIndex )
 /************************************************/
 
-/* return the m_List[index] item
+/** Function GetSheet
+ *  @return the item (sheet) in aIndex position in m_List or NULL if less than index items
+ * @param aIndex = index in sheet list to get the sheet
  */
 {
-    if( index < m_count )
-        return &(m_List[index]);
+    if( aIndex < GetCount() )
+        return &(m_List[aIndex]);
     return NULL;
 }
 
 
 /************************************************************************/
-void EDA_SheetList::BuildSheetList( DrawSheetStruct* sheet )
+void EDA_SheetList::BuildSheetList( DrawSheetStruct* aSheet )
 /************************************************************************/
+
+/** Function BuildSheetList
+ * Build the list of sheets and their sheet path from the aSheet sheet
+ * if aSheet = g_RootSheet, the full sheet path list (and full sheet list) is built
+ * @param aSheet = the starting sheet to  build list
+ */
 {
     if( m_List == NULL )
     {
-        int count = sheet->CountSheets();
+        int count = aSheet->CountSheets();
         m_count = count;
         m_index = 0;
-        count *= sizeof(DrawSheetPath);
-        m_List = (DrawSheetPath*) MyZMalloc( count );
+        count  *= sizeof(DrawSheetPath);
+        m_List  = (DrawSheetPath*) MyZMalloc( count );
         m_currList.Clear();
     }
-    m_currList.Push( sheet );
+    m_currList.Push( aSheet );
     m_List[m_index] = m_currList;
     m_index++;
-    if( sheet->m_AssociatedScreen != NULL )
+    if( aSheet->m_AssociatedScreen != NULL )
     {
         EDA_BaseStruct* strct = m_currList.LastDrawList();
         while( strct )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
-                DrawSheetStruct* sht = (DrawSheetStruct*) strct;
-                BuildSheetList( sht );
+                DrawSheetStruct* sheet = (DrawSheetStruct*) strct;
+                BuildSheetList( sheet );
             }
             strct = strct->Next();
         }

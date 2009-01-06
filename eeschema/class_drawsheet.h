@@ -137,7 +137,7 @@ public:
 
     /** Function ComponentCount
      *  count our own components, without the power components.
-     *  @return the copponent count.
+     *  @return the component count.
      */
     int              ComponentCount();
 
@@ -169,7 +169,18 @@ public:
      *  @return true if found
      */
     bool             LocatePathOfScreen( SCH_SCREEN* aScreen, DrawSheetPath* aList );
+
+    /** Function CountSheets
+     * calculates the number of sheets found in "this"
+     * this number includes the full subsheets count
+     * @return the full count of sheets+subsheets contained by "this"
+     */
     int              CountSheets();
+
+    /** Function GetFileName
+     * return the filename corresponding to this sheet
+     * @return a wxString containing the filename
+     */
     wxString         GetFileName( void );
 
     // Set a new filename without changing anything else

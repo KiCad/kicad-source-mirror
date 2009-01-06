@@ -34,7 +34,7 @@ bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
 {
     DrawSheetPath* sheet;
     SCH_ITEM*      DrawList = NULL;
-    EDA_SheetList  SheetList( NULL );
+    EDA_SheetList  SheetList;
     SCH_COMPONENT* Cmp;
     bool           found = false;
 

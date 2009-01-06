@@ -264,7 +264,7 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
     DrawSheetPath*  sheet;
 
     /* Build the sheet (not screen) list */
-    EDA_SheetList   SheetList( NULL );
+    EDA_SheetList   SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
@@ -303,8 +303,8 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
     Hierarchical_PIN_Sheet_Struct* PinLabel;
     DrawSheetPath* sheet;
 
-    /* Build the screen list */
-    EDA_SheetList  SheetList( NULL );
+    /* Build the sheet list */
+    EDA_SheetList  SheetList;
 
     LABEL_OBJECT   labet_object;
 

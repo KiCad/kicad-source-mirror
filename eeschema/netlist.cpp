@@ -198,7 +198,7 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     SetStatusText( activity );
 
     /* Build the sheet (not screen) list (flattened)*/
-    EDA_SheetList SheetListList( NULL );
+    EDA_SheetList SheetListList;
     i = 0;
     /* first pass : count objects used in connectivty calculation */
     g_NbrObjNet = 0;

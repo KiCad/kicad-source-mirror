@@ -218,12 +218,13 @@ void DrawSheetStruct::SwapData( DrawSheetStruct* copyitem )
 }
 
 
-/****************************************************************/
+/********************************************************************/
 void DrawSheetStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
-/****************************************************************/
+/********************************************************************/
 {
     /* Placement en liste des structures si nouveau composant:*/
-    if( m_Flags & IS_NEW )
+    bool isnew = (m_Flags & IS_NEW) ? true : false;
+    if( isnew )
     {
         if( !frame->EditSheet( this, DC ) )
         {
@@ -237,6 +238,10 @@ void DrawSheetStruct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     }
 
     SCH_ITEM::Place( frame, DC ); //puts it on the EEDrawList.
+    if ( isnew )
+    {
+        frame->SetSheetNumberAndCount();
+    }
 }
 
 
@@ -540,6 +545,11 @@ bool DrawSheetStruct::Load( WinEDA_SchematicFrame* aFrame )
 /**********************************/
 int DrawSheetStruct::CountSheets()
 /**********************************/
+/** Function CountSheets
+ * calculates the number of sheets found in "this"
+ * this number includes the full subsheets count
+ * @return the full count of sheets+subsheets contained by "this"
+ */
 {
     int count = 1; //1 = this!!
 
@@ -550,8 +560,8 @@ int DrawSheetStruct::CountSheets()
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
-                DrawSheetStruct* ss = (DrawSheetStruct*) strct;
-                count += ss->CountSheets();
+                DrawSheetStruct* subsheet = (DrawSheetStruct*) strct;
+                count += subsheet->CountSheets();
             }
         }
     }

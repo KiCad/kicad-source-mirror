@@ -285,7 +285,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 
     /* Create netlist module section */
     fprintf( tmpfile, "$BeginComponentList\n" );
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
@@ -409,7 +409,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
     /* Create text list starting by [.-]pspice , or [.-]gnucap (simulator commands) */
     /* and create text list starting by [+]pspice , or [+]gnucap (simulator commands) */
     bufnum[BUFYPOS_LEN] = 0;
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
@@ -552,7 +552,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
     /* Create netlist module section */
     ClearUsedFlags( );  /* Reset the flags FlagControlMulti in all schematic files*/
 
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
@@ -767,7 +767,7 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT*          Component_in,
     DrawSheetPath* sheet;
     wxString str, Reference = Component_in->GetRef( Sheet_in );
 
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
@@ -956,7 +956,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 
     /* Create netlist module section */
     ClearUsedFlags( );  /* Reset the flags FlagControlMulti in all schematic files*/
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {

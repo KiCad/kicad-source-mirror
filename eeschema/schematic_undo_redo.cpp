@@ -300,7 +300,7 @@ bool WinEDA_SchematicFrame::GetSchematicFromRedoList()
 /* Redo the last edition:
  *  - Save the current schematic in undo list
  *  - Get the old version
- *  @return FALSE if nothing done, else TRUE
+ *  @return FALSE if nothing done, else true
  */
 {
     if( GetScreen()->m_RedoList == NULL )
@@ -314,10 +314,11 @@ bool WinEDA_SchematicFrame::GetSchematicFromRedoList()
 
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
+    SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
 
-    return TRUE;
+    return true;
 }
 
 
@@ -408,7 +409,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
         break;
 
     case IS_WIRE_IMAGE:
-        /* Exchange the current wires and the oild wires */
+        /* Exchange the current wires and the old wires */
         List->SetSon( ( (SCH_SCREEN*) GetScreen() )->ExtractWires( FALSE ) );
         while( FirstItem )
         {
@@ -472,10 +473,11 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
 bool WinEDA_SchematicFrame::GetSchematicFromUndoList()
 /**********************************************************/
 
-/* Undo the last edition:
+/** Function GetSchematicFromUndoList
+ *  Undo the last edition:
  *  - Save the current schematic in Redo list
  *  - Get an old version of the schematic
- *  @return FALSE if nothing done, else TRUE
+ *  @return FALSE if nothing done, else true
  */
 {
     if( GetScreen()->m_UndoList == NULL )
@@ -489,10 +491,11 @@ bool WinEDA_SchematicFrame::GetSchematicFromUndoList()
 
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
+    SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
 
-    return TRUE;
+    return true;
 }
 
 

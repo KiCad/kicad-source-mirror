@@ -251,7 +251,7 @@ void WinEDA_HierFrame::OnSelect( wxTreeEvent& event )
     wxTreeItemId ItemSel = m_Tree->GetSelection();
 
     *(m_Parent->m_CurrentSheet) =
-        ( (TreeItemData*) ( m_Tree->GetItemData( ItemSel ) ) )->m_SheetList;
+        ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetList;
     UpdateScreenFromSheet( m_Parent );
     Close( TRUE );
 }

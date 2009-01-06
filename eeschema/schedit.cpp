@@ -171,6 +171,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             break;
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
         g_ItemToRepeat = NULL;
+        SetSheetNumberAndCount();
         break;
 
     case wxID_PASTE:
@@ -358,6 +359,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             screen->SetCurItem( NULL );
             g_ItemToRepeat = NULL;
             TestDanglingEnds( screen->EEDrawList, &dc );
+            SetSheetNumberAndCount();
             screen->SetModify();
         }
         break;
@@ -655,6 +657,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
         DrawPanel->MouseToCursorSchema();
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
+        SetSheetNumberAndCount();
         break;
 
     case ID_POPUP_ROTATE_BLOCK:

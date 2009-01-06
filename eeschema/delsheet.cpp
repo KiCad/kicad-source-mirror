@@ -71,32 +71,6 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
 }
 
 
-/*********************************************************************/
-
-//void ClearDrawList(EDA_BaseStruct *DrawList, bool confirm_deletion)
-/********************************************************************/
-/* free the draw list DrawList and the subhierarchies */
-
-//this is redundant -- use FreeDrawList, a member of SCH_SCREEN
-
-/*
- * {
- * EDA_BaseStruct *DrawStruct;
- *
- * while (DrawList != NULL)
- * {
- *     DrawStruct = DrawList;
- *     DrawList = DrawList->Pnext;
- *
- *     if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
- *     {
- *         DeleteSubHierarchy((DrawSheetStruct*) DrawStruct, confirm_deletion);
- *     }
- *
- *     delete DrawStruct;
- * }
- * }
- */
 /********************************************************************/
 bool ClearProjectDrawList( SCH_SCREEN* screen, bool confirm_deletion )
 /********************************************************************/

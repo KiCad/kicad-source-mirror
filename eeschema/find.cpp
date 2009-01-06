@@ -78,7 +78,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
     wxString                msg;
     LibDrawPin*             pin;
 
-    EDA_SheetList          SheetList( NULL );
+    EDA_SheetList          SheetList;
 
     sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
@@ -276,7 +276,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
     if( SearchType == 0 )
         s_MarkerCount = 0;
 
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     NotFound = TRUE; StartCount = 0;
     /* Search for s_MarkerCount markers */
@@ -446,7 +446,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
     NotFound   = TRUE;
     StartCount = 0;
 
-    EDA_SheetList SheetList( NULL );
+    EDA_SheetList SheetList;
 
     Sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
