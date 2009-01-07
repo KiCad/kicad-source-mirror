@@ -258,7 +258,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     {
         config->Read( OPTKEY_EDGELAYER_GERBER, &g_Exclude_Edges_Pcb );
         config->Read( OPTKEY_XFINESCALE_ADJ, &m_XScaleAdjust );
-        config->Read( OPTKEY_XFINESCALE_ADJ, &m_YScaleAdjust );
+        config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
     }
 
     m_FineAdjustXscaleOpt = new WinEDA_DFloatValueCtrl( this,
@@ -351,7 +351,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     else
         Plot_Sheet_Ref = false;
 
-    // Option d'impression des pads sur toutes les couches
+    // Option to plot pads on silkscreen layers or all layers
     m_Plot_Pads_on_Silkscreen = new wxCheckBox( this, ID_PRINT_PAD_ON_SILKSCREEN,
         _( "Print pads on silkscreen" ) );
     if( config )
@@ -369,7 +369,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     m_Force_Plot_Pads->SetToolTip( _( "Force print/plot pads on ALL layers" ) );
     LeftBoxSizer->Add( m_Force_Plot_Pads, 0, wxGROW | wxALL, 1 );
 
-    // Options d'impression des textes modules
+    // Options to plot texts on footprints
     m_Plot_Text_Value = new wxCheckBox( this, ID_PRINT_VALUE, _( "Print module value" ) );
 
     m_Plot_Text_Value->SetValue( Sel_Texte_Valeur );
@@ -450,7 +450,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     m_HPGL_PlotCenter_Opt->SetToolTip( _( "Draw origin ( 0,0 ) in sheet center" ) );
     MidLeftBoxSizer->Add( m_HPGL_PlotCenter_Opt, 0, wxGROW | wxALL, 5 );
 
-    // Mise a jour des activations des menus:
+    // Update options values:
     wxCommandEvent cmd_event;
     SetCommands( cmd_event );
 
@@ -667,10 +667,10 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
     Scale_X *= m_XScaleAdjust;
     Scale_Y *= m_YScaleAdjust;
 
+    int format = getFormat();
+
     BaseFileName = m_Parent->GetScreen()->m_FileName;
     ChangeFileNameExt( BaseFileName, wxT( "-" ) );
-
-    int format = getFormat();
 
     switch( format )
     {
@@ -680,6 +680,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
     default:
     case PLOT_FORMAT_GERBER:
+        Scale_X = Scale_Y = 1.0; // No scale option allowed in gerber format
         ext = wxT( ".pho" );
         break;
 
@@ -687,6 +688,12 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         ext = wxT( ".plt" );
         break;
     }
+
+    // Test for a reasonnable scale value
+    if ( Scale_X < 0.01 || Scale_Y < 0.01 )
+        DisplayInfo(this, _("Warning: Scale option set to a very small value") );
+    if ( Scale_X > 100.0 || Scale_Y > 100.0 )
+         DisplayInfo(this, _("Warning: Scale option set to a very large value") );
 
     int mask = 1;
     s_SelectedLayers = 0;
