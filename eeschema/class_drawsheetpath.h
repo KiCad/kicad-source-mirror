@@ -60,16 +60,24 @@
  */
 class DrawSheetPath
 {
-public:
-    int m_numSheets;
+private:
+    unsigned m_numSheets;
 
+public:
 #define DSLSZ 32          // Max number of levels for a sheet path
     DrawSheetStruct* m_sheets[DSLSZ];
 
 public:
     DrawSheetPath();
     ~DrawSheetPath() { };
-    void                Clear() { m_numSheets = 0; }
+    void                Clear()
+    { m_numSheets = 0;
+    }
+
+    unsigned GetSheetsCount()
+    {
+        return m_numSheets;
+    }
 
     /** Function Cmp
      * Compare if this is the same sheet path as aSheetPathToTest
@@ -123,6 +131,13 @@ public:
      * (the "normal" path uses the time stamps which do not changes even when editing sheet parameters)
      */
     wxString            PathHumanReadable();
+
+    /** Function BuildSheetPathInfoFromSheetPathValue
+     * Fill this with data to acces to the hierarchical sheet known by its path aPath
+     * @param aPath = path of the sheet to reach (in non human readable format)
+     * @return true if success else false
+     */
+    bool BuildSheetPathInfoFromSheetPathValue(const wxString & aPath, bool aFound = false );
 
     /**
      * Function UpdateAllScreenReferences

@@ -29,15 +29,16 @@ enum {
 
 class WinEDA_HierFrame;
 
-/* Cette classe permet de memoriser la feuille (sheet) associ�e a l'item
-  * pour l'arbre de hierarchie */
+/* This class derived from wxTreeItemData stores the DrawSheetPath of each sheet in hierarcy
+ * in each TreeItem, in its associated data buffer
+*/
 class TreeItemData : public wxTreeItemData
 {
 public:
-    DrawSheetPath m_SheetList;
+    DrawSheetPath m_SheetPath;
     TreeItemData( DrawSheetPath sheet ) : wxTreeItemData()
     {
-        m_SheetList = sheet;
+        m_SheetPath = sheet;
     }
 };
 
@@ -250,7 +251,7 @@ void WinEDA_HierFrame::OnSelect( wxTreeEvent& event )
     wxTreeItemId ItemSel = m_Tree->GetSelection();
 
     *(m_Parent->m_CurrentSheet) =
-        ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetList;
+        ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath;
     UpdateScreenFromSheet( m_Parent );
     Close( TRUE );
 }

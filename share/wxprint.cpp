@@ -40,8 +40,6 @@
 
 #include "fctsys.h"
 
-//#include "gr_basic.h"
-
 #include "common.h"
 
 #ifdef EESCHEMA
@@ -124,12 +122,12 @@ public:
     }
 
 
-    bool    OnPrintPage( int page );
-    bool    HasPage( int page );
-    bool    OnBeginDocument( int startPage, int endPage );
-    void    GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
+    bool OnPrintPage( int page );
+    bool HasPage( int page );
+    bool OnBeginDocument( int startPage, int endPage );
+    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
 
-    void    DrawPage();
+    void DrawPage();
 };
 
 /*******************************************************/
@@ -200,7 +198,8 @@ void WinEDA_PrintFrame::SetOthersDatas()
     {
         m_BoxSelecLayer[ii] = new wxCheckBox( this, -1,
 #if defined (PCBNEW)
-                                             ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->GetLayerName(
+                                             ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->
+                                             GetLayerName(
                                                  ii ) );
          #else
                                              ReturnLayerName( ii ) );
@@ -528,22 +527,43 @@ bool EDA_Printout::OnPrintPage( int page )
 
 
 #ifdef EESCHEMA
-    BASE_SCREEN* screen    = m_Parent->GetBaseScreen();
-    BASE_SCREEN* oldscreen = screen;
+    WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
+    SCH_SCREEN*            screen       = schframe->GetScreen();
+    SCH_SCREEN*            oldscreen    = screen;
+    DrawSheetPath*         oldsheetpath = schframe->GetSheet();
 
+
+    DrawSheetPath          list;
     if( s_OptionPrintPage == 1 )
     {
-        EDA_ScreenList ScreenList;
-        screen = ScreenList.GetScreen( page - 1 );
+        /* Print all pages, so when called, the page is not the current page.
+         *  We must select it and setup references and others parameters
+         *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
+         *  is shared between many sheets
+         */
+        EDA_SheetList  SheetList( NULL );
+        DrawSheetPath* sheetpath = SheetList.GetSheet( page - 1 );
+        if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
+        {
+            schframe->m_CurrentSheet = &list;
+            schframe->m_CurrentSheet->UpdateAllScreenReferences();
+            schframe->SetSheetNumberAndCount();
+            screen = schframe->m_CurrentSheet->LastScreen();
+        }
+        else
+            screen = NULL;
     }
 
     if( screen == NULL )
         return FALSE;
-    ActiveScreen = (SCH_SCREEN*) screen;
+    ActiveScreen = screen;
     DrawPage();
-    ActiveScreen = (SCH_SCREEN*) oldscreen;
-
+    ActiveScreen = oldscreen;
+    schframe->m_CurrentSheet = oldsheetpath;
+    schframe->m_CurrentSheet->UpdateAllScreenReferences();
+    schframe->SetSheetNumberAndCount();
 #endif
+
 
 #ifdef PCBNEW
     if( (m_Parent->m_Ident == PCB_FRAME) || (m_Parent->m_Ident == GERBER_FRAME) )
@@ -589,8 +609,7 @@ void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
 #ifdef EESCHEMA
     if( s_OptionPrintPage == 1 )
     {
-        EDA_ScreenList ScreenList;
-        ii = ScreenList.GetCount();
+        ii = g_RootSheet->CountSheets();
     }
 #endif
 
@@ -619,10 +638,9 @@ bool EDA_Printout::HasPage( int pageNum )
 /**************************************/
 {
 #ifdef EESCHEMA
-    int            PageCount;
+    int PageCount;
 
-    EDA_ScreenList ScreenList;
-    PageCount = ScreenList.GetCount();
+    PageCount = g_RootSheet->CountSheets();
     if( PageCount >= pageNum )
         return TRUE;
 
@@ -726,8 +744,8 @@ void EDA_Printout::DrawPage()
     {
         int w, h;
         GetPPIPrinter( &w, &h );
-        accurate_Xscale = ( (double) (DrawZoom * w) ) / PCB_INTERNAL_UNIT;
-        accurate_Yscale = ( (double) (DrawZoom * h) ) / PCB_INTERNAL_UNIT;
+        accurate_Xscale = ( (double) ( DrawZoom * w ) ) / PCB_INTERNAL_UNIT;
+        accurate_Yscale = ( (double) ( DrawZoom * h ) ) / PCB_INTERNAL_UNIT;
         if( IsPreview() )  // Scale must take in account the DC size in Preview
         {
             // Get the size of the DC in pixels

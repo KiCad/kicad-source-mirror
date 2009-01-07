@@ -1,26 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        class_drawsheet.cpp
 // Purpose:		member functions for DrawSheetStruct
 //				header = class_drawsheet.h
 // Author:      jean-pierre Charras
 // Modified by:
-// Created:     08/02/2006 18:37:02
-// RCS-ID:
-// Copyright:
 // Licence:     License GNU
 /////////////////////////////////////////////////////////////////////////////
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
 
 #include "fctsys.h"
 
@@ -31,7 +16,7 @@
 
 
 /**********************************************/
-/* class to handle a series of sheets *********/
+/* class to handle a serie of sheets *********/
 /* a 'path' so to speak.. *********************/
 /**********************************************/
 DrawSheetPath::DrawSheetPath()
@@ -42,6 +27,41 @@ DrawSheetPath::DrawSheetPath()
     m_numSheets = 0;
 }
 
+/*********************************************************************************************/
+bool DrawSheetPath::BuildSheetPathInfoFromSheetPathValue(const wxString & aPath, bool aFound )
+/*********************************************************************************************/
+/** Function BuildSheetPathInfoFromSheetPathValue
+ * Fill this with data to acces to the hierarchical sheet known by its path aPath
+ * @param aPath = path of the sheet to reach (in non human readable format)
+ * @return true if success else false
+ */
+{
+    if ( aFound )
+        return true;
+
+    if (  GetSheetsCount() == 0 )
+        Push( g_RootSheet );
+
+    if  ( aPath == Path() )
+        return true;
+
+    SCH_ITEM* schitem = LastDrawList();
+    while( schitem && GetSheetsCount() < NB_MAX_SHEET )
+    {
+        if( schitem->Type() == DRAW_SHEET_STRUCT_TYPE )
+        {
+            DrawSheetStruct* sheet = (DrawSheetStruct*) schitem;
+            Push( sheet );
+            if  ( aPath == Path() )
+                return true;
+            if ( BuildSheetPathInfoFromSheetPathValue( aPath ) )
+                return true;
+            Pop();
+        }
+        schitem = schitem->Next();
+    }
+    return false;
+}
 
 /*******************************************************************/
 int DrawSheetPath::Cmp( const DrawSheetPath& aSheetPathToTest ) const
@@ -59,7 +79,7 @@ int DrawSheetPath::Cmp( const DrawSheetPath& aSheetPathToTest ) const
         return -1;
 
     //otherwise, same number of sheets.
-    for( int i = 0; i<m_numSheets; i++ )
+    for( unsigned i = 0; i<m_numSheets; i++ )
     {
         if( m_sheets[i]->m_TimeStamp > aSheetPathToTest.m_sheets[i]->m_TimeStamp )
             return 1;
@@ -155,7 +175,7 @@ wxString DrawSheetPath::Path()
     //start at 1 to avoid the root sheet,
     //which does not need to be added to the path
     //it's timestamp changes anyway.
-    for( int i = 1; i< m_numSheets; i++ )
+    for( unsigned i = 1; i< m_numSheets; i++ )
     {
         t.Printf( _( "%8.8lX/" ), m_sheets[i]->m_TimeStamp );
         s = s + t;
@@ -180,7 +200,7 @@ wxString DrawSheetPath::PathHumanReadable()
     s = wxT( "/" );
 
     //start at 1 to avoid the root sheet, as above.
-    for( int i = 1; i< m_numSheets; i++ )
+    for( unsigned i = 1; i< m_numSheets; i++ )
     {
         s = s + m_sheets[i]->m_SheetName + wxT( "/" );
     }
@@ -211,7 +231,7 @@ void DrawSheetPath::UpdateAllScreenReferences()
 bool DrawSheetPath::operator=( const DrawSheetPath& d1 )
 {
     m_numSheets = d1.m_numSheets;
-    int i;
+    unsigned i;
     for( i = 0; i<m_numSheets; i++ )
     {
         m_sheets[i] = d1.m_sheets[i];
@@ -230,7 +250,7 @@ bool DrawSheetPath::operator==( const DrawSheetPath& d1 )
 {
     if( m_numSheets != d1.m_numSheets )
         return false;
-    for( int i = 0; i<m_numSheets; i++ )
+    for( unsigned i = 0; i<m_numSheets; i++ )
     {
         if( m_sheets[i] != d1.m_sheets[i] )
             return false;
@@ -244,7 +264,7 @@ bool DrawSheetPath::operator!=( const DrawSheetPath& d1 )
 {
     if( m_numSheets != d1.m_numSheets )
         return true;
-    for( int i = 0; i<m_numSheets; i++ )
+    for( unsigned i = 0; i<m_numSheets; i++ )
     {
         if( m_sheets[i] != d1.m_sheets[i] )
             return true;
