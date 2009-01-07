@@ -71,6 +71,10 @@ int DrawSheetPath::Cmp( const DrawSheetPath& aSheetPathToTest ) const
 }
 
 
+/** Function Last
+  * returns a pointer to the last sheet of the list
+  * One can see the others sheet as the "path" to reach this last sheet
+ */
 DrawSheetStruct* DrawSheetPath::Last()
 {
     if( m_numSheets )
@@ -79,6 +83,9 @@ DrawSheetStruct* DrawSheetPath::Last()
 }
 
 
+/** Function LastScreen
+ * @return the SCH_SCREEN relative to the last sheet in list
+ */
 SCH_SCREEN* DrawSheetPath::LastScreen()
 {
     if( m_numSheets )
@@ -87,7 +94,11 @@ SCH_SCREEN* DrawSheetPath::LastScreen()
 }
 
 
-EDA_BaseStruct* DrawSheetPath::LastDrawList()
+/** Function LastScreen
+ * @return a pointer to the first schematic item handled by the
+ * SCH_SCREEN relative to the last sheet in list
+ */
+SCH_ITEM* DrawSheetPath::LastDrawList()
 {
     if( m_numSheets && m_sheets[m_numSheets - 1]->m_AssociatedScreen )
         return m_sheets[m_numSheets - 1]->m_AssociatedScreen->EEDrawList;

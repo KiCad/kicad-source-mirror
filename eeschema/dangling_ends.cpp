@@ -289,7 +289,7 @@ wxPoint ReturnPinPhysicalPosition( LibDrawPin*             Pin,
         NEGATE( PinPos.y );
 
     else
-        PinPos = TransformCoordinate( DrawLibItem->m_Transform, Pin->m_Pos);
+        PinPos = TransformCoordinate( DrawLibItem->m_Transform, Pin->m_Pos) + DrawLibItem->m_Pos;
 
     return PinPos;
 }

@@ -204,16 +204,15 @@ void WinEDA_HierFrame::BuildSheetsTree( DrawSheetPath* list,
     }
 
     maxposx += m_Tree->GetIndent();
-    EDA_BaseStruct* bs = list->LastDrawList();
-    while( bs && m_nbsheets < NB_MAX_SHEET )
+    SCH_ITEM* schitem = list->LastDrawList();
+    while( schitem && m_nbsheets < NB_MAX_SHEET )
     {
-        if( bs->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( schitem->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
-            DrawSheetStruct* ss = (DrawSheetStruct*) bs;
+            DrawSheetStruct* sheet = (DrawSheetStruct*) schitem;
             m_nbsheets++;
-            menu = m_Tree->AppendItem( *previousmenu,
-                ss->m_SheetName, 0, 1 );
-            list->Push( ss );
+            menu = m_Tree->AppendItem( *previousmenu, sheet->m_SheetName, 0, 1 );
+            list->Push( sheet );
             m_Tree->SetItemData( menu, new TreeItemData( *list ) );
             int ll = m_Tree->GetItemText( menu ).Len();
 #ifdef __WINDOWS__
@@ -233,7 +232,7 @@ void WinEDA_HierFrame::BuildSheetsTree( DrawSheetPath* list,
             m_Tree->Expand( menu );
             list->Pop();
         }
-        bs = bs->Next();
+        schitem = schitem->Next();
     }
 
     maxposx -= m_Tree->GetIndent();

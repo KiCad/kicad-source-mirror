@@ -47,10 +47,17 @@
  */
 
 
-/***************************************************/
-/* class to handle a and acces to series of sheets */
-/* a 'path' so to speak.. **************************/
-/***************************************************/
+/****************************************/
+/* class to handle and acces to a sheet */
+/* a 'path' so to speak..               */
+/****************************************/
+
+/*
+  * The member m_sheets stores the list of sheets from the first (usually g_RootSheet)
+  * to a given sheet in last position.
+  * The last sheet is usually the sheet we want to select or reach. So Last() return this last sheet
+  * Others sheets are the "path" from the first to the last sheet
+ */
 class DrawSheetPath
 {
 public:
@@ -59,6 +66,7 @@ public:
 #define DSLSZ 32          // Max number of levels for a sheet path
     DrawSheetStruct* m_sheets[DSLSZ];
 
+public:
     DrawSheetPath();
     ~DrawSheetPath() { };
     void                Clear() { m_numSheets = 0; }
@@ -68,50 +76,68 @@ public:
      * @param aSheetPathToTest = sheet path to compare
      * @return -1 if differents, 0 if same
      */
-    int              Cmp( const DrawSheetPath& aSheetPathToTest ) const;
-    DrawSheetStruct* Last();
-    SCH_SCREEN*      LastScreen();
-    EDA_BaseStruct*  LastDrawList();
+    int                 Cmp( const DrawSheetPath& aSheetPathToTest ) const;
+
+    /** Function Last
+      * returns a pointer to the last sheet of the list
+      * One can see the others sheet as the "path" to reach this last sheet
+     */
+    DrawSheetStruct*    Last();
+
+    /** Function LastScreen
+     * @return the SCH_SCREEN relative to the last sheet in list
+     */
+    SCH_SCREEN*         LastScreen();
+
+    /** Function LastScreen
+     * @return a pointer to the first schematic item handled by the
+     * SCH_SCREEN relative to the last sheet in list
+     */
+    SCH_ITEM*     LastDrawList();
 
     /** Function Push
      * store (push) aSheet in list
      * @param aSheet = pointer to the DrawSheetStruct to store in list
+     * Push is used when entered a sheet to select or analyse it
+     * This is like cd <directory> in directories navigation
      */
-    void             Push( DrawSheetStruct* aSheet );
+    void                Push( DrawSheetStruct* aSheet );
 
     /** Function Pop
      * retrieves (pop) the last entered sheet and remove it from list
      * @return a DrawSheetStruct* pointer to the removed sheet in list
+     * Pop is used when leaving a sheet after a selection or analyse
+     * This is like cd .. in directories navigation
      */
-    DrawSheetStruct* Pop();
+    DrawSheetStruct*    Pop();
 
     /** Function Path
      * the path uses the time stamps which do not changes even when editing sheet parameters
      * a path is something like / (root) or /34005677 or /34005677/00AE4523
      */
-    wxString         Path();
+    wxString            Path();
 
     /** Function PathHumanReadable
      * Return the sheet path in a readable form, i.e.
      * as a path made from sheet names.
      * (the "normal" path uses the time stamps which do not changes even when editing sheet parameters)
      */
-    wxString         PathHumanReadable();
+    wxString            PathHumanReadable();
 
     /**
      * Function UpdateAllScreenReferences
      * updates the reference and the m_Multi parameter (part selection) for all
      * components on a screen depending on the actual sheet path.
      * Mandatory in complex hierarchies because sheets use the same screen (basic schematic)
-     * but with different references and part selection according to the displayed sheet
+     * but with different references and part selections according to the displayed sheet
      */
-    void             UpdateAllScreenReferences();
+    void                UpdateAllScreenReferences();
 
-    bool operator    =( const DrawSheetPath& d1 );
+    bool operator       =( const DrawSheetPath& d1 );
 
-    bool operator    ==( const DrawSheetPath& d1 );
+    bool operator       ==( const DrawSheetPath& d1 );
 
-    bool operator    !=( const DrawSheetPath& d1 );
+    bool operator       !=( const DrawSheetPath& d1 );
 };
 
 
@@ -153,6 +179,7 @@ public:
         m_List = NULL;
     }
 
+
     /** Function GetCount()
      * @return the number of sheets in list:
      * usually the number of sheets found in the whole hierarchy
@@ -162,18 +189,18 @@ public:
     /** Function GetFirst
      *  @return the first item (sheet) in m_List and prepare calls to GetNext()
      */
-    DrawSheetPath* GetFirst();
+    DrawSheetPath*  GetFirst();
 
     /** Function GetNext
      *  @return the next item (sheet) in m_List or NULL if no more item in sheet list
      */
-    DrawSheetPath* GetNext();
+    DrawSheetPath*  GetNext();
 
     /** Function GetSheet
      *  @return the item (sheet) in aIndex position in m_List or NULL if less than index items
      * @param aIndex = index in sheet list to get the sheet
      */
-    DrawSheetPath* GetSheet( int aIndex );
+    DrawSheetPath*  GetSheet( int aIndex );
 
 private:
 
@@ -182,7 +209,7 @@ private:
      * if aSheet = g_RootSheet, the full sheet path and sheet list is built
      * @param aSheet = the starting sheet from the built is made
      */
-    void           BuildSheetList( DrawSheetStruct* sheet );
+    void            BuildSheetList( DrawSheetStruct* sheet );
 };
 
 #endif /* CLASS_DRAWSHEET_PATH_H */
