@@ -18,25 +18,24 @@
 /*****************************/
 /* class WinEDA_ViewlibFrame */
 /*****************************/
-BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, wxFrame )
-COMMON_EVENTS_DRAWFRAME EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
-EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
+    EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
+    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
 
-EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
-    WinEDA_ViewlibFrame::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
+                    WinEDA_ViewlibFrame::Process_Special_Functions )
 
-EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-    WinEDA_DrawFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_DrawFrame::OnZoom )
 
-EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-    WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
+    EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
+              WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
 
-EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
-    WinEDA_ViewlibFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
+                         WinEDA_ViewlibFrame::Process_Special_Functions )
 
-EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
-EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
+    EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
+    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
 END_EVENT_TABLE()
 
 
@@ -153,8 +152,8 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
     if( DrawPanel )
     {
         DrawPanel->SetSize( m_LibListSize.x + m_CmpListSize.x, 0,
-            size.x - Vtoolbar_size.x - m_LibListSize.x - m_CmpListSize.x,
-            size.y );
+                            size.x - Vtoolbar_size.x - m_LibListSize.x - m_CmpListSize.x,
+                            size.y );
     }
 
     if( m_LibList )
@@ -195,7 +194,7 @@ int WinEDA_ViewlibFrame::BestZoom()
 
     size  = DrawPanel->GetClientSize();
     size -= wxSize( 100, 100 );  // reserve a 100 mils margin
-    ii    = (double) itemsize.x / size.x;
+    ii    = itemsize.x / size.x;
     jj    = itemsize.y / size.y;
     bestzoom  = MAX( ii, jj ) + 1;
 

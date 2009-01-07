@@ -260,20 +260,20 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_IN );
-    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString, wxBitmap( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_OUT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ), msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_REDRAW );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ),
                          _( "Zoom auto" ) );
 
@@ -286,9 +286,9 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, wxBitmap( netlist_xpm ),
-                        _( "Read netlist" ) );
+                         _( "Read netlist" ) );
     m_HToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, wxBitmap( erc_xpm ),
-                        _( "Pcb Design Rules Check" ) );
+                         _( "Pcb Design Rules Check" ) );
 
     m_HToolBar->AddSeparator();
 
@@ -370,14 +370,14 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString,
-                               wxBitmap( show_zone_xpm ), wxNullBitmap,
-                               _( "Show filled areas in zones" ) );
+                                    wxBitmap( show_zone_xpm ), wxNullBitmap,
+                                    _( "Show filled areas in zones" ) );
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
-                               wxBitmap( show_zone_disable_xpm ), wxNullBitmap,
-                               _( "Do not show filled areas in zones" ));
+                                    wxBitmap( show_zone_disable_xpm ), wxNullBitmap,
+                                    _( "Do not show filled areas in zones" ));
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, wxEmptyString,
-                               wxBitmap( show_zone_outline_only_xpm ), wxNullBitmap,
-                               _( "Show outlines of filled areas only in zones" ) );
+                                    wxBitmap( show_zone_outline_only_xpm ), wxNullBitmap,
+                                    _( "Show outlines of filled areas only in zones" ) );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
@@ -573,8 +573,8 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         // Set up toolbar
         m_AuxiliaryToolBar->AddSeparator();
         m_SelTrackWidthBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                                 ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                                 wxPoint( -1, -1 ),
+                                                  ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                                  wxPoint( -1, -1 ),
                                                   wxSize( LISTBOX_WIDTH + 20, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
         m_SelTrackWidthBox_Changed = TRUE;

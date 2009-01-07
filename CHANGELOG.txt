@@ -5,6 +5,21 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Jan-07 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++all
+  * Don't pan or zoom on mouse wheel events when the cursor is not in the
+    drawing area.
+  * Reduce all zoom code to a single zoom command handler.
+  * Eliminate redundant zoom command identifiers.
+  * Move pop up zoom command handler from DrawPanel to DrawFrame.
+  * Change hot key zoom handlers to use command events.
+  * Added DrawFrame event table to replace COMMON_EVENTS_DRAWFRAME macro.
+  * Added locale path relative to binary path for development purposes.
+  * Minor code clean ups and duplicate header removal in files that were
+    updated.
+
+
 2009-Jan-04 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++all

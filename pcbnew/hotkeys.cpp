@@ -4,8 +4,6 @@
 
 #include "fctsys.h"
 
-#include "gr_basic.h"
-
 #include "common.h"
 #include "pcbnew.h"
 #include "id.h"
@@ -172,6 +170,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
  */
 
 {
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
     bool PopupOn = (GetCurItem() && GetCurItem()->m_Flags);
 
     bool ItemFree = (GetCurItem()==0  || GetCurItem()->m_Flags==0);
@@ -269,19 +270,23 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ZOOM_IN:
-        OnZoom( ID_ZOOM_IN_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_OUT:
-        OnZoom( ID_ZOOM_OUT_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_REDRAW:
-        OnZoom( ID_ZOOM_REDRAW_KEY );
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_CENTER:
-        OnZoom( ID_ZOOM_CENTER_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
 
@@ -534,6 +539,9 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
     if( hotkey == 0 )
         return;
 
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
@@ -564,19 +572,23 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ZOOM_IN:
-        OnZoom( ID_ZOOM_IN_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_OUT:
-        OnZoom( ID_ZOOM_OUT_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_REDRAW:
-        OnZoom( ID_ZOOM_REDRAW_KEY );
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_CENTER:
-        OnZoom( ID_ZOOM_CENTER_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
     }
 }

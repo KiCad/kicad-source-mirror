@@ -891,7 +891,7 @@ EDA_Rect MODULE::GetBoundingBox()
 
 
 /*******************************************************/
-void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
+void MODULE::Display_Infos( WinEDA_BasePcbFrame* frame )
 /*******************************************************/
 {
     int      nbpad;

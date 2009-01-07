@@ -168,7 +168,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
         wxMenu* viewMenu = new wxMenu;
         msg  = AddHotkeyName( _( "Zoom in" ), s_Schematic_Hokeys_Descr,
                               HK_ZOOM_IN);
-        item = new wxMenuItem( viewMenu, ID_ZOOM_IN_BUTT,
+        item = new wxMenuItem( viewMenu, ID_ZOOM_IN,
                                msg, _( "Zoom in" ),
                                wxITEM_NORMAL );
         item->SetBitmap( zoom_in_xpm );
@@ -176,13 +176,13 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         msg = AddHotkeyName( _( "Zoom out" ), s_Schematic_Hokeys_Descr,
                              HK_ZOOM_OUT );
-        item = new wxMenuItem( viewMenu, ID_ZOOM_OUT_BUTT,
+        item = new wxMenuItem( viewMenu, ID_ZOOM_OUT,
                                msg, _( "Zoom out" ),
                                wxITEM_NORMAL );
         item->SetBitmap( zoom_out_xpm );
         viewMenu->Append( item );
 
-        item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE_BUTT,
+        item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE,
                                _( "Zoom auto" ), _( "Zoom auto" ),
                                wxITEM_NORMAL );
         item->SetBitmap( zoom_auto_xpm );
@@ -192,7 +192,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
         msg = AddHotkeyName( _( "Redraw view" ), s_Schematic_Hokeys_Descr,
                              HK_ZOOM_REDRAW );
-        item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW_BUTT,
+        item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW,
                                msg, _( "Zoom auto" ),
                                wxITEM_NORMAL );
         item->SetBitmap( zoom_redraw_xpm );

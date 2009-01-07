@@ -15,6 +15,15 @@
 #include <wx/fontdlg.h>
 
 
+BEGIN_EVENT_TABLE( WinEDA_DrawFrame, WinEDA_BasicFrame )
+    EVT_MOUSEWHEEL( WinEDA_DrawFrame::OnMouseEvent )
+    EVT_MENU_OPEN( WinEDA_DrawFrame::OnMenuOpen )
+    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
+                    WinEDA_DrawFrame::OnZoom )
+END_EVENT_TABLE()
+
+
 /*******************************************************/
 /* Constructeur de WinEDA_DrawFrame: la fenetre generale */
 /*******************************************************/
@@ -530,81 +539,6 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
         m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
     m_ID_current_state = id;
-}
-
-
-/********************************************/
-void WinEDA_DrawFrame::OnZoom( int zoom_type )
-/********************************************/
-
-/* Fonction de traitement du zoom
- *  Modifie le facteur de zoom et reaffiche l'ecran
- *  Pour les commandes par menu Popup ou par le clavier, le curseur est
- *  replac� au centre de l'ecran
- */
-{
-    if( DrawPanel == NULL )
-        return;
-
-    BASE_SCREEN*    screen = GetBaseScreen();
-    bool    move_mouse_cursor = FALSE;
-    int     x, y;
-    wxPoint old_pos;
-
-    DrawPanel->GetViewStart( &x, &y );
-    old_pos = GetBaseScreen()->m_Curseur;
-
-    switch( zoom_type )
-    {
-    case ID_POPUP_ZOOM_IN:
-    case ID_ZOOM_IN_KEY:
-        move_mouse_cursor = TRUE;
-        // fall thru
-
-    case ID_ZOOM_IN_BUTT:
-        if( zoom_type == ID_ZOOM_IN_BUTT )
-            GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-
-        screen->SetPreviousZoom();
-
-        Recadre_Trace( move_mouse_cursor );
-        break;
-
-    case ID_POPUP_ZOOM_OUT:
-    case ID_ZOOM_OUT_KEY:
-        move_mouse_cursor = TRUE;
-        // fall thru
-
-    case ID_ZOOM_OUT_BUTT:
-        if( zoom_type == ID_ZOOM_OUT_BUTT )
-            screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-        screen->SetNextZoom();
-        Recadre_Trace( move_mouse_cursor );
-        break;
-
-    case ID_POPUP_ZOOM_REDRAW:
-    case ID_ZOOM_REDRAW_KEY:
-    case ID_ZOOM_REDRAW_BUTT:
-        DrawPanel->Refresh();
-        break;
-
-    case ID_POPUP_ZOOM_CENTER:
-    case ID_ZOOM_CENTER_KEY:
-        Recadre_Trace( TRUE );
-        break;
-
-    case ID_ZOOM_PAGE_BUTT:
-    case ID_ZOOM_AUTO:
-    case ID_POPUP_ZOOM_AUTO:
-        Zoom_Automatique( FALSE );
-        break;
-
-    default:
-        wxMessageBox( wxT( "WinEDA_DrawFrame::OnZoom switch Error" ) );
-        break;
-    }
-
-    Affiche_Status_Box();
 }
 
 

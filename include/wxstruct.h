@@ -174,8 +174,6 @@ public:
 
 class WinEDA_DrawFrame : public WinEDA_BasicFrame
 {
-
-
 public:
     WinEDA_DrawPanel* DrawPanel;            // Draw area
     WinEDA_MsgPanel*  MsgPanel;             // Zone d'affichage de caracteristiques
@@ -260,7 +258,7 @@ public:
 
 //  void OnChar(wxKeyEvent& event);
     void            SetToolbarBgColor( int color_num );
-    void            OnZoom( int zoom_type );
+    virtual void    OnZoom( wxCommandEvent& event );
     void            OnGrid( int grid_type );
     void            Recadre_Trace( bool ToMouse );
     void            PutOnGrid( wxPoint* coord ); /* set the coordiante "coord" to the nearest grid coordinate */
@@ -314,13 +312,9 @@ public:
     /* interprocess communication */
     void            OnSockRequest( wxSocketEvent& evt );
     void            OnSockRequestServer( wxSocketEvent& evt );
+
+    DECLARE_EVENT_TABLE();
 };
-
-#define COMMON_EVENTS_DRAWFRAME \
-    EVT_MOUSEWHEEL( WinEDA_DrawFrame::OnMouseEvent ) \
-    EVT_MENU_OPEN( WinEDA_DrawFrame::OnMenuOpen ) \
-    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
-
 
 
 /****************************************************/

@@ -118,98 +118,128 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 
 
 /*****************************************************************/
-void WinEDA_DrawPanel::Process_Popup_Zoom( wxCommandEvent& event )
-/*****************************************************************/
-
-/* Handle only the Popup command zoom and grid level
- */
+void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 {
-    int        id = event.GetId();
+    if( DrawPanel == NULL )
+    {
+        wxLogDebug( wxT( "No DrawPanel object definedin " \
+                         "WinEDA_DrawFrame::OnZoom()." ) );
+        return;
+    }
+
+    bool         zoom_at_cursor = false;
+    int          id = event.GetId();
+    BASE_SCREEN* screen = GetBaseScreen();
 
     switch( id )
     {
     case ID_POPUP_ZOOM_IN:
+        zoom_at_cursor = true;
+        // fall thru
+
+    case ID_ZOOM_IN:
+        if( id == ID_ZOOM_IN )
+            screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+        screen->SetPreviousZoom();
+        Recadre_Trace( zoom_at_cursor );
+        break;
+
     case ID_POPUP_ZOOM_OUT:
+        zoom_at_cursor = true;
+        // fall thru
+
+    case ID_ZOOM_OUT:
+        if( id == ID_ZOOM_OUT )
+            screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+        screen->SetNextZoom();
+        Recadre_Trace( zoom_at_cursor );
+        break;
+
+    case ID_ZOOM_REDRAW:
+        DrawPanel->Refresh();
+        break;
+
     case ID_POPUP_ZOOM_CENTER:
-    case ID_POPUP_ZOOM_AUTO:
-    case ID_POPUP_ZOOM_REDRAW:
-        m_Parent->OnZoom( id );
+        Recadre_Trace( true );
+        break;
+
+    case ID_ZOOM_PAGE:
+        Zoom_Automatique( false );
         break;
 
     case ID_POPUP_ZOOM_SELECT:
         break;
 
     case ID_POPUP_CANCEL:
-        MouseToCursorSchema();
+        DrawPanel->MouseToCursorSchema();
         break;
 
     case ID_POPUP_ZOOM_LEVEL_1:
-        GetScreen()->SetZoom( 1 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 1 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_2:
-        GetScreen()->SetZoom( 2 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 2 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_4:
-        GetScreen()->SetZoom( 4 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 4 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_8:
-        GetScreen()->SetZoom( 8 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 8 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_16:
-        GetScreen()->SetZoom( 16 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 16 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_32:
-        GetScreen()->SetZoom( 32 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 32 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_64:
-        GetScreen()->SetZoom( 64 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 64 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_128:
-        GetScreen()->SetZoom( 128 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 128 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_256:
-        GetScreen()->SetZoom( 256 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 256 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_512:
-        GetScreen()->SetZoom( 512 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 512 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_1024:
-        GetScreen()->SetZoom( 1024 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 1024 );
+        Recadre_Trace( true );
         break;
 
     case ID_POPUP_ZOOM_LEVEL_2048:
-        GetScreen()->SetZoom( 2048 );
-        m_Parent->Recadre_Trace( TRUE );
+        screen->SetZoom( 2048 );
+        Recadre_Trace( true );
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "WinEDA_DrawPanel::Process_Popup_Zoom() ID error" ) );
-        break;
+        wxLogDebug( wxT( "WinEDA_DrawFram::OnZoom() unhandled ID %d" ), id );
+        return;
     }
 
-    m_Parent->Affiche_Status_Box();
+    Affiche_Status_Box();
 }
 
 void WinEDA_DrawPanel::OnPopupGridSelect( wxCommandEvent& event )
@@ -239,15 +269,14 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
                   zoom_center_xpm );
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, _( "Zoom in" ), zoom_in_xpm );
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, _( "Zoom out" ), zoom_out_xpm );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_AUTO, _( "Zoom auto" ),
-                  zoom_auto_xpm );
+    ADD_MENUITEM( MasterMenu, ID_ZOOM_PAGE, _( "Zoom auto" ), zoom_auto_xpm );
 
     wxMenu* zoom_choice = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( MasterMenu, zoom_choice,
                                ID_POPUP_ZOOM_SELECT, _( "Zoom select" ),
                                zoom_select_xpm );
 
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_REDRAW, _( "Redraw view" ),
+    ADD_MENUITEM( MasterMenu, ID_ZOOM_REDRAW, _( "Redraw view" ),
                   zoom_redraw_xpm );
 
     /* Create the basic zoom list: */
@@ -298,30 +327,4 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
 
     MasterMenu->AppendSeparator();
     ADD_MENUITEM( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), cancel_xpm );
-}
-
-
-/**********************************************************/
-void WinEDA_DrawFrame::Process_Zoom( wxCommandEvent& event )
-/**********************************************************/
-
-/* Handle the Zoom commands from the zoom tools in the main toolbar.
- *  Calls the active window Zoom function
- */
-{
-    int id = event.GetId();
-
-    switch( id )
-    {
-    case ID_ZOOM_IN_BUTT:
-    case ID_ZOOM_OUT_BUTT:
-    case ID_ZOOM_REDRAW_BUTT:
-    case ID_ZOOM_PAGE_BUTT:
-        OnZoom( id );
-        break;
-
-    default:
-        DisplayError( this, wxT( "WinEDA_DrawFrame::Process_Zoom id Error" ) );
-        break;
-    }
 }

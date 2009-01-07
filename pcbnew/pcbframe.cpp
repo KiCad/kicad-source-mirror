@@ -19,7 +19,6 @@
 /*******************************/
 
 BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
-    COMMON_EVENTS_DRAWFRAME
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, WinEDA_PcbFrame::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, WinEDA_PcbFrame::OnSockRequest )
 
@@ -29,8 +28,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_PcbFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_PcbFrame::OnSize )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                    WinEDA_PcbFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_PcbFrame::OnZoom )
 
     EVT_TOOL( ID_LOAD_FILE, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_MENU_READ_LAST_SAVED_VERSION_BOARD, WinEDA_PcbFrame::Files_io )

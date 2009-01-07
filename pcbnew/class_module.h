@@ -195,7 +195,7 @@ public:
      * about this object into the frame's message panel.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void    Display_Infos( WinEDA_DrawFrame* frame );
+    void    Display_Infos( WinEDA_BasePcbFrame* frame );
 
 
     /**

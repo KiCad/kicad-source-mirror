@@ -530,21 +530,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     switch( g_KeyPressed )
     {
-    case EDA_ZOOM_IN_FROM_MOUSE:
-        OnZoom( ID_ZOOM_IN_KEY );
-        oldpos = curpos = GetScreen()->m_Curseur;
-        break;
-
-    case EDA_ZOOM_OUT_FROM_MOUSE:
-        OnZoom( ID_ZOOM_OUT_KEY );
-        oldpos = curpos = GetScreen()->m_Curseur;
-        break;
-
-    case EDA_ZOOM_CENTER_FROM_MOUSE:
-        OnZoom( ID_ZOOM_CENTER_KEY );
-        oldpos = curpos = GetScreen()->m_Curseur;
-        break;
-
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
         Mouse.y -= delta.y;

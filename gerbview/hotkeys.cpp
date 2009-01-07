@@ -84,6 +84,9 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
  */
 
 {
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
     if( (hotkey & GR_KB_CTRL) != 0 )
         hotkey += 'A' - 1;
@@ -99,33 +102,34 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
     default:
     case HK_NOT_FOUND:
         return;
-        break;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_Gerbview_Hokeys_Descr );
         break;
 
     case HK_ZOOM_IN:
-        OnZoom( ID_ZOOM_IN_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_OUT:
-        OnZoom( ID_ZOOM_OUT_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_REDRAW:
-        OnZoom( ID_ZOOM_REDRAW_KEY );
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_CENTER:
-        OnZoom( ID_ZOOM_CENTER_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
-
 
     case HK_RESET_LOCAL_COORD:         /*Reset the relative coord  */
         GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
         break;
-
 
     case HK_SWITCH_UNITS:
         g_UnitMetric = (g_UnitMetric == INCHES ) ? MILLIMETRE : INCHES;

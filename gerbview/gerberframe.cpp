@@ -21,13 +21,11 @@
 /* class WinEDA_GerberFrame for GerbView*/
 /****************************************/
 
-BEGIN_EVENT_TABLE( WinEDA_GerberFrame, wxFrame )
-    COMMON_EVENTS_DRAWFRAME
+BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_GerberFrame::OnSize )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                    WinEDA_GerberFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_GerberFrame::OnZoom )
 
     EVT_TOOL( ID_LOAD_FILE, WinEDA_GerberFrame::Files_io )
     EVT_TOOL( ID_APPEND_FILE, WinEDA_GerberFrame::Files_io )

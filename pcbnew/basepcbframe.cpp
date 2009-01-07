@@ -23,7 +23,6 @@
 /*******************************/
 
 BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, WinEDA_DrawFrame )
-    COMMON_EVENTS_DRAWFRAME
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
                     ID_POPUP_PCB_ITEM_SELECTION_END,
                     WinEDA_BasePcbFrame::ProcessItemSelection )

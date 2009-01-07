@@ -27,8 +27,7 @@
 
 
 BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
-    EVT_TOOL_RANGE( ID_ZOOM_IN_BUTT, ID_ZOOM_PAGE_BUTT,
-                    WinEDA3D_DrawFrame::Process_Zoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA3D_DrawFrame::Process_Zoom )
     EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_END_COMMAND_3D,
                     WinEDA3D_DrawFrame::Process_Special_Functions )
     EVT_MENU( wxID_EXIT, WinEDA3D_DrawFrame::Exit3DFrame )
@@ -172,7 +171,7 @@ void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
 
     switch( event.GetId() )
     {
-    case ID_ZOOM_PAGE_BUTT:
+    case ID_ZOOM_PAGE:
         for( ii = 0; ii < 4; ii++ )
             g_Parm_3D_Visu.m_Rot[ii] = 0.0;
 
@@ -181,17 +180,17 @@ void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
         trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
         break;
 
-    case ID_ZOOM_IN_BUTT:
+    case ID_ZOOM_IN:
         g_Parm_3D_Visu.m_Zoom /= 1.2;
         if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
             g_Parm_3D_Visu.m_Zoom = 0.01;
         break;
 
-    case ID_ZOOM_OUT_BUTT:
+    case ID_ZOOM_OUT:
         g_Parm_3D_Visu.m_Zoom *= 1.2;
         break;
 
-    case ID_ZOOM_REDRAW_BUTT:
+    case ID_ZOOM_REDRAW:
         break;
 
     default:

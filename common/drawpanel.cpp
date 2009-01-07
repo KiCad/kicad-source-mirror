@@ -33,8 +33,6 @@ BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
     EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
     EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
 
-    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                    WinEDA_DrawPanel::Process_Popup_Zoom )
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     WinEDA_DrawPanel::OnPopupGridSelect )
     EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, WinEDA_DrawPanel::OnPan )
@@ -50,7 +48,6 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
                       wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
 {
     m_Parent          = parent;
-    m_Ident           = m_Parent->m_Ident;
     m_Scroll_unit     = 1;
     m_ScrollButt_unit = 40;
 
@@ -902,10 +899,14 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
 
     // Auto pan if mouse is leave working aera:
     wxSize size = GetClientSize();
-    if( ( size.x < event.GetX() )
-       || ( size.y < event.GetY() )
-       || ( event.GetX() <= 0) || ( event.GetY() <= 0 ) )
-        m_Parent->OnZoom( ID_POPUP_ZOOM_CENTER );
+
+    if( ( size.x < event.GetX() ) || ( size.y < event.GetY() )
+        || ( event.GetX() <= 0) || ( event.GetY() <= 0 ) )
+    {
+        wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_POPUP_ZOOM_CENTER );
+        cmd.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( cmd );
+    }
 }
 
 
@@ -918,16 +919,23 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
  */
 void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
 {
-    if( event.GetWheelRotation() == 0 )
+    wxRect rect = GetRect();
+
+    wxLogDebug( wxT( "OnMouseWheel() cursor position: (%d, %d)." ),
+                event.m_x, event.m_y );
+
+    /* Ignore scroll events if the cursor is outside the drawing area. */
+    if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
+        || !rect.Contains( event.GetPosition() ) )
     {
         event.Skip();
         return;
     }
 
-    wxCommandEvent cmd(  wxEVT_COMMAND_MENU_SELECTED );
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    // This is a zoom in ou out command
+    // This is a zoom in or out command
     if( event.GetWheelRotation() > 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
@@ -1073,8 +1081,11 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
     {
         // The middle button has been relached, with no block command:
-        // We use it for a zoom center command
-        g_KeyPressed = localkey = EDA_ZOOM_CENTER_FROM_MOUSE;
+        // We use it for a zoom center at cursor position command
+        wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED,
+                            ID_POPUP_ZOOM_CENTER );
+        cmd.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( cmd );
     }
 
 

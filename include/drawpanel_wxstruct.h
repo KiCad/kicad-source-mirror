@@ -40,7 +40,6 @@ WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
 class WinEDA_DrawPanel : public wxScrolledWindow
 {
 public:
-    int               m_Ident;
     WinEDA_DrawFrame* m_Parent;
     EDA_Rect          m_ClipBox;            // the clipbox used in screen redraw (usually gives the visible area in internal units)
     wxPoint           m_CursorStartPos;     // utile dans controles du mouvement curseur
@@ -114,7 +113,6 @@ public:
 
     void         AddMenuZoom( wxMenu* MasterMenu );
     bool         OnRightClick( wxMouseEvent& event );
-    void         Process_Popup_Zoom( wxCommandEvent& event );
     void         OnPopupGridSelect( wxCommandEvent& event );
     void         Process_Special_Functions( wxCommandEvent& event );
     wxPoint      CursorRealPosition( const wxPoint& ScreenPos );

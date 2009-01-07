@@ -104,20 +104,20 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_IN );
-    m_HToolBar->AddTool( ID_ZOOM_IN_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                          wxBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), s_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_OUT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ), msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_REDRAW );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ),
                          _( "Zoom auto" ) );
 

@@ -4,8 +4,6 @@
 
 #include "fctsys.h"
 
-#include "gr_basic.h"
-
 #include "common.h"
 #include "program.h"
 #include "libcmp.h"
@@ -145,6 +143,9 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
     bool ItemInEdit = GetScreen()->GetCurItem()
             && GetScreen()->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
@@ -172,7 +173,6 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     default:
     case HK_NOT_FOUND:
         return;
-        break;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
@@ -183,19 +183,23 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ZOOM_IN:
-        OnZoom( ID_ZOOM_IN_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_OUT:
-        OnZoom( ID_ZOOM_OUT_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_REDRAW:
-        OnZoom( ID_ZOOM_REDRAW_KEY );
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_CENTER:
-        OnZoom( ID_ZOOM_CENTER_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_UNDO:
@@ -413,6 +417,9 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
  *  Commands are case insensitive
  */
 {
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
     bool ItemInEdit = GetScreen()->GetCurItem()
             && GetScreen()->GetCurItem()->m_Flags;
     bool RefreshToolBar = FALSE; // We must refresh tool bar when the undo/redo tool state is modified
@@ -451,19 +458,23 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ZOOM_IN:
-        OnZoom( ID_ZOOM_IN_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_OUT:
-        OnZoom( ID_ZOOM_OUT_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_REDRAW:
-        OnZoom( ID_ZOOM_REDRAW_KEY );
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_CENTER:
-        OnZoom( ID_ZOOM_CENTER_KEY );
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_UNDO:
