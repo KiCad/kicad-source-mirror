@@ -608,7 +608,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
     /* Init : */
     PrintHeaderHPGL( PlotOutput, g_HPGL_Pen_Descr.m_Pen_Speed, g_HPGL_Pen_Descr.m_Pen_Num );
 
-    PlotWorkSheet( PLOT_FORMAT_HPGL, screen );
+    m_Parent->PlotWorkSheet( PLOT_FORMAT_HPGL, screen );
 
     DrawList = screen->EEDrawList;
     while( DrawList )  /* tracage */

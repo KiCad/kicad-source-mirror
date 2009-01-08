@@ -73,7 +73,7 @@ class WinEDA_PlotPSFrame: public wxDialog
 public:
     /// Constructors
     WinEDA_PlotPSFrame( );
-    WinEDA_PlotPSFrame( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_PLOTPSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_PLOTPSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_PLOTPSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_PLOTPSFRAME_SIZE, long style = SYMBOL_WINEDA_PLOTPSFRAME_STYLE );
+    WinEDA_PlotPSFrame( WinEDA_DrawFrame* parent, wxWindowID id = SYMBOL_WINEDA_PLOTPSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_PLOTPSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_PLOTPSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_PLOTPSFRAME_SIZE, long style = SYMBOL_WINEDA_PLOTPSFRAME_STYLE );
 
     /// Creation
     bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_PLOTPSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_PLOTPSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_PLOTPSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_PLOTPSFRAME_SIZE, long style = SYMBOL_WINEDA_PLOTPSFRAME_STYLE );
@@ -106,7 +106,7 @@ public:
 	void InitOptVars();
     void CreatePSFile(int AllPages, int pagesize);
     void PlotOneSheetPS(const wxString & FileName,
-			BASE_SCREEN * screen, Ki_PageDescr * sheet, int BBox[4], wxPoint plot_offset);
+			SCH_SCREEN * screen, Ki_PageDescr * sheet, int BBox[4], wxPoint plot_offset);
 
     /// Should we show tooltips?
     static bool ShowToolTips();
@@ -119,6 +119,7 @@ public:
     wxBoxSizer* m_DefaultLineSizeCtrlSizer;
     wxTextCtrl* m_MsgBox;
 ////@end WinEDA_PlotPSFrame member variables
+    WinEDA_DrawFrame * m_Parent;
 	WinEDA_ValueCtrl * m_DefaultLineSizeCtrl;
 };
 

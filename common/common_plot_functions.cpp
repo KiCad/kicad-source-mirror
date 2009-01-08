@@ -57,9 +57,9 @@ void Setg_Plot_PlotOffset( wxPoint offset )
 }
 
 
-/*******************************************************/
-void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
-/*******************************************************/
+/**************************************************************************/
+void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
+/**************************************************************************/
 
 /* Plot sheet references
   * margin is in mils (1/1000 inch)
@@ -400,8 +400,7 @@ void PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             break;
 
         case WS_FULLSHEETNAME:
-
-//				msg += GetScreenDesc();
+            msg += GetScreenDesc();
             break;
 
         case WS_COMPANY_NAME:

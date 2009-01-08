@@ -46,7 +46,7 @@ extern int     g_Plot_PlotOrientOptions, g_Plot_PenState;
 void    SetPlotScale( double aXScale, double aYScale );   // Set the plot scale for the current plotting)
 void    Setg_Plot_PlotOffset( wxPoint offset );                // Set the plot offset for the current plotting)
 void    InitPlotParametresGERBER( wxPoint offset, double aXScale, double aYScale );
-void    PlotWorkSheet( int format_plot, BASE_SCREEN* screen );
+// void    PlotWorkSheet( int format_plot, BASE_SCREEN* screen ); now a member of WinEDA_DrawFrame
 void    UserToDeviceCoordinate( wxPoint& pos );
 
 // modifie les coord pos.x et pos.y pour le trace selon l'orientation, l'echelle, les offsets de trace

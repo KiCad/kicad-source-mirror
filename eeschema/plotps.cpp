@@ -101,11 +101,11 @@ IMPLEMENT_DYNAMIC_CLASS( WinEDA_PlotPSFrame, wxDialog )
 BEGIN_EVENT_TABLE( WinEDA_PlotPSFrame, wxDialog )
 
 ////@begin WinEDA_PlotPSFrame event table entries
-    EVT_BUTTON( ID_PLOT_PS_CURRENT_EXECUTE, WinEDA_PlotPSFrame::OnPlotPsCurrentExecuteClick )
+EVT_BUTTON( ID_PLOT_PS_CURRENT_EXECUTE, WinEDA_PlotPSFrame::OnPlotPsCurrentExecuteClick )
 
-    EVT_BUTTON( ID_PLOT_PS_ALL_EXECUTE, WinEDA_PlotPSFrame::OnPlotPsAllExecuteClick )
+EVT_BUTTON( ID_PLOT_PS_ALL_EXECUTE, WinEDA_PlotPSFrame::OnPlotPsAllExecuteClick )
 
-    EVT_BUTTON( wxID_CANCEL, WinEDA_PlotPSFrame::OnCancelClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_PlotPSFrame::OnCancelClick )
 
 ////@end WinEDA_PlotPSFrame event table entries
 
@@ -120,13 +120,14 @@ WinEDA_PlotPSFrame::WinEDA_PlotPSFrame()
 }
 
 
-WinEDA_PlotPSFrame::WinEDA_PlotPSFrame( wxWindow* parent,
-                                        wxWindowID id,
-                                        const wxString& caption,
-                                        const wxPoint& pos,
-                                        const wxSize& size,
-                                        long style )
+WinEDA_PlotPSFrame::WinEDA_PlotPSFrame( WinEDA_DrawFrame* parent,
+                                        wxWindowID        id,
+                                        const wxString&   caption,
+                                        const wxPoint&    pos,
+                                        const wxSize&     size,
+                                        long              style )
 {
+    m_Parent = parent;
     Create( parent, id, caption, pos, size, style );
 }
 
@@ -135,32 +136,34 @@ WinEDA_PlotPSFrame::WinEDA_PlotPSFrame( wxWindow* parent,
  * WinEDA_PlotPSFrame creator
  */
 
-bool WinEDA_PlotPSFrame::Create( wxWindow* parent,
-                                 wxWindowID id,
+bool WinEDA_PlotPSFrame::Create( wxWindow*       parent,
+                                 wxWindowID      id,
                                  const wxString& caption,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style )
+                                 const wxPoint&  pos,
+                                 const wxSize&   size,
+                                 long            style )
 {
 ////@begin WinEDA_PlotPSFrame member initialisation
     m_SizeOption = NULL;
     m_PlotPSColorOption = NULL;
-    m_Plot_Sheet_Ref = NULL;
+    m_Plot_Sheet_Ref    = NULL;
     m_btClose = NULL;
     m_DefaultLineSizeCtrlSizer = NULL;
     m_MsgBox = NULL;
+
 ////@end WinEDA_PlotPSFrame member initialisation
 
 ////@begin WinEDA_PlotPSFrame creation
-    SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
+    SetExtraStyle( wxWS_EX_BLOCK_EVENTS );
     wxDialog::Create( parent, id, caption, pos, size, style );
 
     CreateControls();
-    if (GetSizer())
+    if( GetSizer() )
     {
-        GetSizer()->SetSizeHints(this);
+        GetSizer()->SetSizeHints( this );
     }
     Centre();
+
 ////@end WinEDA_PlotPSFrame creation
     return true;
 }
@@ -179,68 +182,90 @@ void WinEDA_PlotPSFrame::CreateControls()
 
     WinEDA_PlotPSFrame* itemDialog1 = this;
 
-    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    itemDialog1->SetSizer(itemBoxSizer2);
+    wxBoxSizer*         itemBoxSizer2 = new wxBoxSizer( wxVERTICAL );
+    itemDialog1->SetSizer( itemBoxSizer2 );
 
-    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    wxBoxSizer*         itemBoxSizer3 = new wxBoxSizer( wxHORIZONTAL );
+    itemBoxSizer2->Add( itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
-    wxArrayString m_SizeOptionStrings;
-    m_SizeOptionStrings.Add(_("Auto"));
-    m_SizeOptionStrings.Add(_("Page Size A4"));
-    m_SizeOptionStrings.Add(_("Page Size A"));
-    m_SizeOption = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _("Plot page size:"), wxDefaultPosition, wxDefaultSize, m_SizeOptionStrings, 1, wxRA_SPECIFY_COLS );
-    m_SizeOption->SetSelection(0);
-    itemBoxSizer3->Add(m_SizeOption, 0, wxGROW|wxALL, 5);
+    wxArrayString       m_SizeOptionStrings;
+    m_SizeOptionStrings.Add( _( "Auto" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A4" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A" ) );
+    m_SizeOption = new wxRadioBox( itemDialog1, ID_RADIOBOX1, _(
+                                       "Plot page size:" ), wxDefaultPosition, wxDefaultSize,
+                                   m_SizeOptionStrings, 1,
+                                   wxRA_SPECIFY_COLS );
+    m_SizeOption->SetSelection( 0 );
+    itemBoxSizer3->Add( m_SizeOption, 0, wxGROW | wxALL, 5 );
 
-    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer3->Add( 5, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    wxStaticBox* itemStaticBoxSizer6Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Plot Options:"));
-    wxStaticBoxSizer* itemStaticBoxSizer6 = new wxStaticBoxSizer(itemStaticBoxSizer6Static, wxVERTICAL);
-    itemBoxSizer3->Add(itemStaticBoxSizer6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticBox*      itemStaticBoxSizer6Static = new wxStaticBox( itemDialog1, wxID_ANY,
+                                                                  _( "Plot Options:" ) );
+    wxStaticBoxSizer* itemStaticBoxSizer6 = new wxStaticBoxSizer( itemStaticBoxSizer6Static,
+                                                                  wxVERTICAL );
+    itemBoxSizer3->Add( itemStaticBoxSizer6, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxArrayString m_PlotPSColorOptionStrings;
-    m_PlotPSColorOptionStrings.Add(_("B/W"));
-    m_PlotPSColorOptionStrings.Add(_("Color"));
-    m_PlotPSColorOption = new wxRadioBox( itemDialog1, ID_RADIOBOX, _("Plot Color:"), wxDefaultPosition, wxDefaultSize, m_PlotPSColorOptionStrings, 1, wxRA_SPECIFY_COLS );
-    m_PlotPSColorOption->SetSelection(0);
-    itemStaticBoxSizer6->Add(m_PlotPSColorOption, 0, wxGROW|wxALL, 5);
+    m_PlotPSColorOptionStrings.Add( _( "B/W" ) );
+    m_PlotPSColorOptionStrings.Add( _( "Color" ) );
+    m_PlotPSColorOption = new wxRadioBox( itemDialog1, ID_RADIOBOX, _(
+                                              "Plot Color:" ), wxDefaultPosition, wxDefaultSize,
+                                          m_PlotPSColorOptionStrings, 1,
+                                          wxRA_SPECIFY_COLS );
+    m_PlotPSColorOption->SetSelection( 0 );
+    itemStaticBoxSizer6->Add( m_PlotPSColorOption, 0, wxGROW | wxALL, 5 );
 
-    m_Plot_Sheet_Ref = new wxCheckBox( itemDialog1, ID_CHECKBOX, _("Print Sheet Ref"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
-    m_Plot_Sheet_Ref->SetValue(false);
-    itemStaticBoxSizer6->Add(m_Plot_Sheet_Ref, 0, wxGROW|wxALL, 5);
+    m_Plot_Sheet_Ref = new wxCheckBox( itemDialog1, ID_CHECKBOX, _(
+                                           "Print Sheet Ref" ), wxDefaultPosition, wxDefaultSize,
+                                       wxCHK_2STATE );
+    m_Plot_Sheet_Ref->SetValue( false );
+    itemStaticBoxSizer6->Add( m_Plot_Sheet_Ref, 0, wxGROW | wxALL, 5 );
 
-    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer3->Add( 5, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer3->Add(itemBoxSizer10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer3->Add( itemBoxSizer10, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    wxButton* itemButton11 = new wxButton( itemDialog1, ID_PLOT_PS_CURRENT_EXECUTE, _("&Plot page"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton*   itemButton11 = new wxButton( itemDialog1, ID_PLOT_PS_CURRENT_EXECUTE,
+                                             _(
+                                                 "&Plot page" ), wxDefaultPosition, wxDefaultSize,
+                                             0 );
     itemButton11->SetDefault();
-    itemButton11->SetForegroundColour(wxColour(0, 128, 0));
-    itemBoxSizer10->Add(itemButton11, 0, wxGROW|wxALL, 5);
+    itemButton11->SetForegroundColour( wxColour( 0, 128, 0 ) );
+    itemBoxSizer10->Add( itemButton11, 0, wxGROW | wxALL, 5 );
 
-    wxButton* itemButton12 = new wxButton( itemDialog1, ID_PLOT_PS_ALL_EXECUTE, _("Plot a&ll"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton12->SetForegroundColour(wxColour(179, 0, 0));
-    itemBoxSizer10->Add(itemButton12, 0, wxGROW|wxALL, 5);
+    wxButton* itemButton12 = new wxButton( itemDialog1, ID_PLOT_PS_ALL_EXECUTE, _(
+                                               "Plot a&ll" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton12->SetForegroundColour( wxColour( 179, 0, 0 ) );
+    itemBoxSizer10->Add( itemButton12, 0, wxGROW | wxALL, 5 );
 
-    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_btClose->SetForegroundColour(wxColour(0, 0, 255));
-    itemBoxSizer10->Add(m_btClose, 0, wxGROW|wxALL, 5);
+    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _(
+                                  "&Close" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_btClose->SetForegroundColour( wxColour( 0, 0, 255 ) );
+    itemBoxSizer10->Add( m_btClose, 0, wxGROW | wxALL, 5 );
 
-    m_DefaultLineSizeCtrlSizer = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer2->Add(m_DefaultLineSizeCtrlSizer, 0, wxGROW|wxALL, 5);
+    m_DefaultLineSizeCtrlSizer = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer2->Add( m_DefaultLineSizeCtrlSizer, 0, wxGROW | wxALL, 5 );
 
-    wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("Messages :"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer2->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _(
+                                                           "Messages :" ), wxDefaultPosition,
+                                                       wxDefaultSize, 0 );
+    itemBoxSizer2->Add( itemStaticText15,
+                        0,
+                        wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                        5 );
 
-    m_MsgBox = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxSize(-1, 200), wxTE_MULTILINE );
-    itemBoxSizer2->Add(m_MsgBox, 0, wxGROW|wxALL|wxFIXED_MINSIZE, 5);
+    m_MsgBox = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T( "" ), wxDefaultPosition,
+                               wxSize( -1, 200 ), wxTE_MULTILINE );
+    itemBoxSizer2->Add( m_MsgBox, 0, wxGROW | wxALL | wxFIXED_MINSIZE, 5 );
 
     // Set validators
-    m_SizeOption->SetValidator( wxGenericValidator(& PS_SizeSelect) );
-    m_PlotPSColorOption->SetValidator( wxGenericValidator(& g_PlotPSColorOpt) );
-    m_Plot_Sheet_Ref->SetValidator( wxGenericValidator(& Plot_Sheet_Ref) );
+    m_SizeOption->SetValidator( wxGenericValidator( &PS_SizeSelect ) );
+    m_PlotPSColorOption->SetValidator( wxGenericValidator( &g_PlotPSColorOpt ) );
+    m_Plot_Sheet_Ref->SetValidator( wxGenericValidator( &Plot_Sheet_Ref ) );
+
 ////@end WinEDA_PlotPSFrame content construction
 
     SetFocus(); // make the ESC work
@@ -270,8 +295,9 @@ wxBitmap WinEDA_PlotPSFrame::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
 ////@begin WinEDA_PlotPSFrame bitmap retrieval
-    wxUnusedVar(name);
+    wxUnusedVar( name );
     return wxNullBitmap;
+
 ////@end WinEDA_PlotPSFrame bitmap retrieval
 }
 
@@ -284,8 +310,9 @@ wxIcon WinEDA_PlotPSFrame::GetIconResource( const wxString& name )
 {
     // Icon retrieval
 ////@begin WinEDA_PlotPSFrame icon retrieval
-    wxUnusedVar(name);
+    wxUnusedVar( name );
     return wxNullIcon;
+
 ////@end WinEDA_PlotPSFrame icon retrieval
 }
 
@@ -346,24 +373,46 @@ void WinEDA_PlotPSFrame::InitOptVars()
 void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
 /*************************************************************/
 {
-    wxString      PlotFileName, ShortFileName;
-    BASE_SCREEN*  screen;
-    Ki_PageDescr* PlotSheet, * RealSheet;
-    int           BBox[4];
-    wxPoint       plot_offset;
+    WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
+    SCH_SCREEN*            screen       = schframe->GetScreen();
+    SCH_SCREEN*            oldscreen    = screen;
+    DrawSheetPath*         oldsheetpath = schframe->GetSheet();
+    wxString PlotFileName, ShortFileName;
+    Ki_PageDescr*          PlotSheet, * RealSheet;
+    int BBox[4];
+    wxPoint plot_offset;
+    DrawSheetPath*         sheetpath;
 
     g_PlotFormat = PLOT_FORMAT_POST;
 
-    /* Build the screen list */
-    EDA_ScreenList ScreenList;
+    /* When printing all pages, the printed page is not the current page.
+     *  In complex hierarchies, we must setup references and others parameters in the printed SCH_SCREEN
+     *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
+     *  is shared between many sheets
+     */
+    EDA_SheetList SheetList( NULL );
+    sheetpath = SheetList.GetFirst();
+    DrawSheetPath list;
 
-    if( AllPages == TRUE )
-        screen = ScreenList.GetFirst();
-    else
-        screen = ActiveScreen;
-
-    for( ; screen != NULL; screen = ScreenList.GetNext() )
+    for( ; ;  )
     {
+        if( AllPages )
+        {
+            if( sheetpath == NULL )
+                break;
+            list.Clear();
+            if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
+            {
+                schframe->m_CurrentSheet = &list;
+                schframe->m_CurrentSheet->UpdateAllScreenReferences();
+                schframe->SetSheetNumberAndCount();
+                screen = schframe->m_CurrentSheet->LastScreen();
+                ActiveScreen = screen;
+            }
+            else  // Should not happen
+                return;
+            sheetpath = SheetList.GetNext();
+        }
         PlotSheet = screen->m_CurrentSheetDesc;
         RealSheet = &g_Sheet_A4;
 
@@ -372,25 +421,37 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
         else if( pagesize == PAGE_SIZE_A )
             RealSheet = &g_Sheet_A;
 
-        /* Calcul des limites de trace en 1/1000 pouce */
+        /* Calculate plot bouding box in 1/1000 inch */
         BBox[0] = BBox[1] = g_PlotMargin;   // Plot margin in 1/1000 inch
         BBox[2] = RealSheet->m_Size.x - g_PlotMargin;
         BBox[3] = RealSheet->m_Size.y - g_PlotMargin;
 
-        /* Calcul des echelles de conversion */
-        g_PlotScaleX = SCALE_PS *
-                       (float) (BBox[2] - BBox[0]) /
-                       PlotSheet->m_Size.x;
-
-        g_PlotScaleY = SCALE_PS *
-                       (float) (BBox[3] - BBox[1]) /
-                       PlotSheet->m_Size.y;
+        /* Calculate pcbnew to PS conversion scale */
+        g_PlotScaleX = SCALE_PS * (float) (BBox[2] - BBox[0]) / PlotSheet->m_Size.x;
+        g_PlotScaleY = SCALE_PS * (float) (BBox[3] - BBox[1]) / PlotSheet->m_Size.y;
 
         plot_offset.x = 0;
         plot_offset.y = PlotSheet->m_Size.y;
 
-        wxSplitPath( screen->m_FileName.GetData(), (wxString*) NULL,
-            &ShortFileName, (wxString*) NULL );
+        /* If a screen is used more than once (complex hierarchy) we create more than once file
+         * with the same basic filename
+         * To avoid that, we use the root filename and and the sheet path
+         * Or, if filename too long, sheet_name + sheet number
+         */
+        wxSplitPath( g_RootSheet->GetFileName().GetData(), (wxString*) NULL,
+                     &ShortFileName, (wxString*) NULL );
+        if ( (ShortFileName.Len() + schframe->m_CurrentSheet->PathHumanReadable().Len() ) < 50 )
+        {
+            ShortFileName += schframe->m_CurrentSheet->PathHumanReadable();
+            ShortFileName.Replace( wxT( "/" ), wxT( "-" ) );
+            ShortFileName.RemoveLast();
+        }
+        else
+        {
+            wxSplitPath( g_RootSheet->GetFileName().GetData(), (wxString*) NULL,
+                     &ShortFileName, (wxString*) NULL );
+            ShortFileName << wxT("-") << screen->m_ScreenNumber; 
+        }
 
         wxString dirbuf = wxGetCwd() + STRING_DIR_SEP;
 
@@ -401,20 +462,23 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
 
         PlotOneSheetPS( PlotFileName, screen, RealSheet, BBox, plot_offset );
 
-        screen = screen->Next();
-
-        if( AllPages == FALSE )
+        if( !AllPages )
             break;
     }
+
+    ActiveScreen = oldscreen;
+    schframe->m_CurrentSheet = oldsheetpath;
+    schframe->m_CurrentSheet->UpdateAllScreenReferences();
+    schframe->SetSheetNumberAndCount();
 }
 
 
 /*****************************************************************************************/
 void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
-                                         BASE_SCREEN* screen,
-                                         Ki_PageDescr* sheet,
-                                         int BBox[4],
-                                         wxPoint plot_offset )
+                                         SCH_SCREEN*     screen,
+                                         Ki_PageDescr*   sheet,
+                                         int             BBox[4],
+                                         wxPoint         plot_offset )
 /*****************************************************************************************/
 
 /* Trace en format PS. d'une feuille de dessin
@@ -436,7 +500,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
         return;
     }
 
-    SetLocaleTo_C_standard( );
+    SetLocaleTo_C_standard();
     Line.Printf( _( "Plot: %s\n" ), FileName.GetData() );
     m_MsgBox->AppendText( Line );
 
@@ -451,7 +515,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
     {
         if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
             SetColorMapPS( BLACK );
-        PlotWorkSheet( PLOT_FORMAT_POST, screen );
+        m_Parent->PlotWorkSheet( PLOT_FORMAT_POST, screen );
     }
 
     DrawList = screen->EEDrawList;
@@ -565,9 +629,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
 
     /* fin */
     CloseFilePS( PlotOutput );
-    SetLocaleTo_Default( );
+    SetLocaleTo_Default();
 
     m_MsgBox->AppendText( wxT( "Ok\n" ) );
 }
-
-

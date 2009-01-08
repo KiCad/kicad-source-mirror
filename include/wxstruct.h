@@ -279,6 +279,8 @@ public:
     void            OnActivate( wxActivateEvent& event );
     void            ReDrawPanel();
     void            TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
+    void            PlotWorkSheet( int format_plot, BASE_SCREEN* screen );
+    
     /** Function GetXYSheetReferences
      * Return the X,Y sheet references where the point position is located
      * @param aScreen = screen to use
