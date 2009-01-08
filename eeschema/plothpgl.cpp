@@ -117,21 +117,21 @@ IMPLEMENT_DYNAMIC_CLASS( WinEDA_PlotHPGLFrame, wxDialog )
 BEGIN_EVENT_TABLE( WinEDA_PlotHPGLFrame, wxDialog )
 
 ////@begin WinEDA_PlotHPGLFrame event table entries
-    EVT_RADIOBOX( ID_RADIOBOX, WinEDA_PlotHPGLFrame::OnRadioboxSelected )
+EVT_RADIOBOX( ID_RADIOBOX, WinEDA_PlotHPGLFrame::OnRadioboxSelected )
 
-    EVT_SPINCTRL( ID_PEN_WIDTH_UPDATED, WinEDA_PlotHPGLFrame::OnPenWidthUpdatedUpdated )
+EVT_SPINCTRL( ID_PEN_WIDTH_UPDATED, WinEDA_PlotHPGLFrame::OnPenWidthUpdatedUpdated )
 
-    EVT_SPINCTRL( ID_PEN_SPEED_UPDATED, WinEDA_PlotHPGLFrame::OnPenSpeedUpdatedUpdated )
+EVT_SPINCTRL( ID_PEN_SPEED_UPDATED, WinEDA_PlotHPGLFrame::OnPenSpeedUpdatedUpdated )
 
-    EVT_SPINCTRL( ID_PEN_NUMBER_UPDATED, WinEDA_PlotHPGLFrame::OnPenNumberUpdatedUpdated )
+EVT_SPINCTRL( ID_PEN_NUMBER_UPDATED, WinEDA_PlotHPGLFrame::OnPenNumberUpdatedUpdated )
 
-    EVT_BUTTON( ID_PLOT_HPGL_CURRENT_EXECUTE, WinEDA_PlotHPGLFrame::OnPlotHpglCurrentExecuteClick )
+EVT_BUTTON( ID_PLOT_HPGL_CURRENT_EXECUTE, WinEDA_PlotHPGLFrame::OnPlotHpglCurrentExecuteClick )
 
-    EVT_BUTTON( ID_PLOT_HPGL_ALL_EXECUTE, WinEDA_PlotHPGLFrame::OnPlotHpglAllExecuteClick )
+EVT_BUTTON( ID_PLOT_HPGL_ALL_EXECUTE, WinEDA_PlotHPGLFrame::OnPlotHpglAllExecuteClick )
 
-    EVT_BUTTON( wxID_CANCEL, WinEDA_PlotHPGLFrame::OnCancelClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_PlotHPGLFrame::OnCancelClick )
 
-    EVT_BUTTON( ID_PLOT_ACCEPT_OFFSET, WinEDA_PlotHPGLFrame::OnPlotAcceptOffsetClick )
+EVT_BUTTON( ID_PLOT_ACCEPT_OFFSET, WinEDA_PlotHPGLFrame::OnPlotAcceptOffsetClick )
 
 ////@end WinEDA_PlotHPGLFrame event table entries
 
@@ -147,11 +147,11 @@ WinEDA_PlotHPGLFrame::WinEDA_PlotHPGLFrame()
 
 
 WinEDA_PlotHPGLFrame::WinEDA_PlotHPGLFrame( WinEDA_DrawFrame* parent,
-                                            wxWindowID id,
-                                            const wxString& caption,
-                                            const wxPoint& pos,
-                                            const wxSize& size,
-                                            long style )
+                                            wxWindowID        id,
+                                            const wxString&   caption,
+                                            const wxPoint&    pos,
+                                            const wxSize&     size,
+                                            long              style )
 {
     m_Parent = parent;
     Create( parent, id, caption, pos, size, style );
@@ -163,34 +163,36 @@ WinEDA_PlotHPGLFrame::WinEDA_PlotHPGLFrame( WinEDA_DrawFrame* parent,
  * WinEDA_PlotHPGLFrame creator
  */
 
-bool WinEDA_PlotHPGLFrame::Create( wxWindow* parent,
-                                   wxWindowID id,
+bool WinEDA_PlotHPGLFrame::Create( wxWindow*       parent,
+                                   wxWindowID      id,
                                    const wxString& caption,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style )
+                                   const wxPoint&  pos,
+                                   const wxSize&   size,
+                                   long            style )
 {
 ////@begin WinEDA_PlotHPGLFrame member initialisation
-    m_SizeOption = NULL;
+    m_SizeOption   = NULL;
     m_ButtPenWidth = NULL;
     m_ButtPenSpeed = NULL;
-    m_ButtPenNum = NULL;
+    m_ButtPenNum   = NULL;
     m_PlotOrgPosition_X = NULL;
     m_PlotOrgPosition_Y = NULL;
     m_btClose = NULL;
-    m_MsgBox = NULL;
+    m_MsgBox  = NULL;
+
 ////@end WinEDA_PlotHPGLFrame member initialisation
 
 ////@begin WinEDA_PlotHPGLFrame creation
-    SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
+    SetExtraStyle( wxWS_EX_BLOCK_EVENTS );
     wxDialog::Create( parent, id, caption, pos, size, style );
 
     CreateControls();
-    if (GetSizer())
+    if( GetSizer() )
     {
-        GetSizer()->SetSizeHints(this);
+        GetSizer()->SetSizeHints( this );
     }
     Centre();
+
 ////@end WinEDA_PlotHPGLFrame creation
     return true;
 }
@@ -209,104 +211,166 @@ void WinEDA_PlotHPGLFrame::CreateControls()
 
     WinEDA_PlotHPGLFrame* itemDialog1 = this;
 
-    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    itemDialog1->SetSizer(itemBoxSizer2);
+    wxBoxSizer*           itemBoxSizer2 = new wxBoxSizer( wxVERTICAL );
+    itemDialog1->SetSizer( itemBoxSizer2 );
 
-    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    wxBoxSizer*           itemBoxSizer3 = new wxBoxSizer( wxHORIZONTAL );
+    itemBoxSizer2->Add( itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
-    wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer3->Add(itemBoxSizer4, 0, wxGROW|wxALL, 5);
+    wxBoxSizer*           itemBoxSizer4 = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer3->Add( itemBoxSizer4, 0, wxGROW | wxALL, 5 );
 
-    wxArrayString m_SizeOptionStrings;
-    m_SizeOptionStrings.Add(_("Sheet Size"));
-    m_SizeOptionStrings.Add(_("Page Size A4"));
-    m_SizeOptionStrings.Add(_("Page Size A3"));
-    m_SizeOptionStrings.Add(_("Page Size A2"));
-    m_SizeOptionStrings.Add(_("Page Size A1"));
-    m_SizeOptionStrings.Add(_("Page Size A0"));
-    m_SizeOptionStrings.Add(_("Page Size A"));
-    m_SizeOptionStrings.Add(_("Page Size B"));
-    m_SizeOptionStrings.Add(_("Page Size C"));
-    m_SizeOptionStrings.Add(_("Page Size D"));
-    m_SizeOptionStrings.Add(_("Page Size E"));
-    m_SizeOption = new wxRadioBox( itemDialog1, ID_RADIOBOX, _("Plot page size:"), wxDefaultPosition, wxDefaultSize, m_SizeOptionStrings, 1, wxRA_SPECIFY_COLS );
-    m_SizeOption->SetSelection(0);
-    itemBoxSizer4->Add(m_SizeOption, 0, wxALIGN_LEFT|wxALL, 5);
+    wxArrayString         m_SizeOptionStrings;
+    m_SizeOptionStrings.Add( _( "Sheet Size" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A4" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A3" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A2" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A1" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A0" ) );
+    m_SizeOptionStrings.Add( _( "Page Size A" ) );
+    m_SizeOptionStrings.Add( _( "Page Size B" ) );
+    m_SizeOptionStrings.Add( _( "Page Size C" ) );
+    m_SizeOptionStrings.Add( _( "Page Size D" ) );
+    m_SizeOptionStrings.Add( _( "Page Size E" ) );
+    m_SizeOption = new wxRadioBox( itemDialog1, ID_RADIOBOX, _(
+                                       "Plot page size:" ), wxDefaultPosition, wxDefaultSize,
+                                   m_SizeOptionStrings, 1,
+                                   wxRA_SPECIFY_COLS );
+    m_SizeOption->SetSelection( 0 );
+    itemBoxSizer4->Add( m_SizeOption, 0, wxALIGN_LEFT | wxALL, 5 );
 
-    wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer3->Add(itemBoxSizer6, 0, wxALIGN_TOP|wxALL, 5);
+    wxBoxSizer*       itemBoxSizer6 = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer3->Add( itemBoxSizer6, 0, wxALIGN_TOP | wxALL, 5 );
 
-    wxStaticBox* itemStaticBoxSizer7Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Pen control:"));
-    wxStaticBoxSizer* itemStaticBoxSizer7 = new wxStaticBoxSizer(itemStaticBoxSizer7Static, wxVERTICAL);
-    itemBoxSizer6->Add(itemStaticBoxSizer7, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    wxStaticBox*      itemStaticBoxSizer7Static =
+        new wxStaticBox( itemDialog1, wxID_ANY, _( "Pen control:" ) );
+    wxStaticBoxSizer* itemStaticBoxSizer7 = new wxStaticBoxSizer( itemStaticBoxSizer7Static,
+                                                                  wxVERTICAL );
+    itemBoxSizer6->Add( itemStaticBoxSizer7, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
-    wxStaticText* itemStaticText8 = new wxStaticText( itemDialog1, wxID_STATIC, _("Pen Width ( mils )"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer7->Add(itemStaticText8, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText8 =
+        new wxStaticText( itemDialog1, wxID_STATIC, _(
+                              "Pen Width ( mils )" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticBoxSizer7->Add( itemStaticText8,
+                              0,
+                              wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                              5 );
 
-    m_ButtPenWidth = new wxSpinCtrl( itemDialog1, ID_PEN_WIDTH_UPDATED, _T("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 1 );
-    itemStaticBoxSizer7->Add(m_ButtPenWidth, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_ButtPenWidth = new wxSpinCtrl( itemDialog1, ID_PEN_WIDTH_UPDATED, _T(
+                                         "1" ), wxDefaultPosition, wxDefaultSize,
+                                     wxSP_ARROW_KEYS | wxSP_WRAP, 1, 100, 1 );
+    itemStaticBoxSizer7->Add( m_ButtPenWidth, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    wxStaticText* itemStaticText10 = new wxStaticText( itemDialog1, wxID_STATIC, _("Pen Speed ( cm/s )"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer7->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText10 =
+        new wxStaticText( itemDialog1, wxID_STATIC, _(
+                              "Pen Speed ( cm/s )" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticBoxSizer7->Add( itemStaticText10,
+                              0,
+                              wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                              5 );
 
-    m_ButtPenSpeed = new wxSpinCtrl( itemDialog1, ID_PEN_SPEED_UPDATED, _T("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 1 );
-    itemStaticBoxSizer7->Add(m_ButtPenSpeed, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_ButtPenSpeed = new wxSpinCtrl( itemDialog1, ID_PEN_SPEED_UPDATED, _T(
+                                         "1" ), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
+                                     1, 100, 1 );
+    itemStaticBoxSizer7->Add( m_ButtPenSpeed,
+                              0,
+                              wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                              5 );
 
-    wxStaticText* itemStaticText12 = new wxStaticText( itemDialog1, wxID_STATIC, _("Pen Number"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer7->Add(itemStaticText12, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText12 = new wxStaticText( itemDialog1, wxID_STATIC, _(
+                                                           "Pen Number" ), wxDefaultPosition,
+                                                       wxDefaultSize, 0 );
+    itemStaticBoxSizer7->Add( itemStaticText12,
+                              0,
+                              wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                              5 );
 
-    m_ButtPenNum = new wxSpinCtrl( itemDialog1, ID_PEN_NUMBER_UPDATED, _T("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 8, 1 );
-    itemStaticBoxSizer7->Add(m_ButtPenNum, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_ButtPenNum = new wxSpinCtrl( itemDialog1, ID_PEN_NUMBER_UPDATED, _T(
+                                       "1" ), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1,
+                                   8, 1 );
+    itemStaticBoxSizer7->Add( m_ButtPenNum,
+                              0,
+                              wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                              5 );
 
-    wxStaticBox* itemStaticBoxSizer14Static = new wxStaticBox(itemDialog1, wxID_ANY, _("Page offset:"));
-    wxStaticBoxSizer* itemStaticBoxSizer14 = new wxStaticBoxSizer(itemStaticBoxSizer14Static, wxVERTICAL);
-    itemBoxSizer6->Add(itemStaticBoxSizer14, 0, wxALIGN_LEFT|wxALL, 5);
+    wxStaticBox*      itemStaticBoxSizer14Static =
+        new wxStaticBox( itemDialog1, wxID_ANY, _( "Page offset:" ) );
+    wxStaticBoxSizer* itemStaticBoxSizer14 = new wxStaticBoxSizer( itemStaticBoxSizer14Static,
+                                                                   wxVERTICAL );
+    itemBoxSizer6->Add( itemStaticBoxSizer14, 0, wxALIGN_LEFT | wxALL, 5 );
 
-    wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("Plot Offset X"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText15 =
+        new wxStaticText( itemDialog1, wxID_STATIC, _(
+                              "Plot Offset X" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticBoxSizer14->Add( itemStaticText15,
+                               0,
+                               wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                               5 );
 
-    m_PlotOrgPosition_X = new wxTextCtrl( itemDialog1, ID_TEXTCTRL1, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer14->Add(m_PlotOrgPosition_X, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_PlotOrgPosition_X = new wxTextCtrl( itemDialog1, ID_TEXTCTRL1, _T(
+                                              "" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticBoxSizer14->Add( m_PlotOrgPosition_X,
+                               0,
+                               wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM,
+                               5 );
 
-    wxStaticText* itemStaticText17 = new wxStaticText( itemDialog1, wxID_STATIC, _("Plot Offset Y"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer14->Add(itemStaticText17, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxStaticText* itemStaticText17 =
+        new wxStaticText( itemDialog1, wxID_STATIC, _(
+                              "Plot Offset Y" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticBoxSizer14->Add( itemStaticText17,
+                               0,
+                               wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                               5 );
 
-    m_PlotOrgPosition_Y = new wxTextCtrl( itemDialog1, ID_TEXTCTRL2, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticBoxSizer14->Add(m_PlotOrgPosition_Y, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_PlotOrgPosition_Y = new wxTextCtrl( itemDialog1, ID_TEXTCTRL2, _T(
+                                              "" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticBoxSizer14->Add( m_PlotOrgPosition_Y,
+                               0,
+                               wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM,
+                               5 );
 
-    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer3->Add( 5, 5, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer3->Add(itemBoxSizer20, 0, wxALIGN_TOP|wxLEFT|wxTOP|wxBOTTOM, 5);
+    wxBoxSizer* itemBoxSizer20 = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer3->Add( itemBoxSizer20, 0, wxALIGN_TOP | wxLEFT | wxTOP | wxBOTTOM, 5 );
 
-    wxButton* itemButton21 = new wxButton( itemDialog1, ID_PLOT_HPGL_CURRENT_EXECUTE, _("&Plot page"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton*   itemButton21 =
+        new wxButton( itemDialog1, ID_PLOT_HPGL_CURRENT_EXECUTE, _(
+                          "&Plot page" ), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton21->SetDefault();
-    itemButton21->SetForegroundColour(wxColour(0, 128, 0));
-    itemBoxSizer20->Add(itemButton21, 0, wxGROW|wxALL, 5);
+    itemButton21->SetForegroundColour( wxColour( 0, 128, 0 ) );
+    itemBoxSizer20->Add( itemButton21, 0, wxGROW | wxALL, 5 );
 
-    wxButton* itemButton22 = new wxButton( itemDialog1, ID_PLOT_HPGL_ALL_EXECUTE, _("Plot a&ll"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton22->SetForegroundColour(wxColour(0, 0, 255));
-    itemBoxSizer20->Add(itemButton22, 0, wxGROW|wxALL, 5);
+    wxButton* itemButton22 = new wxButton( itemDialog1, ID_PLOT_HPGL_ALL_EXECUTE, _(
+                                               "Plot a&ll" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton22->SetForegroundColour( wxColour( 0, 0, 255 ) );
+    itemBoxSizer20->Add( itemButton22, 0, wxGROW | wxALL, 5 );
 
-    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_btClose->SetForegroundColour(wxColour(128, 0, 0));
-    itemBoxSizer20->Add(m_btClose, 0, wxGROW|wxALL, 5);
+    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _(
+                                  "&Close" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_btClose->SetForegroundColour( wxColour( 128, 0, 0 ) );
+    itemBoxSizer20->Add( m_btClose, 0, wxGROW | wxALL, 5 );
 
-    itemBoxSizer20->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer20->Add( 5, 5, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
-    wxButton* itemButton25 = new wxButton( itemDialog1, ID_PLOT_ACCEPT_OFFSET, _("&Accept Offset"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton25->SetForegroundColour(wxColour(101, 123, 68));
-    itemBoxSizer20->Add(itemButton25, 0, wxGROW|wxALL, 5);
+    wxButton* itemButton25 = new wxButton( itemDialog1, ID_PLOT_ACCEPT_OFFSET, _(
+                                               "&Accept Offset" ), wxDefaultPosition,
+                                           wxDefaultSize, 0 );
+    itemButton25->SetForegroundColour( wxColour( 101, 123, 68 ) );
+    itemBoxSizer20->Add( itemButton25, 0, wxGROW | wxALL, 5 );
 
-    m_MsgBox = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxSize(-1, 110), wxTE_MULTILINE );
-    itemBoxSizer2->Add(m_MsgBox, 0, wxGROW|wxALL, 5);
+    m_MsgBox =
+        new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T( "" ), wxDefaultPosition, wxSize( -1,
+                                                                                       110 ),
+                        wxTE_MULTILINE );
+    itemBoxSizer2->Add( m_MsgBox, 0, wxGROW | wxALL, 5 );
 
     // Set validators
-    m_SizeOption->SetValidator( wxGenericValidator(& HPGL_SizeSelect) );
-    m_ButtPenWidth->SetValidator( wxGenericValidator(& g_HPGL_Pen_Descr.m_Pen_Diam) );
-    m_ButtPenSpeed->SetValidator( wxGenericValidator(& g_HPGL_Pen_Descr.m_Pen_Speed) );
-    m_ButtPenNum->SetValidator( wxGenericValidator(& g_HPGL_Pen_Descr.m_Pen_Num) );
+    m_SizeOption->SetValidator( wxGenericValidator( &HPGL_SizeSelect ) );
+    m_ButtPenWidth->SetValidator( wxGenericValidator( &g_HPGL_Pen_Descr.m_Pen_Diam ) );
+    m_ButtPenSpeed->SetValidator( wxGenericValidator( &g_HPGL_Pen_Descr.m_Pen_Speed ) );
+    m_ButtPenNum->SetValidator( wxGenericValidator( &g_HPGL_Pen_Descr.m_Pen_Num ) );
+
 ////@end WinEDA_PlotHPGLFrame content construction
     SetFocus(); // Make ESC key working
 }
@@ -341,6 +405,7 @@ void WinEDA_PlotHPGLFrame::OnCancelClick( wxCommandEvent& event )
 ////@begin wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL in WinEDA_PlotHPGLFrame.
     // Before editing this code, remove the block markers.
     event.Skip();
+
 ////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL in WinEDA_PlotHPGLFrame.
 }
 
@@ -373,8 +438,9 @@ wxBitmap WinEDA_PlotHPGLFrame::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
 ////@begin WinEDA_PlotHPGLFrame bitmap retrieval
-    wxUnusedVar(name);
+    wxUnusedVar( name );
     return wxNullBitmap;
+
 ////@end WinEDA_PlotHPGLFrame bitmap retrieval
 }
 
@@ -387,8 +453,9 @@ wxIcon WinEDA_PlotHPGLFrame::GetIconResource( const wxString& name )
 {
     // Icon retrieval
 ////@begin WinEDA_PlotHPGLFrame icon retrieval
-    wxUnusedVar(name);
+    wxUnusedVar( name );
     return wxNullIcon;
+
 ////@end WinEDA_PlotHPGLFrame icon retrieval
 }
 
@@ -402,10 +469,12 @@ void WinEDA_PlotHPGLFrame::SetPageOffsetValue()
     if( HPGL_SizeSelect != PAGE_DEFAULT )
     {
         msg = ReturnStringFromValue( g_UnitMetric,
-            Plot_sheet_list[HPGL_SizeSelect]->m_Offset.x, EESCHEMA_INTERNAL_UNIT );
+                                     Plot_sheet_list[HPGL_SizeSelect]->m_Offset.x,
+                                     EESCHEMA_INTERNAL_UNIT );
         m_PlotOrgPosition_X->SetValue( msg );
         msg = ReturnStringFromValue( g_UnitMetric,
-            Plot_sheet_list[HPGL_SizeSelect]->m_Offset.y, EESCHEMA_INTERNAL_UNIT );
+                                     Plot_sheet_list[HPGL_SizeSelect]->m_Offset.y,
+                                     EESCHEMA_INTERNAL_UNIT );
         m_PlotOrgPosition_Y->SetValue( msg );
 
         m_PlotOrgPosition_X->Enable( TRUE );
@@ -507,7 +576,7 @@ void WinEDA_PlotHPGLFrame::ReturnSheetDims( BASE_SCREEN* screen,
 /*******************************************************************/
 
 /* Fonction calculant les dims et offsets de trace de la feuille selectionnee
-  * retourne:
+ * retourne:
  */
 {
     Ki_PageDescr* PlotSheet;
@@ -526,24 +595,46 @@ void WinEDA_PlotHPGLFrame::ReturnSheetDims( BASE_SCREEN* screen,
 void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_SheetSize )
 /***********************************************************************************/
 {
-    wxString      PlotFileName, ShortFileName;
-    BASE_SCREEN*  screen;
-    Ki_PageDescr* PlotSheet;
-    wxSize        SheetSize;
-    wxPoint       SheetOffset, PlotOffset;
-    int           margin;
+    WinEDA_SchematicFrame* schframe = (WinEDA_SchematicFrame*) m_Parent;
+    wxString PlotFileName;
+    SCH_SCREEN*            screen    = schframe->GetScreen();
+    SCH_SCREEN*            oldscreen = screen;
+    DrawSheetPath*         sheetpath, * oldsheetpath = schframe->GetSheet();
+    Ki_PageDescr*          PlotSheet;
+    wxSize  SheetSize;
+    wxPoint SheetOffset, PlotOffset;
+    int     margin;
 
     g_PlotFormat = PLOT_FORMAT_HPGL;
 
-    /* Build the screen list */
-    EDA_ScreenList ScreenList;
+    /* When printing all pages, the printed page is not the current page.
+     *  In complex hierarchies, we must setup references and others parameters in the printed SCH_SCREEN
+     *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
+     *  is shared between many sheets
+     */
+    EDA_SheetList SheetList( NULL );
+    sheetpath = SheetList.GetFirst();
+    DrawSheetPath list;
 
-    if( Select_PlotAll == TRUE )
-        screen = ScreenList.GetFirst();
-    else
-        screen = m_Parent->GetBaseScreen();
-    for( ; screen != NULL; screen = ScreenList.GetNext() )
+    for( ; ;  )
     {
+        if( Select_PlotAll )
+        {
+            if( sheetpath == NULL )
+                break;
+            list.Clear();
+            if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
+            {
+                schframe->m_CurrentSheet = &list;
+                schframe->m_CurrentSheet->UpdateAllScreenReferences();
+                schframe->SetSheetNumberAndCount();
+                screen = schframe->m_CurrentSheet->LastScreen();
+                ActiveScreen = screen;
+            }
+            else  // Should not occur
+                return;
+            sheetpath = SheetList.GetNext();
+        }
         ReturnSheetDims( screen, SheetSize, SheetOffset );
         /* Calcul des echelles de conversion */
         g_PlotScaleX = Scale_X * SCALE_HPGL;
@@ -555,29 +646,26 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
         g_PlotScaleY = g_PlotScaleY * (SheetSize.y - 2 * margin) / PlotSheet->m_Size.y;
 
         /* calcul des offsets */
-        PlotOffset.x  = -(int) (SheetOffset.x * SCALE_HPGL);
+        PlotOffset.x  = -(int) ( SheetOffset.x * SCALE_HPGL );
         PlotOffset.y  = (int) ( (SheetOffset.y + SheetSize.y) * SCALE_HPGL );
-        PlotOffset.x -= (int) (margin * SCALE_HPGL);
-        PlotOffset.y += (int) (margin * SCALE_HPGL);
+        PlotOffset.x -= (int) ( margin * SCALE_HPGL );
+        PlotOffset.y += (int) ( margin * SCALE_HPGL );
 
-        wxSplitPath( screen->m_FileName.GetData(), (wxString*) NULL,
-            &ShortFileName, (wxString*) NULL );
-        wxString dirbuf = wxGetCwd() + STRING_DIR_SEP;
-        if( !ShortFileName.IsEmpty() )
-            PlotFileName = MakeFileName( dirbuf, ShortFileName, wxT( ".plt" ) );
-        else
-            PlotFileName = MakeFileName( dirbuf, g_DefaultSchematicFileName, wxT( ".plt" ) );
+        PlotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".plt" );
 
-        SetLocaleTo_C_standard( );
+        SetLocaleTo_C_standard();
         InitPlotParametresHPGL( PlotOffset, g_PlotScaleX, g_PlotScaleY );
         Plot_1_Page_HPGL( PlotFileName, screen );
-        SetLocaleTo_Default( );
-        screen = screen->Next();
-        if( Select_PlotAll == FALSE )
+        SetLocaleTo_Default();
+
+        if( !Select_PlotAll )
             break;
     }
 
-    m_MsgBox->AppendText( _( "** Plot End **\n" ) );
+    ActiveScreen = oldscreen;
+    schframe->m_CurrentSheet = oldsheetpath;
+    schframe->m_CurrentSheet->UpdateAllScreenReferences();
+    schframe->SetSheetNumberAndCount();
 }
 
 
@@ -587,7 +675,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
 /**************************************************************************/
 
 /* Trace en format HPGL. d'une feuille de dessin
-  * 1 unite HPGL = 0.98 mils ( 1 mil = 1.02041 unite HPGL ) .
+ * 1 unite HPGL = 0.98 mils ( 1 mil = 1.02041 unite HPGL ) .
  */
 {
     EDA_BaseStruct* DrawList;
@@ -653,7 +741,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
                     deltaY = 8;
                 else
                 {
-                    angle  = atan2( (double) (x2 - x1), (double) (y1 - y2) );
+                    angle  = atan2( (double) ( x2 - x1 ), (double) ( y1 - y2 ) );
                     deltaX = (int) ( 8 * sin( angle ) );
                     deltaY = (int) ( 8 * cos( angle ) );
                 }
@@ -663,7 +751,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
                 Move_Plume( wxPoint( x2 + deltaX, y2 - deltaY ), 'D' );
                 Move_Plume( wxPoint( x1 + deltaX, y1 - deltaY ), 'D' );
             }
-                break;
+            break;
 
             default:
                 Move_Plume( wxPoint( x1, y1 ), 'U' );

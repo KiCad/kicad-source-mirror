@@ -376,12 +376,11 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
     WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
     SCH_SCREEN*            screen       = schframe->GetScreen();
     SCH_SCREEN*            oldscreen    = screen;
-    DrawSheetPath*         oldsheetpath = schframe->GetSheet();
-    wxString PlotFileName, ShortFileName;
+    DrawSheetPath*         sheetpath, *oldsheetpath = schframe->GetSheet();
+    wxString PlotFileName;
     Ki_PageDescr*          PlotSheet, * RealSheet;
     int BBox[4];
     wxPoint plot_offset;
-    DrawSheetPath*         sheetpath;
 
     g_PlotFormat = PLOT_FORMAT_POST;
 
@@ -433,32 +432,7 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
         plot_offset.x = 0;
         plot_offset.y = PlotSheet->m_Size.y;
 
-        /* If a screen is used more than once (complex hierarchy) we create more than once file
-         * with the same basic filename
-         * To avoid that, we use the root filename and and the sheet path
-         * Or, if filename too long, sheet_name + sheet number
-         */
-        wxSplitPath( g_RootSheet->GetFileName().GetData(), (wxString*) NULL,
-                     &ShortFileName, (wxString*) NULL );
-        if ( (ShortFileName.Len() + schframe->m_CurrentSheet->PathHumanReadable().Len() ) < 50 )
-        {
-            ShortFileName += schframe->m_CurrentSheet->PathHumanReadable();
-            ShortFileName.Replace( wxT( "/" ), wxT( "-" ) );
-            ShortFileName.RemoveLast();
-        }
-        else
-        {
-            wxSplitPath( g_RootSheet->GetFileName().GetData(), (wxString*) NULL,
-                     &ShortFileName, (wxString*) NULL );
-            ShortFileName << wxT("-") << screen->m_ScreenNumber; 
-        }
-
-        wxString dirbuf = wxGetCwd() + STRING_DIR_SEP;
-
-        if( !ShortFileName.IsEmpty() )
-            PlotFileName = MakeFileName( dirbuf, ShortFileName, wxT( ".ps" ) );
-        else
-            PlotFileName = MakeFileName( dirbuf, g_DefaultSchematicFileName, wxT( ".ps" ) );
+        PlotFileName = schframe->GetUniqueFilenameForCurrentSheet( ) + wxT( ".ps" );
 
         PlotOneSheetPS( PlotFileName, screen, RealSheet, BBox, plot_offset );
 

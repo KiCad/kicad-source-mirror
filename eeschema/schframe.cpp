@@ -450,7 +450,9 @@ void WinEDA_SchematicFrame::SetToolbars()
 }
 
 
+/************************************/
 int WinEDA_SchematicFrame::BestZoom()
+/************************************/
 {
     int    dx, dy, ii, jj;
     int    bestzoom;
@@ -471,6 +473,40 @@ int WinEDA_SchematicFrame::BestZoom()
     return bestzoom;
 }
 
+/*******************************************************************/
+wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet( )
+/*******************************************************************/
+/** Function GetUniqueFilenameForCurrentSheet
+ * @return a filename that can be used in plot and print functions
+ * for the current screen anad sheet path.
+ * This filename is unique and must be used insteed of the sreen filename
+ * (or scheen filename) when one must creates file for each sheet in the heierarchy.
+ * because in complex hierarchies a sheet and a SCH_SCREEN is used more than once
+ * Name is <root sheet filename>-<sheet path>
+ * and has no extension.
+ * However if filename is too long name is <sheet filename>-<sheet number>
+ */
+{
+    wxString filename;
+
+    wxSplitPath( g_RootSheet->GetFileName().GetData(), (wxString*) NULL,
+                 &filename, (wxString*) NULL );
+
+    if ( (filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 50 )
+    {
+        filename += m_CurrentSheet->PathHumanReadable();
+        filename.Replace( wxT( "/" ), wxT( "-" ) );
+        filename.RemoveLast();
+    }
+    else
+    {
+        wxSplitPath( g_RootSheet->GetFileName().GetData(), (wxString*) NULL,
+                 &filename, (wxString*) NULL );
+        filename << wxT("-") << GetScreen()->m_ScreenNumber;
+    }
+
+    return filename;
+}
 
 /**************************************************************/
 void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )

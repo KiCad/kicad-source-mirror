@@ -556,7 +556,7 @@
                 <bool name="proxy-wxFIXED_MINSIZE">0</bool>
                 <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
                 <document>
-                  <string name="title">"wxRadioBox: ID_RADIOBOX1"</string>
+                  <string name="title">"wxRadioBox: ID_RADIOBOX_SELPAGE"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
                   <string name="icon-name">"radiobox"</string>
@@ -566,7 +566,7 @@
                   <long name="locked">0</long>
                   <string name="created">"23/12/2006"</string>
                   <string name="proxy-type">"wbRadioBoxProxy"</string>
-                  <string name="proxy-Id name">"ID_RADIOBOX1"</string>
+                  <string name="proxy-Id name">"ID_RADIOBOX_SELPAGE"</string>
                   <long name="proxy-Id value">10008</long>
                   <string name="proxy-Name">""</string>
                   <string name="proxy-Class">"wxRadioBox"</string>
