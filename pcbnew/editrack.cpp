@@ -96,8 +96,6 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
     if( aTrack == NULL )  /* Starting a new track  */
     {
-        D(printf("Begin_Route NULL\n");)
-
         /* erase old highlight */
         OldNetCodeSurbrillance = g_HightLigth_NetCode;
         OldEtatSurbrillance    = g_HightLigt_Status;
@@ -147,10 +145,6 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
         Hight_Light( DC );
-
-        /* done above
-        g_CurrentTrackSegment->m_Flags = IS_NEW;
-        */
 
         g_CurrentTrackSegment->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
@@ -205,8 +199,6 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
     }
     else    /* Track in progress : segment coordinates are updated by ShowNewTrackWhenMovingCursor*/
     {
-        D(printf("Begin_Route in progress\n");)
-
         /* Tst for a D.R.C. error: */
         if( Drc_On )
         {

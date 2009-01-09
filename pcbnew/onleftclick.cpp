@@ -30,7 +30,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
-        DrawPanel->m_AutoPAN_Request = FALSE;
+        DrawPanel->m_AutoPAN_Request = false;
         if( DrawStruct && DrawStruct->m_Flags ) // "POPUP" in progress
         {
             DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -40,7 +40,10 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
             case TYPE_ZONE_CONTAINER:
                 if ( (DrawStruct->m_Flags & IS_NEW) )
+                {
+                    DrawPanel->m_AutoPAN_Request = true;
                     Begin_Zone( DC );
+                }
                 else
                     End_Move_Zone_Corner_Or_Outlines( DC, (ZONE_CONTAINER *) DrawStruct );
                 exit = true;
@@ -98,7 +101,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 break;
             }
 
-            DrawPanel->m_IgnoreMouseEvents = FALSE;
+            DrawPanel->m_IgnoreMouseEvents = false;
             DrawPanel->CursorOn( DC );
             if ( exit ) return;
         }
@@ -225,6 +228,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             if ( Begin_Zone( DC ) )
             {
+                DrawPanel->m_AutoPAN_Request = true;
                 DrawStruct = GetBoard()->m_CurrentZoneContour;
                 GetScreen()->SetCurItem( DrawStruct );
             }
@@ -233,6 +237,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 && (DrawStruct->Type() == TYPE_ZONE_CONTAINER)
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
+            DrawPanel->m_AutoPAN_Request = true;
             Begin_Zone( DC );
             DrawStruct = GetBoard()->m_CurrentZoneContour;
             GetScreen()->SetCurItem( DrawStruct );
@@ -251,7 +256,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         else if( DrawStruct->Type() == TYPE_TEXTE )
         {
             Place_Texte_Pcb( (TEXTE_PCB*) DrawStruct, DC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
         else
             DisplayError( this, wxT( "Internal err: Struct not TYPE_TEXTE" ) );
@@ -269,7 +274,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         else if( DrawStruct->Type() == TYPE_MODULE )
         {
             Place_Module( (MODULE*) DrawStruct, DC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
         else
             DisplayError( this, wxT( "Internal err: Struct not TYPE_MODULE" ) );
@@ -363,7 +368,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             if( DrawStruct->m_Flags & IS_NEW )
             {
                 End_Route( (TRACK*) DrawStruct, DC );
-                DrawPanel->m_AutoPAN_Request = FALSE;
+                DrawPanel->m_AutoPAN_Request = false;
             }
             else if( DrawStruct->m_Flags == 0 )
             {
@@ -421,14 +426,14 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
         {
             End_Route( (TRACK*) DrawStruct, DC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
         break;
 
     case ID_PCB_ZONES_BUTT:
         if ( End_Zone( DC ) )
         {
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             SetCurItem( NULL );
         }
         break;
@@ -441,13 +446,13 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         if( DrawStruct->Type() != TYPE_DRAWSEGMENT )
         {
             DisplayError( this, wxT( "DrawStruct Type error" ) );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             break;
         }
         if( (DrawStruct->m_Flags & IS_NEW) )
         {
             End_Edge( (DRAWSEGMENT*) DrawStruct, &dc );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             SetCurItem( NULL );
         }
         break;

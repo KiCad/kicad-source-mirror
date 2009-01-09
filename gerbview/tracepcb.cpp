@@ -113,7 +113,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     if( !GetBoard() )
         return;
 
-    bool    erase;
+    bool    erase = false;
     int     Color;
     bool    filled;
 
