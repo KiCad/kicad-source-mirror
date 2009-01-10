@@ -5,6 +5,20 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Jan-19 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Pcbnew:
+    Calculations to create filled areas in a zone modified and uses 2 pass:
+    1 - filled areas are calculated with pads in zone.
+    2 - If thermal shapes are wanted, they are added (i.e. copper removed after ).
+    Seen comments in zones_convert_brd_items_to_polygons.cpp
+    The initial method was calculate filled areas in one pass.
+    With the 2 pass calculation, the calculation time is more expensive but:
+     - Kbool seems now works correctly in cases where the one pass way does not work
+     - Thermal reliefs can have a better shape (todo..) because when calculating them, the filled
+       areas are known (this was not the case in one pass way)
+
+
 2009-Jan-08 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++Eeschema:

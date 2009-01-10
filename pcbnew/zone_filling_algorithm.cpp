@@ -222,7 +222,7 @@ int Propagation( WinEDA_PcbFrame* frame )
 /********************************************/
 
 /** Function Propagation()
- * An important function to calculate zones
+ * Used now only in autoplace calculations
  * Uses the routing matrix to fill the cells within the zone
  * Search and mark cells within the zone, and agree with DRC options.
  * Requirements:
