@@ -676,6 +676,7 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
     switch( Format )
     {
     case PLOT_FORMAT_GERBER:
+        SelectD_CODE_For_LineDraw(thickness);
         if( pt_segm->m_Shape == S_CIRCLE )
             PlotCircle( PLOT_FORMAT_GERBER, thickness, start, radius );
         else if( pt_segm->m_Shape == S_ARC )

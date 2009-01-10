@@ -1,6 +1,13 @@
-/****************************************/
-/**** Routine de trace GERBER RS274X ****/
-/****************************************/
+/*********************************************************/
+/****Function to plot a board in GERBER RS274X format ****/
+/*********************************************************/
+
+/* Creates the output files, one per board layer:
+ * filenames are like xxxc.PHO and use the RS274X format
+ * Units = inches
+ * format 3.4, Leading zero omitted, Abs format
+ * format 3.4 uses the native pcbnew units (1/10000 inch).
+ */
 
 #include "fctsys.h"
 
@@ -10,8 +17,8 @@
 #include "pcbplot.h"
 #include "trigo.h"
 
-/* Structure de Description d'un D_CODE GERBER : */
-#define FIRST_DCODE_VALUE 10
+/* Class to handle a D_CODE when plotting a board : */
+#define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
 
 class D_CODE
 {
@@ -75,8 +82,8 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     if( Plot_Set_MIROIR )
         g_PlotOrient |= PLOT_MIROIR;
 
-    /* Calcul des echelles de conversion */
-    Gerb_scale_plot = 1.0;  /* pour unites gerber en 0,1 Mils, format 3.4 */
+    /* Calculate scaling from pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
+    Gerb_scale_plot = 1.0;  /* for format 3.4 (4 digits for decimal format means 0.1 mil per gerber unit */
     scale_x = Scale_X * Gerb_scale_plot;
     scale_y = Scale_Y * Gerb_scale_plot;
     g_PlotOffset.x = 0;
@@ -176,10 +183,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     EDA_BaseStruct* PtStruct;
     wxString        msg;
 
-//	(Following command has been superceded by new command on lines 93 and 94.)
-//	masque_layer |= EDGE_LAYER;	/* Les elements de la couche EDGE sont tj traces */
-
-    /* Draw items type Drawings Pcb : */
+    /* Draw items type Drawings Pcb matching with masque_layer: */
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
