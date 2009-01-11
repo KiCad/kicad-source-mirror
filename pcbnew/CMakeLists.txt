@@ -68,6 +68,8 @@ set(PCBNEW_SRCS
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp
 #   dialog_track_options.cpp
+    dialog_SVG_print.cpp
+    dialog_SVG_print_base.cpp
     dist.cpp
     dragsegm.cpp
     drc.cpp

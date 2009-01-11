@@ -33,6 +33,8 @@ OBJECTS=	$(TARGET).o classpcb.o\
         dialog_pad_properties.o\
         dialog_pad_properties_base.o\
         dialog_pcb_text_properties.o\
+        dialog_SVG_print.o\
+        dialog_SVG_print_base.o\
 		onrightclick.o\
 		onleftclick.o\
 		modedit_onclick.o\

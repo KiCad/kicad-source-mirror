@@ -34,6 +34,8 @@ OBJECTS = eeschema.o\
 	dialog_options.o\
     dialog_edit_libentry_fields_in_lib.o\
     dialog_edit_libentry_fields_in_lib_base.o\
+    dialog_SVG_print.o\
+    dialog_SVG_print_base.o\
 	tool_lib.o\
 	tool_sch.o\
 	tool_viewlib.o\
@@ -99,8 +101,7 @@ OBJECTS = eeschema.o\
 	find.o \
 	backanno.o \
 	controle.o\
-	hotkeys.o\
-	svg_print.o
+	hotkeys.o
 
 
 eeschema.o: eeschema.cpp program.h general.h $(DEPEND)

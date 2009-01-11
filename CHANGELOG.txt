@@ -5,7 +5,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
-2009-Jan-19 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+2009-Jan-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Pcbnew:
+    Added: print SVG format.
+    SVG print/plot function uses WRITE modeinsteed of OR mode as graphic mode.
+    todo ? uses OR graphic mode with black background color (wait and see)
+++eeschema:
+    Code cleanup for Print SVG format, and used wxFormBuilder in SVG print dialog
+
+
+2009-Jan-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++Pcbnew:
     Calculations to create filled areas in a zone modified and uses 2 pass:

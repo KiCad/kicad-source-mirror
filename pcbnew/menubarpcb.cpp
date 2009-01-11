@@ -92,6 +92,11 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
         item->SetBitmap(print_button);
         m_FilesMenu->Append(item);
 
+        item = new wxMenuItem(m_FilesMenu, ID_GEN_PLOT_SVG,
+                    _("Print S&VG"), _("Plot pcb board in SVG format"));
+        item->SetBitmap(print_button);
+        m_FilesMenu->Append(item);
+
         // Add plot menu
         item = new wxMenuItem(m_FilesMenu, ID_GEN_PLOT, _("&Plot"),
                     _("Plot (HPGL, PostScript, or Gerber format)"));
