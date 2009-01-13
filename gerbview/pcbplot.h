@@ -1,6 +1,6 @@
-		/*******************************************************/
-		/* Menu General de Trace (PLOT): Fichier inclus PLOT.H */
-		/*******************************************************/
+		/******************/
+		/* file pcbplot.h */
+		/******************/
 
 #ifndef PCBPLOT_H
 #define PCBPLOT_H
@@ -8,6 +8,13 @@
 #ifndef eda_global
 #define eda_global extern
 #endif
+
+/* Shared Config keys for plot and print */
+#define OPTKEY_PLOT_LINEWIDTH_VALUE    wxT( "PlotLineWidth" )
+#define OPTKEY_LAYERBASE          wxT( "PlotLayer_%d" )
+#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
+#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
+#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 
 /* Gestion des plumes en plot format HPGL */
 eda_global int HPGL_Pen_Num,				/* num de plume a charger */
@@ -17,10 +24,10 @@ eda_global int HPGL_Pen_Num,				/* num de plume a charger */
 
 eda_global float Scale_X, Scale_Y ;  /* coeff d'agrandissement en X et Y demandes */
 
-eda_global int W_Trait_Serigraphie; /* Largeur du trait utilise en serigraphie
-							 pour trace de pads (traces en mode sketch) */
-eda_global int format_plot;  /* numero de code du format de sortie */
 eda_global int PlotMarge;
+
+eda_global int g_PlotLine_Width; /* Largeur du trait en mode filaire (utilise en serigraphie,
+                                    pour traces en mode sketch et filaire) */
 
 #endif	// ifndef PCBPLOT_H
 

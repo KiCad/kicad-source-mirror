@@ -52,12 +52,12 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	sbOptionsSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
-	m_Print_Sheet_Ref = new wxCheckBox( this, wxID_ANY, _("Print Frame Ref"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Print_Sheet_Ref->SetValue(true);
+	m_Print_Frame_Ref_Ctrl = new wxCheckBox( this, wxID_ANY, _("Print Frame Ref"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Print_Frame_Ref_Ctrl->SetValue(true);
 	
-	m_Print_Sheet_Ref->SetToolTip( _("Print (or not) the Frame references.") );
+	m_Print_Frame_Ref_Ctrl->SetToolTip( _("Print (or not) the Frame references.") );
 	
-	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxALL, 5 );
+	sbOptionsSizer->Add( m_Print_Frame_Ref_Ctrl, 0, wxALL, 5 );
 	
 	m_PrintBoardEdgesCtrl = new wxCheckBox( this, wxID_ANY, _("Print Board Edges"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PrintBoardEdgesCtrl->SetValue(true);

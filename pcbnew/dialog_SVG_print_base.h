@@ -45,7 +45,7 @@ class DIALOG_SVG_PRINT_base : public wxDialog
 		wxStaticText* m_TextPenWidth;
 		wxTextCtrl* m_DialogPenWidth;
 		wxRadioBox* m_ModeColorOption;
-		wxCheckBox* m_Print_Sheet_Ref;
+		wxCheckBox* m_Print_Frame_Ref_Ctrl;
 		wxCheckBox* m_PrintBoardEdgesCtrl;
 		wxButton* m_buttonPrintSelected;
 		wxButton* m_buttonBoard;

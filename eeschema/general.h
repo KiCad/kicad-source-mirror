@@ -253,8 +253,8 @@ eda_global bool        g_EditPinByPinIsOn       /* bool: TRUE si edition des pin
 ;
 
 eda_global int g_LibSymbolDefaultLineWidth; /* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
-eda_global int g_DrawMinimunLineWidth;      /* Minimum line (in EESCHEMA units) width used to draw items on screen; 0 = single pixel line width */
-eda_global int g_PlotPSMinimunLineWidth;    /* Minimum line (in EESCHEMA units) width used to Plot items , postscript format */
+eda_global int g_DrawMinimunLineWidth;      /* Minimum line (in EESCHEMA units) thickness used to draw items on screen; 0 = single pixel line width */
+eda_global int g_PlotLine_Width;            /* Minimum line (in EESCHEMA units) thickness used to Plot/Print items */
 
 eda_global int g_ItemSelectetColor          // Color to draw selected items
 #ifdef MAIN
@@ -270,6 +270,6 @@ eda_global int g_InvisibleItemColor         // Color to draw items flagged invis
 
 /* Config keys */
 #define MINI_DRAW_LINE_WIDTH_KEY   wxT( "MinimunDrawLineWidth" )
-#define MINI_PLOTPS_LINE_WIDTH_KEY wxT( "MinimunPlotPSLineWidth" )
+#define OPTKEY_PLOT_LINEWIDTH_VALUE wxT( "PlotLineWidth" )
 
 #endif   // _GENERAL_H_

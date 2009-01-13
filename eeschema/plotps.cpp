@@ -271,7 +271,7 @@ void WinEDA_PlotPSFrame::CreateControls()
     SetFocus(); // make the ESC work
     m_DefaultLineSizeCtrl = new WinEDA_ValueCtrl( this, _(
                                                       "Default Line Width" ),
-                                                  g_PlotPSMinimunLineWidth,
+                                                  g_PlotLine_Width,
                                                   g_UnitMetric, m_DefaultLineSizeCtrlSizer,
                                                   EESCHEMA_INTERNAL_UNIT );
 }
@@ -363,9 +363,9 @@ void WinEDA_PlotPSFrame::InitOptVars()
     Plot_Sheet_Ref   = m_Plot_Sheet_Ref->GetValue();
     g_PlotPSColorOpt = m_PlotPSColorOption->GetSelection();
     PS_SizeSelect    = m_SizeOption->GetSelection();
-    g_PlotPSMinimunLineWidth = m_DefaultLineSizeCtrl->GetValue();
-    if( g_PlotPSMinimunLineWidth < 1 )
-        g_PlotPSMinimunLineWidth = 1;
+    g_PlotLine_Width = m_DefaultLineSizeCtrl->GetValue();
+    if( g_PlotLine_Width < 1 )
+        g_PlotLine_Width = 1;
 }
 
 
@@ -479,7 +479,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
     m_MsgBox->AppendText( Line );
 
     InitPlotParametresPS( plot_offset, sheet, g_PlotScaleX, g_PlotScaleY );
-    SetDefaultLineWidthPS( g_PlotPSMinimunLineWidth );
+    SetDefaultLineWidthPS( g_PlotLine_Width );
 
     /* Init : */
     PrintHeaderPS( PlotOutput, wxT( "EESchema-PS" ), FileName, 1, BBox, wxLANDSCAPE );
@@ -531,10 +531,10 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
 
             case LAYER_BUS:         /* Trait large */
             {
-                fprintf( PlotOutput, "%d setlinewidth\n", g_PlotPSMinimunLineWidth * 3 );
+                fprintf( PlotOutput, "%d setlinewidth\n", g_PlotLine_Width * 3 );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
-                fprintf( PlotOutput, "%d setlinewidth\n", g_PlotPSMinimunLineWidth );
+                fprintf( PlotOutput, "%d setlinewidth\n", g_PlotLine_Width );
             }
                 break;
 

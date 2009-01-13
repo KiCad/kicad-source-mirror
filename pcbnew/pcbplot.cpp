@@ -19,11 +19,9 @@
 #define OPTKEY_EDGELAYER_GERBER   wxT( "EdgeLayerGerberOpt" )
 #define OPTKEY_XFINESCALE_ADJ     wxT( "PlotXFineScaleAdj" )
 #define OPTKEY_YFINESCALE_ADJ     wxT( "PlotYFineScaleAdj" )
-#define OPTKEY_LAYERBASE          wxT( "PlotLayer_%d" )
 #define OPTKEY_PADS_ON_SILKSCREEN wxT( "PlotPadsOnSilkscreen" )
 #define OPTKEY_ALWAYS_PRINT_PADS  wxT( "PlotAlwaysPads" )
 #define OPTKEY_OUTPUT_FORMAT      wxT( "PlotOutputFormat" )
-#define OPTKEY_LINEWIDTH_VALUE    wxT( "PlotLineWidth" )
 
 
 static long s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
@@ -203,7 +201,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     if( config )
     {
         config->Read( OPTKEY_OUTPUT_FORMAT, &g_PlotFormat );
-        config->Read( OPTKEY_LINEWIDTH_VALUE, &g_PlotLine_Width);
+        config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &g_PlotLine_Width);
     }
 
     m_PlotFormatOpt->SetSelection( g_PlotFormat );
@@ -345,11 +343,11 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     {
         m_Plot_Sheet_Ref = new wxCheckBox( this, ID_PRINT_REF, _( "Print sheet ref" ) );
 
-        m_Plot_Sheet_Ref->SetValue( Plot_Sheet_Ref );
+        m_Plot_Sheet_Ref->SetValue( g_Plot_Frame_Ref );
         LeftBoxSizer->Add( m_Plot_Sheet_Ref, 0, wxGROW | wxALL, 1 );
     }
     else
-        Plot_Sheet_Ref = false;
+        g_Plot_Frame_Ref = false;
 
     // Option to plot pads on silkscreen layers or all layers
     m_Plot_Pads_on_Silkscreen = new wxCheckBox( this, ID_PRINT_PAD_ON_SILKSCREEN,
@@ -426,7 +424,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
         wxDefaultPosition, wxDefaultSize,
         3, list_opt3, 1 );
 
-    m_PlotModeOpt->SetSelection( Plot_Mode );
+    m_PlotModeOpt->SetSelection( g_Plot_Mode );
     MidLeftBoxSizer->Add( m_PlotModeOpt, 0, wxGROW | wxALL, 5 );
 
     m_PlotMirorOpt = new wxCheckBox( this, ID_MIROR_OPT,
@@ -575,7 +573,7 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
     g_Exclude_Edges_Pcb = m_Exclude_Edges_Pcb->GetValue();
 
     if( m_Plot_Sheet_Ref )
-        Plot_Sheet_Ref = m_Plot_Sheet_Ref->GetValue();
+        g_Plot_Frame_Ref = m_Plot_Sheet_Ref->GetValue();
 
     PlotPadsOnSilkLayer  = m_Plot_Pads_on_Silkscreen->GetValue();
     Plot_Pads_All_Layers = m_Force_Plot_Pads->GetValue();
@@ -594,7 +592,7 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
         g_PlotOrient = PLOT_MIROIR;
     else
         g_PlotOrient = 0;
-    Plot_Mode = m_PlotModeOpt->GetSelection();
+    g_Plot_Mode = m_PlotModeOpt->GetSelection();
     g_DrawViaOnMaskLayer = m_PlotNoViaOnMaskOpt->GetValue();
 
     g_HPGL_Pen_Diam  = m_HPGLPenSizeOpt->GetValue();
@@ -619,7 +617,7 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
         int      formatNdx = m_PlotFormatOpt->GetSelection();
         config->Write( OPTKEY_OUTPUT_FORMAT, formatNdx );
 
-        config->Write( OPTKEY_LINEWIDTH_VALUE, g_PlotLine_Width );
+        config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
 
         wxString layerKey;
         for( int layer = 0;  layer<NB_LAYERS;  ++layer )

@@ -2,28 +2,6 @@
 /* File: wxprint.cpp */
 /*********************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-#include "wx/spinctrl.h"
-
-
-#if !wxUSE_PRINTING_ARCHITECTURE
-#error You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h to compile this
-#endif
-
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
@@ -44,7 +22,6 @@
 
 #ifdef EESCHEMA
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #endif
 
@@ -54,10 +31,7 @@
 #include "protos.h"
 
 // For pcbnew:
-#define OPTKEY_LAYERBASE             wxT( "PrintLayer_%d" )
-#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
-#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
-#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
+#include "pcbplot.h"
 #endif
 
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
@@ -69,7 +43,6 @@
 #define WIDTH_MIN_VALUE 1
 
 #ifdef PCBNEW
-extern float  Scale_X, Scale_Y;
 static long   s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
@@ -80,19 +53,12 @@ static double s_ScaleList[] =
 static wxPrintData* g_PrintData;
 
 // Variables locales
-static int          s_PrintPenMinWidth = 6; /* Minimum pen width (in internal units) for printing */
-
 static int          s_PrintMaskLayer;
 static int          s_OptionPrintPage = 0;
 static int          s_Print_Black_and_White = TRUE;
 static int          s_Scale_Select = 3; // default selected scale = ScaleList[3] = 1
 static bool         s_PrintMirror;
 static bool         s_Print_Sheet_Ref = TRUE;
-
-
-/****************************************************************/
-/* frame de Preparation de l'impression (options, selections... */
-/****************************************************************/
 
 #include "dialog_print.cpp"
 
@@ -180,10 +146,6 @@ void WinEDA_PrintFrame::SetOthersDatas()
     m_Print_Mirror->Enable( false );
 #endif
 
-#if defined (PCBNEW)
-    wxConfig* config = wxGetApp().m_EDA_Config;  //  Current config used by application
-#endif
-
     m_FineAdjustXscaleOpt->SetToolTip( _( "Set X scale adjust for exact scale plotting" ) );
     m_FineAdjustYscaleOpt->SetToolTip( _( "Set Y scale adjust for exact scale plotting" ) );
     if( s_Print_Black_and_White )
@@ -221,11 +183,11 @@ void WinEDA_PrintFrame::SetOthersDatas()
 #endif
 
     // Read the scale adjust option
-    if( config )
+    if( m_Config )
     {
-        config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &m_XScaleAdjust );
-        config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
-        config->Read( OPTKEY_PRINT_SCALE, &s_Scale_Select );
+        m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &m_XScaleAdjust );
+        m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
+        m_Config->Read( OPTKEY_PRINT_SCALE, &s_Scale_Select );
 
         s_SelectedLayers = 0;
         for( int layer = 0;  layer<NB_LAYERS;  ++layer )
@@ -236,7 +198,7 @@ void WinEDA_PrintFrame::SetOthersDatas()
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
 
             option = false;
-            if( config->Read( layerKey, &option ) )
+            if( m_Config->Read( layerKey, &option ) )
             {
                 m_BoxSelecLayer[layer]->SetValue( option );
                 if( option )
@@ -310,7 +272,7 @@ void WinEDA_PrintFrame::OnClosePrintDialog()
 
     if( Config )
     {
-        Config->Write( wxT( "PrintPenWidth" ), s_PrintPenMinWidth );
+        Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
     }
 
     if( m_FineAdjustXscaleOpt )
@@ -375,19 +337,19 @@ void WinEDA_PrintFrame::SetPenWidth()
 /****************************************/
 
 /* Get the new pen width value, and verify min et max value
- * NOTE: s_PrintPenMinWidth is in internal units
+ * NOTE: g_PlotLine_Width is in internal units
  */
 {
-    s_PrintPenMinWidth = m_DialogPenWidth->GetValue();
-    if( s_PrintPenMinWidth > WIDTH_MAX_VALUE )
+    g_PlotLine_Width = m_DialogPenWidth->GetValue();
+    if( g_PlotLine_Width > WIDTH_MAX_VALUE )
     {
-        s_PrintPenMinWidth = WIDTH_MAX_VALUE;
+        g_PlotLine_Width = WIDTH_MAX_VALUE;
     }
-    if( s_PrintPenMinWidth < WIDTH_MIN_VALUE )
+    if( g_PlotLine_Width < WIDTH_MIN_VALUE )
     {
-        s_PrintPenMinWidth = WIDTH_MIN_VALUE;
+        g_PlotLine_Width = WIDTH_MIN_VALUE;
     }
-    m_DialogPenWidth->SetValue( s_PrintPenMinWidth );
+    m_DialogPenWidth->SetValue( g_PlotLine_Width );
 }
 
 
@@ -783,8 +745,8 @@ void EDA_Printout::DrawPage()
     /* set Pen min width */
     double ftmp, xdcscale, ydcscale;
 
-    // s_PrintPenMinWidth is in internal units ( 1/1000 inch), and must be converted in pixels
-    ftmp  = (float) s_PrintPenMinWidth * 25.4 / EESCHEMA_INTERNAL_UNIT; // ftmp est en mm
+    // g_PlotLine_Width is in internal units ( 1/1000 inch), and must be converted in pixels
+    ftmp  = (float) g_PlotLine_Width * 25.4 / EESCHEMA_INTERNAL_UNIT; // ftmp est en mm
     ftmp *= (float) PlotAreaSize.x / PageSize_in_mm.x;                  /* ftmp is in  pixels */
 
     /* because the pen size will be scaled by the dc scale, we modify the size

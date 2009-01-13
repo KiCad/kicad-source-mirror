@@ -254,7 +254,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             SetCurrentLineWidth( -1 );
             int thickness = Text->m_Width;
 			if( thickness == 0 )	//
-				thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+				thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
             PlotGraphicText( g_PlotFormat, pos, CharColor,
                                  Text->m_Text,
                                  t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
@@ -468,7 +468,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 
     int thickness = field->m_Width;
 	if( thickness == 0 )
-		thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
     //@todo not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
@@ -675,7 +675,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     }
 
 	if( thickness == 0 )
-		thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
     switch( Orient )
@@ -773,7 +773,7 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
     }
     int thickness = Struct->m_Width;
 	if( thickness == 0 )
-		thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
     bool italic = Struct->m_Italic;
@@ -843,7 +843,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( Struct->m_Layer ) );
 
-    int thickness = MAX( g_PlotPSMinimunLineWidth, g_DrawMinimunLineWidth );
+    int thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
     Move_Plume( Struct->m_Pos, 'U' );

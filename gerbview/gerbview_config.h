@@ -6,7 +6,6 @@
 
 #define INSETUP TRUE
 
-static int Pcbdiv_grille;	/* memorisation temporaire */
 static wxSize TmpGrid;	/* memorisation temporaire */
 
 /* Liste des parametres */
@@ -67,54 +66,6 @@ static PARAM_CFG_BOOL PadShowNumCfg	// Affiche DCodes
 	wxT("PadSNum"),					/* identification */
 	&DisplayOpt.DisplayPadNum,	/* Adresse du parametre */
 	TRUE						/* Valeur par defaut */
-);
-
-static PARAM_CFG_INT AfficheTextePcbCfg
-(
-	wxT("PcbAffT"),			/* identification */
-	&DisplayOpt.DisplayDrawItems, /* Adresse du parametre */
-	FILAIRE,			/* Valeur par defaut */
-	0, 2				/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT PcbTextWidthCfg
-(
-	wxT("TxtLar"),			/* identification */
-	&g_DesignSettings.m_PcbTextWidth,		/* Adresse du parametre */
-	120,				/* Valeur par defaut */
-	0,0xFFFF			/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT TextePcbDimVCfg
-(
-	wxT("TxtPcbV"),				/* identification */
-	&g_DesignSettings.m_PcbTextSize.y,			/* Adresse du parametre */
-	800,					/* Valeur par defaut */
-	0, 0x7FFF				/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT TextePcbDimHCfg
-(
-	wxT("TxtPcbH"),				/* identification */
-	&g_DesignSettings.m_PcbTextSize.x,			/* Adresse du parametre */
-	600,					/* Valeur par defaut */
-	0, 0x7FFF				/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT ScreenPcbGrilleXCfg
-(
-	wxT("PcbGridX"),				/* identification */
-	&TmpGrid.x,				/* Adresse du parametre */
-	500,					/* Valeur par defaut */
-	1,10000					/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT ScreenPcbGrilleYCfg
-(
-	wxT("PcbGridY"),				/* identification */
-	&TmpGrid.y,				/* Adresse du parametre */
-	500,					/* Valeur par defaut */
-	1,10000					/* Valeurs extremes */
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer0Cfg
@@ -446,22 +397,6 @@ static PARAM_CFG_INT EdgeSegmLargeurCfg
 	0,10000				/* Valeurs extremes */
 );
 
-static PARAM_CFG_INT FormatPlotCfg
-(
-	wxT("ForPlot"),			/* identification */
-	&format_plot,		/* Adresse du parametre */
-	1,					/* Valeur par defaut */
-	0,3					/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT WTraitSerigraphiePlotCfg	// Epaiss Trait Serigraphie(mils)
-(
-	wxT("WpenSer"),			/* identification */
-	&W_Trait_Serigraphie,		/* Adresse du parametre */
-	12,					/* Valeur par defaut */
-	0,1000				/* Valeurs extremes */
-);
-
 static PARAM_CFG_DOUBLE UserGrilleXCfg
 (
 	wxT("UserGrX"),				/* identification */
@@ -484,14 +419,6 @@ static PARAM_CFG_INT UserGrilleUnitCfg	// USER Grid Unit (inches/mm)
 	&g_UserGrid_Unit,			/* Adresse du parametre */
 	1,						/* Valeur par defaut */
 	0, 1					/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT DivGrillePcbCfg
-(
-	wxT("DivGrPc"),			/* identification */
-	&Pcbdiv_grille,			/* Adresse du parametre */
-	1,						/* Valeur par defaut */
-	1,10					/* Valeurs extremes */
 );
 
 static PARAM_CFG_INT TimeOutCfg
@@ -529,12 +456,6 @@ static PARAM_CFG_BASE * ParamCfgList[] =
 	& SegmFillCfg,
 	& PadFillCfg,
 	& PadShowNumCfg,
-	& AfficheTextePcbCfg,
-	& TextePcbDimVCfg,
-	& PcbTextWidthCfg,
-	& TextePcbDimHCfg,
-	& ScreenPcbGrilleXCfg,
-	& ScreenPcbGrilleYCfg,
 	& ColorLayer0Cfg,
 	& ColorLayer1Cfg,
 	& ColorLayer2Cfg,
@@ -569,19 +490,12 @@ static PARAM_CFG_BASE * ParamCfgList[] =
 	& ColorLayer31Cfg,
 	& ColorpcbGrilleCfg,
 	& ColorDCodesCfg,
-	& HPGLpenNumCfg,
-	& HPGLdiamCfg,
-	& HPGLspeedCfg,
-	& HPGLrecouvrementCfg,
 	& GERBERSpotMiniCfg,
 	& DrawSegmLargeurCfg,
 	& EdgeSegmLargeurCfg,
-	& FormatPlotCfg,
-	& WTraitSerigraphiePlotCfg,
 	& UserGrilleXCfg,
 	& UserGrilleYCfg,
 	& UserGrilleUnitCfg,
-	& DivGrillePcbCfg,
 	& TimeOutCfg,
 	& DisplPolairCfg,
 	& CursorShapeCfg,

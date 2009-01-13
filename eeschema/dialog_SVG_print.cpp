@@ -15,9 +15,9 @@
 #include "dcsvg.h"
 
 #include "program.h"
+#include "general.h"
 
 // Keys for configuration
-#define PLOTSVGPENWIDTH_KEY wxT( "PlotSVGPenWidth")
 #define PLOTSVGMODECOLOR_KEY  wxT( "PlotSVGModeColor" )
 
 extern BASE_SCREEN* ActiveScreen;
@@ -25,8 +25,6 @@ extern BASE_SCREEN* ActiveScreen;
 #define WIDTH_MIN_VALUE 1
 
 // Variables locales
-static int  s_SVGPenMinWidth;       /* Minimum pen width (in internal units) for printing */
-
 static bool s_Print_Frame_Ref     = true;
 static int  s_PlotBlackAndWhite = 0;
 
@@ -88,13 +86,13 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
     m_ImageXSize_mm = 270;
     if( m_Config )
     {
-        m_Config->Read( PLOTSVGPENWIDTH_KEY, &s_SVGPenMinWidth );
+        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &g_PlotLine_Width );
         m_Config->Read( PLOTSVGMODECOLOR_KEY, &s_PlotBlackAndWhite );
     }
 
     AddUnitSymbol(* m_TextPenWidth, g_UnitMetric );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, s_SVGPenMinWidth, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue(g_UnitMetric, g_PlotLine_Width, m_Parent->m_InternalUnits ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
     if (GetSizer())
     {
@@ -107,20 +105,20 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 void DIALOG_SVG_PRINT::SetPenWidth()
 /********************************************/
 {
-    s_SVGPenMinWidth = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    g_PlotLine_Width = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
-    if( s_SVGPenMinWidth > WIDTH_MAX_VALUE )
+    if( g_PlotLine_Width > WIDTH_MAX_VALUE )
     {
-        s_SVGPenMinWidth = WIDTH_MAX_VALUE;
+        g_PlotLine_Width = WIDTH_MAX_VALUE;
     }
 
-    if( s_SVGPenMinWidth < WIDTH_MIN_VALUE )
+    if( g_PlotLine_Width < WIDTH_MIN_VALUE )
     {
-        s_SVGPenMinWidth = WIDTH_MIN_VALUE;
+        g_PlotLine_Width = WIDTH_MIN_VALUE;
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, s_SVGPenMinWidth, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue(g_UnitMetric, g_PlotLine_Width, m_Parent->m_InternalUnits ) );
 }
 
 
@@ -237,8 +235,8 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName, BASE_SCREEN* scre
     {
         EDA_Rect tmp = panel->m_ClipBox;
         GRResetPenAndBrush( &dc );
-        s_SVGPenMinWidth =  ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-        SetPenMinWidth( s_SVGPenMinWidth );
+        g_PlotLine_Width =  ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+        SetPenMinWidth( g_PlotLine_Width );
         GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
 
 
@@ -295,7 +293,7 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
     if( m_Config )
     {
         s_PlotBlackAndWhite = m_ModeColorOption->GetSelection();
-        m_Config->Write( PLOTSVGPENWIDTH_KEY, s_SVGPenMinWidth );
+        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
         m_Config->Write( PLOTSVGMODECOLOR_KEY, s_PlotBlackAndWhite );
     }
     EndModal( 0 );

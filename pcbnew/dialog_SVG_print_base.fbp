@@ -314,7 +314,7 @@
                                         <property name="label">Print Frame Ref</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">m_Print_Sheet_Ref</property>
+                                        <property name="name">m_Print_Frame_Ref_Ctrl</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>

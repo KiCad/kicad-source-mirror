@@ -17,6 +17,7 @@
 static int pen_rayon;           /* Rayon de la plume en unites pcb */
 static int pen_diam;            /* Diametre de la plume en unites pcb */
 static int pen_recouvrement;    /* recouvrement en remplissage en unites pcb */
+static int s_Nb_Plot_Errors;    // Error count (errors when a line thichness is less than pen width
 
 /* Routines Locales */
 
@@ -32,7 +33,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     int     marge  = 0 * U_PCB; // Extra margin (set to 0)
     bool    Center = FALSE;
 
-    modetrace = Plot_Mode;
+    modetrace = g_Plot_Mode;
 
     /* Calcul des echelles de conversion */
     scale_x = Scale_X * SCALE_HPGL;
@@ -51,7 +52,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     pen_diam  = (int) round( (g_HPGL_Pen_Diam * U_PCB) / Scale_X ); // Assume Scale_X # Scale_Y
     pen_rayon = pen_diam / 2;
 
-    nb_plot_erreur = 0;
+    s_Nb_Plot_Errors = 0;
 
     // compute pen_recouvrement (from g_HPGL_Pen_Recouvrement in mils)
     // with plot scale
@@ -75,7 +76,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
 
     PrintHeaderHPGL( dest, g_HPGL_Pen_Speed, g_HPGL_Pen_Num );
 
-    if( Plot_Sheet_Ref && (g_PlotScaleOpt == 1) )
+    if( g_Plot_Frame_Ref && (g_PlotScaleOpt == 1) )
     {
         int tmp = g_PlotOrient; g_PlotOrient = 0;
         InitPlotParametresHPGL( g_PlotOffset, scale_x, scale_y, g_PlotOrient );
@@ -206,9 +207,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     BOARD_ITEM* PtStruct;
     wxString    msg;
 
-// 	(Following command has been superceded by new command on line 135.)
-//  masque_layer |= EDGE_LAYER; /* Les elements de la couche EDGE sont tj traces */
-
     /* trace des elements type Drawings Pcb : */
     PtStruct = m_Pcb->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
@@ -245,8 +243,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     }
 
     /* Trace des Elements des modules autres que pads */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 48, wxT( "DrawMod" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
@@ -268,8 +264,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     }
 
     /* Trace des Elements des modules : Pastilles */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 48, wxT( "Pads    " ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
@@ -284,8 +278,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
             start   = shape_pos;
             size    = PtPad->m_Size;
             size.x += garde * 2; size.y += garde * 2;
-
-            nb_items++;
 
             switch( PtPad->m_PadShape & 0x7F )
             {
@@ -314,9 +306,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
                                          PtPad->m_Orient, modetrace );
                 break;
             }
-
-            msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 48, wxT( "Pads" ), msg, GREEN );
         }
     }
 
@@ -324,10 +313,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
     if( tracevia )
     {
         TRACK* pts;
-
-        nb_items = 0;
-        Affiche_1_Parametre( this, 56, wxT( "Vias" ), wxEmptyString, RED );
-
         for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
         {
             if( pts->Type() != TYPE_VIA )
@@ -350,16 +335,12 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
             size.x = Via->m_Width + (garde * 2);
 
             trace_1_pastille_RONDE_HPGL( start, size.x, modetrace );
-            nb_items++; msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 56, wxT( "Vias" ), msg, RED );
         }
 
         fputs( "PU;\n", dest );
     }
 
     /* trace des segments pistes */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 64, wxT( "Tracks  " ), wxEmptyString, YELLOW );
     for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
         if( pts->Type() == TYPE_VIA )
@@ -378,7 +359,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
         /* Trace d'un segment de piste */
         trace_1_segment_HPGL( start.x, start.y, end.x, end.y, size.x );
         /* Complement de Trace en mode Remplissage */
-        if( (Plot_Mode == FILLED) && (pen_diam <= size.x ) )
+        if( (g_Plot_Mode == FILLED) && (pen_diam <= size.x ) )
         {
             while( ( size.x -= (int) ( (pen_rayon - pen_recouvrement) * 2 ) ) > 0 )
             {
@@ -389,14 +370,9 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
 
         if( size.x > pen_diam )
             trace_1_pastille_RONDE_HPGL( end, size.x, modetrace );
-
-        nb_items++; msg.Printf( wxT( "%d" ), nb_items );
-        Affiche_1_Parametre( this, 64, wxEmptyString, msg, YELLOW );
     }
 
     /* trace des segments pistes et zones */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 64, wxT( "Zones  " ), wxEmptyString, YELLOW );
     for( pts = m_Pcb->m_Zone; pts != NULL; pts = pts->Next() )
     {
         if( g_TabOneLayerMask[pts->GetLayer()] & masque_layer )
@@ -411,7 +387,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
             /* Trace d'un segment de piste */
             trace_1_segment_HPGL( start.x, start.y, end.x, end.y, size.x );
             /* Complement de Trace en mode Remplissage */
-            if( (Plot_Mode == FILLED) && (pen_diam <= size.x ) )
+            if( (g_Plot_Mode == FILLED) && (pen_diam <= size.x ) )
             {
                 while( ( size.x -= (int) ( (pen_rayon - pen_recouvrement) * 2 ) ) > 0 )
                 {
@@ -422,9 +398,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
 
             if( size.x > pen_diam )
                 trace_1_pastille_RONDE_HPGL( end, size.x, modetrace );
-
-            nb_items++; msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 64, wxEmptyString, msg, YELLOW );
         }
     }
 }
@@ -513,7 +486,7 @@ void trace_1_pastille_RONDE_HPGL( wxPoint pos, int diametre, int modetrace )
 
     if( rayon < 0 )
     {
-        rayon = 0; nb_plot_erreur++;
+        rayon = 0; s_Nb_Plot_Errors++;
     }
     wxSize rsize( rayon, rayon );
 
@@ -563,7 +536,7 @@ void PlotRectangularPad_HPGL( wxPoint padpos, wxSize padsize,
 
     if( (size.x < 0 ) || (size.y < 0) )
     {
-        nb_plot_erreur++;
+        s_Nb_Plot_Errors++;
     }
     if( size.x < 0 )
         size.x = 0;if( size.y < 0 )
@@ -810,10 +783,10 @@ void trace_1_segment_HPGL( int pos_X0, int pos_Y0, int pos_X1, int pos_Y1,
     dh = (epaisseur - (int) pen_diam ) / 2;
     if( dh < 0 )
     {
-        dh = 0; nb_plot_erreur++;
+        dh = 0; s_Nb_Plot_Errors++;
     }
 
-    if( (dh == 0) || (Plot_Mode == FILAIRE) )  /* Le trace se reduit a 1 trait */
+    if( (dh == 0) || (g_Plot_Mode == FILAIRE) )  /* Le trace se reduit a 1 trait */
     {
         Move_Plume_HPGL( wxPoint( pos_X0, pos_Y0 ), 'U' );
         Move_Plume_HPGL( wxPoint( pos_X1, pos_Y1 ), 'D' );

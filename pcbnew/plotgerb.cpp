@@ -112,8 +112,6 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 
     Write_Header_GERBER( g_Main_Title, g_Plot_PlotOutputFile );
 
-    nb_plot_erreur = 0;
-
     int layer_mask = g_TabOneLayerMask[Layer];
 
     // Specify that the contents of the "Edges Pcb" layer are also to be
@@ -219,8 +217,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     }
 
     /* Draw footprints shapes without pads (pads will plotted later) */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 38, wxT( "DrawMod" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
@@ -241,8 +237,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     }
 
     /* Plot footprint pads */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 48, wxT( "Pads" ), wxEmptyString, GREEN );
     Module = m_Pcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
@@ -261,8 +255,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
             /* Don't draw a null size item : */
             if( size.x <= 0 || size.y <= 0 )
                 continue;
-
-            nb_items++;
 
             switch( PtPad->m_PadShape )
             {
@@ -292,17 +284,12 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
                 PlotRectangularPad_GERBER( pos, size, PtPad->m_Orient );
                 break;
             }
-
-            msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 48, wxEmptyString, msg, GREEN );
         }
     }
 
     /* Plot vias : */
     if( tracevia )
     {
-        nb_items = 0;
-        Affiche_1_Parametre( this, 56, wxT( "Vias" ), wxEmptyString, RED );
         for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
         {
             if( track->Type() != TYPE_VIA )
@@ -326,15 +313,10 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
             if( size.x <= 0 )
                 continue;
             Plot_1_CIRCLE_pad_GERBER( pos, size.x );
-            nb_items++;
-            msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 56, wxEmptyString, msg, RED );
         }
     }
-    /* Plot tracks (not vias) : */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 64, wxT( "Tracks" ), wxEmptyString, YELLOW );
 
+    /* Plot tracks (not vias) : */
     for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
     {
         wxPoint end;
@@ -350,17 +332,9 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
 
         SelectD_CODE_For_LineDraw( size.x );
         PlotGERBERLine( pos, end, size.x );
-
-        nb_items++;
-        msg.Printf( wxT( "%d" ), nb_items );
-        Affiche_1_Parametre( this, 64, wxEmptyString, msg, YELLOW );
     }
 
     /* Plot zones: */
-    nb_items = 0;
-    if( m_Pcb->m_Zone )
-        Affiche_1_Parametre( this, 72, wxT( "Zones  " ), wxEmptyString, YELLOW );
-
     for( track = m_Pcb->m_Zone; track != NULL; track = (TRACK*) track->Next() )
     {
         wxPoint end;
@@ -374,10 +348,6 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
 
         SelectD_CODE_For_LineDraw( size.x );
         PlotGERBERLine( pos, end, size.x );
-
-        nb_items++;
-        msg.Printf( wxT( "%d" ), nb_items );
-        Affiche_1_Parametre( this, 72, wxEmptyString, msg, YELLOW );
     }
 
     /* Plot filled ares */

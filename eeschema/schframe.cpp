@@ -163,7 +163,7 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     {
         g_DrawMinimunLineWidth = config->Read( MINI_DRAW_LINE_WIDTH_KEY,
                                                (long) 0 );
-        g_PlotPSMinimunLineWidth = config->Read( MINI_PLOTPS_LINE_WIDTH_KEY,
+        g_PlotLine_Width = config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE,
                                                  (long) 4 );
     }
 
@@ -368,8 +368,7 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
     if( config )
     {
         config->Write( MINI_DRAW_LINE_WIDTH_KEY, (long) g_DrawMinimunLineWidth );
-        config->Write( MINI_PLOTPS_LINE_WIDTH_KEY,
-                       (long) g_PlotPSMinimunLineWidth );
+        config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, (long) g_PlotLine_Width );
     }
 
     Destroy();

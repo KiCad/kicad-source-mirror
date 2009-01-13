@@ -70,9 +70,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
     /* Trace des MODULES : PADS */
     if( PlotPadsOnSilkLayer || Plot_Pads_All_Layers )
     {
-        nb_items = 0;
-        Affiche_1_Parametre( this, 56, wxT( "Pads" ), wxEmptyString, GREEN );
-
         for( MODULE* Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
         {
             pt_pad = (D_PAD*) Module->m_Pads;
@@ -182,17 +179,11 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                     }
                     break;
                 }
-
-                nb_items++; msg.Printf( wxT( "%d" ), nb_items );
-                Affiche_1_Parametre( this, 56, wxEmptyString, msg, GREEN );
             }
         }
     }     /* Fin Sequence de trace des Pads */
 
     /* Trace Textes MODULES */
-    nb_items = 0;
-    Affiche_1_Parametre( this, 64, wxT( "TxtMod" ), wxEmptyString, LIGHTBLUE );
-
     for( MODULE* Module = m_Pcb->m_Modules;  Module;  Module = Module->Next() )
     {
         /* Analyse des autorisations de trace pour les textes VALEUR et REF */
@@ -243,17 +234,11 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         if( trace_ref )
         {
             PlotTextModule( Module->m_Reference, format_plot );
-            nb_items++;
-            msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
         }
 
         if( trace_val )
         {
             PlotTextModule( Module->m_Value, format_plot );
-            nb_items++;
-            msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
         }
 
         pt_texte = (TEXTE_MODULE*) Module->m_Drawings.GetFirst();
@@ -283,9 +268,6 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
                 continue;
 
             PlotTextModule( pt_texte, format_plot );
-            nb_items++;
-            msg.Printf( wxT( "%d" ), nb_items );
-            Affiche_1_Parametre( this, 64, wxEmptyString, msg, LIGHTBLUE );
         }
     }
 
@@ -318,7 +300,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
     orient = pt_texte->GetDrawRotation();
 
     thickness = pt_texte->m_Width;
-    if( Plot_Mode == FILAIRE )
+    if( g_Plot_Mode == FILAIRE )
         thickness = g_PlotLine_Width;
 
     if( pt_texte->m_Mirror )
@@ -475,7 +457,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
 
     type_trace = PtEdge->m_Shape;
     thickness  = PtEdge->m_Width;
-    if( Plot_Mode == FILAIRE )
+    if( g_Plot_Mode == FILAIRE )
         thickness = g_PlotLine_Width;
 
     pos = PtEdge->m_Start;
@@ -653,7 +635,7 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
         return;
 
     thickness = pt_segm->m_Width;
-    if( Plot_Mode == FILAIRE )
+    if( g_Plot_Mode == FILAIRE )
         thickness = g_PlotLine_Width;
 
     start = pt_segm->m_Start;
@@ -788,7 +770,7 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
     int ox, oy, fx, fy;
     int delta;              /* increment (en 0.1 degres) angulaire pour trace de cercles */
 
-    if( Plot_Mode == FILAIRE )
+    if( g_Plot_Mode == FILAIRE )
         thickness = g_PlotLine_Width;
 
     if( IsPostScript( format_plot ) )

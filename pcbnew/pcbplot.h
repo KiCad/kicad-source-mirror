@@ -10,6 +10,12 @@
 #define eda_global extern
 #endif
 
+/* Shared Config keys for plot and print */
+#define OPTKEY_PLOT_LINEWIDTH_VALUE    wxT( "PlotLineWidth" )
+#define OPTKEY_LAYERBASE          wxT( "PlotLayer_%d" )
+#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
+#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
+#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 
 /* Constantes de conversion d'unites */
 /* coeff de conversion dim en 0.1 mil -> dim en unite PS: (unite PS = pouce) */
@@ -23,9 +29,9 @@ eda_global bool g_Exclude_Edges_Pcb		// True to exclude contents of Edges Pcb la
 = FALSE
 #endif
 ;
-eda_global bool Plot_Sheet_Ref;
+eda_global bool g_Plot_Frame_Ref;       // True to plot/print frame references
 eda_global bool g_DrawViaOnMaskLayer;	// True if vias are drawn on Mask layer (ie protected by mask)
-eda_global int Plot_Mode				// = FILAIRE, FILL ou SKETCH
+eda_global int g_Plot_Mode				// = FILAIRE, FILL or SKETCH
 #ifdef MAIN
 = FILLED
 #endif
@@ -84,10 +90,8 @@ eda_global int g_HPGL_Pen_Recouvrement;			/* recouvrement en mils ( pour remplis
 eda_global float Scale_X, Scale_Y ;  /* coeff d'agrandissement en X et Y demandes */
 eda_global wxPoint g_PlotOffset;	/* Offset de trace modifies par l'echelle */
 
-eda_global int nb_plot_erreur ;
-eda_global int nb_items;		/* utilise pour decompter les objets traces */
 eda_global int g_PlotLine_Width; /* Largeur du trait en mode filaire (utilise en serigraphie,
-                             pour traces en mode sketch et filaire) */
+                                    pour traces en mode sketch et filaire) */
 
 eda_global int g_PlotFormat  /* id for plot format (see enum PlotFormat in plot_common.h) */
 #ifdef MAIN

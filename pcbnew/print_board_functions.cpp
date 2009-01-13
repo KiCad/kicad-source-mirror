@@ -17,11 +17,12 @@ static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
 
 
 /************************************************************************************************************/
-void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer, bool aPrintMirrorMode )
+void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMaskLayer, bool aPrintMirrorMode )
 /************************************************************************************************************/
 
-/* Used to print the board.
- *  Print the board, but only layers allowed by printmasklayer
+/** Function PrintPage
+ * Used to print the board (on printer, or when creating SVF files).
+ *  Print the board, but only layers allowed by aPrintMaskLayer
  *  ( printmasklayer is a 32 bits mask: bit n = 1 -> layer n is printed)
  */
 {
@@ -33,7 +34,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     BOARD*               Pcb   = frame->GetBoard();
 
     save_opt = DisplayOpt;
-    if( printmasklayer & ALL_CU_LAYERS )
+    if( aPrintMaskLayer & ALL_CU_LAYERS )
         DisplayOpt.DisplayPadFill = FILLED;
     else
         DisplayOpt.DisplayPadFill = SKETCH;
@@ -59,10 +60,10 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
         case TYPE_COTATION:
         case TYPE_TEXTE:
         case TYPE_MIRE:
-            if( ((1<<item->GetLayer()) & printmasklayer) == 0 )
+            if( ((1<<item->GetLayer()) & aPrintMaskLayer) == 0 )
                 break;
 
-            item->Draw( this, DC, drawmode );
+            item->Draw( this, aDC, drawmode );
             break;
 
         case TYPE_MARKER:       /* Trace des marqueurs */
@@ -75,26 +76,26 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     pt_piste = Pcb->m_Track;
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
-        if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
         if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
         {
             int rayon = pt_piste->m_Width >> 1;
             int color = g_DesignSettings.m_ViaColor[pt_piste->m_Shape];
-            GRSetDrawMode( DC, drawmode );
-            GRFilledCircle( &m_ClipBox, DC, pt_piste->m_Start.x, pt_piste->m_Start.y,
+            GRSetDrawMode( aDC, drawmode );
+            GRFilledCircle( &m_ClipBox, aDC, pt_piste->m_Start.x, pt_piste->m_Start.y,
                             rayon, 0, color, color );
         }
         else
-            pt_piste->Draw( this, DC, drawmode );
+            pt_piste->Draw( this, aDC, drawmode );
     }
 
     pt_piste = Pcb->m_Zone;
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
-        if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
-        pt_piste->Draw( this, DC, drawmode );
+        pt_piste->Draw( this, aDC, drawmode );
     }
 
     // Draw footprints, this is done at last in order to print the pad holes in while
@@ -102,7 +103,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     Module = (MODULE*) Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Print_Module( this, DC, Module, drawmode, printmasklayer );
+        Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer );
     }
 
     /* Print via holes in white color*/
@@ -113,12 +114,12 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     GRForceBlackPen( false );
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
-        if( ( printmasklayer & pt_piste->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
         if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
         {
-            GRSetDrawMode( DC, drawmode );
-            GRFilledCircle( &m_ClipBox, DC, pt_piste->m_Start.x, pt_piste->m_Start.y,
+            GRSetDrawMode( aDC, drawmode );
+            GRFilledCircle( &m_ClipBox, aDC, pt_piste->m_Start.x, pt_piste->m_Start.y,
                             rayon, 0, color, color );
         }
     }
@@ -128,14 +129,14 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = Pcb->GetArea(ii);
-        if( ( printmasklayer & (1 << zone->GetLayer()) ) == 0 )
+        if( ( aPrintMaskLayer & (1 << zone->GetLayer()) ) == 0 )
             continue;
 
-        zone->DrawFilledArea( this, DC, drawmode );
+        zone->DrawFilledArea( this, aDC, drawmode );
     }
 
-    if( Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( DC, ActiveScreen, 0 );
+    if( aPrint_Sheet_Ref )
+        m_Parent->TraceWorkSheet( aDC, GetScreen(), g_PlotLine_Width );
 
     m_PrintIsMirrored = false;
 
