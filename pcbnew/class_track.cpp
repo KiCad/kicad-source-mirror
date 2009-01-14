@@ -641,8 +641,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
      *  we must filter tracks, to avoid a lot of texts.
      *  - only horizontal or vertical tracks are eligible
      *  - only  tracks with a length > 10 * thickness are eligible
+     * and, of course, if we are not printing the board
      */
-    if( Type() == TYPE_ZONE )
+    if( Type() == TYPE_ZONE || g_IsPrinting )
         return;
 
     #define THRESHOLD 10
