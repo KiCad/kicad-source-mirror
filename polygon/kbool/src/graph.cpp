@@ -1,11 +1,11 @@
 /*! \file src/graph.cpp
     \brief Used to Intercect and other process functions
-    \author Klaas Holwerda 
- 
+    \author Klaas Holwerda
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: graph.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
 */
 
@@ -1497,9 +1497,9 @@ int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
 
 
 /*
- 
+
 //       scanbeam->writebeam();
- 
+
       if (j%100 ==0)
       {
         long x;
@@ -1511,33 +1511,33 @@ int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
    _GC->SetState(buf);
        scanbeam->writebeam();
       }
- 
- 
- 
+
+
+
          writegraph(false);
             if (!checksort())
             {
                double x=_lowlink->GetBeginNode()->GetX();
                checksort();
             }
- 
- 
- 
+
+
+
          _LI++;
       }
    }
- 
+
  delete scanbeam;
  return 0;
 }
- 
- 
+
+
          if (!checksort())
          {
             x=_lowlink->GetBeginNode()->GetX();
             checksort();
          }
- 
+
          if (x >= -112200)
          {
 //          writegraph(true);
@@ -2555,7 +2555,7 @@ void Graph::WriteKEY( Bool_Engine* GC, FILE* file )
 
 void Graph::WriteGraphKEY(Bool_Engine* GC)
 {
-
+#if KBOOL_DEBUG == 1
     double scale = 1.0/GC->GetGrid()/GC->GetGrid();
 
     FILE* file = fopen("keygraphfile.key", "w");
@@ -2615,6 +2615,7 @@ void Graph::WriteGraphKEY(Bool_Engine* GC)
             ");
 
     fclose (file);
+#endif
 }
 
 

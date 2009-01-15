@@ -282,7 +282,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if ( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
-        _( "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch or 0.00254 mm)" ) );
+        _( "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch or 0.0254 mm)" ) );
         return false;
     }
 
