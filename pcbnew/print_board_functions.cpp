@@ -50,8 +50,22 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
     DisplayOpt.DisplayZonesMode      = 0;
 
     m_PrintIsMirrored = aPrintMirrorMode;
+    
+    if( ( g_DrawBgColor == BLACK ) && (GetGRForceBlackPenState( ) == false) )
+    {   // One can use the OR mode in this case, and we draw a black background to draw board in OR mode, like on screen
+        // But because black background are very expensive to draw, we draw in black only the minimun area.
+        drawmode = GR_OR;
+
+        EDA_Rect rect = frame->GetBoard()->m_BoundaryBox;
+        rect.Inflate( 2000, 2000 );  // Margin in 1/10000 inch around the board to draw the black background.
+        GRSetDrawMode( aDC, GR_COPY );
+        // draw in black the minimum page area:
+        GRFilledRect( &m_ClipBox, aDC, rect.GetX(), rect.GetY(),
+            rect.GetEnd().x, rect.GetEnd().y, g_DrawBgColor, g_DrawBgColor );
+    }
 
     /* Print the pcb graphic items (texts, ...) */
+    GRSetDrawMode( aDC, drawmode );
     for( BOARD_ITEM* item = Pcb->m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
@@ -106,24 +120,6 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
         Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer );
     }
 
-    /* Print via holes in white color*/
-    pt_piste = Pcb->m_Track;
-    int rayon = g_DesignSettings.m_ViaDrill / 2;
-    int color = WHITE;
-    bool blackpenstate = GetGRForceBlackPenState( );
-    GRForceBlackPen( false );
-    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
-    {
-        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
-            continue;
-        if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
-        {
-            GRSetDrawMode( aDC, drawmode );
-            GRFilledCircle( &m_ClipBox, aDC, pt_piste->m_Start.x, pt_piste->m_Start.y,
-                            rayon, 0, color, color );
-        }
-    }
-    GRForceBlackPen( blackpenstate );
 
     /* Draw filled areas (i.e. zones) */
     for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
@@ -134,6 +130,25 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
 
         zone->DrawFilledArea( this, aDC, drawmode );
     }
+
+    /* Print via holes in bg color: Not sure it is good for buried or blind vias */
+    pt_piste = Pcb->m_Track;
+    int color = g_DrawBgColor;
+    bool blackpenstate = GetGRForceBlackPenState( );
+    GRForceBlackPen( false );
+    GRSetDrawMode( aDC, GR_COPY );
+    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    {
+        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
+            continue;
+        if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
+        {
+            int rayon = g_DesignSettings.m_ViaDrill / 2;
+            GRFilledCircle( &m_ClipBox, aDC, pt_piste->m_Start.x, pt_piste->m_Start.y,
+                            rayon, 0, color, color );
+        }
+    }
+    GRForceBlackPen( blackpenstate );
 
     if( aPrint_Sheet_Ref )
         m_Parent->TraceWorkSheet( aDC, GetScreen(), g_PlotLine_Width );

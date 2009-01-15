@@ -64,7 +64,7 @@ WinEDA_PrintFrame::WinEDA_PrintFrame( WinEDA_DrawFrame* parent, wxWindowID id, c
 	m_Config = wxGetApp().m_EDA_Config;
 	if ( m_Config )
 	{
-		m_Config->Read(wxT("PrintPenWidth"), &g_PlotLine_Width);
+		m_Config->Read(OPTKEY_PLOT_LINEWIDTH_VALUE, &g_PlotLine_Width);
 	}
 
 

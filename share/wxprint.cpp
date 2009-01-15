@@ -268,11 +268,9 @@ void WinEDA_PrintFrame::OnClosePrintDialog()
 /* called when WinEDA_PrintFrame is closed
  */
 {
-    wxConfig* Config = wxGetApp().m_EDA_Config;
-
-    if( Config )
+    if( m_Config )
     {
-        Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
+        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
     }
 
     if( m_FineAdjustXscaleOpt )
@@ -282,16 +280,16 @@ void WinEDA_PrintFrame::OnClosePrintDialog()
     SetPenWidth();
 
 #ifdef PCBNEW
-    if( Config )
+    if( m_Config )
     {
-        Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, m_XScaleAdjust );
-        Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, m_YScaleAdjust );
-        Config->Write( OPTKEY_PRINT_SCALE, s_Scale_Select );
+        m_Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, m_XScaleAdjust );
+        m_Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, m_YScaleAdjust );
+        m_Config->Write( OPTKEY_PRINT_SCALE, s_Scale_Select );
         wxString layerKey;
         for( int layer = 0;  layer<NB_LAYERS;  ++layer )
         {
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
-            Config->Write( layerKey, m_BoxSelecLayer[layer]->IsChecked() );
+            m_Config->Write( layerKey, m_BoxSelecLayer[layer]->IsChecked() );
         }
     }
 #endif
@@ -765,8 +763,15 @@ void EDA_Printout::DrawPage()
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
     g_IsPrinting = TRUE;
+    int bg_color = g_DrawBgColor;
 
 #ifdef PCBNEW
+    
+    // background color can left BLACK only when drawing the full board at once, in color mode
+    // Switch it to WHITE in others cases
+    if ( s_Print_Black_and_White || ( m_PrintFrame->m_PagesOption->GetSelection() != 1 ) )
+        g_DrawBgColor = WHITE;
+
     if( m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
 
@@ -816,6 +821,7 @@ void EDA_Printout::DrawPage()
     panel->PrintPage( dc, m_Print_Sheet_Ref, s_PrintMaskLayer, s_PrintMirror );
 #endif
 
+    g_DrawBgColor = bg_color;
     g_IsPrinting     = FALSE;
     panel->m_ClipBox = tmp;
 

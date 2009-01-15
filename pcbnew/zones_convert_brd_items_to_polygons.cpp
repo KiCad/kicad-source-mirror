@@ -295,6 +295,132 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         delete booleng;
     }
 
+// Now we remove all unused thermal stubs.
+#define REMOVE_UNUSED_THERMAL_STUBS     // Can be commented to skip unused thermal stubs calculations
+#ifdef REMOVE_UNUSED_THERMAL_STUBS
+    // first compute endindex for TestPointInsidePolygon
+    unsigned int indexstart = 0, indexend;
+    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
+    {
+        if( m_FilledPolysList[indexend].end_contour )       // end of a filled sub-area found
+        {
+            break;
+        }
+    }
+
+    /* Second, Add the main (corrected) polygon (i.e. the filled area using only one outline)
+     * in GroupA in Bool_Engine to do a BOOL_A_SUB_B operation
+     * All areas to remove will be put in GroupB in Bool_Engine
+     */
+    booleng = new Bool_Engine();
+    ArmBoolEng( booleng, true );
+
+    /* Add the main corrected polygon (i.e. the filled area using only one outline)
+     * in GroupA in Bool_Engine
+     */
+    CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
+
+    /*
+     * Test and add polygons to remove thermal stubs.
+     */
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    {
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        {
+            // check
+            if( pad->IsOnLayer( GetLayer() )
+                && pad->GetNet() == GetNet()
+                && m_PadOption == THERMAL_PAD )
+            {
+                item_boundingbox = pad->GetBoundingBox();
+                item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
+                if( !(item_boundingbox.Intersects( zone_boundingbox )) )
+                    continue;
+
+                // test point
+                int dx = (pad->m_Size.x / 2) + m_ThermalReliefGapValue;
+                int dy = (pad->m_Size.y / 2) + m_ThermalReliefGapValue;
+
+                // compute north, south, west and east points for zone connection.
+                wxPoint ptTest[4];
+                ptTest[0] = wxPoint(0,  dy+m_ZoneMinThickness/2);
+                ptTest[1] = wxPoint(0, -(dy+m_ZoneMinThickness/2));
+                ptTest[2] = wxPoint( dx+m_ZoneMinThickness/2, 0);
+                ptTest[3] = wxPoint(-(dx+m_ZoneMinThickness/2), 0);
+
+                // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
+                float fAngle = 0.0;
+                if ( pad->m_PadShape == PAD_CIRCLE)
+                    fAngle = 450.0;
+
+                // Test all sides
+                for (int i=0; i<4; i++) {
+                    // rotate point
+                    RotatePoint( &ptTest[i], pad->m_Orient + fAngle );
+                    // translate point
+                    ptTest[i] += pad->ReturnShapePos();
+                    if ( TestPointInsidePolygon( m_FilledPolysList, indexstart,
+                            indexend, ptTest[i].x, ptTest[i].y ) == false)
+                    {
+                        // polygon buffer
+                        std::vector<wxPoint> corners_buffer;
+                        // polygons are rectangles with width of copper bridge value
+                        const int iDTRC = m_ThermalReliefCopperBridgeValue / 2;
+                        switch (i) {
+                            case 0:
+                                corners_buffer.push_back( wxPoint( -iDTRC, dy) );
+                                corners_buffer.push_back( wxPoint( +iDTRC, dy) );
+                                corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                                corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                                break;
+                            case 1:
+                                corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
+                                corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
+                                corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                                corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                                break;
+                            case 2:
+                                corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
+                                corners_buffer.push_back( wxPoint( dx,  iDTRC ) );
+                                corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                                corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                                break;
+                            case 3:
+                                corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
+                                corners_buffer.push_back( wxPoint( -dx,  iDTRC ) );
+                                corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                                corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                                break;
+                        }
+                        // add computed polygon to group_B
+                        if( booleng->StartPolygonAdd( GROUP_B ) )
+                        {
+                            for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
+                            {
+                                wxPoint cpos = corners_buffer[ic];
+                                RotatePoint( &cpos, pad->m_Orient + fAngle );      // Rotate according to module orientation
+                                cpos += pad->ReturnShapePos();                     // Shift origin to position
+                                booleng->AddPoint( cpos.x, cpos.y );
+                            }
+
+                            booleng->EndPolygonAdd();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* compute copper areas */
+    booleng->Do_Operation( BOOL_A_SUB_B );
+
+    /* put these areas in m_FilledPolysList */
+    m_FilledPolysList.clear();
+    CopyPolygonsFromBoolengineToFilledPolysList( booleng );
+    delete booleng;
+
+#endif
+
     // Remove insulated islands:
     if( GetNet() > 0 )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );

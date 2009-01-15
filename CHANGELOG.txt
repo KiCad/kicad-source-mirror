@@ -5,6 +5,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2009-Jan-15 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Pcbnew:
+    Added: patch from Rok Markovic (rok@kanardia.eu) to remove unused stubs in thermal pads
+    Modified: print boards when printing in color mode layers on one sheet:
+        now printed in OR mode like drawings on screen
+        Also in SVG mode, but OR mode seems not work inSVG mode.
+
+
+
 2009-Jan-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++Pcbnew:

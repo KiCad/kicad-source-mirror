@@ -629,6 +629,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             m_End.x, m_End.y, m_Width, color );
     }
 
+    if( g_IsPrinting )
+        return;
+
     // Show clearance for tracks, not for zone segments
     if( ShowClearance( this ) )
     {
@@ -643,7 +646,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
      *  - only  tracks with a length > 10 * thickness are eligible
      * and, of course, if we are not printing the board
      */
-    if( Type() == TYPE_ZONE || g_IsPrinting )
+    if( Type() == TYPE_ZONE )
         return;
 
     #define THRESHOLD 10

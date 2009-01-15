@@ -328,7 +328,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         {
             blackpenstate = GetGRForceBlackPenState();
             GRForceBlackPen( false );
-            color = WHITE;
+            color = g_DrawBgColor;
         }
         else
             color = BLACK; // or DARKGRAY;
