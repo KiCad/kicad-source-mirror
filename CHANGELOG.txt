@@ -12,7 +12,7 @@ email address.
     Added: patch from Rok Markovic (rok@kanardia.eu) to remove unused stubs in thermal pads
     Modified: print boards when printing in color mode layers on one sheet:
         now printed in OR mode like drawings on screen
-        Also in SVG mode, but OR mode seems not work inSVG mode.
+        Also in SVG mode, but OR mode seems not work very well in SVG mode (tested with inkscape).
 
 
 
