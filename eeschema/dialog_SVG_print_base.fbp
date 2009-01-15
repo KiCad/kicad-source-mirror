@@ -332,7 +332,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_PRINT_CURRENT</property>
-                                        <property name="label">PrintCurrent</property>
+                                        <property name="label">Print Current</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_buttonPlotCurrent</property>
