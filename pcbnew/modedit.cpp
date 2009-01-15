@@ -192,7 +192,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     switch( id )   // Traitement des commandes
     {
     case ID_EXIT:
-        Close( TRUE );
+        Close( true );
         break;
 
     case ID_LIBEDIT_SELECT_CURRENT_LIB:
@@ -209,7 +209,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_NEW_MODULE:
         {
-            Clear_Pcb( TRUE );
+            Clear_Pcb( true );
             GetScreen()->ClearUndoRedoList();
             SetCurItem( NULL );
             GetScreen()->m_Curseur = wxPoint( 0, 0 );
@@ -220,7 +220,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
                 module->SetPosition( wxPoint(0, 0) );
                 if( GetBoard()->m_Modules )
                     GetBoard()->m_Modules->m_Flags = 0;
-                Zoom_Automatique( TRUE );
+                Zoom_Automatique( true );
             }
         }
         break;
@@ -229,7 +229,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString Line;
             Line = MakeFileName( g_RealLibDirBuffer, m_CurrentLib.GetData(), LibExtBuffer );
-            Save_1_Module( Line, GetBoard()->m_Modules, TRUE, TRUE );
+            Save_Module_In_Library( Line, GetBoard()->m_Modules, true, true, true );
             GetScreen()->ClrModify();
         }
         break;
@@ -315,13 +315,13 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_IMPORT_PART:
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
-        Clear_Pcb( TRUE );
+        Clear_Pcb( true );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Import_Module( &dc );
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
         GetScreen()->ClrModify();
-        Zoom_Automatique( TRUE );
+        Zoom_Automatique( true );
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
         break;
@@ -333,7 +333,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART:
         if( GetBoard()->m_Modules )
-            Export_Module( GetBoard()->m_Modules, TRUE );
+            Export_Module( GetBoard()->m_Modules, true );
         break;
 
     case ID_MODEDIT_SHEET_SET:
@@ -342,7 +342,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_LOAD_MODULE:
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
-        Clear_Pcb( TRUE );
+        Clear_Pcb( true );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Load_Module_From_Library( m_CurrentLib, &dc );
         if( GetBoard()->m_Modules )
@@ -365,7 +365,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             }
         }
         GetScreen()->ClrModify();
-        Zoom_Automatique( TRUE );
+        Zoom_Automatique( true );
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
         break;
@@ -425,12 +425,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
         DrawPanel->MouseToCursorSchema();
-        Rotate_Module( &dc, (MODULE*) GetScreen()->GetCurItem(), 900, TRUE );
+        Rotate_Module( &dc, (MODULE*) GetScreen()->GetCurItem(), 900, true );
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
         DrawPanel->MouseToCursorSchema();
-        Rotate_Module( &dc, (MODULE*) GetScreen()->GetCurItem(), -900, TRUE );
+        Rotate_Module( &dc, (MODULE*) GetScreen()->GetCurItem(), -900, true );
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE:
@@ -587,12 +587,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_UNDO:
         GetComponentFromUndoList();
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_MODEDIT_REDO:
         GetComponentFromRedoList();
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_POPUP_PLACE_BLOCK:
