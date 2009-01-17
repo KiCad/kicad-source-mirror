@@ -15,7 +15,24 @@
 static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileName, wxDC* DC );
 
 
-/********************************************************/
+void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
+{
+    wxString fn;
+
+    fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
+
+    if( fn != wxEmptyString && Clear_Pcb( true ) )
+    {
+        wxClientDC dc( DrawPanel );
+        DrawPanel->CursorOff( &dc );
+        LoadOneGerberFile( fn, &dc, false );
+        DrawPanel->MouseToCursorSchema();
+        DrawPanel->CursorOn( &dc );
+    }
+}
+
+/***************
+***************************************/
 void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 /********************************************************/
 
@@ -62,24 +79,6 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         Clear_Pcb( TRUE );
         Zoom_Automatique( FALSE );
         GetScreen()->SetRefreshReq();
-        break;
-
-    case ID_LOAD_FILE_1:
-    case ID_LOAD_FILE_2:
-    case ID_LOAD_FILE_3:
-    case ID_LOAD_FILE_4:
-    case ID_LOAD_FILE_5:
-    case ID_LOAD_FILE_6:
-    case ID_LOAD_FILE_7:
-    case ID_LOAD_FILE_8:
-    case ID_LOAD_FILE_9:
-    case ID_LOAD_FILE_10:
-        if( Clear_Pcb( TRUE ) )
-        {
-            LoadOneGerberFile(
-                GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),
-                &dc, FALSE );
-        }
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:

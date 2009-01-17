@@ -99,100 +99,73 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
 /* Creation des menus de la fenetre principale
  */
 {
-    int        ii;
-    wxMenuBar* menuBar = GetMenuBar();
+    wxMenuItem* item;
+    wxMenuBar*  menuBar;
+    /* Destroy the existing menu bar so it can be rebuilt.  This allows
+     * language changes of the menu text on the fly. */
+    if( menuBar )
+        SetMenuBar( NULL );
 
-    if( menuBar == NULL )
-    {
-        menuBar = new wxMenuBar();
+    menuBar = new wxMenuBar();
 
-        // Associate the menu bar with the frame
-        SetMenuBar( menuBar );
+    wxMenu* filesMenu = new wxMenu;
+    item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT,
+                           _( "&Open" ),
+                           _( "Open a NetList file" ) );
+    item->SetBitmap( open_xpm );
+    filesMenu->Append( item );
 
-        m_FilesMenu = new wxMenu;
-        wxMenuItem* item = new wxMenuItem( m_FilesMenu, ID_LOAD_PROJECT,
-                                           _( "&Open" ),
-                                           _( "Open a NetList file" ) );
-        item->SetBitmap( open_xpm );
-        m_FilesMenu->Append( item );
+    filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
+                           _( "&Save As..." ),
+                           _( "Save New NetList and Footprints List files" ) );
+    item->SetBitmap( save_xpm );
+    filesMenu->Append( item );
 
-        m_FilesMenu->AppendSeparator();
-        item = new wxMenuItem( m_FilesMenu, ID_SAVE_PROJECT,
-                               _( "&Save As..." ),
-                               _( "Save New NetList and Footprints List files" ) );
-        item->SetBitmap( save_xpm );
-        m_FilesMenu->Append( item );
+    filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, ID_CVPCB_QUIT, _( "E&xit" ),
+                           _( "Quit Cvpcb" ) );
+    item->SetBitmap( exit_xpm );
+    filesMenu->Append( item );
 
-        m_FilesMenu->AppendSeparator();
-        item = new wxMenuItem( m_FilesMenu, ID_CVPCB_QUIT, _( "E&xit" ),
-                               _( "Quit Cvpcb" ) );
-        item->SetBitmap( exit_xpm );
-        m_FilesMenu->Append( item );
+    // Creation des selections des anciens fichiers
+    wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
 
-// Creation des selections des anciens fichiers
-        m_FilesMenu->AppendSeparator();
-        for( ii = 0; ii < 10; ii++ )
-        {
-            if( GetLastProject( ii ).IsEmpty() )
-                break;
-            m_FilesMenu->Append( ID_LOAD_FILE_1 + ii, GetLastProject( ii ) );
-        }
+    // Menu Configuration:
+    wxMenu* configmenu = new wxMenu;
+    item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Configuration" ),
+                           _( "Setting Libraries, Directories and others..." ) );
+    item->SetBitmap( config_xpm );
+    configmenu->Append( item );
 
-        // Menu Configuration:
-        wxMenu* configmenu = new wxMenu;
-        item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Configuration" ),
-                              _( "Setting Libraries, Directories and others..." ) );
-        item->SetBitmap( config_xpm );
-        configmenu->Append( item );
+    // Font selection and setup
+    AddFontSelectionMenu( configmenu );
 
-        // Font selection and setup
-        AddFontSelectionMenu( configmenu );
+    wxGetApp().SetLanguageList( configmenu );
 
-        wxGetApp().SetLanguageList( configmenu );
+    configmenu->AppendSeparator();
+    item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,
+                           _( "&Save config" ),
+                           _( "Save configuration in current dir" ) );
+    item->SetBitmap( save_setup_xpm );
+    configmenu->Append( item );
 
-        configmenu->AppendSeparator();
-        item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,
-                               _( "&Save config" ),
-                               _( "Save configuration in current dir" ) );
-        item->SetBitmap( save_setup_xpm );
-        configmenu->Append( item );
+    // Menu Help:
+    wxMenu* helpMenu = new wxMenu;
+    item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_HELP, _( "&Contents" ),
+                           _( "Open the cvpcb manual" ) );
+    item->SetBitmap( help_xpm );
+    helpMenu->Append( item );
+    item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_LICENCE,
+                           _( "&About cvpcb" ),
+                           _( "About cvpcb schematic to pcb converter" ) );
+    item->SetBitmap( info_xpm );
+    helpMenu->Append( item );
 
-        // Menu Help:
-        wxMenu* helpMenu = new wxMenu;
-        item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_HELP, _( "&Contents" ),
-                               _( "Open the cvpcb manual" ) );
-        item->SetBitmap( help_xpm );
-        helpMenu->Append( item );
-        item =
-            new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_LICENCE,
-                            _( "&About cvpcb" ),
-                            _( "About cvpcb schematic to pcb converter" ) );
-        item->SetBitmap( info_xpm );
-        helpMenu->Append( item );
+    menuBar->Append( filesMenu, _( "&File" ) );
+    menuBar->Append( configmenu, _( "&Preferences" ) );
+    menuBar->Append( helpMenu, _( "&Help" ) );
 
-        menuBar->Append( m_FilesMenu, _( "&File" ) );
-        menuBar->Append( configmenu, _( "&Preferences" ) );
-        menuBar->Append( helpMenu, _( "&Help" ) );
-    }
-    else        // simple mise a jour de la liste des fichiers anciens
-    {
-        wxMenuItem* item;
-        int         max_file = wxGetApp().m_LastProjectMaxCount;
-        for( ii = max_file - 1; ii >=0; ii-- )
-        {
-            if( m_FilesMenu->FindItem( ID_LOAD_FILE_1 + ii ) )
-            {
-                item = m_FilesMenu->Remove( ID_LOAD_FILE_1 + ii );
-                if( item )
-                    delete item;
-            }
-        }
-
-        for( ii = 0; ii < max_file; ii++ )
-        {
-            if( GetLastProject( ii ).IsEmpty() )
-                break;
-            m_FilesMenu->Append( ID_LOAD_FILE_1 + ii, GetLastProject( ii ) );
-        }
-    }
+    // Associate the menu bar with the frame
+    SetMenuBar( menuBar );
 }

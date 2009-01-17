@@ -5,6 +5,23 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Jan-11 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++All
+  * Replace Kicad file history implementation with wxFileHistory.
+  * Laid groundwork for search paths using wxPathList in EDA_Appl.
+  * Made ReCreateMenuBar actually recreate the menu bar.  Now language updates
+    to menus can be changed without restarting program.
+  * Lots of general housekeeping, simplification, and code beautifying.
+++EESchema
+  * Fix zoom and pan bug in library viewer panel due to incorrect DrawPanel
+    rectangle.
+  * Add zoom accelerator keys to library viewer (works in GTK, not Windows).
+  * Add Postscript header to new print dialog so Linux build works.
+++PcbNew
+  * Add Postscript header to new print dialog so Linux build works.
+
+
 2009-Jan-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++All:

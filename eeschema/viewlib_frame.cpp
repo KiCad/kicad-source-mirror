@@ -26,7 +26,7 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
     EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
                     WinEDA_ViewlibFrame::Process_Special_Functions )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_DrawFrame::OnZoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_ViewlibFrame::OnZoom )
 
     EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
               WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
@@ -39,6 +39,25 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
 END_EVENT_TABLE()
 
 
+/*
+ * This emulates the zoom menu entries found in the other Kicad applications.
+ * The library viewer does not have any menus so add an accelerator table to
+ * the main frame.
+ *
+ * FIXME: For some reason this doesn't work correctly in windows.  Works fine
+ *        in GTK2 in Linux.  Not tested on Mac.  Adding EVT_MENU_RANGE() to
+ *        event table doesn't solve the problem either.
+ */
+static wxAcceleratorEntry accels[] = {
+    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F1, ID_ZOOM_IN ),
+    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F2, ID_ZOOM_OUT ),
+    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F3, ID_ZOOM_REDRAW ),
+    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F4, ID_ZOOM_PAGE )
+};
+
+#define ACCEL_TABLE_CNT  ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
+
+
 /******************************************************************************/
 WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
                                           LibraryStruct* Library,
@@ -47,6 +66,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
                       wxDefaultPosition, wxDefaultSize )
 /******************************************************************************/
 {
+    wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
+
     m_FrameName = wxT( "ViewlibFrame" );
 
     m_Draw_Axis = TRUE;             // TRUE to dispaly Axis
@@ -58,6 +79,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     m_CmpList   = NULL;
     m_LibList   = NULL;
     m_Semaphore = semaphore;
+
     if( m_Semaphore )
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
 
@@ -92,6 +114,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     if( m_LibList )
         ReCreateListLib();
     DisplayLibInfos();
+    SetAcceleratorTable( table );
     BestZoom();
     Show( TRUE );
 }

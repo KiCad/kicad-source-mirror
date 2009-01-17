@@ -187,8 +187,8 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
-    delta.x = GetScreen()->GetGrid().x / zoom;
-    delta.y = GetScreen()->GetGrid().y / zoom;
+    delta = GetScreen()->GetGrid() / zoom;
+
     if( delta.x <= 0 )
         delta.x = 1;
     if( delta.y <= 0 )
@@ -233,28 +233,28 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         case WXK_UP:
             DrawPanel->CalcScrolledPosition( Mouse.x, Mouse.y - delta.y,
                                              &Mouse.x, &Mouse.y );
-            GRMouseWarp( DrawPanel, Mouse );
+            DrawPanel->MouseTo( Mouse );
             break;
 
         case WXK_NUMPAD2:       /* cursor moved down */
         case WXK_DOWN:
             DrawPanel->CalcScrolledPosition( Mouse.x, Mouse.y + delta.y,
                                              &Mouse.x, &Mouse.y );
-            GRMouseWarp( DrawPanel, Mouse );
+            DrawPanel->MouseTo( Mouse );
             break;
 
         case WXK_NUMPAD4:       /*  cursor moved left */
         case WXK_LEFT:
             DrawPanel->CalcScrolledPosition( Mouse.x - delta.x, Mouse.y,
                                              &Mouse.x, &Mouse.y );
-            GRMouseWarp( DrawPanel, Mouse );
+            DrawPanel->MouseTo( Mouse );
             break;
 
         case WXK_NUMPAD6:      /*  cursor moved right */
         case WXK_RIGHT:
             DrawPanel->CalcScrolledPosition( Mouse.x + delta.x, Mouse.y,
                                              &Mouse.x, &Mouse.y );
-            GRMouseWarp( DrawPanel, Mouse );
+            DrawPanel->MouseTo( Mouse );
             break;
         }
     }
@@ -269,8 +269,7 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         RedrawActiveWindow( DC, TRUE );
     }
 
-    if( ( oldpos.x != GetScreen()->m_Curseur.x )
-       || ( oldpos.y != GetScreen()->m_Curseur.y ) )
+    if( oldpos != GetScreen()->m_Curseur )
     {
         if( flagcurseur != 2 )
         {

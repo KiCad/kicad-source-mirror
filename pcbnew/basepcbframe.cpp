@@ -41,7 +41,7 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
                                           long style) :
     WinEDA_DrawFrame( father, idtype, title, pos, size, style )
 {
-    m_InternalUnits = 10000;        // Internal unit = 1/10000 inch
+    m_InternalUnits = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
     m_Pcb = NULL;
 
     m_DisplayPadFill = TRUE;        // How to draw pads
@@ -128,7 +128,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
         // Put cursor on item position
         DrawPanel->CursorOff( &dc );
         screen->m_Curseur = aPos;
-        GRMouseWarp( DrawPanel, screen->m_Curseur );
+        DrawPanel->MouseTo( screen->m_Curseur );
         DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOn( &dc );
     }

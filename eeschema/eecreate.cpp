@@ -430,7 +430,7 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         RedrawOneStruct( DrawPanel, DC, g_ItemToRepeat, GR_DEFAULT_DRAWMODE );
 
 //		GetScreen()->Curseur.x = ox; GetScreen()->Curseur.x = oy;
-//		GRMouseWarp(DrawPanel, DrawPanel->CursorScreenPosition() );
+//		DrawPanel->MouseTo( DrawPanel->CursorScreenPosition() );
     }
 }
 

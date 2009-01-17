@@ -34,9 +34,6 @@ public:
     WinEDA_DisplayFrame* DrawFrame;
     WinEDA_Toolbar*      m_HToolBar; // Toolbar horizontal haut d'ecran
 
-private:
-    wxMenu* m_FilesMenu;
-
     // Constructor and destructor
 public:
     WinEDA_CvpcbFrame( const wxString &title,

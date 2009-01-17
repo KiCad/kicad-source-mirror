@@ -30,7 +30,6 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
     m_ListCmp = NULL;
     m_FootprintList = NULL;
     DrawFrame   = NULL;
-    m_FilesMenu = NULL;
     m_HToolBar  = NULL;
 
     // Give an icon
@@ -121,9 +120,7 @@ void WinEDA_CvpcbFrame::OnSize( wxSizeEvent& event )
 /* Event table for WinEDA_CvpcbFrame */
 /*************************************/
 BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, wxFrame )
-    EVT_MENU_RANGE( ID_LOAD_PROJECT,
-                    ID_LOAD_FILE_10,
-                    WinEDA_CvpcbFrame::LoadNetList )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_CvpcbFrame::LoadNetList )
 
 // Menu events
     EVT_MENU( ID_SAVE_PROJECT,
@@ -387,39 +384,28 @@ void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
  *  Lit la netliste
  */
 {
-    int      id = event.GetId();
-    wxString fullfilename;
-    wxString oldfilename;
     bool     newfile;
+    wxString oldfilename;
+    wxString fn;
+
+    fn = GetFileFromHistory( event.GetId(), _( "Gerber" ) );
 
     if( !NetInNameBuffer.IsEmpty() )
     {
         oldfilename = NetInNameBuffer;
     }
 
-    switch( id )
+    if( fn != wxEmptyString )
     {
-    case ID_LOAD_FILE_1:
-    case ID_LOAD_FILE_2:
-    case ID_LOAD_FILE_3:
-    case ID_LOAD_FILE_4:
-    case ID_LOAD_FILE_5:
-    case ID_LOAD_FILE_6:
-    case ID_LOAD_FILE_7:
-    case ID_LOAD_FILE_8:
-    case ID_LOAD_FILE_9:
-    case ID_LOAD_FILE_10:
-        id -= ID_LOAD_FILE_1;
-        fullfilename = GetLastProject( id );
-        break;
+        newfile = ReadInputNetList( fn );
+
+        if( newfile && !oldfilename.IsEmpty() )
+        {
+            SetLastProject( NetInNameBuffer );
+        }
     }
 
-    newfile = ReadInputNetList( fullfilename );
-    if( newfile &&  !oldfilename.IsEmpty() )
-    {
-        SetLastProject( NetInNameBuffer );
-        ReCreateMenuBar();
-    }
+    ReCreateMenuBar();
 }
 
 

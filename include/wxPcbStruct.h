@@ -336,7 +336,6 @@ public:
 private:
     bool             m_SelTrackWidthBox_Changed;
     bool             m_SelViaSizeBox_Changed;
-    wxMenu*          m_FilesMenu;
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
 
@@ -419,6 +418,7 @@ public:
     void             InstallDrillFrame( wxCommandEvent& event );
     void             ToPostProcess( wxCommandEvent& event );
 
+    void             OnFileHistory( wxCommandEvent& event );
     void             Files_io( wxCommandEvent& event );
     int              LoadOnePcbFile( const wxString& FileName, bool Append );
     int              ReadPcbFile( FILE* File, bool Append );
@@ -762,8 +762,6 @@ class WinEDA_GerberFrame : public WinEDA_BasePcbFrame
 public:
     WinEDAChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelLayerTool;
-private:
-    wxMenu*          m_FilesMenu;
 
 public:
     WinEDA_GerberFrame( wxWindow* father, const wxString& title,
@@ -817,6 +815,7 @@ public:
                                 int garde, int tracevia, int modetrace );
 
     void         Files_io( wxCommandEvent& event );
+    void         OnFileHistory( wxCommandEvent& event );
     int          LoadOneGerberFile( const wxString& FileName, wxDC* DC, int mode );
     int          ReadGerberFile( wxDC* DC, FILE* File, bool Append );
     bool         Read_GERBER_File( wxDC*           DC,

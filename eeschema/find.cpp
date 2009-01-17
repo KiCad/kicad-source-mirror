@@ -185,7 +185,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
             DrawPanel->CursorOff( &dc );
 
             if( mouseWarp )
-                GRMouseWarp( DrawPanel, curpos );
+                DrawPanel->MouseTo( curpos );
 
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
 
@@ -359,7 +359,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
             DrawPanel->PrepareGraphicContext( &dc );
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
-            GRMouseWarp( DrawPanel, curpos );
+            DrawPanel->MouseTo( curpos );
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOn( &dc );
         }
@@ -589,7 +589,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
             DrawPanel->CursorOff( &dc );
 
             if( mouseWarp )
-                GRMouseWarp( DrawPanel, curpos );
+                DrawPanel->MouseTo( curpos );
 
             EXCHG( old_cursor_position, Sheet->LastScreen()->m_Curseur );
 

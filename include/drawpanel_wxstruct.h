@@ -80,7 +80,6 @@ public:
 
 
     void         PrepareGraphicContext( wxDC* DC );
-    wxPoint      CalcAbsolutePosition( const wxPoint& rel_pos );
     bool         IsPointOnDisplay( wxPoint ref_pos );
     void         OnPaint( wxPaintEvent& event );
     void         OnSize( wxSizeEvent& event );

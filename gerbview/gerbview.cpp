@@ -59,6 +59,8 @@ bool WinEDA_App::OnInit()
     frame->Show( TRUE );                // Show GerbView mainframe
     frame->Zoom_Automatique( TRUE );    // Zoomfit drawing in frame
 
+    Read_Config();
+
     if( argc > 1 )
     {
         wxString fileName = MakeFileName( wxEmptyString,
@@ -74,8 +76,6 @@ bool WinEDA_App::OnInit()
 
             if( path != wxEmptyString )
                 wxSetWorkingDirectory( path );
-
-            Read_Config();
 
             // Load all files specified on the command line.
             for( int i = 1;  i<argc;  ++i )
@@ -93,8 +93,6 @@ bool WinEDA_App::OnInit()
             }
         }
     }
-    else
-        Read_Config();
 
     return TRUE;
 }

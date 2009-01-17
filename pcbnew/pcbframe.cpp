@@ -211,9 +211,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_SelTrackWidthBox_Changed = FALSE;
     m_SelViaSizeBox_Changed    = FALSE;
 
-    m_drc = new DRC( this );        // these 2 objects point to each other
-
     SetBoard( new BOARD( NULL, this ) );
+
+    m_drc = new DRC( this );        // these 2 objects point to each other
 
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;

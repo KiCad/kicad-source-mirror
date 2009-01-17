@@ -385,12 +385,14 @@ bool WinEDA_App::OnInit()
 
     if( argc > 1 )
         frame->m_PrjFileName = argv[1];
-    else if( m_EDA_Config )
+    else if( m_fileHistory.GetCount() )
     {
-        frame->m_PrjFileName = m_EDA_Config->Read( wxT( "LastProject" ),
-                                                   nameless_project );
+        frame->m_PrjFileName = m_fileHistory.GetHistoryFile( 0 );
+        if( !wxFileName::FileExists( frame->m_PrjFileName ) )
+            m_fileHistory.RemoveFileFromHistory( 0 );
     }
-    else
+
+    if( !wxFileName::FileExists( frame->m_PrjFileName ) )
         frame->m_PrjFileName = nameless_project;
 
     wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();

@@ -97,12 +97,7 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
  *  Draw the schematic cursor which is usually on grid
  */
 {
-    if( m_CursorLevel != 0 )
-    {
-        return;
-    }
-
-    if( DC == NULL )
+    if( m_CursorLevel != 0 ||  DC == NULL )
         return;
 
     wxPoint Cursor = GetScreen()->m_Curseur;
@@ -201,36 +196,6 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
 }
 
 
-/*********************************************************************/
-wxPoint WinEDA_DrawPanel::CalcAbsolutePosition( const wxPoint& rel_pos )
-/*********************************************************************/
-
-/** Function CalcAbsolutePosition
- * @return absolute position in pixels, considering the scroll amount
- * @param rel_pos = relative position (screen position) in pixel
- *  ( relative position = position in the panel draw area on screen )
- */
-{
-    wxPoint pos;
-
-#ifdef WX_ZOOM
-    CalcUnscrolledPosition( rel_pos.x, rel_pos.y, &pos.x, &pos.y );
-#else
-    int ii, jj;
-
-    GetViewStart( &pos.x, &pos.y ); // pos is the origin in scroll units
-    GetScrollPixelsPerUnit( &ii, &jj );
-
-    pos.x *= ii;
-    pos.y *= jj;    // pos is the origin in pixel units
-
-    pos.x += rel_pos.x;
-    pos.y += rel_pos.y;
-#endif
-    return pos;
-}
-
-
 /**********************************************************************/
 wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 /**********************************************************************/
@@ -240,9 +205,7 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
  * @param  ScreenPos = absolute position in pixels
  */
 {
-    wxPoint curpos = GetScreen()->CursorRealPosition( ScreenPos );
-
-    return curpos;
+    return GetScreen()->CursorRealPosition( ScreenPos );
 }
 
 
@@ -268,13 +231,12 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
     display_rect.Inflate( -PIXEL_MARGIN, -PIXEL_MARGIN );
 
     // Conversion en coord physiques
-    pos = CalcAbsolutePosition( display_rect.GetPosition() );
+    pos = CalcUnscrolledPosition( display_rect.GetPosition() );
 
     pos.x *= GetZoom();
     pos.y *= GetZoom();
 
-    pos.x += GetScreen()->m_DrawOrg.x;
-    pos.y += GetScreen()->m_DrawOrg.y;
+    pos += GetScreen()->m_DrawOrg;
 
     display_rect.SetX( pos.x );
     display_rect.SetY( pos.y );
@@ -385,18 +347,13 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
     wxSize  size;
     wxPoint realpos;
 
-    size = GetClientSize();
-
-    size.x /= 2;
-    size.y /= 2;
-
-    realpos = CalcAbsolutePosition( wxPoint( size.x, size.y ) );
+    size = GetClientSize() / 2;
+    realpos = CalcUnscrolledPosition( wxPoint( size.x, size.y ) );
 
     realpos.x *= GetZoom();
     realpos.y *= GetZoom();
 
-    realpos.x += GetScreen()->m_DrawOrg.x;
-    realpos.y += GetScreen()->m_DrawOrg.y;
+    realpos += GetScreen()->m_DrawOrg;
 
     return realpos;
 }
@@ -428,11 +385,9 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
 #ifdef WX_ZOOM
     CalcScrolledPosition( Mouse.x, Mouse.y, &mouse.x, &mouse.y );
 #else
-    mouse    = Mouse;
-    mouse.x -= GetScreen()->m_StartVisu.x;
-    mouse.y -= GetScreen()->m_StartVisu.y;
+    mouse = Mouse - GetScreen()->m_StartVisu;
 #endif
-    GRMouseWarp( this, mouse );
+    WarpPointer( mouse.x, mouse.y );
 }
 
 
@@ -541,13 +496,11 @@ void WinEDA_DrawPanel::SetBoundaryBox()
     m_ClipBox.SetSize( GetClientSize() );
 
 #ifdef WX_ZOOM
-    m_ClipBox.m_Pos.x  *= GetZoom();
-    m_ClipBox.m_Pos.y  *= GetZoom();
-    m_ClipBox.m_Size.x *= GetZoom();
-    m_ClipBox.m_Size.y *= GetZoom();
+    m_ClipBox.m_Pos.x *= GetZoom();
+    m_ClipBox.m_Pos.y *= GetZoom();
+    m_ClipBox.m_Size  *= GetZoom();
 #else
-    m_ClipBox.m_Pos.x -= GetScreen()->m_StartVisu.x;
-    m_ClipBox.m_Pos.y -= GetScreen()->m_StartVisu.y;
+    m_ClipBox.m_Pos -= GetScreen()->m_StartVisu;
 #endif
 
     m_ScrollButt_unit = MIN( Screen->m_SizeVisu.x, Screen->m_SizeVisu.y ) / 4;
@@ -767,13 +720,9 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     org.x *= zoom;
     org.y *= zoom;
 
-    org.x += screen->m_DrawOrg.x;
-    org.y += screen->m_DrawOrg.y;
+    org += screen->m_DrawOrg;
 
-    size = GetClientSize();
-
-    size.x *= zoom;
-    size.y *= zoom;
+    size = GetClientSize() * zoom;
 
     pasx = screen->m_Grid.x * m_Parent->m_InternalUnits;
     pasy = screen->m_Grid.y * m_Parent->m_InternalUnits;
@@ -868,8 +817,7 @@ bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
     wxPoint pos;
     wxMenu  MasterMenu;
 
-    pos.x = event.GetX();
-    pos.y = event.GetY();
+    pos = event.GetPosition();
 
     if( !m_Parent->OnRightClick( pos, &MasterMenu ) )
         return false;
@@ -921,13 +869,20 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
 {
     wxRect rect = GetRect();
 
-    wxLogDebug( wxT( "OnMouseWheel() cursor position: (%d, %d)." ),
-                event.m_x, event.m_y );
+    /* This fixes a bad rectangle horizontal position returned by the
+     * schematic library veiwer panel.  It may have something to do with
+     * the sash window. */
+    rect.Offset( -rect.x, -rect.y );
 
     /* Ignore scroll events if the cursor is outside the drawing area. */
     if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
         || !rect.Contains( event.GetPosition() ) )
     {
+        wxLogDebug( wxT( "OnMouseWheel() position(%d, %d) " \
+                         "rectangle(%d, %d, %d, %d)" ),
+                    event.GetPosition().x, event.GetPosition().y,
+                    rect.x, rect.y, rect.width, rect.height );
+
         event.Skip();
         return;
     }
@@ -1029,7 +984,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     localrealbutt |= localbutt;     /* compensation defaut wxGTK */
 
     /* Compute absolute m_MousePosition in pixel units: */
-    screen->m_MousePositionInPixels = CalcAbsolutePosition( wxPoint( event.GetX(), event.GetY() ) );
+    screen->m_MousePositionInPixels = CalcUnscrolledPosition( event.GetPosition() );
 
     /* Compute absolute m_MousePosition in user units: */
     screen->m_MousePosition = CursorRealPosition( screen->m_MousePositionInPixels );
@@ -1126,7 +1081,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     if( m_Block_Enable && !(localbutt & GR_M_DCLICK) )
     {
         if( (screen->BlockLocate.m_Command == BLOCK_IDLE)
-           || (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
+            || (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
         {
             screen->BlockLocate.SetOrigin( m_CursorStartPos );
         }
@@ -1140,9 +1095,9 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             }
         }
         else if( (m_CanStartBlock >= 0 )
-                && ( event.LeftIsDown() || event.MiddleIsDown() )
-                && ManageCurseur == NULL
-                && ForceCloseManageCurseur == NULL )
+                 && ( event.LeftIsDown() || event.MiddleIsDown() )
+                 && ManageCurseur == NULL
+                 && ForceCloseManageCurseur == NULL )
         {       // Mouse is dragging: if no block in progress:  start a block command
             if( screen->BlockLocate.m_State == STATE_NO_BLOCK )
             {   //  Start a block command
@@ -1245,8 +1200,9 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 /****************************************************/
 {
-    long key, localkey;
-    bool escape = FALSE;
+    long    key, localkey;
+    bool    escape = FALSE;
+    wxPoint pos;
 
     key = localkey = event.GetKeyCode();
 
@@ -1295,27 +1251,17 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
         }
     }
 
-    /* some key commands use the mouse position: refresh it */
-#if wxCHECK_VERSION( 2, 8, 0 )
-    wxPoint mouse_pos = wxGetMousePosition();   // Get the mouse position on screen
-    wxPoint win_pos   = GetScreenPosition();    // get the draw area (panel)position on screen
-    mouse_pos -= win_pos;                       // mouse_pos = is the mouse position relative to the panel
+    /* Some key commands use the current mouse position: refresh it */
+    pos = CalcUnscrolledPosition( wxGetMousePosition() - GetScreenPosition() );
 
-    /* Compute absolute m_MousePosition in pixel units (i.e. considering the current scrool) : */
-    Screen->m_MousePositionInPixels = CalcAbsolutePosition( mouse_pos );
+    /* Compute absolute mouse position in pixel units (i.e. considering the
+       current scrool) : */
+    Screen->m_MousePositionInPixels = pos;
 
-    /* Compute absolute m_MousePosition in user units: */
-    Screen->m_MousePosition = CursorRealPosition( Screen->m_MousePositionInPixels );
+    /* Compute absolute mouse position in user units: */
+    Screen->m_MousePosition = CursorRealPosition( pos );
 
-#else
-
-    /* if wxGetMousePosition() does not exist,
-     * m_Cursor should be ok, use it to calculate the cursor position on screen
-     */
-    Screen->m_MousePositionInPixels = CursorScreenPosition();
-#endif
-
-    m_Parent->GeneralControle( &DC, Screen->m_MousePositionInPixels );
+    m_Parent->GeneralControle( &DC, pos );
 
 #if 0
     event.Skip();   // Allow menu shortcut processing

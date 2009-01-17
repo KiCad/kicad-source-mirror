@@ -46,9 +46,6 @@ public:
     int     m_LeftWin_Width;
     int     m_CommandWin_Height;
 
-private:
-    wxMenu* m_FilesMenu;
-
 public:
 
     // Constructor and destructor
@@ -65,6 +62,7 @@ public:
     void                    Load_Prj_Config();
     void                    Save_Prj_Config();
     void                    Process_Fct( wxCommandEvent& event );
+    void                    OnFileHistory( wxCommandEvent& event );
     void                    Process_Files( wxCommandEvent& event );
     void                    Process_Config( wxCommandEvent& event );
     void                    Process_Special_Functions( wxCommandEvent& event );

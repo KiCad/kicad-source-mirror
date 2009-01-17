@@ -57,8 +57,6 @@ public:
 
 
 private:
-    wxMenu*              m_FilesMenu;
-
     SCH_CMP_FIELD*       m_CurrentField;
     int                  m_TextFieldSize;
 

@@ -231,8 +231,7 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta.x = screen->GetGrid().x / zoom;
-    delta.y = screen->GetGrid().y / zoom;
+    delta = screen->GetGrid() / zoom;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -300,8 +299,7 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
 
     if( hotkey )
     {
-        if( screen->GetCurItem()
-                  && screen->GetCurItem()->m_Flags )
+        if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
             OnHotKey( DC, hotkey, screen->GetCurItem() );
         else
             OnHotKey( DC, hotkey, NULL );
@@ -327,8 +325,7 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta.x = screen->GetGrid().x / zoom;
-    delta.y = screen->GetGrid().y / zoom;
+    delta = screen->GetGrid() / zoom;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -396,8 +393,7 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
 
     if( hotkey )
     {
-        if( screen->GetCurItem()
-                  && screen->GetCurItem()->m_Flags )
+        if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
             OnHotKey( DC, hotkey, screen->GetCurItem() );
         else
             OnHotKey( DC, hotkey, NULL );
@@ -422,8 +418,7 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta.x = screen->GetGrid().x / zoom;
-    delta.y = screen->GetGrid().y / zoom;
+    delta = screen->GetGrid() / zoom;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -491,8 +486,7 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
 
     if( hotkey )
     {
-        if( screen->GetCurItem()
-                  && screen->GetCurItem()->m_Flags )
+        if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
             OnHotKey( DC, hotkey, screen->GetCurItem() );
         else
             OnHotKey( DC, hotkey, NULL );

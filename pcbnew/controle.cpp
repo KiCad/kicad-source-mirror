@@ -5,7 +5,6 @@
 /* controle.cpp */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -516,11 +515,9 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     }
 
     curpos = DrawPanel->CursorRealPosition( Mouse );
-
     oldpos = GetScreen()->m_Curseur;
 
-    delta.x = (int) round( (double) GetScreen()->GetGrid().x / zoom );
-    delta.y = (int) round( (double) GetScreen()->GetGrid().y / zoom );
+    delta = GetScreen()->GetGrid() / zoom;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -592,10 +589,11 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         {
             // If there's no intrusion and DRC is active, we pass the cursor
             // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
-            if(  !Drc_On || !g_CurrentTrackSegment
-              || g_CurrentTrackSegment != this->GetCurItem()
-              || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment->GetNet(),
-                        g_CurrentTrackSegment->m_Width ) )
+            if( !Drc_On || !g_CurrentTrackSegment
+                || g_CurrentTrackSegment != this->GetCurItem()
+                || !LocateIntrusion( m_Pcb->m_Track,
+                                     g_CurrentTrackSegment->GetNet(),
+                                     g_CurrentTrackSegment->m_Width ) )
             {
                 GetScreen()->m_Curseur = on_grid;
             }

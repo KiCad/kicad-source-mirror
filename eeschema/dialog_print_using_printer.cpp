@@ -11,6 +11,7 @@
 #include "program.h"
 #include "general.h"
 
+#include <wx/dcps.h>
 #include "dialog_print_using_printer_base.h"
 
 

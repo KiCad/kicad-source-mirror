@@ -27,6 +27,21 @@
 
 static void Create_NewPrj_Config( const wxString PrjFullFileName );
 
+void WinEDA_MainFrame::OnFileHistory( wxCommandEvent& event )
+{
+    wxString fn;
+
+    fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
+
+    if( fn != wxEmptyString )
+    {
+        m_PrjFileName = fn;
+        Load_Prj_Config();
+    }
+
+    ReCreateMenuBar();
+}
+
 /***********************************************************/
 void WinEDA_MainFrame::Process_Files( wxCommandEvent& event )
 /***********************************************************/
@@ -44,22 +59,6 @@ void WinEDA_MainFrame::Process_Files( wxCommandEvent& event )
     {
     case ID_SAVE_PROJECT:     /* Update project File */
         Save_Prj_Config();
-        break;
-
-    case ID_LOAD_FILE_1:
-    case ID_LOAD_FILE_2:
-    case ID_LOAD_FILE_3:
-    case ID_LOAD_FILE_4:
-    case ID_LOAD_FILE_5:
-    case ID_LOAD_FILE_6:
-    case ID_LOAD_FILE_7:
-    case ID_LOAD_FILE_8:
-    case ID_LOAD_FILE_9:
-    case ID_LOAD_FILE_10:
-        m_PrjFileName = GetLastProject( id - ID_LOAD_FILE_1 );
-        SetLastProject( m_PrjFileName );
-        ReCreateMenuBar();
-        Load_Prj_Config();
         break;
 
     case ID_NEW_PROJECT:

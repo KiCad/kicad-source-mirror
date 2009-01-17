@@ -147,8 +147,11 @@ void WinEDA_MainFrame::Process_Preferences( wxCommandEvent& event )
 void WinEDA_MainFrame::SetLanguage( wxCommandEvent& event )
 /********************************************************/
 {
-    int id = event.GetId();
-
-    wxGetApp().SetLanguageIdentifier( id );
-    wxGetApp().SetLanguage();
+    wxGetApp().SetLanguageIdentifier( event.GetId() );
+    if ( wxGetApp().SetLanguage() )
+    {
+        wxLogDebug( wxT( "Recreating menu bar due to language change." ) );
+        ReCreateMenuBar();
+        Refresh();
+    }
 }

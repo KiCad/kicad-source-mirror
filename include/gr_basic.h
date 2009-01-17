@@ -59,7 +59,6 @@ int GRMapX(int x);
 int GRMapY(int y);
 
 class WinEDA_DrawPanel;
-void GRMouseWarp(WinEDA_DrawPanel * panel, const wxPoint& pos); /* positionne la souris au point de coord pos */
 
 /* routines generales */
 void GRSetDrawMode(wxDC * DC, int mode);

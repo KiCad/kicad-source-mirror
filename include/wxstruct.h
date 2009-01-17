@@ -127,7 +127,6 @@ public:
     wxSize          m_FrameSize;
     int             m_MsgFrameHeight;
 
-    WinEDA_MenuBar* m_MenuBar;      // menu du haut d'ecran
     WinEDA_Toolbar* m_HToolBar;     // Standard horizontal Toolbar
     bool            m_FrameIsActive;
     wxString        m_FrameName;    // name used for writting and reading setup
@@ -161,7 +160,7 @@ public:
     void            SetLanguage( wxCommandEvent& event );
     void            ProcessFontPreferences( int id );
 
-    wxString        GetLastProject( int rang );
+    wxString        GetFileFromHistory( int cmdId, const wxString& type );
     void            SetLastProject( const wxString& FullFileName );
     void            DisplayActivity( int PerCent, const wxString& Text );
     virtual void    ReCreateMenuBar();

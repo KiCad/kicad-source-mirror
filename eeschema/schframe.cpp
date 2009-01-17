@@ -40,8 +40,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_MENU( ID_NEW_PROJECT, WinEDA_SchematicFrame::OnNewProject )
     EVT_MENU( ID_LOAD_PROJECT, WinEDA_SchematicFrame::OnLoadProject )
 
-    EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
-                    WinEDA_SchematicFrame::OnLoadFile )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_SchematicFrame::OnLoadFile )
 
     EVT_TOOL( ID_NEW_PROJECT, WinEDA_SchematicFrame::OnNewProject )
     EVT_TOOL( ID_LOAD_PROJECT, WinEDA_SchematicFrame::OnLoadProject )
@@ -576,10 +575,15 @@ void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
 /***************************************************************/
 {
-    int i = event.GetId() - ID_LOAD_FILE_1;
+    wxString fn;
 
-    LoadOneEEProject( GetLastProject( i ).GetData(), false );
-    SetToolbars();
+    fn = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
+
+    if( fn != wxEmptyString )
+    {
+        LoadOneEEProject( fn, false );
+        SetToolbars();
+    }
 }
 
 

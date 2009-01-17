@@ -23,7 +23,7 @@ void WinEDA_MainFrame::Load_Prj_Config()
 {
     if( !wxFileExists( m_PrjFileName ) )
     {
-        wxString msg = _( "Project File <" ) + m_PrjFileName +
+        wxString msg = _( "Kicad project file <" ) + m_PrjFileName +
             _( "> not found" );
         DisplayError( this, msg );
         return;
@@ -32,7 +32,7 @@ void WinEDA_MainFrame::Load_Prj_Config()
     wxSetWorkingDirectory( wxPathOnly( m_PrjFileName ) );
     SetTitle( g_Main_Title + wxT( " " ) + GetBuildVersion() + wxT( " " ) +
               m_PrjFileName );
-    ReCreateMenuBar();
+    SetLastProject( m_PrjFileName );
     m_LeftWin->ReCreateTreePrj();
 
     wxString msg = _( "\nWorking dir: " ) + wxGetCwd();

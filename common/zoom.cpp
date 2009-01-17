@@ -50,24 +50,14 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 * @param coord = coordinate to adjust
 */
 {
-    double tmp;
     wxSize grid_size = GetBaseScreen()->GetGrid();
 
     if( !GetBaseScreen()->m_UserGridIsON )
     {
-        tmp      = (double) coord->x / (double) grid_size.x;
-        coord->x = ( (int) round( tmp ) ) * grid_size.x;
-
-        tmp      = (double) coord->y / (double) grid_size.y;
-        coord->y = ( (int) round( tmp ) ) * grid_size.y;
-    }
-    else
-    {
-        double pasx = (double) ( grid_size.x * m_InternalUnits );
-        double pasy = (double) ( grid_size.y * m_InternalUnits );
-
-        coord->x = (int) round( pasx * ( (double) coord->x / pasx ) );
-        coord->y = (int) round( pasy * ( (double) coord->y / pasy ) );
+        coord->x = ( (int) round( (double) coord->x /
+                                  (double) grid_size.x ) ) * grid_size.x;
+        coord->y = ( (int) round( (double) coord->y /
+                                  (double) grid_size.y ) ) * grid_size.y;
     }
 }
 

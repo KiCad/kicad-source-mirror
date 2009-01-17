@@ -184,30 +184,10 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
 /* Create the main horizontal toolbar for the board editor */
 {
-    int      ii;
     wxString msg;
 
     if( m_HToolBar != NULL )
     {
-        // simple mise a jour de la liste des fichiers anciens
-        wxMenuItem* item;
-        for( ii = 9; ii >=0; ii-- )
-        {
-            if( m_FilesMenu->FindItem( ID_LOAD_FILE_1 + ii ) )
-            {
-                item = m_FilesMenu->Remove( ID_LOAD_FILE_1 + ii );
-                if( item )
-                    delete item;
-            }
-        }
-
-        for( ii = 0; ii < 10; ii++ )
-        {
-            if( GetLastProject( ii ).IsEmpty() )
-                break;
-            m_FilesMenu->Append( ID_LOAD_FILE_1 + ii, GetLastProject( ii ) );
-        }
-
         D(printf("ReCreateHToolbar\n");)
         SetToolbars();
         return;

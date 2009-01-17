@@ -10,6 +10,30 @@
 #include "id.h"
 
 
+void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
+{
+    wxString fn;
+    wxClientDC dc( DrawPanel );
+
+    fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
+
+    if( fn != wxEmptyString )
+    {
+        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
+        {
+            DrawPanel->PrepareGraphicContext( &dc );
+            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+        }
+
+        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
+        LoadOnePcbFile( fn, false );
+        ReCreateAuxiliaryToolbar();
+        DrawPanel->MouseToCursorSchema();
+        DrawPanel->CursorOn( &dc );
+    }
+}
+
 /****************************************************/
 void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 /****************************************************/
@@ -82,22 +106,6 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
                                        wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
         SetTitle( GetScreen()->m_FileName );
         ReCreateLayerBox( NULL );
-        break;
-
-    case ID_LOAD_FILE_1:
-    case ID_LOAD_FILE_2:
-    case ID_LOAD_FILE_3:
-    case ID_LOAD_FILE_4:
-    case ID_LOAD_FILE_5:
-    case ID_LOAD_FILE_6:
-    case ID_LOAD_FILE_7:
-    case ID_LOAD_FILE_8:
-    case ID_LOAD_FILE_9:
-    case ID_LOAD_FILE_10:
-        wxSetWorkingDirectory( wxPathOnly( GetLastProject( id - ID_LOAD_FILE_1 ) ) );
-        LoadOnePcbFile( GetLastProject( id - ID_LOAD_FILE_1 ).GetData(),
-                        false );
-        ReCreateAuxiliaryToolbar();
         break;
 
     case ID_SAVE_BOARD:

@@ -47,7 +47,6 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     DrawPanel = NULL;
     MsgPanel  = NULL;
     m_CurrentScreen = NULL;
-    m_MenuBar = NULL;       // main meun frame
     m_ID_current_state    = 0;
     m_HTOOL_current_state = 0;
     m_Draw_Axis           = FALSE;          // TRUE pour avoir les axes dessines
@@ -60,10 +59,6 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     // Internal units per inch
     // = 1000 for schema, = 10000 for PCB
     m_InternalUnits = EESCHEMA_INTERNAL_UNIT;
-    if( ( m_Ident == PCB_FRAME ) || ( m_Ident == GERBER_FRAME )
-        || ( m_Ident == CVPCB_DISPLAY_FRAME )
-        || ( m_Ident == MODULE_EDITOR_FRAME ) )
-        m_InternalUnits = PCB_INTERNAL_UNIT;
 
     minsize.x = 470;
     minsize.y = 350 + m_MsgFrameHeight;
@@ -91,17 +86,12 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
-    if( m_Ident != DISPLAY3D_FRAME )
-    {
-        DrawPanel = new WinEDA_DrawPanel( this, -1, wxPoint( 0, 0 ),
-                                          m_FrameSize );
-        MsgPanel  = new WinEDA_MsgPanel( this, -1, wxPoint( 0, m_FrameSize.y ),
-                                         wxSize( m_FrameSize.x,
-                                                 m_MsgFrameHeight ) );
-        MsgPanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
-                                                 ColorRefs[LIGHTGRAY].m_Green,
-                                                 ColorRefs[LIGHTGRAY].m_Blue ) );
-    }
+    DrawPanel = new WinEDA_DrawPanel( this, -1, wxPoint( 0, 0 ), m_FrameSize );
+    MsgPanel  = new WinEDA_MsgPanel( this, -1, wxPoint( 0, m_FrameSize.y ),
+                                     wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
+    MsgPanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
+                                             ColorRefs[LIGHTGRAY].m_Green,
+                                             ColorRefs[LIGHTGRAY].m_Blue ) );
 }
 
 
@@ -588,22 +578,16 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     int     zoom = screen->GetZoom();
     int     xUnit, yUnit;
 
-    if( screen == NULL )
+    if( screen == NULL || DrawPanel == NULL )
         return;
-    if( DrawPanel == NULL )
-        return;
-
-    draw_size = screen->ReturnPageSize();
 
     // La zone d'affichage est reglee a une taille double de la feuille de travail:
-    draw_size.x *= 2; draw_size.y *= 2;
+    draw_size = screen->ReturnPageSize() * 2;
 
     // On utilise le centre de l'ecran comme position de reference, donc
     // la surface de trace doit etre augmentee
-    panel_size    = DrawPanel->GetClientSize();
-    panel_size.x *= zoom; panel_size.y *= zoom;
-    draw_size.x  += panel_size.x / 2;
-    draw_size.y  += panel_size.y / 2;
+    panel_size = DrawPanel->GetClientSize() * zoom;
+    draw_size += panel_size / 2;
 
 
     if( screen->m_Center )
@@ -622,8 +606,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     screen->m_DrawOrg.y -= screen->m_DrawOrg.y % 256;
 
     // Calcul du nombre de scrolls  (en unites de scrool )
-    scrollbar_number.x = draw_size.x / (DrawPanel->m_Scroll_unit * zoom);
-    scrollbar_number.y = draw_size.y / (DrawPanel->m_Scroll_unit * zoom);
+    scrollbar_number = draw_size / (DrawPanel->m_Scroll_unit * zoom);
 
     xUnit = yUnit = DrawPanel->m_Scroll_unit;
 
@@ -631,13 +614,12 @@ void WinEDA_DrawFrame::AdjustScrollBars()
         xUnit = 1;
     if( yUnit <= 1 )
         yUnit = 1;
-    xUnit *= zoom; yUnit *= zoom;
+    xUnit *= zoom;
+    yUnit *= zoom;
 
     // Calcul de la position, curseur place au centre d'ecran
     scrollbar_pos = screen->m_Curseur;
-
-    scrollbar_pos.x -= screen->m_DrawOrg.x;
-    scrollbar_pos.y -= screen->m_DrawOrg.y;
+    scrollbar_pos -= screen->m_DrawOrg;
 
     scrollbar_pos.x -= panel_size.x / 2;
     scrollbar_pos.y -= panel_size.y / 2;
@@ -698,7 +680,12 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
     int id = event.GetId();
 
     wxGetApp().SetLanguageIdentifier( id );
-    wxGetApp().SetLanguage();
+    if ( wxGetApp().SetLanguage() )
+    {
+        wxLogDebug( wxT( "Recreating menu bar due to language change." ) );
+        ReCreateMenuBar();
+        Refresh();
+    }
 }
 
 

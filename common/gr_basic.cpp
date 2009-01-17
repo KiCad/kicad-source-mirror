@@ -337,17 +337,6 @@ bool GetGRForceBlackPenState( void )
     return ForceBlackPen;
 }
 
-/************************************************************/
-/* routines de controle et positionnement du curseur souris */
-/************************************************************/
-/* positionne la souris au point de coord pos */
-void GRMouseWarp( WinEDA_DrawPanel* panel, const wxPoint& pos )
-{
-    if( panel == NULL )
-        return;
-    panel->WarpPointer( pos.x, pos.y );
-}
-
 
 /**********************************************/
 /* Routine pour selectionner le mode de trace */

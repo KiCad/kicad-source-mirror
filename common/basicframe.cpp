@@ -32,7 +32,6 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father, int idtype,
 
     m_Ident  = idtype;
     SetFont( *g_StdFont );
-    m_MenuBar        = NULL; // menu du haut d'ecran
     m_HToolBar       = NULL;
     m_FrameIsActive  = TRUE;
     m_MsgFrameHeight = MSG_PANEL_DEFAULT_HEIGHT;
@@ -169,48 +168,40 @@ void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
 /* Met a jour la liste des anciens projets
  */
 {
-    unsigned ii;
-
-    if( FullFileName.IsEmpty() )
-        return;
-
-    //suppression d'une ancienne trace eventuelle du meme fichier
-    for( ii = 0; ii < wxGetApp().m_LastProject.GetCount(); )
-    {
-        if( wxGetApp().m_LastProject[ii].IsEmpty() )
-            break;
-#ifdef __WINDOWS__
-        if( wxGetApp().m_LastProject[ii].CmpNoCase( FullFileName ) == 0 )
-#else
-        if( wxGetApp().m_LastProject[ii] == FullFileName )
-#endif
-        {
-            wxGetApp().m_LastProject.RemoveAt( ii );
-        }
-        else
-            ii++;
-    }
-
-    while( wxGetApp().m_LastProject.GetCount() >= wxGetApp().m_LastProjectMaxCount )
-    {
-        wxGetApp().m_LastProject.RemoveAt( wxGetApp().m_LastProject.GetCount() - 1 );
-    }
-
-    wxGetApp().m_LastProject.Insert( FullFileName, 0 );
-
+    wxGetApp().m_fileHistory.AddFileToHistory( FullFileName );
     ReCreateMenuBar();
 }
 
 
-/**************************************************/
-wxString WinEDA_BasicFrame::GetLastProject( int rang )
-/**************************************************/
+/**
+ * Fetch the file name from the file history list.
+ */
+wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
+                                                const wxString& type )
 {
-    if( rang < 0 )
-        rang = 0;
-    if( (unsigned) rang >= wxGetApp().m_LastProject.GetCount() )
-        return wxEmptyString;
-    return wxGetApp().m_LastProject[rang];
+    wxString fn, msg;
+    size_t   i;
+    int      baseId = wxGetApp().m_fileHistory.GetBaseId();
+
+    wxASSERT( cmdId >= baseId
+              && cmdId < baseId + ( int )wxGetApp().m_fileHistory.GetCount() );
+
+    i = ( size_t )( cmdId - baseId );
+
+    if( i < wxGetApp().m_fileHistory.GetCount() )
+    {
+        fn = wxGetApp().m_fileHistory.GetHistoryFile( i );
+        if( !wxFileName::FileExists( fn ) )
+        {
+            msg = type + _( " file <" ) + fn + _( "> was not found." );
+            DisplayError( this, msg );
+            wxGetApp().m_fileHistory.RemoveFileFromHistory( i );
+            fn = wxEmptyString;
+            ReCreateMenuBar();
+        }
+    }
+
+    return fn;
 }
 
 

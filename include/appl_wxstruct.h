@@ -14,6 +14,9 @@
 #define eda_global extern
 #endif
 
+/* Use wxFileHistory for most recently used file handling. */
+#include <wx/docview.h>
+
 
 /**********************************************/
 /*  Class representing the entire Application */
@@ -36,8 +39,6 @@ public:
 
     wxString                 m_BinDir; /* Chemin ou reside l'executable
                                         *  (utilisé si KICAD non défini)*/
-    wxArrayString            m_LastProject;   /* liste des derniers projets chargés */
-    unsigned int             m_LastProjectMaxCount; /* Max histhory file length */
     wxString                 m_KicadEnv;  /* Chemin de kicad défini dans la
                                            * variable d'environnement KICAD,
                                            * typiquement /usr/local/kicad ou
@@ -46,9 +47,10 @@ public:
 
     wxLocale*                m_Locale;      // Gestion de la localisation
     int                      m_LanguageId;  // indicateur de choix du langage ( 0 = defaut)
-    wxMenu*                  m_Language_Menu;  // List menu for languages
     wxString                 m_PdfBrowser;     // Name of the selected browser, for browsing pdf datasheets
     bool                     m_PdfBrowserIsDefault;  // True if the pdf browser is the default (m_PdfBrowser not used)
+    wxPathList               m_searchPaths;
+    wxFileHistory            m_fileHistory;
 
 public:
     WinEDA_App();
@@ -57,6 +59,7 @@ public:
     int     OnRun();
 
     bool    SetBinDir();
+    void    SetDefaultSearchPaths( void );
     void    InitEDA_Appl( const wxString& name );
     bool    SetLanguage( bool first_time = FALSE );
     wxMenu* SetLanguageList( wxMenu* MasterMenu );
@@ -66,7 +69,6 @@ public:
     // Sauvegarde de configurations et options:
     void    GetSettings();
     void    SaveSettings();
-    void    SetLastProject( const wxString& FullFileName );
     void    WriteProjectConfig( const wxString& local_config_filename,
                                 const wxString& GroupName,
                                 PARAM_CFG_BASE** List );

@@ -49,8 +49,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW,
               WinEDA_GerberFrame::ExportDataInPcbnewFormat )
 
-    EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
-                    WinEDA_GerberFrame::Files_io )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_GerberFrame::OnFileHistory )
 
     EVT_MENU( ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions )
 
