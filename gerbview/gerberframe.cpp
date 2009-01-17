@@ -117,7 +117,6 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
 
-// PopUp Menu trait�s dans drawpanel.cpp
 END_EVENT_TABLE()
 
 
@@ -150,7 +149,8 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     SetIcon( wxICON( icon_gerbview ) );
     #endif
 
-    SetBaseScreen( ActiveScreen = ScreenPcb );
+    SetBaseScreen( ScreenPcb );
+    ActiveScreen = ScreenPcb;
 
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -173,6 +173,7 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     PCB_SCREEN* screen = ScreenPcb;
 
+#if 0       // unused currently
     while( screen )
     {
         if( screen->IsModify() )
@@ -188,7 +189,7 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
             return;
         }
     }
-
+#endif
     while( screen ) // suppression flag modify pour eviter d'autres message
     {
         screen->ClrModify();

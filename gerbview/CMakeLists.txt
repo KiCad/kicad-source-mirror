@@ -53,7 +53,8 @@ set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/undelete.cpp
 
     ../share/setpage.cpp
-    ../share/wxprint.cpp)
+    ../pcbnew/dialog_print_using_printer_base.cpp
+    ../pcbnew/dialog_print_using_printer.cpp)
 
 if(WIN32)
     if(MINGW)

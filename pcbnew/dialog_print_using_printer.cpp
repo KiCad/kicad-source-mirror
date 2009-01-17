@@ -1,58 +1,35 @@
-/*********************/
-/* File: wxprint.cpp */
-/*********************/
+/****************************************/
+/* File: dialog_print_using_printer.cpp */
+/****************************************/
 
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
-#include <ctype.h>
-#include "wx/metafile.h"
-#include "wx/print.h"
-#include "wx/printdlg.h"
-#include "wx/dcmirror.h"
-
-#if wxTEST_POSTSCRIPT_IN_MSW
-#include "wx/generic/printps.h"
-#include "wx/generic/prntdlgg.h"
-#endif
-
 #include "fctsys.h"
-
 #include "common.h"
 
-#ifdef EESCHEMA
-#include "program.h"
-#include "general.h"
-#endif
+#include "dialog_print_using_printer_base.h"
 
-#ifdef PCBNEW
 #include "pcbnew.h"
 
 #include "protos.h"
 
-// For pcbnew:
 #include "pcbplot.h"
-#endif
 
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
-#ifdef EESCHEMA
-#define WIDTH_MAX_VALUE 100
-#else
 #define WIDTH_MAX_VALUE 1000
-#endif
 #define WIDTH_MIN_VALUE 1
 
-#ifdef PCBNEW
 static long   s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
-#endif
 
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
 
 // Variables locales
+static int s_PrintPenMinWidth = 1;
 static int          s_PrintMaskLayer;
 static int          s_OptionPrintPage = 0;
 static int          s_Print_Black_and_White = TRUE;
@@ -60,7 +37,39 @@ static int          s_Scale_Select = 3; // default selected scale = ScaleList[3]
 static bool         s_PrintMirror;
 static bool         s_Print_Sheet_Ref = TRUE;
 
-#include "dialog_print.cpp"
+
+/* Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_base
+ *  created by wxFormBuilder
+ */
+class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
+{
+private:
+    WinEDA_DrawFrame* m_Parent;
+    wxConfig*         m_Config;
+    wxCheckBox * m_BoxSelectLayer[32];
+public:
+	double m_XScaleAdjust, m_YScaleAdjust;
+
+public:
+    DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent );
+    ~DIALOG_PRINT_USING_PRINTER() {};
+
+private:
+    void OnCloseWindow( wxCloseEvent& event );
+    void OnInitDialog( wxInitDialogEvent& event );
+    void OnPrintSetup( wxCommandEvent& event );
+    void OnPrintPreview( wxCommandEvent& event );
+    void OnPrintButtonClick( wxCommandEvent& event );
+	void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
+    void SetScale( wxCommandEvent& event );
+    void SetPenWidth();
+    wxString BuildPrintTitle();
+public:
+    bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
+    bool ExcludeEdges() { return m_Exclude_Edges_Pcb->IsChecked(); }
+    bool PrintUsingSinglePage() { return m_PagesOption->GetSelection(); }
+    int SetLayerMaskFromListSelection();
+};
 
 /***************************/
 /* Gestion de l'impression */
@@ -73,9 +82,9 @@ public:
 
 public:
     WinEDA_DrawFrame*  m_Parent;
-    WinEDA_PrintFrame* m_PrintFrame;
+    DIALOG_PRINT_USING_PRINTER* m_PrintFrame;
 
-    EDA_Printout( WinEDA_PrintFrame* print_frame,
+    EDA_Printout( DIALOG_PRINT_USING_PRINTER* print_frame,
                   WinEDA_DrawFrame*  parent,
                   const wxString&    title,
                   bool               print_ref ) :
@@ -104,76 +113,73 @@ void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
  * et affiche la fenetre de dialogue de gestion de l'impression des feuilles
  */
 {
-    wxPoint pos = GetPosition();
-    bool    PrinterError = FALSE;
-
-    // Stop the pending comand (if any...)
-    if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-    {
-        wxClientDC dc( DrawPanel );
-
-        DrawPanel->PrepareDC( dc );
-        DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-    }
-    SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-
     if( g_PrintData == NULL )  // First print
     {
         g_PrintData = new wxPrintData();
 
         if( !g_PrintData->Ok() )
         {
-            PrinterError = TRUE;
             DisplayError( this, _( "Error Init Printer info" ) );
         }
         g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
         g_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
 
-
-    pos.x += 10; pos.y += 10;
-    WinEDA_PrintFrame* frame = new WinEDA_PrintFrame( this );
+    DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
 
     frame->ShowModal(); frame->Destroy();
 }
 
 
-/*******************************************/
-void WinEDA_PrintFrame::SetOthersDatas()
-/*******************************************/
+/*************************************************************************************/
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent ) :
+    DIALOG_PRINT_USING_PRINTER_base( parent )
+/*************************************************************************************/
 {
-#ifndef PCBNEW
-    m_Print_Mirror->Enable( false );
-#endif
+    m_Parent = parent;
+    m_Config = wxGetApp().m_EDA_Config;
+}
 
-    m_FineAdjustXscaleOpt->SetToolTip( _( "Set X scale adjust for exact scale plotting" ) );
-    m_FineAdjustYscaleOpt->SetToolTip( _( "Set Y scale adjust for exact scale plotting" ) );
-    if( s_Print_Black_and_White )
-        m_ColorOption->SetSelection( 1 );
-#ifdef PCBNEW
-    m_PagesOptionEeschema->Show( false );
-    m_PagesOption = m_PagesOptionPcb;
+
+/************************************************************************/
+void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
+/************************************************************************/
+{
+	SetFont(*g_DialogFont);
+    SetFocus();
+    int layer_max = NB_LAYERS;
+    wxString msg;
+
+    #ifdef GERBVIEW
+    layer_max = 32;
+    m_Exclude_Edges_Pcb->SetValue(true);    // no meaning in gerbview
+    m_Exclude_Edges_Pcb->Show(false);
+    msg = _("Layers:");
+    // Set wxRadioBox title to "Layers:" for copper layers and thechincal layers
+    // Because in Gerbview , al layers are only graphic layers (layer id has no meaning)
+    m_CopperLayersBoxSizer->GetStaticBox()->SetLabel( msg );
+    m_TechnicalLayersBoxSizer->GetStaticBox()->SetLabel( msg );
+    #endif
 
     /* Create layer list */
     int mask = 1, ii;
-    for( ii = 0; ii < NB_LAYERS; ii++, mask <<= 1 )
+    for( ii = 0; ii < layer_max ; ii++, mask <<= 1 )
     {
-        m_BoxSelecLayer[ii] = new wxCheckBox( this, -1,
-#if defined (PCBNEW)
-                                             ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->
-                                             GetLayerName(
-                                                 ii ) );
-         #else
-                                             ReturnLayerName( ii ) );
+#ifdef GERBVIEW
+        msg = _("Layer");
+        msg << wxT(" ") << ii+1;
+#else
+        msg = ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->GetLayerName( ii );
 #endif
+        m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 
         if( mask & s_SelectedLayers )
-            m_BoxSelecLayer[ii]->SetValue( TRUE );
+            m_BoxSelectLayer[ii]->SetValue( TRUE );
         if( ii < 16 )
-            m_CopperLayersBoxSizer->Add( m_BoxSelecLayer[ii],
+            m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[ii],
                                          wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
         else
-            m_TechLayersBoxSizer->Add( m_BoxSelecLayer[ii],
+            m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[ii],
                                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
     }
 
@@ -185,12 +191,13 @@ void WinEDA_PrintFrame::SetOthersDatas()
     // Read the scale adjust option
     if( m_Config )
     {
+        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_PrintPenMinWidth );
         m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &m_XScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_SCALE, &s_Scale_Select );
 
         s_SelectedLayers = 0;
-        for( int layer = 0;  layer<NB_LAYERS;  ++layer )
+        for( int layer = 0;  layer<layer_max;  ++layer )
         {
             wxString layerKey;
             bool     option;
@@ -200,7 +207,7 @@ void WinEDA_PrintFrame::SetOthersDatas()
             option = false;
             if( m_Config->Read( layerKey, &option ) )
             {
-                m_BoxSelecLayer[layer]->SetValue( option );
+                m_BoxSelectLayer[layer]->SetValue( option );
                 if( option )
                     s_SelectedLayers |= 1 << layer;
             }
@@ -209,68 +216,63 @@ void WinEDA_PrintFrame::SetOthersDatas()
 
     m_ScaleOption->SetSelection( s_Scale_Select );
 
+    if( s_Print_Black_and_White )
+        m_ModeColorOption->SetSelection( 1 );
+
+    AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
+    m_DialogPenWidth->SetValue(
+        ReturnStringFromValue( g_UnitMetric, s_PrintPenMinWidth, m_Parent->m_InternalUnits ) );
+
+
     // Create scale adjust option
-    wxString msg;
     msg.Printf( wxT( "%lf" ), m_XScaleAdjust );
     m_FineAdjustXscaleOpt->SetValue( msg );
     msg.Printf( wxT( "%lf" ), m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
 
-#else
-    m_PagesOption = m_PagesOptionEeschema;
-    m_PagesOptionPcb->Show( false );
-    m_ScaleOption->Show( false );
-    m_FineAdjustXscaleTitle->Show( false );
-    m_FineAdjustXscaleOpt->Show( false );
-    m_FineAdjustYscaleTitle->Show( false );
-    m_FineAdjustYscaleOpt->Show( false );
-#endif
+    if (GetSizer())
+    {
+        GetSizer()->SetSizeHints(this);
+    }
 }
 
 
-/**********************************************************/
-int WinEDA_PrintFrame::SetLayerMaskFromListSelection()
-/**********************************************************/
+/**************************************************************/
+int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
+/**************************************************************/
 {
     int page_count;
+    int layers_count = NB_LAYERS;
+    if (m_Parent->m_Ident == GERBER_FRAME)
+        layers_count = 32;
 
     s_PrintMaskLayer = 0;
-#ifdef PCBNEW
     int ii;
-    for( ii = 0, page_count = 0; ii < NB_LAYERS; ii++ )
+    for( ii = 0, page_count = 0; ii < layers_count; ii++ )
     {
-        if( m_BoxSelecLayer[ii]->IsChecked() )
+        if( m_BoxSelectLayer[ii]->IsChecked() )
         {
             page_count++;
             s_PrintMaskLayer |= 1 << ii;
         }
     }
 
-#else
-    page_count = 1;
-#endif
     return page_count;
 }
 
 
-/************************************************************/
-void WinEDA_PrintFrame::SetColorOrBlack( wxCommandEvent& event )
-/************************************************************/
+
+/********************************************************************/
+void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
+/********************************************************************/
 {
-    s_Print_Black_and_White = m_ColorOption->GetSelection();
-}
+    s_Print_Black_and_White = m_ModeColorOption->GetSelection();
+    m_Print_Sheet_Ref->SetValue( s_Print_Sheet_Ref );
+    SetPenWidth();
 
-
-/****************************************************/
-void WinEDA_PrintFrame::OnClosePrintDialog()
-/****************************************************/
-
-/* called when WinEDA_PrintFrame is closed
- */
-{
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
+        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_PrintPenMinWidth );
     }
 
     if( m_FineAdjustXscaleOpt )
@@ -279,27 +281,28 @@ void WinEDA_PrintFrame::OnClosePrintDialog()
         m_FineAdjustYscaleOpt->GetValue().ToDouble( &m_YScaleAdjust );
     SetPenWidth();
 
-#ifdef PCBNEW
     if( m_Config )
     {
         m_Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, m_XScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, m_YScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_SCALE, s_Scale_Select );
         wxString layerKey;
-        for( int layer = 0;  layer<NB_LAYERS;  ++layer )
+        int layers_count = NB_LAYERS;
+        if (m_Parent->m_Ident == GERBER_FRAME)
+            layers_count = 32;
+        for( int layer = 0;  layer<layers_count;  ++layer )
         {
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
-            m_Config->Write( layerKey, m_BoxSelecLayer[layer]->IsChecked() );
+            m_Config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );
         }
     }
-#endif
     EndModal( 0 );
 }
 
 
-/************************************************/
-wxString WinEDA_PrintFrame::BuildPrintTitle()
-/************************************************/
+/*****************************************************/
+wxString DIALOG_PRINT_USING_PRINTER::BuildPrintTitle()
+/*****************************************************/
 
 /* return a valid filename to create a print file
  */
@@ -313,11 +316,10 @@ wxString WinEDA_PrintFrame::BuildPrintTitle()
 }
 
 
-/******************************************************/
-void WinEDA_PrintFrame::SetScale( wxCommandEvent& event )
-/******************************************************/
+/******************************************************************/
+void DIALOG_PRINT_USING_PRINTER::SetScale( wxCommandEvent& event )
+/******************************************************************/
 {
-#ifdef PCBNEW
     s_Scale_Select = m_ScaleOption->GetSelection();
     Scale_X = Scale_Y = s_ScaleList[s_Scale_Select];
     if( m_FineAdjustXscaleOpt )
@@ -326,33 +328,36 @@ void WinEDA_PrintFrame::SetScale( wxCommandEvent& event )
         m_FineAdjustYscaleOpt->GetValue().ToDouble( &m_YScaleAdjust );
     Scale_X *= m_XScaleAdjust;
     Scale_Y *= m_YScaleAdjust;
-#endif
 }
 
 
-/****************************************/
-void WinEDA_PrintFrame::SetPenWidth()
-/****************************************/
+/**********************************************/
+void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
+/***********************************************/
 
 /* Get the new pen width value, and verify min et max value
- * NOTE: g_PlotLine_Width is in internal units
+ * NOTE: s_PrintPenMinWidth is in internal units
  */
 {
-    g_PlotLine_Width = m_DialogPenWidth->GetValue();
-    if( g_PlotLine_Width > WIDTH_MAX_VALUE )
+    s_PrintPenMinWidth = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+
+    if( s_PrintPenMinWidth > WIDTH_MAX_VALUE )
     {
-        g_PlotLine_Width = WIDTH_MAX_VALUE;
+        s_PrintPenMinWidth = WIDTH_MAX_VALUE;
     }
-    if( g_PlotLine_Width < WIDTH_MIN_VALUE )
+
+    if( s_PrintPenMinWidth < WIDTH_MIN_VALUE )
     {
-        g_PlotLine_Width = WIDTH_MIN_VALUE;
+        s_PrintPenMinWidth = WIDTH_MIN_VALUE;
     }
-    m_DialogPenWidth->SetValue( g_PlotLine_Width );
+
+    m_DialogPenWidth->SetValue(
+        ReturnStringFromValue(g_UnitMetric, s_PrintPenMinWidth, m_Parent->m_InternalUnits ) );
 }
 
 
 /**********************************************************/
-void WinEDA_PrintFrame::OnPrintSetup( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
 /**********************************************************/
 
 /* Open a dialog box for printer setup (printer options, page size ...)
@@ -374,7 +379,7 @@ void WinEDA_PrintFrame::OnPrintSetup( wxCommandEvent& event )
 
 
 /************************************************************/
-void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 /************************************************************/
 
 /* Open and display a previewer frame for printing
@@ -383,32 +388,31 @@ void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
     wxSize  WSize;
     wxPoint WPos;
     int     x, y;
-    bool    print_ref = TRUE;
 
     SetScale( event );
     SetPenWidth();
 
+    s_Print_Black_and_White = m_ModeColorOption->GetSelection();
+
     if( m_PagesOption )
         s_OptionPrintPage = m_PagesOption->GetSelection();
 
-    if( (m_Print_Sheet_Ref == NULL) || (m_Print_Sheet_Ref->GetValue() == FALSE) )
-        print_ref = FALSE;
+    s_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = BuildPrintTitle();
     wxPrintPreview* preview =
-        new wxPrintPreview( new EDA_Printout( this, m_Parent, title, print_ref ),
-                            new EDA_Printout( this, m_Parent, title, print_ref ), g_PrintData );
+        new wxPrintPreview( new EDA_Printout( this, m_Parent, title, s_Print_Sheet_Ref ),
+                            new EDA_Printout( this, m_Parent, title, s_Print_Sheet_Ref ),
+                            g_PrintData );
 
     if( preview == NULL )
     {
-        DisplayError( this, _( "There was a problem previewing" ) );
+        DisplayError( this, wxT( "OnPrintPreview() problem" ) );
         return;
     }
-#ifdef PCBNEW
     if( s_OptionPrintPage )
         SetLayerMaskFromListSelection();
-#endif
 
     m_Parent->GetPosition( &x, &y );
     WPos.x = x + 4;
@@ -426,28 +430,25 @@ void WinEDA_PrintFrame::OnPrintPreview( wxCommandEvent& event )
 }
 
 
-/**********************************************************/
-void WinEDA_PrintFrame::EDA_PrintPage( wxCommandEvent& event )
-/**********************************************************/
+/***************************************************************************/
+void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
+/***************************************************************************/
 
-/* Called on activate "Print CURRENT" button
+/* Called on activate Print button
  */
 {
-    bool print_ref = TRUE;
-
     SetScale( event );
+
+    s_Print_Black_and_White = m_ModeColorOption->GetSelection();
 
     s_OptionPrintPage = 0;
     if( m_PagesOption )
         s_OptionPrintPage = m_PagesOption->GetSelection();
 
-    if( (m_Print_Sheet_Ref == NULL) || (m_Print_Sheet_Ref->GetValue() == FALSE) )
-        print_ref = FALSE;
+    s_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
 
-#ifdef PCBNEW
     if( s_OptionPrintPage )
         SetLayerMaskFromListSelection();
-#endif
 
     SetPenWidth();
 
@@ -456,7 +457,7 @@ void WinEDA_PrintFrame::EDA_PrintPage( wxCommandEvent& event )
     wxPrinter         printer( &printDialogData );
 
     wxString          title = BuildPrintTitle();
-    EDA_Printout      printout( this, m_Parent, title, print_ref );
+    EDA_Printout      printout( this, m_Parent, title, s_Print_Sheet_Ref );
 
 #ifndef __WINDOWS__
     wxDC*             dc = printout.GetDC();
@@ -484,48 +485,9 @@ bool EDA_Printout::OnPrintPage( int page )
 
     msg.Printf( _( "Print page %d" ), page );
     m_Parent->Affiche_Message( msg );
-
-
-#ifdef EESCHEMA
-    WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
-    SCH_SCREEN*            screen       = schframe->GetScreen();
-    SCH_SCREEN*            oldscreen    = screen;
-    DrawSheetPath*         oldsheetpath = schframe->GetSheet();
-
-
-    DrawSheetPath          list;
-    if( s_OptionPrintPage == 1 )
-    {
-        /* Print all pages, so when called, the page is not the current page.
-         *  We must select it and setup references and others parameters
-         *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
-         *  is shared between many sheets
-         */
-        EDA_SheetList  SheetList( NULL );
-        DrawSheetPath* sheetpath = SheetList.GetSheet( page - 1 );
-        if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
-        {
-            schframe->m_CurrentSheet = &list;
-            schframe->m_CurrentSheet->UpdateAllScreenReferences();
-            schframe->SetSheetNumberAndCount();
-            screen = schframe->m_CurrentSheet->LastScreen();
-        }
-        else
-            screen = NULL;
-    }
-
-    if( screen == NULL )
-        return FALSE;
-    ActiveScreen = screen;
-    DrawPage();
-    ActiveScreen = oldscreen;
-    schframe->m_CurrentSheet = oldsheetpath;
-    schframe->m_CurrentSheet->UpdateAllScreenReferences();
-    schframe->SetSheetNumberAndCount();
-#endif
-
-
-#ifdef PCBNEW
+    int layers_count = NB_LAYERS;
+    if (m_Parent->m_Ident == GERBER_FRAME)
+        layers_count = 32;
     if( (m_Parent->m_Ident == PCB_FRAME) || (m_Parent->m_Ident == GERBER_FRAME) )
     {
         m_PrintFrame->SetLayerMaskFromListSelection();
@@ -533,7 +495,7 @@ bool EDA_Printout::OnPrintPage( int page )
         {
             // compute layer mask from page number
             int ii, jj, mask = 1;
-            for( ii = 0, jj = 0; ii < NB_LAYERS; ii++ )
+            for( ii = 0, jj = 0; ii < layers_count; ii++ )
             {
                 if( s_PrintMaskLayer & mask )
                     jj++;
@@ -545,12 +507,11 @@ bool EDA_Printout::OnPrintPage( int page )
                 mask <<= 1;
             }
 
-            if( ii == NB_LAYERS )
+            if( ii == layers_count )
                 return FALSE;
         }
     }
     DrawPage();
-#endif
 
     return TRUE;
 }
@@ -566,15 +527,6 @@ void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
     *minPage     = 1;
     *selPageFrom = 1;
 
-#ifdef EESCHEMA
-    if( s_OptionPrintPage == 1 )
-    {
-        ii = g_RootSheet->CountSheets();
-    }
-#endif
-
-#ifdef PCBNEW
-
     switch( s_OptionPrintPage )
     {
     case 0:
@@ -586,8 +538,6 @@ void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
         break;
     }
 
-#endif
-
     *maxPage   = ii;
     *selPageTo = ii;
 }
@@ -597,19 +547,7 @@ void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
 bool EDA_Printout::HasPage( int pageNum )
 /**************************************/
 {
-#ifdef EESCHEMA
-    int PageCount;
-
-    PageCount = g_RootSheet->CountSheets();
-    if( PageCount >= pageNum )
-        return TRUE;
-
-    return FALSE;
-#endif
-
-#ifdef PCBNEW
     return TRUE;
-#endif
 }
 
 
@@ -644,7 +582,7 @@ void EDA_Printout::DrawPage()
     int     DrawZoom = 1;
     wxDC*   dc = GetDC();
 
-    s_PrintMirror = m_PrintFrame->m_Print_Mirror->GetValue();
+    s_PrintMirror = m_PrintFrame->IsMirrored();
 
     wxBusyCursor dummy;
 
@@ -659,14 +597,19 @@ void EDA_Printout::DrawPage()
     ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
     ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
 
+    // Gerbview uses a very large sheet (called "World" in gerber language)
+    // to print a sheet, uses A4 is better
     SheetSize    = ActiveScreen->m_CurrentSheetDesc->m_Size;    // size in 1/1000 inch
+    if (m_Parent->m_Ident == GERBER_FRAME)
+    {
+        SheetSize = g_Sheet_A4.m_Size;    // size in 1/1000 inch
+    }
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in pixels
 
     // Get the size of the DC in pixels
     dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
 
-#ifdef PCBNEW
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
     pcbframe->GetBoard()->ComputeBoundaryBox();
     /* Compute the PCB size in internal units*/
@@ -685,9 +628,6 @@ void EDA_Printout::DrawPage()
         DrawOffset.x += pcbframe->GetBoard()->m_BoundaryBox.Centre().x;
         DrawOffset.y += pcbframe->GetBoard()->m_BoundaryBox.Centre().y;
     }
-#else
-    userscale = 1;
-#endif
 
     // Calculate a suitable scaling factor
     scaleX = (double) SheetSize.x / PlotAreaSize.x;
@@ -695,7 +635,6 @@ void EDA_Printout::DrawPage()
     scale  = wxMax( scaleX, scaleY ) / userscale; // Use x or y scaling factor, whichever fits on the DC
 
     // ajust the real draw scale
-#ifdef PCBNEW
     double accurate_Xscale, accurate_Yscale;
     dc->SetUserScale( DrawZoom / scale * m_PrintFrame->m_XScaleAdjust,
                       DrawZoom / scale * m_PrintFrame->m_YScaleAdjust );
@@ -717,11 +656,7 @@ void EDA_Printout::DrawPage()
         accurate_Xscale *= m_PrintFrame->m_XScaleAdjust;
         accurate_Yscale *= m_PrintFrame->m_YScaleAdjust;
     }
-#else
-    dc->SetUserScale( DrawZoom / scale, DrawZoom / scale );
-#endif
 
-#ifdef PCBNEW
     if( (s_ScaleList[s_Scale_Select] > 1.0)         //  scale > 1 -> Recadrage
        || (s_ScaleList[s_Scale_Select] == 0) )      //  fit in page
     {
@@ -730,7 +665,6 @@ void EDA_Printout::DrawPage()
     }
     DrawOffset.x += (int) ( (SheetSize.x / 2) * (m_PrintFrame->m_XScaleAdjust - 1.0) );
     DrawOffset.y += (int) ( (SheetSize.y / 2) * (m_PrintFrame->m_YScaleAdjust - 1.0) );
-#endif
 
     ActiveScreen->m_DrawOrg = DrawOffset;
 
@@ -739,22 +673,7 @@ void EDA_Printout::DrawPage()
         GRForceBlackPen( TRUE );
 
 
-#ifdef EESCHEMA
-    /* set Pen min width */
-    double ftmp, xdcscale, ydcscale;
-
-    // g_PlotLine_Width is in internal units ( 1/1000 inch), and must be converted in pixels
-    ftmp  = (float) g_PlotLine_Width * 25.4 / EESCHEMA_INTERNAL_UNIT; // ftmp est en mm
-    ftmp *= (float) PlotAreaSize.x / PageSize_in_mm.x;                  /* ftmp is in  pixels */
-
-    /* because the pen size will be scaled by the dc scale, we modify the size
-     * in order to keep the requested value */
-    dc->GetUserScale( &xdcscale, &ydcscale );
-    ftmp /= xdcscale;
-    SetPenMinWidth( (int) round( ftmp ) );
-#else
     SetPenMinWidth( 1 );  // min width = 1 pixel
-#endif
 
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
     EDA_Rect          tmp   = panel->m_ClipBox;
@@ -765,11 +684,9 @@ void EDA_Printout::DrawPage()
     g_IsPrinting = TRUE;
     int bg_color = g_DrawBgColor;
 
-#ifdef PCBNEW
-    
     // background color can left BLACK only when drawing the full board at once, in color mode
     // Switch it to WHITE in others cases
-    if ( s_Print_Black_and_White || ( m_PrintFrame->m_PagesOption->GetSelection() != 1 ) )
+    if ( s_Print_Black_and_White || ( ! m_PrintFrame->PrintUsingSinglePage() ) )
         g_DrawBgColor = WHITE;
 
     if( m_Print_Sheet_Ref )
@@ -811,15 +728,11 @@ void EDA_Printout::DrawPage()
     }
 
 #ifndef GERBVIEW
-    if( !m_PrintFrame->m_Exclude_Edges_Pcb->GetValue() )
+    if( !m_PrintFrame->ExcludeEdges() )
         s_PrintMaskLayer |= EDGE_LAYER;
 #endif
 
     panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
-
-#else
-    panel->PrintPage( dc, m_Print_Sheet_Ref, s_PrintMaskLayer, s_PrintMirror );
-#endif
 
     g_DrawBgColor = bg_color;
     g_IsPrinting     = FALSE;

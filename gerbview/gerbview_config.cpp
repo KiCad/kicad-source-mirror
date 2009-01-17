@@ -115,8 +115,6 @@ bool Read_Config()
                                   FALSE );
 
     /* Inits autres variables */
-    if( ScreenPcb )
-        ScreenPcb->SetGrid( TmpGrid );
     if( g_PhotoFilenameExt.IsEmpty() )
         g_PhotoFilenameExt = wxT( ".pho" );
     if( g_DrillFilenameExt.IsEmpty() )

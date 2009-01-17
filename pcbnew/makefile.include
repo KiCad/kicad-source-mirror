@@ -35,12 +35,13 @@ OBJECTS=	$(TARGET).o classpcb.o\
         dialog_pcb_text_properties.o\
         dialog_SVG_print.o\
         dialog_SVG_print_base.o\
+        dialog_print_using_printer.o\
+        dialog_print_using_printer_base.o\
 		onrightclick.o\
 		onleftclick.o\
 		modedit_onclick.o\
 		cross-probing.o\
 		via_edit.o\
-		wxprint.o \
 		class_marker.o\
 		menubarpcb.o \
 		menubarmodedit.o \
@@ -161,9 +162,6 @@ tool_onrightclick.o: tool_onrightclick.cpp
 files.o: files.cpp
 
 export_gencad.o: export_gencad.cpp
-
-wxprint.o: ../share/wxprint.cpp ../share/dialog_print.cpp ../share/dialog_print.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
 print_board_functions.o: print_board_functions.cpp
 

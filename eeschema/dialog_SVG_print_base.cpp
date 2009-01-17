@@ -50,7 +50,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonPlotCurrent = new wxButton( this, wxID_PRINT_CURRENT, _("PrintCurrent"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPlotCurrent = new wxButton( this, wxID_PRINT_CURRENT, _("Print Current"), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonPlotCurrent, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonPlotAll = new wxButton( this, wxID_PRINT_ALL, _("Print All"), wxDefaultPosition, wxDefaultSize, 0 );

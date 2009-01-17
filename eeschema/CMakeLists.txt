@@ -50,6 +50,8 @@ set(EESCHEMA_SRCS
     dialog_erc.cpp
 #   dialog_find.cpp
     dialog_options.cpp
+	dialog_print_using_printer_base.cpp
+    dialog_print_using_printer.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
     edit_component_in_lib.cpp
@@ -110,8 +112,7 @@ set(EESCHEMA_SRCS
     viewlibs.cpp)
 
 set(EESCHEMA_EXTRA_SRCS
-    ../share/setpage.cpp
-    ../share/wxprint.cpp)
+    ../share/setpage.cpp)
 
 if(WIN32)
     if(MINGW)

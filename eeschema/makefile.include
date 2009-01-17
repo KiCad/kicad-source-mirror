@@ -41,7 +41,8 @@ OBJECTS = eeschema.o\
 	tool_viewlib.o\
 	schframe.o\
 	viewlib_frame.o\
-	wxprint.o\
+	dialog_print_using_printer_base.o\
+    dialog_print_using_printer.o\
 	lib_export.o \
 	busentry.o \
 	bus-wire-junction.o \

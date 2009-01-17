@@ -296,7 +296,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 // Now we remove all unused thermal stubs.
-#define REMOVE_UNUSED_THERMAL_STUBS     // Can be commented to skip unused thermal stubs calculations
+//#define REMOVE_UNUSED_THERMAL_STUBS     // Can be commented to skip unused thermal stubs calculations
 #ifdef REMOVE_UNUSED_THERMAL_STUBS
     // first compute endindex for TestPointInsidePolygon
     unsigned int indexstart = 0, indexend;
@@ -338,8 +338,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                     continue;
 
                 // test point
-                int dx = (pad->m_Size.x / 2) + m_ThermalReliefGapValue;
-                int dy = (pad->m_Size.y / 2) + m_ThermalReliefGapValue;
+                int dx = (pad->m_Size.x / 2) + m_ThermalReliefGapValue + 3;
+                int dy = (pad->m_Size.y / 2) + m_ThermalReliefGapValue + 3;
 
                 // compute north, south, west and east points for zone connection.
                 wxPoint ptTest[4];
@@ -349,14 +349,18 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 ptTest[3] = wxPoint(-(dx+m_ZoneMinThickness/2), 0);
 
                 // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
-                float fAngle = 0.0;
+                int fAngle = pad->m_Orient;
                 if ( pad->m_PadShape == PAD_CIRCLE)
-                    fAngle = 450.0;
+                {
+                    dx = (int) (dx * s_Correction);
+                    dy = dx;
+                    fAngle = 450;
+                }
 
                 // Test all sides
                 for (int i=0; i<4; i++) {
                     // rotate point
-                    RotatePoint( &ptTest[i], pad->m_Orient + fAngle );
+                    RotatePoint( &ptTest[i],  fAngle );
                     // translate point
                     ptTest[i] += pad->ReturnShapePos();
                     if ( TestPointInsidePolygon( m_FilledPolysList, indexstart,
@@ -398,7 +402,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                             for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
                             {
                                 wxPoint cpos = corners_buffer[ic];
-                                RotatePoint( &cpos, pad->m_Orient + fAngle );      // Rotate according to module orientation
+                                RotatePoint( &cpos, fAngle );      // Rotate according to module orientation
                                 cpos += pad->ReturnShapePos();                     // Shift origin to position
                                 booleng->AddPoint( cpos.x, cpos.y );
                             }

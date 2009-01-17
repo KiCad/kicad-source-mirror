@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-15 21:48+0100\n"
-"PO-Revision-Date: 2009-01-15 21:50+0100\n"
+"POT-Creation-Date: 2009-01-17 16:54+0100\n"
+"PO-Revision-Date: 2009-01-17 16:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -4550,6 +4550,8 @@ msgid ""
 "Choose if you wand to draw the sheet like it appears on screen,\n"
 "or in black and white mode, better to print it when using  black and white printers"
 msgstr ""
+"Choisir si vous voulez tracer la feuille telle qu'elle apparait à l'écran,\n"
+"ou en noir et blanc, préférable pour l'imprimer lorsque l'on utilise des imprimantes monochromes"
 
 #: pcbnew/dialog_SVG_print_base.cpp:55
 msgid "Print Frame Ref"
@@ -4588,6 +4590,8 @@ msgid ""
 "Enter a filename if you do not want to use defaults files names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"Entrez un nom de fichier si vous ne voulez pas utiliser les noms par défaut\n"
+"Ne peut être utilisé que pour imprimer la feuille courante"
 
 #: pcbnew/dialog_SVG_print_base.cpp:97
 msgid "Messages:"
@@ -5271,6 +5275,107 @@ msgstr "Une piste ou via  a une référence vers un  pad \"%s\" manquant"
 msgid "TextPCB properties"
 msgstr "Propriétés des textes PCB"
 
+#: pcbnew/dialog_print_using_printer_base.cpp:35
+msgid "Exclude Edges_Pcb Layer"
+msgstr "Exclure Couche Contours PCB"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "fit in page"
+msgstr "Ajustage en page"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Scale 0.5"
+msgstr "Echelle 0,5"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Scale 0.7"
+msgstr "Echelle 0,7"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Approx. Scale 1"
+msgstr "Echelle Appprox. 1"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Accurate Scale 1"
+msgstr "Echelle Précise 1"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Scale 1.4"
+msgstr "Echelle 1,4"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Scale 4"
+msgstr "Echelle 4"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:48
+msgid "Approx. Scale:"
+msgstr "Echelle approx.:"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:52
+msgid "X Scale Adjust"
+msgstr "Ajustage Echelle X"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:61
+msgid "Y Scale Adjust"
+msgstr "Ajustage Echelle Y"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:78
+msgid "Pen Width Mini"
+msgstr "Epaiss Plume Mini"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:87
+msgid "Print frame ref"
+msgstr "Imprimer cartouche"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:100
+msgid "Black and white"
+msgstr "Noir et blanc"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:102
+msgid "Print Mode"
+msgstr "Mode d'impression"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:108
+msgid "1 Page per Layer"
+msgstr "1 Page par couche"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:108
+msgid "Single page"
+msgstr "Page unique"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:110
+msgid "Page Print"
+msgstr "Imprimer Page"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:119
+msgid "Page Options"
+msgstr "Options Pages"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:122
+msgid "Preview"
+msgstr "Previsualisation"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:125
+msgid "Print"
+msgstr "Imprimer"
+
+#: pcbnew/dialog_print_using_printer.cpp:122
+msgid "Error Init Printer info"
+msgstr "Erreur Init info imprimante"
+
+#: pcbnew/dialog_print_using_printer.cpp:361
+msgid "Printer Problem!"
+msgstr "Probleme d'imprimante"
+
+#: pcbnew/dialog_print_using_printer.cpp:454
+msgid "There was a problem printing"
+msgstr "Il y a un problème d'impression"
+
+#: pcbnew/dialog_print_using_printer.cpp:470
+#, c-format
+msgid "Print page %d"
+msgstr "Print page %d"
+
 #: eeschema/backanno.cpp:135
 msgid "Load Stuff File"
 msgstr "Charger Fichier d'échange"
@@ -5385,6 +5490,7 @@ msgid "Sheet Size"
 msgstr "Dim. feuille"
 
 #: eeschema/plothpgl.cpp:225
+#: eeschema/plotps.cpp:193
 msgid "Page Size A4"
 msgstr "Feuille A4"
 
@@ -5405,6 +5511,7 @@ msgid "Page Size A0"
 msgstr "Feuille A0"
 
 #: eeschema/plothpgl.cpp:230
+#: eeschema/plotps.cpp:194
 msgid "Page Size A"
 msgstr "Feuille A"
 
@@ -5425,6 +5532,7 @@ msgid "Page Size E"
 msgstr "Feuille E"
 
 #: eeschema/plothpgl.cpp:236
+#: eeschema/plotps.cpp:196
 msgid "Plot page size:"
 msgstr "Format de la feuille:"
 
@@ -5453,10 +5561,12 @@ msgid "Plot Offset Y"
 msgstr "Offset de tracé Y"
 
 #: eeschema/plothpgl.cpp:339
+#: eeschema/plotps.cpp:233
 msgid "&Plot page"
 msgstr "&Tracer Page"
 
 #: eeschema/plothpgl.cpp:345
+#: eeschema/plotps.cpp:240
 msgid "Plot a&ll"
 msgstr "&Tout tracer"
 
@@ -5524,22 +5634,18 @@ msgid "Length"
 msgstr "Longueur"
 
 #: eeschema/affiche.cpp:102
-#: eeschema/pinedit-dialog.cpp:225
 msgid "Up"
 msgstr "Haut"
 
 #: eeschema/affiche.cpp:105
-#: eeschema/pinedit-dialog.cpp:226
 msgid "Down"
 msgstr "Bas"
 
 #: eeschema/affiche.cpp:108
-#: eeschema/pinedit-dialog.cpp:224
 msgid "Left"
 msgstr "Gauche"
 
 #: eeschema/affiche.cpp:111
-#: eeschema/pinedit-dialog.cpp:223
 msgid "Right"
 msgstr "Droite"
 
@@ -5947,37 +6053,30 @@ msgid "Plot: %s\n"
 msgstr "Trace: %s\n"
 
 #: eeschema/pinedit.cpp:22
-#: eeschema/pinedit-dialog.cpp:251
 msgid "line"
 msgstr "Ligne"
 
 #: eeschema/pinedit.cpp:22
-#: eeschema/pinedit-dialog.cpp:252
 msgid "invert"
 msgstr "invert"
 
 #: eeschema/pinedit.cpp:22
-#: eeschema/pinedit-dialog.cpp:253
 msgid "clock"
 msgstr "clock"
 
 #: eeschema/pinedit.cpp:22
-#: eeschema/pinedit-dialog.cpp:254
 msgid "clock inv"
 msgstr "clock inv"
 
 #: eeschema/pinedit.cpp:23
-#: eeschema/pinedit-dialog.cpp:255
 msgid "low in"
 msgstr "low in"
 
 #: eeschema/pinedit.cpp:23
-#: eeschema/pinedit-dialog.cpp:256
 msgid "low clock"
 msgstr "low clock"
 
 #: eeschema/pinedit.cpp:23
-#: eeschema/pinedit-dialog.cpp:257
 msgid "low out"
 msgstr "low out"
 
@@ -6152,7 +6251,6 @@ msgid "Common to Units"
 msgstr "Commun aux Unités"
 
 #: eeschema/dialog_cmp_graphic_properties.cpp:160
-#: eeschema/pinedit-dialog.cpp:197
 msgid "Common to convert"
 msgstr "Commun a converti"
 
@@ -8429,7 +8527,7 @@ msgid "Datasheet"
 msgstr "Documentation"
 
 #: eeschema/dialog_SVG_print_base.cpp:53
-msgid "PrintCurrent"
+msgid "Print Current"
 msgstr "Imprimer Page Courante"
 
 #: eeschema/dialog_SVG_print_base.cpp:56
@@ -8471,6 +8569,10 @@ msgstr "Voir documents des composants"
 #: eeschema/tool_viewlib.cpp:114
 msgid "Insert component in schematic"
 msgstr "Placer composant en schématique"
+
+#: eeschema/dialog_print_using_printer_base.cpp:52
+msgid "Current"
+msgstr "Courant"
 
 #: eeschema/class_drawsheetpath.cpp:180
 #, c-format
@@ -9131,7 +9233,6 @@ msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
 #: kicad/treeprj_frame.cpp:543
-#: kicad/kicad.cpp:381
 msgid "noname"
 msgstr "noname"
 
@@ -9510,6 +9611,7 @@ msgid "%d errors while reading Gerber file [%s]"
 msgstr "%d erreurs pendant lecture fichier gerber [%s]"
 
 #: gerbview/readgerb.cpp:273
+#: gerbview/files.cpp:187
 msgid "D codes files:"
 msgstr "Fichiers D-Codes:"
 
@@ -10200,18 +10302,22 @@ msgid "Back View"
 msgstr "Vue arrière"
 
 #: 3d-viewer/3d_canvas.cpp:374
+#: 3d-viewer/3d_toolbar.cpp:77
 msgid "Move left <-"
 msgstr "Vers la gauche <-"
 
 #: 3d-viewer/3d_canvas.cpp:379
+#: 3d-viewer/3d_toolbar.cpp:80
 msgid "Move right ->"
 msgstr "Vers la droite ->"
 
 #: 3d-viewer/3d_canvas.cpp:384
+#: 3d-viewer/3d_toolbar.cpp:83
 msgid "Move Up ^"
 msgstr "Vers le haut ^"
 
 #: 3d-viewer/3d_canvas.cpp:389
+#: 3d-viewer/3d_toolbar.cpp:86
 msgid "Move Down"
 msgstr "Vers le bas"
 
@@ -10299,57 +10405,9 @@ msgstr "Couche ECO1 On/Off"
 msgid "Eco2 Layer On/Off"
 msgstr "Couche ECO2 On/Off"
 
-#: share/dialog_print.cpp:146
-msgid "Exclude Edges_Pcb Layer"
-msgstr "Exclure Couche Contours PCB"
-
-#: share/dialog_print.cpp:157
-msgid "fit in page"
-msgstr "Ajustage en page"
-
-#: share/dialog_print.cpp:158
-msgid "Scale 0.5"
-msgstr "Echelle 0,5"
-
-#: share/dialog_print.cpp:159
-msgid "Scale 0.7"
-msgstr "Echelle 0,7"
-
-#: share/dialog_print.cpp:160
-msgid "Approx. Scale 1"
-msgstr "Echelle Appprox. 1"
-
-#: share/dialog_print.cpp:161
-msgid "Accurate Scale 1"
-msgstr "Echelle Précise 1"
-
-#: share/dialog_print.cpp:162
-msgid "Scale 1.4"
-msgstr "Echelle 1,4"
-
-#: share/dialog_print.cpp:165
-msgid "Scale 4"
-msgstr "Echelle 4"
-
-#: share/dialog_print.cpp:166
-msgid "Approx. Scale:"
-msgstr "Echelle approx.:"
-
-#: share/dialog_print.cpp:170
-msgid "X Scale Adjust"
-msgstr "Ajustage Echelle X"
-
-#: share/dialog_print.cpp:176
-msgid "Y Scale Adjust"
-msgstr "Ajustage Echelle Y"
-
 #: share/dialog_print.cpp:205
 msgid "Color Print:"
 msgstr "Impression Couleurs:"
-
-#: share/dialog_print.cpp:210
-msgid "1 Page per Layer"
-msgstr "1 Page par couche"
 
 #: share/dialog_print.cpp:211
 msgid "Single Page"
@@ -10359,10 +10417,6 @@ msgstr "Page unique"
 #: share/dialog_print.cpp:219
 msgid "Page Print:"
 msgstr "Imprimer page"
-
-#: share/dialog_print.cpp:217
-msgid "Current"
-msgstr "Courant"
 
 #: share/dialog_print.cpp:230
 msgid "Print S&etup"
@@ -10476,26 +10530,9 @@ msgstr "Commentaire3:"
 msgid "Comment4:"
 msgstr "Commentaire4:"
 
-#: share/wxprint.cpp:127
-msgid "Error Init Printer info"
-msgstr "Erreur Init info imprimante"
-
-#: share/wxprint.cpp:372
-msgid "Printer Problem!"
-msgstr "Probleme d'imprimante"
-
 #: share/wxprint.cpp:405
 msgid "There was a problem previewing"
 msgstr "Il y a un problème de prévisualisation"
-
-#: share/wxprint.cpp:469
-msgid "There was a problem printing"
-msgstr "Il y a un problème d'impression"
-
-#: share/wxprint.cpp:485
-#, c-format
-msgid "Print page %d"
-msgstr "Print page %d"
 
 #: pcbnew/gen_self.h:217
 msgid "Length(inch):"
@@ -10964,10 +11001,6 @@ msgstr "DCodes id."
 #: share/setpage.h:84
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
-
-#: share/dialog_print.h:52
-msgid "Print"
-msgstr "Imprimer"
 
 #~ msgid "Tracks"
 #~ msgstr "Pistes"

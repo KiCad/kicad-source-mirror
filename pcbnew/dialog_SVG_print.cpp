@@ -312,9 +312,10 @@ void DIALOG_SVG_PRINT::OnButtonCancelClick( wxCommandEvent& event )
 void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
 /***********************************************************/
 {
+    SetPenWidth();
+    s_PlotBlackAndWhite = m_ModeColorOption->GetSelection();
     if( m_Config )
     {
-        s_PlotBlackAndWhite = m_ModeColorOption->GetSelection();
         m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_PrintPenMinWidth );
         m_Config->Write( PLOTSVGMODECOLOR_KEY, s_PlotBlackAndWhite );
         wxString layerKey;

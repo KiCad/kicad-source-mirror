@@ -65,6 +65,8 @@ set(PCBNEW_SRCS
     dialog_non_copper_zones_properties_base.cpp
     dialog_pad_properties.cpp
     dialog_pad_properties_base.cpp
+    dialog_print_using_printer.cpp
+    dialog_print_using_printer_base.cpp
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp
 #   dialog_track_options.cpp
@@ -159,8 +161,7 @@ set(PCBNEW_SRCS
     )
 
 set(PCBNEW_EXTRA_SRCS
-    ../share/setpage.cpp
-    ../share/wxprint.cpp)
+    ../share/setpage.cpp )
 
 if(WIN32)
     if(MINGW)

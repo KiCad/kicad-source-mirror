@@ -6,8 +6,6 @@
 
 #define INSETUP TRUE
 
-static wxSize TmpGrid;	/* memorisation temporaire */
-
 /* Liste des parametres */
 
 static PARAM_CFG_WXSTRING PhotoExtBufCfg

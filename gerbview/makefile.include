@@ -15,7 +15,8 @@ OBJECTS= \
 		select_layers_to_pcb.o\
 		sel_layer.o\
 		lay2plot.o\
-		wxprint.o \
+		dialog_print_using_printer_base.o \
+		dialog_print_using_printer.o \
 		edit.o \
 		setpage.o \
 		tool_gerber.o \
@@ -82,8 +83,11 @@ class_drc_item.o: ../pcbnew/class_drc_item.cpp
 sel_layer.o: ../pcbnew/sel_layer.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-wxprint.o: ../share/wxprint.cpp  ../share/dialog_print.cpp ../share/dialog_print.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
+dialog_print_using_printer_base.o: ../pcbnew/dialog_print_using_printer_base.cpp ../pcbnew/dialog_print_using_printer_base.h
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+dialog_print_using_printer.o: ../pcbnew/dialog_print_using_printer.cpp ../pcbnew/dialog_print_using_printer_base.h
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 classpcb.o: ../pcbnew/classpcb.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
