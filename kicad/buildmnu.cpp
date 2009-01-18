@@ -247,7 +247,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                                         datasheet_xpm );
 
     PreferencesMenu->AppendSeparator();
-    wxGetApp().SetLanguageList( PreferencesMenu );
+    wxGetApp().AddMenuLanguageList( PreferencesMenu );
 
 
     /**********************************************************************/

@@ -97,7 +97,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     // Font selection and setup
     AddFontSelectionMenu( configmenu );
 
-    wxGetApp().SetLanguageList( configmenu );
+    wxGetApp().AddMenuLanguageList( configmenu );
 
     configmenu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_SAVE, _( "&Save Setup" ),

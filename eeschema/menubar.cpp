@@ -302,7 +302,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     // Font selection and setup
     AddFontSelectionMenu( configmenu );
 
-    wxGetApp().SetLanguageList( configmenu );
+    wxGetApp().AddMenuLanguageList( configmenu );
 
     configmenu->AppendSeparator();
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),

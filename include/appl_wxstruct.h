@@ -62,7 +62,13 @@ public:
     void    SetDefaultSearchPaths( void );
     void    InitEDA_Appl( const wxString& name );
     bool    SetLanguage( bool first_time = FALSE );
-    wxMenu* SetLanguageList( wxMenu* MasterMenu );
+
+    /** Function AddMenuLanguageList
+     * Create menu list for language choice, and add it as submenu to a main menu
+     * @param   MasterMenu : The main menu. The sub menu list will be accessible from the menu item with id ID_LANGUAGE_CHOICE
+     * @return  the sub menu Language list
+     */
+    void    AddMenuLanguageList( wxMenu* MasterMenu );
     void    SetLanguageIdentifier( int menu_id );
     void    InitOnLineHelp();
 

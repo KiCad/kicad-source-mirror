@@ -65,7 +65,6 @@ private:
 	void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
     void SetScale( wxCommandEvent& event );
     void SetPenWidth();
-    wxString BuildPrintTitle();
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
     bool ExcludeEdges() { return m_Exclude_Edges_Pcb->IsChecked(); }
@@ -111,8 +110,8 @@ public:
 void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
 /*******************************************************/
 
-/* Prepare les structures de donn�es de gestion de l'impression
- * et affiche la fenetre de dialogue de gestion de l'impression des feuilles
+/* Virtual function:
+ * Display the print dialog
  */
 {
     if( g_PrintData == NULL )  // First print
@@ -302,22 +301,6 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-/*****************************************************/
-wxString DIALOG_PRINT_USING_PRINTER::BuildPrintTitle()
-/*****************************************************/
-
-/* return a valid filename to create a print file
- */
-{
-    wxString name, ext;
-
-    wxFileName::SplitPath( m_Parent->GetBaseScreen()->m_FileName,
-                           (wxString*) NULL, &name, &ext );
-    name += wxT( "-" ) + ext;
-    return name;
-}
-
-
 /******************************************************************/
 void DIALOG_PRINT_USING_PRINTER::SetScale( wxCommandEvent& event )
 /******************************************************************/
@@ -387,10 +370,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 /* Open and display a previewer frame for printing
  */
 {
-    wxSize  WSize;
-    wxPoint WPos;
-    int     x, y;
-
     SetScale( event );
     SetPenWidth();
 
@@ -402,7 +381,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     s_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
 
     // Pass two printout objects: for preview, and possible printing.
-    wxString        title   = BuildPrintTitle();
+    wxString        title   = _("Print Preview");
     wxPrintPreview* preview =
         new wxPrintPreview( new EDA_Printout( this, m_Parent, title, s_Print_Sheet_Ref ),
                             new EDA_Printout( this, m_Parent, title, s_Print_Sheet_Ref ),
@@ -416,16 +395,12 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     if( s_OptionPrintPage )
         SetLayerMaskFromListSelection();
 
-    m_Parent->GetPosition( &x, &y );
-    WPos.x = x + 4;
-    WPos.y = y + 25;
+    // Uses the parent position and size.
+    // @todo uses last position and size ans store them when exit in m_Config
+    wxPoint WPos = m_Parent->GetPosition();
+    wxSize WSize = m_Parent->GetSize();
 
-    WSize    = m_Parent->GetSize();
-    WSize.x -= 3;
-    WSize.y += 6;
-
-    wxPreviewFrame* frame = new wxPreviewFrame( preview, this,
-                                                title, WPos, WSize );
+    wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
 
     frame->Initialize();
     frame->Show( TRUE );
@@ -458,7 +433,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
     wxPrinter         printer( &printDialogData );
 
-    wxString          title = BuildPrintTitle();
+    wxString          title = _("Print");
     EDA_Printout      printout( this, m_Parent, title, s_Print_Sheet_Ref );
 
 #ifndef __WINDOWS__

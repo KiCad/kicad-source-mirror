@@ -100,7 +100,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
  */
 {
     wxMenuItem* item;
-    wxMenuBar*  menuBar;
+    wxMenuBar*  menuBar = GetMenuBar();
     /* Destroy the existing menu bar so it can be rebuilt.  This allows
      * language changes of the menu text on the fly. */
     if( menuBar )
@@ -141,7 +141,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     // Font selection and setup
     AddFontSelectionMenu( configmenu );
 
-    wxGetApp().SetLanguageList( configmenu );
+    wxGetApp().AddMenuLanguageList( configmenu );
 
     configmenu->AppendSeparator();
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,

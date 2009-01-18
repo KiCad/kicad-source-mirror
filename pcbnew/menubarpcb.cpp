@@ -1,11 +1,6 @@
 /******************************************************************/
 /* menubarpcb.cpp - creation du menu general de l'editeur de board*/
 /******************************************************************/
-
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 
@@ -198,7 +193,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     // Font selection and setup
     AddFontSelectionMenu( configmenu );
 
-    wxGetApp().SetLanguageList( configmenu );
+    wxGetApp().AddMenuLanguageList( configmenu );
 
     configmenu->AppendSeparator();
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save Preferences" ),

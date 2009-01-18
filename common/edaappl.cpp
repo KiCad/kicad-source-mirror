@@ -1,9 +1,10 @@
-/* TODO ENGLISH BRIEF TODO */
+/***************/
+/* edaappl.cpp */
+/***************/
 
 /***
  * @file edaapl.cpp
- * @brief  methodes relative a la classe winEDA_App, communes
- *          aux environements window et linux
+ * @brief  For the main application: init functions, and language selection (locale handling)
  ***/
 
 #define EDA_BASE
@@ -649,8 +650,8 @@ void WinEDA_App::SaveSettings()
  *  the files are in kicad/internat/xx or kicad/internat/xx_XX
  *  and are named kicad.mo
  *
- * @param   first_time  TODO
- * @return  TODO
+ * @param   first_time  must be set to true the first time this funct is called, false otherwise
+ * @return  true if the language can be set (i.e. if the locale is available)
  */
 /*********************************************/
 bool WinEDA_App::SetLanguage( bool first_time )
@@ -705,10 +706,10 @@ bool WinEDA_App::SetLanguage( bool first_time )
 }
 
 
-/**
- * Return in m_LanguageId the wxWidgets language identifier Id
+/** Function SetLanguageIdentifier
+ *  Set in .m_LanguageId member the wxWidgets language identifier Id
  *   from the kicad menu id (internal menu identifier)
- * @param   menu_id TODO
+ * @param   menu_id = the kicad menuitem id (returned by Menu Event, when clicking on a menu item)
  * @return  none
  */
 /**************************************************/
@@ -731,45 +732,46 @@ void WinEDA_App::SetLanguageIdentifier( int menu_id )
 }
 
 
-/**
- * Create menu list for language choice.
- * @param   MasterMenu  TODO
- * @return  TODO
+/** Function AddMenuLanguageList
+ * Create menu list for language choice, and add it as submenu to a main menu
+ * @param   MasterMenu : The main menu. The sub menu list will be accessible from the menu item with id ID_LANGUAGE_CHOICE
+ * @return  none
  */
 /*********************************************************/
-wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
+void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
 /*********************************************************/
 {
-    wxMenu*      menu;
+    wxMenu*      menu = NULL;
     wxMenuItem*  item;
     unsigned int ii;
 
     item = MasterMenu->FindItem( ID_LANGUAGE_CHOICE );
 
-    if( item == NULL )
+    if( item )     // This menu exists, do nothing
+        return;
+
+    menu = new wxMenu;
+    for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
-        menu = new wxMenu;
-        for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
-        {
-            wxString label = s_Language_List[ii].m_DoNotTranslate ?
-                s_Language_List[ii].m_Lang_Label :
-                wxGetTranslation( s_Language_List[ii].m_Lang_Label );
+        wxString label = s_Language_List[ii].m_DoNotTranslate ?
+            s_Language_List[ii].m_Lang_Label :
+            wxGetTranslation( s_Language_List[ii].m_Lang_Label );
 
-            item = new wxMenuItem( menu,
-                                   s_Language_List[ii].m_KI_Lang_Identifier,
-                                   label, wxEmptyString, wxITEM_CHECK );
+        item = new wxMenuItem( menu,
+                               s_Language_List[ii].m_KI_Lang_Identifier,
+                               label, wxEmptyString, wxITEM_CHECK );
 
-            SETBITMAPS( s_Language_List[ii].m_Lang_Icon );
-            menu->Append( item );
-        }
-
-        ADD_MENUITEM_WITH_HELP_AND_SUBMENU( MasterMenu, menu,
-                                            ID_LANGUAGE_CHOICE,
-                                            _( "Language" ),
-                                            _( "Select application language (only for testing!)" ),
-                                            language_xpm );
+        SETBITMAPS( s_Language_List[ii].m_Lang_Icon );
+        menu->Append( item );
     }
 
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( MasterMenu, menu,
+                                        ID_LANGUAGE_CHOICE,
+                                        _( "Language" ),
+                                        _( "Select application language (only for testing!)" ),
+                                        language_xpm );
+
+    // Set Check mark on current selected language
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
         if( m_LanguageId == s_Language_List[ii].m_WX_Lang_Identifier )
@@ -777,14 +779,12 @@ wxMenu* WinEDA_App::SetLanguageList( wxMenu* MasterMenu )
         else
             menu->Check( s_Language_List[ii].m_KI_Lang_Identifier, false );
     }
-
-    return menu;
 }
 
 
 /**
  * Run init scripts
- * @return  TODO
+ * @return  the defualt OnRun() value (exit codes not used in kicad, so value has no special mening)
  */
 /**********************/
 int WinEDA_App::OnRun()
