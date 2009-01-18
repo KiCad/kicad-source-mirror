@@ -26,12 +26,15 @@ static long   s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
 
+// Define min et max reasonnable values for print scale
+#define MIN_SCALE 0.01
+#define MAX_SCALE 100.0
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
 
 // Variables locales
-static int s_PrintPenMinWidth = 1;
+static int          s_PrintPenMinWidth = 50;    // A reasonnable value to draw items that do dot have aspecifed line width
 static int          s_PrintMaskLayer;
 static int          s_OptionPrintPage = 0;
 static int          s_Print_Black_and_White = TRUE;
@@ -189,6 +192,7 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     m_Exclude_Edges_Pcb->Show( true );
 #endif
 
+    m_XScaleAdjust = m_YScaleAdjust = 1.0;      // Default value for scale
     // Read the scale adjust option
     if( m_Config )
     {
@@ -196,6 +200,10 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
         m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &m_XScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_SCALE, &s_Scale_Select );
+
+        // Test for a reasonnable scale value. Set to 1 if problem
+        if ( m_XScaleAdjust < MIN_SCALE || m_YScaleAdjust < MIN_SCALE || m_XScaleAdjust > MAX_SCALE || m_YScaleAdjust > MAX_SCALE )
+            m_XScaleAdjust = m_YScaleAdjust = 1.0;
 
         s_SelectedLayers = 0;
         for( int layer = 0;  layer<layer_max;  ++layer )
@@ -610,6 +618,12 @@ void EDA_Printout::DrawPage()
     scaleX = (double) SheetSize.x / PlotAreaSize.x;
     scaleY = (double) SheetSize.y / PlotAreaSize.y;
     scale  = wxMax( scaleX, scaleY ) / userscale; // Use x or y scaling factor, whichever fits on the DC
+
+    if ( m_PrintFrame->m_XScaleAdjust > MAX_SCALE || m_PrintFrame->m_YScaleAdjust > MAX_SCALE )
+        DisplayInfo(NULL, _("Warning: Scale option set to a very large value") );
+    // Test for a reasonnable scale value
+    if ( m_PrintFrame->m_XScaleAdjust < MIN_SCALE || m_PrintFrame->m_YScaleAdjust < MIN_SCALE )
+        DisplayInfo(NULL, _("Warning: Scale option set to a very small value") );
 
     // ajust the real draw scale
     double accurate_Xscale, accurate_Yscale;

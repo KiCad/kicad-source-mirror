@@ -23,6 +23,10 @@
 #define OPTKEY_ALWAYS_PRINT_PADS  wxT( "PlotAlwaysPads" )
 #define OPTKEY_OUTPUT_FORMAT      wxT( "PlotOutputFormat" )
 
+// Define min et max reasonnable values for print scale
+#define MIN_SCALE 0.01
+#define MAX_SCALE 100.0
+
 
 static long s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
                                SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
@@ -258,6 +262,10 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
         config->Read( OPTKEY_XFINESCALE_ADJ, &m_XScaleAdjust );
         config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
     }
+
+    // Test for a reasonnable scale value. Set to 1 if problem
+    if ( m_XScaleAdjust < MIN_SCALE || m_YScaleAdjust < MIN_SCALE || m_XScaleAdjust > MAX_SCALE || m_YScaleAdjust > MAX_SCALE )
+        m_XScaleAdjust = m_YScaleAdjust = 1.0;
 
     m_FineAdjustXscaleOpt = new WinEDA_DFloatValueCtrl( this,
         _( "X scale adjust" ), m_XScaleAdjust,
@@ -688,10 +696,10 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
     }
 
     // Test for a reasonnable scale value
-    if ( Scale_X < 0.01 || Scale_Y < 0.01 )
+    if ( Scale_X < MIN_SCALE || Scale_Y < MIN_SCALE )
         DisplayInfo(this, _("Warning: Scale option set to a very small value") );
-    if ( Scale_X > 100.0 || Scale_Y > 100.0 )
-         DisplayInfo(this, _("Warning: Scale option set to a very large value") );
+    if ( Scale_X > MAX_SCALE || Scale_Y > MAX_SCALE )
+        DisplayInfo(this, _("Warning: Scale option set to a very large value") );
 
     int mask = 1;
     s_SelectedLayers = 0;
