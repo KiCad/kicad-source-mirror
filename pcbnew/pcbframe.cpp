@@ -48,9 +48,9 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_MENU_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_MENU( ID_MENU_APPEND_FILE, WinEDA_PcbFrame::Files_io )
     EVT_MENU( ID_MENU_SAVE_BOARD_AS, WinEDA_PcbFrame::Files_io )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_PcbFrame::OnFileHistory )
+
     EVT_MENU( ID_GEN_PLOT, WinEDA_PcbFrame::ToPlotter )
-    EVT_MENU_RANGE( ID_LOAD_FILE_1, ID_LOAD_FILE_10,
-                    WinEDA_PcbFrame::Files_io )
 
     EVT_MENU( ID_GEN_EXPORT_SPECCTRA, WinEDA_PcbFrame::ExportToSpecctra )
     EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, WinEDA_PcbFrame::ExportToGenCAD )

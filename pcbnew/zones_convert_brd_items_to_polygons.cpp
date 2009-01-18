@@ -95,13 +95,13 @@ double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (an
  * 11 - Remove new insulated copper islands
  */
 
- /* Important note:
-  * One can add thermal areas in the step 6, with others items to substract.
-  * It is faster.
-  * But :
-  *     kbool fails sometimes in this case (see comments in AddThermalReliefPadPolygon )
-  *     The separate step to make thermal shapes allows a more sophisticated algorith (todo)
-  *     like remove thermal copper bridges in thermal shapes that are not connected to an area
+/* Important note:
+ * One can add thermal areas in the step 6, with others items to substract.
+ * It is faster.
+ * But :
+ *     kbool fails sometimes in this case (see comments in AddThermalReliefPadPolygon )
+ *     The separate step to make thermal shapes allows a more sophisticated algorith (todo)
+ *     like remove thermal copper bridges in thermal shapes that are not connected to an area
  */
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 {
@@ -188,7 +188,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            if ( (m_PadOption == PAD_NOT_IN_ZONE) || (GetNet() == 0) )
+            if( (m_PadOption == PAD_NOT_IN_ZONE) || (GetNet() == 0) )
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -280,7 +280,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             }
         }
 
-        if ( have_poly_to_substract )
+        if( have_poly_to_substract )
         {
             /* Add the main corrected polygon (i.e. the filled area using only one outline)
              * in GroupA in Bool_Engine
@@ -295,16 +295,31 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         delete booleng;
     }
 
+    // Remove insulated islands:
+    if( GetNet() > 0 )
+        Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+
+    if( m_PadOption != THERMAL_PAD )
+        return;
+
 // Now we remove all unused thermal stubs.
-//#define REMOVE_UNUSED_THERMAL_STUBS     // Can be commented to skip unused thermal stubs calculations
+#define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
 #ifdef REMOVE_UNUSED_THERMAL_STUBS
-    // first compute endindex for TestPointInsidePolygon
-    unsigned int indexstart = 0, indexend;
+
+    /* First, Create the list of filled areas begin and end indexes.
+     *  Because a zone creates more than one filled sub area,
+     *  we must handle all start and end points of all sub areas
+     *  for TestPointInsidePolygon, to search if a point is in a filled area in zone
+     */
+    std::vector <int> filled_areas_begin_end_index_list;
+    unsigned int      indexstart = 0, indexend;
     for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
     {
         if( m_FilledPolysList[indexend].end_contour )       // end of a filled sub-area found
         {
-            break;
+            filled_areas_begin_end_index_list.push_back( indexstart );
+            filled_areas_begin_end_index_list.push_back( indexend );
+            indexstart = indexend + 1;
         }
     }
 
@@ -328,87 +343,110 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             // check
-            if( pad->IsOnLayer( GetLayer() )
-                && pad->GetNet() == GetNet()
-                && m_PadOption == THERMAL_PAD )
+            if( !pad->IsOnLayer( GetLayer() ) )
+                continue;
+            if( pad->GetNet() != GetNet() )
+                continue;
+
+            item_boundingbox = pad->GetBoundingBox();
+            item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
+            if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
+                continue;
+
+            // test point
+            int dx =
+                ( pad->m_Size.x / 2 ) + m_ThermalReliefGapValue;
+            int dy =
+                ( pad->m_Size.y / 2 ) + m_ThermalReliefGapValue;
+
+            // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
+            int fAngle = pad->m_Orient;
+            if( pad->m_PadShape == PAD_CIRCLE )
             {
-                item_boundingbox = pad->GetBoundingBox();
-                item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
-                if( !(item_boundingbox.Intersects( zone_boundingbox )) )
-                    continue;
+                dx     = (int) ( dx * s_Correction );
+                dy     = dx;
+                fAngle = 450;
+            }
 
-                // test point
-                int dx = (pad->m_Size.x / 2) + m_ThermalReliefGapValue + 3;
-                int dy = (pad->m_Size.y / 2) + m_ThermalReliefGapValue + 3;
+            // compute north, south, west and east points for zone connection.
+            // Add a small value to ensure point is inside zone, not on an edge
+            wxPoint ptTest[4];
+            ptTest[0] = wxPoint( 0, 3 + dy + m_ZoneMinThickness / 2 );
+            ptTest[1] = wxPoint( 0, -(3 + dy + m_ZoneMinThickness / 2) );
+            ptTest[2] = wxPoint( 3 + dx + m_ZoneMinThickness / 2, 0 );
+            ptTest[3] = wxPoint( -(3 + dx + m_ZoneMinThickness / 2), 0 );
 
-                // compute north, south, west and east points for zone connection.
-                wxPoint ptTest[4];
-                ptTest[0] = wxPoint(0,  dy+m_ZoneMinThickness/2);
-                ptTest[1] = wxPoint(0, -(dy+m_ZoneMinThickness/2));
-                ptTest[2] = wxPoint( dx+m_ZoneMinThickness/2, 0);
-                ptTest[3] = wxPoint(-(dx+m_ZoneMinThickness/2), 0);
 
-                // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
-                int fAngle = pad->m_Orient;
-                if ( pad->m_PadShape == PAD_CIRCLE)
+            // Test all sides
+            for( int i = 0; i<4; i++ )
+            {
+                // rotate point
+                RotatePoint( &ptTest[i], fAngle );
+
+                // translate point
+                ptTest[i] += pad->ReturnShapePos();
+                bool inside = false;
+                for( unsigned idx = 0;
+                     idx < filled_areas_begin_end_index_list.size() && inside == false;
+                     idx += 2 )
                 {
-                    dx = (int) (dx * s_Correction);
-                    dy = dx;
-                    fAngle = 450;
+                    indexstart = filled_areas_begin_end_index_list[idx];
+                    indexend   = filled_areas_begin_end_index_list[idx + 1];
+                    inside     = TestPointInsidePolygon( m_FilledPolysList, indexstart,
+                                                         indexend, ptTest[i].x, ptTest[i].y );
                 }
 
-                // Test all sides
-                for (int i=0; i<4; i++) {
-                    // rotate point
-                    RotatePoint( &ptTest[i],  fAngle );
-                    // translate point
-                    ptTest[i] += pad->ReturnShapePos();
-                    if ( TestPointInsidePolygon( m_FilledPolysList, indexstart,
-                            indexend, ptTest[i].x, ptTest[i].y ) == false)
-                    {
-                        // polygon buffer
-                        std::vector<wxPoint> corners_buffer;
-                        // polygons are rectangles with width of copper bridge value
-                        const int iDTRC = m_ThermalReliefCopperBridgeValue / 2;
-                        switch (i) {
-                            case 0:
-                                corners_buffer.push_back( wxPoint( -iDTRC, dy) );
-                                corners_buffer.push_back( wxPoint( +iDTRC, dy) );
-                                corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                                corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                                break;
-                            case 1:
-                                corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
-                                corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
-                                corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                                corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                                break;
-                            case 2:
-                                corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
-                                corners_buffer.push_back( wxPoint( dx,  iDTRC ) );
-                                corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                                corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                                break;
-                            case 3:
-                                corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
-                                corners_buffer.push_back( wxPoint( -dx,  iDTRC ) );
-                                corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                                corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                                break;
-                        }
-                        // add computed polygon to group_B
-                        if( booleng->StartPolygonAdd( GROUP_B ) )
-                        {
-                            for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
-                            {
-                                wxPoint cpos = corners_buffer[ic];
-                                RotatePoint( &cpos, fAngle );      // Rotate according to module orientation
-                                cpos += pad->ReturnShapePos();                     // Shift origin to position
-                                booleng->AddPoint( cpos.x, cpos.y );
-                            }
+                if( inside == false )
+                {
+                    // polygon buffer
+                    std::vector<wxPoint> corners_buffer;
 
-                            booleng->EndPolygonAdd();
+                    // polygons are rectangles with width of copper bridge value
+                    const int            iDTRC = m_ThermalReliefCopperBridgeValue / 2;
+
+                    switch( i )
+                    {
+                    case 0:
+                        corners_buffer.push_back( wxPoint( -iDTRC, dy ) );
+                        corners_buffer.push_back( wxPoint( +iDTRC, dy ) );
+                        corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                        corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                        break;
+
+                    case 1:
+                        corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
+                        corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
+                        corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                        corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                        break;
+
+                    case 2:
+                        corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
+                        corners_buffer.push_back( wxPoint( dx, iDTRC ) );
+                        corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                        corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                        break;
+
+                    case 3:
+                        corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
+                        corners_buffer.push_back( wxPoint( -dx, iDTRC ) );
+                        corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                        corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                        break;
+                    }
+
+                    // add computed polygon to group_B
+                    if( booleng->StartPolygonAdd( GROUP_B ) )
+                    {
+                        for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
+                        {
+                            wxPoint cpos = corners_buffer[ic];
+                            RotatePoint( &cpos, fAngle );                           // Rotate according to module orientation
+                            cpos += pad->ReturnShapePos();                          // Shift origin to position
+                            booleng->AddPoint( cpos.x, cpos.y );
                         }
+
+                        booleng->EndPolygonAdd();
                     }
                 }
             }
@@ -423,11 +461,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CopyPolygonsFromBoolengineToFilledPolysList( booleng );
     delete booleng;
 
-#endif
-
-    // Remove insulated islands:
+    // Remove insulated islands, if any:
     if( GetNet() > 0 )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+#endif
 }
 
 
