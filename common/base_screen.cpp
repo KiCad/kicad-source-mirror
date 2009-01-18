@@ -9,6 +9,7 @@
 #include "fctsys.h"
 #include "common.h"
 
+#include "sch_item_struct.h"
 
 /* Implement wxSize array for grid list implementation. */
 #include <wx/arrimpl.cpp>
@@ -498,7 +499,7 @@ EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
  */
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
 {
-    EDA_BaseStruct* item = (EDA_BaseStruct*) EEDrawList;    // @todo : use SCH_ITEM as type for item
+    SCH_ITEM* item = EEDrawList;
 
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<

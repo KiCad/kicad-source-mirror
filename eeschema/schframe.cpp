@@ -245,25 +245,11 @@ void WinEDA_SchematicFrame::SetSheetNumberAndCount()
 }
 
 
+/***************************************************/
 SCH_SCREEN* WinEDA_SchematicFrame::GetScreen() const
+/***************************************************/
 {
     return m_CurrentSheet->LastScreen();
-}
-
-
-void WinEDA_SchematicFrame::SetScreen( SCH_SCREEN* screen )
-{
-    //find it in the hierarchy, and set it.
-    //there is ambiguity in this function (there may be several
-    //instances of a given sheet, but irregardless it is useful
-    //for printing etc.
-    DrawSheetPath sheetlist;
-
-    if( g_RootSheet->LocatePathOfScreen( screen, &sheetlist ) )
-    {
-        *m_CurrentSheet = sheetlist;
-        m_CurrentSheet->UpdateAllScreenReferences();
-    }
 }
 
 

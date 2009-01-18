@@ -1188,11 +1188,6 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 #endif
 
     LastPanel = this;
-
-    /* @todo: move this to where it is really needed, obviously not here in
-     * response to every mouse move event:
-     * m_Parent->SetToolbars();
-     */
 }
 
 

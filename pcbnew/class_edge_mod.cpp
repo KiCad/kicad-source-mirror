@@ -60,7 +60,7 @@ void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
     m_Layer  = source->m_Layer;
     m_Width  = source->m_Width;
 
-    m_PolyPoints = source->m_PolyPoints;
+    m_PolyPoints = source->m_PolyPoints;    // std::vector copy
 }
 
 /***********************************/
@@ -76,10 +76,8 @@ void EDGE_MODULE::SetDrawCoord()
     {
         RotatePoint( &m_Start.x, &m_Start.y, Module->m_Orient );
         RotatePoint( &m_End.x, &m_End.y, Module->m_Orient );
-        m_Start.x += Module->m_Pos.x;
-        m_Start.y += Module->m_Pos.y;
-        m_End.x   += Module->m_Pos.x;
-        m_End.y   += Module->m_Pos.y;
+        m_Start += Module->m_Pos;
+        m_End   += Module->m_Pos;
     }
 }
 

@@ -102,7 +102,6 @@ public:
 
     BASE_SCREEN*            GetBaseScreen() const;
 
-    virtual void            SetScreen( SCH_SCREEN* screen );
     virtual wxString        GetScreenDesc();
 
     void                    InstallConfigFrame( const wxPoint& pos );

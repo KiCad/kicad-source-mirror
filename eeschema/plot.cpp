@@ -285,9 +285,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             {
                 LibDrawPin* Pin = (LibDrawPin*) DEntry;
                 if( Pin->m_Attributs & PINNOTDRAW )
-                {
                         break;
-                }
 
                 /* Calcul de l'orientation reelle de la Pin */
                 orient = Pin->ReturnPinDrawOrient( TransMat );
@@ -295,13 +293,12 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                 pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
 
                 /* Dessin de la pin et du symbole special associe */
-                SetCurrentLineWidth( -1 );
                 PlotPinSymbol( pos, Pin->m_PinLen, orient, Pin->m_PinShape );
-                int thickness = 0;   // @todo: calcultae the pen tickness
+                int thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );;
                 Pin->PlotPinTexts( pos, orient,
                                    Entry->m_TextInside,
                                    Entry->m_DrawPinNum, Entry->m_DrawPinName,
-                                    thickness, false);
+                                   thickness, false);
             }
             break;
 
@@ -471,7 +468,6 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
-    //@todo not sure what to do here in terms of plotting components that may have multiple REFERENCE entries.
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
         PlotGraphicText( g_PlotFormat, textpos, color, field->m_Text,

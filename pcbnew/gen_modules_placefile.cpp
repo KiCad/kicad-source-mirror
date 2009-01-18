@@ -467,7 +467,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 /*******************************************************************/
 
-/* Sortie dsur rptfile d'un segment type drawing PCB:
+/* Sortie sur rptfile d'un segment type drawing PCB:
  *      Les contours sont de differents type:
  *      segment
  *      cercle
@@ -495,12 +495,11 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
     {
     case S_CIRCLE:
         rayon = hypot( dx - ux0, dy - uy0 );
-        sprintf( line, "$CIRCLE \n" ); fputs( line, rptfile );
-        sprintf( line, "centre %.6lf %.6lf\n", ux0, uy0 );
-        sprintf( line, "radius %.6lf\n", rayon );
-        sprintf( line, "width %.6lf\n", width );
-        sprintf( line, "$EndCIRCLE \n" );
-        fputs( line, rptfile );
+        fprintf( rptfile, "$CIRCLE \n" );
+        fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
+        fprintf( rptfile, "radius %.6lf\n", rayon );
+        fprintf( rptfile, "width %.6lf\n", width );
+        fprintf( rptfile, "$EndCIRCLE \n" );
         break;
 
     case S_ARC:
@@ -513,14 +512,12 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
                          PtDrawSegment->m_Start.y,
                          PtDrawSegment->m_Angle );
 
-            // @todo this is a bug, cannot sprintf into line more than once, should use fprintf instead
-            sprintf( line, "$ARC \n" ); fputs( line, rptfile );
-            sprintf( line, "centre %.6lf %.6lf\n", ux0, uy0 );
-            sprintf( line, "start %.6lf %.6lf\n", endx * conv_unit, endy * conv_unit );
-            sprintf( line, "end %.6lf %.6lf\n", dx, dy );
-            sprintf( line, "width %.6lf\n", width );
-            sprintf( line, "$EndARC \n" );
-            fputs( line, rptfile );
+            fprintf( rptfile, "$ARC \n" );
+            fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
+            fprintf( rptfile, "start %.6lf %.6lf\n", endx * conv_unit, endy * conv_unit );
+            fprintf( rptfile, "end %.6lf %.6lf\n", dx, dy );
+            fprintf( rptfile, "width %.6lf\n", width );
+            fprintf( rptfile, "$EndARC \n" );
         }
         break;
 
@@ -528,12 +525,10 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
         sprintf( line, "$LINE \n" );
         fputs( line, rptfile );
 
-        // @todo this is a bug, cannot sprintf into line more than once, should use fprintf instead
-        sprintf( line, "start %.6lf %.6lf\n", ux0, uy0 );
-        sprintf( line, "end %.6lf %.6lf\n", dx, dy );
-        sprintf( line, "width %.6lf\n", width );
-        sprintf( line, "$EndLINE \n" );
-        fputs( line, rptfile );
+        fprintf( rptfile, "start %.6lf %.6lf\n", ux0, uy0 );
+        fprintf( rptfile, "end %.6lf %.6lf\n", dx, dy );
+        fprintf( rptfile, "width %.6lf\n", width );
+        fprintf( rptfile, "$EndLINE \n" );
         break;
     }
 }
