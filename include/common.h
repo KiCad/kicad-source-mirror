@@ -1,9 +1,10 @@
-/****************************/
-/*          common.h        */
-/****************************/
+/**
+ * The common library
+ * @file common.h
+ */
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef __INCLUDE__COMMON_H__
+#define __INCLUDE__COMMON_H__ 1
 
 /* wxWidgets about dialog */
 #include <wx/aboutdlg.h>
@@ -15,7 +16,7 @@
 #include "wx/fileconf.h"
 
 #ifndef COMMON_GLOBL
-#define COMMON_GLOBL extern
+#  define COMMON_GLOBL extern
 #endif
 
 
@@ -41,24 +42,24 @@ enum pseudokeys {
 
 #define ESC 27
 
+/* TODO Executable names TODO*/
 #ifdef __WINDOWS__
-#define CVPCB_EXE    wxT( "cvpcb.exe" )
-#define PCBNEW_EXE   wxT( "pcbnew.exe" )
-#define EESCHEMA_EXE wxT( "eeschema.exe" )
-#define GERBVIEW_EXE wxT( "gerbview.exe" )
-
+#    define CVPCB_EXE    wxT( "cvpcb.exe" )
+#    define PCBNEW_EXE   wxT( "pcbnew.exe" )
+#    define EESCHEMA_EXE wxT( "eeschema.exe" )
+#    define GERBVIEW_EXE wxT( "gerbview.exe" )
 #else
-#ifndef __WXMAC__
-#define CVPCB_EXE    wxT( "cvpcb" )
-#define PCBNEW_EXE   wxT( "pcbnew" )
-#define EESCHEMA_EXE wxT( "eeschema" )
-#define GERBVIEW_EXE wxT( "gerbview" )
+# ifndef __WXMAC__
+#  define CVPCB_EXE    wxT( "cvpcb" )
+#  define PCBNEW_EXE   wxT( "pcbnew" )
+#  define EESCHEMA_EXE wxT( "eeschema" )
+#  define GERBVIEW_EXE wxT( "gerbview" )
 #else
-#define CVPCB_EXE    wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
-#define PCBNEW_EXE   wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
-#define EESCHEMA_EXE wxT( "eeschema.app/Contents/MacOS/eeschema" )
-#define GERBVIEW_EXE wxT( "gerbview.app/Contents/MacOS/gerbview" )
-#endif
+#  define CVPCB_EXE    wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
+#  define PCBNEW_EXE   wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
+#  define EESCHEMA_EXE wxT( "eeschema.app/Contents/MacOS/eeschema" )
+#  define GERBVIEW_EXE wxT( "gerbview.app/Contents/MacOS/gerbview" )
+# endif
 #endif
 
 
@@ -418,242 +419,31 @@ bool                ProcessExecute( const wxString& aCommandLine, int aFlags = w
  */
 wxString            ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
 
-#ifdef __MSVC__     // compilers that does not have the round function (posix)
-/* return the near rounded (like the equivalent integer value) from aNumber
-*/
-double round( double aNumber );
+/* Microsoft Visual C++ compiler does not have round function (posix) */
+#ifdef __MSVC__
+  /* return the near rounded (like the equivalent integer value) from aNumber */
+  double round( double aNumber );
 #endif
 
 /**************/
 /* DRAWTXT.CPP */
 /**************/
-/** Function DrawGraphicText
- * Draw a graphic text (like module texts)
- *  @param aPanel = the current DrawPanel
- *  @param aPos = text position (according to h_justify, v_justify)
- *  @param aColor (enum EDA_Colors) = text color
- *  @param aText = text to draw
- *  @param aOrient = angle in 0.1 degree
- *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
- *  @param aH_justify = horizontal justification (Left, center, right)
- *  @param aV_justify = vertical justification (bottom, center, top)
- *  @param aWidth = line width (pen width) (default = 0)
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *  @param aItalic = true to simulate an italic font
- *  @param aCallback() = function called (if non null) to draw each segment.
- *                  used only to draw 3D texts
- */
-void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                      const wxPoint& aPos, enum EDA_Colors aColor, const wxString& aText,
-                      int aOrient, const wxSize& aSize,
-                      enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
-                      int aWidth = 0, bool aItalic = false,
-                      void (*aCallback)(int x0, int y0, int xf, int yf) = NULL);
-
-/** Function PlotGraphicText
- *  same as DrawGraphicText, but plot graphic text insteed of draw it
- *  @param aFormat_plot = plot format (PLOT_FORMAT_POST, PLOT_FORMAT_HPGL, PLOT_FORMAT_GERBER)
- *  @param aPos = text position (according to aH_justify, aV_justify)
- *  @param aColor (enum EDA_Colors) = text color
- *  @param aText = text to draw
- *  @param aOrient = angle in 0.1 degree
- *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
- *  @param aH_justify = horizontal justification (Left, center, right)
- *  @param aV_justify = vertical justification (bottom, center, top)
- *  @param aWidth = line width (pen width) (default = 0)
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *  @param aItalic = true to simulate an italic font
- */
-void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
-                      const wxString& aText,
-                      int aOrient, const wxSize& aSize,
-                      enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
-                      int aWidth, bool aItalic = false );
+#include "drawtxt.h"
 
 /***************/
 /* CONFIRM.CPP */
 /***************/
-void    DisplayError( wxWindow* parent, const wxString& msg, int displaytime = 0 );
-void    DisplayInfo( wxWindow* parent, const wxString& msg, int displaytime = 0 );
+#include "confirm.h"
 
-/* Routines d'affichage messages ( disparait au bout de displaytime 0.1 secondes) */
-
-bool    IsOK( wxWindow* parent, const wxString& msg );
-
-/* Routine affichant la fenetre "CONFIRMATION"
- *  Retourne 1 ou 0 selon reponse Yes / No */
-
-int     Get_Message( const wxString& title,
-                     const wxString& frame_caption,
-                     wxString& buffer,
-                     wxWindow* frame );
-
-/* Fonction d'installation du menu de Dialogue
- *  entree: titre = titre a afficher
- *  entree/sortie :buffer : contient la reponse
- *           si a l'appel buffer n'est pas vide, son contenu est aussi
- *           affiche, mais disparait a la 1ere correction */
-
-/************************/
-/* file GESTFICH.CPP */
-/************************/
-
-wxString    GetEditorName(); // Return the prefered editor name
-
-/** Function OpenPDF
- * run the PDF viewer and display a PDF file
- * @param file = PDF file to open
- * @return true is success, false if no PDF viewer found
- */
-bool        OpenPDF( const wxString& file );
-
-void        OpenFile( const wxString& file );
-
-bool        EDA_DirectorySelector( const wxString& Title,           /* Titre de la fenetre */
-                                   wxString&       Path,            /* Chemin par defaut */
-                                   int             flag,            /* reserve */
-                                   wxWindow*       Frame,           /* parent frame */
-                                   const wxPoint&  Pos );
-
-wxString EDA_FileSelector( const wxString &Title,                   /* Window title */
-                           const wxString &Path,                    /* default path */
-                           const wxString &FileName,                /*  default filename */
-                           const wxString &Ext,                     /* default extension */
-                           const wxString &Mask,                    /* Display filename mask */
-                           wxWindow * Frame,                        /* parent frame */
-                           int flag,                                /* wxSAVE, wxOPEN ..*/
-                           const bool keep_working_directory,       /* true = do not change the C.W.D. */
-                           const wxPoint& Pos = wxPoint( -1, -1 )
-                           );
-
-wxString    MakeFileName( const wxString& dir,
-                          const wxString& shortname, const wxString& ext );
-
-/* Calcule le nom complet d'un file d'apres les chaines
- *  dir = prefixe (chemin)
- *  shortname = nom avec ou sans chemin ou extension
- *  ext = extension
- *
- *  si la chaine name possede deja un chemin ou une extension, elles
- *  ne seront pas modifiees
- *
- *  retourne la chaine calculee */
-
-wxString    MakeReducedFileName( const wxString& fullfilename,
-                                 const wxString& default_path,
-                                 const wxString& default_ext );
-
-/* Calcule le nom "reduit" d'un file d'apres les chaines
- *  fullfilename = nom complet
- *  default_path = prefixe (chemin) par defaut
- *  default_ext = extension par defaut
- *
- *  retourne le nom reduit, c'est a dire:
- *  sans le chemin si le chemin est default_path
- *  avec ./ si si le chemin est le chemin courant
- *  sans l'extension si l'extension est default_ext
- *
- *  Renvoie un chemin en notation unix ('/' en separateur de repertoire)
- */
-
-WinEDAListBox*  GetFileNames( char* Directory, char* Mask );
-
-void            ChangeFileNameExt( wxString& FullFileName, const wxString& NewExt );
-
-/* Change l'extension du "filename FullFileName" en NewExt.
- *     Retourne FullFileName */
-
-int             ExecuteFile( wxWindow* frame, const wxString& ExecFile,
-                             const wxString& param = wxEmptyString );
-void            AddDelimiterString( wxString& string );
-
-void            SetRealLibraryPath( const wxString& shortlibname ); /* met a jour
-                                                                    *  le chemin des librairies RealLibDirBuffer (global)
-                                                                    *  a partir de UserLibDirBuffer (global):
-                                                                    *  Si UserLibDirBuffer non vide RealLibDirBuffer = UserLibDirBuffer.
-                                                                    *  Sinon si variable d'environnement KICAD definie (KICAD = chemin pour kicad),
-                                                                    *  UserLibDirBuffer = <KICAD>/shortlibname;
-                                                                    *  Sinon UserLibDirBuffer = <Chemin des binaires>../shortlibname/
-                                                                    */
-wxString        FindKicadHelpPath();
-
-/* Find absolute path for kicad/help (or kicad/help/<language>) */
-
-wxString        ReturnKicadDatasPath();
-
-/* Retourne le chemin des donnees communes de kicad. */
-
-wxString        FindKicadFile( const wxString& shortname );
-
-/* Search the executable file shortname in kicad binary path and return
- *  full file name if found or shortname */
-
+/****************/
+/* GESTFICH.CPP */
+/****************/
+#include "gestfich.h"
 
 /*************/
-/* STRING.CPP */
+/*STRING.CPP */
 /*************/
-char*       strupper( char* Text );
-char*       strlower( char* Text );
-
-int         ReadDelimitedText( char* dest, char* source, int NbMaxChar );
-
-/* lit et place dans dest la chaine de caractere trouvee dans source,
- *   delimitee par " .
- *  transfere NbMaxChar max
- *   retourne le nombre de codes lus dans source
- *  dest est termine par NULL */
-
-char*       GetLine( FILE* File, char* Line, int* LineNum = NULL, int SizeLine = 255 );
-
-/* Routine de lecture de 1 ligne utile
- *  retourne la 1ere ligne utile lue.
- *  elimine lignes vides et commentaires */
-char*       StrPurge( char* text );
-
-/* Supprime les caracteres Space en debut de la ligne text
- *  retourne un pointeur sur le 1er caractere non Space de text */
-
-char*       DateAndTime( char* line );
-wxString    DateAndTime();
-
-/* Retourne la chaine de caractere donnant date+heure */
-
-int         StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax );
-
-/*
- *  routine (compatible qsort() ) de comparaision pour classement alphab�tique
- *  Analogue a strncmp() mais les nombres sont compar�s selon leur valeur num�rique
- *  et non pas par leur code ascii */
-
-int         StrNumICmp( const wxChar* str1, const wxChar* str2 );
-
-/* routine (compatible qsort() ) de comparaison pour classement alphab�tique,
- *  avec lower case == upper case.
- *  Analogue a stricmp() mais les nombres sont compar�s selon leur valeur num�rique
- *  et non pas par leur code ascii */
-
-int         StrLenNumICmp( const wxChar* str1, const wxChar* str2, int NbMax );
-
-/* routine (compatible qsort() ) de comparaison pour classement alphab�tique,
- *  avec lower case == upper case.
- *  Analogue a stricmp() mais les nombres sont compar�s selon leur valeur num�rique
- *  et non pas par leur code ascii */
-
-bool        WildCompareString( const wxString& pattern, const wxString& string_to_tst,
-                               bool case_sensitive = TRUE );
-
-/* compare 2 noms de composants, selon regles usuelles
- *  ( Jokers * , ? , autorises).
- *  la chaine de reference est "pattern"
- *  si case_sensitive == TRUE (default), comparaison exacte
- *  retourne TRUE si match FALSE si differences */
-
-char*       to_point( char* Text );
-
-/* convertit les , en . dans une chaine. utilise pour compenser la fct printf
- *  qui genere les flottants avec une virgule au lieu du point en mode international */
+#include "kicad_string.h"
 
 
 /*******************/
@@ -743,47 +533,18 @@ void*           MyMalloc( size_t nb_octets );
 /****************/
 /* eda_doc.cpp */
 /****************/
-int     KeyWordOk( const wxString& KeyList, const wxString& Database );
-
-/* Recherche si dans le texte Database on retrouve tous les mots
- *  cles donnes dans KeyList ( KeyList = suite de mots cles
- *  separes par des espaces
- *  Retourne:
- *      0 si aucun mot cle trouv�
- *      1 si mot cle trouv�
- */
-bool    GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
-                               const wxString& DocName );
-
+#include "eda_doc.h"
 
 /****************************/
 /* get_component_dialog.cpp */
 /****************************/
-wxString GetComponentName( WinEDA_DrawFrame * frame,
-                          wxArrayString & HistoryList, const wxString &Title,
-                          wxString (*AuxTool)( WinEDA_DrawFrame * parent ) );
-
-/* Dialog frame to choose a component name */
-void        AddHistoryComponentName( wxArrayString& HistoryList, const wxString& Name );
-
-/* Add the string "Name" to the history list */
-
+#include "get_component_dialog.h"
 
 /**********************/
 /* block_commande.cpp */
 /**********************/
-void    AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC );
-
-/* Cancel Current block operation. */
-void    InitBlockLocateDatas( WinEDA_DrawPanel* Panel, const wxPoint& startpos );
-
-/* Init the initial values of a BlockLocate, before starting a block command */
-void    DrawAndSizingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-
-/* Redraw the outlines of the block which shows the search area for block commands
- *  The first point of the rectangle showing the area is initialised
- *  by InitBlockLocateDatas().
- *  The other point of the rectangle is the mouse cursor */
+#include "block_commande.h"
 
 
-#endif  // COMMON_H
+#endif  /* __INCLUDE__COMMON_H__ */
+

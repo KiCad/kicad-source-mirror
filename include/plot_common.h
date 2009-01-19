@@ -1,14 +1,17 @@
-/********************/
-/*  plot_common.h   */
-/********************/
+/**
+ * Common plot library \n
+ * Plot settings, postscript plotting, gerber plotting.
+ * 
+ * @file plot_common.h
+ */
 
-#ifndef PLOT_COMMON_H
-#define PLOT_COMMON_H
+#ifndef __INCLUDE__PLOT_COMMON_H__
+#define __INCLUDE__PLOT_COMMON_H__ 1
 
 #ifndef EDA_BASE
- #define COMMON_GLOBL extern
+#  define COMMON_GLOBL extern
 #else
- #define COMMON_GLOBL
+#  define COMMON_GLOBL
 #endif
 
 
@@ -16,7 +19,9 @@
  * Enum PlotFormat
  * must be kept in order of the radio buttons in the plot panel/window.
  */
-enum PlotFormat {
+enum
+PlotFormat
+{
     PLOT_FORMAT_HPGL,
     PLOT_FORMAT_GERBER,
     PLOT_FORMAT_POST
@@ -25,7 +30,7 @@ enum PlotFormat {
 
 static inline bool IsPostScript( int aFormat )
 {
-    return aFormat==PLOT_FORMAT_POST;
+    return aFormat == PLOT_FORMAT_POST;
 }
 
 
@@ -90,25 +95,50 @@ void    SetColorMapPS( int color );
 /*********************************/
 /* common_plotHPGL_functions.cpp */
 /*********************************/
-void    InitPlotParametresHPGL( wxPoint offset, double aXScale, double aYScale, int orient = 0 );
-bool    PrintHeaderHPGL( FILE* plot_file, int pen_speed, int pen_num );
+void    InitPlotParametresHPGL( wxPoint offset,
+                                 double aXScale,
+                                 double aYScale,
+                                    int orient = 0 );
+bool    PrintHeaderHPGL( FILE* plot_file,
+                           int pen_speed,
+                           int pen_num );
 bool    CloseFileHPGL( FILE* plot_file );
-void    PlotCircleHPGL( wxPoint centre, int diameter, bool fill, int width = -1 );
-void    PlotRectHPGL( wxPoint t1, wxPoint t2, bool fill, int width = -1 );
-void    PlotArcHPGL( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width = -1 );
-void    PlotPolyHPGL( int nb, int* coord, bool fill, int width = -1 );
-void    Move_Plume_HPGL( wxPoint pos, int plume );
+void    PlotCircleHPGL( wxPoint centre,
+                            int diameter,
+                           bool fill,
+                            int width = -1 );
+void    PlotRectHPGL( wxPoint t1,
+                      wxPoint t2,
+                         bool fill, 
+                          int width = -1 );
+
+void    PlotArcHPGL( wxPoint centre,
+                         int StAngle,
+                         int EndAngle,
+                         int rayon,
+                        bool fill,
+                         int width = -1 );
+
+
+void    PlotPolyHPGL(  int nb,
+                      int* coord,
+                      bool fill,
+                       int width = -1 );
+void    Move_Plume_HPGL( wxPoint pos,
+                             int plume );
 void    Plume_HPGL( int plume );
 
 /*********************************/
 /* common_plotGERBER_functions.cpp */
 /*********************************/
-/** function InitPlotParametresGERBER
-  * Set the plot offset for the current plotting
-  * @param aOffset = plot offset
-  * @param aXScale,aYScale = coordinate scale (scale coefficient for coordinates)
+/** Function InitPlotParametresGERBER
+ * Set the plot offset for the current plotting
+ * @param aOffset = plot offset
+ * @param aXScale,aYScale = coordinate scale (scale coefficient for coordinates)
  */
-void InitPlotParametresGERBER( wxPoint aOffset, double aXScale, double aYScale );
+void InitPlotParametresGERBER( wxPoint aOffset,
+                                double aXScale,
+                                double aYScale );
 
 /** Function Write_Header_GERBER
  * Write GERBER header to file
@@ -116,7 +146,8 @@ void InitPlotParametresGERBER( wxPoint aOffset, double aXScale, double aYScale )
  * @param aTitle: the name of creator (comment)
  * @param aFile: an opened file to write to
  */
-void Write_Header_GERBER( const wxString aTitle, FILE* aFile );
+void Write_Header_GERBER( const wxString aTitle,
+                          FILE* aFile );
 
 /** Function LineTo_GERBER
   * if aCommand = 'U' initialise the starting point of a line
@@ -124,24 +155,29 @@ void Write_Header_GERBER( const wxString aTitle, FILE* aFile );
   * @param aPos = end of the current line.
   * @param aCommand = 'U' or 'D' or 'Z' (Pen up , no moving )
  */
-void LineTo_GERBER( wxPoint aPos, int aCommand );
+void LineTo_GERBER( wxPoint aPos,
+                        int aCommand );
 
 /** Function PlotGERBERLine
  * Plot a line
- * @param aStartPos = starting point of the line
- * @param aEndPos   = ending point of the line
+ * @param aStartPos  = starting point of the line
+ * @param aEndPos    = ending point of the line
  * @param aThickness = line thickness
 */
-void PlotGERBERLine( wxPoint aStartPos, wxPoint aEndPos, int aThickness );
+void PlotGERBERLine( wxPoint aStartPos,
+                     wxPoint aEndPos,
+                         int aThickness );
 
 /** Function PlotCircle_GERBER
  * writes a non filled circle to output file
  * Plot one circle as segments (6 to 16 depending on its radius
  * @param aCentre = centre coordintes
  * @param aRadius = radius of the circle
- * @param aWidth = line width (noc currently used, D_CODEs must be selected before)
+ * @param aWidth  = line width (noc currently used, D_CODEs must be selected before)
 */
-void PlotCircle_GERBER( wxPoint aCentre, int aRadius, int aWidth );
+void PlotCircle_GERBER( wxPoint aCentre,
+                            int aRadius,
+                            int aWidth );
 
 /** Function PlotPolygon_GERBER
  * writes a closed polyline (not a filled polygon) to output file
@@ -149,15 +185,17 @@ void PlotCircle_GERBER( wxPoint aCentre, int aRadius, int aWidth );
  * @param aCoord = buffer of corners coordinates
  * @param aWidth = line width (noc currently used, D_CODEs must be selected before)
 */
-
-
-void PlotPolygon_GERBER( int aCornersCount, int* aCoord, int aWidth );
+void PlotPolygon_GERBER(  int aCornersCount,
+                         int* aCoord,
+                          int aWidth );
 
 /** Function PlotFilledPolygon_GERBER
  * writes a filled polyline to output file
  * @param aCornersCount = numer of corners
  * @param aCoord = buffer of corners coordinates
 */
-void PlotFilledPolygon_GERBER( int aCornersCount, int* aCoord );
+void PlotFilledPolygon_GERBER(  int aCornersCount,
+                               int* aCoord );
 
-#endif  /* #ifndef PLOT_COMMON_H */
+#endif  /* __INCLUDE__PLOT_COMMON_H__ */
+

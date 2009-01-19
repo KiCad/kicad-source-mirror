@@ -16,6 +16,14 @@ generated doxygen docs readable and clear using the JavaDoc style comments,
 mostly in the header files.  The error and warning output of the doxygen
 compiler can help with this too.
 
+*** GerbView
+Need support for drill files like Excellon, the best is to write small library for parsing
+and displaying it.
+
+*** CVPCB
+Add preference (checkbox) to close cvpcb after saving netlist instead of automatic
+close after saving netlist, because this is not normal program behavoir to quit
+after save.
 
 *** Translate comments that are in French to English so there can be a broader
 understanding by new developers.
