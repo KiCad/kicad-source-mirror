@@ -369,7 +369,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             }
 
             // compute north, south, west and east points for zone connection.
-            // Add a small value to ensure point is inside zone, not on an edge
+            // Add a small value to ensure point is inside (or outside) zone, not on an edge
             wxPoint ptTest[4];
             ptTest[0] = wxPoint( 0, 3 + dy + m_ZoneMinThickness / 2 );
             ptTest[1] = wxPoint( 0, -(3 + dy + m_ZoneMinThickness / 2) );
@@ -936,9 +936,11 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
 
         // The first point of polygon buffer is left lower corner, second the crosspoint of thermal spoke sides,
         // the third is upper right corner and the rest are rounding vertices going anticlockwise. Note the inveted Y-axis in CG.
-        corners_buffer.push_back( wxPoint( -dx, -copper_thickness.y / 2 ) );
+        corners_buffer.push_back( wxPoint( -dx , -(aThermalGap / 4 + copper_thickness.y / 2) ) );	// Adds small miters to zone
+        corners_buffer.push_back( wxPoint( -(dx - aThermalGap / 4) , -copper_thickness.y / 2 ) );	// fill and spoke corner
         corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -copper_thickness.y / 2 ) );
-        corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -dy ) );
+        corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -(dy - aThermalGap / 4) ) );
+		corners_buffer.push_back( wxPoint( -(aThermalGap / 4 + copper_thickness.x / 2), -dy ) );
 
         angle = aPad.m_Orient;
         int rounding_radius = (int) ( aThermalGap * s_Correction );                 // Corner rounding radius

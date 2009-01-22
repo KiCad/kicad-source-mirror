@@ -17,24 +17,24 @@
 // the boost libs have a workaround for the typeof problem
 #ifdef _MSC_VER
  #if ( _MSC_VER <= 1310 ) // 6.5 7.0 and 7.1 use the msvc bug
-  #include <boost/typeof/ msvc/typeof_ impl.hpp>
+  #include <boost/typeof/msvc/typeof_impl.hpp>
  #else // 8.0 or greater
-  #include <boost/typeof/ typeof.hpp>
+  #include <boost/typeof/typeof.hpp>
   // we have to register the types used with the typeof keyword with boost
-  BOOST_TYPEOF_ REGISTER_ TYPE(wxPoint) ;
-  BOOST_TYPEOF_ REGISTER_ TYPE(wxSize) ;
-  BOOST_TYPEOF_ REGISTER_ TYPE(wxString) ;
-  class DrawSheetLabelStruc t;
-  BOOST_TYPEOF_ REGISTER_ TYPE(DrawSheetLa belStruct *);
+  BOOST_TYPEOF_REGISTER_TYPE(wxPoint) ;
+  BOOST_TYPEOF_REGISTER_TYPE(wxSize) ;
+  BOOST_TYPEOF_REGISTER_TYPE(wxString) ;
+  class DrawSheetLabelStruct;
+  BOOST_TYPEOF_REGISTER_TYPE(DrawSheetLabelStruct *);
   class EDA_BaseStruct;
-  BOOST_TYPEOF_ REGISTER_ TYPE(EDA_ BaseStruct *);
+  BOOST_TYPEOF_REGISTER_TYPE(EDA_BaseStruct *);
   class D_PAD;
-  BOOST_TYPEOF_ REGISTER_ TYPE(D_PAD *);
-  BOOST_TYPEOF_ REGISTER_ TYPE(const D_PAD *);
+  BOOST_TYPEOF_REGISTER_TYPE(D_PAD *);
+  BOOST_TYPEOF_REGISTER_TYPE(const D_PAD *);
   class BOARD_ITEM;
-  BOOST_TYPEOF_ REGISTER_ TYPE(BOARD_ ITEM *);
+  BOOST_TYPEOF_REGISTER_TYPE(BOARD_ITEM *);
  #endif // _MSC_VER <= 1310
-  #define typeof(expr) BOOST_TYPEOF( expr)
+  #define typeof(expr) BOOST_TYPEOF(expr)
 #endif // def _MSC_VER
 
 inline double round(double x)

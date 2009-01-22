@@ -40,7 +40,7 @@ public:
  * for instance:
  *    the schematic editor uses a common section (zoom hotkeys list ..) and a specific section
  *    the library editor uses the same common section and a specific section
- * this feature avoid duplications and made hotkey file config easier to understand ane edit
+ * this feature avoid duplications and made hotkey file config easier to understand and edit
  */
 struct Ki_HotkeyInfoSectionDescriptor
 {
