@@ -306,24 +306,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 #define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
 #ifdef REMOVE_UNUSED_THERMAL_STUBS
 
-    /* First, Create the list of filled areas begin and end indexes.
-     *  Because a zone creates more than one filled sub area,
-     *  we must handle all start and end points of all sub areas
-     *  for TestPointInsidePolygon, to search if a point is in a filled area in zone
-     */
-    std::vector <int> filled_areas_begin_end_index_list;
-    unsigned int      indexstart = 0, indexend;
-    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
-    {
-        if( m_FilledPolysList[indexend].end_contour )       // end of a filled sub-area found
-        {
-            filled_areas_begin_end_index_list.push_back( indexstart );
-            filled_areas_begin_end_index_list.push_back( indexend );
-            indexstart = indexend + 1;
-        }
-    }
-
-    /* Second, Add the main (corrected) polygon (i.e. the filled area using only one outline)
+    /* Add the main (corrected) polygon (i.e. the filled area using only one outline)
      * in GroupA in Bool_Engine to do a BOOL_A_SUB_B operation
      * All areas to remove will be put in GroupB in Bool_Engine
      */
@@ -385,16 +368,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
                 // translate point
                 ptTest[i] += pad->ReturnShapePos();
-                bool inside = false;
-                for( unsigned idx = 0;
-                     idx < filled_areas_begin_end_index_list.size() && inside == false;
-                     idx += 2 )
-                {
-                    indexstart = filled_areas_begin_end_index_list[idx];
-                    indexend   = filled_areas_begin_end_index_list[idx + 1];
-                    inside     = TestPointInsidePolygon( m_FilledPolysList, indexstart,
-                                                         indexend, ptTest[i].x, ptTest[i].y );
-                }
+                bool inside = HitTestFilledArea( ptTest[i] );
 
                 if( inside == false )
                 {

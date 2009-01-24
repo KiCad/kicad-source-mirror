@@ -825,7 +825,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                 continue;
 
             // Test for same net
-            if( Area_Ref->GetNet() == Area_To_Test->GetNet() && Area_Ref->GetNet() > 0 )
+            if( Area_Ref->GetNet() == Area_To_Test->GetNet() && Area_Ref->GetNet() >= 0 )
                 continue;
 
             // test for some corners of Area_Ref inside Area_To_Test
@@ -998,7 +998,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
             continue;
 
         // Test for same net
-        if( ( aArea->GetNet() == Area_To_Test->GetNet() ) && (aArea->GetNet() > 0) )
+        if( ( aArea->GetNet() == Area_To_Test->GetNet() ) && (aArea->GetNet() >= 0) )
             continue;
 
         // test for ending line inside Area_To_Test

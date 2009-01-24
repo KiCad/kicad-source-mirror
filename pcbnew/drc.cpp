@@ -314,18 +314,21 @@ void DRC::testUnconnected()
     }
 }
 
-
+/**********************************************/
 void DRC::testZones(bool adoTestFillSegments)
+/**********************************************/
 {
 
     // Test copper areas for valide netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
+    // if a netcode is == 0 the netname is void, and the zone is not connected.
+    // This is allowed, but i am not sure this is a good idea
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ii );
         if( ! Area_To_Test->IsOnCopperLayer() )
             continue;
-        if( Area_To_Test->GetNet() <= 0 )
+        if( Area_To_Test->GetNet() < 0 )
         {
             m_currentMarker = fillMarker( Area_To_Test,
                             DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );

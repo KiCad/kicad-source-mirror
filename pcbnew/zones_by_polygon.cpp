@@ -971,15 +971,18 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
             continue;
         }
 
-        const EQUIPOT* net = FindNet( GetArea( ii )->m_Netname );
-        if( net )
+        if ( GetArea( ii )->GetNet() != 0 )     // i.e. if this zone is connected to a net
         {
-            GetArea( ii )->SetNet( net->GetNet() );
-        }
-        else
-        {
-            error_count++;
-            GetArea( ii )->SetNet( -1 );    //keep Net Name ane set m_NetCode to -1 : error flag
+            const EQUIPOT* net = FindNet( GetArea( ii )->m_Netname );
+            if( net )
+            {
+                GetArea( ii )->SetNet( net->GetNet() );
+            }
+            else
+            {
+                error_count++;
+                GetArea( ii )->SetNet( -1 );    //keep Net Name ane set m_NetCode to -1 : error flag
+            }
         }
     }
 

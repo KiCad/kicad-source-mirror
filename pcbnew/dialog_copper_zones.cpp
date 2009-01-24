@@ -69,18 +69,18 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
 
-    m_FillModeCtrl->SetSelection(m_Zone_Setting->m_FillMode ? 1 : 0);
+    m_FillModeCtrl->SetSelection( m_Zone_Setting->m_FillMode ? 1 : 0 );
 
     AddUnitSymbol( *m_ClearanceValueTitle, g_UnitMetric );
     msg = ReturnStringFromValue( g_UnitMetric,
-        m_Zone_Setting->m_ZoneClearance,
-        m_Parent->m_InternalUnits );
+                                 m_Zone_Setting->m_ZoneClearance,
+                                 m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UnitMetric );
     msg = ReturnStringFromValue( g_UnitMetric,
-        m_Zone_Setting->m_ZoneMinThickness,
-        m_Parent->m_InternalUnits );
+                                 m_Zone_Setting->m_ZoneMinThickness,
+                                 m_Parent->m_InternalUnits );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     switch( m_Zone_Setting->m_Zone_Pad_Options )
@@ -113,11 +113,11 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     AddUnitSymbol( *m_AntipadSizeText, g_UnitMetric );
     AddUnitSymbol( *m_CopperBridgeWidthText, g_UnitMetric );
     PutValueInLocalUnits( *m_AntipadSizeValue,
-        m_Zone_Setting->m_ThermalReliefGapValue,
-        PCB_INTERNAL_UNIT );
+                          m_Zone_Setting->m_ThermalReliefGapValue,
+                          PCB_INTERNAL_UNIT );
     PutValueInLocalUnits( *m_CopperWidthValue,
-        m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
-        PCB_INTERNAL_UNIT );
+                          m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
+                          PCB_INTERNAL_UNIT );
 
     switch( m_Zone_Setting->m_Zone_HatchingStyle )
     {
@@ -158,17 +158,20 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     m_NetSortingOption->SetSelection( m_NetSorting );
 
-    wxString      NetNameFilter = wxT( "N_0*" );
+    wxString NetNameFilter = wxT( "N_0*" );
     if( m_Config )
     {
         NetNameFilter =
             m_Config->Read( ZONE_NET_FILTER_STRING_KEY );
     }
 
+    // Build list of nets:
     m_NetNameFilter->SetValue( NetNameFilter );
     wxArrayString ListNetName;
-    m_Parent->GetBoard()->ReturnSortedNetnamesList( ListNetName,
-        m_NetSorting == 0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+    m_Parent->GetBoard()->ReturnSortedNetnamesList(
+        ListNetName,
+        m_NetSorting ==
+        0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
 
     if( m_NetSorting != 0 )
     {
@@ -183,6 +186,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         }
     }
 
+    ListNetName.Insert( wxT( "<no net>" ), 0 );
     m_ListNetNameSelection->InsertItems( ListNetName, 0 );
 
     // Select net:
@@ -265,7 +269,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if( m_Config )
     {
         m_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-            (long) m_Zone_Setting->m_Zone_HatchingStyle );
+                         (long) m_Zone_Setting->m_Zone_HatchingStyle );
         wxString Filter = m_NetNameFilter->GetValue();
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
@@ -279,10 +283,11 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
         ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
-    if ( m_Zone_Setting->m_ZoneMinThickness < 10 )
+    if( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
-        _( "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch or 0.0254 mm)" ) );
+                     _(
+                         "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch or 0.0254 mm)" ) );
         return false;
     }
 
@@ -292,20 +297,22 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         g_Zone_45_Only = TRUE;
 
     m_Zone_Setting->m_ThermalReliefGapValue = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
-        PCB_INTERNAL_UNIT );
+                                                                       PCB_INTERNAL_UNIT );
     m_Zone_Setting->m_ThermalReliefCopperBridgeValue = ReturnValueFromTextCtrl(
         *m_CopperWidthValue,
         PCB_INTERNAL_UNIT );
 
     m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-        (long) m_Zone_Setting->m_ThermalReliefGapValue );
+                     (long) m_Zone_Setting->m_ThermalReliefGapValue );
     m_Config->Write(
         ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
         (long) m_Zone_Setting->m_ThermalReliefCopperBridgeValue );
 
     if( m_Zone_Setting->m_ThermalReliefCopperBridgeValue <= m_Zone_Setting->m_ZoneMinThickness )
     {
-        DisplayError( this, _( "Error :\nyou must choose a copper bridge value for thermal reliefs bigger than the min zone thickness" ) );
+        DisplayError( this,
+                     _(
+                         "Error :\nyou must choose a copper bridge value for thermal reliefs bigger than the min zone thickness" ) );
         return false;
     }
 
@@ -333,17 +340,29 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         return false;
     }
 
+    if ( ii == 0 )  // the not connected option was selected: this is not a good practice: warn:
+    {
+       if( ! IsOK( this, _(
+           "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?") )
+            )
+        return false;
+     }
+
     wxString net_name = m_ListNetNameSelection->GetString( ii );
 
-    /* Search net_code for this net */
-    EQUIPOT* net;
     g_Zone_Default_Setting.m_NetcodeSelection = 0;
-    for( net = m_Parent->GetBoard()->m_Equipots;   net;  net = net->Next() )
+
+    /* Search net_code for this net, if a net was selected */
+    if( m_ListNetNameSelection->GetSelection() > 0 )
     {
-        if( net->GetNetname() == net_name )
+        EQUIPOT* net;
+        for( net = m_Parent->GetBoard()->m_Equipots;   net;  net = net->Next() )
         {
-            g_Zone_Default_Setting.m_NetcodeSelection = net->GetNet();
-            break;
+            if( net->GetNetname() == net_name )
+            {
+                g_Zone_Default_Setting.m_NetcodeSelection = net->GetNet();
+                break;
+            }
         }
     }
 
