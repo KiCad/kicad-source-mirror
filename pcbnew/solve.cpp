@@ -18,7 +18,7 @@
 #include "cell.h"
 
 /* Routines definies ici : */
-static int  Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC, int two_sides, int row_source,
+static int  Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC, int two_sides, int row_source,
                            int col_source,
                            int row_target, int col_target, CHEVELU* pt_chevelu );
 static int  Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC, int, int, int, int, int, int net_code );
@@ -263,7 +263,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         pt_cur_ch->pad_start->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
         pt_cur_ch->pad_end->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
 
-        success = Route_1_Trace( this, DC, two_sides, row_source, col_source,
+        success = Autoroute_One_Track( this, DC, two_sides, row_source, col_source,
                                  row_target, col_target, pt_cur_ch );
 
         switch( success )
@@ -308,7 +308,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 
 
 /**********************************************************************************/
-static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
+static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                           int two_sides, int row_source, int col_source,
                           int row_target, int col_target, CHEVELU* pt_chevelu )
 /**********************************************************************************/
@@ -346,6 +346,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                              *  de tst (side = TOP ou BOTTOM)*/
     int        start_mask_layer = 0;
     wxString   msg;
+
+    wxBusyCursor dummy_cursor;      // Set an hourglass cursor while routing a track
 
     result = NOSUCCESS;
 
