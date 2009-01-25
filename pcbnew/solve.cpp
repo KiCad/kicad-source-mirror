@@ -65,9 +65,9 @@ static int delta[8][2] = {
 };
 
 static int ndir[8] = { /* for building paths back to source */
-    FROM_SOUTHEAST, FROM_SOUTH, FROM_SOUTHWEST,
+    FROM_SOUTHEAST, FROM_SOUTH,     FROM_SOUTHWEST,
     FROM_EAST,      FROM_WEST,
-    FROM_NORTHEAST, FROM_NORTH, FROM_NORTHWEST
+    FROM_NORTHEAST, FROM_NORTH,     FROM_NORTHWEST
 };
 
 /* blocking masks for neighboring cells */
@@ -173,22 +173,23 @@ static struct
     long trace;
     int  present;
 }           selfok2[8] = {
-    { HOLE_NORTHWEST, 0 },
-    { HOLE_NORTH,     0 },
-    { HOLE_NORTHEAST, 0 },
-    { HOLE_WEST,      0 },
-    { HOLE_EAST,      0 },
-    { HOLE_SOUTHWEST, 0 },
-    { HOLE_SOUTH,     0 },
-    { HOLE_SOUTHEAST, 0 }
+    { HOLE_NORTHWEST, 0                },
+    { HOLE_NORTH,     0                },
+    { HOLE_NORTHEAST, 0                },
+    { HOLE_WEST,      0                },
+    { HOLE_EAST,      0                },
+    { HOLE_SOUTHWEST, 0                },
+    { HOLE_SOUTH,     0                },
+    { HOLE_SOUTHEAST, 0                }
 };
 
 static long newmask[8] = { /* patterns to mask out in neighbor cells */
-    0,                                   CORNER_NORTHWEST | CORNER_NORTHEAST, 0,
+    0,                                   CORNER_NORTHWEST | CORNER_NORTHEAST,
+    0,
     CORNER_NORTHWEST | CORNER_SOUTHWEST, CORNER_NORTHEAST | CORNER_SOUTHEAST,
-    0,                                   CORNER_SOUTHWEST | CORNER_SOUTHEAST, 0
+    0,                                   CORNER_SOUTHWEST | CORNER_SOUTHEAST,
+    0
 };
-
 
 
 /********************************************************/
@@ -221,11 +222,11 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 
     /* go until no more work to do */
     GetWork( &row_source, &col_source, &current_net_code,
-        &row_target, &col_target, &pt_cur_ch );      // 1er chevelu a router
+             &row_target, &col_target, &pt_cur_ch ); // 1er chevelu a router
 
     for( ; row_source != ILLEGAL; GetWork( &row_source, &col_source,
-            &current_net_code, &row_target, &col_target,
-            &pt_cur_ch ) )
+                                           &current_net_code, &row_target, &col_target,
+                                           &pt_cur_ch ) )
     {
         /* Tst demande d'arret de routage ( key ESCAPE actionnee ) */
         wxYield();
@@ -263,7 +264,7 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
         pt_cur_ch->pad_end->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
 
         success = Route_1_Trace( this, DC, two_sides, row_source, col_source,
-            row_target, col_target, pt_cur_ch );
+                                 row_target, col_target, pt_cur_ch );
 
         switch( success )
         {
@@ -306,9 +307,11 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 }
 
 
-/**************************/
-/* int Route_1_Trace(xxx) */
-/**************************/
+/**********************************************************************************/
+static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
+                          int two_sides, int row_source, int col_source,
+                          int row_target, int col_target, CHEVELU* pt_chevelu )
+/**********************************************************************************/
 
 /* Route une piste du BOARD.
  *  Parametres:
@@ -325,9 +328,6 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
  *      STOP_FROM_ESC si Escape demande
  *      ERR_MEMORY defaut alloc RAM
  */
-static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
-                          int two_sides, int row_source, int col_source,
-                          int row_target, int col_target, CHEVELU* pt_chevelu )
 {
     int        r, c, side, d, apx_dist, nr, nc;
     int        result, skip;
@@ -419,13 +419,14 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     /* Placement du bit de suppression d'obstacle relative aux 2 pads a relier */
     pcbframe->Affiche_Message( wxT( "Gen Cells" ) );
 
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_start, CURRENT_PAD, marge, WRITE_OR_CELL );
+    Place_1_Pad_Board(
+        pcbframe->GetBoard(), pt_cur_ch->pad_start, CURRENT_PAD, marge, WRITE_OR_CELL );
     Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_end, CURRENT_PAD, marge, WRITE_OR_CELL );
 
     /* Regenere les barrieres restantes (qui peuvent empieter sur le placement
      *  des bits precedents) */
     ptr = (LISTE_PAD*) &pcbframe->GetBoard()->m_Pads[0];
-    i = pcbframe->GetBoard()->m_Pads.size();
+    i   = pcbframe->GetBoard()->m_Pads.size();
     for( ; i > 0; i--, ptr++ )
     {
         if( (pt_cur_ch->pad_start != *ptr) && (pt_cur_ch->pad_end != *ptr) )
@@ -446,7 +447,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             {
                 start_mask_layer = 2;
                 if( SetQueue( row_source, col_source, TOP, 0, apx_dist,
-                        row_target, col_target ) == 0 )
+                              row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -456,7 +457,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 start_mask_layer |= 1;
 
                 if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                        row_target, col_target ) == 0 )
+                              row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -468,7 +469,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             {
                 start_mask_layer = 1;
                 if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                        row_target, col_target ) == 0 )
+                              row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -478,7 +479,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 start_mask_layer |= 2;
 
                 if( SetQueue( row_source, col_source, TOP, 0, apx_dist,
-                        row_target, col_target ) == 0 )
+                              row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -490,7 +491,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
         start_mask_layer = 1;
 
         if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                row_target, col_target ) == 0 )
+                      row_target, col_target ) == 0 )
         {
             return ERR_MEMORY;
         }
@@ -509,17 +510,17 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             /* Efface Liaison */
             GRSetDrawMode( DC, GR_XOR );
             GRLine( &pcbframe->DrawPanel->m_ClipBox,
-                DC,
-                segm_oX,
-                segm_oY,
-                segm_fX,
-                segm_fY,
-                0,
-                WHITE );
+                    DC,
+                    segm_oX,
+                    segm_oY,
+                    segm_fX,
+                    segm_fY,
+                    0,
+                    WHITE );
 
             /* Generation de la trace */
             if( Retrace( pcbframe, DC, row_source, col_source,
-                   row_target, col_target, side, current_net_code ) )
+                         row_target, col_target, side, current_net_code ) )
             {
                 result = SUCCESS;   /* Success : Route OK */
             }
@@ -591,9 +592,9 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
             olddir  = GetDir( r, c, side );
             newdist = d + CalcDist( ndir[i], olddir,
-                (olddir == FROM_OTHERSIDE) ? GetDir( r,
-                    c,
-                    1 - side ) : 0, side );
+                                    (olddir == FROM_OTHERSIDE) ? GetDir( r,
+                                                                         c,
+                                                                         1 - side ) : 0, side );
 
             /* if (a) not visited yet, or (b) we have */
             /* found a better path, add it to queue */
@@ -602,8 +603,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 SetDir( nr, nc, side, ndir[i] );
                 SetDist( nr, nc, side, newdist );
                 if( SetQueue( nr, nc, side, newdist,
-                        GetApxDist( nr, nc, row_target, col_target ),
-                        row_target, col_target ) == 0 )
+                              GetApxDist( nr, nc, row_target, col_target ),
+                              row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -613,8 +614,8 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 SetDir( nr, nc, side, ndir[i] );
                 SetDist( nr, nc, side, newdist );
                 ReSetQueue( nr, nc, side, newdist,
-                    GetApxDist( nr, nc, row_target, col_target ),
-                    row_target, col_target );
+                            GetApxDist( nr, nc, row_target, col_target ),
+                            row_target, col_target );
             }
         }
 
@@ -663,7 +664,7 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
                 SetDir( r, c, 1 - side, FROM_OTHERSIDE );
                 SetDist( r, c, 1 - side, newdist );
                 if( SetQueue( r, c, 1 - side, newdist, apx_dist, row_target,
-                        col_target ) == 0 )
+                              col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -678,8 +679,10 @@ static int Route_1_Trace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     }
 
 end_of_route:
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_start, ~CURRENT_PAD, marge, WRITE_AND_CELL );
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->pad_end, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    Place_1_Pad_Board(
+        pcbframe->GetBoard(), pt_cur_ch->pad_start, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    Place_1_Pad_Board(
+        pcbframe->GetBoard(), pt_cur_ch->pad_end, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
     return result;
 }
@@ -688,30 +691,40 @@ end_of_route:
 static long bit[8][9] = { /* OT=Otherside */
     /* N, NE, E, SE, S, SW, W, NW, OT */
 /* N */
-    { LINE_VERTICAL,    BENT_StoNE,   CORNER_SOUTHEAST, SHARP_StoSE,  0,
+    { LINE_VERTICAL,    BENT_StoNE,                 CORNER_SOUTHEAST,
+           SHARP_StoSE,
+           0,
            SHARP_StoSW, CORNER_SOUTHWEST, BENT_StoNW, (HOLE | HOLE_SOUTH) },
-/* NE */ { BENT_NtoSW,       DIAG_NEtoSW,  BENT_EtoSW,       ANGLE_SEtoSW, SHARP_StoSW,
+/* NE */ { BENT_NtoSW,       DIAG_NEtoSW,                BENT_EtoSW,             ANGLE_SEtoSW,
+           SHARP_StoSW,
            0, SHARP_WtoSW, ANGLE_SWtoNW, (HOLE | HOLE_SOUTHWEST) },
-/* E */  { CORNER_NORTHWEST, BENT_WtoNE,   LINE_HORIZONTAL,  BENT_WtoSE,
+/* E */  { CORNER_NORTHWEST, BENT_WtoNE,                 LINE_HORIZONTAL,        BENT_WtoSE,
            CORNER_SOUTHWEST, SHARP_WtoSW, 0, SHARP_WtoNW, (HOLE | HOLE_WEST) },
-/* SE */ { SHARP_NtoNW,      ANGLE_NWtoNE, BENT_EtoNW,       DIAG_SEtoNW,  BENT_StoNW,
+/* SE */ { SHARP_NtoNW,      ANGLE_NWtoNE,               BENT_EtoNW,             DIAG_SEtoNW,
+           BENT_StoNW,
            ANGLE_SWtoNW, SHARP_WtoNW, 0, (HOLE | HOLE_NORTHWEST) },
-/* S */  { 0,                SHARP_NtoNE,  CORNER_NORTHEAST, BENT_NtoSE,   LINE_VERTICAL,
+/* S */  { 0,                SHARP_NtoNE,                CORNER_NORTHEAST,       BENT_NtoSE,
+           LINE_VERTICAL,
            BENT_NtoSW, CORNER_NORTHWEST, SHARP_NtoNW, (HOLE | HOLE_NORTH) },
-/* SW */ { SHARP_NtoNE,      0,            SHARP_EtoNE,      ANGLE_NEtoSE, BENT_StoNE,
+/* SW */ { SHARP_NtoNE,      0,                          SHARP_EtoNE,            ANGLE_NEtoSE,
+           BENT_StoNE,
            DIAG_NEtoSW,
            BENT_WtoNE, ANGLE_NWtoNE, (HOLE | HOLE_NORTHEAST) },
-/* W */  { CORNER_NORTHEAST, SHARP_EtoNE,  0,                SHARP_EtoSE,  CORNER_SOUTHEAST,
+/* W */  { CORNER_NORTHEAST, SHARP_EtoNE,                0,                      SHARP_EtoSE,
+           CORNER_SOUTHEAST,
            BENT_EtoSW, LINE_HORIZONTAL, BENT_EtoNW, (HOLE | HOLE_EAST) },
-/* NW */ { BENT_NtoSE,       ANGLE_NEtoSE, SHARP_EtoSE,      0,            SHARP_StoSE,
+/* NW */ { BENT_NtoSE,       ANGLE_NEtoSE,               SHARP_EtoSE,            0,
+           SHARP_StoSE,
            ANGLE_SEtoSW, BENT_WtoSE, DIAG_SEtoNW, (HOLE | HOLE_SOUTHEAST) }
 };
 
-/*****************************************************************/
-/* int Retrace (COMMAND * Cmd, int row_source, int col_source	 */
-/*				int row_target, int col_target, int target_side, */
-/*				 		int current_net_code )					 */
-/*****************************************************************/
+
+/*******************************************************************/
+static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
+                    int row_source, int col_source,
+                    int row_target, int col_target, int target_side,
+                    int current_net_code )
+/*******************************************************************/
 
 /* work from target back to source, actually laying the traces
  *  Parametres:
@@ -729,10 +742,6 @@ static long bit[8][9] = { /* OT=Otherside */
  *      > 0 si Ok
  */
 
-static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
-                    int row_source, int col_source,
-                    int row_target, int col_target, int target_side,
-                    int current_net_code )
 {
     int  r0, c0, s0;
     int  r1, c1, s1;    /* row, col, side d'ou on vient */
@@ -919,11 +928,11 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetState( SEGM_AR, ON );
         g_CurrentTrackSegment->SetLayer( 0x0F );
 
-        g_CurrentTrackSegment->m_Start.x =
-        g_CurrentTrackSegment->m_End.x = pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * row);
+        g_CurrentTrackSegment->m_Start.x   =
+            g_CurrentTrackSegment->m_End.x = pcb->m_BoundaryBox.m_Pos.x + (g_GridRoutingSize * row);
 
-        g_CurrentTrackSegment->m_Start.y =
-        g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
+        g_CurrentTrackSegment->m_Start.y   =
+            g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
 
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentViaSize;
         g_CurrentTrackSegment->m_Shape = g_DesignSettings.m_CurrentViaType;
@@ -995,8 +1004,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
                 if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) ) /* le dernier segment est en ligne*/
                 {
-                    oldTrack->m_End.x = g_CurrentTrackSegment->m_End.x;
-                    oldTrack->m_End.y = g_CurrentTrackSegment->m_End.y;
+                    oldTrack->m_End = g_CurrentTrackSegment->m_End;
 
                     delete g_CurrentTrackList.PopBack();
                 }
@@ -1006,18 +1014,20 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 }
 
 
-/*******************************************/
-/* static void Place_Piste_en_Buffer() */
-/*******************************************/
+/***********************************************************************/
+static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
+/***********************************************************************/
 
 /* Insere la nouvelle piste creee dans la liste standard des pistes.
  *  Modifie les points de debut et fin de piste pour qu'ils soient relies
  *  au centre des pads corresponadants, meme hors grille
  */
-static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 {
-    int               dx0, dy0, dx1, dy1;
-    int               marge, via_marge;
+    if( g_FirstTrackSegment == NULL )
+        return;
+
+    int dx0, dy0, dx1, dy1;
+    int marge, via_marge;
     WinEDA_DrawPanel* panel = pcbframe->DrawPanel;
 
     marge     = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentTrackWidth / 2);
@@ -1047,27 +1057,39 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = Locate_Pad_Connecte( pcbframe->GetBoard(), g_FirstTrackSegment, START );
+    g_FirstTrackSegment->start = Locate_Pad_Connecte(
+        pcbframe->GetBoard(), g_FirstTrackSegment, START );
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, ON );
 
-    g_CurrentTrackSegment->end = Locate_Pad_Connecte( pcbframe->GetBoard(), g_CurrentTrackSegment, END );
+    g_CurrentTrackSegment->end = Locate_Pad_Connecte(
+        pcbframe->GetBoard(), g_CurrentTrackSegment, END );
     if( g_CurrentTrackSegment->end )
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );
 
-    /* recherche de la zone de rangement et insertion de la nouvelle piste */
-    pcbframe->GetBoard()->Add( g_FirstTrackSegment );
-
-    Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_OR );
-
-    pcbframe->test_1_net_connexion( DC, g_FirstTrackSegment->GetNet() );
-
-    /* Trace de la forme exacte de la piste en BOARD */
+    /* Out the new track on the matrix board */
     for( TRACK* track = g_FirstTrackSegment;  track;  track = track->Next() )
     {
         TraceSegmentPcb( pcbframe->GetBoard(), track, HOLE, marge, WRITE_CELL );
         TraceSegmentPcb( pcbframe->GetBoard(), track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
+
+    // Insert new segments in  real board
+    int    netcode    = g_FirstTrackSegment->GetNet();
+    TRACK* firstTrack = g_FirstTrackSegment;
+    int    newCount   = g_CurrentTrackList.GetCount();
+
+    // Put entire new current segment list in BOARD
+    TRACK* track;
+    TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( pcbframe->GetBoard() );
+    while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
+    {
+        pcbframe->GetBoard()->m_Track.Insert( track, insertBeforeMe );
+    }
+
+    Trace_Une_Piste( panel, DC, firstTrack, newCount, GR_OR );
+
+    pcbframe->test_1_net_connexion( DC, netcode );
 
     ActiveScreen->SetModify();
 }
