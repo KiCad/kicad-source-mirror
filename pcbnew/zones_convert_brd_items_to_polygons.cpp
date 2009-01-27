@@ -467,6 +467,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
         for( ii = 0; ii < s_CircleToSegmentsCount; ii++ )
         {
             corner_position = wxPoint( dx, 0 );
+            RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );    // Half increment offset to get more space between
             angle = ii * delta;
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
@@ -487,6 +488,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             for( ii = 0; ii < s_CircleToSegmentsCount / 2 + 1; ii++ )   // Half circle end cap...
             {
                 corner_position = wxPoint( dx, 0 );                     // Coordinate translation +dx
+                RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
                 RotatePoint( &corner_position, angle );
                 angle_pg = ii * delta;
                 RotatePoint( &corner_position, angle_pg );
@@ -497,6 +499,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             for( ii = 0; ii < s_CircleToSegmentsCount / 2 + 1; ii++ )   // Second half circle end cap...
             {
                 corner_position = wxPoint( -dx, 0 );                    // Coordinate translation -dx
+                RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
                 RotatePoint( &corner_position, angle );
                 angle_pg = ii * delta;
                 RotatePoint( &corner_position, angle_pg );
@@ -516,6 +519,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             for( ii = 0; ii < s_CircleToSegmentsCount / 2 + 1; ii++ )
             {
                 corner_position = wxPoint( 0, dy );
+                RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
                 RotatePoint( &corner_position, angle );
                 angle_pg = ii * delta;
                 RotatePoint( &corner_position, angle_pg );
@@ -526,6 +530,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             for( ii = 0; ii < s_CircleToSegmentsCount / 2 + 1; ii++ )
             {
                 corner_position = wxPoint( 0, -dy );
+                RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
                 RotatePoint( &corner_position, angle );
                 angle_pg = ii * delta;
                 RotatePoint( &corner_position, angle_pg );
@@ -544,6 +549,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
         for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( 0, -rounding_radius );
+            RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );	// Start at half increment offset
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );                          // Rounding vector rotation
             corner_position -= aPad.m_Size / 2;                                 // Rounding vector + Pad corner offset
@@ -555,6 +561,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
         for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( -rounding_radius, 0 );
+            RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
             corner_position -= wxPoint( aPad.m_Size.x / 2, -aPad.m_Size.y / 2 );
@@ -566,6 +573,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
         for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( 0, rounding_radius );
+            RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
             corner_position += aPad.m_Size / 2;
@@ -577,6 +585,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
         for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( rounding_radius, 0 );
+            RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
             corner_position -= wxPoint( -aPad.m_Size.x / 2, aPad.m_Size.y / 2 );
@@ -923,6 +932,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         for( int i = 0; i < s_CircleToSegmentsCount / 4 + 1; i++ )
         {
             wxPoint corner_position = wxPoint( 0, -rounding_radius );
+            RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );	// Start at half increment offset
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );                          // Rounding vector rotation
             corner_position -= aPad.m_Size / 2;                                 // Rounding vector + Pad corner offset
@@ -1004,6 +1014,7 @@ void AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
             for( ii = 0; ii < s_CircleToSegmentsCount; ii++ )
             {
                 corner_position = wxPoint( dx, 0 );
+                RotatePoint( &corner_position, (1800/s_CircleToSegmentsCount) );
                 angle = ii * delta;
                 RotatePoint( &corner_position, angle );
                 corner_position += aTrack.m_Start;
