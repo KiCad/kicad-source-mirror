@@ -192,8 +192,13 @@ static long newmask[8] = { /* patterns to mask out in neighbor cells */
 };
 
 
+/* Macro d'affichage de l'activite du routeur; */
+#define AFFICHE_ACTIVITE_ROUTE \
+				msg.Printf( wxT("Activity: Open %d   Closed %d   Moved %d"), OpenNodes, ClosNodes, MoveNodes); \
+				pcbframe->Affiche_Message(msg);
+
 /********************************************************/
-/* int WinEDA_PcbFrame::Solve(wxDC * DC, int two_sides) */
+int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 /********************************************************/
 
 /* route all traces
@@ -202,7 +207,6 @@ static long newmask[8] = { /* patterns to mask out in neighbor cells */
  *             -2 si defaut alloc memoire
  */
 
-int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
 {
     int      current_net_code;
     int      row_source, col_source, row_target, col_target;
@@ -534,6 +538,16 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             result = STOP_FROM_ESC; break;
         }
 
+		/* report every COUNT new nodes or so */
+        #define COUNT 20000
+		if( (OpenNodes-lastopen > COUNT) || (ClosNodes-lastclos > COUNT) || (MoveNodes - lastmove > COUNT))
+		{
+			lastopen = OpenNodes;
+            lastclos = ClosNodes;
+			lastmove = MoveNodes;
+			AFFICHE_ACTIVITE_ROUTE;
+		}
+
         _self = 0;
         if( curcell & HOLE )
         {
@@ -685,6 +699,8 @@ end_of_route:
         pcbframe->GetBoard(), pt_cur_ch->pad_start, ~CURRENT_PAD, marge, WRITE_AND_CELL );
     Place_1_Pad_Board(
         pcbframe->GetBoard(), pt_cur_ch->pad_end, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+
+	AFFICHE_ACTIVITE_ROUTE;
 
     return result;
 }
