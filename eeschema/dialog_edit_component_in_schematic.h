@@ -12,6 +12,9 @@
  */
 class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
 {
+    friend void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
+                          SCH_COMPONENT* aComponent );
+
     WinEDA_SchematicFrame*  m_Parent;
     SCH_COMPONENT*          m_Cmp;
     EDA_LibComponentStruct* m_LibEntry;

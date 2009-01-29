@@ -19,6 +19,23 @@
 int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
 
 
+/**
+ * Function GetTextSize
+ * computes the size of a text string in pixels from the wxFont used within a wxTextCtrl.
+ * @param aString is the text string to measure, must be a single line, no newlines.
+ * @param aWindow is the wxWindow which is the parent of the wxTextCtrl \a aCtrl.
+ * @param aWidth is where to put the width of the string in pixels.
+ * @param aHeight is where to put the heigth of the string in pixels.
+ */
+static void GetTextSize( const wxString& aString, wxWindow* aWindow, wxTextCtrl* aCtrl, wxCoord* aWidth, wxCoord* aHeight )
+{
+    wxClientDC dc( aWindow );
+
+    dc.SetFont( aCtrl->GetFont() );
+    dc.GetTextExtent( aString, aWidth, aHeight );
+}
+
+
 /**********************************************************************/
 void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                           SCH_COMPONENT* aComponent )
@@ -35,13 +52,30 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
     }
     else
     {
-        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* frame =
+        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* dialog =
             new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( parent );
 
-        frame->InitBuffers( aComponent );
+        dialog->InitBuffers( aComponent );
 
-        frame->ShowModal();
-        frame->Destroy();
+        // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
+        {
+            wxCoord width;
+            wxCoord height;
+
+            GetTextSize( dialog->chipnameTextCtrl->GetValue(), dialog, dialog->chipnameTextCtrl, &width, &height );
+
+            wxSize size = dialog->chipnameTextCtrl->GetSize();
+
+            if( size.GetWidth() < width + 10 )
+            {
+                size.SetWidth( width + 10 );
+                dialog->chipnameTextCtrl->SetSizeHints( size );
+                dialog->Layout();
+            }
+        }
+
+        dialog->ShowModal();
+        dialog->Destroy();
     }
 
     parent->DrawPanel->MouseToCursorSchema();
@@ -598,6 +632,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
     if( unitcount < 1 )
         unitcount = 1;
+
     if( unitcount < choiceCount )
     {
         while( unitcount < choiceCount )
