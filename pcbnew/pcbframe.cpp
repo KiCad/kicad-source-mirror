@@ -207,7 +207,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_SelTrackWidthBox         = NULL;
     m_SelViaSizeBox            = NULL;
     m_SelLayerBox              = NULL;
-    m_ZoomMaxValue             = 2048;
     m_SelTrackWidthBox_Changed = FALSE;
     m_SelViaSizeBox_Changed    = FALSE;
 
@@ -542,19 +541,14 @@ void WinEDA_PcbFrame::SetToolbars()
 
         if( m_SelZoomBox )
         {
-            int old_choice = m_SelZoomBox->GetChoice();
-            int new_choice = 1;
-            int zoom;
-
-            for( jj = 1, zoom = 1; zoom <= m_ZoomMaxValue; zoom <<= 1, jj++ )
+            for( jj = 0; jj < (int)GetScreen()->m_ZoomList.GetCount(); jj++ )
             {
-                if( GetScreen() && (GetScreen()->GetZoom() == zoom) )
+                if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
+                {
+                    m_SelZoomBox->SetSelection( jj + 1 );
                     break;
-                new_choice++;
+                }
             }
-
-            if( old_choice != new_choice )
-                m_SelZoomBox->SetSelection( new_choice );
         }
 
         if( m_SelGridBox && GetScreen() )
@@ -575,8 +569,6 @@ void WinEDA_PcbFrame::SetToolbars()
     }
 
     UpdateToolbarLayerInfo();
-
     PrepareLayerIndicator();
-
     DisplayUnitsMsg();
 }

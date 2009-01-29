@@ -110,8 +110,8 @@ void DrawBlockStruct::SetMessageBlock( WinEDA_DrawFrame* frame )
 void DrawBlockStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC )
 /**************************************************************/
 {
-    int w = GetWidth() / panel->GetZoom();
-    int h = GetHeight() / panel->GetZoom();
+    int w = panel->GetScreen()->Scale( GetWidth() );
+    int h = panel->GetScreen()->Scale( GetHeight() );
 
     if(  w == 0 || h == 0 )
         GRLine( &panel->m_ClipBox, DC, GetX(), GetY(),
@@ -133,8 +133,8 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
 {
     DrawBlockStruct* Block = & GetBaseScreen()->BlockLocate;
 
-    if( (Block->m_Command != BLOCK_IDLE)
-       || ( Block->m_State != STATE_NO_BLOCK) )
+    if( ( Block->m_Command != BLOCK_IDLE )
+        || ( Block->m_State != STATE_NO_BLOCK ) )
         return FALSE;
 
     Block->m_Flags   = 0;
@@ -177,7 +177,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
         {
             Block->m_BlockDrawStruct = NULL;
             DisplayError( this,
-                         wxT( "WinEDA_DrawFrame::HandleBlockBegin() Err: ManageCurseur NULL" ) );
+                          wxT( "WinEDA_DrawFrame::HandleBlockBegin() Err: ManageCurseur NULL" ) );
             return TRUE;
         }
         Block->m_State = STATE_BLOCK_MOVE;

@@ -211,14 +211,13 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/*****************************************************************************************/
-void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                               int DrawMode, int Color )
-/*****************************************************************************************/
+/****************************************************************************/
 /* Draw wires, Bus, and dashed liges.. */
+/****************************************************************************/
+void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                               const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int zoom  = panel->GetZoom();
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
@@ -227,15 +226,19 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
         color = ReturnLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
-    if( (m_Layer == LAYER_BUS) && (zoom <= 16) )
+
+    // FIXME: Not compatable with new zoom.
+    if( (m_Layer == LAYER_BUS) && panel->GetScreen()->Scale( width ) <= 1 )
         width *= 3;
 
     if( m_Layer == LAYER_NOTES )
-        GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x, m_Start.y + offset.y,
-                      m_End.x + offset.x, m_End.y + offset.y, width, color );
+        GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
+                      m_Start.y + offset.y, m_End.x + offset.x,
+                      m_End.y + offset.y, width, color );
     else
-        GRLine( &panel->m_ClipBox, DC, m_Start.x + offset.x, m_Start.y + offset.y,
-                m_End.x + offset.x, m_End.y + offset.y, width, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
+                m_Start.y + offset.y, m_End.x + offset.x, m_End.y + offset.y,
+                width, color );
 
     if( m_StartIsDangling )
         DrawDanglingSymbol( panel, DC, m_Start + offset, color );
@@ -310,7 +313,6 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
 
 {
     int color;
-    int zoom  = panel->GetZoom();
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
@@ -319,7 +321,7 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
         color = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    if( (m_Layer == LAYER_BUS) && (zoom <= 16) )
+    if( m_Layer == LAYER_BUS )
         width *= 3;
 
     GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
@@ -345,7 +347,6 @@ void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
                                int DrawMode, int Color )
 {
     int color;
-    int zoom  = panel->GetZoom();
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
@@ -355,7 +356,7 @@ void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
 
     GRSetDrawMode( DC, DrawMode );
 
-    if( (m_Layer == LAYER_BUS) && (zoom <= 16) )
+    if( m_Layer == LAYER_BUS )
     {
         width *= 3;
     }

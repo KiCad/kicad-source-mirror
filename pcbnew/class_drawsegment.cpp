@@ -132,19 +132,19 @@ wxPoint DRAWSEGMENT::GetStart() const
 
 wxPoint DRAWSEGMENT::GetEnd() const
 {
+    wxPoint center;        // center point of the arc
+    wxPoint start;         // start of arc
+
     switch( m_Shape )
     {
     case S_ARC:
-        {
-            // rotate the starting point of the arc, given by m_End, through the angle m_Angle
-            // to get the ending point of the arc.
-            wxPoint center = m_Start;       // center point of the arc
-            wxPoint start  = m_End;         // start of arc
+        // rotate the starting point of the arc, given by m_End, through the
+        // angle m_Angle to get the ending point of the arc.
+        center = m_Start;       // center point of the arc
+        start  = m_End;         // start of arc
+        RotatePoint( &start.x, &start.y, center.x, center.y, -m_Angle );
 
-            RotatePoint( &start.x, &start.y, center.x, center.y, -m_Angle );
-
-            return start;   // after rotation, the end of the arc.
-        }
+        return start;   // after rotation, the end of the arc.
         break;
 
     case S_SEGMENT:
@@ -156,22 +156,16 @@ wxPoint DRAWSEGMENT::GetEnd() const
 
 
 void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int draw_mode, const wxPoint& notUsed )
+                        int draw_mode, const wxPoint& notUsed )
 {
     int ux0, uy0, dx, dy;
     int l_piste;
     int color, mode;
-    int zoom;
     int rayon;
 
     color = g_DesignSettings.m_LayerColor[GetLayer()];
     if( color & ITEM_NOT_SHOW )
         return;
-
-    if( panel )
-        zoom = panel->GetZoom();
-    else
-        zoom = ActiveScreen->GetZoom();
 
     GRSetDrawMode( DC, draw_mode );
     l_piste = m_Width >> 1;  /* l_piste = demi largeur piste */
@@ -187,7 +181,7 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     mode = DisplayOpt.DisplayDrawItems;
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;
-    if( l_piste < (L_MIN_DESSIN * zoom) )
+    if( l_piste < panel->GetScreen()->Unscale( L_MIN_DESSIN ) )
         mode = FILAIRE;
 
     switch( m_Shape )
@@ -210,39 +204,38 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
 
     case S_ARC:
+        int StAngle, EndAngle;
+        rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
+        EndAngle = StAngle + m_Angle;
+
+        if ( ! panel->m_PrintIsMirrored)
         {
-            int StAngle, EndAngle;
-            rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
-            StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
-            EndAngle = StAngle + m_Angle;
-
-            if ( ! panel->m_PrintIsMirrored)
-            {
-                if( StAngle > EndAngle )
-                    EXCHG( StAngle, EndAngle );
-            }
-            else    //Mirrored mode: arc orientation is reversed
-            {
-                if( StAngle < EndAngle )
-                    EXCHG( StAngle, EndAngle );
-            }
+            if( StAngle > EndAngle )
+                EXCHG( StAngle, EndAngle );
+        }
+        else    //Mirrored mode: arc orientation is reversed
+        {
+            if( StAngle < EndAngle )
+                EXCHG( StAngle, EndAngle );
+        }
 
 
-            if( mode == FILAIRE )
-                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, color );
+        if( mode == FILAIRE )
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                   rayon, color );
 
-            else if( mode == SKETCH )
-            {
-                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                       rayon - l_piste, color );
-                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                       rayon + l_piste, color );
-            }
-            else
-            {
-                GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                       rayon, m_Width, color );
-            }
+        else if( mode == SKETCH )
+        {
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                   rayon - l_piste, color );
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                   rayon + l_piste, color );
+        }
+        else
+        {
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                   rayon, m_Width, color );
         }
         break;
 
@@ -339,7 +332,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
         rayon = (int) hypot( (double) (dx), (double) (dy) );
         dist  = (int) hypot( (double) (spot_cX), (double) (spot_cY) );
 
-        if( abs( rayon - dist ) <= (m_Width / 2) )
+        if( abs( rayon - dist ) <= ( m_Width / 2 ) )
         {
             if( m_Shape == S_CIRCLE )
                 return true;
@@ -355,7 +348,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
                 endAngle -= 3600;
             }
 
-            if( mouseAngle >= stAngle  &&  mouseAngle <= endAngle )
+            if( mouseAngle >= stAngle && mouseAngle <= endAngle )
                 return true;
         }
     }

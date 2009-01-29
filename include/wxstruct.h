@@ -11,6 +11,8 @@
 #define eda_global extern
 #endif
 
+#include <vector>
+
 #include <wx/socket.h>
 #include "wx/log.h"
 #include "wx/config.h"
@@ -18,7 +20,10 @@
 #include <wx/laywin.h>
 #include <wx/snglinst.h>
 
-#include <vector>
+#include "base_struct.h"
+#include "appl_wxstruct.h"
+#include "drawpanel_wxstruct.h"
+
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p) delete (p); (p) = NULL; //C++ guarantees that operator delete checks its argument for null-ness
@@ -32,17 +37,16 @@
 
 //  Option for dialog boxes
 // #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
-#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
+#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | \
+                     MAYBE_RESIZE_BORDER
 
-#define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE|wxWANTS_CHARS
+#define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
 class wxMyDialogModalData;
 
 /*  Forward declarations of classes. */
 class WinEDA_DrawPanel;
 class WinEDA_DrawFrame;
-
-#include "base_struct.h"
 
 class WinEDA_App;
 class WinEDA_MsgPanel;
@@ -107,11 +111,6 @@ enum id_toolbar {
 /**********************/
 
 #define MSG_PANEL_DEFAULT_HEIGHT  ( 28 )    // height of the infos display window
-
-/**********************************************/
-/*  Class representing the entire Application */
-/**********************************************/
-#include "appl_wxstruct.h"
 
 
 /******************************************************************/
@@ -183,7 +182,6 @@ public:
 
     WinEDAChoiceBox*  m_SelGridBox;         // Dialog box to choose the grid size
     WinEDAChoiceBox*  m_SelZoomBox;         // Dialog box to choose the Zoom value
-    int m_ZoomMaxValue;                     // Max zoom value: Draw min scale is 1/m_ZoomMaxValue
 
     int     m_CurrentCursorShape;           // shape for cursor (0 = default cursor)
     int     m_ID_current_state;             // Id of active button on the vertical toolbar
@@ -279,7 +277,7 @@ public:
     void            ReDrawPanel();
     void            TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
     void            PlotWorkSheet( int format_plot, BASE_SCREEN* screen );
-    
+
     /** Function GetXYSheetReferences
      * Return the X,Y sheet references where the point position is located
      * @param aScreen = screen to use
@@ -321,9 +319,6 @@ public:
 /****************************************************/
 /* classe representant un ecran graphique de dessin */
 /****************************************************/
-
-#include "drawpanel_wxstruct.h"
-
 
 /*********************************************************
 class WinEDA_MsgPanel : this is a panel to display various infos

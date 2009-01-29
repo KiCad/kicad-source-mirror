@@ -7,6 +7,7 @@
 /* Fichier base_struct.cpp */
 
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "trigo.h"
 #include "common.h"
 #include "wxstruct.h"
@@ -272,10 +273,8 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
  */
 {
-    int zoom;
     int width;
 
-    zoom  = aPanel->GetZoom();
     width = m_Width;
     if( aDisplayMode == FILAIRE )
         width = 0;
@@ -286,7 +285,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     /* Draw text anchor, if allowed */
     if( aAnchor_color != UNSPECIFIED_COLOR )
     {
-        int anchor_size = 2 * zoom;
+        int anchor_size = aPanel->GetScreen()->Unscale( 2 );
         aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
 
         int cX = m_Pos.x + aOffset.x;

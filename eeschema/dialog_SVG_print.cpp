@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
-
+#include "gr_basic.h"
 #include "common.h"
 
 #include "dialog_SVG_print_base.h"

@@ -179,7 +179,6 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 {
     wxSize  delta;
     int     flagcurseur = 0;
-    int     zoom = GetScreen()->GetZoom();
     wxPoint curpos, oldpos;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -187,7 +186,8 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
-    delta = GetScreen()->GetGrid() / zoom;
+    delta = GetScreen()->GetGrid();
+    GetScreen()->Scale( delta );
 
     if( delta.x <= 0 )
         delta.x = 1;

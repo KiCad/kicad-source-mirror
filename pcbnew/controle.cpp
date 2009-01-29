@@ -482,7 +482,6 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /*****************************************************************/
 {
     wxSize  delta;
-    int     zoom = GetScreen()->GetZoom();
     wxPoint curpos, oldpos;
     int     hotkey = 0;
 
@@ -517,7 +516,8 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
-    delta = GetScreen()->GetGrid() / zoom;
+    delta = GetScreen()->GetGrid();
+    GetScreen()->Scale( delta );
 
     if( delta.x <= 0 )
         delta.x = 1;

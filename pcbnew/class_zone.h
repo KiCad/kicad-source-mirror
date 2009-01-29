@@ -6,7 +6,7 @@
 #define CLASS_ZONE_H
 
 #include <vector>
-
+#include "gr_basic.h"
 #include "PolyLine.h"
 
 

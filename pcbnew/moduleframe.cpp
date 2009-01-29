@@ -157,7 +157,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     m_Draw_Axis      = TRUE;    // TRUE pour avoir les axes dessines
     m_Draw_Grid      = TRUE;    // TRUE pour avoir la axes dessinee
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
-    m_ZoomMaxValue   = 1024;
 
     // Give an icon
     SetIcon( wxICON( icon_modedit ) );
@@ -351,17 +350,15 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         if( m_SelZoomBox )
         {
             int old_choice = m_SelZoomBox->GetChoice();
-            int new_choice = 1;
-            int zoom;
-            for( jj = 1, zoom = 1; zoom <= m_ZoomMaxValue; zoom <<= 1, jj++ )
-            {
-                if( GetScreen() && (GetScreen()->GetZoom() == zoom) )
-                    break;
-                new_choice++;
-            }
 
-            if( old_choice != new_choice )
-                m_SelZoomBox->SetSelection( new_choice );
+            for( jj = 0; jj < GetScreen()->m_ZoomList.GetCount(); jj++ )
+            {
+                if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
+                {
+                    m_SelZoomBox->SetSelection( jj + 1 );
+                    break;
+                }
+            }
         }
 
         if( m_SelGridBox && GetScreen() )

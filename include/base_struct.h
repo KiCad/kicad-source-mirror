@@ -93,7 +93,7 @@ class EDA_BaseStruct;
 class WinEDA_DrawFrame;
 class BOARD;
 class EDA_Rect;
-
+class WinEDA_DrawPanel;
 
 /**
  * Class INSPECTOR

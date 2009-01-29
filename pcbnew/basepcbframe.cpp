@@ -7,6 +7,7 @@
 #endif
 
 #include "fctsys.h"
+#include "wxstruct.h"
 #include "common.h"
 
 #include "pcbnew.h"
@@ -89,7 +90,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     wxSize size;
 
     if( m_Pcb == NULL )
-        return 32;
+        return 32 * GetScreen()->m_ZoomScalar;
 
     m_Pcb->ComputeBoundaryBox();
 
@@ -100,10 +101,9 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     ii       = ( dx + (size.x / 2) ) / size.x;
     jj       = ( dy + (size.y / 2) ) / size.y;
     bestzoom = MAX( ii, jj ) + 1;
-
     GetScreen()->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
 
-    return bestzoom;
+    return bestzoom * GetScreen()->m_ZoomScalar;
 }
 
 

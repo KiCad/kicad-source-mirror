@@ -589,9 +589,10 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                             wxSize( LISTBOX_WIDTH, -1 ) );
         msg = _( "Auto" );
         m_SelZoomBox->Append( msg );
-        for( int jj = 0, ii = 1; ii <= m_ZoomMaxValue; ii <<= 1, jj++ )
+        for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
         {
-            msg = _( "Zoom " ); msg << ii;
+            msg = _( "Zoom " );
+            msg << GetScreen()->m_ZoomList[i];
             m_SelZoomBox->Append( msg );
         }
 

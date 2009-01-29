@@ -223,7 +223,7 @@ int WinEDA_ViewlibFrame::BestZoom()
 
     GetScreen()->m_Curseur = BoundaryBox.Centre();
 
-    return bestzoom;
+    return bestzoom * GetScreen()->m_ZoomScalar;
 }
 
 

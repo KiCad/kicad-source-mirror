@@ -379,7 +379,6 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
  */
 {
     int ox, oy, typeaff, width, gcolor;
-    int zoom = panel->GetScreen()->GetZoom();
 
     ox = offset.x;
     oy = offset.y;
@@ -392,9 +391,9 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;
-
     width   = m_Width;
-    if( width / zoom < 2 )
+
+    if( panel->GetScreen()->Scale( width ) < 2 )
         typeaff = FILAIRE;
 
     switch( typeaff )

@@ -42,7 +42,6 @@
 #define EESCHEMA_INTERNAL_UNIT 1000     //  EESCHEMA internal unit = 1/1000 inch
 
 #include "wxstruct.h"
-#include "gr_basic.h"
 
 // Old wxWidget compatibility (prior to wxWidget 2.7):
 #if !wxCHECK_VERSION( 2, 7, 0 )

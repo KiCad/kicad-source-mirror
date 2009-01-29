@@ -30,7 +30,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         xc, yc;
     int     angle;
     wxPoint coord[4];
-    int     zoom;
     int     fillpad = 0;
     wxPoint shape_pos;
 
@@ -39,7 +38,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     wxASSERT( panel );
 
-    zoom = panel->GetZoom();
 
     WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
     PCB_SCREEN*          screen = frame->GetScreen();
@@ -341,7 +339,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         switch( m_DrillShape )
         {
         case PAD_CIRCLE:
-            if( (hole / zoom) > 1 ) /* draw hole if its size is enought */
+            if( screen->Scale( hole ) > 1 ) /* draw hole if its size is enought */
                 GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0, color, color );
             break;
 
@@ -435,7 +433,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     int tsize = min( AreaSize.y, AreaSize.x / numpad_len );
      #define CHAR_SIZE_MIN 5
-    if( (tsize / zoom) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
+    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
     {
         tsize = (int) (tsize * 0.8);             // reserve room for marges and segments thickness
 
@@ -450,7 +448,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     shortname_len = MAX( shortname_len, MIN_CHAR_COUNT);
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
-    if( (tsize / zoom) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
+    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
     {
         tpos    = tpos0;
         tpos.y += AreaSize.y / 2;

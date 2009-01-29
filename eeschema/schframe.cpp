@@ -280,7 +280,7 @@ void WinEDA_SchematicFrame::CreateScreens()
 
     if( g_ScreenLib == NULL )
         g_ScreenLib = new SCH_SCREEN();
-    g_ScreenLib->SetZoom( 4 );
+    g_ScreenLib->SetZoom( 4 * g_ScreenLib->m_ZoomScalar );
     g_ScreenLib->m_UndoRedoCountMax = 10;
 }
 
@@ -450,11 +450,10 @@ int WinEDA_SchematicFrame::BestZoom()
     jj       = dy / size.y;
     bestzoom = MAX( ii, jj ) + 1;
 
-    GetScreen()->SetZoom( ii );
     GetScreen()->m_Curseur.x = dx / 2;
     GetScreen()->m_Curseur.y = dy / 2;
 
-    return bestzoom;
+    return bestzoom * GetScreen()->m_ZoomScalar;
 }
 
 /*******************************************************************/

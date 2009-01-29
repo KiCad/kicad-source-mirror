@@ -5,21 +5,9 @@
 // Created:     18 aug 2006
 // Licence:   License GNU
 /////////////////////////////////////////////////////////////////////////////
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-
-#include <ctype.h>
 #include "wx/metafile.h"
 #include "fctsys.h"
+#include "gr_basic.h"
 
 #include "common.h"
 #include "id.h"

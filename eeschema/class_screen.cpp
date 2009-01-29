@@ -1,6 +1,6 @@
 
 #include "fctsys.h"
-
+#include "gr_basic.h"
 #include "common.h"
 #include "program.h"
 #include "libcmp.h"
@@ -78,7 +78,13 @@ void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /***********************************************************************/
 /* Class SCH_SCREEN: classe de gestion d'un affichage pour schematique */
 /***********************************************************************/
-static int table_zoom[] = { 1, 2, 4, 8, 16, 32, 64, 128, 0 }; /* Valeurs standards du zoom */
+
+/* Default EESchema zoom values. */
+static int SchematicZoomList[] = { 10, 15, 20, 40, 80, 160, 320, 640, 1280 };
+
+#define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / \
+                                   sizeof( int ) )
+
 
 /* Default grid sizes for the schematic editor. */
 static GRID_TYPE SchematicGridList[] = {
@@ -101,7 +107,9 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
 
     EEDrawList = NULL;                  /* Schematic items list */
     m_Zoom = 32;
-    SetZoomList( table_zoom );
+
+    for( i = 0; i < SCHEMATIC_ZOOM_LIST_CNT; i++ )
+        m_ZoomList.Add( SchematicZoomList[i] );
 
     for( i = 0; i < SCHEMATIC_GRID_LIST_CNT; i++ )
         AddGrid( SchematicGridList[i] );

@@ -98,7 +98,6 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     int                  ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
     int                  color, type_trace;
-    int                  zoom;
     int                  typeaff;
     PCB_SCREEN*          screen;
     WinEDA_BasePcbFrame* frame;
@@ -114,8 +113,6 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
 
     screen = frame->GetScreen();
-
-    zoom = screen->GetZoom();
 
     type_trace = m_Shape;
 
@@ -133,7 +130,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         if( !typeaff )
             typeaff = SKETCH;
     }
-    if( (m_Width / zoom) < L_MIN_DESSIN )
+    if( panel->GetScreen()->Scale( m_Width ) < L_MIN_DESSIN )
         typeaff = FILAIRE;
 
     switch( type_trace )
@@ -158,12 +155,15 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             if( typeaff == FILLED )
             {
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, m_Width, color );
+                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon,
+                          m_Width, color );
             }
             else        // SKETCH Mode
             {
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon + (m_Width / 2), color );
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon - (m_Width / 2), color );
+                GRCircle( &panel->m_ClipBox, DC, ux0, uy0,
+                          rayon + (m_Width / 2), color );
+                GRCircle( &panel->m_ClipBox, DC, ux0, uy0,
+                          rayon - (m_Width / 2), color );
             }
         }
         break;
@@ -176,7 +176,8 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             EXCHG( StAngle, EndAngle );
         if( typeaff == FILAIRE )
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon, color );
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+                   rayon, color );
         }
         else if( typeaff == FILLED )
         {
@@ -193,30 +194,28 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
 
     case S_POLYGON:
+        // We must compute true coordinates from m_PolyPoints
+        // which are relative to module position, orientation 0
+
+        std::vector<wxPoint>		points = m_PolyPoints;
+
+        for( unsigned ii = 0; ii < points.size(); ii++ )
         {
-            // We must compute true coordinates from m_PolyPoints
-            // which are relative to module position, orientation 0
+            wxPoint& pt = points[ii];
 
-            std::vector<wxPoint>		points = m_PolyPoints;
-
-            for( unsigned ii = 0; ii < points.size(); ii++ )
+            if( Module )
             {
-                wxPoint& pt = points[ii];
-
-                if( Module )
-                {
-                    RotatePoint( &pt.x, &pt.y, Module->m_Orient );
-                    pt.x += Module->m_Pos.x;
-                    pt.y += Module->m_Pos.y;
-                }
-
-                pt.x   += m_Start0.x - offset.x;
-                pt.y   += m_Start0.y - offset.y;
+                RotatePoint( &pt.x, &pt.y, Module->m_Orient );
+                pt.x += Module->m_Pos.x;
+                pt.y += Module->m_Pos.y;
             }
 
-            GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],
-                    TRUE, m_Width, color, color );
+            pt.x   += m_Start0.x - offset.x;
+            pt.y   += m_Start0.y - offset.y;
         }
+
+        GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],
+                TRUE, m_Width, color, color );
         break;
     }
 }

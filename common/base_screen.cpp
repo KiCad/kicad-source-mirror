@@ -25,14 +25,14 @@ WX_DEFINE_OBJARRAY( GridArray );
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 {
     EEDrawList         = NULL;   /* Schematic items list */
-    m_ZoomList         = NULL;
     m_UndoList         = NULL;
     m_RedoList         = NULL;
     m_UndoRedoCountMax = 1;
     m_FirstRedraw      = TRUE;
     m_ScreenNumber     = 1;
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
-    m_Zoom             = 32;
+    m_ZoomScalar       = 10;
+    m_Zoom             = 32 * m_ZoomScalar;
     m_Grid             = wxSize( 50, 50 );   /* Default grid size */
     m_UserGridIsON     = FALSE;
     m_Diviseur_Grille  = 1;
@@ -47,9 +47,6 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 BASE_SCREEN::~BASE_SCREEN()
 /******************************/
 {
-    if( m_ZoomList )
-        free( m_ZoomList );
-
     ClearUndoRedoList();
 }
 
@@ -101,131 +98,174 @@ wxSize BASE_SCREEN::ReturnPageSize( void )
 {
     int internal_units = GetInternalUnits();
 
-    return wxSize( m_CurrentSheetDesc->m_Size.x * (internal_units / 1000),
-                   m_CurrentSheetDesc->m_Size.y * (internal_units / 1000) );
+    return wxSize( ( m_CurrentSheetDesc->m_Size.x * internal_units ) / 1000,
+                   ( m_CurrentSheetDesc->m_Size.y * internal_units ) / 1000 );
 }
 
 /******************************************************************/
 wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 /******************************************************************/
 {
-    wxPoint curpos;
-
+    wxPoint curpos = ScreenPos;
+    Unscale( curpos );
 //    D(printf("curpos=%d,%d GetZoom=%d, mDrawOrg=%d,%d\n", curpos.x, curpos.y, GetZoom(), m_DrawOrg.x, m_DrawOrg.y );)
 
-    curpos.x = ScreenPos.x * GetZoom();
-    curpos.y = ScreenPos.y * GetZoom();
+//    curpos.x = Unscale( ScreenPos.x );
+//    curpos.y = Unscale( ScreenPos.y );
 
-    curpos.x += m_DrawOrg.x;
-    curpos.y += m_DrawOrg.y;
+    curpos += m_DrawOrg;
 
     return curpos;
 }
 
-
-/**************************************************/
-void BASE_SCREEN::SetZoomList( const int* zoomlist )
-/**************************************************/
-
-/* init liste des zoom (NULL terminated)
+/**
+ * Calculate coordinate value for zooming.
+ *
+ * Call this method when drawing on the device context.  It scales the
+ * coordinate using the current zoom settings.  Zooming in Kicad occurs
+ * by actually scaling the entire drawing using the zoom setting.
+ *
+ * FIXME: We should probably use wxCoord instead of int here but that would
+ *        require using wxCoord in all of the other code that makes device
+ *        context calls as well.
  */
+int BASE_SCREEN::Scale( int coord )
 {
-    int         nbitems;
-    const int*  zoom;
+#ifdef WX_ZOOM
+    return coord;
+#else
+    if( !m_Zoom )
+        return 0;
 
-    // get list length
-    for( nbitems = 1, zoom = zoomlist;  ; zoom++, nbitems++ )
-    {
-        if( *zoom == 0 )
-            break;
-    }
+    if( !m_ZoomScalar || !m_Zoom )
+        return 0;
 
-    // resize our list
-    if( m_ZoomList )
-        free( m_ZoomList );
-
-    m_ZoomList = (int*) MyZMalloc( nbitems * sizeof(int) );
-
-    int ii;
-    for( ii = 0, zoom = zoomlist; ii < nbitems; zoom++, ii++ )
-    {
-        m_ZoomList[ii] = *zoom;
-    }
+    return wxRound( (double) ( coord * m_ZoomScalar ) / (double) m_Zoom );
+#endif
 }
 
 
-/***********************************/
+void BASE_SCREEN::Scale( wxPoint& pt )
+{
+    pt.x = Scale( pt.x );
+    pt.y = Scale( pt.y );
+}
+
+
+void BASE_SCREEN::Scale( wxSize& sz )
+{
+    sz.SetHeight( Scale( sz.GetHeight() ) );
+    sz.SetWidth( Scale( sz.GetWidth() ) );
+}
+
+
+/**
+ * Calculate the physical (unzoomed) location of a coordinate.
+ *
+ * Call this method when you want to find the unzoomed (physical) location
+ * of a coordinate on the drawing.
+ */
+int BASE_SCREEN::Unscale( int coord )
+{
+#ifdef WX_ZOOM
+    return coord;
+#else
+    if( !m_Zoom || !m_ZoomScalar )
+        return 0;
+
+    return wxRound( (double) ( coord * m_Zoom ) / (double) m_ZoomScalar );
+#endif
+}
+
+void BASE_SCREEN::Unscale( wxPoint& pt )
+{
+    pt.x = Unscale( pt.x );
+    pt.y = Unscale( pt.y );
+}
+
+
+void BASE_SCREEN::Unscale( wxSize& sz )
+{
+    sz.SetHeight( Unscale( sz.GetHeight() ) );
+    sz.SetWidth( Unscale( sz.GetWidth() ) );
+}
+
+
+void BASE_SCREEN::SetZoomList( const wxArrayInt& zoomlist )
+{
+    if( !m_ZoomList.IsEmpty() )
+        m_ZoomList.Empty();
+
+    m_ZoomList = zoomlist;
+}
+
+
 void BASE_SCREEN::SetFirstZoom()
-/***********************************/
 {
-    m_Zoom = 1;
+    if( m_ZoomList.IsEmpty() )
+        m_Zoom = m_ZoomScalar;
+    else
+        m_Zoom = m_ZoomList[0];
 }
 
 
-/******************************/
 int BASE_SCREEN::GetZoom() const
-/******************************/
 {
     return m_Zoom;
 }
 
 
-/***********************************/
 void BASE_SCREEN::SetZoom( int coeff )
-/***********************************/
 {
     m_Zoom = coeff;
+
     if( m_Zoom < 1 )
         m_Zoom = 1;
 }
 
 
-/********************************/
 void BASE_SCREEN::SetNextZoom()
-/********************************/
-
-/* Selectionne le prochain coeff de zoom
- */
 {
-    m_Zoom *= 2;
+    size_t i;
 
-    if( m_ZoomList == NULL )
+    if( m_ZoomList.IsEmpty() || m_Zoom >= m_ZoomList.Last() )
         return;
 
-    int ii, zoom_max = 512;
-    for( ii = 0; m_ZoomList[ii] != 0; ii++ )
-        zoom_max = m_ZoomList[ii];
-
-    if( m_Zoom > zoom_max )
-        m_Zoom = zoom_max;
+    for( i = 0; i < m_ZoomList.GetCount(); i++ )
+    {
+        if( m_Zoom < m_ZoomList[i] )
+        {
+            m_Zoom = m_ZoomList[i];
+            break;
+        }
+    }
 }
 
 
-/*************************************/
 void BASE_SCREEN::SetPreviousZoom()
-/*************************************/
-
-/* Selectionne le precedent coeff de zoom
- */
 {
-    m_Zoom /= 2;
-    if( m_Zoom < 1 )
-        m_Zoom = 1;
+    size_t i;
+
+    if( m_ZoomList.IsEmpty() || m_Zoom <= m_ZoomList[0] )
+        return;
+
+    for( i = m_ZoomList.GetCount(); i != 0; i-- )
+    {
+        if( m_Zoom > m_ZoomList[i - 1] )
+        {
+            m_Zoom = m_ZoomList[i - 1];
+            break;
+        }
+    }
 }
 
 
-/**********************************/
 void BASE_SCREEN::SetLastZoom()
-/**********************************/
-
-/* ajuste le coeff de zoom au max
- */
 {
-    if( m_ZoomList == NULL )
+    if( m_ZoomList.IsEmpty() )
         return;
-    int ii;
-    for( ii = 0; m_ZoomList[ii] != 0; ii++ )
-        m_Zoom = m_ZoomList[ii];
+
+    m_Zoom = m_ZoomList.Last();
 }
 
 

@@ -7,6 +7,7 @@
 #endif
 
 #include "fctsys.h"
+#include "wxstruct.h"
 
 #include "common.h"
 #include "gerbview.h"
@@ -137,7 +138,6 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     m_Draw_Grid = TRUE;         // TRUE pour avoir la axes dessinee
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
     m_Ident = GERBER_FRAME;
-    m_ZoomMaxValue = 1024;
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
 
@@ -305,27 +305,17 @@ void WinEDA_GerberFrame::SetToolbars()
 int WinEDA_GerberFrame::BestZoom()
 /*************************************/
 {
-    int    ii, jj;
+    int    ii, jj, gridX, gridY;
     int    bestzoom;
     wxSize size;
 
-    /* calcul du zoom montrant tout le dessim */
     GetBoard()->ComputeBoundaryBox();
+    gridX    = GetScreen()->GetGrid().GetWidth() / 2;
+    gridY    = GetScreen()->GetGrid().GetHeight() / 2;
     size     = DrawPanel->GetClientSize();
-    ii       = GetBoard()->m_BoundaryBox.GetWidth() / size.x;
-    jj       = GetBoard()->m_BoundaryBox.GetHeight() / size.y;
+    ii       = ( GetBoard()->m_BoundaryBox.GetWidth() + gridX ) / size.x;
+    jj       = ( GetBoard()->m_BoundaryBox.GetHeight() + gridY ) / size.y;
     bestzoom = MAX( ii, jj ) + 1;
-
-    /* determination du zoom existant le plus proche */
-    for( ii = 1; ii < 2048; ii <<= 1 )
-    {
-        if( ii >= bestzoom )
-            break;
-    }
-
-    bestzoom = ii;
-
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
-
-    return bestzoom;
+    return bestzoom * GetScreen()->m_ZoomScalar;
 }

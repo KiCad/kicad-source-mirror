@@ -209,6 +209,7 @@ wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
 void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /**************************************************************/
 {
+    wxString msg;
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
     if( wxGetApp().m_HtmlCtrl == NULL )
     {
@@ -223,19 +224,28 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
     }
     else
     {
-        wxString msg;
         msg.Printf( _( "Help file %s not found" ), wxGetApp().m_HelpFileName.GetData() );
         DisplayError( this, msg );
     }
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    wxString fullfilename = FindKicadHelpPath() + wxGetApp().m_HelpFileName;
-    if ( wxFileExists(fullfilename) )
-        GetAssociatedDocument( this, wxEmptyString, fullfilename );
-    else    // Try to find file in English format:
+    // wxString fullfilename = FindKicadHelpPath() + wxGetApp().m_HelpFileName;
+    // if ( wxFileExists(fullfilename) )
+    //     GetAssociatedDocument( this, wxEmptyString, fullfilename );
+    // else    // Try to find file in English format:
+    // {
+    //     fullfilename = FindKicadHelpPath() + wxT("../en/") + wxGetApp().m_HelpFileName;;
+    //     GetAssociatedDocument( this, wxEmptyString, fullfilename );
+    // }
+
+    wxString helpFile = wxGetApp().GetHelpFile();
+    if( !helpFile )
     {
-        fullfilename = FindKicadHelpPath() + wxT("../en/") + wxGetApp().m_HelpFileName;;
-        GetAssociatedDocument( this, wxEmptyString, fullfilename );
+        msg.Printf( _( "Help file %s could not be found." ),
+                    wxGetApp().m_HelpFileName.c_str() );
+        DisplayError( this, msg );
     }
+    else
+        GetAssociatedDocument( this, wxEmptyString, helpFile );
 
 #else
     #error Help files format not defined

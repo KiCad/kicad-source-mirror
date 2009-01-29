@@ -7,6 +7,7 @@
 #endif
 
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "common.h"
 #include "bitmaps.h"
 #include "macros.h"
@@ -36,32 +37,30 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 {
     wxSize minsize;
 
-    m_VToolBar         = NULL;
-    m_AuxVToolBar      = NULL;
-    m_OptionsToolBar   = NULL;
-    m_AuxiliaryToolBar = NULL;
-    m_SelGridBox       = NULL;
-    m_SelZoomBox       = NULL;
-    m_ZoomMaxValue     = 128;
+    m_VToolBar            = NULL;
+    m_AuxVToolBar         = NULL;
+    m_OptionsToolBar      = NULL;
+    m_AuxiliaryToolBar    = NULL;
+    m_SelGridBox          = NULL;
+    m_SelZoomBox          = NULL;
 
-    DrawPanel = NULL;
-    MsgPanel  = NULL;
-    m_CurrentScreen = NULL;
+    DrawPanel             = NULL;
+    MsgPanel              = NULL;
+    m_CurrentScreen       = NULL;
     m_ID_current_state    = 0;
     m_HTOOL_current_state = 0;
-    m_Draw_Axis           = FALSE;          // TRUE pour avoir les axes dessines
-    m_Draw_Grid           = FALSE;          // TRUE pour avoir la axes dessinee
-    m_Draw_Sheet_Ref      = FALSE;          // TRUE pour avoir le cartouche dessin�
-    m_Print_Sheet_Ref     = TRUE;           // TRUE pour avoir le cartouche imprim�
-    m_Draw_Auxiliary_Axis = FALSE;          // TRUE pour avoir les axes auxiliares dessines
-    m_UnitType = INTERNAL_UNIT_TYPE;        // Internal unit = inch
+    m_Draw_Axis           = FALSE;  // TRUE pour avoir les axes dessines
+    m_Draw_Grid           = FALSE;  // TRUE pour avoir la axes dessinee
+    m_Draw_Sheet_Ref      = FALSE;  // TRUE pour avoir le cartouche dessin�
+    m_Print_Sheet_Ref     = TRUE;   // TRUE pour avoir le cartouche imprim�
+    m_Draw_Auxiliary_Axis = FALSE;  // TRUE pour avoir les axes auxiliares dessines
+    m_UnitType            = INTERNAL_UNIT_TYPE;    // Internal unit = inch
 
-    // Internal units per inch
-    // = 1000 for schema, = 10000 for PCB
-    m_InternalUnits = EESCHEMA_INTERNAL_UNIT;
+    // Internal units per inch: = 1000 for schema, = 10000 for PCB
+    m_InternalUnits       = EESCHEMA_INTERNAL_UNIT;
+    minsize.x             = 470;
+    minsize.y             = 350 + m_MsgFrameHeight;
 
-    minsize.x = 470;
-    minsize.y = 350 + m_MsgFrameHeight;
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
     /* Verification des parametres de creation */
@@ -267,42 +266,37 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
 }
 
 
-/********************************************************/
-void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )  // fonction virtuelle
-/********************************************************/
-
-/* Set the zoom when selected by the Zoom List Box
+/**
+ * Set the zoom when selected by the Zoom List Box
  *  Note:
  *      position 0 = Fit in Page
  *      position >= 1 = zoom (1 to zoom max)
  *      last position : special zoom
+ *      virtual function
  */
+void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )
 {
     if( m_SelZoomBox == NULL )
         return;                        //Ne devrait pas se produire!
 
     int id = m_SelZoomBox->GetChoice();
 
-    if( id < 0 )
-        return;             // No selection
+    if( id < 0 || !( id < (int)m_SelZoomBox->GetCount() ) )
+        return;
 
     if( id == 0 )           // Auto zoom (Fit in Page)
     {
-        Zoom_Automatique( TRUE );
+        Zoom_Automatique( true );
     }
-    else if( id == (int) (m_SelZoomBox->GetCount() - 1) )   // Dummy position: unlisted zoom
-        return;
-    else                                                    // zooml 1 to zoom max
+    else
     {
         id--;
-        int zoom = 1 << id;
-        if( zoom > m_ZoomMaxValue )
-            zoom = m_ZoomMaxValue;
-        if( GetBaseScreen()->GetZoom() == zoom )
+        int selectedZoom = GetBaseScreen()->m_ZoomList[id];
+        if( GetBaseScreen()->GetZoom() == selectedZoom )
             return;
         GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-        GetBaseScreen()->SetZoom( zoom );
-        Recadre_Trace( FALSE );
+        GetBaseScreen()->SetZoom( selectedZoom );
+        Recadre_Trace( false );
     }
 }
 
@@ -569,14 +563,11 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 void WinEDA_DrawFrame::AdjustScrollBars()
 /*********************************************/
 {
+    int     xUnit, yUnit;
     wxSize  draw_size, panel_size;
     wxSize  scrollbar_number;
     wxPoint scrollbar_pos;
-
-    BASE_SCREEN*    screen = GetBaseScreen();
-
-    int     zoom = screen->GetZoom();
-    int     xUnit, yUnit;
+    BASE_SCREEN* screen = GetBaseScreen();
 
     if( screen == NULL || DrawPanel == NULL )
         return;
@@ -586,7 +577,8 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 
     // On utilise le centre de l'ecran comme position de reference, donc
     // la surface de trace doit etre augmentee
-    panel_size = DrawPanel->GetClientSize() * zoom;
+    panel_size = DrawPanel->GetClientSize();
+    screen->Unscale( panel_size );
     draw_size += panel_size / 2;
 
 
@@ -606,20 +598,18 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     screen->m_DrawOrg.y -= screen->m_DrawOrg.y % 256;
 
     // Calcul du nombre de scrolls  (en unites de scrool )
-    scrollbar_number = draw_size / (DrawPanel->m_Scroll_unit * zoom);
-
-    xUnit = yUnit = DrawPanel->m_Scroll_unit;
+    scrollbar_number = draw_size / screen->Unscale( screen->m_ZoomScalar );
+    xUnit = yUnit = screen->m_ZoomScalar;
 
     if( xUnit <= 1 )
         xUnit = 1;
     if( yUnit <= 1 )
         yUnit = 1;
-    xUnit *= zoom;
-    yUnit *= zoom;
+    xUnit = screen->Unscale( xUnit );
+    yUnit = screen->Unscale( yUnit );
 
     // Calcul de la position, curseur place au centre d'ecran
-    scrollbar_pos = screen->m_Curseur;
-    scrollbar_pos -= screen->m_DrawOrg;
+    scrollbar_pos = screen->m_Curseur - screen->m_DrawOrg;
 
     scrollbar_pos.x -= panel_size.x / 2;
     scrollbar_pos.y -= panel_size.y / 2;
@@ -634,8 +624,8 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     screen->m_ScrollbarPos    = scrollbar_pos;
     screen->m_ScrollbarNumber = scrollbar_number;
 
-    DrawPanel->SetScrollbars( DrawPanel->m_Scroll_unit,
-                              DrawPanel->m_Scroll_unit,
+    DrawPanel->SetScrollbars( screen->m_ZoomScalar,
+                              screen->m_ZoomScalar,
                               screen->m_ScrollbarNumber.x,
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,

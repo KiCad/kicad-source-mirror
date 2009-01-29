@@ -18,6 +18,8 @@
 #include "colors.h"
 
 class SCH_ITEM;
+class BASE_SCREEN;
+class Ki_PageDescr;
 
 /* Simple class for handling grid arrays. */
 class GRID_TYPE
@@ -43,7 +45,6 @@ public:
     WinEDA_DrawFrame* m_Parent;
     EDA_Rect          m_ClipBox;            // the clipbox used in screen redraw (usually gives the visible area in internal units)
     wxPoint           m_CursorStartPos;     // utile dans controles du mouvement curseur
-    int               m_Scroll_unit;        //	Valeur de l'unite de scroll en pixels pour les barres de scroll
     int               m_ScrollButt_unit;    //	Valeur de l'unite de scroll en pixels pour les boutons de scroll
 
     bool              m_AbortRequest;       // Flag d'arret de commandes longues
@@ -265,20 +266,21 @@ public:
 
 private:
     /* indicateurs divers */
-    char            m_FlagRefreshReq;       /* indique que l'ecran doit redessine */
-    char            m_FlagModified;         // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
-    char            m_FlagSave;             // indique sauvegarde auto faite
-    EDA_BaseStruct* m_CurrentItem;          ///< Currently selected object
+    char            m_FlagRefreshReq;    /* indique que l'ecran doit redessine */
+    char            m_FlagModified;      // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
+    char            m_FlagSave;          // indique sauvegarde auto faite
+    EDA_BaseStruct* m_CurrentItem;       ///< Currently selected object
 
     /* Valeurs du pas de grille et du zoom */
 public:
-    wxSize    m_Grid;               /* Current grid. */
-    GridArray m_GridList;
-    bool      m_UserGridIsON;
+    wxSize      m_Grid;            /* Current grid. */
+    GridArray   m_GridList;
+    bool        m_UserGridIsON;
 
-    int       m_Diviseur_Grille;
-    int*      m_ZoomList;           /* Liste des coefficients standard de zoom */
-    int       m_Zoom;               /* coeff de ZOOM */
+    int         m_Diviseur_Grille;
+    wxArrayInt  m_ZoomList;        /* Array of standard zoom coefficients. */
+    int         m_Zoom;            /* Current zoom coefficient. */
+    int         m_ZoomScalar;      /* Allow zooming to non-integer increments. */
 
 public:
     BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
@@ -328,34 +330,41 @@ public:
      * Function GetZoom
      * returns the current zoom factor
      */
-    int    GetZoom() const;
+    int     GetZoom() const;
 
     /**
      * Function SetZoom
      * adjusts the current zoom factor
      */
-    void   SetZoom( int coeff );
+    void    SetZoom( int coeff );
 
     /**
      * Function SetZoomList
      * sets the list of zoom factors.
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
-    void   SetZoomList( const int* zoomlist );
+    void    SetZoomList( const wxArrayInt& zoomlist );
 
-    void   SetNextZoom();               /* ajuste le prochain coeff de zoom */
-    void   SetPreviousZoom();           /* ajuste le precedent coeff de zoom */
-    void   SetFirstZoom();              /* ajuste le coeff de zoom a 1*/
-    void   SetLastZoom();               /* ajuste le coeff de zoom au max */
+    int     Scale( int coord );
+    void    Scale( wxPoint& pt );
+    void    Scale( wxSize& sz );
+    int     Unscale( int coord );
+    void    Unscale( wxPoint& pt );
+    void    Unscale( wxSize& sz );
+
+    void    SetNextZoom();               /* ajuste le prochain coeff de zoom */
+    void    SetPreviousZoom();           /* ajuste le precedent coeff de zoom */
+    void    SetFirstZoom();              /* ajuste le coeff de zoom a 1*/
+    void    SetLastZoom();               /* ajuste le coeff de zoom au max */
 
     //----<grid stuff>----------------------------------------------------------
-    wxSize GetGrid();                     /* retourne la grille */
-    void   SetGrid( const wxSize& size );
-    void   SetGrid( int );
-    void   SetGridList( GridArray& sizelist );
-    void   AddGrid( const GRID_TYPE& grid );
-    void   AddGrid( const wxSize& size, int id );
-    void   AddGrid( const wxRealPoint& size, int units, int id );
+    wxSize  GetGrid();                     /* retourne la grille */
+    void    SetGrid( const wxSize& size );
+    void    SetGrid( int );
+    void    SetGridList( GridArray& sizelist );
+    void    AddGrid( const GRID_TYPE& grid );
+    void    AddGrid( const wxSize& size, int id );
+    void    AddGrid( const wxRealPoint& size, int units, int id );
 
 
     /**

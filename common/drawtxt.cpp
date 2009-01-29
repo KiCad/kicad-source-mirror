@@ -51,7 +51,6 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
 {
     int            ii, kk, char_count, AsciiCode, endcar;
     int            x0, y0;
-    int            zoom;
     int            size_h, size_v, pitch;
     SH_CODE        f_cod, plume = 'U';
     const SH_CODE* ptcar;
@@ -62,11 +61,6 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     int            coord[100];          // Buffer coordinate used to draw polylines (char shapes)
     bool           sketch_mode = false;
 	bool			italic_reverse = false;		// true for mirrored texts with m_Size.x < 0
-
-    if ( aPanel )
-        zoom = aPanel->GetZoom();
-    else
-        zoom = 1;
 
     size_h = aSize.x;
     size_v = aSize.y;
@@ -101,7 +95,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     {
         int xm, ym, ll, xc, yc;
         int textsize = ABS( pitch );
-        ll = (textsize * char_count) / zoom;
+        ll = aPanel->GetScreen()->Scale( textsize * char_count );
 
         xc = GRMapX( cX );
         yc = GRMapY( cY );
@@ -195,10 +189,10 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     ox = cX - dx;
     oy = cY + dy;
 
-    if( (aSize.x / zoom) == 0 )
+    if( aPanel->GetScreen()->Scale( aSize.x ) == 0 )
         return;
 
-    if( ABS( (aSize.x / zoom) ) < 3 )    /* shapes are too small: connot be drawn */
+    if( ABS( (aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )    /* shapes are too small: connot be drawn */
     {                                   /* insteed the text is drawn as a line */
         dx = (pitch * char_count) / 2;
         dy = size_v / 2;                /* line is always centered */

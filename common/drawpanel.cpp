@@ -2,6 +2,7 @@
 /* drawpanel.cpp - WinEDA_DrawPanel class */
 /******************************************/
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "common.h"
 
 #include "macros.h"
@@ -48,7 +49,6 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
                       wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
 {
     m_Parent          = parent;
-    m_Scroll_unit     = 1;
     m_ScrollButt_unit = 40;
 
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
@@ -89,13 +89,12 @@ BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
 }
 
 
-/*********************************************************************************/
-void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
-/*********************************************************************************/
-
-/*
+/*****************************************************************************
+ *
  *  Draw the schematic cursor which is usually on grid
- */
+ *
+ *****************************************************************************/
+void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
 {
     if( m_CursorLevel != 0 ||  DC == NULL )
         return;
@@ -105,9 +104,8 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
     GRSetDrawMode( DC, GR_XOR );
     if( g_CursorShape == 1 )    /* Trace d'un reticule */
     {
-        int dx = m_ClipBox.GetWidth() * GetZoom();
-
-        int dy = m_ClipBox.GetHeight() * GetZoom();
+        int dx = GetScreen()->Unscale( m_ClipBox.GetWidth() );
+        int dy = GetScreen()->Unscale( m_ClipBox.GetHeight() );
 
         GRLine( &m_ClipBox, DC, Cursor.x - dx, Cursor.y,
                 Cursor.x + dx, Cursor.y, 0, color );            // axe Y
@@ -116,7 +114,7 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
     }
     else
     {
-        int len = CURSOR_SIZE * GetZoom();
+        int len = GetScreen()->Unscale( CURSOR_SIZE );
 
         GRLine( &m_ClipBox, DC, Cursor.x - len, Cursor.y,
                 Cursor.x + len, Cursor.y, 0, color );
@@ -186,11 +184,9 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
     GRResetPenAndBrush( DC );
     DC->SetBackgroundMode( wxTRANSPARENT );
 #ifdef WX_ZOOM
-    int    zoom    = GetZoom();
-    double f_scale = 1.0 / (double) zoom;
-
-    DC->SetUserScale( f_scale, f_scale );
-    PrepareDC( *DC );
+    double scale = 1.0 / (double) GetZoom();
+    DC->SetUserScale( scale, scale );
+    DoPrepareDC( *DC );
 #endif
     SetBoundaryBox();
 }
@@ -233,16 +229,10 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
     // Conversion en coord physiques
     pos = CalcUnscrolledPosition( display_rect.GetPosition() );
 
-    pos.x *= GetZoom();
-    pos.y *= GetZoom();
-
+    GetScreen()->Unscale( pos );
     pos += GetScreen()->m_DrawOrg;
-
-    display_rect.SetX( pos.x );
-    display_rect.SetY( pos.y );
-
-    display_rect.SetWidth( display_rect.GetWidth() * GetZoom() );
-    display_rect.SetHeight( display_rect.GetHeight() * GetZoom() );
+    display_rect.m_Pos = pos;
+    GetScreen()->Unscale( display_rect.m_Size );
 
     return display_rect.Inside( ref_pos );
 }
@@ -277,11 +267,8 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
     wxPoint pos = aRect->GetPosition();
 
     ConvertPcbUnitsToPixelsUnits( &pos );
-
     aRect->SetOrigin( pos );                // rect origin in pixel units
-
-    aRect->m_Size.x /= GetZoom();
-    aRect->m_Size.y /= GetZoom();           // size in pixel units
+    GetScreen()->Scale( aRect->m_Size );
 }
 
 
@@ -302,8 +289,7 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
     drwOrig.y *= y_axis_scale;
 
     // Origin in internal units
-    drwOrig.x *= GetZoom();
-    drwOrig.y *= GetZoom();
+    GetScreen()->Unscale( drwOrig );
 
     // Real origin, according to the "plot" origin
     drwOrig += GetScreen()->m_DrawOrg;
@@ -312,8 +298,7 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
     *aPosition -= drwOrig;
 
     // position in pixels, relative to the visible draw area origin
-    aPosition->x /= GetZoom();
-    aPosition->y /= GetZoom();
+    GetScreen()->Scale( *aPosition );
 }
 
 
@@ -325,14 +310,10 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
  * @return the curseur position in pixels in the panel draw area on screen )
  */
 {
-    wxPoint curpos = GetScreen()->m_Curseur;
-
-    curpos -= GetScreen()->m_DrawOrg;
-
-    curpos.x /= GetZoom();
-    curpos.y /= GetZoom();
-
-    return curpos;
+    wxPoint pos = GetScreen()->m_Curseur;
+    pos -= GetScreen()->m_DrawOrg;
+    GetScreen()->Scale( pos );
+    return pos;
 }
 
 
@@ -350,9 +331,7 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
     size = GetClientSize() / 2;
     realpos = CalcUnscrolledPosition( wxPoint( size.x, size.y ) );
 
-    realpos.x *= GetZoom();
-    realpos.y *= GetZoom();
-
+    GetScreen()->Unscale( realpos );
     realpos += GetScreen()->m_DrawOrg;
 
     return realpos;
@@ -381,7 +360,6 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
  */
 {
     wxPoint mouse;
-
 #ifdef WX_ZOOM
     CalcScrolledPosition( Mouse.x, Mouse.y, &mouse.x, &mouse.y );
 #else
@@ -483,9 +461,7 @@ void WinEDA_DrawPanel::SetBoundaryBox()
     wxPoint org;
     int     ii, jj;
 
-    Screen->m_SizeVisu = GetClientSize();
     GetViewStart( &org.x, &org.y );
-
     GetScrollPixelsPerUnit( &ii, &jj );
     org.x *= ii;
     org.y *= jj;
@@ -496,9 +472,8 @@ void WinEDA_DrawPanel::SetBoundaryBox()
     m_ClipBox.SetSize( GetClientSize() );
 
 #ifdef WX_ZOOM
-    m_ClipBox.m_Pos.x *= GetZoom();
-    m_ClipBox.m_Pos.y *= GetZoom();
-    m_ClipBox.m_Size  *= GetZoom();
+    CalcUnscrolledPosition( m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
+                            &m_ClipBox.m_Pos.x, &m_ClipBox.m_Pos.y );
 #else
     m_ClipBox.m_Pos -= GetScreen()->m_StartVisu;
 #endif
@@ -569,14 +544,12 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
             );
 #endif
 
-    PaintClipBox.x += org.x;
-    PaintClipBox.y += org.y;
+    PaintClipBox.Offset( org );
 
 #ifdef WX_ZOOM
-    m_ClipBox.m_Pos.x  = PaintClipBox.x * GetZoom();
-    m_ClipBox.m_Pos.y  = PaintClipBox.y * GetZoom();
-    m_ClipBox.m_Size.x = PaintClipBox.width * GetZoom();
-    m_ClipBox.m_Size.y = PaintClipBox.height * GetZoom();
+    BASE_SCREEN* screen = GetScreen();
+    screen->Unscale( m_ClipBox.m_Pos );
+    screen->Unscale( m_ClipBox.m_Size );
 #else
     m_ClipBox.SetX( PaintClipBox.GetX() );
     m_ClipBox.SetY( PaintClipBox.GetY() );
@@ -636,9 +609,8 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
     }
 
 #ifdef WX_ZOOM
-    int    zoom    = GetZoom();
-    double f_scale = 1.0 / (double) zoom;
-    DC->SetUserScale( f_scale, f_scale );
+    double scale = 1.0 / (double) GetZoom();
+    DC->SetUserScale( scale, scale );
 #endif
 
     if( erasebg )
@@ -675,7 +647,6 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     int          ii, jj, xg, yg, color;
     wxSize       pas_grille_affichee;
     bool         drawgrid = FALSE;
-    int          zoom = GetZoom();
     wxSize       size;
     wxPoint      org;
     double       pasx, pasy;
@@ -691,7 +662,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
     pas_grille_affichee = screen->GetGrid();
 
-    ii = pas_grille_affichee.x / zoom;
+    ii = screen->Scale( pas_grille_affichee.x );
     if( ii  < 5 )
     {
         pas_grille_affichee.x *= 2;
@@ -700,7 +671,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     if( ii < 5 )
         drawgrid = FALSE; // The gris is small
 
-    ii = pas_grille_affichee.y / zoom;
+    ii = screen->Scale( pas_grille_affichee.y );
     if( ii  < 5 )
     {
         pas_grille_affichee.y *= 2;
@@ -711,18 +682,18 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
-
+    wxLogDebug( _T( "View start: %d, %d,  scroll bar PPI: %d, %d" ),
+                org.x, org.y, ii, jj );
     org.x *= ii;
     org.y *= jj;
-
     screen->m_StartVisu = org;
-
-    org.x *= zoom;
-    org.y *= zoom;
+    wxLogDebug( _T( "Scroll bar drawing position: %d. %d" ), org.x, org.y );
+    screen->Unscale( org );
 
     org += screen->m_DrawOrg;
 
-    size = GetClientSize() * zoom;
+    size = GetClientSize();
+    screen->Unscale( size );
 
     pasx = screen->m_Grid.x * m_Parent->m_InternalUnits;
     pasy = screen->m_Grid.y * m_Parent->m_InternalUnits;
@@ -1139,8 +1110,8 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
              */
             #define BLOCK_MINSIZE_LIMIT 1
             bool BlockIsSmall =
-                ( ABS( screen->BlockLocate.GetWidth() / GetZoom() ) < BLOCK_MINSIZE_LIMIT)
-                && ( ABS( screen->BlockLocate.GetHeight() / GetZoom() ) < BLOCK_MINSIZE_LIMIT);
+                ( ABS( screen->Scale( screen->BlockLocate.GetWidth() ) ) < BLOCK_MINSIZE_LIMIT)
+                  && ( ABS( screen->Scale( screen->BlockLocate.GetHeight() ) ) < BLOCK_MINSIZE_LIMIT);
 
             if( (screen->BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
             {

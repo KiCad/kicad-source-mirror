@@ -222,7 +222,6 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
 {
     wxSize          delta;
     SCH_SCREEN*     screen = GetScreen();
-    int             zoom = screen->GetZoom();
     wxPoint         curpos, oldpos;
     int             hotkey = 0;
 
@@ -231,7 +230,8 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta = screen->GetGrid() / zoom;
+    delta = screen->GetGrid();
+    screen->Scale( delta );
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -316,7 +316,6 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
 {
     wxSize          delta;
     SCH_SCREEN*     screen = GetScreen();
-    int             zoom = screen->GetZoom();
     wxPoint         curpos, oldpos;
     int             hotkey = 0;
 
@@ -325,7 +324,8 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta = screen->GetGrid() / zoom;
+    delta = screen->GetGrid();
+    screen->Scale( delta );
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -403,13 +403,12 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     SetToolbars();
 }
 
-/*************************************************************************************/
-void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
-/*************************************************************************************/
+/*****************************************************************************/
+void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC,
+                                           wxPoint MousePositionInPixels )
 {
     wxSize          delta;
     SCH_SCREEN*     screen = GetScreen();
-    int             zoom = screen->GetZoom();
     wxPoint         curpos, oldpos;
     int             hotkey = 0;
 
@@ -418,7 +417,8 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta = screen->GetGrid() / zoom;
+    delta = screen->GetGrid();
+    screen->Scale( delta );
 
     if( delta.x <= 0 )
         delta.x = 1;

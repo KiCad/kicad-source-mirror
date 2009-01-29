@@ -32,8 +32,7 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
  *  (doit etre fait apres les pads,
  *  car le trace du trou efface tout donc peut etre l'ancre */
 {
-    int zoom = panel->GetZoom();
-    int anchor_size = dim_ancre * zoom;
+    int anchor_size = panel->GetScreen()->Unscale( dim_ancre );
 
     GRSetDrawMode( DC, draw_mode );
 

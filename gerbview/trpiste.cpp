@@ -3,6 +3,7 @@
 /*****************************************************************/
 
 #include "fctsys.h"
+#include "gr_basic.h"
 
 #include "common.h"
 #include "gerbview.h"
@@ -65,8 +66,9 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
 {
     int         l_piste;
     int         color;
-    int         zoom;
     int         fillopt;
+    int         radius;
+    int         halfPenWidth;
     static bool show_err;
 
     if( track->m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
@@ -92,37 +94,34 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
 
     GRSetDrawMode( DC, draw_mode );
 
-    zoom = panel->GetZoom();
 
     fillopt = DisplayOpt.DisplayPcbTrackFill ? FILLED : SKETCH;
 
     switch( track->m_Shape )
     {
     case S_CIRCLE:
+        radius = (int) hypot( (double) (track->m_End.x - track->m_Start.x),
+                              (double) (track->m_End.y - track->m_Start.y) );
+
+        halfPenWidth = track->m_Width >> 1;
+        if( panel->GetScreen()->Scale( halfPenWidth ) < L_MIN_DESSIN )
         {
-            int radius = (int) hypot( (double) (track->m_End.x - track->m_Start.x),
-                            (double) (track->m_End.y - track->m_Start.y) );
+            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x,
+                      track->m_Start.y, radius, 0, color );
+        }
 
-            int halfPenWidth = track->m_Width >> 1;
-            if( (halfPenWidth / zoom) < L_MIN_DESSIN )
-            {
-                GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                          radius, 0, color );
-            }
-
-            if( fillopt == SKETCH )
-            {
-                // draw the border of the pen's path using two circles, each as narrow as possible
-                GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                          radius - halfPenWidth, 0, color );
-                GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                          radius + halfPenWidth, 0, color );
-            }
-            else
-            {
-                GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                          radius, track->m_Width, color );
-            }
+        if( fillopt == SKETCH )
+        {
+            // draw the border of the pen's path using two circles, each as narrow as possible
+            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
+                      radius - halfPenWidth, 0, color );
+            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
+                      radius + halfPenWidth, 0, color );
+        }
+        else
+        {
+            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
+                      radius, track->m_Width, color );
         }
         break;
 
@@ -143,25 +142,23 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         break;
 
     case S_SPOT_CIRCLE:
-        {
-            int radius = track->m_Width >> 1;
+        radius = track->m_Width >> 1;
 
-            fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
-            if( (radius / zoom) < L_MIN_DESSIN )
-            {
-                GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                          radius, 0, color );
-            }
-            else if( fillopt == SKETCH )
-            {
-                GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                          radius, 0, color );
-            }
-            else
-            {
-                GRFilledCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                                radius, 0, color, color );
-            }
+        fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
+        if( panel->GetScreen()->Scale( radius ) < L_MIN_DESSIN )
+        {
+            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x,
+                      track->m_Start.y, radius, 0, color );
+        }
+        else if( fillopt == SKETCH )
+        {
+            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x,
+                      track->m_Start.y, radius, 0, color );
+        }
+        else
+        {
+            GRFilledCircle( &panel->m_ClipBox, DC, track->m_Start.x,
+                            track->m_Start.y, radius, 0, color, color );
         }
         break;
 
@@ -171,7 +168,7 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         l_piste = track->m_Width >> 1;
 
         fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
-        if( (l_piste / zoom) < L_MIN_DESSIN )
+        if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
         {
             GRLine( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
                     track->m_End.x, track->m_End.y, 0, color );
@@ -202,7 +199,7 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
     case S_SEGMENT:
         l_piste = track->m_Width >> 1;
 
-        if( (l_piste / zoom) < L_MIN_DESSIN )
+        if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
         {
             GRLine( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
                     track->m_End.x, track->m_End.y, 0, color );
@@ -212,13 +209,12 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         if( fillopt == SKETCH )
         {
             GRCSegm( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                     track->m_End.x, track->m_End.y,
-                     track->m_Width, color );
+                     track->m_End.x, track->m_End.y, track->m_Width, color );
         }
         else
         {
-            GRFillCSegm( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                         track->m_End.x, track->m_End.y,
+            GRFillCSegm( &panel->m_ClipBox, DC, track->m_Start.x,
+                         track->m_Start.y, track->m_End.x, track->m_End.y,
                          track->m_Width, color );
         }
         break;

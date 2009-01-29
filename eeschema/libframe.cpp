@@ -281,7 +281,7 @@ int WinEDA_LibeditFrame::BestZoom()
         GetScreen()->m_Curseur.y = 0;
     }
 
-    return bestzoom;
+    return bestzoom * GetScreen()->m_ZoomScalar;
 }
 
 

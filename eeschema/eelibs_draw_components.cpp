@@ -167,7 +167,7 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
     }
 
     // Trace de l'ancre
-    int len = 3 * panel->GetZoom();
+    int len = panel->GetScreen()->Unscale( 3 );
     GRLine( &panel->m_ClipBox, DC, aOffset.x, aOffset.y - len, aOffset.x, aOffset.y + len, 0, color );
     GRLine( &panel->m_ClipBox, DC, aOffset.x - len, aOffset.y, aOffset.x + len, aOffset.y, 0, color );
 }

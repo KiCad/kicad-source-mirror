@@ -535,7 +535,6 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 {
     int l_piste;
     int color;
-    int zoom;
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -545,7 +544,8 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
     {
         color = g_DrawBgColor;
-        D( printf( "DRAW_ERASED in Track::Draw, g_DrawBgColor=%04X\n", g_DrawBgColor ); )
+        D( printf( "DRAW_ERASED in Track::Draw, g_DrawBgColor=%04X\n",
+                   g_DrawBgColor ); )
     }
     else
     {
@@ -579,7 +579,6 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     GRSetDrawMode( DC, draw_mode );
 
-    zoom = panel->GetZoom();
 
     l_piste = m_Width >> 1;
 
@@ -587,13 +586,13 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     {
         rayon = (int) hypot( (double) ( m_End.x - m_Start.x ),
             (double) ( m_End.y - m_Start.y ) );
-        if( (l_piste / zoom) < L_MIN_DESSIN )
+        if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
         {
             GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
         }
         else
         {
-            if( l_piste <= zoom ) /* Sketch mode if l_piste/zoom <= 1 */
+            if( panel->GetScreen()->Scale( l_piste ) <= 1 ) /* Sketch mode if l_piste/zoom <= 1 */
             {
                 GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
             }
@@ -611,7 +610,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         return;
     }
 
-    if( (l_piste / zoom) < L_MIN_DESSIN )
+    if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
     {
         GRLine( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
             m_End.x, m_End.y, 0, color );
@@ -658,7 +657,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( len < THRESHOLD * m_Width )
         return;
 
-    if( ( m_Width / zoom) < 6 )     // no room to display a text inside track
+    if( panel->GetScreen()->Scale( m_Width ) < 6 )     // no room to display a text inside track
         return;
 
     if( GetNet() == 0 )
@@ -680,7 +679,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         int angle = 0;
         if ( (m_End.x - m_Start.x) == 0 )   // Vertical segment
             angle = 900;    // angle is in 0.1 degree
-        if( ( tsize / zoom) >= 6 )
+        if( panel->GetScreen()->Scale( tsize ) >= 6 )
         {
             tsize = (tsize * 8) / 10;           // small reduction to give a better look
             DrawGraphicText( panel, DC, tpos,
@@ -696,7 +695,6 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 /*******************************************************************************************/
 {
     int color;
-    int zoom;
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -729,21 +727,21 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     SetAlpha( &color, 150 );
 
-    zoom = panel->GetZoom();
 
     rayon = m_Width >> 1;
-    if( rayon < zoom )
-        rayon = zoom;
+    if( panel->GetScreen()->Scale( rayon ) <= 4 )
+    {
+        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
+        return;
+    }
 
     GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
-    if( rayon <= (4 * zoom) )       // Size too small: cannot be drawn
-        return;
 
     int drill_rayon = GetDrillValue() / 2;
-    int inner_rayon = rayon - (2 * zoom);
+    int inner_rayon = rayon - panel->GetScreen()->Unscale( 2 );
 
     GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-        inner_rayon, color );
+              inner_rayon, color );
 
     // Draw the via hole if the display option allows it
     if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
@@ -830,7 +828,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     {
         // calculate a good size for the text
         int tsize = m_Width / len;
-        if( ( tsize / zoom) >= 6 )
+        if( panel->GetScreen()->Scale( tsize ) >= 6 )
         {
             tsize = (tsize * 8) / 10;           // small reduction to give a better look, inside via
             DrawGraphicText( panel, DC, m_Start,

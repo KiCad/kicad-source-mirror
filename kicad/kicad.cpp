@@ -406,9 +406,8 @@ bool WinEDA_App::OnInit()
 
     /* Splash screen logo */
 #ifdef USE_SPLASH_IMAGE
-    wxString logoname( wxString( m_BinDir ) + _T( "logokicad.png" ) );
-    wxBitmap splash_screen;
-    if( splash_screen.LoadFile( logoname, wxBITMAP_TYPE_PNG ) )
+    wxBitmap bmp;
+    if( bmp.LoadFile( m_BinDir + _T( "logokicad.png" ), wxBITMAP_TYPE_PNG ) )
     {
         wxSplashScreen* splash = new wxSplashScreen( splash_screen,
                                                      wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,

@@ -4,6 +4,7 @@
 /****************************************************/
 
 #include "fctsys.h"
+#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"

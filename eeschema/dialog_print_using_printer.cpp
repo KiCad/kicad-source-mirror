@@ -5,6 +5,7 @@
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 #include "fctsys.h"
+#include "gr_basic.h"
 
 #include "common.h"
 

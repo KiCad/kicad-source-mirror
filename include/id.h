@@ -212,20 +212,15 @@ enum main_id {
 	ID_POPUP_ZOOM_OUT,
 	ID_POPUP_ZOOM_SELECT,
 	ID_POPUP_ZOOM_CENTER,
-	ID_POPUP_ZOOM_LEVEL_1,
-	ID_POPUP_ZOOM_LEVEL_2,
-	ID_POPUP_ZOOM_LEVEL_4,
-	ID_POPUP_ZOOM_LEVEL_8,
-	ID_POPUP_ZOOM_LEVEL_16,
-	ID_POPUP_ZOOM_LEVEL_32,
-	ID_POPUP_ZOOM_LEVEL_64,
-	ID_POPUP_ZOOM_LEVEL_128,
-	ID_POPUP_ZOOM_LEVEL_256,
-	ID_POPUP_ZOOM_LEVEL_512,
-	ID_POPUP_ZOOM_LEVEL_1024,
-	ID_POPUP_ZOOM_LEVEL_2048,
-	ID_POPUP_ZOOM_UNUSED0,
-	ID_POPUP_ZOOM_UNUSED1,
+
+    /* Reserve IDs for popup menu zoom levels.  If you need more than 15
+     * levels of zoom, change ID_POPUP_ZOOM_LEVEL_END.  Note that more
+     * than 15 entries in a context submenu may get too large to display
+     * cleanly.  Add any additional popup zoom IDs above here or the
+     * zoom event handler will not work properly.
+     */
+	ID_POPUP_ZOOM_LEVEL_START,
+	ID_POPUP_ZOOM_LEVEL_END = ID_POPUP_ZOOM_LEVEL_START + 15,
 	ID_POPUP_ZOOM_END_RANGE,		 // last zoom id
 
 	ID_POPUP_GRID_PLUS,

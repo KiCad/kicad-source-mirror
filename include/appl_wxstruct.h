@@ -17,6 +17,7 @@
 /* Use wxFileHistory for most recently used file handling. */
 #include <wx/docview.h>
 
+class PARAM_CFG_BASE;
 
 /**********************************************/
 /*  Class representing the entire Application */
@@ -70,6 +71,7 @@ public:
      */
     void    AddMenuLanguageList( wxMenu* MasterMenu );
     void    SetLanguageIdentifier( int menu_id );
+    void    SetLanguagePath( void );
     void    InitOnLineHelp();
 
     // Sauvegarde de configurations et options:
@@ -85,6 +87,12 @@ public:
 
     void    ReadPdfBrowserInfos();
     void    WritePdfBrowserInfos();
+
+    wxString FindFileInSearchPaths( const wxString& filename,
+                                    const wxArrayString* subdirs = NULL );
+
+    wxString GetHelpFile( void );
+    wxString GetLibraryFile( const wxString& filename );
 };
 
 /*

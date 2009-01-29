@@ -353,7 +353,6 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
  * @param draw_mode = GR_OR, GR_XOR..
  */
 {
-    int                  zoom;
     int                  width, color, orient;
     wxSize               size;
     wxPoint              pos; // Centre du texte
@@ -367,7 +366,6 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
 
     screen = (PCB_SCREEN*) panel->GetScreen();
     frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
-    zoom   = screen->GetZoom();
 
     pos.x = m_Pos.x - offset.x;
     pos.y = m_Pos.y - offset.y;
@@ -376,7 +374,8 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
     orient = GetDrawRotation();
     width  = m_Width;
 
-    if( (frame->m_DisplayModText == FILAIRE) || ( (width / zoom) < L_MIN_DESSIN ) )
+    if( (frame->m_DisplayModText == FILAIRE)
+        || ( screen->Scale( width ) < L_MIN_DESSIN ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
         width = -width;
@@ -386,13 +385,13 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
     /* trace du centre du texte */
     if( (g_AnchorColor & ITEM_NOT_SHOW) == 0 )
     {
-        int anchor_size = 2 * zoom;
+        int anchor_size = screen->Unscale( 2 );
         GRLine( &panel->m_ClipBox, DC,
-            pos.x - anchor_size, pos.y,
-            pos.x + anchor_size, pos.y, 0, g_AnchorColor );
+                pos.x - anchor_size, pos.y,
+                pos.x + anchor_size, pos.y, 0, g_AnchorColor );
         GRLine( &panel->m_ClipBox, DC,
-            pos.x, pos.y - anchor_size,
-            pos.x, pos.y + anchor_size, 0, g_AnchorColor );
+                pos.x, pos.y - anchor_size,
+                pos.x, pos.y + anchor_size, 0, g_AnchorColor );
     }
 
     color = g_DesignSettings.m_LayerColor[Module->GetLayer()];
@@ -418,7 +417,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
 
     /* Trace du texte */
     DrawGraphicText( panel, DC, pos, (enum EDA_Colors) color, m_Text,
-        orient, size, m_HJustify, m_VJustify, width, m_Italic );
+                     orient, size, m_HJustify, m_VJustify, width, m_Italic );
 }
 
 

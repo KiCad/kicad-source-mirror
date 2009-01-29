@@ -161,8 +161,7 @@ bool MARKER::HitTest( const wxPoint& refPos )
     wxSize TrueSize = m_Size;
     if ( ActiveScreen )
     {
-        TrueSize.x *= ActiveScreen->GetZoom();
-        TrueSize.y *= ActiveScreen->GetZoom();
+        ActiveScreen->Unscale( TrueSize );
     }
 
     wxPoint pos = GetPosition();

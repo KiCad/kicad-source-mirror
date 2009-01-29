@@ -4,13 +4,19 @@
 /**********************************************************************/
 
 #include "fctsys.h"
-#include "wxstruct.h"
 
 #include "common.h"
 #include "pcbnew.h"
 
 #include "trigo.h"
 #include "id.h"
+
+
+/* Default PCB zoom coefficients. */
+static const int PcbZoomList[] = { 5, 10, 15, 20, 40, 80, 160, 320, 640, 1280,
+                                   2560, 5120, 10240, 20480 };
+
+#define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
 
 
 /* Default grid sizes for PCB editor screens. */
@@ -40,15 +46,13 @@ PCB_SCREEN::PCB_SCREEN( ) : BASE_SCREEN( TYPE_SCREEN )
 {
     size_t i;
 
-    // a zero terminated list
-    static const int zoom_list[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256,
-                                     512, 1024, 2048, 0 };
+    for( i = 0; i < PCB_ZOOM_LIST_CNT; i++ )
+        m_ZoomList.Add( PcbZoomList[i] );
 
     for( i = 0; i < PCB_GRID_LIST_CNT; i++ )
         AddGrid( PcbGridList[i] );
 
     SetGrid( wxSize( 500, 500 ) );        /* pas de la grille en 1/10000 "*/
-    SetZoomList( zoom_list );
     Init();
 }
 

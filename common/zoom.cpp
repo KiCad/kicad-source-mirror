@@ -30,9 +30,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
  */
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
-
     AdjustScrollBars();
-
     ReDrawPanel();
 
     /* Move the mouse cursor to the on grid graphic cursor position */
@@ -69,10 +67,7 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 /** Redraw the screen with the zoom level which shows all the page or the board
  */
 {
-    int bestzoom;
-
-    bestzoom = BestZoom();
-    GetBaseScreen()->SetZoom( bestzoom );
+    GetBaseScreen()->SetZoom( BestZoom() );
     Recadre_Trace( move_mouse_cursor );
 }
 
@@ -100,8 +95,7 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
     if( bestzoom <= 0 )
         bestzoom = 1;
 
-    GetBaseScreen()->SetZoom( bestzoom );
-
+    GetBaseScreen()->SetZoom( bestzoom * GetBaseScreen()->m_ZoomScalar );
     GetBaseScreen()->m_Curseur = Rect.Centre();
     Recadre_Trace( TRUE );
 }
@@ -112,13 +106,14 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 {
     if( DrawPanel == NULL )
     {
-        wxLogDebug( wxT( "No DrawPanel object definedin " \
+        wxLogDebug( wxT( "No DrawPanel object defined in " \
                          "WinEDA_DrawFrame::OnZoom()." ) );
         return;
     }
 
-    bool         zoom_at_cursor = false;
+    int          i;
     int          id = event.GetId();
+    bool         zoom_at_cursor = false;
     BASE_SCREEN* screen = GetBaseScreen();
 
     switch( id )
@@ -164,69 +159,22 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         break;
 
-    case ID_POPUP_ZOOM_LEVEL_1:
-        screen->SetZoom( 1 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_2:
-        screen->SetZoom( 2 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_4:
-        screen->SetZoom( 4 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_8:
-        screen->SetZoom( 8 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_16:
-        screen->SetZoom( 16 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_32:
-        screen->SetZoom( 32 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_64:
-        screen->SetZoom( 64 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_128:
-        screen->SetZoom( 128 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_256:
-        screen->SetZoom( 256 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_512:
-        screen->SetZoom( 512 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_1024:
-        screen->SetZoom( 1024 );
-        Recadre_Trace( true );
-        break;
-
-    case ID_POPUP_ZOOM_LEVEL_2048:
-        screen->SetZoom( 2048 );
-        Recadre_Trace( true );
-        break;
-
     default:
-        wxLogDebug( wxT( "WinEDA_DrawFram::OnZoom() unhandled ID %d" ), id );
-        return;
+        i = id - ID_POPUP_ZOOM_LEVEL_START;
+
+        if( i < 0 )
+        {
+            wxLogDebug( wxT( "WinEDA_DrawFram::OnZoom() invalid ID %d" ), id );
+            return;
+        }
+        if( !( (size_t) i < screen->m_ZoomList.GetCount()) )
+        {
+            wxLogDebug( _T( "Requested index %d is outside the bounds of " \
+                            "the zoom list." ), i );
+            return;
+        }
+        screen->SetZoom( screen->m_ZoomList[i] );
+        Recadre_Trace( true );
     }
 
     Affiche_Status_Box();
@@ -246,14 +194,14 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
  *  used in OnRightClick(wxMouseEvent& event)
  */
 {
-    size_t           i;
-    int              zoom;
-    wxSize           grid;
-    int              zoom_value;
-    wxString         msg;
-    int              ii;
-    wxString         line;
-    GRID_TYPE        tmp;
+    size_t      i;
+    int         maxZoomIds;
+    int         zoom;
+    wxSize      grid;
+    wxString    msg;
+    GRID_TYPE   tmp;
+    wxMenu*     gridMenu;
+    double      gridValue;
 
     ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, _( "Center" ),
                   zoom_center_xpm );
@@ -269,23 +217,27 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     ADD_MENUITEM( MasterMenu, ID_ZOOM_REDRAW, _( "Redraw view" ),
                   zoom_redraw_xpm );
 
-    /* Create the basic zoom list: */
     zoom = GetScreen()->GetZoom();
-    zoom_value = 1;
-    for( ii = 0; zoom_value <= m_Parent->m_ZoomMaxValue; zoom_value <<= 1, ii++ ) // Create zoom choice 1 .. zoom max
+    maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
+    maxZoomIds = ( (size_t) maxZoomIds < GetScreen()->m_ZoomList.GetCount() ) ?
+        maxZoomIds : GetScreen()->m_ZoomList.GetCount();
+    wxLogDebug( _T( "%d zoom IDs used." ), maxZoomIds );
+
+    /* Populate zoom submenu. */
+    for( i = 0; i < (size_t) maxZoomIds; i++ )
     {
-        line.Printf( wxT( "%u" ), zoom_value );
-        zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_1 + ii,
-                             _( "Zoom: " ) + line, wxEmptyString, TRUE );
-        if( zoom == zoom_value )
-            zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_1 + ii, TRUE );
+        msg.Printf( wxT( "%u" ), GetScreen()->m_ZoomList[i] );
+        zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
+                             wxEmptyString, wxITEM_CHECK );
+        if( zoom == GetScreen()->m_ZoomList[i] )
+            zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_START + i, true );
     }
 
     /* Create grid submenu as required. */
     if( !GetScreen()->m_GridList.IsEmpty() )
     {
-        wxMenu* grid_choice = new wxMenu;
-        ADD_MENUITEM_WITH_SUBMENU( MasterMenu, grid_choice,
+        gridMenu = new wxMenu;
+        ADD_MENUITEM_WITH_SUBMENU( MasterMenu, gridMenu,
                                    ID_POPUP_GRID_SELECT, _( "Grid Select" ),
                                    grid_select_xpm );
 
@@ -294,9 +246,8 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
         for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
         {
             tmp = GetScreen()->m_GridList[i];
-            double grid_value = To_User_Unit( g_UnitMetric,
-                                              tmp.m_Size.x,
-                                              ( (WinEDA_DrawFrame*)m_Parent )->m_InternalUnits );
+            gridValue = To_User_Unit( g_UnitMetric, tmp.m_Size.x,
+                                      ( (WinEDA_DrawFrame*)m_Parent )->m_InternalUnits );
             if( tmp.m_Id == ID_POPUP_GRID_USER )
             {
                 msg = _( "User Grid" );
@@ -304,14 +255,14 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
             else
             {
                 if ( g_UnitMetric == 0 )	// inches
-                    line.Printf( wxT( "%g mils" ), grid_value*1000 );
+                    msg.Printf( wxT( "%g mils" ), gridValue * 1000 );
                 else
-                    line.Printf( wxT( "%g mm" ), grid_value );
-                msg = _( "Grid: " ) + line;
+                    msg.Printf( wxT( "%g mm" ), gridValue );
+                msg = _( "Grid: " ) + msg;
             }
-            grid_choice->Append( tmp.m_Id, msg, wxEmptyString, true );
+            gridMenu->Append( tmp.m_Id, msg, wxEmptyString, true );
             if( grid == tmp.m_Size )
-                grid_choice->Check( tmp.m_Id, true );
+                gridMenu->Check( tmp.m_Id, true );
         }
     }
 

@@ -18,21 +18,21 @@
 extern BASE_SCREEN* ActiveScreen;
 
 /* Variables locales */
-static int          GRLastMoveToX, GRLastMoveToY;
-static int          Text_Color = LIGHTGRAY;
+static int   GRLastMoveToX, GRLastMoveToY;
+static int   Text_Color  = LIGHTGRAY;
 
-static int          PenMinWidth = 1;/* largeur minimum de la plume (DOIT etre > 0)
-                                     *  (utile pour trace sur imprimante) */
-static int          ForceBlackPen;/* si != 0 : traces en noir (utilise pour trace
-                                   *  sur imprimante */
-static int          xcliplo = 0,
-                    ycliplo     = 0,
-                    xcliphi     = 2000,
-                    ycliphi     = 2000;/* coord de la surface de trace */
-static int   lastcolor = -1;
-static int   lastwidth = -1;
+static int   PenMinWidth = 1;    /* largeur minimum de la plume (DOIT etre > 0)
+                                  *  (utile pour trace sur imprimante) */
+static int   ForceBlackPen;      /* si != 0 : traces en noir (utilise pour trace
+                                  *  sur imprimante */
+static int   xcliplo     = 0,
+             ycliplo     = 0,
+             xcliphi     = 2000,
+             ycliphi     = 2000; /* coord de la surface de trace */
+static int   lastcolor   = -1;
+static int   lastwidth   = -1;
 static int   s_Last_Pen_Style = -1;
-static wxDC* lastDC = NULL;
+static wxDC* lastDC      = NULL;
 
 /*
  *  Macro de clipping du trace d'une ligne:
@@ -47,27 +47,18 @@ static wxDC* lastDC = NULL;
 
 static inline int USCALE( us arg, us num, us den )
 {
+#ifndef WX_ZOOM
     int ii;
-
     ii = (int) ( ( (float) arg * num ) / den );
     return ii;
+#else
+    return arg;
+#endif
 }
 
-
-#ifdef WX_ZOOM
-#define GET_ZOOM 1
-#else
-#define GET_ZOOM ActiveScreen->GetZoom()
-#endif
-
-static int inline ZoomValue( int value_to_zoom ) {
-    int zoom = GET_ZOOM;
-    if( !zoom ) return 0;
-
-    if( value_to_zoom >= 0 )
-        return ( value_to_zoom + (zoom >> 1 ) ) / zoom;
-    else
-        return ( value_to_zoom - (zoom >> 1 ) ) / zoom;
+static int inline ZoomValue( int val )
+{
+    return ActiveScreen->Scale( val );
 }
 
 /****************************************/
@@ -75,27 +66,27 @@ static int inline ZoomValue( int value_to_zoom ) {
 /****************************************/
 int GRMapX( int x )
 {
-    int coord = x - ActiveScreen->m_DrawOrg.x;
-
 #ifndef WX_ZOOM
+    int coord = x - ActiveScreen->m_DrawOrg.x;
     coord  = ZoomValue( coord );
     coord -= ActiveScreen->m_StartVisu.x;
-#endif
-
     return coord;
+#else
+    return x;
+#endif
 }
 
 
 int GRMapY( int y )
 {
-    int coord = y - ActiveScreen->m_DrawOrg.y;
-
 #ifndef WX_ZOOM
+    int coord = y - ActiveScreen->m_DrawOrg.y;
     coord  = ZoomValue( coord );
     coord -= ActiveScreen->m_StartVisu.y;
-#endif
-
     return coord;
+#else
+    return y;
+#endif
 }
 
 

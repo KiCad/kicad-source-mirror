@@ -106,7 +106,6 @@ void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     int rayon, ox, oy, gcolor, width;
     int dx1, dx2, dy1, dy2;
     int typeaff;
-    int zoom;
 
     ox = m_Pos.x + offset.x;
     oy = m_Pos.y + offset.y;
@@ -115,12 +114,10 @@ void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( (gcolor & ITEM_NOT_SHOW) != 0 )
         return;
 
-    zoom = panel->GetZoom();
-
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
-    if( width / zoom < 2 )
+    if( panel->GetScreen()->Scale( width ) < 2 )
         typeaff = FILAIRE;
 
     /* Trace du cercle: */
