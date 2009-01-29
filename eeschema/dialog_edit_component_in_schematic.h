@@ -22,6 +22,9 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
 
     static int              s_SelectedRow;
 
+    /// The size of the dialog window last time it was displayed;
+    static wxSize           s_LastSize;
+
     /// a copy of the edited component's SCH_CMP_FIELDs
     SCH_CMP_FIELDS          m_FieldsBuf;
 

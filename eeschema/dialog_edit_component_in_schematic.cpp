@@ -19,21 +19,7 @@
 int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
 
 
-/**
- * Function GetTextSize
- * computes the size of a text string in pixels from the wxFont used within a wxTextCtrl.
- * @param aString is the text string to measure, must be a single line, no newlines.
- * @param aWindow is the wxWindow which is the parent of the wxTextCtrl \a aCtrl.
- * @param aWidth is where to put the width of the string in pixels.
- * @param aHeight is where to put the heigth of the string in pixels.
- */
-static void GetTextSize( const wxString& aString, wxWindow* aWindow, wxTextCtrl* aCtrl, wxCoord* aWidth, wxCoord* aHeight )
-{
-    wxClientDC dc( aWindow );
-
-    dc.SetFont( aCtrl->GetFont() );
-    dc.GetTextExtent( aString, aWidth, aHeight );
-}
+wxSize DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = wxDefaultSize;
 
 
 /**********************************************************************/
@@ -57,24 +43,25 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
 
         dialog->InitBuffers( aComponent );
 
-        // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
+        wxSize sizeNow = dialog->GetSize();
+
+        // this relies on wxDefaultSize being -1,-1, be careful here.
+        if(  sizeNow.GetWidth()  < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
+          || sizeNow.GetHeight() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
         {
-            wxCoord width;
-            wxCoord height;
-
-            GetTextSize( dialog->chipnameTextCtrl->GetValue(), dialog, dialog->chipnameTextCtrl, &width, &height );
-
-            wxSize size = dialog->chipnameTextCtrl->GetSize();
-
-            if( size.GetWidth() < width + 10 )
-            {
-                size.SetWidth( width + 10 );
-                dialog->chipnameTextCtrl->SetSizeHints( size );
-                dialog->Layout();
-            }
+            dialog->SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
         }
 
+        // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
+        EnsureTextCtrlWidth( dialog->chipnameTextCtrl );
+
         dialog->ShowModal();
+
+        // Some of the field values are long and are not always fully visible
+        // because the window comes up too narrow.
+        // Remember user's manual window resizing efforts here so it comes up wide enough next time.
+        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dialog->GetSize();
+
         dialog->Destroy();
     }
 

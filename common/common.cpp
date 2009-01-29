@@ -72,6 +72,42 @@ void SetLocaleTo_Default( void )
 }
 
 
+/********************************************************************/
+bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
+/********************************************************************/
+{
+    wxWindow*   window = aCtrl->GetParent();
+    if( !window )
+        window = aCtrl;
+
+    wxString    ctrlText;
+
+    if( !aString )
+    {
+        ctrlText = aCtrl->GetValue();
+        aString = &ctrlText;
+    }
+
+    wxCoord     width;
+    wxCoord     height;
+
+    {
+        wxClientDC dc( window );
+        dc.SetFont( aCtrl->GetFont() );
+        dc.GetTextExtent( *aString, &width, &height );
+    }
+
+    wxSize size = aCtrl->GetSize();
+    if( size.GetWidth() < width + 10 )
+    {
+        size.SetWidth( width + 10 );
+        aCtrl->SetSizeHints( size );
+        return true;
+    }
+    return false;
+}
+
+
 /*********************************************************************************************/
 Ki_PageDescr::Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name )
 /*********************************************************************************************/

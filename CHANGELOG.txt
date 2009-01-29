@@ -16,10 +16,13 @@ email address.
 
 2009-Jan-29 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
+++all
+    common.c added EnsureTextCtrlWidth()
 ++eeschema
-    dialog edit component in schematic: make sure chipname text control is wide
-    enough to handle unusually long chip names.  Did not have time to look at
-    dialog edit component in library.
+  * dialog edit component in schematic: make sure chipname text control is wide
+    enough to handle unusually long chip names.
+  * Retain and re-use user's desired dialog edit component window size.
+    Did not have time to look at dialog edit component in library.
 
 
 2009-Jan-27 UPDATE Vesa Solonen <vesa.solonen@hut.fi>

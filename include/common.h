@@ -389,6 +389,21 @@ but could make more easier an optional use of locale in kicad
 */
 void SetLocaleTo_Default(void);
 
+
+/**
+ * Function EnsureTextCtrlWidth
+ * sets the minimum pixel width on a text control in order to make a text string
+ * be fully visible within it. The current font within the text control is considered.
+ * The text can come either from the control or be given as an argument.
+ * If the text control is larger than needed, then nothing is done.
+ * @param aCtrl the text control to potentially make wider.
+ * @param aString the text that is used in sizing the control's pixel width.  If NULL, then
+ *   the text already within the control is used.
+ * @return bool - true if the \a aCtrl had its size changed, else false.
+ */
+bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
+
+
 /**
  * Operator << overload
  * outputs a point to the argument string in a format resembling
