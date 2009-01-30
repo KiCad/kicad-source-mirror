@@ -11,7 +11,8 @@
 
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)
- *  @param aPanel = the current DrawPanel
+ *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
+ *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (enum EDA_Colors) = text color
  *  @param aText = text to draw
@@ -23,7 +24,7 @@
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
  *  @param aCallback() = function called (if non null) to draw each segment.
- *                  used only to draw 3D texts
+ *                  used to draw 3D texts or for plotting, NULL for normal drawings
  */
 void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                                   wxDC* aDC,

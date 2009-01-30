@@ -22,7 +22,7 @@
 
 
 /****************************************************************************************************/
-void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
+void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                       const wxPoint& aPos, EDA_Colors aColor, const wxString& aText,
                       int aOrient, const wxSize& aSize,
                       enum GRTextHorizJustifyType aH_justify,
@@ -34,7 +34,8 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)
  * Draw a graphic text (like module texts)
- *  @param aPanel = the current DrawPanel
+ *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
+ *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (enum EDA_Colors) = text color
  *  @param aText = text to draw
@@ -46,7 +47,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
  *  @param aCallback() = function called (if non null) to draw each segment.
- *                  used only to draw 3D texts
+ *                  used to draw 3D texts or for plotting, NULL for normal drawings
  */
 {
     int            ii, kk, char_count, AsciiCode, endcar;
@@ -189,10 +190,11 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
     ox = cX - dx;
     oy = cY + dy;
 
-    if( aPanel->GetScreen()->Scale( aSize.x ) == 0 )
+    // Note: if aPanel == NULL, we are using a GL Canvas that handle scaling
+    if( aPanel && aPanel->GetScreen()->Scale( aSize.x ) == 0 )
         return;
 
-    if( ABS( (aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )    /* shapes are too small: connot be drawn */
+    if( aPanel && ABS( (aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )    /* shapes are too small: connot be drawn */
     {                                   /* insteed the text is drawn as a line */
         dx = (pitch * char_count) / 2;
         dy = size_v / 2;                /* line is always centered */
@@ -209,7 +211,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
         if ( aCallback )
             aCallback( ux0, uy0, dx, dy );
         else
-            GRLine( &aPanel->m_ClipBox, DC, ux0, uy0, dx, dy, aWidth, aColor );
+            GRLine( &aPanel->m_ClipBox, aDC, ux0, uy0, dx, dy, aWidth, aColor );
 
         return;
     }
@@ -259,11 +261,11 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* DC,
                         int ik, * coordptr;
                         coordptr = coord;
                         for( ik = 0; ik < (ii - 2); ik += 2, coordptr += 2 )
-                            GRCSegm( &aPanel->m_ClipBox, DC, *coordptr, *(coordptr + 1),
+                            GRCSegm( &aPanel->m_ClipBox, aDC, *coordptr, *(coordptr + 1),
                                      *(coordptr + 2), *(coordptr + 3), aWidth, aColor );
                     }
                     else
-                        GRPoly( &aPanel->m_ClipBox, DC, ii / 2, (wxPoint*)coord, 0,
+                        GRPoly( &aPanel->m_ClipBox, aDC, ii / 2, (wxPoint*)coord, 0,
                                 aWidth, aColor, aColor );
                 }
                 plume = f_cod; ii = 0;
