@@ -346,11 +346,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 
     if( m_AuxiliaryToolBar )
     {
-        int jj;
+        unsigned jj;
         if( m_SelZoomBox )
         {
-            int old_choice = m_SelZoomBox->GetChoice();
-
             for( jj = 0; jj < GetScreen()->m_ZoomList.GetCount(); jj++ )
             {
                 if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )

@@ -122,8 +122,8 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         (*m_Collector)[i]->Show( 0, std::cout );
 #endif
 
-    /* Remove redundancies: most of time, zones are found twice,
-     * because zones are filled twice ( once by by horizontal and once by vertical segments )
+    /* Remove redundancies: sometime, zones are found twice,
+     * because zones can be are filled by overlapping segments (this is a fill option)
      */
     unsigned long timestampzone = 0;
 
@@ -163,6 +163,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         SetCurItem( item );
     }
+
     else    // we can't figure out which item user wants, do popup menu so user can choose
     {
         wxMenu itemMenu;

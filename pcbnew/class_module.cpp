@@ -890,8 +890,11 @@ EDA_Rect MODULE::GetBoundingBox()
 
 
 /*******************************************************/
-void MODULE::Display_Infos( WinEDA_BasePcbFrame* frame )
+void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
 /*******************************************************/
+/* Virtual function, from EDA_BaseStruct.
+ * display module info on MsgPanel
+*/
 {
     int      nbpad;
     char     bufcar[512], Line[512];
