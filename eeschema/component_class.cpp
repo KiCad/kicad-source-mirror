@@ -353,7 +353,7 @@ EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 
     int y2 = m_Transform[1][0] * xm + m_Transform[1][1] * ym;
 
-    // H and W must be > 0 for wxRect:
+    // H and W must be > 0:
     if( x2 < x1 )
         EXCHG( x2, x1 );
     if( y2 < y1 )

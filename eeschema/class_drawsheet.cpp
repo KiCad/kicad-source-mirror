@@ -374,6 +374,18 @@ EDA_Rect DrawSheetStruct::GetBoundingBox()
     return box;
 }
 
+/************************************************/
+bool DrawSheetStruct::HitTest( const wxPoint& aPosRef )
+/************************************************/
+/** Function HitTest
+ * @return true if the point aPosRef is within item area
+ * @param aPosRef = a wxPoint to test
+ */
+{
+    EDA_Rect rect = GetBoundingBox();
+    return rect.Inside( aPosRef );
+}
+
 
 /************************************/
 int DrawSheetStruct::ComponentCount()

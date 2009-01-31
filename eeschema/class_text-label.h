@@ -102,6 +102,13 @@ public:
     void            SwapData( SCH_TEXT* copyitem );
 
     void            Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+
+    /** Function HitTest
+     * @return true if the point aPosRef is within item area
+     * @param aPosRef = a wxPoint to test
+     */
+    bool HitTest( const wxPoint& aPosRef );
+
     EDA_Rect        GetBoundingBox();
 
     /**
@@ -175,6 +182,12 @@ public:
      */
     bool    Save( FILE* aFile ) const;
 
+    /** Function HitTest
+     * @return true if the point aPosRef is within item area
+     * @param aPosRef = a wxPoint to test
+     */
+    bool HitTest( const wxPoint& aPosRef );
+
     EDA_Rect        GetBoundingBox();
 };
 
@@ -211,6 +224,12 @@ public:
      * @return bool - true if success writing else false.
      */
     bool    Save( FILE* aFile ) const;
+
+    /** Function HitTest
+     * @return true if the point aPosRef is within item area
+     * @param aPosRef = a wxPoint to test
+     */
+    bool HitTest( const wxPoint& aPosRef );
 
     EDA_Rect        GetBoundingBox();
 };

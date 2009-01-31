@@ -35,6 +35,16 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     m_IsDangling = FALSE;
 }
 
+/** Function HitTest
+ * @return true if the point aPosRef is within item area
+ * @param aPosRef = a wxPoint to test
+ */
+bool SCH_TEXT::HitTest( const wxPoint& aPosRef )
+{
+    EDA_Rect rect = GetBoundingBox();
+    return rect.Inside( aPosRef );
+}
+
 
 /*********************************************/
 SCH_TEXT* SCH_TEXT::GenCopy()
@@ -290,6 +300,19 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
     return success;
 }
 
+/************************************************/
+bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosRef )
+/************************************************/
+/** Function HitTest
+ * @return true if the point aPosRef is within item area
+ * @param aPosRef = a wxPoint to test
+ */
+{
+    EDA_Rect rect = GetBoundingBox();
+    return rect.Inside( aPosRef );
+}
+
+
 
 /***********************************************************************************/
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text ) :
@@ -325,6 +348,18 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+/************************************************/
+bool SCH_HIERLABEL::HitTest( const wxPoint& aPosRef )
+/************************************************/
+/** Function HitTest
+ * @return true if the point aPosRef is within item area
+ * @param aPosRef = a wxPoint to test
+ */
+{
+    EDA_Rect rect = GetBoundingBox();
+    return rect.Inside( aPosRef );
 }
 
 
@@ -426,7 +461,9 @@ void SCH_HIERLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
     }
 }
 
+/****************************************/
 EDA_Rect SCH_HIERLABEL::GetBoundingBox()
+/****************************************/
 {
     int x, y, dx, dy, length, height;
 
@@ -639,7 +676,9 @@ void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 }
 
 
+/******************************************/
 EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
+/******************************************/
 {
     int x, y, dx, dy, length, height;
 
@@ -688,7 +727,9 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 }
 
 
+/***********************************/
 EDA_Rect SCH_TEXT::GetBoundingBox()
+/***********************************/
 {
     int x, y, dx, dy, length, height;
 

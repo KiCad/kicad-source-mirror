@@ -22,11 +22,9 @@ static SCH_ITEM* LastSnappedStruct = NULL;
 static int       PickedBoxMinX, PickedBoxMinY, PickedBoxMaxX, PickedBoxMaxY;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
-static bool IsPointInBox( wxPoint aPosRef,
-                          int BoxX1, int BoxY1, int BoxX2, int BoxY2 );
 static bool IsPointOnSegment( wxPoint aPosRef, wxPoint aSegmStart, wxPoint aSegmEnd, int aDist = 0 );
 static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
-                        SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, int zoom_value );
+                        SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, double aScaleFactor);
 
 
 /*********************************************************************/
@@ -37,7 +35,7 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
  *  If more than 1 component is found, a pointer to the smaller component is returned
  */
 {
-    SCH_COMPONENT* DrawLibItem = NULL, * LastDrawLibItem = NULL;
+    SCH_COMPONENT* component = NULL, * lastcomponent = NULL;
     SCH_ITEM*      DrawList;
     EDA_Rect       BoundaryBox;
     float          sizeref = 0, sizecurr;
@@ -50,34 +48,39 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
                  DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
         {
             if( ( SnapPoint2( Screen->m_Curseur, LIBITEM,
-                     DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
+                     DrawList, NULL, Screen->GetScalingFactor() ) ) == FALSE )
                 break;
         }
-        DrawLibItem = (SCH_COMPONENT*) LastSnappedStruct;
-        DrawList    = DrawLibItem->Next();
-        if( LastDrawLibItem == NULL )  // First time a component is located
+        component = (SCH_COMPONENT*) LastSnappedStruct;
+        DrawList    = component->Next();
+        if( lastcomponent == NULL )  // First time a component is located
         {
-            LastDrawLibItem = DrawLibItem;
-            BoundaryBox = LastDrawLibItem->GetBoundaryBox();
+            lastcomponent = component;
+            BoundaryBox = lastcomponent->GetBoundaryBox();
             sizeref = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
         }
         else
         {
-            BoundaryBox = DrawLibItem->GetBoundaryBox();
+            BoundaryBox = component->GetBoundaryBox();
             sizecurr    = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
             if( sizeref > sizecurr )   // a smallest component is found
             {
                 sizeref = sizecurr;
-                LastDrawLibItem = DrawLibItem;
+                lastcomponent = component;
             }
         }
     }
 
-    return LastDrawLibItem;
+    return lastcomponent;
 }
 
 
-/* 	SearchMask = (bitwise OR):
+/********************************************************************************/
+SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask )
+/******************************************************************************/
+
+/* Search an item at pos refpos
+ * 	SearchMask = (bitwise OR):
  *  LIBITEM
  *  WIREITEM
  *  BUSITEM
@@ -100,21 +103,8 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
  *
  *
  *  Return:
- *      -Bloc search:
- *          pointeur sur liste de pointeurs de structures si Plusieurs
- *                  structures selectionnees.
- *          pointeur sur la structure si 1 seule
+ *          pointer on item found or NULL
  *
- *      Positon serach:
- *          pointeur sur la structure.
- *      Si pas de structures selectionnees: retourne NULL
- *
- */
-/********************************************************************************/
-SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask )
-/******************************************************************************/
-
-/* Search an item at pos refpos
  */
 {
     bool      Snapped;
@@ -122,7 +112,7 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
         return NULL;
 
     if( ( Snapped = SnapPoint2( refpos, SearchMask,
-             screen->EEDrawList, NULL, screen->GetZoom() ) ) != FALSE )
+             screen->EEDrawList, NULL, screen->GetScalingFactor() ) ) != FALSE )
     {
         return LastSnappedStruct;
     }
@@ -135,6 +125,11 @@ SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
 /************************************************************************/
 
 /* Search items in block
+ *      Return:
+ *          pointeur sur liste de pointeurs de structures si Plusieurs
+ *                  structures selectionnees.
+ *          pointeur sur la structure si 1 seule
+ *
  */
 {
     int               x, y, OrigX, OrigY;
@@ -195,11 +190,9 @@ SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
 * The routine returns TRUE if point was snapped.							 *
 *****************************************************************************/
 bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
-                 SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, int zoom_value )
+                 SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, double aScaleFactor )
 {
-    int x1, y1, x2, y2;
     DrawPickedStruct* DontSnap;
-    int dx, dy;
 
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
@@ -282,30 +275,19 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             #define STRUCT ( (DrawJunctionStruct*) DrawList )
             if( !(SearchMask & JUNCTIONITEM) )
                 break;
-            dx = DRAWJUNCTION_SIZE / 2;
-            x1 = STRUCT->m_Pos.x - dx;
-            y1 = STRUCT->m_Pos.y - dx;
-            x2 = STRUCT->m_Pos.x + dx;
-            y2 = STRUCT->m_Pos.y + dx;
-            if( IsPointInBox( aPosRef, x1, y1, x2, y2 ) )
+            if( STRUCT->HitTest(aPosRef) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
             }
             break;
 
-
         case DRAW_NOCONNECT_STRUCT_TYPE:
             #undef  STRUCT
             #define STRUCT ( (DrawNoConnectStruct*) DrawList )
             if( !(SearchMask & NOCONNECTITEM) )
                 break;
-            dx = (DRAWNOCONNECT_SIZE * zoom_value) / 2;
-            x1 = STRUCT->m_Pos.x - dx;
-            y1 = STRUCT->m_Pos.y - dx;
-            x2 = STRUCT->m_Pos.x + dx;
-            y2 = STRUCT->m_Pos.y + dx;
-            if( IsPointInBox( aPosRef, x1, y1, x2, y2 ) )
+            if( STRUCT->HitTest(aPosRef) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -313,21 +295,20 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             break;
 
         case DRAW_MARKER_STRUCT_TYPE:
+        {
             #undef  STRUCT
             #define STRUCT ( (DrawMarkerStruct*) DrawList )
             if( !(SearchMask & MARKERITEM) )
                 break;
-            dx = (DRAWMARKER_SIZE * zoom_value) / 2;
-            x1 = STRUCT->m_Pos.x - dx;
-            y1 = STRUCT->m_Pos.y - dx;
-            x2 = STRUCT->m_Pos.x + dx;
-            y2 = STRUCT->m_Pos.y + dx;
-            if( IsPointInBox( aPosRef, x1, y1, x2, y2 ) )
+            int size = (int)((DRAWMARKER_SIZE / aScaleFactor) / 2);
+            wxPoint dist = aPosRef - STRUCT->m_Pos;
+            if( (abs(dist.x ) <= size) && (abs(dist.y ) <= size) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
             }
             break;
+        }
 
         case TYPE_SCH_LABEL:
         case TYPE_SCH_TEXT:
@@ -335,31 +316,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             #define STRUCT ( (SCH_TEXT*) DrawList )
             if( !( SearchMask & (TEXTITEM | LABELITEM) ) )
                 break;
-            dx = STRUCT->m_Size.x * STRUCT->GetLength();
-            dy = STRUCT->m_Size.y;
-            x1 = x2 = STRUCT->m_Pos.x;
-            y1 = y2 = STRUCT->m_Pos.y;
-
-            switch( STRUCT->m_Orient )
-            {
-            case 0:             /* HORIZONTAL Left justified */
-                x2 += dx; y2 -= dy;
-                break;
-
-            case 1:             /* VERTICAL UP */
-                x2 -= dy; y2 -= dx;
-                break;
-
-            case 2:             /* horizontal  Right justified  */
-                x2 -= dx; y2 -= dy;
-                break;
-
-            case 3:             /* vertical DOWN */
-                x2 -= dy; y2 += dx;
-                break;
-            }
-
-            if( IsPointInBox( aPosRef, x1, y1, x2, y2 ) )
+            if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -368,36 +325,23 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 
 
         case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
             #undef  STRUCT
-            #define STRUCT ( (SCH_LABEL*) DrawList )
+            #define STRUCT ( (SCH_GLOBALLABEL*) DrawList )
             if( !(SearchMask & LABELITEM) )
                 break;
-            dx = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1 );        /* longueur */
-            dy = STRUCT->m_Size.y / 2;                                  /* Demi hauteur */
-            x1 = x2 = STRUCT->m_Pos.x;
-            y1 = y2 = STRUCT->m_Pos.y;
-
-            switch( STRUCT->m_Orient )
+            if( STRUCT->HitTest( aPosRef ) )
             {
-            case 0:             /* HORIZONTAL */
-                x2 -= dx; y2 += dy; y1 -= dy;
-                break;
-
-            case 1:             /* VERTICAL UP */
-                x1 -= dy; x2 += dy; y2 += dx;
-                break;
-
-            case 2:             /* horizontal inverse */
-                x2 += dx; y2 += dy; y1 -= dy;
-                break;
-
-            case 3:             /* vertical DOWN */
-                x1 -= dy; x2 += dy; y2 -= dx;
-                break;
+                LastSnappedStruct = DrawList;
+                return TRUE;
             }
+            break;
 
-            if( IsPointInBox( aPosRef, x1, y1, x2, y2 ) )
+        case TYPE_SCH_HIERLABEL:
+            #undef  STRUCT
+            #define STRUCT ( (SCH_HIERLABEL*) DrawList )
+            if( !(SearchMask & LABELITEM) )
+                break;
+            if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -447,13 +391,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             #define STRUCT ( (DrawSheetStruct*) DrawList )
             if( !(SearchMask & SHEETITEM) )
                 break;
-            /* Recalcul des coordonnees de l'encadrement du composant */
-            x1 = STRUCT->m_Pos.x;
-            y1 = STRUCT->m_Pos.y;
-            x2 = STRUCT->m_Pos.x + STRUCT->m_Size.x;
-            y2 = STRUCT->m_Pos.y + STRUCT->m_Size.y;
-
-            if( IsPointInBox( aPosRef, x1, y1, x2, y2 ) )
+            if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -721,29 +659,6 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 
 
     return FALSE;
-}
-
-
-/**********************************************************************/
-static bool IsPointInBox( wxPoint aPosRef,
-                          int BoxX1, int BoxY1, int BoxX2, int BoxY2 )
-/**********************************************************************/
-
-/* Routine detectant que le point pX,pY est dans le rectangle (Box)
- *  Retourne TRUE ou FALSE.
- *
- */
-{
-    if( BoxX1 > BoxX2 )
-        EXCHG( BoxX1, BoxX2 );
-    if( BoxY1 > BoxY2 )
-        EXCHG( BoxY1, BoxY2 );
-
-    if( (aPosRef.x >= BoxX1) && (aPosRef.x <= BoxX2) && (aPosRef.y >= BoxY1) && (aPosRef.y <= BoxY2) )
-        return TRUE;
-
-    else
-        return FALSE;
 }
 
 

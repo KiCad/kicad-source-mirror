@@ -9,7 +9,10 @@ email address.
 ================================================================================
 ++All:
     Print functions and display zoom level modified to use the new zoom implementation
-    Comments adde in some functions.
+    Comments added in some functions.
+    Code cleaning
+    some bugs fixed.
+    Added contributors to list in about Kicad.
 
 2009-Jan-29 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================

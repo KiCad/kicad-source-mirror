@@ -40,9 +40,9 @@ DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) 
 }
 
 
-/*************************************/
+/****************************************/
 wxPoint DrawBusEntryStruct::m_End() const
-/*************************************/
+/****************************************/
 
 // retourne la coord de fin du raccord
 {
@@ -98,6 +98,21 @@ bool DrawBusEntryStruct::Save( FILE* aFile ) const
 }
 
 
+/*********************************************/
+EDA_Rect DrawBusEntryStruct::GetBoundingBox()
+/*********************************************/
+{
+    int      dx = m_Pos.x - m_End().x;
+    int      dy = m_Pos.y - m_End().y;
+    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y ), wxSize( dx, dy ) );
+
+    box.Normalize();
+    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    box.Inflate(width/2, width/2);
+
+    return box;
+}
+
 /****************************/
 /* class DrawJunctionStruct */
 /***************************/
@@ -143,6 +158,7 @@ bool DrawJunctionStruct::Save( FILE* aFile ) const
 
 
 EDA_Rect DrawJunctionStruct::GetBoundingBox()
+// return a bounding box
 {
     int      width = DRAWJUNCTION_SIZE * 2;
     int      xmin  = m_Pos.x - DRAWJUNCTION_SIZE;
@@ -152,6 +168,21 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
 
     return ret;
 };
+
+/*********************************************************/
+bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
+/*********************************************************/
+/** Function HitTest
+ * @return true if the point aPosRef is within item area
+ * @param aPosRef = a wxPoint to test
+ */
+{
+    wxPoint dist = aPosRef - m_Pos;
+
+    if( sqrt( ((double) dist.x * dist.x) + ((double) dist.y * dist.y) ) < DRAWJUNCTION_SIZE )
+        return true;
+     return false;
+}
 
 
 #if defined(DEBUG)
@@ -186,6 +217,35 @@ DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
     newitem->m_Flags = m_Flags;
 
     return newitem;
+}
+
+/*********************************************/
+EDA_Rect DrawNoConnectStruct::GetBoundingBox()
+/*********************************************/
+{
+    const int DELTA = DRAWNOCONNECT_SIZE / 2;
+    EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ), wxSize( 2 * DELTA, 2 * DELTA ) );
+
+    box.Normalize();
+    return box;
+}
+
+
+/*********************************************************/
+bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
+/*********************************************************/
+/** Function HitTest
+ * @return true if the point aPosRef is within item area
+ * @param aPosRef = a wxPoint to test
+ */
+{
+    int width = g_DrawMinimunLineWidth;
+    int delta = ( DRAWNOCONNECT_SIZE + width) / 2;
+
+    wxPoint dist = aPosRef - m_Pos;
+    if( (ABS(dist.x) <= delta) && (ABS(dist.y) <= delta) )
+        return true;
+    return false;
 }
 
 

@@ -129,10 +129,17 @@ public:
     void             Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                            int aDrawMode, int aColor = -1 );
 
+    /** Function HitTest
+     * @return true if the point aPosRef is within item area
+     * @param aPosRef = a wxPoint to test
+     */
+    bool HitTest( const wxPoint& aPosRef );
+
     /** Function GetBoundingBox
      *  @return an EDA_Rect giving the bouding box of the sheet
      */
     EDA_Rect         GetBoundingBox();
+
     void             SwapData( DrawSheetStruct* copyitem );
 
     /** Function ComponentCount

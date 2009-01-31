@@ -249,8 +249,8 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
     }
 
     // Update the BoundaryBox. Remember the fact the screen Y axis is the reverse */
-    NEGATE(ymax); NEGATE(ymin);    // Y is not is screen axis sense
-    // Ensure H > 0 (wxRect assume it)
+    NEGATE(ymax); NEGATE(ymin);    // y coordinates are screen oriented
+    // Ensure H > 0
     if( ymax < ymin )
         EXCHG( ymax, ymin );
     BoundaryBox.SetX( xmin ); BoundaryBox.SetWidth( xmax - xmin );

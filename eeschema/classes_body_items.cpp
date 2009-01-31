@@ -557,10 +557,10 @@ bool LibDrawPolyline::HitTest( wxPoint aPosRef, int aThreshold, const int aTrans
 {
     wxPoint ref, start, end;
 
-    for( unsigned ii = 0; ii < m_PolyPoints.size() - 1; ii++ )
+    for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        start = TransformCoordinate( aTransMat, m_PolyPoints[0] );
-        end   = TransformCoordinate( aTransMat, m_PolyPoints[1] );
+        start = TransformCoordinate( aTransMat, m_PolyPoints[ii-1] );
+        end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
         ref   = aPosRef - start;
         end  -= start;
 
@@ -584,14 +584,15 @@ EDA_Rect LibDrawPolyline::GetBoundaryBox()
     ymin = ymax = m_PolyPoints[0].y;
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        xmin = MIN( xmin, m_PolyPoints[0].x );
-        xmax = MAX( xmax, m_PolyPoints[0].x );
-        ymin = MIN( ymin, m_PolyPoints[0].y );
-        ymax = MAX( ymax, m_PolyPoints[0].y );
+        xmin = MIN( xmin, m_PolyPoints[ii-1].x );
+        xmax = MAX( xmax, m_PolyPoints[ii-1].x );
+        ymin = MIN( ymin, m_PolyPoints[ii].y );
+        ymax = MAX( ymax, m_PolyPoints[ii].y );
     }
 
     BoundaryBox.SetX( xmin ); BoundaryBox.SetWidth( xmax - xmin );
     BoundaryBox.SetY( ymin ); BoundaryBox.SetHeight( ymax - ymin );
+    BoundaryBox.Inflate(m_Width, m_Width);
 
     return BoundaryBox;
 }

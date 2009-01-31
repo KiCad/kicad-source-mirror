@@ -324,11 +324,12 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /***************************************************************************/
 
-/* Appel� sur un double click:
- *  pour un �l�ment editable (textes, composant):
- *      appel de l'editeur correspondant.
- *  pour une connexion en cours:
- *      termine la connexion
+/** Function OnLeftDClick
+ * called on a double click event from the drawpanel mouse handler
+ *  if an editable item is found (text, component)
+ *      Call the suitable dialog editor.
+ *  Id a creat command is in progress:
+ *      validate and finish the command
  */
 {
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();

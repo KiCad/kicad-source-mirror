@@ -209,18 +209,17 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
  */
 {
     int dx, dy;
-    int spot_cX, spot_cY;
+    wxPoint location;
 
     dx = (int) (( Pitch() * GetLength() ) / 2);
     dy = m_Size.y / 2;
 
     /* Is the ref point inside the text area ?  */
-    spot_cX = posref.x - m_Pos.x;
-    spot_cY = posref.y - m_Pos.y;
+    location = posref - m_Pos;
 
-    RotatePoint( &spot_cX, &spot_cY, -m_Orient );
+    RotatePoint( &location, -m_Orient );
 
-    if( ( abs( spot_cX ) <= abs( dx ) ) && ( abs( spot_cY ) <= abs( dy ) ) )
+    if( ( abs( location.x ) <= abs( dx ) ) && ( abs( location.y ) <= abs( dy ) ) )
         return true;
 
     return false;

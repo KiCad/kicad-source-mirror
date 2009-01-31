@@ -294,16 +294,6 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint
 }
 
 
-EDA_Rect DrawNoConnectStruct::GetBoundingBox()
-{
-    const int DELTA = (DRAWNOCONNECT_SIZE / 2);
-    EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ), wxSize( 2 * DELTA, 2 * DELTA ) );
-
-    box.Normalize();
-    return box;
-}
-
-
 /**************************************************************/
 void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                int DrawMode, int Color )
@@ -328,16 +318,6 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
             m_End().x + offset.x, m_End().y + offset.y, width, color );
 }
 
-
-EDA_Rect DrawBusEntryStruct::GetBoundingBox()
-{
-    int      dx = m_Pos.x - m_End().x;
-    int      dy = m_Pos.y - m_End().y;
-    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y ), wxSize( dx, dy ) );
-
-    box.Normalize();
-    return box;
-}
 
 
 /*****************************************************************************
@@ -411,7 +391,6 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
  * Utilisee dans les deplacements de blocs
  */
 {
-    int Width;
     int DrawMode = g_XorMode;
     int width    = g_DrawMinimunLineWidth;
 
@@ -477,15 +456,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         DrawJunctionStruct* Struct;
         Struct = (DrawJunctionStruct*) DrawStruct;
-        Width  = DRAWJUNCTION_SIZE;
-        GRFilledRect( &panel->m_ClipBox,
-                      DC,
-                      Struct->m_Pos.x - Width + dx,
-                      Struct->m_Pos.y - Width + dy,
-                      Struct->m_Pos.x + Width + dx,
-                      Struct->m_Pos.y + Width + dy,
-                      g_GhostColor,
-                      g_GhostColor );
+        Struct->Draw( panel, DC, wxPoint(0,0), DrawMode, g_GhostColor );
         break;
     }
 
