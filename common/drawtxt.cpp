@@ -33,7 +33,6 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)
- * Draw a graphic text (like module texts)
  *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)

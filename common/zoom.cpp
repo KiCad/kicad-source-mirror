@@ -226,7 +226,11 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     /* Populate zoom submenu. */
     for( i = 0; i < (size_t) maxZoomIds; i++ )
     {
-        msg.Printf( wxT( "%u" ), GetScreen()->m_ZoomList[i] );
+        if ( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
+            msg.Printf( wxT( "%u" ), GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar);
+        else
+            msg.Printf(wxT("%.1f"),(float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );
         if( zoom == GetScreen()->m_ZoomList[i] )

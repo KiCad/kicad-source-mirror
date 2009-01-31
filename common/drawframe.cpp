@@ -335,7 +335,7 @@ void WinEDA_DrawFrame::SetToolbars()
 
 
 /********************************************************/
-void WinEDA_DrawFrame::DisplayToolMsg( const wxString msg )
+void WinEDA_DrawFrame::DisplayToolMsg( const wxString& msg )
 /********************************************************/
 {
     SetStatusText( msg, 5 );
@@ -695,10 +695,14 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
     if( !screen )
         return;
 
-    /* affichage Zoom et coordonnees absolues */
-    Line.Printf( wxT( "Z %d" ), screen->GetZoom() );
+    /* Display Zoom level: zoom = zoom_coeff/ZoomScalar */
+    if ( (screen->GetZoom() % screen->m_ZoomScalar) == 0 )
+        Line.Printf( wxT( "Z %d" ),screen->GetZoom() / screen->m_ZoomScalar );
+    else
+        Line.Printf( wxT( "Z %.1f" ), (float)screen->GetZoom() / screen->m_ZoomScalar );
     SetStatusText( Line, 1 );
 
+    /* Display absolute coordinates:  */
     Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) : wxT( "X %.4f  Y %.4f" ),
                  To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
                                m_InternalUnits ),
@@ -706,7 +710,7 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
                                m_InternalUnits ) );
     SetStatusText( Line, 2 );
 
-    /* affichage des coordonnees relatives  */
+    /* Display relative coordinates:  */
     dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
     dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
 

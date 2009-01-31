@@ -219,7 +219,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName, BASE_SCREEN* scre
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;    // size in pixels
 
-    screen->SetZoom( 1 );
+    screen->SetScalingFactor( 1.0 );
     dpi = (float) SheetSize.x * 25.4 / m_ImageXSize_mm;
 
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;

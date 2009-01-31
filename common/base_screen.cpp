@@ -105,13 +105,13 @@ wxSize BASE_SCREEN::ReturnPageSize( void )
 /******************************************************************/
 wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 /******************************************************************/
+/** Function CursorRealPosition
+ * @return the position in user units of location ScreenPos
+ * @param ScreenPos = the screen (in pixel) position co convert
+*/
 {
     wxPoint curpos = ScreenPos;
     Unscale( curpos );
-//    D(printf("curpos=%d,%d GetZoom=%d, mDrawOrg=%d,%d\n", curpos.x, curpos.y, GetZoom(), m_DrawOrg.x, m_DrawOrg.y );)
-
-//    curpos.x = Unscale( ScreenPos.x );
-//    curpos.y = Unscale( ScreenPos.y );
 
     curpos += m_DrawOrg;
 

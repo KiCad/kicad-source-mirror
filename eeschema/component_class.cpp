@@ -18,10 +18,6 @@
 
 WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 
-/***************************/
-/* class SCH_COMPONENT */
-/***************************/
-
 
 /*******************************************************************/
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :

@@ -363,6 +363,9 @@ void WinEDA_BasePcbFrame::SetToolID( int id, int new_cursor_id,
 }
 
 void WinEDA_BasePcbFrame::Affiche_Status_Box()
+/*
+ * Update the status bar information.
+ */
 {
     wxString        Line;
     int             dx, dy;

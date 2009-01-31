@@ -184,7 +184,7 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
     GRResetPenAndBrush( DC );
     DC->SetBackgroundMode( wxTRANSPARENT );
 #ifdef WX_ZOOM
-    double scale = 1.0 / (double) GetZoom();
+    double scale = GetScreen()->GetScalingFactor( );
     DC->SetUserScale( scale, scale );
     DoPrepareDC( *DC );
 #endif
@@ -306,8 +306,8 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
 wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 /********************************************************/
 
-/** CursorScreenPosition
- * @return the curseur position in pixels in the panel draw area on screen )
+/** Function CursorScreenPosition
+ * @return the curseur current position in pixels in the screen draw area
  */
 {
     wxPoint pos = GetScreen()->m_Curseur;
@@ -609,7 +609,7 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
     }
 
 #ifdef WX_ZOOM
-    double scale = 1.0 / (double) GetZoom();
+    double scale = Screen->GetScalingFactor( );
     DC->SetUserScale( scale, scale );
 #endif
 

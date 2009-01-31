@@ -115,7 +115,16 @@ public:
     bool         OnRightClick( wxMouseEvent& event );
     void         OnPopupGridSelect( wxCommandEvent& event );
     void         Process_Special_Functions( wxCommandEvent& event );
+
+    /** Function CursorRealPosition
+     * @return the position in user units of location ScreenPos
+     * @param ScreenPos = the screen (in pixel) position co convert
+    */
     wxPoint      CursorRealPosition( const wxPoint& ScreenPos );
+
+    /** Function CursorScreenPosition
+     * @return the curseur current position in pixels in the screen draw area
+     */
     wxPoint      CursorScreenPosition();
 
     /**
@@ -303,6 +312,10 @@ public:
     wxSize                  ReturnPageSize( void );
     virtual int             GetInternalUnits( void );
 
+    /** Function CursorRealPosition
+     * @return the position in user units of location ScreenPos
+     * @param ScreenPos = the screen (in pixel) position co convert
+    */
     wxPoint                 CursorRealPosition( const wxPoint& ScreenPos );
 
     /* general Undo/Redo command control */
@@ -326,9 +339,27 @@ public:
 
     //----<zoom stuff>----------------------------------------------------------
 
-    /**
-     * Function GetZoom
-     * returns the current zoom factor
+    /** Function GetScalingFactor
+     * @return the the current scale used to draw items on screen
+     * draw coordinates are user coordinates * GetScalingFactor( )
+    */
+    double  GetScalingFactor( )
+    {
+        return (double) m_ZoomScalar / GetZoom();
+    }
+
+    /** Function SetScalingFactor
+     * @param the the current scale used to draw items on screen
+     * draw coordinates are user coordinates * GetScalingFactor( )
+    */
+    void  SetScalingFactor(double aScale )
+    {
+        SetZoom( (int) round(aScale * m_ZoomScalar) );
+    }
+    /** Function GetZoom
+     * @return the current zoom factor
+     * Note: the zoom factor is NOT the scaling factor
+     *       the scaling factor is m_ZoomScalar * GetZoom()
      */
     int     GetZoom() const;
 

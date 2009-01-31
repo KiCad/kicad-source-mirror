@@ -592,7 +592,14 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
         {
             msg = _( "Zoom " );
-            msg << GetScreen()->m_ZoomList[i];
+            if ( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
+                msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
+            else
+            {
+                wxString value;
+                value.Printf(wxT("%.1f"),(float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+                msg += value;
+            }
             m_SelZoomBox->Append( msg );
         }
 

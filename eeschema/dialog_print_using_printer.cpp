@@ -404,7 +404,7 @@ void EDA_Printout::DrawPage()
     double  scaleX, scaleY, scale;
     wxPoint old_org;
     wxPoint DrawOffset; // Offset de trace
-    int     DrawZoom = 1;
+    double     DrawZoom = 1;
     wxDC*   dc = GetDC();
 
     wxBusyCursor dummy;
@@ -416,7 +416,7 @@ void EDA_Printout::DrawPage()
     tmpzoom = ActiveScreen->GetZoom();
     old_org = ActiveScreen->m_DrawOrg;
     /* Change draw scale and offset to draw the whole page */
-    ActiveScreen->SetZoom( DrawZoom );
+    ActiveScreen->SetScalingFactor( DrawZoom );
     ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
     ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
 

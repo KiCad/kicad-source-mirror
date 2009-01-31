@@ -286,7 +286,7 @@ public:
      */
     wxString        GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
 
-    void            DisplayToolMsg( const wxString msg );
+    void            DisplayToolMsg( const wxString& msg );
     void            Process_Zoom( wxCommandEvent& event );
     void            Process_Grid( wxCommandEvent& event );
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
