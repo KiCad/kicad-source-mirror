@@ -35,7 +35,6 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
     m_Zoom             = 32 * m_ZoomScalar;
     m_Grid             = wxSize( 50, 50 );   /* Default grid size */
     m_UserGridIsON     = FALSE;
-    m_Diviseur_Grille  = 1;
     m_Center           = true;
     m_CurrentSheetDesc = &g_Sheet_A4;
 
@@ -116,6 +115,25 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
     curpos += m_DrawOrg;
 
     return curpos;
+}
+
+/** Function SetScalingFactor
+ * calculates the .m_Zoom member to have a given scaling facort
+ * @param the the current scale used to draw items on screen
+ * draw coordinates are user coordinates * GetScalingFactor( )
+*/
+void  BASE_SCREEN::SetScalingFactor(double aScale )
+{
+    int zoom = static_cast<int>( ceil(aScale * m_ZoomScalar) );
+
+    // Limit zoom to max and min allowed values:
+    if (zoom < m_ZoomList[0])
+        zoom = m_ZoomList[0];
+    int idxmax = m_ZoomList.GetCount() - 1;
+    if (zoom > m_ZoomList[idxmax])
+        zoom = m_ZoomList[idxmax];
+
+    SetZoom( zoom );
 }
 
 /**

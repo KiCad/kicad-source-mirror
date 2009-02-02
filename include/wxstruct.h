@@ -22,11 +22,12 @@
 
 #include "base_struct.h"
 #include "appl_wxstruct.h"
-#include "drawpanel_wxstruct.h"
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
 
-
+//C++ guarantees that operator delete checks its argument for null-ness
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p) delete (p); (p) = NULL; //C++ guarantees that operator delete checks its argument for null-ness
+#define SAFE_DELETE(p) delete (p); (p) = NULL;
 #endif
 
 #define INTERNAL_UNIT_TYPE      0        // Internal unit = inch

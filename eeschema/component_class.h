@@ -10,7 +10,7 @@
 #endif
 
 #include "base_struct.h"
-#include "class_screen.h"
+#include "class_sch_screen.h"
 #include <wx/arrstr.h>
 #include <wx/dynarray.h>
 

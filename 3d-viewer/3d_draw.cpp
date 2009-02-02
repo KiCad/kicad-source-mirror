@@ -108,7 +108,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_BoardPos.y = -g_Parm_3D_Visu.m_BoardPos.y;
     g_Parm_3D_Visu.m_Layers     = pcb->m_BoardSettings->m_CopperLayerCount;
     g_Parm_3D_Visu.m_BoardScale = 2.0 / MAX( g_Parm_3D_Visu.m_BoardSize.x,
-        g_Parm_3D_Visu.m_BoardSize.y );
+                                             g_Parm_3D_Visu.m_BoardSize.y );
     double epoxy_width = 1.6;    // epoxy width in mm
     g_Parm_3D_Visu.m_Epoxy_Width = epoxy_width / 2.54 * 1000
                                    * g_Parm_3D_Visu.m_BoardScale;
@@ -190,8 +190,8 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 
     /* move the board in order to draw it with its centre at 0,0 3D coordinates */
     glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BoardScale,
-        -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BoardScale,
-        0.0F );
+                  -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BoardScale,
+                  0.0F );
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
     /* draw tracks and vias : */
@@ -205,10 +205,57 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 
     if( g_Parm_3D_Visu.m_Draw3DZone )
     {
+        // Draw segments used to fill copper areas
         for( segzone = pcb->m_Zone; segzone != NULL; segzone = segzone->Next() )
         {
             if( segzone->Type() == TYPE_ZONE )
                 Draw3D_Track( segzone );
+        }
+
+        // Draw copper areas outlines
+        for( ii = 0; ii < pcb->GetAreaCount(); ii++ )
+        {
+            ZONE_CONTAINER* zone = pcb->GetArea( ii );
+            if( zone->m_FilledPolysList.size() == 0 )
+                continue;
+            if( zone->m_ZoneMinThickness <= 1 )
+                continue;
+            int      imax = zone->m_FilledPolysList.size() - 1;
+            CPolyPt* firstcorner = &zone->m_FilledPolysList[0];
+            CPolyPt* begincorner = firstcorner;
+            SEGZONE  dummysegment(pcb);
+            dummysegment.SetLayer( zone->GetLayer() );
+            dummysegment.m_Width   = zone->m_ZoneMinThickness;
+            for( int ic = 1; ic <= imax; ic++ )
+            {
+                CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
+                if( begincorner->utility == 0 )                 // Draw only basic outlines, not extra segments
+                {
+                    dummysegment.m_Start.x = begincorner->x;
+                    dummysegment.m_Start.y = begincorner->y;
+                    dummysegment.m_End.x   = endcorner->x;
+                    dummysegment.m_End.y   = endcorner->y;
+                    Draw3D_Track( &dummysegment );
+                }
+                if( (endcorner->end_contour) || (ic == imax) )      // the last corner of a filled area is found: draw it
+                {
+                    if( endcorner->utility == 0 )                   // Draw only basic outlines, not extra segments
+                    {
+                        dummysegment.m_Start.x = endcorner->x;
+                        dummysegment.m_Start.y = endcorner->y;
+                        dummysegment.m_End.x   = firstcorner->x;
+                        dummysegment.m_End.y   = firstcorner->y;
+
+                        Draw3D_Track( &dummysegment );
+                    }
+                    ic++;
+                    if( ic < imax - 1 )
+                        begincorner = firstcorner = &zone->m_FilledPolysList[ic];
+                }
+                else
+                    begincorner = endcorner;
+
+            }
         }
     }
 
@@ -434,12 +481,12 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     s_Text3DWidth = text->m_Width * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
     DrawGraphicText( NULL, NULL,
-        text->m_Pos, (EDA_Colors) color, text->m_Text,
-        text->m_Orient, text->m_Size,
-        text->m_HJustify,
-        text->m_VJustify,
-        text->m_Width, text->m_Italic,
-        Draw3dTextSegm );
+                     text->m_Pos, (EDA_Colors) color, text->m_Text,
+                     text->m_Orient, text->m_Size,
+                     text->m_HJustify,
+                     text->m_VJustify,
+                     text->m_Width, text->m_Italic,
+                     Draw3dTextSegm );
 }
 
 
@@ -478,8 +525,8 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         glPushMatrix();
 
         glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BoardScale,
-            -m_Pos.y * g_Parm_3D_Visu.m_BoardScale,
-            g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
+                      -m_Pos.y * g_Parm_3D_Visu.m_BoardScale,
+                      g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
 
         if( m_Orient )
         {
@@ -755,7 +802,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             f_hole_coord[ii][0] = -hole * 0.707;
             f_hole_coord[ii][1] = hole * 0.707;
             RotatePoint( &f_hole_coord[ii][0], &f_hole_coord[ii][1],
-                angle - (ii * 450) );
+                        angle - (ii * 450) );
             f_hole_coord[ii][0] += drillx;
             f_hole_coord[ii][1] += drilly;
         }

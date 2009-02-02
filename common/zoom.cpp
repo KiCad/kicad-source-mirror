@@ -81,21 +81,18 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
  *  @param Rect = selected area to show after zooming
  */
 {
-    int    ii, jj;
-    int    bestzoom;
+    double   scalex, bestscale;
     wxSize size;
 
     /* Compute the best zoom */
     Rect.Normalize();
     size     = DrawPanel->GetClientSize();
     // Use ceil to at least show the full rect
-    ii       = static_cast<int>( ceil(1.0 * Rect.GetSize().x / size.x) );
-    jj       = static_cast<int>( ceil(1.0 * Rect.GetSize().y / size.y) );
-    bestzoom = MAX( ii, jj );
-    if( bestzoom <= 0 )
-        bestzoom = 1;
+    scalex       = (double) Rect.GetSize().x / size.x;
+    bestscale       = (double)Rect.GetSize().y / size.y;
+    bestscale = MAX( bestscale, scalex );
 
-    GetBaseScreen()->SetZoom( bestzoom * GetBaseScreen()->m_ZoomScalar );
+    GetBaseScreen()->SetScalingFactor( bestscale );
     GetBaseScreen()->m_Curseur = Rect.Centre();
     Recadre_Trace( TRUE );
 }

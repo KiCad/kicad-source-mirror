@@ -178,7 +178,6 @@ bool Read_Config( const wxString& project_name )
 
     if( ScreenPcb )
     {
-        ScreenPcb->m_Diviseur_Grille = Pcbdiv_grille;
         ScreenPcb->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
     }
 
@@ -219,8 +218,6 @@ void WinEDA_PcbFrame::Update_config( wxWindow* displayframe )
                                      );
     if( FullFileName.IsEmpty() )
         return;
-
-    Pcbdiv_grille = GetScreen()->m_Diviseur_Grille;
 
     /* ecriture de la configuration */
     wxGetApp().WriteProjectConfig( FullFileName, wxT( "/pcbnew" ),

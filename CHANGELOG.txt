@@ -5,6 +5,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-feb-01 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++All:
+    change filename drawpanel_wxstruct.h to class_drawpanel.h
+    and move class BASE_SCREEN description from drawpanel_wxstruct.h to a new file: class_base_screen.h
+    minor enhancement for window zoom command.
+    refinements in 3D zones drawing.
+
 2009-jan-31 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++All:
