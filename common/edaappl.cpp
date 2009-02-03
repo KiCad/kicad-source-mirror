@@ -40,7 +40,7 @@
 /* Just add new languages to the list.  This macro will properly recalculate
  * the size of the array. */
 #define LANGUAGE_DESCR_COUNT ( sizeof( s_Language_List ) /     \
-                               sizeof( struct LANGUAGE_DESCR ) )
+                              sizeof( struct LANGUAGE_DESCR ) )
 
 /* Default font size */
 #define FONT_DEFAULT_SIZE 10    /* Default font size. */
@@ -216,12 +216,12 @@ static struct LANGUAGE_DESCR s_Language_List[] =
  */
 WinEDA_App::WinEDA_App()
 {
-    m_Checker = NULL;
+    m_Checker  = NULL;
     m_HtmlCtrl = NULL;
     m_EDA_CommonConfig = NULL;
-    m_EDA_Config    = NULL;
-    m_Env_Defined   = FALSE;
-    m_LanguageId    = wxLANGUAGE_DEFAULT;
+    m_EDA_Config  = NULL;
+    m_Env_Defined = FALSE;
+    m_LanguageId  = wxLANGUAGE_DEFAULT;
     m_PdfBrowserIsDefault = TRUE;
     m_Locale = NULL;
 }
@@ -406,7 +406,7 @@ bool WinEDA_App::SetBinDir()
     delete[] native_str;
 
 /* Linux and Unix */
-#elif defined (__UNIX__)
+#elif defined(__UNIX__)
 
     // Under Linux, if argv[0] doesn't the complete path to the executable,
     // it's necessary to obtain it using "which <filename>".
@@ -449,18 +449,19 @@ bool WinEDA_App::SetBinDir()
     wxLogDebug( wxT( "Windows path: " ) + wfn.GetFullPath() );
     wxLogDebug( wxT( "Executable path the Kicad way: " ) + m_BinDir );
     wxLogDebug( wxT( "Executable path the wxWidgets way: " ) +
-                GetTraits()->GetStandardPaths().GetExecutablePath() );
+               GetTraits()->GetStandardPaths().GetExecutablePath() );
 
     return TRUE;
 }
+
 
 /**
  * Set search paths for libraries, modules, internationalization files, etc.
  */
 void WinEDA_App::SetDefaultSearchPaths( void )
 {
-    size_t i;
-    wxString path;
+    size_t     i;
+    wxString   path;
     wxFileName fn( m_BinDir, wxEmptyString );
 
     /* User environment variable path is the first search path.   Chances are
@@ -485,11 +486,11 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     for( i = 0; i < m_searchPaths.GetCount(); i++ )
     {
         wxLogDebug( wxT( "Checking if search path <" ) +
-                    m_searchPaths[i] + wxT( "> exists." ) );
+                   m_searchPaths[i] + wxT( "> exists." ) );
         if( !wxFileName::IsDirReadable( m_searchPaths[i] ) )
         {
             wxLogDebug( wxT( "Removing non-existant path <" ) +
-                        m_searchPaths[i] + wxT( "> from search path list." ) );
+                       m_searchPaths[i] + wxT( "> from search path list." ) );
             m_searchPaths.RemoveAt( i );
             i -= 1;
         }
@@ -527,9 +528,9 @@ void WinEDA_App::GetSettings()
 
     /* Load the last file history settings from legacy version if this is the
      * first time wxFileHistory was used to manage the file history. */
-    if( m_fileHistory.GetCount() == ( size_t )0 )
+    if( m_fileHistory.GetCount() == (size_t) 0 )
     {
-        for( ii = 0; ii < ( unsigned )m_fileHistory.GetMaxFiles(); ii++ )
+        for( ii = 0; ii < (unsigned) m_fileHistory.GetMaxFiles(); ii++ )
         {
             entry = wxT( "LastProject" );
             if( ii != 0 )
@@ -721,10 +722,9 @@ void WinEDA_App::SetLanguageIdentifier( int menu_id )
 }
 
 
-
 void WinEDA_App::SetLanguagePath( void )
 {
-    size_t   i;
+    size_t i;
 
     /* Add defined search paths to locale paths */
     if( !m_searchPaths.IsEmpty() )
@@ -734,6 +734,7 @@ void WinEDA_App::SetLanguagePath( void )
             wxFileName fn( m_searchPaths[i], wxEmptyString );
             fn.AppendDir( wxT( "share" ) );
 #ifndef __WXMSW__
+
             /* Up on level relative to binary path with "share/kicad" appended
              * for all other platforms. */
             fn.AppendDir( wxT( "kicad" ) );
@@ -742,7 +743,7 @@ void WinEDA_App::SetLanguagePath( void )
             if( fn.DirExists() )
             {
                 wxLogDebug( wxT( "Adding locale lookup path: " ) +
-                            fn.GetPath() );
+                           fn.GetPath() );
                 wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
             }
         }
@@ -772,8 +773,8 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
         wxString label = s_Language_List[ii].m_DoNotTranslate ?
-            s_Language_List[ii].m_Lang_Label :
-            wxGetTranslation( s_Language_List[ii].m_Lang_Label );
+                         s_Language_List[ii].m_Lang_Label :
+                         wxGetTranslation( s_Language_List[ii].m_Lang_Label );
 
         item = new wxMenuItem( menu,
                                s_Language_List[ii].m_KI_Lang_Identifier,
@@ -804,7 +805,7 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
  * Look in search paths for requested file.
  *
  */
-wxString WinEDA_App::FindFileInSearchPaths( const wxString& filename,
+wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
                                             const wxArrayString* subdirs )
 {
     size_t     i, j;
@@ -823,7 +824,7 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString& filename,
         if( fn.DirExists() )
         {
             wxLogDebug( _T( "Adding <" ) + fn.GetPath() + _T( "> to " ) +
-                        _T( "file \"" ) + filename + _T( "\" search path." ) );
+                       _T( "file \"" ) + filename + _T( "\" search path." ) );
             paths.Add( fn.GetPath() );
         }
     }
@@ -842,6 +843,10 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString& filename,
  * for the current locale is not found, an attempt to find the English
  * version of the help file is made.  wxEmptyString is returned if the
  * help file is not found.
+ *  Help file is searched in directories in this order:
+ *  help/<canonical name> like help/en_GB
+ *  help/<short name> like help/en
+ *  help/en
  */
 wxString WinEDA_App::GetHelpFile( void )
 {
@@ -860,10 +865,29 @@ wxString WinEDA_App::GetHelpFile( void )
     subdirs.Add( wxT( "kicad" ) );
 #endif
     subdirs.Add( _T( "help" ) );
+
+    /* Search for a help file.
+     *  we *must* find a help file.
+     *  so help is searched in directories in this order:
+     *  help/<canonical name> like help/en_GB
+     *  help/<short name> like help/en
+     *  help/en
+     */
+
+    // Step 1 : Try to find help file in help/<canonical name>
     subdirs.Add( m_Locale->GetCanonicalName() );
     fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
 
-    if( !fn && m_Locale->GetCanonicalName() != wxLocale::GetLanguageInfo(wxLANGUAGE_ENGLISH )->CanonicalName )
+    // Step 2 : if not found Try to find help file in help/<short name>
+    if( !fn  )
+    {
+        subdirs.RemoveAt( subdirs.GetCount() - 1 );
+        subdirs.Add( m_Locale->GetName().BeforeLast( '_' ) ); // GetName( ) does not return always the short name
+        fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
+    }
+
+    // Step 3 : if not found Try to find help file in help/en
+    if( !fn )
     {
         subdirs.RemoveAt( subdirs.GetCount() - 1 );
         subdirs.Add( _T( "en" ) );
@@ -873,12 +897,14 @@ wxString WinEDA_App::GetHelpFile( void )
     return fn;
 }
 
+
 wxString WinEDA_App::GetLibraryFile( const wxString& filename )
 {
     wxArrayString subdirs;
 
     subdirs.Add( wxT( "share" ) );
 #ifndef __WXMSW__
+
     /* Up on level relative to binary path with "share/kicad" appended for
      * all other platforms. */
     subdirs.Add( wxT( "kicad" ) );
