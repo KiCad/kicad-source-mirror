@@ -15,22 +15,14 @@
 #pragma implementation "dialog_eeschema_config.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
 ////@begin includes
 ////@end includes
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
+#include "gestfich.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"

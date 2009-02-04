@@ -5,15 +5,17 @@
 /* lit ou met a jour la configuration de PCBNEW */
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "gestfich.h"
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "pcbcfg.h"
 #include "worksheet.h"
 #include "id.h"
 #include "hotkeys.h"
-
 #include "protos.h"
 
 /* Routines Locales */

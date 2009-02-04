@@ -10,21 +10,11 @@
 #define  PANEL_WXSTRUCT_H
 
 #include "colors.h"
+#include "base_struct.h"
 
+class WinEDA_DrawFrame;
 class BASE_SCREEN;
-
-/* Simple class for handling grid arrays. */
-class GRID_TYPE
-{
-public:
-    int    m_Id;
-    wxSize m_Size;
-};
-
-
-/* Declare array of wxSize for grid list implementation. */
-#include <wx/dynarray.h>
-WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
+class PCB_SCREEN;
 
 
 /****************************************************/

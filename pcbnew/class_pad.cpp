@@ -3,8 +3,10 @@
 /************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+
 #include "pcbnew.h"
 #include "trigo.h"
 #include "id.h"             // ID_TRACK_BUTT

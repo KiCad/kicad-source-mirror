@@ -3,11 +3,11 @@
 /***************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+
 #include "gerbview.h"
 #include "trigo.h"
-
 #include "protos.h"
 
 

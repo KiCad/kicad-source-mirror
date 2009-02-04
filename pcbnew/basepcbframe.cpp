@@ -9,14 +9,15 @@
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "common.h"
+#include "confirm.h"
 
 #include "pcbnew.h"
-
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"
 
 #include "collectors.h"
+#include "class_drawpanel.h"
 
 
 /*******************************/

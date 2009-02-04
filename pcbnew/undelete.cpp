@@ -4,8 +4,10 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+
 #include "pcbnew.h"
 
 

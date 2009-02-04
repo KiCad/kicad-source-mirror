@@ -4,28 +4,16 @@
 // Licence:     GPL License
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 using namespace std;
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
 #include "pcbnew.h"
 #include "zones.h"
-
 #include "id.h"
-
 #include "protos.h"
 
 bool verbose = false;       // false if zone outline diags must not be shown

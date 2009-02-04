@@ -7,12 +7,7 @@
 #define eda_global extern
 #endif
 
-#include "wxstruct.h"
 #include "pcbnew.h"
-#include "cvstruct.h"
-
-#include "gr_basic.h"
-#include "colors.h"
 
 // config for footprints doc file acces
 #define DOC_FOOTPRINTS_LIST_KEY wxT("footprints_doc_file")

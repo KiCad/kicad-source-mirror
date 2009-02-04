@@ -3,13 +3,13 @@
 /******************************************************/
 
 #include "fctsys.h"
+#include "id.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "gestfich.h"
 
-#include "common.h"
 #include "gerbview.h"
 #include "pcbplot.h"
-
-#include "id.h"
-
 #include "protos.h"
 
 static void Process_Move_Item( WinEDA_GerberFrame* frame,

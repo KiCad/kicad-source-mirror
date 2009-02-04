@@ -7,12 +7,14 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "gestfich.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"

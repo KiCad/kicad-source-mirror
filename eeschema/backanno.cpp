@@ -4,9 +4,11 @@
 ****************************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "program.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "libcmp.h"
 #include "general.h"
 
@@ -15,8 +17,7 @@
 /*******************************************************************************************/
 bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
     const wxString& aReference,
-    const wxString&
-    aFootPrint,
+    const wxString& aFootPrint,
     bool            aSetVisible )
 /********************************************************************************************/
 

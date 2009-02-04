@@ -4,15 +4,15 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
 #include "trigo.h"
+#include "id.h"
+#include "class_drawpanel.h"
+#include "drawtxt.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
-#include "id.h"
-
 #include "protos.h"
 
 

@@ -4,8 +4,10 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 
 #define CONFIG_VERSION 1
 

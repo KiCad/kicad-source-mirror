@@ -10,14 +10,15 @@
 #ifndef  APPL_WXSTRUCT_H
 #define  APPL_WXSTRUCT_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 /* Use wxFileHistory for most recently used file handling. */
 #include <wx/docview.h>
+#include <wx/config.h>
+
 
 class PARAM_CFG_BASE;
+class wxSingleInstanceChecker;
+class wxHtmlHelpController;
+
 
 /**********************************************/
 /*  Class representing the entire Application */

@@ -9,6 +9,7 @@
 #include "common.h"
 #include "plot_common.h"
 #include "macros.h"
+#include "kicad_string.h"
 
 // Locales
 static Ki_PageDescr* SheetPS;

@@ -3,11 +3,11 @@
 /********************************/
 
 #include "fctsys.h"
-
 #include "wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "macros.h"
+#include "kicad_string.h"
 
 
 /***********************/

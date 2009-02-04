@@ -12,9 +12,12 @@
 #endif
 
 #define MAIN
-#define eda_global
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
+#include "common.h"
+#include "bitmaps.h"
+#include "colors.h"
 
 #ifdef USE_SPLASH_IMAGE
   #define SPLASH_IMAGE logo_kicad.png
@@ -22,14 +25,18 @@
   #include "wx/mediactrl.h"
 #endif
 
-#include "common.h"
-#include "bitmaps.h"
 #include "kicad.h"
 #include "macros.h"
 
 #ifdef KICAD_PYTHON
  #include <pyhandler.h>
 #endif
+
+/* Global definitions for Kicad */
+wxString g_Main_Title = wxT( "KiCad" );
+wxString g_SchematicRootFileName;
+wxString g_BoardFileName;
+
 
 /* Export functions */
 

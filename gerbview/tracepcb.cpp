@@ -10,11 +10,11 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "protos.h"
 
 

@@ -6,18 +6,18 @@
 #ifndef __INCLUDE__COMMON_H__
 #define __INCLUDE__COMMON_H__ 1
 
-/* wxWidgets about dialog */
-#include <wx/aboutdlg.h>
-#include "wx/statline.h"
-#include "wx/generic/aboutdlgg.h"
-/**************************/
-
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 
 #ifndef COMMON_GLOBL
 #  define COMMON_GLOBL extern
 #endif
+
+class wxAboutDialogInfo;
+class BASE_SCREEN;
+class WinEDA_DrawFrame;
+class WinEDAListBox;
+class WinEDA_DrawPanel;
 
 
 /* Flag for special keys */
@@ -355,15 +355,6 @@ COMMON_GLOBL int g_GridColor
 COMMON_GLOBL BASE_SCREEN* ActiveScreen;
 
 
-/**************************************/
-/* Prototypage des Fonctions Usuelles */
-/**************************************/
-
-class WinEDA_DrawFrame;
-class WinEDAListBox;
-class WinEDA_DrawPanel;
-
-
 /* COMMON.CPP */
 
 /** function SetLocaleTo_C_standard
@@ -439,26 +430,6 @@ wxString            ReturnPcbLayerName( int layer_number, bool is_filename = FAL
   /* return the near rounded (like the equivalent integer value) from aNumber */
   double round( double aNumber );
 #endif
-
-/**************/
-/* DRAWTXT.CPP */
-/**************/
-#include "drawtxt.h"
-
-/***************/
-/* CONFIRM.CPP */
-/***************/
-#include "confirm.h"
-
-/****************/
-/* GESTFICH.CPP */
-/****************/
-#include "gestfich.h"
-
-/*************/
-/*STRING.CPP */
-/*************/
-#include "kicad_string.h"
 
 
 /*******************/
@@ -544,22 +515,4 @@ void            MyFree( void* pt_mem );
 void*           MyZMalloc( size_t nb_octets );
 void*           MyMalloc( size_t nb_octets );
 
-
-/****************/
-/* eda_doc.cpp */
-/****************/
-#include "eda_doc.h"
-
-/****************************/
-/* get_component_dialog.cpp */
-/****************************/
-#include "get_component_dialog.h"
-
-/**********************/
-/* block_commande.cpp */
-/**********************/
-#include "block_commande.h"
-
-
 #endif  /* __INCLUDE__COMMON_H__ */
-

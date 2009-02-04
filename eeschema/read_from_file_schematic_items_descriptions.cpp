@@ -3,8 +3,9 @@
 /*functions to read schematic items descriptions from file
  */
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"

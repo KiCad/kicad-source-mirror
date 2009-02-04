@@ -22,8 +22,8 @@
 #include "wx/clipbrd.h"
 
 #include "fctsys.h"
-#include "common.h"
 #include "id.h"
+#include "gestfich.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"

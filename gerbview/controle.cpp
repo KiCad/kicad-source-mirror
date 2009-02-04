@@ -9,11 +9,11 @@
  */
 
 #include "fctsys.h"
-
 #include "common.h"
-#include "gerbview.h"
-
 #include "id.h"
+#include "class_drawpanel.h"
+
+#include "gerbview.h"
 #include "protos.h"
 
 /* Routines Locales : */

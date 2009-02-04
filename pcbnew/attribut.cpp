@@ -3,11 +3,11 @@
 /******************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+
 #include "pcbnew.h"
 #include "autorout.h"
-
 #include "protos.h"
 
 

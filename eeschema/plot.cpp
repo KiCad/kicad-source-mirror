@@ -4,14 +4,16 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "plot_common.h"
+#include "worksheet.h"
+#include "grfonte.h"
+#include "base_struct.h"
+#include "drawtxt.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "plot_common.h"
-#include "worksheet.h"
-
 #include "protos.h"
 
 /* Local Variables : */

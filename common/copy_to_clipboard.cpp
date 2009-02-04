@@ -5,12 +5,17 @@
 // Created:     18 aug 2006
 // Licence:   License GNU
 /////////////////////////////////////////////////////////////////////////////
+
 #include "wx/metafile.h"
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
 #include "id.h"
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "confirm.h"
+#include "wxstruct.h"
+
 
 extern BASE_SCREEN* ActiveScreen;
 

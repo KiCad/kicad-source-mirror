@@ -4,9 +4,10 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
 #include "macros.h"
+#include "wxstruct.h"
+
 
 /****************************************************************************/
 /* Show a dialog frame to choose a name from an history list, or a new name */

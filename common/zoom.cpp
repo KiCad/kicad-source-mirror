@@ -8,14 +8,13 @@
  */
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "macros.h"
-
 #include "bitmaps.h"
-
 #include "id.h"
-
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "wxstruct.h"
 
 /**************************************************/
 void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )

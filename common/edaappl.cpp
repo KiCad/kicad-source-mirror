@@ -22,7 +22,9 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/apptrait.h>
+#include <wx/snglinst.h>
 
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "worksheet.h"
 #include "id.h"
@@ -31,6 +33,7 @@
 #include "macros.h"
 #include "online_help.h"
 #include "bitmaps.h"
+#include "gestfich.h"
 
 
 #ifdef __UNIX__

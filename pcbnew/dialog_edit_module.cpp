@@ -4,6 +4,7 @@
 /* include in modedit.cpp						*/
 /************************************************/
 
+#include "confirm.h"
 #include "dialog_edit_module.h"
 #include <wx/version.h>
 

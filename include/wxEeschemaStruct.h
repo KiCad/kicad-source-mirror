@@ -6,7 +6,13 @@
 #ifndef  WX_EESCHEMA_STRUCT_H
 #define  WX_EESCHEMA_STRUCT_H
 
+#include "wxstruct.h"
 
+
+class WinEDA_LibeditFrame;
+class WinEDA_ViewlibFrame;
+class SCH_SCREEN;
+class DRAWSEGMENT;
 class DrawPickedStruct;
 class SCH_ITEM;
 class DrawNoConnectStruct;

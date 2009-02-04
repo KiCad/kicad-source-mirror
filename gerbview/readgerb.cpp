@@ -3,11 +3,12 @@
 /********************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "protos.h"
 
 /* Format Gerber : NOTES :

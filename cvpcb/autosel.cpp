@@ -5,11 +5,13 @@
 /* Routines de selection automatique des modules */
 
 #include "fctsys.h"
-
 #include "common.h"
-#include "cvpcb.h"
+#include "confirm.h"
+#include "gestfich.h"
 
+#include "cvpcb.h"
 #include "protos.h"
+#include "cvstruct.h"
 
 #define QUOTE '\''
 

@@ -3,16 +3,15 @@
 /***************************************************/
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
-#include "cvpcb.h"
+#include "id.h"
 #include "trigo.h"
 
-#include "protos.h"
-
 #include "bitmaps.h"
-
-#include "id.h"
+#include "cvpcb.h"
+#include "protos.h"
+#include "cvstruct.h"
 
 
 /*********************************************/

@@ -7,11 +7,11 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+
 #include "pcbnew.h"
 #include "trigo.h"
-
 #include "protos.h"
 
 

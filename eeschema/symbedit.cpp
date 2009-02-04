@@ -9,12 +9,15 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
 
 

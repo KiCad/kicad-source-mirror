@@ -4,10 +4,11 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
 #include "trigo.h"
+#include "class_drawpanel.h"
+
+#include "pcbnew.h"
 
 #ifdef PCBNEW
 #include "drag.h"

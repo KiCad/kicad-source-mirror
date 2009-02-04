@@ -5,11 +5,12 @@
 /* lit ou met a jour la configuration de CVPCB */
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "gestfich.h"
 #include "cvpcb.h"
 #include "protos.h"
-
+#include "cvstruct.h"
 #include "cfg.h"
 
 /* Routines Locales */

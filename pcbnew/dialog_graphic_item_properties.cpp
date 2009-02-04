@@ -12,8 +12,8 @@
  */
 #include "fctsys.h"
 #include "macros.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
 #include "pcbnew.h"
 
 #include "dialog_graphic_item_properties_base.h"

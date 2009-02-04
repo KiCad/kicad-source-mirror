@@ -8,12 +8,15 @@
  */
 
 #include "fctsys.h"
-
 #include "wxstruct.h"
 #include "common.h"
-#include "cvpcb.h"
+#include "confirm.h"
+#include "kicad_string.h"
 
+#include "cvpcb.h"
 #include "protos.h"
+#include "cvstruct.h"
+
 
 #define SEPARATEUR '|'  /* caractere separateur dans netliste */
 

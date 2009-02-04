@@ -5,10 +5,14 @@
 /* cree et/ou affiche et modifie la configuration de CVPCB */
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
+#include "gestfich.h"
 
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvstruct.h"
 
 
 /*****************************************/

@@ -6,15 +6,18 @@
 #define eda_global
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
+#include "confirm.h"
 
 #include <wx/file.h>
+#include <wx/snglinst.h>
 
 #include "common.h"
 #include "pcbnew.h"
 #include "plot_common.h"
+#include "gestfich.h"
 #include "pcbplot.h"
 #include "autorout.h"
-#include "trigo.h"
 #include "cell.h"
 #include "worksheet.h"
 #include "zones.h"

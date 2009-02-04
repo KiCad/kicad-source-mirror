@@ -5,9 +5,11 @@
 /* Fichier PLOT_RTN.CPP*/
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "plot_common.h"
+#include "base_struct.h"
+#include "drawtxt.h"
+#include "confirm.h"
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "trigo.h"

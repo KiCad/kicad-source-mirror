@@ -6,6 +6,8 @@
 #define SCH_ITEM_STRUCT_H
 
 
+class WinEDA_SchematicFrame;
+
 
 /**
  * Class SCH_ITEM

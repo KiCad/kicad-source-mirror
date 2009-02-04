@@ -3,17 +3,13 @@
 /***************************************************/
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "protos.h"
-
 #include "bitmaps.h"
-
 #include "id.h"
-
 #include "hotkeys.h"
 
 /***********************************************/
@@ -38,35 +34,35 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                        FALSE );
 
     filesMenu->Append( ID_MENU_APPEND_FILE, _( "Load Gerber file" ),
-                         _( "Load new Gerber file on currrent layer" ),
-                         FALSE );
+                       _( "Load new Gerber file on currrent layer" ),
+                       FALSE );
 
     filesMenu->Append( ID_MENU_INC_LAYER_AND_APPEND_FILE,
-                         _( "Inc Layer and load Gerber file" ),
-                         _( "Increment layer number, and Load Gerber file" ),
-                         FALSE );
+                       _( "Inc Layer and load Gerber file" ),
+                       _( "Increment layer number, and Load Gerber file" ),
+                       FALSE );
 
     filesMenu->Append( ID_GERBVIEW_LOAD_DCODE_FILE, _( "Load DCodes" ),
-                         _( "Load D-Codes File" ), FALSE );
+                       _( "Load D-Codes File" ), FALSE );
 #if 0
     filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load drill" ),
-                         _( "Load excellon drill file" ), FALSE );
+                       _( "Load excellon drill file" ), FALSE );
 #endif
 
     filesMenu->Append( ID_MENU_NEW_BOARD, _( "&New" ),
-                         _( "Clear all layers" ), FALSE );
+                       _( "Clear all layers" ), FALSE );
 
     filesMenu->AppendSeparator();
     filesMenu->Append( ID_GERBVIEW_EXPORT_TO_PCBNEW,  _( "&Export to Pcbnew" ),
-                         _( "Export data in pcbnew format" ), FALSE );
+                       _( "Export data in pcbnew format" ), FALSE );
 
 #if 0
     filesMenu->AppendSeparator();
     filesMenu->Append( ID_MENU_SAVE_BOARD, _( "&Save layers" ),
-                         _( "Save current layers (GERBER format)" ), FALSE );
+                       _( "Save current layers (GERBER format)" ), FALSE );
 
     filesMenu->Append( ID_MENU_SAVE_BOARD_AS, _( "Save layers as.." ),
-                         _( "Save current layers as.." ), FALSE );
+                       _( "Save current layers as.." ), FALSE );
 #endif
 
     filesMenu->AppendSeparator();
@@ -132,9 +128,9 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     wxMenu* helpMenu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                             _( "Open the gerbview manual" ), help_xpm );
-    ADD_MENUITEM_WITH_HELP(helpMenu, ID_KICAD_ABOUT, _( "&About gerbview" ),
-                           _( "About gerbview gerber and drill viewer" ),
-                           info_xpm );
+    ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About gerbview" ),
+                            _( "About gerbview gerber and drill viewer" ),
+                            info_xpm );
 
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );

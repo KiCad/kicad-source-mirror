@@ -30,11 +30,12 @@
 /****************************/
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "pcbnew.h"
+#include "class_drawpanel.h"
 #include "autorout.h"
 #include "trigo.h"
+#include "gestfich.h"
 
 #include "protos.h"
 

@@ -9,6 +9,9 @@
 #include <set>
 
 
+class WinEDA_GerberFrame;
+class BOARD;
+
 #ifndef eda_global
 #define eda_global extern
 #endif

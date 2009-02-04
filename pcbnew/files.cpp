@@ -3,8 +3,11 @@
 /***************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "pcbnew.h"
 #include "protos.h"
 #include "id.h"

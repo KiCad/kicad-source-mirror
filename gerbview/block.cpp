@@ -5,11 +5,12 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "gerbview.h"
+#include "class_drawpanel.h"
 #include "trigo.h"
+#include "confirm.h"
 
+#include "gerbview.h"
 #include "protos.h"
 
 

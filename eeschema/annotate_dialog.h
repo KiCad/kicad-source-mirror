@@ -32,6 +32,7 @@
 
 ////@begin forward declarations
 class wxBoxSizer;
+class WinEDA_SchematicFrame;
 ////@end forward declarations
 
 /*!

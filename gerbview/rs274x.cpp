@@ -3,11 +3,10 @@
 /********************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "protos.h"
 
 #define CODE( x, y ) ( ((x) << 8) + (y) )

@@ -5,17 +5,19 @@
 #define eda_global
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
+#include "gestfich.h"
+#include "id.h"
 
 #include "cvpcb.h"
-#include "trigo.h"
 #include "zones.h"
-
 #include "bitmaps.h"
-
 #include "protos.h"
+#include "cvstruct.h"
 
-#include "id.h"
+#include <wx/snglinst.h>
 
 wxString g_Main_Title = wxT( "CVpcb" );
 

@@ -6,16 +6,20 @@
 #define eda_global
 
 #include "fctsys.h"
-
-#include <wx/file.h>
-
 #include "common.h"
+#include "appl_wxstruct.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "gestfich.h"
+
 #include "gerbview.h"
 #include "pcbplot.h"
-#include "trigo.h"
-#include "zones.h"
 #include "bitmaps.h"
 #include "protos.h"
+#include "zones.h"
+
+#include <wx/file.h>
+#include <wx/snglinst.h>
 
 
 wxString g_Main_Title = wxT( "GerbView" );

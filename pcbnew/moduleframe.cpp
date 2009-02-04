@@ -7,10 +7,11 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
-
+#include "class_drawpanel.h"
+#include "confirm.h"
 #include "pcbnew.h"
-
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"
@@ -349,7 +350,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         unsigned jj;
         if( m_SelZoomBox )
         {
-            for( jj = 0; jj < GetScreen()->m_ZoomList.GetCount(); jj++ )
+            for( jj = 0; jj < (int)GetScreen()->m_ZoomList.GetCount(); jj++ )
             {
                 if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
                 {

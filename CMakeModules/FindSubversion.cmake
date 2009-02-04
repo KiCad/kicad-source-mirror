@@ -85,7 +85,7 @@ IF(Subversion_SVN_EXECUTABLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     IF(NOT ${Subversion_svn_info_result} EQUAL 0)
-      MESSAGE(SEND_ERROR "Command \"${Subversion_SVN_EXECUTABLE} info ${dir}\" failed with output:\n${Subversion_svn_info_error}")
+      MESSAGE(STATUS "Command \"${Subversion_SVN_EXECUTABLE} info ${dir}\" failed with output:\n${Subversion_svn_info_error}")
     ELSE(NOT ${Subversion_svn_info_result} EQUAL 0)
 
       STRING(REGEX REPLACE "^(.*\n)?svn, version ([.0-9]+).*"
@@ -121,7 +121,7 @@ IF(Subversion_SVN_EXECUTABLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     IF(NOT ${Subversion_svn_log_result} EQUAL 0)
-      MESSAGE(SEND_ERROR "Command \"${Subversion_SVN_EXECUTABLE} log -r BASE ${dir}\" failed with output:\n${Subversion_svn_log_error}")
+      MESSAGE(STATUS "Command \"${Subversion_SVN_EXECUTABLE} log -r BASE ${dir}\" failed with output:\n${Subversion_svn_log_error}")
     ENDIF(NOT ${Subversion_svn_log_result} EQUAL 0)
   ENDMACRO(Subversion_WC_LOG)
 

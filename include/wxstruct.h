@@ -13,17 +13,13 @@
 
 #include <vector>
 
+
 #include <wx/socket.h>
 #include "wx/log.h"
 #include "wx/config.h"
 #include <wx/wxhtml.h>
 #include <wx/laywin.h>
-#include <wx/snglinst.h>
 
-#include "base_struct.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
 
 //C++ guarantees that operator delete checks its argument for null-ness
 #ifndef SAFE_DELETE
@@ -43,40 +39,17 @@
 
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
-class wxMyDialogModalData;
-
 /*  Forward declarations of classes. */
+class EDA_BaseStruct;
+class EDA_Rect;
 class WinEDA_DrawPanel;
-class WinEDA_DrawFrame;
-
-class WinEDA_App;
 class WinEDA_MsgPanel;
-class COMMAND;
-class WinEDA_MainFrame;
 class BASE_SCREEN;
-class SCH_SCREEN;
-class PCB_SCREEN;
-class WinEDA_SchematicFrame;    // Schematic main frame
-class WinEDA_LibeditFrame;      // Component creation and edition main frame
-class WinEDA_ViewlibFrame;      // Component viewer main frame
-class WinEDA_GerberFrame;       // GERBER viewer main frame
 class WinEDA_Toolbar;
-class WinEDA_CvpcbFrame;
-class WinEDA_PcbFrame;
-class WinEDA_ModuleEditFrame;
 class WinEDAChoiceBox;
-#define WinEDA_MenuBar  wxMenuBar
-#define WinEDA_Menu     wxMenu
-#define WinEDA_MenuItem wxMenuItem
-
-// Used but not defined here:
-class DRAWSEGMENT;
-class WinEDA3D_DrawFrame;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
-class GENERAL_COLLECTOR;
-class GENERAL_COLLECTORS_GUIDE;
 
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,

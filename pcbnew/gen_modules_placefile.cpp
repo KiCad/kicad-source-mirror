@@ -7,8 +7,10 @@
  *  2 - create a module report (pos and module descr) (ascii file)
  */
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "pcbnew.h"
 #include "trigo.h"
 

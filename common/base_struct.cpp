@@ -10,10 +10,13 @@
 #include "gr_basic.h"
 #include "trigo.h"
 #include "common.h"
-#include "wxstruct.h"
-#include "base_struct.h"
 #include "grfonte.h"
 #include "macros.h"
+#include "wxstruct.h"
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "drawtxt.h"
+
 
 enum textbox {
     ID_TEXTBOX_LIST = 8010

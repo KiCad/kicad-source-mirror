@@ -3,8 +3,14 @@
 /*******************************************************/
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "id.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "gestfich.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -13,7 +19,6 @@
 #include "worksheet.h"
 #include "hotkeys.h"
 
-#include "id.h"
 
 /* Variables locales */
 

@@ -4,10 +4,15 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "eda_doc.h"
+#include "kicad_string.h"
+#include "gestfich.h"
+#include "get_component_dialog.h"
 
+#include "pcbnew.h"
 #include "protos.h"
 
 class ModList

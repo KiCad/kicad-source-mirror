@@ -10,6 +10,9 @@
 #ifndef  __CLASS_BASE_SCREEN_H__
 #define  __CLASS_BASE_SCREEN_H__
 
+#include "base_struct.h"
+
+
 // Forward declarations:
 class SCH_ITEM;
 class Ki_PageDescr;
@@ -67,6 +70,20 @@ public:
     void SetMessageBlock( WinEDA_DrawFrame* frame );
     void Draw( WinEDA_DrawPanel* panel, wxDC* DC );
 };
+
+
+/* Simple class for handling grid arrays. */
+class GRID_TYPE
+{
+public:
+    int    m_Id;
+    wxSize m_Size;
+};
+
+
+/* Declare array of wxSize for grid list implementation. */
+#include <wx/dynarray.h>
+WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
 
 
 /*******************************************************************/

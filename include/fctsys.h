@@ -41,19 +41,6 @@
 #define PCB_INTERNAL_UNIT      10000    //  PCBNEW internal unit = 1/10000 inch
 #define EESCHEMA_INTERNAL_UNIT 1000     //  EESCHEMA internal unit = 1/1000 inch
 
-#include "wxstruct.h"
-
-// Old wxWidget compatibility (prior to wxWidget 2.7):
-#if !wxCHECK_VERSION( 2, 7, 0 )
-#define wxFD_OPEN             wxOPEN
-#define wxFD_SAVE             wxSAVE
-#define wxFD_DEFAULT_STYLE    wxOPEN
-#define wxFD_MULTIPLE         wxMULTIPLE
-#define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
-#define WXK_PAGEUP            WXK_PRIOR
-#define WXK_PAGEDOWN          WXK_NEXT
-#endif
-
 #ifdef __UNIX__
 #define stricmp  strcasecmp
 #define strnicmp strncasecmp

@@ -6,12 +6,16 @@
  */
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
-#include "wxstruct.h"
 #include "hotkeys_basic.h"
 #include "macros.h"
 #include "bitmaps.h"
 #include "id.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
+#include "wxstruct.h"
 
 
 /* Class to handle hotkey commnands. hotkeys have a default value

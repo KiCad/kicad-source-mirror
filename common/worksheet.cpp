@@ -4,11 +4,15 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
 #include "macros.h"
-
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "drawtxt.h"
+#include "confirm.h"
+#include "wxstruct.h"
 #include "worksheet.h"
+
 
 /* Must be defined in main applications: */
 extern wxString g_Main_Title;

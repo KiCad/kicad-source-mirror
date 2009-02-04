@@ -9,23 +9,12 @@
 #pragma implementation "set_color.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
+#include "class_drawpanel.h"
 
+#include "pcbnew.h"
 #include "protos.h"
 
 #include "set_color.h" // Header file associated with this file

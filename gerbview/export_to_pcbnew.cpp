@@ -5,10 +5,13 @@
  */
 
 #include "fctsys.h"
-
 #include "common.h"
-#include "gerbview.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 
+#include "gerbview.h"
 #include "protos.h"
 
 /* Routines Locales : */

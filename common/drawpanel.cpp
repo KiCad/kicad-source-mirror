@@ -1,12 +1,17 @@
 /******************************************/
 /* drawpanel.cpp - WinEDA_DrawPanel class */
 /******************************************/
+
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
-
 #include "macros.h"
 #include "id.h"
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "wxstruct.h"
+
 
 // Local defines
 #define CURSOR_SIZE 12           // Cursor size in pixels

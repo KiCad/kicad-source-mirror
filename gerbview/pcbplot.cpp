@@ -3,12 +3,11 @@
 		/************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
-#include "gerbview.h"
-#include "pcbplot.h"
 #include "id.h"
 
+#include "gerbview.h"
+#include "pcbplot.h"
 #include "protos.h"
 
 /* variables locale : */

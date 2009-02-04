@@ -5,14 +5,16 @@
 /* Functions to handle Gerbview configuration */
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "gestfich.h"
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "id.h"
 #include "hotkeys.h"
 #include "gerbview_config.h"
-
 #include "protos.h"
 
 

@@ -15,17 +15,6 @@
 #pragma implementation "annotate_dialog.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
 ////@begin includes
 ////@end includes
 
@@ -33,6 +22,7 @@
 #include "bitmaps.h"
 #include "common.h"
 #include "program.h"
+
 #include "annotate_dialog.h"
 
 extern void AnnotateComponents( WinEDA_SchematicFrame* parent,

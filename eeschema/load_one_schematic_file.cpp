@@ -3,14 +3,11 @@
 /****************************************/
 
 #include "fctsys.h"
-
-//#include "gr_basic.h"
-
-#include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
 
 /* in read_from_file_schematic_items_description.cpp */

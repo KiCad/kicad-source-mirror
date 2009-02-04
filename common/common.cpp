@@ -12,6 +12,7 @@
 #include "common.h"
 #include "macros.h"
 #include "build_version.h"
+#include "confirm.h"
 #include <wx/process.h>
 
 /*****************************/

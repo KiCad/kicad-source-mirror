@@ -8,13 +8,36 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
+#include "gestfich.h"
 #include "kicad.h"
 #include "protos.h"
 #include "prjconfig.h"
 
 
 /* Variables locales */
+PARAM_CFG_WXSTRING SchematicRootFileNameCfg
+(
+	wxT("RootSch"),			  /* identification */
+	&g_SchematicRootFileName /* Adresse du parametre */
+);
+
+PARAM_CFG_WXSTRING BoardFileNameCfg
+(
+	wxT("BoardNm"),		/* identification */
+	&g_BoardFileName	/* Adresse du parametre */
+);
+
+
+PARAM_CFG_BASE * CfgParamList[] =
+{
+	& SchematicRootFileNameCfg,
+	& BoardFileNameCfg,
+	NULL
+};
+
 
 
 /*******************************************/

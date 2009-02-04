@@ -9,6 +9,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "gestfich.h"
 
 #include "kicad.h"
 #include "protos.h"
@@ -32,8 +33,9 @@ IMPLEMENT_ABSTRACT_CLASS( WinEDA_TreePrj, wxTreeCtrl )
 
 WinEDA_TreePrj::WinEDA_TreePrj( WinEDA_PrjFrame* parent ) :
     wxTreeCtrl( parent, ID_PROJECT_TREE,
-               wxDefaultPosition, wxDefaultSize,
-               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "EDATreeCtrl" ) )
+                wxDefaultPosition, wxDefaultSize,
+                wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS, wxDefaultValidator,
+                wxT( "EDATreeCtrl" ) )
 {
     m_Parent = parent;
 

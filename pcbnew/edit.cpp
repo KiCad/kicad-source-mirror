@@ -3,8 +3,11 @@
 /******************************************************/
 
 #include "fctsys.h"
-
-#include "common.h"
+#include "appl_wxstruct.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "eda_doc.h"
+#include "gestfich.h"
 #include "pcbnew.h"
 #include "autorout.h"
 

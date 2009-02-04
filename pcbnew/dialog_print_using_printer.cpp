@@ -6,7 +6,10 @@
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
 
 #include <wx/dcps.h>
 

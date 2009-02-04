@@ -3,6 +3,7 @@
 /***************************************************************/
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 
 using namespace std;
 
@@ -11,6 +12,9 @@ using namespace std;
 #include "common.h"
 #include "plot_common.h"
 #include "trigo.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "macros.h"

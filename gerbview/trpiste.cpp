@@ -4,12 +4,13 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+#include "drawtxt.h"
+#include "confirm.h"
+
 #include "gerbview.h"
 #include "pcbplot.h"
-#include "trigo.h"
-
 #include "protos.h"
 
 /* Definition des cas ou l'on force l'affichage en SKETCH (membre .flags) */

@@ -11,6 +11,7 @@
 
 #include "macros.h"
 #include "base_struct.h"
+#include "class_base_screen.h"
 
 /* Max number of sheets in a hierarchy project: */
 #define NB_MAX_SHEET 500

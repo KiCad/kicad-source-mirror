@@ -8,6 +8,8 @@
 #include "common.h"
 #include "trigo.h"
 #include "macros.h"
+#include "base_struct.h"
+#include "class_base_screen.h"
 
 #ifndef FILLED
 #define FILLED 1

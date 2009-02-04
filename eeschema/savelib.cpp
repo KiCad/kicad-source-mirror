@@ -7,8 +7,10 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -72,11 +74,11 @@ bool LibDrawText::Save( FILE* ExportFile ) const
     text.Replace( wxT( " " ), wxT( "~" ) );
 
     fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ",
-            m_Orient,
-            m_Pos.x, m_Pos.y,
-            m_Size.x, m_Attributs,
-            m_Unit, m_Convert,
-            CONV_TO_UTF8( text ));
+             m_Orient,
+             m_Pos.x, m_Pos.y,
+             m_Size.x, m_Attributs,
+             m_Unit, m_Convert,
+             CONV_TO_UTF8( text ));
 
 	fprintf( ExportFile, " %s %d",	m_Italic ? "Italic" : "Normal", m_Width );
 

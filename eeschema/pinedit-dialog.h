@@ -23,6 +23,7 @@
  */
 #include "fctsys.h"
 #include "gr_basic.h"
+#include "class_drawpanel.h"
 
 #include "common.h"
 #include "program.h"

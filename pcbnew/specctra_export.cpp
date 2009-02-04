@@ -36,6 +36,8 @@
 #include "collectors.h"
 #include "wxPcbStruct.h"        // Change_Side_Module()
 #include "pcbstruct.h"          // HISTORY_NUMBER
+#include "confirm.h"            // DisplayError()
+#include "gestfich.h"           // EDA_FileSelector()
 #include "autorout.h"           // NET_CODES_OK
 
 #include "trigo.h"              // RotatePoint()

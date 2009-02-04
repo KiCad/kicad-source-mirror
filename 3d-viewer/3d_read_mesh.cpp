@@ -10,10 +10,9 @@
 #endif
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "macros.h"
-
+#include "kicad_string.h"
 
 #include "3d_struct.h"
 #include "3d_viewer.h"

@@ -17,9 +17,10 @@
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
-#include "common.h"
 #include "pcbstruct.h"
 #include "macros.h"
+#include "drawtxt.h"
+#include "confirm.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"
@@ -460,7 +461,8 @@ static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
     double endx   = xf * g_Parm_3D_Visu.m_BoardScale;
     double endy   = yf * g_Parm_3D_Visu.m_BoardScale;
 
-    Draw3D_FilledSegment( startx, -starty, endx, -endy, s_Text3DWidth, s_Text3DZPos );
+    Draw3D_FilledSegment( startx, -starty, endx, -endy,
+                          s_Text3DWidth, s_Text3DZPos );
 }
 
 
@@ -480,11 +482,9 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
     s_Text3DWidth = text->m_Width * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
-    DrawGraphicText( NULL, NULL,
-                     text->m_Pos, (EDA_Colors) color, text->m_Text,
-                     text->m_Orient, text->m_Size,
-                     text->m_HJustify,
-                     text->m_VJustify,
+    DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
+                     text->m_Text, text->m_Orient, text->m_Size,
+                     text->m_HJustify, text->m_VJustify,
                      text->m_Width, text->m_Italic,
                      Draw3dTextSegm );
 }
@@ -668,7 +668,8 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
     if( holeX && holeY )
     {
         SetGLColor( DARKGRAY );
-        Draw3D_FilledCylinder( drillx, -drilly, hole, g_Parm_3D_Visu.m_LayerZcoord[CMP_N], 0.0 );
+        Draw3D_FilledCylinder( drillx, -drilly, hole,
+                               g_Parm_3D_Visu.m_LayerZcoord[CMP_N], 0.0 );
     }
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis

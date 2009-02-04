@@ -2,10 +2,9 @@
 /* menubarpcb.cpp - creation du menu general de l'editeur de board*/
 /******************************************************************/
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
-
 #include "pcbnew.h"
-
 #include "bitmaps.h"
 #include "protos.h"
 #include "hotkeys.h"

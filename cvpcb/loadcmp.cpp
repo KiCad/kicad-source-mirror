@@ -3,11 +3,15 @@
 /***************************************************/
 
 #include "fctsys.h"
-
 #include "wxstruct.h"
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
+
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvstruct.h"
 
 
 /*****************************************************************/
@@ -103,7 +107,8 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
             }
         }
 
-        fclose( lib_module ); lib_module = 0;
+        fclose( lib_module );
+        lib_module = 0;
     }
 
     if( lib_module )

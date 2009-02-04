@@ -7,8 +7,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "gestfich.h"
 
 #include "dialog_SVG_print_base.h"
 

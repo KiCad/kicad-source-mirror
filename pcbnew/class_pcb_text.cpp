@@ -4,10 +4,10 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
-
 #include "gr_basic.h"
-
 #include "common.h"
+#include "kicad_string.h"
+
 #include "pcbnew.h"
 
 

@@ -7,16 +7,18 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include <wx/fs_zip.h>
 #include <wx/docview.h>
 #include <wx/wfstream.h>
 #include <wx/zstream.h>
 
 #include "common.h"
-
 #include "bitmaps.h"
-#include "protos.h"
+#include "confirm.h"
+#include "gestfich.h"
 
+#include "protos.h"
 #include "id.h"
 
 #include "kicad.h"

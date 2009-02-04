@@ -2,17 +2,21 @@
 /* File: cvframe.cpp */
 /*********************/
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
+#include "eda_doc.h"
+#include "gestfich.h"
+#include "id.h"
+
 #include <wx/fontdlg.h>
 
 #include "cvpcb.h"
 #include "pcbnew.h"
-
 #include "bitmaps.h"
-
 #include "protos.h"
+#include "cvstruct.h"
 
-#include "id.h"
 
 #define FRAME_MIN_SIZE_X 450
 #define FRAME_MIN_SIZE_Y 300

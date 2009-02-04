@@ -7,9 +7,9 @@
 #include "trigo.h"
 #include "wxstruct.h"
 #include "base_struct.h"
-#include "common.h"
 #include "plot_common.h"
 #include "macros.h"
+#include "kicad_string.h"
 
 /* parametre HPGL pour trace de cercle: */
 #define CHORD_ANGLE 10

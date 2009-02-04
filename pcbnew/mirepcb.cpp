@@ -4,10 +4,10 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
+#include "class_drawpanel.h"
 
+#include "pcbnew.h"
 #include "protos.h"
 
 

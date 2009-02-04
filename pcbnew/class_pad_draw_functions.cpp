@@ -4,11 +4,13 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
 #include "trigo.h"
 #include "id.h"             // ID_TRACK_BUTT
+#include "class_drawpanel.h"
+#include "drawtxt.h"
+
+#include "pcbnew.h"
 
 
 /*******************************************************************************************/

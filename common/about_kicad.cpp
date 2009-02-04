@@ -9,8 +9,7 @@
 extern wxString g_Main_Title; // Import program title
 
 /**********************************/
-wxString
-SetMsg( const wxString& msg )
+wxString SetMsg( const wxString& msg )
 /**********************************/
 /* add \n at the beginning of msg under Windows, and do nothing under other version of wxWidgets
  * Needed under wxWidgets 2.8 because wxGTK and wxMSW do not have the same behavior
@@ -30,8 +29,7 @@ SetMsg( const wxString& msg )
 
 
 /**************************************************/
-void
-InitKiCadAbout( wxAboutDialogInfo& info )
+void InitKiCadAbout( wxAboutDialogInfo& info )
 /**************************************************/
 {
 	/* Set name and title */

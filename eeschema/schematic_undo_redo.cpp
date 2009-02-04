@@ -4,13 +4,13 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "confirm.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "id.h"
-
 #include "protos.h"
 
 /* Functions to undo and redo edit commands.

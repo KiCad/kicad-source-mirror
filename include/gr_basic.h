@@ -11,6 +11,10 @@
 
 #include "colors.h"
 
+
+class EDA_Rect;
+
+
 /* Constantes utiles */
 
 #define GR_COPY             0

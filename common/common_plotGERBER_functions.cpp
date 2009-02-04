@@ -10,6 +10,7 @@
 #include "common.h"
 #include "plot_common.h"
 #include "macros.h"
+#include "kicad_string.h"
 
 
 /***************************************************************************/

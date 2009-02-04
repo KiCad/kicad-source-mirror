@@ -7,6 +7,9 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+#include "wxstruct.h"
 #include "program.h"
 #include "libcmp.h"
 #include "protos.h"

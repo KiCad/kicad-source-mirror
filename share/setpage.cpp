@@ -25,23 +25,15 @@
 #pragma implementation "setpage.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
 ////@begin includes
 ////@end includes
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "base_struct.h"
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "wxstruct.h"
 
 #ifdef EESCHEMA
 #include "program.h"

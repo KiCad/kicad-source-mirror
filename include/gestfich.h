@@ -10,6 +10,10 @@
 #define __INCLUDE__GESTFICH_H__ 1
 
 
+/* Forward class declarations. */
+class WinEDAListBox;
+
+
 wxString    GetEditorName(); // Return the prefered editor name
 
 /** Function OpenPDF

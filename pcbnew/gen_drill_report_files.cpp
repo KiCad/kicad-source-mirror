@@ -10,6 +10,11 @@ using namespace std;
 
 #include "common.h"
 #include "plot_common.h"
+#include "base_struct.h"
+#include "colors.h"
+#include "drawtxt.h"
+#include "confirm.h"
+#include "kicad_string.h"
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "macros.h"

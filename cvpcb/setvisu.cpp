@@ -3,14 +3,17 @@
 /*********************************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
-#include "cvpcb.h"
-#include "3d_viewer.h"
+#include "class_drawpanel.h"
 #include "id.h"
-#include "bitmaps.h"
 
+#include "3d_viewer.h"
+
+#include "bitmaps.h"
+#include "cvpcb.h"
 #include "protos.h"
+#include "cvstruct.h"
+
 
 /*******************************************/
 void WinEDA_CvpcbFrame::CreateScreenCmp()

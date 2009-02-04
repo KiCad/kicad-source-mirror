@@ -10,9 +10,9 @@
  */
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "plot_common.h"
+#include "confirm.h"
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "trigo.h"

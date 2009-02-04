@@ -5,8 +5,8 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "fctsys.h"
-
-#include "wx/mimetype.h"
+#include "appl_wxstruct.h"
+#include "confirm.h"
 
 #ifdef  __WINDOWS__
 #ifndef _MSC_VER
@@ -16,6 +16,11 @@
 
 #include "common.h"
 #include "macros.h"
+#include "gestfich.h"
+
+#include "wx/mimetype.h"
+#include "wx/filename.h"
+
 
 /* List of default paths used to locate help files and kicad library files.
  *

@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "common.h"
+#include "confirm.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"

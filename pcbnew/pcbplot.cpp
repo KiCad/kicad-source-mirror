@@ -3,14 +3,15 @@
 /***********************/
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "plot_common.h"
+#include "confirm.h"
+#include "gestfich.h"
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "worksheet.h"
 #include "id.h"
-
 #include "protos.h"
 
 #define PLOT_DEFAULT_MARGE 300      // mils

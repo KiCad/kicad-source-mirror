@@ -11,8 +11,7 @@
 
 
 #include "fctsys.h"
-
-#include <wx/colordlg.h>
+#include "appl_wxstruct.h"
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
@@ -24,6 +23,8 @@
 #define VIEWER_MAIN
 #include "3d_viewer.h"
 #include "trackball.h"
+
+#include <wx/colordlg.h>
 
 
 BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )

@@ -12,14 +12,12 @@
  */
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "pcbnew.h"
 #include "eda_dde.h"
-
 #include "id.h"
 #include "collectors.h"
-
 #include "protos.h"
 
 

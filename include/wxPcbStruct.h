@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#include "wxstruct.h"
+#include "base_struct.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -16,19 +18,12 @@
 
 
 /*  Forward declarations of classes. */
-class WinEDA_DrawPanel;
-class WinEDA_DrawFrame;
-
-#include "base_struct.h"
-
 class PCB_SCREEN;
 class WinEDA_GerberFrame;       // GERBER viewer main frame
 class WinEDA_Toolbar;
 class WinEDA_CvpcbFrame;
 class WinEDA_PcbFrame;
 class WinEDA_ModuleEditFrame;
-
-// Used but not defined here:
 class BOARD;
 class TEXTE_PCB;
 class MODULE;
@@ -43,6 +38,9 @@ class EDGE_MODULE;
 class WinEDA3D_DrawFrame;
 class DRC;
 class ZONE_CONTAINER;
+class DRAWSEGMENT;
+class GENERAL_COLLECTOR;
+class GENERAL_COLLECTORS_GUIDE;
 
 
 /******************************************************************/

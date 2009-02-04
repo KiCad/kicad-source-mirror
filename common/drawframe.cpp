@@ -7,11 +7,16 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "bitmaps.h"
 #include "macros.h"
 #include "id.h"
+#include "class_drawpanel.h"
+#include "class_base_screen.h"
+#include "wxstruct.h"
+#include "confirm.h"
 
 #include <wx/fontdlg.h>
 

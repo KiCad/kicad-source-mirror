@@ -7,8 +7,8 @@
 
 #include "fctsys.h"
 #include "macros.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
 #include "pcbnew.h"
 
 #include "dialog_edit_module_text_base.h"

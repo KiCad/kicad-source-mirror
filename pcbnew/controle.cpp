@@ -5,8 +5,8 @@
 /* controle.cpp */
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
 #include "pcbnew.h"
 #include "protos.h"
 

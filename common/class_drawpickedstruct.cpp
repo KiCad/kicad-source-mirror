@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "base_struct.h"
 #include "sch_item_struct.h"
 
 

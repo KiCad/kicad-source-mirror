@@ -8,11 +8,11 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"

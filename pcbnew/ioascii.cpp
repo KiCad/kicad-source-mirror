@@ -7,12 +7,13 @@
 /* ioascii.cpp */
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+
 #include "pcbnew.h"
 
 #ifdef PCBNEW
-#include "pcbnew.h"
 #include "autorout.h"
 #include "zones.h"
 #endif

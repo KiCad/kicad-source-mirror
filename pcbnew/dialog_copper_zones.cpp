@@ -10,21 +10,10 @@
 #pragma implementation "zones.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
 #include "fctsys.h"
-#include "wxstruct.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
 #include "PolyLine.h"
 #include "pcbnew.h"
 #include "trigo.h"

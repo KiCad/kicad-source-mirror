@@ -3,11 +3,12 @@
 /********************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+#include "confirm.h"
+
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "protos.h"
 
 #define DEFAULT_SIZE 100

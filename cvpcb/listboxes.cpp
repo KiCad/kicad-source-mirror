@@ -3,14 +3,14 @@
 /*************************************************************************/
 
 #include "fctsys.h"
-
 #include "wxstruct.h"
 #include "common.h"
-#include "cvpcb.h"
-
 #include "id.h"
 
+#include "cvpcb.h"
 #include "protos.h"
+#include "cvstruct.h"
+
 
 /******************************************************************************/
 /* Basic class (from wxListView) for displaying component and footprint lists */

@@ -6,6 +6,7 @@
 #define PCBSTRUCT_H
 
 #include "base_struct.h"
+#include "class_base_screen.h"
 #include "board_item_struct.h"
 
 // Definitions relatives aux libariries

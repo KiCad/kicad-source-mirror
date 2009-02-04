@@ -7,13 +7,14 @@
 #endif
 
 #include "fctsys.h"
-
 #include "wxstruct.h"
 #include "common.h"
+#include "colors.h"
+
 
 /* table des evenements captes par un WinEDA_MsgPanel */
 BEGIN_EVENT_TABLE( WinEDA_MsgPanel, wxPanel )
-EVT_PAINT( WinEDA_MsgPanel::OnPaint )
+    EVT_PAINT( WinEDA_MsgPanel::OnPaint )
 END_EVENT_TABLE()
 
 

@@ -3,7 +3,7 @@
 /*********************/
 
 #include "fctsys.h"
-
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "program.h"
 #include "libcmp.h"

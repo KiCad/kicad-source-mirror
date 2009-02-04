@@ -34,6 +34,9 @@
 
 #include "specctra.h"
 #include "common.h"             // IsOK() & EDA_FileSelector()
+#include "class_drawpanel.h"    // DrawPanel
+#include "confirm.h"            // DisplayError()
+#include "gestfich.h"           // EDA_FileSelector()
 
 
 

@@ -4,11 +4,10 @@
 
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
 #include "gerbview.h"
 #include "pcbplot.h"
-
 #include "protos.h"
 
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \

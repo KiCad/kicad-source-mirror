@@ -8,11 +8,10 @@
 
 #include "fctsys.h"
 #include "common.h"
-
+#include "appl_wxstruct.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"

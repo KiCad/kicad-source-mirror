@@ -9,6 +9,9 @@
 #include <vector>
 
 
+class COMMAND;
+
+
 /* install function for DialogNonCopperZonesEditor dialog frame :*/
 bool InstallDialogNonCopperZonesEditor(WinEDA_PcbFrame* aParent, ZONE_CONTAINER* aZone);
 

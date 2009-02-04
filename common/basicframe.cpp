@@ -10,12 +10,16 @@
 #include <wx/aboutdlg.h>
 #include "wx/statline.h"
 #include "wx/generic/aboutdlgg.h"
+#include <wx/fontdlg.h>
 
 #include "fctsys.h"
-#include <wx/fontdlg.h>
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "online_help.h"
 #include "id.h"
+#include "confirm.h"
+#include "eda_doc.h"
+#include "wxstruct.h"
 
 
 /*******************************************************/

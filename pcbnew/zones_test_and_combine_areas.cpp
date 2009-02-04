@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "confirm.h"
 #include "pcbnew.h"
 
 using namespace std;

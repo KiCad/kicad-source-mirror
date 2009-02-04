@@ -8,6 +8,7 @@
 #ifndef __INCLUDE__DRAWTXT_H__
 #define __INCLUDE__DRAWTXT_H__ 1
 
+class WinEDA_DrawPanel;
 
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)

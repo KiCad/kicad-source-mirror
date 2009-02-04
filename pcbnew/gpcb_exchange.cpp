@@ -3,9 +3,8 @@
 /**********************************************************************/
 
 #include "fctsys.h"
-
 #include "wxstruct.h"
-#include "common.h"
+#include "kicad_string.h"
 #include "pcbnew.h"
 #include "trigo.h"
 

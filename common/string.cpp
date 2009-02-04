@@ -5,8 +5,8 @@
 
 #include "fctsys.h"
 #include <time.h>
-#include "common.h"
 #include "macros.h"
+#include "kicad_string.h"
 
 
 /*********************************************************************/
