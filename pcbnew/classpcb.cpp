@@ -12,9 +12,8 @@
 #include "id.h"
 
 
-/* Default PCB zoom coefficients. 3th root of 2 series up to 256 */
-static const int PcbZoomList[] = { 5, 6, 8, 10, 13, 16, 20, 25, 32, 40, 50, 63, 80, 101, 127, 160, 202, 254, 320, 
-                                   403, 508, 640, 806, 1016, 1280, 1613, 2032, 2560, 5120, 10240, 20480 };
+// mostly 1.5 factor, seems to work well.
+static const int PcbZoomList[] = { 5, 8, 12, 18, 27, 40, 60, 90, 140, 200, 300, 450, 700, 1000, 1500, 2250, 4500, 9000, 20480 };
 
 #define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
 
