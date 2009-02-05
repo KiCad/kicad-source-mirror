@@ -213,7 +213,10 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
     {
         if( strnicmp( Line, "ZCorner", 7 ) == 0 ) // new corner found
         {
-            int x = 0, y = 0, flag = 0;
+            int x;
+            int y;
+            int flag;
+
             text = Line + 7;
             ret  = sscanf( text, "%d %d %d", &x, &y, &flag );
             if( ret < 3 )
@@ -224,14 +227,17 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                     m_Poly->Start( m_Layer, x, y, outline_hatch );
                 else
                     AppendCorner( wxPoint( x, y ) );
+
                 has_corner = true;
                 if( flag )
                     m_Poly->Close();
             }
         }
-        if( strnicmp( Line, "ZInfo", 5 ) == 0 )   // general info found
+        else if( strnicmp( Line, "ZInfo", 5 ) == 0 )   // general info found
         {
-            int ts = 0, netcode = 0;
+            int ts;
+            int netcode;
+
             text = Line + 5;
             ret  = sscanf( text, "%X %d %s", &ts, &netcode, netname_buffer );
             if( ret < 3 )
@@ -244,9 +250,10 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                 m_Netname = CONV_FROM_UTF8( netname_buffer );
             }
         }
-        if( strnicmp( Line, "ZLayer", 6 ) == 0 )  // layer found
+        else if( strnicmp( Line, "ZLayer", 6 ) == 0 )  // layer found
         {
-            int x = 0;
+            int x;
+
             text = Line + 6;
             ret  = sscanf( text, "%d", &x );
             if( ret < 1 )
@@ -254,10 +261,11 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             else
                 m_Layer = x;
         }
-        if( strnicmp( Line, "ZAux", 4 ) == 0 )    // aux info found
+        else if( strnicmp( Line, "ZAux", 4 ) == 0 )    // aux info found
         {
-            int  x = 0;
+            int  x;
             char hopt[10];
+
             text = Line + 4;
             ret  = sscanf( text, "%d %c", &x, hopt );
             if( ret < 2 )
@@ -286,7 +294,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             }
             /* Set hatch mode later, after reading outlines corners data */
         }
-        if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
+        else if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {
             int  fillmode = 1;
             int  arcsegmentcount = 16;
@@ -294,6 +302,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             text = Line + 8;
             ret  = sscanf( text, "%d %d %c %d %d", &fillmode, &arcsegmentcount, &drawopt,
                 &m_ThermalReliefGapValue, &m_ThermalReliefCopperBridgeValue );
+
             if( ret < 1 )  // Must find 1 or more args.
                 return false;
             else
@@ -304,7 +313,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 
             m_Unused = 0;      // Waiting for a better use
         }
-        if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
+        else if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
             int  clearance = 200;
             char padoption;
@@ -336,7 +345,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             }
         }
 
-        if( strnicmp( Line, "ZMinThickness", 13 ) == 0 )    // Min Thickness info found
+        else if( strnicmp( Line, "ZMinThickness", 13 ) == 0 )    // Min Thickness info found
         {
             int thickness;
             text = Line + 13;
@@ -347,7 +356,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                m_ZoneMinThickness = thickness;
         }
 
-        if( strnicmp( Line, "$POLYSCORNERS", 13 ) == 0  )  // Read the PolysList (polygons used for fill areas in the zone)
+        else if( strnicmp( Line, "$POLYSCORNERS", 13 ) == 0  )  // Read the PolysList (polygons used for fill areas in the zone)
         {
             while( GetLine( aFile, Line, aLineNum, sizeof(Line) - 1 ) != NULL )
             {
@@ -365,7 +374,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             }
         }
 
-        if( strnicmp( Line, "$end", 4 ) == 0 )    // end of description
+        else if( strnicmp( Line, "$end", 4 ) == 0 )    // end of description
         {
             break;
         }
