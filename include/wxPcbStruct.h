@@ -49,8 +49,6 @@ class GENERAL_COLLECTORS_GUIDE;
 
 class WinEDA_BasePcbFrame : public WinEDA_DrawFrame
 {
-    BOARD* m_Pcb;
-
 public:
 
     bool m_DisplayPadFill;          // How show pads
@@ -63,8 +61,8 @@ public:
     WinEDA_ModuleEditFrame* m_ModuleEditFrame;
 
 protected:
+    BOARD*                  m_Pcb;
     GENERAL_COLLECTOR*      m_Collector;
-
 
 public:
     WinEDA_BasePcbFrame( wxWindow* father, int idtype,
@@ -109,9 +107,7 @@ public:
 
     int          BestZoom();
 
-    void         Show3D_Frame( wxCommandEvent& event );
-
-    virtual void GeneralControle( wxDC* DC, wxPoint Mouse );
+    virtual void Show3D_Frame( wxCommandEvent& event );
 
     // Undo and redo functions
 public:
@@ -377,6 +373,9 @@ public:
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
     WinEDAChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
+
+    void             Show3D_Frame( wxCommandEvent& event );
+    void             GeneralControle( wxDC* DC, wxPoint Mouse );
 
     /**
      * Function UpdateToolbarLayerInfo
@@ -821,6 +820,8 @@ public:
                                    const wxString& D_Code_FullFileName );
     bool         SaveGerberFile( const wxString& FileName, wxDC* DC );
 
+    void         GeneralControle( wxDC* DC, wxPoint Mouse );
+
 
     /**
      * Function Read_D_Code_File
@@ -913,6 +914,8 @@ public:
     void         ToolOnRightClick( wxCommandEvent& event );
     void         OnSelectOptionToolbar( wxCommandEvent& event );
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void         Show3D_Frame( wxCommandEvent& event );
+    void         GeneralControle( wxDC* DC, wxPoint Mouse );
 
     /* handlers for block commands */
     int          ReturnBlockCommand( int key );

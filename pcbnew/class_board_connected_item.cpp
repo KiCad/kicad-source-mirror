@@ -3,14 +3,8 @@
 /*************************************************************************/
 
 #include "fctsys.h"
-
-#include "wxstruct.h"
-#include "common.h"
 #include "pcbnew.h"
 
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )

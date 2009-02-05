@@ -11,6 +11,8 @@
 
 #include <wx/fontdlg.h>
 
+#include "3d_viewer.h"
+
 #include "cvpcb.h"
 #include "pcbnew.h"
 #include "bitmaps.h"

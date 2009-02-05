@@ -36,25 +36,14 @@ set(GERBVIEW_SRCS
     trpiste.cpp )
 
 set(GERBVIEW_EXTRA_SRCS
-    ../pcbnew/basepcbframe.cpp
-    ../pcbnew/class_board.cpp
     ../pcbnew/class_board_item.cpp
-    ../pcbnew/class_board_connected_item.cpp
     ../pcbnew/class_drawsegment.cpp
-    ../pcbnew/class_drc_item.cpp
-    ../pcbnew/class_marker.cpp
-    ../pcbnew/class_pcb_text.cpp
     ../pcbnew/class_track.cpp
-    ../pcbnew/class_zone.cpp
-    ../pcbnew/class_zone_setting.cpp
-    ../pcbnew/classpcb.cpp
-    ../pcbnew/collectors.cpp
-    ../pcbnew/sel_layer.cpp
     ../pcbnew/undelete.cpp
 
     ../share/setpage.cpp
-    ../pcbnew/dialog_print_using_printer_base.cpp
-    ../pcbnew/dialog_print_using_printer.cpp)
+    ../pcbnew/dialog_print_using_printer.cpp
+)
 
 if(WIN32)
     if(MINGW)

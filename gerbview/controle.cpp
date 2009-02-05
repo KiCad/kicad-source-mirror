@@ -30,7 +30,7 @@ BOARD_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
 
 
 /****************************************************************/
-void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /****************************************************************/
 
 /* traitement des touches de fonctions utilisees ds tous les menus
@@ -107,8 +107,7 @@ void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     /* Placement sur la grille generale */
     PutOnGrid( &GetScreen()->m_Curseur );
 
-    if( (oldpos.x != GetScreen()->m_Curseur.x)
-     || (oldpos.y != GetScreen()->m_Curseur.y) )
+    if( oldpos != GetScreen()->m_Curseur )
     {
         curpos = GetScreen()->m_Curseur;
         GetScreen()->m_Curseur = oldpos;

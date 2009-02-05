@@ -364,13 +364,48 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
  * @param Mouse = new mouse cursor position
  */
 {
-    wxPoint mouse;
+    int     x, y, xPpu, yPpu;
+    wxPoint screenPos, drawingPos;
+    wxRect  clientRect( wxPoint( 0, 0 ), GetClientSize() );
+
 #ifdef WX_ZOOM
-    CalcScrolledPosition( Mouse.x, Mouse.y, &mouse.x, &mouse.y );
+    CalcScrolledPosition( Mouse.x, Mouse.y, &screenPos.x, &screenPos.y );
 #else
-    mouse = Mouse - GetScreen()->m_StartVisu;
+    screenPos = Mouse - GetScreen()->m_StartVisu;
 #endif
-    WarpPointer( mouse.x, mouse.y );
+
+    /* Scroll if the requested mouse position cursor is outside the drawing
+     * area. */
+    if( !clientRect.Contains( screenPos ) )
+    {
+        GetViewStart( &x, &y );
+        GetScrollPixelsPerUnit( &xPpu, &yPpu );
+        CalcUnscrolledPosition( screenPos.x, screenPos.y,
+                                &drawingPos.x, &drawingPos.y );
+
+        wxLogDebug( wxT( "MouseTo() initial screen position(%d, %d) " \
+                         "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
+                    screenPos.x, screenPos.y, clientRect.x, clientRect.y,
+                    clientRect.width, clientRect.height, x, y );
+
+        if( screenPos.y < clientRect.GetTop() )
+            y -= m_ScrollButt_unit * yPpu;
+        else if( screenPos.y > clientRect.GetBottom() )
+            y += m_ScrollButt_unit * yPpu;
+        else if( clientRect.GetRight() < screenPos.x )
+            x += m_ScrollButt_unit * xPpu;
+        else
+            x -= m_ScrollButt_unit * xPpu;
+
+        Scroll( x, y );
+        CalcScrolledPosition( drawingPos.x, drawingPos.y,
+                              &screenPos.x, &screenPos.y );
+
+        wxLogDebug( wxT( "MouseTo() scrolled screen position(%d, %d) " \
+                         "view(%d, %d)" ), screenPos.x, screenPos.y, x, y );
+    }
+
+    WarpPointer( screenPos.x, screenPos.y );
 }
 
 
@@ -1242,9 +1277,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
 {
     int        x, y;
-    wxClientDC dc( this );
 
-    PrepareGraphicContext( &dc );
     GetViewStart( &x, &y );       // x and y are in scroll units, not in pixels
 
     switch( event.GetId() )

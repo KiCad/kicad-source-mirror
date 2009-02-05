@@ -144,65 +144,25 @@ void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
 {
 }
 
-#ifdef CVPCB
-/********************************************************************/
-void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
-/********************************************************************/
-
-// Virtual function
-{
-}
-#endif
-
-#include "3d_viewer.h"
-
-/***********************************************************/
-void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
-/***********************************************************/
-
-/* Creates and shows the 3D frame display
- */
-{
-#ifndef GERBVIEW
-
-    // Create the main frame window
-    if( m_Draw3DFrame )
-    {
-        DisplayInfo( this, _( "3D Frame already opened" ) );
-        return;
-    }
-
-#ifdef CVPCB
-    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ),
-    KICAD_DEFAULT_3D_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
-#else
-    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ) );
-#endif
-    // Show the frame
-    m_Draw3DFrame->Show( TRUE );
-#endif
-}
-
-
 /* Virtual functions: Do nothing for WinEDA_BasePcbFrame window */
 
-/***********************************************************************************/
-void WinEDA_BasePcbFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag )
-/***********************************************************************************/
+void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
 {
 }
 
 
-/********************************************************/
+void WinEDA_BasePcbFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
+                                              int flag )
+{
+}
+
+
 void WinEDA_BasePcbFrame::GetComponentFromUndoList( void )
-/********************************************************/
 {
 }
 
 
-/********************************************************/
 void WinEDA_BasePcbFrame::GetComponentFromRedoList( void )
-/********************************************************/
 {
 }
 

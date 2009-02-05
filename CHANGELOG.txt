@@ -5,6 +5,20 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2009-Feb-05 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++All
+  * Change CMakeList.txt so that all PCB object classes that do not need built
+    separately for pcbnew, gerbview, and cvpcb only get built once and added
+    to the common library.
+  * Override all classes derived from WinEDA_BasePcbFrame so that the source
+    code file basepcbframe.cpp only gets compiled once and added to the common
+    library.
+  * Prevent cursor movement keys from moving outside of client area by
+    automatically scrolling the drawing.
+
+
 2009-Feb-4 UPDATE Vesa Solonen <vesa.solonen@hut.fi>
 ================================================================================
 ++pcbnew:
@@ -18,6 +32,7 @@ email address.
     when making changes to base classes.
   * Move sine and cosine look up tables from trigo.h to trigo.cpp to avoid
     multiple recompiles.
+
 
 2009-feb-01 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

@@ -479,7 +479,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
 
 
 /****************************************************************/
-void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /*****************************************************************/
 {
     wxSize  delta;

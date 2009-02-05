@@ -29,25 +29,13 @@ set(CVPCB_SRCS
     writenetlistpcbnew.cpp)
 
 set(CVPCB_EXTRA_SRCS
-    ../pcbnew/basepcbframe.cpp
-    ../pcbnew/class_board.cpp
     ../pcbnew/class_board_item.cpp
-    ../pcbnew/class_board_connected_item.cpp
-    ../pcbnew/class_cotation.cpp
     ../pcbnew/class_drawsegment.cpp
     ../pcbnew/class_edge_mod.cpp
     ../pcbnew/class_equipot.cpp
-    ../pcbnew/class_mire.cpp
     ../pcbnew/class_module.cpp
-    ../pcbnew/class_pad.cpp
-    ../pcbnew/class_pad_draw_functions.cpp
-    ../pcbnew/class_pcb_text.cpp
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp
-    ../pcbnew/class_zone.cpp
-    ../pcbnew/class_zone_setting.cpp
-    ../pcbnew/classpcb.cpp
-    ../pcbnew/collectors.cpp
     ../pcbnew/ioascii.cpp
     ../pcbnew/tracemod.cpp)
 

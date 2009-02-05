@@ -12,32 +12,18 @@ set(PCBNEW_SRCS
     automove.cpp
     autoplac.cpp
     autorout.cpp
-    basepcbframe.cpp
     block.cpp
     block_module_editor.cpp
     board.cpp
-    class_board.cpp
     class_board_item.cpp
-    class_board_connected_item.cpp
-    class_cotation.cpp
     class_drawsegment.cpp
-    class_drc_item.cpp
     class_edge_mod.cpp
     class_equipot.cpp
-    class_marker.cpp
-    class_mire.cpp
     class_module.cpp
-    class_pad.cpp
-    class_pad_draw_functions.cpp
-    classpcb.cpp
-    class_pcb_text.cpp
     class_text_mod.cpp
     class_track.cpp
-    class_zone.cpp
-    class_zone_setting.cpp
     clean.cpp
 #   cleaningoptions_dialog.cpp
-    collectors.cpp
     connect.cpp
     controle.cpp
 #   copy_track.cpp <-- not used
@@ -66,7 +52,6 @@ set(PCBNEW_SRCS
     dialog_pad_properties.cpp
     dialog_pad_properties_base.cpp
     dialog_print_using_printer.cpp
-    dialog_print_using_printer_base.cpp
     dialog_setup_libs.cpp
     dialog_orient_footprints.cpp
 #   dialog_track_options.cpp
@@ -131,7 +116,6 @@ set(PCBNEW_SRCS
     queue.cpp
     ratsnest.cpp
     router.cpp
-    sel_layer.cpp
     set_color.cpp
     set_grid.cpp
     solve.cpp

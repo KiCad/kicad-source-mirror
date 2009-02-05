@@ -7,6 +7,9 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "id.h"
+#include "confirm.h"
+
+#include "3d_viewer.h"
 
 #include "cvpcb.h"
 #include "bitmaps.h"
@@ -23,7 +26,7 @@ BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, WinEDA_DrawFrame )
     EVT_SIZE( WinEDA_DrawFrame::OnSize )
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_DisplayFrame::OnZoom )
     EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_DisplayFrame::InstallOptionsDisplay )
-    EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_BasePcbFrame::Show3D_Frame )
+    EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_DisplayFrame::Show3D_Frame )
 END_EVENT_TABLE()
 
 
@@ -196,69 +199,62 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( delta.y <= 0 )
         delta.y = 1;
 
-    if( g_KeyPressed )
+    switch( g_KeyPressed )
     {
-        switch( g_KeyPressed )
-        {
-        case WXK_F1:
-            cmd.SetId( ID_POPUP_ZOOM_IN );
-            GetEventHandler()->ProcessEvent( cmd );
-            flagcurseur = 2;
-            curpos = GetScreen()->m_Curseur;
-            break;
+    case WXK_F1:
+        cmd.SetId( ID_POPUP_ZOOM_IN );
+        GetEventHandler()->ProcessEvent( cmd );
+        flagcurseur = 2;
+        curpos = GetScreen()->m_Curseur;
+        break;
 
-        case WXK_F2:
-            cmd.SetId( ID_POPUP_ZOOM_OUT );
-            GetEventHandler()->ProcessEvent( cmd );
-            flagcurseur = 2;
-            curpos = GetScreen()->m_Curseur;
-            break;
+    case WXK_F2:
+        cmd.SetId( ID_POPUP_ZOOM_OUT );
+        GetEventHandler()->ProcessEvent( cmd );
+        flagcurseur = 2;
+        curpos = GetScreen()->m_Curseur;
+        break;
 
-        case WXK_F3:
-            cmd.SetId( ID_ZOOM_REDRAW );
-            GetEventHandler()->ProcessEvent( cmd );
-            flagcurseur = 2;
-            break;
+    case WXK_F3:
+        cmd.SetId( ID_ZOOM_REDRAW );
+        GetEventHandler()->ProcessEvent( cmd );
+        flagcurseur = 2;
+        break;
 
-        case WXK_F4:
-            cmd.SetId( ID_POPUP_ZOOM_CENTER );
-            GetEventHandler()->ProcessEvent( cmd );
-            flagcurseur = 2;
-            curpos = GetScreen()->m_Curseur;
-            break;
+    case WXK_F4:
+        cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        flagcurseur = 2;
+        curpos = GetScreen()->m_Curseur;
+        break;
 
-        case ' ':
-            GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
-            break;
+    case ' ':
+        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        break;
 
-        case WXK_NUMPAD8:       /* cursor moved up */
-        case WXK_UP:
-            DrawPanel->CalcScrolledPosition( Mouse.x, Mouse.y - delta.y,
-                                             &Mouse.x, &Mouse.y );
-            DrawPanel->MouseTo( Mouse );
-            break;
+    case WXK_NUMPAD8:       /* cursor moved up */
+    case WXK_UP:
+        Mouse.y -= delta.y;
+        DrawPanel->MouseTo( Mouse );
+        break;
 
-        case WXK_NUMPAD2:       /* cursor moved down */
-        case WXK_DOWN:
-            DrawPanel->CalcScrolledPosition( Mouse.x, Mouse.y + delta.y,
-                                             &Mouse.x, &Mouse.y );
-            DrawPanel->MouseTo( Mouse );
-            break;
+    case WXK_NUMPAD2:       /* cursor moved down */
+    case WXK_DOWN:
+        Mouse.y += delta.y;
+        DrawPanel->MouseTo( Mouse );
+        break;
 
-        case WXK_NUMPAD4:       /*  cursor moved left */
-        case WXK_LEFT:
-            DrawPanel->CalcScrolledPosition( Mouse.x - delta.x, Mouse.y,
-                                             &Mouse.x, &Mouse.y );
-            DrawPanel->MouseTo( Mouse );
-            break;
+    case WXK_NUMPAD4:       /*  cursor moved left */
+    case WXK_LEFT:
+        Mouse.x -= delta.x;
+        DrawPanel->MouseTo( Mouse );
+        break;
 
-        case WXK_NUMPAD6:      /*  cursor moved right */
-        case WXK_RIGHT:
-            DrawPanel->CalcScrolledPosition( Mouse.x + delta.x, Mouse.y,
-                                             &Mouse.x, &Mouse.y );
-            DrawPanel->MouseTo( Mouse );
-            break;
-        }
+    case WXK_NUMPAD6:      /*  cursor moved right */
+    case WXK_RIGHT:
+        Mouse.x += delta.x;
+        DrawPanel->MouseTo( Mouse );
+        break;
     }
 
     GetScreen()->m_Curseur = curpos;
@@ -315,4 +311,21 @@ void WinEDA_DisplayFrame::Process_Special_Functions( wxCommandEvent& event )
     }
 
     SetToolbars();
+}
+
+/**
+ * Display 3D frame of current footprint selection.
+ */
+void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
+{
+    if( m_Draw3DFrame )
+    {
+        DisplayInfo( this, _( "3D Frame already opened" ) );
+        return;
+    }
+
+    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ),
+                                            KICAD_DEFAULT_3D_DRAWFRAME_STYLE |
+                                            wxFRAME_FLOAT_ON_PARENT );
+    m_Draw3DFrame->Show( TRUE );
 }
