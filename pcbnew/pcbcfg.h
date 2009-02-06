@@ -13,8 +13,6 @@
 #define INSETUP TRUE
 
 
-static int Pcbdiv_grille;   /* memorisation temporaire */
-
 /* Liste des parametres */
 
 static PARAM_CFG_WXSTRING UserLibDirBufCfg
@@ -745,13 +743,6 @@ static PARAM_CFG_INT UserGrilleUnitCfg
     0, 1                            /* Min and max values*/
 );
 
-static PARAM_CFG_INT DivGrillePcbCfg
-(
-    wxT( "DivGrPc" ),               /* Keyword */
-    &Pcbdiv_grille,                 /* Parameter address */
-    1,                              /* Default value */
-    1, 10                           /* Min and max values*/
-);
 
 static PARAM_CFG_INT TimeOutCfg     //Duree entre Sauvegardes auto en secondes
 (
@@ -905,7 +896,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &UserGrilleXCfg,
     &UserGrilleYCfg,
     &UserGrilleUnitCfg,
-    &DivGrillePcbCfg,
     &TimeOutCfg,
     &DisplPolairCfg,
     &CursorShapeCfg,

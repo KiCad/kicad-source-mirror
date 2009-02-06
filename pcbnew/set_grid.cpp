@@ -31,10 +31,14 @@ void WinEDA_PcbGridFrame::AcceptPcbOptions(wxCommandEvent& event)
 	m_OptGridSizeY->GetValue().ToDouble( &dtmp );
     g_UserGrid.y = dtmp;
 
-	m_Parent->GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit,
-                                    ID_POPUP_GRID_USER );
+	m_Parent->GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
 
 	EndModal(1);
+    
+    // If the user grid is the current selection , ensure grid size value = new user grid value
+    int ii = m_Parent->m_SelGridBox->GetSelection();
+    if ( ii == m_Parent->m_SelGridBox->GetCount() - 1 )
+        m_Parent->GetScreen()->SetGrid( ID_POPUP_GRID_USER );
 
 	m_Parent->DrawPanel->Refresh( TRUE );
 }

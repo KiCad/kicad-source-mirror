@@ -543,14 +543,18 @@ void WinEDA_PcbFrame::SetToolbars()
 
         if( m_SelZoomBox )
         {
+            bool not_found = true;
             for( jj = 0; jj < (int)GetScreen()->m_ZoomList.GetCount(); jj++ )
             {
                 if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
                 {
                     m_SelZoomBox->SetSelection( jj + 1 );
+                    not_found = false;
                     break;
                 }
             }
+            if ( not_found )
+                m_SelZoomBox->SetSelection( -1 );
         }
 
         if( m_SelGridBox && GetScreen() )

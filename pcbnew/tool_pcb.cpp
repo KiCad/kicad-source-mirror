@@ -603,8 +603,6 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
             m_SelZoomBox->Append( msg );
         }
 
-        m_SelZoomBox->Append( wxT( "" ) );
-
         m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
         // after adding the buttons to the toolbar, must call Realize()

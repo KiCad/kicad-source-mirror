@@ -218,9 +218,10 @@ enum main_id {
      * than 15 entries in a context submenu may get too large to display
      * cleanly.  Add any additional popup zoom IDs above here or the
      * zoom event handler will not work properly.
+     * currently set to 18. This is a compromise for pcbnew. For schematic 15 is enought
      */
 	ID_POPUP_ZOOM_LEVEL_START,
-	ID_POPUP_ZOOM_LEVEL_END = ID_POPUP_ZOOM_LEVEL_START + 15,
+	ID_POPUP_ZOOM_LEVEL_END = ID_POPUP_ZOOM_LEVEL_START + 18,
 	ID_POPUP_ZOOM_END_RANGE,		 // last zoom id
 
 	ID_POPUP_GRID_PLUS,

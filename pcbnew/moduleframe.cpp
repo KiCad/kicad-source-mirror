@@ -195,7 +195,11 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
             GridSize.x = SizeX;
             GridSize.y = SizeY;
         }
+
     }
+
+    GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
+
     GetScreen()->SetGrid( GridSize );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -353,14 +357,18 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         unsigned jj;
         if( m_SelZoomBox )
         {
-            for( jj = 0; jj < (int)GetScreen()->m_ZoomList.GetCount(); jj++ )
+            bool not_found = true;
+            for( jj = 0; jj < GetScreen()->m_ZoomList.GetCount(); jj++ )
             {
                 if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
                 {
                     m_SelZoomBox->SetSelection( jj + 1 );
+                    not_found = false;
                     break;
                 }
             }
+            if ( not_found )
+                m_SelZoomBox->SetSelection( -1 );
         }
 
         if( m_SelGridBox && GetScreen() )
@@ -492,4 +500,26 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     SetToolbars();
     Affiche_Status_Box();    /* Affichage des coord curseur */
+}
+
+
+/*****************************************************************/
+void WinEDA_ModuleEditFrame::OnSelectGrid( wxCommandEvent& event )
+/******************************************************************/
+// Virtual function
+{
+    if( m_SelGridBox == NULL )
+        return;                        // Should not occurs
+    
+	GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
+
+    WinEDA_DrawFrame::OnSelectGrid( event );
+
+    // If the user grid is the current selection , ensure grid size value = new user grid value
+    int ii = m_SelGridBox->GetSelection();
+    if ( ii == (int)(m_SelGridBox->GetCount() - 1) )
+    {
+        GetScreen()->SetGrid( ID_POPUP_GRID_USER );
+        DrawPanel->Refresh();
+    }
 }

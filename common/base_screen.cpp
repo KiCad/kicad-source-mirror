@@ -310,6 +310,7 @@ void BASE_SCREEN::SetGrid( const wxSize& size )
 
     size_t i;
 
+    wxSize nearest_grid = m_GridList[0].m_Size;
     for( i = 0; i < m_GridList.GetCount(); i++ )
     {
         if( m_GridList[i].m_Size == size )
@@ -317,9 +318,13 @@ void BASE_SCREEN::SetGrid( const wxSize& size )
             m_Grid = m_GridList[i].m_Size;
             return;
         }
+        
+        // keep trace of the nearest grill size, if the exact size is not found
+        if ( size.x < m_GridList[i].m_Size.x )
+            nearest_grid = m_GridList[i].m_Size;
     }
 
-    m_Grid = m_GridList[0].m_Size;
+    m_Grid = nearest_grid;
 
     wxLogWarning( _( "Grid size( %d, %d ) not in grid list, falling back to " \
                      "grid size( %d, %d )." ),

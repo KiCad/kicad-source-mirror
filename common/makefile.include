@@ -2,7 +2,7 @@ EXTRACPPFLAGS += -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include
 
 COMMON = ../include/colors.h
 
-
+PCBINCL = -I../pcbnew -I../polygon
 
 OBJECTS= \
 	about_kicad.o\
@@ -39,12 +39,78 @@ OBJECTS= \
 	worksheet.o\
 	base_screen.o\
 	dcsvg.o\
-    zoom.o
+    zoom.o\
+    basepcbframe.o\
+    class_board.o\
+    class_board_connected_item.o\
+    class_cotation.o\
+    class_drc_item.o\
+    class_marker.o\
+    class_mire.o\
+    class_pad.o\
+    class_pad_draw_functions.o\
+    class_pcb_text.o\
+    class_zone.o\
+    class_zone_setting.o\
+    classpcb.o\
+    collectors.o\
+    sel_layer.o\
+    dialog_print_using_printer_base.o
+
 
 ifdef KICAD_PYTHON
 OBJECTS += pyhandler.o
 pyhandler.o: pyhandler.cpp $(COMMON) ../include/pyhandler.h
 endif
+
+
+basepcbframe.o: ../pcbnew/basepcbframe.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_board.o: ../pcbnew/class_board.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_cotation.o: ../pcbnew/class_cotation.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_drc_item.o: ../pcbnew/class_drc_item.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_marker.o: ../pcbnew/class_marker.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_mire.o: ../pcbnew/class_mire.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_pad.o: ../pcbnew/class_pad.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_pad_draw_functions.o: ../pcbnew/class_pad_draw_functions.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_pcb_text.o: ../pcbnew/class_pcb_text.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_zone.o: ../pcbnew/class_zone.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_zone_setting.o: ../pcbnew/class_zone_setting.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+classpcb.o: ../pcbnew/classpcb.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+collectors.o: ../pcbnew/collectors.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+sel_layer.o: ../pcbnew/sel_layer.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+dialog_print_using_printer_base.o: ../pcbnew/dialog_print_using_printer_base.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(DEPEND)
 

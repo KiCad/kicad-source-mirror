@@ -6,6 +6,24 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2009-Feb-6 Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+    Added  a forgotten contributor (Tim Hanson) to kicad contributor list.
+
+++pcbnew:
+    Zoom factors in 1.5 progression, and limited to 18 values
+    (near to to Wayne Stambaugh's changes: 15 values are not enought for pcbnew)
+    removed minor problems in zoom box selection (removed blank line).
+    Added user grid selection in modedit and refinements when user grid is selected.
+    TODO:
+        more refinements in user grid mode.
+        new grid implementation does not used floats when user grid is selected to calculate coordinates.
+        so it is unable to handle a metric grid. Todo: see what happened.
+        
+
+++eeschema:
+    Zoom factors in 1.5 progression, and limited to 15 values according to Wayne Stambaugh's changes.
+
 2009-Feb-05 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++All

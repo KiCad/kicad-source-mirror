@@ -916,6 +916,7 @@ public:
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
+    virtual void OnSelectGrid( wxCommandEvent& event );
 
     /* handlers for block commands */
     int          ReturnBlockCommand( int key );

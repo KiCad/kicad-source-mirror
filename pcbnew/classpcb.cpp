@@ -12,8 +12,16 @@
 #include "id.h"
 
 
-// mostly 1.5 factor, seems to work well.
-static const int PcbZoomList[] = { 5, 8, 12, 18, 27, 40, 60, 90, 140, 200, 300, 450, 700, 1000, 1500, 2250, 4500, 9000, 20480 };
+/* Default pcbnew zoom values.
+  * Limited to 18 values to keep a decent size to menus
+  * 15 it better but does not allow a sufficient number of values
+  * roughtly a 1.5 progression.
+  * The last 2 values is  handy when somebody uses a library import of a module
+  * (or foreign data) which has a bad coordinate 
+  * Also useful in Gerbview for this reason.
+ */
+static const int PcbZoomList[] = { 10, 15, 22, 30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
+                                   2000, 3500, 5000, 10000, 20000 };
 
 #define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
 
@@ -21,27 +29,26 @@ static const int PcbZoomList[] = { 5, 8, 12, 18, 27, 40, 60, 90, 140, 200, 300, 
 /* Default grid sizes for PCB editor screens. */
 static GRID_TYPE PcbGridList[] = {
     { ID_POPUP_GRID_LEVEL_1000, wxSize( 1000, 1000 ) },
-    { ID_POPUP_GRID_LEVEL_500, wxSize( 500, 500 ) },
-    { ID_POPUP_GRID_LEVEL_250, wxSize( 250, 250 ) },
-    { ID_POPUP_GRID_LEVEL_200, wxSize( 200, 200 ) },
-    { ID_POPUP_GRID_LEVEL_100, wxSize( 100, 100 ) },
-    { ID_POPUP_GRID_LEVEL_50, wxSize( 50, 50 ) },
-    { ID_POPUP_GRID_LEVEL_25, wxSize( 25, 25 ) },
-    { ID_POPUP_GRID_LEVEL_20, wxSize( 20, 20 ) },
-    { ID_POPUP_GRID_LEVEL_10, wxSize( 10, 10 ) },
-    { ID_POPUP_GRID_LEVEL_5, wxSize( 5, 5 ) },
-    { ID_POPUP_GRID_LEVEL_2, wxSize( 2, 2 ) },
-    { ID_POPUP_GRID_LEVEL_1, wxSize( 1, 1 ) }
+    { ID_POPUP_GRID_LEVEL_500,  wxSize( 500,  500 )  },
+    { ID_POPUP_GRID_LEVEL_250,  wxSize( 250,  250 )  },
+    { ID_POPUP_GRID_LEVEL_200,  wxSize( 200,  200 )  },
+    { ID_POPUP_GRID_LEVEL_100,  wxSize( 100,  100 )  },
+    { ID_POPUP_GRID_LEVEL_50,   wxSize( 50,   50 )   },
+    { ID_POPUP_GRID_LEVEL_25,   wxSize( 25,   25 )   },
+    { ID_POPUP_GRID_LEVEL_20,   wxSize( 20,   20 )   },
+    { ID_POPUP_GRID_LEVEL_10,   wxSize( 10,   10 )   },
+    { ID_POPUP_GRID_LEVEL_5,    wxSize( 5,    5 )    },
+    { ID_POPUP_GRID_LEVEL_2,    wxSize( 2,    2 )    },
+    { ID_POPUP_GRID_LEVEL_1,    wxSize( 1,    1 )    }
 };
 
 #define PCB_GRID_LIST_CNT ( sizeof( PcbGridList ) / sizeof( GRID_TYPE ) )
 
 
-/**************************************************/
-/* Class SCREEN: classe de gestion d'un affichage */
-/***************************************************/
-/* Constructeur de SCREEN */
-PCB_SCREEN::PCB_SCREEN( ) : BASE_SCREEN( TYPE_SCREEN )
+/*******************************************************************/
+/* Class PCB_SCREEN: class to handle parametres to display a board */
+/********************************************************************/
+PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( TYPE_SCREEN )
 {
     size_t i;
 
@@ -51,7 +58,7 @@ PCB_SCREEN::PCB_SCREEN( ) : BASE_SCREEN( TYPE_SCREEN )
     for( i = 0; i < PCB_GRID_LIST_CNT; i++ )
         AddGrid( PcbGridList[i] );
 
-    SetGrid( wxSize( 500, 500 ) );        /* pas de la grille en 1/10000 "*/
+    SetGrid( wxSize( 500, 500 ) );        /* Set the working grid size to a reasonnable value (in 1/10000 inch) */
     Init();
 }
 
@@ -62,21 +69,24 @@ PCB_SCREEN::~PCB_SCREEN()
 {
 }
 
+
 /*************************/
 void PCB_SCREEN::Init()
 /*************************/
 {
     InitDatas();
-    m_Active_Layer       = COPPER_LAYER_N;      /* ref couche active 0.. 31 */
-    m_Route_Layer_TOP    = CMP_N;               /* ref couches par defaut pour vias (Cu.. Cmp) */
+    m_Active_Layer       = COPPER_LAYER_N;      /* default active layer = bottom layer */
+    m_Route_Layer_TOP    = CMP_N;               /* default layers pair for vias (bottom to top) */
     m_Route_Layer_BOTTOM = COPPER_LAYER_N;
-    m_Zoom               = 128;                               /* valeur */
+    m_Zoom = 150;                               /* a default value for zoom */
 }
+
 
 int PCB_SCREEN::GetInternalUnits( void )
 {
     return PCB_INTERNAL_UNIT;
 }
+
 
 /* Return true if a microvia can be put on board
  * A microvia ia a small via restricted to 2 near neighbour layers
@@ -164,10 +174,10 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_CopperLayerCount = 2;                         // Default design is a double sided board
     m_ViaDrill = 250;                               // defualt via drill (for the entire board)
     m_ViaDrillCustomValue = 250;                    // via drill for vias which must have a defined drill value
-    m_CurrentViaSize    = 450;                      // Current via size
-    m_CurrentViaType    = VIA_THROUGH;              // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
-    m_CurrentTrackWidth = 170;                      // current track width
-    m_UseConnectedTrackWidth = false;				// if true, when creating a new track starting on an existing track, use this track width
+    m_CurrentViaSize         = 450;                 // Current via size
+    m_CurrentViaType         = VIA_THROUGH;         // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
+    m_CurrentTrackWidth      = 170;                 // current track width
+    m_UseConnectedTrackWidth = false;               // if true, when creating a new track starting on an existing track, use this track width
     m_MicroViaDrill = 50;                           // micro via drill (for the entire board)
     m_CurrentMicroViaSize = 150;                    // Current micro via size
     m_MicroViasAllowed    = false;                  // true to allow micro vias
@@ -196,7 +206,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_ViaColor[VIA_BLIND_BURIED] = BROWN;
     m_ViaColor[VIA_THROUGH] = WHITE;
 
-    m_ModuleTextCMPColor    = LIGHTGRAY;    // Text module color for modules on the COMPONENT layer
+    m_ModuleTextCMPColor = LIGHTGRAY;       // Text module color for modules on the COMPONENT layer
     m_ModuleTextCUColor  = MAGENTA;         // Text module color for modules on the COPPER layer
     m_ModuleTextNOVColor = DARKGRAY;        // Text module color for "invisible" texts (must be BLACK if really not displayed)
     m_AnchorColor   = BLUE;                 // Anchor color for modules and texts

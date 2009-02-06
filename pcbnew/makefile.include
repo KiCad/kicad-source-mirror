@@ -21,7 +21,7 @@ ZONE_FILES = zones_by_polygon.o zones_test_and_combine_areas.o\
 
 SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o specctra_import.o
 
-OBJECTS=	$(TARGET).o classpcb.o\
+OBJECTS=	$(TARGET).o\
 		$(ZONE_FILES)\
 		$(SPECCTRA_TOOLS)\
 		print_board_functions.o\
@@ -36,13 +36,11 @@ OBJECTS=	$(TARGET).o classpcb.o\
         dialog_SVG_print.o\
         dialog_SVG_print_base.o\
         dialog_print_using_printer.o\
-        dialog_print_using_printer_base.o\
 		onrightclick.o\
 		onleftclick.o\
 		modedit_onclick.o\
 		cross-probing.o\
 		via_edit.o\
-		class_marker.o\
 		menubarpcb.o \
 		menubarmodedit.o \
 		tool_onrightclick.o\
@@ -52,21 +50,12 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		pcbframe.o \
 		class_drawsegment.o \
 		class_track.o \
-		class_mire.o\
 		class_cotation.o\
-		class_pad.o \
-        class_pad_draw_functions.o\
 		class_equipot.o \
 		class_module.o \
 		class_edge_mod.o \
 		class_text_mod.o\
-		class_pcb_text.o\
 		class_board_item.o\
-        class_board_connected_item.o\
-		class_drc_item.o\
-		class_board.o\
-		class_zone.o\
-        class_zone_setting.o\
 		track.o \
 		set_color.o \
 		set_grid.o \
@@ -111,7 +100,6 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		gendrill.o\
 		gen_holes_and_tools_lists_for_drill.o\
 		gen_drill_report_files.o\
-		sel_layer.o \
 		cotation.o\
 		automove.o\
 		tr_modif.o \
@@ -131,14 +119,12 @@ OBJECTS=	$(TARGET).o classpcb.o\
 		tool_modedit.o\
 		moduleframe.o\
 		find.o\
-		basepcbframe.o\
 		modeditoptions.o\
 		gen_modules_placefile.o\
 		modedit.o\
 		export_gencad.o\
 		hotkeys.o \
-        collectors.o\
-		gpcb_exchange.o
+ 		gpcb_exchange.o
 
 
 setpage.o: ../share/setpage.cpp
@@ -165,15 +151,7 @@ export_gencad.o: export_gencad.cpp
 
 print_board_functions.o: print_board_functions.cpp
 
-classpcb.o: classpcb.cpp
-
 class_track.o: class_track.cpp class_track.h
-
-class_mire.o: class_mire.cpp class_mire.h
-
-class_cotation.o: class_cotation.cpp class_cotation.h
-
-class_pad.o: class_pad.cpp
 
 class_equipot.o: class_equipot.cpp
 
@@ -182,8 +160,6 @@ class_module.o: class_module.cpp
 class_edge_mod.o: class_edge_mod.cpp
 
 class_text_mod.o: class_text_mod.cpp
-
-class_pcb_text.o: class_pcb_text.cpp class_pcb_text.h
 
 pcbnew.o: pcbnew.cpp pcbnew.h pcbplot.h drag.h \
 				autorout.h ../include/eda_dde.h
@@ -315,4 +291,3 @@ dragsegm.o: dragsegm.cpp drag.h
 
 router.o: router.cpp
 
-collectors.o: collectors.cpp collectors.h

@@ -9,30 +9,20 @@ EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing\
 
 OBJECTS= \
 		$(TARGET).o\
-		classpcb.o\
-		class_zone.o\
-		class_zone_setting.o\
 		select_layers_to_pcb.o\
-		sel_layer.o\
 		lay2plot.o\
-		dialog_print_using_printer_base.o \
 		dialog_print_using_printer.o \
 		edit.o \
 		setpage.o \
 		tool_gerber.o \
 		gerberframe.o\
 		onrightclick.o\
-		class_board.o\
 		class_board_item.o\
 		class_drawsegment.o\
 		class_track.o \
-		class_drc_item.o \
-		class_board_connected_item.o\
 		set_color.o \
 		gerbview_config.o \
-		class_marker.o \
 		tracepcb.o \
-		class_pcb_text.o\
 		trpiste.o \
 		reglage.o \
 		options.o \
@@ -49,9 +39,7 @@ OBJECTS= \
 		files.o\
 		block.o\
 		controle.o\
-		basepcbframe.o\
-		export_to_pcbnew.o\
-		collectors.o
+		export_to_pcbnew.o
 
 setpage.o: ../share/setpage.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
@@ -59,49 +47,13 @@ setpage.o: ../share/setpage.cpp
 drawframe.o: ../share/drawframe.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
 
-class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
 class_board_item.o: ../pcbnew/class_board_item.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-class_marker.o: ../pcbnew/class_marker.cpp ../pcbnew/class_marker.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-class_zone.o: ../pcbnew/class_zone.cpp ../pcbnew/class_zone.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-class_zone_setting.o: ../pcbnew/class_zone_setting.cpp ../pcbnew/class_zone_setting.h
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_drawsegment.o: ../pcbnew/class_drawsegment.cpp ../pcbnew/class_drawsegment.h $(DEPEND)
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
-class_drc_item.o: ../pcbnew/class_drc_item.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-sel_layer.o: ../pcbnew/sel_layer.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-dialog_print_using_printer_base.o: ../pcbnew/dialog_print_using_printer_base.cpp ../pcbnew/dialog_print_using_printer_base.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
 dialog_print_using_printer.o: ../pcbnew/dialog_print_using_printer.cpp ../pcbnew/dialog_print_using_printer_base.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-classpcb.o: ../pcbnew/classpcb.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-class_pcb_text.o: ../pcbnew/class_pcb_text.cpp ../pcbnew/class_pcb_text.h
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-class_board.o: ../pcbnew/class_board.cpp $(DEPEND)
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-basepcbframe.o: ../pcbnew/basepcbframe.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-collectors.o: ../pcbnew/collectors.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_track.o: ../pcbnew/class_track.cpp

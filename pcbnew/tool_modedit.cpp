@@ -286,11 +286,17 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
         m_SelZoomBox->Append( msg );
         for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
         {
-            msg.Printf( _( "Zoom %d" ), GetScreen()->m_ZoomList[i] );
+            msg = _( "Zoom " );
+            if ( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
+                msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
+            else
+            {
+                wxString value;
+                value.Printf(wxT("%.1f"),(float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+                msg += value;
+            }
             m_SelZoomBox->Append( msg );
         }
-
-        m_SelZoomBox->Append( wxT( "" ) );
 
         m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
