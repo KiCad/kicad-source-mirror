@@ -1060,7 +1060,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             PATH*   cutout = 0;
 
             // handle the cutouts
-            // http://www.freerouting.net/fen/viewtopic.php?f=6&t=19
             for( ++ndx; ndx<count; ++ndx )
             {
                 if( item->m_Poly->corner[ndx-1].end_contour )
@@ -1068,8 +1067,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
                     window = new WINDOW( plane );
                     plane->AddWindow( window );
 
-                    cutout = new PATH( window, T_path );
-              //    cutout = new PATH( window, T_polygon );
+                    cutout = new PATH( window, T_polygon );
                     window->SetShape( cutout );
 
                     cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];

@@ -1022,6 +1022,8 @@ public:
             const char* quote = out->GetQuoteChar( name.c_str() );
             out->Print( 0, " %s%s%s", quote, name.c_str(), quote );
         }
+        else
+            out->Print( 0, " \"\"" );   // the zone with no name or net_code == 0
 
         if( sequence_number != -1 )
             out->Print( 0, " (sequence_number %d)", sequence_number );
