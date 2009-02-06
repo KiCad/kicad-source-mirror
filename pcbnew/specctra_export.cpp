@@ -1036,19 +1036,51 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
             pcb->structure->planes.push_back( plane );
 
-            PATH*           polygon = new PATH( plane, T_polygon );
-            plane->SetShape( polygon );
+            PATH*           mainPolygon = new PATH( plane, T_polygon );
+            plane->SetShape( mainPolygon );
 
             plane->name = CONV_TO_UTF8( item->m_Netname );
 
-            polygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+            mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
             int count = item->m_Poly->corner.size();
-            for( int j=0; j<count; ++j )
+            int ndx = 0;  // used in 2 for() loops below
+            for( ; ndx<count; ++ndx )
             {
-                wxPoint   point( item->m_Poly->corner[j].x,
-                                 item->m_Poly->corner[j].y );
-                polygon->AppendPoint( mapPt(point) );
+                wxPoint   point( item->m_Poly->corner[ndx].x,
+                                 item->m_Poly->corner[ndx].y );
+                mainPolygon->AppendPoint( mapPt(point) );
+
+                // this was the end of the main polygon
+                if( item->m_Poly->corner[ndx].end_contour )
+                    break;
+            }
+
+            WINDOW* window = 0;
+            PATH*   cutout = 0;
+
+            // handle the cutouts
+            // http://www.freerouting.net/fen/viewtopic.php?f=6&t=19
+            for( ++ndx; ndx<count; ++ndx )
+            {
+                if( item->m_Poly->corner[ndx-1].end_contour )
+                {
+                    window = new WINDOW( plane );
+                    plane->AddWindow( window );
+
+                    cutout = new PATH( window, T_path );
+              //    cutout = new PATH( window, T_polygon );
+                    window->SetShape( cutout );
+
+                    cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+                }
+
+                wxASSERT( window );
+                wxASSERT( cutout );
+
+                wxPoint point(item->m_Poly->corner[ndx].x,
+                              item->m_Poly->corner[ndx].y );
+                cutout->AppendPoint( mapPt(point) );
             }
         }
     }

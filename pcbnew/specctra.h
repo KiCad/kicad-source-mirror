@@ -1005,6 +1005,12 @@ public:
         }
     }
 
+    void AddWindow( WINDOW* aWindow )
+    {
+        aWindow->SetParent( this );
+        windows.push_back( aWindow );
+    }
+
     void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         const char* newline = "\n";
@@ -1047,9 +1053,11 @@ public:
 
             for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
                 i->Format( out, nestLevel+1 );
-        }
 
-        out->Print( 0, ")\n" );
+            out->Print( nestLevel, ")\n" );
+        }
+        else
+            out->Print( 0, ")\n" );
     }
 };
 typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
