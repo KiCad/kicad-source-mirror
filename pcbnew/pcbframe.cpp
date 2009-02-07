@@ -17,11 +17,14 @@
 #include "kbool/include/kbool/booleng.h"
 
 // Keys used in read/write config
-#define PCB_CURR_GRID_X wxT( "PcbCurrGrid_X" )
-#define PCB_CURR_GRID_Y wxT( "PcbCurrGrid_Y" )
+#define PCB_CURR_GRID wxT( "PcbCurrGrid" )
 #define PCB_MAGNETIC_PADS_OPT wxT( "PcbMagPadOpt" )
 #define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
 #define SHOW_MICROWAVE_TOOLS wxT( "ShowMicrowaveTools" )
+
+#define PCB_USER_GRID_X wxT( "PcbUserGrid_X" )
+#define PCB_USER_GRID_Y wxT( "PcbUserGrid_Y" )
+#define PCB_USER_GRID_UNIT wxT( "PcbUserGrid_Unit" )
 
 /*******************************/
 /* class WinEDA_PcbFrame */
@@ -238,21 +241,30 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    wxRealPoint GridSize( 500, 500 );
+    // Read some parameters from config
+    g_UserGrid.x = g_UserGrid.y = 0.5;  // Default user grid size
+    g_UserGrid_Unit = 1;                // Default user grid unit (0 = inch, 1 = mm)
+
+    wxRealPoint GridSize( 500, 500 );  // Default current grid size
 
     if( config )
     {
         double SizeX, SizeY;
 
-        if( config->Read( PCB_CURR_GRID_X, &SizeX )
-           && config->Read( PCB_CURR_GRID_Y, &SizeY ) )
+        if( config->Read( PCB_USER_GRID_X, &SizeX )
+           && config->Read( PCB_USER_GRID_Y, &SizeY ) )
         {
-            GridSize.x = SizeX;
-            GridSize.y = SizeY;
+            g_UserGrid.x = SizeX;
+            g_UserGrid.y = SizeY;
         }
+        config->Read( PCB_USER_GRID_UNIT, &g_UserGrid_Unit );
+
         config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
         config->Read( PCB_MAGNETIC_TRACKS_OPT,  &g_MagneticTrackOption );
     }
+
+    GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
+
     GetScreen()->SetGrid( GridSize );
 
     if( DrawPanel )
@@ -263,6 +275,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     ReCreateVToolbar();
     if( config )
     {
+        long gridselection = 1;
+        config->Read( PCB_CURR_GRID, &gridselection );
+        GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + gridselection  );
         long display_microwave_tools = 0;
         config->Read( SHOW_MICROWAVE_TOOLS, &display_microwave_tools );
         if ( display_microwave_tools )
@@ -328,7 +343,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    while( screen ) // suppression flag modify pour eviter d'autres message
+    while( screen ) // Remove modify flag, to avoi others messages
     {
         screen->ClrModify();
         screen = screen->Next();
@@ -342,8 +357,11 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
     if( config )
     {
         wxRealPoint GridSize = GetScreen()->GetGrid();
-        config->Write( PCB_CURR_GRID_X, GridSize.x );
-        config->Write( PCB_CURR_GRID_Y, GridSize.y );
+
+        config->Write( PCB_USER_GRID_X, g_UserGrid.x );
+        config->Write( PCB_USER_GRID_Y, g_UserGrid.y );
+        config->Write( PCB_USER_GRID_UNIT, g_UserGrid_Unit );
+        config->Write( PCB_CURR_GRID, m_SelGridBox->GetSelection() );
         config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
         config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
         config->Write( SHOW_MICROWAVE_TOOLS, (long) m_AuxVToolBar ? 1 : 0 );

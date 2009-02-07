@@ -12,8 +12,7 @@ email address.
     This is mandatory in Pcbnew to handle metric user grids without error
     (was unusable before, using integer grid size).
     A lot of footprints uses not metric grid.
-    TODO:
-        more refinements for user grid (mainly in read/wrire config).
+    refinements for user grid (mainly in read/write config).
 
 
 2009-Feb-06 UPDATE Dick Hollenbeck <dick@softplc.com>

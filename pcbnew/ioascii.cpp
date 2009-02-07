@@ -362,38 +362,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "UserGridSize" ) == 0 )
-        {
-            wxString msg;
-            if( data )
-            {
-                msg = CONV_FROM_UTF8( data );
-                msg.ToDouble( &g_UserGrid.x );
-            }
-            else
-                continue;
-
-            data = strtok( NULL, " =\n\r" );
-            if( data )
-            {
-                msg = CONV_FROM_UTF8( data );
-                msg.ToDouble( &g_UserGrid.y );
-            }
-            else
-                g_UserGrid.y = g_UserGrid.x;
-
-            data = strtok( NULL, " =\n\r" );
-            if( data )
-            {
-                if( stricmp( data, "mm" ) == 0 )
-                    g_UserGrid_Unit = MILLIMETRE;
-                else
-                    g_UserGrid_Unit = INCHES;
-                GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit,
-                                      ID_POPUP_GRID_USER );
-            }
-            continue;
-        }
 
         if( stricmp( Line, "DrawSegmWidth" ) == 0 )
         {
@@ -510,10 +478,6 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
     fprintf( aFile, "$SETUP\n" );
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-    fprintf( aFile, text );
-
-    sprintf( text, "UserGridSize %lf %lf %s\n", g_UserGrid.x, g_UserGrid.y,
-             ( g_UserGrid_Unit == 0 ) ? "INCH" : "mm" );
     fprintf( aFile, text );
 
     fprintf( aFile, "ZoneGridSize %d\n", g_GridRoutingSize );

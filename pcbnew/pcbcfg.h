@@ -719,31 +719,6 @@ static PARAM_CFG_INT WTraitSerigraphiePlotCfg
     1, 10000                    /* Min and max values*/
 );
 
-static PARAM_CFG_DOUBLE UserGrilleXCfg
-(
-    wxT( "UserGrX" ),           /* Keyword */
-    &g_UserGrid.x,              /* Parameter address */
-    0.01,                       /* Default value */
-    0.0001, 100.0               /* Min and max values(inches)*/
-);
-
-static PARAM_CFG_DOUBLE UserGrilleYCfg
-(
-    wxT( "UserGrY" ),           /* Keyword */
-    &g_UserGrid.y,              /* Parameter address */
-    0.01,                       /* Default value */
-    0.0001, 100.0               /* Min and max values (inches)*/
-);
-
-static PARAM_CFG_INT UserGrilleUnitCfg
-(
-    wxT( "UserGrU" ),               /* Keyword */
-    &g_UserGrid_Unit,               /* Parameter address */
-    1,                              /* Default value */
-    0, 1                            /* Min and max values*/
-);
-
-
 static PARAM_CFG_INT TimeOutCfg     //Duree entre Sauvegardes auto en secondes
 (
     INSETUP,
@@ -803,6 +778,9 @@ static PARAM_CFG_BOOL TwoSegmentTrackBuildCfg
     TRUE                            /* Default value */
 );
 
+
+/* parameters in this list will be saved on request (when saving config).
+*/
 PARAM_CFG_BASE* ParamCfgList[] =
 {
     &UserLibDirBufCfg,
@@ -893,9 +871,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &TexteSegmLargeurCfg,
     &ModuleSegmWidthCfg,
     &WTraitSerigraphiePlotCfg,
-    &UserGrilleXCfg,
-    &UserGrilleYCfg,
-    &UserGrilleUnitCfg,
     &TimeOutCfg,
     &DisplPolairCfg,
     &CursorShapeCfg,

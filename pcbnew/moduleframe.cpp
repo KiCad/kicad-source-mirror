@@ -19,8 +19,7 @@
 #include "3d_viewer.h"
 
 // Keys used in read/write config
-#define MODEDIT_CURR_GRID_X wxT( "ModEditCurrGrid_X" )
-#define MODEDIT_CURR_GRID_Y wxT( "ModEditCurrGrid_Y" )
+#define MODEDIT_CURR_GRID wxT( "ModEditCurrGrid" )
 
 /********************************/
 /* class WinEDA_ModuleEditFrame */
@@ -188,22 +187,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     GetScreen()->SetCurItem( NULL );
     GetSettings();
 
-    wxRealPoint GridSize( 500, 500 );
-    if( config )
-    {
-        double SizeX, SizeY;
-        if( config->Read( MODEDIT_CURR_GRID_X, &SizeX )
-            && config->Read( MODEDIT_CURR_GRID_Y, &SizeY ) )
-        {
-            GridSize.x = SizeX;
-            GridSize.y = SizeY;
-        }
-
-    }
-
     GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
-
-    GetScreen()->SetGrid( GridSize );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateMenuBar();
@@ -211,6 +195,13 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
+    if( config )
+    {
+        long gridselection = 1;
+        config->Read( MODEDIT_CURR_GRID, &gridselection );
+        GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + gridselection  );
+    }
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
@@ -244,9 +235,7 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
     SaveSettings();
     if( config )
     {
-        wxRealPoint GridSize = GetScreen()->GetGrid();
-        config->Write( MODEDIT_CURR_GRID_X, GridSize.x );
-        config->Write( MODEDIT_CURR_GRID_Y, GridSize.y );
+        config->Write( MODEDIT_CURR_GRID, m_SelGridBox->GetSelection() );
     }
     Destroy();
 }

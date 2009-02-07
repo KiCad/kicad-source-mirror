@@ -631,10 +631,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                 msg.Printf( format.GetData(), value );
         }
         else
-        {
             msg = _( "User Grid" );
-        }
-
 
         m_SelGridBox->Append( msg );
     }
