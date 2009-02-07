@@ -19,6 +19,7 @@ email address.
 ================================================================================
 ++pcbnew
     added "cutout" from a ZONE_CONTAINER capability to the SPECCTRA export.
+    added "netless zone" support to SPECCTRA export.
 
 
 2009-Feb-6 Jean-Pierre Charras <jean-pierre.charras@inpg.fr>

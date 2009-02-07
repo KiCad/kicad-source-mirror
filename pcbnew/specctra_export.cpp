@@ -1026,6 +1026,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<zone containers become planes>--------------------------------
     {
+        int netlessZones = 0;
+
         static const KICAD_T  scanZONEs[] = { TYPE_ZONE_CONTAINER, EOT };
         items.Collect( aBoard, scanZONEs );
 
@@ -1040,6 +1042,24 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             plane->SetShape( mainPolygon );
 
             plane->name = CONV_TO_UTF8( item->m_Netname );
+
+            if( plane->name.size() == 0 )
+            {
+                char name[32];
+
+                // This is one of those no connection zones, netcode=0, and it has no name.
+                // Create a unique, bogus netname.
+                NET* no_net = new NET( pcb->network );
+
+                sprintf( name, "@:no_net_%d", netlessZones++ );
+                no_net->net_id = name;
+
+                // add the bogus net name to network->nets.
+                pcb->network->nets.push_back( no_net );
+
+                // use the bogus net name in the netless zone.
+                plane->name = no_net->net_id;
+            }
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
