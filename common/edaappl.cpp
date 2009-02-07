@@ -735,13 +735,9 @@ void WinEDA_App::SetLanguagePath( void )
         for( i = 0; i < m_searchPaths.GetCount(); i++ )
         {
             wxFileName fn( m_searchPaths[i], wxEmptyString );
+            
+            // Append path for Windows and unix kicad pack install
             fn.AppendDir( wxT( "share" ) );
-#ifndef __WXMSW__
-
-            /* Up on level relative to binary path with "share/kicad" appended
-             * for all other platforms. */
-            fn.AppendDir( wxT( "kicad" ) );
-#endif
             fn.AppendDir( wxT( "internat" ) );
             if( fn.DirExists() )
             {
@@ -749,6 +745,18 @@ void WinEDA_App::SetLanguagePath( void )
                            fn.GetPath() );
                 wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
             }
+            fn.RemoveLastDir();
+            
+             // Append path for unix standard install
+            fn.AppendDir( wxT( "kicad" ) );
+            fn.AppendDir( wxT( "internat" ) );
+            if( fn.DirExists() )
+            {
+                wxLogDebug( wxT( "Adding locale lookup path: " ) +
+                           fn.GetPath() );
+                wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
+            }
+            
         }
     }
 }
@@ -854,20 +862,32 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
 wxString WinEDA_App::GetHelpFile( void )
 {
     wxString      fn;
-    wxArrayString subdirs;
+    wxArrayString subdirs, altsubdirs;
 
     /* FIXME: This is not the ideal way to handle this.  Unfortunely, the
      *        CMake install paths seem to be a moving target so this crude
      *        hack solve the problem of install path differences between
      *        Windows and non-Windows platforms. */
-#ifndef __WXMSW__
+    
+    // Partially fixed, but must be enhanced
+
+    // Create subdir tree for "standard" linux distributions, when kicad comes from a distribution
+    // files are in /usr/share/doc/kicad/help
+    // and binaries in /usr/bin or /usr/local/bin
     subdirs.Add( wxT( "share" ) );
-#endif
     subdirs.Add( _T( "doc" ) );
-#ifndef __WXMSW__
     subdirs.Add( wxT( "kicad" ) );
-#endif
     subdirs.Add( _T( "help" ) );
+    
+    // Create subdir tree for linux and Windows kicad pack
+    // Note  the pack form under linux is also useful if an user want to install kicad to a server.
+    // because there is only one path to mount or export (something like /usr/local/kicad).
+    // files are in <install dir>/kicad/doc/help
+    // (often /usr/local/kicad/kicad/doc/help)
+    // <install dir>/kicad/ is retrievered from m_BinDir
+    altsubdirs.Add( _T( "doc" ) );
+    altsubdirs.Add( _T( "help" ) );
+   
 
     /* Search for a help file.
      *  we *must* find a help file.
@@ -879,22 +899,33 @@ wxString WinEDA_App::GetHelpFile( void )
 
     // Step 1 : Try to find help file in help/<canonical name>
     subdirs.Add( m_Locale->GetCanonicalName() );
-    fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
+    altsubdirs.Add( m_Locale->GetCanonicalName() );
+    fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
+    if( !fn  )
+        fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
 
     // Step 2 : if not found Try to find help file in help/<short name>
     if( !fn  )
     {
         subdirs.RemoveAt( subdirs.GetCount() - 1 );
+        altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
         subdirs.Add( m_Locale->GetName().BeforeLast( '_' ) ); // GetName( ) does not return always the short name
-        fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
+        altsubdirs.Add( m_Locale->GetName().BeforeLast( '_' ) ); // GetName( ) does not return always the short name
+        fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
+        if ( ! fn )
+            fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
     }
 
     // Step 3 : if not found Try to find help file in help/en
     if( !fn )
     {
         subdirs.RemoveAt( subdirs.GetCount() - 1 );
+        altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
         subdirs.Add( _T( "en" ) );
-        fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
+        altsubdirs.Add( _T( "en" ) );
+        fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
+         if ( ! fn )
+             fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
     }
 
     return fn;
@@ -918,7 +949,7 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
 
 /**
  * Run init scripts
- * @return  the defualt OnRun() value (exit codes not used in kicad, so value has no special mening)
+ * @return  the default OnRun() value (exit codes not used in kicad, so value has no special mening)
  */
 /**********************/
 int WinEDA_App::OnRun()

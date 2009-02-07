@@ -361,7 +361,10 @@ wxString FullLibName,ShortLibName, Mask;
 		wxEmptyString, Mask,
 		wxFD_DEFAULT_STYLE | wxFD_MULTIPLE);
 
-	FilesDialog.ShowModal();
+	int diag = FilesDialog.ShowModal();
+    if ( diag != wxID_OK )
+        return;
+
 	wxArrayString Filenames;
 	FilesDialog.GetPaths(Filenames);
 
@@ -372,7 +375,7 @@ wxString FullLibName,ShortLibName, Mask;
 		if ( ShortLibName.IsEmpty() )	//Just in case...
 			continue;
 		//Add or insert new library name
-		if (FindLibrary(ShortLibName) == NULL)
+		if ( g_LibName_List.Index(ShortLibName) == wxNOT_FOUND)
 		{
 			m_LibListChanged = TRUE;
 			g_LibName_List.Insert(ShortLibName, ii);
