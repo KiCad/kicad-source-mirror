@@ -82,7 +82,7 @@ void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /* Default EESchema zoom values. Limited to 15 values to keep a decent size to menus */
 static int SchematicZoomList[] =
 {
-    10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280 
+    10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
 };
 
 #define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / \
@@ -91,12 +91,12 @@ static int SchematicZoomList[] =
 
 /* Default grid sizes for the schematic editor. */
 static GRID_TYPE SchematicGridList[] = {
-    { ID_POPUP_GRID_LEVEL_50, wxSize( 50, 50 ) },
-    { ID_POPUP_GRID_LEVEL_25, wxSize( 25, 25 ) },
-    { ID_POPUP_GRID_LEVEL_10, wxSize( 10, 10 ) },
-    { ID_POPUP_GRID_LEVEL_5, wxSize( 5, 5 ) },
-    { ID_POPUP_GRID_LEVEL_2, wxSize( 2, 2 ) },
-    { ID_POPUP_GRID_LEVEL_1, wxSize( 1, 1 ) }
+    { ID_POPUP_GRID_LEVEL_50, wxRealPoint( 50, 50 ) },
+    { ID_POPUP_GRID_LEVEL_25, wxRealPoint( 25, 25 ) },
+    { ID_POPUP_GRID_LEVEL_10, wxRealPoint( 10, 10 ) },
+    { ID_POPUP_GRID_LEVEL_5, wxRealPoint( 5, 5 ) },
+    { ID_POPUP_GRID_LEVEL_2, wxRealPoint( 2, 2 ) },
+    { ID_POPUP_GRID_LEVEL_1, wxRealPoint( 1, 1 ) }
 };
 
 #define SCHEMATIC_GRID_LIST_CNT ( sizeof( SchematicGridList ) / \
@@ -117,7 +117,7 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
     for( i = 0; i < SCHEMATIC_GRID_LIST_CNT; i++ )
         AddGrid( SchematicGridList[i] );
 
-    SetGrid( wxSize( 50, 50 ) );        /* usual grid size */
+    SetGrid( wxRealPoint( 50, 50 ) );        /* usual grid size */
     m_UndoRedoCountMax = 10;            // Undo/redo levels count. 10 is a reasonnable value
     m_RefCount = 0;
     m_Center = false;                   // Suitable for schematic only. for libedit and viewlib, must be set to true

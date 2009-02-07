@@ -482,7 +482,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
 void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /*****************************************************************/
 {
-    wxSize  delta;
+    wxRealPoint delta;
     wxPoint curpos, oldpos;
     int     hotkey = 0;
 
@@ -581,8 +581,11 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         wxPoint on_grid = curpos;
 
         PutOnGrid( &on_grid );
+        wxSize grid;
+        grid.x = (int) GetScreen()->GetGrid().x;
+        grid.y = (int) GetScreen()->GetGrid().y;
         if( Magnetize(m_Pcb, (WinEDA_PcbFrame *) this, m_ID_current_state,
-                        GetScreen()->GetGrid(), on_grid, &curpos) )
+                        grid, on_grid, &curpos) )
         {
             GetScreen()->m_Curseur = curpos;
         }

@@ -47,14 +47,14 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 * @param coord = coordinate to adjust
 */
 {
-    wxSize grid_size = GetBaseScreen()->GetGrid();
+    wxRealPoint grid_size = GetBaseScreen()->GetGrid();
 
     if( !GetBaseScreen()->m_UserGridIsON )
     {
-        coord->x = ( (int) round( (double) coord->x /
-                                  (double) grid_size.x ) ) * grid_size.x;
-        coord->y = ( (int) round( (double) coord->y /
-                                  (double) grid_size.y ) ) * grid_size.y;
+        coord->x = ( (int) round( coord->x /
+                                  grid_size.x ) ) * grid_size.x;
+        coord->y = ( (int) round( coord->y /
+                                  grid_size.y ) ) * grid_size.y;
     }
 }
 
@@ -193,7 +193,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     size_t      i;
     int         maxZoomIds;
     int         zoom;
-    wxSize      grid;
+    wxRealPoint      grid;
     wxString    msg;
     GRID_TYPE   tmp;
     wxMenu*     gridMenu;

@@ -305,17 +305,15 @@ void WinEDA_GerberFrame::SetToolbars()
 int WinEDA_GerberFrame::BestZoom()
 /*************************************/
 {
-    int    ii, jj, gridX, gridY;
-    int    bestzoom;
+    double    ii, jj;
+    double    bestzoom;
     wxSize size;
 
     GetBoard()->ComputeBoundaryBox();
-    gridX    = GetScreen()->GetGrid().GetWidth() / 2;
-    gridY    = GetScreen()->GetGrid().GetHeight() / 2;
     size     = DrawPanel->GetClientSize();
-    ii       = ( GetBoard()->m_BoundaryBox.GetWidth() + gridX ) / size.x;
-    jj       = ( GetBoard()->m_BoundaryBox.GetHeight() + gridY ) / size.y;
-    bestzoom = MAX( ii, jj ) + 1;
+    ii       = GetBoard()->m_BoundaryBox.GetWidth() / size.x;
+    jj       = GetBoard()->m_BoundaryBox.GetHeight() / size.y;
+    bestzoom = MAX( ii, jj );
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
     return bestzoom * GetScreen()->m_ZoomScalar;
 }

@@ -16,6 +16,13 @@
 #include "3d_viewer.h"
 #include "kbool/include/kbool/booleng.h"
 
+// Keys used in read/write config
+#define PCB_CURR_GRID_X wxT( "PcbCurrGrid_X" )
+#define PCB_CURR_GRID_Y wxT( "PcbCurrGrid_Y" )
+#define PCB_MAGNETIC_PADS_OPT wxT( "PcbMagPadOpt" )
+#define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
+#define SHOW_MICROWAVE_TOOLS wxT( "ShowMicrowaveTools" )
+
 /*******************************/
 /* class WinEDA_PcbFrame */
 /*******************************/
@@ -231,20 +238,20 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    wxSize GridSize( 500, 500 );
+    wxRealPoint GridSize( 500, 500 );
 
     if( config )
     {
-        long SizeX, SizeY;
+        double SizeX, SizeY;
 
-        if( config->Read( wxT( "PcbEditGrid_X" ), &SizeX )
-           && config->Read( wxT( "PcbEditGrid_Y" ), &SizeY ) )
+        if( config->Read( PCB_CURR_GRID_X, &SizeX )
+           && config->Read( PCB_CURR_GRID_Y, &SizeY ) )
         {
             GridSize.x = SizeX;
             GridSize.y = SizeY;
         }
-        config->Read( wxT( "PcbMagPadOpt" ), &g_MagneticPadOption );
-        config->Read( wxT( "PcbMagTrackOpt" ),  &g_MagneticTrackOption );
+        config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
+        config->Read( PCB_MAGNETIC_TRACKS_OPT,  &g_MagneticTrackOption );
     }
     GetScreen()->SetGrid( GridSize );
 
@@ -257,7 +264,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     if( config )
     {
         long display_microwave_tools = 0;
-        config->Read( wxT( "ShowMicrowaveTools" ), &display_microwave_tools );
+        config->Read( SHOW_MICROWAVE_TOOLS, &display_microwave_tools );
         if ( display_microwave_tools )
             ReCreateAuxVToolbar();
     }
@@ -334,12 +341,12 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
     SaveSettings();
     if( config )
     {
-        wxSize GridSize = GetScreen()->GetGrid();
-        config->Write( wxT( "PcbEditGrid_X" ), (long) GridSize.x );
-        config->Write( wxT( "PcbEditGrid_Y" ), (long) GridSize.y );
-        config->Write( wxT( "PcbMagPadOpt" ), (long) g_MagneticPadOption );
-        config->Write( wxT( "PcbMagTrackOpt" ), (long) g_MagneticTrackOption );
-        config->Write( wxT( "ShowMicrowaveTools" ), (long) m_AuxVToolBar ? 1 : 0 );
+        wxRealPoint GridSize = GetScreen()->GetGrid();
+        config->Write( PCB_CURR_GRID_X, GridSize.x );
+        config->Write( PCB_CURR_GRID_Y, GridSize.y );
+        config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
+        config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
+        config->Write( SHOW_MICROWAVE_TOOLS, (long) m_AuxVToolBar ? 1 : 0 );
     }
     Destroy();
 }

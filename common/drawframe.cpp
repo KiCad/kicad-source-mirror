@@ -262,9 +262,9 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
     BASE_SCREEN* screen = GetBaseScreen();
 
     screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-    wxSize current_grid = screen->GetGrid();
+    wxRealPoint current_grid = screen->GetGrid();
     screen->SetGrid( event.GetSelection() + ID_POPUP_GRID_LEVEL_1000 );
-    wxSize selected_grid = screen->GetGrid();
+    wxRealPoint selected_grid = screen->GetGrid();
 
     if( selected_grid != current_grid )
         Recadre_Trace( FALSE );

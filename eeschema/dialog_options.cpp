@@ -93,7 +93,7 @@ WinEDA_SetOptionsFrame::WinEDA_SetOptionsFrame( WinEDA_DrawFrame* parent,
     /* Init options */
     if( screen )
     {
-        switch( screen->GetGrid().x )
+        switch( (int)screen->GetGrid().x )
         {
         case 50:
             m_SelGridSize->SetSelection( 0 );
@@ -395,7 +395,7 @@ void WinEDA_SetOptionsFrame::OnCancelClick( wxCommandEvent& event )
 void WinEDA_SetOptionsFrame::Accept( wxCommandEvent& event )
 /**************************************************************************/
 {
-    wxSize   grid;
+    wxRealPoint   grid;
     wxString msg;
 
     g_DrawMinimunLineWidth = m_DefaultDrawLineWidthCtrl->GetValue();
@@ -450,27 +450,27 @@ void WinEDA_SetOptionsFrame::Accept( wxCommandEvent& event )
         break;
 
     case 0:
-        grid = wxSize( 50, 50 );
+        grid = wxRealPoint( 50, 50 );
         break;
 
     case 1:
-        grid = wxSize( 25, 25 );
+        grid = wxRealPoint( 25, 25 );
         break;
 
     case 2:
-        grid = wxSize( 10, 10 );
+        grid = wxRealPoint( 10, 10 );
         break;
 
     case 3:
-        grid = wxSize( 5, 5 );
+        grid = wxRealPoint( 5, 5 );
         break;
 
     case 4:
-        grid = wxSize( 2, 2 );
+        grid = wxRealPoint( 2, 2 );
         break;
 
     case 5:
-        grid = wxSize( 1, 1 );
+        grid = wxRealPoint( 1, 1 );
         break;
     }
 

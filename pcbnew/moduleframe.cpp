@@ -18,6 +18,9 @@
 
 #include "3d_viewer.h"
 
+// Keys used in read/write config
+#define MODEDIT_CURR_GRID_X wxT( "ModEditCurrGrid_X" )
+#define MODEDIT_CURR_GRID_Y wxT( "ModEditCurrGrid_Y" )
 
 /********************************/
 /* class WinEDA_ModuleEditFrame */
@@ -185,12 +188,12 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     GetScreen()->SetCurItem( NULL );
     GetSettings();
 
-    wxSize GridSize( 500, 500 );
+    wxRealPoint GridSize( 500, 500 );
     if( config )
     {
-        long SizeX, SizeY;
-        if( config->Read( wxT( "ModEditGrid_X" ), &SizeX )
-            && config->Read( wxT( "ModEditGrid_Y" ), &SizeY ) )
+        double SizeX, SizeY;
+        if( config->Read( MODEDIT_CURR_GRID_X, &SizeX )
+            && config->Read( MODEDIT_CURR_GRID_Y, &SizeY ) )
         {
             GridSize.x = SizeX;
             GridSize.y = SizeY;
@@ -241,9 +244,9 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
     SaveSettings();
     if( config )
     {
-        wxSize GridSize = GetScreen()->GetGrid();
-        config->Write( wxT( "ModEditGrid_X" ), (long) GridSize.x );
-        config->Write( wxT( "ModEditGrid_Y" ), (long) GridSize.y );
+        wxRealPoint GridSize = GetScreen()->GetGrid();
+        config->Write( MODEDIT_CURR_GRID_X, GridSize.x );
+        config->Write( MODEDIT_CURR_GRID_Y, GridSize.y );
     }
     Destroy();
 }
@@ -407,7 +410,7 @@ void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
 
 void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 {
-    wxSize  delta;
+    wxRealPoint  delta;
     wxPoint curpos, oldpos;
     int     hotkey = 0;
 
@@ -510,7 +513,7 @@ void WinEDA_ModuleEditFrame::OnSelectGrid( wxCommandEvent& event )
 {
     if( m_SelGridBox == NULL )
         return;                        // Should not occurs
-    
+
 	GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
 
     WinEDA_DrawFrame::OnSelectGrid( event );

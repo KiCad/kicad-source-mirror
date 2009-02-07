@@ -77,7 +77,7 @@ class GRID_TYPE
 {
 public:
     int    m_Id;
-    wxSize m_Size;
+    wxRealPoint m_Size;
 };
 
 
@@ -145,7 +145,7 @@ private:
 
     /* Valeurs du pas de grille et du zoom */
 public:
-    wxSize     m_Grid;             /* Current grid. */
+    wxRealPoint     m_Grid;             /* Current grid. */
     GridArray  m_GridList;
     bool       m_UserGridIsON;
 
@@ -240,6 +240,8 @@ public:
     int    Scale( int coord );
     void   Scale( wxPoint& pt );
     void   Scale( wxSize& sz );
+    void   Scale( wxRealPoint& sz );
+
     int    Unscale( int coord );
     void   Unscale( wxPoint& pt );
     void   Unscale( wxSize& sz );
@@ -250,12 +252,12 @@ public:
     void   SetLastZoom();                   /* ajuste le coeff de zoom au max */
 
     //----<grid stuff>----------------------------------------------------------
-    wxSize GetGrid();                      /* retourne la grille */
-    void   SetGrid( const wxSize& size );
+    wxRealPoint GetGrid();                      /* retourne la grille */
+    void   SetGrid( const wxRealPoint& size );
     void   SetGrid( int );
     void   SetGridList( GridArray& sizelist );
     void   AddGrid( const GRID_TYPE& grid );
-    void   AddGrid( const wxSize& size, int id );
+    void   AddGrid( const wxRealPoint& size, int id );
     void   AddGrid( const wxRealPoint& size, int units, int id );
 
 

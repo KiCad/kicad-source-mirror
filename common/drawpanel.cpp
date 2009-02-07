@@ -175,7 +175,7 @@ void WinEDA_DrawPanel::SetZoom( int zoom )
 
 
 /************************************/
-wxSize WinEDA_DrawPanel::GetGrid()
+wxRealPoint WinEDA_DrawPanel::GetGrid()
 /************************************/
 {
     return GetScreen()->GetGrid();
@@ -685,11 +685,10 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     int          Color  = BLUE;
     BASE_SCREEN* screen = GetScreen();
     int          ii, jj, xg, yg, color;
-    wxSize       pas_grille_affichee;
+    wxRealPoint  pas_grille_affichee;
     bool         drawgrid = FALSE;
     wxSize       size;
     wxPoint      org;
-    double       pasx, pasy;
 
     color = g_GridColor;
 
@@ -702,41 +701,35 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
     pas_grille_affichee = screen->GetGrid();
 
-    ii = screen->Scale( pas_grille_affichee.x );
-    if( ii  < 5 )
+    double dgrid = screen->Scale( pas_grille_affichee.x );
+    if( dgrid  < 5 )
     {
         pas_grille_affichee.x *= 2;
-        ii *= 2;
+        dgrid *= 2;
     }
-    if( ii < 5 )
+    if( dgrid < 5 )
         drawgrid = FALSE; // The gris is small
 
-    ii = screen->Scale( pas_grille_affichee.y );
-    if( ii  < 5 )
+    dgrid = screen->Scale( pas_grille_affichee.y );
+    if( ii  < dgrid )
     {
         pas_grille_affichee.y *= 2;
-        ii *= 2;
+        dgrid *= 2;
     }
-    if( ii < 5 )
+    if( dgrid < 5 )
         drawgrid = FALSE; // The gris is small
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
-    wxLogDebug( _T( "View start: %d, %d,  scroll bar PPI: %d, %d" ),
-                org.x, org.y, ii, jj );
     org.x *= ii;
     org.y *= jj;
     screen->m_StartVisu = org;
-    wxLogDebug( _T( "Scroll bar drawing position: %d. %d" ), org.x, org.y );
     screen->Unscale( org );
 
     org += screen->m_DrawOrg;
 
     size = GetClientSize();
     screen->Unscale( size );
-
-    pasx = screen->m_Grid.x * m_Parent->m_InternalUnits;
-    pasy = screen->m_Grid.y * m_Parent->m_InternalUnits;
 
     if( drawgrid )
     {

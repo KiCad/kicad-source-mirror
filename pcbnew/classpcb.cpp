@@ -17,7 +17,7 @@
   * 15 it better but does not allow a sufficient number of values
   * roughtly a 1.5 progression.
   * The last 2 values is  handy when somebody uses a library import of a module
-  * (or foreign data) which has a bad coordinate 
+  * (or foreign data) which has a bad coordinate
   * Also useful in Gerbview for this reason.
  */
 static const int PcbZoomList[] = { 10, 15, 22, 30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
@@ -28,18 +28,18 @@ static const int PcbZoomList[] = { 10, 15, 22, 30, 45, 70, 100, 150, 220, 350, 5
 
 /* Default grid sizes for PCB editor screens. */
 static GRID_TYPE PcbGridList[] = {
-    { ID_POPUP_GRID_LEVEL_1000, wxSize( 1000, 1000 ) },
-    { ID_POPUP_GRID_LEVEL_500,  wxSize( 500,  500 )  },
-    { ID_POPUP_GRID_LEVEL_250,  wxSize( 250,  250 )  },
-    { ID_POPUP_GRID_LEVEL_200,  wxSize( 200,  200 )  },
-    { ID_POPUP_GRID_LEVEL_100,  wxSize( 100,  100 )  },
-    { ID_POPUP_GRID_LEVEL_50,   wxSize( 50,   50 )   },
-    { ID_POPUP_GRID_LEVEL_25,   wxSize( 25,   25 )   },
-    { ID_POPUP_GRID_LEVEL_20,   wxSize( 20,   20 )   },
-    { ID_POPUP_GRID_LEVEL_10,   wxSize( 10,   10 )   },
-    { ID_POPUP_GRID_LEVEL_5,    wxSize( 5,    5 )    },
-    { ID_POPUP_GRID_LEVEL_2,    wxSize( 2,    2 )    },
-    { ID_POPUP_GRID_LEVEL_1,    wxSize( 1,    1 )    }
+    { ID_POPUP_GRID_LEVEL_1000, wxRealPoint( 1000, 1000 ) },
+    { ID_POPUP_GRID_LEVEL_500,  wxRealPoint( 500,  500 )  },
+    { ID_POPUP_GRID_LEVEL_250,  wxRealPoint( 250,  250 )  },
+    { ID_POPUP_GRID_LEVEL_200,  wxRealPoint( 200,  200 )  },
+    { ID_POPUP_GRID_LEVEL_100,  wxRealPoint( 100,  100 )  },
+    { ID_POPUP_GRID_LEVEL_50,   wxRealPoint( 50,   50 )   },
+    { ID_POPUP_GRID_LEVEL_25,   wxRealPoint( 25,   25 )   },
+    { ID_POPUP_GRID_LEVEL_20,   wxRealPoint( 20,   20 )   },
+    { ID_POPUP_GRID_LEVEL_10,   wxRealPoint( 10,   10 )   },
+    { ID_POPUP_GRID_LEVEL_5,    wxRealPoint( 5,    5 )    },
+    { ID_POPUP_GRID_LEVEL_2,    wxRealPoint( 2,    2 )    },
+    { ID_POPUP_GRID_LEVEL_1,    wxRealPoint( 1,    1 )    }
 };
 
 #define PCB_GRID_LIST_CNT ( sizeof( PcbGridList ) / sizeof( GRID_TYPE ) )
@@ -58,7 +58,7 @@ PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( TYPE_SCREEN )
     for( i = 0; i < PCB_GRID_LIST_CNT; i++ )
         AddGrid( PcbGridList[i] );
 
-    SetGrid( wxSize( 500, 500 ) );        /* Set the working grid size to a reasonnable value (in 1/10000 inch) */
+    SetGrid( wxRealPoint( 500, 500 ) );        /* Set the working grid size to a reasonnable value (in 1/10000 inch) */
     Init();
 }
 

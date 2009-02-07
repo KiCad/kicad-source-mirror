@@ -41,7 +41,7 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
  *  Remise a 0 de l'origine des coordonnees relatives
  */
 {
-    wxSize  delta;
+    wxRealPoint  delta;
     wxPoint curpos, oldpos;
     int     hotkey = 0;
 

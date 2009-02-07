@@ -182,7 +182,7 @@ bool WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
 void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /****************************************************************/
 {
-    wxSize  delta;
+    wxRealPoint  delta;
     int     flagcurseur = 0;
     wxPoint curpos, oldpos;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );

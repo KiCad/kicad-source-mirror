@@ -90,8 +90,8 @@ public:
 
     void         SetZoom( int mode );
     int          GetZoom();
-    void         SetGrid( const wxSize& size );
-    wxSize       GetGrid();
+    void         SetGrid( const wxRealPoint& size );
+    wxRealPoint  GetGrid();
 
     void         AddMenuZoom( wxMenu* MasterMenu );
     bool         OnRightClick( wxMouseEvent& event );
