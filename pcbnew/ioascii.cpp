@@ -401,6 +401,12 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
+        if( stricmp( Line, "ViaAltDrill" ) == 0 )
+        {
+            g_DesignSettings.m_ViaDrillCustomValue = atoi( data );
+            continue;
+        }
+
         if( stricmp( Line, "MicroViaDrill" ) == 0 )
         {
             g_DesignSettings.m_MicroViaDrill = atoi( data );
@@ -512,6 +518,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
     fprintf( aFile, "ViaSize %d\n", g_DesignSettings.m_CurrentViaSize );
     fprintf( aFile, "ViaDrill %d\n", g_DesignSettings.m_ViaDrill );
+    fprintf( aFile, "ViaAltDrill %d\n", g_DesignSettings.m_ViaDrillCustomValue );
 
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {

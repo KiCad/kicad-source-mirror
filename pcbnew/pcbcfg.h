@@ -70,6 +70,14 @@ static PARAM_CFG_INT ViaDrillCfg
     0, 0xFFFF                                   /* Min and max values*/
 );
 
+static PARAM_CFG_INT ViaAltDrillCfg
+(
+    wxT( "ViaAltD" ),                           /* Keyword */
+    &g_DesignSettings.m_ViaDrillCustomValue,    /* Parameter address */
+    250,                                        /* Default value */
+    0, 0xFFFF                                   /* Min and max values*/
+);
+
 static PARAM_CFG_INT MicroViaDiametreCfg
 (
     wxT( "MViaDia" ),                               /* Keyword */
@@ -790,6 +798,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadDimVCfg,
     &ViaDiametreCfg,
     &ViaDrillCfg,
+    &ViaAltDrillCfg,
     &MicroViaDiametreCfg,
     &MicroViaDrillCfg,
     &ViaShowHoleCfg,
