@@ -308,9 +308,20 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
     if( pt_texte->m_Mirror )
         size.x = -size.x;                       // Text is mirrored
 
-    if ( format_plot == PLOT_FORMAT_GERBER )
-        SelectD_CODE_For_LineDraw(thickness);
+    switch( format_plot )
+    {
+        case PLOT_FORMAT_GERBER:
+            SelectD_CODE_For_LineDraw(thickness);
+            break;
 
+        case PLOT_FORMAT_HPGL:
+            break;
+
+        case PLOT_FORMAT_POST:
+            SetCurrentLineWidthPS( thickness );
+            break;
+    }
+    
     PlotGraphicText( format_plot, pos, BLACK,
                       pt_texte->m_Text,
                       orient, size,
@@ -564,8 +575,19 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
     if( pt_texte->m_Mirror )
         size.x = -size.x;
 
-    if ( format_plot == PLOT_FORMAT_GERBER )
-        SelectD_CODE_For_LineDraw(thickness);
+    switch( format_plot )
+    {
+        case PLOT_FORMAT_GERBER:
+            SelectD_CODE_For_LineDraw(thickness);
+            break;
+
+        case PLOT_FORMAT_HPGL:
+            break;
+
+        case PLOT_FORMAT_POST:
+            SetCurrentLineWidthPS( thickness );
+            break;
+    }
 
     PlotGraphicText( format_plot, pos, BLACK,
                       pt_texte->m_Text,
