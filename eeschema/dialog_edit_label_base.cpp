@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Aug  7 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,8 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	bSizer2->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextLabel = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextLabel->SetToolTip( _("Enter the text to be used within the schematic") );
+	
 	bSizer2->Add( m_TextLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* m_OptionsSizer;
@@ -33,23 +35,23 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	int m_TextOrientNChoices = sizeof( m_TextOrientChoices ) / sizeof( wxString );
 	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("Direction"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextOrient->SetSelection( 0 );
-	m_OptionsSizer->Add( m_TextOrient, 0, wxALL, 5 );
+	m_OptionsSizer->Add( m_TextOrient, 1, wxALL, 5 );
 	
 	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextStyleNChoices = sizeof( m_TextStyleChoices ) / sizeof( wxString );
 	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextStyle->SetSelection( 0 );
-	m_OptionsSizer->Add( m_TextStyle, 0, wxALL, 5 );
+	m_OptionsSizer->Add( m_TextStyle, 1, wxALL, 5 );
 	
 	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidi"), _("TriState"), _("Passive") };
 	int m_TextShapeNChoices = sizeof( m_TextShapeChoices ) / sizeof( wxString );
-	m_TextShape = new wxRadioBox( this, wxID_ANY, _("Glabel Shape:"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShape->SetSelection( 2 );
-	m_OptionsSizer->Add( m_TextShape, 0, wxALL, 5 );
+	m_TextShape = new wxRadioBox( this, wxID_ANY, _("Glabel Shape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextShape->SetSelection( 0 );
+	m_OptionsSizer->Add( m_TextShape, 1, wxALL, 5 );
 	
 	bSizer2->Add( m_OptionsSizer, 1, wxEXPAND, 5 );
 	
-	bMainSizer->Add( bSizer2, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizer2, 5, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -67,14 +69,14 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetForegroundColour( wxColour( 234, 0, 0 ) );
 	
-	bSizer4->Add( m_buttonOK, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer4->Add( m_buttonOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonCANCEL->SetForegroundColour( wxColour( 0, 0, 187 ) );
 	
-	bSizer4->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer4->Add( m_buttonCANCEL, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	bMainSizer->Add( bSizer4, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bSizer4, 1, 0, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
