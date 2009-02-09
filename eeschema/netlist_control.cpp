@@ -466,7 +466,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
         break;
     }
 
-    Mask = wxT( "*" ) + FileExt + wxT( "*" );
+    Mask = wxT( "*" ) + FileExt;
     ChangeFileNameExt( FullFileName, FileExt );
     FullFileName = FullFileName.AfterLast( '/' );
     FullFileName = EDA_FileSelector( _( "Netlist files:" ),
