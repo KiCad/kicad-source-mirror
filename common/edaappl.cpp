@@ -442,9 +442,14 @@ bool WinEDA_App::SetBinDir()
     m_BinDir = argv[0];
 #endif /* __UNIX__ */
 
-    m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-    while( m_BinDir.Last() != '/' )
+    while( m_BinDir.Last() != DIR_SEP )
         m_BinDir.RemoveLast();
+
+    /* Use unix notation for paths. I am not sure this is a good idea,
+     * but it simplify compatibility between Windows and Unices
+     * However it is a potential problem in path handling under Windows
+    */
+    m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     wxFileName pfn( wxT( "/posix/path/specification" ), wxT( "filename" ) );
     wxFileName wfn( wxT( "\\windows\\path\\specification" ), wxT( "filename" ) );
@@ -464,8 +469,18 @@ bool WinEDA_App::SetBinDir()
 void WinEDA_App::SetDefaultSearchPaths( void )
 {
     size_t     i;
-    wxString   path;
-    wxFileName fn( m_BinDir, wxEmptyString );
+    wxString   path = m_BinDir;
+
+#ifdef __WINDOWS__
+    /* m_BinDir  path is in unix notation.
+     * But wxFileName expect (to work fine) native notation
+     * specifically when using a path including a server, like \\myserver\local_path .
+    */
+    path.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
+
+#endif
+    wxFileName fn( path, wxEmptyString );
+
 
     /* User environment variable path is the first search path.   Chances are
      * if the user is savvy enough to set an environment variable they know
@@ -479,7 +494,9 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     /* Standard application data path if it is different from the binary
      * path. */
     if( fn.GetPath() != GetTraits()->GetStandardPaths().GetDataDir() )
+    {
         m_searchPaths.Add( GetTraits()->GetStandardPaths().GetDataDir() );
+    }
 
     /* Up on level relative to binary path with "share" appended for Windows. */
     fn.RemoveLastDir();
@@ -735,7 +752,7 @@ void WinEDA_App::SetLanguagePath( void )
         for( i = 0; i < m_searchPaths.GetCount(); i++ )
         {
             wxFileName fn( m_searchPaths[i], wxEmptyString );
-            
+
             // Append path for Windows and unix kicad pack install
             fn.AppendDir( wxT( "share" ) );
             fn.AppendDir( wxT( "internat" ) );
@@ -745,9 +762,9 @@ void WinEDA_App::SetLanguagePath( void )
                            fn.GetPath() );
                 wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
             }
-            fn.RemoveLastDir();
-            
+
              // Append path for unix standard install
+            fn.RemoveLastDir();
             fn.AppendDir( wxT( "kicad" ) );
             fn.AppendDir( wxT( "internat" ) );
             if( fn.DirExists() )
@@ -756,7 +773,7 @@ void WinEDA_App::SetLanguagePath( void )
                            fn.GetPath() );
                 wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
             }
-            
+
         }
     }
 }
@@ -832,6 +849,7 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
             for( j = 0; j < subdirs->GetCount(); j++ )
                 fn.AppendDir( subdirs->Item( j ) );
         }
+
         if( fn.DirExists() )
         {
             wxLogDebug( _T( "Adding <" ) + fn.GetPath() + _T( "> to " ) +
@@ -868,7 +886,7 @@ wxString WinEDA_App::GetHelpFile( void )
      *        CMake install paths seem to be a moving target so this crude
      *        hack solve the problem of install path differences between
      *        Windows and non-Windows platforms. */
-    
+
     // Partially fixed, but must be enhanced
 
     // Create subdir tree for "standard" linux distributions, when kicad comes from a distribution
@@ -878,7 +896,7 @@ wxString WinEDA_App::GetHelpFile( void )
     subdirs.Add( _T( "doc" ) );
     subdirs.Add( wxT( "kicad" ) );
     subdirs.Add( _T( "help" ) );
-    
+
     // Create subdir tree for linux and Windows kicad pack
     // Note  the pack form under linux is also useful if an user want to install kicad to a server.
     // because there is only one path to mount or export (something like /usr/local/kicad).
@@ -887,7 +905,7 @@ wxString WinEDA_App::GetHelpFile( void )
     // <install dir>/kicad/ is retrievered from m_BinDir
     altsubdirs.Add( _T( "doc" ) );
     altsubdirs.Add( _T( "help" ) );
-   
+
 
     /* Search for a help file.
      *  we *must* find a help file.
