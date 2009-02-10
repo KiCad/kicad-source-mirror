@@ -449,7 +449,7 @@ bool WinEDA_App::SetBinDir()
     m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     // Remove filename form command line:
-    while( m_BinDir.Last() != '/' )
+    while( m_BinDir.Last() != '/' && !m_BinDir.IsEmpty() )
         m_BinDir.RemoveLast();
 
     wxFileName pfn( wxT( "/posix/path/specification" ), wxT( "filename" ) );
