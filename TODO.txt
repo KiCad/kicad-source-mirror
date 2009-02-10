@@ -33,6 +33,21 @@ understanding by new developers.
 Need to do this using DialogBlocks.
 
 
+2009-02-10 08:58 Assigned To:
+asked by: Cfdev (Sourceforge Feature Request)
+===============================================================================
+PCBNEW Unroute function in rightclick menu (for component)
+
+---Message---
+Hi all,
+It's would be nice to have on right click menu (on component) "unroute
+component".Currently, to do this, I use the deletion of the block but it's
+not good for that.
+(sample: popupmenu -> U10 -> Move,Drag....Unroute)
+thanks if you can do this.
+Cfdev
+
+
 2008-Dec-6 Assigned To:
 asked by: Dick Hollenbeck
 ================================================================================
