@@ -234,25 +234,25 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     case WXK_NUMPAD8:       /* cursor moved up */
     case WXK_UP:
-        Mouse.y -= delta.y;
+        Mouse.y -= (int) round(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD2:       /* cursor moved down */
     case WXK_DOWN:
-        Mouse.y += delta.y;
+        Mouse.y += (int) round(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD4:       /*  cursor moved left */
     case WXK_LEFT:
-        Mouse.x -= delta.x;
+        Mouse.x -= (int) round(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD6:      /*  cursor moved right */
     case WXK_RIGHT:
-        Mouse.x += delta.x;
+        Mouse.x += (int) round(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
     }

@@ -51,10 +51,8 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 
     if( !GetBaseScreen()->m_UserGridIsON )
     {
-        coord->x = ( (int) round( coord->x /
-                                  grid_size.x ) ) * grid_size.x;
-        coord->y = ( (int) round( coord->y /
-                                  grid_size.y ) ) * grid_size.y;
+        coord->x = (int) round( ( coord->x / grid_size.x ) * grid_size.x );
+        coord->y = (int) round( ( coord->y / grid_size.y ) * grid_size.y );
     }
 }
 
@@ -246,7 +244,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
         for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
         {
             tmp = GetScreen()->m_GridList[i];
-            gridValue = To_User_Unit( g_UnitMetric, tmp.m_Size.x,
+            gridValue = To_User_Unit( g_UnitMetric, (int) round(tmp.m_Size.x),
                                       ( (WinEDA_DrawFrame*)m_Parent )->m_InternalUnits );
             if( tmp.m_Id == ID_POPUP_GRID_USER )
             {

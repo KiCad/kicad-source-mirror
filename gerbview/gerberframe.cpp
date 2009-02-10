@@ -315,5 +315,5 @@ int WinEDA_GerberFrame::BestZoom()
     jj       = GetBoard()->m_BoundaryBox.GetHeight() / size.y;
     bestzoom = MAX( ii, jj );
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
-    return bestzoom * GetScreen()->m_ZoomScalar;
+    return (int) round(bestzoom * GetScreen()->m_ZoomScalar);
 }

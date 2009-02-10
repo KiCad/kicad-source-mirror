@@ -154,11 +154,8 @@ int BASE_SCREEN::Scale( int coord )
 #ifdef WX_ZOOM
     return coord;
 #else
-    if( !m_Zoom )
-        return 0;
-
     if( !m_ZoomScalar || !m_Zoom )
-        return 0;
+        return coord;
 
     return wxRound( (double) ( coord * m_ZoomScalar ) / (double) m_Zoom );
 #endif
@@ -173,8 +170,15 @@ void BASE_SCREEN::Scale( wxPoint& pt )
 
 void BASE_SCREEN::Scale( wxRealPoint& pt )
 {
-    pt.x = Scale( pt.x );
-    pt.y = Scale( pt.y );
+#ifdef WX_ZOOM
+    // No change
+#else
+    if( !m_ZoomScalar || !m_Zoom )
+        return;
+
+    pt.x = pt.x * m_ZoomScalar / (double) m_Zoom;
+    pt.y = pt.y  * m_ZoomScalar / (double) m_Zoom;
+#endif
 }
 
 

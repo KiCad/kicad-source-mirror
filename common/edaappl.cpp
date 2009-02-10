@@ -442,14 +442,15 @@ bool WinEDA_App::SetBinDir()
     m_BinDir = argv[0];
 #endif /* __UNIX__ */
 
-    while( m_BinDir.Last() != DIR_SEP )
-        m_BinDir.RemoveLast();
-
     /* Use unix notation for paths. I am not sure this is a good idea,
      * but it simplify compatibility between Windows and Unices
      * However it is a potential problem in path handling under Windows
     */
     m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
+    // Remove filename form command line:
+    while( m_BinDir.Last() != '/' )
+        m_BinDir.RemoveLast();
 
     wxFileName pfn( wxT( "/posix/path/specification" ), wxT( "filename" ) );
     wxFileName wfn( wxT( "\\windows\\path\\specification" ), wxT( "filename" ) );
