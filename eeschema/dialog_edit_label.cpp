@@ -17,6 +17,24 @@
 #include "general.h"
 #include "dialog_edit_label.h"
 
+
+int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText )
+{
+    int ret;
+
+    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText );
+
+    // doing any post construction resizing is better done here than in
+    // OnInitDialog() since it tends to flash/redraw the dialog less.
+    dialog->init();
+
+    ret = dialog->ShowModal();
+    dialog->Destroy();
+    return ret;
+}
+
+
+
 DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText ) :
     DialogLabelEditor_Base( parent )
 {
@@ -25,7 +43,7 @@ DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* C
 }
 
 
-void DialogLabelEditor::OnInitDialog( wxInitDialogEvent& event )
+void DialogLabelEditor::init()
 {
     wxString msg;
 

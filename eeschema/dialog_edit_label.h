@@ -10,19 +10,35 @@
 
 #include "dialog_edit_label_base.h"
 
-class DialogLabelEditor : public DialogLabelEditor_Base 
+class DialogLabelEditor : public DialogLabelEditor_Base
 {
 private:
     WinEDA_SchematicFrame * m_Parent;
     SCH_TEXT * m_CurrentText;
 
-public:
+    void init();
+
+protected:
+    // these are protected so that the static ShowModally() gets used.
     DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText);
     ~DialogLabelEditor(){};
+
+
+public:
+
+    /**
+     * Function ShowModally
+     * is a static function that constructs and then displays one of these dialogs.
+     * @param parent
+     * @param CurrentText is one of several classes derived from SCH_TEXT
+     * @return int - the result Dialog::ShowModal()
+     */
+    static int ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText );
+
 private:
     void OnInitDialog( wxInitDialogEvent& event );
-	void OnButtonOKClick( wxCommandEvent& event );
-	void OnButtonCANCEL_Click( wxCommandEvent& event );
+    void OnButtonOKClick( wxCommandEvent& event );
+    void OnButtonCANCEL_Click( wxCommandEvent& event );
     void TextPropertiesAccept( wxCommandEvent& event );
 };
 

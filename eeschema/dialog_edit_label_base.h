@@ -50,7 +50,6 @@ class DialogLabelEditor_Base : public wxDialog
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnButtonOKClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonCANCEL_Click( wxCommandEvent& event ){ event.Skip(); }
 		

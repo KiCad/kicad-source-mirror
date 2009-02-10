@@ -137,8 +137,7 @@ void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
     DrawPanel->CursorOff( DC );
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
-    DialogLabelEditor* dialog = new DialogLabelEditor( this, TextStruct );
-    dialog->ShowModal(); dialog->Destroy();
+    DialogLabelEditor::ShowModally( this, TextStruct );
 
     RedrawOneStruct( DrawPanel, DC, TextStruct, GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );
