@@ -67,7 +67,7 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 /** Redraw the screen with the zoom level which shows all the page or the board
  */
 {
-    if( GetBaseScreen()->SetZoom( BestZoom() )
+    if( GetBaseScreen()->SetZoom( BestZoom() ) )
         Recadre_Trace( move_mouse_cursor );
 }
 
