@@ -584,8 +584,13 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     // la surface de trace doit etre augmentee
     panel_size = DrawPanel->GetClientSize();
     screen->Unscale( panel_size );
-    draw_size += panel_size / 2;
 
+    /* Adjust drawing size when zooming way out to prevent centering around
+     * cursor problems. */
+    if( panel_size.x > draw_size.x || panel_size.y > draw_size.y )
+        draw_size = panel_size;
+
+    draw_size += panel_size / 2;
 
     if( screen->m_Center )
     {
@@ -597,10 +602,6 @@ void WinEDA_DrawFrame::AdjustScrollBars()
         screen->m_DrawOrg.x = -panel_size.x / 2;
         screen->m_DrawOrg.y = -panel_size.y / 2;
     }
-
-    // DrawOrg est rendu multiple du zoom min :
-    screen->m_DrawOrg.x -= screen->m_DrawOrg.x % 256;
-    screen->m_DrawOrg.y -= screen->m_DrawOrg.y % 256;
 
     // Calcul du nombre de scrolls  (en unites de scrool )
     scrollbar_number = draw_size / screen->Unscale( screen->m_ZoomScalar );

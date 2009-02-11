@@ -67,8 +67,8 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 /** Redraw the screen with the zoom level which shows all the page or the board
  */
 {
-    GetBaseScreen()->SetZoom( BestZoom() );
-    Recadre_Trace( move_mouse_cursor );
+    if( GetBaseScreen()->SetZoom( BestZoom() )
+        Recadre_Trace( move_mouse_cursor );
 }
 
 
@@ -122,8 +122,8 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
     case ID_ZOOM_IN:
         if( id == ID_ZOOM_IN )
             screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-        screen->SetPreviousZoom();
-        Recadre_Trace( zoom_at_cursor );
+        if( screen->SetPreviousZoom() )
+            Recadre_Trace( zoom_at_cursor );
         break;
 
     case ID_POPUP_ZOOM_OUT:
@@ -133,8 +133,8 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
     case ID_ZOOM_OUT:
         if( id == ID_ZOOM_OUT )
             screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-        screen->SetNextZoom();
-        Recadre_Trace( zoom_at_cursor );
+        if( screen->SetNextZoom() )
+            Recadre_Trace( zoom_at_cursor );
         break;
 
     case ID_ZOOM_REDRAW:
@@ -170,8 +170,8 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
                             "the zoom list." ), i );
             return;
         }
-        screen->SetZoom( screen->m_ZoomList[i] );
-        Recadre_Trace( true );
+        if( screen->SetZoom( screen->m_ZoomList[i] ) )
+            Recadre_Trace( true );
     }
 
     Affiche_Status_Box();

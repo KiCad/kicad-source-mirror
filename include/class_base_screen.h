@@ -228,7 +228,7 @@ public:
      * Function SetZoom
      * adjusts the current zoom factor
      */
-    void   SetZoom( int coeff );
+    bool   SetZoom( int coeff );
 
     /**
      * Function SetZoomList
@@ -246,10 +246,10 @@ public:
     void   Unscale( wxPoint& pt );
     void   Unscale( wxSize& sz );
 
-    void   SetNextZoom();                   /* ajuste le prochain coeff de zoom */
-    void   SetPreviousZoom();               /* ajuste le precedent coeff de zoom */
-    void   SetFirstZoom();                  /* ajuste le coeff de zoom a 1*/
-    void   SetLastZoom();                   /* ajuste le coeff de zoom au max */
+    bool   SetNextZoom();               /* ajuste le prochain coeff de zoom */
+    bool   SetPreviousZoom();           /* ajuste le precedent coeff de zoom */
+    bool   SetFirstZoom();              /* ajuste le coeff de zoom a 1*/
+    bool   SetLastZoom();               /* ajuste le coeff de zoom au max */
 
     //----<grid stuff>----------------------------------------------------------
     wxRealPoint GetGrid();                      /* retourne la grille */

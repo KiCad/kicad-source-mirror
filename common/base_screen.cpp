@@ -69,10 +69,6 @@ void BASE_SCREEN::InitDatas()
         m_Curseur.y = ReturnPageSize().y / 2;
     }
 
-    // DrawOrg est rendu multiple du zoom min :
-    m_DrawOrg.x -= m_DrawOrg.x % 256;
-    m_DrawOrg.y -= m_DrawOrg.y % 256;
-
     m_O_Curseur = m_Curseur;
 
     SetCurItem( NULL );
@@ -230,12 +226,23 @@ void BASE_SCREEN::SetZoomList( const wxArrayInt& zoomlist )
 }
 
 
-void BASE_SCREEN::SetFirstZoom()
+bool BASE_SCREEN::SetFirstZoom()
 {
     if( m_ZoomList.IsEmpty() )
-        m_Zoom = m_ZoomScalar;
-    else
+    {
+        if( m_Zoom != m_ZoomScalar )
+        {
+            m_Zoom = m_ZoomScalar;
+            return true;
+        }
+    }
+    else if( m_Zoom != m_ZoomList[0] )
+    {
         m_Zoom = m_ZoomList[0];
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -245,57 +252,67 @@ int BASE_SCREEN::GetZoom() const
 }
 
 
-void BASE_SCREEN::SetZoom( int coeff )
+bool BASE_SCREEN::SetZoom( int coeff )
 {
+    if( coeff == m_Zoom )
+        return false;
+
     m_Zoom = coeff;
 
     if( m_Zoom < 1 )
         m_Zoom = 1;
+
+    return true;
 }
 
 
-void BASE_SCREEN::SetNextZoom()
+bool BASE_SCREEN::SetNextZoom()
 {
     size_t i;
 
     if( m_ZoomList.IsEmpty() || m_Zoom >= m_ZoomList.Last() )
-        return;
+        return false;
 
     for( i = 0; i < m_ZoomList.GetCount(); i++ )
     {
         if( m_Zoom < m_ZoomList[i] )
         {
             m_Zoom = m_ZoomList[i];
-            break;
+            return true;
         }
     }
+
+    return false;
 }
 
 
-void BASE_SCREEN::SetPreviousZoom()
+bool BASE_SCREEN::SetPreviousZoom()
 {
     size_t i;
 
     if( m_ZoomList.IsEmpty() || m_Zoom <= m_ZoomList[0] )
-        return;
+        return false;
 
     for( i = m_ZoomList.GetCount(); i != 0; i-- )
     {
         if( m_Zoom > m_ZoomList[i - 1] )
         {
             m_Zoom = m_ZoomList[i - 1];
-            break;
+            return true;
         }
     }
+
+    return false;
 }
 
 
-void BASE_SCREEN::SetLastZoom()
+bool BASE_SCREEN::SetLastZoom()
 {
-    if( m_ZoomList.IsEmpty() )
-        return;
+    if( m_ZoomList.IsEmpty() || m_Zoom == m_ZoomList.Last() )
+        return false;
 
     m_Zoom = m_ZoomList.Last();
+    return true;
 }
 
 
