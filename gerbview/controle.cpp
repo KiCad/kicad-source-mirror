@@ -74,25 +74,25 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     {
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        Mouse.y -= delta.y;
+        Mouse.y -= (int) round(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        Mouse.y += delta.y;
+        Mouse.y += (int) round(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        Mouse.x -= delta.x;
+        Mouse.x -= (int) round(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        Mouse.x += delta.x;
+        Mouse.x += (int) round(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 

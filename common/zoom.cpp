@@ -51,10 +51,11 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 
     if( !GetBaseScreen()->m_UserGridIsON )
     {
-        coord->x = ( (int) round( coord->x /
-                                  grid_size.x ) ) * grid_size.x;
-        coord->y = ( (int) round( coord->y /
-                                  grid_size.y ) ) * grid_size.y;
+        int tmp = (int) round( coord->x / grid_size.x );
+        coord->x = (int) round(  tmp * grid_size.x );
+
+        tmp = (int) round( coord->y / grid_size.y );
+        coord->y = (int) round ( tmp * grid_size.y );
     }
 }
 

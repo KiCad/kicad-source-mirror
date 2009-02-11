@@ -310,7 +310,7 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {
         double value = To_User_Unit( g_UnitMetric,
-                                     GetScreen()->m_GridList[i].m_Size.x,
+                                     (int)GetScreen()->m_GridList[i].m_Size.x,
                                      PCB_INTERNAL_UNIT );
         if( GetScreen()->m_GridList[i].m_Id != ID_POPUP_GRID_USER )
         {

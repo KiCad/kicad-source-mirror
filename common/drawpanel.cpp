@@ -685,7 +685,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     int          Color  = BLUE;
     BASE_SCREEN* screen = GetScreen();
     int          ii, jj, xg, yg, color;
-    wxRealPoint  pas_grille_affichee;
+    wxRealPoint  screen_grid_size;
     bool         drawgrid = FALSE;
     wxSize       size;
     wxPoint      org;
@@ -699,25 +699,26 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
      */
     drawgrid = m_Parent->m_Draw_Grid;
 
-    pas_grille_affichee = screen->GetGrid();
-
-    double dgrid = screen->Scale( pas_grille_affichee.x );
-    if( dgrid  < 5 )
+    screen_grid_size = screen->GetGrid();
+    
+    wxRealPoint  dgrid = screen_grid_size;
+    screen->Scale( dgrid );     // dgrid = grid size in pixels
+    // if the grid size is sall ( < 5 pixels) do not display all points
+    if( dgrid.x  < 5 )
     {
-        pas_grille_affichee.x *= 2;
-        dgrid *= 2;
+        screen_grid_size.x *= 2;
+        dgrid.x *= 2;
     }
-    if( dgrid < 5 )
-        drawgrid = FALSE; // The gris is small
+    if( dgrid.x < 5 )
+        drawgrid = FALSE; // The gris is too small: do not show it
 
-    dgrid = screen->Scale( pas_grille_affichee.y );
-    if( ii  < dgrid )
+    if( dgrid.y < 5 )
     {
-        pas_grille_affichee.y *= 2;
-        dgrid *= 2;
+        screen_grid_size.y *= 2;
+        dgrid.y *= 2;
     }
-    if( dgrid < 5 )
-        drawgrid = FALSE; // The gris is small
+    if( dgrid.y < 5 )
+        drawgrid = FALSE; // The gris is too small
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
@@ -738,12 +739,12 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         GRSetColorPen( DC, color );
         for( ii = 0; ; ii++ )
         {
-            xg =  ii * pas_grille_affichee.x;
+            xg =  (int) round(ii * screen_grid_size.x);
             int xpos = org.x + xg;
 
             for( jj = 0; ; jj++ )
             {
-                yg = jj * pas_grille_affichee.y;
+                yg = (int) round(jj * screen_grid_size.y);
                 GRPutPixel( &m_ClipBox, DC, xpos, org.y + yg, color );
                 if( yg > size.y )
                     break;

@@ -621,7 +621,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
     {
         GRID_TYPE grid = GetScreen()->m_GridList[i];
         double value = To_User_Unit( g_UnitMetric,
-                                     grid.m_Size.x,
+                                     (int)grid.m_Size.x,
                                      PCB_INTERNAL_UNIT );
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
