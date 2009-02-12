@@ -22,22 +22,22 @@
 /* Fonctions exportees */
 
 /* Fonctions Locales */
-static SCH_ITEM*          CopyStruct( WinEDA_DrawPanel* panel,
-                                      wxDC*             DC,
-                                      BASE_SCREEN*      screen,
-                                      SCH_ITEM*         DrawStruct );
-static void               CollectStructsToDrag( SCH_SCREEN* screen );
-static void               AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
-static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
-                                              wxPoint&       aPosition );
-static void               DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
-                                                   wxDC*             DC,
-                                                   bool              erase );
-static SCH_ITEM*          SaveStructListForPaste( SCH_ITEM* DrawStruct );
-static bool               MirrorStruct( WinEDA_DrawPanel* panel, wxDC* DC,
-                                        SCH_ITEM* DrawStruct, wxPoint& Center );
-static void               MirrorOneStruct( SCH_ITEM* DrawStruct,
-                                           wxPoint&  Center );
+static SCH_ITEM*            CopyStruct( WinEDA_DrawPanel* panel,
+                                        wxDC*                        DC,
+                                        BASE_SCREEN*                 screen,
+                                        SCH_ITEM*                    DrawStruct );
+static void                 CollectStructsToDrag( SCH_SCREEN* screen );
+static void                 AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
+static LibEDA_BaseStruct*   GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                                wxPoint&         aPosition );
+static void                 DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
+                                                     wxDC*             DC,
+                                                     bool              erase );
+static SCH_ITEM*            SaveStructListForPaste( SCH_ITEM* DrawStruct );
+static bool                 MirrorStruct( WinEDA_DrawPanel* panel, wxDC* DC,
+                                          SCH_ITEM* DrawStruct, wxPoint& Center );
+static void                 MirrorOneStruct( SCH_ITEM* DrawStruct,
+                                             wxPoint&  Center );
 
 /*************************************************************************/
 int WinEDA_SchematicFrame::ReturnBlockCommand( int key )
@@ -220,7 +220,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
  *  -1 si commande terminee et composants trouves (block delete, block save)
  */
 {
-    int ii = 0;
+    int              ii = 0;
     bool             zoom_command = FALSE;
     DrawBlockStruct* block = &GetScreen()->BlockLocate;
 
@@ -301,7 +301,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
                 GetScreen()->m_Curseur = wxPoint( 0, 0 );
                 SCH_ITEM* DrawStructCopy =
                     SaveStructListForPaste(
-                         (SCH_ITEM*) block->m_BlockDrawStruct );
+                    (SCH_ITEM*) block->m_BlockDrawStruct );
                 PlaceStruct( GetScreen(), DrawStructCopy );
                 GetScreen()->m_Curseur = oldpos;
                 ii = -1;
@@ -640,14 +640,14 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
     Hierarchical_PIN_Sheet_Struct* DrawSheetLabel;
     DrawMarkerStruct*              DrawMarker;
     DrawNoConnectStruct*           DrawNoConnect;
-    SCH_TEXT*                      DrawText;
-    wxPoint                        px;
+    SCH_TEXT* DrawText;
+    wxPoint px;
     WinEDA_SchematicFrame*         frame;
 
     if( !DrawStruct )
         return;
 
-    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
+    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
 
     switch( DrawStruct->Type() )
     {
@@ -869,7 +869,7 @@ static SCH_ITEM* CopyStruct( WinEDA_DrawPanel* panel,
                 ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
                 ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
             }
-            break;
+                break;
 
             case DRAW_SHEET_STRUCT_TYPE:
             {
@@ -972,8 +972,8 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
     {
         /* Cette stucture est rattachee a une feuille, et n'est pas
          *  accessible par la liste globale directement */
-        frame->SaveCopyInUndoList( (SCH_ITEM*)( (Hierarchical_PIN_Sheet_Struct
-                                                 *) DrawStruct )->GetParent(),
+        frame->SaveCopyInUndoList( (SCH_ITEM*) ( (Hierarchical_PIN_Sheet_Struct
+                                                  *) DrawStruct )->GetParent(),
                                   IS_CHANGED );
         frame->DeleteSheetLabel( DC ? true : false,
                                  (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
@@ -1405,7 +1405,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
         DrawStruct->Type() << wxT( " " ) << DrawStruct->GetClass();
         DisplayError( NULL, msg );
     }
-    break;
+        break;
     }
 
     NewDrawStruct->m_Image = DrawStruct;
@@ -1416,20 +1416,28 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
 /****************************************************/
 static void CollectStructsToDrag( SCH_SCREEN* screen )
 /****************************************************/
+
+/* creates the list of items found when a drag block is initiated.
+ * items are those slected in window block an some items outside this area but connected
+ * to a selected item (connected wires to a component or an entry )
+ */
 {
     DrawPickedStruct*   DrawStructs, * FirstPicked;
     SCH_ITEM*           Struct;
     EDA_DrawLineStruct* SegmStruct;
     int ox, oy, fx, fy;
 
-    /* Set membre .m_Flags des segments */
+    /* .m_Flags member is used to handle how a wire is exactly slected
+     * (fully selected, or partially selected by an end point )
+     */
     for( Struct = screen->EEDrawList; Struct != NULL; Struct = Struct->Next() )
         Struct->m_Flags = 0;
 
-    if( screen->BlockLocate.m_BlockDrawStruct->Type() ==
-        DRAW_SEGMENT_STRUCT_TYPE )
+    // Sel .m_Flags to selected for a wire or buss in selected area if there is only one item:
+    if( screen->BlockLocate.m_BlockDrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         screen->BlockLocate.m_BlockDrawStruct->m_Flags = SELECTED;
 
+    // Sel .m_Flags to selected for a wire or buss in selected area for a list of items:
     else if( screen->BlockLocate.m_BlockDrawStruct->Type() ==
              DRAW_PICK_ITEM_STRUCT_TYPE )
     {
@@ -1437,7 +1445,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             (DrawPickedStruct*) screen->BlockLocate.m_BlockDrawStruct;
         while( DrawStructs )
         {
-            Struct = DrawStructs->m_PickedStruct;
+            Struct          = DrawStructs->m_PickedStruct;
             DrawStructs     = DrawStructs->Next();
             Struct->m_Flags = SELECTED;
         }
@@ -1456,13 +1464,15 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     if( fy < oy )
         EXCHG( fy, oy );
 
-    /* Pour Drag Block: remise sous forme de liste de structure, s'il n'y
-     *  a qu'un seul element ( pour homogeneiser les traitements ulterieurs */
+    /* For drag block only:
+     * If only one item, change for a list of one item
+     * in order to have always a list to handle.
+     */
     if( screen->BlockLocate.m_BlockDrawStruct->Type() !=
         DRAW_PICK_ITEM_STRUCT_TYPE )
     {
         DrawStructs = new DrawPickedStruct(
-             (SCH_ITEM*) screen->BlockLocate.m_BlockDrawStruct );
+            (SCH_ITEM*) screen->BlockLocate.m_BlockDrawStruct );
         screen->BlockLocate.m_BlockDrawStruct = DrawStructs;
     }
 
@@ -1471,7 +1481,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     DrawStructs = (DrawPickedStruct*) screen->BlockLocate.m_BlockDrawStruct;
     while( DrawStructs )
     {
-        Struct = DrawStructs->m_PickedStruct;
+        Struct      = DrawStructs->m_PickedStruct;
         DrawStructs = DrawStructs->Next();
         if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         {
@@ -1486,34 +1496,36 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         }
     }
 
-    /* Recherche des elements complementaires a "dragger", c'est a dire les
-     *  fils et connexions hors bloc relies a des pins ou entries elles meme
-     *  draggees */
+    /* Search for other items to drag. They are end wires connected to selected items
+     */
 
     FirstPicked = DrawStructs =
                       (DrawPickedStruct*) screen->BlockLocate.
                       m_BlockDrawStruct;
     while( DrawStructs )
     {
-        Struct = DrawStructs->m_PickedStruct;
+        Struct      = DrawStructs->m_PickedStruct;
         DrawStructs = DrawStructs->Next();
         if( Struct->Type() == TYPE_SCH_COMPONENT )
-        {
+        {   // Add all pins of the selected component to list
             LibEDA_BaseStruct* DrawItem;
             wxPoint            pos;
             DrawItem = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos );
             while( DrawItem )
             {
-                if( (pos.x < ox) || (pos.x > fx) || (pos.y < oy)
-                   || (pos.y > fy) )
+                if( (pos.x < ox) || (pos.x > fx) || (pos.y < oy) || (pos.y > fy) )
+                {   // This pin is outside area,
+                    // but because it it the pin of a selected component
+                    // we must also select connected items to this pin
                     AddPickedItem( screen, pos );
+                }
 
                 DrawItem = GetNextPinPosition( NULL, pos );
             }
         }
 
         if( Struct->Type() == DRAW_SHEET_STRUCT_TYPE )
-        {
+        {   // Add all pins sheets of a selected hierarchical sheet to the list
             Hierarchical_PIN_Sheet_Struct* SLabel =
                 ( (DrawSheetStruct*) Struct )->m_Label;
             while( SLabel )
@@ -1545,7 +1557,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
     DrawStructs = (DrawPickedStruct*) screen->BlockLocate.m_BlockDrawStruct;
     while( DrawStructs )
     {
-        Struct = DrawStructs->m_PickedStruct;
+        Struct      = DrawStructs->m_PickedStruct;
         DrawStructs = (DrawPickedStruct*) DrawStructs->Next();
 
         switch( Struct->Type() )
@@ -1705,13 +1717,25 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
                                               wxPoint&       aPosition )
 /*********************************************************************************/
+
+/** GetNextPinPosition()
+ * calculate position of the "next" pin of the aDrawLibItem component
+ * if aDrawLibItem is non null : search for the first pin
+ * if aDrawLibItem == NULL, search the next pin
+ * returns its position
+ * @param aDrawLibItem = component test. search for the first pin
+ *      if NULL, serach for the next pin for each call
+ * @param aPosition = the calculated pin position, according to the component orientation and position
+ * @return a pointer to the pin
+ */
 {
     EDA_LibComponentStruct* Entry;
     static LibEDA_BaseStruct* NextItem;
-    static int Multi, convert, PartX, PartY, TransMat[2][2];
+    static int Multi, convert, TransMat[2][2];
     LibEDA_BaseStruct* DEntry;
     int orient;
     LibDrawPin* Pin;
+    static wxPoint CmpPosition;
 
     if( aDrawLibItem )
     {
@@ -1720,11 +1744,10 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
                  FindLibPart( aDrawLibItem->m_ChipName.GetData(), wxEmptyString,
                               FIND_ROOT ) ) == NULL )
             return NULL;
-        DEntry  = Entry->m_Drawings;
-        Multi   = aDrawLibItem->m_Multi;
-        convert = aDrawLibItem->m_Convert;
-        PartX   = aDrawLibItem->m_Pos.x;
-        PartY   = aDrawLibItem->m_Pos.y;
+        DEntry      = Entry->m_Drawings;
+        Multi       = aDrawLibItem->m_Multi;
+        convert     = aDrawLibItem->m_Convert;
+        CmpPosition = aDrawLibItem->m_Pos;
         memcpy( TransMat, aDrawLibItem->m_Transform, sizeof(TransMat) );
     }
     else
@@ -1746,8 +1769,8 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
         orient = Pin->ReturnPinDrawOrient( TransMat );
 
         /* Calcul de la position du point de reference */
-        aPosition = TransformCoordinate( TransMat, Pin->m_Pos);
-        NextItem = DEntry->Next();
+        aPosition = TransformCoordinate( TransMat, Pin->m_Pos ) + CmpPosition;
+        NextItem  = DEntry->Next();
         return DEntry;
     }
 
