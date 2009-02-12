@@ -6,25 +6,25 @@
 LicenseLangString MUILicense ${LANG_PORTUGUESE} "..\licendoc.txt"
 
 ;Component option
-LangString TITLE_SEC01 ${LANG_PORTUGUESE} "Aplicação principal"
+LangString TITLE_SEC01 ${LANG_PORTUGUESE} "Aplicativo principal"
 LangString TITLE_SEC02 ${LANG_PORTUGUESE} "Bibliotecas e componentes"
-LangString TITLE_SEC03 ${LANG_PORTUGUESE} "Projetos de Demostration"
-LangString TITLE_SEC04 ${LANG_PORTUGUESE} "Limas da ajuda"
+LangString TITLE_SEC03 ${LANG_PORTUGUESE} "Projetos de Demostração"
+LangString TITLE_SEC04 ${LANG_PORTUGUESE} "Arquivos de ajuda"
 
 ;Component option descriptions
-LangString DESC_SEC01 ${LANG_PORTUGUESE} "Limas da aplicação principal."
-LangString DESC_SEC02 ${LANG_PORTUGUESE} "As bibliotecas e os componentes são requeridos a menos que forem instaladas previamente."
-LangString DESC_SEC03 ${LANG_PORTUGUESE} "Alguns projetos e tutorials do demostration."
-LangString DESC_SEC04 ${LANG_PORTUGUESE} "Limas da ajuda."
+LangString DESC_SEC01 ${LANG_PORTUGUESE} "Arquivos do aplicativo principal."
+LangString DESC_SEC02 ${LANG_PORTUGUESE} "As bibliotecas e os componentes são necessários, a menos se já foram instalados previamente."
+LangString DESC_SEC03 ${LANG_PORTUGUESE} "Alguns projetos e tutoriais de demonstração."
+LangString DESC_SEC04 ${LANG_PORTUGUESE} "Arquivos de ajuda."
 
 ;General messages
-LangString WINGS3D_PROMPT ${LANG_PORTUGUESE} "Para editar ou criar modelos que do objeto 3D você necessita instalar Wings3D. \
-Wings3D e o manual de usuário podem ser download livre do Web page de Wings3D. Verifique esta caixa para abrir o Web page de Wings3D."
+LangString WINGS3D_PROMPT ${LANG_PORTUGUESE} "Para editar ou criar modelos de objetos 3D você necessita instalar o Wings3D. \
+Wings3D e o manual de usuário podem ser baixados livremente da Web page do Wings3D. Marque esta caixa para abrir a Web page do Wings3D."
 
-LangString UNINST_PROMPT ${LANG_PORTUGUESE} "É você certo você quer remover completamente $(^Name) e todos seus componentes? $\n\
-Isto removerá também todas as limas, bibliotecas e módulos modificados e novos no diretório do programa"
+LangString UNINST_PROMPT ${LANG_PORTUGUESE} "Você está certo que quer remover completamente $(^Name) e todos seus componentes? $\n\
+Isto removerá também todos os arquivos, bibliotecas e módulos modificados, e novos no diretório do programa"
 
-LangString UNINST_SUCCESS ${LANG_PORTUGUESE} "$(^Name) foram removidos com sucesso de seu computador."
-LangString INSTALLER_RUNNING ${LANG_PORTUGUESE} "O instalador está funcionando já."
-LangString UNINSTALLER_RUNNING ${LANG_PORTUGUESE} "O uninstaller está funcionando já."
-LangString ALREADY_INSTALLED ${LANG_PORTUGUESE} "${product_name} é instalado já. Instale este pacote overwrite limas existentes. Você quer continuar?"
+LangString UNINST_SUCCESS ${LANG_PORTUGUESE} "$(^Name) foi removido com sucesso de seu computador."
+LangString INSTALLER_RUNNING ${LANG_PORTUGUESE} "O instalador já está executando."
+LangString UNINSTALLER_RUNNING ${LANG_PORTUGUESE} "O uninstaller já está executando."
+LangString ALREADY_INSTALLED ${LANG_PORTUGUESE} "${product_name} já está instalado. Instalar este pacote irá sobrepor os arquivos existentes. Você quer continuar?"
