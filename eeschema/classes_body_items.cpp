@@ -586,8 +586,8 @@ EDA_Rect LibDrawPolyline::GetBoundaryBox()
     ymin = ymax = m_PolyPoints[0].y;
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        xmin = MIN( xmin, m_PolyPoints[ii-1].x );
-        xmax = MAX( xmax, m_PolyPoints[ii-1].x );
+        xmin = MIN( xmin, m_PolyPoints[ii].x );
+        xmax = MAX( xmax, m_PolyPoints[ii].x );
         ymin = MIN( ymin, m_PolyPoints[ii].y );
         ymax = MAX( ymax, m_PolyPoints[ii].y );
     }
