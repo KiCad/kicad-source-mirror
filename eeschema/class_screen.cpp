@@ -79,10 +79,11 @@ void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 /* Class SCH_SCREEN: classe de gestion d'un affichage pour schematique */
 /***********************************************************************/
 
-/* Default EESchema zoom values. Limited to 15 values to keep a decent size to menus */
+/* Default EESchema zoom values. Limited to 17 values to keep a decent size to menus
+*/
 static int SchematicZoomList[] =
 {
-    10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
+    5, 7, 10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
 };
 
 #define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / \

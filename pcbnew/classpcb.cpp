@@ -13,14 +13,15 @@
 
 
 /* Default pcbnew zoom values.
-  * Limited to 18 values to keep a decent size to menus
+  * Limited to 19 values to keep a decent size to menus
   * 15 it better but does not allow a sufficient number of values
   * roughtly a 1.5 progression.
   * The last 2 values is  handy when somebody uses a library import of a module
   * (or foreign data) which has a bad coordinate
   * Also useful in Gerbview for this reason.
+  * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic functions )
  */
-static const int PcbZoomList[] = { 10, 15, 22, 30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
+static const int PcbZoomList[] = { 5, 10, 15, 22, 30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
                                    2000, 3500, 5000, 10000, 20000 };
 
 #define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
