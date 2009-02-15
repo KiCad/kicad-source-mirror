@@ -327,7 +327,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
  */
 {
     wxString msg;
-    MODULE*  PtModule, * PtBack;
+    MODULE*  Module, * PtBack;
     bool     change = FALSE;
     wxString newmodulename = m_NewModule->GetValue();
     wxString value, lib_reference;  // pour memo Reflib et value de reference
@@ -362,26 +362,26 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    PtModule = m_Parent->GetBoard()->m_Modules;
-    for( ; PtModule != NULL; PtModule = PtModule->Next() )
+    Module = m_Parent->GetBoard()->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        if( PtModule->Next() == NULL )
+        if( Module->Next() == NULL )
             break;
     }
 
-    /* Ici PtModule pointe le dernier module de la liste */
-    for( ; (BOARD*) PtModule != m_Parent->GetBoard(); PtModule = PtBack )
+    /* Ici Module pointe le dernier module de la liste */
+    for( ; Module && ((BOARD*) Module != m_Parent->GetBoard()); Module = PtBack )
     {
         MODULE* module;
-        PtBack = PtModule->Back();
-        if( lib_reference.CmpNoCase( PtModule->m_LibRef ) != 0 )
+        PtBack = Module->Back();
+        if( lib_reference.CmpNoCase( Module->m_LibRef ) != 0 )
             continue;
         if( check_module_value )
         {
-            if( value.CmpNoCase( PtModule->m_Value->m_Text ) != 0 )
+            if( value.CmpNoCase( Module->m_Value->m_Text ) != 0 )
                 continue;
         }
-        module = Change_1_Module( PtModule, newmodulename.GetData(), ShowErr );
+        module = Change_1_Module( Module, newmodulename.GetData(), ShowErr );
         if( module )
             change = TRUE;
         else if( ShowErr )
@@ -408,7 +408,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
  *      - memes netnames pour pads de meme nom
  */
 {
-    MODULE* PtModule, * PtBack;
+    MODULE * Module, * PtBack;
     bool    change  = FALSE;
     int     ShowErr = 5; // Affiche 5 messages d'err maxi
 
@@ -422,18 +422,18 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    PtModule = m_Parent->GetBoard()->m_Modules;
-    for( ; PtModule != NULL; PtModule = PtModule->Next() )
+    Module = m_Parent->GetBoard()->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        if( PtModule->Next() == NULL )
+        if( Module->Next() == NULL )
             break;
     }
 
-    /* Ici PtModule pointe le dernier module de la liste */
-    for( ; (BOARD*) PtModule != m_Parent->GetBoard();  PtModule = PtBack )
+    /* Ici Module pointe le dernier module de la liste */
+    for( ; Module && ((BOARD*) Module != m_Parent->GetBoard());  Module = PtBack )
     {
-        PtBack = PtModule->Back();
-        if( Change_1_Module( PtModule, PtModule->m_LibRef.GetData(), ShowErr ) )
+        PtBack = Module->Back();
+        if( Change_1_Module( Module, Module->m_LibRef.GetData(), ShowErr ) )
             change = TRUE;
         else if( ShowErr )
             ShowErr--;
@@ -448,7 +448,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
 
 
 /******************************************************************/
-MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* PtModule,
+MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
                                                      const wxString& new_module, bool ShowError )
 /*******************************************************************/
 
@@ -467,18 +467,18 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* PtModule,
     MODULE*  NewModule;
     wxString Line;
 
-    if( PtModule == NULL )
+    if( Module == NULL )
         return NULL;
 
     wxBusyCursor dummy;
 
     /* Memorisation des parametres utiles de l'ancien module */
-    oldnamecmp = PtModule->m_LibRef;
+    oldnamecmp = Module->m_LibRef;
     namecmp    = new_module;
 
     /* Chargement du module */
     Line.Printf( _( "Change module %s (%s)  " ),
-                PtModule->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
+                Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
     m_WinMsg->WriteText( Line );
 
     namecmp.Trim( TRUE );
@@ -490,14 +490,14 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* PtModule,
         return NULL;
     }
 
-    if( PtModule == m_CurrentModule )
+    if( Module == m_CurrentModule )
         m_CurrentModule = NewModule;
     m_WinMsg->WriteText( wxT( "Ok\n" ) );
 
     /* Effacement a l'ecran de l'ancien module */
-    PtModule->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+    Module->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
-    m_Parent->Exchange_Module( this, PtModule, NewModule );
+    m_Parent->Exchange_Module( this, Module, NewModule );
 
     /* Affichage du nouveau module */
     NewModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
