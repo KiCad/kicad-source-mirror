@@ -1,0 +1,48 @@
+* Copyright (C) 1992-2008 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+* Copyright (C) 1992-2008 Kicad Developers
+* under GNU General Public License (see copyright.txt)
+
+Main author:
+Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+Maitre de Conferences
+IUT1 GEII2
+Universite Joseph Fourier (U.J.F.)
+Saint Martin d'H�res (38402)
+Laboratiore GIPSA-Lab
+Saint Martin d'H�res
+
+Contributors
+Dick Hollenbeck <dick@softplc.com>
+Jerry Jacobs <jerkejacobs@gmail.com>
+Jonas Diemer <diemer@gmx.de>
+KBool Library http://boolean.klaasholwerda.nl/bool.html
+Rok Markovic <rok@kanardia.eu>
+Tim Hanson <sideskate@gmail.com>
+Vesa Solonen <vesa.solonen@hut.fi>
+Wayne Stambaugh <stambaughw@verizon.net>
+
+See also CHANGELOG.txt for contributors.
+
+
+Document writers
+Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+Igor Plyatov <plyatov@gmail.com>
+
+Translators
+Czech (CZ) Martin Kratoška <martin@ok1rr.com>
+Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>
+French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+Polish (PL) Mateusz Skowroński <skowri@gmail.com>
+Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
+Russian (RU) Igor Plyatov <plyatov@gmail.com>
+Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>
+Spanish (ES) Iñigo Zuluaga <inigo_zuluaga@yahoo.es>
+
+Remy Halvick
+David Briscoe
+Dominique Laigle
+Paul Burke
+
+Programm credits for icons and others
+Icons by Iñigo Zuluaga
+3D modules by Renie Marquet <reniemarquet@uol.com.br>

@@ -17,12 +17,12 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2008.08.25"
+!define PRODUCT_VERSION "2009.02.16"
 !define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
 !define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
-!define COPYRIGHT "Jean-Pierre Charras"
+!define COPYRIGHT "Kicad Team (Jean-Pierre Charras and others)"
 !define COMMENTS ""
 !define HELP_WEB_SITE "http://groups.yahoo.com/group/kicad-users/"
 !define DEVEL_WEB_SITE "http://groups.yahoo.com/group/kicad-devel/"
