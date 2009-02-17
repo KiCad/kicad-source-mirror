@@ -99,6 +99,9 @@ endif
 # mesa (free opengl library) libs
 MESALIBSPATH = /usr/local/lib
 
+# Boost headers     (location of boost/)
+BOOST = ../
+
 #for static link: add wx gl lib
 LIBVERSION=`wx-config --release`
 WXPATH = `wx-config --prefix`/lib

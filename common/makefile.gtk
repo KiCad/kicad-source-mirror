@@ -4,11 +4,6 @@ CC = gcc
 
 include ../libs.linux
 
-# Compiler flags.
-CPPFLAGS +=  -I./ -I../include
-
-EDACPPFLAGS = $(CPPFLAGS)
-
 all: common.a
 
 deps:
@@ -17,7 +12,8 @@ deps:
 include makefile.include
 -include *.d
 
-CPPFLAGS += $(EXTRACPPFLAGS) -fno-strict-aliasing
+# specfic Compiler flags and options
+CPPFLAGS += $(EXTRACPPFLAGS) -I./ -I../include -I$(BOOST)
 EDACPPFLAGS = $(CPPFLAGS)
 
 

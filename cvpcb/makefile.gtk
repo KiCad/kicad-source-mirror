@@ -5,17 +5,8 @@ FINAL = 1
 
 include ../libs.linux
 
-# Compiler flags.
-CPPFLAGS +=
-
-EDACPPFLAGS = $(CPPFLAGS)
-
 TARGET = cvpcb
 
-all: $(TARGET)
-
-deps:
-	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
 
 include makefile.include
 -include *.d
@@ -23,6 +14,10 @@ include makefile.include
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
 
+all: $(TARGET)
+
+deps:
+	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
 
 $(TARGET):	$(OBJECTS) makefile.gtk makefile.include $(EXTRALIBS) ../libs.linux $(LIBVIEWER3D)
 	$(LD) $(OBJECTS) $(LDFLAGS)  $(LIBVIEWER3D)  $(LIBS_WITH_GL) -o $(TARGET)

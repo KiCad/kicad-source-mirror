@@ -3,11 +3,6 @@
 
 include ../libs.linux
 
-BOOST_LIB = ../
-
-# Additional compiler flags
-CPPFLAGS += -I $(BOOST_LIB)
-
 TARGET = pcbnew
 
 all: $(TARGET)
@@ -18,7 +13,8 @@ deps:
 include makefile.include
 -include *.d
 
-CPPFLAGS += $(EXTRACPPFLAGS)
+# Additional compiler flags
+CPPFLAGS += $(EXTRACPPFLAGS) -I$(BOOST_LIB)
 EDACPPFLAGS = $(CPPFLAGS)  $(BOOST_LIB)
 
 

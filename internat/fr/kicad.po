@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-15 19:36+0100\n"
-"PO-Revision-Date: 2009-02-15 19:39+0100\n"
+"POT-Creation-Date: 2009-02-17 09:24+0100\n"
+"PO-Revision-Date: 2009-02-17 09:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2014,67 +2014,6 @@ msgstr "Le fichier Session a une 'reference' a un composant non existant \"%s\""
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "Une piste ou via  a une référence vers un  pad \"%s\" manquant"
 
-#: pcbnew/dialog_track_options.cpp:151
-msgid "Vias:"
-msgstr "Vias:"
-
-#: pcbnew/dialog_track_options.cpp:160
-msgid "Via size"
-msgstr "Diamètre via"
-
-#: pcbnew/dialog_track_options.cpp:176
-msgid "Default Via Drill"
-msgstr "Perçage vias par défaut"
-
-#: pcbnew/dialog_track_options.cpp:192
-msgid "Alternate Via Drill"
-msgstr "Perçage vias alternatif"
-
-#: pcbnew/dialog_track_options.cpp:208
-msgid "Through Via"
-msgstr "Via Traversante"
-
-#: pcbnew/dialog_track_options.cpp:209
-msgid "Blind or Buried Via "
-msgstr "Via enterrée ou Aveugle"
-
-#: pcbnew/dialog_track_options.cpp:212
-msgid "Default Via Type"
-msgstr "Via par Défaut"
-
-#: pcbnew/dialog_track_options.cpp:223
-msgid "Micro Vias:"
-msgstr "Micro Vias:"
-
-#: pcbnew/dialog_track_options.cpp:232
-msgid "Micro Via Size"
-msgstr "Diamètre Micro Via"
-
-#: pcbnew/dialog_track_options.cpp:245
-msgid "Micro Via Drill"
-msgstr "Perçage Micro Via"
-
-#: pcbnew/dialog_track_options.cpp:260
-msgid "Allows Micro Vias"
-msgstr "Autorise Micro Vias"
-
-#: pcbnew/dialog_track_options.cpp:265
-#: pcbnew/dialog_track_options.cpp:268
-msgid ""
-"Allows use of micro vias\n"
-"They are very small vias only from an external copper layer to its near neightbour\n"
-msgstr ""
-"Autorise l'utilisation de micro vias\n"
-"Ce sont de petites vias allant d'une couche externe a la plus proche couche interne uniquement\n"
-
-#: pcbnew/dialog_track_options.cpp:276
-msgid "Track Width"
-msgstr "Epais. Piste"
-
-#: pcbnew/dialog_track_options.cpp:304
-msgid "Mask clearance"
-msgstr "Retrait Masque"
-
 #: pcbnew/class_pad.cpp:381
 msgid "Unknown Pad shape"
 msgstr "Forme Pad inconnue"
@@ -2519,6 +2458,110 @@ msgstr "Le composant avec valeur \"%s\" a une référence vide."
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr "Multiple composants ont une reference identique  \"%s\"."
 
+#: pcbnew/dialog_track_options_base.cpp:20
+msgid "Vias:"
+msgstr "Vias:"
+
+#: pcbnew/dialog_track_options_base.cpp:22
+msgid "Via size"
+msgstr "Diamètre via"
+
+#: pcbnew/dialog_track_options_base.cpp:27
+msgid "Enter the current via diameter."
+msgstr "Entrer la valeur courante du diamètre de via"
+
+#: pcbnew/dialog_track_options_base.cpp:31
+msgid "Default Via Drill"
+msgstr "Perçage vias par défaut"
+
+#: pcbnew/dialog_track_options_base.cpp:36
+msgid ""
+"Enter the default via drill diameter\n"
+"All vias drills not set to a specific drill value will have this drill value."
+msgstr ""
+"Entrer le preçage des vias par défault\n"
+"Tous les perçages de vias non ajusté à une valeur spécifique auront cette valeur de perçage."
+
+#: pcbnew/dialog_track_options_base.cpp:40
+msgid "Specific Via Drill"
+msgstr "Perçage Spécifique"
+
+#: pcbnew/dialog_track_options_base.cpp:45
+msgid ""
+"Use a specific drill value for all vias that must have a given drill value,\n"
+"and set the via hole to this specific drill value using the pop up menu."
+msgstr ""
+"Utiliser une valeur de perçage spécifique pour toutes les vias qui doivent avoir un perçage donné,\n"
+"et mettre le trou de la via à cette valeur spécifique en utilisant le menu popup."
+
+#: pcbnew/dialog_track_options_base.cpp:49
+msgid "Through Via"
+msgstr "Via Traversante"
+
+#: pcbnew/dialog_track_options_base.cpp:49
+msgid "Blind or Buried Via"
+msgstr "Via enterrée ou Aveugle"
+
+#: pcbnew/dialog_track_options_base.cpp:51
+msgid "Default Via Type"
+msgstr "Via par Défaut"
+
+#: pcbnew/dialog_track_options_base.cpp:53
+msgid ""
+"Select the current via type.\n"
+"Trough via is the usual selection"
+msgstr ""
+"Selection du type de via courant.\n"
+"Via traversante est la sélection usuelle."
+
+#: pcbnew/dialog_track_options_base.cpp:60
+msgid "Micro Vias:"
+msgstr "Micro Vias:"
+
+#: pcbnew/dialog_track_options_base.cpp:62
+msgid "Micro Via Size"
+msgstr "Diamètre Micro Via"
+
+#: pcbnew/dialog_track_options_base.cpp:69
+msgid "Micro Via Drill"
+msgstr "Perçage Micro Via"
+
+#: pcbnew/dialog_track_options_base.cpp:79
+msgid "Allows Micro Vias"
+msgstr "Autorise Micro Vias"
+
+#: pcbnew/dialog_track_options_base.cpp:81
+msgid ""
+"Allows use of micro vias\n"
+"They are very small vias only from an external copper layer to its near neightbour\n"
+msgstr ""
+"Autorise l'utilisation de micro vias\n"
+"Ce sont de petites vias allant d'une couche externe a la plus proche couche interne uniquement\n"
+
+#: pcbnew/dialog_track_options_base.cpp:88
+msgid "Dimensions:"
+msgstr "Dimensions:"
+
+#: pcbnew/dialog_track_options_base.cpp:90
+msgid "Track Width"
+msgstr "Epais. Piste"
+
+#: pcbnew/dialog_track_options_base.cpp:95
+msgid "Enter the current track width"
+msgstr "Entrer la largeur de piste courante"
+
+#: pcbnew/dialog_track_options_base.cpp:104
+msgid "This is the clearance between tracks, vias and pads for DRC."
+msgstr "Ceci est l'isolation entre pistes, vias et pads pour le calcul DRC."
+
+#: pcbnew/dialog_track_options_base.cpp:111
+msgid "Mask clearance"
+msgstr "Retrait Masque"
+
+#: pcbnew/dialog_track_options_base.cpp:116
+msgid "This is the clearance between pads and the mask"
+msgstr "Ceci est l'espace entre pads et le masque"
+
 #: pcbnew/pcbcfg.cpp:72
 msgid "Read config file"
 msgstr "Lire config"
@@ -2789,24 +2832,24 @@ msgid "Set via hole to a specific value. This specific value is currently"
 msgstr "Ajuster diamètre  perçage via a une valeur sécifique. Cette valeur spécifique est actuellement"
 
 #: pcbnew/onrightclick.cpp:493
-msgid "Set Via Hole to Alt Value"
-msgstr "Ajuste Perçage Via à Valeur Alternative"
+msgid "Set Via Hole to Specific Value"
+msgstr "Ajuste Perçage Via à Valeur Spécifique"
 
 #: pcbnew/onrightclick.cpp:495
 msgid "Set a specific via hole value. This value is currently"
 msgstr "Ajuste une valeur spécifique de perçage de la via. Cette valeur est actuellement"
 
 #: pcbnew/onrightclick.cpp:498
-msgid "Set the Via Hole Alt Value"
-msgstr "Ajuste la Valeur Alt. Perçage Via"
+msgid "Change the Current Specific Drill Value"
+msgstr "Changer la Valeur du Perçage Spécifique Courant"
 
 #: pcbnew/onrightclick.cpp:500
-msgid "Export Via Hole to Alt Value"
-msgstr "Exporte Perçage Via à Valeur Alt."
+msgid "Export this Via Hole to Alt Value"
+msgstr "Exporte ce Perçage Via comme Valeur Alt."
 
 #: pcbnew/onrightclick.cpp:502
-msgid "Export Via Hole to Others id Vias"
-msgstr "Exporte Perçage Via aux Autres Semblables."
+msgid "Export this Via Hole to Others id Vias"
+msgstr "Exporte ce Perçage Via aux Autres Semblables."
 
 #: pcbnew/onrightclick.cpp:504
 msgid "Set ALL Via Holes to Default"
@@ -4181,7 +4224,6 @@ msgid "Export this zone setup to all others copper zones"
 msgstr "Exporter ces options vers les autres zones de cuivre"
 
 #: pcbnew/dialog_copper_zones_base.cpp:156
-#: pcbnew/dialog_pad_properties_base.cpp:91
 msgid "Ok"
 msgstr "Ok"
 
@@ -4294,7 +4336,6 @@ msgid "Copper"
 msgstr "Cuivre"
 
 #: pcbnew/dialog_edit_module.cpp:271
-#: pcbnew/dialog_pad_properties_base.cpp:64
 msgid "User"
 msgstr "User"
 
@@ -4400,7 +4441,6 @@ msgid "Delete [%s]"
 msgstr "Supprimer [%s]"
 
 #: pcbnew/dialog_SVG_print_base.cpp:23
-#: pcbnew/dialog_pad_properties_base.cpp:106
 msgid "Layers:"
 msgstr "Couches:"
 
@@ -5721,10 +5761,12 @@ msgid "Schematic"
 msgstr "Schématique"
 
 #: eeschema/hotkeys.cpp:253
+#: eeschema/schedit.cpp:244
 msgid "Add Component"
 msgstr "Ajout Composant"
 
 #: eeschema/hotkeys.cpp:275
+#: eeschema/schedit.cpp:192
 msgid "Add Wire"
 msgstr "Ajouter Fils"
 
@@ -6845,22 +6887,18 @@ msgid "No Draw"
 msgstr "Invisible"
 
 #: eeschema/pinedit-dialog.cpp:213
-#: eeschema/affiche.cpp:112
 msgid "Right"
 msgstr "Droite"
 
 #: eeschema/pinedit-dialog.cpp:214
-#: eeschema/affiche.cpp:109
 msgid "Left"
 msgstr "Gauche"
 
 #: eeschema/pinedit-dialog.cpp:215
-#: eeschema/affiche.cpp:103
 msgid "Up"
 msgstr "Haut"
 
 #: eeschema/pinedit-dialog.cpp:216
-#: eeschema/affiche.cpp:106
 msgid "Down"
 msgstr "Bas"
 
@@ -7130,10 +7168,12 @@ msgid "All"
 msgstr "Tout"
 
 #: eeschema/affiche.cpp:180
+#: eeschema/onrightclick.cpp:330
 msgid "Unit"
 msgstr "Unité"
 
 #: eeschema/affiche.cpp:190
+#: eeschema/onrightclick.cpp:317
 msgid "Convert"
 msgstr "Convert"
 
@@ -10582,10 +10622,6 @@ msgstr "Orientation des Modules"
 msgid "Dialog"
 msgstr "Dialog"
 
-#: pcbnew/dialog_track_options.h:53
-msgid "Tracks and Vias Sizes"
-msgstr "Dims Pistes et Vias"
-
 #: pcbnew/pcbnew.h:285
 msgid "??? Via"
 msgstr "??? Via"
@@ -10593,6 +10629,10 @@ msgstr "??? Via"
 #: pcbnew/pcbnew.h:287
 msgid "Blind/Buried Via"
 msgstr "Via Aveugle/Enterrée"
+
+#: pcbnew/dialog_track_options_base.h:68
+msgid "Tracks and Vias Sizes"
+msgstr "Dims Pistes et Vias"
 
 #: pcbnew/dialog_SVG_print_base.h:68
 msgid "Create SVG file"
@@ -10992,6 +11032,10 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Alternate Via Drill"
+#~ msgstr "Perçage vias alternatif"
+#~ msgid "Set the Via Hole Alt Value"
+#~ msgstr "Ajuste la Valeur Alt. Perçage Via"
 #~ msgid "Zoom %d"
 #~ msgstr "Zoom %d"
 

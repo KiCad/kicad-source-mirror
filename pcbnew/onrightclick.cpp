@@ -490,19 +490,19 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             msg = _( "Set via hole to a specific value. This specific value is currently" );
             msg << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
-                                _( "Set Via Hole to Alt Value" ), msg,
+                                _( "Set Via Hole to Specific Value" ), msg,
                                 options_new_pad_xpm );
             msg = _( "Set a specific via hole value. This value is currently" );
             msg  << wxT(" ") << ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViaDrillCustomValue, m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
-                _( "Set the Via Hole Alt Value" ), msg, edit_xpm );
+                _( "Change the Current Specific Drill Value" ), msg, edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT, _(
-                    "Export Via Hole to Alt Value" ), export_options_pad_xpm );
+                    "Use this Via Hole as Specific Value" ), export_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS,
-                _( "Export Via Hole to Others id Vias" ), global_options_pad_xpm );
+                _( "Export this Via Hole to Others id Vias" ), global_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
                 _( "Set ALL Via Holes to Default" ), apply_xpm );
-            if( Track->IsDrillDefault() )   // Can't export the drill value, because this value is 0
+            if( Track->IsDrillDefault() )   // Can't export the drill value, because this value is 0 (default)
             {
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
             }

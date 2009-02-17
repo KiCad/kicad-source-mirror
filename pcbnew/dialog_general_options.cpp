@@ -17,6 +17,7 @@
 #include "dialog_general_options_BoardEditor_base.h"
 #include "dialog_display_options_base.h"
 #include "dialog_general_options.h"
+#include "dialog_track_options.h"
 
 /***********************************************************************************/
 Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent, wxDC* DC ) :
@@ -228,7 +229,6 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
 }
 
 
-#include "dialog_track_options.cpp"
 #include "dialog_graphic_items_options.cpp"
 
 /*****************************************************************/
@@ -240,8 +240,8 @@ void WinEDA_PcbFrame::InstallPcbOptionsFrame( const wxPoint& pos,
     {
     case ID_PCB_TRACK_SIZE_SETUP:
         {
-            WinEDA_PcbTracksDialog* OptionsFrame =
-                new WinEDA_PcbTracksDialog( this );
+            DIALOG_TRACKS_OPTIONS* OptionsFrame =
+                new DIALOG_TRACKS_OPTIONS( this );
 
             OptionsFrame->ShowModal();
             OptionsFrame->Destroy();
