@@ -10,8 +10,9 @@ email address.
 ++pcbnew
     Loading a module into the module editor was changing the layer count
     of a loaded board.  This is because void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
-    called Clear_PCB() which then set the global
-    g_DesignSettings.m_CopperLayerCount = 2;
+    calls bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
+    which then sets the global g_DesignSettings.m_CopperLayerCount = 2;
+    This is terrible.
     We need a layer count in each board, not as a global.  For now, comment out the assignment in initpcb.cpp.
 
 
