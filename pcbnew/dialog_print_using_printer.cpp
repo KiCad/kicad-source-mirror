@@ -688,7 +688,7 @@ void EDA_Printout::DrawPage()
 
     if( userscale == 1.0 ) // Draw the Sheet refs at optimum scale, and board at 1.0 scale
     {
-        dc->SetUserScale( accurate_Yscale, accurate_Yscale );
+        dc->SetUserScale( accurate_Xscale, accurate_Yscale );
     }
 
     if( s_PrintMirror )
