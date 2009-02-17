@@ -5,6 +5,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Feb-17 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    Loading a module into the module editor was changing the layer count
+    of a loaded board.  This is because void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
+    called Clear_PCB() which then set the global
+    g_DesignSettings.m_CopperLayerCount = 2;
+    We need a layer count in each board, not as a global.  For now, comment out the assignment in initpcb.cpp.
+
+
 2009-Feb-17 Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew:
@@ -16,7 +26,7 @@ email address.
 2009-Feb-09 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++eeschema
-    Changed dialog_edit_label so that is is UIpolicies.txt compliant.  Proper case
+    Changed dialog_edit_label so that it is UIpolicies.txt compliant.  Proper case
     on window titles, resizeable dialog border, minimum text width handling.
 
 

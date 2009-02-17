@@ -162,7 +162,11 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
+
+/* NO, this is a global setting, and changing it here changes a loaded board's layer count when loading a module in the module editor since
+    the module editor calls this when loading an existing module.
     g_DesignSettings.m_CopperLayerCount = 2;		// Default copper layers count set to 2: double layer board
+*/
 
     Zoom_Automatique( TRUE );
 
