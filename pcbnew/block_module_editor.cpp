@@ -413,10 +413,10 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         D_PAD* NewPad = new D_PAD( module );
         NewPad->Copy( pad );
         NewPad->m_Selected = IS_SELECTED;
-        module->m_Pads.PushBack( NewPad );
+        module->m_Pads.PushFront( NewPad );
     }
 
-    for( BOARD_ITEM* item = module->m_Drawings;  item;  item->Next() )
+    for( BOARD_ITEM* item = module->m_Drawings;  item; item = item->Next() )
     {
         if( item->m_Selected == 0 )
             continue;
@@ -469,10 +469,8 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
     {
         if( pad->m_Selected == 0 )
             continue;
-        pad->GetPosition().x += offset.x;
-        pad->GetPosition().y += offset.y;
-        pad->m_Pos0.x += offset.x;
-        pad->m_Pos0.y += offset.y;
+        pad->SetPosition( pad->GetPosition() + offset );
+        pad->m_Pos0 += offset;
     }
 
     item = module->m_Drawings;
@@ -484,24 +482,16 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case TYPE_TEXTE_MODULE:
-            ( (TEXTE_MODULE*) item )->GetPosition().x += offset.x;
-            ( (TEXTE_MODULE*) item )->GetPosition().y += offset.y;
-            ( (TEXTE_MODULE*) item )->m_Pos0.x += offset.x;
-            ( (TEXTE_MODULE*) item )->m_Pos0.y += offset.y;
+            ( (TEXTE_MODULE*) item )->m_Pos += offset;
+            ( (TEXTE_MODULE*) item )->m_Pos0 += offset;
             break;
 
         case TYPE_EDGE_MODULE:
-            ( (EDGE_MODULE*) item )->m_Start.x += offset.x;
-            ( (EDGE_MODULE*) item )->m_Start.y += offset.y;
+            ( (EDGE_MODULE*) item )->m_Start += offset;
+            ( (EDGE_MODULE*) item )->m_End += offset;
 
-            ( (EDGE_MODULE*) item )->m_End.x += offset.x;
-            ( (EDGE_MODULE*) item )->m_End.y += offset.y;
-
-            ( (EDGE_MODULE*) item )->m_Start0.x += offset.x;
-            ( (EDGE_MODULE*) item )->m_Start0.y += offset.y;
-
-            ( (EDGE_MODULE*) item )->m_End0.x += offset.x;
-            ( (EDGE_MODULE*) item )->m_End0.y += offset.y;
+            ( (EDGE_MODULE*) item )->m_Start0 += offset;
+            ( (EDGE_MODULE*) item )->m_End0 += offset;
             break;
 
         default:
