@@ -295,7 +295,9 @@ void dialog_freeroute_exchange::OnButton5Click( wxCommandEvent& event )
 
     if( wxFileExists( FullFileName ) )
     {
-        command << wxT("javaws") << wxT( " " ) + FullFileName;
+        // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
+        // The space is interpreted as an argument separator.
+        command << wxT("javaws") << wxChar(' ') << wxChar('"') << FullFileName << wxChar('"');
         ProcessExecute( command );
         return;
     }
