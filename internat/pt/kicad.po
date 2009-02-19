@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-11 21:16-0300\n"
+"PO-Revision-Date: 2009-02-15 15:37-0300\n"
 "Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
@@ -258,7 +258,7 @@ msgstr "Ligações"
 
 #: pcbnew/class_board.cpp:552
 msgid "Connect"
-msgstr "Conectar"
+msgstr "Conectados"
 
 #: pcbnew/class_board.cpp:555
 #: eeschema/eelayer.h:115
@@ -1968,7 +1968,7 @@ msgstr "Seleção de unidadas usadas para apresentar dimensões e posições de itens
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
 msgid "Smass cross"
-msgstr "Cruzamento de trilhas *"
+msgstr "Pequena cruz"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
 msgid "Full screen cursor"
@@ -11193,7 +11193,7 @@ msgstr "Ligar/Desligar camada Eco2"
 
 #: pcbnew/cleaningoptions_dialog.h:48
 msgid "Cleaning options"
-msgstr "Limpado opções"
+msgstr "Opções de limpeza"
 
 #: pcbnew/dialog_copper_zones_base.h:99
 msgid "Fill Zones Options"
