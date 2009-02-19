@@ -566,7 +566,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( ( GetCurItem() )->Type() == TYPE_ZONE_CONTAINER )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
-            zone_container->m_FilledPolysList.clear();
+            Delete_Zone_Fill( &dc, NULL, zone_container->m_TimeStamp );
             test_1_net_connexion( NULL, zone_container->GetNet() );
             GetScreen()->SetModify();
             DrawPanel->Refresh();

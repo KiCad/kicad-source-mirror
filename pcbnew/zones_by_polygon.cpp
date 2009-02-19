@@ -102,7 +102,6 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
  * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
  */
 {
-    int           nb_segm = 0;
     bool          modify  = false;
     unsigned long TimeStamp;
 
@@ -118,13 +117,17 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
         if( zone->m_TimeStamp == TimeStamp )
         {
             modify = TRUE;
-
-            /* Erase segment from screen */
-            if( DC )
-                Trace_Une_Piste( DrawPanel, DC, zone, nb_segm, GR_XOR );
             /* remove item from linked list and free memory */
             zone->DeleteStructure();
         }
+    }
+    
+    // Now delete the outlines of the corresponding copper areas
+    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
+        if( zone->m_TimeStamp == TimeStamp )
+            zone->m_FilledPolysList.clear();
     }
 
     if( modify )
