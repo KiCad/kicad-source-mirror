@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-15 15:37-0300\n"
+"PO-Revision-Date: 2009-02-20 19:19-0300\n"
 "Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
@@ -151,6 +151,7 @@ msgstr "Incluir camada de borda"
 #: pcbnew/dialog_orient_footprints.cpp:167
 #: pcbnew/dialog_pad_properties_base.cpp:97
 #: pcbnew/dialog_pcb_text_properties.cpp:104
+#: pcbnew/dialog_track_options_base.cpp:138
 #: pcbnew/globaleditpad.cpp:110
 #: pcbnew/mirepcb.cpp:103
 #: pcbnew/modedit_onclick.cpp:194
@@ -191,6 +192,7 @@ msgstr "Cancelar"
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:43
 #: pcbnew/dialog_orient_footprints.cpp:164
 #: pcbnew/dialog_pcb_text_properties.cpp:99
+#: pcbnew/dialog_track_options_base.cpp:132
 #: pcbnew/mirepcb.cpp:99
 #: pcbnew/muonde.cpp:328
 #: pcbnew/sel_layer.cpp:160
@@ -714,7 +716,7 @@ msgstr "Sim"
 
 #: pcbnew/class_track.cpp:893
 #: pcbnew/class_zone.cpp:892
-#: pcbnew/zones_by_polygon.cpp:893
+#: pcbnew/zones_by_polygon.cpp:896
 msgid "NetName"
 msgstr "Nome Net"
 
@@ -1280,7 +1282,7 @@ msgid "Options"
 msgstr "Opções"
 
 #: pcbnew/dialog_drc.cpp:442
-#: pcbnew/dialog_track_options.cpp:290
+#: pcbnew/dialog_track_options_base.cpp:106
 msgid "Clearance"
 msgstr "Isolamento"
 
@@ -1388,7 +1390,6 @@ msgstr "Não conectado"
 #: pcbnew/dialog_drc.cpp:548
 #: pcbnew/dialog_graphic_items_options.cpp:267
 #: pcbnew/dialog_initpcb.cpp:164
-#: pcbnew/dialog_track_options.cpp:328
 #: pcbnew/set_grid.cpp:183
 #: pcbnew/swap_layers.cpp:229
 #: cvpcb/dialog_display_options.cpp:183
@@ -1408,7 +1409,6 @@ msgstr "&Cancelar"
 #: pcbnew/dialog_drc.cpp:552
 #: pcbnew/dialog_graphic_items_options.cpp:263
 #: pcbnew/dialog_initpcb.cpp:161
-#: pcbnew/dialog_track_options.cpp:322
 #: pcbnew/set_grid.cpp:178
 #: pcbnew/swap_layers.cpp:225
 #: cvpcb/dialog_cvpcb_config.cpp:138
@@ -1930,7 +1930,7 @@ msgid "Through Vias:"
 msgstr "Vias Completas:"
 
 #: pcbnew/dialog_gendrill.cpp:284
-#: pcbnew/dialog_track_options.cpp:223
+#: pcbnew/dialog_track_options_base.cpp:67
 msgid "Micro Vias:"
 msgstr "Micro Vias:"
 
@@ -2954,49 +2954,76 @@ msgstr ""
 msgid "Messages:"
 msgstr "Mensagens :"
 
-#: pcbnew/dialog_track_options.cpp:151
+#: pcbnew/dialog_track_options_base.cpp:27
 msgid "Vias:"
 msgstr "Vias:"
 
-#: pcbnew/dialog_track_options.cpp:160
+#: pcbnew/dialog_track_options_base.cpp:29
 msgid "Via size"
 msgstr "Diâmetro da Via"
 
-#: pcbnew/dialog_track_options.cpp:176
+#: pcbnew/dialog_track_options_base.cpp:34
+msgid "Enter the current via diameter."
+msgstr "Entrar o diâmetro de via corrente"
+
+#: pcbnew/dialog_track_options_base.cpp:38
 msgid "Default Via Drill"
 msgstr "Furo de via  Default"
 
-#: pcbnew/dialog_track_options.cpp:192
-msgid "Alternate Via Drill"
-msgstr "Furo de via alternativo"
+#: pcbnew/dialog_track_options_base.cpp:43
+msgid ""
+"Enter the default via drill diameter\n"
+"All vias drills not set to a specific drill value will have this drill value."
+msgstr ""
+"Entre o diâmetro de furo padrão para vias\n"
+"Todos os furos de via não especificados terão este valor."
 
-#: pcbnew/dialog_track_options.cpp:208
+#: pcbnew/dialog_track_options_base.cpp:47
+msgid "Specific Via Drill"
+msgstr "Definir diâmetro de Via"
+
+#: pcbnew/dialog_track_options_base.cpp:52
+msgid ""
+"Use a specific drill value for all vias that must have a given drill value,\n"
+"and set the via hole to this specific drill value using the pop up menu."
+msgstr ""
+"Use um valor específico de furo para todas as vias que precisam ter um valor ,\n"
+" e dedefina o furo da via para este valor  específico usando o menu pop-up"
+
+#: pcbnew/dialog_track_options_base.cpp:56
 #: pcbnew/pcbnew.h:288
 msgid "Through Via"
 msgstr "Via Direta"
 
-#: pcbnew/dialog_track_options.cpp:209
-msgid "Blind or Buried Via "
+#: pcbnew/dialog_track_options_base.cpp:56
+msgid "Blind or Buried Via"
 msgstr "Via encoberta"
 
-#: pcbnew/dialog_track_options.cpp:212
+#: pcbnew/dialog_track_options_base.cpp:58
 msgid "Default Via Type"
 msgstr "Tipo de via  Default"
 
-#: pcbnew/dialog_track_options.cpp:232
+#: pcbnew/dialog_track_options_base.cpp:60
+msgid ""
+"Select the current via type.\n"
+"Trough via is the usual selection"
+msgstr ""
+"Selecione o tipo de via corrente:\n"
+"Via passante é o mais usual "
+
+#: pcbnew/dialog_track_options_base.cpp:69
 msgid "Micro Via Size"
 msgstr "Diâmetro da Micro Via"
 
-#: pcbnew/dialog_track_options.cpp:245
+#: pcbnew/dialog_track_options_base.cpp:76
 msgid "Micro Via Drill"
 msgstr "Diâmetro do furo da Micro Via"
 
-#: pcbnew/dialog_track_options.cpp:260
+#: pcbnew/dialog_track_options_base.cpp:86
 msgid "Allows Micro Vias"
 msgstr "Permitir Micro Vias"
 
-#: pcbnew/dialog_track_options.cpp:265
-#: pcbnew/dialog_track_options.cpp:268
+#: pcbnew/dialog_track_options_base.cpp:88
 msgid ""
 "Allows use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour\n"
@@ -3004,13 +3031,29 @@ msgstr ""
 "Permitir usar micro vias\n"
 "Elas são vias muito pequenas somente para camada externa de cobre e uma próxima\n"
 
-#: pcbnew/dialog_track_options.cpp:276
+#: pcbnew/dialog_track_options_base.cpp:95
+msgid "Dimensions:"
+msgstr "Dimensões:"
+
+#: pcbnew/dialog_track_options_base.cpp:97
 msgid "Track Width"
 msgstr "Largura da Trilha"
 
-#: pcbnew/dialog_track_options.cpp:304
+#: pcbnew/dialog_track_options_base.cpp:102
+msgid "Enter the current track width"
+msgstr "Entre a largura de trilha corrente"
+
+#: pcbnew/dialog_track_options_base.cpp:111
+msgid "This is the clearance between tracks, vias and pads for DRC."
+msgstr "Este é o isolamento entre, trilhas, vias e ilhas para DRC."
+
+#: pcbnew/dialog_track_options_base.cpp:118
 msgid "Mask clearance"
 msgstr "Isolamento da máscara"
+
+#: pcbnew/dialog_track_options_base.cpp:123
+msgid "This is the clearance between pads and the mask"
+msgstr "Este é o isolamento entre ilhas e a máscara"
 
 #: pcbnew/dsn.cpp:502
 msgid "Line length exceeded"
@@ -3406,28 +3449,28 @@ msgstr "Deletar Módulo?"
 msgid "Current Board will be lost ?"
 msgstr "Placa atual será perdida?"
 
-#: pcbnew/initpcb.cpp:177
+#: pcbnew/initpcb.cpp:181
 msgid "Delete Zones ?"
 msgstr "Deletar Zonas ?"
 
-#: pcbnew/initpcb.cpp:198
+#: pcbnew/initpcb.cpp:202
 msgid "Delete Board edges ?"
 msgstr "Deletar bordas de placa ?"
 
-#: pcbnew/initpcb.cpp:203
+#: pcbnew/initpcb.cpp:207
 msgid "Delete draw items?"
 msgstr "Deletar ítens de desenho?"
 
-#: pcbnew/initpcb.cpp:245
+#: pcbnew/initpcb.cpp:249
 #: gerbview/initpcb.cpp:136
 msgid "Delete Tracks?"
 msgstr "Deletar Trilhas?"
 
-#: pcbnew/initpcb.cpp:268
+#: pcbnew/initpcb.cpp:272
 msgid "Delete Modules?"
 msgstr "Deletar Módulos?"
 
-#: pcbnew/initpcb.cpp:288
+#: pcbnew/initpcb.cpp:292
 #: gerbview/initpcb.cpp:159
 msgid "Delete Pcb Texts"
 msgstr "Deletar textos do Pcb?"
@@ -4710,24 +4753,24 @@ msgid "Set via hole to a specific value. This specific value is currently"
 msgstr "Definir o furo da via para um valor específico. Tornar esse valor corrente"
 
 #: pcbnew/onrightclick.cpp:493
-msgid "Set Via Hole to Alt Value"
-msgstr "Definir furo de via para o valor alternativo"
+msgid "Set Via Hole to Specific Value"
+msgstr "Definir furo desta via para o valor específico"
 
 #: pcbnew/onrightclick.cpp:495
 msgid "Set a specific via hole value. This value is currently"
 msgstr "Definir um valor específico para furo de via. Tornar esse valor corrente"
 
 #: pcbnew/onrightclick.cpp:498
-msgid "Set the Via Hole Alt Value"
-msgstr "Definir o furo da via para o valor alternativo"
+msgid "Change the Current Specific Drill Value"
+msgstr "Alterar o calor atual de broca específico"
 
 #: pcbnew/onrightclick.cpp:500
-msgid "Export Via Hole to Alt Value"
-msgstr "Exportar furo de Via para o valor alternativo"
+msgid "Use this Via Hole as Specific Value"
+msgstr "Usar este furo de via como valor específico"
 
 #: pcbnew/onrightclick.cpp:502
-msgid "Export Via Hole to Others id Vias"
-msgstr "Exportar furo de via para outras vias"
+msgid "Export this Via Hole to Others id Vias"
+msgstr "Exportar furo desta via para outras vias"
 
 #: pcbnew/onrightclick.cpp:504
 msgid "Set ALL Via Holes to Default"
@@ -6016,21 +6059,21 @@ msgstr "Modificar módulo %s (%s)"
 msgid "Cmp files:"
 msgstr "Arquivos Cmp:"
 
-#: pcbnew/zones_by_polygon.cpp:323
-#: pcbnew/zones_by_polygon.cpp:379
-#: pcbnew/zones_by_polygon.cpp:709
+#: pcbnew/zones_by_polygon.cpp:326
+#: pcbnew/zones_by_polygon.cpp:382
+#: pcbnew/zones_by_polygon.cpp:712
 msgid "Area: DRC outline error"
 msgstr "Área: erro DRC no contorno"
 
-#: pcbnew/zones_by_polygon.cpp:592
+#: pcbnew/zones_by_polygon.cpp:595
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Erro DRC: este ponto inicial está dentro ou muito próximo a outra área"
 
-#: pcbnew/zones_by_polygon.cpp:654
+#: pcbnew/zones_by_polygon.cpp:657
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Erro DRC: fechando esta área criará um erro drc com outra área"
 
-#: pcbnew/zones_by_polygon.cpp:891
+#: pcbnew/zones_by_polygon.cpp:894
 msgid "No Net"
 msgstr "Nenhuma ligação"
 
@@ -9605,7 +9648,7 @@ msgstr "Editor de biblioteca"
 
 #: eeschema/tool_sch.cpp:53
 #: eeschema/viewlibs.cpp:122
-#: eeschema/viewlib_frame.cpp:63
+#: eeschema/viewlib_frame.cpp:59
 msgid "Library browser"
 msgstr "Ir para examinador de biblioteca "
 
@@ -11253,7 +11296,7 @@ msgstr "Diálogo"
 msgid "Create SVG file"
 msgstr "Cirar Arquivo SVG"
 
-#: pcbnew/dialog_track_options.h:53
+#: pcbnew/dialog_track_options_base.h:76
 msgid "Tracks and Vias Sizes"
 msgstr "Dimensões de Trilhas e Vias"
 
