@@ -29,7 +29,7 @@ endif
 endif
 LIBVERSION = 2.8
 
-BOOST_PATH=/f/boost/boost
+BOOST_LIB=/f/boost/boost
 
 
 # You must comment or uncomment this line to disable/enable python support
@@ -45,7 +45,7 @@ ALL_LDFLAGS = -s #-v
 FINAL = 1
 endif
 
-CPPFLAGS += -I $(BOOST_PATH)
+CPPFLAGS += -I $(BOOST_LIB)
 
 ALL_CPPFLAGS = `$(WXWIN)/wx-config --cppflags` $(CPPFLAGS)
 EDACPPFLAGS = $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS)

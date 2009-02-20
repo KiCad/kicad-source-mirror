@@ -13,7 +13,7 @@ include makefile.include
 -include *.d
 
 # specfic Compiler flags and options
-CPPFLAGS += $(EXTRACPPFLAGS) -I./ -I../include -I$(BOOST)
+CPPFLAGS += $(EXTRACPPFLAGS) -I./ -I../include
 EDACPPFLAGS = $(CPPFLAGS)
 
 

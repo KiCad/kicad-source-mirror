@@ -1,4 +1,4 @@
-EXTRACPPFLAGS += -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include
+EXTRACPPFLAGS += -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include -I../polygon
 
 COMMON = ../include/colors.h
 

@@ -87,6 +87,8 @@ ifdef USE_MATCH_LAYER
 CPPFLAGS += -DUSE_MATCH_LAYER
 endif
 
+CPPFLAGS += -I $(BOOST_LIB)
+
 ifdef KICAD_PYTHON
 PYTHON_VERSION=2.5
 PYLIBS= -L/usr/lib
@@ -100,7 +102,7 @@ endif
 MESALIBSPATH = /usr/local/lib
 
 # Boost headers     (location of boost/)
-BOOST = ../
+BOOST_LIB = ../
 
 #for static link: add wx gl lib
 LIBVERSION=`wx-config --release`

@@ -16,20 +16,26 @@
 #endif
 
 /* Important Note:
-  * These drawing functions  clip draw item before send these items to wxDC draw functions.
-  * For guy who aks why i did it, see a sample of problems encounted when pixels
-  * coordinates overflow 16 bits values:
-  * http://trac.wxwidgets.org/ticket/10446
-  * Problems can be found under Windows **and** Linux (mainly when drawing arcs)
-  * (mainly at low zoom values (2, 1 or 0.5), in pcbnew)
-  * some of these problems could be now fixed in recent distributions.
+ * These drawing functions  clip draw item before send these items to wxDC draw functions.
+ * For guy who aks why i did it, see a sample of problems encounted when pixels
+ * coordinates overflow 16 bits values:
+ * http://trac.wxwidgets.org/ticket/10446
+ * Problems can be found under Windows **and** Linux (mainly when drawing arcs)
+ * (mainly at low zoom values (2, 1 or 0.5), in pcbnew)
+ * some of these problems could be now fixed in recent distributions.
  *
-  * Currently (feb 2009) there are overflow problems when drawing solid (filled) polygons under linux without clipping
+ * Currently (feb 2009) there are overflow problems when drawing solid (filled) polygons under linux without clipping
  *
-  * So before removing cliping functions, be aware these bug (they are not in kicad or wxWidgets)
-  * are fixed by testing how are drawn complex lines arcs and solid polygons under Windows and Linux
-  * and remember users can have old versions with bugs
+ * So before removing cliping functions, be aware these bug (they are not in kicad or wxWidgets)
+ * are fixed by testing how are drawn complex lines arcs and solid polygons under Windows and Linux
+ * and remember users can have old versions with bugs
  */
+
+#define USE_CLIP_FILLED_POLYGONS
+
+#ifdef USE_CLIP_FILLED_POLYGONS
+void ClipAndDrawFilledPoly( EDA_Rect * ClipBox, wxDC * DC, wxPoint Points[], int n );
+#endif
 
 /* global variables */
 extern BASE_SCREEN* ActiveScreen;
@@ -39,15 +45,15 @@ static int          GRLastMoveToX, GRLastMoveToY;
 static int          Text_Color = LIGHTGRAY;
 
 static int          PenMinWidth = 1; /* largeur minimum de la plume (DOIT etre > 0)
-                                  *  (utile pour trace sur imprimante) */
+                                      *  (utile pour trace sur imprimante) */
 static int          ForceBlackPen; /* si != 0 : traces en noir (utilise pour trace
-                                  *  sur imprimante */
+                                    *  sur imprimante */
 static int          xcliplo = 0,
-                    ycliplo     = 0,
-                    xcliphi     = 2000,
-                    ycliphi     = 2000; /* coord de la surface de trace */
-static int   lastcolor = -1;
-static int   lastwidth = -1;
+                    ycliplo = 0,
+                    xcliphi = 2000,
+                    ycliphi = 2000;     /* coord de la surface de trace */
+static int   lastcolor      = -1;
+static int   lastwidth      = -1;
 static int   s_Last_Pen_Style = -1;
 static wxDC* lastDC = NULL;
 
@@ -74,9 +80,11 @@ static inline int USCALE( us arg, us num, us den )
 }
 
 
-static int inline ZoomValue( int val ) {
+static int inline ZoomValue( int val )
+{
     return ActiveScreen->Scale( val );
 }
+
 
 /****************************************/
 /* External reference for the mappings. */
@@ -355,10 +363,12 @@ bool GetGRForceBlackPenState( void )
 void GRSetDrawMode( wxDC* DC, int draw_mode )
 {
     if( draw_mode & GR_OR )
-#if defined (__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+#if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+
 
         DC->SetLogicalFunction( wxCOPY );
 #else
+
 
         DC->SetLogicalFunction( wxOR );
 #endif
@@ -449,7 +459,7 @@ void GRSDashedLine( EDA_Rect* ClipBox,
 {
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
-    lastcolor = -1;
+    lastcolor     = -1;
     GRSetColorPen( DC, Color, width, wxSHORT_DASH );
     GRSLine( ClipBox, DC, x1, y1, x2, y2, width, Color );
     lastcolor = -1;
@@ -877,7 +887,16 @@ static void GRSPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[], bool 
     if( Fill && ( n > 2 ) )
     {
         GRSetBrush( DC, BgColor, FILLED );
-        DC->DrawPolygon( n, Points );
+
+
+        /* clip before send the filled polygon to wxDC, because under linux (GTK?)
+         *  polygonsl having large coordinates are incorrectly drawn
+         */
+#ifdef USE_CLIP_FILLED_POLYGONS
+        ClipAndDrawFilledPoly( ClipBox, DC, Points, n );
+#else
+         DC->DrawPolygon( n, Points ); //does not work very well under linux
+#endif
     }
     else
     {
@@ -927,11 +946,11 @@ static void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int aPointCount, wxPoint
 
 
 /* not used
-  * static void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[],
-  *                 bool Fill, int Color, int BgColor )
-  * {
-  * GRSClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
-  * }
+ * static void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[],
+ *                 bool Fill, int Color, int BgColor )
+ * {
+ * GRSClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
+ * }
  */
 
 
@@ -1531,3 +1550,41 @@ void GRSetTextBgColor( wxDC* DC, wxFont*, int Color )
                                ColorRefs[Color].m_Blue )
                            );
 }
+
+#ifdef USE_CLIP_FILLED_POLYGONS
+
+/** Function ClipAndDrawFilledPoly
+ *  Used to clip a polygon and draw it as Filled Polygon
+ *  uses the Sutherland and Hodgman algo to clip the given poly against a rectangle.
+ *  This rectangle is the drawing area
+ *  this is useful under Linux (2009) because filled polygons are incorrectly drawn
+ *  if they have too large coordinates (seems due to integer overflows in calculations)
+ *  Could be removed in some years, if become unnecesary.
+ */
+#include "SutherlandHodgmanClipPoly.h"
+void ClipAndDrawFilledPoly( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
+{
+    static vector<wxPoint> clippedPolygon;
+    static pointVector     inputPolygon, outputPolygon;
+
+    inputPolygon.clear();
+    outputPolygon.clear();
+    clippedPolygon.clear();
+    for( int ii = 0; ii < n; ii++ )
+        inputPolygon.push_back( PointF( (REAL)aPoints[ii].x, (REAL)aPoints[ii].y ) );
+
+    RectF             window( (REAL) aClipBox->GetX(), (REAL) aClipBox->GetY(),
+                             (REAL) aClipBox->GetWidth(), (REAL) aClipBox->GetHeight() );
+
+    SutherlandHodgman sh( window );
+    sh.Clip( inputPolygon, outputPolygon );
+
+    for( cpointIterator cit = outputPolygon.begin(); cit != outputPolygon.end(); ++cit )
+    {
+        clippedPolygon.push_back( wxPoint( (int)round( cit->X ), (int)round( cit->Y ) ) );
+    }
+
+    if ( clippedPolygon.size() )
+        aDC->DrawPolygon( clippedPolygon.size(), &clippedPolygon[0] );
+}
+#endif

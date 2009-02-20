@@ -14,15 +14,15 @@ include makefile.include
 -include *.d
 
 # Additional compiler flags
-CPPFLAGS += $(EXTRACPPFLAGS) -I$(BOOST_LIB)
-EDACPPFLAGS = $(CPPFLAGS)  $(BOOST_LIB)
+CPPFLAGS += $(EXTRACPPFLAGS)
+EDACPPFLAGS = $(CPPFLAGS)
 
 
 $(TARGET): $(OBJECTS) makefile.gtk  makefile.include $(LIBVIEWER3D) $(EXTRALIBS) ../libs.linux
 		$(LD) $(LDFLAGS) $(OBJECTS) $(LIBVIEWER3D) $(LIBS_WITH_GL)\
 		-o $(TARGET)
-		
-		
+
+
 install: $(TARGET)
 	mkdir -p $(KICAD_BIN)
 	cp $(TARGET) $(KICAD_BIN)

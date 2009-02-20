@@ -5,6 +5,18 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Feb-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++gr_basic.cpp
+    Added: Function ClipAndDrawFilledPoly()
+        Used to clip a polygon and display it as Filled Polygon
+        uses the Sutherland and Hodgman algo to clip the given poly against a rectangle.
+        This rectangle is the drawing area
+        this is useful under Linux (2009) because filled polygons are incorrectly drawn
+        if they have too large coordinates (seems due to integer overflows in calculations)
+        Could be removed in some years, if become unnecesary.
+
+
 2009-Feb-17 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
