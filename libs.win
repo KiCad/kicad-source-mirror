@@ -22,9 +22,9 @@ DEBUG = 0
 #Define the wxWidget path (if not found in environment variables):
 ifndef WXWIN
 ifeq ($(DEBUG), 1)
-WXWIN=f:/wxMSW-2.8.9-debug
+WXWIN=f:/wxMSW-2.8.910-rc2/Debug
 else
-WXWIN=f:/wxMSW-2.8.9
+WXWIN=f:/wxMSW-2.8.10-rc2/Release
 endif
 endif
 LIBVERSION = 2.8
@@ -68,22 +68,5 @@ CC = gcc
 .cpp.o:
 	g++ -c -Wall $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $(EXTRACPPFLAGS) -o $@ $*.cpp
 
-# Settings for Cyginw/Mingw32
-# Some versions of windres cannot cope with the --preprocessor
-# option. Uncomment the RCPREPROCESSOR line below if yours can.
-ifndef WINE
-RESCOMP=$(CROSS)windres $(_USE_TEMP_FILE_IF_SUPPORTED)
-else
-RESCOMP=wrc
-endif
-RCINPUTSWITCH=-i
-RCOUTPUTSWITCH=-o
-RCINCSWITCH=--include-dir
-RCDEFSWITCH=--define
-# Note that this can cause windres to fail (Win95/98 problem?)
-# but commenting out RCPREPROCESSOR then does the trick.
-#RCPREPROCESSOR=--preprocessor "$(CXX) -c -E -xc-header -DRC_INVOKED"
-
-# Don't make this too long (e.g. by adding contrib/include/wx) because it will
-# truncate the command line
-RESFLAGS=$(RCPREPROCESSOR) $(RCINCSWITCH) $(WXDIR)/include $(RCEXTRAINC) $(RCDEFSWITCH) __WIN32__ $(RCDEFSWITCH) __WIN95__ $(RCDEFSWITCH) __GNUWIN32__
+# Settings for Mingw32
+RESCOMP=`$(WXWIN)/wx-config --rescomp`
