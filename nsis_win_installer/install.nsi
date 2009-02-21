@@ -109,7 +109,7 @@ Section $(TITLE_SEC01) SEC01
   SectionIn RO
   SetOverwrite try
   SetOutPath "$INSTDIR"
-  File /nonfatal "..\author.txt"
+  File /nonfatal "..\AUTHORS.txt"
   File /nonfatal "..\copyright.txt"
   File /nonfatal "..\gpl.txt"
   File /nonfatal "..\licendoc.txt"

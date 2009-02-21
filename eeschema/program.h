@@ -25,6 +25,8 @@
 
 #define TEXT_NO_VISIBLE 1
 
+#define MIN_BUSLINES_THICKNESS 12   // min bus lines and entries thickness
+
 /* Rotation, mirror of graphic items in components bodies are handled by a transform matrix
  *  The default matix is useful to draw lib entries with a defualt matix ( no rotation, no mirrot
  *  but Y axis is bottom to top, and Y draw axis is to to bottom

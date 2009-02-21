@@ -218,7 +218,7 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = m_Width;
 
     if( Color >= 0 )
         color = Color;
@@ -227,9 +227,11 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     GRSetDrawMode( DC, DrawMode );
 
-    // FIXME: Not compatable with new zoom.
-    if( (m_Layer == LAYER_BUS) && panel->GetScreen()->Scale( width ) <= 1 )
-        width *= 3;
+    // Busses are draw with thick lines
+    if( m_Layer == LAYER_BUS )
+        width = MAX( m_Width, MIN_BUSLINES_THICKNESS );
+
+    width = MAX( width, g_DrawMinimunLineWidth );
 
     if( m_Layer == LAYER_NOTES )
         GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
@@ -303,7 +305,7 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
 
 {
     int color;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = m_Width;
 
     if( Color >= 0 )
         color = Color;
@@ -312,7 +314,9 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
     GRSetDrawMode( DC, DrawMode );
 
     if( m_Layer == LAYER_BUS )
-        width *= 3;
+        width = MAX( m_Width, MIN_BUSLINES_THICKNESS );
+
+    width = MAX( width, g_DrawMinimunLineWidth );
 
     GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
             m_End().x + offset.x, m_End().y + offset.y, width, color );
@@ -327,7 +331,7 @@ void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
                                int DrawMode, int Color )
 {
     int color;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = m_Width;
 
     if( Color >= 0 )
         color = Color;
@@ -337,9 +341,9 @@ void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint&
     GRSetDrawMode( DC, DrawMode );
 
     if( m_Layer == LAYER_BUS )
-    {
-        width *= 3;
-    }
+        width = MAX( m_Width, MIN_BUSLINES_THICKNESS );
+
+    width = MAX( width, g_DrawMinimunLineWidth );
 
     GRMoveTo( m_PolyPoints[0].x, m_PolyPoints[0].y );
     if( m_Layer == LAYER_NOTES )
