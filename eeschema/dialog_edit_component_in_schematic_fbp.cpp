@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  7 2008)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -71,6 +71,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	optionsSizer->Add( chipnameSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 	
 	convertCheckBox = new wxCheckBox( this, wxID_ANY, _("Convert"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	convertCheckBox->SetToolTip( _("Use the alternate shape of this component.\nFor gates, this is the \"De Morgan\" conversion") );
 	
 	optionsSizer->Add( convertCheckBox, 0, wxALL, 8 );
@@ -117,11 +118,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	bShowRotateSizer = new wxBoxSizer( wxVERTICAL );
 	
 	showCheckBox = new wxCheckBox( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	showCheckBox->SetToolTip( _("Check if you want this field visible") );
 	
 	bShowRotateSizer->Add( showCheckBox, 0, wxALL, 5 );
 	
 	rotateCheckBox = new wxCheckBox( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
 	
 	bShowRotateSizer->Add( rotateCheckBox, 0, wxALL, 5 );
@@ -132,6 +135,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
 	m_StyleRadioBox = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
 	m_StyleRadioBox->SetSelection( 0 );
+	m_StyleRadioBox->SetToolTip( _("The style of the currently selected field's text in the schemati") );
+	
 	visibilitySizer->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND, 5 );
@@ -172,7 +177,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	textSizeBoxSizer->Add( textSizeLabel, 0, 0, 5 );
 	
 	textSizeTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	textSizeTextCtrl->SetToolTip( _("The vertical height of the currently selected field's text in the schematic") );
+	textSizeTextCtrl->SetToolTip( _("The size of the currently selected field's text in the schematic") );
 	
 	textSizeBoxSizer->Add( textSizeTextCtrl, 0, wxEXPAND, 5 );
 	
@@ -189,6 +194,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	posXBoxSizer->Add( posXLabel, 0, 0, 5 );
 	
 	posXTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	posXTextCtrl->SetToolTip( _("The X coordinate of the text relative to the component") );
+	
 	posXBoxSizer->Add( posXTextCtrl, 0, wxEXPAND, 5 );
 	
 	positionBoxSizer->Add( posXBoxSizer, 1, wxALL|wxEXPAND, 5 );

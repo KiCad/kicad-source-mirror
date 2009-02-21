@@ -188,12 +188,12 @@ void KiConfigEeschemaFrame::CreateControls()
 
     wxButton* itemButton15 = new wxButton( itemDialog1, ADD_LIB, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
     if (KiConfigEeschemaFrame::ShowToolTips())
-        itemButton15->SetToolTip(_("Add a new library after the selected library, add load it"));
+        itemButton15->SetToolTip(_("Add a new library after the selected library, and load it"));
     itemButton15->SetForegroundColour(wxColour(0, 128, 0));
     itemBoxSizer13->Add(itemButton15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* itemButton16 = new wxButton( itemDialog1, INSERT_LIB, _("Ins"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton16->SetHelpText(_("Add a new library beforer the selected library, add load it"));
+    itemButton16->SetHelpText(_("Add a new library before the selected library, and load it"));
     if (KiConfigEeschemaFrame::ShowToolTips())
         itemButton16->SetToolTip(_("Add a new library beforer the selected library, add load it"));
     itemButton16->SetForegroundColour(wxColour(0, 0, 255));

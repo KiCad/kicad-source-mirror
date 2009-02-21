@@ -645,7 +645,7 @@
                         <property name="size"></property>
                         <property name="style"></property>
                         <property name="subclass"></property>
-                        <property name="tooltip">Enter a filename if you do not want to use defaults files names&#x0A;Can be used only when printing the current sheet</property>
+                        <property name="tooltip">Enter a filename if you do not want to use default file names&#x0A;Can be used only when printing the current sheet</property>
                         <property name="value"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>

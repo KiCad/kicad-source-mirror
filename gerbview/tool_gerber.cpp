@@ -29,11 +29,11 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     menuBar = new wxMenuBar();
 
     wxMenu* filesMenu = new wxMenu;
-    filesMenu->Append( ID_MENU_LOAD_FILE, _( "Clear and Load Gerber file" ),
+    filesMenu->Append( ID_MENU_LOAD_FILE, _( "Clear and Load Gerber File" ),
                        _( "Clear all layers and Load new Gerber file" ),
                        FALSE );
 
-    filesMenu->Append( ID_MENU_APPEND_FILE, _( "Load Gerber file" ),
+    filesMenu->Append( ID_MENU_APPEND_FILE, _( "Load Gerber File" ),
                        _( "Load new Gerber file on currrent layer" ),
                        FALSE );
 
@@ -45,7 +45,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     filesMenu->Append( ID_GERBVIEW_LOAD_DCODE_FILE, _( "Load DCodes" ),
                        _( "Load D-Codes File" ), FALSE );
 #if 0
-    filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load drill" ),
+    filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load Drill" ),
                        _( "Load excellon drill file" ), FALSE );
 #endif
 
@@ -58,10 +58,10 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
 #if 0
     filesMenu->AppendSeparator();
-    filesMenu->Append( ID_MENU_SAVE_BOARD, _( "&Save layers" ),
+    filesMenu->Append( ID_MENU_SAVE_BOARD, _( "&Save Layers" ),
                        _( "Save current layers (GERBER format)" ), FALSE );
 
-    filesMenu->Append( ID_MENU_SAVE_BOARD_AS, _( "Save layers as.." ),
+    filesMenu->Append( ID_MENU_SAVE_BOARD_AS, _( "Save Layers As..." ),
                        _( "Save current layers as.." ), FALSE );
 #endif
 
@@ -78,7 +78,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     // Configuration:
     wxMenu* configmenu = new wxMenu;
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_REQ, _( "&File ext" ),
+    ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_REQ, _( "&File Ext" ),
                             _( "Setting Files extension" ), config_xpm );
     ADD_MENUITEM_WITH_HELP( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
                             _( "Select Colors and Display for layers" ),
@@ -116,19 +116,19 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                             _( "&List DCodes" ),
                             _( "List and edit D-codes" ), show_dcodenumber_xpm );
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_SHOW_SOURCE,
-                            _( "&Show source" ),
+                            _( "&Show Source" ),
                             _( "Show source file for the current layer" ),
                             tools_xpm );
     miscellaneous_menu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_PCB_GLOBAL_DELETE,
-                            _( "&Delete layer" ),
+                            _( "&Delete Layer" ),
                             _( "Delete current layer" ), general_deletions_xpm );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                             _( "Open the gerbview manual" ), help_xpm );
-    ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About gerbview" ),
+    ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About Gerbview" ),
                             _( "About gerbview gerber and drill viewer" ),
                             info_xpm );
 

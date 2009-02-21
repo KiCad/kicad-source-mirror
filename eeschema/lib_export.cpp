@@ -143,7 +143,7 @@ void WinEDA_LibeditFrame::ExportOnePart( bool create_lib )
     wxString msg;
     if( create_lib && success )
     {
-        msg = Name + _( "0k" );
+        msg = Name + _( "Ok" );
         DisplayInfo( this,
             _("Note: this new library will be available only if it is loaded by eeschema.\nModify eeschema config if you want use it.") );
     }

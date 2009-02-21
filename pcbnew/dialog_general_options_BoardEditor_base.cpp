@@ -35,10 +35,10 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	bLeftSizer->Add( m_UnitsSelection, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_CursorShapeChoices[] = { _("Smass cross"), _("Full screen cursor") };
+	wxString m_CursorShapeChoices[] = { _("Small cross"), _("Full screen cursor") };
 	int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
 	m_CursorShape = new wxRadioBox( this, wxID_CURSOR_SHAPE, _("Cursor"), wxDefaultPosition, wxDefaultSize, m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_CursorShape->SetSelection( 1 );
+	m_CursorShape->SetSelection( 0 );
 	m_CursorShape->SetToolTip( _("Main cursor shape selection (small cross or large cursor)") );
 	
 	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );

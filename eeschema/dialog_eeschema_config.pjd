@@ -24,25 +24,25 @@
     <string name="target_wx_version">"&lt;Any&gt;"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
 // Name:        %HEADER-FILENAME%
-// Purpose:     
+// Purpose:
 // Author:      %AUTHOR%
-// Modified by: 
+// Modified by:
 // Created:     %DATE%
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   %COPYRIGHT%
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 "</string>
     <string name="cpp_implementation_comment">"/////////////////////////////////////////////////////////////////////////////
 // Name:        %SOURCE-FILENAME%
-// Purpose:     
+// Purpose:
 // Author:      %AUTHOR%
-// Modified by: 
+// Modified by:
 // Created:     %DATE%
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   %COPYRIGHT%
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 "</string>
@@ -50,11 +50,11 @@
 // Name:        %SYMBOLS-FILENAME%
 // Purpose:     Symbols file
 // Author:      %AUTHOR%
-// Modified by: 
+// Modified by:
 // Created:     %DATE%
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   %COPYRIGHT%
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 "</string>
@@ -812,7 +812,7 @@
                       <string name="proxy-Label">"Add"</string>
                       <bool name="proxy-Default">0</bool>
                       <string name="proxy-Help text">""</string>
-                      <string name="proxy-Tooltip text">"Add a new library after the selected library, add load it"</string>
+                      <string name="proxy-Tooltip text">"Add a new library after the selected library, and load it"</string>
                       <string name="proxy-Data variable">""</string>
                       <string name="proxy-Data validator">""</string>
                       <string name="proxy-Data source">""</string>
@@ -878,7 +878,7 @@
                       <string name="proxy-Member variable name">""</string>
                       <string name="proxy-Label">"Ins"</string>
                       <bool name="proxy-Default">0</bool>
-                      <string name="proxy-Help text">"Add a new library beforer the selected library, add load it"</string>
+                      <string name="proxy-Help text">"Add a new library before the selected library, and load it"</string>
                       <string name="proxy-Tooltip text">""</string>
                       <string name="proxy-Data variable">""</string>
                       <string name="proxy-Data validator">""</string>

@@ -103,7 +103,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
     /* Clear components buffer */
     if( g_BaseListeCmp )
-        FreeMemoryComponants();
+        FreeMemoryComponents();
 
     source = wxFopen( FFileName, wxT( "rt" ) );
     if( source == 0 )

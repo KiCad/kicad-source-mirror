@@ -82,7 +82,7 @@ void WinEDA_MainFrame::Save_Prj_Config()
     FullFileName = m_PrjFileName;
     ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
 
-    FullFileName = EDA_FileSelector( _( "Save project file" ),
+    FullFileName = EDA_FileSelector( _( "Save Project File:" ),
                                      wxGetCwd(),                /* Chemin par defaut */
                                      FullFileName,              /* nom fichier par defaut */
                                      g_Prj_Config_Filename_ext, /* extension par defaut */

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 09:24+0100\n"
-"PO-Revision-Date: 2009-02-17 09:34+0100\n"
+"POT-Creation-Date: 2009-02-21 16:05+0100\n"
+"PO-Revision-Date: 2009-02-21 16:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2255,7 +2255,6 @@ msgid "Adjust size and width for tracks and vias"
 msgstr "Ajuster largeur des pistes et diamètre de vias"
 
 #: pcbnew/menubarpcb.cpp:222
-#: pcbnew/tool_pcb.cpp:614
 msgid "Grid"
 msgstr "Grille"
 
@@ -2391,37 +2390,37 @@ msgstr "&3D Visu"
 msgid "&Help"
 msgstr "&Aide"
 
-#: pcbnew/moduleframe.cpp:229
-msgid "Module Editor: Module modified! Continue?"
-msgstr "Editeur de Module: Module modifié!  Continuer ?"
-
 #: pcbnew/initpcb.cpp:126
 msgid "Current Board will be lost ?"
 msgstr "Le C.I. courant sera perdu ?"
 
-#: pcbnew/initpcb.cpp:177
+#: pcbnew/initpcb.cpp:181
 msgid "Delete Zones ?"
 msgstr "Effacer Zones ?"
 
-#: pcbnew/initpcb.cpp:198
+#: pcbnew/initpcb.cpp:202
 msgid "Delete Board edges ?"
 msgstr "Effacement contour PCB"
 
-#: pcbnew/initpcb.cpp:203
+#: pcbnew/initpcb.cpp:207
 msgid "Delete draw items?"
 msgstr "Suppression éléments graphiques?"
 
-#: pcbnew/initpcb.cpp:245
+#: pcbnew/initpcb.cpp:249
 msgid "Delete Tracks?"
 msgstr "Effacer Pistes ?"
 
-#: pcbnew/initpcb.cpp:268
+#: pcbnew/initpcb.cpp:272
 msgid "Delete Modules?"
 msgstr "Effacement des Modules?"
 
-#: pcbnew/initpcb.cpp:288
+#: pcbnew/initpcb.cpp:292
 msgid "Delete Pcb Texts"
 msgstr "Effacer Textes Pcb"
+
+#: pcbnew/moduleframe.cpp:229
+msgid "Module Editor: Module modified! Continue?"
+msgstr "Editeur de Module: Module modifié!  Continuer ?"
 
 #: pcbnew/specctra_export.cpp:66
 msgid "Specctra DSN file:"
@@ -2458,23 +2457,67 @@ msgstr "Le composant avec valeur \"%s\" a une référence vide."
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr "Multiple composants ont une reference identique  \"%s\"."
 
-#: pcbnew/dialog_track_options_base.cpp:20
+#: pcbnew/dialog_freeroute_exchange.cpp:178
+msgid "Export a Specctra Design (*.dsn) File"
+msgstr "Exporter un fichier de conception Specctra (*.dsn)"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:180
+msgid "Export a Specctra DSN file (to FreeRouter)"
+msgstr "Exporter un fichier Specctra DSN (pour FreeRoute)"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:183
+msgid "Launch FreeRouter via Java Web Start"
+msgstr "Lancer FreeRouter via Java Web Start"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:185
+msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
+msgstr "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou votre Navigateur si non trouvé)"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:188
+msgid "Back Import the Specctra Session (*.ses) File"
+msgstr "Importer un Fichier Specctra Session (*.ses)"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:190
+msgid "Merge a session file created by FreeRouter with the current board."
+msgstr "Importer un fichier session créé par FreeRouter dans le C.I. courant."
+
+#: pcbnew/dialog_freeroute_exchange.cpp:197
+msgid "Visit FreeRouting.net website"
+msgstr "Visiter le site FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:199
+msgid "Launch your browser and go to the FreeRouting.net website"
+msgstr "Lancer votre navigateur pour aller sur  FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:202
+msgid "FreeRouting.net URL"
+msgstr "URL FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:207
+msgid "The URL of the FreeRouting.net website"
+msgstr "L' URL du site FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange.cpp:213
+msgid "&Close"
+msgstr "&Fermer"
+
+#: pcbnew/dialog_track_options_base.cpp:27
 msgid "Vias:"
 msgstr "Vias:"
 
-#: pcbnew/dialog_track_options_base.cpp:22
+#: pcbnew/dialog_track_options_base.cpp:29
 msgid "Via size"
 msgstr "Diamètre via"
 
-#: pcbnew/dialog_track_options_base.cpp:27
+#: pcbnew/dialog_track_options_base.cpp:34
 msgid "Enter the current via diameter."
 msgstr "Entrer la valeur courante du diamètre de via"
 
-#: pcbnew/dialog_track_options_base.cpp:31
+#: pcbnew/dialog_track_options_base.cpp:38
 msgid "Default Via Drill"
 msgstr "Perçage vias par défaut"
 
-#: pcbnew/dialog_track_options_base.cpp:36
+#: pcbnew/dialog_track_options_base.cpp:43
 msgid ""
 "Enter the default via drill diameter\n"
 "All vias drills not set to a specific drill value will have this drill value."
@@ -2482,11 +2525,11 @@ msgstr ""
 "Entrer le preçage des vias par défault\n"
 "Tous les perçages de vias non ajusté à une valeur spécifique auront cette valeur de perçage."
 
-#: pcbnew/dialog_track_options_base.cpp:40
+#: pcbnew/dialog_track_options_base.cpp:47
 msgid "Specific Via Drill"
 msgstr "Perçage Spécifique"
 
-#: pcbnew/dialog_track_options_base.cpp:45
+#: pcbnew/dialog_track_options_base.cpp:52
 msgid ""
 "Use a specific drill value for all vias that must have a given drill value,\n"
 "and set the via hole to this specific drill value using the pop up menu."
@@ -2494,19 +2537,19 @@ msgstr ""
 "Utiliser une valeur de perçage spécifique pour toutes les vias qui doivent avoir un perçage donné,\n"
 "et mettre le trou de la via à cette valeur spécifique en utilisant le menu popup."
 
-#: pcbnew/dialog_track_options_base.cpp:49
+#: pcbnew/dialog_track_options_base.cpp:56
 msgid "Through Via"
 msgstr "Via Traversante"
 
-#: pcbnew/dialog_track_options_base.cpp:49
+#: pcbnew/dialog_track_options_base.cpp:56
 msgid "Blind or Buried Via"
 msgstr "Via enterrée ou Aveugle"
 
-#: pcbnew/dialog_track_options_base.cpp:51
+#: pcbnew/dialog_track_options_base.cpp:58
 msgid "Default Via Type"
 msgstr "Via par Défaut"
 
-#: pcbnew/dialog_track_options_base.cpp:53
+#: pcbnew/dialog_track_options_base.cpp:60
 msgid ""
 "Select the current via type.\n"
 "Trough via is the usual selection"
@@ -2514,23 +2557,23 @@ msgstr ""
 "Selection du type de via courant.\n"
 "Via traversante est la sélection usuelle."
 
-#: pcbnew/dialog_track_options_base.cpp:60
+#: pcbnew/dialog_track_options_base.cpp:67
 msgid "Micro Vias:"
 msgstr "Micro Vias:"
 
-#: pcbnew/dialog_track_options_base.cpp:62
+#: pcbnew/dialog_track_options_base.cpp:69
 msgid "Micro Via Size"
 msgstr "Diamètre Micro Via"
 
-#: pcbnew/dialog_track_options_base.cpp:69
+#: pcbnew/dialog_track_options_base.cpp:76
 msgid "Micro Via Drill"
 msgstr "Perçage Micro Via"
 
-#: pcbnew/dialog_track_options_base.cpp:79
+#: pcbnew/dialog_track_options_base.cpp:86
 msgid "Allows Micro Vias"
 msgstr "Autorise Micro Vias"
 
-#: pcbnew/dialog_track_options_base.cpp:81
+#: pcbnew/dialog_track_options_base.cpp:88
 msgid ""
 "Allows use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour\n"
@@ -2538,27 +2581,27 @@ msgstr ""
 "Autorise l'utilisation de micro vias\n"
 "Ce sont de petites vias allant d'une couche externe a la plus proche couche interne uniquement\n"
 
-#: pcbnew/dialog_track_options_base.cpp:88
+#: pcbnew/dialog_track_options_base.cpp:95
 msgid "Dimensions:"
 msgstr "Dimensions:"
 
-#: pcbnew/dialog_track_options_base.cpp:90
+#: pcbnew/dialog_track_options_base.cpp:97
 msgid "Track Width"
 msgstr "Epais. Piste"
 
-#: pcbnew/dialog_track_options_base.cpp:95
+#: pcbnew/dialog_track_options_base.cpp:102
 msgid "Enter the current track width"
 msgstr "Entrer la largeur de piste courante"
 
-#: pcbnew/dialog_track_options_base.cpp:104
+#: pcbnew/dialog_track_options_base.cpp:111
 msgid "This is the clearance between tracks, vias and pads for DRC."
 msgstr "Ceci est l'isolation entre pistes, vias et pads pour le calcul DRC."
 
-#: pcbnew/dialog_track_options_base.cpp:111
+#: pcbnew/dialog_track_options_base.cpp:118
 msgid "Mask clearance"
 msgstr "Retrait Masque"
 
-#: pcbnew/dialog_track_options_base.cpp:116
+#: pcbnew/dialog_track_options_base.cpp:123
 msgid "This is the clearance between pads and the mask"
 msgstr "Ceci est l'espace entre pads et le masque"
 
@@ -2844,8 +2887,8 @@ msgid "Change the Current Specific Drill Value"
 msgstr "Changer la Valeur du Perçage Spécifique Courant"
 
 #: pcbnew/onrightclick.cpp:500
-msgid "Export this Via Hole to Alt Value"
-msgstr "Exporte ce Perçage Via comme Valeur Alt."
+msgid "Use this Via Hole as Specific Value"
+msgstr "Utiliser ce Perçage de Via comme Valeur Spécifique"
 
 #: pcbnew/onrightclick.cpp:502
 msgid "Export this Via Hole to Others id Vias"
@@ -3379,8 +3422,8 @@ msgid "Board Modified: Continue ?"
 msgstr "Circuit imprimé modifié,  Continuer ?"
 
 #: pcbnew/files.cpp:172
-msgid "Load board files:"
-msgstr "Charger Fichiers C.I.:"
+msgid "Open Board File:"
+msgstr "Ovrir Fichier C.I.:"
 
 #: pcbnew/files.cpp:218
 msgid "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"
@@ -3410,21 +3453,21 @@ msgstr "Ecriture fichier CI: "
 msgid "Failed to create "
 msgstr "Impossible de créer  fichier "
 
-#: pcbnew/zones_by_polygon.cpp:323
-#: pcbnew/zones_by_polygon.cpp:379
-#: pcbnew/zones_by_polygon.cpp:709
+#: pcbnew/zones_by_polygon.cpp:326
+#: pcbnew/zones_by_polygon.cpp:382
+#: pcbnew/zones_by_polygon.cpp:712
 msgid "Area: DRC outline error"
 msgstr "Zone; Erreur DRC sur contour"
 
-#: pcbnew/zones_by_polygon.cpp:592
+#: pcbnew/zones_by_polygon.cpp:595
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Erreur DRC: ce point de départ est a l'intérieur d'une autre zone ou trop proche"
 
-#: pcbnew/zones_by_polygon.cpp:654
+#: pcbnew/zones_by_polygon.cpp:657
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Erreur DRC: la fermeture de cette zone crée une erreur DRC avec une autre zone"
 
-#: pcbnew/zones_by_polygon.cpp:891
+#: pcbnew/zones_by_polygon.cpp:894
 msgid "No Net"
 msgstr "No Net"
 
@@ -3958,7 +4001,7 @@ msgstr "Sélection module"
 
 #: pcbnew/dialog_netlist.cpp:167
 msgid ""
-"Select how footprints are reconized:\n"
+"Select how footprints are recognized:\n"
 "by their reference (U1, R3...) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
@@ -4035,10 +4078,6 @@ msgstr "Recalculer le chevelu complet ( utile après une edition manuelle de nom
 msgid "Netlist File:"
 msgstr "Fichier Netliste:"
 
-#: pcbnew/dialog_netlist.cpp:253
-msgid "&Close"
-msgstr "&Fermer"
-
 #: pcbnew/dialog_netlist.cpp:316
 msgid "Netlist Selection:"
 msgstr "Sélection de la netliste"
@@ -4099,11 +4138,11 @@ msgstr "Mode de Remplissage:"
 msgid ""
 "Filled areas can use solid polygons or segments.\n"
 "Depending on the complexity and the size of the zone,\n"
-"sometime polygons are better and sometime segments are better"
+"sometimes polygons are better and sometimes segments are better."
 msgstr ""
 "Les zones remplies peuvent utiliser des polygones ou des segments.\n"
 "Selon la complexité et la taille de la zone,\n"
-"quelquesfois les polygones sont préférable et quelquesfois les segments sont préférable"
+"quelquefois les polygones sont préférable et quelquefois les segments sont préférable"
 
 #: pcbnew/dialog_copper_zones_base.cpp:48
 msgid "16 segments / 360 deg"
@@ -4216,11 +4255,11 @@ msgid "Value of minimun thickness of filled areas"
 msgstr "Valeur de l'épaisseur minimum des zones remplies"
 
 #: pcbnew/dialog_copper_zones_base.cpp:150
-msgid "Export Setup to others zones"
-msgstr "Exporter options vers autres zones"
+msgid "Export Setup to other zones"
+msgstr "Exporter Options vers Autres Zones"
 
 #: pcbnew/dialog_copper_zones_base.cpp:152
-msgid "Export this zone setup to all others copper zones"
+msgid "Export this zone setup to all other copper zones"
 msgstr "Exporter ces options vers les autres zones de cuivre"
 
 #: pcbnew/dialog_copper_zones_base.cpp:156
@@ -4518,7 +4557,7 @@ msgstr "Nom Fichier:"
 
 #: pcbnew/dialog_SVG_print_base.cpp:92
 msgid ""
-"Enter a filename if you do not want to use defaults files names\n"
+"Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
 "Entrez un nom de fichier si vous ne voulez pas utiliser les noms par défaut\n"
@@ -4531,7 +4570,7 @@ msgstr "Messages:"
 #: pcbnew/dialog_copper_zones.cpp:279
 msgid ""
 "Error :\n"
-"you must choose a copper min thickness value bigger than 0.001 inch or 0.0254 mm)"
+"you must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)"
 msgstr ""
 "Erreur :\n"
 "vous devez choisir une valeur pour l'épaisseur de cuivre dans les freins thermiques plus grande que 0,001 pouce (ou 0,0254 mm)"
@@ -4962,7 +5001,7 @@ msgid "Selection of units used to display dimensions and positions of items"
 msgstr "Sélection des unités pour afficher les dimensions et positions des items"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
-msgid "Smass cross"
+msgid "Small cross"
 msgstr "Petite croix"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:38
@@ -5125,46 +5164,6 @@ msgstr "Pistes Magnétiques"
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:148
 msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Contrôle la capture du curseur pcb quand le curseur souris passe sur une piste"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:178
-msgid "Export a Specctra Design (*.dsn) File"
-msgstr "Exporter un fichier de conception Specctra (*.dsn)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:180
-msgid "Export a Specctra DSN file (to FreeRouter)"
-msgstr "Exporter un fichier Specctra DSN (pour FreeRoute)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:183
-msgid "Launch FreeRouter via Java Web Start"
-msgstr "Lancer FreeRouter via Java Web Start"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:185
-msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
-msgstr "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou votre Navigateur si non trouvé)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:188
-msgid "Back Import the Specctra Session (*.ses) File"
-msgstr "Importer un Fichier Specctra Session (*.ses)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:190
-msgid "Merge a session file created by FreeRouter with the current board."
-msgstr "Importer un fichier session créé par FreeRouter dans le C.I. courant."
-
-#: pcbnew/dialog_freeroute_exchange.cpp:197
-msgid "Visit FreeRouting.net website"
-msgstr "Visiter le site FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:199
-msgid "Launch your browser and go to the FreeRouting.net website"
-msgstr "Lancer votre navigateur pour aller sur  FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:202
-msgid "FreeRouting.net URL"
-msgstr "URL FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:207
-msgid "The URL of the FreeRouting.net website"
-msgstr "L' URL du site FreeRouting.net"
 
 #: pcbnew/tool_modedit.cpp:41
 msgid "Select working library"
@@ -6478,12 +6477,12 @@ msgid "Save only current schematic sheet"
 msgstr "Sauver seulement la feuille active"
 
 #: eeschema/menubar.cpp:64
-msgid "Save &as.."
+msgid "Save &as..."
 msgstr "S&auver Sous..."
 
 #: eeschema/menubar.cpp:65
-msgid "Save current schematic sheet as.."
-msgstr "Sauver la feuille active sous un autre nom"
+msgid "Save current schematic sheet as..."
+msgstr "Sauver la feuille active sous ..."
 
 #: eeschema/menubar.cpp:72
 msgid "Print schematic sheet"
@@ -6622,8 +6621,8 @@ msgid "Place a global label. Warning: all global labels with the same name are c
 msgstr "Placer un label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hiérarchie"
 
 #: eeschema/menubar.cpp:233
-msgid "Place Junction"
-msgstr "Place Jonction"
+msgid "Junction"
+msgstr "Jonction"
 
 #: eeschema/menubar.cpp:234
 msgid "Place junction"
@@ -6690,8 +6689,8 @@ msgid "&Options"
 msgstr "&Options"
 
 #: eeschema/menubar.cpp:297
-msgid "General options..."
-msgstr "Options Générales..."
+msgid "Eeschema general options and preferences"
+msgstr "Options et préférences générales de Eeschema"
 
 #: eeschema/menubar.cpp:307
 msgid "&Save preferences"
@@ -8052,10 +8051,13 @@ msgid "Unload the selected library"
 msgstr "Décharger la librairie sélectionnée"
 
 #: eeschema/dialog_eeschema_config.cpp:191
-msgid "Add a new library after the selected library, add load it"
-msgstr "Ajoute une nouvelle librairie après la librairie sélectionnée, et la charge"
+msgid "Add a new library after the selected library, and load it"
+msgstr "Ajouter une nouvelle librairie après la librairie sélectionnée, et la charger"
 
 #: eeschema/dialog_eeschema_config.cpp:196
+msgid "Add a new library before the selected library, and load it"
+msgstr "Ajouter une nouvelle librairie avant la librairie sélectionnée, et la charger"
+
 #: eeschema/dialog_eeschema_config.cpp:198
 msgid "Add a new library beforer the selected library, add load it"
 msgstr "Ajoute une nouvelle librairie avant la librairie sélectionnée, et la charge"
@@ -8287,7 +8289,7 @@ msgstr "Nom en librairie"
 msgid "The name of the symbol in the library from which this component came"
 msgstr "Le nom du symbole dans la librairie d'où vient le composant."
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:74
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:75
 msgid ""
 "Use the alternate shape of this component.\n"
 "For gates, this is the \"De Morgan\" conversion"
@@ -8295,80 +8297,88 @@ msgstr ""
 "Utiliser la représentation alternative pour ce composant\n"
 "Pour les portes, ceci est la conversion \"De Morgan\""
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:85
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:86
 msgid "Fields"
 msgstr "Champs"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:94
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:95
 msgid "Add a new custom field"
 msgstr "Ajouter un nouveau champ utilisateur"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:99
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:100
 msgid "Delete one of the optional fields"
 msgstr "Supprimer un des champs optionnels."
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:103
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:104
 msgid "Move Up"
 msgstr "Vers le haut ^"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:104
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:105
 msgid "Move the selected optional fields up one position"
 msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:114
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:115
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:119
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:120
 msgid "Show"
 msgstr "Visible"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:120
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:122
 msgid "Check if you want this field visible"
 msgstr "Activer si vous voulez avoir ce champ visible"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:125
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:128
 msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:133
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
 msgid "Style:"
 msgstr "Style:"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:142
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:138
+msgid "The style of the currently selected field's text in the schemati"
+msgstr "Le style du texte du champ actuellement sélectionné"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:147
 msgid "Field Name"
 msgstr "Nom Champ"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:147
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:161
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:152
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:166
 msgid "The text (or value) of the currently selected field"
 msgstr "The texte (ou la valeur) du champ actuellement sélectionné"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:156
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:161
 msgid "Field Value"
 msgstr "Texte Champ"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:170
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:175
 msgid "Size(\")"
 msgstr "Taille(\")"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:175
-msgid "The vertical height of the currently selected field's text in the schematic"
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:180
+msgid "The size of the currently selected field's text in the schematic"
 msgstr "La taille du texte du champ actuellement sélectionné"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:187
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:192
 msgid "PosX(\")"
 msgstr "PosX"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:199
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:197
+msgid "The X coordinate of the text relative to the component"
+msgstr "La position X du texte relativement au composant"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:206
 msgid "PosY(\")"
 msgstr "PosY"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:204
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:211
 msgid "The Y coordinate of the text relative to the component"
 msgstr "La position Y du texte relativement au composant"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:215
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:222
 msgid "Reset to Library Defaults"
 msgstr "Remettre aux Valeurs par Défaut en Librairie"
 
@@ -8522,10 +8532,6 @@ msgstr "Nouvelle Librairie"
 msgid "Export component:"
 msgstr "Exporter composant:"
 
-#: eeschema/lib_export.cpp:146
-msgid "0k"
-msgstr "Ok"
-
 #: eeschema/lib_export.cpp:148
 msgid ""
 "Note: this new library will be available only if it is loaded by eeschema.\n"
@@ -8598,6 +8604,10 @@ msgstr "Alignement au sommet"
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Vert Justify"
 msgstr "Justifié Vert."
+
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:143
+msgid "The vertical height of the currently selected field's text in the schematic"
+msgstr "La taille du texte du champ actuellement sélectionné"
 
 #: eeschema/class_libentry_fields.cpp:132
 msgid "Datasheet"
@@ -8970,13 +8980,9 @@ msgid "About cvpcb schematic to pcb converter"
 msgstr "Au sujet de Cvpcb, schematique vers pcb interface"
 
 #: cvpcb/init.cpp:73
-#, c-format
-msgid "Components: %d (free: %d)"
-msgstr "Composants: %d (libres: %d)"
-
 #: cvpcb/init.cpp:128
 #, c-format
-msgid "Componants: %d (free: %d)"
+msgid "Components: %d (free: %d)"
 msgstr "Composants: %d (libres: %d)"
 
 #: cvpcb/init.cpp:160
@@ -9160,16 +9166,16 @@ msgstr ""
 "Projet: "
 
 #: kicad/prjconfig.cpp:85
-msgid "Save project file"
-msgstr "Sauver fichiers &Projet"
+msgid "Save Project File:"
+msgstr "Sauver Fichier &Projet"
 
 #: kicad/files-io.cpp:71
-msgid "Create Project files:"
-msgstr "Créer fichiers Projets:"
+msgid "Create Project file:"
+msgstr "Créer fichier Projet:"
 
 #: kicad/files-io.cpp:72
-msgid "Load Project files:"
-msgstr "Ouvrir les fichiers Projets"
+msgid "Open Project file:"
+msgstr "Créer Fichier Projet:"
 
 #: kicad/files-io.cpp:125
 msgid "Template file non found "
@@ -9627,8 +9633,8 @@ msgid "Not yet available..."
 msgstr "non encore disponible"
 
 #: gerbview/files.cpp:136
-msgid "Load gerber file"
-msgstr "Charger fichier gerber"
+msgid "Open Gerber File:"
+msgstr "Ouvrir Fichier Gerber"
 
 #: gerbview/files.cpp:189
 #: gerbview/readgerb.cpp:274
@@ -9658,15 +9664,15 @@ msgid "Layer modified,  Continue ?"
 msgstr "Couche modifiée,  Continuer ?"
 
 #: gerbview/tool_gerber.cpp:32
-msgid "Clear and Load Gerber file"
-msgstr "Effacer et charger fichier Gerber"
+msgid "Clear and Load Gerber File"
+msgstr "Effacer et Charger fichier Gerber"
 
 #: gerbview/tool_gerber.cpp:33
 msgid "Clear all layers and Load new Gerber file"
 msgstr "Effacer toutes les couches et charger un fichier Gerber"
 
 #: gerbview/tool_gerber.cpp:36
-msgid "Load Gerber file"
+msgid "Load Gerber File"
 msgstr "Charger Fichier Gerber"
 
 #: gerbview/tool_gerber.cpp:37
@@ -9690,8 +9696,8 @@ msgid "Load D-Codes File"
 msgstr "Charger Fichier de DCodes"
 
 #: gerbview/tool_gerber.cpp:48
-msgid "Load drill"
-msgstr "Charger fichier de perçage"
+msgid "Load Drill"
+msgstr "Charger Fichier de Perçage"
 
 #: gerbview/tool_gerber.cpp:49
 msgid "Load excellon drill file"
@@ -9710,16 +9716,16 @@ msgid "Export data in pcbnew format"
 msgstr "Exporter les données en format pcbnew"
 
 #: gerbview/tool_gerber.cpp:61
-msgid "&Save layers"
-msgstr "&Sauver couches"
+msgid "&Save Layers"
+msgstr "&Sauver Couches"
 
 #: gerbview/tool_gerber.cpp:62
 msgid "Save current layers (GERBER format)"
 msgstr "Sauver couches courantes (format GERBER)"
 
 #: gerbview/tool_gerber.cpp:64
-msgid "Save layers as.."
-msgstr "Sauver couche &active sous.."
+msgid "Save Layers As..."
+msgstr "Sauver Couches sous..."
 
 #: gerbview/tool_gerber.cpp:65
 msgid "Save current layers as.."
@@ -9738,7 +9744,7 @@ msgid "Quit Gerbview"
 msgstr "Quitter Gerbview"
 
 #: gerbview/tool_gerber.cpp:81
-msgid "&File ext"
+msgid "&File Ext"
 msgstr "Ext. &Fichiers"
 
 #: gerbview/tool_gerber.cpp:82
@@ -9766,16 +9772,16 @@ msgid "List and edit D-codes"
 msgstr "Lister et Editer DCodes"
 
 #: gerbview/tool_gerber.cpp:119
-msgid "&Show source"
-msgstr "Montrer source"
+msgid "&Show Source"
+msgstr "Montrer &Source"
 
 #: gerbview/tool_gerber.cpp:120
 msgid "Show source file for the current layer"
 msgstr "Montrer fichier source pour la couche courante"
 
 #: gerbview/tool_gerber.cpp:124
-msgid "&Delete layer"
-msgstr "&Effacer couche"
+msgid "&Delete Layer"
+msgstr "&Effacer Couche"
 
 #: gerbview/tool_gerber.cpp:125
 msgid "Delete current layer"
@@ -9786,7 +9792,7 @@ msgid "Open the gerbview manual"
 msgstr "Ouvrir la documentation de gerbview"
 
 #: gerbview/tool_gerber.cpp:131
-msgid "&About gerbview"
+msgid "&About Gerbview"
 msgstr "&Au sujet de Gerbview"
 
 #: gerbview/tool_gerber.cpp:132
@@ -10124,13 +10130,16 @@ msgid "key "
 msgstr "touche: "
 
 #: common/hotkeys_basic.cpp:370
-#: common/hotkeys_basic.cpp:488
-msgid "Hotkey configuration file:"
-msgstr "Fichier configuration des Hotkeys:"
+msgid "Save Hotkey Configuration File:"
+msgstr "Sauver Fichier Configuration des Hotkeys:"
 
 #: common/hotkeys_basic.cpp:402
 msgid "Allowed keys:\n"
 msgstr "Touches autorisées:\n"
+
+#: common/hotkeys_basic.cpp:488
+msgid "Open Hotkey Configuration File:"
+msgstr "Ouvrir Fichier Configuration des Hotkeys:"
 
 #: common/hotkeys_basic.cpp:507
 msgid "Unable to read "
@@ -10630,7 +10639,7 @@ msgstr "??? Via"
 msgid "Blind/Buried Via"
 msgstr "Via Aveugle/Enterrée"
 
-#: pcbnew/dialog_track_options_base.h:68
+#: pcbnew/dialog_track_options_base.h:76
 msgid "Tracks and Vias Sizes"
 msgstr "Dims Pistes et Vias"
 
@@ -10760,10 +10769,6 @@ msgstr "Fil"
 msgid "Bus"
 msgstr "Bus"
 
-#: eeschema/eelayer.h:85
-msgid "Junction"
-msgstr "Jonction"
-
 #: eeschema/eelayer.h:91
 msgid "Label"
 msgstr "Label"
@@ -10868,7 +10873,7 @@ msgstr "Propriétés du texte graphique:"
 msgid "Fields Properties"
 msgstr "Propriétés des Champs"
 
-#: eeschema/dialog_edit_component_in_schematic_fbp.h:83
+#: eeschema/dialog_edit_component_in_schematic_fbp.h:82
 msgid "Component Properties"
 msgstr "Propriétés du Composant"
 
@@ -11032,6 +11037,24 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "&Delete layer"
+#~ msgstr "&Effacer couche"
+#~ msgid "Export this Via Hole to Alt Value"
+#~ msgstr "Exporte ce Perçage Via comme Valeur Alt."
+#~ msgid "Load board files:"
+#~ msgstr "Charger Fichiers C.I.:"
+#~ msgid "Place Junction"
+#~ msgstr "Place Jonction"
+#~ msgid "General options..."
+#~ msgstr "Options Générales..."
+#~ msgid "0k"
+#~ msgstr "Ok"
+#~ msgid "Componants: %d (free: %d)"
+#~ msgstr "Composants: %d (libres: %d)"
+#~ msgid "Load Project files:"
+#~ msgstr "Ouvrir les fichiers Projets"
+#~ msgid "Load gerber file"
+#~ msgstr "Charger fichier gerber"
 #~ msgid "Alternate Via Drill"
 #~ msgstr "Perçage vias alternatif"
 #~ msgid "Set the Via Hole Alt Value"

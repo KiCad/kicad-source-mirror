@@ -68,8 +68,8 @@ void WinEDA_MainFrame::Process_Files( wxCommandEvent& event )
 
     case ID_LOAD_PROJECT:
         SetLastProject( m_PrjFileName );
-        fullfilename = EDA_FileSelector( IsNew ? _( "Create Project files:" ) :
-                                         _( "Load Project files:" ),
+        fullfilename = EDA_FileSelector( IsNew ? _( "Create Project file:" ) :
+                                         _( "Open Project file:" ),
                                          path,                                      /* Chemin par defaut */
                                          wxEmptyString,                             /* nom fichier par defaut */
                                          g_Prj_Config_Filename_ext,                 /* extension par defaut */

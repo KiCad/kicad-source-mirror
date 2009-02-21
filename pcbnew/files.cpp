@@ -169,7 +169,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     {
         msg = wxT( "*" ) + PcbExtBuffer;
         fileName =
-            EDA_FileSelector( _( "Load board files:" ),
+            EDA_FileSelector( _( "Open Board File:" ),
                               wxEmptyString,            /* Chemin par defaut */
                               GetScreen()->m_FileName,  /* nom fichier par defaut */
                               PcbExtBuffer,             /* extension par defaut */

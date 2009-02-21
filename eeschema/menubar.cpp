@@ -61,8 +61,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
-    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS, _( "Save &as.." ),
-                           _( "Save current schematic sheet as.." ) );
+    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS, _( "Save &as..." ),
+                           _( "Save current schematic sheet as..." ) );
     item->SetBitmap( save_as_xpm );
     filesMenu->Append( item );
 
@@ -230,7 +230,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( add_glabel_xpm );
     placeMenu->Append( item );
 
-    item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, _( "Place Junction" ),
+    item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, _( "Junction" ),
             _( "Place junction" ), wxITEM_NORMAL );
     item->SetBitmap( add_junction_xpm );
     placeMenu->Append( item );
@@ -294,7 +294,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     // Options
     item = new wxMenuItem( configmenu, ID_OPTIONS_SETUP, _( "&Options" ),
-                           _( "General options..." ) );
+                           _( "Eeschema general options and preferences" ) );
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 

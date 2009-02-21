@@ -133,7 +133,7 @@ int WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
 
         mask    += wxT( ";*.gbr;*.gbx;*.lgr;*.ger" );
 
-        filename = EDA_FileSelector( _( "Load gerber file" ),
+        filename = EDA_FileSelector( _( "Open Gerber File:" ),
                                      path,                  /* Chemin par defaut */
                                      wxEmptyString,         /* nom fichier par defaut */
                                      g_PhotoFilenameExt,    /* extension par defaut */

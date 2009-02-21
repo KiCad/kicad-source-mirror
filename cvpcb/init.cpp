@@ -125,7 +125,7 @@ void WinEDA_CvpcbFrame::ReadNetListe()
     if( g_BaseListeCmp )
         m_ListCmp->SetSelection( 0, TRUE );
 
-    msg.Printf( _( "Componants: %d (free: %d)" ), nbcomp,
+    msg.Printf( _( "Components: %d (free: %d)" ), nbcomp,
                 composants_non_affectes );
     SetStatusText( msg, 1 );
 

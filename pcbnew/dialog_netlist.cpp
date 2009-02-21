@@ -164,7 +164,7 @@ void WinEDA_NetlistFrame::CreateControls()
     m_Select_By_Timestamp = new wxRadioBox( itemDialog1, ID_SELECTION_FOOTPRINT_MODE, _("Module Selection:"), wxDefaultPosition, wxDefaultSize, m_Select_By_TimestampStrings, 1, wxRA_SPECIFY_COLS );
     m_Select_By_Timestamp->SetSelection(0);
     if (WinEDA_NetlistFrame::ShowToolTips())
-        m_Select_By_Timestamp->SetToolTip(_("Select how footprints are reconized:\nby their reference (U1, R3...) (normal setting)\nor their time stamp (special setting after a full schematic reannotation)"));
+        m_Select_By_Timestamp->SetToolTip(_("Select how footprints are recognized:\nby their reference (U1, R3...) (normal setting)\nor their time stamp (special setting after a full schematic reannotation)"));
     itemBoxSizer5->Add(m_Select_By_Timestamp, 0, wxGROW|wxALL, 5);
 
     wxArrayString m_ChangeExistingFootprintCtrlStrings;

@@ -21,7 +21,7 @@ void Read_Config( const wxString & FullFileName );  /* lit la configuration */
 	/***************/
 	/* MEMOIRE.CPP */
 	/***************/
-void FreeMemoryComponants();
+void FreeMemoryComponents();
 	/* Routine de liberation memoire de la liste des composants
 		 - remet a NULL BaseListeMod
 		 - remet a 0 NbComp */

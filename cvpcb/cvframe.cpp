@@ -256,7 +256,7 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
     }
 
     FreeMemoryModules();
-    FreeMemoryComponants();
+    FreeMemoryComponents();
     modified = 0;
 
     SaveSettings();
@@ -376,7 +376,7 @@ void WinEDA_CvpcbFrame::DelAssociations( wxCommandEvent& event )
         composants_non_affectes = nbcomp;
     }
 
-    Line.Printf( _( "Componants: %d (free: %d)" ), nbcomp,
+    Line.Printf( _( "Components: %d (free: %d)" ), nbcomp,
                  composants_non_affectes );
     SetStatusText( Line, 1 );
 }

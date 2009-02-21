@@ -41,7 +41,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	int m_FillModeCtrlNChoices = sizeof( m_FillModeCtrlChoices ) / sizeof( wxString );
 	m_FillModeCtrl = new wxRadioBox( this,  ID_RADIOBOX_FILL_MODE_SELECTION, _("Filling Mode:"), wxDefaultPosition, wxDefaultSize, m_FillModeCtrlNChoices, m_FillModeCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FillModeCtrl->SetSelection( 1 );
-	m_FillModeCtrl->SetToolTip( _("Filled areas can use solid polygons or segments.\nDepending on the complexity and the size of the zone,\nsometime polygons are better and sometime segments are better") );
+	m_FillModeCtrl->SetToolTip( _("Filled areas can use solid polygons or segments.\nDepending on the complexity and the size of the zone,\nsometimes polygons are better and sometimes segments are better.") );
 	
 	m_FillOptionsBox->Add( m_FillModeCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -147,9 +147,9 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_RightBoxSizer;
 	m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Setup to others zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Setup to other zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ExportSetupButton->SetForegroundColour( wxColour( 51, 111, 40 ) );
-	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all others copper zones") );
+	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all other copper zones") );
 	
 	m_RightBoxSizer->Add( m_ExportSetupButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	

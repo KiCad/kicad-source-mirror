@@ -68,7 +68,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	bMainSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FileNameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FileNameCtrl->SetToolTip( _("Enter a filename if you do not want to use defaults files names\nCan be used only when printing the current sheet") );
+	m_FileNameCtrl->SetToolTip( _("Enter a filename if you do not want to use default file names\nCan be used only when printing the current sheet") );
 	m_FileNameCtrl->SetMinSize( wxSize( 450,-1 ) );
 	
 	bMainSizer->Add( m_FileNameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

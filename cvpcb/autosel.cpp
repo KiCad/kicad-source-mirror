@@ -53,7 +53,7 @@ char Line[1024];
 FILE *fichierstf ;	/* sert en lecture des differents fichiers *.STF */
 AUTOMODULE * ItemModule,* NextMod;
 AUTOMODULE * BaseListeMod = NULL;
-STORECMP * Componant;
+STORECMP * Component;
 
 int nb_correspondances = 0;
 
@@ -77,7 +77,7 @@ int nb_correspondances = 0;
 		{
 			/* elimination des lignes vides */
 			for (j = 0 ; j < 40 ; j++ )
-			{ 
+			{
 				if (Line[j] == 0 ) goto fin_de_while ;
 				if (Line[j] == QUOTE ) break ;
 			}
@@ -85,7 +85,7 @@ int nb_correspondances = 0;
 			ItemModule = new AUTOMODULE();
 			ItemModule->Pnext = BaseListeMod;
 			BaseListeMod = ItemModule;
-			
+
 			/* stockage du composant ( 'namecmp'  'namelib')
 			name et namelib */
 			for ( j++ ; j < 40 ; j++, k++)
@@ -110,12 +110,12 @@ int nb_correspondances = 0;
 		frame->SetStatusText(msg, 0);
 		}
 
-	Componant = g_BaseListeCmp;
-	for ( ii = 0; Componant != NULL; Componant = Componant->Pnext, ii++ )
+	Component = g_BaseListeCmp;
+	for ( ii = 0; Component != NULL; Component = Component->Pnext, ii++ )
 		{
 		frame->m_ListCmp->SetSelection(ii,TRUE);
-		if( Componant->m_Module.IsEmpty() )
-			auto_select(frame, Componant, BaseListeMod);
+		if( Component->m_Module.IsEmpty() )
+			auto_select(frame, Component, BaseListeMod);
 		}
 
 	/* Liberation memoire */
