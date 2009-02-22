@@ -57,8 +57,6 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
 
 
-#define FreeBSD
-
 	/**************************
  	 * Check Operating System *
  	 **************************/
@@ -133,12 +131,13 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
 	/* TODO are these all russian translators, placed them here now              TODO
 		TODO or else align them below other language maintainer with mail adres   TODO*/
-	info.AddTranslator( SetMsg( wxT( "\n\nRemy Halvick" ) ) );
+	info.AddTranslator( SetMsg( wxT( "\nRemy Halvick" ) ) );
 	info.AddTranslator( SetMsg( wxT( "David Briscoe" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Dominique Laigle" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Paul Burke" ) ) );
 
 	/* Add programm credits for icons */
-	info.AddArtist( wxT( "Icons by Iñigo Zuluaga" ) );
+	info.AddArtist( wxT( "Icons by Iñigo Zuluagaz <inigo_zuluaga@yahoo.es>" ) );
 	info.AddArtist( wxT( "3D modules by Renie Marquet <reniemarquet@uol.com.br>" ) );
+	info.AddArtist( wxT( "3D modules by Cyril Frausti <cyril.frausti@gmail.com>" ) );
 }
