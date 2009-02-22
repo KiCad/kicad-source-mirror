@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-21 20:41+0100\n"
-"PO-Revision-Date: 2009-02-21 20:41+0100\n"
+"POT-Creation-Date: 2009-02-22 11:36+0100\n"
+"PO-Revision-Date: 2009-02-22 11:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -8998,8 +8998,8 @@ msgid "Unable to create netlist file"
 msgstr "Impossible de créer le fichier netliste "
 
 #: cvpcb/init.cpp:210
-msgid "Load Net List"
-msgstr "Lire Netliste"
+msgid "Open NetList File:"
+msgstr "Ouvrir Fichier Netliste:"
 
 #: cvpcb/autosel.cpp:70
 #, c-format
@@ -9037,7 +9037,7 @@ msgstr "Redessin (F3)"
 msgid "1:1 zoom"
 msgstr "1:1 zoom"
 
-#: cvpcb/cvframe.cpp:213
+#: cvpcb/cvframe.cpp:215
 msgid ""
 "Net and component list modified.\n"
 " Save before exit ?"
@@ -9045,35 +9045,31 @@ msgstr ""
 "Netlist et liste composants modifiés,\n"
 "Sauver avant de quitter ?"
 
-#: cvpcb/cvframe.cpp:236
+#: cvpcb/cvframe.cpp:238
 msgid "Problem when saving files, exit anyway ?"
 msgstr "Problème en sauvant les fichiers, quitter quand même"
 
-#: cvpcb/cvframe.cpp:365
+#: cvpcb/cvframe.cpp:367
 msgid "Delete selections"
 msgstr "Effacement des associations existantes"
 
-#: cvpcb/cvframe.cpp:397
-msgid "Gerber"
-msgstr "Gerber "
-
-#: cvpcb/cvframe.cpp:455
+#: cvpcb/cvframe.cpp:461
 msgid "Dialog boxes"
 msgstr "Fenêtres de dialogue"
 
-#: cvpcb/cvframe.cpp:460
+#: cvpcb/cvframe.cpp:466
 msgid "Lists"
 msgstr "Listes"
 
-#: cvpcb/cvframe.cpp:465
+#: cvpcb/cvframe.cpp:471
 msgid "Status box"
 msgstr "Fenêtre d'état"
 
-#: cvpcb/cvframe.cpp:471
+#: cvpcb/cvframe.cpp:477
 msgid "&Font"
 msgstr "&Fonte"
 
-#: cvpcb/cvframe.cpp:472
+#: cvpcb/cvframe.cpp:478
 msgid "Choose font type and size for dialogs, information and status box"
 msgstr "Choisir les fontes et leur taille pour les dialogues, infos et ligne d'état"
 
@@ -11037,6 +11033,10 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Load Net List"
+#~ msgstr "Lire Netliste"
+#~ msgid "Gerber"
+#~ msgstr "Gerber "
 #~ msgid "&Delete layer"
 #~ msgstr "&Effacer couche"
 #~ msgid "Export this Via Hole to Alt Value"

@@ -207,7 +207,7 @@ bool WinEDA_CvpcbFrame::ReadInputNetList( const wxString& FullFileName )
             Mask = wxT( "*" ) + NetInExtBuffer;
         else
             Mask = wxT( "*.net" );
-        Line = EDA_FileSelector( _( "Load Net List" ),
+        Line = EDA_FileSelector( _( "Open NetList File:" ),
                                  NetDirBuffer,      /* Chemin par defaut */
                                  NetInNameBuffer,   /* nom fichier par defaut */
                                  NetInExtBuffer,    /* extension par defaut */

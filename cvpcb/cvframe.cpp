@@ -129,6 +129,8 @@ BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, wxFrame )
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_CvpcbFrame::LoadNetList )
 
 // Menu events
+    EVT_MENU( ID_LOAD_PROJECT,
+              WinEDA_CvpcbFrame::LoadNetList )
     EVT_MENU( ID_SAVE_PROJECT,
               WinEDA_CvpcbFrame::SaveQuitCvpcb )
     EVT_MENU( ID_CVPCB_QUIT,
@@ -386,29 +388,33 @@ void WinEDA_CvpcbFrame::DelAssociations( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
 /***********************************************************/
 
-/* Fonction liee au boutton "Load"
- *  Lit la netliste
+/* Called when click on Load Netlist button or by  menu files
+ *  Read a netlist slected by user
  */
 {
     bool     newfile;
     wxString oldfilename;
-    wxString fn;
+    wxString fullfilename;
+    int      id = event.GetId();
 
-    fn = GetFileFromHistory( event.GetId(), _( "Gerber" ) );
+    // Get a filename from history. if fullfilename is void,
+    // a name will be asked to user, later.
+    if ( id >= wxID_FILE1 && id <= wxID_FILE9 )     // Called by clicking on an old filename in file history
+        fullfilename = GetFileFromHistory( event.GetId(), _( "Netlist" ) );
 
     if( !NetInNameBuffer.IsEmpty() )
     {
         oldfilename = NetInNameBuffer;
     }
 
-    if( fn != wxEmptyString )
-    {
-        newfile = ReadInputNetList( fn );
+    // Read the file fullfilename. If fullfilename is void,
+    // The user will be prompted for a filename.
+    // newfile = true if a file is read.
+    newfile = ReadInputNetList( fullfilename );
 
-        if( newfile && !oldfilename.IsEmpty() )
-        {
-            SetLastProject( NetInNameBuffer );
-        }
+    if( newfile && !oldfilename.IsEmpty() )
+    {
+        SetLastProject( NetInNameBuffer );
     }
 
     ReCreateMenuBar();
