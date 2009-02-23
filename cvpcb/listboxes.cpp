@@ -139,7 +139,7 @@ wxString FootprintListBox::OnGetItemText( long item, long column ) const
 /*********************************************************************/
 
 /* Overlayed function: MUST be provided in wxLC_VIRTUAL mode
- *  because real datas are not handled by ListBoxBase
+ *  because real data is not handled by ListBoxBase
  */
 {
     return m_ActiveFootprintList->Item( item );
@@ -479,7 +479,6 @@ void FootprintListBox::OnLeftClick( wxListEvent& event )
 /********************************************************/
 {
     STOREMOD* Module;
-    wxString  msg;
     wxString  FootprintName = GetSelectedFootprint();
 
     Module = GetModuleDescrByName( FootprintName );
@@ -489,13 +488,15 @@ void FootprintListBox::OnLeftClick( wxListEvent& event )
     }
 
     if( Module )
+    {
+        wxString  msg;
         msg = Module->m_Doc;
-    m_Parent->SetStatusText( msg, 0 );
+        m_Parent->SetStatusText( msg, 0 );
 
-    msg = wxT( "KeyW: " );
-    if( Module )
+        msg = wxT( "KeyW: " );
         msg += Module->m_KeyWord;
-    m_Parent->SetStatusText( msg, 1 );
+        m_Parent->SetStatusText( msg, 1 );
+    }
 }
 
 

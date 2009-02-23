@@ -128,6 +128,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 	info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Iñigo Zuluaga <inigo_zuluaga@yahoo.es>" ) ) );
+	info.AddTranslator( SetMsg( wxT( "German (DE) Rafael.Sokolowski <Rafael.Sokolowski@web.de>" ) ) );
 
 	/* TODO are these all russian translators, placed them here now              TODO
 		TODO or else align them below other language maintainer with mail adres   TODO*/
@@ -138,6 +139,6 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
 	/* Add programm credits for icons */
 	info.AddArtist( wxT( "Icons by Iñigo Zuluagaz <inigo_zuluaga@yahoo.es>" ) );
-	info.AddArtist( wxT( "3D modules by Renie Marquet <reniemarquet@uol.com.br>" ) );
-	info.AddArtist( wxT( "3D modules by Cyril Frausti <cyril.frausti@gmail.com>" ) );
+	info.AddArtist( SetMsg( wxT( "3D modules by Renie Marquet <reniemarquet@uol.com.br>" ) ) );
+	info.AddArtist( SetMsg( wxT( "3D modules by Cyril Frausti <cyril.frausti@gmail.com>" ) ) );
 }
