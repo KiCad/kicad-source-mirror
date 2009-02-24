@@ -5,17 +5,26 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Feb-24 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * dialog boxes calling OnInitDialog are flashing because these functions
+    change the size of controls that are already on screen.  This leads to
+    an annoying resize operation.  So I renamed OnInitDialog(event) to
+    void init() and call it from the constructors.  Did this for
+    dialog_general_options.cpp and dialog_display_options.
+  * dialog_general_options was not setting g_MagneticPadOption and g_MagneticTrackOption
+
+
 2009-Feb-24 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew:
     bug fix:
         2628615 	  Error message after right click into zone
         2625434  	  Crash after trying to edit a line/drawing
-    
 ++cvpcb
     fix: 2625090  CVpcb - language selection
-    
-    
+
 
 2009-Feb-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Feb  8 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -69,17 +69,14 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	bRModuleSizer->Add( m_OptDisplayPads, 0, wxALL|wxEXPAND, 5 );
 	
 	m_OptDisplayPadClearence = new wxCheckBox( this, wxID_ANY, _("Show Pad Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bRModuleSizer->Add( m_OptDisplayPadClearence, 0, wxALL, 5 );
 	
 	m_OptDisplayPadNumber = new wxCheckBox( this, wxID_ANY, _("Show Pad Number"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayPadNumber->SetValue(true);
-	
+	m_OptDisplayPadNumber->SetValue(true); 
 	bRModuleSizer->Add( m_OptDisplayPadNumber, 0, wxALL, 5 );
 	
 	m_OptDisplayPadNoConn = new wxCheckBox( this, wxID_ANY, _("Show Pad NoConnect"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayPadNoConn->SetValue(true);
-	
+	m_OptDisplayPadNoConn->SetValue(true); 
 	bRModuleSizer->Add( m_OptDisplayPadNoConn, 0, wxALL, 5 );
 	
 	sMiddleSizer->Add( bRModuleSizer, 0, 0, 5 );
@@ -125,7 +122,6 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	this->Layout();
 	
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogDisplayOptions_base::OnInitDialog ) );
 	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnOkClick ), NULL, this );
 	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnCancelClick ), NULL, this );
 }
@@ -133,7 +129,6 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 DialogDisplayOptions_base::~DialogDisplayOptions_base()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogDisplayOptions_base::OnInitDialog ) );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnOkClick ), NULL, this );
 	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnCancelClick ), NULL, this );
 }
