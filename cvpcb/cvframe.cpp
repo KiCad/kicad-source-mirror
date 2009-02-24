@@ -488,6 +488,8 @@ void WinEDA_CvpcbFrame::SetLanguage( wxCommandEvent& event )
 
     wxGetApp().SetLanguageIdentifier( id );
     wxGetApp().SetLanguage();
+    ReCreateMenuBar();
+    Refresh();
 }
 
 

@@ -13,6 +13,7 @@
 #include "fctsys.h"
 #include "macros.h"
 #include "common.h"
+#include "confirm.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
 
@@ -51,6 +52,11 @@ DialogGraphicItemProperties::DialogGraphicItemProperties( WinEDA_BasePcbFrame* a
 void WinEDA_BasePcbFrame::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC)
 /*******************************************************************************************/
 {
+    if ( aItem == NULL )
+    {
+        DisplayError(this, wxT("nstallGraphicItemPropertiesDialog() error: NULL item"));
+        return;
+    }
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     DialogGraphicItemProperties* dialog = new DialogGraphicItemProperties( this,
         aItem, aDC );

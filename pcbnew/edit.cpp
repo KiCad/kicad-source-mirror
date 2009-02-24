@@ -135,6 +135,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_VIA_HOLE_EXPORT:
     case ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT:
     case ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS:
+    case ID_POPUP_PCB_EDIT_DRAWING:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -574,13 +575,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        GetBoard()->m_Zone.DeleteAll();
+        GetBoard()->m_Zone.DeleteAll();    // remove zone segments used to fill zones.
         for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
-        {
+        {   // Remove filled aresa in zone
             ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
             zone_container->m_FilledPolysList.clear();;
         }
-
+        SetCurItem(NULL);           // CurItem might be deleted by this command, clear the pointer
         test_connexions( NULL );
         Tst_Ratsnest( NULL, 0 );    // Recalculate the active ratsnest, i.e. the unconnected links */
         GetScreen()->SetModify();

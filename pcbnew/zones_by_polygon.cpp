@@ -127,7 +127,10 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
     {
         ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
         if( zone->m_TimeStamp == TimeStamp )
+        {
+            modify = TRUE;
             zone->m_FilledPolysList.clear();
+        }
     }
 
     if( modify )
