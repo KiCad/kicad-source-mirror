@@ -495,7 +495,6 @@ public:
     // Hightlight functions:
     int              Select_High_Light( wxDC* DC );
     void             Hight_Light( wxDC* DC );
-    void             DrawHightLight( wxDC* DC, int NetCode );
 
     // Track and via edition:
     void             DisplayTrackSettings();

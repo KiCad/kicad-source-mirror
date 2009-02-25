@@ -43,7 +43,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->DrawBackGround( DC );
     TraceWorkSheet( DC, screen, 0 );
 
-    /* Redraw the footprint */
+    /* Redraw the footprints */
     for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
         module->Draw( DrawPanel, DC, GR_OR );
@@ -84,8 +84,6 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, GetScreen(), 0 );
 
     GetBoard()->Draw( DrawPanel, DC, GR_OR );
-    if( g_HightLigt_Status )
-        DrawHightLight( DC, g_HightLigth_NetCode );
 
     DrawGeneralRatsnest( DC );
 
@@ -107,6 +105,9 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 /********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
+
+
+
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
         bool display = true;
@@ -134,7 +135,6 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         else
             Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
     }
-
 
     // Draw the graphic items
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
@@ -184,19 +184,76 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         }
     }
 
-
-    // draw the BOARD's markers.
-    for( unsigned i=0; i < m_markers.size();  ++i )
-    {
-        m_markers[i]->Draw( aPanel, DC, aDrawMode );
-    }
-
     // Draw equipots info
     for( EQUIPOT* net = m_Equipots;  net;  net = net->Next() )
     {
         if ( net->GetNet() != 0 )   // no net if 0
             net->Draw( aPanel, DC, aDrawMode );
     }
+
+    // @todo: this high-light functionality could be built into me.
+    if( g_HightLigt_Status )
+        DrawHighLight( aPanel, DC, g_HightLigth_NetCode );
+
+    // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
+    for( unsigned i=0; i < m_markers.size();  ++i )
+    {
+        m_markers[i]->Draw( aPanel, DC, aDrawMode );
+    }
 }
 
+
+/******************************************************************************/
+void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode )
+/******************************************************************************/
+{
+    int draw_mode;
+
+    if( g_HightLigt_Status )
+        draw_mode = GR_SURBRILL | GR_OR;
+    else
+        draw_mode = GR_AND | GR_SURBRILL;
+
+#if 0   // does not unhighlight properly
+    // redraw the zones with the aNetCode
+    for( SEGZONE* zone = m_Zone;   zone;   zone = zone->Next() )
+    {
+        if( zone->GetNet() == aNetCode )
+        {
+            zone->Draw( aDrawPanel, DC, draw_mode );
+        }
+    }
+#endif
+
+    // Redraw ZONE_CONTAINERS
+    BOARD::ZONE_CONTAINERS& zones = m_ZoneDescriptorList;
+    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
+    {
+        if( (*zc)->GetNet() == aNetCode )
+        {
+            (*zc)->Draw( aDrawPanel, DC, draw_mode );
+        }
+    }
+
+    // Redraw any pads that have aNetCode
+    for( MODULE* module = m_Modules;  module;   module = module->Next() )
+    {
+        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        {
+            if( pad->GetNet() == aNetCode )
+            {
+                pad->Draw( aDrawPanel, DC, draw_mode );
+            }
+        }
+    }
+
+    // Redraw track and vias that have aNetCode
+    for( TRACK* seg = m_Track;   seg;   seg = seg->Next() )
+    {
+        if( seg->GetNet() == aNetCode )
+        {
+            seg->Draw( aDrawPanel, DC, draw_mode );
+        }
+    }
+}
 

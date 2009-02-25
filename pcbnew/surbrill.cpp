@@ -15,11 +15,6 @@
 
 #define Pad_fill (Pad_Fill_Item.State == RUN)
 
-static void Pad_Surbrillance( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module, int NetCode );
-
-/* variables locales : */
-static int draw_mode;
-
 
 /*********************************************************/
 void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
@@ -99,15 +94,13 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
     if( g_HightLigt_Status )
         Hight_Light( DC );
 
-    // use this scheme because of pad is higher priority than tracks in the
+    // use this scheme because a pad is a higher priority than a track in the
     // search, and finding a pad, instead of a track on a pad,
     // allows us to fire a message to eeschema.
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
-
     // optionally, modify the "guide" here as needed using its member functions
-
 
     m_Collector->Collect( GetBoard(), GENERAL_COLLECTOR::PadsTracksOrZones,
                          GetScreen()->RefPos( true ), guide );
@@ -158,74 +151,7 @@ void WinEDA_PcbFrame::Hight_Light( wxDC* DC )
  */
 {
     g_HightLigt_Status = !g_HightLigt_Status;
-    DrawHightLight( DC, g_HightLigth_NetCode );
+
+    GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
 }
 
-
-/****************************************************************/
-void WinEDA_PcbFrame::DrawHightLight( wxDC* DC, int NetCode )
-/****************************************************************/
-
-/* Turn On or OFF the HightLight for trcak and pads with the netcode "NetCode'
- */
-{
-    if( g_HightLigt_Status )
-        draw_mode = GR_SURBRILL | GR_OR;
-    else
-        draw_mode = GR_AND | GR_SURBRILL;
-
-#if 0   // does not unhighlight properly
-    // redraw the zones with the NetCode
-    for( SEGZONE* zone = GetBoard()->m_Zone;   zone;   zone = zone->Next() )
-    {
-        if( zone->GetNet() == NetCode )
-        {
-            zone->Draw( DrawPanel, DC, draw_mode );
-        }
-    }
-#endif
-
-    // Redraw ZONE_CONTAINERS
-    BOARD::ZONE_CONTAINERS& zones = GetBoard()->m_ZoneDescriptorList;
-    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
-    {
-        if( (*zc)->GetNet() == NetCode )
-        {
-            (*zc)->Draw( DrawPanel, DC, draw_mode );
-        }
-    }
-
-    /* Redraw pads */
-    for( MODULE* module = GetBoard()->m_Modules;  module;   module = module->Next() )
-    {
-        Pad_Surbrillance( DrawPanel, DC, module, NetCode );
-    }
-
-    /* Redraw track and vias: */
-    for( TRACK* pts = GetBoard()->m_Track;   pts;   pts = pts->Next() )
-    {
-        if( pts->GetNet() == NetCode )
-        {
-            pts->Draw( DrawPanel, DC, draw_mode );
-        }
-    }
-}
-
-
-/*******************************************************/
-static void Pad_Surbrillance( WinEDA_DrawPanel* panel,
-                              wxDC* DC, MODULE* Module, int NetCode )
-/*******************************************************/
-/* Mise en Surbrillance des Pads */
-{
-    D_PAD* pt_pad;
-
-    /* trace des pastilles */
-    for( pt_pad = Module->m_Pads;  pt_pad;  pt_pad = pt_pad->Next() )
-    {
-        if( pt_pad->GetNet() == NetCode )
-        {
-            pt_pad->Draw( panel, DC, draw_mode );
-        }
-    }
-}

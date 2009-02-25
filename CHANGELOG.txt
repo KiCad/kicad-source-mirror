@@ -5,6 +5,14 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Feb-25 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    Markers were now shown when on top of a high-lighted pad.  Moved highlight
+    drawing function into class BOARD and out of Frame.  Call BOARD::DrawHighLight() from
+    within BOARD::Draw() to fix.
+
+
 2009-Feb-24 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

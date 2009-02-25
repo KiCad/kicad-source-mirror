@@ -60,8 +60,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->GetScreen()->m_Curseur = oldpos;
     g_HightLigt_Status = FALSE;
-
-    ( (WinEDA_PcbFrame*) Panel->m_Parent )->DrawHightLight( DC, g_HightLigth_NetCode );
+    ( (WinEDA_PcbFrame*) Panel->m_Parent )->GetBoard()->DrawHighLight( Panel, DC, g_HightLigth_NetCode );
 
     if( NewTrack )
     {
@@ -119,7 +118,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     g_HightLigth_NetCode = Old_HightLigth_NetCode;
     g_HightLigt_Status   = Old_HightLigt_Status;
     if( g_HightLigt_Status )
-        ( (WinEDA_PcbFrame*) Panel->m_Parent )->DrawHightLight( DC, g_HightLigth_NetCode );
+        ( (WinEDA_PcbFrame*) Panel->m_Parent )->GetBoard()->DrawHighLight( Panel, DC, g_HightLigth_NetCode );
 
     EraseDragListe();
 }
@@ -688,7 +687,8 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
 
     g_HightLigth_NetCode = track->GetNet();
     g_HightLigt_Status   = TRUE;
-    DrawHightLight( DC, g_HightLigth_NetCode );
+
+    GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 }
 void SortTrackEndPoints(TRACK* track)
@@ -844,7 +844,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
 
     g_HightLigth_NetCode = track->GetNet();
     g_HightLigt_Status   = TRUE;
-    DrawHightLight( DC, g_HightLigth_NetCode );
+    GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
 
     if( !InitialiseDragParameters() )
     {
