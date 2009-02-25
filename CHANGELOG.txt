@@ -5,6 +5,17 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Feb-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++EESchema
+  * Fixed hot key bug that caused undo and redo events in the library editor
+    to be passed to the schematic frame.  Fixes bug #1896790.
+  * Fixed hot key bug that allowed new wire to be placed during block move
+    causing a manage cursor message box to pop up.
+  * Fixed hot key bug that allows an object in block to be deleted during
+    a move or drag operation.
+
+
 2009-Feb-25 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
@@ -116,7 +127,6 @@ email address.
     automatically scrolling the drawing.
 
 
->>>>>>> .r1562
 2009-Feb-4 UPDATE Vesa Solonen <vesa.solonen@hut.fi>
 ================================================================================
 ++pcbnew:
