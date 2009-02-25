@@ -54,7 +54,7 @@ void        AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
 static void AddRingPolygon( Bool_Engine* aBooleng,
                             wxPoint      aCentre,
                             wxPoint      aStart,
-                            wxPoint      aEnd,
+                            int          aArcAngle,
                             int          aWidth );
 
 // Local Variables:
@@ -231,22 +231,16 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             switch( ( (DRAWSEGMENT*) item )->m_Shape )
             {
             case S_CIRCLE:
-                AddRingPolygon( booleng, ( (DRAWSEGMENT*) item )->m_Start,
-                               ( (DRAWSEGMENT*) item )->m_End, ( (DRAWSEGMENT*) item )->m_End,
+                AddRingPolygon( booleng, ( (DRAWSEGMENT*) item )->m_Start,  // Circle centre
+                               ( (DRAWSEGMENT*) item )->m_End, 3600,
                                ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
                 break;
 
             case S_ARC:
-            {
-                wxPoint arc_start, arc_end;
-                arc_start = ( (DRAWSEGMENT*) item )->m_End;
-                arc_end   = ( (DRAWSEGMENT*) item )->m_End;
-                RotatePoint( &arc_end,
-                             ( (DRAWSEGMENT*) item )->m_Start,
-                             -( (DRAWSEGMENT*) item )->m_Angle );
-                AddRingPolygon( booleng, ( (DRAWSEGMENT*) item )->m_Start, arc_start, arc_end,
+                AddRingPolygon( booleng, ( (DRAWSEGMENT*) item )->m_Start,  // Arc centre
+                                ( (DRAWSEGMENT*) item )->m_End,
+                                ( (DRAWSEGMENT*) item )->m_Angle,
                                ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
-            }
                 break;
 
             default:
@@ -1144,46 +1138,43 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
 /** Function AddRingPolygon
  * Add a polygon cutout for an Arc in a zone area
  * Convert arcs to multiple straight segments
- * For a cicle, aStart = aEnd
+ * @param aBooleng = the bool engine to use
+ * @param aCentre = centre of the arc or circle
+ * @param aStart = start point of the arc, or apoint of the circle
+ * @param aArcAngle = arc angle in 0.1 degrees. For a circle, aArcAngle = 3600
+ * @param aWidth = width of the line
  */
 void AddRingPolygon( Bool_Engine* aBooleng, wxPoint aCentre,
-                     wxPoint aStart, wxPoint aEnd,
+                     wxPoint aStart, int aArcAngle,
                      int aWidth )
 {
-    wxPoint start, end;
-    int     arc_angle;
+    wxPoint arc_start, arc_end;
     int      delta = 3600 / s_CircleToSegmentsCount;                                                                // rot angle in 0.1 degree
 
-    if( aEnd == aStart )
-        arc_angle = 3600;
-    else
+    arc_end = arc_start = aStart;
+    if( aArcAngle != 3600 )
     {
-        double angle = atan2( aEnd.y - aCentre.y, aEnd.x - aCentre.x ) -
-                             atan2( aStart.y - aCentre.y, aStart.x - aCentre.x );
-        // delta_angle is in 0.1 degrees
-        arc_angle = (int) round ( 1800.0 / M_PI * angle );
-        NEGATE ( arc_angle );   // Due to reverse orientation of Y axis,
-                                // angles are negated, comparing to the mathematical Y orient.
+        RotatePoint( &arc_end, aCentre, -aArcAngle );
     }
 
-    if( arc_angle < 0 )
+    if( aArcAngle < 0 )
     {
-        EXCHG( aStart, aEnd );
-        NEGATE( arc_angle );
+        EXCHG( arc_start, arc_end );
+        NEGATE( aArcAngle );
     }
 
     // Compute the ends of segments and creates poly
-    end = start = aStart;
-    for( int ii = delta; ii < arc_angle; ii += delta )
+    wxPoint curr_end = arc_start, curr_start = arc_start;
+    for( int ii = delta; ii < aArcAngle; ii += delta )
     {
-        end = aStart;
-        RotatePoint( &end, aCentre, ii );
-        AddRoundedEndsSegmentPolygon( aBooleng, start, end, aWidth );
-        start = end;
+        curr_end = arc_start;
+        RotatePoint( &curr_end, aCentre, -ii );
+        AddRoundedEndsSegmentPolygon( aBooleng, curr_start, curr_end, aWidth );
+        curr_start = curr_end;
     }
 
-    if( end != aEnd )
-        AddRoundedEndsSegmentPolygon( aBooleng, end, aEnd, aWidth );
+    if( curr_end != arc_end )
+        AddRoundedEndsSegmentPolygon( aBooleng, curr_end, arc_end, aWidth );
 }
 
 
