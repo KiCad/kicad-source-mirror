@@ -18,8 +18,7 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
                          char* aLine,
                          int aBufsize,
                          int* aLineNum,
-                         int aSchematicFileVersion)
-{
+                         int aSchematicFileVersion ) {
 /**
  * Function ReadTextDescr
  * Reads the data structures for a Text (Comment, label, Hlabel and Hlabel
@@ -56,7 +55,7 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
         return NULL;
     }
 
-    if( feof( aFile ) || GetLine( aFile, aLine, aLineNum, aBufsize) == NULL )
+    if( feof( aFile ) || GetLine( aFile, aLine, aLineNum, aBufsize ) == NULL )
     {
         aMsgDiag.Printf(
             wxT( "EESchema file text struct error line %d (No text), aborted" ),
@@ -76,11 +75,11 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;
-		if ( isdigit(Name3[0]) )
-		{
-			thickness = atol(Name3);
-			TextStruct->m_Width  = thickness;
-		}
+        if( isdigit( Name3[0] ) )
+        {
+            thickness = atol( Name3 );
+            TextStruct->m_Width = thickness;
+        }
         Struct = TextStruct;
         if( stricmp( Name2, "Italic" ) == 0 )
             TextStruct->m_Italic = 1;
@@ -134,11 +133,11 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;
-		if ( isdigit(Name3[0]) )
-		{
-			thickness = atol(Name3);
-			TextStruct->m_Width  = thickness;
-		}
+        if( isdigit( Name3[0] ) )
+        {
+            thickness = atol( Name3 );
+            TextStruct->m_Width = thickness;
+        }
 
         if( strnicmp( Name2, "Italic", 6 ) == 0 )
             TextStruct->m_Italic = 1;
@@ -150,11 +149,11 @@ SCH_ITEM* ReadTextDescr( FILE * aFile,
 
 
 /*************************************************************************************/
-int ReadSheetDescr( wxWindow*    frame,
-                           char*        Line,
-                           FILE*        f,
-                           wxString&    aMsgDiag, int* aLineNum,
-                           BASE_SCREEN* Window )
+int ReadSheetDescr( wxWindow* frame,
+                    char* Line,
+                    FILE* f,
+                    wxString& aMsgDiag, int* aLineNum,
+                    BASE_SCREEN* Window )
 /*************************************************************************************/
 
 /* Fonction utilisee par LoadEEFile().
@@ -198,7 +197,7 @@ int ReadSheetDescr( wxWindow*    frame,
         aMsgDiag.Printf(
             wxT( " ** EESchema file sheet struct error at line %d, aborted\n" ),
             *aLineNum );
-        aMsgDiag << CONV_FROM_UTF8(Line);
+        aMsgDiag << CONV_FROM_UTF8( Line );
         Failed = TRUE;
         return Failed;
     }
@@ -233,7 +232,7 @@ int ReadSheetDescr( wxWindow*    frame,
             aMsgDiag.Printf(
                 wxT( "EESchema file sheet label F%d at line %d, aborted\n" ),
                 fieldNdx, *aLineNum );
-            aMsgDiag << CONV_FROM_UTF8(Line);
+            aMsgDiag << CONV_FROM_UTF8( Line );
             return TRUE;
         }
 
@@ -244,7 +243,7 @@ int ReadSheetDescr( wxWindow*    frame,
             {
                 aMsgDiag.Printf(
                     wxT( "EESchema file sheet field F at line %d, aborted\n" ), *aLineNum );
-                aMsgDiag << CONV_FROM_UTF8(Line);
+                aMsgDiag << CONV_FROM_UTF8( Line );
                 return TRUE;
             }
             if( *ptcar == '"' )
@@ -261,7 +260,7 @@ int ReadSheetDescr( wxWindow*    frame,
                 aMsgDiag.Printf(
                     wxT(
                         "EESchema file sheet Label Caract error line %d, aborted\n" ), *aLineNum );
-                aMsgDiag << CONV_FROM_UTF8(Line);
+                aMsgDiag << CONV_FROM_UTF8( Line );
                 DisplayError( frame, aMsgDiag );
             }
             if( size == 0 )
@@ -301,7 +300,7 @@ int ReadSheetDescr( wxWindow*    frame,
                 aMsgDiag.Printf(
                     wxT(
                         "EESchema file Sheet Label Caract error line %d, aborted\n" ), *aLineNum );
-                aMsgDiag << CONV_FROM_UTF8(Line);
+                aMsgDiag << CONV_FROM_UTF8( Line );
                 DisplayError( frame, aMsgDiag );
                 continue;
             }
@@ -339,7 +338,7 @@ int ReadSheetDescr( wxWindow*    frame,
         aMsgDiag.Printf(
             wxT( " **EESchema file end_sheet struct error at line %d, aborted\n" ),
             *aLineNum );
-        aMsgDiag << CONV_FROM_UTF8(Line);
+        aMsgDiag << CONV_FROM_UTF8( Line );
         Failed = TRUE;
     }
     if( !Failed )
@@ -353,10 +352,10 @@ int ReadSheetDescr( wxWindow*    frame,
 
 
 /******************************************************************/
-bool ReadSchemaDescr( wxWindow*    frame,
-                      char*        Line,
-                      FILE*        f,
-                      wxString&    aMsgDiag, int* aLineNum,
+bool ReadSchemaDescr( wxWindow* frame,
+                      char* Line,
+                      FILE* f,
+                      wxString& aMsgDiag, int* aLineNum,
                       BASE_SCREEN* Window )
 /******************************************************************/
 
@@ -394,7 +393,7 @@ bool ReadSchemaDescr( wxWindow*    frame,
         /* Erreur ici: descr non trouvee */
         aMsgDiag.Printf(
             wxT( "EESchema file Dims Caract error line %d, aborted\n" ), *aLineNum );
-        aMsgDiag << CONV_FROM_UTF8(Line);
+        aMsgDiag << CONV_FROM_UTF8( Line );
         DisplayError( frame, aMsgDiag );
     }
 
@@ -476,8 +475,8 @@ bool ReadSchemaDescr( wxWindow*    frame,
 
 /*************************************************************/
 int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
-                            wxString& aMsgDiag, int* aLineNum,
-                            BASE_SCREEN* Window )
+                   wxString& aMsgDiag, int* aLineNum,
+                   BASE_SCREEN* Window )
 /*************************************************************/
 
 /* Fonction utilisee par LoadEEFile().
@@ -511,7 +510,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
         aMsgDiag.Printf(
             wxT( "EESchema Component descr error at line %d, aborted" ),
             *aLineNum );
-        aMsgDiag << wxT("\n") << CONV_FROM_UTF8(Line);
+        aMsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( Line );
         Failed = TRUE;
         return Failed;
     }
@@ -555,7 +554,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
         }
 
         Name1[ii] = 0; //just in case
-        int jj;
+        int  jj;
         for( jj = 0; jj<ii && Name1[jj] == ' '; jj++ )
             ;
 
@@ -598,13 +597,21 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
         if( Line[0] == 'U' ) /* Lecture num multi, conversion et time stamp */
         {
             sscanf( Line + 1, "%d %d %lX",
-                &component->m_Multi, &component->m_Convert,
-                &component->m_TimeStamp );
+                    &component->m_Multi, &component->m_Convert,
+                    &component->m_TimeStamp );
         }
         else if( Line[0] == 'P' )
         {
             sscanf( Line + 1, "%d %d",
-                &component->m_Pos.x, &component->m_Pos.y );
+                    &component->m_Pos.x, &component->m_Pos.y );
+
+            // Set fields position to a default position (that is the component position
+            // For existing fields, the real position will be set later
+            for( int i = 0; i<component->GetFieldCount();  ++i )
+            {
+                if( component->GetField( i )->m_Text.IsEmpty() )
+                    component->GetField( i )->m_Pos = component->m_Pos;
+            }
         }
         else if( Line[0] == 'A' && Line[1] == 'R' )
         {
@@ -706,13 +713,13 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
             }
 
             component->GetField( fieldNdx )->m_Text = CONV_FROM_UTF8( Name1 );
-			memset(Char3, 0, sizeof(Char3) );
+            memset( Char3, 0, sizeof(Char3) );
             if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
-                     &component->GetField( fieldNdx )->m_Pos.x,
-                     &component->GetField( fieldNdx )->m_Pos.y,
-                     &component->GetField( fieldNdx )->m_Size.x,
-                     &component->GetField( fieldNdx )->m_Attributs,
-                     Char2, Char3 ) ) < 4 )
+                               &component->GetField( fieldNdx )->m_Pos.x,
+                               &component->GetField( fieldNdx )->m_Pos.y,
+                               &component->GetField( fieldNdx )->m_Size.x,
+                               &component->GetField( fieldNdx )->m_Attributs,
+                               Char2, Char3 ) ) < 4 )
             {
                 aMsgDiag.Printf(
                     wxT( "Component Field error line %d, aborted" ),
@@ -745,7 +752,8 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                 else
                     component->GetField( fieldNdx )->m_Italic = false;
                 if( Char3[2] == 'B' )
-                    component->GetField( fieldNdx )->m_Width = component->GetField( fieldNdx )->m_Size.x / 4;
+                    component->GetField( fieldNdx )->m_Width = component->GetField( fieldNdx )->
+                                                               m_Size.x / 4;
                 else
                     component->GetField( fieldNdx )->m_Width = 0;
 
@@ -763,8 +771,8 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
 
     /* Lecture multi et position du composant */
     if( sscanf( Line, "%d %d %d",
-            &component->m_Multi,
-            &component->m_Pos.x, &component->m_Pos.y ) != 3 )
+                &component->m_Multi,
+                &component->m_Pos.x, &component->m_Pos.y ) != 3 )
     {
         aMsgDiag.Printf(
             wxT( "Component unit & pos error at line %d, aborted" ),
@@ -777,10 +785,10 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
     *aLineNum++;
     if( (fgets( Line, 256 - 1, f ) == NULL)
        || (sscanf( Line, "%d %d %d %d",
-               &component->m_Transform[0][0],
-               &component->m_Transform[0][1],
-               &component->m_Transform[1][0],
-               &component->m_Transform[1][1] ) != 4) )
+                   &component->m_Transform[0][0],
+                   &component->m_Transform[0][1],
+                   &component->m_Transform[1][0],
+                   &component->m_Transform[1][1] ) != 4) )
     {
         aMsgDiag.Printf(
             wxT( "Component orient error at line %d, aborted" ),
@@ -812,4 +820,3 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
 
     return Failed;   /* Fin lecture 1 composant */
 }
-
