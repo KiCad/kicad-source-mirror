@@ -361,7 +361,7 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
 /****************************************************/
 
 /** Move the mouse cursor to the position "Mouse"
- * @param Mouse = new mouse cursor position
+ * @param Mouse = mouse cursor position, in pixels units
  */
 {
     int     x, y, xPpu, yPpu;
@@ -700,7 +700,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     drawgrid = m_Parent->m_Draw_Grid;
 
     screen_grid_size = screen->GetGrid();
-    
+
     wxRealPoint  dgrid = screen_grid_size;
     screen->Scale( dgrid );     // dgrid = grid size in pixels
     // if the grid size is sall ( < 5 pixels) do not display all points

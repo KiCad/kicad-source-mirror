@@ -129,7 +129,6 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
         // Put cursor on item position
         DrawPanel->CursorOff( &dc );
         screen->m_Curseur = aPos;
-        DrawPanel->MouseTo( screen->m_Curseur );
         DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOn( &dc );
     }
