@@ -19,7 +19,7 @@ email address.
 2009-Feb-25 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
-  * Markers were now shown when on top of a high-lighted pad.  Moved highlight
+  * Markers were not shown when on top of a high-lighted pad.  Moved highlight
     drawing function into class BOARD and out of Frame.  Call BOARD::DrawHighLight() from
     within BOARD::Draw() to fix.
   * Gerbers were not generated if you had EDGE_MODULEs on a copper layer, such as in
