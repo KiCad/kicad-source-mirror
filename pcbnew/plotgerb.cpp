@@ -84,10 +84,13 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 
     /* Calculate scaling from pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
     Gerb_scale_plot = 1.0;  /* for format 3.4 (4 digits for decimal format means 0.1 mil per gerber unit */
+
     scale_x = Scale_X * Gerb_scale_plot;
     scale_y = Scale_Y * Gerb_scale_plot;
+
     g_PlotOffset.x = 0;
     g_PlotOffset.y = 0;
+
     if( PlotOriginIsAuxAxis )
         g_PlotOffset = m_Auxiliary_Axis_Position;
 
@@ -175,35 +178,30 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
 {
     wxPoint         pos;
     wxSize          size;
-    MODULE*         Module;
-    D_PAD*          PtPad;
-    TRACK*          track;
-    EDA_BaseStruct* PtStruct;
     wxString        msg;
 
     /* Draw items type Drawings Pcb matching with masque_layer: */
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            PlotDrawSegment( (DRAWSEGMENT*) PtStruct, PLOT_FORMAT_GERBER,
+            PlotDrawSegment( (DRAWSEGMENT*) item, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
         case TYPE_TEXTE:
-            PlotTextePcb( (TEXTE_PCB*) PtStruct, PLOT_FORMAT_GERBER,
+            PlotTextePcb( (TEXTE_PCB*) item, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
         case TYPE_COTATION:
-            PlotCotation( (COTATION*) PtStruct, PLOT_FORMAT_GERBER,
+            PlotCotation( (COTATION*) item, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
         case TYPE_MIRE:
-            PlotMirePcb( (MIREPCB*) PtStruct, PLOT_FORMAT_GERBER,
+            PlotMirePcb( (MIREPCB*) item, PLOT_FORMAT_GERBER,
                 masque_layer );
             break;
 
@@ -216,18 +214,16 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
         }
     }
 
-    /* Draw footprints shapes without pads (pads will plotted later) */
-    Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
+    /* Draw footprint shapes without pads (pads will plotted later) */
+    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
-        PtStruct = Module->m_Drawings;
-        for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+        for( BOARD_ITEM* item = module->m_Drawings; item;  item = item->Next() )
         {
-            switch( PtStruct->Type() )
+            switch( item->Type() )
             {
             case TYPE_EDGE_MODULE:
-                if( masque_layer & g_TabOneLayerMask[( (EDGE_MODULE*) PtStruct )->GetLayer()] )
-                    Plot_1_EdgeModule( PLOT_FORMAT_GERBER, (EDGE_MODULE*) PtStruct );
+                if( masque_layer & g_TabOneLayerMask[( (EDGE_MODULE*) item)->GetLayer()] )
+                    Plot_1_EdgeModule( PLOT_FORMAT_GERBER, (EDGE_MODULE*) item );
                 break;
 
             default:
@@ -237,26 +233,25 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     }
 
     /* Plot footprint pads */
-    Module = m_Pcb->m_Modules;
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
+    for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
-        PtPad = (D_PAD*) Module->m_Pads;
-        for( ; PtPad != NULL; PtPad = (D_PAD*) PtPad->Next() )
+        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
         {
             wxPoint shape_pos;
-            if( (PtPad->m_Masque_Layer & masque_layer) == 0 )
+            if( (pad->m_Masque_Layer & masque_layer) == 0 )
                 continue;
-            shape_pos = PtPad->ReturnShapePos();
+
+            shape_pos = pad->ReturnShapePos();
             pos = shape_pos;
 
-            size.x = PtPad->m_Size.x + 2 * garde;
-            size.y = PtPad->m_Size.y + 2 * garde;
+            size.x = pad->m_Size.x + 2 * garde;
+            size.y = pad->m_Size.y + 2 * garde;
 
             /* Don't draw a null size item : */
             if( size.x <= 0 || size.y <= 0 )
                 continue;
 
-            switch( PtPad->m_PadShape )
+            switch( pad->m_PadShape )
             {
             case PAD_CIRCLE:
                 Plot_1_CIRCLE_pad_GERBER( pos, size.x );
@@ -268,20 +263,20 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
                 if( size.x == size.y )
                     Plot_1_CIRCLE_pad_GERBER( pos, size.x );
                 else
-                    trace_1_pastille_OVALE_GERBER( pos, size, PtPad->m_Orient );
+                    trace_1_pastille_OVALE_GERBER( pos, size, pad->m_Orient );
                 break;
 
             case PAD_TRAPEZOID:
             {
-                wxSize delta = PtPad->m_DeltaSize;
+                wxSize delta = pad->m_DeltaSize;
                 trace_1_pad_TRAPEZE_GERBER( pos, size,
-                    delta, PtPad->m_Orient, FILLED );
+                    delta, pad->m_Orient, FILLED );
             }
             break;
 
             case PAD_RECT:
             default:
-                PlotRectangularPad_GERBER( pos, size, PtPad->m_Orient );
+                PlotRectangularPad_GERBER( pos, size, pad->m_Orient );
                 break;
             }
         }
@@ -290,39 +285,46 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     /* Plot vias : */
     if( tracevia )
     {
-        for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
+        for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
         {
             if( track->Type() != TYPE_VIA )
                 continue;
+
             SEGVIA* Via = (SEGVIA*) track;
 
             // vias not plotted if not on selected layer, but if layer
             // == SOLDERMASK_LAYER_CU or SOLDERMASK_LAYER_CMP, vias are drawn,
             // if they are on a external copper layer
             int via_mask_layer = Via->ReturnMaskLayer();
+
             if( via_mask_layer & CUIVRE_LAYER )
                 via_mask_layer |= SOLDERMASK_LAYER_CU;
+
             if( via_mask_layer & CMP_LAYER )
                 via_mask_layer |= SOLDERMASK_LAYER_CMP;
+
             if( ( via_mask_layer & masque_layer) == 0 )
                 continue;
 
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * garde;
+
             /* Don't draw a null size item : */
             if( size.x <= 0 )
                 continue;
+
             Plot_1_CIRCLE_pad_GERBER( pos, size.x );
         }
     }
 
     /* Plot tracks (not vias) : */
-    for( track = m_Pcb->m_Track; track != NULL; track = (TRACK*) track->Next() )
+    for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
     {
         wxPoint end;
 
         if( track->Type() == TYPE_VIA )
             continue;
+
         if( (g_TabOneLayerMask[track->GetLayer()] & masque_layer) == 0 )
             continue;
 
@@ -335,7 +337,7 @@ void WinEDA_BasePcbFrame::Plot_Layer_GERBER( FILE* File, int masque_layer,
     }
 
     /* Plot zones: */
-    for( track = m_Pcb->m_Zone; track != NULL; track = (TRACK*) track->Next() )
+    for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
     {
         wxPoint end;
 
@@ -781,9 +783,6 @@ int Gen_D_CODE_File( FILE* penfile )
 /*****************************/
 void CloseFileGERBER( void )
 /****************************/
-
-/** Function CloseFileGERBER
- */
 {
     char     line[1024];
     wxString TmpFileName, msg;

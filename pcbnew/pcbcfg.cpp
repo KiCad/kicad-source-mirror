@@ -69,11 +69,11 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
     case ID_CONFIG_READ:
         FullFileName = GetScreen()->m_FileName.AfterLast( '/' );
         ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
-        FullFileName = EDA_FileSelector( _( "Read config file" ),
+        FullFileName = EDA_FileSelector( _( "Read Config File" ),
                                          wxPathOnly( GetScreen()->m_FileName ), /* Chemin par defaut */
                                          FullFileName,                          /* nom fichier par defaut */
                                          g_Prj_Config_Filename_ext,             /* extension par defaut */
-                                         FullFileName,                          /* Masque d'affichage */
+                                         wxString( wxT("*")) + g_Prj_Config_Filename_ext,
                                          this,
                                          wxFD_OPEN,
                                          TRUE /* ne change pas de repertoire courant */
@@ -183,10 +183,9 @@ bool Read_Config( const wxString& project_name )
         ScreenPcb->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
     }
 
-    g_DesignSettings.m_TrackWidthHistory[0] =
-        g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_ViaSizeHistory[0] =
-        g_DesignSettings.m_CurrentViaSize;
+    g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
+    g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
+
     for( ii = 1; ii < HISTORY_NUMBER; ii++ )
     {
         g_DesignSettings.m_TrackWidthHistory[ii] = 0;

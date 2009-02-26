@@ -19,9 +19,16 @@ email address.
 2009-Feb-25 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
-    Markers were now shown when on top of a high-lighted pad.  Moved highlight
+  * Markers were now shown when on top of a high-lighted pad.  Moved highlight
     drawing function into class BOARD and out of Frame.  Call BOARD::DrawHighLight() from
     within BOARD::Draw() to fix.
+  * Gerbers were not generated if you had EDGE_MODULEs on a copper layer, such as in
+    a MuWaveBasicShape.  The line thickness was not being put into the gerber via a DCODE.
+    These gerber files were bad, and geda gerbv would also complain.
+  * A few window titles were not conformant with UIpolicies.txt.
+  * You could not load a *.pro file from another project into PCBNEW if your current
+    project had none.  Changed wildcard mask.
+  * Deleted gen_self.h and moved that code into muonde.cpp
 
 
 2009-Feb-24 UPDATE Dick Hollenbeck <dick@softplc.com>

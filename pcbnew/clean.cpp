@@ -420,7 +420,7 @@ static int clean_segments( WinEDA_PcbFrame* frame, wxDC* DC )
         if( !segment->IsNull() )
             continue;
 
-        /* Lenght segment = 0; delete it */
+        /* Length segment = 0; delete it */
         segment->Draw( frame->DrawPanel, DC, GR_XOR );
         segment->DeleteStructure();
         nbpoints_supprimes++;

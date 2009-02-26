@@ -51,7 +51,6 @@ void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
     if( source == NULL )
         return;
 
-    // @todo why not just use "*this = source;"  ?
     m_Start  = source->m_Start;
     m_End    = source->m_End;
     m_Shape  = source->m_Shape;

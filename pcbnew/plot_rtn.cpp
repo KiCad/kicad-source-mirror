@@ -321,7 +321,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
             SetCurrentLineWidthPS( thickness );
             break;
     }
-    
+
     PlotGraphicText( format_plot, pos, BLACK,
                       pt_texte->m_Text,
                       orient, size,
@@ -429,22 +429,21 @@ void Plot_Edges_Modules( BOARD* pcb, int format_plot, int masque_layer )
 /* Trace les contours des modules */
 {
     int          nb_items;  /* Pour affichage activite: nbr modules traites */
-    MODULE*      Module;
-    EDGE_MODULE* PtEdge;
     wxString     msg;
 
     nb_items = 0;
-    Module   = pcb->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
+    for( MODULE* module = pcb->m_Modules;  module;  module = module->Next() )
     {
-        PtEdge = (EDGE_MODULE*) Module->m_Drawings.GetFirst();
-        for( ; PtEdge != NULL; PtEdge = PtEdge->Next() )
+        EDGE_MODULE* edge = (EDGE_MODULE*) module->m_Drawings.GetFirst();
+        for( ; edge; edge = edge->Next() )
         {
-            if( PtEdge->Type() != TYPE_EDGE_MODULE )
+            if( edge->Type() != TYPE_EDGE_MODULE )
                 continue;
-            if( (g_TabOneLayerMask[PtEdge->GetLayer()] & masque_layer) == 0 )
+
+            if( (g_TabOneLayerMask[edge->GetLayer()] & masque_layer) == 0 )
                 continue;
-            Plot_1_EdgeModule( format_plot, PtEdge );
+
+            Plot_1_EdgeModule( format_plot, edge );
         }
 
         /* Affichage du nombre de modules traites */
@@ -470,8 +469,12 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
 
     type_trace = PtEdge->m_Shape;
     thickness  = PtEdge->m_Width;
+
     if( g_Plot_Mode == FILAIRE )
+    {
         thickness = g_PlotLine_Width;
+        wxLogDebug( wxT("changing edgemodule thickness to g_PlotLine_Width") );
+    }
 
     pos = PtEdge->m_Start;
     end = PtEdge->m_End;
@@ -484,6 +487,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         switch( format_plot )
         {
         case PLOT_FORMAT_GERBER:
+            SelectD_CODE_For_LineDraw(thickness);
             PlotGERBERLine( pos, end, thickness );
             break;
 
@@ -577,16 +581,16 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
 
     switch( format_plot )
     {
-        case PLOT_FORMAT_GERBER:
-            SelectD_CODE_For_LineDraw(thickness);
-            break;
+    case PLOT_FORMAT_GERBER:
+        SelectD_CODE_For_LineDraw(thickness);
+        break;
 
-        case PLOT_FORMAT_HPGL:
-            break;
+    case PLOT_FORMAT_HPGL:
+        break;
 
-        case PLOT_FORMAT_POST:
-            SetCurrentLineWidthPS( thickness );
-            break;
+    case PLOT_FORMAT_POST:
+        SetCurrentLineWidthPS( thickness );
+        break;
     }
 
     PlotGraphicText( format_plot, pos, BLACK,

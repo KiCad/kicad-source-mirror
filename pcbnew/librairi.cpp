@@ -722,7 +722,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     /* Ask fo the new module reference */
     if( module_name.IsEmpty() )
     {
-        if( Get_Message( _( "Module Reference:" ), _( "Module Creation:" ), Line, this ) != 0 )
+        if( Get_Message( _( "Module Reference:" ), _( "Module Creation" ), Line, this ) != 0 )
         {
             DisplayInfo( this, _( "No reference, aborted" ) );
             return NULL;
