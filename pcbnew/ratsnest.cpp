@@ -104,7 +104,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
  *  Must be called after a board change (changes for
  *  pads, footprints or a read netlist ).
  *
- *  if display_status_pcb != 0 : Display the computation results
+ *  if display_status_pcb == true : Display the computation results
  */
 {
     wxString msg;

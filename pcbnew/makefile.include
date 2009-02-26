@@ -256,7 +256,7 @@ librairi.o: librairi.cpp
 
 edgemod.o: edgemod.cpp
 
-muonde.o: muonde.cpp drag.h gen_self.h
+muonde.o: muonde.cpp drag.h
 
 autorout.o: autorout.cpp cell.h autorout.h
 

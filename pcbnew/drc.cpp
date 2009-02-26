@@ -187,6 +187,10 @@ int DRC::Drc( ZONE_CONTAINER * aArea, int CornerIndex )
 
 void DRC::RunTests()
 {
+    // Ensure ratsnest is up to date:
+    if( (m_pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+        m_mainWindow->Compile_Ratsnest( NULL, true );
+
     // someone should have cleared the two lists before calling this.
 
     // test pad to pad clearances, nothing to do with tracks, vias or zones.
@@ -197,7 +201,7 @@ void DRC::RunTests()
     testTracks();
 
     // Before testing segments and unconnected, refill all zones:
-    // this is a good caution, and mandatory if using filling zones by solid polygons
+    // this is a good caution, because filled areas can be outdated.
     m_mainWindow->Fill_All_Zones( false );
 
     // test zone clearances to other zones, pads, tracks, and vias

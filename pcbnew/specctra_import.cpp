@@ -115,6 +115,15 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     GetScreen()->SetModify();
     GetBoard()->m_Status_Pcb = 0;
+    
+    /* At this point we should call Compile_Ratsnest()
+     * but this could be time consumming.
+     * So if incorrect number of Connecred and No connected pads is accepted
+     * until Compile_Ratsnest() is called (when track tool selected for instance)
+     * leave the next line commented
+     * Otherwise uncomment this line
+    */
+    //Compile_Ratsnest( NULL, true );
 
     Affiche_Message( wxString( _("Session file imported and merged OK.")) );
 
