@@ -449,7 +449,7 @@ void MoveLibDrawItemAt( LibEDA_BaseStruct* DrawItem, wxPoint newpos )
     {
         int  ii, imax = ( (LibDrawPolyline*) CurrentDrawItem )->GetCornerCount();
         wxPoint offset = newpos - ( (LibDrawPolyline*) CurrentDrawItem )->m_PolyPoints[0];
-        for( ii = 0; ii < imax; ii += 2 )
+        for( ii = 0; ii < imax; ii ++ )
             ( (LibDrawPolyline*) CurrentDrawItem )->m_PolyPoints[ii] += offset;
     }
     break;
