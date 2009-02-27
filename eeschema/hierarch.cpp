@@ -347,8 +347,9 @@ static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame )
     }
     else
     {
-        frame->DrawPanel->Refresh();
         frame->DrawPanel->MouseToCursorSchema();
     }
+
+    frame->DrawPanel->Refresh();
     return true;
 }
