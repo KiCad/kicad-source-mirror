@@ -53,7 +53,8 @@ BASE_SCREEN::~BASE_SCREEN()
 
 
 /*******************************/
-void BASE_SCREEN::InitDatas()
+void
+BASE_SCREEN::InitDatas()
 /*******************************/
 {
     if( m_Center )
@@ -79,19 +80,23 @@ void BASE_SCREEN::InitDatas()
     m_FlagSave = 1;         // Used in auto save: set when an auto save is made
 }
 
-/*
+/**
  * Get screen units scalar.
  *
  * Default implimentation returns scalar used for schematic screen.  The
  * internal units used by the schematic screen is 1 mil (0.001").  Override
  * this in derived classes that require internal units other than 1 mil.
  */
-int BASE_SCREEN::GetInternalUnits( void )
+int
+BASE_SCREEN::GetInternalUnits( void )
 {
     return EESCHEMA_INTERNAL_UNIT;
 }
 
-wxSize BASE_SCREEN::ReturnPageSize( void )
+/************************************/
+wxSize
+BASE_SCREEN::ReturnPageSize( void )
+/************************************/
 {
     int internal_units = GetInternalUnits();
 
@@ -99,13 +104,16 @@ wxSize BASE_SCREEN::ReturnPageSize( void )
                    ( m_CurrentSheetDesc->m_Size.y * internal_units ) / 1000 );
 }
 
-/******************************************************************/
-wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
-/******************************************************************/
-/** Function CursorRealPosition
+
+/**
+ * Function CursorRealPosition
  * @return the position in user units of location ScreenPos
  * @param ScreenPos = the screen (in pixel) position co convert
 */
+/******************************************************************/
+wxPoint
+BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
+/******************************************************************/
 {
     wxPoint curpos = ScreenPos;
     Unscale( curpos );

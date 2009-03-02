@@ -1,7 +1,7 @@
-/*************************************************/
-/* drawtxt.cpp : Function to draw and plot texts */
-/*************************************************/
-
+/**
+ * Functions to draw and plot text on screen
+ * @file drawtxt.cpp 
+ */
 #include "fctsys.h"
 #include "gr_basic.h"
 
@@ -14,24 +14,12 @@
 #include "class_base_screen.h"
 
 #ifndef DEFAULT_SIZE_TEXT
-#define DEFAULT_SIZE_TEXT 50
+#	define DEFAULT_SIZE_TEXT 50
 #endif
 
 #define EDA_DRAWBASE
 #include "grfonte.h"
 
-/* fonctions locales : */
-
-
-/****************************************************************************************************/
-void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                      const wxPoint& aPos, EDA_Colors aColor, const wxString& aText,
-                      int aOrient, const wxSize& aSize,
-                      enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
-                      int aWidth,  bool aItalic,
-                      void (* aCallback) (int x0, int y0, int xf, int yf))
-/****************************************************************************************************/
 
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)
@@ -50,6 +38,20 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aCallback() = function called (if non null) to draw each segment.
  *                  used to draw 3D texts or for plotting, NULL for normal drawings
  */
+/****************************************************************************************************/
+void DrawGraphicText( WinEDA_DrawPanel* aPanel,
+                      wxDC* aDC,
+                      const wxPoint& aPos,
+                      EDA_Colors aColor,
+                      const wxString& aText,
+                      int aOrient,
+                      const wxSize& aSize,
+                      enum GRTextHorizJustifyType aH_justify,
+                      enum GRTextVertJustifyType aV_justify,
+                      int aWidth,
+                      bool aItalic,
+                      void (* aCallback) (int x0, int y0, int xf, int yf))
+/****************************************************************************************************/
 {
     int            ii, kk, char_count, AsciiCode, endcar;
     int            x0, y0;
@@ -313,8 +315,18 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 /* functions used to plot texts, using DrawGraphicText() with a call back function */
 static void  (*MovePenFct)( wxPoint pos, int state ); // a pointer to actual plot function (HPGL, PS, ..)
 static bool s_Plotbegin;        // Flag to init plot
-/* The call back function */
-static void s_Callback_plot(int x0, int y0, int xf, int yf)
+
+
+/*
+ * The call back function
+ */
+/**********************/
+static void
+s_Callback_plot(int x0,
+                int y0,
+                int xf,
+                int yf)
+/**********************/
 {
     static wxPoint PenLastPos;
     wxPoint pstart;
@@ -347,15 +359,6 @@ static void s_Callback_plot(int x0, int y0, int xf, int yf)
 }
 
 
-/******************************************************************************************/
-void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aColor,
-                      const wxString& aText,
-                      int aOrient, const wxSize& aSize,
-                      enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
-                      int aWidth, bool aItalic )
-/******************************************************************************************/
-
 /** Function PlotGraphicText
  *  same as DrawGraphicText, but plot graphic text insteed of draw it
  *  @param aFormat_plot = plot format (PLOT_FORMAT_POST, PLOT_FORMAT_HPGL, PLOT_FORMAT_GERBER)
@@ -370,6 +373,18 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
  */
+/******************************************************************************************/
+void PlotGraphicText( int aFormat_plot,
+                      const wxPoint& aPos,
+                      enum EDA_Colors aColor,
+                      const wxString& aText,
+                      int aOrient,
+                      const wxSize& aSize,
+                      enum GRTextHorizJustifyType aH_justify,
+                      enum GRTextVertJustifyType aV_justify,
+                      int aWidth,
+                      bool aItalic )
+/******************************************************************************************/
 {
     // Initialise the actual function used to plot lines:
     switch( aFormat_plot )
@@ -403,3 +418,4 @@ void PlotGraphicText( int aFormat_plot, const wxPoint& aPos, enum EDA_Colors aCo
     /* end text : pen UP ,no move */
     MovePenFct( wxPoint( 0, 0 ), 'Z' );
 }
+

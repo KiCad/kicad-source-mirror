@@ -1,16 +1,17 @@
-/******************************************************************/
-/* basicframe.cpp - fonctions des classes du type WinEDA_BasicFrame */
-/******************************************************************/
+/**
+ * WinEDA_BasicFrame Class Functions
+ * @file basicframe.cpp
+ */
 
 #ifdef __GNUG__
-#pragma implementation
+#	pragma implementation
 #endif
 
-/* wxWidgets about dialog */
 #include <wx/aboutdlg.h>
+#include <wx/fontdlg.h>
+
 #include "wx/statline.h"
 #include "wx/generic/aboutdlgg.h"
-#include <wx/fontdlg.h>
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -22,15 +23,18 @@
 #include "wxstruct.h"
 
 
-/*******************************************************/
-/* Constructeur de WinEDA_BasicFrame: la fenetre generale */
-/*******************************************************/
-
-WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father, int idtype,
+/*
+ * Class constructor for WinEDA_BasicFrame general options
+ */
+/**********************************************************/
+WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
+                                      int idtype,
                                       const wxString& title,
-                                      const wxPoint& pos, const wxSize& size,
+                                      const wxPoint& pos,
+                                      const wxSize& size,
                                       long style ) :
     wxFrame( father, -1, title, pos, size, style )
+/**********************************************************/
 {
     wxSize minsize;
 
@@ -56,6 +60,9 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father, int idtype,
 }
 
 
+/*
+ *
+ */
 /******************************************/
 WinEDA_BasicFrame::~WinEDA_BasicFrame()
 /******************************************/
@@ -66,18 +73,22 @@ WinEDA_BasicFrame::~WinEDA_BasicFrame()
 }
 
 
-/********************************************/
-void WinEDA_BasicFrame::ReCreateMenuBar()
-/********************************************/
-
-// Virtual function
+/*
+ * Virtual function
+ */
+/***********************************/
+void
+WinEDA_BasicFrame::ReCreateMenuBar()
+/***********************************/
 {
+
 }
 
 
-/*********************************************/
-void WinEDA_BasicFrame::GetSettings()
-/*********************************************/
+/*******************************/
+void
+WinEDA_BasicFrame::GetSettings()
+/*******************************/
 {
     wxString  text;
     int       Ypos_min;
@@ -110,9 +121,10 @@ void WinEDA_BasicFrame::GetSettings()
 }
 
 
-/*****************************************/
-void WinEDA_BasicFrame::SaveSettings()
-/*****************************************/
+/********************************/
+void
+WinEDA_BasicFrame::SaveSettings()
+/********************************/
 {
     wxString text;
     wxConfig* config;
@@ -137,19 +149,22 @@ void WinEDA_BasicFrame::SaveSettings()
 
 
 /******************************************************/
-void WinEDA_BasicFrame::PrintMsg( const wxString& text )
+void
+WinEDA_BasicFrame::PrintMsg( const wxString& text )
 /******************************************************/
 {
     SetStatusText( text );
 }
 
 
-/*************************************************************************/
-void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
-/*************************************************************************/
-
-/* Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
+/*
+ * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
  */
+/*************************************************************************/
+void
+WinEDA_BasicFrame::DisplayActivity( int PerCent,
+                                    const wxString& Text )
+/*************************************************************************/
 {
     wxString Line;
 
@@ -165,23 +180,26 @@ void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
 }
 
 
-/*******************************************************************/
-void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
-/*******************************************************************/
-
-/* Met a jour la liste des anciens projets
+/*
+ * Met a jour la liste des anciens projets
  */
+/*******************************************************************/
+void
+WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
+/*******************************************************************/
 {
     wxGetApp().m_fileHistory.AddFileToHistory( FullFileName );
     ReCreateMenuBar();
 }
 
 
-/**
+/*
  * Fetch the file name from the file history list.
  */
+/*********************************************************************/
 wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
                                                 const wxString& type )
+/*********************************************************************/
 {
     wxString fn, msg;
     size_t   i;
@@ -209,12 +227,18 @@ wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
 }
 
 
+/*
+ *
+ */
 /**************************************************************/
-void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
+void
+WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /**************************************************************/
 {
     wxString msg;
+
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
+
     if( wxGetApp().m_HtmlCtrl == NULL )
     {
         wxGetApp().InitOnLineHelp();
@@ -231,6 +255,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
         msg.Printf( _( "Help file %s not found" ), wxGetApp().m_HelpFileName.GetData() );
         DisplayError( this, msg );
     }
+
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
     // wxString fullfilename = FindKicadHelpPath() + wxGetApp().m_HelpFileName;
     // if ( wxFileExists(fullfilename) )
@@ -252,12 +277,17 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
         GetAssociatedDocument( this, wxEmptyString, helpFile );
 
 #else
-    #error Help files format not defined
+#	error Help files format not defined
 #endif
 }
 
+
+/*
+ *
+ */
 /***********************************************************************/
-void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
+void
+WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
 /***********************************************************************/
 {
     wxAboutDialogInfo info;
@@ -266,8 +296,12 @@ void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
 }
 
 
+/*
+ *
+ */
 /********************************************************************/
-void WinEDA_BasicFrame::ProcessFontPreferences( int id )
+void
+WinEDA_BasicFrame::ProcessFontPreferences( int id )
 /********************************************************************/
 {
     wxFont font;
@@ -308,3 +342,4 @@ void WinEDA_BasicFrame::ProcessFontPreferences( int id )
         break;
     }
 }
+

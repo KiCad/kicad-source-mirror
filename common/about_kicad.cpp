@@ -140,5 +140,5 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 	/* Add programm credits for icons */
 	info.AddArtist( wxT( "Icons by Iñigo Zuluagaz <inigo_zuluaga@yahoo.es>" ) );
 	info.AddArtist( SetMsg( wxT( "3D modules by Renie Marquet <reniemarquet@uol.com.br>" ) ) );
-	info.AddArtist( SetMsg( wxT( "3D modules by Cyril Frausti <cyril.frausti@gmail.com>" ) ) );
+	info.AddArtist( SetMsg( wxT( "3D modules by Christophe Boschat <nox454@hotmail.fr>" ) ) );
 }
