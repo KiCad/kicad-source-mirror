@@ -271,6 +271,14 @@ static PARAM_CFG_SETCOLOR ColorLayerErcErrCfg
     RED                                         /* Default  value */
 );
 
+static PARAM_CFG_SETCOLOR ColorLayerGridCfg
+(
+    INSETUP,
+    wxT( "ColorGrid" ),                         /* Ident String */
+    &g_GridColor,                               /* Parameter address */
+    DARKDARKGRAY                                /* Default value */
+);
+
 static PARAM_CFG_INT PlotMarginCfg
 (
     INSETUP,
@@ -493,7 +501,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &ColorLayerBusCfg,
     &ColorLayerJunctionCfg,
     &ColorLayerLLabelCfg,
-	&ColorLayerHierarLabelCfg,
+    &ColorLayerHierarLabelCfg,
     &ColorLayerGLabelCfg,
     &ColorLayerPinFunCfg,
     &ColorLayerPinNumCfg,
@@ -513,6 +521,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &ColorLayerNoConnectCfg,
     &ColorLayerErcWarnCfg,
     &ColorLayerErcErrCfg,
+    &ColorLayerGridCfg,
 
     &PlotMarginCfg,
     &HPGLSpeed,
