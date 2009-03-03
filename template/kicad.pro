@@ -117,7 +117,7 @@ LabSize=60
 [eeschema/libraries]
 LibName1=power
 LibName2=device
-LibName3=transistor
+LibName3=transistors
 LibName4=conn
 LibName5=linear
 LibName6=regul

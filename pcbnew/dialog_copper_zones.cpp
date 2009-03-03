@@ -269,6 +269,15 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_Zone_Setting->m_ZoneClearance =
         ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
 
+    // Test if this is a reasonnable value for this parameter
+    // A too large value can hang pcbnew
+    #define CLEARANCE_MAX_VALUE 5000    // in 1/10000 inch
+    if ( m_Zone_Setting->m_ZoneClearance > CLEARANCE_MAX_VALUE )
+    {
+        DisplayError( this, _( "Error : Zone clearance is set to an unreasonnable value" ) );
+        return false;
+    }
+
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
         ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
