@@ -446,7 +446,7 @@ private:
     void                GraphicItemBeginDraw( wxDC* DC );
     void                StartMoveDrawSymbol( wxDC* DC );
     void                EndDrawGraphicItem( wxDC* DC );
-    void                LoadOneSymbol( wxDC* DC );
+    void                LoadOneSymbol( );
     void                SaveOneSymbol();
     void                EditGraphicSymbol( wxDC* DC, LibEDA_BaseStruct* DrawItem );
     void                EditSymbolText( wxDC* DC, LibEDA_BaseStruct* DrawItem );

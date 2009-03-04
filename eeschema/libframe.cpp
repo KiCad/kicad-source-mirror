@@ -528,7 +528,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
         SetToolID( id, wxCURSOR_ARROW, _( "Import" ) );
-        LoadOneSymbol( &dc );
+        LoadOneSymbol( );
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
 

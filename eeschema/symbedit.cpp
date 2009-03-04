@@ -28,12 +28,13 @@ static bool CompareSymbols( LibEDA_BaseStruct* DEntryRef,
 /* Variables locales */
 
 
-/***************************************************/
-void WinEDA_LibeditFrame::LoadOneSymbol( wxDC* DC )
-/***************************************************/
+/***********************************************/
+void WinEDA_LibeditFrame::LoadOneSymbol( void )
+/***********************************************/
 
-/* Read a component shape file and add data (graphic items) to the current
+/* Read a component shape file (a symbol file *.sym )and add data (graphic items) to the current
  *  component.
+ * a symbol file *.sym has the same format as a library, and contains only one symbol
  */
 {
     int                     NumOfParts;
@@ -44,9 +45,10 @@ void WinEDA_LibeditFrame::LoadOneSymbol( wxDC* DC )
     FILE*                   ImportFile;
     wxString                msg;
 
-    if( CurrentDrawItem )
-        return;
     if( CurrentLibEntry == NULL )
+        return;
+
+    if( CurrentDrawItem && CurrentDrawItem->m_Flags )   // a command is in progress
         return;
 
     DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -116,13 +118,21 @@ void WinEDA_LibeditFrame::LoadOneSymbol( wxDC* DC )
             DrawEntry = DrawEntry->Next();
         }
 
+        // Remove duplicated drawings:
         SuppressDuplicateDrawItem( CurrentLibEntry );
+
+        // crear flags
+        DrawEntry = CurrentLibEntry->m_Drawings;
+        while( DrawEntry )
+        {
+            DrawEntry->m_Flags    = 0;
+            DrawEntry->m_Selected = 0;
+            DrawEntry = DrawEntry->Next();
+        }
+
         GetScreen()->SetModify();
 
-        // Move (and place ) the new draw items:
-        HandleBlockBegin( DC, -1, GetScreen()->m_Curseur );
-        HandleBlockEnd( DC );
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh();
     }
 
     PQFreeFunc( Entries, ( void( * ) ( void* ) )FreeLibraryEntry );
