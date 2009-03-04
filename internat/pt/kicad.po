@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-02-26 21:42-0300\n"
+"PO-Revision-Date: 2009-03-04 01:00-0300\n"
 "Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
@@ -937,7 +937,11 @@ msgstr "%s pino %s encontrado"
 msgid "Delete NET ?"
 msgstr "Deletar Ligação ?"
 
-#: pcbnew/dialog_copper_zones.cpp:279
+#: pcbnew/dialog_copper_zones.cpp:277
+msgid "Error : Zone clearance is set to an unreasonnable value"
+msgstr "Erro: Valor de isolamento de zona informado impossível de trabalhar"
+
+#: pcbnew/dialog_copper_zones.cpp:288
 msgid ""
 "Error :\n"
 "you must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)"
@@ -945,7 +949,7 @@ msgstr ""
 "Erro :\n"
 "você precisa escolher uma largura mínima de cobre maior que 0,001 polegadas ou 0,0254 mm"
 
-#: pcbnew/dialog_copper_zones.cpp:304
+#: pcbnew/dialog_copper_zones.cpp:313
 msgid ""
 "Error :\n"
 "you must choose a copper bridge value for thermal reliefs bigger than the min zone thickness"
@@ -953,16 +957,16 @@ msgstr ""
 "Erro :\n"
 "você precisa escolher um valor de ligação para alívio térmico  maior que o valor mínimo de largura de zona"
 
-#: pcbnew/dialog_copper_zones.cpp:316
+#: pcbnew/dialog_copper_zones.cpp:325
 #: pcbnew/zones_non_copper_type_functions.cpp:153
 msgid "Error : you must choose a layer"
 msgstr "Erro:  você precisa escolher uma camada"
 
-#: pcbnew/dialog_copper_zones.cpp:328
+#: pcbnew/dialog_copper_zones.cpp:337
 msgid "Error : you must choose a net name"
 msgstr "Erro: você precisa escolher um nome de net"
 
-#: pcbnew/dialog_copper_zones.cpp:335
+#: pcbnew/dialog_copper_zones.cpp:344
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Você escolheu a opção \"não conectado\". Isto irá criar ilhas de cobre isoladas. Está correto?"
 
@@ -1515,7 +1519,7 @@ msgid "Delete Field"
 msgstr "Deletar Campo"
 
 #: pcbnew/dialog_edit_module.cpp:262
-#: common/common.cpp:420
+#: common/common.cpp:452
 msgid "Component"
 msgstr "Componente"
 
@@ -4387,7 +4391,7 @@ msgid "Arc Stub"
 msgstr "Arco de toco"
 
 #: pcbnew/muonde.cpp:695
-#: common/common.cpp:146
+#: common/common.cpp:150
 msgid " (mm):"
 msgstr " (mm):"
 
@@ -10334,30 +10338,30 @@ msgstr "Comentário3:"
 msgid "Comment4:"
 msgstr "Comentário4:"
 
-#: common/base_screen.cpp:357
+#: common/base_screen.cpp:365
 #, c-format
 msgid "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
 msgstr "Tamanho de Grade ( %f, %f ) não está na lista, retornando ao tamanho de grade( %f, %f )."
 
-#: common/base_screen.cpp:380
+#: common/base_screen.cpp:388
 #, c-format
 msgid "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
 msgstr "ID de Grade  %d não está na lista, retornando ao tamanho de grade( %g, %g )."
 
-#: common/basicframe.cpp:200
+#: common/basicframe.cpp:218
 msgid " file <"
 msgstr "arquivo <"
 
-#: common/basicframe.cpp:200
+#: common/basicframe.cpp:218
 msgid "> was not found."
 msgstr "> não encontrado."
 
-#: common/basicframe.cpp:231
+#: common/basicframe.cpp:255
 #, c-format
 msgid "Help file %s not found"
 msgstr "Arquivo de Help %s não encontrado"
 
-#: common/basicframe.cpp:247
+#: common/basicframe.cpp:272
 #, c-format
 msgid "Help file %s could not be found."
 msgstr "Arquivo de Help %s não encontrado."
@@ -10402,131 +10406,131 @@ msgstr "Inverter Bloco"
 msgid "Block Mirror"
 msgstr "Espelhar bloco"
 
-#: common/common.cpp:142
+#: common/common.cpp:146
 msgid " (\"):"
 msgstr " (\"):"
 
-#: common/common.cpp:232
+#: common/common.cpp:246
 msgid " \""
 msgstr "\""
 
-#: common/common.cpp:236
+#: common/common.cpp:250
 msgid " mm"
 msgstr "mm"
 
-#: common/common.cpp:417
+#: common/common.cpp:449
 msgid "Copper   "
 msgstr "Cobre"
 
-#: common/common.cpp:417
+#: common/common.cpp:449
 msgid "Inner L1 "
 msgstr "Interno 1"
 
-#: common/common.cpp:417
+#: common/common.cpp:449
 msgid "Inner L2 "
 msgstr "Interno 2"
 
-#: common/common.cpp:417
+#: common/common.cpp:449
 msgid "Inner L3 "
 msgstr "Interno 3"
 
-#: common/common.cpp:418
+#: common/common.cpp:450
 msgid "Inner L4 "
 msgstr "Interno 4"
 
-#: common/common.cpp:418
+#: common/common.cpp:450
 msgid "Inner L5 "
 msgstr "Interno 5"
 
-#: common/common.cpp:418
+#: common/common.cpp:450
 msgid "Inner L6 "
 msgstr "Interno 6"
 
-#: common/common.cpp:418
+#: common/common.cpp:450
 msgid "Inner L7 "
 msgstr "Interno 7"
 
-#: common/common.cpp:419
+#: common/common.cpp:451
 msgid "Inner L8 "
 msgstr "Interno 8"
 
-#: common/common.cpp:419
+#: common/common.cpp:451
 msgid "Inner L9 "
 msgstr "Interno 9"
 
-#: common/common.cpp:419
+#: common/common.cpp:451
 msgid "Inner L10"
 msgstr "Interno 10"
 
-#: common/common.cpp:419
+#: common/common.cpp:451
 msgid "Inner L11"
 msgstr "Interno 11"
 
-#: common/common.cpp:420
+#: common/common.cpp:452
 msgid "Inner L12"
 msgstr "Interno 12"
 
-#: common/common.cpp:420
+#: common/common.cpp:452
 msgid "Inner L13"
 msgstr "Interno 13"
 
-#: common/common.cpp:420
+#: common/common.cpp:452
 msgid "Inner L14"
 msgstr "Interno 14"
 
-#: common/common.cpp:421
+#: common/common.cpp:453
 msgid "Adhes Cop"
 msgstr "Adesivo Cobreado"
 
-#: common/common.cpp:421
+#: common/common.cpp:453
 msgid "Adhes Cmp"
 msgstr "Adesivo Componentes"
 
-#: common/common.cpp:421
+#: common/common.cpp:453
 msgid "SoldP Cop"
 msgstr "Másc Pasta Solda Cobreado"
 
-#: common/common.cpp:421
+#: common/common.cpp:453
 msgid "SoldP Cmp"
 msgstr "Másc. Pasta Solda Comp."
 
-#: common/common.cpp:422
+#: common/common.cpp:454
 msgid "SilkS Cop"
 msgstr "SilkScreen Cobreado"
 
-#: common/common.cpp:422
+#: common/common.cpp:454
 msgid "SilkS Cmp"
 msgstr "SilkScreen  Comp."
 
-#: common/common.cpp:422
+#: common/common.cpp:454
 msgid "Mask Cop "
 msgstr "Másc.Cobre"
 
-#: common/common.cpp:422
+#: common/common.cpp:454
 msgid "Mask Cmp "
 msgstr "Máscara Componentes"
 
-#: common/common.cpp:423
+#: common/common.cpp:455
 msgid "Drawings "
 msgstr "Desenhos"
 
-#: common/common.cpp:423
+#: common/common.cpp:455
 msgid "Comments "
 msgstr "Comentários"
 
-#: common/common.cpp:423
+#: common/common.cpp:455
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:423
+#: common/common.cpp:455
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:424
+#: common/common.cpp:456
 msgid "Edges Pcb"
 msgstr "Contorno Pcb"
 
-#: common/common.cpp:424
+#: common/common.cpp:456
 msgid "BAD INDEX"
 msgstr "ÍNDICE INVÁLIDO"
 
