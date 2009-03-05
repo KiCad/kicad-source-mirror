@@ -55,18 +55,24 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
     if( aTrackList == NULL )
         return NULL;
 
-    /* Marquage du segment pointe */
     if( flagcolor )
         aTrackList->Draw( frame->DrawPanel, DC, flagcolor );
 
+    // Ensure the flag BUSY is cleared because we use it to mark segments of the track
+    for( TRACK* track = frame->GetBoard()->m_Track; track; track = track->Next() )
+        track->SetState( BUSY , OFF );
+
+    /* Set flags of the initial track segment */
     aTrackList->SetState( BUSY, ON );
     int masque_layer = aTrackList->ReturnMaskLayer();
 
     trackList.push_back( aTrackList );
 
-    /* Traitement du segment pointe : si c'est un segment, le cas est simple.
-     *  Si c'est une via, on doit examiner le nombre de segments connectes.
-     *  Si <=2, on doit detecter une piste, si > 2 seule la via est marquee
+    /* Examine the initial track segment : if it is really a segment, this is easy.
+     *  If it is a via, one must search for connected segments.
+     *  If <=2, this via connect 2 segments (or is connected to only one segment)
+     *      and this via and these 2 segments are a part of a track.
+     *  If > 2 only this via is flagged (the track has only this via)
      */
     if( aTrackList->Type() == TYPE_VIA )
     {
@@ -83,17 +89,17 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
             Segm3 = Fast_Locate_Piste( Segm2->Next(), NULL,
                                       aTrackList->m_Start, masque_layer );
         }
-        if( Segm3 )
+        if( Segm3 )     // More than 2 segments are connected to this via. the "track" is only this via
         {
             *nb_segm = 1;
             return aTrackList;
         }
-        if( Segm1 )
+        if( Segm1 )     // search for others segments connected to the initial segment start point
         {
             masque_layer = Segm1->ReturnMaskLayer();
             Marque_Chaine_segments( frame->GetBoard(), aTrackList->m_Start, masque_layer, &trackList );
         }
-        if( Segm2 )
+        if( Segm2 )     // search for others segments connected to the initial segment end point
         {
             masque_layer = Segm2->ReturnMaskLayer();
             Marque_Chaine_segments( frame->GetBoard(), aTrackList->m_Start, masque_layer, &trackList );
@@ -171,9 +177,7 @@ TRACK* Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
             if( track->GetState( BUSY ) )
             {
                 NbSegmBusy++;
-
                 track->UnLink();
-
                 list->Insert( track, firstTrack->Next() );
             }
         }
