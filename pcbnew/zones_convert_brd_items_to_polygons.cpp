@@ -330,8 +330,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         return;
 
 // Now we remove all unused thermal stubs.
-#define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
-#ifdef REMOVE_UNUSED_THERMAL_STUBS
+//define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
+//#ifdef REMOVE_UNUSED_THERMAL_STUBS
 
 /* Add the main (corrected) polygon (i.e. the filled area using only one outline)
  * in GroupA in Bool_Engine to do a BOOL_A_SUB_B operation
@@ -403,7 +403,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                     std::vector<wxPoint> corners_buffer;
 
                     // polygons are rectangles with width of copper bridge value
-                    const int            iDTRC = m_ThermalReliefCopperBridgeValue / 2;
+                    // contour line width has to be taken into calculation to avoid "thermal stub bleed"
+                    const int            iDTRC = ( m_ThermalReliefCopperBridgeValue - m_ZoneMinThickness ) / 2;
 
                     switch( i )
                     {
@@ -465,7 +466,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 // Remove insulated islands, if any:
     if( GetNet() > 0 )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
-#endif
+//#endif
 }
 
 
