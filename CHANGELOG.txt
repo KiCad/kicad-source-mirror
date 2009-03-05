@@ -17,6 +17,7 @@ email address.
         So they are temporary disabled (see my comments in these functions)
     bug fix in Marque_Une_Piste(): the last segments created can be see as part of the flagged track:
         so delete track (or edit track width) deletes the track and some others segments (last created)
+    bug fix 2660689 Unconnected pads in RC4. Also fixed some no deletion of the old track when creating a new track
 
     
 2009-Feb-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>

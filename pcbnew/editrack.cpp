@@ -505,6 +505,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         for( track=firstTrack; track && i<newCount;  ++i, track = track->Next() )
         {
             track->m_Flags = 0;
+            track->SetState( BUSY, OFF );
         }
 
         // erase the old track, if exists

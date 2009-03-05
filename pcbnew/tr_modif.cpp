@@ -81,10 +81,12 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     BufEnd = BufDeb->GetEndNetCode( netcode );
 
     /* nettoyage des flags pour tout le net */
-    for( pt_del = BufDeb;  pt_del && pt_del != BufEnd;  pt_del = pt_del->Next() )
+    for( pt_del = BufDeb;  pt_del;  pt_del = pt_del->Next() )
     {
         D(printf("track %p turning off BUSY | EDIT | CHAIN\n", pt_del );)
         pt_del->SetState( BUSY | EDIT | CHAIN, OFF );
+        if( pt_del == BufEnd )  // Last segment reached
+            break;
     }
 
     /* Calcul des points limites de la nouvelle piste */
@@ -173,10 +175,12 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
 
     if( nbconnect == 0 )
     {
-        /* nettoyage des flags */
-        for( pt_del = BufDeb; pt_del && pt_del != BufEnd; pt_del = pt_del->Next() )
+        /* Clear used flagss */
+        for( pt_del = BufDeb; pt_del; pt_del = pt_del->Next() )
         {
-            pt_del->SetState( DELETED | EDIT | CHAIN, OFF );
+            pt_del->SetState( BUSY | DELETED | EDIT | CHAIN, OFF );
+            if( pt_del == BufEnd )  // Last segment reached
+                break;
         }
 
         return 0;
@@ -191,9 +195,11 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
     /* Examen de tous les segments marques */
     while( nbconnect )
     {
-        for( pt_del = BufDeb; pt_del && pt_del != BufEnd; pt_del = pt_del->Next() )
+        for( pt_del = BufDeb; pt_del; pt_del = pt_del->Next() )
         {
             if( pt_del->GetState( CHAIN ) )
+                break;
+            if( pt_del == BufEnd )  // Last segment reached
                 break;
         }
 
@@ -244,10 +250,12 @@ int EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
         ListSetState( pt_del, nb_segm, BUSY, OFF );
     }
 
-    /* nettoyage des flags */
-    for( pt_del = Pcb->m_Track; pt_del && pt_del != BufEnd; pt_del = pt_del->Next() )
+    /* Clear used flags */
+    for( pt_del = Pcb->m_Track; pt_del; pt_del = pt_del->Next() )
     {
-        pt_del->SetState( DELETED | EDIT | CHAIN, OFF );
+        pt_del->SetState( BUSY | DELETED | EDIT | CHAIN, OFF );
+        if( pt_del == BufEnd )  // Last segment reached
+            break;
     }
 
     return 0;

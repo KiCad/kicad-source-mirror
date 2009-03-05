@@ -346,9 +346,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
     if( m_Pcb->m_Track )
     {
         TRACK*  pt_start_conn;
-        TRACK*  pt_end_conn;
-
-        pt_end_conn   = NULL;
+        TRACK*  pt_end_conn = NULL;
         pt_start_conn = m_Pcb->m_Track.GetFirst()->GetStartNetCode( net_code );
 
         if( pt_start_conn )
@@ -441,6 +439,7 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
         {
             Track->end = Locate_Piste_Connectee( Track, Track, pt_end_conn, END );
         }
+
         if( Track == pt_end_conn )
             break;
     }
