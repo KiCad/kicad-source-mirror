@@ -13,7 +13,7 @@ LangString TITLE_SEC04 ${LANG_ENGLISH} "Help files"
 LangString DESC_SEC01 ${LANG_ENGLISH} "Main application files."
 LangString DESC_SEC02 ${LANG_ENGLISH} "Libraries and components are required unless they have been previously installed."
 LangString DESC_SEC03 ${LANG_ENGLISH} "Some demonstration projects and tutorials."
-LangString DESC_SEC04 ${LANG_ENGLISH} "Help files."
+LangString DESC_SEC04 ${LANG_ENGLISH} "Help files in pdf format."
 
 ;General messages
 LangString WINGS3D_PROMPT ${LANG_ENGLISH} "To edit or create 3D object models you need to install Wings3D. \

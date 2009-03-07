@@ -22,7 +22,7 @@
 !define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
 !define COMPANY_NAME ""
 !define TRADE_MARKS ""
-!define COPYRIGHT "Kicad Team (Jean-Pierre Charras and others)"
+!define COPYRIGHT "Kicad Team (Jean-Pierre Charras et all)"
 !define COMMENTS ""
 !define HELP_WEB_SITE "http://groups.yahoo.com/group/kicad-users/"
 !define DEVEL_WEB_SITE "http://groups.yahoo.com/group/kicad-devel/"
@@ -77,10 +77,12 @@ ShowUnInstDetails hide
 !insertmacro MUI_LANGUAGE "English" ;first language is the default language
 !insertmacro MUI_LANGUAGE "French"
 !insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "Dutch"
 
 !include "English.nsh"
 !include "French.nsh"
 !include "Polish.nsh"
+!include "Dutch.nsh"
 
 ; MUI end ------
 
