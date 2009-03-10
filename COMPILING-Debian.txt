@@ -1,0 +1,48 @@
+How to build kicad on Debian
+============================
+First Written: 10-Mar-2009
+Lasted edited by: Jerry Jacobs <jerkejacobs@gmail.com>
+
+
+For debian squeeze (testing)
+----------------------------
+
+
+Installing Packages
+~~~~~~~~~~~~~~~~~~~
+The following packages should be installed with
+synaptic, apt-get or aptitude:
+- build-essential
+- cmake
+- libboost-dev
+- libwxgtk2.8-dev
+- libglut3-dev
+
+The following packages will also be installed then
+- cmake dependencies
+- boost development dependencies
+- wxwidgets development dependencies
+- opengl3 (glut) development dependencies
+
+
+Get KiCad Sourcecode
+~~~~~~~~~~~~~~~~~~~~
+Checkout sourcecode using subversion or download latest release.
+
+*Subversion*
+'svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad kicad'
+
+*Release*
+'wget ftp://iut-tice.ujf-grenoble.fr/cao/kicad-sources-2008-08-25c.tar.gz'
+'tar -xvf kicad-sources-2008-08-25c.tar.gz'
+
+
+Compiling
+~~~~~~~~~
+Run 'cmake .' in the root of the source directory then build the
+binaries with 'make'.
+
+
+Installing
+~~~~~~~~~~
+For installing you could use 'make install' or build a debian package.
