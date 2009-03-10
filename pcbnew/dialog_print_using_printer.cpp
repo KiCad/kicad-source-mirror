@@ -22,8 +22,8 @@
 #include "pcbplot.h"
 
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
-#define WIDTH_MAX_VALUE 1000
-#define WIDTH_MIN_VALUE 1
+#define WIDTH_MAX_VALUE           1000
+#define WIDTH_MIN_VALUE           1
 
 static long   s_SelectedLayers;
 static double s_ScaleList[] =
@@ -54,9 +54,9 @@ class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 private:
     WinEDA_DrawFrame* m_Parent;
     wxConfig*         m_Config;
-    wxCheckBox * m_BoxSelectLayer[32];
+    wxCheckBox*       m_BoxSelectLayer[32];
 public:
-	double m_XScaleAdjust, m_YScaleAdjust;
+    double            m_XScaleAdjust, m_YScaleAdjust;
 
 public:
     DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent );
@@ -68,9 +68,11 @@ private:
     void OnPrintSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
-	void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
+
+    void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetScale( wxCommandEvent& event );
     void SetPenWidth();
+
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
     bool ExcludeEdges() { return m_Exclude_Edges_Pcb->IsChecked(); }
@@ -88,17 +90,17 @@ public:
     bool m_Print_Sheet_Ref;
 
 public:
-    WinEDA_DrawFrame*  m_Parent;
+    WinEDA_DrawFrame*           m_Parent;
     DIALOG_PRINT_USING_PRINTER* m_PrintFrame;
 
     EDA_Printout( DIALOG_PRINT_USING_PRINTER* print_frame,
-                  WinEDA_DrawFrame*  parent,
-                  const wxString&    title,
-                  bool               print_ref ) :
+                  WinEDA_DrawFrame*           parent,
+                  const wxString&             title,
+                  bool                        print_ref ) :
         wxPrintout( title )
     {
-        m_PrintFrame = print_frame;
-        m_Parent = parent;
+        m_PrintFrame      = print_frame;
+        m_Parent          = parent;
         s_PrintMaskLayer  = 0xFFFFFFFF;
         m_Print_Sheet_Ref = print_ref;
     }
@@ -152,16 +154,17 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent
 void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 /************************************************************************/
 {
-	SetFont(*g_DialogFont);
+    SetFont( *g_DialogFont );
     SetFocus();
-    int layer_max = NB_LAYERS;
+    int      layer_max = NB_LAYERS;
     wxString msg;
 
     #ifdef GERBVIEW
     layer_max = 32;
-    m_Exclude_Edges_Pcb->SetValue(true);    // no meaning in gerbview
-    m_Exclude_Edges_Pcb->Show(false);
-    msg = _("Layers:");
+    m_Exclude_Edges_Pcb->SetValue( true );    // no meaning in gerbview
+    m_Exclude_Edges_Pcb->Show( false );
+    msg = _( "Layers:" );
+
     // Set wxRadioBox title to "Layers:" for copper layers and thechincal layers
     // Because in Gerbview , al layers are only graphic layers (layer id has no meaning)
     m_CopperLayersBoxSizer->GetStaticBox()->SetLabel( msg );
@@ -170,11 +173,11 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 
     /* Create layer list */
     int mask = 1, ii;
-    for( ii = 0; ii < layer_max ; ii++, mask <<= 1 )
+    for( ii = 0; ii < layer_max; ii++, mask <<= 1 )
     {
 #ifdef GERBVIEW
-        msg = _("Layer");
-        msg << wxT(" ") << ii+1;
+        msg = _( "Layer" );
+        msg << wxT( " " ) << ii + 1;
 #else
         msg = ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->GetLayerName( ii );
 #endif
@@ -187,7 +190,7 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
                                          wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
         else
             m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[ii],
-                                       wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+                                            wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
     }
 
     // Option for excluding contents of "Edges Pcb" layer
@@ -205,7 +208,8 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
         m_Config->Read( OPTKEY_PRINT_SCALE, &s_Scale_Select );
 
         // Test for a reasonnable scale value. Set to 1 if problem
-        if ( m_XScaleAdjust < MIN_SCALE || m_YScaleAdjust < MIN_SCALE || m_XScaleAdjust > MAX_SCALE || m_YScaleAdjust > MAX_SCALE )
+        if( m_XScaleAdjust < MIN_SCALE || m_YScaleAdjust < MIN_SCALE || m_XScaleAdjust >
+            MAX_SCALE || m_YScaleAdjust > MAX_SCALE )
             m_XScaleAdjust = m_YScaleAdjust = 1.0;
 
         s_SelectedLayers = 0;
@@ -242,9 +246,9 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     msg.Printf( wxT( "%lf" ), m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
 
-    if (GetSizer())
+    if( GetSizer() )
     {
-        GetSizer()->SetSizeHints(this);
+        GetSizer()->SetSizeHints( this );
     }
 }
 
@@ -255,7 +259,8 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
 {
     int page_count;
     int layers_count = NB_LAYERS;
-    if (m_Parent->m_Ident == GERBER_FRAME)
+
+    if( m_Parent->m_Ident == GERBER_FRAME )
         layers_count = 32;
 
     s_PrintMaskLayer = 0;
@@ -271,7 +276,6 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
 
     return page_count;
 }
-
 
 
 /********************************************************************/
@@ -299,8 +303,8 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, m_YScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_SCALE, s_Scale_Select );
         wxString layerKey;
-        int layers_count = NB_LAYERS;
-        if (m_Parent->m_Ident == GERBER_FRAME)
+        int      layers_count = NB_LAYERS;
+        if( m_Parent->m_Ident == GERBER_FRAME )
             layers_count = 32;
         for( int layer = 0;  layer<layers_count;  ++layer )
         {
@@ -348,7 +352,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, s_PrintPenMinWidth, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UnitMetric, s_PrintPenMinWidth, m_Parent->m_InternalUnits ) );
 }
 
 
@@ -392,7 +396,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     s_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
 
     // Pass two printout objects: for preview, and possible printing.
-    wxString        title   = _("Print Preview");
+    wxString        title   = _( "Print Preview" );
     wxPrintPreview* preview =
         new wxPrintPreview( new EDA_Printout( this, m_Parent, title, s_Print_Sheet_Ref ),
                             new EDA_Printout( this, m_Parent, title, s_Print_Sheet_Ref ),
@@ -403,13 +407,22 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
         DisplayError( this, wxT( "OnPrintPreview() problem" ) );
         return;
     }
-    if( s_OptionPrintPage )
-        SetLayerMaskFromListSelection();
+
+    SetLayerMaskFromListSelection();
+
+    // If no layer selected, we have no plot. prompt user if it happens
+    // because he could think there is a bug in pcbnew:
+    if( s_PrintMaskLayer == 0 )
+    {
+        DisplayError( this, _( "No layer selected" ) );
+        return;
+    }
+
 
     // Uses the parent position and size.
     // @todo uses last position and size ans store them when exit in m_Config
-    wxPoint WPos = m_Parent->GetPosition();
-    wxSize WSize = m_Parent->GetSize();
+    wxPoint         WPos  = m_Parent->GetPosition();
+    wxSize          WSize = m_Parent->GetSize();
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
 
@@ -435,8 +448,16 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
     s_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
 
-    if( s_OptionPrintPage )
-        SetLayerMaskFromListSelection();
+    SetLayerMaskFromListSelection();
+
+    // If no layer selected, we have no plot. prompt user if it happens
+    // because he could think there is a bug in pcbnew:
+    if( s_PrintMaskLayer == 0 )
+    {
+        DisplayError( this, _( "No layer selected" ) );
+        return;
+    }
+
 
     SetPenWidth();
 
@@ -444,7 +465,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
     wxPrinter         printer( &printDialogData );
 
-    wxString          title = _("Print");
+    wxString          title = _( "Print" );
     EDA_Printout      printout( this, m_Parent, title, s_Print_Sheet_Ref );
 
 #ifndef __WINDOWS__
@@ -473,32 +494,31 @@ bool EDA_Printout::OnPrintPage( int page )
 
     msg.Printf( _( "Print page %d" ), page );
     m_Parent->Affiche_Message( msg );
-    int layers_count = NB_LAYERS;
-    if (m_Parent->m_Ident == GERBER_FRAME)
-        layers_count = 32;
-    if( (m_Parent->m_Ident == PCB_FRAME) || (m_Parent->m_Ident == GERBER_FRAME) )
-    {
-        m_PrintFrame->SetLayerMaskFromListSelection();
-        if( s_OptionPrintPage == 0 )
-        {
-            // compute layer mask from page number
-            int ii, jj, mask = 1;
-            for( ii = 0, jj = 0; ii < layers_count; ii++ )
-            {
-                if( s_PrintMaskLayer & mask )
-                    jj++;
-                if( jj == page )
-                {
-                    s_PrintMaskLayer = mask;
-                    break;
-                }
-                mask <<= 1;
-            }
 
-            if( ii == layers_count )
-                return FALSE;
+    int layers_count = NB_LAYERS;
+    if( m_Parent->m_Ident == GERBER_FRAME )
+        layers_count = 32;
+
+    m_PrintFrame->SetLayerMaskFromListSelection();
+    if( s_OptionPrintPage == 0 )    // compute layer mask from page number
+    {
+        int ii, jj, mask = 1;
+        for( ii = 0, jj = 0; ii < layers_count; ii++ )
+        {
+            if( s_PrintMaskLayer & mask )
+                jj++;
+            if( jj == page )
+            {
+                s_PrintMaskLayer = mask;
+                break;
+            }
+            mask <<= 1;
         }
     }
+
+    if( s_PrintMaskLayer == 0 )
+        return false;
+
     DrawPage();
 
     return TRUE;
@@ -567,7 +587,7 @@ void EDA_Printout::DrawPage()
     wxPoint old_org;
     wxPoint DrawOffset; // Offset de trace
     double  userscale;
-    double     DrawZoom = 1;
+    double  DrawZoom = 1;
     wxDC*   dc = GetDC();
 
     s_PrintMirror = m_PrintFrame->IsMirrored();
@@ -587,8 +607,8 @@ void EDA_Printout::DrawPage()
 
     // Gerbview uses a very large sheet (called "World" in gerber language)
     // to print a sheet, uses A4 is better
-    SheetSize    = ActiveScreen->m_CurrentSheetDesc->m_Size;    // size in 1/1000 inch
-    if (m_Parent->m_Ident == GERBER_FRAME)
+    SheetSize = ActiveScreen->m_CurrentSheetDesc->m_Size;       // size in 1/1000 inch
+    if( m_Parent->m_Ident == GERBER_FRAME )
     {
         SheetSize = g_Sheet_A4.m_Size;    // size in 1/1000 inch
     }
@@ -622,11 +642,12 @@ void EDA_Printout::DrawPage()
     scaleY = (double) SheetSize.y / PlotAreaSize.y;
     scale  = wxMax( scaleX, scaleY ) / userscale; // Use x or y scaling factor, whichever fits on the DC
 
-    if ( m_PrintFrame->m_XScaleAdjust > MAX_SCALE || m_PrintFrame->m_YScaleAdjust > MAX_SCALE )
-        DisplayInfo(NULL, _("Warning: Scale option set to a very large value") );
+    if( m_PrintFrame->m_XScaleAdjust > MAX_SCALE || m_PrintFrame->m_YScaleAdjust > MAX_SCALE )
+        DisplayInfo( NULL, _( "Warning: Scale option set to a very large value" ) );
+
     // Test for a reasonnable scale value
-    if ( m_PrintFrame->m_XScaleAdjust < MIN_SCALE || m_PrintFrame->m_YScaleAdjust < MIN_SCALE )
-        DisplayInfo(NULL, _("Warning: Scale option set to a very small value") );
+    if( m_PrintFrame->m_XScaleAdjust < MIN_SCALE || m_PrintFrame->m_YScaleAdjust < MIN_SCALE )
+        DisplayInfo( NULL, _( "Warning: Scale option set to a very small value" ) );
 
     // ajust the real draw scale
     double accurate_Xscale, accurate_Yscale;
@@ -680,7 +701,7 @@ void EDA_Printout::DrawPage()
 
     // background color can left BLACK only when drawing the full board at once, in color mode
     // Switch it to WHITE in others cases
-    if ( s_Print_Black_and_White || ( ! m_PrintFrame->PrintUsingSinglePage() ) )
+    if( s_Print_Black_and_White || ( !m_PrintFrame->PrintUsingSinglePage() ) )
         g_DrawBgColor = WHITE;
 
     if( m_Print_Sheet_Ref )
@@ -692,7 +713,8 @@ void EDA_Printout::DrawPage()
     }
 
     if( s_PrintMirror )
-    {   // To plot mirror, we reverse the y axis, and modify the plot y origin
+    {
+        // To plot mirror, we reverse the y axis, and modify the plot y origin
         double sx, sy;
 
         dc->GetUserScale( &sx, &sy );
@@ -728,7 +750,7 @@ void EDA_Printout::DrawPage()
 
     panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
 
-    g_DrawBgColor = bg_color;
+    g_DrawBgColor    = bg_color;
     g_IsPrinting     = FALSE;
     panel->m_ClipBox = tmp;
 

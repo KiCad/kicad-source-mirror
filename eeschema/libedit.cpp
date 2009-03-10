@@ -21,10 +21,6 @@
 #include "id.h"
 #include "dialog_create_component.h"
 
-/* Routines locales */
-
-/* Variables locales */
-
 
 /**********************************************/
 void WinEDA_LibeditFrame::DisplayLibInfos()
@@ -47,7 +43,7 @@ void WinEDA_LibeditFrame::DisplayLibInfos()
         if( !CurrentAliasName.IsEmpty() )
             msg << wxT( "  Alias " ) << CurrentAliasName;
     }
-    wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+    static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
     msg << wxT( "   Unit " ) << UnitLetter[CurrentUnit];
 
     if( CurrentConvert > 1 )
@@ -66,7 +62,7 @@ void WinEDA_LibeditFrame::DisplayLibInfos()
 void WinEDA_LibeditFrame::SelectActiveLibrary()
 /**************************************************/
 
-/* Routine to Select Current library
+/* Function to select the current library (working library)
  */
 {
     LibraryStruct* Lib;
@@ -80,10 +76,15 @@ void WinEDA_LibeditFrame::SelectActiveLibrary()
 }
 
 
-/*************************************************/
-/* Routine to Load one selected library content. */
-/*************************************************/
 bool WinEDA_LibeditFrame::LoadOneLibraryPart()
+
+/**
+ * Function LoadOneLibraryPart()
+ * load a library component from the current selected library
+ * Prompt user for component name
+ * If there is no current selected library,
+ * prompt user for library name and make the selected library the current lib.
+ */
 {
     int      i;
     wxString msg;
@@ -96,10 +97,11 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
             return FALSE;
     }
 
-    if( CurrentLib == NULL )
+    if( CurrentLib == NULL )    // No current lib, ask user for the library to use
     {
         SelectActiveLibrary();
-        return FALSE;
+        if( CurrentLib == NULL )
+            return FALSE;
     }
 
     i = GetNameOfPartToLoad( this, CurrentLib, CmpName );
@@ -109,13 +111,13 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
     g_ScreenLib->ClrModify();
     CurrentDrawItem = NULL;
 
-    // Effacement ancien composant affich�
+    // Delete previous library component, if any
     if( CurrentLibEntry )
     {
         SAFE_DELETE( CurrentLibEntry );
     }
 
-    /* Chargement du composant */
+    /* Load the new library component */
     LibEntry = FindLibPart( CmpName.GetData(), CurrentLib->m_Name, FIND_ALIAS );
 
     if( LibEntry == NULL )
@@ -199,7 +201,8 @@ int WinEDA_LibeditFrame::LoadOneLibraryPartAux(
 /*********************************************************************/
 void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*********************************************************************/
-/* Routine generale d'affichage a l'ecran du "PartLib" en cours d'edition */
+/* Function to redraw the current loaded library component
+*/
 {
     if( GetScreen() == NULL )
         return;
@@ -208,9 +211,9 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DC->SetBackground( *wxBLACK_BRUSH );
     DC->SetBackgroundMode( wxTRANSPARENT );
-    GRResetPenAndBrush( DC );   // reinit de la brosse et plume courante
+    GRResetPenAndBrush( DC );
 
-    DrawPanel->CursorOff( DC ); // effacement curseur
+    DrawPanel->CursorOff( DC ); // erase cursor
     if( DrawPanel->ManageCurseur )
     {
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE ); // effacement affichage lie au curseur
@@ -225,11 +228,11 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         DrawLibEntry( DrawPanel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
                       CurrentUnit, CurrentConvert, GR_DEFAULT_DRAWMODE );
 
-    DrawPanel->CursorOn( DC ); // reaffichage curseur
+    DrawPanel->CursorOn( DC ); // redraw cursor
 
     if( DrawPanel->ManageCurseur )
     {
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE ); // reaffichage lie au curseur
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
     }
 
     GetScreen()->ClrRefreshReq();
@@ -242,8 +245,8 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 void WinEDA_LibeditFrame::SaveActiveLibrary()
 /*************************************************/
 
-/* Sauvegarde en fichier la librairie pointee par CurrentLib
- *  une sauvegarde en .bak de l'ancien fichier est egalement cree
+/* Save (on disk) the current library
+ *  if exists the old file is renamed (.bak)
  */
 {
     wxString Name, msg;
@@ -321,8 +324,8 @@ void WinEDA_LibeditFrame::DeleteOnePart()
  *  alias deviennent dependants de celui ci.
  */
 {
-    wxString CmpName;
-    int      NumOfParts;
+    wxString                CmpName;
+    int                     NumOfParts;
     EDA_LibComponentStruct* LibEntry;
     WinEDAListBox*          ListBox;
     const wxChar**          ListNames;
@@ -365,7 +368,7 @@ void WinEDA_LibeditFrame::DeleteOnePart()
     }
 
     ListBox = new WinEDAListBox( this, msg, ListNames, wxEmptyString, NULL,
-                                 wxColour( 255, 255, 255 ) );
+                                wxColour( 255, 255, 255 ) );
 
 
     int ii = ListBox->ShowModal();
@@ -407,7 +410,7 @@ void WinEDA_LibeditFrame::CreateNewLibraryPart()
     int      diag;
 
     if( CurrentLibEntry
-        && !IsOK( this, _( "Clear old component from screen (changes will be lost)?" ) ) )
+       && !IsOK( this, _( "Clear old component from screen (changes will be lost)?" ) ) )
         return;
 
     CurrentDrawItem = NULL;
@@ -429,8 +432,8 @@ void WinEDA_LibeditFrame::CreateNewLibraryPart()
         {
             wxString msg;
             msg << _( "Component \"" ) << Dialogbox.ReturnCmpName() <<
-                _( "\" exists in library \"" ) << CurrentLib->m_Name <<
-                _( "\"." );
+            _( "\" exists in library \"" ) << CurrentLib->m_Name <<
+            _( "\"." );
             DisplayError( this, msg );
             return;
         }
@@ -485,7 +488,7 @@ void WinEDA_LibeditFrame::DeletePartInLib( LibraryStruct*          Library,
     if( Entry->Type == ALIAS )
     {
         RootEntry = FindLibPart(
-             ( (EDA_LibCmpAliasStruct*) Entry )->m_RootName.GetData(),
+            ( (EDA_LibCmpAliasStruct*) Entry )->m_RootName.GetData(),
             Library->m_Name, FIND_ROOT );
         /* Remove alias name from the root component alias list */
         if( RootEntry == NULL )
@@ -539,7 +542,7 @@ void WinEDA_LibeditFrame::DeletePartInLib( LibraryStruct*          Library,
     {
         wxString msg;
         msg.Printf( wxT( "Warning: Alias <%s> not found" ),
-                    AliasName.GetData() );
+                   AliasName.GetData() );
         DisplayError( this, msg, 30 );
     }
     else
@@ -576,18 +579,20 @@ void WinEDA_LibeditFrame::DeletePartInLib( LibraryStruct*          Library,
                                                            Library->m_Name,
                                                            FIND_ALIAS );
         if( AliasEntry == NULL )
-        {   // Should not occurs. If happens, this is an error (or bug)
+        {
+            // Should not occurs. If happens, this is an error (or bug)
             wxString msg;
             msg.Printf( wxT( "Warning: Alias <%s> not found" ),
-                        AliasName.GetData() );
+                       AliasName.GetData() );
             DisplayError( this, msg, 30 );
             continue;
         }
         if( AliasEntry->Type != ALIAS )
-        {   // Should not occurs. If happens, this is an error (or bug)
+        {
+            // Should not occurs. If happens, this is an error (or bug)
             wxString msg;
             msg.Printf( wxT( "Warning: <%s> is not an Alias" ),
-                        AliasName.GetData() );
+                       AliasName.GetData() );
             DisplayError( this, msg, 30 );
             continue;
         }
@@ -635,7 +640,7 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
                                CurrentLib->m_Name, FIND_ROOT ) ) != NULL )
     {
         msg.Printf( _( "Component \"%s\" exists. Change it?" ),
-                    Entry->m_Name.m_Text.GetData() );
+                   Entry->m_Name.m_Text.GetData() );
         if( !IsOK( this, msg ) )
             return;
         NewCmp = FALSE;
@@ -685,6 +690,6 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
     }
 
     msg.Printf( _( "Component %s saved in %s" ),
-                Entry->m_Name.m_Text.GetData(), CurrentLib->m_Name.GetData() );
+               Entry->m_Name.m_Text.GetData(), CurrentLib->m_Name.GetData() );
     Affiche_Message( msg );
 }

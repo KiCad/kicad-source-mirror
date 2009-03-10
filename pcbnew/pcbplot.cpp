@@ -732,6 +732,11 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         }
     }
 
+    // If no layer selected, we have no plot. prompt user if it happens
+    // because he could think there is a bug in pcbnew:
+    if ( s_SelectedLayers == 0 )
+        DisplayError( this, _("No layer selected") );
+
 //  Close(true);
 }
 
