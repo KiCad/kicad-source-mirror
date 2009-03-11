@@ -60,7 +60,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
     new_area->SetNet( netcode );
     new_area->SetLayer( layer );
     new_area->m_TimeStamp = GetTimeStamp();
-    if( iarea < (int) ( m_ZoneDescriptorList.size() - 1) )
+    if( iarea < (int) ( m_ZoneDescriptorList.size() - 1 ) )
         m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + iarea + 1, new_area );
     else
         m_ZoneDescriptorList.push_back( new_area );
@@ -268,7 +268,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
 //** TODO test for cutouts outside of area
 //**	if( test == 1 )
     {
-        std::vector<CPolyLine*> * pa = new std::vector<CPolyLine*>;
+        std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
         curr_polygon->Undraw();
         int n_poly = CurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
         if( n_poly > 1 )    // i.e if clipping has created some polygons, we must add these new copper areas
@@ -318,7 +318,7 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
         return test;
 
     // now see if we need to clip against other areas
-    int layer = modified_area->GetLayer();
+    int  layer = modified_area->GetLayer();
     bool bCheckAllAreas = false;
     if( test == 1 )
         bCheckAllAreas = true;
@@ -327,7 +327,7 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
     if( bCheckAllAreas )
         CombineAllAreasInNet( modified_area->GetNet(), bMessageBoxInt, true );
 
-    if ( layer >= FIRST_NO_COPPER_LAYER )   // Refill non copper zones on this layer
+    if( layer >= FIRST_NO_COPPER_LAYER )    // Refill non copper zones on this layer
     {
         if( m_ZoneDescriptorList.size() > 0 )
         {
@@ -336,18 +336,21 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
                     m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
         }
     }
+
     // Test for bad areas: all zones must have more than 2 corners:
     // Note: should not happen, but just in case.
     for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; )
     {
         ZONE_CONTAINER* zone = m_ZoneDescriptorList[ia1];
-        if( zone->GetNumCorners( ) >= 3 )
+        if( zone->GetNumCorners() >= 3 )
             ia1++;
+
         // Remove zone because it is incorrect:
         else
             RemoveArea( zone );
     }
-     return test;
+
+    return test;
 }
 
 
@@ -362,70 +365,72 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
  */
 int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility )
 {
-    if( m_ZoneDescriptorList.size() > 1 )
+    if( m_ZoneDescriptorList.size() <= 1 )
+        return 0;
+
+    // start by testing all area polygons to set utility2 flags
+    for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
+        if( m_ZoneDescriptorList[ia]->GetNet() == aNetCode )
+            TestAreaPolygon( m_ZoneDescriptorList[ia] );
+
+    // now loop through all combinations
+    for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; ia1++ )
     {
-        // start by testing all area polygons to set utility2 flags
-        for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
-            if( m_ZoneDescriptorList[ia]->GetNet() == aNetCode )
-                TestAreaPolygon( m_ZoneDescriptorList[ia] );
+        ZONE_CONTAINER* curr_area = m_ZoneDescriptorList[ia1];
+        if( curr_area->GetNet() != aNetCode )
+            continue;
 
-        // now loop through all combinations
-        for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; ia1++ )
+        // legal polygon
+        CRect b1 = curr_area->m_Poly->GetCornerBounds();
+        bool  mod_ia1 = false;
+        for( unsigned ia2 = m_ZoneDescriptorList.size() - 1; ia2 > ia1; ia2-- )
         {
-            ZONE_CONTAINER* curr_area = m_ZoneDescriptorList[ia1];
-            if( curr_area->GetNet() != aNetCode )
+            ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
+            if( area2->GetNet() != aNetCode )
                 continue;
-
-            // legal polygon
-            CRect b1      = curr_area->m_Poly->GetCornerBounds();
-            bool  mod_ia1 = false;
-            for( unsigned ia2 = m_ZoneDescriptorList.size() - 1; ia2 > ia1; ia2-- )
+            if( curr_area->GetLayer() == area2->GetLayer()
+                && curr_area->utility2 != -1 && area2->utility2 != -1 )
             {
-                ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
-                if( curr_area->GetLayer() == area2->GetLayer()
-                    && curr_area->utility2 != -1 && area2->utility2 != -1 )
+                CRect b2 = area2->m_Poly->GetCornerBounds();
+                if( !( b1.left > b2.right || b1.right < b2.left
+                       || b1.bottom > b2.top || b1.top < b2.bottom ) )
                 {
-                    CRect b2 = area2->m_Poly->GetCornerBounds();
-                    if( !( b1.left > b2.right || b1.right < b2.left
-                           || b1.bottom > b2.top || b1.top < b2.bottom ) )
+                    // check area2 against curr_area
+                    if( curr_area->utility || area2->utility || bUseUtility ==
+                        false )
                     {
-                        // check area2 against curr_area
-                        if( curr_area->utility || area2->utility || bUseUtility ==
-                            false )
+                        int ret = TestAreaIntersection( curr_area, area2 );
+                        if( ret == 1 )
+                            ret = CombineAreas( curr_area, area2 );
+                        if( ret == 1 )
                         {
-                            int ret = TestAreaIntersection( curr_area, area2 );
-                            if( ret == 1 )
-                                ret = CombineAreas( curr_area, area2 );
-                            if( ret == 1 )
+                            mod_ia1 = true;
+                        }
+                        else if( ret == 2 )
+                        {
+                            if( bMessageBox && bDontShowIntersectionArcsWarning == false )
                             {
-                                mod_ia1 = true;
-                            }
-                            else if( ret == 2 )
-                            {
-                                if( bMessageBox && bDontShowIntersectionArcsWarning == false )
-                                {
-                                    wxString str;
-                                    str.Printf(
-                                        wxT(
-                                            "Areas %d and %d of net \"%s\" intersect, but some of the intersecting sides are arcs.\n" ),
-                                        ia1 + 1,
-                                        ia2 + 1,
-                                        curr_area->m_Netname.GetData() );
-                                    str += wxT( "Therefore, these areas can't be combined." );
-                                    wxMessageBox( str );
-                                }
+                                wxString str;
+                                str.Printf(
+                                    wxT(
+                                        "Areas %d and %d of net \"%s\" intersect, but some of the intersecting sides are arcs.\n" ),
+                                    ia1 + 1,
+                                    ia2 + 1,
+                                    curr_area->m_Netname.GetData() );
+                                str += wxT( "Therefore, these areas can't be combined." );
+                                wxMessageBox( str );
                             }
                         }
                     }
                 }
             }
-
-            if( mod_ia1 )
-                ia1--; // if modified, we need to check it again
         }
+
+        if( mod_ia1 )
+            ia1--;     // if modified, we need to check it again
     }
 
-   return 0;
+    return 0;
 }
 
 
@@ -684,9 +689,9 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
     // polygons intersect, combine them
     std::vector<CArc> arc_array1;
     std::vector<CArc> arc_array2;
-    bool         keep_area_to_combine = false;
+    bool keep_area_to_combine = false;
 
-    Bool_Engine* booleng = new Bool_Engine();
+    Bool_Engine*      booleng = new Bool_Engine();
     ArmBoolEng( booleng );
 
     area_ref->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_A, -1, -1 );
@@ -707,8 +712,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
         bool first = true;
         while( booleng->PolygonHasMorePoints() )
         {
-            int x = (int)booleng->GetPolygonXPoint();
-            int y = (int)booleng->GetPolygonYPoint();
+            int x = (int) booleng->GetPolygonXPoint();
+            int y = (int) booleng->GetPolygonYPoint();
             if( first )
             {
                 first = false;
@@ -767,8 +772,8 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
         }
         while( booleng->PolygonHasMorePoints() )
         {
-            int x = (int)booleng->GetPolygonXPoint();
-            int y = (int)booleng->GetPolygonYPoint();
+            int x = (int) booleng->GetPolygonXPoint();
+            int y = (int) booleng->GetPolygonYPoint();
             area_ref->m_Poly->AppendCorner( x, y );
         }
 
@@ -808,7 +813,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
     for( int ia = 0; ia < GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* Area_Ref = GetArea( ia );
-        if ( ! Area_Ref->IsOnCopperLayer() )
+        if( !Area_Ref->IsOnCopperLayer() )
             continue;
 
         if( aArea_To_Examine && (aArea_To_Examine != Area_Ref) )
@@ -959,7 +964,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 
 bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
-    if ( ! aArea->IsOnCopperLayer() )  // Cannot have a Drc error if not on copper layer
+    if( !aArea->IsOnCopperLayer() )    // Cannot have a Drc error if not on copper layer
         return true;
 
     wxString str;
@@ -990,8 +995,9 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     // iterate through all areas
     for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
     {
-        ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ia2 );
-        int zone_clearance = max(Area_To_Test->m_ZoneClearance, aArea->m_ZoneClearance);
+        ZONE_CONTAINER* Area_To_Test   = m_pcb->GetArea( ia2 );
+        int             zone_clearance = max( Area_To_Test->m_ZoneClearance,
+                                              aArea->m_ZoneClearance );
 
         // test for same layer
         if( Area_To_Test->GetLayer() != aArea->GetLayer() )

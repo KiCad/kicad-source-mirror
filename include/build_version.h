@@ -3,7 +3,7 @@
 #ifndef KICAD_BUILD_VERSION
 #define KICAD_BUILD_VERSION
 
-#define BUILD_VERSION wxT("(20090216-RC5)")
+#define BUILD_VERSION wxT("(20090216-RC6)")
 
 COMMON_GLOBL wxString g_BuildVersion
 #ifdef EDA_BASE
