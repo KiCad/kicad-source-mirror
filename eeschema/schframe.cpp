@@ -539,7 +539,7 @@ void WinEDA_SchematicFrame::OnCreateNetlist( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnCreateBillOfMaterials( wxCommandEvent& )
 /**********************************************************************/
 {
-    WinEDA_Build_BOM_Frame* dlg = new WinEDA_Build_BOM_Frame( this );
+    DIALOG_BUILD_BOM* dlg = new DIALOG_BUILD_BOM( this );
 
     dlg->ShowModal();
     dlg->Destroy();

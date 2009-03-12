@@ -351,7 +351,7 @@ void WinEDA_BasePcbFrame::Affiche_Status_Box()
 
         ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
         Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) : wxT( "Ro %.4f Th %.1f" ),
-                     To_User_Unit( g_UnitMetric, (int) round( ro ), m_InternalUnits ),
+                     To_User_Unit( g_UnitMetric, ro, m_InternalUnits ),
                      theta );
     }
 

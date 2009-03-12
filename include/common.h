@@ -495,20 +495,38 @@ int             ReturnValueFromString( int Units, const wxString& TextValue, int
  */
 wxString        ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit, bool aAdd_unit_symbol = false );
 
-void            AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
-
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
-void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
+void            AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
 
 /* Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl */
-int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
+void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
 
 /* Convert the Value in the wxTextCtrl TextCtrl in an integer,
  *  according to the internal units and the selected unit (g_UnitMetric) */
+int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
 
+/**
+ * Function To_User_Unit
+ * Convert in inch or mm the variable "val" (double)given in internal units
+ * @return the converted value, in double
+ * @param is_metric : true if the result must be returned in mm , false if inches
+ * @param val : double : the given value
+ * @param internal_unit_value = internal units per inch
+ */
+double To_User_Unit( bool is_metric, double val, int internal_unit_value );
+
+/**
+ * Function To_User_Unit
+ * Convert in inch or mm the variable "val" (double)given in internal units
+ * @return the converted value, in double
+ * @param is_metric : true if the result must be returned in mm , false if inches
+ * @param val : integer : the given value
+ * @param internal_unit_value = internal units per inch
+ */
 double          To_User_Unit( bool is_metric, int val, int internal_unit_value );
+
 int             From_User_Unit( bool is_metric, double val, int internal_unit_value );
 wxString        GenDate();
 void            MyFree( void* pt_mem );

@@ -611,7 +611,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 
     // mise a jour des affichages
     m_SelGridBox->Clear();
-    wxString format = _( "Grid" );
+    wxString format = _( "Grid");
     if( g_UnitMetric == INCHES )
         format += wxT( " %.1f" );
     else
@@ -620,9 +620,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {
         GRID_TYPE grid = GetScreen()->m_GridList[i];
-        double value = To_User_Unit( g_UnitMetric,
-                                     (int)grid.m_Size.x,
-                                     PCB_INTERNAL_UNIT );
+        double value = To_User_Unit( g_UnitMetric, grid.m_Size.x, m_InternalUnits );
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
             if( g_UnitMetric == INCHES )

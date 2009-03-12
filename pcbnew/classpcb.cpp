@@ -13,34 +13,45 @@
 
 
 /* Default pcbnew zoom values.
-  * Limited to 19 values to keep a decent size to menus
-  * 15 it better but does not allow a sufficient number of values
-  * roughtly a 1.5 progression.
-  * The last 2 values is  handy when somebody uses a library import of a module
-  * (or foreign data) which has a bad coordinate
-  * Also useful in Gerbview for this reason.
-  * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic functions )
+ * Limited to 19 values to keep a decent size to menus
+ * 15 it better but does not allow a sufficient number of values
+ * roughtly a 1.5 progression.
+ * The last 2 values is  handy when somebody uses a library import of a module
+ * (or foreign data) which has a bad coordinate
+ * Also useful in Gerbview for this reason.
+ * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic functions )
  */
-static const int PcbZoomList[] = { 5, 10, 15, 22, 30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
-                                   2000, 3500, 5000, 10000, 20000 };
+static const int PcbZoomList[] = {
+    5,    10,   15,   22,    30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
+    2000, 3500, 5000, 10000, 20000
+};
 
 #define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
 
 
 /* Default grid sizes for PCB editor screens. */
+#define MM_TO_PCB_UNITS 10000.0 / 25.4
 static GRID_TYPE PcbGridList[] = {
-    { ID_POPUP_GRID_LEVEL_1000, wxRealPoint( 1000, 1000 ) },
-    { ID_POPUP_GRID_LEVEL_500,  wxRealPoint( 500,  500 )  },
-    { ID_POPUP_GRID_LEVEL_250,  wxRealPoint( 250,  250 )  },
-    { ID_POPUP_GRID_LEVEL_200,  wxRealPoint( 200,  200 )  },
-    { ID_POPUP_GRID_LEVEL_100,  wxRealPoint( 100,  100 )  },
-    { ID_POPUP_GRID_LEVEL_50,   wxRealPoint( 50,   50 )   },
-    { ID_POPUP_GRID_LEVEL_25,   wxRealPoint( 25,   25 )   },
-    { ID_POPUP_GRID_LEVEL_20,   wxRealPoint( 20,   20 )   },
-    { ID_POPUP_GRID_LEVEL_10,   wxRealPoint( 10,   10 )   },
-    { ID_POPUP_GRID_LEVEL_5,    wxRealPoint( 5,    5 )    },
-    { ID_POPUP_GRID_LEVEL_2,    wxRealPoint( 2,    2 )    },
-    { ID_POPUP_GRID_LEVEL_1,    wxRealPoint( 1,    1 )    }
+    // predefined grid list in 0.0001 inches
+    { ID_POPUP_GRID_LEVEL_1000,   wxRealPoint( 1000,                   1000 )                      },
+    { ID_POPUP_GRID_LEVEL_500,    wxRealPoint( 500,                    500 )                       },
+    { ID_POPUP_GRID_LEVEL_250,    wxRealPoint( 250,                    250 )                       },
+    { ID_POPUP_GRID_LEVEL_200,    wxRealPoint( 200,                    200 )                       },
+    { ID_POPUP_GRID_LEVEL_100,    wxRealPoint( 100,                    100 )                       },
+    { ID_POPUP_GRID_LEVEL_50,     wxRealPoint( 50,                     50 )                        },
+    { ID_POPUP_GRID_LEVEL_25,     wxRealPoint( 25,                     25 )                        },
+    { ID_POPUP_GRID_LEVEL_20,     wxRealPoint( 20,                     20 )                        },
+    { ID_POPUP_GRID_LEVEL_10,     wxRealPoint( 10,                     10 )                        },
+    { ID_POPUP_GRID_LEVEL_5,      wxRealPoint( 5,                      5 )                         },
+    { ID_POPUP_GRID_LEVEL_2,      wxRealPoint( 2,                      2 )                         },
+    { ID_POPUP_GRID_LEVEL_1,      wxRealPoint( 1,                      1 )                         },
+
+    // predefined grid list in mm
+    { ID_POPUP_GRID_LEVEL_1MM,    wxRealPoint( MM_TO_PCB_UNITS,        MM_TO_PCB_UNITS )           },
+    { ID_POPUP_GRID_LEVEL_0_5MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.5,  MM_TO_PCB_UNITS * 0.5 )     },
+    { ID_POPUP_GRID_LEVEL_0_25MM, wxRealPoint( MM_TO_PCB_UNITS * 0.25, MM_TO_PCB_UNITS * 0.25 )    },
+    { ID_POPUP_GRID_LEVEL_0_2MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.2,  MM_TO_PCB_UNITS * 0.2 )     },
+    { ID_POPUP_GRID_LEVEL_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.1,  MM_TO_PCB_UNITS * 0.1 )     }
 };
 
 #define PCB_GRID_LIST_CNT ( sizeof( PcbGridList ) / sizeof( GRID_TYPE ) )
@@ -128,8 +139,8 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
     DisplayPadNoConn = TRUE;
     DisplayPadIsol   = TRUE;
 
-    DisplayModEdge      = TRUE;
-    DisplayModText      = TRUE;
+    DisplayModEdge = TRUE;
+    DisplayModText = TRUE;
     DisplayPcbTrackFill = TRUE; /* FALSE = sketch , TRUE = rempli */
     DisplayTrackIsol    = FALSE;
     m_DisplayViaMode    = VIA_HOLE_NOT_SHOW;
@@ -175,9 +186,9 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_CopperLayerCount = 2;                         // Default design is a double sided board
     m_ViaDrill = 250;                               // defualt via drill (for the entire board)
     m_ViaDrillCustomValue = 250;                    // via drill for vias which must have a defined drill value
-    m_CurrentViaSize         = 450;                 // Current via size
-    m_CurrentViaType         = VIA_THROUGH;         // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
-    m_CurrentTrackWidth      = 170;                 // current track width
+    m_CurrentViaSize    = 450;                      // Current via size
+    m_CurrentViaType    = VIA_THROUGH;              // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
+    m_CurrentTrackWidth = 170;                      // current track width
     m_UseConnectedTrackWidth = false;               // if true, when creating a new track starting on an existing track, use this track width
     m_MicroViaDrill = 50;                           // micro via drill (for the entire board)
     m_CurrentMicroViaSize = 150;                    // Current micro via size
@@ -191,10 +202,10 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 
     m_DrawSegmentWidth = 100;               // current graphic line width (not EDGE layer)
     m_EdgeSegmentWidth = 100;               // current graphic line width (EDGE layer only)
-    m_PcbTextWidth   = 100;                 // current Pcb (not module) Text width
+    m_PcbTextWidth     = 100;               // current Pcb (not module) Text width
     m_PcbTextSize    = wxSize( 500, 500 );  // current Pcb (not module) Text size
     m_TrackClearence = 100;                 // track to track and track to pads clearance
-    m_MaskMargin = 150;                     // Solder mask margin
+    m_MaskMargin     = 150;                 // Solder mask margin
     /* Color options for screen display of the Printed Board: */
     m_PcbGridColor = DARKGRAY;              // Grid color
 

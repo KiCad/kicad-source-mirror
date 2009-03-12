@@ -37,6 +37,7 @@ set(EESCHEMA_SRCS
 #   dialog_backanno.cpp
 	dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
+	dialog_build_BOM_base.cpp
 #   dialog_cmp_graphic_properties.cpp
     dialog_create_component.cpp
 #   dialog_edit_component_in_lib.cpp

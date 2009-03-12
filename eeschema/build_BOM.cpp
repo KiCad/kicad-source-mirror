@@ -74,7 +74,7 @@ static char s_ExportSeparatorSymbol;
 
 
 /**************************************************************************/
-void WinEDA_Build_BOM_Frame::Create_BOM_Lists( bool aTypeFileIsExport,
+void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
                                                bool aIncludeSubComponents,
                                                char aExportSeparatorSymbol,
                                                bool aRunBrowser )
@@ -125,7 +125,7 @@ void WinEDA_Build_BOM_Frame::Create_BOM_Lists( bool aTypeFileIsExport,
 
 
 /****************************************************************************/
-void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& aFullFileName,
+void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
                                                bool            aIncludeSubComponents )
 /****************************************************************************/
 
@@ -164,7 +164,7 @@ void WinEDA_Build_BOM_Frame::CreateExportList( const wxString& aFullFileName,
 
 
 /****************************************************************************/
-void WinEDA_Build_BOM_Frame::GenereListeOfItems( const wxString& aFullFileName,
+void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
                                                  bool            aIncludeSubComponents )
 /****************************************************************************/
 
@@ -515,7 +515,7 @@ static void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
 
 
 /*******************************************************************************************/
-void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
+void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
                                              bool CompactForm )
 /*******************************************************************************************/
 {
@@ -547,12 +547,19 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
 
     for( ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
     {
-        FieldCtrl = FieldListCtrl[ii - FIELD1];
-        if( FieldCtrl == NULL )
-            continue;
+        if ( ii <= FIELD8 )   // see users fields 1 to 8
+        {
+            FieldCtrl = FieldListCtrl[ii - FIELD1];
+            if( FieldCtrl == NULL )
+                continue;
 
-        if( !FieldCtrl->IsChecked() )
-            continue;
+            if( !FieldCtrl->IsChecked() && !m_AddAllFields->IsChecked() )
+                continue;
+        }
+        
+        if( ! m_AddAllFields->IsChecked() )
+            break;
+       
 
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
@@ -564,7 +571,7 @@ void WinEDA_Build_BOM_Frame::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintComponentsListByRef(
+int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     FILE*                          f,
     std::vector <OBJ_CMP_TO_LIST>& aList,
     bool                           CompactForm,
@@ -706,7 +713,7 @@ int WinEDA_Build_BOM_Frame::PrintComponentsListByRef(
 
 
 /*********************************************************************************************/
-int WinEDA_Build_BOM_Frame::PrintComponentsListByVal(
+int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     FILE*                          f,
     std::vector <OBJ_CMP_TO_LIST>& aList,
     bool

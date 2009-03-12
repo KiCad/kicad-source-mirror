@@ -5,6 +5,16 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-mar-12 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++eeschema:
+    Added: option to print ALL users fields in B.O.M.,
+    so if more than 8 fields, they are printed. (issue 2680640)
+
+++pcbnew:
+    Added 5 metric grids (1mm, 0.5mm 0.25mm 0.2mm and 0.1mm) in default grid list.
+    Minor bug in drill map creation (PS format) fixed
+
 2009-mar-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew:

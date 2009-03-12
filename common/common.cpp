@@ -285,15 +285,19 @@ ReturnValueFromString( int Units,
 }
 
 
-/*
- * Convert in inch or mm the variable "val" given in internal units
- */
 /******************************************************************/
-double
-To_User_Unit( bool is_metric,
+double To_User_Unit( bool is_metric,
               int val,
               int internal_unit_value )
 /******************************************************************/
+/**
+ * Function To_User_Unit
+ * Convert in inch or mm the variable "val" (double)given in internal units
+ * @return the converted value, in double
+ * @param is_metric : true if the result must be returned in mm , false if inches
+ * @param val : integer : the given value
+ * @param internal_unit_value = internal units per inch
+ */
 {
     double value;
 
@@ -304,6 +308,31 @@ To_User_Unit( bool is_metric,
 
     return value;
 }
+
+/******************************************************************/
+double To_User_Unit( bool is_metric,
+              double val,
+              int internal_unit_value )
+/******************************************************************/
+/**
+ * Function To_User_Unit
+ * Convert in inch or mm the variable "val" (double)given in internal units
+ * @return the converted value, in double
+ * @param is_metric : true if the result must be returned in mm , false if inches
+ * @param val : double : the given value
+ * @param internal_unit_value = internal units per inch
+ */
+{
+    double value;
+
+    if( is_metric )
+        value = val * 25.4 / internal_unit_value;
+    else
+        value = val / internal_unit_value;
+
+    return value;
+}
+
 
 
 /*
