@@ -34,11 +34,11 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	
 	sbListOptionsSizer->Add( m_ListCmpbyValItems, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_GenListLabelsbyVal = new wxCheckBox( this, wxID_ANY, _("Hierachy pins by name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GenListLabelsbyVal = new wxCheckBox( this, wxID_ANY, _("Hierarchy pins by name"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	sbListOptionsSizer->Add( m_GenListLabelsbyVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_GenListLabelsbySheet = new wxCheckBox( this, wxID_ANY, _("Hierachy pins by sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GenListLabelsbySheet = new wxCheckBox( this, wxID_ANY, _("Hierarchy pins by sheets"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	sbListOptionsSizer->Add( m_GenListLabelsbySheet, 0, wxALL, 5 );
 	

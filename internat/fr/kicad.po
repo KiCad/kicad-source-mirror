@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-04 07:41+0100\n"
-"PO-Revision-Date: 2009-03-10 09:23+0100\n"
+"PO-Revision-Date: 2009-03-13 08:16+0100\n"
 "Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -325,6 +325,7 @@ msgstr "Créer Fichier de perçage"
 #: pcbnew/dialog_print_using_printer_base.cpp:128
 #: eeschema/annotate_dialog.cpp:220
 #: eeschema/dialog_print_using_printer_base.cpp:72
+#: eeschema/dialog_build_BOM_base.cpp:137
 #: common/zoom.cpp:271
 msgid "Close"
 msgstr "Fermer"
@@ -797,9 +798,9 @@ msgid "Net"
 msgstr "Net"
 
 #: pcbnew/class_board_item.cpp:64
-#: eeschema/dialog_build_BOM.cpp:291
 #: eeschema/edit_component_in_schematic.cpp:428
 #: eeschema/class_libentry_fields.cpp:131
+#: eeschema/dialog_build_BOM_base.cpp:79
 msgid "Footprint"
 msgstr "Module"
 
@@ -963,7 +964,6 @@ msgstr "Garder"
 #: pcbnew/dialog_initpcb.cpp:161
 #: pcbnew/dialog_drc.cpp:552
 #: eeschema/dialog_cmp_graphic_properties.cpp:178
-#: eeschema/dialog_build_BOM.cpp:337
 #: eeschema/pinedit-dialog.cpp:232
 #: eeschema/dialog_edit_component_in_lib.cpp:218
 #: eeschema/sheet.cpp:190
@@ -3077,7 +3077,6 @@ msgstr "L' URL du site FreeRouting.net"
 #: pcbnew/dialog_netlist.cpp:253
 #: eeschema/plotps.cpp:245
 #: eeschema/dialog_erc.cpp:219
-#: eeschema/dialog_build_BOM.cpp:341
 #: eeschema/plothpgl.cpp:339
 msgid "&Close"
 msgstr "&Fermer"
@@ -4079,13 +4078,13 @@ msgstr "Auto"
 msgid "Zoom "
 msgstr "Zoom "
 
-#: pcbnew/tool_pcb.cpp:634
+#: pcbnew/tool_pcb.cpp:632
 #: pcbnew/tool_modedit.cpp:324
 #: common/zoom.cpp:254
 msgid "User Grid"
 msgstr "Grille perso"
 
-#: pcbnew/tool_pcb.cpp:748
+#: pcbnew/tool_pcb.cpp:746
 msgid "+/- to switch"
 msgstr "+/- pour commuter"
 
@@ -4372,9 +4371,10 @@ msgstr "Numéro de plume"
 #: pcbnew/dialog_gendrill.cpp:239
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:80
 #: pcbnew/dialog_print_using_printer_base.cpp:76
-#: eeschema/dialog_build_BOM.cpp:276
 #: eeschema/netlist_control.cpp:127
 #: eeschema/dialog_print_using_printer_base.cpp:23
+#: eeschema/dialog_build_BOM_base.cpp:20
+#: eeschema/dialog_build_BOM_base.cpp:60
 msgid "Options:"
 msgstr "Options :"
 
@@ -4959,6 +4959,7 @@ msgstr "Exporter ces options vers les autres zones de cuivre"
 #: pcbnew/dialog_copper_zones_base.cpp:156
 #: pcbnew/dialog_pad_properties_base.cpp:91
 #: eeschema/lib_export.cpp:146
+#: eeschema/dialog_build_BOM_base.cpp:131
 msgid "Ok"
 msgstr "Ok"
 
@@ -5077,7 +5078,7 @@ msgid "Delete Field"
 msgstr "Supprimer Champ"
 
 #: pcbnew/dialog_edit_module.cpp:262
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Component"
 msgstr "Composant"
 
@@ -6117,7 +6118,7 @@ msgid "Start Point Y"
 msgstr "Start Point Y"
 
 #: eeschema/netlist.cpp:198
-#: eeschema/dialog_build_BOM.cpp:262
+#: eeschema/dialog_build_BOM_base.cpp:47
 msgid "List"
 msgstr "Liste"
 
@@ -6733,103 +6734,6 @@ msgstr "Marqueur Suivant (F5)"
 #: eeschema/dialog_find.cpp:149
 msgid "Find Cmp in &Lib"
 msgstr "Trouver Cmp. en &Libr."
-
-#: eeschema/dialog_build_BOM.cpp:237
-msgid "List items:"
-msgstr " Liste éléments: "
-
-#: eeschema/dialog_build_BOM.cpp:241
-msgid "Components by reference"
-msgstr "Composants par référence"
-
-#: eeschema/dialog_build_BOM.cpp:245
-msgid "Sub Components (i.e. U2A, U2B ...)"
-msgstr "Sous Composants (i.e U2A, U2B...)"
-
-#: eeschema/dialog_build_BOM.cpp:249
-msgid "Components by value"
-msgstr "Composants par valeur"
-
-#: eeschema/dialog_build_BOM.cpp:253
-msgid "Hierachy Pins by Name"
-msgstr "Pins de hiérarchie par Nom"
-
-#: eeschema/dialog_build_BOM.cpp:257
-msgid "Hierachy Pins by Sheets"
-msgstr "Pins de hiérarchie par feuilles"
-
-#: eeschema/dialog_build_BOM.cpp:263
-msgid "Text for spreadsheet import"
-msgstr "Texte pour import dans tableur:"
-
-#: eeschema/dialog_build_BOM.cpp:264
-msgid "Output format:"
-msgstr "Format de sortie"
-
-#: eeschema/dialog_build_BOM.cpp:269
-msgid "Tab"
-msgstr "Tab"
-
-#: eeschema/dialog_build_BOM.cpp:270
-msgid ";"
-msgstr ";"
-
-#: eeschema/dialog_build_BOM.cpp:271
-msgid ","
-msgstr ","
-
-#: eeschema/dialog_build_BOM.cpp:272
-msgid "Field separator for spreadsheet import:"
-msgstr "Séparateur de champ pour import dans tableur:"
-
-#: eeschema/dialog_build_BOM.cpp:280
-msgid "Launch list browser"
-msgstr "Lancer le visualisateur de liste"
-
-#: eeschema/dialog_build_BOM.cpp:287
-msgid "Fields to add:"
-msgstr "Champs à ajouter:"
-
-#: eeschema/dialog_build_BOM.cpp:295
-msgid "Field 1"
-msgstr "Champ 1"
-
-#: eeschema/dialog_build_BOM.cpp:299
-msgid "Field 2"
-msgstr "Champ 2"
-
-#: eeschema/dialog_build_BOM.cpp:303
-msgid "Field 3"
-msgstr "Champ 3"
-
-#: eeschema/dialog_build_BOM.cpp:307
-msgid "Field 4"
-msgstr "Champ 4"
-
-#: eeschema/dialog_build_BOM.cpp:311
-msgid "Field 5"
-msgstr "Champ 5"
-
-#: eeschema/dialog_build_BOM.cpp:315
-msgid "Field 6"
-msgstr "Champ 6"
-
-#: eeschema/dialog_build_BOM.cpp:319
-msgid "Field 7"
-msgstr "Champ 7"
-
-#: eeschema/dialog_build_BOM.cpp:323
-msgid "Field 8"
-msgstr "Champ 8"
-
-#: eeschema/dialog_build_BOM.cpp:329
-msgid "Create &List"
-msgstr "Créer &Liste"
-
-#: eeschema/dialog_build_BOM.cpp:345
-#: cvpcb/dialog_display_options.cpp:187
-msgid "&Apply"
-msgstr "&Appliquer"
 
 #: eeschema/find.cpp:211
 msgid "Pin "
@@ -8939,12 +8843,12 @@ msgstr ""
 "\n"
 "#End List\n"
 
-#: eeschema/build_BOM.cpp:620
+#: eeschema/build_BOM.cpp:627
 #: eeschema/class_libentry_fields.cpp:140
 msgid "Field"
 msgstr "Champ"
 
-#: eeschema/build_BOM.cpp:628
+#: eeschema/build_BOM.cpp:635
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
@@ -8952,17 +8856,17 @@ msgstr ""
 "\n"
 "#Cmp ( ordre = Reference )"
 
-#: eeschema/build_BOM.cpp:631
-#: eeschema/build_BOM.cpp:727
+#: eeschema/build_BOM.cpp:638
+#: eeschema/build_BOM.cpp:734
 msgid " (with SubCmp)"
 msgstr "avec sub-composants"
 
-#: eeschema/build_BOM.cpp:701
-#: eeschema/build_BOM.cpp:782
+#: eeschema/build_BOM.cpp:708
+#: eeschema/build_BOM.cpp:789
 msgid "#End Cmp\n"
 msgstr "#End Cmp\n"
 
-#: eeschema/build_BOM.cpp:724
+#: eeschema/build_BOM.cpp:731
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -8970,17 +8874,17 @@ msgstr ""
 "\n"
 "#Cmp ( ordre = Valeur )"
 
-#: eeschema/build_BOM.cpp:812
+#: eeschema/build_BOM.cpp:819
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:832
+#: eeschema/build_BOM.cpp:839
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:847
+#: eeschema/build_BOM.cpp:854
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
@@ -9526,6 +9430,106 @@ msgstr "Pas de nom de composant!"
 msgid "Component [%s] not found!"
 msgstr "Composant [%s] non trouvé!"
 
+#: eeschema/dialog_build_BOM_base.cpp:23
+msgid "List items:"
+msgstr " Liste éléments: "
+
+#: eeschema/dialog_build_BOM_base.cpp:25
+msgid "Components by reference"
+msgstr "Composants par référence"
+
+#: eeschema/dialog_build_BOM_base.cpp:29
+msgid "Sub components (i.e. U2A, U2B ...)"
+msgstr "Sous composants (i.e U2A, U2B...)"
+
+#: eeschema/dialog_build_BOM_base.cpp:33
+msgid "Components by value"
+msgstr "Composants par valeur"
+
+#: eeschema/dialog_build_BOM_base.cpp:37
+msgid "Hierarchy pins by name"
+msgstr "Pins de hiérarchie par nom"
+
+#: eeschema/dialog_build_BOM_base.cpp:41
+msgid "Hierarchy pins by sheets"
+msgstr "Pins de hiérarchie par feuilles"
+
+#: eeschema/dialog_build_BOM_base.cpp:47
+msgid "Text for spreadsheet import"
+msgstr "Texte pour import dans tableur:"
+
+#: eeschema/dialog_build_BOM_base.cpp:49
+msgid "Output format:"
+msgstr "Format de sortie"
+
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid "Tab"
+msgstr "Tab"
+
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid ";"
+msgstr ";"
+
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid ","
+msgstr ","
+
+#: eeschema/dialog_build_BOM_base.cpp:55
+msgid "Field separator for spreadsheet import:"
+msgstr "Séparateur de champ pour import dans tableur:"
+
+#: eeschema/dialog_build_BOM_base.cpp:62
+msgid "Launch list browser"
+msgstr "Lancer le visualisateur de liste"
+
+#: eeschema/dialog_build_BOM_base.cpp:74
+msgid "Fields to add:"
+msgstr "Champs à ajouter:"
+
+#: eeschema/dialog_build_BOM_base.cpp:77
+msgid "System Fields:"
+msgstr "Champs Système:"
+
+#: eeschema/dialog_build_BOM_base.cpp:86
+msgid "Users Fields:"
+msgstr "Champs Utilisateurs:"
+
+#: eeschema/dialog_build_BOM_base.cpp:88
+msgid "Field 1"
+msgstr "Champ 1"
+
+#: eeschema/dialog_build_BOM_base.cpp:92
+msgid "Field 2"
+msgstr "Champ 2"
+
+#: eeschema/dialog_build_BOM_base.cpp:96
+msgid "Field 3"
+msgstr "Champ 3"
+
+#: eeschema/dialog_build_BOM_base.cpp:100
+msgid "Field 4"
+msgstr "Champ 4"
+
+#: eeschema/dialog_build_BOM_base.cpp:104
+msgid "Field 5"
+msgstr "Champ 5"
+
+#: eeschema/dialog_build_BOM_base.cpp:108
+msgid "Field 6"
+msgstr "Champ 6"
+
+#: eeschema/dialog_build_BOM_base.cpp:112
+msgid "Field 7"
+msgstr "Champ 7"
+
+#: eeschema/dialog_build_BOM_base.cpp:116
+msgid "Field 8"
+msgstr "Champ 8"
+
+#: eeschema/dialog_build_BOM_base.cpp:120
+msgid "All existing users fields"
+msgstr "Tous les champs existants"
+
 #: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
 msgstr ""
@@ -9961,6 +9965,10 @@ msgstr "Afficher Numéro de Pad"
 #: cvpcb/dialog_display_options.cpp:164
 msgid "Display pad number"
 msgstr "Afficher numéro des pastilles"
+
+#: cvpcb/dialog_display_options.cpp:187
+msgid "&Apply"
+msgstr "&Appliquer"
 
 #: kicad/kicad.cpp:388
 #: kicad/treeprj_frame.cpp:534
@@ -10966,119 +10974,119 @@ msgstr " \""
 msgid " mm"
 msgstr " mm"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Copper   "
 msgstr "Cuivre   "
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Inner L1 "
 msgstr "Interne 1"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Inner L2 "
 msgstr "Interne 2"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Inner L3 "
 msgstr "Interne 3"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L4 "
 msgstr "Interne 4"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L5 "
 msgstr "Interne 5"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L6 "
 msgstr "Interne 6"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L7 "
 msgstr "Interne 7"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L8 "
 msgstr "Interne 8"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L9 "
 msgstr "Interne 9"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L10"
 msgstr "Interne 10"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L11"
 msgstr "Interne 11"
 
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Inner L12"
 msgstr "Interne 12"
 
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Inner L13"
 msgstr "Interne 13"
 
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Inner L14"
 msgstr "Interne 14"
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "Adhes Cop"
 msgstr "Adhes Cu "
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "Adhes Cmp"
 msgstr "Adhes  Cmp"
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "SoldP Cop"
 msgstr "SoldP Cu "
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "SoldP Cmp"
 msgstr "SoldP Cmp"
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "SilkS Cop"
 msgstr "Sérigr Cu "
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "SilkS Cmp"
 msgstr "Sérigr Cmp"
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "Mask Cop "
 msgstr "Masque Cu "
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "Mask Cmp "
 msgstr "Masque Cmp"
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Drawings "
 msgstr "Drawings "
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Comments "
 msgstr "Commentaires "
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:456
+#: common/common.cpp:485
 msgid "Edges Pcb"
 msgstr "Contour Pcb"
 
-#: common/common.cpp:456
+#: common/common.cpp:485
 msgid "BAD INDEX"
 msgstr "BAD INDEX"
 
@@ -11532,10 +11540,6 @@ msgstr "Propriétés du texts sur module"
 msgid "General settings"
 msgstr "Options Générales"
 
-#: eeschema/dialog_build_BOM.h:61
-msgid "List of Material"
-msgstr "Liste du Matériel"
-
 #: eeschema/dialog_cmp_graphic_properties.h:43
 msgid "Graphic shape properties"
 msgstr "Propriétés du dessin"
@@ -11675,6 +11679,10 @@ msgstr "Propriétés des Champs"
 #: eeschema/dialog_edit_component_in_schematic_fbp.h:82
 msgid "Component Properties"
 msgstr "Propriétés du Composant"
+
+#: eeschema/dialog_build_BOM_base.h:69
+msgid "List of Material"
+msgstr "Liste du Matériel"
 
 #: eeschema/component_wizard/dialog_component_setup.h:55
 msgid "Component Builder"
