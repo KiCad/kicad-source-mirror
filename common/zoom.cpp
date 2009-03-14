@@ -98,8 +98,12 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 }
 
 
-/*****************************************************************/
+/******************************************************/
 void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
+/******************************************************/
+/** Function OnZoom(
+ * Called from any zoom event (toolbar , hotkey or popup )
+ */
 {
     if( DrawPanel == NULL )
     {
@@ -138,7 +142,9 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_REDRAW:
-        DrawPanel->Refresh();
+        // DrawPanel->Refresh(); usually good,
+        // but does not work under linux, when called from here (wxGTK bug ?)
+        ReDrawPanel();
         break;
 
     case ID_POPUP_ZOOM_CENTER:
