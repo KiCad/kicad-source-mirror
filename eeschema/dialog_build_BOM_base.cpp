@@ -48,13 +48,13 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	int m_OutputFormCtrlNChoices = sizeof( m_OutputFormCtrlChoices ) / sizeof( wxString );
 	m_OutputFormCtrl = new wxRadioBox( this, ID_RADIOBOX_SELECT_FORMAT, _("Output format:"), wxDefaultPosition, wxDefaultSize, m_OutputFormCtrlNChoices, m_OutputFormCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_OutputFormCtrl->SetSelection( 0 );
-	sbOptionsSizer->Add( m_OutputFormCtrl, 0, wxALL|wxEXPAND, 5 );
+	sbOptionsSizer->Add( m_OutputFormCtrl, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxString m_OutputSeparatorCtrlChoices[] = { _("Tab"), _(";"), _(",") };
 	int m_OutputSeparatorCtrlNChoices = sizeof( m_OutputSeparatorCtrlChoices ) / sizeof( wxString );
-	m_OutputSeparatorCtrl = new wxRadioBox( this, wxID_ANY, _("Field separator for spreadsheet import:"), wxDefaultPosition, wxDefaultSize, m_OutputSeparatorCtrlNChoices, m_OutputSeparatorCtrlChoices, 1, wxRA_SPECIFY_COLS|wxRA_SPECIFY_ROWS );
+	m_OutputSeparatorCtrl = new wxRadioBox( this, wxID_ANY, _("Field separator for spreadsheet import:"), wxDefaultPosition, wxDefaultSize, m_OutputSeparatorCtrlNChoices, m_OutputSeparatorCtrlChoices, 1, wxRA_SPECIFY_ROWS );
 	m_OutputSeparatorCtrl->SetSelection( 0 );
-	sbOptionsSizer->Add( m_OutputSeparatorCtrl, 1, wxALL, 5 );
+	sbOptionsSizer->Add( m_OutputSeparatorCtrl, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxStaticBoxSizer* sbBrowseOptSizer;
 	sbBrowseOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
@@ -63,9 +63,9 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	
 	sbBrowseOptSizer->Add( m_GetListBrowser, 0, wxALL|wxEXPAND, 5 );
 	
-	sbOptionsSizer->Add( sbBrowseOptSizer, 0, wxEXPAND, 5 );
+	sbOptionsSizer->Add( sbBrowseOptSizer, 0, wxEXPAND|wxTOP, 5 );
 	
-	bMainSizer->Add( sbOptionsSizer, 0, 0, 5 );
+	bMainSizer->Add( sbOptionsSizer, 10, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -121,9 +121,9 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	
 	sbUsersFiledsSizer->Add( m_AddAllFields, 0, wxALL, 5 );
 	
-	sbFieldsSelectionSizer->Add( sbUsersFiledsSizer, 0, wxEXPAND, 5 );
+	sbFieldsSelectionSizer->Add( sbUsersFiledsSizer, 0, wxEXPAND|wxTOP, 5 );
 	
-	bRightSizer->Add( sbFieldsSelectionSizer, 1, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM, 5 );
+	bRightSizer->Add( sbFieldsSelectionSizer, 1, wxEXPAND, 5 );
 	
 	
 	bRightSizer->Add( 10, 10, 0, 0, 5 );
@@ -139,7 +139,7 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bRightSizer->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	bMainSizer->Add( bRightSizer, 1, wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bRightSizer, 8, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
