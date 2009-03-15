@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-03-04 01:00-0300\n"
+"PO-Revision-Date: 2009-03-15 16:20-0300\n"
 "Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
@@ -303,7 +303,7 @@ msgstr "Ligação"
 
 #: pcbnew/class_board_item.cpp:64
 #: eeschema/class_libentry_fields.cpp:131
-#: eeschema/dialog_build_BOM.cpp:291
+#: eeschema/dialog_build_BOM_base.cpp:79
 #: eeschema/edit_component_in_schematic.cpp:428
 msgid "Footprint"
 msgstr "Footprint"
@@ -481,7 +481,7 @@ msgstr "Segmento"
 #: pcbnew/class_track.cpp:945
 #: pcbnew/class_zone.cpp:904
 #: pcbnew/dialog_edit_module.cpp:263
-#: pcbnew/dialog_print_using_printer.cpp:176
+#: pcbnew/dialog_print_using_printer.cpp:179
 #: pcbnew/sel_layer.cpp:147
 msgid "Layer"
 msgstr "Camada"
@@ -1126,6 +1126,7 @@ msgstr "Exportar as definições desta zona para todas as outras zonas de cobre"
 
 #: pcbnew/dialog_copper_zones_base.cpp:156
 #: pcbnew/dialog_pad_properties_base.cpp:91
+#: eeschema/dialog_build_BOM_base.cpp:131
 #: eeschema/lib_export.cpp:146
 msgid "Ok"
 msgstr "Ok"
@@ -1418,7 +1419,6 @@ msgstr "&Cancelar"
 #: pcbnew/swap_layers.cpp:225
 #: cvpcb/dialog_cvpcb_config.cpp:138
 #: cvpcb/dialog_display_options.cpp:178
-#: eeschema/dialog_build_BOM.cpp:337
 #: eeschema/dialog_cmp_graphic_properties.cpp:178
 #: eeschema/dialog_create_component.cpp:187
 #: eeschema/dialog_edit_component_in_lib.cpp:218
@@ -1519,7 +1519,7 @@ msgid "Delete Field"
 msgstr "Deletar Campo"
 
 #: pcbnew/dialog_edit_module.cpp:262
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Component"
 msgstr "Componente"
 
@@ -1753,7 +1753,6 @@ msgstr "A URL do website do FreeRouting.net"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:213
 #: pcbnew/dialog_netlist.cpp:253
-#: eeschema/dialog_build_BOM.cpp:341
 #: eeschema/dialog_erc.cpp:219
 #: eeschema/plothpgl.cpp:339
 #: eeschema/plotps.cpp:245
@@ -1836,7 +1835,7 @@ msgstr "Escolher coordenadas de origem: absoluta ou relativa ao eixo auxiliar"
 
 #: pcbnew/dialog_gendrill.cpp:205
 #: pcbnew/dialog_gendrill.cpp:215
-#: eeschema/libedit.cpp:42
+#: eeschema/libedit.cpp:38
 msgid "None"
 msgstr "Nenhum"
 
@@ -1884,7 +1883,8 @@ msgstr "Número da pena"
 #: pcbnew/dialog_gendrill.cpp:239
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:80
 #: pcbnew/dialog_print_using_printer_base.cpp:76
-#: eeschema/dialog_build_BOM.cpp:276
+#: eeschema/dialog_build_BOM_base.cpp:20
+#: eeschema/dialog_build_BOM_base.cpp:60
 #: eeschema/dialog_print_using_printer_base.cpp:23
 #: eeschema/netlist_control.cpp:127
 msgid "Options:"
@@ -2035,7 +2035,7 @@ msgstr "16"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:53
 #: pcbnew/dialog_pad_properties_base.cpp:106
-#: pcbnew/dialog_print_using_printer.cpp:164
+#: pcbnew/dialog_print_using_printer.cpp:166
 #: pcbnew/dialog_print_using_printer_base.cpp:20
 #: pcbnew/dialog_SVG_print_base.cpp:23
 msgid "Layers:"
@@ -2372,8 +2372,9 @@ msgstr "Reconstruir todas ratsnest (útil após edição manual de nome de net de il
 #: pcbnew/pcbplot.cpp:299
 #: pcbnew/xchgmod.cpp:140
 #: eeschema/annotate_dialog.cpp:220
+#: eeschema/dialog_build_BOM_base.cpp:137
 #: eeschema/dialog_print_using_printer_base.cpp:72
-#: common/zoom.cpp:271
+#: common/zoom.cpp:277
 msgid "Close"
 msgstr "Fechar"
 
@@ -2595,21 +2596,28 @@ msgstr "Camada Rascunho"
 msgid "TextPCB properties"
 msgstr "Propriedades de Texto no PCB"
 
-#: pcbnew/dialog_print_using_printer.cpp:129
+#: pcbnew/dialog_print_using_printer.cpp:131
 #: eeschema/dialog_print_using_printer.cpp:106
 msgid "Error Init Printer info"
 msgstr "Erro na inicialização da Impressora"
 
-#: pcbnew/dialog_print_using_printer.cpp:373
+#: pcbnew/dialog_print_using_printer.cpp:377
 #: eeschema/dialog_print_using_printer.cpp:217
 msgid "Printer Problem!"
 msgstr "Problema na impressão!"
 
-#: pcbnew/dialog_print_using_printer.cpp:395
+#: pcbnew/dialog_print_using_printer.cpp:399
 msgid "Print Preview"
 msgstr "Pré-visualização"
 
-#: pcbnew/dialog_print_using_printer.cpp:447
+#: pcbnew/dialog_print_using_printer.cpp:417
+#: pcbnew/dialog_print_using_printer.cpp:457
+#: pcbnew/pcbplot.cpp:738
+#: gerbview/edit.cpp:244
+msgid "No layer selected"
+msgstr "Nenhuma camada selecionada"
+
+#: pcbnew/dialog_print_using_printer.cpp:468
 #: pcbnew/dialog_print_using_printer_base.cpp:125
 #: eeschema/dialog_print_using_printer_base.cpp:69
 #: pcbnew/dialog_print_using_printer_base.h:76
@@ -2617,23 +2625,23 @@ msgstr "Pré-visualização"
 msgid "Print"
 msgstr "Imprimir"
 
-#: pcbnew/dialog_print_using_printer.cpp:458
+#: pcbnew/dialog_print_using_printer.cpp:479
 #: eeschema/dialog_print_using_printer.cpp:289
 msgid "There was a problem printing"
 msgstr "Houve um problema durante a impressão"
 
-#: pcbnew/dialog_print_using_printer.cpp:474
+#: pcbnew/dialog_print_using_printer.cpp:495
 #: eeschema/dialog_print_using_printer.cpp:305
 #, c-format
 msgid "Print page %d"
 msgstr "Imprimir página %d"
 
-#: pcbnew/dialog_print_using_printer.cpp:626
+#: pcbnew/dialog_print_using_printer.cpp:646
 #: pcbnew/pcbplot.cpp:703
 msgid "Warning: Scale option set to a very large value"
 msgstr "Atenção: Opção de escala definida para um valor muito grande"
 
-#: pcbnew/dialog_print_using_printer.cpp:629
+#: pcbnew/dialog_print_using_printer.cpp:650
 #: pcbnew/pcbplot.cpp:701
 msgid "Warning: Scale option set to a very small value"
 msgstr "Atenção: Opção de escala definida para um valor muito pequeno"
@@ -3507,7 +3515,7 @@ msgid "File %s exists, OK to replace ?"
 msgstr "Arquivo %s existe, OK para sobrescrever?"
 
 #: pcbnew/librairi.cpp:201
-#: eeschema/symbedit.cpp:168
+#: eeschema/symbedit.cpp:178
 #, c-format
 msgid "Unable to create <%s>"
 msgstr "Incapaz de criar <%s>"
@@ -4337,11 +4345,11 @@ msgstr "Valor"
 msgid "Delete Pad (module %s %s) "
 msgstr "Deletar Ilha (módulo %s %s)"
 
-#: pcbnew/move_or_drag_track.cpp:797
+#: pcbnew/move_or_drag_track.cpp:829
 msgid "Unable to drag this segment: too many segments connected"
 msgstr "Impossível arrastar este segmento: muitos segmentos conectados"
 
-#: pcbnew/move_or_drag_track.cpp:851
+#: pcbnew/move_or_drag_track.cpp:883
 msgid "Unable to drag this segment: two collinear segments"
 msgstr "Impossível arrastar este segmento: muitos segmentos conectados"
 
@@ -5676,7 +5684,7 @@ msgstr "Imprimir módulo"
 #: eeschema/tool_lib.cpp:170
 #: eeschema/tool_sch.cpp:89
 #: eeschema/tool_viewlib.cpp:70
-#: common/zoom.cpp:205
+#: common/zoom.cpp:211
 #: gerbview/tool_gerber.cpp:230
 #: 3d-viewer/3d_toolbar.cpp:43
 msgid "Zoom in"
@@ -5689,7 +5697,7 @@ msgstr "Mais Zoom "
 #: eeschema/tool_lib.cpp:174
 #: eeschema/tool_sch.cpp:93
 #: eeschema/tool_viewlib.cpp:74
-#: common/zoom.cpp:206
+#: common/zoom.cpp:212
 #: gerbview/tool_gerber.cpp:237
 #: 3d-viewer/3d_toolbar.cpp:46
 msgid "Zoom out"
@@ -5701,7 +5709,7 @@ msgstr "Menos Zoom "
 #: eeschema/tool_lib.cpp:178
 #: eeschema/tool_sch.cpp:97
 #: eeschema/tool_viewlib.cpp:78
-#: common/zoom.cpp:214
+#: common/zoom.cpp:220
 #: gerbview/tool_gerber.cpp:244
 #: 3d-viewer/3d_toolbar.cpp:49
 msgid "Redraw view"
@@ -5714,7 +5722,7 @@ msgstr "Redesenhar"
 #: eeschema/menubar.cpp:176
 #: eeschema/tool_lib.cpp:184
 #: eeschema/tool_sch.cpp:102
-#: common/zoom.cpp:207
+#: common/zoom.cpp:213
 #: gerbview/tool_gerber.cpp:255
 #: 3d-viewer/3d_toolbar.cpp:52
 msgid "Zoom auto"
@@ -5821,8 +5829,8 @@ msgid "Grid %.3f"
 msgstr "Grade %.3f"
 
 #: pcbnew/tool_modedit.cpp:324
-#: pcbnew/tool_pcb.cpp:634
-#: common/zoom.cpp:254
+#: pcbnew/tool_pcb.cpp:632
+#: common/zoom.cpp:260
 msgid "User Grid"
 msgstr "Grade do usuário"
 
@@ -6016,7 +6024,7 @@ msgstr ""
 "Largura de trilha automática: quando iniciando de uma trilha existente usar sua largura\n"
 "de outro modo, usar definição de largura atual"
 
-#: pcbnew/tool_pcb.cpp:748
+#: pcbnew/tool_pcb.cpp:746
 msgid "+/- to switch"
 msgstr "+/- para chavear"
 
@@ -6217,7 +6225,6 @@ msgid "Display pad number"
 msgstr "Mostrar Numeração de Ilhas"
 
 #: cvpcb/dialog_display_options.cpp:187
-#: eeschema/dialog_build_BOM.cpp:345
 msgid "&Apply"
 msgstr "&Aplicar"
 
@@ -6741,12 +6748,12 @@ msgstr ""
 "\n"
 "#Fim da Lista\n"
 
-#: eeschema/build_BOM.cpp:620
+#: eeschema/build_BOM.cpp:627
 #: eeschema/class_libentry_fields.cpp:140
 msgid "Field"
 msgstr "Campo"
 
-#: eeschema/build_BOM.cpp:628
+#: eeschema/build_BOM.cpp:635
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
@@ -6754,17 +6761,17 @@ msgstr ""
 "\n"
 "#Componente ( ordenação = Referência )"
 
-#: eeschema/build_BOM.cpp:631
-#: eeschema/build_BOM.cpp:727
+#: eeschema/build_BOM.cpp:638
+#: eeschema/build_BOM.cpp:734
 msgid " (with SubCmp)"
 msgstr "(com SubCmp)"
 
-#: eeschema/build_BOM.cpp:701
-#: eeschema/build_BOM.cpp:782
+#: eeschema/build_BOM.cpp:708
+#: eeschema/build_BOM.cpp:789
 msgid "#End Cmp\n"
 msgstr "#Fim dos Componentes\n"
 
-#: eeschema/build_BOM.cpp:724
+#: eeschema/build_BOM.cpp:731
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -6772,17 +6779,17 @@ msgstr ""
 "\n"
 "#Componente ( ordenação = Valor )"
 
-#: eeschema/build_BOM.cpp:812
+#: eeschema/build_BOM.cpp:819
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s      (Folha %s) pos: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:832
+#: eeschema/build_BOM.cpp:839
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s Planilha %-7.7s (Folha %.2s) pos: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:847
+#: eeschema/build_BOM.cpp:854
 msgid "#End labels\n"
 msgstr "#Fim das Etiquetas\n"
 
@@ -6880,102 +6887,110 @@ msgstr "Itálico Negrito"
 msgid "Text Shape:"
 msgstr "Forma do texto:*"
 
-#: eeschema/dialog_build_BOM.cpp:237
+#: eeschema/dialog_build_BOM_base.cpp:23
 msgid "List items:"
 msgstr "Lista de ítens:"
 
-#: eeschema/dialog_build_BOM.cpp:241
+#: eeschema/dialog_build_BOM_base.cpp:25
 msgid "Components by reference"
 msgstr "Componentes por Referência"
 
-#: eeschema/dialog_build_BOM.cpp:245
-msgid "Sub Components (i.e. U2A, U2B ...)"
+#: eeschema/dialog_build_BOM_base.cpp:29
+msgid "Sub components (i.e. U2A, U2B ...)"
 msgstr "Sub-componentes (i.e U2A, U2B..)"
 
-#: eeschema/dialog_build_BOM.cpp:249
+#: eeschema/dialog_build_BOM_base.cpp:33
 msgid "Components by value"
 msgstr "Componentes por Valor"
 
-#: eeschema/dialog_build_BOM.cpp:253
-msgid "Hierachy Pins by Name"
-msgstr "Hierarquia de Pinos por nome"
+#: eeschema/dialog_build_BOM_base.cpp:37
+msgid "Hierarchy pins by name"
+msgstr "Hierarquia de pinos por nome"
 
-#: eeschema/dialog_build_BOM.cpp:257
-msgid "Hierachy Pins by Sheets"
-msgstr "Hierarquia de Pinos por Página"
+#: eeschema/dialog_build_BOM_base.cpp:41
+msgid "Hierarchy pins by sheets"
+msgstr "Hierarquia de pinos por páginas"
 
-#: eeschema/dialog_build_BOM.cpp:262
+#: eeschema/dialog_build_BOM_base.cpp:47
 #: eeschema/netlist.cpp:198
 msgid "List"
 msgstr "Lista"
 
-#: eeschema/dialog_build_BOM.cpp:263
+#: eeschema/dialog_build_BOM_base.cpp:47
 msgid "Text for spreadsheet import"
 msgstr "Texto para importar em  planilha"
 
-#: eeschema/dialog_build_BOM.cpp:264
+#: eeschema/dialog_build_BOM_base.cpp:49
 msgid "Output format:"
 msgstr "Formato de saída:"
 
-#: eeschema/dialog_build_BOM.cpp:269
+#: eeschema/dialog_build_BOM_base.cpp:53
 msgid "Tab"
 msgstr "Tab"
 
-#: eeschema/dialog_build_BOM.cpp:270
+#: eeschema/dialog_build_BOM_base.cpp:53
 msgid ";"
 msgstr ";"
 
-#: eeschema/dialog_build_BOM.cpp:271
+#: eeschema/dialog_build_BOM_base.cpp:53
 msgid ","
 msgstr ","
 
-#: eeschema/dialog_build_BOM.cpp:272
+#: eeschema/dialog_build_BOM_base.cpp:55
 msgid "Field separator for spreadsheet import:"
 msgstr "Separador de campos para importar em  planilha"
 
-#: eeschema/dialog_build_BOM.cpp:280
+#: eeschema/dialog_build_BOM_base.cpp:62
 msgid "Launch list browser"
 msgstr "Ativar pesquisador de lista"
 
-#: eeschema/dialog_build_BOM.cpp:287
+#: eeschema/dialog_build_BOM_base.cpp:74
 msgid "Fields to add:"
 msgstr "Campos para adicionar:"
 
-#: eeschema/dialog_build_BOM.cpp:295
+#: eeschema/dialog_build_BOM_base.cpp:77
+msgid "System Fields:"
+msgstr "Campos de sistema:"
+
+#: eeschema/dialog_build_BOM_base.cpp:86
+msgid "Users Fields:"
+msgstr "Campos de usuários:"
+
+#: eeschema/dialog_build_BOM_base.cpp:88
 msgid "Field 1"
 msgstr "Campo 1"
 
-#: eeschema/dialog_build_BOM.cpp:299
+#: eeschema/dialog_build_BOM_base.cpp:92
 msgid "Field 2"
 msgstr "Campo 2"
 
-#: eeschema/dialog_build_BOM.cpp:303
+#: eeschema/dialog_build_BOM_base.cpp:96
 msgid "Field 3"
 msgstr "Campo 3"
 
-#: eeschema/dialog_build_BOM.cpp:307
+#: eeschema/dialog_build_BOM_base.cpp:100
 msgid "Field 4"
 msgstr "Campo 4"
 
-#: eeschema/dialog_build_BOM.cpp:311
+#: eeschema/dialog_build_BOM_base.cpp:104
 msgid "Field 5"
 msgstr "Campo 5"
 
-#: eeschema/dialog_build_BOM.cpp:315
+#: eeschema/dialog_build_BOM_base.cpp:108
 msgid "Field 6"
 msgstr "Campo 6"
 
-#: eeschema/dialog_build_BOM.cpp:319
+#: eeschema/dialog_build_BOM_base.cpp:112
 msgid "Field 7"
 msgstr "Campo 7"
 
-#: eeschema/dialog_build_BOM.cpp:323
+#: eeschema/dialog_build_BOM_base.cpp:116
 msgid "Field 8"
 msgstr "Campo 8"
 
-#: eeschema/dialog_build_BOM.cpp:329
-msgid "Create &List"
-msgstr "Criar &Lista"
+#: eeschema/dialog_build_BOM_base.cpp:120
+msgid "All existing users fields"
+msgstr "Todos os campos de usuários existentes"
 
 #: eeschema/dialog_cmp_graphic_properties.cpp:152
 msgid "Options :"
@@ -8133,23 +8148,23 @@ msgstr "Falha ao criar arquivo de biblioteca"
 msgid "Failed to create doc lib file "
 msgstr "Falha ao criar arquivo de biblioteca de documentação"
 
-#: eeschema/libedit.cpp:39
+#: eeschema/libedit.cpp:35
 msgid " Part:   "
 msgstr "Elemento:   "
 
-#: eeschema/libedit.cpp:54
+#: eeschema/libedit.cpp:50
 msgid "   Convert"
 msgstr "  Converter"
 
-#: eeschema/libedit.cpp:56
+#: eeschema/libedit.cpp:52
 msgid "   Normal"
 msgstr "  Normal"
 
-#: eeschema/libedit.cpp:59
+#: eeschema/libedit.cpp:55
 msgid "  (Power Symbol)"
 msgstr "  (Símbolo de alimentação)"
 
-#: eeschema/libedit.cpp:95
+#: eeschema/libedit.cpp:96
 msgid ""
 "Current Part not saved.\n"
 "Continue?"
@@ -8157,83 +8172,83 @@ msgstr ""
 "Componente atual não foi salvo.\n"
 "Continuar?"
 
-#: eeschema/libedit.cpp:123
-#: eeschema/libedit.cpp:431
+#: eeschema/libedit.cpp:125
+#: eeschema/libedit.cpp:434
 msgid "Component \""
 msgstr "Componente \""
 
-#: eeschema/libedit.cpp:123
+#: eeschema/libedit.cpp:125
 msgid "\" not found."
 msgstr "\" não encontrado."
 
-#: eeschema/libedit.cpp:261
+#: eeschema/libedit.cpp:264
 msgid "Modify Library File \""
 msgstr "Modificar arquivo de Biblioteca \""
 
-#: eeschema/libedit.cpp:261
+#: eeschema/libedit.cpp:264
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:271
+#: eeschema/libedit.cpp:274
 msgid "Error while saving Library File \""
 msgstr "Erro durante a salva do arquivo de Biblioteca \""
 
-#: eeschema/libedit.cpp:271
-#: eeschema/libedit.cpp:433
+#: eeschema/libedit.cpp:274
+#: eeschema/libedit.cpp:436
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:277
+#: eeschema/libedit.cpp:280
 msgid "Library File \""
 msgstr "Arquivo Biblioteca \""
 
-#: eeschema/libedit.cpp:279
+#: eeschema/libedit.cpp:282
 msgid "Document File \""
 msgstr "Arquivo Documentação \""
 
-#: eeschema/libedit.cpp:338
+#: eeschema/libedit.cpp:341
 msgid "No Active Library"
 msgstr "Nenhuma biblioteca ativa"
 
-#: eeschema/libedit.cpp:357
+#: eeschema/libedit.cpp:360
 #, c-format
 msgid "Select Component (%d items)"
 msgstr "Selecionar componente (%d ítens)"
 
-#: eeschema/libedit.cpp:381
+#: eeschema/libedit.cpp:384
 msgid "Component not found"
 msgstr "Componente não encontrado"
 
-#: eeschema/libedit.cpp:384
+#: eeschema/libedit.cpp:387
 msgid "Delete component \""
 msgstr "Deletar Componente \""
 
-#: eeschema/libedit.cpp:385
+#: eeschema/libedit.cpp:388
 msgid "\" from library \""
 msgstr "\" da biblioteca \""
 
-#: eeschema/libedit.cpp:410
+#: eeschema/libedit.cpp:413
 msgid "Clear old component from screen (changes will be lost)?"
 msgstr "Limpar componentes antigo da tela (alterações serão perdidas)?"
 
-#: eeschema/libedit.cpp:432
+#: eeschema/libedit.cpp:435
 msgid "\" exists in library \""
 msgstr "\" existe na biblioteca \""
 
-#: eeschema/libedit.cpp:616
+#: eeschema/libedit.cpp:621
 msgid "No component to Save."
 msgstr "Atenção: Nenhum componente para Salvar."
 
-#: eeschema/libedit.cpp:625
+#: eeschema/libedit.cpp:630
 msgid "No Library specified."
 msgstr "Nenhuma biblioteca especificada."
 
-#: eeschema/libedit.cpp:637
+#: eeschema/libedit.cpp:642
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Componente \"%s\" existe, modificar?"
 
-#: eeschema/libedit.cpp:687
+#: eeschema/libedit.cpp:692
 #, c-format
 msgid "Component %s saved in %s"
 msgstr "Componente %s salvo em %s"
@@ -9533,28 +9548,28 @@ msgstr "Não encontrada Nova Etiqueta Hierárquica"
 msgid "Arc %.1f deg"
 msgstr "Arco %.1f graus"
 
-#: eeschema/symbedit.cpp:55
+#: eeschema/symbedit.cpp:57
 msgid "Import symbol drawings:"
 msgstr "Importar desenhos de símbolos:"
 
-#: eeschema/symbedit.cpp:77
+#: eeschema/symbedit.cpp:79
 #, c-format
 msgid "Failed to open Symbol File <%s>"
 msgstr "Falhou ao abrir arquivo <%s>"
 
-#: eeschema/symbedit.cpp:90
+#: eeschema/symbedit.cpp:92
 msgid "Warning: more than 1 part in Symbol File"
 msgstr "Atenção: mais de 1 elemento no arquivo de símbolo"
 
-#: eeschema/symbedit.cpp:95
+#: eeschema/symbedit.cpp:97
 msgid "Symbol File is void"
 msgstr "Arquivo de símbolo está vazio"
 
-#: eeschema/symbedit.cpp:153
+#: eeschema/symbedit.cpp:163
 msgid "Export symbol drawings:"
 msgstr "Exportar desenho de símbolo:"
 
-#: eeschema/symbedit.cpp:173
+#: eeschema/symbedit.cpp:183
 #, c-format
 msgid "Save Symbol in [%s]"
 msgstr "Salvar símbolo em [%s]"
@@ -10418,119 +10433,119 @@ msgstr "\""
 msgid " mm"
 msgstr "mm"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Copper   "
 msgstr "Cobre"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Inner L1 "
 msgstr "Interno 1"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Inner L2 "
 msgstr "Interno 2"
 
-#: common/common.cpp:449
+#: common/common.cpp:478
 msgid "Inner L3 "
 msgstr "Interno 3"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L4 "
 msgstr "Interno 4"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L5 "
 msgstr "Interno 5"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L6 "
 msgstr "Interno 6"
 
-#: common/common.cpp:450
+#: common/common.cpp:479
 msgid "Inner L7 "
 msgstr "Interno 7"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L8 "
 msgstr "Interno 8"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L9 "
 msgstr "Interno 9"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L10"
 msgstr "Interno 10"
 
-#: common/common.cpp:451
+#: common/common.cpp:480
 msgid "Inner L11"
 msgstr "Interno 11"
 
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Inner L12"
 msgstr "Interno 12"
 
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Inner L13"
 msgstr "Interno 13"
 
-#: common/common.cpp:452
+#: common/common.cpp:481
 msgid "Inner L14"
 msgstr "Interno 14"
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "Adhes Cop"
 msgstr "Adesivo Cobreado"
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "Adhes Cmp"
 msgstr "Adesivo Componentes"
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "SoldP Cop"
 msgstr "Másc Pasta Solda Cobreado"
 
-#: common/common.cpp:453
+#: common/common.cpp:482
 msgid "SoldP Cmp"
 msgstr "Másc. Pasta Solda Comp."
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "SilkS Cop"
 msgstr "SilkScreen Cobreado"
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "SilkS Cmp"
 msgstr "SilkScreen  Comp."
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "Mask Cop "
 msgstr "Másc.Cobre"
 
-#: common/common.cpp:454
+#: common/common.cpp:483
 msgid "Mask Cmp "
 msgstr "Máscara Componentes"
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Drawings "
 msgstr "Desenhos"
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Comments "
 msgstr "Comentários"
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:455
+#: common/common.cpp:484
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:456
+#: common/common.cpp:485
 msgid "Edges Pcb"
 msgstr "Contorno Pcb"
 
-#: common/common.cpp:456
+#: common/common.cpp:485
 msgid "BAD INDEX"
 msgstr "ÍNDICE INVÁLIDO"
 
@@ -10751,23 +10766,23 @@ msgstr "Seleção da localização do arquivo de teclas de atalhos (diretório princi
 msgid "Colors"
 msgstr "Cores"
 
-#: common/zoom.cpp:203
+#: common/zoom.cpp:209
 msgid "Center"
 msgstr "Centrar"
 
-#: common/zoom.cpp:211
+#: common/zoom.cpp:217
 msgid "Zoom select"
 msgstr "Selecionar Zoom"
 
-#: common/zoom.cpp:231
+#: common/zoom.cpp:237
 msgid "Zoom: "
 msgstr "Zoom: "
 
-#: common/zoom.cpp:242
+#: common/zoom.cpp:248
 msgid "Grid Select"
 msgstr "Selecionar grade"
 
-#: common/zoom.cpp:262
+#: common/zoom.cpp:268
 msgid "Grid: "
 msgstr "Grade:"
 
@@ -10778,10 +10793,6 @@ msgstr "Ok para deletar bloco?"
 #: gerbview/dcode.cpp:469
 msgid "List D codes"
 msgstr "Lista D CODES"
-
-#: gerbview/edit.cpp:244
-msgid "No layer selected"
-msgstr "Nenhuma camada selecionada"
 
 #: gerbview/export_to_pcbnew.cpp:44
 msgid "None of the Gerber layers contain any data"
@@ -11420,7 +11431,7 @@ msgstr "Anotação do EESchema"
 msgid "Graphic text properties:"
 msgstr "Propriedades de texto gráfico"
 
-#: eeschema/dialog_build_BOM.h:61
+#: eeschema/dialog_build_BOM_base.h:69
 msgid "List of Material"
 msgstr "Lista de Material"
 
