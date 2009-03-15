@@ -87,7 +87,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     bool        switchedLocale = false;
 
     /* Calcul des echelles de conversion */
-    float conv_unit = 0.0001; /* unites = INCHES */
+    double conv_unit = 0.0001; /* unites = INCHES */
 
 //	if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
 
@@ -180,7 +180,6 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     msg.Empty(); msg << moduleCount;
     Affiche_1_Parametre( this, 65, _( "Module count" ), msg, RED );
 
-
     /* Etablissement de la liste des modules par ordre alphabetique */
     Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );
 
@@ -248,9 +247,9 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
         char* text = line + strlen( line );
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
-                 (float) module_pos.x * conv_unit,
-                 (float) module_pos.y * conv_unit,
-                 (float) Liste[ii].m_Module->m_Orient / 10 );
+                 module_pos.x * conv_unit,
+                 module_pos.y * conv_unit,
+                 double(Liste[ii].m_Module->m_Orient) / 10 );
 
         int layer = Liste[ii].m_Module->GetLayer();
 
@@ -307,7 +306,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 /* Print a module report.
  */
 {
-    float    conv_unit;
+    double   conv_unit;
     MODULE*  Module;
     D_PAD*   pad;
     char     line[1024], Buff[80];
@@ -353,13 +352,13 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     fputs( "\n$BOARD\n", rptfile );
     fputs( "unit INCH\n", rptfile );
     sprintf( line, "upper_left_corner %9.6f %9.6f\n",
-             (float) GetBoard()->m_BoundaryBox.GetX() * conv_unit,
-             (float) GetBoard()->m_BoundaryBox.GetY() * conv_unit );
+             GetBoard()->m_BoundaryBox.GetX() * conv_unit,
+             GetBoard()->m_BoundaryBox.GetY() * conv_unit );
     fputs( line, rptfile );
 
     sprintf( line, "lower_right_corner %9.6f %9.6f\n",
-             (float) ( GetBoard()->m_BoundaryBox.GetRight() ) * conv_unit,
-             (float) ( GetBoard()->m_BoundaryBox.GetBottom() ) * conv_unit );
+             GetBoard()->m_BoundaryBox.GetRight() * conv_unit,
+             GetBoard()->m_BoundaryBox.GetBottom() * conv_unit );
     fputs( line, rptfile );
 
     fputs( "$EndBOARD\n\n", rptfile );
@@ -390,12 +389,13 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         module_pos    = Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
         module_pos.y -= File_Place_Offset.y;
+
         sprintf( line, "position %9.6f %9.6f\n",
-                 (float) module_pos.x * conv_unit,
-                 (float) module_pos.y * conv_unit );
+                 module_pos.x * conv_unit,
+                 module_pos.y * conv_unit );
         fputs( line, rptfile );
 
-        sprintf( line, "orientation  %.2f\n", (float) Module->m_Orient / 10 );
+        sprintf( line, "orientation  %.2f\n", (double) Module->m_Orient / 10 );
         if( Module->GetLayer() == CMP_N )
             strcat( line, "layer component\n" );
         else if( Module->GetLayer() == COPPER_LAYER_N )
@@ -410,22 +410,22 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         {
             fprintf( rptfile, "$PAD \"%.4s\"\n", pad->m_Padname );
             sprintf( line, "position %9.6f %9.6f\n",
-                     (float) pad->m_Pos0.x * conv_unit,
-                     (float) pad->m_Pos0.y * conv_unit );
+                     pad->m_Pos0.x * conv_unit,
+                     pad->m_Pos0.y * conv_unit );
             fputs( line, rptfile );
 
             sprintf( line, "size %9.6f %9.6f\n",
-                     (float) pad->m_Size.x * conv_unit,
-                     (float) pad->m_Size.y * conv_unit );
+                     pad->m_Size.x * conv_unit,
+                     pad->m_Size.y * conv_unit );
             fputs( line, rptfile );
-            sprintf( line, "drill %9.6f\n", (float) pad->m_Drill.x * conv_unit );
+            sprintf( line, "drill %9.6f\n", pad->m_Drill.x * conv_unit );
             fputs( line, rptfile );
             sprintf( line, "shape_offset %9.6f %9.6f\n",
-                     (float) pad->m_Offset.x * conv_unit,
-                     (float) pad->m_Offset.y * conv_unit );
+                     pad->m_Offset.x * conv_unit,
+                     pad->m_Offset.y * conv_unit );
             fputs( line, rptfile );
 
-            sprintf( line, "orientation  %.2f\n", (float) (pad->m_Orient - Module->m_Orient) / 10 );
+            sprintf( line, "orientation  %.2f\n", double(pad->m_Orient - Module->m_Orient) / 10 );
             fputs( line, rptfile );
             const char* shape_name[6] =
                 { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
