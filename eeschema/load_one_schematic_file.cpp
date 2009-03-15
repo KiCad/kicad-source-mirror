@@ -81,7 +81,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
     MsgDiag = _( "Loading " ) + screen->m_FileName;
     PrintMsg( MsgDiag );
 
-    if( fgets( Line, 1024 - 1, f ) == NULL
+    if( fgets( Line, sizeof(Line), f ) == NULL
         || strncmp( Line + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 )
         != 0 )
     {
@@ -113,12 +113,21 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
 #endif
 
     LineCount++;
-    if( fgets( Line, 1024 - 1, f ) == NULL || strncmp( Line, "LIBS:", 5 ) != 0 )
+    if( fgets( Line, sizeof(Line), f ) == NULL || strncmp( Line, "LIBS:", 5 ) != 0 )
     {
         MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
         fclose( f );
         return FALSE;
+    }
+
+    // Read the rest of a potentially very long line.  fgets() puts a '\n' into
+    // the buffer if the end of line was reached.  Read until end of line if necessary.
+    if( Line[ strlen( Line )-1 ] != '\n' )
+    {
+        int c;
+        while( !feof( f ) && (c = fgetc( f )) != '\n' )
+            ;
     }
 
     LoadLayers( f, &LineCount );
@@ -407,20 +416,21 @@ static void LoadLayers( FILE* f, int* linecnt )
 /* Load the Layer Struct from a file
  */
 {
-    int  cnt = 0, Number;
+    int  Number;
     char Line[1024];
 
-//int Mode,Color,Layer;
+    //int Mode,Color,Layer;
     char Name[256];
 
-    GetLine( f, Line, NULL, sizeof(Line) );       /* read line */
-    (*linecnt)++;
+    GetLine( f, Line, linecnt, sizeof(Line) );       /* read line */
+
     sscanf( Line, "%s %d %d", Name, &Number, &g_LayerDescr.CurrentLayer );
     if( strcmp( Name, "EELAYER" ) !=0 )
     {
         /* error : init par defaut */
         Number = MAX_LAYER;
     }
+
     if( Number <= 0 )
         Number = MAX_LAYER;
     if( Number > MAX_LAYER )
@@ -428,11 +438,9 @@ static void LoadLayers( FILE* f, int* linecnt )
 
     g_LayerDescr.NumberOfLayers = Number;
 
-    while( GetLine( f, Line, NULL, sizeof(Line) ) )
+    while( GetLine( f, Line, linecnt, sizeof(Line) ) )
     {
-        (*linecnt)++;
         if( strnicmp( Line, "EELAYER END", 11 ) == 0 )
             break;
-        cnt++;
     }
 }
