@@ -78,7 +78,7 @@ DIALOG_BUILD_BOM::DIALOG_BUILD_BOM( WinEDA_DrawFrame* parent ):
     DIALOG_BUILD_BOM_BASE(parent)
 {
     m_Config = wxGetApp().m_EDA_Config;
-    wxASSERT( config != NULL );
+    wxASSERT( m_Config != NULL );
 
     m_Parent = parent;
     
