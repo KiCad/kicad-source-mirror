@@ -122,7 +122,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
     msg.Printf( wxT( " %d" ), m_Pcb->m_Equipots.GetCount() );
     Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
-
+    
     reattribution_reference_piste( display_status_pcb );
 
     /* Compute the full ratsnest
@@ -446,6 +446,11 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     m_Pcb->m_NbNoconnect = 0;
     m_Pcb->m_NbLinks = 0;
 
+    if( m_Pcb->m_Ratsnest )
+        MyFree( m_Pcb->m_Ratsnest );
+    m_Pcb->m_Ratsnest = NULL;
+
+
     if( m_Pcb->m_Pads.size() == 0 )
         return;
 
@@ -464,13 +469,9 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
     /* Allocate memory for buffer ratsnest: there are nb_nodes - 1 ratsnest
      *  maximum ( 1 node = 1 active pad ).
-     * Meory is allocated for nb_nodes ratsnests... (+ a bit more, just in case)
+     * Memory is allocated for nb_nodes ratsnests... (+ a bit more, just in case)
      *  The real ratsnests count nb_links < nb_nodes
      */
-    if( m_Pcb->m_Ratsnest )
-        MyFree( m_Pcb->m_Ratsnest );
-    m_Pcb->m_Ratsnest = NULL;
-
     if( m_Pcb->m_NbNodes == 0 )
         return; /* pas de connexions utiles */
 

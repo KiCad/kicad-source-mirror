@@ -110,6 +110,8 @@ double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (an
  */
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 {
+    bool have_poly_to_substract = false;
+
     // Set the number of segments in arc approximations
     if( m_ArcToSegmentsCount == 32  )
         s_CircleToSegmentsCount = 32;
@@ -149,6 +151,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CopyPolygonsFromBoolengineToFilledPolysList( booleng );
     delete booleng;
 
+    if ( m_FilledPolysList.size() == 0 )
+        return;
+
     /* Second, Add the main (corrected) polygon (i.e. the filled area using only one outline)
      * in GroupA in Bool_Engine to do a BOOL_A_SUB_B operation
      * All areas to remove will be put in GroupB in Bool_Engine
@@ -178,6 +183,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * First : Add pads. Note: pads having the same net as zone are left in zone.
      * Thermal shapes will be created later if necessary
      */
+    have_poly_to_substract = false;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
@@ -189,7 +195,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
+                {
                     AddPadWithClearancePolygon( booleng, *pad, clearance );
+                    have_poly_to_substract = true;
+                }
                 continue;
             }
 
@@ -197,7 +206,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
+                {
                     AddPadWithClearancePolygon( booleng, *pad, clearance );
+                    have_poly_to_substract = true;
+                }
+
             }
         }
     }
@@ -214,8 +227,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             continue;
         item_boundingbox = track->GetBoundingBox();
         if( item_boundingbox.Intersects( zone_boundingbox ) )
+        {
             AddTrackWithClearancePolygon( booleng, *track, clearance );
-    }
+            have_poly_to_substract = true;
+        }
+     }
 
     // Draw graphic items (copper texts) and board edges
     // zone clearance is used here regardless of the g_DesignSettings.m_TrackClearence value
@@ -234,6 +250,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 AddRingPolygon( booleng, ( (DRAWSEGMENT*) item )->m_Start,  // Circle centre
                                ( (DRAWSEGMENT*) item )->m_End, 3600,
                                ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
+                have_poly_to_substract = true;
                 break;
 
             case S_ARC:
@@ -241,6 +258,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                                 ( (DRAWSEGMENT*) item )->m_End,
                                 ( (DRAWSEGMENT*) item )->m_Angle,
                                ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
+                have_poly_to_substract = true;
                 break;
 
             default:
@@ -250,6 +268,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                                              ( (DRAWSEGMENT*) item )->m_End,
                                              ( (DRAWSEGMENT*) item )->m_Width +
                                              (2 * m_ZoneClearance) );
+                have_poly_to_substract = true;
                 break;
             }
 
@@ -259,6 +278,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             if( ( (TEXTE_PCB*) item )->GetLength() == 0 )
                 break;
             AddTextBoxWithClearancePolygon( booleng, (TEXTE_PCB*) item, m_ZoneClearance );
+            have_poly_to_substract = true;
             break;
 
         default:
@@ -267,23 +287,32 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 /* calculates copper areas */
-    booleng->Do_Operation( BOOL_A_SUB_B );
+    if ( have_poly_to_substract )
+    {
+        booleng->Do_Operation( BOOL_A_SUB_B );
 
-/* put these areas in m_FilledPolysList */
-    m_FilledPolysList.clear();
-    CopyPolygonsFromBoolengineToFilledPolysList( booleng );
+        /* put these areas in m_FilledPolysList */
+        m_FilledPolysList.clear();
+        CopyPolygonsFromBoolengineToFilledPolysList( booleng );
+    }
     delete booleng;
 
 // Remove insulated islands:
     if( GetNet() > 0 )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 
+    // remove thermal gaps if required:
+    if( m_PadOption != THERMAL_PAD || aPcb->m_Modules == NULL )
+        return;
+
 // Remove thermal symbols
+    have_poly_to_substract = false;
+
     if( m_PadOption == THERMAL_PAD )
     {
         booleng = new Bool_Engine();
         ArmBoolEng( booleng, true );
-        bool have_poly_to_substract = false;
+        have_poly_to_substract = false;
 
         for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
         {
@@ -320,14 +349,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             CopyPolygonsFromBoolengineToFilledPolysList( booleng );
         }
         delete booleng;
+
+        // Remove insulated islands:
+        if( GetNet() > 0 )
+            Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+
     }
-
-// Remove insulated islands:
-    if( GetNet() > 0 )
-        Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
-
-    if( m_PadOption != THERMAL_PAD )
-        return;
 
 // Now we remove all unused thermal stubs.
 //define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
@@ -348,6 +375,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 /*
  * Test and add polygons to remove thermal stubs.
  */
+    have_poly_to_substract = false;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
@@ -446,6 +474,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                             RotatePoint( &cpos, fAngle );                           // Rotate according to module orientation
                             cpos += pad->ReturnShapePos();                          // Shift origin to position
                             booleng->AddPoint( cpos.x, cpos.y );
+                            have_poly_to_substract = true;
                         }
 
                         booleng->EndPolygonAdd();
@@ -456,16 +485,19 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 /* compute copper areas */
-    booleng->Do_Operation( BOOL_A_SUB_B );
+    if ( have_poly_to_substract )
+    {
+        booleng->Do_Operation( BOOL_A_SUB_B );
 
-/* put these areas in m_FilledPolysList */
-    m_FilledPolysList.clear();
-    CopyPolygonsFromBoolengineToFilledPolysList( booleng );
+    /* put these areas in m_FilledPolysList */
+        m_FilledPolysList.clear();
+        CopyPolygonsFromBoolengineToFilledPolysList( booleng );
+    // Remove insulated islands, if any:
+        if( GetNet() > 0 )
+            Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+    }
+
     delete booleng;
-
-// Remove insulated islands, if any:
-    if( GetNet() > 0 )
-        Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 //#endif
 }
 
@@ -569,7 +601,12 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             break;
         }
 
-    case PAD_RECT:                                                                  // Easy implementation for rectangular cutouts with rounded corners
+    case PAD_TRAPEZOID:
+    default:        /* @todo: the others shapes must be calculated: see trapezoidal shape
+                    * but before this is made, the rect shape is used insteed.
+                    * A polygon *must* be created because we have started a polygon in kbool engine
+                    */
+    case PAD_RECT:          // Easy implementation for rectangular cutouts with rounded corners                                                                  // Easy implementation for rectangular cutouts with rounded corners
         angle = aPad.m_Orient;
         int rounding_radius = (int) ( aClearanceValue * s_Correction );             // Corner rounding radius
         int angle_pg;                                                               // Polygon increment angle

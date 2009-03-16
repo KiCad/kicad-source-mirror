@@ -34,10 +34,13 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 /***********************************************************************/
 {
     int        track_mask;
-    bool       redraw = FALSE;
+    bool       redraw = false;
+    bool       gen_rastnest = false;
     wxClientDC dc( m_Parent->DrawPanel );
 
     m_Parent->DrawPanel->PrepareGraphicContext( &dc );
+
+    m_Parent->SetCurItem( NULL );
 
     if( m_DelAlls->GetValue() )
     {
@@ -49,6 +52,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
         if( m_DelZones->GetValue() )
         {
             m_Parent->Erase_Zones( TRUE );
+            gen_rastnest = true;
             redraw = TRUE;
         }
 
@@ -73,12 +77,12 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
         if( m_DelModules->GetValue() )
         {
             m_Parent->Erase_Modules( TRUE );
+            gen_rastnest = true;
             redraw = TRUE;
         }
-
+        
         if( m_DelTracks->GetValue() )
         {
-            {
                 track_mask = 0;
                 if( !m_TrackFilterLocked->GetValue() )
                     track_mask |= SEGM_FIXE;
@@ -87,7 +91,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 
                 m_Parent->Erase_Pistes( &dc, track_mask, TRUE );
                 redraw = TRUE;
-            }
+                gen_rastnest = true;
         }
 
         if( m_DelMarkers->GetValue() )
@@ -95,11 +99,14 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
             m_Parent->Erase_Marqueurs();
             redraw = TRUE;
         }
+
+        if ( gen_rastnest )
+            m_Parent->Compile_Ratsnest( &dc, true );
+
     }
 
     if( redraw )
     {
-        m_Parent->SetCurItem( NULL );
         m_Parent->DrawPanel->Refresh();
     }
 
@@ -278,6 +285,7 @@ void WinEDA_PcbFrame::Erase_Modules( bool query )
     GetBoard()->m_NbNodes     = 0;
     GetBoard()->m_NbLinks     = 0;
     GetBoard()->m_NbNoconnect = 0;
+    m_Pcb->m_Pads.clear();          // empty the pad list pointers
 
     GetScreen()->SetModify();
 }

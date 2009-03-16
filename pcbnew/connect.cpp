@@ -69,14 +69,14 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
         {
             pt_pad = (D_PAD*) (pt_conn->start);
             if( pt_pad->GetSubNet() == old_val )
-                pt_pad->SetSubNet(pt_conn->GetSubNet());
+                pt_pad->SetSubNet( pt_conn->GetSubNet() );
         }
 
         if( pt_conn->end && (pt_conn->end->Type() == TYPE_PAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->end);
             if( pt_pad->GetSubNet() == old_val )
-                pt_pad->SetSubNet(pt_conn->GetSubNet());
+                pt_pad->SetSubNet( pt_conn->GetSubNet() );
         }
         if( pt_conn == pt_end_conn )
             break;
@@ -115,11 +115,11 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         pt_conn->SetSubNet( 0 );
         PtStruct = pt_conn->start;
         if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
-            ( (D_PAD*) PtStruct )->SetSubNet( 0);
+            ( (D_PAD*) PtStruct )->SetSubNet( 0 );
 
         PtStruct = pt_conn->end;
         if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
-            ( (D_PAD*) PtStruct )->SetSubNet( 0);
+            ( (D_PAD*) PtStruct )->SetSubNet( 0 );
 
         if( pt_conn == pt_end_conn )
             break;
@@ -141,17 +141,17 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
             pt_pad = (D_PAD*) PtStruct;
             if( pt_conn->GetSubNet() )                  /* the track segment is already a cluster member */
             {
-                if( pt_pad->GetSubNet() > 0 )  /* The pad is already a cluster member, so we can merge the 2 clusters */
+                if( pt_pad->GetSubNet() > 0 )           /* The pad is already a cluster member, so we can merge the 2 clusters */
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                   pt_pad->GetSubNet(), pt_conn->GetSubNet() );
+                                      pt_pad->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else  /* The pad is not yet attached to a cluster , so we can add this pad to the cluster */
                     pt_pad->SetSubNet( pt_conn->GetSubNet() );
             }
             else                                        /* the track segment is not attached to a cluster */
             {
-                if( pt_pad->GetSubNet() > 0 )  /* it is connected to a pad in a cluster, merge this track */
+                if( pt_pad->GetSubNet() > 0 )           /* it is connected to a pad in a cluster, merge this track */
                 {
                     pt_conn->SetSubNet( pt_pad->GetSubNet() );
                 }
@@ -174,7 +174,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
                 if( pt_pad->GetSubNet() > 0 )
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                   pt_pad->GetSubNet(), pt_conn->GetSubNet() );
+                                      pt_pad->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
                     pt_pad->SetSubNet( pt_conn->GetSubNet() );
@@ -207,7 +207,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
                 if( pt_autre_piste->GetSubNet() )   /* The other track is already a cluster member, so we can merge the 2 clusters */
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                   pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
+                                      pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else /* The other track is not yet attached to a cluster , so we can add this other track to the cluster */
                 {
@@ -239,7 +239,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
                 if( pt_autre_piste->GetSubNet() )
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                   pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
+                                      pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
                     pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
@@ -291,7 +291,7 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
     for( TRACK* track = m_Pcb->m_Track;  track;  )
     {
         // this is the current net because pt_start_conn is the first segment of the net
-        int current_net_code = track->GetNet();
+        int    current_net_code = track->GetNet();
 
         // this is the last segment of the current net
         TRACK* pt_end_conn = track->GetEndNetCode( current_net_code );
@@ -317,7 +317,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
  * @param net_code = net code to test
  */
 {
-    wxString   msg;
+    wxString msg;
 
     if( net_code == 0 )
         return;
@@ -325,11 +325,11 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
     if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
         Compile_Ratsnest( DC, TRUE );
 
-    for( unsigned i=0;  i<m_Pcb->m_Pads.size();  ++i )
+    for( unsigned i = 0;  i<m_Pcb->m_Pads.size();  ++i )
     {
         D_PAD* pad = m_Pcb->m_Pads[i];
 
-        int pad_net_code = pad->GetNet();
+        int    pad_net_code = pad->GetNet();
 
         if( pad_net_code < net_code )
             continue;
@@ -345,8 +345,8 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
     /* Search for the first and the last segment relative to the given net code */
     if( m_Pcb->m_Track )
     {
-        TRACK*  pt_start_conn;
-        TRACK*  pt_end_conn = NULL;
+        TRACK* pt_start_conn;
+        TRACK* pt_end_conn = NULL;
         pt_start_conn = m_Pcb->m_Track.GetFirst()->GetStartNetCode( net_code );
 
         if( pt_start_conn )
@@ -475,7 +475,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
 
     int        nb_pad  = aPcb->m_Pads.size();
     LISTE_PAD* ptr_pad = pt_liste;
-    LISTE_PAD* lim     = pt_liste + nb_pad - 1;
+    LISTE_PAD* lim = pt_liste + nb_pad - 1;
 
     ptr_pad = pt_liste;
     while( nb_pad )
@@ -539,7 +539,6 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
 }
 
 
-
 /**
  * Function SortPadsByXCoord
  * is used to Sort a pad list by x coordinate value.
@@ -551,7 +550,6 @@ static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 
     return ref->m_Pos.x - comp->m_Pos.x;
 }
-
 
 
 /*****************************************************************************/
@@ -575,17 +573,29 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
  * We search a connection between a track segment and a pad: if found : this segment  netcode is set to the pad netcode
  */
 {
-    TRACK*          pt_piste;
-    TRACK*          pt_next;
-    int             a_color;
-    char            new_passe_request = 1, flag;
-    std::vector<D_PAD*> sortedPads;
-    BOARD_ITEM*     PtStruct;
-    int             masque_layer;
-    wxString        msg;
+    TRACK*              pt_piste;
+    TRACK*              pt_next;
+    int                 a_color;
+    char                new_passe_request = 1, flag;
 
-    if( m_Pcb->m_Pads.size() == 0 )
+    std::vector<D_PAD*> sortedPads;
+    BOARD_ITEM*         PtStruct;
+    int                 masque_layer;
+    wxString            msg;
+
+    if( m_Pcb->m_Pads.size() == 0 )     // If no pad, reset pointers and netcode, and do nothing else
+    {
+        pt_piste = m_Pcb->m_Track;
+        for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+        {
+            pt_piste->start = NULL;
+            pt_piste->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+            pt_piste->SetNet( 0 );
+            pt_piste->end = NULL;
+        }
+
         return;
+    }
 
     a_color = CYAN;
 
@@ -795,10 +805,10 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
  */
 static int Sort_By_NetCode( const void* left, const void* right )
 {
-    TRACK* pt_ref = *(TRACK**) left;
+    TRACK* pt_ref     = *(TRACK**) left;
     TRACK* pt_compare = *(TRACK**) right;
 
-    int ret = pt_ref->GetNet() - pt_compare->GetNet();
+    int    ret = pt_ref->GetNet() - pt_compare->GetNet();
 
     return ret;
 }
@@ -815,11 +825,11 @@ static void RebuildTrackChain( BOARD* pcb )
     if( pcb->m_Track == NULL )
         return;
 
-    int nbsegm = pcb->m_Track.GetCount();
+    int     nbsegm = pcb->m_Track.GetCount();
 
     TRACK** array = (TRACK**) MyZMalloc( nbsegm * sizeof(TRACK*) );
 
-    for( int i=0;  i<nbsegm;  ++i )
+    for( int i = 0;  i<nbsegm;  ++i )
     {
         array[i] = pcb->m_Track.PopFront();
         wxASSERT( array[i] );
@@ -831,7 +841,7 @@ static void RebuildTrackChain( BOARD* pcb )
     qsort( array, nbsegm, sizeof(TRACK*), Sort_By_NetCode );
 
     // add them back to the list
-    for( int i=0;  i<nbsegm;  ++i )
+    for( int i = 0;  i<nbsegm;  ++i )
     {
         pcb->m_Track.PushBack( array[i] );
     }

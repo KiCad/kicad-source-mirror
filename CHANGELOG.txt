@@ -5,6 +5,20 @@ Started 2007-June-11
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2009-mar-16 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew:
+    Fixed:
+        bug that crashes pcbnew when removing all footprints
+        (in connection calculations, pointers to pads not reset)
+
+        bug that crashes pcbnew when filling a zone
+            if a module has a trapezoidal pad
+            (trapezoidal pads are not yet implemented in zone filling,
+            they are now calculated as rect shape (todo: a better handling) )
+
+
 2009-mar-12 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++eeschema:
@@ -51,7 +65,7 @@ email address.
         so delete track (or edit track width) deletes the track and some others segments (last created)
     bug fix 2660689 Unconnected pads in RC4. Also fixed some no deletion of the old track when creating a new track
 
-    
+
 2009-Feb-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++EESchema
