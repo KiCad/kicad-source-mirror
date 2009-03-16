@@ -202,7 +202,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            if( (m_PadOption == PAD_NOT_IN_ZONE) || (GetNet() == 0) )
+            if( (m_PadOption == PAD_NOT_IN_ZONE) || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -698,8 +698,12 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
  * angles less than 90 deg between 2 consecutive lines
  * this is made in round and oblong thermal reliefs
  *
- * Note: polygons are drawm using outlines witk a thickness = aMinThicknessValue
+ * Note 1: polygons are drawm using outlines witk a thickness = aMinThicknessValue
  * so shapes must keep in account this outline thickness
+ *
+ * Note 2:
+ *      Trapezoidal pads are not considered here because they are very special case
+ *      and are used in microwave applications and they do not have a therma relief that change the shape
  */
 void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
                                     D_PAD& aPad,
