@@ -432,7 +432,7 @@ void trace_1_pastille_OVALE_HPGL( wxPoint pos, wxSize size, int aOrient, int mod
 
     if( modetrace == FILLED )
     {
-        PlotRectangularPad_HPGL( pos, wxSize( size.x, deltaxy ),
+        PlotRectangularPad_HPGL( pos, wxSize( size.x, deltaxy+pen_diam ),
                                  aOrient, modetrace );
         cx = 0; cy = deltaxy / 2;
         RotatePoint( &cx, &cy, aOrient );

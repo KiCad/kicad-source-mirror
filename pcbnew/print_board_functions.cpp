@@ -51,18 +51,13 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
 
     m_PrintIsMirrored = aPrintMirrorMode;
     
-    if( ( g_DrawBgColor == BLACK ) && (GetGRForceBlackPenState( ) == false) )
-    {   // One can use the OR mode in this case, and we draw a black background to draw board in OR mode, like on screen
-        // But because black background are very expensive to draw, we draw in black only the minimun area.
+    // The OR mode is used in color mode, but be aware the backgroud *must be BLACK.
+    // In print page dialog, we first plrint in BLACK, and after reprint in color,
+    // on the black "local" backgroud, in OR mode
+    // the black print is not made before, only a white page is printed
+    if( GetGRForceBlackPenState( ) == false )
         drawmode = GR_OR;
 
-        EDA_Rect rect = frame->GetBoard()->m_BoundaryBox;
-        rect.Inflate( 2000, 2000 );  // Margin in 1/10000 inch around the board to draw the black background.
-        GRSetDrawMode( aDC, GR_COPY );
-        // draw in black the minimum page area:
-        GRFilledRect( &m_ClipBox, aDC, rect.GetX(), rect.GetY(),
-            rect.GetEnd().x, rect.GetEnd().y, g_DrawBgColor, g_DrawBgColor );
-    }
 
     /* Print the pcb graphic items (texts, ...) */
     GRSetDrawMode( aDC, drawmode );

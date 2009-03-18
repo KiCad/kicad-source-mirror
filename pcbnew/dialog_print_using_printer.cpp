@@ -564,7 +564,7 @@ bool EDA_Printout::OnBeginDocument( int startPage, int endPage )
 /*************************************************************/
 {
     if( !wxPrintout::OnBeginDocument( startPage, endPage ) )
-        return FALSE;
+        return false;
 
     return TRUE;
 }
@@ -699,11 +699,6 @@ void EDA_Printout::DrawPage()
     g_IsPrinting = TRUE;
     int bg_color = g_DrawBgColor;
 
-    // background color can left BLACK only when drawing the full board at once, in color mode
-    // Switch it to WHITE in others cases
-    if( s_Print_Black_and_White || ( !m_PrintFrame->PrintUsingSinglePage() ) )
-        g_DrawBgColor = WHITE;
-
     if( m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
 
@@ -748,14 +743,29 @@ void EDA_Printout::DrawPage()
         s_PrintMaskLayer |= EDGE_LAYER;
 #endif
 
-    panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
+    g_DrawBgColor = WHITE;
+
+    /* when printing in color mode, we use the graphic OR mode that gives the same look as the screen
+    * But because the backgroud is white when printing, we must use a trick:
+    * In order to plot on a white background in OR mode we must:
+    * 1 - Plot all items in black, this creates a local black backgroud
+    * 2 - Plot in OR mode on black "local" background
+    */
+    if( ! s_Print_Black_and_White )
+    {
+        GRForceBlackPen( true );
+        panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
+        GRForceBlackPen( false );
+    }
+
+     panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
 
     g_DrawBgColor    = bg_color;
-    g_IsPrinting     = FALSE;
+    g_IsPrinting     = false;
     panel->m_ClipBox = tmp;
 
     SetPenMinWidth( 1 );
-    GRForceBlackPen( FALSE );
+    GRForceBlackPen( false );
 
     ActiveScreen->m_StartVisu = tmp_startvisu;
     ActiveScreen->m_DrawOrg   = old_org;
