@@ -70,7 +70,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
         return;
     }
 
-    SetLocaleTo_C_standard( );
+    SetLocaleTo_C_standard();
 
     Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
 
@@ -101,7 +101,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     BoardCenter.y = (int) (BoardCenter.y * scale_y);
 
     if( g_PlotScaleOpt != 1 )
-        Center = TRUE;                          // Echelle != 1
+        Center = TRUE; // Echelle != 1
 
     /* Calcul du cadrage */
     marge = (int) (marge * SCALE_HPGL);
@@ -186,7 +186,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
 
     /* fin */
     CloseFileHPGL( dest );
-    SetLocaleTo_Default( );
+    SetLocaleTo_Default();
 }
 
 
@@ -346,78 +346,86 @@ void WinEDA_BasePcbFrame::Plot_Layer_HPGL( FILE* File, int masque_layer,
         if( pts->Type() == TYPE_VIA )
             continue;
 
-        if( (g_TabOneLayerMask[pts->GetLayer()] & masque_layer) == 0 )
-            continue;
-
-        size.x = size.y = pts->m_Width;
-        start  = pts->m_Start;
-        end    = pts->m_End;
-
-        if( size.x > pen_diam ) /* c.a.d si largeur piste > diam plume */
-            trace_1_pastille_RONDE_HPGL( start, size.x, modetrace );
-
-        /* Trace d'un segment de piste */
-        trace_1_segment_HPGL( start.x, start.y, end.x, end.y, size.x );
-        /* Complement de Trace en mode Remplissage */
-        if( (g_Plot_Mode == FILLED) && (pen_diam <= size.x ) )
-        {
-            while( ( size.x -= (int) ( (pen_rayon - pen_recouvrement) * 2 ) ) > 0 )
-            {
-                trace_1_segment_HPGL( start.x, start.y, end.x, end.y,
-                                     MAX( size.x, pen_diam ) );
-            }
-        }
-
-        if( size.x > pen_diam )
-            trace_1_pastille_RONDE_HPGL( end, size.x, modetrace );
+        if( (g_TabOneLayerMask[pts->GetLayer()] & masque_layer) )
+            Plot_Filled_Segment_HPGL( pts->m_Start, pts->m_End, pts->m_Width, (GRFillMode)g_Plot_Mode );
     }
 
     /* trace des segments pistes et zones */
     for( pts = m_Pcb->m_Zone; pts != NULL; pts = pts->Next() )
     {
-        if( g_TabOneLayerMask[pts->GetLayer()] & masque_layer )
-        {
-            size.x = size.y = pts->m_Width;
-            start  = pts->m_Start;
-            end    = pts->m_End;
+        if( (g_TabOneLayerMask[pts->GetLayer()] & masque_layer) )
+            Plot_Filled_Segment_HPGL( pts->m_Start, pts->m_End, pts->m_Width, (GRFillMode)g_Plot_Mode );
+    }
 
-            if( size.x > pen_diam ) /* c.a.d si largeur piste > diam plume */
-                trace_1_pastille_RONDE_HPGL( start, size.x, modetrace );
-
-            /* Trace d'un segment de piste */
-            trace_1_segment_HPGL( start.x, start.y, end.x, end.y, size.x );
-            /* Complement de Trace en mode Remplissage */
-            if( (g_Plot_Mode == FILLED) && (pen_diam <= size.x ) )
-            {
-                while( ( size.x -= (int) ( (pen_rayon - pen_recouvrement) * 2 ) ) > 0 )
-                {
-                    trace_1_segment_HPGL( start.x, start.y, end.x, end.y,
-                                         MAX( size.x, pen_diam ) );
-                }
-            }
-
-            if( size.x > pen_diam )
-                trace_1_pastille_RONDE_HPGL( end, size.x, modetrace );
-        }
+    /* Plot filled ares */
+    for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = m_Pcb->GetArea( ii );
+        if( ( ( 1 << zone->GetLayer() ) & masque_layer ) == 0 )
+            continue;
+        PlotFilledAreas( zone, PLOT_FORMAT_HPGL );
     }
 }
 
 
+/*********************************************************************************************/
+bool Plot_Filled_Segment_HPGL( wxPoint aStart, wxPoint aEnd, int aWidth, GRFillMode aPlotMode )
+/*********************************************************************************************/
+
+/** Function Plot a filled segment (track)
+ * @param aStart = starting point
+ * @param aEnd = ending point
+ * @param aWidth = segment width (thickness)
+ * @param aPlotMode = FILLED, SKETCH ..
+ * @return true if Ok, false if aWidth > pen size (the segment is always plotted)
+ */
+{
+    wxPoint center;
+    wxSize  size;
+    int     orient;
+
+    if( (pen_diam >= aWidth) || (g_Plot_Mode == FILAIRE) )  /* just a line is Ok */
+    {
+        Move_Plume_HPGL( aStart, 'U' );
+        Move_Plume_HPGL( aEnd, 'D' );
+        Plume_HPGL( 'U' );
+        return pen_diam <= aWidth;;
+    }
+
+    // A segment is like an oval pal, so use trace_1_pastille_OVALE_HPGL to do the work.
+    center.x = (aStart.x + aEnd.x) / 2;
+    center.y = (aStart.y + aEnd.y) / 2;
+
+    size.x = aEnd.x - aStart.x;
+    size.y = aEnd.y - aStart.y;
+    if ( size.y == 0 )
+        orient = 0;
+    else if ( size.x == 0 )
+        orient = 900;
+    else orient = - (int) (atan2( (double)size.y, (double)size.x ) * 1800.0 / M_PI);
+    size.x = (int) sqrt( ((double)size.x * size.x) + ((double)size.y * size.y) ) + aWidth;   // module.
+    size.y = aWidth;
+
+    trace_1_pastille_OVALE_HPGL( center, size, orient, aPlotMode );
+
+    return pen_diam <= aWidth;
+}
+
+
 /************************************************************************************/
-void trace_1_pastille_OVALE_HPGL( wxPoint pos, wxSize size, int orient, int modetrace )
+void trace_1_pastille_OVALE_HPGL( wxPoint pos, wxSize size, int aOrient, int modetrace )
 /************************************************************************************/
 /* Trace 1 pastille PAD_OVAL en position pos_X,Y , de dim size.x, size.y */
 {
     int rayon, deltaxy, cx, cy;
-    int trace_orient = orient;
 
     /* la pastille est ramenee a une pastille ovale avec size.y > size.x
      *  ( ovale vertical en orientation 0 ) */
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y ); trace_orient += 900;
-        if( orient >= 3600 )
-            trace_orient -= 3600;
+        EXCHG( size.x, size.y ); aOrient += 900;
+        if( aOrient >= 3600 )
+            aOrient -= 3600;
     }
     deltaxy = size.y - size.x; /* = distance entre centres de l'ovale */
     rayon   = size.x / 2;
@@ -425,41 +433,41 @@ void trace_1_pastille_OVALE_HPGL( wxPoint pos, wxSize size, int orient, int mode
     if( modetrace == FILLED )
     {
         PlotRectangularPad_HPGL( pos, wxSize( size.x, deltaxy ),
-                                 orient, modetrace );
+                                 aOrient, modetrace );
         cx = 0; cy = deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         trace_1_pastille_RONDE_HPGL( wxPoint( cx + pos.x, cy + pos.y ), size.x, modetrace );
         Plume_HPGL( 'U' );
         cx = 0; cy = -deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         trace_1_pastille_RONDE_HPGL( wxPoint( cx + pos.x, cy + pos.y ), size.x, modetrace );
     }
-    else    /* Trace en mode FILAIRE */
+    else    /* Trace en mode SKETCH */
     {
         cx = -rayon; cy = -deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         Move_Plume_HPGL( wxPoint( cx + pos.x, cy + pos.y ), 'U' );
         cx = -rayon; cy = deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         Move_Plume_HPGL( wxPoint( cx + pos.x, cy + pos.y ), 'D' );
 
         cx = rayon; cy = -deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         Move_Plume_HPGL( wxPoint( cx + pos.x, cy + pos.y ), 'U' );
         cx = rayon; cy = deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         Move_Plume_HPGL( wxPoint( cx + pos.x, cy + pos.y ), 'D' );
         Plume_HPGL( 'U' );
 
-        cx = 0; cy = -deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
-        PlotArc( PLOT_FORMAT_HPGL, wxPoint( cx + pos.x, cy + pos.y ),
-                 trace_orient, trace_orient + 1800,
-                 size.x / 2, pen_diam );
         cx = 0; cy = deltaxy / 2;
-        RotatePoint( &cx, &cy, trace_orient );
+        RotatePoint( &cx, &cy, aOrient );
         PlotArc( PLOT_FORMAT_HPGL, wxPoint( cx + pos.x, cy + pos.y ),
-                 trace_orient + 1800, trace_orient,
+                 -aOrient, -aOrient - 1800,
+                 size.x / 2, pen_diam );
+        cx = 0; cy = -deltaxy / 2;
+        RotatePoint( &cx, &cy, aOrient );
+        PlotArc( PLOT_FORMAT_HPGL, wxPoint( cx + pos.x, cy + pos.y ),
+                 -aOrient - 1800, -aOrient,
                  size.x / 2, pen_diam );
     }
 
@@ -473,7 +481,7 @@ void trace_1_pastille_RONDE_HPGL( wxPoint pos, int diametre, int modetrace )
 /* Trace 1 pastille RONDE (via,pad rond) en position pos */
 {
     char cbuf[1024];
-    int rayon, delta;
+    int  rayon, delta;
 
     UserToDeviceCoordinate( pos );
 
@@ -648,8 +656,8 @@ void trace_1_pad_TRAPEZE_HPGL( wxPoint padpos, wxSize size, wxSize delta,
     wxPoint coord[4];       /* coord reelles des sommets du trapeze a tracer */
     float   fangle;         /* angle d'inclinaison des cotes du trapeze */
     int     rayon;          /* rayon de la plume */
-    int     moveX, moveY;/* variation de position plume selon axe X et Y , lors
-                     *  du remplissage du trapeze */
+    int     moveX, moveY; /* variation de position plume selon axe X et Y , lors
+                          *  du remplissage du trapeze */
 
     rayon = (int) pen_rayon; if( modetrace == FILAIRE )
         rayon = 0;
@@ -759,121 +767,5 @@ void trace_1_pad_TRAPEZE_HPGL( wxPoint padpos, wxSize size, wxSize delta,
         Move_Plume_HPGL( coord[0], 'D' );
     }
 
-    Plume_HPGL( 'U' );
-}
-
-
-/********************************************************************/
-void trace_1_segment_HPGL( int pos_X0, int pos_Y0, int pos_X1, int pos_Y1,
-                           int epaisseur )
-/********************************************************************/
-
-/* Trace 1 rectangle donne par son axe et son epaisseur (piste rectangulaire)
- *  en mode SKETCH
- */
-{
-    float  alpha;   /* angle de l'axe du rectangle */
-    wxSize size;    /* coord relatives a l'origine du segment de sa fin */
-    int    dh;      /* demi epaisseur du segment compte tenu de la
-                     *  largeur de la plume */
-    int    dx_rot;  /* coord du segment en repere modifie ( size.y_rot etant nul )*/
-    float  sin_alpha, cos_alpha;
-
-    size.x = pos_X1 - pos_X0; size.y = pos_Y1 - pos_Y0;
-    dh = (epaisseur - (int) pen_diam ) / 2;
-    if( dh < 0 )
-    {
-        dh = 0; s_Nb_Plot_Errors++;
-    }
-
-    if( (dh == 0) || (g_Plot_Mode == FILAIRE) )  /* Le trace se reduit a 1 trait */
-    {
-        Move_Plume_HPGL( wxPoint( pos_X0, pos_Y0 ), 'U' );
-        Move_Plume_HPGL( wxPoint( pos_X1, pos_Y1 ), 'D' );
-        Plume_HPGL( 'U' );
-        return;
-    }
-
-    if( size.x < 0 )
-    {
-        EXCHG( pos_X0, pos_X1 );  EXCHG( pos_Y0, pos_Y1 );
-        size.y = -size.y; size.x = -size.x;
-    }
-
-    if( size.y == 0 )  /* segment horizontal */
-    {
-        Move_Plume_HPGL( wxPoint( pos_X0, pos_Y0 - dh ), 'U' );
-        Move_Plume_HPGL( wxPoint( pos_X1, pos_Y1 - dh ), 'D' );
-        Move_Plume_HPGL( wxPoint( pos_X1, pos_Y1 + dh ), 'D' );
-        Move_Plume_HPGL( wxPoint( pos_X0, pos_Y0 + dh ), 'D' );
-        Move_Plume_HPGL( wxPoint( pos_X0, pos_Y0 - dh ), 'D' );
-    }
-    else if( size.x == 0 )  /* vertical */
-    {
-        if( size.y < 0 )
-            dh = -dh;
-        Move_Plume_HPGL( wxPoint( pos_X0 - dh, pos_Y0 ), 'U' );
-        Move_Plume_HPGL( wxPoint( pos_X1 - dh, pos_Y1 ), 'D' );
-        Move_Plume_HPGL( wxPoint( pos_X1 + dh, pos_Y1 ), 'D' );
-        Move_Plume_HPGL( wxPoint( pos_X0 + dh, pos_Y0 ), 'D' );
-        Move_Plume_HPGL( wxPoint( pos_X0 - dh, pos_Y0 ), 'D' );
-    }
-    else    /* piste inclinee */
-    {
-        /* On calcule les coord des extremites du rectangle dans le repere
-         *  a axe x confondu avec l'axe du rect. puis on revient dans le repere
-         *  de trace par 2 rotations inverses
-         *   coord :  xrot = x*cos + y*sin
-         *            yrot = y*cos - x*sin
-         *
-         *  avec ici yrot = 0 puisque le segment est horizontal dans le nouveau repere
-         *  Transformee inverse :
-         *   coord :  x = xrot*cos - yrot*sin
-         *            y = yrot*cos + xrot*sin
-         */
-
-        int dx0, dy0, dx1, dy1;
-
-        if( size.x == size.y ) /* alpah = 45 degre */
-        {
-            sin_alpha = cos_alpha = 0.70711;
-        }
-        else if( size.x == -size.y ) /* alpah = -45 degre */
-        {
-            cos_alpha = 0.70711; sin_alpha = -0.70711;
-        }
-        else
-        {
-            alpha     = atan2( (double) size.y, (double) size.x );
-            sin_alpha = sin( alpha );
-            cos_alpha = cos( alpha );
-        }
-
-        dx_rot = (int) (size.x * cos_alpha + size.y * sin_alpha);
-        /* size.y_rot = (int)(size.y * cos_alpha - size.x * sin_alpha) ; doit etre NULL */
-
-        /* calcul du point de coord 0,-dh */
-        dx0 = (int) ( dh * sin_alpha);
-        dy0 = (int) (-dh * cos_alpha );
-        Move_Plume_HPGL( wxPoint( pos_X0 + dx0, pos_Y0 + dy0 ), 'U' );
-
-        /* calcul du point de coord size.xrot,-dh */
-        dx1 = (int) (dx_rot * cos_alpha + dh * sin_alpha);
-        dy1 = (int) (-dh * cos_alpha + dx_rot * sin_alpha );
-        Move_Plume_HPGL( wxPoint( pos_X0 + dx1, pos_Y0 + dy1 ), 'D' );
-
-        /* calcul du point de coord size.xrot,+dh */
-        dx1 = (int) (dx_rot * cos_alpha - dh * sin_alpha);
-        dy1 = (int) (dh * cos_alpha + dx_rot * sin_alpha );
-        Move_Plume_HPGL( wxPoint( pos_X0 + dx1, pos_Y0 + dy1 ), 'D' );
-
-        /* calcul du point de coord 0,+dh */
-        dx1 = (int) ( -dh * sin_alpha);
-        dy1 = (int) (dh * cos_alpha );
-        Move_Plume_HPGL( wxPoint( pos_X0 + dx1, pos_Y0 + dy1 ), 'D' );
-
-        /* retour au point de depart */
-        Move_Plume_HPGL( wxPoint( pos_X0 + dx0, pos_Y0 + dy0 ), 'D' );
-    }
     Plume_HPGL( 'U' );
 }
