@@ -151,7 +151,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CopyPolygonsFromBoolengineToFilledPolysList( booleng );
     delete booleng;
 
-    if ( m_FilledPolysList.size() == 0 )
+    if( m_FilledPolysList.size() == 0 )
         return;
 
     /* Second, Add the main (corrected) polygon (i.e. the filled area using only one outline)
@@ -202,7 +202,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
-            if( (m_PadOption == PAD_NOT_IN_ZONE) || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
+            if( (m_PadOption == PAD_NOT_IN_ZONE)
+               || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
+            // PAD_TRAPEZOID shapes are *never* in zones becuase they are used in microwave apps
+            // and the shae *must not* be changed by thermal pads or others
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -210,7 +213,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                     AddPadWithClearancePolygon( booleng, *pad, clearance );
                     have_poly_to_substract = true;
                 }
-
             }
         }
     }
@@ -231,7 +233,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             AddTrackWithClearancePolygon( booleng, *track, clearance );
             have_poly_to_substract = true;
         }
-     }
+    }
 
     // Draw graphic items (copper texts) and board edges
     // zone clearance is used here regardless of the g_DesignSettings.m_TrackClearence value
@@ -255,8 +257,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
             case S_ARC:
                 AddRingPolygon( booleng, ( (DRAWSEGMENT*) item )->m_Start,  // Arc centre
-                                ( (DRAWSEGMENT*) item )->m_End,
-                                ( (DRAWSEGMENT*) item )->m_Angle,
+                               ( (DRAWSEGMENT*) item )->m_End,
+                               ( (DRAWSEGMENT*) item )->m_Angle,
                                ( (DRAWSEGMENT*) item )->m_Width + (2 * m_ZoneClearance) );
                 have_poly_to_substract = true;
                 break;
@@ -287,7 +289,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 /* calculates copper areas */
-    if ( have_poly_to_substract )
+    if( have_poly_to_substract )
     {
         booleng->Do_Operation( BOOL_A_SUB_B );
 
@@ -353,7 +355,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         // Remove insulated islands:
         if( GetNet() > 0 )
             Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
-
     }
 
 // Now we remove all unused thermal stubs.
@@ -398,7 +399,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 ( pad->m_Size.y / 2 ) + m_ThermalReliefGapValue;
 
             // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
-            int     fAngle = pad->m_Orient;
+            int fAngle = pad->m_Orient;
             if( pad->m_PadShape == PAD_CIRCLE )
             {
                 dx     = (int) ( dx * s_Correction );
@@ -432,7 +433,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
                     // polygons are rectangles with width of copper bridge value
                     // contour line width has to be taken into calculation to avoid "thermal stub bleed"
-                    const int            iDTRC = ( m_ThermalReliefCopperBridgeValue - m_ZoneMinThickness ) / 2;
+                    const int iDTRC =
+                        ( m_ThermalReliefCopperBridgeValue - m_ZoneMinThickness ) / 2;
 
                     switch( i )
                     {
@@ -485,19 +487,21 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 /* compute copper areas */
-    if ( have_poly_to_substract )
+    if( have_poly_to_substract )
     {
         booleng->Do_Operation( BOOL_A_SUB_B );
 
-    /* put these areas in m_FilledPolysList */
+        /* put these areas in m_FilledPolysList */
         m_FilledPolysList.clear();
         CopyPolygonsFromBoolengineToFilledPolysList( booleng );
-    // Remove insulated islands, if any:
+
+        // Remove insulated islands, if any:
         if( GetNet() > 0 )
             Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
     }
 
     delete booleng;
+
 //#endif
 }
 
@@ -519,6 +523,9 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
     int     delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
+    wxSize  psize = aPad.m_Size;                    /* pad size unsed in RECT and TRAPEZOIDAL pads
+                                                     *  trapezoidal pads are considered as rect pad shape having they boudary box size
+                                                     */
 
     switch( aPad.m_PadShape )
     {
@@ -601,12 +608,12 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             break;
         }
 
+    default:
     case PAD_TRAPEZOID:
-    default:        /* @todo: the others shapes must be calculated: see trapezoidal shape
-                    * but before this is made, the rect shape is used insteed.
-                    * A polygon *must* be created because we have started a polygon in kbool engine
-                    */
-    case PAD_RECT:          // Easy implementation for rectangular cutouts with rounded corners                                                                  // Easy implementation for rectangular cutouts with rounded corners
+        psize.x += ABS(aPad.m_DeltaSize.y);
+        psize.y += ABS(aPad.m_DeltaSize.x);
+        // fall through
+    case PAD_RECT:                                                                  // Easy implementation for rectangular cutouts with rounded corners                                                                  // Easy implementation for rectangular cutouts with rounded corners
         angle = aPad.m_Orient;
         int rounding_radius = (int) ( aClearanceValue * s_Correction );             // Corner rounding radius
         int angle_pg;                                                               // Polygon increment angle
@@ -617,7 +624,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             RotatePoint( &corner_position, (1800 / s_CircleToSegmentsCount) );      // Start at half increment offset
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );                              // Rounding vector rotation
-            corner_position -= aPad.m_Size / 2;                                     // Rounding vector + Pad corner offset
+            corner_position -= psize / 2;                                     // Rounding vector + Pad corner offset
             RotatePoint( &corner_position, angle );                                 // Rotate according to module orientation
             corner_position += PadShapePos;                                         // Shift origin to position
             aBooleng->AddPoint( corner_position.x, corner_position.y );
@@ -629,7 +636,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             RotatePoint( &corner_position, (1800 / s_CircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
-            corner_position -= wxPoint( aPad.m_Size.x / 2, -aPad.m_Size.y / 2 );
+            corner_position -= wxPoint( psize.x / 2, -psize.y / 2 );
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
             aBooleng->AddPoint( corner_position.x, corner_position.y );
@@ -641,7 +648,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             RotatePoint( &corner_position, (1800 / s_CircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
-            corner_position += aPad.m_Size / 2;
+            corner_position += psize / 2;
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
             aBooleng->AddPoint( corner_position.x, corner_position.y );
@@ -653,7 +660,7 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
             RotatePoint( &corner_position, (1800 / s_CircleToSegmentsCount) );
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );
-            corner_position -= wxPoint( -aPad.m_Size.x / 2, aPad.m_Size.y / 2 );
+            corner_position -= wxPoint( -psize.x / 2, psize.y / 2 );
             RotatePoint( &corner_position, angle );
             corner_position += PadShapePos;
             aBooleng->AddPoint( corner_position.x, corner_position.y );
@@ -703,7 +710,8 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
  *
  * Note 2:
  *      Trapezoidal pads are not considered here because they are very special case
- *      and are used in microwave applications and they do not have a therma relief that change the shape
+ *      and are used in microwave applications and they *DO NOT* have a thermal relief that change the shape
+ *      by creating stubs and destroy their properties.
  */
 void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
                                     D_PAD& aPad,
@@ -822,7 +830,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
             }
         }
     }
-        break;
+    break;
 
     case PAD_OVAL:
     {
@@ -955,7 +963,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
             }
         }
     }
-        break;
+    break;
 
     case PAD_RECT:       // draw 4 Holes
     {
@@ -1191,7 +1199,7 @@ void AddRingPolygon( Bool_Engine* aBooleng, wxPoint aCentre,
                      int aWidth )
 {
     wxPoint arc_start, arc_end;
-    int      delta = 3600 / s_CircleToSegmentsCount;                                                                // rot angle in 0.1 degree
+    int     delta = 3600 / s_CircleToSegmentsCount;                                                                 // rot angle in 0.1 degree
 
     arc_end = arc_start = aStart;
     if( aArcAngle != 3600 )
