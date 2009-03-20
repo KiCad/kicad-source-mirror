@@ -105,6 +105,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     copySelectedFieldToPanel();
 
     wxToolTip::Enable( true );
+    
+    if( GetSizer() )
+    {
+        GetSizer()->SetSizeHints( this );
+    }
+
 }
 
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-04 07:41+0100\n"
-"PO-Revision-Date: 2009-03-13 08:16+0100\n"
+"POT-Creation-Date: 2009-03-20 08:07+0100\n"
+"PO-Revision-Date: 2009-03-20 10:34+0100\n"
 "Last-Translator: jp charras <jean-pierre.charras@inpg.fr>\n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -23,15 +23,15 @@ msgstr ""
 "X-Poedit-SearchPath-7: share\n"
 
 #: pcbnew/plothpgl.cpp:68
+#: pcbnew/gen_modules_placefile.cpp:147
+#: pcbnew/gen_modules_placefile.cpp:163
+#: pcbnew/gen_modules_placefile.cpp:331
 #: pcbnew/librairi.cpp:306
 #: pcbnew/librairi.cpp:452
 #: pcbnew/librairi.cpp:604
 #: pcbnew/librairi.cpp:807
 #: pcbnew/files.cpp:363
 #: pcbnew/export_gencad.cpp:86
-#: pcbnew/gen_modules_placefile.cpp:147
-#: pcbnew/gen_modules_placefile.cpp:163
-#: pcbnew/gen_modules_placefile.cpp:332
 #: eeschema/plotps.cpp:471
 #: eeschema/plothpgl.cpp:678
 #: cvpcb/genequiv.cpp:45
@@ -136,7 +136,7 @@ msgstr "Lire Fichier Config"
 #: cvpcb/menucfg.cpp:168
 #, c-format
 msgid "File %s not found"
-msgstr " Fichier %s non trouvé"
+msgstr "Fichier %s non trouvé"
 
 #: pcbnew/pcbcfg.cpp:211
 #: eeschema/eeconfig.cpp:214
@@ -323,10 +323,10 @@ msgstr "Créer Fichier de perçage"
 #: pcbnew/xchgmod.cpp:140
 #: pcbnew/dialog_netlist.cpp:232
 #: pcbnew/dialog_print_using_printer_base.cpp:128
+#: eeschema/dialog_build_BOM_base.cpp:137
 #: eeschema/annotate_dialog.cpp:220
 #: eeschema/dialog_print_using_printer_base.cpp:72
-#: eeschema/dialog_build_BOM_base.cpp:137
-#: common/zoom.cpp:271
+#: common/zoom.cpp:277
 msgid "Close"
 msgstr "Fermer"
 
@@ -528,7 +528,7 @@ msgstr "Pas de mémoire pour autoroutage"
 msgid "Place Cells"
 msgstr "Place Cells"
 
-#: pcbnew/plot_rtn.cpp:203
+#: pcbnew/plot_rtn.cpp:207
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
@@ -537,7 +537,7 @@ msgstr ""
 "Votre PCB a un mauvais numero de couche  %u pour le module\n"
 " %s's \"référence\"."
 
-#: pcbnew/plot_rtn.cpp:223
+#: pcbnew/plot_rtn.cpp:227
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
@@ -546,7 +546,7 @@ msgstr ""
 "Votre PCB a un mauvais numero de couche %u pour le module\n"
 " %s's \"valeur\"."
 
-#: pcbnew/plot_rtn.cpp:263
+#: pcbnew/plot_rtn.cpp:268
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
@@ -798,9 +798,9 @@ msgid "Net"
 msgstr "Net"
 
 #: pcbnew/class_board_item.cpp:64
+#: eeschema/dialog_build_BOM_base.cpp:79
 #: eeschema/edit_component_in_schematic.cpp:428
 #: eeschema/class_libentry_fields.cpp:131
-#: eeschema/dialog_build_BOM_base.cpp:79
 msgid "Footprint"
 msgstr "Module"
 
@@ -1449,10 +1449,10 @@ msgstr "Lire fichier de description de forme..."
 #: pcbnew/dialog_edit_module_text_base.cpp:96
 #: pcbnew/dialog_pcb_text_properties.cpp:165
 #: pcbnew/dialog_pcb_text_properties.cpp:176
-#: eeschema/dialog_edit_label_base.cpp:40
-#: eeschema/onrightclick.cpp:295
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialog_edit_label_base.cpp:40
+#: eeschema/onrightclick.cpp:295
 #: eeschema/dialog_options.cpp:236
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:60
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:99
@@ -1956,9 +1956,9 @@ msgstr "Effacer Couche"
 #: pcbnew/dialog_drc.cpp:432
 #: pcbnew/dialog_netlist.cpp:193
 #: eeschema/dialog_erc.cpp:239
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:23
 #: eeschema/dialog_edit_component_in_lib.cpp:166
 #: eeschema/dialog_create_component.cpp:168
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:23
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:49
 msgid "Options"
 msgstr "Options"
@@ -2778,32 +2778,32 @@ msgstr "&3D Visu"
 msgid "&Help"
 msgstr "&Aide"
 
-#: pcbnew/initpcb.cpp:126
+#: pcbnew/initpcb.cpp:133
 msgid "Current Board will be lost ?"
 msgstr "Le C.I. courant sera perdu ?"
 
-#: pcbnew/initpcb.cpp:181
+#: pcbnew/initpcb.cpp:188
 msgid "Delete Zones ?"
 msgstr "Effacer Zones ?"
 
-#: pcbnew/initpcb.cpp:202
+#: pcbnew/initpcb.cpp:209
 msgid "Delete Board edges ?"
 msgstr "Effacement contour PCB"
 
-#: pcbnew/initpcb.cpp:207
+#: pcbnew/initpcb.cpp:214
 msgid "Delete draw items?"
 msgstr "Suppression éléments graphiques?"
 
-#: pcbnew/initpcb.cpp:249
+#: pcbnew/initpcb.cpp:256
 #: gerbview/initpcb.cpp:136
 msgid "Delete Tracks?"
 msgstr "Effacer Pistes ?"
 
-#: pcbnew/initpcb.cpp:272
+#: pcbnew/initpcb.cpp:279
 msgid "Delete Modules?"
 msgstr "Effacement des Modules?"
 
-#: pcbnew/initpcb.cpp:292
+#: pcbnew/initpcb.cpp:300
 #: gerbview/initpcb.cpp:159
 msgid "Delete Pcb Texts"
 msgstr "Effacer Textes Pcb"
@@ -2848,6 +2848,22 @@ msgstr "Il y a un problème d'impression"
 #, c-format
 msgid "Print page %d"
 msgstr "Imprimer page %d"
+
+#: pcbnew/gen_modules_placefile.cpp:133
+msgid "No Modules for Automated Placement"
+msgstr "Pas de Module pour placement Automatisé"
+
+#: pcbnew/gen_modules_placefile.cpp:175
+msgid "Component side place file:"
+msgstr "Fichier placement côté composant:"
+
+#: pcbnew/gen_modules_placefile.cpp:178
+msgid "Copper side place file:"
+msgstr "Fichier placement côté cuivre:"
+
+#: pcbnew/gen_modules_placefile.cpp:181
+msgid "Module count"
+msgstr "Nb Modules"
 
 #: pcbnew/librairi.cpp:64
 msgid "Import Module:"
@@ -3830,7 +3846,7 @@ msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
 #: eeschema/tool_sch.cpp:89
 #: eeschema/tool_viewlib.cpp:70
 #: gerbview/tool_gerber.cpp:230
-#: common/zoom.cpp:205
+#: common/zoom.cpp:211
 #: 3d-viewer/3d_toolbar.cpp:43
 msgid "Zoom in"
 msgstr "Zoom +"
@@ -3843,7 +3859,7 @@ msgstr "Zoom +"
 #: eeschema/tool_sch.cpp:93
 #: eeschema/tool_viewlib.cpp:74
 #: gerbview/tool_gerber.cpp:237
-#: common/zoom.cpp:206
+#: common/zoom.cpp:212
 #: 3d-viewer/3d_toolbar.cpp:46
 msgid "Zoom out"
 msgstr "Zoom -"
@@ -3855,7 +3871,7 @@ msgstr "Zoom -"
 #: eeschema/tool_sch.cpp:97
 #: eeschema/tool_viewlib.cpp:78
 #: gerbview/tool_gerber.cpp:244
-#: common/zoom.cpp:214
+#: common/zoom.cpp:220
 #: 3d-viewer/3d_toolbar.cpp:49
 msgid "Redraw view"
 msgstr "Redessin de l'écran"
@@ -3868,7 +3884,7 @@ msgstr "Redessin de l'écran"
 #: eeschema/tool_lib.cpp:184
 #: eeschema/tool_sch.cpp:102
 #: gerbview/tool_gerber.cpp:255
-#: common/zoom.cpp:207
+#: common/zoom.cpp:213
 #: 3d-viewer/3d_toolbar.cpp:52
 msgid "Zoom auto"
 msgstr "Zoom Automatique"
@@ -4080,7 +4096,7 @@ msgstr "Zoom "
 
 #: pcbnew/tool_pcb.cpp:632
 #: pcbnew/tool_modedit.cpp:324
-#: common/zoom.cpp:254
+#: common/zoom.cpp:260
 msgid "User Grid"
 msgstr "Grille perso"
 
@@ -4371,10 +4387,10 @@ msgstr "Numéro de plume"
 #: pcbnew/dialog_gendrill.cpp:239
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:80
 #: pcbnew/dialog_print_using_printer_base.cpp:76
-#: eeschema/netlist_control.cpp:127
-#: eeschema/dialog_print_using_printer_base.cpp:23
 #: eeschema/dialog_build_BOM_base.cpp:20
 #: eeschema/dialog_build_BOM_base.cpp:60
+#: eeschema/netlist_control.cpp:127
+#: eeschema/dialog_print_using_printer_base.cpp:23
 msgid "Options:"
 msgstr "Options :"
 
@@ -4958,8 +4974,8 @@ msgstr "Exporter ces options vers les autres zones de cuivre"
 
 #: pcbnew/dialog_copper_zones_base.cpp:156
 #: pcbnew/dialog_pad_properties_base.cpp:91
-#: eeschema/lib_export.cpp:146
 #: eeschema/dialog_build_BOM_base.cpp:131
+#: eeschema/lib_export.cpp:146
 msgid "Ok"
 msgstr "Ok"
 
@@ -5656,8 +5672,8 @@ msgstr "Invisible"
 
 #: pcbnew/dialog_edit_module_text_base.cpp:96
 #: pcbnew/dialog_pcb_text_properties.cpp:176
-#: eeschema/dialog_edit_label_base.cpp:40
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialog_edit_label_base.cpp:40
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:60
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:99
 msgid "Italic"
@@ -6063,27 +6079,11 @@ msgstr "Options Pages"
 msgid "Preview"
 msgstr "Prévisualisation"
 
-#: pcbnew/gen_modules_placefile.cpp:133
-msgid "No Modules for Automated Placement"
-msgstr "Pas de Module pour placement Automatisé"
-
-#: pcbnew/gen_modules_placefile.cpp:175
-msgid "Component side place file:"
-msgstr "Fichier placement côté composant:"
-
-#: pcbnew/gen_modules_placefile.cpp:178
-msgid "Copper side place file:"
-msgstr "Fichier placement côté cuivre:"
-
-#: pcbnew/gen_modules_placefile.cpp:181
-msgid "Module count"
-msgstr "Nb Modules"
-
 #: pcbnew/dialog_pcb_text_properties.cpp:74
 msgid "TextPCB properties"
 msgstr "Propriétés des textes PCB"
 
-#: pcbnew/gen_drill_report_files.cpp:394
+#: pcbnew/gen_drill_report_files.cpp:392
 msgid ""
 " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\n"
 "Plot uses circle shape for some drill values"
@@ -7664,6 +7664,393 @@ msgstr "Editer Champ"
 msgid "No new text: no change"
 msgstr "Pas de nouveau texte: pas de changements"
 
+#: eeschema/dialog_build_BOM_base.cpp:23
+msgid "List items:"
+msgstr " Liste éléments: "
+
+#: eeschema/dialog_build_BOM_base.cpp:25
+msgid "Components by reference"
+msgstr "Composants par référence"
+
+#: eeschema/dialog_build_BOM_base.cpp:29
+msgid "Sub components (i.e. U2A, U2B ...)"
+msgstr "Sous composants (i.e U2A, U2B...)"
+
+#: eeschema/dialog_build_BOM_base.cpp:33
+msgid "Components by value"
+msgstr "Composants par valeur"
+
+#: eeschema/dialog_build_BOM_base.cpp:37
+msgid "Hierarchy pins by name"
+msgstr "Pins de hiérarchie par nom"
+
+#: eeschema/dialog_build_BOM_base.cpp:41
+msgid "Hierarchy pins by sheets"
+msgstr "Pins de hiérarchie par feuilles"
+
+#: eeschema/dialog_build_BOM_base.cpp:47
+msgid "Text for spreadsheet import"
+msgstr "Texte pour import dans tableur:"
+
+#: eeschema/dialog_build_BOM_base.cpp:49
+msgid "Output format:"
+msgstr "Format de sortie"
+
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid "Tab"
+msgstr "Tab"
+
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid ";"
+msgstr ";"
+
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid ","
+msgstr ","
+
+#: eeschema/dialog_build_BOM_base.cpp:55
+msgid "Field separator for spreadsheet import:"
+msgstr "Séparateur de champ pour import dans tableur:"
+
+#: eeschema/dialog_build_BOM_base.cpp:62
+msgid "Launch list browser"
+msgstr "Lancer le visualisateur de liste"
+
+#: eeschema/dialog_build_BOM_base.cpp:74
+msgid "Fields to add:"
+msgstr "Champs à ajouter:"
+
+#: eeschema/dialog_build_BOM_base.cpp:77
+msgid "System Fields:"
+msgstr "Champs Système:"
+
+#: eeschema/dialog_build_BOM_base.cpp:86
+msgid "Users Fields:"
+msgstr "Champs Utilisateurs:"
+
+#: eeschema/dialog_build_BOM_base.cpp:88
+msgid "Field 1"
+msgstr "Champ 1"
+
+#: eeschema/dialog_build_BOM_base.cpp:92
+msgid "Field 2"
+msgstr "Champ 2"
+
+#: eeschema/dialog_build_BOM_base.cpp:96
+msgid "Field 3"
+msgstr "Champ 3"
+
+#: eeschema/dialog_build_BOM_base.cpp:100
+msgid "Field 4"
+msgstr "Champ 4"
+
+#: eeschema/dialog_build_BOM_base.cpp:104
+msgid "Field 5"
+msgstr "Champ 5"
+
+#: eeschema/dialog_build_BOM_base.cpp:108
+msgid "Field 6"
+msgstr "Champ 6"
+
+#: eeschema/dialog_build_BOM_base.cpp:112
+msgid "Field 7"
+msgstr "Champ 7"
+
+#: eeschema/dialog_build_BOM_base.cpp:116
+msgid "Field 8"
+msgstr "Champ 8"
+
+#: eeschema/dialog_build_BOM_base.cpp:120
+msgid "All existing users fields"
+msgstr "Tous les champs existants"
+
+#: eeschema/load_one_schematic_file.cpp:76
+msgid "Failed to open "
+msgstr "Erreur ouverture "
+
+#: eeschema/load_one_schematic_file.cpp:81
+msgid "Loading "
+msgstr "Chargement "
+
+#: eeschema/load_one_schematic_file.cpp:88
+#: eeschema/load_one_schematic_file.cpp:118
+msgid " is NOT an EESchema file!"
+msgstr " n'est PAS un fichier EESchema!"
+
+#: eeschema/load_one_schematic_file.cpp:100
+msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
+msgstr " a été créé par une version plus récente de Eeschema et peut ne pas être chargé correctement. SVP mettez à jour Eeschema!"
+
+#: eeschema/load_one_schematic_file.cpp:110
+msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
+msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
+
+#: eeschema/load_one_schematic_file.cpp:405
+msgid "Done Loading "
+msgstr "Chargement terminé"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:26
+#: eeschema/affiche.cpp:180
+#: eeschema/onrightclick.cpp:330
+msgid "Unit"
+msgstr "Unité"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "3"
+msgstr "3"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "5"
+msgstr "5"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "7"
+msgstr "7"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "9"
+msgstr "9"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "11"
+msgstr "11"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "13"
+msgstr "13"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "15"
+msgstr "15"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "17"
+msgstr "17"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "18"
+msgstr "18"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "19"
+msgstr "19"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "20"
+msgstr "20"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "21"
+msgstr "21"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "22"
+msgstr "22"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "23"
+msgstr "23"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "24"
+msgstr "24"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "25"
+msgstr "25"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "26"
+msgstr "26"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:39
+msgid "+90"
+msgstr "+90"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:41
+msgid "Orientation (Degrees)"
+msgstr "Orientation (Degrés)"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:43
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:58
+msgid "Select if the component is to be rotated when drawn"
+msgstr "Sélectionner si le composant doit être tourné lors de l'affichage."
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
+msgid "Mirror ---"
+msgstr "Miroir---"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
+msgid "Mirror |"
+msgstr "Miroir |"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:56
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:71
+msgid "Pick the graphical transformation to be used when displaying the component, if any"
+msgstr "Ajuster la transformation graphique à utiliser pour afficher le composant"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:63
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:446
+msgid "Chip Name"
+msgstr "Nom en librairie"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:67
+msgid "The name of the symbol in the library from which this component came"
+msgstr "Le nom du symbole dans la librairie d'où vient le composant."
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:73
+#: eeschema/affiche.cpp:190
+#: eeschema/onrightclick.cpp:317
+msgid "Convert"
+msgstr "Convert"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:75
+msgid ""
+"Use the alternate shape of this component.\n"
+"For gates, this is the \"De Morgan\" conversion"
+msgstr ""
+"Utiliser la représentation alternative pour ce composant\n"
+"Pour les portes, ceci est la conversion \"De Morgan\""
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:79
+#: eeschema/dialog_edit_component_in_lib.cpp:162
+#: eeschema/dialog_create_component.cpp:180
+msgid "Parts are locked"
+msgstr "Les parts sont verrouillées"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:86
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:20
+#: eeschema/eelayer.h:164
+msgid "Fields"
+msgstr "Champs"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:95
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:29
+msgid "Add a new custom field"
+msgstr "Ajouter un nouveau champ utilisateur"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:100
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:34
+msgid "Delete one of the optional fields"
+msgstr "Supprimer un des champs optionnels."
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:104
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:38
+msgid "Move Up"
+msgstr "Vers le haut ^"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:105
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:39
+msgid "Move the selected optional fields up one position"
+msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:115
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:80
+msgid "Visibility"
+msgstr "Visibilité"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:120
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:85
+msgid "Show"
+msgstr "Visible"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:122
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:87
+msgid "Check if you want this field visible"
+msgstr "Activer si vous voulez avoir ce champ visible"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:128
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:93
+msgid "Check if you want this field's text rotated 90 degrees"
+msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialog_edit_label_base.cpp:40
+#: eeschema/dialog_bodygraphictext_properties_base.cpp:60
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:99
+msgid "Bold"
+msgstr "Gras"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialog_edit_label_base.cpp:40
+#: eeschema/dialog_bodygraphictext_properties_base.cpp:60
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:99
+msgid "Bold Italic"
+msgstr "Gras Italique"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:101
+msgid "Style:"
+msgstr "Style:"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:138
+msgid "The style of the currently selected field's text in the schemati"
+msgstr "Le style du texte du champ actuellement sélectionné"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:147
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:110
+msgid "Field Name"
+msgstr "Nom Champ"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:152
+msgid ""
+"The name of the currently selected field\n"
+"Some fixed fields names are not editable"
+msgstr ""
+"Le nom du champ actuellement sélectionné.\n"
+"Quelques noms de champs fixés ne sont pas modifiables."
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:161
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:124
+msgid "Field Value"
+msgstr "Texte Champ"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:166
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:115
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:129
+msgid "The text (or value) of the currently selected field"
+msgstr "Le texte (ou la valeur) du champ actuellement sélectionné"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:175
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:138
+msgid "Size(\")"
+msgstr "Taille(\")"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:180
+msgid "The size of the currently selected field's text in the schematic"
+msgstr "La taille du texte du champ actuellement sélectionné"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:192
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:155
+msgid "PosX(\")"
+msgstr "PosX"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:197
+msgid "The X coordinate of the text relative to the component"
+msgstr "La position X du texte relativement au composant"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:206
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:167
+msgid "PosY(\")"
+msgstr "PosY"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:211
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:172
+msgid "The Y coordinate of the text relative to the component"
+msgstr "La position Y du texte relativement au composant"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:222
+msgid "Reset to Library Defaults"
+msgstr "Remettre aux Valeurs par Défaut en Librairie"
+
+#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:223
+msgid ""
+"Set position and style of fields and component orientation  to default lib value.\n"
+"Fields texts are not modified."
+msgstr ""
+"Ajuster la  position et le style des champss et l'orientation  du componsant aux valeurs par défaut en librairie.\n"
+"Les textes des champs ne sont pas modifiés."
+
 #: eeschema/tool_sch.cpp:39
 msgid "Open schematic project"
 msgstr "Ouvrir un Projet schématique"
@@ -7840,18 +8227,6 @@ msgstr "oui"
 msgid "All"
 msgstr "Tout"
 
-#: eeschema/affiche.cpp:180
-#: eeschema/onrightclick.cpp:330
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:26
-msgid "Unit"
-msgstr "Unité"
-
-#: eeschema/affiche.cpp:190
-#: eeschema/onrightclick.cpp:317
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:73
-msgid "Convert"
-msgstr "Convert"
-
 #: eeschema/affiche.cpp:195
 msgid "default"
 msgstr "Défaut"
@@ -7873,12 +8248,6 @@ msgstr "Décalage:"
 #: eeschema/dialog_create_component.cpp:176
 msgid "Power symbol"
 msgstr "Symbole alimentation"
-
-#: eeschema/dialog_edit_component_in_lib.cpp:162
-#: eeschema/dialog_create_component.cpp:180
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:79
-msgid "Parts are locked"
-msgstr "Les parts sont verrouillées"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:172
 msgid "Doc:"
@@ -7907,20 +8276,6 @@ msgstr "Enter le texte qui doit être utilisé dans la schématique"
 #: eeschema/dialog_edit_label_base.cpp:36
 msgid "Direction"
 msgstr "Direction"
-
-#: eeschema/dialog_edit_label_base.cpp:40
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
-#: eeschema/dialog_bodygraphictext_properties_base.cpp:60
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:99
-msgid "Bold"
-msgstr "Gras"
-
-#: eeschema/dialog_edit_label_base.cpp:40
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
-#: eeschema/dialog_bodygraphictext_properties_base.cpp:60
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:99
-msgid "Bold Italic"
-msgstr "Gras Italique"
 
 #: eeschema/dialog_edit_label_base.cpp:46
 msgid "TriState"
@@ -8579,31 +8934,6 @@ msgstr "Cette feuille utilise des données partagées dans une hiérarchie compl
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
 msgstr "Doit on la convertir en une feuille de hiérarchie simple (autrement supprimer les données courantes)"
 
-#: eeschema/load_one_schematic_file.cpp:76
-msgid "Failed to open "
-msgstr "Erreur ouverture "
-
-#: eeschema/load_one_schematic_file.cpp:81
-msgid "Loading "
-msgstr "Chargement "
-
-#: eeschema/load_one_schematic_file.cpp:88
-#: eeschema/load_one_schematic_file.cpp:118
-msgid " is NOT an EESchema file!"
-msgstr " n'est PAS un fichier EESchema!"
-
-#: eeschema/load_one_schematic_file.cpp:100
-msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
-msgstr " a été créé par une version plus récente de Eeschema et peut ne pas être chargé correctement. SVP mettez à jour Eeschema!"
-
-#: eeschema/load_one_schematic_file.cpp:110
-msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
-msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
-
-#: eeschema/load_one_schematic_file.cpp:396
-msgid "Done Loading "
-msgstr "Chargement terminé"
-
 #: eeschema/dialog_create_component.cpp:203
 msgid "&1"
 msgstr "&1"
@@ -8887,221 +9217,6 @@ msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
 #: eeschema/build_BOM.cpp:854
 msgid "#End labels\n"
 msgstr "#End labels\n"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "3"
-msgstr "3"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "5"
-msgstr "5"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "7"
-msgstr "7"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "9"
-msgstr "9"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "11"
-msgstr "11"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "13"
-msgstr "13"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "15"
-msgstr "15"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "17"
-msgstr "17"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "18"
-msgstr "18"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "19"
-msgstr "19"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "20"
-msgstr "20"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "21"
-msgstr "21"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "22"
-msgstr "22"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "23"
-msgstr "23"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "24"
-msgstr "24"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "25"
-msgstr "25"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "26"
-msgstr "26"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:39
-msgid "+90"
-msgstr "+90"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:41
-msgid "Orientation (Degrees)"
-msgstr "Orientation (Degrés)"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:43
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:58
-msgid "Select if the component is to be rotated when drawn"
-msgstr "Sélectionner si le composant doit être tourné lors de l'affichage."
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
-msgid "Mirror ---"
-msgstr "Miroir---"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
-msgid "Mirror |"
-msgstr "Miroir |"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:56
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:71
-msgid "Pick the graphical transformation to be used when displaying the component, if any"
-msgstr "Ajuster la transformation graphique à utiliser pour afficher le composant"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:63
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:446
-msgid "Chip Name"
-msgstr "Nom en librairie"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:67
-msgid "The name of the symbol in the library from which this component came"
-msgstr "Le nom du symbole dans la librairie d'où vient le composant."
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:75
-msgid ""
-"Use the alternate shape of this component.\n"
-"For gates, this is the \"De Morgan\" conversion"
-msgstr ""
-"Utiliser la représentation alternative pour ce composant\n"
-"Pour les portes, ceci est la conversion \"De Morgan\""
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:86
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:20
-#: eeschema/eelayer.h:164
-msgid "Fields"
-msgstr "Champs"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:95
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:29
-msgid "Add a new custom field"
-msgstr "Ajouter un nouveau champ utilisateur"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:100
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:34
-msgid "Delete one of the optional fields"
-msgstr "Supprimer un des champs optionnels."
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:104
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:38
-msgid "Move Up"
-msgstr "Vers le haut ^"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:105
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:39
-msgid "Move the selected optional fields up one position"
-msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:115
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:80
-msgid "Visibility"
-msgstr "Visibilité"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:120
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:85
-msgid "Show"
-msgstr "Visible"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:122
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:87
-msgid "Check if you want this field visible"
-msgstr "Activer si vous voulez avoir ce champ visible"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:128
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:93
-msgid "Check if you want this field's text rotated 90 degrees"
-msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:101
-msgid "Style:"
-msgstr "Style:"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:138
-msgid "The style of the currently selected field's text in the schemati"
-msgstr "Le style du texte du champ actuellement sélectionné"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:147
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:110
-msgid "Field Name"
-msgstr "Nom Champ"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:152
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:166
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:115
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:129
-msgid "The text (or value) of the currently selected field"
-msgstr "The texte (ou la valeur) du champ actuellement sélectionné"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:161
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:124
-msgid "Field Value"
-msgstr "Texte Champ"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:175
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:138
-msgid "Size(\")"
-msgstr "Taille(\")"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:180
-msgid "The size of the currently selected field's text in the schematic"
-msgstr "La taille du texte du champ actuellement sélectionné"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:192
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:155
-msgid "PosX(\")"
-msgstr "PosX"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:197
-msgid "The X coordinate of the text relative to the component"
-msgstr "La position X du texte relativement au composant"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:206
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:167
-msgid "PosY(\")"
-msgstr "PosY"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:211
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:172
-msgid "The Y coordinate of the text relative to the component"
-msgstr "La position Y du texte relativement au composant"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.cpp:222
-msgid "Reset to Library Defaults"
-msgstr "Remettre aux Valeurs par Défaut en Librairie"
 
 #: eeschema/eeredraw.cpp:130
 #: eeschema/eelayer.h:171
@@ -9429,106 +9544,6 @@ msgstr "Pas de nom de composant!"
 #, c-format
 msgid "Component [%s] not found!"
 msgstr "Composant [%s] non trouvé!"
-
-#: eeschema/dialog_build_BOM_base.cpp:23
-msgid "List items:"
-msgstr " Liste éléments: "
-
-#: eeschema/dialog_build_BOM_base.cpp:25
-msgid "Components by reference"
-msgstr "Composants par référence"
-
-#: eeschema/dialog_build_BOM_base.cpp:29
-msgid "Sub components (i.e. U2A, U2B ...)"
-msgstr "Sous composants (i.e U2A, U2B...)"
-
-#: eeschema/dialog_build_BOM_base.cpp:33
-msgid "Components by value"
-msgstr "Composants par valeur"
-
-#: eeschema/dialog_build_BOM_base.cpp:37
-msgid "Hierarchy pins by name"
-msgstr "Pins de hiérarchie par nom"
-
-#: eeschema/dialog_build_BOM_base.cpp:41
-msgid "Hierarchy pins by sheets"
-msgstr "Pins de hiérarchie par feuilles"
-
-#: eeschema/dialog_build_BOM_base.cpp:47
-msgid "Text for spreadsheet import"
-msgstr "Texte pour import dans tableur:"
-
-#: eeschema/dialog_build_BOM_base.cpp:49
-msgid "Output format:"
-msgstr "Format de sortie"
-
-#: eeschema/dialog_build_BOM_base.cpp:53
-msgid "Tab"
-msgstr "Tab"
-
-#: eeschema/dialog_build_BOM_base.cpp:53
-msgid ";"
-msgstr ";"
-
-#: eeschema/dialog_build_BOM_base.cpp:53
-msgid ","
-msgstr ","
-
-#: eeschema/dialog_build_BOM_base.cpp:55
-msgid "Field separator for spreadsheet import:"
-msgstr "Séparateur de champ pour import dans tableur:"
-
-#: eeschema/dialog_build_BOM_base.cpp:62
-msgid "Launch list browser"
-msgstr "Lancer le visualisateur de liste"
-
-#: eeschema/dialog_build_BOM_base.cpp:74
-msgid "Fields to add:"
-msgstr "Champs à ajouter:"
-
-#: eeschema/dialog_build_BOM_base.cpp:77
-msgid "System Fields:"
-msgstr "Champs Système:"
-
-#: eeschema/dialog_build_BOM_base.cpp:86
-msgid "Users Fields:"
-msgstr "Champs Utilisateurs:"
-
-#: eeschema/dialog_build_BOM_base.cpp:88
-msgid "Field 1"
-msgstr "Champ 1"
-
-#: eeschema/dialog_build_BOM_base.cpp:92
-msgid "Field 2"
-msgstr "Champ 2"
-
-#: eeschema/dialog_build_BOM_base.cpp:96
-msgid "Field 3"
-msgstr "Champ 3"
-
-#: eeschema/dialog_build_BOM_base.cpp:100
-msgid "Field 4"
-msgstr "Champ 4"
-
-#: eeschema/dialog_build_BOM_base.cpp:104
-msgid "Field 5"
-msgstr "Champ 5"
-
-#: eeschema/dialog_build_BOM_base.cpp:108
-msgid "Field 6"
-msgstr "Champ 6"
-
-#: eeschema/dialog_build_BOM_base.cpp:112
-msgid "Field 7"
-msgstr "Champ 7"
-
-#: eeschema/dialog_build_BOM_base.cpp:116
-msgid "Field 8"
-msgstr "Champ 8"
-
-#: eeschema/dialog_build_BOM_base.cpp:120
-msgid "All existing users fields"
-msgstr "Tous les champs existants"
 
 #: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
@@ -10922,23 +10937,23 @@ msgstr "Emplacement des Fichiers des Hotkeys"
 msgid "Hotkey config file location selection (home directory or kicad tree)"
 msgstr "Sélection emplacement des fichiers de config. des hotkeys(\"home\" ou répertoire kicad)"
 
-#: common/zoom.cpp:203
+#: common/zoom.cpp:209
 msgid "Center"
 msgstr "Centrer"
 
-#: common/zoom.cpp:211
+#: common/zoom.cpp:217
 msgid "Zoom select"
 msgstr "Sélection Zoom"
 
-#: common/zoom.cpp:231
+#: common/zoom.cpp:237
 msgid "Zoom: "
 msgstr "Zoom:  "
 
-#: common/zoom.cpp:242
+#: common/zoom.cpp:248
 msgid "Grid Select"
 msgstr "Sélection Grille"
 
-#: common/zoom.cpp:262
+#: common/zoom.cpp:268
 msgid "Grid: "
 msgstr "Grille: "
 
@@ -11656,6 +11671,10 @@ msgstr "EESchema Tracé HPGL"
 msgid "Sheet properties"
 msgstr "Propriétés de la feuille"
 
+#: eeschema/dialog_edit_component_in_schematic_fbp.h:82
+msgid "Component Properties"
+msgstr "Propriétés du Composant"
+
 #: eeschema/pinedit-dialog.h:67
 msgid "Pin properties"
 msgstr "Propriétés des Pins"
@@ -11675,10 +11694,6 @@ msgstr "Propriétés du texte graphique:"
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.h:74
 msgid "Fields Properties"
 msgstr "Propriétés des Champs"
-
-#: eeschema/dialog_edit_component_in_schematic_fbp.h:82
-msgid "Component Properties"
-msgstr "Propriétés du Composant"
 
 #: eeschema/dialog_build_BOM_base.h:69
 msgid "List of Material"
