@@ -105,7 +105,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 	));
 
 	/* Add developers */
-	info.AddDeveloper( wxT( "Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) );
+	info.AddDeveloper( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
 	info.AddDeveloper( SetMsg( wxT( "Dick Hollenbeck <dick@softplc.com>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "Jonas Diemer <diemer@gmx.de>" ) ) );
