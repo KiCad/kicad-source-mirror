@@ -60,6 +60,7 @@ void DialogLabelEditor::init()
 
     case TYPE_SCH_HIERLABEL:
         SetTitle( _( "Hierarchal Label Properties" ) );
+        m_TextShape->SetLabel( _("Hlabel Shape") );
         break;
 
     case TYPE_SCH_LABEL:

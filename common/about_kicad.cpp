@@ -122,13 +122,13 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 	/* Add translators */
 	info.AddTranslator( wxT( "Czech (CZ) Martin Kratoška <martin@ok1rr.com>" ) );
 	info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) ) );
+	info.AddTranslator( SetMsg( wxT( "French (FR) Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowroński <skowri@gmail.com>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>" ) ) );
 	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Iñigo Zuluaga <inigo_zuluaga@yahoo.es>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "German (DE) Rafael.Sokolowski <Rafael.Sokolowski@web.de>" ) ) );
+	info.AddTranslator( SetMsg( wxT( "German (DE) Rafael.Sokolowski <rafael.sokolowski@web.de>" ) ) );
 
 	/* TODO are these all russian translators, placed them here now              TODO
 		TODO or else align them below other language maintainer with mail adres   TODO*/

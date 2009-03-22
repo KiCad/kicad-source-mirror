@@ -606,7 +606,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 
     *corner_list = 7; corner_list++;	// 7 corners in list
 
-    int symb_len = Len_Size() + (TXTMARGE * 2);   // Real text len + text margin
+    int symb_len = ( Pitch(width) * GetLength() ) + (TXTMARGE * 2);
     // Create outline shape : 6 points
     int x = symb_len + width + 3;
     int y = HalfSize + width + 3;
