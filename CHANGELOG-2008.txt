@@ -1,0 +1,1561 @@
+KiCad ChangeLog 2008
+====================
+
+2008-Dec-31 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Eeschema:
+    Note: this is a work in progress!
+    Files modification.
+    More about italic and bold fields in libraries
+    Use DLIST to handle fields in lib entries
+    Bugs and problems solved in fields edition (some are windows only).
+
+
+2008-Dec-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Eeschema:
+    Note: this is a work in progress!
+    Change dialog to edit fields in libedit.
+    Most of code created by Dick to edit fields in shematic is reused (this was the goal).
+    Component dialog properties -in libedit) is not modified, and fields can be also edited with it.
+    New dialog box is similar to the component dialog box used in schematic.
+    But all features do not work (work in progress!)
+    TODO (by me):
+    use vector to handle fields in libraries, like schematic.
+    Finish work, and test it.
+
+2008-Dec-29 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+  * gr_basic.h DOXYGEN comments.  made a couple functions static and removed
+    those from gr_basic.h since they are private to gr_basic.c.  changed the
+    polygon code to use wxPoints since that is what the underlying wxWidgets
+    API uses.
+++gerbview
+  * More work on drawing polygons, erasure of polygons completed.
+  * Added full support for aperture macro 6, MOIRE.
+  * Example 2 in RS274xrevd_e.pdf almost draws properly now.  Need ARC support
+    in polygons, and need polygon aperture type support to complete.
+
+
+2008-Dec-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Eeschema:
+    More about italic and bold texts options in fields and graphic texts
+
+
+2008-Dec-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++Pcbnew:
+    Added dialog box to edit graphic items (graphic segments, circles, arcs)
+    properties
+
+
+2008-Dec-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++All
+    Cleaning code to draw/plot texts:
+    Now only one function is used to draw and plot texts in pcbnew in all formats
+    Italics texts are allowed in pcbnew (work in progress)
+
+2008-Dec-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++All
+    Cleaning code to draw/plot texts (work in progress):
+    Now only one function is used to draw and plot texts (not for pcbnew)
+    (easier to maintain and ensure texts have the same size in ploting and drawing)
+    In eeschema, italic and bold texts allowed (in pcbenew, texts thickness is already adjustable)
+
+
+2008-Dec-18 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++all
+  * Virtualize DrawFrame class methods required to eliminate compiling
+    drawframe.cpp multiple times depending on the application being built.
+  * Move zoom.cpp and drawframe.cpp to common library and update CMake files.
+  * drawpanel.cpp - Extracted mouse wheel events out of mouse event handler,
+    generate commands for mouse wheel events, and moved panning from DrawFrame
+    class into DrawPanel class.
+  * Initial ground work for new zoom implementation.
+
+
+2008-Dec-15 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++gerbview
+    Implemented most of the "thermal" aperture macro, at least so that it
+    displays as concentric circles OK.  Still need to do the cross hairs.
+    Fixed a bug loading aperture macros from disk, could crash gerbview.
+    Switched TRACKs to after polygons in tracepcb.cpp, temporary solution until
+    I have more time.
+
+
+2008-Dec-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    Display a short net name on vias and pads (if zoom level allows it).
+    Short net names are net names without hierarchy path
+    Add m_ShortNetname and change m_Netname to private in classes D_PAD and EQUIPOT
+
+
+2008-Dec-08 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++all
+  * Remove all instances of application pointers both global and embedded
+    member variables.  Use wxGetApp() for improved readability and type
+    safety.
+
+
+2008-Dec-6 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew & gerbview
+  * As a final migration step, made BOARD_ITEM::SetNext() and
+    BOARD_ITEM::SetBack() _private_, starting at BOARD_ITEM in the class
+    hierarchy so that the compiler will tell us where they are used illegally.
+    Classes derived from BOARD_ITEM then also cannot expose SetNext() and
+    SetPrev(), and this forces everthing related to BOARD_ITEM through DLIST for
+    list manipulation.  The compiler turned up a couple I had missed, two of which
+    were the back pointers of  MODULE::m_Reference->Back(), m_Value->Back(), which I
+    do not think are needed since the MODULE owns these texts, not the other way around.
+    This should be the final nail in the coffin for undisciplined list manipulation
+    within pcbnew and gerbview.
+  * Converted BOARD::Delete() into BOARD::Remove() and then added an inline for
+    BOARD::Delete() which deletes what Remove() returns.
+  * Removed BOARD::DeleteMARKER( int ) since BOARD::Delete() works.
+  * Removed gerbview's undelete.cpp and made gerbview use pcbnew's,
+    by moving the two supporting functions into the common base class
+    of WinEDA_BasePcbFrame, had to add some "#if !defined(GERBVIEW)"s.
+
+
+2008-Dec-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew & gerbview
+  * Renamed Struct3D_Master to S3D_MASTER.
+  * MODULE::m_3D_Drawings is now a DLIST<>
+  * Removed AddToChain(), DeleteStructList() and replaced with calls to DLIST<>
+    members so that list item counting stays accurate.
+
+
+2008-Dec-05 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++all
+  * Simplified and improved grid implementation.  User grid will no longer
+    be displayed if it is the same as any of the default grid sizes.
+  * Removed unused grid code in BASE_SCREEN class.
+  * Source file share/drawpanel.cpp now compiled into common library.
+  * Declare WinEDA_Appl so you can use wxGetApp() instead of passing app
+    pointers all over the place.
+  * Fixed assertion in debug build of 3D viewer.
+  * Some general code beautification and redundant header file removal in files
+    changed by the grid implementation.
+
+
+2008-Dec-3 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew & gerbview
+  * added g_CurrentTrackList, and made g_CurrentTrackSegment and g_FirstTrackSegment
+    be #defines into this DLIST<TRACK>, see pcbnew.h.
+  * Changed to DLIST<> for almost all the list heads in BOARD.
+    Switched datatype of BOARD::m_Track, BOARD::m_Zone, etc to DLIST<>.
+    This simplifies BOARD::~BOARD() somewhat, and adds automatic counting of list elements and encapsulation
+    of all list operations into DHEAD member functions, see common/dlist.cpp.
+  * Removed TRACK::Insert() since it no long fits with the new BOARD::m_Track and BOARD::m_Zone datatypes.
+  * Removed the g_UnDeleteStack support from <any>::UnLink(), this may leave a deficiency, but this code needs
+    to be external to UnLink() anyway.
+  * Made TRACK::SetNext() and TRACK::SetBack() private so they may not be used,
+    the only way to put a TRACK on a list is through DLIST<TRACK>::PushFront()
+    and other member functions of DLIST<TRACK>.
+  * Switched to std::vector<TRACK*> in track.cpp to hold the temporary static list.
+  * Renamed some KICAD_Ts to more closely match the corresponding classname.
+++gerbview
+  * Switched to GR_COPY mode for drawing so we can see the erasures.  debugged
+    erasures in rs274d.cpp.
+  * Now using order specific TRACK loading, so erasures come after objects they
+    are intended to erase.  Still need layer ordering and polygon ordering support, my todo.
+
+    I do not like DeleteStructList() and plan to migrate away from it, DLIST<>:DeletAll()
+    does something like it.
+
+
+=======
+2008-Dec-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    Switch to polygons in zones (old way no more supported)
+    areas can be now filled using solid polygons, or using segments to fill areas inside polygons.
+    results are same, but using segments can be better (faster redraw time) for polygons having a lot
+    of segments (more than 10000)
+
+2008-Dec-02 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++build fixes
+  * Changed wxWidgets library find order so monolithic build is no longer
+    required (at least on MinGW).
+  * Changed CreateSVNVersionHeader.cmake to fall back to "build_version.h"
+    when 'svn info' command fails.  The default macro that ships with CMake
+    will not create build files when 'svn info' fails.
+
+
+2008-Nov-25 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    edit component in schematic editor.  works pretty well, I'm done.
+
+
+2008-Nov-24 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    edit component in schematic editor.  It is not complete but further.
+    Keep your old eeschema binary, this one does not fully work yet, another day or so.
+    Switched away from wxGrid to wxListCtrl, and that class is poorly documented
+    so much time pioneering how to use it. Should go faster now.
+
+
+2008-Nov-23 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+  + Made _protected_ EDA_BaseStruct's:
+    EDA_BaseStruct* Pnext;              /* Linked list: Link (next struct) */
+    EDA_BaseStruct* Pback;              /* Linked list: Link (previous struct) */
+    EDA_BaseStruct* m_Parent;           /* Linked list: Link (parent struct) */
+    EDA_BaseStruct* m_Son;              /* Linked list: Link (son struct) */
+  + Split TRACK::Draw() out for SEGVIA
+  + Added dlist.h & dlist.cpp for DLIST<> template.  All the _inline_ list manipulation
+    code throughout the package is rediculous.  I don't mind list traversal, only
+    list manipulation.  DLIST<> templates can be used to consolidate reliable
+    list manipulation operations and get this code out of the mainline.
+    These functions are shared/inherited for any derivation, so only one copy exists
+    in the final program image.  To use, simply declare e.g. DLIST<D_PAD> or similar.
+    See dlist.h, template class DLIST for function comments.
+  + added EDA_BaseStruct::m_List to assist in debugging list manipulation functions.
++eeschema
+    Started on the edit component in schematic editor.  It is not complete and
+    breaks the usefulness of the editor at this moment.  Do not build this version
+    if you want to fully use eeschema.
+
+
+2008-Nov-22 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    Some cleanup in dialog pad edition.
+    Added:
+    Zones now have a min thickness filled area parameter
+    that ensure a minimun width for filled copper areas
+    (areas below this min thickness are removed)
+    Shapes also are better
+
+
+2008-Nov-19 UPDATE Jerry Jacobs <jerkejacobs@gmail.com>
+================================================================================
+++kicad-library
+    Moved {number}DIP packages to DIP-{number}__{WIDTH} seperated library dip_sockets.mod
+    Created DIP Packages board
+++kicad.pro template
+    Added dip_sockets library to pcbnew libraries in template file
+
+
+2008-Nov-18 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    First version of pcbnew using polygonal filled areas in zones in rats nets calculations.
+    Needs more tests.
+
+
+2008-Nov-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+kbool:
+    Using the last version (1.9) of kbool, downloaded from the wxArt2D project site
+    (see www.wxart2d.org)
+    But the version 1.8 bug still is here.
+    So using the workaround remains mandatory.
+    (this is not a problem because thermal shapes are better...)
+
+
+
+2008-Nov-14 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++gerbiew
+  + Added support for displaying most aperture macros embedded in a RS274X compatible file.
+    Cleanup of rs274d.cpp and added the beginning of the isDark support, which we
+    need to discuss. GERBER::m_ImageNegative can toggle during the course of reading
+    a rs274x file and sometimes this means erasing things.
+  + Tested pcbnew's gerber plotting, still working.  Done
+    with aperture macros for now, but we need to handle the isDark support to
+    top it off after discussion.
+
+
+2008-Nov-8 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++pcbnew
+    Thermal shapes modification for round and oblong pads.
+    This is a workaround for a bug (i believe) of kbool.
+    New thermal shapes have NO angle < 90 degrees between 2 adjacent segments.
+    For shapes that have angle < 90 degrees between 2 adjacent segments,
+    under certains circumstances kbool drops some holes and creates a bad filled area.
+    (see zones_convert_brd_items_to_polygons.cpp)
+
+
+2008-Nov-8 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++gerview
+    Added support for reading in aperture macros embedded in a RS274X compatible file.
+    Cannot display them yet.
+    General cleanup of gerbview.  GERBER_Descr replaced with class GERBER.
+    ReturnToolDescr() replaced with GERBER::GetDCODE().
+    D_CODEs are created lazily now.  pcbnew's gerber plotting needs testing, might
+    have broke something there, accidentally.
+
+
+2008-nov-5 UPDATE Andrey Fedorushkov <andrf@mail.ru>
+================================================================================
++all:
+   Add cyrillic font support.
+   Add russian GOST worksheet support.
+
+2008-nov-2 CLEANUP Jerry Jacobs <jerkejacobs@gmail.com>
+================================================================================
+++kicad:
+   Cleanup comment/codestyle to make things more clear for newbie codeviewer
+   and developers.
+    + buildmnu.cpp
+    + commandframe.cpp
+    + kicad.cpp
+    + treeprj_frame.cpp
+
+
+2008-oct-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++All
+    Use double instead float when possible, ande code cleaning.
+    Some changes for a better code compatibility with others compliers (MSVC)
+    (__MSVC__ must be defined when using MSVC)
+    (double round(double) and typeof unkown in MSVC)
+    Note: I cannot test kicad under MSVC.
+
+
+2008-Oct-19 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    Fixed SCH_COMPONENT() copy constructor with Jean-Pierre's bug catch.
+    Developed a non-functional fbp file using wxFormBuilder for the new
+    dialog_edit_component_in_schematic dialog which I plan on coding in the
+    next couple of weeks as time permits.
+
+2008-oct-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Solved a bug when creating a new zone outline that could crash pcbnew
+    More about copper zones filled without grid (by polygons)
+    Currently for tests only (work in progress).
+    now working: Thermal reliefs parameters can be set.
+
+2008-oct-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    More about copper zones filled without grid (by polygons)
+    Currently for tests only (work in progress).
+    now working
+        thermal reliefs.
+        texts on copper zones.
+        Removing insulated copper islands.
+    currently : not implemented:
+        trapezoidal pads
+
+2008-oct-07 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    More about copper zones filled without grid (by polygons)
+    Currently for eyes and tests only (work in progress).
+    now working
+        thermal reliefs.
+        texts on copper zones.
+    To select this feature choose No Grid in zone grid filling.
+    Work in progress:
+    currently : not implemented:
+        Removing insulated copper islands.
+        trapezoidal pads
+
+
+2008-Oct-6 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    First work on arbitrary number of user fields, i.e. name/value pairs,
+    per schematic component.  Use std::vector to hold fields, added GetField()
+    function to SCH_COMPONENT.
+
+
+2008-oct-02 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    First tests about copper zones filled without grid (by polygons)
+    Currently for eyes and tests only.
+    To select this feature choose No Grid in zone grid filling.
+    Work in progress:
+    currently : not implemented:
+        thermal reliefs (pads are always covered by copper zones).
+        texts on copper zones.
+        Removing insulated copper islands.
+
+2008-Oct-1 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    gen_modules_placefile.cpp: backed out of the "Cu & Cmp" centric terminology
+    and moved towards using layer names which are BOARD specific.
+
+
+2008-Sep-26 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    more about use polygons in zone fill algos on technicals layers:
+    plot Ok. holes are handled
+
+2008-Sep-26 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Starting work to use polygons in zone fill algos.
+    Currently, use this to add zone on non copper layers (technical layers)
+    Only for eyes.
+    Plot outputs do not handle this.
+    Problems with holes in zones.
+    Also: first used of wxFormBuilder
+
+
+2008-Sep-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Fixed a bug in modedit which crashes pcbnew when closing the properties module dialog
+    Both in trunk and tagged versions
+
+
+2008-Sep-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    code cleaning
+    PartTextStruct class name changed to a name : SCH_CMP_FIELD
+
+2008-Sep-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Fixed a problem in zone filling algo: due tu differents ways to truncate coordinates
+    between 2 functions (one round coordinates, and others truncate coordinates),
+    some start points used to fill zones can be inside the zone outlines,
+    but placed outside when init matrix parameters when rounding them instead of truncate.
+    So zone was filled inside and outside when happens.
+
+
+2008-Sep-9 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    Fixed a bug plotting pins with circles in them from eeschema.
+    Added type FILL_T.
+
+
+2008-Aug-26 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    subtle bug solved: no response to the first left click command after opening a dialog box
+    (after an item edition, for instance)
+
+2008-Aug-22 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    bug solved: netlist calculations could crash eeschema under very rare circumstances.
+    recent bug solved: background filled shapes (filled but not solid: texts are readables inside shapes)
+        were drawn (and plotted) as filled (solid) shapes
+
+2008-Aug-18 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    bug solved: Horizontal Oblong pads holes have a bad T Code size in the drill file.
+
+
+2008-Aug-15 UPDATE   Jerry Jacobs <jerkejacobs@gmail.com>
+================================================================================
++About dialog
+modified: (common.cpp) GetAboutBuildVersion() is a custom build version for the about dialog
+          (config.h.cmake)
+          (CreateSVNVersionHeader.cmake) KICAD_ABOUT_VERSION macro added
+
+added:  (about_dialog.cpp) InitKiCadAbout() initalise the about dialog
+
+removed: (common/infospgm.cpp) is no longer needed
+
+
+2008-Aug-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    libedit:
+        solved : a bug which can crash eeschema on a double click.
+        modified : pin lenght edit in pin edit dialog. The value (handle by spin control) was not editable with recent wxWidgets versions
+
+2008-Aug-09 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    bug solved: pads holes not printed.
+    enforced controls against malformed libraries
+
+2008-Aug-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Removed an obsolete option in the plot menu, in gerber format.
+    Cleanup code.
+    Solved a minor bug: rastnest was not displayed after a move module
+    and if the command was aborted
+
+2008-Juil-31 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Added component sheet X,Y location in BOM.
+    Netlist generation: now spaces in names are replaced by '_' for pcbnew (which does not accept spaces)
+    Bug: print all pages did not work.
+    Please note in complex hierarchy, the current "Print All" function needs to be enhanced,
+    because it does not draw all sheets but only all different sheets
+
+2008-Jule-08 UPDATE   Andrey Fedorushkov <andrf@mail.ru>
+================================================================================
++pcbnew:
+    Added displayed length highlighted net to pcbnew/affiche.cpp
+
+
+2008-June-22 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    Default path kicad/share added when searching kicad data (like library, internat ...)
+    Kicad data Default paths are now (windows version and linux server install)
+    1 - kicad/share
+    2 - kicad
+
+
+2008-June-15 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Bug solved: Eeschema crashed when creating a new subsheet with the same
+    filename as an existing filename, if loading this existing file.
+
+
+2008-June-11 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    Online doc format changed to PDF format.
+    This is **very** easier to handle, because :
+    - Openoffice has a very good pdf export function.
+    - Only one file for application
+    - Is standart (The old html format used a zipped archive, not standart)
+    - the doc tree is less complex (see doc/help/fr or doc/help/en for the new tree).
+
+    If a localized doc file is not found, the english version is automatically loaded instead.
+    No need to copy the same pdf file in subdirectory.
+
+
+2008-June-06 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    minor changes
+    added void SetLocaleTo_C_standard(void) and void SetLocaleTo_Default(void)
+    This is wrapper to the C setlocale( LC_NUMERIC, "C" )
+    and setlocale( LC_NUMERIC, "" )function,
+    but could make more easier an optional use of locale in kicad in floating point notations
+
+
+2008-May-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    removed GPC library due to its unacceptable (and stupid) license
+    using the powerfull kbool library insteed (see polygon/kbool)
++all:
+    minor changes
+
+
+2008-May-22 UPDATE Martin Kajdas <kajdas@cox.com>
+================================================================================
++all
+    Moved all XPM files to <kicad>/bitmaps directory and fixed all related files
++PCBnew
+    Changed File/Export shortcut from 'x' to 'e'
+
+
+2008-May-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Solved: problem in manual part selection for multiple parts per package components
+
+
+2008-May-17 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+    Removed bitmaps.cpp.  Made a static library target named "bitmaps" which
+    gets linked into any app needing bitmaps.  Changed bitmaps.h to simply
+    include an alphabetized listing of the bitmap arrays.
+    We can now continue to migrate all remaining bitmaps into:
+        > the <base>/bitmaps directory
+        > the <base>/bitmaps/CMakeLists.txt file there
+        > the include/bitmaps.h file.
+
+
+2008-May-16 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Solved: bad update of toolbars (eeschema and libedit):
+        undo/redo buttons were not always updated after a change.
+
++kicad
+    the project tree now (as earlier) reads subdirs list files when starting
+    kicad. This feature can be disabled (see treeprj_frame.cpp)
+
+2008-May-15 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    Solved netlist problems for multiple parts per package components
+    in complex hierarchies.
+
+
+
+2008-May-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++common.c
+    wrote wxString& operator << ( wxString&, const wxPoint& ) by moving code
+    from DRC_ITEM::ShowCoord()
++pcbnew
+  * embellished DRAWSEGMENT::MenuText() and DRAWSEGMENT::Display_Infos()
+  * wrote wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
+  * wrote wxPoint DRAWSEGMENT::GetEnd() which calculates the end point of an arc
+  * wrote DRAWSEGMENT::GetLength()
+  * Added S_ARC support to the specctra_export.cpp for EDGES_PCB with DRAWSEGMENTS
+    of arcs.   Arc and lines can be intermixed, its just that they must be
+    contiguous.  The user can now use the improved DRAWSEGMENT::Display_Infos() to
+    find any bad or non-contiguous DRAWSEGMENTS, since that function now shows
+    the two endpoints of any segment.
+
+
+2008-May-2 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
++cmake
+  * Use Subversion to automatically generate build date and revision level
+    when building with CMake.  Header file build_version.h will still need
+    manual updates when using the hand written make files.
+
+
+2008-May-4 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added DRAWSEGMENT::GetStart(), GetEnd() and support S_ARC and S_SEGMENT
+    with it for now.
+  * Added arc support to pcb perimeter of the specctra export.
+
+
+2008-May-2 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added ZONE_CONTAINER::GetBoundingBox() and used it to clean up
+    ZONE_CONTAINER deletion.
+  * For end of edge dragging activity: used full DrawPanel->Refresh()
+    to clean up all XOR artifacts.
+
+
+2008-May-1 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Fixed bugs in layer name handling within the BOARD
+
+
+2008-Apr-30 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    made in some dialogs the ESC key working (linux version, already working under windows)
+    screen number and screen count now are set
+
+
+2008-Apr-29 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added WinEDA_PcbFrame::UpdateToolbarLayerInfo() by factoring it out of
+    ReCreateLayerBox().
+  * Changed call in void WinEDA_PcbFrame::SetToolbars() from ReCreateLayerBox()
+    to UpdateToolbarLayerInfo().
+  * Removed calls to SetToolbars() from:
+      > share/drawpanel.cpp's void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
+      > void WinEDA_BasePcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+
+
+2008-Apr-28 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Layer names were not being set into the htoolbar listbox properly if the
+    BOARD was loaded via the command line as happens when kicad chain loads
+    pcbnew. Also, layer names were not being set if a second board was loaded
+    that had the same number of layers as the previous board. The solution was
+    to comment out the listbox rebuild test in WinEDAChoiceBox*
+    WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
+  * files.cpp:  added Clear_Pcb( false ) to LoadOnePcbFile() and call it if
+    not appending.  This way a user can get into the file selection dialog and
+    still abort (change his mind) without losing the current board.  Removed calls to
+    Clear_Pcb() where LoadOnePcbFile() would now do that.
+  * edtxtmod.cpp: fixed the drawing relics when moving and rotating module texts.
+
+
+2008-Apr-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    PS output: now shows oblong holes with the true shape.
+
+
+2008-Apr-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+  * Spent a 1/2 day tracking down two linked list bugs in deleting a
+    DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE.   I cannot believe in the year
+    2008 we should have to debug a linked list function.  This is stuff I expected
+    to do 20 years ago, not today.  The function
+    void WinEDA_SchematicFrame::DeleteSheetLabel( wxDC* DC,
+              Hierarchical_PIN_Sheet_Struct* SheetLabelToDel ) never worked as
+    far as I can tell.
+    Should switch to boost::ptr_vector ASAP everywhere, and leave linked lists in the 1980's.
+  * Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct() was not
+    setting the m_Parent.
+
+
+2008-Apr-21 UPDATE   Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+  * Added WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint Mouse );
+  * Added WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint Mouse );
+  Needed: Move redundant code to WinEDA_DrawFrame::GeneralControle
+
+  ** Current sheet only Annotation and clear annotation now works for complex hierarchies
+
+
+2008-Apr-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+  * Made a little more sense out of the GetScreen() problem by making it
+    non-virtual, and having the two types of frame classes (eeschema's and pcbnew's)
+    each return their respective types of screens {SCH,PCB}_SCREEN*.
+  * Added GetBaseScreen() as the virtual function which always returns BASE_SCREEN*.
+  * Made WinEDA_DrawFrame::GeneralControle( wxDC* DC, wxPoint Mouse ){ dummy }
+  * Added WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint Mouse );
+  * Moved to void <class>::Place( WinEDA_SchematicFrame* frame, wxDC* DC ) from
+    void <class>::Place( WinEDA_DrawFrame* frame, wxDC* DC ) so that these
+    functions can use the new SCH_SCREEN* WinEDA_SchematicFrame::GetScreen()
+    function (the non-virtual one that returns SCH_SCREEN* not BASE_SCREEN*).
+  * Made some menus conformant to UIpolicies.txt regarding uppercase.
+  * Beautified 5-10 files.
+
+
+2008-Apr-17 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    very small bug in display component info removed
++pcbnew
++cvpcb
+    removed bug: forgotten paths when adding lib files when not in the default lib path
+    (same problem as in eeschema, solved in 2008-Apr-09 Update)
+
+
+2008-Apr-16 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    In complex hierarchies, multiples parts per packages now should work,
+    without restrictions
+    Update and use annotate_dialog.pjd to create annotate dialog
+
+
+2008-Apr-15 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    More code cleaning and Files cleaning and reorganization.
+    change DrawSheetLabelStruct class name to a better name: Hierarchical_PIN_Sheet_Struct
+    For simple Hierarchies, files are now compatables with old eescheam versions
+    In complex hierarchies, multiples parts per packages have still problems,
+    but i hope to solve that soon
+    (in fact all the last changes were made for that)
+
+
+2008-Apr-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    code cleaning. SCH_ITEM class used for all schematic items in eeschema.
+    Files reorganization.
+
+
+2008-Apr-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    code cleaning.
+
+
+2008-Apr-09 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    removed bug: forgotten paths when adding lib files when not in the default lib path
+    Also: adding SCH_COMPONENT.m_PartPerPackageSelections to handle multiple parts per package selection
+        in a complex hierarchy, but yet, no other code to do that.
+
+
+2008-Mar-30 UPDATE  Jonas Diemer <diemer-at-gmx.de>
+================================================================================
++eeschema
++pcbnew
+    Display a warning on a file format version mismatch.
+
+2008-Mar-31 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+    Tweaked class MsgPanel so that the screen drawing only happens from
+    its OnPaint() function.
++pcbnew
+    Added virtual BOARD_ITEM::Draw() and forced all BOARD_ITEM derived classes
+    to implement it so that all these functions are also virtual.
+    Made the offset argument default to the new wxPoint BOARD_ITEM::ZeroOffset.
+    Coded DRAWSEGMENT::Draw() from Trace_DrawSegmentPcb() and removed the latter.
+    Coded EQUIPOT::Draw(), and BOARD::Draw().  Both are dummies for now, but
+    both can be reasonably implemented in the future.
+
+
+2008-Mar-30 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    Solved: eeschema crashes when create a new sheet, using the default filename and enter it.
+    Solved: eeschema crashes when delete a sheet label (pin sheet), undo this and move the label.
+    (bad value (not updated) for the DrawSheetLabelStruct.m_Parent member after redo command in sheet edit).
+
++all:
+    Added comments in gestfich.cpp to explain the default paths used by kicad to find help files and lib files
+
+
+2008-Mar-30 UPDATE  Jonas Diemer <diemer-at-gmx.de>
+================================================================================
++eeschema
+    Removed artifacts resulting from redraws in XOR-Mode.
+
+2008-Mar-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    Ensure graphic and footprint texts have a sufficient size to be seen on screen.
+    (bug 1909165, due to text on edge layer with a 0 value for X size)
+
+2008-Mar-22 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    Netlist dialog redesigned, netlist.cpp code modified
+    and added an option to remove not locked footprints
+    when not found in netlist
+
+
+2008-Mar-21 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    pcbplot.cpp now saves the selected layers as wxConfig options,
+    i.e. retentitively.  The ESC key now works in that dialog.
+    Make upper/lower case conformat to UIpolicies.txt
+    Put buttons at bottom, "Close" as bottom button.
+
+
+2008-Mar-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    Removed an very old bug in onrightclick.cpp which crashes eeschema when
+    right clicking in a field inside a component.
+    Old code should never works,    but ...
+
+
+2008-Mar-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    refined the dialog_freeroute_exchange
+    If possible (i.e. if freeroute.jnlp is found in kicad binary directory) javaws is called insteed of the default browser)
+    So @todo removed
+
+2008-Mar-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+    Renamed some classes and their corresponding KICAD_T types so they are both
+    simpler, shorter and more closely match each other: the type and the classname.
+    Wedged a class SCH_ITEM underneath most eeschema drawable items, and this
+    class came from DrawPartStruct which was largely disfunctional.  Eeschema
+    now more closely matches what we have in pcbnew with the BOARD_ITEM base class.
+    The corresponding class in eeschema is now SCH_ITEM.  Put in some of Jonas'
+    patch for the dragging of a block.  Needs testing, especially dragging
+    text since there is no GetBoundingBox() for that yet.  As an interrim solution
+    we could make SCH_ITEM::GetBoundingBox() return a HUGE rectangle so that any class
+    not implementing GetBoundingBox() in eeschema will get properly re-drawn,
+    in theory.
+
+    We are currently using XORing for dragging a single object and using full
+    redraws for dragging a block.  I suppose this can be an experiment for a
+    week or so.  I would not expect that dragging a block of labels with no
+    other object to work currently (i.e. *visually* correctly).
+
+
+2008-Mar-19 UPDATE Igor Plyatov <plyatov@mail.ru>
+================================================================================
+  * Support for Gnome/KDE menu added.
+  * install.txt rewritten and must be used as main source of information for
+    KiCad installation.
+  * how-to-build-kicad.txt deprecated.
+  * how-to-build-for-windows.txt deprecated.
+
+
+2008-Mar-18 UPDATE  Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    refined the dialog_freeroute_exchange.pjd file, adding tooltips, wording
+    changes, wxID_CANCEL so ESC key closes, and added this comment also:
+    // @todo:
+    // 1) add freeroute.jnlp to the Kicad project
+    // 2) change this next C++ line simply run $ "javaws freeroute.jnlp" as a system
+    //    command, bypassing the browser altogether.  Merely need a PATH to javaws.
+
+
+2008-Mar-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    MODULE::GetBoundingBox() takes in account the clearence around the pads
+    (the clearence limit shape around pads (when shown) was not always erased )
+
+
+2008-Mar-17 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Fixed a crashing bug which occured when you run the module editor, select
+    "Update module in current board" and then run the DRC checker after that.
+  * Changed to void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
+    So caller can safely forget to delete the array of pad pointers and the vector's
+    destructor handles this automatically.
+  * Delete pad from within PCBNEW, not module editor, now uses PostDirtyRect()
+
+
+2008-Mar-14 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++eeschema
+  * cleaned up some xor artifacts, see eeschema/getpart.cpp's comment:
+    // switch from normal mode to xor mode for the duration of the move, first
+    // by erasing fully any "normal drawing mode" primitives with the PostDirtyRect(),
+    // then by drawing the first time in xor mode so that subsequent xor
+    // drawing will fully erase this first copy and then the previous copy.
+  * redraw the entire screen at end of a component move.
+  * added many calls to Refresh() to eeschema/onleftclick.cpp and in such cases
+    I now pass a NULL DC to TestDanglingEnds()
+
+
+2008-Mar-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+    some code cleaning and comment translations.
+    added:
+    /** EDA_Rect::Merge( EDA_Rect & aRect )
+     * Modify Position and Size of this in order to contain the given rect
+     * mainly used to calculate bounding boxes
+     * @param aRect = given rect to merge with this
+     */
+
+
+2008-Mar-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    Added a tool to the upper toolbar which gives and easy access to freeroute
+    Solved a bug in plot postscript format when drawing oblong pads:
+        Bad oblong pad size after drawing a round pad
+
+
+2008-Mar-13 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    Dirty rect used in footprint rotation, flip and delete.
+    Better calculation of the footprint dirty rect.
+
+
+2008-Mar-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all
+    Added bool EDA_Rect::Intersects().
++eeschema
+    Added provisionary calls to eeschema/eeredraw.cpp for
+    if( panel->m_ClipBox.Intersects( item->GetBoundingBox() ) )
+
+
+2008-Mar-11 UPDATE   Per Uddén <p.udden@telia.com>
+================================================================================
++3d-viewer
+  * Fix TODO: Add S_ARC and S_CIRCLE shape render to board edge and module edge.
+    Ex. Now is a board with arcs at corners showing correctly.
+
+
+2008-Mar-10 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Improved some comments on new functions dirty area functions
+  * Changed
+    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ); to
+    void    ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect );
+    which I prefer because it is clearer to the human reader of the calling
+    context that the passed argument is to be modified.  References as function
+    arguments are fine, but if they are to be modified, passing by pointer
+    gives human reader a clearer picture when looking at the calling context.
+  * TRACK::GetBoundingBox() now (1) rounds up the radius, and (2) returns a bounding
+    box which is [pos,dim) in nature, [inclusive, exclusive).
+  * Changed from "new wxDCClip()" to use an automatic wxDCClip() variable in
+    drawpanel.cpp
+  * Removed a printf() from "release" build of drawpanel.cpp
+  * Added WinEDA_DrawPanel::PostDirtyRect()
+  * Renamed Supprime_Une_Piste() to Remove_One_Track() and it now uses
+    PostDirtyRect().
+  * void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* Track ) now redraws
+    the screen after a net deletion.
+  * eeschema/dialog_find.cpp: set the initial keyboard focus to the text control
+
+
+2008-Mar-10 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    Pcbnew can import footprints in gpcb format in Nelib format only
+    Pcbnew automatically recognizes pcbnew or gpcb format when importing a footprint.
+        Due to differences between pcbnew and gpcb,
+        only gpcb newlib files containing only one footprint (one element) are useables.
+    Dirty rectangle calculation debugged.
+    WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect& aRect ) can be used to convert a bouding box to a clip box
+    (see example in deltrack.cpp)
++eeschema:
+    restored: missing lines in schedit.cpp (problems in a lot of commands)
+
+
+2008-Mar-06 UPDATE Igor Plyatov <plyatov@mail.ru>
+================================================================================
++help
+    Eliminated bug "help files not found!".
+
+
+2008-Mar-5 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew
+    Solved problem in fill zone calculations when using buried or blind vias (like micro vias)
+
+
+2008-Feb-18 UPDATE Igor Plyatov <plyatov@mail.ru>
+================================================================================
++common
+    Path for the help files changed to doc/help.
++help
+    help moved to the doc/help.
++doc
+    Separated from KiCad source code to the trunk/kicad-doc.
++library
++modules
+    Separated from KiCad source code to the trunk/kicad-library.
+
+
+2008-Mar-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Completed transision to BOARD::GetLayerName() and away from ReturnPcbLayerName().
+    LayerNames and LAYER_T are saved in the *.brd file and may be edited
+    there with a text editor until the UI is in place to edit them in PCBNEW.
+    To understand the strategy, see BOARD::GetLayerName() in class_board.cpp
+    and see WinEDA_BasePcbFrame::ReadSetup().  I will be adding "Board" menu
+    item to Preferences, but there is more to come before the UI gets done:
+    net classes.
+  * Clear_Pcb() now deletes the existing BOARD() and new's a new BOARD() so that
+    the default BOARD::m_Layer[] values can be set in the new BOARD's constructor.
+
+
+2008-mars-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+3d display:
+    Added Jonas Diemer's patch (enhanced movings from mouse and tools)
+
+
+2008-Mar-1 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    Changed ioascii.cpp to save and load board specific layer names, for DEBUG
+    build only. I want to add class LAYER, see below. Added
+    BOARD::SetLayerName(), BOARD::SetLayerType(), and BOARD::GetLayerType().
+    Will add a UI for editing those soon as soon class LAYER is stable. The
+    BOARD::SetLayerXXXX( int layerNdx, VALUE ) functions would simply route to
+    LAYER::SetXXXX( VALUE ). Then layer specific global variables would migrate
+    to the BOARD::LAYER[]s.
+
+    Jean-Pierre please have a look at pcbstruct.h's class LAYER which is just a
+    prototype for now.  EDA_BoardDesignSettings::m_LayerColor would go away,
+    and then I would add LAYER[] to EDA_BoardDesignSettings or BOARD.
+    Whether EDA_BoardDesignSettings or BOARD I don't have a strong preference.
+    I understand this is a bunch of work, and there are tricks needed to handle
+    adding and deleting the number of layers....
+
+
+2008-Feb-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    controle.cpp: fixed the magnetic track if tracks are parallel.
+
+
+2008-Feb-29 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    Renaming the sheet filename now works in simple and complex hierarchies.
+    Use carefully because this can change the whole schematic structure.
+    Gen Bom List now works in unicode build version
+    (label list generation crashed eeschema in unicode build version)
++all
+    Display filename and full sheet name ("sheet path") in sheet reference
+    the full sheet name has no meanning in pcbnew.
+
+
+2008-Feb-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    Fixed: problem which could crash eeschema when a sub schematic file in a hierarchy was not found.
+
+
+2008-Feb-27 UPDATE  Wayne Stambaugh <stambaughw{at}verizon{dot}net>
+================================================================================
++ eeschema
+  * fixed escape key handling and add accelerate keys in annotate dialog.
+  * factored out eeschema frame class to prevent rebuild of entire project
+    when making changes to eeschema frames.
+  * refactor main eeschema event loop by factoring out most of the non-drawing
+    events.
++ cmake
+  * small fix to root CMakeList file to prevent GCC flags being used with
+    other compilers.
+
+
+2008-Feb-26 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    changed in class DrawSheetStruct m_s member name to m_AssociatedScreen
+    some others minor problems solved.
+    some files "uncrustified"
+    Major problem in undo/redo when a sheet is deleted not yet solved
+    Only for a complex hierarchy, could lost data.
+    When a sheet is deleted by block delete. it is put in undo list.
+    It is really deleted after 10 changes (when the undo list is full).
+    At this time, the associated data is also deleted.
+    If an other (not deleted) sheet shares the same data, this data is lost.
+    Need work to solve this problem and keep the undo/redo feature.
+
+
+2008-Feb-25 UPDATE   Wayne Stambaugh <stambaughw{at}verizon{dot}net>
+================================================================================
++eeschema
+  * converted annotate_dialog layout to Gnome HIG per UIPolicy.txt factor
+    out dialog code from annotate.cpp.
+  * refactor and uncrustify schframe.cpp and schedit.cpp
+  * modify eeschema CMakeList.txt to reflect code changes.
+
+
+2008-Feb-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * specctra_export.cpp: added DSN 'outline' support from EDGE_MODULEs.
+    lines and circles, not arcs.
+  * factored out EDGE_MODULE::ShowShape() from EDGE_MODULE::Show().
+  * drc.cpp changed AsSecondItem to HasSecondItem and test it in generating
+    the file report and when making the popup menu in the dialog_drc and
+    when generating the html list item.
+
+
+2008-Feb-21 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    added : full text conversion between text, label, global label and hierarchical label
+    some problems fixed:
+    - annotation incorrectly cleared.
+    - reference not copied in component copy.
+    - incorrect redo when changing the chip name in component edition
+
+    bugs not fixed:
+    - incorrect annotation in complex hierarchy with multi parts per package (duplicates created).
+
+
+2008-Feb-20 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    Fixed bug in getpart.cpp:
+    eeschema crashed when aborting a new component place command
+    Global Symbols now have their shapes
+    Bad global label shape fixed when reading a schematic file
+
+
+2008-Feb-20 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra_export.cpp fixed the offset problem with freerouter.net.
+    http://tech.groups.yahoo.com/group/kicad-devel/message/1076
+
+
+2008-Feb-19 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    Add ZONE_CONTAINER support to the ID_PCB_HIGHLIGHT_BUTT tool and
+    WinEDA_PcbFrame::DrawHightLight().  Added TYPEZONE_CONTAINER to
+    GENERAL_COLLECTOR::AllButZones[] so that containers are editable even
+    when the "Show Zones" toggle is off.  This came from using the software
+    and realizing that if something is visible (zone containers remain visible
+    even when Show Zones is off) then it should be selectable.  Otherwise it is
+    confusing and frustrating.
+
+
+2008-Feb-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Start to use BOARD::GetLayerName() in anticipation of configurable layer
+    names per board.
+  * Comment out a printf() which will lock up pcbnew when
+    it is run under kicad project manager and the interprocess fifo gets filled.
+  * Cross probe was not showing the not found message properly.  wxString was
+    being used for two purposes, input and Printf() destination.
++gerbview
+    Now loads all gerber files given on the command line, not just one.  The
+    first file is loaded into layer 1 (index 0), the second one is loaded
+    into layer 2 (index 1) etc.
+
+
+2008-Feb-18 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema
+    Fixed bug in gen bill of material (dialog_build_BOM.cpp):
+    eeschema crashed when created a B.O.M. (i think: unicode version only)
+
+
+2008-Feb-18 UPDATE Igor Plyatov <plyatov@mail.ru>
+================================================================================
++eeschema
+    Added menu View with all possible elements from the top toolbar.
+    Find item added in to the Edit menu.
++all
+    Translated part of IDs to english.
+
+
+2008-Feb-15 UPDATE Igor Plyatov <plyatov@mail.ru>
+================================================================================
++eeschema
+    Added item "Delete" in "Edit" menu.
+    Added menu "Place" with all possible elements from the right toolbar.
+
+
+2008-Feb-13 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra export: now generate unique pin names from module padnames in the
+    case where there are non-unique pad names within a module.  Tested with
+    Electra demo, and *.dsn files load OK in there as well as in freerouter.
+    Stopped using reserved layer name "signal" and instead output a full
+    padstack consisting of all pertinent layers for via, pads, and keepouts.
+
+
+2008-Feb-12 UPDATE   Tim Hanson sideskate@gmail.com
+================================================================================
++eeschema
+    * commiting my changes to allow multiple instances of a given schematic file within a hierarchy:
+    ** internally, m_currentScreen has been replaced with m_currentSheet,
+        which is a list or 'path' of screens.  The path of screens is used to generate
+        a series of timestamps, which is converted to flat component reference via a look-up
+        table in the schematic files.
+    ** this means that m_currentScreen is no longer used -- use GetScreen().
+    ** GetScreen is virtual, as some of the dialogs keep around a WinEDA_BaseScreen pointer.
+    ** all sub-sheets in a given schematic must have different names to generate a meaningful netlist.
+
+
+2008-Feb-12 UPDATE Igor Plyatov <plyatov@mail.ru>
+================================================================================
++eeschema
+    Added item "New" in "File" menu
++all
+    Russian translation update.
+
+
+2008-Feb-11 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * Added case TYPETRACK, TYPEVIA, and TYPEMODULE support to Board::Add() so
+    that we can over time hide more of the storage architecture of a BOARD and
+    isolate those dependencies in fewer places.
+  * Fixed some pad orientation issues in specctra_export.
+  * Added VIA_MICROVIA & VIA_BLIND_BURIED support to SPECCTRA::makeVIA().
+  * Commented out the specctra design import menu choice for now, don't have
+    time or need for this import.
+  * Specctra export adds 1/2 mil to clearance rules for freerouter so that
+    the routed board clears our DRC checker OK.
+  * Session import seems done now.
+
+
+2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    added "const" to SEGVIA::GetDrillValue() const;
+    added GetDrillValue() to DRC instead of accessing SEGVIA::m_Drill directly.
+    changed specctra_export so it aborts if all reference designators are not
+    unique.  Unless they are unique we cannot import the routed session.  A
+    good example is the xylinx board which now fails to export.
+    first rough work on SEGVIA::makeVIA() but needs much more work.  Simple
+    session files with vias at least import.  Now encode drill diameter in
+    padstack name for later session import.
+    updated todo.txt file.
+
+
+2008-Feb-7 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra import of *.ses, did tracks and components.
+    renamed copy_track.cpp to copy_track.cpp.notused
+    removed copy_track.cpp from pcbnew/CMakeLists.txt
+    added setlocale() around import and export for float text style.
+
+
+2008-Feb-6 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    started specctra imports of *.ses and *.dsn, by adding menus to File | Import.
+
+
+2008-Feb-4 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+    specctra_export.cpp now supports blind/buried/microvias. Fixed how modules
+    are displayed on back of board. Added a circle keepout for each copper-less
+    through hole.
+
+
+2008-Feb-3 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew
+  * specctra_export.cpp was not exporting the nets correctly, now fixed.
+  * Had a problem with an isolated pad modification on a single module instance
+    in the context of several unmodified instances of same module, now fixed.
+  * Fixed oval pads to make freerouting.net happy.
+    See: http://www.freerouting.net/usren/viewtopic.php?f=3&t=317#p408
+    Done with specctra export for now, will think about adding controls (by dialog)
+    on the export later.
+  * Beautification of a few modules.
+
+
+2008-Jan-31 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    remove the old EDGEZONE class.
+    A ZONE_CONTAINER class is used instead to handle the creation of a new zone outline
+
+
+2008-Jan-29 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+    SPECCTRA export does most items now, except existing tracks.  Soon will
+    need testing.
+
+
+2008-Jan-28 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    - Better criteria to find starting poind in zone filling: the filling alg. uses
+    pads, vias and track ends to find where start the filling.
+    - Added a tool + option in popup menu in track mode (select track width):
+    when creating a track, if activated: if we starts on an existing track,
+    the new track takes the width of the existing track
+
+
+2008-Jan-27 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++all:
+    I got a patch from Mr. Wayne Stambaugh which makes it possible to compile
+    infospgm.cpp once and link the same *.o file multiple times.
+    Jean-Pierre, if you not yet using CMake, you should edit your make.include
+    so that infospgm.cpp is only compiled once for everything, not once per
+    program.  Wayne is a competent developer who contacted me about contributing.
+    I consider him a welcome addition to the developers, Dick.
+
+
+2008-Jan-25 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * SPECCTRA export does padstacks ok, except that oval pad's arcs need to be split
+    into quarter circle arcs, and no consideration is given to "layer types".
+    See page bottom of page 74 of the SECCTRA Design Language Reference, May 2000.
+  * HISTORY_NUMBER was spelt with a zero.
+  * Width was spelt as Widht
+
+
+2008-Jan-25 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    - void Change_Side_Module( MODULE* Module, wxDC* DC ) is now member of class BOARD.
+
+    - Better support for micro vias and buried vias (drill files now are useable for board manufacturers)
+    But not yet tested by a board manufacturer. Be carefull.
+    Todo: tools to conversion  between via through and buried via and buried viad optimisation.
+    But must works for micro vias (needed for my next board)
+    (in pcbnew micro vias are blind vias between 2 adjacent layers: micro vias must be enabled
+    in Dimensions/track and via menu, and placed by ctrl v.
+    They are intended to connect small pitch BGA pins to the inner layer, and can be drilled by laser
+    if the hole diameter is small < 0.2mm. A laser can only drill a hole between 2 adjacent layers ).
+
+    ** Currently use buried via for tests only, not for production **.
+
+
+2008-Jan-24 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Export a specctra *.dsn file includes some padstacks, not ovals yet.
+  * Many many refinements to specctra.cpp and specctra.h.
+  * added COLLECTOR::BasePtr(), which is used in qsort.  Could have used
+  * std::sort() instead.
+  * Wrote D_PAD::Compare()
+  * updated todo.txt
+
+
+2008-Jan-24 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Bugs about fill zones removed (not all, of course).
+    Fixed an old bug in block delete (could crashes pcbnew after deleting footprints).
+
+2008-Jan-23 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Export a *.dsn file includes ZONE_CONTAINERs, was actually able to load
+    a board with zones into the freerouter.net package!  No components, traces yet,
+    just zones and layers.  Fixed parsers and Format()ers.
+  * Rewrote SPECCTRA_DB::readTIME() to dodge a missing strptime() on windows.
+
+
+2008-Jan-23 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Plot option in GERBER format Plot (Exclude Edge Pcb layer) modification:
+    - the default is OFF (like odl pcbnew versions)
+    - this setup is now save in config (is persistant)
+
+    In Zone creation, now delete last created corner works.
+
+2008-Jan-22 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Actually able now to export a *.dsn file, but the contents of the file
+    is incomplete, not a complete input BOARD.
+  * Added DRAWSEGMENT::Show() for debugging.
+  * Changed specctra.h's POINT to use double for coordinates.  Changed format
+    string for Format()ing a double.
+  * Changed specctra_export.cpp to actually output an incomplete file.
+  * Added BOARD::GetCopperLayerCount() and BOARD::GetLayerName().
+
+
+2008-Jan-21 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+    Added specctra_export.cpp, specctra.cpp, specctra.h, dsn.cpp, and dsn.h to
+    pcbnew's link requirements. Updated CMakeLists.txt to reflect this. This
+    increased pcbnew's size by 175kb so far. Started the actual export (i.e.
+    BOARD to DSN::PCB copying logic) which is going into specctra_export.cpp's
+    void WinEDA_PcbFrame::ExportToSPECCTRA( wxCommandEvent& event ) so that the
+    huge header file, specctra.h need only be included in one or two *.cpp
+    files. The specctra export menu support was added to id.h, wxPcbStruct.h,
+    menubarpcb.cpp, and pcbframe.cpp. After dsn export, I intend to add an
+    import, and a session file feedback merge. See the revised
+    how-to-build-kicad.txt for the new boost c++ libraries requirement.
+
+
+2008-Jan-21 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    labels and texts display changed when rotated 180 degres:
+    horizontal text are now right justified insteed of 180 degree rotated, and are readable.
+
++pcbnew:
+    bug 1874663 solved (edit a pad netname does not work very well)
+
+2008-Jan-20 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    On line DRC when creating a zone outline.
+    Needs more work to display errors DRC.
+
+
+2008-Jan-18 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all:
+    filtering small mouse moves ( < 5 pixels) when clicking.
+    Starting a wire or a track is now more easily because these small moves do not start a block commnad.
+
++pcbnew:
+    rework of drill filles creation (excellon and reports)
+    needed to have a clean implantation of buried vias and mainly microvia
+    which involve a more complex drill files generation
+    This is better to continue work on zones because :
+    hight density boards = use of BGA = microvias + good zones handling
+    When a board has buried or blind vias (microvia are blind vias),
+    pcbnew creates a drill file per layer pair. for a 4 layer board:
+    drill file for layer1 to layer 2
+    drill file for layer2 to layer 3
+    drill file for layer3 to layer 4
+
+
+2008-Jan-18 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
+    how-to-build-kicad.txt: added the Boost C++ Libraries installation info
+    and requirement.
+
+
+2008-Jan-16 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Move Zone outlines added
+    Zone outline DRC works (needs improvements)
+    some bugs solved, but polyline.cpp still needs work.
+    gendrill: code cleaning.
+
+2008-Jan-14 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    code cleaning:
+     DRAWSEGMENT class functions moved in the new files class_drawsegment.cpp et .h
+
+
+2008-Jan-12 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++eeschema:
+    missing footprints in export netlist (bug 1867321)
+    Affected: PadsPcb converter did not list all footprints
+
++pcbnew:
+    fixed: memory not freeed in block copy (minor bug)
+    Support for micro vias (generation of drill files not finished)
+
+2008-jan-06 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Block commands now works with zones.
+    Some code cleanning.
+
+
+2008-Jan-5 UPDATE   Dick Hollenbeck <dick@softplc.com>
+================================================================================
++pcbnew:
+  * Added pad_shapes.h and blended it into class_pad.h and PolyLine2Kicad.h.
+    Renamed the pad shapes in there to avoid namespace conflicts.
+    RECT became PAD_RECT, CIRCLE became PAD_CIRCLE, etc.
+  * common.cpp's ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
+    has commented out code that I tested as part of a possible new scheme to support
+    custom layer names per project.
+  * More specctra dsn import export work.
+
+
+2008-jan-05 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    Added: Delete cutout outline in zone popup menu
+    the GUI about zones is now working.
+    Some work is needed ( a zone in a zone of the same net is not merged )
+    Currently No DRC for outlines
+
+
+2008-jan-04 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++pcbnew:
+    More about zones:
+        Outlines can be edited. Outlines are merged if needeed.
+        Currently No DRC for outlines
+
+
+2008-jan-01 UPDATE  Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
++all
+    wxstruct modified and wxPcbStuct.h added:
+        classes relatives to pcbnew, cvpcb and gerbview are moved in wxPcbStuct.h
+
