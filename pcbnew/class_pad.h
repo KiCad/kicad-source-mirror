@@ -11,9 +11,9 @@ class Pcb3D_GLCanvas;
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
 private:
-    int m_NetCode;              // Net number for fast comparisons
-    wxString   m_Netname;       // Full net name like /mysheet/mysubsheet/vout used by eeschema
-    wxString   m_ShortNetname;  // short net name, like vout from /mysheet/mysubsheet/vout
+    int      m_NetCode;         // Net number for fast comparisons
+    wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by eeschema
+    wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 
 
 public:
@@ -27,17 +27,17 @@ public:
                                      */
     };
 
-    int      m_Masque_Layer;        // Bitwise layer :1= copper layer, 15= cmp,
+    int m_Masque_Layer;             // Bitwise layer :1= copper layer, 15= cmp,
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 
-    int     m_PadShape;             // Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
-    int     m_DrillShape;           // Shape PAD_CIRCLE, PAD_OVAL
+    int    m_PadShape;              // Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
+    int    m_DrillShape;            // Shape PAD_CIRCLE, PAD_OVAL
 
-    wxSize  m_Drill;                // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
+    wxSize m_Drill;                 // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
                                     // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
 
-    wxSize  m_Offset;   /* This parameter is usefull only for oblong pads (it can be used for other
+    wxSize m_Offset;    /* This parameter is usefull only for oblong pads (it can be used for other
                          * shapes, but without any interest).
                          * this is the offset between the pad hole and the pad shape (you must
                          * understand here pad shape = copper area around the hole)
@@ -61,15 +61,15 @@ public:
     int     m_Orient;               // in 1/10 degrees
 
 private:
-    int     m_SubRatsnest;           // variable used in rats nest computations
-                                    // handle subnet (block) number in ratsnet connection
+    int     m_SubRatsnest;              // variable used in rats nest computations
+                                        // handle subnet (block) number in ratsnet connection
 
 public:
     D_PAD( MODULE* parent );
     D_PAD( D_PAD* pad );
     ~D_PAD();
 
-    void            Copy( D_PAD* source );
+    void Copy( D_PAD* source );
 
     D_PAD* Next() { return (D_PAD*) Pnext; }
 
@@ -79,6 +79,7 @@ public:
      * @return const wxString * , a pointer to the full netname
      */
     wxString GetNetname() const { return m_Netname; }
+
     /**
      * Function GetShortNetname
      * @return const wxString * , a pointer to the short netname
@@ -89,13 +90,13 @@ public:
      * Function SetNetname
      * @param const wxString : the new netname
      */
-    void SetNetname( const wxString & aNetname );
+    void SetNetname( const wxString& aNetname );
 
     /**
      * Function GetShape
      * @return the shape of this pad.
      */
-    int GetShape( ) { return (m_PadShape & 0xFF); }
+    int GetShape() { return m_PadShape & 0xFF;  }
 
     /**
      * Function GetPosition
@@ -113,8 +114,9 @@ public:
         m_Pos = aPos;
     }
 
+
     /* Reading and writing data on files */
-    int             ReadDescr( FILE* File, int* LineNum = NULL );
+    int           ReadDescr( FILE* File, int* LineNum = NULL );
 
     /**
      * Function Save
@@ -122,21 +124,21 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool            Save( FILE* aFile ) const;
+    bool          Save( FILE* aFile ) const;
 
 
     /* drawing functions */
-    void            Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                         int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void          Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                        int aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    void            Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void          Draw3D( Pcb3D_GLCanvas* glcanvas );
 
     // others
-    void            SetPadName( const wxString& name );     // Change pad name
-    wxString        ReturnStringPadName();                  // Return pad name as string in a wxString
-    void            ReturnStringPadName( wxString& text );  // Return pad name as string in a buffer
-    void            ComputeRayon();                         // compute m_Rayon, rayon du cercle exinscrit
-    const wxPoint   ReturnShapePos();                       // retourne la position
+    void          SetPadName( const wxString& name );       // Change pad name
+    wxString      ReturnStringPadName();                    // Return pad name as string in a wxString
+    void          ReturnStringPadName( wxString& text );    // Return pad name as string in a buffer
+    void          ComputeRayon();                           // compute m_Rayon, rayon du cercle exinscrit
+    const wxPoint ReturnShapePos();                         // retourne la position
 
 
     /**
@@ -154,7 +156,7 @@ public:
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void            Display_Infos( WinEDA_DrawFrame* frame );
+    void Display_Infos( WinEDA_DrawFrame* frame );
 
 
     /**
@@ -165,7 +167,7 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    bool            IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( int aLayer ) const;
 
 
     /**
@@ -174,7 +176,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool            HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& refPos );
 
     /**
      * Function GetClass
@@ -192,7 +194,7 @@ public:
      * returns the bounding box of this pad
      * Mainly used to redraw the screen area occuped by the pad
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect   GetBoundingBox();
 
     /**
      * Function Compare
@@ -202,7 +204,7 @@ public:
     static int Compare( const D_PAD* padref, const D_PAD* padcmp );
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
     /**
      * Function Show
@@ -216,4 +218,4 @@ public:
 #endif
 };
 
-typedef class D_PAD * LISTE_PAD;
+typedef class D_PAD* LISTE_PAD;

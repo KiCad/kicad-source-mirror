@@ -73,6 +73,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Copper areas intersect or are too close"));
     case DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE:
         return wxString( _("Copper area has a non existent net name"));
+    case DRCE_HOLE_NEAR_PAD:
+        return wxString( _("Hole near pad"));
+    case DRCE_HOLE_NEAR_TRACK:
+        return wxString( _("Hole near track"));
 
 
     default:

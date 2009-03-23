@@ -62,7 +62,7 @@ void DRC::ShowDialog()
         // copy data retained in this DRC object into the m_ui DrcPanel:
 
         PutValueInLocalUnits( *m_ui->m_SetClearance, g_DesignSettings.m_TrackClearence,
-                             m_mainWindow->m_InternalUnits );;
+                              m_mainWindow->m_InternalUnits );;
 
         m_ui->m_Pad2PadTestCtrl->SetValue( m_doPad2PadTest );
         m_ui->m_ZonesTestCtrl->SetValue( m_doZonesTest );
@@ -74,7 +74,7 @@ void DRC::ShowDialog()
     else
         updatePointers();
 
-    m_ui->Show(true);
+    m_ui->Show( true );
 }
 
 
@@ -102,15 +102,15 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
 {
     m_mainWindow = aPcbWindow;
     m_drawPanel  = aPcbWindow->DrawPanel;
-    m_pcb        = aPcbWindow->GetBoard();
-    m_ui         = 0;
+    m_pcb = aPcbWindow->GetBoard();
+    m_ui  = 0;
 
     // establish initial values for everything:
     m_doPad2PadTest     = true;
     m_doUnconnectedTest = true;
-    m_doZonesTest       = false;
+    m_doZonesTest = false;
 
-    m_doCreateRptFile   = false;
+    m_doCreateRptFile = false;
 
     // m_rptFilename set to empty by its constructor
 
@@ -118,10 +118,10 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
 
     m_spotcx = 0;
     m_spotcy = 0;
-    m_finx = 0;
-    m_finy = 0;
+    m_finx   = 0;
+    m_finy   = 0;
 
-    m_segmAngle = 0;
+    m_segmAngle  = 0;
     m_segmLength = 0;
 
     m_xcliplo = 0;
@@ -132,12 +132,14 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
     m_drawPanel = 0;
 }
 
+
 DRC::~DRC()
 {
     // maybe someday look at pointainer.h  <- google for "pointainer.h"
-    for( unsigned i=0; i<m_unconnected.size();  ++i )
+    for( unsigned i = 0; i<m_unconnected.size();  ++i )
         delete m_unconnected[i];
 }
+
 
 /*********************************************/
 int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
@@ -158,8 +160,9 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 
 
 /**************************************************************/
-int DRC::Drc( ZONE_CONTAINER * aArea, int CornerIndex )
+int DRC::Drc( ZONE_CONTAINER* aArea, int CornerIndex )
 /*************************************************************/
+
 /**
  * Function Drc
  * tests the outline segment starting at CornerIndex and returns the result and displays the error
@@ -173,7 +176,7 @@ int DRC::Drc( ZONE_CONTAINER * aArea, int CornerIndex )
 {
     updatePointers();
 
-    if( ! doEdgeZoneDrc( aArea, CornerIndex ) )
+    if( !doEdgeZoneDrc( aArea, CornerIndex ) )
     {
         wxASSERT( m_currentMarker );
         m_currentMarker->Display_Infos( m_mainWindow );
@@ -182,7 +185,6 @@ int DRC::Drc( ZONE_CONTAINER * aArea, int CornerIndex )
 
     return OK_DRC;
 }
-
 
 
 void DRC::RunTests()
@@ -216,7 +218,6 @@ void DRC::RunTests()
 }
 
 
-
 /***************************************************************/
 void DRC::ListUnconnectedPads()
 /***************************************************************/
@@ -234,7 +235,7 @@ void DRC::updatePointers()
     m_drawPanel = m_mainWindow->DrawPanel;
     m_pcb = m_mainWindow->GetBoard();
 
-    if ( m_ui ) // Use diag list boxes only in DRC dialog
+    if( m_ui )  // Use diag list boxes only in DRC dialog
     {
         m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
 
@@ -245,7 +246,7 @@ void DRC::updatePointers()
 
 void DRC::testTracks()
 {
-    for( TRACK* segm = m_pcb->m_Track;  segm && segm->Next();  segm=segm->Next() )
+    for( TRACK* segm = m_pcb->m_Track;  segm && segm->Next();  segm = segm->Next() )
     {
         if( !doTrackDrc( segm, segm->Next(), true ) )
         {
@@ -257,27 +258,29 @@ void DRC::testTracks()
 }
 
 
+/***********************/
 void DRC::testPad2Pad()
+/***********************/
 {
     std::vector<D_PAD*> sortedPads;
 
     CreateSortedPadListByXCoord( m_pcb, &sortedPads );
 
     // find the max size of the pads (used to stop the test)
-    int  max_size = 0;
+    int max_size = 0;
 
-    for( unsigned i=0;  i<sortedPads.size();  ++i )
+    for( unsigned i = 0;  i<sortedPads.size();  ++i )
     {
         D_PAD* pad = sortedPads[i];
 
-        if( pad->m_Rayon > max_size )
+        if( pad->m_Rayon > max_size )       // m_Rayon is the radius value of the circle containing the pad
             max_size = pad->m_Rayon;
     }
 
     // Test the pads
     D_PAD** listEnd = &sortedPads[ sortedPads.size() ];
 
-    for( unsigned i=0;  i<sortedPads.size();  ++i )
+    for( unsigned i = 0;  i<sortedPads.size();  ++i )
     {
         D_PAD* pad = sortedPads[i];
 
@@ -303,27 +306,27 @@ void DRC::testUnconnected()
         return;
 
     CHEVELU* rat = m_pcb->m_Ratsnest;
-    for( int i=0;  i<m_pcb->GetNumRatsnests();  ++i, ++rat )
+    for( int i = 0;  i<m_pcb->GetNumRatsnests();  ++i, ++rat )
     {
         if( (rat->status & CH_ACTIF) == 0 )
             continue;
 
-        D_PAD*  padStart = rat->pad_start;
-        D_PAD*  padEnd   = rat->pad_end;
+        D_PAD*    padStart = rat->pad_start;
+        D_PAD*    padEnd   = rat->pad_end;
 
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS, padStart->GetPosition(),
-                             padStart->MenuText(m_pcb), padEnd->MenuText(m_pcb),
-                             padStart->GetPosition(),   padEnd->GetPosition() );
+                                         padStart->MenuText( m_pcb ), padEnd->MenuText( m_pcb ),
+                                         padStart->GetPosition(), padEnd->GetPosition() );
 
         m_unconnected.push_back( uncItem );
     }
 }
 
+
 /**********************************************/
-void DRC::testZones(bool adoTestFillSegments)
+void DRC::testZones( bool adoTestFillSegments )
 /**********************************************/
 {
-
     // Test copper areas for valide netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
     // if a netcode is == 0 the netname is void, and the zone is not connected.
@@ -331,12 +334,12 @@ void DRC::testZones(bool adoTestFillSegments)
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ii );
-        if( ! Area_To_Test->IsOnCopperLayer() )
+        if( !Area_To_Test->IsOnCopperLayer() )
             continue;
         if( Area_To_Test->GetNet() < 0 )
         {
             m_currentMarker = fillMarker( Area_To_Test,
-                            DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
+                                          DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
             m_pcb->Add( m_currentMarker );
             m_currentMarker = 0;
         }
@@ -375,11 +378,11 @@ void DRC::testZones(bool adoTestFillSegments)
 
 MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER* fillMe )
 {
-    wxString    textA = aTrack->MenuText( m_pcb );
-    wxString    textB;
+    wxString textA = aTrack->MenuText( m_pcb );
+    wxString textB;
 
-    wxPoint     position;
-    wxPoint     posB;
+    wxPoint  position;
+    wxPoint  posB;
 
     if( aItem )     // aItem might be NULL
     {
@@ -402,8 +405,8 @@ MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKE
             // distance from end of aTrack.
             position = track->m_Start;
 
-            double dToEnd   = hypot( endPos.x   - aTrack->m_End.x,
-                                     endPos.y   - aTrack->m_End.y );
+            double dToEnd = hypot( endPos.x - aTrack->m_End.x,
+                                   endPos.y - aTrack->m_End.y );
             double dToStart = hypot( position.x - aTrack->m_End.x,
                                      position.y - aTrack->m_End.y );
 
@@ -417,23 +420,23 @@ MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKE
 
     if( fillMe )
     {
-        if ( aItem )
+        if( aItem )
             fillMe->SetData( aErrorCode, position,
-                            textA, aTrack->GetPosition(),
-                            textB, posB );
+                             textA, aTrack->GetPosition(),
+                             textB, posB );
         else
             fillMe->SetData( aErrorCode, position,
                             textA, aTrack->GetPosition() );
     }
     else
     {
-        if ( aItem )
+        if( aItem )
             fillMe = new MARKER( aErrorCode, position,
-                            textA, aTrack->GetPosition(),
-                            textB, posB );
+                                 textA, aTrack->GetPosition(),
+                                 textB, posB );
         else
             fillMe = new MARKER( aErrorCode, position,
-                            textA, aTrack->GetPosition() );
+                                textA, aTrack->GetPosition() );
     }
 
     return fillMe;
@@ -442,11 +445,11 @@ MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKE
 
 MARKER* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillMe )
 {
-    wxString    textA = aPad->MenuText( m_pcb );
-    wxString    textB = bPad->MenuText( m_pcb );
+    wxString textA = aPad->MenuText( m_pcb );
+    wxString textB = bPad->MenuText( m_pcb );
 
-    wxPoint posA = aPad->GetPosition();
-    wxPoint posB = bPad->GetPosition();
+    wxPoint  posA = aPad->GetPosition();
+    wxPoint  posB = bPad->GetPosition();
 
     if( fillMe )
         fillMe->SetData( aErrorCode, posA, textA, posA, textB, posB );
@@ -456,11 +459,12 @@ MARKER* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillM
     return fillMe;
 }
 
-MARKER* DRC::fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe )
-{
-    wxString    textA = aArea->MenuText( m_pcb );
 
-    wxPoint posA = aArea->GetPosition();
+MARKER* DRC::fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER* fillMe )
+{
+    wxString textA = aArea->MenuText( m_pcb );
+
+    wxPoint  posA = aArea->GetPosition();
 
     if( fillMe )
         fillMe->SetData( aErrorCode, posA, textA, posA );
@@ -471,11 +475,14 @@ MARKER* DRC::fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe 
 }
 
 
-MARKER* DRC::fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER* fillMe )
+MARKER* DRC::fillMarker( const ZONE_CONTAINER* aArea,
+                         const wxPoint&        aPos,
+                         int                   aErrorCode,
+                         MARKER*               fillMe )
 {
-    wxString    textA = aArea->MenuText( m_pcb );
+    wxString textA = aArea->MenuText( m_pcb );
 
-    wxPoint posA = aPos;
+    wxPoint  posA = aPos;
 
     if( fillMe )
         fillMe->SetData( aErrorCode, posA, textA, posA );
@@ -499,8 +506,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                             //	l'origine du segment de reference
     wxPoint shape_pos;
 
-    org_X        = aRefSeg->m_Start.x;
-    org_Y        = aRefSeg->m_Start.y;
+    org_X = aRefSeg->m_Start.x;
+    org_Y = aRefSeg->m_Start.y;
 
     m_finx = dx = aRefSeg->m_End.x - org_X;
     m_finy = dy = aRefSeg->m_End.y - org_Y;
@@ -515,41 +522,38 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     if( aRefSeg->Type() == TYPE_VIA )
     {
         // test if via's hole is bigger than its diameter
-        // This test seems necessary since the dialog box that displays the
-        // desired via hole size and width does not enforce a hole size smaller
-        // than the via's diameter.
+        // This test is necessary since the via hole size and width can be modified
+        // and an default via hole can be bigger than some vias sizes
         if( aRefSeg->GetDrillValue() > aRefSeg->m_Width )
         {
-#if 0       // a temporary way to fix a bad board here, change for your values
-            if( aRefSeg->GetDrillValue()==120 && aRefSeg->m_Width==100 )
-                aRefSeg->m_Width = 180;
-#else
             m_currentMarker = fillMarker( aRefSeg, NULL,
-                                DRCE_VIA_HOLE_BIGGER, m_currentMarker );
+                                          DRCE_VIA_HOLE_BIGGER, m_currentMarker );
             return false;
-#endif
         }
 
-        // For microvias: test if they are blindvias and only between 2 layers
+        // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
         // and **only** one layer can be drilled
         if( aRefSeg->Shape() == VIA_MICROVIA )
         {
-            int layer1, layer2;
+            int  layer1, layer2;
             bool err = true;
-            ((SEGVIA*)aRefSeg)->ReturnLayerPair(&layer1, &layer2);
-            if (layer1> layer2 ) EXCHG(layer1,layer2);
+            ( (SEGVIA*) aRefSeg )->ReturnLayerPair( &layer1, &layer2 );
+            if( layer1> layer2 )
+                EXCHG( layer1, layer2 );
+
             // test:
-            if (layer1 == COPPER_LAYER_N && layer2 == LAYER_N_2 ) err = false;
-            if (layer1 == (g_DesignSettings.m_CopperLayerCount - 2 ) && layer2 == LAYER_CMP_N ) err = false;
-            if ( err )
+            if( layer1 == COPPER_LAYER_N && layer2 == LAYER_N_2 )
+                err = false;
+            if( layer1 == (g_DesignSettings.m_CopperLayerCount - 2 ) && layer2 == LAYER_CMP_N )
+                err = false;
+            if( err )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
-                                DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
+                                              DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
                 return false;
             }
         }
-
     }
 
     // for a non horizontal or vertical segment Compute the segment angle
@@ -577,7 +581,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
     if( testPads )
     {
-        for( unsigned ii=0;  ii<m_pcb->m_Pads.size();  ++ii )
+        for( unsigned ii = 0;  ii<m_pcb->m_Pads.size();  ++ii )
         {
             D_PAD* pad = m_pcb->m_Pads[ii];
 
@@ -593,7 +597,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 if( pad->m_Drill.x == 0 )
                     continue;
 
-                pseudo_pad.m_Size     = pad->m_Drill;
+                pseudo_pad.m_Size = pad->m_Drill;
                 pseudo_pad.SetPosition( pad->GetPosition() );
                 pseudo_pad.m_PadShape = pad->m_DrillShape;
                 pseudo_pad.m_Orient   = pad->m_Orient;
@@ -603,10 +607,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 m_spotcy = pseudo_pad.GetPosition().y - org_Y;
 
                 if( !checkClearanceSegmToPad( &pseudo_pad, w_dist,
-                                            g_DesignSettings.m_TrackClearence ) )
+                                              g_DesignSettings.m_TrackClearence ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, pad,
-                                        DRCE_TRACK_NEAR_THROUGH_HOLE, m_currentMarker );
+                                                  DRCE_TRACK_NEAR_THROUGH_HOLE, m_currentMarker );
                     return false;
                 }
                 continue;
@@ -615,18 +619,18 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             /* The pad must be in a net (i.e pt_pad->GetNet() != 0 )
              * but no problem if the pad netcode is the current netcode (same net)
              */
-            if( pad->GetNet() &&	// the pad must be connected
-                net_code_ref == pad->GetNet() )	// the pad net is the same as current net -> Ok
+            if( pad->GetNet()                       // the pad must be connected
+               && net_code_ref == pad->GetNet() )   // the pad net is the same as current net -> Ok
                 continue;
 
             // DRC for the pad
             shape_pos = pad->ReturnShapePos();
-            m_spotcx   = shape_pos.x - org_X;
-            m_spotcy   = shape_pos.y - org_Y;
+            m_spotcx  = shape_pos.x - org_X;
+            m_spotcy  = shape_pos.y - org_Y;
             if( !checkClearanceSegmToPad( pad, w_dist, g_DesignSettings.m_TrackClearence ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, pad,
-                                    DRCE_TRACK_NEAR_PAD, m_currentMarker );
+                                              DRCE_TRACK_NEAR_PAD, m_currentMarker );
                 return false;
             }
         }
@@ -639,7 +643,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     // At this point the reference segment is the X axis
 
     // Test the reference segment with other track segments
-    for( track=aStart;  track;  track=track->Next() )
+    for( track = aStart;  track;  track = track->Next() )
     {
         // coord des extremites du segment teste dans le repere modifie
         int x0;
@@ -682,7 +686,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 if( (int) hypot( x0, y0 ) < w_dist )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
-                                        DRCE_VIA_NEAR_VIA, m_currentMarker );
+                                                  DRCE_VIA_NEAR_VIA, m_currentMarker );
                     return false;
                 }
             }
@@ -698,7 +702,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 if( !checkMarginToCircle( x0, y0, w_dist, dx ) )
                 {
                     m_currentMarker = fillMarker( track, aRefSeg,
-                                        DRCE_VIA_NEAR_TRACK, m_currentMarker );
+                                                  DRCE_VIA_NEAR_TRACK, m_currentMarker );
                     return false;
                 }
             }
@@ -724,7 +728,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 continue;
 
             m_currentMarker = fillMarker( aRefSeg, track,
-                                DRCE_TRACK_NEAR_VIA, m_currentMarker );
+                                          DRCE_TRACK_NEAR_VIA, m_currentMarker );
             return false;
         }
 
@@ -739,21 +743,21 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 continue;
 
             if( x0 > xf )
-                EXCHG( x0, xf );                                /* pour que x0 <= xf */
+                EXCHG( x0, xf );                                    /* pour que x0 <= xf */
 
-            if( x0 > (-w_dist) && x0 < (m_segmLength + w_dist) )   /* possible error drc */
+            if( x0 > (-w_dist) && x0 < (m_segmLength + w_dist) )    /* possible error drc */
             {
                 /* Fine test : we consider the rounded shape of the ends */
                 if( x0 >= 0 && x0 <= m_segmLength )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
-                                        DRCE_TRACK_ENDS1, m_currentMarker );
+                                                  DRCE_TRACK_ENDS1, m_currentMarker );
                     return false;
                 }
                 if( !checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
-                                        DRCE_TRACK_ENDS2, m_currentMarker );
+                                                  DRCE_TRACK_ENDS2, m_currentMarker );
                     return false;
                 }
             }
@@ -763,13 +767,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 if( xf >= 0 && xf <= m_segmLength )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
-                                        DRCE_TRACK_ENDS3, m_currentMarker );
+                                                  DRCE_TRACK_ENDS3, m_currentMarker );
                     return false;
                 }
                 if( !checkMarginToCircle( xf, yf, w_dist, m_segmLength ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
-                                        DRCE_TRACK_ENDS4, m_currentMarker );
+                                                  DRCE_TRACK_ENDS4, m_currentMarker );
                     return false;
                 }
             }
@@ -777,7 +781,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( x0 <=0 && xf >= 0 )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
-                                    DRCE_TRACK_UNKNOWN1, m_currentMarker );
+                                              DRCE_TRACK_UNKNOWN1, m_currentMarker );
                 return false;
             }
         }
@@ -792,7 +796,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( (y0 < 0) && (yf > 0) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
-                                    DRCE_TRACKS_CROSSING, m_currentMarker );
+                                              DRCE_TRACKS_CROSSING, m_currentMarker );
                 return false;
             }
 
@@ -800,13 +804,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( !checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
-                                    DRCE_ENDS_PROBLEM1, m_currentMarker );
+                                              DRCE_ENDS_PROBLEM1, m_currentMarker );
                 return false;
             }
             if( !checkMarginToCircle( xf, yf, w_dist, m_segmLength ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
-                                    DRCE_ENDS_PROBLEM2, m_currentMarker );
+                                              DRCE_ENDS_PROBLEM2, m_currentMarker );
                 return false;
             }
         }
@@ -834,7 +838,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 if( !checkLine( x0, y0, xf, yf ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
-                                        DRCE_ENDS_PROBLEM3, m_currentMarker );
+                                                  DRCE_ENDS_PROBLEM3, m_currentMarker );
                     return false;
                 }
                 else    // The drc error is due to the starting or the ending point of the reference segment
@@ -869,13 +873,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     if( !checkMarginToCircle( rx0, ry0, w_dist, dx ) )
                     {
                         m_currentMarker = fillMarker( aRefSeg, track,
-                                            DRCE_ENDS_PROBLEM4, m_currentMarker );
+                                                      DRCE_ENDS_PROBLEM4, m_currentMarker );
                         return false;
                     }
                     if( !checkMarginToCircle( rxf, ryf, w_dist, dx ) )
                     {
                         m_currentMarker = fillMarker( aRefSeg, track,
-                                            DRCE_ENDS_PROBLEM5, m_currentMarker );
+                                                      DRCE_ENDS_PROBLEM5, m_currentMarker );
                         return false;
                     }
                 }
@@ -889,15 +893,20 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
 /*****************************************************************************/
 bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
-                                  int max_size )
+                          int max_size )
 /*****************************************************************************/
 {
-    int        layerMask = aRefPad->m_Masque_Layer & ALL_CU_LAYERS;
+    int          layerMask = aRefPad->m_Masque_Layer & ALL_CU_LAYERS;
 
-    int        x_limite = max_size + g_DesignSettings.m_TrackClearence +
-                           aRefPad->m_Rayon + aRefPad->GetPosition().x;
+    int          x_limite = max_size + g_DesignSettings.m_TrackClearence +
+                            aRefPad->m_Rayon + aRefPad->GetPosition().x;
 
-    for(  LISTE_PAD* pad_list=aStart;  pad_list<aEnd;  ++pad_list )
+    static D_PAD dummypad( (MODULE*) NULL );       // used to test DRC pad to holes: this dummypad is the hole to test
+
+    dummypad.m_Masque_Layer = ALL_CU_LAYERS;
+
+
+    for(  LISTE_PAD* pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
         D_PAD* pad = *pad_list;
         if( pad == aRefPad )
@@ -908,25 +917,73 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
         if( pad->m_Pos.x > x_limite )
             break;
 
-        /* No probleme if pads are on different copper layers */
+
+        /* No problem if pads are on different copper layers,
+         * but their hole (if any ) can create RDC error because they are on all copper layers, so we test them
+        */
         if( (pad->m_Masque_Layer & layerMask ) == 0 )
+        {
+            /* if holes are in the same location and have the same size and shape, this can be accepted */
+            if( pad->GetPosition() == aRefPad->GetPosition()
+                && pad->m_Drill == aRefPad->m_Drill
+                && pad->m_DrillShape == aRefPad->m_DrillShape )
+            {
+                if( aRefPad->m_DrillShape == PAD_CIRCLE )
+                    continue;
+                if( pad->m_Orient == aRefPad->m_Orient )    // for oval holes: must also have the same orientation
+                    continue;
+            }
+
+            /* Here, we must test clearance between holes and pads
+             * dummypad size and shape is adjusted to pad drill size and shape
+             */
+            if( pad->m_Drill.x ) // pad under testing has a hole, test this hole against pad reference
+            {
+                dummypad.SetPosition(  pad->GetPosition() );
+                dummypad.m_Size     = pad->m_Drill;
+                dummypad.m_PadShape = pad->m_DrillShape == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE;
+                dummypad.m_Orient   = pad->m_Orient;
+                if( !checkClearancePadToPad( aRefPad, &dummypad, g_DesignSettings.m_TrackClearence ) )
+                {
+                    // here we have a drc error on pad!
+                    m_currentMarker = fillMarker( pad, aRefPad,
+                                                  DRCE_HOLE_NEAR_PAD, m_currentMarker );
+                    return false;
+                }
+            }
+            if( aRefPad->m_Drill.x ) // pad reference has a hole
+            {
+                dummypad.SetPosition(  aRefPad->GetPosition() );
+                dummypad.m_Size     = aRefPad->m_Drill;
+                dummypad.m_PadShape = aRefPad->m_DrillShape == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE;
+                dummypad.m_Orient   = aRefPad->m_Orient;
+                if( !checkClearancePadToPad( pad, &dummypad, g_DesignSettings.m_TrackClearence ) )
+                {
+                    // here we have a drc erroron aRefPad!
+                    m_currentMarker = fillMarker( aRefPad, pad,
+                                                  DRCE_HOLE_NEAR_PAD, m_currentMarker );
+                    return false;
+                }
+            }
             continue;
+        }
 
         /* The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
          *  But no problem if pads have the same netcode (same net)*/
-        if( pad->GetNet() && (aRefPad->GetNet() == pad->GetNet()) )
+        if( pad->GetNet() && ( aRefPad->GetNet() == pad->GetNet() ) )
             continue;
 
         /* No problem if pads are from the same footprint
          *  and have the same pad number ( equivalent pads  )  */
-        if( (pad->GetParent() == aRefPad->GetParent()) && (pad->m_NumPadName == aRefPad->m_NumPadName) )
+        if( ( pad->GetParent() == aRefPad->GetParent() )
+           && (pad->m_NumPadName == aRefPad->m_NumPadName) )
             continue;
 
         if( !checkClearancePadToPad( aRefPad, pad, g_DesignSettings.m_TrackClearence ) )
         {
             // here we have a drc error!
             m_currentMarker = fillMarker( aRefPad, pad,
-                                DRCE_PAD_NEAR_PAD1, m_currentMarker );
+                                          DRCE_PAD_NEAR_PAD1, m_currentMarker );
             return false;
         }
     }
@@ -941,6 +998,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
 {
     wxPoint rel_pos;
     int     dist;;
+
     wxPoint shape_pos;
     int     pad_angle;
 
@@ -980,10 +1038,10 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
     switch( aRefPad->m_PadShape )
     {
     case PAD_CIRCLE:        // aRefPad is like a track segment with a null lenght
-        m_segmLength  = 0;
-        m_segmAngle = 0;
+        m_segmLength = 0;
+        m_segmAngle  = 0;
 
-        m_finx  = m_finy = 0;
+        m_finx = m_finy = 0;
 
         m_spotcx = rel_pos.x;
         m_spotcy = rel_pos.y;
@@ -998,8 +1056,8 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
         if( aPad->m_PadShape == PAD_RECT )
         {
             wxSize size = aPad->m_Size;
-            if( (pad_angle == 0) || (pad_angle == 900) || (pad_angle == 1800) ||
-               (pad_angle == 2700) )
+            if( (pad_angle == 0) || (pad_angle == 900) || (pad_angle == 1800)
+               || (pad_angle == 2700) )
             {
                 if( (pad_angle == 900) || (pad_angle == 2700) )
                 {
@@ -1007,7 +1065,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
                 }
 
                 // Test DRC:
-                diag      = false;
+                diag = false;
 
                 rel_pos.x = ABS( rel_pos.x );
                 rel_pos.y = ABS( rel_pos.y );
@@ -1020,7 +1078,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
             }
             else        // Any other orient
             {
-                        /* TODO : any orient ... */
+                /* TODO : any orient ... */
             }
         }
         break;
@@ -1029,34 +1087,35 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
     {
         /* Create and test a track segment with same dimensions */
         int segm_width;
-        m_segmAngle = aRefPad->m_Orient;                     // Segment orient.
-        if( aRefPad->m_Size.y < aRefPad->m_Size.x )         /* We suppose the pad is an horizontal oval */
+        m_segmAngle = aRefPad->m_Orient;                        // Segment orient.
+        if( aRefPad->m_Size.y < aRefPad->m_Size.x )             /* We suppose the pad is an horizontal oval */
         {
-            segm_width = aRefPad->m_Size.y;
-            m_segmLength  = aRefPad->m_Size.x - aRefPad->m_Size.y;
+            segm_width   = aRefPad->m_Size.y;
+            m_segmLength = aRefPad->m_Size.x - aRefPad->m_Size.y;
         }
         else        // it was a vertical oval, change to a rotated horizontal one
         {
-            segm_width  = aRefPad->m_Size.x;
-            m_segmLength   = aRefPad->m_Size.y - aRefPad->m_Size.x;
+            segm_width   = aRefPad->m_Size.x;
+            m_segmLength = aRefPad->m_Size.y - aRefPad->m_Size.x;
             m_segmAngle += 900;
         }
 
         /* the start point must be 0,0 and currently rel_pos is relative the center of pad coordinate */
-        int sx = -m_segmLength / 2, sy = 0;        // Start point coordinate of the horizontal equivalent segment
+        int sx = -m_segmLength / 2, sy = 0;         // Start point coordinate of the horizontal equivalent segment
 
-        RotatePoint( &sx, &sy, m_segmAngle );    // True start point coordinate of the equivalent segment
+        RotatePoint( &sx, &sy, m_segmAngle );       // True start point coordinate of the equivalent segment
 
         m_spotcx = rel_pos.x + sx;
         m_spotcy = rel_pos.y + sy;               // pad position / segment origin
 
-        m_finx    = -sx;
-        m_finy    = -sy;                          // end of segment coordinate
+        m_finx = -sx;
+        m_finy = -sy;                             // end of segment coordinate
 
         diag = checkClearanceSegmToPad( aPad, segm_width / 2, dist_min );
         break;
     }
 
+    case PAD_TRAPEZOID:
     default:
         /* TODO...*/
         break;
@@ -1227,6 +1286,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
     return true;
 }
 
+
 /**********************************************************************/
 bool DRC::checkMarginToCircle( int cx, int cy, int radius, int longueur )
 /**********************************************************************/
@@ -1248,7 +1308,6 @@ bool DRC::checkMarginToCircle( int cx, int cy, int radius, int longueur )
 
     return true;
 }
-
 
 
 /**********************************************/
@@ -1310,14 +1369,14 @@ bool DRC::checkLine( int x1, int y1, int x2, int y2 )
         {
             temp = USCALE( (y2 - y1), (m_xcliplo - x1), (x2 - x1) );
             y1  += temp;
-            x1 = m_xcliplo;
+            x1   = m_xcliplo;
             WHEN_INSIDE;
         }
         if( x2 > m_xcliphi )
         {
             temp = USCALE( (y2 - y1), (x2 - m_xcliphi), (x2 - x1) );
             y2  -= temp;
-            x2 = m_xcliphi;
+            x2   = m_xcliphi;
             WHEN_INSIDE;
         }
     }
@@ -1351,24 +1410,23 @@ bool DRC::checkLine( int x1, int y1, int x2, int y2 )
         {
             temp = USCALE( (y1 - y2), (m_xcliplo - x1), (x2 - x1) );
             y1  -= temp;
-            x1 = m_xcliplo;
+            x1   = m_xcliplo;
             WHEN_INSIDE;
         }
         if( x2 > m_xcliphi )
         {
             temp = USCALE( (y1 - y2), (x2 - m_xcliphi), (x2 - x1) );
             y2  += temp;
-            x2 = m_xcliphi;
+            x2   = m_xcliphi;
             WHEN_INSIDE;
         }
     }
 
-    if( ( (x2 + x1)/2 <= m_xcliphi ) && ( (x2 + x1)/2 >= m_xcliplo ) \
-     && ( (y2 + y1)/2 <= m_ycliphi ) && ( (y2 + y1)/2 >= m_ycliplo ) )
+    if( ( (x2 + x1) / 2 <= m_xcliphi ) && ( (x2 + x1) / 2 >= m_xcliplo ) \
+       && ( (y2 + y1) / 2 <= m_ycliphi ) && ( (y2 + y1) / 2 >= m_ycliplo ) )
     {
         return false;
     }
     else
         return true;
 }
-

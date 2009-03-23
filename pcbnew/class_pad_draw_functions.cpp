@@ -362,8 +362,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             }
             RotatePoint( &delta_cx, &delta_cy, angle );
 
-            GRFillCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                ux0 - delta_cx, uy0 - delta_cy,
+            GRFillCSegm( &panel->m_ClipBox, DC, cx0 + delta_cx, cy0 + delta_cy,
+                cx0 - delta_cx, cy0 - delta_cy,
                 rotdx, color );
             break;
 

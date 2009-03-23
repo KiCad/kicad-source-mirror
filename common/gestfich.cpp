@@ -198,7 +198,9 @@ wxString MakeFileName( const wxString& dir,
     {
         if( !wxIsAbsolutePath( shortname ) )
         {
-            if( !shortname.StartsWith( wxT( "./" ) ) && !shortname.StartsWith( wxT( "../" ) ) )
+            if( !shortname.StartsWith( wxT( "./" ) ) && !shortname.StartsWith( wxT( "../" ) )            // under unix
+                && !shortname.StartsWith( wxT( ".\\" ) ) && !shortname.StartsWith( wxT( "..\\" ) ))      // under Windows
+
             {   /* no absolute path in shortname, add dir to shortname */
                 fullfilename = dir;
             }

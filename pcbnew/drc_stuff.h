@@ -58,6 +58,8 @@
 #define COPPERAREA_INSIDE_COPPERAREA        22  ///< copper area outlines intersect
 #define COPPERAREA_CLOSE_TO_COPPERAREA      23  ///< copper area outlines are too close
 #define DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE  24  ///< copper area outline has an incorrect netcode due to a netname not found
+#define DRCE_HOLE_NEAR_PAD                  25  ///< hole too close to pad
+#define DRCE_HOLE_NEAR_TRACK                26  ///< hole too close to track
 
 /**
  * Class DRC_ITEM
