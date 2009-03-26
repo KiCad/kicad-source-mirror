@@ -3,7 +3,7 @@
 #ifndef KICAD_BUILD_VERSION
 #define KICAD_BUILD_VERSION
 
-#define BUILD_VERSION wxT("(20090332-unstable)")
+#define BUILD_VERSION wxT("(20090325-unstable)")
 
 COMMON_GLOBL wxString g_BuildVersion
 #ifdef EDA_BASE

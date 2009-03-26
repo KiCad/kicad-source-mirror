@@ -324,7 +324,7 @@ static ColorButton Layer_29_Butt =
 
 static ButtonIndex Msg_Others_Items =
 {
-    wxT( "Others" ),                // Title
+    _( "Others" ),                // Title
     43                              // Index to last bitmap button in group
 };
 

@@ -104,6 +104,16 @@ static PARAM_CFG_INT ViaShowHoleCfg
     OPT_VIA_HOLE_END - 1                /* Min and max values*/
 );
 
+static PARAM_CFG_INT ShowNetNamesModeCfg
+(
+    INSETUP,
+    wxT( "ShowNetNamesMode" ),                  /* Keyword */
+    &DisplayOpt.DisplayNetNamesMode,            /* Parameter address */
+    3,                                          /* Default value */
+    0,                                          /* Min and max values*/
+    3                                           /* Min and max values*/
+);
+
 static PARAM_CFG_INT TrackClearenceCfg
 (
     wxT( "Isol" ),                                  /* Keyword */
@@ -227,7 +237,7 @@ static PARAM_CFG_INT AfficheContourModuleCfg    // Module Edges: fill/line/sketc
     INSETUP,
     wxT( "ModAffC" ),                           /* Keyword */
     &DisplayOpt.DisplayModEdge,                 /* Parameter address */
-    FILLED,                                    /* Default value */
+    FILLED,                                     /* Default value */
     0, 2                                        /* Min and max values*/
 );
 
@@ -236,7 +246,7 @@ static PARAM_CFG_INT AfficheTexteModuleCfg  // Module Texts: fill/line/sketch
     INSETUP,
     wxT( "ModAffT" ),                       /* Keyword */
     &DisplayOpt.DisplayModText,             /* Parameter address */
-    FILLED,                                /* Default value */
+    FILLED,                                 /* Default value */
     0, 2                                    /* Min and max values*/
 );
 
@@ -245,7 +255,7 @@ static PARAM_CFG_INT AfficheTextePcbCfg     // PCB Texts: fill/line/sketch
     INSETUP,
     wxT( "PcbAffT" ),                       /* Keyword */
     &DisplayOpt.DisplayDrawItems,           /* Parameter address */
-    FILLED,                                /* Default value */
+    FILLED,                                 /* Default value */
     0, 2                                    /* Min and max values*/
 );
 
@@ -788,7 +798,7 @@ static PARAM_CFG_BOOL TwoSegmentTrackBuildCfg
 
 
 /* parameters in this list will be saved on request (when saving config).
-*/
+ */
 PARAM_CFG_BASE* ParamCfgList[] =
 {
     &UserLibDirBufCfg,
@@ -802,6 +812,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &MicroViaDiametreCfg,
     &MicroViaDrillCfg,
     &ViaShowHoleCfg,
+    &ShowNetNamesModeCfg,
     &TrackClearenceCfg,
     &LayerCountCfg,
     &TrackWidthCfg,

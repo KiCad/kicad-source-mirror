@@ -146,9 +146,13 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
     m_DisplayViaMode    = VIA_HOLE_NOT_SHOW;
 
     DisplayPolarCood = TRUE;
-    DisplayZonesMode = 0;       // 0 = Show filled areas outlines in zones,
-                                // 1 = do not show filled areas outlines
-                                // 2 = show outlines of filled areas
+    DisplayZonesMode = 0;       /* 0 = Show filled areas outlines in zones,
+                                * 1 = do not show filled areas outlines
+                                * 2 = show outlines of filled areas */
+    DisplayNetNamesMode = 3;   /* 0 do not show netnames,
+                                 * 1 show netnames on pads
+                                 * 2 show netnames on tracks
+                                 * 3 show netnames on tracks and pads */
     Show_Modules_Cmp = TRUE;
     Show_Modules_Cu  = TRUE;
 

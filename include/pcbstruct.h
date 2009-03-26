@@ -287,6 +287,12 @@ public:
 
     bool DisplayPolarCood;
     int  DisplayZonesMode;
+    int  DisplayNetNamesMode;   /* 0 do not show netnames,
+                                 * 1 show netnames on pads
+                                 * 2 show netnames on tracks
+                                 * 3 show netnames on tracks and pads
+                                */
+
     bool Show_Modules_Cmp;
     bool Show_Modules_Cu;
 

@@ -364,19 +364,19 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
 {
     if( draw_mode & GR_OR )
 #if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
-
-
         DC->SetLogicalFunction( wxCOPY );
 #else
-
-
         DC->SetLogicalFunction( wxOR );
 #endif
     else if( draw_mode & GR_XOR )
         DC->SetLogicalFunction( wxXOR );
     else if( draw_mode & GR_NXOR )
-        DC->SetLogicalFunction( wxEQUIV );
-    else
+#if defined (__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+    DC->SetLogicalFunction( wxXOR );
+#else
+    DC->SetLogicalFunction( wxEQUIV );
+#endif
+   else
         DC->SetLogicalFunction( wxCOPY );
 }
 

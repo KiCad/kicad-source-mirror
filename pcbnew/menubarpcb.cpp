@@ -174,8 +174,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( library_xpm );
     configmenu->Append( item );
 
-    item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
-                           _( "Select colors and display for board items" ) );
+    item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors and Visibility" ),
+                           _( "Select colors and visibilty of layers and some items" ) );
     item->SetBitmap( palette_xpm );
     configmenu->Append( item );
 
@@ -185,7 +185,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->Append( item );
 
     item = new wxMenuItem( configmenu, ID_PCB_LOOK_SETUP, _( "&Display" ),
-                           _( "Select what items are displayed" ) );
+                           _( "Select how items (pads, tracks texts ... ) are displayed" ) );
     item->SetBitmap( display_options_xpm );
     configmenu->Append( item );
 

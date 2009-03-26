@@ -163,6 +163,17 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         }
     }
 
+    // if Contrast mode and a technical layer active, show pads on this layer
+    // so we can see pads on paste or solder layer
+    if( DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
+    {
+        if( IsOnLayer( screen->m_Active_Layer ) )
+            color = g_DesignSettings.m_LayerColor[screen->m_Active_Layer];
+        else
+            color = DARKDARKGRAY;
+    }
+
+
     if( draw_mode & GR_SURBRILL )
     {
         if( draw_mode & GR_AND )
@@ -205,12 +216,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         if( DisplayIsol )
         {
             GRCircle( &panel->m_ClipBox,
-                DC,
-                xc,
-                yc,
-                dx + g_DesignSettings.m_TrackClearence,
-                0,
-                color );
+                      DC,
+                      xc,
+                      yc,
+                      dx + g_DesignSettings.m_TrackClearence,
+                      0,
+                      color );
         }
         break;
 
@@ -233,14 +244,14 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         if( fillpad )
         {
             GRFillCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                ux0 - delta_cx, uy0 - delta_cy,
-                rotdx, color );
+                         ux0 - delta_cx, uy0 - delta_cy,
+                         rotdx, color );
         }
         else
         {
             GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                ux0 - delta_cx, uy0 - delta_cy,
-                rotdx, color );
+                     ux0 - delta_cx, uy0 - delta_cy,
+                     rotdx, color );
         }
 
         /* Trace de la marge d'isolement */
@@ -249,8 +260,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             rotdx = rotdx + g_DesignSettings.m_TrackClearence + g_DesignSettings.m_TrackClearence;
 
             GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                ux0 - delta_cx, uy0 - delta_cy,
-                rotdx, color );
+                     ux0 - delta_cx, uy0 - delta_cy,
+                     rotdx, color );
         }
         break;
 
@@ -363,8 +374,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             RotatePoint( &delta_cx, &delta_cy, angle );
 
             GRFillCSegm( &panel->m_ClipBox, DC, cx0 + delta_cx, cy0 + delta_cy,
-                cx0 - delta_cx, cy0 - delta_cy,
-                rotdx, color );
+                         cx0 - delta_cx, cy0 - delta_cy,
+                         rotdx, color );
             break;
 
         default:
@@ -385,21 +396,31 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
         if( m_Masque_Layer & CMP_LAYER ) /* Trace forme \ */
             GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
-                cx0 + dx0, cy0 + dx0, 0, nc_color );
+                    cx0 + dx0, cy0 + dx0, 0, nc_color );
 
         if( m_Masque_Layer & CUIVRE_LAYER ) /* Trace forme / */
             GRLine( &panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
-                cx0 - dx0, cy0 + dx0, 0, nc_color );
+                    cx0 - dx0, cy0 + dx0, 0, nc_color );
     }
 
     /* Draw the pad number */
+    bool display_padnum = true;
     if( frame && !frame->m_DisplayPadNum )
+        display_padnum = false;
+
+    bool display_netname = true;
+    if( (DisplayOpt.DisplayNetNamesMode == 0) || (DisplayOpt.DisplayNetNamesMode == 2) )
+        display_netname = false;
+
+    if( !display_padnum && !display_netname )
         return;
 
     wxPoint tpos0 = wxPoint( ux0, uy0 );        // Position of the centre of text
     wxPoint tpos  = tpos0;
     wxSize  AreaSize;                           // size of text area, normalized to AreaSize.y < AreaSize.x
-    int     shortname_len   = m_ShortNetname.Len();
+    int     shortname_len = m_ShortNetname.Len();
+    if( ! display_netname )
+        shortname_len = 0;
     if( GetShape() == PAD_CIRCLE )
         angle = 0;
     AreaSize = m_Size;
@@ -410,7 +431,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         AreaSize.y = m_Size.x;
     }
 
-    if( shortname_len > 0 )          // if there is a netname, provides room to display this netname
+    if( shortname_len > 0 )             // if there is a netname, provides room to display this netname
     {
         AreaSize.y /= 2;                // Text used only the upper area of the pad. The lower area displays the net name
         tpos.y     -= AreaSize.y / 2;
@@ -424,42 +445,48 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     NORMALIZE_ANGLE_90( t_angle );
 
     /* Note: in next calculations, texte size is calculated for 3 or more chars.
-    Of course, pads numbers and nets names can have less than 3 chars.
-    but after some tries, i found this is gives the best look
-    */
+     *  Of course, pads numbers and nets names can have less than 3 chars.
+     *  but after some tries, i found this is gives the best look
+     */
     #define MIN_CHAR_COUNT 3
     wxString buffer;
-    ReturnStringPadName( buffer );
-    int numpad_len = buffer.Len();
-    numpad_len = MAX( numpad_len, MIN_CHAR_COUNT);
 
-    int tsize = min( AreaSize.y, AreaSize.x / numpad_len );
-     #define CHAR_SIZE_MIN 5
-    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
+    int tsize;
+    if( display_padnum )
     {
-        tsize = (int) (tsize * 0.8);             // reserve room for marges and segments thickness
+        ReturnStringPadName( buffer );
+        int numpad_len = buffer.Len();
+        numpad_len = MAX( numpad_len, MIN_CHAR_COUNT );
 
-        DrawGraphicText( panel, DC, tpos,
-            WHITE, buffer, t_angle, wxSize( tsize, tsize ),
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+        tsize = min( AreaSize.y, AreaSize.x / numpad_len );
+        #define CHAR_SIZE_MIN 5
+        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
+        {
+            tsize = (int) (tsize * 0.8);                // reserve room for marges and segments thickness
+
+            DrawGraphicText( panel, DC, tpos,
+                             WHITE, buffer, t_angle, wxSize( tsize, tsize ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+        }
     }
 
-    // display the short netnam, if exists
-    if (shortname_len == 0 )
+    // display the short netname, if exists
+    if( shortname_len == 0 )
         return;
-    shortname_len = MAX( shortname_len, MIN_CHAR_COUNT);
+
+    shortname_len = MAX( shortname_len, MIN_CHAR_COUNT );
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
     if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
     {
         tpos    = tpos0;
-        tpos.y += AreaSize.y / 2;
+        if ( display_padnum )
+            tpos.y += AreaSize.y / 2;
         RotatePoint( &tpos, wxPoint( ux0, uy0 ), angle );
 
         tsize = (int) (tsize * 0.8);         // reserve room for marges and segments thickness
         DrawGraphicText( panel, DC, tpos,
-            WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+                         WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
     }
 }
-

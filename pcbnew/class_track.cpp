@@ -650,6 +650,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( Type() == TYPE_ZONE )
         return;
 
+    if ( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
+        return;
+
     #define THRESHOLD 10
     if( (m_End.x - m_Start.x) != 0 &&  (m_End.y - m_Start.y) != 0 )
         return;
@@ -820,6 +823,8 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     // Display the short netname:
     if( GetNet() == 0 )
+        return;
+    if ( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
         return;
     EQUIPOT* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
     if( net == NULL )

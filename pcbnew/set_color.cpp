@@ -156,7 +156,7 @@ void WinEDA_SetColorsFrame::CreateControls()
             MainBoxSizer->Add(FlexColumnBoxSizer, 1, wxGROW|wxLEFT|wxBOTTOM, 5);
 
             // Add a text string to identify the controls within this column.
-            Label = new wxStaticText( this, wxID_STATIC, laytool_index[cln]->m_Name,
+            Label = new wxStaticText( this, wxID_STATIC, wxGetTranslation(laytool_index[cln]->m_Name),
                                       wxDefaultPosition, wxDefaultSize, 0 );
 
             // Make this text string bold (so that it stands out better).
@@ -209,15 +209,17 @@ void WinEDA_SetColorsFrame::CreateControls()
             RowBoxSizer->Add(BUTT_SIZE_X, BUTT_SIZE_Y, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5);
         }
 
+        // Note: When setting texts, we must call wxGetTranslation( ) for all statically created texts
+        // if we want them translated
         if( laytool_list[lyr]->m_LayerNumber >= 0 )
         {
             if( laytool_list[lyr]->m_Title == wxT( "*" ) )
-                msg = g_ViaType_Name[laytool_list[lyr]->m_LayerNumber];
+                msg = wxGetTranslation( g_ViaType_Name[laytool_list[lyr]->m_LayerNumber]);
             else
                 msg = m_Parent->GetBoard()->GetLayerName( laytool_list[lyr]->m_LayerNumber );
         }
         else
-            msg = wxGetTranslation( laytool_list[lyr]->m_Title.GetData() );
+            msg = wxGetTranslation( laytool_list[lyr]->m_Title );
 
         CheckBox = new wxCheckBox( this, ID_COLOR_CHECKBOX_ONOFF, msg,
                                    wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );

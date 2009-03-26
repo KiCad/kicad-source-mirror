@@ -165,6 +165,7 @@ void Dialog_Display_Options::init()
     m_OptDisplayPadNumber->SetValue( DisplayOpt.DisplayPadNum );
     m_OptDisplayPadNoConn->SetValue( DisplayOpt.DisplayPadNoConn );
     m_OptDisplayDrawings->SetSelection( DisplayOpt.DisplayDrawItems );
+    m_ShowNetNamesOption->SetSelection( DisplayOpt.DisplayNetNamesMode);
 
     if( GetSizer() )
     {
@@ -229,6 +230,8 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
     DisplayOpt.DisplayPadNoConn = m_OptDisplayPadNoConn->GetValue();
 
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
+    DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+
 
     m_Parent->DrawPanel->Refresh(TRUE);
 
