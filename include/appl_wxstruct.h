@@ -82,6 +82,20 @@ public:
                                 const wxString& GroupName,
                                 PARAM_CFG_BASE** List );
 
+    /** Function SaveCurrentSetupValues()
+     * Save the current setup values in m_EDA_Config
+     * saved parameters are parameters that have the .m_Setup member set to true
+     * @param aList = array of PARAM_CFG_BASE pointers
+    */
+    void SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
+
+    /** Function ReadCurrentSetupValues()
+     * Raed the current setup values previously saved, from m_EDA_Config
+     * saved parameters are parameters that have the .m_Setup member set to true
+     * @param aList = array of PARAM_CFG_BASE pointers
+     */
+    void ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
+
     bool    ReadProjectConfig( const wxString& local_config_filename,
                                const wxString& GroupName, PARAM_CFG_BASE** List,
                                bool Load_Only_if_New );

@@ -1,6 +1,9 @@
 	/**********************************************************/
-	/** cfg.h : configuration: definition des structures  **/
+	/* gerber_config.h : configuration: setup parameters list */
 	/**********************************************************/
+
+#include "param_config.h"
+
 #define GROUP wxT("/gerbview")
 #define GROUPLIB wxT("libraries")
 
@@ -444,7 +447,7 @@ static PARAM_CFG_INT CursorShapeCfg
 	0, 1					/* Valeurs extremes */
 );
 
-static PARAM_CFG_BASE * ParamCfgList[] =
+PARAM_CFG_BASE * ParamCfgList[] =
 {
 	& PhotoExtBufCfg,
 	& PenExtBufCfg,

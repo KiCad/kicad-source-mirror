@@ -2,6 +2,8 @@
 /** pcbcfg.h : configuration: definition des structures  **/
 /**********************************************************/
 
+#include "param_config.h"
+
 #define GROUP       wxT( "/pcbnew" )
 #define GROUPLIB    wxT( "/pcbnew/libraries" )
 #define GROUPCOMMON wxT( "/common" )

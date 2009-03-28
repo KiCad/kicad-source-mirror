@@ -29,6 +29,7 @@
 #include "eda_dde.h"
 
 wxString g_Main_Title( wxT( "PCBnew" ) );
+extern PARAM_CFG_BASE* ParamCfgList[];
 
 IMPLEMENT_APP( WinEDA_App )
 
@@ -57,6 +58,7 @@ bool WinEDA_App::OnInit()
     }
 
     Read_Config( FFileName );
+    wxGetApp().ReadCurrentSetupValues( ParamCfgList );
     g_DrawBgColor = BLACK;
     Read_Hotkey_Config( frame, false );  /* Must be called before creating the
                                           * main frame in order to display the

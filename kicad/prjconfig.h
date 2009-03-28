@@ -2,6 +2,7 @@
 	/* prjconfig.h : configuration: definition des structures */
 	/**********************************************************/
 
+#include "param_config.h"
 
 
 /* Liste des parametres */

@@ -6,6 +6,8 @@
 #define eda_global extern
 #endif
 
+#include "param_config.h"
+
 #define GROUP       wxT( "/eeschema" )
 #define GROUPCOMMON wxT( "/common" )
 #define GROUPLIB    wxT( "libraries" )

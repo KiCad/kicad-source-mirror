@@ -211,7 +211,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     wxConfig* config           = wxGetApp().m_EDA_Config;
 
     m_FrameName                = wxT( "PcbFrame" );
-    //m_AboutTitle               = g_PcbnewAboutTitle;
     m_Draw_Axis                = TRUE;          // TRUE pour avoir les axes dessines
     m_Draw_Grid                = g_ShowGrid;    // TRUE pour avoir la grille dessinee
     m_Draw_Sheet_Ref           = TRUE;          // TRUE pour avoir le cartouche dessine
@@ -291,6 +290,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 WinEDA_PcbFrame::~WinEDA_PcbFrame()
 /************************************/
 {
+    extern PARAM_CFG_BASE* ParamCfgList[];
+    wxGetApp().SaveCurrentSetupValues( ParamCfgList );
+
     SetBaseScreen( ScreenPcb );
 
     delete m_drc;

@@ -63,6 +63,8 @@ bool WinEDA_App::OnInit()
     /* init EESCHEMA */
     GetSettings();                                  // read current setup
     SeedLayers();
+    extern PARAM_CFG_BASE* ParamCfgList[];
+    wxGetApp().ReadCurrentSetupValues( ParamCfgList );
     Read_Hotkey_Config( frame, false );   /* Must be called before creating
                                            * the main frame  in order to
                                            * display the real hotkeys in menus

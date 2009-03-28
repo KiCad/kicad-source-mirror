@@ -35,7 +35,7 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	
 	sLeftBoxSizer->Add( m_OptDisplayTracksClearance, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_OptDisplayViaHoleChoices[] = { _("Never"), _("Defined Holes"), _("Always") };
+	wxString m_OptDisplayViaHoleChoices[] = { _("Never"), _("Defined holes"), _("Always") };
 	int m_OptDisplayViaHoleNChoices = sizeof( m_OptDisplayViaHoleChoices ) / sizeof( wxString );
 	m_OptDisplayViaHole = new wxRadioBox( this, ID_VIAS_HOLES, _("Show Via Holes:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayViaHoleNChoices, m_OptDisplayViaHoleChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayViaHole->SetSelection( 1 );
@@ -48,7 +48,7 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	wxStaticBoxSizer* sbMiddleLeftSizer;
 	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Names:") ), wxVERTICAL );
 	
-	wxString m_ShowNetNamesOptionChoices[] = { _("Do Not Show"), _("On Pads"), _("OnTracks"), _("On Pads and Tracks") };
+	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("On pads"), _("On tracks"), _("On pads and tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
 	m_ShowNetNamesOption = new wxRadioBox( this, wxID_ANY, _("Show Net Names:"), wxDefaultPosition, wxDefaultSize, m_ShowNetNamesOptionNChoices, m_ShowNetNamesOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ShowNetNamesOption->SetSelection( 3 );
@@ -87,16 +87,16 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	m_OptDisplayPads->SetSelection( 1 );
 	bRModuleSizer->Add( m_OptDisplayPads, 0, wxALL|wxEXPAND, 5 );
 	
-	m_OptDisplayPadClearence = new wxCheckBox( this, wxID_ANY, _("Show Pad Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayPadClearence = new wxCheckBox( this, wxID_ANY, _("Show pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	bRModuleSizer->Add( m_OptDisplayPadClearence, 0, wxALL, 5 );
 	
-	m_OptDisplayPadNumber = new wxCheckBox( this, wxID_ANY, _("Show Pad Number"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayPadNumber = new wxCheckBox( this, wxID_ANY, _("Show pad number"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptDisplayPadNumber->SetValue(true);
 	
 	bRModuleSizer->Add( m_OptDisplayPadNumber, 0, wxALL, 5 );
 	
-	m_OptDisplayPadNoConn = new wxCheckBox( this, wxID_ANY, _("Show Pad NoConnect"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayPadNoConn = new wxCheckBox( this, wxID_ANY, _("Show pad NoConnect"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptDisplayPadNoConn->SetValue(true);
 	
 	bRModuleSizer->Add( m_OptDisplayPadNoConn, 0, wxALL, 5 );

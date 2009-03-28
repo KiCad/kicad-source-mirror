@@ -4,6 +4,17 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-mar-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+================================================================================
+++All
+    code cleanup in project_config.cpp.
+    Now parameters common to all projects are saved on exit.
+    (they are usally options like colors, draw options ...)
+
+++pcbnew:
+    added option to show or not netnames on pads and tracks
+
+
 2009-mar-23 UPDATE Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 ================================================================================
 ++pcbnew:

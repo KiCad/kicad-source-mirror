@@ -37,6 +37,8 @@ bool WinEDA_App::OnInit()
 
     ActiveScreen = ScreenPcb;
     GetSettings();
+    extern PARAM_CFG_BASE* ParamCfgList[];
+    wxGetApp().ReadCurrentSetupValues( ParamCfgList );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

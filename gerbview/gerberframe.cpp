@@ -7,6 +7,7 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -163,6 +164,9 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 WinEDA_GerberFrame::~WinEDA_GerberFrame()
 {
     SetBaseScreen( ScreenPcb );
+    extern PARAM_CFG_BASE* ParamCfgList[];
+    wxGetApp().SaveCurrentSetupValues( ParamCfgList );
+
 }
 
 

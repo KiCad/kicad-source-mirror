@@ -201,7 +201,7 @@
                             <property name="proportion">0</property>
                             <object class="wxRadioBox" expanded="1">
                                 <property name="bg"></property>
-                                <property name="choices">&quot;Never&quot; &quot;Defined Holes&quot; &quot;Always&quot;</property>
+                                <property name="choices">&quot;Never&quot; &quot;Defined holes&quot; &quot;Always&quot;</property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
@@ -269,7 +269,7 @@
                             <property name="proportion">0</property>
                             <object class="wxRadioBox" expanded="1">
                                 <property name="bg"></property>
-                                <property name="choices">&quot;Do Not Show&quot; &quot;On Pads&quot; &quot;OnTracks&quot; &quot;On Pads and Tracks&quot;</property>
+                                <property name="choices">&quot;Do not show&quot; &quot;On pads&quot; &quot;On tracks&quot; &quot;On pads and tracks&quot;</property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
@@ -529,7 +529,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Show Pad Clearance</property>
+                                        <property name="label">Show pad clearance</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_OptDisplayPadClearence</property>
@@ -581,7 +581,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Show Pad Number</property>
+                                        <property name="label">Show pad number</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_OptDisplayPadNumber</property>
@@ -633,7 +633,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Show Pad NoConnect</property>
+                                        <property name="label">Show pad NoConnect</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_OptDisplayPadNoConn</property>

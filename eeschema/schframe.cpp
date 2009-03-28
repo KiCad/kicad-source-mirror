@@ -186,6 +186,9 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
 
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
+    extern PARAM_CFG_BASE* ParamCfgList[];
+    wxGetApp().SaveCurrentSetupValues( ParamCfgList );
+
     SAFE_DELETE( g_RootSheet );
     SAFE_DELETE( m_CurrentSheet ); //a DrawSheetPath, on the heap.
     m_CurrentSheet = NULL;

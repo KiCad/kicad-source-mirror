@@ -26,6 +26,7 @@
 
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "param_config.h"
 #include "worksheet.h"
 #include "id.h"
 #include "build_version.h"

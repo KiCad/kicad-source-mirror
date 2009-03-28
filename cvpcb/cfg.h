@@ -6,6 +6,8 @@
 #define eda_global extern
 #endif
 
+#include "param_config.h"
+
 #define INSETUP TRUE
 
 #define GROUP wxT("/cvpcb")

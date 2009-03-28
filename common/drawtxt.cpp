@@ -1,6 +1,6 @@
 /**
  * Functions to draw and plot text on screen
- * @file drawtxt.cpp 
+ * @file drawtxt.cpp
  */
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -53,7 +53,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                       void (* aCallback) (int x0, int y0, int xf, int yf))
 /****************************************************************************************************/
 {
-    int            ii, kk, char_count, AsciiCode, endcar;
+    int            kk, char_count, AsciiCode;
     int            x0, y0;
     int            size_h, size_v, pitch;
     SH_CODE        f_cod, plume = 'U';
@@ -62,9 +62,10 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     int            ux0, uy0, dx, dy;    // Draw coordinate for segments to draw. also used in some other calculation
     int            cX, cY;              // Texte center
     int            ox, oy;              // Draw coordinates for the current char
-    int            coord[100];          // Buffer coordinate used to draw polylines (char shapes)
+    #define        BUF_SIZE 100
+    wxPoint        coord[BUF_SIZE+1];          // Buffer coordinate used to draw polylines (one char shape)
     bool           sketch_mode = false;
-	bool			italic_reverse = false;		// true for mirrored texts with m_Size.x < 0
+	bool		   italic_reverse = false;		// true for mirrored texts with m_Size.x < 0
 
     size_h = aSize.x;
     size_v = aSize.y;
@@ -72,7 +73,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     if( aWidth < 0 )
     {
         aWidth = -aWidth;
-        sketch_mode = TRUE;
+        sketch_mode = true;
     }
     int thickness = aWidth;
 	if ( aSize.x < 0 )		// text is mirrored using size.x < 0 (mirror / Y axis)
@@ -234,7 +235,9 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
                                                   *  du caractere a dessiner */
 
-        for( ii = 0, endcar = FALSE; !endcar; ptcar++ )
+        int point_count;
+        bool endcar;
+        for( point_count = 0, endcar = false; !endcar; ptcar++ )
         {
             f_cod = *ptcar;
 
@@ -242,36 +245,34 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
             switch( f_cod )
             {
             case 'X':
-                endcar = TRUE;    /* fin du caractere */
+                endcar = true;    /* fin du caractere */
                 break;
 
             case 'U':
-                if( ii && (plume == 'D' ) )
+                if( point_count && (plume == 'D' ) )
                 {
                     if( aWidth <= 1 )
                        aWidth = 0;
                     if ( aCallback )
                     {
-                        int ik, * coordptr;
-                        coordptr = coord;
-                        for( ik = 0; ik < (ii - 2); ik += 2, coordptr += 2 )
-                            aCallback( *coordptr, *(coordptr + 1),
-                                     *(coordptr + 2), *(coordptr + 3) );
+                        for( int ik = 0; ik < (point_count - 1); ik ++ )
+                        {
+                           aCallback( coord[ik].x, coord[ik].y,
+                                     coord[ik+1].x, coord[ik+1].y );
+                        }
                     }
 
                     else if( sketch_mode )
                     {
-                        int ik, * coordptr;
-                        coordptr = coord;
-                        for( ik = 0; ik < (ii - 2); ik += 2, coordptr += 2 )
-                            GRCSegm( &aPanel->m_ClipBox, aDC, *coordptr, *(coordptr + 1),
-                                     *(coordptr + 2), *(coordptr + 3), aWidth, aColor );
+                        for( int ik = 0; ik < (point_count - 1); ik ++ )
+                            GRCSegm( &aPanel->m_ClipBox, aDC, coord[ik].x, coord[ik].y,
+                                     coord[ik+1].x, coord[ik+1].y, aWidth, aColor );
                     }
                     else
-                        GRPoly( &aPanel->m_ClipBox, aDC, ii / 2, (wxPoint*)coord, 0,
+                        GRPoly( &aPanel->m_ClipBox, aDC, point_count, coord, 0,
                                 aWidth, aColor, aColor );
                 }
-                plume = f_cod; ii = 0;
+                plume = f_cod; point_count = 0;
                 break;
 
             case 'D':
@@ -295,8 +296,10 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                     dx    = k2 + ox; dy = k1 + oy;
 
                     RotatePoint( &dx, &dy, cX, cY, aOrient );
-                    coord[ii++] = dx;
-                    coord[ii++] = dy;
+                    coord[point_count].x = dx;
+                    coord[point_count].y = dy;
+                    if ( point_count < BUF_SIZE-1 )
+                        point_count++;
                     break;
                 }
             }
