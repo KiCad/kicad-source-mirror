@@ -1,0 +1,153 @@
+/* build_BOM_from_board.cpp */
+
+
+#include "fctsys.h"
+#include "common.h"
+#include "confirm.h"
+#include "kicad_string.h"
+#include "gestfich.h"
+#include "pcbnew.h"
+
+#include <wx/listimpl.cpp>
+
+/* creates a BOM list rom board
+The format is:
+"Id";"Designator";"Package";"Number";"Designation";"Supplier and ref";
+1;"P1";"DB25FC";1;"DB25FEMELLE";;;
+2;"U9";"PGA120";1;"4003APG120";;;
+3;"JP1";"pin_array_8x2";1;"CONN_8X2";;;
+4;"RR1";"r_pack9";1;"9x1K";;;
+5;"X1";"HC-18UH";1;"8MHz";;;
+6;"U8";"24dip300";1;"EP600";;;
+7;"U5";"32dip600";1;"628128";;;
+8;"C2,C3";"C1";2;"47pF";;;
+9;"U1";"20dip300";1;"74LS245";;;
+10;"U3";"20dip300";1;"74LS541";;;
+11;"U2";"20dip300";1;"74LS688";;;
+12;"C1,C4,C5,C6";"CP6";4;"47uF";;;
+*/
+
+wxString NetBomExtBuffer( wxT( ".csv" ) );    // BOM file extension
+
+class cmp
+{
+public:
+    wxString m_Ref;
+    wxString m_Val;
+    wxString m_Pkg;
+    int      m_Id;
+    int      m_CmpCount;
+};
+WX_DECLARE_LIST( cmp, CmpList );
+
+WX_DEFINE_LIST( CmpList );
+
+void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
+{
+    wxString FullFileName, mask;
+    FILE*    FichBom;
+    MODULE*  Module = GetBoard()->m_Modules;
+    wxString msg;
+
+
+    if( Module == NULL )
+    {
+        DisplayError( this, _( "No Modules!" ) );
+        return;
+    }
+
+    /* Set the file extension: */
+    FullFileName = GetScreen()->m_FileName;
+    ChangeFileNameExt( FullFileName, NetBomExtBuffer );
+
+    mask = wxT( "*" ) + NetBomExtBuffer;
+    FullFileName = EDA_FileSelector( _( "Bom files:" ),
+                                     wxEmptyString,         /* Chemin par defaut */
+                                     FullFileName,          /* nom fichier par defaut */
+                                     NetBomExtBuffer,       /* extension par defaut */
+                                     mask,                  /* Masque d'affichage */
+                                     this,
+                                     wxFD_SAVE,
+                                     FALSE
+                                     );
+    if( FullFileName.IsEmpty() )
+        return;
+
+
+    FichBom = wxFopen( FullFileName, wxT( "wt" ) );
+    if( FichBom == NULL )
+    {
+        msg = _( "Unable to create file " ) + FullFileName;
+        DisplayError( this, msg );
+        return;
+    }
+
+    // Write header:
+    msg = wxT( "\"");
+    msg << _("Id") << wxT("\";\"");
+    msg << _("Designator") << wxT("\";\"");
+    msg << _("Package") << wxT("\";\"");
+    msg << _("Number") << wxT("\";\"");
+    msg << _("Designation") << wxT("\";\"");
+    msg << _("Supplier and ref") << wxT("\";\n" );
+    fprintf( FichBom, CONV_TO_UTF8( msg ) );
+
+    // Build list
+    CmpList           list;
+    cmp*              comp = NULL;
+    CmpList::iterator iter;
+    int i = 1;
+    for( ; Module != NULL; Module = Module->Next() )
+    {
+        bool valExist = false;
+
+        if( comp != NULL )
+        {
+            for( iter = list.begin(); iter != list.end(); iter++ )
+            {
+                cmp* current = *iter;
+                if( (current->m_Val == Module->m_Value->m_Text) && (current->m_Pkg == Module->m_LibRef) )
+                {
+                    current->m_Ref.Append( wxT( ", " ), 1 );
+                    current->m_Ref.Append( Module->m_Reference->m_Text );
+                    comp->m_CmpCount++;
+
+                    valExist = true;
+                    break;
+                }
+            }
+        }
+
+        if( !valExist || (comp == NULL) )
+        {
+            comp        = new cmp();
+            comp->m_Id    = i++;
+            comp->m_Val   = Module->m_Value->m_Text;
+            comp->m_Ref   = Module->m_Reference->m_Text;
+            comp->m_Pkg   = Module->m_LibRef;
+            comp->m_CmpCount = 1;
+            list.Append( comp );
+        }
+    }
+
+    // Print list
+    for( iter = list.begin(); iter != list.end(); iter++ )
+    {
+        cmp* current = *iter;
+
+        msg.Empty();
+
+        msg << current->m_Id << wxT( ";\"" );
+        msg << current->m_Ref << wxT( "\";\"" );
+        msg << current->m_Pkg << wxT( "\";" );
+        msg << current->m_CmpCount << wxT( ";\"" );
+        msg << current->m_Val << wxT( "\";;;\n" );
+        fprintf( FichBom, CONV_TO_UTF8( msg ) );
+
+        list.DeleteObject( current );
+        delete (current);
+    }
+
+
+    fclose( FichBom );
+}

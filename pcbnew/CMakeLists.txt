@@ -15,6 +15,7 @@ set(PCBNEW_SRCS
     block.cpp
     block_module_editor.cpp
     board.cpp
+    build_BOM_from_board.cpp
     class_board_item.cpp
     class_drawsegment.cpp
     class_edge_mod.cpp

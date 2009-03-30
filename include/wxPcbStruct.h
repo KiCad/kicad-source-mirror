@@ -422,7 +422,20 @@ public:
     bool             SavePcbFile( const wxString& FileName );
     int              SavePcbFormatAscii( FILE* File );
     bool             WriteGeneralDescrPcb( FILE* File );
-    bool             RecreateCmpFileFromBoard();
+
+    /**
+     * Function RecreateBOMFileFromBoard
+     * Recreates a .cmp file from the current loaded board
+     * this is the same as created by cvpcb.
+     * can be used if this file is lost
+     */
+    void             RecreateCmpFileFromBoard(wxCommandEvent & aEvent);
+
+    /**
+     * Function RecreateBOMFileFromBoard
+     * Creates a BOM file from the current loaded board
+     */
+    void             RecreateBOMFileFromBoard(wxCommandEvent & aEvent);
 
     void             ExportToGenCAD( wxCommandEvent& event );
 

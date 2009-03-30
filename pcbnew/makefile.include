@@ -24,6 +24,7 @@ SPECCTRA_TOOLS = specctra.o specctra_export.o dsn.o specctra_import.o
 OBJECTS=	$(TARGET).o\
 		$(ZONE_FILES)\
 		$(SPECCTRA_TOOLS)\
+        build_BOM_from_board.o\
 		print_board_functions.o\
 		dialog_freeroute_exchange.o\
 		modedit_undo_redo.o\

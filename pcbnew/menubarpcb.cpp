@@ -263,6 +263,12 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( save_cmpstuff_xpm );
     postprocess_menu->Append( item );
 
+    item = new wxMenuItem( postprocess_menu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
+						   _( "Create &BOM File" ),
+						   _( "Recreate .csv file for CvPcb" ) );
+	item->SetBitmap( tools_xpm );
+	postprocess_menu->Append( item );
+
     //////////////////////////
     // Menu d'outils divers //
     //////////////////////////

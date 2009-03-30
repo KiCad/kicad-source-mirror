@@ -42,10 +42,13 @@ const wxChar* s_AllowedExtensionsToList[] =
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),
+    wxT( "^.*\\.gbr$" ),
     wxT( "^.*\\.odt$" ),
     wxT( "^.*\\.sxw$" ),
     wxT( "^.*\\.htm$" ),
     wxT( "^.*\\.html$" ),
+    wxT( "^.*\\.rpt$" ),
+    wxT( "^.*\\.csv$" ),
     NULL                    // end of list
 };
 

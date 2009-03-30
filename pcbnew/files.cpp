@@ -120,10 +120,6 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         SavePcbFile( wxEmptyString );
         break;
 
-    case ID_PCB_GEN_CMP_FILE:
-        RecreateCmpFileFromBoard();
-        break;
-
     default:
         DisplayError( this, wxT( "File_io Internal Error" ) ); break;
     }

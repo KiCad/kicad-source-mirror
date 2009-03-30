@@ -459,8 +459,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem() == NULL )
             break;
-        Delete_Zone_Fill( &dc, (SEGZONE*) GetCurItem() );
+        {
+        SEGZONE* zsegm = (SEGZONE*) GetCurItem();
+        int netcode = zsegm->GetNet();
+        Delete_Zone_Fill( &dc, zsegm );
         SetCurItem( NULL );
+        test_1_net_connexion( NULL, netcode );
+        GetScreen()->SetModify();
+        }
         break;
 
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
@@ -483,8 +489,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_ZONE_CONTAINER:
     case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         DrawPanel->MouseToCursorSchema();
+        {
+        int netcode = ((ZONE_CONTAINER*) GetCurItem())->GetNet();
         Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
         SetCurItem( NULL );
+        test_1_net_connexion( NULL, netcode );
+        }
         break;
 
     case ID_POPUP_PCB_DELETE_ZONE_CORNER:

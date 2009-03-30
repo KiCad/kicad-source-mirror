@@ -601,8 +601,14 @@ void WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste( wxCommandEvent& event )
 
 
 /***************************************************/
-bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
+void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
 /***************************************************/
+/**
+ * Function RecreateBOMFileFromBoard
+ * Recreates a .cmp file from the current loaded board
+ * this is the same as created by cvpcb.
+ * can be used if this file is lost
+ */
 {
     wxString FullFileNameCmp, mask;
     FILE*    FichCmp;
@@ -613,7 +619,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     if( Module == NULL )
     {
         DisplayError( this, _( "No Modules!" ) );
-        return FALSE;
+        return;
     }
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
@@ -631,7 +637,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
                                         FALSE
                                         );
     if( FullFileNameCmp.IsEmpty() )
-        return FALSE;
+        return;
 
 
     FichCmp = wxFopen( FullFileNameCmp, wxT( "wt" ) );
@@ -639,7 +645,7 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
     {
         msg = _( "Unable to create file " ) + FullFileNameCmp;
         DisplayError( this, msg );
-        return FALSE;
+        return;
     }
 
     fgets( Line, sizeof(Line), FichCmp );
@@ -662,6 +668,4 @@ bool WinEDA_PcbFrame::RecreateCmpFileFromBoard()
 
     fprintf( FichCmp, "\nEndListe\n" );
     fclose( FichCmp );
-
-    return TRUE;
 }
