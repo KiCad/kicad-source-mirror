@@ -683,6 +683,10 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
         ( (WinEDA_BasePcbFrame*) (panel->m_Parent) )->trace_ratsnest_pad( DC );
     }
 
+    // MacOSX seems to need this.
+    if( g_CurrentTrackList.GetCount() == 0 )
+        return;
+
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
     if( ! g_DesignSettings.m_UseConnectedTrackWidth )
