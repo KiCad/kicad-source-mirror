@@ -57,6 +57,9 @@ public:
     int  m_DisplayModEdge;          // How show module drawings
     int  m_DisplayModText;          // How show module texts
     bool m_DisplayPcbTrackFill;     /* FALSE : tracks are show in sketch mode, TRUE = filled */
+    int m_UserGridUnits;
+    wxRealPoint m_UserGridSize;
+
     WinEDA3D_DrawFrame*     m_Draw3DFrame;
     WinEDA_ModuleEditFrame* m_ModuleEditFrame;
 
@@ -99,7 +102,7 @@ public:
     virtual void ReCreateMenuBar();
     virtual void SetToolID( int id, int new_cursor_id,
                             const wxString& title );
-    virtual void Affiche_Status_Box();
+    virtual void UpdateStatusBar();
 
     PCB_SCREEN* GetScreen() const { return (PCB_SCREEN*) WinEDA_DrawFrame::GetBaseScreen(); }
 
@@ -312,6 +315,9 @@ public:
     // divers
     void                     AddHistory( int value, KICAD_T type );    // Add value in data list history
     void                     InstallGridFrame( const wxPoint& pos );
+
+    virtual void             LoadSettings();
+    virtual void             SaveSettings();
 
     DECLARE_EVENT_TABLE()
 };
@@ -825,7 +831,7 @@ public:
 
     void         Files_io( wxCommandEvent& event );
     void         OnFileHistory( wxCommandEvent& event );
-    int          LoadOneGerberFile( const wxString& FileName, wxDC* DC, int mode );
+    bool         LoadOneGerberFile( const wxString& FileName, wxDC* DC, int mode );
     int          ReadGerberFile( wxDC* DC, FILE* File, bool Append );
     bool         Read_GERBER_File( wxDC*           DC,
                                    const wxString& GERBER_FullFileName,

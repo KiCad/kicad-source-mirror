@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
+#include "macros.h"
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "protos.h"
@@ -271,13 +272,13 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
             case 'A':       // A axis offset in current unit (inch ou mm)
                 text++;
                 fcoord     = ReadDouble( text );
-                m_Offset.x = (int) round( fcoord * conv_scale );
+                m_Offset.x = wxRound( fcoord * conv_scale );
                 break;
 
             case 'B':       // B axis offset in current unit (inch ou mm)
                 text++;
                 fcoord     = ReadDouble( text );
-                m_Offset.y = (int) round( fcoord * conv_scale );
+                m_Offset.y = wxRound( fcoord * conv_scale );
                 break;
             }
         }
@@ -383,7 +384,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
             text += 2;              // skip "C," for example
 
             dcode->m_Size.x = dcode->m_Size.y =
-                                  (int) round( ReadDouble( text ) * conv_scale );
+                                  wxRound( ReadDouble( text ) * conv_scale );
 
             switch( stdAperture )
             {
@@ -396,7 +397,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 {
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
-                                           (int) round( ReadDouble( text ) * conv_scale );
+                                           wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = 1;
                 }
 
@@ -407,7 +408,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 {
                     text++;
                     dcode->m_Drill.y =
-                        (int) round( ReadDouble( text ) * conv_scale );
+                        wxRound( ReadDouble( text ) * conv_scale );
 
                     dcode->m_DrillShape = 2;
                 }
@@ -425,7 +426,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 {
                     text++;
                     dcode->m_Size.y =
-                        (int) round( ReadDouble( text ) * conv_scale );
+                        wxRound( ReadDouble( text ) * conv_scale );
                 }
 
                 while( *text == ' ' )
@@ -435,7 +436,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 {
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
-                                           (int) round( ReadDouble( text ) * conv_scale );
+                                           wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = 1;
                 }
 
@@ -446,7 +447,7 @@ bool GERBER::ExecuteRS274XCommand( int command, char buff[GERBER_BUFZ], char*& t
                 {
                     text++;
                     dcode->m_Drill.y =
-                        (int) round( ReadDouble( text ) * conv_scale );
+                        wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = 2;
                 }
                 dcode->m_Defined = TRUE;

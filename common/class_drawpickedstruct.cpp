@@ -4,28 +4,8 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "base_struct.h"
-#include "sch_item_struct.h"
+#include "class_drawpickedstruct.h"
 
-
-/* Constructor and destructor for SCH_ITEM */
-/* They are not inline because this creates problems with gcc at linking time
- * in debug mode
-*/
-
-SCH_ITEM::SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType ) :
-    EDA_BaseStruct( aParent, aType )
-{
-    m_Layer = 0;
-}
-
-SCH_ITEM::~SCH_ITEM()
-{
-}
-
-/**************************/
-/* class DrawPickedStruct */
-/**************************/
 
 /* This class has only one useful member: .m_PickedStruct, used as a link.
  *  It does not describe really an item.
@@ -35,8 +15,8 @@ SCH_ITEM::~SCH_ITEM()
  */
 
 /*******************************************************************/
-DrawPickedStruct::DrawPickedStruct( SCH_ITEM * pickedstruct ) :
-    SCH_ITEM( NULL, DRAW_PICK_ITEM_STRUCT_TYPE )
+DrawPickedStruct::DrawPickedStruct( EDA_BaseStruct* pickedstruct ) :
+    EDA_BaseStruct( NULL, DRAW_PICK_ITEM_STRUCT_TYPE )
 /*******************************************************************/
 {
     m_PickedStruct = pickedstruct;
@@ -68,10 +48,10 @@ EDA_Rect DrawPickedStruct::GetBoundingBox()
 
 EDA_Rect DrawPickedStruct::GetBoundingBoxUnion()
 {
-    EDA_Rect    ret;
+    EDA_Rect          ret;
+    EDA_BaseStruct*   item;
+    DrawPickedStruct* cur = this;
 
-    DrawPickedStruct*   cur = this;
-    SCH_ITEM*           item;
     while( cur && (item = cur->m_PickedStruct) != NULL )
     {
         ret.Merge( item->GetBoundingBox() );

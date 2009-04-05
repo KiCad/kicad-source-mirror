@@ -13,6 +13,7 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "appl_wxstruct.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -47,7 +48,8 @@ public:
 
 
 // Filename extension for BOM list
-#define EXT_LIST wxT( ".lst" )
+static const wxString BomFileExtension( wxT( "lst" ) );
+static const wxString BomFileWildcard( wxT( "Bill of Materials file (*.lst)|*.lst" ) );
 
 
 /* Local functions */
@@ -80,31 +82,23 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
                                                bool aRunBrowser )
 /**************************************************************************/
 {
+    wxFileName fn;
     wxString mask, filename;
 
     s_ExportSeparatorSymbol = aExportSeparatorSymbol;
 
     m_ListFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
-    ChangeFileNameExt( m_ListFileName, EXT_LIST );
+    fn = m_ListFileName;
+    fn.SetExt( BomFileExtension );
 
-    //need to get rid of the path.
-    m_ListFileName = m_ListFileName.AfterLast( '/' );
-    mask  = wxT( "*" );
-    mask += EXT_LIST;
+    wxFileDialog dlg( this, _( "Bill of Materials" ), fn.GetPath(),
+                      fn.GetFullName(), BomFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    filename = EDA_FileSelector( _( "Bill of materials:" ),
-        wxEmptyString,                              /* Chemin par defaut (ici dir courante) */
-        m_ListFileName,                             /* nom fichier par defaut, et resultat */
-        EXT_LIST,                                   /* extension par defaut */
-        mask,                                       /* Masque d'affichage */
-        this,
-        wxFD_SAVE,
-        TRUE
-        );
-    if( filename.IsEmpty() )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
-    else
-        m_ListFileName = filename;
+
+    m_ListFileName = dlg.GetPath();
 
     /* Close dialog, then show the list (if so requested) */
 
@@ -117,7 +111,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
 
     if( aRunBrowser )
     {
-        wxString editorname = GetEditorName();
+        wxString editorname = wxGetApp().GetEditorName();
         AddDelimiterString( filename );
         ExecuteFile( this, editorname, filename );
     }
@@ -194,7 +188,8 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
     {
         /* creates the list file */
         DateAndTime( Line );
-        wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+        wxString Title = wxGetApp().GetAppName() + wxT( " " ) +
+            GetBuildVersion();
         fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
 
         /*  sort component list */

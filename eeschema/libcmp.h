@@ -5,17 +5,13 @@
 #ifndef LIBCMP_H
 #define LIBCMP_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include "priorque.h"
 
 #define LIB_VERSION_MAJOR 2
 #define LIB_VERSION_MINOR 3
 #define LIBFILE_IDENT     "EESchema-LIBRARY Version"        /* Must be the first line of lib files. */
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"    /* Must be the first line of doc files. */
-#define DOC_EXT           wxT( ".dcm" )                     /* Ext. of documentation files */
+#define DOC_EXT           wxT( "dcm" )                     /* Ext. of documentation files */
 
 
 //Offsets used in editing library component, for handle aliad dats
@@ -48,28 +44,20 @@ enum LocateDrawStructType {
 
 
 /* Variables */
-extern LibraryStruct*              LibraryList;         /* All part libs are saved here. */
+extern LibraryStruct*      LibraryList;     /* All part libs are saved here. */
 
 /* Variables used by LibEdit */
-eda_global LibEDA_BaseStruct*      LibItemToRepeat;     /* pointer on a graphic item than can be duplicated by the Ins key
+extern LibEDA_BaseStruct*  LibItemToRepeat;     /* pointer on a graphic item than can be duplicated by the Ins key
                                                           * (usually the last created item */
-eda_global LibraryStruct*          CurrentLib;          /* Current opened library */
-eda_global EDA_LibComponentStruct* CurrentLibEntry;     /* Current component */
-eda_global LibEDA_BaseStruct*      CurrentDrawItem;     /* current edited item */
+extern LibraryStruct*          CurrentLib;          /* Current opened library */
+extern EDA_LibComponentStruct* CurrentLibEntry;     /* Current component */
+extern LibEDA_BaseStruct*      CurrentDrawItem;     /* current edited item */
 
-eda_global wxString CurrentAliasName;                   // Current selected alias (for components which have aliases)
-eda_global bool     g_AsDeMorgan;                       // True if the current component has a "De Morgan" representation
-eda_global int      CurrentUnit                         // Current selected part
-#ifdef MAIN
-= 1
-#endif
-;
-eda_global int CurrentConvert                   /* Convert = 1 .. 255 */
-#ifdef MAIN
-= 1
-#endif
-;
+extern wxString CurrentAliasName;
+extern bool     g_AsDeMorgan;
+extern int      CurrentUnit;
+extern int      CurrentConvert;
 
-eda_global wxString FindLibName;        /* Library (name) containing the last component find by FindLibPart() */
+extern wxString FindLibName;
 
 #endif  //  LIBCMP_H

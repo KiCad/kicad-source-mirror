@@ -8,10 +8,6 @@
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
-#ifndef COMMON_GLOBL
-#define COMMON_GLOBL extern
-#endif
-
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( ".key" )
 
 /* keyword idetifier in kicad config use ti store/retrieve path option */
@@ -54,36 +50,14 @@ public:
 /* Identifiers (tags) in key code configuration file (or section names)
  *  .m_SectionTag member of a Ki_HotkeyInfoSectionDescriptor
  */
-COMMON_GLOBL wxString g_CommonSectionTag
-#ifdef EDA_BASE
-( wxT( "[common]" ) )
-#endif
-;
-COMMON_GLOBL wxString g_SchematicSectionTag
-#ifdef EDA_BASE
-( wxT( "[eeschema]" ) )
-#endif
-;
-COMMON_GLOBL wxString g_LibEditSectionTag
-#ifdef EDA_BASE
-( wxT( "[libedit]" ) )
-#endif
-;
-COMMON_GLOBL wxString g_BoardEditorSectionTag
-#ifdef EDA_BASE
-( wxT( "[pcbnew]" ) )
-#endif
-;
-COMMON_GLOBL wxString g_ModuleEditSectionTag
-#ifdef EDA_BASE
-( wxT( "[footprinteditor]" ) )
-#endif
-;
+extern wxString g_CommonSectionTag;
+extern wxString g_SchematicSectionTag;
+extern wxString g_LibEditSectionTag;
+extern wxString g_BoardEditorSectionTag;
+extern wxString g_ModuleEditSectionTag;
 
-COMMON_GLOBL int g_ConfigFileLocationChoice;    /* 0 = files are in Home directory (usefull under unix)
-                                                 * 1 = kicad/template ( usefull only under windows )
-                                                 * 2 ... = unused
-                                                 */
+extern int g_ConfigFileLocationChoice;
+
 
 /* Functions:
  */

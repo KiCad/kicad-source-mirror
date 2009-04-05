@@ -112,8 +112,8 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
 
 /*******************************************************************************************/
-int WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
-                                           wxDC* DC, int mode )
+bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
+                                            wxDC* DC, int mode )
 /*******************************************************************************************/
 
 /*
@@ -123,44 +123,40 @@ int WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
  *  1 si OK
  */
 {
-    wxString filename = FullFileName;
-    wxString path = wxPathOnly( FullFileName );
+    wxString wildcard;
+    wxFileName fn = FullFileName;
 
     ActiveScreen = GetScreen();
-    if( filename == wxEmptyString )
+
+    if( !fn.IsOk() )
     {
-        wxString mask = wxT( "*" ) + g_PhotoFilenameExt;
+        wildcard.Printf( _( "Gerber files (.%s .gbr .gbx .lgr .ger .pho)|"  \
+                            "*.%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|" ),
+                         g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+        wildcard += AllFilesWildcard;
 
-        mask    += wxT( ";*.gbr;*.gbx;*.lgr;*.ger" );
+        wxFileDialog dlg( this, _( "Open Gerber File" ), fn.GetPath(),
+                          fn.GetFullName(), wildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-        filename = EDA_FileSelector( _( "Open Gerber File:" ),
-                                     path,                  /* Chemin par defaut */
-                                     wxEmptyString,         /* nom fichier par defaut */
-                                     g_PhotoFilenameExt,    /* extension par defaut */
-                                     mask,                  /* Masque d'affichage */
-                                     this,
-                                     0,
-                                     FALSE
-                                     );
-        if( filename == wxEmptyString )
-            return FALSE;
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        fn = dlg.GetPath();
     }
 
-    GetScreen()->m_FileName = filename;
+    GetScreen()->m_FileName = fn.GetFullPath();
+    wxSetWorkingDirectory( fn.GetPath() );
+    fn.SetExt( g_PenFilenameExt );
 
-    if( path != wxEmptyString )
-        wxSetWorkingDirectory( path );
-
-    ChangeFileNameExt( filename, g_PenFilenameExt );
-
-    if( Read_GERBER_File( DC, GetScreen()->m_FileName, filename ) )
+    if( Read_GERBER_File( DC, GetScreen()->m_FileName, fn.GetFullPath() ) )
         SetLastProject( GetScreen()->m_FileName );
 
     Zoom_Automatique( FALSE );
     GetScreen()->SetRefreshReq();
     g_SaveTime = time( NULL );
 
-    return 1;
+    return true;
 }
 
 
@@ -175,31 +171,29 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileNa
  *  1 si OK
  */
 {
-    wxString filename = FullFileName;
+    wxString wildcard;
+    wxFileName fn = FullFileName;
 
     ActiveScreen = frame->GetScreen();
 
-    if( filename == wxEmptyString )
+    if( !fn.IsOk() )
     {
-        wxString penfilesmask( wxT( "*" ) );
+        wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
+                         g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+        wildcard += AllFilesWildcard;
+        fn = frame->GetScreen()->m_FileName;
+        fn.SetExt( g_PenFilenameExt );
+        wxFileDialog dlg( ( wxWindow* )frame, _( "Load GERBER DCODE File" ),
+                          fn.GetPath(), fn.GetFullName(), wildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-        penfilesmask += g_PenFilenameExt;
-        filename = frame->GetScreen()->m_FileName;
-        ChangeFileNameExt( filename, g_PenFilenameExt );
-        filename = EDA_FileSelector( _( "D codes files:" ),
-                                     wxEmptyString,     /* Chemin par defaut */
-                                     filename,          /* nom fichier par defaut */
-                                     g_PenFilenameExt,  /* extension par defaut */
-                                     penfilesmask,      /* Masque d'affichage */
-                                     frame,
-                                     0,
-                                     TRUE
-                                     );
-        if( filename == wxEmptyString )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
+
+        fn = dlg.GetPath();
     }
 
-    frame->Read_D_Code_File( filename );
+    frame->Read_D_Code_File( fn.GetFullPath() );
     frame->CopyDCodesSizeToItems();
     frame->GetScreen()->SetRefreshReq();
 }
@@ -212,29 +206,29 @@ bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName, wxDC* DC 
 /* Sauvegarde du fichier PCB en format ASCII
  */
 {
-    wxString filename = FullFileName;
+    wxString wildcard;
+    wxFileName fn = FullFileName;
 
-    if( filename == wxEmptyString )
+    if( !fn.IsOk() )
     {
-        wxString mask( wxT( "*" ) );
+        fn = GetScreen()->m_FileName;
 
-        mask    += g_PhotoFilenameExt;
-        filename = EDA_FileSelector( _( "Save gerber file" ),
-                                     wxEmptyString,             /* Chemin par defaut */
-                                     GetScreen()->m_FileName,   /* nom fichier par defaut */
-                                     g_PhotoFilenameExt,        /* extension par defaut */
-                                     mask,                      /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     FALSE
-                                     );
-        if( filename.IsEmpty() )
-            return FALSE;
+        wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
+                         g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+
+        wxFileDialog dlg( this, _( "Save Gerber File" ), fn.GetPath(),
+                          fn.GetFullName(), wildcard,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        fn = dlg.GetPath();
     }
 
-    GetScreen()->m_FileName = filename;
+    GetScreen()->m_FileName = fn.GetFullPath();
 
 // TODO
 
-    return TRUE;
+    return true;
 }

@@ -455,21 +455,22 @@ void EDA_Printout::DrawPage()
      * in order to keep the requested value */
     dc->GetUserScale( &xdcscale, &ydcscale );
     ftmp /= xdcscale;
-    SetPenMinWidth( (int) round( ftmp ) );
+    SetPenMinWidth( wxRound( ftmp ) );
 
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
+    BASE_SCREEN*      screen = panel->GetScreen();
     EDA_Rect          tmp   = panel->m_ClipBox;
 
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
-    g_IsPrinting = true;
+    screen->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
     panel->PrintPage( dc, m_Print_Sheet_Ref, 0xFFFFFFFF, false );
 
     g_DrawBgColor    = bg_color;
-    g_IsPrinting     = false;
+    screen->m_IsPrinting = false;
     panel->m_ClipBox = tmp;
 
     SetPenMinWidth( 1 );

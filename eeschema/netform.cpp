@@ -12,6 +12,7 @@
 #include "libcmp.h"
 #include "general.h"
 #include "netlist.h"
+#include "appl_wxstruct.h"
 
 #include "protos.h"
 
@@ -271,13 +272,13 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
     wxString        netname;
     int             ii;
     FILE*           tmpfile;
-    wxString        TmpFullFileName = FullFileName;
+    wxFileName      fn = FullFileName;
 
-    ChangeFileNameExt( TmpFullFileName, wxT( ".tmp" ) );
+    fn.SetExt( wxT( "tmp" ) );
 
-    if( ( tmpfile = wxFopen( TmpFullFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( tmpfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        wxString msg = _( "Failed to create file " ) + TmpFullFileName;
+        wxString msg = _( "Failed to create file " ) + fn.GetFullPath();
         DisplayError( frame, msg );
         return;
     }
@@ -361,7 +362,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
     else
         CommandFile = FindKicadFile( g_NetListerCommandLine );
 
-    CommandFile += wxT( " " ) + TmpFullFileName;
+    CommandFile += wxT( " " ) + fn.GetFullPath();
     CommandFile += wxT( " " ) + FullFileName;
 
     ProcessExecute( CommandFile, wxEXEC_SYNC );
@@ -947,7 +948,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     DrawSheetPath* sheet;
     EDA_BaseStruct* DrawList;
     SCH_COMPONENT* Component;
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
     fprintf( f, "%sHEA\n", CONV_TO_UTF8( StartLine ) );
     DateAndTime( Line );

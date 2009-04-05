@@ -14,9 +14,19 @@
 
 #include "protos.h"
 
-/* routines internes */
 
-/* Variables locales */
+int E_scale;         /* facteur d'echelle des tables de distance */
+int Nb_Sides;        /* Nombre de couches pour autoroutage (0 ou 1) */
+int Nrows = ILLEGAL;
+int Ncols = ILLEGAL;
+int Ntotal;
+int OpenNodes;       /* total number of nodes opened */
+int ClosNodes;       /* total number of nodes closed */
+int MoveNodes;       /* total number of nodes moved */
+int MaxNodes;        /* maximum number of nodes opened at one time */
+
+BOARDHEAD Board;     /* 2-sided board */
+
 
 /********************************************************/
 void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )

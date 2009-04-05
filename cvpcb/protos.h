@@ -5,16 +5,17 @@
 #ifndef PROTOS_H
 #define PROTOS_H
 
-int GenNetlistPcbnew() ;
-int loadcmp() ;
-int listlib() ;
+int GenNetlistPcbnew( FILE* f ) ;
+bool loadcmp( const wxString& fileName ) ;
+bool listlib() ;
+
 STOREMOD * GetModuleDescrByName(const wxString & FootprintName);
 
 
 	/***********/
 	/* CFG.CPP */
 	/***********/
-void Save_Config(wxWindow * parent);
+void Save_Config( wxWindow* parent, const wxString& fileName );
 void Read_Config( const wxString & FullFileName );  /* lit la configuration */
 
 

@@ -167,11 +167,11 @@ void DIALOG_SVG_PRINT::SetPenWidth()
 void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Framet_Ref )
 /***************************************************************************/
 {
+    wxFileName fn;
     wxString msg;
 
     SetPenWidth();
 
-    wxString     FullFileName;
     BASE_SCREEN* screen = m_Parent->GetBaseScreen();
 
     if( aPrintAll )
@@ -182,28 +182,29 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Framet_Ref )
         if ( ! aPrintAll && ! m_BoxSelectLayer[layer]->GetValue( ) )
             continue;
 
-        FullFileName = m_FileNameCtrl->GetValue();
-        if( FullFileName.IsEmpty() )
+        fn = m_FileNameCtrl->GetValue();
+        if( !fn.IsOk() )
         {
-            FullFileName = screen->m_FileName;
-            ChangeFileNameExt( FullFileName, wxT( "" ) );
+            fn = screen->m_FileName;
         }
 
         if( aPrintAll )
-            FullFileName += wxT("-brd");
+            fn.SetName( fn.GetName() + wxT("-brd") );
         else
         {
-            FullFileName << wxT("-") << m_BoxSelectLayer[layer]->GetLabel( );
+            fn.SetName( fn.GetName() + wxT("-") +
+                        m_BoxSelectLayer[layer]->GetLabel( ) );
+
             m_PrintMaskLayer = 1 << layer;
             if ( m_PrintBoardEdgesCtrl->IsChecked() )
                 m_PrintMaskLayer |= EDGE_LAYER;
 
         }
 
-        FullFileName += wxT( ".svg" );
+        fn.SetExt( wxT( ".svg" ) );
 
-        bool success = DrawPage( FullFileName, screen, aPrint_Framet_Ref );
-        msg = _( "Create file " ) + FullFileName;
+        bool success = DrawPage( fn.GetFullPath(), screen, aPrint_Framet_Ref );
+        msg = _( "Create file " ) + fn.GetFullPath();
         if( !success )
             msg += _( " error" );
         msg += wxT( "\n" );
@@ -265,11 +266,11 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName, BASE_SCREEN* scre
         panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
         panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
-        g_IsPrinting = true;
+        screen->m_IsPrinting = true;
         SetLocaleTo_C_standard();       // Switch the locale to standard C (needed to print floating point numbers like 1.3)
         panel->PrintPage( &dc, aPrint_Framet_Ref, m_PrintMaskLayer, false );
         SetLocaleTo_Default();          // revert to the current  locale
-        g_IsPrinting     = FALSE;
+        screen->m_IsPrinting = false;
         panel->m_ClipBox = tmp;
     }
 

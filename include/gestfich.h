@@ -9,12 +9,12 @@
 #ifndef __INCLUDE__GESTFICH_H__
 #define __INCLUDE__GESTFICH_H__ 1
 
+#include <wx/filename.h>
+
 
 /* Forward class declarations. */
 class WinEDAListBox;
 
-
-wxString    GetEditorName(); // Return the prefered editor name
 
 /** Function OpenPDF
  * run the PDF viewer and display a PDF file
@@ -42,8 +42,6 @@ wxString EDA_FileSelector( const wxString &Title,                   /* Window ti
                            const wxPoint& Pos = wxPoint( -1, -1 )
                            );
 
-wxString    MakeFileName( const wxString& dir,
-                          const wxString& shortname, const wxString& ext );
 
 /* Calcule le nom complet d'un file d'apres les chaines
  *  dir = prefixe (chemin)
@@ -74,7 +72,6 @@ wxString    MakeReducedFileName( const wxString& fullfilename,
 
 WinEDAListBox*  GetFileNames( char* Directory, char* Mask );
 
-void            ChangeFileNameExt( wxString& FullFileName, const wxString& NewExt );
 
 /* Change l'extension du "filename FullFileName" en NewExt.
  *     Retourne FullFileName */
@@ -104,6 +101,16 @@ wxString        FindKicadFile( const wxString& shortname );
 /* Search the executable file shortname in kicad binary path and return
  *  full file name if found or shortname */
 
+
+/**
+ * Quote return value of wxFileName::GetFullPath().
+ *
+ * This allows file name paths with spaces to be used as parameters to
+ * ProcessExecute function calls.  This is a cheap and dirty hack and
+ * should probably should be done in a class derived from wxFileName.
+ */
+extern wxString QuoteFullPath( wxFileName& fn,
+                               wxPathFormat format = wxPATH_NATIVE );
 
 #endif /* __INCLUDE__GESTFICH_H__ */
 

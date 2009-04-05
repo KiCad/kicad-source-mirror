@@ -30,20 +30,35 @@ void Read_Config( const wxString& FileName )
  * le chemin de l'executable cvpcb.exe doit etre dans BinDir
  */
 {
-    wxString FullFileName = FileName;
+    wxFileName fn = FileName;
 
     /* Init des valeurs par defaut */
     g_LibName_List.Clear();
     g_ListName_Equ.Clear();
 
-    wxGetApp().ReadProjectConfig( FullFileName,
+    if( fn.GetExt() != ProjectFileExtension )
+        fn.SetExt( ProjectFileExtension );
+
+    if( wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) != wxNOT_FOUND )
+    {
+        wxLogDebug( wxT( "Removing path <%s> to library path search list." ),
+                    g_UserLibDirBuffer.c_str() );
+        wxGetApp().GetLibraryPathList().Remove( g_UserLibDirBuffer );
+    }
+
+    wxGetApp().ReadProjectConfig( fn.GetFullPath(),
                                   GROUP, ParamCfgList, FALSE );
 
-    if( NetInExtBuffer.IsEmpty() )
-        NetInExtBuffer = wxT( ".net" );
+    if( g_NetlistFileExtension.IsEmpty() )
+        g_NetlistFileExtension = wxT( "net" );
 
-    /* Inits autres variables */
-    SetRealLibraryPath( wxT( "modules" ) );
+    if( wxFileName::DirExists( g_UserLibDirBuffer )
+        && wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) == wxNOT_FOUND )
+    {
+        wxLogDebug( wxT( "Adding path <%s> to library path search list." ),
+                    g_UserLibDirBuffer.c_str() );
+        wxGetApp().GetLibraryPathList().Add( g_UserLibDirBuffer );
+    }
 }
 
 
@@ -55,36 +70,22 @@ void WinEDA_CvpcbFrame::Update_Config( wxCommandEvent& event )
  * la vraie fonction de sauvegarde de la config
  */
 {
-    Save_Config( this );
+    Save_Config( this, m_NetlistFileName.GetFullPath() );
 }
 
 
-/************************************/
-void Save_Config( wxWindow* parent )
-/************************************/
-/* enregistrement de la config */
+void Save_Config( wxWindow* parent, const wxString& fileName )
 {
-    wxString path, FullFileName;
+    wxFileName fn = fileName;
 
-    wxString mask( wxT( "*" ) );
+    fn.SetExt( ProjectFileExtension );
 
-    FullFileName = FFileName;
-    ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
+    wxFileDialog dlg( parent, _( "Save Project File" ), fn.GetPath(),
+                      fn.GetFullName(), ProjectFileWildcard, wxFD_SAVE );
 
-    path = wxGetCwd();
-    FullFileName = EDA_FileSelector( _( "Save preferences" ),
-                                     path,                      /* Chemin par defaut */
-                                     FullFileName,              /* nom fichier par defaut */
-                                     g_Prj_Config_Filename_ext, /* extension par defaut */
-                                     mask,                      /* Masque d'affichage */
-                                     parent,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
-
-    if( FullFileName.IsEmpty() )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     /* ecriture de la configuration */
-    wxGetApp().WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
+    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, ParamCfgList );
 }

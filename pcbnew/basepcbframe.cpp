@@ -10,6 +10,7 @@
 #include "wxstruct.h"
 #include "common.h"
 #include "confirm.h"
+#include "appl_wxstruct.h"
 
 #include "pcbnew.h"
 #include "bitmaps.h"
@@ -19,6 +20,11 @@
 #include "collectors.h"
 #include "class_drawpanel.h"
 
+
+/* Configuration entry names. */
+static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
+static const wxString UserGridSizeYEntry( wxT( "PcbUserGrid_Y" ) );
+static const wxString UserGridUnitsEntry( wxT( "PcbUserGrid_Unit" ) );
 
 /*******************************/
 /* class WinEDA_BasePcbFrame */
@@ -43,11 +49,11 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
                                           long style) :
     WinEDA_DrawFrame( father, idtype, title, pos, size, style )
 {
-    m_InternalUnits = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
-    m_Pcb = NULL;
+    m_InternalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
+    m_Pcb                 = NULL;
 
-    m_DisplayPadFill = TRUE;        // How to draw pads
-    m_DisplayPadNum  = TRUE;        // show pads number
+    m_DisplayPadFill      = TRUE;   // How to draw pads
+    m_DisplayPadNum       = TRUE;   // show pads number
 
     m_DisplayModEdge      = FILLED; // How to show module drawings
     m_DisplayModText      = FILLED; // How to show module texts
@@ -55,7 +61,10 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
-    m_Collector = new GENERAL_COLLECTOR();
+    m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
+    m_UserGridUnits       = INCHES;
+
+    m_Collector           = new GENERAL_COLLECTOR();
 }
 
 
@@ -322,7 +331,7 @@ void WinEDA_BasePcbFrame::SetToolID( int id, int new_cursor_id,
         DrawPanel->Refresh();
 }
 
-void WinEDA_BasePcbFrame::Affiche_Status_Box()
+void WinEDA_BasePcbFrame::UpdateStatusBar()
 /*
  * Update the status bar information.
  */
@@ -335,7 +344,7 @@ void WinEDA_BasePcbFrame::Affiche_Status_Box()
     if( !screen )
         return;
 
-    WinEDA_DrawFrame::Affiche_Status_Box();
+    WinEDA_DrawFrame::UpdateStatusBar();
 
     dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
     dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
@@ -356,4 +365,43 @@ void WinEDA_BasePcbFrame::Affiche_Status_Box()
     }
 
     SetStatusText( Line, 0 );
+}
+
+
+/**
+ * Load PCB base frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get loaded.
+ */
+void WinEDA_BasePcbFrame::LoadSettings()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxConfig* cfg = wxGetApp().m_EDA_Config;
+
+    WinEDA_DrawFrame::LoadSettings();
+    cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
+    cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
+    cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits,
+               ( long )INCHES );
+}
+
+
+/**
+ * Save PCB base frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get saved.
+ */
+void WinEDA_BasePcbFrame::SaveSettings()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxConfig* cfg = wxGetApp().m_EDA_Config;
+
+    WinEDA_DrawFrame::SaveSettings();
+    cfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
+    cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
+    cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnits );
 }

@@ -24,9 +24,15 @@
  *  $EndLIBRARY
  */
 
-#define OLD_EXT                    wxT( ".bak" )
-#define FILETMP_EXT                wxT( ".$$$" )
+#define OLD_EXT                    wxT( "bak" )
+#define FILETMP_EXT                wxT( "$$$" )
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
+
+const wxString ModExportFileExtension( wxT( "emp" ) );
+
+const wxString ModExportFileWildcard( _( "Kicad foot print export files " \
+                                         "(*.emp)|*.emp" ) );
+
 
 /* Fonctions locales */
 static bool CreateDocLibrary( const wxString& LibName );
@@ -48,11 +54,9 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
 {
     int       NbLine = 0;
     char      Line[1024];
-    wxString  CmpFullFileName;
-    FILE*     dest;
+    FILE*     file;
     MODULE*   module = NULL;
     bool      Footprint_Is_GPCB_Format = false;
-    wxString  mask = wxT( "*.*;" ); mask += EXT_CMP_MASK;
 
     wxString  LastOpenedPathForLoading;
     wxConfig* Config = wxGetApp().m_EDA_Config;
@@ -61,42 +65,38 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
 
     /* Lecture Fichier module */
-    CmpFullFileName = EDA_FileSelector( _( "Import Module:" ),
-                                        LastOpenedPathForLoading,   /* Chemin par defaut */
-                                        wxEmptyString,              /* nom fichier par defaut */
-                                        wxEmptyString,              /* extension par defaut */
-                                        mask,                       /* Masque d'affichage */
-                                        this,
-                                        wxFD_OPEN,
-                                        true
-                                        );
+    wxFileDialog dlg( this, _( "Import Footprint Module" ),
+                      LastOpenedPathForLoading, wxEmptyString,
+                      ModExportFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    if( CmpFullFileName == wxEmptyString )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;
 
-    if( ( dest = wxFopen( CmpFullFileName, wxT( "rt" ) ) ) == NULL )
+    file = wxFopen( dlg.GetPath(), wxT( "rt" ) );
+
+    if( file == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File <%s> not found" ), CmpFullFileName.GetData() );
+        msg.Printf( _( "File <%s> not found" ), dlg.GetPath() );
         DisplayError( this, msg );
         return NULL;
     }
 
     if( Config )    // Save file path
     {
-        LastOpenedPathForLoading = wxPathOnly( CmpFullFileName );
+        LastOpenedPathForLoading = wxPathOnly( dlg.GetPath() );
         Config->Write( EXPORT_IMPORT_LASTPATH_KEY, LastOpenedPathForLoading );
     }
 
     /* Read header and test file type */
-    GetLine( dest, Line, &NbLine );
+    GetLine( file, Line, &NbLine );
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
     {
         if( strnicmp( Line, "Element", 7 ) == 0 )
             Footprint_Is_GPCB_Format = true;
         else
         {
-            fclose( dest );
+            fclose( file );
             DisplayError( this, _( "Not a module file" ) );
             return NULL;
         }
@@ -105,7 +105,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     /* Read file: Search the description starting line (skip lib header)*/
     if( !Footprint_Is_GPCB_Format )
     {
-        while( GetLine( dest, Line, &NbLine ) != NULL )
+        while( GetLine( file, Line, &NbLine ) != NULL )
         {
             if( strnicmp( Line, "$MODULE", 7 ) == 0 )
                 break;
@@ -116,13 +116,13 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
 
     if( Footprint_Is_GPCB_Format )
     {
-        fclose( dest );
-        module->Read_GPCB_Descr( CmpFullFileName );
+        fclose( file );
+        module->Read_GPCB_Descr( dlg.GetPath() );
     }
     else
     {
-        module->ReadDescr( dest, &NbLine );
-        fclose( dest );
+        module->ReadDescr( file, &NbLine );
+        fclose( file );
     }
 
     /* Insert footprint in list*/
@@ -154,72 +154,59 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
  *                    false = use current path or last used path to export footprint
  */
 {
-    wxString  FullFileName, Mask( wxT( "*" ) );
-    char      Line[1025];
-    FILE*     dest;
-    wxString  msg, path;
-    wxConfig* Config = wxGetApp().m_EDA_Config;
+    wxFileName fn;
+    char       Line[1025];
+    FILE*      file;
+    wxString   msg, path, title, wildcard;
+    wxConfig*  Config = wxGetApp().m_EDA_Config;
 
     if( ptmod == NULL )
         return;
 
     ptmod->m_LibRef = ptmod->m_Reference->m_Text;
-    FullFileName    = ptmod->m_LibRef;
-    FullFileName   += createlib ? LibExtBuffer : EXT_CMP;
-
-    Mask += createlib ? LibExtBuffer : EXT_CMP;
+    fn.SetName( ptmod->m_LibRef );
+    fn.SetExt( createlib ? ModuleFileExtension : ModExportFileExtension );
 
     if( createlib )
         path = g_RealLibDirBuffer;
     else if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
 
-    FullFileName = EDA_FileSelector( createlib ? _( "Create lib" ) : _( "Export Module:" ),
-                                     path,                                  /* Chemin par defaut */
-                                     FullFileName,                          /* nom fichier par defaut */
-                                     createlib ? LibExtBuffer : EXT_CMP,    /* extension par defaut */
-                                     Mask,                                  /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     true
-                                     );
+    fn.SetPath( path );
+    title = createlib ? _( "Create New Library" ) : _( "Export Module" );
+    wildcard  = createlib ?  ModuleFileWildcard : ModExportFileWildcard;
+    wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(), wildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    if( FullFileName.IsEmpty() )
+    if( dlg.ShowModal() == wxCANCEL )
         return;
 
-    if( wxFileExists( FullFileName ) )
-    {
-        msg.Printf( _( "File %s exists, OK to replace ?" ),
-                   FullFileName.GetData() );
-        if( !IsOK( this, msg ) )
-            return;
-    }
+    fn = dlg.GetPath();
 
     /* Generation du fichier Empreinte */
-    if( ( dest = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( file = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg.Printf( _( "Unable to create <%s>" ), FullFileName.GetData() );
+        msg.Printf( _( "Unable to create <%s>" ), fn.GetFullPath().c_str() );
         DisplayError( this, msg );
         return;
     }
 
     if( !createlib && Config )  // Save file path
     {
-        path = wxPathOnly( FullFileName );
-        Config->Write( EXPORT_IMPORT_LASTPATH_KEY, path );
+        Config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
     }
 
-    fprintf( dest, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
-    fputs( "$INDEX\n", dest );
+    fprintf( file, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
+    fputs( "$INDEX\n", file );
 
-    fprintf( dest, "%s\n", CONV_TO_UTF8( ptmod->m_LibRef ) );
-    fputs( "$EndINDEX\n", dest );
+    fprintf( file, "%s\n", CONV_TO_UTF8( ptmod->m_LibRef ) );
+    fputs( "$EndINDEX\n", file );
 
-    GetBoard()->m_Modules->Save( dest );
+    GetBoard()->m_Modules->Save( file );
 
-    fputs( "$EndLIBRARY\n", dest );
-    fclose( dest );
-    msg.Printf( _( "Module exported in file <%s>" ), FullFileName.GetData() );
+    fputs( "$EndLIBRARY\n", file );
+    fclose( file );
+    msg.Printf( _( "Module exported in file <%s>" ), fn.GetFullPath().c_str() );
     DisplayInfo( this, msg );
 }
 
@@ -229,11 +216,12 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
                                                        wxString& libname )
 /**********************************************************/
 {
-    int      ii, NoFound = 1, LineNum = 0;
-    char     Line[1024], Name[256];
-    wxString NewLib, OldLib;
-    FILE*    dest, * lib_module;
-    wxString CmpName, msg;
+    wxFileName newFileName;
+    wxFileName oldFileName;
+    int        ii, NoFound = 1, LineNum = 0;
+    char       Line[1024], Name[256];
+    FILE*      dest, * lib_module;
+    wxString   CmpName, msg;
 
     /* Demande du nom du composant a supprimer */
     CmpName = Select_1_Module_From_List( this, libname, wxEmptyString, wxEmptyString );
@@ -246,12 +234,13 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
     if( !IsOK( this, msg ) )
         return;
 
-    OldLib = libname;
+    oldFileName = libname;
 
-    if( ( lib_module = wxFopen( OldLib, wxT( "rt" ) ) )  == NULL )
+    if( ( lib_module = wxFopen( oldFileName.GetFullPath(),
+                                wxT( "rt" ) ) )  == NULL )
     {
         wxString msg;
-        msg = _( "Library " ) + OldLib + _( " not found" );
+        msg = _( "Library " ) + oldFileName.GetFullPath() + _( " not found" );
         DisplayError( this, msg );
         return;
     }
@@ -297,13 +286,14 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
     }
 
     /* Creation de la nouvelle librairie */
-    NewLib = OldLib;
-    ChangeFileNameExt( NewLib, FILETMP_EXT );
-    if( ( dest = wxFopen( NewLib, wxT( "wt" ) ) ) == NULL )
+    newFileName = oldFileName;
+    newFileName.SetExt( FILETMP_EXT );
+
+    if( ( dest = wxFopen( newFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
         fclose( lib_module );
         wxString msg;
-        msg = _( "Unable to create " ) + NewLib;
+        msg = _( "Unable to create " ) + newFileName.GetFullPath();
         DisplayError( this, msg );
         return;
     }
@@ -314,7 +304,9 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
     fprintf( dest, ENTETE_LIBRAIRIE );
     fprintf( dest, "  %s\n$INDEX\n", DateAndTime( Line ) );
 
-    fseek( lib_module, 0, 0 ); GetLine( lib_module, Line, &ii );
+    fseek( lib_module, 0, 0 );
+    GetLine( lib_module, Line, &ii );
+
     while( GetLine( lib_module, Line, &ii ) )
     {
         if( strnicmp( Line, "$M", 2 ) == 0 )
@@ -366,29 +358,31 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
     wxEndBusyCursor();
 
     /* Le fichier ancienne librairie est renommee en .bak */
-    wxString BakFilename = OldLib;
-    ChangeFileNameExt( BakFilename, OLD_EXT );
+    wxFileName backupFileName = oldFileName;
+    backupFileName.SetExt( OLD_EXT );
 
-    if( wxFileExists( BakFilename ) )
-        wxRemoveFile( BakFilename );
+    if( backupFileName.FileExists() )
+        wxRemoveFile( backupFileName.GetFullPath() );
 
-    if( !wxRenameFile( OldLib, BakFilename ) )
+    if( !wxRenameFile( newFileName.GetFullPath(),
+                       backupFileName.GetFullPath() ) )
     {
         DisplayError( this, wxT( "Librairi.cpp: rename .bak err" ) );
         return;
     }
 
     /* Le fichier temporaire est renommee comme l'ancienne Lib */
-    if( !wxRenameFile( NewLib, OldLib ) )
+    if( !wxRenameFile( newFileName.GetFullPath(), oldFileName.GetFullPath() ) )
     {
         DisplayError( this, wxT( "Librairi.cpp: rename err 2" ) );
         return;
     }
 
-    msg.Printf( _( "Component %s deleted in library %s" ), CmpName.GetData(), OldLib.GetData() );
+    msg.Printf( _( "Component %s deleted in library %s" ), CmpName.GetData(),
+                oldFileName.GetFullPath().c_str() );
     Affiche_Message( msg );
 
-    CreateDocLibrary( OldLib );
+    CreateDocLibrary( oldFileName.GetFullPath() );
 }
 
 
@@ -407,7 +401,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     int      ii, NbModules = 0;
     float    Pas;
     MODULE*  Module;
-    wxString FullFileName = LibName;
+    wxString fileName = LibName;
 
     if( GetBoard()->m_Modules == NULL )
     {
@@ -415,28 +409,24 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
         return;
     }
 
-    if( FullFileName.IsEmpty() )
+    if( LibName.IsEmpty() )
     {
-        wxString Mask = wxT( "*" ) + LibExtBuffer;
-        FullFileName = EDA_FileSelector( _( "Library" ),
-                                         g_RealLibDirBuffer,    /* Chemin par defaut */
-                                         FullFileName,          /* nom fichier par defaut */
-                                         LibExtBuffer,          /* extension par defaut */
-                                         Mask,                  /* Masque d'affichage */
-                                         this,
-                                         wxFD_SAVE,
-                                         true
-                                         );
+        wxFileDialog dlg( this, _( "Library" ), g_RealLibDirBuffer,
+                          wxEmptyString, ModuleFileWildcard,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-        if( FullFileName.IsEmpty() )
+        if( dlg.ShowModal() == wxCANCEL )
             return;
+
+        fileName = dlg.GetPath();
     }
 
-    bool file_exists = wxFileExists( FullFileName );
+    bool file_exists = wxFileExists( fileName );
+
     if( !NewModulesOnly && file_exists )
     {
         wxString msg;
-        msg.Printf( _( "File %s exists, OK to replace ?" ), FullFileName.GetData() );
+        msg.Printf( _( "File %s exists, OK to replace ?" ), fileName.c_str() );
         if( !IsOK( this, msg ) )
             return;
     }
@@ -447,9 +437,9 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     if( !NewModulesOnly || !file_exists )
     {
         FILE* lib_module;
-        if( ( lib_module = wxFopen( FullFileName, wxT( "w+t" ) ) )  == NULL )
+        if( ( lib_module = wxFopen( fileName, wxT( "w+t" ) ) )  == NULL )
         {
-            wxString msg = _( "Unable to create " ) + FullFileName;
+            wxString msg = _( "Unable to create " ) + fileName;
             DisplayError( this, msg );
             return;
         }
@@ -472,7 +462,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     Module = (MODULE*) GetBoard()->m_Modules;
     for( ii = 1; Module != NULL; ii++, Module = (MODULE*) Module->Next() )
     {
-        if( Save_Module_In_Library( FullFileName, Module,
+        if( Save_Module_In_Library( fileName, Module,
                                     NewModulesOnly ? FALSE : true, FALSE, false ) == 0 )
             break;
         DisplayActivity( (int) ( ii * Pas ), wxEmptyString );
@@ -481,7 +471,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
             break;
     }
 
-    CreateDocLibrary( FullFileName );
+    CreateDocLibrary( fileName );
 }
 
 
@@ -501,13 +491,15 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
  * @return :  1 if OK, 0 if abort
  */
 {
-    int      newmodule, end;
-    int      LineNum = 0, tmp;
-    char     Name[256], Line[1024];
-    wxString Name_Cmp;
-    wxString NewLib, OldLib, msg;
-    FILE*    lib_module, * dest;
-    bool     added = true;
+    wxFileName oldFileName;
+    wxFileName newFileName;
+    int        newmodule, end;
+    int        LineNum = 0, tmp;
+    char       Name[256], Line[1024];
+    wxString   Name_Cmp;
+    wxString   msg;
+    FILE*      lib_module, * dest;
+    bool       added = true;
 
     aModule->Display_Infos( this );
 
@@ -596,12 +588,13 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         return 0;
     }
 
-    NewLib = aLibName;
-    ChangeFileNameExt( NewLib, FILETMP_EXT );
-    if( ( dest = wxFopen( NewLib, wxT( "w+t" ) ) )  == NULL )
+    newFileName = aLibName;
+    newFileName.SetExt( FILETMP_EXT );
+
+    if( ( dest = wxFopen( newFileName.GetFullPath(), wxT( "w+t" ) ) )  == NULL )
     {
         fclose( lib_module );
-        msg = _( "Unable to create " ) + NewLib;
+        msg = _( "Unable to create " ) + newFileName.GetFullPath();
         DisplayError( this, msg );
         return 0;
     }
@@ -672,17 +665,17 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     wxEndBusyCursor();
 
     /* The old library file is renamed .bak */
-    OldLib = aLibName;
-    ChangeFileNameExt( OldLib, OLD_EXT );
+    oldFileName = aLibName;
+    oldFileName.SetExt( OLD_EXT );
 
-    if( wxFileExists( OldLib ) )
-        wxRemoveFile( OldLib );
+    if( oldFileName.FileExists() )
+        wxRemoveFile( oldFileName.GetFullPath() );
 
-    if( !wxRenameFile( aLibName, OldLib ) )
+    if( !wxRenameFile( aLibName, oldFileName.GetFullPath() ) )
         DisplayError( this, wxT( "Librairi.cpp: rename .bak err" ) );
 
     /* The new library file is renamed */
-    if( !wxRenameFile( NewLib, aLibName ) )
+    if( !wxRenameFile( newFileName.GetFullPath(), aLibName ) )
     {
         DisplayError( this, wxT( "Librairi.cpp: rename NewLib err" ) );
         return 0;
@@ -771,8 +764,8 @@ void WinEDA_ModuleEditFrame::Select_Active_Library()
         return;
 
     WinEDAListBox* LibListBox = new WinEDAListBox( this, _( "Active Lib:" ),
-                                                  NULL, m_CurrentLib, NULL,
-                                                  wxColour( 200, 200, 255 ) );
+                                                   NULL, m_CurrentLib, NULL,
+                                                   wxColour( 200, 200, 255 ) );
 
     LibListBox->InsertItems( g_LibName_List );
 
@@ -834,14 +827,14 @@ static bool CreateDocLibrary( const wxString& LibName )
  *  (full file name)
  */
 {
-    char     Line[1024];
-    char     cbuf[256];
-    wxString Name, Doc, KeyWord;
-    wxString LibDocName;
-    FILE*    LibMod, * LibDoc;
+    char      Line[1024];
+    char      cbuf[256];
+    wxString   Name, Doc, KeyWord;
+    wxFileName fn;
+    FILE*      LibMod, * LibDoc;
 
-    LibDocName = LibName;
-    ChangeFileNameExt( LibDocName, EXT_DOC );
+    fn = LibName;
+    fn.SetExt( EXT_DOC );
 
     LibMod = wxFopen( LibName, wxT( "rt" ) );
     if( LibMod == NULL )
@@ -855,7 +848,7 @@ static bool CreateDocLibrary( const wxString& LibName )
         return FALSE;
     }
 
-    LibDoc = wxFopen( LibDocName, wxT( "wt" ) );
+    LibDoc = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
     if( LibDoc == NULL )
     {
         fclose( LibMod );

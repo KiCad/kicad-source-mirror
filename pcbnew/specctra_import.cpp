@@ -172,7 +172,7 @@ static int scale( double distance, UNIT_RES* aResolution )
     // used within Kicad.
     factor *= 10.0;
 
-    int ret = (int)  round( factor * distance / resValue );
+    int ret = wxRound( factor * distance / resValue );
     return ret;
 }
 

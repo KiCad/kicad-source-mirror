@@ -31,6 +31,14 @@
  * and remember users can have old versions with bugs
  */
 
+/* variables generales */
+
+// pour les tracés en mode XOR = GR_XOR ou GR_NXOR selon couleur de fond
+int g_XorMode = GR_NXOR;
+// couleur de fond de la frame de dessin
+int g_DrawBgColor = WHITE;
+
+
 #define USE_CLIP_FILLED_POLYGONS
 
 #ifdef USE_CLIP_FILLED_POLYGONS
@@ -1480,21 +1488,17 @@ void GRSetTextFgColor( wxDC* DC, int Color )
 /*********************************************************/
 /* Set the foreground color used to draw texts */
 {
-    DC->SetTextForeground( wxColour(
-                               ColorRefs[Color].m_Red,
-                               ColorRefs[Color].m_Green,
-                               ColorRefs[Color].m_Blue )
-                           );
+    DC->SetTextForeground( wxColour( ColorRefs[Color].m_Red,
+                                     ColorRefs[Color].m_Green,
+                                     ColorRefs[Color].m_Blue ) );
 }
 
 
 void GRSetTextFgColor( wxDC* DC, wxFont*, int Color )
 {
-    DC->SetTextForeground( wxColour(
-                               ColorRefs[Color].m_Red,
-                               ColorRefs[Color].m_Green,
-                               ColorRefs[Color].m_Blue )
-                           );
+    DC->SetTextForeground( wxColour( ColorRefs[Color].m_Red,
+                                     ColorRefs[Color].m_Green,
+                                     ColorRefs[Color].m_Blue ) );
 }
 
 
@@ -1533,22 +1537,18 @@ void GRSetTextBgColor( wxDC* DC, int Color )
 /* Set the background color used to draw texts */
 {
     Color &= MASKCOLOR; // keep only the bits used to select the color
-    DC->SetTextBackground( wxColour(
-                               ColorRefs[Color].m_Red,
-                               ColorRefs[Color].m_Green,
-                               ColorRefs[Color].m_Blue )
-                           );
+    DC->SetTextBackground( wxColour( ColorRefs[Color].m_Red,
+                                     ColorRefs[Color].m_Green,
+                                     ColorRefs[Color].m_Blue ) );
 }
 
 
 void GRSetTextBgColor( wxDC* DC, wxFont*, int Color )
 {
     Color &= MASKCOLOR; // keep only the bits used to select the color
-    DC->SetTextBackground( wxColour(
-                               ColorRefs[Color].m_Red,
-                               ColorRefs[Color].m_Green,
-                               ColorRefs[Color].m_Blue )
-                           );
+    DC->SetTextBackground( wxColour( ColorRefs[Color].m_Red,
+                                     ColorRefs[Color].m_Green,
+                                     ColorRefs[Color].m_Blue ) );
 }
 
 #ifdef USE_CLIP_FILLED_POLYGONS

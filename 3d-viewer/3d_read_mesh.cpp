@@ -13,6 +13,7 @@
 #include "common.h"
 #include "macros.h"
 #include "kicad_string.h"
+#include "appl_wxstruct.h"
 
 #include "3d_struct.h"
 #include "3d_viewer.h"
@@ -22,30 +23,35 @@
 int S3D_MASTER:: ReadData()
 /************************************/
 {
-    char     line[1024], * text;
-    wxString fullfilename;
-    FILE*    file;
-    int      LineNum = 0;
+    char       line[1024], * text;
+    wxFileName fn;
+    wxString   tmp;
+    FILE*      file;
+    int        LineNum = 0;
 
     if( m_Shape3DName.IsEmpty() )
     {
         return 1;
     }
 
-    if( wxIsAbsolutePath( m_Shape3DName ) )
-        fullfilename.Empty();
-    else
-        fullfilename = g_RealLibDirBuffer + LIB3D_PATH;
-    fullfilename += m_Shape3DName;
-#if defined (__WINDOWS__)
-    fullfilename.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
-#else
-#if defined (__UNIX__)
-    fullfilename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-#endif
-#endif
+    fn = m_Shape3DName;
 
-    file = wxFopen( fullfilename, wxT( "rt" ) );
+    if( !fn.FileExists() )
+    {
+        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullPath() );
+
+        if( !tmp )
+        {
+            wxLogDebug( _( "3D part library <%s> could not be found." ),
+                        fn.GetFullPath().c_str() );
+            return -1;
+        }
+
+        fn = tmp;
+    }
+
+    file = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
+
     if( file == NULL )
     {
         return -1;

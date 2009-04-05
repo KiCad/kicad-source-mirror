@@ -644,7 +644,7 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
     {
     case PAD_CIRCLE:
         dist = hypot( deltaX, deltaY );
-        if( (int) ( round( dist ) ) <= dx )
+        if( wxRound( dist ) <= dx )
             return true;
         break;
 

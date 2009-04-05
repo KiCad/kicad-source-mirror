@@ -27,14 +27,14 @@ int NetNumCode;			/* Nombre utilise pour cree des NetNames lors de
 
 int genorcad()
 {
-char Line[1024];
-STOREPIN * Pin;
-STORECMP * CurrentCmp;
-wxString Title = g_Main_Title + wxT(" ") + GetBuildVersion();
+    char Line[1024];
+    STOREPIN * Pin;
+    STORECMP * CurrentCmp;
+    wxString Title = wxGetApp().GetAppName() + wxT(" ") + GetBuildVersion();
 
 	NetNumCode = 1; DateAndTime(Line);
 	fprintf(dest,"( { Netlist by %s, date = %s }\n",
-		CONV_TO_UTF8(Title), Line ) ;
+            CONV_TO_UTF8(Title), Line ) ;
 
 	  /***********************/
 	  /* Lecture de la liste */

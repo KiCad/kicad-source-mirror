@@ -76,7 +76,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
             // a ete effacee
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = previous_layer;
 
-            Affiche_Status_Box();
+            UpdateStatusBar();
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
             {
                 if( g_CurrentTrackList.GetCount()==1 && g_CurrentTrackSegment->Type() != TYPE_VIA )

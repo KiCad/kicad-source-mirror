@@ -130,11 +130,11 @@ void DIALOG_SVG_PRINT::SetPenWidth()
 void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
 /***************************************************************************/
 {
-    wxString msg;
+    wxString     msg;
+    wxFileName   fn;
 
     SetPenWidth();
 
-    wxString FullFileName;
     BASE_SCREEN* screen    = m_Parent->GetBaseScreen();
     BASE_SCREEN* oldscreen = screen;
 
@@ -165,10 +165,11 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
                 return;
             sheetpath = SheetList.GetNext();
 
-            FullFileName = schframe->GetUniqueFilenameForCurrentSheet( ) + wxT( ".svg" );
+            fn = schframe->GetUniqueFilenameForCurrentSheet( ) + wxT( ".svg" );
 
-            bool     success = DrawPage( FullFileName, schscreen, aPrint_Sheet_Ref );
-            msg = _( "Create file " ) + FullFileName;
+            bool success = DrawPage( fn.GetFullPath(), schscreen,
+                                     aPrint_Sheet_Ref );
+            msg = _( "Create file " ) + fn.GetFullPath();
             if( !success )
                 msg += _( " error" );
             msg += wxT( "\n" );
@@ -180,16 +181,20 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     }
     else
     {
-        FullFileName = m_FileNameCtrl->GetValue();
-        if( FullFileName.IsEmpty() )
+        fn = m_FileNameCtrl->GetValue();
+
+        if( !fn.IsOk() )
         {
-            FullFileName = screen->m_FileName;
-            ChangeFileNameExt( FullFileName, wxT( ".svg" ) );
+            fn = screen->m_FileName;
+            fn.SetExt( wxT( "svg" ) );
         }
-        bool     success = DrawPage( FullFileName, screen, aPrint_Sheet_Ref );
-        msg = _( "Create file " ) + FullFileName;
+
+        bool success = DrawPage( fn.GetFullPath(), screen, aPrint_Sheet_Ref );
+        msg = _( "Create file " ) + fn.GetFullPath();
+
         if( !success )
             msg += _( " error" );
+
         msg += wxT( "\n" );
         m_MessagesBox->AppendText( msg );
     }
@@ -247,11 +252,11 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName, BASE_SCREEN* scre
         panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
         panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
-        g_IsPrinting = true;
+        screen->m_IsPrinting = true;
         SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed to print floating point numbers like 1.3)
         panel->PrintPage( &dc, aPrint_Sheet_Ref, 1, false );
         SetLocaleTo_Default( );    // revert to the current  locale
-        g_IsPrinting     = FALSE;
+        screen->m_IsPrinting = false;
         panel->m_ClipBox = tmp;
     }
 

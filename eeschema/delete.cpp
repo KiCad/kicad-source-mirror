@@ -4,13 +4,12 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpickedstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
 
 
@@ -305,7 +304,7 @@ void WinEDA_SchematicFrame::DeleteConnection( wxDC* DC, bool DeleteFullConnectio
 
     if( PickedList )
     {
-        DeleteStruct( DrawPanel, DC, PickedList );
+        DeleteStruct( DrawPanel, DC, (SCH_ITEM*) PickedList );
         GetScreen()->SetModify();
     }
 }

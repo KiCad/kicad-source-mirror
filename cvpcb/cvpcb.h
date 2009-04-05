@@ -2,22 +2,27 @@
 /* CVPCB : declaration des variables globales */
 /**********************************************/
 
+#ifndef __CVPCB_H__
+#define __CVPCB_H__
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
-#include "pcbnew.h"
+#include "pcbcommon.h"
 
 // config for footprints doc file acces
 #define DOC_FOOTPRINTS_LIST_KEY wxT("footprints_doc_file")
 #define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT("footprints_doc/footprints.pdf")
 
-
 // Define print format to display a schematic component line
 #define CMP_FORMAT wxT( "%3d %8s - %16s : %-.32s" )
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"
+
+/* Types de netliste: */
+#define TYPE_NON_SPECIFIE  0
+#define TYPE_ORCADPCB2     1
+#define TYPE_PCAD          2
+#define TYPE_VIEWLOGIC_WIR 3
+#define TYPE_VIEWLOGIC_NET 4
+
 
 enum TypeOfStruct {
     STRUCT_NOT_INIT,
@@ -79,75 +84,36 @@ public:
 };
 
 
-eda_global STOREMOD* g_BaseListePkg;
-eda_global STORECMP* g_BaseListeCmp;
-
-eda_global FILE*     source;
-eda_global FILE*     dest;
-eda_global FILE*     libcmp;
-eda_global FILE*     lib_module;
-
-/* nom des fichiers a traiter */
-eda_global wxString  FFileName;
-eda_global wxString  NetNameBuffer;
-
-/* Types de netliste: */
-#define TYPE_NON_SPECIFIE  0
-#define TYPE_ORCADPCB2     1
-#define TYPE_PCAD          2
-#define TYPE_VIEWLOGIC_WIR 3
-#define TYPE_VIEWLOGIC_NET 4
-
 /* Gestion des noms des librairies */
-eda_global wxString g_EquivExtBuffer
-#ifdef MAIN
-( wxT( ".equ" ) )
-#endif
-;
-eda_global wxString g_ExtCmpBuffer
-#ifdef MAIN
-( wxT( ".cmp" ) )
-#endif
-;
+extern const wxString EquivFileExtension;
+extern const wxString RetroFileExtension;
+extern const wxString ComponentFileExtension;
 
-eda_global wxString      g_UserNetDirBuffer;    // Netlist path (void = current working directory)
+extern const wxString RetroFileWildcard;
+extern const wxString EquivFileWildcard;
 
-eda_global wxArrayString g_ListName_Equ;        // list of .equ files to load
+extern const wxString titleLibLoadError;
 
-eda_global int           g_FlagEESchema;
-eda_global int           Rjustify; /* flag pout troncature des noms de Net:
-                                  * = 0: debut de chaine conservee (->ORCADPCB2)
-                                  * = 1: fin de chaine conservee (->VIEWLOGIC) */
-eda_global int           selection_type;    /* 0 pour sel par U??, 1 pour sel par ref ORCADPCB */
+/* CvPcb global variable definition references. */
+extern STOREMOD* g_BaseListePkg;
+extern STORECMP* g_BaseListeCmp;
 
-eda_global int           modified;          /* Flag != 0 si modif attribution des modules */
-eda_global int           ListModIsModified; /* Flag != 0 si modif liste des lib modules */
+extern wxString   g_NetlistFileExtension;
+extern wxString   g_UserNetDirBuffer;
 
-eda_global char          alim[1024];
+extern wxArrayString g_ListName_Equ;        // list of .equ files to load
 
-eda_global int           nbcomp;                    /* nombre de composants trouves */
-eda_global int           nblib;                     /* nombre d'empreintes trouvees */
-eda_global int           composants_non_affectes;   /* nbre de composants non affectes */
+extern int    g_FlagEESchema;
+extern int    Rjustify; /* flag pout troncature des noms de Net:
+                         * = 0: debut de chaine conservee (->ORCADPCB2)
+                         * = 1: fin de chaine conservee (->VIEWLOGIC) */
 
-eda_global wxString      NameBuffer;
-eda_global wxString      NetInNameBuffer;
-eda_global wxString      NetInExtBuffer;
-eda_global wxString      NetDirBuffer;
+extern int    modified; /* Flag != 0 si modif attribution des module. */
 
-eda_global wxString      ExtRetroBuffer
-#ifdef MAIN
-( wxT( ".stf" ) )
-#endif
-;
+extern int    nbcomp;                    /* nombre de composants trouves */
+extern int    nblib;                     /* nombre d'empreintes trouvees */
+extern int    composants_non_affectes;   /* nbre de composants non affectes */
 
-
-// Variables generales */
-// Unused, for pcbnew compatibility:
-eda_global Ki_PageDescr* SheetList[]
-#ifdef MAIN
-= { NULL }
-#endif
-;
-
-// Unused, for pcbnew compatibility:
 void Plume( int state );
+
+#endif /* __CVPCB_H__ */

@@ -64,9 +64,6 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
 
     m_FrameName = wxT( "ViewlibFrame" );
 
-    m_Draw_Axis = TRUE;             // TRUE to dispaly Axis
-    m_Draw_Grid = TRUE;             // TRUE to display grid
-
     // Give an icon
     SetIcon( wxIcon( library_browse_xpm ) );
 
@@ -97,12 +94,12 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     m_CmpListSize.y = -1;
     m_CmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST,
                                wxPoint( m_LibListSize.x, 0 ),
-        m_CmpListSize, 0, NULL, wxLB_HSCROLL );
+                               m_CmpListSize, 0, NULL, wxLB_HSCROLL );
     m_CmpList->SetFont( *g_DialogFont );
     m_CmpList->SetBackgroundColour( wxColour( 255, 255, 255 ) );    // Component background listbox color (white)
     m_CmpList->SetForegroundColour( wxColour( 0, 0, 0 ) );          // Component foreground listbox color (black)
 
-    GetSettings();
+    LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
     ReCreateVToolbar();

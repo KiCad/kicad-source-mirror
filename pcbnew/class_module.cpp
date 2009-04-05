@@ -11,17 +11,12 @@
 #include "trigo.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "pcbcommon.h"
 
 #include "pcbnew.h"
 
-#ifdef PCBNEW
 #include "autorout.h"
 #include "drag.h"
-#endif
-
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
 
 #include "3d_struct.h"
 #include "protos.h"

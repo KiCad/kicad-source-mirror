@@ -17,93 +17,70 @@
 
 /*****************************************************************************/
 BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
-/*****************************************************************************/
 /* Window events */
     EVT_SIZE( WinEDA_MainFrame::OnSize )
     EVT_CLOSE( WinEDA_MainFrame::OnCloseWindow )
 
 /* Sash drag events */
-    EVT_SASH_DRAGGED( ID_LEFT_FRAME,
-                      WinEDA_MainFrame::OnSashDrag )
-    EVT_SASH_DRAGGED( ID_BOTTOM_FRAME,
-                      WinEDA_MainFrame::OnSashDrag )
-    EVT_SASH_DRAGGED( ID_MAIN_COMMAND,
-                      WinEDA_MainFrame::OnSashDrag )
+    EVT_SASH_DRAGGED( ID_LEFT_FRAME, WinEDA_MainFrame::OnSashDrag )
+    EVT_SASH_DRAGGED( ID_BOTTOM_FRAME, WinEDA_MainFrame::OnSashDrag )
+    EVT_SASH_DRAGGED( ID_MAIN_COMMAND, WinEDA_MainFrame::OnSashDrag )
 
 /* Toolbar events */
-    EVT_TOOL( ID_NEW_PROJECT,
-              WinEDA_MainFrame::Process_Files )
-    EVT_TOOL( ID_LOAD_PROJECT,
-              WinEDA_MainFrame::Process_Files )
-    EVT_TOOL( ID_SAVE_PROJECT,
-              WinEDA_MainFrame::Process_Files )
-    EVT_TOOL( ID_SAVE_AND_ZIP_FILES,
-              WinEDA_MainFrame::Process_Files )
+    EVT_TOOL( ID_NEW_PROJECT, WinEDA_MainFrame::OnLoadProject )
+    EVT_TOOL( ID_LOAD_PROJECT, WinEDA_MainFrame::OnLoadProject )
+    EVT_TOOL( ID_SAVE_PROJECT, WinEDA_MainFrame::OnSaveProject )
+    EVT_TOOL( ID_SAVE_AND_ZIP_FILES, WinEDA_MainFrame::OnArchiveFiles )
 
 /* Menu events */
-    EVT_MENU( ID_SAVE_PROJECT,
-              WinEDA_MainFrame::Process_Files )
-    EVT_MENU( ID_EXIT,
-              WinEDA_MainFrame::Process_Special_Functions )
-    EVT_MENU( ID_TO_EDITOR,
-              WinEDA_MainFrame::Process_Fct )
+    EVT_MENU( ID_SAVE_PROJECT, WinEDA_MainFrame::OnSaveProject )
+    EVT_MENU( ID_EXIT, WinEDA_MainFrame::OnExit )
+    EVT_MENU( ID_TO_EDITOR, WinEDA_MainFrame::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE,
-              WinEDA_MainFrame::Process_Fct )
+              WinEDA_MainFrame::OnOpenFileInTextEditor )
     EVT_MENU( ID_SELECT_PREFERED_EDITOR,
-              WinEDA_MainFrame::Process_Preferences )
+              WinEDA_MainFrame::OnSelectPreferredEditor )
     EVT_MENU( ID_SELECT_DEFAULT_PDF_BROWSER,
-              WinEDA_MainFrame::Process_Preferences )
+              WinEDA_MainFrame::OnSelectDefaultPdfBrowser )
     EVT_MENU( ID_SELECT_PREFERED_PDF_BROWSER,
-              WinEDA_MainFrame::Process_Preferences )
+              WinEDA_MainFrame::OnSelectPreferredPdfBrowser )
     EVT_MENU( ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-              WinEDA_MainFrame::Process_Preferences )
-    EVT_MENU( ID_SAVE_AND_ZIP_FILES,
-              WinEDA_MainFrame::Process_Files )
-    EVT_MENU( ID_READ_ZIP_ARCHIVE,
-              WinEDA_MainFrame::Process_Files )
-    EVT_MENU( ID_PROJECT_TREE_REFRESH,
-              WinEDA_MainFrame::OnRefresh )
-    EVT_MENU( ID_PREFERENCES_FONT_INFOSCREEN,
-              WinEDA_MainFrame::Process_Preferences )
-    EVT_MENU( ID_GENERAL_HELP,
-              WinEDA_MainFrame::GetKicadHelp )
-    EVT_MENU( ID_KICAD_ABOUT,
-              WinEDA_MainFrame::GetKicadAbout )
+              WinEDA_MainFrame::OnSelectPreferredPdfBrowser )
+    EVT_MENU( ID_SAVE_AND_ZIP_FILES, WinEDA_MainFrame::OnArchiveFiles )
+    EVT_MENU( ID_READ_ZIP_ARCHIVE, WinEDA_MainFrame::OnUnarchiveFiles )
+    EVT_MENU( ID_PROJECT_TREE_REFRESH, WinEDA_MainFrame::OnRefresh )
+    EVT_MENU( ID_PREFERENCES_FONT_INFOSCREEN, WinEDA_MainFrame::OnSelectFont )
+    EVT_MENU( ID_GENERAL_HELP, WinEDA_MainFrame::GetKicadHelp )
+    EVT_MENU( ID_KICAD_ABOUT, WinEDA_MainFrame::GetKicadAbout )
 
 /* Range menu events */
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE,
-                    ID_LANGUAGE_CHOICE_END,
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_MainFrame::SetLanguage )
 
-    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9,
-                    WinEDA_MainFrame::OnFileHistory )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_MainFrame::OnFileHistory )
 
 /* Button events */
-    EVT_BUTTON( ID_TO_PCB,
-                WinEDA_MainFrame::Process_Fct )
-    EVT_BUTTON( ID_TO_CVPCB,
-                WinEDA_MainFrame::Process_Fct )
-    EVT_BUTTON( ID_TO_EESCHEMA,
-                WinEDA_MainFrame::Process_Fct )
-    EVT_BUTTON( ID_TO_GERBVIEW,
-                WinEDA_MainFrame::Process_Fct )
+    EVT_BUTTON( ID_TO_PCB, WinEDA_MainFrame::OnRunPcbNew )
+    EVT_BUTTON( ID_TO_CVPCB, WinEDA_MainFrame::OnRunCvpcb )
+    EVT_BUTTON( ID_TO_EESCHEMA, WinEDA_MainFrame::OnRunEeschema )
+    EVT_BUTTON( ID_TO_GERBVIEW, WinEDA_MainFrame::OnRunGerbview )
 
+    EVT_UPDATE_UI( ID_SELECT_DEFAULT_PDF_BROWSER,
+                   WinEDA_MainFrame::OnUpdateDefaultPdfBrowser )
+    EVT_UPDATE_UI( ID_SELECT_PREFERED_PDF_BROWSER,
+                   WinEDA_MainFrame::OnUpdatePreferredPdfBrowser )
 
 #ifdef KICAD_PYTHON
-    EVT_BUTTON( ID_RUN_PYTHON, WinEDA_MainFrame::Process_Fct )
+    EVT_BUTTON( ID_RUN_PYTHON, WinEDA_MainFrame::OnRunPythonScript )
 #endif
 
-/*****************************************************************************/
 END_EVENT_TABLE()
-/*****************************************************************************/
 
 
 /**
  * @brief TODO
  */
-/*****************************************************************************/
 void WinEDA_MainFrame::ReCreateMenuBar()
-/*****************************************************************************/
 {
     wxMenuItem *item;
     wxMenuBar  *menuBar = GetMenuBar();
@@ -119,20 +96,20 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     wxMenu* filesMenu = new wxMenu;
 
     // Open project
-    item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open" ),
+    item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
                            _( "Open an existing project" ) );
     item->SetBitmap( open_project_xpm );
     filesMenu->Append( item );
 
     // New project
-    item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New" ),
+    item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New\tCtrl+N" ),
                            _( "Start a new project" ) );
     item->SetBitmap( new_project_xpm );
     filesMenu->Append( item );
 
 
     // Save project
-    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save" ),
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save\tCtrl+S" ),
                            _( "Save current project" ) );
     item->SetBitmap( save_project_xpm );
     filesMenu->Append( item );
@@ -142,15 +119,13 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
 
     // Archive project
-    item = new wxMenuItem( filesMenu, ID_SAVE_AND_ZIP_FILES,
-                           _( "&Archive" ),
+    item = new wxMenuItem( filesMenu, ID_SAVE_AND_ZIP_FILES, _( "&Archive" ),
                            _( "Archive project files in zip archive" ) );
     item->SetBitmap( zip_xpm );
     filesMenu->Append( item );
 
     // Unarchive project
-    item = new wxMenuItem( filesMenu, ID_READ_ZIP_ARCHIVE,
-                           _( "&Unarchive" ),
+    item = new wxMenuItem( filesMenu, ID_READ_ZIP_ARCHIVE, _( "&Unarchive" ),
                            _( "Unarchive project files from zip file" ) );
     item->SetBitmap( unzip_xpm );
     filesMenu->Append( item );
@@ -278,9 +253,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 /**
  * @brief TODO
  */
-/*****************************************************************************/
 void WinEDA_MainFrame::RecreateBaseHToolbar()
-/*****************************************************************************/
 {
     // Check if toolbar is not already set
     if( m_HToolBar != NULL )
@@ -290,61 +263,36 @@ void WinEDA_MainFrame::RecreateBaseHToolbar()
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
     SetToolBar( m_HToolBar );
 
-
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_PROJECT,                    // Entry ID
-                         wxBitmap( new_project_xpm ),          // XPM Bitmap
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1,
-                         (wxObject*) NULL,
-                         _( "Start a new project" ) );     // Tooltip
-
+    m_HToolBar->AddTool( ID_NEW_PROJECT, wxBitmap( new_project_xpm ),
+                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+                         _( "Start a new project" ) );
 
     // Load project
-    m_HToolBar->AddTool( ID_LOAD_PROJECT,                   // Entry ID
-                         wxBitmap( open_project_xpm ),         // XPM Bitmap
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
-                         _( "Load existing project" ) );  // Tooltip
-
+    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxBitmap( open_project_xpm ),
+                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+                         _( "Load existing project" ) );
 
     // Save project
-    m_HToolBar->AddTool( ID_SAVE_PROJECT,                   // Entry ID
-                         wxBitmap( save_project_xpm ),         // XPM Bitmap
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1,
-                         (wxObject*) NULL,
-                         _( "Save current project" ) );   // Tooltip
-
+    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxBitmap( save_project_xpm ),
+                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+                         _( "Save current project" ) );
 
     // Separator
     m_HToolBar->AddSeparator();
-
 
     // Save and archive files
-    m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES,             // Entry ID
-                         wxBitmap( zip_xpm ),                  // XPM Bitmap
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxBitmap( zip_xpm ),
+                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
                          _( "Archive all project files" ) ); // Tooltip
-
 
     // Separator
     m_HToolBar->AddSeparator();
 
-
     // Refresh project tree
-    m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH,           // Entry ID
-                         wxBitmap( reload_xpm ),               // XPM Bitmap
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
-                         _( "Refresh project tree" ) );   // Tooltip
-
+    m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxBitmap( reload_xpm ),
+                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+                         _( "Refresh project tree" ) );
 
     m_HToolBar->Realize(); // Create m_HToolBar
 }

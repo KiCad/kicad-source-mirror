@@ -5,10 +5,6 @@
 #ifndef CLASS_SCREEN_H
 #define CLASS_SCREEN_H
 
-#ifndef eda_global
- #define eda_global extern
-#endif
-
 #include "macros.h"
 #include "base_struct.h"
 #include "class_base_screen.h"
@@ -37,7 +33,10 @@ public:
      * sets the currently selected object, m_CurrentItem.
      * @param current Any object derived from SCH_ITEM
      */
-    void SetCurItem( SCH_ITEM* aItem ) { BASE_SCREEN::SetCurItem( aItem ); }
+    void SetCurItem( SCH_ITEM* aItem )
+    {
+        BASE_SCREEN::SetCurItem( (BASE_SCREEN*) aItem );
+    }
 
 
     virtual wxString GetClass() const
@@ -78,6 +77,7 @@ public:
 
 // screens are unique, and correspond to .sch files.
 WX_DEFINE_ARRAY( SCH_SCREEN *, ScreenGrowArray );
+
 class EDA_ScreenList
 {
 private:

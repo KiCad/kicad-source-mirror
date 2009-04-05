@@ -16,13 +16,13 @@ set(PCBNEW_SRCS
     block_module_editor.cpp
     board.cpp
     build_BOM_from_board.cpp
-    class_board_item.cpp
-    class_drawsegment.cpp
-    class_edge_mod.cpp
-    class_equipot.cpp
-    class_module.cpp
-    class_text_mod.cpp
-    class_track.cpp
+#    class_board_item.cpp
+#    class_drawsegment.cpp
+#    class_edge_mod.cpp
+#    class_equipot.cpp
+#    class_module.cpp
+#    class_text_mod.cpp
+#    class_track.cpp
     clean.cpp
 #   cleaningoptions_dialog.cpp
     connect.cpp
@@ -129,7 +129,7 @@ set(PCBNEW_SRCS
     tool_modedit.cpp
     tool_onrightclick.cpp
     tool_pcb.cpp
-    tracemod.cpp
+#    tracemod.cpp
     tracepcb.cpp
     track.cpp
     tr_modif.cpp
@@ -147,7 +147,8 @@ set(PCBNEW_SRCS
     )
 
 set(PCBNEW_EXTRA_SRCS
-    ../share/setpage.cpp )
+    ../share/setpage.cpp
+)
 
 if(WIN32)
     if(MINGW)
@@ -169,7 +170,7 @@ endif(APPLE)
 
 add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
 
-target_link_libraries(pcbnew 3d-viewer common polygon bitmaps kbool ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 
 install(TARGETS pcbnew
         DESTINATION ${KICAD_BIN}

@@ -29,15 +29,15 @@ set(CVPCB_SRCS
     writenetlistpcbnew.cpp)
 
 set(CVPCB_EXTRA_SRCS
-    ../pcbnew/class_board_item.cpp
-    ../pcbnew/class_drawsegment.cpp
-    ../pcbnew/class_edge_mod.cpp
-    ../pcbnew/class_equipot.cpp
-    ../pcbnew/class_module.cpp
-    ../pcbnew/class_text_mod.cpp
-    ../pcbnew/class_track.cpp
+#    ../pcbnew/class_board_item.cpp
+#    ../pcbnew/class_drawsegment.cpp
+#    ../pcbnew/class_edge_mod.cpp
+#    ../pcbnew/class_equipot.cpp
+#    ../pcbnew/class_module.cpp
+#    ../pcbnew/class_text_mod.cpp
     ../pcbnew/ioascii.cpp
-    ../pcbnew/tracemod.cpp)
+#    ../pcbnew/tracemod.cpp
+)
 
 if(WIN32)
     if(MINGW)
@@ -59,7 +59,7 @@ endif(APPLE)
 
 add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_EXTRA_SRCS} ${CVPCB_RESOURCES})
 
-target_link_libraries(cvpcb 3d-viewer common polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
+target_link_libraries(cvpcb 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
 
 install(TARGETS cvpcb
         DESTINATION ${KICAD_BIN}

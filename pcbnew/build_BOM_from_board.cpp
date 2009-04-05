@@ -27,7 +27,10 @@ The format is:
 12;"C1,C4,C5,C6";"CP6";4;"47uF";;;
 */
 
-wxString NetBomExtBuffer( wxT( ".csv" ) );    // BOM file extension
+const wxString CsvFileExtension( wxT( "csv" ) );    // BOM file extension
+
+const wxString CsvFileWildcard( _( "Comma separated value files (*.csv)|*.csv" ) );
+
 
 class cmp
 {
@@ -44,10 +47,10 @@ WX_DEFINE_LIST( CmpList );
 
 void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 {
-    wxString FullFileName, mask;
-    FILE*    FichBom;
-    MODULE*  Module = GetBoard()->m_Modules;
-    wxString msg;
+    wxFileName fn;
+    FILE*      FichBom;
+    MODULE*    Module = GetBoard()->m_Modules;
+    wxString   msg;
 
 
     if( Module == NULL )
@@ -57,27 +60,23 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     }
 
     /* Set the file extension: */
-    FullFileName = GetScreen()->m_FileName;
-    ChangeFileNameExt( FullFileName, NetBomExtBuffer );
+    fn = GetScreen()->m_FileName;
+    fn.SetExt( CsvFileExtension );
 
-    mask = wxT( "*" ) + NetBomExtBuffer;
-    FullFileName = EDA_FileSelector( _( "Bom files:" ),
-                                     wxEmptyString,         /* Chemin par defaut */
-                                     FullFileName,          /* nom fichier par defaut */
-                                     NetBomExtBuffer,       /* extension par defaut */
-                                     mask,                  /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     FALSE
-                                     );
-    if( FullFileName.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save Bill of Materials" ), wxEmptyString,
+                      fn.GetFullName(), CsvFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    fn = dlg.GetPath();
 
-    FichBom = wxFopen( FullFileName, wxT( "wt" ) );
+    FichBom = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
+
     if( FichBom == NULL )
     {
-        msg = _( "Unable to create file " ) + FullFileName;
+        msg = _( "Unable to create file " ) + fn.GetFullPath();
         DisplayError( this, msg );
         return;
     }

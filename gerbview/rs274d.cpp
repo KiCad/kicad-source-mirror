@@ -6,6 +6,7 @@
 #include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
+#include "macros.h"
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "protos.h"
@@ -399,9 +400,9 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
             if( is_float )
             {
                 if( m_GerbMetric )
-                    current_coord = (int) round( atof( line ) / 0.00254 );
+                    current_coord = wxRound( atof( line ) / 0.00254 );
                 else
-                    current_coord = (int) round( atof( line ) * PCB_INTERNAL_UNIT );
+                    current_coord = wxRound( atof( line ) * PCB_INTERNAL_UNIT );
             }
             else
             {
@@ -465,7 +466,7 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
 
-                current_coord = (int) round( current_coord * real_scale );
+                current_coord = wxRound( current_coord * real_scale );
             }
 
             if( type_coord == 'X' )
@@ -531,9 +532,9 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
             if( is_float )
             {
                 if( m_GerbMetric )
-                    current_coord = (int) round( atof( line ) / 0.00254 );
+                    current_coord = wxRound( atof( line ) / 0.00254 );
                 else
-                    current_coord = (int) round( atof( line ) * PCB_INTERNAL_UNIT );
+                    current_coord = wxRound( atof( line ) * PCB_INTERNAL_UNIT );
             }
             else
             {
@@ -596,7 +597,7 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
 
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
-                current_coord = (int) round( current_coord * real_scale );
+                current_coord = wxRound( current_coord * real_scale );
             }
             if( type_coord == 'I' )
                 pos.x = current_coord;
@@ -773,9 +774,9 @@ static int scale( double aCoord, bool isMetric )
     int ret;
 
     if( isMetric )
-        ret = (int) round( aCoord / 0.00254 );
+        ret = wxRound( aCoord / 0.00254 );
     else
-        ret = (int) round( aCoord * PCB_INTERNAL_UNIT );
+        ret = wxRound( aCoord * PCB_INTERNAL_UNIT );
 
     return ret;
 }

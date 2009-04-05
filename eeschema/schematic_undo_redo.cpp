@@ -6,6 +6,7 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
+#include "class_drawpickedstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -225,7 +226,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) CopyItem;
                 while( PickedList )
                 {
-                    CopyItem = PickedList->m_PickedStruct;
+                    CopyItem = (SCH_ITEM*) PickedList->m_PickedStruct;
                     CopyItem->m_Flags   = flag_type_command;
                     PickedList->m_Image = CopyItem->m_Image;
                     PickedList = PickedList->Next();
@@ -245,7 +246,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
-                    CopyItem = PickedList->m_PickedStruct;
+                    CopyItem = (SCH_ITEM*) PickedList->m_PickedStruct;
                     PickedList->m_Image = CopyItem;
                     PickedList->m_PickedStruct = NULL;
                     PickedList->m_Flags = flag_type_command;
@@ -271,7 +272,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
-                    CopyItem = PickedList->m_PickedStruct;
+                    CopyItem = (SCH_ITEM*) PickedList->m_PickedStruct;
                     CopyItem->m_Flags   = flag_type_command;
                     PickedList->m_Flags = flag_type_command;
                     PickedList = PickedList->Next();
@@ -388,7 +389,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
             PickedList = (DrawPickedStruct*) FirstItem;
             while( PickedList )
             {
-                item = PickedList->m_PickedStruct;
+                item = (SCH_ITEM*) PickedList->m_PickedStruct;
                 item->SetNext( GetScreen()->EEDrawList );
                 GetScreen()->EEDrawList = item;
                 item->m_Flags = 0;
@@ -447,7 +448,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
                 break;
 
             case IS_DELETED:
-                item = PickedList->m_PickedStruct;
+                item = (SCH_ITEM*) PickedList->m_PickedStruct;
                 item->SetNext( GetScreen()->EEDrawList );
                 GetScreen()->EEDrawList = item;
                 item->m_Flags = 0;

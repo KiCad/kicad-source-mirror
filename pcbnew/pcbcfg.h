@@ -756,15 +756,6 @@ static PARAM_CFG_BOOL DisplPolairCfg
     FALSE                               /* Default value */
 );
 
-static PARAM_CFG_INT CursorShapeCfg
-(
-    INSETUP,
-    wxT( "CuShape" ),               /* Keyword */
-    &g_CursorShape,                 /* Parameter address */
-    0,                              /* Default value */
-    0, 1                            /* Min and max values*/
-);
-
 static PARAM_CFG_INT PrmMaxLinksShowed
 (
     INSETUP,
@@ -895,7 +886,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &WTraitSerigraphiePlotCfg,
     &TimeOutCfg,
     &DisplPolairCfg,
-    &CursorShapeCfg,
     &PrmMaxLinksShowed,
     &ShowRatsnestCfg,
     &ShowModuleRatsnestCfg,

@@ -337,12 +337,10 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
     }
 
     // Update whether grid is actually displayed or otherwise
-//  m_Parent->m_Draw_Grid = g_ShowGrid = m_ShowGrid->GetValue();
     // The previous command compiles OK, but to prevent a warning
     // from being generated when the Linux version is being compiled,
     // the next two commands are provided instead.
-    g_ShowGrid = m_ShowGrid->GetValue();
-    m_Parent->m_Draw_Grid = g_ShowGrid;
+    m_Parent->m_Draw_Grid = m_ShowGrid->GetValue();
 
     // Update color of background
     if( m_SelBgColor->GetSelection() == 0 )

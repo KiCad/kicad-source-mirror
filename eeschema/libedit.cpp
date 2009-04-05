@@ -237,7 +237,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->ClrRefreshReq();
     DisplayLibInfos();
-    Affiche_Status_Box();
+    UpdateStatusBar();
 }
 
 
@@ -249,7 +249,8 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
  *  if exists the old file is renamed (.bak)
  */
 {
-    wxString Name, msg;
+    wxFileName fn;
+    wxString msg;
 
     if( CurrentLib == NULL )
     {
@@ -257,29 +258,31 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
         return;
     }
 
-    Name = MakeFileName( g_RealLibDirBuffer,
-                         CurrentLib->m_Name,
-                         g_LibExtBuffer );
+    fn = wxFileName( g_RealLibDirBuffer, CurrentLib->m_Name,
+                     CompLibFileExtension );
 
-    msg = _( "Modify Library File \"" ) + Name + _( "\"?" );
+    msg = _( "Modify Library File \"" ) + fn.GetFullPath() + _( "\"?" );
+
     if( !IsOK( this, msg ) )
         return;
 
-    bool success = CurrentLib->SaveLibrary( Name );
+    bool success = CurrentLib->SaveLibrary( fn.GetFullPath() );
 
     MsgPanel->EraseMsgBox();
 
     if( !success )
     {
-        msg = _( "Error while saving Library File \"" ) + Name + _( "\"." );
+        msg = _( "Error while saving Library File \"" ) + fn.GetFullPath() +
+            _( "\"." );
         Affiche_1_Parametre( this, 1, wxT( " *** ERROR : **" ), msg, BLUE );
         DisplayError( this, msg );
     }
     else
     {
-        msg = _( "Library File \"" ) + Name + wxT( "\" Ok" );
-        ChangeFileNameExt( Name, DOC_EXT );
-        wxString msg1 = _( "Document File \"" ) + Name + wxT( "\" Ok" );
+        msg = _( "Library File \"" ) + fn.GetFullName() + wxT( "\" Ok" );
+        fn.SetExt( DOC_EXT );
+        wxString msg1 = _( "Document File \"" ) + fn.GetFullPath() +
+            wxT( "\" Ok" );
         Affiche_1_Parametre( this, 1, msg, msg1, BLUE );
     }
 }

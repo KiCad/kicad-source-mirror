@@ -10,16 +10,11 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "macros.h"
 
-#ifdef PCBNEW
 #include "pcbnew.h"
 #include "autorout.h"
 #include "drag.h"
-#endif
-
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
 
 #include "protos.h"
 

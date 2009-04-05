@@ -15,28 +15,25 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
-
 #include "bitmaps.h"
-#include "protos.h"
-
 #include "id.h"
 
 #include "kicad.h"
 
 
-// Constructor
-/*****************************************************************************/
+static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
+static const wxString CommandFrameWidthEntry( wxT( "CommandWinWidth" ) );
+
+
 WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
                                     const wxString& title,
                                     const wxPoint& pos,
                                     const wxSize& size ) :
     WinEDA_BasicFrame( parent, KICAD_MAIN_FRAME, title, pos, size )
-/*****************************************************************************/
 {
     wxString  msg;
     wxString  line;
     wxSize    clientsize;
-    wxConfig* config = wxGetApp().m_EDA_Config;
 
     m_FrameName         = wxT( "KicadFrame" );
     m_VToolBar          = NULL;
@@ -46,13 +43,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_LeftWin_Width     = 200;
     m_CommandWin_Height = 82;
 
-    GetSettings();
-
-    if( config )
-    {
-      config->Read( wxT( "LeftWinWidth" ), &m_LeftWin_Width );
-      config->Read( wxT( "CommandWinWidth" ), &m_CommandWin_Height );
-    }
+    LoadSettings();
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -91,16 +82,12 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 
     m_DialogWin = new wxTextCtrl( m_BottomWin, ID_MAIN_DIALOG, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
-                                  wxTE_MULTILINE |
-                                  wxNO_BORDER |
-                                  wxTE_READONLY );
+                                  wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
     m_DialogWin->SetFont( *g_StdFont );
 
     // m_CommandWin is the box with buttons which launch eechema, pcbnew ...
-    m_CommandWin = new WinEDA_CommandFrame( this,
-                                            ID_MAIN_COMMAND,
-                                            wxPoint( m_LeftWin_Width,
-                                                                 0 ),
+    m_CommandWin = new WinEDA_CommandFrame( this, ID_MAIN_COMMAND,
+                                            wxPoint( m_LeftWin_Width, 0 ),
                                             wxSize( clientsize.x,
                                                     m_CommandWin_Height ),
                                             wxNO_BORDER | wxSW_3D );
@@ -119,15 +106,6 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 WinEDA_MainFrame::~WinEDA_MainFrame()
 /*****************************************************************************/
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
-
-    if( config )
-    {
-        m_LeftWin_Width     = m_LeftWin->GetSize().x;
-        m_CommandWin_Height = m_CommandWin->GetSize().y;
-        config->Write( wxT( "LeftWinWidth" ), m_LeftWin_Width );
-        config->Write( wxT( "CommandWinWidth" ), m_CommandWin_Height );
-    }
 }
 
 
@@ -214,7 +192,6 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
         m_CommandWin->SetDefaultSize( wxSize( -1, hsize.y ) );
         m_BottomWin->SetDefaultSize( wxSize( -1, dy ) );
     }
-    ;
 
     wxLayoutAlgorithm layout;
     layout.LayoutFrame( this );
@@ -231,7 +208,7 @@ void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     int px, py;
 
-    SetLastProject( m_PrjFileName );
+    SetLastProject( m_ProjectFileName.GetFullPath() );
 
     if( !IsIconized() )   // save main frame position and size
     {
@@ -277,120 +254,84 @@ void WinEDA_MainFrame::ReDraw( wxDC* DC )
 }
 
 
-/**********************************************************************/
-void WinEDA_MainFrame::Process_Special_Functions( wxCommandEvent& event )
-/**********************************************************************/
+void WinEDA_MainFrame::OnExit( wxCommandEvent& event )
 {
-    int id = event.GetId();
-
-    switch( id )
-    {
-    case ID_EXIT:
-        Close( TRUE );
-        break;
-
-    default:
-        DisplayError( this,
-                      wxT( "WinEDA_MainFrame::Process_Special_Functions error" ) );
-        break;
-    }
+    Close( true );
 }
 
 
-/********************************************************/
-void WinEDA_MainFrame::Process_Fct( wxCommandEvent& event )
-/*********************************************************/
+void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
 {
-    int      id = event.GetId();
-    wxString FullFileName = m_PrjFileName;
+    wxFileName fn( m_ProjectFileName );
+    fn.SetExt( BoardFileExtension );
+    ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( fn ) );
+}
 
 
-    switch( id )
-    {
-    case ID_TO_PCB:
-        ChangeFileNameExt( FullFileName, g_BoardExtBuffer );
-        AddDelimiterString( FullFileName );
-        ExecuteFile( this, PCBNEW_EXE, FullFileName );
-        break;
+void WinEDA_MainFrame::OnRunCvpcb( wxCommandEvent& event )
+{
+    wxFileName fn( m_ProjectFileName );
+    fn.SetExt( NetlistFileExtension );
+    ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+}
 
-    case ID_TO_CVPCB:
-        ChangeFileNameExt( FullFileName, g_NetlistExtBuffer );
-        AddDelimiterString( FullFileName );
-        ExecuteFile( this, CVPCB_EXE, FullFileName );
-        break;
 
-    case ID_TO_EESCHEMA:
-        ChangeFileNameExt( FullFileName, g_SchExtBuffer );
-        AddDelimiterString( FullFileName );
-        ExecuteFile( this, EESCHEMA_EXE, FullFileName );
-        break;
+void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
+{
+    wxFileName fn( m_ProjectFileName );
+    fn.SetExt( SchematicFileExtension );
+    wxLogDebug( wxT( "Loading EESchema with file <%s>." ),
+                fn.GetFullPath().c_str() );
+    ExecuteFile( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
+}
 
-    case ID_TO_GERBVIEW:
-        FullFileName = wxGetCwd() + STRING_DIR_SEP;
-        AddDelimiterString( FullFileName );
-        ExecuteFile( this, GERBVIEW_EXE, FullFileName );
-        break;
 
-    case ID_TO_EDITOR:
-    {
-        wxString editorname = GetEditorName();
-        if( !editorname.IsEmpty() )
-            ExecuteFile( this, editorname, wxEmptyString );
-    }
-        break;
+void WinEDA_MainFrame::OnRunGerbview( wxCommandEvent& event )
+{
+    wxFileName fn( m_ProjectFileName );
+    ExecuteFile( this, GERBVIEW_EXE,
+                 fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
+}
+
+
+void WinEDA_MainFrame::OnOpenTextEditor( wxCommandEvent& event )
+{
+    wxString editorname = wxGetApp().GetEditorName();
+
+    if( !editorname.IsEmpty() )
+        ExecuteFile( this, editorname, wxEmptyString );
+}
+
 
 #ifdef KICAD_PYTHON
-    case ID_RUN_PYTHON:
-    {
-        wxString script = EDA_FileSelector( _( "Execute Python Script:" ),
-                                            wxEmptyString,              /* Default path */
-                                            wxEmptyString,              /* default filename */
-                                            wxT( ".py" ),               /* default ext. */
-                                            wxT( "*.py" ),              /* mask for filename filter */
-                                            this,
-                                            wxFD_OPEN,
-                                            FALSE
-                                            );
-        if( script.IsEmpty() )
-            break;
-        PyHandler::GetInstance()->RunScript( script );
-    }
-        break;
+void WinEDA_MainFrame::OnRunPythonScript( wxCommandEvent& event )
+{
+    wxFileDialog dlg( this, _( "Execute Python Script" ), wxEmptyString,
+                      wxEmptyString, _( "Python script (*.py)|*.py" ),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    PyHandler::GetInstance()->RunScript( dlg.GetPath() );
+}
 #endif
-    case ID_BROWSE_AN_SELECT_FILE:
-    {
-        wxString mask( wxT( "*" ) ), extension;
+
+
+void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
+{
+    wxString mask( wxT( "*" ) );
 #ifdef __WINDOWS__
-        mask     += wxT( ".*" );
-        extension = wxT( ".*" );
+    mask += wxT( ".*" );
 #endif
-        FullFileName = EDA_FileSelector( _( "Load file:" ),
-                                         wxGetCwd(),    /* Default path */
-                                         wxEmptyString, /* default filename */
-                                         extension,     /* default ext. */
-                                         mask,          /* mask for filename filter */
-                                         this,
-                                         wxFD_OPEN,
-                                         TRUE
-                                         );
-        if( !FullFileName.IsEmpty() )
-        {
-            AddDelimiterString( FullFileName );
-            wxString editorname = GetEditorName();
-            if( !editorname.IsEmpty() )
-                ExecuteFile( this, editorname, FullFileName );
-        }
-    }
-        break;
 
-        break;
+    mask = _( "Text file (" ) + mask + wxT( ")|" ) + mask;
 
-    default:
-        DisplayError( this,
-                      wxT( "WinEDA_MainFrame::Process_Fct Internal Error" ) );
-        break;
-    }
+    wxFileDialog dlg( this, _( "Load File to Edit" ), wxGetCwd(),
+                      wxEmptyString, mask,wxFD_OPEN );
+
+    if( dlg.GetPath() && wxGetApp().GetEditorName() )
+        ExecuteFile( this, wxGetApp().GetEditorName(), dlg.GetPath() );
 }
 
 
@@ -411,12 +352,48 @@ void WinEDA_MainFrame::ClearMsg()
 }
 
 
+/**
+ * Load Kicad main frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get loaded.
+ */
+void WinEDA_MainFrame::LoadSettings()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxConfig* cfg = wxGetApp().m_EDA_Config;
+
+    WinEDA_BasicFrame::LoadSettings();
+    cfg->Read( TreeFrameWidthEntry, &m_LeftWin_Width );
+    cfg->Read( CommandFrameWidthEntry, &m_CommandWin_Height );
+}
+
+
+/**
+ * Save Kicad main frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get saved.
+ */
+void WinEDA_MainFrame::SaveSettings()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxConfig* cfg = wxGetApp().m_EDA_Config;
+
+    WinEDA_BasicFrame::SaveSettings();
+
+    cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
+    cfg->Write( CommandFrameWidthEntry, m_CommandWin->GetSize().y );
+}
+
 
 #ifdef KICAD_PYTHON
 /*****************************************************************************/
 void WinEDA_MainFrame::OnRefreshPy()
 /*****************************************************************************/
 {
-  m_LeftWin->ReCreateTreePrj();
+    m_LeftWin->ReCreateTreePrj();
 }
 #endif

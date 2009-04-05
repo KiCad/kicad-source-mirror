@@ -21,7 +21,6 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 
-#include "fctsys.h"
 #include "id.h"
 #include "gestfich.h"
 
@@ -620,6 +619,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
  *  Output file format is png or jpeg, or image is copied on clipboard
  */
 {
+    wxFileName fn( m_Parent->m_Parent->GetScreen()->m_FileName );
     wxString FullFileName;
     wxString file_ext, mask;
     bool     fmt_is_jpeg = FALSE;
@@ -628,15 +628,15 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         fmt_is_jpeg = TRUE;
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
-        file_ext = fmt_is_jpeg ? wxT( ".jpg" ) : wxT( ".png"; )
-                   mask = wxT( "*" ) + file_ext;
+        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png"; )
+                   mask = wxT( "*." ) + file_ext;
         FullFileName    = m_Parent->m_Parent->GetScreen()->m_FileName;
-        ChangeFileNameExt( FullFileName, file_ext );
+        fn.SetExt( file_ext );
 
         FullFileName =
             EDA_FileSelector( _( "3D Image filename:" ),
                               wxEmptyString,    /* Chemin par defaut */
-                              FullFileName,     /* nom fichier par defaut */
+                              fn.GetFullName(), /* nom fichier par defaut */
                               file_ext,         /* extension par defaut */
                               mask,             /* Masque d'affichage */
                               this,

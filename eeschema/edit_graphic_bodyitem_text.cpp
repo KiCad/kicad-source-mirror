@@ -134,26 +134,25 @@ wxString Line;
 	Close();
 
 	if ( CurrentDrawItem )
-		CurrentDrawItem->Display_Infos_DrawEntry(m_Parent);
+		CurrentDrawItem->DisplayInfo( m_Parent );
 	Close();
 }
 
 
 
-/*******************************************************/
 void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC,
-				LibEDA_BaseStruct * DrawItem)
-/*******************************************************/
+                                         LibEDA_BaseStruct * DrawItem)
 {
-int DrawMode = g_XorMode;
+    int DrawMode = g_XorMode;
 
-	if ( DrawItem == NULL ) return;
-	if ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) return;
+    if ( ( DrawItem == NULL )
+         || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
+        return;
 
 	/* Effacement ancien texte */
 	if( ((LibDrawText*)DrawItem)->m_Text && DC)
 		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
-			DrawItem, DrawMode);
+                              DrawItem, DrawMode);
 
 
 	Dialog_BodyGraphicText_Properties * frame =

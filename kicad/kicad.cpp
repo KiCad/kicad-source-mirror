@@ -11,8 +11,6 @@
 #pragma implementation
 #endif
 
-#define MAIN
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -32,13 +30,6 @@
  #include <pyhandler.h>
 #endif
 
-/* Global definitions for Kicad */
-wxString g_Main_Title = wxT( "KiCad" );
-wxString g_SchematicRootFileName;
-wxString g_BoardFileName;
-
-
-/* Export functions */
 
 /* Import functions */
 char* GetFileName( char* FullPathName );
@@ -384,27 +375,35 @@ bool WinEDA_App::OnInit()
     GetSettings();                  // read current setup
 
     /* Make nameless project translatable */
-    wxString project_ext = _T( ".pro" );
-    wxString nameless_project = _( "noname" ) + project_ext;
+    wxFileName namelessProject( wxGetCwd(), _( "noname" ),
+                                + ProjectFileExtension );
 
     frame = new WinEDA_MainFrame( NULL, wxT( "KiCad" ),
                                   wxPoint( 30, 20 ), wxSize( 600, 400 ) );
 
     if( argc > 1 )
-        frame->m_PrjFileName = argv[1];
+        frame->m_ProjectFileName = argv[1];
     else if( m_fileHistory.GetCount() )
     {
-        frame->m_PrjFileName = m_fileHistory.GetHistoryFile( 0 );
-        if( !wxFileName::FileExists( frame->m_PrjFileName ) )
+        frame->m_ProjectFileName = m_fileHistory.GetHistoryFile( 0 );
+        if( !frame->m_ProjectFileName.FileExists() )
             m_fileHistory.RemoveFileFromHistory( 0 );
+        else
+        {
+            wxCommandEvent cmd( 0, wxID_FILE1 );
+            frame->OnFileHistory( cmd );
+        }
     }
 
-    if( !wxFileName::FileExists( frame->m_PrjFileName ) )
-        frame->m_PrjFileName = nameless_project;
+    if( !frame->m_ProjectFileName.FileExists() )
+    {
+        wxCommandEvent cmd( 0, wxID_ANY );
+        frame->m_ProjectFileName = namelessProject;
+        frame->OnLoadProject( cmd );
+    }
 
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    Title += wxT( " " ) + frame->m_PrjFileName;
-    frame->SetTitle( Title );
+    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
+                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath() );
     frame->ReCreateMenuBar();
     frame->RecreateBaseHToolbar();
 
@@ -414,7 +413,10 @@ bool WinEDA_App::OnInit()
     /* Splash screen logo */
 #ifdef USE_SPLASH_IMAGE
     wxBitmap bmp;
-    if( bmp.LoadFile( m_BinDir + _T( "logokicad.png" ), wxBITMAP_TYPE_PNG ) )
+    wxString binDir = GetTraits()->GetStandardPaths().GetExecutablePath() +
+        wxFileName::GetPathSeparator();
+
+    if( bmp.LoadFile( binDir + _T( "logokicad.png" ), wxBITMAP_TYPE_PNG ) )
     {
         wxSplashScreen* splash = new wxSplashScreen( splash_screen,
                                                      wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,
@@ -430,11 +432,6 @@ bool WinEDA_App::OnInit()
     frame->Show( TRUE );
     frame->Raise();
 
-
-    if( wxFileExists( frame->m_PrjFileName ) )
-    {
-        frame->Load_Prj_Config();
-    }
 
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->AddToModule( wxT( "kicad" ), &py_kicad_init );

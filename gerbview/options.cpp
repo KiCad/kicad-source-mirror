@@ -42,22 +42,22 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
         g_UnitMetric = MILLIMETRE;
-        Affiche_Status_Box();
+        UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
         g_UnitMetric = INCHES;
-        Affiche_Status_Box();
+        UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
         Affiche_Message( wxEmptyString );
         DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
-        Affiche_Status_Box();
+        UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
-        g_CursorShape = m_OptionsToolBar->GetToolState( id );
+        m_CursorShape = m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -206,7 +206,7 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
     m_CursorShape = new wxRadioBox( this, -1, _( "Cursor" ), wxDefaultPosition,
                                     wxDefaultSize,
                                     2, list_cursors, 1 );
-    m_CursorShape->SetSelection( g_CursorShape ? 1 : 0 );
+    m_CursorShape->SetSelection( parent->m_CursorShape ? 1 : 0 );
     MiddleBoxSizer->Add( m_CursorShape, 0, wxGROW | wxALL, 5 );
 
     /* Selection Default Scale (i.e. format 2.3 ou 3.4) */
@@ -239,7 +239,7 @@ void WinEDA_GerberGeneralOptionsFrame::OnOkClick( wxCommandEvent& event )
     DisplayOpt.DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
     g_UnitMetric  = (m_BoxUnits->GetSelection() == 0) ? 0 : 1;
-    g_CursorShape = m_CursorShape->GetSelection();
+    m_Parent->m_CursorShape = m_CursorShape->GetSelection();
     g_Default_GERBER_Format =
         (m_GerberDefaultScale->GetSelection() == 0) ? 23 : 34;
 

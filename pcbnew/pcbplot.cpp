@@ -644,11 +644,12 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
 void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 /***************************************************/
 {
-    int      layer_to_plot;
-    wxString FullFileName, BaseFileName;
-    wxString ext;
+    int        layer_to_plot;
+    wxFileName fn;
+    wxString   ext;
+    wxString   wildcard;
 
-    BOARD*   board = m_Parent->GetBoard();
+    BOARD*     board = m_Parent->GetBoard();
 
     SaveOptPlot( event );
 
@@ -676,23 +677,23 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
     int format = getFormat();
 
-    BaseFileName = m_Parent->GetScreen()->m_FileName;
-    ChangeFileNameExt( BaseFileName, wxT( "-" ) );
-
     switch( format )
     {
     case PLOT_FORMAT_POST:
-        ext = wxT( ".ps" );
+        ext = wxT( "ps" );
+        wildcard = _( "Adobe post script files (.ps)|*.ps" );
         break;
 
     default:
     case PLOT_FORMAT_GERBER:
         Scale_X = Scale_Y = 1.0; // No scale option allowed in gerber format
-        ext = wxT( ".pho" );
+        ext = wxT( "pho" );
+        wildcard = _( "GERBER photo plot files (.pho)|*.pho" );
         break;
 
     case PLOT_FORMAT_HPGL:
-        ext = wxT( ".plt" );
+        ext = wxT( "plt" );
+        wildcard = _( "HPGL plat files (.plt)|*.plt" );
         break;
     }
 
@@ -711,22 +712,27 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         {
             s_SelectedLayers |= mask;
 
+            fn = m_Parent->GetScreen()->m_FileName;
+
             // Calcul du nom du fichier
-            FullFileName = BaseFileName + board->GetLayerName( layer_to_plot ) + ext;
+            fn.SetName( fn.GetName() + wxT( "-" ) +
+                        board->GetLayerName( layer_to_plot ) );
+            fn.SetExt( ext );
 
             switch( format )
             {
             case PLOT_FORMAT_POST:
-                m_Parent->Genere_PS( FullFileName, layer_to_plot, useA4() );
+                m_Parent->Genere_PS( fn.GetFullPath(), layer_to_plot, useA4() );
                 break;
 
             default:
             case PLOT_FORMAT_GERBER:
-                m_Parent->Genere_GERBER( FullFileName, layer_to_plot, s_PlotOriginIsAuxAxis );
+                m_Parent->Genere_GERBER( fn.GetFullPath(), layer_to_plot,
+                                         s_PlotOriginIsAuxAxis );
                 break;
 
             case PLOT_FORMAT_HPGL:
-                m_Parent->Genere_HPGL( FullFileName, layer_to_plot );
+                m_Parent->Genere_HPGL( fn.GetFullPath(), layer_to_plot );
                 break;
             }
         }

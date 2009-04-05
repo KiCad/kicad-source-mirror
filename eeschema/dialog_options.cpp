@@ -439,7 +439,7 @@ void WinEDA_SetOptionsFrame::Accept( wxCommandEvent& event )
     else
         g_ShowAllPins = TRUE;
 
-    g_ShowGrid = m_Parent->m_Draw_Grid = m_ShowGridOpt->GetValue();
+    m_Parent->m_Draw_Grid = m_ShowGridOpt->GetValue();
     m_Parent->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
 
     m_Parent->m_Draw_Grid = m_ShowGridOpt->GetValue();

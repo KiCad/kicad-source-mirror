@@ -8,20 +8,17 @@
 #include "common.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "wxstruct.h"
 #include "param_config.h"
+
 
 #define CONFIG_VERSION 1
 
 #define FORCE_LOCAL_CONFIG true
 
 
-/*********************************************************************/
-static bool ReCreatePrjConfig( const wxString& local_config_filename,
-                               const wxString& GroupName,
-                               bool            ForceUseLocalConfig )
-/*********************************************************************/
-
-/* Cree ou recree la configuration locale de kicad (filename.pro)
+/**
+ * Cree ou recree la configuration locale de kicad (filename.pro)
  * initialise:
  *     g_Prj_Config
  *     g_Prj_Config_LocalFilename
@@ -30,111 +27,126 @@ static bool ReCreatePrjConfig( const wxString& local_config_filename,
  *     true si config locale
  *     false si default config
  */
+bool WinEDA_App::ReCreatePrjConfig( const wxString& fileName,
+                                    const wxString& GroupName,
+                                    bool            ForceUseLocalConfig )
 {
-    // free old config
-    if( g_Prj_Config )
-        delete g_Prj_Config;
-    g_Prj_Config = NULL;
+    wxFileName fn = fileName;
+    wxString defaultFileName;
 
-    // Init local Config filename
-    if( local_config_filename.IsEmpty() )
-        g_Prj_Config_LocalFilename = wxT( "kicad" );
-    else
-        g_Prj_Config_LocalFilename = local_config_filename;
+    // Free old config file.
+    if( m_ProjectConfig )
+    {
+        delete m_ProjectConfig;
+        m_ProjectConfig = NULL;
+    }
 
-    ChangeFileNameExt( g_Prj_Config_LocalFilename, g_Prj_Config_Filename_ext );
+    /* Check just in case the file name does not a kicad project extension. */
+    if( fn.GetExt() != ProjectFileExtension )
+    {
+        wxLogDebug( _( "ReCreatePrjConfig() called with project file <%s> " \
+                       "which does not have the correct file extension." ),
+                    fn.GetFullPath().c_str() );
+        fn.SetExt( ProjectFileExtension );
+    }
+
+    /* Update the library search path list if a new project file is loaded. */
+    if( m_projectFileName != fn )
+    {
+        if( m_libSearchPaths.Index( fn.GetPath() ) != wxNOT_FOUND )
+            m_libSearchPaths.Remove( fn.GetPath() );
+
+        m_libSearchPaths.Insert( fn.GetPath(), 0 );
+        m_projectFileName = fn;
+    }
 
     // Init local config filename
-    if( ForceUseLocalConfig || wxFileExists( g_Prj_Config_LocalFilename ) )
+    if( ForceUseLocalConfig || fn.FileExists() )
     {
-        g_Prj_Default_Config_FullFilename.Empty();
-        g_Prj_Config = new wxFileConfig( wxEmptyString,
-                                         wxEmptyString,
-                                         g_Prj_Config_LocalFilename,
-                                         wxEmptyString,
-                                         wxCONFIG_USE_RELATIVE_PATH );
-
-        g_Prj_Config->DontCreateOnDemand();
+        m_ProjectConfig = new wxFileConfig( wxEmptyString, wxEmptyString,
+                                            fn.GetFullPath(), wxEmptyString );
+        m_ProjectConfig->DontCreateOnDemand();
 
         if( ForceUseLocalConfig )
             return true;
 
-        // Test de la bonne version du fichier (ou groupe) de configuration
-        int version = -1, def_version = 0;
-        g_Prj_Config->SetPath( GroupName );
-        version = g_Prj_Config->Read( wxT( "version" ), def_version );
-        g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
+        /* Check the application version against the version saved in the
+         * project file.
+         *
+         * TODO: Push the version test up the stack so that when one of the
+         *       Kicad application version changes, the other applications
+         *       settings do not get updated.  Practically, this can go away.
+         *       It isn't used anywhere as far as I know (WLS).
+         */
+        int version = -1;
+        int def_version = 0;
+
+        m_ProjectConfig->SetPath( GroupName );
+        version = m_ProjectConfig->Read( wxT( "version" ), def_version );
+        m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+
         if( version > 0 )
             return true;
         else
-            delete g_Prj_Config;    // Version incorrecte
+        {
+            delete m_ProjectConfig;    // Version incorrecte
+        }
     }
 
 
-    // Fichier local non trouve ou invalide
-    g_Prj_Config_LocalFilename.Empty();
-    g_Prj_Default_Config_FullFilename =
-        ReturnKicadDatasPath() +
-        wxT( "template/kicad" ) +
-        g_Prj_Config_Filename_ext;
+    defaultFileName = ReturnKicadDatasPath() + wxT( "template/kicad" ) +
+        wxT( "." ) + ProjectFileExtension;
 
-    // Recreate new config
-    g_Prj_Config = new wxFileConfig( wxEmptyString,
-                                     wxEmptyString,
-                                     wxEmptyString,
-                                     g_Prj_Default_Config_FullFilename,
-                                     wxCONFIG_USE_RELATIVE_PATH );
-
-    g_Prj_Config->DontCreateOnDemand();
+    // Create new project file using the default name.
+    m_ProjectConfig = new wxFileConfig( wxEmptyString, wxEmptyString,
+                                        wxEmptyString, defaultFileName );
+    m_ProjectConfig->DontCreateOnDemand();
 
     return false;
 }
 
 
-/***************************************************************************************/
-void WinEDA_App::WriteProjectConfig( const wxString&  local_config_filename,
-                                     const wxString&  GroupName,
-                                     PARAM_CFG_BASE** List )
-/***************************************************************************************/
-
-/** Function WriteProjectConfig
+/**
+ * Function WriteProjectConfig
  *  Save the current "projet" parameters
  *  saved parameters are parameters that have the .m_Setup member set to false
  *  saving file is the .pro file project
  */
+void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
+                                     const wxString&  GroupName,
+                                     PARAM_CFG_BASE** List )
 {
     PARAM_CFG_BASE* pt_cfg;
     wxString        msg;
 
-    ReCreatePrjConfig( local_config_filename, GroupName,
-                       FORCE_LOCAL_CONFIG );
+    ReCreatePrjConfig( fileName, GroupName, FORCE_LOCAL_CONFIG );
 
     /* Write date ( surtout pour eviter bug de wxFileConfig
      * qui se trompe de rubrique si declaration [xx] en premiere ligne
      * (en fait si groupe vide) */
-    g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
+    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+
     msg = DateAndTime();
+    m_ProjectConfig->Write( wxT( "update" ), msg );
 
-    g_Prj_Config->Write( wxT( "update" ), msg );
     msg = GetAppName();
-
-    g_Prj_Config->Write( wxT( "last_client" ), msg );
+    m_ProjectConfig->Write( wxT( "last_client" ), msg );
 
     /* Save parameters */
-    g_Prj_Config->DeleteGroup( GroupName );   // Erase all datas
-    g_Prj_Config->Flush();
+    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all datas
+    m_ProjectConfig->Flush();
 
-    g_Prj_Config->SetPath( GroupName );
-    g_Prj_Config->Write( wxT( "version" ), CONFIG_VERSION );
-    g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
+    m_ProjectConfig->SetPath( GroupName );
+    m_ProjectConfig->Write( wxT( "version" ), CONFIG_VERSION );
+    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
 
-    for( ; *List != NULL; List++ )
+    for( ; List != NULL && *List != NULL; List++ )
     {
         pt_cfg = *List;
         if( pt_cfg->m_Group )
-            g_Prj_Config->SetPath( pt_cfg->m_Group );
+            m_ProjectConfig->SetPath( pt_cfg->m_Group );
         else
-            g_Prj_Config->SetPath( GroupName );
+            m_ProjectConfig->SetPath( GroupName );
 
         if( pt_cfg->m_Setup )
             continue;
@@ -142,17 +154,16 @@ void WinEDA_App::WriteProjectConfig( const wxString&  local_config_filename,
         if ( pt_cfg->m_Type == PARAM_COMMAND_ERASE )    // Erase all data
         {
             if( pt_cfg->m_Ident )
-                g_Prj_Config->DeleteGroup( pt_cfg->m_Ident );
+                m_ProjectConfig->DeleteGroup( pt_cfg->m_Ident );
         }
         else
-            pt_cfg->SaveParam( g_Prj_Config );
+            pt_cfg->SaveParam( m_ProjectConfig );
     }
 
-    g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
-    delete g_Prj_Config;
-    g_Prj_Config = NULL;
+    m_ProjectConfig->SetPath( UNIX_STRING_DIR_SEP );
+    delete m_ProjectConfig;
+    m_ProjectConfig = NULL;
 }
-
 
 /*****************************************************************/
 void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
@@ -187,13 +198,6 @@ void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 }
 
 
-/***************************************************************************************/
-bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
-                                    const wxString&  GroupName,
-                                    PARAM_CFG_BASE** List,
-                                    bool             Load_Only_if_New )
-/***************************************************************************************/
-
 /** Function ReadProjectConfig
  *  Read the current "projet" parameters
  *  Parameters are parameters that have the .m_Setup member set to false
@@ -207,52 +211,53 @@ bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
  *     wxGetApp().m_CurrentOptionFileDateAndTime
  *     wxGetApp().m_CurrentOptionFile
  */
+bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
+                                    const wxString&  GroupName,
+                                    PARAM_CFG_BASE** List,
+                                    bool             Load_Only_if_New )
 {
     PARAM_CFG_BASE* pt_cfg;
     wxString        timestamp;
 
-    if( List == NULL )
-        return false;
-
     ReCreatePrjConfig( local_config_filename, GroupName, false );
 
-    g_Prj_Config->SetPath( UNIX_STRING_DIR_SEP );
-    timestamp = g_Prj_Config->Read( wxT( "update" ) );
+    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+    timestamp = m_ProjectConfig->Read( wxT( "update" ) );
     if( Load_Only_if_New && ( !timestamp.IsEmpty() )
-       && (timestamp == wxGetApp().m_CurrentOptionFileDateAndTime) )
+       && (timestamp == m_CurrentOptionFileDateAndTime) )
     {
         return false;
     }
 
-    wxGetApp().m_CurrentOptionFileDateAndTime = timestamp;
+    m_CurrentOptionFileDateAndTime = timestamp;
 
     if( !g_Prj_Default_Config_FullFilename.IsEmpty() )
-        wxGetApp().m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
+        m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
     else
     {
         if( wxPathOnly( g_Prj_Config_LocalFilename ).IsEmpty() )
-            wxGetApp().m_CurrentOptionFile =
-                wxGetCwd() + STRING_DIR_SEP + g_Prj_Config_LocalFilename;
+            m_CurrentOptionFile = wxGetCwd() + STRING_DIR_SEP +
+                g_Prj_Config_LocalFilename;
         else
-            wxGetApp().m_CurrentOptionFile = g_Prj_Config_LocalFilename;
+            m_CurrentOptionFile = g_Prj_Config_LocalFilename;
     }
 
-    for( ; *List != NULL; List++ )
+    for( ; List != NULL && *List != NULL; List++ )
     {
         pt_cfg = *List;
         if( pt_cfg->m_Group )
-            g_Prj_Config->SetPath( pt_cfg->m_Group );
+            m_ProjectConfig->SetPath( pt_cfg->m_Group );
         else
-            g_Prj_Config->SetPath( GroupName );
+            m_ProjectConfig->SetPath( GroupName );
 
         if( pt_cfg->m_Setup )
             continue;
 
-        pt_cfg->ReadParam( g_Prj_Config );
+        pt_cfg->ReadParam( m_ProjectConfig );
     }
 
-    delete g_Prj_Config;
-    g_Prj_Config = NULL;
+    delete m_ProjectConfig;
+    m_ProjectConfig = NULL;
 
     return true;
 }
@@ -441,7 +446,7 @@ void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig )
         return;
     double   ftmp = 0;
     wxString msg;
-    msg = g_Prj_Config->Read( m_Ident, wxT( "" ) );
+    msg = aConfig->Read( m_Ident, wxT( "" ) );
 
     if( msg.IsEmpty() )
         ftmp = m_Default;

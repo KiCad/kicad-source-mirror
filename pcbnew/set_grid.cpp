@@ -19,39 +19,23 @@
 
 #include "set_grid.h"
 
-/****************************************************************/
-void WinEDA_PcbGridFrame::AcceptPcbOptions(wxCommandEvent& event)
-/****************************************************************/
-{
-    double dtmp = 0;
-
-	g_UserGrid_Unit = m_UnitGrid->GetSelection();
-	m_OptGridSizeX->GetValue().ToDouble( &dtmp );
-    g_UserGrid.x = dtmp;
-	m_OptGridSizeY->GetValue().ToDouble( &dtmp );
-    g_UserGrid.y = dtmp;
-
-	m_Parent->GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
-
-	EndModal(1);
-
-    // If the user grid is the current selection , ensure grid size value = new user grid value
-    int ii = m_Parent->m_SelGridBox->GetSelection();
-    if ( ii == (int)(m_Parent->m_SelGridBox->GetCount() - 1) )
-        m_Parent->GetScreen()->SetGrid( ID_POPUP_GRID_USER );
-
-	m_Parent->DrawPanel->Refresh( TRUE );
-}
-
-
 
 /************************************************************/
 void WinEDA_BasePcbFrame::InstallGridFrame(const wxPoint & pos)
-/************************************************************/
 {
-	WinEDA_PcbGridFrame * GridFrame =
-				new WinEDA_PcbGridFrame( this, pos );
-	GridFrame->ShowModal(); GridFrame->Destroy();
+	WinEDA_PcbGridFrame dlg( this, pos );
+
+    dlg.SetGridSize( m_UserGridSize );
+    dlg.SetGridUnits( m_UserGridUnits );
+
+	if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    m_UserGridSize = dlg.GetGridSize();
+    m_UserGridUnits = dlg.GetGridUnits();
+
+    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
+    DrawPanel->Refresh();
 }
 
 
@@ -90,21 +74,7 @@ WinEDA_PcbGridFrame::WinEDA_PcbGridFrame( WinEDA_BasePcbFrame* parent,
                                           const wxString& caption,
                                           const wxSize& size, long style )
 {
-    wxString msg;
-    PCB_SCREEN * screen;
-
-	m_Parent = parent;
-	screen = (PCB_SCREEN*)(m_Parent->GetScreen());
-
     Create(parent, id, caption, pos, size, style);
-
-	if ( g_UserGrid_Unit != INCHES )
-		m_UnitGrid->SetSelection(1);
-
-	msg.Printf( wxT("%.4f"), g_UserGrid.x );
-	m_OptGridSizeX->SetValue(msg);
-	msg.Printf( wxT("%.4f"), g_UserGrid.y );
-	m_OptGridSizeY->SetValue(msg);
 }
 
 /*!
@@ -227,7 +197,6 @@ wxIcon WinEDA_PcbGridFrame::GetIconResource( const wxString& name )
 
 void WinEDA_PcbGridFrame::OnOkClick( wxCommandEvent& event )
 {
-	AcceptPcbOptions(event);
 }
 
 /*!
@@ -242,4 +211,35 @@ void WinEDA_PcbGridFrame::OnCancelClick( wxCommandEvent& event )
 ////@end wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL in WinEDA_PcbGridFrame.
 }
 
+void WinEDA_PcbGridFrame::SetGridSize( const wxRealPoint& grid )
+{
+    wxString msg;
 
+	msg.Printf( wxT( "%.4f" ), grid.x );
+	m_OptGridSizeX->SetValue( msg );
+	msg.Printf( wxT( "%.4f" ), grid.y );
+	m_OptGridSizeY->SetValue( msg );
+}
+
+wxRealPoint WinEDA_PcbGridFrame::GetGridSize()
+{
+    wxRealPoint grid;
+
+
+    /* TODO: Some error checking here would be a good thing. */
+	m_OptGridSizeX->GetValue().ToDouble( &grid.x );
+	m_OptGridSizeY->GetValue().ToDouble( &grid.y );
+
+    return grid;
+}
+
+void WinEDA_PcbGridFrame::SetGridUnits( int units )
+{
+	if ( units != INCHES )
+		m_UnitGrid->SetSelection( 1 );
+}
+
+int WinEDA_PcbGridFrame::GetGridUnits()
+{
+	return m_UnitGrid->GetSelection();
+}

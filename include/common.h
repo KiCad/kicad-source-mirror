@@ -9,10 +9,6 @@
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 
-#ifndef COMMON_GLOBL
-#  define COMMON_GLOBL extern
-#endif
-
 class wxAboutDialogInfo;
 class BASE_SCREEN;
 class WinEDA_DrawFrame;
@@ -28,6 +24,8 @@ class WinEDA_DrawPanel;
 #define GR_KB_SHIFT         (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
 #define GR_KB_SHIFTCTRL     (GR_KB_SHIFT | GR_KB_CTRL)
 #define MOUSE_MIDDLE        0x08000000               /* Middle button mouse flag for block commands */
+
+#define NB_ITEMS            11
 
 /* Pseudo key codes for command panning */
 enum pseudokeys {
@@ -126,26 +124,11 @@ public:
     int      m_BottomMargin;
 
 public:
-    Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name );
+    Ki_PageDescr( const wxSize& size, const wxPoint& offset,
+                  const wxString& name );
 };
 
 
-/* Standard page sizes in 1/1000 inch */
-#if defined EDA_BASE
-Ki_PageDescr        g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
-Ki_PageDescr        g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
-Ki_PageDescr        g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
-Ki_PageDescr        g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
-Ki_PageDescr        g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
-Ki_PageDescr        g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
-Ki_PageDescr        g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
-Ki_PageDescr        g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
-Ki_PageDescr        g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
-Ki_PageDescr        g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
-Ki_PageDescr        g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ), wxT( "GERBER" ) );
-Ki_PageDescr        g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "User" ) );
-
-#else
 extern Ki_PageDescr g_Sheet_A4;
 extern Ki_PageDescr g_Sheet_A3;
 extern Ki_PageDescr g_Sheet_A2;
@@ -158,93 +141,69 @@ extern Ki_PageDescr g_Sheet_D;
 extern Ki_PageDescr g_Sheet_E;
 extern Ki_PageDescr g_Sheet_GERBER;
 extern Ki_PageDescr g_Sheet_user;
-#endif
+extern Ki_PageDescr* g_SheetSizeList[];
 
 
-COMMON_GLOBL int      g_LastKey;    /* code de la derniere touche actionn�� */
-COMMON_GLOBL wxString g_ProductName
-#ifdef EDA_BASE
-= wxT( "KiCad E.D.A.  " )
-#endif
-;
+extern wxString g_ProductName;
 
 /* Gestion des librairies */
-COMMON_GLOBL wxString g_RealLibDirBuffer;   // Chemin reel des librairies de module
+extern wxString g_RealLibDirBuffer;   // Chemin reel des librairies de module
 // = UserLibDirBuffer si non vide
 // = chemin par defaut sinon
-COMMON_GLOBL wxString g_UserLibDirBuffer;   // Chemin des librairies de module donne par
+extern wxString g_UserLibDirBuffer;   // Chemin des librairies de module donne par
 // le file de config
 
-/* variables globales generales */
-
-COMMON_GLOBL int g_DebugLevel;      // 0= Pas de debug */
-COMMON_GLOBL int g_MouseOldButtons;
-COMMON_GLOBL int g_KeyPressed;
+extern int g_DebugLevel;      // 0= Pas de debug */
+extern int g_MouseOldButtons;
+extern int g_KeyPressed;
 
 // Font used by kicad.
 // these font have a size which do not depend on default size system font
-COMMON_GLOBL wxFont* g_StdFont;             /* Standard font used for status display ,in message panel */
-COMMON_GLOBL wxFont* g_DialogFont;          /* Normal font used in dialog box */
-COMMON_GLOBL wxFont* g_ItalicFont;          /* Italic font used in dialog box */
-COMMON_GLOBL wxFont* g_MsgFont;             /* Italic font used in msg panel (lower window) */
-COMMON_GLOBL wxFont* g_FixedFont;   /* Affichage de Texte en fenetres de dialogue,
+extern wxFont* g_StdFont;             /* Standard font used for status display ,in message panel */
+extern wxFont* g_DialogFont;          /* Normal font used in dialog box */
+extern wxFont* g_ItalicFont;          /* Italic font used in dialog box */
+extern wxFont* g_MsgFont;             /* Italic font used in msg panel (lower window) */
+extern wxFont* g_FixedFont;   /* Affichage de Texte en fenetres de dialogue,
                                      *  fonte a pas fixe)*/
-COMMON_GLOBL int     g_StdFontPointSize;    /* taille de la fonte */
-COMMON_GLOBL int     g_DialogFontPointSize; /* taille de la fonte */
-COMMON_GLOBL int     g_FixedFontPointSize;  /* taille de la fonte */
-COMMON_GLOBL int     g_MsgFontPointSize;    /* taille de la fonte */
-COMMON_GLOBL int     g_FontMinPointSize;    /* taille minimum des fontes */
+extern int     g_StdFontPointSize;    /* taille de la fonte */
+extern int     g_DialogFontPointSize; /* taille de la fonte */
+extern int     g_FixedFontPointSize;  /* taille de la fonte */
+extern int     g_MsgFontPointSize;    /* taille de la fonte */
+extern int     g_FontMinPointSize;    /* taille minimum des fontes */
 
-COMMON_GLOBL bool    g_IsPrinting;          // TRUE si impression au lieu de trace a l'ecran
-COMMON_GLOBL bool    g_ShowPageLimits       // TRUE to display the page limits
-#ifdef EDA_BASE
-= TRUE
-#endif
-;
+extern bool    g_ShowPageLimits;      // TRUE to display the page limits
 
 
-/* Gloabl variables for project handling */
-COMMON_GLOBL wxString g_Prj_Config_Filename_ext
-#ifdef EDA_BASE
-= wxT( ".pro" )
-#endif
-;
-COMMON_GLOBL wxFileConfig* g_Prj_Config;                        // Configuration locale, propre au projet
-COMMON_GLOBL wxString      g_Prj_Default_Config_FullFilename;   // Nom (full file name) du file Configuration par defaut (kicad.pro)
-COMMON_GLOBL wxString      g_Prj_Config_LocalFilename;          // Nom du file Configuration local (<curr projet>.pro)
+/* File name extension definitions. */
+extern const wxString ProjectFileExtension;
+extern const wxString SchematicFileExtension;
+extern const wxString BoardFileExtension;
+extern const wxString NetlistFileExtension;
+extern const wxString GerberFileExtension;
 
-// Handle the preferd editor for browsing report files:
-COMMON_GLOBL wxString      g_EditorName;
-
-
-// Gestion de la grille "utilisateur" (User Grid)
-#ifdef EDA_BASE
-wxRealPoint        g_UserGrid( 0.01, 0.01 );
-
-int                g_UserGrid_Unit = INCHES;
-#else
-extern wxRealPoint g_UserGrid;
-extern int         g_UserGrid_Unit;
-#endif
-
-COMMON_GLOBL int   g_UnitMetric;        // display units mm = 1, inches = 0, cm = 2
+extern const wxString ProjectFileWildcard;
+extern const wxString SchematicFileWildcard;
+extern const wxString BoardFileWildcard;
+extern const wxString NetlistFileWildcard;
+extern const wxString GerberFileWildcard;
+extern const wxString AllFilesWildcard;
 
 
-// shape selector for cursor screen
-COMMON_GLOBL int g_CursorShape;
+// Nom (full file name) du file Configuration par defaut (kicad.pro)
+extern wxString g_Prj_Default_Config_FullFilename;
+// Nom du file Configuration local (<curr projet>.pro)
+extern wxString g_Prj_Config_LocalFilename;
+
+extern int   g_UnitMetric;   // display units mm = 1, inches = 0, cm = 2
 
 /* Draw color for moving objects: */
-COMMON_GLOBL int g_GhostColor;
+extern int g_GhostColor;
 
 /* Draw color for grid: */
-COMMON_GLOBL int g_GridColor
-#ifdef EDA_BASE
-= DARKGRAY
-#endif
-;
+extern int g_GridColor;
 
 /* Current used screen: (not used in eeshema)*/
-COMMON_GLOBL BASE_SCREEN* ActiveScreen;
+extern BASE_SCREEN* ActiveScreen;
 
 
 /* COMMON.CPP */
@@ -305,7 +264,8 @@ wxString& operator  <<( wxString& aString, const wxPoint& aPoint );
  * @param aFlags The same args as allowed for wxExecute()
  * @return bool - true if success, else false
  */
-bool                ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
+bool        ProcessExecute( const wxString& aCommandLine,
+                            int aFlags = wxEXEC_ASYNC );
 
 
 
@@ -313,21 +273,16 @@ bool                ProcessExecute( const wxString& aCommandLine, int aFlags = w
  * Function ReturnPcbLayerName
  * @return a wxString containing the name of the layer number "layer_number".
  * @param layer_number the layer number of the layer
- * @param is_filename if TRUE,  the name can be used for a file name (not internatinalized, no space)
+ * @param is_filename if TRUE,  the name can be used for a file name (not
+ *        internatinalized, no space)
  */
-wxString            ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
-
-/* Microsoft Visual C++ compiler does not have round function (posix) */
-#ifdef __MSVC__
-  /* return the near rounded (like the equivalent integer value) from aNumber */
-  double round( double aNumber );
-#endif
+wxString    ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
 
 
 /*******************/
 /* about_kicad.cpp */
 /*******************/
-void     InitKiCadAbout( wxAboutDialogInfo& info);
+void        InitKiCadAbout( wxAboutDialogInfo& info);
 
 
 /**************/
@@ -354,16 +309,18 @@ void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
  *  color = couleur d'affichage
  */
 
-void            AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc, const wxString& KeyW );
+void        AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc,
+                        const wxString& KeyW );
 
 /* Routine d'affichage de la documentation associee a un composant */
 
-int             GetTimeStamp();
+int         GetTimeStamp();
 
 /* Retoure une identification temporelle (Time stamp) differente a chaque appel */
-int             DisplayColorFrame( wxWindow* parent, int OldColor );
-int             GetCommandOptions( const int argc, const char** argv, const char* stringtst,
-                                   const char** optarg, int* optind );
+int         DisplayColorFrame( wxWindow* parent, int OldColor );
+int         GetCommandOptions( const int argc, const char** argv,
+                               const char* stringtst, const char** optarg,
+                               int* optind );
 
 
 /* Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
@@ -373,8 +330,9 @@ int             GetCommandOptions( const int argc, const char** argv, const char
  */
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
-wxString        ReturnUnitSymbol( int Units = g_UnitMetric );
-int             ReturnValueFromString( int Units, const wxString& TextValue, int Internal_Unit );
+wxString    ReturnUnitSymbol( int Units = g_UnitMetric );
+int         ReturnValueFromString( int Units, const wxString& TextValue,
+                                   int Internal_Unit );
 
 /** Function ReturnStringFromValue
  * Return the string from Value, according to units (inch, mm ...) for display,
@@ -385,19 +343,20 @@ int             ReturnValueFromString( int Units, const wxString& TextValue, int
  * @param aAdd_unit_symbol = true to add symbol unit to the string value
  * @return a wxString what contains value and optionnaly the sumbol unit (like 2.000 mm)
  */
-wxString        ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit, bool aAdd_unit_symbol = false );
+wxString    ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit,
+                                   bool aAdd_unit_symbol = false );
+
+void        AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
-void            AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
+void        PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
+                                  int Internal_Unit );
 
 /* Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl */
-void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
-
-/* Convert the Value in the wxTextCtrl TextCtrl in an integer,
- *  according to the internal units and the selected unit (g_UnitMetric) */
-int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
+int         ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
+                                     int Internal_Unit );
 
 /**
  * Function To_User_Unit
@@ -407,22 +366,12 @@ int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal
  * @param val : double : the given value
  * @param internal_unit_value = internal units per inch
  */
-double To_User_Unit( bool is_metric, double val, int internal_unit_value );
+double      To_User_Unit( bool is_metric, double val, int internal_unit_value );
 
-/**
- * Function To_User_Unit
- * Convert in inch or mm the variable "val" (double)given in internal units
- * @return the converted value, in double
- * @param is_metric : true if the result must be returned in mm , false if inches
- * @param val : integer : the given value
- * @param internal_unit_value = internal units per inch
- */
-double          To_User_Unit( bool is_metric, int val, int internal_unit_value );
-
-int             From_User_Unit( bool is_metric, double val, int internal_unit_value );
-wxString        GenDate();
-void            MyFree( void* pt_mem );
-void*           MyZMalloc( size_t nb_octets );
-void*           MyMalloc( size_t nb_octets );
+int         From_User_Unit( bool is_metric, double val, int internal_unit_value );
+wxString    GenDate();
+void        MyFree( void* pt_mem );
+void*       MyZMalloc( size_t nb_octets );
+void*       MyMalloc( size_t nb_octets );
 
 #endif  /* __INCLUDE__COMMON_H__ */

@@ -6,10 +6,6 @@
 #define ZONES_H
 
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include "class_zone_setting.h"
 
 
@@ -38,17 +34,10 @@ enum {                          // How pads are covered by copper in zone
 /************************************************/
 
 /* parametre grid size for automatic routing */
-#if defined MAIN
-int             g_GridRoutingSize = 250;
-#else
-extern int      g_GridRoutingSize;
-#endif
+extern int g_GridRoutingSize;
+extern bool g_Zone_45_Only;
 
-eda_global bool g_Zone_45_Only
-#ifdef MAIN
-= FALSE
-#endif
-;
+// Default setting used when creating a new zone
+extern ZONE_SETTING g_Zone_Default_Setting;
 
-eda_global ZONE_SETTING g_Zone_Default_Setting;     // Default setting used when creating a new zone
 #endif  //   ifndef ZONES_H

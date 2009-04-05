@@ -20,11 +20,23 @@
 #include "bitmaps.h"
 #include "id.h"
 
-#define VIEWER_MAIN
 #include "3d_viewer.h"
 #include "trackball.h"
 
 #include <wx/colordlg.h>
+
+Info_3D_Visu g_Parm_3D_Visu;
+double g_Draw3d_dx;
+double g_Draw3d_dy;
+double ZBottom;
+double ZTop;
+double DataScale3D;  // coeff de conversion unites utilsateut -> unites 3D
+
+int gl_attrib[] =
+{
+    WX_GL_RGBA, WX_GL_MIN_RED, 8, WX_GL_MIN_GREEN, 8, WX_GL_MIN_BLUE, 8,
+    WX_GL_DEPTH_SIZE, 16, WX_GL_DOUBLEBUFFER, GL_NONE
+};
 
 
 BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
@@ -358,9 +370,9 @@ void WinEDA3D_DrawFrame::Set3DBgColor()
     S3D_Color color;
     wxColour  newcolor, oldcolor;
 
-    oldcolor.Set( (int) round( g_Parm_3D_Visu.m_BgColor.m_Red * 255 ),
-        (int) round( g_Parm_3D_Visu.m_BgColor.m_Green * 255 ),
-        (int) round( g_Parm_3D_Visu.m_BgColor.m_Blue * 255 ) );
+    oldcolor.Set( wxRound( g_Parm_3D_Visu.m_BgColor.m_Red * 255 ),
+                  wxRound( g_Parm_3D_Visu.m_BgColor.m_Green * 255 ),
+                  wxRound( g_Parm_3D_Visu.m_BgColor.m_Blue * 255 ) );
 
     newcolor = wxGetColourFromUser( this, oldcolor );
     if( newcolor != oldcolor )

@@ -13,6 +13,7 @@
 #include "id.h"
 #include "class_drawpanel.h"
 
+#include "pcbnew.h"
 #include "gerbview.h"
 #include "protos.h"
 
@@ -74,25 +75,25 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     {
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        Mouse.y -= (int) round(delta.y);
+        Mouse.y -= wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        Mouse.y += (int) round(delta.y);
+        Mouse.y += wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        Mouse.x -= (int) round(delta.x);
+        Mouse.x -= wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        Mouse.x += (int) round(delta.x);
+        Mouse.x += wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
@@ -133,5 +134,5 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     }
 
     SetToolbars();
-    Affiche_Status_Box();    /* Affichage des coord curseur */
+    UpdateStatusBar();    /* Affichage des coord curseur */
 }

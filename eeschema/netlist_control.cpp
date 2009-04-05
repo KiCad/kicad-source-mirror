@@ -437,7 +437,8 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
  * and run the netlist creator
  */
 {
-    wxString FullFileName, FileExt, Mask;
+    wxFileName fn;
+    wxString FileWildcard, FileExt;
     wxString msg, Command;
     int      netformat_tmp = g_NetFormat;
 
@@ -449,36 +450,33 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     g_NetFormat = CurrPage->m_IdNetType;
 
     /* Calculate the netlist filename */
-    FullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
 
     switch( g_NetFormat )
     {
     case NET_TYPE_SPICE:
-        FileExt = wxT( ".cir" );
+        FileExt = wxT( "cir" );
+        FileWildcard = _( "SPICE netlist file (.cir)|*.cir" );
         break;
 
     case NET_TYPE_CADSTAR:
-        FileExt = wxT( ".frp" );
+        FileExt = wxT( "frp" );
+        FileWildcard = _( "CadStar netlist file (.frp)|*.frp" );
         break;
 
     default:
-        FileExt = g_NetExtBuffer;
+        FileExt = NetlistFileExtension;
+        FileWildcard = NetlistFileWildcard;
         break;
     }
 
-    Mask = wxT( "*" ) + FileExt;
-    ChangeFileNameExt( FullFileName, FileExt );
-    FullFileName = FullFileName.AfterLast( '/' );
-    FullFileName = EDA_FileSelector( _( "Netlist files:" ),
-                                     wxEmptyString, /* Defaut path */
-                                     FullFileName,  /* Defaut filename */
-                                     FileExt,       /* Defaut extension */
-                                     Mask,          /* Mask for filename selection */
-                                     this,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
-    if( FullFileName.IsEmpty() )
+    fn.SetExt( FileExt );
+
+    wxFileDialog dlg( this, _( "Save Netlist Files" ), fn.GetPath(),
+                      fn.GetFullName(), FileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     m_Parent->MsgPanel->EraseMsgBox();
@@ -514,18 +512,18 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     switch( g_NetFormat )
     {
     default:
-        WriteNetList( m_Parent, FullFileName, TRUE );
+        WriteNetList( m_Parent, dlg.GetPath(), TRUE );
         break;
 
     case NET_TYPE_CADSTAR:
     case NET_TYPE_ORCADPCB2:
-        WriteNetList( m_Parent, FullFileName, FALSE );
+        WriteNetList( m_Parent, dlg.GetPath(), FALSE );
 
     case NET_TYPE_SPICE:
         g_OptNetListUseNames = TRUE; // Used for pspice, gnucap
         if( m_UseNetNamesInNetlist->GetSelection() == 1 )
             g_OptNetListUseNames = FALSE;
-        WriteNetList( m_Parent, FullFileName, g_OptNetListUseNames );
+        WriteNetList( m_Parent, dlg.GetPath(), g_OptNetListUseNames );
         break;
     }
 
@@ -550,7 +548,8 @@ void WinEDA_NetlistFrame::OnCancelClick( wxCommandEvent& event )
 void WinEDA_NetlistFrame::RunSimulator( wxCommandEvent& event )
 /***********************************************************/
 {
-    wxString NetlistFullFileName, ExecFile, CommandLine;
+    wxFileName fn;
+    wxString ExecFile, CommandLine;
 
     g_SimulatorCommandLine =
         m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
@@ -561,10 +560,9 @@ void WinEDA_NetlistFrame::RunSimulator( wxCommandEvent& event )
     CommandLine = g_SimulatorCommandLine.AfterFirst( ' ' );
 
     /* Calculate the netlist filename */
-    NetlistFullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
-    ChangeFileNameExt( NetlistFullFileName, wxT( ".cir" ) );
-    AddDelimiterString( NetlistFullFileName );
-    CommandLine += wxT( " " ) + NetlistFullFileName;
+    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn.SetExt( wxT( "cir" ) );
+    CommandLine += wxT( " \"" ) + fn.GetFullPath() + wxT( "\"" );
 
     ExecuteFile( this, ExecFile, CommandLine );
 }

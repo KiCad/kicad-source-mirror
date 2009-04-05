@@ -1,5 +1,6 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIR}
+                    ../3d-viewer
                     ../pcbnew
                     ../polygon
                    )
@@ -41,23 +42,36 @@ set(COMMON_SRCS
     worksheet.cpp
     wxwineda.cpp
     zoom.cpp
+)
 
+add_library(common ${COMMON_SRCS})
+
+set(PCB_COMMON_SRCS
+    pcbcommon.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp
+    ../pcbnew/class_board_item.cpp
     ../pcbnew/class_cotation.cpp
+    ../pcbnew/class_drawsegment.cpp
     ../pcbnew/class_drc_item.cpp
+    ../pcbnew/class_edge_mod.cpp
+    ../pcbnew/class_equipot.cpp
     ../pcbnew/class_marker.cpp
     ../pcbnew/class_mire.cpp
+    ../pcbnew/class_module.cpp
     ../pcbnew/class_pad.cpp
     ../pcbnew/class_pad_draw_functions.cpp
     ../pcbnew/class_pcb_text.cpp
+    ../pcbnew/class_text_mod.cpp
+    ../pcbnew/class_track.cpp
     ../pcbnew/class_zone.cpp
     ../pcbnew/class_zone_setting.cpp
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
+    ../pcbnew/tracemod.cpp
     ../pcbnew/dialog_print_using_printer_base.cpp
 )
 
-add_library(common ${COMMON_SRCS})
+add_library(pcbcommon ${PCB_COMMON_SRCS})

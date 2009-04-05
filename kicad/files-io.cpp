@@ -12,22 +12,20 @@
 #include <wx/docview.h>
 #include <wx/wfstream.h>
 #include <wx/zstream.h>
+#include <wx/dir.h>
 
 #include "common.h"
 #include "bitmaps.h"
 #include "confirm.h"
 #include "gestfich.h"
-
-#include "protos.h"
 #include "id.h"
 
 #include "kicad.h"
 #include "prjconfig.h"
 
-#define ZIP_EXT  wxT( ".zip" )
-#define ZIP_MASK wxT( "*.zip" )
+static const wxString ZipFileExtension( wxT( "zip" ) );
+static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );
 
-static void Create_NewPrj_Config( const wxString PrjFullFileName );
 
 void WinEDA_MainFrame::OnFileHistory( wxCommandEvent& event )
 {
@@ -37,161 +35,40 @@ void WinEDA_MainFrame::OnFileHistory( wxCommandEvent& event )
 
     if( fn != wxEmptyString )
     {
-        m_PrjFileName = fn;
-        Load_Prj_Config();
+        wxCommandEvent cmd( 0, wxID_ANY );
+        m_ProjectFileName = fn;
+        OnLoadProject( cmd );
     }
 
     ReCreateMenuBar();
 }
 
-/***********************************************************/
-void WinEDA_MainFrame::Process_Files( wxCommandEvent& event )
-/***********************************************************/
-
-/* Gestion generale  des commandes de sauvegarde
- */
+void WinEDA_MainFrame::OnUnarchiveFiles( wxCommandEvent& event )
 {
-    int      id   = event.GetId();
-    wxString path = wxGetCwd();
+    wxFileName fn = m_ProjectFileName;
+    fn.SetExt( ZipFileExtension );
 
-    wxString fullfilename;
-    bool     IsNew = FALSE;
+    wxFileDialog dlg( this, _( "Unzip Project" ), fn.GetPath(),
+                      fn.GetFullName(), ZipFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    switch( id )
-    {
-    case ID_SAVE_PROJECT:     /* Update project File */
-        Save_Prj_Config();
-        break;
-
-    case ID_NEW_PROJECT:
-        IsNew = TRUE;
-
-    case ID_LOAD_PROJECT:
-        SetLastProject( m_PrjFileName );
-        fullfilename = EDA_FileSelector( IsNew ? _( "Create Project file:" ) :
-                                         _( "Open Project file:" ),
-                                         path,                                      /* Chemin par defaut */
-                                         wxEmptyString,                             /* nom fichier par defaut */
-                                         g_Prj_Config_Filename_ext,                 /* extension par defaut */
-                                         wxT( "*" ) + g_Prj_Config_Filename_ext,    /* Masque d'affichage */
-                                         this,
-                                         IsNew ? wxFD_SAVE : wxFD_OPEN,
-                                         FALSE
-                                         );
-        if( fullfilename.IsEmpty() )
-            break;
-
-        ChangeFileNameExt( fullfilename, g_Prj_Config_Filename_ext );
-        m_PrjFileName = fullfilename;
-        if( IsNew )
-            Create_NewPrj_Config( m_PrjFileName );
-        SetLastProject( m_PrjFileName );
-        Load_Prj_Config();
-        break;
-
-
-    case ID_SAVE_AND_ZIP_FILES:
-        CreateZipArchive( wxEmptyString );
-        break;
-
-    case ID_READ_ZIP_ARCHIVE:
-        UnZipArchive( wxEmptyString );
-        break;
-
-    default:
-        DisplayError( this, wxT( "WinEDA_MainFrame::Process_Files error" ) );
-        break;
-    }
-}
-
-
-/**************************************************************/
-static void Create_NewPrj_Config( const wxString PrjFullFileName )
-/**************************************************************/
-
-/* Cree un nouveau fichier projet a partir du modele
- */
-{
-    wxString msg;
-
-    // Init default config filename
-    g_Prj_Config_LocalFilename.Empty();
-
-    g_Prj_Default_Config_FullFilename = ReturnKicadDatasPath() +
-                                        wxT( "template/kicad" ) + g_Prj_Config_Filename_ext;
-
-    if( !wxFileExists( g_Prj_Default_Config_FullFilename ) )
-    {
-        msg = _( "Template file non found " ) + g_Prj_Default_Config_FullFilename;
-        DisplayInfo( NULL, msg );
-    }
-    else
-    {
-        if( wxFileExists( PrjFullFileName ) )
-        {
-            msg = _( "File " ) + PrjFullFileName
-                  + _( " exists! OK to continue?" );
-            if( IsOK( NULL, msg ) )
-            {
-                wxCopyFile( g_Prj_Default_Config_FullFilename,
-                            PrjFullFileName );
-            }
-        }
-    }
-
-    g_SchematicRootFileName = wxFileNameFromPath( PrjFullFileName );
-    ChangeFileNameExt( g_SchematicRootFileName, g_SchExtBuffer );
-
-    g_BoardFileName = wxFileNameFromPath( PrjFullFileName );
-    ChangeFileNameExt( g_BoardFileName, g_BoardExtBuffer );
-
-    wxGetApp().WriteProjectConfig( PrjFullFileName, wxT( "/general" ),
-                                   CfgParamList );
-}
-
-
-/**********************************************************************/
-void WinEDA_MainFrame::UnZipArchive( const wxString FullFileName )
-/**********************************************************************/
-
-/* Lit un fichier archive .zip et le decompresse dans le repertoire courant
- */
-{
-    wxString filename = FullFileName;
-    wxString msg;
-    wxString old_cwd = wxGetCwd();
-
-    if( filename.IsEmpty() )
-        filename = EDA_FileSelector( _( "Unzip Project:" ),
-                                     wxEmptyString, /* Chemin par defaut */
-                                     wxEmptyString, /* nom fichier par defaut */
-                                     ZIP_EXT,       /* extension par defaut */
-                                     ZIP_MASK,      /* Masque d'affichage */
-                                     this,
-                                     wxFD_OPEN,
-                                     TRUE
-                                     );
-    if( filename.IsEmpty() )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    msg = _( "\nOpen " ) + filename + wxT( "\n" );
-    PrintMsg( msg );
+    PrintMsg( _( "\nOpen " ) + dlg.GetPath() + wxT( "\n" ) );
 
-    wxString target_dirname = wxDirSelector( _( "Target Directory" ),
-                                             wxEmptyString, 0,
-                                             wxDefaultPosition, this );
-    if( target_dirname.IsEmpty() )
+    wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
+                        wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+
+    if( dirDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxSetWorkingDirectory( target_dirname );
-    msg = _( "Unzip in " ) + target_dirname + wxT( "\n" );
-    PrintMsg( msg );
+    wxSetWorkingDirectory( dirDlg.GetPath() );
+    PrintMsg( _( "Unzipping project in " ) + dirDlg.GetPath() + wxT( "\n" ) );
 
     wxFileSystem zipfilesys;
     zipfilesys.AddHandler( new wxZipFSHandler );
-
-    filename += wxT( "#zip:" );
-    zipfilesys.ChangePathTo( filename );
+    zipfilesys.ChangePathTo( dlg.GetPath() + wxT( "#zip:" ) );
 
     wxFSFile* zipfile = NULL;
     wxString  localfilename = zipfilesys.FindFirst( wxT( "*.*" ) );
@@ -207,8 +84,7 @@ void WinEDA_MainFrame::UnZipArchive( const wxString FullFileName )
 
         wxString unzipfilename = localfilename.AfterLast( ':' );
 
-        msg = _( "Extract file " ) + unzipfilename;
-        PrintMsg( msg );
+        PrintMsg( _( "Extract file " ) + unzipfilename );
 
         wxInputStream*       stream = zipfile->GetStream();
 
@@ -229,74 +105,56 @@ void WinEDA_MainFrame::UnZipArchive( const wxString FullFileName )
 
     PrintMsg( wxT( "** end **\n" ) );
 
-    wxSetWorkingDirectory( old_cwd );
+    wxSetWorkingDirectory( fn.GetPath() );
 }
 
 
-/********************************************************************/
-void WinEDA_MainFrame::CreateZipArchive( const wxString FullFileName )
-/********************************************************************/
+void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
 {
-    wxString filename = FullFileName;
-    wxString zip_file_fullname;
-    wxString msg;
-    wxString curr_path = wxGetCwd();
+    size_t i;
+    wxFileName fileName = m_ProjectFileName;
+    wxString oldPath = wxGetCwd();
 
-    if( filename.IsEmpty() )
-    {
-        filename = m_PrjFileName;
-        ChangeFileNameExt( filename, wxT( ".zip" ) );
-        filename = EDA_FileSelector( _( "Archive Project files:" ),
-                                     wxEmptyString, /* Chemin par defaut */
-                                     filename,      /* nom fichier par defaut */
-                                     ZIP_EXT,       /* extension par defaut */
-                                     ZIP_MASK,      /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     FALSE
-                                     );
-    }
-    if( filename.IsEmpty() )
+    fileName.SetExt( wxT( ".zip" ) );
+
+    wxFileDialog dlg( this, _( "Archive Project Files" ),
+                      fileName.GetPath(), fileName.GetFullName(),
+                      ZipFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
 
-    wxFileName zip_name( filename );
-
-    zip_file_fullname = zip_name.GetFullName();
-    AddDelimiterString( zip_file_fullname );
+    wxFileName zip = dlg.GetPath();
 
     /* Liste des extensions des fichiers à sauver */
-    static const wxChar* Ext_to_arch[] = {
+    static const wxChar* extList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.cmp" ), wxT( "*.brd" ),
         wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
         wxT( "*.pdf" ), wxT( "*.txt" ),
         NULL
     };
 
-    int      ii = 0;
+    wxString cmd = wxT( "-O " ) + zip.GetPathSeparator() + zip.GetFullName();
 
-    wxString zip_cmd = wxT( "-O " ) + zip_file_fullname;
-    filename = wxFindFirstFile( Ext_to_arch[ii] );
+    wxDir dir( wxT( "." ) + zip.GetPathSeparator() );
 
-    while( !filename.IsEmpty() )
+    if( !dir.IsOpened() )
+        return;
+
+    wxString f;
+
+    for( i = 0; extList[i] != 0; i++ )
     {
-        wxFileName name( filename );
+        bool cont = dir.GetFirst( &f, extList[i] );
 
-        wxString   fullname = name.GetFullName();
-        AddDelimiterString( fullname );
-        zip_cmd += wxT( " " ) + fullname;
-
-        msg = _( "Compress file " ) + fullname + wxT( "\n" );
-        PrintMsg( msg );
-
-        filename = wxFindNextFile();
-        while( filename.IsEmpty() )
+        while( cont )
         {
-            ii++;
-            if( Ext_to_arch[ii] )
-                filename = wxFindFirstFile( Ext_to_arch[ii] );
-            else
-                break;
+            wxFileName fn( f );
+
+            cmd += wxT( " ." ) + zip.GetPathSeparator() + fn.GetFullName();
+            PrintMsg( _( "Compress file " ) + fn.GetFullName() + wxT( "\n" ) );
+            cont = dir.GetNext( &f );
         }
     }
 
@@ -305,14 +163,13 @@ void WinEDA_MainFrame::CreateZipArchive( const wxString FullFileName )
 #else
 #define ZIPPER wxT( "minizip" )
 #endif
-    if( ExecuteFile( this, ZIPPER, zip_cmd ) >= 0 )
+    if( ExecuteFile( this, ZIPPER, cmd ) >= 0 )
     {
-        msg = _( "\nCreate Zip Archive " ) + zip_file_fullname;
-        PrintMsg( msg );
+        PrintMsg( _( "\nCreate Zip Archive " ) + zip.GetFullName() );
         PrintMsg( wxT( "\n** end **\n" ) );
     }
     else
         PrintMsg( wxT( "Minizip command error, abort\n" ) );
 
-    wxSetWorkingDirectory( curr_path );
+    wxSetWorkingDirectory( oldPath );
 }

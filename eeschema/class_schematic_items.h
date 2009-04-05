@@ -5,10 +5,6 @@
 #ifndef CLASS_SCHEMATIC_ITEMS_H
 #define CLASS_SCHEMATIC_ITEMS_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #define DRAWJUNCTION_SIZE  16       /* Rayon du symbole connexion */
 #define DRAWMARKER_SIZE    16       /* Rayon du symbole marqueur */
 #define DRAWNOCONNECT_SIZE 48       /* Rayon du symbole No Connexion */
@@ -28,18 +24,7 @@ enum TypeMarker {      /* Type des Marqueurs */
 
 
 /* Messages correspondants aux types des marqueurs */
-#ifdef MAIN
-const wxChar*        NameMarqueurType[] =
-{
-    wxT( "" ),
-    wxT( "ERC" ),
-    wxT( "PCB" ),
-    wxT( "SIMUL" ),
-    wxT( "?????" )
-};
-#else
 extern const wxChar* NameMarqueurType[];
-#endif
 
 
 /**
@@ -55,7 +40,7 @@ public:
     wxPoint m_End;              // Line end point
 
     bool    m_StartIsDangling;
-    bool    m_EndIsDangling;       // TRUE si Start ou End not connected  (wires, tracks...)
+    bool    m_EndIsDangling;    // TRUE si Start ou End not connected  (wires, tracks...)
 
 public:
     EDA_DrawLineStruct( const wxPoint& pos, int layer );
@@ -81,12 +66,13 @@ public:
 
     EDA_Rect     GetBoundingBox();
 
-    virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset, int draw_mode,
-                       int Color = -1 );
+    virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                       int draw_mode, int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -94,12 +80,11 @@ public:
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
-
 #endif
 };
 
 
-class DrawMarkerStruct    : public SCH_ITEM   /* marqueurs */
+class DrawMarkerStruct : public SCH_ITEM   /* marqueurs */
 {
 public:
     wxPoint    m_Pos;               /* XY coordinates of marker. */
@@ -118,12 +103,14 @@ public:
 
     DrawMarkerStruct* GenCopy();
     wxString          GetComment();
-    virtual void      Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                            int draw_mode, int Color = -1 );
+    virtual void      Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                            const wxPoint& offset, int draw_mode,
+                            int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -131,7 +118,6 @@ public:
 
 #if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );
-
 #endif
 };
 
@@ -151,12 +137,14 @@ public:
 
 
     DrawNoConnectStruct* GenCopy();
-    virtual void         Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                               int draw_mode, int Color = -1 );
+    virtual void         Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                               const wxPoint& offset, int draw_mode,
+                               int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -195,12 +183,14 @@ public:
 
     DrawBusEntryStruct* GenCopy();
     wxPoint             m_End() const;  // retourne la coord de fin du raccord
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                              int draw_mode, int Color = -1 );
+    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                              const wxPoint& offset, int draw_mode,
+                              int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -226,12 +216,14 @@ public:
 
 
     DrawPolylineStruct* GenCopy();
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                              int draw_mode, int Color = -1 );
+    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                              const wxPoint& offset, int draw_mode,
+                              int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -252,7 +244,8 @@ public:
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 };
 
-class DrawJunctionStruct  : public SCH_ITEM
+
+class DrawJunctionStruct : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                  /* XY coordinates of connection. */
@@ -277,8 +270,9 @@ public:
 
     DrawJunctionStruct* GenCopy();
 
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                              int draw_mode, int Color = -1 );
+    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                              const wxPoint& offset, int draw_mode,
+                              int Color = -1 );
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
@@ -289,7 +283,6 @@ public:
 
 #if defined(DEBUG)
     void                Show( int nestLevel, std::ostream& os );
-
 #endif
 };
 

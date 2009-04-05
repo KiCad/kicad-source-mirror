@@ -27,8 +27,8 @@ static void SaveLayers( FILE* f );
 *****************************************************************************/
 bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 {
-    wxString msg;
-    wxString Name, BakName;
+    wxString msg, tmp;
+    wxFileName schematicFileName, backupFileName;
     FILE*    f;
     wxString dirbuf;
 
@@ -42,39 +42,35 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
     switch( FileSave )
     {
     case FILE_SAVE_AS:
-        dirbuf = wxGetCwd() + STRING_DIR_SEP;
-        Name   = MakeFileName( dirbuf, screen->m_FileName, g_SchExtBuffer );
+        schematicFileName = screen->m_FileName;
+        backupFileName = schematicFileName;
+
         /* Rename the old file to a '.bak' one: */
-        BakName = Name;
-        if( wxFileExists( Name ) )
+        if( schematicFileName.FileExists() )
         {
-            ChangeFileNameExt( BakName, wxT( ".bak" ) );
-            wxRemoveFile( BakName );    /* delete Old .bak file */
-            if( !wxRenameFile( Name, BakName ) )
+            backupFileName.SetExt( wxT( "bak" ) );
+            wxRemoveFile( backupFileName.GetFullPath() );
+
+            if( !wxRenameFile( schematicFileName.GetFullPath(),
+                               backupFileName.GetFullPath() ) )
             {
-                DisplayError( this, wxT( "Warning: unable to rename old file" ), 10 );
+                DisplayError( this,
+                              wxT( "Warning: unable to rename old file" ), 10 );
             }
         }
         break;
 
     case FILE_SAVE_NEW:
     {
-        wxString mask = wxT( "*" ) + g_SchExtBuffer;
-        Name = EDA_FileSelector( _( "Schematic files:" ),
-            wxEmptyString,                  /* Chemin par defaut */
-            screen->m_FileName,             /* nom fichier par defaut, et resultat */
-            g_SchExtBuffer,                 /* extension par defaut */
-            mask,                           /* Masque d'affichage */
-            this,
-            wxFD_SAVE,
-            FALSE
-        );
-        if( Name.IsEmpty() )
-            return FALSE;
+        wxFileDialog dlg( this, _( "Schematic Files" ), wxEmptyString,
+                          screen->m_FileName, SchematicFileWildcard,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-        screen->m_FileName = Name;
-        dirbuf = wxGetCwd() + STRING_DIR_SEP;
-        Name   = MakeFileName( dirbuf, Name, g_SchExtBuffer );
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        screen->m_FileName = dlg.GetPath();
+        schematicFileName = dlg.GetPath();
 
         break;
     }
@@ -83,17 +79,18 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
         break;
     }
 
-    if( ( f = wxFopen( Name, wxT( "wt" ) ) ) == NULL )
+    if( ( f = wxFopen( schematicFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to create file " ) + Name;
+        msg = _( "Failed to create file " ) + schematicFileName.GetFullPath();
         DisplayError( this, msg );
-        return FALSE;
+        return false;
     }
 
     if( FileSave == FILE_SAVE_NEW )
-        screen->m_FileName = Name;
+        screen->m_FileName = schematicFileName.GetFullPath();
 
     bool success = screen->Save( f );
+
     if( !success )
         DisplayError( this, _( "File write operation failed." ) );
     else
@@ -135,7 +132,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 
     // Creates header
     if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
-            SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) == EOF )
+                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) == EOF )
         return FALSE;
 
     if( fprintf( aFile, "  date %s\n", CONV_TO_UTF8(datetime) ) == EOF )
@@ -150,14 +147,13 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 
     PlotSheet = m_CurrentSheetDesc;
     fprintf( aFile, "$Descr %s %d %d\n", CONV_TO_UTF8( PlotSheet->m_Name ),
-        PlotSheet->m_Size.x, PlotSheet->m_Size.y );
+             PlotSheet->m_Size.x, PlotSheet->m_Size.y );
 
     /* Write ScreenNumber and NumberOfScreen; not very meaningfull for SheetNumber and Sheet Count
       * in a complex hierarchy, but usefull in simple hierarchy and flat hierarchy
       * Used also to serach the root sheet ( ScreenNumber = 1 ) withing the files
      */
     fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen );
-
     fprintf( aFile, "Title \"%s\"\n", CONV_TO_UTF8( m_Title ) );
     fprintf( aFile, "Date \"%s\"\n", CONV_TO_UTF8( m_Date ) );
     fprintf( aFile, "Rev \"%s\"\n", CONV_TO_UTF8( m_Revision ) );
@@ -170,43 +166,16 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     fprintf( aFile, "$EndDescr\n" );
 
     /* Saving schematic items */
-    bool failed = FALSE;
-    for( SCH_ITEM* item = EEDrawList;  item;  item = item->Next() )
+    bool failed = false;
+
+    for( SCH_ITEM* item = EEDrawList; item && !failed; item = item->Next() )
     {
-        switch( item->Type() )
-        {
-        case TYPE_SCH_COMPONENT:                /* Its a library item. */
-        case DRAW_SHEET_STRUCT_TYPE:            /* Its a Sheet item. */
-        case DRAW_SEGMENT_STRUCT_TYPE:          /* Its a Segment item. */
-        case DRAW_BUSENTRY_STRUCT_TYPE:         /* Its a Raccord item. */
-        case DRAW_POLYLINE_STRUCT_TYPE:         /* Its a polyline item. */
-        case DRAW_JUNCTION_STRUCT_TYPE:         /* Its a connection item. */
-        case DRAW_NOCONNECT_STRUCT_TYPE:        /* Its a NoConnection item. */
-        case TYPE_SCH_TEXT:                     /* Its a text item. */
-        case TYPE_SCH_LABEL:                    /* Its a label item. */
-        case TYPE_SCH_GLOBALLABEL:              /* Its a Global label item. */
-        case TYPE_SCH_HIERLABEL:                /* Its a Hierarchical label item. */
-        case DRAW_MARKER_STRUCT_TYPE:           /* Its a marker item. */
-            if( !item->Save( aFile ) )
-                failed = TRUE;
-            break;
-
-            /*
-              * case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-              * case DRAW_PICK_ITEM_STRUCT_TYPE:
-              * break;
-             */
-
-        default:
-            break;
-        }
-
-        if( failed )
-            break;
+        if( !item->Save( aFile ) )
+            failed = true;
     }
 
     if( fprintf( aFile, "$EndSCHEMATC\n" ) == EOF )
-        failed = TRUE;
+        failed = true;
 
     return !failed;
 }

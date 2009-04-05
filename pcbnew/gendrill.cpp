@@ -18,8 +18,13 @@ using namespace std;
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "macros.h"
+#include "appl_wxstruct.h"
 
 #include "gendrill.h"
+
+const wxString DrillFileExtension( wxT( "drl" ) );
+
+const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );
 
 /*
  *  Creates the drill files in EXCELLON format
@@ -211,7 +216,7 @@ void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
 /* This function displays and deletes the dialog frame for drill tools
  */
 {
-    wxConfig*          Config = wxGetApp().m_EDA_Config;
+    wxConfig* Config = wxGetApp().m_EDA_Config;
 
     if( Config )
     {
@@ -225,8 +230,8 @@ void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
     }
 
     WinEDA_DrillFrame* frame = new WinEDA_DrillFrame( this );
-
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
@@ -238,6 +243,7 @@ void WinEDA_DrillFrame::UpdateConfig()
     SetParams();
 
     wxConfig* Config = wxGetApp().m_EDA_Config;
+
     if( Config )
     {
         Config->Write( ZerosFormatKey, s_Zeros_Format );
@@ -264,8 +270,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
  * And one file per layer pair, which have one or more holes, excluding through holes, already in the first file.
  */
 {
-    wxString FullFileName, Mask( wxT( "*" ) ), Ext( wxT( ".drl" ) );
-    wxString BaseFileName;
+    wxFileName fn;
     wxString layer_extend;              // added to the  Board FileName to create FullFileName (= Board FileName + layer pair names)
     wxString msg;
     bool     ExistsBuriedVias = false;  // If true, drill files are created layer pair by layer pair for buried vias
@@ -285,15 +290,17 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     if( m_MicroViasCount || m_BlindOrBuriedViasCount )
         ExistsBuriedVias = true;
 
-    Mask += Ext;
     for( ; ; )
     {
-        Build_Holes_List( m_Parent->GetBoard(), s_HoleListBuffer, s_ToolListBuffer,
-            layer1, layer2, gen_through_holes ? false : true );
+        Build_Holes_List( m_Parent->GetBoard(), s_HoleListBuffer,
+                          s_ToolListBuffer, layer1, layer2,
+                          gen_through_holes ? false : true );
+
         if( s_ToolListBuffer.size() > 0 ) //holes?
         {
-            FullFileName = m_Parent->GetScreen()->m_FileName;
+            fn = m_Parent->GetScreen()->m_FileName;
             layer_extend.Empty();
+
             if( !gen_through_holes )
             {
                 if( layer1 == COPPER_LAYER_N )
@@ -305,32 +312,28 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
                 else
                     layer_extend << wxT( "-inner" ) << layer2;
             }
-            layer_extend << Ext;
-            ChangeFileNameExt( FullFileName, layer_extend );
 
-            FullFileName = EDA_FileSelector( _( "Drill file" ),
-                wxEmptyString,                              /* Chemin par defaut */
-                FullFileName,                               /* nom fichier par defaut */
-                Ext,                                        /* extension par defaut */
-                Mask,                                       /* Masque d'affichage */
-                this,
-                wxFD_SAVE,
-                TRUE
-            );
+            fn.SetName( fn.GetName() + layer_extend );
+            fn.SetExt( DrillFileExtension );
 
-            if( FullFileName != wxEmptyString )
+            wxFileDialog dlg( this, _( "Save Drill File" ), wxEmptyString,
+                              fn.GetFullName(), DrillFileWildcard,
+                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                continue;
+
+            dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
+
+            if( dest == 0 )
             {
-                dest = wxFopen( FullFileName, wxT( "w" ) );
-                if( dest == 0 )
-                {
-                    msg = _( "Unable to create file " ) + FullFileName;
-                    DisplayError( this, msg );
-                    EndModal( 0 );
-                    return;
-                }
-
-                Create_Drill_File_EXCELLON( s_HoleListBuffer, s_ToolListBuffer );
+                msg = _( "Unable to create file " ) + dlg.GetPath();
+                DisplayError( this, msg );
+                EndModal( 0 );
+                return;
             }
+
+            Create_Drill_File_EXCELLON( s_HoleListBuffer, s_ToolListBuffer );
 
             switch( m_Choice_Drill_Map->GetSelection() )
             {
@@ -338,34 +341,38 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
                 break;
 
             case 1:
-                GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_HPGL );
+                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
+                             PLOT_FORMAT_HPGL );
                 break;
 
             case 2:
-                GenDrillMap( FullFileName, s_HoleListBuffer, s_ToolListBuffer, PLOT_FORMAT_POST );
+                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
+                             PLOT_FORMAT_POST );
                 break;
             }
 
-            if(  !ExistsBuriedVias )
+            if( !ExistsBuriedVias )
                 break;
         }
         if(  gen_through_holes )
             layer2 = layer1 + 1;
         else
         {
-            if( layer2 >= LAYER_CMP_N )                                 // no more layer pair to consider
+            if( layer2 >= LAYER_CMP_N )    // no more layer pair to consider
                 break;
-            layer1++; layer2++;                                         // use next layer pair
-            if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )     // The last layer is reached
-                layer2 = LAYER_CMP_N;                                   // the last layer is always the component layer
+            layer1++;
+            layer2++;                      // use next layer pair
+
+            if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )
+                layer2 = LAYER_CMP_N;      // the last layer is always the component layer
         }
+
         gen_through_holes = false;
     }
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
     {
-        FullFileName = m_Parent->GetScreen()->m_FileName;
-        GenDrillReport( FullFileName );
+        GenDrillReport( m_Parent->GetScreen()->m_FileName );
     }
 
 
@@ -578,7 +585,7 @@ void Gen_Line_EXCELLON( char* line, float x, float y )
             x *= 10; y *= 10;
         }
 
-        sprintf( line, "X%dY%d\n", (int) round( x ), (int) round( y ) );
+        sprintf( line, "X%dY%d\n", wxRound( x ), wxRound( y ) );
         break;
 
     case SUPPRESS_TRAILING:
@@ -593,8 +600,8 @@ void Gen_Line_EXCELLON( char* line, float x, float y )
         if( y<0 )
             ypad++;
 
-        xs.Printf( wxT( "%0*d" ), xpad, (int) round( x ) );
-        ys.Printf( wxT( "%0*d" ), ypad, (int) round( y ) );
+        xs.Printf( wxT( "%0*d" ), xpad, wxRound( x ) );
+        ys.Printf( wxT( "%0*d" ), ypad, wxRound( y ) );
 
         size_t j = xs.Len() - 1;
         while( xs[j] == '0' && j )
@@ -618,8 +625,8 @@ void Gen_Line_EXCELLON( char* line, float x, float y )
             xpad++;
         if( y<0 )
             ypad++;
-        xs.Printf( wxT( "%0*d" ), xpad, (int) round( x ) );
-        ys.Printf( wxT( "%0*d" ), ypad, (int) round( y ) );
+        xs.Printf( wxT( "%0*d" ), xpad, wxRound( x ) );
+        ys.Printf( wxT( "%0*d" ), ypad, wxRound( y ) );
         sprintf( line, "X%sY%s\n", CONV_TO_UTF8( xs ), CONV_TO_UTF8( ys ) );
         break;
     }
@@ -652,7 +659,7 @@ void WinEDA_DrillFrame::Write_Excellon_Header( FILE* aFile )
         int            ii = m_Choice_Zeros_Format->GetSelection();
         DateAndTime( Line );
         // The next 2 lines in EXCELLON files are comments:
-        wxString msg = g_Main_Title + wxT( " " ) + GetBuildVersion();
+        wxString msg = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
         fprintf( aFile, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( msg ), Line );
         msg = wxT( ";FORMAT={" );
         // Print precision:
@@ -726,18 +733,21 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
 /* Genere le plan de percage (Drill map) format HPGL ou POSTSCRIPT
  */
 {
-    wxString FullFileName, Mask( wxT( "*" ) ), Ext;
+    wxFileName fn;
+    wxString ext, wildcard;
     wxString msg;
 
     /* Init extension */
     switch( format )
     {
     case PLOT_FORMAT_HPGL:
-        Ext = wxT( "-drl.plt" );
+        ext = wxT( "plt" );
+        wildcard = _( "HPGL plot files (.plt)|*.plt" );
         break;
 
     case PLOT_FORMAT_POST:
-        Ext = wxT( "-drl.ps" );
+        ext = wxT( "ps" );
+        wildcard = _( "PostScript files (.ps)|*.ps" );
         break;
 
     default:
@@ -746,38 +756,35 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     }
 
     /* Init file name */
-    FullFileName = aFileName;
-    ChangeFileNameExt( FullFileName, Ext );
-    Mask += Ext;
+    fn = aFileName;
+    fn.SetName( fn.GetName() + wxT( "-drl" ) );
+    fn.SetExt( ext );
 
-    FullFileName = EDA_FileSelector( _( "Drill Map file" ),
-        wxEmptyString,                              /* Chemin par defaut */
-        FullFileName,                               /* nom fichier par defaut */
-        Ext,                                        /* extension par defaut */
-        Mask,                                       /* Masque d'affichage */
-        this,
-        wxFD_SAVE,
-        TRUE
-    );
-    if( FullFileName.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save Drill Plot File" ), wxEmptyString,
+                      fn.GetFullName(), wildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    dest = wxFopen( FullFileName, wxT( "wt" ) );
+    dest = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+
     if( dest == 0 )
     {
         msg = _( "Unable to create file" );
-        msg << wxT( " <" ) << FullFileName << wxT( ">" );
-        DisplayError( this, msg ); return;
+        msg << wxT( " <" ) << dlg.GetPath() << wxT( ">" );
+        DisplayError( this, msg );
+        return;
     }
 
     GenDrillMapFile( m_Parent->GetBoard(),
-        dest,
-        FullFileName,
-        m_Parent->GetScreen()->m_CurrentSheetDesc->m_Size,
-        s_HoleListBuffer,
-        s_ToolListBuffer,
-        s_Unit_Drill_is_Inch,
-        format );
+                     dest,
+                     dlg.GetPath(),
+                     m_Parent->GetScreen()->m_CurrentSheetDesc->m_Size,
+                     s_HoleListBuffer,
+                     s_ToolListBuffer,
+                     s_Unit_Drill_is_Inch,
+                     format );
 }
 
 
@@ -789,35 +796,33 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
  *  Create a list of drill values and drill count
  */
 {
-    wxString FileName, Mask( wxT( "*" ) ), Ext( wxT( ".rpt" ) );
+    wxFileName fn;
     wxString msg;
+    wxString wildcard = _( "Drill report files (.rpt)|*.rpt" );
 
-    FileName = aFileName;
-    ChangeFileNameExt( FileName, wxT( "-drl" ) + Ext );
-    Mask += Ext;
+    fn = aFileName;
+    fn.SetName( fn.GetName() + wxT( "-drl" ) );
+    fn.SetExt( wxT( "rpt" ) );
 
-    FileName = EDA_FileSelector( _( "Drill Report file" ),
-        wxEmptyString,                          /* Chemin par defaut */
-        FileName,                               /* nom fichier par defaut */
-        Ext,                                    /* extension par defaut */
-        Mask,                                   /* Masque d'affichage */
-        this,
-        wxFD_SAVE,
-        TRUE
-    );
-    if( FileName.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save Drill Report File" ), wxEmptyString,
+                      fn.GetFullName(), wildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    dest = wxFopen( FileName, wxT( "w" ) );
+    dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
+
     if( dest == 0 )
     {
-        msg = _( "Unable to create file " ) + FileName;
+        msg = _( "Unable to create file " ) + dlg.GetPath();
         DisplayError( this, msg );
         return;
     }
+
     GenDrillReportFile( dest, m_Parent->GetBoard(),
-        m_Parent->GetScreen()->m_FileName,
-        s_Unit_Drill_is_Inch,
-        s_HoleListBuffer,
-        s_ToolListBuffer );
+                        m_Parent->GetScreen()->m_FileName,
+                        s_Unit_Drill_is_Inch,
+                        s_HoleListBuffer,
+                        s_ToolListBuffer );
 }

@@ -287,46 +287,6 @@ void WinEDA_SchematicFrame::RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC )
 }
 
 
-/*********************************************************************/
-void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
-/*********************************************************************/
-{
-    int fieldNdx;
-    EDA_LibComponentStruct* Entry;
-
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
-
-    SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
-
-    // save old cmp in undo list
-    if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == component->Type()) )
-    {
-        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-        frame->SaveCopyInUndoList( component, IS_CHANGED );
-        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-    }
-
-    fieldNdx = m_FieldId;
-    m_AddExtraText = 0;
-    if( fieldNdx == REFERENCE )
-    {
-        Entry = FindLibPart( component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
-        if( Entry != NULL )
-        {
-            if( Entry->m_UnitCount > 1 )
-                m_AddExtraText = 1;
-        }
-    }
-
-    Draw( frame->DrawPanel, DC, wxPoint(0,0), GR_DEFAULT_DRAWMODE );
-    m_Flags = 0;
-    frame->GetScreen()->SetCurItem( NULL );
-    frame->GetScreen()->SetModify();
-    frame->SetCurrentField( NULL );
-}
-
-
 /**************************************************************************************************/
 void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC )
 /**************************************************************************************************/

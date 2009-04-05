@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
+#include "class_drawpickedstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -337,7 +338,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         ListForUndo = BreakSegment( screen, screen->m_Curseur, TRUE );
         if( ListForUndo )
-            SaveCopyInUndoList( ListForUndo, IS_NEW | IS_CHANGED );
+            SaveCopyInUndoList( (SCH_ITEM*) ListForUndo, IS_NEW | IS_CHANGED );
         TestDanglingEnds( screen->EEDrawList, &dc );
     }
         break;

@@ -252,7 +252,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     if( error )
     {
         msg.Printf( _( "%d errors while reading Gerber file [%s]" ),
-                   error, GERBER_FullFileName.GetData() );
+                    error, GERBER_FullFileName.GetData() );
         DisplayError( this, msg );
     }
     fclose( gerber->m_Current_File );
@@ -264,32 +264,33 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
      */
     if( !gerber->m_Has_DCode )
     {
-        wxString DCodeFileName;
+        wxFileName fn;
+
         if( D_Code_FullFileName.IsEmpty() )
         {
-            wxString mask;
-            DCodeFileName = GERBER_FullFileName;
-            ChangeFileNameExt( DCodeFileName, g_PenFilenameExt );
-            mask = wxT( "*" ) + g_PenFilenameExt;
-            DCodeFileName = EDA_FileSelector( _( "D codes files:" ),
-                                              wxEmptyString,    /* Chemin par defaut */
-                                              DCodeFileName,    /* nom fichier par defaut */
-                                              g_PenFilenameExt, /* extension par defaut */
-                                              mask,             /* Masque d'affichage */
-                                              this,
-                                              0,
-                                              TRUE
-                                              );
+            wxString wildcard;
+
+            fn = GERBER_FullFileName;
+            fn.SetExt( g_PenFilenameExt );
+            wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
+                             g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+            wildcard += AllFilesWildcard;
+
+            wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),
+                              wxEmptyString, fn.GetFullName(), wildcard,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
         }
         else
-            DCodeFileName = D_Code_FullFileName;
+            fn = D_Code_FullFileName;
 
-        if( !DCodeFileName.IsEmpty() )
+        if( fn.IsOk() )
         {
-            Read_D_Code_File( DCodeFileName );
+            Read_D_Code_File( fn.GetFullPath() );
             CopyDCodesSizeToItems();
         }
+        else
+            return false;
     }
 
-    return TRUE;
+    return true;
 }

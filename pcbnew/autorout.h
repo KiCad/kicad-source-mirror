@@ -99,29 +99,26 @@ enum CommandOpt {
 
 /* Variables et structures d'autoroutage */
 
-eda_global int E_scale;         /* facteur d'echelle des tables de distance */
+extern int E_scale;     /* facteur d'echelle des tables de distance */
 
 #define ONE_SIDE  0
 #define TWO_SIDES 1
-eda_global int Nb_Sides;        /* Nombre de couches pour autoroutage (0 ou 1) */
+
+extern int Nb_Sides;    /* Nombre de couches pour autoroutage (0 ou 1) */
 
 /* Bits Flags de gestion de remplissage du BOARD */
-#define FORCE_PADS 1        /* pour forcage placement pads quel que soit le netcode */
+#define FORCE_PADS 1  /* pour forcage placement pads quel que soit le netcode */
 
 /* board dimensions */
-extern int     Nrows, Ncols;
-#if defined MAIN
-int            Nrows = ILLEGAL;
-int            Ncols = ILLEGAL;
-#endif
-
-eda_global int Ntotal;
+extern int Nrows;
+extern int Ncols;
+extern int Ntotal;
 
 /* search statistics */
-eda_global int OpenNodes;   /* total number of nodes opened */
-eda_global int ClosNodes;   /* total number of nodes closed */
-eda_global int MoveNodes;   /* total number of nodes moved */
-eda_global int MaxNodes;    /* maximum number of nodes opened at one time */
+extern int OpenNodes;   /* total number of nodes opened */
+extern int ClosNodes;   /* total number of nodes closed */
+extern int MoveNodes;   /* total number of nodes moved */
+extern int MaxNodes;    /* maximum number of nodes opened at one time */
 
 /* Structures utiles a la generation du board en Bit Map */
 
@@ -147,7 +144,7 @@ public:
     void    UnInitBoard();
 };
 
-eda_global BOARDHEAD Board;        /* 2-sided board */
+extern BOARDHEAD Board;        /* 2-sided board */
 
 
 /* Constantes utilisees pour le trace des cellules sur le BOARD */

@@ -27,6 +27,10 @@
 
 #include "id.h"
 
+extern int ExportPartId;
+extern int ImportPartId;
+extern int CreateNewLibAndSavePartId;
+
 
 /****************************************************/
 void WinEDA_LibeditFrame::ReCreateVToolbar()
@@ -130,14 +134,14 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                              wxBitmap( save_part_in_mem_xpm ),
                              _( "Save current component into current loaded library (in memory)" ) );
 
-        m_HToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, wxBitmap( import_xpm ),
+        m_HToolBar->AddTool( ImportPartId, wxEmptyString, wxBitmap( import_xpm ),
                              _( "import component" ) );
 
-        m_HToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, wxBitmap( export_xpm ),
+        m_HToolBar->AddTool( ExportPartId, wxEmptyString, wxBitmap( export_xpm ),
                              _( "export component" ) );
 
-        m_HToolBar->AddTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                             wxEmptyString, wxBitmap( new_library_xpm ),
+        m_HToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString,
+                             wxBitmap( new_library_xpm ),
                              _( "Create a new library an save current component into" ) );
 
         m_HToolBar->AddSeparator();

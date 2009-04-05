@@ -44,7 +44,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
                          wxBitmap( save_library_xpm ),
                          _( "Save Module in working library" ) );
 
-    m_HToolBar->AddTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
+    m_HToolBar->AddTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                          wxEmptyString,
                          wxBitmap( new_library_xpm ),
                          _( "Create new library and save current module" ) );
@@ -77,11 +77,11 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
                          _( "Insert module into current board" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString,
+    m_HToolBar->AddTool( ID_MODEDIT_IMPORT_PART, wxEmptyString,
                          wxBitmap( import_module_xpm ),
                          _( "import module" ) );
 
-    m_HToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString,
+    m_HToolBar->AddTool( ID_MODEDIT_EXPORT_PART, wxEmptyString,
                          wxBitmap( export_module_xpm ),
                          _( "export module" ) );
 

@@ -18,6 +18,20 @@
 #include "protos.h"
 #include "id.h"
 
+
+/* Library editor wxConfig entry names. */
+const wxString lastLibExportPathEntry( wxT( "LastLibraryExportPath" ) );
+const wxString lastLibImportPathEntry( wxT( "LastLibraryImportPath" ) );
+const wxString showGridPathEntry( wxT( "ShowGrid" ) );
+
+/* This method guarentees unique IDs for the library this run of Eeschema
+ * which prevents ID conflicts and eliminates the need to recompile every
+ * source file in the project when adding IDs to include/id.h. */
+int ExportPartId = ::wxNewId();
+int ImportPartId = ::wxNewId();
+int CreateNewLibAndSavePartId = ::wxNewId();
+
+
 /*****************************/
 /* class WinEDA_LibeditFrame */
 /*****************************/
@@ -50,6 +64,13 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_LibeditFrame::Process_Special_Functions )
 
+    EVT_TOOL( ExportPartId, WinEDA_LibeditFrame::OnExportPart )
+    EVT_TOOL( CreateNewLibAndSavePartId, WinEDA_LibeditFrame::OnExportPart )
+    EVT_TOOL( ImportPartId, WinEDA_LibeditFrame::OnImportPart )
+    EVT_UPDATE_UI( ExportPartId, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( CreateNewLibAndSavePartId,
+                   WinEDA_LibeditFrame::OnUpdateEditingPart )
+
 // PopUp Menus pour Zooms trait�s dans drawpanel.cpp
 END_EVENT_TABLE()
 
@@ -58,18 +79,19 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
-                                          long style ) :
+                                          long            style ) :
     WinEDA_DrawFrame( father, LIBEDITOR_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "LibeditFrame" );
     m_Draw_Axis = true;             // true pour avoir les axes dessines
     m_Draw_Grid = true;             // true pour avoir la axes dessinee
+    m_ConfigPath = wxT( "LibraryEditor" );
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
     SetBaseScreen( g_ScreenLib );
     GetScreen()->m_Center = true;       // set to true to have the coordinates origine -0,0) centered on screen
-    GetSettings();
+    LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
@@ -91,6 +113,46 @@ WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 }
 
 
+/**
+ * Load library editor frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get loaded.
+ */
+void WinEDA_LibeditFrame::LoadSettings( )
+{
+    wxConfig* cfg;
+
+    WinEDA_DrawFrame::LoadSettings();
+
+    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
+    cfg = wxGetApp().m_EDA_Config;
+
+    m_LastLibExportPath = cfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
+    m_LastLibImportPath = cfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
+}
+
+
+/**
+ * Save library editor frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get saved.
+ */
+void WinEDA_LibeditFrame::SaveSettings()
+{
+    wxConfig* cfg;
+
+    WinEDA_DrawFrame::SaveSettings();
+
+    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
+    cfg = wxGetApp().m_EDA_Config;
+
+    cfg->Write( lastLibExportPathEntry, m_LastLibExportPath );
+    cfg->Write( lastLibImportPathEntry, m_LastLibImportPath );
+}
+
+
 /***********************************************************/
 void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 /***********************************************************/
@@ -101,7 +163,8 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
     {
         if( !IsOK( this, _( "Component was modified!\nDiscard changes?" ) ) )
         {
-            Event.Veto(); return;
+            Event.Veto();
+            return;
         }
         else
             GetScreen()->ClrModify();
@@ -112,7 +175,8 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
         if( Lib->m_Modified )
         {
             wxString msg;
-            msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ), Lib->m_Name.GetData() );
+            msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
+                        Lib->m_Name.GetData() );
             if( !IsOK( this, msg ) )
             {
                 Event.Veto();
@@ -152,9 +216,6 @@ void WinEDA_LibeditFrame::SetToolbars()
     {
         if( m_HToolBar )
         {
-            m_HToolBar->EnableTool( ID_LIBEDIT_IMPORT_PART, true );
-            m_HToolBar->EnableTool( ID_LIBEDIT_EXPORT_PART, false );
-            m_HToolBar->EnableTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, false );
             m_HToolBar->EnableTool( ID_LIBEDIT_SAVE_CURRENT_PART, false );
             m_HToolBar->EnableTool( ID_DE_MORGAN_CONVERT_BUTT, false );
             m_HToolBar->EnableTool( ID_DE_MORGAN_NORMAL_BUTT, false );
@@ -186,9 +247,6 @@ void WinEDA_LibeditFrame::SetToolbars()
     {
         if( m_HToolBar )
         {
-            m_HToolBar->EnableTool( ID_LIBEDIT_IMPORT_PART, true );
-            m_HToolBar->EnableTool( ID_LIBEDIT_EXPORT_PART, true );
-            m_HToolBar->EnableTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, true );
             m_HToolBar->EnableTool( ID_LIBEDIT_SAVE_CURRENT_PART, true );
             m_HToolBar->EnableTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, true );
             if( (CurrentLibEntry->m_UnitCount > 1) || g_AsDeMorgan )
@@ -283,6 +341,17 @@ int WinEDA_LibeditFrame::BestZoom()
     }
 
     return bestzoom * GetScreen()->m_ZoomScalar;
+}
+
+
+void WinEDA_LibeditFrame::OnUpdateEditingPart( wxUpdateUIEvent& event )
+{
+    event.Enable( CurrentLibEntry != NULL );
+}
+
+void WinEDA_LibeditFrame::OnUpdateNotEditingPart( wxUpdateUIEvent& event )
+{
+    event.Enable( CurrentLibEntry == NULL );
 }
 
 
@@ -387,21 +456,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_DELETE_PART:
         LibItemToRepeat = NULL;
         DeleteOnePart();
-        break;
-
-    case ID_LIBEDIT_IMPORT_PART:
-        LibItemToRepeat = NULL;
-        ImportOnePart();
-        GetScreen()->ClearUndoRedoList();
-        DrawPanel->Refresh();
-        break;
-
-    case ID_LIBEDIT_EXPORT_PART:
-        ExportOnePart( false );
-        break;
-
-    case ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART:
-        ExportOnePart( true );
         break;
 
     case ID_LIBEDIT_CHECK_PART:

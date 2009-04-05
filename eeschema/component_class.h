@@ -5,9 +5,6 @@
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
 
 #include "base_struct.h"
 #include "class_sch_screen.h"
@@ -15,6 +12,14 @@
 #include <wx/dynarray.h>
 
 #include "class_sch_cmp_field.h"
+
+
+extern void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
+                            SCH_COMPONENT* Component,
+                            EDA_LibComponentStruct* Entry,
+                            const wxPoint& Pos, const int TransMat[2][2],
+                            int Multi, int convert, int DrawMode,
+                            int Color = -1, bool DrawPinText = TRUE );
 
 
 WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
@@ -76,23 +81,29 @@ class SCH_COMPONENT : public SCH_ITEM
     friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
 
 public:
-    int               m_Multi;          ///< In multi unit chip - which unit to draw.
+    int             m_Multi;     // In multi unit chip - which unit to draw.
 
-    wxPoint           m_Pos;
+    wxPoint         m_Pos;
 
-    wxString          m_ChipName;       ///< Key to look for in the library, i.e. "74LS00".
+    wxString        m_ChipName;  /* Key to look for in the library,
+                                  * i.e. "74LS00". */
 
-    wxString          m_PrefixString;   /* C, R, U, Q etc - the first character which typically indicates what the component is.
-                                         * determined, upon placement, from the library component.
-                                         * determined, upon file load, by the first non-digits in the reference fields.
-                                         */
+    wxString        m_PrefixString;   /* C, R, U, Q etc - the first character
+                                       * which typically indicates what the
+                                       * component is. Determined, upon
+                                       * placement, from the library component.
+                                       * determined, upon file load, by the
+                                       * first non-digits in the reference
+                                       * fields. */
 
-    int               m_Convert;                    /* Handle mutiple shape (for instance De Morgan conversion) */
-    int               m_Transform[2][2];            /* The rotation/mirror transformation matrix. */
+    int             m_Convert;        /* Handle mutiple shape (for instance
+                                       * De Morgan conversion) */
+    int             m_Transform[2][2]; /* The rotation/mirror transformation
+                                        * matrix. */
 
 private:
 
-    SCH_CMP_FIELDS    m_Fields;         ///< variable length list of fields
+    SCH_CMP_FIELDS  m_Fields;         ///< variable length list of fields
 
 
     /* Hierarchical references.
@@ -101,12 +112,14 @@ private:
      * with:
      * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root scheet)
      * reference = reference for this path (C23, R5, U78 ... )
-     * multi = part selection in multi parts per package (0 or 1 for àne part per package)
+     * multi = part selection in multi parts per package (0 or 1 for àne part
+     * per package)
      */
     wxArrayString m_PathsAndReferences;
 
 public:
-    SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
+    SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ),
+                   SCH_ITEM* aParent = NULL );
 
     /**
      * Copy Constructor
@@ -127,7 +140,8 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -136,8 +150,8 @@ public:
 
     /**
      * Function Load
-     * reads a component in from a file.  The file stream must be positioned at the
-     * first field of the file, not at the component tag.
+     * reads a component in from a file.  The file stream must be positioned at
+     * the first field of the file, not at the component tag.
      * @param aFile The FILE to read from.
      * @throw Error containing the error message text if there is a file format
      *   error or if the disk read has failed.
@@ -173,7 +187,8 @@ public:
     /**
      * Function ReturnFieldName
      * returns the Field name given a field index like (REFERENCE, VALUE ..)
-     * @reeturn wxString - the field name or wxEmptyString if invalid field index.
+     * @reeturn wxString - the field name or wxEmptyString if invalid field
+     *                     index.
      */
     wxString ReturnFieldName( int aFieldNdx ) const;
 
@@ -230,17 +245,22 @@ public:
     /**
      * Function AddHierarchicalReference
      * adds a full hierachical reference (path + local reference)
-     * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp> like /05678E50/A23EF560)
+     * @param aPath = hierarchical path (/<sheet timestamp>/component
+     *                timestamp> like /05678E50/A23EF560)
      * @param aRef = local reference like C45, R56
-     * @param aMulti = part selection, used in multi part per package (0 or 1 for non multi)
+     * @param aMulti = part selection, used in multi part per package (0 or 1
+     *                 for non multi)
      */
-    void                    AddHierarchicalReference( const wxString& aPath, const wxString& aRef, int aMulti );
+    void                    AddHierarchicalReference( const wxString& aPath,
+                                                      const wxString& aRef,
+                                                      int aMulti );
 
     //returns the unit selection, for the given sheet path.
     int                     GetUnitSelection( DrawSheetPath* aSheet );
 
     //Set the unit selection, for the given sheet path.
-    void                    SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection );
+    void                    SetUnitSelection( DrawSheetPath* aSheet,
+                                              int aUnitSelection );
 
 #if defined (DEBUG)
 

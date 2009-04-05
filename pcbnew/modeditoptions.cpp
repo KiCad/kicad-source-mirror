@@ -48,18 +48,18 @@ wxClientDC dc(DrawPanel);
 		case ID_TB_OPTIONS_SELECT_UNIT_INCH:
 			if ( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
 				g_UnitMetric = INCHES;
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
+			UpdateStatusBar();	 /* Reaffichage des coord curseur */
 			ReCreateAuxiliaryToolbar();
 			break;
 
 		case ID_TB_OPTIONS_SHOW_POLAR_COORD:
 			Affiche_Message(wxEmptyString);
 			DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState(id);
-			Affiche_Status_Box();	 /* Reaffichage des coord curseur */
+			UpdateStatusBar();	 /* Reaffichage des coord curseur */
 			break;
 
 		case ID_TB_OPTIONS_SELECT_CURSOR:
-			g_CursorShape = m_OptionsToolBar->GetToolState(id);
+			m_CursorShape = m_OptionsToolBar->GetToolState(id);
 			break;
 
 		case ID_TB_OPTIONS_SHOW_PADS_SKETCH:

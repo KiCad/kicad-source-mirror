@@ -80,11 +80,11 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     FullFileName = FileName;
     if( ( FullFileName.IsEmpty() ) && !IsNew )
     {
-        wxString mask = wxT( "*" ) + g_SchExtBuffer;
+        wxString mask = wxT( "*." ) + SchematicFileExtension;
         FullFileName = EDA_FileSelector( _( "Schematic files:" ),
             wxEmptyString,              /* Chemin par defaut */
             wxEmptyString,              /* nom fichier par defaut */
-            g_SchExtBuffer,             /* extension par defaut */
+            SchematicFileExtension,             /* extension par defaut */
             mask,                       /* Masque d'affichage */
             this,
             wxFD_OPEN,
@@ -154,18 +154,16 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     }
 
     // Loading the project library cache
-    wxString       FullLibName;
-    wxString       shortfilename;
-    wxSplitPath( g_RootSheet->m_AssociatedScreen->m_FileName, NULL, &shortfilename, NULL );
-    FullLibName << wxT( "." ) << STRING_DIR_SEP << shortfilename << wxT( ".cache" ) <<
-    g_LibExtBuffer;
-    if( wxFileExists( FullLibName ) )
+    wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn.SetExt( wxT( "cache.lib" ) );
+    wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
+                fn.GetFullPath().c_str() );
+
+    if( fn.FileExists() )
     {
-        wxString libname;
-        libname = FullLibName;
-        ChangeFileNameExt( libname, wxEmptyString );
-        msg = wxT( "Load " ) + FullLibName;
-        LibraryStruct* LibCache = LoadLibraryName( this, FullLibName, libname );
+        msg = wxT( "Load " ) + fn.GetFullPath();
+        LibraryStruct* LibCache = LoadLibraryName( this, fn.GetFullPath(),
+                                                   fn.GetName() );
         if( LibCache )
         {
             LibCache->m_IsLibCache = TRUE;
@@ -233,8 +231,7 @@ void WinEDA_SchematicFrame::SaveProject()
  */
 {
     SCH_SCREEN*    screen;
-    wxString       LibArchiveFileName;
-
+    wxFileName     fn;
     EDA_ScreenList ScreenList;
 
     for( screen = ScreenList.GetFirst(); screen != NULL;
@@ -245,12 +242,9 @@ void WinEDA_SchematicFrame::SaveProject()
     }
 
     /* Creation du fichier d'archivage composants en repertoire courant */
-    LibArchiveFileName = MakeFileName( wxEmptyString, g_RootSheet->GetFileName(), wxEmptyString );
-    ChangeFileNameExt( LibArchiveFileName, wxEmptyString );
-
-    /* mise a jour extension  */
-    LibArchiveFileName += wxT( ".cache" ) + g_LibExtBuffer;
-    LibArchive( this, LibArchiveFileName );
+    fn = g_RootSheet->GetFileName();
+    fn.SetExt( wxT( "cache." )  + CompLibFileExtension );
+    LibArchive( this, fn.GetFullPath() );
 }
 
 

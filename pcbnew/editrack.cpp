@@ -646,8 +646,8 @@ static void PushTrack( WinEDA_DrawPanel* panel )
         n.y = vec.x;
     }
     f   = dist / hypot( double(n.x), double(n.y) );
-    n.x = (int) round( f * n.x );
-    n.y = (int) round( f * n.y );
+    n.x = wxRound( f * n.x );
+    n.y = wxRound( f * n.y );
 
     Project( &track->m_End, cursor, other );
     track->m_End += n;

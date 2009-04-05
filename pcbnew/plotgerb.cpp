@@ -1,3 +1,4 @@
+
 /*********************************************************/
 /****Function to plot a board in GERBER RS274X format ****/
 /*********************************************************/
@@ -16,6 +17,7 @@
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "trigo.h"
+#include "appl_wxstruct.h"
 
 /* Class to handle a D_CODE when plotting a board : */
 #define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
@@ -113,7 +115,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 
     s_Last_D_code = 0;
 
-    Write_Header_GERBER( g_Main_Title, g_Plot_PlotOutputFile );
+    Write_Header_GERBER( wxGetApp().GetAppName(), g_Plot_PlotOutputFile );
 
     int layer_mask = g_TabOneLayerMask[Layer];
 

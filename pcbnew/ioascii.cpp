@@ -75,7 +75,6 @@
  $EndMODULE
 */
 
-extern Ki_PageDescr* SheetList[];
 
 /* Local Variables */
 int NbDraw, NbTrack, NbZone, NbMod, NbNets;
@@ -639,9 +638,9 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
         {
             text = strtok( Line, " \t\n\r" );
             text = strtok( NULL, " \t\n\r" );
-            Ki_PageDescr* sheet = SheetList[0];
+            Ki_PageDescr* sheet = g_SheetSizeList[0];
             int           ii;
-            for( ii = 0; sheet != NULL; ii++, sheet = SheetList[ii] )
+            for( ii = 0; sheet != NULL; ii++, sheet = g_SheetSizeList[ii] )
             {
                 if( stricmp( CONV_TO_UTF8( sheet->m_Name ), text ) == 0 )
                 {

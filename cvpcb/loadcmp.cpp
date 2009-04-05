@@ -8,17 +8,16 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "macros.h"
+#include "appl_wxstruct.h"
 
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
 
 
-/*****************************************************************/
-MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
-/*****************************************************************/
-
-/*
+/*****************************************************************
+ *
  *   Analyse les LIBRAIRIES pour trouver le module demande
  *   Si ce module est trouve, le copie en memoire, et le
  *   chaine en fin de liste des modules
@@ -26,45 +25,69 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
  *           name_cmp = nom du module
  *       - Retour:
  *           Pointeur sur le nouveau module.
- */
+ *
+ *****************************************************************/
+MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
 {
-    int      LineNum, Found = 0;
-    unsigned ii;
-    char     Line[1024], Name[255];
-    wxString libname;
-    MODULE*  Module = NULL;
+    int        LineNum, Found = 0;
+    unsigned   ii;
+    char       Line[1024], Name[255];
+    wxString   tmp, msg;
+    wxFileName fn;
+    MODULE*    Module = NULL;
+    FILE*      file;
 
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
         /* Calcul du nom complet de la librairie */
-        libname = MakeFileName( g_RealLibDirBuffer, g_LibName_List[ii], LibExtBuffer );
+        fn = g_LibName_List[ii];
+        fn.SetExt( ModuleFileExtension );
 
-        if( ( lib_module = wxFopen( libname, wxT( "rt" ) ) )  == NULL )
+        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+
+        if( !tmp )
         {
+            msg.Printf( _( "PCB foot print library file <%s> could not be " \
+                           "found in the default search paths." ),
+                        fn.GetFullName().c_str() );
+            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
+            continue;
+        }
+
+        file = wxFopen( tmp, wxT( "rt" ) );
+
+        if( file == NULL )
+        {
+            msg.Printf( _( "Could not open PCB foot print library file <%s>." ),
+                        tmp.c_str() );
+            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
             continue;
         }
 
         /* lecture entete chaine definie par ENTETE_LIBRAIRIE */
         LineNum = 0;
-        GetLine( lib_module, Line, &LineNum );
+        GetLine( file, Line, &LineNum );
         StrPurge( Line );
 
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            DisplayError( this, _( "This file is NOT a library file" ) );
+            msg.Printf( _( "<%s> is not a valid Kicad PCB foot print library." ),
+                        tmp.c_str() );
+            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
+            fclose( file );
             return NULL;
         }
 
         /* Lecture de la liste des composants de la librairie */
         Found = 0;
-        while( !Found && GetLine( lib_module, Line, &LineNum ) )
+        while( !Found && GetLine( file, Line, &LineNum ) )
         {
             if( strncmp( Line, "$MODULE", 6 ) == 0 )
                 break;
 
             if( strnicmp( Line, "$INDEX", 6 ) == 0 )
             {
-                while( GetLine( lib_module, Line, &LineNum ) )
+                while( GetLine( file, Line, &LineNum ) )
                 {
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
@@ -80,7 +103,7 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
         }
 
         /* Lecture de la librairie */
-        while( Found && GetLine( lib_module, Line, &LineNum ) )
+        while( Found && GetLine( file, Line, &LineNum ) )
         {
             if( Line[0] != '$' )
                 continue;
@@ -99,22 +122,21 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
 
                 // Switch the locale to standard C (needed to print floating point numbers like 1.3)
                 SetLocaleTo_C_standard();
-                Module->ReadDescr( lib_module, &LineNum );
+                Module->ReadDescr( file, &LineNum );
                 SetLocaleTo_Default();       // revert to the current  locale
                 Module->SetPosition( wxPoint( 0, 0 ) );
-                fclose( lib_module );
+                fclose( file );
                 return Module;
             }
         }
 
-        fclose( lib_module );
-        lib_module = 0;
+        fclose( file );
+        file = 0;
     }
 
-    if( lib_module )
-        fclose( lib_module );
+    if( file )
+        fclose( file );
 
-    wxString msg;
     msg.Printf( _( "Module %s not found" ), CmpName.GetData() );
     DisplayError( this, msg );
     return NULL;

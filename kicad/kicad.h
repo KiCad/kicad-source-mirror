@@ -9,19 +9,21 @@
 #include <pyhandler.h>
 #endif
 
-#include <wx/treectrl.h>
 #include <vector>
+
+#include <wx/treectrl.h>
 #include <wx/dragimag.h>
+#include <wx/filename.h>
 
 #include "wxstruct.h"
+#include "appl_wxstruct.h"
 
-
-/* Message de presentation */
-extern wxString g_Main_Title;
 
 class WinEDA_CommandFrame;
 class WinEDA_TreePrj;
 class WinEDA_PrjFrame;
+
+
 
 /*******************************************/
 /* classe pour la Fenetre generale de kicad*/
@@ -40,7 +42,9 @@ public:
     wxSashLayoutWindow*  m_BottomWin;
     wxTextCtrl*          m_DialogWin;
     WinEDA_Toolbar*      m_VToolBar; // Verticam Toolbar (not used)
-    wxString             m_PrjFileName;
+    wxString             m_BoardFileName;
+    wxString             m_SchematicRootFileName;
+    wxFileName           m_ProjectFileName;
 
     int     m_LeftWin_Width;
     int     m_CommandWin_Height;
@@ -53,31 +57,52 @@ public:
 
     ~WinEDA_MainFrame();
 
-    void                    OnCloseWindow( wxCloseEvent& Event );
-    void                    OnSize( wxSizeEvent& event );
-    void                    OnPaint( wxPaintEvent& event );
-    void                    ReDraw( wxDC* DC );
-    void                    OnSashDrag( wxSashEvent& event );
-    void                    Load_Prj_Config();
-    void                    Save_Prj_Config();
-    void                    Process_Fct( wxCommandEvent& event );
-    void                    OnFileHistory( wxCommandEvent& event );
-    void                    Process_Files( wxCommandEvent& event );
-    void                    Process_Config( wxCommandEvent& event );
-    void                    Process_Special_Functions( wxCommandEvent& event );
-    void                    Process_Preferences( wxCommandEvent& event );
-    void                    ReCreateMenuBar();
-    void                    RecreateBaseHToolbar();
-    void                    PrintMsg( const wxString& text );
-    void                    ClearMsg();
-    void                    SetLanguage( wxCommandEvent& event );
-    void                    OnRefresh( wxCommandEvent& event );
-
-    void                    CreateZipArchive( const wxString FullFileName );
-    void                    UnZipArchive( const wxString FullFileName );
+    void        OnCloseWindow( wxCloseEvent& Event );
+    void        OnSize( wxSizeEvent& event );
+    void        OnPaint( wxPaintEvent& event );
+    void        ReDraw( wxDC* DC );
+    void        OnSashDrag( wxSashEvent& event );
+    void        OnLoadProject( wxCommandEvent& event );
+    void        OnSaveProject( wxCommandEvent& event );
+    void        OnArchiveFiles( wxCommandEvent& event );
+    void        OnUnarchiveFiles( wxCommandEvent& event );
+    void        OnRunPcbNew( wxCommandEvent& event );
+    void        OnRunCvpcb( wxCommandEvent& event );
+    void        OnRunEeschema( wxCommandEvent& event );
+    void        OnRunGerbview( wxCommandEvent& event );
 
 #ifdef KICAD_PYTHON
-    void                    OnRefreshPy();
+    void        OnRunPythonScript( wxCommandEvent& event );
+#endif
+
+    void        OnOpenTextEditor( wxCommandEvent& event );
+    void        OnOpenFileInTextEditor( wxCommandEvent& event );
+    void        OnOpenFileInEditor( wxCommandEvent& event );
+
+    void        OnFileHistory( wxCommandEvent& event );
+    void        OnExit( wxCommandEvent& event );
+    void        Process_Preferences( wxCommandEvent& event );
+    void        ReCreateMenuBar();
+    void        RecreateBaseHToolbar();
+    void        PrintMsg( const wxString& text );
+    void        ClearMsg();
+    void        SetLanguage( wxCommandEvent& event );
+    void        OnRefresh( wxCommandEvent& event );
+    void        OnSelectDefaultPdfBrowser( wxCommandEvent& event );
+    void        OnSelectPreferredPdfBrowser( wxCommandEvent& event );
+    void        OnSelectPreferredEditor( wxCommandEvent& event );
+    void        OnSelectFont( wxCommandEvent& event );
+
+    void        OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
+    void        OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
+
+    void        CreateNewProject( const wxString PrjFullFileName );
+
+    void        LoadSettings();
+    void        SaveSettings();
+
+#ifdef KICAD_PYTHON
+    void        OnRefreshPy();
 
     boost::python::object   GetPrjName() const;
 
@@ -250,6 +275,7 @@ public:
 
 public:
     static wxString                 GetFileExt( TreeFileType type );
+    static wxString                 GetFileWildcard( TreeFileType type );
 
     WinEDA_PrjFrame( WinEDA_MainFrame* parent,
                      const wxPoint& pos, const wxSize& size );
@@ -348,23 +374,4 @@ private:
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 );
 };
 
-
-extern wxString g_SchematicRootFileName;
-extern wxString g_BoardFileName;
-
-#ifdef MAIN
-wxString            g_SchExtBuffer( wxT( ".sch" ) );
-wxString            g_BoardExtBuffer( wxT( ".brd" ) );
-wxString            g_NetlistExtBuffer( wxT( ".net" ) );
-wxString            g_GerberExtBuffer( wxT( ".pho" ) );
-
-#else
-extern wxString g_SchExtBuffer;
-extern wxString g_BoardExtBuffer;
-extern wxString g_NetlistExtBuffer;
-extern wxString g_GerberExtBuffer;
 #endif
-
-#endif
-
-// vim: tabstop=4 : noexpandtab :

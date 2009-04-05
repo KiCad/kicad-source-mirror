@@ -96,14 +96,18 @@ public:
 
     /// Should we show tooltips?
     static bool ShowToolTips();
-	void AcceptPcbOptions(wxCommandEvent& event);
 
 ////@begin WinEDA_PcbGridFrame member variables
     wxRadioBox* m_UnitGrid;
     wxTextCtrl* m_OptGridSizeX;
     wxTextCtrl* m_OptGridSizeY;
 ////@end WinEDA_PcbGridFrame member variables
-	WinEDA_BasePcbFrame * m_Parent;
+
+    void SetGridUnits( int units );
+    int GetGridUnits();
+
+    void SetGridSize( const wxRealPoint& grid );
+    wxRealPoint GetGridSize();
 };
 
 #endif

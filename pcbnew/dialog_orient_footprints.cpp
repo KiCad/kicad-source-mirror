@@ -278,7 +278,7 @@ void dialog_orient_footprints::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    s_NewOrientation = (int) round(d_orient * 10);
+    s_NewOrientation = wxRound(d_orient * 10);
     if ( s_NewOrientation > 3600 )
         s_NewOrientation = 3600;
     if ( s_NewOrientation < -3600 )

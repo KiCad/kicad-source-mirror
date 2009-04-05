@@ -7,10 +7,6 @@
 #define  WXSTRUCT_H
 
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include <vector>
 
 
@@ -122,8 +118,10 @@ public:
     void            GetKicadHelp( wxCommandEvent& event );
     void            GetKicadAbout( wxCommandEvent& event );
     void            PrintMsg( const wxString& text );
-    void            GetSettings();
-    void            SaveSettings();
+
+    virtual void    LoadSettings();
+    virtual void    SaveSettings();
+
     int             WriteHotkeyConfigFile( const wxString&                        Filename,
                                            struct Ki_HotkeyInfoSectionDescriptor* DescList,
                                            bool                                   verbose );
@@ -157,7 +155,7 @@ public:
     WinEDAChoiceBox*  m_SelGridBox;         // Dialog box to choose the grid size
     WinEDAChoiceBox*  m_SelZoomBox;         // Dialog box to choose the Zoom value
 
-    int     m_CurrentCursorShape;           // shape for cursor (0 = default cursor)
+    int     m_CursorShape;                  // shape for cursor (0 = default cursor)
     int     m_ID_current_state;             // Id of active button on the vertical toolbar
     int     m_HTOOL_current_state;          // Id of active button on horizontal toolbar
 
@@ -270,7 +268,7 @@ public:
     virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars();
-    virtual void    Affiche_Status_Box(); /* Affichage des coord curseur, zoom .. */
+    virtual void    UpdateStatusBar(); /* Affichage des coord curseur, zoom .. */
     void            DisplayUnitsMsg();
 
     /* Handlers for block commands */
@@ -285,6 +283,9 @@ public:
     /* interprocess communication */
     void            OnSockRequest( wxSocketEvent& evt );
     void            OnSockRequestServer( wxSocketEvent& evt );
+
+    virtual void    LoadSettings();
+    virtual void    SaveSettings();
 
     DECLARE_EVENT_TABLE();
 };

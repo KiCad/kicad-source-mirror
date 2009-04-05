@@ -20,13 +20,15 @@ void WinEDA_App::ReadPdfBrowserInfos()
 /* Read from Common config the Pdf browser choice
  */
 {
-    if( m_EDA_CommonConfig )
-    {
-        m_PdfBrowserIsDefault = m_EDA_CommonConfig->Read( wxT( "PdfBrowserIsDefault" ), TRUE );
-        m_PdfBrowser = m_EDA_CommonConfig->Read( wxT( "PdfBrowserName" ), wxEmptyString );
-    }
+    wxASSERT( m_EDA_CommonConfig != NULL );
+
+    m_PdfBrowserIsDefault = m_EDA_CommonConfig->Read( wxT( "PdfBrowserIsDefault" ),
+                                                  true );
+    m_PdfBrowser = m_EDA_CommonConfig->Read( wxT( "PdfBrowserName" ),
+                                         wxEmptyString );
+
     if( m_PdfBrowser.IsEmpty() )
-        m_PdfBrowserIsDefault = TRUE;
+        m_PdfBrowserIsDefault = true;
 }
 
 
@@ -37,11 +39,13 @@ void WinEDA_App::WritePdfBrowserInfos()
 /* Write into Common config the Pdf browser choice
  */
 {
-    if( !m_EDA_CommonConfig )
-        return;
+    wxASSERT( m_EDA_CommonConfig != NULL );
+
     if( m_PdfBrowser.IsEmpty() )
-        m_PdfBrowserIsDefault = TRUE;
-    m_EDA_CommonConfig->Write( wxT( "PdfBrowserIsDefault" ), m_PdfBrowserIsDefault );
+        m_PdfBrowserIsDefault = true;
+
+    m_EDA_CommonConfig->Write( wxT( "PdfBrowserIsDefault" ),
+                           m_PdfBrowserIsDefault );
     m_EDA_CommonConfig->Write( wxT( "PdfBrowserName" ), m_PdfBrowser );
 }
 

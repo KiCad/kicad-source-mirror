@@ -13,8 +13,11 @@
 /* Use wxFileHistory for most recently used file handling. */
 #include <wx/docview.h>
 #include <wx/config.h>
+#include <wx/filename.h>
 
 
+class wxConfigBase;
+class wxFileConfig;
 class PARAM_CFG_BASE;
 class wxSingleInstanceChecker;
 class wxHtmlHelpController;
@@ -33,9 +36,11 @@ public:
     wxPoint                  m_HelpPos;
     wxSize                   m_HelpSize;
     wxHtmlHelpController*    m_HtmlCtrl;
-    wxConfig*                m_EDA_Config;        // Config courante (tailles et positions fenetres ...*/
-    wxConfig*                m_EDA_CommonConfig;  // common setup (language ...) */
+    wxConfig*                m_EDA_Config;
+    wxConfig*                m_EDA_CommonConfig;
+    wxFileConfig*            m_ProjectConfig;
     wxString                 m_HelpFileName;
+    wxString                 m_EditorName;
     wxString                 m_CurrentOptionFile; // dernier fichier .cnf utilisé
     wxString                 m_CurrentOptionFileDateAndTime;
 
@@ -54,6 +59,11 @@ public:
     wxPathList               m_searchPaths;
     wxFileHistory            m_fileHistory;
 
+protected:
+    wxString                 m_Title;
+    wxPathList               m_libSearchPaths;
+    wxFileName               m_projectFileName;
+
 public:
     WinEDA_App();
     ~WinEDA_App();
@@ -66,8 +76,13 @@ public:
     bool    SetLanguage( bool first_time = FALSE );
 
     /** Function AddMenuLanguageList
-     * Create menu list for language choice, and add it as submenu to a main menu
-     * @param   MasterMenu : The main menu. The sub menu list will be accessible from the menu item with id ID_LANGUAGE_CHOICE
+     *
+     * Create menu list for language choice, and add it as submenu to a main
+     * menu
+     *
+     * @param   MasterMenu : The main menu. The sub menu list will be accessible
+     *          from the menu item with id ID_LANGUAGE_CHOICE
+     *
      * @return  the sub menu Language list
      */
     void    AddMenuLanguageList( wxMenu* MasterMenu );
@@ -78,10 +93,10 @@ public:
     // Sauvegarde de configurations et options:
     void    GetSettings();
     void    SaveSettings();
+
     void    WriteProjectConfig( const wxString& local_config_filename,
                                 const wxString& GroupName,
                                 PARAM_CFG_BASE** List );
-
     /** Function SaveCurrentSetupValues()
      * Save the current setup values in m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to true
@@ -99,6 +114,9 @@ public:
     bool    ReadProjectConfig( const wxString& local_config_filename,
                                const wxString& GroupName, PARAM_CFG_BASE** List,
                                bool Load_Only_if_New );
+    bool    ReCreatePrjConfig( const wxString& local_config_filename,
+                               const wxString& GroupName,
+                               bool ForceUseLocalConfig );
 
     void    ReadPdfBrowserInfos();
     void    WritePdfBrowserInfos();
@@ -108,6 +126,12 @@ public:
 
     wxString GetHelpFile( void );
     wxString GetLibraryFile( const wxString& filename );
+    wxString& GetEditorName();
+
+    const wxString& GetTitle() { return m_Title; }
+    void SetTitle( const wxString& title ) { m_Title = title; }
+
+    wxPathList& GetLibraryPathList() { return m_libSearchPaths; }
 };
 
 /*

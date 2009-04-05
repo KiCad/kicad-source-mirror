@@ -33,7 +33,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
     wxClientDC dc( DrawPanel );
 
-    wxString   FullFileName;
+    wxFileName fn;
 
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -67,34 +67,33 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_READ:
-        FullFileName = GetScreen()->m_FileName.AfterLast( '/' );
-        ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
-        FullFileName = EDA_FileSelector( _( "Read Config File" ),
-                                         wxPathOnly( GetScreen()->m_FileName ), /* Chemin par defaut */
-                                         FullFileName,                          /* nom fichier par defaut */
-                                         g_Prj_Config_Filename_ext,             /* extension par defaut */
-                                         wxString( wxT("*")) + g_Prj_Config_Filename_ext,
-                                         this,
-                                         wxFD_OPEN,
-                                         TRUE /* ne change pas de repertoire courant */
-                                         );
-        if( FullFileName.IsEmpty() )
+    {
+        fn = GetScreen()->m_FileName;
+        fn.SetExt( ProjectFileExtension );
+
+        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                          fn.GetFullName(), ProjectFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
             break;
-        if( !wxFileExists( FullFileName ) )
+
+        if( !wxFileExists( dlg.GetPath() ) )
         {
             wxString msg;
-            msg.Printf( _( "File %s not found" ), FullFileName.GetData() );
-            DisplayError( this, msg ); break;
+            msg.Printf( _( "File %s not found" ), dlg.GetPath().c_str() );
+            DisplayError( this, msg );
+            break;
         }
-        Read_Config( FullFileName );
-        break;
 
+        Read_Config( dlg.GetPath() );
+        break;
+    }
     case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
-        FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
-        FullFileName += HOTKEY_FILENAME;
-        FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-        WriteHotkeyConfigFile( FullFileName,
-                               s_Pcbnew_Editor_Hokeys_Descr,
+        fn.SetPath( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ) );
+        fn.SetName( HOTKEY_FILENAME );
+        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+        WriteHotkeyConfigFile( fn.GetFullPath(), s_Pcbnew_Editor_Hokeys_Descr,
                                true );
         break;
 
@@ -104,13 +103,13 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
     case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
     {
-        FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
-        FullFileName += HOTKEY_FILENAME;
-        FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-        AddDelimiterString( FullFileName );
-        wxString editorname = GetEditorName();
+        fn.SetPath( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ) );
+        fn.SetName( HOTKEY_FILENAME );
+        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+
+        wxString editorname = wxGetApp().GetEditorName();
         if( !editorname.IsEmpty() )
-            ExecuteFile( this, editorname, FullFileName );
+            ExecuteFile( this, editorname, QuoteFullPath( fn ) );
         break;
     }
 
@@ -119,7 +118,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         HandleHotkeyConfigMenuSelection( this, id );
         break;
 
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:           // Display Current hotkey list for eeschema
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         DisplayHotkeyList( this, s_Board_Editor_Hokeys_Descr );
         break;
 
@@ -150,7 +149,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
 
 
 /**************************************************************************/
-bool Read_Config( const wxString& project_name )
+bool Read_Config( const wxString& projectFileName )
 /*************************************************************************/
 
 /* lit la configuration, si elle n'a pas deja ete lue
@@ -161,26 +160,38 @@ bool Read_Config( const wxString& project_name )
  * Retourne TRUE si lu, FALSE si config non lue ou non modifiée
  */
 {
-    wxString FullFileName;
+    wxFileName fn = projectFileName;
     int      ii;
 
-    g_Prj_Config_Filename_ext = wxT( ".pro" );
-    FullFileName = project_name;
-    ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
+    if( fn.GetExt() != ProjectFileExtension )
+    {
+        wxLogDebug( wxT( "Attempting to open project file <%s>.  Changing " \
+                         "file extension to a Kicad project file extension " \
+                         "(.pro)." ), fn.GetFullPath().c_str() );
+        fn.SetExt( ProjectFileExtension );
+    }
+
+    if( wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) != wxNOT_FOUND )
+    {
+        wxLogDebug( wxT( "Removing path <%s> to library path search list." ),
+                    g_UserLibDirBuffer.c_str() );
+        wxGetApp().GetLibraryPathList().Remove( g_UserLibDirBuffer );
+    }
 
     /* Init des valeurs par defaut */
     g_LibName_List.Clear();
 
-    wxGetApp().ReadProjectConfig( FullFileName,
+    wxGetApp().ReadProjectConfig( fn.GetFullPath(),
                                   GROUP, ParamCfgList, FALSE );
 
     /* Traitement des variables particulieres: */
 
-    SetRealLibraryPath( wxT( "modules" ) );
-
-    if( ScreenPcb )
+    if( wxFileName::DirExists( g_UserLibDirBuffer )
+        && wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) == wxNOT_FOUND )
     {
-        ScreenPcb->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
+        wxLogDebug( wxT( "Adding path <%s> to library path search list." ),
+                    g_UserLibDirBuffer.c_str() );
+        wxGetApp().GetLibraryPathList().Add( g_UserLibDirBuffer );
     }
 
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
@@ -201,26 +212,19 @@ void WinEDA_PcbFrame::Update_config( wxWindow* displayframe )
 /***********************************************************/
 /* enregistrement de la config */
 {
-    wxString FullFileName;
-    wxString mask;
+    wxFileName fn;
 
-    mask = wxT( "*" ) + g_Prj_Config_Filename_ext;
-    FullFileName = GetScreen()->m_FileName.AfterLast( '/' );
-    ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
+    fn = GetScreen()->m_FileName;
+    fn.SetExt( ProjectFileExtension );
 
-    FullFileName = EDA_FileSelector( _( "Save preferences" ),
-                                     wxPathOnly( GetScreen()->m_FileName ), /* Chemin par defaut */
-                                     FullFileName,                          /* nom fichier par defaut */
-                                     g_Prj_Config_Filename_ext,             /* extension par defaut */
-                                     mask,                                  /* Masque d'affichage */
-                                     displayframe,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
-    if( FullFileName.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(),
+                      fn.GetFullName(), ProjectFileWildcard,
+                      wxFD_SAVE | wxFD_CHANGE_DIR );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     /* ecriture de la configuration */
-    wxGetApp().WriteProjectConfig( FullFileName, wxT( "/pcbnew" ),
+    wxGetApp().WriteProjectConfig( fn.GetFullPath(), wxT( "/pcbnew" ),
                                    ParamCfgList );
 }

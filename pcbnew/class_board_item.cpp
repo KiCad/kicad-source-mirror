@@ -36,8 +36,6 @@ wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
 }
 
 
-#if !defined(GERBVIEW)
-
 /********************************************************/
 wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 /********************************************************/
@@ -324,8 +322,6 @@ const char** BOARD_ITEM::MenuIcon() const
 
     return (const char**) xpm;
 }
-
-#endif  // !defined(GERBVIEW)
 
 void BOARD_ITEM::UnLink()
 {

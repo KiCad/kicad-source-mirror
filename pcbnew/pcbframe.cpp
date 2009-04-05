@@ -22,9 +22,6 @@
 #define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
 #define SHOW_MICROWAVE_TOOLS wxT( "ShowMicrowaveTools" )
 
-#define PCB_USER_GRID_X wxT( "PcbUserGrid_X" )
-#define PCB_USER_GRID_Y wxT( "PcbUserGrid_Y" )
-#define PCB_USER_GRID_UNIT wxT( "PcbUserGrid_Unit" )
 
 /*******************************/
 /* class WinEDA_PcbFrame */
@@ -212,9 +209,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     wxConfig* config           = wxGetApp().m_EDA_Config;
 
     m_FrameName                = wxT( "PcbFrame" );
-    m_Draw_Axis                = TRUE;          // TRUE pour avoir les axes dessines
-    m_Draw_Grid                = g_ShowGrid;    // TRUE pour avoir la grille dessinee
-    m_Draw_Sheet_Ref           = TRUE;          // TRUE pour avoir le cartouche dessine
+    m_Draw_Sheet_Ref           = TRUE;  // TRUE pour avoir le cartouche dessine
     m_Draw_Auxiliary_Axis      = TRUE;
     m_SelTrackWidthBox         = NULL;
     m_SelViaSizeBox            = NULL;
@@ -238,33 +233,18 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
     SetBaseScreen( ScreenPcb );
-    GetSettings();
+    LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
-    // Read some parameters from config
-    g_UserGrid.x = g_UserGrid.y = 0.5;  // Default user grid size
-    g_UserGrid_Unit = 1;                // Default user grid unit (0 = inch, 1 = mm)
 
     wxRealPoint GridSize( 500, 500 );  // Default current grid size
 
     if( config )
     {
-        double SizeX, SizeY;
-
-        if( config->Read( PCB_USER_GRID_X, &SizeX )
-           && config->Read( PCB_USER_GRID_Y, &SizeY ) )
-        {
-            g_UserGrid.x = SizeX;
-            g_UserGrid.y = SizeY;
-        }
-        config->Read( PCB_USER_GRID_UNIT, &g_UserGrid_Unit );
-
         config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
-        config->Read( PCB_MAGNETIC_TRACKS_OPT,  &g_MagneticTrackOption );
+        config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     }
 
-    GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
-
+    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( GridSize );
 
     if( DrawPanel )
@@ -361,9 +341,6 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
     {
         wxRealPoint GridSize = GetScreen()->GetGrid();
 
-        config->Write( PCB_USER_GRID_X, g_UserGrid.x );
-        config->Write( PCB_USER_GRID_Y, g_UserGrid.y );
-        config->Write( PCB_USER_GRID_UNIT, g_UserGrid_Unit );
         config->Write( PCB_CURR_GRID, m_SelGridBox->GetSelection() );
         config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
         config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
@@ -453,7 +430,7 @@ void WinEDA_PcbFrame::SetToolbars()
                                             m_Draw_Grid ? _( "Grid not show" ) : _( "Show Grid" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      g_CursorShape );
+                                      m_CursorShape );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_RATSNEST,
                                       g_Show_Ratsnest );

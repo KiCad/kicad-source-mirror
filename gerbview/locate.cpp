@@ -6,6 +6,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 
+#include "pcbnew.h"
 #include "gerbview.h"
 #include "trigo.h"
 #include "protos.h"

@@ -168,7 +168,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         else
             ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
 
-        Affiche_Status_Box();
+        UpdateStatusBar();
         SetToolbars();
         return true;
     }
@@ -307,7 +307,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
     via->Display_Infos( this );
 
-    Affiche_Status_Box();
+    UpdateStatusBar();
 
     SetToolbars();
 

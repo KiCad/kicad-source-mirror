@@ -12,6 +12,7 @@
 #include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "macros.h"
 
 #include "cvpcb.h"
 #include "protos.h"
@@ -22,9 +23,9 @@
 
 /* routines locales : */
 
-static int          ReadPinConnection( STORECMP* CurrentCmp );
-static int          CmpCompare( void* cmp1, void* cmp2 ); /* routine pour qsort() de tri de liste des composants */
-static STORECMP*    TriListeComposants( STORECMP* BaseListe, int nbitems );
+static int       ReadPinConnection( FILE* f, STORECMP* CurrentCmp );
+static int       CmpCompare( void* cmp1, void* cmp2 ); /* routine pour qsort() de tri de liste des composants */
+static STORECMP* TriListeComposants( STORECMP* BaseListe, int nbitems );
 
 /* Tri la liste des composants par ordre alphabetique et met a jour le nouveau chainage avant/arriere
  * retourne un pointeur sur le 1er element de la liste */
@@ -87,6 +88,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
  * }
  */
 {
+    char      alim[1024];
     int       i, k, l;
     char*     LibName;
     char      Line[BUFFER_CHAR_SIZE + 1];
@@ -96,6 +98,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     wxString  component_value;                              /* buffer for component values (470K, 22nF ...) */
     char*     ptchar;
     STORECMP* Cmp;
+    FILE*     source;
 
     modified = 0;
     Rjustify = 0;
@@ -105,12 +108,13 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     if( g_BaseListeCmp )
         FreeMemoryComponents();
 
-    source = wxFopen( FFileName, wxT( "rt" ) );
+    source = wxFopen( m_NetlistFileName.GetFullPath(), wxT( "rt" ) );
+
     if( source == 0 )
     {
-        wxString msg;
-        msg.Printf( _( "File <%s> not found" ), FFileName.GetData() );
-        DisplayError( this, msg ); return -1;
+        DisplayError( this,  _( "File <" ) + m_NetlistFileName.GetFullPath() +
+                      _( "> not found" )  );
+        return -1;
     }
 
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
@@ -270,7 +274,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         }
         Cmp->m_TimeStamp = schematic_timestamp;
 
-        ReadPinConnection( Cmp );
+        ReadPinConnection( source, Cmp );
 
         nbcomp++;
     }
@@ -294,7 +298,7 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
 
     for( ; ; )
     {
-        if( fgets( Line, BUFFER_CHAR_SIZE, source )  == 0 )
+        if( fgets( Line, BUFFER_CHAR_SIZE, f )  == 0 )
             break;
         if( strnicmp( Line, "$endlist", 8 ) == 0 )
         {
@@ -307,7 +311,8 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
         if( strnicmp( Line, "$component", 10 ) == 0 ) // New component ref found
         {
             CmpRef = CONV_FROM_UTF8( Line + 11 );
-            CmpRef.Trim( TRUE ); CmpRef.Trim( FALSE );
+            CmpRef.Trim( TRUE );
+            CmpRef.Trim( FALSE );
             /* Search the new component in list */
             for( Cmp = g_BaseListeCmp; Cmp != NULL; Cmp = Cmp->Pnext )
             {
@@ -318,7 +323,8 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
         else if( Cmp )
         {
             wxString fp = CONV_FROM_UTF8( Line + 1 );
-            fp.Trim( FALSE ); fp.Trim( TRUE );
+            fp.Trim( FALSE );
+            fp.Trim( TRUE );
             Cmp->m_FootprintFilter.Add( fp );
         }
     }
@@ -328,7 +334,7 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
 
 
 /***********************************/
-int ReadPinConnection( STORECMP* Cmp )
+int ReadPinConnection( FILE* f, STORECMP* Cmp )
 /***********************************/
 {
     int        i, jj;
@@ -343,7 +349,7 @@ int ReadPinConnection( STORECMP* Cmp )
         /* debut description trouv‚ */
         for( ; ; )
         {
-            if( fgets( Line, BUFFER_CHAR_SIZE, source ) == 0 )
+            if( fgets( Line, BUFFER_CHAR_SIZE, f ) == 0 )
                 return -1;
 
             /* remove blanks from the beginning of the line */
@@ -387,7 +393,8 @@ int ReadPinConnection( STORECMP* Cmp )
             }
 
             Pin           = new STOREPIN();
-            *LastPin      = Pin; LastPin = &Pin->Pnext;
+            *LastPin      = Pin;
+            LastPin       = &Pin->Pnext;
             Pin->m_PinNum = numpin;
             Pin->m_PinNet = net;
         }

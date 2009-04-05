@@ -132,7 +132,7 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
 
     /* Mise a jour de l'origine des coord relatives */
     GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
-    Affiche_Status_Box();
+    UpdateStatusBar();
 
     Bl_X0 = Mself.m_Start.x;
     Bl_Y0 = Mself.m_Start.y;
@@ -708,7 +708,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
         DisplayError( this, _( "Incorrect number, abort" ) );
         abort = TRUE;
     }
-    gap_size = ABS( (int) round( fval * fcoeff ) );
+    gap_size = ABS( wxRound( fval * fcoeff ) );
 
     if( !abort && (shape_type == 2) )
     {
@@ -721,7 +721,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
             DisplayError( this, _( "Incorrect number, abort" ) );
             abort = TRUE;
         }
-        angle = ABS( (int) round( fval * fcoeff ) );
+        angle = ABS( wxRound( fval * fcoeff ) );
         if( angle > 1800 )
             angle = 1800;
     }
@@ -1061,8 +1061,8 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
     if( PolyShapeType == 2 )  // mirrored
         ShapeScaleY = -ShapeScaleY;
 
-    ShapeSize.x = (int) round( ShapeScaleX );
-    ShapeSize.y = (int) round( ShapeScaleY );
+    ShapeSize.x = wxRound( ShapeScaleX );
+    ShapeSize.y = wxRound( ShapeScaleY );
 
     if( (ShapeSize.x) == 0 || (ShapeSize.y == 0) )
     {
@@ -1104,8 +1104,8 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape( )
     wxPoint first_coordinate, last_coordinate;
     for( ii = 0; ii < npoints; ii++ )  // Copy points
     {
-        last_coordinate.x =  (int) round( *dptr++ * ShapeScaleX ) + pad1->m_Pos0.x;
-        last_coordinate.y = -(int) round( *dptr++ * ShapeScaleY );
+        last_coordinate.x =  wxRound( *dptr++ * ShapeScaleX ) + pad1->m_Pos0.x;
+        last_coordinate.y = -wxRound( *dptr++ * ShapeScaleY );
         edge->m_PolyPoints.push_back( last_coordinate );
     }
 

@@ -125,7 +125,7 @@ bodygraphics_PropertiesAccept( wxCommandEvent& event )
     Close();
 
     if( CurrentDrawItem )
-        CurrentDrawItem->Display_Infos_DrawEntry( m_Parent );
+        CurrentDrawItem->DisplayInfo( m_Parent );
     m_Parent->DrawPanel->Refresh();
 }
 

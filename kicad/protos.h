@@ -1,2 +1,0 @@
-/* prototypes de fonctions */
-

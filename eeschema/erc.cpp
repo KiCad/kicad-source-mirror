@@ -9,6 +9,7 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "appl_wxstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -270,6 +271,7 @@ void WinEDA_ErcFrame::ReBuildMatrixPanel()
 void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
 /**************************************************/
 {
+    wxFileName          fn;
     ObjetNetListStruct* NetItemRef;
     ObjetNetListStruct* OldItem;
     ObjetNetListStruct* StartNet;
@@ -389,28 +391,21 @@ void WinEDA_ErcFrame::TestErc( wxCommandEvent& event )
     /* Generation ouverture fichier diag */
     if( WriteFichierERC == TRUE )
     {
-        wxString ErcFullFileName;
-        ErcFullFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
-        ChangeFileNameExt( ErcFullFileName, wxT( ".erc" ) );
+        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn.SetExt( wxT( "erc" ) );
 
-        ErcFullFileName = EDA_FileSelector( _( "ERC file:" ),
-            wxEmptyString,                                      /* Chemin par defaut */
-            ErcFullFileName,                                    /* nom fichier par defaut */
-            wxT( ".erc" ),                                      /* extension par defaut */
-            wxT( "*.erc" ),                                     /* Masque d'affichage */
-            this,
-            wxFD_SAVE,
-            TRUE
-            );
-        if( ErcFullFileName.IsEmpty() )
+        wxFileDialog dlg( this, _( "ERC File" ), fn.GetPath(), fn.GetFullName(),
+                          _( "Electronic rule check file (.erc)|*.erc" ),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
-        if( WriteDiagnosticERC( ErcFullFileName ) )
+        if( WriteDiagnosticERC( dlg.GetPath() ) )
         {
             Close( TRUE );
-            wxString editorname = GetEditorName();
-            AddDelimiterString( ErcFullFileName );
-            ExecuteFile( this, editorname, ErcFullFileName );
+            ExecuteFile( this, wxGetApp().GetEditorName(),
+                         QuoteFullPath( fn ) );
         }
     }
 }

@@ -15,7 +15,9 @@
 
 #include "drag.h"
 
-/* fonctions locales */
+
+DRAG_SEGM* g_DragSegmentList = NULL;    /* pointe le debut de la liste
+                                         * des structures DRAG_SEGM */
 
 DRAG_SEGM::DRAG_SEGM( TRACK* segm )
 {

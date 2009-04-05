@@ -107,7 +107,7 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
     }
 
     if( CurrentDrawItem )
-        CurrentDrawItem->Display_Infos_DrawEntry( m_Parent );
+        CurrentDrawItem->DisplayInfo( m_Parent );
 
     Close();
 }
@@ -151,7 +151,7 @@ void WinEDA_LibeditFrame::InitEditOnePin()
             Pin->m_Flags = 0;
     }
 
-    CurrentPin->Display_Infos_DrawEntry( this );
+    CurrentPin->DisplayInfo( this );
 }
 
 
@@ -323,7 +323,7 @@ void WinEDA_LibeditFrame::StartMovePin( wxDC* DC )
     GetScreen()->m_Curseur = startPos;
     DrawPanel->MouseToCursorSchema();
 
-    CurrentPin->Display_Infos_DrawEntry( this );
+    CurrentPin->DisplayInfo( this );
     DrawPanel->ManageCurseur = DrawMovePin;
     DrawPanel->ForceCloseManageCurseur = AbortPinMove;
 
@@ -378,7 +378,7 @@ void WinEDA_PinPropertiesFrame::SetPinShape( int newshape )
     {
         CurrentPin->m_PinShape = newshape;
         m_Parent->GetScreen()->SetModify();
-        CurrentPin->Display_Infos_DrawEntry( m_Parent );
+        CurrentPin->DisplayInfo( m_Parent );
 
         Pin = (LibDrawPin*) CurrentLibEntry->m_Drawings;
         for( ; Pin != NULL; Pin = Pin->Next() )
@@ -621,7 +621,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     DrawPanel->ManageCurseur = DrawMovePin;
     DrawPanel->ForceCloseManageCurseur = AbortPinMove;
 
-    CurrentPin->Display_Infos_DrawEntry( this );
+    CurrentPin->DisplayInfo( this );
     GetScreen()->SetModify();
 }
 
@@ -759,7 +759,7 @@ void WinEDA_PinPropertiesFrame::NewSizePin( int newsize )
 
     Pin->m_PinLen = newsize;
 
-    Pin->Display_Infos_DrawEntry( m_Parent );
+    Pin->DisplayInfo( m_Parent );
 
     RefPin = Pin;
 
@@ -941,7 +941,7 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LibDrawPin* SourcePin )
 //	DrawPanel->MouseToCursorSchema();
     DrawPanel->CursorOn( DC );
 
-    Pin->Display_Infos_DrawEntry( this );
+    Pin->DisplayInfo( this );
     GetScreen()->SetModify();
 }
 

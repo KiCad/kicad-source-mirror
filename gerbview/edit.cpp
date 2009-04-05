@@ -7,6 +7,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "appl_wxstruct.h"
 
 #include "gerbview.h"
 #include "pcbplot.h"
@@ -251,7 +252,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_GERBVIEW_SHOW_SOURCE:
         if( gerber_layer )
         {
-            wxString editorname = GetEditorName();
+            wxString editorname = wxGetApp().GetEditorName();
             if( !editorname.IsEmpty() )
                 ExecuteFile( this, editorname, gerber_layer->m_FileName );
         }

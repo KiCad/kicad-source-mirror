@@ -6,10 +6,6 @@
 #define PCBPLOT_H
 
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 /* Shared Config keys for plot and print */
 #define OPTKEY_PLOT_LINEWIDTH_VALUE    wxT( "PlotLineWidth" )
 #define OPTKEY_LAYERBASE               wxT( "PlotLayer_%d" )
@@ -24,97 +20,33 @@
 #define SCALE_HPGL 0.102041
 
 /* Options : */
-eda_global bool g_Exclude_Edges_Pcb     // True to exclude contents of Edges Pcb layer
-#ifdef MAIN
-= FALSE
-#endif
-;
-eda_global bool g_Plot_Frame_Ref;       // True to plot/print frame references
-eda_global bool g_DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer (ie protected by mask)
-eda_global int  g_Plot_Mode             // = FILAIRE, FILL or SKETCH
-#ifdef MAIN
-= FILLED
-#endif
-;
-eda_global bool Plot_Set_MIROIR;
-eda_global bool Sel_Rotate_Window;
-eda_global bool HPGL_Org_Centre;        // TRUE si en HPGL, l'origine le centre de la feuille
-eda_global int  g_PlotPSColorOpt;       // True for color Postscript output
-eda_global bool g_Plot_PS_Negative;     // True to create a  negative board ps plot
+extern bool g_Exclude_Edges_Pcb;
+extern bool g_Plot_Frame_Ref;       // True to plot/print frame references
+extern bool g_DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer (ie protected by mask)
+extern int g_Plot_Mode;
+extern bool Plot_Set_MIROIR;
+extern bool Sel_Rotate_Window;
+extern bool HPGL_Org_Centre;        // TRUE si en HPGL, l'origine le centre de la feuille
+extern int g_PlotPSColorOpt;        // True for color Postscript output
+extern bool g_Plot_PS_Negative;     // True to create a  negative board ps plot
 
 
 /* Autorisation de trace des divers items en serigraphie */
-eda_global bool Sel_Texte_Reference
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool Sel_Texte_Valeur
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool Sel_Texte_Divers
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool Sel_Texte_Invisible;
-eda_global bool PlotPadsOnSilkLayer /* Plot pads sur couche serigraphie */
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool Plot_Pads_All_Layers;   /* Plot pads meme n'appartenant pas a la
-                                          * couche ( utile pour serigraphie) */
+extern bool Sel_Texte_Reference;
+extern bool Sel_Texte_Valeur;
+extern bool Sel_Texte_Divers;
+extern bool Sel_Texte_Invisible;
+extern bool PlotPadsOnSilkLayer;
+extern bool Plot_Pads_All_Layers;   /* Plot pads meme n'appartenant pas a la
+                                        couche ( utile pour serigraphie) */
 
 /* Variables utiles */
 
-eda_global FILE* dest;
+extern FILE * dest;
 
-/* Gestion des plumes en plot format HPGL */
-eda_global int   g_HPGL_Pen_Num             /* num de plume a charger */
-#ifdef MAIN
-= 1
-#endif
-;
-eda_global int g_HPGL_Pen_Speed                 /* vitesse en cm/s */
-#ifdef MAIN
-= 40
-#endif
-;
-eda_global int     g_HPGL_Pen_Diam;             /* diametre en mils */
-eda_global int     g_HPGL_Pen_Recouvrement;     /* recouvrement en mils ( pour remplissages */
-
-/* Gestion des cadrages et echelles de trace */
-eda_global float   Scale_X, Scale_Y;    /* coeff d'agrandissement en X et Y demandes */
-eda_global wxPoint g_PlotOffset;        /* Offset de trace modifies par l'echelle */
-
-eda_global int     g_PlotLine_Width; /* Largeur du trait en mode filaire (utilise en serigraphie,
-                                   * pour traces en mode sketch et filaire) */
-
-eda_global int     g_PlotFormat /* id for plot format (see enum PlotFormat in plot_common.h) */
-#ifdef MAIN
-= PLOT_FORMAT_GERBER
-#endif
-;
-eda_global int g_PlotOrient;  /* numero de code de l'orientation du trace ( voir
-                                * defines precedents):
-                                * 0 = normal
-                                * PLOT_MIROIR = MIROIR
-                               */
-eda_global int g_PlotScaleOpt       // 0 = automatique, >=1 echelle specifiee
-#ifdef MAIN
-= 1
-#endif
-;
-
-eda_global int g_DrillShapeOpt
-#ifdef MAIN
-= 1     // 0 = no drill mark, 1 = small mark, 2 = real drill
-#endif
-;
-
+/* id for plot format (see enum PlotFormat in plot_common.h) */
+extern int g_PlotScaleOpt;
+extern int g_DrillShapeOpt;
 
 /*************************************/
 /* Constantes utiles en trace GERBER */
@@ -181,7 +113,7 @@ void    PlotRectangularPad_HPGL( wxPoint padpos, wxSize padsize, int orient, int
 void    trace_1_pastille_OVALE_POST( wxPoint centre, wxSize size, int orient, int modetrace );
 void    trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace );
 void    trace_1_pad_rectangulaire_POST( wxPoint centre, wxSize size, int orient,
-                                        int modetrace );
+                                     int modetrace );
 void    trace_1_contour_POST( wxPoint centre, wxSize size, wxSize delta,
                               int dim_trait, int orient );
 void    trace_1_pad_TRAPEZE_POST( wxPoint centre, wxSize size, wxSize delta,

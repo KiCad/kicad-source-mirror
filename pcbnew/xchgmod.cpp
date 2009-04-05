@@ -68,12 +68,18 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_ExchangeModuleFrame, wxDialog )
-EVT_BUTTON( ID_EXEC_EXCHANGE_MODULE, WinEDA_ExchangeModuleFrame::Change_Module )
-EVT_BUTTON( ID_EXEC_EXCHANGE_ID_MODULES, WinEDA_ExchangeModuleFrame::Change_ModuleId )
-EVT_BUTTON( ID_EXEC_EXCHANGE_ID_MODULE_AND_VALUE, WinEDA_ExchangeModuleFrame::Change_ModuleId )
-EVT_BUTTON( ID_EXEC_EXCHANGE_ALL_MODULES, WinEDA_ExchangeModuleFrame::Change_ModuleAll )
-EVT_BUTTON( ID_CLOSE_EXCHANGE_MODULE, WinEDA_ExchangeModuleFrame::OnQuit )
-EVT_BUTTON( ID_BROWSE_LIB_MODULES, WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste )
+    EVT_BUTTON( ID_EXEC_EXCHANGE_MODULE,
+                WinEDA_ExchangeModuleFrame::Change_Module )
+    EVT_BUTTON( ID_EXEC_EXCHANGE_ID_MODULES,
+                WinEDA_ExchangeModuleFrame::Change_ModuleId )
+    EVT_BUTTON( ID_EXEC_EXCHANGE_ID_MODULE_AND_VALUE,
+                WinEDA_ExchangeModuleFrame::Change_ModuleId )
+    EVT_BUTTON( ID_EXEC_EXCHANGE_ALL_MODULES,
+                WinEDA_ExchangeModuleFrame::Change_ModuleAll )
+    EVT_BUTTON( ID_CLOSE_EXCHANGE_MODULE,
+                WinEDA_ExchangeModuleFrame::OnQuit )
+    EVT_BUTTON( ID_BROWSE_LIB_MODULES,
+                WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste )
 END_EVENT_TABLE()
 
 
@@ -107,59 +113,61 @@ WinEDA_ExchangeModuleFrame::WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame* par
 
     /* Creation des boutons de commande */
     Button = new wxButton( this, ID_EXEC_EXCHANGE_MODULE,
-                          _( "Change module" ) );
+                           _( "Change module" ) );
 
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     Button = new wxButton( this, ID_EXEC_EXCHANGE_ID_MODULES,
-                          _( "Change same modules" ) );
+                           _( "Change same modules" ) );
 
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_EXEC_EXCHANGE_ID_MODULE_AND_VALUE,
-                          _( "Ch. same module+value" ) );
+                           _( "Ch. same module+value" ) );
 
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_EXEC_EXCHANGE_ALL_MODULES,
-                          _( "Change all" ) );
+                           _( "Change all" ) );
 
     Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_BROWSE_LIB_MODULES,
-                          _( "Browse Libs modules" ) );
+                           _( "Browse Libs modules" ) );
 
     Button->SetForegroundColour( wxColour( 0, 100, 0 ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_CLOSE_EXCHANGE_MODULE,
-                          _( "Close" ) );
+                           _( "Close" ) );
 
     Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     m_OldModule = new WinEDA_EnterText( this, _( "Current Module" ),
-                                       m_CurrentModule ?
-                                       m_CurrentModule->m_LibRef.GetData () : wxEmptyString,
-                                       LeftBoxSizer, wxSize( 150, -1 ) );
+                                        m_CurrentModule ?
+                                        m_CurrentModule->m_LibRef.GetData () : wxEmptyString,
+                                        LeftBoxSizer, wxSize( 150, -1 ) );
 
     m_OldModule->Enable( FALSE );
 
     m_OldValue = new WinEDA_EnterText( this, _( "Current Value" ),
-                                      m_CurrentModule ?
-                                      m_CurrentModule->m_Value->m_Text.GetData () : wxEmptyString,
-                                      LeftBoxSizer, wxSize( 150, -1 ) );
+                                       m_CurrentModule ?
+                                       m_CurrentModule->m_Value->m_Text.GetData () : wxEmptyString,
+                                       LeftBoxSizer, wxSize( 150, -1 ) );
 
     m_OldValue->Enable( FALSE );
 
     m_NewModule = new   WinEDA_EnterText( this, _( "New Module" ),
-                                         m_OldModule->GetValue(), LeftBoxSizer, wxSize( 150, -1 ) );
+                                          m_OldModule->GetValue(),
+                                          LeftBoxSizer, wxSize( 150, -1 ) );
 
-    m_WinMsg = new      wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition, wxSize( 340, 230 ),
+    m_WinMsg = new      wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+                                    wxSize( 340, 230 ),
                                     wxTE_READONLY | wxTE_MULTILINE );
 
     MainBoxSizer->Add( m_WinMsg, 0, wxGROW | wxALL, 5 );
@@ -171,13 +179,14 @@ WinEDA_ExchangeModuleFrame::WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame* par
 
 /*********************************************************************/
 void WinEDA_BasePcbFrame::InstallExchangeModuleFrame( MODULE* Module,
-                                                      wxDC* DC, const wxPoint& pos )
-/*********************************************************************/
+                                                      wxDC* DC,
+                                                      const wxPoint& pos )
 {
-    WinEDA_ExchangeModuleFrame* frame = new WinEDA_ExchangeModuleFrame( this,
-                                Module, DC, pos );
+    WinEDA_ExchangeModuleFrame* frame =
+        new WinEDA_ExchangeModuleFrame( this, Module, DC, pos );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
@@ -205,39 +214,41 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
  *  Retoure 1 si erreur
  */
 {
-    wxString FileNameCmp, tmpfile;
-    FILE*    FichCmp, * NewFile;
-    char     Line[1024];
-    wxString msg;
+    wxFileName fn;
+    wxFileName tmpFileName;
+    FILE*      FichCmp, * NewFile;
+    char       Line[1024];
+    wxString   msg;
 
     if( old_name == new_name )
         return 0;                           /* pas de changement de nom */
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
-    FileNameCmp = m_Parent->GetScreen()->m_FileName;
-    ChangeFileNameExt( FileNameCmp, NetCmpExtBuffer );
+    fn = m_Parent->GetScreen()->m_FileName;
+    fn.SetExt( NetCmpExtBuffer );
 
     // Modification du fichier .cmp correcpondant
-    FichCmp = wxFopen( FileNameCmp, wxT( "rt" ) );
+    FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
     if( FichCmp == NULL )
     {
         if( ShowError )
         {
-            msg.Printf( _( "file %s not found" ), FileNameCmp.GetData() );
+            msg.Printf( _( "file %s not found" ), fn.GetFullPath().c_str() );
             m_WinMsg->WriteText( msg );
         }
         return 1;
     }
 
     /* Analyse du fichier et modif */
-    tmpfile = FileNameCmp;
-    ChangeFileNameExt( tmpfile, wxT( ".$$$" ) );
-    NewFile = wxFopen( tmpfile, wxT( "wt" ) );
+    tmpFileName = fn;
+    tmpFileName.SetExt( wxT( "$$$" ) );
+    NewFile = wxFopen( tmpFileName.GetFullPath(), wxT( "wt" ) );
     if( NewFile == NULL )
     {
         if( ShowError )
         {
-            msg.Printf( _( "Unable to create file %s" ), tmpfile.GetData() );
+            msg.Printf( _( "Unable to create file %s" ),
+                        tmpFileName.GetFullPath().c_str() );
             m_WinMsg->WriteText( msg );
         }
         return 1;
@@ -270,7 +281,7 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
         {
             sprintf( Line + 8, "  = %s;\n", CONV_TO_UTF8( new_name ) );
 
-            msg.Printf( wxT( " * in %s\n" ), FileNameCmp.GetData() );
+            msg = wxT( " * in <" ) + fn.GetFullPath() + wxT( ">.\n" );
             m_WinMsg->WriteText( msg );
 
             start_descr = FALSE;
@@ -280,8 +291,8 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
 
     fclose( FichCmp );
     fclose( NewFile );
-    wxRemoveFile( FileNameCmp );
-    wxRenameFile( tmpfile, FileNameCmp );
+    wxRemoveFile( fn.GetFullPath() );
+    wxRenameFile( tmpFileName.GetFullPath(), fn.GetFullPath() );
     return 0;
 }
 
@@ -478,7 +489,7 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
 
     /* Chargement du module */
     Line.Printf( _( "Change module %s (%s)  " ),
-                Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
+                 Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
     m_WinMsg->WriteText( Line );
 
     namecmp.Trim( TRUE );
@@ -610,11 +621,12 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
  * can be used if this file is lost
  */
 {
-    wxString FullFileNameCmp, mask;
-    FILE*    FichCmp;
-    char     Line[1024];
-    MODULE*  Module = GetBoard()->m_Modules;
-    wxString msg;
+    wxFileName fn;
+    FILE*      FichCmp;
+    char       Line[1024];
+    MODULE*    Module = GetBoard()->m_Modules;
+    wxString   msg;
+    wxString   wildcard;
 
     if( Module == NULL )
     {
@@ -623,33 +635,31 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
     }
 
     /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
-    FullFileNameCmp = GetScreen()->m_FileName;
-    ChangeFileNameExt( FullFileNameCmp, NetCmpExtBuffer );
+    fn = GetScreen()->m_FileName;
+    fn.SetExt( NetCmpExtBuffer );
+    wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) +
+        NetCmpExtBuffer;
 
-    mask = wxT( "*" ) + NetCmpExtBuffer;
-    FullFileNameCmp = EDA_FileSelector( _( "Cmp files:" ),
-                                        wxEmptyString,      /* Chemin par defaut */
-                                        FullFileNameCmp,    /* nom fichier par defaut */
-                                        NetCmpExtBuffer,    /* extension par defaut */
-                                        mask,               /* Masque d'affichage */
-                                        this,
-                                        wxFD_SAVE,
-                                        FALSE
-                                        );
-    if( FullFileNameCmp.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save Component Files" ), wxEmptyString,
+                      fn.GetFullName(), wildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    fn = dlg.GetPath();
 
-    FichCmp = wxFopen( FullFileNameCmp, wxT( "wt" ) );
+    FichCmp = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
     if( FichCmp == NULL )
     {
-        msg = _( "Unable to create file " ) + FullFileNameCmp;
+        msg = _( "Unable to create file " ) + fn.GetFullPath();
         DisplayError( this, msg );
         return;
     }
 
     fgets( Line, sizeof(Line), FichCmp );
-    fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n", DateAndTime( Line ) );
+    fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n",
+             DateAndTime( Line ) );
 
     for( ; Module != NULL; Module = Module->Next() )
     {
@@ -662,7 +672,8 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
         fprintf( FichCmp, "ValeurCmp = %s;\n",
                  !Module->m_Value->m_Text.IsEmpty() ?
                  CONV_TO_UTF8( Module->m_Value->m_Text ) : "[NoVal]" );
-        fprintf( FichCmp, "IdModule  = %s;\n", CONV_TO_UTF8( Module->m_LibRef ) );
+        fprintf( FichCmp, "IdModule  = %s;\n",
+                 CONV_TO_UTF8( Module->m_LibRef ) );
         fprintf( FichCmp, "EndCmp\n" );
     }
 

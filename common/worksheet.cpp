@@ -11,11 +11,910 @@
 #include "drawtxt.h"
 #include "confirm.h"
 #include "wxstruct.h"
+#include "appl_wxstruct.h"
 #include "worksheet.h"
 
 
 /* Must be defined in main applications: */
-extern wxString g_Main_Title;
+
+Ki_WorkSheetData WS_Date =
+{
+	WS_DATE,
+	&WS_Licence,
+	BLOCK_DATE_X, BLOCK_DATE_Y,
+	0,0,
+#if defined(KICAD_GOST)
+	NULL, NULL
+#else
+ 	wxT("Date: "), NULL
+#endif
+};
+
+Ki_WorkSheetData WS_Licence =
+{
+	WS_KICAD_VERSION,
+	&WS_Revision,
+	BLOCK_KICAD_VERSION_X, BLOCK_KICAD_VERSION_Y,
+	0,0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Revision =
+{
+	WS_REV,
+	&WS_SizeSheet,
+#if defined(KICAD_GOST)
+	STAMP_X_185 - 30, STAMP_Y_30 + 90,
+#else
+ 	BLOCK_REV_X, BLOCK_REV_Y,
+#endif
+ 	0,0,
+#if defined(KICAD_GOST)
+	NULL, NULL
+#else
+ 	wxT("Rev: "), NULL
+#endif
+};
+
+Ki_WorkSheetData WS_SizeSheet =
+{
+	WS_SIZESHEET,
+#if defined(KICAD_GOST)
+	&WS_Title,
+	BLOCK_SIZE_SHEET_X, BLOCK_SIZE_SHEET_Y,
+	0,0,
+	NULL, NULL
+};
+#else
+&WS_IdentSheet,
+	BLOCK_SIZE_SHEET_X, BLOCK_SIZE_SHEET_Y,
+	0,0,
+	wxT("Size: "),NULL
+	};
+
+Ki_WorkSheetData WS_IdentSheet =
+{
+	WS_IDENTSHEET,
+	&WS_Title,
+	BLOCK_ID_SHEET_X, BLOCK_ID_SHEET_Y,
+	0,0,
+	wxT("Id: "),NULL
+};
+#endif
+
+Ki_WorkSheetData WS_Title =
+{
+	WS_TITLE,
+	&WS_SheetFilename,
+	BLOCK_TITLE_X, BLOCK_TITLE_Y,
+	0,0,
+#if defined(KICAD_GOST)
+	NULL, NULL
+#else
+	wxT("Title: "),NULL
+#endif
+};
+
+Ki_WorkSheetData WS_SheetFilename =
+{
+	WS_FILENAME,
+	&WS_FullSheetName,
+	BLOCK_FILENAME_X, BLOCK_FILENAME_Y,
+	0,0,
+	wxT("File: "),NULL
+};
+
+Ki_WorkSheetData WS_FullSheetName =
+{
+	WS_FULLSHEETNAME,
+	&WS_Company,
+	BLOCK_FULLSHEETNAME_X, BLOCK_FULLSHEETNAME_Y,
+	0,0,
+	wxT("Sheet: "),NULL
+};
+
+Ki_WorkSheetData WS_Company =
+{
+	WS_COMPANY_NAME,
+	&WS_Comment1,
+	BLOCK_COMMENT_X, BLOCK_COMPANY_Y,
+	0,0,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Comment1 =
+{
+	WS_COMMENT1,
+	&WS_Comment2,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_OY,
+	STAMP_OX, 0,
+#else
+	BLOCK_COMMENT_X, BLOCK_COMMENT1_Y,
+	0,0,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Comment2 =
+{
+	WS_COMMENT2,
+	&WS_Comment3,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_OY,
+	STAMP_OX, 0,
+#else
+	BLOCK_COMMENT_X, BLOCK_COMMENT2_Y,
+	0,0,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Comment3 =
+{
+	WS_COMMENT3,
+	&WS_Comment4,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_OY,
+	STAMP_OX, 0,
+#else
+	BLOCK_COMMENT_X, BLOCK_COMMENT3_Y,
+	0,0,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Comment4 =
+{
+	WS_COMMENT4,
+	&WS_MostLeftLine,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_OY,
+	STAMP_OX, 0,
+#else
+	BLOCK_COMMENT_X, BLOCK_COMMENT4_Y,
+	0,0,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_MostLeftLine =   /* segment vertical gauche */
+{
+	WS_LEFT_SEGMENT,
+#if defined(KICAD_GOST)
+	&WS_MostUpperLine,
+	STAMP_OX, STAMP_OY,
+	STAMP_OX, 0,
+#else
+	&WS_SeparatorLine,
+	BLOCK_OX, SIZETEXT * 16,
+	BLOCK_OX, 0,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_SeparatorLine =	/* horizontal segment between filename and comments*/
+{
+	WS_SEGMENT,
+	&WS_MostUpperLine,
+	BLOCK_OX, VARIABLE_BLOCK_START_POSITION,
+	0, VARIABLE_BLOCK_START_POSITION,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_MostUpperLine =	/* segment horizontal superieur */
+{
+	WS_UPPER_SEGMENT,
+	&WS_Segm3,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_OY,
+	0, STAMP_OY,
+#else
+	BLOCK_OX, SIZETEXT * 16,
+	0, SIZETEXT * 16,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm3 =		/* segment horizontal au dessus de NAME COMPANY */
+{
+	WS_SEGMENT,
+	&WS_Segm4,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_Y_50,
+	STAMP_X_120, STAMP_Y_50,
+#else
+	BLOCK_OX, SIZETEXT * 6,
+	0, SIZETEXT * 6,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm4 =		/* segment vertical a gauche de SHEET et REV */
+{
+	WS_SEGMENT,
+	&WS_Segm5,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_Y_45,
+	STAMP_X_120, STAMP_Y_45,
+#else
+	BLOCK_REV_X + SIZETEXT, SIZETEXT * 4,
+	BLOCK_REV_X + SIZETEXT, 0,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm5 =		/* 1er segment horizontal */
+{
+	WS_SEGMENT,
+	&WS_Segm6,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_Y_40,
+	0, STAMP_Y_40,
+#else
+	BLOCK_OX, SIZETEXT * 2,
+	0, SIZETEXT * 2,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm6 =		/* 2eme segment horizontal */
+{
+	WS_SEGMENT,
+	&WS_Segm7,
+#if defined(KICAD_GOST)
+	STAMP_OX, STAMP_Y_35,
+	STAMP_X_120, STAMP_Y_35,
+#else
+	BLOCK_OX, SIZETEXT * 4,
+	0, SIZETEXT * 4,
+#endif
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm7 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+#if defined(KICAD_GOST)
+	&WS_Segm8,
+	STAMP_X_50, STAMP_Y_35,
+	0, STAMP_Y_35,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm8 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm9,
+	STAMP_OX, STAMP_Y_30,
+	STAMP_X_120, STAMP_Y_30,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm9 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm10,
+	STAMP_OX, STAMP_Y_25,
+	STAMP_X_120, STAMP_Y_25,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm10 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm11,
+	STAMP_OX, STAMP_Y_20,
+	STAMP_X_120, STAMP_Y_20,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm11 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm12,
+	STAMP_X_50, STAMP_Y_20,
+	0, STAMP_Y_20,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm12 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm13,
+	STAMP_OX, STAMP_Y_15,
+	0, STAMP_Y_15,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm13 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm14,
+	STAMP_OX, STAMP_Y_10,
+	STAMP_X_120, STAMP_Y_10,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm14 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm15,
+	STAMP_OX, STAMP_Y_5,
+	STAMP_X_120, STAMP_Y_5,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm15 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm16,
+	STAMP_X_178, STAMP_OY,
+	STAMP_X_178, STAMP_Y_30,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm16 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm17,
+	STAMP_X_168, STAMP_OY,
+	STAMP_X_168, 0,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm17 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm18,
+	STAMP_X_145, STAMP_OY,
+	STAMP_X_145, 0,
+ 	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm18 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm19,
+	STAMP_X_130, STAMP_OY,
+	STAMP_X_130, 0,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm19 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm20,
+	STAMP_X_120, STAMP_OY,
+	STAMP_X_120, 0,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm20 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm21,
+	STAMP_X_50, STAMP_Y_40,
+	STAMP_X_50, 0,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm21 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm22,
+	STAMP_X_45, STAMP_Y_35,
+	STAMP_X_45, STAMP_Y_20,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm22 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm23,
+	STAMP_X_40, STAMP_Y_35,
+	STAMP_X_40, STAMP_Y_20,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm23 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm24,
+	STAMP_X_35, STAMP_Y_40,
+	STAMP_X_35, STAMP_Y_20,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm24 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Segm25,
+	STAMP_X_30, STAMP_Y_20,
+	STAMP_X_30, STAMP_Y_15,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Segm25 =		/* segment vertical apres SIZE */
+{
+	WS_SEGMENT,
+	&WS_Izm,
+	STAMP_X_18, STAMP_Y_40,
+	STAMP_X_18, STAMP_Y_20,
+	NULL,NULL
+};
+
+Ki_WorkSheetData WS_Izm =
+{
+	WS_PODPIS,
+	&WS_Razr,
+	STAMP_X_185 - 30,STAMP_Y_30 + 90,
+	0,0,
+	wxT("§ª§Ù§Þ."), NULL
+};
+
+Ki_WorkSheetData WS_Razr =
+{
+	WS_PODPIS,
+	&WS_Prov,
+	STAMP_X_185 - 30,STAMP_Y_25 + 90,
+	0,0,
+	wxT("§²§Ñ§Ù§â§Ñ§Ò."), NULL
+};
+
+Ki_WorkSheetData WS_Prov =
+{
+	WS_PODPIS,
+	&WS_TKon,
+	STAMP_X_185 - 30,STAMP_Y_20 + 90,
+	0,0,
+	wxT("§±§â§à§Ó."), NULL
+};
+
+Ki_WorkSheetData WS_TKon =
+{
+	WS_PODPIS,
+	&WS_NKon,
+	STAMP_X_185 - 30,STAMP_Y_15 + 90,
+	0,0,
+	wxT("§´.§Ü§à§ß§ä§â."), NULL
+};
+
+Ki_WorkSheetData WS_NKon =
+{
+	WS_PODPIS,
+	&WS_Utv,
+	STAMP_X_185 - 30,STAMP_Y_5 + 90,
+	0,0,
+	wxT("§¯.§Ü§à§ß§ä§â."), NULL
+};
+
+Ki_WorkSheetData WS_Utv =
+{
+	WS_PODPIS,
+	&WS_List,
+	STAMP_X_185 - 30,STAMP_Y_0 + 90,
+	0,0,
+	wxT("§µ§ä§Ó."), NULL
+};
+
+Ki_WorkSheetData WS_List =
+{
+	WS_PODPIS,
+	&WS_NDoc,
+	STAMP_X_178 - 30,STAMP_Y_30 + 90,
+	0,0,
+	wxT("§­§Ú§ã§ä"), NULL
+};
+
+Ki_WorkSheetData WS_NDoc =
+{
+	WS_PODPIS,
+	&WS_Podp,
+	STAMP_X_168 - 30,STAMP_Y_30 + 90,
+	0,0,
+	wxT("N §Õ§à§Ü§å§Þ."), NULL
+};
+
+Ki_WorkSheetData WS_Podp =
+{
+	WS_PODPIS,
+	&WS_Data,
+	STAMP_X_145 - 30,STAMP_Y_30 + 90,
+	0,0,
+	wxT("§±§à§Õ§á."), NULL
+};
+
+Ki_WorkSheetData WS_Data =
+{
+	WS_PODPIS,
+	&WS_Art,
+	STAMP_X_130 - 30,STAMP_Y_30 + 90,
+	0,0,
+	wxT("§¥§Ñ§ä§Ñ"), NULL
+};
+
+Ki_WorkSheetData WS_Art =
+{
+	WS_PODPIS,
+	&WS_Mass,
+	STAMP_X_50 - 30,STAMP_Y_35 + 90,
+	0,0,
+	wxT("§¡§â§ä."), NULL
+};
+
+Ki_WorkSheetData WS_Mass =
+{
+	WS_PODPIS,
+	&WS_Msht,
+	STAMP_X_35 - 30,STAMP_Y_35 + 90,
+	0,0,
+	wxT("§®§Ñ§ã§ã§Ñ"), NULL
+};
+
+Ki_WorkSheetData WS_Msht =
+{
+	WS_PODPIS,
+	&WS_List1,
+	STAMP_X_18 - 30,STAMP_Y_35 + 90,
+	0,0,
+	wxT("§®§Ñ§ã§ê§ä§Ñ§Ò"), NULL
+};
+
+Ki_WorkSheetData WS_List1 =
+{
+	WS_IDENTSHEET,
+	&WS_List2,
+	STAMP_X_50 - 30,STAMP_Y_15 + 90,
+	0,0,
+	wxT("§­§Ú§ã§ä "), NULL
+};
+
+Ki_WorkSheetData WS_List2 =
+{
+	WS_SHEETS,
+	NULL,
+	STAMP_X_30 - 30,STAMP_Y_15 + 90,
+	0,0,
+	wxT("§­§Ú§ã§ä§à§Ó "), NULL
+};
+
+Ki_WorkSheetData WS_CADRE_D =
+{
+	WS_CADRE,
+	&WS_Segm1_D,
+	STAMP_OX, 0,
+	0,0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm1_D =
+{
+	WS_LEFT_SEGMENT_D,
+	&WS_Segm2_D,
+	STAMP_OX, STAMP_Y_15,
+	STAMP_OX, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm2_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm3_D,
+	STAMP_X_178, STAMP_Y_15,
+	STAMP_X_178, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm3_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm4_D,
+	STAMP_X_168, STAMP_Y_15,
+	STAMP_X_168, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm4_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm5_D,
+	STAMP_X_145, STAMP_Y_15,
+	STAMP_X_145, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm5_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm6_D,
+	STAMP_X_130, STAMP_Y_15,
+	STAMP_X_130, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm6_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm7_D,
+	STAMP_X_120, STAMP_Y_15,
+	STAMP_X_120, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm7_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm8_D,
+	STAMP_X_10, STAMP_Y_15,
+	STAMP_X_10, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm8_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm9_D,
+	STAMP_X_185, STAMP_Y_10,
+	STAMP_X_120, STAMP_Y_10,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm9_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm10_D,
+	STAMP_X_185, STAMP_Y_5,
+	STAMP_X_120, STAMP_Y_5,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm10_D =
+{
+	WS_SEGMENT_D,
+	&WS_Segm11_D,
+	STAMP_X_10, STAMP_Y_8,
+	0, STAMP_Y_8,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm11_D =
+{
+	WS_SEGMENT_D,
+	&WS_Izm_D,
+	STAMP_X_185, STAMP_Y_15,
+	0, STAMP_Y_15,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Izm_D =
+{
+	WS_PODPIS_D,
+	&WS_List_D,
+	STAMP_X_185 - 30, STAMP_Y_0 + 90,
+	0, 0,
+	wxT("§ª§Ù§Þ."), NULL
+};
+
+Ki_WorkSheetData WS_List_D =
+{
+	WS_PODPIS_D,
+	&WS_NDoc_D,
+	STAMP_X_178 - 30, STAMP_Y_0 + 90,
+	0, 0,
+	wxT("§­§Ú§ã§ä"), NULL
+};
+
+Ki_WorkSheetData WS_NDoc_D =
+{
+	WS_PODPIS_D,
+	&WS_Podp_D,
+	STAMP_X_168 - 30, STAMP_Y_0 + 90,
+	0, 0,
+	wxT("N §Õ§à§Ü§å§Þ."), NULL
+};
+
+Ki_WorkSheetData WS_Podp_D =
+{
+	WS_PODPIS_D,
+	&WS_Date_D,
+	STAMP_X_145 - 30, STAMP_Y_0 + 90,
+	0, 0,
+	wxT("§±§à§Õ§á."), NULL
+};
+
+Ki_WorkSheetData WS_Date_D =
+{
+	WS_PODPIS_D,
+	&WS_List1_D,
+	STAMP_X_130 - 30, STAMP_Y_0 + 90,
+	0, 0,
+	wxT("§¥§Ñ§ä§Ñ"), NULL
+};
+
+Ki_WorkSheetData WS_List1_D =
+{
+	WS_PODPIS_D,
+	&WS_ListN_D,
+	STAMP_X_10 - 30, STAMP_Y_8 + 90,
+	0, 0,
+	wxT("§­§Ú§ã§ä"), NULL
+};
+
+Ki_WorkSheetData WS_ListN_D =
+{
+	WS_IDENTSHEET_D,
+	NULL,
+	STAMP_Y_0 + 196, STAMP_Y_0 + 90,
+	0, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm1_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm2_LU,
+	STAMP_12, STAMP_145,
+	STAMP_12, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm2_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm3_LU,
+	STAMP_7, STAMP_145,
+	STAMP_7, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm3_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm4_LU,
+	STAMP_12, STAMP_145,
+	0, STAMP_145,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm4_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm5_LU,
+	STAMP_12, STAMP_110,
+	0, STAMP_110,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm5_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm6_LU,
+	STAMP_12, STAMP_85,
+	0, STAMP_85,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm6_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm7_LU,
+	STAMP_12, STAMP_60,
+	0, STAMP_60,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm7_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Segm8_LU,
+	STAMP_12, STAMP_25,
+	0, STAMP_25,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm8_LU =
+{
+	WS_SEGMENT_LU,
+	&WS_Podp1_LU,
+	STAMP_12, 0,
+	0, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Podp1_LU =
+{
+	WS_PODPIS_LU,
+	&WS_Podp2_LU,
+	STAMP_7 + 90, 0 + 30,
+	0, 0,
+	wxT("§ª§ß§Ó.N §á§à§Õ§Ý."), NULL
+};
+
+Ki_WorkSheetData WS_Podp2_LU =
+{
+	WS_PODPIS_LU,
+	&WS_Podp3_LU,
+	STAMP_7 + 90, STAMP_25 + 30,
+	0, 0,
+	wxT("§±§à§Õ§á. §Ú §Õ§Ñ§ä§Ñ"), NULL
+};
+
+Ki_WorkSheetData WS_Podp3_LU =
+{
+	WS_PODPIS_LU,
+	&WS_Podp4_LU,
+	STAMP_7 + 90, STAMP_60 + 30,
+	0, 0,
+	wxT("§£§Ù§Ñ§Þ.§Ú§ß§Ó.N"), NULL
+};
+
+Ki_WorkSheetData WS_Podp4_LU =
+{
+	WS_PODPIS_LU,
+	&WS_Podp5_LU,
+	STAMP_7 + 90, STAMP_85 + 30,
+	0, 0,
+	wxT("§ª§ß§Ó.N §Õ§å§Ò§Ý."), NULL
+};
+
+Ki_WorkSheetData WS_Podp5_LU =
+{
+	WS_PODPIS_LU,
+	NULL,
+	STAMP_7 + 90, STAMP_110 + 30,
+	0, 0,
+	wxT("§±§à§Õ§á. §Ú §Õ§Ñ§ä§Ñ"), NULL
+};
+
+Ki_WorkSheetData WS_Segm1_LT =
+{
+	WS_SEGMENT_LT,
+	&WS_Segm2_LT,
+	STAMP_X_0, STAMP_Y_14,
+	STAMP_X_137, STAMP_Y_14,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm2_LT =
+{
+	WS_SEGMENT_LT,
+	&WS_Segm3_LT,
+	STAMP_X_137, STAMP_Y_14,
+	STAMP_X_137, 0,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm3_LT =
+{
+	WS_SEGMENT_LT,
+	&WS_Segm4_LT,
+	STAMP_X_137, STAMP_Y_7,
+	STAMP_X_84, STAMP_Y_7,
+	NULL, NULL
+};
+
+Ki_WorkSheetData WS_Segm4_LT =
+{
+	WS_SEGMENT_LT,
+	&WS_Segm5_LT,
+	STAMP_X_84, STAMP_Y_14,
+	STAMP_X_84, 0,
+	NULL, NULL
+};
+Ki_WorkSheetData WS_Segm5_LT =
+{
+	WS_SEGMENT_LT,
+	NULL,
+	STAMP_X_70, STAMP_Y_14,
+	STAMP_X_70, 0,
+#else
+	NULL,
+	BLOCK_OX - (SIZETEXT * 11), SIZETEXT * 4,
+	BLOCK_OX - (SIZETEXT * 11), SIZETEXT * 2,
+#endif
+	NULL, NULL
+};
 
 /*************************************************************************************/
 void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width )
@@ -46,17 +945,17 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     if( Sheet == NULL )
     {
         DisplayError( this,
-            wxT( "WinEDA_DrawFrame::TraceWorkSheet() error: NULL Sheet" ) );
+                      wxT( "WinEDA_DrawFrame::TraceWorkSheet() error: NULL Sheet" ) );
         return;
     }
 
     // if not printing, draw the page limits:
-    if( !g_IsPrinting & g_ShowPageLimits )
+    if( !screen->m_IsPrinting & g_ShowPageLimits )
     {
         GRSetDrawMode( DC, GR_COPY );
         GRRect( &DrawPanel->m_ClipBox, DC, 0, 0,
-            Sheet->m_Size.x * scale, Sheet->m_Size.y * scale, width,
-            g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
+                Sheet->m_Size.x * scale, Sheet->m_Size.y * scale, width,
+                g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
     GRSetDrawMode( DC, GR_COPY );
@@ -68,13 +967,13 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
 
 #if defined(KICAD_GOST)
     GRRect( &DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
-	xg * scale, yg * scale, width, Color );
+            xg * scale, yg * scale, width, Color );
 
 #else
     for( ii = 0; ii < 2; ii++ )
     {
         GRRect( &DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
-            xg * scale, yg * scale, width, Color );
+                xg * scale, yg * scale, width, Color );
 
         refx += GRID_REF_W; refy += GRID_REF_W;
         xg   -= GRID_REF_W; yg -= GRID_REF_W;
@@ -87,42 +986,42 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     refy = Sheet->m_Size.y - Sheet->m_BottomMargin; /* Lower left corner */
     for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
     {
-	pos.x = (refx - WsItem->m_Posx)* scale;
-	pos.y = (refy - WsItem->m_Posy)* scale;
-	msg.Empty();
-	switch( WsItem->m_Type )
-	{
+        pos.x = (refx - WsItem->m_Posx)* scale;
+        pos.y = (refy - WsItem->m_Posy)* scale;
+        msg.Empty();
+        switch( WsItem->m_Type )
+        {
 	    case WS_CADRE:
-		break;
+            break;
 	    case WS_PODPIS_LU:
-		if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		DrawGraphicText(DrawPanel, DC, pos, Color,
-				msg, TEXT_ORIENT_VERT, size,
-				GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,width);
-		break;
+            if(WsItem->m_Legende) msg = WsItem->m_Legende;
+            DrawGraphicText(DrawPanel, DC, pos, Color,
+                            msg, TEXT_ORIENT_VERT, size,
+                            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,width);
+            break;
 	    case WS_SEGMENT_LU:
-		xg = Sheet->m_LeftMargin - WsItem->m_Endx;
-		yg = Sheet->m_Size.y - Sheet->m_BottomMargin - WsItem->m_Endy;
-		GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
-			xg * scale, yg * scale, width, Color);
-		break;
-	}
+            xg = Sheet->m_LeftMargin - WsItem->m_Endx;
+            yg = Sheet->m_Size.y - Sheet->m_BottomMargin - WsItem->m_Endy;
+            GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+                   xg * scale, yg * scale, width, Color);
+            break;
+        }
     }
     refy = Sheet->m_BottomMargin; /* Left Top corner */
     for( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
     {
-	pos.x = (refx + WsItem->m_Posx)* scale;
-	pos.y = (refy + WsItem->m_Posy)* scale;
-	msg.Empty();
-	switch( WsItem->m_Type )
-	{
+        pos.x = (refx + WsItem->m_Posx)* scale;
+        pos.y = (refy + WsItem->m_Posy)* scale;
+        msg.Empty();
+        switch( WsItem->m_Type )
+        {
 	    case WS_SEGMENT_LT:
-		xg = Sheet->m_LeftMargin + WsItem->m_Endx;
-		yg = Sheet->m_BottomMargin + WsItem->m_Endy;
-		GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
-			xg * scale, yg * scale, width, Color);
-		break;
-	}
+            xg = Sheet->m_LeftMargin + WsItem->m_Endx;
+            yg = Sheet->m_BottomMargin + WsItem->m_Endy;
+            GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+                   xg * scale, yg * scale, width, Color);
+            break;
+        }
     }
 #else
     refy = Sheet->m_TopMargin;                      /* Upper left corner */
@@ -138,23 +1037,25 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
         if( ii < xg - PAS_REF / 2 )
         {
             GRLine( &DrawPanel->m_ClipBox, DC, ii * scale, refy * scale,
-                ii * scale, (refy + GRID_REF_W) * scale, width, Color );
+                    ii * scale, (refy + GRID_REF_W) * scale, width, Color );
         }
         DrawGraphicText( DrawPanel, DC,
-            wxPoint( (ii - gxpas / 2) * scale, (refy + GRID_REF_W / 2) * scale ),
-            Color,
-            Line, TEXT_ORIENT_HORIZ, size_ref,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width );
+                         wxPoint( (ii - gxpas / 2) * scale, (refy + GRID_REF_W / 2) * scale ),
+                         Color,
+                         Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         width );
         if( ii < xg - PAS_REF / 2 )
         {
             GRLine( &DrawPanel->m_ClipBox, DC, ii * scale, yg * scale,
-                ii * scale, (yg - GRID_REF_W) * scale, width, Color );
+                    ii * scale, (yg - GRID_REF_W) * scale, width, Color );
         }
         DrawGraphicText( DrawPanel, DC,
-            wxPoint( (ii - gxpas / 2) * scale, (yg - GRID_REF_W / 2) * scale ),
-            Color,
-            Line, TEXT_ORIENT_HORIZ, size_ref,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width );
+                         wxPoint( (ii - gxpas / 2) * scale,
+                                  (yg - GRID_REF_W / 2) * scale ),
+                         Color, Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         width );
     }
 
     /* Trace des reperes selon l'axe Y */
@@ -170,23 +1071,26 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
         if( ii < yg - PAS_REF / 2 )
         {
             GRLine( &DrawPanel->m_ClipBox, DC, refx * scale, ii * scale,
-                (refx + GRID_REF_W) * scale, ii * scale, width, Color );
+                    (refx + GRID_REF_W) * scale, ii * scale, width, Color );
         }
         DrawGraphicText( DrawPanel, DC,
-            wxPoint( (refx + GRID_REF_W / 2) * scale, (ii - gypas / 2) * scale ),
-            Color,
-            Line, TEXT_ORIENT_HORIZ, size_ref,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width );
+                         wxPoint( (refx + GRID_REF_W / 2) * scale,
+                                  (ii - gypas / 2) * scale ),
+                         Color,
+                         Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         width );
         if( ii < yg - PAS_REF / 2 )
         {
             GRLine( &DrawPanel->m_ClipBox, DC, xg * scale, ii * scale,
-                (xg - GRID_REF_W) * scale, ii * scale, width, Color );
+                    (xg - GRID_REF_W) * scale, ii * scale, width, Color );
         }
         DrawGraphicText( DrawPanel, DC,
-            wxPoint( (xg - GRID_REF_W / 2) * scale, (ii - gxpas / 2) * scale ),
-            Color,
-            Line, TEXT_ORIENT_HORIZ, size_ref,
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, width );
+                         wxPoint( (xg - GRID_REF_W / 2) * scale,
+                                  (ii - gxpas / 2) * scale ),
+                         Color, Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         width );
     }
 #endif
 
@@ -196,104 +1100,108 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     refy = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
     if (screen->m_ScreenNumber == 1)
     {
-	for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
-	{
-	    pos.x = (refx - WsItem->m_Posx)* scale;
-	    pos.y = (refy - WsItem->m_Posy)* scale;
-	    msg.Empty();
-	    switch( WsItem->m_Type )
-	    {
-		case WS_DATE:
-		    break;
-		case WS_REV:
-		    break;
-		case WS_KICAD_VERSION:
-		    break;
-		case WS_PODPIS:
-		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    DrawGraphicText(DrawPanel, DC, pos, Color,
-				    msg, TEXT_ORIENT_HORIZ, size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
-		    break;
-		case WS_SIZESHEET:
-		    break;
-		case WS_IDENTSHEET:
-		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    msg << screen->m_ScreenNumber;
-		    DrawGraphicText(DrawPanel, DC, pos, Color,
-				    msg, TEXT_ORIENT_HORIZ, size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
-		    break;
-		case WS_SHEETS:
-		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    msg << screen->m_NumberOfScreen;
-		    DrawGraphicText(DrawPanel, DC, pos, Color,
-				    msg, TEXT_ORIENT_HORIZ, size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width);
-		    break;
-		case WS_COMPANY_NAME:
-		    break;
-		case WS_TITLE:
-		    break;
-		case WS_COMMENT1:
-		    break;
-		case WS_COMMENT2:
-		    break;
-		case WS_COMMENT3:
-		    break;
-		case WS_COMMENT4:
-		    break;
-		case WS_UPPER_SEGMENT:
-		case WS_LEFT_SEGMENT:
-		    WS_MostUpperLine.m_Posy =
-		    WS_MostUpperLine.m_Endy =
-		    WS_MostLeftLine.m_Posy = STAMP_OY;
-		    pos.y = (refy - WsItem->m_Posy)* scale;
-		case WS_SEGMENT:
-		    xg = Sheet->m_Size.x -
-		    Sheet->m_RightMargin - WsItem->m_Endx;
-		    yg = Sheet->m_Size.y -
-		    Sheet->m_BottomMargin - WsItem->m_Endy;
-		    GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
-			    xg * scale, yg * scale, width, Color);
-		    break;
-	    }
-	}
+        for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
+        {
+            pos.x = (refx - WsItem->m_Posx)* scale;
+            pos.y = (refy - WsItem->m_Posy)* scale;
+            msg.Empty();
+            switch( WsItem->m_Type )
+            {
+            case WS_DATE:
+                break;
+            case WS_REV:
+                break;
+            case WS_KICAD_VERSION:
+                break;
+            case WS_PODPIS:
+                if( WsItem->m_Legende )
+                    msg = WsItem->m_Legende;
+                DrawGraphicText( DrawPanel, DC, pos, Color,
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                 width );
+                break;
+            case WS_SIZESHEET:
+                break;
+            case WS_IDENTSHEET:
+                if(WsItem->m_Legende)
+                    msg = WsItem->m_Legende;
+                msg << screen->m_ScreenNumber;
+                DrawGraphicText( DrawPanel, DC, pos, Color, msg,
+                                 TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
+                                 GR_TEXT_VJUSTIFY_CENTER, width);
+                break;
+            case WS_SHEETS:
+                if(WsItem->m_Legende)
+                    msg = WsItem->m_Legende;
+                msg << screen->m_NumberOfScreen;
+                DrawGraphicText( DrawPanel, DC, pos, Color, msg,
+                                 TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
+                                 GR_TEXT_VJUSTIFY_CENTER, width);
+                break;
+            case WS_COMPANY_NAME:
+                break;
+            case WS_TITLE:
+                break;
+            case WS_COMMENT1:
+                break;
+            case WS_COMMENT2:
+                break;
+            case WS_COMMENT3:
+                break;
+            case WS_COMMENT4:
+                break;
+            case WS_UPPER_SEGMENT:
+            case WS_LEFT_SEGMENT:
+                WS_MostUpperLine.m_Posy =
+                    WS_MostUpperLine.m_Endy =
+                    WS_MostLeftLine.m_Posy = STAMP_OY;
+                pos.y = (refy - WsItem->m_Posy)* scale;
+            case WS_SEGMENT:
+                xg = Sheet->m_Size.x -
+                    Sheet->m_RightMargin - WsItem->m_Endx;
+                yg = Sheet->m_Size.y -
+                    Sheet->m_BottomMargin - WsItem->m_Endy;
+                GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+                       xg * scale, yg * scale, width, Color);
+                break;
+            }
+        }
     } else {
-	for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
-	{
-	    pos.x = (refx - WsItem->m_Posx)* scale;
-	    pos.y = (refy - WsItem->m_Posy)* scale;
-	    msg.Empty();
-	    switch( WsItem->m_Type )
-	    {
-		case WS_CADRE:
-		/* Begin list number > 1 */
-		case WS_PODPIS_D:
-		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    DrawGraphicText(DrawPanel, DC, pos, Color,
-				    msg, TEXT_ORIENT_HORIZ, size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
-		    break;
-		case WS_IDENTSHEET_D:
-		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    msg << screen->m_ScreenNumber;
-		    DrawGraphicText(DrawPanel, DC, pos, Color,
-				    msg, TEXT_ORIENT_HORIZ, size,
-				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
-		    break;
-		case WS_LEFT_SEGMENT_D:
-		    pos.y = (refy - WsItem->m_Posy)* scale;
-		case WS_SEGMENT_D:
-		    xg = Sheet->m_Size.x -
-			    Sheet->m_RightMargin - WsItem->m_Endx;
-		    yg = Sheet->m_Size.y -
-			    Sheet->m_BottomMargin - WsItem->m_Endy;
-		    GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
-			    xg * scale, yg * scale, width, Color);
-		    break;
-	    }
-	}
+        for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
+        {
+            pos.x = (refx - WsItem->m_Posx)* scale;
+            pos.y = (refy - WsItem->m_Posy)* scale;
+            msg.Empty();
+            switch( WsItem->m_Type )
+            {
+            case WS_CADRE:
+                /* Begin list number > 1 */
+            case WS_PODPIS_D:
+                if(WsItem->m_Legende) msg = WsItem->m_Legende;
+                DrawGraphicText(DrawPanel, DC, pos, Color,
+                                msg, TEXT_ORIENT_HORIZ, size,
+                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
+                break;
+            case WS_IDENTSHEET_D:
+                if(WsItem->m_Legende) msg = WsItem->m_Legende;
+                msg << screen->m_ScreenNumber;
+                DrawGraphicText(DrawPanel, DC, pos, Color,
+                                msg, TEXT_ORIENT_HORIZ, size,
+                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
+                break;
+            case WS_LEFT_SEGMENT_D:
+                pos.y = (refy - WsItem->m_Posy)* scale;
+            case WS_SEGMENT_D:
+                xg = Sheet->m_Size.x -
+                    Sheet->m_RightMargin - WsItem->m_Endx;
+                yg = Sheet->m_Size.y -
+                    Sheet->m_BottomMargin - WsItem->m_Endy;
+                GRLine(&DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+                       xg * scale, yg * scale, width, Color);
+                break;
+            }
+        }
     }
 #else
     refx = Sheet->m_Size.x - Sheet->m_RightMargin - GRID_REF_W;
@@ -312,8 +1220,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg = WsItem->m_Legende;
             msg += screen->m_Date;
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
         case WS_REV:
@@ -321,18 +1229,18 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg = WsItem->m_Legende;
             msg += screen->m_Revision;
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
         case WS_KICAD_VERSION:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += g_ProductName + g_Main_Title;
+            msg += g_ProductName + wxGetApp().GetAppName();
             msg += wxT( " " ) + GetBuildVersion();
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
         case WS_SIZESHEET:
@@ -340,8 +1248,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg = WsItem->m_Legende;
             msg += Sheet->m_Name;
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
 
@@ -350,8 +1258,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg = WsItem->m_Legende;
             msg << screen->m_ScreenNumber << wxT( "/" ) << screen->m_NumberOfScreen;
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
         case WS_FILENAME:
@@ -362,18 +1270,18 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg = WsItem->m_Legende;
             msg << fname << wxT( "." ) << fext;
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
         }
-            break;
+        break;
 
         case WS_FULLSHEETNAME:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += GetScreenDesc();
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
 
@@ -384,8 +1292,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
-                    msg, TEXT_ORIENT_HORIZ, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -395,8 +1303,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg = WsItem->m_Legende;
             msg += screen->m_Title;
             DrawGraphicText( DrawPanel, DC, pos, Color,
-                msg, TEXT_ORIENT_HORIZ, size,
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
             break;
 
         case WS_COMMENT1:
@@ -406,8 +1314,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
-                    msg, TEXT_ORIENT_HORIZ, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -419,8 +1327,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
-                    msg, TEXT_ORIENT_HORIZ, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -432,8 +1340,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
-                    msg, TEXT_ORIENT_HORIZ, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -445,8 +1353,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
-                    msg, TEXT_ORIENT_HORIZ, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -458,16 +1366,16 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
         case WS_LEFT_SEGMENT:
             WS_MostUpperLine.m_Posy        =
                 WS_MostUpperLine.m_Endy    =
-                    WS_MostLeftLine.m_Posy = UpperLimit;
+                WS_MostLeftLine.m_Posy = UpperLimit;
             pos.y = (refy - WsItem->m_Posy) * scale;
 
         case WS_SEGMENT:
             xg = Sheet->m_Size.x -
-                 GRID_REF_W - Sheet->m_RightMargin - WsItem->m_Endx;
+                GRID_REF_W - Sheet->m_RightMargin - WsItem->m_Endx;
             yg = Sheet->m_Size.y -
-                 GRID_REF_W - Sheet->m_BottomMargin - WsItem->m_Endy;
+                GRID_REF_W - Sheet->m_BottomMargin - WsItem->m_Endy;
             GRLine( &DrawPanel->m_ClipBox, DC, pos.x, pos.y,
-                xg * scale, yg * scale, width, Color );
+                    xg * scale, yg * scale, width, Color );
             break;
         }
     }
@@ -494,7 +1402,7 @@ wxString WinEDA_DrawFrame::GetXYSheetReferences( BASE_SCREEN* aScreen, const wxP
     if( Sheet == NULL )
     {
         DisplayError( this,
-            wxT( "WinEDA_DrawFrame::GetXYSheetReferences() error: NULL Sheet" ) );
+                      wxT( "WinEDA_DrawFrame::GetXYSheetReferences() error: NULL Sheet" ) );
         return msg;
     }
 

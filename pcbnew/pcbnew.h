@@ -4,12 +4,9 @@
 #ifndef PCBNEW_H
 #define PCBNEW_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include "pcbstruct.h"
 #include "macros.h"
+#include "pcbcommon.h"
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
@@ -48,85 +45,16 @@
 #define NEWPCB     0    /* used for normal load file */
 
 
-eda_global wxArrayString g_LibName_List;    // library list to load
-
-
-#define UNDELETE_STACK_SIZE 10
-eda_global BOARD_ITEM* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Linked list of deleted items
-eda_global int         g_UnDeleteStackPtr;
-
-eda_global bool        g_ShowGrid
-#ifdef MAIN
-= TRUE
-#endif
-;
-
-/* Look up Table for conversion one layer number -> one bit layer mask: */
-eda_global int g_TabOneLayerMask[LAYER_COUNT]
-#if defined MAIN
-= {
-    0x00000001, 0x00000002, 0x00000004, 0x00000008,
-    0x00000010, 0x00000020, 0x00000040, 0x00000080,
-    0x00000100, 0x00000200, 0x00000400, 0x00000800,
-    0x00001000, 0x00002000, 0x00004000, 0x00008000,
-    0x00010000, 0x00020000, 0x00040000, 0x00080000,
-    0x00100000, 0x00200000, 0x00400000, 0x00800000,
-    0x01000000, 0x02000000, 0x04000000, 0x08000000,
-    0x10000000, 0x20000000, 0x40000000, 0x80000000
-}
-
-
-#endif
-;
-
-/* Look up Table for conversion copper layer count -> general copper layer mask: */
-eda_global int g_TabAllCopperLayerMask[NB_COPPER_LAYERS]
-#if defined MAIN
-= {
-    0x0001, 0x8001, 0x8003, 0x8007,
-    0x800F, 0x801F, 0x803F, 0x807F,
-    0x80FF, 0x81FF, 0x83FF, 0x87FF,
-    0x8FFF, 0x9FFF, 0xCFFF, 0xFFFF
-};
-#endif
-;
-
 /* variables */
-
-extern wxString g_Main_Title;
-
-eda_global bool Drc_On
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool g_AutoDeleteOldTrack    /* Allows automatic deletion of the old track after
-                                          * creation of a new track */
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool g_No_Via_Route;
-eda_global bool g_Drag_Pistes_On;
-eda_global bool g_Show_Ratsnest;
-eda_global bool g_Show_Module_Ratsnest;
-eda_global bool g_Show_Pads_Module_in_Move
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool g_Raccord_45_Auto
-#ifdef MAIN
-= TRUE
-#endif
-;
-eda_global bool g_ShowIsolDuringCreateTrack; /* Show clearance while track creation */
-
-/*********************************/
-/* Display options for board items */
-/*********************************/
-
-eda_global DISPLAY_OPTIONS DisplayOpt;
+extern bool        Drc_On;
+extern bool        g_AutoDeleteOldTrack;
+extern bool        g_No_Via_Route;
+extern bool        g_Drag_Pistes_On;
+extern bool        g_Show_Ratsnest;
+extern bool        g_Show_Module_Ratsnest;
+extern bool        g_Show_Pads_Module_in_Move;
+extern bool        g_Raccord_45_Auto;
+extern bool        g_ShowIsolDuringCreateTrack;
 
 /**
  * Function IsModuleLayerVisible
@@ -147,180 +75,50 @@ bool inline IsModuleLayerVisible( int layer ) {
 }
 
 
-eda_global bool            Track_45_Only;   /* Flag pour limiter l'inclinaison
-                                            *  pistes a 45 degres seulement */
-eda_global bool            Segments_45_Only; /* Flag pour limiter l'inclinaison
-                                             *  edge pcb a 45 degres seulement */
-eda_global wxString        PcbExtBuffer     // Board file extension
-#ifdef MAIN
-( wxT( ".brd" ) )
-#endif
-;
-eda_global wxString g_SaveFileName      // File Name for periodic saving
-#ifdef MAIN
-( wxT( "$savepcb" ) )
-#endif
-;
-eda_global wxString NetExtBuffer       // Netlist file extension
-#ifdef MAIN
-( wxT( ".net" ) )
-#endif
-;
-eda_global wxString NetCmpExtBuffer     // cmp/footprint association file extension
-#ifdef MAIN
-( wxT( ".cmp" ) )
-#endif
-;
+extern bool     Track_45_Only;
+extern bool     Segments_45_Only;
+extern wxString g_Shapes3DExtBuffer;
 
-// Gestion de la liste des librairies
-eda_global wxString LibExtBuffer
-#ifdef MAIN
-( wxT( ".mod" ) )
-#endif
-;
-eda_global wxString g_Shapes3DExtBuffer     //3D shape file extension
-#ifdef MAIN
-( wxT( ".wrl" ) )
-#endif
-;
-
-eda_global int g_CurrentVersionPCB
-#ifdef MAIN
-= 1
-#endif
-;
-
-/* A buffer used in some computations (will be removed in next cleanup code, do not use) */
-#define BUFMEMSIZE 256000       /* buffer size (in bytes) */
-eda_global char* buf_work;      /* pointeur sur le buffer de travail */
-eda_global char* adr_lowmem;    /* adresse de base memoire de calcul disponible*/
-eda_global char* adr_himem;     /* adresse haute limite de la memoire disponible*/
-eda_global char* adr_max;       /* adresse haute maxi utilisee pour la memoire */
-
-
-/* variables generales */
-eda_global int    g_TimeOut;            // Timer for automatic saving
-eda_global int    g_SaveTime;           // Time for next saving
-
+/* A buffer used in some computations (will be removed in next cleanup code,
+ * do not use) */
+#define BUFMEMSIZE 256000    /* buffer size (in bytes) */
+extern char*    buf_work;    /* pointeur sur le buffer de travail */
+extern char*    adr_lowmem;  /* adresse de base memoire de calcul disponible*/
+extern char*    adr_himem;   /* adresse haute limite de la memoire disponible*/
+extern char*    adr_max;     /* adresse haute maxi utilisee pour la memoire */
 
 /* Variables used in footprint handling */
-extern int        Angle_Rot_Module;
-eda_global wxSize ModuleTextSize;  /* Default footprint texts size */
-eda_global int    ModuleTextWidth;
-eda_global int    ModuleSegmentWidth;
-eda_global int    Texte_Module_Type;
-
-
-/***********************/
-/* pistes , vias , pads*/
-/***********************/
-
-#define L_MIN_DESSIN 1  /* Min width segments to allow draws with tickness */
-
-// Current designe settings:
-eda_global class EDA_BoardDesignSettings g_DesignSettings;
-
-// Default values for pad editions
-#ifndef GERBVIEW
-#ifdef MAIN
-D_PAD        g_Pad_Master( (MODULE*) NULL );
-
-#else
-extern D_PAD g_Pad_Master;
-#endif
-#endif
-
+extern int      Angle_Rot_Module;
+extern wxSize   ModuleTextSize;  /* Default footprint texts size */
+extern int      ModuleTextWidth;
+extern int      ModuleSegmentWidth;
 
 /* Layer pair for auto routing and switch layers by hotkey */
-eda_global int  Route_Layer_TOP;
-eda_global int  Route_Layer_BOTTOM;
+extern int      Route_Layer_TOP;
+extern int      Route_Layer_BOTTOM;
 
-eda_global int  g_MaxLinksShowed;       // Mxa count links showed in routing
-eda_global bool g_TwoSegmentTrackBuild  // FALSE = 1 segment build, TRUE = 2 45 deg segm build
-#ifdef MAIN
-= TRUE
-#endif
-;
+extern int      g_MaxLinksShowed;   // Max count links showed in routing
+extern bool     g_TwoSegmentTrackBuild;
 
-/* How to handle magnetic pads & tracks: feature to move the pcb cursor on a pad center / track length */
+extern int      g_MagneticPadOption;
+extern int      g_MagneticTrackOption;
+
+/* Variables to handle hightlight nets */
+extern bool     g_HightLigt_Status;
+extern int      g_HightLigth_NetCode;
+
+extern PCB_SCREEN* ScreenModule;    /* Ecran de l'editeur de modules */
+
+extern wxPoint  g_Offset_Module;    /* Offset de trace du modul en depl */
+
+extern wxString g_Current_PadName;  // Last used pad name (pad num)
+
+
 enum MagneticPadOptionValues {
     no_effect,
     capture_cursor_in_track_tool,
     capture_always
 };
-
-eda_global int g_MagneticPadOption
-#ifdef MAIN
-= capture_cursor_in_track_tool
-#endif
-;
-eda_global int g_MagneticTrackOption
-#ifdef MAIN
-= capture_cursor_in_track_tool
-#endif
-;
-/* Variables to handle hightlight nets */
-eda_global bool g_HightLigt_Status;
-eda_global int  g_HightLigth_NetCode
-#ifdef MAIN
-= -1
-#endif
-;
-
-
-/**
- * Used in track creation, a list of track segments currently being created,
- * with the newest track at the end of the list, sorted by new-ness.  e.g. use
- * TRACK->Back() to get the next older track, TRACK->Next() to get the next
- * newer track.
- */
-eda_global DLIST<TRACK> g_CurrentTrackList;
-
-#define g_CurrentTrackSegment   g_CurrentTrackList.GetLast()    ///< most recently created segment
-#define g_FirstTrackSegment     g_CurrentTrackList.GetFirst()   ///< first segment created
-
-eda_global wxString g_ViaType_Name[4]
-#if defined MAIN
-= {
-    _( "??? Via" ),                 // Not used yet
-    _( "Micro Via" ),               // from external layer (TOP or BOTTOM) from the near neightbour inner layer only
-    _( "Blind/Buried Via" ),        // from inner or external to inner or external layer (no restriction)
-    _( "Through Via" )              // Usual via (from TOP to BOTTOM layer only )
-}
-
-
-#endif
-;
-/* couleurs des autres items des empreintes */
-#if defined MAIN
-int                    g_PadCMPColor = RED;
-int                    g_PadCUColor  = GREEN;
-int                    g_AnchorColor = BLUE;
-int                    g_ModuleTextCMPColor = LIGHTGRAY;
-int                    g_ModuleTextCUColor  = MAGENTA;
-int                    g_ModuleTextNOVColor = DARKGRAY;
-#else
-eda_global int         g_ModuleTextCMPColor;
-eda_global int         g_ModuleTextCUColor;
-eda_global int         g_ModuleTextNOVColor;
-eda_global int         g_AnchorColor;
-eda_global int         g_PadCUColor;
-eda_global int         g_PadCMPColor;
-#endif
-
-eda_global PCB_SCREEN* ScreenPcb;       /* Ecran principal */
-eda_global BOARD* g_ModuleEditor_Pcb;   /* board used to edit footprints (used by modedit)*/
-eda_global PCB_SCREEN* ScreenModule;    /* Ecran de l'editeur de modules */
-
-
-/****************************************************/
-/* Gestion du deplacement des modules et des pistes */
-/****************************************************/
-
-eda_global wxPoint  g_Offset_Module;    /* Offset de trace du modul en depl */
-
-/* Pad editing */
-eda_global wxString g_Current_PadName;  // Last used pad name (pad num)
 
 
 #endif /* PCBNEW_H */

@@ -6,12 +6,8 @@
 #ifndef CVSTRUCT_H
 #define CVSTRUCT_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
-
 #include "wx/listctrl.h"
+#include <wx/filename.h>
 
 /*  Forward declarations of all top-level window classes. */
 class FootprintListBox;
@@ -33,6 +29,7 @@ public:
     ListBoxCmp*          m_ListCmp;
     WinEDA_DisplayFrame* DrawFrame;
     WinEDA_Toolbar*      m_HToolBar; // Toolbar horizontal haut d'ecran
+    wxFileName           m_NetlistFileName;
 
     // Constructor and destructor
 public:
@@ -73,8 +70,7 @@ public:
     void            CreateConfigWindow();
     int             SaveNetList( const wxString& FullFileName );
     int             SaveComponentList( const wxString& FullFileName );
-    bool            ReadInputNetList( const wxString& FullFileName );
-    void            ReadNetListe();
+    bool            ReadNetList();
     int             rdpcad();
     int             ReadSchematicNetlist();
     int             ReadFootprintFilterList( FILE* f );
@@ -177,7 +173,7 @@ class WinEDA_DisplayFrame : public WinEDA_BasePcbFrame
 public:
 
 public:
-    WinEDA_DisplayFrame( wxWindow * father,
+    WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
                          const wxString &title,
                          const wxPoint &pos, const wxSize &size,
                          long style = KICAD_DEFAULT_DRAWFRAME_STYLE );

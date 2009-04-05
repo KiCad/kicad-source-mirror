@@ -69,6 +69,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     int     ClipboardSizeX, ClipboardSizeY;
     bool    DrawBlock = FALSE;
     wxRect  DrawArea;
+    BASE_SCREEN* screen = panel->GetScreen();
 
     /* scale is the ratio resolution/internal units */
     float   scale = 82.0 / panel->m_Parent->m_InternalUnits;
@@ -103,7 +104,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
         EDA_Rect tmp = panel->m_ClipBox;
         GRResetPenAndBrush( &dc );
         GRForceBlackPen( s_PlotBlackAndWhite );
-        g_IsPrinting = TRUE;
+        screen->m_IsPrinting = true;
         dc.SetUserScale( scale, scale );
         ClipboardSizeX = dc.MaxX() + 10;
         ClipboardSizeY = dc.MaxY() + 10;
@@ -115,7 +116,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
             dc.SetClippingRegion( DrawArea );
         }
         panel->PrintPage( &dc, Print_Sheet_Ref, -1, false );
-        g_IsPrinting     = FALSE;
+        screen->m_IsPrinting = false;
         panel->m_ClipBox = tmp;
         wxMetafile* mf = dc.Close();
         if( mf )

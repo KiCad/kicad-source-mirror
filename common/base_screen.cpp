@@ -17,6 +17,7 @@
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY( GridArray );
 
+BASE_SCREEN* ActiveScreen = NULL;
 
 /* defines locaux */
 #define CURSOR_SIZE 12  /* taille de la croix du curseur PCB */
@@ -39,6 +40,7 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
     m_UserGridIsON     = FALSE;
     m_Center           = true;
     m_CurrentSheetDesc = &g_Sheet_A4;
+    m_IsPrinting       = false;
 
     InitDatas();
 }
@@ -165,6 +167,20 @@ int BASE_SCREEN::Scale( int coord )
 #endif
 }
 
+double BASE_SCREEN::Scale( double coord )
+{
+#ifdef WX_ZOOM
+    return coord;
+#else
+    if( !m_Zoom )
+        return 0;
+
+    if( !m_ZoomScalar || !m_Zoom )
+        return 0;
+
+    return ( coord * (double) m_ZoomScalar ) / (double) m_Zoom;
+#endif
+}
 
 void BASE_SCREEN::Scale( wxPoint& pt )
 {

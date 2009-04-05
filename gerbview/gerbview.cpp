@@ -2,9 +2,6 @@
 /*			GERBVIEW		 main file			*/
 /************************************************/
 
-#define MAIN
-#define eda_global
-
 #include "fctsys.h"
 #include "common.h"
 #include "appl_wxstruct.h"
@@ -22,15 +19,27 @@
 #include <wx/snglinst.h>
 
 
-wxString g_Main_Title = wxT( "GerbView" );
+wxString g_PhotoFilenameExt;
+wxString g_DrillFilenameExt;
+wxString g_PenFilenameExt;
+
+int      g_DCodesColor;
+int      g_Default_GERBER_Format;
+int      g_Plot_Spot_Mini;        /* Diametre mini de l'ouverture pour */
+int      g_DisplayPolygonsModeSketch;
+
+GERBER*  g_GERBER_List[32];
+
 
 IMPLEMENT_APP( WinEDA_App )
 
+
 bool WinEDA_App::OnInit()
 {
+    wxFileName fn;
     WinEDA_GerberFrame* frame = NULL;
 
-    InitEDA_Appl( wxT( "gerbview" ) );
+    InitEDA_Appl( wxT( "GerbView" ) );
 
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
@@ -57,8 +66,7 @@ bool WinEDA_App::OnInit()
                                      wxSize( 600, 400 ) );
 
     /* Gerbview mainframe title */
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    frame->SetTitle( Title );
+    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
     frame->SetBoard( new BOARD( NULL, frame ) );
 
     SetTopWindow( frame );              // Set GerbView mainframe on top
@@ -67,38 +75,36 @@ bool WinEDA_App::OnInit()
 
     Read_Config();
 
-    if( argc > 1 )
+    if( argc == 0 )
+        return true;
+
+    fn = argv[1];
+    fn.SetExt( g_PhotoFilenameExt );
+
+    if( fn.IsOk() )
     {
-        wxString fileName = MakeFileName( wxEmptyString,
-                                          argv[1],
-                                          g_PhotoFilenameExt );
+        wxClientDC dc( frame->DrawPanel );
+        frame->DrawPanel->PrepareGraphicContext( &dc );
 
-        if( !fileName.IsEmpty() )
+        if( fn.DirExists() )
+            wxSetWorkingDirectory( fn.GetPath() );
+
+        // Load all files specified on the command line.
+        for( int i = 1; i < argc; ++i )
         {
-            wxClientDC dc( frame->DrawPanel );
-            frame->DrawPanel->PrepareGraphicContext( &dc );
+            fn = wxFileName( argv[i] );
+            fn.SetExt( g_PhotoFilenameExt );
 
-            wxString   path = wxPathOnly( fileName );
+            wxLogDebug( wxT( "Opening file <%s> in GerbView." ),
+                        fn.GetFullPath().c_str() );
 
-            if( path != wxEmptyString )
-                wxSetWorkingDirectory( path );
-
-            // Load all files specified on the command line.
-            for( int i = 1;  i<argc;  ++i )
+            if( fn.FileExists() )
             {
-                fileName = MakeFileName( wxEmptyString,
-                                         argv[i],
-                                         g_PhotoFilenameExt );
-
-                if( wxFileExists( fileName ) )
-                {
-                    ( (PCB_SCREEN*) frame->GetScreen() )->
-                        m_Active_Layer = i - 1;
-                    frame->LoadOneGerberFile( fileName, &dc, FALSE );
-                }
+                ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = i - 1;
+                frame->LoadOneGerberFile( fn.GetFullPath(), &dc, FALSE );
             }
         }
     }
 
-    return TRUE;
+    return true;
 }

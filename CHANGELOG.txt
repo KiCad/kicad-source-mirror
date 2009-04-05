@@ -4,10 +4,55 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-xxx-xx UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++All
+  * Removed all instances #ifdef eda_global, COMMON_GLOBL, and MAIN in order
+    to unobfuscate global variables.
+  * Moved global variables common to all applications into common.cpp.
+  * Moved global variables common to Pcbnew, Gerbview, and Cvpcb into
+    pcbcommon.cpp.
+  * Create pcbcommon library to prevent compiling shared PCB drawing object
+    files multiple times.
+  * Replaced round() with wxRound and eliminate MSVC specific implementation.
+  * Moved project configuration files into the application class.
+  * Moved editor name global variable into the application class.
+  * Created load and save settings methods for basic frame class and begin
+    putting global variables in the class where they are used.
+  * Start replacing obsolete wxWidgets file functions and redundant Kicad
+    file name manipulation code with wxFileName.
+  * Initial library search path implementation using wxPathList.
+  * Define correct wxFileDialog wild cards.
+  * Apply patch Fix typo in about box to keep MAC folks happy.
+  * Lots of general code clean up, spelling error fixes, and uncrustification.
+  * Renamed Affiche_Status_Box to UpdateStatusBar.
+++EESchema
+  * Defined Load() method so library file drawing objects can load themselves.
+  * Defined GetBoundingBox() method so library file drawing objects can
+    calculate their own bounding box.
+  * Fix arc library drawing object bounding box calculation.
+  * Remember last import and export library path in library editor.
+  * Add new library search path support.
+++Kicad
+  * Eliminate the one giant case statement to rule them all command event
+    handler and create per command event handlers.
+++CvPcb
+  * Add new library search path support.
+  * Add message dialogs to prompt user of library file load errors instead of
+    failing silently.
+  * Fix NULL pointer bug were display frame would crash CvPcb when
+    WinEDA_DisplayFrame::Get_Module() could not find foot print module.
+++PcbNew
+  * Add new library search path support.
+  * Add message dialogs to prompt user of library file load errors instead of
+    failing silently.
+
+
 2009-mar-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew:
     added BOM generator (in postprocess menu)
+
 
 2009-mar-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
@@ -24,7 +69,6 @@ email address.
 ================================================================================
 ++pcbnew:
     in DRC: added test pads to holes.
-
 ++Al:
     minor changes.
 
@@ -64,7 +108,6 @@ email address.
 ++pcbnew:
 ++gerbview:
     print,plot: error message displayed when no layer selected.
-
 
 
 2009-Mar-5 UPDATE Vesa Solonen <vesa.solonen@hut.fi>

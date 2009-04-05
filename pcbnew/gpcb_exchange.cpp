@@ -219,8 +219,8 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         iprmcnt++;
     }
 
-    m_Reference->m_Pos.x  = (int) round( ibuf[2] * conv_unit );
-    m_Reference->m_Pos.y  = (int) round( ibuf[3] * conv_unit );;
+    m_Reference->m_Pos.x  = wxRound( ibuf[2] * conv_unit );
+    m_Reference->m_Pos.y  = wxRound( ibuf[3] * conv_unit );;
     m_Reference->m_Orient = ibuf[4] * 900;
 
     // Calculate size: default is 40 mils (400 pcb units)
@@ -264,7 +264,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 if( ii < (params.GetCount() - 2) )
                 {
                     if( params[ii + 2].ToLong( &dim ) )
-                        *list[ii] = (int) round( dim * conv_unit );
+                        *list[ii] = wxRound( dim * conv_unit );
                 }
             }
 
@@ -297,18 +297,18 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             int     rayon = (ibuf[2] + ibuf[3]) / 4; // for and arc: ibuf[3] = ibuf[4]. pcbnew does not know ellipses
             wxPoint centre;
-            centre.x = (int) round( ibuf[0] * conv_unit );
-            centre.y = (int) round( ibuf[1] * conv_unit );
+            centre.x = wxRound( ibuf[0] * conv_unit );
+            centre.y = wxRound( ibuf[1] * conv_unit );
             DrawSegm->m_Start0 = centre;
             int start_angle = ibuf[4] * 10;     // Pcbnew uses 0.1 degrees as units
             start_angle       -= 1800;          // Use normal X axis  as reference
             DrawSegm->m_Angle  = ibuf[5] * 10;  // Angle value is clockwise in gpcb and pcbnew
-            DrawSegm->m_End0.x = (int) round( rayon * conv_unit );
+            DrawSegm->m_End0.x = wxRound( rayon * conv_unit );
             DrawSegm->m_End0.y = 0;
             RotatePoint( &DrawSegm->m_End0, -start_angle );	// Calculate start point coordinate of arc
             DrawSegm->m_End0 += centre;
 
-            DrawSegm->m_Width = (int) round( ibuf[6] * conv_unit );
+            DrawSegm->m_Width = wxRound( ibuf[6] * conv_unit );
             DrawSegm->SetDrawCoord();
             continue;
         }
@@ -330,7 +330,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 {
                     long dim;
                     if( params[ii + 2].ToLong( &dim ) )
-                        ibuf[ii] = (int) round( dim * conv_unit );
+                        ibuf[ii] = wxRound( dim * conv_unit );
                 }
                 else
                     ibuf[ii] = 0;
@@ -381,7 +381,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 {
                     long dim;
                     if( params[ii + 2].ToLong( &dim ) )
-                        ibuf[ii] = (int) round( dim * conv_unit );
+                        ibuf[ii] = wxRound( dim * conv_unit );
                 }
                 else
                     ibuf[ii] = 0;

@@ -74,7 +74,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
 
             if( DrawEntry )
-                DrawEntry->Display_Infos_DrawEntry( this );
+                DrawEntry->DisplayInfo( this );
 
             else
             {
@@ -235,7 +235,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     }
 
     if( DrawEntry )
-        DrawEntry->Display_Infos_DrawEntry( this );
+        DrawEntry->DisplayInfo( this );
     else
         return;
 

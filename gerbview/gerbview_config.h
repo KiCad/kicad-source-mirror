@@ -1,6 +1,6 @@
-	/**********************************************************/
-	/* gerber_config.h : configuration: setup parameters list */
-	/**********************************************************/
+/**********************************************************/
+/** cfg.h : configuration: definition des structures  **/
+/**********************************************************/
 
 #include "param_config.h"
 
@@ -345,7 +345,7 @@ static PARAM_CFG_SETCOLOR ColorDCodesCfg
 static PARAM_CFG_INT HPGLpenNumCfg
 (
 	wxT("HPGLnum"),			/* identification */
-	&HPGL_Pen_Num,		/* Adresse du parametre */
+	&g_HPGL_Pen_Num,		/* Adresse du parametre */
 	1,					/* Valeur par defaut */
 	1, 16				/* Valeurs extremes */
 );
@@ -353,7 +353,7 @@ static PARAM_CFG_INT HPGLpenNumCfg
 static PARAM_CFG_INT HPGLdiamCfg
 (
 	wxT("HPGdiam"),			/* identification */
-	&HPGL_Pen_Diam,			/* Adresse du parametre */
+	&g_HPGL_Pen_Diam,			/* Adresse du parametre */
 	15,					/* Valeur par defaut */
 	0,0xFFFF			/* Valeurs extremes */
 );
@@ -361,7 +361,7 @@ static PARAM_CFG_INT HPGLdiamCfg
 static PARAM_CFG_INT HPGLspeedCfg
 (
 	wxT("HPGLSpd"),			/* identification */
-	&HPGL_Pen_Speed,			/* Adresse du parametre */
+	&g_HPGL_Pen_Speed,			/* Adresse du parametre */
 	25,					/* Valeur par defaut */
 	0,100				/* Valeurs extremes */
 );
@@ -369,7 +369,7 @@ static PARAM_CFG_INT HPGLspeedCfg
 static PARAM_CFG_INT HPGLrecouvrementCfg
 (
 	wxT("HPGLrec"),			/* identification */
-	&HPGL_Pen_Recouvrement,  /* Adresse du parametre */
+	&g_HPGL_Pen_Recouvrement,  /* Adresse du parametre */
 	2,					/* Valeur par defaut */
 	0, 100				/* Valeurs extremes */
 );
@@ -398,30 +398,6 @@ static PARAM_CFG_INT EdgeSegmLargeurCfg
 	0,10000				/* Valeurs extremes */
 );
 
-static PARAM_CFG_DOUBLE UserGrilleXCfg
-(
-	wxT("UserGrX"),				/* identification */
-	&g_UserGrid.x,			/* Adresse du parametre */
-	100.0,					/* Valeur par defaut */
-	0.0,10000.0				/* Valeurs extremes */
-);
-
-static PARAM_CFG_DOUBLE UserGrilleYCfg
-(
-	wxT("UserGrY"),				/* identification */
-	&g_UserGrid.y,			/* Adresse du parametre */
-	100.0,					/* Valeur par defaut */
-	0.0,10000.0				/* Valeurs extremes */
-);
-
-static PARAM_CFG_INT UserGrilleUnitCfg	// USER Grid Unit (inches/mm)
-(
-	wxT("UserGrU"),				/* identification */
-	&g_UserGrid_Unit,			/* Adresse du parametre */
-	1,						/* Valeur par defaut */
-	0, 1					/* Valeurs extremes */
-);
-
 static PARAM_CFG_INT TimeOutCfg
 (
 	wxT("TimeOut"),			/* identification */
@@ -436,15 +412,6 @@ static PARAM_CFG_BOOL DisplPolairCfg
 	wxT("DPolair"),				/* identification */
 	&DisplayOpt.DisplayPolarCood,	/* Adresse du parametre */
 	FALSE						/* Valeur par defaut */
-);
-
-static PARAM_CFG_INT CursorShapeCfg
-(
-	INSETUP,
-	wxT("CuShape"),				/* identification */
-	&g_CursorShape,	/* Adresse du parametre */
-	0,						/* Valeur par defaut */
-	0, 1					/* Valeurs extremes */
 );
 
 PARAM_CFG_BASE * ParamCfgList[] =
@@ -494,12 +461,8 @@ PARAM_CFG_BASE * ParamCfgList[] =
 	& GERBERSpotMiniCfg,
 	& DrawSegmLargeurCfg,
 	& EdgeSegmLargeurCfg,
-	& UserGrilleXCfg,
-	& UserGrilleYCfg,
-	& UserGrilleUnitCfg,
 	& TimeOutCfg,
 	& DisplPolairCfg,
-	& CursorShapeCfg,
 	NULL
 };
 

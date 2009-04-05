@@ -10,6 +10,8 @@
 #include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "macros.h"
+#include "appl_wxstruct.h"
 
 #include "cvpcb.h"
 #include "protos.h"
@@ -28,20 +30,19 @@ int NetNumCode;         /* Nombre utilise pour cree des NetNames lors de
 
 
 /*************************/
-int GenNetlistPcbnew()
-/*************************/
+int GenNetlistPcbnew( FILE* file )
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
     char      Line[1024];
     STOREPIN* Pin;
     STORECMP* CurrentCmp;
-    wxString  Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    wxString  Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
     NetNumCode = 1; DateAndTime( Line );
     if( g_FlagEESchema )
-        fprintf( dest, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, Line );
+        fprintf( file, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, Line );
     else
-        fprintf( dest, "( { netlist created  %s }\n", Line );
+        fprintf( file, "( { netlist created  %s }\n", Line );
 
     /***********************/
     /* Lecture de la liste */
@@ -50,18 +51,18 @@ int GenNetlistPcbnew()
     CurrentCmp = g_BaseListeCmp;
     for( ; CurrentCmp != NULL; CurrentCmp = CurrentCmp->Pnext )
     {
-        fprintf( dest, " ( %s ", CONV_TO_UTF8( CurrentCmp->m_TimeStamp ) );
+        fprintf( file, " ( %s ", CONV_TO_UTF8( CurrentCmp->m_TimeStamp ) );
 
         if( !CurrentCmp->m_Module.IsEmpty() )
-            fprintf( dest, CONV_TO_UTF8( CurrentCmp->m_Module ) );
+            fprintf( file, CONV_TO_UTF8( CurrentCmp->m_Module ) );
 
         else
-            fprintf( dest, "$noname$" );
+            fprintf( file, "$noname$" );
 
-        fprintf( dest, " %s ", CONV_TO_UTF8( CurrentCmp->m_Reference ) );
+        fprintf( file, " %s ", CONV_TO_UTF8( CurrentCmp->m_Reference ) );
 
         /* placement de la valeur */
-        fprintf( dest, "%s\n", CONV_TO_UTF8( CurrentCmp->m_Valeur ) );
+        fprintf( file, "%s\n", CONV_TO_UTF8( CurrentCmp->m_Valeur ) );
 
         /* Tri des pins */
         TriPinsModule( CurrentCmp );
@@ -74,26 +75,28 @@ int GenNetlistPcbnew()
                 ChangePinNet( Pin->m_PinNet );
 
             if( !Pin->m_PinNet.IsEmpty() )
-                fprintf( dest, "  ( %s %s )\n",
+                fprintf( file, "  ( %s %s )\n",
                          CONV_TO_UTF8( Pin->m_PinNum ),
                          CONV_TO_UTF8( Pin->m_PinNet ) );
             else
-                fprintf( dest, "  ( %s ? )\n", CONV_TO_UTF8( Pin->m_PinNum ) );
+                fprintf( file, "  ( %s ? )\n", CONV_TO_UTF8( Pin->m_PinNum ) );
         }
 
-        fprintf( dest, " )\n" );
+        fprintf( file, " )\n" );
     }
 
-    fprintf( dest, ")\n*\n" );
+    fprintf( file, ")\n*\n" );
+
     if( g_FlagEESchema )
-        WriteFootprintFilterInfos( dest );
-    fclose( dest );
+        WriteFootprintFilterInfos( file );
+
+    fclose( file );
     return 0;
 }
 
 
 /******************************************/
-void WriteFootprintFilterInfos( FILE* dest )
+void WriteFootprintFilterInfos( FILE* file )
 /******************************************/
 /* Write the allowed footprint list for each component */
 {
@@ -108,23 +111,23 @@ void WriteFootprintFilterInfos( FILE* dest )
             continue;
         if( !WriteHeader )
         {
-            fprintf( dest, "{ Allowed footprints by component:\n" );
+            fprintf( file, "{ Allowed footprints by component:\n" );
             WriteHeader = TRUE;
         }
-        fprintf( dest, "$component %s\n",
+        fprintf( file, "$component %s\n",
                  CONV_TO_UTF8( component->m_Reference ) );
         /* Write the footprint list */
         for( unsigned int jj = 0; jj < FilterCount; jj++ )
         {
-            fprintf( dest, " %s\n",
+            fprintf( file, " %s\n",
                      CONV_TO_UTF8( component->m_FootprintFilter[jj] ) );
         }
 
-        fprintf( dest, "$endlist\n" );
+        fprintf( file, "$endlist\n" );
     }
 
     if( WriteHeader )
-        fprintf( dest, "$endfootprintlist\n}\n" );
+        fprintf( file, "$endfootprintlist\n}\n" );
 }
 
 

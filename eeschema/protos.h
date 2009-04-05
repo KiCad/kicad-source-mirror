@@ -1,6 +1,7 @@
 //*****************************************/
 /* prototypage des fonctions de EESchema */
 /*****************************************/
+
 void FreeLibraryEntry(LibCmpEntry * Entry);
 
 LibEDA_BaseStruct * LocatePin(const wxPoint & RefPos,

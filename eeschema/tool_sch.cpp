@@ -289,23 +289,23 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_GRID:
-        g_ShowGrid = m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
+        m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
         g_UnitMetric = MILLIMETRE;
-        Affiche_Status_Box();        /* Reaffichage des coord curseur */
+        UpdateStatusBar();        /* Reaffichage des coord curseur */
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
         g_UnitMetric = INCHES;
-        Affiche_Status_Box();        /* Reaffichage des coord curseur */
+        UpdateStatusBar();        /* Reaffichage des coord curseur */
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
         DrawPanel->CursorOff( &dc );
-        g_CursorShape = m_OptionsToolBar->GetToolState( id );
+        m_CursorShape = m_OptionsToolBar->GetToolState( id );
         DrawPanel->CursorOn( &dc );
         break;
 

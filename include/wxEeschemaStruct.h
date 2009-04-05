@@ -65,6 +65,7 @@ public:
 private:
     SCH_CMP_FIELD*       m_CurrentField;
     int                  m_TextFieldSize;
+    bool                 m_ShowGrid;
 
 
 public:
@@ -82,6 +83,9 @@ public:
     void                    GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
     void                    Save_Config( wxWindow* displayframe );
+
+    void                    LoadSettings();
+    void                    SaveSettings();
 
     void                    RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
@@ -386,6 +390,11 @@ public:
     ~WinEDA_LibeditFrame();
 
     void                Process_Special_Functions( wxCommandEvent& event );
+    void                OnImportPart( wxCommandEvent& event );
+    void                OnExportPart( wxCommandEvent& event );
+    void                OnUpdateEditingPart( wxUpdateUIEvent& event );
+    void                OnUpdateNotEditingPart( wxUpdateUIEvent& event );
+
     void                DisplayLibInfos();
     void                RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void                OnCloseWindow( wxCloseEvent& Event );
@@ -398,9 +407,13 @@ public:
     void                OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN*         GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
-    void                OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void                OnHotKey( wxDC* DC, int hotkey,
+                                  EDA_BaseStruct* DrawStruct );
 
-    void                GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+    void                GeneralControle( wxDC* DC,
+                                         wxPoint MousePositionInPixels );
+    void                LoadSettings();
+    void                SaveSettings();
 
 private:
 
@@ -411,10 +424,10 @@ private:
     void                SelectActiveLibrary();
     bool                LoadOneLibraryPart();
     void                SaveActiveLibrary();
-    void                ImportOnePart();
-    void                ExportOnePart( bool create_lib );
+
     int                 LoadOneLibraryPartAux( EDA_LibComponentStruct* LibEntry,
-                                               LibraryStruct* Library, int noMsg = 0 );
+                                               LibraryStruct* Library,
+                                               int noMsg = 0 );
 
     void                DisplayCmpDoc( const wxString& Name );
     void                InstallLibeditFrame( );
@@ -472,6 +485,11 @@ public:
 
     // Repetition automatique de placement de pins
     void                RepeatPinItem( wxDC* DC, LibDrawPin* Pin );
+
+protected:
+    wxString            m_ConfigPath;
+    wxString            m_LastLibImportPath;
+    wxString            m_LastLibExportPath;
 
     DECLARE_EVENT_TABLE()
 };

@@ -11,9 +11,12 @@
  */
 
 #include "fctsys.h"
-#include "gr_basic.h"
-
 #include "common.h"
+#include "class_drawpanel.h"
+#include "base_struct.h"
+#include "gr_basic.h"
+#include "drawtxt.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -22,11 +25,10 @@
 #include "protos.h"
 
 
-/***************************************************************************/
-SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
+SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId,
+                              SCH_COMPONENT* aParent, wxString aName ) :
     SCH_ITEM( aParent, DRAW_PART_TEXT_STRUCT_TYPE ),
     EDA_TextStruct()
-/***************************************************************************/
 {
     m_Pos          = aPos;
     m_FieldId      = aFieldId;
@@ -38,13 +40,139 @@ SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* 
 }
 
 
-/************************************/
 SCH_CMP_FIELD::~SCH_CMP_FIELD()
-/************************************/
 {
 }
 
-/** Function ImportValues
+
+/**
+ * Routine de trace des textes type Field du composant.
+ *  entree:
+ *      DrawMode: mode de trace
+ */
+void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                          const wxPoint& offset, int DrawMode, int Color )
+{
+    int            orient;
+    EDA_Colors     color;
+    wxPoint        pos; /* Position des textes */
+    SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
+    GRTextHorizJustifyType hjustify;
+    GRTextVertJustifyType vjustify;
+    int            LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+
+    if( ( m_Attributs & TEXT_NO_VISIBLE ) || IsVoid() )
+        return;
+
+    GRSetDrawMode( DC, DrawMode );
+
+    /* Calcul de la position des textes, selon orientation du composant */
+    orient   = m_Orient;
+    hjustify = m_HJustify; vjustify = m_VJustify;
+    pos = m_Pos - DrawLibItem->m_Pos;
+
+    pos  = DrawLibItem->GetScreenCoord( pos );
+    pos += DrawLibItem->m_Pos;
+
+    /* Y a t-il rotation (pour l'orientation, la justification)*/
+    if( DrawLibItem->m_Transform[0][1] )  // Rotation du composant de 90deg
+    {
+        if( orient == TEXT_ORIENT_HORIZ )
+            orient = TEXT_ORIENT_VERT;
+        else
+            orient = TEXT_ORIENT_HORIZ;
+        /* Y a t-il rotation, miroir (pour les justifications)*/
+        GRTextHorizJustifyType tmp = hjustify;
+        hjustify = (GRTextHorizJustifyType) vjustify;
+        vjustify = (GRTextVertJustifyType) tmp;
+        if( DrawLibItem->m_Transform[1][0] < 0 )
+            switch ( vjustify )
+            {
+                case GR_TEXT_VJUSTIFY_BOTTOM:
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    break;
+                case GR_TEXT_VJUSTIFY_TOP:
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
+        if( DrawLibItem->m_Transform[1][0] > 0 )
+            switch ( hjustify )
+            {
+                case GR_TEXT_HJUSTIFY_LEFT:
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    break;
+                case GR_TEXT_HJUSTIFY_RIGHT:
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    break;
+                default:
+                    break;
+            }
+    }
+    else
+    {
+        /* Texte horizontal: Y a t-il miroir (pour les justifications)*/
+        if( DrawLibItem->m_Transform[0][0] < 0 )
+            switch ( hjustify )
+            {
+                case GR_TEXT_HJUSTIFY_LEFT:
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    break;
+                case GR_TEXT_HJUSTIFY_RIGHT:
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    break;
+                default:
+                    break;
+            }
+        if( DrawLibItem->m_Transform[1][1] > 0 )
+            switch ( vjustify )
+            {
+                case GR_TEXT_VJUSTIFY_BOTTOM:
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    break;
+                case GR_TEXT_VJUSTIFY_TOP:
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
+    }
+
+    if( m_FieldId == REFERENCE )
+        color = ReturnLayerColor( LAYER_REFERENCEPART );
+    else if( m_FieldId == VALUE )
+        color = ReturnLayerColor( LAYER_VALUEPART );
+    else
+        color = ReturnLayerColor( LAYER_FIELDS );
+
+    if( !m_AddExtraText || (m_FieldId != REFERENCE) )
+    {
+        DrawGraphicText( panel, DC, pos, color, m_Text,
+                         orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+                         m_Size, hjustify, vjustify, LineWidth, m_Italic );
+    }
+    else
+    {
+        /* For more than one part per package, we must add the part selection
+         * A, B, ... or 1, 2, .. to the reference. */
+        wxString fulltext = m_Text;
+#if defined(KICAD_GOST)
+        fulltext.Append( '.');
+        fulltext.Append( '1' - 1 + DrawLibItem->m_Multi );
+#else
+        fulltext.Append( 'A' - 1 + DrawLibItem->m_Multi );
+#endif
+
+        DrawGraphicText( panel, DC, pos, color, fulltext,
+                         orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+                         m_Size, hjustify, vjustify, LineWidth, m_Italic );
+    }
+}
+
+
+/**
+ * Function ImportValues
  * copy parameters from a source.
  * Pointers and specific values (position, texts) are not copied
  * used to init a field from the model read from a lib entry
@@ -62,13 +190,11 @@ void SCH_CMP_FIELD::ImportValues( const LibDrawField& aSource )
     m_Mirror   = aSource.m_Mirror;
 }
 
-/**************************************************************************/
-void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
-/**************************************************************************/
-
-/* Used if undo / redo command:
+/**
+ * Used if undo / redo command:
  *  swap data between this and copyitem
  */
+void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
 {
     EXCHG( m_Text, copyitem->m_Text );
     EXCHG( m_Layer, copyitem->m_Layer );
@@ -84,13 +210,11 @@ void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
 }
 
 
-/*********************************/
-bool SCH_CMP_FIELD::IsVoid()
-/*********************************/
-
-/* return True if the field is void, i.e.:
+/**
+ * return True if the field is void, i.e.:
  *  contains  "~" or ""
  */
+bool SCH_CMP_FIELD::IsVoid()
 {
     if( m_Text.IsEmpty() || m_Text == wxT( "~" ) )
         return true;
@@ -98,15 +222,13 @@ bool SCH_CMP_FIELD::IsVoid()
 }
 
 
-/********************************************/
-EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
-/********************************************/
-
-/** Function GetBoundaryBox()
- * @return an EDA_Rect contains the real (user coordinates) boundary box for a text field,
+/**
+ * Function GetBoundaryBox()
+ * @return an EDA_Rect contains the real (user coordinates) boundary box for
+ *         a text field,
  *  according to the component position, rotation, mirror ...
- *
  */
+EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
 {
     EDA_Rect       BoundaryBox;
     int            hjustify, vjustify;
@@ -125,7 +247,8 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     if( m_FieldId == REFERENCE )   // Real Text can be U1 or U1A
     {
         EDA_LibComponentStruct* Entry =
-            FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+            FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString,
+                         FIND_ROOT );
         if( Entry && (Entry->m_UnitCount > 1) )
             textlen++; // because U1 is show as U1A or U1B ...
     }
@@ -143,7 +266,8 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     y2 = pos.y + (DrawLibItem->m_Transform[1][0] * x1)
          + (DrawLibItem->m_Transform[1][1] * y1);
 
-    /* If the component orientation is +/- 90 deg, the text orientation must be changed */
+    /* If the component orientation is +/- 90 deg, the text orientation must
+     * be changed */
     if( DrawLibItem->m_Transform[0][1] )
     {
         if( orient == TEXT_ORIENT_HORIZ )
@@ -207,9 +331,7 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
 }
 
 
-/*********************************************/
 bool SCH_CMP_FIELD::Save( FILE* aFile ) const
-/*********************************************/
 {
     char hjustify = 'C';
     if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
@@ -224,15 +346,15 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
         vjustify = 'T';
 
     if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c%c%c",
-            m_FieldId,
-            CONV_TO_UTF8( m_Text ),
-            m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
-            m_Pos.x, m_Pos.y,
-            m_Size.x,
-            m_Attributs,
-            hjustify, vjustify,
-			m_Italic ? 'I' : 'N',
-			m_Width > 1 ? 'B' : 'N' ) == EOF )
+                 m_FieldId,
+                 CONV_TO_UTF8( m_Text ),
+                 m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
+                 m_Pos.x, m_Pos.y,
+                 m_Size.x,
+                 m_Attributs,
+                 hjustify, vjustify,
+                 m_Italic ? 'I' : 'N',
+                 m_Width > 1 ? 'B' : 'N' ) == EOF )
     {
         return false;
     }
@@ -252,4 +374,43 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
     }
 
     return true;
+}
+
+
+void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+{
+    int fieldNdx;
+    EDA_LibComponentStruct* Entry;
+
+    frame->DrawPanel->ManageCurseur = NULL;
+    frame->DrawPanel->ForceCloseManageCurseur = NULL;
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
+
+    // save old cmp in undo list
+    if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == component->Type()) )
+    {
+        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
+        frame->SaveCopyInUndoList( component, IS_CHANGED );
+        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
+    }
+
+    fieldNdx = m_FieldId;
+    m_AddExtraText = 0;
+    if( fieldNdx == REFERENCE )
+    {
+        Entry = FindLibPart( component->m_ChipName.GetData(), wxEmptyString,
+                             FIND_ROOT );
+        if( Entry != NULL )
+        {
+            if( Entry->m_UnitCount > 1 )
+                m_AddExtraText = 1;
+        }
+    }
+
+    Draw( frame->DrawPanel, DC, wxPoint(0,0), GR_DEFAULT_DRAWMODE );
+    m_Flags = 0;
+    frame->GetScreen()->SetCurItem( NULL );
+    frame->GetScreen()->SetModify();
+    frame->SetCurrentField( NULL );
 }

@@ -135,8 +135,6 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     m_FrameName = wxT( "GerberFrame" );
 
     //m_AboutTitle     = g_GerbviewAboutTitle;
-    m_Draw_Axis = TRUE;         // TRUE pour avoir les axes dessines
-    m_Draw_Grid = TRUE;         // TRUE pour avoir la axes dessinee
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
     m_Ident = GERBER_FRAME;
     if( DrawPanel )
@@ -152,7 +150,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     SetBaseScreen( ScreenPcb );
     ActiveScreen = ScreenPcb;
 
-    GetSettings();
+    LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -286,7 +284,7 @@ void WinEDA_GerberFrame::SetToolbars()
                                       m_Draw_Grid );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      g_CursorShape );
+                                      m_CursorShape );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
@@ -309,15 +307,16 @@ void WinEDA_GerberFrame::SetToolbars()
 int WinEDA_GerberFrame::BestZoom()
 /*************************************/
 {
-    double    ii, jj;
-    double    bestzoom;
+    double x, y;
     wxSize size;
 
     GetBoard()->ComputeBoundaryBox();
-    size     = DrawPanel->GetClientSize();
-    ii       = GetBoard()->m_BoundaryBox.GetWidth() / size.x;
-    jj       = GetBoard()->m_BoundaryBox.GetHeight() / size.y;
-    bestzoom = MAX( ii, jj );
+    size = DrawPanel->GetClientSize();
+    x = ( (double) GetBoard()->m_BoundaryBox.GetWidth() +
+          GetScreen()->GetGrid().x ) / (double) size.x;
+    y = ( (double) GetBoard()->m_BoundaryBox.GetHeight() +
+          GetScreen()->GetGrid().y ) / (double) size.y;
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
-    return (int) round(bestzoom * GetScreen()->m_ZoomScalar);
+
+    return wxRound( MAX( x, y ) * (double)GetScreen()->m_ZoomScalar );
 }

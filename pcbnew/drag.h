@@ -29,8 +29,8 @@ public:
 
 /* Variables */
 
-eda_global DRAG_SEGM* g_DragSegmentList;    /* pointe le debut de la liste
-                                             *  des structures DRAG_SEGM */
+extern DRAG_SEGM* g_DragSegmentList;    /* pointe le debut de la liste
+                                         * des structures DRAG_SEGM */
 
 /* routines specifiques */
 void    Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC );

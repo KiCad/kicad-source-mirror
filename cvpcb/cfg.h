@@ -2,10 +2,6 @@
 	/** cfg.h : configuration: definition des structures  **/
 	/*******************************************************/
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include "param_config.h"
 
 #define INSETUP TRUE
@@ -40,7 +36,7 @@ static PARAM_CFG_LIBNAME_LIST EquivNameBufCfg
 static PARAM_CFG_WXSTRING NetInExtBufCfg
 (
 	wxT("NetIExt"),		  /* identification */
-	&NetInExtBuffer
+	&g_NetlistFileExtension
 );
 
 static PARAM_CFG_WXSTRING NetDirBufCfg

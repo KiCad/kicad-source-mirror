@@ -13,8 +13,6 @@
 #define ENTETE_LIBRAIRIE "PCBNEW-LibModule-V1"
 #define ENTETE_LIBDOC    "PCBNEW-LibDoc----V1"
 #define L_ENTETE_LIB     18
-#define EXT_CMP          wxT( ".emp" )
-#define EXT_CMP_MASK     wxT( "*.emp" )
 #define EXT_DOC          wxT( ".mdc" )
 
 

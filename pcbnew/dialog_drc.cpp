@@ -763,27 +763,21 @@ void DrcDialog::OnListUnconnectedClick( wxCommandEvent& event )
 
 void DrcDialog::OnButtonBrowseRptFileClick( wxCommandEvent& event )
 {
-    wxString    FileName;
-    wxString    Mask(wxT("*"));
-    wxString    Ext(wxT(".rpt"));
+    wxFileName  fn;
+    wxString    wildcard( _( "DRC report files (.rpt)|*.rpt" ) );
+    wxString    Ext( wxT( "rpt" ) );
 
-    FileName = m_Parent->GetScreen()->m_FileName;
-    ChangeFileNameExt(FileName, wxT("-drc") + Ext);
-    Mask += Ext;
+    fn = m_Parent->GetScreen()->m_FileName + wxT("-drc");
+    fn.SetExt( Ext );
 
-    FileName = EDA_FileSelector( _("DRC Report file"),
-                                 wxEmptyString,     /* Chemin par defaut */
-                                 FileName,          /* nom fichier par defaut */
-                                 Ext,               /* extension par defaut */
-                                 Mask,              /* Masque d'affichage */
-                                 this,
-                                 wxFD_SAVE,
-                                 TRUE
-                                 );
-    if( FileName.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save DRC Report File" ), wxEmptyString,
+                      fn.GetFullName(), wildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_RptFilenameCtrl->SetValue(FileName);
+    m_RptFilenameCtrl->SetValue(dlg.GetPath());
 }
 
 

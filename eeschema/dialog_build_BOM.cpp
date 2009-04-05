@@ -81,7 +81,7 @@ DIALOG_BUILD_BOM::DIALOG_BUILD_BOM( WinEDA_DrawFrame* parent ):
     wxASSERT( m_Config != NULL );
 
     m_Parent = parent;
-    
+
     Init( );
 
     if (GetSizer())
@@ -99,7 +99,7 @@ DIALOG_BUILD_BOM::DIALOG_BUILD_BOM( WinEDA_DrawFrame* parent ):
 void DIALOG_BUILD_BOM::Init()
 {
     SetFont( *g_DialogFont );
-    
+
     SetFocus();
 
     /* Get options */
@@ -203,6 +203,9 @@ void DIALOG_BUILD_BOM::OnCancelClick( wxCommandEvent& event )
 void DIALOG_BUILD_BOM::SavePreferences()
 /**************************************************/
 {
+    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxASSERT( config != NULL );
+
     // Determine current settings of "List items" and "Options" checkboxes
     // (NOTE: These 6 settings are restored when the dialog box is next
     // invoked, but are *not* still saved after EESchema is next shut down.)

@@ -11,6 +11,7 @@
 #include "general.h"
 #include "trigo.h"
 #include "macros.h"
+#include "class_drawpickedstruct.h"
 
 #include "protos.h"
 
@@ -176,7 +177,7 @@ SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
         PickedBoxMaxX = x; PickedBoxMaxY = y;
     }
 
-    return PickedList;
+    return (SCH_ITEM*) PickedList;
 }
 
 

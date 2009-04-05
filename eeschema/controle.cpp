@@ -223,7 +223,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
 void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 /*************************************************************************************/
 {
-    wxRealPoint      delta;
+    wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     curpos, oldpos;
     int         hotkey = 0;
@@ -248,25 +248,25 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
 
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        MousePositionInPixels.y -= (int) round(delta.y);
+        MousePositionInPixels.y -= wxRound(delta.y);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        MousePositionInPixels.y += (int) round(delta.y);
+        MousePositionInPixels.y += wxRound(delta.y);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        MousePositionInPixels.x -= (int) round(delta.x);
+        MousePositionInPixels.x -= wxRound(delta.x);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        MousePositionInPixels.x += (int) round(delta.x);
+        MousePositionInPixels.x += wxRound(delta.x);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
@@ -308,7 +308,7 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
             OnHotKey( DC, hotkey, NULL );
     }
 
-    Affiche_Status_Box();    /* Display cursor coordintes info */
+    UpdateStatusBar();    /* Display cursor coordintes info */
     SetToolbars();
 }
 
@@ -342,25 +342,25 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
 
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        MousePositionInPixels.y -= (int) round(delta.y);
+        MousePositionInPixels.y -= wxRound(delta.y);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        MousePositionInPixels.y += (int) round(delta.y);
+        MousePositionInPixels.y += wxRound(delta.y);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        MousePositionInPixels.x -= (int) round(delta.x);
+        MousePositionInPixels.x -= wxRound(delta.x);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        MousePositionInPixels.x += (int) round(delta.x);
+        MousePositionInPixels.x += wxRound(delta.x);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
@@ -402,7 +402,7 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
             OnHotKey( DC, hotkey, NULL );
     }
 
-    Affiche_Status_Box();    /* Affichage des coord curseur */
+    UpdateStatusBar();    /* Affichage des coord curseur */
     SetToolbars();
 }
 
@@ -436,25 +436,25 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
 
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        MousePositionInPixels.y -= (int) round(delta.y);
+        MousePositionInPixels.y -= wxRound(delta.y);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        MousePositionInPixels.y += (int) round(delta.y);
+        MousePositionInPixels.y += wxRound(delta.y);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        MousePositionInPixels.x -= (int) round(delta.x);
+        MousePositionInPixels.x -= wxRound(delta.x);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        MousePositionInPixels.x += (int) round(delta.x);
+        MousePositionInPixels.x += wxRound(delta.x);
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
@@ -496,6 +496,6 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
             OnHotKey( DC, hotkey, NULL );
     }
 
-    Affiche_Status_Box();    /* Affichage des coord curseur */
+    UpdateStatusBar();    /* Affichage des coord curseur */
     SetToolbars();
 }

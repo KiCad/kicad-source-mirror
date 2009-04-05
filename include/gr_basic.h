@@ -32,16 +32,8 @@ class EDA_Rect;
 
 
 /* variables generales */
-COMMON_GLOBL int g_XorMode          // = GR_XOR ou GR_NXOR selon couleur de fond
-#ifdef EDA_BASE                         // pour les tracés en mode XOR
-= GR_NXOR
-#endif
-;
-COMMON_GLOBL int g_DrawBgColor      // couleur de fond de la frame de dessin
-#ifdef EDA_BASE
- = WHITE
-#endif
-;
+extern int g_XorMode;
+extern int g_DrawBgColor;
 
 
 typedef enum {      /* Line styles for Get/SetLineStyle. */

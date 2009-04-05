@@ -41,7 +41,7 @@ void Dialog_GeneralOptions::init()
     /* Set display options */
     m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
     m_UnitsSelection->SetSelection( g_UnitMetric ? 1 : 0 );
-    m_CursorShape->SetSelection( g_CursorShape ? 1 : 0 );
+    m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
 
     wxString timevalue;
     timevalue << g_TimeOut / 60;
@@ -100,7 +100,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     if( ii != g_UnitMetric )
         m_Parent->ReCreateAuxiliaryToolbar();
 
-    g_CursorShape = m_CursorShape->GetSelection();
+    m_Parent->m_CursorShape = m_CursorShape->GetSelection();
     g_TimeOut = 60 * m_SaveTime->GetValue();
 
     /* Mise a jour de la combobox d'affichage de la couche active */
@@ -343,7 +343,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
             g_UnitMetric = INCHES;
         m_SelTrackWidthBox_Changed = TRUE;
-        Affiche_Status_Box();    /* Reaffichage des coord curseur */
+        UpdateStatusBar();    /* Reaffichage des coord curseur */
         ReCreateAuxiliaryToolbar();
         DisplayUnitsMsg();
         break;
@@ -351,11 +351,11 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
         Affiche_Message( wxEmptyString );
         DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
-        Affiche_Status_Box();    /* Reaffichage des coord curseur */
+        UpdateStatusBar();    /* Reaffichage des coord curseur */
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
-        g_CursorShape = m_OptionsToolBar->GetToolState( id );
+        m_CursorShape = m_OptionsToolBar->GetToolState( id );
         break;
 
     case ID_TB_OPTIONS_AUTO_DEL_TRACK:

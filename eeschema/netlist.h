@@ -5,10 +5,6 @@
 #ifndef _NETLIST_H_
 #define _NETLIST_H_
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
 #define ISBUS 1
@@ -147,8 +143,9 @@ public:
 
 
 /* Global Variables */
-eda_global int g_NbrObjNet;
-eda_global ObjetNetListStruct* g_TabObjNet;
+extern int g_NbrObjNet;
+extern ObjetNetListStruct* g_TabObjNet;
+
 
 /* Prototypes: */
 void        WriteNetList( WinEDA_SchematicFrame* frame,

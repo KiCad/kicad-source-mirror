@@ -8,10 +8,10 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "gestfich.h"
+#include "id.h"
+
 #include "pcbnew.h"
 #include "autorout.h"
-
-#include "id.h"
 #include "protos.h"
 
 // Uncomment following line to enable wxBell() command (which beeps speaker)
@@ -1028,9 +1028,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:
     {
+        wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
         wxString msg = FindKicadHelpPath();
-        msg += wxGetApp().m_EDA_CommonConfig->Read( wxT( "module_doc_file" ),
-                                                    wxT( "pcbnew/footprints.pdf" ) );
+        msg += cfg->Read( wxT( "module_doc_file" ),
+                          wxT( "pcbnew/footprints.pdf" ) );
         GetAssociatedDocument( this, wxEmptyString, msg );
     }
     break;

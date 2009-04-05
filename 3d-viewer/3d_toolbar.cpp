@@ -9,7 +9,6 @@
 
 #include "id.h"
 
-#define BITMAP wxBitmap
 #include "3d_viewer.h"
 
 
@@ -29,62 +28,70 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
     SetToolBar( m_HToolBar );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString, BITMAP( import3d_xpm ),
-                        _( "Reload board" ) );
+    m_HToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
+                         wxBitmap( import3d_xpm ),
+                         _( "Reload board" ) );
 #ifdef __WINDOWS__  // do not work properly under linux
     m_HToolBar-> AddSeparator();
 
-    m_HToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString, BITMAP( copy_button ),
+    m_HToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
+                         wxBitmap( copy_button ),
                         _( "Copy 3D Image to Clipboard" ) );
 #endif
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, BITMAP( zoom_in_xpm ),
-                        _( "Zoom in" ) );
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
+                         _( "Zoom in" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, BITMAP( zoom_out_xpm ),
-                        _( "Zoom out" ) );
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
+                         _( "Zoom out" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, BITMAP( zoom_redraw_xpm ),
-                        _( "Redraw view" ) );
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
+                         wxBitmap( zoom_redraw_xpm ),
+                         _( "Redraw view" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, BITMAP( zoom_auto_xpm ),
-                        _( "Zoom auto" ) );
-
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString, BITMAP( rotate_neg_X_xpm ),
-                        _( "Rotate X <-" ) );
-
-    m_HToolBar->AddTool( ID_ROTATE3D_X_POS, wxEmptyString, BITMAP( rotate_pos_X_xpm ),
-                        _( "Rotate X ->" ) );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ),
+                         _( "Zoom auto" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_ROTATE3D_Y_NEG, wxEmptyString, BITMAP( rotate_neg_Y_xpm ),
-                        _( "Rotate Y <-" ) );
+    m_HToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString,
+                         wxBitmap( rotate_neg_X_xpm ),
+                         _( "Rotate X <-" ) );
 
-    m_HToolBar->AddTool( ID_ROTATE3D_Y_POS, wxEmptyString, BITMAP( rotate_pos_Y_xpm ),
-                        _( "Rotate Y ->" ) );
-
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_ROTATE3D_Z_NEG, wxEmptyString, BITMAP( rotate_neg_Z_xpm ),
-                        _( "Rotate Z <-" ) );
-
-    m_HToolBar->AddTool( ID_ROTATE3D_Z_POS, wxEmptyString, BITMAP( rotate_pos_Z_xpm ),
-                        _( "Rotate Z ->" ) );
+    m_HToolBar->AddTool( ID_ROTATE3D_X_POS, wxEmptyString,
+                         wxBitmap( rotate_pos_X_xpm ),
+                         _( "Rotate X ->" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MOVE3D_LEFT, wxEmptyString, BITMAP( left_xpm ),
-                        _( "Move left <-" ) );
+    m_HToolBar->AddTool( ID_ROTATE3D_Y_NEG, wxEmptyString,
+                         wxBitmap( rotate_neg_Y_xpm ),
+                         _( "Rotate Y <-" ) );
 
-    m_HToolBar->AddTool( ID_MOVE3D_RIGHT, wxEmptyString, BITMAP( right_xpm ),
-                        _( "Move right ->" ) );
+    m_HToolBar->AddTool( ID_ROTATE3D_Y_POS, wxEmptyString,
+                         wxBitmap( rotate_pos_Y_xpm ),
+                         _( "Rotate Y ->" ) );
 
-    m_HToolBar->AddTool( ID_MOVE3D_UP, wxEmptyString, BITMAP( up_xpm ),
-                        _( "Move Up ^" ) );
+    m_HToolBar->AddSeparator();
+    m_HToolBar->AddTool( ID_ROTATE3D_Z_NEG, wxEmptyString,
+                         wxBitmap( rotate_neg_Z_xpm ),
+                         _( "Rotate Z <-" ) );
 
-    m_HToolBar->AddTool( ID_MOVE3D_DOWN, wxEmptyString, BITMAP( down_xpm ),
-                        _( "Move Down" ) );
+    m_HToolBar->AddTool( ID_ROTATE3D_Z_POS, wxEmptyString,
+                         wxBitmap( rotate_pos_Z_xpm ),
+                         _( "Rotate Z ->" ) );
 
+    m_HToolBar->AddSeparator();
+    m_HToolBar->AddTool( ID_MOVE3D_LEFT, wxEmptyString, wxBitmap( left_xpm ),
+                         _( "Move left <-" ) );
+
+    m_HToolBar->AddTool( ID_MOVE3D_RIGHT, wxEmptyString, wxBitmap( right_xpm ),
+                         _( "Move right ->" ) );
+
+    m_HToolBar->AddTool( ID_MOVE3D_UP, wxEmptyString, wxBitmap( up_xpm ),
+                         _( "Move Up ^" ) );
+
+    m_HToolBar->AddTool( ID_MOVE3D_DOWN, wxEmptyString, wxBitmap( down_xpm ),
+                         _( "Move Down" ) );
 
     m_HToolBar->Realize();
 

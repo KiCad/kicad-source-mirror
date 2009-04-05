@@ -25,15 +25,17 @@ enum  LibrEntryOptions {
 };
 
 
-/* basic class to describe components in libraries (true component or alias), non used directly */
-class LibCmpEntry            : public EDA_BaseStruct
+/* basic class to describe components in libraries (true component or alias),
+ * non used directly */
+class LibCmpEntry : public EDA_BaseStruct
 {
 public:
     LibrEntryType    Type;      /* Type = ROOT;
                                  *      = ALIAS pour struct LibraryAliasType */
     LibDrawField     m_Name;    // name	(74LS00 ..) in lib ( = VALUE )
     wxString         m_Doc;     /* documentation for info */
-    wxString         m_KeyWord; /* keyword list (used to select a group of components by keyword) */
+    wxString         m_KeyWord; /* keyword list (used to select a group of
+                                 * components by keyword) */
     wxString         m_DocFile; /* Associed doc filename */
     LibrEntryOptions m_Options; // special features (i.e. Entry is a POWER)
 
@@ -62,20 +64,27 @@ public:
 class EDA_LibComponentStruct : public LibCmpEntry
 {
 public:
-    LibDrawField       m_Prefix;                /* Prefix ( U, IC ... ) = REFERENCE */
-    wxArrayString      m_AliasList;             /* ALIAS list for the component */
-    wxArrayString      m_FootprintList;         /* list of suitable footprint names for the component (wildcard names accepted)*/
-    int                m_UnitCount;             /* Units (or sections) per package */
-    bool               m_UnitSelectionLocked;   // True if units are differents and their selection is locked
-                                                // (i.e. if part A cannot be automatically changed in part B
-    int                m_TextInside;            /* if 0: pin name drawn on the pin itself
-                                                 *  if > 0 pin name drawn inside the component,
-                                                 *  with a distance of m_TextInside in mils */
+    LibDrawField       m_Prefix;         /* Prefix ( U, IC ... ) = REFERENCE */
+    wxArrayString      m_AliasList;      /* ALIAS list for the component */
+    wxArrayString      m_FootprintList;  /* list of suitable footprint names
+                                          * for the component (wildcard names
+                                          * accepted) */
+    int                m_UnitCount;      /* Units (or sections) per package */
+    bool               m_UnitSelectionLocked;  /* True if units are differents
+                                                * and their selection is
+                                                * locked (i.e. if part A cannot
+                                                * be automatically changed in
+                                                * part B */
+    int                m_TextInside;     /* if 0: pin name drawn on the pin
+                                          * itself if > 0 pin name drawn inside
+                                          * the component, with a distance of
+                                          * m_TextInside in mils */
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
-    DLIST<LibDrawField> m_Fields;                  /* Auxiliairy Field list (id >= 2 ) */
-    LibEDA_BaseStruct* m_Drawings;              /* How to draw this part */
-    long               m_LastDate;              // Last change Date
+    DLIST<LibDrawField> m_Fields;         /* Auxiliairy Field list (id >= 2 ) */
+    LibEDA_BaseStruct* m_Drawings;        /* How to draw this part */
+    long               m_LastDate;        // Last change Date
+    DLIST<LibEDA_BaseStruct> m_DrawItems;
 
 public:
     virtual wxString GetClass() const
@@ -85,31 +94,54 @@ public:
 
 
     EDA_LibComponentStruct( const wxChar* CmpName );
-    EDA_Rect GetBoundaryBox( int Unit, int Convert );    /* return Box around the part. */
-
     ~EDA_LibComponentStruct();
+
+    EDA_Rect GetBoundaryBox( int Unit, int Convert );
+
     void     SortDrawItems();
+
+    bool SaveDateAndTime( FILE* ExportFile );
+    bool LoadDateAndTime( char* Line );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.lib" format.
+     * writes the data structures for this object out to a FILE in "*.lib"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool     Save( FILE* aFile );
+    bool Save( FILE* aFile );
+
+    /**
+     * Load component definition from file.
+     *
+     * @param file - File discriptor of file to load form.
+     * @param line - The first line of the component definition.
+     * @param lineNum - The current line number in the file.
+     * @param parent - The parent window for displaying message boxes.
+     *
+     * @return bool - Result of the load, false if there was an error.
+     */
+    bool Load( FILE* file, char* line, int* lineNum, wxString& errorMsg );
+    bool LoadField( char* line, wxString& errorMsg );
+    bool LoadDrawEntries( FILE* f, char* line,
+                          int* lineNum, wxString& errorMsg );
+    bool LoadAliases( char* line, wxString& Error );
+    bool LoadFootprints( FILE* file, char* line,
+                         int* lineNum, wxString& errorMsg );
 
     /** Function SetFields
      * initialize fields from a vector of fields
      * @param aFields a std::vector <LibDrawField> to import.
      */
-    void     SetFields( const std::vector <LibDrawField> aFields );
+    void SetFields( const std::vector <LibDrawField> aFields );
 };
 
 
 /**************************************************************************/
 /* class to handle an alias of an usual component in lib (root component) */
 /**************************************************************************/
-class EDA_LibCmpAliasStruct  : public LibCmpEntry
+class EDA_LibCmpAliasStruct : public LibCmpEntry
 {
 public:
     wxString m_RootName;        /* Root component Part name */

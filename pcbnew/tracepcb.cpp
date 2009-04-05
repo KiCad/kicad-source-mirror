@@ -49,7 +49,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         module->Draw( DrawPanel, DC, GR_OR );
     }
 
-    Affiche_Status_Box();
+    UpdateStatusBar();
 
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -89,7 +89,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->ClrRefreshReq();
 
-    Affiche_Status_Box();
+    UpdateStatusBar();
 
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );

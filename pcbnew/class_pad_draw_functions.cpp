@@ -335,7 +335,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( fillpad && hole )
     {
         bool blackpenstate = false;
-        if( g_IsPrinting )
+        if( screen->m_IsPrinting )
         {
             blackpenstate = GetGRForceBlackPenState();
             GRForceBlackPen( false );
@@ -382,7 +382,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             break;
         }
 
-        if( g_IsPrinting )
+        if( screen->m_IsPrinting )
             GRForceBlackPen( blackpenstate );
     }
 

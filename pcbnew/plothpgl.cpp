@@ -49,7 +49,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
     // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diametre is always g_HPGL_Pen_Diam
     // so apparent pen diam is real pen diam / Scale
-    pen_diam  = (int) round( (g_HPGL_Pen_Diam * U_PCB) / Scale_X ); // Assume Scale_X # Scale_Y
+    pen_diam  = wxRound( (g_HPGL_Pen_Diam * U_PCB) / Scale_X ); // Assume Scale_X # Scale_Y
     pen_rayon = pen_diam / 2;
 
     s_Nb_Plot_Errors = 0;
@@ -60,7 +60,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer )
         g_HPGL_Pen_Recouvrement = 0;
     if( g_HPGL_Pen_Recouvrement >= g_HPGL_Pen_Diam )
         g_HPGL_Pen_Recouvrement = g_HPGL_Pen_Diam - 1;
-    pen_recouvrement = (int) round( g_HPGL_Pen_Recouvrement * 10.0 / Scale_X );
+    pen_recouvrement = wxRound( g_HPGL_Pen_Recouvrement * 10.0 / Scale_X );
 
     dest = wxFopen( FullFileName, wxT( "wt" ) );
     if( dest == NULL )

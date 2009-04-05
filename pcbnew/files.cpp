@@ -67,35 +67,39 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
     case ID_MENU_RECOVER_BOARD:
+    {
+        wxFileName fn;
+
+        if( id == ID_MENU_RECOVER_BOARD )
         {
-            wxString filename, oldfilename = GetScreen()->m_FileName;
-            if( id == ID_MENU_RECOVER_BOARD )
-            {
-                filename = g_SaveFileName + PcbExtBuffer;
-            }
-            else
-            {
-                filename = oldfilename;
-                ChangeFileNameExt( filename, wxT( ".000" ) );
-            }
-            if( !wxFileExists( filename ) )
-            {
-                msg = _( "Recovery file " ) + filename + _( " not found" );
-                DisplayInfo( this, msg );
-                break;
-            }
-            else
-            {
-                msg = _( "Ok to load Recovery file " ) + filename;
-                if( !IsOK( this, msg ) )
-                    break;
-            }
-            LoadOnePcbFile( filename, false );
-            GetScreen()->m_FileName = oldfilename;
-            SetTitle( GetScreen()->m_FileName );
-            ReCreateAuxiliaryToolbar();
+            fn = wxFileName( wxEmptyString, g_SaveFileName, PcbExtBuffer );
         }
+        else
+        {
+            fn = GetScreen()->m_FileName;
+            fn.SetExt( wxT( "000" ) );
+        }
+
+        if( !fn.FileExists() )
+        {
+            msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found" );
+            DisplayInfo( this, msg );
+            break;
+        }
+        else
+        {
+            msg = _( "Ok to load Recovery file " ) + fn.GetFullPath();
+            if( !IsOK( this, msg ) )
+                break;
+        }
+
+        LoadOnePcbFile( fn.GetFullPath(), false );
+        fn.SetExt( PcbExtBuffer );
+        GetScreen()->m_FileName = fn.GetFullPath();
+        SetTitle( GetScreen()->m_FileName );
+        ReCreateAuxiliaryToolbar();
         break;
+    }
 
     case ID_MENU_APPEND_FILE:
     case ID_APPEND_FILE:
@@ -289,8 +293,8 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 /* Write the board file
  */
 {
-    wxString    BackupFileName;
-    wxString    FullFileName;
+    wxFileName  backupFileName;
+    wxFileName  pcbFileName;
     wxString    upperTxt;
     wxString    lowerTxt;
     wxString    msg;
@@ -300,21 +304,14 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 
     if( FileName == wxEmptyString )
     {
-        msg = wxT( "*" ) + PcbExtBuffer;
+        wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString,
+                          GetScreen()->m_FileName, BoardFileWildcard,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-        FullFileName = EDA_FileSelector( _( "Save board files:" ),
-                                         wxEmptyString,             /* Chemin par defaut */
-                                         GetScreen()->m_FileName,   /* nom fichier par defaut */
-                                         PcbExtBuffer,              /* extension par defaut */
-                                         msg,                       /* Masque d'affichage */
-                                         this,
-                                         wxFD_SAVE,
-                                         FALSE
-                       );
-        if( FullFileName == wxEmptyString )
-            return FALSE;
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
 
-        GetScreen()->m_FileName = FullFileName;
+        GetScreen()->m_FileName = dlg.GetPath();
     }
     else
         GetScreen()->m_FileName = FileName;
@@ -325,45 +322,47 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
         GetScreen()->m_Date = GenDate();
     }
 
-    /* Get the filename */
-    FullFileName = MakeFileName( wxEmptyString, GetScreen()->m_FileName, PcbExtBuffer );
+    pcbFileName = GetScreen()->m_FileName;
 
     /* Get the backup file name */
-    BackupFileName = FullFileName;
-    ChangeFileNameExt( BackupFileName, wxT( ".000" ) );
+    backupFileName = pcbFileName;
+    backupFileName.SetExt( wxT( "000" ) );
 
     /* If an old backup file exists, delete it.
     if an old board file existes, rename it to the backup file name
     */
-    if( wxFileExists( FullFileName ) )
+    if( backupFileName.FileExists() )
     {
         /* rename the "old" file" from xxx.brd to xxx.000 */
-        wxRemoveFile( BackupFileName ); /* Remove the old file xxx.000 (if exists) */
-        if( !wxRenameFile( FullFileName, BackupFileName ) )
+        wxRemoveFile( backupFileName.GetFullPath() ); /* Remove the old file xxx.000 (if exists) */
+        if( !wxRenameFile( pcbFileName.GetFullPath(),
+                           backupFileName.GetFullPath() ) )
         {
-            msg = _( "Warning: unable to create bakfile " ) + BackupFileName;
+            msg = _( "Warning: unable to create backup file " ) +
+                backupFileName.GetFullPath();
             DisplayError( this, msg, 15 );
             saveok = FALSE;
         }
     }
     else
     {
-        BackupFileName = wxEmptyString;
+        backupFileName.Clear();
         saveok   = FALSE;
     }
 
     /* Create the file */
-    dest = wxFopen( FullFileName, wxT( "wt" ) );
+    dest = wxFopen( pcbFileName.GetFullPath(), wxT( "wt" ) );
+
     if( dest == 0 )
     {
-        msg = _( "Unable to create " ) + FullFileName;
+        msg = _( "Unable to create " ) + pcbFileName.GetFullPath();
         DisplayError( this, msg );
         saveok = FALSE;
     }
 
     if( dest )
     {
-        GetScreen()->m_FileName = FullFileName;
+        GetScreen()->m_FileName = pcbFileName.GetFullPath();
         SetTitle( GetScreen()->m_FileName );
 
         SavePcbFormatAscii( dest );
@@ -375,14 +374,14 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 
     if( saveok )
     {
-        upperTxt = _( "Backup file: " ) + BackupFileName;
+        upperTxt = _( "Backup file: " ) + backupFileName.GetFullPath();
     }
 
     if( dest )
         lowerTxt = _( "Wrote board file: " );
     else
         lowerTxt = _( "Failed to create " );
-    lowerTxt += FullFileName;
+    lowerTxt += pcbFileName.GetFullPath();
 
     Affiche_1_Parametre( this, 1, upperTxt, lowerTxt, CYAN );
 

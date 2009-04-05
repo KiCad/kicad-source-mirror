@@ -54,7 +54,6 @@ OBJECTS = eeschema.o\
 	dialog_eeschema_config.o\
 	eelayer.o \
 	priorque.o eeconfig.o \
-	affiche.o \
 	getpart.o\
 	netlist.o\
 	netlist_control.o\

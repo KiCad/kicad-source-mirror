@@ -12,10 +12,6 @@
 class WinEDA_GerberFrame;
 class BOARD;
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 // Type d'action du phototraceur:
 #define GERB_ACTIVE_DRAW 1      // activation de lumiere ( baisser de plume)
 #define GERB_STOP_DRAW   2      // extinction de lumiere ( lever de plume)
@@ -29,17 +25,15 @@ typedef enum {
 } PlotFormat;
 
 
-//eda_global wxString g_Plot_FileName;
-eda_global wxString g_PhotoFilenameExt;
-eda_global wxString g_DrillFilenameExt;
-eda_global wxString g_PenFilenameExt;
+extern wxString g_PhotoFilenameExt;
+extern wxString g_DrillFilenameExt;
+extern wxString g_PenFilenameExt;
 
-eda_global int      g_DCodesColor;
-eda_global int      g_Default_GERBER_Format;
-
+extern int      g_DCodesColor;
+extern int      g_Default_GERBER_Format;
 
 /* Gestion des ouvertures GERBER */
-eda_global int g_Plot_Spot_Mini;            /* Diametre mini de l'ouverture pour trace GERBER */
+extern int      g_Plot_Spot_Mini;    /* Diametre mini de l'ouverture pour trace GERBER */
 
 
 /*************************************/
@@ -442,17 +436,10 @@ public:
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 
 
-eda_global GERBER* g_GERBER_List[32];
+extern GERBER* g_GERBER_List[32];
 
+extern int     g_DisplayPolygonsModeSketch;
 
-/**
- * How to show filled polygons :
- * 0 = filled
- * 1 = Sketch mode
- */
-eda_global int           g_DisplayPolygonsModeSketch;
-
-
-#include "pcbnew.h"
+#include "pcbcommon.h"
 
 #endif  // ifndef GERBVIEW_H

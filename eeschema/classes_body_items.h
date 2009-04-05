@@ -2,22 +2,23 @@
 /*	Headers fo library definition and lib component definitions */
 /****************************************************************/
 
-/* Definitions of graphic items used to create shapes of component in libraries (libentry)
+/* Definitions of graphic items used to create shapes in component libraries.
  */
 #ifndef CLASSES_BODY_ITEMS_H
 #define CLASSES_BODY_ITEMS_H
 
-#define TARGET_PIN_DIAM 12                                  /* Circle diameter drawn at the active end of pins */
+#define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
+                                 * pins */
 
-#define DEFAULT_TEXT_SIZE 50                                /* Default size for field texts */
-#define PART_NAME_LEN     15                                /* Maximum length of part name. */
-#define PREFIX_NAME_LEN   5                                 /* Maximum length of prefix (IC, R, SW etc.). */
-#define PIN_WIDTH         100                               /* Width between 2 pins in internal units. */
-#define PIN_LENGTH        300                               /* Default Length of each pin to be drawn. */
+#define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
+#define PART_NAME_LEN       15  /* Maximum length of part name. */
+#define PREFIX_NAME_LEN     5   /* Maximum length of prefix (IC, R, SW etc.). */
+#define PIN_WIDTH           100 /* Width between 2 pins in internal units. */
+#define PIN_LENGTH          300 /* Default Length of each pin to be drawn. */
 
-#define INVERT_PIN_RADIUS   35                              /* Radius of inverted pin circle. */
-#define CLOCK_PIN_DIM       40                              /* Dim of clock pin symbol. */
-#define IEEE_SYMBOL_PIN_DIM 40                              /* Dim of special pin symbol. */
+#define INVERT_PIN_RADIUS   35  /* Radius of inverted pin circle. */
+#define CLOCK_PIN_DIM       40  /* Dim of clock pin symbol. */
+#define IEEE_SYMBOL_PIN_DIM 40  /* Dim of special pin symbol. */
 
 
 /**
@@ -25,12 +26,14 @@
  * is the set of fill types used in plotting or drawing enclosed areas.
  */
 enum FILL_T {
-    NO_FILL,                        // Poly, Square, Circle, Arc = option No Fill
-    FILLED_SHAPE,                   // Poly, Square, Circle, Arc = option Fill with current color ("Solid shape")
-    FILLED_WITH_BG_BODYCOLOR,       /* Poly, Square, Circle, Arc = option Fill with background body color,
-                                     * translucent (texts inside this shape can be seen)
-                                     * not filled in B&W mode when plotting or printing
-                                     */
+    NO_FILL,                     // Poly, Square, Circle, Arc = option No Fill
+    FILLED_SHAPE,                /* Poly, Square, Circle, Arc = option Fill
+                                  * with current color ("Solid shape") */
+    FILLED_WITH_BG_BODYCOLOR,    /* Poly, Square, Circle, Arc = option Fill
+                                  * with background body color, translucent
+                                  * (texts inside this shape can be seen)
+                                  * not filled in B&W mode when plotting or
+                                  * printing */
 };
 
 
@@ -38,7 +41,7 @@ enum FILL_T {
  * Enum ElectricPinType
  * is the set of schematic pin types, used in ERC tests.
  */
-enum ElectricPinType {      /* Type des Pins. si modif: modifier tableau des mgs suivant */
+enum ElectricPinType {
     PIN_INPUT,
     PIN_OUTPUT,
     PIN_BIDI,
@@ -54,25 +57,7 @@ enum ElectricPinType {      /* Type des Pins. si modif: modifier tableau des mgs
 };
 
 /* Messages d'affichage du type electrique */
-eda_global const wxChar* MsgPinElectricType[]
-#ifdef MAIN
-    = {
-    wxT( "input" ),
-    wxT( "output" ),
-    wxT( "BiDi" ),
-    wxT( "3state" ),
-    wxT( "passive" ),
-    wxT( "unspc" ),
-    wxT( "power_in" ),
-    wxT( "power_out" ),
-    wxT( "openCol" ),
-    wxT( "openEm" ),
-    wxT( "?????" )
-    }
-
-
-#endif
-;
+extern const wxChar* MsgPinElectricType[];
 
 /* Autres bits: bits du membre .Flag des Pins */
 #define PINNOTDRAW 1        /* si 1: pin invisible */
@@ -128,11 +113,13 @@ public:
 class LibEDA_BaseStruct : public EDA_BaseStruct
 {
 public:
-    int    m_Unit;          /* Unit identification (for multi part per parkage)
-                             *  0 if the item is common to all units */
-    int    m_Convert;       /* Shape identification (for parts which have a convert shape)
-                             *      0 if the item is common to all shapes */
-    FILL_T m_Fill;          /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR. has meaning only for some items */
+    int    m_Unit;       /* Unit identification (for multi part per parkage)
+                          * 0 if the item is common to all units */
+    int    m_Convert;    /* Shape identification (for parts which have a convert
+                          * shape) 0 if the item is common to all shapes */
+    FILL_T m_Fill;       /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
+                          * has meaning only for some items */
+    wxString m_typeName; /* Name of object displayed in the message panel. */
 
 public:
     LibEDA_BaseStruct* Next()
@@ -146,29 +133,40 @@ public:
 
     /** Function Draw (virtual pure)
      * Draw A body item
-     * @param aPanel = DrawPanel to use (can be null) mainly used for clipping purposes
+     * @param aPanel = DrawPanel to use (can be null) mainly used for clipping
+     *                 purposes
      * @param aDC = Device Context (can be null)
      * @param aOffset = offset to draw
-     * @param aColor = -1 to use the normal body item color, or use this color if >= 0
+     * @param aColor = -1 to use the normal body item color, or use this color
+     *                 if >= 0
      * @param aDrawMode = GR_OR, GR_XOR, ...
-     * @param aData = value or pointer used to pass others parametres, depending on body items.
-     *          used for some items to force to force no fill mode
-     *         ( has meaning only for items what can be filled ). used in printing or moving objects mode
-     *         or to pass refernce to the lib component for pins
+     * @param aData = value or pointer used to pass others parametres,
+     *                depending on body items. used for some items to force
+     *                to force no fill mode ( has meaning only for items what
+     *                can be filled ). used in printing or moving objects mode
+     *                or to pass refernce to the lib component for pins
      * @param aTransformMatrix = Transform Matrix (rotaion, mirror ..)
      */
-    virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-                       int aDrawMode, void* aData, const int aTransformMatrix[2][2] ) = 0;
+    virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC,
+                       const wxPoint &aOffset, int aColor, int aDrawMode,
+                       void* aData, const int aTransformMatrix[2][2] ) = 0;
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) const = 0;
+    virtual bool Load( char* line, wxString& errorMsg ) = 0;
 
-    void         Display_Infos_DrawEntry( WinEDA_DrawFrame* frame );
+    virtual EDA_Rect GetBoundingBox()
+    {
+        return EDA_BaseStruct::GetBoundingBox();
+    }
+
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
 
@@ -183,14 +181,17 @@ public:
     int      m_PinShape;    /* Bitwise ORed: Pin shape (see enum DrawPinShape) */
     int      m_PinType;     /* Electrical pin properties */
     int      m_Attributs;   /* bit 0 != 0: pin invisible */
-    long     m_PinNum;      /* Pin number: 4 Ascii code like "12" or "anod" or "G6"
-                             * "12" is stored as "12\0\0" ans does not depend on endian type*/
+    long     m_PinNum;      /* Pin number: 4 Ascii code like "12" or "anod"
+                             * or "G6" "12" is stored as "12\0\0" ans does not
+                             * depend on endian type*/
     wxString m_PinName;
-    int      m_PinNumSize, m_PinNameSize; /* Pin num and Pin name sizes */
+    int      m_PinNumSize;
+    int      m_PinNameSize; /* Pin num and Pin name sizes */
 
 //	int m_PinNumWidth, m_PinNameWidth;	/* (Currently Unused) Pin num and Pin name text width */
-    wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start point (segments) */
-    int      m_Width;       /* Tickness */
+    wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
+                             * point (segments) */
+    int      m_Width;       /* Line width */
 
 public:
     LibDrawPin();
@@ -207,32 +208,36 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
 
 
     LibDrawPin*  GenCopy();
-    void         Display_Infos( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual EDA_Rect GetBoundingBox();
     wxPoint      ReturnPinEndPoint();
 
     int ReturnPinDrawOrient( const int TransMat[2][2] );
     void         ReturnPinStringNum( wxString& buffer ) const;
     void         SetPinNumFromString( wxString& buffer );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
 
-    void         DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pin_pos,
-                                int orient,
+    void         DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
+                                const wxPoint& pin_pos, int orient,
                                 int DrawMode, int Color = -1 );
 
     void         DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
                                wxPoint& pin_pos, int orient,
-                               int TextInside, bool DrawPinNum, bool DrawPinName,
-                               int Color, int DrawMode );
+                               int TextInside, bool DrawPinNum,
+                               bool DrawPinName, int Color, int DrawMode );
     void         PlotPinTexts( wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,
@@ -247,14 +252,16 @@ public:
 /* Graphic Body Item: Arc */
 /**************************/
 
-class LibDrawArc      : public LibEDA_BaseStruct
+class LibDrawArc : public LibEDA_BaseStruct
 {
 public:
     int     m_Rayon;
-    int     t1, t2;                 /* position des 2 extremites de l'arc en 0.1 degres */
-    wxPoint m_ArcStart, m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
-    wxPoint m_Pos;                  /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;                /* Tickness */
+    int     t1, t2;     /* position des 2 extremites de l'arc en 0.1 degres */
+    wxPoint m_ArcStart;
+    wxPoint m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
+    wxPoint m_Pos;      /* Position or centre (Arc and Circle) or start point
+                         * (segments) */
+    int     m_Width;    /* Line width */
 
 public:
     LibDrawArc();
@@ -267,28 +274,35 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) const;
-
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawArc*  GenCopy();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
+
+    virtual EDA_Rect GetBoundingBox();
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
+
 
 /*****************************/
 /* Graphic Body Item: Circle */
 /*****************************/
-class LibDrawCircle   : public LibEDA_BaseStruct
+class LibDrawCircle : public LibEDA_BaseStruct
 {
 public:
     int     m_Rayon;
-    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;        /* Tickness */
+    wxPoint m_Pos;    /* Position or centre (Arc and Circle) or start
+                       * point (segments) */
+    int     m_Width;  /* Line width */
 
 public:
     LibDrawCircle();
@@ -301,17 +315,22 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool   Save( FILE* aFile ) const;
-
+    virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawCircle* GenCopy();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
+
+    virtual EDA_Rect GetBoundingBox();
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
 
@@ -321,8 +340,7 @@ public:
 /* Fields like Ref , value... are not Text,  */
 /* they are a separate class                 */
 /*********************************************/
-class LibDrawText  : public LibEDA_BaseStruct,
-    public EDA_TextStruct
+class LibDrawText : public LibEDA_BaseStruct, public EDA_TextStruct
 {
 public:
     LibDrawText();
@@ -335,17 +353,21 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) const;
-
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawText* GenCopy();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
+
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
 
@@ -355,9 +377,9 @@ public:
 class LibDrawSquare  : public LibEDA_BaseStruct
 {
 public:
-    wxPoint m_End;
-    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;        /* Tickness */
+    wxPoint m_End;     /* Rectangle end point. */
+    wxPoint m_Pos;     /* Rectangle start point. */
+    int     m_Width;   /* Line width */
 
 public:
     LibDrawSquare();
@@ -370,17 +392,22 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     *  format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool   Save( FILE* aFile ) const;
-
+    virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawSquare* GenCopy();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
+
+    virtual EDA_Rect GetBoundingBox();
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
 /**********************************/
@@ -390,8 +417,9 @@ class LibDrawSegment  : public LibEDA_BaseStruct
 {
 public:
     wxPoint m_End;
-    wxPoint m_Pos;          /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;        /* Tickness */
+    wxPoint m_Pos;      /* Position or centre (Arc and Circle) or start point
+                         * (segments) */
+    int     m_Width;    /* Line width */
 
 public:
     LibDrawSegment();
@@ -404,18 +432,23 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const;
-
+    virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawSegment* GenCopy();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
+
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
+
 
 /**********************************************************/
 /* Graphic Body Item: Polygon and polyline (set of lines) */
@@ -423,7 +456,7 @@ public:
 class LibDrawPolyline : public LibEDA_BaseStruct
 {
 public:
-    int m_Width;                            /* Tickness */
+    int m_Width;                            /* Line width */
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
@@ -438,11 +471,13 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool     Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawPolyline* GenCopy();
     void             AddPoint( const wxPoint& point );
@@ -460,13 +495,16 @@ public:
      */
     bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
-    /** Function GetBoundaryBox
+    /** Function GetBoundingBox
      * @return the boundary box for this, in library coordinates
      */
-    EDA_Rect GetBoundaryBox();
+    virtual EDA_Rect GetBoundingBox();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
+
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

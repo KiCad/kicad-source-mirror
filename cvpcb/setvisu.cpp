@@ -59,7 +59,9 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
             DrawFrame->GetBoard()->m_Modules.DeleteAll();
         }
 
-        DrawFrame->GetBoard()->m_Modules.PushBack( DrawFrame->Get_Module( FootprintName ) );
+        MODULE* mod = DrawFrame->Get_Module( FootprintName );
+        if( mod )
+            DrawFrame->GetBoard()->m_Modules.PushBack( mod );
 
         DrawFrame->Zoom_Automatique( FALSE );
         if( DrawFrame->m_Draw3DFrame )
@@ -94,7 +96,7 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     MODULE* Module = GetBoard()->m_Modules;
     if ( Module )
         Module->Display_Infos( this );
-    Affiche_Status_Box();
+    UpdateStatusBar();
     DrawPanel->Trace_Curseur( DC );
 }
 

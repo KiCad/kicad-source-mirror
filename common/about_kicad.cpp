@@ -5,8 +5,30 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "appl_wxstruct.h"
 
-extern wxString g_Main_Title; // Import program title
+
+#define BUILD_VERSION wxT("(20090325-unstable)")
+
+wxString g_BuildVersion
+
+#ifdef HAVE_SVN_VERSION
+#include "config.h"
+( wxT( KICAD_SVN_VERSION ) )
+#else
+( BUILD_VERSION )
+#endif
+;
+
+wxString g_BuildAboutVersion
+#if defined(HAVE_SVN_VERSION) || defined(HAVE_SVN_REVISION)
+#  include "config.h"
+( wxT( KICAD_ABOUT_VERSION ) )
+#else
+( BUILD_VERSION )
+#endif
+;
+
 
 /**********************************/
 wxString SetMsg( const wxString& msg )
@@ -33,7 +55,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 /**************************************************/
 {
 	/* Set name and title */
-	info.SetName( g_Main_Title );
+	info.SetName( wxGetApp().GetTitle() );
 
 	/* Set description */
 	wxString description;
@@ -65,7 +87,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
 	/* Check for wxMAC */
 #	elif defined __WXMAC__
-	description << ( wxT( "on Macintosch" ) );
+	description << ( wxT( "on Macintosh" ) );
 
 	/* Linux 64 bits */
 #	elif defined _LP64 && __LINUX__

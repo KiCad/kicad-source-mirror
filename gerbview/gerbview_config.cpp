@@ -10,6 +10,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "pcbcommon.h"
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "id.h"
@@ -21,10 +22,9 @@
 #define HOTKEY_FILENAME wxT( "gerbview" )
 
 
-/* Routines Locales */
-
-
-/* Variables locales */
+const wxString GerbviewProjectFileExt( wxT( "cnf" ) );
+const wxString GerbviewProjectFileWildcard( _( "GervView project files " \
+                                               "(.cnf)|*.cnf" ) );
 
 
 /*************************************************************/
@@ -78,7 +78,7 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
         FullFileName += HOTKEY_FILENAME;
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
         AddDelimiterString( FullFileName );
-        wxString editorname = GetEditorName();
+        wxString editorname = wxGetApp().GetEditorName();
         if( !editorname.IsEmpty() )
             ExecuteFile( this, editorname, FullFileName );
     }
@@ -112,17 +112,16 @@ bool Read_Config()
  * Retourne un pointeur su le message d'erreur a afficher
  */
 {
-    g_Prj_Config_Filename_ext = wxT( ".cnf" );
-    wxGetApp().ReadProjectConfig( wxT( "gerbview" ), GROUP, ParamCfgList,
+    wxGetApp().ReadProjectConfig( wxT( "gerbview.cnf" ), GROUP, ParamCfgList,
                                   FALSE );
 
     /* Inits autres variables */
     if( g_PhotoFilenameExt.IsEmpty() )
-        g_PhotoFilenameExt = wxT( ".pho" );
+        g_PhotoFilenameExt = wxT( "pho" );
     if( g_DrillFilenameExt.IsEmpty() )
-        g_DrillFilenameExt = wxT( ".drl" );
+        g_DrillFilenameExt = wxT( "drl" );
     if( g_PenFilenameExt.IsEmpty() )
-        g_PenFilenameExt = wxT( ".pen" );
+        g_PenFilenameExt = wxT( "pen" );
 
     return TRUE;
 }
@@ -136,29 +135,18 @@ void WinEDA_GerberFrame::Update_config()
  * creation du fichier de config
  */
 {
-    wxString FullFileName;
-    wxString mask( wxT( "*" ) );
+    wxFileName fn = wxFileName( wxEmptyString, wxT( "gerbview" ),
+                                GerbviewProjectFileExt );
 
-    g_Prj_Config_Filename_ext = wxT( ".cnf" );
-    mask += g_Prj_Config_Filename_ext;
+    wxFileDialog dlg( this, _( "Save GerbView Project File" ), wxEmptyString,
+                      fn.GetFullName(), GerbviewProjectFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    FullFileName = wxT( "gerbview" );
-    ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
-
-    FullFileName = EDA_FileSelector( _( "Save config file" ),
-                                     wxEmptyString,             /* Chemin par defaut */
-                                     FullFileName,              /* nom fichier par defaut */
-                                     g_Prj_Config_Filename_ext, /* extension par defaut */
-                                     mask,                      /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
-    if( FullFileName.IsEmpty() )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     /* ecriture de la configuration */
-    wxGetApp().WriteProjectConfig( FullFileName, GROUP, ParamCfgList );
+    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, ParamCfgList );
 }
 
 

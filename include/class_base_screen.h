@@ -92,30 +92,34 @@ WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
 class BASE_SCREEN : public EDA_BaseStruct
 {
 public:
-    wxPoint m_DrawOrg;                          /* offsets pour tracer le circuit sur l'ecran */
-    wxPoint m_Curseur;                          /* Screen cursor coordinate (on grid) in user units. */
-    wxPoint m_MousePosition;                    /* Mouse cursor coordinate (off grid) in user units. */
-    wxPoint m_MousePositionInPixels;            /* Mouse cursor coordinate (off grid) in pixels. */
-    wxPoint m_O_Curseur;                        /* Relative Screen cursor coordinate (on grid) in user units.
-                                                 * (coordinates from last reset position)*/
-    wxPoint m_ScrollbarPos;                     // Position effective des Curseurs de scroll
-    wxSize  m_ScrollbarNumber;                  /* Valeur effective des Nombres de Scrool
-                                                 * c.a.d taille en unites de scroll de la surface totale affichable */
-    wxPoint m_StartVisu;                        // Coord absolues du 1er pixel visualis�a l'ecran (en nombre de pixels)
+    wxPoint m_DrawOrg;         /* offsets pour tracer le circuit sur l'ecran */
+    wxPoint m_Curseur;         /* Screen cursor coordinate (on grid) in user units. */
+    wxPoint m_MousePosition;   /* Mouse cursor coordinate (off grid) in user units. */
+    wxPoint m_MousePositionInPixels;
+    wxPoint m_O_Curseur;       /* Relative Screen cursor coordinate (on grid) in user units.
+                                * (coordinates from last reset position)*/
+    wxPoint m_ScrollbarPos;    // Position effective des Curseurs de scroll
+    wxSize  m_ScrollbarNumber; /* Valeur effective des Nombres de Scrool
+                                * c.a.d taille en unites de scroll de la
+                                * surface totale affichable */
+    wxPoint m_StartVisu;       /* Coord absolues du 1er pixel visualis�a
+                                * l'ecran (en nombre de pixels) */
 
-    wxSize  m_SizeVisu;                 /* taille en pixels de l'ecran (fenetre de visu
-                                         * Utile pour recadrer les affichages lors de la
-                                         * navigation dans la hierarchie */
-    bool    m_Center;                   /* fix the coordinate (0,0) position on screen : if TRUE (0,0) in centered on screen
-                                         *  TRUE: when coordiantaes can be < 0 and > 0   all but schematic
-                                         *  FALSE: when coordinates can be only >= 0    Schematic
-                                         */
-    bool            m_FirstRedraw;
+    wxSize  m_SizeVisu;        /* taille en pixels de l'ecran (fenetre de visu
+                                * Utile pour recadrer les affichages lors de la
+                                * navigation dans la hierarchie */
+    bool    m_Center;          /* fix the coordinate (0,0) position on
+                                * screen : if TRUE (0,0) in centered on screen
+                                *  TRUE: when coordiantaes can be < 0 and
+                                * > 0   all but schematic
+                                *  FALSE: when coordinates can be only >= 0
+                                * Schematic */
+    bool    m_FirstRedraw;
 
     /* Gestion des editions */
-    SCH_ITEM*       EEDrawList;             /* Object list (main data) for schematic */
-    EDA_BaseStruct* m_UndoList;             /* Object list for the undo command (old data) */
-    EDA_BaseStruct* m_RedoList;             /* Object list for the redo command (old data) */
+    SCH_ITEM*       EEDrawList; /* Object list (main data) for schematic */
+    EDA_BaseStruct* m_UndoList; /* Object list for the undo command (old data) */
+    EDA_BaseStruct* m_RedoList; /* Object list for the redo command (old data) */
     int             m_UndoRedoCountMax;     /* undo/Redo command Max depth */
 
     /* block control */
@@ -149,9 +153,10 @@ public:
     GridArray  m_GridList;
     bool       m_UserGridIsON;
 
-    wxArrayInt m_ZoomList;          /* Array of standard zoom coefficients. */
-    int        m_Zoom;              /* Current zoom coefficient. */
-    int        m_ZoomScalar;        /* Allow zooming to non-integer increments. */
+    wxArrayInt m_ZoomList;       /* Array of standard zoom coefficients. */
+    int        m_Zoom;           /* Current zoom coefficient. */
+    int        m_ZoomScalar;     /* Allow zooming to non-integer increments. */
+    bool       m_IsPrinting;
 
 public:
     BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
@@ -238,6 +243,7 @@ public:
     void   SetZoomList( const wxArrayInt& zoomlist );
 
     int    Scale( int coord );
+    double Scale( double coord );
     void   Scale( wxPoint& pt );
     void   Scale( wxSize& sz );
     void   Scale( wxRealPoint& sz );

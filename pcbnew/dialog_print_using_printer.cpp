@@ -696,7 +696,7 @@ void EDA_Printout::DrawPage()
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
-    g_IsPrinting = TRUE;
+    m_Parent->GetBaseScreen()->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
     if( m_Print_Sheet_Ref )
@@ -761,7 +761,7 @@ void EDA_Printout::DrawPage()
      panel->PrintPage( dc, 0, s_PrintMaskLayer, s_PrintMirror );
 
     g_DrawBgColor    = bg_color;
-    g_IsPrinting     = false;
+    m_Parent->GetBaseScreen()->m_IsPrinting = false;
     panel->m_ClipBox = tmp;
 
     SetPenMinWidth( 1 );

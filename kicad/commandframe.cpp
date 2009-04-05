@@ -8,8 +8,6 @@
 #include "kicad.h"
 #include "macros.h"
 
-#define BITMAP wxBitmap
-
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -54,30 +52,29 @@ void WinEDA_CommandFrame::CreateCommandToolbar( void )
     m_ButtonLastPosition.x = 20;
     m_ButtonLastPosition.y = 20;
 
-    btn = new wxBitmapButton( this, ID_TO_EESCHEMA, BITMAP( icon_eeschema_xpm ) );
+    btn = new wxBitmapButton( this, ID_TO_EESCHEMA, wxBitmap( icon_eeschema_xpm ) );
     btn->SetToolTip( _( "EESchema (Schematic editor)" ) );
     AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( this, ID_TO_CVPCB, BITMAP( icon_cvpcb_xpm ) );
+    btn = new wxBitmapButton( this, ID_TO_CVPCB, wxBitmap( icon_cvpcb_xpm ) );
     btn->SetToolTip( _( "CVpcb (Components to modules)" ) );
     AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( this, ID_TO_PCB, BITMAP( a_icon_pcbnew_xpm ) );
+    btn = new wxBitmapButton( this, ID_TO_PCB, wxBitmap( a_icon_pcbnew_xpm ) );
     btn->SetToolTip( _( "PCBnew (PCB editor)" ) );
     AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( this, ID_TO_GERBVIEW, BITMAP( icon_gerbview_xpm ) );
+    btn = new wxBitmapButton( this, ID_TO_GERBVIEW, wxBitmap( icon_gerbview_xpm ) );
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
     AddFastLaunch( btn );
 
 
     // Set up toolbar
-
-    #ifdef KICAD_PYTHON
-    btn = new wxBitmapButton( this, ID_RUN_PYTHON, BITMAP( icon_python_xpm ) );
+#ifdef KICAD_PYTHON
+    btn = new wxBitmapButton( this, ID_RUN_PYTHON, wxBitmap( icon_python_xpm ) );
     btn->SetToolTip( _( "Run Python Script" ) );
     AddFastLaunch( btn );
-    #endif
+#endif
 }
 
 

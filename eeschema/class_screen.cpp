@@ -41,40 +41,6 @@ void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
 }
 
 
-/***************************************************************/
-void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
-/***************************************************************/
-
-/* place the struct in EEDrawList.
- *  if it is a new item, it it also put in undo list
- *  for an "old" item, saving it in undo list must be done before editiing,
- *  and not here!
- */
-{
-    if( m_Flags & IS_NEW )
-    {
-        SCH_SCREEN* screen = frame->GetScreen();
-        if( !screen->CheckIfOnDrawList( this ) )  //don't want a loop!
-            screen->AddToDrawList( this );
-        g_ItemToRepeat = this;
-        frame->SaveCopyInUndoList( this, IS_NEW );
-    }
-
-    m_Flags = 0;
-    frame->GetScreen()->SetModify();
-    frame->GetScreen()->SetCurItem( NULL );
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
-
-    if( DC )
-    {
-        frame->DrawPanel->CursorOff( DC );      // Erase schematic cursor
-        RedrawOneStruct( frame->DrawPanel, DC, this, GR_DEFAULT_DRAWMODE );
-        frame->DrawPanel->CursorOn( DC );       // Display schematic cursor
-    }
-}
-
-
 /***********************************************************************/
 /* Class SCH_SCREEN: classe de gestion d'un affichage pour schematique */
 /***********************************************************************/

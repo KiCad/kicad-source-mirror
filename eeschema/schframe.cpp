@@ -137,7 +137,6 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
 
     m_FrameName = wxT( "SchematicFrame" );
     m_Draw_Axis = FALSE;                // TRUE to show axis
-    m_Draw_Grid = g_ShowGrid;           // TRUE to show a grid
     m_Draw_Sheet_Ref = TRUE;            // TRUE to show sheet references
     m_CurrentSheet   = new DrawSheetPath();
     m_CurrentField   = NULL;
@@ -158,14 +157,14 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     g_ItemToRepeat = NULL;
 
     /* Get config */
-    GetSettings();
+    LoadSettings();
 
     if( config )
     {
         g_DrawMinimunLineWidth = config->Read( MINI_DRAW_LINE_WIDTH_KEY,
                                                (long) 0 );
         g_PlotLine_Width = config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE,
-                                                 (long) 4 );
+                                         (long) 4 );
     }
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -423,7 +422,7 @@ void WinEDA_SchematicFrame::SetToolbars()
                                       g_UnitMetric == INCHES ? TRUE : FALSE );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      g_CursorShape );
+                                      m_CursorShape );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_HIDDEN_PINS, g_ShowAllPins );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS,
                                             g_ShowAllPins ? _( "No show Hidden Pins" ) : _(
@@ -443,22 +442,21 @@ void WinEDA_SchematicFrame::SetToolbars()
 int WinEDA_SchematicFrame::BestZoom()
 /************************************/
 {
-    int    dx, dy, ii, jj;
-    int    bestzoom;
+    int    dx, dy;
     wxSize size;
+    double zoom;
 
     dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
     dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
-    size     = DrawPanel->GetClientSize();
-    ii       = dx / size.x;
-    jj       = dy / size.y;
-    bestzoom = MAX( ii, jj ) + 1;
+    size = DrawPanel->GetClientSize();
+    zoom = MAX( (double) dx / (double) size.x,
+                (double) dy / (double) size.y );
 
     GetScreen()->m_Curseur.x = dx / 2;
     GetScreen()->m_Curseur.y = dy / 2;
 
-    return bestzoom * GetScreen()->m_ZoomScalar;
+    return wxRound( zoom * (double) GetScreen()->m_ZoomScalar );
 }
 
 /*******************************************************************/
@@ -606,13 +604,12 @@ void WinEDA_SchematicFrame::OnLoadProject( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 /****************************************************************/
 {
-    wxString Line = g_RootSheet->m_AssociatedScreen->m_FileName;
+    wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
 
-    if( Line != wxEmptyString )
+    if( fn.IsOk() )
     {
-        AddDelimiterString( Line );
-        ChangeFileNameExt( Line, wxEmptyString );
-        ExecuteFile( this, PCBNEW_EXE, Line );
+        fn.ClearExt();
+        ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( fn ) );
     }
     else
         ExecuteFile( this, PCBNEW_EXE );
@@ -623,13 +620,12 @@ void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
 /***************************************************************/
 {
-    wxString Line = g_RootSheet->m_AssociatedScreen->m_FileName;
+    wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn.SetExt( NetlistFileExtension );
 
-    if( Line != wxEmptyString )
+    if( fn.IsOk() && fn.FileExists() )
     {
-        AddDelimiterString( Line );
-        ChangeFileNameExt( Line, wxEmptyString );
-        ExecuteFile( this, CVPCB_EXE, Line );
+        ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
     }
     else
         ExecuteFile( this, CVPCB_EXE );

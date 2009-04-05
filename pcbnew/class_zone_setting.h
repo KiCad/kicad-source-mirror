@@ -6,11 +6,6 @@
 #define ZONE_SETTING_H
 
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
-
 /*************************************************/
 /* Class ZONE_SETTING to handle zones parameters */
 /*************************************************/

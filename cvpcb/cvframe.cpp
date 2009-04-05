@@ -23,104 +23,6 @@
 #define FRAME_MIN_SIZE_X 450
 #define FRAME_MIN_SIZE_Y 300
 
-/*******************************************************/
-/* Constructeur de WinEDA_CvpcbFrame: la fenetre generale */
-/*******************************************************/
-WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
-    WinEDA_BasicFrame( NULL, CVPCB_FRAME, title, wxDefaultPosition,
-                       wxDefaultSize, style )
-{
-    m_FrameName = wxT( "CvpcbFrame" );
-
-    //m_AboutTitle    = g_CvpcbAboutTitle;
-    m_ListCmp = NULL;
-    m_FootprintList = NULL;
-    DrawFrame   = NULL;
-    m_HToolBar  = NULL;
-
-    // Give an icon
-    #ifdef __WINDOWS__
-    SetIcon( wxICON( a_icon_cvpcb ) );
-    #else
-    SetIcon( wxICON( icon_cvpcb ) );
-    #endif
-
-    SetFont( *g_StdFont );
-
-    SetAutoLayout( TRUE );
-
-    GetSettings();
-    if( m_FrameSize.x < FRAME_MIN_SIZE_X )
-        m_FrameSize.x = FRAME_MIN_SIZE_X;
-    if( m_FrameSize.y < FRAME_MIN_SIZE_Y )
-        m_FrameSize.y = FRAME_MIN_SIZE_Y;
-
-    // create the status bar
-    int dims[3] = { -1, -1, 250 };
-    CreateStatusBar( 3 );
-    SetStatusWidths( 3, dims );
-    ReCreateMenuBar();
-    ReCreateHToolbar();
-
-    // Creation des listes de modules disponibles et des composants du schema
-    // Create child subwindows.
-    BuildCmpListBox();
-    BuildFootprintListBox();
-
-    /* Creation des contraintes de dimension de la fenetre d'affichage des composants
-     *  du schema */
-    wxLayoutConstraints* linkpos = new wxLayoutConstraints;
-    linkpos->top.SameAs( this, wxTop );
-    linkpos->bottom.SameAs( this, wxBottom );
-    linkpos->left.SameAs( this, wxLeft );
-    linkpos->width.PercentOf( this, wxWidth, 66 );
-    if( m_ListCmp )
-        m_ListCmp->SetConstraints( linkpos );
-
-    /* Creation des contraintes de dimension de la fenetre d'affichage des modules
-     *  de la librairie */
-    linkpos = new wxLayoutConstraints;
-    linkpos->top.SameAs( m_ListCmp, wxTop );
-    linkpos->bottom.SameAs( m_ListCmp, wxBottom );
-    linkpos->right.SameAs( this, wxRight );
-    linkpos->left.SameAs( m_ListCmp, wxRight );
-    if( m_FootprintList )
-        m_FootprintList->SetConstraints( linkpos );
-
-    // Set minimal frame width and height
-    SetSizeHints( FRAME_MIN_SIZE_X,
-                  FRAME_MIN_SIZE_Y, -1, -1, -1, -1 );
-
-    // Framesize and position
-    SetSize( m_FramePos.x,
-             m_FramePos.y,
-             m_FrameSize.x,
-             m_FrameSize.y );
-}
-
-
-/******************************************/
-WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame()
-/******************************************/
-{
-    wxConfig* config = wxGetApp().m_EDA_Config;
-
-    if( config )
-    {
-        int state = m_HToolBar->GetToolState(
-            ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
-        config->Write( wxT( FILTERFOOTPRINTKEY ), state );
-    }
-}
-
-
-/************************************************/
-void WinEDA_CvpcbFrame::OnSize( wxSizeEvent& event )
-/************************************************/
-{
-    event.Skip();
-}
-
 
 /*************************************/
 /* Event table for WinEDA_CvpcbFrame */
@@ -194,6 +96,98 @@ BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, wxFrame )
 END_EVENT_TABLE()
 
 
+/*******************************************************/
+/* Constructeur de WinEDA_CvpcbFrame: la fenetre generale */
+/*******************************************************/
+WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
+    WinEDA_BasicFrame( NULL, CVPCB_FRAME, title, wxDefaultPosition,
+                       wxDefaultSize, style )
+{
+    m_FrameName = wxT( "CvpcbFrame" );
+
+    m_ListCmp = NULL;
+    m_FootprintList = NULL;
+    DrawFrame   = NULL;
+    m_HToolBar  = NULL;
+
+    // Give an icon
+    #ifdef __WINDOWS__
+    SetIcon( wxICON( a_icon_cvpcb ) );
+    #else
+    SetIcon( wxICON( icon_cvpcb ) );
+    #endif
+
+    SetAutoLayout( TRUE );
+
+    LoadSettings();
+    if( m_FrameSize.x < FRAME_MIN_SIZE_X )
+        m_FrameSize.x = FRAME_MIN_SIZE_X;
+    if( m_FrameSize.y < FRAME_MIN_SIZE_Y )
+        m_FrameSize.y = FRAME_MIN_SIZE_Y;
+
+    // create the status bar
+    int dims[3] = { -1, -1, 250 };
+    CreateStatusBar( 3 );
+    SetStatusWidths( 3, dims );
+    ReCreateMenuBar();
+    ReCreateHToolbar();
+
+    // Creation des listes de modules disponibles et des composants du schema
+    // Create child subwindows.
+    BuildCmpListBox();
+    BuildFootprintListBox();
+
+    /* Creation des contraintes de dimension de la fenetre d'affichage des composants
+     *  du schema */
+    wxLayoutConstraints* linkpos = new wxLayoutConstraints;
+    linkpos->top.SameAs( this, wxTop );
+    linkpos->bottom.SameAs( this, wxBottom );
+    linkpos->left.SameAs( this, wxLeft );
+    linkpos->width.PercentOf( this, wxWidth, 66 );
+    if( m_ListCmp )
+        m_ListCmp->SetConstraints( linkpos );
+
+    /* Creation des contraintes de dimension de la fenetre d'affichage des modules
+     *  de la librairie */
+    linkpos = new wxLayoutConstraints;
+    linkpos->top.SameAs( m_ListCmp, wxTop );
+    linkpos->bottom.SameAs( m_ListCmp, wxBottom );
+    linkpos->right.SameAs( this, wxRight );
+    linkpos->left.SameAs( m_ListCmp, wxRight );
+    if( m_FootprintList )
+        m_FootprintList->SetConstraints( linkpos );
+
+    // Set minimal frame width and height
+    SetSizeHints( FRAME_MIN_SIZE_X, FRAME_MIN_SIZE_Y, -1, -1, -1, -1 );
+
+    // Framesize and position
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+}
+
+
+/******************************************/
+WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame()
+/******************************************/
+{
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
+    if( config )
+    {
+        int state = m_HToolBar->GetToolState(
+            ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
+        config->Write( wxT( FILTERFOOTPRINTKEY ), state );
+    }
+}
+
+
+/************************************************/
+void WinEDA_CvpcbFrame::OnSize( wxSizeEvent& event )
+/************************************************/
+{
+    event.Skip();
+}
+
+
 /******************************************************/
 void WinEDA_CvpcbFrame::OnQuit( wxCommandEvent& event )
 /******************************************************/
@@ -212,7 +206,7 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
     {
         unsigned        ii;
         wxMessageDialog dialog( this,
-                                _( "Net and component list modified.\n Save before exit ?" ),
+                                _( "Net and component list modified.\nSave before exit ?" ),
                                 _( "Confirmation" ),
                                 wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
 
@@ -252,9 +246,9 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
             wxGetApp().m_HtmlCtrl->GetFrame()->Close( TRUE );
     }
 
-    if( !NetInNameBuffer.IsEmpty() )
+    if( m_NetlistFileName.IsOk() )
     {
-        SetLastProject( NetInNameBuffer );
+        SetLastProject( m_NetlistFileName.GetFullPath() );
     }
 
     FreeMemoryModules();
@@ -345,7 +339,7 @@ void WinEDA_CvpcbFrame::ToPreviousNA( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::SaveQuitCvpcb( wxCommandEvent& event )
 /**********************************************************/
 {
-    if( SaveNetList( wxEmptyString )  > 0 )
+    if( SaveNetList( wxEmptyString ) > 0 )
     {
         modified = 0;
         Close( TRUE );
@@ -384,37 +378,56 @@ void WinEDA_CvpcbFrame::DelAssociations( wxCommandEvent& event )
 }
 
 
-/***********************************************************/
-void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
-/***********************************************************/
-
-/* Called when click on Load Netlist button or by  menu files
- *  Read a netlist slected by user
+/*
+ * Called when click on Load Netlist button or by file history menu entries
+ * Read a netlist slected by user
  */
+void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
 {
-    bool     newfile;
-    wxString oldfilename;
-    wxString fullfilename;
-    int      id = event.GetId();
+    wxString   oldPath;
+    wxFileName newFileName;
+    int        id = event.GetId();
 
-    // Get a filename from history. if fullfilename is void,
-    // a name will be asked to user, later.
-    if ( id >= wxID_FILE1 && id <= wxID_FILE9 )     // Called by clicking on an old filename in file history
-        fullfilename = GetFileFromHistory( event.GetId(), _( "Netlist" ) );
-
-    if( !NetInNameBuffer.IsEmpty() )
+    if ( id >= wxID_FILE1 && id <= wxID_FILE9 )
     {
-        oldfilename = NetInNameBuffer;
+        newFileName = GetFileFromHistory( id, _( "Netlist" ) );
+    }
+    else
+    {
+        newFileName = wxFileName( wxGetCwd(), _( "unnamed" ), wxT( "net" ) );
+
+        wxFileDialog dlg( this, _( "Open Net List" ), newFileName.GetPath(),
+                          newFileName.GetFullName(), NetlistFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        newFileName = dlg.GetPath();
     }
 
-    // Read the file fullfilename. If fullfilename is void,
-    // The user will be prompted for a filename.
-    // newfile = true if a file is read.
-    newfile = ReadInputNetList( fullfilename );
+    if( newFileName == m_NetlistFileName )
+        return;
 
-    if( newfile && !oldfilename.IsEmpty() )
+    if( m_NetlistFileName.DirExists() )
+        oldPath = m_NetlistFileName.GetPath();
+
+    /* Update the library search path list. */
+    if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
+        wxGetApp().GetLibraryPathList().Remove( oldPath );
+    wxGetApp().GetLibraryPathList().Insert( newFileName.GetPath(), 0 );
+    m_NetlistFileName = newFileName;
+
+    if( ReadNetList() )
     {
-        SetLastProject( NetInNameBuffer );
+        SetLastProject( m_NetlistFileName.GetFullPath() );
+
+        SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
+                  wxT( " " ) + m_NetlistFileName.GetFullPath() );
+    }
+    else
+    {
+        SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() );
     }
 
     ReCreateMenuBar();
@@ -497,11 +510,12 @@ void WinEDA_CvpcbFrame::SetLanguage( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::DisplayDocFile( wxCommandEvent& event )
 /*************************************************************/
 {
-    wxString DocModuleFileName, fullfilename;
+    wxASSERT( wxGetApp().m_EDA_CommonConfig != NULL );
 
-    DocModuleFileName = wxGetApp().m_EDA_CommonConfig->Read(
-        DOC_FOOTPRINTS_LIST_KEY,
-        DEFAULT_FOOTPRINTS_LIST_FILENAME );
+    wxString  DocModuleFileName, fullfilename;
+    wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
+    DocModuleFileName = cfg->Read( DOC_FOOTPRINTS_LIST_KEY,
+                                   DEFAULT_FOOTPRINTS_LIST_FILENAME );
     if( wxIsAbsolutePath( DocModuleFileName ) )
         fullfilename = DocModuleFileName;
     else

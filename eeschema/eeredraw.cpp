@@ -7,6 +7,8 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "class_drawpickedstruct.h"
+#include "appl_wxstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -14,47 +16,18 @@
 #include "protos.h"
 
 
-char marq_bitmap[] =
-{
-    12, 12, 0,  0,                          /* Dimensions x et y, offsets x et y du bitmap de marqueurs*/
-    YELLOW,                                 /* Couleur */
-    1,  1,  1,  1, 1, 1, 1, 1, 0, 0, 0, 0,  /* bitmap: >= 1 : color, 0 = notrace */
-    1,  1,  1,  0, 1, 0, 1, 1, 0, 0, 0, 0,
-    1,  1,  1,  1, 0, 0, 0, 1, 0, 0, 0, 0,
-    1,  0,  1,  1, 1, 0, 0, 0, 0, 0, 0, 0,
-    1,  1,  0,  1, 1, 1, 0, 0, 0, 0, 0, 0,
-    1,  1,  0,  0, 1, 1, 1, 0, 0, 0, 0, 0,
-    1,  1,  1,  0, 0, 1, 1, 1, 0, 0, 0, 0,
-    0,  0,  0,  0, 0, 0, 1, 1, 1, 0, 0, 0,
-    0,  0,  0,  0, 0, 0, 0, 1, 1, 1, 0, 0,
-    0,  0,  0,  0, 0, 0, 0, 0, 1, 1, 1, 0,
-    0,  0,  0,  0, 0, 0, 0, 0, 0, 1, 1, 1,
-    0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 1, 0
-};
-
-char marqERC_bitmap[] =
-{
-    8, 8, 0, 0, /* Dimensions x et y , offsets x et y du bitmap de marqueurs*/
-    -1,         /* Color: -1 = couleur non pr�cis�e */
-    1, 1, 1, 1, 1, 0, 0, 0,
-    1, 1, 1, 0, 1, 0, 0, 0,
-    1, 1, 1, 1, 0, 0, 0, 0,
-    1, 0, 1, 1, 1, 0, 0, 0,
-    1, 1, 0, 1, 1, 1, 0, 0,
-    0, 0, 0, 0, 1, 1, 1, 0,
-    0, 0, 0, 0, 0, 1, 1, 1,
-    0, 0, 0, 0, 0, 0, 1, 0,
-};
+extern char marq_bitmap[];
 
 
 static EDA_BaseStruct* HighLightStruct = NULL;
 
-/************************************************************/
+
 void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
                          const wxPoint& pos, int Color )
-/************************************************************/
 {
-    if( !g_IsPrinting )   // Draw but do not print the Dangling Symbol */
+    BASE_SCREEN* screen = panel->GetScreen();
+
+    if( !screen->m_IsPrinting ) /* Draw but do not print the Dangling Symbol */
     {
         GRRect( &panel->m_ClipBox, DC,
                 pos.x - DANGLING_SYMBOL_SIZE, pos.y - DANGLING_SYMBOL_SIZE,
@@ -64,21 +37,16 @@ void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/*************************************************/
 void SetHighLightStruct( EDA_BaseStruct* HighLight )
-/*************************************************/
 {
     HighLightStruct = HighLight;
 }
 
 
-/**********************************************************************/
-void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/**********************************************************************/
-
 /*
  * Redraws only the active window which is assumed to be whole visible.
  */
+void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     wxString title;
 
@@ -104,7 +72,8 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    RedrawStructList( DrawPanel, DC, GetScreen()->EEDrawList, GR_DEFAULT_DRAWMODE );
+    RedrawStructList( DrawPanel, DC, GetScreen()->EEDrawList,
+                      GR_DEFAULT_DRAWMODE );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawMinimunLineWidth );
 
@@ -114,14 +83,15 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
     }
 
-    Affiche_Status_Box();
+    UpdateStatusBar();
     GetScreen()->ClrRefreshReq();
 
     // Display the sheet filename, and the sheet path, for non root sheets
-    if( GetScreen()->m_FileName == g_DefaultSchematicFileName ) // This is the root sheet
+    if( GetScreen()->m_FileName == g_DefaultSchematicFileName )
     {
-        wxString msg = g_Main_Title + wxT( " " ) + GetBuildVersion();
-        title.Printf( wxT( "%s [%s]" ), msg.GetData(), GetScreen()->m_FileName.GetData() );
+        wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+        title.Printf( wxT( "%s [%s]" ), msg.GetData(),
+                      GetScreen()->m_FileName.GetData() );
         SetTitle( title );
     }
     else
@@ -134,14 +104,8 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/******************************************************************************************************/
-void WinEDA_DrawPanel::PrintPage( wxDC* DC,
-                                  bool  Print_Sheet_Ref,
-                                  int   PrintMask,
-                                  bool  aPrintMirrorMode )
-/******************************************************************************************************/
-
-/** PrintPage
+/**
+ * PrintPage
  * used to print a page.
  * Print the page pointed by ActiveScreen, set by the calling print function
  * @param DC = wxDC given by the calling print function
@@ -149,6 +113,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC,
  * @param PrintMask = not used here
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  */
+void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref,
+                                  int PrintMask, bool  aPrintMirrorMode )
 {
     wxBeginBusyCursor();
 
@@ -172,7 +138,8 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         if( Structs->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
         {
-            SCH_ITEM* item = ( (DrawPickedStruct*) Structs )->m_PickedStruct;
+            SCH_ITEM* item =
+                (SCH_ITEM*) ( (DrawPickedStruct*) Structs )->m_PickedStruct;
 
 // uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
             //   if( panel->m_ClipBox.Intersects( item->GetBoundingBox() ) )
@@ -211,189 +178,14 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/****************************************************************************/
-/* Draw wires, Bus, and dashed liges.. */
-/****************************************************************************/
-void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                               const wxPoint& offset, int DrawMode, int Color )
-{
-    int color;
-    int width = m_Width;
-
-    if( Color >= 0 )
-        color = Color;
-    else
-        color = ReturnLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
-
-    // Busses are draw with thick lines
-    if( m_Layer == LAYER_BUS )
-        width = MAX( m_Width, MIN_BUSLINES_THICKNESS );
-
-    width = MAX( width, g_DrawMinimunLineWidth );
-
-    if( m_Layer == LAYER_NOTES )
-        GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
-                      m_Start.y + offset.y, m_End.x + offset.x,
-                      m_End.y + offset.y, width, color );
-    else
-        GRLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
-                m_Start.y + offset.y, m_End.x + offset.x, m_End.y + offset.y,
-                width, color );
-
-    if( m_StartIsDangling )
-        DrawDanglingSymbol( panel, DC, m_Start + offset, color );
-
-    if( m_EndIsDangling )
-        DrawDanglingSymbol( panel, DC, m_End + offset, color );
-}
-
-
-/****************************************************************************************/
-void DrawMarkerStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                             int DrawMode, int Color )
-/****************************************************************************************/
-{
-#define WAR 1   // utilis� aussi dans erc.cpp
-
-    if( m_Type == MARQ_ERC )
-    {
-        int color = Color;
-        if( Color <= 0 )
-        {
-            color = (m_MarkFlags == WAR ) ?
-                    g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
-                    g_LayerDescr.LayerColor[LAYER_ERC_ERR];
-        }
-        Draw_Marqueur( panel, DC, m_Pos + offset, marqERC_bitmap, DrawMode, color );
-    }
-    else
-        Draw_Marqueur( panel, DC, m_Pos + offset, marq_bitmap, DrawMode, Color );
-}
-
-
-/*************************************************************************/
-void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                int DrawMode, int Color )
-/*************************************************************************/
-/* DRaw the "No Connect" symbol.. */
-{
-    const int DELTA = (DRAWNOCONNECT_SIZE / 2);
-    int       pX, pY, color;
-    int       width = g_DrawMinimunLineWidth;
-
-    pX = m_Pos.x + offset.x; pY = m_Pos.y + offset.y;
-
-    if( Color >= 0 )
-        color = Color;
-    else
-        color = ReturnLayerColor( LAYER_NOCONNECT );
-    GRSetDrawMode( DC, DrawMode );
-
-    GRLine( &panel->m_ClipBox, DC, pX - DELTA, pY - DELTA, pX + DELTA, pY + DELTA, width, color );
-    GRLine( &panel->m_ClipBox, DC, pX + DELTA, pY - DELTA, pX - DELTA, pY + DELTA, width, color );
-}
-
-
-/**************************************************************/
-void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                               int DrawMode, int Color )
-/***************************************************************/
-
-/* Draw the bus entries  .. */
-
-{
-    int color;
-    int width = m_Width;
-
-    if( Color >= 0 )
-        color = Color;
-    else
-        color = ReturnLayerColor( m_Layer );
-    GRSetDrawMode( DC, DrawMode );
-
-    if( m_Layer == LAYER_BUS )
-        width = MAX( m_Width, MIN_BUSLINES_THICKNESS );
-
-    width = MAX( width, g_DrawMinimunLineWidth );
-
-    GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
-            m_End().x + offset.x, m_End().y + offset.y, width, color );
-}
-
-
-
-/*****************************************************************************
-* Routine to redraw polyline struct.										 *
-*****************************************************************************/
-void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                               int DrawMode, int Color )
-{
-    int color;
-    int width = m_Width;
-
-    if( Color >= 0 )
-        color = Color;
-    else
-        color = ReturnLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
-
-    if( m_Layer == LAYER_BUS )
-        width = MAX( m_Width, MIN_BUSLINES_THICKNESS );
-
-    width = MAX( width, g_DrawMinimunLineWidth );
-
-    GRMoveTo( m_PolyPoints[0].x, m_PolyPoints[0].y );
-    if( m_Layer == LAYER_NOTES )
-    {
-        for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRDashedLineTo( &panel->m_ClipBox, DC, m_PolyPoints[i].x + offset.x,
-                            m_PolyPoints[i].y + offset.y, width, color );
-    }
-    else
-    {
-        for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRLineTo( &panel->m_ClipBox,
-                      DC,
-                      m_PolyPoints[i].x + offset.x,
-                      m_PolyPoints[i].y + offset.y,
-                      width,
-                      color );
-    }
-}
-
-
-/*****************************************************************************
-* Routine to redraw connection struct.										 *
-*****************************************************************************/
-void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                               int DrawMode, int Color )
-{
-    int color;
-
-    if( Color >= 0 )
-        color = Color;
-    else
-        color = ReturnLayerColor( m_Layer );
-    GRSetDrawMode( DC, DrawMode );
-
-    GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
-                    DRAWJUNCTION_SIZE, 0, color, color );
-}
-
-
-/**********************************************************/
-void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
-                         SCH_ITEM* DrawStruct, int dx, int dy )
-/**********************************************************/
 
 /* Routine de redessin en mode fantome (Dessin simplifie en g_XorMode et
  * g_GhostColor
  * de structures.
  * Utilisee dans les deplacements de blocs
  */
+void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
+                         SCH_ITEM* DrawStruct, int dx, int dy )
 {
     int DrawMode = g_XorMode;
     int width    = g_DrawMinimunLineWidth;
@@ -406,7 +198,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     case DRAW_POLYLINE_STRUCT_TYPE:
     {
         DrawPolylineStruct* Struct = (DrawPolylineStruct*) DrawStruct;
-        GRMoveTo( Struct->m_PolyPoints[0].x + dx, Struct->m_PolyPoints[0].y + dy );
+        GRMoveTo( Struct->m_PolyPoints[0].x + dx,
+                  Struct->m_PolyPoints[0].y + dy );
         for( unsigned ii = 1; ii < Struct->GetCornerCount(); ii++ )
             GRLineTo( &panel->m_ClipBox, DC, Struct->m_PolyPoints[ii].x + dx,
                       Struct->m_PolyPoints[ii].y + dy, width, g_GhostColor );
@@ -428,16 +221,13 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         }
         if( (Struct->m_Flags & ENDPOINT) == 0 )
         {
-            GRLineTo( &panel->m_ClipBox,
-                      DC,
-                      Struct->m_End.x + dx,
-                      Struct->m_End.y + dy,
-                      width,
-                      g_GhostColor );
+            GRLineTo( &panel->m_ClipBox, DC, Struct->m_End.x + dx,
+                      Struct->m_End.y + dy, width, g_GhostColor );
         }
         else
         {
-            GRLineTo( &panel->m_ClipBox, DC, Struct->m_End.x, Struct->m_End.y, width, g_GhostColor );
+            GRLineTo( &panel->m_ClipBox, DC, Struct->m_End.x,
+                      Struct->m_End.y, width, g_GhostColor );
         }
         break;
     }
@@ -447,12 +237,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         DrawBusEntryStruct* Struct = (DrawBusEntryStruct*) DrawStruct;
         int xx = Struct->m_Pos.x + dx, yy = Struct->m_Pos.y + dy;
         GRMoveTo( xx, yy );
-        GRLineTo( &panel->m_ClipBox,
-                  DC,
-                  Struct->m_Size.x + xx,
-                  Struct->m_Size.y + yy,
-                  width,
-                  g_GhostColor );
+        GRLineTo( &panel->m_ClipBox, DC, Struct->m_Size.x + xx,
+                  Struct->m_Size.y + yy, width, g_GhostColor );
         break;
     }
 
@@ -495,21 +281,21 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         EDA_LibComponentStruct* LibEntry;
         SCH_COMPONENT*          Struct;
         Struct   = (SCH_COMPONENT*) DrawStruct;
-        LibEntry = FindLibPart( Struct->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        LibEntry = FindLibPart( Struct->m_ChipName.GetData(), wxEmptyString,
+                                FIND_ROOT );
         if( LibEntry == NULL )
             break;
         DrawingLibInGhost( panel, DC, LibEntry, Struct, Struct->m_Pos.x + dx,
-                           Struct->m_Pos.y + dy,
-                           Struct->m_Multi, Struct->m_Convert,
-                           g_GhostColor, FALSE );
+                           Struct->m_Pos.y + dy, Struct->m_Multi,
+                           Struct->m_Convert, g_GhostColor, FALSE );
         break;
     }
 
     case DRAW_SHEET_STRUCT_TYPE:
     {
         DrawSheetStruct* Struct = (DrawSheetStruct*) DrawStruct;
-        GRRect( &panel->m_ClipBox, DC, Struct->m_Pos.x + dx, Struct->m_Pos.y + dy,
-                Struct->m_Pos.x + Struct->m_Size.x + dx,
+        GRRect( &panel->m_ClipBox, DC, Struct->m_Pos.x + dx,
+                Struct->m_Pos.y + dy, Struct->m_Pos.x + Struct->m_Size.x + dx,
                 Struct->m_Pos.y + Struct->m_Size.y + dy, width, g_GhostColor );
         break;
     }
@@ -524,10 +310,6 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/************************************************************/
-void Draw_Marqueur( WinEDA_DrawPanel* panel, wxDC* DC,
-                    wxPoint pos, char* pt_bitmap, int DrawMode, int Color )
-/************************************************************/
 
 /*
  * Place un repere sur l'ecran au point de coordonnees PCB pos_X, pos_Y
@@ -538,6 +320,8 @@ void Draw_Marqueur( WinEDA_DrawPanel* panel, wxDC* DC,
  *
  * copie la description du marqueur en current_marqueur (global)
  */
+void Draw_Marqueur( WinEDA_DrawPanel* panel, wxDC* DC,
+                    wxPoint pos, char* pt_bitmap, int DrawMode, int Color )
 {
     int  px, py, color;
     char ii, ii_max, jj, jj_max;
@@ -545,13 +329,16 @@ void Draw_Marqueur( WinEDA_DrawPanel* panel, wxDC* DC,
     if( pt_bitmap == NULL )
         pt_bitmap = marq_bitmap;
 
-    px = GRMapX( pos.x ); py = GRMapY( pos.y );
+    px = GRMapX( pos.x );
+    py = GRMapY( pos.y );
 
     /* Lecture des dimensions */
-    ii_max = *(pt_bitmap++); jj_max = *(pt_bitmap++);
+    ii_max = *(pt_bitmap++);
+    jj_max = *(pt_bitmap++);
 
     /* lecture des offsets */
-    px += *(pt_bitmap++); py += *(pt_bitmap++);
+    px += *(pt_bitmap++);
+    py += *(pt_bitmap++);
 
     color = *(pt_bitmap++);
     if( (Color > 0) )

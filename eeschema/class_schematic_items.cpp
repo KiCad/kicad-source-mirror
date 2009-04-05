@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
+#include "class_drawpanel.h"
 
 #include "common.h"
 #include "program.h"
@@ -17,11 +18,18 @@
 /* class DrawBusEntryStruct */
 /***************************/
 
+const wxChar*  NameMarqueurType[] =
+{
+    wxT( "" ),
+    wxT( "ERC" ),
+    wxT( "PCB" ),
+    wxT( "SIMUL" ),
+    wxT( "?????" )
+};
 
-/*******************************************************************/
+
 DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) :
     SCH_ITEM( NULL, DRAW_BUSENTRY_STRUCT_TYPE )
-/*******************************************************************/
 {
     m_Pos    = pos;
     m_Size.x = 100;
@@ -40,19 +48,13 @@ DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) 
 }
 
 
-/****************************************/
 wxPoint DrawBusEntryStruct::m_End() const
-/****************************************/
-
-// retourne la coord de fin du raccord
 {
     return wxPoint( m_Pos.x + m_Size.x, m_Pos.y + m_Size.y );
 }
 
 
-/***************************************************/
 DrawBusEntryStruct* DrawBusEntryStruct::GenCopy()
-/***************************************************/
 {
     DrawBusEntryStruct* newitem = new DrawBusEntryStruct( m_Pos, 0, 0 );
 
@@ -88,8 +90,7 @@ bool DrawBusEntryStruct::Save( FILE* aFile ) const
         success = false;
     }
     if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n",
-            m_Pos.x, m_Pos.y,
-            m_End().x, m_End().y ) == EOF )
+                 m_Pos.x, m_Pos.y, m_End().x, m_End().y ) == EOF )
     {
         success = false;
     }
@@ -98,9 +99,7 @@ bool DrawBusEntryStruct::Save( FILE* aFile ) const
 }
 
 
-/*********************************************/
 EDA_Rect DrawBusEntryStruct::GetBoundingBox()
-/*********************************************/
 {
     int      dx = m_Pos.x - m_End().x;
     int      dy = m_Pos.y - m_End().y;
@@ -108,19 +107,38 @@ EDA_Rect DrawBusEntryStruct::GetBoundingBox()
 
     box.Normalize();
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
-    box.Inflate(width/2, width/2);
+    box.Inflate( width / 2, width / 2 );
 
     return box;
 }
+
+
+void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                               const wxPoint& offset, int DrawMode, int Color )
+{
+    int color;
+    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+
+    if( Color >= 0 )
+        color = Color;
+    else
+        color = ReturnLayerColor( m_Layer );
+    GRSetDrawMode( DC, DrawMode );
+
+    if( m_Layer == LAYER_BUS )
+        width *= 3;
+
+    GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
+            m_End().x + offset.x, m_End().y + offset.y, width, color );
+}
+
 
 /****************************/
 /* class DrawJunctionStruct */
 /***************************/
 
-/************************************************************/
 DrawJunctionStruct::DrawJunctionStruct( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
-/************************************************************/
 {
     m_Pos   = pos;
     m_Layer = LAYER_JUNCTION;
@@ -169,19 +187,36 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
     return ret;
 };
 
-/*********************************************************/
-bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
-/*********************************************************/
+
 /** Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
+bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
 {
     wxPoint dist = aPosRef - m_Pos;
 
-    if( sqrt( ((double) dist.x * dist.x) + ((double) dist.y * dist.y) ) < DRAWJUNCTION_SIZE )
-        return true;
-     return false;
+    return sqrt( ( (double) ( dist.x * dist.x ) ) +
+                 ( (double) ( dist.y * dist.y ) ) ) < DRAWJUNCTION_SIZE;
+}
+
+
+/*****************************************************************************
+* Routine to redraw connection struct.										 *
+*****************************************************************************/
+void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                               const wxPoint& offset, int DrawMode, int Color )
+{
+    int color;
+
+    if( Color >= 0 )
+        color = Color;
+    else
+        color = ReturnLayerColor( m_Layer );
+    GRSetDrawMode( DC, DrawMode );
+
+    GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x,
+                    m_Pos.y + offset.y, DRAWJUNCTION_SIZE, 0, color, color );
 }
 
 
@@ -192,8 +227,7 @@ void DrawJunctionStruct::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-        << m_Pos
-        << "/>\n";
+        << m_Pos << "/>\n";
 }
 
 #endif
@@ -219,25 +253,24 @@ DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
     return newitem;
 }
 
-/*********************************************/
+
 EDA_Rect DrawNoConnectStruct::GetBoundingBox()
-/*********************************************/
 {
     const int DELTA = DRAWNOCONNECT_SIZE / 2;
-    EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ), wxSize( 2 * DELTA, 2 * DELTA ) );
+    EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ),
+                   wxSize( 2 * DELTA, 2 * DELTA ) );
 
     box.Normalize();
     return box;
 }
 
 
-/*********************************************************/
-bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
-/*********************************************************/
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
+bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
 {
     int width = g_DrawMinimunLineWidth;
     int delta = ( DRAWNOCONNECT_SIZE + width) / 2;
@@ -268,9 +301,64 @@ bool DrawNoConnectStruct::Save( FILE* aFile ) const
 }
 
 
+void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                                const wxPoint& offset, int DrawMode, int Color )
+{
+    const int DELTA = (DRAWNOCONNECT_SIZE / 2);
+    int       pX, pY, color;
+    int       width = g_DrawMinimunLineWidth;
+
+    pX = m_Pos.x + offset.x; pY = m_Pos.y + offset.y;
+
+    if( Color >= 0 )
+        color = Color;
+    else
+        color = ReturnLayerColor( LAYER_NOCONNECT );
+    GRSetDrawMode( DC, DrawMode );
+
+    GRLine( &panel->m_ClipBox, DC, pX - DELTA, pY - DELTA, pX + DELTA,
+            pY + DELTA, width, color );
+    GRLine( &panel->m_ClipBox, DC, pX + DELTA, pY - DELTA, pX - DELTA,
+            pY + DELTA, width, color );
+}
+
+
 /**************************/
 /* class DrawMarkerStruct */
 /**************************/
+
+char marq_bitmap[] =
+{
+    12, 12, 0,  0, /* Dimensions x et y, offsets x et y du bitmap de marqueurs*/
+    YELLOW,        /* Couleur */
+    1,  1,  1,  1, 1, 1, 1, 1, 0, 0, 0, 0,  /* bitmap: >= 1 : color, */
+    1,  1,  1,  0, 1, 0, 1, 1, 0, 0, 0, 0,  /*  0 = notrace */
+    1,  1,  1,  1, 0, 0, 0, 1, 0, 0, 0, 0,
+    1,  0,  1,  1, 1, 0, 0, 0, 0, 0, 0, 0,
+    1,  1,  0,  1, 1, 1, 0, 0, 0, 0, 0, 0,
+    1,  1,  0,  0, 1, 1, 1, 0, 0, 0, 0, 0,
+    1,  1,  1,  0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0,  0,  0,  0, 0, 0, 1, 1, 1, 0, 0, 0,
+    0,  0,  0,  0, 0, 0, 0, 1, 1, 1, 0, 0,
+    0,  0,  0,  0, 0, 0, 0, 0, 1, 1, 1, 0,
+    0,  0,  0,  0, 0, 0, 0, 0, 0, 1, 1, 1,
+    0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 1, 0
+};
+
+char marqERC_bitmap[] =
+{
+    8, 8, 0, 0, /* Dimensions x et y , offsets x et y du bitmap de marqueurs*/
+    -1,         /* Color: -1 = couleur non pr�cis�e */
+    1, 1, 1, 1, 1, 0, 0, 0,
+    1, 1, 1, 0, 1, 0, 0, 0,
+    1, 1, 1, 1, 0, 0, 0, 0,
+    1, 0, 1, 1, 1, 0, 0, 0,
+    1, 1, 0, 1, 1, 1, 0, 0,
+    0, 0, 0, 0, 1, 1, 1, 0,
+    0, 0, 0, 0, 0, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 1, 0,
+};
+
 
 DrawMarkerStruct::DrawMarkerStruct( const wxPoint& pos, const wxString& text ) :
     SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE )
@@ -332,9 +420,8 @@ bool DrawMarkerStruct::Save( FILE* aFile ) const
     bool success = true;
 
     if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\" F=%X\n",
-            int( m_Type ) + 'A',
-            m_Pos.x, m_Pos.y,
-            CONV_TO_UTF8( m_Comment ), m_MarkFlags ) == EOF )
+                 int( m_Type ) + 'A', m_Pos.x, m_Pos.y,
+                 CONV_TO_UTF8( m_Comment ), m_MarkFlags ) == EOF )
     {
         success = false;
     }
@@ -342,6 +429,28 @@ bool DrawMarkerStruct::Save( FILE* aFile ) const
     return success;
 }
 
+
+void DrawMarkerStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                             const wxPoint& offset, int DrawMode, int Color )
+{
+#define WAR 1   // utilis� aussi dans erc.cpp
+
+    if( m_Type == MARQ_ERC )
+    {
+        int color = Color;
+        if( Color <= 0 )
+        {
+            color = (m_MarkFlags == WAR ) ?
+                g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
+                g_LayerDescr.LayerColor[LAYER_ERC_ERR];
+        }
+
+        Draw_Marqueur( panel, DC, m_Pos + offset, marqERC_bitmap, DrawMode,
+                       color );
+    }
+    else
+        Draw_Marqueur( panel, DC, m_Pos + offset, marq_bitmap, DrawMode, Color );
+}
 
 
 /***************************/
@@ -375,9 +484,7 @@ EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
 }
 
 
-/***************************************************/
 EDA_DrawLineStruct* EDA_DrawLineStruct::GenCopy()
-/***************************************************/
 {
     EDA_DrawLineStruct* newitem = new EDA_DrawLineStruct( m_Start, m_Layer );
 
@@ -387,12 +494,7 @@ EDA_DrawLineStruct* EDA_DrawLineStruct::GenCopy()
 }
 
 
-/************************************************************/
 bool EDA_DrawLineStruct::IsOneEndPointAt( const wxPoint& pos )
-/************************************************************/
-
-/* Return TRUE if the start or the end point is in position pos
- */
 {
     if( (pos.x == m_Start.x) && (pos.y == m_Start.y) )
         return TRUE;
@@ -423,7 +525,6 @@ void EDA_DrawLineStruct::Show( int nestLevel, std::ostream& os )
     "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
-
 #endif
 
 
@@ -438,7 +539,8 @@ EDA_Rect EDA_DrawLineStruct::GetBoundingBox()
     int      ymax = MAX( m_Start.y, m_End.y ) + width;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_Rect ret( wxPoint( xmin, ymin ),
+                  wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -467,9 +569,8 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
     {
         success = false;
     }
-    if (fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n",
-            m_Start.x,m_Start.y,
-            m_End.x,m_End.y) == EOF)
+    if ( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_Start.x,m_Start.y,
+                  m_End.x,m_End.y ) == EOF )
     {
         success = false;
     }
@@ -478,14 +579,46 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
 }
 
 
+void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                               const wxPoint& offset, int DrawMode, int Color )
+{
+    int color;
+    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+
+    if( Color >= 0 )
+        color = Color;
+    else
+        color = ReturnLayerColor( m_Layer );
+
+    GRSetDrawMode( DC, DrawMode );
+
+    // FIXME: Not compatable with new zoom.
+    if( (m_Layer == LAYER_BUS) && panel->GetScreen()->Scale( width ) <= 1 )
+        width *= 3;
+
+    if( m_Layer == LAYER_NOTES )
+        GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
+                      m_Start.y + offset.y, m_End.x + offset.x,
+                      m_End.y + offset.y, width, color );
+    else
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
+                m_Start.y + offset.y, m_End.x + offset.x, m_End.y + offset.y,
+                width, color );
+
+    if( m_StartIsDangling )
+        DrawDanglingSymbol( panel, DC, m_Start + offset, color );
+
+    if( m_EndIsDangling )
+        DrawDanglingSymbol( panel, DC, m_End + offset, color );
+}
+
+
 /****************************/
 /* Class DrawPolylineStruct */
 /****************************/
 
-/***********************************************************/
 DrawPolylineStruct::DrawPolylineStruct( int layer ) :
     SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
-/***********************************************************/
 {
     m_Width  = GR_NORM_WIDTH;
 
@@ -508,19 +641,14 @@ DrawPolylineStruct::DrawPolylineStruct( int layer ) :
 }
 
 
-/********************************************/
 DrawPolylineStruct::~DrawPolylineStruct()
-/*********************************************/
 {
 }
 
 
-/*****************************************************/
 DrawPolylineStruct* DrawPolylineStruct::GenCopy()
-/*****************************************************/
 {
-    DrawPolylineStruct* newitem =
-        new DrawPolylineStruct( m_Layer );
+    DrawPolylineStruct* newitem = new DrawPolylineStruct( m_Layer );
     newitem->m_PolyPoints = m_PolyPoints;   // std::vector copy
     return newitem;
 }
@@ -546,15 +674,14 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
     if( m_Width != GR_NORM_WIDTH )
         width = "Bus";
     if( fprintf( aFile, "Poly %s %s %d\n",
-            width, layer, GetCornerCount() ) == EOF )
+                 width, layer, GetCornerCount() ) == EOF )
     {
-        success = false;
-        return success;
+        return false;
     }
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
         if( fprintf( aFile, "\t%-4d %-4d\n",
-                m_PolyPoints[ii ].x, m_PolyPoints[ii].y ) == EOF )
+                     m_PolyPoints[ii ].x, m_PolyPoints[ii].y ) == EOF )
         {
             success = false;
             break;
@@ -562,4 +689,39 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                               const wxPoint& offset, int DrawMode, int Color )
+{
+    int color;
+    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+
+    if( Color >= 0 )
+        color = Color;
+    else
+        color = ReturnLayerColor( m_Layer );
+
+    GRSetDrawMode( DC, DrawMode );
+
+    if( m_Layer == LAYER_BUS )
+    {
+        width *= 3;
+    }
+
+    GRMoveTo( m_PolyPoints[0].x, m_PolyPoints[0].y );
+
+    if( m_Layer == LAYER_NOTES )
+    {
+        for( unsigned i = 1; i < GetCornerCount(); i++ )
+            GRDashedLineTo( &panel->m_ClipBox, DC, m_PolyPoints[i].x + offset.x,
+                            m_PolyPoints[i].y + offset.y, width, color );
+    }
+    else
+    {
+        for( unsigned i = 1; i < GetCornerCount(); i++ )
+            GRLineTo( &panel->m_ClipBox, DC, m_PolyPoints[i].x + offset.x,
+                      m_PolyPoints[i].y + offset.y, width, color );
+    }
 }

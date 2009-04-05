@@ -8,13 +8,6 @@
 #ifndef __INCLUDE__PLOT_COMMON_H__
 #define __INCLUDE__PLOT_COMMON_H__ 1
 
-#ifndef EDA_BASE
-#  define COMMON_GLOBL extern
-#else
-#  define COMMON_GLOBL
-#endif
-
-
 /**
  * Enum PlotFormat
  * must be kept in order of the radio buttons in the plot panel/window.

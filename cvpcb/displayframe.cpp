@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 #include "id.h"
 #include "confirm.h"
+#include "macros.h"
 
 #include "3d_viewer.h"
 
@@ -34,17 +35,14 @@ END_EVENT_TABLE()
 /* WinEDA_DisplayFrame: the frame to display the current focused footprint */
 /***************************************************************************/
 
-WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father,
+WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
                                           const wxString& title,
                                           const wxPoint& pos,
                                           const wxSize& size, long style ) :
     WinEDA_BasePcbFrame( father, CVPCB_DISPLAY_FRAME, title, pos,
                          size, style )
 {
-    m_FrameName      = wxT( "CmpFrame" );
-    m_Draw_Axis      = TRUE;             // TRUE if we want the axis
-    m_Draw_Grid      = TRUE;             // TRUE if we want the grid
-    m_Draw_Sheet_Ref = FALSE;            // TRUE if we want the sheet references
+    m_FrameName = wxT( "CmpFrame" );
 
     // Give an icon
     #ifdef __WINDOWS__
@@ -55,10 +53,9 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( wxWindow* father,
     SetTitle( title );
 
     SetBoard( new BOARD( NULL, this ) );
-
     SetBaseScreen( new PCB_SCREEN() );
 
-    GetSettings();
+    LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -234,25 +231,25 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     case WXK_NUMPAD8:       /* cursor moved up */
     case WXK_UP:
-        Mouse.y -= (int) round(delta.y);
+        Mouse.y -= wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD2:       /* cursor moved down */
     case WXK_DOWN:
-        Mouse.y += (int) round(delta.y);
+        Mouse.y += wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD4:       /*  cursor moved left */
     case WXK_LEFT:
-        Mouse.x -= (int) round(delta.x);
+        Mouse.x -= wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD6:      /*  cursor moved right */
     case WXK_RIGHT:
-        Mouse.x += (int) round(delta.x);
+        Mouse.x += wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
     }
@@ -285,7 +282,7 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         }
     }
 
-    Affiche_Status_Box();    /* Display new cursor coordinates */
+    UpdateStatusBar();    /* Display new cursor coordinates */
 }
 
 

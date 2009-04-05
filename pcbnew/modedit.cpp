@@ -10,14 +10,14 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-
-#include "pcbnew.h"
-#include "trigo.h"
-#include "3d_viewer.h"
-
+#include "appl_wxstruct.h"
 #include "bitmaps.h"
-#include "protos.h"
 #include "id.h"
+#include "trigo.h"
+
+#include "3d_viewer.h"
+#include "pcbnew.h"
+#include "protos.h"
 
 #include "collectors.h"
 
@@ -202,39 +202,43 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_DELETE_PART:
-        {
-            wxString Line;
-            Line = MakeFileName( g_RealLibDirBuffer, m_CurrentLib, LibExtBuffer );
-            Delete_Module_In_Library( Line );
-        }
+    {
+        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
+                                    ModuleFileExtension );
+        wxString tmp =
+            wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        if( wxFileName::FileExists( tmp ) )
+            Delete_Module_In_Library( tmp );
         break;
+    }
 
     case ID_MODEDIT_NEW_MODULE:
-        {
-            Clear_Pcb( true );
-            GetScreen()->ClearUndoRedoList();
-            SetCurItem( NULL );
-            GetScreen()->m_Curseur = wxPoint( 0, 0 );
+    {
+        Clear_Pcb( true );
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        GetScreen()->m_Curseur = wxPoint( 0, 0 );
 
-            MODULE* module = Create_1_Module( &dc, wxEmptyString );
-            if ( module )       // i.e. if create module command not aborted
-            {
-                module->SetPosition( wxPoint(0, 0) );
-                if( GetBoard()->m_Modules )
-                    GetBoard()->m_Modules->m_Flags = 0;
-                Zoom_Automatique( true );
-            }
+        MODULE* module = Create_1_Module( &dc, wxEmptyString );
+        if ( module )       // i.e. if create module command not aborted
+        {
+            module->SetPosition( wxPoint(0, 0) );
+            if( GetBoard()->m_Modules )
+                GetBoard()->m_Modules->m_Flags = 0;
+            Zoom_Automatique( true );
         }
         break;
+    }
 
     case ID_MODEDIT_SAVE_LIBMODULE:
-        {
-            wxString Line;
-            Line = MakeFileName( g_RealLibDirBuffer, m_CurrentLib.GetData(), LibExtBuffer );
-            Save_Module_In_Library( Line, GetBoard()->m_Modules, true, true, true );
-            GetScreen()->ClrModify();
-        }
+    {
+        wxFileName fn;
+        fn = wxFileName( g_RealLibDirBuffer, m_CurrentLib, ModuleFileExtension );
+        Save_Module_In_Library( fn.GetFullPath(), GetBoard()->m_Modules,
+                                true, true, true );
+        GetScreen()->ClrModify();
         break;
+    }
 
     case ID_MODEDIT_LOAD_MODULE_FROM_BOARD:
         GetScreen()->ClearUndoRedoList();
@@ -314,7 +318,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     }
         break;
 
-    case ID_LIBEDIT_IMPORT_PART:
+    case ID_MODEDIT_IMPORT_PART:
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         Clear_Pcb( true );
@@ -328,12 +332,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             m_Draw3DFrame->NewDisplay();
         break;
 
-    case ID_LIBEDIT_EXPORT_PART:
+    case ID_MODEDIT_EXPORT_PART:
         if( GetBoard()->m_Modules )
             Export_Module( GetBoard()->m_Modules, FALSE );
         break;
 
-    case ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART:
+    case ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART:
         if( GetBoard()->m_Modules )
             Export_Module( GetBoard()->m_Modules, true );
         break;

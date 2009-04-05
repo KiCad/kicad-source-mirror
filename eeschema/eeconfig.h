@@ -2,10 +2,6 @@
 /** eeconfig.h : configuration: definition des structures  **/
 /************************************************************/
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include "param_config.h"
 
 #define GROUP       wxT( "/eeschema" )
@@ -52,24 +48,6 @@ static PARAM_CFG_INT UnitCfg
     &g_UnitMetric,              /* Parameter address */
     0,                          /* Default  value */
     0, 1                        /*  Min and Max values for the parameter */
-);
-
-static PARAM_CFG_INT CursorShapeCfg
-(
-    INSETUP,
-    wxT( "CuShape" ),           /* Ident String */
-    &g_CursorShape,             /* Parameter address */
-    0,                          /* Default  value */
-    0, 1                        /*  Min and Max values for the parameter */
-);
-
-static PARAM_CFG_INT ShowGridCfg
-(
-    INSETUP,
-    wxT( "ShGrid" ),            /* Ident String */
-    &g_ShowGrid,                /* Parameter address */
-    0, 1,                       /*  Min and Max values for the parameter */
-    1                           /* Default  value */
 );
 
 static PARAM_CFG_SETCOLOR DrawBgColorCfg
@@ -496,8 +474,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &NetFormatCfg,
 
     &UnitCfg,
-    &CursorShapeCfg,
-    &ShowGridCfg,
     &DrawBgColorCfg,
     &ColorLayerWireCfg,
     &ColorLayerBusCfg,

@@ -13,21 +13,20 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "macros.h"
+#include "appl_wxstruct.h"
 
 #include "cvpcb.h"
 #include "protos.h"
-
-FILE* name_libmodules;   /* pour lecture librairie */
 
 /* routines locales : */
 static void      ReadDocLib( const wxString& ModLibName );
 static int       LibCompare( void* mod1, void* mod2 );
 static STOREMOD* TriListeModules( STOREMOD* BaseListe, int nbitems );
 
-/**/
 
 /*********************/
-int listlib()
+bool listlib()
 /*********************/
 
 /* Routine lisant la liste des librairies, et generant la liste chainee
@@ -42,13 +41,13 @@ int listlib()
  *
  */
 {
-    char      buffer[1024];
-    wxString  FullLibName;
-    int       errorlevel = 0, end;
-    int       flag_librairie;
-    STOREMOD* ItemLib;
-    unsigned  ii;
-    wxString  msg;
+    FILE*      file;   /* pour lecture librairie */
+    char       buffer[1024];
+    wxFileName fn;
+    int        end;
+    STOREMOD*  ItemLib;
+    unsigned   ii;
+    wxString   tmp, msg;
 
     if( g_BaseListePkg )    /* Liste Deja existante, a supprimer */
     {
@@ -57,50 +56,65 @@ int listlib()
     }
 
     if( g_LibName_List.GetCount() == 0 )
-        return -4;
+    {
+        wxMessageBox( _( "No PCB foot print libraries are listed in the " \
+                         "current project file." ), _( "Project File Error" ),
+                      wxOK | wxICON_ERROR );
+        return false;
+    }
 
-    /* init recherche */
-    SetRealLibraryPath( wxT( "modules" ) );
     nblib = 0;
 
     /* Lecture des Librairies */
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
         /* Calcul du nom complet de la librairie */
-        FullLibName = MakeFileName( g_RealLibDirBuffer,
-                                    g_LibName_List[ii],
-                                    LibExtBuffer );
-        /* acces a une librairie */
-        if( ( name_libmodules = wxFopen( FullLibName, wxT( "rt" ) ) )  == NULL )
+        fn = g_LibName_List[ii];
+        fn.SetExt( ModuleFileExtension );
+
+        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+
+        if( !tmp )
         {
-            msg.Printf( _( "Library file <%s> not found" ),
-                        FullLibName.GetData() );
-            DisplayError( NULL, msg, 20 );
+            msg.Printf( _( "PCB foot print library file <%s> could not be " \
+                           "found in the default search paths." ),
+                        fn.GetFullName().c_str() );
+            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            continue;
+        }
+
+        /* acces a une librairie */
+        file = wxFopen( tmp, wxT( "rt" ) );
+
+        if( file == NULL )
+        {
+            msg.Printf( _( "Could not open PCB foot print library file <%s>." ),
+                        tmp.c_str() );
+            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
             continue;
         }
 
         /* Controle du type de la librairie : */
-        flag_librairie = 0;
-        fgets( buffer, 32, name_libmodules );
+        fgets( buffer, 32, file );
         if( strncmp( buffer, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            msg.Printf( _( "Library file <%s> is not a module library" ),
-                        FullLibName.GetData() );
-            DisplayError( NULL, msg, 20 );
-            fclose( name_libmodules );
+            msg.Printf( _( "<%s> is not a valid Kicad PCB foot print library" ),
+                        tmp.c_str() );
+            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            fclose( file );
             continue;
         }
 
         /* Lecture du nombre de composants */
-        fseek( name_libmodules, 0, 0 );
+        fseek( file, 0, 0 );
 
         /* lecture nom des composants : */
         end = 0;
-        while( !end && fgets( buffer, 255, name_libmodules ) != NULL )
+        while( !end && fgets( buffer, 255, file ) != NULL )
         {
             if( strnicmp( buffer, "$INDEX", 6 ) == 0 )
             {
-                while( fgets( buffer, 255, name_libmodules ) != NULL )
+                while( fgets( buffer, 255, file ) != NULL )
                 {
                     if( strnicmp( buffer, "$EndINDEX", 6 ) == 0 )
                     {
@@ -112,25 +126,29 @@ int listlib()
                     ItemLib->Pnext     = g_BaseListePkg;
                     g_BaseListePkg     = ItemLib;
                     ItemLib->m_Module  = CONV_FROM_UTF8( StrPurge( buffer ) );
-                    ItemLib->m_LibName = FullLibName;
-
+                    ItemLib->m_LibName = tmp;
                     nblib++;
                 }
 
                 if( !end )
-                    errorlevel = -3;
+                {
+                    msg.Printf( _( "Unexpected end of file occurred while " \
+                                   "parsing PCB foot print library <%s>." ),
+                                tmp.c_str() );
+                    wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+                }
             }
         }
 
-        fclose( name_libmodules );
-        ReadDocLib( FullLibName );
+        fclose( file );
+        ReadDocLib( tmp );
     }
 
     /* classement alphabetique: */
     if( g_BaseListePkg )
         g_BaseListePkg = TriListeModules( g_BaseListePkg, nblib );
 
-    return errorlevel;
+    return true;
 }
 
 
@@ -218,18 +236,28 @@ static void ReadDocLib( const wxString& ModLibName )
     STOREMOD* NewMod;
     char      Line[1024];
     wxString  ModuleName;
-    wxString  docfilename;
+    wxString  msg;
     FILE*     LibDoc;
+    wxFileName fn = ModLibName;
 
-    docfilename = ModLibName;
-    ChangeFileNameExt( docfilename, EXT_DOC );
+    fn.SetExt( wxT( "mdc" ) );
 
-    if( ( LibDoc = wxFopen( docfilename, wxT( "rt" ) ) ) == NULL )
+    if( ( LibDoc = wxFopen( fn.GetFullPath(), wxT( "rt" ) ) ) == NULL )
+    {
+        msg.Printf( _( "Could not open PCB foot print library document " \
+                       "file <%s>." ), fn.GetFullPath().c_str() );
+        wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
         return;
+    }
 
     GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 );
     if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
+    {
+        msg.Printf( _( "<%s> is not a valid PCB foot print library " \
+                       "document file." ), fn.GetFullPath().c_str() );
+        wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
         return;
+    }
 
     /* Lecture de la librairie */
     while( GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 ) )

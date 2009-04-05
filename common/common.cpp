@@ -12,13 +12,124 @@
 #include "confirm.h"
 #include <wx/process.h>
 
+/**
+ * Global variables definitions.
+ *
+ * TODO: All if these variables should be moved into the class were they
+ *       are defined and used.  Most of them probably belong in the
+ *       application class.
+ */
+
+/* Standard page sizes in 1/1000 inch */
+Ki_PageDescr g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
+Ki_PageDescr g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
+Ki_PageDescr g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
+Ki_PageDescr g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
+Ki_PageDescr g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
+Ki_PageDescr g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
+Ki_PageDescr g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
+Ki_PageDescr g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
+Ki_PageDescr g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
+Ki_PageDescr g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
+Ki_PageDescr g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ),
+                             wxT( "GERBER" ) );
+Ki_PageDescr g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ),
+                           wxT( "User" ) );
+
+Ki_PageDescr* g_SheetSizeList[NB_ITEMS + 1] =
+{
+    &g_Sheet_A4, &g_Sheet_A3, &g_Sheet_A2, &g_Sheet_A1, &g_Sheet_A0,
+    &g_Sheet_A, &g_Sheet_B, &g_Sheet_C, &g_Sheet_D, &g_Sheet_E,
+    &g_Sheet_user, NULL
+};
+
+
+/* File extension definitions.  Please do not changes these.  If a different
+ * file extension is needed, create a new definition in the application.
+ * Please note, just because they are defined as const dosen't guarentee
+ * that they cannot be changed. */
+const wxString ProjectFileExtension( wxT( "pro" ) );
+const wxString SchematicFileExtension( wxT( "sch" ) );
+const wxString BoardFileExtension( wxT( "brd" ) );
+const wxString NetlistFileExtension( wxT( "net" ) );
+const wxString GerberFileExtension( wxT( "pho" ) );
+
+/* Proper wxFileDialog wild card definitions. */
+const wxString ProjectFileWildcard( _( "Kicad project files (*.pro)|*.pro" ) );
+const wxString BoardFileWildcard( _( "Kicad PCB files (*.brd)|*.brd") );
+const wxString SchematicFileWildcard( _( "Kicad schematic files (*.sch)|*.sch" ) );
+const wxString NetlistFileWildcard( _( "Kicad netlist files (*.net)|*.net" ) );
+const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
+const wxString AllFilesWildcard( _( "All files (*)|*") );
+
+
+wxString    g_ProductName = wxT( "KiCad E.D.A.  " );
+bool        g_ShowPageLimits = true;
+int         g_GridColor = DARKGRAY;
+wxString    g_RealLibDirBuffer;
+wxString    g_UserLibDirBuffer;
+int         g_DebugLevel;
+int         g_MouseOldButtons;
+int         g_KeyPressed;
+wxFont*     g_StdFont = NULL;
+wxFont*     g_DialogFont = NULL;   /* Normal font used in dialog box */
+wxFont*     g_ItalicFont = NULL;   /* Italic font used in dialog box */
+wxFont*     g_MsgFont = NULL;      /* Italic font used in message panel */
+wxFont*     g_FixedFont = NULL;    /* Affichage de Texte en fenetres de dialogue,
+                                    * fonte a pas fixe)*/
+int         g_StdFontPointSize;    /* taille de la fonte */
+int         g_DialogFontPointSize; /* taille de la fonte */
+int         g_FixedFontPointSize;  /* taille de la fonte */
+int         g_MsgFontPointSize;    /* taille de la fonte */
+int         g_FontMinPointSize;    /* taille minimum des fontes */
+
+
+// Nom (full file name) du file Configuration par defaut (kicad.pro)
+wxString    g_Prj_Default_Config_FullFilename;
+
+// Nom du file Configuration local (<curr projet>.pro)
+wxString    g_Prj_Config_LocalFilename;
+
+// Handle the preferd editor for browsing report files:
+int         g_UnitMetric;   // display units mm = 1, inches = 0, cm = 2
+
+/* Draw color for moving objects: */
+int         g_GhostColor;
+
+StructColors ColorRefs[NBCOLOR] =
+{
+    { 0,  0,   0,  BLACK, wxT("BLACK"), DARKDARKGRAY},
+    { 192,  0,  0, BLUE, wxT("BLUE"), LIGHTBLUE},
+    { 0, 160,  0,  GREEN, wxT("GREEN"), LIGHTGREEN },
+    { 160, 160, 0,  CYAN, wxT("CYAN"), LIGHTCYAN },
+    { 0,  0, 160,  RED, wxT("RED"), LIGHTRED },
+    { 160,  0, 160,  MAGENTA, wxT("MAGENTA"), LIGHTMAGENTA },
+    { 0, 128, 128,  BROWN, wxT("BROWN"), YELLOW },
+    { 192, 192, 192,  LIGHTGRAY, wxT("GRAY"), WHITE },
+    { 128,  128,  128,  DARKGRAY, wxT("DARKGRAY"), LIGHTGRAY },
+    { 255,   0, 0,  LIGHTBLUE, wxT("LIGHTBLUE"),  LIGHTBLUE },
+    { 0, 255, 0, LIGHTGREEN, wxT("LIGHTGREEN"), LIGHTGREEN },
+    { 255, 255, 0, LIGHTCYAN, wxT("LIGHTCYAN"), LIGHTCYAN },
+    { 0,  0, 255, LIGHTRED, wxT("LIGHTRED"), LIGHTRED },
+    { 255,  0, 255, LIGHTMAGENTA, wxT("LIGHTMAGENTA"), LIGHTMAGENTA },
+    { 0, 255, 255, YELLOW, wxT("YELLOW"), YELLOW },
+    { 255, 255, 255, WHITE, wxT("WHITE"), WHITE },
+    {  64,  64, 64,  DARKDARKGRAY, wxT("DARKDARKGRAY"),  DARKGRAY },
+    {  64,   0,  0,  DARKBLUE, wxT("DARKBLUE"), BLUE },
+    {    0,  64,  0,  DARKGREEN, wxT("DARKGREEN"),  GREEN },
+    {  64,  64,  0,  DARKCYAN, wxT("DARKCYAN"),  CYAN },
+    {    0,   0, 80,  DARKRED, wxT("DARKRED"),  RED },
+    {  64,   0, 64,  DARKMAGENTA, wxT("DARKMAGENTA"), MAGENTA },
+    {    0,  64, 64,  DARKBROWN, wxT("DARKBROWN"),  BROWN },
+    {  128, 255, 255,   LIGHTYELLOW, wxT("LIGHTYELLOW"),   LIGHTYELLOW }
+};
+
 
 /*
  * Return the build date
  */
 /****************/
-wxString
-GetBuildVersion()
+wxString GetBuildVersion()
 /****************/
 {
     return g_BuildVersion;
@@ -28,9 +139,7 @@ GetBuildVersion()
 /*
  * Return custom build date for about dialog
  */
-wxString
-GetAboutBuildVersion()
-/*********************************************/
+wxString GetAboutBuildVersion()
 {
     return g_BuildAboutVersion;
 }
@@ -47,9 +156,7 @@ GetAboutBuildVersion()
 * but could make more easier an optional use of locale in kicad
 */
 /********************************/
-void
-SetLocaleTo_C_standard( void )
-/********************************/
+void SetLocaleTo_C_standard( void )
 {
     setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
 }
@@ -73,9 +180,8 @@ void SetLocaleTo_Default( void )
 
 
 /********************************************************************/
-bool
-EnsureTextCtrlWidth(wxTextCtrl*     aCtrl,
-                    const wxString* aString )
+bool EnsureTextCtrlWidth(wxTextCtrl* aCtrl,
+                         const wxString* aString )
 /********************************************************************/
 {
     wxWindow*   window = aCtrl->GetParent();
@@ -134,8 +240,7 @@ Ki_PageDescr::Ki_PageDescr(const wxSize&   size,
 
 
 /************************************/
-wxString
-ReturnUnitSymbol( int Units )
+wxString ReturnUnitSymbol( int Units )
 /************************************/
 {
     wxString label;
@@ -158,14 +263,12 @@ ReturnUnitSymbol( int Units )
 }
 
 
-/* 
+/*
  * Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units
  */
 /**************************************************/
-void
-AddUnitSymbol(wxStaticText& Stext,
-              int Units )
+void AddUnitSymbol( wxStaticText& Stext, int Units )
 /**************************************************/
 {
     wxString msg = Stext.GetLabel() + ReturnUnitSymbol( Units );
@@ -174,15 +277,12 @@ AddUnitSymbol(wxStaticText& Stext,
 }
 
 
-/* 
+/*
  * Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl
  */
 /******************************************/
-void
-PutValueInLocalUnits( wxTextCtrl& TextCtr,
-                      int Value,
-                      int Internal_Unit )
+void PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit )
 /*****************************************/
 {
     wxString msg = ReturnStringFromValue( g_UnitMetric, Value, Internal_Unit );
@@ -196,9 +296,7 @@ PutValueInLocalUnits( wxTextCtrl& TextCtr,
  *  according to the internal units and the selected unit (g_UnitMetric)
  */
 /***************************************************/
-int
-ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
-                         int Internal_Unit )
+int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit )
 /***************************************************/
 {
     int      value;
@@ -220,11 +318,8 @@ ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
  * @return a wxString what contains value and optionnaly the sumbol unit (like 2.000 mm)
  */
 /*******************************************/
-wxString
-ReturnStringFromValue(int aUnits,
-                      int aValue,
-                      int aInternal_Unit,
-                      bool aAdd_unit_symbol)
+wxString ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit,
+                                bool aAdd_unit_symbol )
 /*******************************************/
 {
     wxString StringValue;
@@ -258,7 +353,7 @@ ReturnStringFromValue(int aUnits,
 }
 
 
-/* 
+/*
  * Return the string from Value, according to units (inch, mm ...) for display,
  *  and the initial unit for value
  *  Unit = display units (INCH, MM ..)
@@ -266,10 +361,8 @@ ReturnStringFromValue(int aUnits,
  *  Internal_Unit = units per inch for computed value
  */
 /****************************************************************************/
-int
-ReturnValueFromString( int Units,
-                       const wxString& TextValue,
-                       int Internal_Unit )
+int ReturnValueFromString( int Units, const wxString& TextValue,
+                           int Internal_Unit )
 /****************************************************************************/
 {
     int    Value;
@@ -277,7 +370,7 @@ ReturnValueFromString( int Units,
 
     TextValue.ToDouble( &dtmp );
     if( Units >= CENTIMETRE )
-        Value = (int) round( dtmp );
+        Value = wxRound( dtmp );
     else
         Value = From_User_Unit( Units, dtmp, Internal_Unit );
 
@@ -286,9 +379,7 @@ ReturnValueFromString( int Units,
 
 
 /******************************************************************/
-double To_User_Unit( bool is_metric,
-              int val,
-              int internal_unit_value )
+double To_User_Unit( bool is_metric, int val, int internal_unit_value )
 /******************************************************************/
 /**
  * Function To_User_Unit
@@ -339,10 +430,7 @@ double To_User_Unit( bool is_metric,
  * Return in internal units the value "val" given in inch or mm
  */
 /*****************************************/
-int
-From_User_Unit( bool is_metric,
-                double val,
-                int internal_unit_value )
+int From_User_Unit( bool is_metric, double val, int internal_unit_value )
 /*****************************************/
 {
     double value;
@@ -352,7 +440,7 @@ From_User_Unit( bool is_metric,
     else
         value = val * internal_unit_value;
 
-    return (int) round( value );
+    return wxRound( value );
 }
 
 
@@ -360,8 +448,7 @@ From_User_Unit( bool is_metric,
  * Return the string date "day month year" like "23 jun 2005"
  */
 /********/
-wxString
-GenDate()
+wxString GenDate()
 /********/
 {
     static const wxString mois[12] =
@@ -387,8 +474,7 @@ GenDate()
  * My memory allocation
  */
 /***********************************/
-void* 
-MyMalloc( size_t nb_octets )
+void* MyMalloc( size_t nb_octets )
 /***********************************/
 {
     void* pt_mem;
@@ -417,9 +503,7 @@ MyMalloc( size_t nb_octets )
  * @return bool - true if success, else false
  */
 /********************************************/
-bool
-ProcessExecute( const wxString& aCommandLine,
-                int aFlags )
+bool ProcessExecute( const wxString& aCommandLine, int aFlags )
 /********************************************/
 {
 #ifdef __WINDOWS__
@@ -436,8 +520,7 @@ ProcessExecute( const wxString& aCommandLine,
  * My memory allocation, memory space is cleared
  */
 /*****************************/
-void*
-MyZMalloc( size_t nb_octets )
+void* MyZMalloc( size_t nb_octets )
 /*****************************/
 {
     void* pt_mem = MyMalloc( nb_octets );
@@ -449,8 +532,7 @@ MyZMalloc( size_t nb_octets )
 
 
 /*******************************/
-void
-MyFree( void* pt_mem )
+void MyFree( void* pt_mem )
 /*******************************/
 {
     if( pt_mem )
@@ -464,9 +546,7 @@ MyFree( void* pt_mem )
  *  (no spaces, replaced by _)
  */
 /**************************************************************/
-wxString
-ReturnPcbLayerName( int layer_number,
-                    bool omitSpacePadding )
+wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
 /**************************************************************/
 {
     const unsigned LAYER_LIMIT = 29;
@@ -527,11 +607,11 @@ WinEDA_TextFrame::WinEDA_TextFrame( wxWindow* parent,
                                     MAYBE_RESIZE_BORDER )
 /***************************************************************************/
 {
-	/*
-	* TODO background and foreground colors of WinEDA_TextFrame should be
-	* controllable / settable with project settings or config file and not
-	* hardcoded in binairy !
-	*/
+    /*
+    * TODO background and foreground colors of WinEDA_TextFrame should be
+    * controllable / settable with project settings or config file and not
+    * hardcoded in binairy !
+    */
 
     wxSize size;
 
@@ -547,10 +627,10 @@ WinEDA_TextFrame::WinEDA_TextFrame( wxWindow* parent,
                             0, NULL,
                             wxLB_ALWAYS_SB | wxLB_SINGLE );
 
-	/* The color of the text in the wxListBox (black) */
+    /* The color of the text in the wxListBox (black) */
     m_List->SetBackgroundColour( wxColour( 255, 255, 255 ) );
 
-	/* The foreground color of the wxListBox (white) */
+    /* The foreground color of the wxListBox (white) */
     m_List->SetForegroundColour( wxColour( 0, 0, 0 ) );
 
     SetReturnCode( -1 );
@@ -558,8 +638,7 @@ WinEDA_TextFrame::WinEDA_TextFrame( wxWindow* parent,
 
 
 /***************************************************/
-void
-WinEDA_TextFrame::Append( const wxString& text )
+void WinEDA_TextFrame::Append( const wxString& text )
 /***************************************************/
 {
     m_List->Append( text );
@@ -567,8 +646,7 @@ WinEDA_TextFrame::Append( const wxString& text )
 
 
 /**********************************************************/
-void
-WinEDA_TextFrame::D_ClickOnList( wxCommandEvent& event )
+void WinEDA_TextFrame::D_ClickOnList( wxCommandEvent& event )
 /**********************************************************/
 {
     int ii = m_List->GetSelection();
@@ -578,8 +656,7 @@ WinEDA_TextFrame::D_ClickOnList( wxCommandEvent& event )
 
 
 /*************************************************/
-void
-WinEDA_TextFrame::OnClose( wxCloseEvent& event )
+void WinEDA_TextFrame::OnClose( wxCloseEvent& event )
 /*************************************************/
 {
     EndModal( -1 );
@@ -598,17 +675,12 @@ WinEDA_TextFrame::OnClose( wxCloseEvent& event )
  *  color = couleur d'affichage
  */
 /*****************************************************************************/
-void Affiche_1_Parametre( WinEDA_DrawFrame* frame,
-                          int pos_X,
-                          const wxString& texte_H,
-                          const wxString& texte_L,
+void Affiche_1_Parametre( WinEDA_DrawFrame* frame, int pos_X,
+                          const wxString& texte_H, const wxString& texte_L,
                           int color )
 /*****************************************************************************/
 {
-    frame->MsgPanel->Affiche_1_Parametre( pos_X,
-                                          texte_H,
-                                          texte_L,
-                                          color );
+    frame->MsgPanel->Affiche_1_Parametre( pos_X, texte_H, texte_L, color );
 }
 
 
@@ -616,8 +688,8 @@ void Affiche_1_Parametre( WinEDA_DrawFrame* frame,
  *  Routine d'affichage de la documentation associee a un composant
  */
 /****************************************************************************/
-void
-AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc, const wxString& KeyW )
+void AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc,
+                 const wxString& KeyW )
 /****************************************************************************/
 {
     wxString Line1( wxT( "Doc:  " ) ), Line2( wxT( "KeyW: " ) );
@@ -660,9 +732,7 @@ int GetTimeStamp()
  *                      suivie de " ou mm
  */
 /*********************************************/
-const
-wxString& valeur_param( int valeur,
-                        wxString& buf_texte )
+const wxString& valeur_param( int valeur, wxString& buf_texte )
 /*********************************************/
 {
     if( g_UnitMetric )
@@ -682,9 +752,7 @@ wxString& valeur_param( int valeur,
  *
  */
 /**********************************/
-wxString&
-operator <<( wxString& aString,
-             const wxPoint& aPos )
+wxString& operator <<( wxString& aString, const wxPoint& aPos )
 /*********************************/
 {
     wxString temp;
@@ -695,20 +763,3 @@ operator <<( wxString& aString,
 
     return aString;
 }
-
-
-/* compilers that does not have the round function (posix) */
-#ifdef __MSVC__
-/* 
- * return the nearest rounded ( equivalent to the nearest integer value)
- * from aNumber
- */
-/**********************/
-double
-round( double aNumber )
-/**********************/
-{
-    return floor( aNumber + 0.5 );
-}
-#endif
-

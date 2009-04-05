@@ -11,10 +11,6 @@
 
 #include "pcbnew.h"
 
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
-
 #include "trigo.h"
 
 /* DRAWSEGMENT: constructor */

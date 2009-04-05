@@ -6,6 +6,7 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
+#include "class_drawpickedstruct.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"

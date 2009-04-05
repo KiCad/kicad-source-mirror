@@ -9,14 +9,7 @@
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
-
-#ifdef PCBNEW
 #include "drag.h"
-#endif
-
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
 
 /* Police des caracteres de la routine de trace des textes */
 extern char* graphic_fonte_shape[];

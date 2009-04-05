@@ -1,8 +1,6 @@
 /*******************/
 /* File: cvpcb.cpp */
 /*******************/
-#define MAIN
-#define eda_global
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -19,7 +17,36 @@
 
 #include <wx/snglinst.h>
 
-wxString g_Main_Title = wxT( "CVpcb" );
+
+/* Constant string definitions for CvPcb */
+const wxString ComponentFileExtension( wxT( "cmp" ) );
+const wxString RetroFileExtension( wxT( "stf" ) );
+const wxString EquivFileExtension( wxT( "equ" ) );
+
+/* TODO: What is a stuff file???  Please fix this wild card in English if
+ *       you know. */
+const wxString RetroFileWildcard( _( "Kicad component list files (*.stf)|*.stf" ) );
+const wxString EquivFileWildcard( _( "Kicad footprint alias files (*.equ)|*.equ" ) );
+
+const wxString titleLibLoadError( _( "Library Load Error" ) );
+
+
+/* Global variables used in CVPcb. */
+int g_FlagEESchema;
+int Rjustify;
+int modified;
+int nbcomp;
+int nblib;
+int composants_non_affectes;
+
+STOREMOD* g_BaseListePkg = NULL;
+STORECMP* g_BaseListeCmp = NULL;
+
+wxString g_UserNetDirBuffer;  // Netlist path (void = current working directory)
+wxString g_NetlistFileExtension;
+
+wxArrayString g_ListName_Equ; // list of .equ files to load
+
 
 // Create a new application object
 IMPLEMENT_APP( WinEDA_App )
@@ -32,11 +59,12 @@ IMPLEMENT_APP( WinEDA_App )
 
 bool WinEDA_App::OnInit()
 {
+    wxFileName         fn;
     wxString           msg;
     wxString           currCWD = wxGetCwd();
     WinEDA_CvpcbFrame* frame   = NULL;
 
-    InitEDA_Appl( wxT( "cvpcb" ) );
+    InitEDA_Appl( wxT( "CVpcb" ) );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
@@ -51,17 +79,14 @@ bool WinEDA_App::OnInit()
 
     if( argc > 1 )
     {
-        NetInNameBuffer = argv[1];
-        NetNameBuffer   = argv[1];
+        wxLogDebug( wxT( "CvPcb opening file <%s>" ), argv[1] );
+        fn = argv[1];
+        wxSetWorkingDirectory( fn.GetPath() );
     }
 
-    if( !NetInNameBuffer.IsEmpty() )
-        wxSetWorkingDirectory( wxPathOnly( NetInNameBuffer ) );
     g_DrawBgColor = BLACK;
 
-    Read_Config( NetInNameBuffer );
-
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    wxString Title = GetTitle() + wxT( " " ) + GetBuildVersion();
     frame = new WinEDA_CvpcbFrame( Title );
 
     msg.Printf( wxT( "Modules: %d" ), nblib );
@@ -70,25 +95,28 @@ bool WinEDA_App::OnInit()
     // Show the frame
     SetTopWindow( frame );
 
-    frame->Show( TRUE );
+    Read_Config( fn.GetFullPath() );
 
-    listlib();
+    frame->Show( TRUE );
     frame->BuildFootprintListBox();
 
-    if( !NetInNameBuffer.IsEmpty() )  /* nom de fichier passe a la commande */
+    if( fn.IsOk() && fn.FileExists() )
     {
-        FFileName = MakeFileName( NetDirBuffer,
-                                  NetInNameBuffer, NetInExtBuffer );
+        frame->m_NetlistFileName = fn;
 
-        frame->ReadNetListe();
-    }
-    else        /* Mise a jour du titre de la fenetre principale */
-    {
-        wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-        msg.Printf( wxT( "%s {%s%c} [no file]" ),
-                    Title.GetData(), wxGetCwd().GetData(), DIR_SEP );
-        frame->SetTitle( msg );
+        if( frame->ReadNetList() )
+        {
+            g_NetlistFileExtension = fn.GetExt();
+            return true;
+        }
     }
 
-    return TRUE;
+    listlib();
+    g_NetlistFileExtension = wxT( "net" );
+    frame->m_NetlistFileName.Clear();
+    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
+                     wxGetCwd() + wxFileName::GetPathSeparator() +
+                     _( " [no file]" ) );
+
+    return true;
 }

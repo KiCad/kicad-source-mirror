@@ -37,10 +37,11 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
 /******************************************/
 {
 #ifdef ROUTER
-    FILE*    outfile;
-    wxString FullFileName, ExecFileName, msg;
-    int      ii;
-    int      net_number;
+    wxFileName fn;
+    FILE*      outfile;
+    wxString   ExecFileName, msg;
+    int        ii;
+    int        net_number;
 
 #ifdef __UNIX__
     ExecFileName = FindKicadFile( wxT( "anneal" ) );
@@ -56,17 +57,17 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
     }
 
     /* Calcule du nom du fichier intermediaire de communication */
-    FullFileName = GetScreen()->m_FileName;
-    ChangeFileNameExt( FullFileName, wxT( ".ipt" ) );
+    fn = GetScreen()->m_FileName;
+    fn.SetExt( wxT( "ipt" ) );
 
-    if( ( outfile = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( outfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Unable to create temporary file " ) + FullFileName;
+        msg = _( "Unable to create temporary file " ) + fn.GetFullPath();
         DisplayError( this, msg, 20 );
         return;
     }
 
-    msg = _( "Create temporary file " ) + FullFileName;
+    msg = _( "Create temporary file " ) + fn.GetFullPath();
     SetStatusText( msg );
 
     /* calcul ratsnest */
@@ -134,7 +135,7 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
 
     fclose( outfile );
 
-    ExecFileName += wxT( " " ) + FullFileName;
+    ExecFileName += wxT( " " ) + fn.GetFullPath();
 
     Affiche_Message( ExecFileName );
 
@@ -551,30 +552,31 @@ int GenEdges( BOARD* Pcb, FILE* outfile )
 void WinEDA_PcbFrame::ReadAutoroutedTracks( wxDC* DC )
 /****************************************************/
 {
-    char     Line[1024];
-    wxString FullFileName, msg;
-    int      LineNum = 0, NbTrack = 0, NetCode = 0;
-    FILE*    File;
-    TRACK*   newTrack;
-    SEGVIA*  newVia;
-    int      track_count, track_layer, image, track_width;
-    int      via_layer1, via_layer2, via_size;
-    wxPoint  track_start, track_end;
-    int      max_layer = GetBoard()->m_BoardSettings->m_CopperLayerCount;
+    wxFileName fn;
+    char       Line[1024];
+    wxString   msg;
+    int        LineNum = 0, NbTrack = 0, NetCode = 0;
+    FILE*      File;
+    TRACK*     newTrack;
+    SEGVIA*    newVia;
+    int        track_count, track_layer, image, track_width;
+    int        via_layer1, via_layer2, via_size;
+    wxPoint    track_start, track_end;
+    int        max_layer = GetBoard()->m_BoardSettings->m_CopperLayerCount;
 
     /* Calcule du nom du fichier intermediaire de communication */
-    FullFileName = GetScreen()->m_FileName;
-    ChangeFileNameExt( FullFileName, wxT( ".trc" ) );
+    fn = GetScreen()->m_FileName;
+    fn.SetExt( wxT( "trc" ) );
 
-    if( ( File = wxFopen( FullFileName, wxT( "rt" ) ) ) == NULL )
+    if( ( File = wxFopen( fn.GetFullPath(), wxT( "rt" ) ) ) == NULL )
     {
-        msg = _( "Unable to find data file " ) + FullFileName;
+        msg = _( "Unable to find data file " ) + fn.GetFullPath();
         DisplayError( this, msg, 20 );
         return;
     }
     else
     {
-        msg = _( "Reading autorouter data file " ) + FullFileName;
+        msg = _( "Reading autorouter data file " ) + fn.GetFullPath();
         Affiche_Message( msg );
     }
 

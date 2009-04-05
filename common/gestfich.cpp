@@ -175,88 +175,6 @@ wxString MakeReducedFileName( const wxString& fullfilename,
 }
 
 
-/***************************************************************************/
-wxString MakeFileName( const wxString& dir,
-                       const wxString& shortname, const wxString& ext )
-/***************************************************************************/
-
-/** Function MakeFileName
- * Calculate the full file name from dir, shortname and ext
- * @param  dir = path	  (can be empty)
- * @param  shortname = filename with or without path and/or extension
- * @param  ext = extension	(can be empty)
- *  If shortname has an absolute path, or a path starts by ./ or ../,
- *  the path will not be modified
- *  If shortname has an extension, it will not be modified
- *  @return full filename
- */
-{
-    wxString fullfilename;
-    int      ii;
-
-    if( !dir.IsEmpty() )
-    {
-        if( !wxIsAbsolutePath( shortname ) )
-        {
-            if( !shortname.StartsWith( wxT( "./" ) ) && !shortname.StartsWith( wxT( "../" ) )            // under unix
-                && !shortname.StartsWith( wxT( ".\\" ) ) && !shortname.StartsWith( wxT( "..\\" ) ))      // under Windows
-
-            {   /* no absolute path in shortname, add dir to shortname */
-                fullfilename = dir;
-            }
-        }
-    }
-
-    fullfilename += shortname;  // Add shortname to dir or use shortname only
-
-    fullfilename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-
-    /* Add an extension if shortname has no extension */
-    if( ext.IsEmpty() )
-        return fullfilename;
-
-    /* search for an extension */
-    ii = fullfilename.Length(); /* Get the end of name */
-    for( ; ii >= 0; ii-- )
-    {
-        if( fullfilename.GetChar( ii ) == '/' )
-        {
-            /* not extension: add ext */
-            fullfilename += ext;
-            break;
-        }
-        if( fullfilename.GetChar( ii ) == '.' )  /* extension exists, do nothing */
-            break;
-    }
-
-    return fullfilename;
-}
-
-
-/*************************************************************************/
-void ChangeFileNameExt( wxString& FullFileName, const wxString& NewExt )
-/**************************************************************************/
-
-/** Function ChangeFileNameExt
- * change the extension of FullFileName to NewExt.
- * @param FullFileName = filename to modify
- * @param NewExt = new extension for FullFileName
- */
-{
-    wxString FileName;
-
-    FileName = FullFileName.BeforeLast( '.' );
-    if( !FileName.IsEmpty() )
-        FileName += NewExt;
-    else
-        FileName = FullFileName + NewExt;
-
-    if( FileName.StartsWith( wxT( "\"" ) ) && ( FileName.Last() != '"' ) )
-        FileName += wxT( "\"" );
-    FullFileName = FileName;
-}
-
-
 /*******************************************/
 void AddDelimiterString( wxString& string )
 /*******************************************/
@@ -504,12 +422,10 @@ wxString FindKicadFile( const wxString& shortname )
 }
 
 
-/***********************************************************************************/
-int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& param )
-/***********************************************************************************/
-
 /* Call the executable file "ExecFile", with params "param"
  */
+int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
+                 const wxString& param )
 {
     wxString FullFileName;
 
@@ -525,7 +441,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
     }
 
     wxString msg;
-    msg.Printf( wxT( "Command file <%s> not found" ), FullFileName.GetData() );
+    msg.Printf( _( "Command <%s> could not found" ), ExecFile.c_str() );
     DisplayError( frame, msg, 20 );
     return -1;
 }
@@ -653,16 +569,15 @@ wxString ReturnKicadDatasPath()
 }
 
 
-/***************************/
-wxString GetEditorName()
-/***************************/
-
-/* Return the prefered editor name
+/*
+ * Return the prefered editor name
  */
+wxString& WinEDA_App::GetEditorName()
 {
-    wxString editorname = g_EditorName;
+    wxString editorname = m_EditorName;
 
-    if( editorname.IsEmpty() ) // We get the prefered editor name from environment variable
+    // We get the prefered editor name from environment variable first.
+    if( editorname.IsEmpty() )
     {
         wxGetEnv( wxT( "EDITOR" ), &editorname );
     }
@@ -674,23 +589,18 @@ wxString GetEditorName()
 #ifdef __WINDOWS__
         mask += wxT( ".exe" );
 #endif
-        editorname = EDA_FileSelector( _( "Prefered Editor:" ),
-                                       wxEmptyString,   /* Default path */
-                                       wxEmptyString,   /* default filename */
-                                       wxEmptyString,   /* default filename extension */
-                                       mask,            /* filter for filename list */
-                                       NULL,            /* parent frame */
-                                       wxFD_OPEN,       /* wxFD_SAVE, wxFD_OPEN ..*/
-                                       TRUE             /* true = keep the current path */
-                                       );
+        editorname = EDA_FileSelector( _( "Prefered Editor:" ), wxEmptyString,
+                                       wxEmptyString, wxEmptyString, mask,
+                                       NULL, wxFD_OPEN, true );
     }
 
-    if( ( !editorname.IsEmpty() ) && wxGetApp().m_EDA_CommonConfig )
+    if( !editorname.IsEmpty() )
     {
-        g_EditorName = editorname;
-        wxGetApp().m_EDA_CommonConfig->Write( wxT( "Editor" ), g_EditorName );
+        m_EditorName = editorname;
+        m_EDA_CommonConfig->Write( wxT( "Editor" ), m_EditorName );
     }
-    return g_EditorName;
+
+    return m_EditorName;
 }
 
 
@@ -814,4 +724,10 @@ void OpenFile( const wxString& file )
 
     if( success && !command.IsEmpty() )
         ProcessExecute( command );
+}
+
+
+wxString QuoteFullPath( wxFileName& fn, wxPathFormat format )
+{
+    return wxT( "\"" ) + fn.GetFullPath() + wxT( "\"" );
 }

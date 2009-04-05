@@ -178,6 +178,7 @@ public:
     void SetY( int val ) { m_Pos.y = val; }
     void SetWidth( int val ) { m_Size.x = val; }
     void SetHeight( int val ) { m_Size.y = val; }
+    void SetEnd( int x, int y ) { SetEnd( wxPoint( x, y ) ); }
     void SetEnd( const wxPoint& pos )
     {
         m_Size.x = pos.x - m_Pos.x; m_Size.y = pos.y - m_Pos.y;
@@ -374,8 +375,7 @@ public:
 #endif
 
         // return a zero-sized box per default. derived classes should override this
-        EDA_Rect ret( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
-        return ret;
+        return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
     }
 
 

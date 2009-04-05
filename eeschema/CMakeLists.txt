@@ -5,7 +5,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                    )
 
 set(EESCHEMA_SRCS
-    affiche.cpp
+#    affiche.cpp
     annotate.cpp
     annotate_dialog.cpp
     backanno.cpp
@@ -113,7 +113,9 @@ set(EESCHEMA_SRCS
     viewlibs.cpp)
 
 set(EESCHEMA_EXTRA_SRCS
-    ../share/setpage.cpp)
+    ../common/sch_item_struct.cpp
+    ../share/setpage.cpp
+)
 
 if(WIN32)
     if(MINGW)

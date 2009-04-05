@@ -10,9 +10,9 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "gestfich.h"
+#include "appl_wxstruct.h"
 
 #include "kicad.h"
-#include "protos.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"
@@ -259,7 +259,7 @@ bool TreePrjItemData::Rename( const wxString& name, bool check )
     //this is broken & unsafe to use on linux.
     if( m_Type == TREE_DIRECTORY )
         return false;
-    
+
     if( name.IsEmpty() )
         return false;
 
@@ -383,16 +383,17 @@ void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
                     }
                 } while( dir->GetNext( &dir_filename ) );
             }
-            
+
             if( count == 0 )
             {
                 /*  The AddFile() text below should match the filter added to handle
                     it in treeprj_frame.cpp in the line looking like this:
                     m_Filters.push_back( wxT( "^no kicad files found" ) );
                 */
-				prjframe->AddFile( wxString(_("no kicad files found in this directory")), id ); 
+				prjframe->AddFile( wxString( _( "no kicad files found in " \
+                                                "this directory" ) ), id );
             }
-            
+
             /* Sort filenames by alphabetic order */
             m_Parent->SortChildren( id );
             delete dir;
@@ -432,7 +433,7 @@ void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
 
     case TREE_TXT:
     {
-        wxString editorname = GetEditorName();
+        wxString editorname = wxGetApp().GetEditorName();
         if( !editorname.IsEmpty() )
             ExecuteFile( m_Parent, editorname, FullFileName );
         break;

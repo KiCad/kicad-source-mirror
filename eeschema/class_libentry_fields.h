@@ -7,23 +7,26 @@
 
 
 /* Fields , same as component fields.
- * can be defined in libraries (mandatory for ref and value, ca be useful for footprints)
+ * can be defined in libraries (mandatory for ref and value, ca be useful for
+ * footprints)
  * 2 Fields are always defined :
  *     Prefix (U, IC..) with gives the reference in schematic)
- *     Name (74LS00..) used to find the component in libraries, and give the default value in schematic
+ *     Name (74LS00..) used to find the component in libraries, and give the
+ * default value in schematic
  */
 
-class LibDrawField :  public LibEDA_BaseStruct,
+class LibDrawField : public LibEDA_BaseStruct,
     public EDA_TextStruct
 {
 public:
-    int m_FieldId;                    /*  0 = REFERENCE
-                                       *  1 = VALUE
-                                       *  3 = FOOTPRINT (default Footprint)
-                                       *  4 = DOCUMENTATION (user doc link)
-                                       *  others = free fields
-                                       */
-    wxString m_Name;             /* Field Name (not the field text itself, that is .m_Text) */
+    int m_FieldId;     /*  0 = REFERENCE
+                        *  1 = VALUE
+                        *  3 = FOOTPRINT (default Footprint)
+                        *  4 = DOCUMENTATION (user doc link)
+                        *  others = free fields
+                        */
+    wxString m_Name;   /* Field Name (not the field text itself, that is
+                        * .m_Text) */
 
 public:
 
@@ -41,12 +44,13 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool  Save( FILE* aFile ) const;
-
+    virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
 
     LibDrawField* GenCopy();
 
@@ -58,8 +62,9 @@ public:
 
     void          SetFields( const std::vector <LibDrawField> aFields );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset, int aColor,
-               int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
 
     /**
      * Function HitTest
@@ -68,6 +73,21 @@ public:
      * @return bool - true if a hit, else false
      */
     bool HitTest( const wxPoint& refPos );
+
+    void operator=( const LibDrawField& field )
+    {
+        m_FieldId = field.m_FieldId;
+        m_Text = field.m_Text;
+        m_Pos = field.m_Pos;
+        m_Size = field.m_Size;
+        m_Width = field.m_Width;
+        m_Orient = field.m_Orient;
+        m_Mirror = field.m_Mirror;
+        m_Attributs = field.m_Attributs;
+        m_Italic = field.m_Italic;
+        m_HJustify = field.m_HJustify;
+        m_VJustify = field.m_VJustify;
+    }
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

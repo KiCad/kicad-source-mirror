@@ -7,6 +7,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "appl_wxstruct.h"
 
 #include "pcbnew.h"
 #include "trigo.h"
@@ -62,28 +63,24 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
  *  Exporte le board au format GenCAD 1.4
  */
 {
-    wxString FullFileName = GetScreen()->m_FileName;
-    wxString msg, std_ext, mask;
+    wxFileName fn = GetScreen()->m_FileName;
+    wxString msg, ext, wildcard;
     FILE*    file;
 
-    std_ext = wxT( ".gcd" );
-    mask    = wxT( "*" ) + std_ext;
-    ChangeFileNameExt( FullFileName, std_ext );
-    FullFileName = EDA_FileSelector( _( "GenCAD file:" ),
-                                     wxEmptyString,     /* Chemin par defaut */
-                                     FullFileName,      /* nom fichier par defaut */
-                                     std_ext,           /* extension par defaut */
-                                     mask,              /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     FALSE
-                                     );
-    if( FullFileName == wxEmptyString )
+    ext = wxT( "gcd" );
+    wildcard = _( "GenCAD board files (.gcd)|*.gcd" );
+    fn.SetExt( ext );
+
+    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), wxEmptyString,
+                      fn.GetFullName(), wildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    if( ( file = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( file = wxFopen( dlg.GetPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Unable to create " ) + FullFileName;
+        msg = _( "Unable to create " ) + dlg.GetPath();
         DisplayError( this, msg ); return;
     }
 
@@ -493,7 +490,8 @@ bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
 
     fputs( "$HEADER\n", file );
     fputs( "GENCAD 1.4\n", file );
-    msg = wxT( "USER " ) + g_Main_Title + wxT( " " ) + GetBuildVersion();
+    msg = wxT( "USER " ) + wxGetApp().GetAppName() + wxT( " " ) +
+        GetBuildVersion();
     fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
     msg = wxT( "DRAWING " ) + screen->m_FileName;
     fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );

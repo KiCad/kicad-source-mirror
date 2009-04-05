@@ -59,8 +59,10 @@ bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
         }
     }
 
-    if ( DrawEntry ) DrawEntry->Display_Infos_DrawEntry(this);
-    else return true;
+    if ( DrawEntry )
+        DrawEntry->DisplayInfo( this );
+    else
+        return true;
 
     CurrentDrawItem = DrawEntry;
     wxString msg;

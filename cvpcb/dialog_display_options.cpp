@@ -262,7 +262,9 @@ void WinEDA_FootprintDisplayOptionsFrame::UpdateObjectSettings(void)
 
 void WinEDA_FootprintDisplayOptionsFrame::OnSaveConfigClick( wxCommandEvent& event )
 {
-	Save_Config(this);
+    WinEDA_CvpcbFrame* parent = ( WinEDA_CvpcbFrame* )GetParent();
+    wxASSERT( parent && parent->IsKindOf( CLASSINFO( WinEDA_CvpcbFrame ) ) );
+	Save_Config( this, parent->m_NetlistFileName.GetFullPath() );
 }
 
 /*!

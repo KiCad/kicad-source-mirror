@@ -107,13 +107,15 @@ void WinEDA_PcbFrame::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
 /*************************************************************************/
 {
     /* Setup the default netlist file name according to the board file name */
-    wxString default_netfilename = GetScreen()->m_FileName;
+    wxFileName fn = GetScreen()->m_FileName;
 
-    ChangeFileNameExt( default_netfilename, NetExtBuffer );
+    fn.SetExt( NetExtBuffer );
 
-    WinEDA_NetlistFrame* frame = new WinEDA_NetlistFrame( this, DC, default_netfilename );
+    WinEDA_NetlistFrame* frame = new WinEDA_NetlistFrame( this, DC,
+                                                          fn.GetFullPath() );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 

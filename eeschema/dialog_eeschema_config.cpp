@@ -229,11 +229,11 @@ wxString msg = _("Cmp file Ext: ") + g_NetCmpExtBuffer;
     wxStaticText * text = new wxStaticText( itemDialog1, -1, msg, wxDefaultPosition, wxDefaultSize, 0 );
     m_FileExtList->Add(text, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxADJUST_MINSIZE, 5);
 
-	msg = _("Net file Ext: ") + g_NetExtBuffer;
+	msg = _("Net file Ext: ") + NetlistFileExtension;
     text = new wxStaticText( itemDialog1, -1, msg, wxDefaultPosition, wxDefaultSize, 0 );
     m_FileExtList->Add(text, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxADJUST_MINSIZE, 5);
 
-	msg = _("Library file Ext: ") + g_LibExtBuffer;
+	msg = _("Library file Ext: ") + CompLibFileExtension;
     text = new wxStaticText( itemDialog1, -1, msg, wxDefaultPosition, wxDefaultSize, 0 );
     m_FileExtList->Add(text, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxADJUST_MINSIZE, 5);
 
@@ -241,7 +241,7 @@ wxString msg = _("Cmp file Ext: ") + g_NetCmpExtBuffer;
     text = new wxStaticText( itemDialog1, -1, msg, wxDefaultPosition, wxDefaultSize, 0 );
     m_FileExtList->Add(text, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxADJUST_MINSIZE, 5);
 
-	msg = _("Schematic file Ext: ") + g_SchExtBuffer;
+	msg = _("Schematic file Ext: ") + SchematicFileExtension;
     text = new wxStaticText( itemDialog1, -1, msg, wxDefaultPosition, wxDefaultSize, 0 );
     m_FileExtList->Add(text, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxADJUST_MINSIZE, 5);
 
@@ -316,7 +316,6 @@ void KiConfigEeschemaFrame::ChangeSetup()
 /*********************************************/
 {
 	g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-	SetRealLibraryPath( wxT("library") );
 }
 
 
@@ -344,49 +343,58 @@ void KiConfigEeschemaFrame::AddOrInsertLibrary(wxCommandEvent& event)
 	the selection
 */
 {
-int ii;
-wxString FullLibName,ShortLibName, Mask;
+    int        ii;
+    wxString   tmp;
+    wxFileName fn;
 
+    /* TODO: Fix this, it's broken.  Add should add the new library to the
+     *       end of the list and insert should insert the new library ahead
+     *       of the selected library in the list or at the beginning if no
+     *       library is selected. */
 	ii = m_ListLibr->GetSelection();
-	if ( ii < 0 ) ii = 0;
+	if ( ii < 0 )
+        ii = 0;
 	ChangeSetup();
 	if( event.GetId() == ADD_LIB)
 	{
-		if( g_LibName_List.GetCount() != 0 ) ii ++;	/* Add after selection */
+		if( g_LibName_List.GetCount() != 0 )
+            ii++;	/* Add after selection */
 	}
 
-	Mask = wxT("*") + g_LibExtBuffer;
+	wxFileDialog dlg( this, _( "Schematic Component Library Files" ),
+                      g_RealLibDirBuffer, wxEmptyString, CompLibFileWildcard,
+                      wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST );
 
-	wxFileDialog FilesDialog(this, _("Library files:"), g_RealLibDirBuffer,
-		wxEmptyString, Mask,
-		wxFD_DEFAULT_STYLE | wxFD_MULTIPLE);
-
-	int diag = FilesDialog.ShowModal();
-    if ( diag != wxID_OK )
+    if ( dlg.ShowModal() != wxID_OK )
         return;
 
 	wxArrayString Filenames;
-	FilesDialog.GetPaths(Filenames);
+	dlg.GetPaths(Filenames);
 
 	for ( unsigned jj = 0; jj < Filenames.GetCount(); jj ++ )
 	{
-		FullLibName = Filenames[jj];
-		ShortLibName = MakeReducedFileName(FullLibName,g_RealLibDirBuffer,g_LibExtBuffer);
-		if ( ShortLibName.IsEmpty() )	//Just in case...
-			continue;
-		//Add or insert new library name
-		if ( g_LibName_List.Index(ShortLibName) == wxNOT_FOUND)
+		fn = Filenames[jj];
+
+        /* If the library path is already in the library search paths
+         * list, just add the library name to the list.  Otherwise, add
+         * the library name with the full path. */
+        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) == wxNOT_FOUND )
+            tmp = fn.GetPathWithSep() + fn.GetName();
+        else
+            tmp = fn.GetName();
+
+		// Add or insert new library name.
+        if( g_LibName_List.Index( tmp ) == wxNOT_FOUND )
 		{
 			m_LibListChanged = TRUE;
-			g_LibName_List.Insert(ShortLibName, ii);
+            g_LibName_List.Insert( tmp, ii++ );
 			m_ListLibr->Clear();
 			m_ListLibr->InsertItems(g_LibName_List, 0);
 		}
-
 		else
 		{
-			wxString msg;
-			msg << wxT("<") << ShortLibName << wxT("> : ") << _("Library already in use");
+			wxString msg = wxT("<") + tmp + wxT("> : ") +
+                _("Library already in use");
 			DisplayError(this, msg);
 		}
 	}

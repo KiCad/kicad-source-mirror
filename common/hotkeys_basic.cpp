@@ -18,6 +18,19 @@
 #include "wxstruct.h"
 
 
+wxString g_CommonSectionTag( wxT( "[common]" ) );
+wxString g_SchematicSectionTag( wxT( "[eeschema]" ) );
+wxString g_LibEditSectionTag( wxT( "[libedit]" ) );
+wxString g_BoardEditorSectionTag( wxT( "[pcbnew]" ) );
+wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
+
+/* 0 = files are in Home directory (usefull under unix)
+ * 1 = kicad/template ( usefull only under windows )
+ * 2 ... = unused
+ */
+int g_ConfigFileLocationChoice;
+
+
 /* Class to handle hotkey commnands. hotkeys have a default value
  *  This class allows the real key code changed by user from a key code list file
  */
@@ -618,8 +631,7 @@ void AddHotkeyConfigMenu( wxMenu* menu )
 
     item = new wxMenuItem( menu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                            _( "Show Current Hotkey List" ),
-                           _( "Show the current hotkey config" )
-                           );
+                           _( "Show the current hotkey config" ) );
     item->SetBitmap( info_xpm );
     menu->Append( item );
 
@@ -631,8 +643,8 @@ void AddHotkeyConfigMenu( wxMenu* menu )
     menu->Append( item );
 
     item = new wxMenuItem( menu, ID_PREFERENCES_READ_CONFIG_HOTKEYS,
-                          _( "Reread Hotkey config file" ),
-                          _( "Reread the hotkey config file" ) );
+                           _( "Reread Hotkey config file" ),
+                           _( "Reread the hotkey config file" ) );
     item->SetBitmap( reload_xpm );
     menu->Append( item );
     item = new wxMenuItem( menu, ID_PREFERENCES_EDIT_CONFIG_HOTKEYS,
@@ -654,12 +666,11 @@ void AddHotkeyConfigMenu( wxMenu* menu )
                            wxITEM_CHECK );
     submenu_hkcfg->Append( item );
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( menu, submenu_hkcfg,
-                                        -1,
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( menu, submenu_hkcfg, -1,
                                         _( "Hotkey config location" ),
-                                        _(
-                                           "Hotkey config file location selection (home directory or kicad tree)" ),
-                                        right_xpm );
+                                        _( "Hotkey config file location " \
+                                           "selection (home directory or " \
+                                           "kicad tree)" ), right_xpm );
     submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
                           g_ConfigFileLocationChoice == 0 );
     submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
@@ -678,8 +689,8 @@ void  HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id )
  */
 {
     wxMenuBar* menu = frame->GetMenuBar();
-    wxConfig * config = wxGetApp().m_EDA_CommonConfig;
-    wxASSERT( config != NULL );
+
+    wxConfig* config = wxGetApp().m_EDA_CommonConfig;
 
     switch( id )
     {

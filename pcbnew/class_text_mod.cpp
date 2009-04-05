@@ -11,17 +11,12 @@
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 #include "kicad_string.h"
+#include "pcbcommon.h"
 
-#ifdef PCBNEW
 #include "autorout.h"
 #include "drag.h"
-#endif
-
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
-
 #include "protos.h"
+
 
 /************************************************************************/
 /* Class TEXTE_MODULE classe de base des elements type Texte sur module */

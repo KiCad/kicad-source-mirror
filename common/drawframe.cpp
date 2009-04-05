@@ -21,6 +21,11 @@
 #include <wx/fontdlg.h>
 
 
+/* Configuration entry names. */
+static const wxString CursorShapeEntry( wxT( "CuShape" ) );
+static const wxString ShowGridEntry( wxT( "ShGrid" ) );
+
+
 BEGIN_EVENT_TABLE( WinEDA_DrawFrame, WinEDA_BasicFrame )
     EVT_MOUSEWHEEL( WinEDA_DrawFrame::OnMouseEvent )
     EVT_MENU_OPEN( WinEDA_DrawFrame::OnMenuOpen )
@@ -60,6 +65,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_Print_Sheet_Ref     = TRUE;   // TRUE pour avoir le cartouche imprim�
     m_Draw_Auxiliary_Axis = FALSE;  // TRUE pour avoir les axes auxiliares dessines
     m_UnitType            = INTERNAL_UNIT_TYPE;    // Internal unit = inch
+    m_CursorShape         = 0;
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
     m_InternalUnits       = EESCHEMA_INTERNAL_UNIT;
@@ -105,7 +111,7 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 {
     if( DrawPanel )  // Required: in WinEDA3D_DrawFrame, DrawPanel == NULL !
         wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ),
-                                        DrawPanel->m_AutoPAN_Enable );
+                                    DrawPanel->m_AutoPAN_Enable );
 }
 
 
@@ -113,7 +119,7 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 void WinEDA_DrawFrame::AddFontSelectionMenu( wxMenu* main_menu )
 /*****************************************************************/
 
-/* create the submenu for fonte selection and setup font size
+/* create the submenu for font selection and setup font size
  */
 {
     wxMenu* fontmenu = new wxMenu();
@@ -180,7 +186,7 @@ void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
 /**************************************************************/
 
 /*
- *  Dispaly the meesage on yhe bottomon the frame
+ *  Display the message on the bottom the frame
  */
 {
     SetStatusText( message );
@@ -532,7 +538,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
 
 
 /*****************************/
-/* default virtual fonctions */
+/* default virtual functions */
 /*****************************/
 
 void WinEDA_DrawFrame::OnGrid( int grid_type )
@@ -577,11 +583,11 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     if( screen == NULL || DrawPanel == NULL )
         return;
 
-    // La zone d'affichage est reglee a une taille double de la feuille de travail:
+    // The drawing size is twice the current page size.
     draw_size = screen->ReturnPageSize() * 2;
 
-    // On utilise le centre de l'ecran comme position de reference, donc
-    // la surface de trace doit etre augmentee
+    // Calculate the portion of the drawing that can be displayed in the
+    // client area at the current zoom level.
     panel_size = DrawPanel->GetClientSize();
     screen->Unscale( panel_size );
 
@@ -603,8 +609,14 @@ void WinEDA_DrawFrame::AdjustScrollBars()
         screen->m_DrawOrg.y = -panel_size.y / 2;
     }
 
-    // Calcul du nombre de scrolls  (en unites de scrool )
-    scrollbar_number = draw_size / screen->Unscale( screen->m_ZoomScalar );
+    // Calculate the number of scroll bar units for the given zoom level. */
+    scrollbar_number.x =
+        wxRound( (double) draw_size.x /
+                 (double) screen->Unscale( screen->m_ZoomScalar ) );
+    scrollbar_number.y =
+        wxRound( (double) draw_size.y /
+                 (double) screen->Unscale( screen->m_ZoomScalar ) );
+
     xUnit = yUnit = screen->m_ZoomScalar;
 
     if( xUnit <= 1 )
@@ -620,15 +632,20 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     scrollbar_pos.x -= panel_size.x / 2;
     scrollbar_pos.y -= panel_size.y / 2;
 
-    if( scrollbar_pos.x < 0 )
+    if( scrollbar_pos.x <= 0 )
         scrollbar_pos.x = 0;
-    if( scrollbar_pos.y < 0 )
+    if( scrollbar_pos.y <= 0 )
         scrollbar_pos.y = 0;
 
-    scrollbar_pos.x /= xUnit;
-    scrollbar_pos.y /= yUnit;
+    scrollbar_pos.x = wxRound( (double) scrollbar_pos.x / (double) xUnit );
+    scrollbar_pos.y = wxRound( (double) scrollbar_pos.y / (double) yUnit );
     screen->m_ScrollbarPos    = scrollbar_pos;
     screen->m_ScrollbarNumber = scrollbar_number;
+
+    wxLogDebug( wxT( "SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+                screen->m_ZoomScalar, screen->m_ZoomScalar,
+                screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
+                screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
 
     DrawPanel->SetScrollbars( screen->m_ZoomScalar,
                               screen->m_ZoomScalar,
@@ -648,7 +665,7 @@ void WinEDA_DrawFrame::SetDrawBgColor( int color_num )
  *  le parametre XorMode est mis a jour selon la couleur du fond
  */
 {
-    if( (color_num != WHITE) && (color_num != BLACK) )
+    if( ( color_num != WHITE ) && ( color_num != BLACK ) )
         color_num = BLACK;
     g_DrawBgColor = color_num;
     if( color_num == WHITE )
@@ -688,11 +705,11 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 /*
  * Update the status bar information.
  *
- * The base method updates the absolute and relative cooridinates and the
+ * The base method updates the absolute and relative coordinates and the
  * zoom information.  If you override this virtual method, make sure to call
  * this subclassed method.
  */
-void WinEDA_DrawFrame::Affiche_Status_Box()
+void WinEDA_DrawFrame::UpdateStatusBar()
 {
     wxString        Line;
     int             dx, dy;
@@ -703,7 +720,7 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
 
     /* Display Zoom level: zoom = zoom_coeff/ZoomScalar */
     if ( (screen->GetZoom() % screen->m_ZoomScalar) == 0 )
-        Line.Printf( wxT( "Z %d" ),screen->GetZoom() / screen->m_ZoomScalar );
+        Line.Printf( wxT( "Z %d" ), screen->GetZoom() / screen->m_ZoomScalar );
     else
         Line.Printf( wxT( "Z %.1f" ), (float)screen->GetZoom() / screen->m_ZoomScalar );
     SetStatusText( Line, 1 );
@@ -725,4 +742,39 @@ void WinEDA_DrawFrame::Affiche_Status_Box()
                  To_User_Unit( g_UnitMetric, dy, m_InternalUnits ) );
 
     SetStatusText( Line, 3 );
+}
+
+/**
+ * Load draw frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get loaded.
+ */
+void WinEDA_DrawFrame::LoadSettings()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxConfig* cfg = wxGetApp().m_EDA_Config;
+
+    WinEDA_BasicFrame::LoadSettings();
+    cfg->Read( m_FrameName + CursorShapeEntry, &m_CursorShape, ( long )0 );
+    cfg->Read( m_FrameName + ShowGridEntry, &m_Draw_Grid, true );
+}
+
+
+/**
+ * Save draw frame specific configuration settings.
+ *
+ * Don't forget to call this base method from any derived classes or the
+ * settings will not get saved.
+ */
+void WinEDA_DrawFrame::SaveSettings()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxConfig* cfg = wxGetApp().m_EDA_Config;
+
+    WinEDA_BasicFrame::SaveSettings();
+    cfg->Write( m_FrameName + CursorShapeEntry, m_CursorShape );
+    cfg->Write( m_FrameName + ShowGridEntry, m_Draw_Grid );
 }

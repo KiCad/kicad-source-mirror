@@ -258,8 +258,8 @@ static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
 
     t = min( max( t, 0.0 ), 1.0 );
 
-    res->x = (int) round( a0.x + t * a1.x );
-    res->y = (int) round( a0.y + t * a1.y );
+    res->x = wxRound( a0.x + t * a1.x );
+    res->y = wxRound( a0.y + t * a1.y );
 
     return true;
 }
@@ -282,8 +282,8 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
     t /= (double) vec.x * vec.x + (double) vec.y * vec.y;
     t = min( max( t, 0.0 ), 1.0 );
 
-    res->x = (int) round( track->m_Start.x + t * vec.x );
-    res->y = (int) round( track->m_Start.y + t * vec.y );
+    res->x = wxRound( track->m_Start.x + t * vec.x );
+    res->y = wxRound( track->m_Start.y + t * vec.y );
 
     return true;
 }
@@ -530,25 +530,25 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     {
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        Mouse.y -= (int) round(delta.y);
+        Mouse.y -= wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        Mouse.y += (int) round(delta.y);
+        Mouse.y += wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        Mouse.x -= (int) round(delta.x);
+        Mouse.x -= wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        Mouse.x += (int) round(delta.x);
+        Mouse.x += wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
@@ -631,5 +631,5 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     SetToolbars();
 
-    Affiche_Status_Box();    /* Display new cursor coordinates */
+    UpdateStatusBar();    /* Display new cursor coordinates */
 }

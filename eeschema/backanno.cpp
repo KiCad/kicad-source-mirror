@@ -11,6 +11,7 @@
 #include "gestfich.h"
 #include "libcmp.h"
 #include "general.h"
+#include "appl_wxstruct.h"
 
 /* Variables Locales */
 
@@ -146,7 +147,7 @@ bool WinEDA_SchematicFrame::ReadInputStuffFile()
     if( filename.IsEmpty() )
         return FALSE;
 
-    Line  = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    Line  = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
     Line += wxT( " " ) + filename;
     SetTitle( Line );
 

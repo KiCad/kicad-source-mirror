@@ -68,7 +68,7 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
                 delete g_CurrentTrackList.PopBack();
             }
 
-            Affiche_Status_Box();
+            UpdateStatusBar();
 
             if( g_CurrentTrackList.GetCount() == 0 )
             {

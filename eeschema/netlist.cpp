@@ -13,6 +13,10 @@
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
 
+int g_NbrObjNet;
+ObjetNetListStruct* g_TabObjNet = NULL;
+
+
 //#define NETLIST_DEBUG
 
 /* Routines locales */

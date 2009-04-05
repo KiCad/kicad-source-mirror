@@ -13,9 +13,9 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "appl_wxstruct.h"
 
 #include "kicad.h"
-#include "protos.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"
@@ -51,6 +51,21 @@ const wxChar* s_AllowedExtensionsToList[] =
     wxT( "^.*\\.csv$" ),
     NULL                    // end of list
 };
+
+
+/* TODO: Check if these file extension and wildcard definitions are used
+ *       in any of the other Kicad programs and move them into the common
+ *       library as required. */
+
+/* File extension definitions. */
+const wxString PythonFileExtension( wxT( "py" ) );
+const wxString PdfFileExtension( wxT( "pdf" ) );
+const wxString TextFileExtension( wxT( "txt" ) );
+
+/* File wildcard definitions. */
+const wxString PythonFileWildcard( wxT( "Python files (*.py)|*.py" ) );
+const wxString PdfFileWildcard( wxT( "Portable document files (*.pdf)|*.pdf" ) );
+const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
 
 
 /**
@@ -119,9 +134,9 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
 
     // ID_PROJECT_TXTEDIT
     item = new wxMenuItem( menu,
-                          ID_PROJECT_TXTEDIT,
-                          _( "&Edit in a text editor" ),
-                          _( "&Open the file in a Text Editor" ) );
+                           ID_PROJECT_TXTEDIT,
+                           _( "&Edit in a text editor" ),
+                           _( "&Open the file in a Text Editor" ) );
     item->SetBitmap( icon_txt_xpm );
     menu->Append( item );
 
@@ -265,7 +280,7 @@ void WinEDA_PrjFrame::OnDragStart( wxTreeEvent& event )
 
     m_TreeProject->SelectItem( curr_item );
     TreePrjItemData* data = GetSelectedData();
-    if( data->GetFileName() == m_Parent->m_PrjFileName )
+    if( data->GetFileName() == m_Parent->m_ProjectFileName.GetFullPath() )
         return;
 
     wxTreeItemId id = m_TreeProject->GetSelection();
@@ -512,36 +527,29 @@ void WinEDA_PrjFrame::OnNewTxtFile( wxCommandEvent& event )
 void WinEDA_PrjFrame::NewFile( TreeFileType type )
 /*****************************************************************************/
 {
-    wxString         filename;
     wxString         mask = GetFileExt( type );
-    const wxString   sep  = wxFileName().GetPathSeparator();
+    wxString         wildcard = GetFileWildcard( type );
 
     // Get the directory:
     wxString         dir;
+    wxString         title;
 
     TreePrjItemData* treeData;
-    wxString         FullFileName;
 
+    title = ( TREE_DIRECTORY != type ) ? _( "Create New File" ) :
+        _( "Create New Directory" );
 
     treeData = GetSelectedData();
     if( !treeData )
         return;
 
-    dir = treeData->GetDir();
+    dir = wxGetCwd() + wxFileName().GetPathSeparator() + treeData->GetDir();
 
     // Ask for the new file name
-    filename = EDA_FileSelector( TREE_DIRECTORY !=
-                                 type ? _( "Create New File:" ) : _(
-                                     "Create New Directory" ),
-                                 wxGetCwd() + sep + dir,    /* Chemin par defaut */
-                                 _( "noname" ) + mask,      /* nom fichier par defaut */
-                                 mask,                      /* extension par defaut */
-                                 mask,                      /* Masque d'affichage */
-                                 this,
-                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
-                                 TRUE
-                                 );
-    if( filename.IsEmpty() )
+    wxFileDialog dlg( this, title, dir, _( "noname." ) + mask,
+                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     TreeFileType rootType = treeData->GetType();
@@ -559,7 +567,7 @@ void WinEDA_PrjFrame::NewFile( TreeFileType type )
             root = m_TreeProject->GetSelection();
     }
 
-    NewFile( filename, type, root );
+    NewFile( dlg.GetPath(), type, root );
 }
 
 
@@ -606,42 +614,85 @@ wxString WinEDA_PrjFrame::GetFileExt( TreeFileType type )
 
     switch( type )
     {
-    case 0:                    // 0 is not used
-        break;
-
     case TREE_PROJECT:
-        ext = wxT( ".pro" );
+        ext = ProjectFileExtension;
         break;
 
     case TREE_SCHEMA:
-        ext = g_SchExtBuffer;
+        ext = SchematicFileExtension;
         break;
 
     case TREE_PCB:
-        ext = g_BoardExtBuffer;
+        ext = BoardFileExtension;
         break;
 
     case TREE_PY:
-        ext = wxT( ".py" );
+        ext = PythonFileExtension;
         break;
 
     case TREE_GERBER:
-        ext = g_GerberExtBuffer;
+        ext = GerberFileExtension;
         break;
 
     case TREE_PDF:
-        ext = wxT( ".pdf" );
+        ext = PdfFileExtension;
         break;
 
     case TREE_TXT:
-        ext = wxT( ".txt" );
+        ext = TextFileExtension;
         break;
 
     case TREE_NET:
-        ext = wxT( ".net" );
+        ext = NetlistFileExtension;
+        break;
+    default:                       /* Eliminates unnecessary GCC warning. */
+        break;
+    }
+
+    return ext;
+}
+
+/*
+ * Return the wxFileDialog wildcard string for the selected file type.
+ */
+wxString WinEDA_PrjFrame::GetFileWildcard( TreeFileType type )
+{
+    wxString ext;
+
+    switch( type )
+    {
+    case TREE_PROJECT:
+        ext = ProjectFileWildcard;
         break;
 
-    default:
+    case TREE_SCHEMA:
+        ext = SchematicFileWildcard;
+        break;
+
+    case TREE_PCB:
+        ext = BoardFileWildcard;
+        break;
+
+    case TREE_PY:
+        ext = PythonFileWildcard;
+        break;
+
+    case TREE_GERBER:
+        ext = GerberFileWildcard;
+        break;
+
+    case TREE_PDF:
+        ext = PdfFileWildcard;
+        break;
+
+    case TREE_TXT:
+        ext = TextFileWildcard;
+        break;
+
+    case TREE_NET:
+        ext = NetlistFileWildcard;
+        break;
+    default:                       /* Eliminates unnecessary GCC warning. */
         break;
     }
 
@@ -770,7 +821,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
     data->SetState( 0 );
 
     /* Mark root files (files which have the same name as the project) */
-    wxFileName project( m_Parent->m_PrjFileName );
+    wxFileName project( m_Parent->m_ProjectFileName );
     wxFileName currfile( file );
 
     if( currfile.GetName().CmpNoCase( project.GetName() ) == 0 )
@@ -821,7 +872,7 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
 /*****************************************************************************/
 {
     wxTreeItemId rootcellule;
-    wxString     Text;
+    wxFileName   fn;
     bool         prjOpened = false;
 
     if( !m_TreeProject )
@@ -831,15 +882,20 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
 
     m_TreeProject->SetFont( *g_StdFont );
 
-    if( m_Parent->m_PrjFileName.IsEmpty() )
-        Text = wxT( "noname" );
+    if( !m_Parent->m_ProjectFileName.IsOk() )
+    {
+        fn.Clear();
+        fn.SetPath( ::wxGetCwd() );
+        fn.SetName( wxT( "noname" ) );
+        fn.SetExt( ProjectFileExtension );
+    }
     else
-        Text = wxFileNameFromPath( m_Parent->m_PrjFileName );
+        fn = m_Parent->m_ProjectFileName;
 
-    prjOpened = wxFileExists( Text );
+    prjOpened = fn.FileExists();
 
     // root tree:
-    m_root = rootcellule = m_TreeProject->AddRoot( Text,
+    m_root = rootcellule = m_TreeProject->AddRoot( fn.GetFullName(),
                                                    TREE_PROJECT - 1,
                                                    TREE_PROJECT - 1 );
 
@@ -852,32 +908,32 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
 
     m_TreeProject->SetItemFont( rootcellule, *g_StdFont );
 
-    ChangeFileNameExt( Text, wxEmptyString );
+    fn.SetExt( SchematicFileExtension );
 
     // Add at least a .sch / .brd if not existing:
-    if( !wxFileExists( Text + g_SchExtBuffer ) )
-        AddFile( Text + g_SchExtBuffer, m_root );
+    if( !fn.FileExists() )
+        AddFile( fn.GetFullName(), m_root );
 
-    if( !wxFileExists( Text + g_BoardExtBuffer ) )
-        AddFile( Text + g_BoardExtBuffer, m_root );
+    fn.SetExt( BoardFileExtension );
+
+    if( !fn.FileExists( ) )
+        AddFile( fn.GetFullName(), m_root );
+
+    fn.SetExt( ProjectFileExtension );
 
     // Now adding all current files if available
     if( prjOpened )
     {
-        wxDir    dir( wxGetCwd() );
-        wxString dir_str = dir.GetName();
-        wxString sep     = wxFileName().GetPathSeparator();
         wxString filename;
+        wxDir    dir( wxGetCwd() );
+        bool     cont = dir.GetFirst( &filename );
 
-        if( dir.GetFirst( &filename ) )
+        while( cont )
         {
-            do
-            {
-                if( filename == Text + wxT( ".pro" ) )
-                    continue;
-
-                AddFile( dir_str + sep + filename, m_root );
-            } while( dir.GetNext( &filename ) );
+            if( filename != fn.GetFullName() )
+                AddFile( dir.GetName() + wxFileName::GetPathSeparator() +
+                         filename, m_root );
+            cont = dir.GetNext( &filename );
         }
     }
 
@@ -885,6 +941,8 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
 
     /* Sort filenames by alphabetic order */
     m_TreeProject->SortChildren( m_root );
+
+    m_Parent->m_ProjectFileName = fn;
 }
 
 
@@ -975,7 +1033,7 @@ void WinEDA_PrjFrame::OnTxtEdit( wxCommandEvent& event )
 
     wxString FullFileName = tree_data->GetFileName();
     AddDelimiterString( FullFileName );
-    wxString editorname = GetEditorName();
+    wxString editorname = wxGetApp().GetEditorName();
 
     if( !editorname.IsEmpty() )
     {
@@ -1094,7 +1152,7 @@ void WinEDA_PrjFrame::OnRenameAsk( wxTreeEvent& event )
 
     if( !tree_data )
         return;
-    if( m_Parent->m_PrjFileName == tree_data->GetFileName() )
+    if( m_Parent->m_ProjectFileName.GetFullPath() == tree_data->GetFileName() )
         event.Veto();
 }
 

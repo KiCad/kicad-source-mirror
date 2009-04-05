@@ -8,8 +8,8 @@
 #include "id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "hotkeys.h"
 
+#include "hotkeys.h"
 #include "protos.h"
 
 /* How to add a new hotkey:

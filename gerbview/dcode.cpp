@@ -6,6 +6,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "macros.h"
 
 #include "gerbview.h"
 #include "pcbplot.h"

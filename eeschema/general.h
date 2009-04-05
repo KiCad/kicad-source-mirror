@@ -5,13 +5,6 @@
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
-#define us unsigned short
-#define uc unsigned char
-#define ul unsigned long
 
 /* Entete des fichiers schematique */
 #define EESCHEMA_VERSION 2
@@ -23,7 +16,7 @@
 #define MAX_PIN_INFO 10
 
 #define TXTMARGE 10                 /* Decalage (en 1/1000") des textes places
-                                      * sur fils ( labels, num pins ) */
+                                     * sur fils ( labels, num pins ) */
 
 #define HIGHLIGHT_COLOR WHITE
 
@@ -40,12 +33,7 @@
 #define DANGLING_SYMBOL_SIZE 12
 
 /* Message de presentation */
-extern wxString     g_Main_Title;
-eda_global wxString g_DefaultSchematicFileName
-#ifdef MAIN
-( wxT( "noname.sch" ) )
-#endif
-;
+extern wxString g_DefaultSchematicFileName;
 
 /* Masque de recherche pour localisation d'objets a editer */
 #define LIBITEM                    1
@@ -106,41 +94,33 @@ typedef enum {
 
 
 /* variables generales */
-eda_global wxArrayString  g_LibName_List;   // library list (short filenames) to load
-eda_global LibraryStruct* g_LibraryList;    // All part libs are saved here.
+extern wxArrayString  g_LibName_List;   // library list (short filenames) to load
+extern LibraryStruct* g_LibraryList;    // All part libs are saved here.
 
-eda_global int            g_NetFormat;      /* Numero de reference du type de netliste */
-eda_global int            g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
+extern int            g_NetFormat;      /* Numero de reference du type de netliste */
+extern int            g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
                                           * les numeros (netlist PSPICE seulement) */
-eda_global int            g_BGColor;        /* couleur fond d'ecran (normalement blanc) */
-eda_global SCH_ITEM*      g_ItemToRepeat; /* pointeur sur la derniere structure
+extern SCH_ITEM*      g_ItemToRepeat; /* pointeur sur la derniere structure
                                         * dessinee pouvant etre dupliquee par la commande
                                         * Repeat ( NULL si aucune struct existe ) */
-eda_global wxSize         g_RepeatStep;
-eda_global int            g_RepeatDeltaLabel;
+extern wxSize         g_RepeatStep;
+extern int            g_RepeatDeltaLabel;
 
-eda_global SCH_ITEM*      g_ItemToUndoCopy; /* copy of last modified schematic item
+extern SCH_ITEM*      g_ItemToUndoCopy; /* copy of last modified schematic item
                                           * before it is modified (used for undo managing to restore old values ) */
 
-eda_global bool           g_LastSearchIsMarker; // True if last seach is a marker serach
+extern bool           g_LastSearchIsMarker; // True if last seach is a marker serach
                                                 // False for a schematic item search
                                                 // Used for hotkey next search
 
 /* Block operation (copy, paste) */
-eda_global SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
+extern SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
-eda_global int       g_ShowAllPins;
-eda_global int       g_ShowGrid;    // Bool: display grid
-#ifdef MAIN
-wxSize         g_User_Grid( 50, 50 );
-int            g_HVLines = 1;   // Bool: force H or V directions (Wires, Bus ..)
-#else
-extern wxSize  g_User_Grid;
-extern int     g_HVLines;
-#endif
+extern int       g_ShowAllPins;
+extern int       g_HVLines;
 
-eda_global int g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
+extern int g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
 
 
 // Gestion de diverses variables, options... devant etre memorisees mais
@@ -151,43 +131,23 @@ struct EESchemaVariables
     int NbWarningErc;
 };
 
-eda_global struct EESchemaVariables g_EESchemaVar;
+extern struct EESchemaVariables g_EESchemaVar;
 
 /* Variables globales pour Libview */
-eda_global wxString g_CurrentViewLibraryName;           /* nom de la librairie en cours d'examen */
-eda_global wxString g_CurrentViewComponentName;         /* nom du le composant en cours d'examen */
-eda_global int      g_ViewConvert;                      /* Vue normal / convert */
-eda_global int      g_ViewUnit;                         /* part a afficher (A, B ..) */
+extern wxString g_CurrentViewLibraryName;           /* nom de la librairie en cours d'examen */
+extern wxString g_CurrentViewComponentName;         /* nom du le composant en cours d'examen */
+extern int      g_ViewConvert;                      /* Vue normal / convert */
+extern int      g_ViewUnit;                         /* part a afficher (A, B ..) */
 
 /* Variables globales pour Schematic Edit */
-eda_global int      g_DefaultTextLabelSize
-#ifdef MAIN
-= DEFAULT_SIZE_TEXT
-#endif
-;
+extern int      g_DefaultTextLabelSize;
 
 /* Variables globales pour LibEdit */
-eda_global int g_LastTextSize
-#ifdef MAIN
-= DEFAULT_SIZE_TEXT
-#endif
-;
-eda_global int g_LastTextOrient
-#ifdef MAIN
-= TEXT_ORIENT_HORIZ
-#endif
-;
+extern int g_LastTextSize;
+extern int g_LastTextOrient;
 
-eda_global bool g_FlDrawSpecificUnit
-#ifdef MAIN
-= FALSE
-#endif
-;
-eda_global bool g_FlDrawSpecificConvert
-#ifdef MAIN
-= TRUE
-#endif
-;
+extern bool g_FlDrawSpecificUnit;
+extern bool g_FlDrawSpecificConvert;
 
 /********************************************************/
 /* Description des structures des parametres principaux */
@@ -195,9 +155,9 @@ eda_global bool g_FlDrawSpecificConvert
 
 /* Gestion des trace sur table tracante */
 
-eda_global int   g_PlotFormat;                  /* flag = TYPE_HPGL, TYPE_PS... */
-eda_global int   g_PlotMargin;                  /* Marge pour traces du cartouche */
-eda_global float g_PlotScaleX, g_PlotScaleY;    /* coeff d'echelle de trace en unites table tracante */
+extern int   g_PlotFormat;                  /* flag = TYPE_HPGL, TYPE_PS... */
+extern int   g_PlotMargin;                  /* Marge pour traces du cartouche */
+extern float g_PlotScaleX, g_PlotScaleY;    /* coeff d'echelle de trace en unites table tracante */
 
 
 /* For HPGL plotting: Pen caract : */
@@ -207,13 +167,13 @@ struct HPGL_Pen_Descr_Struct
     int m_Pen_Speed;    /* vitesse en cm/s */
     int m_Pen_Diam;     /* Pen diameter in mils */
 };
-eda_global HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
+extern HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
 /* Ecrans usuels */
 
-//eda_global SCH_SCREEN * ScreenSch;
-eda_global DrawSheetStruct* g_RootSheet;
-eda_global SCH_SCREEN*      g_ScreenLib;
+//extern SCH_SCREEN * ScreenSch;
+extern DrawSheetStruct* g_RootSheet;
+extern SCH_SCREEN*      g_ScreenLib;
 
 /*************************************/
 /* Gestion de recherche des elements */
@@ -225,48 +185,28 @@ eda_global SCH_SCREEN*      g_ScreenLib;
 #define CURSEUR_OFF_GRILLE 1
 
 /* Gestion des librairies schematiques */
-eda_global wxString    g_NetNameBuffer;
+extern wxString    g_NetCmpExtBuffer;
+extern wxString    g_SymbolExtBuffer;
 
-#ifdef MAIN
-wxString               g_NetCmpExtBuffer( wxT( ".cmp" ) );
-wxString               g_SymbolExtBuffer( wxT( ".sym" ) );
-wxString               g_NetExtBuffer( wxT( ".net" ) );
-wxString               g_SchExtBuffer( wxT( ".sch" ) );
-wxString               g_LibExtBuffer( wxT( ".lib" ) );
-#else
-eda_global wxString    g_NetCmpExtBuffer;
-eda_global wxString    g_SymbolExtBuffer;
-eda_global wxString    g_NetExtBuffer;
-eda_global wxString    g_SchExtBuffer;
-eda_global wxString    g_LibExtBuffer;
-#endif
+extern const wxString CompLibFileExtension;
+extern const wxString CompLibFileWildcard;
 
-eda_global wxString    g_SimulatorCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
-eda_global wxString    g_NetListerCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
+extern wxString    g_SimulatorCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
+extern wxString    g_NetListerCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
 
-eda_global LayerStruct g_LayerDescr;            /* couleurs des couches  */
+extern LayerStruct g_LayerDescr;            /* couleurs des couches  */
 
-eda_global bool        g_EditPinByPinIsOn       /* bool: TRUE si edition des pins pin a pin au lieu */
-#ifdef MAIN                                     /* de l'edition simultanee des pins de meme coordonnees */
-= FALSE
-#endif
-;
+/* bool: TRUE si edition des pins pin a pin au lieu */
+extern bool        g_EditPinByPinIsOn;
 
-eda_global int g_LibSymbolDefaultLineWidth; /* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
-eda_global int g_DrawMinimunLineWidth;      /* Minimum line (in EESCHEMA units) thickness used to draw items on screen; 0 = single pixel line width */
-eda_global int g_PlotLine_Width;            /* Minimum line (in EESCHEMA units) thickness used to Plot/Print items */
+extern int g_LibSymbolDefaultLineWidth; /* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
+extern int g_DrawMinimunLineWidth;      /* Minimum line (in EESCHEMA units) thickness used to draw items on screen; 0 = single pixel line width */
+extern int g_PlotLine_Width;            /* Minimum line (in EESCHEMA units) thickness used to Plot/Print items */
 
-eda_global int g_ItemSelectetColor          // Color to draw selected items
-#ifdef MAIN
-= BROWN
-#endif
-;
-
-eda_global int g_InvisibleItemColor         // Color to draw items flagged invisible, in libedit (they are insisible in eeschema
-#ifdef MAIN
-= DARKGRAY
-#endif
-;
+// Color to draw selected items
+extern int g_ItemSelectetColor;
+// Color to draw items flagged invisible, in libedit (they are insisible in eeschema
+extern int g_InvisibleItemColor;
 
 /* Config keys */
 #define MINI_DRAW_LINE_WIDTH_KEY   wxT( "MinimunDrawLineWidth" )

@@ -248,36 +248,38 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
  * sheetname and filename (text and size)
  */
 {
-    wxString FileName, msg;
+    wxFileName fn;
+    wxString msg;
 
-    FileName = m_FileNameWin->GetValue();
-    FileName.Trim( FALSE ); FileName.Trim( TRUE );
+    fn = m_FileNameWin->GetValue();
 
-    if( FileName.IsEmpty() )
+    if( !fn.IsOk() )
     {
         DisplayError( this, _( "No Filename! Aborted" ) );
         EndModal( FALSE );
         return;
     }
 
-    ChangeFileNameExt( FileName, g_SchExtBuffer );
+    fn.SetExt( SchematicFileExtension );
 
     /* m_CurrentSheet->m_AssociatedScreen must be a valide screen, and the sheet must have a valid associated filename,
      * so we must call m_CurrentSheet->ChangeFileName to set a filename,
      * AND always when a new sheet is created ( when m_CurrentSheet->m_AssociatedScreen is null ),
      * to create or set an Associated Screen
      */
-    if( ( FileName != m_CurrentSheet->GetFileName() )
-       || ( m_CurrentSheet->m_AssociatedScreen == NULL) )
+    if( ( fn.GetFullPath() != m_CurrentSheet->GetFileName() )
+        || ( m_CurrentSheet->m_AssociatedScreen == NULL) )
     {
-        msg = _( "Changing a Filename can change all the schematic structure and cannot be undone" );
+        msg = _( "Changing a Filename can change all the schematic " \
+                 "structures and cannot be undone." );
         msg << wxT( "\n" );
         msg << _( "Ok to continue renaming?" );
+
         if( m_CurrentSheet->m_AssociatedScreen == NULL || IsOK( NULL, msg ) )
         { //do not prompt on a new sheet. in fact, we should not allow a sheet to be created
           //without a valid associated filename to be read from.
             m_Parent->GetScreen()->ClearUndoRedoList();
-            m_CurrentSheet->ChangeFileName( m_Parent, FileName );   // set filename and the associated screen
+            m_CurrentSheet->ChangeFileName( m_Parent, fn.GetFullPath() );   // set filename and the associated screen
         }
     }
 
@@ -294,7 +296,8 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
 
     if( ( m_CurrentSheet->m_SheetName.IsEmpty() ) )
     {
-        m_CurrentSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ), GetTimeStamp() );
+        m_CurrentSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ),
+                                            GetTimeStamp() );
     }
 
 

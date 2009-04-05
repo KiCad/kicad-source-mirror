@@ -77,18 +77,21 @@ WinEDA_BasicFrame::~WinEDA_BasicFrame()
  * Virtual function
  */
 /***********************************/
-void
-WinEDA_BasicFrame::ReCreateMenuBar()
+void WinEDA_BasicFrame::ReCreateMenuBar()
 /***********************************/
 {
 
 }
 
 
-/*******************************/
-void
-WinEDA_BasicFrame::GetSettings()
-/*******************************/
+/**
+ * Load common frame parameters from configuration.
+ *
+ * The method is virtual so you can override it to load frame specific
+ * parameters.  Don't forget to call the base method or your frames won't
+ * remember their positions and sizes.
+ */
+void WinEDA_BasicFrame::LoadSettings()
 {
     wxString  text;
     int       Ypos_min;
@@ -121,10 +124,14 @@ WinEDA_BasicFrame::GetSettings()
 }
 
 
-/********************************/
-void
-WinEDA_BasicFrame::SaveSettings()
-/********************************/
+/**
+ * Save common frame parameters from configuration.
+ *
+ * The method is virtual so you can override it to save frame specific
+ * parameters.  Don't forget to call the base method or your frames won't
+ * remember their positions and sizes.
+ */
+void WinEDA_BasicFrame::SaveSettings()
 {
     wxString text;
     wxConfig* config;
@@ -149,8 +156,7 @@ WinEDA_BasicFrame::SaveSettings()
 
 
 /******************************************************/
-void
-WinEDA_BasicFrame::PrintMsg( const wxString& text )
+void WinEDA_BasicFrame::PrintMsg( const wxString& text )
 /******************************************************/
 {
     SetStatusText( text );
@@ -161,9 +167,7 @@ WinEDA_BasicFrame::PrintMsg( const wxString& text )
  * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
  */
 /*************************************************************************/
-void
-WinEDA_BasicFrame::DisplayActivity( int PerCent,
-                                    const wxString& Text )
+void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
 /*************************************************************************/
 {
     wxString Line;
@@ -184,8 +188,7 @@ WinEDA_BasicFrame::DisplayActivity( int PerCent,
  * Met a jour la liste des anciens projets
  */
 /*******************************************************************/
-void
-WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
+void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
 /*******************************************************************/
 {
     wxGetApp().m_fileHistory.AddFileToHistory( FullFileName );
@@ -231,8 +234,7 @@ wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
  *
  */
 /**************************************************************/
-void
-WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
+void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /**************************************************************/
 {
     wxString msg;
@@ -286,8 +288,7 @@ WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
  *
  */
 /***********************************************************************/
-void
-WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
+void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
 /***********************************************************************/
 {
     wxAboutDialogInfo info;
@@ -300,8 +301,7 @@ WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
  *
  */
 /********************************************************************/
-void
-WinEDA_BasicFrame::ProcessFontPreferences( int id )
+void WinEDA_BasicFrame::ProcessFontPreferences( int id )
 /********************************************************************/
 {
     wxFont font;

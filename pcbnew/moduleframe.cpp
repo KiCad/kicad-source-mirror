@@ -46,11 +46,11 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LIBEDIT_IMPORT_PART,
+    EVT_TOOL( ID_MODEDIT_IMPORT_PART,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LIBEDIT_EXPORT_PART,
+    EVT_TOOL( ID_MODEDIT_EXPORT_PART,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
+    EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SHEET_SET,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
@@ -160,8 +160,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     wxConfig* config = wxGetApp().m_EDA_Config;
 
     m_FrameName      = wxT( "ModEditFrame" );
-    m_Draw_Axis      = TRUE;    // TRUE pour avoir les axes dessines
-    m_Draw_Grid      = TRUE;    // TRUE pour avoir la axes dessinee
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
 
     // Give an icon
@@ -185,9 +183,9 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
 
     SetBaseScreen( ScreenModule );
     GetScreen()->SetCurItem( NULL );
-    GetSettings();
+    LoadSettings();
 
-    GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
+    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateMenuBar();
@@ -263,8 +261,8 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     else
         active = TRUE;
 
-    m_HToolBar->EnableTool( ID_LIBEDIT_EXPORT_PART, active );
-    m_HToolBar->EnableTool( ID_LIBEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
+    m_HToolBar->EnableTool( ID_MODEDIT_EXPORT_PART, active );
+    m_HToolBar->EnableTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                             active );
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, active && islib );
     MODULE* module_in_edit = GetBoard()->m_Modules;
@@ -338,7 +336,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                                       m_Draw_Grid );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      g_CursorShape );
+                                      m_CursorShape );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
@@ -432,25 +430,25 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     {
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
-        Mouse.y -= (int) round(delta.y);
+        Mouse.y -= wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
     case WXK_DOWN:
-        Mouse.y += (int) round(delta.y);
+        Mouse.y += wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
     case WXK_LEFT:
-        Mouse.x -= (int) round(delta.x);
+        Mouse.x -= wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
     case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
     case WXK_RIGHT:
-        Mouse.x += (int) round(delta.x);
+        Mouse.x += wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
@@ -491,7 +489,7 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     }
 
     SetToolbars();
-    Affiche_Status_Box();    /* Affichage des coord curseur */
+    UpdateStatusBar();    /* Affichage des coord curseur */
 }
 
 
@@ -503,7 +501,7 @@ void WinEDA_ModuleEditFrame::OnSelectGrid( wxCommandEvent& event )
     if( m_SelGridBox == NULL )
         return;                        // Should not occurs
 
-	GetScreen()->AddGrid( g_UserGrid, g_UserGrid_Unit, ID_POPUP_GRID_USER );
+	GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
 
     WinEDA_DrawFrame::OnSelectGrid( event );
 

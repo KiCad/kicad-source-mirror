@@ -16,7 +16,7 @@
 // Local defines
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
-// Locad variables
+// Local variables
 
 /* Used to inhibit a response to a mouse left button release, after a double click
  * (when releasing the left button at the end of the second click
@@ -73,8 +73,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     ForceCloseManageCurseur = NULL;
 
     if( wxGetApp().m_EDA_Config )
-        m_AutoPAN_Enable = wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ),
-                                                          TRUE );
+        m_AutoPAN_Enable = wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ), true );
 
     m_AutoPAN_Request    = FALSE;
     m_Block_Enable       = FALSE;
@@ -107,7 +106,7 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
     wxPoint Cursor = GetScreen()->m_Curseur;
 
     GRSetDrawMode( DC, GR_XOR );
-    if( g_CursorShape == 1 )    /* Trace d'un reticule */
+    if( m_Parent->m_CursorShape == 1 )    /* Trace d'un reticule */
     {
         int dx = GetScreen()->Unscale( m_ClipBox.GetWidth() );
         int dy = GetScreen()->Unscale( m_ClipBox.GetHeight() );
@@ -214,7 +213,7 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 /********************************************************/
 
-/** Funcion IsPointOnDisplay
+/** Function IsPointOnDisplay
  * @param ref_pos is the position to test in pixels, relative to the panel.
  * @return TRUE if ref_pos is a point currently visible on screen
  *         FALSE if ref_pos is out of screen
@@ -312,11 +311,10 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 /********************************************************/
 
 /** Function CursorScreenPosition
- * @return the curseur current position in pixels in the screen draw area
+ * @return the cursor current position in pixels in the screen draw area
  */
 {
-    wxPoint pos = GetScreen()->m_Curseur;
-    pos -= GetScreen()->m_DrawOrg;
+    wxPoint pos = GetScreen()->m_Curseur - GetScreen()->m_DrawOrg;
     GetScreen()->Scale( pos );
     return pos;
 }
@@ -416,7 +414,7 @@ void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
 /**
  * Called on window activation.
  * init the member m_CanStartBlock to avoid a block start command
- * on activation (because a left mouse buton can be pressed and no block command wanted
+ * on activation (because a left mouse button can be pressed and no block command wanted
  * This happens when enter on a hierarchycat sheet on double click
  */
 {
@@ -544,7 +542,7 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 // see setup.h in wx Widgets.
 // wxWidgets configure can need option  --enable-graphics_ctx
 // Currently, **only for tests**
-//#define USE_GCDC_IN_KICAD     // uncommment it to use wxGCDC
+//#define USE_GCDC_IN_KICAD     // uncomment it to use wxGCDC
 #endif
 
 /***************************************************/
@@ -553,8 +551,8 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 {
 #ifdef USE_GCDC_IN_KICAD
     wxPaintDC pDC( this );
-    wxGCDC paintDC(pDC);									// Following line should be disabled on MSW and OS X
-    paintDC.GetGraphicsContext()->Translate(0.5, 0.5);		// Fix for pixel offset bug http://trac.wxwidgets.org/ticket/4187
+    wxGCDC paintDC(pDC);                                    // Following line should be disabled on MSW and OS X
+    paintDC.GetGraphicsContext()->Translate(0.5, 0.5);      // Fix for pixel offset bug http://trac.wxwidgets.org/ticket/4187
 #else
     wxPaintDC paintDC( this );
 #endif
@@ -703,14 +701,14 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
     wxRealPoint  dgrid = screen_grid_size;
     screen->Scale( dgrid );     // dgrid = grid size in pixels
-    // if the grid size is sall ( < 5 pixels) do not display all points
+    // if the grid size is small ( < 5 pixels) do not display all points
     if( dgrid.x  < 5 )
     {
         screen_grid_size.x *= 2;
         dgrid.x *= 2;
     }
     if( dgrid.x < 5 )
-        drawgrid = FALSE; // The gris is too small: do not show it
+        drawgrid = FALSE; // The grid is too small: do not show it
 
     if( dgrid.y < 5 )
     {
@@ -718,7 +716,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         dgrid.y *= 2;
     }
     if( dgrid.y < 5 )
-        drawgrid = FALSE; // The gris is too small
+        drawgrid = FALSE; // The grid is too small
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
@@ -739,12 +737,12 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         GRSetColorPen( DC, color );
         for( ii = 0; ; ii++ )
         {
-            xg =  (int) round(ii * screen_grid_size.x);
+            xg =  wxRound(ii * screen_grid_size.x);
             int xpos = org.x + xg;
 
             for( jj = 0; ; jj++ )
             {
-                yg = (int) round(jj * screen_grid_size.y);
+                yg = wxRound(jj * screen_grid_size.y);
                 GRPutPixel( &m_ClipBox, DC, xpos, org.y + yg, color );
                 if( yg > size.y )
                     break;
@@ -850,7 +848,7 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
     if( !m_AutoPAN_Enable || !m_AutoPAN_Request || m_IgnoreMouseEvents )
         return;
 
-    // Auto pan if mouse is leave working aera:
+    // Auto pan if mouse is leave working area:
     wxSize size = GetClientSize();
 
     if( ( size.x < event.GetX() ) || ( size.y < event.GetY() )
@@ -867,17 +865,12 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
  * Handle mouse wheel events.
  *
  * The mouse wheel is used to provide support for zooming and panning.  This
- * is accomplished by converting mouse wheel events in psuedo menu command
+ * is accomplished by converting mouse wheel events in pseudo menu command
  * events.
  */
 void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
 {
-    wxRect rect = GetRect();
-
-    /* This fixes a bad rectangle horizontal position returned by the
-     * schematic library veiwer panel.  It may have something to do with
-     * the sash window. */
-    rect.Offset( -rect.x, -rect.y );
+    wxRect rect = wxRect( wxPoint( 0, 0), GetClientSize() );
 
     /* Ignore scroll events if the cursor is outside the drawing area. */
     if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
@@ -891,6 +884,9 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
         event.Skip();
         return;
     }
+
+    GetScreen()->m_Curseur =
+        CursorRealPosition( CalcUnscrolledPosition( event.GetPosition() ) );
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -930,12 +926,12 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( !screen )
         return;
-    #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5        /* Adjust value to filter mouse deplacement before
+    #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5        /* Adjust value to filter mouse displacement before
                                                              * consider the drag mouse is really a drag command, not just a movement while click
                                                              */
     static int MinDragEventCount;               /* counts the drag events.
                                                  * used to filter mouse moves before starting a block command
-                                                 * a block comman can be started only if MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
+                                                 * a block command can be started only if MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
                                                  * in order to avoid spurious block commands
                                                  */
     if( event.Leaving() || event.Entering() )
@@ -986,7 +982,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
     ;                               // Unused
 
-    localrealbutt |= localbutt;     /* compensation defaut wxGTK */
+    localrealbutt |= localbutt;     /* compensation default wxGTK */
 
     /* Compute absolute m_MousePosition in pixel units: */
     screen->m_MousePositionInPixels = CalcUnscrolledPosition( event.GetPosition() );
@@ -1040,7 +1036,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
     {
-        // The middle button has been relached, with no block command:
+        // The middle button has been released, with no block command:
         // We use it for a zoom center at cursor position command
         wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED,
                             ID_POPUP_ZOOM_CENTER );
@@ -1049,7 +1045,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
 
 
-    /* Calling the  general function on mouse changes (and pseudo key commands) */
+    /* Calling the general function on mouse changes (and pseudo key commands) */
     m_Parent->GeneralControle( &DC, screen->m_MousePositionInPixels );
 
 
@@ -1065,9 +1061,9 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
 
     /* A new command block can start after a release buttons
-     * and if the drag is enougth
+     * and if the drag is enough
      * This is to avoid a false start block when a dialog box is demiss,
-     * or when changing panels in hierachy navigation
+     * or when changing panels in hierarchy navigation
      * or when clicking while and moving mouse
      */
     if( !event.LeftIsDown() && !event.MiddleIsDown() )
@@ -1076,8 +1072,8 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         m_CanStartBlock   = 0;
 
         /* remember the last cursor position when a drag mouse starts
-         * this is the last postion ** before ** clicking a button
-         * this is usefull to start a block command from the point where the mouse was clicked first
+         * this is the last position ** before ** clicking a button
+         * this is useful to start a block command from the point where the mouse was clicked first
          * (a filter creates a delay for the real block command start, and we must remember this point)
          */
         m_CursorStartPos = screen->m_Curseur;
@@ -1111,7 +1107,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
                 if( event.MiddleIsDown() )
                     cmd_type |= MOUSE_MIDDLE;
 
-                /* A block command is started if the drag is enought.
+                /* A block command is started if the drag is enough.
                  * A small drag is ignored (it is certainly a little mouse move when clicking)
                  * not really a drag mouse
                  */
@@ -1138,7 +1134,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         {
             /* Release the mouse button: end of block.
              * The command can finish (DELETE) or have a next command (MOVE, COPY).
-             * However the block command is cancelled if the block size is small
+             * However the block command is canceled if the block size is small
              * Because a block command filtering is already made, this case happens,
              * but only when the on grid cursor has not moved.
              */
@@ -1255,7 +1251,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     pos = CalcUnscrolledPosition( wxGetMousePosition() - GetScreenPosition() );
 
     /* Compute absolute mouse position in pixel units (i.e. considering the
-       current scrool) : */
+       current scroll) : */
     Screen->m_MousePositionInPixels = pos;
 
     /* Compute absolute mouse position in user units: */

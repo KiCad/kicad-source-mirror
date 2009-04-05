@@ -13,6 +13,7 @@
 #include "gestfich.h"
 #include "pcbnew.h"
 #include "trigo.h"
+#include "appl_wxstruct.h"
 
 class LIST_MOD      /* Permet de lister les elements utiles des modules */
 {
@@ -75,9 +76,8 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     LIST_MOD*   Liste = 0;
     char        line[1024];
     char        Buff[80];
-    wxString    fnFront;
-    wxString    fnBack;
-    wxString    extension;
+    wxFileName  fnFront;
+    wxFileName  fnBack;
     wxString    msg;
     wxString    frontLayerName;
     wxString    backLayerName;
@@ -135,16 +135,14 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     }
 
     fnFront = GetScreen()->m_FileName;
-
     frontLayerName = GetBoard()->GetLayerName( CMP_N );
-    extension.Printf( wxT("-%s.pos"), frontLayerName.GetData() );
+    fnFront.SetName( fnFront.GetName() + frontLayerName.GetData() );
+    fnFront.SetExt( wxT( "pos") );
 
-    ChangeFileNameExt( fnFront, extension );
-
-    fpFront = wxFopen( fnFront, wxT( "wt" ) );
+    fpFront = wxFopen( fnFront.GetFullPath(), wxT( "wt" ) );
     if( fpFront == 0 )
     {
-        msg = _( "Unable to create " ) + fnFront;
+        msg = _( "Unable to create " ) + fnFront.GetFullPath();
         DisplayError( this, msg );
         goto exit;
     }
@@ -152,15 +150,15 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
     {
         fnBack = GetScreen()->m_FileName;
-
         backLayerName = GetBoard()->GetLayerName( COPPER_LAYER_N );
-        extension.Printf( wxT("-%s.pos"), backLayerName.GetData() );
+        fnBack.SetName( fnBack.GetName() + backLayerName.GetData() );
+        fnBack.SetExt( wxT( "pos" ) );
 
-        ChangeFileNameExt( fnBack, extension );
-        fpBack = wxFopen( fnBack, wxT( "wt" ) );
+        fpBack = wxFopen( fnBack.GetFullPath(), wxT( "wt" ) );
+
         if( fpBack == 0 )
         {
-            msg = _( "Unable to create " ) + fnBack;
+            msg = _( "Unable to create " ) + fnBack.GetFullPath();
             DisplayError( this, msg );
             goto exit;
         }
@@ -172,10 +170,12 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     /* Affichage du bilan : */
     MsgPanel->EraseMsgBox();
-    Affiche_1_Parametre( this, 0, _( "Component side place file:" ), fnFront, BLUE );
+    Affiche_1_Parametre( this, 0, _( "Component side place file:" ),
+                         fnFront.GetFullPath(), BLUE );
 
     if( doBoardBack )
-        Affiche_1_Parametre( this, 32, _( "Copper side place file:" ), fnBack, BLUE );
+        Affiche_1_Parametre( this, 32, _( "Copper side place file:" ),
+                             fnBack.GetFullPath(), BLUE );
 
     msg.Empty(); msg << moduleCount;
     Affiche_1_Parametre( this, 65, _( "Module count" ), msg, RED );
@@ -207,7 +207,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
         fputs( line, fpBack );
 
-    Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "### Printed by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
     fputs( line, fpFront );
     if( doBoardBack )
@@ -275,10 +275,11 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
         fputs( "## End\n", fpBack );
 
-    msg = frontLayerName + wxT( " File: " ) + fnFront;
+    msg = frontLayerName + wxT( " File: " ) + fnFront.GetFullPath();
 
     if( doBoardBack )
-        msg += wxT("\n\n") + backLayerName + wxT( " File: " ) + fnBack;
+        msg += wxT("\n\n") + backLayerName + wxT( " File: " ) +
+            fnBack.GetFullPath();
 
     DisplayInfo( this, msg );
 
@@ -310,7 +311,8 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     MODULE*  Module;
     D_PAD*   pad;
     char     line[1024], Buff[80];
-    wxString FullFileName, fnFront, msg;
+    wxFileName fn;
+    wxString fnFront, msg;
     FILE*    rptfile;
     wxPoint  module_pos;
 
@@ -322,14 +324,15 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     File_Place_Offset = wxPoint( 0, 0 );
 
     /* Init nom fichier */
-    FullFileName = GetScreen()->m_FileName;
-    ChangeFileNameExt( FullFileName, wxT( ".rpt" ) );
+    fn = GetScreen()->m_FileName;
+    fn.SetExt( wxT( "rpt" ) );
 
-    rptfile = wxFopen( FullFileName, wxT( "wt" ) );
+    rptfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
     if( rptfile == NULL )
     {
-        msg = _( "Unable to create " ) + FullFileName;
-        DisplayError( this, msg ); return;
+        msg = _( "Unable to create " ) + fn.GetFullPath();
+        DisplayError( this, msg );
+        return;
     }
 
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
@@ -339,7 +342,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     sprintf( line, "## Module report - date %s\n", DateAndTime( Buff ) );
     fputs( line, rptfile );
 
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
+    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "## Created by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
     fputs( line, rptfile );
     fputs( "## Unit = inches, Angle = deg.\n", rptfile );

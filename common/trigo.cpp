@@ -213,7 +213,7 @@ int ArcTangente( int dy, int dx )
     }
 
     fangle = atan2( (double) dy, (double) dx ) / M_PI * 1800;
-    return (int) round( fangle );
+    return wxRound( fangle );
 }
 
 
@@ -265,8 +265,8 @@ void RotatePoint( int* pX, int* pY, int angle )
         fpx = (*pY * fsinus[angle]) + (*pX * fcosinus[angle]);
         fpy = (*pY * fcosinus[angle]) - (*pX * fsinus[angle]);
 
-        *pX = (int) round( fpx );
-        *pY = (int) round( fpy );
+        *pX = wxRound( fpx );
+        *pY = wxRound( fpy );
     }
 }
 

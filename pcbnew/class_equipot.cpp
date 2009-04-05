@@ -7,11 +7,6 @@
 #include "gr_basic.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
-
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
-
 #include "protos.h"
 
 

@@ -36,9 +36,8 @@ set(GERBVIEW_SRCS
     trpiste.cpp )
 
 set(GERBVIEW_EXTRA_SRCS
-    ../pcbnew/class_board_item.cpp
-    ../pcbnew/class_drawsegment.cpp
-    ../pcbnew/class_track.cpp
+#    ../pcbnew/class_board_item.cpp
+#    ../pcbnew/class_drawsegment.cpp
     ../pcbnew/undelete.cpp
 
     ../share/setpage.cpp
@@ -65,7 +64,7 @@ endif(APPLE)
 
 add_executable(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
 
-target_link_libraries(gerbview 3d-viewer common polygon bitmaps kbool ${wxWidgets_LIBRARIES})
+target_link_libraries(gerbview 3d-viewer common pcbcommon polygon bitmaps kbool ${wxWidgets_LIBRARIES})
 
 install(TARGETS gerbview
         DESTINATION ${KICAD_BIN}

@@ -51,11 +51,11 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 
     if( !GetBaseScreen()->m_UserGridIsON )
     {
-        int tmp = (int) round( coord->x / grid_size.x );
-        coord->x = (int) round(  tmp * grid_size.x );
+        int tmp = wxRound( coord->x / grid_size.x );
+        coord->x = wxRound( tmp * grid_size.x );
 
-        tmp = (int) round( coord->y / grid_size.y );
-        coord->y = (int) round ( tmp * grid_size.y );
+        tmp = wxRound( coord->y / grid_size.y );
+        coord->y = wxRound ( tmp * grid_size.y );
     }
 }
 
@@ -180,7 +180,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
             Recadre_Trace( true );
     }
 
-    Affiche_Status_Box();
+    UpdateStatusBar();
 }
 
 void WinEDA_DrawPanel::OnPopupGridSelect( wxCommandEvent& event )

@@ -9,6 +9,7 @@
 #include "gr_basic.h"
 #include "gestfich.h"
 #include "id.h"
+#include "appl_wxstruct.h"
 
 #include "cvpcb.h"
 #include "protos.h"
@@ -77,7 +78,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 
 
 /********************************************/
-void WinEDA_CvpcbFrame::ReadNetListe()
+bool WinEDA_CvpcbFrame::ReadNetList()
 /*******************************************/
 
 /* Lecture de la netliste selon format, ainsi que du fichier des composants
@@ -91,18 +92,21 @@ void WinEDA_CvpcbFrame::ReadNetListe()
     error_level = ReadSchematicNetlist();
 
     if( error_level < 0 )
-        return;
+    {
+        msg.Printf( _( "File <%s> does not appear to be a valid Kicad " \
+                       "net list file." ),
+                    m_NetlistFileName.GetFullPath().c_str() );
+        ::wxMessageBox( msg, _( "File Error" ), wxOK | wxICON_ERROR, this );
+        return false;
+    }
 
     /* lecture des correspondances */
-    loadcmp();
+    loadcmp( m_NetlistFileName.GetFullPath() );
 
     if( m_ListCmp == NULL )
-        return;
+        return false;
 
-    if( !NetInNameBuffer.IsEmpty() )
-        wxSetWorkingDirectory( wxPathOnly( NetInNameBuffer ) );
-
-    Read_Config( NetInNameBuffer );   // relecture de la config (elle peut etre modifiée)
+    Read_Config( m_NetlistFileName.GetFullPath() );
 
     listlib();
     BuildFootprintListBox();
@@ -130,14 +134,14 @@ void WinEDA_CvpcbFrame::ReadNetListe()
     SetStatusText( msg, 1 );
 
     /* Mise a jour du titre de la fenetre principale */
-    wxString Title = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    msg.Printf( wxT( "%s [%s]" ), Title.GetData(), FFileName.GetData() );
-    SetTitle( msg );
+    SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
+              wxT( " " ) + m_NetlistFileName.GetFullPath() );
+    return true;
 }
 
 
 /*****************************************************************/
-int WinEDA_CvpcbFrame::SaveNetList( const wxString& FullFilename )
+int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
 /*****************************************************************/
 
 /* Sauvegarde des fichiers netliste et cmp
@@ -145,93 +149,35 @@ int WinEDA_CvpcbFrame::SaveNetList( const wxString& FullFilename )
  *   Le nom du fichier cmp en est deduit
  */
 {
-    wxString NetlistFullFileName = FullFilename;
+    wxFileName fn;
 
-    if( NetlistFullFileName.IsEmpty() )
-    {
-        wxString Mask = wxT( "*" ) + NetExtBuffer;
-        if( !NetNameBuffer.IsEmpty() )
-        {
-            NetlistFullFileName = NetNameBuffer;
-            ChangeFileNameExt( NetlistFullFileName, NetExtBuffer );
-        }
+    if( !fileName && m_NetlistFileName.IsOk() )
+        fn = m_NetlistFileName;
+    else
+        fn = wxFileName( wxGetCwd(), _( "unamed" ), NetExtBuffer );
 
-        NetlistFullFileName =
-            EDA_FileSelector( _( "Save NetList and Components List files" ),
-                              NetDirBuffer,         /* Chemin par defaut */
-                              NetlistFullFileName,  /* nom fichier par defaut */
-                              NetExtBuffer,         /* extension par defaut */
-                              Mask,                 /* Masque d'affichage */
-                              this,
-                              wxFD_SAVE,
-                              TRUE
-                              );
-    }
-    if( NetlistFullFileName.IsEmpty() )
+    wxFileDialog dlg( this, _( "Save Net and Component List" ), fn.GetPath(),
+                      fn.GetFullName(), NetlistFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
-    FFileName     = NetlistFullFileName;
-    NetNameBuffer = NetlistFullFileName;
-    if( SaveComponentList( NetlistFullFileName ) == 0 )
+    if( SaveComponentList( dlg.GetPath() ) == 0 )
     {
         DisplayError( this, _( "Unable to create component file (.cmp)" ) );
         return 0;
     }
 
-    dest = wxFopen( NetlistFullFileName, wxT( "wt" ) );
-    if( dest == 0 )
+    FILE* netlist = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+
+    if( netlist == 0 )
     {
         DisplayError( this, _( "Unable to create netlist file" ) );
         return 0;
     }
 
-    GenNetlistPcbnew();
+    GenNetlistPcbnew( netlist );
 
     return 1;
-}
-
-
-/**********************************************************************/
-bool WinEDA_CvpcbFrame::ReadInputNetList( const wxString& FullFileName )
-/**********************************************************************/
-
-/* Routine de selection du nom de la netliste d'entree, et de lecure de
- *  celle-ci
- */
-{
-    wxString Mask, Line;
-
-    if( FullFileName.IsEmpty() )
-    {
-        if( !NetInExtBuffer.IsEmpty() )
-            Mask = wxT( "*" ) + NetInExtBuffer;
-        else
-            Mask = wxT( "*.net" );
-        Line = EDA_FileSelector( _( "Open NetList File:" ),
-                                 NetDirBuffer,      /* Chemin par defaut */
-                                 NetInNameBuffer,   /* nom fichier par defaut */
-                                 NetInExtBuffer,    /* extension par defaut */
-                                 Mask,              /* Masque d'affichage */
-                                 this,
-                                 0,
-                                 FALSE
-                                 );
-        if( Line.IsEmpty() )
-            return FALSE;
-    }
-    else
-        Line = FullFileName;
-
-    NetInNameBuffer = Line;
-    NetNameBuffer   = Line;
-    FFileName = NetInNameBuffer;
-
-    /* Mise a jour du titre de la fenetre principale */
-    Line  = g_Main_Title + wxT( " " ) + GetBuildVersion();
-    Line += wxT( " " ) + NetInNameBuffer;
-    SetTitle( Line );
-
-    ReadNetListe();
-
-    return TRUE;
 }

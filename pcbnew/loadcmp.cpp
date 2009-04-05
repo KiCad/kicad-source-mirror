@@ -11,6 +11,7 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "get_component_dialog.h"
+#include "appl_wxstruct.h"
 
 #include "pcbnew.h"
 #include "protos.h"
@@ -162,7 +163,6 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
         build_liste_pads();
-
         module->Draw( DrawPanel, DC, GR_OR );
     }
 
@@ -170,13 +170,8 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 }
 
 
-/*******************************************************************************/
-MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
-                                                   const wxString& library,
-                                                   const wxString& ModuleName, bool show_msg_err )
-/*******************************************************************************/
-
-/*
+/*****************************************************************************
+ *
  *  Analyse les LIBRAIRIES pour trouver le module demande
  *  Si ce module est trouve, le copie en memoire, et le
  *  chaine en fin de liste des modules
@@ -184,70 +179,91 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
  *          name_cmp = nom du module
  *      - Retour:
  *          Pointeur sur le nouveau module.
- */
+ *
+ *****************************************************************************/
+MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
+                                                   const wxString& library,
+                                                   const wxString& ModuleName,
+                                                   bool show_msg_err )
 {
-    int      LineNum, Found = 0;
-    wxString fulllibname;
-    char     Line[512];
-    wxString Name;
-    wxString ComponentName, msg;
-    MODULE*  NewModule;
-    FILE*    lib_module = NULL;
-    unsigned ii;
-
-    ComponentName = ModuleName;
+    int        LineNum, Found = 0;
+    wxFileName fn;
+    char       Line[512];
+    wxString   Name;
+    wxString   msg, tmp;
+    MODULE*    NewModule;
+    FILE*      file = NULL;
+    unsigned   ii;
 
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
-        fulllibname = g_LibName_List[ii];
+        fn = wxFileName( wxEmptyString, g_LibName_List[ii],
+                         ModuleFileExtension );
 
-        /* Calcul du nom complet de la librairie */
-        fulllibname = MakeFileName( g_RealLibDirBuffer, fulllibname, LibExtBuffer );
+        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
 
-        if( ( lib_module = wxFopen( fulllibname, wxT( "rt" ) ) )  == NULL )
+        if( !tmp )
         {
-            msg.Printf( _( "Library <%s> not found" ), fulllibname.GetData() );
-            Affiche_Message( msg );
+            msg.Printf( _( "PCB footprint library file <%s> not found in " \
+                           "search paths." ), fn.GetFullName().c_str() );
+            wxMessageBox( msg, _( "Library Load Error" ),
+                          wxOK | wxICON_ERROR, this );
             continue;
         }
 
-        msg.Printf( _( "Scan Lib: %s" ), fulllibname.GetData() );
+        file = wxFopen( tmp, wxT( "rt" ) );
+
+        if( file == NULL )
+        {
+            msg.Printf( _( "Could not open PCB footprint library file <%s>." ),
+                        tmp.c_str() );
+            wxMessageBox( msg, _( "Library Load Error" ),
+                          wxOK | wxICON_ERROR, this );
+            continue;
+        }
+
+        msg.Printf( _( "Scan Lib: %s" ), tmp.c_str() );
         Affiche_Message( msg );
 
         /* lecture entete chaine definie par ENTETE_LIBRAIRIE */
         LineNum = 0;
-        GetLine( lib_module, Line, &LineNum );
+        GetLine( file, Line, &LineNum );
         StrPurge( Line );
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            DisplayError( winaff, _( "File is not a library" ) );
+            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library " \
+                           "file." ), tmp.c_str() );
+            wxMessageBox( msg, _( "Library Load Error" ),
+                          wxOK | wxICON_ERROR, this );
+            fclose( file );
             return NULL;
         }
 
         /* Lecture de la liste des composants de la librairie */
         Found = 0;
-        while( !Found && GetLine( lib_module, Line, &LineNum ) )
+        while( !Found && GetLine( file, Line, &LineNum ) )
         {
             if( strnicmp( Line, "$MODULE", 6 ) == 0 )
                 break;
             if( strnicmp( Line, "$INDEX", 6 ) == 0 )
             {
-                while( GetLine( lib_module, Line, &LineNum ) )
+                while( GetLine( file, Line, &LineNum ) )
                 {
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
                     StrPurge( Line );
                     msg = CONV_FROM_UTF8( Line );
-                    if( msg.CmpNoCase( ComponentName ) == 0 )
+                    if( msg.CmpNoCase( ModuleName ) == 0 )
                     {
-                        Found = 1; break; /* Trouve! */
+                        Found = 1;
+                        break; /* Trouve! */
                     }
                 }
             }
         }
 
         /* Lecture de la librairie */
-        while( Found && GetLine( lib_module, Line, &LineNum ) )
+        while( Found && GetLine( file, Line, &LineNum ) )
         {
             if( Line[0] != '$' )
                 continue;
@@ -257,33 +273,32 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( wxWindow* winaff,
                 continue;
             /* Lecture du nom du composant */
             Name = CONV_FROM_UTF8( Line + 8 );
-            if( Name.CmpNoCase( ComponentName ) == 0 )  /* composant localise */
+
+            if( Name.CmpNoCase( ModuleName ) == 0 )  /* composant localise */
             {
                 NewModule = new MODULE( GetBoard() );
 
-                // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+                // Switch the locale to standard C (needed to print
+                // floating point numbers like 1.3)
                 SetLocaleTo_C_standard( );
-                NewModule->ReadDescr( lib_module, &LineNum );
-                SetLocaleTo_Default( );        // revert to the current  locale
-
+                NewModule->ReadDescr( file, &LineNum );
+                SetLocaleTo_Default( );        // revert to the current locale
                 GetBoard()->Add( NewModule, ADD_APPEND );
-                fclose( lib_module );
+                fclose( file );
                 Affiche_Message( wxEmptyString );
                 return NewModule;
             }
         }
 
-        fclose( lib_module ); lib_module = 0;
+        fclose( file );
     }
-
-    if( lib_module )
-        fclose( lib_module );
 
     if( show_msg_err )
     {
-        msg.Printf( _( "Module <%s> not found" ), ComponentName.GetData() );
+        msg.Printf( _( "Module <%s> not found" ), ModuleName.c_str() );
         DisplayError( winaff, msg );
     }
+
     return NULL;
 }
 
@@ -309,15 +324,15 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
     int             LineNum;
     unsigned        ii, NbModules;
     char            Line[1024];
-    wxString        FullLibName;
+    wxFileName      fn;
     static wxString OldName;/* Memorise le nom du dernier composant charge */
-    wxString        CmpName;
-    FILE*           lib_module;
+    wxString        CmpName, tmp;
+    FILE*           file;
     wxString        msg;
 
     WinEDAListBox*  ListBox = new WinEDAListBox( active_window, wxEmptyString,
-                                                NULL, OldName, DisplayCmpDoc,
-                                                wxColour( 200, 200, 255 ) );
+                                                 NULL, OldName, DisplayCmpDoc,
+                                                 wxColour( 200, 200, 255 ) );
 
     wxBeginBusyCursor();
 
@@ -328,13 +343,25 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
         /* Calcul du nom complet de la librairie */
         if( Library.IsEmpty() )
         {
-            FullLibName = MakeFileName( g_RealLibDirBuffer,
-                                        g_LibName_List[ii], LibExtBuffer );
+            fn = wxFileName( wxEmptyString, g_LibName_List[ii],
+                             ModuleFileExtension );
         }
         else
-            FullLibName = MakeFileName( g_RealLibDirBuffer, Library, LibExtBuffer );
+            fn = wxFileName( wxEmptyString, Library, ModuleFileExtension );
 
-        ReadDocLib( FullLibName );
+
+        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+
+        if( !tmp )
+        {
+            msg.Printf( _( "PCB footprint library file <%s> not found in " \
+                           "search paths." ), fn.GetFullName().c_str() );
+            wxMessageBox( msg, _( "Library Load Error" ),
+                          wxOK | wxICON_ERROR, this );
+            continue;
+        }
+
+        ReadDocLib( tmp );
 
         if( !KeyWord.IsEmpty() )    /* Inutile de lire la librairie si selection
                                      *  par mots cles, deja lus */
@@ -344,7 +371,9 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
             continue;
         }
 
-        if( ( lib_module = wxFopen( FullLibName, wxT( "rt" ) ) )  == NULL )
+        file = wxFopen( tmp, wxT( "rt" ) );
+
+        if( file  == NULL )
         {
             if( !Library.IsEmpty() )
                 break;
@@ -352,20 +381,25 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
         }
 
         // Statusbar library loaded message
-        msg = _( "Library " ); msg << FullLibName; msg << _(" loaded");
+        msg = _( "Library " ) + fn.GetFullPath() + _(" loaded");
         Affiche_Message( msg );
 
         /* lecture entete */
         LineNum = 0;
-        GetLine( lib_module, Line, &LineNum, sizeof(Line) - 1 );
+        GetLine( file, Line, &LineNum, sizeof(Line) - 1 );
 
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            DisplayError( this, wxT( "This file is not an Eeschema libray file" ), 20 ); continue;
+            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library " \
+                           "file." ), tmp.c_str() );
+            wxMessageBox( msg, _( "Library Load Error" ),
+                          wxOK | wxICON_ERROR, this );
+            fclose( file );
+            continue;
         }
 
         /* Lecture de la librairie */
-        while( GetLine( lib_module, Line, &LineNum, sizeof(Line) - 1 ) )
+        while( GetLine( file, Line, &LineNum, sizeof(Line) - 1 ) )
         {
             if( Line[0] != '$' )
                 continue;
@@ -373,7 +407,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
                 break;
             if( strnicmp( Line, "$INDEX", 6 ) == 0 )
             {
-                while( GetLine( lib_module, Line, &LineNum ) )
+                while( GetLine( file, Line, &LineNum ) )
                 {
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
@@ -394,8 +428,9 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
         }
 
         /* Fin lecture 1 Librairie */
+        fclose( file );
+        file = NULL;
 
-        fclose( lib_module ); lib_module = NULL;
         if( !Library.IsEmpty() )
             break;
     }
@@ -456,7 +491,8 @@ static void DisplayCmpDoc( wxString& Name )
 
     if( !Mod )
     {
-        Name.Empty(); return;
+        Name.Empty();
+        return;
     }
 
     /* Recherche de la description */
@@ -487,14 +523,14 @@ static void ReadDocLib( const wxString& ModLibName )
  *  ModLibName = full file Name de la librairie Modules
  */
 {
-    ModList* NewMod;
-    char     Line[1024];
-    FILE*    LibDoc;
-    wxString FullModLibName = ModLibName;
+    ModList*   NewMod;
+    char       Line[1024];
+    FILE*      LibDoc;
+    wxFileName fn = ModLibName;
 
-    ChangeFileNameExt( FullModLibName, EXT_DOC );
+    fn.SetExt( EXT_DOC );
 
-    if( ( LibDoc = wxFopen( FullModLibName, wxT( "rt" ) ) ) == NULL )
+    if( ( LibDoc = wxFopen( fn.GetFullPath(), wxT( "rt" ) ) ) == NULL )
         return;
 
     GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 );
@@ -556,8 +592,8 @@ MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
     wxString        CmpName, msg;
 
     WinEDAListBox*  ListBox = new WinEDAListBox( this, wxEmptyString,
-                                                NULL, wxEmptyString, NULL,
-                                                wxColour( 200, 200, 255 ) );
+                                                 NULL, wxEmptyString, NULL,
+                                                 wxColour( 200, 200, 255 ) );
 
     /* Recherche des composants en BOARD */
     ii     = 0;

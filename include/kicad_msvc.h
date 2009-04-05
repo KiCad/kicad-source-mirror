@@ -37,12 +37,6 @@
   #define typeof(expr) BOOST_TYPEOF(expr)
 #endif // def _MSC_VER
 
-inline double round(double x)
-{
- return x >= 0.5 ? ceil(x) : floor(x);
-}
-
 #endif // def __MSVC__
 
 #endif  // ndef __KICAD_MSVC_ INC__
-

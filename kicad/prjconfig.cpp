@@ -12,90 +12,129 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "kicad.h"
-#include "protos.h"
 #include "prjconfig.h"
+#include "id.h"
+#include "kicad.h"
+
+static const wxString GeneralGroupName( wxT( "/general" ) );
+
+/* Kicad project file entry namse. */
+static const wxString SchematicRootNameEntry( wxT( "RootSch" ) );
+static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
 
-/* Variables locales */
-PARAM_CFG_WXSTRING SchematicRootFileNameCfg
-(
-	wxT("RootSch"),			  /* identification */
-	&g_SchematicRootFileName /* Adresse du parametre */
-);
-
-PARAM_CFG_WXSTRING BoardFileNameCfg
-(
-	wxT("BoardNm"),		/* identification */
-	&g_BoardFileName	/* Adresse du parametre */
-);
-
-
-PARAM_CFG_BASE * CfgParamList[] =
+void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
 {
-	& SchematicRootFileNameCfg,
-	& BoardFileNameCfg,
-	NULL
-};
+    wxFileName fn;
+    wxFileName newProjectName = PrjFullFileName;
 
+    // Init default config filename
+    fn.SetPath( ReturnKicadDatasPath() );
+    fn.AppendDir( wxT( "template" ) );
+    fn.SetName( wxT( "kicad" ) );
+    fn.SetExt( ProjectFileExtension );
 
-
-/*******************************************/
-void WinEDA_MainFrame::Load_Prj_Config()
-/*******************************************/
-{
-    if( !wxFileExists( m_PrjFileName ) )
+    if( !fn.FileExists() )
     {
-        wxString msg = _( "Kicad project file <" ) + m_PrjFileName +
-            _( "> not found" );
-        DisplayError( this, msg );
+        DisplayInfo( NULL, _( "Template file not found " ) + fn.GetFullPath() );
+        return;
+    }
+    else
+    {
+        wxCopyFile( fn.GetFullPath(), PrjFullFileName );
+    }
+
+    m_SchematicRootFileName = wxFileName( newProjectName.GetName(),
+                                          SchematicFileExtension ).GetFullName();
+
+    m_BoardFileName = wxFileName( newProjectName.GetName(),
+                                  BoardFileExtension ).GetFullName();
+
+    m_ProjectFileName = newProjectName;
+    wxGetApp().WriteProjectConfig( PrjFullFileName, GeneralGroupName, NULL );
+}
+
+
+void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
+{
+    int style;
+    wxString title;
+
+    if( event.GetId() != wxID_ANY )
+    {
+        if( event.GetId() == ID_NEW_PROJECT )
+        {
+            title = _( "Create New Project" );
+            style = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
+        }
+        else
+        {
+            title = _( "Open Existing Project" );
+            style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+        }
+
+        SetLastProject( m_ProjectFileName.GetFullPath() );
+        wxFileDialog dlg( this, title, wxGetCwd(), wxEmptyString,
+                          ProjectFileWildcard, style );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        m_ProjectFileName = dlg.GetPath();
+
+        if( event.GetId() == ID_NEW_PROJECT )
+            CreateNewProject( m_ProjectFileName.GetFullPath() );
+
+        SetLastProject( m_ProjectFileName.GetFullPath() );
+    }
+
+    wxLogDebug( wxT( "Loading Kicad project file: " ) +
+                m_ProjectFileName.GetFullPath() );
+
+    if( !m_ProjectFileName.FileExists() )
+    {
+        DisplayError( this, _( "Kicad project file <" ) +
+                      m_ProjectFileName.GetFullPath() + _( "> not found" ) );
         return;
     }
 
-    wxSetWorkingDirectory( wxPathOnly( m_PrjFileName ) );
-    SetTitle( g_Main_Title + wxT( " " ) + GetBuildVersion() + wxT( " " ) +
-              m_PrjFileName );
-    SetLastProject( m_PrjFileName );
+    wxSetWorkingDirectory( m_ProjectFileName.GetPath() );
+    wxGetApp().ReadProjectConfig( m_ProjectFileName.GetFullPath(),
+                                  GeneralGroupName, NULL, false );
+
+    SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
+              wxT( " " ) +  m_ProjectFileName.GetFullPath() );
+    SetLastProject( m_ProjectFileName.GetFullPath() );
     m_LeftWin->ReCreateTreePrj();
 
-    wxString msg = _( "\nWorking dir: " ) + wxGetCwd();
-    msg << _( "\nProject: " ) << m_PrjFileName << wxT( "\n" );
-    PrintMsg( msg );
+    PrintMsg( _( "Working dir: " ) + m_ProjectFileName.GetPath() +
+              _( "\nProject: " ) + m_ProjectFileName.GetFullName() +
+              wxT( "\n" ) );
 
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::LoadProject" ),
-                                            PyHandler::Convert( m_PrjFileName ) );
+                                            PyHandler::Convert( m_ProjectFileName.GetFullPath() ) );
 #endif
 }
 
 
-/*********************************************/
-void WinEDA_MainFrame::Save_Prj_Config()
-/*********************************************/
+/**
+ * Save the project top level configuration parameters.
+ */
+void WinEDA_MainFrame::OnSaveProject( wxCommandEvent& event )
 {
-    wxString FullFileName;
+    wxString fn;
 
-    wxString mask( wxT( "*" ) );
+    wxFileDialog dlg( this, _( "Save Project File" ), wxGetCwd(),
+                      m_ProjectFileName.GetFullName(), ProjectFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    g_Prj_Config_Filename_ext = wxT( ".pro" );
-    mask += g_Prj_Config_Filename_ext;
-    FullFileName = m_PrjFileName;
-    ChangeFileNameExt( FullFileName, g_Prj_Config_Filename_ext );
-
-    FullFileName = EDA_FileSelector( _( "Save Project File:" ),
-                                     wxGetCwd(),                /* Chemin par defaut */
-                                     FullFileName,              /* nom fichier par defaut */
-                                     g_Prj_Config_Filename_ext, /* extension par defaut */
-                                     mask,                      /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
-
-    if( FullFileName.IsEmpty() )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    m_ProjectFileName = dlg.GetPath();
+
     /* ecriture de la configuration */
-    wxGetApp().WriteProjectConfig( FullFileName, wxT( "/general" ),
-                                   CfgParamList );
+    wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
+                                   GeneralGroupName, NULL );
 }

@@ -11,11 +11,6 @@
 #include "drawtxt.h"
 
 #include "pcbnew.h"
-
-#ifdef CVPCB
-#include "cvpcb.h"
-#endif
-
 #include "protos.h"
 
 
@@ -630,15 +625,15 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             m_End.x, m_End.y, m_Width, color );
     }
 
-    if( g_IsPrinting )
+    if( panel->GetScreen()->m_IsPrinting )
         return;
 
     // Show clearance for tracks, not for zone segments
     if( ShowClearance( this ) )
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-            m_End.x, m_End.y,
-            m_Width + (g_DesignSettings.m_TrackClearence * 2), color );
+                 m_End.x, m_End.y,
+                 m_Width + (g_DesignSettings.m_TrackClearence * 2), color );
     }
 
     /* Display the short netname for tracks, not for zone segments.

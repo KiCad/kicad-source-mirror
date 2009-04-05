@@ -335,13 +335,11 @@ void WinEDA_NetlistFrame::OnOpenNelistClick( wxCommandEvent& event )
 
 void WinEDA_NetlistFrame::OnReadNetlistFileClick( wxCommandEvent& event )
 {
-    wxString CmpFullFileName;
-    CmpFullFileName = m_NetlistFilenameCtrl->GetValue();
-    ChangeFileNameExt( CmpFullFileName, NetCmpExtBuffer );
+    wxFileName fn = m_NetlistFilenameCtrl->GetValue();
+    fn.SetExt( NetCmpExtBuffer );
 
     ReadPcbNetlist( m_Parent, m_NetlistFilenameCtrl->GetValue(),
-                    CmpFullFileName,
-                    m_MessageWindow,
+                    fn.GetFullPath(), m_MessageWindow,
                     m_ChangeExistingFootprintCtrl->GetSelection() == 1 ? TRUE : FALSE,
                     m_DeleteBadTracks->GetSelection() == 1 ? TRUE : FALSE,
                     m_RemoveExtraFootprintsCtrl->IsChecked(),

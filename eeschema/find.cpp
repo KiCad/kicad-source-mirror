@@ -713,9 +713,9 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
     int      nbitems = 0, LineNum = 0;
     char     Line[2048], * name;
 
-    FullFileName = MakeFileName( g_RealLibDirBuffer, wxT( "*" ), g_LibExtBuffer );
+    FullFileName = wxFindFirstFile( g_RealLibDirBuffer + wxT( "*." ) +
+                                    CompLibFileExtension );
 
-    FullFileName = wxFindFirstFile( FullFileName );
     while( !FullFileName.IsEmpty() )
     {
         file = wxFopen( FullFileName, wxT( "rt" ) );

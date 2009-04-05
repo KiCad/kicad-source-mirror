@@ -13,17 +13,6 @@
 wxPoint  BOARD_ITEM::ZeroOffset(0,0);
 
 
-
-// define SCH_ITEM::Place() (defined and used in eeschema but not for pcbnew)
-// this is an ugly workaround to a linking problem in debug mode
-// which needs to define  SCH_ITEM::Place() when not really used.
-#include "sch_item_struct.h"
-void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
-{
-}
-
-
-
 /*****************/
 /* Class BOARD: */
 /*****************/

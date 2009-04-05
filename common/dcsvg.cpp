@@ -29,7 +29,6 @@
 #define newline    wxString( wxT( "\n" ) )
 #define space      wxString( wxT( " " ) )
 #define semicolon  wxString( wxT( ";" ) )
-#define     wx_round( a )    (int) ( (a) + .5 )
 
 #ifdef __BORLANDC__
 #pragma warn -rch

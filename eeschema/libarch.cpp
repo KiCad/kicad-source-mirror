@@ -31,7 +31,8 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
  *  return  true if success
  */
 {
-    wxString DocFileName, msg;
+    wxFileName docFileName;
+    wxString msg;
     char     Line[256];
     FILE*    ArchiveFile, * DocFile;
     EDA_LibComponentStruct* Entry;
@@ -62,8 +63,8 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     sort( ListEntry.begin(), ListEntry.end(), SortCmpByName );
 
     /* calculate the file name for the associated doc file */
-    DocFileName = ArchFullFileName;
-    ChangeFileNameExt( DocFileName, DOC_EXT );
+    docFileName = ArchFullFileName;
+    docFileName.SetExt( DOC_EXT );
 
     if( ( ArchiveFile = wxFopen( ArchFullFileName, wxT( "wt" ) ) ) == NULL )
     {
@@ -72,9 +73,9 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
         return FALSE;
     }
 
-    if( ( DocFile = wxFopen( DocFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( DocFile = wxFopen( docFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to create doc lib file " ) + DocFileName;
+        msg = _( "Failed to create doc lib file " ) + docFileName.GetFullPath();
         DisplayError( frame, msg );
     }
 

@@ -8,6 +8,7 @@
 #include "wxstruct.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "macros.h"
 
 #include "cvpcb.h"
 #include "protos.h"
@@ -18,31 +19,27 @@ void WinEDA_CvpcbFrame::WriteStuffList( wxCommandEvent& event )
 {
     FILE*     FileEquiv;
     STORECMP* Cmp;
-    wxString  Line, FullFileName, Mask;
+    wxString  Line;
+    wxFileName fn = m_NetlistFileName;
 
     if( nbcomp <= 0 )
         return;
 
     /* calcul du nom du fichier */
-    Mask = wxT( "*" ) + ExtRetroBuffer;
-    FullFileName = FFileName;
-    ChangeFileNameExt( FullFileName, ExtRetroBuffer );
+    fn.SetExt( RetroFileExtension );
 
-    FullFileName = EDA_FileSelector( wxT( "Create Stuff File" ),
-                                     wxGetCwd(),    /* Chemin par defaut */
-                                     FullFileName,  /* nom fichier par defaut */
-                                     ExtRetroBuffer, /* extension par defaut */
-                                     Mask,          /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     TRUE  );
-    if( FullFileName.IsEmpty() )
+    wxFileDialog dlg( this, wxT( "Save Stuff File" ), fn.GetPath(),
+                      fn.GetFullName(), RetroFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    FileEquiv = wxFopen( FullFileName, wxT( "wt" ) );
+    FileEquiv = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+
     if( FileEquiv == 0 )
     {
-        Line = _( "Unable to create " ) + FullFileName;
+        Line = _( "Unable to create " ) + dlg.GetPath();
         DisplayError( this, Line, 30 );
         return;
     }

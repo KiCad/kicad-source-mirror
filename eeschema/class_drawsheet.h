@@ -5,10 +5,6 @@
 #ifndef CLASS_DRAWSHEET_H
 #define CLASS_DRAWSHEET_H
 
-#ifndef eda_global
-#define eda_global extern
-#endif
-
 #include "base_struct.h"
 
 extern DrawSheetStruct* g_RootSheet;
