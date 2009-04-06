@@ -98,7 +98,7 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
         }
         DrawGraphicText( panel, DC, wxPoint( tposx, posy ), txtcolor,
                          m_Text, TEXT_ORIENT_HORIZ, size,
-                         side, GR_TEXT_VJUSTIFY_CENTER, LineWidth );
+                         side, GR_TEXT_VJUSTIFY_CENTER, LineWidth, false, true );
     }
     /* dessin du symbole de connexion */
 

@@ -1,5 +1,5 @@
 
-EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a\
+EXTRALIBS = ../common/common.a ../common/pcbcommon.a ../bitmaps/libbitmaps.a\
             ../polygon/lib_polygon.a\
             ../polygon/kbool/src/libkbool.a
 
@@ -49,14 +49,7 @@ OBJECTS=	$(TARGET).o\
 		setpage.o \
 		tool_pcb.o \
 		pcbframe.o \
-		class_drawsegment.o \
-		class_track.o \
 		class_cotation.o\
-		class_equipot.o \
-		class_module.o \
-		class_edge_mod.o \
-		class_text_mod.o\
-		class_board_item.o\
 		track.o \
 		set_color.o \
 		set_grid.o \
@@ -65,7 +58,6 @@ OBJECTS=	$(TARGET).o\
 		affiche.o \
 		swap_layers.o \
 		tracepcb.o \
-		tracemod.o \
 		trpiste.o \
 		surbrill.o \
 		edit_pcb_text.o \
@@ -154,16 +146,6 @@ export_gencad.o: export_gencad.cpp
 
 print_board_functions.o: print_board_functions.cpp
 
-class_track.o: class_track.cpp class_track.h
-
-class_equipot.o: class_equipot.cpp
-
-class_module.o: class_module.cpp
-
-class_edge_mod.o: class_edge_mod.cpp
-
-class_text_mod.o: class_text_mod.cpp
-
 pcbnew.o: pcbnew.cpp pcbnew.h pcbplot.h drag.h \
 				autorout.h ../include/eda_dde.h
 
@@ -178,8 +160,6 @@ xchgmod.o: xchgmod.cpp
 swap_layers.o: swap_layers.cpp
 
 tracepcb.o: tracepcb.cpp
-
-tracemod.o: tracemod.cpp ../include/grfonte.h
 
 trpiste.o: trpiste.cpp
 

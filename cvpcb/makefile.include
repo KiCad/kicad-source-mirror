@@ -4,7 +4,7 @@ OBJSUFF = o
 EXTRACPPFLAGS += -DCVPCB -I../include -Ibitmaps\
 	-I../pcbnew -I../cvpcb  -I../share -I../3d-viewer -I ../polygon
 
-EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a\
+EXTRALIBS = ../common/common.a ../common/pcbcommon.a ../bitmaps/libbitmaps.a\
     ../polygon/lib_polygon.a\
     ../polygon/kbool/src/libkbool.a
 

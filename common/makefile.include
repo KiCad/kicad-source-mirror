@@ -1,73 +1,104 @@
 EXTRACPPFLAGS += -I$(SYSINCLUDE) -I./ -Ibitmaps -I../include -I../polygon
 
-COMMON = ../include/colors.h
+PCBINCL = -I../pcbnew -I../polygon -I../3d-viewer
 
-PCBINCL = -I../pcbnew -I../polygon
-
-OBJECTS= \
-	about_kicad.o\
-	base_struct.o\
-	basicframe.o\
-	drawframe.o\
-	confirm.o \
-	copy_to_clipboard.o\
-	class_drawpickedstruct.o\
-	common_plot_functions.o\
+COMMON_OBJECTS= \
+    about_kicad.o\
+    base_screen.o\
+    base_struct.o\
+    basicframe.o\
+    block_commande.o\
+    class_drawpickedstruct.o\
+    common.o\
+    common_plot_functions.o\
+    common_plotHPGL_functions.o\
+    common_plotPS_functions.o\
 	common_plotGERBER_functions.o\
-	common_plotPS_functions.o\
-	common_plotHPGL_functions.o\
-	dlist.o \
-	hotkeys_basic.o\
-	drawtxt.o \
+	confirm.o\
+    copy_to_clipboard.o\
+    dcsvg.o\
+    displlst.o\
+    dlist.o\
+    drawframe.o\
     drawpanel.o\
-	wxwineda.o \
-	string.o \
-	gr_basic.o\
-	gestfich.o\
-	trigo.o\
-	selcolor.o\
-	common.o\
-	eda_doc.o\
-	toolbars.o\
-	displlst.o \
-	edaappl.o\
-	block_commande.o\
-	msgpanel.o\
-	projet_config.o\
-	get_component_dialog.o\
-	eda_dde.o\
-	worksheet.o\
-	base_screen.o\
-	dcsvg.o\
-    zoom.o\
+    drawtxt.o\
+    edaappl.o\
+    eda_dde.o\
+    eda_doc.o\
+    gestfich.o\
+    get_component_dialog.o\
+    gr_basic.o\
+    hotkeys_basic.o\
+    msgpanel.o\
+    projet_config.o\
+    selcolor.o\
+    string.o\
+    toolbars.o\
+    trigo.o\
+    worksheet.o\
+    wxwineda.o\
+    zoom.o
+
+
+PCB_COMMON_OBJECTS =\
+    pcbcommon.o\
     basepcbframe.o\
     class_board.o\
     class_board_connected_item.o\
+    class_board_item.o\
     class_cotation.o\
+    class_drawsegment.o\
     class_drc_item.o\
+    class_edge_mod.o\
+    class_equipot.o\
     class_marker.o\
     class_mire.o\
+    class_module.o\
     class_pad.o\
     class_pad_draw_functions.o\
     class_pcb_text.o\
+    class_text_mod.o\
+    class_track.o\
     class_zone.o\
     class_zone_setting.o\
     classpcb.o\
     collectors.o\
     sel_layer.o\
+    tracemod.o\
     dialog_print_using_printer_base.o
 
 
 ifdef KICAD_PYTHON
-OBJECTS += pyhandler.o
-pyhandler.o: pyhandler.cpp $(COMMON) ../include/pyhandler.h
+COMMON_OBJECTS += pyhandler.o
+pyhandler.o: pyhandler.cpp ../include/pyhandler.h
 endif
 
+
+pcbcommon.o: pcbcommon.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ $*.cpp
 
 basepcbframe.o: ../pcbnew/basepcbframe.cpp
 	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board.o: ../pcbnew/class_board.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_board_item.o: ../pcbnew/class_board_item.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_drawsegment.o: ../pcbnew/class_drawsegment.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_edge_mod.o: ../pcbnew/class_edge_mod.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_equipot.o: ../pcbnew/class_equipot.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_module.o: ../pcbnew/class_module.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+class_text_mod.o: ../pcbnew/class_text_mod.cpp
 	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_board_connected_item.o: ../pcbnew/class_board_connected_item.cpp
@@ -94,6 +125,12 @@ class_pad_draw_functions.o: ../pcbnew/class_pad_draw_functions.cpp
 class_pcb_text.o: ../pcbnew/class_pcb_text.cpp
 	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
+class_track.o: ../pcbnew/class_track.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
+tracemod.o: ../pcbnew/tracemod.cpp
+	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
+
 class_zone.o: ../pcbnew/class_zone.cpp
 	$(CXX) $(PCBINCL) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
@@ -114,41 +151,41 @@ dialog_print_using_printer_base.o: ../pcbnew/dialog_print_using_printer_base.cpp
 
 gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(DEPEND)
 
-confirm.o: confirm.cpp $(COMMON)
+confirm.o: confirm.cpp
 
-hotkeys_basic.o: hotkeys_basic.cpp ../include/hotkeys_basic.h $(COMMON)
+hotkeys_basic.o: hotkeys_basic.cpp ../include/hotkeys_basic.h
 
-worksheet.o: worksheet.cpp ../include/worksheet.h $(COMMON)
+worksheet.o: worksheet.cpp ../include/worksheet.h
 
-selcolor.o: selcolor.cpp ../include/colors.h $(COMMON)
+selcolor.o: selcolor.cpp ../include/colors.h
 
-get_component_dialog.o: get_component_dialog.cpp $(COMMON)
+get_component_dialog.o: get_component_dialog.cpp
 
-common_plotPS_functions.o: common_plotPS_functions.cpp ../include/plot_common.h $(COMMON)
+common_plotPS_functions.o: common_plotPS_functions.cpp ../include/plot_common.h
 
-common_plotHPGL_functions.o: common_plotPS_functions.cpp ../include/plot_common.h $(COMMON)
+common_plotHPGL_functions.o: common_plotPS_functions.cpp ../include/plot_common.h
 
-drawtxt.o: drawtxt.cpp ../include/grfonte.h $(COMMON)
+drawtxt.o: drawtxt.cpp ../include/grfonte.h
 
-gr_basic.o: gr_basic.cpp ../include/gr_basic.h $(COMMON) ../include/plot_common.h
+gr_basic.o: gr_basic.cpp ../include/gr_basic.h ../include/plot_common.h
 
-dcsvg.o: dcsvg.cpp $(COMMON) ../include/dcsvg.h
+dcsvg.o: dcsvg.cpp ../include/dcsvg.h
 
-projet_config.o: projet_config.cpp $(COMMON)
+projet_config.o: projet_config.cpp
 
-base_struct.o: base_struct.cpp $(COMMON)
+base_struct.o: base_struct.cpp
 
-eda_doc.o: eda_doc.cpp $(COMMON)
+eda_doc.o: eda_doc.cpp
 
-common.o: common.cpp $(COMMON)
+common.o: common.cpp
 
-gestfich.o: gestfich.cpp $(COMMON)
+gestfich.o: gestfich.cpp
 
-toolbars.o: toolbars.cpp $(COMMON)
+toolbars.o: toolbars.cpp
 
-msgpanel.o: msgpanel.cpp $(COMMON)
+msgpanel.o: msgpanel.cpp
 
-block_commande.o: block_commande.cpp $(COMMON)
+block_commande.o: block_commande.cpp
 
 string.o: string.cpp
 
@@ -156,10 +193,10 @@ trigo.o: trigo.cpp ../include/trigo.h
 
 bitmaps.o: bitmaps.cpp ../include/bitmaps.h
 
-edaappl.o: edaappl.cpp $(COMMON) ../include/worksheet.h\
+edaappl.o: edaappl.cpp ../include/worksheet.h\
 	../include/common.h ../include/gr_basic.h\
 	../include/build_version.h
 
-eda_dde.o: eda_dde.cpp $(COMMON) ../include/eda_dde.h
+eda_dde.o: eda_dde.cpp ../include/eda_dde.h
 
-displlst.o: displlst.cpp $(COMMON)
+displlst.o: displlst.cpp

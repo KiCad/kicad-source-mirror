@@ -1,9 +1,9 @@
 KICAD_SUBDIRS =  common bitmaps 3d-viewer polygon polygon/kbool/src  eeschema eeschema/plugins pcbnew kicad cvpcb gerbview
 KICAD_SUBDIRS_BIN =  eeschema eeschema/plugins pcbnew cvpcb kicad gerbview
 # How to invoke make:
-MAKE = make -k -f makefile.g95
-MAKE_INSTALL = make -f makefile.g95 install
-MAKE_CLEAN = make -f makefile.g95 clean
+MAKE = make -k -f makefile.mingw
+MAKE_INSTALL = make -f makefile.mingw install
+MAKE_CLEAN = make -f makefile.mingw clean
 
 all:
 	@for d in $(KICAD_SUBDIRS); do (cd $$d && $(MAKE)); done

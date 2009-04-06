@@ -48,6 +48,7 @@ set(EESCHEMA_SRCS
     dialog_edit_libentry_fields_in_lib.cpp
     dialog_edit_libentry_fields_in_lib_base.cpp
     dialog_eeschema_config.cpp
+    dialog_eeschema_config_fbp.cpp
     dialog_erc.cpp
 #   dialog_find.cpp
     dialog_options.cpp

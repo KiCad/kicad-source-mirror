@@ -35,7 +35,6 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
     wxString   tmp, msg;
     wxFileName fn;
     MODULE*    Module = NULL;
-    FILE*      file;
 
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
@@ -54,7 +53,7 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
             continue;
         }
 
-        file = wxFopen( tmp, wxT( "rt" ) );
+        FILE* file = wxFopen( tmp, wxT( "rt" ) );
 
         if( file == NULL )
         {
@@ -131,11 +130,8 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
         }
 
         fclose( file );
-        file = 0;
+        file = NULL;
     }
-
-    if( file )
-        fclose( file );
 
     msg.Printf( _( "Module %s not found" ), CmpName.GetData() );
     DisplayError( this, msg );

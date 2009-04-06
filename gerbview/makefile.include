@@ -1,4 +1,4 @@
-EXTRALIBS = ../common/common.a ../bitmaps/libbitmaps.a\
+EXTRALIBS = ../common/common.a ../common/pcbcommon.a ../bitmaps/libbitmaps.a\
 		../polygon/lib_polygon.a ../polygon/kbool/src/libkbool.a
 
 EXTRACPPFLAGS= -DGERBVIEW -DPCBNEW -fno-strict-aliasing\

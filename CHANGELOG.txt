@@ -4,7 +4,17 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
-2009-xxx-xx UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+2009-apr-06 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++common:
+    overbar patch merged in drawtxt.cpp and mainly in eechema/class_pin.cpp
+    some cleanup and some compiling problems fixed.
+
+++eeschema:
+    changed dialog_eeschema_config.cpp to use wxFormBuilder to create
+    the corresponding equivalent dialog in dialog_eeschema_config_fbp.cpp
+
+2009-apr-05 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++All
   * Removed all instances #ifdef eda_global, COMMON_GLOBL, and MAIN in order

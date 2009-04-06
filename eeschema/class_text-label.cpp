@@ -195,7 +195,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                          wxPoint( m_Pos.x + offset.x, m_Pos.y - TXTMARGE + offset.y ),
                          color, m_Text, TEXT_ORIENT_HORIZ, m_Size,
                          GR_TEXT_HJUSTIFY_LEFT,
-                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic );
+                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
         break;
 
     case 1: /* Vert Orientation UP */
@@ -204,7 +204,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   m_Pos.y + offset.y ),
                          color, m_Text, TEXT_ORIENT_VERT, m_Size,
                          GR_TEXT_HJUSTIFY_RIGHT,
-                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic );
+                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
         break;
 
     case 2: /* Horiz Orientation - Right justified */
@@ -213,7 +213,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   TXTMARGE + offset.y ),
                          color, m_Text, TEXT_ORIENT_HORIZ, m_Size,
                          GR_TEXT_HJUSTIFY_RIGHT,
-                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic );
+                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
         break;
 
     case 3: /*  Vert Orientation BOTTOM */
@@ -222,7 +222,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                   m_Pos.y + offset.y ),
                          color, m_Text, TEXT_ORIENT_VERT, m_Size,
                          GR_TEXT_HJUSTIFY_RIGHT,
-                         GR_TEXT_VJUSTIFY_TOP, width, m_Italic );
+                         GR_TEXT_VJUSTIFY_TOP, width, m_Italic, true );
         break;
     }
 
@@ -448,28 +448,28 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x - ii, AnchorPos.y ), color,
                          m_Text, TEXT_ORIENT_HORIZ, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic, true );
         break;
 
     case 1:             /* Orientation vert UP */
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x, AnchorPos.y + ii ), color,
                          m_Text, TEXT_ORIENT_VERT, m_Size,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width, m_Italic, true );
         break;
 
     case 2:             /* Orientation horiz inverse */
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x + ii, AnchorPos.y ), color,
                          m_Text, TEXT_ORIENT_HORIZ, m_Size,
-                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic, true );
         break;
 
     case 3:             /* Orientation vert BOTTOM */
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x, AnchorPos.y - ii ), color,
                          m_Text, TEXT_ORIENT_VERT, m_Size,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
         break;
     }
 
@@ -519,7 +519,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
 
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );
     height  = m_Size.y + 2*TXTMARGE;
-    length = ( Pitch(width) * GetLength() ) + height + 2*DANGLING_SYMBOL_SIZE; // add height for triangular shapes
+    length = ( Pitch(width) * NegableTextLength(m_Text) ) + height + 2*DANGLING_SYMBOL_SIZE; // add height for triangular shapes
 
     switch( m_Orient ) // respect orientation
     {
@@ -605,28 +605,28 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& dr
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x - offset, AnchorPos.y ), color,
                          m_Text, TEXT_ORIENT_HORIZ, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic, true );
         break;
 
     case 1:             /* Orientation vert UP */
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x, AnchorPos.y + offset ), color,
                          m_Text, TEXT_ORIENT_VERT, m_Size,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, width, m_Italic, true );
         break;
 
     case 2:             /* Orientation horiz inverse */
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x + offset, AnchorPos.y ), color,
                          m_Text, TEXT_ORIENT_HORIZ, m_Size,
-                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, m_Italic, true );
         break;
 
     case 3:             /* Orientation vert BOTTOM */
         DrawGraphicText( panel, DC,
                          wxPoint( AnchorPos.x, AnchorPos.y - offset ), color,
                          m_Text, TEXT_ORIENT_VERT, m_Size,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic );
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
         break;
     }
 
@@ -647,15 +647,15 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& dr
  */
 void SCH_GLOBALLABEL::CreateGraphicShape( int* corner_list, const wxPoint& Pos )
 {
-    int HalfSize = m_Size.x / 2;
+    int HalfSize = m_Size.y / 2;
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     *corner_list = 7; corner_list++;	// 7 corners in list
 
-    int symb_len = ( Pitch(width) * GetLength() ) + (TXTMARGE * 2);
+    int symb_len = ( Pitch(width) * NegableTextLength(m_Text) ) + (TXTMARGE * 2);
     // Create outline shape : 6 points
     int x = symb_len + width + 3;
-    int y = HalfSize + width + 3;
+    int y = HalfSize*1.5 + width + 3; /* 50% more for negation bar */
     corner_list[0]  = 0; corner_list[1] = 0;        // Starting point (anchor)
     corner_list[2]  = 0; corner_list[3] = -y;       // Up
     corner_list[4]  = -x; corner_list[5] = -y;      // left Up
@@ -734,7 +734,7 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );
     height  = m_Size.y + 2*TXTMARGE;
-    length = ( Pitch(width) * GetLength() ) + 2* height + 2*DANGLING_SYMBOL_SIZE; // add 2*height for triangular shapes (bidirectional)
+    length = ( Pitch(width) * NegableTextLength(m_Text) ) + 2* height + 2*DANGLING_SYMBOL_SIZE; // add 2*height for triangular shapes (bidirectional)
 
     switch( m_Orient ) // respect orientation
     {
@@ -782,7 +782,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
     x = m_Pos.x;
     y = m_Pos.y;
     int     width = MAX( m_Width, g_DrawMinimunLineWidth );
-    length = ( Pitch(width) * GetLength() );
+    length = ( Pitch(width) * NegableTextLength(m_Text) );
     height  = m_Size.y;
     dx = dy = 0;
 

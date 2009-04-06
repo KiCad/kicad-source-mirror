@@ -493,6 +493,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
                      text->m_Text, text->m_Orient, text->m_Size,
                      text->m_HJustify, text->m_VJustify,
                      text->m_Width, text->m_Italic,
+                     true,
                      Draw3dTextSegm );
 }
 

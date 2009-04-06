@@ -70,11 +70,19 @@ void ZONE_CONTAINER::SetNet( int anet_code )
 
     if( m_Parent )
     {
-        EQUIPOT* net = ( (BOARD*) m_Parent )->FindNet( anet_code );
+        BOARD* board = (BOARD*) m_Parent;
+        EQUIPOT* net = board->FindNet( anet_code );
         if( net )
             m_Netname = net->GetNetname();
         else
             m_Netname.Empty();
+
+        // Set corresponding SEGZONE items if this zone uses fill areas by segments
+        for( SEGZONE* zseg = board->m_Zone;  zseg;   zseg = zseg->Next() )
+        {
+            if ( zseg->m_TimeStamp == m_TimeStamp )
+                zseg->SetNet(GetNet());
+        }
     }
     else
         m_Netname.Empty();

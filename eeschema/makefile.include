@@ -40,6 +40,7 @@ OBJECTS = eeschema.o\
 	tool_sch.o\
 	tool_viewlib.o\
 	schframe.o\
+    sch_item_struct.o\
 	viewlib_frame.o\
 	dialog_print_using_printer_base.o\
     dialog_print_using_printer.o\
@@ -52,6 +53,7 @@ OBJECTS = eeschema.o\
 	block_libedit.o\
 	eeredraw.o\
 	dialog_eeschema_config.o\
+	dialog_eeschema_config_fbp.o\
 	eelayer.o \
 	priorque.o eeconfig.o \
 	getpart.o\
@@ -191,8 +193,12 @@ onleftclick.o: onleftclick.cpp $(DEPEND)
 
 eeredraw.o: eeredraw.cpp $(DEPEND)
 
-dialog_eeschema_config.o: dialog_eeschema_config.cpp dialog_eeschema_config.h $(DEPEND)
+dialog_eeschema_config.o: dialog_eeschema_config.cpp dialog_eeschema_config_fbp.h $(DEPEND)
+
+dialog_eeschema_config_fbp.o: dialog_eeschema_config_fbp.cpp dialog_eeschema_config_fbp.h $(DEPEND)
 
 libedit.o: libedit.cpp $(DEPEND)
 
+sch_item_struct.o: ../common/sch_item_struct.cpp
+	$(CXX) -c $(EDACPPFLAGS) -o $@ ../common/$*.cpp
 

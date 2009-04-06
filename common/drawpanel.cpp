@@ -738,19 +738,20 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         for( ii = 0; ; ii++ )
         {
             xg =  wxRound(ii * screen_grid_size.x);
+            if( xg > size.x )
+                break;
             int xpos = org.x + xg;
-
+            xpos = GRMapX( xpos );
             for( jj = 0; ; jj++ )
             {
                 yg = wxRound(jj * screen_grid_size.y);
-                GRPutPixel( &m_ClipBox, DC, xpos, org.y + yg, color );
                 if( yg > size.y )
                     break;
+                int ypos = org.y + yg;
+                DC->DrawPoint( xpos, GRMapY( ypos ) );
             }
 
-            if( xg > size.x )
-                break;
-        }
+         }
     }
 
     /* Draw axis */

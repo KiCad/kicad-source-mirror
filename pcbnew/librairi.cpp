@@ -77,7 +77,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     if( file == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File <%s> not found" ), dlg.GetPath() );
+        msg.Printf( _( "File <%s> not found" ), dlg.GetPath().GetData() );
         DisplayError( this, msg );
         return NULL;
     }

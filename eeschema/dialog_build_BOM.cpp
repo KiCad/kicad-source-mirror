@@ -203,8 +203,7 @@ void DIALOG_BUILD_BOM::OnCancelClick( wxCommandEvent& event )
 void DIALOG_BUILD_BOM::SavePreferences()
 /**************************************************/
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
-    wxASSERT( config != NULL );
+    wxASSERT( m_Config != NULL );
 
     // Determine current settings of "List items" and "Options" checkboxes
     // (NOTE: These 6 settings are restored when the dialog box is next
