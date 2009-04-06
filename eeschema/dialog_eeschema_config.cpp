@@ -146,7 +146,6 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
 
     // Set new default path lib
     g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-    SetRealLibraryPath( wxT( "library" ) ); // set real path lib
 
     // Set new active lib list
     if( m_LibListChanged )
@@ -155,7 +154,7 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         g_LibName_List.Clear();
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii ++ )
             g_LibName_List.Add(m_ListLibr->GetString(ii) );
- 
+
         // take new list in account
         LoadLibraries( m_Parent );
         if( m_Parent->m_ViewlibFrame )

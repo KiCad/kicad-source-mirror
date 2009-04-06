@@ -75,7 +75,6 @@ bool WinEDA_App::OnInit()
     GetSettings();                      // read current setup
 
     wxSetWorkingDirectory( currCWD );   // mofifie par GetSetting
-    SetRealLibraryPath( wxT( "modules" ) );
 
     if( argc > 1 )
     {

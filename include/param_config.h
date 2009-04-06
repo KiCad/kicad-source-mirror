@@ -8,10 +8,7 @@
 
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
-
-#ifndef COMMON_GLOBL
-#  define COMMON_GLOBL extern
-#endif
+#include <wx/dynarray.h>
 
 
 /* definifition des types de parametre des files de configuration */
@@ -40,7 +37,6 @@ public:
 
 public:
     PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type, const wxChar* group = NULL );
-    ~PARAM_CFG_BASE() { };
 
     /** ReadParam
      * read the value of parameter thi stored in aConfig
@@ -209,5 +205,6 @@ public:
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
+WX_DECLARE_OBJARRAY( PARAM_CFG_BASE, PARAM_CFG_ARRAY );
 
 #endif  /* __PARAM_CONFIG_H__ */

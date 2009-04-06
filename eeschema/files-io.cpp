@@ -80,19 +80,16 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     FullFileName = FileName;
     if( ( FullFileName.IsEmpty() ) && !IsNew )
     {
-        wxString mask = wxT( "*." ) + SchematicFileExtension;
-        FullFileName = EDA_FileSelector( _( "Schematic files:" ),
-            wxEmptyString,              /* Chemin par defaut */
-            wxEmptyString,              /* nom fichier par defaut */
-            SchematicFileExtension,             /* extension par defaut */
-            mask,                       /* Masque d'affichage */
-            this,
-            wxFD_OPEN,
-            TRUE
-        );
-        if( FullFileName.IsEmpty() )
+        wxFileDialog dlg( this, _( "Open Schematic" ), wxEmptyString,
+                          wxEmptyString, SchematicFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
+
+        FullFileName = dlg.GetPath();
     }
+
     if( g_RootSheet )
     {
         SAFE_DELETE( g_RootSheet );
@@ -175,12 +172,13 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         LibCacheExist = TRUE;
     }
 
-    if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName ) && !LibCacheExist )   // Nouveau projet prpbablement
+    if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName )
+        && !LibCacheExist )
     {
         Zoom_Automatique( FALSE );
         msg.Printf( _( "File <%s> not found." ),
             g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
-        DisplayInfo( this, msg, 20 );
+        DisplayInfo( this, msg, 0 );
         return -1;
     }
 

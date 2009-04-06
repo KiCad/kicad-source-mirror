@@ -5,10 +5,6 @@
 #ifndef GR_BASIC
 #define GR_BASIC
 
-#ifndef COMMON_GLOBL
-#define COMMON_GLOBL extern
-#endif
-
 #include "colors.h"
 
 

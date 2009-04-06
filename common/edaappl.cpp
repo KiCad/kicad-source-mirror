@@ -528,14 +528,10 @@ void WinEDA_App::SetDefaultSearchPaths( void )
         }
         else
         {
-            /* Build schematic, PCB, and 3D module library file search path
-             * list based on the known existing default search paths. */
+            /* Add schematic library file path to search path list. */
             fn.Clear();
             fn.SetPath( m_searchPaths[i] );
             fn.AppendDir( wxT( "library") );
-
-            wxLogDebug( wxT( "Checking if search path <%s> exists." ),
-                        fn.GetPath().c_str() );
 
             if( fn.IsDirReadable() )
             {
@@ -543,6 +539,19 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                             fn.GetPath().c_str() );
                 m_libSearchPaths.Add( fn.GetPath() );
             }
+
+            /* Add kicad template file path to search path list. */
+            fn.RemoveLastDir();
+            fn.AppendDir( wxT( "template" ) );
+
+            if( fn.IsDirReadable() )
+            {
+                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                            fn.GetPath().c_str() );
+                m_libSearchPaths.Add( fn.GetPath() );
+            }
+
+            /* Add PCB library file path to search path list. */
             fn.RemoveLastDir();
             fn.AppendDir( wxT( "modules" ) );
 
@@ -552,6 +561,8 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                             fn.GetPath().c_str() );
                 m_libSearchPaths.Add( fn.GetPath() );
             }
+
+            /* Add 3D module library file path to search path list. */
             fn.AppendDir( wxT( "packages3d" ) );
 
             if( fn.IsDirReadable() )

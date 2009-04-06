@@ -17,6 +17,9 @@
 #include "gestfich.h"
 #include "wxstruct.h"
 
+#include <wx/apptrait.h>
+#include <wx/stdpaths.h>
+
 
 wxString g_CommonSectionTag( wxT( "[common]" ) );
 wxString g_SchematicSectionTag( wxT( "[eeschema]" ) );
@@ -597,14 +600,21 @@ wxString    ReturnHotkeyConfigFilePath( int choice )
  */
 {
     wxString path;
+    wxAppTraits* traits = wxGetApp().GetTraits();
 
     switch( choice )
     {
     case 0:
-        path = wxGetHomeDir() + wxT( "/" );
-        break;
+        path = traits->GetStandardPaths().GetUserConfigDir() +
+            wxFileName::GetPathSeparator();
 
     case 1:
+        /* TODO: This is broken under a normal Poxis system.  Users
+         *       generally do no have write permissions to this path
+         *       and there is no provision for prompting for the root
+         *       password.  Suggest we remove this unless someone has
+         *       a workable solution (Wayne).
+         */
         path = ReturnKicadDatasPath() + wxT( "template/" );
         break;
 

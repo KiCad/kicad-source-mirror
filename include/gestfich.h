@@ -80,14 +80,6 @@ int             ExecuteFile( wxWindow* frame, const wxString& ExecFile,
                              const wxString& param = wxEmptyString );
 void            AddDelimiterString( wxString& string );
 
-void            SetRealLibraryPath( const wxString& shortlibname ); /* met a jour
-                                                                    *  le chemin des librairies RealLibDirBuffer (global)
-                                                                    *  a partir de UserLibDirBuffer (global):
-                                                                    *  Si UserLibDirBuffer non vide RealLibDirBuffer = UserLibDirBuffer.
-                                                                    *  Sinon si variable d'environnement KICAD definie (KICAD = chemin pour kicad),
-                                                                    *  UserLibDirBuffer = <KICAD>/shortlibname;
-                                                                    *  Sinon UserLibDirBuffer = <Chemin des binaires>../shortlibname/
-                                                                    */
 wxString        FindKicadHelpPath();
 
 /* Find absolute path for kicad/help (or kicad/help/<language>) */

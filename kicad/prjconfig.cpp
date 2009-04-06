@@ -25,23 +25,20 @@ static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
 void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
 {
-    wxFileName fn;
+    wxString   tmp;
     wxFileName newProjectName = PrjFullFileName;
 
     // Init default config filename
-    fn.SetPath( ReturnKicadDatasPath() );
-    fn.AppendDir( wxT( "template" ) );
-    fn.SetName( wxT( "kicad" ) );
-    fn.SetExt( ProjectFileExtension );
+    tmp = wxGetApp().GetLibraryPathList().FindValidPath( wxT( "kicad.pro" ) );
 
-    if( !fn.FileExists() )
+    if( !wxFileName::FileExists( tmp ) )
     {
-        DisplayInfo( NULL, _( "Template file not found " ) + fn.GetFullPath() );
+        DisplayInfo( NULL, _( "Project template file <kicad.pro> not found " ) );
         return;
     }
     else
     {
-        wxCopyFile( fn.GetFullPath(), PrjFullFileName );
+        wxCopyFile( tmp, PrjFullFileName );
     }
 
     m_SchematicRootFileName = wxFileName( newProjectName.GetName(),

@@ -124,7 +124,6 @@ void KiConfigCvpcbFrame::Update()
     if( msg != g_UserLibDirBuffer )
     {
         g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-        SetRealLibraryPath( wxT( "modules" ) );
         listlib();
         m_Parent->BuildFootprintListBox();
     }

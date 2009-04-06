@@ -447,48 +447,6 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
 }
 
 
-/****************************************************/
-void SetRealLibraryPath( const wxString& shortlibname )
-/****************************************************/
-
-/* met a jour le chemin des librairies g_RealLibDirBuffer (global)
- *  a partir de UserLibDirBuffer (global):
- *  Si UserLibDirBuffer non vide g_RealLibDirBuffer = g_UserLibDirBuffer.
- *  Sinon si variable d'environnement KICAD definie (KICAD = chemin pour kicad),
- *      g_UserLibDirBuffer = <KICAD>/shortlibname;
- *  Sinon g_UserLibDirBuffer = <Chemin des binaires>../shortlibname/
- *  Sinon g_UserLibDirBuffer = /usr/share/kicad/shortlibname/
- *
- *  Remarque:
- *  Les \ sont remplaces par / (a la mode Unix)
- */
-{
-    bool PathFound = FALSE;
-
-    if( !g_UserLibDirBuffer.IsEmpty() )   // Chemin impose par la configuration
-    {
-        g_RealLibDirBuffer = g_UserLibDirBuffer;
-        PathFound = TRUE;
-    }
-    else
-    {
-        g_RealLibDirBuffer = ReturnKicadDatasPath();
-        if( wxGetApp().m_Env_Defined )  // Chemin impose par la variable d'environnement
-        {
-            PathFound = TRUE;
-        }
-        g_RealLibDirBuffer += shortlibname;
-        if( wxDirExists( g_RealLibDirBuffer ) )
-            PathFound = TRUE;
-    }
-
-
-    g_RealLibDirBuffer.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-    if( g_RealLibDirBuffer.Last() != '/' )
-        g_RealLibDirBuffer += UNIX_STRING_DIR_SEP;
-}
-
-
 /***********************************/
 wxString ReturnKicadDatasPath()
 /***********************************/

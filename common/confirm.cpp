@@ -105,7 +105,8 @@ void DisplayInfo( wxWindow* parent, const wxString& text, int displaytime )
     dialog = new WinEDA_MessageDialog( parent, text, _( "Info:" ),
                                        wxOK | wxICON_INFORMATION, displaytime );
 
-    dialog->ShowModal(); dialog->Destroy();
+    dialog->ShowModal();
+    dialog->Destroy();
 }
 
 

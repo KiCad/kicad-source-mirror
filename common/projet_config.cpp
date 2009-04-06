@@ -11,10 +11,17 @@
 #include "wxstruct.h"
 #include "param_config.h"
 
+#include <wx/apptrait.h>
+#include <wx/stdpaths.h>
+
 
 #define CONFIG_VERSION 1
 
 #define FORCE_LOCAL_CONFIG true
+
+
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY( PARAM_CFG_ARRAY );
 
 
 /**
@@ -93,13 +100,22 @@ bool WinEDA_App::ReCreatePrjConfig( const wxString& fileName,
         }
     }
 
+    defaultFileName = m_libSearchPaths.FindValidPath( wxT( "kicad.pro" ) );
 
-    defaultFileName = ReturnKicadDatasPath() + wxT( "template/kicad" ) +
-        wxT( "." ) + ProjectFileExtension;
+    if( !defaultFileName )
+    {
+        wxLogDebug( wxT( "Template file <kicad.pro> not found." ) );
+        fn = wxFileName( GetTraits()->GetStandardPaths().GetDocumentsDir(),
+                         wxT( "kicad" ), ProjectFileExtension );
+    }
+    else
+    {
+        fn = defaultFileName;
+    }
 
     // Create new project file using the default name.
     m_ProjectConfig = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                        wxEmptyString, defaultFileName );
+                                        wxEmptyString, fn.GetFullPath() );
     m_ProjectConfig->DontCreateOnDemand();
 
     return false;
