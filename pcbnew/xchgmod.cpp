@@ -494,7 +494,7 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
 
     namecmp.Trim( TRUE );
     namecmp.Trim( FALSE );
-    NewModule = m_Parent->Get_Librairie_Module( this, wxEmptyString, namecmp, ShowError );
+    NewModule = m_Parent->Get_Librairie_Module( wxEmptyString, namecmp, ShowError );
     if( NewModule == NULL )  /* Nouveau module NON trouve, reaffichage de l'ancien */
     {
         m_WinMsg->WriteText( wxT( "No\n" ) );

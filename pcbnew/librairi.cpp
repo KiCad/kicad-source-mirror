@@ -213,7 +213,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 
 /**********************************************************/
 void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
-                                                       wxString& libname )
+                                                       wxString& aLibname )
 /**********************************************************/
 {
     wxFileName newFileName;
@@ -224,17 +224,17 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
     wxString   CmpName, msg;
 
     /* Demande du nom du composant a supprimer */
-    CmpName = Select_1_Module_From_List( this, libname, wxEmptyString, wxEmptyString );
+    CmpName = Select_1_Module_From_List( this, aLibname, wxEmptyString, wxEmptyString );
     if( CmpName == wxEmptyString )
         return;
 
     /* Confirmation */
     msg.Printf( _( "Ok to delete module %s in library %s" ),
-               CmpName.GetData(), libname.GetData() );
+               CmpName.GetData(), aLibname.GetData() );
     if( !IsOK( this, msg ) )
         return;
 
-    oldFileName = libname;
+    oldFileName = aLibname;
 
     if( ( lib_module = wxFopen( oldFileName.GetFullPath(),
                                 wxT( "rt" ) ) )  == NULL )

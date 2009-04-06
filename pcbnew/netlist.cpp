@@ -491,7 +491,7 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                     if( aChangeFootprint )
                     {
                         MODULE* NewModule =
-                            aFrame->Get_Librairie_Module( NULL, wxEmptyString, NameLibCmp, TRUE );
+                            aFrame->Get_Librairie_Module( wxEmptyString, NameLibCmp, TRUE );
                         if( NewModule )  /* Nouveau module trouve : changement de module */
                             Module = aFrame->Exchange_Module( NULL, Module, NewModule );
                     }
@@ -1036,7 +1036,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
         if( (ii == 0) || ( ref->m_LibName != cmp->m_LibName) )
         {
             /* New footprint : must be loaded from a library */
-            Module = aPcbFrame->Get_Librairie_Module( NULL, wxEmptyString, cmp->m_LibName, FALSE );
+            Module = aPcbFrame->Get_Librairie_Module( wxEmptyString, cmp->m_LibName, FALSE );
             ref    = cmp;
             if( Module == NULL )
             {

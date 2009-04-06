@@ -252,14 +252,32 @@ public:
 
 
     // loading footprints
-    MODULE*                  Get_Librairie_Module( wxWindow*       winaff,
-                                                   const wxString& library,
-                                                   const wxString& ModuleName,
-                                                   bool            show_msg_err );
+    /** function Get_Librairie_Module
+     *
+     *  Read active libraries or one library to find and load a given module
+     *  If found the lodule is linked to the tail of linked list of modules
+     *  @param aLibrary: the full filename of the library to read. If empty, all active libraries are read
+     *  @param aModuleName = module name to load
+     *  @param aDisplayMessageError = true to display an error message if any.
+     *  @return a MODULE * pointer to the new module, or NULL
+     *
+     */
+    MODULE*                  Get_Librairie_Module( const wxString& aLibraryFullFilename,
+                                                   const wxString& aModuleName,
+                                                   bool            aDisplayMessageError );
 
+    /** Function Select_1_Module_From_List
+     *  Display a list of modules found in active libraries or a given library
+     *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename == void, list all modules)
+     *  @param aMask = Display filter (wildcart)( Mask = wxEmptyString if not used )
+     *  @param aKeyWord = keyword list, to display a filtered list of module having one (or more) of these keyworks in their keywork list
+     *    ( aKeyWord = wxEmptyString if not used )
+     *
+     *  @return wxEmptyString if abort or fails, or the selected module name if Ok
+     */
     wxString                 Select_1_Module_From_List(
-        WinEDA_DrawFrame* active_window, const wxString& Library,
-        const wxString& Mask, const wxString& KeyWord );
+        WinEDA_DrawFrame* active_window, const wxString& aLibraryFullFilename,
+        const wxString& aMask, const wxString& aKeyWord );
 
     MODULE*                  Load_Module_From_Library( const wxString& library, wxDC* DC );
 

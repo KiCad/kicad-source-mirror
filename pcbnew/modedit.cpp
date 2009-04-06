@@ -25,7 +25,7 @@
 BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 /****************************************************************************/
 {
-    BOARD_ITEM*     item = GetCurItem();
+    BOARD_ITEM* item = GetCurItem();
 
     if( GetBoard()->m_Modules == NULL )
         return NULL;
@@ -69,20 +69,19 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         item = (*m_Collector)[0];
         SetCurItem( item );
     }
-
     else    // we can't figure out which item user wants, do popup menu so user can choose
     {
-        wxMenu itemMenu;
+        wxMenu      itemMenu;
 
         /* Give a title to the selection menu. This is also a cancel menu item */
-        wxMenuItem * item_title = new wxMenuItem(&itemMenu, -1, _( "Selection Clarification" ) );
+        wxMenuItem* item_title = new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
 #ifdef __WINDOWS__
-        wxFont bold_font(*wxNORMAL_FONT);
-        bold_font.SetWeight(wxFONTWEIGHT_BOLD);
-        bold_font.SetStyle( wxFONTSTYLE_ITALIC);
-        item_title->SetFont(bold_font);
+        wxFont      bold_font( *wxNORMAL_FONT );
+        bold_font.SetWeight( wxFONTWEIGHT_BOLD );
+        bold_font.SetStyle( wxFONTSTYLE_ITALIC );
+        item_title->SetFont( bold_font );
 #endif
-        itemMenu.Append(item_title);
+        itemMenu.Append( item_title );
         itemMenu.AppendSeparator();
 
         int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
@@ -103,7 +102,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
         DrawPanel->m_AbortRequest = true;   // changed in false if an item
-        PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
+        PopupMenu( &itemMenu );             // m_AbortRequest = false if an item is selected
 
         DrawPanel->MouseToCursorSchema();
 
@@ -120,7 +119,6 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 
     return item;
 }
-
 
 
 /****************************************************************************/
@@ -205,10 +203,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
                                     ModuleFileExtension );
-        wxString tmp =
+        wxString   full_libraryfilename =
             wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
-        if( wxFileName::FileExists( tmp ) )
-            Delete_Module_In_Library( tmp );
+        if( wxFileName::FileExists( full_libraryfilename ) )
+            Delete_Module_In_Library( full_libraryfilename );
         break;
     }
 
@@ -220,9 +218,9 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
 
         MODULE* module = Create_1_Module( &dc, wxEmptyString );
-        if ( module )       // i.e. if create module command not aborted
+        if( module )        // i.e. if create module command not aborted
         {
-            module->SetPosition( wxPoint(0, 0) );
+            module->SetPosition( wxPoint( 0, 0 ) );
             if( GetBoard()->m_Modules )
                 GetBoard()->m_Modules->m_Flags = 0;
             Zoom_Automatique( true );
@@ -253,8 +251,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         // update module in the current board,
         // not just add it to the board with total disregard for the netlist...
-        WinEDA_PcbFrame* pcbframe       = (WinEDA_PcbFrame*) GetParent();
-        BOARD*           mainpcb        = pcbframe->GetBoard();
+        WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) GetParent();
+        BOARD*           mainpcb  = pcbframe->GetBoard();
         MODULE*          source_module  = NULL;
         MODULE*          module_in_edit = GetBoard()->m_Modules;
 
@@ -263,7 +261,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( module_in_edit->m_Link )        // this is not a new module ...
         {
             source_module = mainpcb->m_Modules;
-            for(  ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
+            for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
             {
                 if( module_in_edit->m_Link == source_module->m_TimeStamp )
                     break;
@@ -290,7 +288,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         // Create the "new" module
         MODULE* newmodule = new MODULE( mainpcb );
         newmodule->Copy( module_in_edit );
-        newmodule->m_Link   = 0;
+        newmodule->m_Link = 0;
 
         // Put the footprint in the main pcb linked list.
         mainpcb->Add( newmodule );
@@ -316,7 +314,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         pcbframe->SetCurItem( NULL );
         mainpcb->m_Status_Pcb = 0;
     }
-        break;
+    break;
 
     case ID_MODEDIT_IMPORT_PART:
         GetScreen()->ClearUndoRedoList();
@@ -346,11 +344,21 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_LOAD_MODULE:
+    {
+        wxString full_libraryfilename;
+        if( !m_CurrentLib.IsEmpty() )
+        {
+            wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
+                                        ModuleFileExtension );
+            full_libraryfilename =
+                wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        }
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         Clear_Pcb( true );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
-        Load_Module_From_Library( m_CurrentLib, &dc );
+        Load_Module_From_Library( full_libraryfilename, &dc );
+    }
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
 
@@ -362,10 +370,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             TEXTE_MODULE* val = GetBoard()->m_Modules->m_Value;
             if( val && ref )
             {
-                ref->m_Type   = TEXT_is_REFERENCE;	// just in case ...
+                ref->m_Type = TEXT_is_REFERENCE;    // just in case ...
                 if( ref->m_Text.Length() == 0 )
                     ref->m_Text = L"Ref**";
-                val->m_Type   =  TEXT_is_VALUE;		// just in case ...
+                val->m_Type = TEXT_is_VALUE;        // just in case ...
                 if( val->m_Text.Length() == 0 )
                     val->m_Text = L"Val**";
             }
@@ -522,18 +530,18 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_ENTER_EDGE_WIDTH:
+    {
+        EDGE_MODULE* edge = NULL;
+        if( GetScreen()->GetCurItem()
+           && ( GetScreen()->GetCurItem()->m_Flags & IS_NEW)
+           && (GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE) )
         {
-            EDGE_MODULE* edge = NULL;
-            if( GetScreen()->GetCurItem()
-               && ( GetScreen()->GetCurItem()->m_Flags & IS_NEW)
-               && (GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE) )
-            {
-                edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
-            }
-            Enter_Edge_Width( edge, &dc );
-            DrawPanel->MouseToCursorSchema();
+            edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
         }
-        break;
+        Enter_Edge_Width( edge, &dc );
+        DrawPanel->MouseToCursorSchema();
+    }
+    break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE:
         DrawPanel->MouseToCursorSchema();
@@ -576,16 +584,16 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_PCB_PAD_SETUP:
+    {
+        BOARD_ITEM* item = GetCurItem();
+        if( item )
         {
-            BOARD_ITEM* item = GetCurItem();
-            if( item )
-            {
-                if( item->Type() != TYPE_PAD )
-                    item = NULL;
-            }
-            InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
+            if( item->Type() != TYPE_PAD )
+                item = NULL;
         }
-        break;
+        InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
+    }
+    break;
 
     case ID_PCB_USER_GRID_SETUP:
         InstallGridFrame( pos );
@@ -662,7 +670,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
  *  orientation 0, cot� composant.
  */
 {
-    D_PAD*          pad      = module->m_Pads;
+    D_PAD*          pad = module->m_Pads;
     EDA_BaseStruct* PtStruct = module->m_Drawings;
     TEXTE_MODULE*   textmod;
     EDGE_MODULE*    edgemod;
