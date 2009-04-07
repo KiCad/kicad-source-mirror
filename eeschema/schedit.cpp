@@ -619,7 +619,6 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                 wxEmptyString, FIND_ALIAS );
             if( LibEntry && LibEntry->m_DocFile != wxEmptyString )
             {
-wxMessageBox(g_RealLibDirBuffer, LibEntry->m_DocFile);
                 GetAssociatedDocument( this,
                                        g_RealLibDirBuffer,
                                        LibEntry->m_DocFile );
