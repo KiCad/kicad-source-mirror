@@ -2,7 +2,7 @@
 
 include ../libs.macosx
 
-TARGET = common.a
+TARGET = common.a pcbcommon.a
 
 all: $(TARGET)
 
@@ -15,9 +15,14 @@ include makefile.include
 CPPFLAGS += $(EXTRACPPFLAGS)
 EDACPPFLAGS = $(CPPFLAGS)
 
-$(TARGET): $(OBJECTS) makefile.macosx makefile.include
+common.a: $(COMMON_OBJECTS) makefile.macosx makefile.include
 	rm -f $@
-	ar -rv $@ $(OBJECTS)
+	ar -rv $@ $(COMMON_OBJECTS)
+	ranlib $@
+
+pcbcommon.a: $(COMMON_PCB_OBJECTS) makefile.macosx makefile.include
+	rm -f $@
+	ar -rv $@ $(COMMON_PCB_OBJECTS)
 	ranlib $@
 
 clean:

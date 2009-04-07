@@ -160,7 +160,8 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow* father,
     wxConfig* config = wxGetApp().m_EDA_Config;
 
     m_FrameName      = wxT( "ModEditFrame" );
-    m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
+    m_Draw_Sheet_Ref = false;   // true to show the frame references
+    m_Draw_Axis      = true;   // true to show X and Y axis on screen
 
     // Give an icon
     SetIcon( wxICON( icon_modedit ) );
@@ -251,13 +252,13 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         return;
 
     if( m_CurrentLib == wxEmptyString )
-        islib = FALSE;
+        islib = false;
 
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, islib );
     m_HToolBar->EnableTool( ID_LIBEDIT_DELETE_PART, islib );
 
     if( GetBoard()->m_Modules == NULL )
-        active = FALSE;
+        active = false;
     else
         active = TRUE;
 
@@ -307,7 +308,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     }
     else
     {
-        m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FALSE );
+        m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, false );
     }
 
 
@@ -325,9 +326,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     if( m_OptionsToolBar )
     {
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM,
-                                      g_UnitMetric == MILLIMETRE ? TRUE : FALSE );
+                                      g_UnitMetric == MILLIMETRE ? TRUE : false );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UnitMetric == INCHES ? TRUE : FALSE );
+                                      g_UnitMetric == INCHES ? TRUE : false );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );

@@ -1,3 +1,5 @@
+#makefile to fast compilation of GerbView.
+
 EXTRALIBS = ../common/common.a ../common/pcbcommon.a ../bitmaps/libbitmaps.a\
 		../polygon/lib_polygon.a ../polygon/kbool/src/libkbool.a
 

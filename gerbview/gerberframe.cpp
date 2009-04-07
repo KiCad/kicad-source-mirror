@@ -134,7 +134,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 {
     m_FrameName = wxT( "GerberFrame" );
 
-    //m_AboutTitle     = g_GerbviewAboutTitle;
+    m_Draw_Axis      = true;   // true to show X and Y axis on screen
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
     m_Ident = GERBER_FRAME;
     if( DrawPanel )

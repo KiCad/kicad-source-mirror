@@ -52,12 +52,12 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     m_InternalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
     m_Pcb                 = NULL;
 
-    m_DisplayPadFill      = TRUE;   // How to draw pads
-    m_DisplayPadNum       = TRUE;   // show pads number
+    m_DisplayPadFill      = true;   // How to draw pads
+    m_DisplayPadNum       = true;   // show pads number
 
     m_DisplayModEdge      = FILLED; // How to show module drawings
     m_DisplayModText      = FILLED; // How to show module texts
-    m_DisplayPcbTrackFill = TRUE;   /* FALSE = sketch , TRUE = filled */
+    m_DisplayPcbTrackFill = true;   /* FALSE = sketch , true = filled */
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
@@ -131,7 +131,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
     if( !DrawPanel->IsPointOnDisplay( aPos ) )
     {
         screen->m_Curseur = aPos;
-        Recadre_Trace( TRUE );
+        Recadre_Trace( true );
     }
     else
     {

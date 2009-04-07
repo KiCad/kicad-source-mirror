@@ -4,7 +4,7 @@ CC = gcc
 
 include ../libs.linux
 
-all: common.a
+all: common.a pcbcommon.a
 
 deps:
 	$(CXX) $(CPPFLAGS) -E -MMD -MG *.cpp >/dev/null
@@ -16,13 +16,17 @@ include makefile.include
 CPPFLAGS += $(EXTRACPPFLAGS) -I./ -I../include
 EDACPPFLAGS = $(CPPFLAGS)
 
-
-common.a: $(OBJECTS) makefile.gtk makefile.include
+common.a: $(COMMON_OBJECTS) makefile.gtk makefile.include
 	rm -f $@
-	ar -rv $@ $(OBJECTS)
+	ar -rv $@ $(COMMON_OBJECTS)
 	ranlib $@
 
-install:common.a
+pcbcommon.a: $(COMMON_PCB_OBJECTS) makefile.gtk makefile.include
+	rm -f $@
+	ar -rv $@ $(COMMON_PCB_OBJECTS)
+	ranlib $@
+
+install:common.a pcb_common.a
 
 clean:
 	rm -f *.o *~ core *.bak *.obj *.d
