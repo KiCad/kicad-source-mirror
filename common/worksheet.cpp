@@ -450,7 +450,7 @@ Ki_WorkSheetData WS_Izm =
 	&WS_Razr,
 	STAMP_X_185 - 30,STAMP_Y_30 + 90,
 	0,0,
-	wxT("ß™ßŸßﬁ."), NULL
+	wxT("–ò–∑–º."), NULL
 };
 
 Ki_WorkSheetData WS_Razr =
@@ -459,7 +459,7 @@ Ki_WorkSheetData WS_Razr =
 	&WS_Prov,
 	STAMP_X_185 - 30,STAMP_Y_25 + 90,
 	0,0,
-	wxT("ß≤ß—ßŸß‚ß—ß“."), NULL
+	wxT("–†–∞–∑—Ä–∞–±."), NULL
 };
 
 Ki_WorkSheetData WS_Prov =
@@ -468,7 +468,7 @@ Ki_WorkSheetData WS_Prov =
 	&WS_TKon,
 	STAMP_X_185 - 30,STAMP_Y_20 + 90,
 	0,0,
-	wxT("ß±ß‚ß‡ß”."), NULL
+	wxT("–ü—Ä–æ–≤."), NULL
 };
 
 Ki_WorkSheetData WS_TKon =
@@ -477,7 +477,7 @@ Ki_WorkSheetData WS_TKon =
 	&WS_NKon,
 	STAMP_X_185 - 30,STAMP_Y_15 + 90,
 	0,0,
-	wxT("ß¥.ß‹ß‡ßﬂß‰ß‚."), NULL
+	wxT("–¢.–∫–æ–Ω—Ç—Ä."), NULL
 };
 
 Ki_WorkSheetData WS_NKon =
@@ -486,7 +486,7 @@ Ki_WorkSheetData WS_NKon =
 	&WS_Utv,
 	STAMP_X_185 - 30,STAMP_Y_5 + 90,
 	0,0,
-	wxT("ßØ.ß‹ß‡ßﬂß‰ß‚."), NULL
+	wxT("–ù.–∫–æ–Ω—Ç—Ä."), NULL
 };
 
 Ki_WorkSheetData WS_Utv =
@@ -495,7 +495,7 @@ Ki_WorkSheetData WS_Utv =
 	&WS_List,
 	STAMP_X_185 - 30,STAMP_Y_0 + 90,
 	0,0,
-	wxT("ßµß‰ß”."), NULL
+	wxT("–£—Ç–≤."), NULL
 };
 
 Ki_WorkSheetData WS_List =
@@ -504,7 +504,7 @@ Ki_WorkSheetData WS_List =
 	&WS_NDoc,
 	STAMP_X_178 - 30,STAMP_Y_30 + 90,
 	0,0,
-	wxT("ß≠ß⁄ß„ß‰"), NULL
+	wxT("–õ–∏—Å—Ç"), NULL
 };
 
 Ki_WorkSheetData WS_NDoc =
@@ -513,7 +513,7 @@ Ki_WorkSheetData WS_NDoc =
 	&WS_Podp,
 	STAMP_X_168 - 30,STAMP_Y_30 + 90,
 	0,0,
-	wxT("N ß’ß‡ß‹ßÂßﬁ."), NULL
+	wxT("N –¥–æ–∫—É–º."), NULL
 };
 
 Ki_WorkSheetData WS_Podp =
@@ -522,7 +522,7 @@ Ki_WorkSheetData WS_Podp =
 	&WS_Data,
 	STAMP_X_145 - 30,STAMP_Y_30 + 90,
 	0,0,
-	wxT("ß±ß‡ß’ß·."), NULL
+	wxT("–ü–æ–¥–ø."), NULL
 };
 
 Ki_WorkSheetData WS_Data =
@@ -531,7 +531,7 @@ Ki_WorkSheetData WS_Data =
 	&WS_Art,
 	STAMP_X_130 - 30,STAMP_Y_30 + 90,
 	0,0,
-	wxT("ß•ß—ß‰ß—"), NULL
+	wxT("–î–∞—Ç–∞"), NULL
 };
 
 Ki_WorkSheetData WS_Art =
@@ -540,7 +540,7 @@ Ki_WorkSheetData WS_Art =
 	&WS_Mass,
 	STAMP_X_50 - 30,STAMP_Y_35 + 90,
 	0,0,
-	wxT("ß°ß‚ß‰."), NULL
+	wxT("–ê—Ä—Ç."), NULL
 };
 
 Ki_WorkSheetData WS_Mass =
@@ -549,7 +549,7 @@ Ki_WorkSheetData WS_Mass =
 	&WS_Msht,
 	STAMP_X_35 - 30,STAMP_Y_35 + 90,
 	0,0,
-	wxT("ßÆß—ß„ß„ß—"), NULL
+	wxT("–ú–∞—Å—Å–∞"), NULL
 };
 
 Ki_WorkSheetData WS_Msht =
@@ -558,7 +558,7 @@ Ki_WorkSheetData WS_Msht =
 	&WS_List1,
 	STAMP_X_18 - 30,STAMP_Y_35 + 90,
 	0,0,
-	wxT("ßÆß—ß„ßÍß‰ß—ß“"), NULL
+	wxT("–ú–∞—Å—à—Ç–∞–±"), NULL
 };
 
 Ki_WorkSheetData WS_List1 =
@@ -567,7 +567,7 @@ Ki_WorkSheetData WS_List1 =
 	&WS_List2,
 	STAMP_X_50 - 30,STAMP_Y_15 + 90,
 	0,0,
-	wxT("ß≠ß⁄ß„ß‰ "), NULL
+	wxT("–õ–∏—Å—Ç "), NULL
 };
 
 Ki_WorkSheetData WS_List2 =
@@ -576,7 +576,7 @@ Ki_WorkSheetData WS_List2 =
 	NULL,
 	STAMP_X_30 - 30,STAMP_Y_15 + 90,
 	0,0,
-	wxT("ß≠ß⁄ß„ß‰ß‡ß” "), NULL
+	wxT("–õ–∏—Å—Ç–æ–≤ "), NULL
 };
 
 Ki_WorkSheetData WS_CADRE_D =
@@ -693,7 +693,7 @@ Ki_WorkSheetData WS_Izm_D =
 	&WS_List_D,
 	STAMP_X_185 - 30, STAMP_Y_0 + 90,
 	0, 0,
-	wxT("ß™ßŸßﬁ."), NULL
+	wxT("–ò–∑–º."), NULL
 };
 
 Ki_WorkSheetData WS_List_D =
@@ -702,7 +702,7 @@ Ki_WorkSheetData WS_List_D =
 	&WS_NDoc_D,
 	STAMP_X_178 - 30, STAMP_Y_0 + 90,
 	0, 0,
-	wxT("ß≠ß⁄ß„ß‰"), NULL
+	wxT("–õ–∏—Å—Ç"), NULL
 };
 
 Ki_WorkSheetData WS_NDoc_D =
@@ -711,7 +711,7 @@ Ki_WorkSheetData WS_NDoc_D =
 	&WS_Podp_D,
 	STAMP_X_168 - 30, STAMP_Y_0 + 90,
 	0, 0,
-	wxT("N ß’ß‡ß‹ßÂßﬁ."), NULL
+	wxT("N –¥–æ–∫—É–º."), NULL
 };
 
 Ki_WorkSheetData WS_Podp_D =
@@ -720,7 +720,7 @@ Ki_WorkSheetData WS_Podp_D =
 	&WS_Date_D,
 	STAMP_X_145 - 30, STAMP_Y_0 + 90,
 	0, 0,
-	wxT("ß±ß‡ß’ß·."), NULL
+	wxT("–ü–æ–¥–ø."), NULL
 };
 
 Ki_WorkSheetData WS_Date_D =
@@ -729,7 +729,7 @@ Ki_WorkSheetData WS_Date_D =
 	&WS_List1_D,
 	STAMP_X_130 - 30, STAMP_Y_0 + 90,
 	0, 0,
-	wxT("ß•ß—ß‰ß—"), NULL
+	wxT("–î–∞—Ç–∞"), NULL
 };
 
 Ki_WorkSheetData WS_List1_D =
@@ -738,7 +738,7 @@ Ki_WorkSheetData WS_List1_D =
 	&WS_ListN_D,
 	STAMP_X_10 - 30, STAMP_Y_8 + 90,
 	0, 0,
-	wxT("ß≠ß⁄ß„ß‰"), NULL
+	wxT("–õ–∏—Å—Ç"), NULL
 };
 
 Ki_WorkSheetData WS_ListN_D =
@@ -828,7 +828,7 @@ Ki_WorkSheetData WS_Podp1_LU =
 	&WS_Podp2_LU,
 	STAMP_7 + 90, 0 + 30,
 	0, 0,
-	wxT("ß™ßﬂß”.N ß·ß‡ß’ß›."), NULL
+	wxT("–ò–Ω–≤.N –ø–æ–¥–ª."), NULL
 };
 
 Ki_WorkSheetData WS_Podp2_LU =
@@ -837,7 +837,7 @@ Ki_WorkSheetData WS_Podp2_LU =
 	&WS_Podp3_LU,
 	STAMP_7 + 90, STAMP_25 + 30,
 	0, 0,
-	wxT("ß±ß‡ß’ß·. ß⁄ ß’ß—ß‰ß—"), NULL
+	wxT("–ü–æ–¥–ø. –∏ –¥–∞—Ç–∞"), NULL
 };
 
 Ki_WorkSheetData WS_Podp3_LU =
@@ -846,7 +846,7 @@ Ki_WorkSheetData WS_Podp3_LU =
 	&WS_Podp4_LU,
 	STAMP_7 + 90, STAMP_60 + 30,
 	0, 0,
-	wxT("ß£ßŸß—ßﬁ.ß⁄ßﬂß”.N"), NULL
+	wxT("–í–∑–∞–º.–∏–Ω–≤.N"), NULL
 };
 
 Ki_WorkSheetData WS_Podp4_LU =
@@ -855,7 +855,7 @@ Ki_WorkSheetData WS_Podp4_LU =
 	&WS_Podp5_LU,
 	STAMP_7 + 90, STAMP_85 + 30,
 	0, 0,
-	wxT("ß™ßﬂß”.N ß’ßÂß“ß›."), NULL
+	wxT("–ò–Ω–≤.N –¥—É–±–ª."), NULL
 };
 
 Ki_WorkSheetData WS_Podp5_LU =
@@ -864,7 +864,7 @@ Ki_WorkSheetData WS_Podp5_LU =
 	NULL,
 	STAMP_7 + 90, STAMP_110 + 30,
 	0, 0,
-	wxT("ß±ß‡ß’ß·. ß⁄ ß’ß—ß‰ß—"), NULL
+	wxT("–ü–æ–¥–ø. –∏ –¥–∞—Ç–∞"), NULL
 };
 
 Ki_WorkSheetData WS_Segm1_LT =
