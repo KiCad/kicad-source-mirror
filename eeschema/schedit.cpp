@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -619,9 +620,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                 wxEmptyString, FIND_ALIAS );
             if( LibEntry && LibEntry->m_DocFile != wxEmptyString )
             {
-                GetAssociatedDocument( this,
-                                       g_RealLibDirBuffer,
-                                       LibEntry->m_DocFile );
+                GetAssociatedDocument( this, LibEntry->m_DocFile ,
+                                       & wxGetApp().GetLibraryPathList() );
             }
         }
         break;

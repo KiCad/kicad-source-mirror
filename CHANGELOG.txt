@@ -10,6 +10,10 @@ email address.
     fixed: bug 2738052 (Delete tool does not delete zones outlines)
 ++eeschema:
     fixed: void history file list in menu
+++All:
+    made GetAssociatedDocument() compatible with last changes in kicad path handling.
+    Get PDF doc associated with a component now works
+    Some work still needed.
 
 2009-apr-06 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

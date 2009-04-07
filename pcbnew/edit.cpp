@@ -1032,7 +1032,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         wxString msg = FindKicadHelpPath();
         msg += cfg->Read( wxT( "module_doc_file" ),
                           wxT( "pcbnew/footprints.pdf" ) );
-        GetAssociatedDocument( this, wxEmptyString, msg );
+        GetAssociatedDocument( this, msg );
     }
     break;
 

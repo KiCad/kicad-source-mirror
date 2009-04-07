@@ -71,21 +71,20 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-/********************************************************************/
-bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
-                            const wxString& DocName )
-/*********************************************************************/
-
-/* Launch the viewer for the doc file  DocName (mime type)
- * LibPath is the doc file search path:
- * (kicad/library)
- * DocName is the short filename with ext. Wildcarts are allowed
- * Seach file is made in LibPath/doc/DocName
- *
+/** Function GetAssociatedDocument
+ * open a document (file) with the suitable browser
+ * @param aFrame = main frame
  * if DocName is starting by http: or ftp: or www. the default internet browser is launched
- */
+ * @param aDocName = filename of file to open (Full filename or short filename)
+ * @param aPaths = a wxPathList to explore.
+ *              if NULL or aDocName is a full filename, aPath is not used.
+*/ 
+bool    GetAssociatedDocument( wxFrame* aFrame, 
+                        const wxString& aDocName,
+                        const wxPathList* aPaths)
+
 {
-    wxString docpath, fullfilename, file_ext;
+    wxString fullfilename, file_ext;
     wxString msg;
     wxString command;
     bool     success = FALSE;
@@ -95,20 +94,19 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
 
     for( int ii = 0; ii < 3; ii++ )
     {
-        if( DocName.First( url_header[ii] ) == 0 )   //. seems an internet url
+        if( aDocName.First( url_header[ii] ) == 0 )   //. seems an internet url
         {
-            wxLaunchDefaultBrowser( DocName );
+            wxLaunchDefaultBrowser( aDocName );
             return TRUE;
         }
     }
 
     /* Compute the full file name */
-    if( wxIsAbsolutePath( DocName ) )
-        fullfilename = DocName;
+    if( wxIsAbsolutePath( aDocName ) || aPaths == NULL)
+        fullfilename = aDocName;
     else
     {
-        docpath      = LibPath + wxT( "doc/" );
-        fullfilename = docpath + DocName;
+        fullfilename = aPaths->FindValidPath( aDocName );
     }
 
 #ifdef __WINDOWS__
@@ -132,7 +130,7 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
                 fullfilename,                       /* nom fichier par defaut */
                 extension,                          /* extension par defaut */
                 mask,                               /* Masque d'affichage */
-                frame,                              /* parent frame */
+                aFrame,                              /* parent frame */
                 wxFD_OPEN,                          /* wxSAVE, wxFD_OPEN ..*/
                 TRUE,                               /* true = ne change pas le repertoire courant */
                 wxPoint( -1, -1 )
@@ -145,7 +143,7 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
     {
         msg = _( "Doc File " );
         msg << wxT("\"") << fullfilename << wxT("\"") << _( " not found" );
-        DisplayError( frame, msg );
+        DisplayError( aFrame, msg );
         return FALSE;
     }
 
@@ -186,7 +184,7 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
     {
         msg.Printf( _( "Unknown MIME type for doc file <%s>" ),
             fullfilename.GetData() );
-        DisplayError( frame, msg );
+        DisplayError( aFrame, msg );
     }
 
     return success;

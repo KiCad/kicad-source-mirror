@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
@@ -59,9 +60,8 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         LibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
                                 g_CurrentViewLibraryName.GetData(), FIND_ALIAS );
         if( LibEntry && ( !LibEntry->m_DocFile.IsEmpty() ) )
-            GetAssociatedDocument( this,
-                                   g_RealLibDirBuffer,
-                                   LibEntry->m_DocFile );
+            GetAssociatedDocument( this, LibEntry->m_DocFile,
+                            & wxGetApp().GetLibraryPathList());
         break;
 
     case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:

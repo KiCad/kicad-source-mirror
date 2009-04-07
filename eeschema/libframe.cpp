@@ -494,7 +494,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
                 docfilename = CurrentLibEntry->m_DocFile;
 
             if( !docfilename.IsEmpty() )
-                GetAssociatedDocument( this, g_RealLibDirBuffer, docfilename );
+                GetAssociatedDocument( this, docfilename, & wxGetApp().GetLibraryPathList() );
         }
         break;
 

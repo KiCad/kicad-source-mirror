@@ -540,6 +540,16 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                 m_libSearchPaths.Add( fn.GetPath() );
             }
 
+            /* Add schematic doc file path (library/doc)to search path list. */
+            fn.AppendDir( wxT( "doc") );
+            if( fn.IsDirReadable() )
+            {
+                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                            fn.GetPath().c_str() );
+                m_libSearchPaths.Add( fn.GetPath() );
+            }
+            fn.RemoveLastDir();
+
             /* Add kicad template file path to search path list. */
             fn.RemoveLastDir();
             fn.AppendDir( wxT( "template" ) );

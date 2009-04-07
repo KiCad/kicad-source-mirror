@@ -521,7 +521,7 @@ void WinEDA_CvpcbFrame::DisplayDocFile( wxCommandEvent& event )
     else
         fullfilename = FindKicadHelpPath() + wxT( "../" ) + DocModuleFileName;
 
-    GetAssociatedDocument( this, wxEmptyString, fullfilename );
+    GetAssociatedDocument( this, fullfilename );
 }
 
 
