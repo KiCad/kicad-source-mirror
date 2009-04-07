@@ -86,7 +86,7 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
  */
 {
     wxString docpath, fullfilename, file_ext;
-    wxString Line;
+    wxString msg;
     wxString command;
     bool     success = FALSE;
 
@@ -143,8 +143,9 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
 
     if( !wxFileExists( fullfilename ) )
     {
-        Line = _( "Doc File " ) + fullfilename + _( " not found" );
-        DisplayError( frame, Line );
+        msg = _( "Doc File " );
+        msg << wxT("\"") << fullfilename << wxT("\"") << _( " not found" );
+        DisplayError( frame, msg );
         return FALSE;
     }
 
@@ -183,9 +184,9 @@ bool GetAssociatedDocument( wxFrame* frame, const wxString& LibPath,
 
     if( !success )
     {
-        Line.Printf( _( "Unknown MIME type for doc file <%s>" ),
+        msg.Printf( _( "Unknown MIME type for doc file <%s>" ),
             fullfilename.GetData() );
-        DisplayError( frame, Line );
+        DisplayError( frame, msg );
     }
 
     return success;

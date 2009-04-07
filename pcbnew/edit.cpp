@@ -1124,6 +1124,20 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_Zone_Fill( DC, (SEGZONE*) Item );
         break;
 
+    case TYPE_ZONE_EDGE_CORNER:
+        Remove_Zone_Corner( DC, (ZONE_CONTAINER*) Item );
+        SetCurItem( NULL );
+        break;
+    
+    case TYPE_ZONE_CONTAINER:
+        {
+        SetCurItem( NULL );
+        int netcode = ((ZONE_CONTAINER*) Item)->GetNet();
+        Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
+        test_1_net_connexion( NULL, netcode );
+        }
+        break;   
+
     case TYPE_MARKER:
         if( Item == GetCurItem() )
             SetCurItem( NULL );

@@ -585,7 +585,7 @@ void WinEDA_App::GetSettings()
 {
     wxASSERT( m_EDA_Config != NULL && m_EDA_CommonConfig != NULL );
 
-    wxString Line, entry;
+    wxString Line;
     unsigned ii;
 
     m_HelpSize.x = 500;
@@ -598,27 +598,6 @@ void WinEDA_App::GetSettings()
                                                            0L );
 
     m_fileHistory.Load( *m_EDA_Config );
-
-    /* Load the last file history settings from legacy version if this is the
-     * first time wxFileHistory was used to manage the file history. */
-    if( m_fileHistory.GetCount() == (size_t) 0 )
-    {
-        for( ii = 0; ii < (unsigned) m_fileHistory.GetMaxFiles(); ii++ )
-        {
-            entry = wxT( "LastProject" );
-            if( ii != 0 )
-                entry << ii;
-
-            if( m_EDA_Config->Read( entry, &Line ) )
-            {
-                if( Line != wxEmptyString && wxFileName::FileExists( Line ) )
-                    m_fileHistory.AddFileToHistory( Line );
-                else
-                    m_EDA_Config->Write( entry, wxEmptyString );
-                Line = wxEmptyString;
-            }
-        }
-    }
 
     /* Set default font sizes */
     g_StdFontPointSize = m_EDA_Config->Read( wxT( "SdtFontSize" ),
