@@ -7,6 +7,7 @@
 #endif
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -231,8 +232,9 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_SAVE_LIBMODULE:
     {
         wxFileName fn;
-        fn = wxFileName( g_RealLibDirBuffer, m_CurrentLib, ModuleFileExtension );
-        Save_Module_In_Library( fn.GetFullPath(), GetBoard()->m_Modules,
+        fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        wxString full_filename = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        Save_Module_In_Library( full_filename, GetBoard()->m_Modules,
                                 true, true, true );
         GetScreen()->ClrModify();
         break;
