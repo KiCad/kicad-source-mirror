@@ -73,13 +73,22 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     ForceCloseManageCurseur = NULL;
 
     if( wxGetApp().m_EDA_Config )
-        m_AutoPAN_Enable = wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ), true );
+        m_AutoPAN_Enable = wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ),
+                                                          true );
 
     m_AutoPAN_Request    = FALSE;
     m_Block_Enable       = FALSE;
     m_PanelDefaultCursor = m_PanelCursor = wxCURSOR_ARROW;
     m_CursorLevel = 0;
     m_PrintIsMirrored = false;
+}
+
+
+WinEDA_DrawPanel::~WinEDA_DrawPanel()
+{
+    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+
+    wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ), m_AutoPAN_Enable );
 }
 
 
@@ -189,7 +198,11 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
     DC->SetBackgroundMode( wxTRANSPARENT );
 #ifdef WX_ZOOM
     double scale = GetScreen()->GetScalingFactor( );
+    wxPoint origin = GetScreen()->m_DrawOrg;
+    wxLogDebug( wxT( "DC user scale factor: %0.3f, X origin: %d, Y " \
+                     "origin: %d" ), scale, origin.x, origin.y );
     DC->SetUserScale( scale, scale );
+    DC->SetLogicalOrigin( origin.x, origin.y );
     DoPrepareDC( *DC );
 #endif
     SetBoundaryBox();
@@ -582,13 +595,12 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
             );
 #endif
 
-    PaintClipBox.Offset( org );
-
 #ifdef WX_ZOOM
     BASE_SCREEN* screen = GetScreen();
     screen->Unscale( m_ClipBox.m_Pos );
     screen->Unscale( m_ClipBox.m_Size );
 #else
+    PaintClipBox.Offset( org );
     m_ClipBox.SetX( PaintClipBox.GetX() );
     m_ClipBox.SetY( PaintClipBox.GetY() );
     m_ClipBox.SetWidth( PaintClipBox.GetWidth() );

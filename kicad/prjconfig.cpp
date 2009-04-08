@@ -29,7 +29,7 @@ void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
     wxFileName newProjectName = PrjFullFileName;
 
     // Init default config filename
-    tmp = wxGetApp().GetLibraryPathList().FindValidPath( wxT( "kicad.pro" ) );
+    tmp = wxGetApp().FindLibraryPath( wxT( "kicad.pro" ) );
 
     if( !wxFileName::FileExists( tmp ) )
     {

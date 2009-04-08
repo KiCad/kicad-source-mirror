@@ -541,14 +541,15 @@ void WinEDA_App::SetDefaultSearchPaths( void )
             }
 
             /* Add schematic doc file path (library/doc)to search path list. */
+            fn.RemoveLastDir();
             fn.AppendDir( wxT( "doc") );
+
             if( fn.IsDirReadable() )
             {
                 wxLogDebug( wxT( "Adding <%s> to library search path list" ),
                             fn.GetPath().c_str() );
                 m_libSearchPaths.Add( fn.GetPath() );
             }
-            fn.RemoveLastDir();
 
             /* Add kicad template file path to search path list. */
             fn.RemoveLastDir();
@@ -1006,6 +1007,23 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
     subdirs.Add( wxT( "kicad" ) );
 #endif
     return FindFileInSearchPaths( filename, &subdirs );
+}
+
+
+/**
+ * Kicad saves user defined library files that are not in the standard
+ * library search path list with the full file path.  Calling the library
+ * search path list with a user library file will fail.  This helper method
+ * solves that problem.
+ *
+ * Returns a wxEmptyString if library file is not found.
+ */
+wxString WinEDA_App::FindLibraryPath( const wxString& fileName )
+{
+    if( wxFileName::FileExists( fileName ) )
+        return fileName;
+    else
+        return GetLibraryPathList().FindValidPath( fileName );
 }
 
 

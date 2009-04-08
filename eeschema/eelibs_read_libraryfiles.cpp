@@ -140,7 +140,7 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
 
         if( !fn.FileExists() )
         {
-            tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+            tmp = wxGetApp().FindLibraryPath( fn );
             if( !tmp )
             {
                 msg.Printf( _( "Library file <%s> not found." ),

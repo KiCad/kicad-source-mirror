@@ -38,7 +38,7 @@ int S3D_MASTER:: ReadData()
 
     if( !fn.FileExists() )
     {
-        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullPath() );
+        tmp = wxGetApp().FindLibraryPath( fn );
 
         if( !tmp )
         {

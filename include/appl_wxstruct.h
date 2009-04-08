@@ -132,6 +132,11 @@ public:
     void SetTitle( const wxString& title ) { m_Title = title; }
 
     wxPathList& GetLibraryPathList() { return m_libSearchPaths; }
+    wxString FindLibraryPath( const wxString& fileName );
+    wxString FindLibraryPath( const wxFileName& fileName )
+    {
+        return FindLibraryPath( fileName.GetFullPath() );
+    }
 };
 
 /*

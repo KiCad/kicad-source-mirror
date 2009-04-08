@@ -461,33 +461,26 @@ void KiConfigPcbnewFrame::LibDelFct( wxCommandEvent& event )
 }
 
 
-/*************************************************************/
+/*************************************************************
+ * Insert or add a library to the existing library list:
+ *  New library is put in list before (insert) or after (add)
+ * the selection.
+ *
+ *************************************************************/
 void KiConfigPcbnewFrame::LibInsertFct( wxCommandEvent& event )
-/*************************************************************/
-
-/* Insert or add a library to the existing library list:
- *   New library is put in list before (insert) or after (add)
- *   the selection
- */
 {
     int        ii;
     wxFileName fn;
     wxString   tmp;
 
     ii = m_ListLibr->GetSelection();
-    if( ii < 0 )
+    if( ii == wxNOT_FOUND && event.GetId() == INSERT_LIB )
         ii = 0;
-    if( event.GetId() == ADD_LIB )
-    {
-        if( g_LibName_List.GetCount() != 0 )
-            ii++;                                   /* Add after selection */
-    }
 
     SetNewOptions();
-    g_RealLibDirBuffer.Replace( wxT( "\\" ), wxT( "/" ) );
 
     wxFileDialog FilesDialog( this, _( "Foot Print Library Files" ),
-                              g_RealLibDirBuffer, wxEmptyString,
+                              wxEmptyString, wxEmptyString,
                               ModuleFileWildcard, wxFD_OPEN | wxFD_MULTIPLE );
 
     if( FilesDialog.ShowModal() != wxID_OK )
@@ -509,10 +502,13 @@ void KiConfigPcbnewFrame::LibInsertFct( wxCommandEvent& event )
             tmp = fn.GetName();
 
 		// Add or insert new library name.
-        if( g_LibName_List.Index( tmp ) == wxNOT_FOUND )
+        if( g_LibName_List.Index( tmp, fn.IsCaseSensitive() ) == wxNOT_FOUND )
 		{
             m_LibModified = TRUE;
-            g_LibName_List.Insert( tmp, ii++ );
+            if( event.GetId() == ADD_LIB )
+                g_LibName_List.Add( tmp );
+            else
+                g_LibName_List.Insert( tmp, ii++ );
             m_ListLibr->Clear();
             m_ListLibr->InsertItems( g_LibName_List, 0 );
         }

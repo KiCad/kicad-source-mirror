@@ -197,11 +197,7 @@ void KiConfigCvpcbFrame::LibAddFct( wxCommandEvent& event )
     wxArrayString Filenames;
 
     ii = m_ListLibr->GetSelection();
-    if( event.GetId() == ADD_LIB )  /* Ajout apres selection */
-    {
-        ii++;
-    }
-    if( ii < 0 )
+    if( ii == wxNOT_FOUND && event.GetId() != ADD_LIB )
         ii = 0;
 
     Update();
@@ -231,9 +227,12 @@ void KiConfigCvpcbFrame::LibAddFct( wxCommandEvent& event )
             tmp = fn.GetName();
 
 		// Add or insert new library name.
-        if( g_LibName_List.Index( tmp ) == wxNOT_FOUND )
+        if( g_LibName_List.Index( tmp, fn.IsCaseSensitive() ) == wxNOT_FOUND )
 		{
-            g_LibName_List.Insert( tmp, ii++ );
+            if( event.GetId() == ADD_LIB )
+                g_LibName_List.Add( tmp );
+            else
+                g_LibName_List.Insert( tmp, ii++ );
         }
         else
         {

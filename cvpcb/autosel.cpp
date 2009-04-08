@@ -71,7 +71,7 @@ static void auto_associe( WinEDA_CvpcbFrame* frame )
         fn = g_ListName_Equ[ii];
         fn.SetExt( EquivFileExtension );
 
-        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        tmp = wxGetApp().FindLibraryPath( fn );
 
         if( !tmp )
         {

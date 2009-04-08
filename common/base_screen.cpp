@@ -55,8 +55,7 @@ BASE_SCREEN::~BASE_SCREEN()
 
 
 /*******************************/
-void
-BASE_SCREEN::InitDatas()
+void BASE_SCREEN::InitDatas()
 /*******************************/
 {
     if( m_Center )
@@ -89,15 +88,13 @@ BASE_SCREEN::InitDatas()
  * internal units used by the schematic screen is 1 mil (0.001").  Override
  * this in derived classes that require internal units other than 1 mil.
  */
-int
-BASE_SCREEN::GetInternalUnits( void )
+int BASE_SCREEN::GetInternalUnits( void )
 {
     return EESCHEMA_INTERNAL_UNIT;
 }
 
 /************************************/
-wxSize
-BASE_SCREEN::ReturnPageSize( void )
+wxSize BASE_SCREEN::ReturnPageSize( void )
 /************************************/
 {
     int internal_units = GetInternalUnits();
@@ -113,8 +110,7 @@ BASE_SCREEN::ReturnPageSize( void )
  * @param ScreenPos = the screen (in pixel) position co convert
 */
 /******************************************************************/
-wxPoint
-BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
+wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 /******************************************************************/
 {
     wxPoint curpos = ScreenPos;
@@ -130,7 +126,7 @@ BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
  * @param the the current scale used to draw items on screen
  * draw coordinates are user coordinates * GetScalingFactor( )
 */
-void  BASE_SCREEN::SetScalingFactor(double aScale )
+void BASE_SCREEN::SetScalingFactor(double aScale )
 {
     int zoom = static_cast<int>( ceil(aScale * m_ZoomScalar) );
 

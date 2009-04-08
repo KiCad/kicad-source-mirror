@@ -197,32 +197,23 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
  *   the selection
  */
 {
-    int      ii;
-    wxString FullLibName, ShortLibName, Mask;
+    int        ii;
+    wxString   tmp;
+    wxFileName fn;
 
     ii = m_ListLibr->GetSelection();
-    if( ii < 0 )
+    if( ii == wxNOT_FOUND && event.GetId() != ID_ADD_LIB )
         ii = 0;
-
-    if( event.GetId() == ID_ADD_LIB )
-    {
-        if( m_ListLibr->GetCount() != 0 )
-            ii++;                                   /* Add after selection */
-    }
-
 
     wxString libpath =  m_LibDirCtrl->GetValue();
     if ( libpath.IsEmpty() )
        libpath = g_RealLibDirBuffer;
 
-    Mask = wxT( "*" ) + CompLibFileExtension;
-
     wxFileDialog FilesDialog( this, _( "Library files:" ), libpath,
-                              wxEmptyString, Mask,
+                              wxEmptyString, CompLibFileWildcard,
                               wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
-    int diag = FilesDialog.ShowModal();
-    if( diag != wxID_OK )
+    if( FilesDialog.ShowModal() != wxID_OK )
         return;
 
     wxArrayString Filenames;
@@ -230,29 +221,35 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
     {
-        FullLibName  = Filenames[jj];
-        ShortLibName = MakeReducedFileName( FullLibName, libpath, CompLibFileExtension );
-        if( ShortLibName.IsEmpty() )    //Just in case...
-            continue;
+        fn = Filenames[jj];
+
+        /* If the library path is already in the library search paths
+         * list, just add the library name to the list.  Otherwise, add
+         * the library name with the full path. */
+        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) == wxNOT_FOUND )
+            tmp = fn.GetPathWithSep() + fn.GetName();
+        else
+            tmp = fn.GetName();
 
         //Add or insert new library name, if not already in list
-        #ifdef __WINDOWS__
-        bool case_sensitive = false;
-        #else
-        bool case_sensitive = true;
-        #endif
-        if( m_ListLibr->FindString( ShortLibName, case_sensitive ) == wxNOT_FOUND )
+        if( m_ListLibr->FindString( tmp, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
             m_LibListChanged = TRUE;
-            m_ListLibr->Insert( ShortLibName, ii );
+            if( event.GetId() == ID_ADD_LIB )
+                g_LibName_List.Add( tmp );
+            else
+                g_LibName_List.Insert( tmp, ii++ );
         }
         else
         {
-            wxString msg;
-            msg << wxT( "<" ) << ShortLibName << wxT( "> : " ) << _( "Library already in use" );
+            wxString msg = wxT( "<" ) + tmp + wxT( "> : " ) +
+                _( "Library already in use" );
             DisplayError( this, msg );
         }
     }
+
+    m_ListLibr->Clear();
+    m_ListLibr->InsertItems( g_LibName_List, 0 );
 }
 
 

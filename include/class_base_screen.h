@@ -212,7 +212,7 @@ public:
      */
     double  GetScalingFactor()
     {
-        return (double) m_ZoomScalar / GetZoom();
+        return (double) m_ZoomScalar / (double) GetZoom();
     }
 
 

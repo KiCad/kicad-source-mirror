@@ -199,9 +199,10 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( const wxString& aLibraryFullF
         if ( one_lib )
             fn = aLibraryFullFilename;
         else
-            fn = wxFileName( wxEmptyString, g_LibName_List[ii], ModuleFileExtension );
+            fn = wxFileName( wxEmptyString, g_LibName_List[ii],
+                             ModuleFileExtension );
 
-        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        tmp = wxGetApp().FindLibraryPath( fn );
 
         if( !tmp )
         {
@@ -352,7 +353,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
         else
             fn = aLibraryFullFilename;
 
-        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        tmp = wxGetApp().FindLibraryPath( fn );
 
         if( !tmp )
         {

@@ -401,17 +401,9 @@ void GRPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int Color )
 void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int Color )
 /********************************************************************/
 {
-    if( ClipBox )  /* suppression des pixels hors ecran */
-    {
-        if( x < ClipBox->GetX() )
-            return;
-        if( y < ClipBox->GetY() )
-            return;
-        if( x > ( ClipBox->GetRight() ) )
-            return;
-        if( y > ( ClipBox->GetBottom() ) )
-            return;
-    }
+    if( ClipBox && !ClipBox->Inside( x, y ) )
+        return;
+
     GRSetColorPen( DC, Color );
     DC->DrawPoint( x, y );
 }

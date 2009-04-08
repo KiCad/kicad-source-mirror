@@ -42,7 +42,7 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
         fn = g_LibName_List[ii];
         fn.SetExt( ModuleFileExtension );
 
-        tmp = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        tmp = wxGetApp().FindLibraryPath( fn );
 
         if( !tmp )
         {

@@ -204,8 +204,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
                                     ModuleFileExtension );
-        wxString   full_libraryfilename =
-            wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        wxString   full_libraryfilename = wxGetApp().FindLibraryPath( fn );
         if( wxFileName::FileExists( full_libraryfilename ) )
             Delete_Module_In_Library( full_libraryfilename );
         break;
@@ -233,7 +232,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         wxFileName fn;
         fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
-        wxString full_filename = wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+        wxString full_filename = wxGetApp().FindLibraryPath( fn );
         Save_Module_In_Library( full_filename, GetBoard()->m_Modules,
                                 true, true, true );
         GetScreen()->ClrModify();
@@ -352,9 +351,9 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
                                         ModuleFileExtension );
-            full_libraryfilename =
-                wxGetApp().GetLibraryPathList().FindValidPath( fn.GetFullName() );
+            full_libraryfilename = wxGetApp().FindLibraryPath( fn );
         }
+
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         Clear_Pcb( true );

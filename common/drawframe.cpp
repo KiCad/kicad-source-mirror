@@ -109,9 +109,6 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 WinEDA_DrawFrame::~WinEDA_DrawFrame()
 /****************************************/
 {
-    if( DrawPanel )  // Required: in WinEDA3D_DrawFrame, DrawPanel == NULL !
-        wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ),
-                                    DrawPanel->m_AutoPAN_Enable );
 }
 
 

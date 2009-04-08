@@ -55,8 +55,9 @@ public:
 public:
 
     // Constructor and destructor
-    WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
-    ~WinEDA_DrawPanel() { }
+    WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos,
+                      const wxSize& size );
+    ~WinEDA_DrawPanel();
 
     /****************************/
     BASE_SCREEN* GetScreen();
