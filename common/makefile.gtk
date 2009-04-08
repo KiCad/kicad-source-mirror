@@ -21,9 +21,9 @@ common.a: $(COMMON_OBJECTS) makefile.gtk makefile.include
 	ar -rv $@ $(COMMON_OBJECTS)
 	ranlib $@
 
-pcbcommon.a: $(COMMON_PCB_OBJECTS) makefile.gtk makefile.include
+pcbcommon.a: $(PCB_COMMON_OBJECTS) makefile.gtk makefile.include
 	rm -f $@
-	ar -rv $@ $(COMMON_PCB_OBJECTS)
+	ar -rv $@ $(PCB_COMMON_OBJECTS)
 	ranlib $@
 
 install:common.a pcb_common.a

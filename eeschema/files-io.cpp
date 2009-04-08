@@ -80,7 +80,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     FullFileName = FileName;
     if( ( FullFileName.IsEmpty() ) && !IsNew )
     {
-        wxFileDialog dlg( this, _( "Open Schematic" ), wxEmptyString,
+        wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
                           wxEmptyString, SchematicFileWildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 

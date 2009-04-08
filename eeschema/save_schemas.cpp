@@ -62,7 +62,7 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 
     case FILE_SAVE_NEW:
     {
-        wxFileDialog dlg( this, _( "Schematic Files" ), wxEmptyString,
+        wxFileDialog dlg( this, _( "Schematic Files" ), wxGetCwd(),
                           screen->m_FileName, SchematicFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
