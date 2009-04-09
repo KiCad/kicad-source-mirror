@@ -336,22 +336,21 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
  * Update the status bar information.
  */
 {
-    wxString        Line;
-    int             dx, dy;
-    double          theta, ro;
-    BASE_SCREEN*    screen = GetBaseScreen();
-
-    if( !screen )
-        return;
-
     WinEDA_DrawFrame::UpdateStatusBar();
 
-    dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
-    dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
-
-    if( DisplayOpt.DisplayPolarCood )  /* Display coordonnee polaire */
+    if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
     {
-        if( (dx == 0) && (dy == 0) )
+        BASE_SCREEN*    screen = GetBaseScreen();
+        if( !screen )
+            return;
+
+        wxString        Line;
+        double          theta, ro;
+
+        int dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
+        int dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
+
+        if( dx==0 && dy==0 )
             theta = 0.0;
         else
             theta = atan2( (double) -dy, (double) dx );
@@ -362,9 +361,17 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
         Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) : wxT( "Ro %.4f Th %.1f" ),
                      To_User_Unit( g_UnitMetric, ro, m_InternalUnits ),
                      theta );
+
+        // overwrite the absolute cartesian coordinates
+        SetStatusText( Line, 2 );
     }
 
+    /*  not this, because status field no. 0 is reserved for actual fleeting
+        status information.  If this is enabled, then that text is erased on
+        every DrawPanel redraw.  Field no. 0 is set with Affiche_Message() and it
+        should persist until called again.
     SetStatusText( Line, 0 );
+    */
 }
 
 

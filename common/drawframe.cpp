@@ -186,7 +186,7 @@ void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
  *  Display the message on the bottom the frame
  */
 {
-    SetStatusText( message );
+    SetStatusText( message, 0 );
 }
 
 
