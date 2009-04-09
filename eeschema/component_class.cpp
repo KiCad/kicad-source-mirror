@@ -820,69 +820,46 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
 
 
 int SCH_COMPONENT::GetRotationMiroir()
+/** function GetRotationMiroir()
+ * Used to display component orientation (in dialog editor or info)
+ * @return the orientation and mirror
+ * Note: Because there are different ways to have a given orientation/mirror,
+ * the orientation/mirror is not necessary wht the used does
+ * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
+ * So this function find a rotation and a mirror value
+ * ( CMP_MIROIR_X because this is the first mirror option tested)
+ *  but can differs from the orientation made by an user
+ * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because they are equivalent)
+ *
+*/
 {
     int  type_rotate = CMP_ORIENT_0;
-    int  TempMat[2][2], MatNormal[2][2];
+    int  ComponentMatOrient[2][2];
     int  ii;
-    bool found = FALSE;
-
-    memcpy( TempMat, m_Transform, sizeof( TempMat ) );
-    SetRotationMiroir( CMP_ORIENT_0 );
-    memcpy( MatNormal, m_Transform, sizeof( MatNormal ) );
-
-    for( ii = 0; ii < 4; ii++ )
+    
+    #define ROTATE_VALUES_COUNT 12
+    int rotate_value[ROTATE_VALUES_COUNT] =    // list of all possibilities, but only the first 8 are actually used
     {
-        if( memcmp( TempMat, m_Transform, sizeof(MatNormal) ) == 0 )
-        {
-            found = TRUE;
-            break;
-        }
-        SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
+        CMP_ORIENT_0, CMP_ORIENT_90, CMP_ORIENT_180, CMP_ORIENT_270,
+        CMP_MIROIR_X + CMP_ORIENT_0, CMP_MIROIR_X + CMP_ORIENT_90, CMP_MIROIR_X + CMP_ORIENT_180, CMP_MIROIR_X + CMP_ORIENT_270,
+        CMP_MIROIR_Y + CMP_ORIENT_0, CMP_MIROIR_Y + CMP_ORIENT_90, CMP_MIROIR_Y + CMP_ORIENT_180, CMP_MIROIR_Y + CMP_ORIENT_270
+    };
+
+    // Try to find the current transform option:
+    memcpy( ComponentMatOrient, m_Transform, sizeof( ComponentMatOrient ) );
+
+    for( ii = 0; ii < ROTATE_VALUES_COUNT; ii++ )
+    {
+        type_rotate = rotate_value[ii];
+        SetRotationMiroir( type_rotate );
+        if( memcmp( ComponentMatOrient, m_Transform, sizeof(ComponentMatOrient) ) == 0 )
+            return type_rotate;
     }
 
-    if( !found )
-    {
-        type_rotate = CMP_MIROIR_X + CMP_ORIENT_0;
-        SetRotationMiroir( CMP_NORMAL );
-        SetRotationMiroir( CMP_MIROIR_X );
-        for( ii = 0; ii < 4; ii++ )
-        {
-            if( memcmp( TempMat, m_Transform, sizeof( MatNormal ) ) == 0 )
-            {
-                found = TRUE;
-                break;
-            }
-            SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
-        }
-    }
-
-    if( !found )
-    {
-        type_rotate = CMP_MIROIR_Y + CMP_ORIENT_0;
-        SetRotationMiroir( CMP_NORMAL );
-        SetRotationMiroir( CMP_MIROIR_Y );
-        for( ii = 0; ii < 4; ii++ )
-        {
-            if( memcmp( TempMat, m_Transform, sizeof( MatNormal ) ) == 0 )
-            {
-                found = TRUE;
-                break;
-            }
-            SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
-        }
-    }
-
-    memcpy( m_Transform, TempMat, sizeof( m_Transform ) );
-
-    if( found )
-    {
-        return type_rotate + ii;
-    }
-    else
-    {
-        wxBell();
-        return CMP_NORMAL;
-    }
+    // Error: orientation not found in list (should not happen)
+    DisplayError(NULL, wxT("Component orientation matrix internal error") );
+    memcpy( m_Transform, ComponentMatOrient, sizeof( ComponentMatOrient ) );
+    return CMP_NORMAL;
 }
 
 

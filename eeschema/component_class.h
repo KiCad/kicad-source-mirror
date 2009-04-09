@@ -170,7 +170,19 @@ public:
     }
 
     void            SetRotationMiroir( int type );
+    /** function GetRotationMiroir()
+     * Used to display component orientation (in dialog editor or info)
+     * @return the orientation and mirror
+     * Note: Because there are different ways to have a given orientation/mirror,
+     * the orientation/mirror is not necessary wht the used does
+     * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
+     * So this function find a rotation and a mirror value
+     * ( CMP_MIROIR_X because this is the first mirror option tested)
+     *  but can differs from the orientation made by an user
+     * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because they are equivalent)
+     */
     int             GetRotationMiroir();
+
     wxPoint         GetScreenCoord( const wxPoint& coord );
     void            Display_Infos( WinEDA_DrawFrame* frame );
 
