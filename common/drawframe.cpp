@@ -699,13 +699,6 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 }
 
 
-/*
- * Update the status bar information.
- *
- * The base method updates the absolute and relative coordinates and the
- * zoom information.  If you override this virtual method, make sure to call
- * this subclassed method.
- */
 void WinEDA_DrawFrame::UpdateStatusBar()
 {
     wxString        Line;

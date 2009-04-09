@@ -268,7 +268,22 @@ public:
     virtual bool     OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void     ToolOnRightClick( wxCommandEvent& event );
     void             AdjustScrollBars();
-    virtual void     UpdateStatusBar(); /* Affichage des coord curseur, zoom .. */
+
+    /**
+     * Function UpdateStatusBar
+     * updates the status bar information.
+     *
+     * The base method updates the absolute and relative coordinates and the
+     * zoom information.  If you override this virtual method, make sure to call
+     * this subclassed method.  The status bar can draw itself.  This is not
+     * a drawing function per se, but rather updates lines of text held by
+     * the components within the status bar which is owned by the wxFrame.
+     * <p>
+     * On a MAC, be careful about calling this function when there is an existing
+     * wxDC in existence on a sibling window.
+     */
+    virtual void     UpdateStatusBar();
+
     void             DisplayUnitsMsg();
 
     /* Handlers for block commands */
