@@ -79,10 +79,11 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Creation de la ligne de status
-    #define ZOOM_DISPLAY_SIZE 60
-    #define COORD_DISPLAY_SIZE 140
-    #define UNITS_DISPLAY_SIZE 50
-    #define FUNCTION_DISPLAY_SIZE 100
+    #define ZOOM_DISPLAY_SIZE       60
+    #define COORD_DISPLAY_SIZE      156
+    #define UNITS_DISPLAY_SIZE      50
+    #define FUNCTION_DISPLAY_SIZE   100
+
     static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
         COORD_DISPLAY_SIZE, COORD_DISPLAY_SIZE,
         UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
@@ -99,6 +100,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     DrawPanel = new WinEDA_DrawPanel( this, -1, wxPoint( 0, 0 ), m_FrameSize );
     MsgPanel  = new WinEDA_MsgPanel( this, -1, wxPoint( 0, m_FrameSize.y ),
                                      wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
+
     MsgPanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
                                              ColorRefs[LIGHTGRAY].m_Green,
                                              ColorRefs[LIGHTGRAY].m_Blue ) );
