@@ -176,6 +176,9 @@ void DIALOG_EESCHEMA_CONFIG::OnCloseWindow( wxCloseEvent& event )
 /*********************************************************************/
 void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 /*********************************************************************/
+/* Remove a library to the library list.
+ * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ */
 {
     int ii;
 
@@ -192,9 +195,10 @@ void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 /**************************************************************************/
 
-/* Insert or add a library to the existing library list:
- *   New library is put in list before (insert) or after (add)
- *   the selection
+/* Insert or add a library to the library list:
+ *   The new library is put in list before (insert button) the selection,
+ *   or added (add button) to end of list
+ * The real list (g_LibName_List) is not changed, so the change can be cancelled
  */
 {
     int        ii;
@@ -236,9 +240,9 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         {
             m_LibListChanged = TRUE;
             if( event.GetId() == ID_ADD_LIB )
-                g_LibName_List.Add( tmp );
+                m_ListLibr->Append( tmp );
             else
-                g_LibName_List.Insert( tmp, ii++ );
+                m_ListLibr->Insert( tmp, ii++ );
         }
         else
         {
@@ -247,9 +251,6 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
             DisplayError( this, msg );
         }
     }
-
-    m_ListLibr->Clear();
-    m_ListLibr->InsertItems( g_LibName_List, 0 );
 }
 
 
