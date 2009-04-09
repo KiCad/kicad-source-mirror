@@ -126,6 +126,7 @@ SCH_TEXT* SCH_TEXT::GenCopy()
     newitem->m_HJustify   = m_HJustify;
     newitem->m_VJustify   = m_VJustify;
     newitem->m_IsDangling = m_IsDangling;
+    newitem->m_Italic     = m_Italic;
 
     return newitem;
 }

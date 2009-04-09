@@ -330,6 +330,9 @@ void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
     wxFileDialog dlg( this, _( "Load File to Edit" ), wxGetCwd(),
                       wxEmptyString, mask,wxFD_OPEN );
 
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
     if( dlg.GetPath() && wxGetApp().GetEditorName() )
         ExecuteFile( this, wxGetApp().GetEditorName(), dlg.GetPath() );
 }

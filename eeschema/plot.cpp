@@ -262,7 +262,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                                  t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                                  Text->m_Size,
                                  GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                thickness);
+                                 thickness, false, true);
             }
             break;
 
@@ -476,7 +476,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size,
                          hjustify, vjustify,
-                        thickness, field->m_Italic);
+                        thickness, field->m_Italic, true);
     }
     else    /* We plt the reference, for a multiple parts per package */
     {
@@ -683,12 +683,12 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
             PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
                              GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER,
-                            thickness, italic );
+                            thickness, italic, true );
         else
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic );
+                            thickness, italic, true );
         break;
 
     case 1:         /* Orientation vert UP */
@@ -696,12 +696,12 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY + offset ),
                              color, Text, TEXT_ORIENT_VERT, Size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
-                            thickness, italic );
+                            thickness, italic, true );
         else
             PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
                              color, Text, TEXT_ORIENT_VERT, Size,
                              GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic );
+                            thickness, italic, true );
         break;
 
     case 2:         /* Horiz Orientation - Right justified */
@@ -709,12 +709,12 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
             PlotGraphicText( g_PlotFormat, wxPoint( pX + offset, pY ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                            thickness, italic );
+                            thickness, italic, true );
         else
-            PlotGraphicText( g_PlotFormat, wxPoint( pX, pY + offset ),
+            PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
                              color, Text, TEXT_ORIENT_HORIZ, Size,
                              GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic );
+                            thickness, italic, true );
         break;
 
     case 3:         /* Orientation vert BOTTOM */
@@ -722,12 +722,12 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
             PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
                              color, Text, TEXT_ORIENT_VERT, Size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic );
+                            thickness, italic, true );
         else
-            PlotGraphicText( g_PlotFormat, wxPoint( pX + offset, pY ),
+            PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
                              color, Text, TEXT_ORIENT_VERT, Size,
                              GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP,
-                            thickness, italic );
+                            thickness, italic, true );
         break;
     }
 
@@ -778,7 +778,7 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
                      Struct->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
                      side, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic  );
+                    thickness, italic, true  );
     /* dessin du symbole de connexion */
 
     if( Struct->m_Edge )
