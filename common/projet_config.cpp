@@ -60,10 +60,8 @@ bool WinEDA_App::ReCreatePrjConfig( const wxString& fileName,
     /* Update the library search path list if a new project file is loaded. */
     if( m_projectFileName != fn )
     {
-        if( m_libSearchPaths.Index( fn.GetPath() ) != wxNOT_FOUND )
-            m_libSearchPaths.Remove( fn.GetPath() );
-
-        m_libSearchPaths.Insert( fn.GetPath(), 0 );
+        RemoveLibraryPath( m_projectFileName.GetPath() );
+        InsertLibraryPath( fn.GetPath(), 0 );
         m_projectFileName = fn;
     }
 

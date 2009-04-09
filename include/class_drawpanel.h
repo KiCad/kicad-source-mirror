@@ -71,7 +71,7 @@ public:
     void         ReDraw( wxDC* DC, bool erasebg = TRUE );
     void         PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask, bool aPrintMirrorMode );
     void         DrawBackGround( wxDC* DC );
-    void         m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode );
+    void         DrawAuxiliaryAxis( wxDC* DC, int drawmode );
     void         OnEraseBackground( wxEraseEvent& event );
     void         OnActivate( wxActivateEvent& event );
 

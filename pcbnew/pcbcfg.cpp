@@ -171,12 +171,7 @@ bool Read_Config( const wxString& projectFileName )
         fn.SetExt( ProjectFileExtension );
     }
 
-    if( wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) != wxNOT_FOUND )
-    {
-        wxLogDebug( wxT( "Removing path <%s> to library path search list." ),
-                    g_UserLibDirBuffer.c_str() );
-        wxGetApp().GetLibraryPathList().Remove( g_UserLibDirBuffer );
-    }
+    wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 
     /* Init des valeurs par defaut */
     g_LibName_List.Clear();
@@ -184,16 +179,10 @@ bool Read_Config( const wxString& projectFileName )
     wxGetApp().ReadProjectConfig( fn.GetFullPath(),
                                   GROUP, ParamCfgList, FALSE );
 
+    /* User library path takes precedent over default library search paths. */
+    wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
+
     /* Traitement des variables particulieres: */
-
-    if( wxFileName::DirExists( g_UserLibDirBuffer )
-        && wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) == wxNOT_FOUND )
-    {
-        wxLogDebug( wxT( "Adding path <%s> to library path search list." ),
-                    g_UserLibDirBuffer.c_str() );
-        wxGetApp().GetLibraryPathList().Add( g_UserLibDirBuffer );
-    }
-
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
 

@@ -153,11 +153,11 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     // Loading the project library cache
     wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
     fn.SetExt( wxT( "cache.lib" ) );
-    wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
-                fn.GetFullPath().c_str() );
 
     if( fn.FileExists() )
     {
+        wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
+                    fn.GetFullPath().c_str() );
         msg = wxT( "Load " ) + fn.GetFullPath();
         LibraryStruct* LibCache = LoadLibraryName( this, fn.GetFullPath(),
                                                    fn.GetName() );

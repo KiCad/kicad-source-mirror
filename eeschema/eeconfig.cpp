@@ -159,12 +159,7 @@ bool Read_Config( const wxString& CfgFileName, bool ForceRereadConfig )
      * extension (.pro). */
     fn.SetExt( ProjectFileExtension );
 
-    if( wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) != wxNOT_FOUND )
-    {
-        wxLogDebug( wxT( "Removing path <%s> to library path search list." ),
-                    g_UserLibDirBuffer.c_str() );
-        wxGetApp().GetLibraryPathList().Remove( g_UserLibDirBuffer );
-    }
+    wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 
     if( !wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, ParamCfgList,
                                        ForceRereadConfig ? FALSE : TRUE ) )
@@ -173,13 +168,8 @@ bool Read_Config( const wxString& CfgFileName, bool ForceRereadConfig )
         IsRead = FALSE;
     }
 
-    if( wxFileName::DirExists( g_UserLibDirBuffer )
-        && wxGetApp().GetLibraryPathList().Index( g_UserLibDirBuffer ) == wxNOT_FOUND )
-    {
-        wxLogDebug( wxT( "Adding path <%s> to library path search list." ),
-                    g_UserLibDirBuffer.c_str() );
-        wxGetApp().GetLibraryPathList().Add( g_UserLibDirBuffer );
-    }
+    /* User library path takes precedent over default library search paths. */
+    wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
     // If the list is void, load the libraries "power.lib" and "device.lib"
     if( g_LibName_List.GetCount() == 0 )

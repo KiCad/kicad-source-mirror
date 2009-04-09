@@ -1023,7 +1023,38 @@ wxString WinEDA_App::FindLibraryPath( const wxString& fileName )
     if( wxFileName::FileExists( fileName ) )
         return fileName;
     else
-        return GetLibraryPathList().FindValidPath( fileName );
+        return m_libSearchPaths.FindValidPath( fileName );
+}
+
+void WinEDA_App::RemoveLibraryPath( const wxString& path )
+{
+    if( m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) != wxNOT_FOUND )
+    {
+        wxLogDebug( wxT( "Removing path <%s> from library path search list." ),
+                    path.c_str() );
+        m_libSearchPaths.Remove( path );
+    }
+}
+
+void WinEDA_App::InsertLibraryPath( const wxString& path, size_t index )
+{
+    if( wxFileName::DirExists( path )
+        && m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) == wxNOT_FOUND )
+    {
+        if( index >= m_libSearchPaths.GetCount() )
+        {
+            wxLogDebug( wxT( "Adding path <%s> to library path search list." ),
+                        path.c_str() );
+            m_libSearchPaths.Add( path );
+        }
+        else
+        {
+            wxLogDebug( wxT( "Inserting path <%s> in library path search " \
+                             "list at index position %d." ),
+                        path.c_str(), index );
+            m_libSearchPaths.Insert( path, index );
+        }
+    }
 }
 
 

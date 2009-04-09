@@ -317,9 +317,9 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
-        DrawPanel->m_Draw_Auxiliary_Axis( DC, GR_XOR );
+        DrawPanel->DrawAuxiliaryAxis( DC, GR_XOR );
         m_Auxiliary_Axis_Position = GetScreen()->m_Curseur;
-        DrawPanel->m_Draw_Auxiliary_Axis( DC, GR_COPY );
+        DrawPanel->DrawAuxiliaryAxis( DC, GR_COPY );
         GetScreen()->SetModify();
         break;
 

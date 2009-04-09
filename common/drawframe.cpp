@@ -573,6 +573,7 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 void WinEDA_DrawFrame::AdjustScrollBars()
 /*********************************************/
 {
+#ifndef WX_ZOOM
     int     xUnit, yUnit;
     wxSize  draw_size, panel_size;
     wxSize  scrollbar_number;
@@ -652,6 +653,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,
                               screen->m_ScrollbarPos.y, TRUE );
+#endif
 }
 
 

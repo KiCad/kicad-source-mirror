@@ -197,13 +197,18 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
     GRResetPenAndBrush( DC );
     DC->SetBackgroundMode( wxTRANSPARENT );
 #ifdef WX_ZOOM
-    double scale = GetScreen()->GetScalingFactor( );
+    double scale = GetScreen()->GetScalingFactor();
     wxPoint origin = GetScreen()->m_DrawOrg;
     wxLogDebug( wxT( "DC user scale factor: %0.3f, X origin: %d, Y " \
                      "origin: %d" ), scale, origin.x, origin.y );
+    DoPrepareDC( *DC );
     DC->SetUserScale( scale, scale );
     DC->SetLogicalOrigin( origin.x, origin.y );
-    DoPrepareDC( *DC );
+
+    int x, y;
+    wxPoint logicalPos = GetScreen()->m_Curseur - origin;;
+    CalcScrolledPosition( logicalPos.x, logicalPos.y, &x, &y );
+    Scroll( x, y );
 #endif
     SetBoundaryBox();
 }
@@ -596,9 +601,10 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 #endif
 
 #ifdef WX_ZOOM
-    BASE_SCREEN* screen = GetScreen();
-    screen->Unscale( m_ClipBox.m_Pos );
-    screen->Unscale( m_ClipBox.m_Size );
+    m_ClipBox.m_Pos.x = paintDC.DeviceToLogicalX( m_ClipBox.m_Pos.x );
+    m_ClipBox.m_Pos.y = paintDC.DeviceToLogicalY( m_ClipBox.m_Pos.y );
+    m_ClipBox.m_Size.SetWidth( paintDC.DeviceToLogicalXRel( m_ClipBox.m_Size.GetWidth() ) );
+    m_ClipBox.m_Size.SetHeight( paintDC.DeviceToLogicalXRel( m_ClipBox.m_Size.GetHeight() ) );
 #else
     PaintClipBox.Offset( org );
     m_ClipBox.SetX( PaintClipBox.GetX() );
@@ -627,7 +633,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     {
         wxDCClipper dcclip( paintDC, PaintClipBox );
 
-        ReDraw( &paintDC, TRUE );
+        ReDraw( &paintDC, true );
     }
 
     m_ClipBox = tmp;
@@ -657,11 +663,6 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
         g_XorMode    = GR_XOR;
         g_GhostColor = WHITE;
     }
-
-#ifdef WX_ZOOM
-    double scale = Screen->GetScalingFactor( );
-    DC->SetUserScale( scale, scale );
-#endif
 
     if( erasebg )
         PrepareGraphicContext( DC );
@@ -742,6 +743,13 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     size = GetClientSize();
     screen->Unscale( size );
 
+#ifdef WX_ZOOM
+    org.x = DC->DeviceToLogicalX( org.x );
+    org.y = DC->DeviceToLogicalY( org.y );
+    size.SetWidth( DC->DeviceToLogicalXRel( size.GetWidth() ) );
+    size.SetHeight( DC->DeviceToLogicalXRel( size.GetHeight() ) );
+#endif
+
     if( drawgrid )
     {
         m_Parent->PutOnGrid( &org );
@@ -767,7 +775,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     }
 
     /* Draw axis */
-    if(  m_Parent->m_Draw_Axis )
+    if( m_Parent->m_Draw_Axis )
     {
         /* Draw the Y axis */
         GRDashedLine( &m_ClipBox, DC, 0, -screen->ReturnPageSize().y,
@@ -778,16 +786,12 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
                       screen->ReturnPageSize().x, 0, 0, Color );
     }
 
-    /* Draw auxiliary axis */
-    if( m_Parent->m_Draw_Auxiliary_Axis )
-    {
-        m_Draw_Auxiliary_Axis( DC, FALSE );
-    }
+    DrawAuxiliaryAxis( DC, GR_COPY );
 }
 
 
 /********************************************************************/
-void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
+void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* DC, int drawmode )
 /********************************************************************/
 
 /** m_Draw_Auxiliary_Axis
@@ -795,8 +799,9 @@ void WinEDA_DrawPanel::m_Draw_Auxiliary_Axis( wxDC* DC, int drawmode )
  * for gerber and excellon files
  */
 {
-    if( m_Parent->m_Auxiliary_Axis_Position.x == 0
-        && m_Parent->m_Auxiliary_Axis_Position.y == 0 )
+    if( !m_Parent->m_Draw_Auxiliary_Axis
+        || ( m_Parent->m_Auxiliary_Axis_Position.x == 0
+             && m_Parent->m_Auxiliary_Axis_Position.y == 0 ) )
         return;
 
     int          Color  = DARKRED;

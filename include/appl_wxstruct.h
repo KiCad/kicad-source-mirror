@@ -137,6 +137,8 @@ public:
     {
         return FindLibraryPath( fileName.GetFullPath() );
     }
+    void RemoveLibraryPath( const wxString& path );
+    void InsertLibraryPath( const wxString& path, size_t index );
 };
 
 /*
