@@ -49,8 +49,6 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         module->Draw( DrawPanel, DC, GR_OR );
     }
 
-    UpdateStatusBar();
-
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
@@ -89,8 +87,6 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->ClrRefreshReq();
 
-    UpdateStatusBar();
-
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
@@ -105,8 +101,6 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 /********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
-
-
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
