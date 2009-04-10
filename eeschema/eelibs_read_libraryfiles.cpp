@@ -164,7 +164,8 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
         else
             msg += _( " error!" );
 
-        frame->PrintMsg( msg );    }
+        frame->PrintMsg( msg ); 
+    }
 
     // reorder the linked list to match the order filename list:
     int            NumOfLibs;
@@ -212,9 +213,7 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
     MyFree( libs );
 
     for( lib = g_LibraryList; lib != NULL; lib = lib->m_Pnext )
-    {
         lib->m_Flags = 0;
-    }
 }
 
 
