@@ -109,7 +109,7 @@ void DIALOG_EESCHEMA_CONFIG::Init()
     NetlistNameItems.Add( wxT( "OrcadPcb2" ) );
     NetlistNameItems.Add( wxT( "CadStar" ) );
     NetlistNameItems.Add( wxT( "Spice" ) );
-    
+
     // Add extra neltlist format (using external converter)
     msg = ReturnUserNetlistTypeName( true );
     while( !msg.IsEmpty() )
@@ -145,9 +145,13 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
     g_NetFormat = m_NetFormatBox->GetSelection() + NET_TYPE_PCBNEW;
 
     // Set new default path lib
-    g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
+    if ( g_UserLibDirBuffer != m_LibDirCtrl->GetValue() )
+    {
+        g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
+        m_LibListChanged = true;
+    }
 
-    // Set new active lib list
+    // Set new active library list if the list of default path was modified
     if( m_LibListChanged )
     {
         // Recreate lib list

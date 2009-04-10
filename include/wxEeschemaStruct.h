@@ -495,17 +495,27 @@ protected:
 };
 
 
+/************************************************************************************************/
+/************************************************************************************************/
 class LibraryStruct;
 class WinEDA_ViewlibFrame : public WinEDA_DrawFrame
 {
-public:
+private:
     WinEDAChoiceBox* SelpartBox;
 
-    wxListBox*       m_LibList;
-    wxSize           m_LibListSize;
-    wxListBox*       m_CmpList;
-    wxSize           m_CmpListSize;
+    // List of libraries (for selection
+    wxSashLayoutWindow*    m_LibListWindow;           // The redimensionnable window to display the lib list
+    wxListBox*       m_LibList;                 // The list of libs
+    wxSize           m_LibListSize;             // size of the window
+
+    // List of components in the selected library
+    wxSashLayoutWindow*    m_CmpListWindow;           // The redimensionnable window to display the component list
+    wxListBox*       m_CmpList;                 // The list of components
+    wxSize           m_CmpListSize;             // size of the window
+
+    // Flags
     wxSemaphore*     m_Semaphore; // != NULL if the frame must emulate a modal dialog
+    wxString         m_ConfigPath;      // subpath for configuartion
 
 public:
     WinEDA_ViewlibFrame( wxWindow* father,
@@ -515,6 +525,7 @@ public:
     ~WinEDA_ViewlibFrame();
 
     void    OnSize( wxSizeEvent& event );
+    void    OnSashDrag( wxSashEvent& event );
     void    ReCreateListLib();
     void    ReCreateListCmp();
     void    Process_Special_Functions( wxCommandEvent& event );
@@ -531,6 +542,9 @@ public:
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
 
     void    GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+
+    void     LoadSettings();
+    void     SaveSettings();
 
 private:
     void    SelectCurrentLibrary();
