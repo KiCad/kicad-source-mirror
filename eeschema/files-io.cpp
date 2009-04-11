@@ -150,10 +150,22 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         return 1;
     }
 
-    // Loading the project library cache
+    /* Loading the project library cache
+     * until apr 2009 the lib is named <root_name>.cache.lib
+     * and after (due to code change): <root_name>-cache.lib
+     * so if the <name>-cache.lib is not foun, the od way will be tried
+    */
+    bool use_oldcachename = false;
     wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
-    fn.SetExt( wxT( "cache.lib" ) );
-
+    wxString cachename =  fn.GetName() + wxT("-cache");
+    fn.SetName( cachename );
+    fn.SetExt( CompLibFileExtension );
+    if( ! fn.FileExists() )
+    {
+        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn.SetExt( wxT( "cache.lib" ) );
+        use_oldcachename = true;
+    }
     if( fn.FileExists() )
     {
         wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
@@ -165,6 +177,13 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         {
             LibCache->m_IsLibCache = TRUE;
             msg += wxT( " OK" );
+            if ( use_oldcachename )     // set the new name
+            {
+                fn.SetName(cachename);
+                fn.SetExt( CompLibFileExtension );
+                LibCache->m_Name = fn.GetName();
+                LibCache->m_FullFileName = fn.GetFullPath();
+            }
         }
         else
             msg += wxT( " ->Error" );
@@ -241,7 +260,9 @@ void WinEDA_SchematicFrame::SaveProject()
 
     /* Creation du fichier d'archivage composants en repertoire courant */
     fn = g_RootSheet->GetFileName();
-    fn.SetExt( wxT( "cache." )  + CompLibFileExtension );
+    wxString cachename =  fn.GetName() + wxT("-cache");
+    fn.SetName( cachename );
+    fn.SetExt( CompLibFileExtension );
     LibArchive( this, fn.GetFullPath() );
 }
 

@@ -115,7 +115,7 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
 
     frame->PrintMsg( _( "Loading schematic component libraries" ) );
 
-    // Free the unwanted libraries (i.e. not in list) but keep the .cache lib
+    // Free the unwanted libraries (i.e. not in list) but keep the cache lib
     LibraryStruct* nextlib, * lib = g_LibraryList;
 
     for( ; lib != NULL; lib = nextlib )
@@ -164,7 +164,7 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
         else
             msg += _( " error!" );
 
-        frame->PrintMsg( msg ); 
+        frame->PrintMsg( msg );
     }
 
     // reorder the linked list to match the order filename list:
