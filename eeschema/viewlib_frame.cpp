@@ -116,7 +116,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     else
     {
         g_CurrentViewLibraryName = Library->m_Name;
-        m_LibListSize.x = 0; 
+        m_LibListSize.x = 0;
     }
 
     // Creates the component window display
@@ -204,7 +204,7 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
     // Now, we must recalculate the position and size of subwindows
     wxSizeEvent SizeEv;
     OnSize( SizeEv );
-    
+
     // Ensure the panel is always redrawn (sometimes some garbage remains):
     DrawPanel->Refresh();
 }
@@ -259,7 +259,7 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
         m_CmpListWindow->SetPosition( wxPoint( m_LibListSize.x, 0 ) );
         m_CmpList->SetSize( m_CmpListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0) );
     }
-    
+
     SizeEv.Skip();
 }
 
@@ -302,29 +302,25 @@ int WinEDA_ViewlibFrame::BestZoom()
 void WinEDA_ViewlibFrame::ReCreateListLib()
 /******************************************/
 {
-    const wxChar** ListNames, ** names;
     int            ii;
+    LibraryStruct* Lib;
     bool           found = FALSE;
 
     if( m_LibList == NULL )
         return;
 
-    ListNames = GetLibNames();
-
     m_LibList->Clear();
-    for( names = ListNames, ii = 0; *names != NULL; names++, ii++ )
+    for( ii = 0, Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext, ii++ )
     {
-        m_LibList->Append( *names );
-        if( g_CurrentViewLibraryName.Cmp( *names ) == 0 )
+        m_LibList->Append(Lib->m_Name);
+        if( g_CurrentViewLibraryName.Cmp( Lib->m_Name ) == 0 )
         {
             m_LibList->SetSelection( ii, TRUE );
             found = TRUE;
         }
     }
 
-    free( ListNames );
-
-    /* Clear current library because it can be deleted after a config change
+    /* If not found, clear current library selection because it can be deleted after a config change
      */
     if( !found )
     {
@@ -444,7 +440,7 @@ void WinEDA_ViewlibFrame::LoadSettings( )
 
     cfg->Read( LIBLIST_WIDTH_KEY, &m_LibListSize.x );
     cfg->Read( CMPLIST_WIDTH_KEY, &m_CmpListSize.x );
-    
+
     // set parameters to a resonnable value
     if ( m_LibListSize.x > m_FrameSize.x/2 )
         m_LibListSize.x = m_FrameSize.x/2;

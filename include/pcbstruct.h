@@ -13,7 +13,7 @@
 #define ENTETE_LIBRAIRIE "PCBNEW-LibModule-V1"
 #define ENTETE_LIBDOC    "PCBNEW-LibDoc----V1"
 #define L_ENTETE_LIB     18
-#define EXT_DOC          wxT( ".mdc" )
+#define EXT_DOC          wxT( "mdc" )
 
 
 /* Bits indicateurs du membre .Status, pour pistes, modules... */
