@@ -7,7 +7,13 @@ email address.
 2009-apr-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++eeschema:
-    Viewlib: listboxes for lib or component selection are now resizable
+    - Viewlib: listboxes for lib or component selection are now resizable
+    - library cache name changed from <root_name>.cache.lib to <root_name>-cache.lib
+    Needed by the new code using wxFileName.
+    When wxFileName calculate the filename, it returns <root_name>,
+    and the old code returns <root_name>.cache
+    So to avoid problems or ugly code, the lib cache name is now <root_name>-cache
+    Old cache is used if the lib cache with the new name is not found.
 
 
 2009-apr-07 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
