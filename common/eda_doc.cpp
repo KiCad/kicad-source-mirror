@@ -78,13 +78,13 @@ static const wxFileTypeInfo EDAfallbacks[] =
  * @param aDocName = filename of file to open (Full filename or short filename)
  * @param aPaths = a wxPathList to explore.
  *              if NULL or aDocName is a full filename, aPath is not used.
-*/ 
-bool    GetAssociatedDocument( wxFrame* aFrame, 
+*/
+bool    GetAssociatedDocument( wxFrame* aFrame,
                         const wxString& aDocName,
                         const wxPathList* aPaths)
 
 {
-    wxString fullfilename, file_ext;
+    wxString docname, fullfilename, file_ext;
     wxString msg;
     wxString command;
     bool     success = FALSE;
@@ -101,6 +101,14 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
         }
     }
 
+    docname = aDocName;
+    #ifdef __WINDOWS__
+    docname.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
+#else
+    docname.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+#endif
+
+
     /* Compute the full file name */
     if( wxIsAbsolutePath( aDocName ) || aPaths == NULL)
         fullfilename = aDocName;
@@ -108,12 +116,6 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
     {
         fullfilename = aPaths->FindValidPath( aDocName );
     }
-
-#ifdef __WINDOWS__
-    fullfilename.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
-#else
-    fullfilename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-#endif
 
     wxString mask( wxT( "*" ) ), extension;
 

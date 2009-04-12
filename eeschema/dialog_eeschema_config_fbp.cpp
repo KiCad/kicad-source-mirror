@@ -124,15 +124,29 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	wxStaticBoxSizer* sbLibPathSizer;
-	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Default library file path:") ), wxHORIZONTAL );
+	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries Files Main Default  Path:") ), wxVERTICAL );
+	
+	wxBoxSizer* bUserLibPathSizer;
+	bUserLibPathSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_LibDirCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LibDirCtrl->SetToolTip( _("Default path to search libraries which have no absolute path in name,\nor a name which does not start by ./ or ../\nIf void, the default path is kicad/share/library") );
 	
-	sbLibPathSizer->Add( m_LibDirCtrl, 1, wxALL, 5 );
+	bUserLibPathSizer->Add( m_LibDirCtrl, 1, wxALL, 5 );
 	
 	m_buttonBrowse = new wxButton( this, ID_LIB_PATH_SEL, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbLibPathSizer->Add( m_buttonBrowse, 0, wxALL, 5 );
+	bUserLibPathSizer->Add( m_buttonBrowse, 0, wxALL, 5 );
+	
+	sbLibPathSizer->Add( bUserLibPathSizer, 1, wxEXPAND, 5 );
+	
+	m_staticTextcurrenpaths = new wxStaticText( this, wxID_ANY, _("Current Libraries Full Paths in Use:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextcurrenpaths->Wrap( -1 );
+	sbLibPathSizer->Add( m_staticTextcurrenpaths, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
+	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
+	
+	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	bMainSizer->Add( sbLibPathSizer, 0, wxEXPAND, 5 );
 	

@@ -96,7 +96,7 @@ bool WinEDA_App::OnInit()
     wxFileName fn;
     WinEDA_PcbFrame* frame = NULL;
 
-    InitEDA_Appl( wxT( "PCBnew" ) );
+    InitEDA_Appl( wxT( "PCBnew" ), APP_TYPE_PCBNEW );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

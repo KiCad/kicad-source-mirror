@@ -148,7 +148,7 @@ bool WinEDA_App::OnInit()
 
     g_DebugLevel = 0;   // Debug level */
 
-    InitEDA_Appl( wxT( "EESchema" ) );
+    InitEDA_Appl( wxT( "EESchema" ), APP_TYPE_EESCHEMA );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

@@ -369,7 +369,7 @@ bool WinEDA_App::OnInit()
 {
     WinEDA_MainFrame* frame;
 
-    InitEDA_Appl( wxT( "KiCad" ) );
+    InitEDA_Appl( wxT( "KiCad" ), APP_TYPE_KICAD );
 
     /* init kicad */
     GetSettings();                  // read current setup

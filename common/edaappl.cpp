@@ -258,14 +258,20 @@ WinEDA_App::~WinEDA_App()
 }
 
 
-/**
- * TODO brief
+/** Function InitEDA_Appl
+ * initialise some general parameters
+ *  - Default paths (help, libs, bin)and configuration flies names
+ *  - Language and locale
+ *  - fonts
+ * @param aName : used as paths in configuration files
+ * @param aId = flag : APP_TYPE_EESCHEMA, APP_TYPE_PCBNEW..
+ *    used to choose what default library path must be used
  */
-void WinEDA_App::InitEDA_Appl( const wxString& name )
+void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
 {
     wxString EnvLang;
-
-    m_Checker = new wxSingleInstanceChecker( name.Lower() + wxT( "-" ) +
+    m_Id = aId;
+    m_Checker = new wxSingleInstanceChecker( aName.Lower() + wxT( "-" ) +
                                              wxGetUserId() );
 
     /* Init kicad environment
@@ -283,17 +289,17 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
 /* Prepare On Line Help. Use only lower case for help filenames, in order to
  * avoid problems with upper/lower case filenames under windows and unix */
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
-    m_HelpFileName = name.Lower() + wxT( ".html" );
+    m_HelpFileName = aName.Lower() + wxT( ".html" );
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
-    m_HelpFileName = name.Lower() + wxT( ".pdf" );
+    m_HelpFileName = aName.Lower() + wxT( ".pdf" );
 #else
     #error Help files format not defined
 #endif
 
     /* Init parameters for configuration */
     SetVendorName( wxT( "kicad" ) );
-    SetAppName( name.Lower() );
-    SetTitle( name );
+    SetAppName( aName.Lower() );
+    SetTitle( aName );
     m_EDA_Config = new wxConfig( );
     wxASSERT( m_EDA_Config != NULL );
     m_EDA_CommonConfig = new wxConfig( CommonConfigPath );
@@ -320,7 +326,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& name )
     g_FixedFont = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN,
                               wxNORMAL, wxNORMAL );
 
-    /* TODO installation des gestionnaires de visu d'images (pour help) TODO*/
+    /* Install some image handlers, mainly for help */
     wxImage::AddHandler( new wxPNGHandler );
     wxImage::AddHandler( new wxGIFHandler );
     wxImage::AddHandler( new wxJPEGHandler );
@@ -478,6 +484,8 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     size_t     i;
     wxString   path = m_BinDir;
 
+    m_searchPaths.Clear();
+
 #ifdef __WINDOWS__
     /* m_BinDir path is in unix notation.
      * But wxFileName expect (to work fine) native notation
@@ -528,31 +536,34 @@ void WinEDA_App::SetDefaultSearchPaths( void )
         }
         else
         {
-            /* Add schematic library file path to search path list. */
             fn.Clear();
             fn.SetPath( m_searchPaths[i] );
-            fn.AppendDir( wxT( "library") );
-
-            if( fn.IsDirReadable() )
+            /* Add schematic library file path to search path list.
+            * we must add <kicad path>/library and <kicad path>/library/doc
+            */
+            if ( m_Id == APP_TYPE_EESCHEMA )
             {
-                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
-                            fn.GetPath().c_str() );
-                m_libSearchPaths.Add( fn.GetPath() );
-            }
+                fn.AppendDir( wxT( "library") );
+                if( fn.IsDirReadable() )
+                {
+                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                                fn.GetPath().c_str() );
+                    m_libSearchPaths.Add( fn.GetPath() );
+                }
 
-            /* Add schematic doc file path (library/doc)to search path list. */
-            fn.RemoveLastDir();
-            fn.AppendDir( wxT( "doc") );
-
-            if( fn.IsDirReadable() )
-            {
-                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
-                            fn.GetPath().c_str() );
-                m_libSearchPaths.Add( fn.GetPath() );
+                /* Add schematic doc file path (library/doc)to search path list. */
+                fn.AppendDir( wxT( "doc") );
+                if( fn.IsDirReadable() )
+                {
+                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                                fn.GetPath().c_str() );
+                    m_libSearchPaths.Add( fn.GetPath() );
+                }
+                fn.RemoveLastDir();
+                fn.RemoveLastDir(); // point to <kicad path>
             }
 
             /* Add kicad template file path to search path list. */
-            fn.RemoveLastDir();
             fn.AppendDir( wxT( "template" ) );
 
             if( fn.IsDirReadable() )
@@ -561,26 +572,29 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                             fn.GetPath().c_str() );
                 m_libSearchPaths.Add( fn.GetPath() );
             }
+            fn.RemoveLastDir();
 
             /* Add PCB library file path to search path list. */
-            fn.RemoveLastDir();
-            fn.AppendDir( wxT( "modules" ) );
-
-            if( fn.IsDirReadable() )
+            if ( (m_Id == APP_TYPE_PCBNEW) ||  (m_Id == APP_TYPE_CVPCB) )
             {
-                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
-                            fn.GetPath().c_str() );
-                m_libSearchPaths.Add( fn.GetPath() );
-            }
+                fn.AppendDir( wxT( "modules" ) );
 
-            /* Add 3D module library file path to search path list. */
-            fn.AppendDir( wxT( "packages3d" ) );
+                if( fn.IsDirReadable() )
+                {
+                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                                fn.GetPath().c_str() );
+                    m_libSearchPaths.Add( fn.GetPath() );
+                }
 
-            if( fn.IsDirReadable() )
-            {
-                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
-                            fn.GetPath().c_str() );
-                m_libSearchPaths.Add( fn.GetPath() );
+                /* Add 3D module library file path to search path list. */
+                fn.AppendDir( wxT( "packages3d" ) );
+
+                if( fn.IsDirReadable() )
+                {
+                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                                fn.GetPath().c_str() );
+                    m_libSearchPaths.Add( fn.GetPath() );
+                }
             }
         }
     }

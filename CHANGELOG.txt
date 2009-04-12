@@ -4,6 +4,23 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-apr-12 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++eeschema:
+    Default libraries path are now differents for pcbnew and eeschema (as it do)
+    Fixed: bad library search path for schematic component docs (docs were not found)
+    Added: display actual lib paths in eeschema lib config dialog.
+
+    These next fix give the same behavior than "old" version
+    Use relative paths in libraries and doc filenames when possible
+    i.e when a file is found in a sub path in a default path
+    (very important for Windows/linux/mac compatibility of projects and their configs)
+
+    TODO: allows user to add paths in list. Currently the user path for lib is broken
+    (but the new code could allow the user to add more than one user path)
+
+    TODO: do the same for pcbnew and cvpcb
+
 2009-apr-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++eeschema:

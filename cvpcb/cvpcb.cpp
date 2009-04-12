@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
+#include "wxstruct.h"
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -64,7 +65,7 @@ bool WinEDA_App::OnInit()
     wxString           currCWD = wxGetCwd();
     WinEDA_CvpcbFrame* frame   = NULL;
 
-    InitEDA_Appl( wxT( "CVpcb" ) );
+    InitEDA_Appl( wxT( "CVpcb" ), APP_TYPE_CVPCB );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

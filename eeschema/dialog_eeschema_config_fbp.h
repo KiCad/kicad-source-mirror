@@ -62,6 +62,8 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxStaticLine* m_staticline1;
 		wxTextCtrl* m_LibDirCtrl;
 		wxButton* m_buttonBrowse;
+		wxStaticText* m_staticTextcurrenpaths;
+		wxListBox* m_DefaultLibraryPathslistBox;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
@@ -74,7 +76,7 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		
 	
 	public:
-		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,400 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,445 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EESCHEMA_CONFIG_FBP();
 	
 };

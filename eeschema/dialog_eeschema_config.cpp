@@ -54,9 +54,9 @@ public:
 void WinEDA_SchematicFrame::InstallConfigFrame( const wxPoint& pos )
 /******************************************************************/
 {
-    DIALOG_EESCHEMA_CONFIG* CfgFrame = new DIALOG_EESCHEMA_CONFIG( this );
+    DIALOG_EESCHEMA_CONFIG CfgFrame( this );
 
-    CfgFrame->ShowModal(); CfgFrame->Destroy();
+    CfgFrame.ShowModal();
 }
 
 
@@ -126,6 +126,13 @@ void DIALOG_EESCHEMA_CONFIG::Init()
 
     m_ListLibr->InsertItems( g_LibName_List, 0 );
     m_LibDirCtrl->SetValue( g_UserLibDirBuffer );
+
+    // Display actual libraries paths:
+    wxPathList libpaths = wxGetApp().GetLibraryPathList();
+    for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
+    {
+        m_DefaultLibraryPathslistBox->Append( libpaths[ii]);
+    }
 }
 
 
@@ -148,6 +155,7 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
     if ( g_UserLibDirBuffer != m_LibDirCtrl->GetValue() )
     {
         g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
+        wxGetApp().SetDefaultSearchPaths( );
         m_LibListChanged = true;
     }
 
@@ -206,7 +214,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
  */
 {
     int        ii;
-    wxString   tmp;
+    wxString   libfilename;
     wxFileName fn;
 
     ii = m_ListLibr->GetSelection();
@@ -233,24 +241,38 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
         /* If the library path is already in the library search paths
          * list, just add the library name to the list.  Otherwise, add
-         * the library name with the full path. */
-        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) == wxNOT_FOUND )
-            tmp = fn.GetPathWithSep() + fn.GetName();
-        else
-            tmp = fn.GetName();
+         * the library name with the full or relative path.
+         * the relative path, when possible is preferable,
+         * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+         *
+        */
+        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
+            libfilename = fn.GetName();
+        else    // not in the default, : see if this file is in a subpath:
+        {
+            libfilename = fn.GetPathWithSep() + fn.GetName();
+            for ( unsigned kk = 0; kk < wxGetApp().GetLibraryPathList().GetCount(); kk ++ )
+            {
+                if( fn.MakeRelativeTo(wxGetApp().GetLibraryPathList()[kk] ) )
+                {
+                    libfilename = fn.GetPathWithSep() + fn.GetName();
+                    break;
+                }
+            }
+        }
 
         //Add or insert new library name, if not already in list
-        if( m_ListLibr->FindString( tmp, fn.IsCaseSensitive() ) == wxNOT_FOUND )
+        if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
             m_LibListChanged = TRUE;
             if( event.GetId() == ID_ADD_LIB )
-                m_ListLibr->Append( tmp );
+                m_ListLibr->Append( libfilename );
             else
-                m_ListLibr->Insert( tmp, ii++ );
+                m_ListLibr->Insert( libfilename, ii++ );
         }
         else
         {
-            wxString msg = wxT( "<" ) + tmp + wxT( "> : " ) +
+            wxString msg = wxT( "<" ) + libfilename + wxT( "> : " ) +
                 _( "Library already in use" );
             DisplayError( this, msg );
         }

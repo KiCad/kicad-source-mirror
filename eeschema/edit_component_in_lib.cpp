@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -198,7 +199,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
     PanelFpFilterBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxButton* Button = new                  wxButton( m_PanelFootprintFilter,
-              ID_ADD_FOOTPRINT_FILTER, _(
+                                                     ID_ADD_FOOTPRINT_FILTER, _(
                                                          "Add" ) );
 
     Button->SetForegroundColour( *wxBLUE );
@@ -380,8 +381,8 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
     }
     else
     {
-        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC]          = m_Doc->GetValue();
-        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_KEYWORD]      = m_Keywords->GetValue();
+        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC]     = m_Doc->GetValue();
+        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_KEYWORD] = m_Keywords->GetValue();
         CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC_FILENAME] = m_Docfile->GetValue();
     }
 
@@ -391,7 +392,8 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
     for( ii = 0; ii < jj; ii++ )
     {
         if( LocateAlias( CurrentLibEntry->m_AliasList, m_PartAliasList->GetString( ii ) ) < 0 )
-        {                                                           // new alias must be created
+        {
+            // new alias must be created
             CurrentLibEntry->m_AliasList.Add( m_PartAliasList->GetString( ii ) );
             CurrentLibEntry->m_AliasList.Add( wxEmptyString );      // Add a void doc string
             CurrentLibEntry->m_AliasList.Add( wxEmptyString );      // Add a void keyword list string
@@ -528,7 +530,7 @@ void WinEDA_PartPropertiesFrame::AddAliasOfPart( wxCommandEvent& WXUNUSED (event
     if( CurrentLibEntry == NULL )
         return;
 
-    if( Get_Message( _( "New alias:" ), _("Component Alias"), Line, this ) != 0 )
+    if( Get_Message( _( "New alias:" ), _( "Component Alias" ), Line, this ) != 0 )
         return;
 
     Line.Replace( wxT( " " ), wxT( "_" ) );
@@ -706,7 +708,7 @@ bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
                 NextDrawItem = CopyDrawEntryStruct( this, DrawItem );
                 NextDrawItem->SetNext( CurrentLibEntry->m_Drawings );
                 CurrentLibEntry->m_Drawings = NextDrawItem;
-                NextDrawItem->m_Convert = 2;
+                NextDrawItem->m_Convert     = 2;
             }
         }
     }
@@ -756,7 +758,7 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
 
     docpath += wxT( "doc" );
     docpath += STRING_DIR_SEP;
-    mask = wxT( "*" );
+    mask     = wxT( "*" );
     FullFileName = EDA_FileSelector( _( "Doc Files" ),
                                      docpath,       /* Chemin par defaut */
                                      wxEmptyString, /* nom fichier par defaut */
@@ -770,7 +772,35 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
         return;
 
     // Suppression du chemin par defaut pour le fichier de doc:
-    filename = MakeReducedFileName( FullFileName, docpath, wxEmptyString );
+
+    /* If the library path is already in the library search paths
+     * list, just add the library name to the list.  Otherwise, add
+     * the library name with the full or relative path.
+     * the relative path, when possible is preferable,
+     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+     *
+     */
+    wxFileName fn = FullFileName;
+    int        pathlen = -1;                                                    // path len, used to find the better subpath within defualts paths
+    if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
+        filename = fn.GetName();
+    else                                                                        // not in the default, : see if this file is in a subpath:
+    {
+        filename = fn.GetPathWithSep() + fn.GetName();
+        for( unsigned kk = 0; kk < wxGetApp().GetLibraryPathList().GetCount(); kk++ )
+        {
+            if( fn.MakeRelativeTo( wxGetApp().GetLibraryPathList()[kk] ) )
+            {
+                if( pathlen < 0                             // a subpath is found
+                   || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
+                {
+                    filename = fn.GetPathWithSep() + fn.GetName();
+                    pathlen  = fn.GetPath().Len();
+                }
+                fn = FullFileName;  //Try to find a better subpath
+            }
+        }
+    }
     m_Docfile->SetValue( filename );
 }
 
@@ -802,7 +832,7 @@ void WinEDA_PartPropertiesFrame::AddFootprintFilter( wxCommandEvent& WXUNUSED (e
     if( CurrentLibEntry == NULL )
         return;
 
-    if( Get_Message( _( "New FootprintFilter:" ), _("Footprint Filter"), Line, this ) != 0 )
+    if( Get_Message( _( "New FootprintFilter:" ), _( "Footprint Filter" ), Line, this ) != 0 )
         return;
 
     Line.Replace( wxT( " " ), wxT( "_" ) );

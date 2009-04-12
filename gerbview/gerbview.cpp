@@ -39,7 +39,7 @@ bool WinEDA_App::OnInit()
     wxFileName fn;
     WinEDA_GerberFrame* frame = NULL;
 
-    InitEDA_Appl( wxT( "GerbView" ) );
+    InitEDA_Appl( wxT( "GerbView" ), APP_TYPE_GERBVIEW );
 
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;

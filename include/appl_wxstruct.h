@@ -15,6 +15,14 @@
 #include <wx/config.h>
 #include <wx/filename.h>
 
+enum id_app_type {
+    APP_TYPE_UNKOWN,
+    APP_TYPE_EESCHEMA,
+    APP_TYPE_PCBNEW,
+    APP_TYPE_CVPCB,
+    APP_TYPE_GERBVIEW,
+    APP_TYPE_KICAD,
+};
 
 class wxConfigBase;
 class wxFileConfig;
@@ -30,6 +38,9 @@ class wxHtmlHelpController;
 class WinEDA_App : public wxApp
 {
 public:
+    id_app_type              m_Id;              /* Used mainly to handle default paths libs
+                                                 *  m_Id = APP_TYPE_EESCHEMA, APP_TYPE_PCBNEW ...
+                                                 */
     wxString                 m_Project;
     wxSingleInstanceChecker* m_Checker;
 
@@ -50,30 +61,41 @@ public:
                                            * variable d'environnement KICAD,
                                            * typiquement /usr/local/kicad ou
                                            * c:\kicad */
-    bool                     m_Env_Defined; // TRUE si variable d'environnement KICAD definie
+    bool          m_Env_Defined;                        // TRUE si variable d'environnement KICAD definie
 
-    wxLocale*                m_Locale;      // Gestion de la localisation
-    int                      m_LanguageId;  // indicateur de choix du langage ( 0 = defaut)
-    wxString                 m_PdfBrowser;     // Name of the selected browser, for browsing pdf datasheets
-    bool                     m_PdfBrowserIsDefault;  // True if the pdf browser is the default (m_PdfBrowser not used)
-    wxPathList               m_searchPaths;
-    wxFileHistory            m_fileHistory;
+    wxLocale*     m_Locale;                             // Gestion de la localisation
+    int           m_LanguageId;                         // indicateur de choix du langage ( 0 = defaut)
+    wxString      m_PdfBrowser;                         // Name of the selected browser, for browsing pdf datasheets
+    bool          m_PdfBrowserIsDefault;                // True if the pdf browser is the default (m_PdfBrowser not used)
+    wxPathList    m_searchPaths;
+    wxFileHistory m_fileHistory;
 
 protected:
-    wxString                 m_Title;
-    wxPathList               m_libSearchPaths;
-    wxFileName               m_projectFileName;
+    wxString      m_Title;
+    wxPathList    m_libSearchPaths;
+    wxFileName    m_projectFileName;
 
 public:
     WinEDA_App();
     ~WinEDA_App();
-    bool    OnInit();
-    int     OnRun();
+    bool      OnInit();
+    int       OnRun();
 
-    bool    SetBinDir();
-    void    SetDefaultSearchPaths( void );
-    void    InitEDA_Appl( const wxString& name );
-    bool    SetLanguage( bool first_time = FALSE );
+    bool      SetBinDir();
+    void      SetDefaultSearchPaths( void );
+
+    /** Function InitEDA_Appl
+     * initialise some general parameters
+     *  - Default paths (help, libs, bin)and configuration flies names
+     *  - Language and locale
+     *  - fonts
+     * @param aName : used as paths in configuration files
+     * @param aId = flag : LIBRARY_TYPE_EESCHEMA or LIBRARY_TYPE_PCBNEW
+     *    used to choose what default library path must be used
+     */
+    void      InitEDA_Appl( const wxString& aName, id_app_type aId = APP_TYPE_UNKOWN);
+
+    bool      SetLanguage( bool first_time = FALSE );
 
     /** Function AddMenuLanguageList
      *
@@ -85,47 +107,48 @@ public:
      *
      * @return  the sub menu Language list
      */
-    void    AddMenuLanguageList( wxMenu* MasterMenu );
-    void    SetLanguageIdentifier( int menu_id );
-    void    SetLanguagePath( void );
-    void    InitOnLineHelp();
+    void      AddMenuLanguageList( wxMenu* MasterMenu );
+    void      SetLanguageIdentifier( int menu_id );
+    void      SetLanguagePath( void );
+    void      InitOnLineHelp();
 
     // Sauvegarde de configurations et options:
-    void    GetSettings();
-    void    SaveSettings();
+    void      GetSettings();
+    void      SaveSettings();
 
-    void    WriteProjectConfig( const wxString& local_config_filename,
-                                const wxString& GroupName,
-                                PARAM_CFG_BASE** List );
+    void      WriteProjectConfig( const wxString&  local_config_filename,
+                                  const wxString&  GroupName,
+                                  PARAM_CFG_BASE** List );
+
     /** Function SaveCurrentSetupValues()
      * Save the current setup values in m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to true
      * @param aList = array of PARAM_CFG_BASE pointers
-    */
-    void SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
+     */
+    void      SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
 
     /** Function ReadCurrentSetupValues()
      * Raed the current setup values previously saved, from m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to true
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
+    void      ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
 
-    bool    ReadProjectConfig( const wxString& local_config_filename,
-                               const wxString& GroupName, PARAM_CFG_BASE** List,
-                               bool Load_Only_if_New );
-    bool    ReCreatePrjConfig( const wxString& local_config_filename,
-                               const wxString& GroupName,
-                               bool ForceUseLocalConfig );
+    bool      ReadProjectConfig( const wxString& local_config_filename,
+                                 const wxString& GroupName, PARAM_CFG_BASE** List,
+                                 bool Load_Only_if_New );
+    bool      ReCreatePrjConfig( const wxString& local_config_filename,
+                                 const wxString& GroupName,
+                                 bool            ForceUseLocalConfig );
 
-    void    ReadPdfBrowserInfos();
-    void    WritePdfBrowserInfos();
+    void      ReadPdfBrowserInfos();
+    void      WritePdfBrowserInfos();
 
-    wxString FindFileInSearchPaths( const wxString& filename,
-                                    const wxArrayString* subdirs = NULL );
+    wxString  FindFileInSearchPaths( const wxString&      filename,
+                                     const wxArrayString* subdirs = NULL );
 
-    wxString GetHelpFile( void );
-    wxString GetLibraryFile( const wxString& filename );
+    wxString  GetHelpFile( void );
+    wxString  GetLibraryFile( const wxString& filename );
     wxString& GetEditorName();
 
     const wxString& GetTitle() { return m_Title; }
@@ -133,10 +156,13 @@ public:
 
     wxPathList& GetLibraryPathList() { return m_libSearchPaths; }
     wxString FindLibraryPath( const wxString& fileName );
+
     wxString FindLibraryPath( const wxFileName& fileName )
     {
         return FindLibraryPath( fileName.GetFullPath() );
     }
+
+
     void RemoveLibraryPath( const wxString& path );
     void InsertLibraryPath( const wxString& path, size_t index );
 };
@@ -146,6 +172,6 @@ public:
  * of the application pointer all over the place or worse yet in a global
  * variable.
  */
-DECLARE_APP(WinEDA_App);
+DECLARE_APP( WinEDA_App );
 
 #endif  /* APPL_WXSTRUCT_H */
