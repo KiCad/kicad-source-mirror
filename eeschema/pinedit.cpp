@@ -502,8 +502,7 @@ void WinEDA_PinPropertiesFrame::SetPinNum( const wxString& newnum, int newsize )
             continue;
         if( newsize >= 0 )
             Pin->m_PinNumSize = newsize;
-        if( newnum )
-            Pin->m_PinNum = CurrentPin->m_PinNum;
+        Pin->m_PinNum = CurrentPin->m_PinNum;
     }
 }
 

@@ -375,8 +375,7 @@ bool WinEDA_App::OnInit()
     GetSettings();                  // read current setup
 
     /* Make nameless project translatable */
-    wxFileName namelessProject( wxGetCwd(), _( "noname" ),
-                                + ProjectFileExtension );
+    wxFileName namelessProject( wxGetCwd(), _( "noname" ), ProjectFileExtension );
 
     frame = new WinEDA_MainFrame( NULL, wxT( "KiCad" ),
                                   wxPoint( 30, 20 ), wxSize( 600, 400 ) );

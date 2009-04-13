@@ -135,9 +135,12 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
         NULL
     };
 
-    wxString cmd = wxT( "-O " ) + zip.GetPathSeparator() + zip.GetFullName();
+    wxString cmd = wxT( "-O " );
+    cmd += zip.GetPathSeparator() + zip.GetFullName();
 
-    wxDir dir( wxT( "." ) + zip.GetPathSeparator() );
+    wxString currdirname = wxT( "." );
+    currdirname += zip.GetPathSeparator();
+    wxDir dir( currdirname );
 
     if( !dir.IsOpened() )
         return;
@@ -152,7 +155,8 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
         {
             wxFileName fn( f );
 
-            cmd += wxT( " ." ) + zip.GetPathSeparator() + fn.GetFullName();
+            cmd += wxT( " ." );
+            cmd += zip.GetPathSeparator() + fn.GetFullName();
             PrintMsg( _( "Compress file " ) + fn.GetFullName() + wxT( "\n" ) );
             cont = dir.GetNext( &f );
         }

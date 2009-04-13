@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -18,6 +19,12 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+
+#if wxCHECK_VERSION( 2, 9, 0 )
+// Do nothing, because wxWidgets 3 supports the SVG format
+// previously, was a contribution library, not included in wxWidgets base
+
+#else
 
 #include "dcsvg.h"
 
@@ -979,3 +986,5 @@ void wxSVGFileDC::write( const wxString& s )
 #pragma warn .rch
 #pragma warn .ccc
 #endif
+
+#endif // wxCHECK_VERSION

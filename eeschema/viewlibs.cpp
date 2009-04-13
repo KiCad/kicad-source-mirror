@@ -312,12 +312,9 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = GetScreen();
 
-    if( *g_CurrentViewComponentName )
-    {
-        LibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
-                                g_CurrentViewLibraryName, FIND_ALIAS );
-        ViewCmpEntry = (LibCmpEntry*) LibEntry;
-    }
+    LibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
+                            g_CurrentViewLibraryName, FIND_ALIAS );
+    ViewCmpEntry = (LibCmpEntry*) LibEntry;
 
     /* Forcage de la reinit de la brosse et plume courante */
     GRResetPenAndBrush( DC );

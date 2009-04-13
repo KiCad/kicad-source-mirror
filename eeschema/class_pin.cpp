@@ -505,7 +505,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
         if( (orient == PIN_LEFT) || (orient == PIN_RIGHT) )
         {
             // It is an horizontal line
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 if( orient == PIN_RIGHT )
                 {
@@ -545,7 +545,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
         else            /* Its a vertical line. */
         {
             // Text is drawn from bottom to top (i.e. to negative value for Y axis)
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 if( orient == PIN_DOWN )
                 {
@@ -588,7 +588,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
         if( (orient == PIN_LEFT) || (orient == PIN_RIGHT) )
         {
             /* Its an horizontal line. */
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
                 DrawGraphicText( panel, DC, wxPoint( x,
@@ -612,7 +612,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
         }
         else     /* Its a vertical line. */
         {
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
                 DrawGraphicText( panel, DC, wxPoint( x1 - TXTMARGE,
@@ -701,7 +701,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
     {
         if( (orient == PIN_LEFT) || (orient == PIN_RIGHT) ) /* Its an horizontal line. */
         {
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 if( orient == PIN_RIGHT )
                 {
@@ -740,7 +740,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
         }
         else         /* Its a vertical line. */
         {
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 if( orient == PIN_DOWN )
                 {
@@ -784,7 +784,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
         if( (orient == PIN_LEFT) || (orient == PIN_RIGHT) )
         {
             /* Its an horizontal line. */
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
                 PlotGraphicText( g_PlotFormat, wxPoint( x,
@@ -807,7 +807,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
         }
         else     /* Its a vertical line. */
         {
-            if( m_PinName && DrawPinName )
+            if( DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
                 PlotGraphicText( g_PlotFormat, wxPoint( x1 - TXTMARGE,
@@ -937,7 +937,8 @@ void LibDrawPin::SetPinNumFromString( wxString& buffer )
         len = 4;
     for( ii = 0; ii < len; ii++ )
     {
-        ascii_buf[ii] = buffer.GetChar( ii ) & 0xFF;
+        ascii_buf[ii] = buffer.GetChar( ii );
+        ascii_buf[ii] &= 0xFF;
     }
 
     strncpy( (char*) &m_PinNum, ascii_buf, 4 );

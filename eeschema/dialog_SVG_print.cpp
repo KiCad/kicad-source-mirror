@@ -235,30 +235,22 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName, BASE_SCREEN* scre
 
     wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
-    if( !dc.Ok() )
-    {
-        DisplayError( this, wxT( "SVGprint error: wxSVGFileDC not OK" ) );
-        success = FALSE;
-    }
-    else
-    {
-        EDA_Rect tmp = panel->m_ClipBox;
-        GRResetPenAndBrush( &dc );
-        g_PlotLine_Width =  ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-        SetPenMinWidth( g_PlotLine_Width );
-        GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
+    EDA_Rect tmp = panel->m_ClipBox;
+    GRResetPenAndBrush( &dc );
+    g_PlotLine_Width =  ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    SetPenMinWidth( g_PlotLine_Width );
+    GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
 
 
-        panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
-        panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
+    panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
-        screen->m_IsPrinting = true;
-        SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-        panel->PrintPage( &dc, aPrint_Sheet_Ref, 1, false );
-        SetLocaleTo_Default( );    // revert to the current  locale
-        screen->m_IsPrinting = false;
-        panel->m_ClipBox = tmp;
-    }
+    screen->m_IsPrinting = true;
+    SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+    panel->PrintPage( &dc, aPrint_Sheet_Ref, 1, false );
+    SetLocaleTo_Default( );    // revert to the current  locale
+    screen->m_IsPrinting = false;
+    panel->m_ClipBox = tmp;
 
 
     GRForceBlackPen( FALSE );

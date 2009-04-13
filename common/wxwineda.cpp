@@ -21,7 +21,7 @@ WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
                                     const wxSize& Size )
 {
     m_Modify = FALSE;
-    if( TextToEdit )
+    if( ! TextToEdit.IsEmpty() )
         m_NewText = TextToEdit;
 
     m_Title = new wxStaticText( parent, -1, Title );

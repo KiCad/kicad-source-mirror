@@ -136,7 +136,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     fnFront = GetScreen()->m_FileName;
     frontLayerName = GetBoard()->GetLayerName( CMP_N );
-    fnFront.SetName( fnFront.GetName() + frontLayerName.GetData() );
+    fnFront.SetName( fnFront.GetName() + frontLayerName );
     fnFront.SetExt( wxT( "pos") );
 
     fpFront = wxFopen( fnFront.GetFullPath(), wxT( "wt" ) );
@@ -151,7 +151,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     {
         fnBack = GetScreen()->m_FileName;
         backLayerName = GetBoard()->GetLayerName( COPPER_LAYER_N );
-        fnBack.SetName( fnBack.GetName() + backLayerName.GetData() );
+        fnBack.SetName( fnBack.GetName() + backLayerName );
         fnBack.SetExt( wxT( "pos" ) );
 
         fpBack = wxFopen( fnBack.GetFullPath(), wxT( "wt" ) );

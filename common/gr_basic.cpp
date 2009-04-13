@@ -1494,26 +1494,6 @@ void GRSetTextFgColor( wxDC* DC, wxFont*, int Color )
 }
 
 
-/*****************************************************************************/
-void GRGetTextExtent( wxDC* DC, const wxChar* Text, long* width, long* height )
-/*****************************************************************************/
-
-/* Return the size of the text
- */
-{
-    long w = 0, h = 0;
-
-    if( Text )
-    {
-        DC->GetTextExtent( Text, &w, &h );
-    }
-    if( width )
-        *width = w;
-    if( height )
-        *height = h;
-}
-
-
 /********************************/
 void GRResetTextFgColor( wxDC* DC )
 /********************************/

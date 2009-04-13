@@ -333,7 +333,7 @@ void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    if( dlg.GetPath() && wxGetApp().GetEditorName() )
+    if( ! dlg.GetPath().IsEmpty() &&  ! wxGetApp().GetEditorName().IsEmpty() )
         ExecuteFile( this, wxGetApp().GetEditorName(), dlg.GetPath() );
 }
 

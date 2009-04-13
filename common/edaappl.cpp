@@ -698,6 +698,10 @@ void WinEDA_App::SaveSettings()
     /* Sdt font settings */
     m_EDA_Config->Write( wxT( "SdtFontSize" ), g_StdFontPointSize );
     m_EDA_Config->Write( wxT( "SdtFontType" ), g_StdFont->GetFaceName() );
+
+#if wxCHECK_VERSION( 2, 9, 0 )
+#warning under wxWidgets 3.0, see how to replace the next lines
+#else
     m_EDA_Config->Write( wxT( "SdtFontStyle" ), g_StdFont->GetStyle() );
     m_EDA_Config->Write( wxT( "SdtFontWeight" ), g_StdFont->GetWeight() );
 
@@ -717,6 +721,7 @@ void WinEDA_App::SaveSettings()
     m_EDA_Config->Write( wxT( "FixedFontSize" ), g_FixedFontPointSize );
     m_EDA_Config->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
     m_EDA_Config->Write( wxT( "WorkingDir" ), wxGetCwd() );
+#endif // wxCHECK_VERSION
 
     /* Save the file history list */
     m_fileHistory.Save( *m_EDA_Config );
@@ -857,9 +862,11 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
     menu = new wxMenu;
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
-        wxString label = s_Language_List[ii].m_DoNotTranslate ?
-                         s_Language_List[ii].m_Lang_Label :
-                         wxGetTranslation( s_Language_List[ii].m_Lang_Label );
+        wxString label;
+        if ( s_Language_List[ii].m_DoNotTranslate )
+            label = s_Language_List[ii].m_Lang_Label;
+        else
+            label = wxGetTranslation( s_Language_List[ii].m_Lang_Label );
 
         item = new wxMenuItem( menu,
                                s_Language_List[ii].m_KI_Lang_Identifier,

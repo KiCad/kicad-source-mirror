@@ -440,7 +440,7 @@ static void Extract_Parameters( wxArrayString& param_list, char* text )
  * last parameter is ) or ]
  */
 {
-    int      key;
+    char      key;
     wxString tmp;
 
     while( *text != 0 )

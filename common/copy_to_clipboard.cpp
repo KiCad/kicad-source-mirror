@@ -94,36 +94,28 @@ bool DrawPage( WinEDA_DrawPanel* panel )
 
     wxMetafileDC dc /*(wxT(""), DrawArea.GetWidth(), DrawArea.GetHeight())*/;
 
-    if( !dc.Ok() )
-    {
-        DisplayError( NULL, wxT( "CopyToClipboard: DrawPage error: wxMetafileDC not OK" ) );
-        success = FALSE;
-    }
-    else
-    {
-        EDA_Rect tmp = panel->m_ClipBox;
-        GRResetPenAndBrush( &dc );
-        GRForceBlackPen( s_PlotBlackAndWhite );
-        screen->m_IsPrinting = true;
-        dc.SetUserScale( scale, scale );
-        ClipboardSizeX = dc.MaxX() + 10;
-        ClipboardSizeY = dc.MaxY() + 10;
-        panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
-        panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    EDA_Rect tmp = panel->m_ClipBox;
+    GRResetPenAndBrush( &dc );
+    GRForceBlackPen( s_PlotBlackAndWhite );
+    screen->m_IsPrinting = true;
+    dc.SetUserScale( scale, scale );
+    ClipboardSizeX = dc.MaxX() + 10;
+    ClipboardSizeY = dc.MaxY() + 10;
+    panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
+    panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
-        if( DrawBlock )
-        {
-            dc.SetClippingRegion( DrawArea );
-        }
-        panel->PrintPage( &dc, Print_Sheet_Ref, -1, false );
-        screen->m_IsPrinting = false;
-        panel->m_ClipBox = tmp;
-        wxMetafile* mf = dc.Close();
-        if( mf )
-        {
-            success = mf->SetClipboard( ClipboardSizeX, ClipboardSizeY );
-            delete mf;
-        }
+    if( DrawBlock )
+    {
+        dc.SetClippingRegion( DrawArea );
+    }
+    panel->PrintPage( &dc, Print_Sheet_Ref, -1, false );
+    screen->m_IsPrinting = false;
+    panel->m_ClipBox = tmp;
+    wxMetafile* mf = dc.Close();
+    if( mf )
+    {
+        success = mf->SetClipboard( ClipboardSizeX, ClipboardSizeY );
+        delete mf;
     }
 
 

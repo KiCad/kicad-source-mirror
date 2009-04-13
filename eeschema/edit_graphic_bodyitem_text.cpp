@@ -140,8 +140,7 @@ wxString Line;
 
 
 
-void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC,
-                                         LibEDA_BaseStruct * DrawItem)
+void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC, LibEDA_BaseStruct * DrawItem)
 {
     int DrawMode = g_XorMode;
 
@@ -150,7 +149,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC,
         return;
 
 	/* Effacement ancien texte */
-	if( ((LibDrawText*)DrawItem)->m_Text && DC)
+	if( DC)
 		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
                               DrawItem, DrawMode);
 
@@ -162,7 +161,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC,
 	GetScreen()->SetModify();
 
 	/* Affichage nouveau texte */
-	if( ((LibDrawText*)DrawItem)->m_Text && DC)
+	if( DC )
 	{
 		if ( (DrawItem->m_Flags & IS_MOVED) == 0 )
 			DrawMode = GR_DEFAULT_DRAWMODE;

@@ -250,7 +250,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelDoc()
         msg_text = CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC];
     else
     {
-        if( CurrentLibEntry && CurrentLibEntry->m_Doc )
+        if( CurrentLibEntry )
             msg_text = CurrentLibEntry->m_Doc;
     }
     m_Doc->SetValue( msg_text );

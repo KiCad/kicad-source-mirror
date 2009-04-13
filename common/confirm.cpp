@@ -126,7 +126,7 @@ bool IsOK( wxWindow* parent, const wxString& text )
 /***********************************************************************/
 int Get_Message( const wxString& title,                // The question
                  const wxString& frame_caption,        // The frame caption
-                 wxString& buffer,                     // String input buffer
+                 wxString& buffer,                     // String input/return buffer
                  wxWindow* frame )
 /***********************************************************************/
 
@@ -140,13 +140,10 @@ int Get_Message( const wxString& title,                // The question
  *          != 0 if ESCAPE
  */
 {
-    wxString message, default_text;
-
-    if( buffer )
-        default_text = buffer;
+    wxString message;
 
     message = wxGetTextFromUser( title, frame_caption,
-                                 default_text, frame );
+                                 buffer, frame );
     if( !message.IsEmpty() )
     {
         message.Trim( FALSE );      // Remove blanks at beginning

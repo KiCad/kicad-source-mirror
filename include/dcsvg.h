@@ -1,3 +1,9 @@
+#if wxCHECK_VERSION( 2, 9, 0 )
+// Do nothing, because wxWidgets 3 supports the SVG format
+// previously, was a contribution library, not included in wxWidgets base
+#include "wx/dcsvg.h"
+#else
+
 #ifndef __DCSVG_H
 #define __DCSVG_H
 #include "wx/wfstream.h"
@@ -413,3 +419,5 @@ public:
 #pragma warn .ccc
 #endif
 #endif
+
+#endif // wxCHECK_VERSION

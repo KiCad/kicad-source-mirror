@@ -24,25 +24,25 @@
     <string name="target_wx_version">"2.6.4"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
 // Name:        %HEADER-FILENAME%
-// Purpose:     
+// Purpose:
 // Author:      %AUTHOR%
-// Modified by: 
+// Modified by:
 // Created:     %DATE%
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   %COPYRIGHT%
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 "</string>
     <string name="cpp_implementation_comment">"/////////////////////////////////////////////////////////////////////////////
 // Name:        %SOURCE-FILENAME%
-// Purpose:     
+// Purpose:
 // Author:      %AUTHOR%
-// Modified by: 
+// Modified by:
 // Created:     %DATE%
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   %COPYRIGHT%
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 "</string>
@@ -50,11 +50,11 @@
 // Name:        %SYMBOLS-FILENAME%
 // Purpose:     Symbols file
 // Author:      %AUTHOR%
-// Modified by: 
+// Modified by:
 // Created:     %DATE%
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   %COPYRIGHT%
-// Licence:     
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 "</string>
@@ -241,7 +241,7 @@
           <string name="proxy-Data class manager window">""</string>
           <string name="proxy-Texture">""</string>
           <string name="proxy-Texture style">"Tiled"</string>
-          <bool name="proxy-wxDEFAULT_DIALOG_STYLE">0</bool>
+          <bool name="proxy-wxDEFAULT_DIALOG_STYLE">1</bool>
           <bool name="proxy-wxCAPTION">1</bool>
           <bool name="proxy-wxRESIZE_BORDER">1</bool>
           <bool name="proxy-wxSYSTEM_MENU">1</bool>
@@ -250,7 +250,7 @@
           <bool name="proxy-wxCLOSE_BOX">1</bool>
           <bool name="proxy-wxMAXIMIZE_BOX">0</bool>
           <bool name="proxy-wxMINIMIZE_BOX">0</bool>
-          <bool name="proxy-wxDIALOG_MODAL">1</bool>
+          <bool name="proxy-wxDIALOG_MODAL">0</bool>
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>

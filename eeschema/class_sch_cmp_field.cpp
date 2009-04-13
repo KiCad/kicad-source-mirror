@@ -157,12 +157,14 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         /* For more than one part per package, we must add the part selection
          * A, B, ... or 1, 2, .. to the reference. */
         wxString fulltext = m_Text;
+        char part_id;
 #if defined(KICAD_GOST)
         fulltext.Append( '.');
-        fulltext.Append( '1' - 1 + DrawLibItem->m_Multi );
+        part_id = '1' - 1 + DrawLibItem->m_Multi;
 #else
-        fulltext.Append( 'A' - 1 + DrawLibItem->m_Multi );
+        part_id = 'A' - 1 + DrawLibItem->m_Multi;
 #endif
+        fulltext.Append( part_id );
 
         DrawGraphicText( panel, DC, pos, color, fulltext,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,

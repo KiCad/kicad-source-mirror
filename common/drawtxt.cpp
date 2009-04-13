@@ -41,7 +41,7 @@ static void DrawGraphicTextPline(
 	EDA_Colors aColor,
 	int aWidth,
 	bool sketch_mode,
-	int point_count, 
+	int point_count,
 	wxPoint *coord,
 	void (* aCallback) (int x0, int y0, int xf, int yf))
 {
@@ -298,20 +298,23 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 		    coord[1].x = overbar_x;
 		    coord[1].y = overbar_y;
 		    /* Plot the overbar segment */
-		    DrawGraphicTextPline(aPanel, aDC, aColor, aWidth, 
+		    DrawGraphicTextPline(aPanel, aDC, aColor, aWidth,
 			sketch_mode, 2, coord, aCallback);
 		}
 		continue; /* Skip ~ processing */
 	    }
 	}
+
+	AsciiCode = aText.GetChar(ptr+overbars);
+
 #if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-	AsciiCode = aText.GetChar(ptr+overbars) & 0x7FF;
+    AsciiCode &= 0x7FF;
 	if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
 	    AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
 	else
 	    AsciiCode = AsciiCode & 0xFF;
 #else
-        AsciiCode = aText.GetChar(ptr+overbars) & 0xFF;
+        AsciiCode &= 0xFF;
 #endif
         ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
                                                   *  du caractere a dessiner */
@@ -334,7 +337,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                 {
                     if( aWidth <= 1 )
                        aWidth = 0;
-		    DrawGraphicTextPline(aPanel, aDC, aColor, aWidth, 
+		    DrawGraphicTextPline(aPanel, aDC, aColor, aWidth,
 			sketch_mode, point_count, coord, aCallback);
                 }
                 plume = f_cod; point_count = 0;
@@ -386,7 +389,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 	coord[1].x = overbar_x;
 	coord[1].y = overbar_y;
 	/* Plot the overbar segment */
-	DrawGraphicTextPline(aPanel, aDC, aColor, aWidth, 
+	DrawGraphicTextPline(aPanel, aDC, aColor, aWidth,
 	    sketch_mode, 2, coord, aCallback);
     }
 }

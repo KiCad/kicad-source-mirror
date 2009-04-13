@@ -46,7 +46,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Import Component" ), m_LastLibImportPath,
                       wxEmptyString, CompLibFileWildcard,
-                      wxFD_OPEN | wxFILE_MUST_EXIST );
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
