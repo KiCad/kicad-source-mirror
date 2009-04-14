@@ -124,7 +124,7 @@ void WinEDA_ViewlibFrame::DisplayLibInfos()
     msg << wxT( " [" );
 
     if( Lib )
-        msg << g_CurrentViewLibraryName;
+        msg <<  Lib->m_FullFileName;
     else
         msg += _( "none selected" );
 

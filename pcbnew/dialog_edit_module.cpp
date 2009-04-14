@@ -5,6 +5,7 @@
 /************************************************/
 
 #include "confirm.h"
+#include "appl_wxstruct.h"
 #include "dialog_edit_module.h"
 #include <wx/version.h>
 
@@ -484,10 +485,10 @@ void Panel3D_Ctrl::Browse3DLib( wxCommandEvent& event )
 /***************************************************/
 {
     wxString fullfilename, shortfilename;
-    wxString fullpath = g_RealLibDirBuffer;
+    wxString fullpath;
     wxString mask = wxT( "*" );
 
-    fullpath += LIB3D_PATH;
+    fullpath = wxGetApp().ReturnLastVisitedLibraryPath(LIB3D_PATH);
     mask += g_Shapes3DExtBuffer;
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );

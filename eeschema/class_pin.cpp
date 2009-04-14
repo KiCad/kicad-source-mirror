@@ -1037,6 +1037,7 @@ void LibDrawPin::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     frame->MsgPanel->Affiche_1_Parametre( 62, _( "Orient" ), Text, MAGENTA );
+wxMessageBox(wxT("Pin!"));
 }
 
 

@@ -3,7 +3,6 @@
 /**************************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
@@ -753,12 +752,11 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
 /****************************************************************************/
 {
     wxString FullFileName, mask;
+    wxString docpath, filename;
 
-    wxString docpath( g_RealLibDirBuffer ), filename;
+    docpath = wxGetApp().ReturnLastVisitedLibraryPath(wxT( "doc" ));
 
-    docpath += wxT( "doc" );
-    docpath += STRING_DIR_SEP;
-    mask     = wxT( "*" );
+    mask = wxT( "*" );
     FullFileName = EDA_FileSelector( _( "Doc Files" ),
                                      docpath,       /* Chemin par defaut */
                                      wxEmptyString, /* nom fichier par defaut */
@@ -771,8 +769,6 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
     if( FullFileName.IsEmpty() )
         return;
 
-    // Suppression du chemin par defaut pour le fichier de doc:
-
     /* If the library path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add
      * the library name with the full or relative path.
@@ -781,6 +777,7 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
      *
      */
     wxFileName fn = FullFileName;
+    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
     int        pathlen = -1;                                                    // path len, used to find the better subpath within defualts paths
     if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
         filename = fn.GetName();

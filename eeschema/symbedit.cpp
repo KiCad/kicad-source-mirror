@@ -9,6 +9,7 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -54,8 +55,10 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
     mask = wxT( "*" ) + g_SymbolExtBuffer;
+    wxString default_lib_path = wxGetApp().ReturnLastVisitedLibraryPath();
+
     FullFileName = EDA_FileSelector( _( "Import symbol drawings:" ),
-                                     g_RealLibDirBuffer,    /* Chemin par defaut */
+                                     default_lib_path,      /* Chemin par defaut */
                                      wxEmptyString,         /* nom fichier par defaut */
                                      g_SymbolExtBuffer,     /* extension par defaut */
                                      mask,                  /* Masque d'affichage */
@@ -71,6 +74,8 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     if( FullFileName.IsEmpty() )
         return;
 
+    wxFileName fn = FullFileName;
+    wxGetApp().SaveLastVisitedLibraryPath(fn.GetPath() );
 
     /* Load data */
     ImportFile = wxFopen( FullFileName, wxT( "rt" ) );
@@ -159,9 +164,10 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
         return;
 
     /* Creation du fichier symbole */
+    wxString default_lib_path = wxGetApp().ReturnLastVisitedLibraryPath();
     mask = wxT( "*" ) + g_SymbolExtBuffer;
     FullFileName = EDA_FileSelector( _( "Export symbol drawings:" ),
-                                     g_RealLibDirBuffer,    /* Chemin par defaut */
+                                     default_lib_path,    /* Chemin par defaut */
                                      wxEmptyString,         /* nom fichier par defaut */
                                      g_SymbolExtBuffer,     /* extension par defaut */
                                      mask,                  /* Masque d'affichage */
@@ -171,6 +177,9 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
                                      );
     if( FullFileName.IsEmpty() )
         return;
+
+    wxFileName fn = FullFileName;
+    wxGetApp().SaveLastVisitedLibraryPath(fn.GetPath() );
 
     ExportFile = wxFopen( FullFileName, wxT( "wt" ) );
     if( ExportFile == NULL )

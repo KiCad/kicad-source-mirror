@@ -340,7 +340,7 @@ PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
 
 
 /** ReadParam
- * read the value of parameter thi stored in aConfig
+ * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
 void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig )
@@ -357,7 +357,7 @@ void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig )
 
 
 /** SaveParam
- * the the value of parameter thi stored in aConfig
+ * save the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
 void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig )
@@ -394,7 +394,7 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
 
 
 /** ReadParam
- * read the value of parameter thi stored in aConfig
+ * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
 void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig )
@@ -410,7 +410,7 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig )
 
 
 /** SaveParam
- * the the value of parameter thi stored in aConfig
+ * save the the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
 void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig )
@@ -451,7 +451,7 @@ PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool          Insetup,
 
 
 /** ReadParam
- * read the value of parameter thi stored in aConfig
+ * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
 void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig )
@@ -475,7 +475,7 @@ void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig )
 
 
 /** SaveParam
- * the the value of parameter thi stored in aConfig
+ * save the the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
 void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig )
@@ -511,7 +511,7 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
 
 
 /** ReadParam
- * read the value of parameter thi stored in aConfig
+ * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
 void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig )
@@ -525,7 +525,7 @@ void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig )
 
 
 /** SaveParam
- * the the value of parameter thi stored in aConfig
+ * save the the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
 void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig )
@@ -557,7 +557,7 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
 
 
 /** ReadParam
- * read the value of parameter thi stored in aConfig
+ * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
 void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig )
@@ -569,7 +569,7 @@ void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig )
 
 
 /** SaveParam
- * the the value of parameter thi stored in aConfig
+ * save the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
 void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig )
@@ -591,7 +591,7 @@ PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
 
 
 /** ReadParam
- * read the value of parameter thi stored in aConfig
+ * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
 void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig )
@@ -615,7 +615,7 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig )
 
 
 /** SaveParam
- * the the value of parameter thi stored in aConfig
+ * save the value of parameter this in aConfig (list of parameters)
  * @param aConfig = the wxConfigBase that can store the parameter
  */
 void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig )

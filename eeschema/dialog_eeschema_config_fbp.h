@@ -52,7 +52,7 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxStaticText* m_InfoSchFileExt;
 		wxStaticText* m_staticTextlibList;
 		wxListBox* m_ListLibr;
-		wxButton* m_buttonRemove;
+		wxButton* m_buttonRemoveLib;
 		wxButton* m_buttonAdd;
 		wxButton* m_buttonIns;
 		
@@ -62,6 +62,7 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxStaticLine* m_staticline1;
 		wxTextCtrl* m_LibDirCtrl;
 		wxButton* m_buttonBrowse;
+		wxButton* m_buttonRemovePath;
 		wxStaticText* m_staticTextcurrenpaths;
 		wxListBox* m_DefaultLibraryPathslistBox;
 		
@@ -73,10 +74,11 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnSaveCfgClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnLibPathSelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRemoveUserPath( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,445 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EESCHEMA_CONFIG_FBP();
 	
 };

@@ -66,7 +66,6 @@ const wxString AllFilesWildcard( _( "All files (*)|*") );
 wxString    g_ProductName = wxT( "KiCad E.D.A.  " );
 bool        g_ShowPageLimits = true;
 int         g_GridColor = DARKGRAY;
-wxString    g_RealLibDirBuffer;
 wxString    g_UserLibDirBuffer;
 int         g_DebugLevel;
 int         g_MouseOldButtons;
@@ -96,6 +95,11 @@ int         g_UnitMetric;   // display units mm = 1, inches = 0, cm = 2
 /* Draw color for moving objects: */
 int         g_GhostColor;
 
+/* predefined colors used in kicad.
+ * Please: if you change a value, remember these values are carefully chosen
+ * to have good results in pcbnew, that uses the ORed value of basic colors
+ * when displaying superimposed objects
+ */
 StructColors ColorRefs[NBCOLOR] =
 {
     { 0,  0,   0,  BLACK, wxT("BLACK"), DARKDARKGRAY},

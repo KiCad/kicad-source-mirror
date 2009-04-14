@@ -86,7 +86,7 @@ public:
 
     /** Function InitEDA_Appl
      * initialise some general parameters
-     *  - Default paths (help, libs, bin)and configuration flies names
+     *  - Default paths (help, libs, bin)and configuration files names
      *  - Language and locale
      *  - fonts
      * @param aName : used as paths in configuration files
@@ -157,12 +157,32 @@ public:
     wxPathList& GetLibraryPathList() { return m_libSearchPaths; }
     wxString FindLibraryPath( const wxString& fileName );
 
+    /** FindLibraryPath
+     * Kicad saves user defined library files that are not in the standard
+     * library search path list with the full file path.  Calling the library
+     * search path list with a user library file will fail.  This helper method
+     * solves that problem.
+     * @param fileName
+     * @return a wxEmptyString if library file is not found.
+     */
     wxString FindLibraryPath( const wxFileName& fileName )
     {
         return FindLibraryPath( fileName.GetFullPath() );
     }
 
+    /** ReturnLastVisitedLibraryPath
+     * Returns the last visited library directory, or (if void) the first
+     * path in lib path list ( but not the CWD )
+     * @param aSubPathToSearch = Prefered sub path to search in path list
+     */
+    wxString ReturnLastVisitedLibraryPath( const wxString & aSubPathToSearch = wxEmptyString);
+    void SaveLastVisitedLibraryPath( const wxString & aPath);
 
+
+    /** Function RemoveLibraryPath
+     * Removes the given ptah from the libary path list
+     * @param path = the path to remove
+     */
     void RemoveLibraryPath( const wxString& path );
     void InsertLibraryPath( const wxString& path, size_t index );
 };

@@ -1462,67 +1462,6 @@ void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 }
 
 
-/*******************************/
-/* Routines used to draw texts */
-/*******************************/
-
-/*********************************************/
-void GRSetFont( wxDC* DC, wxFont* Font )
-/*********************************************/
-/* Routine to set the current font */
-{
-    DC->SetFont( *Font );
-}
-
-
-/*********************************************************/
-void GRSetTextFgColor( wxDC* DC, int Color )
-/*********************************************************/
-/* Set the foreground color used to draw texts */
-{
-    DC->SetTextForeground( wxColour( ColorRefs[Color].m_Red,
-                                     ColorRefs[Color].m_Green,
-                                     ColorRefs[Color].m_Blue ) );
-}
-
-
-void GRSetTextFgColor( wxDC* DC, wxFont*, int Color )
-{
-    DC->SetTextForeground( wxColour( ColorRefs[Color].m_Red,
-                                     ColorRefs[Color].m_Green,
-                                     ColorRefs[Color].m_Blue ) );
-}
-
-
-/********************************/
-void GRResetTextFgColor( wxDC* DC )
-/********************************/
-/* Set the foreground color used to draw texts to the default value */
-{
-    GRSetTextFgColor( DC, Text_Color );
-}
-
-
-/*********************************************************/
-void GRSetTextBgColor( wxDC* DC, int Color )
-/*********************************************************/
-/* Set the background color used to draw texts */
-{
-    Color &= MASKCOLOR; // keep only the bits used to select the color
-    DC->SetTextBackground( wxColour( ColorRefs[Color].m_Red,
-                                     ColorRefs[Color].m_Green,
-                                     ColorRefs[Color].m_Blue ) );
-}
-
-
-void GRSetTextBgColor( wxDC* DC, wxFont*, int Color )
-{
-    Color &= MASKCOLOR; // keep only the bits used to select the color
-    DC->SetTextBackground( wxColour( ColorRefs[Color].m_Red,
-                                     ColorRefs[Color].m_Green,
-                                     ColorRefs[Color].m_Blue ) );
-}
-
 #ifdef USE_CLIP_FILLED_POLYGONS
 
 /** Function ClipAndDrawFilledPoly

@@ -77,6 +77,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
 
     if( Pin )
     {
+
         /* Force display pin infos (the previous display could be a component info) */
         Pin->Display_Infos( this );
         if( LibItem )
@@ -187,7 +188,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
                                  LibItem->GetRef( GetSheet() ),
                                  LibItem->GetField( VALUE )->m_Text,
                                  CYAN );
-        if( IncludePin == TRUE )
+        if( IncludePin )
             return LibItem;
     }
 

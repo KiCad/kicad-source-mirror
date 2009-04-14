@@ -82,11 +82,11 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonRemove = new wxButton( this, ID_REMOVE_LIB, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonRemove->SetForegroundColour( wxColour( 186, 1, 38 ) );
-	m_buttonRemove->SetToolTip( _("Unload the selected library") );
+	m_buttonRemoveLib = new wxButton( this, ID_REMOVE_LIB, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRemoveLib->SetForegroundColour( wxColour( 186, 1, 38 ) );
+	m_buttonRemoveLib->SetToolTip( _("Unload the selected library") );
 	
-	bRightSizer->Add( m_buttonRemove, 0, wxALL, 5 );
+	bRightSizer->Add( m_buttonRemoveLib, 0, wxALL, 5 );
 	
 	m_buttonAdd = new wxButton( this, ID_ADD_LIB, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonAdd->SetForegroundColour( wxColour( 13, 118, 1 ) );
@@ -124,26 +124,45 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	wxStaticBoxSizer* sbLibPathSizer;
-	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries Files Main Default  Path:") ), wxVERTICAL );
+	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Path for Libraries Files:") ), wxVERTICAL );
 	
 	wxBoxSizer* bUserLibPathSizer;
 	bUserLibPathSizer = new wxBoxSizer( wxHORIZONTAL );
 	
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Path:") ), wxHORIZONTAL );
+	
+	wxBoxSizer* bUserListSizer;
+	bUserListSizer = new wxBoxSizer( wxVERTICAL );
+	
 	m_LibDirCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_LibDirCtrl->SetToolTip( _("Default path to search libraries which have no absolute path in name,\nor a name which does not start by ./ or ../\nIf void, the default path is kicad/share/library") );
 	
-	bUserLibPathSizer->Add( m_LibDirCtrl, 1, wxALL, 5 );
+	bUserListSizer->Add( m_LibDirCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	sbSizer4->Add( bUserListSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxBoxSizer* bUserPathsButtonsSizer;
+	bUserPathsButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonBrowse = new wxButton( this, ID_LIB_PATH_SEL, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	bUserLibPathSizer->Add( m_buttonBrowse, 0, wxALL, 5 );
+	bUserPathsButtonsSizer->Add( m_buttonBrowse, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_buttonRemovePath = new wxButton( this, wxID_ANY, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxALL, 5 );
+	
+	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxEXPAND, 5 );
+	
+	bUserLibPathSizer->Add( sbSizer4, 1, wxEXPAND, 5 );
 	
 	sbLibPathSizer->Add( bUserLibPathSizer, 1, wxEXPAND, 5 );
 	
-	m_staticTextcurrenpaths = new wxStaticText( this, wxID_ANY, _("Current Libraries Full Paths in Use:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextcurrenpaths = new wxStaticText( this, wxID_ANY, _("Current Full Paths (for  Libraries and Doc Files)  in Use:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextcurrenpaths->Wrap( -1 );
 	sbLibPathSizer->Add( m_staticTextcurrenpaths, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
+	m_DefaultLibraryPathslistBox->SetToolTip( _("Paths  (system paths and user paths) used to search and load libraries files and component doc files.\nSorted by decreasing priority order.") );
 	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
 	
 	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -155,24 +174,26 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnCloseWindow ) );
-	m_buttonRemove->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveLibClick ), NULL, this );
+	m_buttonRemoveLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveLibClick ), NULL, this );
 	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonIns->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonOk->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnOkClick ), NULL, this );
 	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnCancelClick ), NULL, this );
 	m_buttonSave->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnSaveCfgClick ), NULL, this );
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnLibPathSelClick ), NULL, this );
+	m_buttonRemovePath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveUserPath ), NULL, this );
 }
 
 DIALOG_EESCHEMA_CONFIG_FBP::~DIALOG_EESCHEMA_CONFIG_FBP()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnCloseWindow ) );
-	m_buttonRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveLibClick ), NULL, this );
+	m_buttonRemoveLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveLibClick ), NULL, this );
 	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonIns->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonOk->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnOkClick ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnCancelClick ), NULL, this );
 	m_buttonSave->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnSaveCfgClick ), NULL, this );
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnLibPathSelClick ), NULL, this );
+	m_buttonRemovePath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveUserPath ), NULL, this );
 }

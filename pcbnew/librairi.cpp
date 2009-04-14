@@ -168,7 +168,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     fn.SetExt( createlib ? ModuleFileExtension : ModExportFileExtension );
 
     if( createlib )
-        path = g_RealLibDirBuffer;
+        path = wxGetApp().ReturnLastVisitedLibraryPath();
     else if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
 
@@ -182,6 +182,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
         return;
 
     fn = dlg.GetPath();
+    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
     /* Generation du fichier Empreinte */
     if( ( file = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
@@ -401,7 +402,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     int      ii, NbModules = 0;
     float    Pas;
     MODULE*  Module;
-    wxString fileName = LibName;
+    wxString fileName = LibName, path;
 
     if( GetBoard()->m_Modules == NULL )
     {
@@ -409,9 +410,10 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
         return;
     }
 
+    path = wxGetApp().ReturnLastVisitedLibraryPath();
     if( LibName.IsEmpty() )
     {
-        wxFileDialog dlg( this, _( "Library" ), g_RealLibDirBuffer,
+        wxFileDialog dlg( this, _( "Library" ), path,
                           wxEmptyString, ModuleFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -421,6 +423,8 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
         fileName = dlg.GetPath();
     }
 
+    wxFileName fn(fileName);
+    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
     bool file_exists = wxFileExists( fileName );
 
     if( !NewModulesOnly && file_exists )

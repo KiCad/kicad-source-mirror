@@ -187,15 +187,6 @@ void GRSRect(EDA_Rect * ClipBox, wxDC * DC, int x1, int y1,
 void GRSRect(EDA_Rect * ClipBox, wxDC * DC, int x1, int y1,
             int x2, int y2, int width, int Color);
 
-/* Routines relatives a l'affichage des textes */
-void GRSetFont(wxDC * DC, wxFont * Font);
-void GRResetTextFgColor(wxDC * DC);
-void GRSetTextFgColor(wxDC * DC, int Color);
-void GRSetTextFgColor(wxDC * DC, wxFont * Font, int Color);
-int GRGetTextFgColor(wxDC * DC, wxFont * Font);
-void GRSetTextBgColor(wxDC * DC, int Color);
-void GRSetTextBgColor(wxDC * DC, wxFont * Font, int Color);
-int GRGetTextBgColor(wxDC * DC, wxFont * Font);
 
 #endif      /* define GR_BASIC */
 

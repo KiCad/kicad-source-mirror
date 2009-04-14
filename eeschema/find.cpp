@@ -8,7 +8,9 @@
  *  in current sheet or whole the project
  */
 #include "fctsys.h"
-#include "gr_basic.h"
+
+//#include "gr_basic.h"
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -49,7 +51,7 @@ void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
 
 
 /************************************************************************/
-SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
+SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
     const wxString& component_reference, bool Find_in_hierarchy,
     int SearchType,
     const wxString& text_to_find,
@@ -71,17 +73,17 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
 {
-    DrawSheetPath*          sheet, * SheetWithComponentFound = NULL;
-    SCH_ITEM*               DrawList  = NULL;
-    SCH_COMPONENT* Component = NULL;
-    wxSize                  DrawAreaSize = DrawPanel->GetClientSize();
-    wxPoint                 pos, curpos;
-    bool                    DoCenterAndRedraw = FALSE;
-    bool                    NotFound = true;
-    wxString                msg;
-    LibDrawPin*             pin;
+    DrawSheetPath* sheet, * SheetWithComponentFound = NULL;
+    SCH_ITEM*      DrawList     = NULL;
+    SCH_COMPONENT* Component    = NULL;
+    wxSize         DrawAreaSize = DrawPanel->GetClientSize();
+    wxPoint        pos, curpos;
+    bool           DoCenterAndRedraw = FALSE;
+    bool           NotFound = true;
+    wxString       msg;
+    LibDrawPin*    pin;
 
-    EDA_SheetList          SheetList;
+    EDA_SheetList  SheetList;
 
     sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
@@ -96,7 +98,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
             {
                 SCH_COMPONENT* pSch;
                 pSch = (SCH_COMPONENT*) DrawList;
-                if( component_reference.CmpNoCase( pSch->GetRef(sheet) ) == 0 )
+                if( component_reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
                 {
                     Component = pSch;
                     SheetWithComponentFound = sheet;
@@ -146,23 +148,23 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-            ActiveScreen = m_CurrentSheet->LastScreen();
+            ActiveScreen    = m_CurrentSheet->LastScreen();
             m_CurrentSheet->UpdateAllScreenReferences();
-            DoCenterAndRedraw   = TRUE;
+            DoCenterAndRedraw = TRUE;
         }
         wxPoint delta;
-        pos -= Component->m_Pos;
-        delta = TransformCoordinate( Component->m_Transform, pos);
-        pos = delta + Component->m_Pos;
+        pos  -= Component->m_Pos;
+        delta = TransformCoordinate( Component->m_Transform, pos );
+        pos   = delta + Component->m_Pos;
 
-        wxPoint old_cursor_position = sheet->LastScreen()->m_Curseur;
+        wxPoint old_cursor_position    = sheet->LastScreen()->m_Curseur;
         sheet->LastScreen()->m_Curseur = pos;
 
         curpos = DrawPanel->CursorScreenPosition();
 
         DrawPanel->GetViewStart(
             &( GetScreen()->m_StartVisu.x ),
-            &( GetScreen()->m_StartVisu.y ));
+            &( GetScreen()->m_StartVisu.y ) );
 
         // calcul des coord curseur avec origine = screen
         curpos -= GetScreen()->m_StartVisu;
@@ -176,11 +178,11 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
         }
         #undef MARGIN
 
-        if ( DoCenterAndRedraw )
+        if( DoCenterAndRedraw )
             Recadre_Trace( mouseWarp );
         else
         {
-            wxClientDC  dc( DrawPanel );
+            wxClientDC dc( DrawPanel );
 
             DrawPanel->PrepareGraphicContext( &dc );
 
@@ -255,7 +257,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindComponentAndItem(
 
 
 /*****************************************************************/
-SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
+SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
 /*****************************************************************/
 
 /* Search markers in whole the hierarchy.
@@ -263,9 +265,9 @@ SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
  *  SearchType = 0: search the first marker, else search next marker
  */
 {
-    DrawSheetPath*  sheet, * FirstSheet = NULL;
-    SCH_ITEM*   DrawList, * FirstStruct = NULL, * Struct = NULL;
-    DrawMarkerStruct * Marker = NULL;
+    DrawSheetPath*    sheet, * FirstSheet = NULL;
+    SCH_ITEM*         DrawList, * FirstStruct = NULL, * Struct = NULL;
+    DrawMarkerStruct* Marker = NULL;
     int StartCount;
     bool NotFound;
     wxPoint           firstpos, pos;
@@ -295,7 +297,7 @@ SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
                 pos = Marker->m_Pos;
                 if( FirstSheet == NULL )    /* First item found */
                 {
-                    FirstSheet = sheet; firstpos = pos;
+                    FirstSheet  = sheet; firstpos = pos;
                     FirstStruct = DrawList;
                 }
 
@@ -317,7 +319,8 @@ SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
     }
 
     if( NotFound && FirstSheet )       // markers are found, but we have reach the last marker */
-    {                                   // After the last marker, the first marker is used */
+    {
+        // After the last marker, the first marker is used */
         NotFound = FALSE; sheet = FirstSheet;
         Struct   = FirstStruct;
         pos = firstpos; s_MarkerCount = 1;
@@ -329,18 +332,18 @@ SCH_ITEM * WinEDA_SchematicFrame::FindMarker( int SearchType )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-            ActiveScreen = m_CurrentSheet->LastScreen();
+            ActiveScreen    = m_CurrentSheet->LastScreen();
             m_CurrentSheet->UpdateAllScreenReferences();
-            DoCenterAndRedraw   = TRUE;
+            DoCenterAndRedraw = TRUE;
         }
 
         old_cursor_position = sheet->LastScreen()->m_Curseur;
-        sheet->LastScreen()->m_Curseur   = pos;
+        sheet->LastScreen()->m_Curseur = pos;
         curpos = DrawPanel->CursorScreenPosition();
 
         // calcul des coord curseur avec origine = screen
         DrawPanel->GetViewStart( &m_CurrentSheet->LastScreen()->m_StartVisu.x,
-                                  &m_CurrentSheet->LastScreen()->m_StartVisu.y );
+                                 &m_CurrentSheet->LastScreen()->m_StartVisu.y );
         curpos.x -= m_CurrentSheet->LastScreen()->m_StartVisu.x;
         curpos.y -= m_CurrentSheet->LastScreen()->m_StartVisu.y;
 
@@ -417,16 +420,16 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
 {
-    DrawSheetPath*     Sheet, * FirstSheet = NULL;
-    SCH_ITEM* DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
-    int             StartCount;
-    bool            NotFound;
-    wxPoint         firstpos, pos, old_cursor_position;
-    static int      Find_in_hierarchy;
-    wxSize          DrawAreaSize = DrawPanel->GetClientSize();
-    wxPoint         curpos;
-    bool            DoCenterAndRedraw = FALSE;
-    wxString        msg, WildText;
+    DrawSheetPath* Sheet, * FirstSheet = NULL;
+    SCH_ITEM*      DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
+    int            StartCount;
+    bool           NotFound;
+    wxPoint        firstpos, pos, old_cursor_position;
+    static int     Find_in_hierarchy;
+    wxSize         DrawAreaSize = DrawPanel->GetClientSize();
+    wxPoint        curpos;
+    bool           DoCenterAndRedraw = FALSE;
+    wxString       msg, WildText;
 
     g_LastSearchIsMarker = FALSE;
 
@@ -457,7 +460,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
 
     for( ; Sheet != NULL; Sheet = SheetList.GetNext() )
     {
-        DrawList = (SCH_ITEM*)Sheet->LastDrawList();
+        DrawList = (SCH_ITEM*) Sheet->LastDrawList();
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -465,7 +468,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
             case TYPE_SCH_COMPONENT:
                 SCH_COMPONENT * pSch;
                 pSch = (SCH_COMPONENT*) DrawList;
-                if( WildCompareString( WildText, pSch->GetRef(Sheet), FALSE ) )
+                if( WildCompareString( WildText, pSch->GetRef( Sheet ), FALSE ) )
                 {
                     NotFound = FALSE;
                     pos = pSch->GetField( REFERENCE )->m_Pos;
@@ -497,9 +500,9 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
 
             if( NotFound == FALSE )             /* Item found ! */
             {
-                if( FirstSheet == NULL )       /* First Item found */
+                if( FirstSheet == NULL )        /* First Item found */
                 {
-                    FirstSheet = Sheet;
+                    FirstSheet  = Sheet;
                     firstpos    = pos;
                     FirstStruct = DrawList;
                 }
@@ -531,7 +534,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
     if( NotFound && FirstSheet )
     {
         NotFound = FALSE;
-        Sheet   = FirstSheet;
+        Sheet    = FirstSheet;
         Struct   = FirstStruct;
         pos = firstpos;
         s_ItemsCount = 1;
@@ -543,9 +546,9 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
         {
             Sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *Sheet;
-            ActiveScreen = m_CurrentSheet->LastScreen();
+            ActiveScreen    = m_CurrentSheet->LastScreen();
             m_CurrentSheet->UpdateAllScreenReferences();
-            DoCenterAndRedraw   = TRUE;
+            DoCenterAndRedraw = TRUE;
         }
 
         /* the struct is a TYPE_SCH_COMPONENT type,
@@ -556,18 +559,18 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
             SCH_COMPONENT* pSch = (SCH_COMPONENT*) Struct;
 
             pos -= pSch->m_Pos;
-            pos = TransformCoordinate( pSch->m_Transform, pos );
+            pos  = TransformCoordinate( pSch->m_Transform, pos );
             pos += pSch->m_Pos;
         }
 
         old_cursor_position = Sheet->LastScreen()->m_Curseur;
-        Sheet->LastScreen()->m_Curseur   = pos;
+        Sheet->LastScreen()->m_Curseur = pos;
 
         curpos = DrawPanel->CursorScreenPosition();
 
         DrawPanel->GetViewStart(
-                &( GetScreen()->m_StartVisu.x ),
-                &( GetScreen()->m_StartVisu.y ));
+            &( GetScreen()->m_StartVisu.x ),
+            &( GetScreen()->m_StartVisu.y ) );
 
         // calcul des coord curseur avec origine = screen
         curpos -= m_CurrentSheet->LastScreen()->m_StartVisu;
@@ -577,14 +580,14 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
         if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
            || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
         {
-           DoCenterAndRedraw = true;
+            DoCenterAndRedraw = true;
         }
 
-        if ( DoCenterAndRedraw )
+        if( DoCenterAndRedraw )
             Recadre_Trace( mouseWarp );
         else
         {
-            wxClientDC  dc( DrawPanel );
+            wxClientDC dc( DrawPanel );
 
             DrawPanel->PrepareGraphicContext( &dc );
 
@@ -712,39 +715,26 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
     FILE*    file;
     int      nbitems = 0, LineNum = 0;
     char     Line[2048], * name;
+    wxString path;
 
-    FullFileName = wxFindFirstFile( g_RealLibDirBuffer + wxT( "*." ) +
-                                    CompLibFileExtension );
-
-    while( !FullFileName.IsEmpty() )
+    for( unsigned ii; ii < wxGetApp().GetLibraryPathList().GetCount(); ii++ )
     {
-        file = wxFopen( FullFileName, wxT( "rt" ) );
-        if( file == NULL )
-            continue;
+        path = wxGetApp().GetLibraryPathList()[ii];
+        FullFileName = wxFindFirstFile( path + wxT( "*." ) + CompLibFileExtension );
 
-        while( GetLine( file, Line, &LineNum, sizeof(Line) ) )
+        while( !FullFileName.IsEmpty() )
         {
-            if( strnicmp( Line, "DEF", 3 ) == 0 )
+            file = wxFopen( FullFileName, wxT( "rt" ) );
+            if( file == NULL )
+                continue;
+
+            while( GetLine( file, Line, &LineNum, sizeof(Line) ) )
             {
-                /* Read one DEF part from library: DEF 74LS00 U 0 30 Y Y 4 0 N */
-                strtok( Line, " \t\r\n" );
-                name = strtok( NULL, " \t\r\n" );
-                wxString st_name = CONV_FROM_UTF8( name );
-                if( WildCompareString( wildmask, st_name, FALSE ) )
+                if( strnicmp( Line, "DEF", 3 ) == 0 )
                 {
-                    nbitems++;
-                    if( !FindList.IsEmpty() )
-                        FindList += wxT( "\n" );
-                    FindList << _( "Found " ) << CONV_FROM_UTF8( name )
-                             << _( " in lib " ) << FullFileName;
-                }
-            }
-            else if( strnicmp( Line, "ALIAS", 5 ) == 0 )
-            {
-                /* Read one ALIAS part from library: ALIAS 74HC00 74HCT00 7400 74LS37 */
-                strtok( Line, " \t\r\n" );
-                while( ( name = strtok( NULL, " \t\r\n" ) ) != NULL )
-                {
+                    /* Read one DEF part from library: DEF 74LS00 U 0 30 Y Y 4 0 N */
+                    strtok( Line, " \t\r\n" );
+                    name = strtok( NULL, " \t\r\n" );
                     wxString st_name = CONV_FROM_UTF8( name );
                     if( WildCompareString( wildmask, st_name, FALSE ) )
                     {
@@ -755,11 +745,28 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
                                  << _( " in lib " ) << FullFileName;
                     }
                 }
+                else if( strnicmp( Line, "ALIAS", 5 ) == 0 )
+                {
+                    /* Read one ALIAS part from library: ALIAS 74HC00 74HCT00 7400 74LS37 */
+                    strtok( Line, " \t\r\n" );
+                    while( ( name = strtok( NULL, " \t\r\n" ) ) != NULL )
+                    {
+                        wxString st_name = CONV_FROM_UTF8( name );
+                        if( WildCompareString( wildmask, st_name, FALSE ) )
+                        {
+                            nbitems++;
+                            if( !FindList.IsEmpty() )
+                                FindList += wxT( "\n" );
+                            FindList << _( "Found " ) << CONV_FROM_UTF8( name )
+                                     << _( " in lib " ) << FullFileName;
+                        }
+                    }
+                }
             }
-        }
 
-        fclose( file );
-        FullFileName = wxFindNextFile();
+            fclose( file );
+            FullFileName = wxFindNextFile();
+        }
     }
 
     return nbitems;

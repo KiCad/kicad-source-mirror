@@ -33,15 +33,16 @@ private:
 
 private:
 
-    // Virtual event handlers, overide them in your derived class
+    // event handlers, overiding the fbp handlers
     void Init();
-    virtual void OnCloseWindow( wxCloseEvent& event );
-    virtual void OnSaveCfgClick( wxCommandEvent& event );
-    virtual void OnRemoveLibClick( wxCommandEvent& event );
-    virtual void OnAddOrInsertLibClick( wxCommandEvent& event );
-    virtual void OnLibPathSelClick( wxCommandEvent& event );
-	virtual void OnOkClick( wxCommandEvent& event );
-	virtual void OnCancelClick( wxCommandEvent& event );
+    void OnCloseWindow( wxCloseEvent& event );
+    void OnSaveCfgClick( wxCommandEvent& event );
+    void OnRemoveLibClick( wxCommandEvent& event );
+    void OnAddOrInsertLibClick( wxCommandEvent& event );
+    void OnLibPathSelClick( wxCommandEvent& event );
+	void OnOkClick( wxCommandEvent& event );
+	void OnCancelClick( wxCommandEvent& event );
+    void OnRemoveUserPath( wxCommandEvent& event );
 
 
 public:
@@ -154,8 +155,9 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
     // Set new default path lib
     if ( g_UserLibDirBuffer != m_LibDirCtrl->GetValue() )
     {
+        wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
         g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-        wxGetApp().SetDefaultSearchPaths( );
+        wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
         m_LibListChanged = true;
     }
 
@@ -223,7 +225,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     wxString libpath =  m_LibDirCtrl->GetValue();
     if ( libpath.IsEmpty() )
-       libpath = g_RealLibDirBuffer;
+        libpath = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog FilesDialog( this, _( "Library files:" ), libpath,
                               wxEmptyString, CompLibFileWildcard,
@@ -235,9 +237,11 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     wxArrayString Filenames;
     FilesDialog.GetPaths( Filenames );
 
-    for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
+     for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
     {
         fn = Filenames[jj];
+        if ( jj == 0 )
+            wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
         /* If the library path is already in the library search paths
          * list, just add the library name to the list.  Otherwise, add
@@ -296,7 +300,7 @@ void DIALOG_EESCHEMA_CONFIG::OnLibPathSelClick( wxCommandEvent& event )
 {
     wxString path =  m_LibDirCtrl->GetValue();
     if ( path.IsEmpty() )
-       path = g_RealLibDirBuffer;
+        path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     bool     select = EDA_DirectorySelector( _( " Default Path for libraries" ),    /* Titre de la fenetre */
                                              path,                                  /* Chemin par defaut */
@@ -308,4 +312,14 @@ void DIALOG_EESCHEMA_CONFIG::OnLibPathSelClick( wxCommandEvent& event )
         return;
 
     m_LibDirCtrl->SetValue( path );
+    wxGetApp().SaveLastVisitedLibraryPath( path );
+
 }
+
+
+/***********************************************************************/
+void DIALOG_EESCHEMA_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
+/***********************************************************************/
+{
+    m_LibDirCtrl->Clear( );
+ }

@@ -700,7 +700,7 @@ void WinEDA_App::SaveSettings()
     m_EDA_Config->Write( wxT( "SdtFontType" ), g_StdFont->GetFaceName() );
 
 #if wxCHECK_VERSION( 2, 9, 0 )
-#warning under wxWidgets 3.0, see how to replace the next lines
+#warning TODO: under wxWidgets 3.0, see how to replace the next lines
 #else
     m_EDA_Config->Write( wxT( "SdtFontStyle" ), g_StdFont->GetStyle() );
     m_EDA_Config->Write( wxT( "SdtFontWeight" ), g_StdFont->GetWeight() );
@@ -1030,23 +1030,78 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
     return FindFileInSearchPaths( filename, &subdirs );
 }
 
+/** ReturnLastVisitedLibraryPath
+ * Returns the last visited library directory, or (if void) the first
+ * path in lib path list ( but not the CWD )
+ * @param aSubPathToSearch = Prefered sub path to search in path list (defualt = empty string)
+ */
+wxString s_LastVisitedLibPath;      // Last lib directoty used when adding libraries
+wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString & aSubPathToSearch )
+{
+    if ( ! s_LastVisitedLibPath.IsEmpty() )
+        return s_LastVisitedLibPath;
 
-/**
+    wxString path;
+
+   /* Initialize default path to the main default lib path
+    * this is the second path in list (the first is the project path)
+    */
+    unsigned pcount = wxGetApp().GetLibraryPathList().GetCount();
+    if ( pcount )
+    {
+        unsigned ipath = 0;
+        if ( wxGetApp().GetLibraryPathList()[0] == wxGetCwd() )
+            ipath = 1;
+
+        // First choice fo path:
+        if ( ipath < pcount )
+            path = wxGetApp().GetLibraryPathList()[ipath];
+
+        // Search a sub path matching aSubPathToSearch
+        if ( ! aSubPathToSearch.IsEmpty() )
+        {
+            for ( ; ipath < pcount; ipath++ )
+            {
+                if ( wxGetApp().GetLibraryPathList()[ipath].Contains( aSubPathToSearch ) )
+                {
+                    path = wxGetApp().GetLibraryPathList()[ipath];
+                    break;
+                }
+            }
+        }
+    }
+
+    if ( path.IsEmpty() )
+        path = wxGetCwd();
+    return path;
+}
+
+void WinEDA_App::SaveLastVisitedLibraryPath( const wxString & aPath)
+{
+    s_LastVisitedLibPath = aPath;
+}
+
+
+/** FindLibraryPath
  * Kicad saves user defined library files that are not in the standard
  * library search path list with the full file path.  Calling the library
  * search path list with a user library file will fail.  This helper method
  * solves that problem.
- *
- * Returns a wxEmptyString if library file is not found.
+ * @param fileName
+ * @return a wxEmptyString if library file is not found.
  */
-wxString WinEDA_App::FindLibraryPath( const wxString& fileName )
+wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
 {
-    if( wxFileName::FileExists( fileName ) )
-        return fileName;
+    if( wxFileName::FileExists( aFileName ) )
+        return aFileName;
     else
-        return m_libSearchPaths.FindValidPath( fileName );
+        return m_libSearchPaths.FindValidPath( aFileName );
 }
 
+/** Function RemoveLibraryPath
+ * Removes the given ptah from the libary path list
+ * @param path = the path to remove
+ */
 void WinEDA_App::RemoveLibraryPath( const wxString& path )
 {
     if( m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) != wxNOT_FOUND )

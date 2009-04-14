@@ -258,8 +258,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
         return;
     }
 
-    fn = wxFileName( g_RealLibDirBuffer, CurrentLib->m_Name,
-                     CompLibFileExtension );
+    fn = wxFileName( CurrentLib->m_FullFileName );
 
     msg = _( "Modify Library File \"" ) + fn.GetFullPath() + _( "\"?" );
 

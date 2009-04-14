@@ -146,12 +146,8 @@ extern Ki_PageDescr* g_SheetSizeList[];
 
 extern wxString g_ProductName;
 
-/* Gestion des librairies */
-extern wxString g_RealLibDirBuffer;   // Chemin reel des librairies de module
-// = UserLibDirBuffer si non vide
-// = chemin par defaut sinon
-extern wxString g_UserLibDirBuffer;   // Chemin des librairies de module donne par
-// le file de config
+/* Default user lib path can be left void, if the standard lib path is used */
+extern wxString g_UserLibDirBuffer;
 
 extern int g_DebugLevel;      // 0= Pas de debug */
 extern int g_MouseOldButtons;

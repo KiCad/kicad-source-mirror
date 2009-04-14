@@ -14,7 +14,6 @@
 #include "protos.h"
 #include "cvstruct.h"
 
-
 /*****************************************/
 /* classe pour la frame de Configuration */
 /*****************************************/
@@ -202,7 +201,24 @@ void KiConfigCvpcbFrame::LibAddFct( wxCommandEvent& event )
 
     Update();
 
-    wxFileDialog dlg( this, _( "Foot Print Library Files" ), g_RealLibDirBuffer,
+    wxString libpath =  m_LibDirCtrl->GetValue();
+    if ( libpath.IsEmpty() )
+        libpath = wxGetApp().ReturnLastVisitedLibraryPath();
+
+    if ( libpath.IsEmpty() )
+    {   /* Initialize default path to the main default lib path
+        * this is the second path in list (the first is the project path)
+        */
+        ii = wxGetApp().GetLibraryPathList().GetCount();
+        if ( ii > 2 )
+            ii = 2;
+        if ( ii > 0 )
+            libpath = wxGetApp().GetLibraryPathList()[ii-1];
+        else
+            libpath = wxGetCwd();
+    }
+
+    wxFileDialog dlg( this, _( "Foot Print Library Files" ), libpath,
                       wxEmptyString, ModuleFileWildcard,
                       wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST );
 
@@ -218,7 +234,10 @@ void KiConfigCvpcbFrame::LibAddFct( wxCommandEvent& event )
     {
         fn = Filenames[jj];
 
-        /* If the library path is already in the library search paths
+        if ( jj == 0 )
+            wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+
+         /* If the library path is already in the library search paths
          * list, just add the library name to the list.  Otherwise, add
          * the library name with the full path. */
         if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) == wxNOT_FOUND )
@@ -281,8 +300,24 @@ void KiConfigCvpcbFrame::EquAddFct( wxCommandEvent& event )
 
     Update();
 
+    wxString libpath =  m_LibDirCtrl->GetValue();
+    if ( libpath.IsEmpty() )
+        libpath = wxGetApp().ReturnLastVisitedLibraryPath();
+
+    if ( libpath.IsEmpty() )
+    {   /* Initialize default path to the main default lib path
+        * this is the second path in list (the first is the project path)
+        */
+        ii = wxGetApp().GetLibraryPathList().GetCount();
+        if ( ii > 2 )
+            ii = 2;
+        if ( ii > 0 )
+            libpath = wxGetApp().GetLibraryPathList()[ii-1];
+        else
+            libpath = wxGetCwd();
+    }
     wxFileDialog dlg( this, _( "Open Footprint Alias Files" ),
-                      g_RealLibDirBuffer, wxEmptyString, EquivFileWildcard,
+                      libpath, wxEmptyString, EquivFileWildcard,
                       wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -297,6 +332,9 @@ void KiConfigCvpcbFrame::EquAddFct( wxCommandEvent& event )
     for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
     {
         fn = Filenames[jj];
+
+        if ( jj == 0 )
+            wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
         /* Use the file name without extension if the library path is
          * already in the default library search path.  Otherwise, use

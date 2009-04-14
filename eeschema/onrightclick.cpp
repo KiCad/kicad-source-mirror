@@ -78,10 +78,9 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         return true;
     }
 
-    // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
-    {
-        DrawStruct = SchematicGeneralLocateAndDisplay( FALSE );
+    {   // Just try to locate items at cursor position
+        DrawStruct = SchematicGeneralLocateAndDisplay( false );
         if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
             Hierarchical_PIN_Sheet_Struct* slabel;
@@ -92,7 +91,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         }
     }
 
-    // If Command in progress: put the menu "cancel" and "end tool"
+    // If Command in progress: add "cancel" and "end tool" menu
     if(  m_ID_current_state )
     {
         if( DrawStruct && DrawStruct->m_Flags )
