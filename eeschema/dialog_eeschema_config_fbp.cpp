@@ -92,7 +92,7 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	m_buttonAdd->SetForegroundColour( wxColour( 13, 118, 1 ) );
 	m_buttonAdd->SetToolTip( _("Add a new library after the selected library, and load it") );
 	
-	bRightSizer->Add( m_buttonAdd, 0, wxALL, 5 );
+	bRightSizer->Add( m_buttonAdd, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonIns = new wxButton( this, wxID_ANY, _("Ins"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonIns->SetForegroundColour( wxColour( 0, 65, 130 ) );
@@ -109,7 +109,7 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonCancel->SetForegroundColour( wxColour( 14, 0, 179 ) );
 	
-	bRightSizer->Add( m_buttonCancel, 0, wxALL, 5 );
+	bRightSizer->Add( m_buttonCancel, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonSave = new wxButton( this, ID_SAVE_CFG, _("Save Cfg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonSave->SetToolTip( _("Accept and save current configuration setting in the local .pro file") );
@@ -146,10 +146,10 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	bUserPathsButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonBrowse = new wxButton( this, ID_LIB_PATH_SEL, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	bUserPathsButtonsSizer->Add( m_buttonBrowse, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bUserPathsButtonsSizer->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonRemovePath = new wxButton( this, wxID_ANY, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxALL, 5 );
+	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxEXPAND, 5 );
 	

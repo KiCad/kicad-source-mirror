@@ -774,30 +774,11 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,
      * because it preserve use of default libraries paths, when the path is a sub path of these default paths
-     *
      */
     wxFileName fn = FullFileName;
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
-    int        pathlen = -1;                                                    // path len, used to find the better subpath within defualts paths
-    if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
-        filename = fn.GetName();
-    else                                                                        // not in the default, : see if this file is in a subpath:
-    {
-        filename = fn.GetPathWithSep() + fn.GetName();
-        for( unsigned kk = 0; kk < wxGetApp().GetLibraryPathList().GetCount(); kk++ )
-        {
-            if( fn.MakeRelativeTo( wxGetApp().GetLibraryPathList()[kk] ) )
-            {
-                if( pathlen < 0                             // a subpath is found
-                   || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
-                {
-                    filename = fn.GetPathWithSep() + fn.GetFullName();
-                    pathlen  = fn.GetPath().Len();
-                }
-                fn = FullFileName;  //Try to find a better subpath
-            }
-        }
-    }
+
+    filename = wxGetApp().ReturnFilenameWithRelativePathInLibPath(FullFileName);
     m_Docfile->SetValue( filename );
 }
 

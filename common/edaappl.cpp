@@ -1081,6 +1081,47 @@ void WinEDA_App::SaveLastVisitedLibraryPath( const wxString & aPath)
     s_LastVisitedLibPath = aPath;
 }
 
+/** ReturnFilenameWithRelativePathInLibPath
+ * @return a short filename (with extension) with only a relative path if this filename
+ * can be found in library paths
+ * @param aFullFilename = filename with path and extension.
+ */
+wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath(const wxString & aFullFilename)
+{
+   /* If the library path is already in the library search paths
+     * list, just add the library name to the list.  Otherwise, add
+     * the library name with the full or relative path.
+     * the relative path, when possible is preferable,
+     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+     *
+     */
+    wxFileName fn = aFullFilename;
+    wxString filename = aFullFilename;
+    int        pathlen = -1;                                                    // path len, used to find the better subpath within defualts paths
+    if( GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
+        filename = fn.GetName();
+    else                                                                        // not in the default, : see if this file is in a subpath:
+    {
+        filename = fn.GetPathWithSep() + fn.GetFullName();
+        for( unsigned kk = 0; kk < wxGetApp().GetLibraryPathList().GetCount(); kk++ )
+        {
+            if( fn.MakeRelativeTo(GetLibraryPathList()[kk] ) )
+            {
+                if( pathlen < 0                             // a subpath is found
+                   || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
+                {
+                    filename = fn.GetPathWithSep() + fn.GetFullName();
+                    pathlen  = fn.GetPath().Len();
+                }
+                fn = aFullFilename;  //Try to find a better subpath
+            }
+        }
+    }
+
+    return filename;
+}
+
+
 
 /** FindLibraryPath
  * Kicad saves user defined library files that are not in the standard

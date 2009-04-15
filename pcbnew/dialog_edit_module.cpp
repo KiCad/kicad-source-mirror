@@ -506,8 +506,16 @@ void Panel3D_Ctrl::Browse3DLib( wxCommandEvent& event )
     if( fullfilename == wxEmptyString )
         return;
 
-    shortfilename = MakeReducedFileName( fullfilename,
-                                         fullpath, wxEmptyString );
+    wxFileName fn = fullfilename;
+    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+
+    /* If the file path is already in the library search paths
+     * list, just add the library name to the list.  Otherwise, add
+     * the library name with the full or relative path.
+     * the relative path, when possible is preferable,
+     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+    */
+    shortfilename = wxGetApp().ReturnFilenameWithRelativePathInLibPath(fullfilename);
     m_3D_ShapeName->SetValue( shortfilename );
 }
 

@@ -178,7 +178,13 @@ public:
     wxString ReturnLastVisitedLibraryPath( const wxString & aSubPathToSearch = wxEmptyString);
     void SaveLastVisitedLibraryPath( const wxString & aPath);
 
-
+    /** ReturnFilenameWithRelativePathInLibPath
+     * @return a short filename (with extension) with only a relative path if this filename
+     * can be found in library paths
+     * @param aFullFilename = filename with path and extension.
+     */
+    wxString ReturnFilenameWithRelativePathInLibPath(const wxString & aFullFilename);
+    
     /** Function RemoveLibraryPath
      * Removes the given ptah from the libary path list
      * @param path = the path to remove
