@@ -791,7 +791,7 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
                 if( pathlen < 0                             // a subpath is found
                    || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
                 {
-                    filename = fn.GetPathWithSep() + fn.GetName();
+                    filename = fn.GetPathWithSep() + fn.GetFullName();
                     pathlen  = fn.GetPath().Len();
                 }
                 fn = FullFileName;  //Try to find a better subpath

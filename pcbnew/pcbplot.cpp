@@ -693,7 +693,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
     case PLOT_FORMAT_HPGL:
         ext = wxT( "plt" );
-        wildcard = _( "HPGL plat files (.plt)|*.plt" );
+        wildcard = _( "HPGL plot files (.plt)|*.plt" );
         break;
     }
 
