@@ -70,7 +70,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_Value = new TEXTE_MODULE( this, TEXT_is_VALUE );
 //    m_Value->SetBack( this );
 
-    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );
+    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );   // Reserve one void 3D entry
 }
 
 
@@ -138,9 +138,15 @@ void MODULE::Copy( MODULE* aModule )
 
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
-        S3D_MASTER* t3d = new S3D_MASTER( this );
-        t3d->Copy( item );
-        m_3D_Drawings.PushBack( t3d );
+        S3D_MASTER* t3d = m_3D_Drawings;
+        if ( t3d && t3d->m_Shape3DName.IsEmpty() )
+            t3d->Copy( item );
+        else
+        {
+            t3d = new S3D_MASTER( this );
+            t3d->Copy( item );
+            m_3D_Drawings.PushBack( t3d );
+        }
     }
 
     /* Copie des elements complementaires */
