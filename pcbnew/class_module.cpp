@@ -138,8 +138,10 @@ void MODULE::Copy( MODULE* aModule )
 
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
+        if ( item->m_Shape3DName.IsEmpty() )            // do not copy empty shapes.
+            continue;
         S3D_MASTER* t3d = m_3D_Drawings;
-        if ( t3d && t3d->m_Shape3DName.IsEmpty() )
+        if ( t3d && t3d->m_Shape3DName.IsEmpty() )      // The first entry can exist, but is empty : use it.
             t3d->Copy( item );
         else
         {
