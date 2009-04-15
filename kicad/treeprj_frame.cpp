@@ -816,7 +816,6 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
     cellule = m_TreeProject->AppendItem( root, file );
     TreePrjItemData* data = new TreePrjItemData( type, name, m_TreeProject );
 
-    m_TreeProject->SetItemFont( cellule, *g_StdFont );
     m_TreeProject->SetItemData( cellule, data );
     data->SetState( 0 );
 
@@ -880,8 +879,6 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
     else
         m_TreeProject->DeleteAllItems();
 
-    m_TreeProject->SetFont( *g_StdFont );
-
     if( !m_Parent->m_ProjectFileName.IsOk() )
     {
         fn.Clear();
@@ -905,8 +902,6 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
                                 new TreePrjItemData( TREE_PROJECT,
                                                      wxEmptyString,
                                                      m_TreeProject ) );
-
-    m_TreeProject->SetItemFont( rootcellule, *g_StdFont );
 
     fn.SetExt( SchematicFileExtension );
 

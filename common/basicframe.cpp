@@ -39,7 +39,6 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
     wxSize minsize;
 
     m_Ident  = idtype;
-    SetFont( *g_StdFont );
     m_HToolBar       = NULL;
     m_FrameIsActive  = TRUE;
     m_MsgFrameHeight = MSG_PANEL_DEFAULT_HEIGHT;
@@ -300,19 +299,6 @@ void WinEDA_BasicFrame::ProcessFontPreferences( int id )
     switch( id )
     {
     case ID_PREFERENCES_FONT:
-        break;
-
-    case ID_PREFERENCES_FONT_STATUS:
-        font = wxGetFontFromUser( this, *g_StdFont );
-        if( font.Ok() )
-        {
-            int pointsize = font.GetPointSize();
-            *g_StdFont = font;
-            SetFont( *g_StdFont );
-            if( GetStatusBar() )
-                GetStatusBar()->SetFont( *g_StdFont );
-            g_StdFontPointSize = pointsize;
-        }
         break;
 
     case ID_PREFERENCES_FONT_DIALOG:

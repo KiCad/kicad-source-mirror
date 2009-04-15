@@ -70,16 +70,11 @@ wxString    g_UserLibDirBuffer;
 int         g_DebugLevel;
 int         g_MouseOldButtons;
 int         g_KeyPressed;
-wxFont*     g_StdFont = NULL;
 wxFont*     g_DialogFont = NULL;   /* Normal font used in dialog box */
-wxFont*     g_ItalicFont = NULL;   /* Italic font used in dialog box */
-wxFont*     g_MsgFont = NULL;      /* Italic font used in message panel */
 wxFont*     g_FixedFont = NULL;    /* Affichage de Texte en fenetres de dialogue,
                                     * fonte a pas fixe)*/
-int         g_StdFontPointSize;    /* taille de la fonte */
 int         g_DialogFontPointSize; /* taille de la fonte */
 int         g_FixedFontPointSize;  /* taille de la fonte */
-int         g_MsgFontPointSize;    /* taille de la fonte */
 int         g_FontMinPointSize;    /* taille minimum des fontes */
 
 

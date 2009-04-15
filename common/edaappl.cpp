@@ -247,11 +247,8 @@ WinEDA_App::~WinEDA_App()
     if( m_EDA_CommonConfig )
         delete m_EDA_CommonConfig;
     delete m_EDA_Config;
-    delete g_StdFont;
     delete g_DialogFont;
-    delete g_ItalicFont;
     delete g_FixedFont;
-    delete g_MsgFont;
     if( m_Checker )
         delete m_Checker;
     delete m_Locale;
@@ -286,8 +283,8 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
             m_KicadEnv += UNIX_STRING_DIR_SEP;
     }
 
-/* Prepare On Line Help. Use only lower case for help filenames, in order to
- * avoid problems with upper/lower case filenames under windows and unix */
+/* Prepare On Line Help. Use only lower case for help file names, in order to
+ * avoid problems with upper/lower case file names under windows and unix */
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
     m_HelpFileName = aName.Lower() + wxT( ".html" );
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
@@ -306,22 +303,11 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     wxASSERT( m_EDA_CommonConfig != NULL );
 
     /* Create the fonts used in dialogs and messages */
-    g_StdFontPointSize    = FONT_DEFAULT_SIZE;
-    g_MsgFontPointSize    = FONT_DEFAULT_SIZE;
     g_DialogFontPointSize = FONT_DEFAULT_SIZE;
     g_FixedFontPointSize  = FONT_DEFAULT_SIZE;
 
-    g_StdFont = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN,
-                            wxNORMAL, wxNORMAL );
-
-    g_MsgFont = new wxFont( g_StdFontPointSize, wxFONTFAMILY_ROMAN,
-                            wxNORMAL, wxNORMAL );
-
     g_DialogFont = new wxFont( g_DialogFontPointSize, wxFONTFAMILY_ROMAN,
                                wxNORMAL, wxNORMAL );
-
-    g_ItalicFont = new wxFont( g_DialogFontPointSize, wxFONTFAMILY_ROMAN,
-                               wxFONTSTYLE_ITALIC, wxNORMAL );
 
     g_FixedFont = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN,
                               wxNORMAL, wxNORMAL );
@@ -460,7 +446,7 @@ bool WinEDA_App::SetBinDir()
     */
     m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
-    // Remove filename form command line:
+    // Remove file name form command line:
     while( m_BinDir.Last() != '/' && !m_BinDir.IsEmpty() )
         m_BinDir.RemoveLast();
 
@@ -483,6 +469,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 {
     size_t     i;
     wxString   path = m_BinDir;
+    wxPathList tmp;
 
     m_searchPaths.Clear();
 
@@ -496,7 +483,6 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 
 #endif
     wxFileName fn( path, wxEmptyString );
-
 
     /* User environment variable path is the first search path.  Chances are
      * if the user is savvy enough to set an environment variable they know
@@ -522,15 +508,44 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     fn.AppendDir( wxT( "kicad" ) );
     m_searchPaths.Add( fn.GetPath() );
 
+    /* The normal OS program file install paths allow for binary to be
+     * installed in a different path from the library files.  This is
+     * useful for development purposes so the library and documentation
+     * files do not need to be installed separately.  If someone can
+     * figure out a way to implement this without #ifdef, please do. */
+#ifdef __WXMSW__
+    tmp.AddEnvList( wxT( "PROGRAMFILES" ) );
+#else
+    tmp.AddEnvList( wxT( "PATH" ) );
+#endif
+
+    for( i = 0; i < tmp.GetCount(); i++ )
+    {
+        fn = wxFileName( tmp[i], wxEmptyString );
+
+        if( fn.GetPath().AfterLast( fn.GetPathSeparator() ) == wxT( "bin" ) )
+            fn.RemoveLastDir();
+
+        m_searchPaths.Add( fn.GetPath() );
+        fn.AppendDir( wxT( "kicad" ) );
+        m_searchPaths.Add( fn.GetPath() );
+        fn.AppendDir( wxT( "share" ) );
+        m_searchPaths.Add( fn.GetPath() );
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.AppendDir( wxT( "share" ) );
+        m_searchPaths.Add( fn.GetPath() );
+        fn.AppendDir( wxT( "kicad" ) );
+        m_searchPaths.Add( fn.GetPath() );
+    }
+
     /* Remove all non-existent paths from the list. */
     for( i = 0; i < m_searchPaths.GetCount(); i++ )
     {
-        wxLogDebug( wxT( "Checking if search path <" ) +
-                    m_searchPaths[i] + wxT( "> exists." ) );
         if( !wxFileName::IsDirReadable( m_searchPaths[i] ) )
         {
-            wxLogDebug( wxT( "Removing non-existent path <" ) +
-                        m_searchPaths[i] + wxT( "> from search path list." ) );
+            wxLogDebug( wxT( "Removing <" ) + m_searchPaths[i] +
+                        wxT( "> from search path list." ) );
             m_searchPaths.RemoveAt( i );
             i -= 1;
         }
@@ -546,7 +561,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                 fn.AppendDir( wxT( "library") );
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                    wxLogDebug( wxT( "Adding <%s> to search path list" ),
                                 fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
@@ -555,7 +570,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                 fn.AppendDir( wxT( "doc") );
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                    wxLogDebug( wxT( "Adding <%s> to search path list" ),
                                 fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
@@ -568,14 +583,14 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 
             if( fn.IsDirReadable() )
             {
-                wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                wxLogDebug( wxT( "Adding <%s> to search path list" ),
                             fn.GetPath().c_str() );
                 m_libSearchPaths.Add( fn.GetPath() );
             }
             fn.RemoveLastDir();
 
             /* Add PCB library file path to search path list. */
-            if ( (m_Id == APP_TYPE_PCBNEW) ||  (m_Id == APP_TYPE_CVPCB) )
+            if ( ( m_Id == APP_TYPE_PCBNEW ) || ( m_Id == APP_TYPE_CVPCB ) )
             {
                 fn.AppendDir( wxT( "modules" ) );
 
@@ -591,7 +606,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
+                    wxLogDebug( wxT( "Adding <%s> to search path list" ),
                                 fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
@@ -625,43 +640,10 @@ void WinEDA_App::GetSettings()
     m_fileHistory.Load( *m_EDA_Config );
 
     /* Set default font sizes */
-    g_StdFontPointSize = m_EDA_Config->Read( wxT( "SdtFontSize" ),
-                                             FONT_DEFAULT_SIZE );
-    g_MsgFontPointSize = m_EDA_Config->Read( wxT( "MsgFontSize" ),
-                                             FONT_DEFAULT_SIZE );
     g_DialogFontPointSize = m_EDA_Config->Read( wxT( "DialogFontSize" ),
                                                 FONT_DEFAULT_SIZE );
     g_FixedFontPointSize = m_EDA_Config->Read( wxT( "FixedFontSize" ),
                                                FONT_DEFAULT_SIZE );
-
-    /* Std font type */
-    Line = m_EDA_Config->Read( wxT( "SdtFontType" ), wxEmptyString );
-    if( !Line.IsEmpty() )
-        g_StdFont->SetFaceName( Line );
-
-    /* Sdt font style */
-    ii = m_EDA_Config->Read( wxT( "SdtFontStyle" ), wxFONTFAMILY_ROMAN );
-    g_StdFont->SetStyle( ii );
-
-    /* Sdt font weight */
-    ii = m_EDA_Config->Read( wxT( "SdtFontWeight" ), wxNORMAL );
-    g_StdFont->SetWeight( ii );
-    g_StdFont->SetPointSize( g_StdFontPointSize );
-
-    /* Msg font type */
-    Line = m_EDA_Config->Read( wxT( "MsgFontType" ), wxEmptyString );
-    if( !Line.IsEmpty() )
-        g_MsgFont->SetFaceName( Line );
-
-    /* Msg font style */
-    ii = m_EDA_Config->Read( wxT( "MsgFontStyle" ), wxFONTFAMILY_ROMAN );
-    g_MsgFont->SetStyle( ii );
-
-    /* Msg font weight */
-    ii = m_EDA_Config->Read( wxT( "MsgFontWeight" ), wxNORMAL );
-    g_MsgFont->SetWeight( ii );
-    g_MsgFont->SetPointSize( g_MsgFontPointSize );
-
 
     Line = m_EDA_Config->Read( wxT( "DialogFontType" ), wxEmptyString );
     if( !Line.IsEmpty() )
@@ -696,21 +678,10 @@ void WinEDA_App::SaveSettings()
     wxASSERT( m_EDA_Config != NULL );
 
     /* Sdt font settings */
-    m_EDA_Config->Write( wxT( "SdtFontSize" ), g_StdFontPointSize );
-    m_EDA_Config->Write( wxT( "SdtFontType" ), g_StdFont->GetFaceName() );
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 #warning TODO: under wxWidgets 3.0, see how to replace the next lines
 #else
-    m_EDA_Config->Write( wxT( "SdtFontStyle" ), g_StdFont->GetStyle() );
-    m_EDA_Config->Write( wxT( "SdtFontWeight" ), g_StdFont->GetWeight() );
-
-    /* Msg font settings */
-    m_EDA_Config->Write( wxT( "MsgFontSize" ), g_MsgFontPointSize );
-    m_EDA_Config->Write( wxT( "MsgFontType" ), g_MsgFont->GetFaceName() );
-    m_EDA_Config->Write( wxT( "MsgFontStyle" ), g_MsgFont->GetStyle() );
-    m_EDA_Config->Write( wxT( "MsgFontWeight" ), g_MsgFont->GetWeight() );
-
     /* Dialog font settings */
     m_EDA_Config->Write( wxT( "DialogFontSize" ), g_DialogFontPointSize );
     m_EDA_Config->Write( wxT( "DialogFontType" ), g_DialogFont->GetFaceName() );
@@ -1035,36 +1006,35 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
  * path in lib path list ( but not the CWD )
  * @param aSubPathToSearch = Prefered sub path to search in path list (defualt = empty string)
  */
-wxString s_LastVisitedLibPath;      // Last lib directoty used when adding libraries
 wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString & aSubPathToSearch )
 {
-    if ( ! s_LastVisitedLibPath.IsEmpty() )
-        return s_LastVisitedLibPath;
+    if ( m_LastVisitedLibPath )
+        return m_LastVisitedLibPath;
 
     wxString path;
 
    /* Initialize default path to the main default lib path
     * this is the second path in list (the first is the project path)
     */
-    unsigned pcount = wxGetApp().GetLibraryPathList().GetCount();
+    unsigned pcount = m_libSearchPaths.GetCount();
     if ( pcount )
     {
         unsigned ipath = 0;
-        if ( wxGetApp().GetLibraryPathList()[0] == wxGetCwd() )
+        if ( m_libSearchPaths[0] == wxGetCwd() )
             ipath = 1;
 
-        // First choice fo path:
+        // First choice of path:
         if ( ipath < pcount )
-            path = wxGetApp().GetLibraryPathList()[ipath];
+            path = m_libSearchPaths[ipath];
 
         // Search a sub path matching aSubPathToSearch
         if ( ! aSubPathToSearch.IsEmpty() )
         {
             for ( ; ipath < pcount; ipath++ )
             {
-                if ( wxGetApp().GetLibraryPathList()[ipath].Contains( aSubPathToSearch ) )
+                if ( m_libSearchPaths[ipath].Contains( aSubPathToSearch ) )
                 {
-                    path = wxGetApp().GetLibraryPathList()[ipath];
+                    path = m_libSearchPaths[ipath];
                     break;
                 }
             }
@@ -1078,7 +1048,7 @@ wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString & aSubPathToSe
 
 void WinEDA_App::SaveLastVisitedLibraryPath( const wxString & aPath)
 {
-    s_LastVisitedLibPath = aPath;
+    m_LastVisitedLibPath = aPath;
 }
 
 /** ReturnFilenameWithRelativePathInLibPath
@@ -1098,14 +1068,14 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath(const wxString & aF
     wxFileName fn = aFullFilename;
     wxString filename = aFullFilename;
     int        pathlen = -1;                                                    // path len, used to find the better subpath within defualts paths
-    if( GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
+    if( m_libSearchPaths.Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
         filename = fn.GetName();
     else                                                                        // not in the default, : see if this file is in a subpath:
     {
         filename = fn.GetPathWithSep() + fn.GetFullName();
-        for( unsigned kk = 0; kk < wxGetApp().GetLibraryPathList().GetCount(); kk++ )
+        for( unsigned kk = 0; kk < m_libSearchPaths.GetCount(); kk++ )
         {
-            if( fn.MakeRelativeTo(GetLibraryPathList()[kk] ) )
+            if( fn.MakeRelativeTo(m_libSearchPaths[kk] ) )
             {
                 if( pathlen < 0                             // a subpath is found
                    || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
@@ -1120,7 +1090,6 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath(const wxString & aF
 
     return filename;
 }
-
 
 
 /** FindLibraryPath
@@ -1140,7 +1109,7 @@ wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
 }
 
 /** Function RemoveLibraryPath
- * Removes the given ptah from the libary path list
+ * Removes the given path from the library path list
  * @param path = the path to remove
  */
 void WinEDA_App::RemoveLibraryPath( const wxString& path )

@@ -27,7 +27,8 @@ WinEDA_MsgPanel::WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id,
     wxPanel( parent, id, pos, size )
 {
     m_Parent = parent;
-    SetFont( *g_MsgFont );
+    SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     m_last_x = 0;
 }
 
@@ -45,12 +46,10 @@ void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
 
     erase( &dc );
 
-    dc.SetBackground( *wxBLACK_BRUSH );
+    dc.SetBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     dc.SetBackgroundMode( wxSOLID );
-
-    dc.SetTextBackground( GetBackgroundColour() );
-
-    dc.SetFont( *g_MsgFont );
+    dc.SetTextBackground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
 
     for( unsigned i=0;  i<m_Items.size();  ++i )
         showItem( dc, m_Items[i] );
@@ -85,7 +84,7 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
     {
         wxClientDC dc( this );
 
-        dc.SetFont( *g_MsgFont );
+        dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
         dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
 
     }   // destroy wxClientDC ASAP
@@ -178,7 +177,7 @@ void WinEDA_MsgPanel::erase( wxDC* DC )
     wxBrush brush;
 
     wxSize  size  = GetClientSize();
-    wxColor color = GetBackgroundColour();
+    wxColor color = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
     pen.SetColour( color );
 

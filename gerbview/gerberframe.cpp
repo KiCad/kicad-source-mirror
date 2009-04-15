@@ -37,7 +37,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_NEW_BOARD, WinEDA_GerberFrame::Files_io )
     EVT_TOOL( ID_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
 
-    EVT_MENU_RANGE( ID_PREFERENCES_FONT_INFOSCREEN, ID_PREFERENCES_FONT_END,
+    EVT_MENU_RANGE( ID_PREFERENCES_FONT_DIALOG, ID_PREFERENCES_FONT_END,
                     WinEDA_DrawFrame::ProcessFontPreferences )
 
 // Menu Files:

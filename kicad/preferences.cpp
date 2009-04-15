@@ -98,24 +98,6 @@ void WinEDA_MainFrame::OnSelectPreferredEditor( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnSelectFont( wxCommandEvent& event )
-{
-    wxFont font = wxGetFontFromUser( this, *g_StdFont );
-
-    if( font.Ok() )
-    {
-        int pointsize = font.GetPointSize();
-        *g_StdFont = font;
-        g_StdFontPointSize    = pointsize;
-        g_DialogFontPointSize = pointsize;
-        g_FixedFontPointSize  = pointsize;
-        m_LeftWin->ReCreateTreePrj();
-        m_DialogWin->SetFont( *g_StdFont );
-        m_DialogWin->Refresh();
-    }
-}
-
-
 void WinEDA_MainFrame::SetLanguage( wxCommandEvent& event )
 {
     wxGetApp().SetLanguageIdentifier( event.GetId() );

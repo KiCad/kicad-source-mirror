@@ -51,7 +51,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
                     ID_SCHEMATIC_MAIN_TOOLBAR_END,
                     WinEDA_SchematicFrame::Process_Special_Functions )
 
-    EVT_MENU_RANGE( ID_PREFERENCES_FONT_INFOSCREEN, ID_PREFERENCES_FONT_END,
+    EVT_MENU_RANGE( ID_PREFERENCES_FONT_DIALOG, ID_PREFERENCES_FONT_END,
                     WinEDA_DrawFrame::ProcessFontPreferences )
 
     EVT_MENU( ID_SAVE_PROJECT, WinEDA_SchematicFrame::Save_File )

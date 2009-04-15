@@ -118,13 +118,11 @@ static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
                                               int id, const wxString& text,
                                               const wxBitmap& icon )
 {
-    extern wxFont* g_ItalicFont;
     wxMenuItem*    l_item;
 
     l_item = new wxMenuItem( menu, id, text );
     l_item->SetSubMenu( submenu );
     l_item->SetBitmap( icon );
-    l_item->SetFont( *g_ItalicFont );
     menu->Append( l_item );
 };
 
@@ -135,13 +133,11 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
                                                        const wxString& help,
                                                        const wxBitmap& icon )
 {
-    extern wxFont* g_ItalicFont;
     wxMenuItem*    l_item;
 
     l_item = new wxMenuItem( menu, id, text, help );
     l_item->SetSubMenu( submenu );
     l_item->SetBitmap( icon );
-    l_item->SetFont( *g_ItalicFont );
     menu->Append( l_item );
 };
 

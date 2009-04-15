@@ -83,7 +83,6 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_DialogWin = new wxTextCtrl( m_BottomWin, ID_MAIN_DIALOG, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
-    m_DialogWin->SetFont( *g_StdFont );
 
     // m_CommandWin is the box with buttons which launch eechema, pcbnew ...
     m_CommandWin = new WinEDA_CommandFrame( this, ID_MAIN_COMMAND,
@@ -116,7 +115,6 @@ void WinEDA_MainFrame::PrintMsg( const wxString& text )
  * Put text in the dialog frame
  */
 {
-    m_DialogWin->SetFont( *g_StdFont );
     m_DialogWin->AppendText( text );
 #ifdef DEBUG
     printf("%s\n", (const char*)text.mb_str() );

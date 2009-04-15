@@ -46,7 +46,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
     EVT_TOOL( ID_OPEN_MODULE_EDITOR, WinEDA_PcbFrame::Process_Special_Functions )
 
-    EVT_MENU_RANGE( ID_PREFERENCES_FONT_INFOSCREEN, ID_PREFERENCES_FONT_END,
+    EVT_MENU_RANGE( ID_PREFERENCES_FONT_DIALOG, ID_PREFERENCES_FONT_END,
                     WinEDA_DrawFrame::ProcessFontPreferences )
 
 // Menu Files:

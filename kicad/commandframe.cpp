@@ -33,7 +33,6 @@ WinEDA_CommandFrame::WinEDA_CommandFrame( wxWindow* parent, int id,
     SetSashVisible( wxSASH_BOTTOM, TRUE );
     SetSashVisible( wxSASH_LEFT, TRUE );
     SetExtraBorderSize( 2 );
-    SetFont( *g_StdFont );
     CreateCommandToolbar();
 }
 

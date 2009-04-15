@@ -155,16 +155,11 @@ extern int g_KeyPressed;
 
 // Font used by kicad.
 // these font have a size which do not depend on default size system font
-extern wxFont* g_StdFont;             /* Standard font used for status display ,in message panel */
 extern wxFont* g_DialogFont;          /* Normal font used in dialog box */
-extern wxFont* g_ItalicFont;          /* Italic font used in dialog box */
-extern wxFont* g_MsgFont;             /* Italic font used in msg panel (lower window) */
 extern wxFont* g_FixedFont;   /* Affichage de Texte en fenetres de dialogue,
                                      *  fonte a pas fixe)*/
-extern int     g_StdFontPointSize;    /* taille de la fonte */
 extern int     g_DialogFontPointSize; /* taille de la fonte */
 extern int     g_FixedFontPointSize;  /* taille de la fonte */
-extern int     g_MsgFontPointSize;    /* taille de la fonte */
 extern int     g_FontMinPointSize;    /* taille minimum des fontes */
 
 extern bool    g_ShowPageLimits;      // TRUE to display the page limits

@@ -49,7 +49,6 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
     EVT_MENU( ID_SAVE_AND_ZIP_FILES, WinEDA_MainFrame::OnArchiveFiles )
     EVT_MENU( ID_READ_ZIP_ARCHIVE, WinEDA_MainFrame::OnUnarchiveFiles )
     EVT_MENU( ID_PROJECT_TREE_REFRESH, WinEDA_MainFrame::OnRefresh )
-    EVT_MENU( ID_PREFERENCES_FONT_INFOSCREEN, WinEDA_MainFrame::OnSelectFont )
     EVT_MENU( ID_GENERAL_HELP, WinEDA_MainFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_MainFrame::GetKicadAbout )
 
@@ -162,12 +161,6 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /**********************************************************************/
     wxMenu* PreferencesMenu = new wxMenu;
     /**********************************************************************/
-
-    // Fonts
-    item = new wxMenuItem( PreferencesMenu, ID_PREFERENCES_FONT_INFOSCREEN,
-                           _( "Fonts" ), _( "Font preferences" ) );
-    item->SetBitmap( fonts_xpm );
-    PreferencesMenu->Append( item );
 
     // Prefered text editor
     item = new wxMenuItem( PreferencesMenu, ID_SELECT_PREFERED_EDITOR,

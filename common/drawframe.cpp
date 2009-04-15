@@ -128,16 +128,6 @@ void WinEDA_DrawFrame::AddFontSelectionMenu( wxMenu* main_menu )
                   _( "Dialog boxes" ),
                   fonts_xpm );
 
-    ADD_MENUITEM( fontmenu,
-                  ID_PREFERENCES_FONT_INFOSCREEN,
-                  _( "Lists" ),
-                  fonts_xpm );
-
-    ADD_MENUITEM( fontmenu,
-                  ID_PREFERENCES_FONT_STATUS,
-                  _( "Status box" ),
-                  fonts_xpm );
-
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( main_menu,
                                         fontmenu,
                                         ID_PREFERENCES_FONT,
@@ -151,30 +141,17 @@ void WinEDA_DrawFrame::ProcessFontPreferences( wxCommandEvent& event )
 /********************************************************************/
 {
     int    id = event.GetId();
-    wxFont font;
 
     switch( id )
     {
     case ID_PREFERENCES_FONT:
     case ID_PREFERENCES_FONT_DIALOG:
-    case ID_PREFERENCES_FONT_STATUS:
         WinEDA_BasicFrame::ProcessFontPreferences( id );
         break;
 
-    case ID_PREFERENCES_FONT_INFOSCREEN:
-    {
-        font = wxGetFontFromUser( this, *g_MsgFont );
-        if( font.Ok() )
-        {
-            int pointsize = font.GetPointSize();
-            *g_MsgFont = font;
-            g_MsgFontPointSize = pointsize;
-        }
-        break;
-    }
-
     default:
-        DisplayError( this, wxT( "WinEDA_DrawFrame::ProcessFontPreferences Internal Error" ) );
+        DisplayError( this, wxT( "WinEDA_DrawFrame::ProcessFontPreferences " \
+                                 "Internal Error" ) );
         break;
     }
 }

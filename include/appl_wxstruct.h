@@ -74,6 +74,7 @@ protected:
     wxString      m_Title;
     wxPathList    m_libSearchPaths;
     wxFileName    m_projectFileName;
+    wxString      m_LastVisitedLibPath;
 
 public:
     WinEDA_App();

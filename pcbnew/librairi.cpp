@@ -178,7 +178,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    if( dlg.ShowModal() == wxCANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     fn = dlg.GetPath();
@@ -417,7 +417,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
                           wxEmptyString, ModuleFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-        if( dlg.ShowModal() == wxCANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
         fileName = dlg.GetPath();
