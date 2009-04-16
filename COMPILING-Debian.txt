@@ -33,8 +33,8 @@ Checkout sourcecode using subversion or download latest release.
 'svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad kicad'
 
 *Release*
-'wget ftp://iut-tice.ujf-grenoble.fr/cao/kicad-sources-2008-08-25c.tar.gz'
-'tar -xvf kicad-sources-2008-08-25c.tar.gz'
+download http://iut-tice.ujf-grenoble.fr/cao/kicad-sources-yyyy-mm-dd.tgz'
+'tar -xvf kicad-sources-yyyy-mm-dd.tgz'
 
 
 Compiling
