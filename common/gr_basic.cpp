@@ -50,8 +50,6 @@ extern BASE_SCREEN* ActiveScreen;
 
 /* Variables locales */
 static int          GRLastMoveToX, GRLastMoveToY;
-static int          Text_Color = LIGHTGRAY;
-
 static int          PenMinWidth = 1; /* largeur minimum de la plume (DOIT etre > 0)
                                       *  (utile pour trace sur imprimante) */
 static int          ForceBlackPen; /* si != 0 : traces en noir (utilise pour trace

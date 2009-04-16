@@ -1008,7 +1008,7 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
  */
 wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString & aSubPathToSearch )
 {
-    if ( m_LastVisitedLibPath )
+    if ( ! m_LastVisitedLibPath.IsEmpty() )
         return m_LastVisitedLibPath;
 
     wxString path;

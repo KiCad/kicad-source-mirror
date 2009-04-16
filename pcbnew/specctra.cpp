@@ -321,7 +321,7 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
 
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
+        ThrowIOError( _("Unable to open file \"") + filename +wxT("\"")  );
     }
 
     file.Attach( fp );      // "exception safe" way to close the file.
@@ -351,7 +351,7 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
 
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
+        ThrowIOError( _("Unable to open file \"") + filename + wxT("\"")  );
     }
 
     file.Attach( fp );      // "exception safe" way to close the file.
@@ -3465,7 +3465,7 @@ int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
     }
 
     if( result<0 || (result=vfprintf( fp, fmt, args ))<0 )
-        ThrowIOError( _("System file error writing to file \"%s\""), filename.GetData() );
+        ThrowIOError( _("System file error writing to file \"") + filename + wxT("\"") );
 
     va_end( args );
 
@@ -3521,7 +3521,7 @@ void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IOErro
 
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
+        ThrowIOError( _("Unable to open file \"") + filename + wxT("\"") );
     }
 
     if( pcb )
@@ -3546,7 +3546,7 @@ void SPECCTRA_DB::ExportSESSION( wxString filename )
 
     if( !fp )
     {
-        ThrowIOError( _("Unable to open file \"%s\""), filename.GetData() );
+        ThrowIOError( _("Unable to open file \"") + filename + wxT("\"") );
     }
 
     if( session )

@@ -717,7 +717,7 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
     char     Line[2048], * name;
     wxString path;
 
-    for( unsigned ii; ii < wxGetApp().GetLibraryPathList().GetCount(); ii++ )
+    for( unsigned ii = 0; ii < wxGetApp().GetLibraryPathList().GetCount(); ii++ )
     {
         path = wxGetApp().GetLibraryPathList()[ii];
         FullFileName = wxFindFirstFile( path + wxT( "*." ) + CompLibFileExtension );
