@@ -856,7 +856,7 @@ static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, wxPoint Points[] )
     xcliplo = ClipBox->GetX();
     ycliplo = ClipBox->GetY();
     xcliphi = ClipBox->GetRight();
-    ycliphi = ClipBox->GetHeight();
+    ycliphi = ClipBox->GetBottom();
 
     if( Xmax < xcliplo )
         return FALSE;

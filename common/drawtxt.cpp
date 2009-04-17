@@ -14,7 +14,7 @@
 #include "class_base_screen.h"
 
 #ifndef DEFAULT_SIZE_TEXT
-#	define DEFAULT_SIZE_TEXT 50
+#   define DEFAULT_SIZE_TEXT 50
 #endif
 
 #define EDA_DRAWBASE
@@ -22,53 +22,59 @@
 
 /** Function NegableTextLength
  * Return the text length of a negable string, excluding the ~ markers */
-int NegableTextLength(const wxString& aText)
+int NegableTextLength( const wxString& aText )
 {
     int char_count = aText.length();
+
     /* Fix the character count, removing the ~ found */
-    for (int i = char_count-1; i >= 0; i--) {
-	if (aText[i] == '~') {
-	    char_count--;
-	}
+    for( int i = char_count - 1; i >= 0; i-- )
+    {
+        if( aText[i] == '~' )
+        {
+            char_count--;
+        }
     }
+
     return char_count;
 }
 
+
 /* Helper function for drawing character polygons */
 static void DrawGraphicTextPline(
-	WinEDA_DrawPanel* aPanel,
-	wxDC* aDC,
-	EDA_Colors aColor,
-	int aWidth,
-	bool sketch_mode,
-	int point_count,
-	wxPoint *coord,
-	void (* aCallback) (int x0, int y0, int xf, int yf))
+    WinEDA_DrawPanel* aPanel,
+    wxDC* aDC,
+    EDA_Colors aColor,
+    int aWidth,
+    bool sketch_mode,
+    int point_count,
+    wxPoint* coord,
+    void (* aCallback)(int x0, int y0, int xf, int yf) )
 {
-    if ( aCallback )
+    if( aCallback )
     {
-	for( int ik = 0; ik < (point_count - 1); ik ++ )
-	{
-	    aCallback( coord[ik].x, coord[ik].y,
-		    coord[ik+1].x, coord[ik+1].y );
-	}
+        for( int ik = 0; ik < (point_count - 1); ik++ )
+        {
+            aCallback( coord[ik].x, coord[ik].y,
+                       coord[ik + 1].x, coord[ik + 1].y );
+        }
     }
-
     else if( sketch_mode )
     {
-	for( int ik = 0; ik < (point_count - 1); ik ++ )
-	    GRCSegm( &aPanel->m_ClipBox, aDC, coord[ik].x, coord[ik].y,
-		    coord[ik+1].x, coord[ik+1].y, aWidth, aColor );
+        for( int ik = 0; ik < (point_count - 1); ik++ )
+            GRCSegm( &aPanel->m_ClipBox, aDC, coord[ik].x, coord[ik].y,
+                     coord[ik + 1].x, coord[ik + 1].y, aWidth, aColor );
     }
     else
-	GRPoly( &aPanel->m_ClipBox, aDC, point_count, coord, 0,
-		aWidth, aColor, aColor );
+        GRPoly( &aPanel->m_ClipBox, aDC, point_count, coord, 0,
+                aWidth, aColor, aColor );
 }
 
-static int overbar_position(int size_v, int thickness)
+
+static int overbar_position( int size_v, int thickness )
 {
-    return size_v*1.1+thickness;
+    return size_v * 1.1 + thickness;
 }
+
 
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)
@@ -90,18 +96,18 @@ static int overbar_position(int size_v, int thickness)
  */
 /****************************************************************************************************/
 void DrawGraphicText( WinEDA_DrawPanel* aPanel,
-                      wxDC* aDC,
-                      const wxPoint& aPos,
-                      EDA_Colors aColor,
-                      const wxString& aText,
-                      int aOrient,
-                      const wxSize& aSize,
-                      enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
-                      int aWidth,
-                      bool aItalic,
-		      bool aNegable,
-                      void (* aCallback) (int x0, int y0, int xf, int yf))
+                     wxDC* aDC,
+                     const wxPoint& aPos,
+                     EDA_Colors aColor,
+                     const wxString& aText,
+                     int aOrient,
+                     const wxSize& aSize,
+                     enum GRTextHorizJustifyType aH_justify,
+                     enum GRTextVertJustifyType aV_justify,
+                     int aWidth,
+                     bool aItalic,
+                     bool aNegable,
+                     void (* aCallback)(int x0, int y0, int xf, int yf) )
 /****************************************************************************************************/
 {
     int            char_count, AsciiCode;
@@ -110,15 +116,16 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     SH_CODE        f_cod, plume = 'U';
     const SH_CODE* ptcar;
     int            ptr;
-    int            ux0, uy0, dx, dy;    // Draw coordinate for segments to draw. also used in some other calculation
-    int            cX, cY;              // Texte center
-    int            ox, oy;              // Draw coordinates for the current char
-    int		   overbar_x, overbar_y;	// Start point for the current overbar
-    int		   overbars;		// Number of ~ seen
+    int            ux0, uy0, dx, dy;        // Draw coordinate for segments to draw. also used in some other calculation
+    int            cX, cY;                  // Texte center
+    int            ox, oy;                  // Draw coordinates for the current char
+    int            overbar_x, overbar_y;    // Start point for the current overbar
+    int            overbars;                // Number of ~ seen
+
     #define        BUF_SIZE 100
-    wxPoint        coord[BUF_SIZE+1];          // Buffer coordinate used to draw polylines (one char shape)
-    bool           sketch_mode = false;
-    bool	   italic_reverse = false;		// true for mirrored texts with m_Size.x < 0
+    wxPoint        coord[BUF_SIZE + 1];         // Buffer coordinate used to draw polylines (one char shape)
+    bool           sketch_mode    = false;
+    bool           italic_reverse = false;      // true for mirrored texts with m_Size.x < 0
 
     size_h = aSize.x;
     size_v = aSize.y;
@@ -129,19 +136,22 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         sketch_mode = true;
     }
     int thickness = aWidth;
-    if ( aSize.x < 0 )		// text is mirrored using size.x < 0 (mirror / Y axis)
-	italic_reverse = true;
+    if( aSize.x < 0 )       // text is mirrored using size.x < 0 (mirror / Y axis)
+        italic_reverse = true;
 
-    if (aNegable) {
-	char_count = NegableTextLength(aText);
-    } else {
-	char_count = aText.Len();
+    if( aNegable )
+    {
+        char_count = NegableTextLength( aText );
+    }
+    else
+    {
+        char_count = aText.Len();
     }
     if( char_count == 0 )
         return;
 
     pitch = (10 * size_h ) / 9;    // this is the pitch between chars
-    if ( pitch > 0 )
+    if( pitch > 0 )
         pitch += thickness;
     else
         pitch -= thickness;
@@ -177,11 +187,11 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 
     /* Compute the position ux0, uy0 of the first letter , next */
     dx = (pitch * char_count) / 2;
-    dy = size_v / 2;                        /* dx, dy = draw offset between first letter and text center */
+    dy = size_v / 2;                            /* dx, dy = draw offset between first letter and text center */
 
-    ux0 = uy0 = 0;                          /* Decalage du centre du texte / coord de ref */
+    ux0 = uy0 = 0;                              /* Decalage du centre du texte / coord de ref */
 
-    if( (aOrient == 0) || (aOrient == 1800) ) /* Horizontal Text */
+    if( (aOrient == 0) || (aOrient == 1800) )   /* Horizontal Text */
     {
         switch( aH_justify )
         {
@@ -252,8 +262,9 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     if( aPanel && aPanel->GetScreen()->Scale( aSize.x ) == 0 )
         return;
 
-    if( aPanel && ABS( (aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )    /* shapes are too small: connot be drawn */
-    {                                   /* insteed the text is drawn as a line */
+    if( aPanel && ABS( ( aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )    /* shapes are too small: connot be drawn */
+    {
+        /* insteed the text is drawn as a line */
         dx = (pitch * char_count) / 2;
         dy = size_v / 2;                /* line is always centered */
 
@@ -261,12 +272,12 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         uy0 = cY;
 
         dx += cX;
-        dy = cY;
+        dy  = cY;
 
         RotatePoint( &ux0, &uy0, cX, cY, aOrient );
         RotatePoint( &dx, &dy, cX, cY, aOrient );
 
-        if ( aCallback )
+        if( aCallback )
             aCallback( ux0, uy0, dx, dy );
         else
             GRLine( &aPanel->m_ClipBox, aDC, ux0, uy0, dx, dy, aWidth, aColor );
@@ -278,48 +289,53 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     ptr = 0;   /* ptr = text index */
     while( ptr < char_count )
     {
-	if (aNegable) {
-	    if (aText[ptr+overbars] == '~') {
-		/* Found an overbar, adjust the pointers */
-		overbars++;
+        if( aNegable )
+        {
+            if( aText[ptr + overbars] == '~' )
+            {
+                /* Found an overbar, adjust the pointers */
+                overbars++;
 
-		if (overbars % 2) {
-		    /* Starting the overbar */
-		    overbar_x = ox;
-		    overbar_y = oy-overbar_position(size_v, thickness);
+                if( overbars % 2 )
+                {
+                    /* Starting the overbar */
+                    overbar_x = ox;
+                    overbar_y = oy - overbar_position( size_v, thickness );
                     RotatePoint( &overbar_x, &overbar_y, cX, cY, aOrient );
-		} else {
-		    /* Ending the overbar */
-		    coord[0].x = overbar_x;
-		    coord[0].y = overbar_y;
-		    overbar_x = ox;
-		    overbar_y = oy-overbar_position(size_v, thickness);
+                }
+                else
+                {
+                    /* Ending the overbar */
+                    coord[0].x = overbar_x;
+                    coord[0].y = overbar_y;
+                    overbar_x  = ox;
+                    overbar_y  = oy - overbar_position( size_v, thickness );
                     RotatePoint( &overbar_x, &overbar_y, cX, cY, aOrient );
-		    coord[1].x = overbar_x;
-		    coord[1].y = overbar_y;
-		    /* Plot the overbar segment */
-		    DrawGraphicTextPline(aPanel, aDC, aColor, aWidth,
-			sketch_mode, 2, coord, aCallback);
-		}
-		continue; /* Skip ~ processing */
-	    }
-	}
+                    coord[1].x = overbar_x;
+                    coord[1].y = overbar_y;
+                    /* Plot the overbar segment */
+                    DrawGraphicTextPline( aPanel, aDC, aColor, aWidth,
+                                          sketch_mode, 2, coord, aCallback );
+                }
+                continue; /* Skip ~ processing */
+            }
+        }
 
-	AsciiCode = aText.GetChar(ptr+overbars);
+        AsciiCode = aText.GetChar( ptr + overbars );
 
 #if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-    AsciiCode &= 0x7FF;
-	if ( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
-	    AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
-	else
-	    AsciiCode = AsciiCode & 0xFF;
+        AsciiCode &= 0x7FF;
+        if( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
+            AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
+        else
+            AsciiCode = AsciiCode & 0xFF;
 #else
         AsciiCode &= 0xFF;
 #endif
         ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
                                                   *  du caractere a dessiner */
 
-        int point_count;
+        int  point_count;
         bool endcar;
         for( point_count = 0, endcar = false; !endcar; ptcar++ )
         {
@@ -336,9 +352,9 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                 if( point_count && (plume == 'D' ) )
                 {
                     if( aWidth <= 1 )
-                       aWidth = 0;
-		    DrawGraphicTextPline(aPanel, aDC, aColor, aWidth,
-			sketch_mode, point_count, coord, aCallback);
+                        aWidth = 0;
+                    DrawGraphicTextPline( aPanel, aDC, aColor, aWidth,
+                                          sketch_mode, point_count, coord, aCallback );
                 }
                 plume = f_cod; point_count = 0;
                 break;
@@ -348,28 +364,29 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                 break;
 
             default:
-                {
-                    int y, k1, k2;
-                    y = k1 = f_cod;     /* trace sur axe V */
-                    k1 = -( (k1 * size_v) / 9 );
+            {
+                int y, k1, k2;
+                y  = k1 = f_cod;        /* trace sur axe V */
+                k1 = -( (k1 * size_v) / 9 );
 
-                    ptcar++;
-                    f_cod = *ptcar;
+                ptcar++;
+                f_cod = *ptcar;
 
-                    k2    = f_cod;  /* trace sur axe H */
-                    k2    = (k2 * size_h) / 9;
-                    // To simulate an italic font, add a x offset depending on the y offset
-                    if ( aItalic )
-                        k2 -= italic_reverse ? - k1/8 : k1/8;
-                    dx    = k2 + ox; dy = k1 + oy;
+                k2 = f_cod;         /* trace sur axe H */
+                k2 = (k2 * size_h) / 9;
 
-                    RotatePoint( &dx, &dy, cX, cY, aOrient );
-                    coord[point_count].x = dx;
-                    coord[point_count].y = dy;
-                    if ( point_count < BUF_SIZE-1 )
-                        point_count++;
-                    break;
-                }
+                // To simulate an italic font, add a x offset depending on the y offset
+                if( aItalic )
+                    k2 -= italic_reverse ? -k1 / 8 : k1 / 8;
+                dx = k2 + ox; dy = k1 + oy;
+
+                RotatePoint( &dx, &dy, cX, cY, aOrient );
+                coord[point_count].x = dx;
+                coord[point_count].y = dy;
+                if( point_count < BUF_SIZE - 1 )
+                    point_count++;
+                break;
+            }
             }
 
             /* end switch */
@@ -379,56 +396,56 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 
         ptr++; ox += pitch;
     }
-    if (overbars % 2) {
-	/* Close the last overbar */
-	coord[0].x = overbar_x;
-	coord[0].y = overbar_y;
-	overbar_x = ox;
-	overbar_y = oy-overbar_position(size_v, thickness);
-	RotatePoint( &overbar_x, &overbar_y, cX, cY, aOrient );
-	coord[1].x = overbar_x;
-	coord[1].y = overbar_y;
-	/* Plot the overbar segment */
-	DrawGraphicTextPline(aPanel, aDC, aColor, aWidth,
-	    sketch_mode, 2, coord, aCallback);
+
+    if( overbars % 2 )
+    {
+        /* Close the last overbar */
+        coord[0].x = overbar_x;
+        coord[0].y = overbar_y;
+        overbar_x  = ox;
+        overbar_y  = oy - overbar_position( size_v, thickness );
+        RotatePoint( &overbar_x, &overbar_y, cX, cY, aOrient );
+        coord[1].x = overbar_x;
+        coord[1].y = overbar_y;
+        /* Plot the overbar segment */
+        DrawGraphicTextPline( aPanel, aDC, aColor, aWidth,
+                              sketch_mode, 2, coord, aCallback );
     }
 }
 
 
-
 /* functions used to plot texts, using DrawGraphicText() with a call back function */
-static void  (*MovePenFct)( wxPoint pos, int state ); // a pointer to actual plot function (HPGL, PS, ..)
-static bool s_Plotbegin;        // Flag to init plot
+static void (*MovePenFct)( wxPoint pos, int state );    // a pointer to actual plot function (HPGL, PS, ..)
+static bool s_Plotbegin;                                // Flag to init plot
 
 
 /*
  * The call back function
  */
 /**********************/
-static void
-s_Callback_plot(int x0,
-                int y0,
-                int xf,
-                int yf)
+static void s_Callback_plot( int x0,
+                             int y0,
+                             int xf,
+                             int yf )
 /**********************/
 {
     static wxPoint PenLastPos;
-    wxPoint pstart;
+    wxPoint        pstart;
+
     pstart.x = x0;
     pstart.y = y0;
     wxPoint pend;
     pend.x = xf;
     pend.y = yf;
-    if ( s_Plotbegin )      // First segment to plot
+    if( s_Plotbegin )       // First segment to plot
     {
         MovePenFct( pstart, 'U' );
         MovePenFct( pend, 'D' );
         s_Plotbegin = false;
     }
-
     else
     {
-        if ( PenLastPos == pstart )     // this is a next segment in a polyline
+        if( PenLastPos == pstart )      // this is a next segment in a polyline
         {
             MovePenFct( pend, 'D' );
         }
@@ -459,17 +476,17 @@ s_Callback_plot(int x0,
  *  @param aNegable = true to enable the ~ char for overbarring
  */
 /******************************************************************************************/
-void PlotGraphicText( int aFormat_plot,
-                      const wxPoint& aPos,
-                      enum EDA_Colors aColor,
-                      const wxString& aText,
-                      int aOrient,
-                      const wxSize& aSize,
+void PlotGraphicText( int                         aFormat_plot,
+                      const wxPoint&              aPos,
+                      enum EDA_Colors             aColor,
+                      const wxString&             aText,
+                      int                         aOrient,
+                      const wxSize&               aSize,
                       enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
-                      int aWidth,
-                      bool aItalic,
-		      bool aNegable)
+                      enum GRTextVertJustifyType  aV_justify,
+                      int                         aWidth,
+                      bool                        aItalic,
+                      bool                        aNegable )
 /******************************************************************************************/
 {
     // Initialise the actual function used to plot lines:
@@ -496,12 +513,11 @@ void PlotGraphicText( int aFormat_plot,
 
     s_Plotbegin = true;
     DrawGraphicText( NULL, NULL, aPos, aColor, aText,
-                      aOrient, aSize,
-                      aH_justify, aV_justify,
-                      aWidth,  aItalic, aNegable,
-                      s_Callback_plot);
+                     aOrient, aSize,
+                     aH_justify, aV_justify,
+                     aWidth, aItalic, aNegable,
+                     s_Callback_plot );
 
     /* end text : pen UP ,no move */
     MovePenFct( wxPoint( 0, 0 ), 'Z' );
 }
-
