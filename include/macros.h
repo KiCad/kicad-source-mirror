@@ -14,6 +14,22 @@
 #endif
 
 
+/**
+ * Function GetChars
+ * returns a pointer to the actual character data, either 8 or
+ * 16 bits wide, depending on how the wxWidgets library was compiled.
+ * Pointer
+ */
+const wxChar* GetChars( wxString s )
+{
+#if wxCHECK_VERSION(2,9,0)
+    return (const wxChar*) s.wx_str();
+#else
+    return s.GetData();
+#endif
+}
+
+
 #ifndef MIN
 #define MIN( x, y ) ( (x) > (y) ? (y) : (x) )
 #endif
