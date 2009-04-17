@@ -317,7 +317,7 @@ void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
-        DisplayInfo( this, _( "3D Frame already opened" ) );
+        DisplayInfoMessage( this, _( "3D Frame already opened" ) );
         return;
     }
 

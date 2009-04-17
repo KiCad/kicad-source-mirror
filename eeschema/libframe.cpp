@@ -461,7 +461,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_CHECK_PART:
         if( CurrentLibEntry )
             if( TestPins( CurrentLibEntry ) == false )
-                DisplayInfo( this, _( " Pins Test OK!" ) );
+                DisplayInfoMessage( this, _( " Pins Test OK!" ) );
         break;
 
     case ID_DE_MORGAN_NORMAL_BUTT:

@@ -77,9 +77,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
 
     if( Pin )
     {
-
         /* Force display pin infos (the previous display could be a component info) */
-        Pin->Display_Infos( this );
+        Pin->DisplayInfo( this );
         if( LibItem )
             Affiche_1_Parametre( this, 1,
                                  LibItem->GetRef( GetSheet() ),
@@ -156,7 +155,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
         Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
         if( Pin )
         {
-            Pin->Display_Infos( this );
+            Pin->DisplayInfo( this );
             if( LibItem )
                 Affiche_1_Parametre( this, 1,
                                      LibItem->GetRef( GetSheet() ),
@@ -173,7 +172,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     {
         SCH_CMP_FIELD* Field = (SCH_CMP_FIELD*) DrawStruct;
         LibItem = (SCH_COMPONENT*) Field->GetParent();
-        LibItem->Display_Infos( this );
+        LibItem->DisplayInfo( this );
 
         return DrawStruct;
     }
@@ -182,7 +181,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
     if( Pin )
     {
-        Pin->Display_Infos( this );
+        Pin->DisplayInfo( this );
         if( LibItem )
             Affiche_1_Parametre( this, 1,
                                  LibItem->GetRef( GetSheet() ),
@@ -197,14 +196,14 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     {
         DrawStruct = LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
         LibItem    = (SCH_COMPONENT*) DrawStruct;
-        LibItem->Display_Infos( this );
+        LibItem->DisplayInfo( this );
         return DrawStruct;
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SHEETITEM );
     if( DrawStruct )
     {
-        ( (DrawSheetStruct*) DrawStruct )->Display_Infos( this );
+        ( (DrawSheetStruct*) DrawStruct )->DisplayInfo( this );
         return DrawStruct;
     }
 

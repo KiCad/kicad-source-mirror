@@ -121,7 +121,7 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
             zone->DeleteStructure();
         }
     }
-    
+
     // Now delete the outlines of the corresponding copper areas
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
@@ -592,7 +592,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
             // use the form of SetCurItem() which does not write to the msg panel,
             // SCREEN::SetCurItem(), so the DRC error remains on screen.
-            // WinEDA_PcbFrame::SetCurItem() calls Display_Infos().
+            // WinEDA_PcbFrame::SetCurItem() calls DisplayInfo().
             GetScreen()->SetCurItem( NULL );
             DisplayError( this,
                 _( "DRC error: this start point is inside or too close an other area" ) );
@@ -615,7 +615,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                || !zone->IsOnCopperLayer() ) // Ok, we can add a new corner
             {
                 zone->AppendCorner( GetScreen()->m_Curseur );
-                SetCurItem( zone );     // calls Display_Infos().
+                SetCurItem( zone );     // calls DisplayInfo().
             }
         }
     }

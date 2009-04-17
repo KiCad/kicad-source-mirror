@@ -34,7 +34,7 @@ void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     drawitem->Draw( DrawPanel, DC, GR_XOR );
     drawitem->m_Flags |= IS_MOVED;
     cursor_pos = cursor_pos0 = GetScreen()->m_Curseur;
-    drawitem->Display_Infos( this );
+    drawitem->DisplayInfo( this );
     DrawPanel->ManageCurseur = Move_Segment;
     DrawPanel->ForceCloseManageCurseur = Exit_EditEdge;
     SetCurItem( drawitem );

@@ -375,7 +375,7 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     /* Get a title for this page */
     wxString title = CurrPage->m_TitleStringCtrl->GetValue();
     if( title.IsEmpty() )
-        DisplayInfo( this,
+        DisplayInfoMessage( this,
                     _( "Do not forget to choose a title for this netlist control page" ) );
 }
 

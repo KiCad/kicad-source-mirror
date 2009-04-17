@@ -10,7 +10,7 @@
 
 
 void    DisplayError( wxWindow* parent, const wxString& msg, int displaytime = 0 );
-void    DisplayInfo( wxWindow* parent, const wxString& msg, int displaytime = 0 );
+void    DisplayInfoMessage( wxWindow* parent, const wxString& msg, int displaytime = 0 );
 
 /* Routines d'affichage messages ( disparait au bout de displaytime 0.1 secondes) */
 

@@ -438,7 +438,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             SetCurItem( module );
             module->SetLocked( !module->IsLocked() );
-            module->Display_Infos( this );
+            module->DisplayInfo( this );
         }
         break;
 
@@ -471,7 +471,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
                         msg.Printf( _( "Footprint %s found, but locked" ),
                                    module->m_Reference->m_Text.GetData() );
 
-                        DisplayInfo( this, msg );
+                        DisplayInfoMessage( this, msg );
                     }
                     module = NULL;
                 }
@@ -522,7 +522,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey,
             break;
         }
 
-        module->Display_Infos( this );
+        module->DisplayInfo( this );
         break;
     }
 }

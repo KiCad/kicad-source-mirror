@@ -444,7 +444,7 @@ int TEXTE_MODULE::GetDrawRotation()
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
+void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg, Line;
     int      ii;

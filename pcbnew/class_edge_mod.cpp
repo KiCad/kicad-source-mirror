@@ -217,7 +217,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::Display_Infos( WinEDA_DrawFrame* frame )
+void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString bufcar;
 

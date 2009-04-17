@@ -255,7 +255,7 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see pcbstruct.h
-void DRAWSEGMENT::Display_Infos( WinEDA_DrawFrame* frame )
+void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     int      itype;
     wxString msg;

@@ -29,7 +29,7 @@ void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
     track->SetState( SEGM_FIXE, Flag_On );
     track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
     DrawPanel->CursorOn( DC );    // Display cursor shape
-    track->Display_Infos( this );
+    track->DisplayInfo( this );
 }
 
 

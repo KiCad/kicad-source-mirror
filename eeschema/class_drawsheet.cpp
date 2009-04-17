@@ -611,7 +611,7 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
                        aFileName.GetData() );
             if( !IsOK( NULL, msg ) )
             {
-                DisplayInfo( NULL, _( "Sheet Filename Renaming Aborted" ) );
+                DisplayInfoMessage( (wxWindow*)NULL, _( "Sheet Filename Renaming Aborted" ) );
                 return false;
             }
         }
@@ -687,7 +687,7 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
 
 
 /***********************************************************/
-void DrawSheetStruct::Display_Infos( WinEDA_DrawFrame* frame )
+void DrawSheetStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     frame->MsgPanel->EraseMsgBox();
     Affiche_1_Parametre( frame, 1, _( "Name" ), m_SheetName, CYAN );

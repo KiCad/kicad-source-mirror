@@ -60,7 +60,7 @@ void WinEDA_BasePcbFrame::UnDeleteItem( wxDC* DC )
         test_1_net_connexion( DC, net_code );
 #endif
 
-        m_Pcb->Display_Infos( this );
+        m_Pcb->DisplayInfo( this );
         break;
 
     case TYPE_BOARD_ITEM_LIST:
@@ -80,7 +80,7 @@ void WinEDA_BasePcbFrame::UnDeleteItem( wxDC* DC )
 #if !defined(GERBVIEW)
         test_1_net_connexion( DC, net_code );
 #endif
-        m_Pcb->Display_Infos( this );
+        m_Pcb->DisplayInfo( this );
         break;
 
 #if !defined(GERBVIEW)

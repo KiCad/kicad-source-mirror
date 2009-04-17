@@ -430,7 +430,7 @@ out:
 
 
 /******************************************************/
-void D_PAD::Display_Infos( WinEDA_DrawFrame* frame )
+void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
 /******************************************************/
 /* Affiche en bas d'ecran les caract de la pastille demandee */
 {

@@ -83,7 +83,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         if( !fn.FileExists() )
         {
             msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found" );
-            DisplayInfo( this, msg );
+            DisplayInfoMessage( this, msg );
             break;
         }
         else
@@ -215,11 +215,11 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     sscanf(cbuf, "PCBNEW-BOARD Version %d date", &ver );
     if ( ver > g_CurrentVersionPCB )
     {
-        DisplayInfo( this, _( "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"));
+        DisplayInfoMessage( this, _( "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"));
     }
     else if ( ver < g_CurrentVersionPCB )
     {
-        DisplayInfo( this, _( "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."));
+        DisplayInfoMessage( this, _( "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."));
     }
 
     // Reload the corresponding configuration file:
@@ -264,7 +264,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     build_liste_pads();
 
-    GetBoard()->Display_Infos( this );
+    GetBoard()->DisplayInfo( this );
     DrawPanel->Refresh( true);
 
     /* reset the auto save timer */

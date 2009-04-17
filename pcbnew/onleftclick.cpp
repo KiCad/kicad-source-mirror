@@ -136,7 +136,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             int netcode = Select_High_Light( DC );
             if( netcode < 0 )
-                GetBoard()->Display_Infos( this );
+                GetBoard()->DisplayInfo( this );
             else
                 Affiche_Infos_Equipot( netcode, this );
         }

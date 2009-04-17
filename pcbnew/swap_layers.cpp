@@ -269,7 +269,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     {
         wxString msg;
         msg = _( "Deselect this layer to select the No Change state" );
-        DisplayInfo( this, msg );
+        DisplayInfoMessage( this, msg );
         return;
     }
 

@@ -157,7 +157,7 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_pcb_text.h
-void TEXTE_PCB::Display_Infos( WinEDA_DrawFrame* frame )
+void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 

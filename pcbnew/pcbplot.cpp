@@ -699,9 +699,9 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
     // Test for a reasonnable scale value
     if ( Scale_X < MIN_SCALE || Scale_Y < MIN_SCALE )
-        DisplayInfo(this, _("Warning: Scale option set to a very small value") );
+        DisplayInfoMessage(this, _("Warning: Scale option set to a very small value") );
     if ( Scale_X > MAX_SCALE || Scale_Y > MAX_SCALE )
-        DisplayInfo(this, _("Warning: Scale option set to a very large value") );
+        DisplayInfoMessage(this, _("Warning: Scale option set to a very large value") );
 
     int mask = 1;
     s_SelectedLayers = 0;

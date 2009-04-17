@@ -332,7 +332,7 @@ void DisplayHotkeyList( WinEDA_DrawFrame* frame, struct Ki_HotkeyInfoSectionDesc
         }
     }
 
-    DisplayInfo( frame, msg );
+    DisplayInfoMessage( frame, msg );
 }
 
 

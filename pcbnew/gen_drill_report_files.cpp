@@ -387,7 +387,7 @@ void Gen_Drill_PcbMap( BOARD* aPcb, FILE* aFile,
     /* create the drill list */
     if( aToolListBuffer.size() > 13 )
     {
-        DisplayInfo( NULL,
+        DisplayInfoMessage( NULL,
                      _(
                          " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\nPlot uses circle shape for some drill values" ),
                      10 );

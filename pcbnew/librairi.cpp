@@ -129,7 +129,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     GetBoard()->Add( module );
 
     /* Display info : */
-    module->Display_Infos( this );
+    module->DisplayInfo( this );
     Place_Module( module, DC );
     GetBoard()->m_Status_Pcb = 0;
     build_liste_pads();
@@ -208,7 +208,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     fputs( "$EndLIBRARY\n", file );
     fclose( file );
     msg.Printf( _( "Module exported in file <%s>" ), fn.GetFullPath().c_str() );
-    DisplayInfo( this, msg );
+    DisplayInfoMessage( this, msg );
 }
 
 
@@ -406,7 +406,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
 
     if( GetBoard()->m_Modules == NULL )
     {
-        DisplayInfo( this, _( " No modules to archive!" ) );
+        DisplayInfoMessage( this, _( " No modules to archive!" ) );
         return;
     }
 
@@ -505,7 +505,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     FILE*      lib_module, * dest;
     bool       added = true;
 
-    aModule->Display_Infos( this );
+    aModule->DisplayInfo( this );
 
     if( !wxFileExists( aLibName ) )
     {
@@ -721,7 +721,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
     {
         if( Get_Message( _( "Module Reference:" ), _( "Module Creation" ), Line, this ) != 0 )
         {
-            DisplayInfo( this, _( "No reference, aborted" ) );
+            DisplayInfoMessage( this, _( "No reference, aborted" ) );
             return NULL;
         }
     }
@@ -755,7 +755,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_n
 
     Module->SetPosition( wxPoint( 0, 0 ) );
 
-    Module->Display_Infos( this );
+    Module->DisplayInfo( this );
     return Module;
 }
 

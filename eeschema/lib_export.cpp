@@ -144,7 +144,7 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     if( createLib && success )
     {
         msg = fn.GetFullPath() + _( " - OK" );
-        DisplayInfo( this, _( "Note: this new library will be available " \
+        DisplayInfoMessage( this, _( "Note: this new library will be available " \
                               "only if it is loaded by eeschema.\nModify "
                               "eeschema config if you want use it." ) );
     }

@@ -500,7 +500,7 @@ bool BOARD::ComputeBoundaryBox()
 
 
 // virtual, see pcbstruct.h
-void BOARD::Display_Infos( WinEDA_DrawFrame* frame )
+void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
 {
 /* Affiche l'etat du PCB : nb de pads, nets , connexions.. */
 #define POS_AFF_NBPADS      1

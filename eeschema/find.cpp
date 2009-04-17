@@ -695,13 +695,13 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
             FindList.Empty();
             ExploreAllLibraries( Text, FindList );
             if( FindList.IsEmpty() )
-                DisplayInfo( this, _( "Nothing found" ) );
+                DisplayInfoMessage( this, _( "Nothing found" ) );
             else
-                DisplayInfo( this, FindList );
+                DisplayInfoMessage( this, FindList );
         }
     }
     else
-        DisplayInfo( this, FindList );
+        DisplayInfoMessage( this, FindList );
 
     Close();
 }

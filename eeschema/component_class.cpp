@@ -836,7 +836,7 @@ int SCH_COMPONENT::GetRotationMiroir()
     int  type_rotate = CMP_ORIENT_0;
     int  ComponentMatOrient[2][2];
     int  ii;
-    
+
     #define ROTATE_VALUES_COUNT 12
     int rotate_value[ROTATE_VALUES_COUNT] =    // list of all possibilities, but only the first 8 are actually used
     {
@@ -1046,7 +1046,7 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
 }
 
 
-void SCH_COMPONENT::Display_Infos( WinEDA_DrawFrame* frame )
+void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     EDA_LibComponentStruct* Entry = FindLibPart( m_ChipName.GetData(),
                                                  wxEmptyString, FIND_ROOT );

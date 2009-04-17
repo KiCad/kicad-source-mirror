@@ -168,7 +168,7 @@ void SwapData( EDA_BaseStruct* Item )
 
         // not directly used in schematic:
     default:
-        DisplayInfo( NULL, wxT( "SwapData() error: unexpected type" ) );
+        DisplayInfoMessage( NULL, wxT( "SwapData() error: unexpected type" ) );
         break;
     }
 }

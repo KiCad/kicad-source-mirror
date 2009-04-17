@@ -95,7 +95,7 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     MODULE* Module = GetBoard()->m_Modules;
     if ( Module )
-        Module->Display_Infos( this );
+        Module->DisplayInfo( this );
     UpdateStatusBar();
     DrawPanel->Trace_Curseur( DC );
 }

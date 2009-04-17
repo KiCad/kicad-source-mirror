@@ -108,7 +108,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
         Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
         if( Entry && (Entry->m_Options == ENTRY_POWER) )
         {
-            DisplayInfo( this,
+            DisplayInfoMessage( this,
                         _(
                             "Part is a POWER, value cannot be modified!\nYou must create a new power" )
                          );
@@ -170,7 +170,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
     }
 
     Field->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
-    Cmp->Display_Infos( this );
+    Cmp->DisplayInfo( this );
     GetScreen()->SetModify();
 }
 
@@ -322,7 +322,7 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
                        Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
         GetScreen()->SetModify();
     }
-    Cmp->Display_Infos( this );
+    Cmp->DisplayInfo( this );
 }
 
 
@@ -360,7 +360,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
         GetScreen()->SetModify();
     }
 
-    Cmp->Display_Infos( this );
+    Cmp->DisplayInfo( this );
 }
 
 
@@ -415,6 +415,6 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
                    Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
     GetScreen()->SetModify();
 
-    Cmp->Display_Infos( this );
+    Cmp->DisplayInfo( this );
 }
 

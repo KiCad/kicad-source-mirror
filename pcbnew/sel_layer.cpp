@@ -239,7 +239,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
         wxString InfoMsg;
         InfoMsg = _( "Less than two copper layers are being used." );
         InfoMsg << wxT( "\n" ) << _( "Hence Layer Pairs cannot be specified." );
-        DisplayInfo( this, InfoMsg );
+        DisplayInfoMessage( this, InfoMsg );
         return;
     }
 
@@ -339,7 +339,7 @@ void WinEDA_SelLayerPairFrame::OnOkClick( wxCommandEvent& event )
     // but could be a mistake. So display an info message
     if( m_LayerId[m_LayerListTOP->GetSelection()]
             == m_LayerId[m_LayerListBOTTOM->GetSelection()] )
-        DisplayInfo( this, _( "Warning: The Top Layer and Bottom Layer are same." ) );
+        DisplayInfoMessage( this, _( "Warning: The Top Layer and Bottom Layer are same." ) );
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
 

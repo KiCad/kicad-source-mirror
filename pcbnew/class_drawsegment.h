@@ -64,13 +64,13 @@ public:
                       int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     /**
-     * Function Display_Infos
+     * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_BasePcbFrame in which to print status information.
      */
-    virtual void    Display_Infos( WinEDA_DrawFrame* frame );
+    virtual void    DisplayInfo( WinEDA_DrawFrame* frame );
 
 
     /**

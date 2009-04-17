@@ -4,6 +4,18 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-apr-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++ALL:
+    Code clarification: There were 3 functions to display info:
+    - DisplayInfo (displaying a message info)
+    - class members DisplayInfo and Display_Infos doing the same thing
+      (and sometimes these 2 functions were existing in some classes)
+    This was *very* confusing and created minor bugs
+     (info in eeschema was not always displayed, because the "bad" function was used)
+    Now DisplayInfo is renamed DisplayInfoMessage
+    Ann class member DisplayInfo is used in all classes ( replaces all Display_Infos instances)
+
 2009-apr-12 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++eeschema:

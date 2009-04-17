@@ -481,7 +481,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     PtPad->m_Pos0 = PtPad->m_Pos - Module->m_Pos;
 
     /* Modif des positions textes */
-    Module->Display_Infos( this );
+    Module->DisplayInfo( this );
     Module->m_Value->m_Pos.x = Module->m_Reference->m_Pos.x = ( FirstSegm->m_Start.x +
                                                                 LastSegm->m_End.x ) / 2;
     Module->m_Value->m_Pos.y = Module->m_Reference->m_Pos.y = ( FirstSegm->m_Start.y +

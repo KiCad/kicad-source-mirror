@@ -856,7 +856,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
 
 
 /************************************************************/
-void ZONE_CONTAINER::Display_Infos( WinEDA_DrawFrame* frame )
+void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
 /************************************************************/
 {
     wxString msg;

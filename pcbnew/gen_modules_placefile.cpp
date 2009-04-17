@@ -281,7 +281,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         msg += wxT("\n\n") + backLayerName + wxT( " File: " ) +
             fnBack.GetFullPath();
 
-    DisplayInfo( this, msg );
+    DisplayInfoMessage( this, msg );
 
 
 exit:   // the only safe way out of here, no returns please.

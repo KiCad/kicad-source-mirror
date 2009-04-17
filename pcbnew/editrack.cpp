@@ -186,7 +186,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        g_CurrentTrackSegment->Display_Infos( this );
+        g_CurrentTrackSegment->DisplayInfo( this );
         SetCurItem( g_CurrentTrackSegment );
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
@@ -271,7 +271,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             /* Show the new position */
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
         }
-        g_CurrentTrackSegment->Display_Infos( this );
+        g_CurrentTrackSegment->DisplayInfo( this );
     }
 
     SetCurItem( g_CurrentTrackSegment );
@@ -518,7 +518,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         test_1_net_connexion( DC, netcode );
 
         GetScreen()->SetModify();
-        GetBoard()->Display_Infos( this );
+        GetBoard()->DisplayInfo( this );
     }
 
     wxASSERT( g_FirstTrackSegment==NULL );

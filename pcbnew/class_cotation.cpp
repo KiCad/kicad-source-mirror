@@ -461,10 +461,10 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_cotation.h
-void COTATION::Display_Infos( WinEDA_DrawFrame* frame )
+void COTATION::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     // for now, display only the text within the COTATION using class TEXTE_PCB.
-    m_Text->Display_Infos( frame );
+    m_Text->DisplayInfo( frame );
 }
 
 

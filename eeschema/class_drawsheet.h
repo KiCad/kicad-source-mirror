@@ -105,7 +105,7 @@ public:
 
     void             Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     DrawSheetStruct* GenCopy();
-    void             Display_Infos( WinEDA_DrawFrame* frame );
+    void             DisplayInfo( WinEDA_DrawFrame* frame );
 
     /** Function CleanupSheet
      * Delete pinsheets which are not corresponding to a hierarchal label

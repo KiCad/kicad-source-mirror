@@ -197,7 +197,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         Zoom_Automatique( FALSE );
         msg.Printf( _( "File <%s> not found." ),
             g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
-        DisplayInfo( this, msg, 0 );
+        DisplayInfoMessage( this, msg, 0 );
         return -1;
     }
 

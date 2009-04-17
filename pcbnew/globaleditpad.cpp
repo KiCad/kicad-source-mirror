@@ -230,7 +230,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     wxString ref_name_module = Module->m_LibRef;
 
-    Module->Display_Infos( this );
+    Module->DisplayInfo( this );
 
     WinEDA_PadGlobalEditFrame* frame = new WinEDA_PadGlobalEditFrame( this, aPad );
 
@@ -257,7 +257,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         if( ref_name_module != Module->m_LibRef )
             continue;
 
-        Module->Display_Infos( this );
+        Module->DisplayInfo( this );
 
         /* Effacement du module */
         if ( aDraw )

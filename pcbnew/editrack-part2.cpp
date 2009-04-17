@@ -149,7 +149,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     }
 
     test_1_net_connexion( DC, pt_track->GetNet() );
-    pt_track->Display_Infos( this );
+    pt_track->DisplayInfo( this );
     GetScreen()->SetModify();
 }
 
@@ -264,7 +264,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         // use the form of SetCurItem() which does not write to the msg panel,
         // SCREEN::SetCurItem(), so the DRC error remains on screen.
-        // WinEDA_PcbFrame::SetCurItem() calls Display_Infos().
+        // WinEDA_PcbFrame::SetCurItem() calls DisplayInfo().
         GetScreen()->SetCurItem( g_CurrentTrackSegment );
 
         return false;
@@ -305,7 +305,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-    via->Display_Infos( this );
+    via->DisplayInfo( this );
 
     UpdateStatusBar();
 
@@ -329,7 +329,7 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
 
     pt_segm = Locate_Pistes( GetBoard()->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
     if( pt_segm == NULL )
-        GetBoard()->Display_Infos( this );
+        GetBoard()->DisplayInfo( this );
     else
         test_1_net_connexion( DC, pt_segm->GetNet() );
 }
@@ -368,7 +368,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
 
         if( pt_pad ) /* Affichage du chevelu du net correspondant */
         {
-            pt_pad->Display_Infos( this );
+            pt_pad->DisplayInfo( this );
             pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
             for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
             {
@@ -404,7 +404,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
 
             if( Module )
             {
-                Module->Display_Infos( this );
+                Module->DisplayInfo( this );
                 pt_pad = Module->m_Pads;
                 for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
                 {

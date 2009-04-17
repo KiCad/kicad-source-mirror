@@ -41,7 +41,7 @@ void WinEDA_GerberFrame::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     if( no_used_layers )
     {
-        DisplayInfo( this, _( "None of the Gerber layers contain any data" ) );
+        DisplayInfoMessage( this, _( "None of the Gerber layers contain any data" ) );
         return;
     }
 

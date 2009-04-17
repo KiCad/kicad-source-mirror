@@ -203,7 +203,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
          */
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
-        // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
+        // and it calls SetCurItem() which in turn calls DisplayInfo() on the item.
         DrawPanel->m_AbortRequest = true;   // changed in false if an item
         PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
 

@@ -213,7 +213,7 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     m_Parent->GetScreen()->SetModify();
     if ( m_DC )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
-    m_Item->Display_Infos( m_Parent );
+    m_Item->DisplayInfo( m_Parent );
 
     Close( TRUE );
 }

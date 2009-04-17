@@ -489,9 +489,9 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
 }
 
 
-/**********************************************/
+/*****************************************************/
 void Pcb3D_GLCanvas::OnSize( wxSizeEvent& event )
-/**********************************************/
+/*****************************************************/
 {
     int w, h;
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)

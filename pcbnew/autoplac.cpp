@@ -586,7 +586,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     int     Penalite;
     bool    TstOtherSide;
 
-    Module->Display_Infos( this );
+    Module->DisplayInfo( this );
 
     Build_PlacedPads_List( GetBoard() );
 
@@ -1125,7 +1125,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
             continue;
         pcbframe->GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
         adr_lowmem = buf_work;
-        (*pt_Dmod)->Display_Infos( pcbframe );
+        (*pt_Dmod)->DisplayInfo( pcbframe );
         pcbframe->build_ratsnest_module( DC, *pt_Dmod );
 
         /* calcul du nombre de chevelus externes */

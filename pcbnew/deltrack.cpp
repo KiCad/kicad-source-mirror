@@ -11,10 +11,6 @@
 #include "pcbnew.h"
 #include "protos.h"
 
-/* Routines Locales */
-
-/* Variables locales */
-
 
 /***************************************************************/
 TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
@@ -116,7 +112,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
     GetScreen()->SetModify();
 
     test_1_net_connexion( DC, current_net_code );
-    GetBoard()->Display_Infos( this );
+    GetBoard()->DisplayInfo( this );
     return NULL;
 }
 
@@ -163,7 +159,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
         SaveItemEfface( trackList, ii );
         GetScreen()->SetModify();
         test_1_net_connexion( DC, net_code_delete );
-        GetBoard()->Display_Infos( this );
+        GetBoard()->DisplayInfo( this );
     }
 }
 

@@ -54,7 +54,7 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
     Text->m_Flags = 0;
     Text->Draw( DrawPanel, DC, GR_OR );
 
-    Text->Display_Infos( this );
+    Text->DisplayInfo( this );
 
     return Text;
 }
@@ -80,7 +80,7 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     /* Redessin du Texte */
     Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
 
-    Text->Display_Infos( this );
+    Text->DisplayInfo( this );
 
     module->m_LastEdit_Time = time( NULL );
     GetScreen()->SetModify();
@@ -173,7 +173,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     CursorInitialPosition = Text->m_Pos;
 
-    Text->Display_Infos( this );
+    Text->DisplayInfo( this );
 
     SetCurItem( Text );
     DrawPanel->ManageCurseur = Show_MoveTexte_Module;

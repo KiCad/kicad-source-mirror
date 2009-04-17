@@ -101,7 +101,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         }
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
-        // and it calls SetCurItem() which in turn calls Display_Infos() on the item.
+        // and it calls SetCurItem() which in turn calls DisplayInfo() on the item.
         DrawPanel->m_AbortRequest = true;   // changed in false if an item
         PopupMenu( &itemMenu );             // m_AbortRequest = false if an item is selected
 
@@ -115,7 +115,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 
     if( item )
     {
-        item->Display_Infos( this );
+        item->DisplayInfo( this );
     }
 
     return item;
@@ -780,7 +780,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, wxDC* DC, int transform 
     case ID_MODEDIT_MODULE_SCALE:
     case ID_MODEDIT_MODULE_SCALEX:
     case ID_MODEDIT_MODULE_SCALEY:
-        DisplayInfo( this, wxT( "Not availlable" ) );
+        DisplayInfoMessage( this, wxT( "Not availlable" ) );
         break;
     }
 

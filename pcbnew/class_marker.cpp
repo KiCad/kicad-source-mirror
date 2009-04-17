@@ -122,7 +122,7 @@ void MARKER::UnLink()
 }
 
 
-void MARKER::Display_Infos( WinEDA_DrawFrame* frame )
+void MARKER::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     int      text_pos;
 

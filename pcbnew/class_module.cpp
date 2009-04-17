@@ -896,7 +896,7 @@ EDA_Rect MODULE::GetBoundingBox()
 
 
 /*******************************************************/
-void MODULE::Display_Infos( WinEDA_DrawFrame* frame )
+void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 /*******************************************************/
 /* Virtual function, from EDA_BaseStruct.
  * display module info on MsgPanel

@@ -65,7 +65,7 @@ public:
      */
     void Copy( ZONE_CONTAINER* src );
 
-    void Display_Infos( WinEDA_DrawFrame* frame );
+    void DisplayInfo( WinEDA_DrawFrame* frame );
 
     /**
      * Function Draw

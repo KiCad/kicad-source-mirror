@@ -270,7 +270,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_PCB_ZONES_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Zones" ) );
         if( DisplayOpt.DisplayZonesMode != 0 )
-            DisplayInfo( this, _( "Warning: Display Zone is OFF!!!" ) );
+            DisplayInfoMessage( this, _( "Warning: Display Zone is OFF!!!" ) );
         if( !g_HightLigt_Status && (g_HightLigth_NetCode > 0 ) )
             Hight_Light( &dc );
         break;
@@ -1128,7 +1128,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Remove_Zone_Corner( DC, (ZONE_CONTAINER*) Item );
         SetCurItem( NULL );
         break;
-    
+
     case TYPE_ZONE_CONTAINER:
         {
         SetCurItem( NULL );
@@ -1136,7 +1136,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
         test_1_net_connexion( NULL, netcode );
         }
-        break;   
+        break;
 
     case TYPE_MARKER:
         if( Item == GetCurItem() )

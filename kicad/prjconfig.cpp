@@ -33,7 +33,7 @@ void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
 
     if( !wxFileName::FileExists( tmp ) )
     {
-        DisplayInfo( NULL, _( "Project template file <kicad.pro> not found " ) );
+        DisplayInfoMessage( NULL, _( "Project template file <kicad.pro> not found " ) );
         return;
     }
     else

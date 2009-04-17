@@ -93,7 +93,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
         MsgDiag = FullFileName + _( " was created by a more recent " \
                                     "version of EESchema and may not load " \
                                     "correctly. Please consider updating!" );
-        DisplayInfo( this, MsgDiag );
+        DisplayInfoMessage( this, MsgDiag );
     }
 
 #if 0
@@ -104,7 +104,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
                                     "EESchema. It will be stored in the new " \
                                     "file format when you save this file " \
                                     "again." );
-        DisplayInfo( this, MsgDiag );
+        DisplayInfoMessage( this, MsgDiag );
     }
 #endif
 

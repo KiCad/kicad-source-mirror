@@ -122,7 +122,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
     msg.Printf( wxT( " %d" ), m_Pcb->m_Equipots.GetCount() );
     Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
-    
+
     reattribution_reference_piste( display_status_pcb );
 
     /* Compute the full ratsnest
@@ -147,7 +147,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
         DrawGeneralRatsnest( DC, 0 );
 
     if( display_status_pcb )
-        m_Pcb->Display_Infos( this );
+        m_Pcb->DisplayInfo( this );
 }
 
 

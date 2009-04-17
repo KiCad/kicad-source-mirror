@@ -643,11 +643,11 @@ void EDA_Printout::DrawPage()
     scale  = wxMax( scaleX, scaleY ) / userscale; // Use x or y scaling factor, whichever fits on the DC
 
     if( m_PrintFrame->m_XScaleAdjust > MAX_SCALE || m_PrintFrame->m_YScaleAdjust > MAX_SCALE )
-        DisplayInfo( NULL, _( "Warning: Scale option set to a very large value" ) );
+        DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very large value" ) );
 
     // Test for a reasonnable scale value
     if( m_PrintFrame->m_XScaleAdjust < MIN_SCALE || m_PrintFrame->m_YScaleAdjust < MIN_SCALE )
-        DisplayInfo( NULL, _( "Warning: Scale option set to a very small value" ) );
+        DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very small value" ) );
 
     // ajust the real draw scale
     double accurate_Xscale, accurate_Yscale;

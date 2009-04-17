@@ -252,7 +252,7 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
 
     build_liste_pads();
 
-    newmodule->Display_Infos( this );
+    newmodule->DisplayInfo( this );
     GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
     return newmodule;
 }
@@ -304,7 +304,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
         return FALSE;
 
     /* Confirmation de l'effacement */
-    module->Display_Infos( this );
+    module->DisplayInfo( this );
 
     if( aAskBeforeDeleting )
     {
@@ -521,7 +521,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     Module->Set_Rectangle_Encadrement();
 
     if( m_PcbFrame )
-        Module->Display_Infos( m_PcbFrame );
+        Module->DisplayInfo( m_PcbFrame );
 
     if( !(Module->m_Flags & IS_MOVED) ) /* Inversion simple */
     {
@@ -698,7 +698,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
     /* affichage chevelu general si necessaire */
     ReCompile_Ratsnest_After_Changes( DC );
 
-    module->Display_Infos( this );
+    module->DisplayInfo( this );
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
@@ -757,7 +757,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     else
         module->SetOrientation( angle );
 
-    module->Display_Infos( this );
+    module->DisplayInfo( this );
 
     if( DC )
     {

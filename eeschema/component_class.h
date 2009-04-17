@@ -184,7 +184,7 @@ public:
     int             GetRotationMiroir();
 
     wxPoint         GetScreenCoord( const wxPoint& coord );
-    void            Display_Infos( WinEDA_DrawFrame* frame );
+    void            DisplayInfo( WinEDA_DrawFrame* frame );
 
     /**
      * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)

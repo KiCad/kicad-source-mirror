@@ -373,7 +373,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     }
 
     aFrame->DrawPanel->Refresh();
-    aFrame->GetBoard()->Display_Infos( aFrame );
+    aFrame->GetBoard()->DisplayInfo( aFrame );
 }
 
 
@@ -703,7 +703,7 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow* aFrame,
 
     if( aPcb->m_Modules == NULL )
     {
-        DisplayInfo( aFrame, _( "No modules" ), 10 ); return;
+        DisplayInfoMessage( aFrame, _( "No modules" ), 10 ); return;
     }
 
     /* Construction de la liste des references des modules de la netliste */

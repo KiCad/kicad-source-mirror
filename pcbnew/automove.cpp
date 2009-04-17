@@ -311,7 +311,7 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
     {
         Module->SetLocked( Fixe );
 
-        Module->Display_Infos( this );
+        Module->DisplayInfo( this );
         GetScreen()->SetModify();
     }
     else

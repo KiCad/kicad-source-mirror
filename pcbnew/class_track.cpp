@@ -842,7 +842,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
 
 // see class_track.h
-void TRACK::Display_Infos( WinEDA_DrawFrame* frame )
+void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     int      text_pos;

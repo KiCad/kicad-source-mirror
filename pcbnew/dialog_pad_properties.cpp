@@ -576,7 +576,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->ComputeRayon();
 
         Module->Set_Rectangle_Encadrement();
-        m_CurrentPad->Display_Infos( m_Parent );
+        m_CurrentPad->DisplayInfo( m_Parent );
         if( m_DC )  // redraw the area where the pad was
             m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
         m_Parent->GetScreen()->SetModify();

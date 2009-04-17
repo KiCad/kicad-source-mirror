@@ -116,7 +116,7 @@ void WinEDA_BasePcbFrame::Export_Pad_Settings( D_PAD* pt_pad )
 
     Module = (MODULE*) pt_pad->GetParent();
 
-    pt_pad->Display_Infos( this );
+    pt_pad->DisplayInfo( this );
 
     g_Pad_Master.m_PadShape     = pt_pad->m_PadShape;
     g_Pad_Master.m_Attribut     = pt_pad->m_Attribut;
@@ -236,7 +236,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 
     /* Redessin du module */
     Module->Set_Rectangle_Encadrement();
-    Pad->Display_Infos( this );
+    Pad->DisplayInfo( this );
     if ( draw )
         DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
 }
@@ -287,7 +287,7 @@ void WinEDA_BasePcbFrame::StartMovePad( D_PAD* Pad, wxDC* DC )
 
     s_CurrentSelectedPad = Pad;
     Pad_OldPos = Pad->m_Pos;
-    Pad->Display_Infos( this );
+    Pad->DisplayInfo( this );
     DrawPanel->ManageCurseur = Show_Pad_Move;
     DrawPanel->ForceCloseManageCurseur = Exit_Move_Pad;
 
@@ -390,6 +390,6 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
 
     Module->Set_Rectangle_Encadrement();
 
-    Pad->Display_Infos( this );
+    Pad->DisplayInfo( this );
     Module->Draw( DrawPanel, DC, GR_OR );
 }

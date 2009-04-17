@@ -93,7 +93,7 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
 
 
 /**************************************************************************/
-void DisplayInfo( wxWindow* parent, const wxString& text, int displaytime )
+void DisplayInfoMessage( wxWindow* parent, const wxString& text, int displaytime )
 /**************************************************************************/
 
 /* Affiche un Message d'information.

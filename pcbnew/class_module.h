@@ -190,12 +190,12 @@ public:
                        const wxPoint& offset, int dim_ancre, int draw_mode );
 
     /**
-     * Function Display_Infos
+     * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void    Display_Infos( WinEDA_DrawFrame* frame );
+    void    DisplayInfo( WinEDA_DrawFrame* frame );
 
 
     /**

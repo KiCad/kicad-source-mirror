@@ -260,7 +260,7 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
 
     if( aItem )
     {
-        aItem->Display_Infos( this );
+        aItem->DisplayInfo( this );
 
 #if 0 && defined(DEBUG)
     aItem->Show( 0, std::cout );
@@ -272,7 +272,7 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
         // we can use either of these two:
 
         //MsgPanel->EraseMsgBox();
-        m_Pcb->Display_Infos( this );       // show the BOARD stuff
+        m_Pcb->DisplayInfo( this );       // show the BOARD stuff
 
 #if 0 && defined(DEBUG)
         std::cout << "SetCurItem(NULL)\n";

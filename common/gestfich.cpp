@@ -541,7 +541,7 @@ wxString& WinEDA_App::GetEditorName()
     }
     if( editorname.IsEmpty() ) // We must get a prefered editor name
     {
-        DisplayInfo( NULL, _( "No default editor found, you must choose it" ) );
+        DisplayInfoMessage( NULL, _( "No default editor found, you must choose it" ) );
         wxString mask( wxT( "*" ) );
 
 #ifdef __WINDOWS__
