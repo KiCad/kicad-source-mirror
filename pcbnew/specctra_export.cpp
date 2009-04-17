@@ -868,7 +868,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             if( module->GetReference() == wxEmptyString )
             {
                 ThrowIOError( _("Component with value of \"%s\" has empty reference id."),
-                                module->GetValue().GetData() );
+                                GetChars( module->GetValue() ) );
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
@@ -876,7 +876,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             if( !refpair.second )      // insert failed
             {
                 ThrowIOError( _("Multiple components have identical reference IDs of \"%s\"."),
-                      module->GetReference().GetData() );
+                      GetChars( module->GetReference() ) );
             }
         }
     }

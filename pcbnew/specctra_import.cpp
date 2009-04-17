@@ -115,7 +115,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     GetScreen()->SetModify();
     GetBoard()->m_Status_Pcb = 0;
-    
+
     /* At this point we should call Compile_Ratsnest()
      * but this could be time consumming.
      * So if incorrect number of Connecred and No connected pads is accepted
@@ -201,7 +201,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
     {
         wxString layerName = CONV_FROM_UTF8( aPath->layer_id.c_str() );
         ThrowIOError( _("Session file uses invalid layer id \"%s\""),
-                        layerName.GetData() );
+                        GetChars(layerName) );
     }
 
     TRACK* track = new TRACK( sessionBoard );
@@ -258,7 +258,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
             ThrowIOError( _( "Unsupported via shape: \"%s\""),
-                     LEXER::GetTokenString( type ).GetData() );
+                     GetChars( LEXER::GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -276,7 +276,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
             ThrowIOError( _( "Unsupported via shape: \"%s\""),
-                     LEXER::GetTokenString( type ).GetData() );
+                     GetChars( LEXER::GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -300,7 +300,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
             DSN_T type = shape->shape->Type();
             if( type != T_circle )
                 ThrowIOError( _( "Unsupported via shape: \"%s\""),
-                         LEXER::GetTokenString( type ).GetData() );
+                         GetChars( LEXER::GetTokenString( type ) ) );
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
@@ -309,7 +309,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
             {
                 wxString layerName = CONV_FROM_UTF8( circle->layer_id.c_str() );
                 ThrowIOError( _("Session file uses invalid layer id \"%s\""),
-                                layerName.GetData() );
+                                GetChars( layerName ) );
             }
 
             if( layerNdx > topLayerNdx )
@@ -392,7 +392,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             {
                 ThrowIOError(
                    _("Session file has 'reference' to non-existent component \"%s\""),
-                   reference.GetData() );
+                   GetChars( reference ) );
             }
 
             if( !place->hasVertex )
@@ -536,7 +536,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
                 wxString psid( CONV_FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
 
                 ThrowIOError( _("A wire_via references a missing padstack \"%s\""),
-                             psid.GetData() );
+                             GetChars( psid ) );
             }
 
             for( unsigned v=0;  v<wire_via->vertexes.size();  ++v )
