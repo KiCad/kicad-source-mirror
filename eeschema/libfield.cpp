@@ -93,7 +93,7 @@ static wxString ReturnFieldFullText( LibDrawField* aField)
     {
 #if defined(KICAD_GOST)
     text.Printf( wxT( "%s?.%c" ),
-               aField->m_Text.m_Text.GetData(), CurrentUnit + '1' - 1 );
+               aField->m_Text.GetData(), CurrentUnit + '1' - 1 );
 #else
 
     text.Printf( wxT( "%s?%c" ),
