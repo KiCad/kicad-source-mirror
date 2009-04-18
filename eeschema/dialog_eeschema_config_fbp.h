@@ -21,7 +21,6 @@
 #include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/statline.h>
-#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,9 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 			ID_REMOVE_LIB = 1000,
 			ID_ADD_LIB,
 			ID_SAVE_CFG,
+			wxID_REMOVE_PATH,
 			ID_LIB_PATH_SEL,
+			wxID_INSERT_PATH,
 		};
 		
 		wxStaticText* m_staticTextNetListFormats;
@@ -53,16 +54,17 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxStaticText* m_staticTextlibList;
 		wxListBox* m_ListLibr;
 		wxButton* m_buttonRemoveLib;
-		wxButton* m_buttonAdd;
+		wxButton* m_buttonAddLib;
 		wxButton* m_buttonIns;
 		
 		wxButton* m_buttonOk;
 		wxButton* m_buttonCancel;
 		wxButton* m_buttonSave;
 		wxStaticLine* m_staticline1;
-		wxTextCtrl* m_LibDirCtrl;
-		wxButton* m_buttonBrowse;
+		wxListBox* m_listUserPaths;
 		wxButton* m_buttonRemovePath;
+		wxButton* m_buttonAddPath;
+		wxButton* m_buttonInsPath;
 		wxStaticText* m_staticTextcurrenpaths;
 		wxListBox* m_DefaultLibraryPathslistBox;
 		
@@ -73,12 +75,12 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnSaveCfgClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnLibPathSelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveUserPath( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnAddOrInsertPath( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,559 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EESCHEMA_CONFIG_FBP();
 	
 };

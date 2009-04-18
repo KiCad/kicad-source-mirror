@@ -185,13 +185,19 @@ public:
      * @param aFullFilename = filename with path and extension.
      */
     wxString ReturnFilenameWithRelativePathInLibPath(const wxString & aFullFilename);
-    
+
     /** Function RemoveLibraryPath
-     * Removes the given ptah from the libary path list
-     * @param path = the path to remove
+     * Removes the given path(s) from the library path list
+     * @param aPaths = path or path list to remove. paths must be separated by ";"
      */
-    void RemoveLibraryPath( const wxString& path );
-    void InsertLibraryPath( const wxString& path, size_t index );
+    void RemoveLibraryPath( const wxString& aPaths );
+
+    /** Function InsertLibraryPath
+     * insert path(s) int lib paths list.
+     * @param aPaths = path or path list to add. paths must be separated by ";"
+     * @param aIndex = insertion point
+     */
+    void InsertLibraryPath( const wxString& aPaths, size_t aIndex );
 };
 
 /*

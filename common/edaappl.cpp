@@ -22,6 +22,7 @@
 #include <wx/stdpaths.h>
 #include <wx/apptrait.h>
 #include <wx/snglinst.h>
+#include <wx/tokenzr.h>
 
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -46,7 +47,7 @@ static const wxChar* CommonConfigPath = wxT( "kicad_common" );
 /* Just add new languages to the list.  This macro will properly recalculate
  * the size of the array. */
 #define LANGUAGE_DESCR_COUNT ( sizeof( s_Language_List ) /     \
-                               sizeof( struct LANGUAGE_DESCR ) )
+                              sizeof( struct LANGUAGE_DESCR ) )
 
 /* Default font size */
 #define FONT_DEFAULT_SIZE 10    /* Default font size. */
@@ -222,14 +223,14 @@ static struct LANGUAGE_DESCR s_Language_List[] =
  */
 WinEDA_App::WinEDA_App()
 {
-    m_Checker  = NULL;
-    m_HtmlCtrl = NULL;
+    m_Checker     = NULL;
+    m_HtmlCtrl    = NULL;
     m_EDA_Config  = NULL;
     m_Env_Defined = FALSE;
     m_LanguageId  = wxLANGUAGE_DEFAULT;
     m_PdfBrowserIsDefault = TRUE;
     m_Locale = NULL;
-    m_ProjectConfig = NULL;
+    m_ProjectConfig    = NULL;
     m_EDA_CommonConfig = NULL;
 }
 
@@ -267,9 +268,10 @@ WinEDA_App::~WinEDA_App()
 void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
 {
     wxString EnvLang;
+
     m_Id = aId;
     m_Checker = new wxSingleInstanceChecker( aName.Lower() + wxT( "-" ) +
-                                             wxGetUserId() );
+                                            wxGetUserId() );
 
     /* Init kicad environment
      * the environment variable KICAD (if exists) gives the kicad path:
@@ -297,7 +299,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     SetVendorName( wxT( "kicad" ) );
     SetAppName( aName.Lower() );
     SetTitle( aName );
-    m_EDA_Config = new wxConfig( );
+    m_EDA_Config = new wxConfig();
     wxASSERT( m_EDA_Config != NULL );
     m_EDA_CommonConfig = new wxConfig( CommonConfigPath );
     wxASSERT( m_EDA_CommonConfig != NULL );
@@ -443,7 +445,7 @@ bool WinEDA_App::SetBinDir()
     /* Use unix notation for paths. I am not sure this is a good idea,
      * but it simplify compatibility between Windows and Unices
      * However it is a potential problem in path handling under Windows
-    */
+     */
     m_BinDir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     // Remove file name form command line:
@@ -456,7 +458,7 @@ bool WinEDA_App::SetBinDir()
     wxLogDebug( wxT( "Windows path: " ) + wfn.GetFullPath() );
     wxLogDebug( wxT( "Executable path the Kicad way: " ) + m_BinDir );
     wxLogDebug( wxT( "Executable path the wxWidgets way: " ) +
-                GetTraits()->GetStandardPaths().GetExecutablePath() );
+               GetTraits()->GetStandardPaths().GetExecutablePath() );
 
     return TRUE;
 }
@@ -474,6 +476,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     m_searchPaths.Clear();
 
 #ifdef __WINDOWS__
+
     /* m_BinDir path is in unix notation.
      * But wxFileName expect (to work fine) native notation
      * specifically when using a path including a server, like
@@ -509,10 +512,10 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     m_searchPaths.Add( fn.GetPath() );
 
     /* The normal OS program file install paths allow for binary to be
-     * installed in a different path from the library files.  This is
-     * useful for development purposes so the library and documentation
-     * files do not need to be installed separately.  If someone can
-     * figure out a way to implement this without #ifdef, please do. */
+    * installed in a different path from the library files.  This is
+    * useful for development purposes so the library and documentation
+    * files do not need to be installed separately.  If someone can
+    * figure out a way to implement this without #ifdef, please do. */
 #ifdef __WXMSW__
     tmp.AddEnvList( wxT( "PROGRAMFILES" ) );
 #else
@@ -545,7 +548,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
         if( !wxFileName::IsDirReadable( m_searchPaths[i] ) )
         {
             wxLogDebug( wxT( "Removing <" ) + m_searchPaths[i] +
-                        wxT( "> from search path list." ) );
+                       wxT( "> from search path list." ) );
             m_searchPaths.RemoveAt( i );
             i -= 1;
         }
@@ -553,25 +556,26 @@ void WinEDA_App::SetDefaultSearchPaths( void )
         {
             fn.Clear();
             fn.SetPath( m_searchPaths[i] );
+
             /* Add schematic library file path to search path list.
-            * we must add <kicad path>/library and <kicad path>/library/doc
-            */
-            if ( m_Id == APP_TYPE_EESCHEMA )
+             * we must add <kicad path>/library and <kicad path>/library/doc
+             */
+            if( m_Id == APP_TYPE_EESCHEMA )
             {
-                fn.AppendDir( wxT( "library") );
+                fn.AppendDir( wxT( "library" ) );
                 if( fn.IsDirReadable() )
                 {
                     wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                                fn.GetPath().c_str() );
+                               fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
 
                 /* Add schematic doc file path (library/doc)to search path list. */
-                fn.AppendDir( wxT( "doc") );
+                fn.AppendDir( wxT( "doc" ) );
                 if( fn.IsDirReadable() )
                 {
                     wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                                fn.GetPath().c_str() );
+                               fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
                 fn.RemoveLastDir();
@@ -584,20 +588,20 @@ void WinEDA_App::SetDefaultSearchPaths( void )
             if( fn.IsDirReadable() )
             {
                 wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                            fn.GetPath().c_str() );
+                           fn.GetPath().c_str() );
                 m_libSearchPaths.Add( fn.GetPath() );
             }
             fn.RemoveLastDir();
 
             /* Add PCB library file path to search path list. */
-            if ( ( m_Id == APP_TYPE_PCBNEW ) || ( m_Id == APP_TYPE_CVPCB ) )
+            if( ( m_Id == APP_TYPE_PCBNEW ) || ( m_Id == APP_TYPE_CVPCB ) )
             {
                 fn.AppendDir( wxT( "modules" ) );
 
                 if( fn.IsDirReadable() )
                 {
                     wxLogDebug( wxT( "Adding <%s> to library search path list" ),
-                                fn.GetPath().c_str() );
+                               fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
 
@@ -607,7 +611,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                 if( fn.IsDirReadable() )
                 {
                     wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                                fn.GetPath().c_str() );
+                               fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
             }
@@ -791,21 +795,21 @@ void WinEDA_App::SetLanguagePath( void )
             if( fn.DirExists() )
             {
                 wxLogDebug( wxT( "Adding locale lookup path: " ) +
-                            fn.GetPath() );
+                           fn.GetPath() );
                 wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
             }
 
-             // Append path for unix standard install
+            // Append path for unix standard install
             fn.RemoveLastDir();
 
-             // Append path for unix standard install
+            // Append path for unix standard install
             fn.AppendDir( wxT( "kicad" ) );
             fn.AppendDir( wxT( "internat" ) );
 
             if( fn.DirExists() )
             {
                 wxLogDebug( wxT( "Adding locale lookup path: " ) +
-                            fn.GetPath() );
+                           fn.GetPath() );
                 wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
             }
         }
@@ -834,7 +838,7 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
         wxString label;
-        if ( s_Language_List[ii].m_DoNotTranslate )
+        if( s_Language_List[ii].m_DoNotTranslate )
             label = s_Language_List[ii].m_Lang_Label;
         else
             label = wxGetTranslation( s_Language_List[ii].m_Lang_Label );
@@ -888,7 +892,7 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
         if( fn.DirExists() )
         {
             wxLogDebug( _T( "Adding <" ) + fn.GetPath() + _T( "> to " ) +
-                        _T( "file \"" ) + filename + _T( "\" search path." ) );
+                       _T( "file \"" ) + filename + _T( "\" search path." ) );
             paths.Add( fn.GetPath() );
         }
     }
@@ -963,11 +967,12 @@ wxString WinEDA_App::GetHelpFile( void )
     {
         subdirs.RemoveAt( subdirs.GetCount() - 1 );
         altsubdirs.RemoveAt( altsubdirs.GetCount() - 1 );
-         // wxLocale::GetName() does not return always the short name
+
+        // wxLocale::GetName() does not return always the short name
         subdirs.Add( m_Locale->GetName().BeforeLast( '_' ) );
         altsubdirs.Add( m_Locale->GetName().BeforeLast( '_' ) );
         fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
-        if ( ! fn )
+        if( !fn )
             fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
     }
 
@@ -979,7 +984,7 @@ wxString WinEDA_App::GetHelpFile( void )
         subdirs.Add( _T( "en" ) );
         altsubdirs.Add( _T( "en" ) );
         fn = FindFileInSearchPaths( m_HelpFileName, &altsubdirs );
-        if ( ! fn )
+        if( !fn )
             fn = FindFileInSearchPaths( m_HelpFileName, &subdirs );
     }
 
@@ -1001,38 +1006,39 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
     return FindFileInSearchPaths( filename, &subdirs );
 }
 
+
 /** ReturnLastVisitedLibraryPath
  * Returns the last visited library directory, or (if void) the first
  * path in lib path list ( but not the CWD )
  * @param aSubPathToSearch = Prefered sub path to search in path list (defualt = empty string)
  */
-wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString & aSubPathToSearch )
+wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString& aSubPathToSearch )
 {
-    if ( ! m_LastVisitedLibPath.IsEmpty() )
+    if( !m_LastVisitedLibPath.IsEmpty() )
         return m_LastVisitedLibPath;
 
     wxString path;
 
-   /* Initialize default path to the main default lib path
-    * this is the second path in list (the first is the project path)
-    */
+    /* Initialize default path to the main default lib path
+     * this is the second path in list (the first is the project path)
+     */
     unsigned pcount = m_libSearchPaths.GetCount();
-    if ( pcount )
+    if( pcount )
     {
         unsigned ipath = 0;
-        if ( m_libSearchPaths[0] == wxGetCwd() )
+        if( m_libSearchPaths[0] == wxGetCwd() )
             ipath = 1;
 
         // First choice of path:
-        if ( ipath < pcount )
+        if( ipath < pcount )
             path = m_libSearchPaths[ipath];
 
         // Search a sub path matching aSubPathToSearch
-        if ( ! aSubPathToSearch.IsEmpty() )
+        if( !aSubPathToSearch.IsEmpty() )
         {
-            for ( ; ipath < pcount; ipath++ )
+            for( ; ipath < pcount; ipath++ )
             {
-                if ( m_libSearchPaths[ipath].Contains( aSubPathToSearch ) )
+                if( m_libSearchPaths[ipath].Contains( aSubPathToSearch ) )
                 {
                     path = m_libSearchPaths[ipath];
                     break;
@@ -1041,24 +1047,26 @@ wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString & aSubPathToSe
         }
     }
 
-    if ( path.IsEmpty() )
+    if( path.IsEmpty() )
         path = wxGetCwd();
     return path;
 }
 
-void WinEDA_App::SaveLastVisitedLibraryPath( const wxString & aPath)
+
+void WinEDA_App::SaveLastVisitedLibraryPath( const wxString& aPath )
 {
     m_LastVisitedLibPath = aPath;
 }
+
 
 /** ReturnFilenameWithRelativePathInLibPath
  * @return a short filename (with extension) with only a relative path if this filename
  * can be found in library paths
  * @param aFullFilename = filename with path and extension.
  */
-wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath(const wxString & aFullFilename)
+wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aFullFilename )
 {
-   /* If the library path is already in the library search paths
+    /* If the library path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,
@@ -1066,16 +1074,17 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath(const wxString & aF
      *
      */
     wxFileName fn = aFullFilename;
-    wxString filename = aFullFilename;
-    int        pathlen = -1;                                                    // path len, used to find the better subpath within defualts paths
-    if( m_libSearchPaths.Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
+    wxString   filename = aFullFilename;
+    int        pathlen  = -1;                                                   // path len, used to find the better subpath within defualts paths
+
+    if( m_libSearchPaths.Index( fn.GetPath() ) != wxNOT_FOUND )                 // Ok, trivial case
         filename = fn.GetName();
     else                                                                        // not in the default, : see if this file is in a subpath:
     {
         filename = fn.GetPathWithSep() + fn.GetFullName();
         for( unsigned kk = 0; kk < m_libSearchPaths.GetCount(); kk++ )
         {
-            if( fn.MakeRelativeTo(m_libSearchPaths[kk] ) )
+            if( fn.MakeRelativeTo( m_libSearchPaths[kk] ) )
             {
                 if( pathlen < 0                             // a subpath is found
                    || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
@@ -1108,37 +1117,50 @@ wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
         return m_libSearchPaths.FindValidPath( aFileName );
 }
 
+
 /** Function RemoveLibraryPath
- * Removes the given path from the library path list
- * @param path = the path to remove
+ * Removes the given path(s) from the library path list
+ * @param aPaths = path or path list to remove. paths must be separated by ";"
  */
-void WinEDA_App::RemoveLibraryPath( const wxString& path )
+void WinEDA_App::RemoveLibraryPath( const wxString& aPaths )
 {
-    if( m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) != wxNOT_FOUND )
+    wxStringTokenizer Token( aPaths, wxT( ";\n\r" ) );
+
+    while( Token.HasMoreTokens() )
     {
-        wxLogDebug( wxT( "Removing path <%s> from library path search list." ),
-                    path.c_str() );
-        m_libSearchPaths.Remove( path );
+        wxString path = Token.GetNextToken();
+        if( m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) != wxNOT_FOUND )
+        {
+            m_libSearchPaths.Remove( path );
+        }
     }
 }
 
-void WinEDA_App::InsertLibraryPath( const wxString& path, size_t index )
+
+/** Function InsertLibraryPath
+ * insert path(s) int lib paths list.
+ * @param aPaths = path or path list to add. paths must be separated by ";"
+ * @param aIndex = insertion point
+ */
+void WinEDA_App::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
 {
-    if( wxFileName::DirExists( path )
-        && m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) == wxNOT_FOUND )
+    wxStringTokenizer Token( aPaths, wxT( ";\n\r" ) );
+
+    while( Token.HasMoreTokens() )
     {
-        if( index >= m_libSearchPaths.GetCount() )
+        wxString path = Token.GetNextToken();
+        if( wxFileName::DirExists( path )
+            && m_libSearchPaths.Index( path, wxFileName::IsCaseSensitive() ) == wxNOT_FOUND )
         {
-            wxLogDebug( wxT( "Adding path <%s> to library path search list." ),
-                        path.c_str() );
-            m_libSearchPaths.Add( path );
-        }
-        else
-        {
-            wxLogDebug( wxT( "Inserting path <%s> in library path search " \
-                             "list at index position %d." ),
-                        path.c_str(), index );
-            m_libSearchPaths.Insert( path, index );
+            if( aIndex >= m_libSearchPaths.GetCount() )
+            {
+                m_libSearchPaths.Add( path );
+            }
+            else
+            {
+                m_libSearchPaths.Insert( path, aIndex );
+            }
+            aIndex++;
         }
     }
 }
