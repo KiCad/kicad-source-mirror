@@ -769,7 +769,7 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
     if( FullFileName.IsEmpty() )
         return;
 
-    /* If the library path is already in the library search paths
+    /* If the path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,

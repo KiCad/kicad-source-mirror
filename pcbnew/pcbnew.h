@@ -56,6 +56,8 @@ extern bool        g_Show_Pads_Module_in_Move;
 extern bool        g_Raccord_45_Auto;
 extern bool        g_ShowIsolDuringCreateTrack;
 
+extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint libraries filesnames
+
 /**
  * Function IsModuleLayerVisible
  * expects either of the two layers on which a module can reside, and returns
@@ -78,6 +80,7 @@ bool inline IsModuleLayerVisible( int layer ) {
 extern bool     Track_45_Only;
 extern bool     Segments_45_Only;
 extern wxString g_Shapes3DExtBuffer;
+extern wxString g_DocModulesFileName;
 
 /* A buffer used in some computations (will be removed in next cleanup code,
  * do not use) */

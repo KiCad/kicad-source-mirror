@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_eeschema_config_fbp__
-#define __dialog_eeschema_config_fbp__
+#ifndef __dialog_pcbnew_config_libs_and_paths_fbp__
+#define __dialog_pcbnew_config_libs_and_paths_fbp__
 
 #include <wx/intl.h>
 
@@ -16,19 +16,20 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/listbox.h>
 #include <wx/button.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_EESCHEMA_CONFIG_FBP
+/// Class DIALOG_PCBNEW_CONFIG_LIBS_FBP
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog 
+class DIALOG_PCBNEW_CONFIG_LIBS_FBP : public wxDialog 
 {
 	private:
 	
@@ -38,19 +39,16 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 			ID_ADD_LIB = 1000,
 			ID_REMOVE_LIB,
 			ID_SAVE_CFG,
+			wxID_BROWSE_MOD_DOC,
 			ID_LIB_PATH_SEL,
 			wxID_INSERT_PATH,
 			wxID_REMOVE_PATH,
 		};
 		
-		wxStaticText* m_staticTextNetListFormats;
-		wxListBox* m_NetFormatBox;
-		
+		wxStaticText* m_InfoBoardFileExt;
 		wxStaticText* m_InfoCmpFileExt;
-		wxStaticText* m_InfoNetFileExt;
 		wxStaticText* m_InfoLibFileExt;
-		wxStaticText* m_InfoSymbFileExt;
-		wxStaticText* m_InfoSchFileExt;
+		wxStaticText* m_InfoNetlistFileExt;
 		wxStaticText* m_staticTextlibList;
 		wxListBox* m_ListLibr;
 		wxButton* m_buttonAddLib;
@@ -61,6 +59,8 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxButton* m_buttonCancel;
 		wxButton* m_buttonSave;
 		wxStaticLine* m_staticline1;
+		wxTextCtrl* m_TextHelpModulesFileName;
+		wxButton* m_buttonModDoc;
 		wxListBox* m_listUserPaths;
 		wxButton* m_buttonAddPath;
 		wxButton* m_buttonInsPath;
@@ -75,14 +75,15 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnSaveCfgClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnBrowseModDocFile( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnAddOrInsertPath( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveUserPath( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,559 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_EESCHEMA_CONFIG_FBP();
+		DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 593,612 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_PCBNEW_CONFIG_LIBS_FBP();
 	
 };
 
-#endif //__dialog_eeschema_config_fbp__
+#endif //__dialog_pcbnew_config_libs_and_paths_fbp__

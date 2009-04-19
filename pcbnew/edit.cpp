@@ -1029,10 +1029,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:
     {
         wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
-        wxString msg = FindKicadHelpPath();
-        msg += cfg->Read( wxT( "module_doc_file" ),
-                          wxT( "pcbnew/footprints.pdf" ) );
-        GetAssociatedDocument( this, msg );
+        cfg->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
+        GetAssociatedDocument( this, g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
     }
     break;
 

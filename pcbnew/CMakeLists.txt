@@ -52,8 +52,9 @@ set(PCBNEW_SRCS
     dialog_non_copper_zones_properties_base.cpp
     dialog_pad_properties.cpp
     dialog_pad_properties_base.cpp
+    dialog_pcbnew_config_libs_and_paths.cpp
+    dialog_pcbnew_config_libs_and_paths_fbp.cpp
     dialog_print_using_printer.cpp
-    dialog_setup_libs.cpp
     dialog_orient_footprints.cpp
     dialog_track_options.cpp
     dialog_track_options_base.cpp

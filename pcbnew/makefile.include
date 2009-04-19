@@ -64,7 +64,8 @@ OBJECTS=	$(TARGET).o\
 		locate.o \
 		modules.o \
 		loadcmp.o \
-		dialog_setup_libs.o \
+		dialog_pcbnew_config_libs_and_paths.o\
+		dialog_pcbnew_config_libs_and_paths_fbp.o\
 		dialog_general_options.o \
 		dialog_general_options_BoardEditor_base.o\
 		dialog_display_options_base.o\
@@ -181,7 +182,7 @@ affiche.o: affiche.cpp
 
 tr_modif.o: tr_modif.cpp
 
-dialog_setup_libs.o: dialog_setup_libs.cpp
+dialog_pcbnew_config_libs_and_paths.o: dialog_pcbnew_config_libs_and_paths.cpp dialog_pcbnew_config_libs_and_paths_fbp.h
 
 initpcb.o: initpcb.cpp dialog_initpcb.cpp dialog_initpcb.h
 

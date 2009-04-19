@@ -87,6 +87,16 @@ bool Plot_Pads_All_Layers; /* Plot pads meme n'appartenant pas a la
                               couche ( utile pour serigraphie) */
 
 
+// Wildcard for footprint libraries filesnames
+const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file " \
+                                         "(*.mod)|*.mod" ) );
+/* Name of the document footprint list
+ * usually located in share/modules/footprints_doc
+ * this is of the responsability to users to create this file
+ * if they want to have a list of footprints
+ */
+wxString g_DocModulesFileName = wxT("footprints_doc/footprints.pdf");
+
 IMPLEMENT_APP( WinEDA_App )
 
 /****************************/

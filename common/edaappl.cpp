@@ -582,17 +582,6 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                 fn.RemoveLastDir(); // point to <kicad path>
             }
 
-            /* Add kicad template file path to search path list. */
-            fn.AppendDir( wxT( "template" ) );
-
-            if( fn.IsDirReadable() )
-            {
-                wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                           fn.GetPath().c_str() );
-                m_libSearchPaths.Add( fn.GetPath() );
-            }
-            fn.RemoveLastDir();
-
             /* Add PCB library file path to search path list. */
             if( ( m_Id == APP_TYPE_PCBNEW ) || ( m_Id == APP_TYPE_CVPCB ) )
             {
@@ -614,7 +603,19 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                                fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
+                fn.RemoveLastDir();
+                fn.RemoveLastDir(); // point to <kicad path>
             }
+            /* Add kicad template file path to search path list. */
+            fn.AppendDir( wxT( "template" ) );
+
+            if( fn.IsDirReadable() )
+            {
+                wxLogDebug( wxT( "Adding <%s> to search path list" ),
+                           fn.GetPath().c_str() );
+                m_libSearchPaths.Add( fn.GetPath() );
+            }
+            fn.RemoveLastDir();
         }
     }
 }
