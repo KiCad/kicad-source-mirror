@@ -9,6 +9,7 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "kicad_string.h"
 
 #include "cvpcb.h"
 #include "protos.h"
@@ -23,7 +24,6 @@ public:
     AUTOMODULE* Pnext;
     wxString    m_Name;
     wxString    m_LibName;
-    wxString    m_Library;
 
     AUTOMODULE() { m_Type = 0; Pnext = NULL; }
 };
@@ -33,27 +33,20 @@ public:
 static int  auto_select( WinEDA_CvpcbFrame* frame,
                          STORECMP*          Cmp,
                          AUTOMODULE*        BaseListeMod );
-static void auto_associe( WinEDA_CvpcbFrame* frame );
-
+static char * ReadQuotedText(wxString & aTarget, char * aText);
 
 /*************************************************************/
 void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
 /*************************************************************/
 
-/* Fonction liee au boutton "Auto"
- *   Lance l'association automatique modules/composants
+/* Called by the automatic association button
+ *  Read *.equ files to try to find acorresponding footprint
+ * for each component that is not already linked to a footprint ( a "free" component )
+ * format of a line:
+ * 'cmp_ref' 'footprint_name'
  */
 {
-    auto_associe( this );
-}
-
-
-/**************************************************/
-static void auto_associe( WinEDA_CvpcbFrame* frame )
-/**************************************************/
-{
     wxFileName  fn;
-    unsigned    ii, j, k;
     wxString    msg, tmp;
     char        Line[1024];
     FILE*       file;
@@ -66,7 +59,7 @@ static void auto_associe( WinEDA_CvpcbFrame* frame )
         return;
 
     /* recherche des equivalences a travers les fichiers possibles */
-    for( ii = 0; ii < g_ListName_Equ.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < g_ListName_Equ.GetCount(); ii++ )
     {
         fn = g_ListName_Equ[ii];
         fn.SetExt( EquivFileExtension );
@@ -92,16 +85,13 @@ static void auto_associe( WinEDA_CvpcbFrame* frame )
         }
 
         /* lecture fichier n */
-        while( fgets( Line, 79, file ) != 0 )
+        while( GetLine( file, Line, NULL,  sizeof(Line) ) != NULL )
         {
-            /* elimination des lignes vides */
-            for( j = 0; j < 40; j++ )
-            {
-                if( Line[j] == 0 )
-                    goto fin_de_while;
-                if( Line[j] == QUOTE )
-                    break;
-            }
+            char * text = Line;
+            text = ReadQuotedText(tmp, text);
+
+            if ( text == NULL || (*text == 0 )  )
+                continue;
 
             ItemModule = new AUTOMODULE();
             ItemModule->Pnext = BaseListeMod;
@@ -109,56 +99,73 @@ static void auto_associe( WinEDA_CvpcbFrame* frame )
 
             /* stockage du composant ( 'namecmp'  'namelib')
              *  name et namelib */
-            for( j++; j < 40; j++, k++ )
-            {
-                if( Line[j] == QUOTE )
-                    break;
-                ItemModule->m_Name.Append( Line[j] );
-            }
+            ItemModule->m_Name = tmp;
 
-            j++;
-            for( ; j < 80; )
-                if( Line[j++] == QUOTE )
-                    break;
-
-            for( ; ; j++ )
-            {
-                if( Line[j] == QUOTE )
-                    break;
-                ItemModule->m_LibName.Append( Line[j] );
-            }
+            text++;
+            ReadQuotedText(ItemModule->m_LibName, text);
 
             nb_correspondances++;
-fin_de_while:;
         }
 
         fclose( file );
-
-        /* Affichage Statistiques */
-        msg.Printf( _( "%d equivalences" ), nb_correspondances );
-        frame->SetStatusText( msg, 0 );
     }
+
+
+    /* display some info */
+    msg.Printf( _( "%d equivalences" ), nb_correspondances );
+    SetStatusText( msg, 0 );
+    wxMessageBox(msg);
 
     Component = g_BaseListeCmp;
-    for( ii = 0; Component != NULL; Component = Component->Pnext, ii++ )
+    for( unsigned ii = 0; Component != NULL; Component = Component->Pnext, ii++ )
     {
-        frame->m_ListCmp->SetSelection( ii, TRUE );
+        m_ListCmp->SetSelection( ii, TRUE );
         if( Component->m_Module.IsEmpty() )
-            auto_select( frame, Component, BaseListeMod );
+            auto_select( this, Component, BaseListeMod );
     }
 
-    /* Liberation memoire */
+    /* free memory: */
     for( ItemModule = BaseListeMod; ItemModule != NULL; ItemModule = NextMod )
     {
-        NextMod = ItemModule->Pnext; delete ItemModule;
+        NextMod = ItemModule->Pnext;
+        delete ItemModule;
     }
 
     BaseListeMod = NULL;
 }
 
+/***************************************************/
+char * ReadQuotedText(wxString & aTarget, char * aText)
+/***************************************************/
+/** read the string between quotes and put it in aTarget
+ * put text in aTarget
+ * return a pointer to the last read char (the second quote if Ok)
+*/
+{
+    // search the first quote:
+    for( ; *aText != 0; aText++ )
+    {
+        if( *aText == QUOTE )
+            break;
+    }
+
+    if ( *aText == 0 )
+        return NULL;
+
+    aText++;
+    for(; *aText != 0; aText++ )
+    {
+        if( *aText == QUOTE )
+            break;
+        aTarget.Append(*aText);
+    }
+
+    return aText;
+}
+
 
 /****************************************************************/
-static int auto_select( WinEDA_CvpcbFrame* frame, STORECMP* Cmp,
+int auto_select( WinEDA_CvpcbFrame* frame, STORECMP* Cmp,
                         AUTOMODULE* BaseListeMod )
 /****************************************************************/
 

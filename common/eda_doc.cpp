@@ -112,6 +112,11 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
     /* Compute the full file name */
     if( wxIsAbsolutePath( aDocName ) || aPaths == NULL)
         fullfilename = aDocName;
+    /* If the file exists, this is a trivial case: return the filename "as this"
+     * the name can be an absolute path, or a relative path like ./filename or ../<filename>
+    */
+    else if( wxFileName::FileExists( aDocName ) )
+        fullfilename = aDocName;
     else
     {
         fullfilename = aPaths->FindValidPath( aDocName );

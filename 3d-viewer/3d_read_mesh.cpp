@@ -25,7 +25,7 @@ int S3D_MASTER:: ReadData()
 {
     char       line[1024], * text;
     wxFileName fn;
-    wxString   tmp;
+    wxString   FullFilename;
     FILE*      file;
     int        LineNum = 0;
 
@@ -34,23 +34,23 @@ int S3D_MASTER:: ReadData()
         return 1;
     }
 
-    fn = m_Shape3DName;
 
-    if( !fn.FileExists() )
+    if( wxFileName::FileExists(m_Shape3DName) )
+        FullFilename = m_Shape3DName;
+    else
     {
-        tmp = wxGetApp().FindLibraryPath( fn );
+        fn = m_Shape3DName;
+        FullFilename = wxGetApp().FindLibraryPath( fn );
 
-        if( !tmp )
+        if( FullFilename.IsEmpty() )
         {
             wxLogDebug( _( "3D part library <%s> could not be found." ),
                         fn.GetFullPath().c_str() );
             return -1;
         }
-
-        fn = tmp;
     }
 
-    file = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
+    file = wxFopen( FullFilename, wxT( "rt" ) );
 
     if( file == NULL )
     {

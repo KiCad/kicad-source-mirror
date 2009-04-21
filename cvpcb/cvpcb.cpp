@@ -24,9 +24,13 @@ const wxString ComponentFileExtension( wxT( "cmp" ) );
 const wxString RetroFileExtension( wxT( "stf" ) );
 const wxString EquivFileExtension( wxT( "equ" ) );
 
-/* TODO: What is a stuff file???  Please fix this wild card in English if
- *       you know. */
+// Wildcard for footprint libraries filesnames
+const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file " \
+                                         "(*.mod)|*.mod" ) );
+// Wildcard for schematic retroannotation (import footprint names in schematic):
 const wxString RetroFileWildcard( _( "Kicad component list files (*.stf)|*.stf" ) );
+
+// Wildcard for alias footprint files
 const wxString EquivFileWildcard( _( "Kicad footprint alias files (*.equ)|*.equ" ) );
 
 const wxString titleLibLoadError( _( "Library Load Error" ) );
@@ -40,6 +44,10 @@ int nbcomp;
 int nblib;
 int composants_non_affectes;
 
+// Option to keep cvpcb open after saving netlist files
+bool g_KeepCvpcbOpen = false;
+
+
 STOREMOD* g_BaseListePkg = NULL;
 STORECMP* g_BaseListeCmp = NULL;
 
@@ -47,6 +55,14 @@ wxString g_UserNetDirBuffer;  // Netlist path (void = current working directory)
 wxString g_NetlistFileExtension;
 
 wxArrayString g_ListName_Equ; // list of .equ files to load
+
+/* Name of the document footprint list
+ * usually located in share/modules/footprints_doc
+ * this is of the responsability to users to create this file
+ * if they want to have a list of footprints
+ */
+wxString g_DocModulesFileName = DEFAULT_FOOTPRINTS_LIST_FILENAME;
+
 
 
 // Create a new application object
@@ -65,7 +81,7 @@ bool WinEDA_App::OnInit()
     wxString           currCWD = wxGetCwd();
     WinEDA_CvpcbFrame* frame   = NULL;
 
-    InitEDA_Appl( wxT( "CVpcb" ), APP_TYPE_CVPCB );
+    InitEDA_Appl( wxT( "Cvpcb" ), APP_TYPE_CVPCB );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
@@ -96,6 +112,9 @@ bool WinEDA_App::OnInit()
     SetTopWindow( frame );
 
     Read_Config( fn.GetFullPath() );
+    long tmp;
+    if ( wxGetApp().m_EDA_CommonConfig->Read( CLOSE_OPTION_KEY, & tmp) )
+        g_KeepCvpcbOpen = tmp;
 
     frame->Show( TRUE );
     frame->BuildFootprintListBox();

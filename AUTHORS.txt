@@ -3,7 +3,7 @@
 * under GNU General Public License (see copyright.txt)
 
 == Main Author
-Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 Maitre de Conferences
 IUT1 GEII2
 Universite Joseph Fourier (U.J.F.)
@@ -24,7 +24,7 @@ Wayne Stambaugh <stambaughw@verizon.net>
 See also CHANGELOG.txt for contributors.
 
 == Document Writers
-Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
+Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 Igor Plyatov <plyatov@gmail.com>
 
 == Translators

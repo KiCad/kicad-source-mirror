@@ -185,7 +185,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
     wxFileName fn;
 
     ii = m_ListLibr->GetSelection();
-    if( ii == wxNOT_FOUND && event.GetId() != ID_ADD_LIB )
+    if( ii == wxNOT_FOUND )
         ii = 0;
 
     wxString libpath;

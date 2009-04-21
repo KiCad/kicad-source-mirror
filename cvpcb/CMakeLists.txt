@@ -12,7 +12,8 @@ set(CVPCB_SRCS
     class_cvpcb.cpp
     cvframe.cpp
     cvpcb.cpp
-#   dialog_cvpcb_config.cpp
+    dialog_cvpcb_config.cpp
+    dialog_cvpcb_config_fbp.cpp
     dialog_display_options.cpp
     displayframe.cpp
     genequiv.cpp

@@ -67,7 +67,6 @@ public:
     void            BuildCmpListBox();
     void            BuildFootprintListBox();
     void            CreateScreenCmp();
-    void            CreateConfigWindow();
     int             SaveNetList( const wxString& FullFileName );
     int             SaveComponentList( const wxString& FullFileName );
     bool            ReadNetList();

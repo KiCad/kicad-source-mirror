@@ -16,6 +16,8 @@ OBJECTS = $(TARGET).o \
             class_board_item.o\
             memoire.o \
 			cvframe.o\
+            dialog_cvpcb_config.o\
+            dialog_cvpcb_config_fbp.o\
 			listboxes.o\
 			displayframe.o\
 			init.o\

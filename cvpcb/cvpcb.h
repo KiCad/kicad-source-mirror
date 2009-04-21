@@ -8,8 +8,11 @@
 #include "pcbcommon.h"
 
 // config for footprints doc file acces
-#define DOC_FOOTPRINTS_LIST_KEY wxT("footprints_doc_file")
-#define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT("footprints_doc/footprints.pdf")
+#define DOC_FOOTPRINTS_LIST_KEY          wxT( "footprints_doc_file" )
+#define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
+
+// option key to close cvpcb after saving files
+#define CLOSE_OPTION_KEY wxT( "KeepCvpcbOpen" )
 
 // Define print format to display a schematic component line
 #define CMP_FORMAT wxT( "%3d %8s - %16s : %-.32s" )
@@ -62,7 +65,7 @@ public:
     wxString      m_Module;     /* Nom du module (Package) corresp */
     wxString      m_Repere;     /* utilise selon formats de netliste */
     wxArrayString m_FootprintFilter;    /* List of allowed footprints (wildcart allowed
-                                          * if void: no filtering */
+                                         * if void: no filtering */
 
     STORECMP();
     ~STORECMP();
@@ -94,25 +97,40 @@ extern const wxString EquivFileWildcard;
 
 extern const wxString titleLibLoadError;
 
-/* CvPcb global variable definition references. */
-extern STOREMOD* g_BaseListePkg;
-extern STORECMP* g_BaseListeCmp;
+// Wildcard for footprint libraries filesnames
+extern const wxString g_FootprintLibFileWildcard;
 
-extern wxString   g_NetlistFileExtension;
-extern wxString   g_UserNetDirBuffer;
+// Wildcard for schematic retroannotation (import footprint names in schematic):
+extern const wxString g_FootprintEquFileWildcard;
+
+/* Name of the document footprint list
+ * usually located in share/modules/footprints_doc
+ * this is of the responsability to users to create this file
+ * if they want to have a list of footprints
+ */
+extern wxString      g_DocModulesFileName;
+
+/* CvPcb global variable definition references. */
+extern STOREMOD*     g_BaseListePkg;
+extern STORECMP*     g_BaseListeCmp;
+
+extern wxString      g_NetlistFileExtension;
+extern wxString      g_UserNetDirBuffer;
 
 extern wxArrayString g_ListName_Equ;        // list of .equ files to load
 
-extern int    g_FlagEESchema;
-extern int    Rjustify; /* flag pout troncature des noms de Net:
+extern int           g_FlagEESchema;
+extern int           Rjustify; /* flag pout troncature des noms de Net:
                          * = 0: debut de chaine conservee (->ORCADPCB2)
                          * = 1: fin de chaine conservee (->VIEWLOGIC) */
 
-extern int    modified; /* Flag != 0 si modif attribution des module. */
+extern int  modified;                       /* Flag != 0 si modif attribution des module. */
 
-extern int    nbcomp;                    /* nombre de composants trouves */
-extern int    nblib;                     /* nombre d'empreintes trouvees */
-extern int    composants_non_affectes;   /* nbre de composants non affectes */
+extern int  nbcomp;                         /* nombre de composants trouves */
+extern int  nblib;                          /* nombre d'empreintes trouvees */
+extern int  composants_non_affectes;        /* nbre de composants non affectes */
+
+extern bool g_KeepCvpcbOpen;                // Option to keep cvpcb open after saving netlist files
 
 void Plume( int state );
 

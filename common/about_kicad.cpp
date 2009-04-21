@@ -8,7 +8,7 @@
 #include "appl_wxstruct.h"
 
 
-#define BUILD_VERSION wxT("(20090414-unstable)")
+#define BUILD_VERSION wxT("(20090421-unstable)")
 
 wxString g_BuildVersion
 
@@ -138,7 +138,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 	info.AddDeveloper( SetMsg( wxT( "Wayne Stambaugh <stambaughw@verizon.net>" ) ) );
 
 	/* Add document writers*/
-	info.AddDocWriter( wxT( "Jean-Pierre Charras <jean-pierre.charras@inpg.fr>" ) );
+	info.AddDocWriter( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
 	info.AddDocWriter( SetMsg( wxT( "Igor Plyatov <plyatov@gmail.com>" ) ) );
 
 	/* Add translators */

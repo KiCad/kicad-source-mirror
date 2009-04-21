@@ -18,6 +18,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "dialog_cvpcb_config.h"
 
 
 #define FRAME_MIN_SIZE_X 450
@@ -342,7 +343,8 @@ void WinEDA_CvpcbFrame::SaveQuitCvpcb( wxCommandEvent& event )
     if( SaveNetList( wxEmptyString ) > 0 )
     {
         modified = 0;
-        Close( TRUE );
+        if ( ! g_KeepCvpcbOpen )
+            Close( TRUE );
     }
 }
 
@@ -437,12 +439,9 @@ void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
 /***********************************************************/
 void WinEDA_CvpcbFrame::ConfigCvpcb( wxCommandEvent& event )
 /***********************************************************/
-
-/* Fonction liee au boutton "Config"
- *  Affiche le panneau de configuration
- */
 {
-    CreateConfigWindow();
+    DIALOG_CVPCB_CONFIG ConfigFrame( this );
+    ConfigFrame.ShowModal();
 }
 
 
@@ -500,18 +499,10 @@ void WinEDA_CvpcbFrame::SetLanguage( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::DisplayDocFile( wxCommandEvent& event )
 /*************************************************************/
 {
-    wxASSERT( wxGetApp().m_EDA_CommonConfig != NULL );
-
-    wxString  DocModuleFileName, fullfilename;
     wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
-    DocModuleFileName = cfg->Read( DOC_FOOTPRINTS_LIST_KEY,
-                                   DEFAULT_FOOTPRINTS_LIST_FILENAME );
-    if( wxIsAbsolutePath( DocModuleFileName ) )
-        fullfilename = DocModuleFileName;
-    else
-        fullfilename = FindKicadHelpPath() + wxT( "../" ) + DocModuleFileName;
-
-    GetAssociatedDocument( this, fullfilename );
+    cfg->Read( DOC_FOOTPRINTS_LIST_KEY, g_DocModulesFileName );
+ 
+    GetAssociatedDocument( this,  g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
 }
 
 

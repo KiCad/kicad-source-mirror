@@ -1,8 +1,6 @@
 /***************************************/
-/** menucfg : configuration de CVPCB  **/
+/* menucfg : buils the cvpcb main menu */
 /***************************************/
-
-/* cree et/ou affiche et modifie la configuration de CVPCB */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -11,357 +9,87 @@
 #include "gestfich.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvstruct.h"
 
-/*****************************************/
-/* classe pour la frame de Configuration */
-/*****************************************/
-#include "dialog_cvpcb_config.cpp"
+#include "bitmaps.h"
+
+#include "id.h"
 
 
-/***************************************************/
-void WinEDA_CvpcbFrame::CreateConfigWindow()
-/***************************************************/
-/* Creation de la fenetre de configuration de CVPCB */
+/*******************************************/
+void WinEDA_CvpcbFrame::ReCreateMenuBar()
+/*******************************************/
+
+/* Creation des menus de la fenetre principale
+ */
 {
-    KiConfigCvpcbFrame* ConfigFrame = new KiConfigCvpcbFrame( this );
-
-    ConfigFrame->ShowModal();
-    ConfigFrame->Destroy();
-}
-
-
-/*********************************************/
-void KiConfigCvpcbFrame::SetDialogDatas()
-/*********************************************/
-{
-    wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
-
-    m_ListLibr->InsertItems( g_LibName_List, 0 );
-    m_ListEquiv->InsertItems( g_ListName_Equ, 0 );
-
-    m_LibDirCtrl = new WinEDA_EnterText( this, _( "Lib Dir:" ),
-                                         g_UserLibDirBuffer,
-                                         m_RightBoxSizer, wxDefaultSize );
-
-    m_NetInputExtCtrl = new WinEDA_EnterText( this, _( "Net Input Ext:" ),
-                                              g_NetlistFileExtension,
-                                              m_NetExtBoxSizer, wxDefaultSize );
-
-    wxString DocModuleFileName = cfg->Read( DOC_FOOTPRINTS_LIST_KEY,
-                                            DEFAULT_FOOTPRINTS_LIST_FILENAME );
-    m_TextHelpModulesFileName = new WinEDA_EnterText( this,
-                                                      _( "Module Doc File:" ),
-                                                      DocModuleFileName,
-                                                      m_RightBoxSizer,
-                                                      wxDefaultSize );
-
-    /* Create info on Files ext */
-    wxStaticText* StaticText;
-    wxString      text;
-    text.Printf( wxT( "%s     .%s" ), _( "Cmp ext:" ),
-                 ComponentFileExtension.c_str() );
-    StaticText = new wxStaticText( this, -1, text );
-    m_FileExtList->Add( StaticText,
-                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
-                        wxADJUST_MINSIZE );
-
-    text.Printf( wxT( "%s     .%s" ), _( "Lib ext:" ),
-                 ModuleFileExtension.c_str() );
-    StaticText = new wxStaticText( this, -1, text );
-    m_FileExtList->Add( StaticText,
-                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
-                        wxADJUST_MINSIZE );
-
-    text.Printf( wxT( "%s  .%s" ), _( "NetOut ext:" ), NetExtBuffer.c_str() );
-    StaticText = new wxStaticText( this, -1, text );
-    m_FileExtList->Add( StaticText,
-                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
-                        wxADJUST_MINSIZE );
-
-    text.Printf( wxT( "%s   .%s" ), _( "Equiv ext:" ),
-                 EquivFileExtension.c_str() );
-    StaticText = new wxStaticText( this, -1, text );
-    m_FileExtList->Add( StaticText,
-                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
-                        wxADJUST_MINSIZE );
-
-    text.Printf( wxT( "%s   .%s" ), _( "Retro ext:" ),
-                 RetroFileExtension.c_str() );
-    StaticText = new wxStaticText( this, -1, text );
-    m_FileExtList->Add( StaticText,
-                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
-                        wxADJUST_MINSIZE );
-}
-
-
-/********************************************************/
-void KiConfigCvpcbFrame::AcceptCfg( wxCommandEvent& event )
-/********************************************************/
-{
-    Update();
-    Close();
-}
-
-
-/**********************************/
-void KiConfigCvpcbFrame::Update()
-/**********************************/
-{
-    wxASSERT( wxGetApp().m_EDA_CommonConfig != NULL );
-
-    wxString  msg;
-    wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
-
-    if( !m_DoUpdate )
-        return;
-    g_NetlistFileExtension = m_NetInputExtCtrl->GetValue();
-    cfg->Write( DOC_FOOTPRINTS_LIST_KEY, m_TextHelpModulesFileName->GetValue() );
-
-    msg = m_LibDirCtrl->GetValue();
-    if( msg != g_UserLibDirBuffer )
-    {
-        g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-        listlib();
-        m_Parent->BuildFootprintListBox();
-    }
-}
-
-
-/****************************************************/
-void KiConfigCvpcbFrame::SaveCfg( wxCommandEvent& event )
-/****************************************************/
-{
-    WinEDA_CvpcbFrame* parent = ( WinEDA_CvpcbFrame* )GetParent();
-    wxASSERT( parent && parent->IsKindOf( CLASSINFO( WinEDA_CvpcbFrame ) ) );
-
-    Update();
-    Save_Config( this, parent->m_NetlistFileName.GetFullPath() );
-}
-
-
-/******************************************************/
-void KiConfigCvpcbFrame::ReadOldCfg( wxCommandEvent& event )
-{
-    WinEDA_CvpcbFrame* parent = ( WinEDA_CvpcbFrame* )GetParent();
-    wxASSERT( parent && parent->IsKindOf( CLASSINFO( WinEDA_CvpcbFrame ) ) );
-
-    wxFileName fn = parent->m_NetlistFileName;
-    fn.SetExt( ProjectFileExtension );
-
-    wxFileDialog dlg( this, _( "Load Project File" ), fn.GetPath(),
-                      fn.GetFullName(), ProjectFileWildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    Read_Config( dlg.GetPath() );
-    m_DoUpdate = FALSE;
-    Close( TRUE );
-}
-
-
-/*******************************************************/
-void KiConfigCvpcbFrame::LibDelFct( wxCommandEvent& event )
-/*******************************************************/
-{
-    int ii;
-
-    ii = m_ListLibr->GetSelection();
-    if( ii < 0 )
-        return;
-
-    g_LibName_List.RemoveAt( ii );
-
-    /* suppression de la reference dans la liste des librairies */
-    m_ListLibr->Delete( ii );
-
-    g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-
-    listlib();
-
-    m_Parent->BuildFootprintListBox();
-}
-
-
-/********************************************************/
-void KiConfigCvpcbFrame::LibAddFct( wxCommandEvent& event )
-/********************************************************/
-{
-    int           ii;
-    wxFileName    fn;
-    wxString      tmp;
-    wxArrayString Filenames;
-
-    ii = m_ListLibr->GetSelection();
-    if( ii == wxNOT_FOUND && event.GetId() != ADD_LIB )
-        ii = 0;
-
-    Update();
-
-    wxString libpath =  m_LibDirCtrl->GetValue();
-    if ( libpath.IsEmpty() )
-        libpath = wxGetApp().ReturnLastVisitedLibraryPath();
-
-    if ( libpath.IsEmpty() )
-    {   /* Initialize default path to the main default lib path
-        * this is the second path in list (the first is the project path)
-        */
-        ii = wxGetApp().GetLibraryPathList().GetCount();
-        if ( ii > 2 )
-            ii = 2;
-        if ( ii > 0 )
-            libpath = wxGetApp().GetLibraryPathList()[ii-1];
-        else
-            libpath = wxGetCwd();
-    }
-
-    wxFileDialog dlg( this, _( "Foot Print Library Files" ), libpath,
-                      wxEmptyString, ModuleFileWildcard,
-                      wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    dlg.GetPaths( Filenames );
-
-    if( Filenames.GetCount() == 0 )
-        return;
-
-    for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
-    {
-        fn = Filenames[jj];
-
-        if ( jj == 0 )
-            wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
-
-         /* If the library path is already in the library search paths
-         * list, just add the library name to the list.  Otherwise, add
-         * the library name with the full path. */
-        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) == wxNOT_FOUND )
-            tmp = fn.GetPathWithSep() + fn.GetName();
-        else
-            tmp = fn.GetName();
-
-		// Add or insert new library name.
-        if( g_LibName_List.Index( tmp, fn.IsCaseSensitive() ) == wxNOT_FOUND )
-		{
-            if( event.GetId() == ADD_LIB )
-                g_LibName_List.Add( tmp );
-            else
-                g_LibName_List.Insert( tmp, ii++ );
-        }
-        else
-        {
-            wxString msg = wxT( "<" ) + tmp + wxT( "> : " ) +
-                _( "Library already in use" );
-            DisplayError( this, msg );
-        }
-    }
-
-    g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-    listlib();
-    m_Parent->BuildFootprintListBox();
-    m_ListLibr->Clear();
-    m_ListLibr->InsertItems( g_LibName_List, 0 );
-}
-
-
-/********************************************************/
-void KiConfigCvpcbFrame::EquDelFct( wxCommandEvent& event )
-/********************************************************/
-{
-    int ii;
-
-    ii = m_ListEquiv->GetSelection();
-    if( ii < 0 )
-        return;
-
-    g_ListName_Equ.RemoveAt( ii );
-    m_ListEquiv->Delete( ii );
-}
-
-
-/********************************************************/
-void KiConfigCvpcbFrame::EquAddFct( wxCommandEvent& event )
-/********************************************************/
-{
-    int        ii;
-    wxFileName fn;
-    wxString   libName;
-
-    ii = m_ListEquiv->GetSelection();
-    if( event.GetId() == ADD_EQU )
-        ii++;                               /* Ajout apres selection */
-    if( ii < 0 )
-        ii = 0;
-
-    Update();
-
-    wxString libpath =  m_LibDirCtrl->GetValue();
-    if ( libpath.IsEmpty() )
-        libpath = wxGetApp().ReturnLastVisitedLibraryPath();
-
-    if ( libpath.IsEmpty() )
-    {   /* Initialize default path to the main default lib path
-        * this is the second path in list (the first is the project path)
-        */
-        ii = wxGetApp().GetLibraryPathList().GetCount();
-        if ( ii > 2 )
-            ii = 2;
-        if ( ii > 0 )
-            libpath = wxGetApp().GetLibraryPathList()[ii-1];
-        else
-            libpath = wxGetCwd();
-    }
-    wxFileDialog dlg( this, _( "Open Footprint Alias Files" ),
-                      libpath, wxEmptyString, EquivFileWildcard,
-                      wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxArrayString Filenames;
-    dlg.GetFilenames( Filenames );
-
-    if( Filenames.GetCount() == 0 )
-        return;
-
-    for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
-    {
-        fn = Filenames[jj];
-
-        if ( jj == 0 )
-            wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
-
-        /* Use the file name without extension if the library path is
-         * already in the default library search path.  Otherwise, use
-         * the full path and file name without the extension. */
-        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) == wxNOT_FOUND )
-            libName = fn.GetPathWithSep() + fn.GetName();
-        else
-            libName = fn.GetName();
-
-        //Add or insert new equiv library name
-        if( g_ListName_Equ.Index( libName ) == wxNOT_FOUND )
-        {
-            g_ListName_Equ.Insert( libName, ii++ );
-        }
-        else
-        {
-            wxString msg;
-            msg << wxT( "<" ) << libName << wxT( "> : " ) <<
-                _( "Library already in use" );
-            DisplayError( this, msg );
-        }
-    }
-
-    /* Update display list */
-    g_UserLibDirBuffer = m_LibDirCtrl->GetValue();
-    listlib();
-
-    m_ListEquiv->Clear();
-    m_ListEquiv->InsertItems( g_ListName_Equ, 0 );
+    wxMenuItem* item;
+    wxMenuBar*  menuBar = GetMenuBar();
+    /* Destroy the existing menu bar so it can be rebuilt.  This allows
+     * language changes of the menu text on the fly. */
+    if( menuBar )
+        SetMenuBar( NULL );
+
+    menuBar = new wxMenuBar();
+
+    wxMenu* filesMenu = new wxMenu;
+    item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT,
+                           _( "&Open" ),
+                           _( "Open a NetList file" ) );
+    item->SetBitmap( open_xpm );
+    filesMenu->Append( item );
+
+    filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
+                           _( "&Save As..." ),
+                           _( "Save New NetList and Footprints List files" ) );
+    item->SetBitmap( save_xpm );
+    filesMenu->Append( item );
+
+    filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, ID_CVPCB_QUIT, _( "E&xit" ),
+                           _( "Quit Cvpcb" ) );
+    item->SetBitmap( exit_xpm );
+    filesMenu->Append( item );
+
+    // Creation des selections des anciens fichiers
+    wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
+
+    // Menu Configuration:
+    wxMenu* configmenu = new wxMenu;
+    item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Configuration" ),
+                           _( "Setting Libraries, Directories and others..." ) );
+    item->SetBitmap( config_xpm );
+    configmenu->Append( item );
+
+    // Font selection and setup
+    AddFontSelectionMenu( configmenu );
+
+    wxGetApp().AddMenuLanguageList( configmenu );
+
+    configmenu->AppendSeparator();
+    item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,
+                           _( "&Save config" ),
+                           _( "Save configuration in current dir" ) );
+    item->SetBitmap( save_setup_xpm );
+    configmenu->Append( item );
+
+    // Menu Help:
+    wxMenu* helpMenu = new wxMenu;
+    item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_HELP, _( "&Contents" ),
+                           _( "Open the cvpcb manual" ) );
+    item->SetBitmap( help_xpm );
+    helpMenu->Append( item );
+    item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_LICENCE,
+                           _( "&About cvpcb" ),
+                           _( "About cvpcb schematic to pcb converter" ) );
+    item->SetBitmap( info_xpm );
+    helpMenu->Append( item );
+
+    menuBar->Append( filesMenu, _( "&File" ) );
+    menuBar->Append( configmenu, _( "&Preferences" ) );
+    menuBar->Append( helpMenu, _( "&Help" ) );
+
+    // Associate the menu bar with the frame
+    SetMenuBar( menuBar );
 }
