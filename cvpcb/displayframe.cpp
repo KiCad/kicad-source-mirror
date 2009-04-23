@@ -22,7 +22,7 @@
 /* Construction de la table des evenements pour WinEDA_DrawFrame */
 /*****************************************************************/
 
-BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, WinEDA_DrawFrame )
+BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_DrawFrame::OnSize )
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_DisplayFrame::OnZoom )

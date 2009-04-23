@@ -1,5 +1,5 @@
 /***********************************************************/
-/*						wxstruct.h:							 */
+/*                      cvstruct.h  :                      */
 /* descriptions des principales classes derivees utilisees */
 /***********************************************************/
 
@@ -8,12 +8,13 @@
 
 #include "wx/listctrl.h"
 #include <wx/filename.h>
+#include "param_config.h"
+#include "cvpcb.h"
 
 /*  Forward declarations of all top-level window classes. */
 class FootprintListBox;
 class ListBoxCmp;
 class WinEDA_DisplayFrame;
-class STORECMP;
 
 #define LIST_BOX_TYPE wxListView
 
@@ -25,11 +26,26 @@ class WinEDA_CvpcbFrame : public WinEDA_BasicFrame
 {
 public:
 
+    bool                 m_KeepCvpcbOpen;
     FootprintListBox*    m_FootprintList;
     ListBoxCmp*          m_ListCmp;
     WinEDA_DisplayFrame* DrawFrame;
     WinEDA_Toolbar*      m_HToolBar; // Toolbar horizontal haut d'ecran
     wxFileName           m_NetlistFileName;
+    wxArrayString        m_ModuleLibNames;
+    wxArrayString        m_AliasLibNames;
+    wxString             m_UserLibraryPath;
+    wxString             m_NetlistFileExtension;
+    wxString             m_DocModulesFileName;
+    FOOTPRINT_LIST       m_footprints;
+    COMPONENT_LIST       m_components;
+
+protected:
+    int                  m_undefinedComponentCnt;
+    bool                 m_modified;
+    bool                 m_rightJustify;
+    bool                 m_isEESchemaNetlist;
+    PARAM_CFG_ARRAY      m_projectFileParams;
 
     // Constructor and destructor
 public:
@@ -49,8 +65,6 @@ public:
     void            ReCreateHToolbar();
     virtual void    ReCreateMenuBar();
     void            SetLanguage( wxCommandEvent& event );
-    void            AddFontSelectionMenu( wxMenu* main_menu );
-    void            ProcessFontPreferences( wxCommandEvent& event );
 
     void            ToFirstNA( wxCommandEvent& event );
     void            ToPreviousNA( wxCommandEvent& event );
@@ -58,11 +72,15 @@ public:
     void            SaveQuitCvpcb( wxCommandEvent& event );
     void            LoadNetList( wxCommandEvent& event );
     void            ConfigCvpcb( wxCommandEvent& event );
+    void            OnKeepOpenOnSave( wxCommandEvent& event );
     void            DisplayModule( wxCommandEvent& event );
     void            AssocieModule( wxCommandEvent& event );
     void            WriteStuffList( wxCommandEvent& event );
     void            DisplayDocFile( wxCommandEvent& event );
     void            OnSelectFilteringFootprint( wxCommandEvent& event );
+
+    void            OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
+
     void            SetNewPkg( const wxString& package );
     void            BuildCmpListBox();
     void            BuildFootprintListBox();
@@ -75,6 +93,12 @@ public:
     int             ReadFootprintFilterList( FILE* f );
     int             ReadViewlogicWirList();
     int             ReadViewlogicNetList();
+    void            LoadProjectFile( const wxString& FileName );
+    void            SaveProjectFile( const wxString& fileName );
+    virtual void    LoadSettings();
+    virtual void    SaveSettings();
+
+    const PARAM_CFG_ARRAY& GetProjectFileParameters( void );
 
     DECLARE_EVENT_TABLE()
 };
@@ -91,7 +115,7 @@ public:
 public:
 
     ListBoxBase( WinEDA_CvpcbFrame * parent, wxWindowID id,
-        const wxPoint &loc, const wxSize &size );
+                 const wxPoint &loc, const wxSize &size );
 
     ~ListBoxBase();
 
@@ -113,17 +137,18 @@ public:
     bool           m_UseFootprintFullList;
 
 public:
-    FootprintListBox( WinEDA_CvpcbFrame * parent,
-        wxWindowID id, const wxPoint &loc, const wxSize &size,
-        int nbitems, wxString choice[] );
+    FootprintListBox( WinEDA_CvpcbFrame * parent, wxWindowID id,
+                      const wxPoint &loc, const wxSize &size,
+                      int nbitems, wxString choice[] );
     ~FootprintListBox();
 
     int         GetCount();
     void        SetSelection( unsigned index, bool State = TRUE );
     void        SetString( unsigned linecount, const wxString& text );
     void        AppendLine( const wxString& text );
-    void        SetFootprintFullList();
-    void        SetFootprintFilteredList( STORECMP* Component );
+    void        SetFootprintFullList( FOOTPRINT_LIST& list );
+    void        SetFootprintFilteredList( COMPONENT* Component,
+                                          FOOTPRINT_LIST& list );
     void        SetActiveFootprintList( bool FullList, bool Redraw = FALSE );
 
     wxString    GetSelectedFootprint();
@@ -147,8 +172,8 @@ public:
 public:
 
     ListBoxCmp( WinEDA_CvpcbFrame * parent, wxWindowID id,
-        const wxPoint &loc, const wxSize &size,
-        int nbitems, wxString choice[] );
+                const wxPoint &loc, const wxSize &size,
+                int nbitems, wxString choice[] );
 
     ~ListBoxCmp();
 

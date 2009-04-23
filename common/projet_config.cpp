@@ -179,6 +179,62 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
     m_ProjectConfig = NULL;
 }
 
+
+void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
+                                     const wxString&  GroupName,
+                                     const PARAM_CFG_ARRAY& params )
+{
+    PARAM_CFG_BASE* param;
+    wxString        msg;
+    size_t          i;
+
+    ReCreatePrjConfig( fileName, GroupName, FORCE_LOCAL_CONFIG );
+
+    /* Write date ( surtout pour eviter bug de wxFileConfig
+     * qui se trompe de rubrique si declaration [xx] en premiere ligne
+     * (en fait si groupe vide) */
+    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+
+    msg = DateAndTime();
+    m_ProjectConfig->Write( wxT( "update" ), msg );
+
+    msg = GetAppName();
+    m_ProjectConfig->Write( wxT( "last_client" ), msg );
+
+    /* Save parameters */
+    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all datas
+    m_ProjectConfig->Flush();
+
+    m_ProjectConfig->SetPath( GroupName );
+    m_ProjectConfig->Write( wxT( "version" ), CONFIG_VERSION );
+    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+
+    for( i = 0; i < params.GetCount(); i++ )
+    {
+        param = &params[i];
+        if( param->m_Group )
+            m_ProjectConfig->SetPath( param->m_Group );
+        else
+            m_ProjectConfig->SetPath( GroupName );
+
+        if( param->m_Setup )
+            continue;
+
+        if ( param->m_Type == PARAM_COMMAND_ERASE )    // Erase all data
+        {
+            if( param->m_Ident )
+                m_ProjectConfig->DeleteGroup( param->m_Ident );
+        }
+        else
+            param->SaveParam( m_ProjectConfig );
+    }
+
+    m_ProjectConfig->SetPath( UNIX_STRING_DIR_SEP );
+    delete m_ProjectConfig;
+    m_ProjectConfig = NULL;
+}
+
+
 /*****************************************************************/
 void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 /*****************************************************************/
@@ -268,6 +324,60 @@ bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
             continue;
 
         pt_cfg->ReadParam( m_ProjectConfig );
+    }
+
+    delete m_ProjectConfig;
+    m_ProjectConfig = NULL;
+
+    return true;
+}
+
+
+bool WinEDA_App::ReadProjectConfig( const wxString&        local_config_filename,
+                                    const wxString&        GroupName,
+                                    const PARAM_CFG_ARRAY& params,
+                                    bool                   Load_Only_if_New )
+{
+    size_t          i;
+    PARAM_CFG_BASE* param;
+    wxString        timestamp;
+
+    ReCreatePrjConfig( local_config_filename, GroupName, false );
+
+    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+    timestamp = m_ProjectConfig->Read( wxT( "update" ) );
+    if( Load_Only_if_New && ( !timestamp.IsEmpty() )
+       && (timestamp == m_CurrentOptionFileDateAndTime) )
+    {
+        return false;
+    }
+
+    m_CurrentOptionFileDateAndTime = timestamp;
+
+    if( !g_Prj_Default_Config_FullFilename.IsEmpty() )
+        m_CurrentOptionFile = g_Prj_Default_Config_FullFilename;
+    else
+    {
+        if( wxPathOnly( g_Prj_Config_LocalFilename ).IsEmpty() )
+            m_CurrentOptionFile = wxGetCwd() + STRING_DIR_SEP +
+                g_Prj_Config_LocalFilename;
+        else
+            m_CurrentOptionFile = g_Prj_Config_LocalFilename;
+    }
+
+    for( i = 0; i < params.GetCount(); i++ )
+    {
+        param = &params[i];
+
+        if( param->m_Group )
+            m_ProjectConfig->SetPath( param->m_Group );
+        else
+            m_ProjectConfig->SetPath( GroupName );
+
+        if( param->m_Setup )
+            continue;
+
+        param->ReadParam( m_ProjectConfig );
     }
 
     delete m_ProjectConfig;

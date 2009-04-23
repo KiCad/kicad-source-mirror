@@ -43,7 +43,7 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
     {
         msg = _( "Footprint: " ) + FootprintName;
         DrawFrame->SetTitle( msg );
-        STOREMOD* Module = GetModuleDescrByName( FootprintName );
+        FOOTPRINT* Module = GetModuleDescrByName( FootprintName, m_footprints );
         msg = _( "Lib: " );
 
         if( Module )

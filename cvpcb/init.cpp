@@ -19,20 +19,19 @@
 /* routines locales : */
 
 
-/**********************************************************/
-void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
-/*********************************************************/
-
 /*
  *   - Affecte un module au composant selectionne
  *   - Selectionne le composant suivant
  */
+void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 {
-    STORECMP* Composant;
-    int       ii, NumCmp, IsNew = 1;
-    wxString  Line;
+    COMPONENT_LIST::iterator i;
+    COMPONENT* Component;
+    bool       isUndefined = false;
+    int        NumCmp;
+    wxString   Line;
 
-    if( g_BaseListeCmp == NULL )
+    if( m_components.empty() )
         return;
 
     NumCmp = m_ListCmp->GetSelection();
@@ -42,26 +41,22 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
         m_ListCmp->SetSelection( NumCmp, TRUE );
     }
 
-    Composant = g_BaseListeCmp;
-    for( ii = 0; Composant != NULL; Composant = Composant->Pnext, ii++ )
-    {
-        if( NumCmp == ii )
-            break;
-    }
+    Component = m_components[ NumCmp ];
 
-    if( Composant == NULL )
+    if( Component == NULL )
         return;
-    if( !Composant->m_Module.IsEmpty() )
-        IsNew = 0;
 
-    Composant->m_Module = package;
+    isUndefined = Component->m_Module.IsEmpty();
 
-    Line.Printf( CMP_FORMAT, ii + 1,
-                 Composant->m_Reference.GetData(), Composant->m_Valeur.GetData(),
-                 Composant->m_Module.GetData() );
-    modified = 1;
-    if( IsNew )
-        composants_non_affectes -= 1;
+    Component->m_Module = package;
+
+    Line.Printf( CMP_FORMAT, NumCmp + 1,
+                 Component->m_Reference.GetData(), Component->m_Valeur.GetData(),
+                 Component->m_Module.GetData() );
+    m_modified = true;
+
+    if( isUndefined )
+        m_undefinedComponentCnt -= 1;
 
     m_ListCmp->SetString( NumCmp, Line );
     m_ListCmp->SetSelection( NumCmp, FALSE );
@@ -72,22 +67,21 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     m_ListCmp->SetSelection( NumCmp, TRUE );
 
     Line.Printf( _( "Components: %d (free: %d)" ),
-                 nbcomp, composants_non_affectes );
+                 m_components.GetCount(), m_undefinedComponentCnt );
     SetStatusText( Line, 1 );
 }
 
 
-/********************************************/
-bool WinEDA_CvpcbFrame::ReadNetList()
-/*******************************************/
 
-/* Lecture de la netliste selon format, ainsi que du fichier des composants
+/*
+ * Lecture de la netliste selon format, ainsi que du fichier des composants
  */
+bool WinEDA_CvpcbFrame::ReadNetList()
 {
-    STORECMP* Composant;
-    wxString  msg;
-    int       ii;
-    int       error_level;
+    COMPONENT_LIST::iterator i;
+    COMPONENT* Component;
+    wxString   msg;
+    int        error_level;
 
     error_level = ReadSchematicNetlist();
 
@@ -101,36 +95,35 @@ bool WinEDA_CvpcbFrame::ReadNetList()
     }
 
     /* lecture des correspondances */
-    loadcmp( m_NetlistFileName.GetFullPath() );
+    LoadComponentFile( m_NetlistFileName.GetFullPath(), m_components );
 
     if( m_ListCmp == NULL )
         return false;
 
-    Read_Config( m_NetlistFileName.GetFullPath() );
-
-    listlib();
+    LoadProjectFile( m_NetlistFileName.GetFullPath() );
+    LoadFootprintFiles( m_ModuleLibNames, m_footprints );
     BuildFootprintListBox();
 
     m_ListCmp->Clear();
-    Composant = g_BaseListeCmp;
 
-    composants_non_affectes = 0;
-    for( ii = 1; Composant != NULL; Composant = Composant->Pnext, ii++ )
+    m_undefinedComponentCnt = 0;
+    for( i = m_components.begin(); i != m_components.end(); ++i )
     {
-        msg.Printf( CMP_FORMAT, ii,
-                    Composant->m_Reference.GetData(),
-                    Composant->m_Valeur.GetData(),
-                    Composant->m_Module.GetData() );
+        Component = *i;
+        msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
+                    Component->m_Reference.GetData(),
+                    Component->m_Valeur.GetData(),
+                    Component->m_Module.GetData() );
         m_ListCmp->AppendLine( msg );
-        if( Composant->m_Module.IsEmpty() )
-            composants_non_affectes += 1;
+        if( Component->m_Module.IsEmpty() )
+            m_undefinedComponentCnt += 1;
     }
 
-    if( g_BaseListeCmp )
+    if( !m_components.empty() )
         m_ListCmp->SetSelection( 0, TRUE );
 
-    msg.Printf( _( "Components: %d (free: %d)" ), nbcomp,
-                composants_non_affectes );
+    msg.Printf( _( "Components: %d (free: %d)" ), m_components.GetCount(),
+                m_undefinedComponentCnt );
     SetStatusText( msg, 1 );
 
     /* Mise a jour du titre de la fenetre principale */
@@ -140,14 +133,12 @@ bool WinEDA_CvpcbFrame::ReadNetList()
 }
 
 
-/*****************************************************************/
-int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
-/*****************************************************************/
-
-/* Sauvegarde des fichiers netliste et cmp
+/*
+ * Sauvegarde des fichiers netliste et cmp
  *   Le nom complet du fichier Netliste doit etre dans FFileName.
  *   Le nom du fichier cmp en est deduit
  */
+int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
 {
     wxFileName fn;
 
@@ -177,7 +168,8 @@ int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
         return 0;
     }
 
-    GenNetlistPcbnew( netlist );
+    GenNetlistPcbnew( netlist, m_components, m_isEESchemaNetlist,
+                      m_rightJustify );
 
     return 1;
 }

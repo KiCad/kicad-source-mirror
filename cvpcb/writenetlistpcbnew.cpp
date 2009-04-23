@@ -3,7 +3,8 @@
 /***************************/
 
 /*
- *  Complete la netliste (*.NET) en y placant les ref *.lib FORMAT PCBNEW ou ORCADPCB
+ * Complete la netliste (*.NET) en y placant les ref *.lib FORMAT PCBNEW ou
+ * ORCADPCB
  */
 
 #include "fctsys.h"
@@ -19,27 +20,72 @@
 #define MAX_LEN_NETNAME 16
 
 /* Routines locales */
-static void TriPinsModule( STORECMP* CurrentCmp );
-static int  PinCompare( const void* cmp1, const void* cmp2 );
-static void ChangePinNet(  wxString& PinNet );
-static void WriteFootprintFilterInfos( FILE* dest );
-
-/* Variables Locales */
-int NetNumCode;         /* Nombre utilise pour cree des NetNames lors de
-                         *  reaffectation de NetNames */
+static void ChangePinNet(  COMPONENT_LIST& list, wxString& PinNet,
+                           int* netNumber, bool rightJustify );
+static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
 
 
-/*************************/
-int GenNetlistPcbnew( FILE* file )
+static void RemoveDuplicatePins( COMPONENT* component )
+{
+    wxASSERT( component != NULL );
+
+    PIN_LIST::iterator i;
+    PIN *pin1, *pin2;
+    wxString msg;
+
+    if( component->m_Pins.size() <= 1 )
+        return;
+
+    i = component->m_Pins.begin();
+    pin1 = *i;
+    ++i;
+
+    while( i != component->m_Pins.end() )
+    {
+        pin2 = *i;
+
+        wxASSERT( pin2 != NULL );
+
+        if( !same_pin_number( pin1, pin2 ) )
+        {
+            pin1 = pin2;
+            ++i;
+            continue;
+        }
+
+        if( !same_pin_net( pin1, pin2 ) )
+        {
+            msg.Printf( _( "Component %s %s pin %s : Different Nets" ),
+                        component->m_Reference.GetData(),
+                        component->m_Valeur.GetData(),
+                        pin1->m_PinNum.GetData() );
+            DisplayError( NULL, msg, 60 );
+        }
+
+        wxLogDebug( wxT( "Removing duplicate pin %s from component %s: %s" ),
+                    pin1->m_PinNum.c_str(), component->m_Reference.c_str(),
+                    component->m_Valeur.c_str() );
+        pin1 = pin2;
+        i = component->m_Pins.erase( i );
+        delete pin2;
+    }
+}
+
+
+int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
+                      bool rightJustify )
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
-    char      Line[1024];
-    STOREPIN* Pin;
-    STORECMP* CurrentCmp;
-    wxString  Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    COMPONENT_LIST::iterator iCmp;
+    PIN_LIST::iterator       iPin;
+    char       Line[1024];
+    PIN*       Pin;
+    COMPONENT* Component;
+    int        netNumber = 1;
 
-    NetNumCode = 1; DateAndTime( Line );
-    if( g_FlagEESchema )
+    DateAndTime( Line );
+
+    if( isEESchemaNetlist )
         fprintf( file, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, Line );
     else
         fprintf( file, "( { netlist created  %s }\n", Line );
@@ -48,31 +94,33 @@ int GenNetlistPcbnew( FILE* file )
     /* Lecture de la liste */
     /***********************/
 
-    CurrentCmp = g_BaseListeCmp;
-    for( ; CurrentCmp != NULL; CurrentCmp = CurrentCmp->Pnext )
+    for( iCmp = list.begin(); iCmp != list.end(); ++iCmp )
     {
-        fprintf( file, " ( %s ", CONV_TO_UTF8( CurrentCmp->m_TimeStamp ) );
+        Component = *iCmp;
 
-        if( !CurrentCmp->m_Module.IsEmpty() )
-            fprintf( file, CONV_TO_UTF8( CurrentCmp->m_Module ) );
+        fprintf( file, " ( %s ", CONV_TO_UTF8( Component->m_TimeStamp ) );
+
+        if( !Component->m_Module.IsEmpty() )
+            fprintf( file, CONV_TO_UTF8( Component->m_Module ) );
 
         else
             fprintf( file, "$noname$" );
 
-        fprintf( file, " %s ", CONV_TO_UTF8( CurrentCmp->m_Reference ) );
+        fprintf( file, " %s ", CONV_TO_UTF8( Component->m_Reference ) );
 
         /* placement de la valeur */
-        fprintf( file, "%s\n", CONV_TO_UTF8( CurrentCmp->m_Valeur ) );
+        fprintf( file, "%s\n", CONV_TO_UTF8( Component->m_Valeur ) );
 
-        /* Tri des pins */
-        TriPinsModule( CurrentCmp );
+        Component->m_Pins.Sort( compare );
+        RemoveDuplicatePins( Component );
 
         /* Placement de la liste des pins */
-        Pin = CurrentCmp->m_Pins;
-        for( ; Pin != NULL; Pin = Pin->Pnext )
+        for( iPin = Component->m_Pins.begin(); iPin != Component->m_Pins.end();
+             ++iPin )
         {
+            Pin = *iPin;
             if( Pin->m_PinNet.Len() > MAX_LEN_NETNAME )
-                ChangePinNet( Pin->m_PinNet );
+                ChangePinNet( list, Pin->m_PinNet, &netNumber, rightJustify );
 
             if( !Pin->m_PinNet.IsEmpty() )
                 fprintf( file, "  ( %s %s )\n",
@@ -87,24 +135,26 @@ int GenNetlistPcbnew( FILE* file )
 
     fprintf( file, ")\n*\n" );
 
-    if( g_FlagEESchema )
-        WriteFootprintFilterInfos( file );
+    if( isEESchemaNetlist )
+        WriteFootprintFilterInfos( file, list );
 
     fclose( file );
     return 0;
 }
 
 
-/******************************************/
-void WriteFootprintFilterInfos( FILE* file )
-/******************************************/
-/* Write the allowed footprint list for each component */
+/*
+ * Write the allowed footprint list for each component
+ */
+void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
 {
-    STORECMP* component   = g_BaseListeCmp;
-    bool      WriteHeader = FALSE;
+    COMPONENT_LIST::iterator i;
+    COMPONENT* component;
+    bool       WriteHeader = FALSE;
 
-    for( ; component != NULL; component = component->Pnext )
+    for( i = list.begin(); i != list.end(); ++i )
     {
+        component = *i;
         unsigned int FilterCount;
         FilterCount = component->m_FootprintFilter.GetCount();
         if( FilterCount == 0 )
@@ -131,131 +181,48 @@ void WriteFootprintFilterInfos( FILE* file )
 }
 
 
-/***********************************************/
-static void TriPinsModule( STORECMP* CurrentCmp )
-/***********************************************/
-
-/* Tri et controle des pins du module CurrentCmp
- */
-{
-    STOREPIN* Pin, * NextPin, ** BasePin;
-    int       nbpins = 0, ii;
-
-    Pin = CurrentCmp->m_Pins;
-    if( Pin == NULL )
-        return;
-
-    /* comptage des pins */
-    for( ; Pin != NULL; Pin = Pin->Pnext )
-        nbpins++;
-
-    /* Tri des pins: etablissement de la liste des pointeurs */
-    BasePin = (STOREPIN**) MyZMalloc( nbpins * sizeof(STOREPIN*) );
-
-    Pin = CurrentCmp->m_Pins;
-    for( ii = 0; ii < nbpins; ii++, Pin = Pin->Pnext )
-    {
-        BasePin[ii] = Pin;
-    }
-
-    /* Tri des Pins */
-    qsort( BasePin, nbpins, sizeof( STORECMP*), PinCompare );
-
-    /* Remise a jour des pointeurs chaines */
-    for( ii = 0; ii < nbpins - 1; ii++ )
-    {
-        BasePin[ii]->Pnext = BasePin[ii + 1];
-    }
-
-    BasePin[ii]->Pnext = NULL;
-    CurrentCmp->m_Pins = BasePin[0];
-
-    MyFree( BasePin );
-
-    /* Elimination des redondances */
-    Pin = CurrentCmp->m_Pins;
-    while( Pin != NULL )
-    {
-        NextPin = Pin->Pnext;
-        if( NextPin == NULL )
-            break;
-        if( Pin->m_PinNum != NextPin->m_PinNum )
-        {
-            Pin = Pin->Pnext;  continue;
-        }
-        /* 2 pins successives ont le meme numero */
-        if( Pin->m_PinNet != NextPin->m_PinNet )
-        {
-            wxString msg;
-            msg.Printf( _( "%s %s pin %s : Different Nets" ),
-                        CurrentCmp->m_Reference.GetData(),
-                        CurrentCmp->m_Valeur.GetData(),
-                        Pin->m_PinNum.GetData() );
-            DisplayError( NULL, msg, 60 );
-        }
-        Pin->Pnext = NextPin->Pnext;
-        delete NextPin;
-    }
-}
-
-
-/*******************************************************/
-static int PinCompare( const void* cmp1, const void* cmp2 )
-/*******************************************************/
-
 /*
- *  routine PinCompare() pour qsort() pour classement alphabetique
- *   pour tri de la liste des Pins
+ * Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
+ * suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
  */
+static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
+                          int* netNumber,  bool rightJustify )
 {
-    STOREPIN** pt1, ** pt2;
-    int        ii;
+    wxASSERT( netNumber != NULL );
 
-    pt1 = (STOREPIN**) cmp1;
-    pt2 = (STOREPIN**) cmp2;
-
-    ii = StrLenNumICmp( (*pt1)->m_PinNum.GetData(),
-                        (*pt2)->m_PinNum.GetData(), 4 );
-    return ii;
-}
-
-
-/*******************************************/
-static void ChangePinNet( wxString& PinNet )
-/*******************************************/
-
-/* Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
- *   suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
- */
-{
-    STOREPIN* Pin;
-    STORECMP* CurrentCmp;
-    int       ii;
-    wxString  OldName;
-    wxString  NewName;
+    COMPONENT_LIST::iterator iCmp;
+    PIN_LIST::iterator iPin;
+    PIN*       Pin;
+    COMPONENT* Cmp;
+    wxString   OldName;
+    wxString   NewName;
 
     OldName = PinNet;
-    ii = PinNet.Len();
-    if( Rjustify )  /* On conserve les 8 dernieres lettres du nom */
+
+    if( rightJustify )  /* On conserve les 8 dernieres lettres du nom */
     {
         NewName = OldName.Right( 8 );
-        NewName << NetNumCode;
+        NewName << *netNumber;
     }
     else             /* On conserve les 8 premieres lettres du nom */
     {
         NewName = OldName.Left( 8 );
-        NewName << NetNumCode;
+        NewName << *netNumber;
     }
-    NetNumCode++;
 
-    CurrentCmp = g_BaseListeCmp;
-    for( ; CurrentCmp != NULL; CurrentCmp = CurrentCmp->Pnext )
+    *netNumber = *netNumber + 1;
+
+    for( iCmp = list.begin(); iCmp != list.end(); ++iCmp )
     {
-        Pin = CurrentCmp->m_Pins;
-        for( ; Pin != NULL; Pin = Pin->Pnext )
+        Cmp = *iCmp;
+
+        for( iPin = Cmp->m_Pins.begin(); iPin != Cmp->m_Pins.end(); ++iPin )
         {
+            Pin = *iPin;
+
             if( Pin->m_PinNet != OldName )
                 continue;
+
             Pin->m_PinNet = NewName;
         }
     }

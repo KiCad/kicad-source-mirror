@@ -14,6 +14,8 @@
 #include <wx/docview.h>
 #include <wx/config.h>
 #include <wx/filename.h>
+#include "param_config.h"
+
 
 enum id_app_type {
     APP_TYPE_UNKOWN,
@@ -26,7 +28,6 @@ enum id_app_type {
 
 class wxConfigBase;
 class wxFileConfig;
-class PARAM_CFG_BASE;
 class wxSingleInstanceChecker;
 class wxHtmlHelpController;
 
@@ -120,6 +121,9 @@ public:
     void      WriteProjectConfig( const wxString&  local_config_filename,
                                   const wxString&  GroupName,
                                   PARAM_CFG_BASE** List );
+    void      WriteProjectConfig( const wxString&  fileName,
+                                  const wxString&  GroupName,
+                                  const PARAM_CFG_ARRAY& params );
 
     /** Function SaveCurrentSetupValues()
      * Save the current setup values in m_EDA_Config
@@ -136,7 +140,12 @@ public:
     void      ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
 
     bool      ReadProjectConfig( const wxString& local_config_filename,
-                                 const wxString& GroupName, PARAM_CFG_BASE** List,
+                                 const wxString& GroupName,
+                                 PARAM_CFG_BASE** List,
+                                 bool Load_Only_if_New );
+    bool      ReadProjectConfig( const wxString& local_config_filename,
+                                 const wxString& GroupName,
+                                 const PARAM_CFG_ARRAY& List,
                                  bool Load_Only_if_New );
     bool      ReCreatePrjConfig( const wxString& local_config_filename,
                                  const wxString& GroupName,

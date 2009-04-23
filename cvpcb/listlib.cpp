@@ -20,16 +20,11 @@
 #include "protos.h"
 
 /* routines locales : */
-static void      ReadDocLib( const wxString& ModLibName );
-static int       LibCompare( void* mod1, void* mod2 );
-static STOREMOD* TriListeModules( STOREMOD* BaseListe, int nbitems );
+static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list );
 
 
-/*********************/
-bool listlib()
-/*********************/
-
-/* Routine lisant la liste des librairies, et generant la liste chainee
+/**
+ * Routine lisant la liste des librairies, et generant la liste chainee
  *  des modules disponibles
  *
  *  Module descr format:
@@ -40,22 +35,25 @@ bool listlib()
  *  $EndMODULE
  *
  */
+bool LoadFootprintFiles( const wxArrayString& libNames,
+                         FOOTPRINT_LIST& list )
 {
     FILE*      file;   /* pour lecture librairie */
     char       buffer[1024];
     wxFileName fn;
     int        end;
-    STOREMOD*  ItemLib;
+    FOOTPRINT*  ItemLib;
     unsigned   ii;
     wxString   tmp, msg;
 
-    if( g_BaseListePkg )    /* Liste Deja existante, a supprimer */
+    if( !list.empty() )
     {
-        FreeMemoryModules();
-        g_BaseListePkg = NULL;
+        list.DeleteContents( true );
+        list.Clear();
+        list.DeleteContents( false );
     }
 
-    if( g_LibName_List.GetCount() == 0 )
+    if( libNames.GetCount() == 0 )
     {
         wxMessageBox( _( "No PCB foot print libraries are listed in the " \
                          "current project file." ), _( "Project File Error" ),
@@ -63,13 +61,11 @@ bool listlib()
         return false;
     }
 
-    nblib = 0;
-
     /* Lecture des Librairies */
-    for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
+    for( ii = 0; ii < libNames.GetCount(); ii++ )
     {
         /* Calcul du nom complet de la librairie */
-        fn = g_LibName_List[ii];
+        fn = libNames[ii];
         fn.SetExt( ModuleFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
@@ -122,12 +118,10 @@ bool listlib()
                         break;
                     }
 
-                    ItemLib = new STOREMOD();
-                    ItemLib->Pnext     = g_BaseListePkg;
-                    g_BaseListePkg     = ItemLib;
-                    ItemLib->m_Module  = CONV_FROM_UTF8( StrPurge( buffer ) );
+                    ItemLib = new FOOTPRINT();
+                    ItemLib->m_Module = CONV_FROM_UTF8( StrPurge( buffer ) );
                     ItemLib->m_LibName = tmp;
-                    nblib++;
+                    list.push_back( ItemLib );
                 }
 
                 if( !end )
@@ -141,104 +135,29 @@ bool listlib()
         }
 
         fclose( file );
-        ReadDocLib( tmp );
+        ReadDocLib( tmp, list );
     }
 
-    /* classement alphabetique: */
-    if( g_BaseListePkg )
-        g_BaseListePkg = TriListeModules( g_BaseListePkg, nblib );
+    list.Sort( compare );
 
     return true;
 }
 
 
-/************************************************/
-static int LibCompare( void* mod1, void* mod2 )
-/************************************************/
-
-/*
- *  routine compare() pour qsort() en classement alphabétique des modules
- */
-{
-    int       ii;
-    STOREMOD* pt1, * pt2;
-
-    pt1 = *( (STOREMOD**) mod1 );
-    pt2 = *( (STOREMOD**) mod2 );
-
-    ii = StrNumICmp( pt1->m_Module.GetData(), pt2->m_Module.GetData() );
-    return ii;
-}
-
-
-/********************************************************************/
-static STOREMOD* TriListeModules( STOREMOD* BaseListe, int nbitems )
-/********************************************************************/
-
-/* Tri la liste des Modules par ordre alphabetique et met a jour
- *  le nouveau chainage avant/arriere
- *   retourne un pointeur sur le 1er element de la liste
- */
-{
-    STOREMOD** bufferptr, * Item;
-    int        ii, nb;
-
-    if( nbitems <= 0 )
-        return NULL;
-    if( BaseListe == NULL )
-        return NULL;
-
-    if( nbitems == 1 )
-        return BaseListe;                   // Tri inutile et impossible
-
-    bufferptr = (STOREMOD**) MyZMalloc( (nbitems + 3) * sizeof(STOREMOD*) );
-
-    for( ii = 1, nb = 0, Item = BaseListe;
-         Item != NULL;
-         Item = Item->Pnext, ii++ )
-    {
-        nb++;
-        bufferptr[ii] = Item;
-    }
-
-    /* ici bufferptr[0] = NULL et bufferptr[nbitem+1] = NULL et ces 2 valeurs
-     *  representent le chainage arriere du 1er element ( = NULL),
-     *  et le chainage avant du dernier element ( = NULL ) */
-
-    qsort( bufferptr + 1, nb, sizeof(STOREMOD*),
-           ( int( * ) ( const void*, const void* ) )LibCompare );
-
-    /* Mise a jour du chainage */
-    for( ii = 1; ii <= nb; ii++ )
-    {
-        Item = bufferptr[ii];
-        Item->m_Num = ii;
-        Item->Pnext = bufferptr[ii + 1];
-        Item->Pback = bufferptr[ii - 1];
-    }
-
-    Item = bufferptr[1];
-    MyFree( bufferptr );
-
-    return Item;
-}
-
-
-/***************************************************/
-static void ReadDocLib( const wxString& ModLibName )
-/***************************************************/
-
 /* Routine de lecture du fichier Doc associe a la librairie ModLibName.
  *   Cree en memoire la chaine liste des docs pointee par MList
  *   ModLibName = full file Name de la librairie Modules
  */
+static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list )
 {
-    STOREMOD* NewMod;
-    char      Line[1024];
-    wxString  ModuleName;
-    wxString  msg;
-    FILE*     LibDoc;
+    FOOTPRINT* NewMod;
+    FOOTPRINT* tmp;
+    char       Line[1024];
+    wxString   ModuleName;
+    wxString   msg;
+    FILE*      LibDoc;
     wxFileName fn = ModLibName;
+    FOOTPRINT_LIST::iterator i;
 
     fn.SetExt( wxT( "mdc" ) );
 
@@ -277,12 +196,15 @@ static void ReadDocLib( const wxString& ModLibName )
                 {
                 case 'L':       /* LibName */
                     ModuleName = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-                    NewMod     = g_BaseListePkg;
-                    while( NewMod )
+                    for( i = list.begin(); i != list.end(); ++i )
                     {
-                        if( ModuleName == NewMod->m_Module )
+                        tmp = *i;
+
+                        if( ModuleName == tmp->m_Module )
+                        {
+                            NewMod = tmp;
                             break;
-                        NewMod = NewMod->Pnext;
+                        }
                     }
 
                     break;
@@ -293,7 +215,7 @@ static void ReadDocLib( const wxString& ModLibName )
                     break;
 
                 case 'C':       /* Doc */
-                    if( NewMod && (!NewMod->m_Doc ) )
+                    if( NewMod && ( !NewMod->m_Doc ) )
                         NewMod->m_Doc = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
                     break;
                 }

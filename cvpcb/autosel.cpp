@@ -29,40 +29,66 @@ public:
 };
 
 
-/* routines locales : */
-static int  auto_select( WinEDA_CvpcbFrame* frame,
-                         STORECMP*          Cmp,
-                         AUTOMODULE*        BaseListeMod );
-static char * ReadQuotedText(wxString & aTarget, char * aText);
+/*
+ * read the string between quotes and put it in aTarget
+ * put text in aTarget
+ * return a pointer to the last read char (the second quote if Ok)
+ */
+char * ReadQuotedText(wxString & aTarget, char * aText)
+{
+    // search the first quote:
+    for( ; *aText != 0; aText++ )
+    {
+        if( *aText == QUOTE )
+            break;
+    }
 
-/*************************************************************/
-void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
-/*************************************************************/
+    if ( *aText == 0 )
+        return NULL;
 
-/* Called by the automatic association button
- *  Read *.equ files to try to find acorresponding footprint
- * for each component that is not already linked to a footprint ( a "free" component )
+    aText++;
+    for(; *aText != 0; aText++ )
+    {
+        if( *aText == QUOTE )
+            break;
+        aTarget.Append(*aText);
+    }
+
+    return aText;
+}
+
+
+/*
+ * Called by the automatic association button
+ * Read *.equ files to try to find corresponding footprint
+ * for each component that is not already linked to a footprint ( a "free"
+ * component )
  * format of a line:
  * 'cmp_ref' 'footprint_name'
  */
+void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
 {
+    COMPONENT_LIST::iterator iCmp;
+    FOOTPRINT_LIST::iterator iFp;
     wxFileName  fn;
     wxString    msg, tmp;
     char        Line[1024];
     FILE*       file;
     AUTOMODULE* ItemModule, * NextMod;
     AUTOMODULE* BaseListeMod = NULL;
-    STORECMP*   Component;
+    COMPONENT*  Component;
+    FOOTPRINT*  footprint;
+    size_t      ii;
     int         nb_correspondances = 0;
 
-    if( nbcomp <= 0 )
+    if( m_components.empty() )
         return;
 
     /* recherche des equivalences a travers les fichiers possibles */
-    for( unsigned ii = 0; ii < g_ListName_Equ.GetCount(); ii++ )
+    for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
     {
-        fn = g_ListName_Equ[ii];
-        fn.SetExt( EquivFileExtension );
+        fn = m_AliasLibNames[ii];
+        fn.SetExt( FootprintAliasFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
 
@@ -110,18 +136,41 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
         fclose( file );
     }
 
-
     /* display some info */
     msg.Printf( _( "%d equivalences" ), nb_correspondances );
     SetStatusText( msg, 0 );
     wxMessageBox(msg);
 
-    Component = g_BaseListeCmp;
-    for( unsigned ii = 0; Component != NULL; Component = Component->Pnext, ii++ )
+    for( iCmp = m_components.begin(); iCmp != m_components.end(); ++iCmp )
     {
-        m_ListCmp->SetSelection( ii, TRUE );
+        Component = *iCmp;
+        m_ListCmp->SetSelection( m_components.IndexOf( Component ), TRUE );
+
         if( Component->m_Module.IsEmpty() )
-            auto_select( this, Component, BaseListeMod );
+        {
+            ItemModule = BaseListeMod;
+            for( ; ItemModule != NULL; ItemModule = ItemModule->Pnext )
+            {
+                if( ItemModule->m_Name.CmpNoCase( Component->m_Valeur ) != 0 )
+                    continue;
+
+                for( iFp = m_footprints.begin(); iFp != m_footprints.end(); ++iFp )
+                {
+                    footprint = *iFp;
+
+                    if( ItemModule->m_LibName.CmpNoCase( footprint->m_Module ) == 0 )
+                    {
+                        SetNewPkg( footprint->m_Module );
+                        break;
+                    }
+                }
+
+                msg.Printf( _( "Component %s: Footprint %s not found in " \
+                               "libraries" ), Component->m_Valeur.GetData(),
+                            ItemModule->m_LibName.GetData() );
+                DisplayError( this, msg, 10 );
+            }
+        }
     }
 
     /* free memory: */
@@ -132,78 +181,4 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
     }
 
     BaseListeMod = NULL;
-}
-
-/***************************************************/
-char * ReadQuotedText(wxString & aTarget, char * aText)
-/***************************************************/
-/** read the string between quotes and put it in aTarget
- * put text in aTarget
- * return a pointer to the last read char (the second quote if Ok)
-*/
-{
-    // search the first quote:
-    for( ; *aText != 0; aText++ )
-    {
-        if( *aText == QUOTE )
-            break;
-    }
-
-    if ( *aText == 0 )
-        return NULL;
-
-    aText++;
-    for(; *aText != 0; aText++ )
-    {
-        if( *aText == QUOTE )
-            break;
-        aTarget.Append(*aText);
-    }
-
-    return aText;
-}
-
-
-/****************************************************************/
-int auto_select( WinEDA_CvpcbFrame* frame, STORECMP* Cmp,
-                        AUTOMODULE* BaseListeMod )
-/****************************************************************/
-
-/* associe automatiquement composant et Module
- *   Retourne;
- *       0 si OK
- *       1 si module specifie non trouve en liste librairie
- *       2 si pas de module specifie dans la liste des equivalences
- */
-{
-    AUTOMODULE* ItemModule;
-    STOREMOD*   Module;
-    wxString    msg;
-
-    /* examen de la liste des correspondances */
-    ItemModule = BaseListeMod;
-    for( ; ItemModule != NULL; ItemModule = ItemModule->Pnext )
-    {
-        if( ItemModule->m_Name.CmpNoCase( Cmp->m_Valeur ) != 0 )
-            continue;
-
-        /* Correspondance trouvee, recherche nom module dans la liste des
-         *  modules disponibles en librairie */
-        Module = g_BaseListePkg;
-        for( ; Module != NULL; Module = Module->Pnext )
-        {
-            if( ItemModule->m_LibName.CmpNoCase( Module->m_Module ) == 0 )
-            {
-                frame->SetNewPkg( Module->m_Module );
-                return 0;
-            }
-        }
-
-        msg.Printf( _( "Component %s: Footprint %s not found in libraries" ),
-                    Cmp->m_Valeur.GetData(), ItemModule->m_LibName.GetData() );
-        DisplayError( frame, msg, 10 );
-        return 2;
-    }
-
-    return 1;
 }

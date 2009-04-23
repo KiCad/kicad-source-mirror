@@ -25,6 +25,11 @@
 static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
 static const wxString UserGridSizeYEntry( wxT( "PcbUserGrid_Y" ) );
 static const wxString UserGridUnitsEntry( wxT( "PcbUserGrid_Unit" ) );
+static const wxString DisplayPadFillEntry( wxT( "DiPadFi" ) );
+static const wxString DisplayPadNumberEntry( wxT( "DiPadNu" ) );
+static const wxString DisplayModuleEdgeEntry( wxT( "DiModEd" ) );
+static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
+
 
 /*******************************/
 /* class WinEDA_BasePcbFrame */
@@ -392,6 +397,16 @@ void WinEDA_BasePcbFrame::LoadSettings()
     cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
     cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits,
                ( long )INCHES );
+    cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
+    cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
+    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge,
+               ( long )FILLED );
+    if( m_DisplayModEdge < FILAIRE || m_DisplayModEdge > SKETCH )
+        m_DisplayModEdge = FILLED;
+    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText,
+               ( long )FILLED );
+    if( m_DisplayModText < FILAIRE || m_DisplayModText > SKETCH )
+        m_DisplayModText = FILLED;
 }
 
 
@@ -411,4 +426,8 @@ void WinEDA_BasePcbFrame::SaveSettings()
     cfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
     cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
     cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnits );
+    cfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
+    cfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
+    cfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
+    cfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
 }

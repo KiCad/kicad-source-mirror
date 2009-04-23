@@ -171,12 +171,14 @@ extern const wxString SchematicFileExtension;
 extern const wxString BoardFileExtension;
 extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
+extern const wxString PdfFileExtension;
 
 extern const wxString ProjectFileWildcard;
 extern const wxString SchematicFileWildcard;
 extern const wxString BoardFileWildcard;
 extern const wxString NetlistFileWildcard;
 extern const wxString GerberFileWildcard;
+extern const wxString PdfFileWildcard;
 extern const wxString AllFilesWildcard;
 
 

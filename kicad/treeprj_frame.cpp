@@ -59,12 +59,10 @@ const wxChar* s_AllowedExtensionsToList[] =
 
 /* File extension definitions. */
 const wxString PythonFileExtension( wxT( "py" ) );
-const wxString PdfFileExtension( wxT( "pdf" ) );
 const wxString TextFileExtension( wxT( "txt" ) );
 
 /* File wildcard definitions. */
 const wxString PythonFileWildcard( wxT( "Python files (*.py)|*.py" ) );
-const wxString PdfFileWildcard( wxT( "Portable document files (*.pdf)|*.pdf" ) );
 const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
 
 

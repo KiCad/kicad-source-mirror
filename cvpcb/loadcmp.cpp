@@ -35,11 +35,12 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
     wxString   tmp, msg;
     wxFileName fn;
     MODULE*    Module = NULL;
+    WinEDA_CvpcbFrame* parent = ( WinEDA_CvpcbFrame* ) GetParent();
 
-    for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
+    for( ii = 0; ii < parent->m_ModuleLibNames.GetCount(); ii++ )
     {
         /* Calcul du nom complet de la librairie */
-        fn = g_LibName_List[ii];
+        fn = parent->m_ModuleLibNames[ii];
         fn.SetExt( ModuleFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );

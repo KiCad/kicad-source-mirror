@@ -26,7 +26,6 @@ WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
 
     m_Title = new wxStaticText( parent, -1, Title );
 
-    m_Title->SetForegroundColour( wxColour( 200, 0, 0 ) );
     BoxSizer->Add( m_Title, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
     m_FrameText = new   wxTextCtrl( parent, -1, TextToEdit, wxDefaultPosition, Size );

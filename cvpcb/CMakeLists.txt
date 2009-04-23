@@ -21,24 +21,12 @@ set(CVPCB_SRCS
     listboxes.cpp
     listlib.cpp
     loadcmp.cpp
-    memoire.cpp
     menucfg.cpp
     readschematicnetlist.cpp
     savecmp.cpp
     setvisu.cpp
     tool_cvpcb.cpp
     writenetlistpcbnew.cpp)
-
-set(CVPCB_EXTRA_SRCS
-#    ../pcbnew/class_board_item.cpp
-#    ../pcbnew/class_drawsegment.cpp
-#    ../pcbnew/class_edge_mod.cpp
-#    ../pcbnew/class_equipot.cpp
-#    ../pcbnew/class_module.cpp
-#    ../pcbnew/class_text_mod.cpp
-    ../pcbnew/ioascii.cpp
-#    ../pcbnew/tracemod.cpp
-)
 
 if(WIN32)
     if(MINGW)
@@ -58,7 +46,7 @@ if(APPLE)
     set(MACOSX_BUNDLE_NAME cvpcb)
 endif(APPLE)
 
-add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_EXTRA_SRCS} ${CVPCB_RESOURCES})
+add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_RESOURCES})
 
 target_link_libraries(cvpcb 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
 

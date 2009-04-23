@@ -62,15 +62,18 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     item->SetBitmap( config_xpm );
     configmenu->Append( item );
 
-    // Font selection and setup
-    AddFontSelectionMenu( configmenu );
-
     wxGetApp().AddMenuLanguageList( configmenu );
 
+    item = new wxMenuItem( configmenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
+                           _( "Keep Open On Save" ),
+                           _( "Prevent CVPcb from exiting after saving " \
+                              "netlist file" ),
+                           wxITEM_CHECK );
+    configmenu->Append( item );
     configmenu->AppendSeparator();
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,
-                           _( "&Save config" ),
-                           _( "Save configuration in current dir" ) );
+                           _( "&Save Project File" ),
+                           _( "Save changes to the project file" ) );
     item->SetBitmap( save_setup_xpm );
     configmenu->Append( item );
 

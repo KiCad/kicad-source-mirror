@@ -2,7 +2,7 @@
 /* readschematicnetlist.cpp */
 /****************************/
 
-/* Read a nelist type Eeschema or OrcadPCB2 and buid the component list
+/* Read a nelist type Eeschema or OrcadPCB2 and build the component list
  * Manages the lines like :
  * ( XXXXXX VALEUR|(pin1,pin2,...=newalim) ID VALEUR
  */
@@ -23,20 +23,16 @@
 
 /* routines locales : */
 
-static int       ReadPinConnection( FILE* f, STORECMP* CurrentCmp );
-static int       CmpCompare( void* cmp1, void* cmp2 ); /* routine pour qsort() de tri de liste des composants */
-static STORECMP* TriListeComposants( STORECMP* BaseListe, int nbitems );
+static int ReadPinConnection( FILE* f, COMPONENT* CurrentCmp );
 
-/* Tri la liste des composants par ordre alphabetique et met a jour le nouveau chainage avant/arriere
- * retourne un pointeur sur le 1er element de la liste */
+/* Tri la liste des composants par ordre alphabetique et met a jour le nouveau
+ * chainage avant/arriere retourne un pointeur sur le 1er element de la liste */
 
-#define BUFFER_CHAR_SIZE 1024   // Size of buffers used to  store netlist datas
+#define BUFFER_CHAR_SIZE 1024   // Size of buffers used to  store netlist data
 
-/************************************************/
-int WinEDA_CvpcbFrame::ReadSchematicNetlist()
-/************************************************/
 
-/** Function ReadSchematicNetlist
+/**
+ * Function ReadSchematicNetlist
  * Read a Eeschema (or OrcadPCB) netlist
  * like:
  * # EESchema Netlist Version 1.1 created  15/5/2008-12:09:21
@@ -87,26 +83,30 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
  * $endfootprintlist
  * }
  */
+int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 {
-    char      alim[1024];
-    int       i, k, l;
-    char*     LibName;
-    char      Line[BUFFER_CHAR_SIZE + 1];
-    wxString  component_reference;                          /* buffer for component reference (U1, R4...) */
-    wxString  schematic_timestamp;                          /* buffer for component time stamp */
-    wxString  footprint_name;                               /* buffer for component footprint field */
-    wxString  component_value;                              /* buffer for component values (470K, 22nF ...) */
-    char*     ptchar;
-    STORECMP* Cmp;
-    FILE*     source;
+    char       alim[1024];
+    int        i, k, l;
+    char*      LibName;
+    char       Line[BUFFER_CHAR_SIZE + 1];
+    wxString   component_reference;  /* buffer for component reference (U1, R4...) */
+    wxString   schematic_timestamp;  /* buffer for component time stamp */
+    wxString   footprint_name;       /* buffer for component footprint field */
+    wxString   component_value;      /* buffer for component values (470K, 22nF ...) */
+    char*      ptchar;
+    COMPONENT* Cmp;
+    FILE*      source;
 
-    modified = 0;
-    Rjustify = 0;
-    g_FlagEESchema = FALSE;
+    m_modified = false;
+    m_isEESchemaNetlist = false;
 
     /* Clear components buffer */
-    if( g_BaseListeCmp )
-        FreeMemoryComponents();
+    if( !m_components.empty() )
+    {
+        m_components.DeleteContents( true );
+        m_components.Clear();
+        m_components.DeleteContents( false );
+    }
 
     source = wxFopen( m_NetlistFileName.GetFullPath(), wxT( "rt" ) );
 
@@ -129,7 +129,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     {
         i = strnicmp( Line, "# EESchema", 7 ); /* net type EESchema */
         if( i == 0 )
-            g_FlagEESchema = TRUE;
+            m_isEESchemaNetlist = TRUE;
     }
 
     if( i != 0 )
@@ -143,7 +143,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     SetStatusText( _( "Netlist Format: EESchema" ), 0 );
 
 
-    /* Read the netlit */
+    /* Read the netlist */
     for( ; ; )
     {
         /* Search the beginning of a component description */
@@ -255,13 +255,12 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         }
 
         /* Store info for this component */
-        Cmp = new STORECMP();
-        Cmp->Pnext       = g_BaseListeCmp;
-        g_BaseListeCmp   = Cmp;
+        Cmp = new COMPONENT();
         Cmp->m_Reference = component_reference;
         Cmp->m_Valeur    = component_value;
+        m_components.push_back( Cmp );
 
-        if(  g_FlagEESchema )   /* copy footprint name: */
+        if(  m_isEESchemaNetlist )   /* copy footprint name: */
         {
             if( strnicmp( LibName, "$noname", 7 ) != 0 )
             {
@@ -275,26 +274,22 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         Cmp->m_TimeStamp = schematic_timestamp;
 
         ReadPinConnection( source, Cmp );
-
-        nbcomp++;
     }
 
     fclose( source );
 
-    /* Alpabetic sorting : */
-    g_BaseListeCmp = TriListeComposants( g_BaseListeCmp, nbcomp );
+    m_components.Sort( compare );
 
     return 0;
 }
 
 
-/********************************************************/
 int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
-/********************************************************/
 {
-    char      Line[BUFFER_CHAR_SIZE + 1];
-    wxString  CmpRef;
-    STORECMP* Cmp = NULL;
+    COMPONENT_LIST::iterator i;
+    char       Line[BUFFER_CHAR_SIZE + 1];
+    wxString   CmpRef;
+    COMPONENT* Cmp = NULL;
 
     for( ; ; )
     {
@@ -313,9 +308,12 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
             CmpRef = CONV_FROM_UTF8( Line + 11 );
             CmpRef.Trim( TRUE );
             CmpRef.Trim( FALSE );
+
             /* Search the new component in list */
-            for( Cmp = g_BaseListeCmp; Cmp != NULL; Cmp = Cmp->Pnext )
+            for( i = m_components.begin(); i != m_components.end(); ++i )
             {
+                Cmp = *i;
+
                 if( Cmp->m_Reference == CmpRef )
                     break;
             }
@@ -333,16 +331,13 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
 }
 
 
-/***********************************/
-int ReadPinConnection( FILE* f, STORECMP* Cmp )
-/***********************************/
+int ReadPinConnection( FILE* f, COMPONENT* Cmp )
 {
-    int        i, jj;
-    wxString   numpin;
-    wxString   net;
-    char       Line[BUFFER_CHAR_SIZE + 1];
-    STOREPIN*  Pin     = NULL;
-    STOREPIN** LastPin = &Cmp->m_Pins;
+    int      i, jj;
+    wxString numpin;
+    wxString net;
+    char     Line[BUFFER_CHAR_SIZE + 1];
+    PIN*     Pin     = NULL;
 
     for( ; ; )
     {
@@ -392,69 +387,10 @@ int ReadPinConnection( FILE* f, STORECMP* Cmp )
                 net.Append( Line[i] );
             }
 
-            Pin           = new STOREPIN();
-            *LastPin      = Pin;
-            LastPin       = &Pin->Pnext;
+            Pin           = new PIN();
             Pin->m_PinNum = numpin;
             Pin->m_PinNet = net;
+            Cmp->m_Pins.push_back( Pin );
         }
     }
-}
-
-
-/****************************************************************/
-STORECMP* TriListeComposants( STORECMP* BaseListe, int nbitems )
-/****************************************************************/
-
-/* Sort the component list( this is a linked list)
- * retourn the beginning of the list
- */
-{
-    STORECMP** bufferptr, * Item;
-    int        ii;
-
-    if( nbitems <= 0 )
-        return NULL;
-    bufferptr = (STORECMP**) MyZMalloc( (nbitems + 2) * sizeof(STORECMP*) );
-
-    for( ii = 1, Item = BaseListe; Item != NULL; Item = Item->Pnext, ii++ )
-    {
-        bufferptr[ii] = Item;
-    }
-
-    /* Here: bufferptr[0] = NULL and bufferptr[nbitem+1] = NULL.
-     * These 2 values are the first item back link, and the last item forward link
-     */
-
-    qsort( bufferptr + 1, nbitems, sizeof(STORECMP*),
-           ( int( * ) ( const void*, const void* ) )CmpCompare );
-    /* Update linked list */
-    for( ii = 1; ii <= nbitems; ii++ )
-    {
-        Item = bufferptr[ii];
-        Item->m_Num = ii;
-        Item->Pnext = bufferptr[ii + 1];
-        Item->Pback = bufferptr[ii - 1];
-    }
-
-    return bufferptr[1];
-}
-
-
-/****************************************/
-int CmpCompare( void* mod1, void* mod2 )
-/****************************************/
-
-/*
- * Compare function for qsort() : alphabetic sorting, with numbering order
- */
-{
-    int       ii;
-    STORECMP* pt1, * pt2;
-
-    pt1 = *( (STORECMP**) mod1 );
-    pt2 = *( (STORECMP**) mod2 );
-
-    ii = StrNumICmp( pt1->m_Reference.GetData(), pt2->m_Reference.GetData() );
-    return ii;
 }

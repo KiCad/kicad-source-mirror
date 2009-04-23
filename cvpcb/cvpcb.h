@@ -8,11 +8,7 @@
 #include "pcbcommon.h"
 
 // config for footprints doc file acces
-#define DOC_FOOTPRINTS_LIST_KEY          wxT( "footprints_doc_file" )
 #define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
-
-// option key to close cvpcb after saving files
-#define CLOSE_OPTION_KEY wxT( "KeepCvpcbOpen" )
 
 // Define print format to display a schematic component line
 #define CMP_FORMAT wxT( "%3d %8s - %16s : %-.32s" )
@@ -27,38 +23,35 @@
 #define TYPE_VIEWLOGIC_NET 4
 
 
-enum TypeOfStruct {
-    STRUCT_NOT_INIT,
-    STRUCT_COMPONENT,
-    STRUCT_PIN,
-    STRUCT_MODULE,
-    STRUCT_PSEUDOMODULE
-};
-
-class STOREPIN
+class PIN
 {
 public:
-    int       m_Type;           /* Type de la structure */
-    STOREPIN* Pnext;            /* Chainage avant */
-    int       m_Index;          /* variable utilisee selon types de netlistes */
-    int       m_PinType;        /* code type electrique ( Entree Sortie Passive..) */
-    wxString  m_PinNet;         /* Pointeur sur le texte nom de net */
+    int       m_Index;     /* variable utilisee selon types de netlistes */
+    int       m_PinType;   /* code type electrique ( Entree Sortie Passive..) */
+    wxString  m_PinNet;    /* Pointeur sur le texte nom de net */
     wxString  m_PinNum;
     wxString  m_PinName;
-    wxString  m_Repere;     /* utilise selon formats de netliste */
+    wxString  m_Repere;    /* utilise selon formats de netliste */
 
-    STOREPIN();
+    PIN();
 };
 
-class STORECMP
+WX_DECLARE_LIST( PIN, PIN_LIST );
+
+/* PIN object list sort function. */
+extern int compare( const PIN** item1, const PIN** item2 );
+
+/* PIN object comparison functions. */
+extern bool same_pin_number( const PIN* item1, const PIN* item2 );
+extern bool same_pin_net( const PIN* item1, const PIN* item2 );
+
+
+class COMPONENT
 {
 public:
-    int           m_Type;       /* Type de la structure */
-    STORECMP*     Pnext;        /* Chainage avant */
-    STORECMP*     Pback;        /* Chainage arriere */
     int           m_Num;        /* Numero d'ordre */
     int           m_Multi;      /* Nombre d' unites par boitier */
-    STOREPIN*     m_Pins;       /* pointeur sur la liste des Pins */
+    PIN_LIST      m_Pins;       /* pointeur sur la liste des Pins */
     wxString      m_Reference;  /* U3, R5  ... */
     wxString      m_Valeur;     /* 7400, 47K ... */
     wxString      m_TimeStamp;  /* Signature temporelle ("00000000" si absente) */
@@ -67,70 +60,42 @@ public:
     wxArrayString m_FootprintFilter;    /* List of allowed footprints (wildcart allowed
                                          * if void: no filtering */
 
-    STORECMP();
-    ~STORECMP();
+    COMPONENT();
+    ~COMPONENT();
 };
 
-class STOREMOD
+WX_DECLARE_LIST( COMPONENT, COMPONENT_LIST );
+
+/* COMPONENT object list sort function. */
+extern int compare( const COMPONENT** item1, const COMPONENT** item2 );
+
+
+class FOOTPRINT
 {
 public:
-    int       m_Type;       /* Type de la structure */
-    STOREMOD* Pnext;        /* Chainage avant */
-    STOREMOD* Pback;        /* Chainage arriere */
     wxString  m_Module;     /* Nom du module */
     wxString  m_LibName;    /* Nom de la librairie contenant ce module */
     int       m_Num;        /* Numero d'ordre pour affichage sur la liste */
     wxString  m_Doc;        /* Doc associee */
     wxString  m_KeyWord;    /* Mots cles associes */
 
-    STOREMOD();
+    FOOTPRINT();
 };
 
+WX_DECLARE_LIST( FOOTPRINT, FOOTPRINT_LIST );
+
+/* FOOTPRINT object list sort function. */
+extern int compare( const FOOTPRINT** item1, const FOOTPRINT** item2 );
 
 /* Gestion des noms des librairies */
-extern const wxString EquivFileExtension;
+extern const wxString FootprintAliasFileExtension;
 extern const wxString RetroFileExtension;
 extern const wxString ComponentFileExtension;
 
 extern const wxString RetroFileWildcard;
-extern const wxString EquivFileWildcard;
+extern const wxString FootprintAliasFileWildcard;
 
 extern const wxString titleLibLoadError;
-
-// Wildcard for footprint libraries filesnames
-extern const wxString g_FootprintLibFileWildcard;
-
-// Wildcard for schematic retroannotation (import footprint names in schematic):
-extern const wxString g_FootprintEquFileWildcard;
-
-/* Name of the document footprint list
- * usually located in share/modules/footprints_doc
- * this is of the responsability to users to create this file
- * if they want to have a list of footprints
- */
-extern wxString      g_DocModulesFileName;
-
-/* CvPcb global variable definition references. */
-extern STOREMOD*     g_BaseListePkg;
-extern STORECMP*     g_BaseListeCmp;
-
-extern wxString      g_NetlistFileExtension;
-extern wxString      g_UserNetDirBuffer;
-
-extern wxArrayString g_ListName_Equ;        // list of .equ files to load
-
-extern int           g_FlagEESchema;
-extern int           Rjustify; /* flag pout troncature des noms de Net:
-                         * = 0: debut de chaine conservee (->ORCADPCB2)
-                         * = 1: fin de chaine conservee (->VIEWLOGIC) */
-
-extern int  modified;                       /* Flag != 0 si modif attribution des module. */
-
-extern int  nbcomp;                         /* nombre de composants trouves */
-extern int  nblib;                          /* nombre d'empreintes trouvees */
-extern int  composants_non_affectes;        /* nbre de composants non affectes */
-
-extern bool g_KeepCvpcbOpen;                // Option to keep cvpcb open after saving netlist files
 
 void Plume( int state );
 

@@ -45,7 +45,6 @@ class wxBoxSizer;
 #define TEXT_SELECT 10002
 #define PADFILL_OPT 10003
 #define PADNUM_OPT 10004
-#define ID_SAVE_CONFIG 10005
 #define ID_STATICLINE1 10006
 #define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_FOOTPRINTDISPLAYOPTIONSFRAME_TITLE _("Display Options")
@@ -84,9 +83,6 @@ public:
 
 ////@begin WinEDA_FootprintDisplayOptionsFrame event handler declarations
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_SAVE_CONFIG
-    void OnSaveConfigClick( wxCommandEvent& event );
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
@@ -120,7 +116,6 @@ public:
     wxBoxSizer* ColumnBoxSizer;
     wxCheckBox* m_IsShowPadFill;
     wxCheckBox* m_IsShowPadNum;
-    wxBoxSizer* BottomBoxSizer;
     wxButton* m_CancelButton;
 ////@end WinEDA_FootprintDisplayOptionsFrame member variables
 

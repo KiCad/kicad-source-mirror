@@ -8,74 +8,105 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "gestfich.h"
+#include "param_config.h"
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
-#include "cfg.h"
-
-/* Routines Locales */
-/**/
 
 
-/**************************************************/
-void Read_Config( const wxString& FileName )
-/**************************************************/
+#define GROUP wxT("/cvpcb")
+#define GROUPLIB wxT("/pcbnew/libraries")
+#define GROUPEQU wxT("/cvpcb/libraries")
 
-/* lit la configuration
+
+/**
+ * Return project file parameter list for CVPcb.
+ *
+ * Populate the project file parameter array specific to CVPcb if it hasn't
+ * already been populated and return a reference to the array to the caller.
+ * Creating the parameter list at run time has the advantage of being able
+ * to define local variables.  The old method of statically building the array
+ * at compile time requiring global variable definitions.
+ */
+const PARAM_CFG_ARRAY& WinEDA_CvpcbFrame::GetProjectFileParameters( void )
+{
+    if( !m_projectFileParams.IsEmpty() )
+        return m_projectFileParams;
+
+    m_projectFileParams.Add( new PARAM_CFG_BASE( GROUPLIB,
+                                                 PARAM_COMMAND_ERASE ) );
+    m_projectFileParams.Add( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
+                                                         &m_ModuleLibNames,
+                                                         GROUPLIB ) );
+    m_projectFileParams.Add( new PARAM_CFG_LIBNAME_LIST( wxT( "EquName" ),
+                                                         &m_AliasLibNames,
+                                                         GROUPEQU ) );
+    m_projectFileParams.Add( new PARAM_CFG_WXSTRING( wxT( "NetIExt" ),
+                                                     &m_NetlistFileExtension ) );
+    m_projectFileParams.Add( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
+                                                     &m_UserLibraryPath,
+                                                     GROUPLIB ) );
+
+    return m_projectFileParams;
+}
+
+
+/**
+ * lit la configuration
  * 1 - lit cvpcb.cnf
  * 2 - si non trouve lit <chemin de cvpcb.exe>/cvpcb.cnf
  * 3 - si non trouve: init des variables aux valeurs par defaut
  *
  * Remarque:
  * le chemin de l'executable cvpcb.exe doit etre dans BinDir
+ *
  */
+void WinEDA_CvpcbFrame::LoadProjectFile( const wxString& FileName )
 {
     wxFileName fn = FileName;
 
     /* Init des valeurs par defaut */
-    g_LibName_List.Clear();
-    g_ListName_Equ.Clear();
+    m_ModuleLibNames.Clear();
+    m_AliasLibNames.Clear();
 
     if( fn.GetExt() != ProjectFileExtension )
         fn.SetExt( ProjectFileExtension );
 
-    wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
+    wxGetApp().RemoveLibraryPath( m_UserLibraryPath );
 
-    wxGetApp().ReadProjectConfig( fn.GetFullPath(),
-                                  GROUP, ParamCfgList, FALSE );
+    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP,
+                                  GetProjectFileParameters(), FALSE );
 
-    if( g_NetlistFileExtension.IsEmpty() )
-        g_NetlistFileExtension = wxT( "net" );
+    if( m_NetlistFileExtension.IsEmpty() )
+        m_NetlistFileExtension = wxT( "net" );
 
     /* User library path takes precedent over default library search paths. */
-    wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
+    wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
 }
 
-
-/************************************************************/
-void WinEDA_CvpcbFrame::Update_Config( wxCommandEvent& event )
-/************************************************************/
 
 /* fonction relai d'appel a Save_Config,
  * la vraie fonction de sauvegarde de la config
  */
+void WinEDA_CvpcbFrame::Update_Config( wxCommandEvent& event )
 {
-    Save_Config( this, m_NetlistFileName.GetFullPath() );
+    SaveProjectFile( m_NetlistFileName.GetFullPath() );
 }
 
 
-void Save_Config( wxWindow* parent, const wxString& fileName )
+void WinEDA_CvpcbFrame::SaveProjectFile( const wxString& fileName )
 {
     wxFileName fn = fileName;
 
     fn.SetExt( ProjectFileExtension );
 
-    wxFileDialog dlg( parent, _( "Save Project File" ), fn.GetPath(),
+    wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(),
                       fn.GetFullName(), ProjectFileWildcard, wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     /* ecriture de la configuration */
-    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, ParamCfgList );
+    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
+                                   GetProjectFileParameters() );
 }

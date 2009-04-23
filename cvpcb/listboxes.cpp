@@ -17,8 +17,8 @@
 /* Not directly used: the 2 list boxes actually used are derived from it      */
 /******************************************************************************/
 
-ListBoxBase::ListBoxBase( WinEDA_CvpcbFrame* parent,
-                          wxWindowID id, const wxPoint& loc, const wxSize& size ) :
+ListBoxBase::ListBoxBase( WinEDA_CvpcbFrame* parent,  wxWindowID id,
+                          const wxPoint& loc, const wxSize& size ) :
     LIST_BOX_TYPE( parent, id, loc, size,
                    wxSUNKEN_BORDER | wxLC_NO_HEADER |
                    wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL )
@@ -38,7 +38,7 @@ ListBoxBase::~ListBoxBase()
 void ListBoxBase::OnSize( wxSizeEvent& event )
 /************************************************/
 
-// Ajust the column width to the entire available window width
+// Adjust the column width to the entire available window width
 {
     wxSize size  = GetClientSize();
     int    width = 0;
@@ -66,7 +66,8 @@ int ListBoxBase::GetSelection()
 /***************************************/
 
 FootprintListBox::FootprintListBox( WinEDA_CvpcbFrame* parent,
-                                    wxWindowID id, const wxPoint& loc, const wxSize& size,
+                                    wxWindowID id, const wxPoint& loc,
+                                    const wxSize& size,
                                     int nbitems, wxString choice[] ) :
     ListBoxBase( parent, id, loc, size )
 {
@@ -138,7 +139,7 @@ void FootprintListBox::AppendLine( const wxString& text )
 wxString FootprintListBox::OnGetItemText( long item, long column ) const
 /*********************************************************************/
 
-/* Overlayed function: MUST be provided in wxLC_VIRTUAL mode
+/* Overlaid function: MUST be provided in wxLC_VIRTUAL mode
  *  because real data is not handled by ListBoxBase
  */
 {
@@ -197,7 +198,7 @@ END_EVENT_TABLE()
 void ListBoxCmp::Clear()
 /****************************/
 
-// Reset ALL datas
+// Reset ALL data
 {
     m_ComponentList.Clear();
     SetItemCount( 0 );
@@ -242,8 +243,8 @@ void ListBoxCmp::AppendLine( const wxString& text )
 wxString ListBoxCmp::OnGetItemText( long item, long column ) const
 /****************************************************************/
 
-/* Overlayed function: MUST be provided in wxLC_VIRTUAL mode
- *  because real datas are not handled by ListBoxBase
+/* Overlaid function: MUST be provided in wxLC_VIRTUAL mode
+ *  because real data are not handled by ListBoxBase
  */
 {
     return m_ComponentList.Item( item );
@@ -279,10 +280,11 @@ void WinEDA_CvpcbFrame::BuildCmpListBox()
 /* Create or update the schematic components list.
  */
 {
-    int       ii;
-    STORECMP* Composant;
-    wxString  msg;
-    wxSize    size( 10, 10 );
+    COMPONENT_LIST::iterator i;
+    COMPONENT* Component;
+    wxString   msg;
+    wxSize     size( 10, 10 );
+    wxFont     guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
     if( m_ListCmp == NULL )
     {
@@ -291,21 +293,25 @@ void WinEDA_CvpcbFrame::BuildCmpListBox()
                                     0, NULL );
         m_ListCmp->SetBackgroundColour( wxColour( 225, 255, 255 ) );
         m_ListCmp->SetForegroundColour( wxColour( 0, 0, 0 ) );
-        m_ListCmp->SetFont( *g_FixedFont );
+        m_ListCmp->SetFont( wxFont( guiFont.GetPointSize(),
+                                    wxFONTFAMILY_MODERN,
+                                    wxFONTSTYLE_NORMAL,
+                                    wxFONTWEIGHT_NORMAL ) );
     }
 
     m_ListCmp->m_ComponentList.Clear();
-    Composant = g_BaseListeCmp;
-    for( ii = 1; Composant != NULL; Composant = Composant->Pnext, ii++ )
+
+    for( i = m_components.begin(); i != m_components.end(); ++i )
     {
-        msg.Printf( CMP_FORMAT, ii,
-                   Composant->m_Reference.GetData(), Composant->m_Valeur.GetData(),
-                   Composant->m_Module.GetData() );
+        Component = *i;
+        msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
+                    Component->m_Reference.GetData(),
+                    Component->m_Valeur.GetData(),
+                    Component->m_Module.GetData() );
         m_ListCmp->m_ComponentList.Add( msg );
     }
 
     m_ListCmp->SetItemCount( m_ListCmp->m_ComponentList.Count() );
-
     m_ListCmp->SetSelection( 0, TRUE );
 }
 
@@ -319,6 +325,7 @@ void WinEDA_CvpcbFrame::BuildFootprintListBox()
 {
     wxString msg;
     wxSize   size( 10, 10 );
+    wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 
     if( m_FootprintList == NULL )
     {
@@ -327,10 +334,13 @@ void WinEDA_CvpcbFrame::BuildFootprintListBox()
                                                 0, NULL );
         m_FootprintList->SetBackgroundColour( wxColour( 225, 255, 225 ) );
         m_FootprintList->SetForegroundColour( wxColour( 0, 0, 0 ) );
-        m_FootprintList->SetFont( *g_FixedFont );
+        m_FootprintList->SetFont( wxFont( guiFont.GetPointSize(),
+                                          wxFONTFAMILY_MODERN,
+                                          wxFONTSTYLE_NORMAL,
+                                          wxFONTWEIGHT_NORMAL ) );
     }
 
-    m_FootprintList->SetFootprintFullList();
+    m_FootprintList->SetFootprintFullList( m_footprints );
 
     msg.Printf( _( "Footprints: %d" ), m_FootprintList->GetCount() );
     SetStatusText( msg, 2 );
@@ -338,51 +348,57 @@ void WinEDA_CvpcbFrame::BuildFootprintListBox()
 
 
 /************************************************/
-void FootprintListBox::SetFootprintFullList()
-/************************************************/
+void FootprintListBox::SetFootprintFullList( FOOTPRINT_LIST& list )
 {
-    STOREMOD* FootprintItem;
-    wxString  msg;
-    int       OldSelection = GetSelection();
+    FOOTPRINT_LIST::iterator i;
+    FOOTPRINT* footprint;
+    wxString   msg;
+    int        OldSelection = GetSelection();
 
     m_FullFootprintList.Clear();
-    FootprintItem = g_BaseListePkg;
 
-    for( int ii = 1; FootprintItem != NULL; FootprintItem = FootprintItem->Pnext, ii++ )
+    for( i = list.begin(); i != list.end(); ++i )
     {
-        msg.Printf( wxT( "%3d %s" ), ii, FootprintItem->m_Module.GetData() );
+        footprint = *i;
+        msg.Printf( wxT( "%3d %s" ), m_FullFootprintList.GetCount() + 1,
+                    footprint->m_Module.GetData() );
         m_FullFootprintList.Add( msg );
     }
 
     SetActiveFootprintList( TRUE );
 
-    if( (GetCount() == 0) ||  (OldSelection < 0) || ( OldSelection >= GetCount() ) )
+    if( ( GetCount() == 0 )
+        || ( OldSelection < 0 ) || ( OldSelection >= GetCount() ) )
         SetSelection( 0, TRUE );
     Refresh();
 }
 
 
 /**********************************************************************/
-void FootprintListBox::SetFootprintFilteredList( STORECMP* Component )
+void FootprintListBox::SetFootprintFilteredList( COMPONENT* Component,
+                                                 FOOTPRINT_LIST& list )
 /*********************************************************************/
 {
-    STOREMOD* FootprintItem;
-    wxString  msg;
-    int       OldSelection = GetSelection();
-    bool      HasItem = FALSE;
+    FOOTPRINT_LIST::iterator i;
+    FOOTPRINT* footprint;
+    wxString   msg;
+    unsigned   jj;
+    int        OldSelection = GetSelection();
+    bool       HasItem = FALSE;
 
     m_FilteredFootprintList.Clear();
-    FootprintItem = g_BaseListePkg;
 
-    int cmpnum = 1;
-    for( int ii = 0; FootprintItem != NULL; FootprintItem = FootprintItem->Pnext, ii++ )
+    for( i = list.begin(); i != list.end(); ++i )
     {
+        footprint = *i;
+
         /* Search for matching footprints */
-        for( unsigned jj = 0; jj < Component->m_FootprintFilter.GetCount(); jj++ )
+        for( jj = 0; jj < Component->m_FootprintFilter.GetCount(); jj++ )
         {
-            if( !FootprintItem->m_Module.Matches( Component->m_FootprintFilter[jj] ) )
+            if( !footprint->m_Module.Matches( Component->m_FootprintFilter[jj] ) )
                 continue;
-            msg.Printf( wxT( "%3d %s" ), cmpnum++, FootprintItem->m_Module.GetData() );
+            msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
+                        footprint->m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
             HasItem = TRUE;
         }
@@ -393,7 +409,7 @@ void FootprintListBox::SetFootprintFilteredList( STORECMP* Component )
     else
         SetActiveFootprintList( TRUE );
 
-    if( (GetCount() == 0) || ( OldSelection >= GetCount() ) )
+    if( ( GetCount() == 0 ) || ( OldSelection >= GetCount() ) )
         SetSelection( 0, TRUE );
 
     Refresh();
@@ -422,8 +438,10 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 	if ( m_ActiveFootprintList )
 	{
 		bool new_selection;
-		if( FullList ) new_selection = TRUE;
-		else new_selection = FALSE;
+		if( FullList )
+            new_selection = TRUE;
+		else
+            new_selection = FALSE;
 		if( new_selection != old_selection )
 			SetSelection( 0, TRUE );
 	}
@@ -443,13 +461,14 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 
     if( Redraw )
     {
-        if( !m_UseFootprintFullList || (m_UseFootprintFullList != old_selection) )
+        if( !m_UseFootprintFullList
+            || ( m_UseFootprintFullList != old_selection ) )
         {
             Refresh();
         }
     }
 
-    if( !m_UseFootprintFullList || (m_UseFootprintFullList != old_selection) )
+    if( !m_UseFootprintFullList || ( m_UseFootprintFullList != old_selection ) )
     {
         m_Parent->SetStatusText( wxEmptyString, 0 );
         m_Parent->SetStatusText( wxEmptyString, 1 );
@@ -457,9 +476,11 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 
     wxString msg;
     if( FullList )
-        msg.Printf( _( "Footprints (All): %d" ), m_ActiveFootprintList->GetCount() );
+        msg.Printf( _( "Footprints (All): %d" ),
+                    m_ActiveFootprintList->GetCount() );
     else
-        msg.Printf( _( "Footprints (filtered): %d" ), m_ActiveFootprintList->GetCount() );
+        msg.Printf( _( "Footprints (filtered): %d" ),
+                    m_ActiveFootprintList->GetCount() );
     m_Parent->SetStatusText( msg, 2 );
 }
 
@@ -469,8 +490,7 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 /**************************************/
 
 BEGIN_EVENT_TABLE( FootprintListBox, LIST_BOX_TYPE )
-EVT_SIZE( ListBoxBase::OnSize )
-
+    EVT_SIZE( ListBoxBase::OnSize )
 END_EVENT_TABLE()
 
 
@@ -478,10 +498,10 @@ END_EVENT_TABLE()
 void FootprintListBox::OnLeftClick( wxListEvent& event )
 /********************************************************/
 {
-    STOREMOD* Module;
+    FOOTPRINT* Module;
     wxString  FootprintName = GetSelectedFootprint();
 
-    Module = GetModuleDescrByName( FootprintName );
+    Module = GetModuleDescrByName( FootprintName, m_Parent->m_footprints );
     if( m_Parent->DrawFrame )
     {
         m_Parent->CreateScreenCmp(); /* refresh general */
@@ -510,17 +530,19 @@ void FootprintListBox::OnLeftDClick( wxListEvent& event )
 }
 
 
-/**************************************************************/
-STOREMOD* GetModuleDescrByName( const wxString& FootprintName )
-/**************************************************************/
+FOOTPRINT* GetModuleDescrByName( const wxString& FootprintName,
+                                 FOOTPRINT_LIST& list )
 {
-    STOREMOD* FootprintItem = g_BaseListePkg;
+    FOOTPRINT_LIST::iterator i;
+    FOOTPRINT* footprint;
 
-    for( ; FootprintItem != NULL; FootprintItem = FootprintItem->Pnext )
+    for( i = list.begin() ; i != list.end(); ++i )
     {
-        if( FootprintItem->m_Module == FootprintName )
-            break; // found !
+        footprint = *i;
+
+        if( *footprint->m_Module == FootprintName )
+            return footprint;
     }
 
-    return FootprintItem;
+    return NULL;
 }

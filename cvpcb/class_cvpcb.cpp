@@ -2,58 +2,73 @@
 /* class_cvpcb.cpp */
 /*******************/
 
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
-
 #include "fctsys.h"
-#include "common.h"
+#include "kicad_string.h"
 
 #include "cvpcb.h"
 
-STORECMP::STORECMP()
+#include <wx/listimpl.cpp>
+
+
+WX_DEFINE_LIST( PIN_LIST );
+
+PIN::PIN()
 {
-	Pnext = Pback = NULL;
-	m_Type = STRUCT_COMPONENT;
-	m_Pins = NULL;
-	m_Num = 0;
-	m_Multi = 0;
+    m_Index = 0;         /* variable utilisee selon types de netlistes */
+    m_PinType = 0;       /* code type electrique ( Entree Sortie Passive..) */
 }
 
-STORECMP::~STORECMP()
+int compare( const PIN** item1, const PIN** item2 )
 {
-STOREPIN * Pin, * NextPin;
-	
-	for( Pin = m_Pins; Pin != NULL; Pin = NextPin )
-	{
-		NextPin = Pin->Pnext; delete Pin;
-	}
+    return StrLenNumICmp( (*item1)->m_PinNum.GetData(),
+                          (*item2)->m_PinNum.GetData(), 4 );
+}
+
+bool same_pin_number( const PIN* item1, const PIN* item2 )
+{
+    wxASSERT( item1 != NULL && item2 != NULL );
+
+    return ( item1->m_PinNum == item2->m_PinNum );
+}
+
+bool same_pin_net( const PIN* item1, const PIN* item2 )
+{
+    wxASSERT( item1 != NULL && item2 != NULL );
+
+    return ( item1->m_PinNet == item2->m_PinNet );
 }
 
 
+WX_DEFINE_LIST( COMPONENT_LIST );
 
-STOREMOD::STOREMOD()
+COMPONENT::COMPONENT()
 {
-	Pnext = Pback = NULL;
-	m_Type = STRUCT_MODULE;
-	m_Num = 0;
+    m_Num = 0;
+    m_Multi = 0;
+}
+
+COMPONENT::~COMPONENT()
+{
+    m_Pins.DeleteContents( true );
+    m_Pins.Clear();
+}
+
+int compare( const COMPONENT** item1, const COMPONENT** item2 )
+{
+    return StrNumICmp( (*item1)->m_Reference.GetData(),
+                       (*item2)->m_Reference.GetData() );
 }
 
 
-STOREPIN::STOREPIN()
+WX_DEFINE_LIST( FOOTPRINT_LIST );
+
+FOOTPRINT::FOOTPRINT()
 {
-	m_Type = STRUCT_PIN;	/* Type de la structure */
-	Pnext = NULL;			/* Chainage avant */
-	m_Index = 0;				/* variable utilisee selon types de netlistes */
-	m_PinType = 0;			/* code type electrique ( Entree Sortie Passive..) */
+    m_Num = 0;
 }
 
+int compare( const FOOTPRINT** item1, const FOOTPRINT** item2 )
+{
+    return StrNumICmp( (*item1)->m_Module.GetData(),
+                       (*item2)->m_Module.GetData() );
+}

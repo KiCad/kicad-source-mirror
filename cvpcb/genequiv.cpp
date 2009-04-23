@@ -17,12 +17,13 @@
 
 void WinEDA_CvpcbFrame::WriteStuffList( wxCommandEvent& event )
 {
-    FILE*     FileEquiv;
-    STORECMP* Cmp;
-    wxString  Line;
+    COMPONENT_LIST::iterator i;
+    FILE*      FileEquiv;
+    COMPONENT* Cmp;
+    wxString   Line;
     wxFileName fn = m_NetlistFileName;
 
-    if( nbcomp <= 0 )
+    if( m_components.GetCount() <= 0 )
         return;
 
     /* calcul du nom du fichier */
@@ -45,8 +46,10 @@ void WinEDA_CvpcbFrame::WriteStuffList( wxCommandEvent& event )
     }
 
     /* Generation de la liste */
-    for( Cmp = g_BaseListeCmp; Cmp != NULL; Cmp = Cmp->Pnext )
+    for( i = m_components.begin(); i != m_components.end(); ++i )
     {
+        Cmp = *i;
+
         /* génération du composant si son empreinte est définie */
         if( Cmp->m_Module.IsEmpty() )
             continue;

@@ -24,19 +24,19 @@ char EnteteCmpMod[] = { "Cmp-Mod V01" };
 const wxString titleComponentLibErr( _( "Component Library Error" ) );
 
 
-/*****************************************************************************/
-/* Routine de sauvegarde du fichier des modules
+/*
+ * Routine de sauvegarde du fichier des modules
  *   Retourne 1 si OK
  *           0 si ecriture non faite
  */
-/****************************************************************************/
 int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
 {
-    STORECMP*  Cmp;
-    FILE*      dest;
-    wxFileName fn( NetlistFullFileName );
-    char       Line[1024];
-    wxString   Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    COMPONENT_LIST::iterator i;
+    COMPONENT*  Cmp;
+    FILE*       dest;
+    wxFileName  fn( NetlistFullFileName );
+    char        Line[1024];
+    wxString    Title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
 
     /* calcul du nom du fichier */
     fn.SetExt( ComponentFileExtension );
@@ -49,8 +49,9 @@ int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
     fprintf( dest, " Created by %s", CONV_TO_UTF8( Title ) );
     fprintf( dest, " date = %s\n", DateAndTime( Line ) );
 
-    for( Cmp = g_BaseListeCmp; Cmp != NULL; Cmp = Cmp->Pnext )
+    for( i = m_components.begin(); i != m_components.end(); ++i )
     {
+        Cmp = *i;
         fprintf( dest, "\nBeginCmp\n" );
         fprintf( dest, "TimeStamp = %s;\n", CONV_TO_UTF8( Cmp->m_TimeStamp ) );
         fprintf( dest, "Reference = %s;\n", CONV_TO_UTF8( Cmp->m_Reference ) );
@@ -61,23 +62,22 @@ int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
 
     fprintf( dest, "\nEndListe\n" );
     fclose( dest );
-
     return 1;
 }
 
 
-/***************/
-/* recupere la liste des associations composants/empreintes
+/*
+ * recupere la liste des associations composants/empreintes
  */
-/****************/
-bool loadcmp( const wxString& fileName )
+bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
 {
-    wxString   timestamp, valeur, ilib, namecmp, msg;
-    bool       read_cmp_data = FALSE, eof = FALSE;
-    STORECMP*  Cmp;
-    char       Line[1024], * ident, * data;
-    FILE*      source;
-    wxFileName fn = fileName;
+    COMPONENT_LIST::iterator i;
+    wxString    timestamp, valeur, ilib, namecmp, msg;
+    bool        read_cmp_data = FALSE, eof = FALSE;
+    COMPONENT*  Cmp;
+    char        Line[1024], * ident, * data;
+    FILE*       source;
+    wxFileName  fn = fileName;
 
     /* calcul du nom du fichier */
     fn.SetExt( ComponentFileExtension );
@@ -176,8 +176,10 @@ bool loadcmp( const wxString& fileName )
 
         /* Recherche du composant correspondant en netliste et
          *    mise a jour de ses parametres */
-        for( Cmp = g_BaseListeCmp; Cmp != NULL; Cmp = Cmp->Pnext )
+        for( i = list.begin(); i != list.end(); ++i )
         {
+            Cmp = *i;
+
             if( namecmp != Cmp->m_Reference )
                 continue;
 

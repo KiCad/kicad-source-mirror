@@ -24,12 +24,14 @@ DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( WinEDA_CvpcbFrame* parent ) :
     DIALOG_CVPCB_CONFIG_FBP( parent )
 {
     wxString title;
+    wxFileName fn = parent->m_NetlistFileName;
+    fn.SetExt( ProjectFileExtension );
 
     m_Parent   = parent;
     m_Config = wxGetApp().m_EDA_CommonConfig;
- 
+
     Init( );
-    title = _( "from " ) + wxGetApp().m_CurrentOptionFile;
+    title = _( "Project file: " ) + fn.GetFullPath();
     SetTitle( title );
     if( GetSizer() )
     {
@@ -44,35 +46,16 @@ void DIALOG_CVPCB_CONFIG::Init()
 {
     wxString msg;
 
-    SetFont( *g_DialogFont );
     SetFocus();
 
     m_LibListChanged = false;
     m_LibPathChanged = false;
-    m_UserLibDirBufferImg = g_UserLibDirBuffer;         // Save the original lib path
+    m_UserLibDirBufferImg = m_Parent->m_UserLibraryPath;
 
-    // Display current files extension (info)
-    msg = m_InfoCmpFileExt->GetLabel() + ComponentFileExtension;
-    m_InfoCmpFileExt->SetLabel( msg );
+    m_ListLibr->InsertItems( m_Parent->m_ModuleLibNames, 0 );
+    m_ListEquiv->InsertItems( m_Parent->m_AliasLibNames, 0 );
 
-    msg = m_InfoLibFileExt->GetLabel() + ModuleFileExtension;
-    m_InfoLibFileExt->SetLabel( msg );
-
-    msg = m_InfoNetlistFileExt->GetLabel() + g_NetlistFileExtension;
-    m_InfoNetlistFileExt->SetLabel( msg );
-
-    msg = m_InfoEquivFileExt->GetLabel() + EquivFileExtension;
-    m_InfoEquivFileExt->SetLabel( msg );
-
-    msg = m_InfoRetroannotFileExt->GetLabel() + RetroFileExtension;
-    m_InfoRetroannotFileExt->SetLabel( msg );
-
-    m_ListLibr->InsertItems( g_LibName_List, 0 );
-    m_ListEquiv->InsertItems( g_ListName_Equ, 0 );
-
-    // Display current modules doc file:
-    m_Config->Read( DOC_FOOTPRINTS_LIST_KEY, g_DocModulesFileName );
-    m_TextHelpModulesFileName->SetValue( g_DocModulesFileName );
+    m_TextHelpModulesFileName->SetValue( m_Parent->m_DocModulesFileName );
 
     // Load user libs paths:
     wxStringTokenizer Token( m_UserLibDirBufferImg, wxT( ";\n\r" ) );
@@ -93,8 +76,6 @@ void DIALOG_CVPCB_CONFIG::Init()
     // select the first path afer the current path project
     if( libpaths.GetCount() > 1 )
         m_DefaultLibraryPathslistBox->Select( 1 );
-    
-    m_radioBoxCloseOpt->SetSelection ( g_KeepCvpcbOpen ? 1 : 0 );
 }
 
 
@@ -108,9 +89,10 @@ void DIALOG_CVPCB_CONFIG::OnCancelClick( wxCommandEvent& event )
         for( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii++ )
             wxGetApp().RemoveLibraryPath( m_listUserPaths->GetString( ii ) );
 
-        wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
+        wxGetApp().InsertLibraryPath( m_Parent->m_UserLibraryPath, 1 );
     }
-    EndModal( -1 );
+
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -118,21 +100,17 @@ void DIALOG_CVPCB_CONFIG::OnCancelClick( wxCommandEvent& event )
 void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
 /**************************************************************/
 {
-    g_KeepCvpcbOpen = m_radioBoxCloseOpt->GetSelection( ) ? true : false;
-    m_Config->Write( CLOSE_OPTION_KEY, (long) g_KeepCvpcbOpen );
-
-    m_Config->Write( DOC_FOOTPRINTS_LIST_KEY,
-                    m_TextHelpModulesFileName->GetValue() );
+    m_Parent->m_DocModulesFileName = m_TextHelpModulesFileName->GetValue();
 
     // Recreate the user lib path
     if( m_LibPathChanged )
     {
-        g_UserLibDirBuffer.Empty();
+        m_Parent->m_UserLibraryPath.Empty();
         for( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii++ )
         {
             if( ii > 0 )
-                g_UserLibDirBuffer << wxT( ";" );
-            g_UserLibDirBuffer << m_listUserPaths->GetString( ii );
+                m_Parent->m_UserLibraryPath << wxT( ";" );
+            m_Parent->m_UserLibraryPath << m_listUserPaths->GetString( ii );
         }
     }
 
@@ -141,20 +119,22 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
-        g_LibName_List.Clear();
+        m_Parent->m_ModuleLibNames.Clear();
         for( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii++ )
-            g_LibName_List.Add( m_ListLibr->GetString( ii ) );
+            m_Parent->m_ModuleLibNames.Add( m_ListLibr->GetString( ii ) );
 
         // Recreate equ list
-        g_ListName_Equ.Clear();
+        m_Parent->m_AliasLibNames.Clear();
         for( unsigned ii = 0; ii < m_ListEquiv->GetCount(); ii++ )
-            g_ListName_Equ.Add( m_ListEquiv->GetString( ii ) );
+            m_Parent->m_AliasLibNames.Add( m_ListEquiv->GetString( ii ) );
 
-        listlib();
+        LoadFootprintFiles( m_Parent->m_ModuleLibNames,
+                            m_Parent->m_footprints );
         m_Parent->BuildFootprintListBox();
     }
-    if( event.GetId() != ID_SAVE_CFG )
-        EndModal( 0 );
+
+    m_Parent->SaveProjectFile( m_Parent->m_NetlistFileName.GetFullPath() );
+    EndModal( wxID_OK );
 }
 
 
@@ -209,12 +189,12 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     if( (event.GetId() == ID_INSERT_EQU) || (event.GetId() == ID_INSERT_LIB) )
         insert = true;
 
-    wildcard = EquivFileWildcard;
+    wildcard = FootprintAliasFileWildcard;
     wxListBox * list = m_ListEquiv;
     if( (event.GetId() == ID_ADD_LIB) || (event.GetId() == ID_INSERT_LIB) )
     {
         list = m_ListLibr;
-        wildcard = g_FootprintLibFileWildcard;
+        wildcard = ModuleFileWildcard;
     }
 
     ii = list->GetSelection();
@@ -246,8 +226,8 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
          * list, just add the library name to the list.  Otherwise, add
          * the library name with the full or relative path.
          * the relative path, when possible is preferable,
-         * because it preserve use of default libraries paths, when the path is a sub path of these default paths
-         *
+         * because it preserve use of default libraries paths, when the path
+         * is a sub path of these default paths
          */
         if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
             libfilename = fn.GetName();
@@ -280,15 +260,6 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
             DisplayError( this, msg );
         }
     }
-}
-
-
-/*******************************************************************/
-void DIALOG_CVPCB_CONFIG::OnSaveCfgClick( wxCommandEvent& event )
-/*******************************************************************/
-{
-    OnOkClick( event );
-    Save_Config( this, m_Parent->m_NetlistFileName.GetFullPath() );
 }
 
 
@@ -370,16 +341,14 @@ void DIALOG_CVPCB_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
 void DIALOG_CVPCB_CONFIG::OnBrowseModDocFile( wxCommandEvent& event )
 /**************************************************************************/
 {
-    wxString FullFileName, mask;
+    wxString FullFileName;
     wxString docpath, filename;
 
     docpath = wxGetApp().ReturnLastVisitedLibraryPath( wxT( "doc" ) );
 
-    mask = wxT( "*.pdf" );
-
     wxFileDialog FilesDialog( this, _( "Footprint document file:" ), docpath,
-                              wxEmptyString, mask,
-                              wxFD_DEFAULT_STYLE  );
+                              wxEmptyString, PdfFileWildcard,
+                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( FilesDialog.ShowModal() != wxID_OK )
         return;
@@ -390,7 +359,8 @@ void DIALOG_CVPCB_CONFIG::OnBrowseModDocFile( wxCommandEvent& event )
      * list, just add the library name to the list.  Otherwise, add
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,
-     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+     * because it preserve use of default libraries paths, when the path is
+     * a sub path of these default paths
      */
     wxFileName fn = FullFileName;
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );

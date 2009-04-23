@@ -26,7 +26,6 @@ private:
     void OnCloseWindow( wxCloseEvent& event );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-    void OnSaveCfgClick( wxCommandEvent& event );
     void OnAddOrInsertLibClick( wxCommandEvent& event );
     void OnRemoveLibClick( wxCommandEvent& event );
     void OnBrowseModDocFile( wxCommandEvent& event );

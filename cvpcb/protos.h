@@ -5,32 +5,16 @@
 #ifndef PROTOS_H
 #define PROTOS_H
 
-int GenNetlistPcbnew( FILE* f ) ;
-bool loadcmp( const wxString& fileName ) ;
-bool listlib() ;
+extern int GenNetlistPcbnew( FILE* f, COMPONENT_LIST& list,
+                             bool isEESchemaNetlist = true,
+                             bool rightJustify = false );
+extern bool LoadComponentFile( const wxString& fileName,
+                               COMPONENT_LIST& list );
+extern bool LoadFootprintFiles( const wxArrayString& libNames,
+                                FOOTPRINT_LIST& list );
 
-STOREMOD * GetModuleDescrByName(const wxString & FootprintName);
-
-
-	/***********/
-	/* CFG.CPP */
-	/***********/
-void Save_Config( wxWindow* parent, const wxString& fileName );
-void Read_Config( const wxString & FullFileName );  /* lit la configuration */
-
-
-	/***************/
-	/* MEMOIRE.CPP */
-	/***************/
-void FreeMemoryComponents();
-	/* Routine de liberation memoire de la liste des composants
-		 - remet a NULL BaseListeMod
-		 - remet a 0 NbComp */
-
-void FreeMemoryModules();
-	/* Routine de liberation memoire de la liste des modules
-		 - remet a NULL g_BaseListePkg
-		 - rement a 0 NbLib; */
+FOOTPRINT* GetModuleDescrByName( const wxString& FootprintName,
+                                 FOOTPRINT_LIST& list );
 
 #endif	// PROTOS_H
 
