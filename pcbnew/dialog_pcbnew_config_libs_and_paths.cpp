@@ -40,7 +40,7 @@ DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( WinEDA_PcbFrame* parent ):
     SetTitle( title );
 
     if( GetSizer() )
-    GetSizer()->SetSizeHints( this );
+        GetSizer()->SetSizeHints( this );
 
 }
 

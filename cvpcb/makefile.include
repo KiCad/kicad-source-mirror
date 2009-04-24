@@ -14,7 +14,6 @@ LIBVIEWER3D = ../3d-viewer/3d-viewer.a
 OBJECTS = $(TARGET).o \
 			class_cvpcb.o\
             class_board_item.o\
-            memoire.o \
 			cvframe.o\
             dialog_cvpcb_config.o\
             dialog_cvpcb_config_fbp.o\
@@ -48,19 +47,9 @@ displayframe.o: displayframe.cpp
 
 listboxes.o: listboxes.cpp
 
-drawframe.o: ../share/drawframe.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../share/$*.cpp
-
 init.o: init.cpp
 
-memoire.o: memoire.cpp
-
-rdpcad.o: rdpcad.cpp
-
 class_board_item.o: ../pcbnew/class_board_item.cpp
-	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
-
-class_board.o: ../pcbnew/class_board.cpp
 	$(CXX) -c $(EDACPPFLAGS) -o $@ ../pcbnew/$*.cpp
 
 class_drawsegment.o: ../pcbnew/class_drawsegment.cpp ../pcbnew/class_drawsegment.h
@@ -83,10 +72,6 @@ class_equipot.o: ../pcbnew/class_equipot.cpp
 
 readschematicnetlist.o: readschematicnetlist.cpp
 
-viewlogi.o: viewlogi.cpp
-
-viewlnet.o: viewlnet.cpp
-
 loadcmp.o: loadcmp.cpp
 
 savecmp.o: savecmp.cpp
@@ -100,7 +85,7 @@ ioascii.o: ../pcbnew/ioascii.cpp
 
 listlib.o: listlib.cpp
 
-cfg.o: cfg.cpp cfg.h
+cfg.o: cfg.cpp
 
 menucfg.o: menucfg.cpp dialog_cvpcb_config.cpp dialog_cvpcb_config.h
 

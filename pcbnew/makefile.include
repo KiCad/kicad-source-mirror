@@ -55,6 +55,8 @@ OBJECTS=	$(TARGET).o\
 		set_grid.o \
 		pcbcfg.o \
 		netlist.o \
+		dialog_netlist.o \
+		dialog_netlist_fbp.o \
 		affiche.o \
 		swap_layers.o \
 		tracepcb.o \
@@ -152,7 +154,7 @@ pcbnew.o: pcbnew.cpp pcbnew.h pcbplot.h drag.h \
 
 pcbcfg.o: pcbcfg.cpp pcbcfg.h pcbplot.h
 
-netlist.o: netlist.cpp dialog_netlist.cpp dialog_netlist.h
+netlist.o: netlist.cpp dialog_netlist.h
 
 gen_modules_placefile.o: gen_modules_placefile.cpp
 

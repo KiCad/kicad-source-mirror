@@ -4,6 +4,13 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-apr-24 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew:
+    Fixed: fully broken netlist import from eeschema when using time stamp.
+    (normal operation worked fine)
+    Added: alawys print diags in dialog window when reading a netlist
+
 2009-apr-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++ALL:

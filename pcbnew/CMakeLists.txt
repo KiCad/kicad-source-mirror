@@ -46,7 +46,8 @@ set(PCBNEW_SRCS
 	dialog_graphic_item_properties.cpp
 	dialog_graphic_item_properties_base.cpp
 #   dialog_initpcb.cpp
-#   dialog_netlist.cpp
+    dialog_netlist.cpp
+	dialog_netlist_fbp.cpp
     dialog_pcb_text_properties.cpp
     zones_non_copper_type_functions.cpp
     dialog_non_copper_zones_properties_base.cpp
