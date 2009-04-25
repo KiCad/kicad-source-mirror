@@ -82,7 +82,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bRightSizerButtons->Add( m_button4, 0, wxALL|wxEXPAND, 5 );
 	
-	m_button5 = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button5 = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizerButtons->Add( m_button5, 0, wxALL|wxEXPAND, 5 );
 	
 	bUpperSizer->Add( bRightSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );

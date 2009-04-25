@@ -28,7 +28,8 @@
 extern void AnnotateComponents( WinEDA_SchematicFrame* parent,
                                 bool annotateSchematic,
                                 int sortOption,
-                                bool resetAnnotation );
+                                bool resetAnnotation,
+                                bool repairsTimestamps );
 
 ////@begin XPM images
 ////@end XPM images
@@ -261,7 +262,7 @@ void WinEDA_AnnotateFrame::OnApplyClick( wxCommandEvent& event )
     if (response == wxCANCEL)
         return;
     AnnotateComponents( m_Parent, GetLevel(), GetSortOrder(),
-                        GetResetItems() );
+                        GetResetItems() , true );
     m_btnClear->Enable();
 }
 

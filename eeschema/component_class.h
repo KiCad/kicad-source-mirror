@@ -112,8 +112,7 @@ private:
      * with:
      * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root scheet)
      * reference = reference for this path (C23, R5, U78 ... )
-     * multi = part selection in multi parts per package (0 or 1 for àne part
-     * per package)
+     * multi = part selection in multi parts per package (0 or 1 for one part per package)
      */
     wxArrayString m_PathsAndReferences;
 
@@ -192,6 +191,13 @@ public:
      *             else remove annotation relative to this sheetpath
      */
     void            ClearAnnotation( DrawSheetPath* aSheet );
+
+    /** function SetTimeStamp
+     * Change the old time stamp to the new time stamp.
+     * the time stamp is also modified in paths
+     * @param aNewTimeStamp = new time stamp
+     */
+    void            SetTimeStamp( long aNewTimeStamp);
 
     EDA_Rect        GetBoundaryBox() const;
     EDA_Rect        GetBoundingBox();

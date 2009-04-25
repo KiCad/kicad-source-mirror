@@ -4,6 +4,12 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-apr-25 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++ Eeschema:
+    When annotating: tests and repairs bad (duplicated) time stamps.
+    Can be found in old schematics or converted from others tools ...
+
 2009-apr-24 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Pcbnew:

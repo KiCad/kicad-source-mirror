@@ -77,13 +77,12 @@ static char s_ExportSeparatorSymbol;
 
 /**************************************************************************/
 void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
-                                               bool aIncludeSubComponents,
-                                               char aExportSeparatorSymbol,
-                                               bool aRunBrowser )
+                                         bool aIncludeSubComponents,
+                                         char aExportSeparatorSymbol,
+                                         bool aRunBrowser )
 /**************************************************************************/
 {
     wxFileName fn;
-    wxString mask, filename;
 
     s_ExportSeparatorSymbol = aExportSeparatorSymbol;
 
@@ -112,6 +111,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
     if( aRunBrowser )
     {
         wxString editorname = wxGetApp().GetEditorName();
+        wxString filename   = m_ListFileName;
         AddDelimiterString( filename );
         ExecuteFile( this, editorname, filename );
     }
@@ -120,7 +120,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
 
 /****************************************************************************/
 void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
-                                               bool            aIncludeSubComponents )
+                                         bool            aIncludeSubComponents )
 /****************************************************************************/
 
 /*
@@ -159,7 +159,7 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
 
 /****************************************************************************/
 void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
-                                                 bool            aIncludeSubComponents )
+                                           bool            aIncludeSubComponents )
 /****************************************************************************/
 
 /** GenereListeOfItems()
@@ -189,7 +189,7 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         /* creates the list file */
         DateAndTime( Line );
         wxString Title = wxGetApp().GetAppName() + wxT( " " ) +
-            GetBuildVersion();
+                         GetBuildVersion();
         fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
 
         /*  sort component list */
@@ -219,8 +219,8 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         {
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsBySheet );
             msg.Printf( _(
-                    "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ),
-                itemCount );
+                            "\n#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n" ),
+                        itemCount );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
         }
@@ -230,8 +230,8 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsByValue );
 
             msg.Printf( _(
-                    "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ),
-                itemCount );
+                            "\n#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n\n" ),
+                        itemCount );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
         }
@@ -277,8 +277,8 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
             item.m_Unit = DrawLibItem->GetUnitSelection( sheet );
 
             strncpy( item.m_Reference,
-                CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
-                sizeof( item.m_Reference ) );
+                    CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
+                    sizeof( item.m_Reference ) );
 
             // Ensure always nul terminate m_Ref.
             item.m_Reference[sizeof( item.m_Reference ) - 1 ] = 0;
@@ -511,7 +511,7 @@ static void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
 
 /*******************************************************************************************/
 void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
-                                             bool CompactForm )
+                                       bool CompactForm )
 /*******************************************************************************************/
 {
     // @todo make this variable length
@@ -534,7 +534,7 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
         if( CompactForm )
         {
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
         else
             fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
@@ -542,7 +542,7 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
     for( ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
     {
-        if ( ii <= FIELD8 )   // see users fields 1 to 8
+        if( ii <= FIELD8 )    // see users fields 1 to 8
         {
             FieldCtrl = FieldListCtrl[ii - FIELD1];
             if( FieldCtrl == NULL )
@@ -551,14 +551,14 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
             if( !FieldCtrl->IsChecked() && !m_AddAllFields->IsChecked() )
                 continue;
         }
-        
-        if( ! m_AddAllFields->IsChecked() )
+
+        if( !m_AddAllFields->IsChecked() )
             break;
-       
+
 
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
         else
             fprintf( f, "; %-12s", CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
     }
@@ -570,8 +570,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     FILE*                          f,
     std::vector <OBJ_CMP_TO_LIST>& aList,
     bool                           CompactForm,
-    bool
-                                   aIncludeSubComponents )
+    bool                           aIncludeSubComponents )
 /*********************************************************************************************/
 
 /* Print the B.O.M sorted by reference
@@ -657,8 +656,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
         if( ( Multi > 1 ) && aIncludeSubComponents )
 #if defined (KICAD_GOST)
 
+
+
             Unit = aList[ii].m_Unit + '1' - 1;
 #else
+
+
 
             Unit = aList[ii].m_Unit + 'A' - 1;
 #endif
@@ -669,10 +672,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         if( CompactForm )
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
         else
             fprintf( f, "| %-10s %-12s", CmpName,
-                CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
 
         if( aIncludeSubComponents )
         {
@@ -764,7 +767,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
         sprintf( CmpName, "%s%c", aList[ii].m_Reference, Unit );
 #endif
         fprintf( f, "| %-12s %-10s", CONV_TO_UTF8( DrawLibItem->GetField(
-                    VALUE )->m_Text ), CmpName );
+                                                       VALUE )->m_Text ), CmpName );
 
         // print the sheet path
         if( aIncludeSubComponents )

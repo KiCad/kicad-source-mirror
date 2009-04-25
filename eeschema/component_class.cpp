@@ -415,6 +415,23 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     rf->m_Text = ref;  // for drawing.
 }
 
+/** function SetTimeStamp
+ * Change the old time stamp to the new time stamp.
+ * the time stamp is also modified in paths
+ * @param aNewTimeStamp = new time stamp
+ */
+void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp)
+{
+    wxString string_timestamp, string_oldtimestamp;
+    string_timestamp.Printf(wxT("%8.8X"), aNewTimeStamp);
+    string_oldtimestamp.Printf(wxT("%8.8X"), m_TimeStamp);
+    m_TimeStamp = aNewTimeStamp;
+    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    {
+        m_PathsAndReferences[ii].Replace(string_oldtimestamp.GetData(), string_timestamp.GetData());
+   }
+}
+
 
 /***********************************************************/
 //returns the unit selection, for the given sheet path.

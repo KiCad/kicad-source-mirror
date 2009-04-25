@@ -18,7 +18,7 @@
 
 /* Local Functions*/
 static int  AddComponentsInSheetToList( std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
-                                DrawSheetPath*                 sheet );
+                                        DrawSheetPath*                 sheet );
 static void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
 static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
 static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
@@ -26,6 +26,7 @@ int         GetLastReferenceNumber( int                            aObjet,
                                     std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
 static int  ExistUnit( int aObjet, int aUnit,
                        std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
+static int  ReplaceDuplicatedTimeStamps();
 
 
 /******************************************************/
@@ -175,6 +176,21 @@ static bool AnnotateByValue( const OBJ_CMP_TO_LIST& item1, const OBJ_CMP_TO_LIST
 }
 
 
+/*****************************************************************************
+* qsort function to annotate items by value
+*  Components are sorted by time stamp
+*****************************************************************************/
+static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1, const OBJ_CMP_TO_LIST& item2 )
+{
+    int ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
+
+    if( ii == 0 )
+        ii = item1.m_TimeStamp - item2.m_TimeStamp;
+
+    return ii < 0;
+}
+
+
 /**************************************************************************************/
 void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
 /**************************************************************************************/
@@ -237,15 +253,32 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedr
 *                     1 = annotate by sorting Y position,
 *                     2 = annotate by sorting value
 * @param resetAnnotation : true = remove previous annotation false = anotate new components only
+* @param repairsTimestamps : true = test for duplicate times stamps and replace duplicated
+*                   Note: this option could change previous annotation, because time stamps are used to handle annotation
+*                       mainly in complex hierarchies.
 *****************************************************************************/
 void AnnotateComponents( WinEDA_SchematicFrame* parent,
                          bool                   annotateSchematic,
                          int                    sortOption,
-                         bool                   resetAnnotation )
+                         bool                   resetAnnotation,
+                         bool                   repairsTimestamps )
 {
     std::vector <OBJ_CMP_TO_LIST> ComponentsList;
 
     wxBusyCursor dummy;
+
+    // Test and replace duplicte time stamps
+    // duplicate can happen with old schematics, or schematic conversions or manual editions of files ...
+    if( repairsTimestamps )
+    {
+        int ireplacecount = ReplaceDuplicatedTimeStamps();
+        if ( ireplacecount )
+        {
+            wxString msg;
+            msg.Printf(_("%d Duplicate Time stamps replaced"), ireplacecount);
+            DisplayInfoMessage( NULL, msg, 2);
+        }
+    }
 
     /* If it is an annotation for all the components, reset previous
      * annotation: */
@@ -301,13 +334,15 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 
 
 /*******************************************************************************************************/
-int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList, DrawSheetPath* aSheet )
+int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
+                                 DrawSheetPath*                 aSheet )
 /********************************************************************************************************/
+
 /** function AddComponentsInSheetToList()
  * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found in sheet
  * @param aComponentsList = a std::vector list to fill
  * @param the DrawSheetPath sheet to analyse
-*/
+ */
 {
     int                     NbrCmp   = 0;
     EDA_BaseStruct*         DrawList = aSheet->LastDrawList();
@@ -320,18 +355,18 @@ int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
             Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(),
-                wxEmptyString,
-                FIND_ROOT );
+                                 wxEmptyString,
+                                 FIND_ROOT );
             if( Entry == NULL )
                 continue;
 
             OBJ_CMP_TO_LIST new_object;
-            new_object.m_RootCmp     = DrawLibItem;
-            new_object.m_Entry       = Entry;
-            new_object.m_Unit        = DrawLibItem->GetUnitSelection( aSheet );
-            new_object.m_SheetPath   = *aSheet;
-            new_object.m_IsNew       = false;
-            new_object.m_Flag        = 0;
+            new_object.m_RootCmp   = DrawLibItem;
+            new_object.m_Entry     = Entry;
+            new_object.m_Unit      = DrawLibItem->GetUnitSelection( aSheet );
+            new_object.m_SheetPath = *aSheet;
+            new_object.m_IsNew     = false;
+            new_object.m_Flag      = 0;
             new_object.m_TimeStamp = DrawLibItem->m_TimeStamp;
 
             if( DrawLibItem->GetRef( aSheet ).IsEmpty() )
@@ -375,7 +410,7 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
         component->SetRef( &(aComponentsList[ii].m_SheetPath), CONV_FROM_UTF8( Text ) );
         component->m_Multi = aComponentsList[ii].m_Unit;
         component->SetUnitSelection( &(aComponentsList[ii].m_SheetPath),
-            aComponentsList[ii].m_Unit );
+                                     aComponentsList[ii].m_Unit );
     }
 }
 
@@ -657,7 +692,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
             msg.Printf( _( "item not annotated: %s%s" ),
-                cmpref.GetData(), Buff.GetData() );
+                       cmpref.GetData(), Buff.GetData() );
 
             if( (ComponentsList[ii].m_Unit > 0) && (ComponentsList[ii].m_Unit < 0x7FFFFFFF) )
             {
@@ -679,10 +714,10 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
             msg.Printf( _( "Error item %s%s" ), cmpref.GetData(),
-                Buff.GetData() );
+                       Buff.GetData() );
 
             Buff.Printf( _( " unit %d and no more than %d parts" ),
-                ComponentsList[ii].m_Unit, ComponentsList[ii].m_Entry->m_UnitCount );
+                         ComponentsList[ii].m_Unit, ComponentsList[ii].m_Entry->m_UnitCount );
             msg << Buff;
             DisplayError( frame, msg );
             error++;
@@ -699,7 +734,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
         msg.Empty();
         Buff.Empty();
 
-        if( (ComponentsList[ii].CompareRef(ComponentsList[ii + 1]) != 0)
+        if( (ComponentsList[ii].CompareRef( ComponentsList[ii + 1] ) != 0)
            || ( ComponentsList[ii].m_NumRef != ComponentsList[ii + 1].m_NumRef ) )
             continue;
 
@@ -714,7 +749,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
             msg.Printf( _( "Multiple item %s%s" ),
-                cmpref.GetData(), Buff.GetData() );
+                       cmpref.GetData(), Buff.GetData() );
 
             if( (ComponentsList[ii].m_Unit > 0) && (ComponentsList[ii].m_Unit < 0x7FFFFFFF) )
             {
@@ -737,7 +772,7 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
 
             cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
             msg.Printf( _( "Multiple item %s%s" ),
-                cmpref.GetData(), Buff.GetData() );
+                       cmpref.GetData(), Buff.GetData() );
 
             if( (ComponentsList[ii].m_Unit > 0) && (ComponentsList[ii].m_Unit < 0x7FFFFFFF) )
             {
@@ -750,30 +785,30 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
         }
 
         /* Error if values are different between units, for the same reference */
-        int next = ii+1;
+        int next = ii + 1;
         if( ComponentsList[ii].CompareValue( ComponentsList[next] ) != 0 )
         {
             wxString nextcmpref;
             cmpref     = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
             nextcmpref = CONV_FROM_UTF8( ComponentsList[next].m_Reference );
-#if defined (KICAD_GOST)
+#if defined(KICAD_GOST)
             msg.Printf( _( "Diff values for %s%d.%c (%s) and %s%d.%c (%s)" ),
-                cmpref.GetData(),
-                ComponentsList[ii].m_NumRef,
-                ComponentsList[ii].m_Unit + '1' - 1,
-                ComponentsList[ii].m_Value->GetData(), nextcmpref.GetData(),
-                ComponentsList[next].m_NumRef,
-                ComponentsList[next].m_Unit + '1' - 1,
-                ComponentsList[next].m_Value->GetData() );
+                       cmpref.GetData(),
+                       ComponentsList[ii].m_NumRef,
+                       ComponentsList[ii].m_Unit + '1' - 1,
+                       ComponentsList[ii].m_Value->GetData(), nextcmpref.GetData(),
+                       ComponentsList[next].m_NumRef,
+                       ComponentsList[next].m_Unit + '1' - 1,
+                       ComponentsList[next].m_Value->GetData() );
 #else
             msg.Printf( _( "Diff values for %s%d%c (%s) and %s%d%c (%s)" ),
-                cmpref.GetData(),
-                ComponentsList[ii].m_NumRef,
-                ComponentsList[ii].m_Unit + 'A' - 1,
-                ComponentsList[ii].m_Value->GetData(), nextcmpref.GetData(),
-                ComponentsList[next].m_NumRef,
-                ComponentsList[next].m_Unit + 'A' - 1,
-                ComponentsList[next].m_Value->GetData() );
+                       cmpref.GetData(),
+                       ComponentsList[ii].m_NumRef,
+                       ComponentsList[ii].m_Unit + 'A' - 1,
+                       ComponentsList[ii].m_Value->GetData(), nextcmpref.GetData(),
+                       ComponentsList[next].m_NumRef,
+                       ComponentsList[next].m_Unit + 'A' - 1,
+                       ComponentsList[next].m_Value->GetData() );
 #endif
 
             DisplayError( frame, msg );
@@ -781,5 +816,105 @@ int CheckAnnotate( WinEDA_SchematicFrame* frame, bool oneSheetOnly )
         }
     }
 
+    // count the duplicated time stamps
+    sort( ComponentsList.begin(), ComponentsList.end(), SortByTimeStamp );
+    for( int ii = 0; (ii < imax) && (error < 4); ii++ )
+    {
+        if( (ComponentsList[ii].m_TimeStamp != ComponentsList[ii + 1].m_TimeStamp)
+           || ( ComponentsList[ii].m_SheetPath != ComponentsList[ii + 1].m_SheetPath ) )
+            continue;
+
+        /* Same time stamp found.  */
+        wxString nextcmpref;
+        wxString full_path;
+        full_path.Printf( wxT( "%s%8.8X" ),
+                          ComponentsList[ii].m_SheetPath.Path().GetData(),
+                          ComponentsList[ii].m_TimeStamp );
+        cmpref     = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
+        nextcmpref = CONV_FROM_UTF8( ComponentsList[ii + 1].m_Reference );
+        msg.Printf( _( "duplicate time stamp (%s) for %s%d and %s%d" ),
+                    full_path.GetData(),
+                    cmpref.GetData(), ComponentsList[ii].m_NumRef,
+                    nextcmpref.GetData(), ComponentsList[ii + 1].m_NumRef );
+        DisplayError( frame, msg );
+        error++;
+    }
+
     return error;
+}
+
+
+/***********************************************
+ * function to sort sch_items by time stamp
+ ************************************************/
+static bool SortItemByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
+{
+    int ii = item1->m_TimeStamp - item2->m_TimeStamp;
+
+    /* if same time stamp, compare type, in order to have
+    *  first : component
+    *  after : sheet
+    * because this is the first item that have its time stamp changed
+    * and changing the time stamp of a sheet can loose annotation
+    */
+
+    if( ii == 0 && ( item1->Type() != item2->Type()) )
+        if ( item1->Type() == DRAW_SHEET_STRUCT_TYPE )
+            ii = -1;
+
+    return ii < 0;
+}
+
+
+/** Function ReplaceDuplicatedTimeStamps
+ * Search for duplicate time stamps in the whole hierarchy, and replace duplicae by new time stamps
+ */
+int ReplaceDuplicatedTimeStamps()
+{
+    /* Build the whole screen list */
+    EDA_ScreenList ScreenList;
+
+    /* Build the list of items with time stamps (components and sheets)
+     * note: if all items have a different time stamp, this ensure also different paths in complex hierarchy
+     * this is the reason we have differant time stamps for components AND sheets
+     */
+    std::vector <SCH_ITEM*> itemlist;
+    SCH_SCREEN*             screen;
+    SCH_ITEM* item;
+    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    {
+        item = screen->EEDrawList;
+        while( item )
+        {
+            if( (item->Type() == DRAW_SHEET_STRUCT_TYPE)
+               ||  (item->Type() == TYPE_SCH_COMPONENT) )
+                itemlist.push_back( item );
+
+            item = item->Next();
+        }
+    }
+
+    // Test and replace duplicated time stamps
+
+    int imax     = itemlist.size() - 1;
+    int errcount = 0;
+    sort( itemlist.begin(), itemlist.end(), SortItemByTimeStamp );
+    for( int ii = 0; ii < imax; ii++ )
+    {
+        item = itemlist[ii];
+        SCH_ITEM* nextitem = itemlist[ii + 1];
+        if( item->m_TimeStamp == nextitem->m_TimeStamp )
+        {
+            errcount++;
+            // for a component, update its Time stamp and its paths (m_PathsAndReferences field)
+            if (item->Type() == TYPE_SCH_COMPONENT )
+                ((SCH_COMPONENT*) item)->SetTimeStamp( GetTimeStamp());
+            // for a sheet, update only its time stamp (annotation of its components will be lost)
+            // TODO: see how to change sheet paths for its cmp list (can be possible in most cases)
+            else
+                item->m_TimeStamp = GetTimeStamp();
+        }
+    }
+
+    return errcount;
 }

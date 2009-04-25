@@ -474,7 +474,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Save Netlist Files" ), fn.GetPath(),
                       fn.GetFullName(), FileWildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      wxFD_SAVE /*| wxFD_OVERWRITE_PROMPT*/ );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
