@@ -16,8 +16,6 @@ private:
     WinEDA_SchematicFrame * m_Parent;
     SCH_TEXT * m_CurrentText;
 
-    void init();
-
 protected:
     // these are protected so that the static ShowModally() gets used.
     DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText);
@@ -36,7 +34,8 @@ public:
     static int ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText );
 
 private:
-    void OnInitDialog( wxInitDialogEvent& event );
+    void init( );
+	void onEnterKey( wxCommandEvent& event );
     void OnButtonOKClick( wxCommandEvent& event );
     void OnButtonCANCEL_Click( wxCommandEvent& event );
     void TextPropertiesAccept( wxCommandEvent& event );

@@ -47,8 +47,6 @@ void DialogLabelEditor::init()
 {
     wxString msg;
 
-    SetFont( *g_DialogFont );
-
     m_TextLabel->SetValue( m_CurrentText->m_Text );
     m_TextLabel->SetFocus();
 
@@ -133,3 +131,13 @@ void DialogLabelEditor::OnButtonCANCEL_Click( wxCommandEvent& event )
     m_Parent->DrawPanel->MouseToCursorSchema();
     EndModal( -1 );
 }
+
+/*!
+ * wxTE_PROCESS_ENTER  event handler for m_TextLabel
+ */
+
+void DialogLabelEditor::onEnterKey( wxCommandEvent& event )
+{
+    TextPropertiesAccept( event );
+}
+

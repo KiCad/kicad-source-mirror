@@ -54,7 +54,6 @@ enum onrclick_id {
  */
 
 BEGIN_EVENT_TABLE( Pcb3D_GLCanvas, wxGLCanvas )
-EVT_SIZE( Pcb3D_GLCanvas::OnSize )
 EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
 EVT_CHAR( Pcb3D_GLCanvas::OnChar )
 EVT_MOUSE_EVENTS( Pcb3D_GLCanvas::OnMouseEvent )
@@ -67,7 +66,7 @@ END_EVENT_TABLE()
 Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, const wxWindowID id,
                                 int* gl_attrib ) :
     wxGLCanvas( parent, id,
-                wxPoint( -1, -1 ), wxSize( -1, -1 ), 0, wxT( "Pcb3D_glcanvas" ), gl_attrib )
+                wxPoint( -1, -1 ), wxSize( -1, -1 ), wxFULL_REPAINT_ON_RESIZE )
 /*************************************************************************/
 {
     m_init   = FALSE;
@@ -479,35 +478,19 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
 /*************************************************/
 {
     wxPaintDC dc( this );
+    // Set the OpenGL viewport according to the client size of this canvas.
+    // This is done here rather than in a wxSizeEvent handler because our
+    // OpenGL rendering context (and thus viewport setting) is used with
+    // multiple canvases: If we updated the viewport in the wxSizeEvent
+    // handler, changing the size of one canvas causes a viewport setting that
+    // is wrong when next another canvas is repainted.
+    const wxSize ClientSize = GetClientSize();
 
-#ifndef __WXMOTIF__
-    if( !GetContext() )
-        return;
-#endif
+    glViewport(0, 0, ClientSize.x, ClientSize.y);
     Redraw();
     event.Skip();
 }
 
-
-/*****************************************************/
-void Pcb3D_GLCanvas::OnSize( wxSizeEvent& event )
-/*****************************************************/
-{
-    int w, h;
-    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    // this is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize( event );
-
-    GetClientSize( &w, &h );
-#ifndef __WXMOTIF__
-    if( GetContext() )
-#endif
-    {
-        glViewport( 0, 0, (GLint) w, (GLint) h );
-    }
-
-    event.Skip();
-}
 
 
 /***********************************************************/

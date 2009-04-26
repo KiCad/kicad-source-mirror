@@ -257,34 +257,29 @@ void WinEDA_MainFrame::RecreateBaseHToolbar()
     SetToolBar( m_HToolBar );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_PROJECT, wxBitmap( new_project_xpm ),
-                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, wxBitmap( new_project_xpm ),
                          _( "Start a new project" ) );
 
     // Load project
-    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxBitmap( open_project_xpm ),
-                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, wxBitmap( open_project_xpm ),
                          _( "Load existing project" ) );
 
     // Save project
-    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxBitmap( save_project_xpm ),
-                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString, wxBitmap( save_project_xpm ),
                          _( "Save current project" ) );
 
     // Separator
     m_HToolBar->AddSeparator();
 
     // Save and archive files
-    m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxBitmap( zip_xpm ),
-                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString, wxBitmap( zip_xpm ),
                          _( "Archive all project files" ) ); // Tooltip
 
     // Separator
     m_HToolBar->AddSeparator();
 
     // Refresh project tree
-    m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxBitmap( reload_xpm ),
-                         wxNullBitmap, FALSE, -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString, wxBitmap( reload_xpm ),
                          _( "Refresh project tree" ) );
 
     m_HToolBar->Realize(); // Create m_HToolBar

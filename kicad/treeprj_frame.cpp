@@ -985,7 +985,7 @@ void WinEDA_PrjFrame::OnRight( wxTreeEvent& Event )
         {
             // Grrrr! wxMenu does not have any copy constructor !! (do it by hand)
             wxMenuItem* src   = list[i];
-            wxString    label = src->GetText();
+            wxString    label = src->GetLabel();
 
             // for obscure reasons, the & is translated into _ ... so replace it
             label.Replace( wxT( "_" ), wxT( "&" ), true );

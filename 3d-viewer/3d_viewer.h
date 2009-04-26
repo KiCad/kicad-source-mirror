@@ -87,7 +87,6 @@ public:
     void ClearLists();
 
     void OnPaint(wxPaintEvent& event);
-    void OnSize(wxSizeEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnMouseEvent(wxMouseEvent& event);

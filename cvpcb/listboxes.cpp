@@ -540,7 +540,7 @@ FOOTPRINT* GetModuleDescrByName( const wxString& FootprintName,
     {
         footprint = *i;
 
-        if( *footprint->m_Module == FootprintName )
+        if( footprint->m_Module == FootprintName )
             return footprint;
     }
 
