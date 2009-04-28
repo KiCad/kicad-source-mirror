@@ -527,6 +527,10 @@ public:
                   int aDisplayMode, GRFillMode aDisplay_mode = FILAIRE,
                   EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
 
+    wxSize    DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                  const wxPoint& aOffset, EDA_Colors aColor,
+                  int aDisplayMode, GRFillMode aDisplay_mode = FILAIRE,
+                  EDA_Colors aAnchor_color = UNSPECIFIED_COLOR, wxString txt=wxString(),wxPoint pos=wxPoint(0,0) );
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

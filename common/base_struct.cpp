@@ -171,7 +171,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_Orient    = 0;                                /* Orient in 0.1 degrees */
     m_Attributs = 0;
     m_Mirror    = false;                            // display mirror if true
-    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
+    m_HJustify  = GR_TEXT_HJUSTIFY_LEFT;
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
     m_Width  = 0;                                   /* thickness */
     m_Italic = false;                               /* true = italic shape */
@@ -264,7 +264,6 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            int aDrawMode,
                            GRFillMode aDisplayMode, EDA_Colors aAnchor_color )
 /***************************************************************/
-
 /** Function Draw
  *  @param aPanel = the current DrawPanel
  *  @param aDC = the current Device Context
@@ -274,44 +273,68 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
  *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
  */
+
 {
-    int width;
+    wxPoint pos = m_Pos;
+    wxArrayString* list =  wxStringSplit( m_Text, '\n');
 
-    width = m_Width;
-    if( aDisplayMode == FILAIRE )
-        width = 0;
-
-    if( aDrawMode != -1 )
-        GRSetDrawMode( aDC, aDrawMode );
-
-    /* Draw text anchor, if allowed */
-    if( aAnchor_color != UNSPECIFIED_COLOR )
+    for( int i=0;i<list->Count();i++)
     {
-        int anchor_size = aPanel->GetScreen()->Unscale( 2 );
-        aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
-
-        int cX = m_Pos.x + aOffset.x;
-        int cY = m_Pos.y + aOffset.y;
-
-        GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
-                cX + anchor_size, cY, 0, aAnchor_color );
-
-        GRLine( &aPanel->m_ClipBox, aDC, cX, cY - anchor_size,
-                cX, cY + anchor_size, 0, aAnchor_color );
+       wxString txt = list->Item(i);
+       wxSize size=DrawOneLine(aPanel,aDC,aOffset,aColor,aDrawMode,aDisplayMode,aAnchor_color,txt,pos);
+       pos.y+=1.5*(size.y); 
     }
-
-    if( aDisplayMode == SKETCH )
-        width = -width;
-	wxSize size = m_Size;
-	if ( m_Mirror )
-		size.x = -size.x;
-
-    DrawGraphicText( aPanel, aDC,
-                     aOffset + m_Pos, aColor, m_Text,
-                     m_Orient, size,
-                     m_HJustify, m_VJustify, width, m_Italic );
+    delete (list);
+     
 }
 
+
+
+wxSize EDA_TextStruct::DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                           const wxPoint& aOffset, EDA_Colors aColor,
+                           int aDrawMode,
+                           GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
+                           wxString txt, wxPoint pos )
+{
+      int width = m_Width;
+      if( aDisplayMode == FILAIRE )
+          width = 0;
+
+      if( aDrawMode != -1 )
+          GRSetDrawMode( aDC, aDrawMode );
+
+      /* Draw text anchor, if allowed */
+      if( aAnchor_color != UNSPECIFIED_COLOR )
+      {
+          int anchor_size = aPanel->GetScreen()->Unscale( 2 );
+          aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
+
+          int cX = pos.x + aOffset.x;
+          int cY = pos.y + aOffset.y;
+
+          GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
+                  cX + anchor_size, cY, 0, aAnchor_color );
+
+          GRLine( &aPanel->m_ClipBox, aDC, cX, cY - anchor_size,
+                  cX, cY + anchor_size, 0, aAnchor_color );
+      }
+
+      if( aDisplayMode == SKETCH )
+          width = -width;
+          
+	    wxSize size = m_Size;
+	    
+	    if ( m_Mirror )
+		    size.x = -size.x;
+
+      
+      
+      DrawGraphicText( aPanel, aDC,
+                       aOffset + pos, aColor, txt,
+                       m_Orient, size,
+                       m_HJustify, m_VJustify, width, m_Italic );
+      return size;
+}
 
 /******************/
 /* Class EDA_Rect */

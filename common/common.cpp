@@ -378,6 +378,38 @@ int ReturnValueFromString( int Units, const wxString& TextValue,
     return Value;
 }
 
+/**
+ * Function wxStringSplit
+ * Split a String to a String List when founding 'splitter'
+ * @return the list
+ * @param txt : wxString : a String text
+ * @param splitter : wxChar : the 'split' character
+ */
+/**********************************************************/
+wxArrayString* wxStringSplit(wxString txt, wxChar splitter)
+/**********************************************************/
+{
+    wxArrayString* list = new wxArrayString();
+    while (1)
+    {
+      int index=txt.Find(splitter);
+      if (index == wxNOT_FOUND)
+        break;
+      
+      wxString tmp;
+      tmp = txt.Mid(0,index);
+      txt = txt.Mid( index+1, txt.size() - index);
+      list->Add(tmp);
+    }
+    
+    if (!txt.IsEmpty())
+    {
+      list->Add(txt);
+    }
+    
+    return list;
+}
+
 
 /******************************************************************/
 double To_User_Unit( bool is_metric, int val, int internal_unit_value )

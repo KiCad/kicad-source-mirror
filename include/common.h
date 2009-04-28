@@ -351,6 +351,11 @@ void        PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
 int         ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
                                      int Internal_Unit );
 
+/* return a String List from a string, whith a specific splitter*/
+//WX_DECLARE_LIST( wxString, StringList );
+//WX_DEFINE_LIST( StringList );
+wxArrayString* wxStringSplit(wxString txt, wxChar splitter);
+
 /**
  * Function To_User_Unit
  * Convert in inch or mm the variable "val" (double)given in internal units

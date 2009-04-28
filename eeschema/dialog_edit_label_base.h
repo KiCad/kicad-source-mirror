@@ -56,7 +56,7 @@ class DialogLabelEditor_Base : public wxDialog
 		
 	
 	public:
-		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,300 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, bool multiline = false, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,300 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogLabelEditor_Base();
 	
 };

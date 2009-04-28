@@ -12,13 +12,13 @@
 
 
 /**********************************************************************************/
-/* Classe WinEDA_EnterText pour entrer une ligne texte au clavier dans les frames */
+/* Classe WinEDA_EnterText pour entrer une ou plusieurs ligne texte au clavier dans les frames */
 /**********************************************************************************/
 WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
                                     const wxString& Title,
                                     const wxString& TextToEdit,
                                     wxBoxSizer* BoxSizer,
-                                    const wxSize& Size )
+                                    const wxSize& Size, bool Multiline )
 {
     m_Modify = FALSE;
     if( ! TextToEdit.IsEmpty() )
@@ -28,7 +28,12 @@ WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
 
     BoxSizer->Add( m_Title, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
-    m_FrameText = new   wxTextCtrl( parent, -1, TextToEdit, wxDefaultPosition, Size );
+    long style = 0;
+    
+    if (Multiline)
+      style = wxTE_MULTILINE;
+      
+    m_FrameText = new   wxTextCtrl( parent, -1, TextToEdit, wxDefaultPosition, Size,style );
 
     m_FrameText->SetInsertionPoint( 1 );
     BoxSizer->Add( m_FrameText,

@@ -398,7 +398,7 @@ public:
     // Constructor and destructor
     WinEDA_EnterText( wxWindow* parent, const wxString& Title,
                       const wxString& TextToEdit, wxBoxSizer* BoxSizer,
-                      const wxSize& Size );
+                      const wxSize& Size, bool Multiline = false );
 
     ~WinEDA_EnterText()
     {

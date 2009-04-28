@@ -189,46 +189,68 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
         color = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
+    wxArrayString* list = wxStringSplit(m_Text, '\n');
+    
+    wxPoint pos;
+    int orientation;
+    GRTextHorizJustifyType Hjustify;
+    GRTextVertJustifyType  Vjustify;
+    pos = m_Pos + offset;
+    
     switch( m_Orient )
     {
     case 0: /* Horiz Normal Orientation (left justified) */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + offset.x, m_Pos.y - TXTMARGE + offset.y ),
-                         color, m_Text, TEXT_ORIENT_HORIZ, m_Size,
-                         GR_TEXT_HJUSTIFY_LEFT,
-                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
+        orientation = TEXT_ORIENT_HORIZ;
+        Hjustify = GR_TEXT_HJUSTIFY_LEFT;
+        Vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+        pos.y-=TXTMARGE;
         break;
 
     case 1: /* Vert Orientation UP */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x - TXTMARGE + offset.x,
-                                  m_Pos.y + offset.y ),
-                         color, m_Text, TEXT_ORIENT_VERT, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT,
-                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
+        orientation = TEXT_ORIENT_VERT;
+        Hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+        Vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+        pos.x-=TXTMARGE;
         break;
 
     case 2: /* Horiz Orientation - Right justified */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x + offset.x, m_Pos.y -
-                                  TXTMARGE + offset.y ),
-                         color, m_Text, TEXT_ORIENT_HORIZ, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT,
-                         GR_TEXT_VJUSTIFY_BOTTOM, width, m_Italic, true );
+        orientation = TEXT_ORIENT_HORIZ;
+        Hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+        Vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+        pos.y-=TXTMARGE;
         break;
 
     case 3: /*  Vert Orientation BOTTOM */
-        DrawGraphicText( panel, DC,
-                         wxPoint( m_Pos.x - TXTMARGE + offset.x,
-                                  m_Pos.y + offset.y ),
-                         color, m_Text, TEXT_ORIENT_VERT, m_Size,
-                         GR_TEXT_HJUSTIFY_RIGHT,
-                         GR_TEXT_VJUSTIFY_TOP, width, m_Italic, true );
+        orientation = TEXT_ORIENT_VERT;
+        Hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+        Vjustify = GR_TEXT_VJUSTIFY_TOP;
+        pos.x-=TXTMARGE;
         break;
     }
 
+    for( int i=0;i<list->Count();i++)
+    {
+       wxString txt = list->Item(i);
+       
+
+        DrawGraphicText( panel, DC,
+                         pos,
+                         color, txt, orientation, m_Size,
+                         Hjustify,
+                         Vjustify, width, m_Italic, true );
+                         
+        if (orientation == TEXT_ORIENT_HORIZ)
+          pos.y+= 1.5*(m_Size.y);
+        else
+          pos.x+= 1.5*(m_Size.x);
+    }
+
+
+    delete (list);
+    
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
+
 }
 
 

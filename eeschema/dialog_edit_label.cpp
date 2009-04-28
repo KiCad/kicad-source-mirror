@@ -21,8 +21,22 @@
 int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText )
 {
     int ret;
+    bool multiline;
 
-    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText );
+    switch( CurrentText->Type() )
+    {
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_LABEL:
+        multiline = false;
+        break;
+
+    default:
+        multiline = true;
+        break;
+    }
+    
+    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText, multiline );
 
     // doing any post construction resizing is better done here than in
     // OnInitDialog() since it tends to flash/redraw the dialog less.
@@ -35,8 +49,8 @@ int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * C
 
 
 
-DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText ) :
-    DialogLabelEditor_Base( parent )
+DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText,bool multiline ) :
+    DialogLabelEditor_Base( parent,wxID_ANY,multiline )
 {
     m_Parent = parent;
     m_CurrentText = CurrentText;
@@ -67,6 +81,7 @@ void DialogLabelEditor::init()
 
     default:
         SetTitle( _( "Text Properties" ) );
+      	m_TextLabel->Disconnect(wxEVT_COMMAND_TEXT_ENTER , wxCommandEventHandler ( DialogLabelEditor::onEnterKey ), NULL, this);
         break;
     }
 
@@ -111,6 +126,14 @@ void DialogLabelEditor::init()
     }
 }
 
+/*!
+ * wxTE_PROCESS_ENTER  event handler for m_TextLabel
+ */
+
+void DialogLabelEditor::onEnterKey( wxCommandEvent& event )
+{
+    TextPropertiesAccept( event );
+}
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
@@ -130,14 +153,5 @@ void DialogLabelEditor::OnButtonCANCEL_Click( wxCommandEvent& event )
 {
     m_Parent->DrawPanel->MouseToCursorSchema();
     EndModal( -1 );
-}
-
-/*!
- * wxTE_PROCESS_ENTER  event handler for m_TextLabel
- */
-
-void DialogLabelEditor::onEnterKey( wxCommandEvent& event )
-{
-    TextPropertiesAccept( event );
 }
 

@@ -107,7 +107,7 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
 
     m_Name = new WinEDA_EnterText( this, _( "Text:" ),
                                   TextPCB->m_Text,
-                                  LeftBoxSizer, wxSize( 200, -1 ) );
+                                  LeftBoxSizer, wxSize( 200, 60 ),true );
     m_Name->SetFocus();
     m_Name->SetSelection( -1, -1 );
 
@@ -232,7 +232,7 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentTextPCB->SetLayer( m_SelLayerBox->GetChoice() );
     CurrentTextPCB->m_Italic = m_Style->GetSelection() ? 1 : 0;
 
-    if( m_DC )     // Displya new text
+    if( m_DC )     // Display new text
     {
        CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
