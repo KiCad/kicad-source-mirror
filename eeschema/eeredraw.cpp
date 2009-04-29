@@ -87,7 +87,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GetScreen()->ClrRefreshReq();
 
     // Display the sheet filename, and the sheet path, for non root sheets
-    if( GetScreen()->m_FileName == g_DefaultSchematicFileName )
+    if( GetScreen()->m_FileName == m_DefaultSchematicFileName )
     {
         wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
         title.Printf( wxT( "%s [%s]" ), msg.GetData(),

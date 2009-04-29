@@ -7,6 +7,7 @@
 #define  WX_EESCHEMA_STRUCT_H
 
 #include "wxstruct.h"
+#include "param_config.h"
 
 
 class WinEDA_LibeditFrame;
@@ -56,16 +57,23 @@ class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 public:
     WinEDAChoiceBox*     m_SelPartBox;
     DrawSheetPath*       m_CurrentSheet;    ///< which sheet we are presently working on.
-    int m_Multiflag;
+    int                  m_Multiflag;
+    int                  m_NetlistFormat;
+    bool                 m_ShowAllPins;
     wxPoint              m_OldPos;
     WinEDA_LibeditFrame* m_LibeditFrame;
     WinEDA_ViewlibFrame* m_ViewlibFrame;
+    wxString             m_UserLibraryPath;
+    wxArrayString        m_ComponentLibFiles;
 
 
 private:
-    SCH_CMP_FIELD* m_CurrentField;
-    int            m_TextFieldSize;
-    bool           m_ShowGrid;
+    wxString             m_DefaultSchematicFileName;
+    SCH_CMP_FIELD*       m_CurrentField;
+    int                  m_TextFieldSize;
+    bool                 m_ShowGrid;
+    PARAM_CFG_ARRAY      m_projectFileParams;
+    PARAM_CFG_ARRAY      m_configSettings;
 
 
 public:
@@ -82,8 +90,11 @@ public:
 
     void GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
-    void Save_Config( wxWindow* displayframe );
+    const PARAM_CFG_ARRAY& GetProjectFileParameters( void );
+    void SaveProjectFile( wxWindow* displayframe );
+    bool LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig );
 
+    const PARAM_CFG_ARRAY& GetConfigurationSettings( void );
     void LoadSettings();
     void SaveSettings();
 
@@ -94,7 +105,6 @@ public:
     void ReCreateVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
-    void SetToolbars();
     void OnHotKey( wxDC*           DC,
                    int             hotkey,
                    EDA_BaseStruct* DrawStruct );
@@ -251,6 +261,16 @@ private:
     void                           OnOpenLibraryViewer( wxCommandEvent& event );
     void                           OnOpenLibraryEditor( wxCommandEvent& event );
 
+    /* User interface update event handlers. */
+    void                    OnUpdateBlockSelected( wxUpdateUIEvent& event );
+    void                    OnUpdatePaste( wxUpdateUIEvent& event );
+    void                    OnUpdateSchematicUndo( wxUpdateUIEvent& event );
+    void                    OnUpdateSchematicRedo( wxUpdateUIEvent& event );
+    void                    OnUpdateGrid( wxUpdateUIEvent& event );
+    void                    OnUpdateUnits( wxUpdateUIEvent& event );
+    void                    OnUpdateSelectCursor( wxUpdateUIEvent& event );
+    void                    OnUpdateHiddenPins( wxUpdateUIEvent& event );
+    void                    OnUpdateBusOrientation( wxUpdateUIEvent& event );
 
     // Bus Entry
     DrawBusEntryStruct*            CreateBusEntry( wxDC* DC, int entry_type );
@@ -415,12 +435,13 @@ public:
     void               SetToolbars();
     void               OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
+    SCH_SCREEN*        GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
     void               OnHotKey( wxDC* DC, int hotkey,
                                  EDA_BaseStruct* DrawStruct );
 
     void               GeneralControle( wxDC*   DC,
                                         wxPoint MousePositionInPixels );
+
     void               LoadSettings();
     void               SaveSettings();
 

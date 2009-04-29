@@ -111,7 +111,6 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
         m_LibList = new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST, wxPoint( 0, 0 ),
                                    m_LibListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0),
                                     0, NULL, wxLB_HSCROLL );
-        m_LibList->SetFont( *g_DialogFont );
     }
     else
     {
@@ -135,7 +134,6 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
                                wxPoint( 0, 0 ),
                                m_CmpListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0),
                                0, NULL, wxLB_HSCROLL );
-    m_CmpList->SetFont( *g_DialogFont );
 
     if( m_LibList )
         ReCreateListLib();

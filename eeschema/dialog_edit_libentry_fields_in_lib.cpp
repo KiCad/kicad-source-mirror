@@ -142,7 +142,6 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB()
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event )
 /**********************************************************************************/
 {
-    SetFont( *g_DialogFont );
     m_skipCopyFromPanel = false;
     wxListItem columnLabel;
 

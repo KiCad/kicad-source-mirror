@@ -254,7 +254,10 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString editorname = wxGetApp().GetEditorName();
             if( !editorname.IsEmpty() )
-                ExecuteFile( this, editorname, gerber_layer->m_FileName );
+            {
+                wxFileName fn( gerber_layer->m_FileName );
+                ExecuteFile( this, editorname, QuoteFullPath( fn ) );
+            }
         }
         break;
 

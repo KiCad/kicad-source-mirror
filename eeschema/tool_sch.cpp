@@ -310,7 +310,7 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_HIDDEN_PINS:
-        g_ShowAllPins = m_OptionsToolBar->GetToolState( id );
+        m_ShowAllPins = m_OptionsToolBar->GetToolState( id );
         DrawPanel->ReDraw( &dc, TRUE );
         break;
 

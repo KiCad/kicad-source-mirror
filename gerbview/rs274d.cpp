@@ -45,14 +45,14 @@
  *  X,Y sont suivies de + ou - et de m+n chiffres (non separes)
  *          m = partie entiere
  *          n = partie apres la virgule
- *           formats classiques : 	m = 2, n = 3 (format 2.3)
+ *           formats classiques :   m = 2, n = 3 (format 2.3)
  *                                  m = 3, n = 4 (format 3.4)
  *  ex:
  *  G__ X00345Y-06123 D__*
  *
  *  Outils et D_CODES
  *  numero d'outil ( identification des formes )
- *  1 a 99 	(classique)
+ *  1 a 99  (classique)
  *  1 a 999
  *  D_CODES:
  *
@@ -94,8 +94,13 @@ static wxPoint LastPosition;
  *   color other than the background color, else use the background color
  *   when drawing so that an erasure happens.
  */
-static void fillCircularTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
-         const wxPoint& aPos, int aDiameter, int aPenWidth, bool isDark )
+static void fillCircularTRACK(  TRACK*         aTrack,
+                                int            Dcode_index,
+                                int            aLayer,
+                                const wxPoint& aPos,
+                                int            aDiameter,
+                                int            aPenWidth,
+                                bool           isDark )
 {
     aTrack->m_Shape = S_CIRCLE;
     aTrack->m_Width = aPenWidth;
@@ -105,8 +110,8 @@ static void fillCircularTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 
     // When drawing a TRACK with shape S_CIRCLE, the hypotenuse (i.e. distance)
     // between the Start and End points gives the radius of the circle.
-    aTrack->m_Start = aTrack->m_End = aPos;
-    aTrack->m_End.x += max(0, (aDiameter + 1)/2);
+    aTrack->m_Start  = aTrack->m_End = aPos;
+    aTrack->m_End.x += max( 0, (aDiameter + 1) / 2 );
 
     NEGATE( aTrack->m_Start.y );
     NEGATE( aTrack->m_End.y );
@@ -132,8 +137,12 @@ static void fillCircularTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
  *   color other than the background color, else use the background color
  *   when drawing so that an erasure happens.
  */
-static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
-         const wxPoint& aPos, int aDiameter, bool isDark )
+static void fillRoundFlashTRACK(  TRACK*         aTrack,
+                                  int            Dcode_index,
+                                  int            aLayer,
+                                  const wxPoint& aPos,
+                                  int            aDiameter,
+                                  bool           isDark )
 {
     aTrack->SetLayer( aLayer );
     aTrack->m_Width = aDiameter;
@@ -141,7 +150,7 @@ static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     NEGATE( aTrack->m_Start.y );
     NEGATE( aTrack->m_End.y );
     aTrack->SetNet( Dcode_index );
-    aTrack->m_Shape   = S_SPOT_CIRCLE;
+    aTrack->m_Shape = S_SPOT_CIRCLE;
 
     if( !isDark )
     {
@@ -152,7 +161,8 @@ static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 
 /**
  * Function fillOvalOrRectFlashTRACK
- * initializes a given TRACK so that it can draw an oval or rectangular filled rectangle.
+ * initializes a given TRACK so that it can draw an oval or rectangular
+ * filled rectangle.
  *
  * @param aTrack The TRACK to fill in.
  * @param Dcode_index The DCODE value, like D14
@@ -164,8 +174,13 @@ static void fillRoundFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
  *   color other than the background color, else use the background color
  *   when drawing so that an erasure happens.
  */
-static void fillOvalOrRectFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
-         const wxPoint& aPos, const wxSize& aSize, int aShape, bool isDark )
+static void fillOvalOrRectFlashTRACK(  TRACK*         aTrack,
+                                       int            Dcode_index,
+                                       int            aLayer,
+                                       const wxPoint& aPos,
+                                       const wxSize&  aSize,
+                                       int            aShape,
+                                       bool           isDark )
 {
     int width = MIN( aSize.x, aSize.y );
     int len   = MAX( aSize.x, aSize.y ) - width;
@@ -214,8 +229,13 @@ static void fillOvalOrRectFlashTRACK(  TRACK* aTrack, int Dcode_index, int aLaye
  *   color other than the background color, else use the background color
  *   when drawing so that an erasure happens.
  */
-static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
-         const wxPoint& aStart, const wxPoint& aEnd, int aWidth, bool isDark )
+static void fillLineTRACK(  TRACK*         aTrack,
+                            int            Dcode_index,
+                            int            aLayer,
+                            const wxPoint& aStart,
+                            const wxPoint& aEnd,
+                            int            aWidth,
+                            bool           isDark )
 {
     aTrack->SetLayer( aLayer );
 
@@ -266,9 +286,9 @@ static void fillLineTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
  *   when drawing so that an erasure happens.
  */
 static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
-                         const wxPoint& aStart, const wxPoint& aEnd,
-                         const wxPoint& rel_center, int aWidth,
-                         bool trigo_sens, bool multiquadrant, bool isDark )
+                           const wxPoint& aStart, const wxPoint& aEnd,
+                           const wxPoint& rel_center, int aWidth,
+                           bool trigo_sens, bool multiquadrant, bool isDark )
 {
     wxPoint center, delta;
 
@@ -333,7 +353,7 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     }
 
     aTrack->SetNet( Dcode_index );
-    aTrack->m_Param        = center.x;
+    aTrack->m_Param = center.x;
     aTrack->SetSubNet( center.y );
 
     NEGATE( aTrack->m_Start.y );
@@ -358,11 +378,10 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 
 /***********************************************/
 wxPoint GERBER::ReadXYCoord( char*& Text )
+{
 /***********************************************/
-
 /* Retourne la coord courante pointee par Text (XnnnnYmmmm)
  */
-{
     wxPoint pos = m_CurrentPos;
     int     type_coord = 0, current_coord, nbchar;
     bool    is_float   = false;
@@ -385,7 +404,7 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
         {
             type_coord = *Text;
             Text++;
-            text = line;
+            text   = line;
             nbchar = 0;
             while( IsNumber( *Text ) )
             {
@@ -406,10 +425,12 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
             }
             else
             {
-                int    fmt_scale = (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
+                int fmt_scale =
+                    (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
                 if( m_NoTrailingZeros )
                 {
-                    int min_digit = (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
+                    int min_digit =
+                        (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
                     while( nbchar < min_digit )
                     {
                         *(text++) = '0';
@@ -493,19 +514,18 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
 
 /************************************************/
 wxPoint GERBER::ReadIJCoord( char*& Text )
+{
 /************************************************/
-
 /* Retourne la coord type InnJnn courante pointee par Text (InnnnJmmmm)
  *  Ces coordonn�es sont relatives, donc si une coord est absente, sa valeur
  *  par defaut est 0
  */
-{
     wxPoint pos( 0, 0 );
 
-    int   type_coord = 0, current_coord, nbchar;
-    bool  is_float   = false;
-    char* text;
-    char  line[256];
+    int     type_coord = 0, current_coord, nbchar;
+    bool    is_float   = false;
+    char*   text;
+    char    line[256];
 
     if( Text == NULL )
         return pos;
@@ -517,7 +537,7 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
         {
             type_coord = *Text;
             Text++;
-            text = line;
+            text   = line;
             nbchar = 0;
             while( IsNumber( *Text ) )
             {
@@ -538,10 +558,12 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
             }
             else
             {
-                int    fmt_scale = (type_coord == 'I') ? m_FmtScale.x : m_FmtScale.y;
+                int fmt_scale =
+                    (type_coord == 'I') ? m_FmtScale.x : m_FmtScale.y;
                 if( m_NoTrailingZeros )
                 {
-                    int min_digit = (type_coord == 'I') ? m_FmtLen.x : m_FmtLen.y;
+                    int min_digit =
+                        (type_coord == 'I') ? m_FmtLen.x : m_FmtLen.y;
                     while( nbchar < min_digit )
                     {
                         *(text++) = '0';
@@ -616,11 +638,10 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
 
 /*****************************************************/
 int GERBER::ReturnGCodeNumber( char*& Text )
+{
 /*****************************************************/
-
 /* Lit la sequence Gnn et retourne la valeur nn
  */
-{
     int   ii = 0;
     char* text;
     char  line[1024];
@@ -642,11 +663,10 @@ int GERBER::ReturnGCodeNumber( char*& Text )
 
 /**************************************************/
 int GERBER::ReturnDCodeNumber( char*& Text )
+{
 /**************************************************/
-
 /* Lit la sequence Dnn et retourne la valeur nn
  */
-{
     int   ii = 0;
     char* text;
     char  line[1024];
@@ -667,9 +687,9 @@ int GERBER::ReturnDCodeNumber( char*& Text )
 
 /******************************************************************/
 bool GERBER::Execute_G_Command( char*& text, int G_commande )
-/******************************************************************/
 {
-    D(printf( "%22s: G_CODE<%d>\n", __func__, G_commande );)
+/******************************************************************/
+    D( printf( "%22s: G_CODE<%d>\n", __func__, G_commande ); )
 
     switch( G_commande )
     {
@@ -747,14 +767,15 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
         break;
 
     case GC_TURN_OFF_POLY_FILL:
-        m_PolygonFillMode      = false;
+        m_PolygonFillMode = false;
         m_PolygonFillModeState = 0;
         break;
 
     case GC_MOVE:       // Non existant
     default:
     {
-        wxString msg; msg.Printf( wxT( "G%.2d command not handled" ), G_commande );
+        wxString msg; msg.Printf( wxT( "G%0.2d command not handled" ),
+                                  G_commande );
         DisplayError( NULL, msg );
         return false;
     }
@@ -790,8 +811,8 @@ static int scale( double aCoord, bool isMetric )
  */
 static wxPoint mapPt( double x, double y, bool isMetric )
 {
-    wxPoint ret(  scale( x, isMetric ),
-                  scale( y, isMetric ) );
+    wxPoint ret( scale( x, isMetric ),
+                scale( y, isMetric ) );
 
     return ret;
 }
@@ -801,25 +822,28 @@ static wxPoint mapPt( double x, double y, bool isMetric )
  * Function mapExposure
  * translates the first parameter from an aperture macro into a current exposure
  * setting.
- * @param curExposure A dynamic setting which can change throughout the reading of the
- *         gerber file, and it indicates whether the current tool is lit or not.
+ * @param curExposure A dynamic setting which can change throughout the
+ * reading of the gerber file, and it indicates whether the current tool
+ * is lit or not.
  * @param isNegative A dynamic setting which can change throughout the reading of
  *    the gerber file, and it indicates whether the current D codes are to
  *    be interpreted as erasures or not.
  */
 static bool mapExposure( int param1, bool curExposure, bool isNegative )
 {
-    bool    exposure;
+    bool exposure;
 
     switch( param1 )
     {
     case 0:
         exposure = false;
         break;
+
     default:
     case 1:
         exposure = true;
         break;
+
     case 2:
         exposure = !curExposure;
     }
@@ -830,22 +854,22 @@ static bool mapExposure( int param1, bool curExposure, bool isNegative )
 
 /*****************************************************************************/
 bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
-                                          char*& text, int D_commande )
-/*****************************************************************************/
+                                    char*& text, int D_commande )
 {
-    wxSize      size( 15, 15 );
+/*****************************************************************************/
+    wxSize     size( 15, 15 );
 
-    APERTURE_T  aperture = APT_CIRCLE;
-    TRACK*      track;
-    BOARD*		pcb = frame->GetBoard();
+    APERTURE_T aperture = APT_CIRCLE;
+    TRACK*     track;
+    BOARD*     pcb = frame->GetBoard();
 
-    int         activeLayer = frame->GetScreen()->m_Active_Layer;
+    int        activeLayer = frame->GetScreen()->m_Active_Layer;
 
-    int         dcode = 0;
-    D_CODE*     tool = NULL;
-    wxString    msg;
+    int        dcode = 0;
+    D_CODE*    tool  = NULL;
+    wxString   msg;
 
-    D(printf( "%22s: D_CODE<%d>\n", __func__, D_commande );)
+    D( printf( "%22s: D_CODE<%d>\n", __func__, D_commande ); )
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
     {
@@ -876,7 +900,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             SEGZONE* edge_poly;
             edge_poly = new SEGZONE( pcb );
             pcb->m_Zone.Append( edge_poly );
-            D(printf("R:%p\n", edge_poly );)
+            D( printf( "R:%p\n", edge_poly ); )
 
             edge_poly->SetLayer( activeLayer );
             edge_poly->m_Width = 1;
@@ -889,13 +913,14 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
             edge_poly->SetNet( m_PolygonFillModeState );
 
-            // the first track of each polygon has a netcode of zero, otherwise one.
-            // set the erasure flag in that special track, if a negative polygon.
+            // the first track of each polygon has a netcode of zero,
+            // otherwise one.  Sset the erasure flag in that special track,
+            // if a negative polygon.
             if( !m_PolygonFillModeState )
             {
                 if( m_LayerNegative ^ m_ImageNegative )
                     edge_poly->m_Flags |= DRAW_ERASED;
-                D(printf("\nm_Flags=0x%08X\n", edge_poly->m_Flags );)
+                D( printf( "\nm_Flags=0x%08X\n", edge_poly->m_Flags ); )
             }
 
             m_PreviousPos = m_CurrentPos;
@@ -903,7 +928,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
-            m_Exposure = false;
+            m_Exposure    = false;
             m_PreviousPos = m_CurrentPos;
             m_PolygonFillModeState = 0;
             break;
@@ -932,10 +957,10 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case GERB_INTERPOL_LINEAR_1X:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
-                D(printf("R:%p\n", track );)
-                fillLineTRACK(  track, dcode, activeLayer,
-                                m_PreviousPos, m_CurrentPos,
-                                size.x, !(m_LayerNegative ^ m_ImageNegative) );
+                D( printf( "R:%p\n", track ); )
+                fillLineTRACK( track, dcode, activeLayer, m_PreviousPos,
+                               m_CurrentPos, size.x,
+                               !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             case GERB_INTERPOL_LINEAR_01X:
@@ -948,16 +973,17 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case GERB_INTERPOL_ARC_POS:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
-                D(printf("R:%p\n", track );)
-                fillArcTRACK(  track, dcode, activeLayer,
-                     m_PreviousPos, m_CurrentPos, m_IJPos,
-                     size.x, m_Iterpolation==GERB_INTERPOL_ARC_NEG ? false : true,
-                     m_360Arc_enbl, !(m_LayerNegative ^ m_ImageNegative) );
+                D( printf( "R:%p\n", track ); )
+                fillArcTRACK( track, dcode, activeLayer, m_PreviousPos,
+                              m_CurrentPos, m_IJPos,  size.x,
+                              ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
+                              false : true, m_360Arc_enbl,
+                              !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             default:
-                msg.Printf( wxT( "Execute_DCODE_Command: interpol error (type %X)" ),
-                            m_Iterpolation );
+                msg.Printf( wxT( "Execute_DCODE_Command: interpol error " \
+                                 "(type %X)" ), m_Iterpolation );
                 DisplayError( frame, msg );
                 break;
             }
@@ -966,7 +992,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
-            m_Exposure = false;
+            m_Exposure    = false;
             m_PreviousPos = m_CurrentPos;
             break;
 
@@ -985,193 +1011,245 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
             case APT_CIRCLE:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
-                D(printf("R:%p\n", track );)
+                D( printf( "R:%p\n", track ); )
                 fillRoundFlashTRACK( track, dcode, activeLayer,
-                                m_CurrentPos,
-                                size.x, !(m_LayerNegative ^ m_ImageNegative) );
+                                     m_CurrentPos, size.x,
+                                     !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             case APT_OVAL:
             case APT_RECT:
                 track = new TRACK( pcb );
                 pcb->m_Track.Append( track );
-                D(printf("R:%p\n", track );)
+                D( printf( "R:%p\n", track ); )
                 fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                m_CurrentPos, size,
-                                aperture == APT_RECT ? S_SPOT_RECT : S_SPOT_OVALE,
-                                !(m_LayerNegative ^ m_ImageNegative) );
+                                          m_CurrentPos, size,
+                                          ( aperture == APT_RECT ) ?
+                                          S_SPOT_RECT : S_SPOT_OVALE,
+                                          !(m_LayerNegative ^ m_ImageNegative) );
                 break;
 
             case APT_MACRO:
+            {
+                APERTURE_MACRO* macro = tool->GetMacro();
+                wxASSERT( macro );
+
+                // split the macro primitives up into multiple normal TRACK elements
+                for( AM_PRIMITIVES::iterator p = macro->primitives.begin();
+                     p!=macro->primitives.end();
+                     ++p )
                 {
-                    APERTURE_MACRO* macro = tool->GetMacro();
-                    wxASSERT( macro );
+                    bool    exposure;
+                    wxPoint curPos = m_CurrentPos;
 
-                    // split the macro primitives up into multiple normal TRACK elements
-                    for( AM_PRIMITIVES::iterator p=macro->primitives.begin();  p!=macro->primitives.end();  ++p )
+                    switch( p->primitive_id )
                     {
-                        bool    exposure;
-                        wxPoint curPos = m_CurrentPos;
+                    case AMP_CIRCLE:
+                    {
+                        exposure = mapExposure( p->GetExposure(), m_Exposure,
+                                                m_ImageNegative );
+                        curPos  += mapPt( p->params[2].GetValue( tool ),
+                                          p->params[3].GetValue( tool ),
+                                          m_GerbMetric );
+                        int diameter = scale( p->params[1].GetValue( tool ),
+                                              m_GerbMetric );
 
-                        switch( p->primitive_id )
+                        track = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillRoundFlashTRACK( track, dcode, activeLayer,
+                                             m_CurrentPos, diameter, exposure );
+                    }
+                    break;
+
+                    case AMP_LINE2:
+                    case AMP_LINE20:
+                    {
+                        exposure = mapExposure(
+                            p->GetExposure(), m_Exposure, m_ImageNegative );
+                        int     width = scale( p->params[1].GetValue( tool ),
+                                               m_GerbMetric );
+                        wxPoint start = mapPt( p->params[2].GetValue( tool ),
+                                               p->params[3].GetValue( tool ),
+                                               m_GerbMetric );
+                        wxPoint end   = mapPt( p->params[4].GetValue( tool ),
+                                               p->params[5].GetValue( tool ),
+                                               m_GerbMetric );
+
+                        if( start.x == end.x )
                         {
-                        case AMP_CIRCLE:
-                            {
-                                exposure = mapExposure( p->GetExposure(), m_Exposure, m_ImageNegative );
-                                curPos += mapPt( p->params[2].GetValue( tool ), p->params[3].GetValue( tool ), m_GerbMetric );
-                                int diameter = scale( p->params[1].GetValue( tool ), m_GerbMetric );
-
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillRoundFlashTRACK( track, dcode, activeLayer,
-                                                m_CurrentPos,
-                                                diameter, exposure );
-                            }
-                            break;
-
-                        case AMP_LINE2:
-                        case AMP_LINE20:
-                            {
-                                exposure = mapExposure( p->GetExposure(), m_Exposure, m_ImageNegative );
-                                int width  = scale( p->params[1].GetValue( tool ), m_GerbMetric );
-                                wxPoint start = mapPt( p->params[2].GetValue( tool ), p->params[3].GetValue( tool ), m_GerbMetric );
-                                wxPoint end   = mapPt( p->params[4].GetValue( tool ), p->params[5].GetValue( tool ), m_GerbMetric );
-
-                                if( start.x == end.x )
-                                {
-                                    size.x = width;
-                                    size.y = ABS( end.y - start.y ) + 1;
-                                }
-                                else
-                                {
-                                    size.x = ABS( end.x - start.x ) + 1;
-                                    size.y = width;
-                                }
-
-                                wxPoint midPoint( (start.x + end.x)/2, (start.y+end.y)/2 );
-                                curPos += midPoint;
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                               curPos, size, S_SPOT_RECT,
-                                               exposure );
-                            }
-                            break;
-
-                        case AMP_LINE_CENTER:
-                            {
-                                exposure = mapExposure( p->GetExposure(), m_Exposure, m_ImageNegative );
-                                wxPoint msize = mapPt( p->params[1].GetValue( tool ), p->params[2].GetValue( tool ), m_GerbMetric );
-                                size.x = msize.x;
-                                size.y = msize.y;
-                                curPos += mapPt( p->params[3].GetValue( tool ), p->params[4].GetValue( tool ), m_GerbMetric );
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                               curPos, size, S_SPOT_RECT,
-                                               exposure );
-                            }
-                            break;
-
-                        case AMP_LINE_LOWER_LEFT:
-                            {
-                                exposure = mapExposure( p->GetExposure(), m_Exposure, m_ImageNegative );
-                                wxPoint msize = mapPt( p->params[1].GetValue( tool ), p->params[2].GetValue( tool ), m_GerbMetric );
-                                size.x = msize.x;
-                                size.y = msize.y;
-                                wxPoint lowerLeft = mapPt( p->params[3].GetValue( tool ), p->params[4].GetValue( tool ), m_GerbMetric );
-                                curPos += lowerLeft;
-                                // need the middle, so adjust from the lower left
-                                curPos.y += size.y/2;
-                                curPos.x += size.x/2;
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                               curPos, size, S_SPOT_RECT,
-                                               exposure );
-                            }
-                            break;
-
-                        case AMP_THERMAL:
-                            {
-                                int outerDiam = scale( p->params[2].GetValue(tool), m_GerbMetric );
-                                int innerDiam = scale( p->params[3].GetValue(tool), m_GerbMetric );
-
-                                curPos += mapPt( p->params[0].GetValue( tool ), p->params[1].GetValue( tool ), m_GerbMetric );
-
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
-                                                outerDiam, !(m_LayerNegative ^ m_ImageNegative) );
-
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
-                                                innerDiam, (m_LayerNegative ^ m_ImageNegative) );
-
-                                // @todo: draw the cross hairs, see page 23 of rs274 spec.
-                                // this might be done with two lines, thickness from params[4], and drawing
-                                // darkness "(m_LayerNegative ^ m_ImageNegative)"
-                            }
-                            break;
-
-                        case AMP_MOIRE:
-                            {
-                                curPos += mapPt( p->params[0].GetValue( tool ), p->params[1].GetValue( tool ), m_GerbMetric );
-
-                                // e.g.: "6,0,0,0.125,.01,0.01,3,0.003,0.150,0"
-                                int outerDiam = scale( p->params[2].GetValue(tool), m_GerbMetric );
-                                int penThickness = scale( p->params[3].GetValue(tool), m_GerbMetric );
-                                int gap = scale( p->params[4].GetValue(tool), m_GerbMetric );
-                                int numCircles = p->params[5].GetValue(tool);
-                                int crossHairThickness = scale( p->params[6].GetValue(tool), m_GerbMetric );
-                                int crossHairLength = scale( p->params[7].GetValue(tool), m_GerbMetric );
-                                // ignore rotation, not supported
-
-                                int diamAdjust = 2 * (gap + penThickness);	// adjust outerDiam by this on each nested circle
-                                for( int i=0; i<numCircles;  ++i, outerDiam -= diamAdjust )
-                                {
-                                    track = new TRACK( pcb );
-                                    pcb->m_Track.Append( track );
-                                    D(printf("R:%p\n", track );)
-                                    fillCircularTRACK( track, dcode, activeLayer, curPos, outerDiam,
-                                            penThickness, !(m_LayerNegative ^ m_ImageNegative) );
-                                }
-
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                        curPos, wxSize(crossHairThickness,crossHairLength),
-                                        S_SPOT_RECT, !(m_LayerNegative ^ m_ImageNegative) );
-
-                                track = new TRACK( pcb );
-                                pcb->m_Track.Append( track );
-                                D(printf("R:%p\n", track );)
-
-                                // swap x and y in wxSize() for this one
-                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                        curPos, wxSize(crossHairLength,crossHairThickness),
-                                        S_SPOT_RECT, !(m_LayerNegative ^ m_ImageNegative) );
-                            }
-                            break;
-
-                        case AMP_EOF:
-                        case AMP_OUTLINE:
-                        case AMP_POLYGON:
-                        default:
-                            // not yet supported, waiting for you.
-                            break;
+                            size.x = width;
+                            size.y = ABS( end.y - start.y ) + 1;
                         }
+                        else
+                        {
+                            size.x = ABS( end.x - start.x ) + 1;
+                            size.y = width;
+                        }
+
+                        wxPoint midPoint( (start.x + end.x) / 2,
+                                          (start.y + end.y) / 2 );
+                        curPos += midPoint;
+                        track   = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                  curPos, size, S_SPOT_RECT,
+                                                  exposure );
+                    }
+                    break;
+
+                    case AMP_LINE_CENTER:
+                    {
+                        exposure = mapExposure( p->GetExposure(), m_Exposure,
+                                                m_ImageNegative );
+                        wxPoint msize = mapPt( p->params[1].GetValue( tool ),
+                                               p->params[2].GetValue( tool ),
+                                               m_GerbMetric );
+                        size.x  = msize.x;
+                        size.y  = msize.y;
+                        curPos += mapPt( p->params[3].GetValue( tool ),
+                                         p->params[4].GetValue( tool ),
+                                         m_GerbMetric );
+                        track   = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                  curPos, size, S_SPOT_RECT,
+                                                  exposure );
+                    }
+                    break;
+
+                    case AMP_LINE_LOWER_LEFT:
+                    {
+                        exposure = mapExposure(
+                            p->GetExposure(), m_Exposure, m_ImageNegative );
+                        wxPoint msize = mapPt( p->params[1].GetValue( tool ),
+                                               p->params[2].GetValue( tool ),
+                                               m_GerbMetric );
+                        size.x = msize.x;
+                        size.y = msize.y;
+                        wxPoint lowerLeft = mapPt( p->params[3].GetValue( tool ),
+                                                   p->params[4].GetValue( tool ),
+                                                   m_GerbMetric );
+                        curPos += lowerLeft;
+
+                        // need the middle, so adjust from the lower left
+                        curPos.y += size.y / 2;
+                        curPos.x += size.x / 2;
+                        track     = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                  curPos, size, S_SPOT_RECT,
+                                                  exposure );
+                    }
+                    break;
+
+                    case AMP_THERMAL:
+                    {
+                        int outerDiam = scale( p->params[2].GetValue( tool ),
+                                               m_GerbMetric );
+                        int innerDiam = scale( p->params[3].GetValue( tool ),
+                                               m_GerbMetric );
+
+                        curPos += mapPt( p->params[0].GetValue( tool ),
+                                         p->params[1].GetValue( tool ),
+                                         m_GerbMetric );
+
+                        track = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillRoundFlashTRACK( track, dcode, activeLayer,
+                                             curPos, outerDiam,
+                                            !(m_LayerNegative ^ m_ImageNegative) );
+
+                        track = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
+                                             innerDiam,
+                                             (m_LayerNegative ^ m_ImageNegative) );
+
+                        // @todo: draw the cross hairs, see page 23 of rs274
+                        // spec. this might be done with two lines, thickness
+                        // from params[4], and drawing
+                        // darkness "(m_LayerNegative ^ m_ImageNegative)"
+                    }
+                    break;
+
+                    case AMP_MOIRE:
+                    {
+                        curPos += mapPt( p->params[0].GetValue( tool ),
+                                         p->params[1].GetValue( tool ),
+                                         m_GerbMetric );
+
+                        // e.g.: "6,0,0,0.125,.01,0.01,3,0.003,0.150,0"
+                        int outerDiam    = scale( p->params[2].GetValue( tool ),
+                                                  m_GerbMetric );
+                        int penThickness = scale( p->params[3].GetValue( tool ),
+                                                  m_GerbMetric );
+                        int gap = scale( p->params[4].GetValue( tool ),
+                                         m_GerbMetric );
+                        int numCircles = p->params[5].GetValue( tool );
+                        int crossHairThickness =
+                            scale( p->params[6].GetValue( tool ), m_GerbMetric );
+                        int crossHairLength =
+                            scale( p->params[7].GetValue( tool ), m_GerbMetric );
+
+                        // ignore rotation, not supported
+
+                        int diamAdjust = 2 * (gap + penThickness);          // adjust outerDiam by this on each nested circle
+                        for( int i = 0;
+                             i < numCircles;
+                             ++i, outerDiam -= diamAdjust )
+                        {
+                            track = new TRACK( pcb );
+                            pcb->m_Track.Append( track );
+                            D( printf( "R:%p\n", track ); )
+                            fillCircularTRACK( track, dcode, activeLayer,
+                                               curPos, outerDiam,
+                                               penThickness,
+                                               !(m_LayerNegative ^ m_ImageNegative) );
+                        }
+
+                        track = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                 curPos,
+                                                 wxSize( crossHairThickness,
+                                                         crossHairLength ),
+                                                 S_SPOT_RECT,
+                                                 !(m_LayerNegative ^
+                                                   m_ImageNegative) );
+
+                        track = new TRACK( pcb );
+                        pcb->m_Track.Append( track );
+                        D( printf( "R:%p\n", track ); )
+
+                        // swap x and y in wxSize() for this one
+                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                 curPos,
+                                                 wxSize( crossHairLength,
+                                                         crossHairThickness ),
+                                                 S_SPOT_RECT,
+                                                 !(m_LayerNegative ^
+                                                   m_ImageNegative) );
+                    }
+                    break;
+
+                    case AMP_EOF:
+                    case AMP_OUTLINE:
+                    case AMP_POLYGON:
+                    default:
+
+                        // not yet supported, waiting for you.
+                        break;
                     }
                 }
-                break;
+            }
+            break;
 
             default:
                 break;
@@ -1187,4 +1265,3 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
 
     return true;
 }
-

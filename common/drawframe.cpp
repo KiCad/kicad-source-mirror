@@ -630,6 +630,11 @@ void WinEDA_DrawFrame::AdjustScrollBars()
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,
                               screen->m_ScrollbarPos.y, TRUE );
+#else
+    BASE_SCREEN* screen = GetBaseScreen();
+    wxSize drawingSize = screen->ReturnPageSize() * 2;
+    DrawPanel->SetScrollbars( 1, 1, drawingSize.x, drawingSize.y,
+                              screen->m_Curseur.x, screen->m_Curseur.y, true );
 #endif
 }
 

@@ -246,7 +246,7 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
     {
         if( frame->m_LibeditFrame && frame->m_LibeditFrame->IsActive() )
             aColor = g_InvisibleItemColor;
-        else if( !g_ShowAllPins )
+        else if( !frame->m_ShowAllPins )
             return;
     }
 

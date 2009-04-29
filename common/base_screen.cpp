@@ -116,7 +116,9 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
     wxPoint curpos = ScreenPos;
     Unscale( curpos );
 
+#ifndef WX_ZOOM
     curpos += m_DrawOrg;
+#endif
 
     return curpos;
 }

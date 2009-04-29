@@ -61,8 +61,8 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
+    EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -71,8 +71,8 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
     WinEDA_SchematicFrame* parent,
     Hierarchical_PIN_Sheet_Struct*  curr_pinsheet,
     const wxPoint&         framepos ) :
-    wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos, wxSize( 340, 220 ),
-              DIALOG_STYLE )
+    wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
+              wxSize( 340, 220 ), DIALOG_STYLE )
 /**********************************************************************************/
 {
     wxPoint   pos;
@@ -93,15 +93,14 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
 
     /* Creation des boutons de commande */
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     m_TextWin = new WinEDA_GraphicTextCtrl( this, _( "Text:" ),
-                                            m_CurrentPinSheet->m_Text, m_CurrentPinSheet->m_Size.x,
+                                            m_CurrentPinSheet->m_Text,
+                                            m_CurrentPinSheet->m_Size.x,
                                             g_UnitMetric, LeftBoxSizer, 200 );
 
     // Selection de la forme :

@@ -20,6 +20,7 @@
     <string name="resource_prefix">""</string>
     <bool name="use_two_step_construction">0</bool>
     <bool name="use_enums">0</bool>
+    <bool name="generate_for_xrced">0</bool>
     <string name="current_platform">"&lt;All platforms&gt;"</string>
     <string name="target_wx_version">"&lt;Any&gt;"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
@@ -114,6 +115,7 @@
     <bool name="archive_all_image_files">0</bool>
     <bool name="xrc_retain_relative_paths">1</bool>
     <bool name="xrc_generate_id_tags">0</bool>
+    <bool name="xrc_use_name_property">0</bool>
   </header>
   <data>
     <document>
@@ -157,6 +159,7 @@
         <string name="Compiler location">"%AUTO%"</string>
         <string name="wxWidgets location">"%AUTO%"</string>
         <string name="C++ command">"%AUTO%"</string>
+        <string name="C command">"%AUTO%"</string>
         <string name="Resource compiler">"%AUTO%"</string>
         <string name="Make command">"%AUTO%"</string>
         <string name="Project makefile">"%AUTO%"</string>
@@ -168,6 +171,7 @@
         <string name="Optimizations">"%AUTO%"</string>
         <string name="Warnings">"%AUTO%"</string>
         <string name="Debug flags">"%AUTO%"</string>
+        <string name="Extra compile flags">"%AUTO%"</string>
         <string name="Libraries">"%AUTO%"</string>
         <string name="Library path">"%AUTO%"</string>
         <string name="Linker flags">"%AUTO%"</string>
@@ -180,6 +184,7 @@
         <string name="PATH variable">"%AUTO%"</string>
         <bool name="Suppress source rules">0</bool>
         <bool name="Enable makefile generation">1</bool>
+        <string name="CFG">""</string>
       </document>
     </document>
   </data>
@@ -314,7 +319,7 @@
               <string name="proxy-AlignV">"Centre"</string>
               <long name="proxy-Stretch factor">0</long>
               <long name="proxy-Border">5</long>
-              <bool name="proxy-wxLEFT">0</bool>
+              <bool name="proxy-wxLEFT">1</bool>
               <bool name="proxy-wxRIGHT">1</bool>
               <bool name="proxy-wxTOP">1</bool>
               <bool name="proxy-wxBOTTOM">1</bool>
@@ -348,8 +353,8 @@
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
                 <string name="proxy-Background colour">""</string>
-                <string name="proxy-Foreground colour">"008040"</string>
-                <string name="proxy-Font">"8, wxSWISS, wxNORMAL, wxBOLD, false, Tahoma"</string>
+                <string name="proxy-Foreground colour">""</string>
+                <string name="proxy-Font">"wxSYS_DEFAULT_GUI_FONT:*1.2,default,default,wxBOLD,false,default"</string>
                 <bool name="proxy-Hidden">0</bool>
                 <bool name="proxy-Enabled">1</bool>
                 <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
@@ -722,61 +727,6 @@
                 </document>
               </document>
               <document>
-                <string name="title">"wxStaticLine: wxID_STATIC"</string>
-                <string name="type">"dialog-control-document"</string>
-                <string name="filename">""</string>
-                <string name="icon-name">"staticline"</string>
-                <long name="is-transient">0</long>
-                <long name="owns-file">1</long>
-                <long name="title-mode">0</long>
-                <long name="locked">0</long>
-                <string name="created">"21/4/2008"</string>
-                <string name="proxy-type">"wbStaticLineProxy"</string>
-                <string name="proxy-Id name">"wxID_STATIC"</string>
-                <long name="proxy-Id value">5105</long>
-                <string name="proxy-Name">""</string>
-                <string name="proxy-Class">"wxStaticLine"</string>
-                <string name="proxy-Base class">"wxStaticLine"</string>
-                <bool name="proxy-External implementation">1</bool>
-                <bool name="proxy-Separate files">0</bool>
-                <string name="proxy-Implementation filename">""</string>
-                <string name="proxy-Header filename">""</string>
-                <string name="proxy-Member variable name">""</string>
-                <string name="proxy-Background colour">""</string>
-                <string name="proxy-Foreground colour">""</string>
-                <string name="proxy-Font">""</string>
-                <bool name="proxy-Hidden">0</bool>
-                <bool name="proxy-Enabled">1</bool>
-                <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
-                <bool name="proxy-wxLI_HORIZONTAL">1</bool>
-                <bool name="proxy-wxLI_VERTICAL">0</bool>
-                <bool name="proxy-wxNO_BORDER">0</bool>
-                <bool name="proxy-wxSIMPLE_BORDER">0</bool>
-                <bool name="proxy-wxDOUBLE_BORDER">0</bool>
-                <bool name="proxy-wxSUNKEN_BORDER">0</bool>
-                <bool name="proxy-wxRAISED_BORDER">0</bool>
-                <bool name="proxy-wxSTATIC_BORDER">0</bool>
-                <bool name="proxy-wxWANTS_CHARS">0</bool>
-                <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
-                <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
-                <string name="proxy-Custom styles">""</string>
-                <long name="proxy-X">-1</long>
-                <long name="proxy-Y">-1</long>
-                <long name="proxy-Width">-1</long>
-                <long name="proxy-Height">-1</long>
-                <string name="proxy-AlignH">"Expand"</string>
-                <string name="proxy-AlignV">"Expand"</string>
-                <long name="proxy-Stretch factor">0</long>
-                <long name="proxy-Border">5</long>
-                <bool name="proxy-wxLEFT">1</bool>
-                <bool name="proxy-wxRIGHT">1</bool>
-                <bool name="proxy-wxTOP">1</bool>
-                <bool name="proxy-wxBOTTOM">1</bool>
-                <bool name="proxy-wxSHAPED">0</bool>
-                <bool name="proxy-wxADJUST_MINSIZE">0</bool>
-                <bool name="proxy-wxFIXED_MINSIZE">0</bool>
-              </document>
-              <document>
                 <string name="title">"wxStaticText: wxID_STATIC"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
@@ -802,8 +752,8 @@
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
                 <string name="proxy-Background colour">""</string>
-                <string name="proxy-Foreground colour">"7D020C"</string>
-                <string name="proxy-Font">"8, wxSWISS, wxNORMAL, wxBOLD, false, Tahoma"</string>
+                <string name="proxy-Foreground colour">""</string>
+                <string name="proxy-Font">"wxSYS_DEFAULT_GUI_FONT:*1.2,default,default,wxBOLD,false,default"</string>
                 <bool name="proxy-Hidden">0</bool>
                 <bool name="proxy-Enabled">1</bool>
                 <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
@@ -982,7 +932,7 @@
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">"m_rbSortBy_X_Position"</string>
-                    <string name="proxy-Label">"Sort Components by &amp;X Position"</string>
+                    <string name="proxy-Label">"Sort components by &amp;X position"</string>
                     <bool name="proxy-Initial value">1</bool>
                     <string name="proxy-Help text">""</string>
                     <string name="proxy-Tooltip text">""</string>
@@ -1135,7 +1085,7 @@
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">"m_rbSortBy_Y_Position"</string>
-                    <string name="proxy-Label">"Sort Components by &amp;Y Position"</string>
+                    <string name="proxy-Label">"Sort components by &amp;Y position"</string>
                     <bool name="proxy-Initial value">0</bool>
                     <string name="proxy-Help text">""</string>
                     <string name="proxy-Tooltip text">""</string>
@@ -1288,7 +1238,7 @@
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">"rbSortByValue"</string>
-                    <string name="proxy-Label">"Sort Components by &amp;Value"</string>
+                    <string name="proxy-Label">"Sort components by &amp;value"</string>
                     <bool name="proxy-Initial value">0</bool>
                     <string name="proxy-Help text">""</string>
                     <string name="proxy-Tooltip text">""</string>
@@ -1458,7 +1408,7 @@
                 <string name="proxy-Data class header filename">""</string>
                 <string name="proxy-Data class manager window">""</string>
                 <string name="proxy-Background colour">""</string>
-                <string name="proxy-Foreground colour">"0000E6"</string>
+                <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
                 <bool name="proxy-Hidden">0</bool>
                 <bool name="proxy-Enabled">1</bool>
@@ -1525,7 +1475,7 @@
                 <string name="proxy-Data class header filename">""</string>
                 <string name="proxy-Data class manager window">""</string>
                 <string name="proxy-Background colour">""</string>
-                <string name="proxy-Foreground colour">"C60000"</string>
+                <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
                 <bool name="proxy-Hidden">0</bool>
                 <bool name="proxy-Enabled">1</bool>

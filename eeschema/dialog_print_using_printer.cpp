@@ -129,12 +129,10 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent
 void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 /************************************************************************/
 {
-	SetFont(*g_DialogFont);
     SetFocus();
 
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &g_PlotLine_Width );
         m_Config->Read( PRINTMODECOLOR_KEY, &s_Print_Black_and_White );
     }
 
@@ -163,7 +161,6 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
         m_Config->Write( PRINTMODECOLOR_KEY, s_Print_Black_and_White );
     }
 

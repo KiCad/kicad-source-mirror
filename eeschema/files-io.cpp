@@ -73,7 +73,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     {
         if( !IsOK( this, _( "Clear Schematic Hierarchy (modified!)?" ) ) )
             return FALSE;
-        if( g_RootSheet->m_AssociatedScreen->m_FileName != g_DefaultSchematicFileName )
+        if( g_RootSheet->m_AssociatedScreen->m_FileName != m_DefaultSchematicFileName )
             SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
     }
 
@@ -121,7 +121,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         screen->m_Commentaire2.Empty();
         screen->m_Commentaire3.Empty();
         screen->m_Commentaire4.Empty();
-        Read_Config( wxEmptyString, TRUE );
+        LoadProjectFile( wxEmptyString, TRUE );
         Zoom_Automatique( TRUE );
         SetSheetNumberAndCount();
         DrawPanel->Refresh();
@@ -132,7 +132,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     msg = _( "Ready\nWorking dir: \n" ) + wxGetCwd();
     PrintMsg( msg );
 
-    Read_Config( wxEmptyString, FALSE );
+    LoadProjectFile( wxEmptyString, FALSE );
 
     // Delete old caches.
     LibraryStruct* nextlib, * lib = g_LibraryList;

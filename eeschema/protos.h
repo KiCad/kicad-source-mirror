@@ -78,7 +78,7 @@ PriorQue *LoadLibraryAux(WinEDA_DrawFrame * frame, LibraryStruct * library,
             FILE *f, int *NumOfParts);
 LibraryStruct * LoadLibraryName(WinEDA_DrawFrame * frame,
                 const wxString & FullLibName, const wxString & LibName);
-void LoadLibraries(WinEDA_DrawFrame * frame);
+void LoadLibraries( WinEDA_SchematicFrame* frame );
 void FreeCmpLibrary(wxWindow * frame, const wxString & LibName);
 const wxChar **GetLibNames();
 
@@ -209,7 +209,6 @@ int CountCmpNumber();
 /***************/
 /* EECONFIG.CPP */
 /***************/
-bool Read_Config( const wxString & CfgFileName, bool ForceRereadConfig );
 bool Read_Hotkey_Config( WinEDA_DrawFrame * frame, bool verbose );
 
 
@@ -387,7 +386,8 @@ int LocateAlias( const wxArrayString & AliasData, const wxString & Name);
 /***************/
 /* OPTIONS.CPP */
 /***************/
-void DisplayOptionFrame(WinEDA_DrawFrame * parent, const wxPoint & framepos);
+void DisplayOptionFrame( WinEDA_SchematicFrame* parent,
+                         const wxPoint& framepos );
 
 /****************/
 /* CONTROLE.CPP */

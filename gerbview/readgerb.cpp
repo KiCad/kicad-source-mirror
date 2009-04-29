@@ -204,8 +204,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
 
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or command if xx = 0..9*/
                 D_commande = gerber->ReturnDCodeNumber( text );
-                gerber->Execute_DCODE_Command( this, DC,
-                                                     text, D_commande );
+                gerber->Execute_DCODE_Command( this, DC, text, D_commande );
                 break;
 
             case 'X':
@@ -214,7 +213,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 if( *text == '*' )      // command like X12550Y19250*
                 {
                     gerber->Execute_DCODE_Command( this, DC, text,
-                                                         gerber->m_Last_Pen_Command );
+                                                   gerber->m_Last_Pen_Command );
                 }
                 break;
 

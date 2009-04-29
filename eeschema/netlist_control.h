@@ -51,7 +51,8 @@ public:
     wxBoxSizer*       m_LowBoxSizer;
 
     EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
-                      int id_NetType, int idCheckBox, int idCreateFile );
+                      int id_NetType, int idCheckBox, int idCreateFile,
+                      bool selected );
     ~EDA_NoteBookPage() { };
 };
 

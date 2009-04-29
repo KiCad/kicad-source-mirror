@@ -131,6 +131,7 @@ public:
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void      SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
+    void      SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List );
 
     /** Function ReadCurrentSetupValues()
      * Raed the current setup values previously saved, from m_EDA_Config
@@ -138,6 +139,7 @@ public:
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void      ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
+    void      ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List );
 
     bool      ReadProjectConfig( const wxString& local_config_filename,
                                  const wxString& GroupName,

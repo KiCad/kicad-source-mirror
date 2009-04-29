@@ -57,7 +57,6 @@ WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* parent, const wxString& title,
     m_MoveFct  = movefct;
     m_WinMsg   = NULL;
     SetReturnCode( -1 );
-    SetFont( *g_DialogFont );
 
     if( itemlist )
         for( names = m_ItemList, ii = 0; *names != NULL; names++ )
@@ -114,9 +113,10 @@ WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* parent, const wxString& title,
 
     if( m_MoveFct )
     {
-        size.x   = -1; size.y = 60;
-        m_WinMsg = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition, size,
-                                   wxTE_READONLY | wxTE_MULTILINE );
+        size.x   = -1;
+        size.y   = 60;
+        m_WinMsg = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+                                   size, wxTE_READONLY | wxTE_MULTILINE );
 
         GeneralBoxSizer->Add( m_WinMsg, 0, wxGROW | wxALL, 5 );
     }

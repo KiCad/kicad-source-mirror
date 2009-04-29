@@ -62,23 +62,19 @@ class wxStdDialogButtonSizer;
 #define ID_TEXTCTRL_USER_PAGE_SIZE_X 10002
 #define ID_TEXTCTRL_USER_PAGE_SIZE_Y 10003
 #define ID_TEXTCTRL_REVISION 10004
-#define ID_TEXTCTRL_TITLE 10005
-#define ID_TEXTCTRL_COMPANY 10006
-#define ID_TEXTCTRL_COMMENT1 10007
-#define ID_TEXTCTRL_COMMENT2 10008
-#define ID_TEXTCTRL_COMMENT3 10009
-#define ID_TEXTCTRL_COMMENT4 10010
-
-#ifdef EESCHEMA
 #define ID_CHECKBOX_REVISION 10011
+#define ID_TEXTCTRL_TITLE 10005
 #define ID_CHECKBOX_TITLE 10012
+#define ID_TEXTCTRL_COMPANY 10006
 #define ID_CHECKBOX_COMPANY 10013
+#define ID_TEXTCTRL_COMMENT1 10007
 #define ID_CHECKBOX_COMMENT1 10014
+#define ID_TEXTCTRL_COMMENT2 10008
 #define ID_CHECKBOX_COMMENT2 10015
+#define ID_TEXTCTRL_COMMENT3 10009
 #define ID_CHECKBOX_COMMENT3 10016
+#define ID_TEXTCTRL_COMMENT4 10010
 #define ID_CHECKBOX_COMMENT4 10017
-#endif
-
 #define ID_STATICLINE 10018
 #define SYMBOL_WINEDA_SETPAGEFRAME_STYLE wxDEFAULT_DIALOG_STYLE|MAYBE_RESIZE_BORDER
 #define SYMBOL_WINEDA_SETPAGEFRAME_TITLE _("Page Settings")
@@ -124,6 +120,7 @@ public:
     void CreateControls();
 
 ////@begin WinEDA_SetPageFrame event handler declarations
+
     /// wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
     void OnCloseWindow( wxCloseEvent& event );
 
@@ -136,6 +133,7 @@ public:
 ////@end WinEDA_SetPageFrame event handler declarations
 
 ////@begin WinEDA_SetPageFrame member function declarations
+
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
@@ -170,33 +168,29 @@ public:
     wxStaticText* m_TextSheetNumber;
     wxStaticBoxSizer* RevisionSizer;
     wxTextCtrl* m_TextRevision;
+    wxCheckBox* m_RevisionExport;
     wxStaticBoxSizer* TitleSizer;
     wxTextCtrl* m_TextTitle;
+    wxCheckBox* m_TitleExport;
     wxStaticBoxSizer* CompanySizer;
     wxTextCtrl* m_TextCompany;
+    wxCheckBox* m_CompanyExport;
     wxStaticBoxSizer* Comment1Sizer;
     wxTextCtrl* m_TextComment1;
+    wxCheckBox* m_Comment1Export;
     wxStaticBoxSizer* Comment2Sizer;
     wxTextCtrl* m_TextComment2;
+    wxCheckBox* m_Comment2Export;
     wxStaticBoxSizer* Comment3Sizer;
     wxTextCtrl* m_TextComment3;
+    wxCheckBox* m_Comment3Export;
     wxStaticBoxSizer* Comment4Sizer;
     wxTextCtrl* m_TextComment4;
+    wxCheckBox* m_Comment4Export;
     wxStaticLine* Line;
     wxStdDialogButtonSizer* StdDialogButtonSizer;
     wxButton* Button_OK;
     wxButton* Button_Cancel;
-
-#ifdef EESCHEMA
-    wxCheckBox* m_RevisionExport;
-    wxCheckBox* m_TitleExport;
-    wxCheckBox* m_CompanyExport;
-    wxCheckBox* m_Comment1Export;
-    wxCheckBox* m_Comment2Export;
-    wxCheckBox* m_Comment3Export;
-    wxCheckBox* m_Comment4Export;
-#endif
-
 ////@end WinEDA_SetPageFrame member variables
 
     WinEDA_DrawFrame *m_ParentDrawFrame;

@@ -104,14 +104,14 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
 /******************************************/
 /* Function LoadLibraries
  * Clear all alredy loaded librries and load all librairies
- * given in g_LibName_List
+ * given in frame->m_ComponentLibFiles
  */
 /******************************************/
-void LoadLibraries (WinEDA_DrawFrame* frame)
+void LoadLibraries( WinEDA_SchematicFrame* frame )
 {
     wxFileName fn;
     wxString msg, tmp;
-    unsigned ii, iimax = g_LibName_List.GetCount();
+    unsigned ii, iimax = frame->m_ComponentLibFiles.GetCount();
 
     frame->PrintMsg( _( "Loading schematic component libraries" ) );
 
@@ -124,15 +124,15 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
         if( lib->m_IsLibCache )
             continue;
 
-        // is this library in "wanted list" g_LibName_List ?
-        if( g_LibName_List.Index( lib->m_Name ) == wxNOT_FOUND )
+        // is this library in "wanted list" frame->m_ComponentLibFiles ?
+        if( frame->m_ComponentLibFiles.Index( lib->m_Name ) == wxNOT_FOUND )
             FreeCmpLibrary( frame, lib->m_Name );
     }
 
     // Load missing libraries (if any)
     for( ii = 0; ii < iimax; ii++ )
     {
-        fn = g_LibName_List[ii];
+        fn = frame->m_ComponentLibFiles[ii];
         fn.SetExt( CompLibFileExtension );
 
         if( !fn.IsOk() )
@@ -182,11 +182,11 @@ void LoadLibraries (WinEDA_DrawFrame* frame)
         (LibraryStruct**) MyZMalloc( sizeof(LibraryStruct*) * (NumOfLibs + 2) );
 
     int             jj = 0;
-    for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
+    for( ii = 0; ii < frame->m_ComponentLibFiles.GetCount(); ii++ )
     {
         if( jj >= NumOfLibs )
             break;
-        fn = g_LibName_List[ii];
+        fn = frame->m_ComponentLibFiles[ii];
         lib = FindLibrary( fn.GetName() );
         if( lib )
         {

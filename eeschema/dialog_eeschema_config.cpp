@@ -87,12 +87,11 @@ DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame* parent )
 void DIALOG_EESCHEMA_CONFIG::Init()
 /***********************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();
 
     m_LibListChanged = false;
     m_LibPathChanged = false;
-    m_UserLibDirBufferImg = g_UserLibDirBuffer;         // Save the original lib path
+    m_UserLibDirBufferImg = m_Parent->m_UserLibraryPath;         // Save the original lib path
 
     // Display current files extension (info)
     wxString msg = m_InfoCmpFileExt->GetLabel() + g_NetCmpExtBuffer;
@@ -127,11 +126,11 @@ void DIALOG_EESCHEMA_CONFIG::Init()
 
     m_NetFormatBox->InsertItems( NetlistNameItems, 0 );
 
-    if( g_NetFormat > (int) m_NetFormatBox->GetCount() )
-        g_NetFormat = NET_TYPE_PCBNEW;
-    m_NetFormatBox->SetSelection( g_NetFormat - NET_TYPE_PCBNEW );
+    if( m_Parent->m_NetlistFormat > (int) m_NetFormatBox->GetCount() )
+        m_Parent->m_NetlistFormat = NET_TYPE_PCBNEW;
+    m_NetFormatBox->SetSelection( m_Parent->m_NetlistFormat - NET_TYPE_PCBNEW );
 
-    m_ListLibr->InsertItems( g_LibName_List, 0 );
+    m_ListLibr->InsertItems( m_Parent->m_ComponentLibFiles, 0 );
 
     // Load user libs paths:
     wxStringTokenizer Token( m_UserLibDirBufferImg, wxT( ";\n\r" ) );
@@ -164,7 +163,7 @@ void DIALOG_EESCHEMA_CONFIG::OnCancelClick( wxCommandEvent& event )
     {
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii ++ )
             wxGetApp().RemoveLibraryPath( m_listUserPaths->GetString(ii)) ;
-        wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1);
+        wxGetApp().InsertLibraryPath( m_Parent->m_UserLibraryPath, 1);
     }
     EndModal( -1 );
 }
@@ -175,17 +174,17 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
 /**************************************************************/
 {
     // Set new netlist format
-    g_NetFormat = m_NetFormatBox->GetSelection() + NET_TYPE_PCBNEW;
+    m_Parent->m_NetlistFormat = m_NetFormatBox->GetSelection() + NET_TYPE_PCBNEW;
 
     // Recreate the user lib path
     if ( m_LibPathChanged )
     {
-        g_UserLibDirBuffer.Empty();
+        m_Parent->m_UserLibraryPath.Empty();
         for ( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii ++ )
         {
             if ( ii > 0 )
-                g_UserLibDirBuffer << wxT(";");
-            g_UserLibDirBuffer << m_listUserPaths->GetString(ii);
+                m_Parent->m_UserLibraryPath << wxT(";");
+            m_Parent->m_UserLibraryPath << m_listUserPaths->GetString(ii);
         }
     }
 
@@ -194,9 +193,9 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
-        g_LibName_List.Clear();
+        m_Parent->m_ComponentLibFiles.Clear();
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii ++ )
-            g_LibName_List.Add(m_ListLibr->GetString(ii) );
+            m_Parent->m_ComponentLibFiles.Add(m_ListLibr->GetString(ii) );
 
         // take new list in account
         LoadLibraries( m_Parent );
@@ -220,7 +219,7 @@ void DIALOG_EESCHEMA_CONFIG::OnCloseWindow( wxCloseEvent& event )
 void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 /*********************************************************************/
 /* Remove a library to the library list.
- * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change can be cancelled
  */
 {
     int ii;
@@ -241,7 +240,8 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 /* Insert or add a library to the library list:
  *   The new library is put in list before (insert button) the selection,
  *   or added (add button) to end of list
- * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change
+ * can be cancelled
  */
 {
     int        ii;
@@ -320,7 +320,7 @@ void DIALOG_EESCHEMA_CONFIG::OnSaveCfgClick( wxCommandEvent& event )
 /*******************************************************************/
 {
     OnOkClick( event );
-    m_Parent->Save_Config( this );
+    m_Parent->SaveProjectFile( this );
 }
 
 

@@ -83,7 +83,6 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
     wxString  title;
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
 
 	/* Shows the config filename currently used : */
     title = _( "from " ) + wxGetApp().m_CurrentOptionFile;
@@ -105,11 +104,9 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
     RightBoxSizer->AddSpacer( 20 );
 
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     wxSize size;

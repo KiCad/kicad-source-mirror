@@ -130,13 +130,9 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_buttonOK = new wxButton( this, wxID_OK, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetDefault(); 
-	m_buttonOK->SetForegroundColour( wxColour( 170, 0, 0 ) );
-	
 	bRightSizer->Add( m_buttonOK, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonCANCEL->SetForegroundColour( wxColour( 11, 0, 202 ) );
-	
 	bRightSizer->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	bMainSizer->Add( bRightSizer, 8, wxALL|wxEXPAND, 5 );

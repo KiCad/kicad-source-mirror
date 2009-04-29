@@ -24,6 +24,8 @@ enum paramcfg_id    /* type du parametre dans la structure ParamConfig */
 };
 
 #define MAX_COLOR  0x8001F
+#define IS_VALID_COLOR( c )  ( ( c >= 0 ) && ( c <= 0x8001F ) )
+
 #define INT_MINVAL 0x80000000
 #define INT_MAXVAL 0x7FFFFFFF
 

@@ -21,11 +21,8 @@
 
 // Global variables
 
-wxString g_DefaultSchematicFileName( wxT( "noname.sch" ) );
-wxArrayString  g_LibName_List;   // library list (short filenames) to load
 LibraryStruct* g_LibraryList;    // All part libs are saved here.
 
-int       g_NetFormat;      /* Numero de reference du type de netliste */
 int       g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
                                  * les numeros (netlist PSPICE seulement) */
 SCH_ITEM* g_ItemToRepeat; /* pointeur sur la derniere structure
@@ -46,7 +43,6 @@ bool      g_LastSearchIsMarker; /* True if last seach is a marker serach
 SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
-int       g_ShowAllPins;
 int       g_HVLines = 1;   // Bool: force H or V directions (Wires, Bus ..)
 
 int       g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
@@ -158,8 +154,6 @@ bool WinEDA_App::OnInit()
     /* init EESCHEMA */
     SeedLayers();
     GetSettings();
-    extern PARAM_CFG_BASE* ParamCfgList[];
-    wxGetApp().ReadCurrentSetupValues( ParamCfgList );
     Read_Hotkey_Config( frame, false );   /* Must be called before creating
                                            * the main frame  in order to
                                            * display the real hotkeys in menus
@@ -195,7 +189,7 @@ bool WinEDA_App::OnInit()
     else
     {
         // Read a default config file if no file to load.
-        Read_Config( wxEmptyString, TRUE );
+        frame->LoadProjectFile( wxEmptyString, TRUE );
         if( frame->DrawPanel )
             frame->DrawPanel->Refresh( TRUE );
     }

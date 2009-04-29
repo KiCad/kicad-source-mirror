@@ -85,9 +85,6 @@ enum pseudokeys {
 class LibNameList;
 
 
-//#define MAX_COLOR  0x8001F
-
-
 /***********************************/
 /* Classe pour affichage de textes */
 /***********************************/

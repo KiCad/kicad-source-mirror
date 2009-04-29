@@ -50,13 +50,13 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
                    bool use_netnames )
 /*******************************************************************************/
 
-/* Create the netlist file ( Format is given by g_NetFormat )
+/* Create the netlist file ( Format is given by frame->m_NetlistFormat )
  *  bool use_netnames is used only for Spice netlist
  */
 {
     FILE*        f = NULL;
 
-    if( g_NetFormat < NET_TYPE_CUSTOM1 )
+    if( frame->m_NetlistFormat < NET_TYPE_CUSTOM1 )
     {
         if( ( f = wxFopen( FileNameNL, wxT( "wt" ) ) ) == NULL )
         {
@@ -68,7 +68,7 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
 
     wxBusyCursor Busy;
 
-    switch( g_NetFormat )
+    switch( frame->m_NetlistFormat )
     {
     case NET_TYPE_PCBNEW:
         WriteNetListPCBNEW( frame, f, TRUE );

@@ -86,7 +86,6 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
     m_AuxTool = show_extra_tool;
     m_GetExtraFunction = FALSE;
 
-    SetFont( *g_DialogFont );
     s_ItemName.Empty();
     m_Text = &s_ItemName;
 
@@ -122,7 +121,6 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
                        5 );
 
     Button = new wxButton( this, ID_ACCEPT_NAME, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     Button->SetDefault();
     RightBoxSizer->Add( Button,
                         0,
@@ -130,22 +128,18 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
                         5 );
 
     Button = new wxButton( this, ID_ACCEPT_KEYWORD, _( "Search KeyWord" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     Button = new wxButton( this, ID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     Button = new wxButton( this, ID_LIST_ALL, _( "List All" ) );
-    Button->SetForegroundColour( wxColor( 0, 80, 0 ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
 #ifndef __WXMAC__
     if( m_AuxTool )     /* The selection can be done by an extra function */
     {
         Button = new wxButton( this, ID_EXTRA_TOOL, _( "By Lib Browser" ) );
-        Button->SetForegroundColour( wxColor( 0, 0, 0 ) ); // Listbox Color
         RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
 #endif

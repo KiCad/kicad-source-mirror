@@ -298,9 +298,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
-    // Font selection and setup
-    AddFontSelectionMenu( configmenu );
-
     wxGetApp().AddMenuLanguageList( configmenu );
 
     configmenu->AppendSeparator();

@@ -78,7 +78,7 @@ class WinEDA_SetOptionsFrame: public wxDialog
 public:
     /// Constructors
     WinEDA_SetOptionsFrame( );
-    WinEDA_SetOptionsFrame( WinEDA_DrawFrame* parent, wxWindowID id = SYMBOL_WINEDA_SETOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_SETOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_SETOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_SETOPTIONSFRAME_SIZE, long style = SYMBOL_WINEDA_SETOPTIONSFRAME_STYLE );
+    WinEDA_SetOptionsFrame( WinEDA_SchematicFrame* parent, wxWindowID id = SYMBOL_WINEDA_SETOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_SETOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_SETOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_SETOPTIONSFRAME_SIZE, long style = SYMBOL_WINEDA_SETOPTIONSFRAME_STYLE );
 
     /// Creation
     bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WINEDA_SETOPTIONSFRAME_IDNAME, const wxString& caption = SYMBOL_WINEDA_SETOPTIONSFRAME_TITLE, const wxPoint& pos = SYMBOL_WINEDA_SETOPTIONSFRAME_POSITION, const wxSize& size = SYMBOL_WINEDA_SETOPTIONSFRAME_SIZE, long style = SYMBOL_WINEDA_SETOPTIONSFRAME_STYLE );
@@ -110,7 +110,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
-	WinEDA_DrawFrame * m_Parent;
+	WinEDA_SchematicFrame * m_Parent;
     
 ////@begin WinEDA_SetOptionsFrame member variables
     wxStaticBoxSizer* m_DrawOptionsSizer;

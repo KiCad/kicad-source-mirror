@@ -84,13 +84,11 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent )
 void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 /*************************************************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();     // Make ESC key working
 
     m_ImageXSize_mm = 270;
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &g_PlotLine_Width );
         m_Config->Read( PLOTSVGMODECOLOR_KEY, &s_PlotBlackAndWhite );
     }
 
@@ -294,7 +292,6 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
     if( m_Config )
     {
         s_PlotBlackAndWhite = m_ModeColorOption->GetSelection();
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_PlotLine_Width );
         m_Config->Write( PLOTSVGMODECOLOR_KEY, s_PlotBlackAndWhite );
     }
     EndModal( 0 );

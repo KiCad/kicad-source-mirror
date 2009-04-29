@@ -95,7 +95,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelAlias()
 {
     wxButton*   Button;
 
-    m_PanelAlias->SetFont( *g_DialogFont );
     wxBoxSizer* PanelAliasBoxSizer = new    wxBoxSizer( wxHORIZONTAL );
 
     m_PanelAlias->SetSizer( PanelAliasBoxSizer );
@@ -105,7 +104,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelAlias()
 
     wxStaticText* Msg = new                 wxStaticText( m_PanelAlias, -1, _( "Alias" ) );
 
-    Msg->SetForegroundColour( wxColour( 200, 0, 0 ) );
     LeftBoxSizer->Add( Msg, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_PartAliasList = new                   wxListBox( m_PanelAlias,
@@ -122,19 +120,16 @@ void WinEDA_PartPropertiesFrame::BuildPanelAlias()
 
     Button = new                    wxButton( m_PanelAlias, ID_ADD_ALIAS, _( "Add" ) );
 
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     m_ButtonDeleteOneAlias = new    wxButton( m_PanelAlias, ID_DELETE_ONE_ALIAS,
                                              _( "Delete" ) );
 
-    m_ButtonDeleteOneAlias->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( m_ButtonDeleteOneAlias, 0, wxGROW | wxALL, 5 );
 
     m_ButtonDeleteAllAlias = new wxButton( m_PanelAlias, ID_DELETE_ALL_ALIAS,
                                           _( "Delete All" ) );
 
-    m_ButtonDeleteAllAlias->SetForegroundColour( *wxRED );
     if( !CurrentAliasName.IsEmpty() )
         m_ButtonDeleteAllAlias->Enable( FALSE );
     RightBoxSizer->Add( m_ButtonDeleteAllAlias, 0, wxGROW | wxALL, 5 );
@@ -170,8 +165,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
 
     m_NoteBook->AddPage( m_PanelFootprintFilter, _( "Footprint Filter" ) );
 
-    m_PanelFootprintFilter->SetFont( *g_DialogFont );
-
     wxBoxSizer* PanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
     m_PanelFootprintFilter->SetSizer( PanelFpFilterBoxSizer );
@@ -182,7 +175,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
     wxStaticText* Msg = new                 wxStaticText( m_PanelFootprintFilter, -1, _(
                                                              "Footprints" ) );
 
-    Msg->SetForegroundColour( wxColour( 200, 0, 0 ) );
     LeftBoxSizer->Add( Msg, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FootprintFilterListBox = new          wxListBox( m_PanelFootprintFilter,
@@ -201,7 +193,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
                                                      ID_ADD_FOOTPRINT_FILTER, _(
                                                          "Add" ) );
 
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     m_ButtonDeleteOneFootprintFilter = new  wxButton( m_PanelFootprintFilter,
@@ -209,7 +200,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
                                                      _(
                                                          "Delete" ) );
 
-    m_ButtonDeleteOneFootprintFilter->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( m_ButtonDeleteOneFootprintFilter, 0, wxGROW | wxALL, 5 );
 
     m_ButtonDeleteAllFootprintFilter = new wxButton( m_PanelFootprintFilter,
@@ -217,7 +207,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
                                                     _(
                                                         "Delete All" ) );
 
-    m_ButtonDeleteAllFootprintFilter->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( m_ButtonDeleteAllFootprintFilter, 0, wxGROW | wxALL, 5 );
 
 
@@ -286,8 +275,6 @@ void WinEDA_PartPropertiesFrame::BuildPanelBasic()
 /* create the basic panel for component properties editing
  */
 {
-    m_PanelBasic->SetFont( *g_DialogFont );
-
     AsConvertButt = new wxCheckBox( m_PanelBasic, -1, _( "As Convert" ) );
 
     if( g_AsDeMorgan )

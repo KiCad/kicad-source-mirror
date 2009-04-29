@@ -74,13 +74,9 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	bSizer4->Add( 8, 8, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetForegroundColour( wxColour( 234, 0, 0 ) );
-	
 	bSizer4->Add( m_buttonOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonCANCEL->SetForegroundColour( wxColour( 0, 0, 187 ) );
-	
 	bSizer4->Add( m_buttonCANCEL, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	bMainSizer->Add( bSizer4, 1, 0, 5 );

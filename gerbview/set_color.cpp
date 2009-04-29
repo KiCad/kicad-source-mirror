@@ -124,8 +124,6 @@ void WinEDA_SetColorsFrame::CreateControls()
     wxSize CorrectSize; // Used while specifying sizes of buttons and spacers
     int ButtonHeight;   // Also used for the same reason
 
-    SetFont( *g_DialogFont );
-
     OuterBoxSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(OuterBoxSizer);
 
@@ -268,7 +266,6 @@ void WinEDA_SetColorsFrame::CreateControls()
     if (WinEDA_SetColorsFrame::ShowToolTips())
         Button->SetToolTip( _("Switch on all of the Gerber layers") );
     Button->SetMinSize( wxSize( CorrectSize.x, ButtonHeight ) );
-    Button->SetForegroundColour( wxColor( 0, 100, 0 ) );
     FlexColumnBoxSizer->Add(Button, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5);
 
     // Now do everything required for providing the second button.
@@ -277,7 +274,6 @@ void WinEDA_SetColorsFrame::CreateControls()
     if (WinEDA_SetColorsFrame::ShowToolTips())
         Button->SetToolTip( _("Switch off all of the Gerber layers") );
     Button->SetMinSize( wxSize( CorrectSize.x, ButtonHeight ) );
-    Button->SetForegroundColour( wxColor( 100, 0, 0 ) );
     FlexColumnBoxSizer->Add(Button, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5);
 
     // As each column contains seventeen rows, and only six rows of the third column have been
@@ -313,11 +309,9 @@ void WinEDA_SetColorsFrame::CreateControls()
     OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxGROW|wxALL, 10);
 
     Button = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-    Button->SetForegroundColour( *wxRED );
     StdDialogButtonSizer->AddButton(Button);
 
     Button = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    Button->SetForegroundColour( *wxBLUE );
     StdDialogButtonSizer->AddButton(Button);
 
     Button = new wxButton( this, wxID_APPLY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );

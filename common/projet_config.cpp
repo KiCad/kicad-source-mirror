@@ -246,7 +246,6 @@ void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
  */
 {
     PARAM_CFG_BASE* pt_cfg;
-    wxString        msg;
 
     if( m_EDA_Config == NULL )
         return;
@@ -254,6 +253,32 @@ void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
     for( ; *aList != NULL; aList++ )
     {
         pt_cfg = *aList;
+        if( pt_cfg->m_Setup == false )
+            continue;
+
+        if ( pt_cfg->m_Type == PARAM_COMMAND_ERASE )    // Erase all data
+        {
+            if( pt_cfg->m_Ident )
+                m_EDA_Config->DeleteGroup( pt_cfg->m_Ident );
+        }
+        else
+            pt_cfg->SaveParam( m_EDA_Config );
+    }
+}
+
+
+void WinEDA_App::SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List )
+{
+    size_t          i;
+    PARAM_CFG_BASE* pt_cfg;
+
+    if( m_EDA_Config == NULL )
+        return;
+
+    for( i = 0; i < List.GetCount(); i++ )
+    {
+        pt_cfg = &List[i];
+
         if( pt_cfg->m_Setup == false )
             continue;
 
@@ -402,6 +427,23 @@ void WinEDA_App::ReadCurrentSetupValues( PARAM_CFG_BASE** aList )
     for( ; *aList != NULL; aList++ )
     {
         pt_cfg = *aList;
+        if( pt_cfg->m_Setup == false )
+            continue;
+
+        pt_cfg->ReadParam( m_EDA_Config );
+    }
+}
+
+
+void WinEDA_App::ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List )
+{
+    size_t          i;
+    PARAM_CFG_BASE* pt_cfg;
+
+    for( i = 0; i < List.GetCount(); i++ )
+    {
+        pt_cfg = &List[i];
+
         if( pt_cfg->m_Setup == false )
             continue;
 

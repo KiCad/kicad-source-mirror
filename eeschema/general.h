@@ -94,10 +94,8 @@ typedef enum {
 
 
 /* variables generales */
-extern wxArrayString  g_LibName_List;   // library list (short filenames) to load
 extern LibraryStruct* g_LibraryList;    // All part libs are saved here.
 
-extern int            g_NetFormat;      /* Numero de reference du type de netliste */
 extern int            g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
                                           * les numeros (netlist PSPICE seulement) */
 extern SCH_ITEM*      g_ItemToRepeat; /* pointeur sur la derniere structure
@@ -207,9 +205,5 @@ extern int g_PlotLine_Width;            /* Minimum line (in EESCHEMA units) thic
 extern int g_ItemSelectetColor;
 // Color to draw items flagged invisible, in libedit (they are insisible in eeschema
 extern int g_InvisibleItemColor;
-
-/* Config keys */
-#define MINI_DRAW_LINE_WIDTH_KEY   wxT( "MinimunDrawLineWidth" )
-#define OPTKEY_PLOT_LINEWIDTH_VALUE wxT( "PlotLineWidth" )
 
 #endif   // _GENERAL_H_

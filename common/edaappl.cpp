@@ -697,6 +697,7 @@ void WinEDA_App::SaveSettings()
     m_EDA_Config->Write( wxT( "FixedFontSize" ), g_FixedFontPointSize );
     m_EDA_Config->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
     m_EDA_Config->Write( wxT( "WorkingDir" ), wxGetCwd() );
+    m_EDA_Config->Write( wxT( "BgColor" ), g_DrawBgColor );
 #endif // wxCHECK_VERSION
 
     /* Save the file history list */

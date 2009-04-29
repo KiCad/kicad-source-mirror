@@ -158,7 +158,6 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
  */
 {
     m_Parent = parent;
-    SetFont( *g_DialogFont );
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( MainBoxSizer );
@@ -170,11 +169,9 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxButton* Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     /* Display / not display polar coordinates: */
@@ -289,7 +286,6 @@ WinEDA_LookFrame::WinEDA_LookFrame( WinEDA_BasePcbFrame* parent,
 /*******************************************************************************/
 {
     m_Parent = parent;
-    SetFont( *g_DialogFont );
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( MainBoxSizer );
@@ -301,11 +297,9 @@ WinEDA_LookFrame::WinEDA_LookFrame( WinEDA_BasePcbFrame* parent,
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxButton* Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     // Show Option Draw Tracks

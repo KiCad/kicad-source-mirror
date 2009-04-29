@@ -91,9 +91,6 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                             _( " Select how items are displayed" ),
                             display_options_xpm );
 
-    // Font selection and setup
-    AddFontSelectionMenu( configmenu );
-
     wxGetApp().AddMenuLanguageList( configmenu );
 
     configmenu->AppendSeparator();
@@ -242,7 +239,8 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          -1, -1, (wxObject*) NULL,
                          msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "Redraw view" ), s_Gerbview_Hokeys_Descr,
+                         HK_ZOOM_REDRAW );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxBitmap( zoom_redraw_xpm ),
                          wxNullBitmap,
                          FALSE,
@@ -271,8 +269,10 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
         choices.Add( msg );
     }
 
-    m_SelLayerBox = new WinEDAChoiceBox( m_HToolBar, ID_TOOLBARH_PCB_SELECT_LAYER,
-                                         wxDefaultPosition, wxSize( 150, -1 ), choices );
+    m_SelLayerBox = new WinEDAChoiceBox( m_HToolBar,
+                                         ID_TOOLBARH_PCB_SELECT_LAYER,
+                                         wxDefaultPosition, wxSize( 150, -1 ),
+                                         choices );
     m_SelLayerBox->SetSelection( GetScreen()->m_Active_Layer );
     m_HToolBar->AddControl( m_SelLayerBox );
 
@@ -286,8 +286,10 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
         choices.Add( msg );
     }
 
-    m_SelLayerTool = new WinEDAChoiceBox( m_HToolBar, ID_TOOLBARH_GERBER_SELECT_TOOL,
-                                          wxDefaultPosition, wxSize( 150, -1 ), choices );
+    m_SelLayerTool = new WinEDAChoiceBox( m_HToolBar,
+                                          ID_TOOLBARH_GERBER_SELECT_TOOL,
+                                          wxDefaultPosition, wxSize( 150, -1 ),
+                                          choices );
     m_HToolBar->AddControl( m_SelLayerTool );
 
 
@@ -368,7 +370,8 @@ create or update the left vertical toolbar (option toolbar
         return;
 
     // creation du tool bar options
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
+    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
+                                           ID_OPT_TOOLBAR, FALSE );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxBitmap( grid_xpm ),
                                wxNullBitmap,
@@ -376,7 +379,8 @@ create or update the left vertical toolbar (option toolbar
                                -1, -1, (wxObject*) NULL,
                                _( "Display Grid OFF" ) );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxBitmap( polar_coord_xpm ),
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                               wxBitmap( polar_coord_xpm ),
                                wxNullBitmap,
                                TRUE,
                                -1, -1, (wxObject*) NULL,
@@ -390,7 +394,8 @@ create or update the left vertical toolbar (option toolbar
                                wxBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxBitmap( cursor_shape_xpm ),
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR,
+                               wxBitmap( cursor_shape_xpm ),
                                wxNullBitmap,
                                TRUE,
                                -1, -1, (wxObject*) NULL,

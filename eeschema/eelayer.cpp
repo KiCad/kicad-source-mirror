@@ -121,8 +121,6 @@ void WinEDA_SetColorsFrame::CreateControls()
 {
     int lyr, grp, butt_ID, buttcolor;
 
-    SetFont( *g_DialogFont );
-
     OuterBoxSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(OuterBoxSizer);
 
@@ -237,11 +235,9 @@ void WinEDA_SetColorsFrame::CreateControls()
     OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxGROW|wxALL, 10);
 
     Button = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-    Button->SetForegroundColour( *wxRED );
     StdDialogButtonSizer->AddButton(Button);
 
     Button = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    Button->SetForegroundColour( *wxBLUE );
     StdDialogButtonSizer->AddButton(Button);
     Button->SetFocus();
 

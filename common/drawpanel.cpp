@@ -222,7 +222,16 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
  * @param  ScreenPos = absolute position in pixels
  */
 {
+#ifdef WX_ZOOM
+    wxCoord x, y;
+    wxClientDC DC( this );
+    PrepareGraphicContext( &DC );
+    x = DC.DeviceToLogicalX( ScreenPos.x );
+    y = DC.DeviceToLogicalY( ScreenPos.y );
+    return wxPoint( x, y );
+#else
     return GetScreen()->CursorRealPosition( ScreenPos );
+#endif
 }
 
 
@@ -323,17 +332,23 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
 }
 
 
-/********************************************************/
-wxPoint WinEDA_DrawPanel::CursorScreenPosition()
-/********************************************************/
-
 /** Function CursorScreenPosition
  * @return the cursor current position in pixels in the screen draw area
  */
+wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 {
+#ifdef WX_ZOOM
+    wxCoord x, y;
+    wxClientDC DC( this );
+    PrepareGraphicContext( &DC );
+    x = DC.LogicalToDeviceX( GetScreen()->m_Curseur.x );
+    y = DC.LogicalToDeviceY( GetScreen()->m_Curseur.y );
+    return wxPoint( x, y );
+#else
     wxPoint pos = GetScreen()->m_Curseur - GetScreen()->m_DrawOrg;
     GetScreen()->Scale( pos );
     return pos;
+#endif
 }
 
 
@@ -352,8 +367,16 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
     realpos = CalcUnscrolledPosition( wxPoint( size.x, size.y ) );
 
     GetScreen()->Unscale( realpos );
+#ifdef WX_ZOOM
+    wxCoord x, y;
+    wxClientDC DC( this );
+    PrepareGraphicContext( &DC );
+    x = DC.DeviceToLogicalX( realpos.x );
+    y = DC.DeviceToLogicalY( realpos.y );
+    return wxPoint( x, y );
+#else
     realpos += GetScreen()->m_DrawOrg;
-
+#endif
     return realpos;
 }
 
@@ -648,6 +671,10 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
         wxDCClipper dcclip( paintDC, PaintClipBox );
 
         ReDraw( &paintDC, true );
+
+#ifdef WX_ZOOM
+        paintDC.SetUserScale( 1.0, 1.0 );
+#endif
     }
 
     m_ClipBox = tmp;
@@ -1284,7 +1311,11 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     }
 
     /* Some key commands use the current mouse position: refresh it */
+#ifdef WX_ZOOM
+    pos = CalcUnscrolledPosition( wxGetMousePosition() );
+#else
     pos = CalcUnscrolledPosition( wxGetMousePosition() - GetScreenPosition() );
+#endif
 
     /* Compute absolute mouse position in pixel units (i.e. considering the
        current scroll) : */
