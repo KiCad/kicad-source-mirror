@@ -28,7 +28,6 @@
 #include "trackball.h"
 
 /* Tool and button Bitmaps */
-#define XPM_3D_MAIN
 #include "bitmaps.h"
 
 enum onrclick_id {
@@ -63,10 +62,8 @@ EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
 END_EVENT_TABLE()
 
 /*************************************************************************/
-Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, const wxWindowID id,
-                                int* gl_attrib ) :
-    wxGLCanvas( parent, id,
-                wxPoint( -1, -1 ), wxSize( -1, -1 ), wxFULL_REPAINT_ON_RESIZE )
+Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
+    wxGLCanvas( parent, -1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
 /*************************************************************************/
 {
     m_init   = FALSE;
@@ -91,7 +88,6 @@ void Pcb3D_GLCanvas::ClearLists()
 {
     if( m_gllist > 0 )
         glDeleteLists( m_gllist, 1 );
-//    m_init   = FALSE;
     m_gllist = 0;
 }
 

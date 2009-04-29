@@ -162,15 +162,22 @@ if(WIN32)
 endif(WIN32)
 
 if(APPLE)
-    set(PCBNEW_RESOURCES pcbnew.icns)
+    set(PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns"
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE pcbnew.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew)
     set(MACOSX_BUNDLE_NAME pcbnew)
+    set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
 add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
+
+if(APPLE)
+    set_target_properties(pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+endif(APPLE)
 
 target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
 

@@ -32,12 +32,6 @@ double ZBottom;
 double ZTop;
 double DataScale3D;  // coeff de conversion unites utilsateut -> unites 3D
 
-int gl_attrib[] =
-{
-    WX_GL_RGBA, WX_GL_MIN_RED, 8, WX_GL_MIN_GREEN, 8, WX_GL_MIN_BLUE, 8,
-    WX_GL_DEPTH_SIZE, 16, WX_GL_DOUBLEBUFFER, GL_NONE
-};
-
 
 BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA3D_DrawFrame::Process_Zoom )
@@ -84,7 +78,7 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
 
     // Make a Pcb3D_GLCanvas
 
-    m_Canvas = new Pcb3D_GLCanvas( this, -1, gl_attrib );
+    m_Canvas = new Pcb3D_GLCanvas( this );
 
     /* init OpenGL once */
     m_Canvas->InitGL();

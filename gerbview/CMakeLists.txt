@@ -54,8 +54,10 @@ if(WIN32)
 endif(WIN32)
 
 if(APPLE)
-    set(GERBVIEW_RESOURCES gerbview.icns)
+    set(GERBVIEW_RESOURCES gerbview.icns gerbview_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview.icns"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/gerbview_doc.icns"
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE gerbview.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.gerbview)
@@ -63,6 +65,10 @@ if(APPLE)
 endif(APPLE)
 
 add_executable(gerbview WIN32 MACOSX_BUNDLE ${GERBVIEW_SRCS} ${GERBVIEW_EXTRA_SRCS} ${GERBVIEW_RESOURCES})
+
+if(APPLE)
+    set_target_properties(gerbview PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+endif(APPLE)
 
 target_link_libraries(gerbview 3d-viewer common pcbcommon polygon bitmaps kbool ${wxWidgets_LIBRARIES})
 

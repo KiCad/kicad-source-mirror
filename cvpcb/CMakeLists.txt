@@ -38,8 +38,10 @@ if(WIN32)
 endif(WIN32)
 
 if(APPLE)
-    set(CVPCB_RESOURCES cvpcb.icns)
+    set(CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.icns"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/cvpcb_doc.icns"
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE cvpcb.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.cvpcb)
@@ -47,6 +49,10 @@ if(APPLE)
 endif(APPLE)
 
 add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_RESOURCES})
+
+if(APPLE)
+    set_target_properties(cvpcb PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+endif(APPLE)
 
 target_link_libraries(cvpcb 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
 

@@ -80,8 +80,7 @@ private:
     GLuint m_gllist;
 
 public:
-    Pcb3D_GLCanvas( WinEDA3D_DrawFrame *parent, const wxWindowID id = -1,
-                    int* gl_attrib = NULL);
+    Pcb3D_GLCanvas( WinEDA3D_DrawFrame *parent );
     ~Pcb3D_GLCanvas();
 
     void ClearLists();

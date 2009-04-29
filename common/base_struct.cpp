@@ -29,7 +29,7 @@ EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
 {
     InitVars();
     m_StructType = idType;
-    m_Parent = parent;  /* Chainage hierarchique sur struct racine */
+    m_Parent     = parent; /* Chainage hierarchique sur struct racine */
 }
 
 
@@ -85,7 +85,7 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
 {
     KICAD_T stype;
 
-#if 0 && defined (DEBUG)
+#if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
@@ -105,7 +105,7 @@ SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
 // A function that should have been in wxWidgets
 std::ostream& operator<<( std::ostream& out, const wxSize& size )
@@ -173,9 +173,9 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_Mirror    = false;                            // display mirror if true
     m_HJustify  = GR_TEXT_HJUSTIFY_LEFT;
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
-    m_Width  = 0;                                   /* thickness */
-    m_Italic = false;                               /* true = italic shape */
-    m_Text   = text;
+    m_Width     = 0;                                /* thickness */
+    m_Italic    = false;                            /* true = italic shape */
+    m_Text = text;
 }
 
 
@@ -196,7 +196,7 @@ int EDA_TextStruct::Len_Size()
     if( nbchar == 0 )
         return 0;
 
-    len = (( (10 * m_Size.x ) / 9 ) + m_Width) * nbchar;
+    len = ( ( (10 * m_Size.x ) / 9 ) + m_Width ) * nbchar;
     return len;
 }
 
@@ -211,10 +211,10 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
  *      false else.
  */
 {
-    int dx, dy;
+    int     dx, dy;
     wxPoint location;
 
-    dx = (int) (( Pitch() * GetLength() ) / 2);
+    dx = (int) ( ( Pitch() * GetLength() ) / 2 );
     dy = m_Size.y / 2;
 
     /* Is the ref point inside the text area ?  */
@@ -246,15 +246,16 @@ bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
 
 
 /*******************************/
-int EDA_TextStruct::Pitch(int aMinTickness)
+int EDA_TextStruct::Pitch( int aMinTickness )
 /*******************************/
+
 /**
  * Function Pitch
  * @return distance between 2 characters
  * @param aMinTickness = min segments tickness
  */
 {
-    return ((m_Size.x * 10)/9) + MAX( m_Width, aMinTickness);
+    return ( (m_Size.x * 10) / 9 ) + MAX( m_Width, aMinTickness );
 }
 
 
@@ -264,6 +265,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            int aDrawMode,
                            GRFillMode aDisplayMode, EDA_Colors aAnchor_color )
 /***************************************************************/
+
 /** Function Draw
  *  @param aPanel = the current DrawPanel
  *  @param aDC = the current Device Context
@@ -275,66 +277,74 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 
 {
-    wxPoint pos = m_Pos;
-    wxArrayString* list =  wxStringSplit( m_Text, '\n');
+    wxPoint        pos  = m_Pos;
+    wxArrayString* list = wxStringSplit( m_Text, '\n' );
 
-    for( int i=0;i<list->Count();i++)
+    for( unsigned i = 0; i<list->Count(); i++ )
     {
-       wxString txt = list->Item(i);
-       wxSize size=DrawOneLine(aPanel,aDC,aOffset,aColor,aDrawMode,aDisplayMode,aAnchor_color,txt,pos);
-       pos.y+=1.5*(size.y); 
+        wxString txt  = list->Item( i );
+        wxSize   size = DrawOneLine( aPanel,
+                                     aDC,
+                                     aOffset,
+                                     aColor,
+                                     aDrawMode,
+                                     aDisplayMode,
+                                     aAnchor_color,
+                                     txt,
+                                     pos );
+        pos.y += 1.5 * (size.y);
     }
-    delete (list);
-     
-}
 
+    delete (list);
+}
 
 
 wxSize EDA_TextStruct::DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                           const wxPoint& aOffset, EDA_Colors aColor,
-                           int aDrawMode,
-                           GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
-                           wxString txt, wxPoint pos )
+                                    const wxPoint& aOffset, EDA_Colors aColor,
+                                    int aDrawMode,
+                                    GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
+                                    wxString txt, wxPoint pos )
 {
-      int width = m_Width;
-      if( aDisplayMode == FILAIRE )
-          width = 0;
+    int width = m_Width;
 
-      if( aDrawMode != -1 )
-          GRSetDrawMode( aDC, aDrawMode );
+    if( aDisplayMode == FILAIRE )
+        width = 0;
 
-      /* Draw text anchor, if allowed */
-      if( aAnchor_color != UNSPECIFIED_COLOR )
-      {
-          int anchor_size = aPanel->GetScreen()->Unscale( 2 );
-          aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
+    if( aDrawMode != -1 )
+        GRSetDrawMode( aDC, aDrawMode );
 
-          int cX = pos.x + aOffset.x;
-          int cY = pos.y + aOffset.y;
+    /* Draw text anchor, if allowed */
+    if( aAnchor_color != UNSPECIFIED_COLOR )
+    {
+        int anchor_size = aPanel->GetScreen()->Unscale( 2 );
+        aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
 
-          GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
-                  cX + anchor_size, cY, 0, aAnchor_color );
+        int cX = pos.x + aOffset.x;
+        int cY = pos.y + aOffset.y;
 
-          GRLine( &aPanel->m_ClipBox, aDC, cX, cY - anchor_size,
-                  cX, cY + anchor_size, 0, aAnchor_color );
-      }
+        GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
+                cX + anchor_size, cY, 0, aAnchor_color );
 
-      if( aDisplayMode == SKETCH )
-          width = -width;
-          
-	    wxSize size = m_Size;
-	    
-	    if ( m_Mirror )
-		    size.x = -size.x;
+        GRLine( &aPanel->m_ClipBox, aDC, cX, cY - anchor_size,
+                cX, cY + anchor_size, 0, aAnchor_color );
+    }
 
-      
-      
-      DrawGraphicText( aPanel, aDC,
-                       aOffset + pos, aColor, txt,
-                       m_Orient, size,
-                       m_HJustify, m_VJustify, width, m_Italic );
-      return size;
+    if( aDisplayMode == SKETCH )
+        width = -width;
+
+    wxSize size = m_Size;
+
+    if( m_Mirror )
+        size.x = -size.x;
+
+
+    DrawGraphicText( aPanel, aDC,
+                     aOffset + pos, aColor, txt,
+                     m_Orient, size,
+                     m_HJustify, m_VJustify, width, m_Italic );
+    return size;
 }
+
 
 /******************/
 /* Class EDA_Rect */
@@ -369,7 +379,7 @@ bool EDA_Rect::Inside( const wxPoint& point )
 {
     int    rel_posx = point.x - m_Pos.x;
     int    rel_posy = point.y - m_Pos.y;
-    wxSize size = m_Size;
+    wxSize size     = m_Size;
 
     if( size.x < 0 )
     {
@@ -395,10 +405,10 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
     // this logic taken from wxWidgets' geometry.cpp file:
     bool rc;
 
-    int left   = MAX( m_Pos.x, aRect.m_Pos.x );
-    int right  = MIN( m_Pos.x + m_Size.x, aRect.m_Pos.x + aRect.m_Size.x );
-    int top    = MAX( m_Pos.y, aRect.m_Pos.y );
-    int bottom = MIN( m_Pos.y + m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
+    int  left   = MAX( m_Pos.x, aRect.m_Pos.x );
+    int  right  = MIN( m_Pos.x + m_Size.x, aRect.m_Pos.x + aRect.m_Size.x );
+    int  top    = MAX( m_Pos.y, aRect.m_Pos.y );
+    int  bottom = MIN( m_Pos.y + m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
 
     if( left < right && top < bottom )
         rc = true;
@@ -499,7 +509,7 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
     Normalize();        // ensure width and height >= 0
     EDA_Rect rect = aRect;
     rect.Normalize();   // ensure width and height >= 0
-    wxPoint  end      = GetEnd();
+    wxPoint  end = GetEnd();
     wxPoint  rect_end = rect.GetEnd();
 
     // Change origin and size in order to contain the given rect

@@ -25,8 +25,10 @@ if(WIN32)
 endif(WIN32)
 
 if(APPLE)
-    set(KICAD_RESOURCES kicad.icns)
+    set(KICAD_RESOURCES kicad.icns kicad_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/kicad.icns"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/kicad_doc.icns"
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE kicad.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.kicad)
@@ -34,6 +36,10 @@ if(APPLE)
 endif(APPLE)
 
 add_executable(kicad WIN32 MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
+
+if(APPLE)
+    set_target_properties(kicad PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+endif(APPLE)
 
 target_link_libraries(kicad common bitmaps ${wxWidgets_LIBRARIES})
 

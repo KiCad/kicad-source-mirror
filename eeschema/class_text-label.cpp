@@ -199,6 +199,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
     
     switch( m_Orient )
     {
+    default:
     case 0: /* Horiz Normal Orientation (left justified) */
         orientation = TEXT_ORIENT_HORIZ;
         Hjustify = GR_TEXT_HJUSTIFY_LEFT;
@@ -228,7 +229,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
         break;
     }
 
-    for( int i=0;i<list->Count();i++)
+    for( unsigned i=0;i<list->Count();i++)
     {
        wxString txt = list->Item(i);
        
