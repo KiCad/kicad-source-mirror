@@ -4,6 +4,13 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-may-01 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew:
+    Better dialog options for zones on technical layers.
+    Zones on silk screen filled with segments are now plotted
+    Better support of multiline texts (work in progress)
+
 2009-apr-25 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++ Eeschema:

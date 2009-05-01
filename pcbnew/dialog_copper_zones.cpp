@@ -49,8 +49,6 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 {
     BOARD* board = m_Parent->GetBoard();
 
-    SetFont( *g_DialogFont );
-
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
     wxString msg;

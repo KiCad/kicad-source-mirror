@@ -527,10 +527,26 @@ public:
                   int aDisplayMode, GRFillMode aDisplay_mode = FILAIRE,
                   EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
 
-    wxSize    DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+private:
+    /** Function DrawOneLineOfText
+     * Draw a single text line.
+     * Used to draw each line of this EDA_TextStruct, that can be multiline
+     *  @param aPanel = the current DrawPanel
+     *  @param aDC = the current Device Context
+     *  @param aOffset = draw offset (usually (0,0))
+     *  @param EDA_Colors aColor = text color
+     *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
+     *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
+     *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
+     *  @param EDA_Colors aText = the single line of text to draw.
+     *  @param EDA_Colors aPos = the position of this line ).
+     */
+    void    DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                   const wxPoint& aOffset, EDA_Colors aColor,
-                  int aDisplayMode, GRFillMode aDisplay_mode = FILAIRE,
-                  EDA_Colors aAnchor_color = UNSPECIFIED_COLOR, wxString txt=wxString(),wxPoint pos=wxPoint(0,0) );
+                  int aDisplayMode, GRFillMode aDisplay_mode,
+                  EDA_Colors aAnchor_color, wxString& aText,
+                  wxPoint aPos );
+public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.

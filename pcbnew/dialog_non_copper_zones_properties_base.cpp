@@ -10,7 +10,6 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DialogNonCopperZonesPropertiesBase, wxDialog )
-	EVT_INIT_DIALOG( DialogNonCopperZonesPropertiesBase::_wxFB_InitDialog )
 	EVT_BUTTON( wxID_OK, DialogNonCopperZonesPropertiesBase::_wxFB_OnOkClick )
 	EVT_BUTTON( wxID_CANCEL, DialogNonCopperZonesPropertiesBase::_wxFB_OnCancelClick )
 END_EVENT_TABLE()
@@ -25,17 +24,40 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	wxBoxSizer* m_UpperSizer;
 	m_UpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
-	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
-	m_OutlineAppearanceCtrl = new wxRadioBox( this, wxID_ANY, _("Outlines Appearence"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OutlineAppearanceCtrl->SetSelection( 1 );
-	m_UpperSizer->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	wxStaticBoxSizer* sbLeftSizer_;
+	sbLeftSizer_ = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Zone Fill Options:") ), wxVERTICAL );
+	
+	wxString m_FillModeCtrlChoices[] = { _("Use polygons"), _("Use segments") };
+	int m_FillModeCtrlNChoices = sizeof( m_FillModeCtrlChoices ) / sizeof( wxString );
+	m_FillModeCtrl = new wxRadioBox( this, wxID_ANY, _("Filling Mode:"), wxDefaultPosition, wxDefaultSize, m_FillModeCtrlNChoices, m_FillModeCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_FillModeCtrl->SetSelection( 0 );
+	sbLeftSizer_->Add( m_FillModeCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	m_MinThicknessValueTitle = new wxStaticText( this, wxID_ANY, _("Zone min thickness value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MinThicknessValueTitle->Wrap( -1 );
+	sbLeftSizer_->Add( m_MinThicknessValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_ZoneMinThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbLeftSizer_->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_UpperSizer->Add( sbLeftSizer_, 0, 0, 5 );
+	
+	wxStaticBoxSizer* m_OutilinesBoxOpt;
+	m_OutilinesBoxOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outlines Options:") ), wxVERTICAL );
 	
 	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("H, V and 45 deg") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
 	m_OrientEdgesOpt = new wxRadioBox( this, wxID_ANY, _("Zone Edges Orient"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientEdgesOpt->SetSelection( 0 );
-	m_UpperSizer->Add( m_OrientEdgesOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
+	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
+	m_OutlineAppearanceCtrl = new wxRadioBox( this, wxID_ANY, _("Outlines Appearence"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_OutlineAppearanceCtrl->SetSelection( 1 );
+	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_UpperSizer->Add( m_OutilinesBoxOpt, 0, 0, 5 );
 	
 	wxBoxSizer* m_ButtonsSizer;
 	m_ButtonsSizer = new wxBoxSizer( wxVERTICAL );

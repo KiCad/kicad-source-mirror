@@ -23,28 +23,34 @@ class DialogNonCopperZonesEditor : public DialogNonCopperZonesPropertiesBase
 private:
     WinEDA_PcbFrame* m_Parent;
     ZONE_CONTAINER*  m_Zone_Container;
+    ZONE_SETTING* m_Zone_Setting;
 
 private:
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-    void InitDialog( wxInitDialogEvent& event );
+    void Init();
 
 public:
     DialogNonCopperZonesEditor( WinEDA_PcbFrame* parent,
-                                ZONE_CONTAINER*  zone_container );
+                                ZONE_CONTAINER*  zone_container,
+                                ZONE_SETTING*    zone_setting );
     ~DialogNonCopperZonesEditor();
 };
 
 
 /*******************************************************************************************/
 DialogNonCopperZonesEditor::DialogNonCopperZonesEditor( WinEDA_PcbFrame* parent,
-                                                        ZONE_CONTAINER*  zone_container ) :
+                                                        ZONE_CONTAINER*  zone_container,
+                                                        ZONE_SETTING*    zone_setting ) :
     DialogNonCopperZonesPropertiesBase( parent )
 /*******************************************************************************************/
 {
     m_Parent = parent;
     m_Zone_Container = zone_container;
-    SetFont( *g_DialogFont );
+    m_Zone_Setting   = zone_setting;
+    Init();
+    /* the size of some items has changed, so we must call SetSizeHints() */
+    GetSizer()->SetSizeHints( this );
 }
 
 
@@ -54,23 +60,31 @@ DialogNonCopperZonesEditor::~DialogNonCopperZonesEditor()
 {
 }
 
+
 /* install function for DialogNonCopperZonesEditor dialog frame :*/
-bool InstallDialogNonCopperZonesEditor(WinEDA_PcbFrame* aParent, ZONE_CONTAINER* aZone)
+bool InstallDialogNonCopperZonesEditor( WinEDA_PcbFrame* aParent, ZONE_CONTAINER* aZone )
 {
-    DialogNonCopperZonesEditor* frame = new DialogNonCopperZonesEditor( aParent, aZone );
-    bool diag = frame->ShowModal();
-    frame->Destroy();
+    DialogNonCopperZonesEditor frame( aParent, aZone, &g_Zone_Default_Setting );
+    bool diag = frame.ShowModal();
 
     return diag;
 }
 
 
 /********************************************************************/
-void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
+void DialogNonCopperZonesEditor::Init()
 /********************************************************************/
 {
     SetFocus();
     SetReturnCode( ZONE_ABORT );  // Will be changed on buttons click
+
+    m_FillModeCtrl->SetSelection( m_Zone_Setting->m_FillMode ? 1 : 0 );
+
+    AddUnitSymbol( *m_MinThicknessValueTitle, g_UnitMetric );
+    wxString msg = ReturnStringFromValue( g_UnitMetric,
+                                 m_Zone_Setting->m_ZoneMinThickness,
+                                 m_Parent->m_InternalUnits );
+    m_ZoneMinThicknessCtrl->SetValue( msg );
 
     if( g_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
@@ -106,13 +120,10 @@ void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
         }
         else
         {
-            if( ( (PCB_SCREEN*) ( m_Parent->GetScreen() ) )->m_Active_Layer == layer_number )
+            if( ( (PCB_SCREEN*)( m_Parent->GetScreen() ) )->m_Active_Layer == layer_number )
                 m_LayerSelectionCtrl->SetSelection( ii );
         }
     }
-
-    /* the size of m_LayerSelectionCtrl has changed, so we must recall SetSizeHints() */
-    GetSizer()->SetSizeHints(this);
 }
 
 
@@ -120,6 +131,19 @@ void DialogNonCopperZonesEditor::InitDialog( wxInitDialogEvent& event )
 void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
 /******************************************************************/
 {
+    wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
+    m_Zone_Setting->m_ZoneMinThickness =
+        ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+    if( m_Zone_Setting->m_ZoneMinThickness < 10 )
+    {
+        DisplayError( this,
+                     _(
+                         "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)" ) );
+        return;
+    }
+
+    m_Zone_Setting->m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
+
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
@@ -138,7 +162,7 @@ void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
     if( wxGetApp().m_EDA_Config )
     {
         wxGetApp().m_EDA_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
-            (long) g_Zone_Default_Setting.m_Zone_HatchingStyle );
+                                        (long) g_Zone_Default_Setting.m_Zone_HatchingStyle );
     }
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
@@ -164,4 +188,3 @@ void DialogNonCopperZonesEditor::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( ZONE_ABORT );
 }
-

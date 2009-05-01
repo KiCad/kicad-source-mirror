@@ -196,7 +196,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         trace_val = Sel_Texte_Valeur;
         trace_ref = Sel_Texte_Reference; // les 2 autorisations de tracer sont donnees
 
-        TEXTE_MODULE* text      = Module->m_Reference;
+        TEXTE_MODULE* text = Module->m_Reference;
         unsigned      textLayer = text->GetLayer();
 
         if( textLayer >= 32 )
@@ -216,7 +216,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         if( text->m_NoShow && !Sel_Texte_Invisible )
             trace_ref = FALSE;
 
-        text      = Module->m_Value;
+        text = Module->m_Value;
         textLayer = text->GetLayer();
 
         if( textLayer > 32 )
@@ -285,6 +285,28 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( int format_plot,
         if( ( ( 1 << edge_zone->GetLayer() ) & masque_layer ) == 0 )
             continue;
         PlotFilledAreas( edge_zone, format_plot );
+    }
+
+    // Plot segments used to fill zone areas:
+    for( SEGZONE* seg = m_Pcb->m_Zone; seg != NULL; seg = seg->Next() )
+    {
+        if( ( ( 1 << seg->GetLayer() ) & masque_layer ) == 0 )
+            continue;
+        switch( format_plot )
+        {
+        case PLOT_FORMAT_GERBER:
+            SelectD_CODE_For_LineDraw( seg->m_Width );
+            PlotGERBERLine( seg->m_Start, seg->m_End, seg->m_Width );
+            break;
+
+        case PLOT_FORMAT_HPGL:
+            Plot_Filled_Segment_HPGL( seg->m_Start, seg->m_End, seg->m_Width, FILLED );
+            break;
+
+        case PLOT_FORMAT_POST:
+            PlotFilledSegmentPS( seg->m_Start, seg->m_End, seg->m_Width );
+            break;
+        }
     }
 
 exit:
@@ -497,7 +519,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
             break;
 
         case PLOT_FORMAT_HPGL:
-            Plot_Filled_Segment_HPGL( pos, end, thickness, (GRFillMode)g_Plot_Mode );
+            Plot_Filled_Segment_HPGL( pos, end, thickness, (GRFillMode) g_Plot_Mode );
             break;
 
         case PLOT_FORMAT_POST:
@@ -508,12 +530,12 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         break;      /* Fin trace segment simple */
 
     case S_CIRCLE:
-        radius = (int) hypot( (double) (end.x - pos.x), (double) (end.y - pos.y) );
+        radius = (int) hypot( (double) ( end.x - pos.x ), (double) ( end.y - pos.y ) );
         PlotCircle( format_plot, thickness, pos, radius );
         break;
 
     case S_ARC:
-        radius   = (int) hypot( (double) (end.x - pos.x), (double) (end.y - pos.y) );
+        radius   = (int) hypot( (double) ( end.x - pos.x ), (double) ( end.y - pos.y ) );
         StAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
         EndAngle = StAngle + PtEdge->m_Angle;
         if( StAngle > EndAngle )
@@ -556,7 +578,7 @@ void Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge )
         PlotFilledPolygon( format_plot, PtEdge->m_PolyPoints.size(), ptr_base );
         free( ptr_base );
     }
-        break;
+    break;
     }
 }
 
@@ -626,13 +648,13 @@ void PlotFilledAreas( ZONE_CONTAINER* aZone, int aFormat )
     if( CornersBuffer == NULL )
     {
         CornersBufferSize = imax * 4;
-        CornersBuffer = (int*) MyMalloc( CornersBufferSize * sizeof(int) );
+        CornersBuffer     = (int*) MyMalloc( CornersBufferSize * sizeof(int) );
     }
 
     if( (imax * 4) > CornersBufferSize )
     {
         CornersBufferSize = imax * 4;
-        CornersBuffer = (int*) realloc( CornersBuffer, CornersBufferSize * sizeof(int) );
+        CornersBuffer     = (int*) realloc( CornersBuffer, CornersBufferSize * sizeof(int) );
     }
 
     imax--;
@@ -692,12 +714,12 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
 
     if( pt_segm->m_Shape == S_CIRCLE )
     {
-        radius = (int) hypot( (double) (end.x - start.x), (double) (end.y - start.y) );
+        radius = (int) hypot( (double) ( end.x - start.x ), (double) ( end.y - start.y ) );
     }
 
     if( pt_segm->m_Shape == S_ARC )
     {
-        radius   = (int) hypot( (double) (end.x - start.x), (double) (end.y - start.y) );
+        radius   = (int) hypot( (double) ( end.x - start.x ), (double) ( end.y - start.y ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + pt_segm->m_Angle;
         if( StAngle > EndAngle )
@@ -723,7 +745,7 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
         else if( pt_segm->m_Shape == S_ARC )
             PlotArc( PLOT_FORMAT_HPGL, start, StAngle, EndAngle, radius, thickness );
         else
-            Plot_Filled_Segment_HPGL( start, end, thickness, (GRFillMode)g_Plot_Mode );
+            Plot_Filled_Segment_HPGL( start, end, thickness, (GRFillMode) g_Plot_Mode );
         break;
 
     case PLOT_FORMAT_POST:
@@ -815,13 +837,13 @@ void PlotPolygon( int format_plot, int nbpoints, int* coord, int width )
             for( int ii = 1; ii < nbpoints; ii++ )
             {
                 end.x = *coord++;
-                end.y = *coord++; 
-                Plot_Filled_Segment_HPGL( start, end, width, (GRFillMode)g_Plot_Mode );
+                end.y = *coord++;
+                Plot_Filled_Segment_HPGL( start, end, width, (GRFillMode) g_Plot_Mode );
                 start = end;
             }
         }
     }
-        break;
+    break;
 
     case PLOT_FORMAT_POST:
         PlotPolyPS( nbpoints, coord, false, width );
@@ -890,9 +912,9 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
             break;
 
         case PLOT_FORMAT_HPGL:
-            Plot_Filled_Segment_HPGL( wxPoint(centre.x + ox, centre.y + oy),
-                                      wxPoint(centre.x + fx, centre.y + fy),
-                                         thickness,  (GRFillMode)g_Plot_Mode );
+            Plot_Filled_Segment_HPGL( wxPoint( centre.x + ox, centre.y + oy ),
+                                      wxPoint( centre.x + fx, centre.y + fy ),
+                                      thickness, (GRFillMode) g_Plot_Mode );
             break;
 
         case PLOT_FORMAT_POST:
@@ -916,9 +938,9 @@ void PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
         break;
 
     case PLOT_FORMAT_HPGL:
-            Plot_Filled_Segment_HPGL( wxPoint(centre.x + ox, centre.y + oy),
-                                      wxPoint(centre.x + fx, centre.y + fy),
-                                         thickness,  (GRFillMode)g_Plot_Mode );
+        Plot_Filled_Segment_HPGL( wxPoint( centre.x + ox, centre.y + oy ),
+                                  wxPoint( centre.x + fx, centre.y + fy ),
+                                  thickness, (GRFillMode) g_Plot_Mode );
         break;
 
     case PLOT_FORMAT_POST:

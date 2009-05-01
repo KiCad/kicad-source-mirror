@@ -171,7 +171,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_Orient    = 0;                                /* Orient in 0.1 degrees */
     m_Attributs = 0;
     m_Mirror    = false;                            // display mirror if true
-    m_HJustify  = GR_TEXT_HJUSTIFY_LEFT;
+    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
     m_Width     = 0;                                /* thickness */
     m_Italic    = false;                            /* true = italic shape */
@@ -267,6 +267,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 /***************************************************************/
 
 /** Function Draw
+ * Draws this, that can be a multiline text
  *  @param aPanel = the current DrawPanel
  *  @param aDC = the current Device Context
  *  @param aOffset = draw offset (usually (0,0))
@@ -279,11 +280,18 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 {
     wxPoint        pos  = m_Pos;
     wxArrayString* list = wxStringSplit( m_Text, '\n' );
+    wxPoint offset;
+
+    offset.y = (int) (m_Size.y * 1.5 );
+
+    RotatePoint( &offset, m_Orient );
+    if( m_Mirror )
+        offset.x = -offset.x;
 
     for( unsigned i = 0; i<list->Count(); i++ )
     {
         wxString txt  = list->Item( i );
-        wxSize   size = DrawOneLine( aPanel,
+        DrawOneLineOfText( aPanel,
                                      aDC,
                                      aOffset,
                                      aColor,
@@ -292,18 +300,31 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                      aAnchor_color,
                                      txt,
                                      pos );
-        pos.y += 1.5 * (size.y);
+        pos += offset;
     }
 
     delete (list);
 }
 
 
-wxSize EDA_TextStruct::DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+/** Function DrawOneLineOfText
+ * Draw a single text line.
+ * Used to draw each line of this EDA_TextStruct, that can be multiline
+ *  @param aPanel = the current DrawPanel
+ *  @param aDC = the current Device Context
+ *  @param aOffset = draw offset (usually (0,0))
+ *  @param EDA_Colors aColor = text color
+ *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
+ *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
+ *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
+ *  @param EDA_Colors aText = the single line of text to draw.
+ *  @param EDA_Colors aPos = the position of this line ).
+ */
+void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                     const wxPoint& aOffset, EDA_Colors aColor,
                                     int aDrawMode,
                                     GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
-                                    wxString txt, wxPoint pos )
+                                    wxString& aText, wxPoint aPos )
 {
     int width = m_Width;
 
@@ -319,8 +340,8 @@ wxSize EDA_TextStruct::DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         int anchor_size = aPanel->GetScreen()->Unscale( 2 );
         aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
 
-        int cX = pos.x + aOffset.x;
-        int cY = pos.y + aOffset.y;
+        int cX = aPos.x + aOffset.x;
+        int cY = aPos.y + aOffset.y;
 
         GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
                 cX + anchor_size, cY, 0, aAnchor_color );
@@ -339,10 +360,9 @@ wxSize EDA_TextStruct::DrawOneLine( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
 
     DrawGraphicText( aPanel, aDC,
-                     aOffset + pos, aColor, txt,
+                     aOffset + aPos, aColor, aText,
                      m_Orient, size,
                      m_HJustify, m_VJustify, width, m_Italic );
-    return size;
 }
 
 
