@@ -148,20 +148,15 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_ExportSetupButton = new wxButton( this, wxID_BUTTON_EXPORT, _("Export Setup to other zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ExportSetupButton->SetForegroundColour( wxColour( 51, 111, 40 ) );
 	m_ExportSetupButton->SetToolTip( _("Export this zone setup to all other copper zones") );
 	
 	m_RightBoxSizer->Add( m_ExportSetupButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_OkButton = new wxButton( this, wxID_OK, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OkButton->SetDefault(); 
-	m_OkButton->SetForegroundColour( wxColour( 140, 49, 47 ) );
-	
 	m_RightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ButtonCancel->SetForegroundColour( wxColour( 45, 38, 155 ) );
-	
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	

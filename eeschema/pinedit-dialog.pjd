@@ -673,7 +673,7 @@
                 <string name="proxy-Label">" Pin Options :"</string>
                 <string name="proxy-Member variable name">""</string>
                 <string name="proxy-Sizer member variable name">""</string>
-                <string name="proxy-Foreground colour">"400080"</string>
+                <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
                 <bool name="proxy-Hidden">0</bool>
                 <bool name="proxy-Enabled">1</bool>
@@ -1519,7 +1519,7 @@
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
                 <string name="proxy-Background colour">""</string>
-                <string name="proxy-Foreground colour">"295454"</string>
+                <string name="proxy-Foreground colour">""</string>
                 <string name="proxy-Font">""</string>
                 <bool name="proxy-Hidden">0</bool>
                 <bool name="proxy-Enabled">1</bool>
@@ -1794,7 +1794,7 @@
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Background colour">""</string>
-                  <string name="proxy-Foreground colour">"004000"</string>
+                  <string name="proxy-Foreground colour">""</string>
                   <string name="proxy-Font">""</string>
                   <bool name="proxy-Hidden">0</bool>
                   <bool name="proxy-Enabled">1</bool>
@@ -1858,7 +1858,7 @@
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Background colour">""</string>
-                  <string name="proxy-Foreground colour">"444422"</string>
+                  <string name="proxy-Foreground colour">""</string>
                   <string name="proxy-Font">""</string>
                   <bool name="proxy-Hidden">0</bool>
                   <bool name="proxy-Enabled">1</bool>
