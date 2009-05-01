@@ -114,49 +114,6 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 }
 
 
-/****************************************************************/
-void WinEDA_DrawFrame::AddFontSelectionMenu( wxMenu* main_menu )
-/*****************************************************************/
-
-/* create the submenu for font selection and setup font size
- */
-{
-    wxMenu* fontmenu = new wxMenu();
-
-    ADD_MENUITEM( fontmenu,
-                  ID_PREFERENCES_FONT_DIALOG,
-                  _( "Dialog boxes" ),
-                  fonts_xpm );
-
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( main_menu,
-                                        fontmenu,
-                                        ID_PREFERENCES_FONT,
-                                        _( "&Font" ),
-                                        _( "Choose font type and size for dialogs, infos and status box" ),
-                                        fonts_xpm );
-}
-
-/********************************************************************/
-void WinEDA_DrawFrame::ProcessFontPreferences( wxCommandEvent& event )
-/********************************************************************/
-{
-    int    id = event.GetId();
-
-    switch( id )
-    {
-    case ID_PREFERENCES_FONT:
-    case ID_PREFERENCES_FONT_DIALOG:
-        WinEDA_BasicFrame::ProcessFontPreferences( id );
-        break;
-
-    default:
-        DisplayError( this, wxT( "WinEDA_DrawFrame::ProcessFontPreferences " \
-                                 "Internal Error" ) );
-        break;
-    }
-}
-
-
 /**************************************************************/
 void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
 /**************************************************************/

@@ -43,7 +43,7 @@ bool      g_LastSearchIsMarker; /* True if last seach is a marker serach
 SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
-int       g_HVLines = 1;   // Bool: force H or V directions (Wires, Bus ..)
+bool      g_HVLines = true;   // Bool: force H or V directions (Wires, Bus ..)
 
 int       g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
 

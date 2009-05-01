@@ -48,25 +48,11 @@ DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( WinEDA_PcbFrame* parent ):
 void DIALOG_PCBNEW_CONFIG_LIBS::Init()
 /*************************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();
 
     m_LibListChanged = false;
     m_LibPathChanged = false;
-    m_UserLibDirBufferImg = g_UserLibDirBuffer;         // Save the original lib path
-
-    // Display current files extension (info)
-    wxString msg = m_InfoBoardFileExt->GetLabel() + PcbExtBuffer;
-    m_InfoBoardFileExt->SetLabel( msg );
-
-    msg = m_InfoCmpFileExt->GetLabel() + NetCmpExtBuffer;
-    m_InfoCmpFileExt->SetLabel( msg );
-
-    msg = m_InfoLibFileExt->GetLabel() + ModuleFileExtension;
-    m_InfoLibFileExt->SetLabel( msg );
-
-    msg = m_InfoNetlistFileExt->GetLabel() + NetExtBuffer;
-    m_InfoNetlistFileExt->SetLabel( msg );
+    m_UserLibDirBufferImg = g_UserLibDirBuffer;  // Save the original lib path
 
     m_ListLibr->InsertItems( g_LibName_List, 0 );
 
@@ -90,7 +76,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::Init()
         m_DefaultLibraryPathslistBox->Append( libpaths[ii]);
     }
 
-    // select the first path afer the current path project
+    // select the first path after the current path project
     if ( libpaths.GetCount() > 1 )
         m_DefaultLibraryPathslistBox->Select( 1 );
 }
@@ -107,7 +93,8 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnCancelClick( wxCommandEvent& event )
             wxGetApp().RemoveLibraryPath( m_listUserPaths->GetString(ii)) ;
         wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1);
     }
-    EndModal( -1 );
+
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -116,7 +103,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnOkClick( wxCommandEvent& event )
 /**************************************************************/
 {
      m_Config->Write( wxT( "module_doc_file" ),
-                m_TextHelpModulesFileName->GetValue() );
+                      m_TextHelpModulesFileName->GetValue() );
 
     // Recreate the user lib path
     if ( m_LibPathChanged )
@@ -130,8 +117,8 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnOkClick( wxCommandEvent& event )
         }
     }
 
-
-    // Set new active library list if the lib list of if default path list was modified
+    // Set new active library list if the lib list of if default path list
+    // was modified
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
@@ -139,15 +126,17 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnOkClick( wxCommandEvent& event )
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii ++ )
             g_LibName_List.Add(m_ListLibr->GetString(ii) );
     }
-    if ( event.GetId() != ID_SAVE_CFG )
-        EndModal( 0 );
+
+    m_Parent->Update_config( this );
+    EndModal( wxID_OK );
 }
+
 
 /**************************************************************/
 void DIALOG_PCBNEW_CONFIG_LIBS::OnCloseWindow( wxCloseEvent& event )
 /**************************************************************/
 {
-    EndModal( 0 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -156,7 +145,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnCloseWindow( wxCloseEvent& event )
 void DIALOG_PCBNEW_CONFIG_LIBS::OnRemoveLibClick( wxCommandEvent& event )
 /*********************************************************************/
 /* Remove a library to the library list.
- * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
 {
     int ii;
@@ -177,7 +166,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
 /* Insert or add a library to the library list:
  *   The new library is put in list before (insert button) the selection,
  *   or added (add button) to end of list
- * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
 {
     int        ii;
@@ -213,9 +202,9 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
          * list, just add the library name to the list.  Otherwise, add
          * the library name with the full or relative path.
          * the relative path, when possible is preferable,
-         * because it preserve use of default libraries paths, when the path is a sub path of these default paths
-         *
-        */
+         * because it preserve use of default libraries paths, when the
+         * path is a sub path of these default paths
+         */
         if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
             libfilename = fn.GetName();
         else    // not in the default, : see if this file is in a subpath:
@@ -250,27 +239,15 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
 }
 
 
-
-/*******************************************************************/
-void DIALOG_PCBNEW_CONFIG_LIBS::OnSaveCfgClick( wxCommandEvent& event )
-/*******************************************************************/
-{
-    OnOkClick( event );
-    m_Parent->Update_config( this );
-}
-
-
 /***********************************************************************/
 void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertPath( wxCommandEvent& event )
 /***********************************************************************/
 {
     wxString path = wxGetApp().ReturnLastVisitedLibraryPath();
 
-    bool     select = EDA_DirectorySelector( _( "Default Path for Libraries" ),    /* Titre de la fenetre */
-                                             path,                                  /* Chemin par defaut */
-                                             wxDD_DEFAULT_STYLE,
-                                             this,                                  /* parent frame */
-                                             wxDefaultPosition );
+    bool     select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
+                                             path, wxDD_DEFAULT_STYLE,
+                                             this, wxDefaultPosition );
 
     if( !select )
         return;
@@ -306,7 +283,6 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertPath( wxCommandEvent& event )
         DisplayError(this, _("Path already in use") );
 
     wxGetApp().SaveLastVisitedLibraryPath( path );
-
 }
 
 
@@ -333,19 +309,18 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnRemoveUserPath( wxCommandEvent& event )
     }
 }
 
+
 /**************************************************************************/
 void DIALOG_PCBNEW_CONFIG_LIBS::OnBrowseModDocFile( wxCommandEvent& event )
 /**************************************************************************/
 {
-    wxString FullFileName, mask;
+    wxString FullFileName;
     wxString docpath, filename;
 
     docpath = wxGetApp().ReturnLastVisitedLibraryPath(wxT( "doc" ));
 
-    mask = wxT( "*.pdf" );
-
     wxFileDialog FilesDialog( this, _( "Footprint document file:" ), docpath,
-                              wxEmptyString, mask,
+                              wxEmptyString, PdfFileWildcard,
                               wxFD_DEFAULT_STYLE  );
 
     if( FilesDialog.ShowModal() != wxID_OK )
@@ -356,7 +331,8 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnBrowseModDocFile( wxCommandEvent& event )
      * list, just add the library name to the list.  Otherwise, add
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,
-     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+     * because it preserve use of default libraries paths, when the path is
+     * a sub path of these default paths
      */
     wxFileName fn = FullFileName;
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );

@@ -303,6 +303,7 @@ void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe )
 static const wxString MinDrawLineWidthEntry( wxT( "MinimunDrawLineWidth" ) );
 static const wxString PlotLineWidthEntry( wxT( "PlotLineWidth" ) );
 static const wxString ShowHiddenPinsEntry( wxT( "ShowHiddenPins" ) );
+static const wxString HorzVertLinesOnlyEntry( wxT( "HorizVertLinesOnly" ) );
 
 
 /*
@@ -428,7 +429,7 @@ void WinEDA_SchematicFrame::LoadSettings()
     g_DrawMinimunLineWidth = cfg->Read( MinDrawLineWidthEntry, (long) 0 );
     g_PlotLine_Width = cfg->Read( PlotLineWidthEntry, (long) 4 );
     cfg->Read( ShowHiddenPinsEntry, &m_ShowAllPins, false );
-
+    cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
 }
 
 
@@ -448,4 +449,5 @@ void WinEDA_SchematicFrame::SaveSettings()
     cfg->Write( MinDrawLineWidthEntry, (long) g_DrawMinimunLineWidth );
     cfg->Write( PlotLineWidthEntry, (long) g_PlotLine_Width );
     cfg->Write( ShowHiddenPinsEntry, m_ShowAllPins );
+    cfg->Write( HorzVertLinesOnlyEntry, g_HVLines );
 }

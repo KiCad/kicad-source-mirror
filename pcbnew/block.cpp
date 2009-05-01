@@ -110,10 +110,10 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     wxButton* m_button2;
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
     Centre();
     this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-    this->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+    this->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90,
+                           false, wxEmptyString ) );
 
     /* Sizer 1 creation */
     wxFlexGridSizer* fgSizer1;
@@ -155,10 +155,8 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
 
     /* Creation des boutons de commande */
     m_button2 = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
-    m_button2->SetForegroundColour( *wxBLUE );
     fgSizer2->Add( m_button2, 0, wxALL, 5 );
     m_button1 = new wxButton( this, wxID_OK, _( "OK" ), wxDefaultPosition, wxDefaultSize, 0 );
-    m_button1->SetForegroundColour( *wxRED );
     m_button1->SetDefault();
     fgSizer2->Add( m_button1, 0, wxALL, 5 );
 

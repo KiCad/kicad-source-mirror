@@ -81,7 +81,6 @@ WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* paren
     wxButton* Button;
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
     Centre();
 
     CurrentPad = Pad;
@@ -92,24 +91,16 @@ WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* paren
     Button = new wxButton( this, ID_CHANGE_GET_PAD_SETTINGS,
                            _( "Pad Settings..." ), pos );
 
-    Button->SetForegroundColour( wxColor( 0, 80, 0 ) );
-
     pos.y += Button->GetDefaultSize().y + 50;
     Button = new wxButton( this, ID_CHANGE_CURRENT_MODULE,
                            _( "Change Module" ), pos );
-
-    Button->SetForegroundColour( *wxRED );
 
     pos.y += Button->GetDefaultSize().y + 10;
     Button = new wxButton( this, ID_CHANGE_ID_MODULES,
                            _( "Change ID Modules" ), pos );
 
-    Button->SetForegroundColour( *wxRED );
-
     pos.y += Button->GetDefaultSize().y + 10;
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ), pos );
-
-    Button->SetForegroundColour( *wxBLUE );
 
     // Selection des filtres de selection des pads :
     pos.x = 5;

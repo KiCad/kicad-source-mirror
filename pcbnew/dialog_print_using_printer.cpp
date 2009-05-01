@@ -154,7 +154,6 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent
 void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 /************************************************************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();
     int      layer_max = NB_LAYERS;
     wxString msg;

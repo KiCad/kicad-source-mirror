@@ -104,13 +104,9 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	
 	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetDefault(); 
-	m_buttonOK->SetForegroundColour( wxColour( 202, 0, 0 ) );
-	
 	bSizer5->Add( m_buttonOK, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonCANCEL->SetForegroundColour( wxColour( 0, 0, 220 ) );
-	
 	bSizer5->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	bSizer2->Add( bSizer5, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );

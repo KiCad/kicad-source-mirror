@@ -108,7 +108,6 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
     wxString  LayerList[NB_LAYERS + 1]; // One extra element for "(Deselect)" radiobutton
     int       LayerCount, LayerSelect = -1;
     m_Parent = parent;
-    SetFont( *g_DialogFont );
 
     /* Build the layer list */
     LayerCount = 0;
@@ -158,11 +157,9 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
     FrameBoxSizer->Add(ButtonBoxSizer, 0, wxALIGN_BOTTOM|wxALL, 0);
 
     Button = new wxButton( this, wxID_OK, _("OK") );
-    Button->SetForegroundColour( *wxRED );
     ButtonBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
     Button = new wxButton( this, wxID_CANCEL, _("Cancel") );
-    Button->SetForegroundColour( *wxBLUE );
     ButtonBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
     if( GetSizer() )
@@ -273,7 +270,6 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
     int       LayerTopSelect = 0, LayerBottomSelect = 0;
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
     /* Construction de la liste des couches autoris�s */
@@ -317,11 +313,9 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
     RadioBoxSizer->Add(m_LayerListBOTTOM, 0, wxALIGN_TOP|wxALL, 5);
 
     Button = new wxButton( this, wxID_OK, _("OK") );
-    Button->SetForegroundColour( *wxRED );
     ButtonBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
     Button = new wxButton( this, wxID_CANCEL, _("Cancel") );
-    Button->SetForegroundColour( *wxBLUE );
     ButtonBoxSizer->Add(Button, 0, wxGROW|wxALL, 5);
 
     if( GetSizer() )

@@ -72,7 +72,6 @@ void DialogGraphicItemProperties::OnInitDialog( wxInitDialogEvent& event )
  * according to the item parameters values
 */
 {
-    SetFont( *g_DialogFont );
     SetFocus();
 
     wxString msg;

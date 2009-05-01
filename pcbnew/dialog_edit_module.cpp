@@ -47,7 +47,6 @@ WinEDA_ModulePropertiesFrame::WinEDA_ModulePropertiesFrame( WinEDA_BasePcbFrame*
     SetIcon( wxICON( icon_modedit ) );        // Give an icon
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
     m_DC = DC;
 
     m_LayerCtrl   = NULL;
@@ -85,12 +84,10 @@ void WinEDA_ModulePropertiesFrame::CreateControls()
     SetSizer( m_GeneralBoxSizer );
 
     m_NoteBook = new wxNotebook( this, ID_NOTEBOOK );
-    m_NoteBook->SetFont( *g_DialogFont );
     m_GeneralBoxSizer->Add( m_NoteBook, 0, wxGROW | wxALL, 5 );
 
     // Add panels
     m_PanelProperties = new wxPanel( m_NoteBook, -1 );
-    m_PanelProperties->SetFont( *g_DialogFont );
     m_PanelPropertiesBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     m_PanelProperties->SetSizer( m_PanelPropertiesBoxSizer );
     BuildPanelModuleProperties( FullOptions );
@@ -118,11 +115,9 @@ void WinEDA_ModulePropertiesFrame::CreateControls()
     m_GeneralBoxSizer->Add( ButtonsBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     ButtonsBoxSizer->Add( Button, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     ButtonsBoxSizer->Add( Button, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 }
 
@@ -187,11 +182,9 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
         wxStaticText*  YPositionStatic = new wxStaticText(m_PanelProperties, -1, _("Y"));
         Button = new wxButton( m_PanelProperties, ID_MODULE_PROPERTIES_EXCHANGE,
                               _( "Change module(s)" ) );
-        Button->SetForegroundColour( wxColor( 80, 40, 0 ) );
         PropRightSizer->Add( Button, 0, wxGROW | wxALL, 5 );
         Button = new wxButton( m_PanelProperties, ID_GOTO_MODULE_EDITOR,
                               _( "Edit Module" ) );
-        Button->SetForegroundColour( wxColor( 0, 128, 80 ) );
         PropRightSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
         wxStaticBox* positionBox = new wxStaticBox(m_PanelProperties, -1, _("Position") );
@@ -244,17 +237,14 @@ void WinEDA_ModulePropertiesFrame::BuildPanelModuleProperties( bool FullOptions 
 
     Button = new wxButton( m_PanelProperties, ID_MODULE_EDIT_ADD_TEXT,
                           _( "Add Field" ) );
-    Button->SetForegroundColour( *wxBLACK );
     StaticBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     Button = new wxButton( m_PanelProperties, ID_MODULE_EDIT_EDIT_TEXT,
                           _( "Edit Field" ) );
-    Button->SetForegroundColour( *wxBLACK );
     StaticBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     m_DeleteFieddButton = Button = new wxButton( m_PanelProperties, ID_MODULE_EDIT_DELETE_TEXT,
                                                 _( "Delete Field" ) );
-    m_DeleteFieddButton->SetForegroundColour( *wxBLACK );
     m_DeleteFieddButton->Enable( FALSE ); // Enable pour fields autres que ref et valeur
     StaticBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
@@ -400,7 +390,6 @@ Panel3D_Ctrl::Panel3D_Ctrl( WinEDA_ModulePropertiesFrame* parentframe,
 
     m_Parent      = parent;
     m_ParentFrame = parentframe;
-    SetFont( *g_DialogFont );
     wxBoxSizer*   Panel3DBoxSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( Panel3DBoxSizer );
 
@@ -422,17 +411,14 @@ Panel3D_Ctrl::Panel3D_Ctrl( WinEDA_ModulePropertiesFrame* parentframe,
     LowerBoxSizer->Add( PropRightSizer, 0, wxGROW | wxALL, 5 );
 
     button = new wxButton( this, ID_BROWSE_3D_LIB, _( "Browse" ) );
-    button->SetForegroundColour( *wxBLUE );
     PropRightSizer->Add( button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     button = new wxButton( this, ID_ADD_3D_SHAPE, _( "Add 3D Shape" ) );
-    button->SetForegroundColour( *wxRED );
     PropRightSizer->Add( button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     if( (struct3D == NULL) || (struct3D->Back() != NULL) )
     {
         button = new wxButton( this, ID_REMOVE_3D_SHAPE, _( "Remove 3D Shape" ) );
-        button->SetForegroundColour( *wxRED );
         PropRightSizer->Add( button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
     }
 

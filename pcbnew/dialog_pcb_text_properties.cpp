@@ -79,7 +79,6 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
 
     m_Parent = parent;
 
-    SetFont( *g_DialogFont );
     m_DC = DC;
     Centre();
 

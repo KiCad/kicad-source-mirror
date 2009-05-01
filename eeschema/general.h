@@ -115,8 +115,7 @@ extern bool           g_LastSearchIsMarker; // True if last seach is a marker se
 extern SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
-extern int       g_ShowAllPins;
-extern int       g_HVLines;
+extern bool      g_HVLines;
 
 extern int g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
 

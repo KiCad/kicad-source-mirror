@@ -53,7 +53,7 @@ DialogPadPropertiesBase::DialogPadPropertiesBase( wxWindow* parent, wxWindowID i
 	wxString m_DrillShapeCtrlChoices[] = { _("Circle"), _("Oval") };
 	int m_DrillShapeCtrlNChoices = sizeof( m_DrillShapeCtrlChoices ) / sizeof( wxString );
 	m_DrillShapeCtrl = new wxRadioBox( this, ID_RADIOBOX_DRILL_SHAPE, _("Drill Shape:"), wxDefaultPosition, wxDefaultSize, m_DrillShapeCtrlNChoices, m_DrillShapeCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_DrillShapeCtrl->SetSelection( 0 );
+	m_DrillShapeCtrl->SetSelection( 1 );
 	m_DrillShapeBoxSizer->Add( m_DrillShapeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_MainSizer->Add( m_DrillShapeBoxSizer, 1, wxBOTTOM, 5 );
@@ -90,13 +90,9 @@ DialogPadPropertiesBase::DialogPadPropertiesBase( wxWindow* parent, wxWindowID i
 	
 	m_buttonOk = new wxButton( this, wxID_OK, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOk->SetDefault(); 
-	m_buttonOk->SetForegroundColour( wxColour( 209, 26, 5 ) );
-	
 	m_RightBoxSizer->Add( m_buttonOk, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonCancel->SetForegroundColour( wxColour( 14, 2, 164 ) );
-	
 	m_RightBoxSizer->Add( m_buttonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	

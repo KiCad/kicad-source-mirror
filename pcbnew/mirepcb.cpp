@@ -82,7 +82,6 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
     wxButton* Button;
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
     m_DC = DC;
     Centre();
 
@@ -97,11 +96,9 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
 
     /* Creation des boutons de commande */
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     // Size:

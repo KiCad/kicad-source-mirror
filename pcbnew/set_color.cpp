@@ -123,8 +123,6 @@ void WinEDA_SetColorsFrame::CreateControls()
     wxSize CorrectRowSize; // Used while specifying height of various spacers
     int ButtonHeight;      // Used while specifying height of other spacers
 
-    SetFont( *g_DialogFont );
-
     OuterBoxSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(OuterBoxSizer);
 
@@ -280,7 +278,6 @@ void WinEDA_SetColorsFrame::CreateControls()
                 if (WinEDA_SetColorsFrame::ShowToolTips())
                     Button->SetToolTip( _("Switch on all of the copper layers") );
                 Button->SetMinSize( wxSize( GoodWidth, ButtonHeight ) );
-                Button->SetForegroundColour( wxColor( 0, 100, 0 ) );
                 FlexColumnBoxSizer->Add(Button, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5);
 
                 // Now do everything required for providing the second button.
@@ -289,7 +286,6 @@ void WinEDA_SetColorsFrame::CreateControls()
                 if (WinEDA_SetColorsFrame::ShowToolTips())
                     Button->SetToolTip( _("Switch off all of the copper layers") );
                 Button->SetMinSize( wxSize( GoodWidth, ButtonHeight ) );
-                Button->SetForegroundColour( wxColor( 100, 0, 0 ) );
                 FlexColumnBoxSizer->Add(Button, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5);
             }
             else
@@ -342,11 +338,9 @@ void WinEDA_SetColorsFrame::CreateControls()
     OuterBoxSizer->Add(StdDialogButtonSizer, 0, wxGROW|wxALL, 10);
 
     Button = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-    Button->SetForegroundColour( *wxRED );
     StdDialogButtonSizer->AddButton(Button);
 
     Button = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    Button->SetForegroundColour( *wxBLUE );
     StdDialogButtonSizer->AddButton(Button);
 
     Button = new wxButton( this, wxID_APPLY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );

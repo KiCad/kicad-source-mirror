@@ -70,7 +70,7 @@ enum id_drawframe {
 
 enum id_toolbar {
     TOOLBAR_MAIN = 1,       // Main horizontal Toolbar
-    TOOLBAR_TOOL,           // Rigth vertical Toolbar (list of tools)
+    TOOLBAR_TOOL,           // Right vertical Toolbar (list of tools)
     TOOLBAR_OPTION,         // Left vertical Toolbar (option toolbar
     TOOLBAR_AUX             // Secondary horizontal Toolbar
 };
@@ -98,7 +98,7 @@ public:
 
     WinEDA_Toolbar* m_HToolBar;     // Standard horizontal Toolbar
     bool            m_FrameIsActive;
-    wxString        m_FrameName;    // name used for writting and reading setup
+    wxString        m_FrameName;    // name used for writing and reading setup
                                     // It is "SchematicFrame", "PcbFrame" ....
     wxString        m_AboutTitle;   // Name of program displayed in About.
 
@@ -129,7 +129,6 @@ public:
                                        struct Ki_HotkeyInfoSectionDescriptor* DescList,
                                        bool                                   verbose );
     void         SetLanguage( wxCommandEvent& event );
-    void         ProcessFontPreferences( int id );
 
     wxString     GetFileFromHistory( int cmdId, const wxString& type );
     void         SetLastProject( const wxString& FullFileName );
@@ -193,17 +192,15 @@ public:
 
     /**
      * Function GetBaseScreen
-     * is virtual and returns a pointer to a BASE_SCREEN or one of its derivatives.
-     * It may be overloaded by derived classes.
+     * is virtual and returns a pointer to a BASE_SCREEN or one of its
+     * derivatives.  It may be overloaded by derived classes.
      */
     virtual BASE_SCREEN* GetBaseScreen() const { return m_CurrentScreen; }
 
     void             OnMenuOpen( wxMenuEvent& event );
     void             OnMouseEvent( wxMouseEvent& event );
-    virtual void     OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
-    void             AddFontSelectionMenu( wxMenu* main_menu );
-    void             ProcessFontPreferences( wxCommandEvent& event );
-
+    virtual void     OnHotKey( wxDC* DC, int hotkey,
+                               EDA_BaseStruct* DrawStruct );
 
     void             Affiche_Message( const wxString& message );
     void             EraseMsgBox();

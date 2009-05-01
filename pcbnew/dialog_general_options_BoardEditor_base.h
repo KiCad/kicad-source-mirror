@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  8 2009)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -72,12 +72,11 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		
 		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,280 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogGeneralOptionsBoardEditor_base();
 	

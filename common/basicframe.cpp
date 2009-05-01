@@ -285,38 +285,3 @@ void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
     InitKiCadAbout(info);
     wxAboutBox(info);
 }
-
-
-/*
- *
- */
-/********************************************************************/
-void WinEDA_BasicFrame::ProcessFontPreferences( int id )
-/********************************************************************/
-{
-    wxFont font;
-
-    switch( id )
-    {
-    case ID_PREFERENCES_FONT:
-        break;
-
-    case ID_PREFERENCES_FONT_DIALOG:
-        font = wxGetFontFromUser( this, *g_DialogFont );
-        if( font.Ok() )
-        {
-            int pointsize = font.GetPointSize();
-            *g_DialogFont = font;
-            SetFont( *g_DialogFont );
-            g_DialogFontPointSize = pointsize;
-            g_FixedFontPointSize  = pointsize;
-            g_FixedFont->SetPointSize( g_FixedFontPointSize );
-        }
-        break;
-
-    default:
-        DisplayError( this, wxT( "WinEDA_BasicFrame::ProcessFontPreferences Internal Error" ) );
-        break;
-    }
-}
-

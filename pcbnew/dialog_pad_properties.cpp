@@ -110,8 +110,6 @@ void DialogPadProperties::InitDialog( wxInitDialogEvent& event )
     int            tmp;
     wxCommandEvent cmd_event;
 
-    SetFont( *g_DialogFont );
-
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
     m_PadNumCtrl->SetValue( g_Current_PadName );

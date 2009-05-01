@@ -45,22 +45,23 @@ private:
 public:
 
     // Constructor and destructor
-    WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame * parent,
-                                MODULE * Module, wxDC * DC, const wxPoint &pos );
+    WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame* parent,
+                                MODULE* Module, wxDC* DC, const wxPoint& pos );
     ~WinEDA_ExchangeModuleFrame()
     {
     }
+
 
 private:
     void    OnQuit( wxCommandEvent& event );
     void    Change_Module( wxCommandEvent& event );
     void    Change_ModuleId( wxCommandEvent& event );
     void    Change_ModuleAll( wxCommandEvent& event );
-    int     Maj_ListeCmp(
-        const wxString& reference,
-        const wxString& old_name,
-        const wxString& new_name, bool ShowError );
-    MODULE* Change_1_Module( MODULE* Module, const wxString& new_module, bool ShowError );
+    int     Maj_ListeCmp( const wxString& reference, const wxString& old_name,
+                          const wxString& new_name, bool ShowError );
+    MODULE* Change_1_Module( MODULE*         Module,
+                             const wxString& new_module,
+                             bool            ShowError );
     void    Sel_NewMod_By_Liste( wxCommandEvent& event );
 
 
@@ -83,17 +84,19 @@ BEGIN_EVENT_TABLE( WinEDA_ExchangeModuleFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-WinEDA_ExchangeModuleFrame::WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame* parent,
-                                                        MODULE* Module, wxDC* DC,
-                                                        const wxPoint& framepos ) :
+WinEDA_ExchangeModuleFrame::WinEDA_ExchangeModuleFrame(
+    WinEDA_BasePcbFrame* parent,
+    MODULE*              Module,
+    wxDC*                DC,
+    const wxPoint&
+                         framepos ) :
     wxDialog( parent, -1, _( "Exchange Modules" ), framepos, wxSize( 360, 460 ),
               DIALOG_STYLE )
 {
     wxButton* Button;
 
     m_Parent = parent;
-    SetFont( *g_DialogFont );
-    m_DC = DC;
+    m_DC     = DC;
     Centre();
 
     m_CurrentModule = Module;
@@ -115,60 +118,56 @@ WinEDA_ExchangeModuleFrame::WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame* par
     Button = new wxButton( this, ID_EXEC_EXCHANGE_MODULE,
                            _( "Change module" ) );
 
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     Button = new wxButton( this, ID_EXEC_EXCHANGE_ID_MODULES,
                            _( "Change same modules" ) );
 
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_EXEC_EXCHANGE_ID_MODULE_AND_VALUE,
                            _( "Ch. same module+value" ) );
 
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_EXEC_EXCHANGE_ALL_MODULES,
                            _( "Change all" ) );
 
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_BROWSE_LIB_MODULES,
                            _( "Browse Libs modules" ) );
 
-    Button->SetForegroundColour( wxColour( 0, 100, 0 ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
 
     Button = new wxButton( this, ID_CLOSE_EXCHANGE_MODULE,
                            _( "Close" ) );
 
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     m_OldModule = new WinEDA_EnterText( this, _( "Current Module" ),
                                         m_CurrentModule ?
-                                        m_CurrentModule->m_LibRef.GetData () : wxEmptyString,
+                                        m_CurrentModule->m_LibRef.GetData() :
+                                        wxEmptyString,
                                         LeftBoxSizer, wxSize( 150, -1 ) );
 
     m_OldModule->Enable( FALSE );
 
     m_OldValue = new WinEDA_EnterText( this, _( "Current Value" ),
                                        m_CurrentModule ?
-                                       m_CurrentModule->m_Value->m_Text.GetData () : wxEmptyString,
+                                       m_CurrentModule->m_Value->m_Text.GetData() :
+                                       wxEmptyString,
                                        LeftBoxSizer, wxSize( 150, -1 ) );
 
     m_OldValue->Enable( FALSE );
 
-    m_NewModule = new   WinEDA_EnterText( this, _( "New Module" ),
-                                          m_OldModule->GetValue(),
-                                          LeftBoxSizer, wxSize( 150, -1 ) );
+    m_NewModule = new WinEDA_EnterText( this, _( "New Module" ),
+                                        m_OldModule->GetValue(),
+                                        LeftBoxSizer, wxSize( 150, -1 ) );
 
-    m_WinMsg = new      wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
-                                    wxSize( 340, 230 ),
-                                    wxTE_READONLY | wxTE_MULTILINE );
+    m_WinMsg = new wxTextCtrl( this, -1, wxEmptyString, wxDefaultPosition,
+                               wxSize( 340, 230 ),
+                               wxTE_READONLY | wxTE_MULTILINE );
 
     MainBoxSizer->Add( m_WinMsg, 0, wxGROW | wxALL, 5 );
 
@@ -177,9 +176,8 @@ WinEDA_ExchangeModuleFrame::WinEDA_ExchangeModuleFrame( WinEDA_BasePcbFrame* par
 }
 
 
-/*********************************************************************/
-void WinEDA_BasePcbFrame::InstallExchangeModuleFrame( MODULE* Module,
-                                                      wxDC* DC,
+void WinEDA_BasePcbFrame::InstallExchangeModuleFrame( MODULE*        Module,
+                                                      wxDC*          DC,
                                                       const wxPoint& pos )
 {
     WinEDA_ExchangeModuleFrame* frame =
@@ -190,21 +188,13 @@ void WinEDA_BasePcbFrame::InstallExchangeModuleFrame( MODULE* Module,
 }
 
 
-/**********************************************************************/
-void WinEDA_ExchangeModuleFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
-/**********************************************************************/
+void WinEDA_ExchangeModuleFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 {
     Close( true );    // true is to force the frame to close
 }
 
 
 /************************************************************************/
-int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
-    const wxString& reference,
-    const wxString& old_name,
-    const wxString& new_name, bool ShowError )
-/************************************************************************/
-
 /*
  *  Met a jour le fichier name.CMP (s'il existe) apres un echange de module
  *  (par la commande changeMod), si les modules sont geres par ce fichier
@@ -213,6 +203,10 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
  *  trouve.
  *  Retoure 1 si erreur
  */
+int WinEDA_ExchangeModuleFrame::Maj_ListeCmp( const wxString& reference,
+                                              const wxString& old_name,
+                                              const wxString& new_name,
+                                              bool ShowError )
 {
     wxFileName fn;
     wxFileName tmpFileName;
@@ -255,7 +249,8 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
     }
 
     fgets( Line, sizeof(Line), FichCmp );
-    fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n", DateAndTime( Line ) );
+    fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n",
+             DateAndTime( Line ) );
 
     bool start_descr = FALSE;
     while( fgets( Line, sizeof(Line), FichCmp ) != NULL )
@@ -272,7 +267,7 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
         }
 
         if( (strnicmp( Line, "Begin", 5 ) == 0)
-           || (strnicmp( Line, "End", 3 ) == 0) )
+            || (strnicmp( Line, "End", 3 ) == 0) )
         {
             start_descr = FALSE;
         }
@@ -297,17 +292,15 @@ int WinEDA_ExchangeModuleFrame::Maj_ListeCmp(
 }
 
 
-/********************************************************************/
-void WinEDA_ExchangeModuleFrame::Change_Module( wxCommandEvent& event )
-/********************************************************************/
-
-/* Routine de changement d'un module:
+/*
+ * Routine de changement d'un module:
  *  Change le module pointe par la souris, par un autre en conservant
  *      - meme orientation
  *      - meme position
  *      - memes textes valeur et ref
  *      - memes netnames pour pads de meme nom
  */
+void WinEDA_ExchangeModuleFrame::Change_Module( wxCommandEvent& event )
 {
     wxString newmodulename = m_NewModule->GetValue();
 
@@ -322,11 +315,8 @@ void WinEDA_ExchangeModuleFrame::Change_Module( wxCommandEvent& event )
 }
 
 
-/*********************************************************************/
-void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
-/**********************************************************************/
-
-/* Routine de changement de tous les modules de meme nom lib que celui
+/*
+ * Routine de changement de tous les modules de meme nom lib que celui
  *  selectionne, en conservant
  *      - meme orientation
  *      - meme position
@@ -336,6 +326,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
  *  Attention: m_CurrentModule ne pointe plus sur le module de reference
  *  puisque celui ci a ete change!!
  */
+void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
 {
     wxString msg;
     MODULE*  Module, * PtBack;
@@ -356,14 +347,14 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
         check_module_value = TRUE;
         value = m_CurrentModule->m_Value->m_Text;
         msg.Printf( _( "Change modules <%s> -> <%s> (val = %s)?" ),
-                   m_CurrentModule->m_LibRef.GetData(),
-                   newmodulename.GetData(),
-                   m_CurrentModule->m_Value->m_Text.GetData() );
+                    m_CurrentModule->m_LibRef.GetData(),
+                    newmodulename.GetData(),
+                    m_CurrentModule->m_Value->m_Text.GetData() );
     }
     else
     {
         msg.Printf( _( "Change modules <%s> -> <%s> ?" ),
-                   lib_reference.GetData(), newmodulename.GetData() );
+                    lib_reference.GetData(), newmodulename.GetData() );
     }
 
     if( !IsOK( this, msg ) )
@@ -381,7 +372,9 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
     }
 
     /* Ici Module pointe le dernier module de la liste */
-    for( ; Module && ((BOARD*) Module != m_Parent->GetBoard()); Module = PtBack )
+    for( ;
+         Module && ( (BOARD*) Module != m_Parent->GetBoard() );
+         Module = PtBack )
     {
         MODULE* module;
         PtBack = Module->Back();
@@ -407,19 +400,17 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
 }
 
 
-/***********************************************************************/
-void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
-/***********************************************************************/
-
-/* Routine de changement de tous les modules par les modules de meme nom lib:
+/*
+ * Routine de changement de tous les modules par les modules de meme nom lib:
  *  en conservant
  *      - meme orientation
  *      - meme position
  *      - memes textes valeur et ref
  *      - memes netnames pour pads de meme nom
  */
+void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
 {
-    MODULE * Module, * PtBack;
+    MODULE* Module, * PtBack;
     bool    change  = FALSE;
     int     ShowErr = 5; // Affiche 5 messages d'err maxi
 
@@ -441,7 +432,9 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
     }
 
     /* Ici Module pointe le dernier module de la liste */
-    for( ; Module && ((BOARD*) Module != m_Parent->GetBoard());  Module = PtBack )
+    for( ;
+         Module && ( (BOARD*) Module != m_Parent->GetBoard() );
+         Module = PtBack )
     {
         PtBack = Module->Back();
         if( Change_1_Module( Module, Module->m_LibRef.GetData(), ShowErr ) )
@@ -458,12 +451,8 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
 }
 
 
-/******************************************************************/
-MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
-                                                     const wxString& new_module, bool ShowError )
-/*******************************************************************/
-
-/* Routine de changement d'un module:
+/*
+ * Routine de changement d'un module:
  *  Change le module de numero empr, avec le module de nom new_module
  *      - meme orientation
  *      - meme position
@@ -473,6 +462,9 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
  *      0 si pas de changement ( si le nouveau module n'est pas en libr)
  *      1 si OK
  */
+MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
+                                                     const wxString& new_module,
+                                                     bool ShowError )
 {
     wxString namecmp, oldnamecmp;
     MODULE*  NewModule;
@@ -489,12 +481,14 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
 
     /* Chargement du module */
     Line.Printf( _( "Change module %s (%s)  " ),
-                 Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
+                Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
     m_WinMsg->WriteText( Line );
 
     namecmp.Trim( TRUE );
     namecmp.Trim( FALSE );
-    NewModule = m_Parent->Get_Librairie_Module( wxEmptyString, namecmp, ShowError );
+    NewModule = m_Parent->Get_Librairie_Module( wxEmptyString,
+                                                namecmp,
+                                                ShowError );
     if( NewModule == NULL )  /* Nouveau module NON trouve, reaffichage de l'ancien */
     {
         m_WinMsg->WriteText( wxT( "No\n" ) );
@@ -513,29 +507,33 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
     /* Affichage du nouveau module */
     NewModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
 
-    Maj_ListeCmp( NewModule->m_Reference->m_Text, oldnamecmp, namecmp, ShowError );
+    Maj_ListeCmp( NewModule->m_Reference->m_Text,
+                  oldnamecmp,
+                  namecmp,
+                  ShowError );
 
     return NewModule;
 }
 
 
-/***********************************************************************************/
-MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
-                                              MODULE* OldModule, MODULE* NewModule )
-/***********************************************************************************/
-
 /*
- *  Remplace le module OldModule par le module NewModule (en conservant position, orientation..)
- *  OldModule est supprim� de la memoire.
+ * Remplace le module OldModule par le module NewModule (en conservant
+ * position, orientation..)
+ * OldModule est supprim� de la memoire.
  */
+MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
+                                              MODULE*   OldModule,
+                                              MODULE*   NewModule )
 {
-    wxPoint oldpos;/* memorisation temporaire pos curseur */
+    wxPoint oldpos; /* memorisation temporaire pos curseur */
     D_PAD*  pad, * old_pad;
 
 
-    if( (OldModule->Type() != TYPE_MODULE) || (NewModule->Type() != TYPE_MODULE) )
+    if( (OldModule->Type() != TYPE_MODULE)
+       || (NewModule->Type() != TYPE_MODULE) )
     {
-        DisplayError( winaff, wxT( "WinEDA_BasePcbFrame::Exchange_Module() StuctType error" ) );
+        DisplayError( winaff, wxT( "WinEDA_BasePcbFrame::Exchange_Module() " \
+                                   "StuctType error" ) );
     }
 
     NewModule->SetParent( GetBoard() );
@@ -560,7 +558,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
 
     /* Mise a jour des textes ref et val */
     NewModule->m_Reference->m_Text = OldModule->m_Reference->m_Text;
-    NewModule->m_Value->m_Text = OldModule->m_Value->m_Text;
+    NewModule->m_Value->m_Text     = OldModule->m_Value->m_Text;
 
     /* Mise a jour des autres parametres */
     NewModule->m_TimeStamp = OldModule->m_TimeStamp;
@@ -576,29 +574,29 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( strnicmp( pad->m_Padname, old_pad->m_Padname,
-                         sizeof(pad->m_Padname) ) == 0 )
+                          sizeof(pad->m_Padname) ) == 0 )
             {
-                pad->SetNetname(old_pad->GetNetname() );
+                pad->SetNetname( old_pad->GetNetname() );
                 pad->SetNet( old_pad->GetNet() );
             }
         }
     }
 
     /* Effacement de l'ancien module */
-    OldModule ->DeleteStructure();
+    OldModule->DeleteStructure();
 
     GetBoard()->m_Status_Pcb = 0;
-    NewModule->m_Flags  = 0;
+    NewModule->m_Flags = 0;
     GetScreen()->SetModify();
 
     return NewModule;
 }
 
 
-/***************************************************************************/
+/*
+ * affiche la liste des modules en librairie et selectione 1 nom
+ */
 void WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste( wxCommandEvent& event )
-/***************************************************************************/
-/*affiche la liste des modules en librairie et selectione 1 nom */
 {
     wxString newname;
 
@@ -611,15 +609,13 @@ void WinEDA_ExchangeModuleFrame::Sel_NewMod_By_Liste( wxCommandEvent& event )
 }
 
 
-/***************************************************/
-void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
-/***************************************************/
 /**
  * Function RecreateBOMFileFromBoard
  * Recreates a .cmp file from the current loaded board
  * this is the same as created by cvpcb.
  * can be used if this file is lost
  */
+void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName fn;
     FILE*      FichCmp;
@@ -638,7 +634,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
     fn = GetScreen()->m_FileName;
     fn.SetExt( NetCmpExtBuffer );
     wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) +
-        NetCmpExtBuffer;
+               NetCmpExtBuffer;
 
     wxFileDialog dlg( this, _( "Save Component Files" ), wxEmptyString,
                       fn.GetFullName(), wildcard,
@@ -665,7 +661,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard(wxCommandEvent& aEvent)
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
         fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->m_TimeStamp );
-        fprintf( FichCmp, "Path = %s\n", CONV_TO_UTF8(Module->m_Path) );
+        fprintf( FichCmp, "Path = %s\n", CONV_TO_UTF8( Module->m_Path ) );
         fprintf( FichCmp, "Reference = %s;\n",
                  !Module->m_Reference->m_Text.IsEmpty() ?
                  CONV_TO_UTF8( Module->m_Reference->m_Text ) : "[NoRef]" );

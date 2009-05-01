@@ -98,8 +98,6 @@ DIALOG_BUILD_BOM::DIALOG_BUILD_BOM( WinEDA_DrawFrame* parent ):
 
 void DIALOG_BUILD_BOM::Init()
 {
-    SetFont( *g_DialogFont );
-
     SetFocus();
 
     /* Get options */

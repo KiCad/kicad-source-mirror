@@ -77,7 +77,6 @@ void DialogEditModuleText::OnCancelClick( wxCommandEvent& event )
 void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
 /********************************************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();
 
     wxString msg;

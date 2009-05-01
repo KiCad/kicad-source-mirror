@@ -29,7 +29,6 @@ DIALOG_TRACKS_OPTIONS::DIALOG_TRACKS_OPTIONS( WinEDA_PcbFrame* parent )
 
 void DIALOG_TRACKS_OPTIONS::OnInitDialog( wxInitDialogEvent& event )
 {
-    SetFont( *g_DialogFont );
     SetFocus();
 
     // deselect the existing text, seems SetFocus() wants to emulate Microsoft, which is not desireable here.

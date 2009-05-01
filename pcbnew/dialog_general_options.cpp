@@ -35,7 +35,6 @@ Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent, wxDC* DC 
 void Dialog_GeneralOptions::init()
 /********************************************************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();
 
     /* Set display options */

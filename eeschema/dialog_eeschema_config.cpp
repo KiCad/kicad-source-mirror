@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_eeschema_config.cpp
 // Purpose:
 // Author:      jean-pierre Charras
@@ -32,14 +31,13 @@ private:
     WinEDA_SchematicFrame* m_Parent;
     bool m_LibListChanged;
     bool m_LibPathChanged;
-    wxString m_UserLibDirBufferImg;         // Copy of original g_UserLibDirBuffer
+    wxString m_UserLibDirBufferImg;      // Copy of original g_UserLibDirBuffer
 
 private:
 
     // event handlers, overiding the fbp handlers
     void Init();
     void OnCloseWindow( wxCloseEvent& event );
-    void OnSaveCfgClick( wxCommandEvent& event );
     void OnRemoveLibClick( wxCommandEvent& event );
     void OnAddOrInsertLibClick( wxCommandEvent& event );
     void OnAddOrInsertPath( wxCommandEvent& event );
@@ -87,27 +85,13 @@ DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame* parent )
 void DIALOG_EESCHEMA_CONFIG::Init()
 /***********************************/
 {
+    wxString msg;
+
     SetFocus();
 
     m_LibListChanged = false;
     m_LibPathChanged = false;
-    m_UserLibDirBufferImg = m_Parent->m_UserLibraryPath;         // Save the original lib path
-
-    // Display current files extension (info)
-    wxString msg = m_InfoCmpFileExt->GetLabel() + g_NetCmpExtBuffer;
-    m_InfoCmpFileExt->SetLabel( msg );
-
-    msg = m_InfoNetFileExt->GetLabel() + NetlistFileExtension;
-    m_InfoNetFileExt->SetLabel( msg );
-
-    msg = m_InfoLibFileExt->GetLabel() + CompLibFileExtension;
-    m_InfoLibFileExt->SetLabel( msg );
-
-    msg = m_InfoSymbFileExt->GetLabel() + g_SymbolExtBuffer;
-    m_InfoSymbFileExt->SetLabel( msg );
-
-    msg = m_InfoSchFileExt->GetLabel() + SchematicFileExtension;
-    m_InfoSchFileExt->SetLabel( msg );
+    m_UserLibDirBufferImg = m_Parent->m_UserLibraryPath;
 
     // Init currently availlable netlist formats
     wxArrayString NetlistNameItems;
@@ -165,7 +149,8 @@ void DIALOG_EESCHEMA_CONFIG::OnCancelClick( wxCommandEvent& event )
             wxGetApp().RemoveLibraryPath( m_listUserPaths->GetString(ii)) ;
         wxGetApp().InsertLibraryPath( m_Parent->m_UserLibraryPath, 1);
     }
-    EndModal( -1 );
+
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -188,8 +173,9 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         }
     }
 
-
-    // Set new active library list if the lib list of if default path list was modified
+    /* Set new active library list if the lib list of if default path list
+     * was modified
+     */
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
@@ -202,15 +188,16 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         if( m_Parent->m_ViewlibFrame )
             m_Parent->m_ViewlibFrame->ReCreateListLib();
     }
-    if ( event.GetId() != ID_SAVE_CFG )
-        EndModal( 0 );
+
+    m_Parent->SaveProjectFile( this );
+    EndModal( wxID_OK );
 }
 
 /**************************************************************/
 void DIALOG_EESCHEMA_CONFIG::OnCloseWindow( wxCloseEvent& event )
 /**************************************************************/
 {
-    EndModal( 0 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -277,9 +264,9 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
          * list, just add the library name to the list.  Otherwise, add
          * the library name with the full or relative path.
          * the relative path, when possible is preferable,
-         * because it preserve use of default libraries paths, when the path is a sub path of these default paths
-         *
-        */
+         * because it preserve use of default libraries paths, when the path
+         * is a sub path of these default paths
+         */
         if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
             libfilename = fn.GetName();
         else    // not in the default, : see if this file is in a subpath:
@@ -315,26 +302,15 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
 
 
-/*******************************************************************/
-void DIALOG_EESCHEMA_CONFIG::OnSaveCfgClick( wxCommandEvent& event )
-/*******************************************************************/
-{
-    OnOkClick( event );
-    m_Parent->SaveProjectFile( this );
-}
-
-
 /***********************************************************************/
 void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
 /***********************************************************************/
 {
     wxString path = wxGetApp().ReturnLastVisitedLibraryPath();
 
-    bool     select = EDA_DirectorySelector( _( "Default Path for Libraries" ),    /* Titre de la fenetre */
-                                             path,                                  /* Chemin par defaut */
-                                             wxDD_DEFAULT_STYLE,
-                                             this,                                  /* parent frame */
-                                             wxDefaultPosition );
+    bool select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
+                                         path, wxDD_DEFAULT_STYLE,
+                                         this, wxDefaultPosition );
 
     if( !select )
         return;
@@ -365,7 +341,6 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
             m_DefaultLibraryPathslistBox->Append( libpaths[ii]);
         }
     }
-
     else
         DisplayError(this, _("Path already in use") );
 

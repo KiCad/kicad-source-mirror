@@ -849,7 +849,6 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
               DIALOG_STYLE )
 {
     m_Parent = parent;
-    SetFont( *g_DialogFont );
 
     if( PolyEdges )
         free( PolyEdges );
@@ -864,15 +863,12 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
     MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxButton* Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    Button->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    Button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, ID_READ_SHAPE_FILE, _( "Read Shape Descr File..." ) );
-    Button->SetForegroundColour( wxColor( 0, 100, 0 ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     wxString shapelist[3] = { _( "Normal" ), _( "Symmetrical" ), _( "Mirrored" ) };

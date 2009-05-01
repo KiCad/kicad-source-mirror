@@ -131,13 +131,9 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	
 	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetDefault(); 
-	m_buttonOK->SetForegroundColour( wxColour( 194, 0, 0 ) );
-	
 	bRightSizer->Add( m_buttonOK, 0, wxALL, 5 );
 	
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonCANCEL->SetForegroundColour( wxColour( 2, 2, 196 ) );
-	
 	bRightSizer->Add( m_buttonCANCEL, 0, wxALL, 5 );
 	
 	bMainSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );

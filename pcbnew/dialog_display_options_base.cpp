@@ -129,13 +129,9 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	bRightSizer->Add( 10, 10, 0, 0, 5 );
 	
 	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetForegroundColour( wxColour( 204, 0, 0 ) );
-	
 	bRightSizer->Add( m_buttonOK, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonCANCEL->SetForegroundColour( wxColour( 0, 0, 200 ) );
-	
 	bRightSizer->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bRightSizer, 0, wxEXPAND|wxALL, 5 );

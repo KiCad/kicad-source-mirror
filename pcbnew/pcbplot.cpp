@@ -171,7 +171,6 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     wxConfig* config = wxGetApp().m_EDA_Config;  //  Current config used by application
 
 
-    SetFont( *g_DialogFont );
     m_Plot_Sheet_Ref = NULL;
 
     wxBoxSizer* MainBoxSizer = new      wxBoxSizer( wxHORIZONTAL );
@@ -285,19 +284,15 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
 
     /* Create the command buttons */
     m_PlotButton = new    wxButton( this, ID_EXEC_PLOT, _( "Plot" ) );
-    m_PlotButton->SetForegroundColour( *wxRED );
     RightBoxSizer->Add( m_PlotButton, 0, wxGROW | wxALL, 5 );
 
     button = new    wxButton( this, ID_SAVE_OPT_PLOT, _( "Save Options" ) );
-    button->SetForegroundColour( wxColour( 0, 80, 0 ) );
     RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
 
     button = new    wxButton( this, ID_CREATE_DRILL_FILE, _( "Generate drill file" ) );
-    button->SetForegroundColour( wxColour( 0, 80, 80 ) );
     RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
 
     button = new    wxButton( this, wxID_CANCEL, _( "Close" ) );
-    button->SetForegroundColour( *wxBLUE );
     RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
 
 

@@ -691,7 +691,7 @@
                                 <property name="context_help"></property>
                                 <property name="default">1</property>
                                 <property name="enabled">1</property>
-                                <property name="fg">209,26,5</property>
+                                <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_OK</property>
@@ -743,7 +743,7 @@
                                 <property name="context_help"></property>
                                 <property name="default">0</property>
                                 <property name="enabled">1</property>
-                                <property name="fg">14,2,164</property>
+                                <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_CANCEL</property>

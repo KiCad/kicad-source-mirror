@@ -248,7 +248,6 @@ WinEDA_App::~WinEDA_App()
     if( m_EDA_CommonConfig )
         delete m_EDA_CommonConfig;
     delete m_EDA_Config;
-    delete g_DialogFont;
     delete g_FixedFont;
     if( m_Checker )
         delete m_Checker;
@@ -305,11 +304,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     wxASSERT( m_EDA_CommonConfig != NULL );
 
     /* Create the fonts used in dialogs and messages */
-    g_DialogFontPointSize = FONT_DEFAULT_SIZE;
     g_FixedFontPointSize  = FONT_DEFAULT_SIZE;
-
-    g_DialogFont = new wxFont( g_DialogFontPointSize, wxFONTFAMILY_ROMAN,
-                               wxNORMAL, wxNORMAL );
 
     g_FixedFont = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN,
                               wxNORMAL, wxNORMAL );
@@ -645,20 +640,8 @@ void WinEDA_App::GetSettings()
     m_fileHistory.Load( *m_EDA_Config );
 
     /* Set default font sizes */
-    g_DialogFontPointSize = m_EDA_Config->Read( wxT( "DialogFontSize" ),
-                                                FONT_DEFAULT_SIZE );
     g_FixedFontPointSize = m_EDA_Config->Read( wxT( "FixedFontSize" ),
                                                FONT_DEFAULT_SIZE );
-
-    Line = m_EDA_Config->Read( wxT( "DialogFontType" ), wxEmptyString );
-    if( !Line.IsEmpty() )
-        g_DialogFont->SetFaceName( Line );
-
-    ii = m_EDA_Config->Read( wxT( "DialogFontStyle" ), wxFONTFAMILY_ROMAN );
-    g_DialogFont->SetStyle( ii );
-    ii = m_EDA_Config->Read( wxT( "DialogFontWeight" ), wxNORMAL );
-    g_DialogFont->SetWeight( ii );
-    g_DialogFont->SetPointSize( g_DialogFontPointSize );
 
     g_FixedFont->SetPointSize( g_FixedFontPointSize );
 
@@ -687,12 +670,6 @@ void WinEDA_App::SaveSettings()
 #if wxCHECK_VERSION( 2, 9, 0 )
 #warning TODO: under wxWidgets 3.0, see how to replace the next lines
 #else
-    /* Dialog font settings */
-    m_EDA_Config->Write( wxT( "DialogFontSize" ), g_DialogFontPointSize );
-    m_EDA_Config->Write( wxT( "DialogFontType" ), g_DialogFont->GetFaceName() );
-    m_EDA_Config->Write( wxT( "DialogFontStyle" ), g_DialogFont->GetStyle() );
-    m_EDA_Config->Write( wxT( "DialogFontWeight" ), g_DialogFont->GetWeight() );
-
     /* Misc settings */
     m_EDA_Config->Write( wxT( "FixedFontSize" ), g_FixedFontPointSize );
     m_EDA_Config->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );

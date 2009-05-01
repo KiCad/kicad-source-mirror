@@ -88,7 +88,6 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent ) :
 void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 /*************************************************************/
 {
-    SetFont( *g_DialogFont );
     SetFocus();     // Make ESC key working
 
     m_ImageXSize_mm = 270;

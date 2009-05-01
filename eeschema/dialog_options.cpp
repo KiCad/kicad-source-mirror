@@ -420,9 +420,9 @@ void WinEDA_SetOptionsFrame::Accept( wxCommandEvent& event )
         g_ShowPageLimits = FALSE;
 
     if( m_SelDirWires->GetSelection() == 0 )
-        g_HVLines = 1;
+        g_HVLines = true;
     else
-        g_HVLines = 0;
+        g_HVLines = false;
 
     if( m_Selunits->GetSelection() == 0 )
         g_UnitMetric = 1;
