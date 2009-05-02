@@ -467,7 +467,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxString          title = _( "Print" );
     EDA_Printout      printout( this, m_Parent, title, s_Print_Sheet_Ref );
 
-#ifndef __WINDOWS__
+#if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
     wxDC*             dc = printout.GetDC();
     ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
 #endif
