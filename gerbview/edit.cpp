@@ -100,6 +100,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     {
     case wxID_CUT:
     case wxID_COPY:
+    case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
@@ -283,6 +284,12 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_DELETE_BLOCK:
         GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
+        break;
+
+    case ID_POPUP_MIRROR_X_BLOCK:
+        GetScreen()->BlockLocate.m_Command = BLOCK_MIRROR_X;
         GetScreen()->BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

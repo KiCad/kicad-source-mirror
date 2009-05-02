@@ -174,6 +174,12 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
             Block_Delete( DC );
             break;
 
+        case BLOCK_MIRROR_X: /* Mirror*/
+            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            Block_Mirror_X( DC );
+            break;
+
         case BLOCK_ROTATE: /* Unused */
             break;
 
@@ -192,7 +198,6 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_ABORT:
         case BLOCK_SELECT_ITEMS_ONLY:
-        case BLOCK_MIRROR_X:
         case BLOCK_MIRROR_Y:
             break;
         }
@@ -362,6 +367,66 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         zsegment = zsegment->Next();
     }
 
+    DrawPanel->Refresh( TRUE );
+}
+
+
+/************************************************/
+void WinEDA_BasePcbFrame::Block_Mirror_X( wxDC* DC )
+/************************************************/
+
+/*
+ *  Function to mirror items in the current selected block
+ */
+{
+    int     xoffset = 0;
+    wxPoint oldpos;
+
+    oldpos = GetScreen()->m_Curseur;
+    DrawPanel->ManageCurseur = NULL;
+
+    GetScreen()->m_Curseur = oldpos;
+    DrawPanel->MouseToCursorSchema();
+    GetScreen()->SetModify();
+    GetScreen()->BlockLocate.Normalize();
+
+    /* Calculate offset to mirror track points from block edges */
+    xoffset = GetScreen()->BlockLocate.m_Pos.x + GetScreen()->BlockLocate.m_Pos.x
+              + GetScreen()->BlockLocate.m_Size.x;
+
+    /* Move the Track segments in block */
+    for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
+    {
+        if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
+        {
+            m_Pcb->m_Status_Pcb = 0;
+            track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
+            track->m_Start.x = xoffset - track->m_Start.x;
+            track->m_End.x   = xoffset - track->m_End.x;
+
+            // the two parameters are used in gerbview to store centre coordinates for arcs.
+            // move this centre
+            track->m_Param = xoffset - track->m_Param;
+            track->Draw( DrawPanel, DC, GR_OR ); // redraw the moved track
+        }
+    }
+
+    /* Move the Zone segments in block */
+    for( SEGZONE* zsegment = m_Pcb->m_Zone; zsegment; zsegment = zsegment->Next() )
+    {
+        if( IsSegmentInBox( GetScreen()->BlockLocate, zsegment ) )
+        {
+            zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
+            zsegment->m_Start.x = xoffset - zsegment->m_Start.x;
+            zsegment->m_End.x   = xoffset - zsegment->m_End.x;
+
+            // the two parameters are used in gerbview to store centre coordinates for arcs.
+            // move this centre
+            zsegment->m_Param = xoffset - zsegment->m_Param;
+            zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone zegment
+        }
+    }
+    
     DrawPanel->Refresh( TRUE );
 }
 

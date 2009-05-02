@@ -53,6 +53,7 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
                 PopMenu->Append( ID_POPUP_PLACE_BLOCK, _( "Place Block" ) );
                 PopMenu->Append( ID_POPUP_COPY_BLOCK, _( "Copy Block (shift mouse)" ) );
                 PopMenu->Append( ID_POPUP_DELETE_BLOCK, _( "Delete Block (ctrl + drag mouse)" ) );
+                PopMenu->Append( ID_POPUP_MIRROR_X_BLOCK, _( "Mirror Block" ) );
             }
             else
                 PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ) );

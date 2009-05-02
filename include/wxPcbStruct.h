@@ -316,11 +316,41 @@ public:
                                             int garde, int tracevia, int modetrace );
 
     /* Block operations: */
+    /**
+     * Function Block_Delete
+     * deletes all tracks and segments within the selected block.
+     * Defined separately in pcbnew and gerbview
+     *
+     * @param DC A device context to draw on.
+     */    
     void                     Block_Delete( wxDC* DC );
     void                     Block_Rotate( wxDC* DC );
     void                     Block_Invert( wxDC* DC );
+    /**
+     * Function Block_Move
+     * moves all tracks and segments within the selected block.
+     * New location is determined by the current offset from the selected block's original location.
+     * Defined separately in pcbnew and gerbview
+     *
+     * @param DC A device context to draw on.
+     */
     void                     Block_Move( wxDC* DC );
-    void                     Block_Duplicate( wxDC* DC );
+    /**
+     * Function Block_Mirror_X
+     * mirrors all tracks and segments within the currently selected block in the X axis.
+     *
+     * @param DC A device context to draw on.
+     */
+    void                     Block_Mirror_X( wxDC* DC );
+    /**
+     * Function Block_Duplicate
+     * copies-and-moves all tracks and segments within the selected block. 
+     * New location is determined by the current offset from the selected block's original location.
+     * Defined separately in pcbnew and gerbview
+     *
+     * @param DC A device context to draw on.
+     */
+     void                     Block_Duplicate( wxDC* DC );
 
 
     // layerhandling:
