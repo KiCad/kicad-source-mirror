@@ -201,10 +201,8 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
                                            ID_OPT_TOOLBAR, FALSE );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxBitmap( grid_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
+                                wxBitmap( grid_xpm ),
                                _( "Display Grid OFF" ) );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
@@ -219,33 +217,21 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
                                wxBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                wxBitmap( cursor_shape_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
                                _( "Change Cursor Shape" ) );
 
     m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                wxBitmap( pad_sketch_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
                                _( "Show Pads Sketch" ) );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
                                wxBitmap( text_sketch_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
                                _( "Show Texts Sketch" ) );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
                                wxBitmap( show_mod_edge_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
                                _( "Show Edges Sketch" ) );
 
     m_OptionsToolBar->Realize();

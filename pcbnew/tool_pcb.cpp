@@ -490,37 +490,27 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar()
                                         ID_AUX_V_TOOLBAR, FALSE );
 
     // Set up toolbar
-    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD,
+    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
                             wxBitmap( mw_Add_Line_xpm ),
-                            wxNullBitmap, TRUE,
-                            -1, -1, (wxObject*) NULL,
                             _( "Create line of specified length for microwave applications" ) );
 
-    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD,
+    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
                             wxBitmap( mw_Add_Gap_xpm ),
-                            wxNullBitmap, TRUE,
-                            -1, -1, (wxObject*) NULL,
                             _( "Create gap of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddSeparator();
 
-    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD,
+    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
                             wxBitmap( mw_Add_Stub_xpm ),
-                            wxNullBitmap, TRUE,
-                            -1, -1, (wxObject*) NULL,
                             _( "Create stub of specified length for microwave applications" ) );
 
-    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD,
+    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
                             wxBitmap( mw_Add_stub_arc_xpm ),
-                            wxNullBitmap, TRUE,
-                            -1, -1, (wxObject*) NULL,
                             _( "Create stub (arc) of specified length for microwave applications" )
                             );
 
-    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD,
+    m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
                             wxBitmap( mw_Add_Shape_xpm ),
-                            wxNullBitmap, TRUE,
-                            -1, -1, (wxObject*) NULL,
                             _( "Create a polynomial shape for microwave applications" ) );
 
     m_AuxVToolBar->Realize();

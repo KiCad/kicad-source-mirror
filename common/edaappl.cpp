@@ -248,7 +248,6 @@ WinEDA_App::~WinEDA_App()
     if( m_EDA_CommonConfig )
         delete m_EDA_CommonConfig;
     delete m_EDA_Config;
-    delete g_FixedFont;
     if( m_Checker )
         delete m_Checker;
     delete m_Locale;
@@ -302,12 +301,6 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     wxASSERT( m_EDA_Config != NULL );
     m_EDA_CommonConfig = new wxConfig( CommonConfigPath );
     wxASSERT( m_EDA_CommonConfig != NULL );
-
-    /* Create the fonts used in dialogs and messages */
-    g_FixedFontPointSize  = FONT_DEFAULT_SIZE;
-
-    g_FixedFont = new wxFont( g_FixedFontPointSize, wxFONTFAMILY_MODERN,
-                              wxNORMAL, wxNORMAL );
 
     /* Install some image handlers, mainly for help */
     wxImage::AddHandler( new wxPNGHandler );
@@ -626,7 +619,6 @@ void WinEDA_App::GetSettings()
     wxASSERT( m_EDA_Config != NULL && m_EDA_CommonConfig != NULL );
 
     wxString Line;
-    unsigned ii;
 
     m_HelpSize.x = 500;
     m_HelpSize.y = 400;
@@ -638,12 +630,6 @@ void WinEDA_App::GetSettings()
                                                            0L );
 
     m_fileHistory.Load( *m_EDA_Config );
-
-    /* Set default font sizes */
-    g_FixedFontPointSize = m_EDA_Config->Read( wxT( "FixedFontSize" ),
-                                               FONT_DEFAULT_SIZE );
-
-    g_FixedFont->SetPointSize( g_FixedFontPointSize );
 
     m_EDA_Config->Read( wxT( "ShowPageLimits" ), &g_ShowPageLimits );
 
@@ -664,18 +650,9 @@ void WinEDA_App::GetSettings()
 void WinEDA_App::SaveSettings()
 {
     wxASSERT( m_EDA_Config != NULL );
-
-    /* Sdt font settings */
-
-#if wxCHECK_VERSION( 2, 9, 0 )
-#warning TODO: under wxWidgets 3.0, see how to replace the next lines
-#else
-    /* Misc settings */
-    m_EDA_Config->Write( wxT( "FixedFontSize" ), g_FixedFontPointSize );
     m_EDA_Config->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
     m_EDA_Config->Write( wxT( "WorkingDir" ), wxGetCwd() );
     m_EDA_Config->Write( wxT( "BgColor" ), g_DrawBgColor );
-#endif // wxCHECK_VERSION
 
     /* Save the file history list */
     m_fileHistory.Save( *m_EDA_Config );

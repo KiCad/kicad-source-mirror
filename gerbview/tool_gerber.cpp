@@ -165,27 +165,22 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     SetToolBar( m_HToolBar );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxBitmap( new_xpm ),
-                         wxNullBitmap, FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString,
+                          wxBitmap( new_xpm ),
                          _( "New World" ) );
 
-    m_HToolBar->AddTool( ID_LOAD_FILE, wxBitmap( open_xpm ),
-                         wxNullBitmap, FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString,
+                         wxBitmap( open_xpm ),
                          _( "Open existing Layer" ) );
 
 #if 0
-    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxBitmap( save_button ),
-                         wxNullBitmap, FALSE,
-                         -1, -1, (wxObject*) NULL,
-                         _( "Save World" ) );
+    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
+                         wxBitmap( save_button ),
+                         _( "Save" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_SHEET_SET, wxBitmap( sheetset_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString,
+                         wxBitmap( sheetset_xpm ),
                          _( "page settings (size, texts)" ) );
 
 #endif
@@ -193,71 +188,52 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     m_HToolBar->AddSeparator();
 
 #if 0
-    m_HToolBar->AddTool( wxID_CUT, wxBitmap( cut_button ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( wxID_CUT, wxEmptyString,
+                         wxBitmap( cut_button ),
                          _( "Cut selected item" ) );
 
-    m_HToolBar->AddTool( wxID_COPY, wxBitmap( copy_button ),
-                         wxNullBitmap, FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( wxID_COPY, wxEmptyString,
+                         wxBitmap( copy_button ),
                          _( "Copy selected item" ) );
 
-    m_HToolBar->AddTool( wxID_PASTE, wxBitmap( paste_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( wxID_PASTE, wxEmptyString,
+                         wxBitmap( paste_xpm ),
                          _( "Paste" ) );
 #endif
 
-    m_HToolBar->AddTool( ID_UNDO_BUTT, wxBitmap( undelete_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_UNDO_BUTT, wxEmptyString,
+                         wxBitmap( undelete_xpm ),
                          _( "Undelete" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GEN_PRINT, wxBitmap( print_button ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString,
+                         wxBitmap( print_button ),
                          _( "Print World" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_IN );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxBitmap( zoom_in_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
+                         wxBitmap( zoom_in_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_OUT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxBitmap( zoom_out_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
+                         wxBitmap( zoom_out_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Gerbview_Hokeys_Descr,
                          HK_ZOOM_REDRAW );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxBitmap( zoom_redraw_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
+                         wxBitmap( zoom_redraw_xpm ),
                          msg );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxBitmap( zoom_auto_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
+                         wxBitmap( zoom_auto_xpm ),
                          _( "Zoom auto" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_FIND_ITEMS, wxBitmap( find_xpm ),
-                         wxNullBitmap,
-                         FALSE,
-                         -1, -1, (wxObject*) NULL,
+    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString,
+                         wxBitmap( find_xpm ),
                          _( "Find D-codes" ) );
 
     wxArrayString choices;
@@ -313,45 +289,33 @@ create or update the right vertical toolbar
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_SELECT_BUTT,
-                         wxBitmap( cursor_xpm ),
-                         wxNullBitmap, TRUE,
-                         -1, -1, (wxObject*) NULL );
+    m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString,
+                         wxBitmap( cursor_xpm ) );
     m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
 #if 0
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_COMPONENT_BUTT,
+    m_VToolBar->AddTool( ID_COMPONENT_BUTT, wxEmptyString,
                          wxBitmap( component_button ),
-                         wxNullBitmap, TRUE,
-                         -1, -1, (wxObject*) NULL,
                          _( "Add Flashes" ) );
 
-    m_VToolBar->AddTool( ID_BUS_BUTT,
+    m_VToolBar->AddTool( ID_BUS_BUTT, wxEmptyString,
                          wxBitmap( bus_button ),
-                         wxNullBitmap, TRUE,
-                         -1, -1, (wxObject*) NULL,
                          _( "Add Lines" ) );
 
-    m_VToolBar->AddTool( ID_JUNCTION_BUTT,
+    m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          wxBitmap( junction_xpm ),
-                         wxNullBitmap, TRUE,
-                         -1, -1, (wxObject*) NULL,
                          _( "Add layer alignment target" ) );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT,
+    m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
                          wxBitmap( tool_text_xpm ),
-                         wxNullBitmap, TRUE,
-                         -1, -1, (wxObject*) NULL,
                          _( "Add Text" ) );
 
 #endif
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT,
+    m_VToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString,
                          wxBitmap( delete_body_xpm ),
-                         wxNullBitmap, TRUE,
-                         -1, -1, (wxObject*) NULL,
                          _( "Delete items" ) );
 
     m_VToolBar->Realize();
@@ -373,18 +337,13 @@ create or update the left vertical toolbar (option toolbar
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
                                            ID_OPT_TOOLBAR, FALSE );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxBitmap( grid_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Display Grid OFF" ) );
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
+                                wxBitmap( grid_xpm ),
+                               _( "Display Grid OFF" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                wxBitmap( polar_coord_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Display Polar Coord ON" ) );
+                               _( "Display Polar Coord ON" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                wxBitmap( unit_inch_xpm ),
@@ -394,41 +353,26 @@ create or update the left vertical toolbar (option toolbar
                                wxBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                wxBitmap( cursor_shape_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Change Cursor Shape" ) );
+                               _( "Change Cursor Shape" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                wxBitmap( pad_sketch_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Show Spots in Sketch Mode" ) );
+                               _( "Show Spots in Sketch Mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
                                wxBitmap( showtrack_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Show Lines in Sketch Mode" ) );
+                               _( "Show Lines in Sketch Mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
                                wxBitmap( opt_show_polygon_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Show Polygons in Sketch Mode" ) );
+                               _( "Show Polygons in Sketch Mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
                                wxBitmap( show_dcodenumber_xpm ),
-                               wxNullBitmap,
-                               TRUE,
-                               -1, -1, (wxObject*) NULL,
-                               _( "Show dcode number" ) );
+                               _( "Show dcode number" ), wxITEM_CHECK );
 
     m_OptionsToolBar->Realize();
 

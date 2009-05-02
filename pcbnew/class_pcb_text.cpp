@@ -146,7 +146,6 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
     if( fprintf( aFile, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n") - 1 )
         return false;
 
-    bool        rc    = false;
     const char* style = m_Italic ? "Italic" : "Normal";
 
     wxArrayString* list = wxStringSplit( m_Text, '\n' );

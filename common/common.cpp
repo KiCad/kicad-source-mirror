@@ -72,11 +72,6 @@ wxString    g_UserLibDirBuffer;
 int         g_DebugLevel;
 int         g_MouseOldButtons;
 int         g_KeyPressed;
-wxFont*     g_FixedFont = NULL;    /* Affichage de Texte en fenetres de dialogue,
-                                    * fonte a pas fixe)*/
-int         g_FixedFontPointSize;  /* taille de la fonte */
-int         g_FontMinPointSize;    /* taille minimum des fontes */
-
 
 // Nom (full file name) du file Configuration par defaut (kicad.pro)
 wxString    g_Prj_Default_Config_FullFilename;
@@ -393,18 +388,18 @@ wxArrayString* wxStringSplit(wxString txt, wxChar splitter)
       int index=txt.Find(splitter);
       if (index == wxNOT_FOUND)
         break;
-      
+
       wxString tmp;
       tmp = txt.Mid(0,index);
       txt = txt.Mid( index+1, txt.size() - index);
       list->Add(tmp);
     }
-    
+
     if (!txt.IsEmpty())
     {
       list->Add(txt);
     }
-    
+
     return list;
 }
 
