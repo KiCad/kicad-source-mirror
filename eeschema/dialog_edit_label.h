@@ -18,7 +18,7 @@ private:
 
 protected:
     // these are protected so that the static ShowModally() gets used.
-    DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText, bool multiline);
+    DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText);
     ~DialogLabelEditor(){};
 
 

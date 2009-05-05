@@ -311,7 +311,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
             fprintf( tmpfile, "Footprint=%s\n", CONV_TO_UTF8( FootprintName ) );
             Line = wxT( "Reference=" ) + Component->GetRef( sheet ) + wxT( "\n" );
             Line.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( tmpfile, CONV_TO_UTF8( Line ) );
+            fputs( CONV_TO_UTF8( Line ), tmpfile );
 
             Line = Component->GetField( VALUE )->m_Text;
             Line.Replace( wxT( " " ), wxT( "_" ) );

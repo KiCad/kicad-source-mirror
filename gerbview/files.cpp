@@ -135,7 +135,10 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
                          g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
         wildcard += AllFilesWildcard;
 
-        wxFileDialog dlg( this, _( "Open Gerber File" ), fn.GetPath(),
+        wxString currpath = fn.GetPath();
+        if ( currpath.IsEmpty() )
+            currpath = wxGetCwd();
+        wxFileDialog dlg( this, _( "Open Gerber File" ), currpath,
                           fn.GetFullName(), wildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 

@@ -440,14 +440,6 @@ bool WinEDA_App::SetBinDir()
     while( m_BinDir.Last() != '/' && !m_BinDir.IsEmpty() )
         m_BinDir.RemoveLast();
 
-    wxFileName pfn( wxT( "/posix/path/specification" ), wxT( "filename" ) );
-    wxFileName wfn( wxT( "\\windows\\path\\specification" ), wxT( "filename" ) );
-    wxLogDebug( wxT( "Posix path: " ) + pfn.GetFullPath() );
-    wxLogDebug( wxT( "Windows path: " ) + wfn.GetFullPath() );
-    wxLogDebug( wxT( "Executable path the Kicad way: " ) + m_BinDir );
-    wxLogDebug( wxT( "Executable path the wxWidgets way: " ) +
-               GetTraits()->GetStandardPaths().GetExecutablePath() );
-
     return TRUE;
 }
 

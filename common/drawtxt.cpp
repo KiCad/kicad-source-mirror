@@ -189,68 +189,47 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     dx = (pitch * char_count) / 2;
     dy = size_v / 2;                            /* dx, dy = draw offset between first letter and text center */
 
-    ux0 = uy0 = 0;                              /* Decalage du centre du texte / coord de ref */
+    ux0 = uy0 = 0;                              /* for ux0 = uy0 = 0, the text is centered */
 
-    if( (aOrient == 0) || (aOrient == 1800) )   /* Horizontal Text */
+    wxPoint offset_org( dx, dy );
+    int     irot = aOrient;
+    while( irot >= 1800 )
+        irot -= 1800;
+
+    while( irot < 0 )
+        irot += 1800;
+
+    if( irot != 0 )
+        EXCHG( offset_org.x, offset_org.y );
+
+    switch( aH_justify )
     {
-        switch( aH_justify )
-        {
-        case GR_TEXT_HJUSTIFY_CENTER:
-            break;
+    case GR_TEXT_HJUSTIFY_CENTER:
+        break;
 
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            ux0 = -dx;
-            break;
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        ux0 = -offset_org.x;
+        break;
 
-        case GR_TEXT_HJUSTIFY_LEFT:
-            ux0 = dx;
-            break;
-        }
-
-        switch( aV_justify )
-        {
-        case GR_TEXT_VJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_VJUSTIFY_TOP:
-            uy0 = dy;
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            uy0 = -dy;
-            break;
-        }
+    case GR_TEXT_HJUSTIFY_LEFT:
+        ux0 = offset_org.x;
+        break;
     }
-    else    /* Vertical Text */
+
+    switch( aV_justify )
     {
-        switch( aH_justify )
-        {
-        case GR_TEXT_HJUSTIFY_CENTER:
-            break;
+    case GR_TEXT_VJUSTIFY_CENTER:
+        break;
 
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            ux0 = -dy;
-            break;
+    case GR_TEXT_VJUSTIFY_TOP:
+        uy0 = offset_org.y;
+        break;
 
-        case GR_TEXT_HJUSTIFY_LEFT:
-            ux0 = dy;
-            break;
-        }
-
-        switch( aV_justify )
-        {
-        case GR_TEXT_VJUSTIFY_CENTER:
-            break;
-
-        case GR_TEXT_VJUSTIFY_TOP:
-            uy0 = dx;
-            break;
-
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            uy0 = -dx;
-            break;
-        }
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        uy0 = -offset_org.y;
+        break;
     }
+
 
     cX += ux0;
     cY += uy0;

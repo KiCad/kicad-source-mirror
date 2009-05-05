@@ -613,23 +613,20 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 
     if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
         ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                      _( "Zoom Block" ), zoom_selected_xpm );
+                      _( "Window Zoom" ), zoom_selected_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
 
     if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
-    {
-        wxMenu* menu_other_block_commands = new wxMenu;
-        ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_other_block_commands,
-                                   -1, _( "Other Block Commands" ), right_xpm );
-        ADD_MENUITEM( menu_other_block_commands, wxID_COPY, _( "Save Block" ), copy_button );
-        ADD_MENUITEM( menu_other_block_commands, ID_POPUP_COPY_BLOCK,
+    {   // After a block move (that is also a block selection) one can reselect a block function:
+        ADD_MENUITEM( PopMenu, wxID_COPY, _( "Save Block" ), copy_button );
+        ADD_MENUITEM( PopMenu, ID_POPUP_COPY_BLOCK,
                       _( "Copy Block" ), copyblock_xpm );
-        ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DRAG_BLOCK,
+        ADD_MENUITEM( PopMenu, ID_POPUP_DRAG_BLOCK,
                       _( "Drag Block" ), move_xpm );
-        ADD_MENUITEM( menu_other_block_commands, ID_POPUP_DELETE_BLOCK,
+        ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK,
                       _( "Delete Block" ), delete_xpm );
-        ADD_MENUITEM( menu_other_block_commands, ID_POPUP_MIRROR_Y_BLOCK, _(
+        ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, _(
                           "Mirror Block ||" ), mirror_H_xpm );
 #if 0
   #ifdef __WINDOWS__

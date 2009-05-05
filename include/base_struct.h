@@ -499,6 +499,8 @@ public:
     bool     m_Italic;                  /* true to simulate an italic font... */
     GRTextHorizJustifyType m_HJustify;  /* Horiz Justify */
     GRTextVertJustifyType m_VJustify;   /* Vertical and  Vert Justify */
+    bool     m_MultilineAllowed;        /* true to use multiline option, false to use only single line text
+                                         * Single line is faster in calculations than multiline */
 
 public:
     EDA_TextStruct( const wxString& text = wxEmptyString );

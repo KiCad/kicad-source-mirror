@@ -704,7 +704,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     if( !CompactForm )
     {
         msg = _( "#End Cmp\n" );
-        fprintf( f, CONV_TO_UTF8( msg ) );
+        fputs( CONV_TO_UTF8( msg ), f );
     }
     return 0;
 }
@@ -731,7 +731,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     if( aIncludeSubComponents )
         msg << _( " (with SubCmp)" );
     msg << wxT( "\n" );
-    fprintf( f, CONV_TO_UTF8( msg ) );
+    fputs( CONV_TO_UTF8( msg ), f );
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
@@ -781,11 +781,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
 
         PrintFieldData( f, DrawLibItem );
 
-        fprintf( f, "\n" );
+        fputs( "\n", f );
     }
 
     msg = _( "#End Cmp\n" );
-    fprintf( f, CONV_TO_UTF8( msg ) );
+    fputs( CONV_TO_UTF8( msg ), f );
     return 0;
 }
 
@@ -821,7 +821,7 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
                 (float) DrawTextItem->m_Pos.x / 1000,
                 (float) DrawTextItem->m_Pos.y / 1000 );
 
-            fprintf( f, CONV_TO_UTF8( msg ) );
+            fputs( CONV_TO_UTF8( msg ), f );
             break;
 
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
@@ -840,7 +840,7 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
                 aList[ii].m_SheetPath.PathHumanReadable().GetData(),
                 (float) DrawSheetLabel->m_Pos.x / 1000,
                 (float) DrawSheetLabel->m_Pos.y / 1000 );
-            fprintf( f, CONV_TO_UTF8( msg ) );
+            fputs( CONV_TO_UTF8( msg ), f );
         }
         break;
 
@@ -850,7 +850,7 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
     }
 
     msg = _( "#End labels\n" );
-    fprintf( f, CONV_TO_UTF8( msg ) );
+    fputs( CONV_TO_UTF8( msg ), f );
     return 0;
 }
 

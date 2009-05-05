@@ -112,15 +112,6 @@ public:
     }
 
 
-    /** function CreateGraphicShape
-      * Calculates the graphic shape (a polygon) associated to the text
-      * @param corner_list = coordinates list fill with polygon corners ooordinates (size > 20)
-      * @param Pos = Postion of the shape
-      * format list is
-      * <corner_count>, x0, y0, ... xn, yn
-     */
-    void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
-
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
@@ -136,6 +127,16 @@ public:
     bool HitTest( const wxPoint& aPosRef );
 
     EDA_Rect        GetBoundingBox();
+
+    /** function CreateGraphicShape
+      * Calculates the graphic shape (a polygon) associated to the text
+      * @param aCorner_list = coordinates list fill with polygon corners ooordinates
+      * @param Pos = Postion of the shape
+      * format list is
+      * <corner_count>, x0, y0, ... xn, yn
+     */
+    void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint & Pos );
+
 };
 
 
@@ -157,12 +158,12 @@ public:
 
     /** function CreateGraphicShape
       * Calculates the graphic shape (a polygon) associated to the text
-      * @param corner_list = coordinates list fill with polygon corners ooordinates (size >= 14)
+      * @param aCorner_list = coordinates list fill with polygon corners ooordinates
       * @param Pos = Postion of the shape
       * format list is
       * <corner_count>, x0, y0, ... xn, yn
       */
-    void CreateGraphicShape( int* corner_list, const wxPoint & Pos );
+    void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint & Pos );
 
     /**
      * Function Save

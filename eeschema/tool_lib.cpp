@@ -114,61 +114,57 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
         SetToolBar( m_HToolBar );
 
         // Set up toolbar
-        m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString, wxBitmap( save_library_xpm ),
-                             _( "Save current loaded library on disk (file update)" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString,
+                            wxBitmap( save_library_xpm ),
+                            _( "Save current loaded library on disk (file update)" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_SELECT_CURRENT_LIB, wxEmptyString, wxBitmap( library_xpm ),
-                             _( "Select working library" ) );
+                            _( "Select working library" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, wxBitmap( delete_xpm ),
-                             _( "Delete component in current library" ) );
+                            _( "Delete component in current library" ) );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, wxBitmap( new_component_xpm ),
-                             _( "New component" ) );
+                            _( "New component" ) );
 
-        m_HToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxBitmap( add_component_xpm ),
-                             _( "Select component to edit" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
+                            wxBitmap( add_component_xpm ),
+                            _( "Select component to edit" ) );
 
         m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
-                             wxBitmap( save_part_in_mem_xpm ),
-                             _( "Save current component into current loaded library (in memory)" ) );
+                            wxBitmap( save_part_in_mem_xpm ),
+                            _( "Save current component into current loaded library (in memory)" ) );
 
         m_HToolBar->AddTool( ImportPartId, wxEmptyString, wxBitmap( import_xpm ),
-                             _( "import component" ) );
+                            _( "import component" ) );
 
         m_HToolBar->AddTool( ExportPartId, wxEmptyString, wxBitmap( export_xpm ),
-                             _( "export component" ) );
+                            _( "export component" ) );
 
         m_HToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString,
-                             wxBitmap( new_library_xpm ),
-                             _( "Create a new library an save current component into" ) );
+                            wxBitmap( new_library_xpm ),
+                            _( "Create a new library an save current component into" ) );
 
         m_HToolBar->AddSeparator();
-		msg = AddHotkeyName( _( "Undo last edition" ), s_Schematic_Hokeys_Descr, HK_UNDO );
+        msg = AddHotkeyName( _( "Undo last edition" ), s_Schematic_Hokeys_Descr, HK_UNDO );
         m_HToolBar->AddTool( ID_LIBEDIT_UNDO, wxEmptyString, wxBitmap( undo_xpm ), msg );
-		msg = AddHotkeyName( _( "Redo the last undo command" ), s_Schematic_Hokeys_Descr, HK_REDO );
+        msg = AddHotkeyName( _( "Redo the last undo command" ), s_Schematic_Hokeys_Descr, HK_REDO );
         m_HToolBar->AddTool( ID_LIBEDIT_REDO, wxEmptyString, wxBitmap( redo_xpm ), msg );
 
         m_HToolBar->AddSeparator();
-        m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxBitmap( part_properties_xpm ),
-                             wxNullBitmap,
-                             FALSE,
-                             -1, -1, (wxObject*) NULL,
-                             _( "Edit component properties" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
+                            wxBitmap( part_properties_xpm ),
+                            _( "Edit component properties" ) );
 
-        m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxBitmap( add_text_xpm ),
-                             wxNullBitmap,
-                             FALSE,
-                             -1, -1, (wxObject*) NULL,
-                             _( "Add, remove fields and edit fields properties" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
+                            wxBitmap( add_text_xpm ),
+                            _( "Add, remove fields and edit fields properties" ) );
 
         m_HToolBar->AddSeparator();
-        m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxBitmap( erc_xpm ),
-                             wxNullBitmap,
-                             FALSE,
-                             -1, -1, (wxObject*) NULL,
-                             _( "Test duplicate pins" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString,
+                            wxBitmap( erc_xpm ),
+                            _( "Test duplicate pins" ) );
 
         m_HToolBar->AddSeparator();
         msg = AddHotkeyName( _( "Zoom in" ), s_Libedit_Hokeys_Descr, HK_ZOOM_IN );
@@ -184,8 +180,8 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                              msg );
 
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                             wxBitmap( zoom_auto_xpm ),
-                             _( "Zoom auto" ) );
+                            wxBitmap( zoom_auto_xpm ),
+                            _( "Zoom auto" ) );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
@@ -201,28 +197,24 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                                 (CurrentConvert >= 2) ? TRUE : FALSE );
 
         m_HToolBar->AddSeparator();
-        m_HToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxBitmap( datasheet_xpm ),
-                             wxNullBitmap,
-                             FALSE,
-                             -1, -1, (wxObject*) NULL,
-                             _( "Documents" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString,
+                            wxBitmap( datasheet_xpm ),
+                            _( "Documents" ) );
         m_HToolBar->EnableTool( ID_LIBEDIT_VIEW_DOC, FALSE );
 
         m_HToolBar->AddSeparator();
         m_SelpartBox = new WinEDAChoiceBox( m_HToolBar, ID_LIBEDIT_SELECT_PART_NUMBER,
-                                            wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ) );
+                                           wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ) );
         m_HToolBar->AddControl( m_SelpartBox );
 
         m_SelAliasBox = new WinEDAChoiceBox( m_HToolBar, ID_LIBEDIT_SELECT_ALIAS,
-                                             wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ) );
+                                            wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ) );
         m_HToolBar->AddControl( m_SelAliasBox );
 
         m_HToolBar->AddSeparator();
-        m_HToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxBitmap( pin2pin_xpm ),
-                             wxNullBitmap,
-                             TRUE,
-                             -1, -1, (wxObject*) NULL,
-                             _( "Edit pins part per part (Carefully use!)" ) );
+        m_HToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString,
+                            wxBitmap( pin2pin_xpm ),
+                            _( "Edit pins part per part (Carefully use!)" ) );
         m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
 
         // after adding the buttons to the toolbar, must call Realize() to reflect the changes

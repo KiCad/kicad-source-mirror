@@ -32,7 +32,7 @@
             <property name="minimum_size"></property>
             <property name="name">DialogLabelEditor_Base</property>
             <property name="pos"></property>
-            <property name="size">600,300</property>
+            <property name="size">600,216</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Text Editor</property>
@@ -81,9 +81,9 @@
                     <property name="proportion">5</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">bSizer2</property>
+                        <property name="name">bSizerTextCtrl</property>
                         <property name="orient">wxVERTICAL</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>

@@ -231,10 +231,6 @@ void EDA_ScreenList::AddScreenToList( SCH_SCREEN* testscreen )
     }
 
     m_List.Add( testscreen );
-#ifdef DEBUG
-    printf( "EDA_ScreenList::AddScreenToList adding %s\n",
-            (const char*) testscreen->m_FileName.mb_str() );
-#endif
 }
 
 

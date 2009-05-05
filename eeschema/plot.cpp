@@ -616,7 +616,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
   * Les textes peuvent avoir 4 directions.
  */
 {
-    int      Poly[50];
+    static std::vector <wxPoint>  Poly;
     int      pX, pY, Shape = 0, Orient = 0, offset;
     wxSize   Size;
     wxString Text;
@@ -737,12 +737,12 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     if( Struct->Type() == TYPE_SCH_GLOBALLABEL )
     {
         ( (SCH_GLOBALLABEL*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
-        PlotPoly( Poly[0], Poly + 1, NOFILL );
+        PlotPoly( Poly.size(), &Poly[0].x, NOFILL );
     }
     if( Struct->Type() == TYPE_SCH_HIERLABEL )
     {
         ( (SCH_HIERLABEL*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
-        PlotPoly( Poly[0], Poly + 1, NOFILL );
+        PlotPoly( Poly.size(), &Poly[0].x, NOFILL );
     }
 }
 

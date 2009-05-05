@@ -9,31 +9,23 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id, bool multiline, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxVERTICAL );
+	bSizerTextCtrl = new wxBoxSizer( wxVERTICAL );
 	
-  m_staticText1 = new wxStaticText( this, wxID_ANY, _("Text"), wxDefaultPosition, wxDefaultSize, 0 );
-  m_staticText1->Wrap( -1 );
-	bSizer2->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	bSizerTextCtrl->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	if (multiline)
-  {
-   	m_TextLabel = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxTE_MULTILINE );
-  }
-   else
-  {
- 	  m_TextLabel = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
- 	}
+	m_TextLabel = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_TextLabel->SetToolTip( _("Enter the text to be used within the schematic") );
 	
-	bSizer2->Add( m_TextLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerTextCtrl->Add( m_TextLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* m_OptionsSizer;
 	m_OptionsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -56,9 +48,9 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	m_TextShape->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextShape, 1, wxALL, 5 );
 	
-	bSizer2->Add( m_OptionsSizer, 1, wxEXPAND, 5 );
+	bSizerTextCtrl->Add( m_OptionsSizer, 1, wxEXPAND, 5 );
 	
-	bMainSizer->Add( bSizer2, 5, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerTextCtrl, 5, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );

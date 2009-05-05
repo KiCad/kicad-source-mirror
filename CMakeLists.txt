@@ -15,9 +15,9 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 
 # Russian GOST and CYRILLIC patch
-option(KICAD_CYRILLIC "enable/disable building unicode (default OFF)")
+option(KICAD_CYRILLIC "enable/disable building using cyrillic (needs unicode) (default OFF)")
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
-option(KICAD_GOST "enable/disable building unicode (default OFF)")
+option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
 # Comment this out if you don't want to build with Python support.
 # OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")

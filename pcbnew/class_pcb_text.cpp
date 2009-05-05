@@ -19,6 +19,7 @@ TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, TYPE_TEXTE ),
     EDA_TextStruct()
 {
+    m_MultilineAllowed = true;
 }
 
 
@@ -43,6 +44,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Italic    = source->m_Italic;
     m_HJustify  = source->m_HJustify;
     m_VJustify  = source->m_VJustify;
+    m_MultilineAllowed = m_MultilineAllowed;
 
     m_Text = source->m_Text;
 }

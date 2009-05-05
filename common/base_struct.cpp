@@ -175,6 +175,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
     m_Width     = 0;                                /* thickness */
     m_Italic    = false;                            /* true = italic shape */
+    m_MultilineAllowed = false;                     // Set to true only for texts that can use multiline.
     m_Text = text;
 }
 
@@ -245,9 +246,9 @@ bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
 }
 
 
-/*******************************/
+/*********************************************/
 int EDA_TextStruct::Pitch( int aMinTickness )
-/*******************************/
+/*********************************************/
 
 /**
  * Function Pitch
@@ -278,19 +279,37 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 
 {
-    wxPoint        pos  = m_Pos;
-    wxArrayString* list = wxStringSplit( m_Text, '\n' );
-    wxPoint offset;
 
-    offset.y = (int) (m_Size.y * 1.5 );
-
-    RotatePoint( &offset, m_Orient );
-    if( m_Mirror )
-        offset.x = -offset.x;
-
-    for( unsigned i = 0; i<list->Count(); i++ )
+    if ( m_MultilineAllowed )
     {
-        wxString txt  = list->Item( i );
+        wxPoint        pos  = m_Pos;
+        wxArrayString* list = wxStringSplit( m_Text, '\n' );
+        wxPoint offset;
+
+        offset.y = (int) (m_Size.y * 1.5 );
+
+        RotatePoint( &offset, m_Orient );
+        if( m_Mirror )
+            offset.x = -offset.x;
+        for( unsigned i = 0; i<list->Count(); i++ )
+        {
+            wxString txt  = list->Item( i );
+            DrawOneLineOfText( aPanel,
+                                         aDC,
+                                         aOffset,
+                                         aColor,
+                                         aDrawMode,
+                                         aDisplayMode,
+                                         aAnchor_color,
+                                         txt,
+                                         pos );
+            pos += offset;
+        }
+
+        delete (list);
+    }
+
+    else
         DrawOneLineOfText( aPanel,
                                      aDC,
                                      aOffset,
@@ -298,12 +317,8 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                      aDrawMode,
                                      aDisplayMode,
                                      aAnchor_color,
-                                     txt,
-                                     pos );
-        pos += offset;
-    }
-
-    delete (list);
+                                     m_Text,
+                                     m_Pos );
 }
 
 
@@ -358,11 +373,10 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( m_Mirror )
         size.x = -size.x;
 
-
     DrawGraphicText( aPanel, aDC,
                      aOffset + aPos, aColor, aText,
                      m_Orient, size,
-                     m_HJustify, m_VJustify, width, m_Italic );
+                     m_HJustify, m_VJustify, width, m_Italic, true );
 }
 
 

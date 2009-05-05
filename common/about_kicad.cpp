@@ -8,7 +8,7 @@
 #include "appl_wxstruct.h"
 
 
-#define BUILD_VERSION wxT("(20090421-unstable)")
+#define BUILD_VERSION wxT("(20090504-unstable)")
 
 wxString g_BuildVersion
 
