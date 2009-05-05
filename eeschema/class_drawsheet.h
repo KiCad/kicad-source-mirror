@@ -58,6 +58,13 @@ public:
     void                           Show( int nestLevel, std::ostream& os );
 
 #endif
+
+    /** function CreateGraphicShape
+     * Calculates the graphic shape (a polygon) associated to the text
+     * @param aCorner_list = list to fill with polygon corners coordinates
+     * @param Pos = Position of the shape
+     */
+    void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos );
 };
 
 

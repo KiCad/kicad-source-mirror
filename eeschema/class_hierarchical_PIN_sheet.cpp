@@ -65,14 +65,11 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
 {
     GRTextHorizJustifyType side;
     EDA_Colors             txtcolor;
-    int    posx, tposx, posy, size2;
-    wxSize size;
-    int    NbSegm;
+    int posx, tposx, posy;
 
-    // @todo use wxPoints here
-    int    coord[20];
+    static std::vector <wxPoint> Poly;
 
-    int    LineWidth = g_DrawMinimunLineWidth;
+    int LineWidth = g_DrawMinimunLineWidth;
 
     if( Color >= 0 )
         txtcolor = (EDA_Colors) Color;
@@ -80,9 +77,9 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
         txtcolor = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    posx = m_Pos.x + offset.x;
-    posy = m_Pos.y + offset.y;
-    size = m_Size;
+    posx   = m_Pos.x + offset.x;
+    posy   = m_Pos.y + offset.y;
+    wxSize size = m_Size;
 
     if( !m_Text.IsEmpty() )
     {
@@ -100,63 +97,70 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
                          m_Text, TEXT_ORIENT_HORIZ, size,
                          side, GR_TEXT_VJUSTIFY_CENTER, LineWidth, false, true );
     }
-    /* dessin du symbole de connexion */
 
+    /* Draw the graphic symbol */
+    CreateGraphicShape( Poly, m_Pos + offset );
+    int FillShape = false;
+    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0],
+            FillShape, LineWidth, txtcolor, txtcolor );     /* Poly Non rempli */
+}
+
+
+/** function CreateGraphicShape
+ * Calculates the graphic shape (a polygon) associated to the text
+ * @param aCorner_list = list to fill with polygon corners coordinates
+ * @param Pos = Position of the shape
+ */
+void Hierarchical_PIN_Sheet_Struct::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                                        const wxPoint&         Pos )
+{
+    wxSize size = m_Size;
+
+    aCorner_list.clear();
     if( m_Edge )
     {
         size.x = -size.x;
         size.y = -size.y;
     }
 
-    coord[0] = posx;
-    coord[1] = posy;
+    int size2 = size.x / 2;
 
-    size2  = size.x / 2;
-    NbSegm = 0;
-
+    aCorner_list.push_back( Pos );
     switch( m_Shape )
     {
     case 0:         /* input |> */
-        coord[2]  = posx; coord[3] = posy - size2;
-        coord[4]  = posx + size2; coord[5] = posy - size2;
-        coord[6]  = posx + size.x; coord[7] = posy;
-        coord[8]  = posx + size2; coord[9] = posy + size2;
-        coord[10] = posx; coord[11] = posy + size2;
-        coord[12] = coord[0]; coord[13] = coord[1];
-        NbSegm    = 7;
+        aCorner_list.push_back( wxPoint( Pos.x, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y + size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x, Pos.y + size2 ) );
+        aCorner_list.push_back( Pos );
         break;
 
     case 1:         /* output <| */
-        coord[2]  = posx + size2; coord[3] = posy - size2;
-        coord[4]  = posx + size.x; coord[5] = posy - size2;
-        coord[6]  = posx + size.x; coord[7] = posy + size2;
-        coord[8]  = posx + size2; coord[9] = posy + size2;
-        coord[10] = coord[0]; coord[11] = coord[1];
-        NbSegm    = 6;
+        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y + size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y + size2 ) );
+        aCorner_list.push_back( Pos );
         break;
 
     case 2:         /* bidi <> */
     case 3:         /* TriSt <> */
-        coord[2] = posx + size2; coord[3] = posy - size2;
-        coord[4] = posx + size.x; coord[5] = posy;
-        coord[6] = posx + size2; coord[7] = posy + size2;
-        coord[8] = coord[0];  coord[9] = coord[1];
-        NbSegm   = 5;
+        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y + size2 ) );
+        aCorner_list.push_back( Pos );
         break;
 
     default:         /* unsp []*/
-        coord[2]  = posx; coord[3] = posy - size2;
-        coord[4]  = posx + size.x; coord[5] = posy - size2;
-        coord[6]  = posx + size.x; coord[7] = posy + size2;
-        coord[8]  = posx; coord[9] = posy + size2;
-        coord[10] = coord[0]; coord[11] = coord[1];
-        NbSegm    = 6;
+        aCorner_list.push_back( wxPoint( Pos.x, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y - size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y + size2 ) );
+        aCorner_list.push_back( wxPoint( Pos.x, Pos.y + size2 ) );
+        aCorner_list.push_back( Pos );
         break;
     }
-
-    int FillShape = FALSE;
-    GRPoly( &panel->m_ClipBox, DC, NbSegm, (wxPoint*) coord,
-            FillShape, LineWidth, txtcolor, txtcolor );     /* Poly Non rempli */
 }
 
 

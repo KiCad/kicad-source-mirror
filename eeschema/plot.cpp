@@ -17,7 +17,7 @@
 #include "protos.h"
 
 /* Local Variables : */
-static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct );
+static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* Struct );
 static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
 static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape );
@@ -747,21 +747,24 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 }
 
 
-/***********************************************************************/
-static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
-/***********************************************************************/
-/* Routine de dessin des Sheet Labels type hierarchie */
+/*****************************************************************************************/
+static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* aHierarchical_PIN )
+/****************************************************************************************/
+/* Plot a Hierarchical_PIN_Sheet
+*/
 {
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    int posx, tposx, posy, size, size2;
-    int coord[16];
+    int posx, tposx, posy, size;
+    static std::vector <wxPoint> Poly;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-        txtcolor = ReturnLayerColor( Struct->GetLayer() );
+        txtcolor = ReturnLayerColor( aHierarchical_PIN->GetLayer() );
 
-    posx = Struct->m_Pos.x; posy = Struct->m_Pos.y; size = Struct->m_Size.x;
+    posx = aHierarchical_PIN->m_Pos.x;
+    posy = aHierarchical_PIN->m_Pos.y;
+    size = aHierarchical_PIN->m_Size.x;
     GRTextHorizJustifyType side;
-    if( Struct->m_Edge )
+    if( aHierarchical_PIN->m_Edge )
     {
         tposx = posx - size;
         side  = GR_TEXT_HJUSTIFY_RIGHT;
@@ -771,61 +774,20 @@ static void PlotSheetLabelStruct( Hierarchical_PIN_Sheet_Struct* Struct )
         tposx = posx + size + (size / 8);
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
-    int thickness = Struct->m_Width;
+    int thickness = aHierarchical_PIN->m_Width;
 	if( thickness == 0 )
 		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
-    bool italic = Struct->m_Italic;
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
-                     Struct->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
+                     aHierarchical_PIN->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
                      side, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic, true  );
-    /* dessin du symbole de connexion */
+                    thickness, aHierarchical_PIN->m_Italic, true  );
 
-    if( Struct->m_Edge )
-        size = -size;
-    coord[0] = posx; coord[1] = posy; size2 = size / 2;
+    /* Draw the associated graphic symbol */
+    aHierarchical_PIN->CreateGraphicShape( Poly, aHierarchical_PIN->m_Pos );
 
-    switch( Struct->m_Shape )
-    {
-    case 0:         /* input |> */
-        coord[2]  = posx; coord[3] = posy - size2;
-        coord[4]  = posx + size2; coord[5] = posy - size2;
-        coord[6]  = posx + size; coord[7] = posy;
-        coord[8]  = posx + size2; coord[9] = posy + size2;
-        coord[10] = posx; coord[11] = posy + size2;
-        coord[12] = posx; coord[13] = posy;
-        PlotPoly( 7, coord, NOFILL );
-        break;
-
-    case 1:         /* output <| */
-        coord[2]  = posx + size2; coord[3] = posy - size2;
-        coord[4]  = posx + size; coord[5] = posy - size2;
-        coord[6]  = posx + size; coord[7] = posy + size2;
-        coord[8]  = posx + size2; coord[9] = posy + size2;
-        coord[10] = posx; coord[11] = posy;
-        PlotPoly( 6, coord, NOFILL );
-        break;
-
-    case 2:         /* bidi <> */
-    case 3:         /* TriSt <> */
-        coord[2] = posx + size2; coord[3] = posy - size2;
-        coord[4] = posx + size; coord[5] = posy;
-        coord[6] = posx + size2; coord[7] = posy + size2;
-        coord[8] = posx; coord[9] = posy;
-        PlotPoly( 5, coord, NOFILL );
-        break;
-
-    default:         /* unsp []*/
-        coord[2]  = posx; coord[3] = posy - size2;
-        coord[4]  = posx + size; coord[5] = posy - size2;
-        coord[6]  = posx + size; coord[7] = posy + size2;
-        coord[8]  = posx; coord[9] = posy + size2;
-        coord[10] = posx; coord[11] = posy;
-        PlotPoly( 6, coord, NOFILL );
-        break;
-    }
+    PlotPoly( Poly.size(), &Poly[0].x, NOFILL );
 }
 
 
@@ -895,7 +857,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
 
     while( SheetLabelStruct != NULL )
     {
-        PlotSheetLabelStruct( SheetLabelStruct );
+        Plot_Hierarchical_PIN_Sheet( SheetLabelStruct );
         SheetLabelStruct = SheetLabelStruct->Next();
     }
 }
