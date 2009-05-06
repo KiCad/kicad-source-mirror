@@ -138,7 +138,7 @@
         <long name="locked">0</long>
         <string name="template-name">""</string>
         <bool name="dirty">1</bool>
-        <long name="makefile-last-written">0</long>
+        <long name="makefile-last-written">-8519680</long>
         <string name="Compiler name">""</string>
         <string name="Build mode">"Debug"</string>
         <string name="Unicode mode">"ANSI"</string>
@@ -760,7 +760,6 @@
                 <long name="locked">0</long>
                 <string name="created">"26/3/2006"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
-                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnOkClick"</string>
                 <string name="proxy-Id name">"wxID_OK"</string>
                 <long name="proxy-Id value">5100</long>
                 <string name="proxy-Name">""</string>
@@ -827,7 +826,6 @@
                 <long name="locked">0</long>
                 <string name="created">"26/3/2006"</string>
                 <string name="proxy-type">"wbButtonProxy"</string>
-                <string name="event-handler-0">"wxEVT_COMMAND_BUTTON_CLICKED|OnCancelClick"</string>
                 <string name="proxy-Id name">"wxID_CANCEL"</string>
                 <long name="proxy-Id value">5101</long>
                 <string name="proxy-Name">""</string>

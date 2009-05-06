@@ -77,12 +77,6 @@ public:
 
 ////@begin WinEDA_PcbGridFrame event handler declarations
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
-    void OnOkClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
-    void OnCancelClick( wxCommandEvent& event );
-
 ////@end WinEDA_PcbGridFrame event handler declarations
 
 ////@begin WinEDA_PcbGridFrame member function declarations
