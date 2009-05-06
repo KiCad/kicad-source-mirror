@@ -15,18 +15,20 @@
 #include "protos.h"
 #include "cvstruct.h"
 
+
 #define QUOTE '\''
 
-class AUTOMODULE
+class FOOTPRINT_ALIAS
 {
 public:
     int         m_Type;
-    AUTOMODULE* Pnext;
     wxString    m_Name;
-    wxString    m_LibName;
+    wxString    m_FootprintName;
 
-    AUTOMODULE() { m_Type = 0; Pnext = NULL; }
+    FOOTPRINT_ALIAS() { m_Type = 0; }
 };
+
+typedef boost::ptr_vector< FOOTPRINT_ALIAS > FOOTPRINT_ALIAS_LIST;
 
 
 /*
@@ -68,18 +70,13 @@ char * ReadQuotedText(wxString & aTarget, char * aText)
  */
 void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
 {
-    COMPONENT_LIST::iterator iCmp;
-    FOOTPRINT_LIST::iterator iFp;
-    wxFileName  fn;
-    wxString    msg, tmp;
-    char        Line[1024];
-    FILE*       file;
-    AUTOMODULE* ItemModule, * NextMod;
-    AUTOMODULE* BaseListeMod = NULL;
-    COMPONENT*  Component;
-    FOOTPRINT*  footprint;
-    size_t      ii;
-    int         nb_correspondances = 0;
+    FOOTPRINT_ALIAS_LIST aliases;
+    FOOTPRINT_ALIAS*     alias;
+    wxFileName           fn;
+    wxString             msg, tmp;
+    char                 Line[1024];
+    FILE*                file;
+    size_t               ii;
 
     if( m_components.empty() )
         return;
@@ -89,7 +86,6 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
     {
         fn = m_AliasLibNames[ii];
         fn.SetExt( FootprintAliasFileExtension );
-
         tmp = wxGetApp().FindLibraryPath( fn );
 
         if( !tmp )
@@ -101,6 +97,8 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
             continue;
         }
 
+        wxLogDebug( wxT( "Opening footprint alias file: %s." ), tmp.c_str() );
+
         file = wxFopen( tmp, wxT( "rt" ) );
 
         if( file == NULL )
@@ -111,74 +109,72 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
         }
 
         /* lecture fichier n */
-        while( GetLine( file, Line, NULL,  sizeof(Line) ) != NULL )
+        while( GetLine( file, Line, NULL, sizeof(Line) ) != NULL )
         {
-            char * text = Line;
-            text = ReadQuotedText(tmp, text);
+            char* text = Line;
+            wxString value, footprint;
 
-            if ( text == NULL || (*text == 0 )  )
+            text = ReadQuotedText( value, text );
+
+            if( text == NULL || ( *text == 0 ) || value.IsEmpty() )
                 continue;
 
-            ItemModule = new AUTOMODULE();
-            ItemModule->Pnext = BaseListeMod;
-            BaseListeMod = ItemModule;
-
-            /* stockage du composant ( 'namecmp'  'namelib')
-             *  name et namelib */
-            ItemModule->m_Name = tmp;
-
             text++;
-            ReadQuotedText(ItemModule->m_LibName, text);
+            text = ReadQuotedText( footprint, text );
 
-            nb_correspondances++;
+            if( footprint.IsEmpty() )
+                continue;
+
+            alias = new FOOTPRINT_ALIAS();
+            alias->m_Name = value;
+            alias->m_FootprintName = footprint;
+            wxLogDebug( wxT( "Adding alias %s for footprint %s" ),
+                        value.c_str(), footprint.c_str() );
+            aliases.push_back( alias );
+            text++;
         }
 
         fclose( file );
     }
 
-    /* display some info */
-    msg.Printf( _( "%d equivalences" ), nb_correspondances );
+    /* Display the number of footpint aliases.  */
+    msg.Printf( _( "%d footprint aliases found." ), aliases.size() );
     SetStatusText( msg, 0 );
-    wxMessageBox(msg);
 
-    for( iCmp = m_components.begin(); iCmp != m_components.end(); ++iCmp )
+    ii = 0;
+
+    BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        Component = *iCmp;
-        m_ListCmp->SetSelection( m_components.IndexOf( Component ), TRUE );
+        m_ListCmp->SetSelection( ii, true );
 
-        if( Component->m_Module.IsEmpty() )
+        if( !component.m_Module.IsEmpty() )
+            continue;
+
+        BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )
         {
-            ItemModule = BaseListeMod;
-            for( ; ItemModule != NULL; ItemModule = ItemModule->Pnext )
+            if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
+                continue;
+
+            BOOST_FOREACH( FOOTPRINT& footprint, m_footprints )
             {
-                if( ItemModule->m_Name.CmpNoCase( Component->m_Valeur ) != 0 )
-                    continue;
-
-                for( iFp = m_footprints.begin(); iFp != m_footprints.end(); ++iFp )
+                if( alias.m_FootprintName.CmpNoCase( footprint.m_Module ) == 0 )
                 {
-                    footprint = *iFp;
-
-                    if( ItemModule->m_LibName.CmpNoCase( footprint->m_Module ) == 0 )
-                    {
-                        SetNewPkg( footprint->m_Module );
-                        break;
-                    }
+                    SetNewPkg( footprint.m_Module );
+                    break;
                 }
+            }
 
-                msg.Printf( _( "Component %s: Footprint %s not found in " \
-                               "libraries" ), Component->m_Valeur.GetData(),
-                            ItemModule->m_LibName.GetData() );
-                DisplayError( this, msg, 10 );
+            if( component.m_Module.IsEmpty() )
+            {
+                msg.Printf( _( "Component %s: footprint %s not found in " \
+                               "any of the project footprint libraries." ),
+                            component.m_Reference.c_str(),
+                            alias.m_FootprintName.c_str() );
+                wxMessageBox( msg, _( "CVPcb Error" ), wxOK | wxICON_ERROR,
+                              this );
             }
         }
-    }
 
-    /* free memory: */
-    for( ItemModule = BaseListeMod; ItemModule != NULL; ItemModule = NextMod )
-    {
-        NextMod = ItemModule->Pnext;
-        delete ItemModule;
+        ii += 1;
     }
-
-    BaseListeMod = NULL;
 }

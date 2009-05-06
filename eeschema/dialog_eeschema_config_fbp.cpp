@@ -27,11 +27,6 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	
 	bMainSizer->Add( sbSizer5, 0, wxALL, 5 );
 	
-	wxBoxSizer* bLeftSizer;
-	bLeftSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	bMainSizer->Add( bLeftSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
 	wxStaticBoxSizer* sbLibsChoiceSizer;
 	sbLibsChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Component library files") ), wxHORIZONTAL );
 	

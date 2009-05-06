@@ -103,9 +103,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     /* Clear components buffer */
     if( !m_components.empty() )
     {
-        m_components.DeleteContents( true );
-        m_components.Clear();
-        m_components.DeleteContents( false );
+        m_components.clear();
     }
 
     source = wxFopen( m_NetlistFileName.GetFullPath(), wxT( "rt" ) );
@@ -257,7 +255,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         /* Store info for this component */
         Cmp = new COMPONENT();
         Cmp->m_Reference = component_reference;
-        Cmp->m_Valeur    = component_value;
+        Cmp->m_Value     = component_value;
         m_components.push_back( Cmp );
 
         if(  m_isEESchemaNetlist )   /* copy footprint name: */
@@ -278,7 +276,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
     fclose( source );
 
-    m_components.Sort( compare );
+    m_components.sort();
 
     return 0;
 }
@@ -286,7 +284,6 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
 int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
 {
-    COMPONENT_LIST::iterator i;
     char       Line[BUFFER_CHAR_SIZE + 1];
     wxString   CmpRef;
     COMPONENT* Cmp = NULL;
@@ -310,9 +307,9 @@ int WinEDA_CvpcbFrame::ReadFootprintFilterList( FILE* f )
             CmpRef.Trim( FALSE );
 
             /* Search the new component in list */
-            for( i = m_components.begin(); i != m_components.end(); ++i )
+            BOOST_FOREACH( COMPONENT& component, m_components )
             {
-                Cmp = *i;
+                Cmp = &component;
 
                 if( Cmp->m_Reference == CmpRef )
                     break;
@@ -388,8 +385,8 @@ int ReadPinConnection( FILE* f, COMPONENT* Cmp )
             }
 
             Pin           = new PIN();
-            Pin->m_PinNum = numpin;
-            Pin->m_PinNet = net;
+            Pin->m_Number = numpin;
+            Pin->m_Net = net;
             Cmp->m_Pins.push_back( Pin );
         }
     }

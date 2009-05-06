@@ -10,11 +10,9 @@
 #include "gestfich.h"
 #include "id.h"
 #include "param_config.h"
-
-#include "3d_viewer.h"
+#include "bitmaps.h"
 
 #include "cvpcb.h"
-#include "bitmaps.h"
 #include "protos.h"
 #include "cvstruct.h"
 #include "dialog_cvpcb_config.h"
@@ -157,8 +155,8 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
     BuildCmpListBox();
     BuildFootprintListBox();
 
-    /* Creation des contraintes de dimension de la fenetre d'affichage des composants
-     *  du schema */
+    /* Creation des contraintes de dimension de la fenetre d'affichage des
+     * composants du schema */
     wxLayoutConstraints* linkpos = new wxLayoutConstraints;
     linkpos->top.SameAs( this, wxTop );
     linkpos->bottom.SameAs( this, wxBottom );
@@ -167,8 +165,8 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
     if( m_ListCmp )
         m_ListCmp->SetConstraints( linkpos );
 
-    /* Creation des contraintes de dimension de la fenetre d'affichage des modules
-     *  de la librairie */
+    /* Creation des contraintes de dimension de la fenetre d'affichage des
+     * modules de la librairie */
     linkpos = new wxLayoutConstraints;
     linkpos->top.SameAs( m_ListCmp, wxTop );
     linkpos->bottom.SameAs( m_ListCmp, wxBottom );
@@ -197,11 +195,6 @@ WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame()
             ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
         config->Write( wxT( FILTERFOOTPRINTKEY ), state );
     }
-
-    m_footprints.DeleteContents( true );
-    m_footprints.Clear();
-    m_components.DeleteContents( true );
-    m_components.Clear();
 }
 
 
@@ -268,7 +261,8 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
     {
         unsigned        ii;
         wxMessageDialog dialog( this,
-                                _( "Net and component list modified.\nSave before exit ?" ),
+                                _( "Net and component list modified.\nSave " \
+                                   "before exit ?" ),
                                 _( "Confirmation" ),
                                 wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
 
@@ -332,8 +326,6 @@ void WinEDA_CvpcbFrame::OnChar( wxKeyEvent& event )
 void WinEDA_CvpcbFrame::ToFirstNA( wxCommandEvent& event )
 /*******************************************************/
 {
-    COMPONENT_LIST::iterator i;
-    COMPONENT* Component;
     int        ii = 0;
     int        selection;
 
@@ -345,11 +337,9 @@ void WinEDA_CvpcbFrame::ToFirstNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = 0;
 
-    for( i = m_components.begin(); i != m_components.end(); ++i )
+    BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        Component = *i;
-
-        if( Component->m_Module.IsEmpty() && ii > selection )
+        if( component.m_Module.IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
             return;
@@ -367,8 +357,6 @@ void WinEDA_CvpcbFrame::ToFirstNA( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::ToPreviousNA( wxCommandEvent& event )
 /**********************************************************/
 {
-    COMPONENT_LIST::reverse_iterator i;
-    COMPONENT* Component;
     int        ii;
     int        selection;
 
@@ -381,11 +369,9 @@ void WinEDA_CvpcbFrame::ToPreviousNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = m_ListCmp->GetCount() - 1;
 
-    for( i = m_components.rbegin(); i != m_components.rend(); ++i )
+    BOOST_REVERSE_FOREACH( COMPONENT& component, m_components )
     {
-        Component = *i;
-
-        if( Component->m_Module.IsEmpty() && ii < selection )
+        if( component.m_Module.IsEmpty() && ii < selection )
         {
             m_ListCmp->SetSelection( ii );
             return;
@@ -418,25 +404,24 @@ void WinEDA_CvpcbFrame::DelAssociations( wxCommandEvent& event )
 /* Supprime toutes les associations deja faites
  */
 {
-    COMPONENT_LIST::iterator i;
-    COMPONENT* Component;
     wxString   Line;
 
     if( IsOK( this, _( "Delete selections" ) ) )
     {
-        for( i = m_components.begin(); i != m_components.end(); ++i )
+        m_ListCmp->SetSelection( 0 );
+
+        BOOST_FOREACH( COMPONENT& component, m_components )
         {
-            Component = *i;
-            Component->m_Module.Empty();
+            component.m_Module.Empty();
             SetNewPkg( wxEmptyString );
         }
 
         m_ListCmp->SetSelection( 0 );
-        m_undefinedComponentCnt = m_components.GetCount();
+        m_undefinedComponentCnt = m_components.size();
     }
 
-    Line.Printf( _( "Components: %d (free: %d)" ), m_components.GetCount(),
-                 m_components.GetCount() );
+    Line.Printf( _( "Components: %d (free: %d)" ), m_components.size(),
+                 m_components.size() );
     SetStatusText( Line, 1 );
 }
 
@@ -568,7 +553,6 @@ void WinEDA_CvpcbFrame::OnLeftDClick( wxListEvent& event )
 void WinEDA_CvpcbFrame::OnSelectComponent( wxListEvent& event )
 /*************************************************************/
 {
-    COMPONENT* Component;
     int        selection;
 
     if( !m_HToolBar->GetToolState( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
@@ -584,15 +568,14 @@ void WinEDA_CvpcbFrame::OnSelectComponent( wxListEvent& event )
         return;
     }
 
-    Component = m_components[ selection ];
-
-    if( Component == NULL )
+    if( &m_components[ selection ] == NULL )
     {
         m_FootprintList->SetActiveFootprintList( TRUE, TRUE );
         return;
     }
 
-    m_FootprintList->SetFootprintFilteredList( Component, m_footprints );
+    m_FootprintList->SetFootprintFilteredList( &m_components[ selection ],
+                                               m_footprints );
 }
 
 

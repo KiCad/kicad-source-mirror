@@ -53,7 +53,7 @@ int genorcad( bool rightJustify )
         fprintf( dest, " %s ", CONV_TO_UTF8( CurrentCmp->m_Reference ) );
 
         /* placement de la valeur */
-        fprintf( dest, "%s\n", CONV_TO_UTF8( CurrentCmp->m_Valeur ) );
+        fprintf( dest, "%s\n", CONV_TO_UTF8( CurrentCmp->m_Value ) );
 
         /* Tri des pins */
         TriPinsModule( CurrentCmp );
@@ -140,7 +140,7 @@ static void TriPinsModule( COMPONENT* CurrentCmp )
             wxString msg;
             msg.Printf( _( "%s %s pin %s : Different Nets" ),
                         CurrentCmp->m_Reference.GetData(),
-                        CurrentCmp->m_Valeur.GetData(),
+                        CurrentCmp->m_Value.GetData(),
                         Pin->m_PinNum.GetData() );
             DisplayError( NULL, msg, 60 );
         }

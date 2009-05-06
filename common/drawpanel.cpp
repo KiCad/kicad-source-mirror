@@ -199,14 +199,12 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
 #ifdef WX_ZOOM
     double scale = GetScreen()->GetScalingFactor();
     wxPoint origin = GetScreen()->m_DrawOrg;
-    wxLogDebug( wxT( "DC user scale factor: %0.3f, X origin: %d, Y " \
-                     "origin: %d" ), scale, origin.x, origin.y );
     int ppuX, ppuY, startX, startY;
-    GetScrollPixelsPerUnit(& ppuX, & ppuY);
-    GetViewStart(& startX, & startY);
+    GetScrollPixelsPerUnit( & ppuX, & ppuY );
+    GetViewStart( &startX, &startY );
     DC->SetDeviceOrigin( origin.x - startX * ppuX, origin.y - startY * ppuY );
     DC->SetUserScale( scale, scale );
-    wxSize size = GetScreen()->ReturnPageSize() * 2 * scale;
+//    wxSize size = GetScreen()->ReturnPageSize() * 2 * scale;
 //    DC->SetLogicalOrigin( origin.x, origin.y );
 #endif
     SetBoundaryBox();
@@ -368,12 +366,11 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
 
     GetScreen()->Unscale( realpos );
 #ifdef WX_ZOOM
-    wxCoord x, y;
-    wxClientDC DC( this );
-    PrepareGraphicContext( &DC );
-    x = DC.DeviceToLogicalX( realpos.x );
-    y = DC.DeviceToLogicalY( realpos.y );
-    return wxPoint( x, y );
+//    wxCoord x, y;
+//    wxClientDC DC( this );
+//    PrepareGraphicContext( &DC );
+//    realpos.x = DC.DeviceToLogicalX( realpos.x );
+//    realpos.y = DC.DeviceToLogicalY( realpos.y );
 #else
     realpos += GetScreen()->m_DrawOrg;
 #endif

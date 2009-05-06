@@ -1,6 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        3d_viewer.h
 /////////////////////////////////////////////////////////////////////////////
+
+#ifndef __3D_VIEWER_H__
+#define __3D_VIEWER_H__
+
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
@@ -172,3 +176,5 @@ extern double g_Draw3d_dx, g_Draw3d_dy;
 extern double ZBottom, ZTop;
 extern double DataScale3D;  // coeff de conversion unites utilsateut -> unites 3D
 extern int gl_attrib[];
+
+#endif  /*  __3D_VIEWER_H__ */

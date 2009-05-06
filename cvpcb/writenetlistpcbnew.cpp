@@ -20,29 +20,27 @@
 #define MAX_LEN_NETNAME 16
 
 /* Routines locales */
-static void ChangePinNet(  COMPONENT_LIST& list, wxString& PinNet,
-                           int* netNumber, bool rightJustify );
+static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
+                          int* netNumber, bool rightJustify );
 static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
 
 
-static void RemoveDuplicatePins( COMPONENT* component )
+static void RemoveDuplicatePins( COMPONENT& component )
 {
-    wxASSERT( component != NULL );
-
     PIN_LIST::iterator i;
     PIN *pin1, *pin2;
     wxString msg;
 
-    if( component->m_Pins.size() <= 1 )
+    if( component.m_Pins.size() <= 1 )
         return;
 
-    i = component->m_Pins.begin();
-    pin1 = *i;
+    i = component.m_Pins.begin();
+    pin1 = &(*i);
     ++i;
 
-    while( i != component->m_Pins.end() )
+    while( i != component.m_Pins.end() )
     {
-        pin2 = *i;
+        pin2 = &(*i);
 
         wxASSERT( pin2 != NULL );
 
@@ -56,17 +54,17 @@ static void RemoveDuplicatePins( COMPONENT* component )
         if( !same_pin_net( pin1, pin2 ) )
         {
             msg.Printf( _( "Component %s %s pin %s : Different Nets" ),
-                        component->m_Reference.GetData(),
-                        component->m_Valeur.GetData(),
-                        pin1->m_PinNum.GetData() );
+                        component.m_Reference.GetData(),
+                        component.m_Value.GetData(),
+                        pin1->m_Number.GetData() );
             DisplayError( NULL, msg, 60 );
         }
 
         wxLogDebug( wxT( "Removing duplicate pin %s from component %s: %s" ),
-                    pin1->m_PinNum.c_str(), component->m_Reference.c_str(),
-                    component->m_Valeur.c_str() );
+                    pin1->m_Number.c_str(), component.m_Reference.c_str(),
+                    component.m_Value.c_str() );
         pin1 = pin2;
-        i = component->m_Pins.erase( i );
+        i = component.m_Pins.erase( i );
         delete pin2;
     }
 }
@@ -76,11 +74,7 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
                       bool rightJustify )
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
-    COMPONENT_LIST::iterator iCmp;
-    PIN_LIST::iterator       iPin;
     char       Line[1024];
-    PIN*       Pin;
-    COMPONENT* Component;
     int        netNumber = 1;
 
     DateAndTime( Line );
@@ -94,40 +88,36 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
     /* Lecture de la liste */
     /***********************/
 
-    for( iCmp = list.begin(); iCmp != list.end(); ++iCmp )
+    BOOST_FOREACH( COMPONENT& component, list )
     {
-        Component = *iCmp;
+        fprintf( file, " ( %s ", CONV_TO_UTF8( component.m_TimeStamp ) );
 
-        fprintf( file, " ( %s ", CONV_TO_UTF8( Component->m_TimeStamp ) );
-
-        if( !Component->m_Module.IsEmpty() )
-            fprintf( file, CONV_TO_UTF8( Component->m_Module ) );
+        if( !component.m_Module.IsEmpty() )
+            fprintf( file, CONV_TO_UTF8( component.m_Module ) );
 
         else
             fprintf( file, "$noname$" );
 
-        fprintf( file, " %s ", CONV_TO_UTF8( Component->m_Reference ) );
+        fprintf( file, " %s ", CONV_TO_UTF8( component.m_Reference ) );
 
         /* placement de la valeur */
-        fprintf( file, "%s\n", CONV_TO_UTF8( Component->m_Valeur ) );
+        fprintf( file, "%s\n", CONV_TO_UTF8( component.m_Value ) );
 
-        Component->m_Pins.Sort( compare );
-        RemoveDuplicatePins( Component );
+        component.m_Pins.sort();
+        RemoveDuplicatePins( component );
 
         /* Placement de la liste des pins */
-        for( iPin = Component->m_Pins.begin(); iPin != Component->m_Pins.end();
-             ++iPin )
+        BOOST_FOREACH( PIN& pin, component.m_Pins )
         {
-            Pin = *iPin;
-            if( Pin->m_PinNet.Len() > MAX_LEN_NETNAME )
-                ChangePinNet( list, Pin->m_PinNet, &netNumber, rightJustify );
+            if( pin.m_Net.Len() > MAX_LEN_NETNAME )
+                ChangePinNet( list, pin.m_Net, &netNumber, rightJustify );
 
-            if( !Pin->m_PinNet.IsEmpty() )
+            if( !pin.m_Net.IsEmpty() )
                 fprintf( file, "  ( %s %s )\n",
-                         CONV_TO_UTF8( Pin->m_PinNum ),
-                         CONV_TO_UTF8( Pin->m_PinNet ) );
+                         CONV_TO_UTF8( pin.m_Number ),
+                         CONV_TO_UTF8( pin.m_Net ) );
             else
-                fprintf( file, "  ( %s ? )\n", CONV_TO_UTF8( Pin->m_PinNum ) );
+                fprintf( file, "  ( %s ? )\n", CONV_TO_UTF8( pin.m_Number ) );
         }
 
         fprintf( file, " )\n" );
@@ -148,15 +138,12 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
  */
 void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
 {
-    COMPONENT_LIST::iterator i;
-    COMPONENT* component;
     bool       WriteHeader = FALSE;
 
-    for( i = list.begin(); i != list.end(); ++i )
+    BOOST_FOREACH( COMPONENT& component, list )
     {
-        component = *i;
         unsigned int FilterCount;
-        FilterCount = component->m_FootprintFilter.GetCount();
+        FilterCount = component.m_FootprintFilter.GetCount();
         if( FilterCount == 0 )
             continue;
         if( !WriteHeader )
@@ -165,12 +152,12 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
             WriteHeader = TRUE;
         }
         fprintf( file, "$component %s\n",
-                 CONV_TO_UTF8( component->m_Reference ) );
+                 CONV_TO_UTF8( component.m_Reference ) );
         /* Write the footprint list */
         for( unsigned int jj = 0; jj < FilterCount; jj++ )
         {
             fprintf( file, " %s\n",
-                     CONV_TO_UTF8( component->m_FootprintFilter[jj] ) );
+                     CONV_TO_UTF8( component.m_FootprintFilter[jj] ) );
         }
 
         fprintf( file, "$endlist\n" );
@@ -190,10 +177,6 @@ static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
 {
     wxASSERT( netNumber != NULL );
 
-    COMPONENT_LIST::iterator iCmp;
-    PIN_LIST::iterator iPin;
-    PIN*       Pin;
-    COMPONENT* Cmp;
     wxString   OldName;
     wxString   NewName;
 
@@ -212,18 +195,14 @@ static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
 
     *netNumber = *netNumber + 1;
 
-    for( iCmp = list.begin(); iCmp != list.end(); ++iCmp )
+    BOOST_FOREACH( COMPONENT& component, list )
     {
-        Cmp = *iCmp;
-
-        for( iPin = Cmp->m_Pins.begin(); iPin != Cmp->m_Pins.end(); ++iPin )
+        BOOST_FOREACH( PIN& pin, component.m_Pins )
         {
-            Pin = *iPin;
-
-            if( Pin->m_PinNet != OldName )
+            if( pin.m_Net != OldName )
                 continue;
 
-            Pin->m_PinNet = NewName;
+            pin.m_Net = NewName;
         }
     }
 }

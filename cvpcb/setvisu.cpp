@@ -7,21 +7,25 @@
 #include "class_drawpanel.h"
 #include "id.h"
 
-#include "3d_viewer.h"
-
 #include "bitmaps.h"
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
 
-
-/*******************************************/
-void WinEDA_CvpcbFrame::CreateScreenCmp()
-/*******************************************/
-
-/* Create or Update the frame showing the current highlighted footprint
- *  and (if showed) the 3D display frame
+/*
+ * NOTE: There is something in 3d_viewer.h that causes a compiler error in
+ *       <boost/foreach.hpp> in Linux so move it after cvpcb.h where it is
+ *       included to prevent the error from occuring.
  */
+#include "3d_viewer.h"
+
+
+
+/*
+ * Create or Update the frame showing the current highlighted footprint
+ * and (if showed) the 3D display frame
+ */
+void WinEDA_CvpcbFrame::CreateScreenCmp()
 {
     wxString msg, FootprintName;
     bool     IsNew = FALSE;
@@ -77,10 +81,10 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
 
 
 
-/*******************************************************************/
+/*
+ * Draws the current highlighted footprint.
+ */
 void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/*******************************************************************/
-/* Draws the current highlighted footprint */
 {
     if( !GetBoard() )
         return;
@@ -101,14 +105,15 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/********************************************************************/
+
+/*
+ * Redraw the BOARD items but not cursors, axis or grid.
+ */
 void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
                   int aDrawMode, const wxPoint& offset )
-/********************************************************************/
-/* Redraw the BOARD items but not cursors, axis or grid */
 {
     if( m_Modules )
     {
         m_Modules->Draw( aPanel, DC, GR_COPY );
-   }
+    }
 }

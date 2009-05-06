@@ -21,7 +21,7 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	
 	m_ListLibr = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListLibr->SetToolTip( _("List of active library files.\nOnly library files in this list are loaded by Pcbnew.\nThe order of this list is important:\nPcbnew searchs for a given footprint using this list order priority.") );
-	m_ListLibr->SetMinSize( wxSize( 450,-1 ) );
+	m_ListLibr->SetMinSize( wxSize( 450,90 ) );
 	
 	sbLibsChoiceSizer->Add( m_ListLibr, 1, wxALL|wxEXPAND, 5 );
 	
@@ -45,7 +45,7 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	
 	sbLibsChoiceSizer->Add( bSizerLibButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bMainSizer->Add( sbLibsChoiceSizer, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbLibsChoiceSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbEquivChoiceSizer;
 	sbEquivChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint alias files") ), wxHORIZONTAL );

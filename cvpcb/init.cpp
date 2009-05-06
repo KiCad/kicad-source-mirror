@@ -25,7 +25,6 @@
  */
 void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 {
-    COMPONENT_LIST::iterator i;
     COMPONENT* Component;
     bool       isUndefined = false;
     int        NumCmp;
@@ -38,10 +37,10 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     if( NumCmp < 0 )
     {
         NumCmp = 0;
-        m_ListCmp->SetSelection( NumCmp, TRUE );
+        m_ListCmp->SetSelection( NumCmp, true );
     }
 
-    Component = m_components[ NumCmp ];
+    Component = &m_components[ NumCmp ];
 
     if( Component == NULL )
         return;
@@ -51,7 +50,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     Component->m_Module = package;
 
     Line.Printf( CMP_FORMAT, NumCmp + 1,
-                 Component->m_Reference.GetData(), Component->m_Valeur.GetData(),
+                 Component->m_Reference.GetData(), Component->m_Value.GetData(),
                  Component->m_Module.GetData() );
     m_modified = true;
 
@@ -67,7 +66,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     m_ListCmp->SetSelection( NumCmp, TRUE );
 
     Line.Printf( _( "Components: %d (free: %d)" ),
-                 m_components.GetCount(), m_undefinedComponentCnt );
+                 m_components.size(), m_undefinedComponentCnt );
     SetStatusText( Line, 1 );
 }
 
@@ -78,8 +77,6 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
  */
 bool WinEDA_CvpcbFrame::ReadNetList()
 {
-    COMPONENT_LIST::iterator i;
-    COMPONENT* Component;
     wxString   msg;
     int        error_level;
 
@@ -105,24 +102,23 @@ bool WinEDA_CvpcbFrame::ReadNetList()
     BuildFootprintListBox();
 
     m_ListCmp->Clear();
-
     m_undefinedComponentCnt = 0;
-    for( i = m_components.begin(); i != m_components.end(); ++i )
+
+    BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        Component = *i;
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
-                    Component->m_Reference.GetData(),
-                    Component->m_Valeur.GetData(),
-                    Component->m_Module.GetData() );
+                    component.m_Reference.GetData(),
+                    component.m_Value.GetData(),
+                    component.m_Module.GetData() );
         m_ListCmp->AppendLine( msg );
-        if( Component->m_Module.IsEmpty() )
+        if( component.m_Module.IsEmpty() )
             m_undefinedComponentCnt += 1;
     }
 
     if( !m_components.empty() )
         m_ListCmp->SetSelection( 0, TRUE );
 
-    msg.Printf( _( "Components: %d (free: %d)" ), m_components.GetCount(),
+    msg.Printf( _( "Components: %d (free: %d)" ), m_components.size(),
                 m_undefinedComponentCnt );
     SetStatusText( msg, 1 );
 

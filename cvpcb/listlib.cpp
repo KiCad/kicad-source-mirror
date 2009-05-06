@@ -48,9 +48,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
     if( !list.empty() )
     {
-        list.DeleteContents( true );
-        list.Clear();
-        list.DeleteContents( false );
+        list.clear();
     }
 
     if( libNames.GetCount() == 0 )
@@ -138,7 +136,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         ReadDocLib( tmp, list );
     }
 
-    list.Sort( compare );
+    list.sort();
 
     return true;
 }
@@ -151,13 +149,11 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list )
 {
     FOOTPRINT* NewMod;
-    FOOTPRINT* tmp;
     char       Line[1024];
     wxString   ModuleName;
     wxString   msg;
     FILE*      LibDoc;
     wxFileName fn = ModLibName;
-    FOOTPRINT_LIST::iterator i;
 
     fn.SetExt( wxT( "mdc" ) );
 
@@ -196,13 +192,11 @@ static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list )
                 {
                 case 'L':       /* LibName */
                     ModuleName = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-                    for( i = list.begin(); i != list.end(); ++i )
+                    BOOST_FOREACH( FOOTPRINT& footprint, list )
                     {
-                        tmp = *i;
-
-                        if( ModuleName == tmp->m_Module )
+                        if( ModuleName == footprint.m_Module )
                         {
-                            NewMod = tmp;
+                            NewMod = &footprint;
                             break;
                         }
                     }

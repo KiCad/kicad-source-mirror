@@ -7,6 +7,10 @@
 
 #include "pcbcommon.h"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/foreach.hpp>
+
+
 // config for footprints doc file acces
 #define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
 
@@ -27,21 +31,23 @@ class PIN
 {
 public:
     int       m_Index;     /* variable utilisee selon types de netlistes */
-    int       m_PinType;   /* code type electrique ( Entree Sortie Passive..) */
-    wxString  m_PinNet;    /* Pointeur sur le texte nom de net */
-    wxString  m_PinNum;
-    wxString  m_PinName;
+    int       m_Type;      /* code type electrique ( Entree Sortie Passive..) */
+    wxString  m_Net;       /* Pointeur sur le texte nom de net */
+    wxString  m_Number;
+    wxString  m_Name;
     wxString  m_Repere;    /* utilise selon formats de netliste */
 
     PIN();
 };
 
-WX_DECLARE_LIST( PIN, PIN_LIST );
+typedef boost::ptr_vector< PIN > PIN_LIST;
 
 /* PIN object list sort function. */
-extern int compare( const PIN** item1, const PIN** item2 );
+extern bool operator<( const PIN& item1, const PIN& item2 );
 
-/* PIN object comparison functions. */
+/* PIN uniqueness test function. */
+extern bool operator==( const PIN& item1, const PIN& item2 );
+
 extern bool same_pin_number( const PIN* item1, const PIN* item2 );
 extern bool same_pin_net( const PIN* item1, const PIN* item2 );
 
@@ -49,25 +55,25 @@ extern bool same_pin_net( const PIN* item1, const PIN* item2 );
 class COMPONENT
 {
 public:
-    int           m_Num;        /* Numero d'ordre */
-    int           m_Multi;      /* Nombre d' unites par boitier */
-    PIN_LIST      m_Pins;       /* pointeur sur la liste des Pins */
-    wxString      m_Reference;  /* U3, R5  ... */
-    wxString      m_Valeur;     /* 7400, 47K ... */
-    wxString      m_TimeStamp;  /* Signature temporelle ("00000000" si absente) */
-    wxString      m_Module;     /* Nom du module (Package) corresp */
-    wxString      m_Repere;     /* utilise selon formats de netliste */
-    wxArrayString m_FootprintFilter;    /* List of allowed footprints (wildcart allowed
-                                         * if void: no filtering */
+    int           m_Num;       /* Numero d'ordre */
+    int           m_Multi;     /* Nombre d' unites par boitier */
+    PIN_LIST      m_Pins;      /* pointeur sur la liste des Pins */
+    wxString      m_Reference; /* U3, R5  ... */
+    wxString      m_Value;     /* 7400, 47K ... */
+    wxString      m_TimeStamp; /* Signature temporelle ("00000000" si absente) */
+    wxString      m_Module;    /* Nom du module (Package) corresp */
+    wxString      m_Repere;    /* utilise selon formats de netliste */
+    wxArrayString m_FootprintFilter;  /* List of allowed footprints (wildcards
+                                       * allowed ). If empty: no filtering */
 
     COMPONENT();
     ~COMPONENT();
 };
 
-WX_DECLARE_LIST( COMPONENT, COMPONENT_LIST );
+typedef boost::ptr_vector< COMPONENT > COMPONENT_LIST;
 
 /* COMPONENT object list sort function. */
-extern int compare( const COMPONENT** item1, const COMPONENT** item2 );
+extern bool operator<( const COMPONENT& item1, const COMPONENT& item2 );
 
 
 class FOOTPRINT
@@ -82,10 +88,10 @@ public:
     FOOTPRINT();
 };
 
-WX_DECLARE_LIST( FOOTPRINT, FOOTPRINT_LIST );
+typedef boost::ptr_vector< FOOTPRINT > FOOTPRINT_LIST;
 
 /* FOOTPRINT object list sort function. */
-extern int compare( const FOOTPRINT** item1, const FOOTPRINT** item2 );
+extern bool operator<( const FOOTPRINT& item1, const FOOTPRINT& item2 );
 
 /* Gestion des noms des librairies */
 extern const wxString FootprintAliasFileExtension;

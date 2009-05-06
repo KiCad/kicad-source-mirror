@@ -10,12 +10,18 @@
 #include "confirm.h"
 #include "macros.h"
 
-#include "3d_viewer.h"
-
 #include "cvpcb.h"
 #include "bitmaps.h"
 #include "protos.h"
 #include "cvstruct.h"
+
+/*
+ * NOTE: There is something in 3d_viewer.h that causes a compiler error in
+ *       <boost/foreach.hpp> in Linux so move it after cvpcb.h where it is
+ *       included to prevent the error from occuring.
+ */
+#include "3d_viewer.h"
+
 
 
 /*****************************************************************/

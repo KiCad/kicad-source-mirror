@@ -78,8 +78,8 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">0</property>
-                    <object class="wxStaticBoxSizer" expanded="0">
+                    <property name="proportion">1</property>
+                    <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
                         <property name="label">Footprint library files</property>
                         <property name="minimum_size"></property>
@@ -101,7 +101,7 @@
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size">-1,-1</property>
-                                <property name="minimum_size">450,-1</property>
+                                <property name="minimum_size">450,90</property>
                                 <property name="name">m_ListLibr</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>

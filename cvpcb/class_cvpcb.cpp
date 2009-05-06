@@ -10,36 +10,37 @@
 #include <wx/listimpl.cpp>
 
 
-WX_DEFINE_LIST( PIN_LIST );
-
 PIN::PIN()
 {
     m_Index = 0;         /* variable utilisee selon types de netlistes */
-    m_PinType = 0;       /* code type electrique ( Entree Sortie Passive..) */
+    m_Type = 0;          /* code type electrique ( Entree Sortie Passive..) */
 }
 
-int compare( const PIN** item1, const PIN** item2 )
+bool operator<( const PIN& item1, const PIN& item2 )
 {
-    return StrLenNumICmp( (*item1)->m_PinNum.GetData(),
-                          (*item2)->m_PinNum.GetData(), 4 );
+    return ( StrLenNumICmp( item1.m_Number.GetData(),
+                            item2.m_Number.GetData(), 4 ) < 0 );
+}
+
+bool operator==( const PIN& item1, const PIN& item2 )
+{
+    return ( item1.m_Number == item2.m_Number );
 }
 
 bool same_pin_number( const PIN* item1, const PIN* item2 )
 {
     wxASSERT( item1 != NULL && item2 != NULL );
 
-    return ( item1->m_PinNum == item2->m_PinNum );
+    return ( item1->m_Number == item2->m_Number );
 }
 
 bool same_pin_net( const PIN* item1, const PIN* item2 )
 {
     wxASSERT( item1 != NULL && item2 != NULL );
 
-    return ( item1->m_PinNet == item2->m_PinNet );
+    return ( item1->m_Net == item2->m_Net );
 }
 
-
-WX_DEFINE_LIST( COMPONENT_LIST );
 
 COMPONENT::COMPONENT()
 {
@@ -49,26 +50,22 @@ COMPONENT::COMPONENT()
 
 COMPONENT::~COMPONENT()
 {
-    m_Pins.DeleteContents( true );
-    m_Pins.Clear();
 }
 
-int compare( const COMPONENT** item1, const COMPONENT** item2 )
+bool operator<( const COMPONENT& item1, const COMPONENT& item2 )
 {
-    return StrNumICmp( (*item1)->m_Reference.GetData(),
-                       (*item2)->m_Reference.GetData() );
+    return ( StrNumICmp( item1.m_Reference.GetData(),
+                         item2.m_Reference.GetData() ) < 0 );
 }
 
-
-WX_DEFINE_LIST( FOOTPRINT_LIST );
 
 FOOTPRINT::FOOTPRINT()
 {
     m_Num = 0;
 }
 
-int compare( const FOOTPRINT** item1, const FOOTPRINT** item2 )
+bool operator<( const FOOTPRINT& item1, const FOOTPRINT& item2 )
 {
-    return StrNumICmp( (*item1)->m_Module.GetData(),
-                       (*item2)->m_Module.GetData() );
+    return ( StrNumICmp( item1.m_Module.GetData(),
+                         item2.m_Module.GetData() ) < 0 );
 }

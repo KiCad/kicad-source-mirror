@@ -31,8 +31,6 @@ const wxString titleComponentLibErr( _( "Component Library Error" ) );
  */
 int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
 {
-    COMPONENT_LIST::iterator i;
-    COMPONENT*  Cmp;
     FILE*       dest;
     wxFileName  fn( NetlistFullFileName );
     char        Line[1024];
@@ -49,14 +47,17 @@ int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
     fprintf( dest, " Created by %s", CONV_TO_UTF8( Title ) );
     fprintf( dest, " date = %s\n", DateAndTime( Line ) );
 
-    for( i = m_components.begin(); i != m_components.end(); ++i )
+    BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        Cmp = *i;
         fprintf( dest, "\nBeginCmp\n" );
-        fprintf( dest, "TimeStamp = %s;\n", CONV_TO_UTF8( Cmp->m_TimeStamp ) );
-        fprintf( dest, "Reference = %s;\n", CONV_TO_UTF8( Cmp->m_Reference ) );
-        fprintf( dest, "ValeurCmp = %s;\n", CONV_TO_UTF8( Cmp->m_Valeur ) );
-        fprintf( dest, "IdModule  = %s;\n", CONV_TO_UTF8( Cmp->m_Module ) );
+        fprintf( dest, "TimeStamp = %s;\n",
+                 CONV_TO_UTF8( component.m_TimeStamp ) );
+        fprintf( dest, "Reference = %s;\n",
+                 CONV_TO_UTF8( component.m_Reference ) );
+        fprintf( dest, "ValeurCmp = %s;\n",
+                 CONV_TO_UTF8( component.m_Value ) );
+        fprintf( dest, "IdModule  = %s;\n",
+                 CONV_TO_UTF8( component.m_Module ) );
         fprintf( dest, "EndCmp\n" );
     }
 
@@ -71,10 +72,8 @@ int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
  */
 bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
 {
-    COMPONENT_LIST::iterator i;
     wxString    timestamp, valeur, ilib, namecmp, msg;
     bool        read_cmp_data = FALSE, eof = FALSE;
-    COMPONENT*  Cmp;
     char        Line[1024], * ident, * data;
     FILE*       source;
     wxFileName  fn = fileName;
@@ -176,15 +175,13 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
 
         /* Recherche du composant correspondant en netliste et
          *    mise a jour de ses parametres */
-        for( i = list.begin(); i != list.end(); ++i )
+        BOOST_FOREACH( COMPONENT& component, list )
         {
-            Cmp = *i;
-
-            if( namecmp != Cmp->m_Reference )
+            if( namecmp != component.m_Reference )
                 continue;
 
             /* composant identifie , copie du nom du module correspondant */
-            Cmp->m_Module = ilib;
+            component.m_Module = ilib;
         }
     }
 
