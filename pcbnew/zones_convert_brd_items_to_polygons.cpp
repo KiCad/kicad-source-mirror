@@ -277,8 +277,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             break;
 
         case TYPE_TEXTE:
-            if( ( (TEXTE_PCB*) item )->GetLength() == 0 )
-                break;
             AddTextBoxWithClearancePolygon( booleng, (TEXTE_PCB*) item, m_ZoneClearance );
             have_poly_to_substract = true;
             break;
@@ -1234,36 +1232,29 @@ void AddRingPolygon( Bool_Engine* aBooleng, wxPoint aCentre,
 void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
                                         TEXTE_PCB* aText, int aClearanceValue )
 {
-    int corners[8];     // Buffer of coordinates
-    int ii;
+    if ( aText->GetLength() == 0 )
+        return;
 
-    int dx = aText->Pitch() * aText->GetLength();
-    int dy = aText->m_Size.y + aText->m_Width;
+    wxPoint corners[4];     // Buffer of polygon corners
 
-    /* Creates bounding box (rectangle) for an horizontal text */
-    dx /= 2; dy /= 2;    /* dx et dy = demi dimensionx X et Y */
-    dx += aClearanceValue;
-    dy += aClearanceValue;
-    corners[0] = aText->m_Pos.x - dx;
-    corners[1] = aText->m_Pos.y - dy;
-    corners[2] = aText->m_Pos.x + dx;
-    corners[3] = aText->m_Pos.y - dy;
-    corners[4] = aText->m_Pos.x + dx;
-    corners[5] = aText->m_Pos.y + dy;
-    corners[6] = aText->m_Pos.x - dx;
-    corners[7] = aText->m_Pos.y + dy;
+    EDA_Rect rect = aText->GetTextBox( -1 );
+    rect.Inflate( aClearanceValue, aClearanceValue );
+    corners[0] = rect.GetOrigin();
+    corners[1].y = corners[0].y;
+    corners[1].x = rect.GetRight();
+    corners[2].x = corners[1].x;
+    corners[2].y = rect.GetBottom();
+    corners[3].y = corners[2].y;
+    corners[3].x = corners[0].x;
 
-    // Rotate rectangle
-    RotatePoint( &corners[0], &corners[1], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
-    RotatePoint( &corners[2], &corners[3], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
-    RotatePoint( &corners[4], &corners[5], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
-    RotatePoint( &corners[6], &corners[7], aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
-
+ 
     if( aBooleng->StartPolygonAdd( GROUP_B ) )
     {
-        for( ii = 0; ii < 8; ii += 2 )
+        for( int ii = 0; ii < 4; ii ++ )
         {
-            aBooleng->AddPoint( corners[ii], corners[ii + 1] );
+            // Rotate polygon
+            RotatePoint( &corners[ii].x, &corners[ii].y, aText->m_Pos.x, aText->m_Pos.y, aText->m_Orient );
+            aBooleng->AddPoint( corners[ii].x, corners[ii].y );
         }
 
         aBooleng->EndPolygonAdd();

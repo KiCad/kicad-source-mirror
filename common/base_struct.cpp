@@ -185,20 +185,111 @@ EDA_TextStruct::~EDA_TextStruct()
 }
 
 
-/********************************/
-int EDA_TextStruct::Len_Size()
-/********************************/
-
-// Return the text lenght in internal units
+/**
+ * Function LenSize
+ * @return the text lenght in internal units
+ * @param aLine : the line of text to consider.
+ * For single line text, this parameter is always m_Text
+ */
+int EDA_TextStruct::LenSize( const wxString& aLine )
 {
-    int nbchar = m_Text.Len();
-    int len;
+    int nbchar = aLine.Len();
 
-    if( nbchar == 0 )
-        return 0;
+    int len = ( ( (10 * m_Size.x ) / 9 ) + m_Width ) * nbchar;
 
-    len = ( ( (10 * m_Size.x ) / 9 ) + m_Width ) * nbchar;
     return len;
+}
+
+
+/** Function GetTextBox
+ * useful in multiline texts to calculate the full text or a line area (for zones filling, locate functions....)
+ * @return the rect containing the line of text (i.e. the position and the size of one line)
+ * this rectangle is calculated for 0 orient text. if orient is not 0 the rect must be rotated to match the physical area
+ * @param aLine : the line of text to consider.
+ * for single line text, aLine is unused
+ * If aLine == -1, the full area (considering all lines) is returned
+ */
+EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
+{
+    EDA_Rect       rect;
+    wxPoint        pos;
+    wxArrayString* list = NULL;
+
+    wxString*      text = &m_Text;
+
+    if( m_MultilineAllowed )
+    {
+        list = wxStringSplit( m_Text, '\n' );
+        if( aLine >= 0 && (aLine < (int)list->GetCount()) )
+            text = &list->Item( aLine );
+        else
+            text = &list->Item( 0 );
+    }
+
+
+    // calculate the H and V size
+    int    dx = LenSize( *text );
+    int    dy = m_Size.y + m_Width;
+    int extra_dy = (m_Size.y * 3)/10;      // extra dy value for letters like j and y
+
+    /* Creates bounding box (rectangle) for an horizontal text */
+    wxSize textsize = wxSize( dx, dy );
+    rect.SetOrigin( m_Pos );
+
+    // for multiline texts ans aLine < 0, merge all rectangles
+    if( m_MultilineAllowed && aLine < 0 )
+    {
+        dy = GetInterline();
+        for( unsigned ii = 1; ii < list->GetCount(); ii++ )
+        {
+            text = &list->Item( ii );
+            dx   = LenSize( *text );
+            textsize.x  = MAX( textsize.x, dx );
+            textsize.y += dy;
+        }
+    }
+    delete list;
+
+    textsize.y += extra_dy;
+    rect.SetSize( textsize );
+
+    /* Now, calculate the rect origin, according to text justification
+     * At this point the area origin is the text origin.
+     * This is true only for left and top text justified.
+     * and must be recalculated for others justifications
+     * also, note the V justification is relative to the first line
+     */
+    switch( m_HJustify )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:
+        break;
+
+    case GR_TEXT_HJUSTIFY_CENTER:
+        rect.SetX( rect.GetX() - (rect.GetWidth() / 2) );
+        break;
+
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        rect.SetX( rect.GetX() - rect.GetWidth() );
+        break;
+    }
+
+    dy = m_Size.y + m_Width;
+    switch( m_VJustify )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:
+        break;
+
+    case GR_TEXT_VJUSTIFY_CENTER:
+        rect.SetY( rect.GetY() - (dy / 2) );
+        break;
+
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        rect.SetY( rect.GetY() + (dy / 2) );
+        break;
+    }
+
+    rect.Normalize();       // Make h and v sizes always >= 0
+    return rect;
 }
 
 
@@ -212,21 +303,13 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
  *      false else.
  */
 {
-    int     dx, dy;
-    wxPoint location;
-
-    dx = (int) ( ( Pitch() * GetLength() ) / 2 );
-    dy = m_Size.y / 2;
+    EDA_Rect rect = GetTextBox( -1 );   // Get the full text area.
 
     /* Is the ref point inside the text area ?  */
-    location = posref - m_Pos;
+    wxPoint location = posref;
+    RotatePoint( &location, m_Pos, -m_Orient );
 
-    RotatePoint( &location, -m_Orient );
-
-    if( ( abs( location.x ) <= abs( dx ) ) && ( abs( location.y ) <= abs( dy ) ) )
-        return true;
-
-    return false;
+    return rect.Inside ( location);
 }
 
 
@@ -279,46 +362,42 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 
 {
-
-    if ( m_MultilineAllowed )
+    if( m_MultilineAllowed )
     {
         wxPoint        pos  = m_Pos;
         wxArrayString* list = wxStringSplit( m_Text, '\n' );
-        wxPoint offset;
+        wxPoint        offset;
 
-        offset.y = (int) (m_Size.y * 1.5 );
+        offset.y = GetInterline();
 
         RotatePoint( &offset, m_Orient );
-        if( m_Mirror )
-            offset.x = -offset.x;
         for( unsigned i = 0; i<list->Count(); i++ )
         {
-            wxString txt  = list->Item( i );
+            wxString txt = list->Item( i );
             DrawOneLineOfText( aPanel,
-                                         aDC,
-                                         aOffset,
-                                         aColor,
-                                         aDrawMode,
-                                         aDisplayMode,
-                                         aAnchor_color,
-                                         txt,
-                                         pos );
+                               aDC,
+                               aOffset,
+                               aColor,
+                               aDrawMode,
+                               aDisplayMode,
+                               aAnchor_color,
+                               txt,
+                               pos );
             pos += offset;
         }
 
         delete (list);
     }
-
     else
         DrawOneLineOfText( aPanel,
-                                     aDC,
-                                     aOffset,
-                                     aColor,
-                                     aDrawMode,
-                                     aDisplayMode,
-                                     aAnchor_color,
-                                     m_Text,
-                                     m_Pos );
+                           aDC,
+                           aOffset,
+                           aColor,
+                           aDrawMode,
+                           aDisplayMode,
+                           aAnchor_color,
+                           m_Text,
+                           m_Pos );
 }
 
 
@@ -336,10 +415,10 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param EDA_Colors aPos = the position of this line ).
  */
 void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                                    const wxPoint& aOffset, EDA_Colors aColor,
-                                    int aDrawMode,
-                                    GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
-                                    wxString& aText, wxPoint aPos )
+                                        const wxPoint& aOffset, EDA_Colors aColor,
+                                        int aDrawMode,
+                                        GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
+                                        wxString& aText, wxPoint aPos )
 {
     int width = m_Width;
 
@@ -353,7 +432,7 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( aAnchor_color != UNSPECIFIED_COLOR )
     {
         int anchor_size = aPanel->GetScreen()->Unscale( 2 );
-        aAnchor_color = (EDA_Colors) (aAnchor_color & MASKCOLOR);
+        aAnchor_color = (EDA_Colors) ( aAnchor_color & MASKCOLOR );
 
         int cX = aPos.x + aOffset.x;
         int cY = aPos.y + aOffset.y;

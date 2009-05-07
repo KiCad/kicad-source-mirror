@@ -709,9 +709,9 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
         DrawText = (SCH_TEXT*) DrawStruct;
         px = DrawText->m_Pos;
         if( DrawText->m_Orient == 0 )       /* horizontal text */
-            dx = DrawText->Len_Size() / 2;
+            dx = DrawText->LenSize(DrawText->m_Text) / 2;
         else if( DrawText->m_Orient == 2 )  /* invert horizontal text*/
-            dx = -DrawText->Len_Size() / 2;
+            dx = -DrawText->LenSize(DrawText->m_Text) / 2;
         else
             dx = 0;
         px.x += dx;

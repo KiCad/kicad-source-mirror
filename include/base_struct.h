@@ -567,10 +567,31 @@ public:
     bool    HitTest( EDA_Rect& refArea );
 
     /**
-     * Function Len_Size
-     * Return the text lenght in internal units
+     * Function LenSize
+     * @return the text lenght in internal units
+     * @param aLine : the line of text to consider.
+     * For single line text, this parameter is always m_Text
      */
-    int     Len_Size();
+    int     LenSize(const wxString & aLine);
+
+    /** Function GetTextBox
+     * useful in multiline texts to calculate the full text or a line area (for zones filling, locate functions....)
+     * @return the rect containing the line of text (i.e. the position and the size of one line)
+     * this rectangle is calculated for 0 orient text. if orient is not 0 the rect must be rotated to match the physical area
+     * @param aLine : the line of text to consider.
+     * for single line text, aLine is unused
+     * If aLine == -1, the full area (considering all lines) is returned
+     */
+    EDA_Rect GetTextBox( int aLine = -1);
+    
+    /** Function GetInterline
+     * return the distance between 2 text lines
+     * has meaning only for multiline texts
+     */
+    int GetInterline()
+    {
+        return (( m_Size.y * 13 ) / 10) + m_Width;
+    }
 };
 
 #endif /* BASE_STRUCT_H */
