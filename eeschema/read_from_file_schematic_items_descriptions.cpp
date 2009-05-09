@@ -132,8 +132,17 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
     }
     else
     {
-        SCH_TEXT* TextStruct =
-            new SCH_TEXT( pos, CONV_FROM_UTF8( text ) );
+	wxString val= CONV_FROM_UTF8( text );
+	for (;;)
+	{
+	  int i=val.find(_("\\n"));
+	  if (i==wxNOT_FOUND)
+	    break;
+	    
+	  val.erase(i,2);
+	  val.insert(i,_("\n"));
+	}
+        SCH_TEXT* TextStruct = new SCH_TEXT( pos, val );
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->m_Orient = orient;

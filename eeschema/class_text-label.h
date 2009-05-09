@@ -22,15 +22,16 @@ typedef enum {
 extern const char* SheetLabelType[];
 extern int* TemplateShape[5][4];
 
-
 class SCH_TEXT : public SCH_ITEM
     , public EDA_TextStruct
 {
+
 public:
     int  m_Layer;
     int  m_Shape;
     bool m_IsDangling;          // TRUE if not connected
-
+    
+    
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
                     KICAD_T aType = TYPE_SCH_TEXT );
@@ -70,6 +71,8 @@ public:
     void Show( int nestLevel, std::ostream& os );
 
 #endif
+
+    
 
 };
 

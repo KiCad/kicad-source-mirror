@@ -148,6 +148,20 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
             else if( Line[1] == 'D' )
                 Failed = ReadSchemaDescr( this, Line, f, MsgDiag, &LineCount,
                                           screen );
+	    else if( Line[1] == 'T' ) //text part
+	    {
+	      printf("**** TEXT PART\n");
+	      SCH_ITEM* Struct;
+	      Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line),
+				      &LineCount, version);
+	      if( Struct )
+	      {
+		  Struct->SetNext( screen->EEDrawList );
+		  screen->EEDrawList = Struct;
+	      }
+	      else
+		  Failed = true;
+	    }
 
             break;
 

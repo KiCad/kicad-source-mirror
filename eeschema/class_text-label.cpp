@@ -84,6 +84,7 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     m_Pos   = pos;
     m_Shape = 0;
     m_IsDangling = FALSE;
+    m_MultilineAllowed=true;
 }
 
 
@@ -243,7 +244,6 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 }
 
-
 /**
  * Function Save
  * writes the data structures for this object out to a FILE in "*.brd" format.
@@ -257,15 +257,28 @@ bool SCH_TEXT::Save( FILE* aFile ) const
 
     if( m_Italic )
         shape = "Italic";
+	
+    wxString text=m_Text;
+    
+    for (;;)
+    {
+      int i=text.find('\n');
+      if (i==wxNOT_FOUND)
+	break;
+	
+      text.erase(i,1);
+      text.insert(i,_("\\n"));
+    }
+      
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                m_Pos.x, m_Pos.y,
-                m_Orient, m_Size.x,
-                shape, m_Width,
-                CONV_TO_UTF8( m_Text ) ) == EOF )
+            m_Pos.x, m_Pos.y,
+            m_Orient, m_Size.x,
+            shape, m_Width,
+            CONV_TO_UTF8( text ) ) == EOF )
     {
         success = false;
     }
-
+    
     return success;
 }
 

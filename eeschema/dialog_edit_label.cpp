@@ -21,7 +21,22 @@
 int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText )
 {
     int ret;
-    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText );
+    bool multiline;
+
+    switch( CurrentText->Type() )
+    {
+    case TYPE_SCH_GLOBALLABEL:
+    case TYPE_SCH_HIERLABEL:
+    case TYPE_SCH_LABEL:
+        multiline = false;
+        break;
+
+    default:
+        multiline = true;
+        break;
+    }
+    
+    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText, multiline );
 
     // doing any post construction resizing is better done here than in
     // OnInitDialog() since it tends to flash/redraw the dialog less.
@@ -34,8 +49,8 @@ int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * C
 
 
 
-DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText ) :
-    DialogLabelEditor_Base( parent )
+DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText,bool multiline ) :
+    DialogLabelEditor_Base( parent,wxID_ANY,multiline )
 {
     m_Parent = parent;
     m_CurrentText = CurrentText;
