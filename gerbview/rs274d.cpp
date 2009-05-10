@@ -288,7 +288,7 @@ static void fillLineTRACK(  TRACK*         aTrack,
 static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
                            const wxPoint& aStart, const wxPoint& aEnd,
                            const wxPoint& rel_center, int aWidth,
-                           bool trigo_sens, bool multiquadrant, bool isDark )
+                           bool clockwise, bool multiquadrant, bool isDark )
 {
     wxPoint center, delta;
 
@@ -299,9 +299,9 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     if( multiquadrant )
     {
         center.x = aStart.x + rel_center.x;
-        center.y = aStart.y - rel_center.y;
+        center.y = aStart.y + rel_center.y;
 
-        if( !trigo_sens )
+        if( clockwise )
         {
             aTrack->m_Start = aStart;
             aTrack->m_End   = aEnd;
@@ -314,33 +314,35 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
     }
     else
     {
-        center  = rel_center;
+        center = rel_center;
         delta.x = aEnd.x - aStart.x;
         delta.y = aEnd.y - aStart.y;
 
-        // il faut corriger de signe de rel_center.x et rel_center.y
-        // selon le quadrant ou on se trouve
-        if( (delta.x >= 0) && (delta.y >= 0) ) // 1er quadrant
+        if( (delta.x >= 0) && (delta.y >= 0) )
         {
-            center.x = -center.x;
+            // Quadrant 2
         }
-        else if( (delta.x < 0) && (delta.y >= 0) ) // 2eme quadrant
+        else if( (delta.x >= 0) && (delta.y < 0) )
         {
-            center.x = -center.x;
+            // Quadrant 1
             center.y = -center.y;
         }
-        else if( (delta.x < 0) && (delta.y < 0) )  // 3eme quadrant
+        else if( (delta.x < 0) && (delta.y >= 0) )
         {
-            center.y = -center.y;
+            // Quadrant 4
+            center.x = -center.x;
         }
-        else    // 4eme qadrant: les 2 coord sont >= 0!
+        else
         {
+            // Quadrant 3
+            center.x = -center.x;
+            center.y = -center.y;
         }
 
         center.x += aStart.x;
-        center.y  = aStart.y + center.y;
+        center.y += aStart.y;
 
-        if(  trigo_sens )
+        if( clockwise )
         {
             aTrack->m_Start = aStart;
             aTrack->m_End   = aEnd;
