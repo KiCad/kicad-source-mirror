@@ -7,6 +7,10 @@ Lasted edited by: Jerry Jacobs <jerkejacobs@gmail.com>
 For debian squeeze (testing)
 ----------------------------
 
+Special Note
+~~~~~~~~~~~~
+After SVN trunk revision 1753 boost library 1.36 or higher is needed
+to compile KiCad.
 
 Installing Packages
 ~~~~~~~~~~~~~~~~~~~
