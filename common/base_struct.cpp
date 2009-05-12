@@ -254,8 +254,8 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     rect.SetSize( textsize );
 
     /* Now, calculate the rect origin, according to text justification
-     * At this point the area origin is the text origin.
-     * This is true only for left and top text justified.
+     * At this point the area origin is the text origin (m_Pos).
+     * This is true only for left and top text justified texts.
      * and must be recalculated for others justifications
      * also, note the V justification is relative to the first line
      */
@@ -284,7 +284,7 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
-        rect.SetY( rect.GetY() + (dy / 2) );
+        rect.SetY( rect.GetY() - dy );
         break;
     }
 

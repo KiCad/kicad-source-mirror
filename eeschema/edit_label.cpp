@@ -47,7 +47,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
     else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
         DisplayError( this, _( "Empty Text!" ) );
 
-    m_CurrentText->m_Orient = m_TextOrient->GetSelection();
+    m_CurrentText->SetSchematicTextOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
     value = ReturnValueFromString( g_UnitMetric, text, m_Parent->m_InternalUnits );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
@@ -101,7 +101,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
     case TYPE_SCH_TEXT:
         ItemInitialPosition = TextStruct->m_Pos;
         OldSize   = TextStruct->m_Size;
-        OldOrient = TextStruct->m_Orient;
+        OldOrient = TextStruct->GetSchematicTextOrientation();
         break;
 
     default:
@@ -163,14 +163,16 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
     /* Rotation du texte */
+    int orient;
     switch( TextStruct->Type() )
     {
     case TYPE_SCH_LABEL:
     case TYPE_SCH_GLOBALLABEL:
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_TEXT:
-        TextStruct->m_Orient++;
-        TextStruct->m_Orient &= 3;
+        orient = TextStruct->GetSchematicTextOrientation() + 1;
+        orient &= 3;
+        TextStruct->SetSchematicTextOrientation( orient );
         break;
 
     default:
@@ -209,13 +211,13 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
     case LAYER_HIERLABEL:
         NewText = new SCH_HIERLABEL( GetScreen()->m_Curseur );
         NewText->m_Shape  = s_DefaultShapeGLabel;
-        NewText->m_Orient = s_DefaultOrientGLabel;
+        NewText->SetSchematicTextOrientation( s_DefaultOrientGLabel );
         break;
 
     case LAYER_GLOBLABEL:
         NewText = new SCH_GLOBALLABEL( GetScreen()->m_Curseur );
         NewText->m_Shape  = s_DefaultShapeGLabel;
-        NewText->m_Orient = s_DefaultOrientGLabel;
+        NewText->SetSchematicTextOrientation( s_DefaultOrientGLabel );
         break;
 
     default:
@@ -238,7 +240,7 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
     if( type == LAYER_GLOBLABEL  || type == LAYER_HIERLABEL )
     {
         s_DefaultShapeGLabel  = NewText->m_Shape;
-        s_DefaultOrientGLabel = NewText->m_Orient;
+        s_DefaultOrientGLabel = NewText->GetSchematicTextOrientation();
     }
 
     RedrawOneStruct( DrawPanel, DC, NewText, GR_DEFAULT_DRAWMODE );
@@ -317,7 +319,7 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
             SCH_TEXT* Text = (SCH_TEXT*) Struct;
             Text->m_Pos    = ItemInitialPosition;
             Text->m_Size   = OldSize;
-            Text->m_Orient = OldOrient;
+            Text->SetSchematicTextOrientation( OldOrient );
         }
             break;
 
@@ -372,11 +374,9 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
 
     /* copy the old text settings */
     newtext->m_Shape      = Text->m_Shape;
-    newtext->m_Orient     = Text->m_Orient;
+    newtext->SetSchematicTextOrientation( Text->GetSchematicTextOrientation() );
     newtext->m_Size       = Text->m_Size;
     newtext->m_Width      = Text->m_Width;
-    newtext->m_HJustify   = Text->m_HJustify;
-    newtext->m_VJustify   = Text->m_VJustify;
     newtext->m_IsDangling = Text->m_IsDangling;
 
     // save current text flag:

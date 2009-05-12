@@ -311,11 +311,10 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             break;
         }
 
-        case TYPE_SCH_LABEL:
         case TYPE_SCH_TEXT:
             #undef  STRUCT
             #define STRUCT ( (SCH_TEXT*) DrawList )
-            if( !( SearchMask & (TEXTITEM | LABELITEM) ) )
+            if( !( SearchMask & TEXTITEM) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {
@@ -325,21 +324,11 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             break;
 
 
+        case TYPE_SCH_LABEL:
         case TYPE_SCH_GLOBALLABEL:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_GLOBALLABEL*) DrawList )
-            if( !(SearchMask & LABELITEM) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return TRUE;
-            }
-            break;
-
         case TYPE_SCH_HIERLABEL:
             #undef  STRUCT
-            #define STRUCT ( (SCH_HIERLABEL*) DrawList )
+            #define STRUCT ( (SCH_TEXT*) DrawList )     // SCH_TEXT is the base class of these labels
             if( !(SearchMask & LABELITEM) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )

@@ -10,6 +10,7 @@
 #include "grfonte.h"
 #include "base_struct.h"
 #include "drawtxt.h"
+#include "trigo.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -20,7 +21,7 @@
 static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* Struct );
 static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
-static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape );
+static void PlotPinSymbol( const wxPoint& pos, int len, int orient, int Shape );
 
 /***/
 
@@ -29,8 +30,8 @@ static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape )
 #define NOFILL false
 
 /* routine de lever ou baisser de plume.
-  * si plume = 'U' les traces suivants se feront plume levee
-  * si plume = 'D' les traces suivants se feront plume levee
+ * si plume = 'U' les traces suivants se feront plume levee
+ * si plume = 'D' les traces suivants se feront plume levee
  */
 void Plume( int plume )
 {
@@ -69,6 +70,7 @@ void SetCurrentLineWidth( int width )
     }
 }
 
+
 /*******************************************************************************/
 void PlotRect( wxPoint p1, wxPoint p2, int fill, int width )
 /*******************************************************************************/
@@ -85,18 +87,19 @@ void PlotRect( wxPoint p1, wxPoint p2, int fill, int width )
     }
 }
 
+
 /*****************************************************************************************/
 void PlotArc( wxPoint aCentre, int aStAngle, int aEndAngle, int aRadius, bool aFill, int aWidth )
 /*****************************************************************************************/
 
 /** Function PlotArc
-  * Plot an arc:
-  * @param aCentre = Arc centre
-  * @param aStAngle = begining of arc in 0.1 degrees
-  * @param aEndAngle = end of arc in 0.1 degrees
-  * @param aRadius = Arc radius
-  * @param aFill = fill option
-  * @param aWidth = Tickness of outlines
+ * Plot an arc:
+ * @param aCentre = Arc centre
+ * @param aStAngle = begining of arc in 0.1 degrees
+ * @param aEndAngle = end of arc in 0.1 degrees
+ * @param aRadius = Arc radius
+ * @param aFill = fill option
+ * @param aWidth = Tickness of outlines
  */
 {
     switch( g_PlotFormat )
@@ -134,9 +137,9 @@ void PlotPoly( int nb, int* coord, bool fill, int width )
 /******************************************************************/
 
 /* Trace un polygone ferme
-  * coord = tableau des coord des sommets
-  * nb = nombre de coord ( 1 coord = 2 elements: X et Y du tableau )
-  * fill : si != 0 polygone rempli
+ * coord = tableau des coord des sommets
+ * nb = nombre de coord ( 1 coord = 2 elements: X et Y du tableau )
+ * fill : si != 0 polygone rempli
  */
 {
     if( nb <= 1 )
@@ -181,7 +184,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 /*************************************************/
 /* Polt a component */
 {
-    int                     ii, t1, t2, * Poly, orient;
+    int ii, t1, t2, * Poly, orient;
     LibEDA_BaseStruct*      DEntry;
     EDA_LibComponentStruct* Entry;
     int                     TransMat[2][2], Multi, convert;
@@ -214,122 +217,131 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         switch( DEntry->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
+        {
+            LibDrawArc* Arc = (LibDrawArc*) DEntry;
+            t1  = Arc->t1; t2 = Arc->t2;
+            pos = TransformCoordinate( TransMat, Arc->m_Pos ) + DrawLibItem->m_Pos;
+            MapAngles( &t1, &t2, TransMat );
+            if( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
-                LibDrawArc* Arc = (LibDrawArc*) DEntry;
-                t1    = Arc->t1; t2 = Arc->t2;
-                pos = TransformCoordinate( TransMat, Arc->m_Pos ) + DrawLibItem->m_Pos;
-                MapAngles( &t1, &t2, TransMat );
-                if ( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-                {
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                    PlotArc( pos, t1, t2, Arc->m_Rayon, true, 0 );
-                }
-                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-                PlotArc( pos, t1, t2, Arc->m_Rayon, Arc->m_Fill == FILLED_SHAPE ? true : false, Arc->m_Width );
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotArc( pos, t1, t2, Arc->m_Rayon, true, 0 );
             }
-            break;
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+            PlotArc( pos,
+                     t1,
+                     t2,
+                     Arc->m_Rayon,
+                     Arc->m_Fill == FILLED_SHAPE ? true : false,
+                     Arc->m_Width );
+        }
+        break;
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
+        {
+            LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
+            pos = TransformCoordinate( TransMat, Circle->m_Pos ) + DrawLibItem->m_Pos;
+            if( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
-                LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
-                pos = TransformCoordinate( TransMat, Circle->m_Pos ) + DrawLibItem->m_Pos;
-                if ( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-                {
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                    PlotCercle( pos, Circle->m_Rayon * 2, true, 0 );
-                }
-                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-                PlotCercle( pos, Circle->m_Rayon * 2, Circle->m_Fill == FILLED_SHAPE ? true : false, Circle->m_Width );
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotCercle( pos, Circle->m_Rayon * 2, true, 0 );
             }
-            break;
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+            PlotCercle( pos,
+                        Circle->m_Rayon * 2,
+                        Circle->m_Fill == FILLED_SHAPE ? true : false,
+                        Circle->m_Width );
+        }
+        break;
 
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-            {
+        {
             LibDrawText* Text = (LibDrawText*) DEntry;
 
             /* The text orientation may need to be flipped if the
-              * transformation matrix causes xy axes to be flipped. */
-            t1    = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
+             * transformation matrix causes xy axes to be flipped. */
+            t1  = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
             pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
             SetCurrentLineWidth( -1 );
             int thickness = Text->m_Width;
-			if( thickness == 0 )	//
-				thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+            if( thickness == 0 )    //
+                thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
             PlotGraphicText( g_PlotFormat, pos, CharColor,
-                                 Text->m_Text,
-                                 t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                                 Text->m_Size,
-                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                 thickness, false, true);
-            }
-            break;
+                             Text->m_Text,
+                             t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
+                             Text->m_Size,
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             thickness, false, true );
+        }
+        break;
 
         case COMPONENT_RECT_DRAW_TYPE:
-            {
-                LibDrawSquare* Square = (LibDrawSquare*) DEntry;
-                pos = TransformCoordinate( TransMat, Square->m_Pos ) + DrawLibItem->m_Pos;
-                wxPoint end = TransformCoordinate( TransMat, Square->m_End ) + DrawLibItem->m_Pos;
+        {
+            LibDrawSquare* Square = (LibDrawSquare*) DEntry;
+            pos = TransformCoordinate( TransMat, Square->m_Pos ) + DrawLibItem->m_Pos;
+            wxPoint        end =
+                TransformCoordinate( TransMat, Square->m_End ) + DrawLibItem->m_Pos;
 
-                if ( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-                {
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                    PlotRect( pos, end, true, 0 );
-                }
-                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-                PlotRect( pos, end, Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
+            if( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotRect( pos, end, true, 0 );
             }
-            break;
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+            PlotRect( pos, end, Square->m_Fill == FILLED_SHAPE ? true : false, Square->m_Width );
+        }
+        break;
 
         case COMPONENT_PIN_DRAW_TYPE:     /* Trace des Pins */
-            {
-                LibDrawPin* Pin = (LibDrawPin*) DEntry;
-                if( Pin->m_Attributs & PINNOTDRAW )
-                        break;
+        {
+            LibDrawPin* Pin = (LibDrawPin*) DEntry;
+            if( Pin->m_Attributs & PINNOTDRAW )
+                break;
 
-                /* Calcul de l'orientation reelle de la Pin */
-                orient = Pin->ReturnPinDrawOrient( TransMat );
-                /* compute Pin Pos */
-                pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
+            /* Calcul de l'orientation reelle de la Pin */
+            orient = Pin->ReturnPinDrawOrient( TransMat );
+            /* compute Pin Pos */
+            pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
 
-                /* Dessin de la pin et du symbole special associe */
-                PlotPinSymbol( pos, Pin->m_PinLen, orient, Pin->m_PinShape );
-                int thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );;
-                Pin->PlotPinTexts( pos, orient,
-                                   Entry->m_TextInside,
-                                   Entry->m_DrawPinNum, Entry->m_DrawPinName,
-                                   thickness, false);
-            }
-            break;
+            /* Dessin de la pin et du symbole special associe */
+            PlotPinSymbol( pos, Pin->m_PinLen, orient, Pin->m_PinShape );
+            int thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );;
+            Pin->PlotPinTexts( pos, orient,
+                               Entry->m_TextInside,
+                               Entry->m_DrawPinNum, Entry->m_DrawPinName,
+                               thickness, false );
+        }
+        break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
+        {
+            LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
+            Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->GetCornerCount() );
+            for( ii = 0; ii < (int) polyline->GetCornerCount(); ii++ )
             {
-                LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
-                Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->GetCornerCount() );
-                for( ii = 0; ii < (int)polyline->GetCornerCount(); ii++ )
-                {
-                    pos = polyline->m_PolyPoints[ii];
-                    pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
-                    Poly[ii * 2] = pos.x;
-                    Poly[ii * 2 + 1] = pos.y;
-                }
-
-                if ( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-                {
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                    PlotPoly( ii, Poly, true, 0 );
-                }
-                if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-                    SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
-                PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
-                MyFree( Poly );
+                pos = polyline->m_PolyPoints[ii];
+                pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
+                Poly[ii * 2]     = pos.x;
+                Poly[ii * 2 + 1] = pos.y;
             }
-            break;
+
+            if( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotPoly( ii, Poly, true, 0 );
+            }
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+            PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
+            MyFree( Poly );
+        }
+        break;
 
         default:
-            D(printf("Drawing Type=%d\n", DEntry->Type() )) ;
+            D( printf( "Drawing Type=%d\n", DEntry->Type() ) );
         }
 
         /* Fin Switch */
@@ -339,8 +351,8 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
     /* Fin Boucle de dessin */
 
     /* Trace des champs, avec placement et orientation selon orient. du
-      * composant
-      * Si la reference commence par # elle n'est pas tracee
+     * composant
+     * Si la reference commence par # elle n'est pas tracee
      */
 
     if( (Entry->m_Prefix.m_Attributs & TEXT_NO_VISIBLE) == 0 )
@@ -367,20 +379,20 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 /**************************************************************/
 
 /* Routine de trace des textes type Field du composant.
-  * entree:
-  *     DrawLibItem: pointeur sur le composant
-  *     FieldNumber: Numero du champ
-  *     IsMulti: flag Non Null si il y a plusieurs parts par boitier.
-  *             n'est utile que pour le champ reference pour ajouter a celui ci
-  *             l'identification de la part ( A, B ... )
-  *     DrawMode: mode de trace
+ * entree:
+ *     DrawLibItem: pointeur sur le composant
+ *     FieldNumber: Numero du champ
+ *     IsMulti: flag Non Null si il y a plusieurs parts par boitier.
+ *             n'est utile que pour le champ reference pour ajouter a celui ci
+ *             l'identification de la part ( A, B ... )
+ *     DrawMode: mode de trace
  */
 
 {
-    wxPoint         textpos; /* Position des textes */
-    SCH_CMP_FIELD*  field = DrawLibItem->GetField( FieldNumber );
-    int             orient;
-    EDA_Colors color = UNSPECIFIED_COLOR;
+    wxPoint        textpos;  /* Position des textes */
+    SCH_CMP_FIELD* field = DrawLibItem->GetField( FieldNumber );
+    int            orient;
+    EDA_Colors     color = UNSPECIFIED_COLOR;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         color = ReturnLayerColor( field->GetLayer() );
@@ -392,9 +404,9 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
         return;
 
     /* Calcul de la position des textes, selon orientation du composant */
-    orient   = field->m_Orient;
+    orient = field->m_Orient;
     GRTextHorizJustifyType hjustify = field->m_HJustify;
-    GRTextVertJustifyType vjustify = field->m_VJustify;
+    GRTextVertJustifyType  vjustify = field->m_VJustify;
     textpos = field->m_Pos - DrawLibItem->m_Pos;    // textpos is the text position relative to the component anchor
 
     textpos = TransformCoordinate( DrawLibItem->m_Transform, textpos ) + DrawLibItem->m_Pos;
@@ -412,62 +424,74 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
         vjustify = (GRTextVertJustifyType) tmp;
 
         if( DrawLibItem->m_Transform[1][0] < 0 )
-            switch ( vjustify )
+            switch( vjustify )
             {
-                case GR_TEXT_VJUSTIFY_BOTTOM:
-                    vjustify = GR_TEXT_VJUSTIFY_TOP;
-                    break;
-                case GR_TEXT_VJUSTIFY_TOP:
-                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                    break;
-                default:
-                    break;
+            case GR_TEXT_VJUSTIFY_BOTTOM:
+                vjustify = GR_TEXT_VJUSTIFY_TOP;
+                break;
+
+            case GR_TEXT_VJUSTIFY_TOP:
+                vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                break;
+
+            default:
+                break;
             }
+
         if( DrawLibItem->m_Transform[1][0] > 0 )
-            switch ( hjustify )
+            switch( hjustify )
             {
-                case GR_TEXT_HJUSTIFY_LEFT:
-                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-                    break;
-                case GR_TEXT_HJUSTIFY_RIGHT:
-                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
-                    break;
-                default:
-                    break;
+            case GR_TEXT_HJUSTIFY_LEFT:
+                hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                break;
+
+            case GR_TEXT_HJUSTIFY_RIGHT:
+                hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                break;
+
+            default:
+                break;
             }
+
     }
     else
     {
         /* Texte horizontal: Y a t-il miroir (pour les justifications)*/
         if( DrawLibItem->m_Transform[0][0] < 0 )
-            switch ( hjustify )
+            switch( hjustify )
             {
-                case GR_TEXT_HJUSTIFY_LEFT:
-                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-                    break;
-                case GR_TEXT_HJUSTIFY_RIGHT:
-                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
-                    break;
-                default:
-                    break;
+            case GR_TEXT_HJUSTIFY_LEFT:
+                hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                break;
+
+            case GR_TEXT_HJUSTIFY_RIGHT:
+                hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                break;
+
+            default:
+                break;
             }
+
         if( DrawLibItem->m_Transform[1][1] > 0 )
-            switch ( vjustify )
+            switch( vjustify )
             {
-                case GR_TEXT_VJUSTIFY_BOTTOM:
-                    vjustify = GR_TEXT_VJUSTIFY_TOP;
-                    break;
-                case GR_TEXT_VJUSTIFY_TOP:
-                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                    break;
-                default:
-                    break;
+            case GR_TEXT_VJUSTIFY_BOTTOM:
+                vjustify = GR_TEXT_VJUSTIFY_TOP;
+                break;
+
+            case GR_TEXT_VJUSTIFY_TOP:
+                vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                break;
+
+            default:
+                break;
             }
+
     }
 
     int thickness = field->m_Width;
-	if( thickness == 0 )
-		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+    if( thickness == 0 )
+        thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
     if( !IsMulti || (FieldNumber != REFERENCE) )
@@ -476,14 +500,14 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size,
                          hjustify, vjustify,
-                        thickness, field->m_Italic, true);
+                         thickness, field->m_Italic, true );
     }
     else    /* We plt the reference, for a multiple parts per package */
     {
-            /* Adding A, B ... to the reference */
+        /* Adding A, B ... to the reference */
         wxString Text;
         Text = field->m_Text;
-        char unit_id;
+        char     unit_id;
 #if defined(KICAD_GOST)
         Text.Append( '.' );
         unit_id = '1' - 1 + DrawLibItem->m_Multi;
@@ -494,19 +518,19 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
         PlotGraphicText( g_PlotFormat, textpos, color, Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size, hjustify, vjustify,
-                        thickness, field->m_Italic );
+                         thickness, field->m_Italic );
     }
 }
 
 
 /**************************************************************************/
-static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape )
+static void PlotPinSymbol( const wxPoint& pos, int len, int orient, int Shape )
 /**************************************************************************/
 
 /* Trace la pin du symbole en cours de trace
  */
 {
-    int MapX1, MapY1, x1, y1;
+    int        MapX1, MapY1, x1, y1;
     EDA_Colors color = UNSPECIFIED_COLOR;
 
     color = ReturnLayerColor( LAYER_PIN );
@@ -540,7 +564,7 @@ static void PlotPinSymbol( const wxPoint & pos, int len, int orient, int Shape )
     if( Shape & INVERT )
     {
         PlotCercle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
-                             MapY1 * INVERT_PIN_RADIUS + y1),
+                             MapY1 * INVERT_PIN_RADIUS + y1 ),
                     INVERT_PIN_RADIUS * 2,  // diameter
                     false,                  // fill
                     -1 );                   // width
@@ -612,18 +636,11 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 /*******************************************/
 
 /*
-  * Routine de trace des Textes, Labels et Global-Labels.
-  * Les textes peuvent avoir 4 directions.
+ * Routine de trace des Textes, Labels et Global-Labels.
+ * Les textes peuvent avoir 4 directions.
  */
 {
-    static std::vector <wxPoint>  Poly;
-    int      pX, pY, Shape = 0, Orient = 0, offset;
-    wxSize   Size;
-    wxString Text;
-    EDA_Colors color = UNSPECIFIED_COLOR;
-
-    bool italic = false;
-    int thickness = 0;
+    static std::vector <wxPoint> Poly;
 
     switch( Struct->Type() )
     {
@@ -631,117 +648,60 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_LABEL:
     case TYPE_SCH_TEXT:
-        Text   = ( (SCH_TEXT*) Struct )->m_Text;
-        Size   = ( (SCH_TEXT*) Struct )->m_Size;
-        thickness = ( (SCH_TEXT*) Struct )->m_Width;
-        italic = ( (SCH_TEXT*) Struct )->m_Italic;
-        Orient = ( (SCH_TEXT*) Struct )->m_Orient;
-        Shape  = ( (SCH_TEXT*) Struct )->m_Shape;
-        pX     = ( (SCH_TEXT*) Struct )->m_Pos.x;
-        pY     = ( (SCH_TEXT*) Struct )->m_Pos.y;
-        offset = TXTMARGE;
-        if( Struct->Type() == TYPE_SCH_GLOBALLABEL
-            || Struct->Type() == TYPE_SCH_HIERLABEL )
-            offset += Size.x;       // We must draw the Glabel graphic symbol
-        if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-            color = ReturnLayerColor( ( (SCH_TEXT*) Struct )->m_Layer );
         break;
 
     default:
         return;
     }
 
-    if( Size.x == 0 )
-        Size = wxSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
+    SCH_TEXT* schText = (SCH_TEXT*) Struct;
+    EDA_Colors color = UNSPECIFIED_COLOR;
+    if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+        color = ReturnLayerColor( schText->m_Layer );
+    wxPoint    textpos = schText->m_Pos + schText->GetSchematicTextOffset();
+    int thickness = schText->m_Width;
+    if( thickness == 0 )
+        thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
 
-    if ( Struct->Type() == TYPE_SCH_GLOBALLABEL )
-    {
-        offset =  ( (SCH_GLOBALLABEL*) Struct )->m_Width;
-        switch( Shape )
-        {
-        case NET_INPUT:
-        case NET_BIDI:
-        case NET_TRISTATE:
-            offset += Size.x/2;
-            break;
-
-        case NET_OUTPUT:
-            offset += TXTMARGE;
-            break;
-
-        default:
-            break;
-        }
-    }
-
-	if( thickness == 0 )
-		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
-    switch( Orient )
+    if( schText->m_MultilineAllowed )
     {
-    case 0:         /* Orientation horiz normale */
-        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
-            PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
-                             color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER,
-                            thickness, italic, true );
-        else
-            PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
-                             color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic, true );
-        break;
+        wxPoint        pos  = textpos;
+        wxArrayString* list = wxStringSplit( schText->m_Text, '\n' );
+        wxPoint        offset;
 
-    case 1:         /* Orientation vert UP */
-        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
-            PlotGraphicText( g_PlotFormat, wxPoint( pX, pY + offset ),
-                             color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
-                            thickness, italic, true );
-        else
-            PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
-                             color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic, true );
-        break;
+        offset.y = schText->GetInterline();
 
-    case 2:         /* Horiz Orientation - Right justified */
-        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
-            PlotGraphicText( g_PlotFormat, wxPoint( pX + offset, pY ),
-                             color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                            thickness, italic, true );
-        else
-            PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
-                             color, Text, TEXT_ORIENT_HORIZ, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic, true );
-        break;
+        RotatePoint( &offset, schText->m_Orient );
+        for( unsigned i = 0; i<list->Count(); i++ )
+        {
+            wxString txt = list->Item( i );
+            PlotGraphicText( g_PlotFormat, pos,
+                     color, txt, schText->m_Orient, schText->m_Size,
+                     schText->m_HJustify, schText->m_VJustify,
+                     thickness, schText->m_Italic, true );
+            pos += offset;
+        }
 
-    case 3:         /* Orientation vert BOTTOM */
-        if( Struct->Type() == TYPE_SCH_GLOBALLABEL || Struct->Type() == TYPE_SCH_HIERLABEL )
-            PlotGraphicText( g_PlotFormat, wxPoint( pX, pY - offset ),
-                             color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic, true );
-        else
-            PlotGraphicText( g_PlotFormat, wxPoint( pX - offset, pY ),
-                             color, Text, TEXT_ORIENT_VERT, Size,
-                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_TOP,
-                            thickness, italic, true );
-        break;
+        delete (list);
     }
+    
+    else
+        PlotGraphicText( g_PlotFormat, textpos,
+                     color, schText->m_Text, schText->m_Orient, schText->m_Size,
+                     schText->m_HJustify, schText->m_VJustify,
+                     thickness, schText->m_Italic, true );
 
     /* Draw graphic symbol for global or hierachical labels */
     if( Struct->Type() == TYPE_SCH_GLOBALLABEL )
     {
-        ( (SCH_GLOBALLABEL*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
+        ( (SCH_GLOBALLABEL*) Struct )->CreateGraphicShape( Poly, schText->m_Pos );
         PlotPoly( Poly.size(), &Poly[0].x, NOFILL );
     }
     if( Struct->Type() == TYPE_SCH_HIERLABEL )
     {
-        ( (SCH_HIERLABEL*) Struct )->CreateGraphicShape( Poly, wxPoint(pX, pY) );
+        ( (SCH_HIERLABEL*) Struct )->CreateGraphicShape( Poly, schText->m_Pos );
         PlotPoly( Poly.size(), &Poly[0].x, NOFILL );
     }
 }
@@ -750,11 +710,13 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 /*****************************************************************************************/
 static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* aHierarchical_PIN )
 /****************************************************************************************/
+
 /* Plot a Hierarchical_PIN_Sheet
-*/
+ */
 {
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    int posx, tposx, posy, size;
+    int        posx, tposx, posy, size;
+
     static std::vector <wxPoint> Poly;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
@@ -775,14 +737,14 @@ static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* aHierarc
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
     int thickness = aHierarchical_PIN->m_Width;
-	if( thickness == 0 )
-		thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+    if( thickness == 0 )
+        thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
     SetCurrentLineWidth( thickness );
 
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
                      aHierarchical_PIN->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
                      side, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, aHierarchical_PIN->m_Italic, true  );
+                     thickness, aHierarchical_PIN->m_Italic, true  );
 
     /* Draw the associated graphic symbol */
     aHierarchical_PIN->CreateGraphicShape( Poly, aHierarchical_PIN->m_Pos );
@@ -798,9 +760,9 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
 {
     Hierarchical_PIN_Sheet_Struct* SheetLabelStruct;
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    wxSize   size;
-    wxString Text;
-    wxPoint  pos;
+    wxSize     size;
+    wxString   Text;
+    wxPoint    pos;
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( Struct->m_Layer ) );
@@ -834,7 +796,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     PlotGraphicText( g_PlotFormat, pos, txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                    thickness, italic );
+                     thickness, italic );
 
     /*Draw texts : FileName */
     Text = Struct->GetFileName();
@@ -848,7 +810,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
                      txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
-                    thickness, italic );
+                     thickness, italic );
 
     /* Draw texts : SheetLabel */
     SheetLabelStruct = Struct->m_Label;

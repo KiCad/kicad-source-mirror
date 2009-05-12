@@ -21,21 +21,8 @@
 int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText )
 {
     int ret;
-    bool multiline;
+    bool multiline = CurrentText->m_MultilineAllowed;
 
-    switch( CurrentText->Type() )
-    {
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_LABEL:
-        multiline = false;
-        break;
-
-    default:
-        multiline = true;
-        break;
-    }
-    
     DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText, multiline );
 
     // doing any post construction resizing is better done here than in
@@ -97,7 +84,7 @@ void DialogLabelEditor::init()
         EnsureTextCtrlWidth( m_TextLabel );
 
     // Set validators
-    m_TextOrient->SetSelection( m_CurrentText->m_Orient );
+    m_TextOrient->SetSelection( m_CurrentText->GetSchematicTextOrientation() );
     m_TextShape->SetSelection( m_CurrentText->m_Shape );
 
     int style = 0;

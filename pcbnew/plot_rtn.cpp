@@ -353,7 +353,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
                      pt_texte->m_Text,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
-                     thickness, pt_texte->m_Italic );
+                     thickness, pt_texte->m_Italic, true );
 }
 
 
@@ -620,11 +620,34 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
         break;
     }
 
-    PlotGraphicText( format_plot, pos, BLACK,
+    if( pt_texte->m_MultilineAllowed )
+    {
+        wxArrayString* list = wxStringSplit( pt_texte->m_Text, '\n' );
+        wxPoint        offset;
+
+        offset.y = pt_texte->GetInterline();
+
+        RotatePoint( &offset, orient );
+        for( unsigned i = 0; i<list->Count(); i++ )
+        {
+            wxString txt = list->Item( i );
+            PlotGraphicText( format_plot, pos, BLACK,
+                     txt,
+                     orient, size,
+                     pt_texte->m_HJustify, pt_texte->m_VJustify,
+                     thickness, pt_texte->m_Italic, true );
+            pos += offset;
+        }
+
+        delete (list);
+    }
+    
+    else
+        PlotGraphicText( format_plot, pos, BLACK,
                      pt_texte->m_Text,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
-                     thickness, pt_texte->m_Italic );
+                     thickness, pt_texte->m_Italic, true );
 }
 
 

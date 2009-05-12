@@ -75,7 +75,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
             new SCH_LABEL( pos, CONV_FROM_UTF8( text ) );
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
-        TextStruct->m_Orient = orient;
+        TextStruct->SetSchematicTextOrientation( orient );
         if( isdigit( Name3[0] ) )
         {
             thickness = atol( Name3 );
@@ -92,7 +92,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
 
         Struct = TextStruct;
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
-        TextStruct->m_Orient = orient;
+        TextStruct->SetSchematicTextOrientation(  orient );
         TextStruct->m_Shape  = NET_INPUT;
         TextStruct->m_Width  = thickness;
 
@@ -115,7 +115,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
 
         Struct = TextStruct;
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
-        TextStruct->m_Orient = orient;
+        TextStruct->SetSchematicTextOrientation( orient );
         TextStruct->m_Shape  = NET_INPUT;
         TextStruct->m_Width  = thickness;
 
@@ -138,14 +138,14 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
 	  int i=val.find(_("\\n"));
 	  if (i==wxNOT_FOUND)
 	    break;
-	    
+
 	  val.erase(i,2);
 	  val.insert(i,_("\n"));
 	}
         SCH_TEXT* TextStruct = new SCH_TEXT( pos, val );
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
-        TextStruct->m_Orient = orient;
+        TextStruct->SetSchematicTextOrientation( orient );
         if( isdigit( Name3[0] ) )
         {
             thickness = atol( Name3 );

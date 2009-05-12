@@ -525,6 +525,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     else
         m_FieldHJustifyCtrl->SetSelection(1);
 
+    if( field.m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        m_FieldVJustifyCtrl->SetSelection(0);
+    else if( field.m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        m_FieldVJustifyCtrl->SetSelection(2);
+    else
+        m_FieldVJustifyCtrl->SetSelection(1);
+
     fieldNameTextCtrl->SetValue( field.m_Name );
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable filed name editing
@@ -605,16 +612,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
     field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
 
-    if( field.m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
-        m_FieldVJustifyCtrl->SetSelection(0);
-    else if( field.m_VJustify == GR_TEXT_VJUSTIFY_TOP )
-        m_FieldVJustifyCtrl->SetSelection(2);
-    else
-        m_FieldVJustifyCtrl->SetSelection(1);
-
-    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
-
-    /* Void fields texts for REFERENCE and VALUE (value is the name of the compinent in lib ! ) are not allowed
+    /* Void fields texts for REFERENCE and VALUE (value is the name of the component in lib ! ) are not allowed
      * change them only for a new non void value
      */
     if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
