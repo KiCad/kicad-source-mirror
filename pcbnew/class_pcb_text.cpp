@@ -179,8 +179,11 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                       int DrawMode, const wxPoint& offset )
 /**********************************************************************/
 
-/*
- *  DrawMode = GR_OR, GR_XOR.., -1 si mode courant.
+/** Function Draw
+ *  DrawMode = GR_OR, GR_XOR ..
+ * Like tracks, texts are drawn in filled or sketch mode, never in line mode
+ * because the line mode does not keep the actual size of the text
+ * and the actual size is very important, especially for copper texts
  */
 {
     int color = g_DesignSettings.m_LayerColor[m_Layer];
@@ -188,15 +191,16 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( color & ITEM_NOT_SHOW )
         return;
 
+    GRFillMode fillmode = FILLED;
+    if ( DisplayOpt.DisplayDrawItems == SKETCH)
+        GRFillMode fillmode = SKETCH;
+       
     EDA_TextStruct::Draw(
-        panel,
-        DC,
+        panel, DC,
         offset,
         (EDA_Colors) color,
-        DrawMode,
-        (GRFillMode) DisplayOpt.DisplayDrawItems,
-        (g_AnchorColor &
-         ITEM_NOT_SHOW) ? UNSPECIFIED_COLOR : (EDA_Colors) g_AnchorColor );
+        DrawMode, fillmode,
+        (g_AnchorColor & ITEM_NOT_SHOW) ? UNSPECIFIED_COLOR : (EDA_Colors) g_AnchorColor );
 }
 
 
