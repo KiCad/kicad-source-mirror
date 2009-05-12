@@ -441,15 +441,20 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit Text" ), edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Text" ), delete_text_xpm );
 
-    // add menu change type text (to label, glabel, text):
-    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                  _( "Change to Label" ), label2text_xpm );
-    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                  _( "Change to Hierarchical Label" ), label2glabel_xpm );
-    ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                  _( "Change to Glabel" ), label2glabel_xpm );
-    ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
-                               ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+    /* add menu change type text (to label, glabel, text),
+     * but only if this is a single line text
+     */
+    if( Text->m_Text.Find( wxT("\n") ) ==  wxNOT_FOUND )
+    {
+        ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
+                      _( "Change to Label" ), label2text_xpm );
+        ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
+                      _( "Change to Hierarchical Label" ), label2glabel_xpm );
+        ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
+                      _( "Change to Glabel" ), label2glabel_xpm );
+        ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type,
+                                   ID_POPUP_SCH_CHANGE_TYPE_TEXT, _( "Change Type" ), gl_change_xpm );
+    }
 }
 
 
