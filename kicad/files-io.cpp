@@ -115,7 +115,7 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
     wxFileName fileName = m_ProjectFileName;
     wxString oldPath = wxGetCwd();
 
-    fileName.SetExt( wxT( ".zip" ) );
+    fileName.SetExt( wxT( "zip" ) );
 
     wxFileDialog dlg( this, _( "Archive Project Files" ),
                       fileName.GetPath(), fileName.GetFullName(),
@@ -131,12 +131,12 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
     static const wxChar* extList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.cmp" ), wxT( "*.brd" ),
         wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
-        wxT( "*.pdf" ), wxT( "*.txt" ),
+        wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ),
         NULL
     };
 
-    wxString cmd = wxT( "-O " );
-    cmd += zip.GetPathSeparator() + zip.GetFullName();
+    wxString cmd = wxT( "-o " );    // run minizip with option -o (overwrite)
+    cmd += zip.GetFullPath();
 
     wxString currdirname = wxT( "." );
     currdirname += zip.GetPathSeparator();
@@ -154,9 +154,8 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
         while( cont )
         {
             wxFileName fn( f );
-
-            cmd += wxT( " ." );
-            cmd += zip.GetPathSeparator() + fn.GetFullName();
+            cmd += wxT( " " );
+            cmd +=  fn.GetFullName();
             PrintMsg( _( "Compress file " ) + fn.GetFullName() + wxT( "\n" ) );
             cont = dir.GetNext( &f );
         }
@@ -169,7 +168,9 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
 #endif
     if( ExecuteFile( this, ZIPPER, cmd ) >= 0 )
     {
-        PrintMsg( _( "\nCreate Zip Archive " ) + zip.GetFullName() );
+        wxString msg;
+        msg.Printf( _("\nCreate Zip Archive <%s>" ), zip.GetFullName().GetData() );
+        PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
     }
     else
