@@ -193,7 +193,7 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     GRFillMode fillmode = FILLED;
     if ( DisplayOpt.DisplayDrawItems == SKETCH)
-        GRFillMode fillmode = SKETCH;
+        fillmode = SKETCH;
        
     EDA_TextStruct::Draw(
         panel, DC,
