@@ -15,10 +15,11 @@ class DialogLabelEditor : public DialogLabelEditor_Base
 private:
     WinEDA_SchematicFrame * m_Parent;
     SCH_TEXT * m_CurrentText;
+    wxTextCtrl* m_TextLabel;
 
 protected:
     // these are protected so that the static ShowModally() gets used.
-    DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText, bool multiline);
+    DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText);
     ~DialogLabelEditor(){};
 
 

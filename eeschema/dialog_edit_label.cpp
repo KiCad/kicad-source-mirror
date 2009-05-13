@@ -21,9 +21,8 @@
 int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText )
 {
     int ret;
-    bool multiline = CurrentText->m_MultilineAllowed;
 
-    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText, multiline );
+    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText );
 
     // doing any post construction resizing is better done here than in
     // OnInitDialog() since it tends to flash/redraw the dialog less.
@@ -36,17 +35,29 @@ int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * C
 
 
 
-DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText,bool multiline ) :
-    DialogLabelEditor_Base( parent,wxID_ANY,multiline )
+DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText ) :
+    DialogLabelEditor_Base( parent )
 {
     m_Parent = parent;
     m_CurrentText = CurrentText;
+    init();
 }
 
 
 void DialogLabelEditor::init()
 {
     wxString msg;
+    
+    if( m_CurrentText->m_MultilineAllowed )
+    {
+        m_TextLabel = m_textCtrlMultiline;
+        m_TextLabelSingleline->Show(false);
+    }
+    else
+    {
+        m_TextLabel = m_TextLabelSingleline;
+       m_textCtrlMultiline->Show(false);
+    }
 
     m_TextLabel->SetValue( m_CurrentText->m_Text );
     m_TextLabel->SetFocus();

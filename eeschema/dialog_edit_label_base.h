@@ -18,8 +18,8 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/radiobox.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,9 +38,9 @@ class DialogLabelEditor_Base : public wxDialog
 			wxID_SIZE,
 		};
 		
-		wxBoxSizer* bSizerTextCtrl;
 		wxStaticText* m_staticText1;
-		wxTextCtrl* m_TextLabel;
+		wxTextCtrl* m_TextLabelSingleline;
+		wxTextCtrl* m_textCtrlMultiline;
 		wxRadioBox* m_TextOrient;
 		wxRadioBox* m_TextStyle;
 		wxRadioBox* m_TextShape;
@@ -57,7 +57,7 @@ class DialogLabelEditor_Base : public wxDialog
 		
 	
 	public:
-		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, bool multiline=false, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 600,216 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 526,281 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogLabelEditor_Base();
 	
 };
