@@ -16,23 +16,12 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbSizer5;
-	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Default netlist format") ), wxHORIZONTAL );
-	
-	m_NetFormatBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 150,70 ), 0, NULL, wxLB_NEEDED_SB|wxLB_SINGLE ); 
-	sbSizer5->Add( m_NetFormatBox, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	sbSizer5->Add( 0, 15, 0, wxEXPAND, 5 );
-	
-	bMainSizer->Add( sbSizer5, 0, wxALL, 5 );
-	
 	wxStaticBoxSizer* sbLibsChoiceSizer;
 	sbLibsChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Component library files") ), wxHORIZONTAL );
 	
 	m_ListLibr = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListLibr->SetToolTip( _("List of active library files.\nOnly library files in this list are loaded by Eeschema.\nThe order of this list is important:\nEeschema searchs for a given component using this list order priority.") );
-	m_ListLibr->SetMinSize( wxSize( 400,90 ) );
+	m_ListLibr->SetMinSize( wxSize( 400,250 ) );
 	
 	sbLibsChoiceSizer->Add( m_ListLibr, 1, wxALL|wxEXPAND, 5 );
 	

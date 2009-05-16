@@ -35,7 +35,7 @@ static wxString currentLibraryName;
 /** Function LoadLibraryName
  * Routine to load the given library name. FullLibName should hold full path
  * of file name to open, while LibName should hold only its name.
- * IF library already exists, it is NOT reloaded.
+ * If library already exists, it is NOT reloaded.
  * @return : new lib or NULL
  */
 /****************************************************************************/
@@ -101,19 +101,15 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
 }
 
 
-/******************************************/
-/* Function LoadLibraries
- * Clear all alredy loaded librries and load all librairies
+/** Function LoadLibraries
+ * Clear all already loaded libraries and load all librairies
  * given in frame->m_ComponentLibFiles
  */
-/******************************************/
 void LoadLibraries( WinEDA_SchematicFrame* frame )
 {
     wxFileName fn;
     wxString msg, tmp;
     unsigned ii, iimax = frame->m_ComponentLibFiles.GetCount();
-
-    frame->PrintMsg( _( "Loading schematic component libraries" ) );
 
     // Free the unwanted libraries (i.e. not in list) but keep the cache lib
     LibraryStruct* nextlib, * lib = g_LibraryList;
@@ -143,10 +139,8 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
             tmp = wxGetApp().FindLibraryPath( fn );
             if( !tmp )
             {
-                msg.Printf( _( "Library file <%s> not found." ),
-                            fn.GetName().c_str() );
-                wxMessageBox( msg, _( "Library Load Error" ),
-                              wxOK | wxICON_ERROR, frame );
+                msg.Printf( _( "Library file <%s> not found." ), fn.GetName().c_str() );
+                wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, frame );
                 continue;
             }
         }

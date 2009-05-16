@@ -16,9 +16,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -40,8 +40,6 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 			wxID_INSERT_PATH,
 			wxID_REMOVE_PATH,
 		};
-		
-		wxListBox* m_NetFormatBox;
 		
 		wxListBox* m_ListLibr;
 		wxButton* m_buttonAddLib;

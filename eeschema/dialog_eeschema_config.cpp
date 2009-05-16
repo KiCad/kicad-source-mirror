@@ -93,26 +93,6 @@ void DIALOG_EESCHEMA_CONFIG::Init()
     m_LibPathChanged = false;
     m_UserLibDirBufferImg = m_Parent->m_UserLibraryPath;
 
-    // Init currently availlable netlist formats
-    wxArrayString NetlistNameItems;
-    NetlistNameItems.Add( wxT( "Pcbnew" ) );
-    NetlistNameItems.Add( wxT( "OrcadPcb2" ) );
-    NetlistNameItems.Add( wxT( "CadStar" ) );
-    NetlistNameItems.Add( wxT( "Spice" ) );
-
-    // Add extra neltlist format (using external converter)
-    msg = ReturnUserNetlistTypeName( true );
-    while( !msg.IsEmpty() )
-    {
-        NetlistNameItems.Add( msg );
-        msg = ReturnUserNetlistTypeName( false );
-    }
-
-    m_NetFormatBox->InsertItems( NetlistNameItems, 0 );
-
-    if( m_Parent->m_NetlistFormat > (int) m_NetFormatBox->GetCount() )
-        m_Parent->m_NetlistFormat = NET_TYPE_PCBNEW;
-    m_NetFormatBox->SetSelection( m_Parent->m_NetlistFormat - NET_TYPE_PCBNEW );
 
     m_ListLibr->InsertItems( m_Parent->m_ComponentLibFiles, 0 );
 
@@ -158,9 +138,6 @@ void DIALOG_EESCHEMA_CONFIG::OnCancelClick( wxCommandEvent& event )
 void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
 /**************************************************************/
 {
-    // Set new netlist format
-    m_Parent->m_NetlistFormat = m_NetFormatBox->GetSelection() + NET_TYPE_PCBNEW;
-
     // Recreate the user lib path
     if ( m_LibPathChanged )
     {

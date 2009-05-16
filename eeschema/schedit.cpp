@@ -54,6 +54,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
+    case ID_POPUP_IMPORT_GLABEL:
     case ID_POPUP_SCH_EDIT_PINSHEET:
     case ID_POPUP_SCH_MOVE_PINSHEET:
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
@@ -386,15 +387,19 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_EDIT_SHEET:
         EditSheet( (DrawSheetStruct*) screen->GetCurItem(), &dc );
         break;
+    
+    case ID_POPUP_IMPORT_GLABEL:
+        if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+            GetScreen()->SetCurItem( Import_PinSheet( (DrawSheetStruct*)screen->GetCurItem(), &dc ) );
+        break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
-        ( (DrawSheetStruct*)
-         screen->GetCurItem() )->CleanupSheet( this, true );
+        if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+            ( (DrawSheetStruct*) screen->GetCurItem() )->CleanupSheet( this, true );
         break;
 
     case ID_POPUP_SCH_EDIT_PINSHEET:
-        Edit_PinSheet( (Hierarchical_PIN_Sheet_Struct*)
-                      screen->GetCurItem(), &dc );
+        Edit_PinSheet( (Hierarchical_PIN_Sheet_Struct*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_MOVE_PINSHEET:

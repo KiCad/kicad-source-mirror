@@ -135,12 +135,12 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
 	wxString val= CONV_FROM_UTF8( text );
 	for (;;)
 	{
-	  int i=val.find(_("\\n"));
+	  int i=val.find(wxT("\\n"));
 	  if (i==wxNOT_FOUND)
 	    break;
 
 	  val.erase(i,2);
-	  val.insert(i,_("\n"));
+	  val.insert(i,wxT("\n"));
 	}
         SCH_TEXT* TextStruct = new SCH_TEXT( pos, val );
 

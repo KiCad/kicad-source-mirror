@@ -201,9 +201,9 @@ void WinEDA_SchematicFrame::ReCreateVToolbar()
                          wxBitmap( add_hierarchical_subsheet_xpm ),
                          _( "Place hierarchical sheet" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_IMPORT_GLABEL_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_POPUP_IMPORT_GLABEL, wxEmptyString,
                          wxBitmap( import_hierarchical_label_xpm ),
-                         _( "Place a pin sheet , imported from a hierarchical label in sheet" ),
+                         _( "Place a pin sheet , imported from the corresponding hierarchical label in sheet" ),
 						 wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,

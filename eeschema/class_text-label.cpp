@@ -512,7 +512,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
             break;
 
         text.erase( i, 1 );
-        text.insert( i, _( "\\n" ) );
+        text.insert( i, wxT( "\\n" ) );
     }
 
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",

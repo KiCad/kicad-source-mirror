@@ -259,12 +259,10 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
 
-    // If the list is void, load the libraries "power.lib" and "device.lib"
+    /* If the list is void, force loadind the library "power.lib" that is the "standard" library for power symbols
+    */
     if( m_ComponentLibFiles.GetCount() == 0 )
-    {
         m_ComponentLibFiles.Add( wxT( "power" ) );
-        m_ComponentLibFiles.Add( wxT( "device" ) );
-    }
 
     if( frame )
     {
