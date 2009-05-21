@@ -7,7 +7,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 # Many of the commented out ones are nested in *.cpp files for dialogs
 set(PCBNEW_SRCS
-    affiche.cpp
     attribut.cpp
     automove.cpp
     autoplac.cpp

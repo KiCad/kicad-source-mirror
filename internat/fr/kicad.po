@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-16 20:42+0100\n"
-"PO-Revision-Date: 2009-05-16 20:51+0100\n"
+"POT-Creation-Date: 2009-05-21 17:31+0100\n"
+"PO-Revision-Date: 2009-05-21 17:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -357,51 +357,51 @@ msgstr "Le texte est la  VALEUR!"
 msgid "Place module"
 msgstr "Place module"
 
-#: pcbnew/loadcmp.cpp:209
-#: pcbnew/loadcmp.cpp:360
+#: pcbnew/loadcmp.cpp:210
+#: pcbnew/loadcmp.cpp:361
 #, c-format
 msgid "PCB footprint library file <%s> not found in search paths."
 msgstr "Librairie modules PCB %s non trouvée dans les chemins de recherche"
 
-#: pcbnew/loadcmp.cpp:211
-#: pcbnew/loadcmp.cpp:222
-#: pcbnew/loadcmp.cpp:238
-#: pcbnew/loadcmp.cpp:362
-#: pcbnew/loadcmp.cpp:398
+#: pcbnew/loadcmp.cpp:212
+#: pcbnew/loadcmp.cpp:223
+#: pcbnew/loadcmp.cpp:239
+#: pcbnew/loadcmp.cpp:363
+#: pcbnew/loadcmp.cpp:399
 msgid "Library Load Error"
 msgstr "Erreur en Chargement de librairie"
 
-#: pcbnew/loadcmp.cpp:220
+#: pcbnew/loadcmp.cpp:221
 #, c-format
 msgid "Could not open PCB footprint library file <%s>."
 msgstr "Ne peu ouvrir le fichier librairie de modules PCB <%s>."
 
-#: pcbnew/loadcmp.cpp:227
+#: pcbnew/loadcmp.cpp:228
 #, c-format
 msgid "Scan Lib: %s"
 msgstr "Examen Lib: %s"
 
-#: pcbnew/loadcmp.cpp:236
-#: pcbnew/loadcmp.cpp:396
+#: pcbnew/loadcmp.cpp:237
+#: pcbnew/loadcmp.cpp:397
 #, c-format
 msgid "<%s> is not a valid Kicad PCB footprint library file."
 msgstr "<%s> n'est pas un fichier librarire de modules Kicad PCB valide."
 
-#: pcbnew/loadcmp.cpp:303
+#: pcbnew/loadcmp.cpp:304
 #, c-format
 msgid "Module <%s> not found"
 msgstr "Module <%s> non trouvé"
 
-#: pcbnew/loadcmp.cpp:387
+#: pcbnew/loadcmp.cpp:388
 msgid "Library "
 msgstr "Librairie "
 
-#: pcbnew/loadcmp.cpp:387
+#: pcbnew/loadcmp.cpp:388
 msgid " loaded"
 msgstr " chargé"
 
-#: pcbnew/loadcmp.cpp:458
-#: pcbnew/loadcmp.cpp:610
+#: pcbnew/loadcmp.cpp:459
+#: pcbnew/loadcmp.cpp:611
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Modules [%d éléments]"
@@ -1287,7 +1287,7 @@ msgstr "Epaisseur Contour"
 msgid "Incorrect number, no change"
 msgstr "Nombre incorrect, pas de changement"
 
-#: pcbnew/ioascii.cpp:167
+#: pcbnew/ioascii.cpp:174
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
@@ -1492,30 +1492,6 @@ msgstr "Déplacer Modules ?"
 #: pcbnew/automove.cpp:222
 msgid "Autoplace modules: No board edges detected. Unable to place modules"
 msgstr "Autoplace modules: Pas de contours sur pcb. Impossible de placer les modules"
-
-#: pcbnew/affiche.cpp:35
-msgid "Net Name"
-msgstr "Nom Equipot"
-
-#: pcbnew/affiche.cpp:37
-msgid "No Net (not connected)"
-msgstr "Pas de Net (non connecté)"
-
-#: pcbnew/affiche.cpp:40
-msgid "Net Code"
-msgstr "Net Code"
-
-#: pcbnew/affiche.cpp:53
-msgid "Pads"
-msgstr "Pads"
-
-#: pcbnew/affiche.cpp:67
-msgid "Vias"
-msgstr "Vias"
-
-#: pcbnew/affiche.cpp:70
-msgid "Net Length"
-msgstr "Long. Net"
 
 #: pcbnew/pcbframe.cpp:303
 msgid "Board modified, Save before exit ?"
@@ -1762,53 +1738,60 @@ msgstr "N'affiche pas les couches cuivre"
 msgid "Apply"
 msgstr "Appliquer"
 
-#: pcbnew/class_track.cpp:868
+#: pcbnew/class_track.cpp:871
 #: pcbnew/class_board_item.cpp:173
 msgid "Zone"
 msgstr "Zone"
 
-#: pcbnew/class_track.cpp:876
+#: pcbnew/class_track.cpp:879
 msgid "Type"
 msgstr "Type"
 
-#: pcbnew/class_track.cpp:893
+#: pcbnew/class_track.cpp:896
 msgid "NetName"
 msgstr "NetName"
 
-#: pcbnew/class_track.cpp:899
+#: pcbnew/class_track.cpp:902
 msgid "NetCode"
 msgstr "NetCode"
 
-#: pcbnew/class_track.cpp:904
+#: pcbnew/class_track.cpp:907
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_track.cpp:906
+#: pcbnew/class_track.cpp:909
 #: pcbnew/class_board_item.cpp:26
 msgid "Circle"
 msgstr "Cercle"
 
-#: pcbnew/class_track.cpp:908
+#: pcbnew/class_track.cpp:911
 msgid "Standard"
 msgstr "Standard"
 
-#: pcbnew/class_track.cpp:916
+#: pcbnew/class_track.cpp:919
 msgid "Flags"
 msgstr "Flags"
 
-#: pcbnew/class_track.cpp:929
+#: pcbnew/class_track.cpp:932
 #: pcbnew/class_module.cpp:960
 msgid "Stat"
 msgstr "Stat"
 
-#: pcbnew/class_track.cpp:953
+#: pcbnew/class_track.cpp:957
 msgid "Diam"
 msgstr "Diam"
 
-#: pcbnew/class_track.cpp:960
 #: pcbnew/class_track.cpp:965
 msgid "Drill"
 msgstr "Perçage"
+
+#: pcbnew/class_track.cpp:969
+msgid "(Specific)"
+msgstr "(Specifique)"
+
+#: pcbnew/class_track.cpp:971
+msgid "(Default)"
+msgstr "(Défaut)"
 
 #: pcbnew/class_module.cpp:930
 msgid "Last Change"
@@ -1817,6 +1800,11 @@ msgstr "Last Change"
 #: pcbnew/class_module.cpp:936
 msgid "Netlist path"
 msgstr "Chemin Netliste "
+
+#: pcbnew/class_module.cpp:952
+#: pcbnew/menubarpcb.cpp:230
+msgid "Pads"
+msgstr "Pads"
 
 #: pcbnew/class_module.cpp:967
 msgid "Module"
@@ -2405,15 +2393,15 @@ msgstr "Fichier <%s> non trouvé, Netliste utilisée pour sélection des  module
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Composant [%s]: Module <%s> non trouvé en librairie"
 
-#: pcbnew/onleftclick.cpp:179
+#: pcbnew/onleftclick.cpp:183
 msgid "Graphic not authorized on Copper layers"
 msgstr "Graphique non autorisé sur Couches Cuivre"
 
-#: pcbnew/onleftclick.cpp:202
+#: pcbnew/onleftclick.cpp:206
 msgid "Tracks on Copper layers only "
 msgstr "Pistes sur Couches Cuivre seulement"
 
-#: pcbnew/onleftclick.cpp:286
+#: pcbnew/onleftclick.cpp:290
 msgid "Cotation not authorized on Copper layers"
 msgstr "Cotation non autorisée sur Couches Cuivre"
 
@@ -2422,7 +2410,6 @@ msgid "Options"
 msgstr "Options"
 
 #: pcbnew/dialog_drc.cpp:440
-#: pcbnew/dialog_track_options_base.cpp:106
 msgid "Clearance"
 msgstr "Isolation"
 
@@ -2891,6 +2878,22 @@ msgstr "Créer Fichier "
 #: pcbnew/dialog_SVG_print.cpp:208
 msgid " error"
 msgstr " erreur"
+
+#: pcbnew/class_equipot.cpp:148
+msgid "Net Name"
+msgstr "Nom Equipot"
+
+#: pcbnew/class_equipot.cpp:151
+msgid "Net Code"
+msgstr "Net Code"
+
+#: pcbnew/class_equipot.cpp:180
+msgid "Vias"
+msgstr "Vias"
+
+#: pcbnew/class_equipot.cpp:183
+msgid "Net Length"
+msgstr "Long. Net"
 
 #: pcbnew/dialog_track_options_base.cpp:27
 msgid "Vias:"
@@ -3929,11 +3932,11 @@ msgstr "Le caractère de délimitation de ligne doit être un seul caractère  '
 msgid "Un-terminated delimited string"
 msgstr "Ligne délimitée non terminée"
 
-#: pcbnew/modedit.cpp:274
+#: pcbnew/modedit.cpp:275
 msgid "Unable to find the footprint source on the main board"
 msgstr "Impossible de trouver le module source sur le PCB principal"
 
-#: pcbnew/modedit.cpp:275
+#: pcbnew/modedit.cpp:276
 msgid ""
 "\n"
 "Cannot update the footprint"
@@ -3941,11 +3944,11 @@ msgstr ""
 "\n"
 "Ne peut mettre à jour le module"
 
-#: pcbnew/modedit.cpp:283
+#: pcbnew/modedit.cpp:284
 msgid "A footprint source was found on the main board"
 msgstr "Un module source a été trouvé sur le PCB principal"
 
-#: pcbnew/modedit.cpp:284
+#: pcbnew/modedit.cpp:285
 msgid ""
 "\n"
 "Cannot insert this footprint"
@@ -3953,20 +3956,20 @@ msgstr ""
 "\n"
 "Ne peut insérer ce module"
 
-#: pcbnew/modedit.cpp:407
+#: pcbnew/modedit.cpp:409
 msgid "Add Pad"
 msgstr "Ajouter Pastilles"
 
-#: pcbnew/modedit.cpp:410
+#: pcbnew/modedit.cpp:412
 #: pcbnew/menubarmodedit.cpp:45
 msgid "Pad Settings"
 msgstr "Caract pads"
 
-#: pcbnew/modedit.cpp:420
+#: pcbnew/modedit.cpp:422
 msgid "Add Drawing"
 msgstr "Ajout d'éléments graphiques"
 
-#: pcbnew/modedit.cpp:424
+#: pcbnew/modedit.cpp:426
 msgid "Place anchor"
 msgstr "Place Ancre"
 
@@ -7254,8 +7257,6 @@ msgid "Reset"
 msgstr "Défaut"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:26
-#: eeschema/onrightclick.cpp:329
-#: eeschema/classes_body_items.cpp:72
 msgid "Unit"
 msgstr "Unité"
 
@@ -7360,8 +7361,6 @@ msgid "The name of the symbol in the library from which this component came"
 msgstr "Le nom du symbole dans la librairie d'où vient le composant."
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:73
-#: eeschema/onrightclick.cpp:316
-#: eeschema/classes_body_items.cpp:82
 msgid "Convert"
 msgstr "Convert"
 
@@ -7374,8 +7373,6 @@ msgstr ""
 "Pour les portes, ceci est la conversion \"De Morgan\""
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:79
-#: eeschema/dialog_create_component.cpp:178
-#: eeschema/dialog_edit_component_in_lib.cpp:160
 msgid "Parts are locked"
 msgstr "Les parts sont verrouillées"
 
@@ -7416,12 +7413,10 @@ msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
-#: eeschema/dialog_edit_label_base.cpp:43
 msgid "Bold"
 msgstr "Gras"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:134
-#: eeschema/dialog_edit_label_base.cpp:43
 msgid "Bold Italic"
 msgstr "Gras Italique"
 
@@ -8892,6 +8887,8 @@ msgstr "%8.8lX/"
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:95
 #: eeschema/dialog_edit_component_in_schematic.cpp:100
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:159
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:164
 msgid "Pos "
 msgstr "Pos "
 
@@ -9166,7 +9163,7 @@ msgstr "Erreur en Fichier Projet"
 #: cvpcb/loadcmp.cpp:50
 #, c-format
 msgid "PCB foot print library file <%s> could not be found in the default search paths."
-msgstr ""
+msgstr "Le fichier librairie de modules PCB <%s> n'a pas pu être trouvé dans les chemins de recherche par défaut."
 
 #: cvpcb/listlib.cpp:85
 #: cvpcb/loadcmp.cpp:61
@@ -9187,7 +9184,7 @@ msgstr "Fin de fichier inattendue lors de l'analyse de la librairie de modules P
 #: cvpcb/listlib.cpp:162
 #, c-format
 msgid "Could not open PCB foot print library document file <%s>."
-msgstr ""
+msgstr "Ne peut pas ouvrir le fichier documentation de module <%s>."
 
 #: cvpcb/listlib.cpp:171
 #, c-format
@@ -9236,7 +9233,7 @@ msgstr " [pas de fichier]"
 #: cvpcb/autosel.cpp:93
 #, c-format
 msgid "Footprint alias library file <%s> could not be found in the default search paths."
-msgstr ""
+msgstr "Le fichier d'alias <%s> n'a pas pu être trouvé dans les chemins de recherche par défaut."
 
 #: cvpcb/autosel.cpp:106
 #, c-format
@@ -9361,7 +9358,7 @@ msgstr "Rester Ouvert après Sauvegarde"
 
 #: cvpcb/menucfg.cpp:69
 msgid "Prevent CVPcb from exiting after saving netlist file"
-msgstr ""
+msgstr "N'autorise pas la fermeture automatique de Cvpcb après la sauvegarde de la netliste"
 
 #: cvpcb/menucfg.cpp:75
 msgid "&Save Project File"
@@ -11412,6 +11409,8 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "No Net (not connected)"
+#~ msgstr "Pas de Net (non connecté)"
 #~ msgid "Default netlist format"
 #~ msgstr "Format netlistes par défaut"
 #~ msgid "Loading schematic component libraries"

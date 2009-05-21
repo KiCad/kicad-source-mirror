@@ -904,6 +904,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     /* Ecriture de l'entete PCB : */
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
             DateAndTime( line ) );
+    fprintf( aFile, "# Created by Pcbnew%s\n\n", CONV_TO_UTF8( GetBuildVersion() ) );
 
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( GetScreen(), aFile );

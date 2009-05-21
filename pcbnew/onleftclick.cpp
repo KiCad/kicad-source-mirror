@@ -138,7 +138,11 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( netcode < 0 )
                 GetBoard()->DisplayInfo( this );
             else
-                Affiche_Infos_Equipot( netcode, this );
+            {
+                EQUIPOT * net  = GetBoard()->FindNet(netcode);
+                if ( net )
+                    net->DisplayInfo( this );
+            }
         }
         break;
 

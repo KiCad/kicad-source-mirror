@@ -4,10 +4,9 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
-#include "gr_basic.h"
+#include "common.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
-#include "protos.h"
 
 
 /*********************************************************/
@@ -127,6 +126,62 @@ void EQUIPOT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPo
 {
 }
 
+
+/**
+ * Function DisplayInfo
+ * has knowledge about the frame and how and where to put status information
+ * about this object into the frame's message panel.
+ * Is virtual from EDA_BaseStruct.
+ * @param frame A WinEDA_DrawFrame in which to print status information.
+ */
+ void EQUIPOT::DisplayInfo( WinEDA_DrawFrame* frame )
+{
+    int             count;
+    EDA_BaseStruct* Struct;
+    wxString        txt;
+    MODULE*         module;
+    D_PAD*          pad;
+    double	    lengthnet = 0;
+
+    frame->MsgPanel->EraseMsgBox();
+
+    Affiche_1_Parametre( frame, 1, _( "Net Name" ), GetNetname(), RED );
+
+    txt.Printf( wxT( "%d" ), GetNet() );
+    Affiche_1_Parametre( frame, 30, _( "Net Code" ), txt, RED );
+
+    count = 0;
+    module = ((WinEDA_BasePcbFrame*)frame)->GetBoard()->m_Modules;
+    for( ; module != 0; module = module->Next() )
+    {
+        for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
+        {
+            if( pad->GetNet() == GetNet() )
+                count++;
+        }
+    }
+
+    txt.Printf( wxT( "%d" ), count );
+    Affiche_1_Parametre( frame, 40, _( "Pads" ), txt, DARKGREEN );
+
+    count = 0;
+    Struct = ((WinEDA_BasePcbFrame*)frame)->GetBoard()->m_Track;
+    for( ; Struct != NULL; Struct = Struct->Next() )
+    {
+        if( Struct->Type() == TYPE_VIA )
+            if( ( (SEGVIA*) Struct )->GetNet() == GetNet() )
+                count++;
+        if( Struct->Type() == TYPE_TRACK )
+            if( ( (TRACK*) Struct )->GetNet() == GetNet() )
+            lengthnet += ( (TRACK*) Struct )->GetLength();
+    }
+
+    txt.Printf( wxT( "%d" ), count );
+    Affiche_1_Parametre( frame, 50, _( "Vias" ), txt, BLUE );
+
+    valeur_param( (int) lengthnet, txt );
+    Affiche_1_Parametre( frame, 60, _( "Net Length" ), txt, RED );
+}
 
 #if defined(DEBUG)
 

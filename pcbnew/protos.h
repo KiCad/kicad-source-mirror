@@ -330,11 +330,6 @@ void    Trace_Block( WinEDA_DrawPanel* panel, wxDC* DC, int ox, int oy, int fx, 
   *   (toujours en mode XOR) */
 
 
-/*****************************************************************/
-/* AFFICHE.CPP: (Fonctions d'affichage de messages, parametres... */
-/*****************************************************************/
-void    Affiche_Infos_Equipot( int netcode, WinEDA_BasePcbFrame* frame );
-
 /************/
 /* ZONES.CPP */
 /************/
