@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char * green_xpm[];
+extern const char * erc_green_xpm[];
 #else
-const char *green_xpm[] = {
+const char *erc_green_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "11 11 2 1",
 "- c Black",

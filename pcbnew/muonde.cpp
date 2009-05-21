@@ -251,7 +251,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
         DisplayError( this, _( "Incorrect number, abort" ) );
         return NULL;
     }
-    Mself.lng = (int) round( fval * fcoeff );
+    Mself.lng = wxRound( fval * fcoeff );
 
     /* Controle des valeurs ( ii = valeur minimale de la longueur */
     if( Mself.lng < Mself.m_Size.y )
@@ -690,7 +690,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
     wxString value;
     if( g_UnitMetric )
     {
-        fcoeff = 10000.0 / 25.4;
+        fcoeff = 10000.0f / 25.4f;
         value.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
         msg  += _( " (mm):" );
     }
@@ -1191,7 +1191,7 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     /* Entree de la longueur desiree du gap*/
     if( g_UnitMetric )
     {
-        fcoeff = 10000.0 / 25.4;
+        fcoeff = 10000.0f / 25.4f;
         msg.Printf( wxT( "%2.3f" ), gap_size / fcoeff );
         Get_Message( _( "Gap (mm):" ), _("Create Microwave Gap"), msg, this );
     }

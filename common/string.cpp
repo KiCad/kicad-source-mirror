@@ -4,7 +4,6 @@
 /*********************************************/
 
 #include "fctsys.h"
-#include <time.h>
 #include "macros.h"
 #include "kicad_string.h"
 

@@ -62,7 +62,7 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_MODEDIT_PAD_SETTINGS,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
+              WinEDA_ModuleEditFrame::LoadModuleFromBoard )
     EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,

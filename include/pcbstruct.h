@@ -125,7 +125,7 @@
 /* Forward declaration */
 class EQUIPOT;
 class MARKER;
-struct CHEVELU;
+class CHEVELU;
 
 //class Ki_PageDescr;
 //class DrawBlockStruct;
@@ -289,7 +289,7 @@ public:
                                  * 1 show netnames on pads
                                  * 2 show netnames on tracks
                                  * 3 show netnames on tracks and pads
-                                */
+                                 */
 
     bool Show_Modules_Cmp;
     bool Show_Modules_Cu;

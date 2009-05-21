@@ -121,8 +121,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     {
         wxString msg;
         err = TRUE;
-        msg.Printf( wxT( "HandleBlockPLace() : m_BlockDrawStruct = " \
-                         "NULL (cmd %d, state %d)" ),
+        msg.Printf( wxT( "HandleBlockPLace() : m_BlockDrawStruct = NULL (cmd %d, state %d)" ),
                     block->m_Command, block->m_State );
         DisplayError( this, msg );
     }
@@ -202,11 +201,12 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     if( block->m_BlockDrawStruct )
     {
         DisplayError( this,
-                     wxT( "HandleBlockPLace() error: DrawStruct != Null" ) );
+                      wxT( "HandleBlockPLace() error: DrawStruct != Null" ) );
         block->m_BlockDrawStruct = NULL;
     }
 
-    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
+    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor,
+               wxEmptyString );
 }
 
 

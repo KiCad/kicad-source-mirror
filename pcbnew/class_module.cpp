@@ -913,7 +913,8 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     if( frame->m_Ident != PCB_FRAME )
         flag = TRUE;
     pos = 1;
-    Affiche_1_Parametre( frame, pos, m_Reference->m_Text, m_Value->m_Text, DARKCYAN );
+    Affiche_1_Parametre( frame, pos, m_Reference->m_Text, m_Value->m_Text,
+                         DARKCYAN );
 
     /* Affiche signature temporelle ou date de modif (en edition de modules) */
     pos += 6;
@@ -933,11 +934,12 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     else
     {
         msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
-        Affiche_1_Parametre( frame, pos, _( "Netlist path" ), /*msg*/ m_Path, BROWN );
+        Affiche_1_Parametre( frame, pos, _( "Netlist path" ), m_Path, BROWN );
     }
 
     pos += 12;
-    Affiche_1_Parametre( frame, pos, _( "Layer" ), board->GetLayerName( m_Layer ), RED );
+    Affiche_1_Parametre( frame, pos, _( "Layer" ),
+                         board->GetLayerName( m_Layer ), RED );
 
     pos += 6;
     EDA_BaseStruct* PtStruct = m_Pads;

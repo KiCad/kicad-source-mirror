@@ -122,6 +122,17 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 }
 
 
+void WinEDA_ModuleEditFrame::LoadModuleFromBoard( wxCommandEvent& event )
+{
+    GetScreen()->ClearUndoRedoList();
+    Load_Module_Module_From_BOARD( NULL );
+    GetScreen()->ClrModify();
+
+    if( m_Draw3DFrame )
+        m_Draw3DFrame->NewDisplay();
+}
+
+
 /****************************************************************************/
 void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 /****************************************************************************/
@@ -239,14 +250,6 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->ClrModify();
         break;
     }
-
-    case ID_MODEDIT_LOAD_MODULE_FROM_BOARD:
-        GetScreen()->ClearUndoRedoList();
-        Load_Module_Module_From_BOARD( NULL );
-        GetScreen()->ClrModify();
-        if( m_Draw3DFrame )
-            m_Draw3DFrame->NewDisplay();
-        break;
 
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
     case ID_MODEDIT_UPDATE_MODULE_IN_BOARD:

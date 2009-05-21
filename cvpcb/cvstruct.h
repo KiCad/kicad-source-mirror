@@ -16,7 +16,6 @@ class FootprintListBox;
 class ListBoxCmp;
 class WinEDA_DisplayFrame;
 
-#define LIST_BOX_TYPE wxListView
 
 /******************************************************/
 /* classe derivee pour la Fenetre principale de cvpcb */
@@ -98,7 +97,7 @@ public:
     virtual void    LoadSettings();
     virtual void    SaveSettings();
 
-    const PARAM_CFG_ARRAY& GetProjectFileParameters( void );
+    PARAM_CFG_ARRAY& GetProjectFileParameters( void );
 
     DECLARE_EVENT_TABLE()
 };
@@ -107,11 +106,8 @@ public:
 /***********************************************/
 /* ListBox derivee pour l'affichage des listes */
 /***********************************************/
-class ListBoxBase : public LIST_BOX_TYPE
+class ListBoxBase : public wxListView
 {
-public:
-    WinEDA_CvpcbFrame* m_Parent;
-
 public:
 
     ListBoxBase( WinEDA_CvpcbFrame * parent, wxWindowID id,
@@ -121,6 +117,9 @@ public:
 
     int     GetSelection();
     void    OnSize( wxSizeEvent& event );
+
+    virtual WinEDA_CvpcbFrame* GetParent();
+
 };
 
 /************************************************************/
@@ -205,7 +204,6 @@ public:
     ~WinEDA_DisplayFrame();
 
     void    OnCloseWindow( wxCloseEvent& Event );
-    void    Process_Special_Functions( wxCommandEvent& event );
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void    ReCreateHToolbar();
     void    ReCreateVToolbar();

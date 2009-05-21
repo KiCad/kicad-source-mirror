@@ -283,9 +283,9 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     m_Parent->MsgPanel->EraseMsgBox();
 
     /* Set conversion scale depending on drill file units */
-    s_ConversionUnits = 0.0001;                             /* unites = INCHES */
+    s_ConversionUnits = 0.0001f;                            /* unites = INCHES */
     if( !s_Unit_Drill_is_Inch )
-        s_ConversionUnits = 0.000254;                       /* unites = mm */
+        s_ConversionUnits = 0.000254f;                       /* unites = mm */
 
     if( m_MicroViasCount || m_BlindOrBuriedViasCount )
         ExistsBuriedVias = true;

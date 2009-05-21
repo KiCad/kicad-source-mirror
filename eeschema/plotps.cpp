@@ -16,16 +16,6 @@
 #pragma implementation "plotps.h"
 #endif
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
 #include "fctsys.h"
 #include "gr_basic.h"
 
@@ -36,8 +26,6 @@
 #include "worksheet.h"
 #include "plot_common.h"
 #include "protos.h"
-
-#include "wx/defs.h"
 
 // coeff de conversion dim en 1 mil -> dim en unite PS:
 const double SCALE_PS = 0.001;

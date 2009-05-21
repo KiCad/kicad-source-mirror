@@ -280,10 +280,10 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
 
     case S_POLYGON:
         ret = fprintf( aFile, "DP %d %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_PolyPoints.size(),
-                 m_Width, m_Layer );
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       (int)m_PolyPoints.size(),
+                       m_Width, m_Layer );
 
         for( unsigned i=0;  i<m_PolyPoints.size();  ++i )
             fprintf( aFile, "Dl %d %d\n",  m_PolyPoints[i].x, m_PolyPoints[i].y );

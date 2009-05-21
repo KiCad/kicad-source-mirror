@@ -16,9 +16,7 @@
 #include "dialog_print_using_printer_base.h"
 
 #include "pcbnew.h"
-
 #include "protos.h"
-
 #include "pcbplot.h"
 
 #define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT

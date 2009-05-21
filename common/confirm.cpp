@@ -4,19 +4,6 @@
 /* test demande ESC 	 */
 /*************************/
 
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 
@@ -44,7 +31,7 @@ public:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_MessageDialog, wxMessageDialog )
-EVT_TIMER( ID_TIMOUT, WinEDA_MessageDialog::OnTimeOut )
+    EVT_TIMER( ID_TIMOUT, WinEDA_MessageDialog::OnTimeOut )
 END_EVENT_TABLE()
 
 /**********************************************************************************/
@@ -80,12 +67,12 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
     wxMessageDialog* dialog;
 
     if( displaytime > 0 )
-        dialog = new    WinEDA_MessageDialog( parent, text, _( "Warning" ),
-                                              wxOK | wxICON_INFORMATION,
-                                              displaytime );
+        dialog = new WinEDA_MessageDialog( parent, text, _( "Warning" ),
+                                           wxOK | wxICON_INFORMATION,
+                                           displaytime );
     else
-        dialog = new    WinEDA_MessageDialog( parent, text, _( "Error" ),
-                                              wxOK | wxICON_ERROR, 0 );
+        dialog = new WinEDA_MessageDialog( parent, text, _( "Error" ),
+                                           wxOK | wxICON_ERROR, 0 );
 
     dialog->ShowModal();
     dialog->Destroy();
@@ -116,7 +103,8 @@ bool IsOK( wxWindow* parent, const wxString& text )
 {
     int ii;
 
-    ii = wxMessageBox( text, _( "Confirmation" ), wxYES_NO | wxCENTRE | wxICON_HAND, parent );
+    ii = wxMessageBox( text, _( "Confirmation" ),
+                       wxYES_NO | wxCENTRE | wxICON_HAND, parent );
     if( ii == wxYES )
         return TRUE;
     return FALSE;
@@ -124,9 +112,9 @@ bool IsOK( wxWindow* parent, const wxString& text )
 
 
 /***********************************************************************/
-int Get_Message( const wxString& title,                // The question
-                 const wxString& frame_caption,        // The frame caption
-                 wxString& buffer,                     // String input/return buffer
+int Get_Message( const wxString& title,           // The question
+                 const wxString& frame_caption,   // The frame caption
+                 wxString& buffer,                // String input/return buffer
                  wxWindow* frame )
 /***********************************************************************/
 

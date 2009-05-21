@@ -3,18 +3,6 @@
 // Name: eda_dde.cpp //
 ///////////////////////
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include <wx/wxprec.h>
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-// for all others, include the necessary headers
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
-
 #include "fctsys.h"
 #include "eda_dde.h"
 #include "wxstruct.h"

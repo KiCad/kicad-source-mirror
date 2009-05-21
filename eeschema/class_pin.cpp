@@ -130,8 +130,7 @@ bool LibDrawPin::Load( char* line, wxString& errorMsg )
 
     if( i < 11 )
     {
-        errorMsg.Printf( wxT( "pin only had %d parameters of the " \
-                              "required 11 or 12" ), i );
+        errorMsg.Printf( wxT( "pin only had %d parameters of the required 11 or 12" ), i );
         return false;
     }
 

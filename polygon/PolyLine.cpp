@@ -3,15 +3,14 @@
 //
 // implementation for kicad and kbool polygon clipping library
 //
-using namespace std;
-
 #include <math.h>
 #include <vector>
 
 #include "fctsys.h"
 
-
 #include "PolyLine.h"
+
+using namespace std;
 
 
 #define pi 3.14159265359

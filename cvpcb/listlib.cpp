@@ -19,6 +19,7 @@
 #include "cvpcb.h"
 #include "protos.h"
 
+
 /* routines locales : */
 static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list );
 
@@ -53,9 +54,8 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
     if( libNames.GetCount() == 0 )
     {
-        wxMessageBox( _( "No PCB foot print libraries are listed in the " \
-                         "current project file." ), _( "Project File Error" ),
-                      wxOK | wxICON_ERROR );
+        wxMessageBox( _( "No PCB foot print libraries are listed in the current project file." ),
+                      _( "Project File Error" ), wxOK | wxICON_ERROR );
         return false;
     }
 
@@ -70,8 +70,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
         if( !tmp )
         {
-            msg.Printf( _( "PCB foot print library file <%s> could not be " \
-                           "found in the default search paths." ),
+            msg.Printf( _( "PCB foot print library file <%s> could not be found in the default search paths." ),
                         fn.GetFullName().c_str() );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
             continue;
@@ -124,8 +123,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
                 if( !end )
                 {
-                    msg.Printf( _( "Unexpected end of file occurred while " \
-                                   "parsing PCB foot print library <%s>." ),
+                    msg.Printf( _( "Unexpected end of file occurred while parsing PCB foot print library <%s>." ),
                                 tmp.c_str() );
                     wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
                 }
@@ -159,8 +157,8 @@ static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list )
 
     if( ( LibDoc = wxFopen( fn.GetFullPath(), wxT( "rt" ) ) ) == NULL )
     {
-        msg.Printf( _( "Could not open PCB foot print library document " \
-                       "file <%s>." ), fn.GetFullPath().c_str() );
+        msg.Printf( _( "Could not open PCB foot print library document file <%s>." ),
+                    fn.GetFullPath().c_str() );
         wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
         return;
     }
@@ -168,8 +166,8 @@ static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list )
     GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 );
     if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
     {
-        msg.Printf( _( "<%s> is not a valid PCB foot print library " \
-                       "document file." ), fn.GetFullPath().c_str() );
+        msg.Printf( _( "<%s> is not a valid PCB foot print library document file." ),
+                    fn.GetFullPath().c_str() );
         wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
         return;
     }

@@ -733,7 +733,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
                 break;
             dx = aRefPoint.x - Circle->m_Pos.x;
             dy = aRefPoint.y + Circle->m_Pos.y;
-            int dist = (int) sqrt( dx * dx + dy * dy );
+            int dist = (int) sqrt( (double)( dx * dx + dy * dy ) );
             if( abs( dist - Circle->m_Rayon ) <= seuil )
                 return DrawItem;
         }

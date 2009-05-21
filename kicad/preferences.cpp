@@ -42,11 +42,10 @@ void WinEDA_MainFrame::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 {
     bool select = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
 
-    if( !wxGetApp().m_PdfBrowser || select )
+    if( !wxGetApp().m_PdfBrowser && !select )
     {
-        if( !select )
-            DisplayError( this, _( "You must choose a PDF viewer before use " \
-                                   "this option" ) );
+        DisplayError( this,
+                      _( "You must choose a PDF viewer before using this option." ) );
     }
 
     wxString wildcard( wxT( "*" ) );

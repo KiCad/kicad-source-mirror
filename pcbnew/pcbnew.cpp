@@ -88,8 +88,8 @@ bool Plot_Pads_All_Layers; /* Plot pads meme n'appartenant pas a la
 
 
 // Wildcard for footprint libraries filesnames
-const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file " \
-                                         "(*.mod)|*.mod" ) );
+const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
+
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
  * this is of the responsability to users to create this file
@@ -123,8 +123,8 @@ bool WinEDA_App::OnInit()
 
         if( fn.GetExt() != BoardFileExtension )
         {
-            wxLogDebug( wxT( "PcbNew file <%s> has the wrong extension." \
-                             "  Changing extension to .brd." ),
+            wxLogDebug( wxT( "PcbNew file <%s> has the wrong extension.  \
+Changing extension to .brd." ),
                         fn.GetFullPath().c_str() );
             fn.SetExt( BoardFileExtension );
         }

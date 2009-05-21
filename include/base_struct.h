@@ -472,13 +472,13 @@ enum GRTextVertJustifyType {
 
 /* Options to show solid segments (segments, texts...) */
 enum GRFillMode {
-    FILAIRE = 0,        // segments are drawn as lines
-    FILLED,             // normal mode: segments have thickness
-    SKETCH              // skect mode: segments have thickness, but are not filled
+    FILAIRE = 0,     // segments are drawn as lines
+    FILLED,          // normal mode: segments have thickness
+    SKETCH           // skect mode: segments have thickness, but are not filled
 };
 
 
-#define DEFAULT_SIZE_TEXT 60        /* default text height (in mils or  1/1000") */
+#define DEFAULT_SIZE_TEXT 60    /* default text height (in mils or 1/1000") */
 
 /**
  * Class EDA_TextStruct

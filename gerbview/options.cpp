@@ -64,13 +64,11 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
         if( m_OptionsToolBar->GetToolState( id ) )
         {
-            m_DisplayPadFill = FALSE;
-            DisplayOpt.DisplayPadFill = FALSE;
+            DisplayOpt.DisplayPadFill = m_DisplayPadFill = false;
         }
         else
         {
-            m_DisplayPadFill = TRUE;
-            DisplayOpt.DisplayPadFill = TRUE;
+            DisplayOpt.DisplayPadFill = m_DisplayPadFill = true;
         }
         DrawPanel->Refresh( TRUE );
         break;
@@ -364,9 +362,9 @@ void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
         DisplayOpt.DisplayPcbTrackFill = FALSE;
 
     if( m_OptDisplayFlashes->GetSelection() == 1 )
-        DisplayOpt.DisplayPadFill = TRUE;
+        DisplayOpt.DisplayPadFill = true;
     else
-        DisplayOpt.DisplayPadFill = FALSE;
+        DisplayOpt.DisplayPadFill = false;
 
     if( m_OptDisplayPolygons->GetSelection() == 0 )
         g_DisplayPolygonsModeSketch = 1;

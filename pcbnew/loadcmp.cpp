@@ -207,8 +207,8 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( const wxString& aLibraryFullF
 
         if( !tmp )
         {
-            msg.Printf( _( "PCB footprint library file <%s> not found in " \
-                           "search paths." ), fn.GetFullName().c_str() );
+            msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
+                        fn.GetFullName().c_str() );
             wxMessageBox( msg, _( "Library Load Error" ),
                           wxOK | wxICON_ERROR, this );
             continue;
@@ -234,8 +234,8 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( const wxString& aLibraryFullF
         StrPurge( Line );
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library " \
-                           "file." ), tmp.c_str() );
+            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
+                        tmp.c_str() );
             wxMessageBox( msg, _( "Library Load Error" ),
                           wxOK | wxICON_ERROR, this );
             fclose( file );
@@ -358,8 +358,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
 
         if( !tmp )
         {
-            msg.Printf( _( "PCB footprint library file <%s> not found in " \
-                           "search paths." ), fn.GetFullName().c_str() );
+            msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
+                        fn.GetFullName().c_str() );
             wxMessageBox( msg, _( "Library Load Error" ),
                           wxOK | wxICON_ERROR, this );
             continue;
@@ -394,8 +394,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
 
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library " \
-                           "file." ), tmp.c_str() );
+            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
+                        tmp.c_str() );
             wxMessageBox( msg, _( "Library Load Error" ),
                           wxOK | wxICON_ERROR, this );
             fclose( file );

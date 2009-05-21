@@ -82,8 +82,9 @@ wxString g_Shapes3DExtBuffer( wxT( "wrl" ) );
 const wxString ModuleFileExtension( wxT( "mod" ) );
 
 /* PCB file name wild card definitions. */
-const wxString ModuleFileWildcard( _( "Kicad footprint library files " \
-                                      "(*.mod)|*.mod") );
+const wxString ModuleFileWildcard(
+    _( "Kicad footprint library files (*.mod)|*.mod" )
+);
 
 int g_CurrentVersionPCB = 1;
 

@@ -19,8 +19,6 @@
  *      - shapes are smoothed.
  */
 
-using namespace std;
-
 #include <math.h>
 #include <vector>
 
@@ -31,8 +29,10 @@ using namespace std;
 
 #include "zones.h"
 
-
 #include "PolyLine.h"
+
+using namespace std;
+
 
 extern void Test_For_Copper_Island_And_Remove( BOARD* aPcb, ZONE_CONTAINER* aZone_container );
 

@@ -29,17 +29,17 @@
  *  Le cout est ici donne en majoration
  */
 static const float OrientPenality[11] = {
-    2.0,    /* CntRot = 0 en fait rotation interdite */
-    1.9,    /* CntRot = 1 */
-    1.8,    /* CntRot = 2 */
-    1.7,    /* CntRot = 3 */
-    1.6,    /* CntRot = 4 */
-    1.5,    /* CntRot = 5 */
-    1.4,    /* CntRot = 5 */
-    1.3,    /* CntRot = 7 */
-    1.2,    /* CntRot = 8 */
-    1.1,    /* CntRot = 9 */
-    1.0     /* CntRot = 10 rotation autorisee, penalite nulle */
+    2.0f,    /* CntRot = 0 en fait rotation interdite */
+    1.9f,    /* CntRot = 1 */
+    1.8f,    /* CntRot = 2 */
+    1.7f,    /* CntRot = 3 */
+    1.6f,    /* CntRot = 4 */
+    1.5f,    /* CntRot = 5 */
+    1.4f,    /* CntRot = 5 */
+    1.3f,    /* CntRot = 7 */
+    1.2f,    /* CntRot = 8 */
+    1.1f,    /* CntRot = 9 */
+    1.0f     /* CntRot = 10 rotation autorisee, penalite nulle */
 };
 
 /* Etat d'une cellule */
@@ -121,7 +121,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
     lay_tmp_TOP    = Route_Layer_TOP;
     OldPasRoute    = g_GridRoutingSize;
 
-    g_GridRoutingSize = GetScreen()->GetGrid().x;
+    g_GridRoutingSize = (int)GetScreen()->GetGrid().x;
 
     // Ensure g_GridRoutingSize has a reasonnable value:
     if( g_GridRoutingSize < 10 )

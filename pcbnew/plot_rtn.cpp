@@ -848,7 +848,7 @@ void PlotPolygon( int format_plot, int nbpoints, int* coord, int width )
         // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
         // with plot scale (if Scale is 2, pen diametre is always g_HPGL_Pen_Diam
         // so apparent pen diam is real pen diam / Scale
-        int      pen_diam = (int) round( (g_HPGL_Pen_Diam * U_PCB) / Scale_X ); // Assume Scale_X # Scale_Y
+        int      pen_diam = wxRound( (g_HPGL_Pen_Diam * U_PCB) / Scale_X ); // Assume Scale_X # Scale_Y
         wxString msg;
         if( pen_diam >= width )
             PlotPolyHPGL( nbpoints, coord, false, width ); // PlotPolyHPGL does not handle width

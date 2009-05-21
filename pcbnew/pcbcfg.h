@@ -210,11 +210,11 @@ static PARAM_CFG_BOOL TrackAfficheGardeCfg
     FALSE                           /* Default value */
 );
 
-static PARAM_CFG_BOOL PadFillCfg
+static PARAM_CFG_INT PadFillCfg
 (
     INSETUP,
     wxT( "PadFill" ),               /* Keyword */
-    &DisplayOpt.DisplayPadFill,     /* Parameter address */
+    (int*)&DisplayOpt.DisplayPadFill,     /* Parameter address */
     TRUE                            /* Default value */
 );
 

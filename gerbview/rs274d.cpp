@@ -984,8 +984,8 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                 break;
 
             default:
-                msg.Printf( wxT( "Execute_DCODE_Command: interpol error " \
-                                 "(type %X)" ), m_Iterpolation );
+                msg.Printf( wxT( "Execute_DCODE_Command: interpol error (type %X)" ),
+                            m_Iterpolation );
                 DisplayError( frame, msg );
                 break;
             }
@@ -1193,7 +1193,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
                                                   m_GerbMetric );
                         int gap = scale( p->params[4].GetValue( tool ),
                                          m_GerbMetric );
-                        int numCircles = p->params[5].GetValue( tool );
+                        int numCircles = (int)p->params[5].GetValue( tool );
                         int crossHairThickness =
                             scale( p->params[6].GetValue( tool ), m_GerbMetric );
                         int crossHairLength =

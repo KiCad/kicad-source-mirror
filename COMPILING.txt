@@ -1,6 +1,6 @@
---== How to build kicad using CMAKE ==--
+--== How to build kicad ==--
 First Written: 19-Dec-2007
-Last Revised: 12-Mar-2008
+Last Revised: 13-May-2009
 
 
 Kicad needs wxWidgets, the multi platform G.U.I.
@@ -26,6 +26,7 @@ sections below.)
 ===== Step Details ====================================================
 
 1)  If windows, then install "msys" and "mingw".
+
 Skip this step if on a Unix box.  Get msys and mingw here:
 http://mingw.org/
 msys sets up a development environment that allows the bash shell to run.
@@ -33,19 +34,24 @@ mingw are a set of tools that run on windows or under msys.  You will need
 at least the following mingw packages: make, gcc, g++, binutils, autoconf, and
 automake.
 
+
 -----------------------------------------------------------------------------
 
-2)  If linux, install "mesa".  Use your package manager to install the development
-libaries.
+2)  If linux, install "mesa".  Use your package manager to install the
+    development libaries.
+
 
 -----------------------------------------------------------------------------
 
 3)  Make sure g++ and "make" are in your path.
+
 If windows, then try running g++ and make from within your msys bash shell.
+
 
 -----------------------------------------------------------------------------
 
 4)  Install wxWidgets [and build it if on windows].
+
 If on windows, download
 http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.8.zip or a newer version.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
@@ -54,8 +60,8 @@ such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide
 access to this build directory from msys.  (Note that if you want you can build
 a "debug" version of the wxWidgets library at this point, instead of the release
 version, or in addition to the the release version.)
-Unzip the wmMWS zip file into the build directory.  Change directories into there,
-and then:
+Unzip the wmMWS zip file into the build directory.  Change directories into
+there, and then:
 
     mkdir build-release
     mkdir build-debug
@@ -82,21 +88,23 @@ Verify that wx-config is in your path.  Modify your PATH environment variable
 if need be so you can run wx-config from a command prompt.  You may have to
 restart your msys shell, depending on how you modify your PATH.
 
-
 If on linux, use your package manager to install shared object libraries and the
 development versions of the wxWidgets packages which include the C++ headers. An
 alternative is to build static libaries from source. Verify that wx-config is in
 your path by running it from a command prompt. Linux users then go to next step.
 
+
 -----------------------------------------------------------------------------
 
 5)  Install zlib [and build it if on windows].
+
 If on windows, download http://www.zlib.net/zlib123.zip or a newer version.
 Start msys so you have a bash shell. Decide where your zlib build directory
 will be. It must be where you can access it from within the msys environment,
 such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide
 access to this build directory from msys. Unzip the zlib123.zip file into this
 build directory. Change directories into there, and then:
+
     ./configure
     make
     make install
@@ -107,12 +115,15 @@ If linux, use your package manager to install zlib pre-built binaries.
 Note (JP Charras):
 	Under Linux, zlib is usually installed.
 	if not found by wxWidget installation, wxWidgets creates an alternate zlib
-	Under Windows, zlib is not installed, so my cmake buld try to use the wxWidgets zlib build.
-	So, under windows kicad build should work without zlib install.
+	Under Windows, zlib is not installed, so my cmake buld try to use the
+    wxWidgets zlib build.  So, under windows kicad build should work without
+    zlib install.
+
 
 -----------------------------------------------------------------------------
 
 6)  Install CMAKE.
+
 If windows, download the installation binary for windows from cmake.org.
 Install that and choose to add cmake to your path during installation.  You
 will have to restart and command shells for the new path to take effect.
@@ -124,15 +135,18 @@ or later. If only an older one is available in your package repository, build
 2.6.1 from source. Verify that cmake is in your path by trying to run it from a
 command prompt.
 
+
 -----------------------------------------------------------------------------
 
 7)  Install Boost C++ Libraries
+
 Under linux, boost is already installed, but can be too old.
 If this is the case, you *must* update boost.
 Go to http://www.boost.org/ dowlload the latest version of boost.
 unzip (or untar) boots file.
-under Windows, files can be installed (unzipped) everywhere, but when create makefiles using cmake,
-you will have a message saying boost is not found, something like:
+under Windows, files can be installed (unzipped) everywhere, but when create
+makefiles using cmake, you will have a message saying boost is not found,
+something like:
 
 -- Check for installed Boost -- not found
 CMake Error at CMakeModules/CheckFindPackageResult.cmake:6 (message):
@@ -145,13 +159,16 @@ Boost_INCLUDE_DIR:PATH=Boost_INCLUDE_DIR-NOTFOUND
 
 and edit it to set the right path, something like:
 Boost_INCLUDE_DIR:PATH=f:/boost/boost
-(on my computer boost is unzipper in f:\boost, and boost installed files are in f:\boost\boost)
+(on my computer boost is unzipper in f:\boost, and boost installed files are
+in f:\boost\boost)
 
 
 -----------------------------------------------------------------------------
 
 8)  Install the kicad source tree.
+
 You can use the subversion repository or a tar file for this.  See the wiki.
+
 
 -----------------------------------------------------------------------------
 
@@ -187,17 +204,21 @@ notice the leading <boost/ in the path.
 So point your Boost_INCLUDE_DIR:PATH= variable to a directory above the
 "boost" directory.
 
+
 -----------------------------------------------------------------------------
 
 10)  Use make to build and install kicad.
+
 You compile Kicad here.  You will only need to do step 8) again when one of the
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
+
     cd <kicadSource>/build/release
     make
     [sudo] make install
 
 You are now done unless you want to make a Debug build.
+
 
 -----------------------------------------------------------------------------
 
@@ -206,9 +227,9 @@ You are now done unless you want to make a Debug build.
     cd <kicadSource>/build/debug
 
 On either cmake command line shown below, you can optionally include
--DCMAKE_INSTALL_PREFIX=<finallInstallDir> before the final ../../ argument. Although
-normally you do not install the Debug binaries, you can debug them where they
-were built.
+-DCMAKE_INSTALL_PREFIX=<finallInstallDir> before the final ../../ argument.
+Although normally you do not install the Debug binaries, you can debug them
+where they were built.
 
 If windows, run the following command:
     cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
@@ -218,6 +239,7 @@ If linux, run instead the following command:
 
 Make the Debug binaries:
     make
+
 
 -----------------------------------------------------------------------------
 
@@ -240,9 +262,7 @@ These should be set from command line:
 
  CMAKE_INSTALL_PREFIX (OPTIONAL)
 
-
  KICAD_MINIZIP ON/OFF
-
 
  KICAD_PYTHON ON/OFF
 
@@ -253,154 +273,3 @@ Note: that it is easy to build only a specific binary such as pcbnew alone:
     make pcbnew
 
 -----------------------------------------------------------------------------
-
-End of CMAKE related building.
-
-
-============= OLD STUFF NOT PERTINENT TO CMAKE ==============================
-
-unzip sources in a working directory.
-This will create the directory "kicad-dev".
-
-First you must install wxWidgets (see www.wxWidgets.org)
-See below for suggested configure command.
-
-Linux compilation:
-You must have:
-wxWidgets ( I suggest you install wxWidgets in /usr/local).
-(see below for suggested configure command, then make and make install)
-
-Mesa: pcbnew and cvpcv need openGL or mesa.
-(you must install mesa devel if libGL et libGLU are not found).
-GTK 2 (install development libraries).
-
-Because old version of Mesa has problem under a recent linux distrib (mandarke 10.1),
-I am using Mesa version 6.2.1, statically compiled, installed in /usr/local
-Mesa installation:
-Get MesaLib-6.2.1.tar.gz from http://www.mesa3d.org/
-in /usr/local : tar zxvf MesaLib-6.2.1.tar.gz
-in /usr/local/Mesa-6.2.1 :
-make linux-x86-static
-make install ( libGL.a et libGLU.a are copied in /usr/local/lib, and header in /usr/local/include)
-
-kicad compilation:
-in kicad-dev:
- Have a look to libs.linux (you can/must edit this file if you have problems)
- Currently libs.linux uses wxWidgets 2.8.6 build (see below for suggested configure command)
- lines to edit:
- STD_INSTALL = 1
- which can be (see comments in libs.linux)
- STD_INSTALL = 0 (or 2)
-
- after libs.linux edition:
- run make -f makefile.gtk
-
-Windows compilation:
-
-kicad is build with mingw and msys.
-Currently libs.win uses wxWidgets 2.8.6 (see below for suggested configure command)
-
-install mingw  and msys ( see mingw.org )
-(opengl libs are included in mingw or windows)
-
-Under msys:
-    (Warning: make.exe utility is sometime renamed mingw32-make.exe in install process
-    of msys.)
-
-Build wxWidgets (currently version 2.8.6)
-    See below for suggested configure command, then make
-
-    In include/wx/msw/setup.h, check (and edit if needed) the defines :
-    #define wxUSE_GLCANVAS       1
-    #define wxUSE_MOUSEWHEEL  1 // Include mouse wheel support
-    #define wxUSE_HOTKEY 0      // Hotkey support (currently Windows only)
-
-
-Exit msys.
-Set environment variable WXWIN ( something as wxwin=/d/wxWidgets-2.8.6
-for a wxWidget installed in d:\wxWidgets-2.8.6)
-
-Have a look to libs.win (Currently this file handle wxWidgets 2.8.6)
-
-Under msys:
-    in kicad-dev:
-    run make -f makefile.g95
-
-*************************************************************************************
-Building wxWidgets:
-*************************************************************************************
-linux:
- rm *.cache
- ./configure --enable-monolithic --enable-unicode=no --enable-shared=no --with-opengl --with-libpng=builtin --with-libjpeg=builtin --with-libtiff=builtin --with-zlib=builtin --with-regex=builtin
-
-linux-unicode:
- rm *.cache
- ./configure --enable-monolithic --enable-unicode=yes --enable-shared=no --with-opengl --with-libpng=builtin --with-libjpeg=builtin --with-libtiff=builtin --with-zlib=builtin --with-regex=builtin
-
-osX:
- rm *.cache
- ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-opengl --disable-universal --disable-compat24
-
-osX-unicode:
- rm *.cache
- ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-opengl --enable-universal_binary
-
-windows:
- rm *.cache
- ./configure --enable-unicode=no --enable-shared=no --enable-monolithic --with-msw --with-opengl  --with-odbc
-
-windows-unicode:
- rm *.cache
- ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-msw --with-opengl
-
-*************************************************************************************
-Patch wxWidgets
-*************************************************************************************
-*************************************************************************************
-wxGTK version:
-*************************************************************************************
-Patch for printing wide traces that were showing missing rounded end caps:
-wxGTK-2.8.6/src/generic/dcpsg.cpp
-line 1634
-    PsPrint( "%%EndProlog\n" );
-
-must be
-    PsPrint( "%%EndProlog\n" );
-    PsPrint("%%BeginSetup\n");
-    PsPrint( "1 setlinecap\n" );
-    PsPrint("%%EndSetup\n");
-
-
-patch for Arcs drawings (NOT NEEDED for wxWidgets 2.7.1, needed for versions prior to 2.7.1)
-wxGTK-2.x.y/src/gtk/dcclient.cpp
-in function WindowDC::DoDrawArc
-line 572 for wxWidgets 2.7.0-1:
-        if (m_pen.GetStyle() != wxTRANSPARENT)
-        {
-            gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-
-            gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
-            gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
-        }
-must be
-        if (m_pen.GetStyle() != wxTRANSPARENT)
-        {
-            gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-
-            if (m_brush.GetStyle() != wxTRANSPARENT)
-            {
-                gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
-                gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
-            }
-        }
-
-
-*************************************************************************************
-wxMSW version: for wxWMSW 2.8.1 only
-*************************************************************************************
-
-wxMSW.2.8.1/src/msw/menu.cpp
-line 410
-    if ( !pItem->IsOwnerDrawn()  )
-must be
-    if ( !pItem->IsOwnerDrawn() && !pItem->IsSeparator() )

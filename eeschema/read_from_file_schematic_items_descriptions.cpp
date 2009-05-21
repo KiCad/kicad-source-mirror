@@ -132,20 +132,23 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
     }
     else
     {
-	wxString val= CONV_FROM_UTF8( text );
-	for (;;)
-	{
-	  int i=val.find(wxT("\\n"));
-	  if (i==wxNOT_FOUND)
-	    break;
+        wxString val = CONV_FROM_UTF8( text );
 
-	  val.erase(i,2);
-	  val.insert(i,wxT("\n"));
-	}
+        for( ;; )
+        {
+            int i=val.find( wxT( "\\n" ) );
+
+            if( i == wxNOT_FOUND )
+                break;
+            val.erase( i, 2 );
+            val.insert( i, wxT( "\n" ) );
+        }
+
         SCH_TEXT* TextStruct = new SCH_TEXT( pos, val );
 
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->SetSchematicTextOrientation( orient );
+
         if( isdigit( Name3[0] ) )
         {
             thickness = atol( Name3 );
@@ -265,8 +268,9 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
         {
             if( sscanf( ptcar, "%d", &size ) != 1 )
             {
-                aMsgDiag.Printf( wxT( "EESchema file sheet Label Caract " \
-                                      "error line %d, aborted\n" ), *aLineNum );
+                aMsgDiag.Printf( wxT( "EESchema file sheet Label Caract \
+error line %d, aborted\n" ),
+                    *aLineNum );
                 aMsgDiag << CONV_FROM_UTF8( Line );
                 DisplayError( frame, aMsgDiag );
             }
@@ -304,8 +308,9 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
                         &SheetLabelStruct->m_Pos.x, &SheetLabelStruct->m_Pos.y,
                         &size ) != 5 )
             {
-                aMsgDiag.Printf( wxT( "EESchema file Sheet Label Caract " \
-                                      "error line %d, aborted\n" ), *aLineNum );
+                aMsgDiag.Printf( wxT( "EESchema file Sheet Label Caract \
+error line %d, aborted\n" ),
+                                 *aLineNum );
                 aMsgDiag << CONV_FROM_UTF8( Line );
                 DisplayError( frame, aMsgDiag );
                 continue;
@@ -341,8 +346,8 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
 
     if( strnicmp( "$End", Line, 4 ) != 0 )
     {
-        aMsgDiag.Printf( wxT( "**EESchema file end_sheet struct error at " \
-                              "line %d, aborted\n" ), *aLineNum );
+        aMsgDiag.Printf( wxT( "**EESchema file end_sheet struct error at line %d, aborted\n" ),
+                         *aLineNum );
         aMsgDiag << CONV_FROM_UTF8( Line );
         Failed = TRUE;
     }
@@ -394,8 +399,8 @@ bool ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     if( SheetFormatList[ii] == NULL )
     {
         /* Erreur ici: descr non trouvee */
-        aMsgDiag.Printf( wxT( "EESchema file Dims Caract error line %d, " \
-                              "aborted\n" ), *aLineNum );
+        aMsgDiag.Printf( wxT( "EESchema file Dims Caract error line %d, \aborted\n" ),
+                         *aLineNum );
         aMsgDiag << CONV_FROM_UTF8( Line );
         DisplayError( frame, aMsgDiag );
     }

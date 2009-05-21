@@ -278,7 +278,7 @@ public:
 
     WinEDA_PrjFrame( WinEDA_MainFrame* parent,
                      const wxPoint& pos, const wxSize& size );
-    ~WinEDA_PrjFrame() { }
+    ~WinEDA_PrjFrame();
     void                            OnSelect( wxTreeEvent& Event );
     void                            OnRenameAsk( wxTreeEvent& Event );
     void                            OnRename( wxTreeEvent& Event );

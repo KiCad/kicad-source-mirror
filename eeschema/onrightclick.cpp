@@ -40,21 +40,6 @@ static void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
                                  WinEDA_SchematicFrame* frame );
 
 
-/***********************************************************************/
-void WinEDA_SchematicFrame::ToolOnRightClick( wxCommandEvent& event )
-/***********************************************************************/
-{
-    int id = event.GetId();
-
-    switch( id )
-    {
-    default:
-        DisplayError( this, wxT( "ToolOnRightClick() error" ) );
-        break;
-    }
-}
-
-
 /*****************************************************************/
 bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                                           wxMenu*        PopMenu )
@@ -66,7 +51,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
  */
 {
     SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
-    bool            BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
+    bool      BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
 
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu

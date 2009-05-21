@@ -92,8 +92,7 @@ public:
 
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
-    virtual void Process_Special_Functions( wxCommandEvent& event ) = 0;
-    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
+    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
     virtual void ReCreateHToolbar() = 0;
     virtual void ReCreateVToolbar() = 0;
     virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos )  = 0;
@@ -112,8 +111,6 @@ public:
 
     virtual void Show3D_Frame( wxCommandEvent& event );
 
-    // Undo and redo functions
-public:
     virtual void SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
                                      int             flag_type_command = 0 );
 
@@ -983,6 +980,7 @@ public:
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
     virtual void OnSelectGrid( wxCommandEvent& event );
+    void         LoadModuleFromBoard( wxCommandEvent& event );
 
     /* handlers for block commands */
     int          ReturnBlockCommand( int key );

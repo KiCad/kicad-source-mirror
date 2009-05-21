@@ -96,7 +96,7 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "*" ),         '*'              },
     { wxT( "+" ),         '+'              },
     { wxT( "-" ),         '-'              },
-    { wxT( "\%" ),        '%'              },
+    { wxT( "%%" ),        '%'              },
     { wxT( "A" ),         'A'              },
     { wxT( "B" ),         'B'              },
     { wxT( "C" ),         'C'              },
@@ -676,11 +676,11 @@ void AddHotkeyConfigMenu( wxMenu* menu )
                            wxITEM_CHECK );
     submenu_hkcfg->Append( item );
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( menu, submenu_hkcfg, -1,
-                                        _( "Hotkey config location" ),
-                                        _( "Hotkey config file location " \
-                                           "selection (home directory or " \
-                                           "kicad tree)" ), right_xpm );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU(
+        menu, submenu_hkcfg, -1,
+        _( "Hotkey config location" ),
+        _( "Select hotkey config file location (home directory or kicad tree)" ),
+        right_xpm );
     submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
                           g_ConfigFileLocationChoice == 0 );
     submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,

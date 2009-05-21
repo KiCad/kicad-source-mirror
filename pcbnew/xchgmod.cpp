@@ -532,8 +532,8 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     if( (OldModule->Type() != TYPE_MODULE)
        || (NewModule->Type() != TYPE_MODULE) )
     {
-        DisplayError( winaff, wxT( "WinEDA_BasePcbFrame::Exchange_Module() " \
-                                   "StuctType error" ) );
+        DisplayError( winaff,
+                      wxT( "WinEDA_BasePcbFrame::Exchange_Module() StuctType error" ) );
     }
 
     NewModule->SetParent( GetBoard() );

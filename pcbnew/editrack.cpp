@@ -309,9 +309,9 @@ bool WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC )
         return false;
     }
 
-    pas_45 = GetScreen()->GetGrid().x / 2;
+    pas_45 = (int)GetScreen()->GetGrid().x / 2;
     if( pas_45 < curTrack->m_Width )
-        pas_45 = GetScreen()->GetGrid().x;
+        pas_45 = (int)GetScreen()->GetGrid().x;
 
     while( pas_45 < curTrack->m_Width )
         pas_45 *= 2;
@@ -666,11 +666,12 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 {
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-    int         IsolTmp, Track_fill_copy;
+    int         IsolTmp;
+    bool        Track_fill_copy;
     PCB_SCREEN* screen = (PCB_SCREEN*) panel->GetScreen();
 
     Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
-    DisplayOpt.DisplayPcbTrackFill = SKETCH;
+    DisplayOpt.DisplayPcbTrackFill = true;
     IsolTmp = DisplayOpt.DisplayTrackIsol;
 
     if( g_ShowIsolDuringCreateTrack )

@@ -81,8 +81,7 @@ wxString   g_SymbolExtBuffer( wxT( "sym" ) );
 
 const wxString CompLibFileExtension( wxT( "lib" ) );
 
-const wxString CompLibFileWildcard( wxT( "Kicad component library file " \
-                                         "(*.lib)|*.lib" ) );
+const wxString CompLibFileWildcard( wxT( "Kicad component library file (*.lib)|*.lib" ) );
 
 wxString   g_SimulatorCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
 wxString   g_NetListerCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)

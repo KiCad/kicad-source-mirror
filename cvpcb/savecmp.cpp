@@ -93,8 +93,8 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
     /* Identification du Type de fichier CmpMod */
     if( fgets( Line, 79, source ) == 0 )
     {
-        msg.Printf( _( " <%s> does not appear to be a valid Kicad component " \
-                       "library." ), fn.GetFullPath().c_str() );
+        msg.Printf( _( " <%s> does not appear to be a valid Kicad component library." ),
+                    fn.GetFullPath().c_str() );
         wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
         fclose( source );
         return false;

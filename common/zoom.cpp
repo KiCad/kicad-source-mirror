@@ -107,8 +107,8 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 {
     if( DrawPanel == NULL )
     {
-        wxLogDebug( wxT( "No DrawPanel object defined in " \
-                         "WinEDA_DrawFrame::OnZoom()." ) );
+        wxLogDebug( wxT( "%s, %d: DrawPanel object is undefined ." ),
+                    __TFILE__, __LINE__ );
         return;
     }
 
@@ -165,15 +165,10 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
     default:
         i = id - ID_POPUP_ZOOM_LEVEL_START;
 
-        if( i < 0 )
+        if( ( i < 0 ) || ( (size_t) i >= screen->m_ZoomList.GetCount() ) )
         {
-            wxLogDebug( wxT( "WinEDA_DrawFram::OnZoom() invalid ID %d" ), id );
-            return;
-        }
-        if( !( (size_t) i < screen->m_ZoomList.GetCount()) )
-        {
-            wxLogDebug( _T( "Requested index %d is outside the bounds of " \
-                            "the zoom list." ), i );
+            wxLogDebug( _T( "%s %d: index %d is outside the bounds of the zoom list." ),
+                        __TFILE__, __LINE__, i );
             return;
         }
         if( screen->SetZoom( screen->m_ZoomList[i] ) )
@@ -254,7 +249,8 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
         {
             tmp = GetScreen()->m_GridList[i];
             gridValue = To_User_Unit( g_UnitMetric, tmp.m_Size.x,
-                                      ( (WinEDA_DrawFrame*)m_Parent )->m_InternalUnits );
+                                      m_Parent->m_InternalUnits );
+
             if( tmp.m_Id == ID_POPUP_GRID_USER )
             {
                 msg = _( "User Grid" );

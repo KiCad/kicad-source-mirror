@@ -4,16 +4,17 @@
 
 /* read the generic netlist created by eeschema and convert it to a pads-pcb form
  */
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
-#include <ctype.h>
 
-#ifdef __UNIX__
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
+#if defined( HAVE_STRINGS_H )
+#include <strings.h>
 #endif
+
+#include <ctype.h>
 
 /* Pads-pcb sample:
  *PADS-PCB*

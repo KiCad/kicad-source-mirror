@@ -17,28 +17,28 @@
 /* class WinEDA_ViewlibFrame */
 /*****************************/
 BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
-/* Window events */
-EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
-EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+    /* Window events */
+    EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
+    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
 
-/* Sash drag events */
-EVT_SASH_DRAGGED( ID_LIBVIEW_LIBWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
-EVT_SASH_DRAGGED( ID_LIBVIEW_CMPWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
+    /* Sash drag events */
+    EVT_SASH_DRAGGED( ID_LIBVIEW_LIBWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
+    EVT_SASH_DRAGGED( ID_LIBVIEW_CMPWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
 
 
-/* Toolbar events */
-EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
-                WinEDA_ViewlibFrame::Process_Special_Functions )
-EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_ViewlibFrame::OnZoom )
-EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-          WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
-EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
-                     WinEDA_ViewlibFrame::Process_Special_Functions )
+    /* Toolbar events */
+    EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
+                    WinEDA_ViewlibFrame::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_ViewlibFrame::OnZoom )
+    EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
+              WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )
+    EVT_KICAD_CHOICEBOX( ID_LIBVIEW_SELECT_PART_NUMBER,
+                         WinEDA_ViewlibFrame::Process_Special_Functions )
 
-/* listbox events */
-EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
-EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
+    /* listbox events */
+    EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
+    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
 END_EVENT_TABLE()
 
 
@@ -58,13 +58,13 @@ static wxAcceleratorEntry accels[] =
 #define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
 
 #define EXTRA_BORDER_SIZE 2
-/******************************************************************************/
+
+
 WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
                                           LibraryStruct* Library,
                                           wxSemaphore*   semaphore ) :
     WinEDA_DrawFrame( father, VIEWER_FRAME, _( "Library browser" ),
                       wxDefaultPosition, wxDefaultSize )
-/******************************************************************************/
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
@@ -101,16 +101,18 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     {
         // Creates the libraries window display
         m_LibListWindow =
-            new wxSashLayoutWindow( this, ID_LIBVIEW_LIBWINDOW, win_pos, m_LibListSize,
-                                   wxCLIP_CHILDREN | wxSW_3D, wxT(
-                                       "LibWindow" ) );
+            new wxSashLayoutWindow( this, ID_LIBVIEW_LIBWINDOW, win_pos,
+                                    m_LibListSize, wxCLIP_CHILDREN | wxSW_3D,
+                                    wxT( "LibWindow" ) );
         m_LibListWindow->SetOrientation( wxLAYOUT_VERTICAL );
         m_LibListWindow->SetAlignment( wxLAYOUT_LEFT );
         m_LibListWindow->SetSashVisible( wxSASH_RIGHT, TRUE );
         m_LibListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
-        m_LibList = new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST, wxPoint( 0, 0 ),
-                                   m_LibListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0),
-                                    0, NULL, wxLB_HSCROLL );
+        m_LibList =
+            new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST,
+                           wxPoint( 0, 0 ),
+                           m_LibListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0),
+                           0, NULL, wxLB_HSCROLL );
     }
     else
     {
@@ -123,8 +125,9 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     win_pos.x = m_LibListSize.x;
     win_pos.y = 0;
     m_CmpListWindow = new wxSashLayoutWindow( this, ID_LIBVIEW_CMPWINDOW,
-                                             win_pos, m_CmpListSize,
-                                             wxCLIP_CHILDREN | wxSW_3D, wxT( "CmpWindow" ) );
+                                              win_pos, m_CmpListSize,
+                                              wxCLIP_CHILDREN | wxSW_3D,
+                                              wxT( "CmpWindow" ) );
     m_CmpListWindow->SetOrientation( wxLAYOUT_VERTICAL );
 
 //    m_CmpListWindow->SetAlignment( wxLAYOUT_LEFT );
@@ -467,4 +470,3 @@ void WinEDA_ViewlibFrame::SaveSettings()
         cfg->Write( LIBLIST_WIDTH_KEY, m_LibListSize.x );
     cfg->Write( CMPLIST_WIDTH_KEY, m_CmpListSize.x );
 }
-

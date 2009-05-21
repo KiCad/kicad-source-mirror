@@ -30,8 +30,7 @@
 
 const wxString ModExportFileExtension( wxT( "emp" ) );
 
-const wxString ModExportFileWildcard( _( "Kicad foot print export files " \
-                                         "(*.emp)|*.emp" ) );
+const wxString ModExportFileWildcard( _( "Kicad foot print export files (*.emp)|*.emp" ) );
 
 
 /* Fonctions locales */

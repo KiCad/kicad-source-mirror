@@ -8,7 +8,7 @@
 
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
-#include <wx/dynarray.h>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 /* definifition des types de parametre des files de configuration */
@@ -207,6 +207,6 @@ public:
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
-WX_DECLARE_OBJARRAY( PARAM_CFG_BASE, PARAM_CFG_ARRAY );
+typedef boost::ptr_vector< PARAM_CFG_BASE > PARAM_CFG_ARRAY;
 
 #endif  /* __PARAM_CONFIG_H__ */

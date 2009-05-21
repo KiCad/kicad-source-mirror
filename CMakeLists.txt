@@ -93,7 +93,6 @@ mark_as_advanced(KICAD_BIN
                  KICAD_TEMPLATE)
 
 
-
 #================================================
 # Find libraries that are needed to build KiCad.
 #================================================
@@ -121,12 +120,15 @@ find_package(wxWidgets COMPONENTS gl html adv core net base QUIET)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
 
-
 # Include wxWidgets macros.
 include(${wxWidgets_USE_FILE})
 
 # Include MinGW resource compiler.
 include(MinGWResourceCompiler)
+
+# Generate build system specific header file.
+include(PerformFeatureChecks)
+perform_feature_checks()
 
 # Automagically create version header file.
 include(CreateSVNVersionHeader)
@@ -145,7 +147,6 @@ endif(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
 include_directories(${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/share
                     ${CMAKE_BINARY_DIR})
-
 
 
 #================================================
@@ -173,7 +174,6 @@ add_subdirectory(polygon/kbool/src)
 add_subdirectory(demos)
 add_subdirectory(internat)
 add_subdirectory(template)
-
 
 
 #================================================
@@ -208,7 +208,6 @@ if(UNIX)
             COMPONENT resources)
 
 
-
    # CVpcb desktop file
    install(FILES ${LINUX_DESKTOP_FILES}/cvpcb.desktop
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
@@ -217,7 +216,6 @@ if(UNIX)
    install(FILES ${LINUX_DESKTOP_ICONS}/kicad_cvpcb.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
-
 
 
    # EEschema desktop file
@@ -230,7 +228,6 @@ if(UNIX)
            COMPONENT resources)
 
 
-
    # GerbView desktop file
    install(FILES ${LINUX_DESKTOP_FILES}/gerbview.desktop
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
@@ -239,7 +236,6 @@ if(UNIX)
    install(FILES ${LINUX_DESKTOP_ICONS}/kicad_gerbview.png
            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
            COMPONENT resources)
-
 
 
    # PCBnew desktop file

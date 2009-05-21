@@ -200,7 +200,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     MODULE*  Module;
     wxPoint  start, current;
     int      Ymax_size, Xsize_allowed;
-    int      pas_grille = GetScreen()->GetGrid().x;
+    int      pas_grille = (int)GetScreen()->GetGrid().x;
     bool     EdgeExists;
     float    surface;
 
@@ -218,8 +218,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     if( PlaceModulesHorsPcb && !EdgeExists )
     {
         DisplayError( this,
-                      _(
-                          "Autoplace modules: No board edges detected. Unable to place modules" ),
+                      _( "Autoplace modules: No board edges detected. Unable to place modules" ),
                       20 );
         return;
     }

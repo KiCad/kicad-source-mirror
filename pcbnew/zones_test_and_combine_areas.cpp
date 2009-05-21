@@ -684,7 +684,9 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
 int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine )
 {
     if( area_ref == area_to_combine )
+    {
         ASSERT( 0 );
+    }
 
     // polygons intersect, combine them
     std::vector<CArc> arc_array1;

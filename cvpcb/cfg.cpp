@@ -28,24 +28,24 @@
  * to define local variables.  The old method of statically building the array
  * at compile time requiring global variable definitions.
  */
-const PARAM_CFG_ARRAY& WinEDA_CvpcbFrame::GetProjectFileParameters( void )
+PARAM_CFG_ARRAY& WinEDA_CvpcbFrame::GetProjectFileParameters( void )
 {
-    if( !m_projectFileParams.IsEmpty() )
+    if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.Add( new PARAM_CFG_BASE( GROUPLIB,
-                                                 PARAM_COMMAND_ERASE ) );
-    m_projectFileParams.Add( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                         &m_ModuleLibNames,
-                                                         GROUPLIB ) );
-    m_projectFileParams.Add( new PARAM_CFG_LIBNAME_LIST( wxT( "EquName" ),
-                                                         &m_AliasLibNames,
-                                                         GROUPEQU ) );
-    m_projectFileParams.Add( new PARAM_CFG_WXSTRING( wxT( "NetIExt" ),
-                                                     &m_NetlistFileExtension ) );
-    m_projectFileParams.Add( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
-                                                     &m_UserLibraryPath,
-                                                     GROUPLIB ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BASE( GROUPLIB,
+                                                       PARAM_COMMAND_ERASE ) );
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
+                                                               &m_ModuleLibNames,
+                                                               GROUPLIB ) );
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "EquName" ),
+                                                               &m_AliasLibNames,
+                                                               GROUPEQU ) );
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetIExt" ),
+                                                           &m_NetlistFileExtension ) );
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
+                                                           &m_UserLibraryPath,
+                                                           GROUPLIB ) );
 
     return m_projectFileParams;
 }

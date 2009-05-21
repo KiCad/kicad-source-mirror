@@ -13,9 +13,6 @@
 #include "pcbplot.h"
 #include "protos.h"
 
-static void Process_Move_Item( WinEDA_GerberFrame* frame,
-                               EDA_BaseStruct* DrawStruct, wxDC* DC );
-
 /************************************************************************/
 void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 /************************************************************************/
@@ -31,15 +28,10 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     {
         if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
         {
-            switch( DrawStruct->Type() )
-            {
-            default:
-                msg.Printf(
-                    wxT( "WinEDA_GerberFrame::ProcessCommand err: Struct %d, m_Flags = %X" ),
-                    (unsigned) DrawStruct->Type(),
-                    (unsigned) DrawStruct->m_Flags );
-                DisplayError( this, msg );
-            }
+            msg.Printf( wxT( "WinEDA_GerberFrame::ProcessCommand err: Struct %d, m_Flags = %X" ),
+                        (unsigned) DrawStruct->Type(),
+                        (unsigned) DrawStruct->m_Flags );
+            DisplayError( this, msg );
         }
         else
         {
@@ -221,11 +213,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_BULLSEYE, wxT( "Delete item" ) );
         break;
 
-    case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
-        DrawPanel->MouseToCursorSchema();
-        Process_Move_Item( this, GetScreen()->GetCurItem(), &dc );
-        break;
-
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         ((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_SelLayerBox->GetChoice();
         DrawPanel->Refresh( TRUE );
@@ -308,29 +295,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/****************************************************************/
-static void Process_Move_Item( WinEDA_GerberFrame* frame,
-                               EDA_BaseStruct* DrawStruct, wxDC* DC )
-/****************************************************************/
-{
-    if( DrawStruct == NULL )
-        return;
-
-    frame->DrawPanel->MouseToCursorSchema();
-
-    switch( DrawStruct->Type() )
-    {
-    default:
-        wxString msg;
-        msg.Printf(
-            wxT( "WinEDA_LibeditFrame::Move_Item Error: Bad DrawType %d" ),
-            DrawStruct->Type() );
-        DisplayError( frame, msg );
-        break;
-    }
-}
-
-
 /**************************************************************************/
 void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /**************************************************************************/
@@ -353,16 +317,6 @@ void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             DrawStruct = GerberGeneralLocateAndDisplay();
-        }
-
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
-            break;
-
-        // Element localis�
-        switch( DrawStruct->Type() )
-        {
-        default:
-            break;
         }
 
         break;      // end case 0

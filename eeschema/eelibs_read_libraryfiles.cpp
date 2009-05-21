@@ -539,12 +539,10 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame,
         if( !Res )
         {           /* Something went wrong there. */
             if( errorMsg.IsEmpty() )
-                Msg.Printf( wxT( "Error at line %d of library \n\"%s\",\n" \
-                                 "library not loaded" ),
+                Msg.Printf( wxT( "Error at line %d of library \n\"%s\",\nlibrary not loaded" ),
                             *LineNum, currentLibraryName.GetData() );
             else
-                Msg.Printf( wxT( "Error <%s> at line %d of library \n\"%s\"," \
-                                 "\nlibrary not loaded" ),
+                Msg.Printf( wxT( "Error <%s> at line %d of library \n\"%s\",\nlibrary not loaded" ),
                             errorMsg.c_str(), *LineNum,
                             currentLibraryName.GetData() );
             DisplayError( frame, Msg );
@@ -621,18 +619,17 @@ static LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame, FILE* f,
             break;
 
         default:
-            MsgLine.Printf( wxT( "Undefined DRAW command in line %d\n" \
-                                 "%s, aborted." ), *LineNum, Line );
+            MsgLine.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
+                            *LineNum, Line );
             DisplayError( frame, MsgLine );
             return Head;
         }
 
         if( !entryLoaded )
         {
-            MsgLine.Printf( wxT( "> in DRAW command %c in line %d" ), Line[0],
-                            *LineNum );
-            MsgLine = wxT( "Error <" ) + errorMsg + MsgLine +
-                wxT( ", aborted." );
+            MsgLine.Printf( wxT( "Error <%s %s> in DRAW command %c in line %d, aborted." ),
+                            errorMsg.c_str(), MsgLine.c_str(),
+                            Line[0], *LineNum );
             DisplayError( frame, MsgLine );
             SAFE_DELETE( New );
 

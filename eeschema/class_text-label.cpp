@@ -864,7 +864,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list, c
 
     // Create outline shape : 6 points
     int x = symb_len + width + 3;
-    int y = HalfSize * 1.5 + width + 3;                         // 50% more for negation bar
+    int y = wxRound( (double)HalfSize * 1.5 + (double)width + 3.0 );  // 50% more for negation bar
     aCorner_list.push_back( wxPoint( 0, 0 ) );                  // Starting point (anchor)
     aCorner_list.push_back( wxPoint( 0, -y ) );                 // Up
     aCorner_list.push_back( wxPoint( -x, -y ) );                // left Up

@@ -23,8 +23,7 @@
 
 
 const wxString GerbviewProjectFileExt( wxT( "cnf" ) );
-const wxString GerbviewProjectFileWildcard( _( "GerbView project files " \
-                                               "(.cnf)|*.cnf" ) );
+const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.cnf" ) );
 
 
 /*************************************************************/

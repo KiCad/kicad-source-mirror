@@ -135,7 +135,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     start = time( NULL );
 
     /* Calcul du pas de routage fixe a 5 mils et plus */
-    g_GridRoutingSize = GetScreen()->GetGrid().x;
+    g_GridRoutingSize = (int)GetScreen()->GetGrid().x;
     if( g_GridRoutingSize < 50 )
         g_GridRoutingSize = 50;
     E_scale = g_GridRoutingSize / 50; if( E_scale < 1 )

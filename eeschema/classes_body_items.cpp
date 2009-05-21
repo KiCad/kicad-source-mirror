@@ -129,8 +129,8 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
                   &m_Width, tmp, &startx, &starty, &endx, &endy );
     if( cnt < 8 )
     {
-        errorMsg.Printf( wxT( "arc only had %d parameters of the " \
-                              "required 8" ), cnt );
+        errorMsg.Printf( _( "arc only had %d parameters of the required 8" ),
+                         cnt );
         return false;
     }
 
@@ -268,8 +268,8 @@ EDA_Rect LibDrawArc::GetBoundingBox()
     if( ( normStart == nullPoint ) || ( normEnd == nullPoint )
         || ( m_Rayon == 0 ) )
     {
-        wxLogDebug( wxT(" Invalid arc drawing definition, center(%d, %d) " \
-                        "start(%d, %d), end(%d, %d), radius %d" ),
+        wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d) \
+start(%d, %d), end(%d, %d), radius %d" ),
                     m_Pos.x, m_Pos.y, m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
                     m_ArcEnd.y, m_Rayon );
         return rect;
@@ -362,8 +362,8 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
                        &m_Rayon, &m_Unit, &m_Convert, &m_Width, tmp );
     if( cnt < 6 )
     {
-        errorMsg.Printf( wxT( "circle only had %d parameters of the " \
-                              "required 6" ), cnt );
+        errorMsg.Printf( _( "circle only had %d parameters of the required 6" ),
+                         cnt );
         return false;
     }
 
@@ -501,8 +501,8 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
 
     if( cnt < 8 )
     {
-        errorMsg.Printf( wxT( "text only had %d parameters of the " \
-                              "required 8" ), cnt );
+        errorMsg.Printf( _( "text only had %d parameters of the required 8" ),
+                         cnt );
         return false;
     }
 
@@ -609,8 +609,8 @@ bool LibDrawSquare::Load( char* line, wxString& errorMsg )
 
     if( cnt < 7 )
     {
-        errorMsg.Printf( wxT( "rectangle only had %d parameters of the " \
-                              "required 7" ), cnt );
+        errorMsg.Printf( _( "rectangle only had %d parameters of the required 7" ),
+                         cnt );
         return false;
     }
 
@@ -814,13 +814,12 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
 
     if( i < 4 )
     {
-        errorMsg.Printf( wxT( "polyline only had %d parameters of the " \
-                              "required 4" ), i );
+        errorMsg.Printf( _( "polyline only had %d parameters of the required 4" ), i );
         return false;
     }
     if ( ccount <= 0 )
     {
-        errorMsg.Printf( wxT( "polyline count parameter %d is invalid" ),
+        errorMsg.Printf( _( "polyline count parameter %d is invalid" ),
                          ccount );
         return false;
     }
@@ -836,14 +835,14 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
         p = strtok( NULL, " \t\n" );
         if( sscanf( p, "%d", &pt.x ) != 1 )
         {
-            errorMsg.Printf( wxT( "polyline point %d X position not defined" ),
+            errorMsg.Printf( _( "polyline point %d X position not defined" ),
                              i );
             return false;
         }
         p = strtok( NULL, " \t\n" );
         if( sscanf( p, "%d", &pt.y ) != 1 )
         {
-            errorMsg.Printf( wxT( "polyline point %d Y position not defined" ),
+            errorMsg.Printf( _( "polyline point %d Y position not defined" ),
                              i );
             return false;
         }

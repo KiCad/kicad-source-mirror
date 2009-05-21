@@ -130,8 +130,8 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
 
     if( !fn.IsOk() )
     {
-        wildcard.Printf( _( "Gerber files (.%s .gbr .gbx .lgr .ger .pho)|"  \
-                            "*.%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|" ),
+        wildcard.Printf( _( "Gerber files (.%s .gbr .gbx .lgr .ger .pho)| \
+*.%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|" ),
                          g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
         wildcard += AllFilesWildcard;
 

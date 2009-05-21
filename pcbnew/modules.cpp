@@ -45,7 +45,7 @@ void Show_Pads_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
         return;
 
     pad_fill_tmp = DisplayOpt.DisplayPadFill;
-    DisplayOpt.DisplayPadFill = FALSE; /* Trace en SKETCH */
+    DisplayOpt.DisplayPadFill = true; /* Trace en SKETCH */
     pt_pad = module->m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
@@ -794,7 +794,7 @@ void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
     if( g_Show_Pads_Module_in_Move )
     {
         pad_fill_tmp = DisplayOpt.DisplayPadFill;
-        DisplayOpt.DisplayPadFill = SKETCH;  /* Trace en SKETCH en deplacement */
+        DisplayOpt.DisplayPadFill = true;  /* Trace en SKETCH en deplacement */
 
         pt_pad = module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )

@@ -1,5 +1,4 @@
 
-#include <wx/checklst.h>
 #include <wx/tooltip.h>
 #include <algorithm>
 

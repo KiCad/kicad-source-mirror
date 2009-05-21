@@ -73,8 +73,8 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     ForceCloseManageCurseur = NULL;
 
     if( wxGetApp().m_EDA_Config )
-        m_AutoPAN_Enable = wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ),
-                                                          true );
+        wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ), &m_AutoPAN_Enable,
+                                       true );
 
     m_AutoPAN_Request    = FALSE;
     m_Block_Enable       = FALSE;
@@ -197,13 +197,25 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
     GRResetPenAndBrush( DC );
     DC->SetBackgroundMode( wxTRANSPARENT );
 #ifdef WX_ZOOM
+    int clientWidth, clientHeight;
+    GetClientSize( &clientWidth, &clientHeight );
+
+    wxSize drawingSize = GetScreen()->ReturnPageSize() * 2;
+
     double scale = GetScreen()->GetScalingFactor();
-    wxPoint origin = GetScreen()->m_DrawOrg;
-    int ppuX, ppuY, startX, startY;
-    GetScrollPixelsPerUnit( & ppuX, & ppuY );
-    GetViewStart( &startX, &startY );
-    DC->SetDeviceOrigin( origin.x - startX * ppuX, origin.y - startY * ppuY );
+    int dx = 0, dy = 0;
+    int drawingWidth = wxRound( (double)drawingSize.GetWidth() * scale );
+    int drawingHeight = wxRound( (double)drawingSize.GetHeight() * scale );
+
+    if( drawingWidth < clientWidth )
+        dx = ( clientWidth - drawingWidth ) / 2;
+    if( drawingHeight < clientHeight )
+        dy = ( clientHeight - drawingHeight ) / 2;
+
+    wxCoord x, y;
+    DC->GetDeviceOrigin( &x, &y );
     DC->SetUserScale( scale, scale );
+    DC->SetDeviceOrigin( x + dx, y + dy );
 //    wxSize size = GetScreen()->ReturnPageSize() * 2 * scale;
 //    DC->SetLogicalOrigin( origin.x, origin.y );
 #endif
@@ -418,8 +430,8 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
         CalcUnscrolledPosition( screenPos.x, screenPos.y,
                                 &drawingPos.x, &drawingPos.y );
 
-        wxLogDebug( wxT( "MouseTo() initial screen position(%d, %d) " \
-                         "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
+        wxLogDebug( wxT( "MouseTo() initial screen position(%d, %d) " ) \
+                    wxT( "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, clientRect.x, clientRect.y,
                     clientRect.width, clientRect.height, x, y );
 
@@ -436,8 +448,8 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
         CalcScrolledPosition( drawingPos.x, drawingPos.y,
                               &screenPos.x, &screenPos.y );
 
-        wxLogDebug( wxT( "MouseTo() scrolled screen position(%d, %d) " \
-                         "view(%d, %d)" ), screenPos.x, screenPos.y, x, y );
+        wxLogDebug( wxT( "MouseTo() scrolled screen position(%d, %d) " ) \
+                    wxT( "view(%d, %d)" ), screenPos.x, screenPos.y, x, y );
     }
 
     WarpPointer( screenPos.x, screenPos.y );
@@ -936,8 +948,8 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
     if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
         || !rect.Contains( event.GetPosition() ) )
     {
-        wxLogDebug( wxT( "OnMouseWheel() position(%d, %d) " \
-                         "rectangle(%d, %d, %d, %d)" ),
+        wxLogDebug( wxT( "OnMouseWheel() position(%d, %d) " ) \
+                    wxT( "rectangle(%d, %d, %d, %d)" ),
                     event.GetPosition().x, event.GetPosition().y,
                     rect.x, rect.y, rect.width, rect.height );
 

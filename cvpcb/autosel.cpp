@@ -90,8 +90,8 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
 
         if( !tmp )
         {
-            msg.Printf( _( "Footprint alias library file <%s> could not be " \
-                           "found in the default search paths." ),
+            msg.Printf( _( "Footprint alias library file <%s> could not be \
+found in the default search paths." ),
                         fn.GetFullName().c_str() );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
             continue;
@@ -166,8 +166,8 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
 
             if( component.m_Module.IsEmpty() )
             {
-                msg.Printf( _( "Component %s: footprint %s not found in " \
-                               "any of the project footprint libraries." ),
+                msg.Printf( _( "Component %s: footprint %s not found in \
+any of the project footprint libraries." ),
                             component.m_Reference.c_str(),
                             alias.m_FootprintName.c_str() );
                 wxMessageBox( msg, _( "CVPcb Error" ), wxOK | wxICON_ERROR,

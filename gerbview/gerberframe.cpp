@@ -105,7 +105,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
 // Annulation de commande en cours
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    WinEDA_PcbFrame::Process_Special_Functions )
+                    WinEDA_GerberFrame::Process_Special_Functions )
 
 // Pop up menu
     EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
@@ -133,16 +133,15 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     m_Draw_Axis      = true;   // true to show X and Y axis on screen
     m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
-    m_Ident = GERBER_FRAME;
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
 
     // Give an icon
-    #ifdef __WINDOWS__
+#ifdef __WINDOWS__
     SetIcon( wxICON( a_icon_gerbview ) );
-    #else
+#else
     SetIcon( wxICON( icon_gerbview ) );
-    #endif
+#endif
 
     SetBaseScreen( ScreenPcb );
     ActiveScreen = ScreenPcb;

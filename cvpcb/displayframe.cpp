@@ -51,11 +51,11 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
     m_FrameName = wxT( "CmpFrame" );
 
     // Give an icon
-    #ifdef __WINDOWS__
+#ifdef __WINDOWS__
     SetIcon( wxICON( a_icon_cvpcb ) );
-    #else
+#else
     SetIcon( wxICON( icon_cvpcb ) );
-    #endif
+#endif
     SetTitle( title );
 
     SetBoard( new BOARD( NULL, this ) );
@@ -291,30 +291,6 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     UpdateStatusBar();    /* Display new cursor coordinates */
 }
 
-
-/*************************************************************************/
-void WinEDA_DisplayFrame::Process_Special_Functions( wxCommandEvent& event )
-/*************************************************************************/
-
-/* Called when a tool is selected, or when a popup menu is clicked
- *  Currently : no action exists
- */
-{
-    int        id = event.GetId();
-
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
-
-    switch( id )
-    {
-    default:
-        wxMessageBox( wxT( "WinEDA_DisplayFrame::Process_Special_Functions error" ) );
-        break;
-    }
-
-    SetToolbars();
-}
 
 /**
  * Display 3D frame of current footprint selection.

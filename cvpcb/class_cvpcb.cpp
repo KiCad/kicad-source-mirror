@@ -7,8 +7,6 @@
 
 #include "cvpcb.h"
 
-#include <wx/listimpl.cpp>
-
 
 PIN::PIN()
 {

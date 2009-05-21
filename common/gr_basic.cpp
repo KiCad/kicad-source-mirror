@@ -49,15 +49,15 @@ void ClipAndDrawFilledPoly( EDA_Rect * ClipBox, wxDC * DC, wxPoint Points[], int
 extern BASE_SCREEN* ActiveScreen;
 
 /* Variables locales */
-static int          GRLastMoveToX, GRLastMoveToY;
-static int          PenMinWidth = 1; /* largeur minimum de la plume (DOIT etre > 0)
-                                      *  (utile pour trace sur imprimante) */
-static int          ForceBlackPen; /* si != 0 : traces en noir (utilise pour trace
-                                    *  sur imprimante */
-static int          xcliplo = 0,
-                    ycliplo = 0,
-                    xcliphi = 2000,
-                    ycliphi = 2000;     /* coord de la surface de trace */
+static int   GRLastMoveToX, GRLastMoveToY;
+static int   PenMinWidth = 1; /* largeur minimum de la plume (DOIT etre > 0)
+                               *  (utile pour trace sur imprimante) */
+static bool  ForceBlackPen;   /* si != 0 : traces en noir (utilise pour trace
+                               *  sur imprimante */
+static int   xcliplo = 0,
+             ycliplo = 0,
+             xcliphi = 2000,
+             ycliphi = 2000;     /* coord de la surface de trace */
 static int   lastcolor      = -1;
 static int   lastwidth      = -1;
 static int   s_Last_Pen_Style = -1;
@@ -1490,7 +1490,7 @@ void ClipAndDrawFilledPoly( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPoints[], in
 
     for( cpointIterator cit = outputPolygon.begin(); cit != outputPolygon.end(); ++cit )
     {
-        clippedPolygon.push_back( wxPoint( (int)round( cit->X ), (int)round( cit->Y ) ) );
+        clippedPolygon.push_back( wxPoint( wxRound( cit->X ), wxRound( cit->Y ) ) );
     }
 
     if ( clippedPolygon.size() )

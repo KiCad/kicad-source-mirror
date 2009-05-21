@@ -218,11 +218,10 @@ public:
     virtual void     OnSelectGrid( wxCommandEvent& event );
     virtual void     OnSelectZoom( wxCommandEvent& event );
 
-    virtual void    GeneralControle( wxDC* DC, wxPoint Mouse ) { /* dummy */ }
+    virtual void     GeneralControle( wxDC* DC, wxPoint Mouse ) { /* dummy */ }
     virtual void     OnSize( wxSizeEvent& event );
     void             OnEraseBackground( wxEraseEvent& SizeEvent );
 
-//  void OnChar(wxKeyEvent& event);
     void             SetToolbarBgColor( int color_num );
     virtual void     OnZoom( wxCommandEvent& event );
     void             OnGrid( int grid_type );
@@ -259,8 +258,7 @@ public:
     void             Process_Zoom( wxCommandEvent& event );
     void             Process_Grid( wxCommandEvent& event );
     virtual void     RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
-    virtual void     Process_Special_Functions( wxCommandEvent& event ) = 0;
-    virtual void     OnLeftClick( wxDC* DC, const wxPoint& MousePos )   = 0;
+    virtual void     OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
     virtual void     OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     virtual bool     OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void     ToolOnRightClick( wxCommandEvent& event );

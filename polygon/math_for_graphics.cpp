@@ -1,7 +1,5 @@
 // math for graphics utility routines, from FreePCB
 
-using namespace std;
-
 #include <vector>
 
 #include <math.h>
@@ -11,6 +9,8 @@ using namespace std;
 #include "fctsys.h"
 
 #include "PolyLine.h"
+
+using namespace std;
 
 
 // test for hit on line segment

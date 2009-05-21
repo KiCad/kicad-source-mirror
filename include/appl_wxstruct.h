@@ -123,7 +123,7 @@ public:
                                   PARAM_CFG_BASE** List );
     void      WriteProjectConfig( const wxString&  fileName,
                                   const wxString&  GroupName,
-                                  const PARAM_CFG_ARRAY& params );
+                                  PARAM_CFG_ARRAY& params );
 
     /** Function SaveCurrentSetupValues()
      * Save the current setup values in m_EDA_Config
@@ -131,7 +131,7 @@ public:
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void      SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
-    void      SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List );
+    void      SaveCurrentSetupValues( PARAM_CFG_ARRAY& List );
 
     /** Function ReadCurrentSetupValues()
      * Raed the current setup values previously saved, from m_EDA_Config
@@ -139,7 +139,7 @@ public:
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void      ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
-    void      ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List );
+    void      ReadCurrentSetupValues( PARAM_CFG_ARRAY& List );
 
     bool      ReadProjectConfig( const wxString& local_config_filename,
                                  const wxString& GroupName,
@@ -147,7 +147,7 @@ public:
                                  bool Load_Only_if_New );
     bool      ReadProjectConfig( const wxString& local_config_filename,
                                  const wxString& GroupName,
-                                 const PARAM_CFG_ARRAY& List,
+                                 PARAM_CFG_ARRAY& List,
                                  bool Load_Only_if_New );
     bool      ReCreatePrjConfig( const wxString& local_config_filename,
                                  const wxString& GroupName,

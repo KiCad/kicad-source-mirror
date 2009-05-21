@@ -72,7 +72,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
         Scale_X        = Scale_Y = 1.0;
         scale_x        = Scale_X * SCALE_HPGL;
         scale_y        = Scale_Y * SCALE_HPGL;
-        fTextScale     = SCALE_HPGL;
+        fTextScale     = (float)SCALE_HPGL;
         SheetSize      = aSheetSize;
         SheetSize.x   *= U_PCB;
         SheetSize.y   *= U_PCB;
@@ -162,7 +162,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
     }
 
     // Set Drill Symbols width in 1/10000 mils
-    LineWidth = 50 / scale_x;        // real scale will be CharScale * scale_x
+    LineWidth = wxRound( 50.0 / scale_x ); // real scale will be CharScale * scale_x
     int tmpPlotLineWidth = g_PlotLine_Width;
     // Plot board outlines and drill map
     if ( format == PLOT_FORMAT_POST)

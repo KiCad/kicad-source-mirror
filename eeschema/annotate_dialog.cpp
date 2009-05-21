@@ -248,8 +248,7 @@ void WinEDA_AnnotateFrame::OnApplyClick( wxCommandEvent& event )
     else
         message += _( "on the current sheet?" );
 
-    message += _( "\n\nThis operation will change the current annotation and " \
-                  "cannot be undone." );
+    message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
     response = wxMessageBox( message, wxT( "" ),
                              wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
@@ -274,8 +273,7 @@ void WinEDA_AnnotateFrame::OnClearAnnotationCmpClick( wxCommandEvent& event )
     else
         message += _( "the current sheet?" );
 
-    message += _( "\n\nThis operation will clear the existing annotation " \
-                  "and cannot be undone." );
+    message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
     response = wxMessageBox( message, wxT( "" ),
                              wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)

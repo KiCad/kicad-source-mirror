@@ -508,8 +508,8 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
             break;
 
         default:
-            errorMsg.Printf( wxT( "Undefined DRAW command in line %d\n" \
-                                  "%s, aborted." ), *lineNum, line );
+            errorMsg.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
+                             *lineNum, line );
             m_Drawings = headEntry;
             return false;
         }
@@ -526,8 +526,8 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
             {
                 if( GetLine( f, line, lineNum, 1024 ) == NULL )
                 {
-                    errorMsg = wxT( "File ended prematurely while attempting" \
-                                    "to flush to end of drawing section." );
+                    errorMsg = wxT( "File ended prematurely while attempting \
+to flush to end of drawing section." );
                     return false;
                 }
             } while( strncmp( line, "ENDDRAW", 7 ) != 0 );

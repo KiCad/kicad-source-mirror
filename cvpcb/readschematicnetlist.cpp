@@ -135,7 +135,8 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         wxString msg, Lineconv = CONV_FROM_UTF8( Line );
         msg.Printf( _( "Unknown file format <%s>" ), Lineconv.GetData() );
         DisplayError( this, msg );
-        fclose( source ); return -3;
+        fclose( source );
+        return -3;
     }
 
     SetStatusText( _( "Netlist Format: EESchema" ), 0 );

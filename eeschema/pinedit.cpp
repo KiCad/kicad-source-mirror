@@ -774,8 +774,9 @@ static void CreateImagePins( LibDrawPin* Pin )
   * creation d'une pin
  */
 {
-    int         ii, CreateConv = false;
+    int         ii;
     LibDrawPin* NewPin;
+    bool        CreateConv = false;
 
     if( g_EditPinByPinIsOn )
         return;

@@ -46,7 +46,7 @@ bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
     } while( 0 );
 
 
-extern float fsinus[];
-extern float fcosinus[];
+extern double fsinus[];
+extern double fcosinus[];
 
 #endif

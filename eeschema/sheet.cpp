@@ -266,10 +266,8 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
     if( ( fn.GetFullPath() != m_CurrentSheet->GetFileName() )
         || ( m_CurrentSheet->m_AssociatedScreen == NULL) )
     {
-        msg = _( "Changing a Filename can change all the schematic " \
-                 "structures and cannot be undone." );
-        msg << wxT( "\n" );
-        msg << _( "Ok to continue renaming?" );
+        msg = _( "Changing a Filename can change all the schematic \
+                  structures and cannot be undone.\nOk to continue renaming?" );
 
         if( m_CurrentSheet->m_AssociatedScreen == NULL || IsOK( NULL, msg ) )
         { //do not prompt on a new sheet. in fact, we should not allow a sheet to be created

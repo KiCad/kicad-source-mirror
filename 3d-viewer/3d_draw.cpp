@@ -152,14 +152,14 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
         glEnable( GL_COLOR_MATERIAL );
         SetGLColor( WHITE );
         glBegin( GL_LINES );
-        glNormal3f( 0.0, 0.0, 1.0 );    // Normal is Z axis
-        glVertex3f( 0.0, 0.0, 0.0 );
-        glVertex3f( 1.0, 0.0, 0.0 );    // X axis
-        glVertex3f( 0.0, 0.0, 0.0 );
-        glVertex3f( 0.0, -1.0, 0.0 );   // Y axis
-        glNormal3f( 1.0, 0.0, 0.0 );    // Normal is Y axis
-        glVertex3f( 0.0, 0.0, 0.0 );
-        glVertex3f( 0.0, 0.0, 0.3 );    // Z axis
+        glNormal3f( 0.0f, 0.0f, 1.0f );    // Normal is Z axis
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 1.0f, 0.0f, 0.0f );    // X axis
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, -1.0f, 0.0f );   // Y axis
+        glNormal3f( 1.0f, 0.0f, 0.0f );    // Normal is Y axis
+        glVertex3f( 0.0f, 0.0f, 0.0f );
+        glVertex3f( 0.0f, 0.0f, 0.3f );    // Z axis
         glEnd();
     }
 

@@ -34,7 +34,6 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
                                       const wxSize& size,
                                       long style ) :
     wxFrame( father, -1, title, pos, size, style )
-/**********************************************************/
 {
     wxSize minsize;
 

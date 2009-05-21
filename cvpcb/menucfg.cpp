@@ -24,11 +24,12 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
  */
 {
     wxMenuItem* item;
-    wxMenuBar*  menuBar = GetMenuBar();
+    wxMenuBar*  menuBar;
+
     /* Destroy the existing menu bar so it can be rebuilt.  This allows
      * language changes of the menu text on the fly. */
-    if( menuBar )
-        SetMenuBar( NULL );
+//    if( menuBar )
+//        SetMenuBar( NULL );
 
     menuBar = new wxMenuBar();
 
@@ -66,8 +67,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
 
     item = new wxMenuItem( configmenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
                            _( "Keep Open On Save" ),
-                           _( "Prevent CVPcb from exiting after saving " \
-                              "netlist file" ),
+                           _( "Prevent CVPcb from exiting after saving netlist file" ),
                            wxITEM_CHECK );
     configmenu->Append( item );
     configmenu->AppendSeparator();

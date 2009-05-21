@@ -12,9 +12,6 @@
 #include "libcmp.h"
 #include "general.h"
 
-//#include "protos.h"
-
-#include "wx/image.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
 

@@ -743,7 +743,7 @@ int Gen_D_CODE_File( FILE* penfile )
 
     while( ptr_tool && ( ptr_tool->m_Type >= 0 ) )
     {
-        float fscale = 0.0001; // For 3.4 format
+        float fscale = 0.0001f; // For 3.4 format
         char* text;
         sprintf( cbuf, "%%ADD%d", ptr_tool->m_NumDcode );
         text = cbuf + strlen( cbuf );

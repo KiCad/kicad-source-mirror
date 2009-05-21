@@ -217,8 +217,9 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
             m_OptDisplayModEdges->GetSelection();
 
     if (m_OptDisplayPads->GetSelection() == 1 )
-         DisplayOpt.DisplayPadFill = TRUE;
-    else DisplayOpt.DisplayPadFill = FALSE;
+        DisplayOpt.DisplayPadFill = true;
+    else
+        DisplayOpt.DisplayPadFill = false;
 
     m_Parent->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
 
@@ -230,7 +231,6 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
 
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
-
 
     m_Parent->DrawPanel->Refresh(TRUE);
 
@@ -377,8 +377,14 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        m_DisplayPadFill = DisplayOpt.DisplayPadFill =
-                               !m_OptionsToolBar->GetToolState( id );
+        if( m_OptionsToolBar->GetToolState( id ) )
+        {
+            m_DisplayPadFill = DisplayOpt.DisplayPadFill = true;
+        }
+        else
+        {
+            m_DisplayPadFill = DisplayOpt.DisplayPadFill = false;
+        }
         DrawPanel->Refresh( );
         break;
 

@@ -90,11 +90,11 @@ public:
 
     void GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
-    const PARAM_CFG_ARRAY& GetProjectFileParameters( void );
+    PARAM_CFG_ARRAY& GetProjectFileParameters( void );
     void SaveProjectFile( wxWindow* displayframe );
     bool LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig );
 
-    const PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+    PARAM_CFG_ARRAY& GetConfigurationSettings( void );
     void LoadSettings();
     void SaveSettings();
 
@@ -131,7 +131,6 @@ public:
     void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool             OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void             OnSelectOptionToolbar( wxCommandEvent& event );
-    void             ToolOnRightClick( wxCommandEvent& event );
     int              BestZoom();        // Retourne le meilleur zoom
 
     SCH_ITEM*        SchematicGeneralLocateAndDisplay( bool IncludePin = TRUE );

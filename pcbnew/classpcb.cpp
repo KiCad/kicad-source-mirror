@@ -134,7 +134,7 @@ bool PCB_SCREEN::IsMicroViaAcceptable( void )
 
 DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 {
-    DisplayPadFill   = TRUE;
+    DisplayPadFill   = FILLED;
     DisplayPadNum    = TRUE;
     DisplayPadNoConn = TRUE;
     DisplayPadIsol   = TRUE;

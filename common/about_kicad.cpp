@@ -13,7 +13,7 @@
 wxString g_BuildVersion
 
 #ifdef HAVE_SVN_VERSION
-#include "config.h"
+#include "version.h"
 ( wxT( KICAD_SVN_VERSION ) )
 #else
 ( BUILD_VERSION )
@@ -22,7 +22,7 @@ wxString g_BuildVersion
 
 wxString g_BuildAboutVersion
 #if defined(HAVE_SVN_VERSION) || defined(HAVE_SVN_REVISION)
-#  include "config.h"
+#  include "version.h"
 ( wxT( KICAD_ABOUT_VERSION ) )
 #else
 ( BUILD_VERSION )

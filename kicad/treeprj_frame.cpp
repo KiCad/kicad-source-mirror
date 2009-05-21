@@ -100,7 +100,7 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     m_Filters.push_back( wxT( "^no kicad files found" ) );
 
 
-  #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
     m_Filters.push_back( wxT( "^.*\\.py$" ) );
 
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RunScript" ) );
@@ -112,7 +112,7 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::DeleteFile" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RenameFile" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::MoveFile" ) );
-  #endif /* KICAD_PYTHON */
+#endif /* KICAD_PYTHON */
 
 
     for( int i = 0; i < TREE_MAX; i++ )
@@ -121,13 +121,13 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     wxMenu* menu = m_ContextMenus[TREE_PY];
 
     // Python script context menu
-  #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
     item = new wxMenuItem( menu, ID_PROJECT_RUNPY,
                            _( "&Run" ),
                            _( "Run the Python Script" ) );
     item->SetBitmap( icon_python_small_xpm );
     menu->Append( item );
-  #endif /* KICAD_PYTHON */
+#endif /* KICAD_PYTHON */
 
 
     // ID_PROJECT_TXTEDIT
@@ -228,6 +228,21 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
     ReCreateTreePrj();
 }
 
+WinEDA_PrjFrame::~WinEDA_PrjFrame()
+{
+    size_t  i;
+    wxMenu* menu;
+
+    for( i = 0; i < m_ContextMenus.size(); i++ )
+    {
+        menu = m_ContextMenus[i];
+        delete menu;
+    }
+
+    if( m_PopupMenu )
+        delete m_PopupMenu;
+}
+
 
 /*****************************************************************************/
 BEGIN_EVENT_TABLE( WinEDA_PrjFrame, wxSashLayoutWindow )
@@ -256,13 +271,6 @@ BEGIN_EVENT_TABLE( WinEDA_PrjFrame, wxSashLayoutWindow )
 /*****************************************************************************/
 END_EVENT_TABLE()
 /*****************************************************************************/
-
-
-/*****************************************************************************/
-WinEDA_TreePrj::~WinEDA_TreePrj()
-/*****************************************************************************/
-{
-}
 
 
 /**

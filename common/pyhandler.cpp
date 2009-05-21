@@ -1,24 +1,12 @@
-#include "wx/wxprec.h"
+#include "fctsys.h"
+#include "common.h"
+
 #include <id.h>
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
-
 #include <wx/dir.h>
-#include <wx/utils.h>
 
 #include <pyhandler.h>
 #include <iostream>
-
-#include "fctsys.h"
-#include "common.h"
 
 using namespace boost::python;
 

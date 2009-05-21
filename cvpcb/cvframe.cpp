@@ -261,8 +261,7 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
     {
         unsigned        ii;
         wxMessageDialog dialog( this,
-                                _( "Net and component list modified.\nSave " \
-                                   "before exit ?" ),
+                                _( "Net and component list modified.\nSave before exit ?" ),
                                 _( "Confirmation" ),
                                 wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
 

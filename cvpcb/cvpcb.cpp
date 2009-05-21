@@ -25,10 +25,8 @@ const wxString RetroFileExtension( wxT( "stf" ) );
 const wxString FootprintAliasFileExtension( wxT( "equ" ) );
 
 // Wildcard for schematic retroannotation (import footprint names in schematic):
-const wxString RetroFileWildcard( _( "Kicad retroannotation files " \
-                                     "(*.stf)|*.stf" ) );
-const wxString FootprintAliasFileWildcard( _( "Kicad footprint alias files " \
-                                              "(*.equ)|*.equ" ) );
+const wxString RetroFileWildcard( _( "Kicad retroannotation files (*.stf)|*.stf" ) );
+const wxString FootprintAliasFileWildcard( _( "Kicad footprint alias files (*.equ)|*.equ" ) );
 
 const wxString titleLibLoadError( _( "Library Load Error" ) );
 

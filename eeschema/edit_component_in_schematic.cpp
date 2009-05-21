@@ -12,8 +12,6 @@
 #include "libcmp.h"
 #include "general.h"
 
-#include "wx/checklst.h"
-
 #include "protos.h"
 
 

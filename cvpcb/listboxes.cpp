@@ -19,11 +19,10 @@
 
 ListBoxBase::ListBoxBase( WinEDA_CvpcbFrame* parent,  wxWindowID id,
                           const wxPoint& loc, const wxSize& size ) :
-    LIST_BOX_TYPE( parent, id, loc, size,
-                   wxSUNKEN_BORDER | wxLC_NO_HEADER |
-                   wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL )
+    wxListView( parent, id, loc, size,
+                wxSUNKEN_BORDER | wxLC_NO_HEADER |
+                wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL )
 {
-    m_Parent = parent;
     InsertColumn( 0, wxEmptyString );
     SetColumnWidth( 0, wxLIST_AUTOSIZE );
 }
@@ -57,6 +56,12 @@ int ListBoxBase::GetSelection()
 }
 
 
+WinEDA_CvpcbFrame* ListBoxBase::GetParent()
+{
+    return (WinEDA_CvpcbFrame*) wxListView::GetParent();
+}
+
+
 /***************************************/
 /* ListBox handling the footprint list */
 /***************************************/
@@ -67,6 +72,7 @@ FootprintListBox::FootprintListBox( WinEDA_CvpcbFrame* parent,
                                     int nbitems, wxString choice[] ) :
     ListBoxBase( parent, id, loc, size )
 {
+    m_UseFootprintFullList = true;
 	m_ActiveFootprintList = NULL;
     SetActiveFootprintList( TRUE );
 }
@@ -106,7 +112,8 @@ wxString FootprintListBox::GetSelectedFootprint()
     if( ii >= 0 )
     {
         wxString msg = (*m_ActiveFootprintList)[ii];
-        msg.Trim( TRUE ); msg.Trim( FALSE );
+        msg.Trim( TRUE );
+        msg.Trim( FALSE );
         FootprintName = msg.AfterFirst( wxChar( ' ' ) );
     }
 
@@ -172,7 +179,7 @@ ListBoxCmp::~ListBoxCmp()
 /* Build the events table for the schematic components list box
  */
 
-BEGIN_EVENT_TABLE( ListBoxCmp, LIST_BOX_TYPE )
+BEGIN_EVENT_TABLE( ListBoxCmp, ListBoxBase )
     EVT_SIZE( ListBoxBase::OnSize )
 END_EVENT_TABLE()
 
@@ -418,8 +425,8 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 
     if( !m_UseFootprintFullList || ( m_UseFootprintFullList != old_selection ) )
     {
-        m_Parent->SetStatusText( wxEmptyString, 0 );
-        m_Parent->SetStatusText( wxEmptyString, 1 );
+        GetParent()->SetStatusText( wxEmptyString, 0 );
+        GetParent()->SetStatusText( wxEmptyString, 1 );
     }
 
     wxString msg;
@@ -429,7 +436,7 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
     else
         msg.Printf( _( "Footprints (filtered): %d" ),
                     m_ActiveFootprintList->GetCount() );
-    m_Parent->SetStatusText( msg, 2 );
+    GetParent()->SetStatusText( msg, 2 );
 }
 
 
@@ -437,7 +444,7 @@ void FootprintListBox::SetActiveFootprintList( bool FullList, bool Redraw )
 /* Event table for the footprint list */
 /**************************************/
 
-BEGIN_EVENT_TABLE( FootprintListBox, LIST_BOX_TYPE )
+BEGIN_EVENT_TABLE( FootprintListBox, ListBoxBase )
     EVT_SIZE( ListBoxBase::OnSize )
 END_EVENT_TABLE()
 
@@ -449,21 +456,21 @@ void FootprintListBox::OnLeftClick( wxListEvent& event )
     FOOTPRINT* Module;
     wxString  FootprintName = GetSelectedFootprint();
 
-    Module = GetModuleDescrByName( FootprintName, m_Parent->m_footprints );
-    if( m_Parent->DrawFrame )
+    Module = GetModuleDescrByName( FootprintName, GetParent()->m_footprints );
+    if( GetParent()->DrawFrame )
     {
-        m_Parent->CreateScreenCmp(); /* refresh general */
+        GetParent()->CreateScreenCmp(); /* refresh general */
     }
 
     if( Module )
     {
         wxString  msg;
         msg = Module->m_Doc;
-        m_Parent->SetStatusText( msg, 0 );
+        GetParent()->SetStatusText( msg, 0 );
 
         msg = wxT( "KeyW: " );
         msg += Module->m_KeyWord;
-        m_Parent->SetStatusText( msg, 1 );
+        GetParent()->SetStatusText( msg, 1 );
     }
 }
 
@@ -474,7 +481,7 @@ void FootprintListBox::OnLeftDClick( wxListEvent& event )
 {
     wxString FootprintName = GetSelectedFootprint();
 
-    m_Parent->SetNewPkg( FootprintName );
+    GetParent()->SetNewPkg( FootprintName );
 }
 
 

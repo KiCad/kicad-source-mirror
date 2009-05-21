@@ -376,8 +376,8 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
 
     m_Grid = nearest_grid;
 
-    wxLogWarning( _( "Grid size( %f, %f ) not in grid list, falling back to " \
-                     "grid size( %f, %f )." ),
+    wxLogWarning( wxT( "Grid size( %f, %f ) not in grid list, falling back " ) \
+                  wxT( "to grid size( %f, %f )." ),
                   size.x, size.y, m_Grid.x, m_Grid.y );
 }
 
@@ -399,8 +399,8 @@ void BASE_SCREEN::SetGrid( int id  )
 
     m_Grid = m_GridList[0].m_Size;
 
-    wxLogWarning( _( "Grid ID %d not in grid list, falling back to " \
-                     "grid size( %g, %g )." ), id, m_Grid.x, m_Grid.y );
+    wxLogWarning( wxT( "Grid ID %d not in grid list, falling back to " ) \
+                  wxT( "grid size( %g, %g )." ), id, m_Grid.x, m_Grid.y );
 }
 
 void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
@@ -418,8 +418,8 @@ void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
         }
         if( m_GridList[i].m_Id == grid.m_Id )
         {
-            wxLogDebug( wxT( "Changing grid ID %d from size( %g, %g ) to " \
-                             "size( %g, %g )." ),
+            wxLogDebug( wxT( "Changing grid ID %d from size( %g, %g ) to " ) \
+                        wxT( "size( %g, %g )." ),
                         grid.m_Id, m_GridList[i].m_Size.x,
                         m_GridList[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
             m_GridList[i].m_Size = grid.m_Size;

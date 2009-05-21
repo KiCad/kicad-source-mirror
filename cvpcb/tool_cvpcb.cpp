@@ -26,28 +26,35 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
     SetToolBar( m_HToolBar );
 
-    m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString, wxBitmap( open_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
+                         wxBitmap( open_xpm ),
                          _( "Open a NetList file" ) );
 
-    m_HToolBar->AddTool( ID_CVPCB_SAVEQUITCVPCB, wxEmptyString, wxBitmap( save_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_SAVEQUITCVPCB, wxEmptyString,
+                         wxBitmap( save_xpm ),
                          _( "Save NetList and Footprints List files" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString, wxBitmap( config_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString,
+                         wxBitmap( config_xpm ),
                          _( "Configuration" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString, wxBitmap( module_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString,
+                         wxBitmap( module_xpm ),
                          _( "View selected footprint" ) );
 
-    m_HToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString, wxBitmap( auto_associe_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
+                         wxBitmap( auto_associe_xpm ),
                          _( "Automatic Association" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString, wxBitmap( left_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
+                         wxBitmap( left_xpm ),
                          _( "Select previous free component" ) );
 
-    m_HToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString, wxBitmap( right_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString,
+                         wxBitmap( right_xpm ),
                          _( "Select next free component" ) );
 
     m_HToolBar->AddSeparator();
@@ -58,7 +65,8 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_CREATE_STUFF_FILE, wxEmptyString,
                          wxBitmap( save_cmpstuff_xpm ),
-                         _( "Create export file (component/footprint list, used by eeschema to fill the footprint field of components)" ) );
+                         _( "Create export file (component/footprint list, \
+used by eeschema to fill the footprint field of components)" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_PCB_DISPLAY_FOOTPRINT_DOC, wxEmptyString,
@@ -89,4 +97,3 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
     // the changes
     m_HToolBar->Realize();
 }
-

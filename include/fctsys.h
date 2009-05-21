@@ -17,19 +17,10 @@
 #include <wx/wx.h>
 #endif
 
-#include <stdio.h>
-#ifdef __FreeBSD__
-#include <stdlib.h>
-#else
-#ifndef __DARWIN__
-#include <malloc.h>     // MacOSX (DARWIN): malloc() and free() are in stdlib.h
-#endif
-#endif
-#include <time.h>
-#include <math.h>
-#include <string.h>
-#include <ctype.h>
-
+/*
+ * FIXME: This appears to already be included in the OSX build of wxWidgets.
+ *        Will someone with OSX please remove this and see if it compiles.
+ */
 #ifdef __WXMAC__
 #include <Carbon/Carbon.h>
 #endif
@@ -40,11 +31,6 @@
 
 #define PCB_INTERNAL_UNIT      10000    //  PCBNEW internal unit = 1/10000 inch
 #define EESCHEMA_INTERNAL_UNIT 1000     //  EESCHEMA internal unit = 1/1000 inch
-
-#ifdef __UNIX__
-#define stricmp  strcasecmp
-#define strnicmp strncasecmp
-#endif
 
 #ifdef __WINDOWS__
 #define DIR_SEP        '\\'
@@ -60,7 +46,6 @@
 #define D(x)        // nothing
 #endif
 
-
 #define UNIX_STRING_DIR_SEP wxT( "/" )
 #define WIN_STRING_DIR_SEP  wxT( "\\" )
 
@@ -75,5 +60,7 @@
 #else
 #define MAYBE_RESIZE_BORDER 0               // no resizeable border
 #endif
+
+#include "config.h"
 
 #endif /* FCTSYS_H */

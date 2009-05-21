@@ -331,14 +331,14 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
     // the order in which they are specified is not wrong!)
     if( SheetPS->m_Name.Cmp( wxT( "User" ) ) == 0 )
         sprintf( Line, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
-            (int) round( SheetPS->m_Size.y * CONV_SCALE ),
-            (int) round( SheetPS->m_Size.x * CONV_SCALE ) );
+                 wxRound( SheetPS->m_Size.y * CONV_SCALE ),
+                 wxRound( SheetPS->m_Size.x * CONV_SCALE ) );
 
     else  // ( if SheetPS->m_Name does not equal "User" )
         sprintf( Line, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
-            CONV_TO_UTF8( SheetPS->m_Name ),
-            (int) round( SheetPS->m_Size.y * CONV_SCALE ),
-            (int) round( SheetPS->m_Size.x * CONV_SCALE ) );
+                 CONV_TO_UTF8( SheetPS->m_Name ),
+                 wxRound( SheetPS->m_Size.y * CONV_SCALE ),
+                 wxRound( SheetPS->m_Size.x * CONV_SCALE ) );
     fputs( Line, g_Plot_PlotOutputFile );
 
     if( PaperOrientation == wxPORTRAIT )

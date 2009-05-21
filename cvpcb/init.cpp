@@ -84,8 +84,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
 
     if( error_level < 0 )
     {
-        msg.Printf( _( "File <%s> does not appear to be a valid Kicad " \
-                       "net list file." ),
+        msg.Printf( _( "File <%s> does not appear to be a valid Kicad net list file." ),
                     m_NetlistFileName.GetFullPath().c_str() );
         ::wxMessageBox( msg, _( "File Error" ), wxOK | wxICON_ERROR, this );
         return false;

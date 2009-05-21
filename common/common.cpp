@@ -323,7 +323,7 @@ wxString ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit,
         StringValue << aValue;
     else
     {
-        value_to_print = To_User_Unit( aUnits, aValue, aInternal_Unit );
+        value_to_print = To_User_Unit( (bool)aUnits, aValue, aInternal_Unit );
         StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
             value_to_print );
     }
@@ -366,7 +366,7 @@ int ReturnValueFromString( int Units, const wxString& TextValue,
     if( Units >= CENTIMETRE )
         Value = wxRound( dtmp );
     else
-        Value = From_User_Unit( Units, dtmp, Internal_Unit );
+        Value = From_User_Unit( (bool)Units, dtmp, Internal_Unit );
 
     return Value;
 }

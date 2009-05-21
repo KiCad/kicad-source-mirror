@@ -28,7 +28,7 @@ static TRACK*   AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int ext
 static void     Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC );
 
 /* Local Variables: */
-static bool a_color;    /* message color */
+static int  a_color;    /* message color */
 static bool s_CleanVias     = true;
 static bool s_MergeSegments = true;
 static bool s_DeleteUnconnectedSegm = true;

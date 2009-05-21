@@ -35,9 +35,9 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
 
     save_opt = DisplayOpt;
     if( aPrintMaskLayer & ALL_CU_LAYERS )
-        DisplayOpt.DisplayPadFill = FILLED;
+        DisplayOpt.DisplayPadFill = true;
     else
-        DisplayOpt.DisplayPadFill = SKETCH;
+        DisplayOpt.DisplayPadFill = false;
     frame->m_DisplayPadFill      = DisplayOpt.DisplayPadFill;
     frame->m_DisplayPadNum       = DisplayOpt.DisplayPadNum = false;
     DisplayOpt.DisplayPadNoConn  = false;

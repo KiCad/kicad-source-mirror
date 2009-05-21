@@ -6,7 +6,6 @@
 #define COMPONENT_CLASS_H
 
 
-#include "base_struct.h"
 #include "class_sch_screen.h"
 #include <wx/arrstr.h>
 #include <wx/dynarray.h>

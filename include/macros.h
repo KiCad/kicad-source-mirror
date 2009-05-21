@@ -74,11 +74,15 @@ static inline const wxChar* GetChars( wxString s )
 /* macro to exchange 2 items */
 /*****************************/
 
-/* this macro uses the typeof keyword
- * for compilers that do not know typeof (MSVC )
- * the boost libs have a workaround for the typeof problem
+/*
+ * The EXCHG macro uses BOOST_TYPEOF for compilers that do not have native
+ * typeof support (MSVC).  Please do not attempt to qualify these macros
+ * within #ifdef compiler definitions pragmas.  BOOST_TYPEOF is smart enough
+ * to check for native typeof support and use it instead of it's own
+ * implementation.  These macros effectively compile to nothing on platforms
+ * with native typeof support.
  */
-#ifdef __MSVC__     // MSCV does not know typeof. Others def can be added here
+
 #include "boost/typeof/typeof.hpp"
 
 // we have to register the types used with the typeof keyword with boost
@@ -93,13 +97,11 @@ class D_PAD;
 BOOST_TYPEOF_REGISTER_TYPE( D_PAD* );
 BOOST_TYPEOF_REGISTER_TYPE( const D_PAD* );
 class BOARD_ITEM;
-BOOST_TYPEOF_REGISTER_TYPE( BOARD_ ITEM* );
+BOOST_TYPEOF_REGISTER_TYPE( BOARD_ITEM* );
 
-#define typeof (expr)BOOST_TYPEOF( expr )
-#endif  // #ifdef __MSVC__
-
-// here is the macro:
-#define EXCHG( a, b ) { typeof(a)__temp__ = (a); (a) = (b); (b) = __temp__; }
+#define EXCHG( a, b ) { BOOST_TYPEOF(a) __temp__ = (a);      \
+                        (a) = (b);                           \
+                        (b) = __temp__; }
 
 
 /*****************************************************/

@@ -102,8 +102,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_SchematicFrame::Process_Config " \
-                                 "internal error" ) );
+        DisplayError( this, wxT( "WinEDA_SchematicFrame::Process_Config internal error" ) );
     }
 }
 
@@ -135,89 +134,90 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
  * to define local variables.  The old method of statically building the array
  * at compile time requiring global variable definitions.
  */
-const PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
+PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
 {
-    if( !m_projectFileParams.IsEmpty() )
+    if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.Add( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
-                                                     &m_UserLibraryPath ) );
-    m_projectFileParams.Add( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                         &m_ComponentLibFiles,
-                                                         GROUPLIB ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "NetFmt" ),
-                                                &m_NetlistFormat,
-                                                NET_TYPE_PCBNEW,
-                                                NET_TYPE_PCBNEW,
-                                                NET_TYPE_CUSTOM_MAX ) );
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
+                                                           &m_UserLibraryPath ) );
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
+                                                               &m_ComponentLibFiles,
+                                                               GROUPLIB ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "NetFmt" ),
+                                                      &m_NetlistFormat,
+                                                      NET_TYPE_PCBNEW,
+                                                      NET_TYPE_PCBNEW,
+                                                      NET_TYPE_CUSTOM_MAX ) );
 
     /* NOTE: Left as global until supporting code  can be fixed. */
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "HPGLSpd" ),
-                                                &g_HPGL_Pen_Descr.m_Pen_Speed,
-                                                20, 2, 45 ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "HPGLDm" ),
-                                                &g_HPGL_Pen_Descr.m_Pen_Diam,
-                                                15, 1, 150 ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "HPGLNum" ),
-                                                &g_HPGL_Pen_Descr.m_Pen_Num,
-                                                1, 1, 8 ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_A4" ),
-                                                &g_Sheet_A4.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_A4" ),
-                                                &g_Sheet_A4.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_A3" ),
-                                                &g_Sheet_A3.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_A3" ),
-                                                &g_Sheet_A3.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_A2" ),
-                                                &g_Sheet_A2.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_A2" ),
-                                                &g_Sheet_A2.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_A1" ),
-                                                &g_Sheet_A1.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_A1" ),
-                                                &g_Sheet_A1.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_A0" ),
-                                                &g_Sheet_A0.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_A0" ),
-                                                &g_Sheet_A0.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_A" ),
-                                                &g_Sheet_A.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_A" ),
-                                                &g_Sheet_A.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_B" ),
-                                                &g_Sheet_B.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_B" ),
-                                                &g_Sheet_B.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_C" ),
-                                                &g_Sheet_C.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_C" ),
-                                                &g_Sheet_C.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_D" ),
-                                                &g_Sheet_D.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_D" ),
-                                                &g_Sheet_D.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offX_E" ),
-                                                &g_Sheet_E.m_Offset.x ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "offY_E" ),
-                                                &g_Sheet_E.m_Offset.y ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "RptD_X" ),
-                                                &g_RepeatStep.x,
-                                                0, -1000, +1000 ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "RptD_Y" ),
-                                                &g_RepeatStep.y,
-                                                100, -1000, +1000 ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "RptLab" ),
-                                                &g_RepeatDeltaLabel,
-                                                1, -10, +10 ) );
-    m_projectFileParams.Add( new PARAM_CFG_WXSTRING( wxT( "SimCmd" ),
-                                                     &g_SimulatorCommandLine ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "UseNetN" ),
-                                                &g_OptNetListUseNames,
-                                                0, 0, 1 ) );
-    m_projectFileParams.Add( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                                &g_DefaultTextLabelSize,
-                                                DEFAULT_SIZE_TEXT, 0, 1000 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLSpd" ),
+                                                      &g_HPGL_Pen_Descr.m_Pen_Speed,
+                                                      20, 2, 45 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLDm" ),
+                                                      &g_HPGL_Pen_Descr.m_Pen_Diam,
+                                                      15, 1, 150 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLNum" ),
+                                                      &g_HPGL_Pen_Descr.m_Pen_Num,
+                                                      1, 1, 8 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A4" ),
+                                                      &g_Sheet_A4.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A4" ),
+                                                      &g_Sheet_A4.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A3" ),
+                                                      &g_Sheet_A3.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A3" ),
+                                                      &g_Sheet_A3.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A2" ),
+                                                      &g_Sheet_A2.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A2" ),
+                                                      &g_Sheet_A2.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A1" ),
+                                                      &g_Sheet_A1.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A1" ),
+                                                      &g_Sheet_A1.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A0" ),
+                                                      &g_Sheet_A0.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A0" ),
+                                                      &g_Sheet_A0.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A" ),
+                                                      &g_Sheet_A.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A" ),
+                                                      &g_Sheet_A.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_B" ),
+                                                      &g_Sheet_B.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_B" ),
+                                                      &g_Sheet_B.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_C" ),
+                                                      &g_Sheet_C.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_C" ),
+                                                      &g_Sheet_C.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_D" ),
+                                                      &g_Sheet_D.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_D" ),
+                                                      &g_Sheet_D.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_E" ),
+                                                      &g_Sheet_E.m_Offset.x ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_E" ),
+                                                      &g_Sheet_E.m_Offset.y ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_X" ),
+                                                      &g_RepeatStep.x,
+                                                      0, -1000, +1000 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_Y" ),
+                                                      &g_RepeatStep.y,
+                                                      100, -1000, +1000 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptLab" ),
+                                                      &g_RepeatDeltaLabel,
+                                                      1, -10, +10 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "SimCmd" ),
+                                                           &g_SimulatorCommandLine ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "UseNetN" ),
+                                                      &g_OptNetListUseNames,
+                                                      0, 0, 1 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
+                                                      &g_DefaultTextLabelSize,
+                                                      DEFAULT_SIZE_TEXT, 0,
+                                                      1000 ) );
 
     return m_projectFileParams;
 }
@@ -320,92 +320,92 @@ static const wxString HorzVertLinesOnlyEntry( wxT( "HorizVertLinesOnly" ) );
  *       global variables or move them to the object class where they are
  *       used.
  */
-const PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
+PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
 {
-    if( !m_configSettings.IsEmpty() )
+    if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.Add( new PARAM_CFG_INT( true, wxT( "Unite" ),
-                                             &g_UnitMetric, 0, 0, 1 ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_WIRE],
-                                                  GREEN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBus" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_BUS],
-                                                  BLUE ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorConn" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_JUNCTION],
-                                                  GREEN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLlab" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_LOCLABEL],
-                                                  BLACK ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorHlab" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_HIERLABEL],
-                                                  BROWN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGbllab" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_GLOBLABEL],
-                                                  RED ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinF" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_PINFUN],
-                                                  MAGENTA ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColPinN" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_PINNUM],
-                                                  RED ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPNam" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_PINNAM],
-                                                  CYAN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorField" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_FIELDS],
-                                                  MAGENTA ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRef" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_REFERENCEPART],
-                                                  CYAN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorValue" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_VALUEPART],
-                                                  CYAN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNote" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_NOTES],
-                                                  LIGHTBLUE ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBody" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_DEVICE],
-                                                  RED ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyBg" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_DEVICE_BACKGROUND],
-                                                  LIGHTYELLOW ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNetN" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_NETNAM],
-                                                  DARKGRAY ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPin" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_PIN],
-                                                  RED ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheet" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_SHEET],
-                                                  MAGENTA ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true,
-                                                  wxT( "ColorSheetFileName" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_SHEETFILENAME],
-                                                  BROWN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetName" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_SHEETNAME],
-                                                  CYAN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetLab" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_SHEETLABEL],
-                                                  BROWN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoCo" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_NOCONNECT],
-                                                  BLUE ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcW" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_ERC_WARN],
-                                                  GREEN ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
-                                                  &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
-                                                  RED ) );
-    m_configSettings.Add( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
-                                                  &g_GridColor,
-                                                  DARKDARKGRAY ) );
-    m_configSettings.Add( new PARAM_CFG_INT( true, wxT( "Pltmarg" ),
-                                             &g_PlotMargin,
-                                             300, 0, 10000 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Unite" ),
+                                                   &g_UnitMetric, 0, 0, 1 ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_WIRE],
+                                                        GREEN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBus" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_BUS],
+                                                        BLUE ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorConn" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_JUNCTION],
+                                                        GREEN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLlab" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_LOCLABEL],
+                                                        BLACK ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorHlab" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_HIERLABEL],
+                                                        BROWN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGbllab" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_GLOBLABEL],
+                                                        RED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinF" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_PINFUN],
+                                                        MAGENTA ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColPinN" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_PINNUM],
+                                                        RED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPNam" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_PINNAM],
+                                                        CYAN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorField" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_FIELDS],
+                                                        MAGENTA ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRef" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_REFERENCEPART],
+                                                        CYAN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorValue" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_VALUEPART],
+                                                        CYAN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNote" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_NOTES],
+                                                        LIGHTBLUE ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBody" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_DEVICE],
+                                                        RED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyBg" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_DEVICE_BACKGROUND],
+                                                        LIGHTYELLOW ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNetN" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_NETNAM],
+                                                        DARKGRAY ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPin" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_PIN],
+                                                        RED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheet" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_SHEET],
+                                                        MAGENTA ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
+                                                        wxT( "ColorSheetFileName" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_SHEETFILENAME],
+                                                        BROWN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetName" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_SHEETNAME],
+                                                        CYAN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetLab" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_SHEETLABEL],
+                                                        BROWN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoCo" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_NOCONNECT],
+                                                        BLUE ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcW" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_ERC_WARN],
+                                                        GREEN ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
+                                                        RED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
+                                                        &g_GridColor,
+                                                        DARKDARKGRAY ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Pltmarg" ),
+                                                   &g_PlotMargin,
+                                                   300, 0, 10000 ) );
 
     return m_configSettings;
 }

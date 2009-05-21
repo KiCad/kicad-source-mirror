@@ -57,6 +57,13 @@ WinEDA_TreePrj::WinEDA_TreePrj( WinEDA_PrjFrame* parent ) :
 }
 
 
+WinEDA_TreePrj::~WinEDA_TreePrj()
+{
+    if( m_ImageList )
+        delete m_ImageList;
+}
+
+
 /***************************************************************************************/
 int WinEDA_TreePrj::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
 /***************************************************************************************/
@@ -215,8 +222,8 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
     if( !wxRenameFile( GetFileName(), destName, false ) )
 #endif
     {
-        wxMessageDialog( m_Parent, _( "Unable to move file ... " ), _(
-                             "Permission error ?" ), wxICON_ERROR | wxOK );
+        wxMessageDialog( m_Parent, _( "Unable to move file ... " ),
+                         _( "Permission error ?" ), wxICON_ERROR | wxOK );
         return;
     }
 
@@ -390,8 +397,8 @@ void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
                     it in treeprj_frame.cpp in the line looking like this:
                     m_Filters.push_back( wxT( "^no kicad files found" ) );
                 */
-				prjframe->AddFile( wxString( _( "no kicad files found in " \
-                                                "this directory" ) ), id );
+				prjframe->AddFile(
+                    _( "no kicad files found in this directory" ), id );
             }
 
             /* Sort filenames by alphabetic order */

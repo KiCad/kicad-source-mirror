@@ -10,7 +10,7 @@
 
 #ifdef  __WINDOWS__
 #ifndef _MSC_VER
-#include <dir.h>
+//#include <dir.h>
 #endif
 #endif
 

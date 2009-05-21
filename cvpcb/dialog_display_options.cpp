@@ -37,7 +37,8 @@ void WinEDA_DisplayFrame::InstallOptionsDisplay(wxCommandEvent& event)
 /*********************************************************************/
 /* Creation de la fenetre d'options de la fenetre de visu */
 {
-	WinEDA_FootprintDisplayOptionsFrame * OptionWindow = new WinEDA_FootprintDisplayOptionsFrame(this);
+	WinEDA_FootprintDisplayOptionsFrame* OptionWindow =
+        new WinEDA_FootprintDisplayOptionsFrame(this);
 	OptionWindow->ShowModal();
 	OptionWindow->Destroy();
 }
@@ -179,7 +180,7 @@ void WinEDA_FootprintDisplayOptionsFrame::CreateControls()
     // Set validators
     m_EdgesDisplayOption->SetValidator( wxGenericValidator(& DisplayOpt.DisplayModEdge) );
     m_TextDisplayOption->SetValidator( wxGenericValidator(& DisplayOpt.DisplayModText) );
-    m_IsShowPadFill->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadFill) );
+    m_IsShowPadFill->SetValidator( wxGenericValidator( & DisplayOpt.DisplayPadFill) );
     m_IsShowPadNum->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadNum) );
 ////@end WinEDA_FootprintDisplayOptionsFrame content construction
 

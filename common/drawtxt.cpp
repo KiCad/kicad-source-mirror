@@ -80,7 +80,7 @@ static void DrawGraphicTextPline(
 
 static int overbar_position( int size_v, int thickness )
 {
-    return size_v * 1.1 + thickness;
+    return wxRound( (double)size_v * 1.1 + (double)thickness );
 }
 
 

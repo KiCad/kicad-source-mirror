@@ -4,8 +4,6 @@
 // Licence:     GPL License
 /////////////////////////////////////////////////////////////////////////////
 
-using namespace std;
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -15,6 +13,8 @@ using namespace std;
 #include "zones.h"
 #include "id.h"
 #include "protos.h"
+
+using namespace std;
 
 bool verbose = false;       // false if zone outline diags must not be shown
 

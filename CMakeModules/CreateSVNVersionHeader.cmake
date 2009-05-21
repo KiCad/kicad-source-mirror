@@ -54,9 +54,9 @@ macro(create_svn_version_header)
         # reflect this.
         add_definitions(-DHAVE_SVN_VERSION)
 
-        # Generate config.h.
-        configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/config.h.cmake
-                       ${CMAKE_BINARY_DIR}/config.h)
+        # Generate version.h.
+        configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/version.h.cmake
+                       ${CMAKE_BINARY_DIR}/version.h)
 
         message(STATUS "Kicad SVN version: ${KICAD_SVN_VERSION}")
         message(STATUS "Kicad about version: ${KICAD_ABOUT_VERSION}")
