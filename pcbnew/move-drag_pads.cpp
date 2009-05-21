@@ -243,7 +243,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 
 
 /*********************************************************/
-void WinEDA_BasePcbFrame::DeletePad( D_PAD* Pad, wxDC* DC )
+void WinEDA_BasePcbFrame::DeletePad( D_PAD* Pad )
 /*********************************************************/
 /* Function to delete the pad "pad" */
 {
@@ -336,7 +336,8 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 
     Pad->m_Flags = 0;
 
-    Pad->Draw( DrawPanel, DC, GR_OR );
+    if ( DC )
+        Pad->Draw( DrawPanel, DC, GR_OR );
 
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
@@ -347,7 +348,8 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
     {
         Track = pt_drag->m_Segm;
         Track->SetState( EDIT, OFF );
-        Track->Draw( DrawPanel, DC, GR_OR );
+        if ( DC )
+            Track->Draw( DrawPanel, DC, GR_OR );
     }
 
     EraseDragListe();
@@ -377,7 +379,8 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
 
     GetScreen()->SetModify();
 
-    Module->Draw( DrawPanel, DC, GR_XOR );
+    if ( DC )
+        Module->Draw( DrawPanel, DC, GR_XOR );
 
     EXCHG( Pad->m_Size.x, Pad->m_Size.y );
     EXCHG( Pad->m_Drill.x, Pad->m_Drill.y );
@@ -391,5 +394,6 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
     Module->Set_Rectangle_Encadrement();
 
     Pad->DisplayInfo( this );
-    Module->Draw( DrawPanel, DC, GR_OR );
+    if ( DC )
+        Module->Draw( DrawPanel, DC, GR_OR );
 }

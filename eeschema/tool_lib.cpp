@@ -214,7 +214,7 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString,
                             wxBitmap( pin2pin_xpm ),
-                            _( "Edit pins part per part (Carefully use!)" ) );
+                            _( "Edit pins part per part (Carefully use!)" ), wxITEM_CHECK );
         m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
 
         // after adding the buttons to the toolbar, must call Realize() to reflect the changes

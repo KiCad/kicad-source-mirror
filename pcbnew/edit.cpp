@@ -734,7 +734,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_PAD:
-        DeletePad( (D_PAD*) GetCurItem(), &dc );
+        DeletePad( (D_PAD*) GetCurItem() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
         break;

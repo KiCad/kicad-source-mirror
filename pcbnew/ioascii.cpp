@@ -160,6 +160,13 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
             newTrack->SetDrillValue(drill);
 
         newTrack->SetLayer( layer );
+
+        if ( makeType == TYPE_VIA )
+        {   // Ensure layers are OK when possible:
+            if( newTrack->Shape() == VIA_THROUGH )
+                ((SEGVIA*)newTrack)->SetLayerPair( LAYER_CMP_N, COPPER_LAYER_N );
+        }
+
         newTrack->SetNet( net_code );
         newTrack->SetState( flags, ON );
     }

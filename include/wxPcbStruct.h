@@ -242,7 +242,7 @@ public:
 
     // Pads sur modules
     void                     AddPad( MODULE* Module, bool draw );
-    void                     DeletePad( D_PAD* Pad, wxDC* DC );
+    void                     DeletePad( D_PAD* Pad );
     void                     StartMovePad( D_PAD* Pad, wxDC* DC );
     void                     RotatePad( D_PAD* Pad, wxDC* DC );
     void                     PlacePad( D_PAD* Pad, wxDC* DC );
@@ -322,7 +322,7 @@ public:
      * Defined separately in pcbnew and gerbview
      *
      * @param DC A device context to draw on.
-     */    
+     */
     void                     Block_Delete( wxDC* DC );
     void                     Block_Rotate( wxDC* DC );
     void                     Block_Invert( wxDC* DC );
@@ -344,7 +344,7 @@ public:
     void                     Block_Mirror_X( wxDC* DC );
     /**
      * Function Block_Duplicate
-     * copies-and-moves all tracks and segments within the selected block. 
+     * copies-and-moves all tracks and segments within the selected block.
      * New location is determined by the current offset from the selected block's original location.
      * Defined separately in pcbnew and gerbview
      *

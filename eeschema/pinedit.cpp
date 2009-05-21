@@ -195,7 +195,7 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
             continue;
         if( Pin->m_Flags )
             continue;
-        if( ask_for_pin )
+        if( ask_for_pin && !g_EditPinByPinIsOn )
         {
             DrawPanel->m_IgnoreMouseEvents = true;
             status = IsOK( this, _( "Occupied by other pin. Continue?" ) );

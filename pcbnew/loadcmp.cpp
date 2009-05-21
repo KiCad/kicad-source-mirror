@@ -163,7 +163,8 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
         build_liste_pads();
-        module->Draw( DrawPanel, DC, GR_OR );
+        if ( DC )
+            module->Draw( DrawPanel, DC, GR_OR );
     }
 
     return module;

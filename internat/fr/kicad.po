@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-16 07:41+0100\n"
-"PO-Revision-Date: 2009-05-16 07:57+0100\n"
+"POT-Creation-Date: 2009-05-16 20:42+0100\n"
+"PO-Revision-Date: 2009-05-16 20:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -5628,20 +5628,19 @@ msgstr "Chemins de recherche défini par l'utilisateur"
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:74
 msgid "Additional paths used in this project. The priority is highter than default Kicad paths."
-msgstr ""
+msgstr "Chemins additionnels utilisés dans ce projet. La priorité est plus haute que les chemins par défaut de Kicad."
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:97
-#, fuzzy
 msgid "Current search path list"
-msgstr ""
-"Liste des Hotkeys courantes:\n"
-"\n"
+msgstr "Liste des chemins de recherche courrants"
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:105
 msgid ""
 "Paths  (system paths and user paths) used to search and load libraries files and component doc files.\n"
 "Sorted by decreasing priority order."
 msgstr ""
+"Chemins (chemins système et chemins utilisateurs) utilisés pour chercher et charger les fichiers libriries et documentation des composants.\n"
+"Triés par ordre de priorité décroissante."
 
 #: eeschema/lib_export.cpp:47
 msgid "Import Component"
@@ -6457,7 +6456,7 @@ msgstr "Noir"
 msgid "Background Color:"
 msgstr "Couleur du Fond:"
 
-#: eeschema/dialog_eeschema_config.cpp:247
+#: eeschema/dialog_eeschema_config.cpp:224
 msgid "Library files:"
 msgstr "Fichiers Librairies:"
 
@@ -8530,15 +8529,10 @@ msgid "New FootprintFilter:"
 msgstr "Nouveau Filtre de Modules:"
 
 #: eeschema/dialog_eeschema_config_fbp.cpp:20
-msgid "Default netlist format"
-msgstr "Format netlistes par défaut"
-
-#: eeschema/dialog_eeschema_config_fbp.cpp:31
-#, fuzzy
 msgid "Component library files"
-msgstr "Couche composant"
+msgstr "Fichiers librairies de composants"
 
-#: eeschema/dialog_eeschema_config_fbp.cpp:34
+#: eeschema/dialog_eeschema_config_fbp.cpp:23
 msgid ""
 "List of active library files.\n"
 "Only library files in this list are loaded by Eeschema.\n"
@@ -8549,7 +8543,7 @@ msgstr ""
 "Seuls les fichiers librairie dans cette liste sont chargés par eeschema.\n"
 "L'ordre de cette liste est important:Eeschema cherche un composant donné en utilisant cette liste par ordre de priorité."
 
-#: eeschema/dialog_eeschema_config_fbp.cpp:62
+#: eeschema/dialog_eeschema_config_fbp.cpp:51
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
 
@@ -9162,7 +9156,7 @@ msgstr "Impossible de créer le fichier netliste "
 
 #: cvpcb/listlib.cpp:56
 msgid "No PCB foot print libraries are listed in the current project file."
-msgstr ""
+msgstr "Aucune librairie de modules PCB listée dans le fichier projet courant."
 
 #: cvpcb/listlib.cpp:57
 msgid "Project File Error"
@@ -9183,12 +9177,12 @@ msgstr "Ne peut ouvrir le fichier librairie de modules PCB <%s>."
 #: cvpcb/listlib.cpp:95
 #, c-format
 msgid "<%s> is not a valid Kicad PCB foot print library"
-msgstr ""
+msgstr "<%s> n'est pas un fichier librairie module Kicad PCB valide."
 
 #: cvpcb/listlib.cpp:127
 #, c-format
 msgid "Unexpected end of file occurred while parsing PCB foot print library <%s>."
-msgstr ""
+msgstr "Fin de fichier inattendue lors de l'analyse de la librairie de modules PCB  <%s>."
 
 #: cvpcb/listlib.cpp:162
 #, c-format
@@ -9198,12 +9192,12 @@ msgstr ""
 #: cvpcb/listlib.cpp:171
 #, c-format
 msgid "<%s> is not a valid PCB foot print library document file."
-msgstr ""
+msgstr "<%s> n'est pas un fichier librairie documentation module  PCB valide."
 
 #: cvpcb/loadcmp.cpp:74
 #, c-format
 msgid "<%s> is not a valid Kicad PCB foot print library."
-msgstr ""
+msgstr "<%s> in'est pas un fichier de module PCB  Kicad valide."
 
 #: cvpcb/loadcmp.cpp:137
 #, c-format
@@ -9224,8 +9218,8 @@ msgid "Component %s %s pin %s : Different Nets"
 msgstr "Composant %s %s pin %s :  Nets Differents"
 
 #: cvpcb/cvpcb.cpp:28
-msgid "Kicad component list files (*.stf)|*.stf"
-msgstr ""
+msgid "Kicad retroannotation files (*.stf)|*.stf"
+msgstr "Fichiers de retroannotaion  Kicad  (*.stf)|*.stf"
 
 #: cvpcb/cvpcb.cpp:30
 msgid "Kicad footprint alias files (*.equ)|*.equ"
@@ -9255,9 +9249,9 @@ msgid "%d footprint aliases found."
 msgstr "%d alias de modules trouvés."
 
 #: cvpcb/autosel.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Component %s: footprint %s not found in any of the project footprint libraries."
-msgstr "Composant %s: Module %s non trouvé en librairies"
+msgstr "Composant %s: Module %s non trouvé dans les librairies de modules du projet"
 
 #: cvpcb/autosel.cpp:173
 msgid "CVPcb Error"
@@ -9443,9 +9437,8 @@ msgid "Netlist error: %s"
 msgstr "Erreur Netliste: %s"
 
 #: cvpcb/savecmp.cpp:24
-#, fuzzy
 msgid "Component Library Error"
-msgstr "Couche composant"
+msgstr "Erreur en Librairie de Composanr"
 
 #: cvpcb/savecmp.cpp:87
 #, c-format
@@ -9455,7 +9448,7 @@ msgstr "Ne peut pas ouvrir le fichier librairie <%s>."
 #: cvpcb/savecmp.cpp:96
 #, c-format
 msgid " <%s> does not appear to be a valid Kicad component library."
-msgstr ""
+msgstr " <%s>ne semble pas être une librairie de composants de Kicad valide."
 
 #: cvpcb/savecmp.cpp:105
 #, c-format
@@ -11419,6 +11412,8 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Default netlist format"
+#~ msgstr "Format netlistes par défaut"
 #~ msgid "Loading schematic component libraries"
 #~ msgstr "Chargement des librairies de composants schématiques"
 

@@ -131,6 +131,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
+    bool redraw = false;
     wxClientDC dc( DrawPanel );
 
     DrawPanel->CursorOff( &dc );
@@ -358,7 +359,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         Clear_Pcb( true );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
-        Load_Module_From_Library( full_libraryfilename, &dc );
+        Load_Module_From_Library( full_libraryfilename, NULL );
+        redraw = true;
     }
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
@@ -440,7 +442,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
         DrawPanel->MouseToCursorSchema();
-        Rotate_Module( &dc, (MODULE*) GetScreen()->GetCurItem(), 900, true );
+        Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), 900, true );
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
@@ -468,7 +470,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DELETE_PAD:
         SaveCopyInUndoList( GetBoard()->m_Modules );
-        DeletePad( (D_PAD*) GetScreen()->GetCurItem(), &dc );
+        DeletePad( (D_PAD*) GetScreen()->GetCurItem() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
         break;
@@ -658,6 +660,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     SetToolbars();
     DrawPanel->CursorOn( &dc );
+    if ( redraw )
+        DrawPanel->Refresh();
 }
 
 
