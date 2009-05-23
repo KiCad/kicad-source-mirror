@@ -80,7 +80,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
             gen_rastnest = true;
             redraw = TRUE;
         }
-        
+
         if( m_DelTracks->GetValue() )
         {
                 track_mask = 0;
@@ -148,9 +148,6 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     /* init pointeurs  et variables */
     GetScreen()->m_FileName.Empty();
-
-    memset( buf_work, 0, BUFMEMSIZE );
-    adr_lowmem = adr_max = buf_work;
 
     SetCurItem( NULL );
 

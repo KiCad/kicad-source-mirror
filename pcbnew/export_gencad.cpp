@@ -17,7 +17,7 @@
 #include "id.h"
 
 bool        CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame );
-static int* CreateTracksInfoData( FILE* file, BOARD* pcb );
+static void CreateTracksInfoData( FILE* file, BOARD* pcb );
 static void CreateBoardSection( FILE* file, BOARD* pcb );
 static void CreateComponentsSection( FILE* file, BOARD* pcb );
 static void CreateDevicesSection( FILE* file, BOARD* pcb );
@@ -71,7 +71,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     wildcard = _( "GenCAD board files (.gcd)|*.gcd" );
     fn.SetExt( ext );
 
-    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), wxEmptyString,
+    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), wxGetCwd(),
                       fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -691,7 +691,7 @@ void CreateBoardSection( FILE* file, BOARD* pcb )
 
 
 /****************************************************/
-int* CreateTracksInfoData( FILE* file, BOARD* pcb )
+void CreateTracksInfoData( FILE* file, BOARD* pcb )
 /****************************************************/
 
 /* Creation de la section "$TRACKS"
@@ -701,72 +701,60 @@ int* CreateTracksInfoData( FILE* file, BOARD* pcb )
  *  TRACK <name> <width>
  *  $ENDTRACK
  *
- *  on attribut ici comme nom l'epaisseur des traits precede de "TRACK": ex
+ *  on attribue ici comme nom l'epaisseur des traits precede de "TRACK": ex
  *  pour une largeur de 120 : nom = "TRACK120".
  */
 {
     TRACK* track;
-    int*   trackinfo, * ptinfo;
+    int last_width = -1;
 
     /* recherche des epaisseurs utilisees pour les traces: */
 
-    trackinfo  = (int*) adr_lowmem;
-    *trackinfo = -1;
+    std::vector <int> trackinfo;
 
+    unsigned ii;
     for( track = pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( *trackinfo != track->m_Width ) // recherche d'une epaisseur deja utilisee
+        if( last_width != track->m_Width ) // recherche d'une epaisseur deja utilisee
         {
-            ptinfo = (int*) adr_lowmem;
-            while( *ptinfo >= 0 )
+            for ( ii = 0;  ii < trackinfo.size(); ii++ )
             {
-                if( *ptinfo != track->m_Width )
-                    ptinfo++;
-                else
-                    break;
+                if( trackinfo[ii] == track->m_Width )
+                   break;
             }
 
-            trackinfo = ptinfo;
-            if( *ptinfo < 0 )
-            {
-                *ptinfo = track->m_Width;
-                ptinfo++; *ptinfo = -1;
-            }
-        }
+            if ( ii == trackinfo.size() )   // not found
+                trackinfo.push_back(track->m_Width);
+
+            last_width = track->m_Width;
+         }
     }
 
     for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( *trackinfo != track->m_Width ) // recherche d'une epaisseur deja utilisee
+        if( last_width != track->m_Width ) // recherche d'une epaisseur deja utilisee
         {
-            ptinfo = (int*) adr_lowmem;
-            while( *ptinfo >= 0 )
+           for ( ii = 0;  ii < trackinfo.size(); ii++ )
             {
-                if( *ptinfo != track->m_Width )
-                    ptinfo++;
-                else
-                    break;
+                if( trackinfo[ii] == track->m_Width )
+                   break;
             }
 
-            trackinfo = ptinfo;
-            if( *ptinfo < 0 )
-            {
-                *ptinfo = track->m_Width;
-                ptinfo++; *ptinfo = -1;
-            }
+            if ( ii == trackinfo.size() )   // not found
+                trackinfo.push_back(track->m_Width);
+
+            last_width = track->m_Width;
         }
     }
 
     // Write data
     fputs( "$TRACKS\n", file );
-    for( trackinfo = (int*) adr_lowmem; *trackinfo >= 0; trackinfo++ )
+    for( ii = 0;  ii < trackinfo.size(); ii++ )
     {
-        fprintf( file, "TRACK TRACK%d %d\n", *trackinfo, *trackinfo );
+        fprintf( file, "TRACK TRACK%d %d\n", trackinfo[ii], trackinfo[ii] );
     }
 
     fputs( "$ENDTRACKS\n\n", file );
-
-    return (int*) adr_lowmem;
 }
 
 

@@ -42,7 +42,6 @@ extern PARAM_CFG_BASE* ParamCfgList[];
 
 char* buf_work = NULL;      /* pointeur sur le buffer de travail */
 char* adr_lowmem = NULL;    /* adresse de base memoire de calcul disponible*/
-char* adr_himem = NULL;     /* adresse haute limite de la memoire disponible*/
 char* adr_max = NULL;       /* adresse haute maxi utilisee pour la memoire */
 
 int Angle_Rot_Module;
@@ -143,7 +142,6 @@ Changing extension to .brd." ),
     /* allocation de la memoire pour le fichier et autres buffers: */
     /* On reserve BUFMEMSIZE octets de ram pour calcul */
     buf_work  = adr_lowmem = (char*) MyZMalloc( BUFMEMSIZE );   /* adresse de la zone de calcul */
-    adr_himem = adr_lowmem + BUFMEMSIZE;                        /* adr limite haute */
     adr_max   = adr_lowmem;
 
     if( adr_lowmem == NULL )

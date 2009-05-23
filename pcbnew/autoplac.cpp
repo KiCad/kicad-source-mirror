@@ -963,7 +963,6 @@ void Build_PlacedPads_List( BOARD* aPcb )
 
     aPcb->m_Status_Pcb |= LISTE_PAD_OK;
     aPcb->m_Status_Pcb &= ~(LISTE_CHEVELU_OK | CHEVELU_LOCAL_OK);
-    adr_lowmem = buf_work;
 }
 
 
@@ -1124,7 +1123,6 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         if( !( (*pt_Dmod)->m_ModuleStatus & MODULE_to_PLACE ) )
             continue;
         pcbframe->GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
-        adr_lowmem = buf_work;
         (*pt_Dmod)->DisplayInfo( pcbframe );
         pcbframe->build_ratsnest_module( DC, *pt_Dmod );
 
