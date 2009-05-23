@@ -52,7 +52,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 wxString msg;
                 msg.Printf(
                     wxT(
-                        "WinEDA_ModEditFrame::ProcessCommand err: m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
+                        "WinEDA_ModEditFrame::OnLeftClick err: m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
                     DrawStruct, DrawStruct->Type(), DrawStruct->m_Flags );
                 DisplayError( this, msg );
                 DrawStruct->m_Flags = 0;
@@ -122,7 +122,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( DrawStruct && (DrawStruct->m_Flags == 0) )
             {
                 SaveCopyInUndoList( GetBoard()->m_Modules );
-                RemoveStruct( DrawStruct, DC );
+                RemoveStruct( DrawStruct );
                 SetCurItem( DrawStruct = NULL );
             }
         }
@@ -130,7 +130,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_MODEDIT_PLACE_ANCHOR:
         SaveCopyInUndoList( GetBoard()->m_Modules );
-        Place_Ancre( GetBoard()->m_Modules, DC );
+        Place_Ancre( GetBoard()->m_Modules );
         GetBoard()->m_Modules->m_Flags  = 0;
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Recadre_Trace( TRUE );
@@ -401,8 +401,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_MODULE:
-            InstallModuleOptionsFrame( (MODULE*) DrawStruct,
-                                      &dc, pos );
+            InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc );
             DrawPanel->MouseToCursorSchema();
             break;
 

@@ -19,23 +19,19 @@
 
 /* Variables locales: */
 bool GoToEditor = FALSE;
-/**************************************/
-/* class WinEDA_ModulePropertiesFrame */
-/**************************************/
 
+/* class WinEDA_ModulePropertiesFrame */
 #include "dialog_edit_module.cpp"
 
 /*******************************************************************/
-void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module,
-                                                     wxDC* DC,
-                                                     const wxPoint& pos )
+void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC * DC )
 /*******************************************************************/
 
 /* Fonction relai d'installation de la frame d'édition des proprietes
  *  du module*/
 {
     WinEDA_ModulePropertiesFrame* frame =
-        new WinEDA_ModulePropertiesFrame( this, Module, DC, pos );
+        new WinEDA_ModulePropertiesFrame( this, Module, DC );
 
     frame->ShowModal(); frame->Destroy();
 
@@ -61,7 +57,7 @@ void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module,
 
 
 /*******************************************************************/
-void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
+void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 /*******************************************************************/
 
 /*
@@ -69,32 +65,27 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
  *  Le module doit etre d'abort selectionne
  */
 {
-    int             deltaX, deltaY;
+    wxPoint         delta;
     EDA_BaseStruct* PtStruct;
     D_PAD*          pt_pad;
 
     if( pt_mod == NULL )
         return;
 
-    pt_mod->DrawAncre( DrawPanel, DC, wxPoint( 0, 0 ),
-                       DIM_ANCRE_MODULE, GR_XOR );
-
-    deltaX = pt_mod->m_Pos.x - GetScreen()->m_Curseur.x;
-    deltaY = pt_mod->m_Pos.y - GetScreen()->m_Curseur.y;
+    delta = pt_mod->m_Pos - GetScreen()->m_Curseur;
 
     pt_mod->m_Pos = GetScreen()->m_Curseur;
 
     /* Mise a jour des coord relatives des elements:
      *  les coordonnees relatives sont relatives a l'ancre, pour orient 0.
      *  il faut donc recalculer deltaX et deltaY en orientation 0 */
-    RotatePoint( &deltaX, &deltaY, -pt_mod->m_Orient );
+    RotatePoint( &delta, -pt_mod->m_Orient );
 
     /* Mise a jour des coord relatives des pads */
     pt_pad = (D_PAD*) pt_mod->m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        pt_pad->m_Pos0.x += deltaX;
-        pt_pad->m_Pos0.y += deltaY;
+        pt_pad->m_Pos0 += delta;
     }
 
     /* Mise a jour des coord relatives contours .. */
@@ -106,14 +97,14 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
         case TYPE_EDGE_MODULE:
                 #undef STRUCT
                 #define STRUCT ( (EDGE_MODULE*) PtStruct )
-            STRUCT->m_Start0.x += deltaX; STRUCT->m_Start0.y += deltaY;
-            STRUCT->m_End0.x   += deltaX; STRUCT->m_End0.y += deltaY;
+            STRUCT->m_Start0 += delta;
+            STRUCT->m_End0   += delta;
             break;
 
         case TYPE_TEXTE_MODULE:
                 #undef STRUCT
                 #define STRUCT ( (TEXTE_MODULE*) PtStruct )
-            STRUCT->m_Pos0.x += deltaX; STRUCT->m_Pos0.y += deltaY;
+            STRUCT->m_Pos0 += delta;
             break;
 
         default:
@@ -122,12 +113,12 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod, wxDC* DC )
     }
 
     pt_mod->Set_Rectangle_Encadrement();
-    pt_mod->DrawAncre( DrawPanel, DC, wxPoint( 0, 0 ), DIM_ANCRE_MODULE, GR_OR );
+    DrawPanel->Refresh();
 }
 
 
 /**********************************************************************/
-void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
+void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
 /**********************************************************************/
 {
     if( Item == NULL )
@@ -152,12 +143,13 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item, wxDC* DC )
             DisplayError( this, _( "Text is VALUE!" ) );
             break;
         }
-        DeleteTextModule( text, DC );
+        DeleteTextModule( text );
     }
         break;
 
     case TYPE_EDGE_MODULE:
-        Delete_Edge_Module( (EDGE_MODULE*) Item, DC );
+        Delete_Edge_Module( (EDGE_MODULE*) Item );
+        DrawPanel->Refresh();
         break;
 
     case TYPE_MODULE:

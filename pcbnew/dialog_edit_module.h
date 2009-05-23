@@ -54,7 +54,7 @@ private:
 public:
     // Constructor and destructor
     WinEDA_ModulePropertiesFrame(WinEDA_BasePcbFrame *parent,
-                            MODULE * Module, wxDC * DC, const wxPoint & pos);
+                            MODULE * Module, wxDC * DC);
     ~WinEDA_ModulePropertiesFrame()
         {
         }

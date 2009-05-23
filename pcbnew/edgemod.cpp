@@ -144,7 +144,7 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 
 /***************************************************************************/
-void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
+void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge )
 /***************************************************************************/
 
 /* Change the EDGE_MODULE Edge width,
@@ -179,7 +179,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 
 
 /***************************************************************************/
-void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC )
+void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
 /***************************************************************************/
 
 /* Change the EDGE_MODULE Edge layer,  (The new layer will be asked)
@@ -267,12 +267,11 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
 
 
 /****************************************************************************/
-void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
+void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge )
 /****************************************************************************/
-/*	Edition of the edge items width
- *  delete EDGE_MODULE Edge if Edge != NULL
- * @param Edge = edge to edit, or NULL
- * @param DC = current Device Context
+/** Function Delete_Edge_Module
+ *  delete EDGE_MODULE Edge
+ * @param Edge = edge to delete
  */
 {
     if( Edge == NULL )
@@ -284,7 +283,6 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
     }
 
     MODULE* Module = (MODULE*) Edge->GetParent();
-    Edge->Draw( DrawPanel, DC, GR_XOR );
 
     /* suppression d'un segment */
     Edge ->DeleteStructure();

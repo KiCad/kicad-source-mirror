@@ -37,9 +37,8 @@ END_EVENT_TABLE()
 
 /**************************************************************************************/
 WinEDA_ModulePropertiesFrame::WinEDA_ModulePropertiesFrame( WinEDA_BasePcbFrame* parent,
-                                                            MODULE* Module, wxDC* DC,
-                                                            const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Module properties" ), framepos, wxDefaultSize, DIALOG_STYLE )
+                                                            MODULE* Module, wxDC* DC ) :
+    wxDialog( parent, -1, _( "Module properties" ), wxDefaultPosition, wxDefaultSize, DIALOG_STYLE )
 /**************************************************************************************/
 {
     wxString number;
@@ -813,7 +812,7 @@ void WinEDA_ModulePropertiesFrame::EditOrDelTextModule( wxCommandEvent& event )
             Line.Printf( _( "Delete [%s]" ), Text->m_Text.GetData() );
             if( !IsOK( this, Line ) )
                 goto out;
-            m_Parent->DeleteTextModule( Text, m_DC );
+            m_Parent->DeleteTextModule( Text );
             ReCreateFieldListBox();
             m_TextListBox->SetSelection( 0 );
         }

@@ -88,7 +88,7 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
 
 /**************************************************************************/
-void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC )
+void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
 /**************************************************************************/
 
 /*
@@ -104,7 +104,6 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     if( Text->m_Type == TEXT_is_DIVERS )
     {
-        // Text->Draw( DrawPanel, DC, GR_XOR );
         DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
 
         /* liberation de la memoire : */

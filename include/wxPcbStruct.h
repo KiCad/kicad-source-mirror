@@ -188,8 +188,7 @@ public:
                                              int DrawMode, int color, int type );
 
     // Gestion des modules
-    void                     InstallModuleOptionsFrame( MODULE* Module,
-                                                        wxDC* DC, const wxPoint& pos );
+    void                     InstallModuleOptionsFrame( MODULE* Module, wxDC * DC );
     MODULE*                  Copie_Module( MODULE* module );
     MODULE*                  Exchange_Module( wxWindow* winaff,
                                               MODULE*   old_module,
@@ -228,7 +227,7 @@ public:
 
     // module texts
     void                     RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
-    void                     DeleteTextModule( TEXTE_MODULE* Text, wxDC* DC );
+    void                     DeleteTextModule( TEXTE_MODULE* Text );
     void                     PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
     void                     StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC );
     TEXTE_MODULE*            CreateTextModule( MODULE* Module, wxDC* DC );
@@ -1000,9 +999,9 @@ private:
 public:
 
     // Footprint edition
-    void         Place_Ancre( MODULE* module, wxDC* DC );
-    void         RemoveStruct( EDA_BaseStruct* Item, wxDC* DC );
-    void         Transform( MODULE* module, wxDC* DC, int transform );
+    void         Place_Ancre( MODULE* module );
+    void         RemoveStruct( EDA_BaseStruct* Item );
+    void         Transform( MODULE* module, int transform );
 
     // loading Footprint
     MODULE*      Import_Module( wxDC* DC );
@@ -1010,9 +1009,9 @@ public:
     void         Load_Module_Module_From_BOARD( MODULE* Module );
 
     // functions to edit footprint edges
-    void         Edit_Edge_Width( EDGE_MODULE* Edge, wxDC* DC );
-    void         Edit_Edge_Layer( EDGE_MODULE* Edge, wxDC* DC );
-    void         Delete_Edge_Module( EDGE_MODULE* Edge, wxDC* DC );
+    void         Edit_Edge_Width( EDGE_MODULE* Edge );
+    void         Edit_Edge_Layer( EDGE_MODULE* Edge );
+    void         Delete_Edge_Module( EDGE_MODULE* Edge );
     EDGE_MODULE* Begin_Edge_Module( EDGE_MODULE* Edge, wxDC* DC, int type_edge );
     void         End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC );
     void         Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC );

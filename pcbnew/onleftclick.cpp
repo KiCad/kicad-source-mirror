@@ -214,10 +214,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( DrawStruct )
                 DrawPanel->m_AutoPAN_Request = TRUE;
         }
-        else if( DrawStruct &&
-
-//					(DrawStruct->Type() == TYPE_TRACK) &&
-                (DrawStruct->m_Flags & IS_NEW) )
+        else if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
         {
             TRACK* track = Begin_Route( (TRACK*) DrawStruct, DC );
             if( track )  // c'est a dire si OK
@@ -391,7 +388,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_MODULE:
-            InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc, pos );
+            InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc );
             DrawPanel->MouseToCursorSchema();
             break;
 

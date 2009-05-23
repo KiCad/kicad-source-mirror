@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-21 17:31+0100\n"
-"PO-Revision-Date: 2009-05-21 17:37+0100\n"
+"PO-Revision-Date: 2009-05-21 18:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -290,11 +290,11 @@ msgstr "Nettoyage segments nulls"
 
 #: pcbnew/clean.cpp:506
 msgid "Merging Segments:"
-msgstr "Fusionner Segments:"
+msgstr "Fusion des Segments:"
 
 #: pcbnew/clean.cpp:508
 msgid "Merge"
-msgstr "Fusionner"
+msgstr "Fusion"
 
 #: pcbnew/clean.cpp:508
 msgid "0"
@@ -374,7 +374,7 @@ msgstr "Erreur en Chargement de librairie"
 #: pcbnew/loadcmp.cpp:221
 #, c-format
 msgid "Could not open PCB footprint library file <%s>."
-msgstr "Ne peu ouvrir le fichier librairie de modules PCB <%s>."
+msgstr "Ne peut ouvrir le fichier librairie de modules PCB <%s>."
 
 #: pcbnew/loadcmp.cpp:228
 #, c-format

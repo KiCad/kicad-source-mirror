@@ -697,7 +697,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-        InstallModuleOptionsFrame( (MODULE*) GetCurItem(), &dc, pos );
+        InstallModuleOptionsFrame( (MODULE*) GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -756,7 +756,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        DeleteTextModule( (TEXTE_MODULE*) GetCurItem(), &dc );
+        DeleteTextModule( (TEXTE_MODULE*) GetCurItem() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
         break;
