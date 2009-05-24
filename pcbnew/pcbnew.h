@@ -82,14 +82,6 @@ extern bool     Segments_45_Only;
 extern wxString g_Shapes3DExtBuffer;
 extern wxString g_DocModulesFileName;
 
-/* A buffer used in some computations (will be removed in next cleanup code,
- * do not use) */
-#define BUFMEMSIZE 256000    /* buffer size (in bytes) */
-extern char*    buf_work;    /* pointeur sur le buffer de travail */
-extern char*    adr_lowmem;  /* adresse de base memoire de calcul disponible*/
-extern char*    adr_himem;   /* adresse haute limite de la memoire disponible*/
-extern char*    adr_max;     /* adresse haute maxi utilisee pour la memoire */
-
 /* Variables used in footprint handling */
 extern int      Angle_Rot_Module;
 extern wxSize   ModuleTextSize;  /* Default footprint texts size */

@@ -40,9 +40,10 @@ bool g_TwoSegmentTrackBuild = TRUE;
 bool g_HightLigt_Status;
 extern PARAM_CFG_BASE* ParamCfgList[];
 
-char* buf_work = NULL;      /* pointeur sur le buffer de travail */
-char* adr_lowmem = NULL;    /* adresse de base memoire de calcul disponible*/
-char* adr_max = NULL;       /* adresse haute maxi utilisee pour la memoire */
+/* A buffer used in some computations (will be removed in next cleanup code,
+ * DO NOT use) */
+#define BUFMEMSIZE 256000    /* buffer size (in bytes) */
+char* adr_lowmem = NULL;
 
 int Angle_Rot_Module;
 int ModuleSegmentWidth;
@@ -141,8 +142,7 @@ Changing extension to .brd." ),
 
     /* allocation de la memoire pour le fichier et autres buffers: */
     /* On reserve BUFMEMSIZE octets de ram pour calcul */
-    buf_work  = adr_lowmem = (char*) MyZMalloc( BUFMEMSIZE );   /* adresse de la zone de calcul */
-    adr_max   = adr_lowmem;
+    adr_lowmem = (char*) MyZMalloc( BUFMEMSIZE );   /* adresse de la zone de calcul */
 
     if( adr_lowmem == NULL )
     {

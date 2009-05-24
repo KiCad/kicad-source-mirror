@@ -13,6 +13,8 @@
 
 #include "protos.h"
 
+extern char*    adr_lowmem;  /* adresse de base memoire de calcul disponible */
+
 /* exported variables */
 CHEVELU*    g_pt_chevelu;
 CHEVELU*    local_liste_chevelu;    // Buffer address for local ratsnest
@@ -566,7 +568,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
     m_Pcb->m_NbNoconnect = noconn;
     m_Pcb->m_Status_Pcb |= LISTE_CHEVELU_OK;
-    adr_lowmem = buf_work;
 
     // erase the ratsnest displayed on screen if needed
     CHEVELU* Chevelu = (CHEVELU*) m_Pcb->m_Ratsnest;
@@ -1002,8 +1003,6 @@ void WinEDA_BasePcbFrame::build_liste_pads()
         }
     }
 
-    adr_lowmem = buf_work;
-
     if( m_Pcb->m_Ratsnest )
     {
         MyFree( m_Pcb->m_Ratsnest );
@@ -1246,9 +1245,6 @@ calcul_chevelu_ext:
         nb_local_chevelu++;
         local_chevelu++;
     }
-
-    /* return the new free memory buffer address, in the general buffer */
-    adr_max = MAX( adr_max, (char*) (local_chevelu + 1) );
 
     return (char*) (local_chevelu + 1);   /* the struct pointed by local_chevelu is used
     in temporary computations, so we skip it
