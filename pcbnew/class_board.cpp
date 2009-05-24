@@ -33,7 +33,8 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_Ratsnest         = NULL;          // pointeur liste rats
     m_LocalRatsnest    = NULL;          // pointeur liste rats local
     m_CurrentZoneContour = NULL;        // This ZONE_CONTAINER handle the zone contour cuurently in progress
-                                        // de determination des contours de zone
+    m_NetInfo = new NETINFO_LIST( this) ;    // handle nets info list (name, design constraints ..
+
 
     for( int layer=0; layer<NB_COPPER_LAYERS;  ++layer )
     {
@@ -65,6 +66,8 @@ BOARD::~BOARD()
 
     delete m_CurrentZoneContour;
     m_CurrentZoneContour = NULL;
+
+    delete m_NetInfo;
 }
 
 
@@ -239,15 +242,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         aBoardItem->SetParent( this );
         break;
 
-    case TYPE_EQUIPOT:
-        if( aControl & ADD_APPEND )
-            m_Equipots.PushBack( (EQUIPOT*) aBoardItem );
-        else
-            m_Equipots.PushFront( (EQUIPOT*) aBoardItem );
-        aBoardItem->SetParent( this );
-        break;
-
-    // other types may use linked list
+        // other types may use linked list
     default:
         wxFAIL_MSG( wxT("BOARD::Add() needs work: BOARD_ITEM type not handled") );
     }
@@ -304,10 +299,6 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     case TYPE_EDGE_MODULE:
     case TYPE_MIRE:
         m_Drawings.Remove( aBoardItem );
-        break;
-
-    case TYPE_EQUIPOT:
-        m_Equipots.Remove( (EQUIPOT*) aBoardItem );
         break;
 
     // other types may use linked list
@@ -534,7 +525,7 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     txt.Printf( wxT( "%d" ), m_NbLinks );
     Affiche_1_Parametre( frame, POS_AFF_NBLINKS, _( "Links" ), txt, DARKGREEN );
 
-    txt.Printf( wxT( "%d" ), m_Equipots.GetCount() );
+    txt.Printf( wxT( "%d" ), m_NetInfo->GetCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBNETS, _( "Nets" ), txt, RED );
 
     txt.Printf( wxT( "%d" ), m_NbLinks - GetNumNoconnect() );
@@ -683,11 +674,6 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 
-        case TYPE_EQUIPOT:
-            result = IterateForward( m_Equipots, inspector, testData, p );
-            ++p;
-            break;
-
         case TYPE_ZONE:
             result = IterateForward( m_Zone, inspector, testData, p );
             ++p;
@@ -794,18 +780,12 @@ BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
  * @param anetcode The netcode to search for.
  * @return EQUIPOT* - the net or NULL if not found.
  */
-EQUIPOT* BOARD::FindNet( int anetcode ) const
+NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
 {
     // the first valid netcode is 1.
     // zero is reserved for "no connection" and is not used.
     if( anetcode > 0 )
-    {
-        for( EQUIPOT* net = m_Equipots;  net;  net=net->Next() )
-        {
-            if( net->GetNet() == anetcode )
-                return net;
-        }
-    }
+        return m_NetInfo->GetItem( anetcode );
     return NULL;
 }
 
@@ -816,16 +796,16 @@ EQUIPOT* BOARD::FindNet( int anetcode ) const
  * @param aNetname A Netname to search for.
  * @return EQUIPOT* - the net or NULL if not found.
  */
-EQUIPOT* BOARD::FindNet( const wxString & aNetname ) const
+NETINFO_ITEM* BOARD::FindNet( const wxString & aNetname ) const
 {
     // the first valid netcode is 1.
     // zero is reserved for "no connection" and is not used.
     if( ! aNetname.IsEmpty() )
     {
-        for( EQUIPOT* net = m_Equipots;  net;  net=net->Next() )
+        for(unsigned ii = 1;  ii <  m_NetInfo->GetCount();  ii++ )
         {
-            if( net->GetNetname() == aNetname )
-                return net;
+            if( m_NetInfo->GetItem( ii )->GetNetname() == aNetname )
+                return m_NetInfo->GetItem( ii );
         }
     }
     return NULL;
@@ -865,81 +845,40 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 }
 
 
-/* Two sort functions used in BOARD::ReturnSortedNetnamesList */
-// Sort nets by name
-int s_SortByNames(const void * ptr1, const void * ptr2)
-{
-    EQUIPOT* item1 = * (EQUIPOT**) ptr1;
-    EQUIPOT* item2 = * (EQUIPOT**) ptr2;
-    return  item1->GetNetname().CmpNoCase(item2->GetNetname());
-}
-
 // Sort nets by decreasing pad count
-int s_SortByNodes(const void * ptr1, const void * ptr2)
+static bool s_SortByNodes(const NETINFO_ITEM* a, const NETINFO_ITEM* b)
 {
-    EQUIPOT* item1 = * (EQUIPOT**) ptr1;
-    EQUIPOT* item2 = * (EQUIPOT**) ptr2;
-    if ( (item1->m_NbNodes - item2->m_NbNodes) != 0 )
-        return  - (item1->m_NbNodes - item2->m_NbNodes);
-    return  item1->GetNetname().CmpNoCase(item2->GetNetname());
+    return  a->GetNodesCount() < b->GetNodesCount();
 }
 
 
 /**
  * Function ReturnSortedNetnamesList
- * searches for a net with the given netcode.
  * @param aNames An array string to fill with net names.
- * @param aSort_Type : NO_SORT = no sort, ALPHA_SORT = sort by alphabetic order, PAD_CNT_SORT = sort by active pads count.
+ * @param aSortbyPadsCount : true = sort by active pads count, false = no sort (i.e. leave the sort by net names)
  * @return int - net names count.
  */
-int BOARD::ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Type)
+int BOARD::ReturnSortedNetnamesList( wxArrayString & aNames, bool aSortbyPadsCount)
 {
-    int NetCount = 0;
-    int ii;
-    EQUIPOT* net;
-
-    /* count items to list and sort */
-    for( net = m_Equipots; net;  net=net->Next() )
-    {
-        if ( net->GetNetname().IsEmpty() ) continue;
-        NetCount++;
-    }
-
-    if ( NetCount == 0 ) return 0;
+    if ( m_NetInfo->GetCount() == 0 ) return 0;
 
     /* Build the list */
-    EQUIPOT* * net_ptr_list = (EQUIPOT* *) MyMalloc( NetCount * sizeof(* net_ptr_list) );
-    for( ii = 0, net = m_Equipots; net; net=net->Next() )
+    std::vector <NETINFO_ITEM*>  netBuffer;
+    netBuffer.reserve(m_NetInfo->GetCount());
+    for( unsigned ii = 1; ii < m_NetInfo->GetCount(); ii++ )
     {
-        if ( net->GetNetname().IsEmpty() ) continue;
-        net_ptr_list[ii] = net;
-        ii++;
+        if ( m_NetInfo->GetItem(ii)->GetNet() > 0 )
+           netBuffer.push_back(m_NetInfo->GetItem(ii));
     }
 
     /* sort the list */
-    switch ( aSort_Type )
-    {
-        case NO_SORT : break;
+    if ( aSortbyPadsCount )
+        sort (netBuffer.begin(), netBuffer.end(), s_SortByNodes);
 
-        case ALPHA_SORT :
-            qsort (net_ptr_list, NetCount, sizeof(EQUIPOT*), s_SortByNames);
-            break;
+    for( unsigned ii = 0; ii <  netBuffer.size(); ii++ )
+       aNames.Add(netBuffer[ii]->GetNetname());
 
-        case PAD_CNT_SORT:
-            qsort (net_ptr_list, NetCount, sizeof(EQUIPOT*), s_SortByNodes);
-            break;
-    }
-
-    /* fill the given list */
-    for( ii = 0; ii < NetCount; ii++ )
-    {
-        net = net_ptr_list[ii];
-        aNames.Add(net->GetNetname());
-    }
-
-    MyFree(net_ptr_list);
-
-    return NetCount;
+    return netBuffer.size();
 }
 
 /************************************/
@@ -950,8 +889,8 @@ bool BOARD::Save( FILE* aFile ) const
     BOARD_ITEM* item;
 
     // save the nets
-    for( item = m_Equipots;  item;  item=item->Next() )
-        if( !item->Save( aFile ) )
+    for( unsigned ii = 0; ii < m_NetInfo->GetCount(); ii++ )
+        if( !m_NetInfo->GetItem(ii)->Save( aFile ) )
             goto out;
 
     // save the modules
@@ -1084,6 +1023,45 @@ ZONE_CONTAINER*  BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos, int aSt
     return NULL;
 }
 
+/**
+ * Function SetAreasNetCodesFromNetNames
+ * Set the .m_NetCode member of all copper areas, according to the area Net Name
+ * The SetNetCodesFromNetNames is an equivalent to net name, for fast comparisons.
+ * However the Netcode is an arbitrary equivalence, it must be set after each netlist read
+ * or net change
+ * Must be called after pad netcodes are calculated
+ * @return : error count
+ * For non copper areas, netcode is set to 0
+ */
+int BOARD::SetAreasNetCodesFromNetNames( void )
+{
+    int error_count = 0;
+
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        if ( ! GetArea( ii )->IsOnCopperLayer() )
+        {
+            GetArea( ii )->SetNet( 0 );
+            continue;
+        }
+
+        if ( GetArea( ii )->GetNet() != 0 )     // i.e. if this zone is connected to a net
+        {
+            const NETINFO_ITEM* net = FindNet( GetArea( ii )->m_Netname );
+            if( net )
+            {
+                GetArea( ii )->SetNet( net->GetNet() );
+            }
+            else
+            {
+                error_count++;
+                GetArea( ii )->SetNet( -1 );    //keep Net Name ane set m_NetCode to -1 : error flag
+            }
+        }
+    }
+
+    return error_count;
+}
 
 
 #if defined(DEBUG)
@@ -1114,12 +1092,6 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     for( ; p; p = p->Next() )
         p->Show( nestLevel+2, os );
     NestedSpace( nestLevel+1, os ) << "</pdrawings>\n";
-
-    NestedSpace( nestLevel+1, os ) << "<nets>\n";
-    p = m_Equipots;
-    for( ; p; p = p->Next() )
-        p->Show( nestLevel+2, os );
-    NestedSpace( nestLevel+1, os ) << "</nets>\n";
 
     NestedSpace( nestLevel+1, os ) << "<tracks>\n";
     p = m_Track;

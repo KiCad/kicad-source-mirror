@@ -131,7 +131,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     module->DisplayInfo( this );
     Place_Module( module, DC );
     GetBoard()->m_Status_Pcb = 0;
-    build_liste_pads();
+    GetBoard()->Build_Pads_Full_List();
 
     return module;
 }

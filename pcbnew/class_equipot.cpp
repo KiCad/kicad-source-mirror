@@ -1,6 +1,6 @@
-/*****************************************************************/
-/* fonctions membres de la classe EQUIPOT et fonctions associ�s */
-/*****************************************************************/
+/*************************************************************************/
+/* NETINFO_ITEM class, to handle info on nets (netnames, net constraints ...) */
+/*************************************************************************/
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -10,44 +10,31 @@
 
 
 /*********************************************************/
-/* classe EQUIPOT: gestion des listes d'equipotentielles */
+/* class NETINFO_ITEM: hand data relative to a given net */
 /*********************************************************/
 
-/* Constructeur de la classe EQUIPOT */
-EQUIPOT::EQUIPOT( BOARD_ITEM* aParent ) :
-    BOARD_ITEM( aParent, TYPE_EQUIPOT )
+/* Constructor */
+NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
 {
     SetNet( 0 );
     m_NbNodes = m_NbLink = m_NbNoconn = 0;
-    m_Masque_Layer  = 0;
-    m_Masque_Plan   = 0;
     m_ForceWidth    = 0;
-    m_PadzoneStart  = NULL; // pointeur sur debut de liste pads du net
-    m_PadzoneEnd    = NULL; // pointeur sur fin de liste pads du net
     m_RatsnestStart = NULL; // pointeur sur debut de liste ratsnests du net
     m_RatsnestEnd   = NULL; // pointeur sur fin de liste ratsnests du net
 }
 
 
-/* destructeut */
+/* destructot */
 
-EQUIPOT::~EQUIPOT()
+NETINFO_ITEM::~NETINFO_ITEM()
 {
 }
 
 
-wxPoint& EQUIPOT::GetPosition()
-{
-    static wxPoint dummy;
-
-    return dummy;
-}
-
 
 /*********************************************************/
-int EQUIPOT:: ReadDescr( FILE* File, int* LineNum )
+int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
 /*********************************************************/
-
 /* Routine de lecture de 1 descr Equipotentielle.
  *  retourne 0 si OK
  *          1 si lecture incomplete
@@ -84,12 +71,12 @@ int EQUIPOT:: ReadDescr( FILE* File, int* LineNum )
 
 
 /**************************************/
-bool EQUIPOT::Save( FILE* aFile ) const
+bool NETINFO_ITEM::Save( FILE* aFile ) const
 /**************************************/
+/** Note: the old name of class NETINFO_ITEM was EQUIPOT
+ * so in Save (and read) functions, for compatibility, we use EQUIPOT as keyword
+ */
 {
-    if( GetState( DELETED ) )
-        return true;
-
     bool success = false;
 
     fprintf( aFile, "$EQUIPOT\n" );
@@ -112,17 +99,17 @@ out:
  * Function SetNetname
  * @param const wxString : the new netname
  */
-void EQUIPOT::SetNetname( const wxString & aNetname )
+void NETINFO_ITEM::SetNetname( const wxString & aNetname )
 {
     m_Netname = aNetname;
     m_ShortNetname = m_Netname.AfterLast( '/' );
 }
 
 
-/** function Draw
+/** function Draw (TODO)
  * we actually could show a NET, simply show all the tracks and pads or net name on pad and vias
  */
-void EQUIPOT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
+void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
 }
 
@@ -134,7 +121,7 @@ void EQUIPOT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPo
  * Is virtual from EDA_BaseStruct.
  * @param frame A WinEDA_DrawFrame in which to print status information.
  */
- void EQUIPOT::DisplayInfo( WinEDA_DrawFrame* frame )
+ void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     int             count;
     EDA_BaseStruct* Struct;
@@ -182,23 +169,3 @@ void EQUIPOT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPo
     valeur_param( (int) lengthnet, txt );
     Affiche_1_Parametre( frame, 60, _( "Net Length" ), txt, RED );
 }
-
-#if defined(DEBUG)
-
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
-void EQUIPOT::Show( int nestLevel, std::ostream& os )
-{
-    // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " name=\"" << m_Netname.mb_str() << '"' <<
-    " netcode=\"" << GetNet() << "\"/>\n";
-}
-
-
-#endif

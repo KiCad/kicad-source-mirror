@@ -261,7 +261,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_TRACK_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Tracks" ) );
         DisplayTrackSettings();
-        if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         {
             Compile_Ratsnest( &dc, true );
         }
@@ -311,7 +311,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
         SetToolID( id, wxCURSOR_HAND, _( "Local Ratsnest" ) );
-        if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
             Compile_Ratsnest( &dc, true );
         break;
 
@@ -466,6 +466,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         test_1_net_connexion( NULL, netcode );
         GetScreen()->SetModify();
+        GetBoard()->DisplayInfo(this );
         }
         break;
 
@@ -494,6 +495,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
         SetCurItem( NULL );
         test_1_net_connexion( NULL, netcode );
+        GetBoard()->DisplayInfo(this );
         }
         break;
 
@@ -571,6 +573,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         DrawPanel->MouseToCursorSchema();
         Fill_All_Zones();
+        GetBoard()->DisplayInfo(this );
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
@@ -580,8 +583,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             Delete_Zone_Fill( &dc, NULL, zone_container->m_TimeStamp );
             test_1_net_connexion( NULL, zone_container->GetNet() );
             GetScreen()->SetModify();
+            GetBoard()->DisplayInfo(this );
             DrawPanel->Refresh();
         }
+        SetCurItem( NULL );
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
@@ -595,6 +600,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         test_connexions( NULL );
         Tst_Ratsnest( NULL, 0 );    // Recalculate the active ratsnest, i.e. the unconnected links */
         GetScreen()->SetModify();
+        GetBoard()->DisplayInfo(this );
         DrawPanel->Refresh();
         break;
 
@@ -602,6 +608,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         Fill_Zone( NULL, (ZONE_CONTAINER*) GetCurItem() );
         test_1_net_connexion( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
+        GetBoard()->DisplayInfo(this );
         DrawPanel->Refresh();
         break;
 
@@ -1133,6 +1140,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         int netcode = ((ZONE_CONTAINER*) Item)->GetNet();
         Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
         test_1_net_connexion( NULL, netcode );
+        GetBoard()->DisplayInfo(this );
         }
         break;
 
@@ -1151,7 +1159,6 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case TYPE_NOT_INIT:
-    case TYPE_EQUIPOT:
     case TYPE_PCB:
     default:
     {

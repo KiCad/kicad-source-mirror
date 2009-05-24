@@ -10,7 +10,6 @@
 #include "confirm.h"
 
 #include "pcbnew.h"
-#include "autorout.h"
 #include "protos.h"
 
 
@@ -45,9 +44,9 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
 /* Affiche ou efface le chevelu selon l'etat du bouton d'appel */
 {
     int      ii;
-    CHEVELU* pt_chevelu;
+    RATSNEST_ITEM* pt_chevelu;
 
-    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
     {
         if( g_Show_Ratsnest )
             Compile_Ratsnest( DC, TRUE );
@@ -64,7 +63,7 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
     {
         for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
         {
-            pt_chevelu->status |= CH_VISIBLE;
+            pt_chevelu->m_Status |= CH_VISIBLE;
         }
 
         DrawGeneralRatsnest( DC, 0 );
@@ -73,7 +72,7 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
     {
         for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
         {
-            pt_chevelu->status &= ~CH_VISIBLE;
+            pt_chevelu->m_Status &= ~CH_VISIBLE;
         }
     }
 }
@@ -346,14 +345,14 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
  */
 {
     int      ii;
-    CHEVELU* pt_chevelu;
+    RATSNEST_ITEM* pt_chevelu;
     D_PAD*   pt_pad = NULL;
     MODULE*  Module = NULL;
 
     if( g_Show_Ratsnest )
         return; // Deja Affich�
 
-    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
     {
         Compile_Ratsnest( DC, TRUE );
     }
@@ -369,22 +368,22 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         if( pt_pad ) /* Affichage du chevelu du net correspondant */
         {
             pt_pad->DisplayInfo( this );
-            pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+            pt_chevelu = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
             for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
             {
                 if( pt_chevelu->GetNet() == pt_pad->GetNet() )
                 {
-                    if( (pt_chevelu->status & CH_VISIBLE) != 0 )
+                    if( (pt_chevelu->m_Status & CH_VISIBLE) != 0 )
                         continue;
-                    pt_chevelu->status |= CH_VISIBLE;
-                    if( (pt_chevelu->status & CH_ACTIF) == 0 )
+                    pt_chevelu->m_Status |= CH_VISIBLE;
+                    if( (pt_chevelu->m_Status & CH_ACTIF) == 0 )
                         continue;
 
                     GRSetDrawMode( DC, GR_XOR );
-                    GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
-                            pt_chevelu->pad_start->m_Pos.y,
-                            pt_chevelu->pad_end->m_Pos.x,
-                            pt_chevelu->pad_end->m_Pos.y,
+                    GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->m_PadStart->m_Pos.x,
+                            pt_chevelu->m_PadStart->m_Pos.y,
+                            pt_chevelu->m_PadEnd->m_Pos.x,
+                            pt_chevelu->m_PadEnd->m_Pos.y,
                             0,
                             g_DesignSettings.m_RatsnestColor );
                 }
@@ -408,24 +407,24 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                 pt_pad = Module->m_Pads;
                 for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
                 {
-                    pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+                    pt_chevelu = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
                     for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
                     {
-                        if( (pt_chevelu->pad_start == pt_pad)
-                           || (pt_chevelu->pad_end == pt_pad) )
+                        if( (pt_chevelu->m_PadStart == pt_pad)
+                           || (pt_chevelu->m_PadEnd == pt_pad) )
                         {
-                            if( pt_chevelu->status & CH_VISIBLE )
+                            if( pt_chevelu->m_Status & CH_VISIBLE )
                                 continue;
 
-                            pt_chevelu->status |= CH_VISIBLE;
-                            if( (pt_chevelu->status & CH_ACTIF) == 0 )
+                            pt_chevelu->m_Status |= CH_VISIBLE;
+                            if( (pt_chevelu->m_Status & CH_ACTIF) == 0 )
                                 continue;
 
                             GRSetDrawMode( DC, GR_XOR );
-                            GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->pad_start->m_Pos.x,
-                                    pt_chevelu->pad_start->m_Pos.y,
-                                    pt_chevelu->pad_end->m_Pos.x,
-                                    pt_chevelu->pad_end->m_Pos.y,
+                            GRLine( &DrawPanel->m_ClipBox, DC, pt_chevelu->m_PadStart->m_Pos.x,
+                                    pt_chevelu->m_PadStart->m_Pos.y,
+                                    pt_chevelu->m_PadEnd->m_Pos.x,
+                                    pt_chevelu->m_PadEnd->m_Pos.y,
                                     0,
                                     g_DesignSettings.m_RatsnestColor );
                         }
@@ -442,10 +441,10 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     if( (pt_pad == NULL) && (Module == NULL) )
     {
         DrawGeneralRatsnest( DC );
-        pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+        pt_chevelu = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
 
         for( ii = GetBoard()->GetNumRatsnests(); (ii > 0) && pt_chevelu; pt_chevelu++, ii-- )
-            pt_chevelu->status &= ~CH_VISIBLE;
+            pt_chevelu->m_Status &= ~CH_VISIBLE;
     }
 }
 
@@ -459,21 +458,21 @@ void WinEDA_PcbFrame::Affiche_PadsNoConnect( wxDC* DC )
  */
 {
     int      ii;
-    CHEVELU* pt_chevelu;
+    RATSNEST_ITEM* pt_chevelu;
     D_PAD*   pt_pad;
 
-    pt_chevelu = (CHEVELU*) GetBoard()->m_Ratsnest;
+    pt_chevelu = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
     for( ii = GetBoard()->GetNumRatsnests(); ii > 0; pt_chevelu++, ii-- )
     {
-        if( (pt_chevelu->status & CH_ACTIF) == 0 )
+        if( (pt_chevelu->m_Status & CH_ACTIF) == 0 )
             continue;
 
-        pt_pad = pt_chevelu->pad_start;
+        pt_pad = pt_chevelu->m_PadStart;
 
         if( pt_pad )
             pt_pad->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
 
-        pt_pad = pt_chevelu->pad_end;
+        pt_pad = pt_chevelu->m_PadEnd;
         if( pt_pad )
             pt_pad->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
     }

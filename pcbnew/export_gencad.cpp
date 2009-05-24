@@ -433,25 +433,26 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
  */
 {
     wxString msg;
-    EQUIPOT* equipot;
+    NETINFO_ITEM* net;
     D_PAD*   pad;
     MODULE*  module;
     int      NbNoConn = 1;
 
     fputs( "$SIGNALS\n", file );
 
-    for( equipot = pcb->m_Equipots; equipot != NULL; equipot = equipot->Next() )
+    for( unsigned ii = 0; ii < pcb->m_NetInfo->GetCount() ; ii++ )
     {
-        if( equipot->GetNetname() == wxEmptyString )  // dummy equipot (non connexion)
+        net =  pcb->m_NetInfo->GetItem(ii);
+        if( net->GetNetname() == wxEmptyString )  // dummy equipot (non connexion)
         {
             wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;
-            equipot->SetNetname(msg); ;
+            net->SetNetname(msg); ;
         }
 
-        if( equipot->GetNet() <= 0 )  // dummy equipot (non connexion)
+        if( net->GetNet() <= 0 )  // dummy equipot (non connexion)
             continue;
 
-        msg = wxT( "\nSIGNAL " ) + equipot->GetNetname();
+        msg = wxT( "\nSIGNAL " ) + net->GetNetname();
 
         fputs( CONV_TO_UTF8( msg ), file );
         fputs( "\n", file );
@@ -461,7 +462,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
             for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
             {
                 wxString padname;
-                if( pad->GetNet() != equipot->GetNet() )
+                if( pad->GetNet() != net->GetNet() )
                     continue;
 
                 pad->ReturnStringPadName( padname );
@@ -587,10 +588,10 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
         if( old_netcode != track->GetNet() )
         {
             old_netcode = track->GetNet();
-            EQUIPOT* equipot = pcb->FindNet( track->GetNet() );
+            NETINFO_ITEM* net = pcb->FindNet( track->GetNet() );
             wxString netname;
-            if( equipot && (equipot->GetNetname() != wxEmptyString) )
-                netname = equipot->GetNetname();
+            if( net && (net->GetNetname() != wxEmptyString) )
+                netname = net->GetNetname();
             else
                 netname = wxT( "_noname_" );
             fprintf( file, "\nROUTE %s\n", CONV_TO_UTF8( netname ) );

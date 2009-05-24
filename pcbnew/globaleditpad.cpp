@@ -8,7 +8,6 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
-#include "autorout.h"
 #include "trigo.h"
 
 #include "drag.h"
@@ -279,7 +278,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
                 if( pt_pad->m_Masque_Layer != g_Pad_Master.m_Masque_Layer )
                     continue;
                 else
-                    m_Pcb->m_Status_Pcb &= ~( LISTE_CHEVELU_OK | CONNEXION_OK);
+                    m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
             }
 
             /* Modif des caracteristiques: */

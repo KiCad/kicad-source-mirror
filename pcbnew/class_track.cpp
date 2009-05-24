@@ -665,7 +665,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     if( GetNet() == 0 )
         return;
-    EQUIPOT* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
+    NETINFO_ITEM* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
     if( net == NULL )
         return;
 
@@ -824,7 +824,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         return;
     if( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
         return;
-    EQUIPOT* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
+    NETINFO_ITEM* net = ( (BOARD*) GetParent() )->FindNet( GetNet() );
     if( net == NULL )
         return;
 
@@ -886,7 +886,7 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         /* Display NetName pour les segments de piste type cuivre */
 
-        EQUIPOT* equipot = board->FindNet( GetNet() );
+        NETINFO_ITEM* equipot = board->FindNet( GetNet() );
 
         if( equipot )
             msg = equipot->GetNetname();

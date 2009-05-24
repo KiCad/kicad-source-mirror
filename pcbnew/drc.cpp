@@ -190,7 +190,7 @@ int DRC::Drc( ZONE_CONTAINER* aArea, int CornerIndex )
 void DRC::RunTests()
 {
     // Ensure ratsnest is up to date:
-    if( (m_pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         m_mainWindow->Compile_Ratsnest( NULL, true );
 
     // someone should have cleared the two lists before calling this.
@@ -296,7 +296,7 @@ void DRC::testPad2Pad()
 
 void DRC::testUnconnected()
 {
-    if( (m_pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
     {
         wxClientDC dc( m_mainWindow->DrawPanel );
         m_mainWindow->Compile_Ratsnest( &dc, TRUE );
@@ -305,14 +305,14 @@ void DRC::testUnconnected()
     if( m_pcb->m_Ratsnest == NULL )
         return;
 
-    CHEVELU* rat = m_pcb->m_Ratsnest;
+    RATSNEST_ITEM* rat = m_pcb->m_Ratsnest;
     for( int i = 0;  i<m_pcb->GetNumRatsnests();  ++i, ++rat )
     {
-        if( (rat->status & CH_ACTIF) == 0 )
+        if( (rat->m_Status & CH_ACTIF) == 0 )
             continue;
 
-        D_PAD*    padStart = rat->pad_start;
-        D_PAD*    padEnd   = rat->pad_end;
+        D_PAD*    padStart = rat->m_PadStart;
+        D_PAD*    padEnd   = rat->m_PadEnd;
 
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS, padStart->GetPosition(),
                                          padStart->MenuText( m_pcb ), padEnd->MenuText( m_pcb ),

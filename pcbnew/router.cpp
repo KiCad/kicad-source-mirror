@@ -191,9 +191,9 @@ void Out_Pads( BOARD* Pcb, FILE* outfile )
             if( nb_pads < 2 )
             {
                 wxString Line;
-                EQUIPOT* equipot = Pcb->FindNet( netcode );
+                NETINFO_ITEM* net = Pcb->FindNet( netcode );
                 Line.Printf( wxT( "Warning: %d pad, net %s" ),
-                            nb_pads, equipot->GetNetname().GetData() );
+                            nb_pads, net->GetNetname().GetData() );
                 DisplayError( NULL, Line, 20 );
             }
             fprintf( outfile, "r %d %d %d %d %d %d 1 1\n",

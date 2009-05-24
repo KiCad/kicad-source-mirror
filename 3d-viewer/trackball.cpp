@@ -50,8 +50,7 @@
  * Gavin Bell
  */
 #include <math.h>
-#include "fctsys.h"         // used only to define GLfloat
-#include "3d_viewer.h"      // used only to define GLfloat
+#include "wx/glcanvas.h"     // used only to define GLfloat
 #include "trackball.h"
 
 /*

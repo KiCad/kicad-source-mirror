@@ -26,7 +26,6 @@ enum KICAD_T {
     TYPE_PCB,
 
     // Items in pcb
-    TYPE_EQUIPOT,
     TYPE_MODULE,
     TYPE_PAD,
     TYPE_DRAWSEGMENT,

@@ -34,7 +34,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
 /* init board, route traces*/
 {
     int      ii, start, stop;
-    CHEVELU* ptmp;
+    RATSNEST_ITEM* ptmp;
     MODULE*  Module = NULL;
     D_PAD*   Pad    = NULL;
     int      autoroute_net_code = -1;
@@ -90,23 +90,23 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         break;
     }
 
-    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK ) == 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
         Compile_Ratsnest( DC, TRUE );
 
     /* Placement du flag CH_ROUTE_REQ sur les chevelus demandes */
-    ptmp = (CHEVELU*) GetBoard()->m_Ratsnest;
+    ptmp = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
     for( ii = GetBoard()->GetNumRatsnests(); ii > 0; ii--, ptmp++ )
     {
-        ptmp->status &= ~CH_ROUTE_REQ;
+        ptmp->m_Status &= ~CH_ROUTE_REQ;
 
         switch( mode )
         {
         case ROUTE_ALL:
-            ptmp->status |= CH_ROUTE_REQ; break;
+            ptmp->m_Status |= CH_ROUTE_REQ; break;
 
         case ROUTE_NET:
             if( autoroute_net_code == ptmp->GetNet() )
-                ptmp->status |= CH_ROUTE_REQ;
+                ptmp->m_Status |= CH_ROUTE_REQ;
             break;
 
         case ROUTE_MODULE:
@@ -114,23 +114,23 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
             D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
             for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
             {
-                if( ptmp->pad_start == pt_pad )
-                    ptmp->status |= CH_ROUTE_REQ;
-                if( ptmp->pad_end == pt_pad )
-                    ptmp->status |= CH_ROUTE_REQ;
+                if( ptmp->m_PadStart == pt_pad )
+                    ptmp->m_Status |= CH_ROUTE_REQ;
+                if( ptmp->m_PadEnd == pt_pad )
+                    ptmp->m_Status |= CH_ROUTE_REQ;
             }
 
             break;
         }
 
         case ROUTE_PAD:
-            if( (ptmp->pad_start == Pad) || (ptmp->pad_end == Pad) )
-                ptmp->status |= CH_ROUTE_REQ;
+            if( (ptmp->m_PadStart == Pad) || (ptmp->m_PadEnd == Pad) )
+                ptmp->m_Status |= CH_ROUTE_REQ;
             break;
         }
     }
 
-    ptmp = (CHEVELU*) GetBoard()->m_Ratsnest;
+    ptmp = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
 
     start = time( NULL );
 
@@ -191,18 +191,18 @@ void WinEDA_PcbFrame::Reset_Noroutable( wxDC* DC )
  */
 {
     int      ii;
-    CHEVELU* pt_rats;
+    RATSNEST_ITEM* pt_rats;
 
-    if( (GetBoard()->m_Status_Pcb & LISTE_CHEVELU_OK )== 0 )
+    if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK )== 0 )
         Compile_Ratsnest( DC, TRUE );
 
-    pt_rats = (CHEVELU*) GetBoard()->m_Ratsnest;
+    pt_rats = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
     if( pt_rats == NULL )
         return;
 
     for( ii = GetBoard()->GetNumRatsnests(); ii > 0; ii--, pt_rats++ )
     {
-        pt_rats->status &= ~CH_UNROUTABLE;
+        pt_rats->m_Status &= ~CH_UNROUTABLE;
     }
 }
 

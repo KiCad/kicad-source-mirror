@@ -178,12 +178,6 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         }
     }
 
-    // Draw equipots info
-    for( EQUIPOT* net = m_Equipots;  net;  net = net->Next() )
-    {
-        if ( net->GetNet() != 0 )   // no net if 0
-            net->Draw( aPanel, DC, aDrawMode );
-    }
 
     // @todo: this high-light functionality could be built into me.
     if( g_HightLigt_Status )

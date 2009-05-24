@@ -578,7 +578,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     else
     {
         m_Pcb->m_Status_Pcb = 0;        /* we need (later) a full ratnest computation */
-        build_liste_pads();
+        m_Pcb->Build_Pads_Full_List();
     }
 
 }

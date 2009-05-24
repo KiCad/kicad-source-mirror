@@ -71,7 +71,7 @@ void ZONE_CONTAINER::SetNet( int anet_code )
     if( m_Parent )
     {
         BOARD* board = (BOARD*) m_Parent;
-        EQUIPOT* net = board->FindNet( anet_code );
+        NETINFO_ITEM* net = board->FindNet( anet_code );
         if( net )
             m_Netname = net->GetNetname();
         else
@@ -883,7 +883,7 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         if( GetNet() >= 0 )
         {
-            EQUIPOT* equipot = ( (WinEDA_PcbFrame*) frame )->GetBoard()->FindNet( GetNet() );
+            NETINFO_ITEM* equipot = ( (WinEDA_PcbFrame*) frame )->GetBoard()->FindNet( GetNet() );
 
             if( equipot )
                 msg = equipot->GetNetname();
@@ -1055,7 +1055,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
  */
 bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
 {
-    EQUIPOT* net;
+    NETINFO_ITEM* net;
     if ( m_Parent && (net = ((BOARD*)m_Parent)->FindNet( GetNet()) ) )
     {
         m_Netname = net->GetNetname();

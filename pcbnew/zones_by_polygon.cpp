@@ -793,7 +793,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     }
 
     g_Zone_Default_Setting.ExportSetting( *zone_container);
-    EQUIPOT* net = GetBoard()->FindNet( g_Zone_Default_Setting.m_NetcodeSelection );
+    NETINFO_ITEM* net = GetBoard()->FindNet( g_Zone_Default_Setting.m_NetcodeSelection );
     if( net )   // net === NULL should not occur
         zone_container->m_Netname = net->GetNetname();
 
@@ -880,7 +880,7 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     if( g_HightLigth_NetCode > 0 )
     {
-        EQUIPOT* net = GetBoard()->FindNet( g_HightLigth_NetCode );
+        NETINFO_ITEM* net = GetBoard()->FindNet( g_HightLigth_NetCode );
         if( net == NULL )
         {
             if( g_HightLigth_NetCode > 0 )
@@ -943,42 +943,3 @@ int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
 }
 
 
-/**
- * Function SetAreasNetCodesFromNetNames
- * Set the .m_NetCode member of all copper areas, according to the area Net Name
- * The SetNetCodesFromNetNames is an equivalent to net name, for fast comparisons.
- * However the Netcode is an arbitrary equivalence, it must be set after each netlist read
- * or net change
- * Must be called after pad netcodes are calculated
- * @return : error count
- * For non copper areas, netcode is set to 0
- */
-int BOARD::SetAreasNetCodesFromNetNames( void )
-{
-    int error_count = 0;
-
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        if ( ! GetArea( ii )->IsOnCopperLayer() )
-        {
-            GetArea( ii )->SetNet( 0 );
-            continue;
-        }
-
-        if ( GetArea( ii )->GetNet() != 0 )     // i.e. if this zone is connected to a net
-        {
-            const EQUIPOT* net = FindNet( GetArea( ii )->m_Netname );
-            if( net )
-            {
-                GetArea( ii )->SetNet( net->GetNet() );
-            }
-            else
-            {
-                error_count++;
-                GetArea( ii )->SetNet( -1 );    //keep Net Name ane set m_NetCode to -1 : error flag
-            }
-        }
-    }
-
-    return error_count;
-}

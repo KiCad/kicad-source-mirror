@@ -521,7 +521,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
             }
             else
             {
-                const EQUIPOT* net = m_Parent->GetBoard()->FindNet( Current_PadNetName );
+                const NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet( Current_PadNetName );
                 if( net )
                 {
                     RastnestIsChanged = true;

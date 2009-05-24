@@ -157,8 +157,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     wxArrayString ListNetName;
     m_Parent->GetBoard()->ReturnSortedNetnamesList(
         ListNetName,
-        m_NetSorting ==
-        0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+        m_NetSorting == 0 ? false : true );
 
     if( m_NetSorting != 0 )
     {
@@ -181,7 +180,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 
     if( net_select > 0 )
     {
-        EQUIPOT* equipot = m_Parent->GetBoard()->FindNet( net_select );
+        NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
         if( equipot )  // Search net in list and select it
         {
             for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
@@ -351,15 +350,9 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     /* Search net_code for this net, if a net was selected */
     if( m_ListNetNameSelection->GetSelection() > 0 )
     {
-        EQUIPOT* net;
-        for( net = m_Parent->GetBoard()->m_Equipots;   net;  net = net->Next() )
-        {
-            if( net->GetNetname() == net_name )
-            {
-                g_Zone_Default_Setting.m_NetcodeSelection = net->GetNet();
-                break;
-            }
-        }
+        NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet(net_name);
+        if( net )
+            g_Zone_Default_Setting.m_NetcodeSelection = net->GetNet();
     }
 
     return true;
@@ -374,9 +367,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
 
     m_NetSorting = m_NetSortingOption->GetSelection();
     m_Parent->GetBoard()->ReturnSortedNetnamesList(
-        ListNetName,
-        m_NetSorting ==
-        0 ? BOARD::ALPHA_SORT : BOARD::PAD_CNT_SORT );
+        ListNetName, m_NetSorting == 0 ? false : true );
     if( m_NetSorting != 0 )
     {
         wxString Filter = m_NetNameFilter->GetValue();
@@ -398,11 +389,11 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
 
-    // Select and isplay current zone net name in listbox:
+    // Select and display current zone net name in listbox:
     int net_select = m_Zone_Setting->m_NetcodeSelection;
     if( net_select > 0 )
     {
-        EQUIPOT* equipot = m_Parent->GetBoard()->FindNet( net_select );
+        NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
         if( equipot )  // Search net in list and select it
         {
             for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )

@@ -24,10 +24,10 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
  *  if an equipot is selected the corresponding tracks and pads are highlighted
  */
 {
-    EQUIPOT*          Equipot;
+    NETINFO_ITEM*          net;
     wxString          msg;
     WinEDA_TextFrame* List;
-    int ii, jj;
+    unsigned ii;
 
     msg = wxT( "*" );
     Get_Message( _( "Filter for net names:" ), _("Net Filter"), msg, this );
@@ -36,16 +36,15 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
 
     List = new WinEDA_TextFrame( this, _( "List Nets" ) );
 
-    Equipot = (EQUIPOT*) GetBoard()->m_Equipots;
-    for( ; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
+    for( ii = 0; ii < GetBoard()->m_NetInfo->GetCount() ; ii++ )
     {
+        net =  GetBoard()->m_NetInfo->GetItem( ii );
         wxString Line;
-        /* calcul adr relative du nom de la pastille reference de la piste */
-        if( !WildCompareString( msg, Equipot->GetNetname(), FALSE ) )
+        if( !WildCompareString( msg, net->GetNetname(), false ) )
             continue;
 
-        Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), Equipot->GetNet(),
-                    Equipot->GetNetname().GetData() );
+        Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), net->GetNet(),
+                    net->GetNetname().GetData() );
         List->Append( Line );
     }
 
@@ -56,17 +55,15 @@ void WinEDA_PcbFrame::Liste_Equipot( wxCommandEvent& event )
     if( ii < 0 )
         return;
 
-    /* Recherche du numero de net rellement selectionn�*/
-    Equipot = (EQUIPOT*) GetBoard()->m_Equipots;
-    for( jj = 0; Equipot != NULL; Equipot = (EQUIPOT*) Equipot->Next() )
+    for( unsigned jj = 0; jj < GetBoard()->m_NetInfo->GetCount() ; jj++ )
     {
-        /* calcul adr relative du nom de la pastille reference de la piste */
-        if( !WildCompareString( msg, Equipot->GetNetname(), FALSE ) )
+        net =  GetBoard()->m_NetInfo->GetItem( ii );
+        if( !WildCompareString( msg, net->GetNetname(), false ) )
             continue;
 
         if( ii == jj )
         {
-            ii = Equipot->GetNet();
+            ii = net->GetNet();
             break;
         }
         jj++;

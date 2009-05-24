@@ -1,46 +1,127 @@
-/*************************************************/
-/*	classe EQUIPOT: Class to handle info on nets */
-/*************************************************/
+/************************/
+/* file class_equipot.h */
+/************************/
 
-class EQUIPOT : public BOARD_ITEM
+/*
+ *  Classes to handle info on nets
+ */
+
+#ifndef __CLASSES_NETINFO__
+#define __CLASSES_NETINFO__
+
+// Forward declaration:
+class NETINFO_ITEM;
+
+
+/* Class RATSNEST_ITEM: describes a ratsnest line: a straight line connecting 2 pads */
+
+class RATSNEST_ITEM
 {
 private:
-    int        m_NetCode;       // this is a number equivalent to the net name
+    int    m_NetCode;   // netcode ( = 1.. n ,  0 is the value used for not connected items)
+
+public:
+    int    m_Status;        // etat: voir defines précédents (CH_ ...)
+    D_PAD* m_PadStart;      // pointer to the starting pad
+    D_PAD* m_PadEnd;        // pointer to ending pad
+    int    m_Lenght;        // lenght of the line
+
+    /**
+     * Function GetNet
+     * @return int - the net code.
+     */
+    int GetNet() const
+    {
+        return m_NetCode;
+    }
+
+
+    void SetNet( int aNetCode )
+    {
+        m_NetCode = aNetCode;
+    }
+
+    /** function Draw
+     */
+    void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
+
+};
+
+/***************************************************************/
+/******************* class NETINFO *****************************/
+/***************************************************************/
+
+
+class NETINFO_LIST
+{
+private:
+    BOARD* m_Parent;
+
+//    boost::ptr_vector<NETINFO_ITEM*>  m_NetBuffer;           // nets buffer list (name, design constraints ..
+    std::vector<NETINFO_ITEM*> m_NetBuffer;            // nets buffer list (name, design constraints ..
+public:
+    NETINFO_LIST( BOARD* aParent );
+    ~NETINFO_LIST();
+
+    /** Function GetItem
+     * @param aNetcode = netcode to identify a given NETINFO_ITEM
+     * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its netcode, or NULL if not found
+     */
+    NETINFO_ITEM* GetItem( int aNetcode );
+
+    /** Function GetCount()
+     * @return the number of nets ( always >= 1 )
+     * the first net is the "not connected" net
+     */
+    unsigned GetCount() { return m_NetBuffer.size(); }
+
+    /**
+     * Function Append
+     * adds \a aNewElement to the end of the list.
+     */
+    void Append( NETINFO_ITEM* aNewElement );
+
+    /** Function Clear
+     * delete the list of nets (and free memory)
+     */
+    void Clear();
+
+    /** Function BuildListOfNets
+     * initialize the list of NETINFO_ITEM m_NetBuffer
+     * The list is sorted by names.
+     */
+    void BuildListOfNets();
+};
+
+/** class NETINFO_ITEM
+ * @info This class handle the data relative to a given net
+ */
+
+class NETINFO_ITEM
+{
+private:
+    int      m_NetCode;         // this is a number equivalent to the net name
                                 // Used for fast comparisons in rastnest and DRC computations.
-    wxString   m_Netname;       // Full net name like /mysheet/mysubsheet/vout used by eeschema
-    wxString   m_ShortNetname;  // short net name, like vout from /mysheet/mysubsheet/vout
+    wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by eeschema
+    wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 
 
 public:
-    int        status;          // no route, hight light...
-    int        m_NbNodes;       // Pads count for this net
-    int        m_NbLink;        // Ratsnets count for this net
-    int        m_NbNoconn;      // Ratsnets remaining to route count
-    int        m_Masque_Layer;  // couches interdites (bit 0 = layer 0...)
-    int        m_Masque_Plan;   // couches mises en plan de cuivre
-    int        m_ForceWidth;    // specific width (O = default width)
-    LISTE_PAD* m_PadzoneStart;  // pointeur sur debut de liste pads du net
-    LISTE_PAD* m_PadzoneEnd;    // pointeur sur fin de liste pads du net
-    CHEVELU*   m_RatsnestStart; // pointeur sur debut de liste ratsnests du net
-    CHEVELU*   m_RatsnestEnd;   // pointeur sur fin de liste ratsnests du net
+    int                          m_NbNodes;         // Pads count for this net
+    int                          m_NbLink;          // Ratsnets count for this net
+    int                          m_NbNoconn;        // Ratsnets remaining to route count
+    int                          m_ForceWidth;      // specific width (O = default width)
+    std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
+    RATSNEST_ITEM*               m_RatsnestStart;   // pointeur sur debut de liste ratsnests du net
+    RATSNEST_ITEM*               m_RatsnestEnd;     // pointeur sur fin de liste ratsnests du net
+    std::vector <RATSNEST_ITEM*> m_ListRatsnest;    // List of Ratsnests for this net
 
-    EQUIPOT( BOARD_ITEM* aParent );
-    ~EQUIPOT();
+    NETINFO_ITEM( BOARD_ITEM* aParent );
+    ~NETINFO_ITEM();
 
-    EQUIPOT*    Next() const { return (EQUIPOT*) Pnext; }
-    EQUIPOT*    Back() const { return (EQUIPOT*) Pback; }
-
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it
-     *          can be changed
-     * A dummy to satisfy pure virtual BOARD::GetPosition()
-     */
-    wxPoint& GetPosition();
 
     /* Readind and writing data on files */
-    int   ReadDescr( FILE* File, int* LineNum );
+    int  ReadDescr( FILE* File, int* LineNum );
 
     /**
      * Function Save
@@ -54,8 +135,7 @@ public:
     /** function Draw
      * @todo we actually could show a NET, simply show all the tracks and pads or net name on pad and vias
      */
-    void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
 
 
     /**
@@ -65,11 +145,14 @@ public:
     int GetNet() const { return m_NetCode; }
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
 
+    int GetNodesCount() const { return m_ListPad.size(); }
+
     /**
      * Function GetNetname
      * @return const wxString * , a pointer to the full netname
      */
     wxString GetNetname() const { return m_Netname; }
+
     /**
      * Function GetShortNetname
      * @return const wxString * , a pointer to the short netname
@@ -80,18 +163,7 @@ public:
      * Function SetNetname
      * @param const wxString : the new netname
      */
-    void SetNetname( const wxString & aNetname );
-
-
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
-    wxString GetClass() const
-    {
-        return wxT("NET");
-    }
+    void SetNetname( const wxString& aNetname );
 
 
 /**
@@ -101,18 +173,40 @@ public:
  * Is virtual from EDA_BaseStruct.
  * @param frame A WinEDA_DrawFrame in which to print status information.
  */
- void            DisplayInfo( WinEDA_DrawFrame* frame );
-
-#if defined(DEBUG)
-    /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
-     * @param os The ostream& to output to.
-     */
-    virtual void Show( int nestLevel, std::ostream& os );
-#endif
-
+    void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
+
+/*****************************/
+/* flags for a RATSNEST_ITEM */
+/*****************************/
+#define CH_VISIBLE          1   /* affichage permanent demande */
+#define CH_UNROUTABLE       2   /* non route par l'autorouteur */
+#define CH_ROUTE_REQ        4   /* doit etre route par l'autorouteur */
+#define CH_ACTIF            8   /* chevelu non encore routé */
+#define LOCAL_RATSNEST_ITEM 0x8000    /* indique un chevelu reliant 2 pins d'un meme
+                                       *  module pour le calcul des chevelus relatifs a 1 seul module */
+
+
+/****************************************************************/
+/* description d'un point de piste pour le suivi des connexions */
+/****************************************************************/
+#define START_ON_PAD   0x10
+#define END_ON_PAD     0x20
+#define START_ON_TRACK 0x40
+#define END_ON_TRACK   0x80
+
+
+/* Status bit (OR'ed bits) for class BOARD member .m_Status_Pcb */
+enum StatusPcbFlags {
+    LISTE_PAD_OK = 1,                           /* Pad list is Ok */
+    LISTE_RATSNEST_ITEM_OK = 2,                 /* General Rastnest is Ok */
+    RATSNEST_ITEM_LOCAL_OK = 4,                 /* current MODULE rastnest is Ok */
+    CONNEXION_OK = 8,                           /* Bit indicant que la liste des connexions existe */
+    NET_CODES_OK = 0x10,    /* Bit indicant que les netcodes sont OK ( pas de modif
+                             *  de noms de net */
+    DO_NOT_SHOW_GENERAL_RASTNEST = 0x20         /* Do not display the general rastnest (used in module moves) */
+};
+
+
+#endif  // __CLASSES_NETINFO__

@@ -302,9 +302,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPE_SCREEN:
         case TYPE_NOT_INIT:
         case TYPE_PCB:
-        case TYPE_EQUIPOT:
             msg.Printf(
-                wxT( "WinEDA_PcbFrame::OnRightClick() Error: illegal DrawType %d" ),
+                wxT( "WinEDA_PcbFrame::OnRightClick() Error: unexpected DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
             SetCurItem( NULL );

@@ -95,9 +95,8 @@ void WinEDA_BasePcbFrame::UnDeleteItem( wxDC* DC )
 
         item->SetState( DELETED, OFF );     /* Creal DELETED flag */
         item->m_Flags   = 0;
-        m_Pcb->m_Status_Pcb = 0;
-
-        build_liste_pads();
+        GetBoard()->m_Status_Pcb = 0;
+        GetBoard()->Build_Pads_Full_List();
         ReCompile_Ratsnest_After_Changes( DC );
         break;
 #endif
@@ -168,7 +167,8 @@ BOARD_ITEM* WinEDA_BasePcbFrame::SaveItemEfface( BOARD_ITEM* aItem, int nbitems 
             m_Pcb->m_Modules.Remove( module );
             module->SetState( DELETED, ON );
             g_UnDeleteStack[g_UnDeleteStackPtr++] = module;
-            build_liste_pads();
+            GetBoard()->m_Status_Pcb = 0;
+            GetBoard()->Build_Pads_Full_List();
         }
         break;
 #endif

@@ -286,8 +286,6 @@ public:
     void                     Build_Board_Ratsnest( wxDC* DC );
     void                     DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
     void                     trace_ratsnest_pad( wxDC* DC );
-    void                     recalcule_pad_net_code();    /* compute and update the PAD net codes */
-    void                     build_liste_pads();
     int*                     build_ratsnest_pad( EDA_BaseStruct* ref,
                                                  const wxPoint&  refpos,
                                                  bool            init );
@@ -295,7 +293,7 @@ public:
     void                     Tst_Ratsnest( wxDC* DC, int ref_netcode );
     void                     test_connexions( wxDC* DC );
     void                     test_1_net_connexion( wxDC* DC, int net_code );
-    void                     reattribution_reference_piste( int affiche );
+    void                     RecalculateAllTracksNetcode( );
 
     // Plotting
     void                     ToPlotter( wxCommandEvent& event );

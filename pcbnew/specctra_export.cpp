@@ -1112,9 +1112,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
         // find the highest numbered netCode within the board.
         int highestNetCode = -1;
-        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
-            highestNetCode = MAX( highestNetCode, equipot->GetNet() );
-
+//        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
+//            highestNetCode = MAX( highestNetCode, equipot->GetNet() );
+        highestNetCode = aBoard->m_NetInfo->GetCount() - 1;
         deleteNETs();
 
         // expand the net vector to highestNetCode+1, setting empty to NULL
@@ -1124,11 +1124,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         for( unsigned i=1;  i<nets.size();  ++i )
             nets[i] = new NET( pcb->network );
 
-        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
+        for( unsigned ii = 0;  ii < aBoard->m_NetInfo->GetCount(); ii++ )
         {
-            int netcode = equipot->GetNet();
+            NETINFO_ITEM* net = aBoard->m_NetInfo->GetItem(ii);
+            int netcode = net->GetNet();
             if( netcode > 0 )
-                nets[ netcode ]->net_id = CONV_TO_UTF8( equipot->GetNetname() );
+                nets[ netcode ]->net_id = CONV_TO_UTF8( net->GetNetname() );
         }
 
         items.Collect( aBoard, scanMODULEs );
@@ -1303,9 +1304,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
                 if( old_netcode != netcode )
                 {
                     old_netcode = netcode;
-                    EQUIPOT* equipot = aBoard->FindNet( netcode );
-                    wxASSERT( equipot );
-                    netname = CONV_TO_UTF8( equipot->GetNetname() );
+                    NETINFO_ITEM* net = aBoard->FindNet( netcode );
+                    wxASSERT( net );
+                    netname = CONV_TO_UTF8( net->GetNetname() );
                 }
 
                 WIRE* wire = new WIRE( wiring );
@@ -1364,10 +1365,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             dsnVia->padstack_id = registered->padstack_id;
             dsnVia->vertexes.push_back( mapPt( via->GetPosition() ) );
 
-            EQUIPOT* equipot = aBoard->FindNet( netcode );
-            wxASSERT( equipot );
+            NETINFO_ITEM* net = aBoard->FindNet( netcode );
+            wxASSERT( net );
 
-            dsnVia->net_id = CONV_TO_UTF8( equipot->GetNetname() );
+            dsnVia->net_id = CONV_TO_UTF8( net->GetNetname() );
 
             dsnVia->via_type = T_protect;     // @todo, this should be configurable
         }

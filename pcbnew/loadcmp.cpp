@@ -77,7 +77,7 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 
     Module->m_Flags = 0;
 
-    build_liste_pads();
+    GetBoard()->Build_Pads_Full_List();
 
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Place_Module( Module, NULL );
@@ -162,7 +162,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         module->m_TimeStamp = GetTimeStamp();
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
-        build_liste_pads();
+        GetBoard()->Build_Pads_Full_List();
         if ( DC )
             module->Draw( DrawPanel, DC, GR_OR );
     }

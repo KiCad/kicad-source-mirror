@@ -7,7 +7,6 @@
 
 #include "common.h"
 #include "pcbnew.h"
-#include "autorout.h"
 
 #include "protos.h"
 
@@ -322,7 +321,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
     if( net_code == 0 )
         return;
 
-    if( (m_Pcb->m_Status_Pcb & LISTE_CHEVELU_OK) == 0 )
+    if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Compile_Ratsnest( DC, TRUE );
 
     for( unsigned i = 0;  i<m_Pcb->m_Pads.size();  ++i )
@@ -563,12 +562,11 @@ void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
 
 
 /********************************************************************/
-void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
+void WinEDA_BasePcbFrame::RecalculateAllTracksNetcode( )
 /********************************************************************/
 
 /* search connections between tracks and pads, and propagate pad net codes to the track segments
  * This is a 2 pass computation.
- * The pad netcodes are assumed to be initialized.
  * First:
  * We search a connection between a track segment and a pad: if found : this segment  netcode is set to the pad netcode
  */
@@ -583,6 +581,9 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     int                 masque_layer;
     wxString            msg;
 
+    // Build the net info list
+    GetBoard()->m_NetInfo->BuildListOfNets();
+
     if( m_Pcb->m_Pads.size() == 0 )     // If no pad, reset pointers and netcode, and do nothing else
     {
         pt_piste = m_Pcb->m_Track;
@@ -593,27 +594,13 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
             pt_piste->SetNet( 0 );
             pt_piste->end = NULL;
         }
-
         return;
     }
-
-    a_color = CYAN;
-
-    if( affiche )
-        Affiche_1_Parametre( this, POS_AFF_CHREF, wxT( "DataBase" ), wxT( "Netcodes" ), a_color );
-
-    recalcule_pad_net_code();
-
-    if( affiche )
-        Affiche_1_Parametre( this, -1, wxEmptyString, wxT( "Gen Pads " ), a_color );
 
     /**************************************************************/
     /* Pass 1: search the connections between track ends and pads */
     /**************************************************************/
     CreateSortedPadListByXCoord( m_Pcb, &sortedPads );
-
-    if( affiche )
-        Affiche_1_Parametre( this, -1, wxEmptyString, wxT( "Conn Pads" ), a_color );
 
     /* Reset variables and flags used in computation */
     pt_piste = m_Pcb->m_Track;
@@ -667,8 +654,6 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
      * the connection (if found) is between segments
      * when a track has a net code and the other has a null net code, the null net code is changed
      */
-    if( affiche )
-        Affiche_1_Parametre( this, POS_AFF_CHREF, wxEmptyString, wxT( "Conn Segm" ), a_color );
 
     for( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
@@ -693,11 +678,6 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     {
         bool reset_flag = FALSE;
         new_passe_request = 0;
-        if( affiche )
-        {
-            msg.Printf( wxT( "Net->Segm pass %d  " ), new_passe_request + 1 );
-            Affiche_1_Parametre( this, POS_AFF_CHREF, wxEmptyString, msg, a_color );
-        }
 
         /* look for vias which could be connect many tracks */
         for( TRACK* via = m_Pcb->m_Track; via != NULL; via = via->Next() )
@@ -789,12 +769,7 @@ void WinEDA_BasePcbFrame::reattribution_reference_piste( int affiche )
     }
 
     /* Sort the track list by net codes: */
-    if( affiche )
-        Affiche_1_Parametre( this, -1, wxEmptyString, wxT( "Reorder " ), a_color );
     RebuildTrackChain( m_Pcb );
-
-    if( affiche )
-        Affiche_1_Parametre( this, -1, wxEmptyString, wxT( "         " ), a_color );
 }
 
 

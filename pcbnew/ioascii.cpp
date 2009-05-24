@@ -595,7 +595,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Nzone %d\n", GetBoard()->GetNumSegmZone() );
 
     fprintf( File, "Nmodule %d\n", NbModules );
-    fprintf( File, "Nnets %d\n", GetBoard()->m_Equipots.GetCount() );
+    fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetCount() );
 
     fprintf( File, "$EndGENERAL\n\n" );
     return TRUE;
@@ -784,9 +784,9 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( strnicmp( Line, "$EQUIPOT", 7 ) == 0 )
         {
-            EQUIPOT* Equipot = new EQUIPOT( GetBoard() );
-            GetBoard()->m_Equipots.PushBack( Equipot );
-            Equipot->ReadDescr( File, &LineNum );
+            NETINFO_ITEM* net = new NETINFO_ITEM( GetBoard() );
+            GetBoard()->m_NetInfo->Append( net );
+            net->ReadDescr( File, &LineNum );
             continue;
         }
 

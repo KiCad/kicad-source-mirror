@@ -139,7 +139,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 GetBoard()->DisplayInfo( this );
             else
             {
-                EQUIPOT * net  = GetBoard()->FindNet(netcode);
+                NETINFO_ITEM * net  = GetBoard()->FindNet(netcode);
                 if ( net )
                     net->DisplayInfo( this );
             }

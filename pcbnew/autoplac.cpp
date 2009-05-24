@@ -62,7 +62,7 @@ static void     TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, i
 static MODULE*  PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC );
 
 /* variables importees */
-extern CHEVELU* local_liste_chevelu;        // adresse de base du buffer des chevelus locaux
+extern RATSNEST_ITEM* local_liste_chevelu;        // adresse de base du buffer des chevelus locaux
 extern int      nb_local_chevelu;           // nbr de links du module en deplacement
 
 
@@ -315,7 +315,7 @@ end_of_tst:
 
     /* Recalcul de la liste des pads, detruite par les calculs precedents */
     GetBoard()->m_Status_Pcb = 0;
-    build_liste_pads();
+    GetBoard()->Build_Pads_Full_List();
 
     DrawPanel->ReDraw( DC, TRUE );
 
@@ -607,7 +607,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 
     g_Offset_Module.x    = cx - CurrPosition.x;
     g_Offset_Module.y    = cy - CurrPosition.y;
-    GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+    GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
 
     /* tst des pastilles traversantes, qui pour un circuit imprime ayant des
      *  composants des 2 cotes, peuvent tomber sur un composant de cote oppose:
@@ -710,7 +710,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     Module->m_RealBoundaryBox.m_Pos.y = oy + cy;
     CurrPosition = LastPosOK;
 
-    GetBoard()->m_Status_Pcb &= ~(CHEVELU_LOCAL_OK | LISTE_PAD_OK );
+    GetBoard()->m_Status_Pcb &= ~(RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
 
     MinCout = mincout;
     return error;
@@ -866,14 +866,14 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
  *  penalite pour les inclinaisons se rapprochant de 45 degre
  */
 {
-    CHEVELU* pt_local_chevelu;
+    RATSNEST_ITEM* pt_local_chevelu;
     int      ii;
     float    cout, icout;
     int      ox, oy;
     int      fx, fy;
     int      dx, dy;
 
-    if( (GetBoard()->m_Status_Pcb & CHEVELU_LOCAL_OK) == 0 )
+    if( (GetBoard()->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK) == 0 )
         return -1;
 
     pt_local_chevelu = local_liste_chevelu;
@@ -882,12 +882,12 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
     while( ii-- > 0 )
     {
-        if( !(pt_local_chevelu->status & LOCAL_CHEVELU) )
+        if( !(pt_local_chevelu->m_Status & LOCAL_RATSNEST_ITEM) )
         {
-            ox = pt_local_chevelu->pad_start->GetPosition().x - g_Offset_Module.x;
-            oy = pt_local_chevelu->pad_start->GetPosition().y - g_Offset_Module.y;
-            fx = pt_local_chevelu->pad_end->GetPosition().x;
-            fy = pt_local_chevelu->pad_end->GetPosition().y;
+            ox = pt_local_chevelu->m_PadStart->GetPosition().x - g_Offset_Module.x;
+            oy = pt_local_chevelu->m_PadStart->GetPosition().y - g_Offset_Module.y;
+            fx = pt_local_chevelu->m_PadEnd->GetPosition().x;
+            fy = pt_local_chevelu->m_PadEnd->GetPosition().y;
 
             if( AutoPlaceShowAll )
             {
@@ -962,7 +962,7 @@ void Build_PlacedPads_List( BOARD* aPcb )
     }
 
     aPcb->m_Status_Pcb |= LISTE_PAD_OK;
-    aPcb->m_Status_Pcb &= ~(LISTE_CHEVELU_OK | CHEVELU_LOCAL_OK);
+    aPcb->m_Status_Pcb &= ~(LISTE_RATSNEST_ITEM_OK | RATSNEST_ITEM_LOCAL_OK);
 }
 
 
@@ -1102,7 +1102,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 {
     MODULE** BaseListeModules, ** pt_Dmod;
     MODULE*  Module = NULL, * AltModule = NULL;
-    CHEVELU* pt_local_chevelu;
+    RATSNEST_ITEM* pt_local_chevelu;
     int      NbModules, ii;
 
     BaseListeModules = GenListeModules( pcbframe->GetBoard(), &NbModules );
@@ -1122,7 +1122,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         (*pt_Dmod)->flag = 0;
         if( !( (*pt_Dmod)->m_ModuleStatus & MODULE_to_PLACE ) )
             continue;
-        pcbframe->GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+        pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
         (*pt_Dmod)->DisplayInfo( pcbframe );
         pcbframe->build_ratsnest_module( DC, *pt_Dmod );
 
@@ -1131,13 +1131,13 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         ii = nb_local_chevelu;
         while( ii-- > 0 )
         {
-            if( (pt_local_chevelu->status & LOCAL_CHEVELU) == 0 )
+            if( (pt_local_chevelu->m_Status & LOCAL_RATSNEST_ITEM) == 0 )
                 (*pt_Dmod)->flag++;
             pt_local_chevelu++;
         }
     }
 
-    pcbframe->GetBoard()->m_Status_Pcb &= ~CHEVELU_LOCAL_OK;
+    pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
 
     qsort( BaseListeModules, NbModules, sizeof(MODULE * *),
            ( int (*)( const void*, const void* ) )Tri_RatsModules );

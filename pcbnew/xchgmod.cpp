@@ -310,7 +310,7 @@ void WinEDA_ExchangeModuleFrame::Change_Module( wxCommandEvent& event )
     if( Change_1_Module( m_CurrentModule, newmodulename, TRUE ) )
     {
         m_Parent->GetBoard()->m_Status_Pcb = 0;
-        m_Parent->build_liste_pads();
+        m_Parent->GetBoard()->Build_Pads_Full_List();
     }
 }
 
@@ -395,7 +395,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
     if( change )
     {
         m_Parent->GetBoard()->m_Status_Pcb = 0;
-        m_Parent->build_liste_pads();
+        m_Parent->GetBoard()->Build_Pads_Full_List();
     }
 }
 
@@ -446,7 +446,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
     if( change )
     {
         m_Parent->GetBoard()->m_Status_Pcb = 0;
-        m_Parent->build_liste_pads();
+        m_Parent->GetBoard()->Build_Pads_Full_List();
     }
 }
 

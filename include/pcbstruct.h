@@ -123,9 +123,9 @@
 #define EXTERNAL_LAYERS         0x00008001
 
 /* Forward declaration */
-class EQUIPOT;
+class NETINFO_ITEM;
 class MARKER;
-class CHEVELU;
+class RATSNEST_ITEM;
 
 //class Ki_PageDescr;
 //class DrawBlockStruct;

@@ -47,17 +47,12 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
     wxString            text;
     wxString            msg;
     wxString            temp;
+    NETINFO_ITEM* net;
     const BOARD_ITEM*   item = this;
-    EQUIPOT*            net;
     D_PAD *             pad;
 
     switch( item->Type() )
     {
-    case TYPE_EQUIPOT:
-        text << _( "Net" ) << ( (EQUIPOT*) item )->GetNetname() << wxT( " " ) <<
-        ( (EQUIPOT*) item )->GetNet();
-        break;
-
     case TYPE_MODULE:
         text << _( "Footprint" ) << wxT( " " ) << ( (MODULE*) item )->GetReference();
         text << wxT( " (" ) << aPcb->GetLayerName( item->m_Layer ).Trim() << wxT( ")" );
@@ -258,10 +253,6 @@ const char** BOARD_ITEM::MenuIcon() const
 
     switch( item->Type() )
     {
-    case TYPE_EQUIPOT:
-        xpm = general_ratsnet_xpm;
-        break;
-
     case TYPE_MODULE:
         xpm = module_xpm;
         break;

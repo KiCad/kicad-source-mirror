@@ -447,9 +447,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
         {
             wxString netName = CONV_FROM_UTF8( net->net_id.c_str() );
 
-            EQUIPOT* equipot = aBoard->FindNet( netName );
-            if( equipot )
-                netCode = equipot->GetNet();
+            NETINFO_ITEM* net = aBoard->FindNet( netName );
+            if( net )
+                netCode = net->GetNet();
             else  // else netCode remains 0
             {
                 // int breakhere = 1;
@@ -508,9 +508,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             {
                 wxString netName = CONV_FROM_UTF8( net->net_id.c_str() );
 
-                EQUIPOT* equipot = aBoard->FindNet( netName );
-                if( equipot )
-                    netCode = equipot->GetNet();
+                NETINFO_ITEM* net = aBoard->FindNet( netName );
+                if( net )
+                    netCode = net->GetNet();
 
                 // else netCode remains 0
             }

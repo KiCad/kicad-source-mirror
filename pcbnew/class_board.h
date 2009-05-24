@@ -7,6 +7,7 @@
 
 
 #include "dlist.h"
+#include "class_equipot.h"
 
 
 class ZONE_CONTAINER;
@@ -86,21 +87,19 @@ public:
     EDA_BoardDesignSettings* m_BoardSettings;   // Link to current design settings
     int             m_NbNodes;                  // Active pads (pads attached to a net ) count
     int             m_NbLinks;                  // Ratsnest count
-    int             m_NbLoclinks;               // Ratsests to show while creating a track
-    int             m_NbNoconnect;              // Active ratsnet count (rastnest not alraedy connected by tracks
+    int             m_NbLoclinks;               // Number of ratsnests from mouse cursor to pads to show while creating a track
+    int             m_NbNoconnect;              // Active ratsnet count (rastnests not alraedy connected by tracks)
 
     DLIST<BOARD_ITEM> m_Drawings;               // linked list of lines & texts
     DLIST<MODULE>   m_Modules;                  // linked list of MODULEs
-    DLIST<EQUIPOT>  m_Equipots;                 // linked list of nets
-
     DLIST<TRACK>    m_Track;                    // linked list of TRACKs and SEGVIAs
-
     DLIST<SEGZONE>  m_Zone;                     // linked list of SEGZONEs
 
     std::vector<D_PAD*> m_Pads;                 // Entry for a sorted pad list (used in ratsnest calculations)
+    NETINFO_LIST*   m_NetInfo;                  // nets info list (name, design constraints ..
 
-    CHEVELU*        m_Ratsnest;                 // Rastnest list
-    CHEVELU*        m_LocalRatsnest;            // Rastnest list used while moving a footprint
+    RATSNEST_ITEM*        m_Ratsnest;                 // Rastnest list
+    RATSNEST_ITEM*        m_LocalRatsnest;            // Rastnest list used while moving a footprint
 
     ZONE_CONTAINER* m_CurrentZoneContour;     	// zone contour currently in progress
 
@@ -247,6 +246,17 @@ public:
 
     int     GetNumNodes();        // retourne le nombre de pads a netcode > 0
 
+    /** Function Build_Pads_Full_List
+     *  Create the pad list
+     * initialise:
+     *   m_Pads (list of pads)
+     *   m_NbNodes = 0
+     * set m_Status_Pcb = LISTE_PAD_OK;
+     * and clear for all pads the m_SubRatsnest member;
+     * delete ( free memory) m_Pcb->m_Ratsnest and set m_Pcb->m_Ratsnest to NULL
+     */
+    void Build_Pads_Full_List();
+
     // Calcul du rectangle d'encadrement:
     bool    ComputeBoundaryBox();
 
@@ -294,17 +304,17 @@ public:
      * Function FindNet
      * searches for a net with the given netcode.
      * @param aNetcode A netcode to search for.
-     * @return EQUIPOT* - the net or NULL if not found.
+     * @return NETINFO_ITEM_ITEM* - the net or NULL if not found.
      */
-    EQUIPOT* FindNet( int aNetcode ) const;
+    NETINFO_ITEM* FindNet( int aNetcode ) const;
 
     /**
      * Function FindNet overlayed
      * searches for a net with the given name.
      * @param aNetname A Netname to search for.
-     * @return EQUIPOT* - the net or NULL if not found.
+     * @return NETINFO_ITEM* - the net or NULL if not found.
      */
-    EQUIPOT* FindNet( const wxString & aNetname ) const;
+    NETINFO_ITEM* FindNet( const wxString & aNetname ) const;
 
     /**
      * Function FindModuleByReference
@@ -319,18 +329,11 @@ public:
 
     /**
      * Function ReturnSortedNetnamesList
-     * searches for a net with the given netcode.
      * @param aNames An array string to fill with net names.
-     * @param aSort_Type : NO_SORT = no sort, ALPHA_SORT = sort by alphabetic order, PAD_CNT_SORT = sort by active pads count.
+     * @param aSortbyPadsCount : true = sort by active pads count, false = no sort (i.e. leave the sort by net names)
      * @return int - net names count.
      */
-    enum netname_sort_type {
-        NO_SORT,
-        ALPHA_SORT,
-        PAD_CNT_SORT
-    };
-    int ReturnSortedNetnamesList( wxArrayString & aNames, const int aSort_Type);
-
+    int ReturnSortedNetnamesList( wxArrayString & aNames, bool aSortbyPadsCount);
 
     /**
      * Function Save

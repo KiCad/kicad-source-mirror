@@ -23,7 +23,7 @@ struct CWORK /* a unit of work is a hole-pair to connect */
 	int net_code;		/* net_code			*/
 	int ToRow;			/* target row		*/
 	int ToCol;			/* target column	*/
-	CHEVELU *pt_rats;	/* chevelu correspondant*/
+	RATSNEST_ITEM *pt_rats;	/* chevelu correspondant*/
 	int ApxDist;		/* approximate distance	*/
 	int Cost;			/* cost for sort by length */
 	int Priority;       /* routage priority */
@@ -38,8 +38,8 @@ static CWORK *Current = NULL;
 
 void InitWork();
 void ReInitWork();
-int SetWork( int, int, int, int, int, CHEVELU *, int );
-void GetWork( int *, int *, int *, int *, int *, CHEVELU ** );
+int SetWork( int, int, int, int, int, RATSNEST_ITEM *, int );
+void GetWork( int *, int *, int *, int *, int *, RATSNEST_ITEM ** );
 void SortWork();
 
 
@@ -71,7 +71,7 @@ void ReInitWork()
 	}
 
 /*****************************************************************************/
-/*int SetWork(int r1,int c1,int* n_c,int r2,int c2,CHEVELU * pt_ch,int pri )*/
+/*int SetWork(int r1,int c1,int* n_c,int r2,int c2,RATSNEST_ITEM * pt_ch,int pri )*/
 /*****************************************************************************/
 
 /* add a unit of work to the work list
@@ -81,7 +81,7 @@ void ReInitWork()
 */
 static int GetCost(int r1,int c1,int r2,int c2);
 
-int SetWork(int r1,int c1,int n_c,int r2,int c2,CHEVELU * pt_ch,int pri )
+int SetWork(int r1,int c1,int n_c,int r2,int c2,RATSNEST_ITEM * pt_ch,int pri )
 {
 CWORK *p;
 
@@ -113,7 +113,7 @@ CWORK *p;
 	/* void GetWork (int *r1,int *c1,int *r2,int *c2, char **n1,char **n2 ) */
 	/************************************************************************/
 
-void GetWork (int *r1,int *c1,int *n_c,int *r2,int *c2,CHEVELU** pt_ch )
+void GetWork (int *r1,int *c1,int *n_c,int *r2,int *c2,RATSNEST_ITEM** pt_ch )
 	/* fetch a unit of work from the work list */
 {
 	if (Current)

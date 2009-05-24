@@ -1,8 +1,4 @@
-/************************************************/
-/* EDITEUR de PCB: AUTOROUTAGE: routines d'init */
-/************************************************/
-
-/* Fichier BOARD.CC */
+/* Fichier BOARD.CPP : functions for autorouting */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -18,7 +14,7 @@
 /* routines externes : */
 
 /* Routines definies ici: */
-int         Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu );
+int         Build_Work( BOARD* Pcb, RATSNEST_ITEM* pt_base_chevelu );
 void        PlaceCells( BOARD* Pcb, int net_code, int flag );
 int         InitBoard();
 BoardCell   GetCell( int, int, int );
@@ -340,15 +336,15 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
 
 /******************************************************/
-int Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu )
+int Build_Work( BOARD* Pcb, RATSNEST_ITEM* pt_base_chevelu )
 /*****************************************************/
 /* Build liste conn */
 {
     int      ii;
-    CHEVELU* pt_rats = pt_base_chevelu;
+    RATSNEST_ITEM* pt_rats = pt_base_chevelu;
     D_PAD*   pt_pad;
     int      r1, r2, c1, c2, current_net_code;
-    CHEVELU* pt_ch;
+    RATSNEST_ITEM* pt_ch;
     int      demi_pas = g_GridRoutingSize / 2;
     wxString msg;
 
@@ -357,13 +353,13 @@ int Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu )
     for( ii = Pcb->GetNumRatsnests(); ii > 0; ii--, pt_rats++ )
     {
         /* On ne route que les chevelus actifs et routables */
-        if( (pt_rats->status & CH_ACTIF) == 0 )
+        if( (pt_rats->m_Status & CH_ACTIF) == 0 )
             continue;
-        if( pt_rats->status & CH_UNROUTABLE )
+        if( pt_rats->m_Status & CH_UNROUTABLE )
             continue;
-        if( (pt_rats->status & CH_ROUTE_REQ) == 0 )
+        if( (pt_rats->m_Status & CH_ROUTE_REQ) == 0 )
             continue;
-        pt_pad = pt_rats->pad_start;
+        pt_pad = pt_rats->m_PadStart;
 
         current_net_code = pt_pad->GetNet();
         pt_ch = pt_rats;
@@ -385,7 +381,7 @@ int Build_Work( BOARD* Pcb, CHEVELU* pt_base_chevelu )
             return 0;
         }
 
-        pt_pad = pt_rats->pad_end;
+        pt_pad = pt_rats->m_PadEnd;
 
         r2 = (pt_pad->GetPosition().y - Pcb->m_BoundaryBox.m_Pos.y + demi_pas ) / g_GridRoutingSize;
         if( r2 < 0 || r2 >= Nrows )

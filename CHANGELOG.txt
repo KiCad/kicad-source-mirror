@@ -4,6 +4,18 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-may-24 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew:
+    clean code in ratsnet calculations (work in progress)
+    The old code was very difficukt to understand, and was sometime very ugly.
+    Mainly, the list of nets (RATSNEST_ITEM class, formerly EQUIPOT class)
+    are now handled in a std::vector, and not a linked list.
+    This is better, because nets identifiers for pads and tracks are a number called netcode.
+    now, this is the index of the given net in this list, and the code to find a net given by its netcode
+    is very fast.
+
+
 2009-may-12 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++All:

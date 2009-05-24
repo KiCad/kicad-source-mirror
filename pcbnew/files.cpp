@@ -262,7 +262,8 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     SetLastProject( GetScreen()->m_FileName );
 
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
-    build_liste_pads();
+    GetBoard()->m_Status_Pcb = 0;
+    GetBoard()->Build_Pads_Full_List();
 
     GetBoard()->DisplayInfo( this );
     DrawPanel->Refresh( true);

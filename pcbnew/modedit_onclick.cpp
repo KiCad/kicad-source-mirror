@@ -333,7 +333,6 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPE_SCREEN:
     case TYPE_NOT_INIT:
     case TYPE_PCB:
-    case TYPE_EQUIPOT:
         msg.Printf(
             wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
             DrawStruct->Type() );

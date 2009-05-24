@@ -77,8 +77,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
 
     /* Rebuild the pad infos (pad list and netcodes) to ensure an up to date info */
     frame->GetBoard()->m_Status_Pcb = 0;
-    frame->build_liste_pads();
-    frame->recalcule_pad_net_code();
+    frame->GetBoard()->m_NetInfo->BuildListOfNets();
 
     if( s_CleanVias )       // delete redundant vias
     {
