@@ -442,6 +442,11 @@ void GRLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int wi
                  width ), Color );
 }
 
+void GRLine(EDA_Rect * aClipBox, wxDC * aDC, wxPoint aStart, wxPoint aEnd, int aWidth, int aColor)
+{
+    GRSLine( aClipBox, aDC, GRMapX( aStart.x ), GRMapY( aStart.y ), GRMapX( aEnd.x ), GRMapY( aEnd.y ),
+            ZoomValue( aWidth ), aColor );
+}
 
 /***************************************************/
 /* Routine to draw a Dashed line, in Screen space. */

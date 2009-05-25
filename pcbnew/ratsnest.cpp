@@ -767,7 +767,7 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 int WinEDA_BasePcbFrame::Test_1_Net_Ratsnest( wxDC* DC, int ref_netcode )
 /**************************************************************************/
 
-/**
+/** function Test_1_Net_Ratsnest
  *  Compute the rastnest relative to the net "net_code"
  *  @param ref_netcode = netcode used to compute the rastnest.
  */
@@ -1043,27 +1043,24 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
 
     GRSetDrawMode( DC, GR_XOR );
     int tmpcolor = g_DesignSettings.m_RatsnestColor;
-    wxPoint offset = -g_Offset_Module;
     while( ii-- > 0 )
     {
         if( local_chevelu->m_Status & LOCAL_RATSNEST_ITEM )
         {
             g_DesignSettings.m_RatsnestColor = YELLOW;
-            local_chevelu->Draw( DrawPanel, DC, GR_XOR, offset );
+            local_chevelu->Draw( DrawPanel, DC, GR_XOR, g_Offset_Module );
         }
         else
         {
             g_DesignSettings.m_RatsnestColor = tmpcolor;
-            GRLine( &DrawPanel->m_ClipBox, DC,
-                    local_chevelu->m_PadStart->m_Pos.x + offset.x,
-                    local_chevelu->m_PadStart->m_Pos.y + offset.y,
-                    local_chevelu->m_PadEnd->m_Pos.x,
-                    local_chevelu->m_PadEnd->m_Pos.y,
-                    0, g_DesignSettings.m_RatsnestColor );
+            wxPoint tmp = local_chevelu->m_PadStart->m_Pos;
+            local_chevelu->m_PadStart->m_Pos -= g_Offset_Module;
+            local_chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint(0,0) );
+            local_chevelu->m_PadStart->m_Pos = tmp;
         }
         local_chevelu++;
     }
-    
+
     g_DesignSettings.m_RatsnestColor = tmpcolor;
 }
 
@@ -1154,7 +1151,7 @@ void WinEDA_BasePcbFrame::build_ratsnest_pad( BOARD_ITEM* ref,
         NETINFO_ITEM * net = m_Pcb->FindNet(current_net_code);
         if ( net == NULL )
             return;
-        
+
         // Create a list of pads candidates ( pads not already connected to the current track:
         for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
         {
@@ -1186,15 +1183,13 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
     if( s_RatsnestMouseToPads.size() == 0)
         return;
 
- 
+
     GRSetDrawMode( DC, GR_XOR );
     for( int ii = 0; ii < (int)s_RatsnestMouseToPads.size(); ii++ )
     {
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos.x, s_CursorPos.y,
-                s_RatsnestMouseToPads[ii].x, s_RatsnestMouseToPads[ii].y,
-                0, YELLOW );
+        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos, s_RatsnestMouseToPads[ii], 0, YELLOW );
     }
 }

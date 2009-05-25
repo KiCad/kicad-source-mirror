@@ -70,6 +70,7 @@ void GRForceBlackPen(bool flagforce );
 bool GetGRForceBlackPenState( void );
 void SetPenMinWidth(int minwidth); /* ajustage de la largeur mini de plume */
 
+void GRLine(EDA_Rect * aClipBox, wxDC * aDC, wxPoint aStart, wxPoint aEnd, int aWidth, int aColor);
 void GRLine(EDA_Rect * ClipBox, wxDC * DC, int x1, int y1, int x2, int y2, int width, int Color);
 void GRMixedLine(EDA_Rect * ClipBox, wxDC * DC, int x1, int y1, int x2, int y2, int width, int Color);
 void GRSMixedLine(EDA_Rect * ClipBox, wxDC * DC, int x1, int y1, int x2, int y2, int width, int Color);
