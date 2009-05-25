@@ -250,7 +250,7 @@ public:
 #include "class_edge_mod.h"     // Class for  footprint graphic elements
 #include "class_text_mod.h"     // Class for  footprint fields
 #include "class_module.h"       // Class for the footprint
-#include "class_equipot.h"
+#include "class_netinfo.h"      // Class for nets
 
 
 /***********************************/

@@ -924,7 +924,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     Track->SetState( EDIT, OFF );
     Track->Draw( DrawPanel, DC, draw_mode );
 
-    /* Tracage des segments dragges */
+    /* Draw ddragged tracks */
     pt_drag = g_DragSegmentList;
     for( ; pt_drag; pt_drag = pt_drag->Pnext )
     {
@@ -954,10 +954,10 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
 
 
 /************************************************************************/
-EDA_BaseStruct* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
+BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
 /************************************************************************/
 
-/* Routine trouvant le point " d'accrochage " d'une extremite de piste.
+/* Routine trouvant le point "d'accrochage" d'une extremite de piste.
  *  Ce point peut etre un PAD ou un autre segment de piste
  *  Retourne:
  *      - pointeur sur ce PAD ou:

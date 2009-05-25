@@ -7,7 +7,7 @@
 
 
 #include "dlist.h"
-#include "class_equipot.h"
+#include "class_netinfo.h"
 
 
 class ZONE_CONTAINER;

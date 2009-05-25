@@ -56,7 +56,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/class_drawsegment.cpp
     ../pcbnew/class_drc_item.cpp
     ../pcbnew/class_edge_mod.cpp
-    ../pcbnew/class_equipot.cpp
+    ../pcbnew/class_netinfo_item.cpp
     ../pcbnew/class_netinfolist.cpp
     ../pcbnew/class_marker.cpp
     ../pcbnew/class_mire.cpp

@@ -13,20 +13,20 @@
 
 #include "protos.h"
 
-extern char*    adr_lowmem;  /* adresse de base memoire de calcul disponible */
+extern char* adr_lowmem;     /* adresse de base memoire de calcul disponible */
 
 
 /* exported variables */
-RATSNEST_ITEM*    g_pt_chevelu;
-RATSNEST_ITEM*    local_liste_chevelu;    // Buffer address for local ratsnest
+RATSNEST_ITEM* g_pt_chevelu;
+RATSNEST_ITEM* local_liste_chevelu;         // Buffer address for local ratsnest
 // (ratnest relative to one footprint while moving it
-int         nb_local_chevelu;       // link count (active ratnest count) for the footprint beeing moved
+int            nb_local_chevelu;            // link count (active ratnest count) for the footprint beeing moved
 
 /* local variables */
-static int  nb_pads_ref;                    // node count (node = pad with a net code) for the footprint beeing moved
-static int  nb_pads_externes;               // Connected pads count ( pads which are
+static int     nb_pads_ref;                 // node count (node = pad with a net code) for the footprint beeing moved
+static int     nb_pads_externes;            // Connected pads count ( pads which are
 //	in other footprints and connected to a pad of the footprint beeing moved
-static bool DisplayRastnestInProgress;      // Enable the display of the ratsnest during the ratsnest computations
+static bool    DisplayRastnestInProgress;   // Enable the display of the ratsnest during the ratsnest computations
 
 /* Note about the ratsnest computation:
  *  Building the general ratsnest:
@@ -211,8 +211,8 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
  *  @return blocks not connected count
  */
 {
-    int        dist_min, current_dist;
-    int        current_num_block = 1;
+    int     dist_min, current_dist;
+    int     current_num_block = 1;
     D_PAD** pt_liste_pad_tmp;
     D_PAD** pt_liste_pad_aux;
     D_PAD** pt_liste_pad_block1 = NULL;
@@ -285,17 +285,13 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
         /* Create the new ratsnet */
         (*nblinks)++;
         g_pt_chevelu->SetNet( (*pt_liste_pad)->GetNet() );
-        g_pt_chevelu->m_Status    = CH_ACTIF | CH_VISIBLE;
-        g_pt_chevelu->m_Lenght      = dist_min;
+        g_pt_chevelu->m_Status   = CH_ACTIF | CH_VISIBLE;
+        g_pt_chevelu->m_Lenght   = dist_min;
         g_pt_chevelu->m_PadStart = *pt_liste_pad;
         g_pt_chevelu->m_PadEnd   = *pt_liste_pad_tmp;
 
         if( DisplayRastnestInProgress && DC )
-            GRLine( &DrawPanel->m_ClipBox, DC, g_pt_chevelu->m_PadStart->m_Pos.x,
-                    g_pt_chevelu->m_PadStart->m_Pos.y,
-                    g_pt_chevelu->m_PadEnd->m_Pos.x,
-                    g_pt_chevelu->m_PadEnd->m_Pos.y,
-                    0, g_DesignSettings.m_RatsnestColor );
+            g_pt_chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
 
         g_pt_chevelu++;
     }
@@ -331,16 +327,13 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
  *          last block number used
  */
 {
-    int        dist_min, current_dist;
+    int     dist_min, current_dist;
     D_PAD** pt_liste_pad_tmp;
     D_PAD** pt_liste_pad_aux;
     D_PAD** pt_start_liste;
-    D_PAD*     ref_pad, * pad;
+    D_PAD*  ref_pad, * pad;
 
     pt_start_liste = pt_liste_pad;
-
-    if( DC )
-        GRSetDrawMode( DC, GR_XOR );
 
     for(  ; pt_liste_pad < pt_limite; pt_liste_pad++ )
     {
@@ -394,19 +387,14 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
 
             (*nblinks)++;
             g_pt_chevelu->SetNet( ref_pad->GetNet() );
-            g_pt_chevelu->m_Status    = CH_ACTIF | CH_VISIBLE;
-            g_pt_chevelu->m_Lenght      = dist_min;
+            g_pt_chevelu->m_Status   = CH_ACTIF | CH_VISIBLE;
+            g_pt_chevelu->m_Lenght   = dist_min;
             g_pt_chevelu->m_PadStart = ref_pad;
             g_pt_chevelu->m_PadEnd   = pad;
 
             if( DisplayRastnestInProgress && DC )
-            {
-                GRLine( &DrawPanel->m_ClipBox, DC, g_pt_chevelu->m_PadStart->m_Pos.x,
-                        g_pt_chevelu->m_PadStart->m_Pos.y,
-                        g_pt_chevelu->m_PadEnd->m_Pos.x,
-                        g_pt_chevelu->m_PadEnd->m_Pos.y,
-                        0, g_DesignSettings.m_RatsnestColor );
-            }
+                g_pt_chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+
             g_pt_chevelu++;
         }
     }
@@ -477,7 +465,8 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     if( m_Pcb->m_NbNodes == 0 )
         return; /* pas de connexions utiles */
 
-    m_Pcb->m_Ratsnest = (RATSNEST_ITEM*) MyZMalloc( (m_Pcb->m_NbNodes + 10 ) * sizeof(RATSNEST_ITEM) );
+    m_Pcb->m_Ratsnest =
+        (RATSNEST_ITEM*) MyZMalloc( (m_Pcb->m_NbNodes + 10 ) * sizeof(RATSNEST_ITEM) );
     if( m_Pcb->m_Ratsnest == NULL )
         return;
 
@@ -505,10 +494,10 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         /* Compute the ratsnest relative to the current net */
 
         /* a - first pass : create the blocks from not already in block pads */
-        D_PAD ** pstart = &net->m_ListPad[0];
-        D_PAD ** pend = pstart + net->m_ListPad.size();
-        int icnt = gen_rats_pad_to_pad( DrawPanel, DC, pstart, pend,
-                                        num_block, &noconn );
+        D_PAD** pstart = &net->m_ListPad[0];
+        D_PAD** pend   = pstart + net->m_ListPad.size();
+        int     icnt   = gen_rats_pad_to_pad( DrawPanel, DC, pstart, pend,
+                                              num_block, &noconn );
 
         /* b - blocks connection (Iteration) */
         while( icnt > 1 )
@@ -530,19 +519,13 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
 // erase the ratsnest displayed on screen if needed
     RATSNEST_ITEM* Chevelu = m_Pcb->m_Ratsnest;
-    if( DC )
-        GRSetDrawMode( DC, GR_XOR );
-
     for( int ii = m_Pcb->GetNumRatsnests(); ii > 0 && Chevelu; ii--, Chevelu++ )
     {
         if( !g_Show_Ratsnest )
             Chevelu->m_Status &= ~CH_VISIBLE;
 
         if( DC )
-            GRLine( &DrawPanel->m_ClipBox, DC,
-                    Chevelu->m_PadStart->m_Pos.x, Chevelu->m_PadStart->m_Pos.y,
-                    Chevelu->m_PadEnd->m_Pos.x, Chevelu->m_PadEnd->m_Pos.y,
-                    0, g_DesignSettings.m_RatsnestColor );
+            Chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
     }
 }
 
@@ -569,7 +552,7 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
  *  @param netcode if > 0, Display only the ratsnest relative to the correponding net_code
  */
 {
-    int      ii;
+    int            ii;
     RATSNEST_ITEM* Chevelu;
 
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
@@ -583,19 +566,13 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
     if( Chevelu == NULL )
         return;
 
-    GRSetDrawMode( DC, GR_XOR );
     for( ii = m_Pcb->GetNumRatsnests(); ii > 0; Chevelu++, ii-- )
     {
         if( ( Chevelu->m_Status & (CH_VISIBLE | CH_ACTIF) ) != (CH_VISIBLE | CH_ACTIF) )
             continue;
 
         if( (net_code <= 0) || ( net_code == Chevelu->GetNet() ) )
-        {
-            GRLine( &DrawPanel->m_ClipBox, DC,
-                    Chevelu->m_PadStart->m_Pos.x, Chevelu->m_PadStart->m_Pos.y,
-                    Chevelu->m_PadEnd->m_Pos.x, Chevelu->m_PadEnd->m_Pos.y,
-                    0, g_DesignSettings.m_RatsnestColor );
-        }
+            Chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
     }
 }
 
@@ -621,7 +598,7 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC, NETIN
  *  @return    blocks not connected count
  */
 {
-    int      current_num_block, min_block;
+    int            current_num_block, min_block;
     RATSNEST_ITEM* chevelu, * min_chevelu;
 
     /* Search a link from a block to an other block */
@@ -644,7 +621,7 @@ static int tst_rats_block_to_block( WinEDA_DrawPanel* DrawPanel, wxDC* DC, NETIN
      * we must set its status to ACTIVE and merge the 2 blocks
      */
     min_chevelu->m_Status |= CH_ACTIF;
-    current_num_block    = min_chevelu->m_PadStart->GetSubRatsnest();
+    current_num_block      = min_chevelu->m_PadStart->GetSubRatsnest();
     min_block = min_chevelu->m_PadEnd->GetSubRatsnest();
 
     if( min_block > current_num_block )
@@ -688,7 +665,7 @@ static int tst_rats_pad_to_pad( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
  * @return new block number
  */
 {
-    D_PAD*   pad_start, * pad_end;
+    D_PAD*         pad_start, * pad_end;
     RATSNEST_ITEM* chevelu;
 
     for( chevelu = start_rat_list; chevelu < end_rat_list; chevelu++ )
@@ -732,14 +709,14 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
  * if ref_netcode == 0, test all nets, else test only ref_netcode
  */
 {
-    RATSNEST_ITEM*      chevelu;
-    D_PAD*        pad;
-    int           net_code;
-    NETINFO_ITEM* net;
+    RATSNEST_ITEM* chevelu;
+    D_PAD*         pad;
+    int            net_code;
+    NETINFO_ITEM*  net;
 
     if( m_Pcb->m_Pads.size() == 0 )
         return;
-    if ( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+    if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Build_Board_Ratsnest( DC );
 
     for( net_code = 1; ; net_code++ )
@@ -760,21 +737,21 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
             num_block = MAX( num_block, subnet );
         }
 
-         for( chevelu = net->m_RatsnestStart; chevelu < net->m_RatsnestEnd; chevelu++ )
+        for( chevelu = net->m_RatsnestStart; chevelu < net->m_RatsnestEnd; chevelu++ )
         {
-                chevelu->m_Status &= ~CH_ACTIF;
+            chevelu->m_Status &= ~CH_ACTIF;
         }
 
         /* a - tst connection between pads */
         int ii = tst_rats_pad_to_pad( DrawPanel, DC, num_block,
-                net->m_RatsnestStart, net->m_RatsnestEnd );
+                                      net->m_RatsnestStart, net->m_RatsnestEnd );
 
         /* b - test connexion between blocks (Iteration) */
         while( ii > 1 )
         {
             ii = tst_rats_block_to_block( DrawPanel, DC, net );
         }
-     }
+    }
 
     m_Pcb->m_NbNoconnect = 0;
     RATSNEST_ITEM* Chevelu = m_Pcb->m_Ratsnest;
@@ -823,21 +800,21 @@ char* WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
  *          The ratsnest section must be computed for each new position
  */
 {
-    D_PAD**      pt_liste_pad;
-    D_PAD**      pt_liste_ref;
-    D_PAD**      pt_liste_generale;
-    D_PAD*          pad_ref;
-    D_PAD*          pad_externe;
-    D_PAD**      pt_liste_pad_limite;
-    D_PAD**      pt_start_liste;
-    D_PAD**      pt_end_liste;
-    int             ii, jj;
+    D_PAD** pt_liste_pad;
+    D_PAD** pt_liste_ref;
+    D_PAD** pt_liste_generale;
+    D_PAD* pad_ref;
+    D_PAD* pad_externe;
+    D_PAD** pt_liste_pad_limite;
+    D_PAD** pt_start_liste;
+    D_PAD** pt_end_liste;
+    int ii, jj;
     RATSNEST_ITEM*        local_chevelu;
-    static RATSNEST_ITEM* pt_fin_int_chevelu;     // End list for "internal" ratsnest
-    static int      nb_int_chevelu;         // "internal" ratsnest count
-    int             current_net_code;
-    int             increment, distance;    // variables de calcul de ratsnest
-    int             pad_pos_X, pad_pos_Y;   // True pad position according to the current footprint position
+    static RATSNEST_ITEM* pt_fin_int_chevelu;       // End list for "internal" ratsnest
+    static int            nb_int_chevelu;           // "internal" ratsnest count
+    int                   current_net_code;
+    int                   increment, distance;      // variables de calcul de ratsnest
+    int                   pad_pos_X, pad_pos_Y;     // True pad position according to the current footprint position
 
 
     if( (GetBoard()->m_Status_Pcb & LISTE_PAD_OK) == 0 )
@@ -983,8 +960,8 @@ calcul_chevelu_ext:
     pt_liste_ref     = (D_PAD**) adr_lowmem;
     pad_ref = *pt_liste_ref;
 
-    current_net_code      = pad_ref->GetNet();
-    local_chevelu->m_Lenght   = 0x7FFFFFFF;
+    current_net_code = pad_ref->GetNet();
+    local_chevelu->m_Lenght = 0x7FFFFFFF;
     local_chevelu->m_Status = 0;
     increment = 0;
     for( ii = 0; ii < nb_pads_ref; ii++ )
@@ -998,7 +975,7 @@ calcul_chevelu_ext:
                 nb_local_chevelu++; local_chevelu++;
             }
             increment = 0;
-            current_net_code    = pad_ref->GetNet();
+            current_net_code = pad_ref->GetNet();
             local_chevelu->m_Lenght = 0x7FFFFFFF;
         }
 
@@ -1025,7 +1002,7 @@ calcul_chevelu_ext:
                 local_chevelu->m_PadStart = pad_ref;
                 local_chevelu->m_PadEnd   = pad_externe;
                 local_chevelu->SetNet( pad_ref->GetNet() );
-                local_chevelu->m_Lenght   = distance;
+                local_chevelu->m_Lenght = distance;
                 local_chevelu->m_Status = 0;
 
                 increment = 1;
@@ -1039,7 +1016,7 @@ calcul_chevelu_ext:
         local_chevelu++;
     }
 
-    return (char*)(local_chevelu + 1);    /* the struct pointed by local_chevelu is used
+    return (char*) (local_chevelu + 1);    /* the struct pointed by local_chevelu is used
                                            *  in temporary computations, so we skip it
                                            */
 }
@@ -1054,7 +1031,7 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
  */
 {
     RATSNEST_ITEM* local_chevelu;
-    int      ii;
+    int            ii;
 
     if( DC == NULL )
         return;
@@ -1064,34 +1041,15 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
     local_chevelu = local_liste_chevelu;
     ii = nb_local_chevelu;
 
-    GRSetDrawMode( DC, GR_XOR );
-
     while( ii-- > 0 )
     {
-        if( local_chevelu->m_Status & LOCAL_RATSNEST_ITEM )
-        {
-            GRLine( &DrawPanel->m_ClipBox, DC,
-                    local_chevelu->m_PadStart->m_Pos.x - g_Offset_Module.x,
-                    local_chevelu->m_PadStart->m_Pos.y - g_Offset_Module.y,
-                    local_chevelu->m_PadEnd->m_Pos.x - g_Offset_Module.x,
-                    local_chevelu->m_PadEnd->m_Pos.y - g_Offset_Module.y,
-                    0, YELLOW );
-        }
-        else
-        {
-            GRLine( &DrawPanel->m_ClipBox, DC,
-                    local_chevelu->m_PadStart->m_Pos.x - g_Offset_Module.x,
-                    local_chevelu->m_PadStart->m_Pos.y - g_Offset_Module.y,
-                    local_chevelu->m_PadEnd->m_Pos.x,
-                    local_chevelu->m_PadEnd->m_Pos.y,
-                    0, g_DesignSettings.m_RatsnestColor );
-        }
+        local_chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
         local_chevelu++;
     }
 }
 
 
-/**
+/*
  *  construction de la liste en mode de calcul rapide pour affichage
  *  en temps reel du chevelu d'un pad lors des tracés d'une piste démarrant
  *  sur ce pad.
@@ -1102,61 +1060,53 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
  *      init (flag)
  *          = 0 : mise a jour des chevelu
  *          <> 0:	creation de la liste
- *  retourne: adresse memoire disponible
  */
 
-/* Used by build_ratsnest_pad(): sort function by link lenght (manathan distance)*/
-static int sort_by_localnetlength( const void* o1, const void* o2 )
+/* Buffer to store pads coordinates when creating a track.
+ *  these pads are members of the net
+ *  and when the mouse is moved, the g_MaxLinksShowed links to neightbors are drawn
+ */
+static std::vector <wxPoint> s_RatsnestMouseToPads;
+static wxPoint s_CursorPos; // Coordinate of the moving point (mouse cursor and end of current track segment)
+
+/* Used by build_ratsnest_pad(): sort function by link lenght (manhattan distance)*/
+static bool sort_by_localnetlength( const wxPoint& ref, const wxPoint& compare )
 {
-    int* ref     = (int*) o1;
-    int* compare = (int*) o2;
+    wxPoint deltaref = ref - s_CursorPos;
+    wxPoint deltacmp = compare - s_CursorPos;
 
-    int* org = (int*) adr_lowmem;   // ref coordinate (todo : change for a betted code: used an external wxPoint variable)
-    int  ox  = *org++;
-    int  oy  = *org++;
-    int  lengthref, lengthcmp;
+    // = distance between ref coordinate and pad ref
+    int     lengthref = abs( deltaref.x ) + abs( deltaref.y );
 
-    lengthref = abs( *ref - ox );
-    ref++;
+    // distance between ref coordinate and the other pad
+    int     lengthcmp = abs( deltacmp.x ) + abs( deltacmp.y );
 
-    lengthref += abs( *ref - oy );   // = distance between ref coordinate and pad ref
-
-    lengthcmp = abs( *compare - ox );
-
-    compare++;
-
-    lengthcmp += abs( *compare - oy );   // = distance between ref coordinate and the other pad
-
-    return lengthref - lengthcmp;
+    return lengthref < lengthcmp;
 }
 
 
 /****************************************************************************************/
-int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
+void WinEDA_BasePcbFrame::build_ratsnest_pad( BOARD_ITEM* ref,
                                               const wxPoint& refpos, bool init )
 /****************************************************************************************/
 {
-    int        ii;
-    int*       pt_coord, * base_data;
-    int        current_net_code = 0, conn_number = 0;
-    D_PAD** padlist;
-    D_PAD*     pad_ref = NULL;
+    int     current_net_code = 0, conn_number = 0;
+     D_PAD*  pad_ref = NULL;
 
     if( ( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-       || ( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 ) )
+       || ( (m_Pcb->m_Status_Pcb & LISTE_PAD_OK) == 0 ) || ( (m_Pcb->m_Status_Pcb & NET_CODES_OK) == 0 ) )
     {
-        nb_local_chevelu = 0;
-        return NULL;
+        s_RatsnestMouseToPads.clear();
+        return;
     }
 
 
-    base_data = pt_coord = (int*) adr_lowmem;
-    local_liste_chevelu = (RATSNEST_ITEM*) pt_coord;
+    s_CursorPos = refpos;
     if( init )
     {
-        nb_local_chevelu = 0;
+        s_RatsnestMouseToPads.clear();
         if( ref == NULL )
-            return NULL;
+            return;
 
         switch( ref->Type() )
         {
@@ -1180,41 +1130,26 @@ int* WinEDA_BasePcbFrame::build_ratsnest_pad( EDA_BaseStruct* ref,
         }
 
         if( current_net_code <= 0 )
-            return NULL;
+            return;
 
-        *pt_coord++ = refpos.x;
-        *pt_coord++ = refpos.y;
-
-        if( m_Pcb->m_Ratsnest == NULL )
-            return NULL;
-
-        padlist = &m_Pcb->m_Pads[0];
-        for( ii = 0; ii < (int) m_Pcb->m_Pads.size(); padlist++, ii++ )
+        NETINFO_ITEM * net = m_Pcb->FindNet(current_net_code);
+        if ( net == NULL )
+            return;
+        
+        // Create a list of pads candidates ( pads not already connected to the current track:
+        for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
         {
-            D_PAD* pad = *padlist;
-            if( pad->GetNet() != current_net_code )
-                continue;
-
+            D_PAD* pad = net->m_ListPad[ii];
             if( pad == pad_ref )
                 continue;
 
             if( !pad->GetSubNet() || (pad->GetSubNet() != conn_number) )
-            {
-                *pt_coord = pad->m_Pos.x; pt_coord++;
-                *pt_coord = pad->m_Pos.y; pt_coord++;
-                nb_local_chevelu++;
-            }
+                s_RatsnestMouseToPads.push_back( pad->m_Pos );
         }
     }   /* end if Init */
-    else if( nb_local_chevelu )
-    {
-        *pt_coord = refpos.x;
-        *(pt_coord + 1) = refpos.y;
-    }
 
-    qsort( base_data + 2, nb_local_chevelu, 2 * sizeof(int),
-           sort_by_localnetlength );
-    return pt_coord;
+    if( s_RatsnestMouseToPads.size() > 1)
+        sort( s_RatsnestMouseToPads.begin(), s_RatsnestMouseToPads.end(), sort_by_localnetlength );
 }
 
 
@@ -1226,35 +1161,21 @@ void WinEDA_BasePcbFrame::trace_ratsnest_pad( wxDC* DC )
  *  Displays a "ratsnest" during track creation
  */
 {
-    int* pt_coord;
-    int  ii;
-    int  refX, refY;
-
     if( DC == NULL )
         return;
 
-    if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+    if( s_RatsnestMouseToPads.size() == 0)
         return;
 
-    if( nb_local_chevelu == 0 )
-        return;
-
-    if( local_liste_chevelu == NULL )
-        return;
-
-    pt_coord = (int*) local_liste_chevelu;
-
-    refX = *pt_coord++;
-    refY = *pt_coord++;
-
+ 
     GRSetDrawMode( DC, GR_XOR );
-    for( ii = 0; ii < nb_local_chevelu; ii++ )
+    for( int ii = 0; ii < (int)s_RatsnestMouseToPads.size(); ii++ )
     {
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, DC, refX, refY, *pt_coord, *(pt_coord + 1),
+        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos.x, s_CursorPos.y,
+                s_RatsnestMouseToPads[ii].x, s_RatsnestMouseToPads[ii].y,
                 0, YELLOW );
-        pt_coord += 2;
     }
 }

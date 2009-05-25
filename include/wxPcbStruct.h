@@ -286,7 +286,7 @@ public:
     void                     Build_Board_Ratsnest( wxDC* DC );
     void                     DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
     void                     trace_ratsnest_pad( wxDC* DC );
-    int*                     build_ratsnest_pad( EDA_BaseStruct* ref,
+    void                     build_ratsnest_pad( BOARD_ITEM* ref,
                                                  const wxPoint&  refpos,
                                                  bool            init );
 

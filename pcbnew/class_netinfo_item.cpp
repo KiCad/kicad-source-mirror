@@ -3,14 +3,14 @@
 /*************************************************************************/
 
 #include "fctsys.h"
-#include "wxstruct.h"
+#include "class_drawpanel.h"
 #include "common.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
 
 
 /*********************************************************/
-/* class NETINFO_ITEM: hand data relative to a given net */
+/* class NETINFO_ITEM: handle data relative to a given net */
 /*********************************************************/
 
 /* Constructor */
@@ -24,7 +24,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
 }
 
 
-/* destructot */
+/* destructor */
 
 NETINFO_ITEM::~NETINFO_ITEM()
 {
@@ -107,9 +107,8 @@ void NETINFO_ITEM::SetNetname( const wxString & aNetname )
 
 
 /** function Draw (TODO)
- * we actually could show a NET, simply show all the tracks and pads or net name on pad and vias
  */
-void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
+void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset )
 {
 }
 
@@ -169,3 +168,24 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
     valeur_param( (int) lengthnet, txt );
     Affiche_1_Parametre( frame, 60, _( "Net Length" ), txt, RED );
 }
+
+
+/***********************/
+/* class RATSNEST_ITEM */
+/***********************/
+
+/** function Draw 
+ * Draws a line from the starting pad to the ending pad
+ */
+void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset )
+{
+    EDA_Colors color = (EDA_Colors) g_DesignSettings.m_RatsnestColor;
+    if ( (m_Status & LOCAL_RATSNEST_ITEM) )
+        color = YELLOW;
+    GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos.x + aOffset.x,
+            m_PadStart->m_Pos.y + aOffset.y,
+            m_PadEnd->m_Pos.x + aOffset.x,
+            m_PadEnd->m_Pos.y + aOffset.y,
+            0, color );
+}
+

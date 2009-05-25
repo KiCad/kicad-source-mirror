@@ -353,7 +353,7 @@ void MasqueAttributs( int* masque_set, int* masque_clr );
 /* DUPLTRAC.CPP */
 /***************/
 
-EDA_BaseStruct* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask );
+BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask );
 
 /* Routine trouvant le point " d'accrochage " d'une extremite de piste.
  *  Ce point peut etre un PAD ou un autre segment de piste

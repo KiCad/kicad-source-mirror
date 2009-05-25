@@ -86,7 +86,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
     D_PAD*          pt_pad = NULL;
     TRACK*          TrackOnStartPoint = NULL;
     int             masquelayer = g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
-    EDA_BaseStruct* LockPoint;
+    BOARD_ITEM*     LockPoint;
     wxPoint         pos = GetScreen()->m_Curseur;
 
     static int      InitialTrackWidthValue; /* first track segment width.
@@ -457,7 +457,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
      *  ceci contribue a la reduction du temps de calcul */
 
     /* Accrochage de la fin de la piste */
-    EDA_BaseStruct* LockPoint = LocateLockPoint( GetBoard(), pos, masquelayer );
+    BOARD_ITEM* LockPoint = LocateLockPoint( GetBoard(), pos, masquelayer );
 
     if( LockPoint ) /* La fin de la piste est sur un PAD */
     {
