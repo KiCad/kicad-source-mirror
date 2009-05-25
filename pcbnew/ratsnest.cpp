@@ -1041,11 +1041,30 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
     local_chevelu = local_liste_chevelu;
     ii = nb_local_chevelu;
 
+    GRSetDrawMode( DC, GR_XOR );
+    int tmpcolor = g_DesignSettings.m_RatsnestColor;
+    wxPoint offset = -g_Offset_Module;
     while( ii-- > 0 )
     {
-        local_chevelu->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+        if( local_chevelu->m_Status & LOCAL_RATSNEST_ITEM )
+        {
+            g_DesignSettings.m_RatsnestColor = YELLOW;
+            local_chevelu->Draw( DrawPanel, DC, GR_XOR, offset );
+        }
+        else
+        {
+            g_DesignSettings.m_RatsnestColor = tmpcolor;
+            GRLine( &DrawPanel->m_ClipBox, DC,
+                    local_chevelu->m_PadStart->m_Pos.x + offset.x,
+                    local_chevelu->m_PadStart->m_Pos.y + offset.y,
+                    local_chevelu->m_PadEnd->m_Pos.x,
+                    local_chevelu->m_PadEnd->m_Pos.y,
+                    0, g_DesignSettings.m_RatsnestColor );
+        }
         local_chevelu++;
     }
+    
+    g_DesignSettings.m_RatsnestColor = tmpcolor;
 }
 
 

@@ -175,17 +175,14 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
 /***********************/
 
 /** function Draw 
- * Draws a line from the starting pad to the ending pad
+ * Draws a line (a ratsnest) from the starting pad to the ending pad
  */
 void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset )
 {
-    EDA_Colors color = (EDA_Colors) g_DesignSettings.m_RatsnestColor;
-    if ( (m_Status & LOCAL_RATSNEST_ITEM) )
-        color = YELLOW;
     GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos.x + aOffset.x,
             m_PadStart->m_Pos.y + aOffset.y,
             m_PadEnd->m_Pos.x + aOffset.x,
             m_PadEnd->m_Pos.y + aOffset.y,
-            0, color );
+            0, g_DesignSettings.m_RatsnestColor );
 }
 
