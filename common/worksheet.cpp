@@ -826,7 +826,7 @@ Ki_WorkSheetData WS_Podp1_LU =
 {
 	WS_PODPIS_LU,
 	&WS_Podp2_LU,
-	STAMP_7 + 90, 0 + 30,
+	STAMP_7 + 90, 0 + 492,
 	0, 0,
 	wxT("Инв.N подл."), NULL
 };
@@ -835,7 +835,7 @@ Ki_WorkSheetData WS_Podp2_LU =
 {
 	WS_PODPIS_LU,
 	&WS_Podp3_LU,
-	STAMP_7 + 90, STAMP_25 + 30,
+	STAMP_7 + 90, STAMP_25 + 688,
 	0, 0,
 	wxT("Подп. и дата"), NULL
 };
@@ -844,7 +844,7 @@ Ki_WorkSheetData WS_Podp3_LU =
 {
 	WS_PODPIS_LU,
 	&WS_Podp4_LU,
-	STAMP_7 + 90, STAMP_60 + 30,
+	STAMP_7 + 90, STAMP_60 + 492,
 	0, 0,
 	wxT("Взам.инв.N"), NULL
 };
@@ -853,7 +853,7 @@ Ki_WorkSheetData WS_Podp4_LU =
 {
 	WS_PODPIS_LU,
 	&WS_Podp5_LU,
-	STAMP_7 + 90, STAMP_85 + 30,
+	STAMP_7 + 90, STAMP_85 + 492,
 	0, 0,
 	wxT("Инв.N дубл."), NULL
 };
@@ -862,7 +862,7 @@ Ki_WorkSheetData WS_Podp5_LU =
 {
 	WS_PODPIS_LU,
 	NULL,
-	STAMP_7 + 90, STAMP_110 + 30,
+	STAMP_7 + 90, STAMP_110 + 688,
 	0, 0,
 	wxT("Подп. и дата"), NULL
 };
