@@ -25,7 +25,7 @@
  *  C4 CHIP_B
  *  D1 CHIP_B
  *  JP1 unknown
- * 
+ *
  *NET*
  *SIGNAL* N03791
  *  C3.1 R1.1 JP2.7 U1.3
@@ -42,7 +42,7 @@
 /* Generic netlist sample:
  *  $BeginNetlist
  *  $BeginComponentList
- * 
+ *
  *  $BeginComponent
  *  TimeStamp=32568D1E
  *  Footprint=
@@ -68,7 +68,7 @@
  *  16=REF5_1
  *  $EndPinList
  *  $EndComponent
- * 
+ *
  *  $BeginComponent
  *  TimeStamp=325679C1
  *  Footprint=
@@ -89,7 +89,7 @@
  *  $EndPinList
  *  $EndComponent
  *  $EndComponentList
- * 
+ *
  *  $BeginNets
  *  Net 0 ""
  *  Net 1 "GND"
@@ -102,7 +102,7 @@
  *  Net 173 ""
  *  BUS1 30
  *  $EndNets
- * 
+ *
  *  $EndNetlist
  */
 

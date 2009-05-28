@@ -33,8 +33,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
 /********************************************************/
 /* init board, route traces*/
 {
-    int      ii, start, stop;
-    RATSNEST_ITEM* ptmp;
+    int      start, stop;
     MODULE*  Module = NULL;
     D_PAD*   Pad    = NULL;
     int      autoroute_net_code = -1;
@@ -94,9 +93,9 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         Compile_Ratsnest( DC, TRUE );
 
     /* Placement du flag CH_ROUTE_REQ sur les chevelus demandes */
-    ptmp = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
-    for( ii = GetBoard()->GetNumRatsnests(); ii > 0; ii--, ptmp++ )
+    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
     {
+            RATSNEST_ITEM* ptmp = &GetBoard()->m_FullRatsnest[ii];
         ptmp->m_Status &= ~CH_ROUTE_REQ;
 
         switch( mode )
@@ -130,8 +129,6 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         }
     }
 
-    ptmp = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
-
     start = time( NULL );
 
     /* Calcul du pas de routage fixe a 5 mils et plus */
@@ -162,7 +159,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     PlaceCells( GetBoard(), -1, FORCE_PADS );
 
     /* Construction de la liste des pistes a router */
-    Build_Work( GetBoard(), ptmp );
+    Build_Work( GetBoard() );
 
     // DisplayBoard(DrawPanel, DC);
 
@@ -190,19 +187,12 @@ void WinEDA_PcbFrame::Reset_Noroutable( wxDC* DC )
  *  Si ce flag est a 1 il n'est pas reroute
  */
 {
-    int      ii;
-    RATSNEST_ITEM* pt_rats;
-
     if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK )== 0 )
         Compile_Ratsnest( DC, TRUE );
 
-    pt_rats = (RATSNEST_ITEM*) GetBoard()->m_Ratsnest;
-    if( pt_rats == NULL )
-        return;
-
-    for( ii = GetBoard()->GetNumRatsnests(); ii > 0; ii--, pt_rats++ )
+    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
     {
-        pt_rats->m_Status &= ~CH_UNROUTABLE;
+        GetBoard()->m_FullRatsnest[ii].m_Status &= ~CH_UNROUTABLE;
     }
 }
 

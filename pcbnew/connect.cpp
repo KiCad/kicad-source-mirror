@@ -363,7 +363,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 
     /* Display results */
     msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
-                m_Pcb->m_NbLinks, m_Pcb->GetNumNoconnect(),
+                m_Pcb->GetRatsnestsCount(), m_Pcb->GetNoconnectCount(),
                 nb_net_noconnect );
 
     Affiche_Message( msg );

@@ -60,8 +60,6 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     GetBoard()->m_BoundaryBox.SetOrigin( 0, 0 );
     GetBoard()->m_BoundaryBox.SetSize( 0, 0 );
     GetBoard()->m_Status_Pcb = 0;
-    GetBoard()->m_NbLoclinks = 0;
-    GetBoard()->m_NbLinks    = 0;
     GetBoard()->m_NbNodes     = 0;
     GetBoard()->m_NbNoconnect = 0;
 

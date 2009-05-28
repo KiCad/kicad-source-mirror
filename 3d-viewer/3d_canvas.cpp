@@ -78,7 +78,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 /*************************************/
 {
     ClearLists();
-	m_init = FALSE;
+    m_init = FALSE;
 }
 
 
@@ -224,7 +224,7 @@ void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
 /********************************************************/
 {
     wxSize size( GetClientSize() );
-    double  spin_quat[4];
+    double spin_quat[4];
 
 
     if( event.RightDown() )
@@ -474,6 +474,7 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
 /*************************************************/
 {
     wxPaintDC dc( this );
+
     // Set the OpenGL viewport according to the client size of this canvas.
     // This is done here rather than in a wxSizeEvent handler because our
     // OpenGL rendering context (and thus viewport setting) is used with
@@ -482,11 +483,10 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
     // is wrong when next another canvas is repainted.
     const wxSize ClientSize = GetClientSize();
 
-    glViewport(0, 0, ClientSize.x, ClientSize.y);
+    glViewport( 0, 0, ClientSize.x, ClientSize.y );
     Redraw();
     event.Skip();
 }
-
 
 
 /***********************************************************/
@@ -518,7 +518,7 @@ void Pcb3D_GLCanvas::InitGL()
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-#define MAX_VIEW_ANGLE  160.0 / 45.0
+#define MAX_VIEW_ANGLE 160.0 / 45.0
     if( g_Parm_3D_Visu.m_Zoom > MAX_VIEW_ANGLE )
         g_Parm_3D_Visu.m_Zoom = MAX_VIEW_ANGLE;
     gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
@@ -599,9 +599,9 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
  */
 {
     wxFileName fn( m_Parent->m_Parent->GetScreen()->m_FileName );
-    wxString FullFileName;
-    wxString file_ext, mask;
-    bool     fmt_is_jpeg = FALSE;
+    wxString   FullFileName;
+    wxString   file_ext, mask;
+    bool       fmt_is_jpeg = FALSE;
 
     if( event.GetId() == ID_MENU_SCREENCOPY_JPEG )
         fmt_is_jpeg = TRUE;
@@ -627,13 +627,26 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     }
 
     Redraw( true );
-    wxSize     image_size = GetClientSize();
-    wxClientDC dc( this );
-    wxBitmap   bitmap( image_size.x, image_size.y );
-    wxMemoryDC memdc;
-    memdc.SelectObject( bitmap );
-    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
-    memdc.SelectObject( wxNullBitmap );
+
+    struct vieport_params
+    {
+        GLint originx;
+        GLint originy;
+        GLint x;
+        GLint y;
+    } viewport;
+
+    glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
+
+    unsigned char* pixelbuffer = (unsigned char*) malloc( 3 * viewport.x * viewport.y );
+    glReadPixels( 0, 0, viewport.x, viewport.y, GL_RGB, GL_UNSIGNED_BYTE, pixelbuffer );
+
+    wxImage        image( viewport.x, viewport.y );
+
+    image.SetData( pixelbuffer );
+    image = image.Mirror();
+    image = image.Rotate90().Rotate90();
+    wxBitmap bitmap( image, -1 );
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
@@ -650,8 +663,6 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     }
     else
     {
-        wxImage image = bitmap.ConvertToImage();
-
         if( !image.SaveFile( FullFileName,
                              fmt_is_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
             wxLogError( wxT( "Can't save file" ) );

@@ -31,7 +31,7 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
                          wxBitmap( import3d_xpm ),
                          _( "Reload board" ) );
-#ifdef __WINDOWS__  // do not work properly under linux
+#if (defined(__WINDOWS__) || defined(__APPLE__))  // do not work properly under linux
     m_HToolBar-> AddSeparator();
 
     m_HToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,

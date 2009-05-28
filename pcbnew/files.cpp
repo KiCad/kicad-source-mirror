@@ -263,10 +263,11 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;
-    GetBoard()->Build_Pads_Full_List();
-
-    GetBoard()->DisplayInfo( this );
+ 
     DrawPanel->Refresh( true);
+
+    Compile_Ratsnest( NULL, true );
+    GetBoard()->DisplayInfo( this );
 
     /* reset the auto save timer */
     g_SaveTime = time( NULL );

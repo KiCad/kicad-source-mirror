@@ -81,10 +81,10 @@ public:
      */
     void Append( NETINFO_ITEM* aNewElement );
 
-    /** Function Clear
+    /** Function DeleteData
      * delete the list of nets (and free memory)
      */
-    void Clear();
+    void DeleteData();
 
     /** Function BuildListOfNets
      * initialize the list of NETINFO_ITEM m_NetBuffer
@@ -112,9 +112,8 @@ public:
     int                          m_NbNoconn;        // Ratsnets remaining to route count
     int                          m_ForceWidth;      // specific width (O = default width)
     std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
-    RATSNEST_ITEM*               m_RatsnestStart;   // pointeur sur debut de liste ratsnests du net
-    RATSNEST_ITEM*               m_RatsnestEnd;     // pointeur sur fin de liste ratsnests du net
-    std::vector <RATSNEST_ITEM*> m_ListRatsnest;    // List of Ratsnests for this net
+    unsigned                     m_RatsnestStart;   // debut de liste ratsnests du net (included)
+    unsigned                     m_RatsnestEnd;     // fin de liste ratsnests du net (excluded)
 
     NETINFO_ITEM( BOARD_ITEM* aParent );
     ~NETINFO_ITEM();

@@ -82,12 +82,9 @@ private:
 public:
     WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation
     EDA_Rect                m_BoundaryBox;      // Board size and position
-    int                     m_Unused;
     int                     m_Status_Pcb;       // Flags used in ratsnet calculation and update
     EDA_BoardDesignSettings* m_BoardSettings;   // Link to current design settings
     int             m_NbNodes;                  // Active pads (pads attached to a net ) count
-    int             m_NbLinks;                  // Ratsnest count
-    int             m_NbLoclinks;               // Number of ratsnests from mouse cursor to pads to show while creating a track
     int             m_NbNoconnect;              // Active ratsnet count (rastnests not alraedy connected by tracks)
 
     DLIST<BOARD_ITEM> m_Drawings;               // linked list of lines & texts
@@ -98,8 +95,9 @@ public:
     std::vector<D_PAD*> m_Pads;                 // Entry for a sorted pad list (used in ratsnest calculations)
     NETINFO_LIST*   m_NetInfo;                  // nets info list (name, design constraints ..
 
-    RATSNEST_ITEM*        m_Ratsnest;                 // Rastnest list
-    RATSNEST_ITEM*        m_LocalRatsnest;            // Rastnest list used while moving a footprint
+    std::vector<RATSNEST_ITEM>  m_FullRatsnest;             // Rastnest list for the BOARD
+    std::vector<RATSNEST_ITEM>  m_LocalRatsnest;            /* Rastnest list relative to a given footprint
+(used while moving a footprint) */
 
     ZONE_CONTAINER* m_CurrentZoneContour;     	// zone contour currently in progress
 
@@ -233,27 +231,26 @@ public:
     /* Routines de calcul des nombres de segments pistes et zones */
     int     GetNumSegmTrack();
     int     GetNumSegmZone();
-    int     GetNumNoconnect();    // retourne le nombre de connexions manquantes
+    unsigned     GetNoconnectCount();    // retourne le nombre de connexions manquantes
 
     /**
      * Function GetNumRatsnests
      * @return int - The number of rats
      */
-    int     GetNumRatsnests()
+    unsigned     GetRatsnestsCount()
     {
-        return m_NbLinks;
+        return m_FullRatsnest.size();
     }
 
-    int     GetNumNodes();        // retourne le nombre de pads a netcode > 0
+    unsigned     GetNodesCount();        // retourne le nombre de pads a netcode > 0
 
     /** Function Build_Pads_Full_List
      *  Create the pad list
      * initialise:
      *   m_Pads (list of pads)
-     *   m_NbNodes = 0
      * set m_Status_Pcb = LISTE_PAD_OK;
-     * and clear for all pads the m_SubRatsnest member;
-     * delete ( free memory) m_Pcb->m_Ratsnest and set m_Pcb->m_Ratsnest to NULL
+     * and clear for all pads in list the m_SubRatsnest member;
+     * clear m_Pcb->m_FullRatsnest
      */
     void Build_Pads_Full_List();
 

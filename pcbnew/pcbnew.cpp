@@ -40,11 +40,6 @@ bool g_TwoSegmentTrackBuild = TRUE;
 bool g_HightLigt_Status;
 extern PARAM_CFG_BASE* ParamCfgList[];
 
-/* A buffer used in some computations (will be removed in next cleanup code,
- * DO NOT use) */
-#define BUFMEMSIZE 256000    /* buffer size (in bytes) */
-char* adr_lowmem = NULL;
-
 int Angle_Rot_Module;
 int ModuleSegmentWidth;
 int ModuleTextWidth;
@@ -140,15 +135,6 @@ Changing extension to .brd." ),
                                           * real hotkeys in menus or tool tips */
 
 
-    /* allocation de la memoire pour le fichier et autres buffers: */
-    /* On reserve BUFMEMSIZE octets de ram pour calcul */
-    adr_lowmem = (char*) MyZMalloc( BUFMEMSIZE );   /* adresse de la zone de calcul */
-
-    if( adr_lowmem == NULL )
-    {
-        printf( "No Memory, Fatal err Memory alloc\n" );
-        return FALSE;
-    }
     frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ),
                                  wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );

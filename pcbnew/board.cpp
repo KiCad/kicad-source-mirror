@@ -14,7 +14,7 @@
 /* routines externes : */
 
 /* Routines definies ici: */
-int         Build_Work( BOARD* Pcb, RATSNEST_ITEM* pt_base_chevelu );
+int         Build_Work( BOARD* Pcb );
 void        PlaceCells( BOARD* Pcb, int net_code, int flag );
 int         InitBoard();
 BoardCell   GetCell( int, int, int );
@@ -336,12 +336,11 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
 
 /******************************************************/
-int Build_Work( BOARD* Pcb, RATSNEST_ITEM* pt_base_chevelu )
+int Build_Work( BOARD* Pcb )
 /*****************************************************/
 /* Build liste conn */
 {
-    int      ii;
-    RATSNEST_ITEM* pt_rats = pt_base_chevelu;
+    RATSNEST_ITEM* pt_rats;
     D_PAD*   pt_pad;
     int      r1, r2, c1, c2, current_net_code;
     RATSNEST_ITEM* pt_ch;
@@ -350,8 +349,9 @@ int Build_Work( BOARD* Pcb, RATSNEST_ITEM* pt_base_chevelu )
 
     InitWork(); /* clear work list */
     Ntotal = 0;
-    for( ii = Pcb->GetNumRatsnests(); ii > 0; ii--, pt_rats++ )
+    for( unsigned ii = 0;Pcb->GetRatsnestsCount(); ii++ )
     {
+        pt_rats = &Pcb->m_FullRatsnest[ii];
         /* On ne route que les chevelus actifs et routables */
         if( (pt_rats->m_Status & CH_ACTIF) == 0 )
             continue;

@@ -69,7 +69,7 @@ int CalcDist( int, int, int ,int );
 
 /* BOARD.CPP */
 bool ComputeMatriceSize(WinEDA_BasePcbFrame * frame, int pas_route);
-int Build_Work(BOARD * Pcb, RATSNEST_ITEM* pt_chevelus);
+int Build_Work(BOARD * Pcb);
 void PlaceCells(BOARD * Pcb, int net_code, int flag = 0);
 
 BoardCell GetCell( int, int, int );

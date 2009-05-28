@@ -281,7 +281,7 @@ public:
     void                     Compile_Ratsnest( wxDC* DC, bool affiche );    /* Recalcul complet du chevelu */
     void                     ReCompile_Ratsnest_After_Changes( wxDC* DC );
     int                      Test_1_Net_Ratsnest( wxDC* DC, int net_code );
-    char*                    build_ratsnest_module( wxDC* DC, MODULE* Module );
+    void                     build_ratsnest_module( wxDC* DC, MODULE* Module );
     void                     trace_ratsnest_module( wxDC* DC );
     void                     Build_Board_Ratsnest( wxDC* DC );
     void                     DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
@@ -521,7 +521,14 @@ public:
 
     /* Fonctions specifiques */
     MODULE*          ListAndSelectModuleName();
-    void             Liste_Equipot( wxCommandEvent& event );
+
+    /** Function ListNetsAndSelect
+     * called by a command event
+     * displays the sorted list of nets in a dialog frame
+     * If a net is selected, it is hightlighted
+     */
+    void             ListNetsAndSelect( wxCommandEvent& event );
+
     void             Swap_Layers( wxCommandEvent& event );
     void             Install_Test_DRC_Frame( wxDC* DC );
 

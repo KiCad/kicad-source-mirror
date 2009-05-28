@@ -302,12 +302,12 @@ void DRC::testUnconnected()
         m_mainWindow->Compile_Ratsnest( &dc, TRUE );
     }
 
-    if( m_pcb->m_Ratsnest == NULL )
+    if( m_pcb->GetRatsnestsCount() == 0 )
         return;
 
-    RATSNEST_ITEM* rat = m_pcb->m_Ratsnest;
-    for( int i = 0;  i<m_pcb->GetNumRatsnests();  ++i, ++rat )
+    for( unsigned ii = 0; ii < m_pcb->GetRatsnestsCount();  ++ii )
     {
+        RATSNEST_ITEM* rat = &m_pcb->m_FullRatsnest[ii];
         if( (rat->m_Status & CH_ACTIF) == 0 )
             continue;
 

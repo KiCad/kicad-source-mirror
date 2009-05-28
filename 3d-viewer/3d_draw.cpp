@@ -1,22 +1,10 @@
 //////////////////////////////////////
-
 // Name:        3d_draw.cpp
 //////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "fctsys.h"
+#include "common.h"
 #include "trigo.h"
-
-
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include "pcbstruct.h"
 #include "macros.h"
 #include "drawtxt.h"
@@ -26,6 +14,11 @@
 #include "trackball.h"
 
 #include "3d_struct.h"
+
+#if !wxUSE_GLCANVAS
+#error Please set wxUSE_GLCANVAS to 1 in setup.h.
+#endif
+
 
 static void Draw3D_FilledCircle( double posx, double posy,
                                  double rayon, double hole_rayon, double zpos );
@@ -108,7 +101,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_BoardPos   = pcb->m_BoundaryBox.Centre();
     g_Parm_3D_Visu.m_BoardPos.y = -g_Parm_3D_Visu.m_BoardPos.y;
     g_Parm_3D_Visu.m_Layers     = pcb->m_BoardSettings->m_CopperLayerCount;
-    
+
     // Ensure the board has 2 sides for 3D views, because it is hard to find a *really* single side board in the true life...
     if ( g_Parm_3D_Visu.m_Layers < 2 )
         g_Parm_3D_Visu.m_Layers = 2;
@@ -489,7 +482,31 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
     s_Text3DWidth = text->m_Width * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
-    DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
+    if( text->m_MultilineAllowed )
+    {
+        wxPoint        pos  = text->m_Pos;
+        wxArrayString* list = wxStringSplit( text->m_Text, '\n' );
+        wxPoint        offset;
+
+        offset.y = text->GetInterline();
+
+        RotatePoint( &offset, text->m_Orient );
+        for( unsigned i = 0; i<list->Count(); i++ )
+        {
+            wxString txt = list->Item( i );
+            DrawGraphicText( NULL, NULL, pos, (EDA_Colors) color,
+                     txt, text->m_Orient, text->m_Size,
+                     text->m_HJustify, text->m_VJustify,
+                     text->m_Width, text->m_Italic,
+                     true,
+                     Draw3dTextSegm );
+            pos += offset;
+        }
+
+        delete (list);
+    }
+    else
+        DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
                      text->m_Text, text->m_Orient, text->m_Size,
                      text->m_HJustify, text->m_VJustify,
                      text->m_Width, text->m_Italic,

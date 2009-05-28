@@ -19,7 +19,7 @@ NETINFO_LIST::NETINFO_LIST( BOARD* aParent )
 
 NETINFO_LIST::~NETINFO_LIST()
 {
-    Clear();
+    DeleteData();
 }
 
 
@@ -35,10 +35,10 @@ NETINFO_ITEM* NETINFO_LIST::GetItem( int aNetcode )
 }
 
 
-/** Function Clear
+/** Function DeleteData
  * delete the list of nets (and free memory)
  */
-void NETINFO_LIST::Clear()
+void NETINFO_LIST::DeleteData()
 {
     for( unsigned ii = 0; ii < GetCount(); ii++ )
         delete m_NetBuffer[ii];
@@ -83,7 +83,7 @@ void NETINFO_LIST::BuildListOfNets()
     int nodes_count = 0;
     NETINFO_ITEM* net_item;
 
-    Clear();        // Remove all nets info and free memory
+    DeleteData();        // Remove all nets info and free memory
 
     // Create and add the "unconnected net"
     net_item = new NETINFO_ITEM( m_Parent );
@@ -135,13 +135,12 @@ void BOARD::Build_Pads_Full_List()
 /**********************************/
 
 /** Function Build_Pads_Full_List
- *  Create the pad list
+ *  Create the pad list, sorted by net names
  * initialise:
  *   m_Pads (list of pads)
- *   m_NbNodes = 0
  * set m_Status_Pcb = LISTE_PAD_OK;
- * and clear for all pads the m_SubRatsnest member;
- * delete ( free memory) m_Pcb->m_Ratsnest and set m_Pcb->m_Ratsnest to NULL
+ * also clear m_Pcb->m_FullRatsnest that could have bad data
+ *   (m_Pcb->m_FullRatsnest uses pointer to pads)
  */
 {
     if( m_Status_Pcb & LISTE_PAD_OK )
@@ -149,8 +148,7 @@ void BOARD::Build_Pads_Full_List()
 
     // empty the old list
     m_Pads.clear();
-
-    m_NbNodes = 0;
+    m_FullRatsnest.clear();
 
     /* Clear variables used in rastnest computation */
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
@@ -161,20 +159,11 @@ void BOARD::Build_Pads_Full_List()
 
             pad->SetSubRatsnest( 0 );
             pad->SetParent( module );
-
-            if( pad->GetNet() )
-                m_NbNodes++;
         }
     }
 
     // Sort pad list per net
     sort( m_Pads.begin(), m_Pads.end(), PadlistSortByNetnames );
-
-    if( m_Ratsnest )
-    {
-        MyFree( m_Ratsnest );
-        m_Ratsnest = NULL;
-    }
 
     m_Status_Pcb = LISTE_PAD_OK;
 }

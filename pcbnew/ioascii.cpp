@@ -208,8 +208,7 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 
         if( strnicmp( data, "Links", 5 ) == 0 )
         {
-            data = strtok( NULL, " =\n\r" );
-            GetBoard()->m_NbLinks = atoi( data );
+            // Info only, do nothing
             continue;
         }
 
@@ -571,7 +570,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 
     // Write old format for Layer count (for compatibility with old versions of pcbnew
     fprintf( File, "Ly %8X\n", g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS ); // For compatibility with old version of pcbnew
-    fprintf( File, "Links %d\n", GetBoard()->m_NbLinks );
+    fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 
     /* Write Bounding box info */
@@ -872,10 +871,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     BestZoom();
 
-#ifdef PCBNEW
-    // Build connectivity info
-    Compile_Ratsnest( NULL, TRUE );
-#endif
+    GetBoard()->m_Status_Pcb = 0;
     return 1;
 }
 

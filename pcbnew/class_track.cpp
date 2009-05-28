@@ -886,10 +886,10 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         /* Display NetName pour les segments de piste type cuivre */
 
-        NETINFO_ITEM* equipot = board->FindNet( GetNet() );
+        NETINFO_ITEM* net = board->FindNet( GetNet() );
 
-        if( equipot )
-            msg = equipot->GetNetname();
+        if( net )
+            msg = net->GetNetname();
         else
             msg = wxT( "<noname>" );
 

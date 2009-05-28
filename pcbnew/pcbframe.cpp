@@ -102,7 +102,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, WinEDA_PcbFrame::RecreateBOMFileFromBoard )
 
 // menu Miscellaneous
-    EVT_MENU( ID_MENU_LIST_NETS, WinEDA_PcbFrame::Liste_Equipot )
+    EVT_MENU( ID_MENU_LIST_NETS, WinEDA_PcbFrame::ListNetsAndSelect )
     EVT_MENU( ID_PCB_GLOBAL_DELETE, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_CLEAN, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS,
