@@ -1,8 +1,8 @@
-/********************************************************/
-/* methodes pour les structures de base:				*/
-/*		EDA_BaseStruct (classe non utilisable seule)	*/
-/*		EDA_TextStruct (classe non utilisable seule)	*/
-/********************************************************/
+/****************************************/
+/* Basic classes for Kicad:				*/
+/*		EDA_BaseStruct                  */
+/*		EDA_TextStruct                  */
+/****************************************/
 
 /* Fichier base_struct.cpp */
 
@@ -10,7 +10,6 @@
 #include "gr_basic.h"
 #include "trigo.h"
 #include "common.h"
-#include "grfonte.h"
 #include "macros.h"
 #include "wxstruct.h"
 #include "class_drawpanel.h"

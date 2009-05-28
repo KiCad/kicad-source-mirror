@@ -7,7 +7,6 @@
 #include "common.h"
 #include "plot_common.h"
 #include "worksheet.h"
-#include "grfonte.h"
 #include "base_struct.h"
 #include "drawtxt.h"
 #include "trigo.h"
@@ -694,7 +693,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
 
         delete (list);
     }
-    
+
     else
         PlotGraphicText( g_PlotFormat, textpos,
                      color, schText->m_Text, schText->m_Orient, schText->m_Size,

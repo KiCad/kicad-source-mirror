@@ -18,7 +18,7 @@
 #endif
 
 #define EDA_DRAWBASE
-#include "hershey.h"
+#include "hershey_fonts.h"
 
 #define HERSHEY_SIZE 32.0
 
