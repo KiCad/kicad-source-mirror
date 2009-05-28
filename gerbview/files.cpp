@@ -112,8 +112,10 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
 
 /*******************************************************************************************/
-bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
-                                            wxDC* DC, int mode )
+bool
+WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
+                                       wxDC* DC,
+                                         int mode )
 /*******************************************************************************************/
 
 /*
@@ -123,36 +125,57 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
  *  1 si OK
  */
 {
-    wxString wildcard;
-    wxFileName fn = FullFileName;
+    wxString filetypes;
+    wxFileName filename = FullFileName;
 
     ActiveScreen = GetScreen();
 
-    if( !fn.IsOk() )
+    if( !filename.IsOk() )
     {
-        wildcard.Printf( _( "Gerber files (.%s .gbr .gbx .lgr .ger .pho)| \
-*.%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|" ),
-                         g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
-        wildcard += AllFilesWildcard;
+		wxString current_path = filename.GetPath();
 
-        wxString currpath = fn.GetPath();
-        if ( currpath.IsEmpty() )
-            currpath = wxGetCwd();
-        wxFileDialog dlg( this, _( "Open Gerber File" ), currpath,
-                          fn.GetFullName(), wildcard,
+		/* Standard gerber filetypes */
+		filetypes += _("Gerber files (.gbr .gbx .lgr .ger .pho)| \
+			*.gbr;*.GBR;*.gbx;*.GBX;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO|");
+
+		/* Special gerber filetypes */
+		filetypes += _("Top layer (*.GTL)|*.GTL;*.gtl|");
+		filetypes += _("Bottom solder resist (*.GBS)|*.GBS;*.gbs|");
+		filetypes += _("Top solder resist (*.GTS)|*.GTS;*.gts|");
+		filetypes += _("Bottom overlay (*.GBO)|*.GBO;*.gbo|");
+		filetypes += _("Top overlay (*.GTO)|*.GTO;*.gto|");
+		filetypes += _("Bottom paste (*.GBP)|*.GBP;*.gto|");
+		filetypes += _("Top paste (*.GTP)|*.GTP;*.gtp|");
+		filetypes += _("Keep-out layer (*.GKO)|*.GKO;*.gko|");
+		filetypes += _("Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|");
+		filetypes += _("Top Pad Master (*.GPT)|*.GPT;*.gpt|");
+		filetypes += _("Bottom Pad Master (*.GPB)|*.GPB;*.gpb|");
+
+		/* All filetypes */
+		filetypes += AllFilesWildcard;
+
+		/* Get current path if emtpy */
+        if ( current_path.IsEmpty() )
+            current_path = wxGetCwd();
+
+        wxFileDialog dlg( this,
+                          _( "Open Gerber File" ),
+                          current_path,
+                          filename.GetFullName(),
+                          filetypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        fn = dlg.GetPath();
+        filename = dlg.GetPath();
     }
 
-    GetScreen()->m_FileName = fn.GetFullPath();
-    wxSetWorkingDirectory( fn.GetPath() );
-    fn.SetExt( g_PenFilenameExt );
+    GetScreen()->m_FileName = filename.GetFullPath();
+    wxSetWorkingDirectory( filename.GetPath() );
+    filename.SetExt( g_PenFilenameExt );
 
-    if( Read_GERBER_File( DC, GetScreen()->m_FileName, fn.GetFullPath() ) )
+    if( Read_GERBER_File( DC, GetScreen()->m_FileName, filename.GetFullPath() ) )
         SetLastProject( GetScreen()->m_FileName );
 
     Zoom_Automatique( FALSE );
