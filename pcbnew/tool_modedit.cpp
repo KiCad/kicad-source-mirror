@@ -203,7 +203,8 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
                                 wxBitmap( grid_xpm ),
-                               _( "Display Grid OFF" ) );
+                               _( "Display Grid OFF" ), wxITEM_CHECK );
+    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, m_Draw_Grid );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                wxBitmap( polar_coord_xpm ),
