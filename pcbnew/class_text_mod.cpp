@@ -413,7 +413,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
 
     /* Trace du texte */
     DrawGraphicText( panel, DC, pos, (enum EDA_Colors) color, m_Text,
-                     orient, size, m_HJustify, m_VJustify, width, m_Italic );
+                     orient, size, m_HJustify, m_VJustify, width, m_Italic, m_Bold);
 }
 
 

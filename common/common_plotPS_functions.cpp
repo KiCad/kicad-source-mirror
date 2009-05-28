@@ -31,6 +31,7 @@ void InitPlotParametresPS( wxPoint offset, Ki_PageDescr* sheet,
     g_Plot_XScale = aXScale;
     g_Plot_YScale = aYScale;
     g_Plot_CurrentPenWidth = -1;
+    g_Plot_PenState = 'Z';
 }
 
 
@@ -211,18 +212,22 @@ void LineTo_PS( wxPoint pos, int plume )
 /* Routine to draw to a new position
  */
 {
-    if( plume == 'Z' )
+    char Line[256];
+    if( plume == 'Z' ) {
+	if (g_Plot_PenState != 'Z') {
+	    fputs( "stroke\n", g_Plot_PlotOutputFile );
+	    g_Plot_PenState = 'Z';
+	}
         return;
+    }
 
     UserToDeviceCoordinate( pos );
-    if( plume == 'D' )
-    {
-        char Line[256];
-        sprintf( Line, "%d %d %d %d line\n",
-            g_Plot_LastPenPosition.x, g_Plot_LastPenPosition.y, pos.x, pos.y );
-        fputs( Line, g_Plot_PlotOutputFile );
+    if (g_Plot_PenState == 'Z') {
+	fputs( "newpath\n", g_Plot_PlotOutputFile );
     }
-    g_Plot_LastPenPosition = pos;
+    sprintf( Line, "%d %d %sto\n", pos.x, pos.y, (plume=='D')?"line":"move" );
+    fputs( Line, g_Plot_PlotOutputFile );
+    g_Plot_PenState = plume;
 }
 
 
@@ -272,11 +277,11 @@ void PrintHeaderPS( FILE* file, const wxString& Creator,
         "/rect0 { rectstroke } bind def\n",
         "/rect1 { rectfill } bind def\n",
         "/rect2 { rectfill } bind def\n",
+	"/linemode0 { 0 setlinecap 0 setlinejoin 0 setlinewidth } bind def\n",
+	"/linemode1 { 1 setlinecap 1 setlinejoin } bind def\n",
         "gsave\n",
         "72 72 scale\t\t\t% Talk inches\n",
-        "1 setlinecap\n",
-        "1 setlinejoin\n",
-        "1 setlinewidth\n",
+        "linemode1\n",
         NULL
     };
 

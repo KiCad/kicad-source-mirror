@@ -4,16 +4,16 @@
  * @see   common.h
  */
 
-
 #ifndef __INCLUDE__DRAWTXT_H__
 #define __INCLUDE__DRAWTXT_H__ 1
 
 class WinEDA_DrawPanel;
 
+int TextWidth(const wxString& aText, int size_h, bool italic, bool bold );
+
 /** Function NegableTextLength
  * Return the text length of a negable string, excluding the ~ markers */
 int NegableTextLength( const wxString& aText );
-
 
 /** Function DrawGraphicText
  * Draw a graphic text (like module texts)
@@ -29,6 +29,7 @@ int NegableTextLength( const wxString& aText );
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
+ *  @param aBold = true to use a bold font
  *  @param aNegable = true to enable the ~ char for overbarring
  *  @param aCallback() = function called (if non null) to draw each segment.
  *                  used to draw 3D texts or for plotting, NULL for normal drawings
@@ -42,9 +43,9 @@ void DrawGraphicText( WinEDA_DrawPanel * aPanel,
                       const wxSize &aSize,
                       enum GRTextHorizJustifyType aH_justify,
                       enum GRTextVertJustifyType aV_justify,
-                      int aWidth = 0,
-                      bool aItalic = false,
-                      bool aNegable = false,
+                      int aWidth,
+                      bool aItalic,
+		      bool aBold,
                       void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL );
 
 /** Function PlotGraphicText
@@ -60,7 +61,7 @@ void DrawGraphicText( WinEDA_DrawPanel * aPanel,
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
- *  @param aNegable = true to enable the ~ char for overbarring
+ *  @param aBold = true to use a bold font
  */
 void PlotGraphicText(            int                         aFormat_plot,
                                  const wxPoint&              aPos,
@@ -71,8 +72,8 @@ void PlotGraphicText(            int                         aFormat_plot,
                                  enum GRTextHorizJustifyType aH_justify,
                                  enum GRTextVertJustifyType  aV_justify,
                                  int                         aWidth,
-                                 bool                        aItalic = false,
-                                 bool                        aNegable = false );
+                                 bool                        aItalic,
+                                 bool                        aBold );
 
 
 #endif /* __INCLUDE__DRAWTXT_H__ */

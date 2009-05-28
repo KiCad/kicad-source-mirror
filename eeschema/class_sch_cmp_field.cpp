@@ -150,7 +150,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         DrawGraphicText( panel, DC, pos, color, m_Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         m_Size, hjustify, vjustify, LineWidth, m_Italic );
+                         m_Size, hjustify, vjustify, LineWidth, m_Italic, m_Bold, false );
     }
     else
     {
@@ -168,7 +168,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
         DrawGraphicText( panel, DC, pos, color, fulltext,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         m_Size, hjustify, vjustify, LineWidth, m_Italic );
+                         m_Size, hjustify, vjustify, LineWidth, m_Italic, m_Bold, false );
     }
 }
 
@@ -187,6 +187,7 @@ void SCH_CMP_FIELD::ImportValues( const LibDrawField& aSource )
     m_HJustify = aSource.m_HJustify;
     m_VJustify = aSource.m_VJustify;
     m_Italic   = aSource.m_Italic;
+    m_Bold     = aSource.m_Bold;
     m_Width    = aSource.m_Width;
     m_Attributs = aSource.m_Attributs;
     m_Mirror   = aSource.m_Mirror;
@@ -207,6 +208,7 @@ void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
     EXCHG( m_Mirror, copyitem->m_Mirror );
     EXCHG( m_Attributs, copyitem->m_Attributs );
     EXCHG( m_Italic, copyitem->m_Italic );
+    EXCHG( m_Bold, copyitem->m_Bold );
     EXCHG( m_HJustify, copyitem->m_HJustify );
     EXCHG( m_VJustify, copyitem->m_VJustify );
 }
@@ -245,20 +247,7 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     x1 = m_Pos.x - pos.x;
     y1 = m_Pos.y - pos.y;
 
-    textlen = GetLength();
-    if( m_FieldId == REFERENCE )   // Real Text can be U1 or U1A
-    {
-        EDA_LibComponentStruct* Entry =
-            FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString,
-                         FIND_ROOT );
-        if( Entry && (Entry->m_UnitCount > 1) )
-            textlen++; // because U1 is show as U1A or U1B ...
-    }
-    dx = m_Size.x * textlen;
-
-    // Real X Size is 10/9 char size because space between 2 chars is 1/10 X Size
-    dx = (dx * 10) / 9;
-
+    dx = LenSize(m_Text);
     dy = m_Size.y;
     hjustify = m_HJustify;
     vjustify = m_VJustify;
@@ -356,7 +345,7 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
                  m_Attributs,
                  hjustify, vjustify,
                  m_Italic ? 'I' : 'N',
-                 m_Width > 1 ? 'B' : 'N' ) == EOF )
+                 m_Bold ? 'B' : 'N' ) == EOF )
     {
         return false;
     }

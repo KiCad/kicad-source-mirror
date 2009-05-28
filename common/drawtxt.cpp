@@ -18,7 +18,9 @@
 #endif
 
 #define EDA_DRAWBASE
-#include "grfonte.h"
+#include "hershey.h"
+
+#define HERSHEY_SIZE 32.0
 
 /* Functions to draw / plot a string.
  *  texts have only one line.
@@ -47,6 +49,54 @@ int NegableTextLength( const wxString& aText )
 }
 
 
+static const char* get_hershey_recipe( int AsciiCode, bool bold )
+{
+    AsciiCode &= 0x7F;
+    if( AsciiCode < 32 )
+        AsciiCode = 32;                 /* Clamp control chars */
+    AsciiCode -= 32;
+
+    if( bold )
+    {
+        return hershey_duplex[AsciiCode];
+    }
+    else
+    {
+        return hershey_simplex[AsciiCode];
+    }
+}
+
+
+int TextWidth( const wxString& aText, int size_h, bool italic, bool bold )
+{
+    int tally = 0;
+    int char_count = aText.length();
+
+    for( int i = 0; i < char_count; i++ )
+    {
+        int AsciiCode = aText[i];
+
+        if( AsciiCode == '~' ) /* Skip the negation marks */
+        {
+            continue;
+        }
+
+        const char* ptcar = get_hershey_recipe( AsciiCode, bold );
+        /* Get metrics */
+        int         xsta = *ptcar++ - 'R';
+        int         xsto = *ptcar++ - 'R';
+        tally += wxRound( size_h * (xsto - xsta) / HERSHEY_SIZE );
+    }
+
+    /* Italic correction, 1/8em */
+    if( italic )
+    {
+        tally += wxRound( size_h * 0.125 );
+    }
+    return tally;
+}
+
+
 /* Helper function for drawing character polygons */
 static void DrawGraphicTextPline(
     WinEDA_DrawPanel* aPanel,
@@ -56,7 +106,7 @@ static void DrawGraphicTextPline(
     bool sketch_mode,
     int point_count,
     wxPoint* coord,
-    void (*aCallback)( int x0, int y0, int xf, int yf ) )
+    void (* aCallback)( int x0, int y0, int xf, int yf ) )
 {
     if( aCallback )
     {
@@ -80,7 +130,33 @@ static void DrawGraphicTextPline(
 
 static int overbar_position( int size_v, int thickness )
 {
-    return wxRound( (double)size_v * 1.1 + (double)thickness );
+    return wxRound( (double) size_v * 30.0 / HERSHEY_SIZE + (double) thickness );
+}
+
+
+static int clamp_text_pen_size( int width, int size_h, bool bold )
+{
+    /* As a rule, pen width should not be >1/8em, otherwise the character
+     * will be cluttered up in its own fatness */
+    /* XXX @todo: Should be handled in the UI and gerber plotter too */
+    int maxWidth = wxRound( ABS( size_h ) / 8.0 );
+
+    if( width > maxWidth )
+    {
+        width = maxWidth;
+    }
+
+    /* Special rule for bold text: the width should be at least 1.42 times the
+     *  quantum unit, otherwise the line pairs will be visible! */
+    if( bold )
+    {
+        int minWidth = wxRound( ABS( size_h ) * 1.42 / HERSHEY_SIZE + 0.5 );
+        if( width < minWidth )
+        {
+            width = minWidth;
+        }
+    }
+    return width;
 }
 
 
@@ -98,7 +174,7 @@ static int overbar_position( int size_v, int thickness )
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
- *  @param aNegable = true to enable the ~ char for overbarring
+ *  @param aBold = true to use a bold font
  *  @param aCallback() = function called (if non null) to draw each segment.
  *                  used to draw 3D texts or for plotting, NULL for normal drawings
  */
@@ -114,27 +190,26 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                      enum GRTextVertJustifyType aV_justify,
                      int aWidth,
                      bool aItalic,
-                     bool aNegable,
-                     void (*aCallback)( int x0, int y0, int xf, int yf ) )
+                     bool aBold,
+                     void (* aCallback)( int x0, int y0, int xf, int yf ) )
 /****************************************************************************************************/
 {
-    int            char_count, AsciiCode;
-    int            x0, y0;
-    int            size_h, size_v, pitch;
-    SH_CODE        f_cod, plume = 'U';
-    const SH_CODE* ptcar;
-    int            ptr;
-    int            dx, dy;        // Draw coordinate for segments to draw. also used in some other calculation
-    wxPoint        current_char_pos;        // Draw coordinates for the current char
-    wxPoint        overbar_pos;            // Start point for the current overbar
-    int            overbars;                // Number of ~ seen
+    int     char_count, AsciiCode;
+    int     x0, y0;
+    int     size_h, size_v;
+    int     ptr;
+    int     dx, dy;                         // Draw coordinate for segments to draw. also used in some other calculation
+    wxPoint current_char_pos;               // Draw coordinates for the current char
+    wxPoint overbar_pos;                    // Start point for the current overbar
+    int     overbars;                       // Number of ~ seen
+    int     overbar_italic_comp;            // Italic compensation for overbar
 
     #define        BUF_SIZE 100
-    wxPoint        coord[BUF_SIZE + 1];         // Buffer coordinate used to draw polylines (one char shape)
-    bool           sketch_mode    = false;
-    bool           italic_reverse = false;      // true for mirrored texts with m_Size.x < 0
+    wxPoint coord[BUF_SIZE + 1];                // Buffer coordinate used to draw polylines (one char shape)
+    bool    sketch_mode    = false;
+    bool    italic_reverse = false;             // true for mirrored texts with m_Size.x < 0
 
-    size_h = aSize.x;
+    size_h = aSize.x;                           /* PLEASE NOTE: H is for HORIZONTAL not for HEIGHT */
     size_v = aSize.y;
 
     if( aWidth < 0 )
@@ -142,35 +217,25 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         aWidth = -aWidth;
         sketch_mode = true;
     }
-    int thickness = aWidth;
-    if( aSize.x < 0 )       // text is mirrored using size.x < 0 (mirror / Y axis)
+    if( size_h < 0 )       // text is mirrored using size.x < 0 (mirror / Y axis)
         italic_reverse = true;
 
-    if( aNegable )
-    {
-        char_count = NegableTextLength( aText );
-    }
-    else
-    {
-        char_count = aText.Len();
-    }
+    aWidth = clamp_text_pen_size( aWidth, size_h, aBold );
+
+    char_count = NegableTextLength( aText );
     if( char_count == 0 )
         return;
 
-    pitch = (10 * size_h ) / 9;    // this is the pitch between chars
-    if( pitch > 0 )
-        pitch += thickness;
-    else
-        pitch -= thickness;
-
     current_char_pos = aPos;
+
+    dx = TextWidth( aText, size_h, aItalic, aBold );
+    dy = size_v;
 
     /* Do not draw the text if out of draw area! */
     if( aPanel )
     {
         int xm, ym, ll, xc, yc;
-        int textsize = ABS( pitch );
-        ll = aPanel->GetScreen()->Scale( textsize * char_count );
+        ll = aPanel->GetScreen()->Scale( ABS( dx ) );
 
         xc = GRMapX( current_char_pos.x );
         yc = GRMapY( current_char_pos.y );
@@ -195,9 +260,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
      * this position is the position of the left bottom point of the letter
      * this is the same as the text position only for a left and bottom justified text
      * In others cases, this position must be calculated from the text position ans size
-    */
-    dx = pitch * char_count;
-    dy = size_v;                            /* dx, dy = draw offset between first letter and text center */
+     */
 
     switch( aH_justify )
     {
@@ -216,7 +279,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     switch( aV_justify )
     {
     case GR_TEXT_VJUSTIFY_CENTER:
-        current_char_pos.y += dy/2;
+        current_char_pos.y += dy / 2;
         break;
 
     case GR_TEXT_VJUSTIFY_TOP:
@@ -235,7 +298,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     if( aPanel && ABS( ( aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )
     {
         /* draw the text as a line always vertically centered */
-        wxPoint end( current_char_pos.x + dx, current_char_pos.y);
+        wxPoint end( current_char_pos.x + dx, current_char_pos.y );
 
         RotatePoint( &current_char_pos, aPos, aOrient );
         RotatePoint( &end, aPos, aOrient );
@@ -244,129 +307,128 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
             aCallback( current_char_pos.x, current_char_pos.y, end.x, end.y );
         else
             GRLine( &aPanel->m_ClipBox, aDC,
-                current_char_pos.x, current_char_pos.y, end.x, end.y , aWidth, aColor );
+                    current_char_pos.x, current_char_pos.y, end.x, end.y, aWidth, aColor );
 
         return;
     }
+
+    if( aItalic )
+    {
+        overbar_italic_comp = overbar_position( size_v, aWidth ) / 8;
+        if( italic_reverse )
+        {
+            overbar_italic_comp = -overbar_italic_comp;
+        }
+    }
+    else
+    {
+        overbar_italic_comp = 0;
+    };
 
     overbars = 0;
     ptr = 0;   /* ptr = text index */
     while( ptr < char_count )
     {
-        if( aNegable )
+        if( aText[ptr + overbars] == '~' )
         {
-            if( aText[ptr + overbars] == '~' )
-            {
-                /* Found an overbar, adjust the pointers */
-                overbars++;
+            /* Found an overbar, adjust the pointers */
+            overbars++;
 
-                if( overbars % 2 )
-                {
-                    /* Starting the overbar */
-                    overbar_pos = current_char_pos;
-                    overbar_pos.y -= overbar_position( size_v, thickness );
-                    RotatePoint( &overbar_pos, aPos, aOrient );
-                }
-                else
-                {
-                    /* Ending the overbar */
-                    coord[0] = overbar_pos;
-                    overbar_pos  = current_char_pos;
-                    overbar_pos.y -= overbar_position( size_v, thickness );
-                    RotatePoint( &overbar_pos, aPos, aOrient );
-                    coord[1] = overbar_pos;
-                    /* Plot the overbar segment */
-                    DrawGraphicTextPline( aPanel, aDC, aColor, aWidth,
-                                          sketch_mode, 2, coord, aCallback );
-                }
-                continue; /* Skip ~ processing */
+            if( overbars % 2 )
+            {
+                /* Starting the overbar */
+                overbar_pos    = current_char_pos;
+                overbar_pos.x += overbar_italic_comp;
+                overbar_pos.y -= overbar_position( size_v, aWidth );
+                RotatePoint( &overbar_pos, aPos, aOrient );
             }
+            else
+            {
+                /* Ending the overbar */
+                coord[0]       = overbar_pos;
+                overbar_pos    = current_char_pos;
+                overbar_pos.x += overbar_italic_comp;
+                overbar_pos.y -= overbar_position( size_v, aWidth );
+                RotatePoint( &overbar_pos, aPos, aOrient );
+                coord[1] = overbar_pos;
+                /* Plot the overbar segment */
+                DrawGraphicTextPline( aPanel, aDC, aColor, aWidth,
+                                      sketch_mode, 2, coord, aCallback );
+            }
+            continue; /* Skip ~ processing */
         }
 
         AsciiCode = aText.GetChar( ptr + overbars );
 
-#if defined(wxUSE_UNICODE) && defined(KICAD_CYRILLIC)
-        AsciiCode &= 0x7FF;
-        if( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
-            AsciiCode = utf8_to_ascii[AsciiCode - 0x410] & 0xFF;
-        else
-            AsciiCode = AsciiCode & 0xFF;
-#else
-        AsciiCode &= 0xFF;
-#endif
-        ptcar = graphic_fonte_shape[AsciiCode];  /* ptcar pointe la description
-                                                  *  du caractere a dessiner */
-
-        int  point_count;
-        bool endcar;
-        for( point_count = 0, endcar = false; !endcar; ptcar++ )
+        const char* ptcar = get_hershey_recipe( AsciiCode, aBold );
+        /* Get metrics */
+        int         xsta = *ptcar++ - 'R';
+        int         xsto = *ptcar++ - 'R';
+        int         point_count = 0;
+        bool        endcar = false;
+        while( !endcar )
         {
-            f_cod = *ptcar;
-
-            /* get code n de la forme selectionnee */
-            switch( f_cod )
+            int hc1, hc2;
+            hc1 = *ptcar++;
+            if( hc1 )
             {
-            case 'X':
-                endcar = true;    /* fin du caractere */
-                break;
+                hc2 = *ptcar++;
+            }
+            else
+            {
+                /* End of character, insert a synthetic pen up */
+                hc1    = ' ';
+                hc2    = 'R';
+                endcar = true;
+            }
+            hc1 -= 'R'; hc2 -= 'R'; /* Do the Hershey decode thing: coordinates values are coded as <value> + 'R' */
 
-            case 'U':
-                if( point_count && (plume == 'D' ) )
+            /* Pen up request */
+            if( hc1 == -50 && hc2 == 0 )
+            {
+                if( point_count )
                 {
                     if( aWidth <= 1 )
                         aWidth = 0;
                     DrawGraphicTextPline( aPanel, aDC, aColor, aWidth,
                                           sketch_mode, point_count, coord, aCallback );
                 }
-                plume = f_cod; point_count = 0;
-                break;
-
-            case 'D':
-                plume = f_cod;
-                break;
-
-            default:
+                point_count = 0;
+            }
+            else
             {
-                int y, k1, k2;
                 wxPoint currpoint;
-                y  = k1 = f_cod;        /* trace sur axe V */
-                k1 = -( (k1 * size_v) / 9 );
-
-                ptcar++;
-                f_cod = *ptcar;
-
-                k2 = f_cod;         /* trace sur axe H */
-                k2 = (k2 * size_h) / 9;
+                hc1 -= xsta; hc2 -= 11; /* Align the midpoint */
+                hc1  = wxRound( hc1 * size_h / HERSHEY_SIZE );
+                hc2  = wxRound( hc2 * size_v / HERSHEY_SIZE );
 
                 // To simulate an italic font, add a x offset depending on the y offset
                 if( aItalic )
-                    k2 -= italic_reverse ? -k1 / 8 : k1 / 8;
-                currpoint.x = k2 + current_char_pos.x;
-                currpoint.y = k1 + current_char_pos.y;
+                    hc1 -= wxRound( italic_reverse ? -hc2 / 8.0 : hc2 / 8.0 );
+                currpoint.x = hc1 + current_char_pos.x;
+                currpoint.y = hc2 + current_char_pos.y;
 
                 RotatePoint( &currpoint, aPos, aOrient );
                 coord[point_count] = currpoint;
-               if( point_count < BUF_SIZE - 1 )
+                if( point_count < BUF_SIZE - 1 )
                     point_count++;
-                break;
             }
-            }
-
-            /* end switch */
         }
 
         /* end draw 1 char */
 
         ptr++;
-        current_char_pos.x += pitch;    // current_char_pos is now the next position
+
+        // Apply the advance width
+        current_char_pos.x += wxRound( size_h * (xsto - xsta) / HERSHEY_SIZE );
     }
 
     if( overbars % 2 )
     {
         /* Close the last overbar */
-        coord[0] = overbar_pos;
-        overbar_pos  = current_char_pos;
-        overbar_pos.y  -= overbar_position( size_v, thickness );
+        coord[0]       = overbar_pos;
+        overbar_pos    = current_char_pos;
+        overbar_pos.y -= overbar_position( size_v, aWidth );
         RotatePoint( &overbar_pos, aPos, aOrient );
         coord[1] = overbar_pos;
         /* Plot the overbar segment */
@@ -384,12 +446,9 @@ static bool s_Plotbegin;                                // Flag to init plot
 /*
  * The call back function
  */
-/**********************/
-static void s_Callback_plot( int x0,
-                             int y0,
-                             int xf,
-                             int yf )
-/**********************/
+/****************************************************************/
+static void s_Callback_plot( int x0, int y0,  int xf, int yf )
+/****************************************************************/
 {
     static wxPoint PenLastPos;
     wxPoint        pstart;
@@ -435,7 +494,7 @@ static void s_Callback_plot( int x0,
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
  *  @param aItalic = true to simulate an italic font
- *  @param aNegable = true to enable the ~ char for overbarring
+ *  @param aBold = true to use a bold font
  */
 /******************************************************************************************/
 void PlotGraphicText( int                         aFormat_plot,
@@ -448,14 +507,24 @@ void PlotGraphicText( int                         aFormat_plot,
                       enum GRTextVertJustifyType  aV_justify,
                       int                         aWidth,
                       bool                        aItalic,
-                      bool                        aNegable )
+                      bool                        aBold )
 /******************************************************************************************/
 {
+    if( aWidth > 0 )
+    {
+        aWidth = clamp_text_pen_size( aWidth, aSize.x, aBold );
+    }
+    else
+    {
+        aWidth = -clamp_text_pen_size( -aWidth, aSize.x, aBold );
+    }
+
     // Initialise the actual function used to plot lines:
     switch( aFormat_plot )
     {
     case PLOT_FORMAT_POST:
         MovePenFct = LineTo_PS;
+        SetCurrentLineWidthPS( aWidth );
         break;
 
     case PLOT_FORMAT_HPGL:
@@ -464,6 +533,7 @@ void PlotGraphicText( int                         aFormat_plot,
 
     case PLOT_FORMAT_GERBER:
         MovePenFct = LineTo_GERBER;
+        /* Gerber tool has to be set outside... */
         break;
 
     default:
@@ -477,7 +547,7 @@ void PlotGraphicText( int                         aFormat_plot,
     DrawGraphicText( NULL, NULL, aPos, aColor, aText,
                      aOrient, aSize,
                      aH_justify, aV_justify,
-                     aWidth, aItalic, aNegable,
+                     aWidth, aItalic, aBold,
                      s_Callback_plot );
 
     /* end text : pen UP ,no move */

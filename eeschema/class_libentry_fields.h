@@ -85,6 +85,7 @@ public:
         m_Mirror = field.m_Mirror;
         m_Attributs = field.m_Attributs;
         m_Italic = field.m_Italic;
+        m_Bold = field.m_Bold;
         m_HJustify = field.m_HJustify;
         m_VJustify = field.m_VJustify;
     }

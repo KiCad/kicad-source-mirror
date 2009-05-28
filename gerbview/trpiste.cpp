@@ -280,6 +280,7 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
         DrawGraphicText( panel, DC,
                          pos, (EDA_Colors) g_DCodesColor, Line,
                          orient, wxSize( width, width ),
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER );
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+			  0, false, false, false);
     }
 }

@@ -243,8 +243,7 @@ public:
                                int      TextInside,
                                bool     DrawPinNum,
                                bool     DrawPinNameint,
-                               int      aWidth,
-                               bool     aItalic );
+                               int      aWidth);
 };
 
 

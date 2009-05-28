@@ -30,7 +30,6 @@ static inline bool IsPostScript( int aFormat )
 const int PLOT_MIROIR = 1;
 
 // Variables used in Common plot functions
-extern wxPoint g_Plot_LastPenPosition;
 extern wxPoint g_Plot_PlotOffset;
 extern FILE*   g_Plot_PlotOutputFile;
 extern double  g_Plot_XScale, g_Plot_YScale;

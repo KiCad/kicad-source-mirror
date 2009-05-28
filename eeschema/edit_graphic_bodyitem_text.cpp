@@ -65,7 +65,7 @@ wxString msg;
 		int shape = 0;
 		if ( m_GraphicText->m_Italic)
 			shape = 1;
-		if ( m_GraphicText->m_Width > 1)
+		if ( m_GraphicText->m_Bold)
 			shape |= 2;
 
 		m_TextShapeOpt->SetSelection(shape);
@@ -126,9 +126,9 @@ wxString Line;
 			m_GraphicText->m_Italic = false;
 
 		if ( (m_TextShapeOpt->GetSelection() & 2 ) != 0 )
-			m_GraphicText->m_Width = m_GraphicText->m_Size.x / 4;
+			m_GraphicText->m_Bold = true;
 		else
-			m_GraphicText->m_Width = 0;
+			m_GraphicText->m_Bold = false;
 
 	}
 	Close();

@@ -16,7 +16,6 @@
 
 
 // Variables partagees avec Common plot Postscript et HPLG Routines
-wxPoint g_Plot_LastPenPosition;
 wxPoint g_Plot_PlotOffset;
 FILE*   g_Plot_PlotOutputFile;
 double  g_Plot_XScale, g_Plot_YScale;
@@ -81,6 +80,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     void              (*FctPlume)( wxPoint pos, int state );
     int               UpperLimit = VARIABLE_BLOCK_START_POSITION;
     bool italic = false;
+    bool bold = false;
     bool thickness = 0; //@todo : use current pen
 
     switch( format_plot )
@@ -94,8 +94,8 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         break;
 
     case PLOT_FORMAT_GERBER:
-		FctPlume = LineTo_GERBER;
-		break;
+	FctPlume = LineTo_GERBER;
+	break;
 
     default:
         return;
@@ -121,6 +121,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     pos.x = ref.x; pos.y = yg;
     FctPlume( pos,'D' );
     FctPlume(ref,'D');
+    FctPlume(ref,'Z');
 #else
 
     for( ii = 0; ii < 2; ii++ )
@@ -136,6 +137,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         ref.x += GRID_REF_W * conv_unit; ref.y += GRID_REF_W * conv_unit;
         xg -= GRID_REF_W * conv_unit; yg -= GRID_REF_W * conv_unit;
     }
+    FctPlume(ref,'Z');
 #endif
 
     /* trace des reperes */
@@ -162,7 +164,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		PlotGraphicText(format_plot, pos, color,
 				msg, TEXT_ORIENT_VERT, text_size,
                         	GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                            thickness, italic );
+                            thickness, italic, false, false );
 
         	break;
     	    case WS_SEGMENT_LU:
@@ -170,6 +172,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     		pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
     		pos.y = (yg - WsItem->m_Endy) * conv_unit;
 		FctPlume(pos, 'D');
+		FctPlume(ref,'Z');
     		break;
 	}
     }
@@ -185,6 +188,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         	pos.x = (ref.x + WsItem->m_Endx) * conv_unit;
         	pos.y = (ref.y + WsItem->m_Endy) * conv_unit;
         	FctPlume(pos, 'D');
+		FctPlume(ref,'Z');
         	break;
 	}
     }
@@ -202,13 +206,14 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             FctPlume( pos, 'U' );
             pos.x = ii * conv_unit; pos.y = (ref.y + GRID_REF_W) * conv_unit;
             FctPlume( pos, 'D' );
+	    FctPlume(ref,'Z');
         }
         pos.x = (ii - gxpas / 2) * conv_unit;
         pos.y = (ref.y + GRID_REF_W / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-            thickness, italic );
+            thickness, italic, false );
 
         if( ii < xg - PAS_REF / 2 )
         {
@@ -216,13 +221,14 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             FctPlume( pos, 'U' );
             pos.x = ii * conv_unit; pos.y = (yg - GRID_REF_W) * conv_unit;
             FctPlume( pos, 'D' );
+	    FctPlume(ref,'Z');
         }
         pos.x = (ii - gxpas / 2) * conv_unit;
         pos.y = (yg - GRID_REF_W / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-            thickness, italic );
+            thickness, italic, false );
     }
 
     /* Trace des reperes selon l'axe Y */
@@ -237,13 +243,14 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             FctPlume( pos, 'U' );
             pos.x = (ref.x + GRID_REF_W) * conv_unit; pos.y = ii * conv_unit;
             FctPlume( pos, 'D' );
+	    FctPlume(ref,'Z');
         }
         pos.x = (ref.x + GRID_REF_W / 2) * conv_unit;
         pos.y = (ii - gypas / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-            thickness, italic );
+            thickness, italic, false );
 
         if( ii < yg - PAS_REF / 2 )
         {
@@ -251,12 +258,13 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             FctPlume( pos, 'U' );
             pos.x = (xg - GRID_REF_W) * conv_unit; pos.y = ii * conv_unit;
             FctPlume( pos, 'D' );
+	    FctPlume(ref,'Z');
         }
         pos.x = (xg - GRID_REF_W / 2) * conv_unit;
         pos.y = (ii - gypas / 2) * conv_unit;
         PlotGraphicText( format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-            thickness, italic );
+            thickness, italic, false );
     }
 #endif
 
@@ -285,7 +293,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic );
+                    thickness, italic, false, false );
 		    break;
 		case WS_SIZESHEET:
 		    break;
@@ -294,14 +302,14 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    msg << screen->m_ScreenNumber;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic );
+                    thickness, italic, false, false );
 		    break;
 		case WS_SHEETS:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_NumberOfScreen;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic );
+                    thickness, italic, false, false );
 		    break;
 		case WS_COMPANY_NAME:
 		    break;
@@ -322,6 +330,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
 		    pos.y = (ref.y - WsItem->m_Endy)  * conv_unit;
 		    FctPlume(pos, 'D');
+		    FctPlume(ref,'Z');
 		    break;
 	    }
 	}
@@ -339,14 +348,14 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic );
+                    thickness, italic, false, false );
 		    break;
 		case WS_IDENTSHEET_D:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_ScreenNumber;
 		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                    thickness, italic );
+                    thickness, italic, false, false );
 		    break;
 		case WS_LEFT_SEGMENT_D:
 		case WS_SEGMENT_D:
@@ -354,6 +363,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
 		    pos.y = (ref.y - WsItem->m_Endy) * conv_unit;
 		    FctPlume(pos, 'D');
+		    FctPlume(ref,'Z');
 		    break;
 	    }
 	}
@@ -366,6 +376,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     {
         pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
         pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
+	 bold = false;
         if( WsItem->m_Legende )
             msg = WsItem->m_Legende;
         else
@@ -375,10 +386,12 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         {
         case WS_DATE:
             msg += screen->m_Date;
+	     bold = true;
             break;
 
         case WS_REV:
             msg += screen->m_Revision;
+	     bold = true;
             break;
 
         case WS_KICAD_VERSION:
@@ -409,10 +422,12 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             msg += screen->m_Company;
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+	     bold = true;
             break;
 
         case WS_TITLE:
             msg += screen->m_Title;
+	     bold = true;
             break;
 
         case WS_COMMENT1:
@@ -456,6 +471,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             auxpos.y = (ref.y - WsItem->m_Endy) * conv_unit;;
             FctPlume( pos, 'U' );
             FctPlume( auxpos, 'D' );
+	    FctPlume(ref,'Z');
         }
             break;
         }
@@ -465,7 +481,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             PlotGraphicText( format_plot, pos, color,
                 msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                thickness, italic );
+                thickness, italic, bold );
         }
     }
 #endif

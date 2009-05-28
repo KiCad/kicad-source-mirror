@@ -175,6 +175,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
     m_Width     = 0;                                /* thickness */
     m_Italic    = false;                            /* true = italic shape */
+    m_Bold      = false;
     m_MultilineAllowed = false;                     // Set to true only for texts that can use multiline.
     m_Text = text;
 }
@@ -191,13 +192,9 @@ EDA_TextStruct::~EDA_TextStruct()
  * @param aLine : the line of text to consider.
  * For single line text, this parameter is always m_Text
  */
-int EDA_TextStruct::LenSize( const wxString& aLine )
+int EDA_TextStruct::LenSize( const wxString& aLine ) const
 {
-    int nbchar = aLine.Len();
-
-    int len = ( ( (10 * m_Size.x ) / 9 ) + m_Width ) * nbchar;
-
-    return len;
+    return TextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Width;
 }
 
 
@@ -328,21 +325,6 @@ bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
     return false;
 }
 
-
-/*********************************************/
-int EDA_TextStruct::Pitch( int aMinTickness )
-/*********************************************/
-
-/**
- * Function Pitch
- * @return distance between 2 characters
- * @param aMinTickness = min segments tickness
- */
-{
-    return ( (m_Size.x * 10) / 9 ) + MAX( m_Width, aMinTickness );
-}
-
-
 /***************************************************************/
 void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            const wxPoint& aOffset, EDA_Colors aColor,
@@ -455,7 +437,7 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC,
                      aOffset + aPos, aColor, aText,
                      m_Orient, size,
-                     m_HJustify, m_VJustify, width, m_Italic, true );
+                     m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
 

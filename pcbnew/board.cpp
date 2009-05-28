@@ -275,16 +275,17 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             break;
 
         case TYPE_TEXTE:
+	    {
             TEXTE_PCB*      PtText;
             PtText = (TEXTE_PCB*) item;
 
             if( PtText->GetLength() == 0 )
                 break;
-
-            ux0 = PtText->m_Pos.x; uy0 = PtText->m_Pos.y;
-
-            dx = PtText->Pitch() * PtText->GetLength();
-            dy = PtText->m_Size.y + PtText->m_Width;
+	    
+	    EDA_Rect textbox = PtText->GetTextBox(-1);
+            ux0 = textbox.GetX(); uy0 = textbox.GetY();
+            dx = textbox.GetWidth();
+            dy = textbox.GetHeight();
 
             /* Put bounding box (rectangle) on matrix */
             dx /= 2;
@@ -306,6 +307,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                                   ux1 + via_marge, uy1 + via_marge,
                                   (int) (PtText->m_Orient),
                                   masque_layer, VIA_IMPOSSIBLE, WRITE_OR_CELL );
+	    }
             break;
 
         default:

@@ -326,7 +326,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC,
                      wxPoint( pos.x, pos.y - 8 ), (EDA_Colors) txtcolor,
                      Text, TEXT_ORIENT_HORIZ, wxSize( m_SheetNameSize, m_SheetNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false, false );
 
     /* Draw text : FileName */
     if( aColor >= 0 )
@@ -338,7 +338,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                      wxPoint( pos.x, pos.y + m_Size.y + 4 ),
                      (EDA_Colors) txtcolor,
                      Text, TEXT_ORIENT_HORIZ, wxSize( m_FileNameSize, m_FileNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth );
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth, false, false, false );
 
 
     /* Draw text : SheetLabel */

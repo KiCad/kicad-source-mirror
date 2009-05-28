@@ -496,6 +496,7 @@ public:
     bool     m_Mirror;                 // Display Normal / mirror
     int      m_Attributs;               /* flags (visible...) */
     bool     m_Italic;                  /* true to simulate an italic font... */
+    bool     m_Bold;                    /* true to use a bold font... */
     GRTextHorizJustifyType m_HJustify;  /* Horiz Justify */
     GRTextVertJustifyType m_VJustify;   /* Vertical and  Vert Justify */
     bool     m_MultilineAllowed;        /* true to use multiline option, false to use only single line text
@@ -506,13 +507,6 @@ public:
     virtual ~EDA_TextStruct();
 
     int     GetLength() const { return m_Text.Length(); };
-
-    /**
-     * Function Pitch
-     * @return distance between 2 characters
-     * @param aMinTickness = min segments tickness
-     */
-    int     Pitch(int aMinTickness = 0);
 
     /** Function Draw
      *  @param aPanel = the current DrawPanel
@@ -571,7 +565,7 @@ public:
      * @param aLine : the line of text to consider.
      * For single line text, this parameter is always m_Text
      */
-    int     LenSize(const wxString & aLine);
+    int     LenSize(const wxString & aLine) const;
 
     /** Function GetTextBox
      * useful in multiline texts to calculate the full text or a line area (for zones filling, locate functions....)

@@ -200,7 +200,8 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth );
+                     Field->m_HJustify, Field->m_VJustify, LineWidth,
+		      Field->m_Italic, Field->m_Bold, false);
 
     DrawPanel->CursorOn( DC );
 
@@ -272,7 +273,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth );
+                     Field->m_HJustify, Field->m_VJustify, LineWidth, 
+		      Field->m_Italic, Field->m_Bold, false);
 
     if( !Text.IsEmpty() )
     {
@@ -289,7 +291,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth );
+                     Field->m_HJustify, Field->m_VJustify, LineWidth,
+		      Field->m_Italic, Field->m_Bold, false);
 
     GetScreen()->SetModify();
 
@@ -340,7 +343,8 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth );
+                     Field->m_HJustify, Field->m_VJustify, LineWidth,
+		      Field->m_Italic, Field->m_Bold, false);
 
     if( Field->m_Orient )
         Field->m_Orient = 0;
@@ -354,7 +358,8 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth );
+                     Field->m_HJustify, Field->m_VJustify, LineWidth,
+		      Field->m_Italic, Field->m_Bold, false);
     DrawPanel->CursorOn( DC );
 }
 

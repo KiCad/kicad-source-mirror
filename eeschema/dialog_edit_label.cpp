@@ -101,7 +101,7 @@ void DialogLabelEditor::init()
     int style = 0;
     if( m_CurrentText->m_Italic )
         style = 1;
-    if( m_CurrentText->m_Width > 1 )
+    if( m_CurrentText->m_Bold )
         style += 2;
 
     m_TextStyle->SetSelection( style );

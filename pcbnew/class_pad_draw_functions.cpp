@@ -466,7 +466,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
             DrawGraphicText( panel, DC, tpos,
                              WHITE, buffer, t_angle, wxSize( tsize, tsize ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false, false );
         }
     }
 
@@ -487,6 +487,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         tsize = (int) (tsize * 0.8);         // reserve room for marges and segments thickness
         DrawGraphicText( panel, DC, tpos,
                          WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7 );
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
+			  false, false );
     }
 }

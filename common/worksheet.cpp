@@ -997,7 +997,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             if(WsItem->m_Legende) msg = WsItem->m_Legende;
             DrawGraphicText(DrawPanel, DC, pos, Color,
                             msg, TEXT_ORIENT_VERT, size,
-                            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,width);
+                            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,width, 
+			     false, false, false);
             break;
 	    case WS_SEGMENT_LU:
             xg = Sheet->m_LeftMargin - WsItem->m_Endx;
@@ -1044,7 +1045,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                          Color,
                          Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width );
+                         width, false, false, false );
         if( ii < xg - PAS_REF / 2 )
         {
             GRLine( &DrawPanel->m_ClipBox, DC, ii * scale, yg * scale,
@@ -1055,7 +1056,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                                   (yg - GRID_REF_W / 2) * scale ),
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width );
+                         width, false, false, false );
     }
 
     /* Trace des reperes selon l'axe Y */
@@ -1079,7 +1080,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                          Color,
                          Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width );
+                         width, false, false, false );
         if( ii < yg - PAS_REF / 2 )
         {
             GRLine( &DrawPanel->m_ClipBox, DC, xg * scale, ii * scale,
@@ -1090,7 +1091,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                                   (ii - gxpas / 2) * scale ),
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width );
+                         width, false, false, false );
     }
 #endif
 
@@ -1119,7 +1120,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width );
+                                 width, false, false, false );
                 break;
             case WS_SIZESHEET:
                 break;
@@ -1129,7 +1130,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg << screen->m_ScreenNumber;
                 DrawGraphicText( DrawPanel, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, width);
+                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false, false);
                 break;
             case WS_SHEETS:
                 if(WsItem->m_Legende)
@@ -1137,7 +1138,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 msg << screen->m_NumberOfScreen;
                 DrawGraphicText( DrawPanel, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, width);
+                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false, false);
                 break;
             case WS_COMPANY_NAME:
                 break;
@@ -1181,14 +1182,14 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
                 if(WsItem->m_Legende) msg = WsItem->m_Legende;
                 DrawGraphicText(DrawPanel, DC, pos, Color,
                                 msg, TEXT_ORIENT_HORIZ, size,
-                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
+                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width, false, false, false);
                 break;
             case WS_IDENTSHEET_D:
                 if(WsItem->m_Legende) msg = WsItem->m_Legende;
                 msg << screen->m_ScreenNumber;
                 DrawGraphicText(DrawPanel, DC, pos, Color,
                                 msg, TEXT_ORIENT_HORIZ, size,
-                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width);
+                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,width, false, false, false);
                 break;
             case WS_LEFT_SEGMENT_D:
                 pos.y = (refy - WsItem->m_Posy)* scale;
@@ -1221,7 +1222,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg += screen->m_Date;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, true, false );
             break;
 
         case WS_REV:
@@ -1230,7 +1232,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg += screen->m_Revision;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, true, false );
             break;
 
         case WS_KICAD_VERSION:
@@ -1240,7 +1243,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg += wxT( " " ) + GetBuildVersion();
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, false, false );
             break;
 
         case WS_SIZESHEET:
@@ -1249,7 +1253,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg += Sheet->m_Name;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, false, false );
             break;
 
 
@@ -1259,7 +1264,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg << screen->m_ScreenNumber << wxT( "/" ) << screen->m_NumberOfScreen;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, false, false );
             break;
 
         case WS_FILENAME:
@@ -1271,7 +1277,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg << fname << wxT( "." ) << fext;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, false, false );
         }
         break;
 
@@ -1281,7 +1288,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg += GetScreenDesc();
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, false, false );
             break;
 
 
@@ -1293,7 +1301,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+				  false, true, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1304,7 +1313,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             msg += screen->m_Title;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+			      false, true, false );
             break;
 
         case WS_COMMENT1:
@@ -1315,7 +1325,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+				  false, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1328,7 +1339,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+				  false, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1341,7 +1353,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+				  false, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1354,7 +1367,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
             {
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
-                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width );
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, width, 
+				  false, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;

@@ -315,7 +315,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
                       msg,
                       0, wxSize((int)(CharSize * CharScale), (int)(CharSize * CharScale)),
                       GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                      TextWidth );
+                      TextWidth, false, false );
             break;
         }
 
@@ -344,7 +344,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, w
                       Text,
                       0, wxSize((int)(CharSize * CharScale), (int)(CharSize * CharScale)),
                       GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                      TextWidth );
+                      TextWidth, false, false );
         break;
     }
 

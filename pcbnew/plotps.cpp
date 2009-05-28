@@ -564,7 +564,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
         rayon = diam.x / 2;
         if( rayon < 1 )
             rayon = 1;
-        fprintf( dest, "newpath %d %d %d 0 360 arc fill stroke\n",
+        fprintf( dest, "%d %d %d cir1\n",
             centre.x, centre.y, rayon );
     }
     else
@@ -576,7 +576,7 @@ void trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace )
         if( rayon < w )
             w = rayon;
         SetCurrentLineWidthPS( w );
-        fprintf( dest, "newpath %d %d %d 0 360 arc stroke\n",
+        fprintf( dest, "%d %d %d cir0\n",
             centre.x, centre.y, rayon );
     }
 }
@@ -605,12 +605,12 @@ void trace_1_pad_rectangulaire_POST( wxPoint centre,
         RotatePoint( &x0, &y0, centre.x, centre.y, orient );
         RotatePoint( &x1, &y1, centre.x, centre.y, orient );
 
-        fprintf( dest, "0 setlinewidth 0 setlinecap 0 setlinejoin\n" );
+        fprintf( dest, "linemode0 " );
         ForcePenReinit();   // Force init line width for PlotFilledSegmentPS
         PlotFilledSegmentPS( wxPoint( x0, y0 ), wxPoint( x1, y1 ), w );
         ForcePenReinit();
+        fprintf( dest, "linemode1 " );
         SetCurrentLineWidthPS( 0 );   // Force init line width to default
-        fprintf( dest, "1 setlinecap 1 setlinejoin\n" );
     }
     else
     {
@@ -772,7 +772,5 @@ void trace_1_pad_TRAPEZE_POST( wxPoint centre, wxSize size, wxSize delta,
 
     fprintf( dest, "%d %d lineto ", polygone[0].x, polygone[0].y );
 
-    if( modetrace == FILLED )
-        fprintf( dest, "fill " );
-    fprintf( dest, "stroke\n" );
+    fprintf( dest, "poly%d\n", (modetrace == FILLED?1:0) );
 }

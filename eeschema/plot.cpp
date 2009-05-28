@@ -35,8 +35,16 @@ static void PlotPinSymbol( const wxPoint& pos, int len, int orient, int Shape );
  */
 void Plume( int plume )
 {
-    if( g_PlotFormat  == PLOT_FORMAT_HPGL )
+    switch( g_PlotFormat )
+    {
+    case PLOT_FORMAT_HPGL:
         Plume_HPGL( plume );
+        break;
+
+    case PLOT_FORMAT_POST:
+        LineTo_PS( wxPoint(0,0), plume );
+        break;
+    }
 }
 
 
@@ -175,7 +183,7 @@ void PlotNoConnectStruct( DrawNoConnectStruct* Struct )
     Move_Plume( wxPoint( pX + DELTA, pY + DELTA ), 'D' );
     Move_Plume( wxPoint( pX + DELTA, pY - DELTA ), 'U' );
     Move_Plume( wxPoint( pX - DELTA, pY + DELTA ), 'D' );
-    Plume( 'U' );
+    Plume( 'Z' );
 }
 
 
@@ -273,7 +281,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
                              t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                              Text->m_Size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                             thickness, false, true );
+                             thickness, Text->m_Italic, Text->m_Bold );
         }
         break;
 
@@ -312,7 +320,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             Pin->PlotPinTexts( pos, orient,
                                Entry->m_TextInside,
                                Entry->m_DrawPinNum, Entry->m_DrawPinName,
-                               thickness, false );
+                               thickness );
         }
         break;
 
@@ -500,7 +508,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size,
                          hjustify, vjustify,
-                         thickness, field->m_Italic, true );
+                         thickness, field->m_Italic, field->m_Bold );
     }
     else    /* We plt the reference, for a multiple parts per package */
     {
@@ -518,7 +526,7 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
         PlotGraphicText( g_PlotFormat, textpos, color, Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                          field->m_Size, hjustify, vjustify,
-                         thickness, field->m_Italic );
+                         thickness, field->m_Italic, field->m_Bold );
     }
 }
 
@@ -627,7 +635,7 @@ static void PlotPinSymbol( const wxPoint& pos, int len, int orient, int Shape )
             Move_Plume( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ), 'D' );
         }
     }
-    Plume( 'U' );
+    Plume( 'Z' );
 }
 
 
@@ -680,7 +688,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
             PlotGraphicText( g_PlotFormat, pos,
                      color, txt, schText->m_Orient, schText->m_Size,
                      schText->m_HJustify, schText->m_VJustify,
-                     thickness, schText->m_Italic, true );
+                     thickness, schText->m_Italic, schText->m_Bold );
             pos += offset;
         }
 
@@ -691,7 +699,7 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
         PlotGraphicText( g_PlotFormat, textpos,
                      color, schText->m_Text, schText->m_Orient, schText->m_Size,
                      schText->m_HJustify, schText->m_VJustify,
-                     thickness, schText->m_Italic, true );
+                     thickness, schText->m_Italic, schText->m_Bold );
 
     /* Draw graphic symbol for global or hierachical labels */
     if( Struct->Type() == TYPE_SCH_GLOBALLABEL )
@@ -744,7 +752,7 @@ static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* aHierarc
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
                      aHierarchical_PIN->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
                      side, GR_TEXT_VJUSTIFY_CENTER,
-                     thickness, aHierarchical_PIN->m_Italic, true  );
+                     thickness, aHierarchical_PIN->m_Italic, aHierarchical_PIN->m_Bold );
 
     /* Draw the associated graphic symbol */
     aHierarchical_PIN->CreateGraphicShape( Poly, aHierarchical_PIN->m_Pos );
@@ -782,7 +790,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     Move_Plume( pos, 'D' );
     Move_Plume( Struct->m_Pos, 'D' );
 
-    Plume( 'U' );
+    Plume( 'Z' );
 
     /* Draw texts: SheetName */
     Text = Struct->m_SheetName;
@@ -796,7 +804,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     PlotGraphicText( g_PlotFormat, pos, txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                     thickness, italic );
+                     thickness, italic, false );
 
     /*Draw texts : FileName */
     Text = Struct->GetFileName();
@@ -810,7 +818,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
                      txtcolor,
                      Text, TEXT_ORIENT_HORIZ, size,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
-                     thickness, italic );
+                     thickness, italic, false );
 
     /* Draw texts : SheetLabel */
     SheetLabelStruct = Struct->m_Label;

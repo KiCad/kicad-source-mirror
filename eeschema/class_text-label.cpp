@@ -134,6 +134,7 @@ SCH_TEXT* SCH_TEXT::GenCopy()
     newitem->m_VJustify   = m_VJustify;
     newitem->m_IsDangling = m_IsDangling;
     newitem->m_Italic     = m_Italic;
+    newitem->m_Bold       = m_Bold;
     newitem->m_SchematicOrientation = m_SchematicOrientation;
 
     return newitem;
@@ -242,6 +243,7 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
         break;
 
     case NET_OUTPUT:
+    case NET_UNSPECIFIED:
         offset += TXTMARGE;
         break;
 
@@ -518,7 +520,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
                 m_Pos.x, m_Pos.y,
                 m_SchematicOrientation, m_Size.x,
-                shape, m_Width,
+                shape, (m_Bold?1:0),
                 CONV_TO_UTF8( text ) ) == EOF )
     {
         success = false;
@@ -575,7 +577,7 @@ bool SCH_LABEL::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
                 m_Pos.x, m_Pos.y,
-                m_SchematicOrientation, m_Size.x, shape, m_Width,
+                m_SchematicOrientation, m_Size.x, shape, (m_Bold?1:0),
                 CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
@@ -614,7 +616,7 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
                 m_Pos.x, m_Pos.y,
                 m_SchematicOrientation, m_Size.x,
                 SheetLabelType[m_Shape],
-                shape, m_Width,
+                shape, (m_Bold?1:0),
                 CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
@@ -668,7 +670,7 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
                 m_Pos.x, m_Pos.y,
                 m_SchematicOrientation, m_Size.x,
                 SheetLabelType[m_Shape],
-                shape, m_Width,
+                shape, (m_Bold?1:0),
                 CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
@@ -774,7 +776,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
 
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
     height = m_Size.y + 2 * TXTMARGE;
-    length = ( Pitch( width ) * NegableTextLength( m_Text ) )
+    length = LenSize( m_Text )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
 
@@ -860,7 +862,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list, c
 
     aCorner_list.clear();
 
-    int symb_len = ( Pitch( width ) * NegableTextLength( m_Text ) ) + (TXTMARGE * 2);
+    int symb_len = LenSize( m_Text ) + (TXTMARGE * 2);
 
     // Create outline shape : 6 points
     int x = symb_len + width + 3;
@@ -943,7 +945,7 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
     height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
     length =
-        ( Pitch( width ) * NegableTextLength( m_Text ) )    // text X size
+        LenSize( m_Text )     // text X size
         + height                                            // add height for triangular shapes (bidirectional)
         + DANGLING_SYMBOL_SIZE;
 
@@ -993,7 +995,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
     x = m_Pos.x;
     y = m_Pos.y;
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
-    length = ( Pitch( width ) * NegableTextLength( m_Text ) );
+    length = LenSize( m_Text );
     height = m_Size.y;
     dx     = dy = 0;
 

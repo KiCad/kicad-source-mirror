@@ -479,7 +479,7 @@ bool LibDrawText::Save( FILE* ExportFile ) const
     fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient,
              m_Pos.x, m_Pos.y, m_Size.x, m_Attributs, m_Unit, m_Convert,
              CONV_TO_UTF8( text ));
-	fprintf( ExportFile, " %s %d",	m_Italic ? "Italic" : "Normal", m_Width );
+	fprintf( ExportFile, " %s %d",	m_Italic ? "Italic" : "Normal", (m_Bold>0)?1:0 );
 	fprintf( ExportFile, "\n");
 
     return true;
@@ -488,7 +488,7 @@ bool LibDrawText::Save( FILE* ExportFile ) const
 
 bool LibDrawText::Load( char* line, wxString& errorMsg )
 {
-    int cnt;
+    int cnt, thickness;
     char buf[256];
     char tmp[256];
 
@@ -497,7 +497,7 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
 
     cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s %s %d",
                   &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
-                  &m_Unit, &m_Convert, buf, tmp, &m_Width );
+                  &m_Unit, &m_Convert, buf, tmp, &thickness );
 
     if( cnt < 8 )
     {
@@ -510,6 +510,9 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
 
     if ( strnicmp( tmp, "Italic", 6 ) == 0 )
         m_Italic = true;
+    if (thickness > 0) {
+	m_Bold = true;
+    }
 
     /* Convert '~' to spaces. */
     m_Text = CONV_FROM_UTF8( buf );
@@ -533,6 +536,7 @@ LibDrawText* LibDrawText::GenCopy()
     newitem->m_Text      = m_Text;
     newitem->m_Width     = m_Width;
     newitem->m_Italic    = m_Italic;
+    newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
     newitem->m_VJustify  = m_VJustify;
     return newitem;
@@ -565,7 +569,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
                      t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                      m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                     linewidth, m_Italic );
+                     linewidth, m_Italic, m_Bold );
 }
 
 

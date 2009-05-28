@@ -491,13 +491,10 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
         x1 += m_PinLen; break;
     }
 
-    float fPinTextPitch = (PinNameSize.x * 1.1) + LineWidth;
-
-    PinTxtLen = NegableTextLength( m_PinName );
+    PinTxtLen = TextWidth( m_PinName, PinNameSize.x, false, false) + LineWidth;
 
     if( PinTxtLen == 0 )
         DrawPinName = FALSE;
-    PinTxtLen = (int) ( fPinTextPitch * PinTxtLen );
 
     if( TextInside )  /* Draw the text inside, but the pin numbers outside. */
     {
@@ -515,7 +512,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
                                      GR_TEXT_VJUSTIFY_CENTER, LineWidth,
-                                     false, true );
+                                     false, false );
                 }
                 else    // Orient == PIN_LEFT
                 {
@@ -526,7 +523,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
                                      GR_TEXT_VJUSTIFY_CENTER, LineWidth,
-                                     false, true );
+                                     false, false );
                 }
             }
 
@@ -538,7 +535,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false, false );
             }
         }
         else            /* Its a vertical line. */
@@ -554,7 +551,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
                                      GR_TEXT_VJUSTIFY_CENTER, LineWidth,
-                                     false, true );
+                                     false, false );
                 if( DrawPinNum )
                     DrawGraphicText( panel, DC,
                                      wxPoint( x1 - TXTMARGE,
@@ -562,7 +559,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      StringPinNum,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false, false );
             }
             else        /* PIN_UP */
             {
@@ -574,7 +571,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
                                      GR_TEXT_VJUSTIFY_CENTER, LineWidth,
-                                     false, true );
+                                     false, false );
                 if( DrawPinNum )
                     DrawGraphicText( panel, DC,
                                      wxPoint( x1 - TXTMARGE,
@@ -582,7 +579,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      StringPinNum,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth );
+                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth,
+				      false, false, false);
             }
         }
     }
@@ -600,7 +598,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_BOTTOM, LineWidth,
-                                 false, true );
+                                 false, false );
             }
             if( DrawPinNum )
             {
@@ -611,7 +609,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_TOP,
-                                 LineWidth );
+                                 LineWidth, false, false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -624,7 +622,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, true );
+                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false );
             }
 
             if( DrawPinNum )
@@ -635,15 +633,11 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_TOP, LineWidth );
+                                 GR_TEXT_VJUSTIFY_TOP, LineWidth, false, false, false );
             }
         }
     }
 }
-
-
-extern void Move_Plume( wxPoint pos, int plume ); // see plot.cpp
-
 
 /*****************************************************************************
 * Plot pin number and pin text info, given the pin line coordinates.	  *
@@ -659,7 +653,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                int TextInside,
                                bool DrawPinNum,
                                bool DrawPinName,
-                               int aWidth, bool aItalic )
+                               int aWidth )
 {
     int        x, y, x1, y1;
     wxString   StringPinNum;
@@ -693,13 +687,9 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
         x1 += m_PinLen; break;
     }
 
-    float fPinTextPitch = (PinNameSize.x * 1.1) + aWidth;
-
-    PinTxtLen = NegableTextLength( m_PinName );
-
+    PinTxtLen = TextWidth( m_PinName, PinNameSize.x, false, false) + aWidth;
     if( PinTxtLen == 0 )
         DrawPinName = FALSE;
-    PinTxtLen = (int) ( fPinTextPitch * PinTxtLen );
 
     if( TextInside )                                        /* Draw the text inside, but the pin numbers outside. */
     {
@@ -716,7 +706,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
                                      GR_TEXT_VJUSTIFY_CENTER,
-                                     aWidth, aItalic, true );
+                                     aWidth, false, false );
                 }
                 else    // orient == PIN_LEFT
                 {
@@ -727,7 +717,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                          PinNameSize,
                                          GR_TEXT_HJUSTIFY_RIGHT,
                                          GR_TEXT_VJUSTIFY_CENTER,
-                                         aWidth, aItalic, true );
+                                         aWidth, false, false );
                 }
                 if( DrawPinNum )
                 {
@@ -737,7 +727,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      TEXT_ORIENT_HORIZ, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM,
-                                     aWidth, aItalic );
+                                     aWidth, false, false );
                 }
             }
         }
@@ -753,7 +743,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
                                      GR_TEXT_VJUSTIFY_CENTER,
-                                     aWidth, aItalic, true );
+                                     aWidth, false, false );
                 if( DrawPinNum )
                 {
                     PlotGraphicText( g_PlotFormat,
@@ -763,7 +753,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM,
-                                     aWidth, aItalic );
+                                     aWidth, false, false );
                 }
             }
             else        /* PIN_UP */
@@ -776,7 +766,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
                                      GR_TEXT_VJUSTIFY_CENTER,
-                                     aWidth, aItalic, true );
+                                     aWidth, false, false );
                 if( DrawPinNum )
                 {
                     PlotGraphicText( g_PlotFormat,
@@ -786,7 +776,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM,
-                                     aWidth, aItalic );
+                                     aWidth, false, false );
                 }
             }
         }
@@ -805,7 +795,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_BOTTOM,
-                                 aWidth, aItalic, true );
+                                 aWidth, false, false );
             }
             if( DrawPinNum )
             {
@@ -815,7 +805,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_TOP,
-                                 aWidth, aItalic );
+                                 aWidth, false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -829,7 +819,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_BOTTOM,
-                                 aWidth, aItalic, true );
+                                 aWidth, false, false );
             }
 
             if( DrawPinNum )
@@ -841,7 +831,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_TOP,
-                                 aWidth, aItalic );
+                                 aWidth, false, false );
             }
         }
     }

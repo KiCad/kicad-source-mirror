@@ -513,7 +513,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     int style = 0;
     if( field.m_Italic )
         style = 1;
-    if( field.m_Width > 1 )
+    if( field.m_Bold )
         style |= 2;
     m_StyleRadioBox->SetSelection( style );
 
@@ -633,9 +633,9 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         field.m_Italic = false;
 
     if( (style & 2 ) != 0 )
-        field.m_Width = field.m_Size.x / 4;
+        field.m_Bold = true;
     else
-        field.m_Width = 0;
+	field.m_Bold = false;
 
     double value;
 

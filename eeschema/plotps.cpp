@@ -452,7 +452,6 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
     DrawList = screen->EEDrawList;
     while( DrawList )  /* tracage */
     {
-        Plume( 'U' );
         layer = LAYER_NOTES;
 
         switch( DrawList->Type() )
@@ -483,6 +482,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
                 fprintf( PlotOutput, "[50 50] 0 setdash\n" );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
+                Plume( 'Z' );
                 fprintf( PlotOutput, "[] 0 setdash\n" );
                 break;
 
@@ -491,6 +491,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
                 fprintf( PlotOutput, "%d setlinewidth\n", g_PlotLine_Width * 3 );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
+                Plume( 'Z' );
                 fprintf( PlotOutput, "%d setlinewidth\n", g_PlotLine_Width );
             }
                 break;
@@ -499,6 +500,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
                 SetCurrentLineWidth( -1 );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
+                Plume( 'Z' );
                 break;
             }
 
@@ -554,7 +556,6 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
             break;
         }
 
-        Plume( 'U' );
         DrawList = DrawList->Next();
     }
 

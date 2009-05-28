@@ -353,7 +353,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
                      pt_texte->m_Text,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
-                     thickness, pt_texte->m_Italic, true );
+                     thickness, pt_texte->m_Italic, pt_texte->m_Bold );
 }
 
 
@@ -635,7 +635,7 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
                      txt,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
-                     thickness, pt_texte->m_Italic, true );
+                     thickness, pt_texte->m_Italic, pt_texte->m_Bold );
             pos += offset;
         }
 
@@ -647,7 +647,7 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
                      pt_texte->m_Text,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
-                     thickness, pt_texte->m_Italic, true );
+                     thickness, pt_texte->m_Italic, pt_texte->m_Bold );
 }
 
 

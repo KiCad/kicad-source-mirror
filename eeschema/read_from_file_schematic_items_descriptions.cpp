@@ -79,7 +79,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         if( isdigit( Name3[0] ) )
         {
             thickness = atol( Name3 );
-            TextStruct->m_Width = thickness;
+            TextStruct->m_Bold = (thickness != 0);
         }
         Struct = TextStruct;
         if( stricmp( Name2, "Italic" ) == 0 )
@@ -94,7 +94,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->SetSchematicTextOrientation(  orient );
         TextStruct->m_Shape  = NET_INPUT;
-        TextStruct->m_Width  = thickness;
+	TextStruct->m_Bold = (thickness != 0);
 
         if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
             TextStruct->m_Shape = NET_OUTPUT;
@@ -117,7 +117,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->SetSchematicTextOrientation( orient );
         TextStruct->m_Shape  = NET_INPUT;
-        TextStruct->m_Width  = thickness;
+	TextStruct->m_Bold = (thickness != 0);
 
         if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
             TextStruct->m_Shape = NET_OUTPUT;
@@ -152,7 +152,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         if( isdigit( Name3[0] ) )
         {
             thickness = atol( Name3 );
-            TextStruct->m_Width = thickness;
+	    TextStruct->m_Bold = (thickness != 0);
         }
 
         if( strnicmp( Name2, "Italic", 6 ) == 0 )
@@ -759,10 +759,9 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
                 else
                     component->GetField( fieldNdx )->m_Italic = false;
                 if( Char3[2] == 'B' )
-                    component->GetField( fieldNdx )->m_Width =
-                        component->GetField( fieldNdx )->m_Size.x / 4;
+                    component->GetField( fieldNdx )->m_Bold = true;
                 else
-                    component->GetField( fieldNdx )->m_Width = 0;
+                    component->GetField( fieldNdx )->m_Bold = false;
 
                 component->GetField( fieldNdx )->m_HJustify = hjustify;
                 component->GetField( fieldNdx )->m_VJustify = vjustify;

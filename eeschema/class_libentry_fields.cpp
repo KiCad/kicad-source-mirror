@@ -74,7 +74,7 @@ bool LibDrawField::Save( FILE* ExportFile ) const
              (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
              hjustify, vjustify,
              m_Italic ? 'I' : 'N',
-             m_Width > 1 ? 'B' : 'N' );
+             m_Bold ? 'B' : 'N' );
 
     /* Save field name, if necessary
      * Field name is saved only if it is not the default name.
@@ -132,7 +132,7 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
     line++;
 
     fieldUserName[0] = 0;
-	memset( textVJustify, 0, sizeof( textVJustify ) );
+    memset( textVJustify, 0, sizeof( textVJustify ) );
 
     cnt = sscanf( line, " %d %d %d %c %c %c %s", &m_Pos.x, &m_Pos.y, &m_Size.y,
                   &textOrient, &textVisible, &textHJustify, textVJustify );
@@ -180,11 +180,10 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
         else
             return false;
 
-        if ( strlen( textVJustify ) >= 2 && textVJustify[1] == 'I' )  // Italic
+        if ( textVJustify[1] == 'I' )  // Italic
             m_Italic = true;
-        if ( strlen( textVJustify ) >= 2 && textVJustify[2] == 'B' )  // Bold
-            m_Width = m_Size.x / 4;
-
+        if ( textVJustify[2] == 'B' )  // Bold
+            m_Bold = true;
     }
 
     if( m_FieldId >= FIELD1 )
@@ -241,7 +240,7 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     GRSetDrawMode( aDC, aDrawMode );
     DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, text->GetData(),
                      m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                     m_Size, m_HJustify, m_VJustify, linewidth, m_Italic );
+                     m_Size, m_HJustify, m_VJustify, linewidth, m_Italic, m_Bold );
 }
 
 
@@ -321,6 +320,7 @@ void LibDrawField::Copy( LibDrawField* Target ) const
     Target->m_HJustify  = m_HJustify;
     Target->m_VJustify  = m_VJustify;
     Target->m_Italic    = m_Italic;
+    Target->m_Bold      = m_Bold;
 }
 
 
