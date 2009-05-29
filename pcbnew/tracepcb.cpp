@@ -101,6 +101,63 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 /********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
 {
+    /* The order of drawing is flexible on some systems and not on others.  For
+     * OSes which use OR to draw, the order is not important except for the
+     * effect of the highlight and its relationship to markers. See comment below.
+     * This order indepence comes from the fact that a binary OR operation is
+     * commutative in nature.
+     * However on the OSX, the OR operation is not used, and so this sequence
+     * below is chosen to give MODULEs the highest visible priority.
+     */
+
+
+    /* Draw all tracks and zones.  As long as dark colors are used for the tracks,
+     * Then the OR draw mode should show tracks underneath other tracks.  But a white
+     * track will cover any other color since it has more bits to OR in.
+     */
+    for( TRACK* track = m_Track;  track;   track = track->Next() )
+    {
+        track->Draw( aPanel, DC, aDrawMode );
+    }
+
+    for( SEGZONE* zone = m_Zone;  zone;   zone = zone->Next() )
+    {
+        zone->Draw( aPanel, DC, aDrawMode );
+    }
+
+    // Draw the graphic items
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    {
+        if( item->m_Flags & IS_MOVED )
+            continue;
+
+        switch( item->Type() )
+        {
+        case TYPE_COTATION:
+        case TYPE_TEXTE:
+        case TYPE_MIRE:
+        case TYPE_DRAWSEGMENT:
+            item->Draw( aPanel, DC, aDrawMode );
+            break;
+
+       default:
+            break;
+        }
+    }
+
+    /* Draw areas (i.e. zones) */
+    for( int ii = 0; ii < GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetArea(ii);
+
+        // Areas must be drawn here only if not moved or dragged,
+        // because these areas are drawn by ManageCursor() in a specific manner
+        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        {
+            zone->Draw( aPanel, DC, aDrawMode );
+            zone->DrawFilledArea( aPanel, DC, aDrawMode );
+        }
+    }
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
@@ -129,55 +186,6 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         else
             Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
     }
-
-    // Draw the graphic items
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
-    {
-        if( item->m_Flags & IS_MOVED )
-            continue;
-
-        switch( item->Type() )
-        {
-        case TYPE_COTATION:
-        case TYPE_TEXTE:
-        case TYPE_MIRE:
-        case TYPE_DRAWSEGMENT:
-            item->Draw( aPanel, DC, aDrawMode );
-            break;
-
-       default:
-            break;
-        }
-    }
-
-    /* Draw all tracks and zones.  As long as dark colors are used for the tracks,
-     * Then the OR draw mode should show tracks underneath other tracks.  But a white
-     * track will cover any other color since it has more bits to OR in.
-     */
-    for( TRACK* track = m_Track;  track;   track = track->Next() )
-    {
-        track->Draw( aPanel, DC, aDrawMode );
-    }
-
-    for( SEGZONE* zone = m_Zone;  zone;   zone = zone->Next() )
-    {
-        zone->Draw( aPanel, DC, aDrawMode );
-    }
-
-    /* Draw areas (i.e. zones) */
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* zone = GetArea(ii);
-
-        // Areas must be drawn here only if not moved or dragged,
-        // because these areas are drawn by ManageCursor() in a specific manner
-        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
-        {
-            zone->Draw( aPanel, DC, aDrawMode );
-            zone->DrawFilledArea( aPanel, DC, aDrawMode );
-        }
-    }
-
 
     // @todo: this high-light functionality could be built into me.
     if( g_HightLigt_Status )
