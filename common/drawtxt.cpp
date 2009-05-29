@@ -20,7 +20,7 @@
 #define EDA_DRAWBASE
 #include "hershey_fonts.h"
 
-#define HERSHEY_SIZE 32.0
+#define HERSHEY_SIZE 32.0       // size factor used to calculate actual size of shapes from hershey fonts
 
 /* Functions to draw / plot a string.
  *  texts have only one line.
@@ -67,7 +67,7 @@ static const char* get_hershey_recipe( int AsciiCode, bool bold )
 }
 
 
-int TextWidth( const wxString& aText, int size_h, bool italic, bool bold )
+int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool italic, bool bold )
 {
     int tally = 0;
     int char_count = aText.length();
@@ -85,13 +85,13 @@ int TextWidth( const wxString& aText, int size_h, bool italic, bool bold )
         /* Get metrics */
         int         xsta = *ptcar++ - 'R';
         int         xsto = *ptcar++ - 'R';
-        tally += wxRound( size_h * (xsto - xsta) / HERSHEY_SIZE );
+        tally += wxRound( aXSize * (xsto - xsta) / HERSHEY_SIZE );
     }
 
     /* Italic correction, 1/8em */
     if( italic )
     {
-        tally += wxRound( size_h * 0.125 );
+        tally += wxRound( aXSize * 0.125 );
     }
     return tally;
 }
@@ -130,7 +130,7 @@ static void DrawGraphicTextPline(
 
 static int overbar_position( int size_v, int thickness )
 {
-    return wxRound( (double) size_v * 30.0 / HERSHEY_SIZE + (double) thickness );
+    return wxRound( ((double) size_v * 26/HERSHEY_SIZE ) + ((double) thickness * 1.5) );
 }
 
 
@@ -228,7 +228,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 
     current_char_pos = aPos;
 
-    dx = TextWidth( aText, size_h, aItalic, aBold );
+    dx = ReturnGraphicTextWidth( aText, size_h, aItalic, aBold );
     dy = size_v;
 
     /* Do not draw the text if out of draw area! */

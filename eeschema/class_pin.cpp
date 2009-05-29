@@ -456,7 +456,6 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     int        x, y, x1, y1;
     wxString   StringPinNum;
     EDA_Colors NameColor, NumColor;
-    int        PinTxtLen;
 
     wxSize     PinNameSize( m_PinNameSize, m_PinNameSize );
     wxSize     PinNumSize( m_PinNumSize, m_PinNumSize );
@@ -491,9 +490,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
         x1 += m_PinLen; break;
     }
 
-    PinTxtLen = TextWidth( m_PinName, PinNameSize.x, false, false) + LineWidth;
-
-    if( PinTxtLen == 0 )
+    if( m_PinName.IsEmpty() )
         DrawPinName = FALSE;
 
     if( TextInside )  /* Draw the text inside, but the pin numbers outside. */
@@ -658,7 +655,6 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
     int        x, y, x1, y1;
     wxString   StringPinNum;
     EDA_Colors NameColor, NumColor;
-    int        PinTxtLen   = 0;
     wxSize     PinNameSize = wxSize( m_PinNameSize, m_PinNameSize );
     wxSize     PinNumSize  = wxSize( m_PinNumSize, m_PinNumSize );
     bool       plot_color  = (g_PlotFormat == PLOT_FORMAT_POST)
@@ -687,8 +683,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
         x1 += m_PinLen; break;
     }
 
-    PinTxtLen = TextWidth( m_PinName, PinNameSize.x, false, false) + aWidth;
-    if( PinTxtLen == 0 )
+    if( m_PinName.IsEmpty() )
         DrawPinName = FALSE;
 
     if( TextInside )                                        /* Draw the text inside, but the pin numbers outside. */

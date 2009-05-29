@@ -9,7 +9,11 @@
 
 class WinEDA_DrawPanel;
 
-int TextWidth(const wxString& aText, int size_h, bool italic, bool bold );
+/** Function ReturnGraphicTextWidth
+ * @return the X size of the graphic text
+ * the full X size is ReturnGraphicTextWidth + the thickness of graphic lines
+ */
+int ReturnGraphicTextWidth(const wxString& aText, int size_h, bool italic, bool bold );
 
 /** Function NegableTextLength
  * Return the text length of a negable string, excluding the ~ markers */

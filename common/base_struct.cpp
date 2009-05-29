@@ -193,7 +193,7 @@ EDA_TextStruct::~EDA_TextStruct()
  */
 int EDA_TextStruct::LenSize( const wxString& aLine ) const
 {
-    return TextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Width;
+    return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Width;
 }
 
 
