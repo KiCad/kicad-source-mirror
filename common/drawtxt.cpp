@@ -51,6 +51,23 @@ int NegableTextLength( const wxString& aText )
 
 static const char* get_hershey_recipe( int AsciiCode, bool bold )
 {
+
+#if defined(KICAD_CYRILLIC)
+    AsciiCode &= 0x7FF;
+    if( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
+    {
+        return hershey_cyrillic[AsciiCode - 0x410];
+    }
+    else if( AsciiCode == 0x401 )
+    {
+        return hershey_cyrillic[0x5];
+    }
+    else if( AsciiCode == 0x451 )
+    {
+        return hershey_cyrillic[0x25];
+    }
+#endif
+
     AsciiCode &= 0x7F;
     if( AsciiCode < 32 )
         AsciiCode = 32;                 /* Clamp control chars */
