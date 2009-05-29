@@ -19,8 +19,12 @@
 
 #define EDA_DRAWBASE
 #include "hershey_fonts.h"
-
-#define HERSHEY_SIZE 32.0       // size factor used to calculate actual size of shapes from hershey fonts
+/* factor used to calculate actual size of shapes from hershey fonts (could be adjusted depending on the font name)
+ * Its value is choosen in order to have letters like M, P .. vertical size equal to the vertical char size parameter
+ * Of course some shapes can be bigger or smaller than the vertical char size parameter
+*/
+#define HERSHEY_SCALE_FACTOR 1/21.0
+double s_HerscheyScaleFactor = HERSHEY_SCALE_FACTOR;
 
 /* Functions to draw / plot a string.
  *  texts have only one line.
@@ -102,7 +106,7 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool italic, bool
         /* Get metrics */
         int         xsta = *ptcar++ - 'R';
         int         xsto = *ptcar++ - 'R';
-        tally += wxRound( aXSize * (xsto - xsta) / HERSHEY_SIZE );
+        tally += wxRound( aXSize * (xsto - xsta) * s_HerscheyScaleFactor );
     }
 
     /* Italic correction, 1/8em */
@@ -147,7 +151,7 @@ static void DrawGraphicTextPline(
 
 static int overbar_position( int size_v, int thickness )
 {
-    return wxRound( ((double) size_v * 26/HERSHEY_SIZE ) + ((double) thickness * 1.5) );
+    return wxRound( ((double) size_v * 26 * s_HerscheyScaleFactor ) + ((double) thickness * 1.5) );
 }
 
 
@@ -167,7 +171,7 @@ static int clamp_text_pen_size( int width, int size_h, bool bold )
      *  quantum unit, otherwise the line pairs will be visible! */
     if( bold )
     {
-        int minWidth = wxRound( ABS( size_h ) * 1.42 / HERSHEY_SIZE + 0.5 );
+        int minWidth = wxRound( ABS( size_h ) * 1.42 * s_HerscheyScaleFactor + 0.5 );
         if( width < minWidth )
         {
             width = minWidth;
@@ -416,8 +420,8 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
             {
                 wxPoint currpoint;
                 hc1 -= xsta; hc2 -= 11; /* Align the midpoint */
-                hc1  = wxRound( hc1 * size_h / HERSHEY_SIZE );
-                hc2  = wxRound( hc2 * size_v / HERSHEY_SIZE );
+                hc1  = wxRound( hc1 * size_h * s_HerscheyScaleFactor );
+                hc2  = wxRound( hc2 * size_v * s_HerscheyScaleFactor );
 
                 // To simulate an italic font, add a x offset depending on the y offset
                 if( aItalic )
@@ -437,7 +441,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         ptr++;
 
         // Apply the advance width
-        current_char_pos.x += wxRound( size_h * (xsto - xsta) / HERSHEY_SIZE );
+        current_char_pos.x += wxRound( size_h * (xsto - xsta) * s_HerscheyScaleFactor );
     }
 
     if( overbars % 2 )

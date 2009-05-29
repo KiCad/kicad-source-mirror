@@ -714,8 +714,6 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
 {
     static std::vector <wxPoint> Poly;
     EDA_Colors color;
-    wxPoint    text_offset = offset + GetSchematicTextOffset();
-
     int        width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
@@ -726,6 +724,7 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
     GRSetDrawMode( DC, DrawMode );
 
     EXCHG( width, m_Width );            // Set the minimum width
+    wxPoint    text_offset = offset + GetSchematicTextOffset();
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( width, m_Width );            // set initial value
 
@@ -775,7 +774,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
     dx = dy = 0;
 
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
-    height = m_Size.y + 2 * TXTMARGE;
+    height = m_Size.y + width + 2 * TXTMARGE;
     length = LenSize( m_Text )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
@@ -829,7 +828,6 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aO
     EDA_Colors color;
     wxPoint    text_offset = aOffset + GetSchematicTextOffset();
 
-    int        width = MAX( m_Width, g_DrawMinimunLineWidth );
 
     if( Color >= 0 )
         color = (EDA_Colors) Color;
@@ -838,6 +836,7 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aO
 
     GRSetDrawMode( DC, DrawMode );
 
+    int        width = MAX( m_Width, g_DrawMinimunLineWidth );
     EXCHG( width, m_Width );            // Set the minimum width
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( width, m_Width );            // set initial value
@@ -996,7 +995,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
     y = m_Pos.y;
     int width = MAX( m_Width, g_DrawMinimunLineWidth );
     length = LenSize( m_Text );
-    height = m_Size.y;
+    height = m_Size.y + width;
     dx     = dy = 0;
 
     switch( m_SchematicOrientation )
