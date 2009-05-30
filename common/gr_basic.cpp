@@ -321,7 +321,6 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
 void GRSetBrush( wxDC* DC, int Color, int fill )
 /***********************************************/
 {
-    Color &= MASKCOLOR; // Pour 32 couleurs Max
     if( ForceBlackPen )
         Color = BLACK;
     wxBrush DrawBrush;
