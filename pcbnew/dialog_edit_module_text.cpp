@@ -10,6 +10,8 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
+#include "drawtxt.h"
+#include "confirm.h"
 
 #include "dialog_edit_module_text_base.h"
 
@@ -178,9 +180,12 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     // Test for a reasonnable width:
     if( width <= 1 )
         width = 1;
-    int minthickness = min(m_CurrentTextMod->m_Size.x, m_CurrentTextMod->m_Size.y) / 4;
-    if( width > minthickness )
-        width = minthickness;
+    int maxthickness = Clamp_Text_PenSize(width, m_CurrentTextMod->m_Size );
+    if( width > maxthickness )
+    {
+        DisplayError(this, _("The text thickness is too large for the text size. It will be clamped"));
+        width = maxthickness;
+    }
     m_CurrentTextMod->SetWidth( width );
 
     m_CurrentTextMod->m_NoShow = (m_Show->GetSelection() == 0) ? 0 : 1;

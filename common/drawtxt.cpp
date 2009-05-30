@@ -19,12 +19,55 @@
 
 #define EDA_DRAWBASE
 #include "hershey_fonts.h"
+
 /* factor used to calculate actual size of shapes from hershey fonts (could be adjusted depending on the font name)
  * Its value is choosen in order to have letters like M, P .. vertical size equal to the vertical char size parameter
  * Of course some shapes can be bigger or smaller than the vertical char size parameter
-*/
-#define HERSHEY_SCALE_FACTOR 1/21.0
+ */
+#define HERSHEY_SCALE_FACTOR 1 / 21.0
 double s_HerscheyScaleFactor = HERSHEY_SCALE_FACTOR;
+
+
+
+/** Function GetPensizeForBold
+ * @return the "best" value for a pen size to draw/plot a bold text
+ * @param aTextSize = the char size (height or width)
+ */
+int GetPenSizeForBold( int aTextSize )
+{
+    return wxRound( aTextSize / 5.0 );
+}
+
+
+/** Function  Clamp_Text_PenSize
+ *As a rule, pen width should not be >1/4em, otherwise the character
+ * will be cluttered up in its own fatness
+ * so pen width max is aSize/4 for bold text, and aSize/6 for normal text
+ * The "best" pen width is aSize/5 for bold texts,
+ * so the clamp is consistant with bold option.
+ * @param aPenSize = the pen size to clamp
+ * @param aSize the char size (height or width)
+ * @param aBold = true if text accept bold pen size
+ * @return the max pen size allowed
+ */
+int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
+{
+    int penSize  = aPenSize;
+    double scale = aBold ? 4.0 : 6.0;
+    int maxWidth = wxRound( ABS( aSize ) / scale );
+
+    if( penSize > maxWidth )
+        penSize = maxWidth;
+    return penSize;
+}
+
+int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
+{
+    int size  = MIN( ABS( aSize.x ), ABS( aSize.y ) );
+    return Clamp_Text_PenSize(aPenSize, size, aBold);;
+}
+
+
 
 /* Functions to draw / plot a string.
  *  texts have only one line.
@@ -53,9 +96,15 @@ int NegableTextLength( const wxString& aText )
 }
 
 
-static const char* get_hershey_recipe( int AsciiCode, bool bold )
-{
 
+/* Function GetHersheyShapeDescription()
+ * return a pointer to the shape corresponding to unicode value AsciiCode
+ * Note we use the same font for Bold and Normal texts
+ * because kicad handles a variable pen size to do that
+ * that gives better results in XOR draw mode.
+ */
+static const char* GetHersheyShapeDescription( int AsciiCode )
+{
 #if defined(KICAD_CYRILLIC)
     AsciiCode &= 0x7FF;
     if( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
@@ -77,18 +126,11 @@ static const char* get_hershey_recipe( int AsciiCode, bool bold )
         AsciiCode = 32;                 /* Clamp control chars */
     AsciiCode -= 32;
 
-    if( bold )
-    {
-        return hershey_duplex[AsciiCode];
-    }
-    else
-    {
-        return hershey_simplex[AsciiCode];
-    }
+    return hershey_simplex[AsciiCode];
 }
 
 
-int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool italic, bool bold )
+int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aWidth )
 {
     int tally = 0;
     int char_count = aText.length();
@@ -102,7 +144,7 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool italic, bool
             continue;
         }
 
-        const char* ptcar = get_hershey_recipe( AsciiCode, bold );
+        const char* ptcar = GetHersheyShapeDescription( AsciiCode );
         /* Get metrics */
         int         xsta = *ptcar++ - 'R';
         int         xsto = *ptcar++ - 'R';
@@ -110,7 +152,7 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool italic, bool
     }
 
     /* Italic correction, 1/8em */
-    if( italic )
+    if( aItalic )
     {
         tally += wxRound( aXSize * 0.125 );
     }
@@ -149,35 +191,11 @@ static void DrawGraphicTextPline(
 }
 
 
+/* Helper function for texts with over bar
+ */
 static int overbar_position( int size_v, int thickness )
 {
-    return wxRound( ((double) size_v * 26 * s_HerscheyScaleFactor ) + ((double) thickness * 1.5) );
-}
-
-
-static int clamp_text_pen_size( int width, int size_h, bool bold )
-{
-    /* As a rule, pen width should not be >1/8em, otherwise the character
-     * will be cluttered up in its own fatness */
-    /* XXX @todo: Should be handled in the UI and gerber plotter too */
-    int maxWidth = wxRound( ABS( size_h ) / 8.0 );
-
-    if( width > maxWidth )
-    {
-        width = maxWidth;
-    }
-
-    /* Special rule for bold text: the width should be at least 1.42 times the
-     *  quantum unit, otherwise the line pairs will be visible! */
-    if( bold )
-    {
-        int minWidth = wxRound( ABS( size_h ) * 1.42 * s_HerscheyScaleFactor + 0.5 );
-        if( width < minWidth )
-        {
-            width = minWidth;
-        }
-    }
-    return width;
+    return wxRound( ( (double) size_v * 26 * s_HerscheyScaleFactor ) + ( (double) thickness * 1.5 ) );
 }
 
 
@@ -192,10 +210,11 @@ static int clamp_text_pen_size( int width, int size_h, bool bold )
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
  *  @param aH_justify = horizontal justification (Left, center, right)
  *  @param aV_justify = vertical justification (bottom, center, top)
- *  @param aWidth = line width (pen width) (default = 0)
+ *  @param aWidth = line width (pen width) (use default width if aWidth = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
+ *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
- *  @param aBold = true to use a bold font
+ *  @param aBold = true to use a bold font. Useful only with default width value (aWidth = 0)
  *  @param aCallback() = function called (if non null) to draw each segment.
  *                  used to draw 3D texts or for plotting, NULL for normal drawings
  */
@@ -233,6 +252,9 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     size_h = aSize.x;                           /* PLEASE NOTE: H is for HORIZONTAL not for HEIGHT */
     size_v = aSize.y;
 
+    if( aWidth == 0 && aBold )       // Use default values if aWidth == 0
+        aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
+
     if( aWidth < 0 )
     {
         aWidth = -aWidth;
@@ -241,15 +263,13 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     if( size_h < 0 )       // text is mirrored using size.x < 0 (mirror / Y axis)
         italic_reverse = true;
 
-    aWidth = clamp_text_pen_size( aWidth, size_h, aBold );
-
     char_count = NegableTextLength( aText );
     if( char_count == 0 )
         return;
 
     current_char_pos = aPos;
 
-    dx = ReturnGraphicTextWidth( aText, size_h, aItalic, aBold );
+    dx = ReturnGraphicTextWidth( aText, size_h, aItalic, aWidth );
     dy = size_v;
 
     /* Do not draw the text if out of draw area! */
@@ -381,7 +401,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 
         AsciiCode = aText.GetChar( ptr + overbars );
 
-        const char* ptcar = get_hershey_recipe( AsciiCode, aBold );
+        const char* ptcar = GetHersheyShapeDescription( AsciiCode );
         /* Get metrics */
         int         xsta = *ptcar++ - 'R';
         int         xsto = *ptcar++ - 'R';
@@ -468,7 +488,7 @@ static bool s_Plotbegin;                                // Flag to init plot
  * The call back function
  */
 /****************************************************************/
-static void s_Callback_plot( int x0, int y0,  int xf, int yf )
+static void s_Callback_plot( int x0, int y0, int xf, int yf )
 /****************************************************************/
 {
     static wxPoint PenLastPos;
@@ -514,8 +534,9 @@ static void s_Callback_plot( int x0, int y0,  int xf, int yf )
  *  @param aV_justify = vertical justification (bottom, center, top)
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
+ *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
- *  @param aBold = true to use a bold font
+ *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  */
 /******************************************************************************************/
 void PlotGraphicText( int                         aFormat_plot,
@@ -531,14 +552,8 @@ void PlotGraphicText( int                         aFormat_plot,
                       bool                        aBold )
 /******************************************************************************************/
 {
-    if( aWidth > 0 )
-    {
-        aWidth = clamp_text_pen_size( aWidth, aSize.x, aBold );
-    }
-    else
-    {
-        aWidth = -clamp_text_pen_size( -aWidth, aSize.x, aBold );
-    }
+    if( aWidth == 0 && aBold )      // Use default values if aWidth == 0
+        aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
 
     // Initialise the actual function used to plot lines:
     switch( aFormat_plot )
@@ -568,7 +583,8 @@ void PlotGraphicText( int                         aFormat_plot,
     DrawGraphicText( NULL, NULL, aPos, aColor, aText,
                      aOrient, aSize,
                      aH_justify, aV_justify,
-                     aWidth, aItalic, aBold,
+                     aWidth, aItalic,
+                     aBold,
                      s_Callback_plot );
 
     /* end text : pen UP ,no move */

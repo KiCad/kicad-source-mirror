@@ -11,6 +11,7 @@
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
+#include "drawtxt.h"
 #include "trigo.h"
 #include "protos.h"
 
@@ -44,6 +45,8 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
 
     Text->m_Text = wxT( "text" );
 
+    ModuleTextWidth = Clamp_Text_PenSize( ModuleTextWidth,
+            MIN(ModuleTextSize.x, ModuleTextSize.y), true );
     Text->m_Size  = ModuleTextSize;
     Text->m_Width = ModuleTextWidth;
     Text->m_Pos   = GetScreen()->m_Curseur;

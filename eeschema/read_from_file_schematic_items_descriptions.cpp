@@ -9,6 +9,7 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "drawtxt.h"
 
 #include "protos.h"
 
@@ -69,7 +70,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
     if( text == NULL )
         return NULL;
 
-    if( Name1[0] == 'L' )
+    if( Name1[0] == 'L' )  // Reading a simple label (SCH_LABEL item)
     {
         SCH_LABEL* TextStruct =
             new SCH_LABEL( pos, CONV_FROM_UTF8( text ) );
@@ -80,12 +81,13 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         {
             thickness = atol( Name3 );
             TextStruct->m_Bold = (thickness != 0);
+            TextStruct->m_Width  = TextStruct->m_Bold ? GetPenSizeForBold( size ) : 0;
         }
         Struct = TextStruct;
         if( stricmp( Name2, "Italic" ) == 0 )
             TextStruct->m_Italic = 1;
     }
-    else if( Name1[0] == 'G' && aSchematicFileVersion > '1' )
+    else if( Name1[0] == 'G' && aSchematicFileVersion > '1' )  // Reading a global label (SCH_GLOBALLABEL item)
     {
         SCH_GLOBALLABEL* TextStruct =
             new SCH_GLOBALLABEL( pos, CONV_FROM_UTF8( text ) );
@@ -94,7 +96,8 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->SetSchematicTextOrientation(  orient );
         TextStruct->m_Shape  = NET_INPUT;
-	TextStruct->m_Bold = (thickness != 0);
+        TextStruct->m_Bold = (thickness != 0);
+        TextStruct->m_Width  = TextStruct->m_Bold ? GetPenSizeForBold( size ) : 0;
 
         if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
             TextStruct->m_Shape = NET_OUTPUT;
@@ -107,7 +110,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         if( stricmp( Name3, "Italic" ) == 0 )
             TextStruct->m_Italic = 1;
     }
-    else if( (Name1[0] == 'H')
+    else if( (Name1[0] == 'H')  // Reading a hierarchical label (SCH_HIERLABEL item)
             || (Name1[0] == 'G' && aSchematicFileVersion == '1') ) //in schematic file version 1, glabels were actually hierarchal labels.
     {
         SCH_HIERLABEL* TextStruct =
@@ -117,7 +120,8 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         TextStruct->m_Size.x = TextStruct->m_Size.y = size;
         TextStruct->SetSchematicTextOrientation( orient );
         TextStruct->m_Shape  = NET_INPUT;
-	TextStruct->m_Bold = (thickness != 0);
+        TextStruct->m_Bold = (thickness != 0);
+        TextStruct->m_Width  = TextStruct->m_Bold ? GetPenSizeForBold( size ) : 0;
 
         if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
             TextStruct->m_Shape = NET_OUTPUT;
@@ -130,7 +134,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         if( stricmp( Name3, "Italic" ) == 0 )
             TextStruct->m_Italic = 1;
     }
-    else
+    else        // reading a graphic text (comment)
     {
         wxString val = CONV_FROM_UTF8( text );
 
@@ -152,7 +156,8 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
         if( isdigit( Name3[0] ) )
         {
             thickness = atol( Name3 );
-	    TextStruct->m_Bold = (thickness != 0);
+            TextStruct->m_Bold = (thickness != 0);
+            TextStruct->m_Width = TextStruct->m_Bold ? GetPenSizeForBold( size ) : 0;
         }
 
         if( strnicmp( Name2, "Italic", 6 ) == 0 )

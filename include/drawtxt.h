@@ -9,6 +9,26 @@
 
 class WinEDA_DrawPanel;
 
+/** Function  Clamp_Text_PenSize
+ *As a rule, pen width should not be >1/4em, otherwise the character
+    * will be cluttered up in its own fatness
+    * The pen width max is aSize/4 for bold texts, and aSize/6 for normal texts
+    * The "best" pen width is aSize/5 for bold texts,
+    * so the clamp is consistant with bold option.
+    * @param aPenSize = the pen size to clamp
+    * @param aSize the char size (height or width, od its wxSize)
+    * @param aBold = true if text accept bold pen size
+    * @return the max pen size allowed
+*/
+int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold = true);
+int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold = true);
+
+/** Function GetPensizeForBold
+ * @return the "best" value for a pen size to draw/plot a bold text
+ * @param aTextSize = the char size (height or width)
+ */
+int GetPenSizeForBold( int aTextSize );
+
 /** Function ReturnGraphicTextWidth
  * @return the X size of the graphic text
  * the full X size is ReturnGraphicTextWidth + the thickness of graphic lines
@@ -32,9 +52,9 @@ int NegableTextLength( const wxString& aText );
  *  @param aV_justify = vertical justification (bottom, center, top)
  *  @param aWidth = line width (pen width) (default = 0)
  *      if width < 0 : draw segments in sketch mode, width = abs(width)
+ *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font
- *  @param aNegable = true to enable the ~ char for overbarring
  *  @param aCallback() = function called (if non null) to draw each segment.
  *                  used to draw 3D texts or for plotting, NULL for normal drawings
  */
@@ -49,7 +69,7 @@ void DrawGraphicText( WinEDA_DrawPanel * aPanel,
                       enum GRTextVertJustifyType aV_justify,
                       int aWidth,
                       bool aItalic,
-		      bool aBold,
+                      bool aBold,
                       void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL );
 
 /** Function PlotGraphicText

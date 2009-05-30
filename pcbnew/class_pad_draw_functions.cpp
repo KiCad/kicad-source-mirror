@@ -205,6 +205,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = FALSE;
 
+    SetAlpha(&color, 170);
+
     switch( GetShape() )
     {
     case PAD_CIRCLE:

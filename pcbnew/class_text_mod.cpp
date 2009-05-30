@@ -166,19 +166,18 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
     ReadDelimitedText( BufLine, aLine, sizeof(BufLine) );
     m_Text = CONV_FROM_UTF8( BufLine );
 
-    // Test for a reasonnable width:
-    if( m_Width <= 1 )
-        m_Width = 1;
-    if( m_Width > TEXTS_MAX_WIDTH )
-        m_Width = TEXTS_MAX_WIDTH;
-
     // Test for a reasonnable size:
     if( m_Size.x < TEXTS_MIN_SIZE )
         m_Size.x = TEXTS_MIN_SIZE;
     if( m_Size.y < TEXTS_MIN_SIZE )
         m_Size.y = TEXTS_MIN_SIZE;
 
-    return success;
+     // Set a reasonnable width:
+    if( m_Width < 1 )
+        m_Width = 1;
+    m_Width = Clamp_Text_PenSize( m_Width, m_Size );
+
+   return success;
 }
 
 
@@ -203,6 +202,8 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 
     m_Size  = source->m_Size;
     m_Width = source->m_Width;
+    m_Italic = source->m_Italic;
+    m_Bold = source->m_Bold;
 
     m_Text = source->m_Text;
 }

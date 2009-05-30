@@ -325,11 +325,7 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
     if( ForceBlackPen )
         Color = BLACK;
     wxBrush DrawBrush;
-    DrawBrush.SetColour(
-        ColorRefs[Color].m_Red,
-        ColorRefs[Color].m_Green,
-        ColorRefs[Color].m_Blue
-        );
+    DrawBrush.SetColour( MakeColour( Color ) );
 
     if( fill )
         DrawBrush.SetStyle( wxSOLID );

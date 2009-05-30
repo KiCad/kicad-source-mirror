@@ -5,7 +5,9 @@
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "gr_basic.h"
+#include "base_struct.h"
 #include "common.h"
+#include "drawtxt.h"
 #include "kicad_string.h"
 
 #include "pcbnew.h"
@@ -42,6 +44,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Width     = source->m_Width;
     m_Attributs = source->m_Attributs;
     m_Italic    = source->m_Italic;
+    m_Bold      = source->m_Bold;
     m_HJustify  = source->m_HJustify;
     m_VJustify  = source->m_VJustify;
     m_MultilineAllowed = m_MultilineAllowed;
@@ -131,6 +134,11 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
         }
     }
 
+     // Set a reasonnable width:
+    if( m_Width < 1 )
+        m_Width = 1;
+    m_Width = Clamp_Text_PenSize( m_Width, m_Size );
+
     return 1;
 }
 
@@ -194,7 +202,7 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRFillMode fillmode = FILLED;
     if ( DisplayOpt.DisplayDrawItems == SKETCH)
         fillmode = SKETCH;
-       
+
     EDA_TextStruct::Draw(
         panel, DC,
         offset,

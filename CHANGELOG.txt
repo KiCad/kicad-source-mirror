@@ -4,6 +4,16 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-may-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++All:
+    Cleaned and optimized code about new hershey fonts and bold texts handling.
+    Bold texts use now the same font as normal texts.
+    Only the pen size used to draw them is bigger.
+    - The max pen size allowed depending on texts sizes is now tested
+        when loading boards and modules, and clamped if too large.
+
+
 
 2009-may-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

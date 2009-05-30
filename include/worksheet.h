@@ -11,32 +11,32 @@
 #ifndef __WORKSHEET_H__
 #define __WORKSHEET_H__
 
-#define GRID_REF_W 70   /* hauteur de la bande de reference grille */
-#define SIZETEXT 60     /* Dimension des textes du cartouche */
-#define SIZETEXT_REF 50 /* Dimension des lettres du marquage des reperes */
-#define PAS_REF 2000    /* pas des marquages de reference des reperes */
-#define TEXT_VTAB_HEIGHT SIZETEXT*2
+#define GRID_REF_W       70     /* hauteur de la bande de reference grille */
+#define SIZETEXT         60     /* Dimension des textes du cartouche */
+#define SIZETEXT_REF     50     /* Dimension des lettres du marquage des reperes */
+#define PAS_REF          2000   /* pas des marquages de reference des reperes */
+#define TEXT_VTAB_HEIGHT SIZETEXT * 2
 
 #if defined(KICAD_GOST)
 /* Shtamp */
-#define STAMP_OX    185 * 10000 / 254
-#define STAMP_OY     55 * 10000 / 254
+#define STAMP_OX 185 * 10000 / 254
+#define STAMP_OY 55 * 10000 / 254
 
-#define STAMP_Y_0   0
-#define STAMP_Y_5   5 * 10000 / 254
-#define STAMP_Y_8   8 * 10000 / 254
-#define STAMP_Y_7   7 * 10000 / 254
-#define STAMP_Y_10  10 * 10000 / 254
-#define STAMP_Y_14  14 * 10000 / 254
-#define STAMP_Y_15  15 * 10000 / 254
-#define STAMP_Y_20  20 * 10000 / 254
-#define STAMP_Y_25  25 * 10000 / 254
-#define STAMP_Y_30  30 * 10000 / 254
-#define STAMP_Y_35  35 * 10000 / 254
-#define STAMP_Y_40  40 * 10000 / 254
-#define STAMP_Y_45  45 * 10000 / 254
-#define STAMP_Y_50  50 * 10000 / 254
-#define STAMP_Y_55  55 * 10000 / 254
+#define STAMP_Y_0  0
+#define STAMP_Y_5  5 * 10000 / 254
+#define STAMP_Y_8  8 * 10000 / 254
+#define STAMP_Y_7  7 * 10000 / 254
+#define STAMP_Y_10 10 * 10000 / 254
+#define STAMP_Y_14 14 * 10000 / 254
+#define STAMP_Y_15 15 * 10000 / 254
+#define STAMP_Y_20 20 * 10000 / 254
+#define STAMP_Y_25 25 * 10000 / 254
+#define STAMP_Y_30 30 * 10000 / 254
+#define STAMP_Y_35 35 * 10000 / 254
+#define STAMP_Y_40 40 * 10000 / 254
+#define STAMP_Y_45 45 * 10000 / 254
+#define STAMP_Y_50 50 * 10000 / 254
+#define STAMP_Y_55 55 * 10000 / 254
 
 #define STAMP_X_0   0
 #define STAMP_X_10  10 * 10000 / 254
@@ -58,59 +58,58 @@
 #define STAMP_X_178 178 * 10000 / 254
 #define STAMP_X_185 185 * 10000 / 254
 
-#define STAMP_5     5 * 10000 / 254
-#define STAMP_7     7 * 10000 / 254
-#define STAMP_12    12 * 10000 / 254
+#define STAMP_5  5 * 10000 / 254
+#define STAMP_7  7 * 10000 / 254
+#define STAMP_12 12 * 10000 / 254
 
-#define STAMP_145   145 * 10000 / 254
-#define STAMP_110   110 * 10000 / 254
-#define STAMP_85    85 * 10000 / 254
-#define STAMP_60    60 * 10000 / 254
-#define STAMP_25    25 * 10000 / 254
+#define STAMP_145 145 * 10000 / 254
+#define STAMP_110 110 * 10000 / 254
+#define STAMP_85  85 * 10000 / 254
+#define STAMP_60  60 * 10000 / 254
+#define STAMP_25  25 * 10000 / 254
 #endif
 
 /* Les coord ci dessous sont relatives au coin bas - droit de la feuille, et
-seront soustraires de cette origine
-*/
-#define BLOCK_OX    4200
-#define BLOCK_KICAD_VERSION_X BLOCK_OX - SIZETEXT
-#define BLOCK_KICAD_VERSION_Y SIZETEXT
-#define BLOCK_REV_X 820
-#define BLOCK_REV_Y (SIZETEXT*3)
-#define BLOCK_DATE_X BLOCK_OX - (SIZETEXT*15)
-#define BLOCK_DATE_Y (SIZETEXT*3)
-#define BLOCK_ID_SHEET_X 820
-#define BLOCK_ID_SHEET_Y SIZETEXT
-#define BLOCK_SIZE_SHEET_X BLOCK_OX - SIZETEXT
-#define BLOCK_SIZE_SHEET_Y (SIZETEXT*3)
-#define BLOCK_TITLE_X BLOCK_OX - SIZETEXT
-#define BLOCK_TITLE_Y (SIZETEXT*5)
-#define BLOCK_FULLSHEETNAME_X BLOCK_OX - SIZETEXT
-#define BLOCK_FULLSHEETNAME_Y (SIZETEXT * 7)
-#define BLOCK_FILENAME_X BLOCK_OX - SIZETEXT
-#define BLOCK_FILENAME_Y (SIZETEXT * 9)
-#define BLOCK_COMMENT_X BLOCK_OX - SIZETEXT
+ *  seront soustraires de cette origine
+ */
+#define BLOCK_OX                      4200
+#define BLOCK_KICAD_VERSION_X         BLOCK_OX - SIZETEXT
+#define BLOCK_KICAD_VERSION_Y         SIZETEXT
+#define BLOCK_REV_X                   820
+#define BLOCK_REV_Y                   (SIZETEXT * 3)
+#define BLOCK_DATE_X                  BLOCK_OX - (SIZETEXT * 15)
+#define BLOCK_DATE_Y                  (SIZETEXT * 3)
+#define BLOCK_ID_SHEET_X              820
+#define BLOCK_ID_SHEET_Y              SIZETEXT
+#define BLOCK_SIZE_SHEET_X            BLOCK_OX - SIZETEXT
+#define BLOCK_SIZE_SHEET_Y            (SIZETEXT * 3)
+#define BLOCK_TITLE_X                 BLOCK_OX - SIZETEXT
+#define BLOCK_TITLE_Y                 (SIZETEXT * 5)
+#define BLOCK_FULLSHEETNAME_X         BLOCK_OX - SIZETEXT
+#define BLOCK_FULLSHEETNAME_Y         (SIZETEXT * 7)
+#define BLOCK_FILENAME_X              BLOCK_OX - SIZETEXT
+#define BLOCK_FILENAME_Y              (SIZETEXT * 9)
+#define BLOCK_COMMENT_X               BLOCK_OX - SIZETEXT
 #define VARIABLE_BLOCK_START_POSITION (SIZETEXT * 10)
-#define BLOCK_COMPANY_Y (SIZETEXT*11)
-#define BLOCK_COMMENT1_Y (SIZETEXT*13)
-#define BLOCK_COMMENT2_Y (SIZETEXT*15)
-#define BLOCK_COMMENT3_Y (SIZETEXT*17)
-#define BLOCK_COMMENT4_Y (SIZETEXT*19)
+#define BLOCK_COMPANY_Y               (SIZETEXT * 11)
+#define BLOCK_COMMENT1_Y              (SIZETEXT * 13)
+#define BLOCK_COMMENT2_Y              (SIZETEXT * 15)
+#define BLOCK_COMMENT3_Y              (SIZETEXT * 17)
+#define BLOCK_COMMENT4_Y              (SIZETEXT * 19)
 
 struct Ki_WorkSheetData
 {
 public:
-    int m_Type;             /* nombre permettant de reconnaitre la description */
-    Ki_WorkSheetData * Pnext;
-    int m_Posx, m_Posy;     /* position de l'element ou point de depart du segment */
-    int m_Endx, m_Endy;     /* extremite d'un element type segment ou cadre */
-    const wxChar * m_Legende;       /* Pour m_Textes: texte a afficher avant le texte lui meme */
-    const wxChar * m_Text;      /* Pour m_Textes:pointeur sur le texte a afficher */
+    int               m_Type;           /* nombre permettant de reconnaitre la description */
+    Ki_WorkSheetData* Pnext;
+    int               m_Posx, m_Posy;   /* position de l'element ou point de depart du segment */
+    int               m_Endx, m_Endy;   /* extremite d'un element type segment ou cadre */
+    const wxChar*     m_Legende;        /* Pour m_Textes: texte a afficher avant le texte lui meme */
+    const wxChar*     m_Text;           /* Pour m_Textes:pointeur sur le texte a afficher */
 };
 
 /* Type des descriptions Ki_WorkSheetData */
-enum TypeKi_WorkSheetData
-{
+enum TypeKi_WorkSheetData {
     WS_DATE,
     WS_REV,
     WS_KICAD_VERSION,

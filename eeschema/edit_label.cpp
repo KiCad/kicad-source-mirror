@@ -6,6 +6,8 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "base_struct.h"
+#include "drawtxt.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 
@@ -61,9 +63,15 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
         m_CurrentText->m_Italic = 0;
 
     if ( ( style & 2 ) )
+    {
         m_CurrentText->m_Bold = true;
+        m_CurrentText->m_Width = GetPenSizeForBold( m_CurrentText->m_Size.x );
+    }
     else
+    {
         m_CurrentText->m_Bold = false;
+        m_CurrentText->m_Width = 0;
+    }
 
     m_Parent->GetScreen()->SetModify();
 

@@ -491,14 +491,14 @@ public:
     wxString m_Text;                    /* text! */
     wxPoint  m_Pos;                     /* XY position of anchor text. */
     wxSize   m_Size;                    /* XY size of text */
-    int      m_Width;                   /* text width */
+    int      m_Width;                   /* pen size used to draw this text */
     int      m_Orient;                  /* Orient in 0.1 degrees */
-    bool     m_Mirror;                 // Display Normal / mirror
+    bool     m_Mirror;                  /* Display Normal / mirror */
     int      m_Attributs;               /* flags (visible...) */
-    bool     m_Italic;                  /* true to simulate an italic font... */
-    bool     m_Bold;                    /* true to use a bold font... */
-    GRTextHorizJustifyType m_HJustify;  /* Horiz Justify */
-    GRTextVertJustifyType m_VJustify;   /* Vertical and  Vert Justify */
+    bool     m_Italic;                  /* true to simulate (or use if exists) an italic font... */
+    bool     m_Bold;                    /* true to simulate a bold font ... */
+    GRTextHorizJustifyType m_HJustify;  /* Horiz justification */
+    GRTextVertJustifyType m_VJustify;   /* Vertical justification */
     bool     m_MultilineAllowed;        /* true to use multiline option, false to use only single line text
                                          * Single line is faster in calculations than multiline */
 
@@ -576,7 +576,7 @@ public:
      * If aLine == -1, the full area (considering all lines) is returned
      */
     EDA_Rect GetTextBox( int aLine = -1);
-    
+
     /** Function GetInterline
      * return the distance between 2 text lines
      * has meaning only for multiline texts

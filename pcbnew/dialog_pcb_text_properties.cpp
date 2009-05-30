@@ -7,6 +7,8 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
+#include "drawtxt.h"
+#include "confirm.h"
 
 enum id_TextPCB_properties {
     ID_TEXTPCB_SELECT_LAYER = 1900
@@ -221,10 +223,12 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentTextPCB->m_Width = m_TxtWidthCtlr->GetValue();
 
     // test for acceptable values for parameters:
-    int max_tickness = min( CurrentTextPCB->m_Size.x, CurrentTextPCB->m_Size.y );
-    max_tickness /= 4;
-    if( CurrentTextPCB->m_Width > max_tickness )
-        CurrentTextPCB->m_Width = max_tickness;
+    int maxthickness = Clamp_Text_PenSize( CurrentTextPCB->m_Width, CurrentTextPCB->m_Size  );
+    if( CurrentTextPCB->m_Width > maxthickness )
+    {
+        DisplayError(this, _("The text thickness is too large for the text size. It will be clamped"));
+        CurrentTextPCB->m_Width = maxthickness;
+    }
 
     CurrentTextPCB->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
     CurrentTextPCB->m_Orient = m_Orient->GetSelection() * 900;

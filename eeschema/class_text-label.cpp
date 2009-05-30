@@ -520,7 +520,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
                 m_Pos.x, m_Pos.y,
                 m_SchematicOrientation, m_Size.x,
-                shape, (m_Bold?1:0),
+                shape, m_Width,
                 CONV_TO_UTF8( text ) ) == EOF )
     {
         success = false;
@@ -577,7 +577,7 @@ bool SCH_LABEL::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
                 m_Pos.x, m_Pos.y,
-                m_SchematicOrientation, m_Size.x, shape, (m_Bold?1:0),
+                m_SchematicOrientation, m_Size.x, shape, m_Width,
                 CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
@@ -616,7 +616,7 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
                 m_Pos.x, m_Pos.y,
                 m_SchematicOrientation, m_Size.x,
                 SheetLabelType[m_Shape],
-                shape, (m_Bold?1:0),
+                shape, m_Width,
                 CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
@@ -670,7 +670,7 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
                 m_Pos.x, m_Pos.y,
                 m_SchematicOrientation, m_Size.x,
                 SheetLabelType[m_Shape],
-                shape, (m_Bold?1:0),
+                shape, m_Width,
                 CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
