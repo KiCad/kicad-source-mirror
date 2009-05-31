@@ -154,6 +154,8 @@ void Dialog_Display_Options::init()
 
     if ( DisplayOpt.DisplayPadFill )
         m_OptDisplayPads->SetSelection(1);
+    else
+        m_OptDisplayPads->SetSelection(0);
 
     m_Show_Page_Limits->SetSelection( g_ShowPageLimits ? 0 : 1);
 
@@ -379,11 +381,11 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
         if( m_OptionsToolBar->GetToolState( id ) )
         {
-            m_DisplayPadFill = DisplayOpt.DisplayPadFill = true;
+            m_DisplayPadFill = DisplayOpt.DisplayPadFill = false;
         }
         else
         {
-            m_DisplayPadFill = DisplayOpt.DisplayPadFill = false;
+            m_DisplayPadFill = DisplayOpt.DisplayPadFill = true;
         }
         DrawPanel->Refresh( );
         break;
