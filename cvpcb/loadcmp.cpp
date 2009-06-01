@@ -47,7 +47,8 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
 
         if( !tmp )
         {
-            msg.Printf( _( "PCB foot print library file <%s> could not be found in the default search paths." ),
+            msg.Printf( _( "PCB foot print library file <%s> could not be \
+found in the default search paths." ),
                         fn.GetFullName().c_str() );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
             continue;

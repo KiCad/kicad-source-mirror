@@ -236,7 +236,8 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     gypas = ( yg - ref.y) / ipas;
     for( ii = ref.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
     {
-        msg.Empty(); msg << jj;
+        msg.Empty();
+        msg.Append('A' + jj);
         if( ii < yg - PAS_REF / 2 )
         {
             pos.x = ref.x * conv_unit; pos.y = ii * conv_unit;

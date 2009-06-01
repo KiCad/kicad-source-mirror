@@ -1,4 +1,4 @@
-/**********************************************************/
+ /**********************************************************/
 /* wxwineda.cpp - fonctions des classes du type WinEDAxxxx */
 /**********************************************************/
 
@@ -29,10 +29,10 @@ WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
     BoxSizer->Add( m_Title, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
     long style = 0;
-    
+
     if (Multiline)
       style = wxTE_MULTILINE;
-      
+
     m_FrameText = new   wxTextCtrl( parent, -1, TextToEdit, wxDefaultPosition, Size,style );
 
     m_FrameText->SetInsertionPoint( 1 );
@@ -410,15 +410,17 @@ void WinEDA_ValueCtrl::Enable( bool enbl )
 /***************************************************************/
 /* Classe pour afficher et editer une valeur en double flottant*/
 /***************************************************************/
-WinEDA_DFloatValueCtrl::WinEDA_DFloatValueCtrl( wxWindow* parent, const wxString& title,
-                                                double value, wxBoxSizer* BoxSizer )
+WinEDA_DFloatValueCtrl::WinEDA_DFloatValueCtrl( wxWindow* parent,
+                                                const wxString& title,
+                                                double value,
+                                                wxBoxSizer* BoxSizer )
 {
     wxString buffer;
     wxString label = title;
 
     m_Value = value;
 
-    m_Text = new        wxStaticText( parent, -1, label );
+    m_Text = new wxStaticText( parent, -1, label );
 
     BoxSizer->Add( m_Text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 

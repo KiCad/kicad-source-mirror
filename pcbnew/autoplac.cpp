@@ -327,7 +327,8 @@ void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
  */
 {
     int color, ii, jj;
-    int ox, oy, top_state, bottom_state;
+    int ox, oy;
+    BoardCell top_state, bottom_state;
 
     GRSetDrawMode( DC, GR_COPY );
     for( ii = 0; ii < Nrows; ii++ )

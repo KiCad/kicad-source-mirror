@@ -173,9 +173,9 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
                 double b = atan2( track->m_End.y-cy, track->m_End.x-cx );
 
                 drawitem->m_Shape = S_ARC;
-                drawitem->m_Angle = fmod( (a-b)/M_PI*1800.0+3600.0, 3600.0 );
-                drawitem->m_Start.x = cx;
-                drawitem->m_Start.y = cy;
+                drawitem->m_Angle = (int)fmod( (a-b)/M_PI*1800.0+3600.0, 3600.0 );
+                drawitem->m_Start.x = (int)cx;
+                drawitem->m_Start.y = (int)cy;
             }
 
             pcb->Add( drawitem );
