@@ -1,0 +1,9 @@
+[Desktop Entry]
+Categories=Development;Electronics
+Comment=Design a printed circuit board.
+Exec=eeschema
+GenericName=EDA Suite
+Icon=eeschema
+MimeType=application/x-kicad-schematic;
+Name=Eeschema
+Type=Application
