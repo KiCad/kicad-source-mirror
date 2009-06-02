@@ -6,6 +6,21 @@ email address.
 
 2009-may-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
+++Eeschema:
+    Changes about thickness of lines in draw/plot functions.
+    Now there is only one thickness parameter for plot and print.
+    This is now the default thickness value,
+        used for items that have a line thickness = 0,
+        and NOT the minimum thickness.
+    reasons:
+        - Obviously, differents parameters to draw and plot and bad.
+            (what you plot is NOT what you see)
+        - small texts are not readable with an minimum thickness value
+            that could be good for others items.
+
+
+2009-may-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
 ++All:
     Cleaned and optimized code about new hershey fonts and bold texts handling.
     Bold texts use now the same font as normal texts.

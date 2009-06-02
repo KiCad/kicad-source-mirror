@@ -69,7 +69,7 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
 
     static std::vector <wxPoint> Poly;
 
-    int LineWidth = g_DrawMinimunLineWidth;
+    int LineWidth = g_DrawDefaultLineThickness;
 
     if( Color >= 0 )
         txtcolor = (EDA_Colors) Color;

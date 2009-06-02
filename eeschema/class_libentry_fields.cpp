@@ -207,7 +207,9 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint text_pos;
 
     int     color     = aColor;
-    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+
 
     if( aColor < 0 )               // Used normal color or selected color
     {

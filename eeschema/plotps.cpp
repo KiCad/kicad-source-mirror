@@ -230,7 +230,7 @@ void WinEDA_PlotPSFrame::CreateControls()
     SetFocus(); // make the ESC work
     m_DefaultLineSizeCtrl = new WinEDA_ValueCtrl( this, _(
                                                       "Default Line Width" ),
-                                                  g_PlotLine_Width,
+                                                  g_DrawDefaultLineThickness,
                                                   g_UnitMetric, m_DefaultLineSizeCtrlSizer,
                                                   EESCHEMA_INTERNAL_UNIT );
 }
@@ -320,9 +320,9 @@ void WinEDA_PlotPSFrame::InitOptVars()
     Plot_Sheet_Ref   = m_Plot_Sheet_Ref->GetValue();
     g_PlotPSColorOpt = m_PlotPSColorOption->GetSelection();
     PS_SizeSelect    = m_SizeOption->GetSelection();
-    g_PlotLine_Width = m_DefaultLineSizeCtrl->GetValue();
-    if( g_PlotLine_Width < 1 )
-        g_PlotLine_Width = 1;
+    g_DrawDefaultLineThickness = m_DefaultLineSizeCtrl->GetValue();
+    if( g_DrawDefaultLineThickness < 1 )
+        g_DrawDefaultLineThickness = 1;
 }
 
 
@@ -436,7 +436,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
     m_MsgBox->AppendText( Line );
 
     InitPlotParametresPS( plot_offset, sheet, g_PlotScaleX, g_PlotScaleY );
-    SetDefaultLineWidthPS( g_PlotLine_Width );
+    SetDefaultLineWidthPS( g_DrawDefaultLineThickness );
 
     /* Init : */
     PrintHeaderPS( PlotOutput, wxT( "EESchema-PS" ), FileName, 1, BBox, wxLANDSCAPE );
@@ -478,7 +478,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
             switch( layer )
             {
             case LAYER_NOTES:         /* Trace en pointilles */
-                SetCurrentLineWidth( -1 );
+                SetCurrentLineWidth( g_DrawDefaultLineThickness );
                 fprintf( PlotOutput, "[50 50] 0 setdash\n" );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
@@ -488,16 +488,20 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
 
             case LAYER_BUS:         /* Trait large */
             {
-                fprintf( PlotOutput, "%d setlinewidth\n", g_PlotLine_Width * 3 );
+                int thickness = wxRound( g_DrawDefaultLineThickness * 1.4 );
+                if ( thickness < 3 ) thickness = 3;
+                SetCurrentLineWidth( thickness );
+                fprintf( PlotOutput, "%d setlinewidth\n", thickness );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
                 Plume( 'Z' );
-                fprintf( PlotOutput, "%d setlinewidth\n", g_PlotLine_Width );
+                SetCurrentLineWidth( g_DrawDefaultLineThickness );
+                fprintf( PlotOutput, "%d setlinewidth\n", g_DrawDefaultLineThickness );
             }
                 break;
 
             default:
-                SetCurrentLineWidth( -1 );
+                SetCurrentLineWidth( g_DrawDefaultLineThickness );
                 Move_Plume( StartPos, 'U' );
                 Move_Plume( EndPos, 'D' );
                 Plume( 'Z' );

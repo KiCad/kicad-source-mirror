@@ -67,8 +67,8 @@ bool      g_FlDrawSpecificConvert = TRUE;
 
 int       g_PlotFormat;                  /* flag = TYPE_HPGL, TYPE_PS... */
 int       g_PlotMargin;                  /* Marge pour traces du cartouche */
-float     g_PlotScaleX;
-float     g_PlotScaleY; /* coeff d'echelle de trace en unites table tracante */
+double    g_PlotScaleX;
+double    g_PlotScaleY; /* coeff d'echelle de trace en unites table tracante */
 
 HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
@@ -88,12 +88,18 @@ wxString   g_NetListerCommandLine;  // ligne de commande pour l'appel au simulat
 
 LayerStruct g_LayerDescr;            /* couleurs des couches  */
 
-/* bool: TRUE si edition des pins pin a pin au lieu */
-bool g_EditPinByPinIsOn = FALSE;
+bool g_EditPinByPinIsOn = false;   /* true to do not synchronize pins edition
+                                             *  when they are at the same location */
 
-int g_LibSymbolDefaultLineWidth; /* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
-int g_DrawMinimunLineWidth;      /* Minimum line (in EESCHEMA units) thickness used to draw items on screen; 0 = single pixel line width */
-int g_PlotLine_Width;            /* Minimum line (in EESCHEMA units) thickness used to Plot/Print items */
+int  g_LibSymbolDefaultLineWidth = 0; /* default line width  (in EESCHEMA units)
+                                                    *  used when creating a new graphic item in libedit.
+                                                    *  0 = use default line thicknes
+                                                    */
+int  g_DrawDefaultLineThickness = 6; /* Default line (in EESCHEMA units) thickness
+                                                   *  used to draw/plot items having a default thickness line value (i.e. = 0 ).
+                                                   *  0 = single pixel line width
+                                                   */
+
 // Color to draw selected items
 int g_ItemSelectetColor = BROWN;
 // Color to draw items flagged invisible, in libedit (they are insisible in eeschema

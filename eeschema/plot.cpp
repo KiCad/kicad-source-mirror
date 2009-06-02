@@ -272,9 +272,9 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
             t1  = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
             pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
             SetCurrentLineWidth( -1 );
-            int thickness = Text->m_Width;
-            if( thickness == 0 )    //
-                thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+            int thickness = (Text->m_Width == 0) ? g_DrawDefaultLineThickness : Text->m_Width;
+            thickness = Clamp_Text_PenSize( thickness, Text->m_Size, Text->m_Bold );
+
             PlotGraphicText( g_PlotFormat, pos, CharColor,
                              Text->m_Text,
                              t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
@@ -315,7 +315,7 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
 
             /* Dessin de la pin et du symbole special associe */
             PlotPinSymbol( pos, Pin->m_PinLen, orient, Pin->m_PinShape );
-            int thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );;
+            int thickness = g_DrawDefaultLineThickness;
             Pin->PlotPinTexts( pos, orient,
                                Entry->m_TextInside,
                                Entry->m_DrawPinNum, Entry->m_DrawPinName,
@@ -496,9 +496,8 @@ static void PlotTextField( SCH_COMPONENT* DrawLibItem,
 
     }
 
-    int thickness = field->m_Width;
-    if( thickness == 0 )
-        thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+    int thickness = (field->m_Width == 0) ? g_DrawDefaultLineThickness : field->m_Width;
+    thickness = Clamp_Text_PenSize( thickness, field->m_Size, field->m_Bold );
     SetCurrentLineWidth( thickness );
 
     if( !IsMulti || (FieldNumber != REFERENCE) )
@@ -666,9 +665,8 @@ void PlotTextStruct( EDA_BaseStruct* Struct )
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         color = ReturnLayerColor( schText->m_Layer );
     wxPoint    textpos = schText->m_Pos + schText->GetSchematicTextOffset();
-    int thickness = schText->m_Width;
-    if( thickness == 0 )
-        thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+    int thickness = (schText->m_Width == 0) ? g_DrawDefaultLineThickness : schText->m_Width;
+    thickness = Clamp_Text_PenSize( thickness, schText->m_Size, schText->m_Bold );
 
     SetCurrentLineWidth( thickness );
 
@@ -743,9 +741,9 @@ static void Plot_Hierarchical_PIN_Sheet( Hierarchical_PIN_Sheet_Struct* aHierarc
         tposx = posx + size + (size / 8);
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
-    int thickness = aHierarchical_PIN->m_Width;
-    if( thickness == 0 )
-        thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+
+    int thickness = (aHierarchical_PIN->m_Width == 0) ? g_DrawDefaultLineThickness : aHierarchical_PIN->m_Width;
+    thickness = Clamp_Text_PenSize( thickness, aHierarchical_PIN->m_Size, aHierarchical_PIN->m_Bold );
     SetCurrentLineWidth( thickness );
 
     PlotGraphicText( g_PlotFormat, wxPoint( tposx, posy ), txtcolor,
@@ -774,7 +772,7 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( Struct->m_Layer ) );
 
-    int thickness = MAX( g_PlotLine_Width, g_DrawMinimunLineWidth );
+    int thickness = g_DrawDefaultLineThickness;
     SetCurrentLineWidth( thickness );
 
     Move_Plume( Struct->m_Pos, 'U' );
@@ -795,6 +793,8 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     Text = Struct->m_SheetName;
     size = wxSize( Struct->m_SheetNameSize, Struct->m_SheetNameSize );
     pos  = Struct->m_Pos; pos.y -= 4;
+    thickness = g_DrawDefaultLineThickness;
+    thickness = Clamp_Text_PenSize( thickness, size, false );
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETNAME ) );
@@ -808,6 +808,8 @@ void PlotSheetStruct( DrawSheetStruct* Struct )
     /*Draw texts : FileName */
     Text = Struct->GetFileName();
     size = wxSize( Struct->m_FileNameSize, Struct->m_FileNameSize );
+    thickness = g_DrawDefaultLineThickness;
+    thickness = Clamp_Text_PenSize( thickness, size, false );
 
     if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
         SetColorMapPS( ReturnLayerColor( LAYER_SHEETFILENAME ) );

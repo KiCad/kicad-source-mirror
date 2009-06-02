@@ -305,7 +305,7 @@ void DrawSheetStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxString Text;
     int      color;
     wxPoint  pos = m_Pos + aOffset;
-    int      LineWidth = g_DrawMinimunLineWidth;
+    int      LineWidth = g_DrawDefaultLineThickness;
 
     if( aColor >= 0 )
         color = aColor;

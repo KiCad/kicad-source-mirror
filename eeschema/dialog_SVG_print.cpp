@@ -94,7 +94,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
     AddUnitSymbol(* m_TextPenWidth, g_UnitMetric );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_PlotLine_Width, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness, m_Parent->m_InternalUnits ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
     if (GetSizer())
     {
@@ -107,20 +107,20 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 void DIALOG_SVG_PRINT::SetPenWidth()
 /********************************************/
 {
-    g_PlotLine_Width = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
-    if( g_PlotLine_Width > WIDTH_MAX_VALUE )
+    if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
     {
-        g_PlotLine_Width = WIDTH_MAX_VALUE;
+        g_DrawDefaultLineThickness = WIDTH_MAX_VALUE;
     }
 
-    if( g_PlotLine_Width < WIDTH_MIN_VALUE )
+    if( g_DrawDefaultLineThickness < WIDTH_MIN_VALUE )
     {
-        g_PlotLine_Width = WIDTH_MIN_VALUE;
+        g_DrawDefaultLineThickness = WIDTH_MIN_VALUE;
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_PlotLine_Width, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness, m_Parent->m_InternalUnits ) );
 }
 
 
@@ -235,8 +235,8 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName, BASE_SCREEN* scre
 
     EDA_Rect tmp = panel->m_ClipBox;
     GRResetPenAndBrush( &dc );
-    g_PlotLine_Width =  ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-    SetPenMinWidth( g_PlotLine_Width );
+    g_DrawDefaultLineThickness =  ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    SetPenMinWidth( g_DrawDefaultLineThickness );
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
 
 

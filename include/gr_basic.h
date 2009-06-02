@@ -38,11 +38,6 @@ typedef enum {      /* Line styles for Get/SetLineStyle. */
     GR_DASHED_LINE = 3
 } GRLineStypeType;
 
-typedef enum {      /* Line widths for Get/SetLineStyle. */
-    GR_NORM_WIDTH  = 1,
-    GR_THICK_WIDTH = 3
-} GRLineWidthType;
-
 
 /*******************************************************/
 /* Prototypage des fonctions definies dans gr_basic.cc */

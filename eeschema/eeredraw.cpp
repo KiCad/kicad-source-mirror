@@ -75,7 +75,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     RedrawStructList( DrawPanel, DC, GetScreen()->EEDrawList,
                       GR_DEFAULT_DRAWMODE );
 
-    TraceWorkSheet( DC, GetScreen(), g_DrawMinimunLineWidth );
+    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
     DrawPanel->CursorOn( DC );          // reaffichage curseur
     if( DrawPanel->ManageCurseur )
@@ -121,7 +121,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref,
     RedrawStructList( this, DC, ActiveScreen->EEDrawList, GR_COPY );
 
     if( Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( DC, ActiveScreen, g_DrawMinimunLineWidth );
+        m_Parent->TraceWorkSheet( DC, ActiveScreen, g_DrawDefaultLineThickness );
 
     wxEndBusyCursor();
 }
@@ -188,7 +188,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
                          SCH_ITEM* DrawStruct, int dx, int dy )
 {
     int DrawMode = g_XorMode;
-    int width    = g_DrawMinimunLineWidth;
+    int width    = g_DrawDefaultLineThickness;
 
 
     GRSetDrawMode( DC, DrawMode );

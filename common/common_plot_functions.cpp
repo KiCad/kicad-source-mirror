@@ -236,8 +236,10 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     gypas = ( yg - ref.y) / ipas;
     for( ii = ref.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
     {
-        msg.Empty();
-        msg.Append('A' + jj);
+        if( jj < 26 )
+            msg.Printf( wxT( "%c" ), jj + 'A' );
+        else    // I hope 52 identifiers are enought...
+            msg.Printf( wxT( "%c" ), 'a' + jj - 26 );
         if( ii < yg - PAS_REF / 2 )
         {
             pos.x = ref.x * conv_unit; pos.y = ii * conv_unit;

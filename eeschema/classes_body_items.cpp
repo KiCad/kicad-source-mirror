@@ -197,7 +197,7 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2, posc;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -398,7 +398,7 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -550,7 +550,9 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    // Clip pen size for small texts:
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -649,7 +651,7 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -744,7 +746,7 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -894,7 +896,7 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint         pos1;
 
     int             color     = ReturnLayerColor( LAYER_DEVICE );
-    int             linewidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int             linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     // Buffer used to store current corners coordinates for drawings
     static wxPoint* Buf_Poly_Drawings = NULL;

@@ -192,7 +192,8 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
         color = DARKGRAY;
     Field->m_Pos.x = GetScreen()->m_Curseur.x;
     Field->m_Pos.y = -GetScreen()->m_Curseur.y;
-    int LineWidth = MAX( Field->m_Width, g_DrawMinimunLineWidth );
+    int linewidth = (Field->m_Width == 0) ? g_DrawDefaultLineThickness : Field->m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, Field->m_Size, Field->m_Bold );
     DrawPanel->CursorOff( DC );
 
     GRSetDrawMode( DC, GR_DEFAULT_DRAWMODE );
@@ -200,8 +201,8 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth,
-		      Field->m_Italic, Field->m_Bold, false);
+                     Field->m_HJustify, Field->m_VJustify, linewidth,
+                     Field->m_Italic, Field->m_Bold);
 
     DrawPanel->CursorOn( DC );
 
@@ -219,7 +220,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
     wxString   Text;
     wxString   title;
     EDA_Colors color;
-    int        LineWidth = MAX( Field->m_Width, g_DrawMinimunLineWidth );
+    int linewidth = (Field->m_Width == 0) ? g_DrawDefaultLineThickness : Field->m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, Field->m_Size, Field->m_Bold );
 
     if( Field == NULL )
         return;
@@ -273,8 +275,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth, 
-		      Field->m_Italic, Field->m_Bold, false);
+                     Field->m_HJustify, Field->m_VJustify, linewidth,
+		      Field->m_Italic, Field->m_Bold);
 
     if( !Text.IsEmpty() )
     {
@@ -291,8 +293,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth,
-		      Field->m_Italic, Field->m_Bold, false);
+                     Field->m_HJustify, Field->m_VJustify, linewidth,
+		      Field->m_Italic, Field->m_Bold);
 
     GetScreen()->SetModify();
 
@@ -338,13 +340,14 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
     DrawPanel->CursorOff( DC );
 
     GRSetDrawMode( DC, g_XorMode );
-    int LineWidth = MAX( Field->m_Width, g_DrawMinimunLineWidth );
+    int linewidth = (Field->m_Width == 0) ? g_DrawDefaultLineThickness : Field->m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, Field->m_Size, Field->m_Bold );
     DrawGraphicText( DrawPanel, DC, wxPoint( Field->m_Pos.x, -Field->m_Pos.y ),
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth,
-		      Field->m_Italic, Field->m_Bold, false);
+                     Field->m_HJustify, Field->m_VJustify, linewidth,
+		      Field->m_Italic, Field->m_Bold);
 
     if( Field->m_Orient )
         Field->m_Orient = 0;
@@ -358,8 +361,8 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
                      color, ReturnFieldFullText( Field ),
                      Field->m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
                      Field->m_Size,
-                     Field->m_HJustify, Field->m_VJustify, LineWidth,
-		      Field->m_Italic, Field->m_Bold, false);
+                     Field->m_HJustify, Field->m_VJustify, linewidth,
+		      Field->m_Italic, Field->m_Bold);
     DrawPanel->CursorOn( DC );
 }
 

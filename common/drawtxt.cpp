@@ -260,6 +260,11 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         aWidth = -aWidth;
         sketch_mode = true;
     }
+
+#ifdef CLIP_PEN      // made by draw and plot functions
+    aWidth = Clamp_Text_PenSize( aWidth, aSize, aBold );
+#endif
+
     if( size_h < 0 )       // text is mirrored using size.x < 0 (mirror / Y axis)
         italic_reverse = true;
 
@@ -554,6 +559,13 @@ void PlotGraphicText( int                         aFormat_plot,
 {
     if( aWidth == 0 && aBold )      // Use default values if aWidth == 0
         aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
+
+#ifdef CLIP_PEN      // made by draw and plot functions
+    if ( aWidth >= 0 )
+        aWidth = Clamp_Text_PenSize( aWidth, aSize, aBold );
+    else
+        aWidth = - Clamp_Text_PenSize( -aWidth, aSize, aBold );
+#endif
 
     // Initialise the actual function used to plot lines:
     switch( aFormat_plot )

@@ -284,7 +284,7 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
 {
     int          MapX1, MapY1, x1, y1;
     int          color;
-    int          width  = MAX( m_Width, g_DrawMinimunLineWidth );
+    int          width  = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     int          posX   = aPinPos.x, posY = aPinPos.y, len = m_PinLen;
     BASE_SCREEN* screen = aPanel->GetScreen();
 
@@ -460,7 +460,10 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     wxSize     PinNameSize( m_PinNameSize, m_PinNameSize );
     wxSize     PinNumSize( m_PinNumSize, m_PinNumSize );
 
-    int        LineWidth = g_DrawMinimunLineWidth;
+    int        nameLineWidth = g_DrawDefaultLineThickness;
+    nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_PinNameSize, false );
+    int        numLineWidth = g_DrawDefaultLineThickness;
+    numLineWidth = Clamp_Text_PenSize( numLineWidth, m_PinNumSize, false );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -508,7 +511,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      TEXT_ORIENT_HORIZ,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
-                                     GR_TEXT_VJUSTIFY_CENTER, LineWidth,
+                                     GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
                                      false, false );
                 }
                 else    // Orient == PIN_LEFT
@@ -519,7 +522,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      TEXT_ORIENT_HORIZ,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
-                                     GR_TEXT_VJUSTIFY_CENTER, LineWidth,
+                                     GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
                                      false, false );
                 }
             }
@@ -532,7 +535,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false, false );
+                                 GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
+                                 false, false );
             }
         }
         else            /* Its a vertical line. */
@@ -547,7 +551,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      m_PinName,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
-                                     GR_TEXT_VJUSTIFY_CENTER, LineWidth,
+                                     GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
                                      false, false );
                 if( DrawPinNum )
                     DrawGraphicText( panel, DC,
@@ -556,7 +560,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      StringPinNum,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false, false );
+                                     GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
+                                     false, false);
             }
             else        /* PIN_UP */
             {
@@ -567,7 +572,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      m_PinName,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
-                                     GR_TEXT_VJUSTIFY_CENTER, LineWidth,
+                                     GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
                                      false, false );
                 if( DrawPinNum )
                     DrawGraphicText( panel, DC,
@@ -576,8 +581,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      StringPinNum,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM, LineWidth,
-				      false, false, false);
+                                     GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
+                                     false, false);
             }
         }
     }
@@ -594,7 +599,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth,
+                                 GR_TEXT_VJUSTIFY_BOTTOM, nameLineWidth,
                                  false, false );
             }
             if( DrawPinNum )
@@ -605,8 +610,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_TOP,
-                                 LineWidth, false, false, false );
+                                 GR_TEXT_VJUSTIFY_TOP, numLineWidth,
+                                 false, false);
             }
         }
         else     /* Its a vertical line. */
@@ -619,7 +624,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM, LineWidth, false, false );
+                                 GR_TEXT_VJUSTIFY_BOTTOM, nameLineWidth,
+                                 false, false );
             }
 
             if( DrawPinNum )
@@ -630,7 +636,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_TOP, LineWidth, false, false, false );
+                                 GR_TEXT_VJUSTIFY_TOP, numLineWidth,
+                                 false, false );
             }
         }
     }

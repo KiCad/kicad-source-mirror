@@ -308,7 +308,7 @@ void WinEDA_SetOptionsFrame::CreateControls()
 
     m_DefaultDrawLineWidthCtrl = new    WinEDA_ValueCtrl( this, _(
                                                               "Default Line Width" ),
-                                                          g_DrawMinimunLineWidth,
+                                                          g_DrawDefaultLineThickness,
                                                           g_UnitMetric, m_DrawOptionsSizer,
                                                           EESCHEMA_INTERNAL_UNIT );
 
@@ -393,11 +393,11 @@ void WinEDA_SetOptionsFrame::Accept( wxCommandEvent& event )
     wxRealPoint   grid;
     wxString msg;
 
-    g_DrawMinimunLineWidth = m_DefaultDrawLineWidthCtrl->GetValue();
-    if( g_DrawMinimunLineWidth < 0 )
-        g_DrawMinimunLineWidth = 0;
-    if( g_DrawMinimunLineWidth > 100 )
-        g_DrawMinimunLineWidth = 100;
+    g_DrawDefaultLineThickness = m_DefaultDrawLineWidthCtrl->GetValue();
+    if( g_DrawDefaultLineThickness < 0 )
+        g_DrawDefaultLineThickness = 0;
+    if( g_DrawDefaultLineThickness > 100 )
+        g_DrawDefaultLineThickness = 100;
 
     g_DefaultTextLabelSize = m_DefaultLabelSizeCtrl->GetValue();
     if( g_DefaultTextLabelSize < 0 )

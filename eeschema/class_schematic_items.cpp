@@ -40,7 +40,6 @@ DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) 
     if( id == BUS_TO_BUS )
     {
         m_Layer = LAYER_BUS;
-        m_Width = 1;
     }
 
     if( shape == '/' )
@@ -106,7 +105,7 @@ EDA_Rect DrawBusEntryStruct::GetBoundingBox()
     EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y ), wxSize( dx, dy ) );
 
     box.Normalize();
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     box.Inflate( width / 2, width / 2 );
 
     return box;
@@ -117,7 +116,7 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( Color >= 0 )
         color = Color;
@@ -125,8 +124,11 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         color = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    if( m_Layer == LAYER_BUS )
-        width *= 3;
+    if( m_Layer == LAYER_BUS )      // TODO: find a better way to handle bus thickness
+    {
+        width = wxRound(width * 1.3);
+        width = MAX(width, 3);
+    }
 
     GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
             m_End().x + offset.x, m_End().y + offset.y, width, color );
@@ -272,7 +274,7 @@ EDA_Rect DrawNoConnectStruct::GetBoundingBox()
  */
 bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
 {
-    int width = g_DrawMinimunLineWidth;
+    int width = g_DrawDefaultLineThickness;
     int delta = ( DRAWNOCONNECT_SIZE + width) / 2;
 
     wxPoint dist = aPosRef - m_Pos;
@@ -306,7 +308,7 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     const int DELTA = (DRAWNOCONNECT_SIZE / 2);
     int       pX, pY, color;
-    int       width = g_DrawMinimunLineWidth;
+    int       width = g_DrawDefaultLineThickness;
 
     pX = m_Pos.x + offset.x; pY = m_Pos.y + offset.y;
 
@@ -462,23 +464,21 @@ EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
 {
     m_Start = pos;
     m_End   = pos;
+    m_Width = 0;        // Default thickness used
     m_StartIsDangling = m_EndIsDangling = FALSE;
 
     switch( layer )
     {
     default:
         m_Layer = LAYER_NOTES;     /* Mettre ds Notes */
-        m_Width = GR_NORM_WIDTH;
         break;
 
     case LAYER_WIRE:
         m_Layer = LAYER_WIRE;
-        m_Width = GR_NORM_WIDTH;
         break;
 
     case LAYER_BUS:
         m_Layer = LAYER_BUS;
-        m_Width = GR_THICK_WIDTH;
         break;
     }
 }
@@ -563,8 +563,6 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
         layer = "Wire";
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
-    if( m_Width != GR_NORM_WIDTH )
-        layer = "Bus";
     if( fprintf( aFile, "Wire %s %s\n", layer, width ) == EOF )
     {
         success = false;
@@ -583,7 +581,7 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( Color >= 0 )
         color = Color;
@@ -593,8 +591,11 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, DrawMode );
 
     // FIXME: Not compatable with new zoom.
-    if( (m_Layer == LAYER_BUS) && panel->GetScreen()->Scale( width ) <= 1 )
-        width *= 3;
+    if( m_Layer == LAYER_BUS)
+    {
+        width = wxRound(width * 1.4);
+        width = MAX(width, 3);
+    }
 
     if( m_Layer == LAYER_NOTES )
         GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
@@ -620,7 +621,7 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 DrawPolylineStruct::DrawPolylineStruct( int layer ) :
     SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
 {
-    m_Width  = GR_NORM_WIDTH;
+    m_Width  = 0;
 
     switch( layer )
     {
@@ -630,12 +631,8 @@ DrawPolylineStruct::DrawPolylineStruct( int layer ) :
 
     case LAYER_WIRE:
     case LAYER_NOTES:
-        m_Layer = layer;
-        break;
-
     case LAYER_BUS:
         m_Layer = layer;
-        m_Width = GR_THICK_WIDTH;
         break;
     }
 }
@@ -671,8 +668,6 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
         layer = "Wire";
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
-    if( m_Width != GR_NORM_WIDTH )
-        width = "Bus";
     if( fprintf( aFile, "Poly %s %s %d\n",
                  width, layer, GetCornerCount() ) == EOF )
     {
@@ -696,7 +691,7 @@ void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( Color >= 0 )
         color = Color;

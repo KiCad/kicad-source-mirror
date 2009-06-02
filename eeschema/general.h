@@ -97,19 +97,19 @@ typedef enum {
 extern LibraryStruct* g_LibraryList;    // All part libs are saved here.
 
 extern int            g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
-                                          * les numeros (netlist PSPICE seulement) */
+                                             * les numeros (netlist PSPICE seulement) */
 extern SCH_ITEM*      g_ItemToRepeat; /* pointeur sur la derniere structure
-                                        * dessinee pouvant etre dupliquee par la commande
-                                        * Repeat ( NULL si aucune struct existe ) */
+                                       * dessinee pouvant etre dupliquee par la commande
+                                       * Repeat ( NULL si aucune struct existe ) */
 extern wxSize         g_RepeatStep;
 extern int            g_RepeatDeltaLabel;
 
 extern SCH_ITEM*      g_ItemToUndoCopy; /* copy of last modified schematic item
-                                          * before it is modified (used for undo managing to restore old values ) */
+                                         * before it is modified (used for undo managing to restore old values ) */
 
 extern bool           g_LastSearchIsMarker; // True if last seach is a marker serach
-                                                // False for a schematic item search
-                                                // Used for hotkey next search
+// False for a schematic item search
+// Used for hotkey next search
 
 /* Block operation (copy, paste) */
 extern SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
@@ -117,7 +117,7 @@ extern SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Bloc
 // Gestion d'options
 extern bool      g_HVLines;
 
-extern int g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
+extern int       g_PlotPSColorOpt; // True = plot postcript color (see plotps.cpp)
 
 
 // Gestion de diverses variables, options... devant etre memorisees mais
@@ -140,11 +140,11 @@ extern int      g_ViewUnit;                         /* part a afficher (A, B ..)
 extern int      g_DefaultTextLabelSize;
 
 /* Variables globales pour LibEdit */
-extern int g_LastTextSize;
-extern int g_LastTextOrient;
+extern int      g_LastTextSize;
+extern int      g_LastTextOrient;
 
-extern bool g_FlDrawSpecificUnit;
-extern bool g_FlDrawSpecificConvert;
+extern bool     g_FlDrawSpecificUnit;
+extern bool     g_FlDrawSpecificConvert;
 
 /********************************************************/
 /* Description des structures des parametres principaux */
@@ -152,9 +152,9 @@ extern bool g_FlDrawSpecificConvert;
 
 /* Gestion des trace sur table tracante */
 
-extern int   g_PlotFormat;                  /* flag = TYPE_HPGL, TYPE_PS... */
-extern int   g_PlotMargin;                  /* Marge pour traces du cartouche */
-extern float g_PlotScaleX, g_PlotScaleY;    /* coeff d'echelle de trace en unites table tracante */
+extern int    g_PlotFormat;                     /* flag = TYPE_HPGL, TYPE_PS... */
+extern int    g_PlotMargin;                     /* Marge pour traces du cartouche */
+extern double g_PlotScaleX, g_PlotScaleY;       /* coeff d'echelle de trace en unites table tracante */
 
 
 /* For HPGL plotting: Pen caract : */
@@ -166,9 +166,7 @@ struct HPGL_Pen_Descr_Struct
 };
 extern HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
-/* Ecrans usuels */
-
-//extern SCH_SCREEN * ScreenSch;
+/* First and main (root) screen */
 extern DrawSheetStruct* g_RootSheet;
 extern SCH_SCREEN*      g_ScreenLib;
 
@@ -177,31 +175,37 @@ extern SCH_SCREEN*      g_ScreenLib;
 /*************************************/
 
 /* valeur de flag indicant si le pointeur de reference pour une localisation
-  * est le curseur sur grille ou le curseur a deplacement fin hors grille */
+ * est le curseur sur grille ou le curseur a deplacement fin hors grille */
 #define CURSEUR_ON_GRILLE  0
 #define CURSEUR_OFF_GRILLE 1
 
 /* Gestion des librairies schematiques */
-extern wxString    g_NetCmpExtBuffer;
-extern wxString    g_SymbolExtBuffer;
+extern wxString       g_NetCmpExtBuffer;
+extern wxString       g_SymbolExtBuffer;
 
 extern const wxString CompLibFileExtension;
 extern const wxString CompLibFileWildcard;
 
-extern wxString    g_SimulatorCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
-extern wxString    g_NetListerCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
+extern wxString       g_SimulatorCommandLine;   // ligne de commande pour l'appel au simulateur (gnucap, spice..)
+extern wxString       g_NetListerCommandLine;   // ligne de commande pour l'appel au simulateur (gnucap, spice..)
 
-extern LayerStruct g_LayerDescr;            /* couleurs des couches  */
+extern LayerStruct    g_LayerDescr;             /* couleurs des couches  */
 
-/* bool: TRUE si edition des pins pin a pin au lieu */
-extern bool        g_EditPinByPinIsOn;
+extern bool           g_EditPinByPinIsOn;   /* true to do not synchronize pins edition
+                                             *  when they are at the same location */
 
-extern int g_LibSymbolDefaultLineWidth; /* default line width  (in EESCHEMA units) used when creating a new graphic item in libedit : 0 = default */
-extern int g_DrawMinimunLineWidth;      /* Minimum line (in EESCHEMA units) thickness used to draw items on screen; 0 = single pixel line width */
-extern int g_PlotLine_Width;            /* Minimum line (in EESCHEMA units) thickness used to Plot/Print items */
+extern int            g_LibSymbolDefaultLineWidth; /* default line width  (in EESCHEMA units)
+                                                    *  used when creating a new graphic item in libedit.
+                                                    *  0 = use default line thicknes
+                                                    */
+extern int            g_DrawDefaultLineThickness; /* Default line (in EESCHEMA units) thickness
+                                                   *  used to draw/plot items having a default thickness line value (i.e. = 0 ).
+                                                   *  0 = single pixel line width
+                                                   */
 
 // Color to draw selected items
 extern int g_ItemSelectetColor;
+
 // Color to draw items flagged invisible, in libedit (they are insisible in eeschema
 extern int g_InvisibleItemColor;
 

@@ -1070,10 +1070,9 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_w
     gypas = ( yg - refy) / ipas;
     for( ii = refy + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
     {
-        Line.Empty();
         if( jj < 26 )
             Line.Printf( wxT( "%c" ), jj + 'A' );
-        else
+        else    // I hope 52 identifiers are enought...
             Line.Printf( wxT( "%c" ), 'a' + jj - 26 );
         if( ii < yg - PAS_REF / 2 )
         {

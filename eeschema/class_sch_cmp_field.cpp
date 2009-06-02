@@ -59,7 +59,10 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
     GRTextHorizJustifyType hjustify;
     GRTextVertJustifyType vjustify;
-    int            LineWidth = MAX( m_Width, g_DrawMinimunLineWidth );
+    int            LineWidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
+    // Clip pen size for small texts:
+    LineWidth = Clamp_Text_PenSize( LineWidth, m_Size, m_Bold );
 
     if( ( m_Attributs & TEXT_NO_VISIBLE ) || IsVoid() )
         return;
@@ -236,7 +239,6 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
 {
     EDA_Rect       BoundaryBox;
     int            hjustify, vjustify;
-    int            textlen;
     int            orient;
     int            dx, dy, x1, y1, x2, y2;
 
@@ -317,6 +319,10 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     BoundaryBox.SetY( y1 );
     BoundaryBox.SetWidth( dx );
     BoundaryBox.SetHeight( dy );
+
+    // Take thickness in account:
+    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    BoundaryBox.Inflate( linewidth,linewidth );
 
     return BoundaryBox;
 }

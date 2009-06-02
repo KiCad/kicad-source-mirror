@@ -137,9 +137,9 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
         m_Config->Read( PRINTMODECOLOR_KEY, &s_Print_Black_and_White );
     }
 
-    AddUnitSymbol(* m_TextPenWidth, g_UnitMetric );
+    AddUnitSymbol(* m_TextPenWidth, g_DrawDefaultLineThickness );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_PlotLine_Width, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness, m_Parent->m_InternalUnits ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
 
     m_ModeColorOption->SetSelection( s_Print_Black_and_White ? 1 : 0);
@@ -177,20 +177,20 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
  * NOTE: g_PlotLine_Width is in internal units
  */
 {
-    g_PlotLine_Width = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
-    if( g_PlotLine_Width > WIDTH_MAX_VALUE )
+    if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
     {
-        g_PlotLine_Width = WIDTH_MAX_VALUE;
+        g_DrawDefaultLineThickness = WIDTH_MAX_VALUE;
     }
 
-    if( g_PlotLine_Width < WIDTH_MIN_VALUE )
+    if( g_DrawDefaultLineThickness < WIDTH_MIN_VALUE )
     {
-        g_PlotLine_Width = WIDTH_MIN_VALUE;
+        g_DrawDefaultLineThickness = WIDTH_MIN_VALUE;
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_PlotLine_Width, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness, m_Parent->m_InternalUnits ) );
 }
 
 
@@ -442,18 +442,8 @@ void EDA_Printout::DrawPage()
         GRForceBlackPen( true );
 
 
-    /* set Pen min width */
-    double ftmp, xdcscale, ydcscale;
-
-    // g_PlotLine_Width is in internal units ( 1/1000 inch), and must be converted in pixels
-    ftmp  = (float) g_PlotLine_Width * 25.4 / EESCHEMA_INTERNAL_UNIT;   // ftmp est en mm
-    ftmp *= (float) PlotAreaSize.x / PageSize_in_mm.x;                  /* ftmp is in  pixels */
-
-    /* because the pen size will be scaled by the dc scale, we modify the size
-     * in order to keep the requested value */
-    dc->GetUserScale( &xdcscale, &ydcscale );
-    ftmp /= xdcscale;
-    SetPenMinWidth( wxRound( ftmp ) );
+    /* set Pen min width (not used now) */
+    SetPenMinWidth( 1 );
 
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
     BASE_SCREEN*      screen = panel->GetScreen();

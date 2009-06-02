@@ -195,7 +195,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 {
     wxPoint text_offset;
 
-    int     width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     width = MAX( m_Width, g_DrawDefaultLineThickness );
 
     int     ii = m_Size.x + TXTMARGE + width;
 
@@ -230,7 +230,9 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 {
     wxPoint text_offset;
-    int     width    = MAX( m_Width, g_DrawMinimunLineWidth );
+    int     width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
+    width = Clamp_Text_PenSize( width, m_Size, m_Bold );
     int     HalfSize = m_Size.x / 2;
     int     offset   = width;
 
@@ -473,7 +475,9 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
  */
 {
     EDA_Colors color;
-    int        width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int        linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( Color >= 0 )
         color = (EDA_Colors) Color;
@@ -483,9 +487,9 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
 
-    EXCHG( width, m_Width );            // Set the minimum width
+    EXCHG( linewidth, m_Width );            // Set the minimum width
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    EXCHG( width, m_Width );            // set initial value
+    EXCHG( linewidth, m_Width );            // set initial value
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 }
@@ -714,7 +718,8 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
 {
     static std::vector <wxPoint> Poly;
     EDA_Colors color;
-    int        width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int        linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( Color >= 0 )
         color = (EDA_Colors) Color;
@@ -723,13 +728,13 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
 
     GRSetDrawMode( DC, DrawMode );
 
-    EXCHG( width, m_Width );            // Set the minimum width
-    wxPoint    text_offset = offset + GetSchematicTextOffset();
+    EXCHG( linewidth, m_Width );            // Set the minimum width
+    wxPoint text_offset = offset + GetSchematicTextOffset();
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    EXCHG( width, m_Width );            // set initial value
+    EXCHG( linewidth, m_Width );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );
-    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, width, color, color );
+    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
@@ -773,7 +778,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
     y  = m_Pos.y;
     dx = dy = 0;
 
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     height = m_Size.y + width + 2 * TXTMARGE;
     length = LenSize( m_Text )
              + height                 // add height for triangular shapes
@@ -836,13 +841,14 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aO
 
     GRSetDrawMode( DC, DrawMode );
 
-    int        width = MAX( m_Width, g_DrawMinimunLineWidth );
-    EXCHG( width, m_Width );            // Set the minimum width
+    int linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    EXCHG( linewidth, m_Width );            // Set the minimum width
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    EXCHG( width, m_Width );            // set initial value
+    EXCHG( linewidth, m_Width );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
-    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, width, color, color );
+    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
@@ -856,22 +862,24 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aO
  */
 void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos )
 {
-    int HalfSize = m_Size.y / 2;
-    int width    = MAX( m_Width, g_DrawMinimunLineWidth );
+    int HalfSize  = m_Size.y / 2;
+    int linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     aCorner_list.clear();
 
     int symb_len = LenSize( m_Text ) + (TXTMARGE * 2);
 
     // Create outline shape : 6 points
-    int x = symb_len + width + 3;
-    int y = wxRound( (double)HalfSize * 1.5 + (double)width + 3.0 );  // 50% more for negation bar
-    aCorner_list.push_back( wxPoint( 0, 0 ) );                  // Starting point (anchor)
-    aCorner_list.push_back( wxPoint( 0, -y ) );                 // Up
-    aCorner_list.push_back( wxPoint( -x, -y ) );                // left Up
-    aCorner_list.push_back( wxPoint( -x, 0 ) );                 // left
-    aCorner_list.push_back( wxPoint( -x, y ) );                 // left down
-    aCorner_list.push_back( wxPoint( 0, y ) );                  // down
+    int x = symb_len + linewidth + 3;
+    int y = wxRound( (double) HalfSize * 1.5 + (double) linewidth + 3.0 );  // 50% more for negation bar
+    aCorner_list.push_back( wxPoint( 0, 0 ) );                              // Starting point (anchor)
+    aCorner_list.push_back( wxPoint( 0, -y ) );                             // Up
+    aCorner_list.push_back( wxPoint( -x, -y ) );                            // left Up
+    aCorner_list.push_back( wxPoint( -x, 0 ) );                             // left
+    aCorner_list.push_back( wxPoint( -x, y ) );                             // left down
+    aCorner_list.push_back( wxPoint( 0, y ) );                              // down
 
     int x_offset = 0;
 
@@ -941,10 +949,10 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
     y  = m_Pos.y;
     dx = dy = 0;
 
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
     length =
-        LenSize( m_Text )     // text X size
+        LenSize( m_Text )                                   // text X size
         + height                                            // add height for triangular shapes (bidirectional)
         + DANGLING_SYMBOL_SIZE;
 
@@ -993,7 +1001,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
 
     x = m_Pos.x;
     y = m_Pos.y;
-    int width = MAX( m_Width, g_DrawMinimunLineWidth );
+    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     length = LenSize( m_Text );
     height = m_Size.y + width;
     dx     = dy = 0;
