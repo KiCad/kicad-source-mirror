@@ -186,64 +186,40 @@ install(FILES freeroute.jnlp
         DESTINATION ${KICAD_BIN}
         COMPONENT resources)
 
-
+###
+# FreeDesktop .desktop and MIME resources
+###
 if(UNIX)
-    # set resource dir variables
-    #set(KICAD_PROGRAM_ICONS ${CMAKE_INSTALL_PREFIX}/share/kicad/icons)
-    set(LINUX_RESOURCES_DIR resources/linux)
-    set(LINUX_DESKTOP_FILES ${LINUX_RESOURCES_DIR}/opendesktop)
-    set(LINUX_DESKTOP_ICONS ${LINUX_RESOURCES_DIR}/icons)
+	
+	# Set paths
+	set(UNIX_MIME_DIR resources/linux/mime)
+    set(UNIX_MIMELNK_FILES		${UNIX_MIME_DIR}/mimelnk)
+	set(UNIX_MIME_FILES			${UNIX_MIME_DIR}/mime)
+	set(UNIX_ICONS_FILES		${UNIX_MIME_DIR}/icons)
+	set(UNIX_APPLICATIONS_FILES	${UNIX_MIME_DIR}/applications)
 
+	# Install Mimelnk directory
+	install(DIRECTORY ${UNIX_MIMELNK_FILES}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/share/mimelnk
+        COMPONENT resources
+        PATTERN ".svn" EXCLUDE)
 
-    # Install program icons
-    #add_subdirectory(resources/icons)
+	# Install Mime directory
+	install(DIRECTORY ${UNIX_ICONS_FILES}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/share/mime
+		COMPONENT resources
+		PATTERN ".svn" EXCLUDE)
 
-    # KiCad desktop file
-    install(FILES ${LINUX_DESKTOP_FILES}/kicad.desktop
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
-            COMPONENT resources)
-    # KiCad icon file
-    install(FILES ${LINUX_DESKTOP_ICONS}/kicad.png
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
-            COMPONENT resources)
+    # Install Icons
+	install(DIRECTORY ${UNIX_ICONS_FILES}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons
+		COMPONENT resources
+		PATTERN ".svn" EXCLUDE)
 
+    # Install Applications directory (.desktop files)
+    install(DIRECTORY ${UNIX_APPLICATIONS_FILES}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+        COMPONENT resources
+        PATTERN ".svn" EXCLUDE)
 
-   # CVpcb desktop file
-   install(FILES ${LINUX_DESKTOP_FILES}/cvpcb.desktop
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
-           COMPONENT resources)
-   # CVpcb icon file
-   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_cvpcb.png
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
-           COMPONENT resources)
-
-
-   # EEschema desktop file
-   install(FILES ${LINUX_DESKTOP_FILES}/eeschema.desktop
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
-           COMPONENT resources)
-   # EEschema icon file
-   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_eeschema.png
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
-           COMPONENT resources)
-
-
-   # GerbView desktop file
-   install(FILES ${LINUX_DESKTOP_FILES}/gerbview.desktop
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
-           COMPONENT resources)
-   # GerbView icon file
-   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_gerbview.png
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
-           COMPONENT resources)
-
-
-   # PCBnew desktop file
-   install(FILES ${LINUX_DESKTOP_FILES}/pcbnew.desktop
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
-           COMPONENT resources)
-   # PCBnew icon file
-   install(FILES ${LINUX_DESKTOP_ICONS}/kicad_pcbnew.png
-           DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps
-           COMPONENT resources)
 endif(UNIX)
