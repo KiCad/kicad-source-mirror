@@ -351,7 +351,7 @@ int Build_Work( BOARD* Pcb )
 
     InitWork(); /* clear work list */
     Ntotal = 0;
-    for( unsigned ii = 0;Pcb->GetRatsnestsCount(); ii++ )
+    for( unsigned ii = 0; ii < Pcb->GetRatsnestsCount(); ii++ )
     {
         pt_rats = &Pcb->m_FullRatsnest[ii];
         /* On ne route que les chevelus actifs et routables */
@@ -402,7 +402,8 @@ int Build_Work( BOARD* Pcb )
             return 0;
         }
 
-        SetWork( r1, c1, current_net_code, r2, c2, pt_ch, 0 ); Ntotal++;
+        SetWork( r1, c1, current_net_code, r2, c2, pt_ch, 0 );
+        Ntotal++;
     }
 
     SortWork();
