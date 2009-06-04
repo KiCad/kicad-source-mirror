@@ -182,7 +182,7 @@ file extension to a Kicad project file extension (.pro)." ),
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
-    /* Traitement des variables particulieres: */
+    /* Some parameters must be reinitialize after loading a new board or config: */
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
 
@@ -192,6 +192,26 @@ file extension to a Kicad project file extension (.pro)." ),
         g_DesignSettings.m_ViaSizeHistory[ii]    = 0;
     }
 
+    /* Reset the ITEM_NOT_SHOW flag when loading a new config
+    *  Because it could creates SERIOUS mistakes for the user,
+     * if some items are not visible after loading a board...
+    */
+    for( ii = 0; ii < LAYER_COUNT; ii++ )
+        g_DesignSettings.m_LayerColor[ii] &= ~ ITEM_NOT_SHOW;
+    DisplayOpt.Show_Modules_Cmp = true;
+    DisplayOpt.Show_Modules_Cu = true;
+    g_ModuleTextNOVColor &= ~ ITEM_NOT_SHOW;
+    g_ModuleTextCMPColor &= ~ ITEM_NOT_SHOW;
+    g_ModuleTextCUColor &= ~ ITEM_NOT_SHOW;
+    g_PadCMPColor &= ~ ITEM_NOT_SHOW;
+    g_PadCUColor &= ~ ITEM_NOT_SHOW;
+    g_DesignSettings.m_ViaColor[VIA_THROUGH] &= ~ ITEM_NOT_SHOW;
+    g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED] &= ~ ITEM_NOT_SHOW;
+    g_DesignSettings.m_ViaColor[VIA_MICROVIA] &= ~ ITEM_NOT_SHOW;
+    // These parameters could be left in their previous state, or resetted
+    // Comment or uncomment to keep or reset this option after loading a board
+    g_AnchorColor &= ~ ITEM_NOT_SHOW;
+    DisplayOpt.DisplayPadNoConn = true;
     return TRUE;
 }
 

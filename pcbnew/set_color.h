@@ -16,6 +16,8 @@ class wxFlexGridSizer;
 class wxStaticLine;
 class wxStdDialogButtonSizer;
 
+// variable used to handle grid visibility:
+extern bool s_showGrid;
 
 // Specify how many elements are contained within laytool_list[]
 const int NB_BUTT = 43;
@@ -415,7 +417,7 @@ static ColorButton Grid_Butt =
     -1,
     &g_GridColor,                               // Address of optional parameter
     FALSE,
-    &g_ShowGrid                                 // Address of boolean display control parameter to toggle
+    &s_showGrid                                 // Address of boolean display control parameter to toggle
 };
 
 static ColorButton Show_Pads_Noconnect_Butt =

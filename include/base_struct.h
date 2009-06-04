@@ -513,13 +513,13 @@ public:
      *  @param aDC = the current Device Context
      *  @param aOffset = draw offset (usually (0,0))
      *  @param EDA_Colors aColor = text color
-     *  @param aDraw_mode = GR_OR, GR_XOR.., -1 to use the current mode.
+     *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      *  @param GRFillMode aDisplay_mode = FILAIRE, FILLED or SKETCH
      *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      */
     void    Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                   const wxPoint& aOffset, EDA_Colors aColor,
-                  int aDisplayMode, GRFillMode aDisplay_mode = FILAIRE,
+                  int aDrawMode, GRFillMode aDisplay_mode = FILAIRE,
                   EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
 
 private:
@@ -531,14 +531,14 @@ private:
      *  @param aOffset = draw offset (usually (0,0))
      *  @param EDA_Colors aColor = text color
      *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
+     *  @param aFillMode = FILAIRE, FILLED or SKETCH
      *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      *  @param EDA_Colors aText = the single line of text to draw.
      *  @param EDA_Colors aPos = the position of this line ).
      */
     void    DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                   const wxPoint& aOffset, EDA_Colors aColor,
-                  int aDisplayMode, GRFillMode aDisplay_mode,
+                  int aDrawMode, GRFillMode aFillMode,
                   EDA_Colors aAnchor_color, wxString& aText,
                   wxPoint aPos );
 public:

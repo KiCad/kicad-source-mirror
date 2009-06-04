@@ -19,6 +19,9 @@
 
 #include "protos.h"
 
+// variable used to handle grid visibility:
+bool s_showGrid;
+
 #include "set_color.h" // Header file associated with this file
 
 // Local variables:
@@ -132,6 +135,7 @@ void WinEDA_SetColorsFrame::CreateControls()
 
     // Add various items to the dialog box, as determined by the
     // details of each element contained within laytool_list[]
+    s_showGrid = m_Parent->m_Draw_Grid;
     for( lyr = 0, cln = 0; lyr < NB_BUTT; lyr++ )
     {
         // Look for the first set of controls within each column.
@@ -441,8 +445,8 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
             *laytool_list[lyr]->m_NoDisplay = laytool_list[lyr]->m_CheckBox->GetValue();
         }
     }
-    // Additional command required for updating visibility of grid.
-    m_Parent->m_Draw_Grid = g_ShowGrid;
+   // Additional command required for updating visibility of grid.
+    m_Parent->m_Draw_Grid = s_showGrid;
 }
 
 

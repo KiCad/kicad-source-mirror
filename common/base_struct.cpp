@@ -328,7 +328,7 @@ bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
 void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            const wxPoint& aOffset, EDA_Colors aColor,
                            int aDrawMode,
-                           GRFillMode aDisplayMode, EDA_Colors aAnchor_color )
+                           GRFillMode aFillMode, EDA_Colors aAnchor_color )
 /***************************************************************/
 
 /** Function Draw
@@ -338,7 +338,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aOffset = draw offset (usually (0,0))
  *  @param EDA_Colors aColor = text color
  *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
- *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
+ *  @param aFillMode = FILAIRE, FILLED or SKETCH
  *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
  */
 
@@ -360,7 +360,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                aOffset,
                                aColor,
                                aDrawMode,
-                               aDisplayMode,
+                               aFillMode,
                                aAnchor_color,
                                txt,
                                pos );
@@ -375,7 +375,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            aOffset,
                            aColor,
                            aDrawMode,
-                           aDisplayMode,
+                           aFillMode,
                            aAnchor_color,
                            m_Text,
                            m_Pos );
@@ -390,7 +390,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aOffset = draw offset (usually (0,0))
  *  @param EDA_Colors aColor = text color
  *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
- *  @param aDisplayMode = FILAIRE, FILLED or SKETCH
+ *  @param aFillMode = FILAIRE, FILLED or SKETCH
  *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
  *  @param EDA_Colors aText = the single line of text to draw.
  *  @param EDA_Colors aPos = the position of this line ).
@@ -398,12 +398,12 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                         const wxPoint& aOffset, EDA_Colors aColor,
                                         int aDrawMode,
-                                        GRFillMode aDisplayMode, EDA_Colors aAnchor_color,
+                                        GRFillMode aFillMode, EDA_Colors aAnchor_color,
                                         wxString& aText, wxPoint aPos )
 {
     int width = m_Width;
 
-    if( aDisplayMode == FILAIRE )
+    if( aFillMode == FILAIRE )
         width = 0;
 
     if( aDrawMode != -1 )
@@ -425,7 +425,7 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                 cX, cY + anchor_size, 0, aAnchor_color );
     }
 
-    if( aDisplayMode == SKETCH )
+    if( aFillMode == SKETCH )
         width = -width;
 
     wxSize size = m_Size;

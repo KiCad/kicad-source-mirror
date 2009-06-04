@@ -17,6 +17,9 @@
 #include "pcbnew.h"
 #include "protos.h"
 
+// temporary variable used to handle grid visibility:
+bool s_showGrid;
+
 #include "set_color.h" // Header file associated with this file
 
 // Local variables:
@@ -128,6 +131,8 @@ void WinEDA_SetColorsFrame::CreateControls()
 
     MainBoxSizer = new wxBoxSizer(wxHORIZONTAL);
     OuterBoxSizer->Add(MainBoxSizer, 1, wxGROW|wxLEFT|wxRIGHT, 5);
+
+    s_showGrid = m_Parent->m_Draw_Grid;
 
     // Add various items to the dialog box, as determined by the
     // details of each element contained within laytool_list[]
@@ -470,7 +475,7 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
         }
     }
     // Additional command required for updating visibility of grid.
-    m_Parent->m_Draw_Grid = g_ShowGrid;
+    m_Parent->m_Draw_Grid = s_showGrid;
 }
 
 

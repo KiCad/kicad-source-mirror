@@ -36,7 +36,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_GRID:
-        m_Draw_Grid = g_ShowGrid = m_OptionsToolBar->GetToolState( id );
+        m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh( TRUE );
         break;
 

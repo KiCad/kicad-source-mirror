@@ -23,7 +23,6 @@ extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 
 extern wxArrayString   g_LibName_List;    // library list to load
-extern bool            g_ShowGrid;
 extern BOARD_ITEM*     g_UnDeleteStack[UNDELETE_STACK_SIZE];
 extern int             g_UnDeleteStackPtr;
 extern DISPLAY_OPTIONS DisplayOpt;

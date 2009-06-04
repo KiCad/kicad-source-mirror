@@ -320,7 +320,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_GRID:
-        m_Draw_Grid = g_ShowGrid = m_OptionsToolBar->GetToolState( id );
+        m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh( );
         break;
 

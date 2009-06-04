@@ -210,11 +210,11 @@ static PARAM_CFG_BOOL TrackAfficheGardeCfg
     FALSE                           /* Default value */
 );
 
-static PARAM_CFG_INT PadFillCfg
+static PARAM_CFG_BOOL PadFillCfg
 (
     INSETUP,
     wxT( "PadFill" ),               /* Keyword */
-    (int*)&DisplayOpt.DisplayPadFill,     /* Parameter address */
+    &DisplayOpt.DisplayPadFill,     /* Parameter address */
     TRUE                            /* Default value */
 );
 
@@ -252,7 +252,7 @@ static PARAM_CFG_INT AfficheTexteModuleCfg  // Module Texts: fill/line/sketch
     0, 2                                    /* Min and max values*/
 );
 
-static PARAM_CFG_INT AfficheTextePcbCfg     // PCB Texts: fill/line/sketch
+static PARAM_CFG_INT AffichePcbTextCfg     // PCB Texts: fill/line/sketch
 (
     INSETUP,
     wxT( "PcbAffT" ),                       /* Keyword */
@@ -268,7 +268,7 @@ static PARAM_CFG_BOOL SegmPcb45Cfg  // Force 45 degrees for segments
     TRUE                            /* Default value */
 );
 
-static PARAM_CFG_INT TextePcbDimVCfg
+static PARAM_CFG_INT PcbTextDimVCfg
 (
     wxT( "TxtPcbV" ),                                                       /* Keyword */
     &g_DesignSettings.m_PcbTextSize.y,                                      /* Parameter address */
@@ -276,7 +276,7 @@ static PARAM_CFG_INT TextePcbDimVCfg
     TEXTS_MIN_SIZE, TEXTS_MAX_SIZE                                          /* Min and max values*/
 );
 
-static PARAM_CFG_INT TextePcbDimHCfg
+static PARAM_CFG_INT PcbTextDimHCfg
 (
     wxT( "TxtPcbH" ),                                                       /* Keyword */
     &g_DesignSettings.m_PcbTextSize.x,                                      /* Parameter address */
@@ -823,10 +823,10 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadShowNumCfg,
     &AfficheContourModuleCfg,
     &AfficheTexteModuleCfg,
-    &AfficheTextePcbCfg,
+    &AffichePcbTextCfg,
     &SegmPcb45Cfg,
-    &TextePcbDimVCfg,
-    &TextePcbDimHCfg,
+    &PcbTextDimVCfg,
+    &PcbTextDimHCfg,
     &ColorLayer0Cfg,
     &ColorLayer1Cfg,
     &ColorLayer2Cfg,

@@ -324,7 +324,7 @@ static ColorButton Grid_Butt=
     _("Grid"),                  // Title
     &g_GridColor,               // Address of optional parameter
     FALSE,
-    &g_ShowGrid                 // Address of boolean display control parameter to toggle
+    &s_showGrid                 // Address of boolean display control parameter to toggle
 };
 
 static ColorButton Show_DCodes_Butt=

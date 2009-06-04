@@ -69,7 +69,6 @@ wxArrayString g_LibName_List;    // library list to load
 
 BOARD_ITEM* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Linked list of deleted items
 int         g_UnDeleteStackPtr;
-bool        g_ShowGrid = true;
 
 DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
 
