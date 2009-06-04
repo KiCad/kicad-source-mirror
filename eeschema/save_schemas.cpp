@@ -114,21 +114,18 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
  * @return bool - true if success writing else false.
  */
 {
-    const wxChar** LibNames;
     wxString       Name, msg;
     Ki_PageDescr*  PlotSheet;
 
     wxString datetime = DateAndTime(  );
-
-    LibNames = GetLibNames();
-    for( int ii = 0; LibNames[ii] != NULL; ii++ )
+    bool first = true;
+    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
-        if( ii > 0 )
+        if( first )
             Name += wxT( "," );
-        Name += LibNames[ii];
+        Name += Lib->m_Name;
+        first = false;
     }
-
-    MyFree( LibNames );
 
     // Creates header
     if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,

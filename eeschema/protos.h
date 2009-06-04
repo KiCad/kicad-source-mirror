@@ -80,7 +80,6 @@ LibraryStruct * LoadLibraryName(WinEDA_DrawFrame * frame,
                 const wxString & FullLibName, const wxString & LibName);
 void LoadLibraries( WinEDA_SchematicFrame* frame );
 void FreeCmpLibrary(wxWindow * frame, const wxString & LibName);
-const wxChar **GetLibNames();
 
 void SnapLibItemPoint(int OrigX, int OrigY, int *ClosestX, int *ClosestY,
                          SCH_COMPONENT *DrawLibItem);

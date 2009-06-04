@@ -24,15 +24,15 @@
 /***************************************************************/
 LibraryStruct * SelectLibraryFromList(WinEDA_DrawFrame * frame)
 /***************************************************************/
-/* Routine pour selectionner une librairie a partir d'une liste
+/** Function SelectLibraryFromList
+ * Displays a list of current loaded libraries, and allows the user to select a library
+ * This list is sorted, with the library cache always at end of the list
 */
 {
 int ii, NumOfLibs = NumOfLibraries();
 LibraryStruct *Lib = NULL;
 static wxString OldLibName;
-WinEDAListBox * ListBox;
 wxString LibName;
-const wxChar ** ListNames;
 
 	if (NumOfLibs == 0)
 	{
@@ -40,20 +40,38 @@ const wxChar ** ListNames;
 		return(NULL) ;
 	}
 
-	ListNames = GetLibNames();
-	ListBox = new WinEDAListBox(frame, _("Select Lib"),
-                                    ListNames,  OldLibName, NULL,
+	WinEDAListBox ListBox(frame, _("Select Lib"),
+                                    NULL,  OldLibName, NULL,
 	                            wxColour(255,255,255)); // Library browser background color
-	ListBox->MoveMouseToOrigin();
 
-	ii = ListBox->ShowModal(); ListBox->Destroy();
+    wxArrayString libNamesList;
+    LibraryStruct * libcache = NULL;
+    for( LibraryStruct * Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
+    {
+        if ( Lib->m_IsLibCache )
+            libcache = Lib;
+        else
+            libNamesList.Add( Lib->m_Name );
+    }
+    
+    libNamesList.Sort();
+    
+    // Add lib cache
+    if ( libcache )
+        libNamesList.Add( libcache->m_Name );
+    
+    ListBox.InsertItems(libNamesList);
+
+
+	ListBox.MoveMouseToOrigin();
+
+	ii = ListBox.ShowModal();
 
 	if (ii >= 0)	/* Recherche de la librairie */
-		{
-		Lib = FindLibrary(ListNames[ii]);
-		}
+    {
+		Lib = FindLibrary(libNamesList[ii]);
+    }
 
-	free (ListNames);
 	return(Lib);
 }
 

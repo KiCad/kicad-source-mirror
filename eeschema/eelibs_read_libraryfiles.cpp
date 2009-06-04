@@ -257,30 +257,6 @@ void FreeCmpLibrary (wxWindow* frame, const wxString& LibName)
 }
 
 
-/******************************/
-/** GetLibNames()
- * Routine to return pointers to all library names.
- *  User is responsible to deallocate memory
- */
-/******************************/
-const wxChar** GetLibNames()
-{
-    int            ii, NumOfLibs = NumOfLibraries();
-    const wxChar** Names;
-    LibraryStruct* Lib;
-
-    Names = (const wxChar**) MyZMalloc( sizeof(wxChar*) * (NumOfLibs + 1) );
-    for( ii = 0, Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext, ii++ )
-    {
-        Names[ii] = Lib->m_Name.GetData();
-    }
-
-    Names[ii] = NULL;
-
-    return Names;
-}
-
-
 /** Function LibraryEntryCompare
  * Routine to compare two EDA_LibComponentStruct for the PriorQue module.
  * Comparison (insensitive  case) is based on Part name.

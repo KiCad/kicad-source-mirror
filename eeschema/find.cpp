@@ -627,12 +627,12 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
 void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
 /*************************************************************/
 
-/* Recherche exhaustive d'un composant en librairies, meme non chargees
+/* Search for a given component.
+ * The serach is made in loaded libraries,
+ * and if not found in all libraries found in lib paths.
  */
 {
     wxString                Text, FindList;
-    const wxChar**          ListNames;
-    LibraryStruct*          Lib = NULL;
     EDA_LibComponentStruct* LibEntry;
     bool FoundInLib = FALSE;     // True si reference trouvee ailleurs qu'en cache
 
@@ -643,33 +643,23 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
     }
     s_OldStringFound = Text;
 
-    int ii, nbitems, NumOfLibs = NumOfLibraries();
-    if( NumOfLibs == 0 )
+     if( NumOfLibraries() == 0 )
     {
         DisplayError( this, _( "No libraries are loaded" ) );
         Close(); return;
     }
 
-    ListNames = GetLibNames();
-
-    nbitems = 0;
-    for( ii = 0; ii < NumOfLibs; ii++ )    /* Recherche de la librairie */
+ 
+    int nbitemsFound = 0;
+    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
-        bool IsLibCache;
-        Lib = FindLibrary( ListNames[ii] );
-        if( Lib == NULL )
-            break;
-        if( Lib->m_Name.Contains( wxT( ".cache" ) ) )
-            IsLibCache = TRUE;
-        else
-            IsLibCache = FALSE;
         LibEntry = (EDA_LibComponentStruct*) PQFirst( &Lib->m_Entries, FALSE );
         while( LibEntry )
         {
             if( WildCompareString( Text, LibEntry->m_Name.m_Text, FALSE ) )
             {
-                nbitems++;
-                if( !IsLibCache )
+                nbitemsFound++;
+                if( !Lib->m_IsLibCache )
                     FoundInLib = TRUE;
                 if( !FindList.IsEmpty() )
                     FindList += wxT( "\n" );
@@ -681,11 +671,9 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
         }
     }
 
-    free( ListNames );
-
     if( !FoundInLib )
     {
-        if( nbitems )
+        if( nbitemsFound )
             FindList = wxT( "\n" ) + Text + _( " found only in cache" );
         else
             FindList = Text + _( " not found" );
@@ -719,7 +707,7 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
 
     for( unsigned ii = 0; ii < wxGetApp().GetLibraryPathList().GetCount(); ii++ )
     {
-        path = wxGetApp().GetLibraryPathList()[ii];
+        path = wxGetApp().GetLibraryPathList()[ii] + STRING_DIR_SEP;
         FullFileName = wxFindFirstFile( path + wxT( "*." ) + CompLibFileExtension );
 
         while( !FullFileName.IsEmpty() )

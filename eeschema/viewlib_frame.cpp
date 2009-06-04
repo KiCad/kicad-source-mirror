@@ -302,22 +302,44 @@ int WinEDA_ViewlibFrame::BestZoom()
 /******************************************/
 void WinEDA_ViewlibFrame::ReCreateListLib()
 /******************************************/
+/** Function ReCreateListLib
+ * Creates or recreates the list of current loaded libraries.
+ * This list is sorted, with the library cache always at end of the list
+*/
 {
-    int            ii;
-    LibraryStruct* Lib;
+    LibraryStruct * libcache = NULL;
     bool           found = FALSE;
 
     if( m_LibList == NULL )
         return;
 
     m_LibList->Clear();
-    for( ii = 0, Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext, ii++ )
+    
+    wxArrayString libNamesList;
+    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
-        m_LibList->Append(Lib->m_Name);
-        if( g_CurrentViewLibraryName.Cmp( Lib->m_Name ) == 0 )
+        if ( Lib->m_IsLibCache )
+            libcache = Lib;
+        else
+            libNamesList.Add( Lib->m_Name );
+    }
+    
+    libNamesList.Sort();
+    
+    // Add lib cache
+    if ( libcache )
+        libNamesList.Add( libcache->m_Name );
+    
+    m_LibList->Append(libNamesList);
+
+    // Search for a previous selection:
+    for ( unsigned ii = 0; ii < m_LibList->GetCount(); ii++ )
+    {
+        if( g_CurrentViewLibraryName.Cmp( m_LibList->GetString(ii) ) == 0 )
         {
             m_LibList->SetSelection( ii, TRUE );
             found = TRUE;
+            break;
         }
     }
 
