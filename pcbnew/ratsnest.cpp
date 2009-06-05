@@ -107,17 +107,17 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
 
     GetBoard()->m_Status_Pcb = 0;                   /* we want a full ratnest computation, from the scratch */
-    GetBoard()->Build_Pads_Full_List();             /* Create the sorted pad list */
-    MsgPanel->EraseMsgBox();
+     MsgPanel->EraseMsgBox();
+
+
+    // Rebuild the full pads and net info list
+    RecalculateAllTracksNetcode();
 
     if( display_status_pcb )
     {
         msg.Printf( wxT( " %d" ), m_Pcb->m_Pads.size() );
         Affiche_1_Parametre( this, 1, wxT( "pads" ), msg, RED );
     }
-
-    //Rebuild the net info list
-    RecalculateAllTracksNetcode();
 
     if( display_status_pcb )
     {
@@ -775,6 +775,7 @@ void WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
     if( (GetBoard()->m_Status_Pcb & LISTE_PAD_OK) == 0 )
     {
+        GetBoard()->m_Status_Pcb = 0;
         GetBoard()->Build_Pads_Full_List();
     }
 

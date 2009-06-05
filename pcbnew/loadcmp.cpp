@@ -162,7 +162,14 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         module->m_TimeStamp = GetTimeStamp();
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
-        GetBoard()->Build_Pads_Full_List();
+        /* TODO: call RecalculateAllTracksNetcode() only if some pads pads have
+         * a netname.
+         * If all pads are "not connected (usually the caes in module libraries,
+         * rebuild only the pad and list of nets ( faster)
+        */
+//        GetBoard()->m_Pcb->m_NetInfo->BuildListOfNets();
+        RecalculateAllTracksNetcode( );
+        
         if ( DC )
             module->Draw( DrawPanel, DC, GR_OR );
     }

@@ -302,7 +302,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
 /* Routine de gestion de la commande BLOCK END
  *  returne :
- *  0 si aucun compos ant selectionne
+ *  0 si aucun composant selectionne
  *  1 sinon
  *  -1 si commande terminée et composants trouvés (block delete, block save)
  */
@@ -573,14 +573,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     }
 
     DrawPanel->Refresh( TRUE );
-    if( g_Show_Ratsnest )
-        Compile_Ratsnest( DC, TRUE );
-    else
-    {
-        m_Pcb->m_Status_Pcb = 0;        /* we need (later) a full ratnest computation */
-        m_Pcb->Build_Pads_Full_List();
-    }
-
+    Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -740,8 +733,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
     }
 
     DrawPanel->Refresh( TRUE );
-    if( g_Show_Ratsnest )
-        Compile_Ratsnest( DC, TRUE );
+    Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -928,8 +920,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
     }
 
     DrawPanel->Refresh( TRUE );
-    if( g_Show_Ratsnest )
-        Compile_Ratsnest( DC, TRUE );
+    Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -1074,8 +1065,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     }
 
     DrawPanel->Refresh( TRUE );
-    if( g_Show_Ratsnest )
-        Compile_Ratsnest( DC, TRUE );
+    Compile_Ratsnest( DC, TRUE );
 }
 
 
@@ -1125,7 +1115,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             m_Pcb->m_Modules.PushFront( new_module );
 
             GetScreen()->m_Curseur = module->m_Pos + MoveVector;
-            Place_Module( new_module, DC );
+            Place_Module( new_module, NULL );
         }
 
         GetScreen()->m_Curseur = oldpos;
@@ -1150,8 +1140,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 
                 new_track->m_Start += MoveVector;
                 new_track->m_End += MoveVector;
-
-                new_track->Draw( DrawPanel, DC, GR_OR ); // reaffichage
             }
             track = next_track;
         }
@@ -1170,8 +1158,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 
                 new_segzone->m_Start += MoveVector;
                 new_segzone->m_End   += MoveVector;
-
-                new_segzone->Draw( DrawPanel, DC, GR_OR );
             }
         }
 
@@ -1185,7 +1171,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 new_zone->m_TimeStamp = GetTimeStamp();
                 new_zone->Move( MoveVector );
                 m_Pcb->Add(new_zone);
-                new_zone->Draw( DrawPanel, DC, GR_OR );
             }
         }
     }
@@ -1217,7 +1202,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 
                 new_drawsegment->m_Start += MoveVector;
                 new_drawsegment->m_End   += MoveVector;
-                new_drawsegment->Draw( DrawPanel, DC, GR_OR );
             }
             break;
 
@@ -1237,7 +1221,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 
                 /* Redessin du Texte */
                 new_pcbtext->m_Pos += MoveVector;
-                new_pcbtext->Draw( DrawPanel, DC, GR_OR );
             }
             break;
 
@@ -1256,7 +1239,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 m_Pcb->Add( new_mire );
 
                 new_mire->m_Pos += MoveVector;
-                new_mire->Draw( DrawPanel, DC, GR_OR );
             }
             break;
 
@@ -1275,7 +1257,6 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 m_Pcb->Add( new_cotation );
 
                 new_cotation->Move( MoveVector );
-                new_cotation->Draw( DrawPanel, DC, GR_OR );
             }
             break;
 
@@ -1283,4 +1264,8 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
             break;
         }
     }
+
+    DrawPanel->Refresh( TRUE );
+    Compile_Ratsnest( DC, TRUE );
+
 }

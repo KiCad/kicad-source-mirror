@@ -17,10 +17,10 @@
 NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
 {
     SetNet( 0 );
-    m_NbNodes = m_NbLink = m_NbNoconn = 0;
+    m_NbNodes       = m_NbLink = m_NbNoconn = 0;
     m_ForceWidth    = 0;
-    m_RatsnestStart = 0; // debut de liste ratsnests du net
-    m_RatsnestEnd   = 0; // fin de liste ratsnests du net
+    m_RatsnestStart = 0;    // debut de liste ratsnests du net
+    m_RatsnestEnd   = 0;    // fin de liste ratsnests du net
 }
 
 
@@ -31,10 +31,10 @@ NETINFO_ITEM::~NETINFO_ITEM()
 }
 
 
-
 /*********************************************************/
 int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
 /*********************************************************/
+
 /* Routine de lecture de 1 descr Equipotentielle.
  *  retourne 0 si OK
  *          1 si lecture incomplete
@@ -73,6 +73,7 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
 /**************************************/
 bool NETINFO_ITEM::Save( FILE* aFile ) const
 /**************************************/
+
 /** Note: the old name of class NETINFO_ITEM was EQUIPOT
  * so in Save (and read) functions, for compatibility, we use EQUIPOT as keyword
  */
@@ -95,11 +96,12 @@ out:
     return success;
 }
 
+
 /**
  * Function SetNetname
  * @param const wxString : the new netname
  */
-void NETINFO_ITEM::SetNetname( const wxString & aNetname )
+void NETINFO_ITEM::SetNetname( const wxString& aNetname )
 {
     m_Netname = aNetname;
     m_ShortNetname = m_Netname.AfterLast( '/' );
@@ -120,14 +122,14 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
  * Is virtual from EDA_BaseStruct.
  * @param frame A WinEDA_DrawFrame in which to print status information.
  */
- void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
+void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     int             count;
     EDA_BaseStruct* Struct;
     wxString        txt;
     MODULE*         module;
     D_PAD*          pad;
-    double	    lengthnet = 0;
+    double          lengthnet = 0;
 
     frame->MsgPanel->EraseMsgBox();
 
@@ -136,8 +138,8 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
     txt.Printf( wxT( "%d" ), GetNet() );
     Affiche_1_Parametre( frame, 30, _( "Net Code" ), txt, RED );
 
-    count = 0;
-    module = ((WinEDA_BasePcbFrame*)frame)->GetBoard()->m_Modules;
+    count  = 0;
+    module = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->m_Modules;
     for( ; module != 0; module = module->Next() )
     {
         for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
@@ -150,8 +152,8 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
     txt.Printf( wxT( "%d" ), count );
     Affiche_1_Parametre( frame, 40, _( "Pads" ), txt, DARKGREEN );
 
-    count = 0;
-    Struct = ((WinEDA_BasePcbFrame*)frame)->GetBoard()->m_Track;
+    count  = 0;
+    Struct = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->m_Track;
     for( ; Struct != NULL; Struct = Struct->Next() )
     {
         if( Struct->Type() == TYPE_VIA )
@@ -159,7 +161,7 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
                 count++;
         if( Struct->Type() == TYPE_TRACK )
             if( ( (TRACK*) Struct )->GetNet() == GetNet() )
-            lengthnet += ( (TRACK*) Struct )->GetLength();
+                lengthnet += ( (TRACK*) Struct )->GetLength();
     }
 
     txt.Printf( wxT( "%d" ), count );
@@ -174,6 +176,16 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const
 /* class RATSNEST_ITEM */
 /***********************/
 
+RATSNEST_ITEM::RATSNEST_ITEM()
+{
+    m_NetCode  = 0;         // netcode ( = 1.. n ,  0 is the value used for not connected items)
+    m_Status   = 0;         // state
+    m_PadStart = NULL;      // pointer to the starting pad
+    m_PadEnd   = NULL;      // pointer to ending pad
+    m_Lenght   = 0;         // lenght of the line (temporary used in some calculations)
+}
+
+
 /** function Draw
  * Draws a line (a ratsnest) from the starting pad to the ending pad
  */
@@ -182,4 +194,3 @@ void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, cons
     GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos - aOffset,
             m_PadEnd->m_Pos - aOffset, 0, g_DesignSettings.m_RatsnestColor );
 }
-

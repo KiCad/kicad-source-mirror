@@ -14,6 +14,15 @@ class NETINFO_ITEM;
 
 
 /* Class RATSNEST_ITEM: describes a ratsnest line: a straight line connecting 2 pads */
+/*****************************/
+/* flags for a RATSNEST_ITEM */
+/*****************************/
+#define CH_VISIBLE          1   /* affichage permanent demande */
+#define CH_UNROUTABLE       2   /* non route par l'autorouteur */
+#define CH_ROUTE_REQ        4   /* doit etre route par l'autorouteur */
+#define CH_ACTIF            8   /* chevelu non encore routé */
+#define LOCAL_RATSNEST_ITEM 0x8000    /* indique un chevelu reliant 2 pins d'un meme
+                                       *  module pour le calcul des chevelus relatifs a 1 seul module */
 
 class RATSNEST_ITEM
 {
@@ -21,10 +30,13 @@ private:
     int    m_NetCode;   // netcode ( = 1.. n ,  0 is the value used for not connected items)
 
 public:
-    int    m_Status;        // etat: voir defines précédents (CH_ ...)
+    int    m_Status;        // State: see previous defines (CH_ ...)
     D_PAD* m_PadStart;      // pointer to the starting pad
     D_PAD* m_PadEnd;        // pointer to ending pad
-    int    m_Lenght;        // lenght of the line
+    int    m_Lenght;        // lenght of the line (temporary used in some calculations)
+
+    /* constructor */
+    RATSNEST_ITEM();
 
     /**
      * Function GetNet
@@ -176,15 +188,6 @@ public:
 };
 
 
-/*****************************/
-/* flags for a RATSNEST_ITEM */
-/*****************************/
-#define CH_VISIBLE          1   /* affichage permanent demande */
-#define CH_UNROUTABLE       2   /* non route par l'autorouteur */
-#define CH_ROUTE_REQ        4   /* doit etre route par l'autorouteur */
-#define CH_ACTIF            8   /* chevelu non encore routé */
-#define LOCAL_RATSNEST_ITEM 0x8000    /* indique un chevelu reliant 2 pins d'un meme
-                                       *  module pour le calcul des chevelus relatifs a 1 seul module */
 
 
 /****************************************************************/

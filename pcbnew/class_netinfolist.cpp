@@ -92,9 +92,9 @@ void NETINFO_LIST::BuildListOfNets()
     /* Build the PAD list, sorted by net */
     m_Parent->Build_Pads_Full_List();
 
-    int    netcode = 0;
     /* Build netnames list, and create a netcode for each netname */
     D_PAD* last_pad = NULL;
+    int    netcode = 0;
     for( unsigned ii = 0; ii < m_Parent->m_Pads.size(); ii++ )
     {
         pad = m_Parent->m_Pads[ii];

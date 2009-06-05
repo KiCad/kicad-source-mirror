@@ -229,6 +229,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         else
             m_Modules.PushFront( (MODULE*) aBoardItem );
         aBoardItem->SetParent( this );
+        // Because the list of pads has changed, reset the status
+        // This indicate the list of pad and nets must be recalculated before use
+        m_Status_Pcb = 0;
         break;
 
     case TYPE_COTATION:

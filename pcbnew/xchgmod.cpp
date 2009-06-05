@@ -309,8 +309,7 @@ void WinEDA_ExchangeModuleFrame::Change_Module( wxCommandEvent& event )
 
     if( Change_1_Module( m_CurrentModule, newmodulename, TRUE ) )
     {
-        m_Parent->GetBoard()->m_Status_Pcb = 0;
-        m_Parent->GetBoard()->Build_Pads_Full_List();
+        m_Parent->Compile_Ratsnest( m_DC, true );
     }
 }
 
@@ -394,8 +393,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleId( wxCommandEvent& event )
 
     if( change )
     {
-        m_Parent->GetBoard()->m_Status_Pcb = 0;
-        m_Parent->GetBoard()->Build_Pads_Full_List();
+        m_Parent->Compile_Ratsnest( m_DC, true );
     }
 }
 
@@ -445,8 +443,7 @@ void WinEDA_ExchangeModuleFrame::Change_ModuleAll( wxCommandEvent& event )
 
     if( change )
     {
-        m_Parent->GetBoard()->m_Status_Pcb = 0;
-        m_Parent->GetBoard()->Build_Pads_Full_List();
+        m_Parent->Compile_Ratsnest( m_DC, true );
     }
 }
 
@@ -500,12 +497,14 @@ MODULE* WinEDA_ExchangeModuleFrame::Change_1_Module( MODULE* Module,
     m_WinMsg->WriteText( wxT( "Ok\n" ) );
 
     /* Effacement a l'ecran de l'ancien module */
-    Module->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+    if ( m_DC )
+        Module->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     m_Parent->Exchange_Module( this, Module, NewModule );
 
     /* Affichage du nouveau module */
-    NewModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+    if ( m_DC )
+        NewModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
 
     Maj_ListeCmp( NewModule->m_Reference->m_Text,
                   oldnamecmp,
