@@ -433,7 +433,7 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     /* Regenere les barrieres restantes (qui peuvent empieter sur le placement
      *  des bits precedents) */
     ptr = (LISTE_PAD*) &pcbframe->GetBoard()->m_Pads[0];
-    i   = pcbframe->GetBoard()->m_Pads.size();
+    i   = pcbframe->GetBoard()->GetPadsCount();
     for( ; i > 0; i--, ptr++ )
     {
         if( (pt_cur_ch->m_PadStart != *ptr) && (pt_cur_ch->m_PadEnd != *ptr) )

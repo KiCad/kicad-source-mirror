@@ -189,7 +189,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     // Placement des PADS sur le board //
     /////////////////////////////////////
 
-    for( unsigned i=0;  i<aPcb->m_Pads.size(); ++i )
+    for( unsigned i=0;  i<aPcb->GetPadsCount(); ++i )
     {
         D_PAD* pad = aPcb->m_Pads[i];
 
@@ -281,7 +281,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
             if( PtText->GetLength() == 0 )
                 break;
-	    
+
 	    EDA_Rect textbox = PtText->GetTextBox(-1);
             ux0 = textbox.GetX(); uy0 = textbox.GetY();
             dx = textbox.GetWidth();

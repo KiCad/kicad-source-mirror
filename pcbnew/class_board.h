@@ -242,7 +242,18 @@ public:
         return m_FullRatsnest.size();
     }
 
-    unsigned     GetNodesCount();        // retourne le nombre de pads a netcode > 0
+    /** Function GetNodesCount
+     * @return the number of pads members of nets (i.e. with netcode > 0)
+    */
+    unsigned     GetNodesCount();
+
+    /** Function GetPadsCount
+     * @return the number of pads in board
+    */
+    unsigned     GetPadsCount()
+    {
+        return m_Pads.size();
+    }
 
     /** Function Build_Pads_Full_List
      *  Create the pad list

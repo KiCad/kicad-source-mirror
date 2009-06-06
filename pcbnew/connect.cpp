@@ -276,7 +276,7 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
  */
 {
     // Clear the cluster identifier for all pads
-    for( unsigned i = 0;  i< m_Pcb->m_Pads.size();  ++i )
+    for( unsigned i = 0;  i< m_Pcb->GetPadsCount();  ++i )
     {
         D_PAD* pad = m_Pcb->m_Pads[i];
 
@@ -324,7 +324,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Compile_Ratsnest( DC, TRUE );
 
-    for( unsigned i = 0;  i<m_Pcb->m_Pads.size();  ++i )
+    for( unsigned i = 0;  i<m_Pcb->GetPadsCount();  ++i )
     {
         D_PAD* pad = m_Pcb->m_Pads[i];
 
@@ -472,7 +472,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
     D_PAD*     pad;
     int        ii;
 
-    int        nb_pad  = aPcb->m_Pads.size();
+    int        nb_pad  = aPcb->GetPadsCount();
     LISTE_PAD* ptr_pad = pt_liste;
     LISTE_PAD* lim = pt_liste + nb_pad - 1;
 
@@ -557,7 +557,7 @@ void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
 {
     aVector->insert( aVector->end(), aBoard->m_Pads.begin(), aBoard->m_Pads.end() );
 
-    qsort( &(*aVector)[0], aBoard->m_Pads.size(), sizeof( D_PAD*), SortPadsByXCoord );
+    qsort( &(*aVector)[0], aBoard->GetPadsCount(), sizeof( D_PAD*), SortPadsByXCoord );
 }
 
 
@@ -584,7 +584,7 @@ void WinEDA_BasePcbFrame::RecalculateAllTracksNetcode( )
     // Build the net info list
     GetBoard()->m_NetInfo->BuildListOfNets();
 
-    if( m_Pcb->m_Pads.size() == 0 )     // If no pad, reset pointers and netcode, and do nothing else
+    if( m_Pcb->GetPadsCount() == 0 )     // If no pad, reset pointers and netcode, and do nothing else
     {
         pt_piste = m_Pcb->m_Track;
         for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )

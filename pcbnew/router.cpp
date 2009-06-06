@@ -158,11 +158,11 @@ void Out_Pads( BOARD* Pcb, FILE* outfile )
     LISTE_PAD* pt_liste_pad, * pt_start_liste,
     * pt_end_liste, * pt_liste_pad_limite;
     int        pin_min_layer, pin_max_layer;
-    int        no_conn = Pcb->m_Pads.size() + 1;/* valeur incrementee pour indiquer
+    int        no_conn = Pcb->GetPadsCount() + 1;/* valeur incrementee pour indiquer
                                  *  que le pad n'est pas deja connecte a une piste*/
 
     pt_liste_pad = pt_start_liste = &Pcb->m_Pads[0];
-    pt_liste_pad_limite = pt_start_liste + Pcb->m_Pads.size();
+    pt_liste_pad_limite = pt_start_liste + Pcb->GetPadsCount();
 
     if( pt_liste_pad == NULL )
         return;

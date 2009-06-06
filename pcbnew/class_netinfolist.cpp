@@ -27,9 +27,9 @@ NETINFO_LIST::~NETINFO_LIST()
  * @param aNetcode = netcode to identify a given NETINFO_ITEM
  * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its netcode, or NULL if not found
  */
-NETINFO_ITEM* NETINFO_LIST::GetItem( int aNetcode )
+NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetcode )
 {
-    if( aNetcode < 0 || ( aNetcode > (int) ( GetCount() - 1 ) ) )
+    if( aNetcode < 0 || ( aNetcode > (int) ( GetNetsCount() - 1 ) ) )
         return NULL;
     return m_NetBuffer[aNetcode];
 }
@@ -40,7 +40,7 @@ NETINFO_ITEM* NETINFO_LIST::GetItem( int aNetcode )
  */
 void NETINFO_LIST::DeleteData()
 {
-    for( unsigned ii = 0; ii < GetCount(); ii++ )
+    for( unsigned ii = 0; ii < GetNetsCount(); ii++ )
         delete m_NetBuffer[ii];
 
     m_NetBuffer.clear();
@@ -51,7 +51,7 @@ void NETINFO_LIST::DeleteData()
  * Function Append
  * adds \a aNewElement to the end of the list.
  */
-void NETINFO_LIST::Append( NETINFO_ITEM* aNewElement )
+void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
     m_NetBuffer.push_back( aNewElement );
 }
@@ -87,7 +87,7 @@ void NETINFO_LIST::BuildListOfNets()
 
     // Create and add the "unconnected net"
     net_item = new NETINFO_ITEM( m_Parent );
-    Append( net_item );
+    AppendNet( net_item );
 
     /* Build the PAD list, sorted by net */
     m_Parent->Build_Pads_Full_List();
@@ -113,7 +113,7 @@ void NETINFO_LIST::BuildListOfNets()
             net_item = new NETINFO_ITEM( m_Parent );
             net_item->SetNet( netcode );
             net_item->SetNetname( pad->GetNetname() );
-            Append( net_item );
+            AppendNet( net_item );
         }
 
         pad->SetNet( netcode );

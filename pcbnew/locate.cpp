@@ -583,7 +583,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
  *      (bonne position ET bonne couche).
  */
 {
-    for( unsigned i=0; i<Pcb->m_Pads.size();  ++i )
+    for( unsigned i=0; i<Pcb->GetPadsCount();  ++i )
     {
         D_PAD* pad = Pcb->m_Pads[i];
 

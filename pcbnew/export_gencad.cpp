@@ -168,10 +168,10 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
     fputs( "$PADS\n", file );
 
-    if( pcb->m_Pads.size() > 0 )
+    if( pcb->GetPadsCount() > 0 )
     {
         pads.insert( pads.end(), pcb->m_Pads.begin(), pcb->m_Pads.end() );
-        qsort( &pads[0], pcb->m_Pads.size(), sizeof( D_PAD* ), Pad_list_Sort_by_Shapes );
+        qsort( &pads[0], pcb->GetPadsCount(), sizeof( D_PAD* ), Pad_list_Sort_by_Shapes );
     }
 
     D_PAD*  old_pad = NULL;
@@ -440,9 +440,9 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
     fputs( "$SIGNALS\n", file );
 
-    for( unsigned ii = 0; ii < pcb->m_NetInfo->GetCount() ; ii++ )
+    for( unsigned ii = 0; ii < pcb->m_NetInfo->GetNetsCount() ; ii++ )
     {
-        net =  pcb->m_NetInfo->GetItem(ii);
+        net =  pcb->m_NetInfo->GetNetItem(ii);
         if( net->GetNetname() == wxEmptyString )  // dummy equipot (non connexion)
         {
             wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;

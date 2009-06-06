@@ -581,7 +581,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
     if( testPads )
     {
-        for( unsigned ii = 0;  ii<m_pcb->m_Pads.size();  ++ii )
+        for( unsigned ii = 0;  ii<m_pcb->GetPadsCount();  ++ii )
         {
             D_PAD* pad = m_pcb->m_Pads[ii];
 

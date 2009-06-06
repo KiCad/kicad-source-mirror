@@ -332,15 +332,26 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                                            DisplayOpt.DisplayPolarCood ?
+                                            _( "Polar Coords not show" ) :
+                                            _( "Display Polar Coords" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
                                       m_Draw_Grid );
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
+                                            m_Draw_Grid ? _( "Grid not show" ) : _( "Show Grid" ) );
+
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
                                       m_CursorShape );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                                            m_DisplayPadFill ?
+                                            _( "Show Pads Sketch mode" ) :
+                                            _( "Show pads filled mode" ) );
     }
 
     if( m_AuxiliaryToolBar )

@@ -522,7 +522,7 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
             viasCount++;
     }
 
-    txt.Printf( wxT( "%d" ), m_Pads.size() );
+    txt.Printf( wxT( "%d" ), GetPadsCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBPADS, _( "Pads" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), viasCount );
@@ -531,7 +531,7 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBNODES, _( "Nodes" ), txt, DARKCYAN );
 
-    txt.Printf( wxT( "%d" ), m_NetInfo->GetCount() );
+    txt.Printf( wxT( "%d" ), m_NetInfo->GetNetsCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBNETS, _( "Nets" ), txt, RED );
 
     /* These parameters are known only if the full ratsnest is available,
@@ -822,8 +822,8 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
     // zero is reserved for "no connection" and is not used.
     if( anetcode > 0 )
     {
-        wxASSERT( anetcode == m_NetInfo->GetItem( anetcode )->GetNet() );
-        return m_NetInfo->GetItem( anetcode );
+        wxASSERT( anetcode == m_NetInfo->GetNetItem( anetcode )->GetNet() );
+        return m_NetInfo->GetNetItem( anetcode );
     }
     return NULL;
 }
@@ -841,10 +841,10 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
     // zero is reserved for "no connection" and is not used.
     if( !aNetname.IsEmpty() )
     {
-        for( unsigned ii = 1;  ii <  m_NetInfo->GetCount();  ii++ )
+        for( unsigned ii = 1;  ii <  m_NetInfo->GetNetsCount();  ii++ )
         {
-            if( m_NetInfo->GetItem( ii )->GetNetname() == aNetname )
-                return m_NetInfo->GetItem( ii );
+            if( m_NetInfo->GetNetItem( ii )->GetNetname() == aNetname )
+                return m_NetInfo->GetNetItem( ii );
         }
     }
     return NULL;
@@ -899,16 +899,16 @@ static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
  */
 int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
-    if( m_NetInfo->GetCount() == 0 )
+    if( m_NetInfo->GetNetsCount() == 0 )
         return 0;
 
     /* Build the list */
     std::vector <NETINFO_ITEM*> netBuffer;
-    netBuffer.reserve( m_NetInfo->GetCount() );
-    for( unsigned ii = 1; ii < m_NetInfo->GetCount(); ii++ )
+    netBuffer.reserve( m_NetInfo->GetNetsCount() );
+    for( unsigned ii = 1; ii < m_NetInfo->GetNetsCount(); ii++ )
     {
-        if( m_NetInfo->GetItem( ii )->GetNet() > 0 )
-            netBuffer.push_back( m_NetInfo->GetItem( ii ) );
+        if( m_NetInfo->GetNetItem( ii )->GetNet() > 0 )
+            netBuffer.push_back( m_NetInfo->GetNetItem( ii ) );
     }
 
     /* sort the list */
@@ -930,8 +930,8 @@ bool BOARD::Save( FILE* aFile ) const
     BOARD_ITEM* item;
 
     // save the nets
-    for( unsigned ii = 0; ii < m_NetInfo->GetCount(); ii++ )
-        if( !m_NetInfo->GetItem( ii )->Save( aFile ) )
+    for( unsigned ii = 0; ii < m_NetInfo->GetNetsCount(); ii++ )
+        if( !m_NetInfo->GetNetItem( ii )->Save( aFile ) )
             goto out;
 
     // save the modules

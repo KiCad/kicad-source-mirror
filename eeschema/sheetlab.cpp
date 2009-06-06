@@ -26,11 +26,6 @@ static wxSize   NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 /* class WinEDA_PinSheetPropertiesFrame */
 /****************************************/
 
-#define NBSHAPES 5
-static wxString shape_list[NBSHAPES] =
-{
-    wxT( "Input" ), wxT( "Output" ), wxT( "Bidi" ), wxT( "TriState" ), wxT( "Passive" )
-};
 
 
 /*****************************************************/
@@ -91,7 +86,7 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
 
     m_CurrentPinSheet = curr_pinsheet;
 
-    /* Creation des boutons de commande */
+    /* Create buttons: */
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
@@ -103,7 +98,12 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
                                             m_CurrentPinSheet->m_Size.x,
                                             g_UnitMetric, LeftBoxSizer, 200 );
 
-    // Selection de la forme :
+    // Display shape selection :
+    #define NBSHAPES 5
+    wxString shape_list[NBSHAPES] =
+    {
+       _( "Input" ), _( "Output" ), _( "Bidi" ), _( "TriState" ), _( "Passive" )
+    };
     m_PinSheetShape = new wxRadioBox( this, -1, _( "PinSheet Shape:" ),
                                       wxDefaultPosition, wxSize( -1, -1 ),
                                       NBSHAPES, shape_list, 1 );
@@ -138,9 +138,6 @@ void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
 /*****************************************************************/
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*****************************************************************/
-
-/*  Routine de sortie du Menu d'Edition Des NETS (Labels) SHEET
- */
 {
     Hierarchical_PIN_Sheet_Struct* SheetLabel = (Hierarchical_PIN_Sheet_Struct*)
                                        Panel->GetScreen()->GetCurItem();

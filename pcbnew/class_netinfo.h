@@ -79,19 +79,19 @@ public:
      * @param aNetcode = netcode to identify a given NETINFO_ITEM
      * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its netcode, or NULL if not found
      */
-    NETINFO_ITEM* GetItem( int aNetcode );
+    NETINFO_ITEM* GetNetItem( int aNetcode );
 
     /** Function GetCount()
      * @return the number of nets ( always >= 1 )
-     * the first net is the "not connected" net
+     * becuse the first net is the "not connected" net and always exists
      */
-    unsigned GetCount() { return m_NetBuffer.size(); }
+    unsigned GetNetsCount() { return m_NetBuffer.size(); }
 
     /**
      * Function Append
      * adds \a aNewElement to the end of the list.
      */
-    void Append( NETINFO_ITEM* aNewElement );
+    void AppendNet( NETINFO_ITEM* aNewElement );
 
     /** Function DeleteData
      * delete the list of nets (and free memory)
@@ -99,7 +99,7 @@ public:
     void DeleteData();
 
     /** Function BuildListOfNets
-     * initialize the list of NETINFO_ITEM m_NetBuffer
+     * Build or rebuild the list of NETINFO_ITEM m_NetBuffer
      * The list is sorted by names.
      */
     void BuildListOfNets();

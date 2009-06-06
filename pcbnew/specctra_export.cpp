@@ -1114,7 +1114,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         int highestNetCode = -1;
 //        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
 //            highestNetCode = MAX( highestNetCode, equipot->GetNet() );
-        highestNetCode = aBoard->m_NetInfo->GetCount() - 1;
+        highestNetCode = aBoard->m_NetInfo->GetNetsCount() - 1;
         deleteNETs();
 
         // expand the net vector to highestNetCode+1, setting empty to NULL
@@ -1124,9 +1124,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         for( unsigned i=1;  i<nets.size();  ++i )
             nets[i] = new NET( pcb->network );
 
-        for( unsigned ii = 0;  ii < aBoard->m_NetInfo->GetCount(); ii++ )
+        for( unsigned ii = 0;  ii < aBoard->m_NetInfo->GetNetsCount(); ii++ )
         {
-            NETINFO_ITEM* net = aBoard->m_NetInfo->GetItem(ii);
+            NETINFO_ITEM* net = aBoard->m_NetInfo->GetNetItem(ii);
             int netcode = net->GetNet();
             if( netcode > 0 )
                 nets[ netcode ]->net_id = CONV_TO_UTF8( net->GetNetname() );
