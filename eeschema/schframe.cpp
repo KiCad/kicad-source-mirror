@@ -428,12 +428,14 @@ void WinEDA_SchematicFrame::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void WinEDA_SchematicFrame::OnUpdateSchematicUndo( wxUpdateUIEvent& event )
 {
-    event.Enable( (GetScreen()->m_UndoList) ? true : false );
+    if ( GetScreen() )
+        event.Enable( (GetScreen()->m_UndoList) ? true : false );
 }
 
 void WinEDA_SchematicFrame::OnUpdateSchematicRedo( wxUpdateUIEvent& event )
 {
-    event.Enable( (GetScreen()->m_RedoList) ? true : false );
+    if ( GetScreen() )
+        event.Enable( (GetScreen()->m_RedoList) ? true : false );
 }
 
 void WinEDA_SchematicFrame::OnUpdateBusOrientation( wxUpdateUIEvent& event )
