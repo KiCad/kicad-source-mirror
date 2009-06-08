@@ -1020,7 +1020,7 @@
                 <string name="proxy-Implementation filename">""</string>
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">"m_PanelDoc"</string>
-                <string name="proxy-Tab label">"Doc"</string>
+                <string name="proxy-Tab label">"Description"</string>
                 <string name="proxy-Tab icon">""</string>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
@@ -1120,7 +1120,7 @@
                     <string name="proxy-Implementation filename">""</string>
                     <string name="proxy-Header filename">""</string>
                     <string name="proxy-Member variable name">""</string>
-                    <string name="proxy-Label">"Doc:"</string>
+                    <string name="proxy-Label">"Description:"</string>
                     <long name="proxy-Wrapping width">-1</long>
                     <string name="proxy-Help text">""</string>
                     <string name="proxy-Tooltip text">""</string>

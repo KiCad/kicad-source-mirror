@@ -167,7 +167,7 @@ void WinEDA_PartPropertiesFrame::CreateControls()
     m_PanelDocBoxSizer = new wxBoxSizer(wxVERTICAL);
     m_PanelDoc->SetSizer(m_PanelDocBoxSizer);
 
-    wxStaticText* itemStaticText18 = new wxStaticText( m_PanelDoc, wxID_STATIC, _("Doc:"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText18 = new wxStaticText( m_PanelDoc, wxID_STATIC, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
     m_PanelDocBoxSizer->Add(itemStaticText18, 0, wxGROW|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
     m_Doc = new wxTextCtrl( m_PanelDoc, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
@@ -193,7 +193,7 @@ void WinEDA_PartPropertiesFrame::CreateControls()
     wxButton* itemButton26 = new wxButton( m_PanelDoc, ID_BROWSE_DOC_FILES, _("Browse DocFiles"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer24->Add(itemButton26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_NoteBook->AddPage(m_PanelDoc, _("Doc"));
+    m_NoteBook->AddPage(m_PanelDoc, _("Description"));
 
     m_PanelAlias = new wxPanel( m_NoteBook, ID_PANEL_ALIAS, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 
