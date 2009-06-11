@@ -428,7 +428,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
     for( unsigned ii = 0;  ii<m_Pcb->GetPadsCount();  ++ii )
     {
-        pad = m_Pcb->m_Pads[ii];
+        pad = m_Pcb->m_NetInfo->GetPad(ii);
         pad->SetSubRatsnest( 0 );
     }
 
@@ -499,17 +499,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     }
 }
 
-
-/**********************************************************************/
-void WinEDA_BasePcbFrame::ReCompile_Ratsnest_After_Changes( wxDC* DC )
-/**********************************************************************/
-
-/* recompile rastnest after a module move, delete, ..
- */
-{
-    if( g_Show_Ratsnest && DC )
-        Compile_Ratsnest( DC, TRUE );
-}
 
 
 /*********************************************************************/
@@ -776,7 +765,7 @@ void WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
     if( (GetBoard()->m_Status_Pcb & LISTE_PAD_OK) == 0 )
     {
         GetBoard()->m_Status_Pcb = 0;
-        GetBoard()->Build_Pads_Full_List();
+        GetBoard()->m_NetInfo->BuildListOfNets();
     }
 
     /* Compute the "local" ratsnest if needed (when this footprint starts move)

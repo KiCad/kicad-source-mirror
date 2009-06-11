@@ -131,7 +131,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     module->DisplayInfo( this );
     Place_Module( module, DC );
     GetBoard()->m_Status_Pcb = 0;
-    GetBoard()->Build_Pads_Full_List();
+    GetBoard()->m_NetInfo->BuildListOfNets();
 
     return module;
 }

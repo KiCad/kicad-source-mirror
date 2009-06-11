@@ -250,8 +250,8 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     rect.SetSize( textsize );
 
     /* Now, calculate the rect origin, according to text justification
-     * At this point the area origin is the text origin (m_Pos).
-     * This is true only for left and top text justified texts.
+     * At this point the rectangle origin is the text origin (m_Pos).
+     * This is true only for left and top text justified texts (using top to bottom Y axis orientation).
      * and must be recalculated for others justifications
      * also, note the V justification is relative to the first line
      */
@@ -290,13 +290,14 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
 
 
 /*************************************************/
-bool EDA_TextStruct::HitTest( const wxPoint& posref )
+bool EDA_TextStruct::TextHitTest( const wxPoint& posref )
 /*************************************************/
 
-/* locate function
- *  return:
- *      true  if posref is inside the text area.
- *      false else.
+/**
+ * Function TextHitTest (overlayed)
+ * tests if the given point is inside this object.
+ * @param posref point to test
+ * @return bool - true if a hit, else false
  */
 {
     EDA_Rect rect = GetTextBox( -1 );   // Get the full text area.
@@ -310,13 +311,13 @@ bool EDA_TextStruct::HitTest( const wxPoint& posref )
 
 
 /**
- * Function HitTest (overlayed)
+ * Function TextHitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
  * @param refArea the given EDA_Rect to test
  * @return bool - true if a hit, else false
  */
 /*********************************************************/
-bool EDA_TextStruct::HitTest( EDA_Rect& refArea )
+bool EDA_TextStruct::TextHitTest( EDA_Rect& refArea )
 /*********************************************************/
 {
     if( refArea.Inside( m_Pos ) )

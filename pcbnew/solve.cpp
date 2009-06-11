@@ -337,7 +337,6 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     int        r, c, side, d, apx_dist, nr, nc;
     int        result, skip;
     int        i;
-    LISTE_PAD* ptr;
     long       curcell, newcell, buddy, lastopen, lastclos, lastmove;
     int        newdist, olddir, _self;
     int        current_net_code;
@@ -432,13 +431,13 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
     /* Regenere les barrieres restantes (qui peuvent empieter sur le placement
      *  des bits precedents) */
-    ptr = (LISTE_PAD*) &pcbframe->GetBoard()->m_Pads[0];
     i   = pcbframe->GetBoard()->GetPadsCount();
-    for( ; i > 0; i--, ptr++ )
+    for( unsigned ii = 0; ii < pcbframe->GetBoard()->GetPadsCount(); ii++ )
     {
-        if( (pt_cur_ch->m_PadStart != *ptr) && (pt_cur_ch->m_PadEnd != *ptr) )
+        D_PAD * ptr =  pcbframe->GetBoard()->m_NetInfo->GetPad(ii);
+        if( (pt_cur_ch->m_PadStart != ptr) && (pt_cur_ch->m_PadEnd != ptr) )
         {
-            Place_1_Pad_Board( pcbframe->GetBoard(), *ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+            Place_1_Pad_Board( pcbframe->GetBoard(), ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
         }
     }
 

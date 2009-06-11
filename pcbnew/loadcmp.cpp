@@ -44,9 +44,9 @@ static void ReadDocLib( const wxString& ModLibName );
 static ModList* MList;
 
 
-/***************************************************************************/
-void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
-/***************************************************************************/
+/********************************************************************/
+void WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
+/********************************************************************/
 {
     MODULE* NewModule;
     WinEDA_BasePcbFrame* parent = (WinEDA_BasePcbFrame*) GetParent();
@@ -77,7 +77,7 @@ void WinEDA_ModuleEditFrame::Load_Module_Module_From_BOARD( MODULE* Module )
 
     Module->m_Flags = 0;
 
-    GetBoard()->Build_Pads_Full_List();
+    GetBoard()->m_NetInfo->BuildListOfNets();
 
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Place_Module( Module, NULL );
@@ -169,7 +169,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         */
 //        GetBoard()->m_Pcb->m_NetInfo->BuildListOfNets();
         RecalculateAllTracksNetcode( );
-        
+
         if ( DC )
             module->Draw( DrawPanel, DC, GR_OR );
     }

@@ -479,14 +479,8 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     int             ux0, uy0;
     int             dx, dy, spot_cX, spot_cY;
 
-    if( m_Text )
-    {
-        // because HitTest() is present in both base classes of TEXTE_PCB
-        // use a clarifying cast to tell compiler which HitTest()
-        // to call.
-        if( static_cast<EDA_TextStruct*>(m_Text)->HitTest( ref_pos ) )
+    if( m_Text && m_Text->TextHitTest( ref_pos ) )
             return true;
-    }
 
     /* Localisation des SEGMENTS ?) */
     ux0 = Barre_ox;

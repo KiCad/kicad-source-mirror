@@ -58,9 +58,9 @@ IMPLEMENT_DYNAMIC_CLASS( WinEDA_SheetPropertiesFrame, wxDialog )
 BEGIN_EVENT_TABLE( WinEDA_SheetPropertiesFrame, wxDialog )
 
 ////@begin WinEDA_SheetPropertiesFrame event table entries
-    EVT_BUTTON( wxID_CANCEL, WinEDA_SheetPropertiesFrame::OnCancelClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_SheetPropertiesFrame::OnCancelClick )
 
-    EVT_BUTTON( wxID_OK, WinEDA_SheetPropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_OK, WinEDA_SheetPropertiesFrame::OnOkClick )
 
 ////@end WinEDA_SheetPropertiesFrame event table entries
 
@@ -89,11 +89,11 @@ WinEDA_SheetPropertiesFrame::WinEDA_SheetPropertiesFrame( WinEDA_SchematicFrame*
 
     AddUnitSymbol( *m_SheetNameTextSize );
     PutValueInLocalUnits( *m_SheetNameSize, m_CurrentSheet->m_SheetNameSize,
-        m_Parent->m_InternalUnits );
+                          m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_FileNameTextSize );
     PutValueInLocalUnits( *m_FileNameSize, m_CurrentSheet->m_FileNameSize,
-        m_Parent->m_InternalUnits );
+                          m_Parent->m_InternalUnits );
 }
 
 
@@ -105,25 +105,27 @@ bool WinEDA_SheetPropertiesFrame::Create( wxWindow* parent, wxWindowID id, const
                                           const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin WinEDA_SheetPropertiesFrame member initialisation
-    m_FileNameWin = NULL;
+    m_FileNameWin  = NULL;
     m_SheetNameWin = NULL;
-    m_FileNameTextSize = NULL;
-    m_FileNameSize = NULL;
+    m_FileNameTextSize  = NULL;
+    m_FileNameSize      = NULL;
     m_SheetNameTextSize = NULL;
-    m_SheetNameSize = NULL;
+    m_SheetNameSize     = NULL;
     m_btClose = NULL;
+
 ////@end WinEDA_SheetPropertiesFrame member initialisation
 
 ////@begin WinEDA_SheetPropertiesFrame creation
-    SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
+    SetExtraStyle( wxWS_EX_BLOCK_EVENTS );
     wxDialog::Create( parent, id, caption, pos, size, style );
 
     CreateControls();
-    if (GetSizer())
+    if( GetSizer() )
     {
-        GetSizer()->SetSizeHints(this);
+        GetSizer()->SetSizeHints( this );
     }
     Centre();
+
 ////@end WinEDA_SheetPropertiesFrame creation
     return true;
 }
@@ -140,56 +142,85 @@ void WinEDA_SheetPropertiesFrame::CreateControls()
 
     WinEDA_SheetPropertiesFrame* itemDialog1 = this;
 
-    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    itemDialog1->SetSizer(itemBoxSizer2);
+    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer( wxVERTICAL );
 
-    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer3, 0, wxGROW|wxALL, 5);
+    itemDialog1->SetSizer( itemBoxSizer2 );
 
-    wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer3->Add(itemBoxSizer4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxBoxSizer*   itemBoxSizer3 = new wxBoxSizer( wxHORIZONTAL );
+    itemBoxSizer2->Add( itemBoxSizer3, 0, wxGROW | wxALL, 5 );
 
-    wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer4->Add(itemStaticText5, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxBoxSizer*   itemBoxSizer4 = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer3->Add( itemBoxSizer4, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    m_FileNameWin = new wxTextCtrl( itemDialog1, ID_TEXTCTRL1, _T(""), wxDefaultPosition, wxSize(300, -1), wxTE_PROCESS_ENTER );
-    itemBoxSizer4->Add(m_FileNameWin, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _(
+                                                          "Filename:" ), wxDefaultPosition,
+                                                      wxDefaultSize, 0 );
+    itemBoxSizer4->Add( itemStaticText5,
+                        0,
+                        wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                        5 );
 
-    wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("Sheetname:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer4->Add(itemStaticText7, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    m_FileNameWin =
+        new wxTextCtrl( itemDialog1, ID_TEXTCTRL1, _T( "" ), wxDefaultPosition, wxSize( 300,
+                                                                                        -1 ),
+                        wxTE_PROCESS_ENTER );
+    itemBoxSizer4->Add( m_FileNameWin, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    m_SheetNameWin = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxSize(300, -1), 0 );
-    itemBoxSizer4->Add(m_SheetNameWin, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _(
+                                                          "Sheetname:" ), wxDefaultPosition,
+                                                      wxDefaultSize, 0 );
+    itemBoxSizer4->Add( itemStaticText7,
+                        0,
+                        wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                        5 );
 
-    wxBoxSizer* itemBoxSizer9 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer3->Add(itemBoxSizer9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_SheetNameWin =
+        new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T( "" ), wxDefaultPosition, wxSize( 300,
+                                                                                       -1 ), 0 );
+    itemBoxSizer4->Add( m_SheetNameWin, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    m_FileNameTextSize = new wxStaticText( itemDialog1, wxID_STATIC, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer9->Add(m_FileNameTextSize, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    wxBoxSizer* itemBoxSizer9 = new wxBoxSizer( wxVERTICAL );
+    itemBoxSizer3->Add( itemBoxSizer9, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-    m_FileNameSize = new wxTextCtrl( itemDialog1, ID_TEXTCTRL2, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer9->Add(m_FileNameSize, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_FileNameTextSize = new wxStaticText( itemDialog1, wxID_STATIC, _(
+                                               "Size" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer9->Add( m_FileNameTextSize,
+                        0,
+                        wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                        5 );
 
-    m_SheetNameTextSize = new wxStaticText( itemDialog1, wxID_STATIC, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer9->Add(m_SheetNameTextSize, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    m_FileNameSize = new wxTextCtrl( itemDialog1, ID_TEXTCTRL2, _T(
+                                         "" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer9->Add( m_FileNameSize, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    m_SheetNameSize = new wxTextCtrl( itemDialog1, ID_TEXTCTRL3, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer9->Add(m_SheetNameSize, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
+    m_SheetNameTextSize = new wxStaticText( itemDialog1, wxID_STATIC, _(
+                                                "Size" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer9->Add( m_SheetNameTextSize,
+                        0,
+                        wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
+                        5 );
 
-    itemBoxSizer2->Add(5, 5, 1, wxGROW|wxALL, 5);
+    m_SheetNameSize = new wxTextCtrl( itemDialog1, ID_TEXTCTRL3, _T(
+                                          "" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer9->Add( m_SheetNameSize, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    wxBoxSizer* itemBoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer15, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer2->Add( 5, 5, 1, wxGROW | wxALL, 5 );
 
-    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer15->Add(m_btClose, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxBoxSizer* itemBoxSizer15 = new wxBoxSizer( wxHORIZONTAL );
+    itemBoxSizer2->Add( itemBoxSizer15, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5 );
 
-    wxButton* itemButton17 = new wxButton( itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_btClose = new wxButton( itemDialog1, wxID_CANCEL, _(
+                                  "&Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer15->Add( m_btClose, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+
+    wxButton* itemButton17 = new wxButton( itemDialog1, wxID_OK, _(
+                                               "&OK" ), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton17->SetDefault();
-    itemBoxSizer15->Add(itemButton17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer15->Add( itemButton17, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     // Set validators
-    m_SheetNameWin->SetValidator( wxTextValidator(wxFILTER_NONE, & m_CurrentSheet->m_SheetName) );
+    m_SheetNameWin->SetValidator( wxTextValidator( wxFILTER_NONE, &m_CurrentSheet->m_SheetName ) );
+
 ////@end WinEDA_SheetPropertiesFrame content construction
 
     m_btClose->SetFocus();
@@ -215,8 +246,9 @@ wxBitmap WinEDA_SheetPropertiesFrame::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
 ////@begin WinEDA_SheetPropertiesFrame bitmap retrieval
-    wxUnusedVar(name);
+    wxUnusedVar( name );
     return wxNullBitmap;
+
 ////@end WinEDA_SheetPropertiesFrame bitmap retrieval
 }
 
@@ -229,8 +261,9 @@ wxIcon WinEDA_SheetPropertiesFrame::GetIconResource( const wxString& name )
 {
     // Icon retrieval
 ////@begin WinEDA_SheetPropertiesFrame icon retrieval
-    wxUnusedVar(name);
+    wxUnusedVar( name );
     return wxNullIcon;
+
 ////@end WinEDA_SheetPropertiesFrame icon retrieval
 }
 
@@ -245,7 +278,7 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
  */
 {
     wxFileName fn;
-    wxString msg;
+    wxString   msg;
 
     fn = m_FileNameWin->GetValue();
 
@@ -264,13 +297,14 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
      * to create or set an Associated Screen
      */
     if( ( fn.GetFullPath() != m_CurrentSheet->GetFileName() )
-        || ( m_CurrentSheet->m_AssociatedScreen == NULL) )
+       || ( m_CurrentSheet->m_AssociatedScreen == NULL) )
     {
-        msg = _( "Changing a Filename can change all the schematic \
-                  structures and cannot be undone.\nOk to continue renaming?" );
+        msg = _(
+            "Changing a Filename can change all the schematic \
+structures and cannot be undone.\nOk to continue renaming?"                                                                  );
 
         if( m_CurrentSheet->m_AssociatedScreen == NULL || IsOK( NULL, msg ) )
-        { //do not prompt on a new sheet. in fact, we should not allow a sheet to be created
+        {   //do not prompt on a new sheet. in fact, we should not allow a sheet to be created
           //without a valid associated filename to be read from.
             m_Parent->GetScreen()->ClearUndoRedoList();
             m_CurrentSheet->ChangeFileName( m_Parent, fn.GetFullPath() );   // set filename and the associated screen
@@ -280,18 +314,18 @@ void WinEDA_SheetPropertiesFrame::SheetPropertiesAccept( wxCommandEvent& event )
     msg = m_FileNameSize->GetValue();
     m_CurrentSheet->m_FileNameSize =
         ReturnValueFromString( g_UnitMetric,
-            msg, m_Parent->m_InternalUnits );
+                               msg, m_Parent->m_InternalUnits );
 
     m_CurrentSheet->m_SheetName = m_SheetNameWin->GetValue();
     msg = m_SheetNameSize->GetValue();
     m_CurrentSheet->m_SheetNameSize =
         ReturnValueFromString( g_UnitMetric,
-            msg, m_Parent->m_InternalUnits );
+                               msg, m_Parent->m_InternalUnits );
 
     if( ( m_CurrentSheet->m_SheetName.IsEmpty() ) )
     {
         m_CurrentSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ),
-                                            GetTimeStamp() );
+                                           GetTimeStamp() );
     }
 
 
@@ -387,8 +421,8 @@ void WinEDA_SchematicFrame::ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC )
     while( sheetlabel )
     {
         s_SheetMindx = MAX( s_SheetMindx,
-            (int) ( (sheetlabel->GetLength() +
-                     1) * sheetlabel->m_Size.x ) );
+                           (int) ( (sheetlabel->GetLength() +
+                                    1) * sheetlabel->m_Size.x ) );
         s_SheetMindy = MAX( s_SheetMindy, sheetlabel->m_Pos.y - Sheet->m_Pos.y );
         sheetlabel   = sheetlabel->Next();
     }
@@ -426,12 +460,12 @@ void WinEDA_SchematicFrame::StartMoveSheet( DrawSheetStruct* Sheet, wxDC* DC )
 /********************************************************/
 static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    wxPoint               move_vector;
+    wxPoint          move_vector;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
-    BASE_SCREEN*          screen = panel->GetScreen();
+    BASE_SCREEN*     screen = panel->GetScreen();
 
-    DrawSheetStruct*      Sheet = (DrawSheetStruct*)
-                                  screen->GetCurItem();
+    DrawSheetStruct* Sheet = (DrawSheetStruct*)
+                             screen->GetCurItem();
 
     /* Effacement du composant: tj apres depl curseur */
     if( erase )
@@ -487,7 +521,7 @@ static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     else if( Sheet->m_Flags & IS_MOVED )             /* move en cours: on l'annule */
     {
-        wxPoint curspos = Screen->m_Curseur;
+        wxPoint             curspos   = Screen->m_Curseur;
         Panel->GetScreen()->m_Curseur = s_OldPos;
         DeplaceSheet( Panel, DC, TRUE );
         RedrawOneStruct( Panel, DC, Sheet, GR_DEFAULT_DRAWMODE );

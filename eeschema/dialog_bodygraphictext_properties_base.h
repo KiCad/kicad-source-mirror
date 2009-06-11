@@ -17,8 +17,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/button.h>
@@ -36,23 +37,25 @@ class Dialog_BodyGraphicText_Properties_base : public wxDialog
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_TextValue;
-		wxCheckBox* m_CommonUnit;
-		wxCheckBox* m_CommonConvert;
-		wxCheckBox* m_Orient;
 		wxStaticText* m_TextSizeText;
 		wxTextCtrl* m_TextSize;
+		wxCheckBox* m_Orient;
+		wxStaticLine* m_staticline1;
+		wxCheckBox* m_CommonUnit;
+		wxCheckBox* m_CommonConvert;
 		wxRadioBox* m_TextShapeOpt;
+		wxRadioBox* m_TextHJustificationOpt;
+		wxRadioBox* m_TextVJustificationOpt;
 		wxButton* m_buttonOK;
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		Dialog_BodyGraphicText_Properties_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Graphic text properties:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 360,180 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		Dialog_BodyGraphicText_Properties_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Graphic text properties:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 511,193 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~Dialog_BodyGraphicText_Properties_base();
 	
 };

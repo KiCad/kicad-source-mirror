@@ -170,7 +170,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
     if( pcb->GetPadsCount() > 0 )
     {
-        pads.insert( pads.end(), pcb->m_Pads.begin(), pcb->m_Pads.end() );
+        pads.insert( pads.end(), pcb->m_NetInfo->m_PadsFullList.begin(), pcb->m_NetInfo->m_PadsFullList.end() );
         qsort( &pads[0], pcb->GetPadsCount(), sizeof( D_PAD* ), Pad_list_Sort_by_Shapes );
     }
 

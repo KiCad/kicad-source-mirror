@@ -58,7 +58,7 @@ public:
      */
     bool    HitTest( const wxPoint& refPos )
     {
-        return EDA_TextStruct::HitTest( refPos );
+        return TextHitTest( refPos );
     }
 
 
@@ -70,7 +70,7 @@ public:
      */
     bool    HitTest( EDA_Rect& refArea )
     {
-        return EDA_TextStruct::HitTest( refArea );
+        return TextHitTest( refArea );
     }
 
     /**

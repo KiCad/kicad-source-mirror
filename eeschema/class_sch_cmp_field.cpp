@@ -59,7 +59,16 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) m_Parent;
     GRTextHorizJustifyType hjustify;
     GRTextVertJustifyType vjustify;
-    int            LineWidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int            LineWidth = m_Width;
+    
+    if (LineWidth == 0)   // Use default values for pen size
+    {
+        if ( m_Bold  )
+            LineWidth = GetPenSizeForBold( m_Size.x );
+        else
+            LineWidth = g_DrawDefaultLineThickness;
+    }
+
 
     // Clip pen size for small texts:
     LineWidth = Clamp_Text_PenSize( LineWidth, m_Size, m_Bold );
@@ -153,7 +162,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         DrawGraphicText( panel, DC, pos, color, m_Text,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         m_Size, hjustify, vjustify, LineWidth, m_Italic, m_Bold, false );
+                         m_Size, hjustify, vjustify, LineWidth, m_Italic, m_Bold );
     }
     else
     {

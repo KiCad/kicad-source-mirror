@@ -53,10 +53,10 @@ public:
         m_NetCode = aNetCode;
     }
 
+
     /** function Draw
      */
     void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
-
 };
 
 /***************************************************************/
@@ -70,7 +70,10 @@ private:
     BOARD* m_Parent;
 
 //    boost::ptr_vector<NETINFO_ITEM*>  m_NetBuffer;           // nets buffer list (name, design constraints ..
-    std::vector<NETINFO_ITEM*> m_NetBuffer;            // nets buffer list (name, design constraints ..
+    std::vector<NETINFO_ITEM*> m_NetBuffer;                     // nets buffer list (name, design constraints ..
+public:
+    std::vector<D_PAD*>        m_PadsFullList;                  // Entry for a sorted pad list (used in ratsnest calculations)
+
 public:
     NETINFO_LIST( BOARD* aParent );
     ~NETINFO_LIST();
@@ -103,6 +106,37 @@ public:
      * The list is sorted by names.
      */
     void BuildListOfNets();
+
+    /** Function GetPadsCount
+     * @return the number of pads in board
+     */
+    unsigned     GetPadsCount()
+    {
+        return m_PadsFullList.size();
+    }
+
+    /** Function GetPad
+     * @return the pad idx from m_PadsFullList
+     */
+    D_PAD*     GetPad( unsigned aIdx)
+    {
+        if (aIdx < m_PadsFullList.size() )
+            return m_PadsFullList[aIdx];
+        else
+            return NULL;
+    }
+
+private:
+
+    /** Function Build_Pads_Full_List
+     *  Create the pad list
+     * initialise:
+     *   m_Pads (list of pads)
+     * set m_Status_Pcb = LISTE_PAD_OK;
+     * and clear for all pads in list the m_SubRatsnest member;
+     * clear m_Pcb->m_FullRatsnest
+     */
+    void Build_Pads_Full_List();
 };
 
 /** class NETINFO_ITEM
@@ -119,13 +153,13 @@ private:
 
 
 public:
-    int                          m_NbNodes;         // Pads count for this net
-    int                          m_NbLink;          // Ratsnets count for this net
-    int                          m_NbNoconn;        // Ratsnets remaining to route count
-    int                          m_ForceWidth;      // specific width (O = default width)
+    int      m_NbNodes;                             // Pads count for this net
+    int      m_NbLink;                              // Ratsnets count for this net
+    int      m_NbNoconn;                            // Ratsnets remaining to route count
+    int      m_ForceWidth;                          // specific width (O = default width)
     std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
-    unsigned                     m_RatsnestStart;   // debut de liste ratsnests du net (included)
-    unsigned                     m_RatsnestEnd;     // fin de liste ratsnests du net (excluded)
+    unsigned m_RatsnestStart;                       // debut de liste ratsnests du net (included)
+    unsigned m_RatsnestEnd;                         // fin de liste ratsnests du net (excluded)
 
     NETINFO_ITEM( BOARD_ITEM* aParent );
     ~NETINFO_ITEM();
@@ -186,8 +220,6 @@ public:
  */
     void DisplayInfo( WinEDA_DrawFrame* frame );
 };
-
-
 
 
 /****************************************************************/

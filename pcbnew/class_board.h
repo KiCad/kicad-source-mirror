@@ -18,8 +18,7 @@ class EDA_BoardDesignSettings;
  * Enum LAYER_T
  * gives the allowed types of layers, same as Specctra DSN spec.
  */
-enum LAYER_T
-{
+enum LAYER_T {
     LT_SIGNAL,
     LT_POWER,
     LT_MIXED,
@@ -34,10 +33,10 @@ enum LAYER_T
 struct LAYER
 {
     /** The name of the layer, there should be no spaces in this name. */
-    wxString    m_Name;
+    wxString m_Name;
 
     /** The type of the layer */
-    LAYER_T     m_Type;
+    LAYER_T m_Type;
 
 //    int         m_Color;
 //    bool        m_Visible;      // ? use flags in m_Color instead ?
@@ -58,7 +57,7 @@ struct LAYER
      * @return LAYER_T - The binary representation of the layer type, or
      *   LAYER_T(-1) if the string is invalid
      */
-    static LAYER_T ParseType( const char* aType );
+    static LAYER_T     ParseType( const char* aType );
 };
 
 
@@ -71,35 +70,34 @@ class BOARD : public BOARD_ITEM
     friend class WinEDA_PcbFrame;
 
 private:
-    typedef std::vector<MARKER*>  MARKERS;      // @todo: switch to boost:ptr_vector, and change ~BOARD()
-    MARKERS         m_markers;                  ///< MARKERs for clearance problems, owned by pointer
+    typedef std::vector<MARKER*> MARKERS;                   // @todo: switch to boost:ptr_vector, and change ~BOARD()
+    MARKERS m_markers;                                      ///< MARKERs for clearance problems, owned by pointer
 
-    typedef std::vector<ZONE_CONTAINER*>  ZONE_CONTAINERS;  // @todo: switch to boost::ptr_vector, and change ~BOARD()
-    ZONE_CONTAINERS m_ZoneDescriptorList; 	   ///< edge zone descriptors, owned by pointer
+    typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;   // @todo: switch to boost::ptr_vector, and change ~BOARD()
+    ZONE_CONTAINERS            m_ZoneDescriptorList;        ///< edge zone descriptors, owned by pointer
 
-    LAYER           m_Layer[NB_COPPER_LAYERS];
+    LAYER                      m_Layer[NB_COPPER_LAYERS];
 
 public:
-    WinEDA_BasePcbFrame*    m_PcbFrame;         // Window de visualisation
-    EDA_Rect                m_BoundaryBox;      // Board size and position
-    int                     m_Status_Pcb;       // Flags used in ratsnet calculation and update
-    EDA_BoardDesignSettings* m_BoardSettings;   // Link to current design settings
-    int             m_NbNodes;                  // Active pads (pads attached to a net ) count
-    int             m_NbNoconnect;              // Active ratsnet count (rastnests not alraedy connected by tracks)
+    WinEDA_BasePcbFrame*       m_PcbFrame;                  // Window de visualisation
+    EDA_Rect                   m_BoundaryBox;               // Board size and position
+    int                        m_Status_Pcb;                // Flags used in ratsnet calculation and update
+    EDA_BoardDesignSettings*   m_BoardSettings;             // Link to current design settings
+    int                        m_NbNodes;                   // Active pads (pads attached to a net ) count
+    int                        m_NbNoconnect;               // Active ratsnet count (rastnests not alraedy connected by tracks)
 
-    DLIST<BOARD_ITEM> m_Drawings;               // linked list of lines & texts
-    DLIST<MODULE>   m_Modules;                  // linked list of MODULEs
-    DLIST<TRACK>    m_Track;                    // linked list of TRACKs and SEGVIAs
-    DLIST<SEGZONE>  m_Zone;                     // linked list of SEGZONEs
+    DLIST<BOARD_ITEM>          m_Drawings;                  // linked list of lines & texts
+    DLIST<MODULE>              m_Modules;                   // linked list of MODULEs
+    DLIST<TRACK>               m_Track;                     // linked list of TRACKs and SEGVIAs
+    DLIST<SEGZONE>             m_Zone;                      // linked list of SEGZONEs
 
-    std::vector<D_PAD*> m_Pads;                 // Entry for a sorted pad list (used in ratsnest calculations)
-    NETINFO_LIST*   m_NetInfo;                  // nets info list (name, design constraints ..
+    NETINFO_LIST*              m_NetInfo;                   // nets info list (name, design constraints ..
 
-    std::vector<RATSNEST_ITEM>  m_FullRatsnest;             // Rastnest list for the BOARD
-    std::vector<RATSNEST_ITEM>  m_LocalRatsnest;            /* Rastnest list relative to a given footprint
-(used while moving a footprint) */
+    std::vector<RATSNEST_ITEM> m_FullRatsnest;              // Rastnest list for the BOARD
+    std::vector<RATSNEST_ITEM> m_LocalRatsnest;             /* Rastnest list relative to a given footprint
+                                                             *  (used while moving a footprint) */
 
-    ZONE_CONTAINER* m_CurrentZoneContour;     	// zone contour currently in progress
+    ZONE_CONTAINER*            m_CurrentZoneContour; // zone contour currently in progress
 
     BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
@@ -119,8 +117,9 @@ public:
      * @param aBoardItem The item to add to this board.
      * @param aControl An int which can vary how the item is added.
      */
-    void    Add( BOARD_ITEM* aBoardItem, int aControl = 0 );
-#define ADD_APPEND      1   ///< aControl flag for Add( aControl ), appends not inserts
+    void     Add( BOARD_ITEM* aBoardItem, int aControl = 0 );
+
+#define ADD_APPEND 1        ///< aControl flag for Add( aControl ), appends not inserts
 
 
     /**
@@ -150,13 +149,13 @@ public:
      * Function DeleteMARKERs
      * deletes ALL MARKERS from the board.
      */
-    void    DeleteMARKERs();
+    void        DeleteMARKERs();
 
     /**
      * Function DeleteZONEOutlines
      * deletes ALL zone outlines from the board.
      */
-    void    DeleteZONEOutlines();
+    void        DeleteZONEOutlines();
 
 
     /**
@@ -172,6 +171,7 @@ public:
         return NULL;
     }
 
+
     /**
      * Function GetMARKERCount
      * @return int - The number of MARKERS.
@@ -181,11 +181,12 @@ public:
         return (int) m_markers.size();
     }
 
+
     /**
      * Function GetCopperLayerCount
      * @return int - The number of copper layers in the BOARD.
      */
-    int GetCopperLayerCount() const;
+    int      GetCopperLayerCount() const;
 
     /**
      * Function GetLayerName
@@ -205,7 +206,7 @@ public:
      * @return bool - true if aLayerName was legal and unique amoung other
      *   layer names at other layer indices and aLayerIndex was within range, else false.
      */
-    bool SetLayerName( int aLayerIndex, const wxString& aLayerName );
+    bool     SetLayerName( int aLayerIndex, const wxString& aLayerName );
 
     /**
      * Function GetLayerType
@@ -215,7 +216,7 @@ public:
      * @return LAYER_T - the layer type, or LAYER_T(-1) if the
      *  index was out of range.
      */
-    LAYER_T GetLayerType( int aLayerIndex ) const;
+    LAYER_T  GetLayerType( int aLayerIndex ) const;
 
     /**
      * Function SetLayerName
@@ -225,13 +226,13 @@ public:
      * @param aLayerType The new layer type.
      * @return bool - true if aLayerType was legal and aLayerIndex was within range, else false.
      */
-    bool SetLayerType( int aLayerIndex, LAYER_T aLayerType );
+    bool     SetLayerType( int aLayerIndex, LAYER_T aLayerType );
 
 
     /* Routines de calcul des nombres de segments pistes et zones */
-    int     GetNumSegmTrack();
-    int     GetNumSegmZone();
-    unsigned     GetNoconnectCount();    // retourne le nombre de connexions manquantes
+    int      GetNumSegmTrack();
+    int      GetNumSegmZone();
+    unsigned GetNoconnectCount();        // retourne le nombre de connexions manquantes
 
     /**
      * Function GetNumRatsnests
@@ -242,31 +243,22 @@ public:
         return m_FullRatsnest.size();
     }
 
+
     /** Function GetNodesCount
      * @return the number of pads members of nets (i.e. with netcode > 0)
-    */
-    unsigned     GetNodesCount();
+     */
+    unsigned GetNodesCount();
 
     /** Function GetPadsCount
      * @return the number of pads in board
-    */
+     */
     unsigned     GetPadsCount()
     {
-        return m_Pads.size();
+        return m_NetInfo->GetPadsCount();
     }
 
-    /** Function Build_Pads_Full_List
-     *  Create the pad list
-     * initialise:
-     *   m_Pads (list of pads)
-     * set m_Status_Pcb = LISTE_PAD_OK;
-     * and clear for all pads in list the m_SubRatsnest member;
-     * clear m_Pcb->m_FullRatsnest
-     */
-    void Build_Pads_Full_List();
-
     // Calcul du rectangle d'encadrement:
-    bool    ComputeBoundaryBox();
+    bool          ComputeBoundaryBox();
 
 
     /**
@@ -276,10 +268,10 @@ public:
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void    DisplayInfo( WinEDA_DrawFrame* frame );
+    void          DisplayInfo( WinEDA_DrawFrame* frame );
 
-    void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void          Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                        int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     /**
      * Function DrawHighLight
@@ -289,7 +281,7 @@ public:
      * @param aDrawPanel is needed for the clipping support.
      * @param aNetCode is the net number to highlight or to dim.
      */
-    void DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode );
+    void          DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode );
 
     /**
      * Function Visit
@@ -305,7 +297,7 @@ public:
      *  else SCAN_CONTINUE, and determined by the inspector.
      */
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-        const KICAD_T scanTypes[] );
+                         const KICAD_T scanTypes[] );
 
 
     /**
@@ -322,7 +314,7 @@ public:
      * @param aNetname A Netname to search for.
      * @return NETINFO_ITEM* - the net or NULL if not found.
      */
-    NETINFO_ITEM* FindNet( const wxString & aNetname ) const;
+    NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
 
     /**
      * Function FindModuleByReference
@@ -333,7 +325,7 @@ public:
      * @return MODULE* - If found, the MODULE having the given reference
      *  designator, else NULL.
      */
-    MODULE* FindModuleByReference( const wxString& aReference ) const;
+    MODULE*       FindModuleByReference( const wxString& aReference ) const;
 
     /**
      * Function ReturnSortedNetnamesList
@@ -341,7 +333,7 @@ public:
      * @param aSortbyPadsCount : true = sort by active pads count, false = no sort (i.e. leave the sort by net names)
      * @return int - net names count.
      */
-    int ReturnSortedNetnamesList( wxArrayString & aNames, bool aSortbyPadsCount);
+    int           ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
     /**
      * Function Save
@@ -349,7 +341,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool Save( FILE* aFile ) const;
+    bool          Save( FILE* aFile ) const;
 
 
     /**
@@ -364,6 +356,7 @@ public:
 
 
 #if defined(DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -383,6 +376,7 @@ public:
     /*************************/
     /* Copper Areas handling */
     /*************************/
+
     /**
      * Function HitTestForAnyFilledArea
      * tests if the given wxPoint is within the bounds of a filled area of this zone.
@@ -393,19 +387,27 @@ public:
      * @param aEndLayer the last layer (-1 to ignore it) to test
      * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
      */
-    ZONE_CONTAINER*  HitTestForAnyFilledArea( const wxPoint& aRefPos, int aStartLayer, int aEndLayer = -1 );
+    ZONE_CONTAINER* HitTestForAnyFilledArea( const wxPoint& aRefPos,
+                                             int            aStartLayer,
+                                             int            aEndLayer = -1 );
 
     /**
      * Function RedrawAreasOutlines
      * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void RedrawAreasOutlines(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer);
+    void            RedrawAreasOutlines( WinEDA_DrawPanel* panel,
+                                         wxDC*             aDC,
+                                         int               aDrawMode,
+                                         int               aLayer );
 
     /**
      * Function RedrawFilledAreas
      * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void RedrawFilledAreas(WinEDA_DrawPanel* panel, wxDC * aDC, int aDrawMode, int aLayer);
+    void RedrawFilledAreas( WinEDA_DrawPanel* panel,
+                            wxDC*             aDC,
+                            int               aDrawMode,
+                            int               aLayer );
 
     /**
      * Function SetAreasNetCodesFromNetNames
@@ -417,7 +419,7 @@ public:
      * @return : error count
      * For non copper areas, netcode is set to 0
      */
-    int SetAreasNetCodesFromNetNames(void);
+    int SetAreasNetCodesFromNetNames( void );
 
     /**
      * Function GetArea
@@ -432,21 +434,24 @@ public:
         return NULL;
     }
 
+
     /**
      * Function GetAreaIndex
      * returns the Area Index  for the given Zone Container.
      * @param  aArea :The ZONE_CONTAINER to find.
      * @return an Area Index in m_ZoneDescriptorList or -1 if non found.
      */
-    int GetAreaIndex( const ZONE_CONTAINER* aArea) const
+    int GetAreaIndex( const ZONE_CONTAINER* aArea ) const
     {
-        for( int ii = 0; ii < GetAreaCount(); ii++ )	// Search for aArea in list
+        for( int ii = 0; ii < GetAreaCount(); ii++ )    // Search for aArea in list
         {
-            if ( aArea == GetArea( ii ) )	// Found !
+            if( aArea == GetArea( ii ) )                // Found !
                 return ii;
         }
+
         return -1;
     }
+
 
     /**
      * Function GetAreaCount
@@ -457,11 +462,13 @@ public:
         return (int) m_ZoneDescriptorList.size();
     }
 
+
     /* Functions used in test, merge and cut outlines */
+
     /**
-      * Function AddArea
-      * add empty copper area to net
-      * @return pointer to the new area
+     * Function AddArea
+     * add empty copper area to net
+     * @return pointer to the new area
      */
     ZONE_CONTAINER* AddArea( int netcode, int layer, int x, int y, int hatch );
 
@@ -470,24 +477,24 @@ public:
      * @param  area = area to remove
      * @return 0
      */
-    int RemoveArea( ZONE_CONTAINER* area_to_remove );
+    int             RemoveArea( ZONE_CONTAINER* area_to_remove );
 
     /**
      * Function InsertArea
-      * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
+     * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
      * @return pointer to the new area
      */
     ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
 
     /**
-     Function CompleteArea
+     *  Function CompleteArea
      * complete copper area contour by adding a line from last to first corner
      * if there is only 1 or 2 corners, remove (delete) the area
      * @param area_to_complete = area to complete or remove
      * @param style = style of last corner
      * @return 1 if Ok, 0 if area removed
-    */
-    int CompleteArea( ZONE_CONTAINER* area_to_complete, int style );
+     */
+    int             CompleteArea( ZONE_CONTAINER* area_to_complete, int style );
 
     /**
      * Function TestAreaPolygon
@@ -500,7 +507,7 @@ public:
      *  1 if intersecting sides, but no intersecting arcs
      * Also sets utility2 flag of area with return value
      */
-    int TestAreaPolygon( ZONE_CONTAINER* CurrArea );
+    int             TestAreaPolygon( ZONE_CONTAINER* CurrArea );
 
     /**
      * Function ClipAreaPolygon
@@ -513,9 +520,11 @@ public:
      *	 0 if no intersecting sides
      *	 1 if intersecting sides
      * Also sets areas->utility1 flags if areas are modified
-    */
-    int ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
-                                bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs = TRUE );
+     */
+    int             ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
+                                     bool            bMessageBoxArc,
+                                     bool            bMessageBoxInt,
+                                     bool            bRetainArcs = TRUE );
 
     /**
      * Process an area that has been modified, by clipping its polygon against
@@ -528,50 +537,50 @@ public:
      *  0 if no intersecting sides
      *  1 if intersecting sides, polygon clipped
      */
-    int AreaPolygonModified( ZONE_CONTAINER* modified_area,
-                                    bool            bMessageBoxArc,
-                                    bool            bMessageBoxInt );
+    int  AreaPolygonModified( ZONE_CONTAINER* modified_area,
+                              bool            bMessageBoxArc,
+                              bool            bMessageBoxInt );
 
     /**
      * Function CombineAllAreasInNet
-      * Checks all copper areas in net for intersections, combining them if found
-      * @param aNetCode = net to consider
-      * @param bMessageBox : if true display warning message box
-      * @param bUseUtility : if true, don't check areas if both utility flags are 0
-      * Sets utility flag = 1 for any areas modified
-      * If an area has self-intersecting arcs, doesn't try to combine it
+     * Checks all copper areas in net for intersections, combining them if found
+     * @param aNetCode = net to consider
+     * @param bMessageBox : if true display warning message box
+     * @param bUseUtility : if true, don't check areas if both utility flags are 0
+     * Sets utility flag = 1 for any areas modified
+     * If an area has self-intersecting arcs, doesn't try to combine it
      */
-    int CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility );
+    int  CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility );
 
     /**
-      * Function TestAreaIntersections
-      * Check for intersection of a given copper area with other areas in same net
-      * @param area_to_test = area to compare to all other areas in the same net
+     * Function TestAreaIntersections
+     * Check for intersection of a given copper area with other areas in same net
+     * @param area_to_test = area to compare to all other areas in the same net
      */
     bool TestAreaIntersections( ZONE_CONTAINER* area_to_test );
 
     /**
-      * Function TestAreaIntersection
-      * Test for intersection of 2 copper areas
-      * area_to_test must be after area_ref in m_ZoneDescriptorList
-      * @param area_ref = area reference
-      * @param area_to_test = area to compare for intersection calculations
-      * @return : 0 if no intersection
-      *         1 if intersection
-      *         2 if arcs intersect
+     * Function TestAreaIntersection
+     * Test for intersection of 2 copper areas
+     * area_to_test must be after area_ref in m_ZoneDescriptorList
+     * @param area_ref = area reference
+     * @param area_to_test = area to compare for intersection calculations
+     * @return : 0 if no intersection
+     *         1 if intersection
+     *         2 if arcs intersect
      */
-    int TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
+    int  TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
 
     /**
-      * Function CombineAreas
-      * If possible, combine 2 copper areas
-      * area_ref must be BEFORE area_to_combine
-      * area_to_combine will be deleted, if areas are combined
-      * @return : 0 if no intersection
-      *         1 if intersection
-      *         2 if arcs intersect
+     * Function CombineAreas
+     * If possible, combine 2 copper areas
+     * area_ref must be BEFORE area_to_combine
+     * area_to_combine will be deleted, if areas are combined
+     * @return : 0 if no intersection
+     *         1 if intersection
+     *         2 if arcs intersect
      */
-    int CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
+    int  CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
 
     /**
      * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
@@ -581,8 +590,9 @@ public:
      * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
      * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
      * @return errors count
-    */
-    int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,bool aCreate_Markers );
+     */
+    int  Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
+                                                    bool            aCreate_Markers );
 
     /****** function relative to ratsnest calculations: */
 
@@ -592,7 +602,6 @@ public:
      * @param aNetcode = netcode to analyse. if -1, analyse all nets
      */
     void Test_Connections_To_Copper_Areas( int aNetcode = -1 );
-
 };
 
-#endif		// #ifndef CLASS_BOARD_H
+#endif      // #ifndef CLASS_BOARD_H

@@ -583,7 +583,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     {
         for( unsigned ii = 0;  ii<m_pcb->GetPadsCount();  ++ii )
         {
-            D_PAD* pad = m_pcb->m_Pads[ii];
+            D_PAD* pad = m_pcb->m_NetInfo->GetPad( ii );
 
             /* No problem if pads are on an other layer,
              * But if a drill hole exists	(a pad on a single layer can have a hole!)

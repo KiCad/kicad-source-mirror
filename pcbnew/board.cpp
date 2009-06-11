@@ -189,9 +189,9 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     // Placement des PADS sur le board //
     /////////////////////////////////////
 
-    for( unsigned i=0;  i<aPcb->GetPadsCount(); ++i )
+    for( unsigned i=0; i < aPcb->GetPadsCount(); ++i )
     {
-        D_PAD* pad = aPcb->m_Pads[i];
+        D_PAD* pad = aPcb->m_NetInfo->GetPad(i);
 
         if( net_code != pad->GetNet() || (flag & FORCE_PADS) )
         {

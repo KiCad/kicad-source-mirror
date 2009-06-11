@@ -543,21 +543,21 @@ private:
                   wxPoint aPos );
 public:
     /**
-     * Function HitTest
+     * Function TextHitTest
      * tests if the given wxPoint is within the bounds of this object.
      * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& ref_pos );
+    bool    TextHitTest( const wxPoint& ref_pos );
 
     /**
-     * Function HitTest (overlayed)
+     * Function TextHitTest (overlayed)
      * tests if the given EDA_Rect intersect this object.
      * For now, the anchor must be inside this rect.
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_Rect& refArea );
+    bool    TextHitTest( EDA_Rect& refArea );
 
     /**
      * Function LenSize

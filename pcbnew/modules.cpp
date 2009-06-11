@@ -189,12 +189,12 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
             module->m_Flags = 0;
         }
 
-        if( module->m_Flags & IS_NEW )  // Copy command: delete new footprint
+        if( (module->m_Flags & IS_NEW) )  // Copy command: delete new footprint
         {
             module->DeleteStructure();
             module = NULL;
             pcbframe->GetBoard()->m_Status_Pcb = 0;
-            pcbframe->GetBoard()->Build_Pads_Full_List();
+            pcbframe->GetBoard()->m_NetInfo->BuildListOfNets();
         }
     }
 
@@ -241,15 +241,11 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
     newmodule = new MODULE( GetBoard() );
     newmodule->Copy( module );
 
-    /* no, Add() below does this
-    newmodule->SetParent( GetBoard() );
-    */
-
     GetBoard()->Add( newmodule, ADD_APPEND );
 
     newmodule->m_Flags = IS_NEW;
 
-    GetBoard()->Build_Pads_Full_List();
+    GetBoard()->m_NetInfo->BuildListOfNets();
 
     newmodule->DisplayInfo( this );
     GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
@@ -327,9 +323,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
     /* Sauvegarde en buffer des undelete */
     SaveItemEfface( module, 1 );
 
-    GetBoard()->m_Status_Pcb = 0;
-    GetBoard()->Build_Pads_Full_List();
-    ReCompile_Ratsnest_After_Changes( DC );
+     Compile_Ratsnest( DC, true );
 
     // redraw the area where the module was
     if( DC )
@@ -529,7 +523,7 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
             Module->Draw( m_PcbFrame->DrawPanel, DC, GR_OR );
 
             /* affichage chevelu general si necessaire */
-            m_PcbFrame->ReCompile_Ratsnest_After_Changes( DC );
+            m_PcbFrame->Compile_Ratsnest( DC, true );
         }
     }
     else
@@ -695,7 +689,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
     }
 
     /* affichage chevelu general si necessaire */
-    ReCompile_Ratsnest_After_Changes( DC );
+    Compile_Ratsnest( DC, true );
 
     module->DisplayInfo( this );
 
@@ -765,7 +759,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
             module->Draw( DrawPanel, DC, GR_OR );
 
             /* Reaffichage chevelu general si necessaire */
-            ReCompile_Ratsnest_After_Changes( DC );
+            Compile_Ratsnest( DC, true );
         }
         else
         {

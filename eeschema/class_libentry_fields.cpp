@@ -254,44 +254,24 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 bool LibDrawField::HitTest( const wxPoint& refPos )
 {
-    EDA_Rect bbox;             // bounding box for the text
-    int      dx;               // X size for the full text
-
-    bbox.SetOrigin( m_Pos );
-
-    dx = m_Size.x * m_Text.Len();
-
     // Reference designator text has one additional character (displays U?)
     if( m_FieldId == REFERENCE )
-        dx += m_Size.x;
+        m_Text.Append('?');
+    // if using TextHitTest() remember this function uses top to bottom y axis convention
+    // and for lib items we are using bottom to top convention
+    // so for non center Y justification we use a trick.
+    GRTextVertJustifyType vJustify = m_VJustify;
+    if ( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+    else if  ( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        m_VJustify = GR_TEXT_VJUSTIFY_TOP;
 
-    // spacing between characters is 0.1 the character size
-    dx = (int) ( (double) dx * 10.0 / 9 );
-    int dy = m_Size.y;
+    bool hit = TextHitTest(refPos);
+    m_VJustify = vJustify;
 
-    if( m_Orient )
-        EXCHG( dx, dy );            // Swap X and Y size for a vertical text
-
-    // adjust position of the left bottom corner according to the justification
-    // pos is at this point correct for a left and top justified text
-    // Horizontal justification
-    if( m_HJustify == GR_TEXT_HJUSTIFY_CENTER )
-        bbox.Offset( -dx / 2, 0 );
-    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
-        bbox.Offset( -dx, 0 );
-
-    // Vertical justification
-    if( m_VJustify == GR_TEXT_VJUSTIFY_CENTER )
-        bbox.Offset( 0, -dy / 2 );
-    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
-        bbox.Offset( 0, -dy );
-
-    bbox.SetSize( dx, dy );
-
-    if( bbox.Inside( refPos ) )
-        return true;
-
-    return false;
+    if( m_FieldId == REFERENCE )
+        m_Text.RemoveLast( );
+    return hit;
 }
 
 

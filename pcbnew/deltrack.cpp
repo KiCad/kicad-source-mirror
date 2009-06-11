@@ -179,7 +179,7 @@ void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         return;
 
     TRACK*  trackList = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, 0 );
-
+    int net_code = pt_segm->GetNet();
     if( nb_segm ) /* Il y a nb_segm segments de piste a effacer */
     {
         int ii = 0;
@@ -195,5 +195,7 @@ void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         }
 
         SaveItemEfface( trackList, nb_segm );
+        if ( net_code > 0 )
+            test_1_net_connexion( DC, net_code );
     }
 }

@@ -620,7 +620,7 @@ bool MoveStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 static void MirrorYPoint( wxPoint& point, wxPoint& Center )
 {
     point.x -= Center.x;
-    point.x  = -point.x;
+    NEGATE(point.x);
     point.x += Center.x;
 }
 
@@ -683,6 +683,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
     case DRAW_BUSENTRY_STRUCT_TYPE:
         DrawRaccord = (DrawBusEntryStruct*) DrawStruct;
         MirrorYPoint( DrawRaccord->m_Pos, Center );
+        NEGATE(DrawRaccord->m_Size.x);
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:

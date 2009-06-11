@@ -32,7 +32,7 @@ public:
 	~Dialog_BodyGraphicText_Properties() {};
 
 private:
-	void OnInitDialog( wxInitDialogEvent& event );
+	void InitDialog( );
 	void OnOkClick( wxCommandEvent& event );
 	void OnCancelClick( wxCommandEvent& event );
 };
@@ -43,12 +43,13 @@ Dialog_BodyGraphicText_Properties::Dialog_BodyGraphicText_Properties(  WinEDA_Li
 {
 	m_Parent = aParent;
 	m_GraphicText = aGraphicText;
+    InitDialog( );
 }
 
 
-/********************************************************************************/
-void Dialog_BodyGraphicText_Properties::OnInitDialog( wxInitDialogEvent& event )
-/********************************************************************************/
+/*****************************************************/
+void Dialog_BodyGraphicText_Properties::InitDialog(  )
+/*****************************************************/
 {
 wxString msg;
 
@@ -69,6 +70,38 @@ wxString msg;
 			shape |= 2;
 
 		m_TextShapeOpt->SetSelection(shape);
+        
+        switch ( m_GraphicText->m_HJustify )
+        {
+            case GR_TEXT_HJUSTIFY_LEFT:
+                m_TextHJustificationOpt->SetSelection(0);
+                break;
+
+            case GR_TEXT_HJUSTIFY_CENTER:
+                m_TextHJustificationOpt->SetSelection(1);
+                break;
+
+            case GR_TEXT_HJUSTIFY_RIGHT:
+                m_TextHJustificationOpt->SetSelection(2);
+                break;
+
+        }
+
+        switch ( m_GraphicText->m_VJustify )
+        {
+            case GR_TEXT_VJUSTIFY_BOTTOM:
+                m_TextVJustificationOpt->SetSelection(0);
+                break;
+
+            case GR_TEXT_VJUSTIFY_CENTER:
+                m_TextVJustificationOpt->SetSelection(1);
+                break;
+
+            case GR_TEXT_VJUSTIFY_TOP:
+                m_TextVJustificationOpt->SetSelection(2);
+                break;
+
+        }
 	}
 	else
 	{
@@ -130,6 +163,37 @@ wxString Line;
 		else
 			m_GraphicText->m_Bold = false;
 
+        switch ( m_TextHJustificationOpt->GetSelection() )
+        {
+            case 0:
+                m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+                break;
+
+            case 1:
+                m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                break;
+
+            case 2:
+                m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+                break;
+
+        }
+
+        switch ( m_TextVJustificationOpt->GetSelection()  )
+        {
+            case 0:
+                m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                break;
+
+            case 1:
+                m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+                break;
+
+            case 2:
+                m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_TOP;
+                break;
+
+        }
 	}
 	Close();
 

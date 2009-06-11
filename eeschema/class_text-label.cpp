@@ -95,7 +95,7 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
  */
 bool SCH_TEXT::HitTest( const wxPoint& aPosRef )
 {
-    return EDA_TextStruct::HitTest( aPosRef );
+    return TextHitTest( aPosRef );
 }
 
 

@@ -54,7 +54,6 @@ float          MinCout;
 
 /* Fonctions locales */
 static int      TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
-static void     Build_PlacedPads_List( BOARD* Pcb );
 static int      Tri_PlaceModules( MODULE** pt_ref, MODULE** pt_compare );
 
 static void     TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
@@ -309,10 +308,8 @@ end_of_tst:
         Module->Set_Rectangle_Encadrement();
     }
 
-    /* Recalcul de la liste des pads, detruite par les calculs precedents */
     GetBoard()->m_Status_Pcb = 0;
-    GetBoard()->Build_Pads_Full_List();
-
+    Compile_Ratsnest( DC, true );
     DrawPanel->ReDraw( DC, TRUE );
 
     DrawPanel->m_AbortEnable = FALSE;
@@ -584,8 +581,6 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     bool    TstOtherSide;
 
     Module->DisplayInfo( this );
-
-    Build_PlacedPads_List( GetBoard() );
 
     LastPosOK.x = GetBoard()->m_BoundaryBox.m_Pos.x;
     LastPosOK.y = GetBoard()->m_BoundaryBox.m_Pos.y;
@@ -912,51 +907,6 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
 }
 
 
-/********************************************/
-void Build_PlacedPads_List( BOARD* aPcb )
-/********************************************/
-
-/*
- *  construction de la liste ( sous forme d'une liste de stucture )
- *  des caract utiles des pads du PCB pour Placement Automatique )
- *  Cette liste est restreinte a la liste des pads des modules deja places sur
- *  la carte.
- *
- *  parametres:
- *      adresse du buffer de classement = Pcb->ptr_pads;
- *
- *  Variables globales mise a jour:
- *  pointeur ptr_pads (adr de classement de la liste des pads)
- *  nb_pads = nombre utile de pastilles classes
- *  m_Status_Pcb |= LISTE_PAD_OK
- */
-{
-    aPcb->m_Pads.clear();
-
-    aPcb->m_NbNodes = 0;
-
-    // Initialisation du buffer et des variables de travail
-    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
-    {
-        if( module->m_ModuleStatus & MODULE_to_PLACE )
-            continue;
-
-        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
-        {
-            aPcb->m_Pads.push_back( pad );
-            pad->SetSubNet( 0 );
-            pad->SetSubRatsnest( 0 );
-            pad->SetParent( module );
-            if( pad->GetNet() )
-                aPcb->m_NbNodes++;
-        }
-    }
-
-    aPcb->m_Status_Pcb |= LISTE_PAD_OK;
-    aPcb->m_Status_Pcb &= ~(LISTE_RATSNEST_ITEM_OK | RATSNEST_ITEM_LOCAL_OK);
-}
-
-
 /*****************************************************************/
 /* Construction de la zone de penalite ( rectangle ) d'un module */
 /*****************************************************************/
@@ -1098,8 +1048,6 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     BaseListeModules = GenListeModules( pcbframe->GetBoard(), &NbModules );
     if( BaseListeModules == NULL )
         return NULL;
-
-    Build_PlacedPads_List( pcbframe->GetBoard() );
 
     /* Tri par surface decroissante des modules
      *  (on place les plus gros en 1er), surface ponderee par le nombre de pads */

@@ -125,7 +125,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 void WinEDA_ModuleEditFrame::LoadModuleFromBoard( wxCommandEvent& event )
 {
     GetScreen()->ClearUndoRedoList();
-    Load_Module_Module_From_BOARD( NULL );
+    Load_Module_From_BOARD( NULL );
     GetScreen()->ClrModify();
 
     if( m_Draw3DFrame )

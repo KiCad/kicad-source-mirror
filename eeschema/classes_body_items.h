@@ -281,6 +281,15 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+    
+
     LibDrawArc*  GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
@@ -322,6 +331,14 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+
     LibDrawCircle* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
@@ -359,6 +376,26 @@ public:
      */
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool    HitTest( const wxPoint& refPos );
+
+    /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+     * For now, an ending point must be inside this rect.
+     * @param refArea : the given EDA_Rect
+     * @return bool - true if a hit, else false
+     */
+    virtual bool    HitTest( EDA_Rect& refArea )
+    {
+        return TextHitTest( refArea );
+    }
 
     LibDrawText* GenCopy();
 

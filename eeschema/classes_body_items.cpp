@@ -30,7 +30,7 @@ const wxChar* MsgPinElectricType[] =
     wxT( "?????" )
 };
 
-static int fill_tab[3] = { 'N', 'F', 'f' };
+static int    fill_tab[3] = { 'N', 'F', 'f' };
 
 //#define DRAW_ARC_WITH_ANGLE		// Used to draw arcs
 
@@ -39,11 +39,11 @@ static int fill_tab[3] = { 'N', 'F', 'f' };
 LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
     EDA_BaseStruct( struct_type )
 {
-    m_Unit     = 0;  /* Unit identification (for multi part per package)
+    m_Unit    = 0;   /* Unit identification (for multi part per package)
                       *  0 if the item is common to all units */
-    m_Convert  = 0;  /* Shape identification (for parts which have a convert
+    m_Convert = 0;   /* Shape identification (for parts which have a convert
                       * shape) 0 if the item is common to all shapes */
-    m_Fill     = NO_FILL;
+    m_Fill    = NO_FILL;
 
     m_typeName = _( "Undefined" );
 }
@@ -83,12 +83,17 @@ void LibEDA_BaseStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+
+/**********************/
+/** class LibDrawArc **/
+/**********************/
+
 LibDrawArc::LibDrawArc() : LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE )
 {
     m_Rayon = 0;
     t1 = t2 = 0;
-    m_Width = 0;
-    m_Fill  = NO_FILL;
+    m_Width    = 0;
+    m_Fill     = NO_FILL;
     m_typeName = _( "Arc" );
 }
 
@@ -121,7 +126,7 @@ bool LibDrawArc::Save( FILE* ExportFile ) const
 
 bool LibDrawArc::Load( char* line, wxString& errorMsg )
 {
-    int startx, starty, endx, endy, cnt;
+    int  startx, starty, endx, endy, cnt;
     char tmp[256];
 
     cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %d %s %d %d %d %d",
@@ -148,7 +153,7 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
         m_ArcStart.x = startx;
         m_ArcStart.y = starty;
         m_ArcEnd.x   = endx;
-        m_ArcEnd.y = endy;
+        m_ArcEnd.y   = endy;
     }
     else
     {
@@ -157,7 +162,7 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
         m_ArcStart.x = m_Rayon;
         m_ArcStart.y = 0;
         m_ArcEnd.x   = m_Rayon;
-        m_ArcEnd.y = 0;
+        m_ArcEnd.y   = 0;
         RotatePoint( &m_ArcStart.x, &m_ArcStart.y, -t1 );
         m_ArcStart.x += m_Pos.x;
         m_ArcStart.y += m_Pos.y;
@@ -169,6 +174,39 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
     return true;
 }
 
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param aRefPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool LibDrawArc::HitTest( const wxPoint& aRefPos )
+{
+    wxPoint relpos = aRefPos - m_Pos;
+    int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
+    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    // Have a minimal tolerance for hit test
+    if ( mindist < 3 )
+        mindist = 3;        // = 3 mils
+    if( abs( dist - m_Rayon ) > mindist )
+        return false;
+    
+    // We are on the circle, ensure we are on the arc, between m_ArcStart and m_ArcEnd
+    int astart = t1;    // arc starting point ( in 0.1 degree)
+    int aend = t2;      // arc ending point ( in 0.1 degree)
+    int atest = wxRound( atan2(relpos.y, relpos.x) * 1800.0 / M_PI );
+    NORMALIZE_ANGLE_180(atest);
+    NORMALIZE_ANGLE_180(astart);
+    NORMALIZE_ANGLE_180(aend);
+
+    if ( astart > aend )
+        EXCHG(astart, aend);
+
+    if( atest >= astart && atest <= aend )
+        return true;
+    
+    return false;
+}
 
 LibDrawArc* LibDrawArc::GenCopy()
 {
@@ -259,27 +297,28 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
 EDA_Rect LibDrawArc::GetBoundingBox()
 {
-    int minX, minY, maxX, maxY, angleStart, angleEnd;
+    int      minX, minY, maxX, maxY, angleStart, angleEnd;
     EDA_Rect rect;
-    wxPoint nullPoint, startPos, endPos, centerPos;
-    wxPoint normStart = m_ArcStart - m_Pos;
-    wxPoint normEnd = m_ArcEnd - m_Pos;
+    wxPoint  nullPoint, startPos, endPos, centerPos;
+    wxPoint  normStart = m_ArcStart - m_Pos;
+    wxPoint  normEnd   = m_ArcEnd - m_Pos;
 
     if( ( normStart == nullPoint ) || ( normEnd == nullPoint )
-        || ( m_Rayon == 0 ) )
+       || ( m_Rayon == 0 ) )
     {
-        wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d) \
-start(%d, %d), end(%d, %d), radius %d" ),
+        wxLogDebug( wxT(
+                        "Invalid arc drawing definition, center(%d, %d) \
+start(%d, %d), end(%d, %d), radius %d"                                                                            ),
                     m_Pos.x, m_Pos.y, m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
                     m_ArcEnd.y, m_Rayon );
         return rect;
     }
 
-    endPos = TransformCoordinate( DefaultTransformMatrix, m_ArcEnd );
-    startPos = TransformCoordinate( DefaultTransformMatrix, m_ArcStart );
-    centerPos = TransformCoordinate( DefaultTransformMatrix, m_Pos );
+    endPos     = TransformCoordinate( DefaultTransformMatrix, m_ArcEnd );
+    startPos   = TransformCoordinate( DefaultTransformMatrix, m_ArcStart );
+    centerPos  = TransformCoordinate( DefaultTransformMatrix, m_Pos );
     angleStart = t1;
-    angleEnd = t2;
+    angleEnd   = t2;
 
     if( MapAngles( &angleStart, &angleEnd, DefaultTransformMatrix ) )
     {
@@ -301,13 +340,13 @@ start(%d, %d), end(%d, %d), radius %d" ),
     if( angleStart > angleEnd )
         angleEnd += 3600;
 
-    if( angleStart <= 900 && angleEnd >= 900 )        /* 90 deg */
+    if( angleStart <= 900 && angleEnd >= 900 )          /* 90 deg */
         maxY = centerPos.y + m_Rayon;
-    if( angleStart <= 1800 && angleEnd >= 1800 )      /* 180 deg */
+    if( angleStart <= 1800 && angleEnd >= 1800 )        /* 180 deg */
         minX = centerPos.x - m_Rayon;
-    if( angleStart <= 2700 && angleEnd >= 2700 )      /* 270 deg */
+    if( angleStart <= 2700 && angleEnd >= 2700 )        /* 270 deg */
         minY = centerPos.y - m_Rayon;
-    if( angleStart <= 3600 && angleEnd >= 3600 )      /* 0 deg   */
+    if( angleStart <= 3600 && angleEnd >= 3600 )        /* 0 deg   */
         maxX = centerPos.x + m_Rayon;
 
     rect.SetOrigin( minX, minY );
@@ -339,8 +378,8 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
 
 LibDrawCircle::LibDrawCircle() : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE )
 {
-    m_Rayon = 0;
-    m_Fill  = NO_FILL;
+    m_Rayon    = 0;
+    m_Fill     = NO_FILL;
     m_typeName = _( "Circle" );
 }
 
@@ -358,8 +397,9 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
 {
     char tmp[256];
 
-    int cnt =  sscanf( &line[2], "%d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
+    int  cnt = sscanf( &line[2], "%d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
                        &m_Rayon, &m_Unit, &m_Convert, &m_Width, tmp );
+
     if( cnt < 6 )
     {
         errorMsg.Printf( _( "circle only had %d parameters of the required 6" ),
@@ -375,6 +415,25 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
     return true;
 }
 
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param aRefPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool LibDrawCircle::HitTest( const wxPoint& aRefPos )
+{
+    wxPoint relpos = aRefPos - m_Pos;
+    int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
+    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    // Have a minimal tolerance for hit test
+    if ( mindist < 3 )
+        mindist = 3;        // = 3 mils
+    if( abs( dist - m_Rayon ) > mindist )
+        return false;
+
+    return false;
+}
 
 LibDrawCircle* LibDrawCircle::GenCopy()
 {
@@ -417,8 +476,8 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                        m_Rayon, linewidth, color,
-                        ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                       m_Rayon, linewidth, color,
+                       ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
                         m_Rayon, 0, color, color );
@@ -431,9 +490,11 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 EDA_Rect LibDrawCircle::GetBoundingBox()
 {
     EDA_Rect rect;
+
     rect.SetOrigin( m_Pos.x - m_Rayon, ( m_Pos.y - m_Rayon ) * -1 );
     rect.SetEnd( m_Pos.x + m_Rayon, ( m_Pos.y + m_Rayon ) * -1 );
     rect.Inflate( m_Width / 2, m_Width / 2 );
+
     return rect;
 }
 
@@ -461,10 +522,14 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+/***********************/
+/** class LibDrawText **/
+/***********************/
+
 LibDrawText::LibDrawText() :
     LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ), EDA_TextStruct()
 {
-    m_Size = wxSize( 50, 50 );
+    m_Size     = wxSize( 50, 50 );
     m_typeName = _( "Text" );
 }
 
@@ -472,15 +537,31 @@ LibDrawText::LibDrawText() :
 bool LibDrawText::Save( FILE* ExportFile ) const
 {
     wxString text = m_Text;
-	// Spaces are not allowed in text because it is not double quoted:
+
+    // Spaces are not allowed in text because it is not double quoted:
     // changed to '~'
     text.Replace( wxT( " " ), wxT( "~" ) );
 
     fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient,
-             m_Pos.x, m_Pos.y, m_Size.x, m_Attributs, m_Unit, m_Convert,
-             CONV_TO_UTF8( text ));
-	fprintf( ExportFile, " %s %d",	m_Italic ? "Italic" : "Normal", (m_Bold>0)?1:0 );
-	fprintf( ExportFile, "\n");
+            m_Pos.x, m_Pos.y, m_Size.x, m_Attributs, m_Unit, m_Convert,
+            CONV_TO_UTF8( text ) );
+    fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal", (m_Bold>0) ? 1 : 0 );
+
+    char hjustify = 'C';
+    if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+        hjustify = 'L';
+    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+        hjustify = 'R';
+
+    char vjustify = 'C';
+    if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        vjustify = 'B';
+    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        vjustify = 'T';
+
+    fprintf( ExportFile, "%c %c", hjustify, vjustify );
+
+    fprintf( ExportFile, "\n" );
 
     return true;
 }
@@ -488,16 +569,17 @@ bool LibDrawText::Save( FILE* ExportFile ) const
 
 bool LibDrawText::Load( char* line, wxString& errorMsg )
 {
-    int cnt, thickness;
+    int  cnt, thickness;
+    char hjustify = 'C', vjustify = 'C';
     char buf[256];
     char tmp[256];
 
     buf[0] = 0;
-    tmp[0] = 0;			// For italic option, Not in old versions
+    tmp[0] = 0;         // For italic option, Not in old versions
 
-    cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s %s %d",
+    cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s %s %d %c %c",
                   &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
-                  &m_Unit, &m_Convert, buf, tmp, &thickness );
+                  &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify, &vjustify );
 
     if( cnt < 8 )
     {
@@ -508,10 +590,41 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
 
     m_Size.y = m_Size.x;
 
-    if ( strnicmp( tmp, "Italic", 6 ) == 0 )
+    if( strnicmp( tmp, "Italic", 6 ) == 0 )
         m_Italic = true;
-    if (thickness > 0) {
-	m_Bold = true;
+    if( thickness > 0 )
+    {
+        m_Bold = true;
+    }
+
+    switch( hjustify )
+    {
+    case 'L':
+        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+        break;
+
+    case 'C':
+        m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+        break;
+
+    case 'R':
+        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+        break;
+    }
+
+    switch( vjustify )
+    {
+    case 'T':
+        m_VJustify = GR_TEXT_VJUSTIFY_TOP;
+        break;
+
+    case 'C':
+        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+        break;
+
+    case 'B':
+        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+        break;
     }
 
     /* Convert '~' to spaces. */
@@ -521,12 +634,35 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
     return true;
 }
 
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param refPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool LibDrawText::HitTest( const wxPoint& refPos )
+{
+    // if using TextHitTest() remember this function uses top to bottom y axis convention
+    // and for lib items we are using bottom to top convention
+    // so for non center Y justification we use a trick.
+    GRTextVertJustifyType vJustify = m_VJustify;
+    if ( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+    else if  ( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        m_VJustify = GR_TEXT_VJUSTIFY_TOP;
+
+    bool hit = TextHitTest(refPos);
+    m_VJustify = vJustify;
+    
+    return hit;
+}
+
 
 LibDrawText* LibDrawText::GenCopy()
 {
     LibDrawText* newitem = new LibDrawText();
 
-    newitem->m_Pos       = m_Pos;
+    newitem->m_Pos = m_Pos;
     newitem->m_Orient    = m_Orient;
     newitem->m_Size      = m_Size;
     newitem->m_Attributs = m_Attributs;
@@ -550,7 +686,16 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int     linewidth = m_Width;
+
+    if( linewidth == 0 )   // Use default values for pen size
+    {
+        if( m_Bold  )
+            linewidth = GetPenSizeForBold( m_Size.x );
+        else
+            linewidth = g_DrawDefaultLineThickness;
+    }
+
     // Clip pen size for small texts:
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -570,7 +715,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
                      t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                     m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                     m_Size, m_HJustify, m_VJustify,
                      linewidth, m_Italic, m_Bold );
 }
 
@@ -588,10 +733,14 @@ void LibDrawText::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+/*************************/
+/** class LibDrawSquare **/
+/*************************/
+
 LibDrawSquare::LibDrawSquare() : LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE )
 {
-    m_Width = 0;
-    m_Fill  = NO_FILL;
+    m_Width    = 0;
+    m_Fill     = NO_FILL;
     m_typeName = _( "Rectangle" );
 }
 
@@ -607,7 +756,7 @@ bool LibDrawSquare::Save( FILE* ExportFile ) const
 
 bool LibDrawSquare::Load( char* line, wxString& errorMsg )
 {
-    int cnt;
+    int  cnt;
     char tmp[256];
 
     cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
@@ -670,8 +819,8 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                      linewidth, color,
-                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                     linewidth, color,
+                     ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                       linewidth, color, color );
@@ -697,6 +846,7 @@ void LibDrawSquare::DisplayInfo( WinEDA_DrawFrame* frame )
 EDA_Rect LibDrawSquare::GetBoundingBox()
 {
     EDA_Rect rect;
+
     rect.SetOrigin( m_Pos.x, m_Pos.y * -1 );
     rect.SetEnd( m_End.x, m_End.y * -1 );
     rect.Inflate( m_Width / 2, m_Width / 2 );
@@ -706,7 +856,7 @@ EDA_Rect LibDrawSquare::GetBoundingBox()
 
 LibDrawSegment::LibDrawSegment() : LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE )
 {
-    m_Width = 0;
+    m_Width    = 0;
     m_typeName = _( "Segment" );
 }
 
@@ -786,8 +936,8 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
 LibDrawPolyline::LibDrawPolyline() :
     LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
 {
-    m_Fill  = NO_FILL;
-    m_Width = 0;
+    m_Fill     = NO_FILL;
+    m_Width    = 0;
     m_typeName = _( "PolyLine" );
 }
 
@@ -811,8 +961,8 @@ bool LibDrawPolyline::Save( FILE* ExportFile ) const
 
 bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
 {
-    char* p;
-    int i, ccount = 0;
+    char*   p;
+    int     i, ccount = 0;
     wxPoint pt;
 
     i = sscanf( &line[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert,
@@ -823,7 +973,7 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
         errorMsg.Printf( _( "polyline only had %d parameters of the required 4" ), i );
         return false;
     }
-    if ( ccount <= 0 )
+    if( ccount <= 0 )
     {
         errorMsg.Printf( _( "polyline count parameter %d is invalid" ),
                          ccount );
@@ -852,7 +1002,7 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
                              i );
             return false;
         }
-        AddPoint(pt);
+        AddPoint( pt );
     }
 
     m_Fill = NO_FILL;
@@ -937,8 +1087,8 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 1, linewidth, color,
-                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+               Buf_Poly_Drawings, 1, linewidth, color,
+               ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
                 Buf_Poly_Drawings, 1, linewidth, color, color );
@@ -961,7 +1111,7 @@ bool LibDrawPolyline::HitTest( wxPoint aPosRef, int aThreshold,
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        start = TransformCoordinate( aTransMat, m_PolyPoints[ii-1] );
+        start = TransformCoordinate( aTransMat, m_PolyPoints[ii - 1] );
         end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
         ref   = aPosRef - start;
         end  -= start;

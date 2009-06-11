@@ -179,7 +179,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
     }
 
     GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
-    ReCompile_Ratsnest_After_Changes( &dc );
+    Compile_Ratsnest( &dc, true );
     SetToolbars();
 }
 

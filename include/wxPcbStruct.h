@@ -279,7 +279,6 @@ public:
 
     //  ratsnest functions
     void                     Compile_Ratsnest( wxDC* DC, bool affiche );    /* Recalcul complet du chevelu */
-    void                     ReCompile_Ratsnest_After_Changes( wxDC* DC );
     int                      Test_1_Net_Ratsnest( wxDC* DC, int net_code );
     void                     build_ratsnest_module( wxDC* DC, MODULE* Module );
     void                     trace_ratsnest_module( wxDC* DC );
@@ -1011,7 +1010,7 @@ public:
     // loading Footprint
     MODULE*      Import_Module( wxDC* DC );
     void         Export_Module( MODULE* ptmod, bool createlib );
-    void         Load_Module_Module_From_BOARD( MODULE* Module );
+    void         Load_Module_From_BOARD( MODULE* Module );
 
     // functions to edit footprint edges
     void         Edit_Edge_Width( EDGE_MODULE* Edge );

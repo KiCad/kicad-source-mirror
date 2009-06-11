@@ -278,7 +278,7 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
     // Clear the cluster identifier for all pads
     for( unsigned i = 0;  i< m_Pcb->GetPadsCount();  ++i )
     {
-        D_PAD* pad = m_Pcb->m_Pads[i];
+        D_PAD* pad = m_Pcb->m_NetInfo->GetPad(i);
 
         pad->SetZoneSubNet( 0 );
         pad->SetSubNet( 0 );
@@ -326,7 +326,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 
     for( unsigned i = 0;  i<m_Pcb->GetPadsCount();  ++i )
     {
-        D_PAD* pad = m_Pcb->m_Pads[i];
+        D_PAD* pad = m_Pcb->m_NetInfo->GetPad(i);
 
         int    pad_net_code = pad->GetNet();
 
@@ -555,7 +555,7 @@ static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
 /*****************************************************************************/
 {
-    aVector->insert( aVector->end(), aBoard->m_Pads.begin(), aBoard->m_Pads.end() );
+    aVector->insert( aVector->end(), aBoard->m_NetInfo->m_PadsFullList.begin(), aBoard->m_NetInfo->m_PadsFullList.end() );
 
     qsort( &(*aVector)[0], aBoard->GetPadsCount(), sizeof( D_PAD*), SortPadsByXCoord );
 }

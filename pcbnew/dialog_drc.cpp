@@ -631,11 +631,6 @@ void DrcDialog::OnStartdrcClick( wxCommandEvent& event )
 
     wxBeginBusyCursor();
 
-    // running the module editor and selecting "Update module in current board"
-    // causes the list to become obsolete because of the new pads from the
-    // revised module.
-    m_Parent->GetBoard()->Build_Pads_Full_List();
-
     // run all the tests, with no UI at this time.
     m_tester->RunTests();
 

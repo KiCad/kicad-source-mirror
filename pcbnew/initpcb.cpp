@@ -279,7 +279,6 @@ void WinEDA_PcbFrame::Erase_Modules( bool query )
     GetBoard()->m_Modules.DeleteAll();
 
     GetBoard()->m_Status_Pcb = 0;
-    m_Pcb->m_Pads.clear();          // empty the pad list pointers
     m_Pcb->m_NetInfo->DeleteData();
     m_Pcb->m_FullRatsnest.clear();          // empty the pad list pointers
     m_Pcb->m_LocalRatsnest.clear();          // empty the pad list pointers

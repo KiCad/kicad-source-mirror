@@ -585,7 +585,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
 {
     for( unsigned i=0; i<Pcb->GetPadsCount();  ++i )
     {
-        D_PAD* pad = Pcb->m_Pads[i];
+        D_PAD* pad = Pcb->m_NetInfo->GetPad(i);
 
         if( pad->m_Pos != ref_pos )
             continue;

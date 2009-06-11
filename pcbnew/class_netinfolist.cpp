@@ -44,6 +44,7 @@ void NETINFO_LIST::DeleteData()
         delete m_NetBuffer[ii];
 
     m_NetBuffer.clear();
+    m_PadsFullList.clear();
 }
 
 
@@ -90,14 +91,14 @@ void NETINFO_LIST::BuildListOfNets()
     AppendNet( net_item );
 
     /* Build the PAD list, sorted by net */
-    m_Parent->Build_Pads_Full_List();
+    Build_Pads_Full_List();
 
     /* Build netnames list, and create a netcode for each netname */
     D_PAD* last_pad = NULL;
     int    netcode = 0;
-    for( unsigned ii = 0; ii < m_Parent->m_Pads.size(); ii++ )
+    for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
     {
-        pad = m_Parent->m_Pads[ii];
+        pad = m_PadsFullList[ii];
         if( pad->GetNetname().IsEmpty() ) // pad not connected
         {
             pad->SetNet( 0 );
@@ -130,9 +131,9 @@ void NETINFO_LIST::BuildListOfNets()
 }
 
 
-/**********************************/
-void BOARD::Build_Pads_Full_List()
-/**********************************/
+/*****************************************/
+void NETINFO_LIST::Build_Pads_Full_List()
+/*****************************************/
 
 /** Function Build_Pads_Full_List
  *  Create the pad list, sorted by net names
@@ -143,19 +144,19 @@ void BOARD::Build_Pads_Full_List()
  *   (m_Pcb->m_FullRatsnest uses pointer to pads)
  */
 {
-    if( m_Status_Pcb & LISTE_PAD_OK )
+    if( m_Parent->m_Status_Pcb & LISTE_PAD_OK )
         return;
 
     // empty the old list
-    m_Pads.clear();
-    m_FullRatsnest.clear();
+    m_PadsFullList.clear();
+    m_Parent->m_FullRatsnest.clear();
 
     /* Clear variables used in rastnest computation */
-    for( MODULE* module = m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = m_Parent->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
         {
-            m_Pads.push_back( pad );
+            m_PadsFullList.push_back( pad );
 
             pad->SetSubRatsnest( 0 );
             pad->SetParent( module );
@@ -163,7 +164,7 @@ void BOARD::Build_Pads_Full_List()
     }
 
     // Sort pad list per net
-    sort( m_Pads.begin(), m_Pads.end(), PadlistSortByNetnames );
+    sort( m_PadsFullList.begin(), m_PadsFullList.end(), PadlistSortByNetnames );
 
-    m_Status_Pcb = LISTE_PAD_OK;
+    m_Parent->m_Status_Pcb = LISTE_PAD_OK;
 }

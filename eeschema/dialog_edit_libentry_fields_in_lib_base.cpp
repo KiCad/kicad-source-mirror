@@ -66,7 +66,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	
 	wxString m_FieldVJustifyCtrlChoices[] = { _("Align bottom"), _("Align center"), _("Align top") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
-	m_FieldVJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Vert Justify"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_FieldVJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Vert. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FieldVJustifyCtrl->SetSelection( 1 );
 	m_FieldVJustifyCtrl->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
 	

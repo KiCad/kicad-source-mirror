@@ -69,6 +69,11 @@ static inline const wxChar* GetChars( wxString s )
                                       while( Angle > 900 ) \
                                           Angle -= 1800; }
 
+/* Normalize angle to be in the -180.0 .. 180.0 range */
+#define NORMALIZE_ANGLE_180( Angle ) { while( Angle <= -1800 ) \
+                                          Angle += 3600;\
+                                      while( Angle > 1800 ) \
+                                          Angle -= 3600; }
 
 /*****************************/
 /* macro to exchange 2 items */

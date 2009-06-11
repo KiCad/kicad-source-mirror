@@ -45,8 +45,7 @@ void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC * DC )
                                                             wxSize( 600, 400 ) );
         }
 
-        m_ModuleEditFrame->Load_Module_Module_From_BOARD(
-            (MODULE*) GetScreen()->GetCurItem() );
+        m_ModuleEditFrame->Load_Module_From_BOARD( (MODULE*) GetScreen()->GetCurItem() );
         SetCurItem( NULL );
 
         GoToEditor = FALSE;
