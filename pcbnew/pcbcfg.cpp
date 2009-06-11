@@ -164,12 +164,7 @@ bool Read_Config( const wxString& projectFileName )
     int      ii;
 
     if( fn.GetExt() != ProjectFileExtension )
-    {
-        wxLogDebug( wxT( "Attempting to open project file <%s>.  Changing \
-file extension to a Kicad project file extension (.pro)." ),
-                    fn.GetFullPath().c_str() );
         fn.SetExt( ProjectFileExtension );
-    }
 
     wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 

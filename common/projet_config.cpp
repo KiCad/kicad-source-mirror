@@ -46,12 +46,12 @@ bool WinEDA_App::ReCreatePrjConfig( const wxString& fileName,
         m_ProjectConfig = NULL;
     }
 
-    /* Check just in case the file name does not a kicad project extension. */
+    /* Check the file name does not a kicad project extension.
+     * This allows the user to enter a filename without extension
+     * or use an existing name to create te project file
+    */
     if( fn.GetExt() != ProjectFileExtension )
     {
-        wxLogDebug( wxT( "ReCreatePrjConfig() called with project file <%s> \
-which does not have the correct file extension." ),
-                    fn.GetFullPath().c_str() );
         fn.SetExt( ProjectFileExtension );
     }
 

@@ -576,11 +576,6 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     screen->m_ScrollbarPos    = scrollbar_pos;
     screen->m_ScrollbarNumber = scrollbar_number;
 
-    wxLogDebug( wxT( "SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
-                screen->m_ZoomScalar, screen->m_ZoomScalar,
-                screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
-                screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
-
     DrawPanel->SetScrollbars( screen->m_ZoomScalar,
                               screen->m_ZoomScalar,
                               screen->m_ScrollbarNumber.x,

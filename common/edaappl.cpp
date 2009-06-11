@@ -527,8 +527,6 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     {
         if( !wxFileName::IsDirReadable( m_searchPaths[i] ) )
         {
-            wxLogDebug( wxT( "Removing <" ) + m_searchPaths[i] +
-                       wxT( "> from search path list." ) );
             m_searchPaths.RemoveAt( i );
             i -= 1;
         }
@@ -545,17 +543,13 @@ void WinEDA_App::SetDefaultSearchPaths( void )
                 fn.AppendDir( wxT( "library" ) );
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                               fn.GetPath().c_str() );
-                    m_libSearchPaths.Add( fn.GetPath() );
+                     m_libSearchPaths.Add( fn.GetPath() );
                 }
 
                 /* Add schematic doc file path (library/doc)to search path list. */
                 fn.AppendDir( wxT( "doc" ) );
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                               fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
                 fn.RemoveLastDir();
@@ -569,9 +563,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to library search path list" ),
-                               fn.GetPath().c_str() );
-                    m_libSearchPaths.Add( fn.GetPath() );
+                     m_libSearchPaths.Add( fn.GetPath() );
                 }
 
                 /* Add 3D module library file path to search path list. */
@@ -579,8 +571,6 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 
                 if( fn.IsDirReadable() )
                 {
-                    wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                               fn.GetPath().c_str() );
                     m_libSearchPaths.Add( fn.GetPath() );
                 }
                 fn.RemoveLastDir();
@@ -591,9 +581,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 
             if( fn.IsDirReadable() )
             {
-                wxLogDebug( wxT( "Adding <%s> to search path list" ),
-                           fn.GetPath().c_str() );
-                m_libSearchPaths.Add( fn.GetPath() );
+                 m_libSearchPaths.Add( fn.GetPath() );
             }
             fn.RemoveLastDir();
         }
@@ -839,8 +827,6 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
 
         if( fn.DirExists() )
         {
-            wxLogDebug( _T( "Adding <" ) + fn.GetPath() + _T( "> to " ) +
-                       _T( "file \"" ) + filename + _T( "\" search path." ) );
             paths.Add( fn.GetPath() );
         }
     }
