@@ -190,7 +190,7 @@ bool LibDrawArc::HitTest( const wxPoint& aRefPos )
         mindist = 3;        // = 3 mils
     if( abs( dist - m_Rayon ) > mindist )
         return false;
-    
+
     // We are on the circle, ensure we are on the arc, between m_ArcStart and m_ArcEnd
     int astart = t1;    // arc starting point ( in 0.1 degree)
     int aend = t2;      // arc ending point ( in 0.1 degree)
@@ -204,7 +204,7 @@ bool LibDrawArc::HitTest( const wxPoint& aRefPos )
 
     if( atest >= astart && atest <= aend )
         return true;
-    
+
     return false;
 }
 
@@ -375,6 +375,10 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
 }
 
+
+/*************************/
+/** class LibDrawCircle **/
+/*************************/
 
 LibDrawCircle::LibDrawCircle() : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE )
 {
@@ -559,7 +563,7 @@ bool LibDrawText::Save( FILE* ExportFile ) const
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
-    fprintf( ExportFile, "%c %c", hjustify, vjustify );
+    fprintf( ExportFile, " %c %c", hjustify, vjustify );
 
     fprintf( ExportFile, "\n" );
 
@@ -653,7 +657,7 @@ bool LibDrawText::HitTest( const wxPoint& refPos )
 
     bool hit = TextHitTest(refPos);
     m_VJustify = vJustify;
-    
+
     return hit;
 }
 
@@ -854,6 +858,9 @@ EDA_Rect LibDrawSquare::GetBoundingBox()
 }
 
 
+/**************************/
+/** class LibDrawSegment **/
+/**************************/
 LibDrawSegment::LibDrawSegment() : LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE )
 {
     m_Width    = 0;
@@ -933,6 +940,9 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+/***************************/
+/** class LibDrawPolyline **/
+/***************************/
 LibDrawPolyline::LibDrawPolyline() :
     LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
 {
