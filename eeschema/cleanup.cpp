@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "trigo.h"
 #include "confirm.h"
 #include "class_drawpickedstruct.h"
 #include "program.h"
@@ -16,8 +17,7 @@
 
 
 /* Routines locales */
-static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
-                            EDA_DrawLineStruct* TstSegm );
+static int TstAlignSegment( EDA_DrawLineStruct* RefSegm, EDA_DrawLineStruct* TstSegm );
 
 /* Variable locales */
 
@@ -37,7 +37,7 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
 
     WinEDA_SchematicFrame* frame;
 
-    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
+    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
 
     DrawList = EEDrawList;
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
@@ -50,7 +50,7 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
                 if( TstDrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
                 {
                     flag = TstAlignSegment( (EDA_DrawLineStruct*) DrawList,
-                                            (EDA_DrawLineStruct*) TstDrawList );
+                                           (EDA_DrawLineStruct*) TstDrawList );
                     if( flag )  /* Suppression de TstSegm */
                     {
                         /* keep the bits set in .m_Flags, because the deleted segment can be flagged */
@@ -87,7 +87,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
     if( Screen == NULL )
     {
         DisplayError( NULL,
-                      wxT( "BreakSegmentOnJunction() error: NULL screen" ) );
+                     wxT( "BreakSegmentOnJunction() error: NULL screen" ) );
         return;
     }
 
@@ -144,7 +144,6 @@ DrawPickedStruct* BreakSegment( SCH_SCREEN* screen,
 {
     EDA_BaseStruct* DrawList;
     EDA_DrawLineStruct* segment, * NewSegment;
-    int ox, oy, fx, fy;
     DrawPickedStruct* List = NULL;
 
     DrawList = screen->EEDrawList;
@@ -154,17 +153,13 @@ DrawPickedStruct* BreakSegment( SCH_SCREEN* screen,
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
             segment = (EDA_DrawLineStruct*) DrawList;
-            ox = segment->m_Start.x; oy = segment->m_Start.y;
-            fx = segment->m_End.x; fy = segment->m_End.y;
-            if( distance( fx - ox, fy - oy, breakpoint.x - ox, breakpoint.y -
-                          oy, 0 ) == 0 )
+
+            if( !TestSegmentHit( breakpoint, segment->m_Start, segment->m_End, 0 ) )
                 break;
 
             /* Segment connecte: doit etre coupe en 2 si px,py n'est
              *  pas une extremite */
-            if( (ox == breakpoint.x) && (oy == breakpoint.y ) )
-                break;
-            if( (fx == breakpoint.x) && (fy == breakpoint.y ) )
+            if( (segment->m_Start == breakpoint) || (segment->m_End == breakpoint ) )
                 break;
             /* Ici il faut couper le segment en 2 */
             if( PutInUndoList )         // First: put copy of the old segment in undo list

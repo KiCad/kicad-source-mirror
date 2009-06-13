@@ -14,14 +14,26 @@ void RotatePoint( wxPoint* point, int angle );
 void RotatePoint( wxPoint *point, const wxPoint & centre, int angle );
 void RotatePoint( double *pX, double *pY, int angle );
 void RotatePoint( double *pX, double *pY, double cx, double cy, int angle );
-int ArcTangente( int dy, int dx );
-/* Retourne l'arc tangente en 0.1 degres du vecteur de coord dx, dy
+
+/** function ArcTangente
+Retourne l'arc tangente en 0.1 degres du vecteur de coord dx, dy
    entre -1800 et 1800
    Analogue a atan2 ( mais plus rapide pour les caculs si
    l'angle est souvent 0, -1800, ou +- 900  */
+int ArcTangente( int dy, int dx );
 
 bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
 
+
+/** Function TestSegmentHit
+ * test for hit on line segment
+ * i.e. cursor within a given distance from segment
+ * @param aRefPoint = cursor (point to test) coords
+ * @param aStart is the first end-point of the line segment
+ * @param aEnd is the second end-point of the line segment
+ * @param aDist = maximum distance for hit
+*/
+bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist );
 
 /*******************/
 /* Macro NEW_COORD */

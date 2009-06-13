@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
+#include "trigo.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
@@ -14,6 +15,20 @@
 #include "plot_common.h"
 #include "protos.h"
 
+const wxChar* MsgPinElectricType[] =
+{
+    wxT( "input" ),
+    wxT( "output" ),
+    wxT( "BiDi" ),
+    wxT( "3state" ),
+    wxT( "passive" ),
+    wxT( "unspc" ),
+    wxT( "power_in" ),
+    wxT( "power_out" ),
+    wxT( "openCol" ),
+    wxT( "openEm" ),
+    wxT( "?????" )
+};
 
 LibDrawPin::LibDrawPin() : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
 {
@@ -27,8 +42,42 @@ LibDrawPin::LibDrawPin() : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
     m_PinNameSize = 50;                 /* Default size for pin name and num */
     m_Width    = 0;
     m_typeName = _( "Pin" );
+    m_PinNumShapeOpt     = 0;
+    m_PinNameShapeOpt    = 0;
+    m_PinNumPositionOpt  = 0;
+    m_PinNamePositionOpt = 0;
+}
 
-//	m_PinNumWidth = m_PinNameWidth = 0;	// Unused
+
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param aRefPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool LibDrawPin::HitTest( const wxPoint& aRefPos )
+{
+    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+
+    // Have a minimal tolerance for hit test
+    if( mindist < 3 )
+        mindist = 3;        // = 3 mils
+
+    return HitTest( aRefPos, mindist, DefaultTransformMatrix );
+}
+
+/** Function HitTest
+ * @return true if the point aPosRef is near a pin
+ * @param aRefPos = a wxPoint to test
+ * @param aThreshold = max distance to a segment
+ * @param aTransMat = the transform matrix
+ */
+bool LibDrawPin::HitTest( wxPoint aRefPos, int aThreshold, const int aTransMat[2][2] )
+{
+    wxPoint pinPos = TransformCoordinate( aTransMat, m_Pos );
+    wxPoint pinEnd = TransformCoordinate( aTransMat, ReturnPinEndPoint() );
+
+    return TestSegmentHit( aRefPos, pinPos, pinEnd, aThreshold );
 }
 
 
@@ -461,6 +510,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     wxSize     PinNumSize( m_PinNumSize, m_PinNumSize );
 
     int        nameLineWidth = g_DrawDefaultLineThickness;
+
     nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_PinNameSize, false );
     int        numLineWidth = g_DrawDefaultLineThickness;
     numLineWidth = Clamp_Text_PenSize( numLineWidth, m_PinNumSize, false );
@@ -561,7 +611,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
-                                     false, false);
+                                     false, false );
             }
             else        /* PIN_UP */
             {
@@ -582,7 +632,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                      TEXT_ORIENT_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
-                                     false, false);
+                                     false, false );
             }
         }
     }
@@ -611,7 +661,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_TOP, numLineWidth,
-                                 false, false);
+                                 false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -643,6 +693,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     }
 }
 
+
 /*****************************************************************************
 * Plot pin number and pin text info, given the pin line coordinates.	  *
 * Same as DrawPinTexts((), but output is the plotter
@@ -653,11 +704,11 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
 * the opposite direction to x2,y2), otherwise all is drawn outside.		 *
 *****************************************************************************/
 void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
-                               int orient,
-                               int TextInside,
-                               bool DrawPinNum,
-                               bool DrawPinName,
-                               int aWidth )
+                               int      orient,
+                               int      TextInside,
+                               bool     DrawPinNum,
+                               bool     DrawPinName,
+                               int      aWidth )
 {
     int        x, y, x1, y1;
     wxString   StringPinNum;
@@ -956,19 +1007,23 @@ LibDrawPin* LibDrawPin::GenCopy()
 {
     LibDrawPin* newpin = new LibDrawPin();
 
-    newpin->m_Pos         = m_Pos;
-    newpin->m_PinLen      = m_PinLen;
-    newpin->m_Orient      = m_Orient;
-    newpin->m_PinShape    = m_PinShape;
-    newpin->m_PinType     = m_PinType;
-    newpin->m_Attributs   = m_Attributs;
-    newpin->m_PinNum      = m_PinNum;
-    newpin->m_PinNumSize  = m_PinNumSize;
-    newpin->m_PinNameSize = m_PinNameSize;
-    newpin->m_Unit        = m_Unit;
-    newpin->m_Convert     = m_Convert;
-    newpin->m_Flags       = m_Flags;
-    newpin->m_Width       = m_Width;
+    newpin->m_Pos                = m_Pos;
+    newpin->m_PinLen             = m_PinLen;
+    newpin->m_Orient             = m_Orient;
+    newpin->m_PinShape           = m_PinShape;
+    newpin->m_PinType            = m_PinType;
+    newpin->m_Attributs          = m_Attributs;
+    newpin->m_PinNum             = m_PinNum;
+    newpin->m_PinNumSize         = m_PinNumSize;
+    newpin->m_PinNameSize        = m_PinNameSize;
+    newpin->m_PinNumShapeOpt     = m_PinNumShapeOpt;
+    newpin->m_PinNameShapeOpt    = m_PinNameShapeOpt;
+    newpin->m_PinNumPositionOpt  = m_PinNumPositionOpt;
+    newpin->m_PinNamePositionOpt = m_PinNamePositionOpt;
+    newpin->m_Unit               = m_Unit;
+    newpin->m_Convert            = m_Convert;
+    newpin->m_Flags              = m_Flags;
+    newpin->m_Width              = m_Width;
 
     newpin->m_PinName = m_PinName;
 

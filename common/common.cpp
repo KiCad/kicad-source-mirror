@@ -21,25 +21,25 @@
  */
 
 /* Standard page sizes in 1/1000 inch */
-Ki_PageDescr g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
-Ki_PageDescr g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
-Ki_PageDescr g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
-Ki_PageDescr g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
-Ki_PageDescr g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
-Ki_PageDescr g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
-Ki_PageDescr g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
-Ki_PageDescr g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
-Ki_PageDescr g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
-Ki_PageDescr g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
-Ki_PageDescr g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ),
+Ki_PageDescr  g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
+Ki_PageDescr  g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
+Ki_PageDescr  g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
+Ki_PageDescr  g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
+Ki_PageDescr  g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
+Ki_PageDescr  g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
+Ki_PageDescr  g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
+Ki_PageDescr  g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
+Ki_PageDescr  g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
+Ki_PageDescr  g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
+Ki_PageDescr  g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ),
                              wxT( "GERBER" ) );
-Ki_PageDescr g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ),
+Ki_PageDescr  g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ),
                            wxT( "User" ) );
 
 Ki_PageDescr* g_SheetSizeList[NB_ITEMS + 1] =
 {
-    &g_Sheet_A4, &g_Sheet_A3, &g_Sheet_A2, &g_Sheet_A1, &g_Sheet_A0,
-    &g_Sheet_A, &g_Sheet_B, &g_Sheet_C, &g_Sheet_D, &g_Sheet_E,
+    &g_Sheet_A4,   &g_Sheet_A3, &g_Sheet_A2, &g_Sheet_A1, &g_Sheet_A0,
+    &g_Sheet_A,    &g_Sheet_B,  &g_Sheet_C,  &g_Sheet_D,  &g_Sheet_E,
     &g_Sheet_user, NULL
 };
 
@@ -57,33 +57,33 @@ const wxString PdfFileExtension( wxT( "pdf" ) );
 
 /* Proper wxFileDialog wild card definitions. */
 const wxString ProjectFileWildcard( _( "Kicad project files (*.pro)|*.pro" ) );
-const wxString BoardFileWildcard( _( "Kicad PCB files (*.brd)|*.brd") );
+const wxString BoardFileWildcard( _( "Kicad PCB files (*.brd)|*.brd" ) );
 const wxString SchematicFileWildcard( _( "Kicad schematic files (*.sch)|*.sch" ) );
 const wxString NetlistFileWildcard( _( "Kicad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
-const wxString AllFilesWildcard( _( "All files (*)|*") );
+const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
 
-wxString    g_ProductName = wxT( "KiCad E.D.A.  " );
-bool        g_ShowPageLimits = true;
-int         g_GridColor = DARKGRAY;
-wxString    g_UserLibDirBuffer;
-int         g_DebugLevel;
-int         g_MouseOldButtons;
-int         g_KeyPressed;
+wxString       g_ProductName    = wxT( "KiCad E.D.A.  " );
+bool           g_ShowPageLimits = true;
+int            g_GridColor = DARKGRAY;
+wxString       g_UserLibDirBuffer;
+int            g_DebugLevel;
+int            g_MouseOldButtons;
+int            g_KeyPressed;
 
 // Nom (full file name) du file Configuration par defaut (kicad.pro)
-wxString    g_Prj_Default_Config_FullFilename;
+wxString       g_Prj_Default_Config_FullFilename;
 
 // Nom du file Configuration local (<curr projet>.pro)
-wxString    g_Prj_Config_LocalFilename;
+wxString       g_Prj_Config_LocalFilename;
 
 // Handle the preferd editor for browsing report files:
-int         g_UnitMetric;   // display units mm = 1, inches = 0, cm = 2
+int            g_UnitMetric; // display units mm = 1, inches = 0, cm = 2
 
 /* Draw color for moving objects: */
-int         g_GhostColor;
+int            g_GhostColor;
 
 /* predefined colors used in kicad.
  * Please: if you change a value, remember these values are carefully chosen
@@ -92,45 +92,43 @@ int         g_GhostColor;
  */
 StructColors ColorRefs[NBCOLOR] =
 {
-    { 0,  0,   0,  BLACK, wxT("BLACK"), DARKDARKGRAY},
-    { 192,  0,  0, BLUE, wxT("BLUE"), LIGHTBLUE},
-    { 0, 160,  0,  GREEN, wxT("GREEN"), LIGHTGREEN },
-    { 160, 160, 0,  CYAN, wxT("CYAN"), LIGHTCYAN },
-    { 0,  0, 160,  RED, wxT("RED"), LIGHTRED },
-    { 160,  0, 160,  MAGENTA, wxT("MAGENTA"), LIGHTMAGENTA },
-    { 0, 128, 128,  BROWN, wxT("BROWN"), YELLOW },
-    { 192, 192, 192,  LIGHTGRAY, wxT("GRAY"), WHITE },
-    { 128,  128,  128,  DARKGRAY, wxT("DARKGRAY"), LIGHTGRAY },
-    { 255,   0, 0,  LIGHTBLUE, wxT("LIGHTBLUE"),  LIGHTBLUE },
-    { 0, 255, 0, LIGHTGREEN, wxT("LIGHTGREEN"), LIGHTGREEN },
-    { 255, 255, 0, LIGHTCYAN, wxT("LIGHTCYAN"), LIGHTCYAN },
-    { 0,  0, 255, LIGHTRED, wxT("LIGHTRED"), LIGHTRED },
-    { 255,  0, 255, LIGHTMAGENTA, wxT("LIGHTMAGENTA"), LIGHTMAGENTA },
-    { 0, 255, 255, YELLOW, wxT("YELLOW"), YELLOW },
-    { 255, 255, 255, WHITE, wxT("WHITE"), WHITE },
-    {  64,  64, 64,  DARKDARKGRAY, wxT("DARKDARKGRAY"),  DARKGRAY },
-    {  64,   0,  0,  DARKBLUE, wxT("DARKBLUE"), BLUE },
-    {    0,  64,  0,  DARKGREEN, wxT("DARKGREEN"),  GREEN },
-    {  64,  64,  0,  DARKCYAN, wxT("DARKCYAN"),  CYAN },
-    {    0,   0, 80,  DARKRED, wxT("DARKRED"),  RED },
-    {  64,   0, 64,  DARKMAGENTA, wxT("DARKMAGENTA"), MAGENTA },
-    {    0,  64, 64,  DARKBROWN, wxT("DARKBROWN"),  BROWN },
-    {  128, 255, 255,   LIGHTYELLOW, wxT("LIGHTYELLOW"),   LIGHTYELLOW }
+    { 0,    0,   0,   BLACK,        wxT( "BLACK" ),        DARKDARKGRAY          },
+    { 192,  0,   0,   BLUE,         wxT( "BLUE" ),         LIGHTBLUE             },
+    { 0,    160, 0,   GREEN,        wxT( "GREEN" ),        LIGHTGREEN            },
+    { 160,  160, 0,   CYAN,         wxT( "CYAN" ),         LIGHTCYAN             },
+    { 0,    0,   160, RED,          wxT( "RED" ),          LIGHTRED              },
+    { 160,  0,   160, MAGENTA,      wxT( "MAGENTA" ),      LIGHTMAGENTA          },
+    { 0,    128, 128, BROWN,        wxT( "BROWN" ),        YELLOW                },
+    { 192,  192, 192, LIGHTGRAY,    wxT( "GRAY" ),         WHITE                 },
+    { 128,  128, 128, DARKGRAY,     wxT( "DARKGRAY" ),     LIGHTGRAY             },
+    { 255,  0,   0,   LIGHTBLUE,    wxT( "LIGHTBLUE" ),    LIGHTBLUE             },
+    { 0,    255, 0,   LIGHTGREEN,   wxT( "LIGHTGREEN" ),   LIGHTGREEN            },
+    { 255,  255, 0,   LIGHTCYAN,    wxT( "LIGHTCYAN" ),    LIGHTCYAN             },
+    { 0,    0,   255, LIGHTRED,     wxT( "LIGHTRED" ),     LIGHTRED              },
+    { 255,  0,   255, LIGHTMAGENTA, wxT( "LIGHTMAGENTA" ), LIGHTMAGENTA          },
+    { 0,    255, 255, YELLOW,       wxT( "YELLOW" ),       YELLOW                },
+    { 255,  255, 255, WHITE,        wxT( "WHITE" ),        WHITE                 },
+    {  64,  64,  64,  DARKDARKGRAY, wxT( "DARKDARKGRAY" ), DARKGRAY              },
+    {  64,  0,   0,   DARKBLUE,     wxT( "DARKBLUE" ),     BLUE                  },
+    {    0, 64,  0,   DARKGREEN,    wxT( "DARKGREEN" ),    GREEN                 },
+    {  64,  64,  0,   DARKCYAN,     wxT( "DARKCYAN" ),     CYAN                  },
+    {    0, 0,   80,  DARKRED,      wxT( "DARKRED" ),      RED                   },
+    {  64,  0,   64,  DARKMAGENTA,  wxT( "DARKMAGENTA" ),  MAGENTA               },
+    {    0, 64,  64,  DARKBROWN,    wxT( "DARKBROWN" ),    BROWN                 },
+    {  128, 255, 255, LIGHTYELLOW,  wxT( "LIGHTYELLOW" ),  LIGHTYELLOW           }
 };
 
 
-/*
+/** Function GetBuildVersion()
  * Return the build date
  */
-/****************/
 wxString GetBuildVersion()
-/****************/
 {
     return g_BuildVersion;
 }
 
 
-/*
+/** Function GetAboutBuildVersion()
  * Return custom build date for about dialog
  */
 wxString GetAboutBuildVersion()
@@ -140,15 +138,15 @@ wxString GetAboutBuildVersion()
 
 
 /** function SetLocaleTo_C_standard
-* because kicad is internationalized, switch internatization to "C" standard
-* i.e. uses the . (dot) as separator in print/read float numbers
-* (some contries (France, Germany ..) use , (comma) as separator)
-* This function must be called before read or write ascii files using float numbers in data
-* the SetLocaleTo_C_standard function must be called after reading or writing the file
-*
-* This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
-* but could make more easier an optional use of locale in kicad
-*/
+ * because kicad is internationalized, switch internatization to "C" standard
+ * i.e. uses the . (dot) as separator in print/read float numbers
+ * (some contries (France, Germany ..) use , (comma) as separator)
+ * This function must be called before read or write ascii files using float numbers in data
+ * the SetLocaleTo_C_standard function must be called after reading or writing the file
+ *
+ * This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
+ * but could make more easier an optional use of locale in kicad
+ */
 /********************************/
 void SetLocaleTo_C_standard( void )
 {
@@ -157,13 +155,13 @@ void SetLocaleTo_C_standard( void )
 
 
 /** function SetLocaleTo_Default
-  * because kicad is internationalized, switch internatization to default
-  * to use the default separator in print/read float numbers
-  * (. (dot) but some contries (France, Germany ..) use , (comma) as separator)
-  * This function must be called after a call to SetLocaleTo_C_standard
+ * because kicad is internationalized, switch internatization to default
+ * to use the default separator in print/read float numbers
+ * (. (dot) but some contries (France, Germany ..) use , (comma) as separator)
+ * This function must be called after a call to SetLocaleTo_C_standard
  *
-  * This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
-  * but could make more easier an optional use of locale in kicad
+ * This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
+ * but could make more easier an optional use of locale in kicad
  */
 /********************************/
 void SetLocaleTo_Default( void )
@@ -174,24 +172,25 @@ void SetLocaleTo_Default( void )
 
 
 /********************************************************************/
-bool EnsureTextCtrlWidth(wxTextCtrl* aCtrl,
-                         const wxString* aString )
+bool EnsureTextCtrlWidth( wxTextCtrl*     aCtrl,
+                          const wxString* aString )
 /********************************************************************/
 {
-    wxWindow*   window = aCtrl->GetParent();
+    wxWindow* window = aCtrl->GetParent();
+
     if( !window )
         window = aCtrl;
 
-    wxString    ctrlText;
+    wxString ctrlText;
 
     if( !aString )
     {
         ctrlText = aCtrl->GetValue();
-        aString = &ctrlText;
+        aString  = &ctrlText;
     }
 
-    wxCoord     width;
-    wxCoord     height;
+    wxCoord width;
+    wxCoord height;
 
     {
         wxClientDC dc( window );
@@ -211,9 +210,9 @@ bool EnsureTextCtrlWidth(wxTextCtrl* aCtrl,
 
 
 /*********************************************************************************************/
-Ki_PageDescr::Ki_PageDescr(const wxSize&   size,
-                           const wxPoint&  offset,
-                           const wxString& name )
+Ki_PageDescr::Ki_PageDescr( const wxSize&   size,
+                            const wxPoint&  offset,
+                            const wxString& name )
 /*********************************************************************************************/
 {
     // All sizes are in 1/1000 inch
@@ -223,12 +222,12 @@ Ki_PageDescr::Ki_PageDescr(const wxSize&   size,
 
     // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)
 #if defined(KICAD_GOST)
-    m_LeftMargin = LEFTMARGIN;
-    m_RightMargin = RIGHTMARGIN;
-    m_TopMargin = TOPMARGIN;
+    m_LeftMargin   = LEFTMARGIN;
+    m_RightMargin  = RIGHTMARGIN;
+    m_TopMargin    = TOPMARGIN;
     m_BottomMargin = BOTTOMMARGIN;
 #else
-     m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
+    m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
 #endif
 }
 
@@ -323,9 +322,9 @@ wxString ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit,
         StringValue << aValue;
     else
     {
-        value_to_print = To_User_Unit( (bool)aUnits, aValue, aInternal_Unit );
+        value_to_print = To_User_Unit( (bool) aUnits, aValue, aInternal_Unit );
         StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
-            value_to_print );
+                           value_to_print );
     }
 
     if( aAdd_unit_symbol )
@@ -366,10 +365,11 @@ int ReturnValueFromString( int Units, const wxString& TextValue,
     if( Units >= CENTIMETRE )
         Value = wxRound( dtmp );
     else
-        Value = From_User_Unit( (bool)Units, dtmp, Internal_Unit );
+        Value = From_User_Unit( (bool) Units, dtmp, Internal_Unit );
 
     return Value;
 }
+
 
 /**
  * Function wxStringSplit
@@ -379,25 +379,26 @@ int ReturnValueFromString( int Units, const wxString& TextValue,
  * @param splitter : wxChar : the 'split' character
  */
 /**********************************************************/
-wxArrayString* wxStringSplit(wxString txt, wxChar splitter)
+wxArrayString* wxStringSplit( wxString txt, wxChar splitter )
 /**********************************************************/
 {
     wxArrayString* list = new wxArrayString();
-    while (1)
-    {
-      int index=txt.Find(splitter);
-      if (index == wxNOT_FOUND)
-        break;
 
-      wxString tmp;
-      tmp = txt.Mid(0,index);
-      txt = txt.Mid( index+1, txt.size() - index);
-      list->Add(tmp);
+    while( 1 )
+    {
+        int index = txt.Find( splitter );
+        if( index == wxNOT_FOUND )
+            break;
+
+        wxString tmp;
+        tmp = txt.Mid( 0, index );
+        txt = txt.Mid( index + 1, txt.size() - index );
+        list->Add( tmp );
     }
 
-    if (!txt.IsEmpty())
+    if( !txt.IsEmpty() )
     {
-      list->Add(txt);
+        list->Add( txt );
     }
 
     return list;
@@ -407,6 +408,7 @@ wxArrayString* wxStringSplit(wxString txt, wxChar splitter)
 /******************************************************************/
 double To_User_Unit( bool is_metric, int val, int internal_unit_value )
 /******************************************************************/
+
 /**
  * Function To_User_Unit
  * Convert in inch or mm the variable "val" (double)given in internal units
@@ -419,18 +421,20 @@ double To_User_Unit( bool is_metric, int val, int internal_unit_value )
     double value;
 
     if( is_metric )
-        value = (double) (val) * 25.4 / internal_unit_value;
+        value = (double) ( val ) * 25.4 / internal_unit_value;
     else
-        value = (double) (val) / internal_unit_value;
+        value = (double) ( val ) / internal_unit_value;
 
     return value;
 }
 
+
 /******************************************************************/
-double To_User_Unit( bool is_metric,
-              double val,
-              int internal_unit_value )
+double To_User_Unit( bool   is_metric,
+                     double val,
+                     int    internal_unit_value )
 /******************************************************************/
+
 /**
  * Function To_User_Unit
  * Convert in inch or mm the variable "val" (double)given in internal units
@@ -449,7 +453,6 @@ double To_User_Unit( bool is_metric,
 
     return value;
 }
-
 
 
 /*
@@ -490,8 +493,8 @@ wxString GenDate()
     time( &buftime );
     Date = gmtime( &buftime );
     string_date.Printf( wxT( "%d %s %d" ), Date->tm_mday,
-        mois[Date->tm_mon].GetData(),
-        Date->tm_year + 1900 );
+                        mois[Date->tm_mon].GetData(),
+                        Date->tm_year + 1900 );
     return string_date;
 }
 
@@ -580,7 +583,8 @@ wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
     // These are only default layer names.  For PCBNEW, the copper names
     // may be over-ridden in the BOARD file *.brd.
 
-    static const wxString layer_name_list[] = {
+    static const wxString layer_name_list[] =
+    {
         _( "Copper   " ), _( "Inner L1 " ), _( "Inner L2 " ), _( "Inner L3 " ),
         _( "Inner L4 " ), _( "Inner L5 " ), _( "Inner L6 " ), _( "Inner L7 " ),
         _( "Inner L8 " ), _( "Inner L9 " ), _( "Inner L10" ), _( "Inner L11" ),
@@ -622,22 +626,22 @@ EVT_CLOSE( WinEDA_TextFrame::OnClose )
 END_EVENT_TABLE()
 
 /***************************************************************************/
-WinEDA_TextFrame::WinEDA_TextFrame( wxWindow* parent,
+WinEDA_TextFrame::WinEDA_TextFrame( wxWindow*       parent,
                                     const wxString& title ) :
-                          wxDialog( parent,
-                                    -1, title,
-                                    wxPoint( -1, -1 ),
-                                    wxSize( 250, 350 ),
-                                    wxDEFAULT_DIALOG_STYLE |
-                                    wxFRAME_FLOAT_ON_PARENT |
-                                    MAYBE_RESIZE_BORDER )
+    wxDialog( parent,
+              -1, title,
+              wxPoint( -1, -1 ),
+              wxSize( 250, 350 ),
+              wxDEFAULT_DIALOG_STYLE |
+              wxFRAME_FLOAT_ON_PARENT |
+              MAYBE_RESIZE_BORDER )
 /***************************************************************************/
 {
     /*
-    * TODO background and foreground colors of WinEDA_TextFrame should be
-    * controllable / settable with project settings or config file and not
-    * hardcoded in binairy !
-    */
+     * TODO background and foreground colors of WinEDA_TextFrame should be
+     * controllable / settable with project settings or config file and not
+     * hardcoded in binairy !
+     */
 
     wxSize size;
 

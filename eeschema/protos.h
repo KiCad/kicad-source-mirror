@@ -139,12 +139,12 @@ SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMas
 
 
     Return:
-        -Bloc searc:
+        -Bloc search:
             pointeur sur liste de pointeurs de structures si Plusieurs
                     structures selectionnees.
             pointeur sur la structure si 1 seule
 
-        Positon serach:
+        Positon search:
             pointeur sur la structure.
         Si pas de structures selectionnees: retourne NULL */
 
@@ -159,20 +159,6 @@ LibDrawPin * LocateAnyPin(SCH_ITEM *DrawList, const wxPoint & RefPos,
 
 Hierarchical_PIN_Sheet_Struct * LocateAnyPinSheet(const wxPoint & RefPos,
                     SCH_ITEM *DrawList);
-
-int distance(int dx, int dy, int spot_cX, int spot_cY, int seuil);
-    /* Calcul de la distance du point spot_cx,spot_cy a un segment de droite,
-        d'origine 0,0 et d'extremite dx, dy;
-        retourne:
-             0 si distance > seuil
-             1 si distance <= seuil
-         Variables utilisees ( sont ramenees au repere centre sur l'origine du segment)
-             dx, dy = coord de l'extremite segment.
-             spot_cX,spot_cY = coord du curseur souris
-         la recherche se fait selon 4 cas:
-             segment horizontal
-             segment vertical
-             segment quelconque */
 
 
 /***************/

@@ -161,6 +161,29 @@ public:
     virtual bool Save( FILE* aFile ) const = 0;
     virtual bool Load( char* line, wxString& errorMsg ) = 0;
 
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param refPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool    HitTest( const wxPoint& refPos )
+    {
+        return false;   // derived classes should override this function
+    }
+
+    /** Function HitTest (overlayed)
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] ) = 0;
+
+   /** Function GetBoundingBox
+     * @return the boundary box for this, in library coordinates
+     */
     virtual EDA_Rect GetBoundingBox()
     {
         return EDA_BaseStruct::GetBoundingBox();
@@ -188,8 +211,12 @@ public:
     int      m_PinNumSize;
     int      m_PinNameSize; /* Pin num and Pin name sizes */
 
-//	int m_PinNumWidth, m_PinNameWidth;	/* (Currently Unused) Pin num and Pin name text width */
-    wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
+	// (Currently Unused) Pin num and Pin name text opt: italic/normal/bold, 0 = default:
+    char m_PinNumShapeOpt, m_PinNameShapeOpt;
+	// (Currently Unused) Pin num and Pin name text opt position, 0 = default:
+    char m_PinNumPositionOpt, m_PinNamePositionOpt;
+
+wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
                              * point (segments) */
     int      m_Width;       /* Line width */
 
@@ -216,6 +243,22 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+
+    /** Function HitTest
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     LibDrawPin*  GenCopy();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
@@ -288,7 +331,14 @@ public:
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
-    
+
+     /** Function HitTest
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     LibDrawArc*  GenCopy();
 
@@ -339,6 +389,14 @@ public:
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
+     /** Function HitTest
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+
     LibDrawCircle* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
@@ -384,6 +442,14 @@ public:
      * @return bool - true if a hit, else false
      */
     virtual bool    HitTest( const wxPoint& refPos );
+
+     /** Function HitTest
+     * @return true if the point aPosRef is near a segment
+     * @param aPosRef = a wxPoint to test, in eeschema coordinates
+     * @param aThreshold = max distance to a segment
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     /**
      * Function HitTest (overlayed)
@@ -436,6 +502,22 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+
+    /** Function HitTest
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+
     LibDrawSquare* GenCopy();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
@@ -475,6 +557,22 @@ public:
      */
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
+
+     /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+
+    /** Function HitTest
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     LibDrawSegment* GenCopy();
 
@@ -523,13 +621,21 @@ public:
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
+     /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+
     /** Function HitTest
      * @return true if the point aPosRef is near a segment
      * @param aPosRef = a wxPoint to test
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
      */
-    bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     /** Function GetBoundingBox
      * @return the boundary box for this, in library coordinates

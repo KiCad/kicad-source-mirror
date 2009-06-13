@@ -14,6 +14,7 @@ set(EESCHEMA_SRCS
     build_BOM.cpp
     busentry.cpp
     bus-wire-junction.cpp
+    class_BodyItem_Text.cpp
     class_drawsheet.cpp
     class_drawsheetpath.cpp
     class_hierarchical_PIN_sheet.cpp

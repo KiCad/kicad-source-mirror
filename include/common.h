@@ -271,13 +271,8 @@ void        InitKiCadAbout( wxAboutDialogInfo& info);
 wxString    GetBuildVersion(); /* Return the build date */
 wxString    GetAboutBuildVersion(); /* Return custom build date for about dialog */
 
-void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
-                                 int               pos_X,
-                                 const wxString&   texte_H,
-                                 const wxString&   texte_L,
-                                 int               color );
-
-/*
+/**
+ * function Affiche_1_Parametre
  *  Routine d'affichage d'un parametre.
  *  pos_X = cadrage horizontal
  *      si pos_X < 0 : la position horizontale est la derniere
@@ -288,6 +283,11 @@ void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
  *      si "", par d'affichage sur cette ligne
  *  color = couleur d'affichage
  */
+void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
+                                 int               pos_X,
+                                 const wxString&   texte_H,
+                                 const wxString&   texte_L,
+                                 int               color );
 
 void        AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc,
                         const wxString& KeyW );

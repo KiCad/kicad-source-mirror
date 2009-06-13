@@ -254,26 +254,52 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 bool LibDrawField::HitTest( const wxPoint& refPos )
 {
-    // Reference designator text has one additional character (displays U?)
-    if( m_FieldId == REFERENCE )
-        m_Text.Append('?');
-    // if using TextHitTest() remember this function uses top to bottom y axis convention
-    // and for lib items we are using bottom to top convention
-    // so for non center Y justification we use a trick.
-    GRTextVertJustifyType vJustify = m_VJustify;
-    if ( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
-        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
-    else if  ( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
-        m_VJustify = GR_TEXT_VJUSTIFY_TOP;
-
-    bool hit = TextHitTest(refPos);
-    m_VJustify = vJustify;
-
-    if( m_FieldId == REFERENCE )
-        m_Text.RemoveLast( );
-    return hit;
+    return HitTest( refPos, 0, DefaultTransformMatrix );
 }
 
+ /** Function HitTest
+ * @return true if the point aPosRef is near this object
+ * @param aPosRef = a wxPoint to test
+ * @param aThreshold =  unused here (TextHitTest calculates its threshold )
+ * @param aTransMat = the transform matrix
+ */
+bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+{
+    int extraCharCount = 0;
+    // Reference designator text has one or 2 additional character (displays U? or U?A)
+    if( m_FieldId == REFERENCE )
+    {
+        extraCharCount++;
+        m_Text.Append('?');
+        EDA_LibComponentStruct* parent = (EDA_LibComponentStruct*)m_Parent;
+        if ( parent && ( parent->m_UnitCount > 1 ) )
+        {
+            m_Text.Append('A');
+            extraCharCount++;
+        }
+    }
+
+    wxPoint physicalpos = TransformCoordinate( aTransMat, m_Pos );
+    wxPoint tmp = m_Pos;
+    m_Pos = physicalpos;
+    /* The text orientation may need to be flipped if the
+     *  transformation matrix causes xy axes to be flipped.
+     * this simple algo works only for schematic matrix (rot 90 or/and mirror)
+    */
+    int t1 = ( aTransMat[0][0] != 0 ) ^ ( m_Orient != 0 );
+    int orient = t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
+    EXCHG( m_Orient, orient );
+
+    bool hit = TextHitTest(aPosRef);
+
+    EXCHG( m_Orient, orient );
+    m_Pos = tmp;
+
+    while( extraCharCount-- )
+        m_Text.RemoveLast( );
+
+    return hit;
+}
 
 // Creation et Duplication d'un field
 LibDrawField* LibDrawField::GenCopy()

@@ -74,6 +74,14 @@ public:
      */
     bool HitTest( const wxPoint& refPos );
 
+     /** Function HitTest
+     * @return true if the point aPosRef is near this object
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+
     void operator=( const LibDrawField& field )
     {
         m_FieldId = field.m_FieldId;

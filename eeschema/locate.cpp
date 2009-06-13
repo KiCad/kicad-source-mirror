@@ -15,15 +15,11 @@
 
 #include "protos.h"
 
-/* Routines exportees */
-int         distance( int dx, int dy, int spot_cX, int spot_cY, int seuil );
-
 /* Routines Locales */
 static SCH_ITEM* LastSnappedStruct = NULL;
 static int       PickedBoxMinX, PickedBoxMinY, PickedBoxMaxX, PickedBoxMaxY;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
-static bool IsPointOnSegment( wxPoint aPosRef, wxPoint aSegmStart, wxPoint aSegmEnd, int aDist = 0 );
 static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                         SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, double aScaleFactor );
 
@@ -208,6 +204,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( DontSnap->m_PickedStruct == DrawList )
                 continue;
 
+        int hitminDist = MAX( g_DrawDefaultLineThickness, 3 ) ;
         switch( DrawList->Type() )
         {
         case DRAW_POLYLINE_STRUCT_TYPE:
@@ -218,8 +215,8 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 
             for( unsigned i = 0; i < STRUCT->GetCornerCount() - 1; i++ )
             {
-                if( IsPointOnSegment( aPosRef, STRUCT->m_PolyPoints[i],
-                                      STRUCT->m_PolyPoints[i + 1] ) )
+                if( TestSegmentHit( aPosRef, STRUCT->m_PolyPoints[i],
+                                      STRUCT->m_PolyPoints[i + 1], hitminDist ) )
                 {
                     LastSnappedStruct = DrawList;
                     return TRUE;
@@ -234,7 +231,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( !( SearchMask & (DRAWITEM | WIREITEM | BUSITEM) ) )
                 break;
 
-            if( IsPointOnSegment( aPosRef, STRUCT->m_Start, STRUCT->m_End ) )
+            if( TestSegmentHit( aPosRef, STRUCT->m_Start, STRUCT->m_End, 0 ) )
             {
                 if( ( (SearchMask & DRAWITEM) && (STRUCT->GetLayer() == LAYER_NOTES) )
                    || ( (SearchMask & WIREITEM) && (STRUCT->GetLayer() == LAYER_WIRE) )
@@ -266,7 +263,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( !( SearchMask & (RACCORDITEM) ) )
                 break;
 
-            if( IsPointOnSegment( aPosRef, STRUCT->m_Pos, STRUCT->m_End() ) )
+            if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(), hitminDist ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -654,25 +651,6 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 }
 
 
-/********************************************************************************/
-static bool IsPointOnSegment( wxPoint aPosRef, wxPoint aSegmStart, wxPoint aSegmEnd, int aDist )
-/********************************************************************************/
-
-/* Routine detectant que le point pX,pY est sur le Segment X1,Y1 a X2,Y2
- *  Retourne TRUE ou FALSE.
- */
-{
-    /* Move coordinates origin to aSegmStart */
-    aPosRef  -= aSegmStart;
-    aSegmEnd -= aSegmStart;
-
-    if( distance( aSegmEnd.x, aSegmEnd.y, aPosRef.x, aPosRef.y, aDist ) )
-        return TRUE;
-
-    else
-        return FALSE;
-}
-
 
 /*********************************************************************************/
 LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
@@ -702,15 +680,6 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
 
     DrawItem = LibEntry->m_Drawings;
 
-    int seuil = 3;     /* Tolerance: 1/2 pas de petite grille */
-
-    // Calculates aRefPoint according to library components Y axis convention:
-    // Y axis is bottom to top
-    // RefPoint Y is top to bottom
-    // so negate the aRefPoint Y coordinate value does the trick 
-    wxPoint pointInLibitemsSpace = aRefPoint;
-    NEGATE( pointInLibitemsSpace.y );
-
     for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
     {
         if( Unit && DrawItem->m_Unit && (Unit != DrawItem->m_Unit) )
@@ -721,88 +690,45 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
         switch( DrawItem->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
-        {
-            LibDrawArc* Arc = (LibDrawArc*) DrawItem;
             if( (masque & LOCATE_COMPONENT_ARC_DRAW_TYPE) == 0 )
                 break;
-            if( Arc->HitTest( pointInLibitemsSpace ) )
+            if( DrawItem->HitTest( aRefPoint ) )
                 return DrawItem;
-        }
         break;
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
-        {
-            LibDrawCircle* Circle = (LibDrawCircle*) DrawItem;
             if( (masque & LOCATE_COMPONENT_CIRCLE_DRAW_TYPE) == 0 )
                 break;
-            if( Circle->HitTest( pointInLibitemsSpace ) )
+            if( DrawItem->HitTest( aRefPoint ) )
                 return DrawItem;
-        }
         break;
 
-        case COMPONENT_RECT_DRAW_TYPE:
-        {           // Locate a rect if the mouse cursor is on a side of this rectangle
-            LibDrawSquare* Square = (LibDrawSquare*) DrawItem;
+        case COMPONENT_RECT_DRAW_TYPE:  // Locate a rect if the mouse cursor is on a side of this rectangle
             if( (masque & LOCATE_COMPONENT_RECT_DRAW_TYPE) == 0 )
                 break;
-            wxPoint start, end;
-            start.x = Square->m_Pos.x;
-            start.y = -Square->m_Pos.y;
-            end.x   = Square->m_End.x;
-            end.y   = -Square->m_Pos.y;
-
-            // locate lower segment
-            if( IsPointOnSegment( aRefPoint, start, end, seuil ) )
+             if( DrawItem->HitTest( aRefPoint ) )
                 return DrawItem;
-
-            // locate right segment
-            start.x = Square->m_End.x;
-            end.y   = -Square->m_End.y;
-            if( IsPointOnSegment( aRefPoint, start, end, seuil ) )
-                return DrawItem;
-
-            // locate upper segment
-            start.y = -Square->m_End.y;
-            end.x   = Square->m_Pos.x;
-            if( IsPointOnSegment( aRefPoint, start, end, seuil ) )
-                return DrawItem;
-
-            // locate left segment
-            start.x = Square->m_Pos.x;
-            end.x   = -Square->m_Pos.y;
-            if( IsPointOnSegment( aRefPoint, start, end, seuil ) )
-                return DrawItem;
-        }
-        break;
+         break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
-        {
-            LibDrawPolyline* polyline = (LibDrawPolyline*) DrawItem;
             if( (masque & LOCATE_COMPONENT_POLYLINE_DRAW_TYPE) == 0 )
                 break;
-            if( polyline->HitTest( aRefPoint, seuil, DefaultTransformMatrix ) )
+            if( DrawItem->HitTest( aRefPoint ) )
                 return DrawItem;
-        }
         break;
 
         case COMPONENT_LINE_DRAW_TYPE:
-        {
-            LibDrawSegment* Segment = (LibDrawSegment*) DrawItem;
             if( (masque & LOCATE_COMPONENT_LINE_DRAW_TYPE) == 0 )
                 break;
-            if( IsPointOnSegment( pointInLibitemsSpace, Segment->m_Pos, Segment->m_End, seuil ) )
+            if( DrawItem->HitTest( aRefPoint ) )
                 return DrawItem;
-        }
         break;
 
         case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        {
-            LibDrawText* Text = (LibDrawText*) DrawItem;
             if( (masque & LOCATE_COMPONENT_GRAPHIC_TEXT_DRAW_TYPE) == 0 )
                 break;
-            if( Text->HitTest( pointInLibitemsSpace ) )
-                return DrawItem; /* Found! */
-        }
+            if( DrawItem->HitTest( aRefPoint ) )
+                return DrawItem;
         break;
 
         default:
@@ -811,117 +737,6 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
     }
 
     return NULL;
-}
-
-
-/****************************************************************/
-int distance( int dx, int dy, int spot_cX, int spot_cY, int seuil )
-/****************************************************************/
-
-/*
- *  Calcul de la distance du point spot_cx,spot_cy a un segment de droite,
- *  d'origine 0,0 et d'extremite dx, dy;
- *  retourne:
- *      0 si distance > seuil
- *      1 si distance <= seuil
- *  Variables utilisees ( sont ramenees au repere centre sur l'origine du segment)
- *      dx, dy = coord de l'extremite segment.
- *      spot_cX,spot_cY = coord du curseur souris
- *  la recherche se fait selon 4 cas:
- *      segment horizontal
- *      segment vertical
- *      segment quelconque
- */
-{
-    int cXrot, cYrot,   /* coord du point (souris) dans le repere tourne */
-        segX, segY;     /* coord extremite segment tj >= 0 */
-    int pointX, pointY; /* coord point a tester dans repere modifie dans lequel
-                         *  segX et segY sont >=0 */
-
-    segX = dx; segY = dy; pointX = spot_cX; pointY = spot_cY;
-
-    /*Recalcul coord pour que le segment soit dans 1er quadrant (coord >= 0)*/
-    if( segX < 0 )   /* mise en0 par symetrie par rapport a l'axe Y */
-    {
-        segX = -segX; pointX = -pointX;
-    }
-    if( segY < 0 )   /* mise en > 0 par symymetrie par rapport a l'axe X */
-    {
-        segY = -segY; pointY = -pointY;
-    }
-
-
-    if( segY == 0 ) /* piste Horizontale */
-    {
-        if( abs( pointY ) <= seuil )
-        {
-            if( (pointX >= 0) && (pointX <= segX) )
-                return 1;
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (pointX < 0) && (pointX >= -seuil) )
-            {
-                if( ( (pointX * pointX) + (pointY * pointY) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (pointX > segX) && ( pointX <= (segX + seuil) ) )
-            {
-                if( ( ( (pointX - segX) * (pointX - segX) ) + (pointY * pointY) ) <=
-                   (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    else if( segX == 0 ) /* piste verticale */
-    {
-        if( abs( pointX ) <= seuil )
-        {
-            if( (pointY >= 0 ) && (pointY <= segY) )
-                return 1;
-            if( (pointY < 0) && (pointY >= -seuil) )
-            {
-                if( ( (pointY * pointY) + (pointX * pointX) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (pointY > segY) && ( pointY <= (segY + seuil) ) )
-            {
-                if( ( ( (pointY - segY) * (pointY - segY) ) + (pointX * pointX) ) <=
-                   (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    else    /* orientation quelconque */
-    {
-        /* On fait un changement d'axe (rotation) de facon a ce que le segment
-         *  de piste soit horizontal dans le nouveau repere */
-        int angle;
-
-        angle = (int) ( atan2( (double) segY, (double) segX ) * 1800 / M_PI );
-        cXrot = pointX; cYrot = pointY;
-        RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
-        RotatePoint( &segX, &segY, angle );     /* Rotation du segment */
-
-        /*la piste est Horizontale , par suite des modifs de coordonnes
-         *  et d'axe, donc segX = longueur du segment */
-
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
-        {
-            if( (cXrot >= 0) && (cXrot <= segX) )
-                return 1;
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
-            {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
-                    return 1;
-            }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
-            {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
-                    return 1;
-            }
-        }
-    }
-    return 0;
 }
 
 
@@ -989,10 +804,6 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
  *  Si convert = 0, le numero convert n'est pas teste
  */
 {
-    LibEDA_BaseStruct* DrawItem;
-    LibDrawPin* Pin;
-    int x1, y1, x2, y2;
-
     if( Entry == NULL )
         return NULL;
 
@@ -1002,12 +813,12 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
         return NULL;
     }
 
-    DrawItem = Entry->m_Drawings;
+    LibEDA_BaseStruct* DrawItem = Entry->m_Drawings;
     for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
     {
         if( DrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) /* Pin Trouvee */
         {
-            Pin = (LibDrawPin*) DrawItem;
+            LibDrawPin* Pin = (LibDrawPin*) DrawItem;
 
             if( Unit && DrawItem->m_Unit && (DrawItem->m_Unit != Unit) )
                 continue;
@@ -1015,36 +826,22 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
             if( convert && DrawItem->m_Convert && (DrawItem->m_Convert != convert) )
                 continue;
 
-            x2 = Pin->m_Pos.x;
-            y2 = Pin->m_Pos.y;
-            x1 = Pin->ReturnPinEndPoint().x;
-            y1 = Pin->ReturnPinEndPoint().y;
-
             if( DrawLibItem == NULL )
             {
-                y1 = -y1; y2 = -y2;
+                if ( Pin->HitTest( RefPos ) )
+                    return DrawItem;
             }
+
             else
             {
-                int x = x1, y = y1;
-                x1 = DrawLibItem->m_Pos.x + DrawLibItem->m_Transform[0][0] *x
-                     + DrawLibItem->m_Transform[0][1] *y;
-                y1 = DrawLibItem->m_Pos.y + DrawLibItem->m_Transform[1][0] *x
-                     + DrawLibItem->m_Transform[1][1] *y;
-                x  = x2; y = y2;
-                x2 = DrawLibItem->m_Pos.x + DrawLibItem->m_Transform[0][0] *x
-                     + DrawLibItem->m_Transform[0][1] *y;
-                y2 = DrawLibItem->m_Pos.y + DrawLibItem->m_Transform[1][0] *x
-                     + DrawLibItem->m_Transform[1][1] *y;
+                int mindist = Pin->m_Width ? Pin->m_Width / 2 : g_DrawDefaultLineThickness / 2;
+
+                // Have a minimal tolerance for hit test
+                if( mindist < 3 )
+                    mindist = 3;        // = 3 mils
+                if ( Pin->HitTest( RefPos - DrawLibItem->m_Pos, mindist, DrawLibItem->m_Transform ) )
+                    return DrawItem;
             }
-
-            if( x1 > x2 )
-                EXCHG( x1, x2 );if( y1 > y2 )
-                EXCHG( y1, y2 );
-
-            if( (RefPos.x >= x1) && (RefPos.x <= x2)
-               && (RefPos.y >= y1) && (RefPos.y <= y2) )
-                return DrawItem;
         }
     }
 
