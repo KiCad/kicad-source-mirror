@@ -379,7 +379,7 @@ LibDrawField* WinEDA_LibeditFrame::LocateField( EDA_LibComponentStruct* LibEntry
     wxPoint refpos;
 
     refpos.x = GetScreen()->m_Curseur.x;
-    refpos.y = -GetScreen()->m_Curseur.y;  // Y axis is from bottom to top in library
+    refpos.y = GetScreen()->m_Curseur.y;  // Y axis is from bottom to top in library
     /* Test reference */
     if( LibEntry->m_Name.HitTest( refpos ) )
         return &LibEntry->m_Name;
