@@ -16,7 +16,12 @@
 #define PIN_WIDTH           100 /* Width between 2 pins in internal units. */
 #define PIN_LENGTH          300 /* Default Length of each pin to be drawn. */
 
+#if defined(KICAD_GOST)
+#define INVERT_PIN_RADIUS   20  /* Radius of inverted pin circle. */
+#else
 #define INVERT_PIN_RADIUS   35  /* Radius of inverted pin circle. */
+#endif
+
 #define CLOCK_PIN_DIM       40  /* Dim of clock pin symbol. */
 #define IEEE_SYMBOL_PIN_DIM 40  /* Dim of special pin symbol. */
 
