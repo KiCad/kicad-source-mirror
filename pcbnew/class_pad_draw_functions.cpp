@@ -481,6 +481,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
     {
+    	 if( !(!IsOnLayer( screen->m_Active_Layer )&& DisplayOpt.ContrastModeDisplay)){
+
         tpos    = tpos0;
         if ( display_padnum )
             tpos.y += AreaSize.y / 2;
@@ -491,5 +493,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
                          WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
 			  false, false );
+    	 }
     }
 }

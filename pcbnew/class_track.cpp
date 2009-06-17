@@ -684,11 +684,14 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             angle = 900;                    // angle is in 0.1 degree
         if( panel->GetScreen()->Scale( tsize ) >= 6 )
         {
+        	if( !(!IsOnLayer( curr_layer )&& DisplayOpt.ContrastModeDisplay)){
+
             tsize = (tsize * 8) / 10;           // small reduction to give a better look
             DrawGraphicText( panel, DC, tpos,
                              WHITE, net->GetShortNetname(), angle, wxSize( tsize, tsize ),
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
 			      false, false );
+        	}
         }
     }
 }
