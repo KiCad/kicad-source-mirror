@@ -33,7 +33,6 @@ bool g_Show_Ratsnest;
 bool g_Show_Module_Ratsnest;
 bool g_Show_Pads_Module_in_Move = TRUE;
 bool g_Raccord_45_Auto = TRUE;
-int g_ShowClearanceWhenTrackCreation = 1;
 bool Track_45_Only;
 bool Segments_45_Only;
 bool g_TwoSegmentTrackBuild = TRUE;

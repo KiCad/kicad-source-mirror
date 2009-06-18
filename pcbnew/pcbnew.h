@@ -54,12 +54,6 @@ extern bool g_Show_Ratsnest;
 extern bool g_Show_Module_Ratsnest;
 extern bool g_Show_Pads_Module_in_Move;
 extern bool g_Raccord_45_Auto;
-extern int  g_ShowClearanceWhenTrackCreation;  /* = 0 , 1 or 2
-                                                *  0 = do not show clearance
-                                                *  1 = show track clearance
-                                                *  2 = show clearance + via area
-                                                *  (useful to know what clearance area is neede if we want to put a via on terminal track point)
-                                                */
 
 extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint libraries filesnames
 

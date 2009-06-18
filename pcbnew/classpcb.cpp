@@ -143,12 +143,12 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 
     DisplayModEdge = true;
     DisplayModText = true;
-    DisplayPcbTrackFill = true; /* false = sketch , true = rempli */
-    DisplayTrackIsol    = false;
-    m_DisplayViaMode    = VIA_HOLE_NOT_SHOW;
+    DisplayPcbTrackFill    = true; /* false = sketch , true = filled */
+    ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
+    m_DisplayViaMode = VIA_HOLE_NOT_SHOW;
 
     DisplayPolarCood    = false; /* false = display absolute coordinates,
-                                 * true = display polar cordinates */
+                                  * true = display polar cordinates */
     DisplayZonesMode    = 0;    /* 0 = Show filled areas outlines in zones,
                                  * 1 = do not show filled areas outlines
                                  * 2 = show outlines of filled areas */

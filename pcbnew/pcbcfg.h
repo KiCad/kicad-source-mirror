@@ -194,20 +194,13 @@ static PARAM_CFG_BOOL SegmFillCfg
     TRUE                                            /* Default value */
 );
 
-static PARAM_CFG_INT NewTrackAfficheGardeCfg
-(
-    INSETUP,
-    wxT( "NewAffG" ),               /* Keyword */
-    &g_ShowClearanceWhenTrackCreation,   /* Parameter address */
-    1                            /* Default value */
-);
 
-static PARAM_CFG_BOOL TrackAfficheGardeCfg
+static PARAM_CFG_INT TrackDisplayClearanceCfg
 (
     INSETUP,
-    wxT( "SegAffG" ),               /* Keyword */
-    &DisplayOpt.DisplayTrackIsol,   /* Parameter address */
-    FALSE                           /* Default value */
+    wxT( "TrackDisplayClearance" ),                 /* Keyword */
+    &DisplayOpt.ShowTrackClearanceMode,             /* Parameter address */
+    SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS          /* Default value */
 );
 
 static PARAM_CFG_BOOL PadFillCfg
@@ -816,8 +809,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &Raccord45Cfg,
     &UnitCfg,
     &SegmFillCfg,
-    &TrackAfficheGardeCfg,
-    &NewTrackAfficheGardeCfg,
+    &TrackDisplayClearanceCfg,
     &PadFillCfg,
     &PadAfficheGardeCfg,
     &PadShowNumCfg,

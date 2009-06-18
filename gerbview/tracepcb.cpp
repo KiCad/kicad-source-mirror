@@ -43,7 +43,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
     DisplayOpt.DisplayModEdge      = FILLED;
     DisplayOpt.DisplayModText      = FILLED;
     DisplayOpt.DisplayPcbTrackFill = FILLED;
-    DisplayOpt.DisplayTrackIsol    = 0;
+    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZonesMode = 0;
     DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;

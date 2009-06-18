@@ -49,7 +49,7 @@ static bool ShowClearance( const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
     return !(aTrack->m_Flags & DRAW_ERASED)
-           &&  DisplayOpt.DisplayTrackIsol
+           &&  DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS
            &&  aTrack->GetLayer() <= LAST_COPPER_LAYER
            && ( aTrack->Type() == TYPE_TRACK || aTrack->Type() == TYPE_VIA );
 }
@@ -764,7 +764,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         }
     }
 
-    if( DisplayOpt.DisplayTrackIsol )
+    if( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                   rayon + g_DesignSettings.m_TrackClearence, color );
 

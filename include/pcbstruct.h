@@ -268,6 +268,17 @@ public:
 #include "class_marker.h"
 #include "class_zone.h"
 
+/* Values for DISPLAY_OPTIONS.ShowTrackClearanceMode parameter option
+ *  This parameter controls how to show tracks and vias clerance area
+ */
+enum ShowTrackClearanceModeList {
+    DO_NOT_SHOW_CLEARANCE = 0,                      // Do not show clearance areas
+    SHOW_CLEARANCE_NEW_TRACKS,                      // Show clearance areas only for new track during track creation
+    SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,        /* Show clrearance areas only for new track during track creation,
+                                                     *  and shows a via clearnce area at end of current new segment (guide to place a nev via
+                                                     */
+    SHOW_CLEARANCE_ALWAYS                           // Show Always clearance areas for track and vias
+};
 
 class DISPLAY_OPTIONS
 {
@@ -279,10 +290,15 @@ public:
 
     int  DisplayModEdge;
     int  DisplayModText;
-    bool DisplayPcbTrackFill;   /* FALSE = sketch , TRUE = filled */
-    bool DisplayTrackIsol;
+    bool DisplayPcbTrackFill;       /* FALSE = sketch , TRUE = filled */
+    int  ShowTrackClearanceMode;    /* = 0 , 1 or 2
+                                     *  0 = do not show clearance
+                                     *  1 = show track clearance
+                                     *  2 = show clearance + via area
+                                     *  (useful to know what clearance area is neede if we want to put a via on terminal track point)
+                                     */
 
-    int  m_DisplayViaMode;      /* 0 do not show via hole,
+    int m_DisplayViaMode;       /* 0 do not show via hole,
                                  * 1 show via hole for non default value
                                  * 2 show all via hole */
 

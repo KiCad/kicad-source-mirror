@@ -59,7 +59,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
     EVT_MENU( ID_COLORS_SETUP, WinEDA_GerberFrame::Process_Config )
     EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config )
-    EVT_MENU( ID_PCB_LOOK_SETUP, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_DrawFrame::SetLanguage )

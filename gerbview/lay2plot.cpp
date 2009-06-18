@@ -28,7 +28,7 @@ void Print_PcbItems(BOARD * Pcb, wxDC *DC, int drawmode, int printmasklayer)
     DisplayOpt.DisplayPadNoConn = 0;
     DisplayOpt.DisplayPadIsol = 0;
     DisplayOpt.DisplayPcbTrackFill = FILLED;
-    DisplayOpt.DisplayTrackIsol = 0;
+    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems = FILLED;
     DisplayOpt.DisplayZonesMode = 0;
 

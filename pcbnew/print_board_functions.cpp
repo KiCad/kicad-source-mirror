@@ -45,12 +45,13 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
     DisplayOpt.DisplayModEdge    = FILLED;
     DisplayOpt.DisplayModText    = FILLED;
     frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
-    DisplayOpt.DisplayTrackIsol  = false;
+    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems  = FILLED;
     DisplayOpt.DisplayZonesMode      = 0;
+    DisplayOpt.DisplayNetNamesMode  = 0;
 
     m_PrintIsMirrored = aPrintMirrorMode;
-    
+
     // The OR mode is used in color mode, but be aware the backgroud *must be BLACK.
     // In print page dialog, we first plrint in BLACK, and after reprint in color,
     // on the black "local" backgroud, in OR mode

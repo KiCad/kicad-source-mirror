@@ -60,13 +60,22 @@ void Dialog_Display_Options::init()
     if ( DisplayOpt.DisplayPcbTrackFill )
         m_OptDisplayTracks->SetSelection(1);
 
-    if ( DisplayOpt.DisplayTrackIsol )
-        m_OptDisplayTracksClearance->SetSelection(3);
-    else if ( g_ShowClearanceWhenTrackCreation == 1)
-        m_OptDisplayTracksClearance->SetSelection(1);
-    else if ( g_ShowClearanceWhenTrackCreation == 2)
-        m_OptDisplayTracksClearance->SetSelection(2);
-    else m_OptDisplayTracksClearance->SetSelection(0);
+    switch ( DisplayOpt.ShowTrackClearanceMode )
+    {
+        case DO_NOT_SHOW_CLEARANCE:
+            m_OptDisplayTracksClearance->SetSelection(0);
+            break;
+        case SHOW_CLEARANCE_NEW_TRACKS:
+            m_OptDisplayTracksClearance->SetSelection(1);
+            break;
+        default:
+        case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+            m_OptDisplayTracksClearance->SetSelection(2);
+            break;
+        case SHOW_CLEARANCE_ALWAYS:
+            m_OptDisplayTracksClearance->SetSelection(3);
+            break;
+    }
 
     if ( DisplayOpt.DisplayPadFill )
         m_OptDisplayPads->SetSelection(1);
@@ -115,21 +124,17 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
 
     switch ( m_OptDisplayTracksClearance->GetSelection() )
     {
-        case 3:
-            DisplayOpt.DisplayTrackIsol = TRUE;
-            g_ShowClearanceWhenTrackCreation = 1;
+        case 0:
+            DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
             break;
         case 1:
-            DisplayOpt.DisplayTrackIsol = FALSE;
-            g_ShowClearanceWhenTrackCreation = 1;
+            DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS;
             break;
         case 2:
-            DisplayOpt.DisplayTrackIsol = FALSE;
-            g_ShowClearanceWhenTrackCreation = 2;
+            DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
             break;
-        case 0:
-            DisplayOpt.DisplayTrackIsol = FALSE;
-            g_ShowClearanceWhenTrackCreation = 0;
+        case 3:
+            DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
             break;
     }
 

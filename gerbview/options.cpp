@@ -390,7 +390,7 @@ void WinEDA_GerberFrame::InstallPcbOptionsFrame( const wxPoint& pos, int id )
 {
     switch( id )
     {
-    case ID_PCB_LOOK_SETUP:
+    case ID_PCB_DISPLAY_OPTIONS_SETUP:
     {
         WinEDA_LookFrame* OptionsFrame =
             new WinEDA_LookFrame( this, pos );

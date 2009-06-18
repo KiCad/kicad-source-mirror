@@ -51,7 +51,7 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
     }
 
     case ID_PCB_TRACK_SIZE_SETUP:
-    case ID_PCB_LOOK_SETUP:
+    case ID_PCB_DISPLAY_OPTIONS_SETUP:
     case ID_OPTIONS_SETUP:
         InstallPcbOptionsFrame( pos, id );
         break;

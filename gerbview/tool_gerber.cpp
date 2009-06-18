@@ -87,7 +87,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     ADD_MENUITEM_WITH_HELP( configmenu, ID_OPTIONS_SETUP, _( "&Options" ),
                             _( " Select general options" ), preference_xpm );
 
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_PCB_LOOK_SETUP, _( "Display" ),
+    ADD_MENUITEM_WITH_HELP( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP, _( "Display" ),
                             _( " Select how items are displayed" ),
                             display_options_xpm );
 
