@@ -52,7 +52,6 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PCB_TRACK_SIZE_SETUP:
-    case ID_PCB_LOOK_SETUP:
     case ID_OPTIONS_SETUP:
     case ID_PCB_DRAWINGS_WIDTHS_SETUP:
         InstallPcbOptionsFrame( pos, &dc, id );

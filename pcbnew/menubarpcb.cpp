@@ -184,7 +184,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
-    item = new wxMenuItem( configmenu, ID_PCB_LOOK_SETUP, _( "&Display" ),
+    item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP, _( "&Display" ),
                            _( "Select how items (pads, tracks texts ... ) are displayed" ) );
     item->SetBitmap( display_options_xpm );
     configmenu->Append( item );

@@ -8,6 +8,8 @@ email address.
 ================================================================================
 ++Pcbnew:
     Added: in DRC tests: tests for vias min size and tracks min width.
+    Added: Option to show the via area while creating a new track.
+        Useful in compact designs to know hos to place a via during track creation.
 
 2009-june-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

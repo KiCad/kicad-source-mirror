@@ -194,12 +194,12 @@ static PARAM_CFG_BOOL SegmFillCfg
     TRUE                                            /* Default value */
 );
 
-static PARAM_CFG_BOOL NewTrackAfficheGardeCfg
+static PARAM_CFG_INT NewTrackAfficheGardeCfg
 (
     INSETUP,
     wxT( "NewAffG" ),               /* Keyword */
-    &g_ShowIsolDuringCreateTrack,   /* Parameter address */
-    TRUE                            /* Default value */
+    &g_ShowClearanceWhenTrackCreation,   /* Parameter address */
+    1                            /* Default value */
 );
 
 static PARAM_CFG_BOOL TrackAfficheGardeCfg

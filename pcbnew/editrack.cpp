@@ -674,7 +674,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     DisplayOpt.DisplayPcbTrackFill = true;
     IsolTmp = DisplayOpt.DisplayTrackIsol;
 
-    if( g_ShowIsolDuringCreateTrack )
+    if( g_ShowClearanceWhenTrackCreation )
         DisplayOpt.DisplayTrackIsol = TRUE;
 
     /* efface ancienne position si elle a ete deja dessinee */
@@ -682,6 +682,14 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     {
         Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
         ( (WinEDA_BasePcbFrame*) (panel->m_Parent) )->trace_ratsnest_pad( DC );
+        if( g_ShowClearanceWhenTrackCreation > 1 )  // Show the via area
+        {
+            int color = g_DesignSettings.m_LayerColor[g_CurrentTrackSegment->GetLayer()];
+            GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
+                g_CurrentTrackSegment->m_End.y,
+                (g_DesignSettings.m_CurrentViaSize/2) + g_DesignSettings.m_TrackClearence,
+                color );
+        }
     }
 
     // MacOSX seems to need this.
@@ -734,6 +742,14 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 
     D( g_CurrentTrackList.VerifyListIntegrity(); );
     Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
+    if( g_ShowClearanceWhenTrackCreation > 1 )  // Show the via area
+    {
+        int color = g_DesignSettings.m_LayerColor[g_CurrentTrackSegment->GetLayer()];
+        GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
+            g_CurrentTrackSegment->m_End.y,
+            (g_DesignSettings.m_CurrentViaSize/2) + g_DesignSettings.m_TrackClearence,
+            color );
+    }
 
     DisplayOpt.DisplayTrackIsol    = IsolTmp;
     DisplayOpt.DisplayPcbTrackFill = Track_fill_copy;

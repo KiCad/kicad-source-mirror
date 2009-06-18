@@ -12,23 +12,23 @@
 
 /* Flag used in locate functions
  * the locate ref point is the on grid cursor or the off grid mouse cursor */
-#define CURSEUR_ON_GRILLE   (0 << 0)
-#define CURSEUR_OFF_GRILLE  (1 << 0)
+#define CURSEUR_ON_GRILLE  (0 << 0)
+#define CURSEUR_OFF_GRILLE (1 << 0)
 
-#define IGNORE_LOCKED       (1 << 1)    ///< if module is locked, do not select for single module operation
-#define MATCH_LAYER         (1 << 2)    ///< if module not on current layer, do not select
-#define VISIBLE_ONLY        (1 << 3)    ///< if module not on a visible layer, do not select
+#define IGNORE_LOCKED (1 << 1)          ///< if module is locked, do not select for single module operation
+#define MATCH_LAYER   (1 << 2)          ///< if module not on current layer, do not select
+#define VISIBLE_ONLY  (1 << 3)          ///< if module not on a visible layer, do not select
 
 
 #define START 0     /* Flag used in locale routines */
 #define END   1
 
-#define DIM_ANCRE_MODULE 3  /* Anchor size (footprint centre) */
-#define DIM_ANCRE_TEXTE  2  /* Anchor size (Text centre) */
+#define DIM_ANCRE_MODULE 3      /* Anchor size (footprint centre) */
+#define DIM_ANCRE_TEXTE  2      /* Anchor size (Text centre) */
 
-#define TEXTS_MIN_SIZE 50   // Min size in pcbnew units value (50 * 0.0001 mils)
-#define TEXTS_MAX_SIZE 100000   // Min size in pcbnew units value (1 inch) )
-#define TEXTS_MAX_WIDTH 5000   // Max width in pcbnew units value (0.5 inches)
+#define TEXTS_MIN_SIZE  50      // Min size in pcbnew units value (50 * 0.0001 mils)
+#define TEXTS_MAX_SIZE  100000  // Min size in pcbnew units value (1 inch) )
+#define TEXTS_MAX_WIDTH 5000    // Max width in pcbnew units value (0.5 inches)
 
 /* Used in Zoom menu */
 #define ZOOM_PLUS   -1
@@ -46,15 +46,20 @@
 
 
 /* variables */
-extern bool        Drc_On;
-extern bool        g_AutoDeleteOldTrack;
-extern bool        g_No_Via_Route;
-extern bool        g_Drag_Pistes_On;
-extern bool        g_Show_Ratsnest;
-extern bool        g_Show_Module_Ratsnest;
-extern bool        g_Show_Pads_Module_in_Move;
-extern bool        g_Raccord_45_Auto;
-extern bool        g_ShowIsolDuringCreateTrack;
+extern bool Drc_On;
+extern bool g_AutoDeleteOldTrack;
+extern bool g_No_Via_Route;
+extern bool g_Drag_Pistes_On;
+extern bool g_Show_Ratsnest;
+extern bool g_Show_Module_Ratsnest;
+extern bool g_Show_Pads_Module_in_Move;
+extern bool g_Raccord_45_Auto;
+extern int  g_ShowClearanceWhenTrackCreation;  /* = 0 , 1 or 2
+                                                *  0 = do not show clearance
+                                                *  1 = show track clearance
+                                                *  2 = show clearance + via area
+                                                *  (useful to know what clearance area is neede if we want to put a via on terminal track point)
+                                                */
 
 extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint libraries filesnames
 
@@ -65,7 +70,8 @@ extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint li
  * @param layer One of the two allowed layers for modules: CMP_N or COPPER_LAYER_N
  * @return bool - true if the layer is visible, else false.
  */
-bool inline IsModuleLayerVisible( int layer ) {
+bool inline IsModuleLayerVisible( int layer )
+{
     if( layer==CMP_N )
         return DisplayOpt.Show_Modules_Cmp;
 
@@ -77,36 +83,36 @@ bool inline IsModuleLayerVisible( int layer ) {
 }
 
 
-extern bool     Track_45_Only;
-extern bool     Segments_45_Only;
-extern wxString g_Shapes3DExtBuffer;
-extern wxString g_DocModulesFileName;
+extern bool        Track_45_Only;
+extern bool        Segments_45_Only;
+extern wxString    g_Shapes3DExtBuffer;
+extern wxString    g_DocModulesFileName;
 
 /* Variables used in footprint handling */
-extern int      Angle_Rot_Module;
-extern wxSize   ModuleTextSize;  /* Default footprint texts size */
-extern int      ModuleTextWidth;
-extern int      ModuleSegmentWidth;
+extern int         Angle_Rot_Module;
+extern wxSize      ModuleTextSize; /* Default footprint texts size */
+extern int         ModuleTextWidth;
+extern int         ModuleSegmentWidth;
 
 /* Layer pair for auto routing and switch layers by hotkey */
-extern int      Route_Layer_TOP;
-extern int      Route_Layer_BOTTOM;
+extern int         Route_Layer_TOP;
+extern int         Route_Layer_BOTTOM;
 
-extern int      g_MaxLinksShowed;   // Max count links showed in routing
-extern bool     g_TwoSegmentTrackBuild;
+extern int         g_MaxLinksShowed; // Max count links showed in routing
+extern bool        g_TwoSegmentTrackBuild;
 
-extern int      g_MagneticPadOption;
-extern int      g_MagneticTrackOption;
+extern int         g_MagneticPadOption;
+extern int         g_MagneticTrackOption;
 
 /* Variables to handle hightlight nets */
-extern bool     g_HightLigt_Status;
-extern int      g_HightLigth_NetCode;
+extern bool        g_HightLigt_Status;
+extern int         g_HightLigth_NetCode;
 
-extern PCB_SCREEN* ScreenModule;    /* Ecran de l'editeur de modules */
+extern PCB_SCREEN* ScreenModule;        /* Ecran de l'editeur de modules */
 
-extern wxPoint  g_Offset_Module;    /* Offset de trace du modul en depl */
+extern wxPoint     g_Offset_Module;     /* Offset de trace du modul en depl */
 
-extern wxString g_Current_PadName;  // Last used pad name (pad num)
+extern wxString    g_Current_PadName;   // Last used pad name (pad num)
 
 
 enum MagneticPadOptionValues {

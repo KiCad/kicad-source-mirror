@@ -55,7 +55,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_TrackMinWidthTitle
 	->Wrap( -1 );
 	fgMinValuesSizer->Add( m_TrackMinWidthTitle
-	, 0, wxALL|wxALIGN_RIGHT, 5 );
+	, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_SetTrackMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetTrackMinWidthCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
@@ -64,7 +64,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_MicroViaMinTitle = new wxStaticText( this, wxID_ANY, _("MicroVia Min Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinTitle->Wrap( -1 );
-	fgMinValuesSizer->Add( m_MicroViaMinTitle, 0, wxALL|wxALIGN_RIGHT, 5 );
+	fgMinValuesSizer->Add( m_MicroViaMinTitle, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_SetMicroViakMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetMicroViakMinSizeCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
@@ -119,7 +119,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	sbSizer3->Add( m_UnconnectedTestCtrl, 0, wxALL, 5 );
 	
-	sbSizerOptions->Add( sbSizer3, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizerOptions->Add( sbSizer3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_CommandSizer->Add( sbSizerOptions, 1, 0, 5 );
 	

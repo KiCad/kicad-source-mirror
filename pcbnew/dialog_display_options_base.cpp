@@ -27,10 +27,10 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	
 	sLeftBoxSizer->Add( m_OptDisplayTracks, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_OptDisplayTracksClearanceChoices[] = { _("Always"), _("New track"), _("Never") };
+	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("Always") };
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
 	m_OptDisplayTracksClearance = new wxRadioBox( this, ID_SHOW_CLEARANCE, _("Show Tracks Clearance:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
-	m_OptDisplayTracksClearance->SetSelection( 1 );
+	m_OptDisplayTracksClearance->SetSelection( 0 );
 	m_OptDisplayTracksClearance->SetToolTip( _("Show( or not) tracks clearance area.\nIf New track is selected,  track clearance area is shown only when creating the track.") );
 	
 	sLeftBoxSizer->Add( m_OptDisplayTracksClearance, 0, wxALL|wxEXPAND, 5 );
