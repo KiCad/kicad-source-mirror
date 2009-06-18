@@ -111,7 +111,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         case ID_LIBEDIT_BODY_TEXT_BUTT:
             if( CurrentDrawItem == NULL || CurrentDrawItem->m_Flags == 0 )
             {
-                CurrentDrawItem = CreateGraphicItem( DC );
+                CurrentDrawItem = CreateGraphicItem( CurrentLibEntry, DC );
             }
             else if( CurrentDrawItem )
             {

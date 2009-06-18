@@ -21,7 +21,8 @@
  * Also useful in Gerbview for this reason.
  * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic functions )
  */
-static const int PcbZoomList[] = {
+static const int PcbZoomList[] =
+{
     5,    10,   15,   22,    30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
     2000, 3500, 5000, 10000, 20000
 };
@@ -31,7 +32,8 @@ static const int PcbZoomList[] = {
 
 /* Default grid sizes for PCB editor screens. */
 #define MM_TO_PCB_UNITS 10000.0 / 25.4
-static GRID_TYPE PcbGridList[] = {
+static GRID_TYPE PcbGridList[] =
+{
     // predefined grid list in 0.0001 inches
     { ID_POPUP_GRID_LEVEL_1000,   wxRealPoint( 1000,                   1000 )                      },
     { ID_POPUP_GRID_LEVEL_500,    wxRealPoint( 500,                    500 )                       },
@@ -135,29 +137,30 @@ bool PCB_SCREEN::IsMicroViaAcceptable( void )
 DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 {
     DisplayPadFill   = FILLED;
-    DisplayPadNum    = TRUE;
-    DisplayPadNoConn = TRUE;
-    DisplayPadIsol   = TRUE;
+    DisplayPadNum    = true;
+    DisplayPadNoConn = true;
+    DisplayPadIsol   = true;
 
-    DisplayModEdge = TRUE;
-    DisplayModText = TRUE;
-    DisplayPcbTrackFill = TRUE; /* FALSE = sketch , TRUE = rempli */
-    DisplayTrackIsol    = FALSE;
+    DisplayModEdge = true;
+    DisplayModText = true;
+    DisplayPcbTrackFill = true; /* false = sketch , true = rempli */
+    DisplayTrackIsol    = false;
     m_DisplayViaMode    = VIA_HOLE_NOT_SHOW;
 
-    DisplayPolarCood = TRUE;
-    DisplayZonesMode = 0;       /* 0 = Show filled areas outlines in zones,
-                                * 1 = do not show filled areas outlines
-                                * 2 = show outlines of filled areas */
+    DisplayPolarCood    = false; /* false = display absolute coordinates,
+                                 * true = display polar cordinates */
+    DisplayZonesMode    = 0;    /* 0 = Show filled areas outlines in zones,
+                                 * 1 = do not show filled areas outlines
+                                 * 2 = show outlines of filled areas */
     DisplayNetNamesMode = 3;   /* 0 do not show netnames,
-                                 * 1 show netnames on pads
-                                 * 2 show netnames on tracks
-                                 * 3 show netnames on tracks and pads */
-    Show_Modules_Cmp = TRUE;
-    Show_Modules_Cu  = TRUE;
+                                * 1 show netnames on pads
+                                * 2 show netnames on tracks
+                                * 3 show netnames on tracks and pads */
+    Show_Modules_Cmp    = true;
+    Show_Modules_Cu     = true;
 
-    DisplayDrawItems    = TRUE;
-    ContrastModeDisplay = FALSE;
+    DisplayDrawItems    = true;
+    ContrastModeDisplay = false;
 }
 
 
@@ -169,7 +172,8 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 {
     int ii;
 
-    static const int default_layer_color[32] = {
+    static const int default_layer_color[32] =
+    {
         GREEN,     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
         LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
         LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
@@ -204,14 +208,17 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
         m_ViaSizeHistory[ii]    = 0;    // Last HISTORY_NUMBER used via sizes
     }
 
-    m_DrawSegmentWidth = 100;               // current graphic line width (not EDGE layer)
-    m_EdgeSegmentWidth = 100;               // current graphic line width (EDGE layer only)
-    m_PcbTextWidth     = 100;               // current Pcb (not module) Text width
-    m_PcbTextSize    = wxSize( 500, 500 );  // current Pcb (not module) Text size
-    m_TrackClearence = 100;                 // track to track and track to pads clearance
-    m_MaskMargin     = 150;                 // Solder mask margin
+    m_DrawSegmentWidth = 100;                       // current graphic line width (not EDGE layer)
+    m_EdgeSegmentWidth = 100;                       // current graphic line width (EDGE layer only)
+    m_PcbTextWidth     = 100;                       // current Pcb (not module) Text width
+    m_PcbTextSize      = wxSize( 500, 500 );        // current Pcb (not module) Text size
+    m_TrackClearence   = 100;                       // track to track and track to pads clearance
+    m_TrackMinWidth    = 80;                        // track min value for width ((min copper size value
+    m_ViasMinSize      = 350;                       // vias (not micro vias) min diameter
+    m_MicroViasMinSize = 200;                       // micro vias (not vias) min diameter
+    m_MaskMargin = 150;                             // Solder mask margin
     /* Color options for screen display of the Printed Board: */
-    m_PcbGridColor = DARKGRAY;              // Grid color
+    m_PcbGridColor = DARKGRAY;                      // Grid color
 
     for( ii = 0; ii < 32; ii++ )
         m_LayerColor[ii] = default_layer_color[ii];

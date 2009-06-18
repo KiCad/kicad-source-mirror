@@ -162,6 +162,7 @@ LibCmpEntry::LibCmpEntry( LibrEntryType CmpType, const wxChar* CmpName ) :
 {
     Type = CmpType;
     m_Name.m_FieldId = VALUE;
+    m_Name.SetParent( this );
     if( CmpName )
         m_Name.m_Text = CmpName;
 }
@@ -220,6 +221,7 @@ EDA_LibComponentStruct:: EDA_LibComponentStruct( const wxChar* CmpName ) :
     m_DrawPinNum = 1;
     m_DrawPinName = 1;
     m_Prefix.m_FieldId = REFERENCE;
+    m_Prefix.SetParent( this );
 }
 
 
@@ -478,32 +480,32 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
         switch( line[0] )
         {
         case 'A':    /* Arc */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawArc();
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawArc(this);
             entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'C':    /* Circle */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawCircle();
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawCircle(this);
             entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'T':    /* Text */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawText();
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawText(this);
             entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'S':    /* Square */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawSquare();
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawSquare(this);
             entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'X':    /* Pin Description */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawPin();
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawPin(this);
             entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'P':    /* Polyline */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawPolyline();
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawPolyline(this);
             entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
@@ -568,7 +570,7 @@ bool EDA_LibComponentStruct::LoadAliases( char* line, wxString& errorMsg )
 
 bool EDA_LibComponentStruct::LoadField( char* line, wxString& errorMsg )
 {
-    LibDrawField* field = new LibDrawField();
+    LibDrawField* field = new LibDrawField(this);
 
     if ( !field->Load( line, errorMsg ) )
     {
@@ -704,7 +706,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
             create = TRUE;
         if( create )
         {
-            LibDrawField*Field = new LibDrawField( ii );
+            LibDrawField*Field = new LibDrawField( this, ii );
             aFields[ii].Copy( Field );
             CurrentLibEntry->m_Fields.PushBack( Field );
         }
@@ -719,6 +721,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
     for( LibDrawField* Field = CurrentLibEntry->m_Fields; Field;
          Field = Field->Next() )
     {
+        Field->SetParent( this );
         if( Field->m_FieldId >= FIELD1 )
         {
             if( Field->m_Text.IsEmpty() )

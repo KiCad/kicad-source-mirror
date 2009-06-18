@@ -376,10 +376,7 @@ LibDrawField* WinEDA_LibeditFrame::LocateField( EDA_LibComponentStruct* LibEntry
  *     pointer on the field (or NULL )
  */
 {
-    wxPoint refpos;
-
-    refpos.x = GetScreen()->m_Curseur.x;
-    refpos.y = GetScreen()->m_Curseur.y;  // Y axis is from bottom to top in library
+    wxPoint refpos = GetScreen()->m_Curseur;
     /* Test reference */
     if( LibEntry->m_Name.HitTest( refpos ) )
         return &LibEntry->m_Name;
@@ -388,7 +385,7 @@ LibDrawField* WinEDA_LibeditFrame::LocateField( EDA_LibComponentStruct* LibEntry
     if( LibEntry->m_Prefix.HitTest( refpos ) )
         return &LibEntry->m_Prefix;
 
-    /* Localisation des autres fields */
+    /* Test others fields */
     for( LibDrawField* field = LibEntry->m_Fields;  field;  field = field->Next() )
     {
         if( field->m_Text.IsEmpty() )

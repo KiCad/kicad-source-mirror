@@ -484,7 +484,7 @@ private:
     void               PlaceAncre();
 
     // Edition des graphismes:
-    LibEDA_BaseStruct* CreateGraphicItem( wxDC* DC );
+    LibEDA_BaseStruct* CreateGraphicItem( EDA_LibComponentStruct * LibEntry, wxDC* DC );
     void               GraphicItemBeginDraw( wxDC* DC );
     void               StartMoveDrawSymbol( wxDC* DC );
     void               EndDrawGraphicItem( wxDC* DC );

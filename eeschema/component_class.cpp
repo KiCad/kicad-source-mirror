@@ -42,13 +42,12 @@ void CreateDummyCmp()
 {
     DummyCmp = new EDA_LibComponentStruct( NULL );
 
-    LibDrawSquare* Square = new LibDrawSquare();
+    LibDrawSquare* Square = new LibDrawSquare(DummyCmp);
 
     Square->m_Pos   = wxPoint( -200, 200 );
     Square->m_End   = wxPoint( 200, -200 );
-    Square->m_Width = 4;
 
-    LibDrawText* Text = new LibDrawText();
+    LibDrawText* Text = new LibDrawText(DummyCmp);
 
     Text->m_Size.x = Text->m_Size.y = 150;
     Text->m_Text   = wxT( "??" );

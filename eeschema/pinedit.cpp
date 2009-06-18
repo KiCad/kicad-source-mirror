@@ -553,7 +553,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
         DrawItem->m_Flags = 0;
 
-    CurrentPin = new LibDrawPin();
+    CurrentPin = new LibDrawPin(CurrentLibEntry);
 
     CurrentDrawItem = CurrentPin;
     if( CurrentPin == NULL )

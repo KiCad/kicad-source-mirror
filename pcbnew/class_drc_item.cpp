@@ -77,6 +77,12 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _("Hole near pad"));
     case DRCE_HOLE_NEAR_TRACK:
         return wxString( _("Hole near track"));
+    case DRCE_TOO_SMALL_TRACK_WIDTH:
+        return wxString( _("Too small track width"));
+    case DRCE_TOO_SMALL_VIA:
+        return wxString( _("Too small via size"));
+    case DRCE_TOO_SMALL_MICROVIA:
+        return wxString( _("Too small micro via size"));
 
 
     default:

@@ -41,7 +41,7 @@
 
 #include "drc_stuff.h"
 
-#include "dialog_drc.cpp"
+#include "dialog_drc.h"
 
 
 /******************************************************/
@@ -56,12 +56,18 @@ void DRC::ShowDialog()
 {
     if( !m_ui )
     {
-        m_ui = new DrcDialog( this, m_mainWindow );
+        m_ui = new DIALOG_DRC_CONTROL( this, m_mainWindow );
         updatePointers();
 
         // copy data retained in this DRC object into the m_ui DrcPanel:
 
         PutValueInLocalUnits( *m_ui->m_SetClearance, g_DesignSettings.m_TrackClearence,
+                              m_mainWindow->m_InternalUnits );;
+        PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl, g_DesignSettings.m_TrackMinWidth,
+                              m_mainWindow->m_InternalUnits );;
+        PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl, g_DesignSettings.m_ViasMinSize,
+                              m_mainWindow->m_InternalUnits );;
+        PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl, g_DesignSettings.m_MicroViasMinSize,
                               m_mainWindow->m_InternalUnits );;
 
         m_ui->m_Pad2PadTestCtrl->SetValue( m_doPad2PadTest );
@@ -187,6 +193,11 @@ int DRC::Drc( ZONE_CONTAINER* aArea, int CornerIndex )
 }
 
 
+/**
+ * Function RunTests
+ * will actually run all the tests specified with a previous call to
+ * SetSettings()
+ */
 void DRC::RunTests()
 {
     // Ensure ratsnest is up to date:
@@ -521,6 +532,26 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     /* Phase 0 : Test vias : */
     if( aRefSeg->Type() == TYPE_VIA )
     {
+        // test if the via size is bigger thn min size allowed
+        if( aRefSeg->Shape() == VIA_MICROVIA )
+        {
+            if(aRefSeg->m_Width < g_DesignSettings.m_MicroViasMinSize)
+            {
+                m_currentMarker = fillMarker( aRefSeg, NULL,
+                                              DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
+                return false;
+        }
+
+        }
+        else
+        {
+            if(aRefSeg->m_Width < g_DesignSettings.m_ViasMinSize)
+            {
+                m_currentMarker = fillMarker( aRefSeg, NULL,
+                                              DRCE_TOO_SMALL_VIA, m_currentMarker );
+                return false;
+            }
+        }
         // test if via's hole is bigger than its diameter
         // This test is necessary since the via hole size and width can be modified
         // and an default via hole can be bigger than some vias sizes
@@ -553,6 +584,15 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                                               DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR, m_currentMarker );
                 return false;
             }
+        }
+    }
+    else    // This is a track segment
+    {
+        if(aRefSeg->m_Width < g_DesignSettings.m_TrackMinWidth)
+        {
+            m_currentMarker = fillMarker( aRefSeg, NULL,
+                                          DRCE_TOO_SMALL_TRACK_WIDTH, m_currentMarker );
+            return false;
         }
     }
 

@@ -38,13 +38,19 @@
  *
  *  others = free fields
  */
-LibDrawField::LibDrawField( int idfield ) :
-    LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE )
+LibDrawField::LibDrawField(EDA_LibComponentStruct * aParent, int idfield ) :
+    LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE, aParent )
 {
     m_FieldId = idfield;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
 }
 
+LibDrawField::LibDrawField( int idfield ) :
+    LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE, NULL )
+{
+    m_FieldId = idfield;
+    m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
+}
 
 LibDrawField::~LibDrawField()
 {
@@ -318,6 +324,7 @@ LibDrawField* LibDrawField::GenCopy()
  */
 void LibDrawField::Copy( LibDrawField* Target ) const
 {
+    Target->SetParent( m_Parent );
     Target->m_Pos       = m_Pos;
     Target->m_Size      = m_Size;
     Target->m_Width     = m_Width;

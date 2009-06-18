@@ -121,7 +121,8 @@ static const char* GetHersheyShapeDescription( int AsciiCode )
     }
 #endif
 
-    AsciiCode &= 0x7F;
+    if ( AsciiCode > 0x7F )
+        AsciiCode = '?';
     if( AsciiCode < 32 )
         AsciiCode = 32;                 /* Clamp control chars */
     AsciiCode -= 32;
@@ -244,6 +245,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
     int     overbars;                       // Number of ~ seen
     int     overbar_italic_comp;            // Italic compensation for overbar
 
+
     #define        BUF_SIZE 100
     wxPoint coord[BUF_SIZE + 1];                // Buffer coordinate used to draw polylines (one char shape)
     bool    sketch_mode    = false;
@@ -329,7 +331,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         break;
 
     case GR_TEXT_VJUSTIFY_TOP:
-        current_char_pos.y += dy;
+         current_char_pos.y += dy;
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:

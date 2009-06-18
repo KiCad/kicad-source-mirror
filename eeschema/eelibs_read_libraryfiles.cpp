@@ -17,7 +17,7 @@
 #include "protos.h"
 
 /* Local Functions */
-static LibEDA_BaseStruct* GetDrawEntry( WinEDA_DrawFrame* frame, FILE* f,
+static LibEDA_BaseStruct* ReadDrawEntryItemDescription( EDA_LibComponentStruct* aParent, FILE* f,
                                         char* Line, int* LineNum );
 static bool AddAliasNames( EDA_LibComponentStruct* LibEntry, char* line );
 static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
@@ -493,7 +493,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame,
         }
         else if( strcmp( p, "DRAW" ) == 0 )
         {
-            LibEntry->m_Drawings = GetDrawEntry( frame, f, Line, LineNum );
+            LibEntry->m_Drawings = ReadDrawEntryItemDescription( LibEntry, f, Line, LineNum );
         }
         else if( strncmp( p, "ALIAS", 5 ) == 0 )
         {
@@ -538,7 +538,7 @@ EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame,
 * been read already. Reads upto and include ENDDRAW, or an error (NULL ret). *
 *****************************************************************************/
 
-static LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame, FILE* f,
+static LibEDA_BaseStruct* ReadDrawEntryItemDescription (EDA_LibComponentStruct* aParent, FILE* f,
                                         char* Line, int* LineNum)
 {
     wxString           MsgLine, errorMsg;
@@ -551,7 +551,7 @@ static LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame, FILE* f,
     {
         if( GetLine( f, Line, LineNum, 1024 ) == NULL )
         {
-            DisplayError( frame, wxT( "File ended prematurely" ) );
+            DisplayError( NULL, wxT( "File ended prematurely" ) );
             return Head;
         }
 
@@ -565,39 +565,39 @@ static LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame, FILE* f,
         switch( Line[0] )
         {
         case 'A':    /* Arc */
-            New = ( LibEDA_BaseStruct* ) new LibDrawArc();
+            New = ( LibEDA_BaseStruct* ) new LibDrawArc(aParent);
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
         case 'C':    /* Circle */
-            New = ( LibEDA_BaseStruct* ) new LibDrawCircle();
+            New = ( LibEDA_BaseStruct* ) new LibDrawCircle(aParent);
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
         case 'T':    /* Text */
-            New = ( LibEDA_BaseStruct* ) new LibDrawText();
+            New = ( LibEDA_BaseStruct* ) new LibDrawText(aParent);
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
         case 'S':    /* Square */
-            New = ( LibEDA_BaseStruct* ) new LibDrawSquare();
+            New = ( LibEDA_BaseStruct* ) new LibDrawSquare(aParent);
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
         case 'X':    /* Pin Description */
-            New = ( LibEDA_BaseStruct* ) new LibDrawPin();
+            New = ( LibEDA_BaseStruct* ) new LibDrawPin(aParent);
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
         case 'P':    /* Polyline */
-            New = ( LibEDA_BaseStruct* ) new LibDrawPolyline();
+            New = ( LibEDA_BaseStruct* ) new LibDrawPolyline(aParent);
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
         default:
             MsgLine.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
                             *LineNum, Line );
-            DisplayError( frame, MsgLine );
+            DisplayError( NULL, MsgLine );
             return Head;
         }
 
@@ -606,7 +606,7 @@ static LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame, FILE* f,
             MsgLine.Printf( wxT( "Error <%s %s> in DRAW command %c in line %d, aborted." ),
                             errorMsg.c_str(), MsgLine.c_str(),
                             Line[0], *LineNum );
-            DisplayError( frame, MsgLine );
+            DisplayError( NULL, MsgLine );
             SAFE_DELETE( New );
 
             /* FLush till end of draw: */
@@ -614,7 +614,7 @@ static LibEDA_BaseStruct* GetDrawEntry (WinEDA_DrawFrame* frame, FILE* f,
             {
                 if( GetLine( f, Line, LineNum, 1024 ) == NULL )
                 {
-                    DisplayError( frame, wxT( "File ended prematurely" ) );
+                    DisplayError( NULL, wxT( "File ended prematurely" ) );
                     return Head;
                 }
             } while( strncmp( Line, "ENDDRAW", 7 ) != 0 );

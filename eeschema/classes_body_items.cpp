@@ -15,13 +15,13 @@
 #include "protos.h"
 
 
-static int    fill_tab[3] = { 'N', 'F', 'f' };
+static int fill_tab[3] = { 'N', 'F', 'f' };
 
 //#define DRAW_ARC_WITH_ANGLE		// Used to draw arcs
 
 
 /* Base class (abstract) for components bodies items */
-LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
+LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type, EDA_LibComponentStruct* aParent ) :
     EDA_BaseStruct( struct_type )
 {
     m_Unit    = 0;   /* Unit identification (for multi part per package)
@@ -30,6 +30,7 @@ LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type ) :
                       * shape) 0 if the item is common to all shapes */
     m_Fill    = NO_FILL;
 
+    m_Parent   = aParent;
     m_typeName = _( "Undefined" );
 }
 
@@ -68,12 +69,12 @@ void LibEDA_BaseStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-
 /**********************/
 /** class LibDrawArc **/
 /**********************/
 
-LibDrawArc::LibDrawArc() : LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE )
+LibDrawArc::LibDrawArc( EDA_LibComponentStruct* aParent ) :
+    LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
     m_Rayon = 0;
     t1 = t2 = 0;
@@ -159,6 +160,7 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
     return true;
 }
 
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -167,13 +169,15 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
  */
 bool LibDrawArc::HitTest( const wxPoint& aRefPoint )
 {
-    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+
     // Have a minimal tolerance for hit test
-    if ( mindist < 3 )
+    if( mindist < 3 )
         mindist = 3;        // = 3 mils
 
     return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
 }
+
 
 /** Function HitTest
  * @return true if the point aPosRef is near this object
@@ -185,7 +189,8 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
 {
     // TODO: use aTransMat to calculmates parameters
     wxPoint relpos = aRefPoint;
-    NEGATE(relpos.y);       // reverse Y axis
+
+    NEGATE( relpos.y );       // reverse Y axis
 
     relpos -= m_Pos;
     int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
@@ -195,14 +200,14 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
 
     // We are on the circle, ensure we are only on the arc, i.e. between m_ArcStart and m_ArcEnd
     int astart = t1;    // arc starting point ( in 0.1 degree)
-    int aend = t2;      // arc ending point ( in 0.1 degree)
-    int atest = wxRound( atan2(relpos.y, relpos.x) * 1800.0 / M_PI );
-    NORMALIZE_ANGLE_180(atest);
-    NORMALIZE_ANGLE_180(astart);
-    NORMALIZE_ANGLE_180(aend);
+    int aend   = t2;    // arc ending point ( in 0.1 degree)
+    int atest  = wxRound( atan2( relpos.y, relpos.x ) * 1800.0 / M_PI );
+    NORMALIZE_ANGLE_180( atest );
+    NORMALIZE_ANGLE_180( astart );
+    NORMALIZE_ANGLE_180( aend );
 
-    if ( astart > aend )
-        EXCHG(astart, aend);
+    if( astart > aend )
+        EXCHG( astart, aend );
 
     if( atest >= astart && atest <= aend )
         return true;
@@ -213,7 +218,7 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
 
 LibDrawArc* LibDrawArc::GenCopy()
 {
-    LibDrawArc* newitem = new LibDrawArc();
+    LibDrawArc* newitem = new LibDrawArc( GetParent() );
 
     newitem->m_Pos = m_Pos;
     newitem->m_ArcStart = m_ArcStart;
@@ -383,7 +388,8 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
 /** class LibDrawCircle **/
 /*************************/
 
-LibDrawCircle::LibDrawCircle() : LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE )
+LibDrawCircle::LibDrawCircle( EDA_LibComponentStruct* aParent ) :
+    LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
 {
     m_Rayon    = 0;
     m_Fill     = NO_FILL;
@@ -422,6 +428,7 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
     return true;
 }
 
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -430,13 +437,15 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
  */
 bool LibDrawCircle::HitTest( const wxPoint& aPosRef )
 {
-    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+
     // Have a minimal tolerance for hit test
-    if ( mindist < 3 )
+    if( mindist < 3 )
         mindist = 3;        // = 3 mils
 
     return HitTest( aPosRef, mindist, DefaultTransformMatrix );
 }
+
 
 /** Function HitTest
  * @return true if the point aPosRef is near this object
@@ -448,7 +457,9 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMa
 {
     wxPoint relpos = aPosRef - TransformCoordinate( aTransMat, m_Pos );
 
-    int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
+    int     dist =
+        wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
+
     if( abs( dist - m_Rayon ) <= aThreshold )
         return true;
     return false;
@@ -457,7 +468,7 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMa
 
 LibDrawCircle* LibDrawCircle::GenCopy()
 {
-    LibDrawCircle* newitem = new LibDrawCircle();
+    LibDrawCircle* newitem = new LibDrawCircle( GetParent() );
 
     newitem->m_Pos     = m_Pos;
     newitem->m_Rayon   = m_Rayon;
@@ -542,12 +553,12 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-
 /*************************/
 /** class LibDrawSquare **/
 /*************************/
 
-LibDrawSquare::LibDrawSquare() : LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE )
+LibDrawSquare::LibDrawSquare( EDA_LibComponentStruct* aParent ) :
+    LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
     m_Fill     = NO_FILL;
@@ -590,7 +601,7 @@ bool LibDrawSquare::Load( char* line, wxString& errorMsg )
 
 LibDrawSquare* LibDrawSquare::GenCopy()
 {
-    LibDrawSquare* newitem = new LibDrawSquare();
+    LibDrawSquare* newitem = new LibDrawSquare( GetParent() );
 
     newitem->m_Pos     = m_Pos;
     newitem->m_End     = m_End;
@@ -663,6 +674,7 @@ EDA_Rect LibDrawSquare::GetBoundingBox()
     return rect;
 }
 
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -671,14 +683,15 @@ EDA_Rect LibDrawSquare::GetBoundingBox()
  */
 bool LibDrawSquare::HitTest( const wxPoint& aRefPoint )
 {
+    int mindist = (m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2) + 1;
 
-    int mindist = (m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2) + 1;
     // Have a minimal tolerance for hit test
-    if ( mindist < 3 )
+    if( mindist < 3 )
         mindist = 3;        // = 3 mils
 
     return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
 }
+
 
 /** Function HitTest
  * @return true if the point aPosRef is near this object
@@ -688,14 +701,15 @@ bool LibDrawSquare::HitTest( const wxPoint& aRefPoint )
  */
 bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat[2][2] )
 {
-    wxPoint actualStart = TransformCoordinate( aTransMat, m_Pos);
-    wxPoint actualEnd = TransformCoordinate( aTransMat, m_End);
+    wxPoint actualStart = TransformCoordinate( aTransMat, m_Pos );
+    wxPoint actualEnd   = TransformCoordinate( aTransMat, m_End );
 
     // locate lower segment
     wxPoint start, end;
+
     start = actualStart;
-    end.x   = actualEnd.x;
-    end.y   = actualStart.y;
+    end.x = actualEnd.x;
+    end.y = actualStart.y;
     if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
         return true;
 
@@ -720,10 +734,12 @@ bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold, const int aTrans
     return false;
 }
 
+
 /**************************/
 /** class LibDrawSegment **/
 /**************************/
-LibDrawSegment::LibDrawSegment() : LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE )
+LibDrawSegment::LibDrawSegment( EDA_LibComponentStruct* aParent ) :
+    LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
     m_typeName = _( "Segment" );
@@ -746,7 +762,7 @@ bool LibDrawSegment::Load( char* line, wxString& errorMsg )
 
 LibDrawSegment* LibDrawSegment::GenCopy()
 {
-    LibDrawSegment* newitem = new LibDrawSegment();
+    LibDrawSegment* newitem = new LibDrawSegment( GetParent() );
 
     newitem->m_Pos     = m_Pos;
     newitem->m_End     = m_End;
@@ -801,7 +817,8 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->MsgPanel->Affiche_1_Parametre( 60, _( "Bounding box" ), msg, BROWN );
 }
 
- /**
+
+/**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
  * @param aRefPos A wxPoint to test
@@ -809,13 +826,15 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
  */
 bool LibDrawSegment::HitTest( const wxPoint& aPosRef )
 {
-    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+
     // Have a minimal tolerance for hit test
-    if ( mindist < 3 )
+    if( mindist < 3 )
         mindist = 3;        // = 3 mils
 
     return HitTest( aPosRef, mindist, DefaultTransformMatrix );
 }
+
 
 /** Function HitTest
  * @return true if the point aPosRef is near this object
@@ -826,7 +845,7 @@ bool LibDrawSegment::HitTest( const wxPoint& aPosRef )
 bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
 {
     wxPoint start = TransformCoordinate( aTransMat, m_Pos );
-    wxPoint end = TransformCoordinate( aTransMat, m_End );
+    wxPoint end   = TransformCoordinate( aTransMat, m_End );
 
     return TestSegmentHit( aPosRef, start, end, aThreshold );
 }
@@ -835,8 +854,8 @@ bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold, const int aTransM
 /***************************/
 /** class LibDrawPolyline **/
 /***************************/
-LibDrawPolyline::LibDrawPolyline() :
-    LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE )
+LibDrawPolyline::LibDrawPolyline( EDA_LibComponentStruct* aParent ) :
+    LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;
     m_Width    = 0;
@@ -923,7 +942,7 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
 
 LibDrawPolyline* LibDrawPolyline::GenCopy()
 {
-    LibDrawPolyline* newitem = new LibDrawPolyline();
+    LibDrawPolyline* newitem = new LibDrawPolyline( GetParent() );
 
     newitem->m_PolyPoints = m_PolyPoints;   // Vector copy
     newitem->m_Width   = m_Width;
@@ -1008,12 +1027,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 bool LibDrawPolyline::HitTest( const wxPoint& aRefPos )
 {
-    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+
     // Have a minimal tolerance for hit test
-    if ( mindist < 3 )
+    if( mindist < 3 )
         mindist = 3;        // = 3 mils
     return HitTest( aRefPos, mindist, DefaultTransformMatrix );
 }
+
 
 /** Function HitTest
  * @return true if the point aPosRef is near a segment
@@ -1031,7 +1052,7 @@ bool LibDrawPolyline::HitTest( wxPoint aPosRef, int aThreshold,
         start = TransformCoordinate( aTransMat, m_PolyPoints[ii - 1] );
         end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
 
-        if ( TestSegmentHit( aPosRef, start, end, aThreshold ) )
+        if( TestSegmentHit( aPosRef, start, end, aThreshold ) )
             return true;
     }
 

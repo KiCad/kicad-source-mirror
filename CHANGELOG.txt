@@ -4,6 +4,10 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-june-18 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew:
+    Added: in DRC tests: tests for vias min size and tracks min width.
 
 2009-june-11 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
@@ -22,7 +26,7 @@ email address.
         used for items that have a line thickness = 0,
         and NOT the minimum thickness.
     reasons:
-        - Obviously, differents parameters to draw and plot and bad.
+        - Obviously, differents parameters to draw and plot are bad.
             (what you plot is NOT what you see)
         - small texts are not readable with an minimum thickness value
             that could be good for others items.

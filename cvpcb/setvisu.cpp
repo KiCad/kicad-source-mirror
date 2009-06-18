@@ -68,6 +68,7 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
             DrawFrame->GetBoard()->m_Modules.PushBack( mod );
 
         DrawFrame->Zoom_Automatique( FALSE );
+        DrawFrame->UpdateStatusBar();    /* Display new cursor coordinates and zoom value */
         if( DrawFrame->m_Draw3DFrame )
             DrawFrame->m_Draw3DFrame->NewDisplay();
     }

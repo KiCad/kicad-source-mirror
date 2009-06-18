@@ -133,7 +133,7 @@ public:
     }
 
 
-    LibEDA_BaseStruct( KICAD_T struct_type );
+    LibEDA_BaseStruct( KICAD_T struct_type, EDA_LibComponentStruct * aParent );
     virtual ~LibEDA_BaseStruct() { }
 
     /** Function Draw (virtual pure)
@@ -166,6 +166,10 @@ public:
     virtual bool Save( FILE* aFile ) const = 0;
     virtual bool Load( char* line, wxString& errorMsg ) = 0;
 
+    EDA_LibComponentStruct * GetParent()
+    {
+        return (EDA_LibComponentStruct *)m_Parent;
+    }
 
     /**
      * Function HitTest
@@ -226,7 +230,7 @@ wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
     int      m_Width;       /* Line width */
 
 public:
-    LibDrawPin();
+    LibDrawPin(EDA_LibComponentStruct * aParent);
     ~LibDrawPin() { }
 
     LibDrawPin* Next() const { return (LibDrawPin*) Pnext; }
@@ -311,7 +315,7 @@ public:
     int     m_Width;    /* Line width */
 
 public:
-    LibDrawArc();
+    LibDrawArc(EDA_LibComponentStruct * aParent);
     ~LibDrawArc() { }
     virtual wxString GetClass() const
     {
@@ -368,7 +372,7 @@ public:
     int     m_Width;  /* Line width */
 
 public:
-    LibDrawCircle();
+    LibDrawCircle(EDA_LibComponentStruct * aParent);
     ~LibDrawCircle() { }
     virtual wxString GetClass() const
     {
@@ -422,7 +426,7 @@ public:
 class LibDrawText : public LibEDA_BaseStruct, public EDA_TextStruct
 {
 public:
-    LibDrawText();
+    LibDrawText(EDA_LibComponentStruct * aParent);
     ~LibDrawText() { }
     virtual wxString GetClass() const
     {
@@ -489,7 +493,7 @@ public:
     int     m_Width;   /* Line width */
 
 public:
-    LibDrawSquare();
+    LibDrawSquare(EDA_LibComponentStruct * aParent);
     ~LibDrawSquare() { }
     virtual wxString GetClass() const
     {
@@ -545,7 +549,7 @@ public:
     int     m_Width;    /* Line width */
 
 public:
-    LibDrawSegment();
+    LibDrawSegment(EDA_LibComponentStruct * aParent);
     ~LibDrawSegment() { }
     virtual wxString GetClass() const
     {
@@ -599,7 +603,7 @@ public:
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
-    LibDrawPolyline();
+    LibDrawPolyline(EDA_LibComponentStruct * aParent);
     ~LibDrawPolyline() { }
 
     virtual wxString GetClass() const

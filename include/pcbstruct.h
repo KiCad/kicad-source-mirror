@@ -28,35 +28,35 @@
                                  *  et mises en chaine "DELETED" */
 #define NO_TRACE    (1 << 7)    /* l'element ne doit pas etre affiche */
 
-#define SURBRILL    (1 << 5)    /* element en surbrillance */
-#define DRAG        (1 << 4)    /* segment en mode drag */
-#define EDIT        (1 << 3)    /* element en cours d'edition */
-#define SEGM_FIXE   (1 << 2)    /* segment FIXE ( pas d'effacement global ) */
-#define SEGM_AR     (1 << 1)    /* segment Auto_Route */
-#define CHAIN       (1 << 0)    /* segment marque  */
+#define SURBRILL  (1 << 5)      /* element en surbrillance */
+#define DRAG      (1 << 4)      /* segment en mode drag */
+#define EDIT      (1 << 3)      /* element en cours d'edition */
+#define SEGM_FIXE (1 << 2)      /* segment FIXE ( pas d'effacement global ) */
+#define SEGM_AR   (1 << 1)      /* segment Auto_Route */
+#define CHAIN     (1 << 0)      /* segment marque  */
 
 
 /* Layer identification (layer number) */
-#define FIRST_COPPER_LAYER    0
-#define COPPER_LAYER_N        0
-#define LAYER_N_2             1     /* Numero layer 2 */
-#define LAYER_N_3             2     /* Numero layer 3 */
-#define LAYER_N_4             3     /* Numero layer 4 */
-#define LAYER_N_5             4     /* Numero layer 5 */
-#define LAYER_N_6             5     /* Numero layer 6 */
-#define LAYER_N_7             6     /* Numero layer 7 */
-#define LAYER_N_8             7     /* Numero layer 8 */
-#define LAYER_N_9             8     /* Numero layer 9 */
-#define LAYER_N_10            9     /* Numero layer 10 */
-#define LAYER_N_11            10    /* Numero layer 11 */
-#define LAYER_N_12            11    /* Numero layer 12 */
-#define LAYER_N_13            12    /* Numero layer 13 */
-#define LAYER_N_14            13    /* Numero layer 14 */
-#define LAYER_N_15            14    /* Numero layer 15 */
-#define LAYER_CMP_N           15
-#define CMP_N                 15
-#define LAST_COPPER_LAYER     15
-#define NB_COPPER_LAYERS      (LAST_COPPER_LAYER + 1)
+#define FIRST_COPPER_LAYER 0
+#define COPPER_LAYER_N     0
+#define LAYER_N_2          1        /* Numero layer 2 */
+#define LAYER_N_3          2        /* Numero layer 3 */
+#define LAYER_N_4          3        /* Numero layer 4 */
+#define LAYER_N_5          4        /* Numero layer 5 */
+#define LAYER_N_6          5        /* Numero layer 6 */
+#define LAYER_N_7          6        /* Numero layer 7 */
+#define LAYER_N_8          7        /* Numero layer 8 */
+#define LAYER_N_9          8        /* Numero layer 9 */
+#define LAYER_N_10         9        /* Numero layer 10 */
+#define LAYER_N_11         10       /* Numero layer 11 */
+#define LAYER_N_12         11       /* Numero layer 12 */
+#define LAYER_N_13         12       /* Numero layer 13 */
+#define LAYER_N_14         13       /* Numero layer 14 */
+#define LAYER_N_15         14       /* Numero layer 15 */
+#define LAYER_CMP_N        15
+#define CMP_N              15
+#define LAST_COPPER_LAYER  15
+#define NB_COPPER_LAYERS   (LAST_COPPER_LAYER + 1)
 
 #define FIRST_NO_COPPER_LAYER 16
 #define ADHESIVE_N_CU         16
@@ -75,52 +75,52 @@
 #define LAST_NO_COPPER_LAYER  28
 #define NB_LAYERS             (LAST_NO_COPPER_LAYER + 1)
 
-#define LAYER_COUNT           32
+#define LAYER_COUNT 32
 
 
 /*************************************/
 /* constantes de gestion des couches */
 /*************************************/
-#define CUIVRE_LAYER            (1 << COPPER_LAYER_N)       ///< bit mask for copper layer
-#define LAYER_2                 (1 << LAYER_N_2)            ///< bit mask for layer 2
-#define LAYER_3                 (1 << LAYER_N_3)            ///< bit mask for layer 3
-#define LAYER_4                 (1 << LAYER_N_4)            ///< bit mask for layer 4
-#define LAYER_5                 (1 << LAYER_N_5)            ///< bit mask for layer 5
-#define LAYER_6                 (1 << LAYER_N_6)            ///< bit mask for layer 6
-#define LAYER_7                 (1 << LAYER_N_7)            ///< bit mask for layer 7
-#define LAYER_8                 (1 << LAYER_N_8)            ///< bit mask for layer 8
-#define LAYER_9                 (1 << LAYER_N_9)            ///< bit mask for layer 9
-#define LAYER_10                (1 << LAYER_N_10)           ///< bit mask for layer 10
-#define LAYER_11                (1 << LAYER_N_11)           ///< bit mask for layer 11
-#define LAYER_12                (1 << LAYER_N_12)           ///< bit mask for layer 12
-#define LAYER_13                (1 << LAYER_N_13)           ///< bit mask for layer 13
-#define LAYER_14                (1 << LAYER_N_14)           ///< bit mask for layer 14
-#define LAYER_15                (1 << LAYER_N_15)           ///< bit mask for layer 15
-#define CMP_LAYER               (1 << LAYER_CMP_N)          ///< bit mask for component layer
-#define ADHESIVE_LAYER_CU       (1 << ADHESIVE_N_CU)
-#define ADHESIVE_LAYER_CMP      (1 << ADHESIVE_N_CMP)
-#define SOLDERPASTE_LAYER_CU    (1 << SOLDERPASTE_N_CU)
-#define SOLDERPASTE_LAYER_CMP   (1 << SOLDERPASTE_N_CMP)
-#define SILKSCREEN_LAYER_CU     (1 << SILKSCREEN_N_CU)
-#define SILKSCREEN_LAYER_CMP    (1 << SILKSCREEN_N_CMP)
-#define SOLDERMASK_LAYER_CU     (1 << SOLDERMASK_N_CU)
-#define SOLDERMASK_LAYER_CMP    (1 << SOLDERMASK_N_CMP)
-#define DRAW_LAYER              (1 << DRAW_N)
-#define COMMENT_LAYER           (1 << COMMENT_N)
-#define ECO1_LAYER              (1 << ECO1_N)
-#define ECO2_LAYER              (1 << ECO2_N)
-#define EDGE_LAYER              (1 << EDGE_N)
+#define CUIVRE_LAYER          (1 << COPPER_LAYER_N)         ///< bit mask for copper layer
+#define LAYER_2               (1 << LAYER_N_2)              ///< bit mask for layer 2
+#define LAYER_3               (1 << LAYER_N_3)              ///< bit mask for layer 3
+#define LAYER_4               (1 << LAYER_N_4)              ///< bit mask for layer 4
+#define LAYER_5               (1 << LAYER_N_5)              ///< bit mask for layer 5
+#define LAYER_6               (1 << LAYER_N_6)              ///< bit mask for layer 6
+#define LAYER_7               (1 << LAYER_N_7)              ///< bit mask for layer 7
+#define LAYER_8               (1 << LAYER_N_8)              ///< bit mask for layer 8
+#define LAYER_9               (1 << LAYER_N_9)              ///< bit mask for layer 9
+#define LAYER_10              (1 << LAYER_N_10)             ///< bit mask for layer 10
+#define LAYER_11              (1 << LAYER_N_11)             ///< bit mask for layer 11
+#define LAYER_12              (1 << LAYER_N_12)             ///< bit mask for layer 12
+#define LAYER_13              (1 << LAYER_N_13)             ///< bit mask for layer 13
+#define LAYER_14              (1 << LAYER_N_14)             ///< bit mask for layer 14
+#define LAYER_15              (1 << LAYER_N_15)             ///< bit mask for layer 15
+#define CMP_LAYER             (1 << LAYER_CMP_N)            ///< bit mask for component layer
+#define ADHESIVE_LAYER_CU     (1 << ADHESIVE_N_CU)
+#define ADHESIVE_LAYER_CMP    (1 << ADHESIVE_N_CMP)
+#define SOLDERPASTE_LAYER_CU  (1 << SOLDERPASTE_N_CU)
+#define SOLDERPASTE_LAYER_CMP (1 << SOLDERPASTE_N_CMP)
+#define SILKSCREEN_LAYER_CU   (1 << SILKSCREEN_N_CU)
+#define SILKSCREEN_LAYER_CMP  (1 << SILKSCREEN_N_CMP)
+#define SOLDERMASK_LAYER_CU   (1 << SOLDERMASK_N_CU)
+#define SOLDERMASK_LAYER_CMP  (1 << SOLDERMASK_N_CMP)
+#define DRAW_LAYER            (1 << DRAW_N)
+#define COMMENT_LAYER         (1 << COMMENT_N)
+#define ECO1_LAYER            (1 << ECO1_N)
+#define ECO2_LAYER            (1 << ECO2_N)
+#define EDGE_LAYER            (1 << EDGE_N)
 
-#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_CU
+#define FIRST_NON_COPPER_LAYER ADHESIVE_N_CU
 #define LAST_NON_COPPER_LAYER  EDGE_N
 
 //      extra bits              0xE0000000
 /* masques generaux : */
-#define ALL_LAYERS              0x1FFFFFFF
-#define ALL_NO_CU_LAYERS        0x1FFF0000
-#define ALL_CU_LAYERS           0x0000FFFF
-#define INTERNAL_LAYERS         0x00007FFE      /* Bits layers internes */
-#define EXTERNAL_LAYERS         0x00008001
+#define ALL_LAYERS       0x1FFFFFFF
+#define ALL_NO_CU_LAYERS 0x1FFF0000
+#define ALL_CU_LAYERS    0x0000FFFF
+#define INTERNAL_LAYERS  0x00007FFE             /* Bits layers internes */
+#define EXTERNAL_LAYERS  0x00008001
 
 /* Forward declaration */
 class NETINFO_ITEM;
@@ -142,24 +142,27 @@ class RATSNEST_ITEM;
 class EDA_BoardDesignSettings
 {
 public:
-    int    m_CopperLayerCount;                  // Number of copper layers for this design
-    int    m_ViaDrill;                          // via drill (for the entire board)
-    int    m_ViaDrillCustomValue;               // via drill for vias which must have a defined drill value
-    int    m_MicroViaDrill;                     // micro via drill (for the entire board)
-    int    m_CurrentViaSize;                    // Current via size
-    int    m_CurrentMicroViaSize;               // Current micro via size
-    bool   m_MicroViasAllowed;                  // true to allow micro vias
-    int    m_ViaSizeHistory[HISTORY_NUMBER];    // Last HISTORY_NUMBER used via sizes
-    int    m_CurrentViaType;                    // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
-    int    m_CurrentTrackWidth;                 // current track width
-    bool   m_UseConnectedTrackWidth;            // if true, when creating a new track starting on an existing track, use this track width
-    int    m_TrackWidthHistory[HISTORY_NUMBER]; // Last HISTORY_NUMBER used track widths
-    int    m_DrawSegmentWidth;                  // current graphic line width (not EDGE layer)
-    int    m_EdgeSegmentWidth;                  // current graphic line width (EDGE layer only)
-    int    m_PcbTextWidth;                      // current Pcb (not module) Text width
-    wxSize m_PcbTextSize;                       // current Pcb (not module) Text size
-    int    m_TrackClearence;                    // track to track and track to pads clearance
-    int    m_MaskMargin;                        // Solder mask margin
+    int    m_CopperLayerCount;                      // Number of copper layers for this design
+    int    m_ViaDrill;                              // via drill (for the entire board)
+    int    m_ViaDrillCustomValue;                   // via drill for vias which must have a defined drill value
+    int    m_MicroViaDrill;                         // micro via drill (for the entire board)
+    int    m_CurrentViaSize;                        // Current via size
+    int    m_CurrentMicroViaSize;                   // Current micro via size
+    bool   m_MicroViasAllowed;                      // true to allow micro vias
+    int    m_ViaSizeHistory[HISTORY_NUMBER];        // Last HISTORY_NUMBER used via sizes
+    int    m_CurrentViaType;                        // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
+    int    m_CurrentTrackWidth;                     // current track width
+    bool   m_UseConnectedTrackWidth;                // if true, when creating a new track starting on an existing track, use this track width
+    int    m_TrackWidthHistory[HISTORY_NUMBER];     // Last HISTORY_NUMBER used track widths
+    int    m_DrawSegmentWidth;                      // current graphic line width (not EDGE layer)
+    int    m_EdgeSegmentWidth;                      // current graphic line width (EDGE layer only)
+    int    m_PcbTextWidth;                          // current Pcb (not module) Text width
+    wxSize m_PcbTextSize;                           // current Pcb (not module) Text size
+    int    m_TrackClearence;                        // track to track and track to pads clearance
+    int    m_TrackMinWidth;                         // track min value for width ((min copper size value
+    int    m_ViasMinSize;                           // vias (not micro vias) min diameter
+    int    m_MicroViasMinSize;                      // micro vias (not vias) min diameter
+    int    m_MaskMargin;                            // Solder mask margin
 
     // Color options for screen display of the Printed Board:
     int    m_PcbGridColor;                      // Grid color
@@ -186,7 +189,7 @@ public:
      * returns a bit-map of all the layers that are visible.
      * @return int - the visible layers in bit-mapped form.
      */
-    int    GetVisibleLayers() const;
+    int GetVisibleLayers() const;
 };
 
 

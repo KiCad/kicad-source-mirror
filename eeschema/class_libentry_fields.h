@@ -35,6 +35,7 @@ public:
 
 
     LibDrawField( int idfield = 2 );
+    LibDrawField( EDA_LibComponentStruct * aParent, int idfield = 2 );
     ~LibDrawField();
     virtual wxString GetClass() const
     {
@@ -96,6 +97,7 @@ public:
         m_Bold = field.m_Bold;
         m_HJustify = field.m_HJustify;
         m_VJustify = field.m_VJustify;
+        m_Parent = field.m_Parent;
     }
 };
 

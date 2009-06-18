@@ -30,7 +30,8 @@ const wxChar* MsgPinElectricType[] =
     wxT( "?????" )
 };
 
-LibDrawPin::LibDrawPin() : LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE )
+LibDrawPin::LibDrawPin(EDA_LibComponentStruct * aParent) :
+    LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE, aParent )
 {
     m_PinLen      = 300;                /* default Pin len */
     m_Orient      = PIN_RIGHT;          /* Pin oprient: Up, Down, Left, Right */
@@ -1005,7 +1006,7 @@ void LibDrawPin::SetPinNumFromString( wxString& buffer )
 LibDrawPin* LibDrawPin::GenCopy()
 /*************************************/
 {
-    LibDrawPin* newpin = new LibDrawPin();
+    LibDrawPin* newpin = new LibDrawPin( GetParent() );
 
     newpin->m_Pos                = m_Pos;
     newpin->m_PinLen             = m_PinLen;

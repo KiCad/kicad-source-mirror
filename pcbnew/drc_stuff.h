@@ -60,6 +60,9 @@
 #define DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE  24  ///< copper area outline has an incorrect netcode due to a netname not found
 #define DRCE_HOLE_NEAR_PAD                  25  ///< hole too close to pad
 #define DRCE_HOLE_NEAR_TRACK                26  ///< hole too close to track
+#define DRCE_TOO_SMALL_TRACK_WIDTH          27  ///< Too small track width
+#define DRCE_TOO_SMALL_VIA                  28  ///< Too small via size
+#define DRCE_TOO_SMALL_MICROVIA             29  ///< Too small micro via size
 
 /**
  * Class DRC_ITEM
@@ -257,7 +260,7 @@ public:
 
 class WinEDA_DrawPanel;
 class MARKER;
-class DrcDialog;
+class DIALOG_DRC_CONTROL;
 
 
 /**
@@ -318,7 +321,7 @@ typedef std::vector<DRC_ITEM*>  DRC_LIST;
  */
 class DRC
 {
-    friend class DrcDialog;
+    friend class DIALOG_DRC_CONTROL;
 
 private:
 
@@ -353,7 +356,7 @@ private:
     WinEDA_PcbFrame*  m_mainWindow;
     WinEDA_DrawPanel* m_drawPanel;
     BOARD*            m_pcb;
-    DrcDialog*        m_ui;
+    DIALOG_DRC_CONTROL*        m_ui;
 
     DRC_LIST          m_unconnected;    ///< list of unconnected pads, as DRC_ITEMs
 

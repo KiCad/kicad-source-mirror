@@ -22,8 +22,9 @@
 
 
 
-LibDrawText::LibDrawText() :
-    LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ), EDA_TextStruct()
+LibDrawText::LibDrawText(EDA_LibComponentStruct * aParent) :
+    LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
+    EDA_TextStruct()
 {
     m_Size     = wxSize( 50, 50 );
     m_typeName = _( "Text" );
@@ -169,7 +170,7 @@ bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[
 
 LibDrawText* LibDrawText::GenCopy()
 {
-    LibDrawText* newitem = new LibDrawText();
+    LibDrawText* newitem = new LibDrawText(NULL);
 
     newitem->m_Pos = m_Pos;
     newitem->m_Orient    = m_Orient;
