@@ -162,10 +162,12 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     {
         g_DesignSettings.m_ViaSizeHistory[ii] =
             g_DesignSettings.m_TrackWidthHistory[ii] = 0;
+        g_DesignSettings.m_TrackClearenceHistory[ii] = 0;
     }
 
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
+    g_DesignSettings.m_TrackClearenceHistory[0] = g_DesignSettings.m_TrackClearence;
+    g_DesignSettings.m_ViaSizeHistory[0] = g_DesignSettings.m_CurrentViaSize;
 
 /* NO, this is a global setting, and changing it here changes a loaded board's layer count when loading a module in the module editor since
     the module editor calls this when loading an existing module.

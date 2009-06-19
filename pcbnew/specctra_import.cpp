@@ -111,6 +111,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     SetLocaleTo_Default( );    // revert to the current locale
 
     m_SelTrackWidthBox_Changed = TRUE;
+    m_SelClrWidthBox_Changed = TRUE;
     m_SelViaSizeBox_Changed    = TRUE;
 
     GetScreen()->SetModify();

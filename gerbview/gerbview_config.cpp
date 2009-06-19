@@ -63,6 +63,7 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
     case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
+        FullFileName +=  wxT(".");
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
         WriteHotkeyConfigFile( FullFileName, s_Gerbview_Hokeys_Descr, true );
         break;
@@ -75,6 +76,7 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
     {
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
+        FullFileName +=  wxT(".");
         FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
         AddDelimiterString( FullFileName );
         wxString editorname = wxGetApp().GetEditorName();
@@ -161,6 +163,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
         g_ConfigFileLocationChoice );
 
     FullFileName += HOTKEY_FILENAME;
+    FullFileName +=  wxT(".");
     FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
     return frame->ReadHotkeyConfigFile( FullFileName,
                                         s_Gerbview_Hokeys_Descr,

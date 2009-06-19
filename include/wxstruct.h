@@ -156,6 +156,7 @@ public:
 
     int          m_CursorShape;             // shape for cursor (0 = default cursor)
     int          m_ID_current_state;        // Id of active button on the vertical toolbar
+    int          m_ID_last_state;           // Id of previous active button on the vertical toolbar
     int          m_HTOOL_current_state;     // Id of active button on horizontal toolbar
 
     int          m_InternalUnits;           // Internal units count in 1 inch

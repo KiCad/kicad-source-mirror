@@ -368,13 +368,21 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                wxBitmap( showtrack_xpm ),
                                _( "Show Tracks Sketch" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                wxEmptyString,
                                wxBitmap( palette_xpm ),
-                               _( "Hight Contrast Mode Display" ),
+                               _( "High Contrast Mode Display" ),
                                wxITEM_CHECK );
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE,
+    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                   DisplayOpt.ContrastModeDisplay );
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
+                               wxEmptyString,
+                               wxBitmap( invisible_text_xpm ),
+                               _( "Show Invisible Text" ),
+                               wxITEM_CHECK );
+    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
+           		g_ModuleTextNOVColor & ITEM_NOT_SHOW );
+
 
 #ifdef MUWAVE_ENBL
     m_OptionsToolBar->AddSeparator();
@@ -548,6 +556,12 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                   wxSize( LISTBOX_WIDTH + 20, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
         m_SelTrackWidthBox_Changed = TRUE;
+        m_SelClrWidthBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
+                                                          ID_AUX_TOOLBAR_PCB_CLR_WIDTH,
+                                                          wxPoint( -1, -1 ),
+                                                          wxSize( LISTBOX_WIDTH + 20, -1 ) );
+		m_AuxiliaryToolBar->AddControl( m_SelClrWidthBox );
+		m_SelClrWidthBox_Changed = TRUE;
 
         m_AuxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                      wxEmptyString,
@@ -626,6 +640,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 
     m_SelViaSizeBox_Changed    = TRUE;
     m_SelTrackWidthBox_Changed = TRUE;
+    m_SelClrWidthBox_Changed = TRUE;
 
     ReCreateLayerBox( NULL );
 

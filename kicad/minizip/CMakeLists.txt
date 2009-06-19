@@ -8,7 +8,7 @@ else(ZLIB_FOUND)
     # include files are in ${wxWidgets_ROOT_DIR}/src/zlib
     # and the corresponding library is libwxzlib-<version>.a (like libwxzlib-2.8.a)
     # and we try to use it
-    set(ZLIB_INCLUDE_DIR ${wxWidgets_ROOT_DIR}/src/zlib)
+    find_path(ZLIB_INCLUDE_DIR zlib.h PATHS ${wxWidgets_ROOT_DIR}/src/zlib/ DOC "location of zlib include files")
     set(ZLIB_LIBRARIES ${wxWidgets_ROOT_DIR}/lib/libwxzlib-2.8.a)
 endif(ZLIB_FOUND)
 

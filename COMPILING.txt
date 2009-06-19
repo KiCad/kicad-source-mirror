@@ -114,10 +114,13 @@ If linux, use your package manager to install zlib pre-built binaries.
 
 Note (JP Charras):
 	Under Linux, zlib is usually installed.
-	if not found by wxWidget installation, wxWidgets creates an alternate zlib
-	Under Windows, zlib is not installed, so my cmake buld try to use the
+	If it is not found by the wxWidget installation, wxWidgets creates an alternate zlib library.
+	Under Windows, if zlib is not installed, my cmake build will try to use the
     wxWidgets zlib build.  So, under windows kicad build should work without
     zlib install.
+
+	If you are using the wxWidget zlib, make sure that the wxWidgets/src/zlib directory is copied 
+	to ${wxWidgets_ROOT_DIR}/src/zlib
 
 
 -----------------------------------------------------------------------------

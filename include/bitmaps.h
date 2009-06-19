@@ -156,6 +156,7 @@ extern const char* import3d_xpm[];
 extern const char* info_xpm[];
 extern const char* insert_module_board_xpm[];
 extern const char* invert_module_xpm[];
+extern const char* invisible_text_xpm[];
 extern const char* jigsaw_xpm[];
 extern const char* kicad_icon_small_xpm[];
 extern const char* kicad_icon_xpm[];

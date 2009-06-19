@@ -245,6 +245,7 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
     wxString curr_cwd    = wxGetCwd();
     wxString defaultname = FileName;
     wxString defaultpath = Path;
+    wxString dotted_Ext = wxT(".") + Ext;
 
     defaultname.Replace( wxT( "/" ), STRING_DIR_SEP );
     defaultpath.Replace( wxT( "/" ), STRING_DIR_SEP );
@@ -268,7 +269,7 @@ wxString EDA_FileSelector( const wxString& Title,                   /* Dialog ti
     fullfilename = wxFileSelector( wxString( Title ),
                                    defaultpath,
                                    defaultname,
-                                   Ext,
+                                   dotted_Ext,
                                    Mask,
                                    flag, /* open mode wxFD_OPEN, wxFD_SAVE .. */
                                    Frame,

@@ -116,6 +116,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
         g_ConfigFileLocationChoice );
 
     FullFileName += HOTKEY_FILENAME;
+    FullFileName += wxT(".");
     FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
     frame->ReadHotkeyConfigFile( FullFileName,
                                  s_Eeschema_Hokeys_Descr,

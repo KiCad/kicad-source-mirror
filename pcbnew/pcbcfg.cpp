@@ -140,6 +140,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
         g_ConfigFileLocationChoice );
 
     FullFileName += HOTKEY_FILENAME;
+    FullFileName += wxT(".");
     FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
     return frame->ReadHotkeyConfigFile( FullFileName,
                                         s_Pcbnew_Editor_Hokeys_Descr,
@@ -178,11 +179,13 @@ bool Read_Config( const wxString& projectFileName )
 
     /* Some parameters must be reinitialize after loading a new board or config: */
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
+    g_DesignSettings.m_TrackClearenceHistory[0] = g_DesignSettings.m_TrackClearence;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
 
     for( ii = 1; ii < HISTORY_NUMBER; ii++ )
     {
         g_DesignSettings.m_TrackWidthHistory[ii] = 0;
+        g_DesignSettings.m_TrackClearenceHistory[ii] = 0;
         g_DesignSettings.m_ViaSizeHistory[ii]    = 0;
     }
 

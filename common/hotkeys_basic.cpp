@@ -381,7 +381,7 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
     {
         wxString Mask, Path, Ext;
         Ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-        Mask = wxT( "*" ) + Ext;
+        Mask = wxT( "*." ) + Ext;
         Path = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFilename = EDA_FileSelector( _( "Save Hotkey Configuration File:" ),
                                          Path,          /* Chemin par defaut */
@@ -499,7 +499,7 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile( const wxString&                    
     {
         wxString Mask, Path, Ext;
         Ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-        Mask = wxT( "*" ) + Ext;
+        Mask = wxT( "*." ) + Ext;
         Path = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFilename = EDA_FileSelector( _( "Open Hotkey Configuration File:" ),
                                          Path,          /* Chemin par defaut */

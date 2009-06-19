@@ -221,6 +221,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
             g_UnitMetric = INCHES;
         m_SelTrackWidthBox_Changed = TRUE;
+        m_SelClrWidthBox_Changed = TRUE;
         UpdateStatusBar();    /* Reaffichage des coord curseur */
         ReCreateAuxiliaryToolbar();
         DisplayUnitsMsg();
@@ -273,11 +274,18 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh( );
         break;
 
-    case ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE:
+    case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay =
             m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh( );
         break;
+    case ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE:
+            if(!m_OptionsToolBar->GetToolState( id ))
+            	g_ModuleTextNOVColor &= (~ITEM_NOT_SHOW);
+            else
+            	g_ModuleTextNOVColor |= ( ITEM_NOT_SHOW);
+            DrawPanel->Refresh( );
+            break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
         if( m_OptionsToolBar->GetToolState( id ) )  // show aux V toolbar (Microwave tool)

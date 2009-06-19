@@ -344,7 +344,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
 
     WinEDAListBox*  ListBox = new WinEDAListBox( active_window, wxEmptyString,
                                                  NULL, OldName, DisplayCmpDoc,
-                                                 wxColour( 200, 200, 255 ) );
+                                                 wxColour( 200, 200, 255 ),GetScreen()->m_Curseur );
 
     wxBeginBusyCursor();
 

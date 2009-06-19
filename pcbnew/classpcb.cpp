@@ -205,6 +205,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         m_TrackWidthHistory[ii] = 0;    // Last HISTORY_NUMBER used track widths
+        m_TrackClearenceHistory[ii] = 0;
         m_ViaSizeHistory[ii]    = 0;    // Last HISTORY_NUMBER used via sizes
     }
 

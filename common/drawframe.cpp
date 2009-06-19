@@ -58,6 +58,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     MsgPanel              = NULL;
     m_CurrentScreen       = NULL;
     m_ID_current_state    = 0;
+    m_ID_last_state    = 0;
     m_HTOOL_current_state = 0;
     m_Draw_Axis           = FALSE;  // TRUE pour avoir les axes dessines
     m_Draw_Grid           = FALSE;  // TRUE pour avoir la axes dessinee

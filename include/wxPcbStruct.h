@@ -372,10 +372,12 @@ class WinEDA_PcbFrame : public WinEDA_BasePcbFrame
 public:
     WinEDAChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelTrackWidthBox;
+    WinEDAChoiceBox* m_SelClrWidthBox;
     WinEDAChoiceBox* m_SelViaSizeBox;
 
 private:
     bool             m_SelTrackWidthBox_Changed;
+    bool             m_SelClrWidthBox_Changed;
     bool             m_SelViaSizeBox_Changed;
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp

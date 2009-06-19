@@ -164,6 +164,7 @@ set(BITMAP_SRCS
     Info.xpm
     Insert_Module_Board.xpm
     Invert_Module.xpm
+    invisible_text.xpm
     jigsaw.xpm
     kicad_icon_small.xpm
     Label2GLabel.xpm

@@ -205,6 +205,12 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 
             continue;
         }
+        if( stricmp( data, "LayerThickness" ) == 0 )
+        {
+            data   = strtok( NULL, " =\n\r" );
+            GetBoard()->m_BoardSettings->m_LayerThickness = atoi( data );;
+            continue;
+        }
 
         if( strnicmp( data, "Links", 5 ) == 0 )
         {
@@ -360,6 +366,12 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             g_DesignSettings.m_TrackMinWidth = atoi( data );
             continue;
         }
+        if( stricmp( Line, "TrackClearenceHistory" ) == 0 )
+                {
+                    int tmp = atoi( data );
+                    AddHistory( tmp, TYPE_CLR );
+                    continue;
+                }
 
         if( stricmp( Line, "ZoneClearence" ) == 0 )
         {
@@ -534,7 +546,15 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
                  g_DesignSettings.m_TrackWidthHistory[ii] );
     }
 
+
     fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearence );
+    for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
+        {
+            if( g_DesignSettings.m_TrackClearenceHistory[ii] == 0 )
+                break;
+            fprintf( aFile, "TrackClearenceHistory %d\n",
+                     g_DesignSettings.m_TrackClearenceHistory[ii] );
+        }
     fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     fprintf( aFile, "TrackMinWidth %d\n" , g_DesignSettings.m_TrackMinWidth );
 
@@ -613,6 +633,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Ndraw %d\n", NbDrawItem );
     fprintf( File, "Ntrack %d\n", GetBoard()->GetNumSegmTrack() );
     fprintf( File, "Nzone %d\n", GetBoard()->GetNumSegmZone() );
+    fprintf( File, "LayerThickness %d\n", GetBoard()->m_BoardSettings->m_LayerThickness );
 
     fprintf( File, "Nmodule %d\n", NbModules );
     fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetNetsCount() );

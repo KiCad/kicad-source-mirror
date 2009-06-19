@@ -159,10 +159,12 @@ public:
     int    m_PcbTextWidth;                          // current Pcb (not module) Text width
     wxSize m_PcbTextSize;                           // current Pcb (not module) Text size
     int    m_TrackClearence;                        // track to track and track to pads clearance
+	int    m_TrackClearenceHistory[HISTORY_NUMBER]; // Last HISTORY_NUMBER used track widths
     int    m_TrackMinWidth;                         // track min value for width ((min copper size value
     int    m_ViasMinSize;                           // vias (not micro vias) min diameter
     int    m_MicroViasMinSize;                      // micro vias (not vias) min diameter
     int    m_MaskMargin;                            // Solder mask margin
+	int    m_LayerThickness;                        // Layer Thickness for 3D viewer
 
     // Color options for screen display of the Printed Board:
     int    m_PcbGridColor;                      // Grid color

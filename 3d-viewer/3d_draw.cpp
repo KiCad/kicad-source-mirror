@@ -110,8 +110,9 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
                                              g_Parm_3D_Visu.m_BoardSize.y );
     // @TODO: epoxy_width (board thickness) must be set by user,
     // because all boards thickness no not match with this setup:
-    double epoxy_width = 1.6;    // epoxy width in mm
-    g_Parm_3D_Visu.m_Epoxy_Width = epoxy_width / 2.54 * 1000
+    //double epoxy_width = 1.6;    // epoxy width in mm
+
+    g_Parm_3D_Visu.m_Epoxy_Width = pcb->m_BoardSettings->m_LayerThickness 
                                    * g_Parm_3D_Visu.m_BoardScale;
 
     /* calculate z position for each layer */

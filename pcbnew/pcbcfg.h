@@ -79,6 +79,13 @@ static PARAM_CFG_INT ViaAltDrillCfg
     250,                                        /* Default value */
     0, 0xFFFF                                   /* Min and max values*/
 );
+static PARAM_CFG_INT LayerThicknessCfg
+(
+    wxT( "LayerThickness" ),                           /* Keyword */
+    &g_DesignSettings.m_LayerThickness,    /* Parameter address */
+    630,                                        /* Default value */
+    0, 0xFFFF                                   /* Min and max values*/
+);
 
 static PARAM_CFG_INT MicroViaDiametreCfg
 (
@@ -800,6 +807,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &ViaShowHoleCfg,
     &ShowNetNamesModeCfg,
     &TrackClearenceCfg,
+    &LayerThicknessCfg,
     &LayerCountCfg,
     &TrackWidthCfg,
     &RouteLayTopCfg,

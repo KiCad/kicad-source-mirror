@@ -137,6 +137,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                          WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_CLR_WIDTH,
+                         WinEDA_PcbFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_TOOLBARH_PCB_AUTOPLACE, WinEDA_PcbFrame::AutoPlace )
@@ -153,6 +155,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_PCB_HIGHLIGHT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_COMPONENT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_TRACK_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_TOGGLE_PRESENT_COMMAND, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_ZONES_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_MIRE_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_ARC_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
@@ -210,9 +213,11 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_Draw_Sheet_Ref           = TRUE;  // TRUE pour avoir le cartouche dessine
     m_Draw_Auxiliary_Axis      = TRUE;
     m_SelTrackWidthBox         = NULL;
+    m_SelClrWidthBox = NULL;
     m_SelViaSizeBox            = NULL;
     m_SelLayerBox              = NULL;
     m_SelTrackWidthBox_Changed = FALSE;
+    m_SelClrWidthBox_Changed = FALSE;
     m_SelViaSizeBox_Changed    = FALSE;
 
     SetBoard( new BOARD( NULL, this ) );
@@ -467,12 +472,18 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Show Tracks Sketch mode" ) :
                                             _( "Show Tracks filled mode" ) );
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE,
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                       DisplayOpt.ContrastModeDisplay );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGHT_CONTRAST_MODE,
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                             DisplayOpt.ContrastModeDisplay ?
                                             _( "Normal Contrast Mode Display" ) :
-                                            _( "Hight Contrast Mode Display" ) );
+                                            _( "High Contrast Mode Display" ) );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
+        		g_ModuleTextNOVColor & ITEM_NOT_SHOW );
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
+            		   g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
+                                                   _( "Show Invisible Text" ) :
+                                                   _( "Hide Invisible Text" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1, m_AuxVToolBar ? true : false );
     }
 
@@ -512,6 +523,38 @@ void WinEDA_PcbFrame::SetToolbars()
                     m_SelTrackWidthBox->SetSelection( ii );
             }
         }
+
+        if( m_SelClrWidthBox && m_SelClrWidthBox_Changed )
+                {
+                    m_SelClrWidthBox_Changed = FALSE;
+                    m_SelClrWidthBox->Clear();
+                    wxString format = _( "Clearance" );
+
+                    if( g_UnitMetric == INCHES )
+                        format += wxT( " %.1f" );
+                    else
+                        format += wxT( " %.3f" );
+
+                    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
+                    {
+                        if( g_DesignSettings.m_TrackClearenceHistory[ii] == 0 )
+                            break; // Fin de liste
+                        double value = To_User_Unit( g_UnitMetric,
+                                                     g_DesignSettings.m_TrackClearenceHistory[ii],
+                                                     PCB_INTERNAL_UNIT );
+
+                        if( g_UnitMetric == INCHES )
+                            msg.Printf( format.GetData(), value * 1000 );
+                        else
+                            msg.Printf( format.GetData(), value );
+
+                        m_SelClrWidthBox->Append( msg );
+
+                        if( g_DesignSettings.m_TrackClearenceHistory[ii] ==
+                            g_DesignSettings.m_TrackClearence )
+                        	m_SelClrWidthBox->SetSelection( ii );
+                    }
+                }
 
         if( m_SelViaSizeBox && m_SelViaSizeBox_Changed )
         {

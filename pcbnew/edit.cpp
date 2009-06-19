@@ -30,8 +30,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
+
     int        itmp;
     wxClientDC dc( DrawPanel );
+    BOARD_ITEM* DrawStruct = GetCurItem();
+
+    int toggle = 0;
 
     DrawPanel->CursorOff( &dc );
     DrawPanel->PrepareGraphicContext( &dc );
@@ -45,6 +49,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case wxID_CUT:
     case wxID_COPY:
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
+    case ID_AUX_TOOLBAR_PCB_CLR_WIDTH:
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
     case ID_ON_GRID_SELECT:
     case ID_ON_ZOOM_SELECT:
@@ -156,7 +161,15 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         else
             SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
         break;
+    case ID_TOGGLE_PRESENT_COMMAND:
+          /* if( DrawPanel->ManageCurseur
+            && DrawPanel->ForceCloseManageCurseur )
+        {
+            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+        }
+   */
 
+        break;
     default:        // Finish (abort ) the command
         if( DrawPanel->ManageCurseur
             && DrawPanel->ForceCloseManageCurseur )
@@ -164,17 +177,160 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
 
-        if( m_ID_current_state != id )
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        if( m_ID_current_state != id ){
+          if (m_ID_last_state != m_ID_current_state)
+            m_ID_last_state = m_ID_current_state;
+          SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        }
         break;
     }
 
     switch( id )   // Execute command
     {
+    case 0: break;
     case ID_EXIT:
         Close( true );
         break;
+    case ID_TOGGLE_PRESENT_COMMAND:
+            switch( m_ID_current_state )
+                {
+                case 0:
+                   /*  if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+                    {
+                        DrawStruct = PcbGeneralLocateAndDisplay();
+                    }
 
+                    if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
+                        break;
+
+                    SendMessageToEESCHEMA( DrawStruct );
+
+                    // An item is found
+                    SetCurItem( DrawStruct );
+
+                    switch( DrawStruct->Type() )
+                    {
+                    case TYPE_TRACK:
+                    case TYPE_VIA:
+                        if( DrawStruct->m_Flags & IS_NEW )
+                        {
+                            End_Route( (TRACK*) DrawStruct, DC );
+                            DrawPanel->m_AutoPAN_Request = false;
+                        }
+                        else if( DrawStruct->m_Flags == 0 )
+                        {
+                            Edit_TrackSegm_Width( DC, (TRACK*) DrawStruct );
+                        }
+                        break;
+
+                    case TYPE_TEXTE:
+                        InstallTextPCBOptionsFrame( (TEXTE_PCB*) DrawStruct, DC );
+                        DrawPanel->MouseToCursorSchema();
+                        break;
+
+                    case TYPE_PAD:
+                        InstallPadOptionsFrame( (D_PAD*) DrawStruct, &dc, pos );
+                        DrawPanel->MouseToCursorSchema();
+                        break;
+
+                    case TYPE_MODULE:
+                        InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc );
+                        DrawPanel->MouseToCursorSchema();
+                        break;
+
+                    case TYPE_MIRE:
+                        InstallMireOptionsFrame( (MIREPCB*) DrawStruct, &dc, pos );
+                        DrawPanel->MouseToCursorSchema();
+                        break;
+
+                    case TYPE_COTATION:
+                        Install_Edit_Cotation( (COTATION*) DrawStruct, &dc, pos );
+                        DrawPanel->MouseToCursorSchema();
+                        break;
+
+                    case TYPE_TEXTE_MODULE:
+                        InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc, pos );
+                        DrawPanel->MouseToCursorSchema();
+                        break;
+
+                    case TYPE_DRAWSEGMENT:
+                        InstallGraphicItemPropertiesDialog((DRAWSEGMENT*)DrawStruct, &dc);
+                        break;
+
+                    case TYPE_ZONE_CONTAINER:
+                        if( DrawStruct->m_Flags )
+                            break;
+                        Edit_Zone_Params( &dc, (ZONE_CONTAINER*) DrawStruct );
+                        break;
+
+                    default:
+                        break;
+                    }
+
+                    break;      // end case 0
+                    */
+                      toggle = 1;
+                   break;
+                case ID_TRACK_BUTT:
+                    if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
+                    {
+                        End_Route( (TRACK*) DrawStruct, &dc );
+                        DrawPanel->m_AutoPAN_Request = false;
+                    }
+                    else
+                      toggle = 1;
+                    break;
+
+                case ID_PCB_ZONES_BUTT:
+                    if ( End_Zone( &dc ) )
+                    {
+                        DrawPanel->m_AutoPAN_Request = false;
+                        SetCurItem( NULL );
+                    }
+                    else
+                      toggle = 1;
+                    break;
+
+                case ID_LINE_COMMENT_BUTT:
+                case ID_PCB_ARC_BUTT:
+                case ID_PCB_CIRCLE_BUTT:
+                          if( DrawStruct == NULL )
+                            {}
+                          else if( DrawStruct->Type() != TYPE_DRAWSEGMENT )
+                          {
+                              DisplayError( this, wxT( "DrawStruct Type error" ) );
+                              DrawPanel->m_AutoPAN_Request = false;
+
+                          }
+                          else if( (DrawStruct->m_Flags & IS_NEW) )
+                          {
+                              End_Edge( (DRAWSEGMENT*) DrawStruct, &dc );
+                              DrawPanel->m_AutoPAN_Request = false;
+                              SetCurItem( NULL );
+                          }
+                          else
+                            toggle = 1;
+                    break;
+                  default:
+
+                      toggle = 1;
+                    break;
+                }
+                if (toggle){
+                    int swap = m_ID_last_state;
+                    m_ID_last_state  = m_ID_current_state;
+                    SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+                    m_ID_current_state = swap;
+                }
+
+
+                    //SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
+
+                event.SetId(m_ID_current_state);
+                Process_Special_Functions(event);
+
+
+        break;
     case ID_OPEN_MODULE_EDITOR:
         if( m_ModuleEditFrame == NULL )
         {
@@ -921,6 +1077,18 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         g_DesignSettings.m_UseConnectedTrackWidth = false;
     }
     break;
+    case ID_AUX_TOOLBAR_PCB_CLR_WIDTH:
+    {
+        int ii = m_SelClrWidthBox->GetChoice();
+        g_DesignSettings.m_TrackClearence =
+            g_DesignSettings.m_TrackClearenceHistory[ii];
+        DisplayTrackSettings();
+        m_SelTrackWidthBox_Changed = false;
+        m_SelClrWidthBox_Changed = false;
+        m_SelViaSizeBox_Changed    = false;
+        g_DesignSettings.m_UseConnectedTrackWidth = false;
+    }
+    break;
 
     case ID_POPUP_PCB_SELECT_WIDTH1:
     case ID_POPUP_PCB_SELECT_WIDTH2:
@@ -1050,8 +1218,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "WinEDA_PcbFrame::Process_Special_Functions() id error" ) );
+              wxString msg;
+        msg.Printf(
+            wxT( "WinEDA_PcbFrame::Process_Special_Functions() id %d error" ),
+            DrawStruct->Type() );
+        DisplayError( this, msg );
+
         break;
     }
 

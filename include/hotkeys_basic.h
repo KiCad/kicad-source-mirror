@@ -8,7 +8,7 @@
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
-#define DEFAULT_HOTKEY_FILENAME_EXT wxT( ".key" )
+#define DEFAULT_HOTKEY_FILENAME_EXT wxT( "key" )
 
 /* keyword idetifier in kicad config use ti store/retrieve path option */
 #define HOTKEY_CFG_PATH_OPT wxT( "HotkeyPathOption" )

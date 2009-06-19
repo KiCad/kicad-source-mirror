@@ -154,6 +154,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     }
 
     m_SelTrackWidthBox_Changed = TRUE;
+    m_SelClrWidthBox_Changed = TRUE;
     m_SelViaSizeBox_Changed    = TRUE;
 
     if( Append )
@@ -263,7 +264,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;
- 
+
     DrawPanel->Refresh( true);
 
     Compile_Ratsnest( NULL, true );

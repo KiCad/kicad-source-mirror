@@ -33,6 +33,7 @@ void WinEDA_PcbFrame::DisplayTrackSettings()
                buftrc.GetData(), bufvia.GetData() );
     Affiche_Message( msg );
     m_SelTrackWidthBox_Changed = TRUE;
+    m_SelClrWidthBox_Changed = TRUE;
     m_SelViaSizeBox_Changed    = TRUE;
 }
 
