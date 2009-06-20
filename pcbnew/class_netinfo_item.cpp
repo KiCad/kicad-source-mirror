@@ -19,8 +19,8 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
     SetNet( 0 );
     m_NbNodes       = m_NbLink = m_NbNoconn = 0;
     m_ForceWidth    = 0;
-    m_RatsnestStart = 0;    // debut de liste ratsnests du net
-    m_RatsnestEnd   = 0;    // fin de liste ratsnests du net
+    m_RatsnestStartIdx = 0;    // Starting point of ratsnests of this net in a general buffer of ratsnest
+    m_RatsnestEndIdx   = 0;    // Ending point of ratsnests of this net
 }
 
 

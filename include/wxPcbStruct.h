@@ -218,9 +218,8 @@ public:
                                             MODULE* module,
                                             int     angle,
                                             bool    incremental );
-    void                     Place_Module( MODULE* module, wxDC* DC );
-    void                     InstallExchangeModuleFrame( MODULE* ExchangeModuleModule,
-                                                         wxDC* DC, const wxPoint& pos );
+    void                     Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest = false );
+    void                     InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
 
     // Graphic items edition:
     void                     InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );

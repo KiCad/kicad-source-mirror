@@ -86,7 +86,8 @@ void NETINFO_LIST::BuildListOfNets()
 
     DeleteData();        // Remove all nets info and free memory
 
-    // Create and add the "unconnected net"
+    // Create and add the "unconnected net", always existing,
+    // used to handle pads and tracks that are not member of a "real" net
     net_item = new NETINFO_ITEM( m_Parent );
     AppendNet( net_item );
 

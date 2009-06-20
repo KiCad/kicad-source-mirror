@@ -13,6 +13,7 @@
 
 #include "protos.h"
 
+#define DBG_BUID_NETINFO
 
 /* local variables */
 static std::vector <D_PAD*> s_localPadBuffer;           // for local ratsnest calculations when moving a footprint: buffer of pads to consider
@@ -107,7 +108,10 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
 
     GetBoard()->m_Status_Pcb = 0;                   /* we want a full ratnest computation, from the scratch */
-     MsgPanel->EraseMsgBox();
+    MsgPanel->EraseMsgBox();
+#ifdef DBG_BUID_NETINFO
+    wxSafeYield();
+#endif
 
 
     // Rebuild the full pads and net info list
@@ -124,6 +128,9 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
         msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetNetsCount() );
         Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
     }
+#ifdef DBG_BUID_NETINFO
+    wxSafeYield();
+#endif
 
     /* Compute the full ratsnest
      *  which can be see like all the possible links or logical connections.
@@ -449,7 +456,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
             DisplayError(this,wxT("Build_Board_Ratsnest() error: net not found") );
             return;
         }
-        net->m_RatsnestStart = m_Pcb->GetRatsnestsCount();
+        net->m_RatsnestStartIdx = m_Pcb->GetRatsnestsCount();
 
         int           num_block = 0;
         for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
@@ -473,14 +480,14 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
             icnt = gen_rats_block_to_block( DrawPanel, m_Pcb->m_FullRatsnest, pstart, pend );
         }
 
-        net->m_RatsnestEnd = m_Pcb->GetRatsnestsCount();
+        net->m_RatsnestEndIdx = m_Pcb->GetRatsnestsCount();
 
         /* sort by lenght */
-        if( (net->m_RatsnestEnd - net->m_RatsnestStart) > 1 )
+        if( (net->m_RatsnestEndIdx - net->m_RatsnestStartIdx) > 1 )
         {
             RATSNEST_ITEM* rats = &m_Pcb->m_FullRatsnest[0];
-            qsort( rats + net->m_RatsnestStart,
-                   net->m_RatsnestEnd - net->m_RatsnestStart,
+            qsort( rats + net->m_RatsnestStartIdx,
+                   net->m_RatsnestEndIdx - net->m_RatsnestStartIdx,
                    sizeof(RATSNEST_ITEM), sort_by_length );
         }
     }
@@ -555,7 +562,7 @@ static int tst_rats_block_to_block( NETINFO_ITEM* net, vector<RATSNEST_ITEM>& aR
 
     /* Search a link from a block to an other block */
     min_rats = NULL;
-    for( unsigned ii = net->m_RatsnestStart; ii < net->m_RatsnestEnd; ii++ )
+    for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
     {
         rats = &aRatsnestBuffer[ii];
         if( rats->m_PadStart->GetSubRatsnest() == rats->m_PadEnd->GetSubRatsnest() )  // Same block
@@ -691,14 +698,14 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
             num_block = MAX( num_block, subnet );
         }
 
-        for( unsigned ii = net->m_RatsnestStart; ii < net->m_RatsnestEnd; ii++ )
+        for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
         {
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_ACTIF;
         }
 
         /* a - tst connection between pads */
         rats = &m_Pcb->m_FullRatsnest[0];
-        int icnt = tst_rats_pad_to_pad( num_block, rats + net->m_RatsnestStart, rats + net->m_RatsnestEnd );
+        int icnt = tst_rats_pad_to_pad( num_block, rats + net->m_RatsnestStartIdx, rats + net->m_RatsnestEndIdx );
 
         /* b - test connexion between blocks (Iteration) */
         while( icnt > 1 )

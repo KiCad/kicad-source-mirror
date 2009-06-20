@@ -68,9 +68,8 @@ class NETINFO_LIST
 {
 private:
     BOARD* m_Parent;
-
-//    boost::ptr_vector<NETINFO_ITEM*>  m_NetBuffer;           // nets buffer list (name, design constraints ..
     std::vector<NETINFO_ITEM*> m_NetBuffer;                     // nets buffer list (name, design constraints ..
+
 public:
     std::vector<D_PAD*>        m_PadsFullList;                  // Entry for a sorted pad list (used in ratsnest calculations)
 
@@ -115,16 +114,18 @@ public:
         return m_PadsFullList.size();
     }
 
+
     /** Function GetPad
      * @return the pad idx from m_PadsFullList
      */
-    D_PAD*     GetPad( unsigned aIdx)
+    D_PAD* GetPad( unsigned aIdx )
     {
-        if (aIdx < m_PadsFullList.size() )
+        if( aIdx < m_PadsFullList.size() )
             return m_PadsFullList[aIdx];
         else
             return NULL;
     }
+
 
 private:
 
@@ -156,10 +157,12 @@ public:
     int      m_NbNodes;                             // Pads count for this net
     int      m_NbLink;                              // Ratsnets count for this net
     int      m_NbNoconn;                            // Ratsnets remaining to route count
-    int      m_ForceWidth;                          // specific width (O = default width)
+    int      m_ForceWidth;                          // specific width (0 = default width)
     std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
-    unsigned m_RatsnestStart;                       // debut de liste ratsnests du net (included)
-    unsigned m_RatsnestEnd;                         // fin de liste ratsnests du net (excluded)
+    unsigned m_RatsnestStartIdx;                    /* Starting point of ratsnests of this net (included)
+                                                     * in a general buffer of ratsnest (a vector<RATSNEST_ITEM*> buffer)
+                                                     */
+    unsigned m_RatsnestEndIdx;                      // Ending point of ratsnests of this net (excluded) in this buffer
 
     NETINFO_ITEM( BOARD_ITEM* aParent );
     ~NETINFO_ITEM();

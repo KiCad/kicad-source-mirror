@@ -4,10 +4,18 @@
 /* include in modedit.cpp						*/
 /************************************************/
 
+#include "fctsys.h"
+#include "common.h"
+#include "class_drawpanel.h"
 #include "confirm.h"
+#include "pcbnew.h"
 #include "appl_wxstruct.h"
+#include "gestfich.h"
+#include "3d_struct.h"
+#include "3d_viewer.h"
 #include "dialog_edit_module.h"
-#include <wx/version.h>
+
+extern bool GoToEditor;
 
 /**************************************/
 /* class WinEDA_ModulePropertiesFrame */
@@ -652,8 +660,7 @@ void WinEDA_ModulePropertiesFrame::GotoModuleEditor( wxCommandEvent& event )
 void WinEDA_ModulePropertiesFrame::ExchangeModule( wxCommandEvent& event )
 /**********************************************************************/
 {
-    m_Parent->InstallExchangeModuleFrame( m_CurrentModule,
-                                         m_DC, wxPoint( -1, -1 ) );
+    m_Parent->InstallExchangeModuleFrame( m_CurrentModule );
 
     // Attention: si il y a eu echange, m_CurrentModule a été delete!
     m_Parent->SetCurItem( NULL );

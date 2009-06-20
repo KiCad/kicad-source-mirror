@@ -15,13 +15,11 @@
 #include "3d_struct.h"
 #include "3d_viewer.h"
 
+#include "dialog_edit_module.h"
+
 #include "protos.h"
 
-/* Variables locales: */
 bool GoToEditor = FALSE;
-
-/* class WinEDA_ModulePropertiesFrame */
-#include "dialog_edit_module.cpp"
 
 /*******************************************************************/
 void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC * DC )

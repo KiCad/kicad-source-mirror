@@ -642,7 +642,7 @@ int ChangeSideNumLayer( int oldlayer )
 
 
 /*****************************************************************/
-void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
+void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest )
 /*****************************************************************/
 
 /* Place a l'endroit pointe par la souris le module deja existant selectionne
@@ -688,8 +688,8 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC )
         EraseDragListe();
     }
 
-    /* affichage chevelu general si necessaire */
-    Compile_Ratsnest( DC, true );
+    if( !aDoNotRecreateRatsnest )
+        Compile_Ratsnest( DC, true );
 
     module->DisplayInfo( this );
 

@@ -265,8 +265,11 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;
 
+    // Display the loaded board:
     DrawPanel->Refresh( true);
-
+    wxSafeYield();      // Needed if we want to see the board now.
+    
+    // Compile rastnest and displays net info
     Compile_Ratsnest( NULL, true );
     GetBoard()->DisplayInfo( this );
 
