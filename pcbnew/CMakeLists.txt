@@ -34,22 +34,22 @@ set(PCBNEW_SRCS
     dialog_copper_zones_base.cpp
     dialog_display_options.cpp
     dialog_display_options_base.cpp
-	dialog_drc_base.cpp
+    dialog_drc_base.cpp
     dialog_drc.cpp
     dialog_edit_module_text.cpp
-	dialog_edit_module_text_base.cpp
+    dialog_edit_module_text_base.cpp
     dialog_edit_module.cpp
     dialog_exchange_modules_base.cpp
     dialog_freeroute_exchange.cpp
 #   dialog_gendrill.cpp
     dialog_general_options.cpp
-	dialog_general_options_BoardEditor_base.cpp
+    dialog_general_options_BoardEditor_base.cpp
 #   dialog_graphic_items_options.cpp
-	dialog_graphic_item_properties.cpp
-	dialog_graphic_item_properties_base.cpp
+    dialog_graphic_item_properties.cpp
+    dialog_graphic_item_properties_base.cpp
 #   dialog_initpcb.cpp
     dialog_netlist.cpp
-	dialog_netlist_fbp.cpp
+    dialog_netlist_fbp.cpp
     dialog_pcb_text_properties.cpp
     zones_non_copper_type_functions.cpp
     dialog_non_copper_zones_properties_base.cpp
@@ -74,7 +74,7 @@ set(PCBNEW_SRCS
     editmod.cpp
     editrack.cpp
     editrack-part2.cpp
-	edit_pcb_text.cpp
+    edit_pcb_text.cpp
     edit_track_width.cpp
     edtxtmod.cpp
     export_gencad.cpp

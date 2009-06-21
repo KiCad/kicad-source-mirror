@@ -36,9 +36,9 @@ set(EESCHEMA_SRCS
     delete.cpp
     delsheet.cpp
 #   dialog_backanno.cpp
-	dialog_bodygraphictext_properties_base.cpp
+    dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
-	dialog_build_BOM_base.cpp
+    dialog_build_BOM_base.cpp
 #   dialog_cmp_graphic_properties.cpp
     dialog_create_component.cpp
 #   dialog_edit_component_in_lib.cpp
@@ -53,7 +53,7 @@ set(EESCHEMA_SRCS
     dialog_erc.cpp
 #   dialog_find.cpp
     dialog_options.cpp
-	dialog_print_using_printer_base.cpp
+    dialog_print_using_printer_base.cpp
     dialog_print_using_printer.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
