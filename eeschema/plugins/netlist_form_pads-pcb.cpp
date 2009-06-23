@@ -330,7 +330,8 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 /***************************************************/
 int AreStringsEqual( const char * src, const char * ref )
 /***************************************************/
-/* Compare 2 chains, and return 0 if equal or 1 if different
+/* Compare 2 strings (case insensitive),
+ * and return 1 (true) if equal or 0 (false) if different
  * stricmp does the same job, but does not exist under all systems
  */
 {
