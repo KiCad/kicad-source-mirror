@@ -4,15 +4,10 @@
 
 /* read the generic netlist created by eeschema and convert it to a pads-pcb form
  */
-#include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#if defined( HAVE_STRINGS_H )
-#include <strings.h>
-#endif
 
 #include <ctype.h>
 
@@ -109,6 +104,7 @@
 char*   GetLine( FILE* File, char* Line, int* LineNum, int SizeLine );
 int     ReadAndWriteComponentDataSection( FILE* InFile, FILE* OutFile, int* LineNumber );
 int     ReadAndWriteNetsDataSection( FILE* InFile, FILE* OutFile, int* LineNumber );
+int AreStringsEqual( const char * src, const char * ref );
 
 
 class ComponentDataClass
@@ -174,12 +170,12 @@ int main( int argc, char** argv )
     /* Read and write data lines */
     while( GetLine( InFile, Line, &LineNumber, sizeof(Line) ) )
     {
-        if( stricmp( Line, "$BeginComponent" ) == 0 )
+        if( AreStringsEqual( Line, "$BeginComponent" ) )
         {
             ReadAndWriteComponentDataSection( InFile, OutFile, &LineNumber );
             continue;
         }
-        if( stricmp( Line, "$BeginNets" ) == 0 )
+        if( AreStringsEqual( Line, "$BeginNets" )  )
         {
             fprintf( OutFile, "\n*NET*\n" );
             ReadAndWriteNetsDataSection( InFile, OutFile, &LineNumber );
@@ -215,16 +211,16 @@ int ReadAndWriteComponentDataSection( FILE* InFile, FILE* OutFile, int* LineNumb
 
     while( GetLine( InFile, Line, LineNumber, sizeof(Line) ) )
     {
-        if( stricmp( Line, "$BeginPinList" ) == 0 )
+        if( AreStringsEqual( Line, "$BeginPinList" )  )
         {
             while( GetLine( InFile, Line, LineNumber, sizeof(Line) ) )
-                if( stricmp( Line, "$EndPinList" ) == 0 )
+                if( AreStringsEqual( Line, "$EndPinList" )  )
                     break;
 
             continue;
         }
 
-        if( stricmp( Line, "$EndComponent" ) == 0 ) // Create the output for the component:
+        if( AreStringsEqual( Line, "$EndComponent" )  ) // Create the output for the component:
         {
             /* Create the line like: C2 unknown */
 
@@ -237,27 +233,27 @@ int ReadAndWriteComponentDataSection( FILE* InFile, FILE* OutFile, int* LineNumb
         data  = strtok( NULL, "=\n\r" );
         if( data == NULL )
             continue;
-        if( stricmp( Line, "TimeStamp" ) == 0 )
+        if( AreStringsEqual( Line, "TimeStamp" )  )
         {
             ComponentData.m_TimeStamp = atol( data );
             continue;
         }
-        if( stricmp( Line, "Footprint" ) == 0 )
+        if( AreStringsEqual( Line, "Footprint" ) )
         {
             strncpy( ComponentData.m_Footprint, data, 255 );
             continue;
         }
-        if( stricmp( Line, "Reference" ) == 0 )
+        if( AreStringsEqual( Line, "Reference" )  )
         {
             strncpy( ComponentData.m_Reference, data, 255 );
             continue;
         }
-        if( stricmp( Line, "Value" ) == 0 )
+        if( AreStringsEqual( Line, "Value" )  )
         {
             strncpy( ComponentData.m_Value, data, 255 );
             continue;
         }
-        if( stricmp( Line, "Libref" ) == 0 )
+        if( AreStringsEqual( Line, "Libref" )  )
         {
             strncpy( ComponentData.m_LibRef, data, 255 );
             continue;
@@ -283,10 +279,10 @@ int ReadAndWriteNetsDataSection( FILE* InFile, FILE* OutFile, int* LineNumber )
 
     while( GetLine( InFile, Line, LineNumber, sizeof(Line) ) )
     {
-        if( stricmp( Line, "$EndNets" ) == 0 )
+        if( AreStringsEqual( Line, "$EndNets" )  )
             return 0;
         ident = strtok( Line, " \n\r" );
-        if( stricmp( ident, "Net" ) == 0 )
+        if( AreStringsEqual( ident, "Net" )  )
         {
             netnum  = strtok( NULL, " \n\r" );
             netname = strtok( NULL, " \"\n\r" );
@@ -329,4 +325,33 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 
     strtok( Line, "\n\r" );
     return Line;
+}
+
+/***************************************************/
+int AreStringsEqual( const char * src, const char * ref )
+/***************************************************/
+/* Compare 2 chains, and return 0 if equal or 1 if different
+ * stricmp does the same job, but does not exist under all systems
+ */
+{
+    int match = 1;
+    while (src && ref )
+    {
+        unsigned char c1 = *src;
+        unsigned char c2 = *ref;
+        if ( c1 >= 'a' && c1 <= 'z' )
+            c1 += 'A' - 'a';
+        if ( c2 >= 'a' && c2 <= 'z' )
+            c2 += 'A' - 'a';
+         if ( c1 != c2 )
+        {
+            match = 0;
+            break;
+        }
+        if ( c1 == 0 || c2 == 0 )
+            break;
+        src++; ref++;
+    }
+
+    return match;
 }

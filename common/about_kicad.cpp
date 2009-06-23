@@ -8,7 +8,11 @@
 #include "appl_wxstruct.h"
 
 
-#define BUILD_VERSION wxT("(20090602-unstable)")
+#define BUILD_VERSION "(20090621-unstable)"
+#ifndef KICAD_ABOUT_VERSION
+#define KICAD_ABOUT_VERSION BUILD_VERSION
+#endif
+
 
 wxString g_BuildVersion
 
@@ -16,7 +20,7 @@ wxString g_BuildVersion
 #include "version.h"
 ( wxT( KICAD_SVN_VERSION ) )
 #else
-( BUILD_VERSION )
+( wxT( BUILD_VERSION ) )
 #endif
 ;
 
@@ -25,7 +29,7 @@ wxString g_BuildAboutVersion
 #  include "version.h"
 ( wxT( KICAD_ABOUT_VERSION ) )
 #else
-( BUILD_VERSION )
+( wxT( BUILD_VERSION ) )
 #endif
 ;
 

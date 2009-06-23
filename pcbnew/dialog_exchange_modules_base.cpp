@@ -50,7 +50,7 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	
 	wxString m_SelectionChoices[] = { _("Change module"), _("Change same modules"), _("Ch. same module+value"), _("Change all") };
 	int m_SelectionNChoices = sizeof( m_SelectionChoices ) / sizeof( wxString );
-	m_Selection = new wxRadioBox( this, ID_SELECTION_CLICKED, _("wxRadioBox"), wxDefaultPosition, wxDefaultSize, m_SelectionNChoices, m_SelectionChoices, 1, wxRA_SPECIFY_COLS );
+	m_Selection = new wxRadioBox( this, ID_SELECTION_CLICKED, _("Browse Libs modules"), wxDefaultPosition, wxDefaultSize, m_SelectionNChoices, m_SelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_Selection->SetSelection( 0 );
 	bMiddleSizer->Add( m_Selection, 0, wxALL, 5 );
 	

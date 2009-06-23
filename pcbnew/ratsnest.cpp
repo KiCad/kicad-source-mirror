@@ -13,7 +13,14 @@
 
 #include "protos.h"
 
-#define DBG_BUID_NETINFO
+/* Sometimes Pcbnew crashes when calculating net info (Heap Error)
+ * gen_rats_block_to_block() seems the culprit, but because this is a memory allocation error, it is not sure.
+ * define DBG_BUILD_NETINFO diplays som diags.
+ * All code between #define DBG_BUILD_NETINFO and #endif will be removed when ths issue will be solved
+ * Comment this next line for normal use
+ * JP Charras
+ */
+//#define DBG_BUILD_NETINFO
 
 /* local variables */
 static std::vector <D_PAD*> s_localPadBuffer;           // for local ratsnest calculations when moving a footprint: buffer of pads to consider
@@ -109,7 +116,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
     GetBoard()->m_Status_Pcb = 0;                   /* we want a full ratnest computation, from the scratch */
     MsgPanel->EraseMsgBox();
-#ifdef DBG_BUID_NETINFO
+#ifdef DBG_BUILD_NETINFO
     wxSafeYield();
 #endif
 
@@ -128,7 +135,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
         msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetNetsCount() );
         Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
     }
-#ifdef DBG_BUID_NETINFO
+#ifdef DBG_BUILD_NETINFO
     wxSafeYield();
 #endif
 
@@ -138,16 +145,33 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
      *  This full ratsnest is not modified by track editing.
      *  It changes only when a netlist is read, or footprints are modified
      */
+#ifdef DBG_BUILD_NETINFO
+    Affiche_Message( wxT( "Build Board Ratsnest" ) );
+    wxSafeYield();
+#endif
     Build_Board_Ratsnest( DC );
 
     /* Compute the pad connections due to the existing tracks (physical connections)*/
+#ifdef DBG_BUILD_NETINFO
+    Affiche_Message( wxT( "testconnexions" ) );
+    wxSafeYield();
+#endif
     test_connexions( DC );
 
     /* Compute the active ratsnest, i.e. the unconnected links
      *  it is faster than Build_Board_Ratsnest()
      *  because many optimisations and computations are already made
      */
+#ifdef DBG_BUILD_NETINFO
+    Affiche_Message( wxT( "Tst Ratsnest" ) );
+    wxSafeYield();
+#endif
     Tst_Ratsnest( DC, 0 );
+
+#ifdef DBG_BUILD_NETINFO
+    Affiche_Message( wxT( "End Tst Ratsnest" ) );
+    wxSafeYield();
+#endif
 
     // Redraw the active ratsnest ( if enabled )
     if( g_Show_Ratsnest && DC )
@@ -189,10 +213,10 @@ static int sort_by_length( const void* o1, const void* o2 )
 
 
 /*****************************************************************************/
-static int gen_rats_block_to_block( WinEDA_DrawPanel*           aDrawPanel,
-                                    std::vector<RATSNEST_ITEM>& aRatsnestBuffer,
-                                    D_PAD**                     aPadList,
-                                    D_PAD**                     aPadMax )
+static int gen_rats_block_to_block( std::vector<RATSNEST_ITEM>& aRatsnestBuffer,
+                                    std::vector<D_PAD*>&        aPadBuffer,
+                                    unsigned                    aPadIdxStart,
+                                    unsigned                    aPadIdxMax )
 /*****************************************************************************/
 
 /**
@@ -203,41 +227,37 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel*           aDrawPanel,
  *  the block n ( n > 1 ) it connected to block 1 by their 2 nearest pads.
  *  When the block is found, it is merged with the block 1
  *  the D_PAD member m_SubRatsnest handles the block number
- *  @param  aPadList = starting address (within the pad list) for search
- *  @param  aPadMax	  = ending address (within the pad list) for search
  *  @param aRatsnestBuffer = a std::vector<RATSNEST_ITEM> buffer to fill with new ratsnest items
+ *  @param aPadBuffer = a std::vector<D_PAD*> that is the list of pads to consider
+ *  @param  aPadIdxStart = starting index (within the pad list) for search
+ *  @param  aPadIdxMax	  = ending index (within the pad list) for search
  *  @return blocks not connected count
  */
 {
-    int     dist_min, current_dist;
-    int     current_num_block = 1;
-    D_PAD** pt_liste_pad_tmp;
-    D_PAD** pt_liste_pad_aux;
-    D_PAD** pt_liste_pad_block1 = NULL;
-    D_PAD** pt_start_liste;
-
-    pt_liste_pad_tmp = NULL;
+    int dist_min, current_dist;
+    int current_num_block = 1;
+    int padBlock1Idx = -1;              // Index in aPadBuffer for the "better" pad found in block 1
+    int padBlockToMergeIdx = -1;        // Index in aPadBuffer for the "better" pad found in block to merge
 
     dist_min = 0x7FFFFFFF;
 
-    pt_start_liste = aPadList;
-
     /* Search the nearest pad from block 1 */
-    for( ; aPadList < aPadMax; aPadList++ )
+    for( unsigned ii = aPadIdxStart; ii < aPadIdxMax; ii++ )
     {
-        D_PAD* ref_pad = *aPadList;
+        D_PAD* ref_pad = aPadBuffer[ii];
+        #ifdef DBG_BUILD_NETINFO
+        if( ref_pad->Type() != TYPE_PAD )
+            wxMessageBox( wxT( "gen_rats_block_to_block() err: ref_pad is not a D_PAD" ) );
+        #endif
 
         /* search a pad which is in the block 1 */
         if( ref_pad->GetSubRatsnest() != 1 )
             continue;
 
         /* pad is found, search its nearest neighbour in other blocks */
-        for( pt_liste_pad_aux = pt_start_liste; ; pt_liste_pad_aux++ )
+        for( unsigned jj = aPadIdxStart; jj < aPadIdxMax; jj++ )
         {
-            D_PAD* curr_pad = *pt_liste_pad_aux;
-
-            if( pt_liste_pad_aux >= aPadMax )
-                break;
+            D_PAD* curr_pad = aPadBuffer[jj];
 
             if( curr_pad->GetSubRatsnest() == 1 )  // not in an other block
                 continue;
@@ -253,8 +273,8 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel*           aDrawPanel,
                 current_num_block = curr_pad->GetSubRatsnest();
                 dist_min = current_dist;
 
-                pt_liste_pad_tmp    = pt_liste_pad_aux;
-                pt_liste_pad_block1 = aPadList;
+                padBlockToMergeIdx = jj;
+                padBlock1Idx = ii;
             }
         }
     }
@@ -266,35 +286,39 @@ static int gen_rats_block_to_block( WinEDA_DrawPanel*           aDrawPanel,
      */
     if( current_num_block > 1 )
     {
-        /* The block n is merged with the bloc 1 :
+        /* The block n (n=current_num_block) is merged with the bloc 1 :
          *  to do that, we set the m_SubRatsnest member to 1 for all pads in block n
          */
-        for( aPadList = pt_start_liste; aPadList < aPadMax; aPadList++ )
+        for( unsigned ii = aPadIdxStart; ii < aPadIdxMax; ii++ )
         {
-            if( (*aPadList)->GetSubRatsnest() == current_num_block )
-                (*aPadList)->SetSubRatsnest( 1 );
+            D_PAD* pad = aPadBuffer[ii];
+            if( pad->GetSubRatsnest() == current_num_block )
+                pad->SetSubRatsnest( 1 );
         }
 
-        aPadList = pt_liste_pad_block1;
-
-        /* Create the new ratsnet */
-        RATSNEST_ITEM net;
-        net.SetNet( (*aPadList)->GetNet() );
-        net.m_Status   = CH_ACTIF | CH_VISIBLE;
-        net.m_Lenght   = dist_min;
-        net.m_PadStart = *aPadList;
-        net.m_PadEnd   = *pt_liste_pad_tmp;
-        aRatsnestBuffer.push_back( net );
+        if( padBlock1Idx < 0 )
+            DisplayError( NULL, wxT( "gen_rats_block_to_block() internal error" ) );
+        else
+        {
+            /* Create the new ratsnet */
+            RATSNEST_ITEM net;
+            net.SetNet( aPadBuffer[padBlock1Idx]->GetNet() );
+            net.m_Status   = CH_ACTIF | CH_VISIBLE;
+            net.m_Lenght   = dist_min;
+            net.m_PadStart = aPadBuffer[padBlock1Idx];
+            net.m_PadEnd   = aPadBuffer[padBlockToMergeIdx];
+            aRatsnestBuffer.push_back( net );
+        }
     }
     return current_num_block;
 }
 
 
 /*****************************************************************************/
-static int gen_rats_pad_to_pad( WinEDA_DrawPanel*      aDrawPanel,
-                                vector<RATSNEST_ITEM>& aRatsnestBuffer,
-                                D_PAD**                aPadList,
-                                D_PAD**                aPadMax,
+static int gen_rats_pad_to_pad( vector<RATSNEST_ITEM>& aRatsnestBuffer,
+                                std::vector<D_PAD*>&   aPadBuffer,
+                                unsigned               aPadIdxStart,
+                                unsigned               aPadIdxMax,
                                 int                    current_num_block )
 /*****************************************************************************/
 
@@ -307,42 +331,34 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel*      aDrawPanel,
  * Its creates a block if the 2 pads are not connected, or merge the unconnected pad to the existing block.
  * These blocks include 2 pads and the 2 pads are linked by a ratsnest.
  *
- * @param   pt_liste_pad = starting address in the pad buffer
- * @param   pt_limite	  = ending address
+ * @param aRatsnestBuffer = a std::vector<RATSNEST_ITEM> buffer to fill with new ratsnest items
+ * @param aPadBuffer = a std::vector<D_PAD*> that is the list of pads to consider
+ * @param  aPadIdxStart = starting index (within the pad list) for search
+ * @param  aPadIdxMax	  = ending index (within the pad list) for search
  * @param   current_num_block = Last existing block number de pads
  *      These block are created by the existing tracks analysis
- *  @param aRatsnestBuffer = a std::vector<RATSNEST_ITEM> buffer to fill with new ratsnest items
  *
  * @return the last block number used
  */
 {
-    int     dist_min, current_dist;
-    D_PAD** pt_liste_pad_tmp;
-    D_PAD** pt_liste_pad_aux;
-    D_PAD** pt_start_liste;
-    D_PAD*  ref_pad, * pad;
+    int    dist_min, current_dist;
+    D_PAD* ref_pad, * pad;
 
-    pt_start_liste = aPadList;
-
-    for(  ; aPadList < aPadMax; aPadList++ )
+    for( unsigned ii = aPadIdxStart; ii < aPadIdxMax; ii++ )
     {
-        ref_pad = *aPadList;
+        ref_pad = aPadBuffer[ii];
 
         if( ref_pad->GetSubRatsnest() )
             continue; // Pad already connected
 
-        pt_liste_pad_tmp = NULL;
         dist_min = 0x7FFFFFFF;
-
-        for( pt_liste_pad_aux = pt_start_liste; ; pt_liste_pad_aux++ )
+        int padBlockToMergeIdx = -1;        // Index in aPadBuffer for the "better" pad found in block to merge
+        for( unsigned jj = aPadIdxStart; jj < aPadIdxMax; jj++ )
         {
-            if( pt_liste_pad_aux >= aPadMax )
-                break;
-
-            if( pt_liste_pad_aux == aPadList )
+            if( ii == jj )
                 continue;
 
-            pad = *pt_liste_pad_aux;
+            pad = aPadBuffer[jj];
 
             /* Compare distance between pads ("Manhattan" distance) */
             current_dist = abs( pad->m_Pos.x - ref_pad->m_Pos.x ) +
@@ -351,20 +367,20 @@ static int gen_rats_pad_to_pad( WinEDA_DrawPanel*      aDrawPanel,
             if( dist_min > current_dist )
             {
                 dist_min = current_dist;
-                pt_liste_pad_tmp = pt_liste_pad_aux;
+                padBlockToMergeIdx = jj;
             }
         }
 
-        if( pt_liste_pad_tmp != NULL )
+        if( padBlockToMergeIdx >= 0 )
         {
-            pad = *pt_liste_pad_tmp;
+            pad = aPadBuffer[padBlockToMergeIdx];
 
             /* Update the block number
              *  if the 2 pads are not already created : a new block is created
              */
             if( (pad->GetSubRatsnest() == 0) && (ref_pad->GetSubRatsnest() == 0) )
             {
-                current_num_block++;
+                current_num_block++;        // Creates a new block number (or subratsnest)
                 pad->SetSubRatsnest( current_num_block );
                 ref_pad->SetSubRatsnest( current_num_block );
             }
@@ -435,7 +451,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
     for( unsigned ii = 0;  ii<m_Pcb->GetPadsCount();  ++ii )
     {
-        pad = m_Pcb->m_NetInfo->GetPad(ii);
+        pad = m_Pcb->m_NetInfo->GetPad( ii );
         pad->SetSubRatsnest( 0 );
     }
 
@@ -447,18 +463,31 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
     unsigned current_net_code = 1;    // 1er net_code a analyser (net_code = 0 -> no connect)
     noconn = 0;
+#ifdef DBG_BUILD_NETINFO
+    Affiche_Message( wxT( "Build Board Ratsnest - 1" ) );
+    wxSafeYield();
+#endif
 
     for( ; current_net_code < m_Pcb->m_NetInfo->GetNetsCount(); current_net_code++ )
     {
         NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
-        if ( net == NULL )      //Should not occur
+        if( net == NULL )       //Should not occur
         {
-            DisplayError(this,wxT("Build_Board_Ratsnest() error: net not found") );
+            DisplayError( this, wxT( "Build_Board_Ratsnest() error: net not found" ) );
             return;
         }
         net->m_RatsnestStartIdx = m_Pcb->GetRatsnestsCount();
+#ifdef DBG_BUILD_NETINFO
+        wxString msg;
+        msg.Printf( wxT(
+                       "Build Board Ratsnest net %d/%d start" ), current_net_code,
+                   m_Pcb->m_NetInfo->GetNetsCount() );
+        Affiche_Message( msg );
+        wxSafeYield();
+#endif
 
-        int           num_block = 0;
+        // Search for the last subratsnest already in use
+        int num_block = 0;
         for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
         {
             pad = net->m_ListPad[ii];
@@ -467,22 +496,47 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         }
 
         /* Compute the ratsnest relative to the current net */
+#ifdef DBG_BUILD_NETINFO
+        msg.Printf( wxT(
+                       "Build Board Ratsnest net %d/%d first pass" ), current_net_code,
+                   m_Pcb->m_NetInfo->GetNetsCount() );
+        Affiche_Message( msg );
+        wxSafeYield();
+#endif
 
         /* a - first pass : create the blocks from not already in block pads */
-        D_PAD** pstart = &net->m_ListPad[0];
-        D_PAD** pend   = pstart + net->m_ListPad.size();
-        int     icnt   = gen_rats_pad_to_pad( DrawPanel, m_Pcb->m_FullRatsnest, pstart, pend,
-                                              num_block );
+        int icnt = gen_rats_pad_to_pad( m_Pcb->m_FullRatsnest,
+                                        net->m_ListPad,
+                                        0,
+                                        net->m_ListPad.size(),
+                                        num_block );
 
+ #ifdef DBG_BUILD_NETINFO
+        msg.Printf( wxT( "Build Board Ratsnest net (%s) %d/%d iteration" ),
+                   m_Pcb->FindNet( current_net_code )->GetNetname().GetData(),
+                   current_net_code, m_Pcb->m_NetInfo->GetNetsCount() );
+        Affiche_Message( msg );
+        wxSafeYield();
+#endif
         /* b - blocks connection (Iteration) */
         while( icnt > 1 )
         {
-            icnt = gen_rats_block_to_block( DrawPanel, m_Pcb->m_FullRatsnest, pstart, pend );
+            icnt = gen_rats_block_to_block( m_Pcb->m_FullRatsnest, net->m_ListPad, 0,
+                                           net->m_ListPad.size() );
+            net = m_Pcb->FindNet( current_net_code );
         }
 
         net->m_RatsnestEndIdx = m_Pcb->GetRatsnestsCount();
 
+ #ifdef DBG_BUILD_NETINFO
+        msg.Printf( wxT(
+                       "Build Board Ratsnest net %d/%d sort" ), current_net_code,
+                   m_Pcb->m_NetInfo->GetNetsCount() );
+        Affiche_Message( msg );
+        wxSafeYield();
+#endif
         /* sort by lenght */
+        net = m_Pcb->FindNet( current_net_code );
         if( (net->m_RatsnestEndIdx - net->m_RatsnestStartIdx) > 1 )
         {
             RATSNEST_ITEM* rats = &m_Pcb->m_FullRatsnest[0];
@@ -492,6 +546,10 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         }
     }
 
+#ifdef DBG_BUILD_NETINFO
+    Affiche_Message( wxT( "Build Board Ratsnest - 2" ) );
+    wxSafeYield();
+#endif
     m_Pcb->m_NbNoconnect = noconn;
     m_Pcb->m_Status_Pcb |= LISTE_RATSNEST_ITEM_OK;
 
@@ -505,7 +563,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
             m_Pcb->m_FullRatsnest[ii].Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
     }
 }
-
 
 
 /*********************************************************************/
@@ -527,7 +584,8 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
 
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
-        if( ( m_Pcb->m_FullRatsnest[ii].m_Status & (CH_VISIBLE | CH_ACTIF) ) != (CH_VISIBLE | CH_ACTIF) )
+        if( ( m_Pcb->m_FullRatsnest[ii].m_Status & (CH_VISIBLE | CH_ACTIF) ) !=
+           (CH_VISIBLE | CH_ACTIF) )
             continue;
 
         if( (net_code <= 0) || ( net_code == m_Pcb->m_FullRatsnest[ii].GetNet() ) )
@@ -546,7 +604,7 @@ static int tst_rats_block_to_block( NETINFO_ITEM* net, vector<RATSNEST_ITEM>& aR
  *  Function testing the ratsnest between 2 blocks ( same net )
  *  The search is made between pads in block 1 and the others blocks
  *  The block n ( n > 1 ) is merged with block 1 by the smallest ratsnest
- *  Différence between gen_rats_block_to_block(..):
+ *  Difference between gen_rats_block_to_block(..):
  *  The analysis is not made pads to pads but uses the general ratsnest list.
  *  The function activate the smallest ratsnest between block 1 and the block n
  *  (activate a logical connexion)
@@ -680,9 +738,9 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
     for( int net_code = 1; net_code < (int) m_Pcb->m_NetInfo->GetNetsCount(); net_code++ )
     {
         net = m_Pcb->FindNet( net_code );
-        if ( net == NULL )      //Should not occur
+        if( net == NULL )       //Should not occur
         {
-            DisplayError(this, wxT("Tst_Ratsnest() error: net not found") );
+            DisplayError( this, wxT( "Tst_Ratsnest() error: net not found" ) );
             return;
         }
 
@@ -705,7 +763,9 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 
         /* a - tst connection between pads */
         rats = &m_Pcb->m_FullRatsnest[0];
-        int icnt = tst_rats_pad_to_pad( num_block, rats + net->m_RatsnestStartIdx, rats + net->m_RatsnestEndIdx );
+        int icnt = tst_rats_pad_to_pad( num_block,
+                                        rats + net->m_RatsnestStartIdx,
+                                        rats + net->m_RatsnestEndIdx );
 
         /* b - test connexion between blocks (Iteration) */
         while( icnt > 1 )
@@ -759,13 +819,13 @@ void WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
  *          The ratsnest section must be computed for each new position
  */
 {
-    static unsigned pads_module_count;             // node count (node = pad with a net code) for the footprint beeing moved
-    static unsigned internalRatsCount;             // number of internal links (links between pads of the module)
+    static unsigned pads_module_count;              // node count (node = pad with a net code) for the footprint beeing moved
+    static unsigned internalRatsCount;              // number of internal links (links between pads of the module)
     D_PAD**         baseListePad;
     D_PAD*          pad_ref;
     D_PAD*          pad_externe;
     int             current_net_code;
-    int             distance;            // variables de calcul de ratsnest
+    int             distance;                       // variables de calcul de ratsnest
     wxPoint         pad_pos;                        // True pad position according to the current footprint position
 
 
@@ -814,9 +874,9 @@ void WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
         // A new net was found, load all pads of others modules members of this net:
         NETINFO_ITEM* net = m_Pcb->FindNet( pad_ref->GetNet() );
-        if ( net == NULL )      //Should not occur
+        if( net == NULL )       //Should not occur
         {
-            DisplayError(this,wxT("build_ratsnest_module() error: net not found") );
+            DisplayError( this, wxT( "build_ratsnest_module() error: net not found" ) );
             return;
         }
 
@@ -860,15 +920,12 @@ void WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
 
         /* End of list found: */
         /* a - first step of lee algorithm : build the pad to pad link list */
-        int icnt = gen_rats_pad_to_pad( DrawPanel, m_Pcb->m_LocalRatsnest,
-                                        baseListePad + ii, baseListePad + jj,
-                                        0 );
+        int icnt = gen_rats_pad_to_pad( m_Pcb->m_LocalRatsnest, s_localPadBuffer, ii, jj, 0 );
 
         /* b - second step of lee algorithm : build the block to block link list (Iteration) */
         while( icnt > 1 )
         {
-            icnt = gen_rats_block_to_block( DrawPanel, m_Pcb->m_LocalRatsnest,
-                                            baseListePad + ii, baseListePad + jj );
+            icnt = gen_rats_block_to_block( m_Pcb->m_LocalRatsnest, s_localPadBuffer, ii, jj );
         }
 
         ii = jj;
@@ -890,6 +947,7 @@ void WinEDA_BasePcbFrame::build_ratsnest_module( wxDC* DC, MODULE* Module )
      *  This section computes the "external" ratsnest: must be done when the footprint position changes
      */
 CalculateExternalRatsnest:
+
     /* This section search:
      *  for each current module pad the nearest neighbour external pad (of course for the same net code).
      *  For each current footprint cluster of pad (pads having the same net code),
@@ -904,7 +962,7 @@ CalculateExternalRatsnest:
         m_Pcb->m_LocalRatsnest.erase( m_Pcb->m_LocalRatsnest.begin() + internalRatsCount,
                                      m_Pcb->m_LocalRatsnest.end() );
 
-    current_net_code    = s_localPadBuffer[0]->GetNet();
+    current_net_code = s_localPadBuffer[0]->GetNet();
     for( unsigned ii = 0; ii < pads_module_count; ii++ )
     {
         pad_ref = s_localPadBuffer[ii];
@@ -1076,9 +1134,9 @@ void WinEDA_BasePcbFrame::build_ratsnest_pad( BOARD_ITEM* ref,
             return;
 
         NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
-         if ( net == NULL )      //Should not occur
+        if( net == NULL )        //Should not occur
         {
-            DisplayError(this,wxT("build_ratsnest_pad() error: net not found") );
+            DisplayError( this, wxT( "build_ratsnest_pad() error: net not found" ) );
             return;
         }
 

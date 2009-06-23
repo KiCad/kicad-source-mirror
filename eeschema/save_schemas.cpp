@@ -121,7 +121,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     bool first = true;
     for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
-        if( first )
+        if( ! first )
             Name += wxT( "," );
         Name += Lib->m_Name;
         first = false;
