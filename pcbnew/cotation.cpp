@@ -348,6 +348,8 @@ void WinEDA_PcbFrame::Install_Edit_Cotation( COTATION* Cotation,
 
     WinEDA_CotationPropertiesFrame* frame = new WinEDA_CotationPropertiesFrame( this,
                                                                                 Cotation, DC, pos );
+
+    Ajuste_Details_Cotation( Cotation );
     frame->ShowModal();
     frame->Destroy();
 }

@@ -717,6 +717,13 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
                 return DrawItem;
         break;
 
+        case COMPONENT_BEZIER_DRAW_TYPE:
+            if( (masque & LOCATE_COMPONENT_POLYLINE_DRAW_TYPE) == 0 )
+                break;
+            if( DrawItem->HitTest( aRefPoint ) )
+                return DrawItem;
+        break;
+
         case COMPONENT_LINE_DRAW_TYPE:
             if( (masque & LOCATE_COMPONENT_LINE_DRAW_TYPE) == 0 )
                 break;

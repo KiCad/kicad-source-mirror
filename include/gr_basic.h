@@ -6,8 +6,7 @@
 #define GR_BASIC
 
 #include "colors.h"
-
-
+#include <vector>
 class EDA_Rect;
 
 
@@ -86,6 +85,8 @@ void GRSLineRel(EDA_Rect * ClipBox, wxDC * DC, int x, int y, int width, int Colo
 
 void GRPoly(EDA_Rect * ClipBox, wxDC * DC, int n, wxPoint Points[], bool Fill, int width, int Color, int BgColor);
 
+void GRBezier(EDA_Rect* ClipBox, wxDC* DC,int x1, int y1, int x2, int y2, int x3, int y3,int width, int Color);
+void GRBezier(EDA_Rect* ClipBox, wxDC* DC,int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4,int width, int Color);
 
 /**
  * Function GRClosedPoly

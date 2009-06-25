@@ -10,6 +10,8 @@
 #include "macros.h"
 #include "base_struct.h"
 #include "class_base_screen.h"
+#include "bezier_curves.h"
+
 
 #ifndef FILLED
 #define FILLED 1
@@ -33,7 +35,7 @@
 
 /* variables generales */
 
-// pour les tracés en mode XOR = GR_XOR ou GR_NXOR selon couleur de fond
+// pour les tracÃˆs en mode XOR = GR_XOR ou GR_NXOR selon couleur de fond
 int g_XorMode = GR_NXOR;
 // couleur de fond de la frame de dessin
 int g_DrawBgColor = WHITE;
@@ -364,7 +366,7 @@ bool GetGRForceBlackPenState( void )
 void GRSetDrawMode( wxDC* DC, int draw_mode )
 {
     if( draw_mode & GR_OR )
-#if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+#if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION(2,9,0) )
         DC->SetLogicalFunction( wxCOPY );
 #else
         DC->SetLogicalFunction( wxOR );
@@ -372,7 +374,7 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
     else if( draw_mode & GR_XOR )
         DC->SetLogicalFunction( wxXOR );
     else if( draw_mode & GR_NXOR )
-#if defined (__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+#if defined (__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION(2,9,0) )
     DC->SetLogicalFunction( wxXOR );
 #else
     DC->SetLogicalFunction( wxEQUIV );
@@ -1497,3 +1499,36 @@ void ClipAndDrawFilledPoly( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPoints[], in
         aDC->DrawPolygon( clippedPolygon.size(), &clippedPolygon[0] );
 }
 #endif
+
+void GRBezier( EDA_Rect* ClipBox,
+               wxDC*     DC,
+               int       x1,
+               int       y1,
+               int       x2,
+               int       y2,
+               int       x3,
+               int       y3,
+               int       width,
+               int       Color )
+{
+    std::vector<wxPoint> Points = Bezier2Poly( x1, y1, x2, y2, x3, y3 );
+    GRPoly( ClipBox, DC, Points.size(), &Points[0], false, width, Color, 0 );
+}
+
+
+void GRBezier( EDA_Rect* ClipBox,
+               wxDC*     DC,
+               int       x1,
+               int       y1,
+               int       x2,
+               int       y2,
+               int       x3,
+               int       y3,
+               int       x4,
+               int       y4,
+               int       width,
+               int       Color )
+{
+    std::vector<wxPoint> Points = Bezier2Poly( x1, y1, x2, y2, x3, y3, x4, y4 );
+    GRPoly( ClipBox, DC, Points.size(), &Points[0], false, width, Color, 0 );
+}

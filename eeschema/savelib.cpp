@@ -60,6 +60,10 @@ LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
         NewDrawItem = ( (LibDrawPolyline*) DrawItem )->GenCopy();
         break;
 
+    case COMPONENT_BEZIER_DRAW_TYPE:
+        NewDrawItem = ( (LibDrawBezier*) DrawItem )->GenCopy();
+        break;
+
     default:
         msg.Printf( wxT( "CopyDrawLibEntryStruct: unknown Draw Type %d" ),
                     DrawItem->Type() );

@@ -658,4 +658,70 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 };
 
+/**********************************************************/
+/* Graphic Body Item: Bezier Curve (set of lines) */
+/**********************************************************/
+class LibDrawBezier : public LibEDA_BaseStruct
+	{
+	public:
+		int m_Width;                            /* Line width */
+		std::vector<wxPoint> m_BezierPoints;      // list of parameter (3|4)
+		std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
+		
+	public:
+		LibDrawBezier(EDA_LibComponentStruct * aParent);
+		~LibDrawBezier() { }
+		
+		virtual wxString GetClass() const
+		{
+			return wxT( "LibDrawBezier" );
+		}
+		
+		
+		/**
+		 * Function Save
+		 * writes the data structures for this object out to a FILE in "*.brd"
+		 * format.
+		 * @param aFile The FILE to write to.
+		 * @return bool - true if success writing else false.
+		 */
+		virtual bool Save( FILE* aFile ) const;
+		virtual bool Load( char* line, wxString& errorMsg );
+		
+		LibDrawBezier* GenCopy();
+		void             AddPoint( const wxPoint& point );
+		
+		/** Function GetCornerCount
+		 * @return the number of corners
+		 */
+		unsigned GetCornerCount() const { return m_PolyPoints.size(); }
+		
+		/**
+		 * Function HitTest
+		 * tests if the given wxPoint is within the bounds of this object.
+		 * @param aRefPos A wxPoint to test
+		 * @return bool - true if a hit, else false
+		 */
+		virtual bool HitTest( const wxPoint& aRefPos );
+		
+		/** Function HitTest
+		 * @return true if the point aPosRef is near a segment
+		 * @param aPosRef = a wxPoint to test
+		 * @param aThreshold = max distance to a segment
+		 * @param aTransMat = the transform matrix
+		 */
+		virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+		
+		/** Function GetBoundingBox
+		 * @return the boundary box for this, in library coordinates
+		 */
+		virtual EDA_Rect GetBoundingBox();
+		
+		void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+				  int aColor, int aDrawMode, void* aData,
+				  const int aTransformMatrix[2][2] );
+		
+		virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+	};
+
 #endif  //  CLASSES_BODY_ITEMS_H

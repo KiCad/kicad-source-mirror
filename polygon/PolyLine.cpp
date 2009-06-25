@@ -9,11 +9,13 @@
 #include "fctsys.h"
 
 #include "PolyLine.h"
+#include "gr_basic.h"
+#include "bezier_curves.h"
 
 using namespace std;
 
 
-#define pi 3.14159265359
+#define pi M_PI
 
 CPolyLine::CPolyLine()
 {
@@ -1571,3 +1573,21 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
 
     Close( STRAIGHT );
 }
+
+// Bezier Support
+void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3) {
+    std::vector<wxPoint> bezier_points;
+
+    bezier_points = Bezier2Poly(x1,y1,x2,y2,x3,y3);
+    for( unsigned int i = 0; i < bezier_points.size() ; i++)
+        AppendCorner( bezier_points[i].x, bezier_points[i].y);
+}
+
+void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+    std::vector<wxPoint> bezier_points;
+
+    bezier_points = Bezier2Poly(x1,y1,x2,y2,x3,y3,x4,y4);
+    for( unsigned int i = 0; i < bezier_points.size() ; i++)
+        AppendCorner( bezier_points[i].x, bezier_points[i].y);
+}
+

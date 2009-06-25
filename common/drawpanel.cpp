@@ -289,8 +289,8 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
     // The pcb units have finer granularity than the pixels, so it can happen
     // that the rectangle is not large enough for the erase portion.
 
-    aRect.m_Size.x += 2;  // += 1 is not enough!
-    aRect.m_Size.y += 2;
+    aRect.m_Size.x += 4;  // += 1 is not enough!
+    aRect.m_Size.y += 4;
 
     // D( printf( "2) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n",  aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
 

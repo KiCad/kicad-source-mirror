@@ -753,32 +753,69 @@ void PlotDrawSegment( DRAWSEGMENT* pt_segm, int Format, int masque_layer )
     {
     case PLOT_FORMAT_GERBER:
         SelectD_CODE_For_LineDraw( thickness );
-        if( pt_segm->m_Shape == S_CIRCLE )
-            PlotCircle( PLOT_FORMAT_GERBER, thickness, start, radius );
-        else if( pt_segm->m_Shape == S_ARC )
-            PlotArc( PLOT_FORMAT_GERBER, start,
+
+        switch(pt_segm->m_Shape)
+        {
+            case S_CIRCLE:
+                PlotCircle( PLOT_FORMAT_GERBER, thickness, start, radius );
+            break;
+
+            case S_ARC:
+                PlotArc( PLOT_FORMAT_GERBER, start,
                      StAngle, EndAngle, radius, thickness );
-        else
-            PlotGERBERLine( start, end, thickness );
-        break;
+            break;
+            case S_CURVE:
+                for (unsigned int i=1; i < pt_segm->m_BezierPoints.size(); i++) {
+                    PlotGERBERLine( pt_segm->m_BezierPoints[i-1], pt_segm->m_BezierPoints[i], thickness);
+                }
+            break; 
+            default:
+                 PlotGERBERLine( start, end, thickness );
+        }
+       break;
 
     case PLOT_FORMAT_HPGL:
-        if( pt_segm->m_Shape == S_CIRCLE )
-            PlotCircle( PLOT_FORMAT_HPGL, thickness, start, radius );
-        else if( pt_segm->m_Shape == S_ARC )
-            PlotArc( PLOT_FORMAT_HPGL, start, StAngle, EndAngle, radius, thickness );
-        else
-            Plot_Filled_Segment_HPGL( start, end, thickness, (GRFillMode) g_Plot_Mode );
-        break;
 
+        switch(pt_segm->m_Shape)
+        {
+            case S_CIRCLE:
+                PlotCircle( PLOT_FORMAT_HPGL, thickness, start, radius );
+            break;
+
+            case S_ARC:
+                PlotArc( PLOT_FORMAT_HPGL, start, StAngle, EndAngle, radius, thickness );
+            break;
+
+            case S_CURVE:
+                for (unsigned int i=1; i < pt_segm->m_BezierPoints.size(); i++) {
+                    Plot_Filled_Segment_HPGL( pt_segm->m_BezierPoints[i-1], pt_segm->m_BezierPoints[i], thickness,(GRFillMode) g_Plot_Mode);
+                }
+            break; 
+            default:
+                Plot_Filled_Segment_HPGL( start, end, thickness, (GRFillMode) g_Plot_Mode );
+        }
+        break;
     case PLOT_FORMAT_POST:
-        if( pt_segm->m_Shape == S_CIRCLE )
-            PlotCircle( PLOT_FORMAT_POST, thickness, start, radius );
-        else if( pt_segm->m_Shape == S_ARC )
-            PlotArc( PLOT_FORMAT_POST, start,
+        switch(pt_segm->m_Shape)
+        {
+            case S_CIRCLE:
+                PlotCircle( PLOT_FORMAT_POST, thickness, start, radius );
+            break;
+
+            case S_ARC:
+                PlotArc( PLOT_FORMAT_POST, start,
                      StAngle, EndAngle, radius, thickness );
-        else
-            PlotFilledSegmentPS( start, end, thickness );
+            break;
+
+            case S_CURVE:
+                for (unsigned int i=1; i < pt_segm->m_BezierPoints.size(); i++) {
+                    PlotFilledSegmentPS( pt_segm->m_BezierPoints[i-1], pt_segm->m_BezierPoints[i], thickness);
+                }
+            break;
+
+            default: 
+                PlotFilledSegmentPS( start, end, thickness );
+        }
         break;
     }
 }

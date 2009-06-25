@@ -24,6 +24,7 @@ wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
     case S_RECT:            return _( "Rect" );
     case S_ARC:             return _( "Arc" );
     case S_CIRCLE:          return _( "Circle" );
+    case S_CURVE:           return _( "Bezier Curve" );
 
     // used in Gerbview:
     case S_ARC_RECT:        return wxT( "arc_rect" );

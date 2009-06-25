@@ -243,6 +243,11 @@ public:
 private:
     Bool_Engine*           m_Kbool_Poly_Engine; // polygons set in kbool engine data
     bool bDrawn;
+
+    // Bezier Support
+public:
+    void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3);
+    void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
 };
 
 #endif  // #ifndef POLYLINE_H

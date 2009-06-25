@@ -15,7 +15,10 @@ public:
     int     m_Shape;            // Shape: line, Circle, Arc
     int     m_Type;             // Used in complex associations ( Dimensions.. )
     int     m_Angle;            // Used only for Arcs: Arc angle in 1/10 deg
+    wxPoint m_BezierC1;		// Bezier Control Point 1
+    wxPoint m_BezierC2;		// Bezier Control Point 1
 
+    std::vector<wxPoint> m_BezierPoints;
 public:
     DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype = TYPE_DRAWSEGMENT );
     ~DRAWSEGMENT();

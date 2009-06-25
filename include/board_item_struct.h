@@ -19,7 +19,8 @@ enum Track_Shapes {
     S_SPOT_OVALE,       /* Oblong spot (for GERBER)*/
     S_SPOT_CIRCLE,      /* rounded spot (for GERBER)*/
     S_SPOT_RECT,        /* Rectangular spott (for GERBER)*/
-    S_POLYGON           /* polygonal shape */
+    S_POLYGON,          /* polygonal shape */
+    S_CURVE             /* Bezier Curve*/
 };
 
 

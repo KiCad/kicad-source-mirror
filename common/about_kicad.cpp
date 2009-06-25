@@ -9,29 +9,25 @@
 
 
 #define BUILD_VERSION "(20090621-unstable)"
-#ifndef KICAD_ABOUT_VERSION
-#define KICAD_ABOUT_VERSION BUILD_VERSION
-#endif
 
-
-wxString g_BuildVersion
 
 #ifdef HAVE_SVN_VERSION
 #include "version.h"
-( wxT( KICAD_SVN_VERSION ) )
+wxString g_BuildVersion( wxT( KICAD_SVN_VERSION ) );
 #else
-( wxT( BUILD_VERSION ) )
+wxString g_BuildVersion( wxT( BUILD_VERSION ) );
 #endif
-;
 
-wxString g_BuildAboutVersion
+
 #if defined(HAVE_SVN_VERSION) || defined(HAVE_SVN_REVISION)
 #  include "version.h"
-( wxT( KICAD_ABOUT_VERSION ) )
-#else
-( wxT( BUILD_VERSION ) )
+#ifndef KICAD_ABOUT_VERSION
+#define KICAD_ABOUT_VERSION BUILD_VERSION
 #endif
-;
+wxString g_BuildAboutVersion( wxT( KICAD_ABOUT_VERSION ) );
+#else
+wxString g_BuildAboutVersion( wxT( BUILD_VERSION ) );
+#endif
 
 
 /**********************************/
@@ -137,6 +133,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 	info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "Jonas Diemer <diemer@gmx.de>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "KBool Library <http://boolean.klaasholwerda.nl/bool.html>" ) ) );
+	info.AddDeveloper( SetMsg( wxT( "Marco Serantoni <marco.serantoni@gmail.com>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "Rok Markovic <rok@kanardia.eu>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "Tim Hanson <sideskate@gmail.com>" ) ) );
 	info.AddDeveloper( SetMsg( wxT( "Vesa Solonen <vesa.solonen@hut.fi>" ) ) );

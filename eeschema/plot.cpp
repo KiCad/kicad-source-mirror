@@ -347,6 +347,29 @@ void PlotLibPart( SCH_COMPONENT* DrawLibItem )
         }
         break;
 
+        case COMPONENT_BEZIER_DRAW_TYPE:
+        {
+            LibDrawBezier* polyline = (LibDrawBezier*) DEntry;
+            Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->GetCornerCount() );
+            for( ii = 0; ii < (int) polyline->GetCornerCount(); ii++ )
+            {
+                pos = polyline->m_PolyPoints[ii];
+                pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
+                Poly[ii * 2]     = pos.x;
+                Poly[ii * 2 + 1] = pos.y;
+            }
+
+            if( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            {
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                PlotPoly( ii, Poly, true, 0 );
+            }
+            if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
+                SetColorMapPS( ReturnLayerColor( LAYER_DEVICE ) );
+            PlotPoly( ii, Poly, polyline->m_Fill == FILLED_SHAPE ? true : false, polyline->m_Width );
+            MyFree( Poly );
+        }
+
         default:
             D( printf( "Drawing Type=%d\n", DEntry->Type() ) );
         }

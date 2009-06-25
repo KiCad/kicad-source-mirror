@@ -46,8 +46,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( frame->m_DisplayPadFill == FILLED )
         fillpad = 1;
 
-#ifdef PCBNEW
-    if( m_Flags & IS_MOVED )
+#if defined(PCBNEW) || defined(__WXMAC__)
+    if( m_Flags & IS_MOVED || !DisplayOpt.DisplayPadFill )
         fillpad = 0;
 #endif
 

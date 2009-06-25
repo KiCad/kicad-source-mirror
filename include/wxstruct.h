@@ -9,7 +9,6 @@
 
 #include <vector>
 
-
 #include <wx/socket.h>
 #include "wx/log.h"
 #include "wx/config.h"

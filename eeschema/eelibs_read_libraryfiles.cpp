@@ -594,6 +594,11 @@ static LibEDA_BaseStruct* ReadDrawEntryItemDescription (EDA_LibComponentStruct* 
             entryLoaded = New->Load( Line, errorMsg );
             break;
 
+        case 'B':    /* Bezier */
+            New = ( LibEDA_BaseStruct* ) new LibDrawBezier(aParent);
+            entryLoaded = New->Load( Line, errorMsg );
+            break;
+
         default:
             MsgLine.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
                             *LineNum, Line );

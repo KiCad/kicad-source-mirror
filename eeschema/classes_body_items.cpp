@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 #include "trigo.h"
+#include "bezier_curves.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -1101,6 +1102,237 @@ void LibDrawPolyline::DisplayInfo( WinEDA_DrawFrame* frame )
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
+
+    frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
+}
+
+/***************************/
+/** class LibDrawBezier **/
+/***************************/
+LibDrawBezier::LibDrawBezier( EDA_LibComponentStruct* aParent ) :
+    LibEDA_BaseStruct( COMPONENT_BEZIER_DRAW_TYPE, aParent )
+{
+    m_Fill     = NO_FILL;
+    m_Width    = 0;
+    m_typeName = _( "Bezier" );
+}
+
+
+bool LibDrawBezier::Save( FILE* ExportFile ) const
+{
+    int ccount = GetCornerCount();
+
+    fprintf( ExportFile, "B %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
+
+    for( unsigned i = 0; i < GetCornerCount(); i++ )
+    {
+        fprintf( ExportFile, "  %d %d", m_BezierPoints[i].x, m_BezierPoints[i].y );
+    }
+
+    fprintf( ExportFile, " %c\n", fill_tab[m_Fill] );
+
+    return true;
+}
+
+
+bool LibDrawBezier::Load( char* line, wxString& errorMsg )
+{
+    char*   p;
+    int     i, ccount = 0;
+    wxPoint pt;
+
+    i = sscanf( &line[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert,
+			   &m_Width );
+
+    if( i !=4 )
+    {
+        errorMsg.Printf( _( "Bezier only had %d parameters of the required 4" ), i );
+        return false;
+    }
+    if( ccount <= 0 )
+    {
+        errorMsg.Printf( _( "Bezier count parameter %d is invalid" ),
+						ccount );
+        return false;
+    }
+
+    p = strtok( &line[2], " \t\n" );
+    p = strtok( NULL, " \t\n" );
+    p = strtok( NULL, " \t\n" );
+    p = strtok( NULL, " \t\n" );
+
+    for( i = 0; i < ccount; i++ )
+    {
+        wxPoint point;
+        p = strtok( NULL, " \t\n" );
+        if( sscanf( p, "%d", &pt.x ) != 1 )
+        {
+            errorMsg.Printf( _( "Bezier point %d X position not defined" ),
+							i );
+            return false;
+        }
+        p = strtok( NULL, " \t\n" );
+        if( sscanf( p, "%d", &pt.y ) != 1 )
+        {
+            errorMsg.Printf( _( "Bezier point %d Y position not defined" ),
+							i );
+            return false;
+        }
+        m_BezierPoints.push_back( pt );
+    }
+
+    m_Fill = NO_FILL;
+
+    if( ( p = strtok( NULL, " \t\n" ) ) != NULL )
+    {
+        if( p[0] == 'F' )
+            m_Fill = FILLED_SHAPE;
+        if( p[0] == 'f' )
+            m_Fill = FILLED_WITH_BG_BODYCOLOR;
+    }
+
+    return true;
+}
+
+
+LibDrawBezier* LibDrawBezier::GenCopy()
+{
+    LibDrawBezier* newitem = new LibDrawBezier(GetParent());
+
+    newitem->m_BezierPoints = m_BezierPoints;   // Vector copy
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Fill    = m_Fill;
+    return newitem;
+}
+
+void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+						   const wxPoint& aOffset, int aColor, int aDrawMode,
+						   void* aData, const int aTransformMatrix[2][2] )
+{
+    wxPoint         pos1;
+	std::vector<wxPoint> PolyPointsTraslated;
+
+    int             color     = ReturnLayerColor( LAYER_DEVICE );
+    int             linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
+    m_PolyPoints = Bezier2Poly( m_BezierPoints[0] ,
+                           m_BezierPoints[1] ,
+                           m_BezierPoints[2] ,
+                           m_BezierPoints[3]);
+
+	PolyPointsTraslated.clear();
+	for( unsigned int i = 0; i < m_PolyPoints.size() ; i++)
+		PolyPointsTraslated.push_back( TransformCoordinate( aTransformMatrix, m_PolyPoints[i] ) + aOffset);
+
+    if( aColor < 0 )                // Used normal color or selected color
+    {
+        if( m_Selected & IS_SELECTED )
+            color = g_ItemSelectetColor;
+    }
+    else
+        color = aColor;
+
+    FILL_T fill = aData ? NO_FILL : m_Fill;
+    if( aColor >= 0 )
+        fill = NO_FILL;
+
+    if( fill == FILLED_WITH_BG_BODYCOLOR )
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+                &PolyPointsTraslated[0], 1, linewidth, color,
+                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+    else if( fill == FILLED_SHAPE  )
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+                &PolyPointsTraslated[0], 1, linewidth, color, color );
+    else
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+                &PolyPointsTraslated[0], 0, linewidth, color, color );
+
+}
+
+
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param aRefPos A wxPoint to test
+ * @return bool - true if a hit, else false
+ */
+bool LibDrawBezier::HitTest( const wxPoint& aRefPos )
+{
+    int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
+    // Have a minimal tolerance for hit test
+    if ( mindist < 3 )
+        mindist = 3;        // = 3 mils
+    return HitTest( aRefPos, mindist, DefaultTransformMatrix );
+}
+
+/** Function HitTest
+ * @return true if the point aPosRef is near a segment
+ * @param aPosRef = a wxPoint to test
+ * @param aThreshold = max distance to a segment
+ * @param aTransMat = the transform matrix
+ */
+bool LibDrawBezier::HitTest( wxPoint aPosRef, int aThreshold,
+							  const int aTransMat[2][2] )
+{
+    wxPoint ref, start, end;
+
+    for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
+    {
+        start = TransformCoordinate( aTransMat, m_PolyPoints[ii - 1] );
+        end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
+        if ( TestSegmentHit( aPosRef, start, end, aThreshold ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+/** Function GetBoundingBox
+ * @return the boundary box for this, in library coordinates
+ */
+EDA_Rect LibDrawBezier::GetBoundingBox()
+{
+    EDA_Rect rect;
+    int      xmin, xmax, ymin, ymax;
+	if(!GetCornerCount())
+		return rect;
+    xmin = xmax = m_PolyPoints[0].x;
+    ymin = ymax = m_PolyPoints[0].y;
+
+    for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
+    {
+        xmin = MIN( xmin, m_PolyPoints[ii].x );
+        xmax = MAX( xmax, m_PolyPoints[ii].x );
+        ymin = MIN( ymin, m_PolyPoints[ii].y );
+        ymax = MAX( ymax, m_PolyPoints[ii].y );
+    }
+
+    rect.SetOrigin( xmin, ymin * -1 );
+    rect.SetEnd( xmax, ymax * -1 );
+    rect.Inflate( m_Width / 2, m_Width / 2 );
+
+    return rect;
+}
+
+
+void LibDrawBezier::DisplayInfo( WinEDA_DrawFrame* frame )
+{
+    wxString msg;
+    EDA_Rect bBox = GetBoundingBox();
+
+    LibEDA_BaseStruct::DisplayInfo( frame );
+
+    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+								EESCHEMA_INTERNAL_UNIT, true );
+
+    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+
+    msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
+			   bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
 }

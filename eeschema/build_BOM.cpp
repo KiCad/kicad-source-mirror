@@ -515,7 +515,7 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 /*******************************************************************************************/
 {
     // @todo make this variable length
-    static const wxCheckBox* FieldListCtrl[] = {
+    const wxCheckBox* FieldListCtrl[] = {
         m_AddField1,
         m_AddField2,
         m_AddField3,
@@ -586,7 +586,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     if( CompactForm )
     {
         // @todo make this variable length
-        static const wxCheckBox* FieldListCtrl[FIELD8 - FIELD1 + 1] = {
+        const wxCheckBox* FieldListCtrl[FIELD8 - FIELD1 + 1] = {
             m_AddField1,
             m_AddField2,
             m_AddField3,

@@ -10,6 +10,7 @@ set(COMMON_SRCS
     base_screen.cpp
     base_struct.cpp
     basicframe.cpp
+    bezier_curves.cpp
     block_commande.cpp
     class_drawpickedstruct.cpp
     common.cpp
