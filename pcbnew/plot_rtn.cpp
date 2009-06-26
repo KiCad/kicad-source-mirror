@@ -349,7 +349,7 @@ static void PlotTextModule( TEXTE_MODULE* pt_texte, int format_plot )
         break;
     }
 
-    PlotGraphicText( format_plot, pos, BLACK,
+    PlotGraphicText( format_plot, pos, g_Plot_PS_Negative ? WHITE : BLACK,
                      pt_texte->m_Text,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
@@ -631,7 +631,7 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            PlotGraphicText( format_plot, pos, BLACK,
+            PlotGraphicText( format_plot, pos, g_Plot_PS_Negative ? WHITE : BLACK,
                      txt,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
@@ -643,7 +643,7 @@ void PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer )
     }
     
     else
-        PlotGraphicText( format_plot, pos, BLACK,
+        PlotGraphicText( format_plot, pos, g_Plot_PS_Negative ? WHITE : BLACK,
                      pt_texte->m_Text,
                      orient, size,
                      pt_texte->m_HJustify, pt_texte->m_VJustify,
