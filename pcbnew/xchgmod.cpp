@@ -124,10 +124,12 @@ void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
     case 1:
     case 2:
         m_NewModule->Enable( true );
+        m_Browsebutton->Enable( true );
         break;
 
     case 3:
         m_NewModule->Enable( false );
+        m_Browsebutton->Enable( false );
         break;
     }
 }
@@ -202,7 +204,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             strtok( buf, ";\n\r" );
             if( stricmp( buf, CONV_TO_UTF8( reference ) ) == 0 )
             {
-                start_descr = TRUE;
+                start_descr = true;
             }
         }
 
@@ -247,7 +249,7 @@ void DIALOG_EXCHANGE_MODULE::Change_Module()
     if( newmodulename == wxEmptyString )
         return;
 
-    if( Change_1_Module( m_CurrentModule, newmodulename, TRUE ) )
+    if( Change_1_Module( m_CurrentModule, newmodulename, true ) )
     {
         m_Parent->Compile_Ratsnest( NULL, true );
         m_Parent->DrawPanel->Refresh();
@@ -272,9 +274,9 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     MODULE*  Module, * PtBack;
     bool     change = FALSE;
     wxString newmodulename = m_NewModule->GetValue();
-    wxString value, lib_reference;  // pour memo Reflib et value de reference
+    wxString value, lib_reference;
     bool     check_module_value = FALSE;
-    int      ShowErr = 5;           // Affiche 5 messages d'err maxi
+    int      ShowErr = 3;           // Affiche 3 messages d'err maxi
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
@@ -284,7 +286,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     lib_reference = m_CurrentModule->m_LibRef;
     if( aUseValue )
     {
-        check_module_value = TRUE;
+        check_module_value = true;
         value = m_CurrentModule->m_Value->m_Text;
         msg.Printf( _( "Change modules <%s> -> <%s> (val = %s)?" ),
                    m_CurrentModule->m_LibRef.GetData(),
@@ -320,7 +322,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         }
         module = Change_1_Module( Module, newmodulename.GetData(), ShowErr );
         if( module )
-            change = TRUE;
+            change = true;
         else if( ShowErr )
             ShowErr--;
     }
@@ -345,7 +347,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
 {
     MODULE* Module, * PtBack;
     bool    change  = FALSE;
-    int     ShowErr = 5; // Affiche 5 messages d'err maxi
+    int     ShowErr = 3; // Affiche 3 messages d'err maxi
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
@@ -364,7 +366,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
     {
         PtBack = Module->Back();
         if( Change_1_Module( Module, Module->m_LibRef.GetData(), ShowErr ) )
-            change = TRUE;
+            change = true;
         else if( ShowErr )
             ShowErr--;
     }
@@ -411,7 +413,7 @@ MODULE* DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
                 Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
     m_WinMessages->AppendText( Line );
 
-    namecmp.Trim( TRUE );
+    namecmp.Trim( true );
     namecmp.Trim( FALSE );
     NewModule = m_Parent->Get_Librairie_Module( wxEmptyString,
                                                 namecmp,
@@ -468,19 +470,19 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     Place_Module( NewModule, NULL, true );
     GetScreen()->m_Curseur = oldpos;
 
-    /* Changement eventuel de couche */
+    /* Flip footprint if needed */
     if( OldModule->GetLayer() != NewModule->GetLayer() )
     {
         GetBoard()->Change_Side_Module( NewModule, NULL );
     }
 
-    /* Rotation eventuelle du module */
+    /* Rotate footprint if needed */
     if( OldModule->m_Orient != NewModule->m_Orient )
     {
         Rotate_Module( NULL, NewModule, OldModule->m_Orient, FALSE );
     }
 
-    /* Mise a jour des textes ref et val */
+    /* Update reference and value */
     NewModule->m_Reference->m_Text = OldModule->m_Reference->m_Text;
     NewModule->m_Value->m_Text     = OldModule->m_Value->m_Text;
 
@@ -488,7 +490,7 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
     NewModule->m_TimeStamp = OldModule->m_TimeStamp;
     NewModule->m_Path = OldModule->m_Path;
 
-    /* mise a jour des netnames ( lorsque c'est possible) */
+    /* Update pad netnames ( when possible) */
     pad = NewModule->m_Pads;
     for( ; pad != NULL; pad = pad->Next() )
     {

@@ -1,5 +1,5 @@
 /*********************************************************************/
-/* EESchema											  				 */
+/* EESchema											                 */
 /* edit_label.cpp: label, global label and text creation or edition  */
 /*********************************************************************/
 
@@ -30,8 +30,6 @@ static int     s_DefaultShapeGLabel  = (int) NET_INPUT;
 static int     s_DefaultOrientGLabel = 0;
 
 
-
-
 /****************************************************************************/
 void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
 /****************************************************************************/
@@ -57,19 +55,19 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
         m_CurrentText->m_Shape = m_TextShape->GetSelection();
 
     int style = m_TextStyle->GetSelection();
-    if ( ( style & 1 ) )
+    if( ( style & 1 ) )
         m_CurrentText->m_Italic = 1;
     else
         m_CurrentText->m_Italic = 0;
 
-    if ( ( style & 2 ) )
+    if( ( style & 2 ) )
     {
-        m_CurrentText->m_Bold = true;
+        m_CurrentText->m_Bold  = true;
         m_CurrentText->m_Width = GetPenSizeForBold( m_CurrentText->m_Size.x );
     }
     else
     {
-        m_CurrentText->m_Bold = false;
+        m_CurrentText->m_Bold  = false;
         m_CurrentText->m_Width = 0;
     }
 
@@ -158,7 +156,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
-            GetScreen(), TEXTITEM | LABELITEM );
+                                             GetScreen(), TEXTITEM | LABELITEM );
     if( TextStruct == NULL )
         return;
 
@@ -172,13 +170,14 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     /* Rotation du texte */
     int orient;
+
     switch( TextStruct->Type() )
     {
     case TYPE_SCH_LABEL:
     case TYPE_SCH_GLOBALLABEL:
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_TEXT:
-        orient = TextStruct->GetSchematicTextOrientation() + 1;
+        orient  = TextStruct->GetSchematicTextOrientation() + 1;
         orient &= 3;
         TextStruct->SetSchematicTextOrientation( orient );
         break;
@@ -218,13 +217,13 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 
     case LAYER_HIERLABEL:
         NewText = new SCH_HIERLABEL( GetScreen()->m_Curseur );
-        NewText->m_Shape  = s_DefaultShapeGLabel;
+        NewText->m_Shape = s_DefaultShapeGLabel;
         NewText->SetSchematicTextOrientation( s_DefaultOrientGLabel );
         break;
 
     case LAYER_GLOBLABEL:
         NewText = new SCH_GLOBALLABEL( GetScreen()->m_Curseur );
-        NewText->m_Shape  = s_DefaultShapeGLabel;
+        NewText->m_Shape = s_DefaultShapeGLabel;
         NewText->SetSchematicTextOrientation( s_DefaultOrientGLabel );
         break;
 
@@ -295,8 +294,8 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*************************************************************/
 /* Abort function for the command move text */
 {
-    BASE_SCREEN*    screen = Panel->GetScreen();
-    SCH_ITEM*       Struct = (SCH_ITEM*) screen->GetCurItem();
+    BASE_SCREEN* screen = Panel->GetScreen();
+    SCH_ITEM*    Struct = (SCH_ITEM*) screen->GetCurItem();
 
     g_ItemToRepeat = NULL;
     Panel->ManageCurseur = NULL;
@@ -325,11 +324,11 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
         case TYPE_SCH_TEXT:
         {
             SCH_TEXT* Text = (SCH_TEXT*) Struct;
-            Text->m_Pos    = ItemInitialPosition;
-            Text->m_Size   = OldSize;
+            Text->m_Pos  = ItemInitialPosition;
+            Text->m_Size = OldSize;
             Text->SetSchematicTextOrientation( OldOrient );
         }
-            break;
+        break;
 
         default:
             break;
@@ -380,12 +379,18 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
         return;
     }
 
-    /* copy the old text settings */
-    newtext->m_Shape      = Text->m_Shape;
+    /* copy the old text settings
+     * Justifications are not copied because they are not used in labels,
+     *  and can be used in texts
+     *  So they will be set to default in conversion.
+     */
+    newtext->m_Shape = Text->m_Shape;
     newtext->SetSchematicTextOrientation( Text->GetSchematicTextOrientation() );
-    newtext->m_Size       = Text->m_Size;
-    newtext->m_Width      = Text->m_Width;
-    newtext->m_IsDangling = Text->m_IsDangling;
+    newtext->m_Size   = Text->m_Size;
+    newtext->m_Width  = Text->m_Width;
+    newtext->m_Italic = Text->m_Italic;
+    newtext->m_Bold   = Text->m_Bold;
+
 
     // save current text flag:
     int flags = Text->m_Flags;

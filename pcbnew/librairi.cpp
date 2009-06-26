@@ -24,7 +24,7 @@
  *  $EndLIBRARY
  */
 
-#define OLD_EXT                    wxT( "bak" )
+#define BACKUP_EXT                    wxT( "bak" )
 #define FILETMP_EXT                wxT( "$$$" )
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
 
@@ -359,12 +359,12 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
 
     /* Le fichier ancienne librairie est renommee en .bak */
     wxFileName backupFileName = oldFileName;
-    backupFileName.SetExt( OLD_EXT );
+    backupFileName.SetExt( BACKUP_EXT );
 
     if( backupFileName.FileExists() )
         wxRemoveFile( backupFileName.GetFullPath() );
 
-    if( !wxRenameFile( newFileName.GetFullPath(),
+    if( !wxRenameFile( oldFileName.GetFullPath(),
                        backupFileName.GetFullPath() ) )
     {
         DisplayError( this, wxT( "Librairi.cpp: rename .bak err" ) );
@@ -669,7 +669,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 
     /* The old library file is renamed .bak */
     oldFileName = aLibName;
-    oldFileName.SetExt( OLD_EXT );
+    oldFileName.SetExt( BACKUP_EXT );
 
     if( oldFileName.FileExists() )
         wxRemoveFile( oldFileName.GetFullPath() );

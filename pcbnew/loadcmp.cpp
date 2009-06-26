@@ -214,10 +214,13 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module( const wxString& aLibraryFullF
 
         if( !tmp )
         {
-            msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
-                        fn.GetFullName().c_str() );
-            wxMessageBox( msg, _( "Library Load Error" ),
-                          wxOK | wxICON_ERROR, this );
+            if ( aDisplayMessageError )
+            {
+                msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
+                            fn.GetFullName().c_str() );
+                wxMessageBox( msg, _( "Library Load Error" ),
+                              wxOK | wxICON_ERROR, this );
+            }
             continue;
         }
 
