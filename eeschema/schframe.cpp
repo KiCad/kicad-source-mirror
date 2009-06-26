@@ -422,8 +422,8 @@ void WinEDA_SchematicFrame::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 
 void WinEDA_SchematicFrame::OnUpdatePaste( wxUpdateUIEvent& event )
 {
-    event.Enable( g_BlockSaveDataList );
-    m_HToolBar->EnableTool( wxID_PASTE, g_BlockSaveDataList );
+    event.Enable( g_BlockSaveDataList != NULL );
+    m_HToolBar->EnableTool( wxID_PASTE, g_BlockSaveDataList != NULL );
 }
 
 void WinEDA_SchematicFrame::OnUpdateSchematicUndo( wxUpdateUIEvent& event )

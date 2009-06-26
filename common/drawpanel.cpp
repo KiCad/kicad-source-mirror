@@ -197,27 +197,10 @@ void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
     GRResetPenAndBrush( DC );
     DC->SetBackgroundMode( wxTRANSPARENT );
 #ifdef WX_ZOOM
-    int clientWidth, clientHeight;
-    GetClientSize( &clientWidth, &clientHeight );
-
-    wxSize drawingSize = GetScreen()->ReturnPageSize() * 2;
-
     double scale = GetScreen()->GetScalingFactor();
-    int dx = 0, dy = 0;
-    int drawingWidth = wxRound( (double)drawingSize.GetWidth() * scale );
-    int drawingHeight = wxRound( (double)drawingSize.GetHeight() * scale );
-
-    if( drawingWidth < clientWidth )
-        dx = ( clientWidth - drawingWidth ) / 2;
-    if( drawingHeight < clientHeight )
-        dy = ( clientHeight - drawingHeight ) / 2;
-
-    wxCoord x, y;
-    DC->GetDeviceOrigin( &x, &y );
     DC->SetUserScale( scale, scale );
-    DC->SetDeviceOrigin( x + dx, y + dy );
-//    wxSize size = GetScreen()->ReturnPageSize() * 2 * scale;
-//    DC->SetLogicalOrigin( origin.x, origin.y );
+    wxPoint origin = GetScreen()->m_DrawOrg;
+    DC->SetLogicalOrigin( origin.x, origin.y );
 #endif
     SetBoundaryBox();
 }
@@ -613,6 +596,12 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 /***************************************************/
 {
+    if( GetScreen() == NULL )
+    {
+        event.Skip();
+        return;
+    }
+
 #ifdef USE_GCDC_IN_KICAD
     wxPaintDC pDC( this );
     wxGCDC paintDC(pDC);                                    // Following line should be disabled on MSW and OS X
@@ -647,10 +636,23 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 #endif
 
 #ifdef WX_ZOOM
-    m_ClipBox.m_Pos.x = paintDC.DeviceToLogicalX( m_ClipBox.m_Pos.x );
-    m_ClipBox.m_Pos.y = paintDC.DeviceToLogicalY( m_ClipBox.m_Pos.y );
-    m_ClipBox.m_Size.SetWidth( paintDC.DeviceToLogicalXRel( m_ClipBox.m_Size.GetWidth() ) );
-    m_ClipBox.m_Size.SetHeight( paintDC.DeviceToLogicalYRel( m_ClipBox.m_Size.GetHeight() ) );
+    wxLogDebug( wxT( "1) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) " \
+                     "m_ClipBox=(%d, %d, %d, %d)\n" ), PaintClipBox.x,
+                     PaintClipBox.y, PaintClipBox.width, PaintClipBox.height,
+                     org.x, org.y,  m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
+                     m_ClipBox.m_Size.x, m_ClipBox.m_Size.y );
+
+    wxSize drawing_size = GetScreen()->ReturnPageSize() * 2;
+    m_ClipBox.m_Pos.x = 0;
+    m_ClipBox.m_Pos.y = 0;
+    m_ClipBox.SetWidth( drawing_size.x );
+    m_ClipBox.SetHeight( drawing_size.y );
+
+    wxLogDebug( wxT( "2) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) " \
+                     "m_ClipBox=(%d, %d, %d, %d)\n" ), PaintClipBox.x,
+                     PaintClipBox.y, PaintClipBox.width, PaintClipBox.height,
+                     org.x, org.y,  m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y,
+                     m_ClipBox.m_Size.x, m_ClipBox.m_Size.y );
 #else
     PaintClipBox.Offset( org );
     m_ClipBox.SetX( PaintClipBox.GetX() );
@@ -677,8 +679,9 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 
     // call ~wxDCClipper() before ~wxPaintDC()
     {
+#ifndef WX_ZOOM
         wxDCClipper dcclip( paintDC, PaintClipBox );
-
+#endif
         ReDraw( &paintDC, true );
 
 #ifdef WX_ZOOM

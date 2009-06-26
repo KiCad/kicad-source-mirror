@@ -194,7 +194,8 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
     NEGATE( relpos.y );       // reverse Y axis
 
     relpos -= m_Pos;
-    int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
+    int dist = wxRound( sqrt( ( (double) relpos.x * (double) relpos.x ) +
+                              ( (double) relpos.y * (double) relpos.y ) ) );
 
     if( abs( dist - m_Rayon ) > aThreshold )
         return false;
@@ -202,7 +203,7 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
     // We are on the circle, ensure we are only on the arc, i.e. between m_ArcStart and m_ArcEnd
     int astart = t1;    // arc starting point ( in 0.1 degree)
     int aend   = t2;    // arc ending point ( in 0.1 degree)
-    int atest  = wxRound( atan2( relpos.y, relpos.x ) * 1800.0 / M_PI );
+    int atest  = wxRound( atan2( (double) relpos.y, (double) relpos.x ) * 1800.0 / M_PI );
     NORMALIZE_ANGLE_180( atest );
     NORMALIZE_ANGLE_180( astart );
     NORMALIZE_ANGLE_180( aend );

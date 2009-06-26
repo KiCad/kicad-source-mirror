@@ -104,7 +104,7 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
 
     int    dx = x3 - x1;
     int    dy = y3 - y1;
-    double d  = fabs( ( (x2 - x3) * dy - (y2 - y3) * dx ) );
+    double d  = fabs( (double) ( (x2 - x3) * dy - (y2 - y3) * dx ) );
     double da;
 
     if( d > bezier_curve_collinearity_epsilon )
@@ -124,7 +124,8 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
 
             // Angle & Cusp Condition
             //----------------------
-            da = fabs( atan2( y3 - y2, x3 - x2 ) - atan2( y2 - y1, x2 - x1 ) );
+            da = fabs( atan2( (double) ( y3 - y2 ), (double) ( x3 - x2 ) ) -
+                       atan2( (double) ( y2 - y1 ), (double) ( x2 - x1 ) ) );
             if( da >=M_PI )
                 da = 2 * M_PI - da;
 
@@ -160,7 +161,8 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
             else if( d >= 1 )
                 d = calc_sq_distance( x2, y2, x3, y3 );
             else
-                d = calc_sq_distance( x2, y2, x1 + d * dx, y1 + d * dy );
+                d = calc_sq_distance( x2, y2, x1 + (int) d * dx,
+                                      y1 + (int) d * dy );
         }
         if( d < bezier_distance_tolerance_square )
         {
@@ -204,8 +206,8 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
     int    dx = x4 - x1;
     int    dy = y4 - y1;
 
-    double d2 = fabs( ( (x2 - x4) * dy - (y2 - y4) * dx ) );
-    double d3 = fabs( ( (x3 - x4) * dy - (y3 - y4) * dx ) );
+    double d2 = fabs( (double) ( (x2 - x4) * dy - (y2 - y4) * dx ) );
+    double d3 = fabs( (double) ( (x3 - x4) * dy - (y3 - y4) * dx ) );
     double da1, da2, k;
 
     switch( (int(d2 > bezier_curve_collinearity_epsilon) << 1) +
@@ -241,14 +243,16 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
             else if( d2 >= 1 )
                 d2 = calc_sq_distance( x2, y2, x4, y4 );
             else
-                d2 = calc_sq_distance( x2, y2, x1 + d2 * dx, y1 + d2 * dy );
+                d2 = calc_sq_distance( x2, y2, x1 + (int) d2 * dx,
+                                       y1 + (int) d2 * dy );
 
             if( d3 <= 0 )
                 d3 = calc_sq_distance( x3, y3, x1, y1 );
             else if( d3 >= 1 )
                 d3 = calc_sq_distance( x3, y3, x4, y4 );
             else
-                d3 = calc_sq_distance( x3, y3, x1 + d3 * dx, y1 + d3 * dy );
+                d3 = calc_sq_distance( x3, y3, x1 + (int) d3 * dx,
+                                       y1 + (int) d3 * dy );
         }
         if( d2 > d3 )
         {
@@ -282,7 +286,8 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
             // Angle Condition
             //----------------------
-            da1 = fabs( atan2( y4 - y3, x4 - x3 ) - atan2( y3 - y2, x3 - x2 ) );
+            da1 = fabs( atan2( (double) ( y4 - y3 ), (double) ( x4 - x3 ) ) -
+                        atan2( (double) ( y3 - y2 ), (double) ( x3 - x2 ) ) );
             if( da1 >= M_PI )
                 da1 = 2 * M_PI - da1;
 
@@ -318,7 +323,8 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
             // Angle Condition
             //----------------------
-            da1 = fabs( atan2( y3 - y2, x3 - x2 ) - atan2( y2 - y1, x2 - x1 ) );
+            da1 = fabs( atan2( (double) ( y3 - y2 ), (double) ( x3 - x2 ) ) -
+                        atan2( (double) ( y2 - y1 ), (double) ( x2 - x1 ) ) );
             if( da1 >= M_PI )
                 da1 = 2 * M_PI - da1;
 
@@ -357,9 +363,11 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
             // Angle & Cusp Condition
             //----------------------
-            k   = atan2( y3 - y2, x3 - x2 );
-            da1 = fabs( k - atan2( y2 - y1, x2 - x1 ) );
-            da2 = fabs( atan2( y4 - y3, x4 - x3 ) - k );
+            k   = atan2( (double) ( y3 - y2 ), (double) ( x3 - x2 ) );
+            da1 = fabs( k - atan2( (double) ( y2 - y1 ),
+                                   (double) ( x2 - x1 ) ) );
+            da2 = fabs( atan2( (double) ( y4 - y3 ),
+                               (double) ( x4 - x3 ) ) - k );
             if( da1 >= M_PI )
                 da1 = 2 * M_PI - da1;
             if( da2 >= M_PI )

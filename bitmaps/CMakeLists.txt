@@ -394,7 +394,7 @@ set(PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # The name of the directory to put the copied and renamed *.xpm files into.
 # As files are copied they are renamed to *.cpp.
-set(XPM_CPP_PATH "${PATH}/auto_renamed_to_cpp"
+set(XPM_CPP_PATH "${CMAKE_BINARY_DIR}/bitmaps/auto_renamed_to_cpp"
     CACHE PATH "path to store renamed .xpm files for compilation")
 
 foreach(LOOP_VAR ${BITMAP_SRCS})

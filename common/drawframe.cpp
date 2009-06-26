@@ -508,7 +508,6 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 void WinEDA_DrawFrame::AdjustScrollBars()
 /*********************************************/
 {
-#ifndef WX_ZOOM
     int     xUnit, yUnit;
     wxSize  draw_size, panel_size;
     wxSize  scrollbar_number;
@@ -544,6 +543,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
         screen->m_DrawOrg.y = -panel_size.y / 2;
     }
 
+#ifndef WX_ZOOM
     // Calculate the number of scroll bar units for the given zoom level. */
     scrollbar_number.x =
         wxRound( (double) draw_size.x /
@@ -583,18 +583,26 @@ void WinEDA_DrawFrame::AdjustScrollBars()
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,
                               screen->m_ScrollbarPos.y, TRUE );
-// #else
-//     BASE_SCREEN* screen = GetBaseScreen();
-//     wxSize drawingSize = screen->ReturnPageSize() * 2;
-//     wxCoord x, y;
-//     wxClientDC DC( this );
-//     DrawPanel->PrepareGraphicContext( &DC );
-//     x = DC.LogicalToDeviceXRel( drawingSize.GetWidth() );
-//     y = DC.LogicalToDeviceYRel( drawingSize.GetHeight() );
-//     DrawPanel->SetScrollbars( 1, 1, x, y,
-//                               DC.LogicalToDeviceX( screen->m_Curseur.x ),
-//                               DC.LogicalToDeviceY( screen->m_Curseur.y ),
-//                               true );
+#else
+    int x, y, scroll_x, scroll_y;
+    double scale_x, scale_y;
+
+    wxClientDC DC( this );
+
+    DrawPanel->PrepareGraphicContext( &DC );
+    x = DC.LogicalToDeviceXRel( draw_size.GetWidth() );
+    y = DC.LogicalToDeviceYRel( draw_size.GetHeight() );
+
+    scrollbar_pos = screen->m_Curseur - screen->m_DrawOrg;
+    scrollbar_pos.x -= panel_size.x / 2;
+    scrollbar_pos.y -= panel_size.y / 2;
+    scroll_x = DC.LogicalToDeviceXRel( scrollbar_pos.x );
+    scroll_y = DC.LogicalToDeviceYRel( scrollbar_pos.y );
+
+    wxLogDebug( wxT( "SetScrollbars(1, 1, %d, %d, %d, %d)" ),
+                x, y, scroll_x, scroll_y );
+
+    DrawPanel->SetScrollbars( 1, 1, x, y, scroll_x, scroll_y );
 #endif
 }
 
