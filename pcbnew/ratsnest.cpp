@@ -102,7 +102,6 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
 /** Function Compile_Ratsnest
  *  Create the entire board ratsnesr.
- *  Msut be called AFTER the connectivity computation
  *  Must be called after a board change (changes for
  *  pads, footprints or a read netlist ).
  *

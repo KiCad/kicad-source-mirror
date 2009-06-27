@@ -56,6 +56,8 @@ class DIALOG_DRC_CONTROL_BASE : public wxDialog
 		;
 		wxStaticText* m_MicroViaMinTitle;
 		wxButton* m_BrowseButton;
+		wxStaticText* m_staticText6;
+		wxTextCtrl* m_Messages;
 		wxButton* m_buttonRunDRC;
 		wxButton* m_buttonListUnconnected;
 		wxButton* m_DeleteAllButton;
@@ -90,12 +92,9 @@ class DIALOG_DRC_CONTROL_BASE : public wxDialog
 		wxTextCtrl* m_SetMicroViakMinSizeCtrl;
 		wxCheckBox* m_CreateRptCtrl;
 		wxTextCtrl* m_RptFilenameCtrl;
-		wxCheckBox* m_Pad2PadTestCtrl;
-		wxCheckBox* m_ZonesTestCtrl;
-		wxCheckBox* m_UnconnectedTestCtrl;
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 678,508 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 683,508 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DRC_CONTROL_BASE();
 	
 };

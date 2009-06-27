@@ -70,10 +70,6 @@ void DRC::ShowDialog()
         PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl, g_DesignSettings.m_MicroViasMinSize,
                               m_mainWindow->m_InternalUnits );;
 
-        m_ui->m_Pad2PadTestCtrl->SetValue( m_doPad2PadTest );
-        m_ui->m_ZonesTestCtrl->SetValue( m_doZonesTest );
-        m_ui->m_UnconnectedTestCtrl->SetValue( m_doUnconnectedTest );
-
         m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
         m_ui->m_RptFilenameCtrl->SetValue( m_rptFilename );
     }
@@ -92,9 +88,6 @@ void DRC::DestroyDialog( int aReason )
         {
             // if user clicked OK, save his choices in this DRC object.
             m_doCreateRptFile   = m_ui->m_CreateRptCtrl->GetValue();
-            m_doPad2PadTest     = m_ui->m_Pad2PadTestCtrl->GetValue();
-            m_doZonesTest       = m_ui->m_ZonesTestCtrl->GetValue();
-            m_doUnconnectedTest = m_ui->m_UnconnectedTestCtrl->GetValue();
             m_rptFilename       = m_ui->m_RptFilenameCtrl->GetValue();
         }
 
@@ -112,9 +105,9 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
     m_ui  = 0;
 
     // establish initial values for everything:
-    m_doPad2PadTest     = true;
-    m_doUnconnectedTest = true;
-    m_doZonesTest = false;
+    m_doPad2PadTest     = true;     // enable pad to pad clearance tests
+    m_doUnconnectedTest = true;     // enable unconnected tests
+    m_doZonesTest = true;           // enable zone to items clearance tests
 
     m_doCreateRptFile = false;
 
@@ -198,34 +191,62 @@ int DRC::Drc( ZONE_CONTAINER* aArea, int CornerIndex )
  * will actually run all the tests specified with a previous call to
  * SetSettings()
  */
-void DRC::RunTests()
+void DRC::RunTests(wxTextCtrl * aMessages)
 {
     // Ensure ratsnest is up to date:
     if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+    {
+        if ( aMessages )
+            aMessages->AppendText( _("Compile Ratsnest") );
         m_mainWindow->Compile_Ratsnest( NULL, true );
+        if ( aMessages )
+            aMessages->AppendText( _(" Ok\n"));
+    }
 
     // someone should have cleared the two lists before calling this.
 
     // test pad to pad clearances, nothing to do with tracks, vias or zones.
     if( m_doPad2PadTest )
+    {
+        if ( aMessages )
+            aMessages->AppendText( _("Test pads to pads clearance") );
         testPad2Pad();
+        if ( aMessages )
+            aMessages->AppendText( _("\n"));
+    }
 
     // test track and via clearances to other tracks, pads, and vias
     testTracks();
 
     // Before testing segments and unconnected, refill all zones:
     // this is a good caution, because filled areas can be outdated.
+    if ( aMessages )
+        aMessages->AppendText( _("Fill zones") );
     m_mainWindow->Fill_All_Zones( false );
+    if ( aMessages )
+        aMessages->AppendText( _(" Ok\n"));
 
     // test zone clearances to other zones, pads, tracks, and vias
+    if ( aMessages && m_doZonesTest)
+        aMessages->AppendText( _("Test zones") );
     testZones( m_doZonesTest );
+    if ( aMessages && m_doZonesTest)
+        aMessages->AppendText( _("\n"));
 
     // find and gather unconnected pads.
     if( m_doUnconnectedTest )
+    {
+        if ( aMessages )
+            aMessages->AppendText( _("List unconnected pads") );
         testUnconnected();
+        if ( aMessages )
+            aMessages->AppendText( _("\n"));
+    }
 
     // update the m_ui listboxes
     updatePointers();
+    if ( aMessages )
+        aMessages->AppendText( _("Finished\n") );
 }
 
 

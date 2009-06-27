@@ -84,7 +84,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_RptFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_RptFilenameCtrl->SetToolTip( _("Enter the report filename") );
-	m_RptFilenameCtrl->SetMinSize( wxSize( 200,-1 ) );
+	m_RptFilenameCtrl->SetMinSize( wxSize( 250,-1 ) );
 	
 	ReportFileSizer->Add( m_RptFilenameCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -95,33 +95,21 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	sbSizerOptions->Add( bSizer7, 1, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Include Tests For:") ), wxVERTICAL );
+	m_CommandSizer->Add( sbSizerOptions, 0, 0, 5 );
 	
-	m_Pad2PadTestCtrl = new wxCheckBox( this, wxID_ANY, _("Pad to pad"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Pad2PadTestCtrl->SetValue(true);
+	wxBoxSizer* bSizerMessages;
+	bSizerMessages = new wxBoxSizer( wxVERTICAL );
 	
-	m_Pad2PadTestCtrl->SetToolTip( _("Include tests for clearances between pad to pads") );
-	m_Pad2PadTestCtrl->SetHelpText( _("Include tests for clearances between pad to pads") );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	bSizerMessages->Add( m_staticText6, 0, wxRIGHT|wxLEFT, 5 );
 	
-	sbSizer3->Add( m_Pad2PadTestCtrl, 0, wxALL, 5 );
+	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
+	m_Messages->SetMinSize( wxSize( 160,-1 ) );
 	
-	m_ZonesTestCtrl = new wxCheckBox( this, wxID_ANY, _("Zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerMessages->Add( m_Messages, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_ZonesTestCtrl->SetToolTip( _("Include zones in clearance or unconnected tests") );
-	
-	sbSizer3->Add( m_ZonesTestCtrl, 0, wxALL, 5 );
-	
-	m_UnconnectedTestCtrl = new wxCheckBox( this, wxID_ANY, _("Unconnected pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_UnconnectedTestCtrl->SetValue(true);
-	
-	m_UnconnectedTestCtrl->SetToolTip( _("Find unconnected pads") );
-	
-	sbSizer3->Add( m_UnconnectedTestCtrl, 0, wxALL, 5 );
-	
-	sbSizerOptions->Add( sbSizer3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_CommandSizer->Add( sbSizerOptions, 1, 0, 5 );
+	m_CommandSizer->Add( bSizerMessages, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );

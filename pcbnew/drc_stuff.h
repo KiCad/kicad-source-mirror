@@ -593,8 +593,9 @@ public:
      * Function RunTests
      * will actually run all the tests specified with a previous call to
      * SetSettings()
+     * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
-    void    RunTests();
+    void    RunTests(wxTextCtrl * aMessages = NULL);
 
 
     /**
