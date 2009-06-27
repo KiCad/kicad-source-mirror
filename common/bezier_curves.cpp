@@ -6,11 +6,11 @@
 #include "bezier_curves.h"
 
 
-#define add_segment(segment) if(bezier_points[bezier_points.size()-1] != segment) bezier_points.push_back(segment);
+#define add_segment(segment) if(s_bezier_Points_Buffer[s_bezier_Points_Buffer.size()-1] != segment) s_bezier_Points_Buffer.push_back(segment);
 
 
 // Local variables:
-static std::vector<wxPoint> bezier_points;
+static std::vector<wxPoint> s_bezier_Points_Buffer;
 
 static int    bezier_recursion_limit     = 12;
 static double bezier_approximation_scale = 0.5;  // 1
@@ -36,53 +36,70 @@ static void recursive_bezier( int x1,
 /***********************************************************************************/
 
 
+/**
+ * Function Bezier2Poly
+ * convert a Bezier curve to a polyline
+ * @return a std::vector<wxPoint> containing the points of the polyline
+ * @param C1, c2, c3, c4 = wxPoints of the Bezier curve
+ */
 std::vector<wxPoint> Bezier2Poly( wxPoint c1, wxPoint c2, wxPoint c3, wxPoint c4 )
 {
     return Bezier2Poly( c1.x, c1.y, c2.x, c2.y, c3.x, c3.y, c4.x, c4.y );
 }
 
 
+/**
+ * Function Bezier2Poly
+ * convert a Bezier curve to a polyline
+ * @return a std::vector<wxPoint> containing the points of the polyline
+ * @param C1, c2, c3 = wxPoints of the Bezier curve
+ */
 std::vector<wxPoint> Bezier2Poly( wxPoint c1, wxPoint c2, wxPoint c3 )
 {
     return Bezier2Poly( c1.x, c1.y, c2.x, c2.y, c3.x, c3.y );
 }
 
 
-inline int calc_sq_distance( int x1, int y1, int x2, int y2 )
+inline double calc_sq_distance( int x1, int y1, int x2, int y2 )
 {
     int dx = x2 - x1;
     int dy = y2 - y1;
 
-    return dx * dx + dy * dy;
+    return (double)dx * dx + (double)dy * dy;
+}
+
+inline double sqrt_len( int dx, int dy )
+{
+    return ((double)dx * dx) + ((double)dy * dy);
 }
 
 
 std::vector<wxPoint>  Bezier2Poly( int x1, int y1, int x2, int y2, int x3, int y3 )
 {
-    bezier_points.clear();
+    s_bezier_Points_Buffer.clear();
 
     bezier_distance_tolerance_square  = 0.5 / bezier_approximation_scale;
     bezier_distance_tolerance_square *= bezier_distance_tolerance_square;
-    bezier_points.push_back( wxPoint( x1, y1 ) );
+    s_bezier_Points_Buffer.push_back( wxPoint( x1, y1 ) );
     recursive_bezier( x1, y1, x2, y2, x3, y3, 0 );
-    bezier_points.push_back( wxPoint( x3, y3 ) );
+    s_bezier_Points_Buffer.push_back( wxPoint( x3, y3 ) );
 
-    wxLogDebug( wxT( "Bezier Conversion - End (%d vertex)" ), bezier_points.size() );
-    return bezier_points;
+    wxLogDebug( wxT( "Bezier Conversion - End (%d vertex)" ), s_bezier_Points_Buffer.size() );
+    return s_bezier_Points_Buffer;
 }
 
 
 std::vector<wxPoint> Bezier2Poly( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4 )
 {
-    bezier_points.clear();
+    s_bezier_Points_Buffer.clear();
     bezier_distance_tolerance_square  = 0.5 / bezier_approximation_scale;
     bezier_distance_tolerance_square *= bezier_distance_tolerance_square;
 
-    bezier_points.push_back( wxPoint( x1, y1 ) );
+    s_bezier_Points_Buffer.push_back( wxPoint( x1, y1 ) );
     recursive_bezier( x1, y1, x2, y2, x3, y3, x4, y4, 0 );
-    bezier_points.push_back( wxPoint( x4, y4 ) );
-    wxLogDebug( wxT( "Bezier Conversion - End (%d vertex)" ), bezier_points.size() );
-    return bezier_points;
+    s_bezier_Points_Buffer.push_back( wxPoint( x4, y4 ) );
+    wxLogDebug( wxT( "Bezier Conversion - End (%d vertex)" ), s_bezier_Points_Buffer.size() );
+    return s_bezier_Points_Buffer;
 }
 
 
@@ -104,7 +121,7 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
 
     int    dx = x3 - x1;
     int    dy = y3 - y1;
-    double d  = fabs( (double) ( (x2 - x3) * dy - (y2 - y3) * dx ) );
+    double d  = fabs( ((double) (x2 - x3) * dy) - ((double) (y2 - y3) * dx ) );
     double da;
 
     if( d > bezier_curve_collinearity_epsilon )
@@ -142,14 +159,14 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
     {
         // Collinear case
         //------------------
-        da = dx * dx + dy * dy;
+        da = sqrt_len(dx, dy);
         if( da == 0 )
         {
             d = calc_sq_distance( x1, y1, x2, y2 );
         }
         else
         {
-            d = ( (x2 - x1) * dx + (y2 - y1) * dy ) / da;
+            d = ( (double)(x2 - x1) * dx + (double)(y2 - y1) * dy ) / da;
             if( d > 0 && d < 1 )
             {
                 // Simple collinear case, 1---2---3
@@ -276,7 +293,7 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
         // p1,p2,p4 are collinear, p3 is significant
         //----------------------
-        if( d3 * d3 <= bezier_distance_tolerance_square * (dx * dx + dy * dy) )
+        if( d3 * d3 <= bezier_distance_tolerance_square * sqrt_len(dx, dy) )
         {
             if( bezier_angle_tolerance < bezier_curve_angle_tolerance_epsilon )
             {
@@ -313,7 +330,7 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
         // p1,p3,p4 are collinear, p2 is significant
         //----------------------
-        if( d2 * d2 <= bezier_distance_tolerance_square * (dx * dx + dy * dy) )
+        if( d2 * d2 <= bezier_distance_tolerance_square * sqrt_len(dx, dy) )
         {
             if( bezier_angle_tolerance < bezier_curve_angle_tolerance_epsilon )
             {
@@ -350,7 +367,7 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
         // Regular case
         //-----------------
-        if( (d2 + d3) * (d2 + d3) <= bezier_distance_tolerance_square * (dx * dx + dy * dy) )
+        if( (d2 + d3) * (d2 + d3) <= bezier_distance_tolerance_square * sqrt_len(dx, dy) )
         {
             // If the curvature doesn't exceed the distance_tolerance value
             // we tend to finish subdivisions.
