@@ -1,193 +1,384 @@
 /**
  * Common plot library \n
  * Plot settings, postscript plotting, gerber plotting.
- * 
+ *
  * @file plot_common.h
  */
 
 #ifndef __INCLUDE__PLOT_COMMON_H__
 #define __INCLUDE__PLOT_COMMON_H__ 1
 
+#include <vector>
+using namespace std;
+#include "drawtxt.h"
+
 /**
  * Enum PlotFormat
  * must be kept in order of the radio buttons in the plot panel/window.
  */
-enum
-PlotFormat
-{
+enum PlotFormat {
     PLOT_FORMAT_HPGL,
     PLOT_FORMAT_GERBER,
     PLOT_FORMAT_POST
 };
 
-
-static inline bool IsPostScript( int aFormat )
-{
-    return aFormat == PLOT_FORMAT_POST;
-}
-
-
 const int PLOT_MIROIR = 1;
 
-// Variables used in Common plot functions
-extern wxPoint g_Plot_PlotOffset;
-extern FILE*   g_Plot_PlotOutputFile;
-extern double  g_Plot_XScale, g_Plot_YScale;
-extern int     g_Plot_DefaultPenWidth, g_Plot_CurrentPenWidth;
-extern int     g_Plot_PlotOrientOptions, g_Plot_PenState;
+class Plotter
+{
+public:
+    Plotter()
+    {
+        plot_scale = 1;
+        default_pen_width = 0;
+        current_pen_width = -1;     /* To-be-set marker */
+        pen_state = 'Z';            /* End-of-path idle */
+        plot_orient_options = 0;    /* Mirror flag */
+        output_file   = 0;
+        color_mode    = false;      /* Start as a BW plot */
+        negative_mode = false;
+        sheet = NULL;
+    }
 
 
-/*******************************/
-/* common_plot_functions.cpp   */
-/*******************************/
-void    SetPlotScale( double aXScale, double aYScale );   // Set the plot scale for the current plotting)
-void    Setg_Plot_PlotOffset( wxPoint offset );                // Set the plot offset for the current plotting)
-void    InitPlotParametresGERBER( wxPoint offset, double aXScale, double aYScale );
-// void    PlotWorkSheet( int format_plot, BASE_SCREEN* screen ); now a member of WinEDA_DrawFrame
-void    UserToDeviceCoordinate( wxPoint& pos );
-
-// modifie les coord pos.x et pos.y pour le trace selon l'orientation, l'echelle, les offsets de trace
-void    UserToDeviceSize( wxSize& size );
-
-// modifie les dimension size.x et size.y pour le trace selon l'echelle
-void    ForcePenReinit();
-
-// set the flag g_Plot_CurrentPenWidth to -1 in order
-// to force a pen width redefinition for the next draw command
+    virtual ~Plotter()
+    {
+        /* Emergency cleanup */
+        if( output_file )
+        {
+            fclose( output_file );
+        }
+    }
 
 
-/*******************************/
-/* common_plotPS_functions.cpp */
-/*******************************/
-void    SetCurrentLineWidthPS( int width );
-void    InitPlotParametresPS( wxPoint offset,
-                              Ki_PageDescr* sheet,
-                              double aXScale,
-                              double aYScale,
-                              int orient = 0 );
-void    SetDefaultLineWidthPS( int width );
-void    PlotRectPS( wxPoint p1, wxPoint p2, bool fill, int width = -1 );
-void    PlotCirclePS( wxPoint pos, int diametre, bool fill, int width = -1 );
-void    PlotArcPS( wxPoint centre, int StAngle, int EndAngle, int rayon, bool fill, int width = -1 );
+    virtual void start_plot( FILE* fout ) = 0;
+    virtual void end_plot() = 0;
 
-// Plot an arc: StAngle, EndAngle = start and end arc in 0.1 degree
-void    PlotPolyPS( int nb_segm, int* coord, bool fill, int width = -1 );
-void    PlotFilledSegmentPS( wxPoint start, wxPoint end, int width );
-void    LineTo_PS( wxPoint pos, int plume );
-void    PrintHeaderPS( FILE* file,
-                       const wxString& Creator,
-                       const wxString& FileName,
-                       int PageCount,
-                       int BBox[4],
-                       int PaperOrientation );
-bool    CloseFilePS( FILE* plot_file );
-void    SetColorMapPS( int color );
+    virtual void set_negative( bool _negative )
+    {
+        negative_mode = _negative;
+    }
 
 
-/*********************************/
-/* common_plotHPGL_functions.cpp */
-/*********************************/
-void    InitPlotParametresHPGL( wxPoint offset,
-                                 double aXScale,
-                                 double aYScale,
-                                    int orient = 0 );
-bool    PrintHeaderHPGL( FILE* plot_file,
-                           int pen_speed,
-                           int pen_num );
-bool    CloseFileHPGL( FILE* plot_file );
-void    PlotCircleHPGL( wxPoint centre,
-                            int diameter,
-                           bool fill,
-                            int width = -1 );
-void    PlotRectHPGL( wxPoint t1,
-                      wxPoint t2,
-                         bool fill, 
-                          int width = -1 );
-
-void    PlotArcHPGL( wxPoint centre,
-                         int StAngle,
-                         int EndAngle,
-                         int rayon,
-                        bool fill,
-                         int width = -1 );
+    virtual void set_color_mode( bool _color_mode )
+    {
+        color_mode = _color_mode;
+    }
 
 
-void    PlotPolyHPGL(  int nb,
-                      int* coord,
-                      bool fill,
-                       int width = -1 );
-void    Move_Plume_HPGL( wxPoint pos,
-                             int plume );
-void    Plume_HPGL( int plume );
+    bool get_color_mode() const
+    {
+        return color_mode;
+    }
 
-/*********************************/
-/* common_plotGERBER_functions.cpp */
-/*********************************/
-/** Function InitPlotParametresGERBER
- * Set the plot offset for the current plotting
- * @param aOffset = plot offset
- * @param aXScale,aYScale = coordinate scale (scale coefficient for coordinates)
- */
-void InitPlotParametresGERBER( wxPoint aOffset,
-                                double aXScale,
-                                double aYScale );
 
-/** Function Write_Header_GERBER
- * Write GERBER header to file
- * initialize global variable g_Plot_PlotOutputFile
- * @param aTitle: the name of creator (comment)
- * @param aFile: an opened file to write to
- */
-void Write_Header_GERBER( const wxString aTitle,
-                          FILE* aFile );
+    virtual void set_paper_size( Ki_PageDescr* sheet );
+    virtual void set_current_line_width( int width ) = 0;
+    virtual void set_default_line_width( int width ) = 0;
+    virtual void set_color( int color )  = 0;
+    virtual void set_dash( bool dashed ) = 0;
 
-/** Function LineTo_GERBER
-  * if aCommand = 'U' initialise the starting point of a line
-  * if aCommand = 'D' draw a line from the starting point, or last point to aPos
-  * @param aPos = end of the current line.
-  * @param aCommand = 'U' or 'D' or 'Z' (Pen up , no moving )
- */
-void LineTo_GERBER( wxPoint aPos,
-                        int aCommand );
+    virtual void set_creator( const wxString& _creator )
+    {
+        creator = _creator;
+    }
 
-/** Function PlotGERBERLine
- * Plot a line
- * @param aStartPos  = starting point of the line
- * @param aEndPos    = ending point of the line
- * @param aThickness = line thickness
-*/
-void PlotGERBERLine( wxPoint aStartPos,
-                     wxPoint aEndPos,
-                         int aThickness );
 
-/** Function PlotCircle_GERBER
- * writes a non filled circle to output file
- * Plot one circle as segments (6 to 16 depending on its radius
- * @param aCentre = centre coordintes
- * @param aRadius = radius of the circle
- * @param aWidth  = line width (noc currently used, D_CODEs must be selected before)
-*/
-void PlotCircle_GERBER( wxPoint aCentre,
-                            int aRadius,
-                            int aWidth );
+    virtual void set_filename( const wxString& _filename )
+    {
+        filename = _filename;
+    }
 
-/** Function PlotPolygon_GERBER
- * writes a closed polyline (not a filled polygon) to output file
- * @param aCornersCount = numer of corners
- * @param aCoord = buffer of corners coordinates
- * @param aWidth = line width (noc currently used, D_CODEs must be selected before)
-*/
-void PlotPolygon_GERBER(  int aCornersCount,
-                         int* aCoord,
-                          int aWidth );
 
-/** Function PlotFilledPolygon_GERBER
- * writes a filled polyline to output file
- * @param aCornersCount = numer of corners
- * @param aCoord = buffer of corners coordinates
-*/
-void PlotFilledPolygon_GERBER(  int aCornersCount,
-                               int* aCoord );
+    virtual void set_viewport( wxPoint offset,
+                               double scale, int orient ) = 0;
+
+    /* Standard primitives */
+    virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill,
+                       int width = -1 ) = 0;
+    virtual void circle( wxPoint pos, int diametre, FILL_T fill,
+                         int width = -1 ) = 0;
+    virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+                      FILL_T fill, int width = -1 );
+    virtual void poly( int nb_segm, int* coord, FILL_T fill,
+                       int width = -1 ) = 0;
+    virtual void thick_segment( wxPoint start, wxPoint end, int width,
+                                GRTraceMode tracemode );
+    virtual void thick_arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+                            int width, GRTraceMode tracemode );
+    virtual void thick_rect( wxPoint p1, wxPoint p2, int width,
+                             GRTraceMode tracemode );
+    virtual void thick_circle( wxPoint pos, int diametre, int width,
+                               GRTraceMode tracemode );
+    virtual void pen_to( wxPoint pos, char plume ) = 0;
+
+    /* Flash primitives */
+    virtual void flash_pad_circle( wxPoint pos, int diametre,
+                                   GRTraceMode trace_mode ) = 0;
+    virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                 GRTraceMode trace_mode ) = 0;
+    virtual void flash_pad_rect( wxPoint pos, wxSize size,
+                                 int orient, GRTraceMode trace_mode ) = 0;
+    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                   int orient, GRTraceMode trace_mode ) = 0;
+
+    /* Convenience functions */
+    void move_to( wxPoint pos )
+    {
+        pen_to( pos, 'U' );
+    }
+
+
+    void line_to( wxPoint pos )
+    {
+        pen_to( pos, 'D' );
+    }
+
+
+    void finish_to( wxPoint pos )
+    {
+        pen_to( pos, 'D' );
+        pen_to( pos, 'Z' );
+    }
+
+
+    void pen_finish()
+    {
+        /* Shortcut */
+        pen_to( wxPoint( 0, 0 ), 'Z' );
+    }
+
+
+    void text( const wxPoint&              aPos,
+               enum EDA_Colors             aColor,
+               const wxString&             aText,
+               int                         aOrient,
+               const wxSize&               aSize,
+               enum GRTextHorizJustifyType aH_justify,
+               enum GRTextVertJustifyType  aV_justify,
+               int                         aWidth,
+               bool                        aItalic,
+               bool                        aBold );
+    void           marker( const wxPoint& position, int diametre, int aShapeId );
+
+protected:
+    /* These are marker subcomponents */
+    void           center_square( const wxPoint& position, int diametre, FILL_T fill );
+    void           center_lozenge( const wxPoint& position, int diametre, FILL_T fill );
+
+    /* Helper function for sketched filler segment */
+    void           segment_as_oval( wxPoint start, wxPoint end, int width,
+                                    GRTraceMode tracemode );
+    void           sketch_oval( wxPoint pos, wxSize size, int orient, int width );
+
+    virtual void   user_to_device_coordinates( wxPoint& pos );
+    virtual void   user_to_device_size( wxSize& size );
+    virtual double user_to_device_size( double size );
+
+    /* Plot scale */
+    double        plot_scale;
+    /* Device scale (from decimils to device units) */
+    double        device_scale;
+    /* Plot offset (in decimils) */
+    wxPoint       plot_offset;
+    /* Output file */
+    FILE*         output_file;
+    /* Pen handling */
+    bool          color_mode, negative_mode;
+    int           default_pen_width;
+    int           current_pen_width;
+    char          pen_state;
+    wxPoint       pen_lastpos;
+    /* Other stuff */
+    int           plot_orient_options; /* For now, mirror plot */
+    wxString      creator;
+    wxString      filename;
+    Ki_PageDescr* sheet;
+    wxSize        paper_size;
+};
+
+class HPGL_Plotter : public Plotter
+{
+public:
+    virtual void start_plot( FILE* fout );
+    virtual void end_plot();
+
+/* HPGL doesn't handle line thickness or color */
+    virtual void set_current_line_width( int width )
+    {
+        /* Handy override */
+        current_pen_width = pen_diameter;
+    };
+    virtual void set_default_line_width( int width ) {};
+    virtual void set_dash( bool dashed );
+
+    virtual void set_color( int color ) {};
+    virtual void set_pen_speed( int speed )
+    {
+        wxASSERT( output_file == 0 );
+        pen_speed = speed;
+    }
+
+
+    virtual void set_pen_number( int number )
+    {
+        wxASSERT( output_file == 0 );
+        pen_number = number;
+    }
+
+
+    virtual void set_pen_diameter( double diameter )
+    {
+        wxASSERT( output_file == 0 );
+        pen_diameter = diameter;
+    }
+
+
+    virtual void set_pen_overlap( double overlap )
+    {
+        wxASSERT( output_file == 0 );
+        pen_overlap = overlap;
+    }
+
+
+    virtual void set_viewport( wxPoint offset,
+                               double scale, int orient );
+    virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void thick_segment( wxPoint start, wxPoint end, int width,
+                                GRTraceMode tracemode );
+    virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+                      FILL_T fill, int width = -1 );
+    virtual void pen_to( wxPoint pos, char plume );
+    virtual void flash_pad_circle( wxPoint pos, int diametre,
+                                   GRTraceMode trace_mode );
+    virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                 GRTraceMode trace_mode );
+    virtual void flash_pad_rect( wxPoint pos, wxSize size,
+                                 int orient, GRTraceMode trace_mode );
+    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                   int orient, GRTraceMode trace_mode );
+
+protected:
+    void         pen_control( int plume );
+
+    int    pen_speed;
+    int    pen_number;
+    double pen_diameter;
+    double pen_overlap;
+};
+
+class PS_Plotter : public Plotter
+{
+public:
+    PS_Plotter()
+    {
+        plot_scale_adjX = 1;
+        plot_scale_adjY = 1;
+    }
+
+
+    virtual void start_plot( FILE* fout );
+    virtual void end_plot();
+    virtual void set_current_line_width( int width );
+    virtual void set_default_line_width( int width );
+    virtual void set_dash( bool dashed );
+    virtual void set_color( int color );
+
+    void set_scale_adjust( double scaleX, double scaleY )
+    {
+        plot_scale_adjX = scaleX;
+        plot_scale_adjY = scaleY;
+    }
+
+
+    virtual void set_viewport( wxPoint offset,
+                               double scale, int orient );
+    virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+                      FILL_T fill, int width = -1 );
+    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void pen_to( wxPoint pos, char plume );
+    virtual void flash_pad_circle( wxPoint pos, int diametre,
+                                   GRTraceMode trace_mode );
+    virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                 GRTraceMode trace_mode );
+    virtual void flash_pad_rect( wxPoint pos, wxSize size,
+                                 int orient, GRTraceMode trace_mode );
+    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                   int orient, GRTraceMode trace_mode );
+
+protected:
+    double plot_scale_adjX, plot_scale_adjY;
+};
+
+/* Class to handle a D_CODE when plotting a board : */
+#define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
+
+struct Aperture
+{
+    enum Aperture_Type {
+        Circle   = 1,
+        Rect     = 2,
+        Plotting = 3,
+        Oval     = 4
+    };
+
+    wxSize        size;     /* horiz and Vert size*/
+    Aperture_Type type;     /* Type ( Line, rect , circulaire , ovale .. ) */
+    int           D_code;   /* code number ( >= 10 ); */
+
+    /* Trivia question: WHY Gerber decided to use D instead of the usual T for
+     *  tool change? */
+};
+
+class Gerber_Plotter : public Plotter
+{
+public:
+    Gerber_Plotter()
+    {
+        work_file  = 0;
+        final_file = 0;
+        current_aperture = apertures.end();
+    }
+
+
+    virtual void               start_plot( FILE* fout );
+    virtual void               end_plot();
+    virtual void               set_current_line_width( int width );
+    virtual void               set_default_line_width( int width );
+
+/* RS274X has no dashing, nor colours */
+    virtual void set_dash( bool dashed ) {};
+    virtual void set_color( int color ) {};
+    virtual void               set_viewport( wxPoint offset,
+                                             double scale, int orient );
+    virtual void               rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void               circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void               poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void               pen_to( wxPoint pos, char plume );
+    virtual void               flash_pad_circle( wxPoint pos, int diametre,
+                                                 GRTraceMode trace_mode );
+    virtual void               flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                               GRTraceMode trace_mode );
+    virtual void               flash_pad_rect( wxPoint pos, wxSize size,
+                                               int orient, GRTraceMode trace_mode );
+    virtual void               flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                                 int orient, GRTraceMode trace_mode );
+
+protected:
+    void                       select_aperture( const wxSize& size, Aperture::Aperture_Type type );
+
+    vector<Aperture>::iterator get_aperture( const wxSize&           size,
+                                             Aperture::Aperture_Type type );
+
+    FILE*                      work_file, * final_file;
+    void                       write_aperture_list();
+
+    vector<Aperture>           apertures;
+    vector<Aperture>::iterator current_aperture;
+};
 
 #endif  /* __INCLUDE__PLOT_COMMON_H__ */
-

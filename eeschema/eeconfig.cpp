@@ -403,10 +403,6 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
                                                         &g_GridColor,
                                                         DARKDARKGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Pltmarg" ),
-                                                   &g_PlotMargin,
-                                                   300, 0, 10000 ) );
-
     return m_configSettings;
 }
 

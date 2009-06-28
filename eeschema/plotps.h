@@ -106,7 +106,8 @@ public:
 	void InitOptVars();
     void CreatePSFile(int AllPages, int pagesize);
     void PlotOneSheetPS(const wxString & FileName,
-			SCH_SCREEN * screen, Ki_PageDescr * sheet, int BBox[4], wxPoint plot_offset);
+			SCH_SCREEN * screen, Ki_PageDescr * sheet,
+			wxPoint plot_offset, double scale);
 
     /// Should we show tooltips?
     static bool ShowToolTips();
@@ -121,6 +122,7 @@ public:
 ////@end WinEDA_PlotPSFrame member variables
     WinEDA_DrawFrame * m_Parent;
 	WinEDA_ValueCtrl * m_DefaultLineSizeCtrl;
+    int PlotPSColorOpt;
 };
 
 #endif

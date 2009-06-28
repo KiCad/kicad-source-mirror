@@ -191,10 +191,12 @@ void WinEDA_DrillFrame::CreateControls()
     wxArrayString m_Choice_Drill_OffsetStrings;
     m_Choice_Drill_OffsetStrings.Add(_("absolute"));
     m_Choice_Drill_OffsetStrings.Add(_("auxiliary axis"));
-    m_Choice_Drill_Offset = new wxRadioBox( itemDialog1, ID_SEL_DRILL_SHEET, _("Drill Origin:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_OffsetStrings, 1, wxRA_SPECIFY_COLS );
+    m_Choice_Drill_Offset = new wxRadioBox( itemDialog1, ID_SEL_DRILL_SHEET, 
+	    _("Drill Origin:"), wxDefaultPosition, wxDefaultSize, 
+	    m_Choice_Drill_OffsetStrings, 1, wxRA_SPECIFY_COLS );
     m_Choice_Drill_Offset->SetSelection(0);
     if (WinEDA_DrillFrame::ShowToolTips())
-        m_Choice_Drill_Offset->SetToolTip(_("Choose the coordinate origin: absolute or relative to the auxiliray axis"));
+        m_Choice_Drill_Offset->SetToolTip(_("Choose the coordinate origin: absolute or relative to the auxiliary axis"));
     m_LeftBoxSizer->Add(m_Choice_Drill_Offset, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
@@ -202,9 +204,12 @@ void WinEDA_DrillFrame::CreateControls()
 
     wxArrayString m_Choice_Drill_MapStrings;
     m_Choice_Drill_MapStrings.Add(_("None"));
-    m_Choice_Drill_MapStrings.Add(_("drill sheet (HPGL)"));
-    m_Choice_Drill_MapStrings.Add(_("drill sheet (PostScript)"));
-    m_Choice_Drill_Map = new wxRadioBox( itemDialog1, ID_SEL_DRILL_SHEET, _("Drill Sheet:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapStrings, 1, wxRA_SPECIFY_COLS );
+    m_Choice_Drill_MapStrings.Add(_("Drill sheet (HPGL)"));
+    m_Choice_Drill_MapStrings.Add(_("Drill sheet (PostScript)"));
+    m_Choice_Drill_MapStrings.Add(_("Drill sheet (Gerber)"));
+    m_Choice_Drill_Map = new wxRadioBox( itemDialog1, ID_SEL_DRILL_SHEET, 
+	    _("Drill Sheet:"), wxDefaultPosition, wxDefaultSize, 
+	    m_Choice_Drill_MapStrings, 1, wxRA_SPECIFY_COLS );
     m_Choice_Drill_Map->SetSelection(0);
     if (WinEDA_DrillFrame::ShowToolTips())
         m_Choice_Drill_Map->SetToolTip(_("Creates a drill map in PS or HPGL format"));

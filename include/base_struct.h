@@ -472,10 +472,25 @@ enum GRTextVertJustifyType {
 };
 
 /* Options to show solid segments (segments, texts...) */
-enum GRFillMode {
+enum GRTraceMode {
     FILAIRE = 0,     // segments are drawn as lines
     FILLED,          // normal mode: segments have thickness
     SKETCH           // skect mode: segments have thickness, but are not filled
+};
+
+/**
+ * Enum FILL_T
+ * is the set of fill types used in plotting or drawing enclosed areas.
+ */
+enum FILL_T {
+    NO_FILL,                     // Poly, Square, Circle, Arc = option No Fill
+    FILLED_SHAPE,                /* Poly, Square, Circle, Arc = option Fill
+                                  * with current color ("Solid shape") */
+    FILLED_WITH_BG_BODYCOLOR,    /* Poly, Square, Circle, Arc = option Fill
+                                  * with background body color, translucent
+                                  * (texts inside this shape can be seen)
+                                  * not filled in B&W mode when plotting or
+                                  * printing */
 };
 
 
@@ -516,12 +531,12 @@ public:
      *  @param aOffset = draw offset (usually (0,0))
      *  @param EDA_Colors aColor = text color
      *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     *  @param GRFillMode aDisplay_mode = FILAIRE, FILLED or SKETCH
+     *  @param GRTraceMode aDisplay_mode = FILAIRE, FILLED or SKETCH
      *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      */
     void    Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                   const wxPoint& aOffset, EDA_Colors aColor,
-                  int aDrawMode, GRFillMode aDisplay_mode = FILAIRE,
+                  int aDrawMode, GRTraceMode aDisplay_mode = FILAIRE,
                   EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
 
 private:
@@ -540,7 +555,7 @@ private:
      */
     void    DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                   const wxPoint& aOffset, EDA_Colors aColor,
-                  int aDrawMode, GRFillMode aFillMode,
+                  int aDrawMode, GRTraceMode aFillMode,
                   EDA_Colors aAnchor_color, wxString& aText,
                   wxPoint aPos );
 public:

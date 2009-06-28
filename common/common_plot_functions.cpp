@@ -14,52 +14,8 @@
 #include "class_base_screen.h"
 #include "drawtxt.h"
 
-
-// Variables partagees avec Common plot Postscript et HPLG Routines
-wxPoint g_Plot_PlotOffset;
-FILE*   g_Plot_PlotOutputFile;
-double  g_Plot_XScale, g_Plot_YScale;
-int     g_Plot_DefaultPenWidth;
-int     g_Plot_CurrentPenWidth = -1;
-int     g_Plot_PlotOrientOptions, g_Plot_PenState;
-
-/*************************/
-void ForcePenReinit()
-/*************************/
-
-/* set the flag g_Plot_CurrentPenWidth to -1 in order to force a pen width redefinition
-  * for the next draw command
- */
-{
-    g_Plot_CurrentPenWidth = -1;
-}
-
-
-/**********************************************/
-void SetPlotScale( double aXScale, double aYScale )
-/**********************************************/
-
-/* Set the plot scale for the current plotting)
- */
-{
-    g_Plot_XScale = aXScale;
-    g_Plot_YScale = aYScale;
-}
-
-
-/*********************************/
-void Setg_Plot_PlotOffset( wxPoint offset )
-/*********************************/
-
-/* Set the plot offset for the current plotting)
- */
-{
-    g_Plot_PlotOffset = offset;
-}
-
-
 /**************************************************************************/
-void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
+void WinEDA_DrawFrame::PlotWorkSheet( Plotter *plotter, BASE_SCREEN* screen )
 /**************************************************************************/
 
 /* Plot sheet references
@@ -68,40 +24,21 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 {
 #define WSTEXTSIZE 50   // Text size in mils
     Ki_PageDescr*     Sheet = screen->m_CurrentSheetDesc;
-    int               ii, jj, xg, yg, ipas, gxpas, gypas;
+    int               xg, yg, ipas, gxpas, gypas;
     wxSize            PageSize;
     wxPoint           pos, ref;
     EDA_Colors        color;
-    Ki_WorkSheetData* WsItem;
     int               conv_unit = screen->GetInternalUnits() / 1000; /* Scale to convert dimension in 1/1000 in into internal units
                                                       * (1/1000 inc for EESchema, 1/10000 for pcbnew */
     wxString          msg;
     wxSize            text_size;
-    void              (*FctPlume)( wxPoint pos, int state );
     int               UpperLimit = VARIABLE_BLOCK_START_POSITION;
     bool italic = false;
     bool bold = false;
     bool thickness = 0; //@todo : use current pen
 
-    switch( format_plot )
-    {
-    case PLOT_FORMAT_POST:
-        FctPlume = LineTo_PS;
-        break;
-
-    case PLOT_FORMAT_HPGL:
-        FctPlume = Move_Plume_HPGL;
-        break;
-
-    case PLOT_FORMAT_GERBER:
-	FctPlume = LineTo_GERBER;
-	break;
-
-    default:
-        return;
-    }
-
     color = BLACK;
+    plotter->set_color(color);
 
     PageSize.x = Sheet->m_Size.x;
     PageSize.y = Sheet->m_Size.y;
@@ -113,31 +50,30 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     yg    = (PageSize.y - Sheet->m_BottomMargin) * conv_unit;   /* lower right corner */
 
 #if defined(KICAD_GOST)
-    FctPlume(ref,'U');
+    plotter->move_to( ref );
     pos.x = xg; pos.y = ref.y;
-    FctPlume(pos,'D');
+    plotter->line_to( pos );
     pos.x = xg; pos.y = yg;
-    FctPlume(pos,'D');
+    plotter->line_to( pos );
     pos.x = ref.x; pos.y = yg;
-    FctPlume( pos,'D' );
-    FctPlume(ref,'D');
-    FctPlume(ref,'Z');
+    plotter->line_to( pos );
+    plotter->finish_to( ref );
 #else
-
-    for( ii = 0; ii < 2; ii++ )
+    for( unsigned ii = 0; ii < 2; ii++ )
     {
-        FctPlume( ref, 'U' );
+        plotter->move_to( ref );
         pos.x = xg; pos.y = ref.y;
-        FctPlume( pos, 'D' );
+        plotter->line_to( pos );
         pos.x = xg; pos.y = yg;
-        FctPlume( pos, 'D' );
+        plotter->line_to( pos );
         pos.x = ref.x; pos.y = yg;
-        FctPlume( pos, 'D' );
-        FctPlume( ref, 'D' );
-        ref.x += GRID_REF_W * conv_unit; ref.y += GRID_REF_W * conv_unit;
-        xg -= GRID_REF_W * conv_unit; yg -= GRID_REF_W * conv_unit;
+        plotter->line_to( pos );
+        plotter->finish_to( ref );
+        ref.x += GRID_REF_W * conv_unit; 
+	ref.y += GRID_REF_W * conv_unit;
+        xg -= GRID_REF_W * conv_unit; 
+	yg -= GRID_REF_W * conv_unit;
     }
-    FctPlume(ref,'Z');
 #endif
 
     /* trace des reperes */
@@ -150,7 +86,9 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     yg    = (PageSize.y - Sheet->m_BottomMargin);   /* lower right corner in 1/1000 inch */
 
 #if defined(KICAD_GOST)
-    for ( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
+    for ( Ki_WorkSheetData* WsItem = &WS_Segm1_LU; 
+	    WsItem != NULL; 
+	    WsItem = WsItem->Pnext )
     {
 	pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
 	pos.y = (yg - WsItem->m_Posy) * conv_unit;
@@ -161,22 +99,22 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		break;
 	    case WS_PODPIS_LU:
 		if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		PlotGraphicText(format_plot, pos, color,
+		plotter->text( pos, color,
 				msg, TEXT_ORIENT_VERT, text_size,
                         	GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
                             thickness, italic, false );
-
         	break;
     	    case WS_SEGMENT_LU:
-    		FctPlume(pos, 'U');
+    		plotter->move_to(pos);
     		pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
     		pos.y = (yg - WsItem->m_Endy) * conv_unit;
-		FctPlume(pos, 'D');
-		FctPlume(ref,'Z');
+		plotter->finish_to(pos);
     		break;
 	}
     }
-    for ( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
+    for ( Ki_WorkSheetData* WsItem = &WS_Segm1_LT; 
+	    WsItem != NULL; 
+	    WsItem = WsItem->Pnext )
     {
 	pos.x = (ref.x + WsItem->m_Posx) * conv_unit;
 	pos.y = (ref.y + WsItem->m_Posy) * conv_unit;
@@ -184,11 +122,10 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 	switch( WsItem->m_Type )
 	{
     	    case WS_SEGMENT_LT:
-    		FctPlume(pos, 'U');
+    		plotter->move_to(pos);
         	pos.x = (ref.x + WsItem->m_Endx) * conv_unit;
         	pos.y = (ref.y + WsItem->m_Endy) * conv_unit;
-        	FctPlume(pos, 'D');
-		FctPlume(ref,'Z');
+        	plotter->finish_to(pos);
         	break;
 	}
     }
@@ -197,20 +134,19 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     /* Trace des reperes selon l'axe X */
     ipas  = (xg - ref.x) / PAS_REF;
     gxpas = ( xg - ref.x) / ipas;
-    for( ii = ref.x + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
+    for(int ii = ref.x + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
     {
         msg.Empty(); msg << jj;
         if( ii < xg - PAS_REF / 2 )
         {
             pos.x = ii * conv_unit; pos.y = ref.y * conv_unit;
-            FctPlume( pos, 'U' );
+            plotter->move_to(pos);
             pos.x = ii * conv_unit; pos.y = (ref.y + GRID_REF_W) * conv_unit;
-            FctPlume( pos, 'D' );
-	    FctPlume(ref,'Z');
+            plotter->finish_to(pos);
         }
         pos.x = (ii - gxpas / 2) * conv_unit;
         pos.y = (ref.y + GRID_REF_W / 2) * conv_unit;
-        PlotGraphicText( format_plot, pos, color,
+        plotter->text( pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
             thickness, italic, false );
@@ -218,14 +154,13 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         if( ii < xg - PAS_REF / 2 )
         {
             pos.x = ii * conv_unit; pos.y = yg * conv_unit;
-            FctPlume( pos, 'U' );
+            plotter->move_to( pos);
             pos.x = ii * conv_unit; pos.y = (yg - GRID_REF_W) * conv_unit;
-            FctPlume( pos, 'D' );
-	    FctPlume(ref,'Z');
+            plotter->finish_to(pos);
         }
         pos.x = (ii - gxpas / 2) * conv_unit;
         pos.y = (yg - GRID_REF_W / 2) * conv_unit;
-        PlotGraphicText( format_plot, pos, color,
+        plotter->text( pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
             thickness, italic, false );
@@ -234,7 +169,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     /* Trace des reperes selon l'axe Y */
     ipas  = (yg - ref.y) / PAS_REF;
     gypas = ( yg - ref.y) / ipas;
-    for( ii = ref.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
+    for( int ii = ref.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
     {
         if( jj < 26 )
             msg.Printf( wxT( "%c" ), jj + 'A' );
@@ -243,14 +178,13 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         if( ii < yg - PAS_REF / 2 )
         {
             pos.x = ref.x * conv_unit; pos.y = ii * conv_unit;
-            FctPlume( pos, 'U' );
+            plotter->move_to(pos);
             pos.x = (ref.x + GRID_REF_W) * conv_unit; pos.y = ii * conv_unit;
-            FctPlume( pos, 'D' );
-	    FctPlume(ref,'Z');
+            plotter->finish_to(pos);
         }
         pos.x = (ref.x + GRID_REF_W / 2) * conv_unit;
         pos.y = (ii - gypas / 2) * conv_unit;
-        PlotGraphicText( format_plot, pos, color,
+        plotter->text( pos, color,
             msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
             thickness, italic, false );
@@ -258,14 +192,13 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
         if( ii < yg - PAS_REF / 2 )
         {
             pos.x = xg * conv_unit; pos.y = ii * conv_unit;
-            FctPlume( pos, 'U' );
+            plotter->move_to(pos);
             pos.x = (xg - GRID_REF_W) * conv_unit; pos.y = ii * conv_unit;
-            FctPlume( pos, 'D' );
-	    FctPlume(ref,'Z');
+            plotter->finish_to(pos);
         }
         pos.x = (xg - GRID_REF_W / 2) * conv_unit;
         pos.y = (ii - gypas / 2) * conv_unit;
-        PlotGraphicText( format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+        plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
             thickness, italic, false );
     }
@@ -279,7 +212,9 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     ref.y = PageSize.y - Sheet->m_BottomMargin;
     if (screen->m_ScreenNumber == 1)
     {
-	for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
+	for(Ki_WorkSheetData* WsItem = &WS_Date; 
+		WsItem != NULL; 
+		WsItem = WsItem->Pnext )
 	{
 	    pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
 	    pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
@@ -294,7 +229,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		    break;
 		case WS_PODPIS:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+		    plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                     thickness, italic, false );
 		    break;
@@ -303,14 +238,14 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		case WS_IDENTSHEET:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_ScreenNumber;
-		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
+		    plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ,text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                     thickness, italic, false );
 		    break;
 		case WS_SHEETS:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_NumberOfScreen;
-		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+		    plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                     thickness, italic, false );
 		    break;
@@ -329,16 +264,17 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		case WS_UPPER_SEGMENT:
 		case WS_LEFT_SEGMENT:
 		case WS_SEGMENT:
-		    FctPlume(pos, 'U');
+		    plot->move_to(pos);
 		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
 		    pos.y = (ref.y - WsItem->m_Endy)  * conv_unit;
-		    FctPlume(pos, 'D');
-		    FctPlume(ref,'Z');
+		    plot->finish_to(pos);
 		    break;
 	    }
 	}
     } else {
-	for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
+	for(Ki_WorkSheetData* WsItem = &WS_CADRE_D; 
+		WsItem != NULL; 
+		WsItem = WsItem->Pnext )
 	{
 	    pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
 	    pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
@@ -349,24 +285,23 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
 		/* Begin list number > 1 */
 		case WS_PODPIS_D:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
-		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+		    plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                     thickness, italic, false );
 		    break;
 		case WS_IDENTSHEET_D:
 		    if(WsItem->m_Legende) msg = WsItem->m_Legende;
 		    msg << screen->m_ScreenNumber;
-		    PlotGraphicText(format_plot, pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+		    plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
 				    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                     thickness, italic, false );
 		    break;
 		case WS_LEFT_SEGMENT_D:
 		case WS_SEGMENT_D:
-		    FctPlume(pos, 'U');
+		    plot->move_to(pos);
 		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
 		    pos.y = (ref.y - WsItem->m_Endy) * conv_unit;
-		    FctPlume(pos, 'D');
-		    FctPlume(ref,'Z');
+		    plot->finish_to(pos);
 		    break;
 	    }
 	}
@@ -375,7 +310,9 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
     ref.x = PageSize.x - GRID_REF_W - Sheet->m_RightMargin;
     ref.y = PageSize.y - GRID_REF_W - Sheet->m_BottomMargin;
 
-    for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
+    for (Ki_WorkSheetData* WsItem = &WS_Date; 
+	    WsItem != NULL; 
+	    WsItem = WsItem->Pnext )
     {
         pos.x = (ref.x - WsItem->m_Posx) * conv_unit;
         pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
@@ -472,63 +409,393 @@ void WinEDA_DrawFrame::PlotWorkSheet( int format_plot, BASE_SCREEN* screen )
             wxPoint auxpos;
             auxpos.x = (ref.x - WsItem->m_Endx) * conv_unit;;
             auxpos.y = (ref.y - WsItem->m_Endy) * conv_unit;;
-            FctPlume( pos, 'U' );
-            FctPlume( auxpos, 'D' );
-	    FctPlume(ref,'Z');
+		plotter->move_to( pos );
+		plotter->finish_to( auxpos );
         }
             break;
         }
 
         if( !msg.IsEmpty() )
         {
-            PlotGraphicText( format_plot, pos, color,
+	    plotter->text( pos, color,
                 msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                 thickness, italic, bold );
         }
     }
 #endif
-
-    switch( format_plot )
-    {
-    case PLOT_FORMAT_HPGL:
-        Plume_HPGL( 'U' );
-        break;
-
-    case PLOT_FORMAT_POST:
-        break;
-    }
 }
 
-
 /******************************************/
-void UserToDeviceCoordinate( wxPoint& pos )
+void Plotter::user_to_device_coordinates( wxPoint& pos )
 /******************************************/
 
 /* modifie les coord pos.x et pos.y pour le trace selon l'orientation,
   * l'echelle, les offsets de trace */
 {
-    pos.x = (int) (pos.x * g_Plot_XScale);
-    pos.y = (int) (pos.y * g_Plot_YScale);
+    pos.x = (int) ((pos.x - plot_offset.x) * plot_scale * device_scale);
+    
+    if (plot_orient_options == PLOT_MIROIR)
+	pos.y = (int) ((pos.y - plot_offset.y) * plot_scale * device_scale);
+    else
+	pos.y = (int) ((paper_size.y - (pos.y - plot_offset.y) * plot_scale) * device_scale);
+}
 
-    switch( g_Plot_PlotOrientOptions ) /* Calcul du cadrage */
+/********************************************************************/
+void Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon, 
+	FILL_T fill, int width )
+/********************************************************************/
+/* Generic arc rendered as a polyline */
+{
+    wxPoint start, end;
+    const int delta = 50; 	/* increment (in 0.1 degrees) to draw circles */
+    double alpha;
+
+    if (StAngle > EndAngle)
+	EXCHG(StAngle, EndAngle);
+    
+    set_current_line_width(width);
+    /* Please NOTE the different sign due to Y-axis flip */
+    alpha = StAngle/1800.0*M_PI;
+    start.x = centre.x + (int) (rayon * cos(-alpha));
+    start.y = centre.y + (int) (rayon * sin(-alpha));
+    move_to(start);
+    for(int ii = StAngle+delta; ii < EndAngle; ii += delta )
     {
-    default:
-        pos.x -= g_Plot_PlotOffset.x; pos.y = g_Plot_PlotOffset.y - pos.y;
+	alpha = ii/1800.0*M_PI;
+        end.x = centre.x + (int) (rayon * cos(-alpha));
+        end.y = centre.y + (int) (rayon * sin(-alpha));
+        line_to(end);
+    }
+
+    alpha = EndAngle/1800.0*M_PI;
+    end.x = centre.x + (int) (rayon * cos(-alpha));
+    end.y = centre.y + (int) (rayon * sin(-alpha));
+    finish_to( end );
+}
+
+/************************************/
+void Plotter::user_to_device_size( wxSize& size )
+/************************************/
+/* modifie les dimension size.x et size.y pour le trace selon l'echelle */
+{
+    size.x = (int) (size.x * plot_scale * device_scale);
+    size.y = (int) (size.y * plot_scale * device_scale);
+}
+
+/************************************/
+double Plotter::user_to_device_size( double size )
+/************************************/
+{
+    return size * plot_scale * device_scale;
+}
+
+/************************************************************************************/
+void Plotter::center_square( const wxPoint& position, int diametre, FILL_T fill)
+/************************************************************************************/
+{
+    int rayon = diametre / 2.8284;
+    int coord[10] = {
+	position.x+rayon, position.y+rayon,
+	position.x+rayon, position.y-rayon,
+	position.x-rayon, position.y-rayon,
+	position.x-rayon, position.y+rayon,
+	position.x+rayon, position.y+rayon
+    };
+    if (fill) 
+    {
+	poly(4, coord, fill);
+    }
+    else
+    {
+	poly(5, coord, fill);
+    }
+}
+
+/************************************************************************************/
+void Plotter::center_lozenge( const wxPoint& position, int diametre, FILL_T fill)
+/************************************************************************************/
+{
+    int rayon = diametre / 2;
+    int coord[10] = {
+	position.x, position.y+rayon,
+	position.x+rayon, position.y,
+	position.x, position.y-rayon,
+	position.x-rayon, position.y,
+	position.x, position.y+rayon,
+    };
+    if (fill) 
+    {
+	poly(4, coord, fill);
+    }
+    else
+    {
+	poly(5, coord, fill);
+    }
+}
+
+/************************************************************************************/
+void Plotter::marker( const wxPoint& position, int diametre, int aShapeId)
+/************************************************************************************/
+
+/* Trace un motif de numero de forme aShapeId, aux coord x0, y0.
+ *  x0, y0 = coordonnees tables
+ *  diametre = diametre (coord table) du trou
+ *  aShapeId = index ( permet de generer des formes caract )
+ */
+{
+    int  rayon = diametre / 2;
+
+    int  x0, y0;
+
+    x0 = position.x; y0 = position.y;
+
+    switch( aShapeId )
+    {
+    case 0:     /* vias : forme en X */
+        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
+	line_to( wxPoint( x0 + rayon, y0 + rayon ) );
+        move_to( wxPoint( x0 + rayon, y0 - rayon ) );
+        finish_to( wxPoint( x0 - rayon, y0 + rayon ) );
         break;
 
-    case PLOT_MIROIR:
-        pos.x -= g_Plot_PlotOffset.x; pos.y = -g_Plot_PlotOffset.y + pos.y;
+    case 1:     /* Cercle */
+	circle(position, diametre, NO_FILL);
+        break;
+
+    case 2:     /* forme en + */
+        move_to( wxPoint( x0, y0 - rayon ) );
+        line_to( wxPoint( x0, y0 + rayon ) );
+        move_to( wxPoint( x0 + rayon, y0 ) );
+        finish_to( wxPoint( x0 - rayon, y0 ) );
+        break;
+
+    case 3:     /* forme en X cercle */
+	circle(position, diametre, NO_FILL);
+        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
+        line_to( wxPoint( x0 + rayon, y0 + rayon ) );
+        move_to( wxPoint( x0 + rayon, y0 - rayon ) );
+        finish_to( wxPoint( x0 - rayon, y0 + rayon ) );
+        break;
+
+    case 4:     /* forme en cercle barre de - */
+	circle(position, diametre, NO_FILL);
+        move_to( wxPoint( x0 - rayon, y0 ) );
+        finish_to( wxPoint( x0 + rayon, y0 ) );
+        break;
+
+    case 5:     /* forme en cercle barre de | */
+	circle(position, diametre, NO_FILL);
+        move_to( wxPoint( x0, y0 - rayon ) );
+        finish_to( wxPoint( x0, y0 + rayon ) );
+        break;
+
+    case 6:     /* forme en carre */
+	center_square(position, diametre, NO_FILL);
+        break;
+
+    case 7:     /* forme en losange */
+	center_lozenge(position, diametre, NO_FILL);
+        break;
+
+    case 8:     /* forme en carre barre par un X*/
+	center_square(position, diametre, NO_FILL);
+        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
+        line_to( wxPoint( x0 + rayon, y0 + rayon ) );
+        move_to( wxPoint( x0 + rayon, y0 - rayon ) );
+        finish_to( wxPoint( x0 - rayon, y0 + rayon ) );
+        break;
+
+    case 9:     /* forme en losange barre par un +*/
+	center_lozenge(position, diametre, NO_FILL);
+        move_to( wxPoint( x0, y0 - rayon ) );
+        line_to( wxPoint( x0, y0 + rayon ) );
+        move_to( wxPoint( x0 + rayon, y0 ) );
+        finish_to( wxPoint( x0 - rayon, y0 ) );
+        break;
+
+    case 10:     /* forme en carre barre par un '/' */
+	center_square(position, diametre, NO_FILL);
+        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
+        finish_to( wxPoint( x0 + rayon, y0 + rayon ) );
+        break;
+
+    case 11:     /* forme en losange barre par un |*/
+	center_lozenge(position, diametre, NO_FILL);
+        move_to( wxPoint( x0, y0 - rayon ) );
+        finish_to( wxPoint( x0, y0 + rayon ) );
+        break;
+
+    case 12:     /* forme en losange barre par un -*/
+	center_lozenge(position, diametre, NO_FILL);
+        move_to( wxPoint( x0 - rayon, y0 ) );
+        finish_to( wxPoint( x0 + rayon, y0 ) );
+        break;
+
+    default:
+	circle(position, diametre, NO_FILL);
         break;
     }
 }
 
-
-/************************************/
-void UserToDeviceSize( wxSize& size )
-/************************************/
-/* modifie les dimension size.x et size.y pour le trace selon l'echelle */
+/***************************************************************/
+void Plotter::segment_as_oval( wxPoint start, wxPoint end, int width,
+	GRTraceMode tracemode)
+/***************************************************************/
 {
-    size.x = (int) (size.x * g_Plot_XScale);
-    size.y = (int) (size.y * g_Plot_YScale);
+    /* Convert a thick segment and plot it as an oval */
+    wxPoint center( (start.x + end.x) / 2, (start.y + end.y) / 2);
+    wxSize size( end.x - start.x, end.y - start.y);
+    int orient;
+    if ( size.y == 0 )
+	orient = 0;
+    else if ( size.x == 0 )
+	orient = 900;
+    else orient = - (int) (atan2( (double)size.y, (double)size.x ) * 1800.0 / M_PI);
+    size.x = (int) sqrt( ((double)size.x * size.x) + ((double)size.y * size.y) ) + width;
+    size.y = width;
+
+    flash_pad_oval( center, size, orient, tracemode );
 }
+
+/***************************************************************/
+void Plotter::sketch_oval(wxPoint pos, wxSize size, int orient,
+	int width)
+/***************************************************************/
+{
+    set_current_line_width(width);
+    width = current_pen_width;
+    int rayon, deltaxy, cx, cy;
+    if( size.x > size.y )
+    {
+        EXCHG( size.x, size.y ); orient += 900;
+        if( orient >= 3600 )
+            orient -= 3600;
+    }
+    deltaxy = size.y - size.x; /* = distance entre centres de l'ovale */
+    rayon   = (size.x-width) / 2;
+    cx = -rayon; cy = -deltaxy / 2;
+    RotatePoint( &cx, &cy, orient );
+    move_to( wxPoint( cx + pos.x, cy + pos.y ) );
+    cx = -rayon; cy = deltaxy / 2;
+    RotatePoint( &cx, &cy, orient );
+    finish_to( wxPoint( cx + pos.x, cy + pos.y ) );
+
+    cx = rayon; cy = -deltaxy / 2;
+    RotatePoint( &cx, &cy, orient );
+    move_to( wxPoint( cx + pos.x, cy + pos.y ) );
+    cx = rayon; cy = deltaxy / 2;
+    RotatePoint( &cx, &cy, orient );
+    finish_to( wxPoint( cx + pos.x, cy + pos.y ) );
+
+    cx = 0; cy = deltaxy / 2;
+    RotatePoint( &cx, &cy, orient );
+    arc( wxPoint( cx + pos.x, cy + pos.y ),
+	    orient + 1800 , orient + 3600,
+	    rayon, NO_FILL);
+    cx = 0; cy = -deltaxy / 2;
+    RotatePoint( &cx, &cy, orient );
+    arc( wxPoint( cx + pos.x, cy + pos.y ),
+	    orient, orient + 1800,
+	    rayon, NO_FILL );
+}
+
+/***************************************************************/
+void Plotter::thick_segment( wxPoint start, wxPoint end, int width,
+	   GRTraceMode tracemode )
+/***************************************************************/
+/* Plot 1 segment like a track segment
+ */
+{
+    switch (tracemode)
+    {
+    case FILLED:
+    case FILAIRE:
+	set_current_line_width(tracemode==FILLED?width:-1);
+	move_to(start);
+	finish_to(end);
+        break;
+    case SKETCH:
+	set_current_line_width(-1);
+	segment_as_oval(start, end, width, tracemode);
+	break;
+    }
+}
+
+void Plotter::thick_arc( wxPoint centre, int StAngle, int EndAngle, int rayon, 
+	    int width, GRTraceMode tracemode )
+{
+    switch (tracemode)
+    {
+    case FILAIRE:
+	set_current_line_width(-1);
+	arc(centre, StAngle, EndAngle, rayon, NO_FILL,-1);
+	break;
+    case FILLED:
+	arc(centre, StAngle, EndAngle, rayon,NO_FILL, width);
+	break;
+    case SKETCH:
+	set_current_line_width(-1);
+	arc(centre, StAngle, EndAngle, rayon-(width-current_pen_width)/2,NO_FILL, -1);
+	arc(centre, StAngle, EndAngle, rayon+(width-current_pen_width)/2,NO_FILL, -1);
+	break;
+    }
+}
+
+void Plotter::thick_rect( wxPoint p1, wxPoint p2, int width,
+	    GRTraceMode tracemode)
+{
+    switch (tracemode)
+    {
+    case FILAIRE:
+	rect(p1, p2,NO_FILL, -1);
+	break;
+    case FILLED:
+	rect(p1, p2,NO_FILL, width);
+	break;
+    case SKETCH:
+	set_current_line_width(-1);
+	p1.x -= (width-current_pen_width)/2;
+	p1.y -= (width-current_pen_width)/2;
+	p2.x += (width-current_pen_width)/2;
+	p2.y += (width-current_pen_width)/2;
+	rect(p1, p2,NO_FILL, -1);
+	p1.x += (width-current_pen_width);
+	p1.y += (width-current_pen_width);
+	p2.x -= (width-current_pen_width);
+	p2.y -= (width-current_pen_width);
+	rect(p1, p2,NO_FILL, -1);
+        break;
+    }
+}
+
+void Plotter::thick_circle( wxPoint pos, int diametre, int width,
+	    GRTraceMode tracemode)
+{
+    switch (tracemode)
+    {
+    case FILAIRE:
+	circle(pos, diametre,NO_FILL, -1);
+	break;
+    case FILLED:
+	circle(pos, diametre,NO_FILL, width);
+	break;
+    case SKETCH:
+	set_current_line_width(-1);
+	circle(pos, diametre-width+current_pen_width,NO_FILL, -1);
+	circle(pos, diametre+width-current_pen_width,NO_FILL, -1);
+	break;
+    }
+}
+
+/*************************************************************************************/
+void Plotter::set_paper_size(Ki_PageDescr* asheet)
+/*************************************************************************************/
+{
+    wxASSERT(!output_file);
+    sheet = asheet;
+    // Sheets are in mils, plotter works with decimils
+    paper_size.x = sheet->m_Size.x * 10;
+    paper_size.y = sheet->m_Size.y * 10;
+}
+

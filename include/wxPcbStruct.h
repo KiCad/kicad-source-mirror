@@ -295,17 +295,20 @@ public:
 
     // Plotting
     void                     ToPlotter( wxCommandEvent& event );
-    void                     Plot_Serigraphie( int format_plot, FILE* File, int masque_layer );
     void                     Genere_GERBER( const wxString& FullFileName, int Layer,
-                                            bool PlotOriginIsAuxAxis );
-    void                     Genere_HPGL( const wxString& FullFileName, int Layer );
-    void                     Genere_PS( const wxString& FullFileName, int Layer, bool useA4 );
-    void                     Plot_Layer_HPGL( FILE* File, int masque_layer,
-                                              int garde, int tracevia, int modetrace );
-    void                     Plot_Layer_GERBER( FILE* File, int masque_layer,
-                                                int garde, int tracevia );
-    void                     Plot_Layer_PS( FILE* File, int masque_layer,
-                                            int garde, int tracevia, int modetrace );
+                                            bool PlotOriginIsAuxAxis, 
+					    GRTraceMode trace_mode );
+    void                     Genere_HPGL( const wxString& FullFileName, int Layer,
+	    GRTraceMode trace_mode);
+    void                     Genere_PS( const wxString& FullFileName, int Layer, 
+	    bool useA4, GRTraceMode trace_mode );
+    void		     Plot_Layer(Plotter *plotter, int Layer, GRTraceMode trace_mode );
+    void                     Plot_Standard_Layer( Plotter *plotter, int masque_layer,
+                                            int garde, bool trace_via, 
+					    GRTraceMode trace_mode );
+    void                     Plot_Serigraphie( Plotter *plotter, int masque_layer,
+	    GRTraceMode trace_mode);
+    void PlotDrillMark(Plotter *plotter, GRTraceMode trace_mode );
 
     /* Block operations: */
     /**
@@ -872,12 +875,12 @@ public:
     void         Genere_GERBER( const wxString& FullFileName, int Layers );
     void         Genere_PS( const wxString& FullFileName, int Layers );
     void         Plot_Layer_HPGL( FILE* File, int masque_layer,
-                                  int garde, int tracevia, int modetrace );
+                                  int garde, bool trace_via, GRTraceMode trace_mode );
     void         Plot_Layer_GERBER( FILE* File, int masque_layer,
-                                    int garde, int tracevia );
+                                    int garde, bool trace_via, GRTraceMode trace_mode );
     int          Gen_D_CODE_File( const wxString& Name_File );
     void         Plot_Layer_PS( FILE* File, int masque_layer,
-                                int garde, int tracevia, int modetrace );
+                                int garde, bool trace_via, GRTraceMode trace_mode );
 
     void         Files_io( wxCommandEvent& event );
     void         OnFileHistory( wxCommandEvent& event );

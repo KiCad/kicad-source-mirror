@@ -704,7 +704,8 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
 * If TextInside then the text is been put inside (moving from x1, y1 in		 *
 * the opposite direction to x2,y2), otherwise all is drawn outside.		 *
 *****************************************************************************/
-void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
+void LibDrawPin::PlotPinTexts( Plotter *plotter,
+			       wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,
                                bool     DrawPinNum,
@@ -716,12 +717,10 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
     EDA_Colors NameColor, NumColor;
     wxSize     PinNameSize = wxSize( m_PinNameSize, m_PinNameSize );
     wxSize     PinNumSize  = wxSize( m_PinNumSize, m_PinNumSize );
-    bool       plot_color  = (g_PlotFormat == PLOT_FORMAT_POST)
-                             && g_PlotPSColorOpt;
 
     /* Get the num and name colors */
-    NameColor = (EDA_Colors) ( plot_color ? ReturnLayerColor( LAYER_PINNAM ) : -1 );
-    NumColor  = (EDA_Colors) ( plot_color ? ReturnLayerColor( LAYER_PINNUM ) : -1 );
+    NameColor = ReturnLayerColor( LAYER_PINNAM );
+    NumColor  = ReturnLayerColor( LAYER_PINNUM );
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );
@@ -754,7 +753,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                 if( orient == PIN_RIGHT )
                 {
                     x = x1 + TextInside;
-                    PlotGraphicText( g_PlotFormat, wxPoint( x, y1 ), NameColor,
+                    plotter->text( wxPoint( x, y1 ), NameColor,
                                      m_PinName,
                                      TEXT_ORIENT_HORIZ,
                                      PinNameSize,
@@ -766,7 +765,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                 {
                     x = x1 - TextInside;
                     if( DrawPinName )
-                        PlotGraphicText( g_PlotFormat, wxPoint( x, y1 ),
+                        plotter->text( wxPoint( x, y1 ),
                                          NameColor, m_PinName, TEXT_ORIENT_HORIZ,
                                          PinNameSize,
                                          GR_TEXT_HJUSTIFY_RIGHT,
@@ -775,8 +774,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                 }
                 if( DrawPinNum )
                 {
-                    PlotGraphicText( g_PlotFormat,
-                                     wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ),
+                    plotter->text( wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ),
                                      NumColor, StringPinNum,
                                      TEXT_ORIENT_HORIZ, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
@@ -792,7 +790,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                 y = y1 + TextInside;
 
                 if( DrawPinName )
-                    PlotGraphicText( g_PlotFormat, wxPoint( x1, y ), NameColor,
+                    plotter->text( wxPoint( x1, y ), NameColor,
                                      m_PinName,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
@@ -800,8 +798,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      aWidth, false, false );
                 if( DrawPinNum )
                 {
-                    PlotGraphicText( g_PlotFormat,
-                                     wxPoint( x1 - TXTMARGE,
+                    plotter->text( wxPoint( x1 - TXTMARGE,
                                               (y1 + pin_pos.y) / 2 ),
                                      NumColor, StringPinNum,
                                      TEXT_ORIENT_VERT, PinNumSize,
@@ -815,7 +812,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                 y = y1 - TextInside;
 
                 if( DrawPinName )
-                    PlotGraphicText( g_PlotFormat, wxPoint( x1, y ), NameColor,
+                    plotter->text( wxPoint( x1, y ), NameColor,
                                      m_PinName,
                                      TEXT_ORIENT_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
@@ -823,8 +820,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
                                      aWidth, false, false );
                 if( DrawPinNum )
                 {
-                    PlotGraphicText( g_PlotFormat,
-                                     wxPoint( x1 - TXTMARGE,
+                    plotter->text( wxPoint( x1 - TXTMARGE,
                                               (y1 + pin_pos.y) / 2 ),
                                      NumColor, StringPinNum,
                                      TEXT_ORIENT_VERT, PinNumSize,
@@ -843,8 +839,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
             if( DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
-                PlotGraphicText( g_PlotFormat, wxPoint( x,
-                                                        y1 - TXTMARGE ),
+                plotter->text( wxPoint( x, y1 - TXTMARGE ),
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -854,7 +849,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
             if( DrawPinNum )
             {
                 x = (x1 + pin_pos.x) / 2;
-                PlotGraphicText( g_PlotFormat, wxPoint( x, y1 + TXTMARGE ),
+                plotter->text( wxPoint( x, y1 + TXTMARGE ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -867,8 +862,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
             if( DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
-                PlotGraphicText( g_PlotFormat, wxPoint( x1 - TXTMARGE,
-                                                        y ),
+                plotter->text( wxPoint( x1 - TXTMARGE, y ),
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -878,9 +872,7 @@ void LibDrawPin::PlotPinTexts( wxPoint& pin_pos,
 
             if( DrawPinNum )
             {
-                PlotGraphicText( g_PlotFormat,
-                                 wxPoint( x1 + TXTMARGE,
-                                          (y1 + pin_pos.y) / 2 ),
+                plotter->text( wxPoint( x1 + TXTMARGE, (y1 + pin_pos.y) / 2 ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,

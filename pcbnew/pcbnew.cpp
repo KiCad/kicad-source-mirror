@@ -55,32 +55,6 @@ wxString g_Current_PadName;  // Last used pad name (pad num)
 
 PCB_SCREEN* ScreenModule  = NULL;
 
-/* Options : */
-// True to exclude contents of Edges Pcb layer
-bool g_Exclude_Edges_Pcb = FALSE;
-bool g_Plot_Frame_Ref;       // True to plot/print frame references
-bool g_DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer (ie protected by mask)
-
-// = FILAIRE, FILL or SKETCH
-int g_Plot_Mode = FILLED;
-bool Plot_Set_MIROIR;
-bool Sel_Rotate_Window;
-bool HPGL_Org_Centre;       // TRUE si en HPGL, l'origine le centre de la feuille
-int g_PlotPSColorOpt;       // True for color Postscript output
-bool g_Plot_PS_Negative;    // True to create a  negative board ps plot
-
-/* Autorisation de trace des divers items en serigraphie */
-bool Sel_Texte_Reference = TRUE;
-bool Sel_Texte_Valeur = TRUE;
-bool Sel_Texte_Divers = TRUE;
-bool Sel_Texte_Invisible;
-
-/* Plot pads sur couche serigraphie */
-bool PlotPadsOnSilkLayer = TRUE;
-bool Plot_Pads_All_Layers; /* Plot pads meme n'appartenant pas a la
-                              couche ( utile pour serigraphie) */
-
-
 // Wildcard for footprint libraries filesnames
 const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
 

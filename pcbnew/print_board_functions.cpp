@@ -147,7 +147,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
     GRForceBlackPen( blackpenstate );
 
     if( aPrint_Sheet_Ref )
-        m_Parent->TraceWorkSheet( aDC, GetScreen(), g_PlotLine_Width );
+        m_Parent->TraceWorkSheet( aDC, GetScreen(), 10 );
 
     m_PrintIsMirrored = false;
 

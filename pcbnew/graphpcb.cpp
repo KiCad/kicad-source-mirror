@@ -24,8 +24,6 @@ void    TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int 
 /* Local functions */
 static void    DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                         int color, int op_logique );
-static void    DrawHVSegment( int ux0, int uy0, int ux1, int uy1, int demi_largeur, int layer,
-                       int color, int op_logique );
 
 static void    TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
                            int color, int op_logique );
@@ -762,94 +760,6 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
         }
     }
 }
-
-
-/********************************************************************/
-void DrawHVSegment( int ux0, int uy0, int ux1, int uy1, int demi_largeur, int layer,
-                    int color, int op_logique )
-/********************************************************************/
-
-/* Draw a horizontal or vertical segment.
- *  same as DrawSegmentQcq, but faster
- */
-{
-    int  row, col;
-    int  row_max, col_max, row_min, col_min;
-
-    void (*WriteCell)( int, int, int, BoardCell );
-
-    switch( op_logique )
-    {
-    default:
-    case WRITE_CELL:
-        WriteCell = SetCell; break;
-
-    case WRITE_OR_CELL:
-        WriteCell = OrCell; break;
-
-    case WRITE_XOR_CELL:
-        WriteCell = XorCell; break;
-
-    case WRITE_AND_CELL:
-        WriteCell = AndCell; break;
-
-    case WRITE_ADD_CELL:
-        WriteCell = AddCell; break;
-    }
-
-    // Modif des coord pour que les coord de fin soient > coord de debut
-    if( uy1 < uy0 )
-        EXCHG( uy0, uy1 );              // ceci n'est vrai que parce que
-    if( ux1 < ux0 )
-        EXCHG( ux0, ux1 );              // dx ou dy ou les 2 sonts nuls
-
-    // Le segment est assimile a un rectangle.
-    // TODO: traiter correctement les extremites arrondies
-//	if ( ux0 == ux1 )	// Vertical Segment
-    {
-        ux0 -= demi_largeur; ux1 += demi_largeur;
-    }
-
-//	else	// Horizontal segment
-    {
-        uy0 -= demi_largeur; uy1 += demi_largeur;
-    }
-
-    // Calcul des coord limites des cellules appartenant au rectangle
-    row_max = uy1 / g_GridRoutingSize;
-    col_max = ux1 / g_GridRoutingSize;
-
-    row_min = uy0 / g_GridRoutingSize;
-    if( uy0 > row_min * g_GridRoutingSize )
-        row_min++;                                   // Traitement de l'arrondi par defaut
-
-    col_min = ux0 / g_GridRoutingSize;
-    if( ux0 > col_min * g_GridRoutingSize )
-        col_min++;
-
-    if( row_min < 0 )
-        row_min = 0;
-    if( row_max >= (Nrows - 1) )
-        row_max = Nrows - 1;
-    if( col_min < 0 )
-        col_min = 0;
-    if( col_max >= (Ncols - 1) )
-        col_max = Ncols - 1;
-
-    if( row_min > row_max )
-        row_max = row_min;
-    if( col_min > col_max )
-        col_max = col_min;
-
-    for( row = row_min; row <= row_max; row++ )
-    {
-        for( col = col_min; col <= col_max; col++ )
-        {
-            OP_CELL( layer, row, col );
-        }
-    }
-}
-
 
 /*****************************************************************/
 void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,

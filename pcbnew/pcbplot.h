@@ -19,105 +19,75 @@
 /* coeff de conversion dim en 0,1 mil -> dim en unite HPGL: */
 #define SCALE_HPGL 0.102041
 
-/* Options : */
-extern bool g_Exclude_Edges_Pcb;
-extern bool g_Plot_Frame_Ref;       // True to plot/print frame references
-extern bool g_DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer (ie protected by mask)
-extern int g_Plot_Mode;
-extern bool Plot_Set_MIROIR;
-extern bool Sel_Rotate_Window;
-extern bool HPGL_Org_Centre;        // TRUE si en HPGL, l'origine le centre de la feuille
-extern int g_PlotPSColorOpt;        // True for color Postscript output
-extern bool g_Plot_PS_Negative;     // True to create a  negative board ps plot
+/* Plot Options : */
+struct PCB_Plot_Options {
+    bool Exclude_Edges_Pcb;
+    int PlotLine_Width;
+    bool Plot_Frame_Ref;       // True to plot/print frame references
+    bool DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer (ie protected by mask)
+    GRTraceMode Trace_Mode;
+    bool Plot_Set_MIROIR;
+    int HPGL_Pen_Num;                                                                  
+    int HPGL_Pen_Speed;
+    int HPGL_Pen_Diam;
+    int HPGL_Pen_Recouvrement;
+    int PlotPSColorOpt;        // True for color Postscript output
+    bool Plot_PS_Negative;     // True to create a  negative board ps plot
 
-
-/* Autorisation de trace des divers items en serigraphie */
-extern bool Sel_Texte_Reference;
-extern bool Sel_Texte_Valeur;
-extern bool Sel_Texte_Divers;
-extern bool Sel_Texte_Invisible;
-extern bool PlotPadsOnSilkLayer;
-extern bool Plot_Pads_All_Layers;   /* Plot pads meme n'appartenant pas a la
+    /* Autorisation de trace des divers items en serigraphie */
+    bool Sel_Texte_Reference;
+    bool Sel_Texte_Valeur;
+    bool Sel_Texte_Divers;
+    bool Sel_Texte_Invisible;
+    bool PlotPadsOnSilkLayer;
+    bool Plot_Pads_All_Layers;   /* Plot pads meme n'appartenant pas a la
                                         couche ( utile pour serigraphie) */
 
-/* Variables utiles */
+    /* id for plot format (see enum PlotFormat in plot_common.h) */
+    int PlotFormat;
+    int PlotOrient;
+    int PlotScaleOpt;
+    enum DrillShapeOptT {
+	NO_DRILL_SHAPE = 0,
+	SMALL_DRILL_SHAPE = 1,
+	FULL_DRILL_SHAPE = 2
+    };
+    DrillShapeOptT DrillShapeOpt;
+    double Scale;
+    double ScaleAdjX;
+    double ScaleAdjY;
+};
 
-extern FILE * dest;
-
-/* id for plot format (see enum PlotFormat in plot_common.h) */
-extern int g_PlotScaleOpt;
-extern int g_DrillShapeOpt;
+extern PCB_Plot_Options g_pcb_plot_options;
 
 /*************************************/
 /* Constantes utiles en trace GERBER */
 /*************************************/
 
-/* codes de type de forme d'outils */
-#define GERB_CIRCLE 1
-#define GERB_RECT   2
-#define GERB_LINE   3
-#define GERB_OVALE  4
-#define GERB_DONUT  5
-
 /* PLOT_RTN.CC */
-void    PlotTextePcb( TEXTE_PCB* pt_texte, int format_plot, int masque_layer );
+void    PlotTextePcb(Plotter *plotter, TEXTE_PCB* pt_texte, int masque_layer,
+	GRTraceMode trace_mode);
 
 /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
   * prepare les parametres de trace de texte */
-void    PlotArc( int format_plot, wxPoint centre, int start_angle, int end_angle,
-                 int rayon, int width );
-void    PlotCircle( int format_plot, int width, wxPoint centre, int rayon );
-void    PlotFilledPolygon( int format_plot, int nbpoints, int* coord );
-void    PlotPolygon( int format_plot, int nbpoints, int* coord, int width );
 
-void    PlotDrawSegment( DRAWSEGMENT* PtSegm, int format_plot, int masque_layer );
+void    PlotDrawSegment(Plotter *plotter, DRAWSEGMENT* PtSegm, int masque_layer,
+	GRTraceMode trace_mode);
 
-void    PlotCotation( COTATION* Cotation, int format_plot, int masque_layer );
+void    PlotCotation(Plotter *plotter, COTATION* Cotation, int masque_layer ,
+	GRTraceMode trace_mode);
 
-void    PlotMirePcb( MIREPCB* PtMire, int format_plot, int masque_layer );
+void    PlotMirePcb(Plotter *plotter, MIREPCB* PtMire, int masque_layer ,
+	GRTraceMode trace_mode);
 
-void    Plot_1_EdgeModule( int format_plot, EDGE_MODULE* PtEdge );
+void    Plot_1_EdgeModule(Plotter *plotter, EDGE_MODULE* PtEdge ,
+	GRTraceMode trace_mode);
 
-void    PlotFilledAreas( ZONE_CONTAINER* aZone, int aFormat );
+void    PlotFilledAreas(Plotter *plotter, ZONE_CONTAINER* aZone, 
+	GRTraceMode trace_mode);
 
 /* PLOTGERB.CPP */
-void    SelectD_CODE_For_LineDraw( int aSize );
-void    trace_1_contour_GERBER( wxPoint pos, wxSize size, wxSize delta,
-                                int penwidth, int orient );
-
-/* Trace 1 contour rectangulaire ou trapezoidal d'orientation quelconque
-  *  donne par son centre, ses dimensions,
-  *  ses variations, l'epaisseur du trait et son orientation orient */
-
-/* PLOTHPGL.CPP */
-
-/** Function Plot a filled segment (track)
- * @param aStart = starting point
- * @param aEnd = ending point
- * @param aWidth = segment width (thickness)
- * @param aPlotMode = FILLED, SKETCH ..
- * @return true if Ok, false if aWidth > pen size (the segment is always plotted)
- */
-bool    Plot_Filled_Segment_HPGL( wxPoint aStart, wxPoint aEnd, int aWidth, GRFillMode aPlotMode );
-
-void    trace_1_pad_TRAPEZE_HPGL( wxPoint padpos, wxSize size, wxSize delta,
-                                  int orient, int modetrace );
-
-void    trace_1_pastille_RONDE_HPGL( wxPoint padpos, int diametre, int modetrace );
-void    trace_1_pastille_OVALE_HPGL( wxPoint padpos, wxSize size, int orient, int modetrace );
-void    PlotRectangularPad_HPGL( wxPoint padpos, wxSize padsize, int orient, int modetrace );
-
-/**************/
-/* PLOTPS.CPP */
-/**************/
-void    trace_1_pastille_OVALE_POST( wxPoint centre, wxSize size, int orient, int modetrace );
-void    trace_1_pastille_RONDE_POST( wxPoint centre, int diametre, int modetrace );
-void    trace_1_pad_rectangulaire_POST( wxPoint centre, wxSize size, int orient,
-                                     int modetrace );
-void    trace_1_contour_POST( wxPoint centre, wxSize size, wxSize delta,
-                              int dim_trait, int orient );
-void    trace_1_pad_TRAPEZE_POST( wxPoint centre, wxSize size, wxSize delta,
-                                  int orient, int modetrace );
+void    SelectD_CODE_For_LineDraw(Plotter *plotter, int aSize );
 
 
 #endif  /* #define PCBPLOT_H */

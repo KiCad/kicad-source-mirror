@@ -156,7 +156,8 @@ private:
     void    UpdateConfig();
 	void    Write_Excellon_Header( FILE * aFile);
     void    GenDrillReport( const wxString aFileName );
-    int     Create_Drill_File_EXCELLON( std::vector<HOLE_INFO> & aHoleListBuffer,
+	int     Create_Drill_File_EXCELLON(FILE *excellon_dest,
+		std::vector<HOLE_INFO> & aHoleListBuffer,
 		std::vector<DRILL_TOOL> & aToolListBuffer );
 	int 	Gen_Liste_Tools( std::vector<DRILL_TOOL> & buffer, bool print_header );
 };

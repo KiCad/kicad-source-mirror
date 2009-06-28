@@ -104,11 +104,11 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
     m_MicroViaDrillValue->SetLabel( msg );
 
     msg.Empty();
-    msg << g_HPGL_Pen_Num;
+    msg << g_pcb_plot_options.HPGL_Pen_Num;
     m_PenNum->SetValue( msg );
 
     msg.Empty();
-    msg << g_HPGL_Pen_Speed;
+    msg << g_pcb_plot_options.HPGL_Pen_Speed;
     m_PenSpeed->SetValue( msg );
 
     // See if we have some buried vias or/and microvias, and display microvias drill value if so
@@ -180,11 +180,11 @@ void WinEDA_DrillFrame::SetParams( void )
 
     msg = m_PenSpeed->GetValue();
     if( msg.ToLong( &ltmp ) )
-        g_HPGL_Pen_Speed = ltmp;
+        g_pcb_plot_options.HPGL_Pen_Speed = ltmp;
     msg = m_PenNum->GetValue();
 
     if( msg.ToLong( &ltmp ) )
-        g_HPGL_Pen_Num = ltmp;
+        g_pcb_plot_options.HPGL_Pen_Num = ltmp;
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         File_Drill_Offset = wxPoint( 0, 0 );
     else
@@ -323,9 +323,9 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             if( dlg.ShowModal() == wxID_CANCEL )
                 continue;
 
-            dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
+            FILE *excellon_dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
 
-            if( dest == 0 )
+            if( excellon_dest == 0 )
             {
                 msg = _( "Unable to create file " ) + dlg.GetPath();
                 DisplayError( this, msg );
@@ -333,7 +333,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
                 return;
             }
 
-            Create_Drill_File_EXCELLON( s_HoleListBuffer, s_ToolListBuffer );
+            Create_Drill_File_EXCELLON(excellon_dest, s_HoleListBuffer, s_ToolListBuffer );
 
             switch( m_Choice_Drill_Map->GetSelection() )
             {
@@ -348,6 +348,11 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             case 2:
                 GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
                              PLOT_FORMAT_POST );
+                break;
+
+            case 3:
+                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
+                             PLOT_FORMAT_GERBER );
                 break;
             }
 
@@ -403,7 +408,8 @@ void WinEDA_DrillFrame::UpdatePrecisionOptions( wxCommandEvent& event )
 
 
 /**********************************************************************************/
-int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHoleListBuffer,
+int WinEDA_DrillFrame::Create_Drill_File_EXCELLON(FILE *excellon_dest,
+	std::vector<HOLE_INFO>&  aHoleListBuffer,
                                                    std::vector<DRILL_TOOL>& aToolListBuffer )
 /**********************************************************************************/
 
@@ -421,7 +427,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
 
     SetLocaleTo_C_standard(); // Use the standard notation for float numbers
 
-    Write_Excellon_Header( dest );
+    Write_Excellon_Header( excellon_dest );
 
     holes_count = 0;
     int tool_reference = -2;
@@ -430,25 +436,23 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
     for( unsigned ii = 0; ii < aToolListBuffer.size(); ii++ )
     {
         if( s_Unit_Drill_is_Inch )  /* does it need T01, T02 or is T1,T2 ok?*/
-            sprintf( line, "T%dC%.3f\n", ii + 1,
+            fprintf( excellon_dest, "T%dC%.3f\n", ii + 1,
                 float (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits );
         else
-            sprintf( line, "T%dC%.3f\n", ii + 1,
+            fprintf( excellon_dest, "T%dC%.3f\n", ii + 1,
                 float (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits * 10.0 );
-
-        fputs( line, dest );
     }
 
-    fputs( "%\n", dest );
+    fputs( "%\n", excellon_dest );
 
     if( !Minimal )
-        fputs( "M47\n", dest );             /* Operator message */
-    fputs( "G05\n", dest );                 /* Drill mode */
+        fputs( "M47\n", excellon_dest );             /* Operator message */
+    fputs( "G05\n", excellon_dest );                 /* Drill mode */
     /* Units : */
     if( s_Unit_Drill_is_Inch && !Minimal )
-        fputs( "M72\n", dest ); /* M72 = inch mode */
+        fputs( "M72\n", excellon_dest ); /* M72 = inch mode */
     else if( !Minimal )
-        fputs( "M71\n", dest ); /* M71 = metric mode */
+        fputs( "M71\n", excellon_dest ); /* M71 = metric mode */
 
     /* Read the hole file and generate lines for normal holes (oblong holes will be created later) */
     for( unsigned ii = 0; ii < aHoleListBuffer.size(); ii++ )
@@ -458,8 +462,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
         if( tool_reference != aHoleListBuffer[ii].m_Tool_Reference )
         {
             tool_reference = aHoleListBuffer[ii].m_Tool_Reference;
-            sprintf( line, "T%d\n", tool_reference );
-            fputs( line, dest );
+            fprintf( excellon_dest, "T%d\n", tool_reference );
         }
 
         x0 = aHoleListBuffer[ii].m_Hole_Pos_X - File_Drill_Offset.x;
@@ -479,7 +482,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
             Gen_Line_EXCELLON( line, xt * 10, yt * 10 );
         }
 
-        fputs( line, dest );
+        fputs( line, excellon_dest );
         holes_count++;
     }
 
@@ -492,8 +495,7 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
         if( tool_reference != aHoleListBuffer[ii].m_Tool_Reference )
         {
             tool_reference = aHoleListBuffer[ii].m_Tool_Reference;
-            sprintf( line, "T%d\n", tool_reference );
-            fputs( line, dest );
+            fprintf( excellon_dest, "T%d\n", tool_reference );
         }
 
         diam = MIN( aHoleListBuffer[ii].m_Hole_SizeX, aHoleListBuffer[ii].m_Hole_SizeY );
@@ -534,21 +536,21 @@ int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( std::vector<HOLE_INFO>&  aHol
             if( line[kk] == '\n' || line[kk] =='\r' )
                 line[kk] = 0;
 
-        fputs( line, dest );
+        fputs( line, excellon_dest );
 
-        fputs( "G85", dest );    // add the "G85" command
+        fputs( "G85",excellon_dest );    // add the "G85" command
 
         xt = float (xf) * s_ConversionUnits; yt = float (yf) * s_ConversionUnits;
         if( s_Unit_Drill_is_Inch )
             Gen_Line_EXCELLON( line, xt, yt );
         else
             Gen_Line_EXCELLON( line, xt * 10, yt * 10 );
-        fputs( line, dest );
-        fputs( "G05\n", dest );
+        fputs( line, excellon_dest );
+        fputs( "G05\n", excellon_dest );
         holes_count++;
     }
 
-    Write_End_Of_File_Drill( dest );
+    Write_End_Of_File_Drill( excellon_dest );
 
     SetLocaleTo_Default();  // Revert to locale float notation
 
@@ -750,6 +752,12 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
         wildcard = _( "PostScript files (.ps)|*.ps" );
         break;
 
+    case PLOT_FORMAT_GERBER:
+        ext = wxT( "pho" );
+        wildcard = _( "Gerber files (.pho)|*.pho" );
+        break;
+
+
     default:
         DisplayError( this, wxT( "WinEDA_DrillFrame::GenDrillMap() error" ) );
         return;
@@ -767,9 +775,9 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    dest = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+    FILE *drillplot_dest = wxFopen( dlg.GetPath(), wxT( "wt" ) );
 
-    if( dest == 0 )
+    if( drillplot_dest == 0 )
     {
         msg = _( "Unable to create file" );
         msg << wxT( " <" ) << dlg.GetPath() << wxT( ">" );
@@ -778,13 +786,13 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     }
 
     GenDrillMapFile( m_Parent->GetBoard(),
-                     dest,
+                     drillplot_dest,
                      dlg.GetPath(),
-                     m_Parent->GetScreen()->m_CurrentSheetDesc->m_Size,
+                     m_Parent->GetScreen()->m_CurrentSheetDesc,
                      s_HoleListBuffer,
                      s_ToolListBuffer,
                      s_Unit_Drill_is_Inch,
-                     format );
+                     format, File_Drill_Offset );
 }
 
 
@@ -811,16 +819,16 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
+    FILE *report_dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
 
-    if( dest == 0 )
+    if( report_dest == 0 )
     {
         msg = _( "Unable to create file " ) + dlg.GetPath();
         DisplayError( this, msg );
         return;
     }
 
-    GenDrillReportFile( dest, m_Parent->GetBoard(),
+    GenDrillReportFile( report_dest, m_Parent->GetBoard(),
                         m_Parent->GetScreen()->m_FileName,
                         s_Unit_Drill_is_Inch,
                         s_HoleListBuffer,

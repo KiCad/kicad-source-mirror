@@ -318,13 +318,13 @@ void DIALOG_PRINT_USING_PRINTER::SetScale( wxCommandEvent& event )
 /******************************************************************/
 {
     s_Scale_Select = m_ScaleOption->GetSelection();
-    Scale_X = Scale_Y = s_ScaleList[s_Scale_Select];
+    g_pcb_plot_options.Scale =  s_ScaleList[s_Scale_Select];
     if( m_FineAdjustXscaleOpt )
         m_FineAdjustXscaleOpt->GetValue().ToDouble( &m_XScaleAdjust );
     if( m_FineAdjustYscaleOpt )
         m_FineAdjustYscaleOpt->GetValue().ToDouble( &m_YScaleAdjust );
-    Scale_X *= m_XScaleAdjust;
-    Scale_Y *= m_YScaleAdjust;
+    g_pcb_plot_options.ScaleAdjX = m_XScaleAdjust;
+    g_pcb_plot_options.ScaleAdjX = m_YScaleAdjust;
 }
 
 

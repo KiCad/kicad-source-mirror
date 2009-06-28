@@ -244,18 +244,7 @@ int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);
 /************/
 /* PLOT.CPP */
 /************/
-void SetCurrentLineWidth( int width);
-
-void PlotArc(wxPoint centre, int StAngle, int EndAngle, int rayon, int width = -1);
-void PlotCercle(wxPoint centre, int diametre, bool fill, int width = -1);
-void PlotPoly( int nb, int * coord, bool fill, int width = -1);
-
-void PlotNoConnectStruct(DrawNoConnectStruct * Struct);
-void PlotLibPart( SCH_COMPONENT *DrawLibItem );
-                    /* Genere le trace d'un composant */
-void PlotSheetStruct(DrawSheetStruct *Struct);
-                    /* Routine de dessin du bloc type hierarchie */
-void PlotTextStruct(EDA_BaseStruct *Struct);
+void PlotDrawlist(Plotter *plotter, SCH_ITEM* drawlist );
 
 /***************/
 /* DELSHEET.CPP */

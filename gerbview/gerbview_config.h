@@ -342,38 +342,6 @@ static PARAM_CFG_SETCOLOR ColorDCodesCfg
     WHITE               /* Valeur par defaut */
 );
 
-static PARAM_CFG_INT HPGLpenNumCfg
-(
-    wxT("HPGLnum"),         /* identification */
-    &g_HPGL_Pen_Num,        /* Adresse du parametre */
-    1,                  /* Valeur par defaut */
-    1, 16               /* Valeurs extremes */
-);
-
-static PARAM_CFG_INT HPGLdiamCfg
-(
-    wxT("HPGdiam"),         /* identification */
-    &g_HPGL_Pen_Diam,           /* Adresse du parametre */
-    15,                 /* Valeur par defaut */
-    0,0xFFFF            /* Valeurs extremes */
-);
-
-static PARAM_CFG_INT HPGLspeedCfg
-(
-    wxT("HPGLSpd"),         /* identification */
-    &g_HPGL_Pen_Speed,          /* Adresse du parametre */
-    25,                 /* Valeur par defaut */
-    0,100               /* Valeurs extremes */
-);
-
-static PARAM_CFG_INT HPGLrecouvrementCfg
-(
-    wxT("HPGLrec"),         /* identification */
-    &g_HPGL_Pen_Recouvrement,  /* Adresse du parametre */
-    2,                  /* Valeur par defaut */
-    0, 100              /* Valeurs extremes */
-);
-
 static PARAM_CFG_INT GERBERSpotMiniCfg
 (
     wxT("GERBmin"),         /* identification */

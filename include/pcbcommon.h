@@ -69,24 +69,4 @@ extern wxString g_Current_PadName;  // Last used pad name (pad num)
 
 extern D_PAD    g_Pad_Master;
 
-/* Gestion des plumes en plot format HPGL */
-extern int g_HPGL_Pen_Num;
-extern int g_HPGL_Pen_Speed;
-extern int g_HPGL_Pen_Diam;
-extern int g_HPGL_Pen_Recouvrement;
-
-extern float Scale_X;
-extern float Scale_Y;
-
-extern wxPoint g_PlotOffset;
-
-extern int g_PlotLine_Width;
-
-extern int g_PlotFormat;
-extern int g_PlotOrient;
-
-/* id for plot format (see enum PlotFormat in plot_common.h) */
-extern int g_PlotScaleOpt;
-extern int g_DrillShapeOpt;
-
 #endif  /*  __PCBCOMMON_H__ */

@@ -655,7 +655,7 @@ static PARAM_CFG_SETCOLOR ColorCheveluCfg
 static PARAM_CFG_INT HPGLpenNumCfg
 (
     wxT( "HPGLnum" ),               /* Keyword */
-    &g_HPGL_Pen_Num,                /* Parameter address */
+    &g_pcb_plot_options.HPGL_Pen_Num,                /* Parameter address */
     1,                              /* Default value */
     1, 16                           /* Min and max values*/
 );
@@ -663,7 +663,7 @@ static PARAM_CFG_INT HPGLpenNumCfg
 static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
 (
     wxT( "HPGdiam" ),               /* Keyword */
-    &g_HPGL_Pen_Diam,               /* Parameter address */
+    &g_pcb_plot_options.HPGL_Pen_Diam,               /* Parameter address */
     15,                             /* Default value */
     0, 100                          /* Min and max values*/
 );
@@ -671,7 +671,7 @@ static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
 static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
 (
     wxT( "HPGLSpd" ),               /* Keyword */
-    &g_HPGL_Pen_Speed,              /* Parameter address */
+    &g_pcb_plot_options.HPGL_Pen_Speed,              /* Parameter address */
     20,                             /* Default value */
     0, 1000                         /* Min and max values*/
 );
@@ -679,16 +679,9 @@ static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
 static PARAM_CFG_INT HPGLrecouvrementCfg
 (
     wxT( "HPGLrec" ),           /* Keyword */
-    &g_HPGL_Pen_Recouvrement,   /* Parameter address */
+    &g_pcb_plot_options.HPGL_Pen_Recouvrement,   /* Parameter address */
     2,                          /* Default value */
     0, 0x100                    /* Min and max values*/
-);
-
-static PARAM_CFG_BOOL HPGLcenterCfg     //HPGL Org Coord ( 0 normal, 1 Centre)
-(
-    wxT( "HPGLorg" ),                   /* Keyword */
-    &HPGL_Org_Centre,                   /* Parameter address */
-    FALSE                               /* Default value */
 );
 
 static PARAM_CFG_INT VernisEpargneGardeCfg
@@ -734,7 +727,7 @@ static PARAM_CFG_INT ModuleSegmWidthCfg
 static PARAM_CFG_INT WTraitSerigraphiePlotCfg
 (
     wxT( "WpenSer" ),           /* Keyword */
-    &g_PlotLine_Width,          /* Parameter address */
+    &g_pcb_plot_options.PlotLine_Width,          /* Parameter address */
     10,                         /* Default value */
     1, 10000                    /* Min and max values*/
 );
@@ -877,7 +870,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &HPGLdiamCfg,
     &HPGLspeedCfg,
     &HPGLrecouvrementCfg,
-    &HPGLcenterCfg,
     &VernisEpargneGardeCfg,
     &DrawSegmLargeurCfg,
     &EdgeSegmLargeurCfg,

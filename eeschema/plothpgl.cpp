@@ -28,24 +28,14 @@
 #include "general.h"
 #include "worksheet.h"
 #include "plot_common.h"
-
 #include "protos.h"
-
-/* coeff de conversion dim en 1 mil -> dim en unite HPGL: */
-#define SCALE_HPGL 1.02041
-
 #include "plothpgl.h"
 
 ////@begin XPM images
 ////@end XPM images
 
-extern void Move_Plume( wxPoint pos, int plume );
-extern void Plume( int plume );
-
 /* Variables locales : */
 FILE*         PlotOutput; /* exportee dans printps.cc */
-static double Scale_X = 1;
-static double Scale_Y = 1;
 int           HPGL_SizeSelect;
 
 enum PageFormatReq {
@@ -519,9 +509,6 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
     Ki_PageDescr*          PlotSheet;
     wxSize  SheetSize;
     wxPoint SheetOffset, PlotOffset;
-    int     margin;
-
-    g_PlotFormat = PLOT_FORMAT_HPGL;
 
     /* When printing all pages, the printed page is not the current page.
      *  In complex hierarchies, we must setup references and others parameters in the printed SCH_SCREEN
@@ -532,7 +519,7 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
     sheetpath = SheetList.GetFirst();
     DrawSheetPath list;
 
-    for( ; ;  )
+    while (true)
     {
         if( Select_PlotAll )
         {
@@ -547,31 +534,27 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
                 screen = schframe->m_CurrentSheet->LastScreen();
                 ActiveScreen = screen;
             }
-            else  // Should not occur
+            else  // Should not happen
                 return;
             sheetpath = SheetList.GetNext();
         }
         ReturnSheetDims( screen, SheetSize, SheetOffset );
         /* Calcul des echelles de conversion */
-        g_PlotScaleX = Scale_X * SCALE_HPGL;
-        g_PlotScaleY = Scale_Y * SCALE_HPGL;
-
-        margin       = 400; // Margin in mils
+	if (HPGL_SheetSize)
+	    PlotSheet = Plot_sheet_list[HPGL_SheetSize];
+	else
         PlotSheet    = screen->m_CurrentSheetDesc;
-        g_PlotScaleX = g_PlotScaleX * (SheetSize.x - 2 * margin) / PlotSheet->m_Size.x;
-        g_PlotScaleY = g_PlotScaleY * (SheetSize.y - 2 * margin) / PlotSheet->m_Size.y;
+	/* 10x because eeschema works in mils, not decimils */
+        double plot_scale = 10 * (double)PlotSheet->m_Size.x / (double)SheetSize.x;
 
         /* calcul des offsets */
-        PlotOffset.x  = -(int) ( SheetOffset.x * SCALE_HPGL );
-        PlotOffset.y  = (int) ( (SheetOffset.y + SheetSize.y) * SCALE_HPGL );
-        PlotOffset.x -= (int) ( margin * SCALE_HPGL );
-        PlotOffset.y += (int) ( margin * SCALE_HPGL );
+        PlotOffset.x  = -SheetOffset.x;
+        PlotOffset.y  = -SheetOffset.y;
 
         PlotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".plt" );
 
         SetLocaleTo_C_standard();
-        InitPlotParametresHPGL( PlotOffset, g_PlotScaleX, g_PlotScaleY );
-        Plot_1_Page_HPGL( PlotFileName, screen );
+        Plot_1_Page_HPGL( PlotFileName, screen, PlotSheet, PlotOffset, plot_scale );
         SetLocaleTo_Default();
 
         if( !Select_PlotAll )
@@ -586,152 +569,54 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll, int HPGL_She
 
 
 /**************************************************************************/
-void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FullFileName,
-                                             BASE_SCREEN*    screen )
+void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FileName,
+                                             SCH_SCREEN* screen,
+					     Ki_PageDescr* sheet,
+					     wxPoint &offset,
+					     double plot_scale)
 /**************************************************************************/
-
-/* Trace en format HPGL. d'une feuille de dessin
- * 1 unite HPGL = 0.98 mils ( 1 mil = 1.02041 unite HPGL ) .
- */
 {
-    EDA_BaseStruct* DrawList;
-    SCH_COMPONENT*  DrawLibItem;
-    int             x1 = 0, y1 = 0, x2 = 0, y2 = 0, layer;
     wxString        msg;
 
-    PlotOutput = wxFopen( FullFileName, wxT( "wt" ) );
-    if( PlotOutput == 0 )
+    FILE *output_file = wxFopen( FileName, wxT( "wt" ) );
+    if( output_file == NULL )
     {
-        msg = _( "Unable to create " ) + FullFileName;
-        DisplayError( this, msg ); return;
+        msg  = wxT( "\n** " );
+        msg += _( "Unable to create " ) + FileName + wxT( " **\n\n" );
+        m_MsgBox->AppendText( msg );
+        wxBell();
+        return;
     }
 
-    msg = _( "Plot  " ) + FullFileName + wxT( "\n" );
+    SetLocaleTo_C_standard();
+    msg.Printf( _( "Plot: %s\n" ), FileName.GetData() );
     m_MsgBox->AppendText( msg );
 
+    HPGL_Plotter *plotter = new HPGL_Plotter();
+    plotter->set_paper_size(sheet);
+    plotter->set_viewport( offset, plot_scale, 0);
+    plotter->set_default_line_width( g_DrawDefaultLineThickness );
     /* Init : */
-    PrintHeaderHPGL( PlotOutput, g_HPGL_Pen_Descr.m_Pen_Speed, g_HPGL_Pen_Descr.m_Pen_Num );
+    plotter->set_creator(wxT("EESchema-HPGL"));
+    plotter->set_filename(FileName);
+    plotter->set_pen_speed(g_HPGL_Pen_Descr.m_Pen_Speed);
+    plotter->set_pen_number(g_HPGL_Pen_Descr.m_Pen_Num);
+    plotter->set_pen_diameter(g_HPGL_Pen_Descr.m_Pen_Diam);
+    plotter->set_pen_overlap(g_HPGL_Pen_Descr.m_Pen_Diam/2);
+    plotter->start_plot( output_file );
 
-    m_Parent->PlotWorkSheet( PLOT_FORMAT_HPGL, screen );
+    plotter->set_color( BLACK );
+    m_Parent->PlotWorkSheet( plotter, screen );
 
-    DrawList = screen->EEDrawList;
-    while( DrawList )  /* tracage */
-    {
-        Plume( 'U' );
-        layer = LAYER_NOTES;
-
-        switch( DrawList->Type() )
-        {
-        case DRAW_BUSENTRY_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawBusEntryStruct*) DrawList )
-            x1    = STRUCT->m_Pos.x; y1 = STRUCT->m_Pos.y;
-            x2    = STRUCT->m_End().x; y2 = STRUCT->m_End().y;
-            layer = STRUCT->GetLayer();
-
-        case DRAW_SEGMENT_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (EDA_DrawLineStruct*) DrawList )
-            if( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
-            {
-                x1    = STRUCT->m_Start.x; y1 = STRUCT->m_Start.y;
-                x2    = STRUCT->m_End.x; y2 = STRUCT->m_End.y;
-                layer = STRUCT->GetLayer();
-            }
-
-            switch( layer )
-            {
-            case LAYER_NOTES:         /* Trace en pointilles */
-                Move_Plume( wxPoint( x1, y1 ), 'U' );
-                fprintf( PlotOutput, "LT 2;\n" );
-                Move_Plume( wxPoint( x2, y2 ), 'D' );
-                fprintf( PlotOutput, "LT;\n" );
-                break;
-
-            case LAYER_BUS:         /* Trait large */
-            {
-                int deltaX = 0, deltaY = 0; double angle;
-                if( (x2 - x1) == 0 )
-                    deltaX = 8;
-                else if( (y2 - y1) == 0 )
-                    deltaY = 8;
-                else
-                {
-                    angle  = atan2( (double) ( x2 - x1 ), (double) ( y1 - y2 ) );
-                    deltaX = (int) ( 8 * sin( angle ) );
-                    deltaY = (int) ( 8 * cos( angle ) );
-                }
-                Move_Plume( wxPoint( x1 + deltaX, y1 - deltaY ), 'U' );
-                Move_Plume( wxPoint( x1 - deltaX, y1 + deltaY ), 'D' );
-                Move_Plume( wxPoint( x2 - deltaX, y2 + deltaY ), 'D' );
-                Move_Plume( wxPoint( x2 + deltaX, y2 - deltaY ), 'D' );
-                Move_Plume( wxPoint( x1 + deltaX, y1 - deltaY ), 'D' );
-            }
-            break;
-
-            default:
-                Move_Plume( wxPoint( x1, y1 ), 'U' );
-                Move_Plume( wxPoint( x2, y2 ), 'D' );
-                break;
-            }
-
-            break;
-
-        case DRAW_JUNCTION_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawJunctionStruct*) DrawList )
-            x1 = STRUCT->m_Pos.x; y1 = STRUCT->m_Pos.y;
-            PlotCercle( wxPoint( x1, y1 ), DRAWJUNCTION_SIZE * 2, true );
-            break;
-
-        case TYPE_SCH_TEXT:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-            PlotTextStruct( DrawList );
-            break;
-
-        case TYPE_SCH_COMPONENT:
-            DrawLibItem = (SCH_COMPONENT*) DrawList;
-            PlotLibPart( DrawLibItem );
-            break;
-
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
-            break;
-
-        case DRAW_POLYLINE_STRUCT_TYPE:
-            break;
-
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            break;
-
-        case DRAW_MARKER_STRUCT_TYPE:
-            break;
-
-        case DRAW_SHEET_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawSheetStruct*) DrawList )
-            PlotSheetStruct( STRUCT );
-            break;
-
-        case DRAW_NOCONNECT_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawNoConnectStruct*) DrawList )
-            PlotNoConnectStruct( STRUCT );
-            break;
-
-        default:
-            break;
-        }
-
-        Plume( 'U' );
-        DrawList = DrawList->Next();
-    }
+    PlotDrawlist(plotter, screen->EEDrawList);
 
     /* fin */
-    CloseFileHPGL( PlotOutput );
-}
+    plotter->end_plot();
+    delete plotter;
+    SetLocaleTo_Default();
 
+    m_MsgBox->AppendText( wxT( "Ok\n" ) );
+}
 
 /*!
  * wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX

@@ -18,8 +18,8 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
+#include "confirm.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -27,27 +27,15 @@
 #include "plot_common.h"
 #include "protos.h"
 
-// coeff de conversion dim en 1 mil -> dim en unite PS:
-const double SCALE_PS = 0.001;
-
-extern void Move_Plume( wxPoint pos, int plume );
-extern void Plume( int plume );
-
 enum PageFormatReq {
     PAGE_SIZE_AUTO,
     PAGE_SIZE_A4,
     PAGE_SIZE_A
 };
 
-
 /* Variables locales : */
 static int   PS_SizeSelect  = PAGE_SIZE_AUTO;
-extern FILE* PlotOutput;
 static bool  Plot_Sheet_Ref = TRUE;
-
-
-////@begin includes
-////@end includes
 
 #include "plotps.h"
 
@@ -116,6 +104,7 @@ WinEDA_PlotPSFrame::WinEDA_PlotPSFrame( WinEDA_DrawFrame* parent,
                                         long              style )
 {
     m_Parent = parent;
+    PlotPSColorOpt = false;
     Create( parent, id, caption, pos, size, style );
 }
 
@@ -223,7 +212,7 @@ void WinEDA_PlotPSFrame::CreateControls()
 
     // Set validators
     m_SizeOption->SetValidator( wxGenericValidator(& PS_SizeSelect) );
-    m_PlotPSColorOption->SetValidator( wxGenericValidator(& g_PlotPSColorOpt) );
+    m_PlotPSColorOption->SetValidator( wxGenericValidator(& PlotPSColorOpt) );
     m_Plot_Sheet_Ref->SetValidator( wxGenericValidator(& Plot_Sheet_Ref) );
 ////@end WinEDA_PlotPSFrame content construction
 
@@ -318,7 +307,7 @@ void WinEDA_PlotPSFrame::InitOptVars()
 /*****************************************/
 {
     Plot_Sheet_Ref   = m_Plot_Sheet_Ref->GetValue();
-    g_PlotPSColorOpt = m_PlotPSColorOption->GetSelection();
+    PlotPSColorOpt = m_PlotPSColorOption->GetSelection();
     PS_SizeSelect    = m_SizeOption->GetSelection();
     g_DrawDefaultLineThickness = m_DefaultLineSizeCtrl->GetValue();
     if( g_DrawDefaultLineThickness < 1 )
@@ -335,11 +324,8 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
     SCH_SCREEN*            oldscreen    = screen;
     DrawSheetPath*         sheetpath, *oldsheetpath = schframe->GetSheet();
     wxString PlotFileName;
-    Ki_PageDescr*          PlotSheet, * RealSheet;
-    int BBox[4];
+    Ki_PageDescr*          PlotSheet, *RealSheet;
     wxPoint plot_offset;
-
-    g_PlotFormat = PLOT_FORMAT_POST;
 
     /* When printing all pages, the printed page is not the current page.
      *  In complex hierarchies, we must setup references and others parameters in the printed SCH_SCREEN
@@ -350,7 +336,7 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
     sheetpath = SheetList.GetFirst();
     DrawSheetPath list;
 
-    for( ; ;  )
+    while (true)
     {
         if( AllPages )
         {
@@ -370,28 +356,30 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
             sheetpath = SheetList.GetNext();
         }
         PlotSheet = screen->m_CurrentSheetDesc;
-        RealSheet = &g_Sheet_A4;
-
-        if( pagesize == PAGE_SIZE_AUTO )
-            RealSheet = PlotSheet;
-        else if( pagesize == PAGE_SIZE_A )
+	switch (pagesize)
+	{
+	case PAGE_SIZE_A:
             RealSheet = &g_Sheet_A;
+	    break;
+	case PAGE_SIZE_A4:
+        RealSheet = &g_Sheet_A4;
+	    break;
+	case PAGE_SIZE_AUTO:
+	default:
+            RealSheet = PlotSheet;
+	    break;
+	}
 
-        /* Calculate plot bouding box in 1/1000 inch */
-        BBox[0] = BBox[1] = g_PlotMargin;   // Plot margin in 1/1000 inch
-        BBox[2] = RealSheet->m_Size.x - g_PlotMargin;
-        BBox[3] = RealSheet->m_Size.y - g_PlotMargin;
-
-        /* Calculate pcbnew to PS conversion scale */
-        g_PlotScaleX = SCALE_PS * (float) (BBox[2] - BBox[0]) / PlotSheet->m_Size.x;
-        g_PlotScaleY = SCALE_PS * (float) (BBox[3] - BBox[1]) / PlotSheet->m_Size.y;
+        double scalex = (double) RealSheet->m_Size.x / PlotSheet->m_Size.x;
+        double scaley = (double) RealSheet->m_Size.y / PlotSheet->m_Size.y;
+	double scale = 10 * MIN(scalex, scaley);
 
         plot_offset.x = 0;
-        plot_offset.y = PlotSheet->m_Size.y;
+        plot_offset.y = 0;
 
         PlotFileName = schframe->GetUniqueFilenameForCurrentSheet( ) + wxT( ".ps" );
 
-        PlotOneSheetPS( PlotFileName, screen, RealSheet, BBox, plot_offset );
+        PlotOneSheetPS( PlotFileName, screen, RealSheet, plot_offset, scale );
 
         if( !AllPages )
             break;
@@ -408,163 +396,51 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
 void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
                                          SCH_SCREEN*     screen,
                                          Ki_PageDescr*   sheet,
-                                         int             BBox[4],
-                                         wxPoint         plot_offset )
+                                         wxPoint         plot_offset,
+					 double	  	 scale)
 /*****************************************************************************************/
 
 /* Trace en format PS. d'une feuille de dessin
  */
 {
-    wxString       Line;
-    SCH_ITEM*      DrawList;
-    SCH_COMPONENT* DrawLibItem;
-    int            layer;
-    wxPoint        StartPos, EndPos;
+    wxString msg;
 
-    PlotOutput = wxFopen( FileName, wxT( "wt" ) );
-    if( PlotOutput == NULL )
+    FILE *output_file = wxFopen( FileName, wxT( "wt" ) );
+    if( output_file == NULL )
     {
-        Line  = wxT( "\n** " );
-        Line += _( "Unable to create " ) + FileName + wxT( " **\n\n" );
-        m_MsgBox->AppendText( Line );
+        msg  = wxT( "\n** " );
+        msg += _( "Unable to create " ) + FileName + wxT( " **\n\n" );
+        m_MsgBox->AppendText( msg );
         wxBell();
         return;
     }
 
     SetLocaleTo_C_standard();
-    Line.Printf( _( "Plot: %s\n" ), FileName.GetData() );
-    m_MsgBox->AppendText( Line );
+    msg.Printf( _( "Plot: %s\n" ), FileName.GetData() );
+    m_MsgBox->AppendText( msg );
 
-    InitPlotParametresPS( plot_offset, sheet, g_PlotScaleX, g_PlotScaleY );
-    SetDefaultLineWidthPS( g_DrawDefaultLineThickness );
+    PS_Plotter *plotter = new PS_Plotter();
+    plotter->set_paper_size(sheet);
+    plotter->set_viewport( plot_offset, scale, 0);
+    plotter->set_default_line_width( g_DrawDefaultLineThickness );
+    plotter->set_color_mode(PlotPSColorOpt);
 
     /* Init : */
-    PrintHeaderPS( PlotOutput, wxT( "EESchema-PS" ), FileName, 1, BBox, wxLANDSCAPE );
-    InitPlotParametresPS( plot_offset, sheet, 1.0, 1.0 );
+    plotter->set_creator(wxT("EESchema-PS"));
+    plotter->set_filename(FileName);
+    plotter->start_plot(output_file);
 
-    if( m_Plot_Sheet_Ref->GetValue() )
-    {
-        if( (g_PlotFormat == PLOT_FORMAT_POST) && g_PlotPSColorOpt )
-            SetColorMapPS( BLACK );
-        m_Parent->PlotWorkSheet( PLOT_FORMAT_POST, screen );
-    }
-
-    DrawList = screen->EEDrawList;
-    while( DrawList )  /* tracage */
-    {
-        layer = LAYER_NOTES;
-
-        switch( DrawList->Type() )
-        {
-        case DRAW_BUSENTRY_STRUCT_TYPE:             /* Struct Raccord et Segment sont identiques */
-            #undef STRUCT
-            #define STRUCT ( (DrawBusEntryStruct*) DrawList )
-            StartPos = STRUCT->m_Pos;
-            EndPos   = STRUCT->m_End();
-            layer    = STRUCT->GetLayer();
-
-        case DRAW_SEGMENT_STRUCT_TYPE:
-            #undef STRUCT
-            #define STRUCT ( (EDA_DrawLineStruct*) DrawList )
-            if( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+    if( Plot_Sheet_Ref )
             {
-                StartPos = STRUCT->m_Start;
-                EndPos   = STRUCT->m_End;
-                layer    = STRUCT->GetLayer();
-            }
-            if( g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( layer ) );
-
-            switch( layer )
-            {
-            case LAYER_NOTES:         /* Trace en pointilles */
-                SetCurrentLineWidth( g_DrawDefaultLineThickness );
-                fprintf( PlotOutput, "[50 50] 0 setdash\n" );
-                Move_Plume( StartPos, 'U' );
-                Move_Plume( EndPos, 'D' );
-                Plume( 'Z' );
-                fprintf( PlotOutput, "[] 0 setdash\n" );
-                break;
-
-            case LAYER_BUS:         /* Trait large */
-            {
-                int thickness = wxRound( g_DrawDefaultLineThickness * 1.4 );
-                if ( thickness < 3 ) thickness = 3;
-                SetCurrentLineWidth( thickness );
-                fprintf( PlotOutput, "%d setlinewidth\n", thickness );
-                Move_Plume( StartPos, 'U' );
-                Move_Plume( EndPos, 'D' );
-                Plume( 'Z' );
-                SetCurrentLineWidth( g_DrawDefaultLineThickness );
-                fprintf( PlotOutput, "%d setlinewidth\n", g_DrawDefaultLineThickness );
-            }
-                break;
-
-            default:
-                SetCurrentLineWidth( g_DrawDefaultLineThickness );
-                Move_Plume( StartPos, 'U' );
-                Move_Plume( EndPos, 'D' );
-                Plume( 'Z' );
-                break;
-            }
-
-            break;
-
-        case DRAW_JUNCTION_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawJunctionStruct*) DrawList )
-            if( g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( STRUCT->GetLayer() ) );
-            PlotCercle( STRUCT->m_Pos, DRAWJUNCTION_SIZE, 1 );
-            break;
-
-        case TYPE_SCH_TEXT:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-            PlotTextStruct( DrawList );
-            break;
-
-        case TYPE_SCH_COMPONENT:
-            DrawLibItem = (SCH_COMPONENT*) DrawList;
-            PlotLibPart( DrawLibItem );
-            break;
-
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
-            break;
-
-        case DRAW_POLYLINE_STRUCT_TYPE:
-            break;
-
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            break;
-
-        case DRAW_MARKER_STRUCT_TYPE:
-            break;
-
-        case DRAW_SHEET_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawSheetStruct*) DrawList )
-            PlotSheetStruct( STRUCT );
-            break;
-
-        case DRAW_NOCONNECT_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawNoConnectStruct*) DrawList )
-            if( g_PlotPSColorOpt )
-                SetColorMapPS( ReturnLayerColor( LAYER_NOCONNECT ) );
-            PlotNoConnectStruct( STRUCT );
-            break;
-
-        default:
-            break;
+	plotter->set_color( BLACK );
+        m_Parent->PlotWorkSheet( plotter, screen );
         }
 
-        DrawList = DrawList->Next();
-    }
+    PlotDrawlist(plotter, screen->EEDrawList);
 
     /* fin */
-    CloseFilePS( PlotOutput );
+    plotter->end_plot();
+    delete plotter;
     SetLocaleTo_Default();
 
     m_MsgBox->AppendText( wxT( "Ok\n" ) );

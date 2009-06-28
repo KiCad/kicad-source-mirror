@@ -117,9 +117,6 @@ extern SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Bloc
 // Gestion d'options
 extern bool      g_HVLines;
 
-extern int       g_PlotPSColorOpt; // True = plot postcript color (see plotps.cpp)
-
-
 // Gestion de diverses variables, options... devant etre memorisees mais
 // Remises a 0 lors d'un rechargement de projetc
 struct EESchemaVariables
@@ -151,11 +148,6 @@ extern bool     g_FlDrawSpecificConvert;
 /********************************************************/
 
 /* Gestion des trace sur table tracante */
-
-extern int    g_PlotFormat;                     /* flag = TYPE_HPGL, TYPE_PS... */
-extern int    g_PlotMargin;                     /* Marge pour traces du cartouche */
-extern double g_PlotScaleX, g_PlotScaleY;       /* coeff d'echelle de trace en unites table tracante */
-
 
 /* For HPGL plotting: Pen caract : */
 struct HPGL_Pen_Descr_Struct

@@ -45,6 +45,7 @@ class WinEDAChoiceBox;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
+class Plotter;
 
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,
@@ -244,7 +245,7 @@ public:
     void             OnActivate( wxActivateEvent& event );
     void             ReDrawPanel();
     void             TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
-    void             PlotWorkSheet( int format_plot, BASE_SCREEN* screen );
+    void             PlotWorkSheet( Plotter *plotter, BASE_SCREEN* screen );
 
     /** Function GetXYSheetReferences
      * Return the X,Y sheet references where the point position is located

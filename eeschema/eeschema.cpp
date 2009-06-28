@@ -45,8 +45,6 @@ SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 // Gestion d'options
 bool      g_HVLines = true;   // Bool: force H or V directions (Wires, Bus ..)
 
-int       g_PlotPSColorOpt;    // True = plot postcript color (see plotps.cpp)
-
 struct EESchemaVariables g_EESchemaVar;
 
 /* Variables globales pour Libview */
@@ -64,11 +62,6 @@ int       g_LastTextOrient = TEXT_ORIENT_HORIZ;
 
 bool      g_FlDrawSpecificUnit = FALSE;
 bool      g_FlDrawSpecificConvert = TRUE;
-
-int       g_PlotFormat;                  /* flag = TYPE_HPGL, TYPE_PS... */
-int       g_PlotMargin;                  /* Marge pour traces du cartouche */
-double    g_PlotScaleX;
-double    g_PlotScaleY; /* coeff d'echelle de trace en unites table tracante */
 
 HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 

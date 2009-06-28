@@ -329,7 +329,7 @@ bool EDA_TextStruct::TextHitTest( EDA_Rect& refArea )
 void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            const wxPoint& aOffset, EDA_Colors aColor,
                            int aDrawMode,
-                           GRFillMode aFillMode, EDA_Colors aAnchor_color )
+                           GRTraceMode aFillMode, EDA_Colors aAnchor_color )
 /***************************************************************/
 
 /** Function Draw
@@ -399,7 +399,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                         const wxPoint& aOffset, EDA_Colors aColor,
                                         int aDrawMode,
-                                        GRFillMode aFillMode, EDA_Colors aAnchor_color,
+                                        GRTraceMode aFillMode, EDA_Colors aAnchor_color,
                                         wxString& aText, wxPoint aPos )
 {
     int width = m_Width;
