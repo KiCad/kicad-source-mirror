@@ -22,8 +22,8 @@
 
 /********************************************************************************/
 void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer,
-                                         bool PlotOriginIsAuxAxis, 
-					 GRTraceMode trace_mode ) 
+                                         bool PlotOriginIsAuxAxis,
+                                         GRTraceMode trace_mode )
 /********************************************************************************/
 
 /* Creates the output files, one per board layer:
@@ -43,13 +43,13 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 
     if( PlotOriginIsAuxAxis )
         offset = m_Auxiliary_Axis_Position;
-    else 
+    else
     {
-	offset.x = 0;
-	offset.y = 0;
+        offset.x = 0;
+        offset.y = 0;
     }
 
-    FILE *output_file = wxFopen( FullFileName, wxT( "wt" ) );
+    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
     if( output_file == NULL )
     {
         wxString msg = _( "unable to create file " ) + FullFileName;
@@ -58,23 +58,23 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     }
 
     SetLocaleTo_C_standard();
-    Plotter *plotter = new Gerber_Plotter();
+    Plotter* plotter = new Gerber_Plotter();
     /* No mirror and scaling for gerbers! */
-    plotter->set_viewport(offset, scale, 0);
+    plotter->set_viewport( offset, scale, 0 );
     plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );
-    plotter->set_creator(wxT("PCBNEW-RS274X"));
-    plotter->set_filename(FullFileName);
+    plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
+    plotter->set_filename( FullFileName );
 
     Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
 
-    plotter->start_plot(output_file);
+    plotter->start_plot( output_file );
+
     // Sheet refs on gerber CAN be useful... and they're always 1:1
     if( g_pcb_plot_options.Plot_Frame_Ref )
-	PlotWorkSheet( plotter, GetScreen() );
-    Plot_Layer(plotter, Layer, trace_mode);
+        PlotWorkSheet( plotter, GetScreen() );
+    Plot_Layer( plotter, Layer, trace_mode );
 
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();
 }
-

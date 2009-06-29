@@ -13,36 +13,38 @@
 #include "protos.h"
 
 /*****************************************************************************/
-void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer, 
-	GRTraceMode trace_mode)
+void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
+                                       GRTraceMode trace_mode )
 /*****************************************************************************/
 {
-    wxSize  SheetSize;
-    wxSize  BoardSize;
-    wxPoint BoardCenter;
-    bool    Center = FALSE;
+    wxSize        SheetSize;
+    wxSize        BoardSize;
+    wxPoint       BoardCenter;
+    bool          Center = FALSE;
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
-    double scale;
-    wxPoint offset;
+    double        scale;
+    wxPoint       offset;
 
     MsgPanel->EraseMsgBox();
+
     // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diametre is always g_HPGL_Pen_Diam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam  = wxRound( (g_pcb_plot_options.HPGL_Pen_Diam * U_PCB) / g_pcb_plot_options.Scale );
+    int pen_diam = wxRound( (g_pcb_plot_options.HPGL_Pen_Diam * U_PCB) / g_pcb_plot_options.Scale );
 
     // compute pen_recouvrement (from g_HPGL_Pen_Recouvrement in mils)
     // with plot scale
     if( g_pcb_plot_options.HPGL_Pen_Recouvrement < 0 )
-	g_pcb_plot_options.HPGL_Pen_Recouvrement = 0;
+        g_pcb_plot_options.HPGL_Pen_Recouvrement = 0;
     if( g_pcb_plot_options.HPGL_Pen_Recouvrement >= g_pcb_plot_options.HPGL_Pen_Diam )
-	g_pcb_plot_options.HPGL_Pen_Recouvrement = g_pcb_plot_options.HPGL_Pen_Diam - 1;
-    int pen_recouvrement = wxRound( g_pcb_plot_options.HPGL_Pen_Recouvrement * 10.0 / g_pcb_plot_options.Scale );
+        g_pcb_plot_options.HPGL_Pen_Recouvrement = g_pcb_plot_options.HPGL_Pen_Diam - 1;
+    int   pen_recouvrement = wxRound(
+        g_pcb_plot_options.HPGL_Pen_Recouvrement * 10.0 / g_pcb_plot_options.Scale );
 
-    FILE *output_file = wxFopen( FullFileName, wxT( "wt" ) );
+    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
     if( output_file == NULL )
     {
-	wxString msg = _( "Unable to create file " ) + FullFileName;
+        wxString msg = _( "Unable to create file " ) + FullFileName;
         DisplayError( this, msg );
         return;
     }
@@ -51,7 +53,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
-	Center = TRUE; // Echelle != 1 donc trace centree du PCB
+        Center = TRUE; // Echelle != 1 donc trace centree du PCB
 
 
     // calcul en unites internes des dimensions des feuilles ( connues en 1/1000 pouce )
@@ -65,48 +67,48 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
 
     if( g_pcb_plot_options.PlotScaleOpt == 0 )       // Optimum scale
     {
-	double Xscale, Yscale;
-	// Fit to 80% of the page
-	Xscale  = ( (SheetSize.x*0.8)  / BoardSize.x);
-	Yscale  = ( (SheetSize.y*0.8)  / BoardSize.y);
-	scale = MIN( Xscale, Yscale );
+        double Xscale, Yscale;
+
+        // Fit to 80% of the page
+        Xscale = ( (SheetSize.x * 0.8) / BoardSize.x );
+        Yscale = ( (SheetSize.y * 0.8) / BoardSize.y );
+        scale  = MIN( Xscale, Yscale );
     }
     else
-	scale = g_pcb_plot_options.Scale;
+        scale = g_pcb_plot_options.Scale;
 
     // Calcul du cadrage (echelle != 1 donc recadrage du trace)
-        if( Center )
-        {
-	offset.x = BoardCenter.x-(SheetSize.x/2)/scale;
-	offset.y = BoardCenter.y-(SheetSize.y/2)/scale;
-        }
-        else
+    if( Center )
     {
-	offset.x = 0;
-	offset.y = 0;
+        offset.x = BoardCenter.x - (SheetSize.x / 2) / scale;
+        offset.y = BoardCenter.y - (SheetSize.y / 2) / scale;
+    }
+    else
+    {
+        offset.x = 0;
+        offset.y = 0;
     }
 
-    HPGL_Plotter *plotter = new HPGL_Plotter();
-    plotter->set_paper_size(currentsheet);
-    plotter->set_viewport(offset, scale, 
-	g_pcb_plot_options.PlotOrient);
+    HPGL_Plotter* plotter = new HPGL_Plotter();
+    plotter->set_paper_size( currentsheet );
+    plotter->set_viewport( offset, scale,
+                           g_pcb_plot_options.PlotOrient );
     plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );
-    plotter->set_creator(wxT("PCBNEW-HPGL"));
-    plotter->set_filename(FullFileName);
-    plotter->set_pen_speed(g_pcb_plot_options.HPGL_Pen_Speed);
-    plotter->set_pen_number(g_pcb_plot_options.HPGL_Pen_Num);
-    plotter->set_pen_overlap(pen_recouvrement);
-    plotter->set_pen_diameter(pen_diam);
-    plotter->start_plot(output_file);
+    plotter->set_creator( wxT( "PCBNEW-HPGL" ) );
+    plotter->set_filename( FullFileName );
+    plotter->set_pen_speed( g_pcb_plot_options.HPGL_Pen_Speed );
+    plotter->set_pen_number( g_pcb_plot_options.HPGL_Pen_Num );
+    plotter->set_pen_overlap( pen_recouvrement );
+    plotter->set_pen_diameter( pen_diam );
+    plotter->start_plot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with
      * paperscale!=1, anyway */
-    if( g_pcb_plot_options.Plot_Frame_Ref && !Center)
-	PlotWorkSheet( plotter, GetScreen() );
+    if( g_pcb_plot_options.Plot_Frame_Ref && !Center )
+        PlotWorkSheet( plotter, GetScreen() );
 
-    Plot_Layer(plotter, Layer, trace_mode);
+    Plot_Layer( plotter, Layer, trace_mode );
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();
 }
-
