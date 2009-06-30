@@ -74,7 +74,8 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
         if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
             continue;
 
-        plotter->set_current_line_width( DEntry->GetPenSize( ) );
+        int thickness = DEntry->GetPenSize( );
+
         plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
         draw_bgfill = plotter->get_color_mode();
 
@@ -97,7 +98,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
                           -t1,
                           Arc->m_Rayon,
                           Arc->m_Fill,
-                          Arc->m_Width );
+                          thickness );
         }
         break;
 
@@ -114,7 +115,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
             plotter->circle( pos,
                              Circle->m_Rayon * 2,
                              Circle->m_Fill,
-                             Circle->m_Width );
+                             thickness );
         }
         break;
 
@@ -126,7 +127,6 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
              * transformation matrix causes xy axes to be flipped. */
             t1  = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
             pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
-            int thickness = Text->GetPenSize( );
             plotter->text( pos, CharColor,
                            Text->m_Text,
                            t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
@@ -149,7 +149,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
                 plotter->rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->rect( pos, end, Square->m_Fill, Square->m_Width );
+            plotter->rect( pos, end, Square->m_Fill, thickness );
         }
         break;
 
@@ -165,7 +165,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
             pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
 
             /* Dessin de la pin et du symbole special associe */
-            int thickness = Pin->GetPenSize();
+            thickness = Pin->GetPenSize();
             plotter->set_current_line_width( thickness );
             PlotPinSymbol( plotter, pos, Pin->m_PinLen, orient, Pin->m_PinShape );
             Pin->PlotPinTexts( plotter, pos, orient,
@@ -193,7 +193,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
                 plotter->poly( ii, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->poly( ii, Poly, polyline->m_Fill, polyline->m_Width );
+            plotter->poly( ii, Poly, polyline->m_Fill, thickness );
             MyFree( Poly );
         }
         break;
@@ -216,7 +216,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
                 plotter->poly( ii, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->poly( ii, Poly, polyline->m_Fill, polyline->m_Width );
+            plotter->poly( ii, Poly, polyline->m_Fill, thickness );
             MyFree( Poly );
         }
 
@@ -688,25 +688,25 @@ static void PlotSheetStruct( Plotter* plotter, DrawSheetStruct* Struct )
 }
 
 
-/*************************************************/
-void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
-/*************************************************/
+/********************************************************/
+void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
+/*********************************************************/
 {
-    while( drawlist )  /* tracage */
+    while( aDrawlist )  /* Plot each item in draw list */
     {
         SCH_COMPONENT* DrawLibItem;
         int            layer;
         wxPoint        StartPos, EndPos;
 
-        plotter->set_current_line_width( drawlist->GetPenSize( ) );
-        switch( drawlist->Type() )
+        plotter->set_current_line_width( aDrawlist->GetPenSize( ) );
+        switch( aDrawlist->Type() )
         {
         case DRAW_BUSENTRY_STRUCT_TYPE:             /* Struct Raccord et Segment sont identiques */
         case DRAW_SEGMENT_STRUCT_TYPE:
-            if( drawlist->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
+            if( aDrawlist->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
             {
             #undef STRUCT
-            #define STRUCT ( (DrawBusEntryStruct*) drawlist )
+            #define STRUCT ( (DrawBusEntryStruct*) aDrawlist )
                 StartPos = STRUCT->m_Pos;
                 EndPos   = STRUCT->m_End();
                 layer    = STRUCT->GetLayer();
@@ -715,7 +715,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
             else
             {
             #undef STRUCT
-            #define STRUCT ( (EDA_DrawLineStruct*) drawlist )
+            #define STRUCT ( (EDA_DrawLineStruct*) aDrawlist )
                 StartPos = STRUCT->m_Start;
                 EndPos   = STRUCT->m_End;
                 layer    = STRUCT->GetLayer();
@@ -732,7 +732,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
                 break;
 
             case LAYER_BUS:         /* Trait large */
-                plotter->thick_segment( StartPos, EndPos, drawlist->GetPenSize( ), FILLED );
+                plotter->thick_segment( StartPos, EndPos, aDrawlist->GetPenSize( ), FILLED );
             break;
 
             default:
@@ -744,8 +744,8 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
             break;
 
         case DRAW_JUNCTION_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawJunctionStruct*) drawlist )
+            #undef STRUCT
+            #define STRUCT ( (DrawJunctionStruct*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
             plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_SIZE, FILLED_SHAPE );
             break;
@@ -754,11 +754,11 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
         case TYPE_SCH_LABEL:
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
-            PlotTextStruct( plotter, (SCH_TEXT*) drawlist );
+            PlotTextStruct( plotter, (SCH_TEXT*) aDrawlist );
             break;
 
         case TYPE_SCH_COMPONENT:
-            DrawLibItem = (SCH_COMPONENT*) drawlist;
+            DrawLibItem = (SCH_COMPONENT*) aDrawlist;
             PlotLibPart( plotter, DrawLibItem );
             break;
 
@@ -775,21 +775,17 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
             break;
 
         case DRAW_SHEET_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawSheetStruct*) drawlist )
-            PlotSheetStruct( plotter, STRUCT );
+            PlotSheetStruct( plotter, (DrawSheetStruct*) aDrawlist );
             break;
 
         case DRAW_NOCONNECT_STRUCT_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (DrawNoConnectStruct*) drawlist )
             plotter->set_color( ReturnLayerColor( LAYER_NOCONNECT ) );
-            PlotNoConnectStruct( plotter, STRUCT );
+            PlotNoConnectStruct( plotter, (DrawNoConnectStruct*) aDrawlist );
             break;
 
         default:
             break;
         }
-        drawlist = drawlist->Next();
+        aDrawlist = aDrawlist->Next();
     }
 }
