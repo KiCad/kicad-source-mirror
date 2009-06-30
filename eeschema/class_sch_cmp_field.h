@@ -57,6 +57,11 @@ public:
      */
     void     ImportValues( const LibDrawField& aSource );
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    int GetPenSize( );
+
     /**
      * Function Draw
      */

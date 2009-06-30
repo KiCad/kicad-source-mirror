@@ -65,7 +65,6 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
     Multi   = DrawLibItem->m_Multi;
     convert = DrawLibItem->m_Convert;
 
-    plotter->set_current_line_width( g_DrawDefaultLineThickness );
     for( LibEDA_BaseStruct* DEntry = Entry->m_Drawings;
         DEntry != NULL; DEntry = DEntry->Next() )
     {
@@ -75,6 +74,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
         if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
             continue;
 
+        plotter->set_current_line_width( DEntry->GetPenSize( ) );
         plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
         draw_bgfill = plotter->get_color_mode();
 
@@ -89,12 +89,12 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
             if( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
                 plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->arc( pos, -t1, -t2, Arc->m_Rayon, FILLED_SHAPE, 0 );
+                plotter->arc( pos, -t2, -t1, Arc->m_Rayon, FILLED_SHAPE, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
             plotter->arc( pos,
-                          -t1,
                           -t2,
+                          -t1,
                           Arc->m_Rayon,
                           Arc->m_Fill,
                           Arc->m_Width );
@@ -126,7 +126,6 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
              * transformation matrix causes xy axes to be flipped. */
             t1  = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
             pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
-            plotter->set_current_line_width( -1 );
             int thickness = (Text->m_Width == 0) ? g_DrawDefaultLineThickness : Text->m_Width;
             thickness = Clamp_Text_PenSize( thickness, Text->m_Size, Text->m_Bold );
 
@@ -369,9 +368,7 @@ static void PlotTextField( Plotter* plotter, SCH_COMPONENT* DrawLibItem,
 
     }
 
-    int thickness = (field->m_Width == 0) ? g_DrawDefaultLineThickness : field->m_Width;
-    thickness = Clamp_Text_PenSize( thickness, field->m_Size, field->m_Bold );
-    plotter->set_current_line_width( thickness );
+    int thickness = field->GetPenSize( );
 
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
@@ -509,9 +506,9 @@ static void PlotPinSymbol( Plotter* plotter, const wxPoint& pos,
 }
 
 
-/*******************************************/
-static void PlotTextStruct( Plotter* plotter, EDA_BaseStruct* Struct )
-/*******************************************/
+/********************************************************************/
+static void PlotTextStruct( Plotter* plotter, SCH_TEXT*  aSchText )
+/********************************************************************/
 
 /*
  * Routine de trace des Textes, Labels et Global-Labels.
@@ -520,7 +517,7 @@ static void PlotTextStruct( Plotter* plotter, EDA_BaseStruct* Struct )
 {
     static std::vector <wxPoint> Poly;
 
-    switch( Struct->Type() )
+    switch( aSchText->Type() )
     {
     case TYPE_SCH_GLOBALLABEL:
     case TYPE_SCH_HIERLABEL:
@@ -532,31 +529,29 @@ static void PlotTextStruct( Plotter* plotter, EDA_BaseStruct* Struct )
         return;
     }
 
-    SCH_TEXT*  schText = (SCH_TEXT*) Struct;
     EDA_Colors color   = UNSPECIFIED_COLOR;
-    color = ReturnLayerColor( schText->m_Layer );
-    wxPoint    textpos   = schText->m_Pos + schText->GetSchematicTextOffset();
-    int        thickness = (schText->m_Width == 0) ? g_DrawDefaultLineThickness : schText->m_Width;
-    thickness = Clamp_Text_PenSize( thickness, schText->m_Size, schText->m_Bold );
+    color = ReturnLayerColor( aSchText->m_Layer );
+    wxPoint    textpos   = aSchText->m_Pos + aSchText->GetSchematicTextOffset();
+    int        thickness = aSchText->GetPenSize( );
 
     plotter->set_current_line_width( thickness );
 
-    if( schText->m_MultilineAllowed )
+    if( aSchText->m_MultilineAllowed )
     {
         wxPoint        pos  = textpos;
-        wxArrayString* list = wxStringSplit( schText->m_Text, '\n' );
+        wxArrayString* list = wxStringSplit( aSchText->m_Text, '\n' );
         wxPoint        offset;
 
-        offset.y = schText->GetInterline();
+        offset.y = aSchText->GetInterline();
 
-        RotatePoint( &offset, schText->m_Orient );
+        RotatePoint( &offset, aSchText->m_Orient );
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
             plotter->text( pos,
-                           color, txt, schText->m_Orient, schText->m_Size,
-                           schText->m_HJustify, schText->m_VJustify,
-                           thickness, schText->m_Italic, schText->m_Bold );
+                           color, txt, aSchText->m_Orient, aSchText->m_Size,
+                           aSchText->m_HJustify, aSchText->m_VJustify,
+                           thickness, aSchText->m_Italic, aSchText->m_Bold );
             pos += offset;
         }
 
@@ -564,19 +559,19 @@ static void PlotTextStruct( Plotter* plotter, EDA_BaseStruct* Struct )
     }
     else
         plotter->text( textpos,
-                       color, schText->m_Text, schText->m_Orient, schText->m_Size,
-                       schText->m_HJustify, schText->m_VJustify,
-                       thickness, schText->m_Italic, schText->m_Bold );
+                       color, aSchText->m_Text, aSchText->m_Orient, aSchText->m_Size,
+                       aSchText->m_HJustify, aSchText->m_VJustify,
+                       thickness, aSchText->m_Italic, aSchText->m_Bold );
 
     /* Draw graphic symbol for global or hierachical labels */
-    if( Struct->Type() == TYPE_SCH_GLOBALLABEL )
+    if( aSchText->Type() == TYPE_SCH_GLOBALLABEL )
     {
-        ( (SCH_GLOBALLABEL*) Struct )->CreateGraphicShape( Poly, schText->m_Pos );
+        ( (SCH_GLOBALLABEL*) aSchText )->CreateGraphicShape( Poly, aSchText->m_Pos );
         plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
     }
-    if( Struct->Type() == TYPE_SCH_HIERLABEL )
+    if( aSchText->Type() == TYPE_SCH_HIERLABEL )
     {
-        ( (SCH_HIERLABEL*) Struct )->CreateGraphicShape( Poly, schText->m_Pos );
+        ( (SCH_HIERLABEL*) aSchText )->CreateGraphicShape( Poly, aSchText->m_Pos );
         plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
     }
 }
@@ -775,7 +770,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
         case TYPE_SCH_LABEL:
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
-            PlotTextStruct( plotter, drawlist );
+            PlotTextStruct( plotter, (SCH_TEXT*) drawlist );
             break;
 
         case TYPE_SCH_COMPONENT:

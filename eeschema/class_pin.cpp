@@ -276,6 +276,16 @@ bool LibDrawPin::Load( char* line, wxString& errorMsg )
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawPin::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
+
 /**********************************************************************************************/
 void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
                        wxDC*             aDC,
@@ -334,7 +344,7 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
 {
     int          MapX1, MapY1, x1, y1;
     int          color;
-    int          width  = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int          width  = GetPenSize( );
     int          posX   = aPinPos.x, posY = aPinPos.y, len = m_PinLen;
     BASE_SCREEN* screen = aPanel->GetScreen();
 
@@ -510,10 +520,10 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
     wxSize     PinNameSize( m_PinNameSize, m_PinNameSize );
     wxSize     PinNumSize( m_PinNumSize, m_PinNumSize );
 
-    int        nameLineWidth = g_DrawDefaultLineThickness;
+    int        nameLineWidth = GetPenSize( );
 
     nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_PinNameSize, false );
-    int        numLineWidth = g_DrawDefaultLineThickness;
+    int        numLineWidth = GetPenSize( );
     numLineWidth = Clamp_Text_PenSize( numLineWidth, m_PinNumSize, false );
 
     GRSetDrawMode( DC, DrawMode );

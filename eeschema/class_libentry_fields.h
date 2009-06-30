@@ -43,6 +43,11 @@ public:
     }
 
 
+    /** Function GetPenSize virtual pure
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    int GetPenSize( );
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd"

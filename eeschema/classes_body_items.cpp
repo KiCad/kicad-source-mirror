@@ -237,6 +237,16 @@ LibDrawArc* LibDrawArc::GenCopy()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawArc::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
+
 void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                        const wxPoint& aOffset, int aColor,
                        int aDrawMode, void* aData,
@@ -245,7 +255,6 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2, posc;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -275,7 +284,7 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                    m_Rayon, linewidth, color,
+                    m_Rayon, GetPenSize( ), color,
                     ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
@@ -285,12 +294,12 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 #ifdef DRAW_ARC_WITH_ANGLE
 
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-               m_Rayon, linewidth, color );
+               m_Rayon, GetPenSize( ), color );
 
 #else
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                posc.x, posc.y, linewidth, color );
+                posc.x, posc.y, GetPenSize( ), color );
 
 #endif
     }
@@ -483,6 +492,16 @@ LibDrawCircle* LibDrawCircle::GenCopy()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawCircle::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
+
 void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                           const wxPoint& aOffset, int aColor, int aDrawMode,
                           void* aData, const int aTransformMatrix[2][2] )
@@ -490,7 +509,6 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -509,14 +527,14 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                       m_Rayon, linewidth, color,
+                       m_Rayon, GetPenSize( ), color,
                        ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
                         m_Rayon, 0, color, color );
     else
         GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                  m_Rayon, linewidth, color );
+                  m_Rayon, GetPenSize( ), color );
 }
 
 
@@ -616,6 +634,15 @@ LibDrawSquare* LibDrawSquare::GenCopy()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawSquare::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
 void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                           const wxPoint& aOffset, int aColor, int aDrawMode,
                           void* aData, const int aTransformMatrix[2][2] )
@@ -623,7 +650,6 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -642,14 +668,14 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                     linewidth, color,
+                     GetPenSize( ), color,
                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                      linewidth, color, color );
+                      GetPenSize( ), color, color );
     else
         GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                linewidth, color );
+                GetPenSize( ), color );
 }
 
 
@@ -776,6 +802,15 @@ LibDrawSegment* LibDrawSegment::GenCopy()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawSegment::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
 void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            const wxPoint& aOffset, int aColor, int aDrawMode,
                            void* aData, const int aTransformMatrix[2][2] )
@@ -783,7 +818,6 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -797,7 +831,7 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     pos2 = TransformCoordinate( aTransformMatrix, m_End ) + aOffset;
 
     GRLine( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-            linewidth, color );
+            GetPenSize( ), color );
 }
 
 
@@ -962,6 +996,15 @@ void LibDrawPolyline::AddPoint( const wxPoint& point )
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawPolyline::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
 void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                             const wxPoint& aOffset, int aColor, int aDrawMode,
                             void* aData, const int aTransformMatrix[2][2] )
@@ -969,7 +1012,6 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint         pos1;
 
     int             color     = ReturnLayerColor( LAYER_DEVICE );
-    int             linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     // Buffer used to store current corners coordinates for drawings
     static wxPoint* Buf_Poly_Drawings = NULL;
@@ -1010,14 +1052,14 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-               Buf_Poly_Drawings, 1, linewidth, color,
+               Buf_Poly_Drawings, 1, GetPenSize( ), color,
                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 1, linewidth, color, color );
+                Buf_Poly_Drawings, 1, GetPenSize( ), color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 0, linewidth, color, color );
+                Buf_Poly_Drawings, 0, GetPenSize( ), color, color );
 }
 
 
@@ -1209,6 +1251,15 @@ LibDrawBezier* LibDrawBezier::GenCopy()
     return newitem;
 }
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawBezier::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
 void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 						   const wxPoint& aOffset, int aColor, int aDrawMode,
 						   void* aData, const int aTransformMatrix[2][2] )
@@ -1217,7 +1268,6 @@ void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 	std::vector<wxPoint> PolyPointsTraslated;
 
     int             color     = ReturnLayerColor( LAYER_DEVICE );
-    int             linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     m_PolyPoints = Bezier2Poly( m_BezierPoints[0] ,
                            m_BezierPoints[1] ,
@@ -1242,14 +1292,14 @@ void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, linewidth, color,
+                &PolyPointsTraslated[0], 1, GetPenSize( ), color,
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, linewidth, color, color );
+                &PolyPointsTraslated[0], 1, GetPenSize( ), color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 0, linewidth, color, color );
+                &PolyPointsTraslated[0], 0, GetPenSize( ), color, color );
 
 }
 

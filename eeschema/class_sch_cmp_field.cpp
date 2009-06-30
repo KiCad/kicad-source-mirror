@@ -45,6 +45,25 @@ SCH_CMP_FIELD::~SCH_CMP_FIELD()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int SCH_CMP_FIELD::GetPenSize( )
+{
+    int     pensize = m_Width;
+
+    if( pensize == 0 )   // Use default values for pen size
+    {
+        if( m_Bold  )
+            pensize = GetPenSizeForBold( m_Size.x );
+        else
+            pensize = g_DrawDefaultLineThickness;
+    }
+    // Clip pen size for small texts:
+    pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
+    return pensize;
+}
+
 /**
  * Routine de trace des textes type Field du composant.
  *  entree:
@@ -60,7 +79,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRTextHorizJustifyType hjustify;
     GRTextVertJustifyType vjustify;
     int            LineWidth = m_Width;
-    
+
     if (LineWidth == 0)   // Use default values for pen size
     {
         if ( m_Bold  )

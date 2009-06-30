@@ -189,6 +189,25 @@ LibDrawText* LibDrawText::GenCopy()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawText::GetPenSize( )
+{
+    int     pensize = m_Width;
+
+    if( pensize == 0 )   // Use default values for pen size
+    {
+        if( m_Bold  )
+            pensize = GetPenSizeForBold( m_Size.x );
+        else
+            pensize = g_DrawDefaultLineThickness;
+    }
+    // Clip pen size for small texts:
+    pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
+    return pensize;
+}
+
 void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                         const wxPoint& aOffset, int aColor, int aDrawMode,
                         void* aData, const int aTransformMatrix[2][2] )
@@ -196,19 +215,6 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint pos1, pos2;
 
     int     color     = ReturnLayerColor( LAYER_DEVICE );
-    int     linewidth = m_Width;
-
-    if( linewidth == 0 )   // Use default values for pen size
-    {
-        if( m_Bold  )
-            linewidth = GetPenSizeForBold( m_Size.x );
-        else
-            linewidth = g_DrawDefaultLineThickness;
-    }
-
-    // Clip pen size for small texts:
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
-
     if( aColor < 0 )       // Used normal color or selected color
     {
         if( ( m_Selected & IS_SELECTED ) )
@@ -226,7 +232,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
                      t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                      m_Size, m_HJustify, m_VJustify,
-                     linewidth, m_Italic, m_Bold );
+                     GetPenSize( ), m_Italic, m_Bold );
 }
 
 

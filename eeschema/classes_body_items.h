@@ -141,6 +141,11 @@ public:
                        const wxPoint &aOffset, int aColor, int aDrawMode,
                        void* aData, const int aTransformMatrix[2][2] ) = 0;
 
+    /** Function GetPenSize virtual pure
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( ) = 0;
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd"
@@ -210,7 +215,7 @@ public:
 	// (Currently Unused) Pin num and Pin name text opt position, 0 = default:
     char m_PinNumPositionOpt, m_PinNamePositionOpt;
 
-wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
+    wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
                              * point (segments) */
     int      m_Width;       /* Line width */
 
@@ -262,6 +267,11 @@ public:
     int ReturnPinDrawOrient( const int TransMat[2][2] );
     void         ReturnPinStringNum( wxString& buffer ) const;
     void         SetPinNumFromString( wxString& buffer );
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -343,6 +353,11 @@ public:
 
     virtual EDA_Rect GetBoundingBox();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
 };
 
 
@@ -393,6 +408,11 @@ public:
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     LibDrawCircle* GenCopy();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -460,6 +480,11 @@ public:
 
     LibDrawText* GenCopy();
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
@@ -514,6 +539,11 @@ public:
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     LibDrawSquare* GenCopy();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -570,6 +600,11 @@ public:
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     LibDrawSegment* GenCopy();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -637,6 +672,11 @@ public:
      */
     virtual EDA_Rect GetBoundingBox();
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
@@ -648,66 +688,71 @@ public:
 /* Graphic Body Item: Bezier Curve (set of lines) */
 /**********************************************************/
 class LibDrawBezier : public LibEDA_BaseStruct
-	{
-	public:
-		int m_Width;                            /* Line width */
-		std::vector<wxPoint> m_BezierPoints;      // list of parameter (3|4)
-		std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
-		
-	public:
-		LibDrawBezier(EDA_LibComponentStruct * aParent);
-		~LibDrawBezier() { }
-		
-		virtual wxString GetClass() const
-		{
-			return wxT( "LibDrawBezier" );
-		}
-		
-		
-		/**
-		 * Function Save
-		 * writes the data structures for this object out to a FILE in "*.brd"
-		 * format.
-		 * @param aFile The FILE to write to.
-		 * @return bool - true if success writing else false.
-		 */
-		virtual bool Save( FILE* aFile ) const;
-		virtual bool Load( char* line, wxString& errorMsg );
-		
-		LibDrawBezier* GenCopy();
-		void             AddPoint( const wxPoint& point );
-		
-		/** Function GetCornerCount
-		 * @return the number of corners
-		 */
-		unsigned GetCornerCount() const { return m_PolyPoints.size(); }
-		
-		/**
-		 * Function HitTest
-		 * tests if the given wxPoint is within the bounds of this object.
-		 * @param aRefPos A wxPoint to test
-		 * @return bool - true if a hit, else false
-		 */
-		virtual bool HitTest( const wxPoint& aRefPos );
-		
-		/** Function HitTest
-		 * @return true if the point aPosRef is near a segment
-		 * @param aPosRef = a wxPoint to test
-		 * @param aThreshold = max distance to a segment
-		 * @param aTransMat = the transform matrix
-		 */
-		virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
-		
-		/** Function GetBoundingBox
-		 * @return the boundary box for this, in library coordinates
-		 */
-		virtual EDA_Rect GetBoundingBox();
-		
-		void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-				  int aColor, int aDrawMode, void* aData,
-				  const int aTransformMatrix[2][2] );
-		
-		virtual void DisplayInfo( WinEDA_DrawFrame* frame );
-	};
+{
+public:
+    int m_Width;                            /* Line width */
+    std::vector<wxPoint> m_BezierPoints;      // list of parameter (3|4)
+    std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
+
+public:
+    LibDrawBezier(EDA_LibComponentStruct * aParent);
+    ~LibDrawBezier() { }
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "LibDrawBezier" );
+    }
+
+
+    /**
+     * Function Save
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
+     * @param aFile The FILE to write to.
+     * @return bool - true if success writing else false.
+     */
+    virtual bool Save( FILE* aFile ) const;
+    virtual bool Load( char* line, wxString& errorMsg );
+
+    LibDrawBezier* GenCopy();
+    void             AddPoint( const wxPoint& point );
+
+    /** Function GetCornerCount
+     * @return the number of corners
+     */
+    unsigned GetCornerCount() const { return m_PolyPoints.size(); }
+
+    /**
+     * Function HitTest
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param aRefPos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    virtual bool HitTest( const wxPoint& aRefPos );
+
+    /** Function HitTest
+     * @return true if the point aPosRef is near a segment
+     * @param aPosRef = a wxPoint to test
+     * @param aThreshold = max distance to a segment
+     * @param aTransMat = the transform matrix
+     */
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+
+    /** Function GetBoundingBox
+     * @return the boundary box for this, in library coordinates
+     */
+    virtual EDA_Rect GetBoundingBox();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
+    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+              int aColor, int aDrawMode, void* aData,
+              const int aTransformMatrix[2][2] );
+
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+};
 
 #endif  //  CLASSES_BODY_ITEMS_H

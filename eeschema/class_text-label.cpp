@@ -466,6 +466,26 @@ void SCH_TEXT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int SCH_TEXT::GetPenSize( )
+{
+    int     pensize = m_Width;
+
+    if( pensize == 0 )   // Use default values for pen size
+    {
+        if( m_Bold  )
+            pensize = GetPenSizeForBold( m_Size.x );
+        else
+            pensize = g_DrawDefaultLineThickness;
+    }
+    // Clip pen size for small texts:
+    pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
+    return pensize;
+}
+
+
 /*******************************************************************************************/
 void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
                      int DrawMode, int Color )

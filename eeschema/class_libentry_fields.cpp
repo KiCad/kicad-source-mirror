@@ -202,6 +202,17 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
 }
 
 
+
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LibDrawField::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
+
 /*
  * if aData not NULL, aData must point a wxString which is used instead of
  * the m_Text
@@ -213,7 +224,7 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxPoint text_pos;
 
     int     color     = aColor;
-    int     linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int     linewidth = GetPenSize( );
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
 

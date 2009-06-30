@@ -97,6 +97,12 @@ public:
      */
     bool         Save( FILE* aFile ) const;
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    int GetPenSize( );
+
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 
