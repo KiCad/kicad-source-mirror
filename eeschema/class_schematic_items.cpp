@@ -112,11 +112,26 @@ EDA_Rect DrawBusEntryStruct::GetBoundingBox()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int DrawBusEntryStruct::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    if( m_Layer == LAYER_BUS )      // TODO: find a better way to handle bus thickness
+    {
+        pensize = wxRound(pensize * 1.3);
+        pensize = MAX(pensize, 3);
+    }
+
+    return pensize;
+}
+
+
 void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
 
     if( Color >= 0 )
         color = Color;
@@ -124,14 +139,8 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         color = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    if( m_Layer == LAYER_BUS )      // TODO: find a better way to handle bus thickness
-    {
-        width = wxRound(width * 1.3);
-        width = MAX(width, 3);
-    }
-
     GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
-            m_End().x + offset.x, m_End().y + offset.y, width, color );
+            m_End().x + offset.x, m_End().y + offset.y, GetPenSize( ), color );
 }
 
 
@@ -202,6 +211,15 @@ bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
                  ( (double) ( dist.y * dist.y ) ) ) < DRAWJUNCTION_SIZE;
 }
 
+
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ * has no meaning for DrawJunctionStruct
+ */
+int DrawJunctionStruct::GetPenSize( )
+{
+    return 0;
+}
 
 /*****************************************************************************
 * Routine to redraw connection struct.										 *
@@ -302,6 +320,14 @@ bool DrawNoConnectStruct::Save( FILE* aFile ) const
     return success;
 }
 
+
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int DrawNoConnectStruct::GetPenSize( )
+{
+    return g_DrawDefaultLineThickness;
+}
 
 void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                 const wxPoint& offset, int DrawMode, int Color )
@@ -577,11 +603,20 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int EDA_DrawLineStruct::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
 void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int width = GetPenSize( );
 
     if( Color >= 0 )
         color = Color;
@@ -687,11 +722,20 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int DrawPolylineStruct::GetPenSize( )
+{
+    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    return pensize;
+}
+
 void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int width = GetPenSize( );
 
     if( Color >= 0 )
         color = Color;

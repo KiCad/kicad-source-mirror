@@ -78,6 +78,11 @@ public:
      */
     bool         Save( FILE* aFile ) const;
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 #endif
@@ -116,6 +121,12 @@ public:
      */
     bool              Save( FILE* aFile ) const;
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     * for a marker, has no meaning, but it is necessary to satisfy the SCH_ITEM class requirements
+     */
+    virtual int GetPenSize( ) { return 0; };
+
 #if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );
 #endif
@@ -137,6 +148,12 @@ public:
 
 
     DrawNoConnectStruct* GenCopy();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
     virtual void         Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int draw_mode,
                                int Color = -1 );
@@ -197,6 +214,12 @@ public:
     bool                Save( FILE* aFile ) const;
 
     EDA_Rect            GetBoundingBox();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
 };
 
 class DrawPolylineStruct  : public SCH_ITEM /* Polyligne (serie de segments) */
@@ -242,6 +265,12 @@ public:
      */
 
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
 };
 
 
@@ -269,6 +298,11 @@ public:
     EDA_Rect            GetBoundingBox();
 
     DrawJunctionStruct* GenCopy();
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
 
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                               const wxPoint& offset, int draw_mode,

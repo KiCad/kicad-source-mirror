@@ -59,6 +59,11 @@ public:
 
 #endif
 
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
+
     /** function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = list to fill with polygon corners coordinates
@@ -120,6 +125,11 @@ public:
      * @param aFrame = the schematic frame
      */
     void             CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
+
+    /** Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
+     */
+    virtual int GetPenSize( );
 
     /** Function Draw
      *  Draw the hierarchical sheet shape

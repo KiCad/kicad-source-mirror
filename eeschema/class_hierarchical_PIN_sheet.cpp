@@ -57,6 +57,15 @@ Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int Hierarchical_PIN_Sheet_Struct::GetPenSize( )
+{
+    return g_DrawDefaultLineThickness;
+}
+
+
 /********************************************************************************************/
 void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                                           int DrawMode, int Color )
@@ -69,7 +78,7 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
 
     static std::vector <wxPoint> Poly;
 
-    int LineWidth = g_DrawDefaultLineThickness;
+    int LineWidth = GetPenSize( );
 
     if( Color >= 0 )
         txtcolor = (EDA_Colors) Color;

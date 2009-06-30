@@ -285,6 +285,14 @@ void DrawSheetStruct::CleanupSheet( WinEDA_SchematicFrame* aFrame, bool aRedraw 
 }
 
 
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int DrawSheetStruct::GetPenSize( )
+{
+    return g_DrawDefaultLineThickness;
+}
+
 /**************************************************************************************/
 void DrawSheetStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                             const wxPoint& aOffset,

@@ -38,7 +38,7 @@ static void PlotNoConnectStruct( Plotter* plotter, DrawNoConnectStruct* Struct )
 
     pX = Struct->m_Pos.x; pY = Struct->m_Pos.y;
 
-    plotter->set_current_line_width( -1 );
+    plotter->set_current_line_width( Struct->GetPenSize( ) );
     plotter->move_to( wxPoint( pX - DELTA, pY - DELTA ) );
     plotter->finish_to( wxPoint( pX + DELTA, pY + DELTA ) );
     plotter->move_to( wxPoint( pX + DELTA, pY - DELTA ) );
@@ -126,9 +126,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
              * transformation matrix causes xy axes to be flipped. */
             t1  = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
             pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
-            int thickness = (Text->m_Width == 0) ? g_DrawDefaultLineThickness : Text->m_Width;
-            thickness = Clamp_Text_PenSize( thickness, Text->m_Size, Text->m_Bold );
-
+            int thickness = Text->GetPenSize( );
             plotter->text( pos, CharColor,
                            Text->m_Text,
                            t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
@@ -167,8 +165,9 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
             pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
 
             /* Dessin de la pin et du symbole special associe */
+            int thickness = Pin->GetPenSize();
+            plotter->set_current_line_width( thickness );
             PlotPinSymbol( plotter, pos, Pin->m_PinLen, orient, Pin->m_PinShape );
-            int thickness = g_DrawDefaultLineThickness;
             Pin->PlotPinTexts( plotter, pos, orient,
                                Entry->m_TextInside,
                                Entry->m_DrawPinNum, Entry->m_DrawPinName,
@@ -414,8 +413,6 @@ static void PlotPinSymbol( Plotter* plotter, const wxPoint& pos,
 
     plotter->set_color( color );
 
-    plotter->set_current_line_width( -1 );
-
     MapX1 = MapY1 = 0; x1 = pos.x; y1 = pos.y;
 
     switch( orient )
@@ -607,12 +604,7 @@ static void Plot_Hierarchical_PIN_Sheet( Plotter*                       plotter,
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
 
-    int thickness =
-        (aHierarchical_PIN->m_Width ==
-         0) ? g_DrawDefaultLineThickness : aHierarchical_PIN->m_Width;
-    thickness = Clamp_Text_PenSize( thickness,
-                                    aHierarchical_PIN->m_Size,
-                                    aHierarchical_PIN->m_Bold );
+    int thickness = aHierarchical_PIN->GetPenSize( );
     plotter->set_current_line_width( thickness );
 
     plotter->text( wxPoint( tposx, posy ), txtcolor,
@@ -640,7 +632,7 @@ static void PlotSheetStruct( Plotter* plotter, DrawSheetStruct* Struct )
 
     plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
 
-    int thickness = g_DrawDefaultLineThickness;
+    int thickness = Struct->GetPenSize( );
     plotter->set_current_line_width( thickness );
 
     plotter->move_to( Struct->m_Pos );
@@ -706,6 +698,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
         int            layer;
         wxPoint        StartPos, EndPos;
 
+        plotter->set_current_line_width( drawlist->GetPenSize( ) );
         switch( drawlist->Type() )
         {
         case DRAW_BUSENTRY_STRUCT_TYPE:             /* Struct Raccord et Segment sont identiques */
@@ -732,7 +725,6 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
             switch( layer )
             {
             case LAYER_NOTES:         /* Trace en pointilles */
-                plotter->set_current_line_width( g_DrawDefaultLineThickness );
                 plotter->set_dash( true );
                 plotter->move_to( StartPos );
                 plotter->finish_to( EndPos );
@@ -740,18 +732,10 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
                 break;
 
             case LAYER_BUS:         /* Trait large */
-            {
-                int thickness = wxRound( g_DrawDefaultLineThickness * 2 );
-                if( thickness < 3 )
-                    thickness = 3;
-                /* We NEED it to be thick, even on HPGL */
-                plotter->thick_segment( StartPos, EndPos, thickness, FILLED );
-                plotter->set_current_line_width( g_DrawDefaultLineThickness );
-            }
+                plotter->thick_segment( StartPos, EndPos, drawlist->GetPenSize( ), FILLED );
             break;
 
             default:
-                plotter->set_current_line_width( g_DrawDefaultLineThickness );
                 plotter->move_to( StartPos );
                 plotter->finish_to( EndPos );
                 break;
