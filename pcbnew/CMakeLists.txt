@@ -118,6 +118,7 @@ set(PCBNEW_SRCS
     plotgerb.cpp
     plothpgl.cpp
     plotps.cpp
+    plotdxf.cpp
     plot_rtn.cpp
     queue.cpp
     ratsnest.cpp

@@ -316,12 +316,12 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             fn.SetName( fn.GetName() + layer_extend );
             fn.SetExt( DrillFileExtension );
 
-            wxFileDialog dlg( this, _( "Save Drill File" ), wxEmptyString,
+            wxFileDialog dlg( this, _( "Save Drill File" ), fn.GetPath(),
                               fn.GetFullName(), DrillFileWildcard,
                               wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
             if( dlg.ShowModal() == wxID_CANCEL )
-                continue;
+                break;
 
             FILE *excellon_dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
 
@@ -354,6 +354,11 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
                 GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
                              PLOT_FORMAT_GERBER );
                 break;
+
+            case 4:
+                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
+                             PLOT_FORMAT_DXF );
+                break;
             }
 
             if( !ExistsBuriedVias )
@@ -379,7 +384,6 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     {
         GenDrillReport( m_Parent->GetScreen()->m_FileName );
     }
-
 
     EndModal( 0 );
 }
@@ -757,6 +761,10 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
         wildcard = _( "Gerber files (.pho)|*.pho" );
         break;
 
+    case PLOT_FORMAT_DXF:
+        ext = wxT( "dxf" );
+        wildcard = _( "DXF files (.dxf)|*.dxf" );
+        break;
 
     default:
         DisplayError( this, wxT( "WinEDA_DrillFrame::GenDrillMap() error" ) );
@@ -768,9 +776,9 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
     fn.SetExt( ext );
 
-    wxFileDialog dlg( this, _( "Save Drill Plot File" ), wxEmptyString,
+    wxFileDialog dlg( this, _( "Save Drill Plot File" ), fn.GetPath(),
                       fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR );
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -812,9 +820,9 @@ void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
     fn.SetExt( wxT( "rpt" ) );
 
-    wxFileDialog dlg( this, _( "Save Drill Report File" ), wxEmptyString,
+    wxFileDialog dlg( this, _( "Save Drill Report File" ),  fn.GetPath(),
                       fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR );
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

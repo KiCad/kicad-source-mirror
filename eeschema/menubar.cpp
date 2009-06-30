@@ -91,6 +91,12 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( plot_xpm );
     choice_plot_fmt->Append( item );
 
+    item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_DXF, _( "Plot DXF" ),
+                           _( "Plot schematic sheet in DXF format" ) );
+    item->SetBitmap( plot_xpm );
+    choice_plot_fmt->Append( item );
+
+
 #ifdef __WINDOWS__
     /* Under windows, one can draw to the clipboard */
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,

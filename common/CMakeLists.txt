@@ -18,6 +18,7 @@ set(COMMON_SRCS
     common_plotHPGL_functions.cpp
     common_plotPS_functions.cpp
     common_plotGERBER_functions.cpp
+    common_plotDXF_functions.cpp
     confirm.cpp
     copy_to_clipboard.cpp
     dcsvg.cpp

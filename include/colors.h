@@ -6,7 +6,7 @@
 #define _COLORS_H
 
 /* Definitions des Numeros des Couleurs ( palette de 32) */
-#define NBCOLOR             32
+#define NBCOLOR             24
 
 #define MASKCOLOR           31           ///< mask for color index into ColorRefs[]
 

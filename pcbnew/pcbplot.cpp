@@ -116,8 +116,15 @@ public:
 
         // change the A4 to the simple postscript, according to the
         // PlotFormat enum
-        if( radioNdx == 3 )
+	switch (radioNdx)
+	{
+	case 3:
             radioNdx = PLOT_FORMAT_POST;
+	    break;
+	case 4:
+	    radioNdx = PLOT_FORMAT_DXF;
+	    break;
+	}
 
         return PlotFormat( radioNdx );
     }
@@ -192,18 +199,19 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
 
     LeftBoxSizer->Add( LayersBoxSizer, 0, wxGROW | wxALL, 5 );
 
-    static const wxString fmtmsg[4] =
+    static const wxString fmtmsg[5] =
     {
         wxT( "HPGL" ),
         wxT( "Gerber" ),
         wxT( "Postscript" ),
-        wxT( "Postscript A4" )
+        wxT( "Postscript A4" ),
+	wxT( "DXF Export" )
     };
 
     m_PlotFormatOpt = new wxRadioBox( this, ID_SEL_PLOT_FORMAT,
                                       _( "Plot Format" ), wxDefaultPosition,
                                       wxSize( -1, -1 ),
-                                      4, fmtmsg, 1, wxRA_SPECIFY_COLS );
+                                      5, fmtmsg, 1, wxRA_SPECIFY_COLS );
     MidRightBoxSizer->Add( m_PlotFormatOpt, 0, wxGROW | wxALL, 5 );
 
     if( config )
@@ -595,6 +603,28 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
         m_Plot_PS_Negative->SetValue( false );
         m_Plot_PS_Negative->Enable( false );
         break;
+
+    case PLOT_FORMAT_DXF:
+        m_PlotMirorOpt->Enable( false );
+	m_PlotMirorOpt->SetValue( false );
+        m_Drill_Shape_Opt->SetSelection( 0 );
+        m_Drill_Shape_Opt->Enable( false );
+        m_PlotModeOpt->Enable( true );
+        m_Choice_Plot_Offset->Enable( false );
+        m_LinesWidth->Enable( false );
+        m_HPGL_OptionsBox->Enable( false );
+        m_HPGLPenSizeOpt->Enable( false );
+        m_HPGLPenSpeedOpt->Enable( false );
+        m_HPGLPenOverlayOpt->Enable( false );
+        m_Exclude_Edges_Pcb->SetValue( false );
+        m_Exclude_Edges_Pcb->Enable( false );
+        m_Scale_Opt->Enable( false );
+        m_Scale_Opt->SetSelection( 1 );
+        m_FineAdjustXscaleOpt->Enable( false );
+        m_FineAdjustYscaleOpt->Enable( false );
+        m_Plot_PS_Negative->SetValue( false );
+        m_Plot_PS_Negative->Enable( false );
+        break;
     }
 
     g_pcb_plot_options.PlotFormat = format;
@@ -715,7 +745,6 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         wildcard = _( "Adobe post script files (.ps)|*.ps" );
         break;
 
-    default:
     case PLOT_FORMAT_GERBER:
         g_pcb_plot_options.Scale = 1.0; // No scale option allowed in gerber format
         ext      = wxT( "pho" );
@@ -725,6 +754,12 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
     case PLOT_FORMAT_HPGL:
         ext = wxT( "plt" );
         wildcard = _( "HPGL plot files (.plt)|*.plt" );
+        break;
+
+    case PLOT_FORMAT_DXF:
+        g_pcb_plot_options.Scale = 1.0; 
+        ext = wxT( "dxf" );
+        wildcard = _( "DXF files (.dxf)|*.dxf" );
         break;
     }
 
@@ -761,7 +796,6 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 			g_pcb_plot_options.Trace_Mode );
                 break;
 
-            default:
             case PLOT_FORMAT_GERBER:
                 m_Parent->Genere_GERBER( fn.GetFullPath(), layer_to_plot,
                                          s_PlotOriginIsAuxAxis, 
@@ -770,6 +804,11 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
             case PLOT_FORMAT_HPGL:
                 m_Parent->Genere_HPGL( fn.GetFullPath(), layer_to_plot, 
+			g_pcb_plot_options.Trace_Mode );
+                break;
+
+            case PLOT_FORMAT_DXF:
+                m_Parent->Genere_DXF( fn.GetFullPath(), layer_to_plot, 
 			g_pcb_plot_options.Trace_Mode );
                 break;
             }

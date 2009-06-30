@@ -21,6 +21,7 @@
     <bool name="use_two_step_construction">0</bool>
     <bool name="use_enums">0</bool>
     <bool name="generate_for_xrced">0</bool>
+    <bool name="generate_virtual_eventhandlers">0</bool>
     <string name="current_platform">"&lt;All platforms&gt;"</string>
     <string name="target_wx_version">"2.8.7"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
@@ -142,6 +143,8 @@
         <string name="Use exceptions">"Yes"</string>
         <string name="Use ODBC">"No"</string>
         <string name="Use OpenGL">"No"</string>
+        <string name="Use wxMediaCtrl">"No"</string>
+        <string name="Use wxRichTextCtrl">"Yes"</string>
         <string name="wxWidgets version">"%WXVERSION%"</string>
         <string name="Executable name">"%EXECUTABLE%"</string>
         <string name="Program arguments">""</string>
@@ -628,7 +631,7 @@
                 <string name="proxy-Member variable name">"m_Choice_Drill_Map"</string>
                 <string name="proxy-Label">"Drill Sheet:"</string>
                 <long name="proxy-Major dimension count">1</long>
-                <string name="proxy-Items">"None|drill sheet (HPGL)|drill sheet (PostScript)"</string>
+                <string name="proxy-Items">"None|drill sheet (HPGL)|drill sheet (PostScript)|Drill sheet (Gerber)|Drill sheet (DXF)"</string>
                 <long name="proxy-Initial value">0</long>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">"Creates a drill map in PS or HPGL format"</string>

@@ -19,7 +19,8 @@ using namespace std;
 enum PlotFormat {
     PLOT_FORMAT_HPGL,
     PLOT_FORMAT_GERBER,
-    PLOT_FORMAT_POST
+    PLOT_FORMAT_POST,
+    PLOT_FORMAT_DXF
 };
 
 const int PLOT_MIROIR = 1;
@@ -379,6 +380,50 @@ protected:
 
     vector<Aperture>           apertures;
     vector<Aperture>::iterator current_aperture;
+};
+
+class DXF_Plotter : public Plotter
+{
+public:
+    virtual void start_plot( FILE* fout );
+    virtual void end_plot();
+
+/* For now we don't use 'thick' primitives, so no line width */
+    virtual void set_current_line_width( int width )
+    {
+        /* Handy override */
+        current_pen_width = 0;
+    };
+    virtual void set_default_line_width( int width ) 
+    {
+	/* DXF lines are infinitesimal */
+	default_pen_width = 0;
+    };
+    virtual void set_dash( bool dashed );
+
+    virtual void set_color( int color );
+
+    virtual void set_viewport( wxPoint offset,
+                               double scale, int orient );
+    virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void thick_segment( wxPoint start, wxPoint end, int width,
+                                GRTraceMode tracemode );
+    virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+                      FILL_T fill, int width = -1 );
+    virtual void pen_to( wxPoint pos, char plume );
+    virtual void flash_pad_circle( wxPoint pos, int diametre,
+                                   GRTraceMode trace_mode );
+    virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                 GRTraceMode trace_mode );
+    virtual void flash_pad_rect( wxPoint pos, wxSize size,
+                                 int orient, GRTraceMode trace_mode );
+    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                   int orient, GRTraceMode trace_mode );
+
+protected:
+    int          current_color;
 };
 
 #endif  /* __INCLUDE__PLOT_COMMON_H__ */

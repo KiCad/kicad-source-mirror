@@ -65,6 +65,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
     Multi   = DrawLibItem->m_Multi;
     convert = DrawLibItem->m_Convert;
 
+    plotter->set_current_line_width( g_DrawDefaultLineThickness );
     for( LibEDA_BaseStruct* DEntry = Entry->m_Drawings;
         DEntry != NULL; DEntry = DEntry->Next() )
     {
@@ -88,12 +89,12 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
             if( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
                 plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->arc( pos, t1, t2, Arc->m_Rayon, FILLED_SHAPE, 0 );
+                plotter->arc( pos, -t1, -t2, Arc->m_Rayon, FILLED_SHAPE, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
             plotter->arc( pos,
-                          t1,
-                          t2,
+                          -t1,
+                          -t2,
                           Arc->m_Rayon,
                           Arc->m_Fill,
                           Arc->m_Width );
@@ -713,19 +714,25 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist )
         switch( drawlist->Type() )
         {
         case DRAW_BUSENTRY_STRUCT_TYPE:             /* Struct Raccord et Segment sont identiques */
+        case DRAW_SEGMENT_STRUCT_TYPE:
+            if( drawlist->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
+            {
             #undef STRUCT
             #define STRUCT ( (DrawBusEntryStruct*) drawlist )
-            StartPos = STRUCT->m_Pos;
-            EndPos   = STRUCT->m_End();
-            layer    = STRUCT->GetLayer();
-
-        case DRAW_SEGMENT_STRUCT_TYPE:
+                StartPos = STRUCT->m_Pos;
+                EndPos   = STRUCT->m_End();
+                layer    = STRUCT->GetLayer();
+                plotter->set_color( ReturnLayerColor( layer ) );
+            }
+            else
+            {
             #undef STRUCT
             #define STRUCT ( (EDA_DrawLineStruct*) drawlist )
-            StartPos = STRUCT->m_Start;
-            EndPos   = STRUCT->m_End;
-            layer    = STRUCT->GetLayer();
-            plotter->set_color( ReturnLayerColor( layer ) );
+                StartPos = STRUCT->m_Start;
+                EndPos   = STRUCT->m_End;
+                layer    = STRUCT->GetLayer();
+                plotter->set_color( ReturnLayerColor( layer ) );
+            }
 
             switch( layer )
             {

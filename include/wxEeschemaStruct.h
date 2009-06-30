@@ -202,6 +202,7 @@ public:
     // Plot functions:
     void                           ToPlot_PS( wxCommandEvent& event );
     void                           ToPlot_HPGL( wxCommandEvent& event );
+    void                           ToPlot_DXF( wxCommandEvent& event );
     void                           ToPostProcess( wxCommandEvent& event );
 
     // read and save files

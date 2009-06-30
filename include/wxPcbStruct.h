@@ -302,6 +302,8 @@ public:
 	    GRTraceMode trace_mode);
     void                     Genere_PS( const wxString& FullFileName, int Layer, 
 	    bool useA4, GRTraceMode trace_mode );
+    void                     Genere_DXF( const wxString& FullFileName, int Layer,
+	    GRTraceMode trace_mode);
     void		     Plot_Layer(Plotter *plotter, int Layer, GRTraceMode trace_mode );
     void                     Plot_Standard_Layer( Plotter *plotter, int masque_layer,
                                             int garde, bool trace_via, 

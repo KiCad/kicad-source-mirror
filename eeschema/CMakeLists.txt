@@ -95,6 +95,7 @@ set(EESCHEMA_SRCS
     plot.cpp
     plothpgl.cpp
     plotps.cpp
+    plotdxf.cpp
     priorque.cpp
     read_from_file_schematic_items_descriptions.cpp
     savelib.cpp

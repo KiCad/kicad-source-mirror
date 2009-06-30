@@ -41,7 +41,6 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     int             dX, dY;
     wxPoint         BoardCentre;
     wxPoint	    offset;
-    wxSize          SheetSize;
     wxString        msg;
     Plotter	    *plotter = NULL;
 
@@ -67,9 +66,6 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
     case PLOT_FORMAT_HPGL:     /* Calcul des echelles de conversion format HPGL */
     {
-        SheetSize = aSheet->m_Size;
-        SheetSize.x   *= U_PCB;
-        SheetSize.y   *= U_PCB;
         offset.x = 0;
         offset.y = 0;
 	scale = 1;
@@ -86,6 +82,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     case PLOT_FORMAT_POST:
     {
 	Ki_PageDescr* SheetPS = &g_Sheet_A4;
+	wxSize SheetSize;
         SheetSize.x = SheetPS->m_Size.x * U_PCB;
         SheetSize.y = SheetPS->m_Size.y * U_PCB;
 	/* Keep size for drill legend */
@@ -103,6 +100,18 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 	plotter->set_viewport(offset, scale, 0);
         break;
     }
+    case PLOT_FORMAT_DXF:
+    {
+        offset.x = 0;
+        offset.y = 0;
+	scale = 1;
+	DXF_Plotter *dxf_plotter = new DXF_Plotter;
+	plotter = dxf_plotter;
+	plotter->set_paper_size(aSheet);
+	plotter->set_viewport(offset, scale, 0);
+	break;
+    }
+
     default:
 	wxASSERT(false);
     }
