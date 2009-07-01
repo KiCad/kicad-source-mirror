@@ -196,9 +196,9 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
 
 // return a bounding box
 {
-    int      width = DRAWJUNCTION_SIZE * 2;
-    int      xmin  = m_Pos.x - DRAWJUNCTION_SIZE;
-    int      ymin  = m_Pos.y - DRAWJUNCTION_SIZE;
+    int      width = DRAWJUNCTION_DIAMETER;
+    int      xmin  = m_Pos.x - (DRAWJUNCTION_DIAMETER/2);
+    int      ymin  = m_Pos.y - (DRAWJUNCTION_DIAMETER/2);
 
     EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( width, width ) );
 
@@ -215,7 +215,7 @@ bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                ( (double) ( dist.y * dist.y ) ) ) < DRAWJUNCTION_SIZE;
+                ( (double) ( dist.y * dist.y ) ) ) < (DRAWJUNCTION_DIAMETER/2);
 }
 
 
@@ -244,7 +244,7 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, DrawMode );
 
     GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x,
-                    m_Pos.y + offset.y, DRAWJUNCTION_SIZE, 0, color, color );
+                    m_Pos.y + offset.y, (DRAWJUNCTION_DIAMETER/2), 0, color, color );
 }
 
 

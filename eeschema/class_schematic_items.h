@@ -5,7 +5,7 @@
 #ifndef CLASS_SCHEMATIC_ITEMS_H
 #define CLASS_SCHEMATIC_ITEMS_H
 
-#define DRAWJUNCTION_SIZE  16       /* Rayon du symbole connexion */
+#define DRAWJUNCTION_DIAMETER  32       /* Size (diameter) of junctions between wires */
 #define DRAWMARKER_SIZE    16       /* Rayon du symbole marqueur */
 #define DRAWNOCONNECT_SIZE 48       /* Rayon du symbole No Connexion */
 

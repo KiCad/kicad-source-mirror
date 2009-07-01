@@ -735,7 +735,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
             #undef STRUCT
             #define STRUCT ( (DrawJunctionStruct*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
-            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_SIZE * 2, FILLED_SHAPE );
+            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_DIAMETER, FILLED_SHAPE );
             break;
 
         case TYPE_SCH_TEXT:
