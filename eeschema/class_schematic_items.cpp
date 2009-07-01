@@ -14,11 +14,16 @@
 
 #include "protos.h"
 
+/* used to calculate the pen size from default value
+ * the actual pen size is default value * BUS_WIDTH_EXPAND
+ */
+ #define BUS_WIDTH_EXPAND 1.4
+
 /****************************/
 /* class DrawBusEntryStruct */
 /***************************/
 
-const wxChar*  NameMarqueurType[] =
+const wxChar* NameMarqueurType[] =
 {
     wxT( "" ),
     wxT( "ERC" ),
@@ -105,7 +110,7 @@ EDA_Rect DrawBusEntryStruct::GetBoundingBox()
     EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y ), wxSize( dx, dy ) );
 
     box.Normalize();
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int      width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     box.Inflate( width / 2, width / 2 );
 
     return box;
@@ -115,13 +120,14 @@ EDA_Rect DrawBusEntryStruct::GetBoundingBox()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int DrawBusEntryStruct::GetPenSize( )
+int DrawBusEntryStruct::GetPenSize()
 {
     int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    if( m_Layer == LAYER_BUS )      // TODO: find a better way to handle bus thickness
+
+    if( m_Layer == LAYER_BUS && m_Width == 0 )
     {
-        pensize = wxRound(pensize * 1.3);
-        pensize = MAX(pensize, 3);
+        pensize = wxRound( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
+        pensize = MAX( pensize, 3 );
     }
 
     return pensize;
@@ -140,7 +146,7 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, DrawMode );
 
     GRLine( &panel->m_ClipBox, DC, m_Pos.x + offset.x, m_Pos.y + offset.y,
-            m_End().x + offset.x, m_End().y + offset.y, GetPenSize( ), color );
+            m_End().x + offset.x, m_End().y + offset.y, GetPenSize(), color );
 }
 
 
@@ -187,6 +193,7 @@ bool DrawJunctionStruct::Save( FILE* aFile ) const
 
 
 EDA_Rect DrawJunctionStruct::GetBoundingBox()
+
 // return a bounding box
 {
     int      width = DRAWJUNCTION_SIZE * 2;
@@ -208,7 +215,7 @@ bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                 ( (double) ( dist.y * dist.y ) ) ) < DRAWJUNCTION_SIZE;
+                ( (double) ( dist.y * dist.y ) ) ) < DRAWJUNCTION_SIZE;
 }
 
 
@@ -216,10 +223,11 @@ bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
  * @return the size of the "pen" that be used to draw or plot this item
  * has no meaning for DrawJunctionStruct
  */
-int DrawJunctionStruct::GetPenSize( )
+int DrawJunctionStruct::GetPenSize()
 {
     return 0;
 }
+
 
 /*****************************************************************************
 * Routine to redraw connection struct.										 *
@@ -247,8 +255,9 @@ void DrawJunctionStruct::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-        << m_Pos << "/>\n";
+                                 << m_Pos << "/>\n";
 }
+
 
 #endif
 
@@ -278,7 +287,7 @@ EDA_Rect DrawNoConnectStruct::GetBoundingBox()
 {
     const int DELTA = DRAWNOCONNECT_SIZE / 2;
     EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ),
-                   wxSize( 2 * DELTA, 2 * DELTA ) );
+                  wxSize( 2 * DELTA, 2 * DELTA ) );
 
     box.Normalize();
     return box;
@@ -292,11 +301,12 @@ EDA_Rect DrawNoConnectStruct::GetBoundingBox()
  */
 bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
 {
-    int width = g_DrawDefaultLineThickness;
-    int delta = ( DRAWNOCONNECT_SIZE + width) / 2;
+    int     width = g_DrawDefaultLineThickness;
+    int     delta = ( DRAWNOCONNECT_SIZE + width) / 2;
 
     wxPoint dist = aPosRef - m_Pos;
-    if( (ABS(dist.x) <= delta) && (ABS(dist.y) <= delta) )
+
+    if( (ABS( dist.x ) <= delta) && (ABS( dist.y ) <= delta) )
         return true;
     return false;
 }
@@ -324,10 +334,11 @@ bool DrawNoConnectStruct::Save( FILE* aFile ) const
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int DrawNoConnectStruct::GetPenSize( )
+int DrawNoConnectStruct::GetPenSize()
 {
     return g_DrawDefaultLineThickness;
 }
+
 
 void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                 const wxPoint& offset, int DrawMode, int Color )
@@ -357,20 +368,20 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 char marq_bitmap[] =
 {
-    12, 12, 0,  0, /* Dimensions x et y, offsets x et y du bitmap de marqueurs*/
-    YELLOW,        /* Couleur */
-    1,  1,  1,  1, 1, 1, 1, 1, 0, 0, 0, 0,  /* bitmap: >= 1 : color, */
-    1,  1,  1,  0, 1, 0, 1, 1, 0, 0, 0, 0,  /*  0 = notrace */
-    1,  1,  1,  1, 0, 0, 0, 1, 0, 0, 0, 0,
-    1,  0,  1,  1, 1, 0, 0, 0, 0, 0, 0, 0,
-    1,  1,  0,  1, 1, 1, 0, 0, 0, 0, 0, 0,
-    1,  1,  0,  0, 1, 1, 1, 0, 0, 0, 0, 0,
-    1,  1,  1,  0, 0, 1, 1, 1, 0, 0, 0, 0,
-    0,  0,  0,  0, 0, 0, 1, 1, 1, 0, 0, 0,
-    0,  0,  0,  0, 0, 0, 0, 1, 1, 1, 0, 0,
-    0,  0,  0,  0, 0, 0, 0, 0, 1, 1, 1, 0,
-    0,  0,  0,  0, 0, 0, 0, 0, 0, 1, 1, 1,
-    0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 1, 0
+    12, 12, 0, 0,                           /* Dimensions x et y, offsets x et y du bitmap de marqueurs*/
+    YELLOW,                                 /* Couleur */
+    1,  1,  1, 1, 1, 1, 1, 1, 0, 0, 0, 0,   /* bitmap: >= 1 : color, */
+    1,  1,  1, 0, 1, 0, 1, 1, 0, 0, 0, 0,   /*  0 = notrace */
+    1,  1,  1, 1, 0, 0, 0, 1, 0, 0, 0, 0,
+    1,  0,  1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+    1,  1,  0, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+    1,  1,  0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
+    1,  1,  1, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0,  0,  0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
+    0,  0,  0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+    0,  0,  0, 0, 0, 0, 0, 0, 1, 1, 1, 0,
+    0,  0,  0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+    0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 1, 0
 };
 
 char marqERC_bitmap[] =
@@ -391,8 +402,8 @@ char marqERC_bitmap[] =
 DrawMarkerStruct::DrawMarkerStruct( const wxPoint& pos, const wxString& text ) :
     SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE )
 {
-    m_Pos       = pos;              /* XY coordinates of marker. */
-    m_Type      = MARQ_UNSPEC;
+    m_Pos  = pos;                   /* XY coordinates of marker. */
+    m_Type = MARQ_UNSPEC;
     m_MarkFlags = 0;                // complements d'information
     m_Comment   = text;
 }
@@ -407,7 +418,7 @@ DrawMarkerStruct* DrawMarkerStruct::GenCopy()
 {
     DrawMarkerStruct* newitem = new DrawMarkerStruct( m_Pos, m_Comment );
 
-    newitem->m_Type      = m_Type;
+    newitem->m_Type = m_Type;
     newitem->m_MarkFlags = m_MarkFlags;
 
     return newitem;
@@ -420,7 +431,7 @@ wxString DrawMarkerStruct::GetComment()
 }
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
 /**
  * Function Show
@@ -435,6 +446,8 @@ void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << m_Pos
                                  << "/>\n";
 }
+
+
 #endif
 
 /**
@@ -448,7 +461,7 @@ bool DrawMarkerStruct::Save( FILE* aFile ) const
     bool success = true;
 
     if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\" F=%X\n",
-                 int( m_Type ) + 'A', m_Pos.x, m_Pos.y,
+                 int(m_Type) + 'A', m_Pos.x, m_Pos.y,
                  CONV_TO_UTF8( m_Comment ), m_MarkFlags ) == EOF )
     {
         success = false;
@@ -469,8 +482,8 @@ void DrawMarkerStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         if( Color <= 0 )
         {
             color = (m_MarkFlags == WAR ) ?
-                g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
-                g_LayerDescr.LayerColor[LAYER_ERC_ERR];
+                    g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
+                    g_LayerDescr.LayerColor[LAYER_ERC_ERR];
         }
 
         Draw_Marqueur( panel, DC, m_Pos + offset, marqERC_bitmap, DrawMode,
@@ -530,7 +543,7 @@ bool EDA_DrawLineStruct::IsOneEndPointAt( const wxPoint& pos )
 }
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
 /**
  * Function Show
@@ -551,6 +564,7 @@ void EDA_DrawLineStruct::Show( int nestLevel, std::ostream& os )
     "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
+
 #endif
 
 
@@ -566,7 +580,7 @@ EDA_Rect EDA_DrawLineStruct::GetBoundingBox()
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
     EDA_Rect ret( wxPoint( xmin, ymin ),
-                  wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+                 wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -593,8 +607,8 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
     {
         success = false;
     }
-    if ( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_Start.x,m_Start.y,
-                  m_End.x,m_End.y ) == EOF )
+    if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_Start.x, m_Start.y,
+                 m_End.x, m_End.y ) == EOF )
     {
         success = false;
     }
@@ -606,17 +620,25 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int EDA_DrawLineStruct::GetPenSize( )
+int EDA_DrawLineStruct::GetPenSize()
 {
     int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
+    if( m_Layer == LAYER_BUS && m_Width == 0 )
+    {
+        pensize = wxRound( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
+        pensize = MAX( pensize, 3 );
+    }
+
     return pensize;
 }
+
 
 void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = GetPenSize( );
+    int width = GetPenSize();
 
     if( Color >= 0 )
         color = Color;
@@ -624,13 +646,6 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         color = ReturnLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
-
-    // FIXME: Not compatable with new zoom.
-    if( m_Layer == LAYER_BUS)
-    {
-        width = wxRound(width * 1.4);
-        width = MAX(width, 3);
-    }
 
     if( m_Layer == LAYER_NOTES )
         GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
@@ -656,7 +671,7 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 DrawPolylineStruct::DrawPolylineStruct( int layer ) :
     SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
 {
-    m_Width  = 0;
+    m_Width = 0;
 
     switch( layer )
     {
@@ -681,6 +696,7 @@ DrawPolylineStruct::~DrawPolylineStruct()
 DrawPolylineStruct* DrawPolylineStruct::GenCopy()
 {
     DrawPolylineStruct* newitem = new DrawPolylineStruct( m_Layer );
+
     newitem->m_PolyPoints = m_PolyPoints;   // std::vector copy
     return newitem;
 }
@@ -704,7 +720,7 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
     if( fprintf( aFile, "Poly %s %s %d\n",
-                 width, layer, GetCornerCount() ) == EOF )
+                width, layer, GetCornerCount() ) == EOF )
     {
         return false;
     }
@@ -725,17 +741,19 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int DrawPolylineStruct::GetPenSize( )
+int DrawPolylineStruct::GetPenSize()
 {
     int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
     return pensize;
 }
+
 
 void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
-    int width = GetPenSize( );
+    int width = GetPenSize();
 
     if( Color >= 0 )
         color = Color;

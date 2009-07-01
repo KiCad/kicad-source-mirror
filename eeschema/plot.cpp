@@ -38,7 +38,7 @@ static void PlotNoConnectStruct( Plotter* plotter, DrawNoConnectStruct* Struct )
 
     pX = Struct->m_Pos.x; pY = Struct->m_Pos.y;
 
-    plotter->set_current_line_width( Struct->GetPenSize( ) );
+    plotter->set_current_line_width( Struct->GetPenSize() );
     plotter->move_to( wxPoint( pX - DELTA, pY - DELTA ) );
     plotter->finish_to( wxPoint( pX + DELTA, pY + DELTA ) );
     plotter->move_to( wxPoint( pX + DELTA, pY - DELTA ) );
@@ -74,7 +74,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
         if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
             continue;
 
-        int thickness = DEntry->GetPenSize( );
+        int thickness = DEntry->GetPenSize();
 
         plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
         draw_bgfill = plotter->get_color_mode();
@@ -367,7 +367,7 @@ static void PlotTextField( Plotter* plotter, SCH_COMPONENT* DrawLibItem,
 
     }
 
-    int thickness = field->GetPenSize( );
+    int thickness = field->GetPenSize();
 
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
@@ -504,7 +504,7 @@ static void PlotPinSymbol( Plotter* plotter, const wxPoint& pos,
 
 
 /********************************************************************/
-static void PlotTextStruct( Plotter* plotter, SCH_TEXT*  aSchText )
+static void PlotTextStruct( Plotter* plotter, SCH_TEXT* aSchText )
 /********************************************************************/
 
 /*
@@ -526,10 +526,10 @@ static void PlotTextStruct( Plotter* plotter, SCH_TEXT*  aSchText )
         return;
     }
 
-    EDA_Colors color   = UNSPECIFIED_COLOR;
+    EDA_Colors color = UNSPECIFIED_COLOR;
     color = ReturnLayerColor( aSchText->m_Layer );
     wxPoint    textpos   = aSchText->m_Pos + aSchText->GetSchematicTextOffset();
-    int        thickness = aSchText->GetPenSize( );
+    int        thickness = aSchText->GetPenSize();
 
     plotter->set_current_line_width( thickness );
 
@@ -604,7 +604,7 @@ static void Plot_Hierarchical_PIN_Sheet( Plotter*                       plotter,
         side  = GR_TEXT_HJUSTIFY_LEFT;
     }
 
-    int thickness = aHierarchical_PIN->GetPenSize( );
+    int thickness = aHierarchical_PIN->GetPenSize();
     plotter->set_current_line_width( thickness );
 
     plotter->text( wxPoint( tposx, posy ), txtcolor,
@@ -632,7 +632,7 @@ static void PlotSheetStruct( Plotter* plotter, DrawSheetStruct* Struct )
 
     plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
 
-    int thickness = Struct->GetPenSize( );
+    int thickness = Struct->GetPenSize();
     plotter->set_current_line_width( thickness );
 
     plotter->move_to( Struct->m_Pos );
@@ -698,10 +698,10 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
         int            layer;
         wxPoint        StartPos, EndPos;
 
-        plotter->set_current_line_width( aDrawlist->GetPenSize( ) );
+        plotter->set_current_line_width( aDrawlist->GetPenSize() );
         switch( aDrawlist->Type() )
         {
-        case DRAW_BUSENTRY_STRUCT_TYPE:             /* Struct Raccord et Segment sont identiques */
+        case DRAW_BUSENTRY_STRUCT_TYPE:
         case DRAW_SEGMENT_STRUCT_TYPE:
             if( aDrawlist->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
             {
@@ -722,24 +722,12 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
                 plotter->set_color( ReturnLayerColor( layer ) );
             }
 
-            switch( layer )
-            {
-            case LAYER_NOTES:         /* Trace en pointilles */
+            if( layer == LAYER_NOTES )
                 plotter->set_dash( true );
-                plotter->move_to( StartPos );
-                plotter->finish_to( EndPos );
+            plotter->move_to( StartPos );
+            plotter->finish_to( EndPos );
+            if( layer == LAYER_NOTES )
                 plotter->set_dash( false );
-                break;
-
-            case LAYER_BUS:         /* Trait large */
-                plotter->thick_segment( StartPos, EndPos, aDrawlist->GetPenSize( ), FILLED );
-            break;
-
-            default:
-                plotter->move_to( StartPos );
-                plotter->finish_to( EndPos );
-                break;
-            }
 
             break;
 
@@ -747,7 +735,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
             #undef STRUCT
             #define STRUCT ( (DrawJunctionStruct*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
-            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_SIZE*2, FILLED_SHAPE );
+            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_SIZE * 2, FILLED_SHAPE );
             break;
 
         case TYPE_SCH_TEXT:
