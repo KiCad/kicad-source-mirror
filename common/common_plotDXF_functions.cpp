@@ -43,8 +43,9 @@ void DXF_Plotter::start_plot( FILE* fout )
     fprintf( output_file, "0\nTABLE\n2\nLAYER\n70\n%d\n", NBCOLOR );
     for( int i = 0; i<NBCOLOR; i++ )
     {
+        wxString cname = ColorRefs[i].m_Name;
         fprintf( output_file, "0\nLAYER\n2\n%s\n70\n0\n62\n%d\n6\nCONTINUOUS\n",
-                 CONV_TO_UTF8( ColorRefs[i].m_Name ), i + 1 );
+                 CONV_TO_UTF8( cname ), i + 1 );
     }
 
     /* End of layer table, begin entities */
@@ -104,8 +105,9 @@ void DXF_Plotter::circle( wxPoint centre, int diameter, FILL_T fill, int width )
     user_to_device_coordinates( centre );
     if( rayon > 0 )
     {
+        wxString cname = ColorRefs[current_color].m_Name;
         fprintf( output_file, "0\nCIRCLE\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%g\n",
-                 CONV_TO_UTF8( ColorRefs[current_color].m_Name ),
+                 CONV_TO_UTF8( cname ),
                  centre.x, centre.y, rayon );
     }
 }
@@ -161,8 +163,9 @@ void DXF_Plotter::pen_to( wxPoint pos, char plume )
     if( pen_lastpos != pos && plume == 'D' )
     {
         /* DXF LINE */
+        wxString cname = ColorRefs[current_color].m_Name;
         fprintf( output_file, "0\nLINE\n8\n%s\n10\n%d.0\n20\n%d.0\n11\n%d.0\n21\n%d.0\n",
-                 CONV_TO_UTF8( ColorRefs[current_color].m_Name ),
+                 CONV_TO_UTF8( cname ),
                  pen_lastpos.x, pen_lastpos.y, pos.x, pos.y );
     }
     pen_lastpos = pos;
@@ -218,8 +221,9 @@ void DXF_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
     rayon = user_to_device_size( rayon );
 
     /* DXF ARC */
+    wxString cname = ColorRefs[current_color].m_Name;
     fprintf( output_file, "0\nARC\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%d.0\n50\n%d.0\n51\n%d.0\n",
-             CONV_TO_UTF8( ColorRefs[current_color].m_Name ),
+             CONV_TO_UTF8( cname ),
              centre.x, centre.y, rayon,
              StAngle / 10, EndAngle / 10 );
 }
