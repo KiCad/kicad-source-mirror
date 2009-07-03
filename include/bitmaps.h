@@ -114,6 +114,7 @@ extern const char* edit_xpm[];
 extern const char* eeschema_xpm[];
 extern const char* enter_sheet_xpm[];
 extern const char* erc_xpm[];
+extern const char* erc_green_xpm[];
 extern const char* error_xpm[];
 extern const char* exit_xpm[];
 extern const char* export_module_xpm[];

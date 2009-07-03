@@ -51,6 +51,7 @@ set(EESCHEMA_SRCS
     dialog_eeschema_config.cpp
     dialog_eeschema_config_fbp.cpp
     dialog_erc.cpp
+    dialog_erc_base.cpp
 #   dialog_find.cpp
     dialog_options.cpp
     dialog_print_using_printer_base.cpp

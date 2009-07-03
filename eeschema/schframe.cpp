@@ -25,6 +25,7 @@
 #include "dialog_erc.h"
 #include "dialog_find.h"
 #include "netlist_control.h"
+#include "dialog_erc.h"
 
 
 /*******************************/
@@ -493,7 +494,7 @@ void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )
 void WinEDA_SchematicFrame::OnErc( wxCommandEvent& event )
 /*********************************************************/
 {
-    WinEDA_ErcFrame* dlg = new WinEDA_ErcFrame( this );
+    DIALOG_ERC* dlg = new DIALOG_ERC( this );
 
     dlg->ShowModal();
     dlg->Destroy();
