@@ -869,25 +869,14 @@ static SCH_ITEM* CopyStruct( WinEDA_DrawPanel* panel,
             switch( Struct->Type() )
             {
             case TYPE_SCH_COMPONENT:
-            {
                 ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
                 ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
-            }
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:
-            {
                 //DuplicateStruct calls GenCopy, which should handle
-                //m_AssociatedScreen and m_sRefCount properly.
-                DrawSheetStruct* sheet = (DrawSheetStruct*) Struct;
-                sheet->m_TimeStamp = GetTimeStamp();
-
-                //sheet->m_AssociatedScreen->m_UndoList  = NULL;
-                //sheet->m_AssociatedScreen->m_RedoList  = NULL;
-                //keep m_AssociatedScreen pointer & associated.
-                //sheet->m_Son = NULL; m_son is involved in undo and redo.
+                //m_AssociatedScreen, m_TimeStamp and m_sRefCount properly.
                 break;
-            }
 
             default:
                 ;

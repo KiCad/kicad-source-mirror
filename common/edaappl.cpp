@@ -589,12 +589,12 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 }
 
 
-/**
+/** Function GetSettings
  * Get application settings
- *
+ * @param aReopenLastUsedDirectory = true to switch to last opened directory, false to use current CWD
  * @return  none
  */
-void WinEDA_App::GetSettings()
+void WinEDA_App::GetSettings(bool aReopenLastUsedDirectory)
 {
     wxASSERT( m_EDA_Config != NULL && m_EDA_CommonConfig != NULL );
 
@@ -613,9 +613,12 @@ void WinEDA_App::GetSettings()
 
     m_EDA_Config->Read( wxT( "ShowPageLimits" ), &g_ShowPageLimits );
 
-    if( m_EDA_Config->Read( wxT( "WorkingDir" ), &Line ) && wxDirExists( Line ) )
+    if( aReopenLastUsedDirectory )
     {
-        wxSetWorkingDirectory( Line );
+        if( m_EDA_Config->Read( wxT( "WorkingDir" ), &Line ) && wxDirExists( Line ) )
+        {
+            wxSetWorkingDirectory( Line );
+        }
     }
 
     m_EDA_Config->Read( wxT( "BgColor" ), &g_DrawBgColor );

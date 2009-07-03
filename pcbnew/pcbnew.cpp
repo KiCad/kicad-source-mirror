@@ -83,7 +83,10 @@ bool WinEDA_App::OnInit()
     }
 
     ScreenPcb = new PCB_SCREEN();
-    GetSettings();
+
+    // read current setup and reopen last directory if no filename to open in command line
+    bool reopenLastUsedDirectory = argc == 1;
+    GetSettings(reopenLastUsedDirectory);
 
     if( argc > 1 )
     {

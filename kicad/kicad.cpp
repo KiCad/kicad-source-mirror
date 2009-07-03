@@ -371,8 +371,9 @@ bool WinEDA_App::OnInit()
 
     InitEDA_Appl( wxT( "KiCad" ), APP_TYPE_KICAD );
 
-    /* init kicad */
-    GetSettings();                  // read current setup
+    // read current setup and reopen last directory if no filename to open in command line
+    bool reopenLastUsedDirectory = argc == 1;
+    GetSettings(reopenLastUsedDirectory);
 
     /* Make nameless project translatable */
     wxFileName namelessProject( wxGetCwd(), _( "noname" ), ProjectFileExtension );

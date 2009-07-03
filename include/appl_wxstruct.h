@@ -115,7 +115,13 @@ public:
     void      InitOnLineHelp();
 
     // Sauvegarde de configurations et options:
-    void      GetSettings();
+    /** Function GetSettings
+     * Get application settings
+     * @param aReopenLastUsedDirectory = true to switch to last opened directory, false to use current CWD
+     * @return  none
+     */
+    void GetSettings(bool aReopenLastUsedDirectory);
+
     void      SaveSettings();
 
     void      WriteProjectConfig( const wxString&  local_config_filename,

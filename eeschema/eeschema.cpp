@@ -151,7 +151,11 @@ bool WinEDA_App::OnInit()
 
     /* init EESCHEMA */
     SeedLayers();
-    GetSettings();
+
+    // read current setup and reopen last directory if no filename to open in command line
+    bool reopenLastUsedDirectory = argc == 1;
+    GetSettings(reopenLastUsedDirectory);
+
     Read_Hotkey_Config( frame, false );   /* Must be called before creating
                                            * the main frame  in order to
                                            * display the real hotkeys in menus

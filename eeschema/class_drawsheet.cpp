@@ -146,7 +146,9 @@ DrawSheetStruct* DrawSheetStruct::GenCopy()
 
     newitem->m_FileName      = m_FileName;
     newitem->m_FileNameSize  = m_FileNameSize;
-    newitem->m_SheetName     = m_SheetName;
+/*    newitem->m_SheetName     = m_SheetName;   m_SheetName must be unique for all sub sheets in a given sheet
+*                                               so we no not duplicate sheet name
+*/
     newitem->m_SheetNameSize = m_SheetNameSize;
 
     newitem->m_Label = NULL;

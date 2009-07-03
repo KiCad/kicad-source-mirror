@@ -43,7 +43,6 @@ bool WinEDA_App::OnInit()
 {
     wxFileName         fn;
     wxString           msg;
-    wxString           currCWD = wxGetCwd();
     WinEDA_CvpcbFrame* frame   = NULL;
 
     InitEDA_Appl( wxT( "Cvpcb" ), APP_TYPE_CVPCB );
@@ -54,16 +53,15 @@ bool WinEDA_App::OnInit()
             return false;
     }
 
-    GetSettings();                      // read current setup
-
-    wxSetWorkingDirectory( currCWD );   // mofifie par GetSetting
-
     if( argc > 1 )
     {
-        wxLogDebug( wxT( "CvPcb opening file <%s>" ), argv[1] );
         fn = argv[1];
         wxSetWorkingDirectory( fn.GetPath() );
     }
+
+    // read current setup and reopen last directory if no filename to open in command line
+    bool reopenLastUsedDirectory = argc == 1;
+    GetSettings(reopenLastUsedDirectory);
 
     g_DrawBgColor = BLACK;
 
