@@ -78,6 +78,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = kicad \
                          pcbnew \
+                         cvpcb \
                          eeschema \
                          3d-viewer \
                          common \

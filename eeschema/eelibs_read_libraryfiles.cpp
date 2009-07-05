@@ -2,6 +2,8 @@
 /*	Functions to handle component library files : read functions */
 /*****************************************************************/
 
+#include <iostream>
+
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -109,6 +111,7 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
 {
     wxFileName fn;
     wxString msg, tmp;
+    wxString libraries_not_found;
     unsigned ii, iimax = frame->m_ComponentLibFiles.GetCount();
 
     // Free the unwanted libraries (i.e. not in list) but keep the cache lib
@@ -139,8 +142,7 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
             tmp = wxGetApp().FindLibraryPath( fn );
             if( !tmp )
             {
-                msg.Printf( _( "Library file <%s> not found." ), fn.GetName().c_str() );
-                wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, frame );
+		libraries_not_found += fn.GetName() + _("\n");
                 continue;
             }
         }
@@ -160,6 +162,16 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
 
         frame->PrintMsg( msg );
     }
+
+	/* Print the libraries not found */
+	if(libraries_not_found != _(""))
+	{
+		wxString message = _("The following libraries could not be found:\n\n");
+		message += libraries_not_found;
+		wxMessageBox( message, _("Load error!"), wxOK | wxICON_ERROR, frame );
+	}
+
+
 
     // reorder the linked list to match the order filename list:
     int            NumOfLibs;

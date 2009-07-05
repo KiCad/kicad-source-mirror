@@ -4,6 +4,13 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-july-05 UPDATE Jerry Jacobs <jerkejacobs@gmail.com
+================================================================================
++ Closing bug 2802441, No single error messages any more, 2009-06-07 over2there.
+ Fixed this both in eeschema and cvpcb, for now printing wxstring in a
+ messagebox. Should make a nice textctrl dialog.
++ Added cvpcb directory to Doxyfile
+
 2009-june-19 UPDATE Jerry Jacobs <jerkejacobs@gmail.com>
 ================================================================================
 Added Hauptmech patch.
