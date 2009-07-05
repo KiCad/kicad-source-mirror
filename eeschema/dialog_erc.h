@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialog_erc.h
 // Author:      jean-pierre Charras
-// Licence:    GPL 
+// Licence:    GPL
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _DIALOG_ERC_H_
@@ -31,7 +31,7 @@ extern const wxChar* CommentERC_V[];
  */
 
 class DIALOG_ERC: public DIALOG_ERC_BASE
-{    
+{
 	DECLARE_EVENT_TABLE()
 
 private:
@@ -58,6 +58,7 @@ public:
     void OnResetMatrixClick( wxCommandEvent& event );
 
 	void TestErc( wxTextCtrl* aMessagesList );
+    void DisplayERC_MarkersList( );
 	void SelLocal(wxCommandEvent& event);
 	void SelNewCmp(wxCommandEvent& event);
 	void ResetDefaultERCDiag(wxCommandEvent& event);

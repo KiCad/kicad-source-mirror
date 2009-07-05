@@ -265,7 +265,22 @@ public:
     wxPoint      ReturnPinEndPoint();
 
     int ReturnPinDrawOrient( const int TransMat[2][2] );
-    void         ReturnPinStringNum( wxString& buffer ) const;
+
+    /** Function ReturnPinStringNum
+     * fill a buffer with pin num as a wxString
+     *  Pin num is coded as a long or 4 ascii chars
+     *  Used to print/draw the pin num
+     * @param aStringBuffer = the wxString to store the pin num as an unicode string
+     */
+    void         ReturnPinStringNum( wxString& aStringBuffer ) const;
+
+    /** Function ReturnPinStringNum (static function)
+     * Pin num is coded as a long or 4 ascii chars
+     * @param aPinNum = a long containing a pin num
+     * @return aStringBuffer = the wxString to store the pin num as an unicode string
+     */
+    static wxString         ReturnPinStringNum( long aPinNum );
+
     void         SetPinNumFromString( wxString& buffer );
 
     /** Function GetPenSize

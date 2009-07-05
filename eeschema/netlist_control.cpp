@@ -486,7 +486,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     m_Parent->MsgPanel->EraseMsgBox();
 
     ReAnnotatePowerSymbolsOnly();
-    if( CheckAnnotate( m_Parent, 0 ) )
+    if( m_Parent->CheckAnnotate( NULL, 0 ) )
     {
         if( !IsOK( this, _( "Must be Annotated, Continue ?" ) ) )
             return;

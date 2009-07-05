@@ -13,14 +13,6 @@
 
 #include "protos.h"
 
-/* Sometimes Pcbnew crashes when calculating net info (Heap Error)
- * gen_rats_block_to_block() seems the culprit, but because this is a memory allocation error, it is not sure.
- * define DBG_BUILD_NETINFO diplays som diags.
- * All code between #define DBG_BUILD_NETINFO and #endif will be removed when ths issue will be solved
- * Comment this next line for normal use
- * JP Charras
- */
-//#define DBG_BUILD_NETINFO
 
 /* local variables */
 static std::vector <D_PAD*> s_localPadBuffer;           // for local ratsnest calculations when moving a footprint: buffer of pads to consider
@@ -115,10 +107,6 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
     GetBoard()->m_Status_Pcb = 0;                   /* we want a full ratnest computation, from the scratch */
     MsgPanel->EraseMsgBox();
-#ifdef DBG_BUILD_NETINFO
-    wxSafeYield();
-#endif
-
 
     // Rebuild the full pads and net info list
     RecalculateAllTracksNetcode();
@@ -134,9 +122,6 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
         msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetNetsCount() );
         Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
     }
-#ifdef DBG_BUILD_NETINFO
-    wxSafeYield();
-#endif
 
     /* Compute the full ratsnest
      *  which can be see like all the possible links or logical connections.
@@ -144,33 +129,16 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
      *  This full ratsnest is not modified by track editing.
      *  It changes only when a netlist is read, or footprints are modified
      */
-#ifdef DBG_BUILD_NETINFO
-    Affiche_Message( wxT( "Build Board Ratsnest" ) );
-    wxSafeYield();
-#endif
     Build_Board_Ratsnest( DC );
 
     /* Compute the pad connections due to the existing tracks (physical connections)*/
-#ifdef DBG_BUILD_NETINFO
-    Affiche_Message( wxT( "testconnexions" ) );
-    wxSafeYield();
-#endif
     test_connexions( DC );
 
     /* Compute the active ratsnest, i.e. the unconnected links
      *  it is faster than Build_Board_Ratsnest()
      *  because many optimisations and computations are already made
      */
-#ifdef DBG_BUILD_NETINFO
-    Affiche_Message( wxT( "Tst Ratsnest" ) );
-    wxSafeYield();
-#endif
     Tst_Ratsnest( DC, 0 );
-
-#ifdef DBG_BUILD_NETINFO
-    Affiche_Message( wxT( "End Tst Ratsnest" ) );
-    wxSafeYield();
-#endif
 
     // Redraw the active ratsnest ( if enabled )
     if( g_Show_Ratsnest && DC )
@@ -244,10 +212,6 @@ static int gen_rats_block_to_block( std::vector<RATSNEST_ITEM>& aRatsnestBuffer,
     for( unsigned ii = aPadIdxStart; ii < aPadIdxMax; ii++ )
     {
         D_PAD* ref_pad = aPadBuffer[ii];
-        #ifdef DBG_BUILD_NETINFO
-        if( ref_pad->Type() != TYPE_PAD )
-            wxMessageBox( wxT( "gen_rats_block_to_block() err: ref_pad is not a D_PAD" ) );
-        #endif
 
         /* search a pad which is in the block 1 */
         if( ref_pad->GetSubRatsnest() != 1 )
@@ -462,10 +426,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
     unsigned current_net_code = 1;    // 1er net_code a analyser (net_code = 0 -> no connect)
     noconn = 0;
-#ifdef DBG_BUILD_NETINFO
-    Affiche_Message( wxT( "Build Board Ratsnest - 1" ) );
-    wxSafeYield();
-#endif
 
     for( ; current_net_code < m_Pcb->m_NetInfo->GetNetsCount(); current_net_code++ )
     {
@@ -476,14 +436,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
             return;
         }
         net->m_RatsnestStartIdx = m_Pcb->GetRatsnestsCount();
-#ifdef DBG_BUILD_NETINFO
-        wxString msg;
-        msg.Printf( wxT(
-                       "Build Board Ratsnest net %d/%d start" ), current_net_code,
-                   m_Pcb->m_NetInfo->GetNetsCount() );
-        Affiche_Message( msg );
-        wxSafeYield();
-#endif
 
         // Search for the last subratsnest already in use
         int num_block = 0;
@@ -495,13 +447,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         }
 
         /* Compute the ratsnest relative to the current net */
-#ifdef DBG_BUILD_NETINFO
-        msg.Printf( wxT(
-                       "Build Board Ratsnest net %d/%d first pass" ), current_net_code,
-                   m_Pcb->m_NetInfo->GetNetsCount() );
-        Affiche_Message( msg );
-        wxSafeYield();
-#endif
 
         /* a - first pass : create the blocks from not already in block pads */
         int icnt = gen_rats_pad_to_pad( m_Pcb->m_FullRatsnest,
@@ -510,13 +455,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
                                         net->m_ListPad.size(),
                                         num_block );
 
- #ifdef DBG_BUILD_NETINFO
-        msg.Printf( wxT( "Build Board Ratsnest net (%s) %d/%d iteration" ),
-                   m_Pcb->FindNet( current_net_code )->GetNetname().GetData(),
-                   current_net_code, m_Pcb->m_NetInfo->GetNetsCount() );
-        Affiche_Message( msg );
-        wxSafeYield();
-#endif
         /* b - blocks connection (Iteration) */
         while( icnt > 1 )
         {
@@ -527,13 +465,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
 
         net->m_RatsnestEndIdx = m_Pcb->GetRatsnestsCount();
 
- #ifdef DBG_BUILD_NETINFO
-        msg.Printf( wxT(
-                       "Build Board Ratsnest net %d/%d sort" ), current_net_code,
-                   m_Pcb->m_NetInfo->GetNetsCount() );
-        Affiche_Message( msg );
-        wxSafeYield();
-#endif
         /* sort by lenght */
         net = m_Pcb->FindNet( current_net_code );
         if( (net->m_RatsnestEndIdx - net->m_RatsnestStartIdx) > 1 )
@@ -545,10 +476,6 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
         }
     }
 
-#ifdef DBG_BUILD_NETINFO
-    Affiche_Message( wxT( "Build Board Ratsnest - 2" ) );
-    wxSafeYield();
-#endif
     m_Pcb->m_NbNoconnect = noconn;
     m_Pcb->m_Status_Pcb |= LISTE_RATSNEST_ITEM_OK;
 

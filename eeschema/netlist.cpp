@@ -210,8 +210,6 @@ void* WinEDA_SchematicFrame::BuildNetListBase()
     g_TabObjNet = NULL; /* Init pour le 1er passage dans ListeObjetConnection */
 
     /* count nelist items */
-    g_RootSheet->m_AssociatedScreen->SetModify();
-
     for( sheet = SheetListList.GetFirst(); sheet != NULL; sheet = SheetListList.GetNext() )
     {
         g_NbrObjNet += ListeObjetConnection( sheet, NULL );

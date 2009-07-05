@@ -60,14 +60,13 @@ void DIALOG_ERC::Init()
 	num.Printf(wxT("%d"), g_EESchemaVar.NbWarningErc);
 	m_LastWarningCount->SetLabel(num);
 
+    DisplayERC_MarkersList( );
+
 	// Init Panel Matrix
 	ReBuildMatrixPanel();
 }
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS
- */
-
+/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 /* Delete the old ERC markers, over the whole hierarchy
  */
@@ -77,30 +76,21 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
     m_Parent->DrawPanel->Refresh();
 }
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
- */
-
+/* wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL */
 void DIALOG_ERC::OnCancelClick( wxCommandEvent& event )
 {
     EndModal(0);
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX
- */
-
+/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX */
 void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 {
 	ResetDefaultERCDiag(event);
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERC_CMP
- */
-
+/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERC_CMP */
 void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 {
     m_MessagesList->Clear();
@@ -113,7 +103,7 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 void DIALOG_ERC::ReBuildMatrixPanel()
 /*********************************************/
 
-/* Build or rebuild the panel showing the ERC matrix
+/* Build or rebuild the panel showing the ERC confict matrix
  */
 {
     int           ii, jj, event_id, text_height;

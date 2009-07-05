@@ -30,7 +30,8 @@ enum  TypeNetForm {
 /* Max pin number per component and footprint */
 #define MAXPIN 5000
 
-enum NetObjetType {      /* Type des objets de Net */
+enum NetObjetType {
+    /* Type des objets de Net */
     NET_SEGMENT,
     NET_BUS,
     NET_JONCTION,
@@ -48,7 +49,8 @@ enum NetObjetType {      /* Type des objets de Net */
 };
 
 
-enum  ConnectType {         /* Valeur du Flag de connection */
+enum  ConnectType {
+    /* Valeur du Flag de connection */
     UNCONNECTED = 0,        /* Pin ou Label non connecte */
     NOCONNECT,              /* Pin volontairement non connectee (Symb. NoConnect utilise) */
     PAD_CONNECT             /* connexion normale */
@@ -59,26 +61,31 @@ enum  ConnectType {         /* Valeur du Flag de connection */
 class ObjetNetListStruct
 {
 public:
-    EDA_BaseStruct* m_Comp;         /* Pointeur sur la definition de l'objet */
-    void*           m_Link;      /* Pour SheetLabelStruct: Pointeur sur la feuille de hierarchie
-                                  *  Pour les Pins: pointeur sur le composant */
-    int             m_Flag;         /* flag pour calculs internes */
+    NetObjetType    m_Type;             // Type of this item (see NetObjetType enum)
+    EDA_BaseStruct* m_Comp;             /* Pointer on the schematic item that created this net object (the parent)*/
+    void*           m_Link;      /* For Hierarchical_PIN_Sheet_Struct:
+                                  * Pointer to the hierarchy sheet that contains this Hierarchical_PIN_Sheet_Struct
+                                  *  For Pins: pointer to the component that contains this pin
+                                  */
+    int             m_Flag;             /* flag used in calculations */
     DrawSheetPath   m_SheetList;
-    NetObjetType    m_Type;
-    int             m_ElectricalType;   /* Pour Pins et sheet labels: type electrique */
+    int             m_ElectricalType;   /* Has meaning only for Pins and hierachical pins: electrical type */
 private:
-    int             m_NetCode;          /* pour elements simples */
+    int             m_NetCode;          /* net code for all items except BUS labels because a BUS label has
+                                         *  as many net codes as bus members
+                                         */
 public:
-    int             m_BusNetCode;       /* pour connexions type bus */
-    int             m_Member;        /* pour les labels type BUSWIRE ( labels de bus eclate )
-                                      *  numero de membre */
+    int             m_BusNetCode;       /* Used for BUS connections */
+    int             m_Member;        /* for labels type NET_BUSLABELMEMBER ( bus member created from the BUS label )
+                                      *  member number
+                                      */
     ConnectType     m_FlagOfConnection;
     DrawSheetPath   m_SheetListInclude;     /* sheet that the hierarchal label connects to.*/
     long            m_PinNum;               /* numero de pin( 4 octets -> 4 codes ascii) */
-    const wxString* m_Label;                /* Tous types Labels:pointeur sur la wxString definissant le label */
+    const wxString* m_Label;                /* For all labels:pointer on the text label */
     wxPoint         m_Start, m_End;
 
-#if defined (DEBUG)
+#if defined(DEBUG)
     void Show( std::ostream& out, int ndx );
 
 #endif
@@ -97,29 +104,29 @@ public:
 class OBJ_CMP_TO_LIST
 {
 public:
-    SCH_COMPONENT* m_RootCmp;                           // the component in schematic
+    SCH_COMPONENT*          m_RootCmp;                  // the component in schematic
     EDA_LibComponentStruct* m_Entry;                    // the source component in library
-    int            m_Unit;                              /* Selected part (For multi parts per package) depending on sheet path */
-    DrawSheetPath  m_SheetPath;                         /* the sheet path for this component */
-    unsigned long  m_TimeStamp;                         /* unique identification number depending on sheet path */
-    bool           m_IsNew;                             /* true for not yet annotated components */
-    wxString*      m_Value;                             /* Component value (same for all instances) */
-    char           m_Reference[32];                     /* Component reference prefix, without number (for IC1, this is IC) ) */
-    int            m_NumRef;                            /* Reference number (for IC1, this is 1) ) depending on sheet path*/
-    int            m_Flag;                              /* flag for computations */
+    int m_Unit;                                         /* Selected part (For multi parts per package) depending on sheet path */
+    DrawSheetPath           m_SheetPath;                /* the sheet path for this component */
+    unsigned long           m_TimeStamp;                /* unique identification number depending on sheet path */
+    bool      m_IsNew;                                  /* true for not yet annotated components */
+    wxString* m_Value;                                  /* Component value (same for all instances) */
+    char      m_Reference[32];                          /* Component reference prefix, without number (for IC1, this is IC) ) */
+    int       m_NumRef;                                 /* Reference number (for IC1, this is 1) ) depending on sheet path*/
+    int       m_Flag;                                   /* flag for computations */
 public:
 
     OBJ_CMP_TO_LIST()
     {
-        m_RootCmp   = NULL;
-        m_Entry = NULL;
-        m_Unit = 0;
-        m_TimeStamp = 0;
-        m_IsNew = false;
-        m_Value = NULL;
+        m_RootCmp      = NULL;
+        m_Entry        = NULL;
+        m_Unit         = 0;
+        m_TimeStamp    = 0;
+        m_IsNew        = false;
+        m_Value        = NULL;
         m_Reference[0] = 0;
-        m_NumRef = 0;
-        m_Flag = 0;
+        m_NumRef       = 0;
+        m_Flag         = 0;
     }
 
 
@@ -134,12 +141,12 @@ public:
         return strnicmp( m_Reference, item.m_Reference, 32 );
     }
 
-    bool IsPartsLocked( )
+
+    bool IsPartsLocked()
     {
         return m_Entry->m_UnitSelectionLocked;
     }
 };
-
 
 
 /* Global Variables */
@@ -148,10 +155,10 @@ extern ObjetNetListStruct* g_TabObjNet;
 
 
 /* Prototypes: */
-void        WriteNetList( WinEDA_SchematicFrame* frame,
-                          const wxString&        FileNameNL,
-                          bool                   use_netnames );
-void        FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
+void     WriteNetList( WinEDA_SchematicFrame* frame,
+                       const wxString&        FileNameNL,
+                       bool                   use_netnames );
+void     FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
 
 /** Function ReturnUserNetlistTypeName
  * to retrieve user netlist type names
@@ -160,7 +167,7 @@ void        FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
  * this function must be called first with "first_item" = true
  * and after with "first_item" = false to get all the other existing netlist names
  */
-wxString    ReturnUserNetlistTypeName( bool first_item );
+wxString ReturnUserNetlistTypeName( bool first_item );
 
 
 #endif

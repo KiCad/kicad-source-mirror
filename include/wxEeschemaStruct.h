@@ -333,10 +333,7 @@ private:
     Hierarchical_PIN_Sheet_Struct* Import_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
 
 public:
-    void                           DeleteSheetLabel(
-        bool aRedraw,
-        Hierarchical_PIN_Sheet_Struct*
-             aSheetLabelToDel );
+    void                           DeleteSheetLabel( bool aRedraw, Hierarchical_PIN_Sheet_Struct* aSheetLabelToDel );
 
 private:
 
@@ -395,6 +392,23 @@ public:
     // Test des points de connexion en l'air (dangling ends)
     void           TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC );
     LibDrawPin*    LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos );
+
+    // ERC:
+    /**
+     * Function CheckAnnotate
+     *  Check errors relatives to annotation:
+     *      components not annotated
+     *      components having the same reference (duplicates)
+     *      for multiple parts per package components :
+     *          part number > number of parts
+     *          different values between parts
+     * @return errors count
+     * @param aMessageList = a wxTextCtrl to display merssages. If NULL, they are displyed in a wxMessageBox
+     * @param aOneSheetOnly : true = search is made only in the current sheet
+     *                       false = search in whole hierarchy (usual search).
+     */
+    int CheckAnnotate( wxTextCtrl * aMessageList, bool aOneSheetOnly );
+
 
     DECLARE_EVENT_TABLE()
 };

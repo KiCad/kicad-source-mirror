@@ -966,18 +966,31 @@ int LibDrawPin::ReturnPinDrawOrient( const int TransMat[2][2] )
 
 
 /** Function ReturnPinStringNum
- * fill the buffer with pin num as a wxString
- *  Pin num is coded as a long
+ * fill a buffer with pin num as a wxString
+ *  Pin num is coded as a long or 4 ascii chars
  *  Used to print/draw the pin num
+ * @param aStringBuffer = the wxString to store the pin num as an unicode string
  */
-void LibDrawPin::ReturnPinStringNum( wxString& buffer ) const
+void LibDrawPin::ReturnPinStringNum( wxString& aStringBuffer ) const
+{
+    aStringBuffer = ReturnPinStringNum( m_PinNum );
+}
+
+/** Function ReturnPinStringNum (static function)
+ *  Pin num is coded as a long or 4 ascii chars
+ * @param aPinNum = a long containing a pin num
+ * @return aStringBuffer = the wxString to store the pin num as an unicode string
+ */
+wxString LibDrawPin::ReturnPinStringNum( long aPinNum )
 {
     char ascii_buf[5];
 
-    memcpy( ascii_buf, &m_PinNum, 4 );
+    memcpy( ascii_buf, &aPinNum, 4 );
     ascii_buf[4] = 0;
 
-    buffer = CONV_FROM_UTF8( ascii_buf );
+    wxString buffer = CONV_FROM_UTF8( ascii_buf );
+
+    return buffer;
 }
 
 

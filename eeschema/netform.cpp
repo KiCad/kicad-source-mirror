@@ -54,7 +54,7 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
  *  bool use_netnames is used only for Spice netlist
  */
 {
-    FILE*        f = NULL;
+    FILE* f = NULL;
 
     if( frame->m_NetlistFormat < NET_TYPE_CUSTOM1 )
     {
@@ -241,8 +241,9 @@ static wxString ReturnPinNetName( ObjetNetListStruct* Pin,
             {
                 wxString lnet = NetName;
                 NetName = g_TabObjNet[jj].m_SheetList.PathHumanReadable();
+
                 // If sheet path is too long, use the time stamp name insteed
-                if ( NetName.Length() > 32 )
+                if( NetName.Length() > 32 )
                     NetName = g_TabObjNet[jj].m_SheetList.Path();
                 NetName += lnet;
             }
@@ -283,7 +284,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
         return;
     }
 
-    ClearUsedFlags( );  /* Reset the flags FlagControlMulti in all schematic files*/
+    ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic files*/
     fprintf( tmpfile, "$BeginNetlist\n" );
 
     /* Create netlist module section */
@@ -553,7 +554,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
 
     /* Create netlist module section */
-    ClearUsedFlags( );  /* Reset the flags FlagControlMulti in all schematic files*/
+    ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic files*/
 
     EDA_SheetList SheetList;
 
@@ -580,7 +581,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                     if( CmpListCount >= CmpListSize )
                     {
                         CmpListSize += 1000;
-                        CmpList = (OBJ_CMP_TO_LIST*) realloc(
+                        CmpList      = (OBJ_CMP_TO_LIST*) realloc(
                             CmpList,
                             sizeof(OBJ_CMP_TO_LIST) * CmpListSize );
                     }
@@ -647,7 +648,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
         for( ii = 0; ii < CmpListCount; ii++ )
         {
             Component = CmpList[ii].m_RootCmp;
-            Entry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+            Entry     = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
 
             //Line.Printf(_("%s"), CmpList[ii].m_Ref);
             //Line.Replace( wxT( " " ), wxT( "_" ) );
@@ -729,24 +730,39 @@ static void EraseDuplicatePins( ObjetNetListStruct** TabPin, int NbrPin )
  *  (This is a list of pins found in the whole schematic, for a given component)
  *  These duplicate pins were put in list because some pins (powers... )
  *  are found more than one time when we have a multiple parts per package component
- *  for instance, a 74ls00 has 4 parts, and therefor the VCC pin and GND pin apperas 4 times
+ *  for instance, a 74ls00 has 4 parts, and therefore the VCC pin and GND pin appears 4 times
  *  in the list.
  */
 {
-    int ii, jj;
-
-    for( ii = 0; ii < NbrPin - 1; ii++ )
+    for( int ii = 0; ii < NbrPin - 1; ii++ )
     {
         if( TabPin[ii] == NULL )
-            continue; /* Deja supprime */
+            continue; /* already deleted */
         if( TabPin[ii]->m_PinNum != TabPin[ii + 1]->m_PinNum )
             continue;
-        /* 2 Pins doublees */
-        for( jj = ii + 1; jj < NbrPin; jj++ )
+        /* Duplicated Pins
+         * remove duplicates. The priority is keep connected pins and remove unconnected
+         * So this allows (for instance when using multi op amps per package
+         * to connect only one op amp to power
+        */
+        int idxref = ii;
+        for( int jj = ii + 1; jj < NbrPin; jj++ )
         {
-            if( TabPin[ii]->m_PinNum != TabPin[jj]->m_PinNum )
+            if( TabPin[idxref]->m_PinNum != TabPin[jj]->m_PinNum )
                 break;
-            TabPin[jj] = NULL;
+            if ( TabPin[idxref]->GetNet() )
+                TabPin[jj] = NULL;
+            else
+            { /* the refernce pin is not connected: remove this pin if the other pin is connected */
+                if ( TabPin[jj]->GetNet() )
+                {
+                    TabPin[idxref] = NULL;
+                    idxref = jj;
+                }
+                else    // the 2 pins are not connected: remove the tested pin, and continue ...
+                    TabPin[jj] = NULL;
+            }
+
         }
     }
 }
@@ -798,6 +814,7 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT*          Component_in,
                     if( DEntry->m_Convert
                        && (DEntry->m_Convert != Component2->m_Convert) )
                         continue;
+
                     // A suitable pin in found: add it to the current list
                     AddPinToComponentPinList( Component2, sheet, (LibDrawPin*) DEntry );
                 }
@@ -858,7 +875,8 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
                    && ( ObjNet[jj].m_Type != NET_PINLABEL) )
                     continue;
 
-                NetName = *g_TabObjNet[jj].m_Label; break;
+                NetName = *g_TabObjNet[jj].m_Label;
+                break;
             }
 
             NetcodeName.Printf( wxT( "Net %d " ), NetCode );
@@ -873,6 +891,7 @@ static void WriteGENERICListOfNets( FILE* f, ObjetNetListStruct* ObjNet )
                 NetcodeName += NetName;
             }
             NetcodeName += wxT( "\"" );
+
             // Add the netname without prefix, in cases we need only the "short" netname
             NetcodeName += wxT( " \"" ) + NetName + wxT( "\"" );
             LastNetCode  = NetCode;
@@ -958,7 +977,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     fprintf( f, "\n" );
 
     /* Create netlist module section */
-    ClearUsedFlags( );  /* Reset the flags FlagControlMulti in all schematic files*/
+    ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic files*/
     EDA_SheetList SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )

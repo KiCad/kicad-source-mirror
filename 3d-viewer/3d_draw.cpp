@@ -112,7 +112,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     // because all boards thickness no not match with this setup:
     //double epoxy_width = 1.6;    // epoxy width in mm
 
-    g_Parm_3D_Visu.m_Epoxy_Width = pcb->m_BoardSettings->m_LayerThickness 
+    g_Parm_3D_Visu.m_Epoxy_Width = pcb->m_BoardSettings->m_LayerThickness
                                    * g_Parm_3D_Visu.m_BoardScale;
 
     /* calculate z position for each layer */
@@ -483,6 +483,9 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
     s_Text3DWidth = text->m_Width * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
+    wxSize size = text->m_Size;
+    if( text->m_Mirror )
+        NEGATE(size.x);
     if( text->m_MultilineAllowed )
     {
         wxPoint        pos  = text->m_Pos;
@@ -496,7 +499,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
         {
             wxString txt = list->Item( i );
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) color,
-                     txt, text->m_Orient, text->m_Size,
+                     txt, text->m_Orient, size,
                      text->m_HJustify, text->m_VJustify,
                      text->m_Width, text->m_Italic,
                      true,
@@ -508,7 +511,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     }
     else
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
-                     text->m_Text, text->m_Orient, text->m_Size,
+                     text->m_Text, text->m_Orient, size,
                      text->m_HJustify, text->m_VJustify,
                      text->m_Width, text->m_Italic,
                      true,

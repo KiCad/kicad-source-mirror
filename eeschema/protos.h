@@ -235,11 +235,6 @@ int IsBusLabel(const wxString & LabelDrawList);
 /***************/
 void ReAnnotatePowerSymbolsOnly();
 
-int CheckAnnotate(WinEDA_SchematicFrame * frame, bool OneSheetOnly);
-                /* Retourne le nombre de composants non annotes ou erron�s
-                    Si OneSheetOnly : recherche sur le schema courant
-                    else: recherche sur toute la hierarchie */
-
 
 /************/
 /* PLOT.CPP */
