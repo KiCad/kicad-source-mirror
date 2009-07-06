@@ -49,7 +49,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
     DrawPolylineStruct*  PolylineStruct;
     EDA_DrawLineStruct*  SegmentStruct;
     DrawBusEntryStruct*  RaccordStruct;
-    DrawMarkerStruct*    MarkerStruct;
+    MARKER_SCH*    Marker;
     DrawNoConnectStruct* NoConnectStruct;
     int                  LineCount;
     wxString             MsgDiag;   /* Error and log messages */
@@ -335,22 +335,23 @@ at line %d, aborted" ),
             {
                 char* text;
                 char  BufLine[1024];
-                MarkerStruct = new DrawMarkerStruct( pos, wxEmptyString );
+                Marker = new MARKER_SCH( pos, wxEmptyString );
 
                 ii = ReadDelimitedText( BufLine, Line, 256 );
-                MarkerStruct->m_Type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
-                if( MarkerStruct->m_Type < 0 )
-                    MarkerStruct->m_Type = MARQ_UNSPEC;
+                int type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
+                if( type < 0 )
+                    type = MARQ_UNSPEC;
+                Marker->SetMarkerType( type );
                 if( ii )
-                    MarkerStruct->m_Comment = CONV_FROM_UTF8( BufLine );
+                    Marker->SetErrorText( CONV_FROM_UTF8( BufLine ) );
                 text = strstr( Line, " F=" );
                 if( text )
                 {
                     sscanf( text + 3, "%X", &ii );
-                    MarkerStruct->m_MarkFlags = ii;
+                    Marker->SetErrorLevel( ii );
                 }
-                MarkerStruct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = MarkerStruct;
+                Marker->SetNext( screen->EEDrawList );
+                screen->EEDrawList = Marker;
             }
             break;
 

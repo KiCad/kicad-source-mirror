@@ -363,72 +363,32 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 /**************************/
-/* class DrawMarkerStruct */
+/* class MARKER_SCH */
 /**************************/
 
-char marq_bitmap[] =
-{
-    12, 12, 0, 0,                           /* Dimensions x et y, offsets x et y du bitmap de marqueurs*/
-    YELLOW,                                 /* Couleur */
-    1,  1,  1, 1, 1, 1, 1, 1, 0, 0, 0, 0,   /* bitmap: >= 1 : color, */
-    1,  1,  1, 0, 1, 0, 1, 1, 0, 0, 0, 0,   /*  0 = notrace */
-    1,  1,  1, 1, 0, 0, 0, 1, 0, 0, 0, 0,
-    1,  0,  1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-    1,  1,  0, 1, 1, 1, 0, 0, 0, 0, 0, 0,
-    1,  1,  0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
-    1,  1,  1, 0, 0, 1, 1, 1, 0, 0, 0, 0,
-    0,  0,  0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
-    0,  0,  0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
-    0,  0,  0, 0, 0, 0, 0, 0, 1, 1, 1, 0,
-    0,  0,  0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-    0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 1, 0
-};
 
-char marqERC_bitmap[] =
-{
-    8, 8, 0, 0, /* Dimensions x et y , offsets x et y du bitmap de marqueurs*/
-    -1,         /* Color: -1 = couleur non pr�cis�e */
-    1, 1, 1, 1, 1, 0, 0, 0,
-    1, 1, 1, 0, 1, 0, 0, 0,
-    1, 1, 1, 1, 0, 0, 0, 0,
-    1, 0, 1, 1, 1, 0, 0, 0,
-    1, 1, 0, 1, 1, 1, 0, 0,
-    0, 0, 0, 0, 1, 1, 1, 0,
-    0, 0, 0, 0, 0, 1, 1, 1,
-    0, 0, 0, 0, 0, 0, 1, 0,
-};
-
-
-DrawMarkerStruct::DrawMarkerStruct( const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE )
-{
-    m_Pos  = pos;                   /* XY coordinates of marker. */
-    m_Type = MARQ_UNSPEC;
-    m_MarkFlags = 0;                // complements d'information
-    m_Comment   = text;
-}
-
-
-DrawMarkerStruct::~DrawMarkerStruct()
+MARKER_SCH::MARKER_SCH( const wxPoint& pos, const wxString& text ) :
+    SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE ),
+    MARKER_BASE(0, pos, text, pos)
 {
 }
 
 
-DrawMarkerStruct* DrawMarkerStruct::GenCopy()
+MARKER_SCH::~MARKER_SCH()
 {
-    DrawMarkerStruct* newitem = new DrawMarkerStruct( m_Pos, m_Comment );
+}
 
-    newitem->m_Type = m_Type;
-    newitem->m_MarkFlags = m_MarkFlags;
+
+MARKER_SCH* MARKER_SCH::GenCopy()
+{
+    MARKER_SCH* newitem = new MARKER_SCH( GetPos(), GetErrorText() );
+
+    newitem->SetMarkerType( GetMarkerType());
+    newitem->SetErrorLevel( GetErrorLevel());
 
     return newitem;
 }
 
-
-wxString DrawMarkerStruct::GetComment()
-{
-    return m_Comment;
-}
 
 
 #if defined(DEBUG)
@@ -440,10 +400,10 @@ wxString DrawMarkerStruct::GetComment()
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
+void MARKER_SCH::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << m_Pos
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << GetPos()
                                  << "/>\n";
 }
 
@@ -456,13 +416,13 @@ void DrawMarkerStruct::Show( int nestLevel, std::ostream& os )
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool DrawMarkerStruct::Save( FILE* aFile ) const
+bool MARKER_SCH::Save( FILE* aFile ) const
 {
     bool success = true;
-
+    wxString msg = GetErrorText();
     if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\" F=%X\n",
-                 int(m_Type) + 'A', m_Pos.x, m_Pos.y,
-                 CONV_TO_UTF8( m_Comment ), m_MarkFlags ) == EOF )
+                 GetMarkerType() + 'A', GetPos().x, GetPos().y,
+                 CONV_TO_UTF8( msg ), GetErrorLevel() ) == EOF )
     {
         success = false;
     }
@@ -471,26 +431,22 @@ bool DrawMarkerStruct::Save( FILE* aFile ) const
 }
 
 
-void DrawMarkerStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+void MARKER_SCH::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                              const wxPoint& offset, int DrawMode, int Color )
 {
-#define WAR 1   // utilis� aussi dans erc.cpp
+#define WAR 1   // see erc.cpp
 
-    if( m_Type == MARQ_ERC )
+    if( GetMarkerType() == MARQ_ERC )
     {
-        int color = Color;
         if( Color <= 0 )
         {
-            color = (m_MarkFlags == WAR ) ?
+            Color = (GetErrorLevel() == WAR ) ?
                     g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
                     g_LayerDescr.LayerColor[LAYER_ERC_ERR];
         }
-
-        Draw_Marqueur( panel, DC, m_Pos + offset, marqERC_bitmap, DrawMode,
-                       color );
     }
-    else
-        Draw_Marqueur( panel, DC, m_Pos + offset, marq_bitmap, DrawMode, Color );
+    m_Color = Color;
+    DrawMarker( panel, DC, DrawMode, offset );
 }
 
 

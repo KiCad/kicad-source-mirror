@@ -13,6 +13,7 @@ set(COMMON_SRCS
     bezier_curves.cpp
     block_commande.cpp
     class_drawpickedstruct.cpp
+    class_marker_base.cpp
     common.cpp
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp

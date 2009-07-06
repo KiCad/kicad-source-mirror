@@ -4,6 +4,22 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2009-july-06 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++All:
+    Use a common class for markers in pcbnew and eeschema:
+    created a basic class called MARKER_BASE
+    class DRC_ITEM is also common to pcbnew and eeschema
+    class MARKER (in pcbnew) and class MARKER_SCH (eeschema) are derived
+    from this basic class.
+    The main goal is to use a common class for pcbnew and eeschema to handle
+    errors and to have similar dialogs
+    and have more comprehensive ERC messages errors in eeschema
+    This is a work in progress
+
+
+
 2009-july-05 UPDATE Jerry Jacobs <jerkejacobs@gmail.com
 ================================================================================
 + Closing bug 2802441, No single error messages any more, 2009-06-07 over2there.

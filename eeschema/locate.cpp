@@ -297,12 +297,10 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
         case DRAW_MARKER_STRUCT_TYPE:
         {
             #undef  STRUCT
-            #define STRUCT ( (DrawMarkerStruct*) DrawList )
+            #define STRUCT ( (MARKER_SCH*) DrawList )
             if( !(SearchMask & MARKERITEM) )
                 break;
-            int size     = (int) ( (DRAWMARKER_SIZE / aScaleFactor) / 2 );
-            wxPoint dist = aPosRef - STRUCT->m_Pos;
-            if( (abs( dist.x ) <= size) && (abs( dist.y ) <= size) )
+            if( STRUCT->HitTest(aPosRef) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -472,7 +470,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
 
     case DRAW_MARKER_STRUCT_TYPE:
         #undef STRUCT
-        #define STRUCT ( (DrawMarkerStruct*) DrawStruct )
+        #define STRUCT ( (MARKER_SCH*) DrawStruct )
         if( (STRUCT->m_Pos.x >= x1) && (STRUCT->m_Pos.x <= x2)
            && (STRUCT->m_Pos.y >= y1) && (STRUCT->m_Pos.y <= y2) )
             return TRUE;

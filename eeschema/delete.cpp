@@ -493,7 +493,7 @@ void DeleteAllMarkers( int type )
 {
     SCH_SCREEN* screen;
     SCH_ITEM * DrawStruct, * NextStruct;
-    DrawMarkerStruct* Marker;
+    MARKER_SCH* Marker;
 
     EDA_ScreenList ScreenList;
 
@@ -506,8 +506,8 @@ void DeleteAllMarkers( int type )
                 continue;
 
             /* Marqueur trouve */
-            Marker = (DrawMarkerStruct*) DrawStruct;
-            if( Marker->m_Type != type )
+            Marker = (MARKER_SCH*) DrawStruct;
+            if( Marker->GetMarkerType() != type )
                 continue;
 
             /* Suppression du marqueur */

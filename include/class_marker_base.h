@@ -1,0 +1,147 @@
+/***************************************/
+/* Markers: used to show a drc problem */
+/***************************************/
+
+#ifndef _CLASS_MARKER_BASE_H
+#define _CLASS_MARKER_BASE_H
+
+#include "class_drc_item.h"
+
+class MARKER_BASE
+{
+public:
+    wxPoint  m_Pos;                 ///< position of the marker
+protected:
+    char*    m_Bitmap;              ///< Shape (bitmap)
+    int      m_MarkerType;          ///< Can be used as a flag
+    int      m_Color;               ///< color
+    wxSize   m_Size;                ///< Size of the graphic symbol
+
+    DRC_ITEM m_drc;
+
+    void     init();
+
+public:
+
+    MARKER_BASE( );
+
+    /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bText Text describing the second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
+           const wxString& aText, const wxPoint& aPos,
+           const wxString& bText, const wxPoint& bPos );
+     /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the object
+     * @param aPos The position of the object
+     */
+    MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
+           const wxString& aText, const wxPoint& aPos );
+
+
+    ~MARKER_BASE();
+
+    /** Function DrawMarker
+     */
+    void    DrawMarker( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset );
+
+
+    /**
+     * Function GetPos
+     * returns the position of this MARKER, const.
+     */
+    const wxPoint& GetPos() const
+    {
+        return m_Pos;
+    }
+
+
+    /** Function to set/get error levels (warning, fatal ..)
+     * this value is stored in m_MarkerType
+     */
+    void SetErrorLevel(int aErrorLevel )
+    {
+        m_MarkerType &= 0xFF00;
+        m_MarkerType &= 0xFF;
+        m_MarkerType |= aErrorLevel << 8;
+    }
+
+    int GetErrorLevel( ) const
+    {
+        return (m_MarkerType >> 8) & 0xFF;
+    }
+
+
+    /** Functions to set/get marker type (DRC, ERC, or other)
+     * this value is stored in m_MarkerType
+     */
+    void SetMarkerType(int aMarkerType )
+    {
+        m_MarkerType &= 0xFF;
+        aMarkerType &= 0xFF;
+        m_MarkerType |= aMarkerType;
+    }
+
+    int GetMarkerType( ) const
+    {
+        return m_MarkerType & 0xFF;
+    }
+
+    /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bText Text describing the second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
+             const wxString& aText, const wxPoint& aPos,
+             const wxString& bText, const wxPoint& bPos );
+
+    /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the object
+     * @param aPos The position of the object
+     */
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
+             const wxString& aText, const wxPoint& aPos );
+
+
+    /**
+     * Function GetReporter
+     * returns the DRC_ITEM held within this MARKER so that its
+     * interface may be used.
+     * @return const& DRC_ITEM
+     */
+    const DRC_ITEM& GetReporter() const
+    {
+        return m_drc;
+    }
+
+
+    /**
+     * Function HitTestMarker
+     * tests if the given wxPoint is within the bounds of this object.
+     * @param ref_pos A wxPoint to test
+     * @return bool - true if a hit, else false
+     */
+    bool    HitTestMarker( const wxPoint& ref_pos );
+};
+
+
+#endif      //  _CLASS_MARKER_BASE_H

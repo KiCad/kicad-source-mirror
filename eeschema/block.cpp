@@ -640,7 +640,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
     SCH_COMPONENT*                 DrawLibItem;
     DrawSheetStruct*               DrawSheet;
     Hierarchical_PIN_Sheet_Struct* DrawSheetLabel;
-    DrawMarkerStruct*              DrawMarker;
+    MARKER_SCH*              DrawMarker;
     DrawNoConnectStruct*           DrawNoConnect;
     SCH_TEXT* DrawText;
     wxPoint px;
@@ -692,7 +692,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
-        DrawMarker = (DrawMarkerStruct*) DrawStruct;
+        DrawMarker = (MARKER_SCH*) DrawStruct;
         MirrorYPoint( DrawMarker->m_Pos, Center );
         break;
 
@@ -1198,7 +1198,7 @@ void MoveOneStruct( SCH_ITEM* DrawStruct, const wxPoint& move_vector )
     SCH_COMPONENT*                 DrawLibItem;
     DrawSheetStruct*               DrawSheet;
     Hierarchical_PIN_Sheet_Struct* DrawSheetLabel;
-    DrawMarkerStruct*              DrawMarker;
+    MARKER_SCH*              DrawMarker;
     DrawNoConnectStruct*           DrawNoConnect;
 
     if( !DrawStruct )
@@ -1241,7 +1241,7 @@ void MoveOneStruct( SCH_ITEM* DrawStruct, const wxPoint& move_vector )
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
-        DrawMarker = (DrawMarkerStruct*) DrawStruct;
+        DrawMarker = (MARKER_SCH*) DrawStruct;
         DrawMarker->m_Pos += move_vector;
         break;
 
@@ -1337,7 +1337,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawMarkerStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (MARKER_SCH*) DrawStruct )->GenCopy();
         break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
@@ -1672,7 +1672,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
         case DRAW_MARKER_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (DrawMarkerStruct*) Struct )
+                #define STRUCT ( (MARKER_SCH*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break; /* Already in list */
             if( STRUCT->m_Pos != position )

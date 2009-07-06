@@ -313,7 +313,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
              *  ::wxPostEvent( GetEventHandler(), cmd );
              */
 
-            m_Parent->CursorGoto( item->GetPosition() );
+            m_Parent->CursorGoto( item->GetPointA() );
 
             // turn control over to m_Parent, hide this DIALOG_DRC_CONTROL window,
             // no destruction so we can preserve listbox cursor
@@ -453,7 +453,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
-            m_Parent->CursorGoto( item->GetPosition() );
+            m_Parent->CursorGoto( item->GetPointA() );
 
             Hide();
 

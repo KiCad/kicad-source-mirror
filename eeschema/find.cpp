@@ -267,7 +267,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
 {
     DrawSheetPath*    sheet, * FirstSheet = NULL;
     SCH_ITEM*         DrawList, * FirstStruct = NULL, * Struct = NULL;
-    DrawMarkerStruct* Marker = NULL;
+    MARKER_SCH* Marker = NULL;
     int StartCount;
     bool NotFound;
     wxPoint           firstpos, pos;
@@ -292,7 +292,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
         {
             if( DrawList->Type() == DRAW_MARKER_STRUCT_TYPE )
             {
-                Marker   = (DrawMarkerStruct*) DrawList;
+                Marker   = (MARKER_SCH*) DrawList;
                 NotFound = FALSE;
                 pos = Marker->m_Pos;
                 if( FirstSheet == NULL )    /* First item found */
@@ -649,7 +649,7 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
         Close(); return;
     }
 
- 
+
     int nbitemsFound = 0;
     for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {

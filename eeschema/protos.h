@@ -167,9 +167,6 @@ Hierarchical_PIN_Sheet_Struct * LocateAnyPinSheet(const wxPoint & RefPos,
 void DrawDanglingSymbol(WinEDA_DrawPanel * panel,wxDC * DC,
             const wxPoint & pos, int Color);
 
-void Draw_Marqueur(WinEDA_DrawPanel * panel, wxDC * DC,
-            wxPoint pos, char* pt_bitmap, int DrawMode, int Color);
-
 void DrawStructsInGhost(WinEDA_DrawPanel * panel, wxDC * DC,
                                     SCH_ITEM * DrawStruct, int dx, int dy );
 void SetHighLightStruct(SCH_ITEM *HighLight);

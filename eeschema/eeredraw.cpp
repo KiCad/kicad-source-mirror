@@ -15,10 +15,6 @@
 #include "general.h"
 #include "protos.h"
 
-
-extern char marq_bitmap[];
-
-
 static EDA_BaseStruct* HighLightStruct = NULL;
 
 
@@ -309,51 +305,3 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     }
 }
 
-
-
-/*
- * Place un repere sur l'ecran au point de coordonnees PCB pos_X, pos_Y
- * Le marqueur est defini par un tableau de 2 + (lig*col) elements:
- *  1er element: dim nbre ligne
- *  2er element: dim nbre col
- *  suite: lig * col elements a 0 ou 1 : si 1 mise a color du pixel
- *
- * copie la description du marqueur en current_marqueur (global)
- */
-void Draw_Marqueur( WinEDA_DrawPanel* panel, wxDC* DC,
-                    wxPoint pos, char* pt_bitmap, int DrawMode, int Color )
-{
-    int  px, py, color;
-    char ii, ii_max, jj, jj_max;
-
-    if( pt_bitmap == NULL )
-        pt_bitmap = marq_bitmap;
-
-    px = GRMapX( pos.x );
-    py = GRMapY( pos.y );
-
-    /* Lecture des dimensions */
-    ii_max = *(pt_bitmap++);
-    jj_max = *(pt_bitmap++);
-
-    /* lecture des offsets */
-    px += *(pt_bitmap++);
-    py += *(pt_bitmap++);
-
-    color = *(pt_bitmap++);
-    if( (Color > 0) )
-        color = Color;
-    if( color < 0 )
-        color = 0;
-    GRSetDrawMode( DC, DrawMode );
-
-    /* Trace du bitmap */
-    for( ii = 0; ii < ii_max; ii++ )
-    {
-        for( jj = 0; jj < jj_max; jj++, pt_bitmap++ )
-        {
-            if( *pt_bitmap )
-                GRSPutPixel( &panel->m_ClipBox, DC, px + ii, py + jj, color );
-        }
-    }
-}

@@ -125,11 +125,11 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKERITEM );
     if( DrawStruct )
     {
-        DrawMarkerStruct* Marker = (DrawMarkerStruct*) DrawStruct;
-        ii   = Marker->m_Type;
-        Text = Marker->GetComment();
+        MARKER_SCH* Marker = (MARKER_SCH*) DrawStruct;
+        Text = Marker->GetErrorText();
         if( Text.IsEmpty() )
-            Text = wxT( "NoComment" );
+            Text = wxT( "???" );
+        ii = Marker->GetMarkerType();
         msg = NameMarqueurType[ii]; msg << wxT( " << " ) << Text;
         Affiche_Message( msg );
         return DrawStruct;

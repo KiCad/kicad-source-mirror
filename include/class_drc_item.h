@@ -1,0 +1,219 @@
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef _CLASS_DRC_ITEM_H
+#define _CLASS_DRC_ITEM_H
+
+/**
+ * Class DRC_ITEM
+ * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
+ *  It is generated when two objects are too close (DRC)
+ * or two connected objects (pins) have incompatibleelectrical type (ERC).
+ * There are holders for information on two items.  The
+ * information held is the board coordinate and the MenuText for each item.
+ * Also held is the type of error by number and the location of the MARKER.
+ * A function is provided to translate that number into text.
+ * Some errors involve only one item (item with an incorrect param) so
+ * m_hasSecondItem is set to false in this case.
+ */
+class DRC_ITEM
+{
+protected:
+    int      m_ErrorCode;                       ///< the error code's numeric value
+    wxString m_MainText;                        ///< text for the first BOARD_ITEM or SCH_ITEM
+    wxString m_AuxiliaryText;                   ///< text for the second BOARD_ITEM or SCH_ITEM
+    wxPoint  m_MainPosition;                    ///< the location of the first (or main ) BOARD_ITEM or SCH_ITEM. This is also the position of the marker
+    wxPoint  m_AuxiliaryPosition;               ///< the location of the second BOARD_ITEM or SCH_ITEM
+    bool     m_hasSecondItem;                   ///< true when 2 items create a DRC/ERC error, false if only one item
+
+
+public:
+
+    DRC_ITEM()
+    {
+        m_ErrorCode     = 0;
+        m_hasSecondItem = false;
+    }
+
+
+    DRC_ITEM( int aErrorCode,
+              const wxString& aMainText, const wxString& bAuxiliaryText,
+              const wxPoint& aMainPos, const wxPoint& bAuxiliaryPos )
+    {
+        SetData( aErrorCode,
+                 aMainText, bAuxiliaryText,
+                 aMainPos, bAuxiliaryPos );
+    }
+
+
+    DRC_ITEM( int aErrorCode,
+              const wxString& aText, const wxPoint& aPos )
+    {
+        SetData( aErrorCode, aText, aPos );
+    }
+
+
+    void SetData( int aErrorCode,
+                  const wxString& aMainText, const wxPoint& aMainPos )
+    {
+        SetData( aErrorCode,
+                 aMainText, aMainText,
+                 aMainPos, aMainPos );
+        m_hasSecondItem = false;
+    }
+
+
+    void SetData( int aErrorCode,
+                  const wxString& aMainText, const wxString& bAuxiliaryText,
+                  const wxPoint& aMainPos, const wxPoint& bAuxiliaryPos )
+    {
+        m_ErrorCode         = aErrorCode;
+        m_MainText          = aMainText;
+        m_AuxiliaryText     = bAuxiliaryText;
+        m_MainPosition      = aMainPos;
+        m_AuxiliaryPosition = bAuxiliaryPos;
+        m_hasSecondItem     = true;
+    }
+
+
+    bool HasSecondItem() const { return m_hasSecondItem; }
+
+    /** acces to A and B texts
+     */
+    wxString GetMainText() const { return m_MainText; }
+    wxString GetAuxiliaryText() const { return m_AuxiliaryText; }
+
+    /**
+     * Function ShowHtml
+     * translates this object into a fragment of HTML suitable for the
+     * wxWidget's wxHtmlListBox class.
+     * @return wxString - the html text.
+     */
+    wxString ShowHtml() const
+    {
+        wxString ret;
+
+        if( m_hasSecondItem )
+        {
+            // an html fragment for the entire message in the listbox.  feel free
+            // to add color if you want:
+            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData(),
+                       ShowCoord( m_AuxiliaryPosition ).GetData(), m_AuxiliaryText.GetData() );
+        }
+        else
+        {
+            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData() );
+        }
+
+        return ret;
+    }
+
+
+    /**
+     * Function ShowReport
+     * translates this object into a text string suitable for saving
+     * to disk in a report.
+     * @return wxString - the simple multi-line report text.
+     */
+    wxString ShowReport() const
+    {
+        wxString ret;
+
+        if( m_hasSecondItem )
+        {
+            ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData(),
+                       ShowCoord( m_AuxiliaryPosition ).GetData(), m_AuxiliaryText.GetData() );
+        }
+        else
+        {
+            ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+                       m_ErrorCode,
+                       GetErrorText().GetData(),
+                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData() );
+        }
+
+        return ret;
+    }
+
+
+    /**
+     * Function GetErrorCode
+     * returns the error code.
+     */
+    int GetErrorCode() const
+    {
+        return m_ErrorCode;
+    }
+
+
+    /**
+     * Function GetErrorText
+     * returns the string form of a drc error code.
+     */
+    wxString GetErrorText() const;
+
+    const wxString& GetTextA() const
+    {
+        return m_MainText;
+    }
+
+
+    const wxString& GetTextB() const
+    {
+        return m_AuxiliaryText;
+    }
+
+
+    const wxPoint& GetPointA() const
+    {
+        return m_MainPosition;
+    }
+
+
+    const wxPoint& GetPointB() const
+    {
+        return m_AuxiliaryPosition;
+    }
+
+
+    /**
+     * Function ShowCoord
+     * formats a coordinate or position to text.
+     * @param aPos The position to format
+     * @return wxString - The formated string
+     */
+    static wxString ShowCoord( const wxPoint& aPos );
+};
+
+
+#endif      // _CLASS_DRC_ITEM_H

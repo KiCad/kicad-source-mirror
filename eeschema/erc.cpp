@@ -26,10 +26,6 @@
  */
 
 
-/* fonctions exportees */
-
-/* fonctions importees */
-
 /* fonctions locales */
 static bool WriteDiagnosticERC( const wxString& FullFileName );
 static void Diagnose( WinEDA_DrawPanel* panel,
@@ -217,12 +213,12 @@ void DIALOG_ERC::TestErc( wxTextCtrl* aMessagesList )
                                                                            m_SheetName ) == 0 )
                 {
                     /* Create a new marker type ERC error*/
-                    DrawMarkerStruct* Marker =
-                        new DrawMarkerStruct( ( (DrawSheetStruct*) item_to_test )->m_Pos,
+                    MARKER_SCH* Marker =
+                        new MARKER_SCH( ( (DrawSheetStruct*) item_to_test )->m_Pos,
                                              _( "Duplicate Sheet name" ) );
 
-                    Marker->m_Type = MARQ_ERC;
-                    Marker->m_MarkFlags = ERR;
+                    Marker->SetMarkerType( MARQ_ERC );
+                    Marker->SetErrorLevel( ERR );
                     Marker->SetNext( Screen->EEDrawList );
                     Screen->EEDrawList = Marker;
                     g_EESchemaVar.NbErrorErc++;
@@ -356,15 +352,15 @@ void DIALOG_ERC::DisplayERC_MarkersList( )
                 continue;
 
             /* Marqueur trouve */
-            DrawMarkerStruct* Marker = (DrawMarkerStruct*) DrawStruct;
-            if( Marker->m_Type != MARQ_ERC )
+            MARKER_SCH* Marker = (MARKER_SCH*) DrawStruct;
+            if( Marker->GetMarkerType() != MARQ_ERC )
                 continue;
 
             /* Display diag */
             wxString msg;
             msg.Printf(_("sheet %s: %s\n"),
                     Sheet->PathHumanReadable().GetData(),
-                    Marker->GetComment().GetData() );
+                    Marker->GetErrorText().GetData() );
             m_MessagesList->AppendText( msg );
         }
     }
@@ -445,7 +441,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
  *  if MinConn < 0: this is an error on labels
  */
 {
-    DrawMarkerStruct* Marker = NULL;
+    MARKER_SCH* Marker = NULL;
     wxString          DiagLevel;
     SCH_SCREEN*       screen;
     int ii, jj;
@@ -454,27 +450,30 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         return;
 
     /* Creation du nouveau marqueur type Erreur ERC */
-    Marker = new DrawMarkerStruct( aNetItemRef->m_Start, wxEmptyString );
+    Marker = new MARKER_SCH( aNetItemRef->m_Start, wxEmptyString );
 
-    Marker->m_Type = MARQ_ERC;
-    Marker->m_MarkFlags = WAR;
+    Marker->SetMarkerType( MARQ_ERC );
+    Marker->SetErrorLevel( WAR );
     screen = aNetItemRef->m_SheetList.LastScreen();
     Marker->SetNext( screen->EEDrawList );
     screen->EEDrawList = Marker;
     g_EESchemaVar.NbErrorErc++;
     g_EESchemaVar.NbWarningErc++;
 
+    wxString msg;
     if( aMinConn < 0 )   // Traitement des erreurs sur labels
     {
         if( (aNetItemRef->m_Type == NET_HIERLABEL)
            || (aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
         {
-            Marker->m_Comment.Printf( _( "Warning HLabel %s not connected to SheetLabel" ),
+            msg.Printf( _( "Warning HLabel %s not connected to SheetLabel" ),
                                      aNetItemRef->m_Label->GetData() );
         }
         else
-            Marker->m_Comment.Printf( _( "Warning SheetLabel %s not connected to HLabel" ),
+            msg.Printf( _( "Warning SheetLabel %s not connected to HLabel" ),
                                      aNetItemRef->m_Label->GetData() );
+
+        Marker->SetErrorText(msg);
         return;
     }
 
@@ -493,8 +492,9 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
     {
         if( aMinConn == NOC )    /* 1 seul element dans le net */
         {
-            Marker->m_Comment.Printf( _( "Warning Cmp %s, Pin %s (%s) Unconnected" ),
+            msg.Printf( _( "Warning Cmp %s, Pin %s (%s) Unconnected" ),
                 cmp_ref.GetData(), string_pinnum.GetData(), MsgPinElectricType[ii] );
+            Marker->SetErrorText(msg);
             return;
         }
 
@@ -502,18 +502,20 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         {
            if ( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
                 cmp_ref = ((SCH_COMPONENT*)aNetItemRef->m_Link)->GetRef( &aNetItemRef->m_SheetList );
-            Marker->m_Comment.Printf(
+            msg.Printf(
                 _( "Warning Cmp %s, Pin %s (%s) not driven (Net %d)" ),
                 cmp_ref.GetData(), string_pinnum.GetData(),
                 MsgPinElectricType[ii], aNetItemRef->GetNet() );
+            Marker->SetErrorText(msg);
             return;
         }
 
         if( aDiag == UNC )
         {
-            Marker->m_Comment.Printf(
+            msg.Printf(
                 _( "Warning More than 1 Pin connected to UnConnect symbol @X=%f"", Y=%f""" ),
-                    (float)Marker->m_Pos.x/1000, (float)Marker->m_Pos.y/1000);
+                    (float)Marker->GetPos().x/1000, (float)Marker->GetPos().y/1000);
+            Marker->SetErrorText(msg);
             return;
         }
     }
@@ -525,7 +527,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         if( aDiag == ERR )
         {
             DiagLevel = _( "Error" );
-            Marker->m_MarkFlags = ERR;
+            Marker->SetErrorLevel( ERR );
             g_EESchemaVar.NbWarningErc--;
         }
 
@@ -535,11 +537,12 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         alt_cmp = wxT("?");
         if ( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
             alt_cmp = ((SCH_COMPONENT*)aNetItemTst->m_Link)->GetRef( &aNetItemTst->m_SheetList );
-        Marker->m_Comment.Printf( _("%s: Cmp %s, Pin %s (%s) connected to Cmp %s, Pin %s (%s) (net %d)" ),
+        msg.Printf( _("%s: Cmp %s, Pin %s (%s) connected to Cmp %s, Pin %s (%s) (net %d)" ),
                                  DiagLevel.GetData(),
                                  cmp_ref.GetData(), string_pinnum.GetData(), MsgPinElectricType[ii],
                                  alt_cmp.GetData(), alt_string_pinnum.GetData(),MsgPinElectricType[jj],
                                  aNetItemRef->GetNet() );
+        Marker->SetErrorText(msg);
     }
 }
 
@@ -641,8 +644,8 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
 /* Create the Diagnostic file (<xxx>.erc file)
  */
 {
-    EDA_BaseStruct*   DrawStruct;
-    DrawMarkerStruct* Marker;
+    SCH_ITEM*   DrawStruct;
+    MARKER_SCH* Marker;
     char Line[256];
     static FILE*      OutErc;
     DrawSheetPath*    Sheet;
@@ -679,15 +682,15 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
                 continue;
 
             /* Marqueur trouve */
-            Marker = (DrawMarkerStruct*) DrawStruct;
-            if( Marker->m_Type != MARQ_ERC )
+            Marker = (MARKER_SCH*) DrawStruct;
+            if( Marker->GetMarkerType() != MARQ_ERC )
                 continue;
 
             /* Write diag marqueur */
             msg.Printf( _( "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n" ),
-                        Marker->GetComment().GetData(),
-                        (float) Marker->m_Pos.x / 1000,
-                        (float) Marker->m_Pos.y / 1000 );
+                        Marker->GetErrorText().GetData(),
+                        (float) Marker->GetPos().x / 1000,
+                        (float) Marker->GetPos().y / 1000 );
 
             fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
         }

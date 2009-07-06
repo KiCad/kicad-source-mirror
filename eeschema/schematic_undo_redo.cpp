@@ -137,8 +137,8 @@ void SwapData( EDA_BaseStruct* Item )
     case DRAW_MARKER_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawMarkerStruct*) Item )
-        #define DEST   ( (DrawMarkerStruct*) image )
+        #define SOURCE ( (MARKER_SCH*) Item )
+        #define DEST   ( (MARKER_SCH*) image )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
