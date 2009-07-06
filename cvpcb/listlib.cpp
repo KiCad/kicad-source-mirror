@@ -147,6 +147,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 		wxString message = _("The following mdc files could not be found:\n\n");
 		message += mdc_files_not_found;
 		wxMessageBox( message, _("Load error!"), wxOK | wxICON_ERROR );
+		mdc_files_not_found = wxT("");
 	}
 
 	/* Display if there are mdc files invalid */
@@ -155,6 +156,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 		wxString message = _("The following mdc files are invalid:\n\n");
 		message += mdc_files_invalid;
 		wxMessageBox( message, _("Load error!"), wxOK | wxICON_ERROR );
+		mdc_files_invalid = wxT("");
 	}
 
 	list.sort();
