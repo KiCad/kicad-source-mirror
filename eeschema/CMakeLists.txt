@@ -5,7 +5,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                    )
 
 set(EESCHEMA_SRCS
-#    affiche.cpp
     annotate.cpp
     annotate_dialog.cpp
     backanno.cpp
@@ -21,6 +20,7 @@ set(EESCHEMA_SRCS
     class_libentry.cpp
     class_libentry_fields.cpp
     class_library.cpp
+    class_marker_sch.cpp
     class_pin.cpp
     class_sch_cmp_field.cpp
     class_schematic_items.cpp
@@ -62,7 +62,6 @@ set(EESCHEMA_SRCS
     edit_component_in_schematic.cpp
     edit_label.cpp
     eeconfig.cpp
-#   eecreate.cpp
     eelayer.cpp
     eelibs_draw_components.cpp
     eelibs_read_libraryfiles.cpp

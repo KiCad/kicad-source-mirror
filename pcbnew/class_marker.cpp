@@ -12,7 +12,7 @@
 #include "pcbnew.h"
 #include "class_marker.h"
 
-
+#define SCALING_FACTOR 30       // Adjust the actual size of markers, when using default shape
 
 /*******************/
 /* Classe MARKER */
@@ -22,6 +22,8 @@ MARKER::MARKER( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, TYPE_MARKER ),
     MARKER_BASE( )
 {
+    m_Color = WHITE;
+    m_ScalingFactor = SCALING_FACTOR;
 }
 
 
@@ -32,6 +34,8 @@ MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
     MARKER_BASE(  aErrorCode, aMarkerPos, aText, aPos, bText, bPos )
 
 {
+    m_Color = WHITE;
+    m_ScalingFactor = SCALING_FACTOR;
 }
 
 MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
@@ -39,6 +43,8 @@ MARKER::MARKER( int aErrorCode, const wxPoint& aMarkerPos,
     BOARD_ITEM( NULL, TYPE_MARKER ),  // parent set during BOARD::Add()
     MARKER_BASE( aErrorCode, aMarkerPos, aText,  aPos )
 {
+    m_Color = WHITE;
+    m_ScalingFactor = SCALING_FACTOR;
 }
 
 

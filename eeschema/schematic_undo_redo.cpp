@@ -13,6 +13,7 @@
 #include "general.h"
 #include "id.h"
 #include "protos.h"
+#include "class_marker_sch.h"
 
 /* Functions to undo and redo edit commands.
  *  commmands to undo are in CurrentScreen->m_UndoList

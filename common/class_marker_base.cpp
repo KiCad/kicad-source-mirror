@@ -4,34 +4,32 @@
 **********************************************************************************/
 
 /* file class_marker_base.cpp
-*/
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_base_screen.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "class_marker_base.h"
 
 
-/* Default bitmap shape for markers */
-static char Default_MarkerBitmap[] =
+// Default marquer shape:
+#define M_SHAPE_SCALE 6     // default scaling factor for MarkerShapeCorners coordinates
+#define CORNERS_COUNT 8
+// corners of the default shape
+static wxPoint MarkerShapeCorners[CORNERS_COUNT] =
 {
-    12, 12,                                 /* x and y size of the bitmap */
-    1,  1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,    /* bitmap: 1 = color, 0 = notrace */
-    1,  1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0,
-    1,  1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0,
-    1,  0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-    1,  1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0,
-    1,  1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
-    1,  1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0,
-    0,  0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
-    0,  0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
-    0,  0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0,
-    0,  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-    0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0
+    wxPoint( 0,  0 ),
+    wxPoint( 8,  1 ),
+    wxPoint( 4,  3 ),
+    wxPoint( 13, 8 ),
+    wxPoint( 9, 9 ),
+    wxPoint( 8,  13 ),
+    wxPoint( 3,  4 ),
+    wxPoint( 1,  8 )
 };
-
 
 /*******************/
 /* Classe MARKER_BASE */
@@ -39,36 +37,43 @@ static char Default_MarkerBitmap[] =
 
 void MARKER_BASE::init()
 {
-    m_Bitmap = NULL;
-    m_MarkerType   = 0;
-    m_Color  = RED;
-    m_Bitmap = Default_MarkerBitmap;
-    m_Size.x = Default_MarkerBitmap[0];
-    m_Size.y = Default_MarkerBitmap[1];
+    m_MarkerType = 0;
+    m_Color = RED;
+    for( unsigned ii = 0; ii < CORNERS_COUNT; ii++ )
+    {
+        wxPoint corner = MarkerShapeCorners[ii];
+        m_Corners.push_back( corner );
+        m_Size.x = MAX( m_Size.x, corner.x);
+        m_Size.y = MAX( m_Size.y, corner.y);
+    }
 }
 
-MARKER_BASE::MARKER_BASE( )
+
+MARKER_BASE::MARKER_BASE()
 {
+    m_ScalingFactor = M_SHAPE_SCALE;
     init();
 }
 
 
 MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-               const wxString& aText, const wxPoint& aPos,
-               const wxString& bText, const wxPoint& bPos )
+                          const wxString& aText, const wxPoint& aPos,
+                          const wxString& bText, const wxPoint& bPos )
 {
+    m_ScalingFactor = M_SHAPE_SCALE;
     init();
 
-    SetData( aErrorCode,aMarkerPos,
-         aText, aPos,
-         bText, bPos );
+    SetData( aErrorCode, aMarkerPos,
+             aText, aPos,
+             bText, bPos );
 }
 
-MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-           const wxString& aText, const wxPoint& aPos )
-{
-    init();
 
+MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
+                          const wxString& aText, const wxPoint& aPos )
+{
+    m_ScalingFactor = M_SHAPE_SCALE;
+    init();
     SetData( aErrorCode, aMarkerPos, aText, aPos );
 }
 
@@ -80,96 +85,70 @@ MARKER_BASE::~MARKER_BASE()
 
 
 void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-         const wxString& aText, const wxPoint& aPos,
-         const wxString& bText, const wxPoint& bPos )
+                           const wxString& aText, const wxPoint& aPos,
+                           const wxString& bText, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
     m_drc.SetData( aErrorCode,
-             aText, bText, aPos, bPos );
-
-    // @todo: switch on error code to set error code specific color, and possibly bitmap.
-    m_Color = WHITE;
+                   aText, bText, aPos, bPos );
 }
 
 
 void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-         const wxString& aText, const wxPoint& aPos )
+                           const wxString& aText, const wxPoint& aPos )
 {
     m_Pos = aMarkerPos;
     m_drc.SetData( aErrorCode,
-             aText, aPos );
-
-    // @todo: switch on error code to set error code specific color, and possibly bitmap.
-    m_Color = WHITE;
+                   aText, aPos );
 }
-
 
 
 /**********************************************/
 bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
 /**********************************************/
 {
-    // the MARKER_BASE is 12 pixels by 12 pixels, but is not resized with zoom, so
-    // as zoom changes, the effective real size (in user units) of the MARKER_BASE changes.
+    int     dx = refPos.x - m_Pos.x;
+    int     dy = refPos.y - m_Pos.y;
 
-    wxSize TrueSize = m_Size;
-    if ( ActiveScreen )
-    {
-        ActiveScreen->Unscale( TrueSize );
-    }
-
-    wxPoint pos = m_Pos;
-
-    int dx = refPos.x - pos.x;
-    int dy = refPos.y - pos.y;
+    wxSize Realsize = m_Size;
+    Realsize.x *= m_ScalingFactor;
+    Realsize.y *= m_ScalingFactor;
 
     /* is refPos in the box: Marker size to right an bottom,
-    or size/2 to left or top */
-    if( dx <= TrueSize.x  && dy <= TrueSize.y &&
-        dx >= -TrueSize.x/2  && dy >= -TrueSize.y/2 )
+     *  or size/2 to left or top */
+    if( dx <= Realsize.x  && dy <= Realsize.y
+        && dx >= -Realsize.x / 2  && dy >= -Realsize.y / 2 )
         return true;
     else
         return false;
 }
 
 
-
 /**********************************************************************/
-void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode,
-                                                const wxPoint& offset )
+void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
+                              const wxPoint& aOffset )
 /**********************************************************************/
 
-/*
- *  Trace un repere sur l'ecran au point de coordonnees PCB pos
- *  Le marqueur est defini par un tableau de 2 + (lig*col) elements:
- *   1er element: dim nbre ligne
- *   2er element: dim nbre col
- *   suite: lig * col elements a 0 ou 1 : si 1 mise a color du pixel
+/**  Function DrawMarker
+ *  The shape is the polygon defined in m_Corners (array of wxPoints)
  */
 {
-    int   ii, jj;
-    char* pt_bitmap = m_Bitmap;
+    wxPoint corners[CORNERS_COUNT];
 
-    if( pt_bitmap == NULL ) return;
+    GRSetDrawMode( aDC, aDrawMode );
 
-    GRSetDrawMode( DC, DrawMode );
-
-    wxPoint pos = m_Pos;
-    pos.x = GRMapX( pos.x );
-    pos.y = GRMapY( pos.y );
-
-    /* Get the bitmap size */
-    m_Size.x = *(pt_bitmap++);
-    m_Size.y = *(pt_bitmap++);
-
-    /* Draw the bitmap */
-    for( ii = 0; ii < m_Size.x; ii++ )
+    for( unsigned ii = 0; ii < m_Corners.size(); ii++ )
     {
-        for( jj = 0; jj < m_Size.y; jj++, pt_bitmap++ )
-        {
-            if( *pt_bitmap )
-                GRSPutPixel( &panel->m_ClipBox, DC,
-                             pos.x + ii, pos.y + jj, m_Color );
-        }
+        corners[ii] = m_Corners[ii];
+        corners[ii].x *= m_ScalingFactor;
+        corners[ii].y *= m_ScalingFactor;
+        corners[ii] += m_Pos + aOffset;
     }
+
+    GRClosedPoly( &aPanel->m_ClipBox, aDC, CORNERS_COUNT, corners,
+                  true,         // = Filled
+                  0,            // outline width
+                  m_Color,      // outline color
+                  m_Color       // fill collor
+                  );
 }

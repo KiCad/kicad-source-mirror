@@ -19,6 +19,7 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "class_marker_sch.h"
 
 /* Variables Locales */
 static int      s_ItemsCount, s_MarkerCount;

@@ -16,6 +16,7 @@
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_marker_sch.h"
 
 
 /* Variables Locales */

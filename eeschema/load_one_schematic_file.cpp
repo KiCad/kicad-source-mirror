@@ -9,6 +9,7 @@
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_marker_sch.h"
 
 /* in read_from_file_schematic_items_description.cpp */
 SCH_ITEM* ReadTextDescr( FILE* aFile, wxString& aMsgDiag, char* aLine,
@@ -339,8 +340,8 @@ at line %d, aborted" ),
 
                 ii = ReadDelimitedText( BufLine, Line, 256 );
                 int type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
-                if( type < 0 )
-                    type = MARQ_UNSPEC;
+                if( type < 0 || type >= MARK_NMAX)
+                    type = MARK_UNSPEC;
                 Marker->SetMarkerType( type );
                 if( ii )
                     Marker->SetErrorText( CONV_FROM_UTF8( BufLine ) );

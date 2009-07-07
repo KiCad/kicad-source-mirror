@@ -14,6 +14,8 @@
 #include "general.h"
 #include "protos.h"
 
+#include "class_marker_sch.h"
+
 /**************************************************************************************/
 SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool IncludePin )
 /**************************************************************************************/

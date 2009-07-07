@@ -5,27 +5,12 @@
 #ifndef CLASS_SCHEMATIC_ITEMS_H
 #define CLASS_SCHEMATIC_ITEMS_H
 
-#include "class_marker_base.h"
-
 #define DRAWJUNCTION_DIAMETER  32       /* Size (diameter) of junctions between wires */
 #define DRAWNOCONNECT_SIZE 48       /* Rayon du symbole No Connexion */
 
 /* flags pour BUS ENTRY (bus to bus ou wire to bus */
 #define WIRE_TO_BUS 0
 #define BUS_TO_BUS  1
-
-
-enum TypeMarker {      /* Type des Marqueurs */
-    MARQ_UNSPEC,
-    MARQ_ERC,
-    MARQ_PCB,
-    MARQ_SIMUL,
-    MARQ_NMAX        /* Derniere valeur: fin de tableau */
-};
-
-
-/* Messages correspondants aux types des marqueurs */
-extern const wxChar* NameMarqueurType[];
 
 
 /**
@@ -86,63 +71,6 @@ public:
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
-#endif
-};
-
-
-class MARKER_SCH : public SCH_ITEM , public MARKER_BASE
-{
-public:
-    MARKER_SCH( const wxPoint& aPos, const wxString& aText );
-    ~MARKER_SCH();
-    virtual wxString GetClass() const
-    {
-        return wxT( "MARKER_SCH" );
-    }
-
-
-    MARKER_SCH* GenCopy();
-    virtual void      Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                            const wxPoint& offset, int draw_mode,
-                            int Color = -1 );
-
-
-    wxString GetErrorText( ) const
-    {
-        wxString text = m_drc.GetMainText();
-        return text;
-    }
-
-    void SetErrorText( wxString aText)
-    {
-        SetData( m_drc.GetErrorCode(), GetPos(), aText, GetPos() );
-    }
-
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool              Save( FILE* aFile ) const;
-
-    /** Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     * for a marker, has no meaning, but it is necessary to satisfy the SCH_ITEM class requirements
-     */
-    virtual int GetPenSize( ) { return 0; };
-
-    /** Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool HitTest( const wxPoint& aPosRef )
-    {
-        return HitTestMarker( aPosRef );
-    }
-#if defined(DEBUG)
-    void              Show( int nestLevel, std::ostream& os );
 #endif
 };
 

@@ -15,10 +15,12 @@
 #include "general.h"
 #include "netlist.h"
 #include "bitmaps.h"
+#include "class_marker_sch.h"
 
 #include "protos.h"
 
 #include "dialog_erc.h"
+#include "erc.h"
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
@@ -71,7 +73,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 /* Delete the old ERC markers, over the whole hierarchy
  */
 {
-    DeleteAllMarkers( MARQ_ERC );
+    DeleteAllMarkers( MARK_ERC );
     m_MessagesList->Clear();
     m_Parent->DrawPanel->Refresh();
 }
@@ -214,5 +216,101 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         m_PanelMatrixSizer->SetMinSize( BoxMatrixMinSize );
     }
     m_Initialized = TRUE;
+}
+
+
+
+/** Function DisplayERC_MarkersList
+ * read the schematic and display the list of ERC markers
+ */
+void DIALOG_ERC::DisplayERC_MarkersList()
+{
+    EDA_SheetList SheetList;
+
+    for( DrawSheetPath* Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
+    {
+        SCH_ITEM* DrawStruct = Sheet->LastDrawList();
+        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+        {
+            if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
+                continue;
+
+            /* Marqueur trouve */
+            MARKER_SCH* Marker = (MARKER_SCH*) DrawStruct;
+            if( Marker->GetMarkerType() != MARK_ERC )
+                continue;
+
+            /* Display diag */
+            wxString msg;
+            msg.Printf( _( "sheet %s (loc X=%f" ", Y=%f" "): %s\n" ),
+                       Sheet->PathHumanReadable().GetData(),
+                       (float) Marker->m_Pos.x / 1000, (float) Marker->m_Pos.y / 1000,
+                       Marker->GetErrorText().GetData() );
+            m_MessagesList->AppendText( msg );
+        }
+    }
+}
+
+
+/**************************************************************/
+void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
+/**************************************************************/
+
+/* Remet aux valeurs par defaut la matrice de diagnostic
+ */
+{
+    memcpy( DiagErc, DefaultDiagErc, sizeof(DiagErc) );
+    ReBuildMatrixPanel();
+}
+
+
+/************************************************************/
+void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
+/************************************************************/
+
+/* Change the error level for the pressed button, on the matrix table
+ */
+{
+    int             id, level, ii, x, y;
+    wxBitmapButton* Butt;
+    const char**    new_bitmap_xpm = NULL;
+    wxPoint         pos;
+
+    id   = event.GetId();
+    ii   = id - ID_MATRIX_0;
+    Butt = (wxBitmapButton*) event.GetEventObject();
+    pos  = Butt->GetPosition();
+
+    x = ii / PIN_NMAX; y = ii % PIN_NMAX;
+
+    level = DiagErc[y][x];
+
+    switch( level )
+    {
+    case OK:
+        level = WAR;
+        new_bitmap_xpm = warning_xpm;
+        break;
+
+    case WAR:
+        level = ERR;
+        new_bitmap_xpm = error_xpm;
+        break;
+
+    case ERR:
+        level = OK;
+        new_bitmap_xpm = erc_green_xpm;
+        break;
+    }
+
+    if( new_bitmap_xpm )
+    {
+        delete Butt;
+        Butt = new wxBitmapButton( m_PanelERCOptions, id,
+                                   wxBitmap( new_bitmap_xpm ), pos );
+
+        m_ButtonList[y][x] = Butt;
+        DiagErc[y][x] = DiagErc[x][y] = level;
+    }
 }
 

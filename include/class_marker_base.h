@@ -12,11 +12,11 @@ class MARKER_BASE
 public:
     wxPoint  m_Pos;                 ///< position of the marker
 protected:
-    char*    m_Bitmap;              ///< Shape (bitmap)
+    std::vector <wxPoint> m_Corners;             ///< Corner list for shape definition (a polygon)
     int      m_MarkerType;          ///< Can be used as a flag
-    int      m_Color;               ///< color
-    wxSize   m_Size;                ///< Size of the graphic symbol
-
+    EDA_Colors      m_Color;               ///< color
+    wxSize   m_Size;                ///< Size of the graphic symbol, used for Hit Tests
+    int      m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can set the physical size
     DRC_ITEM m_drc;
 
     void     init();
@@ -65,13 +65,21 @@ public:
     }
 
 
+    /** Function SetColor
+     * Set the color of this marker
+     */
+    void SetColor(EDA_Colors aColor )
+    {
+        m_Color = aColor;
+    }
+
     /** Function to set/get error levels (warning, fatal ..)
      * this value is stored in m_MarkerType
      */
     void SetErrorLevel(int aErrorLevel )
     {
-        m_MarkerType &= 0xFF00;
-        m_MarkerType &= 0xFF;
+        m_MarkerType &= ~0xFF00;
+        aErrorLevel &= 0xFF;
         m_MarkerType |= aErrorLevel << 8;
     }
 
@@ -86,7 +94,7 @@ public:
      */
     void SetMarkerType(int aMarkerType )
     {
-        m_MarkerType &= 0xFF;
+        m_MarkerType &= ~0xFF;
         aMarkerType &= 0xFF;
         m_MarkerType |= aMarkerType;
     }

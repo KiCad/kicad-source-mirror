@@ -20,12 +20,6 @@ extern const wxChar* CommentERC_V[];
 /*  Control identifiers */
 #define ID_MATRIX_0 1800
 
-#define OK  0
-#define WAR 1
-#define ERR 2
-#define UNC 3
-
-
 /*!
  * DIALOG_ERC class declaration
  */

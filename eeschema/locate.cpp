@@ -12,6 +12,7 @@
 #include "trigo.h"
 #include "macros.h"
 #include "class_drawpickedstruct.h"
+#include "class_marker_sch.h"
 
 #include "protos.h"
 
