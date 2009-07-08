@@ -403,11 +403,11 @@ public:
      *          part number > number of parts
      *          different values between parts
      * @return errors count
-     * @param aMessageList = a wxTextCtrl to display merssages. If NULL, they are displyed in a wxMessageBox
+     * @param aMessageList = a wxArrayString to store messages. If NULL, they are displayed in a wxMessageBox
      * @param aOneSheetOnly : true = search is made only in the current sheet
      *                       false = search in whole hierarchy (usual search).
      */
-    int CheckAnnotate( wxTextCtrl * aMessageList, bool aOneSheetOnly );
+    int CheckAnnotate( wxArrayString * aMessageList, bool aOneSheetOnly );
 
 
     DECLARE_EVENT_TABLE()

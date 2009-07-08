@@ -74,6 +74,12 @@ public:
     }
 
 
+    /** Function SetData
+     * initialize all data in item
+     * @param aErrorCode = error code
+     * @param aMainText = the text concerning the schematic or board item
+     * @param aMainPos = position the item and therefore of this issue
+     */
     void SetData( int aErrorCode,
                   const wxString& aMainText, const wxPoint& aMainPos )
     {
@@ -83,7 +89,14 @@ public:
         m_hasSecondItem = false;
     }
 
-
+    /** Function SetData
+     * initialize all data in item
+     * @param aErrorCode = error code
+     * @param aMainText = the first text (main text) concerning the main schematic or board item
+     * @param bAuxiliaryText = the second text (main text) concerning the second schematic or board item
+     * @param aMainPos = position the first item and therefore of this issue
+     * @param bAuxiliaryPos = position the second item
+     */
     void SetData( int aErrorCode,
                   const wxString& aMainText, const wxString& bAuxiliaryText,
                   const wxPoint& aMainPos, const wxPoint& bAuxiliaryPos )
@@ -93,6 +106,18 @@ public:
         m_AuxiliaryText     = bAuxiliaryText;
         m_MainPosition      = aMainPos;
         m_AuxiliaryPosition = bAuxiliaryPos;
+        m_hasSecondItem     = true;
+    }
+
+    /** Function SetAuxiliaryData
+     * initialize data for the second (auxiliary) item
+     * @param aAuxiliaryText = the second text (main text) concerning the second schematic or board item
+     * @param aAuxiliaryPos = position the second item
+     */
+    void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
+    {
+        m_AuxiliaryText     = aAuxiliaryText;
+        m_AuxiliaryPosition = aAuxiliaryPos;
         m_hasSecondItem     = true;
     }
 
@@ -175,12 +200,11 @@ public:
         return m_ErrorCode;
     }
 
-
     /**
      * Function GetErrorText
      * returns the string form of a drc error code.
-     */
-    wxString GetErrorText() const;
+    */
+     wxString GetErrorText() const;
 
     const wxString& GetTextA() const
     {

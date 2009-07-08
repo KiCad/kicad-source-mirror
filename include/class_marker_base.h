@@ -130,6 +130,16 @@ public:
              const wxString& aText, const wxPoint& aPos );
 
 
+    /** Function SetAuxiliaryData
+     * initialize data for the second (auxiliary) item
+     * @param aAuxiliaryText = the second text (main text) concerning the second schematic or board item
+     * @param aAuxiliaryPos = position the second item
+     */
+    void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
+    {
+        m_drc.SetAuxiliaryData( aAuxiliaryText, aAuxiliaryPos );
+    }
+
     /**
      * Function GetReporter
      * returns the DRC_ITEM held within this MARKER so that its
@@ -149,6 +159,15 @@ public:
      * @return bool - true if a hit, else false
      */
     bool    HitTestMarker( const wxPoint& ref_pos );
+    
+    /**
+     * Function GetBoundingBoxMarker
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
+    EDA_Rect GetBoundingBoxMarker();
 };
 
 

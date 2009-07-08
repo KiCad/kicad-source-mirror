@@ -166,7 +166,7 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 
 
 /**************************************************/
-void DIALOG_ERC::TestErc( wxTextCtrl* aMessagesList )
+void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 /**************************************************/
 {
     wxFileName          fn;
@@ -190,8 +190,9 @@ void DIALOG_ERC::TestErc( wxTextCtrl* aMessagesList )
     {
         if( aMessagesList )
         {
-            aMessagesList->AppendText( _( "Annotation Required!" ) );
-            aMessagesList->AppendText( wxT( "\n" ) );
+            wxString msg = _( "Annotation Required!" );
+            msg += wxT( "\n" );
+            aMessagesList->Add( msg );
         }
         return;
     }
@@ -340,9 +341,6 @@ void DIALOG_ERC::TestErc( wxTextCtrl* aMessagesList )
     // Display diags:
     DisplayERC_MarkersList();
 
-    if( m_TotalErrCount == 0 )
-        m_MessagesList->AppendText( _( "ERC finished, no error\n" ) );
-
     // Display new markers:
     m_Parent->DrawPanel->Refresh();
 
@@ -382,7 +380,6 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
  */
 {
     MARKER_SCH* Marker = NULL;
-    wxString    DiagLevel;
     SCH_SCREEN* screen;
     int         ii, jj;
 
@@ -472,14 +469,12 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
     if( aNetItemTst )         /* Erreur entre 2 pins */
     {
         jj = aNetItemTst->m_ElectricalType;
-        DiagLevel = _( "Warning" );
-        int severity = ERCE_PIN_TO_PIN_WARNING;
+        int errortype = ERCE_PIN_TO_PIN_WARNING;
         if( aDiag == ERR )
         {
-            DiagLevel = _( "Error" );
             Marker->SetErrorLevel( ERR );
             g_EESchemaVar.NbWarningErc--;
-            severity = ERCE_PIN_TO_PIN_ERROR;
+            errortype = ERCE_PIN_TO_PIN_ERROR;
         }
 
         wxString alt_string_pinnum, alt_cmp;
@@ -488,15 +483,16 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         alt_cmp = wxT( "?" );
         if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
             alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef( &aNetItemTst->m_SheetList );
-        msg.Printf( _( "%s: Cmp %s, Pin %s (%s) connected to Cmp %s, Pin %s (%s) (net %d)" ),
-                   DiagLevel.GetData(),
-                   cmp_ref.GetData(), string_pinnum.GetData(), MsgPinElectricType[ii],
-                   alt_cmp.GetData(), alt_string_pinnum.GetData(), MsgPinElectricType[jj],
-                   aNetItemRef->GetNet() );
-        Marker->SetData( severity,
+        msg.Printf( _("Cmp %s, Pin %s (%s) connected to " ),
+                   cmp_ref.GetData(), string_pinnum.GetData(), MsgPinElectricType[ii] );
+        Marker->SetData( errortype,
                          aNetItemRef->m_Start,
                          msg,
                          aNetItemRef->m_Start );
+        msg.Printf( _("Cmp %s, Pin %s (%s) (net %d)" ),
+                   alt_cmp.GetData(), alt_string_pinnum.GetData(), MsgPinElectricType[jj],
+                   aNetItemRef->GetNet() );
+        Marker->SetAuxiliaryData( msg, aNetItemTst->m_Start );
     }
 }
 
@@ -610,7 +606,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
         return FALSE;
 
     DateAndTime( Line );
-    msg = _( "ERC control" );
+    msg = _( "ERC report" );
 
     fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8( msg ), Line );
 
@@ -636,17 +632,10 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
             if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
                 continue;
 
-            /* Marqueur trouve */
             Marker = (MARKER_SCH*) DrawStruct;
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
-
-            /* Write diag marqueur */
-            msg.Printf( _( "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n" ),
-                        Marker->GetErrorText().GetData(),
-                        (float) Marker->GetPos().x / 1000,
-                        (float) Marker->GetPos().y / 1000 );
-
+            msg = Marker->GetReporter().ShowReport();
             fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
         }
     }

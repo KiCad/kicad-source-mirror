@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:        dialog_erc.h
 // Author:      jean-pierre Charras
 // Licence:    GPL
@@ -7,13 +8,17 @@
 #ifndef _DIALOG_ERC_H_
 #define _DIALOG_ERC_H_
 
+#include <wx/htmllbox.h>
+#include <vector>
+
+
 #include "dialog_erc_base.h"
 
 /* Variable locales */
-extern int WriteFichierERC;
-extern int DiagErc[PIN_NMAX][PIN_NMAX];
-extern bool       DiagErcTableInit; // go to TRUE after DiagErc init
-extern int DefaultDiagErc[PIN_NMAX][PIN_NMAX];
+extern int           WriteFichierERC;
+extern int           DiagErc[PIN_NMAX][PIN_NMAX];
+extern bool          DiagErcTableInit; // go to TRUE after DiagErc init
+extern int           DefaultDiagErc[PIN_NMAX][PIN_NMAX];
 extern const wxChar* CommentERC_H[];
 extern const wxChar* CommentERC_V[];
 
@@ -24,16 +29,17 @@ extern const wxChar* CommentERC_V[];
  * DIALOG_ERC class declaration
  */
 
-class DIALOG_ERC: public DIALOG_ERC_BASE
+class DIALOG_ERC : public DIALOG_ERC_BASE
 {
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 
 private:
-	WinEDA_SchematicFrame * m_Parent;
-	wxBitmapButton * m_ButtonList[PIN_NMAX][PIN_NMAX];
-	bool m_Initialized;
+    WinEDA_SchematicFrame* m_Parent;
+    wxBitmapButton*        m_ButtonList[PIN_NMAX][PIN_NMAX];
+    bool m_Initialized;
 
 public:
+
     /// Constructors
     DIALOG_ERC( WinEDA_SchematicFrame* parent );
 
@@ -51,15 +57,19 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX
     void OnResetMatrixClick( wxCommandEvent& event );
 
-	void TestErc( wxTextCtrl* aMessagesList );
-    void DisplayERC_MarkersList( );
-	void SelLocal(wxCommandEvent& event);
-	void SelNewCmp(wxCommandEvent& event);
-	void ResetDefaultERCDiag(wxCommandEvent& event);
-	void ChangeErrorLevel(wxCommandEvent& event);
-	void ReBuildMatrixPanel();
+    // Double click on a marker info:
+	void OnLeftDClickMarkersList( wxCommandEvent& event );
 
+    void TestErc( wxArrayString* aMessagesList );
+    void DisplayERC_MarkersList();
+    void SelLocal( wxCommandEvent& event );
+    void SelNewCmp( wxCommandEvent& event );
+    void ResetDefaultERCDiag( wxCommandEvent& event );
+    void ChangeErrorLevel( wxCommandEvent& event );
+    void ReBuildMatrixPanel();
 };
 
+
 #endif
-    // _DIALOG_ERC_H_
+
+// _DIALOG_ERC_H_

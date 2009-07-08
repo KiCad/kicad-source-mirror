@@ -22,6 +22,7 @@ set(COMMON_SRCS
     common_plotDXF_functions.cpp
     confirm.cpp
     copy_to_clipboard.cpp
+    dialog_display_info_HTML_base.cpp
     dcsvg.cpp
     displlst.cpp
     dlist.cpp

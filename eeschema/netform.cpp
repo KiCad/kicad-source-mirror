@@ -741,7 +741,7 @@ static void EraseDuplicatePins( ObjetNetListStruct** TabPin, int NbrPin )
         if( TabPin[ii]->m_PinNum != TabPin[ii + 1]->m_PinNum )
             continue;
         /* Duplicated Pins
-         * remove duplicates. The priority is keep connected pins and remove unconnected
+         * remove duplicates. The priority is to keep connected pins and remove unconnected
          * So this allows (for instance when using multi op amps per package
          * to connect only one op amp to power
         */

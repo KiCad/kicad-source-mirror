@@ -123,6 +123,20 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
         return false;
 }
 
+/**
+ * Function GetBoundingBoxMarker
+ * returns the orthogonal, bounding box of this object for display purposes.
+ * This box should be an enclosing perimeter for visible components of this
+ * object, and the units should be in the pcb or schematic coordinate system.
+ * It is OK to overestimate the size by a few counts.
+ */
+EDA_Rect MARKER_BASE::GetBoundingBoxMarker()
+{
+    wxSize Realsize = m_Size;
+    Realsize.x *= m_ScalingFactor;
+    Realsize.y *= m_ScalingFactor;
+    return EDA_Rect( m_Pos,Realsize );
+}
 
 /**********************************************************************/
 void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,

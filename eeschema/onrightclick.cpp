@@ -16,6 +16,7 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "class_marker_sch.h"
 
 #include "protos.h"
 #include "hotkeys.h"
@@ -38,6 +39,8 @@ static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field );
 static void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
                                  WinEDA_SchematicFrame* frame );
+static void AddMenusForMarkers( wxMenu* aPopMenu, MARKER_SCH* aMarker,
+                                 WinEDA_SchematicFrame* aFrame );
 
 
 /*****************************************************************/
@@ -138,7 +141,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ), delete_xpm );
+        AddMenusForMarkers( PopMenu, (MARKER_SCH*) DrawStruct, this );
         break;
 
     case TYPE_SCH_TEXT:
@@ -629,4 +632,13 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
   #endif
 #endif
     }
+}
+
+/**********************************************************************/
+void AddMenusForMarkers( wxMenu* aPopMenu, MARKER_SCH* aMarker,
+                                 WinEDA_SchematicFrame* aFrame )
+/**********************************************************************/
+{
+    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ), delete_xpm );
+    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_GETINFO_MARKER, _( "About this Marker" ), info_xpm );
 }

@@ -10,6 +10,7 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "class_drawpickedstruct.h"
+#include "class_marker_sch.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -117,6 +118,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_LEAVE_SHEET:
     case ID_POPUP_SCH_ADD_JUNCTION:
     case ID_POPUP_SCH_ADD_LABEL:
+    case ID_POPUP_SCH_GETINFO_MARKER:
 
         /* At this point: Do nothing. these commands do not need to stop the current command
           * (mainly a block command) or reset the current state
@@ -710,6 +712,11 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             TestDanglingEnds( screen->EEDrawList, &dc );
             screen->SetCurItem( NULL );
         }
+        break;
+
+    case ID_POPUP_SCH_GETINFO_MARKER:
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_MARKER_STRUCT_TYPE )
+            ((MARKER_SCH*)screen->GetCurItem())->DisplayMarkerInfo( this );
         break;
 
     case ID_SCHEMATIC_UNDO:

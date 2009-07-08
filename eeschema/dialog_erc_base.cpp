@@ -5,6 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "dialog_erc_listbox.h"
+
 #include "dialog_erc_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -13,6 +15,7 @@ BEGIN_EVENT_TABLE( DIALOG_ERC_BASE, wxDialog )
 	EVT_BUTTON( ID_ERC_CMP, DIALOG_ERC_BASE::_wxFB_OnErcCmpClick )
 	EVT_BUTTON( ID_ERASE_DRC_MARKERS, DIALOG_ERC_BASE::_wxFB_OnEraseDrcMarkersClick )
 	EVT_BUTTON( wxID_CANCEL, DIALOG_ERC_BASE::_wxFB_OnCancelClick )
+	EVT_LISTBOX_DCLICK( ID_MAKER_HTMLLISTBOX, DIALOG_ERC_BASE::_wxFB_OnLeftDClickMarkersList )
 	EVT_BUTTON( ID_RESET_MATRIX, DIALOG_ERC_BASE::_wxFB_OnResetMatrixClick )
 END_EVENT_TABLE()
 
@@ -84,7 +87,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	bercSizer->Add( bupperSizer, 0, wxEXPAND, 5 );
 	
-	m_WriteResultOpt = new wxCheckBox( m_PanelERC, wxID_ANY, _("Write ERC report"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_WriteResultOpt = new wxCheckBox( m_PanelERC, wxID_ANY, _("Create ERC report"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	bercSizer->Add( m_WriteResultOpt, 0, wxALL, 5 );
 	
@@ -95,10 +98,10 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_textMessage->Wrap( -1 );
 	bercSizer->Add( m_textMessage, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_MessagesList = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_MessagesList->SetMinSize( wxSize( 580,300 ) );
+	m_MessagesList = new ERC_HTML_LISTBOX( m_PanelERC, ID_MAKER_HTMLLISTBOX, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	m_MessagesList->SetMinSize( wxSize( 500,350 ) );
 	
-	bercSizer->Add( m_MessagesList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bercSizer->Add( m_MessagesList, 1, wxALL|wxEXPAND, 5 );
 	
 	m_PanelERC->SetSizer( bercSizer );
 	m_PanelERC->Layout();

@@ -336,21 +336,27 @@ at line %d, aborted" ),
             {
                 char* text;
                 char  BufLine[1024];
-                Marker = new MARKER_SCH( pos, wxEmptyString );
-
-                ii = ReadDelimitedText( BufLine, Line, 256 );
+                BufLine[0] = 0;
+                int errtype = 0;
+                Marker = new MARKER_SCH( );
+                ii = ReadDelimitedText( BufLine, Line, 1024 );
                 int type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
                 if( type < 0 || type >= MARK_NMAX)
                     type = MARK_UNSPEC;
                 Marker->SetMarkerType( type );
-                if( ii )
-                    Marker->SetErrorText( CONV_FROM_UTF8( BufLine ) );
-                text = strstr( Line, " F=" );
+                text = Line+ii;
+
+                text = strstr( text, " F=" );
                 if( text )
                 {
+                    ii = 0;
                     sscanf( text + 3, "%X", &ii );
                     Marker->SetErrorLevel( ii );
+                    text = strstr( text, " T=" );
+                    if( text )
+                        sscanf( text + 3, "%X", &errtype );
                 }
+                Marker->SetData(errtype, pos, CONV_FROM_UTF8( BufLine ) , pos);
                 Marker->SetNext( screen->EEDrawList );
                 screen->EEDrawList = Marker;
             }

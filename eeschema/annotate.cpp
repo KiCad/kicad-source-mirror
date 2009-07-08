@@ -632,7 +632,7 @@ static int ExistUnit( int aObjet, int Unit,
 
 
 /***************************************************************************************/
-int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneSheetOnly )
+int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 /***************************************************************************************/
 
 /**
@@ -644,7 +644,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
  *          part number > number of parts
  *          different values between parts
  * @return errors count
- * @param aMessageList = a wxTextCtrl to display merssages. If NULL, they are displyed in a wxMessageBox
+ * @param aMessageList = a wxArrayString to store messages. If NULL, they are displayed in a wxMessageBox
  * @param aOneSheetOnly : true = search is made only in the current sheet
  *                       false = search in whole hierarchy (usual search).
  */
@@ -700,8 +700,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
             }
             if( aMessageList )
             {
-                aMessageList->AppendText( msg );
-                aMessageList->AppendText( wxT( "\n" ) );
+                aMessageList->Add( msg + wxT( "\n" ) );
             }
             else
                 DisplayError( NULL, msg );
@@ -726,8 +725,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
             msg << Buff;
             if( aMessageList )
             {
-                aMessageList->AppendText( msg );
-                aMessageList->AppendText( wxT( "\n" ) );
+                aMessageList->Add( msg + wxT( "\n" ));
             }
             else
                 DisplayError( NULL, msg );
@@ -769,8 +767,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
             }
             if( aMessageList )
             {
-                aMessageList->AppendText( msg );
-                aMessageList->AppendText( wxT( "\n" ) );
+                aMessageList->Add( msg + wxT( "\n" ));
             }
             else
                 DisplayError( NULL, msg );
@@ -799,8 +796,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
 
             if( aMessageList )
             {
-                aMessageList->AppendText( msg );
-                aMessageList->AppendText( wxT( "\n" ) );
+                aMessageList->Add( msg + wxT( "\n" ));
             }
             else
                 DisplayError( NULL, msg );
@@ -836,9 +832,8 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
 
             if( aMessageList )
             {
-                aMessageList->AppendText( msg );
-                aMessageList->AppendText( wxT( "\n" ) );
-            }
+                aMessageList->Add( msg + wxT( "\n" ));
+           }
             else
                 DisplayError( NULL, msg );
             error++;
@@ -867,9 +862,8 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxTextCtrl* aMessageList, bool aOneShe
                     nextcmpref.GetData(), ComponentsList[ii + 1].m_NumRef );
         if( aMessageList )
         {
-            aMessageList->AppendText( msg );
-            aMessageList->AppendText( wxT( "\n" ) );
-        }
+                 aMessageList->Add( msg + wxT( "\n" ));
+       }
         else
             DisplayError( NULL, msg );
         error++;

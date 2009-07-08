@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:        dialog_erc.cpp
 // Purpose:
 // Author:      jean-pierre Charras
@@ -20,84 +21,151 @@
 #include "protos.h"
 
 #include "dialog_erc.h"
+#include "dialog_erc_listbox.h"
 #include "erc.h"
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-	EVT_COMMAND_RANGE(ID_MATRIX_0,
-					ID_MATRIX_0 + (PIN_NMAX * PIN_NMAX) - 1,
-					wxEVT_COMMAND_BUTTON_CLICKED,
-					DIALOG_ERC::ChangeErrorLevel)
+EVT_COMMAND_RANGE( ID_MATRIX_0,
+                   ID_MATRIX_0 + (PIN_NMAX * PIN_NMAX) - 1,
+                   wxEVT_COMMAND_BUTTON_CLICKED,
+                   DIALOG_ERC::ChangeErrorLevel )
 END_EVENT_TABLE()
 
 
-DIALOG_ERC::DIALOG_ERC( WinEDA_SchematicFrame* parent )
-    : DIALOG_ERC_BASE(parent)
+DIALOG_ERC::DIALOG_ERC( WinEDA_SchematicFrame* parent ) :
+    DIALOG_ERC_BASE( parent )
 {
-	m_Parent = parent;
-	Init();
+    m_Parent = parent;
+    Init();
 
-	GetSizer()->SetSizeHints(this);
-
+    GetSizer()->SetSizeHints( this );
 }
+
 
 void DIALOG_ERC::Init()
 {
     SetFocus();
 
-	m_Initialized = FALSE;
-	for( int ii = 0; ii < PIN_NMAX; ii++ )
-		for( int jj = 0; jj < PIN_NMAX; jj++ )
-			m_ButtonList[ii][jj] = NULL;
+    m_Initialized = FALSE;
+    for( int ii = 0; ii < PIN_NMAX; ii++ )
+        for( int jj = 0; jj < PIN_NMAX; jj++ )
+            m_ButtonList[ii][jj] = NULL;
 
     m_WriteResultOpt->SetValue( WriteFichierERC );
 
-	wxString num;
-	num.Printf(wxT("%d"), g_EESchemaVar.NbErrorErc);
-	m_TotalErrCount->SetLabel(num);
+    wxString num;
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
+    m_TotalErrCount->SetLabel( num );
 
-	num.Printf(wxT("%d"), g_EESchemaVar.NbErrorErc-g_EESchemaVar.NbWarningErc);
-	m_LastErrCount->SetLabel(num);
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
+    m_LastErrCount->SetLabel( num );
 
-	num.Printf(wxT("%d"), g_EESchemaVar.NbWarningErc);
-	m_LastWarningCount->SetLabel(num);
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
+    m_LastWarningCount->SetLabel( num );
 
-    DisplayERC_MarkersList( );
+    DisplayERC_MarkersList();
 
-	// Init Panel Matrix
-	ReBuildMatrixPanel();
+    // Init Panel Matrix
+    ReBuildMatrixPanel();
 }
+
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
+
 /* Delete the old ERC markers, over the whole hierarchy
  */
 {
     DeleteAllMarkers( MARK_ERC );
-    m_MessagesList->Clear();
+    m_MessagesList->ClearList();
     m_Parent->DrawPanel->Refresh();
 }
+
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL */
 void DIALOG_ERC::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal(0);
+    EndModal( 0 );
 }
 
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX */
 void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 {
-	ResetDefaultERCDiag(event);
+    ResetDefaultERCDiag( event );
 }
 
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERC_CMP */
 void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 {
+    wxBusyCursor();
     m_MessagesList->Clear();
     wxSafeYield();      // m_MessagesList must be redraw
-	TestErc( m_MessagesList);
+    wxArrayString messageList;
+    TestErc( &messageList );
+#warning    m_MessagesList->Append(messageList);
+}
+
+
+// Double click on a marker info:
+void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
+{
+    int index = m_MessagesList->GetSelection();
+
+    if( index < 0 )
+        return;
+
+    const MARKER_SCH* marker = m_MessagesList->GetItem( (unsigned) index );
+
+    EndModal( 1 );
+
+
+    // Search for the selected marker
+    DrawSheetPath* sheet;
+    bool           NotFound;
+    wxPoint        pos = marker->m_Pos;
+    wxPoint        curpos, old_cursor_position;
+
+    EDA_SheetList  SheetList;
+
+    NotFound = TRUE;
+    /* Search for the selected marker */
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    {
+        SCH_ITEM*item = (SCH_ITEM*) sheet->LastDrawList();
+        while( item && NotFound )
+        {
+            if( item == marker )
+            {
+                NotFound = FALSE;
+                break;
+            }
+            item = item->Next();
+        }
+
+        if( NotFound == false )
+            break;
+    }
+
+
+    if( NotFound ) // Error
+    {
+        wxMessageBox( wxT( "OnLeftDClickMarkersList() error: Marker Not Found" ) );
+        return;
+    }
+
+    if( sheet != m_Parent->GetSheet() )
+    {
+        sheet->LastScreen()->SetZoom( m_Parent->GetScreen()->GetZoom() );
+        *m_Parent->m_CurrentSheet = *sheet;
+        ActiveScreen    = m_Parent->m_CurrentSheet->LastScreen();
+        m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
+    }
+
+    sheet->LastScreen()->m_Curseur = pos;
+    m_Parent->Recadre_Trace( true );
 }
 
 
@@ -219,13 +287,14 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 }
 
 
-
 /** Function DisplayERC_MarkersList
  * read the schematic and display the list of ERC markers
  */
 void DIALOG_ERC::DisplayERC_MarkersList()
 {
     EDA_SheetList SheetList;
+
+    m_MessagesList->ClearList();
 
     for( DrawSheetPath* Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {
@@ -241,12 +310,12 @@ void DIALOG_ERC::DisplayERC_MarkersList()
                 continue;
 
             /* Display diag */
-            wxString msg;
-            msg.Printf( _( "sheet %s (loc X=%f" ", Y=%f" "): %s\n" ),
-                       Sheet->PathHumanReadable().GetData(),
-                       (float) Marker->m_Pos.x / 1000, (float) Marker->m_Pos.y / 1000,
-                       Marker->GetErrorText().GetData() );
-            m_MessagesList->AppendText( msg );
+
+//            wxString msg;
+//            msg.Printf( _( "<b>sheet %s</b><ul>\n" ), Sheet->PathHumanReadable().GetData() );
+//            msg += Marker->GetReporter().ShowHtml();
+//            m_MessagesList->Append( msg );
+            m_MessagesList->AppendToList( Marker );
         }
     }
 }
@@ -313,4 +382,3 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
         DiagErc[y][x] = DiagErc[x][y] = level;
     }
 }
-

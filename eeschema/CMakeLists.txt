@@ -16,6 +16,7 @@ set(EESCHEMA_SRCS
     class_BodyItem_Text.cpp
     class_drawsheet.cpp
     class_drawsheetpath.cpp
+    class_drc_erc_item.cpp
     class_hierarchical_PIN_sheet.cpp
     class_libentry.cpp
     class_libentry_fields.cpp

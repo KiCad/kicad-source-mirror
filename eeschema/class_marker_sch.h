@@ -5,6 +5,7 @@
 #ifndef _CLASS_MARKER_SCH_H_
 #define _CLASS_MARKER_SCH_H_
 
+#include "sch_item_struct.h"
 #include "class_marker_base.h"
 
 /* Marker are mainly used to show an ERC error
@@ -42,17 +43,6 @@ public:
                             int aColor = -1 );
 
 
-    wxString GetErrorText( ) const
-    {
-        wxString text = m_drc.GetMainText();
-        return text;
-    }
-
-    void SetErrorText( wxString aText)
-    {
-        SetData( m_drc.GetErrorCode(), GetPos(), aText, GetPos() );
-    }
-
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch"
@@ -76,6 +66,21 @@ public:
     {
         return HitTestMarker( aPosRef );
     }
+
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
+    virtual EDA_Rect GetBoundingBox();
+    
+    /** Function DisplayMarkerInfo()
+     * Displays the full info of this marker, in a HTML window
+     */
+    void DisplayMarkerInfo(WinEDA_SchematicFrame * aFrame);
+
 #if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );
 #endif

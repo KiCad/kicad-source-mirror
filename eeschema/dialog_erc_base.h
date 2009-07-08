@@ -10,6 +10,8 @@
 
 #include <wx/intl.h>
 
+class ERC_HTML_LISTBOX;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -21,7 +23,7 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
-#include <wx/textctrl.h>
+#include <wx/listbox.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -43,6 +45,7 @@ class DIALOG_ERC_BASE : public wxDialog
 		void _wxFB_OnErcCmpClick( wxCommandEvent& event ){ OnErcCmpClick( event ); }
 		void _wxFB_OnEraseDrcMarkersClick( wxCommandEvent& event ){ OnEraseDrcMarkersClick( event ); }
 		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
+		void _wxFB_OnLeftDClickMarkersList( wxCommandEvent& event ){ OnLeftDClickMarkersList( event ); }
 		void _wxFB_OnResetMatrixClick( wxCommandEvent& event ){ OnResetMatrixClick( event ); }
 		
 	
@@ -51,6 +54,7 @@ class DIALOG_ERC_BASE : public wxDialog
 		{
 			ID_ERC_CMP = 1000,
 			ID_ERASE_DRC_MARKERS,
+			ID_MAKER_HTMLLISTBOX,
 			ID_RESET_MATRIX,
 		};
 		
@@ -69,7 +73,7 @@ class DIALOG_ERC_BASE : public wxDialog
 		wxCheckBox* m_WriteResultOpt;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_textMessage;
-		wxTextCtrl* m_MessagesList;
+		ERC_HTML_LISTBOX* m_MessagesList;
 		wxPanel* m_PanelERCOptions;
 		wxBoxSizer* m_PanelMatrixSizer;
 		wxButton* m_ResetOptButton;
@@ -80,6 +84,7 @@ class DIALOG_ERC_BASE : public wxDialog
 		virtual void OnErcCmpClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnLeftDClickMarkersList( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnResetMatrixClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
