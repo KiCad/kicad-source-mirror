@@ -68,8 +68,19 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	bupperSizer->Add( sdiagSizer, 0, 0, 5 );
 	
+	wxBoxSizer* bSizeMessages;
+	bSizeMessages = new wxBoxSizer( wxVERTICAL );
 	
-	bupperSizer->Add( 10, 10, 1, wxEXPAND, 5 );
+	m_titleMessages = new wxStaticText( m_PanelERC, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleMessages->Wrap( -1 );
+	bSizeMessages->Add( m_titleMessages, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_MessagesList = new wxTextCtrl( m_PanelERC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_MessagesList->SetMinSize( wxSize( 300,-1 ) );
+	
+	bSizeMessages->Add( m_MessagesList, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	
+	bupperSizer->Add( bSizeMessages, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -94,14 +105,14 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_staticline2 = new wxStaticLine( m_PanelERC, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bercSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 	
-	m_textMessage = new wxStaticText( m_PanelERC, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textMessage->Wrap( -1 );
-	bercSizer->Add( m_textMessage, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_textMarkers = new wxStaticText( m_PanelERC, wxID_ANY, _("Markers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textMarkers->Wrap( -1 );
+	bercSizer->Add( m_textMarkers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_MessagesList = new ERC_HTML_LISTBOX( m_PanelERC, ID_MAKER_HTMLLISTBOX, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_MessagesList->SetMinSize( wxSize( 500,350 ) );
+	m_MarkersList = new ERC_HTML_LISTBOX( m_PanelERC, ID_MAKER_HTMLLISTBOX, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxSIMPLE_BORDER ); 
+	m_MarkersList->SetMinSize( wxSize( 500,350 ) );
 	
-	bercSizer->Add( m_MessagesList, 1, wxALL|wxEXPAND, 5 );
+	bercSizer->Add( m_MarkersList, 1, wxALL|wxEXPAND, 5 );
 	
 	m_PanelERC->SetSizer( bercSizer );
 	m_PanelERC->Layout();

@@ -78,7 +78,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
  */
 {
     DeleteAllMarkers( MARK_ERC );
-    m_MessagesList->ClearList();
+    m_MarkersList->ClearList();
     m_Parent->DrawPanel->Refresh();
 }
 
@@ -101,23 +101,25 @@ void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 {
     wxBusyCursor();
+    m_MarkersList->Clear();
     m_MessagesList->Clear();
-    wxSafeYield();      // m_MessagesList must be redraw
+    wxSafeYield();      // m_MarkersList must be redraw
     wxArrayString messageList;
     TestErc( &messageList );
-#warning    m_MessagesList->Append(messageList);
+    for ( unsigned ii = 0; ii < messageList.GetCount(); ii++ )
+        m_MessagesList->AppendText(messageList[ii]);
 }
 
 
 // Double click on a marker info:
 void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
 {
-    int index = m_MessagesList->GetSelection();
+    int index = m_MarkersList->GetSelection();
 
     if( index < 0 )
         return;
 
-    const MARKER_SCH* marker = m_MessagesList->GetItem( (unsigned) index );
+    const MARKER_SCH* marker = m_MarkersList->GetItem( (unsigned) index );
 
     EndModal( 1 );
 
@@ -294,7 +296,7 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 {
     EDA_SheetList SheetList;
 
-    m_MessagesList->ClearList();
+    m_MarkersList->ClearList();
 
     for( DrawSheetPath* Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {
@@ -314,8 +316,8 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 //            wxString msg;
 //            msg.Printf( _( "<b>sheet %s</b><ul>\n" ), Sheet->PathHumanReadable().GetData() );
 //            msg += Marker->GetReporter().ShowHtml();
-//            m_MessagesList->Append( msg );
-            m_MessagesList->AppendToList( Marker );
+//            m_MarkersList->Append( msg );
+            m_MarkersList->AppendToList( Marker );
         }
     }
 }

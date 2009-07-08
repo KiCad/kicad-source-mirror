@@ -20,6 +20,7 @@ class ERC_HTML_LISTBOX;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
@@ -66,14 +67,15 @@ class DIALOG_ERC_BASE : public wxDialog
 		wxStaticText* m_LastWarningCount;
 		wxStaticText* m_LastErrCountText;
 		wxStaticText* m_LastErrCount;
-		
+		wxStaticText* m_titleMessages;
+		wxTextCtrl* m_MessagesList;
 		wxButton* m_buttonERC;
 		wxButton* m_buttondelmarkers;
 		wxButton* m_buttonClose;
 		wxCheckBox* m_WriteResultOpt;
 		wxStaticLine* m_staticline2;
-		wxStaticText* m_textMessage;
-		ERC_HTML_LISTBOX* m_MessagesList;
+		wxStaticText* m_textMarkers;
+		ERC_HTML_LISTBOX* m_MarkersList;
 		wxPanel* m_PanelERCOptions;
 		wxBoxSizer* m_PanelMatrixSizer;
 		wxButton* m_ResetOptButton;
