@@ -18,8 +18,10 @@
 // Default marquer shape:
 #define M_SHAPE_SCALE 6     // default scaling factor for MarkerShapeCorners coordinates
 #define CORNERS_COUNT 8
-// corners of the default shape
-static wxPoint MarkerShapeCorners[CORNERS_COUNT] =
+/* corners of the default shape
+ * real coordinates are these values * .m_ScalingFactor
+*/
+static const wxPoint MarkerShapeCorners[CORNERS_COUNT] =
 {
     wxPoint( 0,  0 ),
     wxPoint( 8,  1 ),
@@ -39,13 +41,20 @@ void MARKER_BASE::init()
 {
     m_MarkerType = 0;
     m_Color = RED;
+    wxPoint start = MarkerShapeCorners[0];
+    wxPoint end = MarkerShapeCorners[0];
     for( unsigned ii = 0; ii < CORNERS_COUNT; ii++ )
     {
         wxPoint corner = MarkerShapeCorners[ii];
         m_Corners.push_back( corner );
-        m_Size.x = MAX( m_Size.x, corner.x);
-        m_Size.y = MAX( m_Size.y, corner.y);
+        start.x = MIN( start.x, corner.x);
+        start.y = MIN( start.y, corner.y);
+        end.x = MAX( end.x, corner.x);
+        end.y = MAX( end.y, corner.y);
     }
+
+    m_ShapeBoundingBox.SetOrigin(start);
+    m_ShapeBoundingBox.SetEnd(end);
 }
 
 
@@ -103,24 +112,15 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
 }
 
 
-/**********************************************/
+/******************************************************/
 bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
-/**********************************************/
+/******************************************************/
 {
-    int     dx = refPos.x - m_Pos.x;
-    int     dy = refPos.y - m_Pos.y;
+    wxPoint rel_pos = refPos - m_Pos;
+    rel_pos.x /= m_ScalingFactor;
+    rel_pos.y /= m_ScalingFactor;
 
-    wxSize Realsize = m_Size;
-    Realsize.x *= m_ScalingFactor;
-    Realsize.y *= m_ScalingFactor;
-
-    /* is refPos in the box: Marker size to right an bottom,
-     *  or size/2 to left or top */
-    if( dx <= Realsize.x  && dy <= Realsize.y
-        && dx >= -Realsize.x / 2  && dy >= -Realsize.y / 2 )
-        return true;
-    else
-        return false;
+    return m_ShapeBoundingBox.Inside(rel_pos);
 }
 
 /**
@@ -132,10 +132,14 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
  */
 EDA_Rect MARKER_BASE::GetBoundingBoxMarker()
 {
-    wxSize Realsize = m_Size;
-    Realsize.x *= m_ScalingFactor;
-    Realsize.y *= m_ScalingFactor;
-    return EDA_Rect( m_Pos,Realsize );
+    wxSize realsize = m_ShapeBoundingBox.GetSize();
+    wxPoint realposition = m_ShapeBoundingBox.GetPosition();
+    realsize.x *= m_ScalingFactor;
+    realsize.y *= m_ScalingFactor;
+    realposition.x *= m_ScalingFactor;
+    realposition.y *= m_ScalingFactor;
+    realposition += m_Pos;
+    return EDA_Rect( m_Pos,realsize );
 }
 
 /**********************************************************************/

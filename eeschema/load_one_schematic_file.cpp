@@ -50,7 +50,6 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
     DrawPolylineStruct*  PolylineStruct;
     EDA_DrawLineStruct*  SegmentStruct;
     DrawBusEntryStruct*  RaccordStruct;
-    MARKER_SCH*    Marker;
     DrawNoConnectStruct* NoConnectStruct;
     int                  LineCount;
     wxString             MsgDiag;   /* Error and log messages */
@@ -325,6 +324,7 @@ at line %d, aborted" ),
             break;
 
         case 'K':                       /* It is a Marker item. */
+        #if 0       // Markers are no more read from file
             if( sscanf( SLine, "%s %d %d", Name1, &pos.x, &pos.y ) != 3 )
             {
                 MsgDiag.Printf( wxT( "EESchema file marker struct error line %d, aborted" ),
@@ -338,7 +338,7 @@ at line %d, aborted" ),
                 char  BufLine[1024];
                 BufLine[0] = 0;
                 int errtype = 0;
-                Marker = new MARKER_SCH( );
+                MARKER_SCH* Marker = new MARKER_SCH( );
                 ii = ReadDelimitedText( BufLine, Line, 1024 );
                 int type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
                 if( type < 0 || type >= MARK_NMAX)
@@ -360,6 +360,7 @@ at line %d, aborted" ),
                 Marker->SetNext( screen->EEDrawList );
                 screen->EEDrawList = Marker;
             }
+            #endif
             break;
 
         case 'T':                       /* It is a text item. */

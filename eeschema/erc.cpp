@@ -165,6 +165,53 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 };
 
 
+
+/**Function TestDuplicateSheetNames( )
+ * inside a given sheet, one cannot have sheets with duplicate names (file names can be duplicated).
+ */
+int TestDuplicateSheetNames( )
+{
+    int err_count = 0;
+    EDA_ScreenList ScreenList;      // Created the list of screen
+    for( SCH_SCREEN* Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
+    {
+        for( SCH_ITEM* ref_item = Screen->EEDrawList; ref_item != NULL; ref_item = ref_item->Next() )
+        {
+            // search for a scheet;
+            if( ref_item->Type() != DRAW_SHEET_STRUCT_TYPE )
+                continue;
+            for( SCH_ITEM* item_to_test = ref_item->Next();
+                item_to_test != NULL;
+                item_to_test = item_to_test->Next() )
+            {
+                if( item_to_test->Type() != DRAW_SHEET_STRUCT_TYPE )
+                    continue;
+
+                // We have found a second sheet: compare names
+                if( ( (DrawSheetStruct*) ref_item )->m_SheetName.CmpNoCase( ( (DrawSheetStruct*)
+                                                                             item_to_test )->
+                                                                           m_SheetName ) == 0 )
+                {
+                    /* Create a new marker type ERC error*/
+                    MARKER_SCH* Marker = new MARKER_SCH();
+                    Marker->m_TimeStamp = GetTimeStamp();
+                    Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
+                                     ( (DrawSheetStruct*) item_to_test )->m_Pos,
+                                     _( "Duplicate Sheet name" ),
+                                     ( (DrawSheetStruct*) item_to_test )->m_Pos );
+                    Marker->SetMarkerType( MARK_ERC );
+                    Marker->SetErrorLevel( ERR );
+                    Marker->SetNext( Screen->EEDrawList );
+                    Screen->EEDrawList = Marker;
+                    err_count++;
+                }
+            }
+        }
+    }
+
+    return err_count;
+}
+
 /**************************************************/
 void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 /**************************************************/
@@ -219,43 +266,10 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     /* Test duplicate sheet names
      * inside a given sheet, one cannot have sheets with duplicate names (file names can be duplicated).
-     * Test screens is enought
      */
-    for( SCH_SCREEN* Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
-    {
-        for( SCH_ITEM* ref_item = Screen->EEDrawList; ref_item != NULL; ref_item = ref_item->Next() )
-        {
-            // serach for a scheet;
-            if( ref_item->Type() != DRAW_SHEET_STRUCT_TYPE )
-                continue;
-            for( SCH_ITEM* item_to_test = ref_item->Next();
-                item_to_test != NULL;
-                item_to_test = item_to_test->Next() )
-            {
-                if( item_to_test->Type() != DRAW_SHEET_STRUCT_TYPE )
-                    continue;
-
-                // We have found a second sheet: compare names
-                if( ( (DrawSheetStruct*) ref_item )->m_SheetName.CmpNoCase( ( (DrawSheetStruct*)
-                                                                             item_to_test )->
-                                                                           m_SheetName ) == 0 )
-                {
-                    /* Create a new marker type ERC error*/
-                    MARKER_SCH* Marker = new MARKER_SCH();
-                    Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
-                                     ( (DrawSheetStruct*) item_to_test )->m_Pos,
-                                     _( "Duplicate Sheet name" ),
-                                     ( (DrawSheetStruct*) item_to_test )->m_Pos );
-                    Marker->SetMarkerType( MARK_ERC );
-                    Marker->SetErrorLevel( ERR );
-                    Marker->SetNext( Screen->EEDrawList );
-                    Screen->EEDrawList = Marker;
-                    g_EESchemaVar.NbErrorErc++;
-                    g_EESchemaVar.NbWarningErc++;
-                }
-            }
-        }
-    }
+    int errcnt = TestDuplicateSheetNames( );
+    g_EESchemaVar.NbErrorErc += errcnt;
+    g_EESchemaVar.NbWarningErc += errcnt;
 
     m_Parent->BuildNetListBase();
 
@@ -388,6 +402,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
 
     /* Creation du nouveau marqueur type Erreur ERC */
     Marker = new MARKER_SCH();
+    Marker->m_TimeStamp = GetTimeStamp();
 
     Marker->SetMarkerType( MARK_ERC );
     Marker->SetErrorLevel( WAR );
@@ -430,7 +445,8 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         if( aMinConn == NOC )    /* 1 seul element dans le net */
         {
             msg.Printf( _( "Cmp %s, Pin %s (%s) Unconnected" ),
-                        cmp_ref.GetData(), string_pinnum.GetData(), MsgPinElectricType[ii] );
+                        cmp_ref.GetData(), string_pinnum.GetData(),
+                        MsgPinElectricType[ii] );
             Marker->SetData( ERCE_PIN_NOT_CONNECTED,
                              aNetItemRef->m_Start,
                              msg,
@@ -522,15 +538,15 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
     NetItemTst    = netstart;
     local_minconn = NOC;
 
-    /* Examen de la liste des Pins connectees a NetItemRef */
+    /* Test pins Pins connected to NetItemRef */
     for( ; ; NetItemTst++ )
     {
         if( NetItemRef == NetItemTst )
             continue;
 
-        /* Est - on toujours dans le meme net ? */
-        if( (NetItemTst >= Lim)                                     // fin de liste (donc fin de net)
-           || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )    // fin de net
+        /* We examine only a given net. We stop the search if the net changes */
+        if( (NetItemTst >= Lim)                                     // End of list
+           || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )    // End of net
         {
             /* Fin de netcode trouve: Tst connexion minimum */
             if( (*MinConnexion < NET_NC )

@@ -86,19 +86,30 @@ void MARKER_SCH::Show( int nestLevel, std::ostream& os )
  * writes the data structures for this object out to a FILE in "*.brd" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
+ * Currently: do nothing (markers are no more saved in files)
  */
 bool MARKER_SCH::Save( FILE* aFile ) const
 {
     bool     success = true;
-    wxString msg     = GetReporter().GetMainText();
+#if 0
+    wxString msg     = m_drc.GetMainText();
 
-    if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\" F=%X T=%X\n",
+    if( fprintf( aFile, "Kmarq %c %-4d %-4d \"%s\"",
                 GetMarkerType() + 'A', GetPos().x, GetPos().y,
-                CONV_TO_UTF8( msg ), GetErrorLevel(), GetReporter().GetErrorCode() ) == EOF )
-    {
+                CONV_TO_UTF8( msg ) ) == EOF )
         success = false;
-    }
 
+    if ( m_drc.HasSecondItem() )
+    {
+            msg     = GetReporter().GetAuxiliaryText();
+        if( fprintf( aFile, " \"%s\" %-4d %-4d",
+                    GetMarkerType() + 'A', m_drc.GetPointB().x, m_drc.GetPointB().y,
+                    CONV_TO_UTF8( msg ) ) == EOF )
+            success = false;
+    }
+    if( fprintf( aFile, " F=%X T=%X\n",
+                GetErrorLevel(), GetReporter().GetErrorCode() ) == EOF )
+#endif
     return success;
 }
 
@@ -149,7 +160,7 @@ void MARKER_SCH::DisplayMarkerInfo( WinEDA_SchematicFrame* aFrame )
     wxString msg = GetReporter().ShowHtml();
 
     DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( aFrame, -1, wxEmptyString,
-                                              wxGetMousePosition(), wxSize( 550, 130 ) );
+                                              wxGetMousePosition(), wxSize( 550, 170 ) );
 
     infodisplay.m_htmlWindow->SetPage( msg );
     infodisplay.ShowModal();

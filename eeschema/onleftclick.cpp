@@ -12,6 +12,8 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "class_marker_sch.h"
+
 #include "protos.h"
 
 static wxArrayString s_CmpNameList;
@@ -367,6 +369,10 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         case DRAW_PART_TEXT_STRUCT_TYPE:
             EditCmpFieldText( (SCH_CMP_FIELD*) DrawStruct, DC );
             DrawPanel->MouseToCursorSchema();
+            break;
+
+        case DRAW_MARKER_STRUCT_TYPE:
+            ((MARKER_SCH*)DrawStruct)->DisplayMarkerInfo( this);
             break;
 
         default:

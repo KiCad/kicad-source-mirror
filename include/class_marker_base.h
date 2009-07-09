@@ -10,20 +10,20 @@
 class MARKER_BASE
 {
 public:
-    wxPoint  m_Pos;                 ///< position of the marker
+    wxPoint               m_Pos;                    ///< position of the marker
 protected:
-    std::vector <wxPoint> m_Corners;             ///< Corner list for shape definition (a polygon)
-    int      m_MarkerType;          ///< Can be used as a flag
-    EDA_Colors      m_Color;               ///< color
-    wxSize   m_Size;                ///< Size of the graphic symbol, used for Hit Tests
-    int      m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can set the physical size
-    DRC_ITEM m_drc;
+    std::vector <wxPoint> m_Corners;                ///< Corner list for shape definition (a polygon)
+    int                   m_MarkerType;             ///< Can be used as a flag
+    EDA_Colors            m_Color;                  ///< color
+    EDA_Rect              m_ShapeBoundingBox;       ///< Bounding box of the graphic symbol, relative to the position of the shape, used for Hit Tests
+    int                   m_ScalingFactor;          ///< Scaling factor for m_Size and m_Corners (can set the physical size
+    DRC_ITEM              m_drc;
 
-    void     init();
+    void init();
 
 public:
 
-    MARKER_BASE( );
+    MARKER_BASE();
 
     /**
      * Constructor
@@ -35,9 +35,10 @@ public:
      * @param bPos The position of the second of two objects
      */
     MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-           const wxString& aText, const wxPoint& aPos,
-           const wxString& bText, const wxPoint& bPos );
-     /**
+                 const wxString& aText, const wxPoint& aPos,
+                 const wxString& bText, const wxPoint& bPos );
+
+    /**
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
      * @param aMarkerPos The position of the MARKER on the BOARD
@@ -45,14 +46,14 @@ public:
      * @param aPos The position of the object
      */
     MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-           const wxString& aText, const wxPoint& aPos );
+                 const wxString& aText, const wxPoint& aPos );
 
 
     ~MARKER_BASE();
 
     /** Function DrawMarker
      */
-    void    DrawMarker( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset );
+    void DrawMarker( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset );
 
 
     /**
@@ -68,22 +69,24 @@ public:
     /** Function SetColor
      * Set the color of this marker
      */
-    void SetColor(EDA_Colors aColor )
+    void SetColor( EDA_Colors aColor )
     {
         m_Color = aColor;
     }
 
+
     /** Function to set/get error levels (warning, fatal ..)
      * this value is stored in m_MarkerType
      */
-    void SetErrorLevel(int aErrorLevel )
+    void SetErrorLevel( int aErrorLevel )
     {
         m_MarkerType &= ~0xFF00;
-        aErrorLevel &= 0xFF;
+        aErrorLevel  &= 0xFF;
         m_MarkerType |= aErrorLevel << 8;
     }
 
-    int GetErrorLevel( ) const
+
+    int GetErrorLevel() const
     {
         return (m_MarkerType >> 8) & 0xFF;
     }
@@ -92,17 +95,19 @@ public:
     /** Functions to set/get marker type (DRC, ERC, or other)
      * this value is stored in m_MarkerType
      */
-    void SetMarkerType(int aMarkerType )
+    void SetMarkerType( int aMarkerType )
     {
         m_MarkerType &= ~0xFF;
-        aMarkerType &= 0xFF;
+        aMarkerType  &= 0xFF;
         m_MarkerType |= aMarkerType;
     }
 
-    int GetMarkerType( ) const
+
+    int GetMarkerType() const
     {
         return m_MarkerType & 0xFF;
     }
+
 
     /**
      * Function SetData
@@ -115,8 +120,8 @@ public:
      * @param bPos The position of the second of two objects
      */
     void SetData( int aErrorCode, const wxPoint& aMarkerPos,
-             const wxString& aText, const wxPoint& aPos,
-             const wxString& bText, const wxPoint& bPos );
+                  const wxString& aText, const wxPoint& aPos,
+                  const wxString& bText, const wxPoint& bPos );
 
     /**
      * Function SetData
@@ -127,7 +132,7 @@ public:
      * @param aPos The position of the object
      */
     void SetData( int aErrorCode, const wxPoint& aMarkerPos,
-             const wxString& aText, const wxPoint& aPos );
+                  const wxString& aText, const wxPoint& aPos );
 
 
     /** Function SetAuxiliaryData
@@ -139,6 +144,7 @@ public:
     {
         m_drc.SetAuxiliaryData( aAuxiliaryText, aAuxiliaryPos );
     }
+
 
     /**
      * Function GetReporter
@@ -158,8 +164,8 @@ public:
      * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTestMarker( const wxPoint& ref_pos );
-    
+    bool     HitTestMarker( const wxPoint& ref_pos );
+
     /**
      * Function GetBoundingBoxMarker
      * returns the orthogonal, bounding box of this object for display purposes.

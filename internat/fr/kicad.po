@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-08 07:54+0100\n"
-"PO-Revision-Date: 2009-07-08 08:02+0100\n"
+"POT-Creation-Date: 2009-07-09 08:02+0100\n"
+"PO-Revision-Date: 2009-07-09 08:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -5707,11 +5707,6 @@ msgstr "Change tous"
 msgid "Browse Libs modules"
 msgstr "Liste modules"
 
-#: eeschema/dialog_erc.cpp:245
-#, c-format
-msgid "sheet %s (loc X=%f, Y=%f): %s\n"
-msgstr "feuille %s (pos X=%f, Y=%f): %s\n"
-
 #: eeschema/libedit.cpp:35
 msgid " Part:   "
 msgstr "Composant   "
@@ -5817,63 +5812,63 @@ msgstr "Le composant \" %s\" existe, Le changer ?"
 msgid "Component %s saved in %s"
 msgstr "Composant %s sauvé en %s"
 
-#: eeschema/schedit.cpp:187
+#: eeschema/schedit.cpp:189
 msgid "Push/Pop Hierarchy"
 msgstr "Naviger dans Hiérarchie"
 
-#: eeschema/schedit.cpp:191
+#: eeschema/schedit.cpp:193
 msgid "Add NoConnect Flag"
 msgstr "Ajoutde symboles de non connexion"
 
-#: eeschema/schedit.cpp:195
+#: eeschema/schedit.cpp:197
 msgid "Add Wire"
 msgstr "Ajouter Fils"
 
-#: eeschema/schedit.cpp:199
+#: eeschema/schedit.cpp:201
 msgid "Add Bus"
 msgstr "Addition de Bus"
 
-#: eeschema/schedit.cpp:207
+#: eeschema/schedit.cpp:209
 msgid "Add Junction"
 msgstr "Ajout jonctions"
 
-#: eeschema/schedit.cpp:211
+#: eeschema/schedit.cpp:213
 msgid "Add Label"
 msgstr "Ajout Label"
 
-#: eeschema/schedit.cpp:215
+#: eeschema/schedit.cpp:217
 msgid "Add Global label"
 msgstr "Ajout de labels globaux"
 
-#: eeschema/schedit.cpp:219
+#: eeschema/schedit.cpp:221
 msgid "Add Hierarchal label"
 msgstr "Ajouter Label Hiérarchique"
 
-#: eeschema/schedit.cpp:227
+#: eeschema/schedit.cpp:229
 msgid "Add Wire to Bus entry"
 msgstr "Addition d'entrées de bus (type fil vers bus)"
 
-#: eeschema/schedit.cpp:231
+#: eeschema/schedit.cpp:233
 msgid "Add Bus to Bus entry"
 msgstr "Addition d'entrées de bus (type bus vers bus)"
 
-#: eeschema/schedit.cpp:235
+#: eeschema/schedit.cpp:237
 msgid "Add Sheet"
 msgstr "Ajout de Feuille"
 
-#: eeschema/schedit.cpp:239
+#: eeschema/schedit.cpp:241
 msgid "Add PinSheet"
 msgstr "Ajout Conn. hiérar."
 
-#: eeschema/schedit.cpp:243
+#: eeschema/schedit.cpp:245
 msgid "Import PinSheet"
 msgstr "Importer Connecteur de hiérarchie"
 
-#: eeschema/schedit.cpp:247
+#: eeschema/schedit.cpp:249
 msgid "Add Component"
 msgstr "Ajout Composant"
 
-#: eeschema/schedit.cpp:251
+#: eeschema/schedit.cpp:253
 msgid "Add Power"
 msgstr "Ajouter Alims"
 
@@ -6506,39 +6501,39 @@ msgstr "item non numéroté: %s%s"
 msgid "( unit %d)"
 msgstr "( Unité %d)"
 
-#: eeschema/annotate.cpp:721
+#: eeschema/annotate.cpp:720
 #, c-format
 msgid "Error item %s%s"
 msgstr "Erreur item %s%s"
 
-#: eeschema/annotate.cpp:724
+#: eeschema/annotate.cpp:723
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " unité %d et plus que %d parts"
 
-#: eeschema/annotate.cpp:762
-#: eeschema/annotate.cpp:791
+#: eeschema/annotate.cpp:760
+#: eeschema/annotate.cpp:788
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Multipleélément %s%s"
 
-#: eeschema/annotate.cpp:767
-#: eeschema/annotate.cpp:796
+#: eeschema/annotate.cpp:765
+#: eeschema/annotate.cpp:793
 #, c-format
 msgid " (unit %d)"
 msgstr " ( Unité %d)"
 
-#: eeschema/annotate.cpp:818
+#: eeschema/annotate.cpp:814
 #, c-format
 msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
 
-#: eeschema/annotate.cpp:827
+#: eeschema/annotate.cpp:823
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
 
-#: eeschema/annotate.cpp:864
+#: eeschema/annotate.cpp:859
 #, c-format
 msgid "duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "signature temporelle dupliquée (%s) pour %s%d et %s%d"
@@ -6583,64 +6578,58 @@ msgstr "Pas de nouveau Label Hiérarchique trouvé"
 msgid "Annotation Required!"
 msgstr "Numérotation requise!"
 
-#: eeschema/erc.cpp:246
+#: eeschema/erc.cpp:247
 msgid "Duplicate Sheet name"
 msgstr "Nom de feuille en double"
 
-#: eeschema/erc.cpp:344
-msgid "ERC finished, no error\n"
-msgstr "ERC finie, pas d'erreur\n"
-
-#: eeschema/erc.cpp:355
+#: eeschema/erc.cpp:353
 msgid "ERC File"
 msgstr "Fichier ERC"
 
-#: eeschema/erc.cpp:356
+#: eeschema/erc.cpp:354
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Fichier Contrôle des règles électroniques (.erc)|*.erc"
 
-#: eeschema/erc.cpp:409
+#: eeschema/erc.cpp:406
 #, c-format
 msgid "HLabel %s not connected to SheetLabel"
 msgstr "HLabel %s non connecté à SheetLabel"
 
-#: eeschema/erc.cpp:413
+#: eeschema/erc.cpp:410
 #, c-format
 msgid "SheetLabel %s not connected to HLabel"
 msgstr "SheetLabel %s non connecté à HLabel"
 
-#: eeschema/erc.cpp:435
+#: eeschema/erc.cpp:432
 #, c-format
 msgid "Cmp %s, Pin %s (%s) Unconnected"
 msgstr "Cmp %s, Pin %s (%s) Non connectée"
 
-#: eeschema/erc.cpp:450
+#: eeschema/erc.cpp:447
 #, c-format
 msgid "Cmp %s, Pin %s (%s) not driven (Net %d)"
 msgstr "Cmp %s, Pin %s (%s) non pilotée (Net %d)"
 
-#: eeschema/erc.cpp:463
+#: eeschema/erc.cpp:460
 msgid "More than 1 Pin connected to UnConnect symbol"
 msgstr "Plus de 1 Pin connectée à un symbole de non connexion"
 
-#: eeschema/erc.cpp:475
-msgid "Warning"
-msgstr "Avertissement"
+#: eeschema/erc.cpp:486
+#, fuzzy, c-format
+msgid "Cmp %s, Pin %s (%s) connected to "
+msgstr "Cmp %s, Pin %s (%s) Non connectée"
 
-#: eeschema/erc.cpp:479
-msgid "Error"
-msgstr "Erreur"
+#: eeschema/erc.cpp:492
+#, fuzzy, c-format
+msgid "Cmp %s, Pin %s (%s) (net %d)"
+msgstr "Cmp %s, Pin %s (%s) Non connectée"
 
-#: eeschema/erc.cpp:491
-#, c-format
-msgid "%s: Cmp %s, Pin %s (%s) connected to Cmp %s, Pin %s (%s) (net %d)"
-msgstr "%s: Cmp %s, Pin %s (%s) connectée à Cmp %s, Pin %s (%s) (net %d)"
+#: eeschema/erc.cpp:609
+#, fuzzy
+msgid "ERC report"
+msgstr "Créer Rapport d'erreur"
 
-#: eeschema/erc.cpp:613
-msgid "ERC control"
-msgstr "Contrôle ERC"
-
-#: eeschema/erc.cpp:623
+#: eeschema/erc.cpp:619
 msgid ""
 "\n"
 "***** Sheet / (Root) \n"
@@ -6648,7 +6637,7 @@ msgstr ""
 "\n"
 "***** Feuille/ ( Racine)\n"
 
-#: eeschema/erc.cpp:628
+#: eeschema/erc.cpp:624
 #, c-format
 msgid ""
 "\n"
@@ -6657,12 +6646,7 @@ msgstr ""
 "\n"
 "***** Feuille %s\n"
 
-#: eeschema/erc.cpp:645
-#, c-format
-msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
-msgstr "ERC: %s (X= %2.3f pouces, Y= %2.3f pouces\n"
-
-#: eeschema/erc.cpp:654
+#: eeschema/erc.cpp:643
 #, c-format
 msgid ""
 "\n"
@@ -6679,296 +6663,300 @@ msgstr "Pas de composants trouvés"
 msgid "Selection"
 msgstr "Sélection"
 
-#: eeschema/onrightclick.cpp:105
+#: eeschema/onrightclick.cpp:108
 msgid "Leave Sheet"
 msgstr "Quitter sous-feuille"
 
-#: eeschema/onrightclick.cpp:121
+#: eeschema/onrightclick.cpp:124
 msgid "Delete Noconn"
 msgstr "Supprimer Non Connexion"
 
-#: eeschema/onrightclick.cpp:131
+#: eeschema/onrightclick.cpp:134
 msgid "Move Bus Entry"
 msgstr "Déplacer Entrée de Bus"
 
-#: eeschema/onrightclick.cpp:133
+#: eeschema/onrightclick.cpp:136
 msgid "Set Bus Entry /"
 msgstr "Entrée de Bus /"
 
-#: eeschema/onrightclick.cpp:135
+#: eeschema/onrightclick.cpp:138
 msgid "Set Bus Entry \\"
 msgstr "Entrée de Bus \\"
 
-#: eeschema/onrightclick.cpp:137
+#: eeschema/onrightclick.cpp:140
 msgid "Delete Bus Entry"
 msgstr "Supprimer Entrée de Bus"
 
-#: eeschema/onrightclick.cpp:232
+#: eeschema/onrightclick.cpp:235
 msgid "Move Field"
 msgstr "Déplace Champ"
 
-#: eeschema/onrightclick.cpp:233
+#: eeschema/onrightclick.cpp:236
 msgid "Rotate Field"
 msgstr "Rotation Champ"
 
-#: eeschema/onrightclick.cpp:259
+#: eeschema/onrightclick.cpp:262
 msgid "Move Component"
 msgstr "Déplace Composant"
 
-#: eeschema/onrightclick.cpp:264
+#: eeschema/onrightclick.cpp:267
 msgid "Drag Component"
 msgstr "Drag Composant"
 
-#: eeschema/onrightclick.cpp:271
+#: eeschema/onrightclick.cpp:274
 msgid "Rotate +"
 msgstr "Rotation +"
 
-#: eeschema/onrightclick.cpp:275
+#: eeschema/onrightclick.cpp:278
 msgid "Mirror --"
 msgstr "Miroir--"
 
-#: eeschema/onrightclick.cpp:277
+#: eeschema/onrightclick.cpp:280
 msgid "Mirror ||"
 msgstr "Miroir ||"
 
-#: eeschema/onrightclick.cpp:283
+#: eeschema/onrightclick.cpp:286
 msgid "Orient Component"
 msgstr "Oriente Composant"
 
-#: eeschema/onrightclick.cpp:296
+#: eeschema/onrightclick.cpp:299
 msgid "Footprint "
 msgstr "Empreinte: "
 
-#: eeschema/onrightclick.cpp:301
+#: eeschema/onrightclick.cpp:304
 msgid "Convert"
 msgstr "Convert"
 
-#: eeschema/onrightclick.cpp:309
+#: eeschema/onrightclick.cpp:312
 #, c-format
 msgid "Unit %d %c"
 msgstr "Unité %d %c"
 
-#: eeschema/onrightclick.cpp:314
+#: eeschema/onrightclick.cpp:317
 msgid "Unit"
 msgstr "Unité"
 
-#: eeschema/onrightclick.cpp:319
+#: eeschema/onrightclick.cpp:322
 msgid "Edit Component"
 msgstr "Edite Composant"
 
-#: eeschema/onrightclick.cpp:323
+#: eeschema/onrightclick.cpp:326
 msgid "Copy Component"
 msgstr "Copie Composant"
 
-#: eeschema/onrightclick.cpp:324
+#: eeschema/onrightclick.cpp:327
 msgid "Delete Component"
 msgstr "Suppression Composant"
 
-#: eeschema/onrightclick.cpp:343
+#: eeschema/onrightclick.cpp:346
 msgid "Move Global Label"
 msgstr "Déplacer Label Global"
 
-#: eeschema/onrightclick.cpp:344
+#: eeschema/onrightclick.cpp:347
 msgid "Rotate Global Label"
 msgstr "Rot. Label Global"
 
-#: eeschema/onrightclick.cpp:345
+#: eeschema/onrightclick.cpp:348
 msgid "Edit Global Label"
 msgstr "Editer Label Global"
 
-#: eeschema/onrightclick.cpp:346
+#: eeschema/onrightclick.cpp:349
 msgid "Delete Global Label"
 msgstr "Supprimer Label Global"
 
-#: eeschema/onrightclick.cpp:350
-#: eeschema/onrightclick.cpp:404
-#: eeschema/onrightclick.cpp:437
+#: eeschema/onrightclick.cpp:353
+#: eeschema/onrightclick.cpp:407
+#: eeschema/onrightclick.cpp:440
 msgid "Change to Hierarchical Label"
 msgstr "Changer en Label Hiérarchique"
 
-#: eeschema/onrightclick.cpp:352
-#: eeschema/onrightclick.cpp:377
-#: eeschema/onrightclick.cpp:435
+#: eeschema/onrightclick.cpp:355
+#: eeschema/onrightclick.cpp:380
+#: eeschema/onrightclick.cpp:438
 msgid "Change to Label"
 msgstr "Change en Label"
 
-#: eeschema/onrightclick.cpp:354
-#: eeschema/onrightclick.cpp:379
-#: eeschema/onrightclick.cpp:406
+#: eeschema/onrightclick.cpp:357
+#: eeschema/onrightclick.cpp:382
+#: eeschema/onrightclick.cpp:409
 msgid "Change to Text"
 msgstr "Change en Texte"
 
-#: eeschema/onrightclick.cpp:356
-#: eeschema/onrightclick.cpp:383
-#: eeschema/onrightclick.cpp:410
-#: eeschema/onrightclick.cpp:441
+#: eeschema/onrightclick.cpp:359
+#: eeschema/onrightclick.cpp:386
+#: eeschema/onrightclick.cpp:413
+#: eeschema/onrightclick.cpp:444
 msgid "Change Type"
 msgstr "Change Type"
 
-#: eeschema/onrightclick.cpp:370
+#: eeschema/onrightclick.cpp:373
 msgid "Move Hierarchical Label"
 msgstr "Déplacer Label Hiérarchique"
 
-#: eeschema/onrightclick.cpp:371
+#: eeschema/onrightclick.cpp:374
 msgid "Rotate Hierarchical Label"
 msgstr "Rot. Label Hiérarchique"
 
-#: eeschema/onrightclick.cpp:372
+#: eeschema/onrightclick.cpp:375
 msgid "Edit Hierarchical Label"
 msgstr "Editer Label Hiérarchique"
 
-#: eeschema/onrightclick.cpp:373
+#: eeschema/onrightclick.cpp:376
 msgid "Delete Hierarchical label"
 msgstr "Supprimer Label Hiérarchique"
 
-#: eeschema/onrightclick.cpp:381
-#: eeschema/onrightclick.cpp:408
+#: eeschema/onrightclick.cpp:384
+#: eeschema/onrightclick.cpp:411
 msgid "Change to Global Label"
 msgstr "Change en Label Global"
 
-#: eeschema/onrightclick.cpp:397
+#: eeschema/onrightclick.cpp:400
 msgid "Move Label"
 msgstr "Déplace Label"
 
-#: eeschema/onrightclick.cpp:398
+#: eeschema/onrightclick.cpp:401
 msgid "Rotate Label"
 msgstr "Rot. Label"
 
-#: eeschema/onrightclick.cpp:399
+#: eeschema/onrightclick.cpp:402
 msgid "Edit Label"
 msgstr "Editer Label"
 
-#: eeschema/onrightclick.cpp:400
+#: eeschema/onrightclick.cpp:403
 msgid "Delete Label"
 msgstr "Supprimer Label"
 
-#: eeschema/onrightclick.cpp:424
+#: eeschema/onrightclick.cpp:427
 msgid "Move Text"
 msgstr "Déplacer Texte"
 
-#: eeschema/onrightclick.cpp:425
+#: eeschema/onrightclick.cpp:428
 msgid "Rotate Text"
 msgstr "Rot. Texte"
 
-#: eeschema/onrightclick.cpp:426
+#: eeschema/onrightclick.cpp:429
 msgid "Edit Text"
 msgstr "Editer Texte"
 
-#: eeschema/onrightclick.cpp:427
+#: eeschema/onrightclick.cpp:430
 msgid "Delete Text"
 msgstr "Effacer Texte"
 
-#: eeschema/onrightclick.cpp:439
+#: eeschema/onrightclick.cpp:442
 msgid "Change to Glabel"
 msgstr "Change en Label Global"
 
-#: eeschema/onrightclick.cpp:460
-#: eeschema/onrightclick.cpp:500
+#: eeschema/onrightclick.cpp:463
+#: eeschema/onrightclick.cpp:503
 msgid "Break Wire"
 msgstr "Briser Fil"
 
-#: eeschema/onrightclick.cpp:463
+#: eeschema/onrightclick.cpp:466
 msgid "Delete Junction"
 msgstr "Supprimer Jonction"
 
-#: eeschema/onrightclick.cpp:468
-#: eeschema/onrightclick.cpp:494
+#: eeschema/onrightclick.cpp:471
+#: eeschema/onrightclick.cpp:497
 msgid "Delete Node"
 msgstr "Supprimer Noeud"
 
-#: eeschema/onrightclick.cpp:470
-#: eeschema/onrightclick.cpp:496
+#: eeschema/onrightclick.cpp:473
+#: eeschema/onrightclick.cpp:499
 msgid "Delete Connection"
 msgstr "Supprimer Connexion"
 
-#: eeschema/onrightclick.cpp:487
+#: eeschema/onrightclick.cpp:490
 msgid "Wire End"
 msgstr "Terminer Fil"
 
-#: eeschema/onrightclick.cpp:489
+#: eeschema/onrightclick.cpp:492
 msgid "Delete Wire"
 msgstr "Supprimer Fil"
 
-#: eeschema/onrightclick.cpp:510
-#: eeschema/onrightclick.cpp:542
+#: eeschema/onrightclick.cpp:513
+#: eeschema/onrightclick.cpp:545
 msgid "Add Global Label"
 msgstr "Ajout Label Global"
 
-#: eeschema/onrightclick.cpp:526
+#: eeschema/onrightclick.cpp:529
 msgid "Bus End"
 msgstr "Terminer Bus"
 
-#: eeschema/onrightclick.cpp:529
+#: eeschema/onrightclick.cpp:532
 msgid "Delete Bus"
 msgstr "Supprimer Bus"
 
-#: eeschema/onrightclick.cpp:533
+#: eeschema/onrightclick.cpp:536
 msgid "Break Bus"
 msgstr "Briser Bus"
 
-#: eeschema/onrightclick.cpp:555
+#: eeschema/onrightclick.cpp:558
 msgid "Enter Sheet"
 msgstr "Entrer dans Feuille"
 
-#: eeschema/onrightclick.cpp:557
+#: eeschema/onrightclick.cpp:560
 msgid "Move Sheet"
 msgstr "Déplacer Feuille"
 
-#: eeschema/onrightclick.cpp:562
+#: eeschema/onrightclick.cpp:565
 msgid "Place Sheet"
 msgstr "Placer Feuille"
 
-#: eeschema/onrightclick.cpp:566
+#: eeschema/onrightclick.cpp:569
 msgid "Edit Sheet"
 msgstr "Editer Feuille"
 
-#: eeschema/onrightclick.cpp:567
+#: eeschema/onrightclick.cpp:570
 msgid "Resize Sheet"
 msgstr "Redimensionner Feuille"
 
-#: eeschema/onrightclick.cpp:569
+#: eeschema/onrightclick.cpp:572
 msgid "Import PinSheets"
 msgstr "Importer Connecteur de Hiérarchie"
 
-#: eeschema/onrightclick.cpp:573
+#: eeschema/onrightclick.cpp:576
 msgid "Cleanup PinSheets"
 msgstr "Nettoyage des Pins Hiérarchiques"
 
-#: eeschema/onrightclick.cpp:575
+#: eeschema/onrightclick.cpp:578
 msgid "Delete Sheet"
 msgstr "Supprimer Feuille"
 
-#: eeschema/onrightclick.cpp:588
+#: eeschema/onrightclick.cpp:591
 msgid "Move PinSheet"
 msgstr "Déplace Connecteur de hiérarchie"
 
-#: eeschema/onrightclick.cpp:590
+#: eeschema/onrightclick.cpp:593
 msgid "Edit PinSheet"
 msgstr "Edit Connecteur de hiérarchie"
 
-#: eeschema/onrightclick.cpp:593
+#: eeschema/onrightclick.cpp:596
 msgid "Delete PinSheet"
 msgstr "Supprimer Connecteur de hiérarchie"
 
-#: eeschema/onrightclick.cpp:610
+#: eeschema/onrightclick.cpp:613
 msgid "Window Zoom"
 msgstr "Zoom sur Fenètre"
 
-#: eeschema/onrightclick.cpp:616
+#: eeschema/onrightclick.cpp:619
 msgid "Save Block"
 msgstr "Sauver Bloc"
 
-#: eeschema/onrightclick.cpp:620
+#: eeschema/onrightclick.cpp:623
 msgid "Drag Block"
 msgstr "Drag Bloc"
 
-#: eeschema/onrightclick.cpp:624
+#: eeschema/onrightclick.cpp:627
 msgid "Mirror Block ||"
 msgstr "Miroir Bloc ||"
 
-#: eeschema/onrightclick.cpp:628
+#: eeschema/onrightclick.cpp:631
 msgid "Copy to Clipboard"
 msgstr "Copie dans Presse papier"
+
+#: eeschema/onrightclick.cpp:643
+msgid "About this Marker"
+msgstr ""
 
 #: eeschema/edit_label.cpp:48
 msgid "Empty Text!"
@@ -8973,6 +8961,41 @@ msgstr "Librairie <"
 msgid "> header read error"
 msgstr "> erreur lecture entête"
 
+#: eeschema/class_drc_erc_item.cpp:39
+#, fuzzy
+msgid "ERC err unspecified"
+msgstr "Non specifié"
+
+#: eeschema/class_drc_erc_item.cpp:41
+#, fuzzy
+msgid "Duplicate sheet names within a given sheet"
+msgstr "Nom de feuille en double"
+
+#: eeschema/class_drc_erc_item.cpp:43
+msgid "Pin not connected (and no connect symbol found on this pin)"
+msgstr "Pin non connectée (pas de symbole de non connexion trouvé sur cette pin)"
+
+#: eeschema/class_drc_erc_item.cpp:45
+msgid "Pin connected to some others pins but no pin to drive it"
+msgstr "Pin connectée à d'autres pins, mais aucunne pin pour la piloter"
+
+#: eeschema/class_drc_erc_item.cpp:47
+msgid "Confict problem between pins. Severity: warning"
+msgstr "Problème de conflit entre pins. Sévérité: warning"
+
+#: eeschema/class_drc_erc_item.cpp:49
+msgid "Confict problem between pins. Severity: error"
+msgstr "Problème de conflit entre pins. Sévérité: erreur"
+
+#: eeschema/class_drc_erc_item.cpp:51
+#, fuzzy
+msgid "Mismatch between hierarchical labels and pins sheets"
+msgstr "Addition de pins de hiérarchie dans les feuilles symboles de hiérarchie"
+
+#: eeschema/class_drc_erc_item.cpp:53
+msgid "A no connect symbol is connected to more than 1 pin"
+msgstr "Un symbole de non connexion est connecté à plus de une pin"
+
 #: eeschema/dialog_edit_component_in_schematic.cpp:94
 #: eeschema/dialog_edit_component_in_schematic.cpp:99
 #: eeschema/dialog_edit_libentry_fields_in_lib.cpp:159
@@ -9010,7 +9033,7 @@ msgstr " a été créé par une version plus récente de Eeschema et peut ne pas
 msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
 msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
 
-#: eeschema/load_one_schematic_file.cpp:409
+#: eeschema/load_one_schematic_file.cpp:415
 msgid "Done Loading "
 msgstr "Chargement terminé"
 
@@ -9116,45 +9139,51 @@ msgstr "la position X du point %d de la courbe de Bezier n'est pas définie"
 msgid "Bezier point %d Y position not defined"
 msgstr "la position Y du point %d de la courbe de Bezier n'est pas définie"
 
-#: eeschema/dialog_erc_base.cpp:35
+#: eeschema/dialog_erc_base.cpp:38
 msgid "Erc File Report:"
 msgstr "Fichier rapport d'erreurs:"
 
-#: eeschema/dialog_erc_base.cpp:40
+#: eeschema/dialog_erc_base.cpp:43
 msgid "Total Errors Count:  "
 msgstr "Nombre Total d'Erreurs:  "
 
-#: eeschema/dialog_erc_base.cpp:44
-#: eeschema/dialog_erc_base.cpp:52
-#: eeschema/dialog_erc_base.cpp:60
+#: eeschema/dialog_erc_base.cpp:47
+#: eeschema/dialog_erc_base.cpp:55
+#: eeschema/dialog_erc_base.cpp:63
 msgid "0000"
 msgstr "0000"
 
-#: eeschema/dialog_erc_base.cpp:48
+#: eeschema/dialog_erc_base.cpp:51
 msgid "Warnings Count:"
 msgstr "Nombre de Warnings:"
 
-#: eeschema/dialog_erc_base.cpp:56
+#: eeschema/dialog_erc_base.cpp:59
 msgid "Errors Count:"
 msgstr "Nombre d'erreurs:"
 
-#: eeschema/dialog_erc_base.cpp:74
+#: eeschema/dialog_erc_base.cpp:88
 msgid "&Test Erc"
 msgstr "&Test Erc"
 
-#: eeschema/dialog_erc_base.cpp:77
+#: eeschema/dialog_erc_base.cpp:91
 msgid "&Del Markers"
 msgstr "&Supprimer Marqueurs"
 
-#: eeschema/dialog_erc_base.cpp:87
-msgid "Write ERC report"
+#: eeschema/dialog_erc_base.cpp:101
+#, fuzzy
+msgid "Create ERC report"
 msgstr "Créer Rapport d'erreur"
 
-#: eeschema/dialog_erc_base.cpp:106
+#: eeschema/dialog_erc_base.cpp:108
+#, fuzzy
+msgid "Markers:"
+msgstr "Marqueur"
+
+#: eeschema/dialog_erc_base.cpp:120
 msgid "ERC"
 msgstr "ERC"
 
-#: eeschema/dialog_erc_base.cpp:110
+#: eeschema/dialog_erc_base.cpp:124
 msgid "Reset"
 msgstr "Défaut"
 
@@ -10239,6 +10268,7 @@ msgid "D code File Ext:"
 msgstr "Ext. Fichiers DCodes:"
 
 #: gerbview/select_layers_to_pcb.cpp:220
+#: gerbview/tool_gerber.cpp:244
 msgid "Layer "
 msgstr "Couche "
 
@@ -10555,131 +10585,131 @@ msgstr "Fichiers \"Portable document format\"  (*.pdf)|*.pdf"
 msgid "All files (*)|*"
 msgstr "Tous les fichiers (*)|*"
 
-#: common/common.cpp:244
+#: common/common.cpp:245
 msgid " (\"):"
 msgstr " (\"):"
 
-#: common/common.cpp:334
+#: common/common.cpp:335
 msgid " \""
 msgstr " \""
 
-#: common/common.cpp:338
+#: common/common.cpp:339
 msgid " mm"
 msgstr " mm"
 
-#: common/common.cpp:588
+#: common/common.cpp:589
 msgid "Copper   "
 msgstr "Cuivre   "
 
-#: common/common.cpp:588
+#: common/common.cpp:589
 msgid "Inner L1 "
 msgstr "Interne 1"
 
-#: common/common.cpp:588
+#: common/common.cpp:589
 msgid "Inner L2 "
 msgstr "Interne 2"
 
-#: common/common.cpp:588
+#: common/common.cpp:589
 msgid "Inner L3 "
 msgstr "Interne 3"
 
-#: common/common.cpp:589
+#: common/common.cpp:590
 msgid "Inner L4 "
 msgstr "Interne 4"
 
-#: common/common.cpp:589
+#: common/common.cpp:590
 msgid "Inner L5 "
 msgstr "Interne 5"
 
-#: common/common.cpp:589
+#: common/common.cpp:590
 msgid "Inner L6 "
 msgstr "Interne 6"
 
-#: common/common.cpp:589
+#: common/common.cpp:590
 msgid "Inner L7 "
 msgstr "Interne 7"
 
-#: common/common.cpp:590
+#: common/common.cpp:591
 msgid "Inner L8 "
 msgstr "Interne 8"
 
-#: common/common.cpp:590
+#: common/common.cpp:591
 msgid "Inner L9 "
 msgstr "Interne 9"
 
-#: common/common.cpp:590
+#: common/common.cpp:591
 msgid "Inner L10"
 msgstr "Interne 10"
 
-#: common/common.cpp:590
+#: common/common.cpp:591
 msgid "Inner L11"
 msgstr "Interne 11"
 
-#: common/common.cpp:591
+#: common/common.cpp:592
 msgid "Inner L12"
 msgstr "Interne 12"
 
-#: common/common.cpp:591
+#: common/common.cpp:592
 msgid "Inner L13"
 msgstr "Interne 13"
 
-#: common/common.cpp:591
+#: common/common.cpp:592
 msgid "Inner L14"
 msgstr "Interne 14"
 
-#: common/common.cpp:592
+#: common/common.cpp:593
 msgid "Adhes Cop"
 msgstr "Adhes Cu "
 
-#: common/common.cpp:592
+#: common/common.cpp:593
 msgid "Adhes Cmp"
 msgstr "Adhes  Cmp"
 
-#: common/common.cpp:592
+#: common/common.cpp:593
 msgid "SoldP Cop"
 msgstr "SoldP Cu "
 
-#: common/common.cpp:592
+#: common/common.cpp:593
 msgid "SoldP Cmp"
 msgstr "SoldP Cmp"
 
-#: common/common.cpp:593
+#: common/common.cpp:594
 msgid "SilkS Cop"
 msgstr "Sérigr Cu "
 
-#: common/common.cpp:593
+#: common/common.cpp:594
 msgid "SilkS Cmp"
 msgstr "Sérigr Cmp"
 
-#: common/common.cpp:593
+#: common/common.cpp:594
 msgid "Mask Cop "
 msgstr "Masque Cu "
 
-#: common/common.cpp:593
+#: common/common.cpp:594
 msgid "Mask Cmp "
 msgstr "Masque Cmp"
 
-#: common/common.cpp:594
+#: common/common.cpp:595
 msgid "Drawings "
 msgstr "Drawings "
 
-#: common/common.cpp:594
+#: common/common.cpp:595
 msgid "Comments "
 msgstr "Commentaires "
 
-#: common/common.cpp:594
+#: common/common.cpp:595
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:594
+#: common/common.cpp:595
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:595
+#: common/common.cpp:596
 msgid "Edges Pcb"
 msgstr "Contour Pcb"
 
-#: common/common.cpp:595
+#: common/common.cpp:596
 msgid "BAD INDEX"
 msgstr "BAD INDEX"
 
@@ -10750,6 +10780,14 @@ msgstr "Langue"
 #: common/edaappl.cpp:796
 msgid "Select application language (only for testing!)"
 msgstr "Choisir la langue (seulement pour tests!)"
+
+#: common/confirm.cpp:70
+msgid "Warning"
+msgstr "Avertissement"
+
+#: common/confirm.cpp:74
+msgid "Error"
+msgstr "Erreur"
 
 #: common/eda_doc.cpp:151
 msgid "Doc File "
@@ -11452,7 +11490,7 @@ msgstr "Propriétés du texte graphique:"
 msgid "Fields Properties"
 msgstr "Propriétés des Champs"
 
-#: eeschema/dialog_erc_base.h:87
+#: eeschema/dialog_erc_base.h:94
 msgid "EESchema Erc"
 msgstr "EESchema Erc"
 
@@ -11612,6 +11650,16 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "sheet %s (loc X=%f, Y=%f): %s\n"
+#~ msgstr "feuille %s (pos X=%f, Y=%f): %s\n"
+#~ msgid "ERC finished, no error\n"
+#~ msgstr "ERC finie, pas d'erreur\n"
+#~ msgid "%s: Cmp %s, Pin %s (%s) connected to Cmp %s, Pin %s (%s) (net %d)"
+#~ msgstr "%s: Cmp %s, Pin %s (%s) connectée à Cmp %s, Pin %s (%s) (net %d)"
+#~ msgid "ERC control"
+#~ msgstr "Contrôle ERC"
+#~ msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
+#~ msgstr "ERC: %s (X= %2.3f pouces, Y= %2.3f pouces\n"
 #~ msgid "Last Warnings: "
 #~ msgstr "-> Dern. Warnings: "
 #~ msgid "Last Errors:   "
