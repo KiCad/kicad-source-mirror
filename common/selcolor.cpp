@@ -98,7 +98,7 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
     MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     OuterBoxSizer->Add( MainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    for( ii = 0; ColorRefs[ii].m_Name != NULL; ii++ )
+    for( ii = 0; ColorRefs[ii].m_Name != NULL && ii < NBCOLOR; ii++ )
     {
         // Provide a separate column for every eight buttons (and their
         // associated text strings), so provide a FlexGrid Sizer with

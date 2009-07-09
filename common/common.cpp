@@ -89,6 +89,7 @@ int            g_GhostColor;
  * Please: if you change a value, remember these values are carefully chosen
  * to have good results in pcbnew, that uses the ORed value of basic colors
  * when displaying superimposed objects
+ * The NULL value of the last item can be used as an end of list item
  */
 StructColors ColorRefs[NBCOLOR] =
 {

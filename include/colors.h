@@ -82,7 +82,7 @@ struct StructColors
     int             m_LightColor;
 };
 
-
+// list of existing Colors:
 extern StructColors ColorRefs[NBCOLOR];
 
 /**
