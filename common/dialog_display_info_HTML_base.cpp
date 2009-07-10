@@ -11,17 +11,17 @@
 
 DIALOG_DISPLAY_HTML_TEXT_BASE::DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 400,170 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 400,120 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_htmlWindow = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	bMainSizer->Add( m_htmlWindow, 1, wxALL|wxEXPAND, 5 );
+	m_htmlWindow = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
+	bMainSizer->Add( m_htmlWindow, 1, wxEXPAND, 5 );
 	
-	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	m_buttonClose->SetDefault(); 
-	bMainSizer->Add( m_buttonClose, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bMainSizer->Add( m_buttonClose, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

@@ -324,43 +324,7 @@ at line %d, aborted" ),
             break;
 
         case 'K':                       /* It is a Marker item. */
-        #if 0       // Markers are no more read from file
-            if( sscanf( SLine, "%s %d %d", Name1, &pos.x, &pos.y ) != 3 )
-            {
-                MsgDiag.Printf( wxT( "EESchema file marker struct error line %d, aborted" ),
-                                LineCount );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( Line );
-                Failed = true;
-            }
-            else
-            {
-                char* text;
-                char  BufLine[1024];
-                BufLine[0] = 0;
-                int errtype = 0;
-                MARKER_SCH* Marker = new MARKER_SCH( );
-                ii = ReadDelimitedText( BufLine, Line, 1024 );
-                int type = (TypeMarker) ( (Name1[0] & 255) - 'A' );
-                if( type < 0 || type >= MARK_NMAX)
-                    type = MARK_UNSPEC;
-                Marker->SetMarkerType( type );
-                text = Line+ii;
-
-                text = strstr( text, " F=" );
-                if( text )
-                {
-                    ii = 0;
-                    sscanf( text + 3, "%X", &ii );
-                    Marker->SetErrorLevel( ii );
-                    text = strstr( text, " T=" );
-                    if( text )
-                        sscanf( text + 3, "%X", &errtype );
-                }
-                Marker->SetData(errtype, pos, CONV_FROM_UTF8( BufLine ) , pos);
-                Marker->SetNext( screen->EEDrawList );
-                screen->EEDrawList = Marker;
-            }
-            #endif
+            // Markers are no more read from file. they are only created on demand in schematic
             break;
 
         case 'T':                       /* It is a text item. */

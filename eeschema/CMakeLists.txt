@@ -1,6 +1,7 @@
 add_definitions(-DEESCHEMA)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_SOURCE_DIR}/common
                     ${Boost_INCLUDE_DIR}
                    )
 

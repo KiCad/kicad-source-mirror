@@ -661,6 +661,8 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     m_ClipBox.SetHeight( PaintClipBox.GetHeight() );
 #endif
 
+    // Be sure the drawpanel clipbox is bigger than the region to repair:
+    m_ClipBox.Inflate(1,1); // Give it one pixel more in each direction
 
 #if 0 && defined (DEBUG)
     printf( "2) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",

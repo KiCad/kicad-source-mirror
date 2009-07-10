@@ -40,7 +40,7 @@ class DIALOG_DISPLAY_HTML_TEXT_BASE : public wxDialog
 	
 	public:
 		wxHtmlWindow* m_htmlWindow;
-		DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 431,180 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DISPLAY_HTML_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 431,120 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DISPLAY_HTML_TEXT_BASE();
 	
 };

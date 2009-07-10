@@ -549,10 +549,38 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
            || ( NetItemRef->GetNet() != NetItemTst->GetNet() ) )    // End of net
         {
             /* Fin de netcode trouve: Tst connexion minimum */
-            if( (*MinConnexion < NET_NC )
-               && (local_minconn < NET_NC ) )                       /* Not connected or not driven pin */
+            if( (*MinConnexion < NET_NC ) && (local_minconn < NET_NC ) )  /* Not connected or not driven pin */
             {
-                Diagnose( panel, NetItemRef, NULL, local_minconn, WAR );
+                bool seterr = true;
+                if( local_minconn == NOC && NetItemRef->m_Type == NET_PIN)
+                {
+                    /* This pin is not connected: for multiple part per package, and duplicated pin,
+                    * search for an other instance of this pin
+                    * this will be flagged only is all instances of this pin are not connected
+                    * TODO test also if instances connected are connected to the same net
+                    */
+                    for ( ObjetNetListStruct *duppin = g_TabObjNet; duppin < Lim; duppin ++ )
+                    {
+                        if ( duppin->m_Type != NET_PIN )
+                            continue;
+                        if( duppin == NetItemRef )
+                            continue;
+                        if ( NetItemRef->m_PinNum != duppin->m_PinNum )
+                            continue;
+
+                        if( ( (SCH_COMPONENT*) NetItemRef->m_Link )->GetRef(&NetItemRef->m_SheetList) !=
+                                ((SCH_COMPONENT*) duppin->m_Link )->GetRef(&duppin->m_SheetList) )
+                            continue;
+                        // Same component and same pin. Do dot create error for this pin
+                        // if the other pin is connected (i.e. if duppin net has an other item)
+                        if ( (duppin > g_TabObjNet) && (duppin->GetNet() == (duppin-1)->GetNet()))
+                            seterr = false;
+                        if ( (duppin < Lim-1) && (duppin->GetNet() == (duppin+1)->GetNet()) )
+                            seterr = false;
+                    }
+                }
+                if ( seterr )
+                    Diagnose( panel, NetItemRef, NULL, local_minconn, WAR );
                 *MinConnexion = DRV;   // inhibition autres messages de ce type pour ce net
             }
             return;

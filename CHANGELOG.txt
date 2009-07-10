@@ -4,6 +4,18 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-july-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Eeschema:
+    Enhanced netlist creation and ERC tests for component having multiple parts per package
+    Connecting power pins of all parts is no more needed.
+    Usually, these components have in schematic duplicated  power pins.
+    Op amps having 4 parts have also 4 duplicated  pins per power input,
+    and therefore the user must place 4 power symboles per physical power pin
+    Now Only one power is needed (now eeschema search for a connected pin
+    between duplicated power pins)
+    Note this is a work in progress because the ERC does not check if these duplicate
+    are connected to the *same* net.
 
 2009-july-06 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
