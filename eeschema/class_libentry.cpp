@@ -675,10 +675,6 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
         bBox.Merge( DrawEntry->GetBoundingBox() );
     }
 
-    wxRect r = bBox;
-    wxLogDebug( wxT( "New boundary box = (%d, %d, %d, %d)" ), r.GetLeft(),
-                r.GetRight(), r.GetBottom(), r.GetTop() );
-
     return bBox;
 }
 

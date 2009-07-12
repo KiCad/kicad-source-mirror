@@ -166,7 +166,7 @@ public:
                                                         SCH_COMPONENT*  LibItem );
 
     /* netlist generation */
-    void*                          BuildNetListBase();
+    void                           BuildNetListBase();
 
     /**
      * Function DeleteAnnotation

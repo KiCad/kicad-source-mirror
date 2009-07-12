@@ -23,6 +23,7 @@ set(EESCHEMA_SRCS
     class_libentry_fields.cpp
     class_library.cpp
     class_marker_sch.cpp
+    class_netlist_object.cpp
     class_pin.cpp
     class_sch_cmp_field.cpp
     class_schematic_items.cpp

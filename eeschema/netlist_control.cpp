@@ -28,8 +28,6 @@
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
 #define CUSTOM_NETLIST_COMMAND wxT( "CustomNetlistCommand" )
 
-/* Loacl variable */
-
 /****************************************************/
 wxString ReturnUserNetlistTypeName( bool first_item )
 /****************************************************/
@@ -531,7 +529,6 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
         break;
     }
 
-    FreeTabNetList( g_TabObjNet, g_NbrObjNet );
     m_Parent->m_NetlistFormat = netformat_tmp;
 
     WriteCurrentNetlistSetup();

@@ -11,6 +11,8 @@
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
 
+#include "class_netlist_object.h"
+
 /* Id to select netlist type */
 enum  TypeNetForm {
     NET_TYPE_UNINIT = 0,
@@ -30,69 +32,6 @@ enum  TypeNetForm {
 /* Max pin number per component and footprint */
 #define MAXPIN 5000
 
-enum NetObjetType {
-    /* Type des objets de Net */
-    NET_SEGMENT,
-    NET_BUS,
-    NET_JONCTION,
-    NET_LABEL,
-    NET_GLOBLABEL,
-    NET_HIERLABEL,  //on a screen to indicate connection to a higher-level sheet
-    NET_SHEETLABEL, //on a drawscreen element to indicate connection to a lower-level sheet.
-    NET_BUSLABELMEMBER,
-    NET_GLOBBUSLABELMEMBER,
-    NET_HIERBUSLABELMEMBER,
-    NET_SHEETBUSLABELMEMBER,
-    NET_PINLABEL,
-    NET_PIN,
-    NET_NOCONNECT
-};
-
-
-enum  ConnectType {
-    /* Valeur du Flag de connection */
-    UNCONNECTED = 0,        /* Pin ou Label non connecte */
-    NOCONNECT,              /* Pin volontairement non connectee (Symb. NoConnect utilise) */
-    PAD_CONNECT             /* connexion normale */
-};
-
-
-/* Structure decrivant 1 element de connexion (pour netlist ) */
-class ObjetNetListStruct
-{
-public:
-    NetObjetType    m_Type;             // Type of this item (see NetObjetType enum)
-    EDA_BaseStruct* m_Comp;             /* Pointer on the schematic item that created this net object (the parent)*/
-    void*           m_Link;      /* For Hierarchical_PIN_Sheet_Struct:
-                                  * Pointer to the hierarchy sheet that contains this Hierarchical_PIN_Sheet_Struct
-                                  *  For Pins: pointer to the component that contains this pin
-                                  */
-    int             m_Flag;             /* flag used in calculations */
-    DrawSheetPath   m_SheetList;
-    int             m_ElectricalType;   /* Has meaning only for Pins and hierachical pins: electrical type */
-private:
-    int             m_NetCode;          /* net code for all items except BUS labels because a BUS label has
-                                         *  as many net codes as bus members
-                                         */
-public:
-    int             m_BusNetCode;       /* Used for BUS connections */
-    int             m_Member;        /* for labels type NET_BUSLABELMEMBER ( bus member created from the BUS label )
-                                      *  member number
-                                      */
-    ConnectType     m_FlagOfConnection;
-    DrawSheetPath   m_SheetListInclude;     /* sheet that the hierarchal label connects to.*/
-    long            m_PinNum;               /* numero de pin( 4 octets -> 4 codes ascii) */
-    const wxString* m_Label;                /* For all labels:pointer on the text label */
-    wxPoint         m_Start, m_End;
-
-#if defined(DEBUG)
-    void Show( std::ostream& out, int ndx );
-
-#endif
-
-    void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
-    int GetNet() const { return m_NetCode; }
-};
 
 
 /* object used in annotation to handle a list of components in schematic
@@ -150,15 +89,17 @@ public:
 
 
 /* Global Variables */
-extern int g_NbrObjNet;
-extern ObjetNetListStruct* g_TabObjNet;
+
+// Buffer to build the list of items used in netlist and erc calculations
+typedef std::vector <NETLIST_OBJECT*> NETLIST_OBJECT_LIST;
+extern  NETLIST_OBJECT_LIST g_NetObjectslist;
 
 
 /* Prototypes: */
 void     WriteNetList( WinEDA_SchematicFrame* frame,
                        const wxString&        FileNameNL,
                        bool                   use_netnames );
-void     FreeTabNetList( ObjetNetListStruct* TabNetItems, int NbrNetItems );
+void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
 
 /** Function ReturnUserNetlistTypeName
  * to retrieve user netlist type names
