@@ -19,12 +19,9 @@
 #include "cvpcb.h"
 #include "protos.h"
 
-
-/* Bla */ 
+/* MDC file strings */ 
 wxString mdc_files_not_found;
 wxString mdc_files_invalid;
-
-
 
 /* routines locales : */
 static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list );
@@ -141,21 +138,28 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         ReadDocLib( tmp, list );
     }
 
+
+
+
 	/* Display if there are mdc files not found */
-	if( mdc_files_not_found != wxT(""))
+	if( !mdc_files_not_found.IsEmpty() )
 	{
-		wxString message = _("The following mdc files could not be found:\n\n");
-		message += mdc_files_not_found;
-		wxMessageBox( message, _("Load error!"), wxOK | wxICON_ERROR );
+		wxString message = _("Some MDC files could not be found!");
+		DIALOG_LOAD_ERROR *dialog = new DIALOG_LOAD_ERROR(NULL);
+		dialog->Show();
+		dialog->MessageSet(&message);
+		dialog->ListSet(&mdc_files_not_found);
 		mdc_files_not_found = wxT("");
 	}
 
 	/* Display if there are mdc files invalid */
-	if( mdc_files_invalid != wxT(""))
+	if( !mdc_files_invalid.IsEmpty() )
 	{
-		wxString message = _("The following mdc files are invalid:\n\n");
-		message += mdc_files_invalid;
-		wxMessageBox( message, _("Load error!"), wxOK | wxICON_ERROR );
+		wxString message = _("Some MDC files are invalid!");
+		DIALOG_LOAD_ERROR *dialog = new DIALOG_LOAD_ERROR(NULL);
+		dialog->Show();
+		dialog->MessageSet(&message);
+		dialog->ListSet(&mdc_files_invalid);
 		mdc_files_invalid = wxT("");
 	}
 

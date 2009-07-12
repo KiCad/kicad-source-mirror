@@ -23,6 +23,8 @@ set(COMMON_SRCS
     confirm.cpp
     copy_to_clipboard.cpp
     dialog_display_info_HTML_base.cpp
+	dialog_load_error.cpp
+	dialog_load_error_base.cpp
     dcsvg.cpp
     displlst.cpp
     dlist.cpp

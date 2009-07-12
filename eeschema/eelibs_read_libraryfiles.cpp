@@ -166,9 +166,12 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
 	/* Print the libraries not found */
 	if( !libraries_not_found.IsEmpty() )
 	{
-		wxString message = _("The following libraries could not be found:\n\n");
-		message += libraries_not_found;
-		wxMessageBox( message, _("Load error!"), wxOK | wxICON_ERROR, frame );
+		wxString message = _("The following libraries could not be found:");
+		DIALOG_LOAD_ERROR *dialog = new DIALOG_LOAD_ERROR(NULL);
+		dialog->Show();
+		dialog->MessageSet(&message);
+		dialog->ListSet(&libraries_not_found);
+		libraries_not_found = wxT("");
 	}
 
 
