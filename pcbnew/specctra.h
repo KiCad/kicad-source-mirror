@@ -1320,6 +1320,8 @@ public:
     }
 };
 
+typedef boost::ptr_vector<LAYER>    LAYERS;
+
 
 class LAYER_PAIR : public ELEM
 {
@@ -1552,13 +1554,42 @@ public:
 };
 
 
+class STRUCTURE_OUT : public ELEM
+{
+    friend class SPECCTRA_DB;
+
+    LAYERS      layers;
+    RULE*       rules;
+
+public:
+    STRUCTURE_OUT( ELEM* aParent ) :
+        ELEM( T_structure_out, aParent )
+    {
+        rules = 0;
+    }
+
+    ~STRUCTURE_OUT()
+    {
+        delete rules;
+    }
+
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    {
+        for( LAYERS::iterator i=layers.begin();  i!=layers.end();  ++i )
+            i->Format( out, nestLevel );
+
+        if( rules )
+            rules->Format( out, nestLevel );
+    }
+};
+
+
 class STRUCTURE : public ELEM_HOLDER
 {
     friend class SPECCTRA_DB;
 
     UNIT_RES*   unit;
 
-    typedef boost::ptr_vector<LAYER>    LAYERS;
     LAYERS      layers;
 
     LAYER_NOISE_WEIGHT*  layer_noise_weight;
@@ -3435,7 +3466,7 @@ class ROUTE : public ELEM
 
     UNIT_RES*       resolution;
     PARSER*         parser;
-    STRUCTURE*      structure;
+    STRUCTURE_OUT*  structure_out;
     LIBRARY*        library;
     NET_OUTS        net_outs;
 //    TEST_POINTS*    test_points;
@@ -3447,14 +3478,14 @@ public:
     {
         resolution = 0;
         parser = 0;
-        structure = 0;
+        structure_out = 0;
         library = 0;
     }
     ~ROUTE()
     {
         delete resolution;
         delete parser;
-        delete structure;
+        delete structure_out;
         delete library;
 //        delete test_points;
     }
@@ -3475,8 +3506,8 @@ public:
         if( parser )
             parser->Format( out, nestLevel );
 
-        if( structure )
-            structure->Format( out, nestLevel );
+        if( structure_out )
+            structure_out->Format( out, nestLevel );
 
         if( library )
             library->Format( out, nestLevel );
@@ -3781,6 +3812,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     void doRESOLUTION( UNIT_RES* growth ) throw(IOError);
     void doUNIT( UNIT_RES* growth ) throw( IOError );
     void doSTRUCTURE( STRUCTURE* growth ) throw( IOError );
+    void doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IOError );
     void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOError );
     void doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError );
     void doBOUNDARY( BOUNDARY* growth ) throw( IOError );

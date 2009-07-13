@@ -4,6 +4,14 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Jul-13 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    added support to specctra import for the <structure_out> descriptor.
+    <route_descriptor> had confused <structure_descriptor> with the <structure_out_descriptor>
+    The fix facillitates round tripping from the TOPO-R router.
+
+
 2009-july-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Eeschema:

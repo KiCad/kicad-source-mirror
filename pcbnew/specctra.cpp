@@ -834,6 +834,49 @@ L_place:
 }
 
 
+void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IOError )
+{
+    /*
+    <structure_out_descriptor >::=
+        (structure_out
+            {<layer_descriptor> }
+            [<rule_descriptor> ]
+        )
+    */
+
+    DSN_T   tok = nextTok();
+
+    while( tok != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            expecting( T_LEFT );
+
+        tok = nextTok();
+        switch( tok )
+        {
+        case T_layer:
+            LAYER* layer;
+            layer = new LAYER( growth );
+            growth->layers.push_back( layer );
+            doLAYER( layer );
+            break;
+
+        case T_rule:
+            if( growth->rules )
+                unexpected( tok );
+            growth->rules = new RULE( growth, T_rule );
+            doRULE( growth->rules );
+            break;
+
+        default:
+            unexpected( lexer->CurText() );
+        }
+
+        tok = nextTok();
+    }
+}
+
+
 void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
 {
     DSN_T   tok = nextTok();
@@ -3303,11 +3346,11 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
             doPARSER( growth->parser );
             break;
 
-        case T_structure:
-            if( growth->structure )
+        case T_structure_out:
+            if( growth->structure_out )
                 unexpected( tok );
-            growth->structure = new STRUCTURE( growth );
-            doSTRUCTURE( growth->structure );
+            growth->structure_out = new STRUCTURE_OUT( growth );
+            doSTRUCTURE_OUT( growth->structure_out );
             break;
 
         case T_library_out:
