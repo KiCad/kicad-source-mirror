@@ -21,7 +21,7 @@ void DIALOG_LOAD_ERROR::ListClear(void)
 
 /** Function ListSet
  * Add a list of items.
- * @param list = a pointer on a string containing items. Items are separated by '\n'
+ * @param list = a string containing items. Items are separated by '\n'
  */
 void DIALOG_LOAD_ERROR::ListSet(const wxString &list)
 {
@@ -42,7 +42,7 @@ void DIALOG_LOAD_ERROR::ListSet(const wxString &list)
 
 /** Function MessageSet
  * Add a message (in bold) to message list.
- * @param message = a pointer to the message
+ * @param message = the message
  */
 void DIALOG_LOAD_ERROR::MessageSet(const wxString &message)
 {

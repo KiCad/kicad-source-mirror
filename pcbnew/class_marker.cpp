@@ -90,3 +90,4 @@ void MARKER::DisplayInfo( WinEDA_DrawFrame* frame )
     text_pos = 25;
     Affiche_1_Parametre( frame, text_pos, txtA, txtB, DARKBROWN );
 }
+

@@ -158,6 +158,11 @@ public:
     }
 
 
+    /** Function DisplayMarkerInfo()
+     * Displays the full info of this marker, in a HTML window
+     */
+    void DisplayMarkerInfo(WinEDA_DrawFrame * aFrame);
+
     /**
      * Function HitTestMarker
      * tests if the given wxPoint is within the bounds of this object.

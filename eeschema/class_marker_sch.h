@@ -75,11 +75,7 @@ public:
      * It is OK to overestimate the size by a few counts.
      */
     virtual EDA_Rect GetBoundingBox();
-    
-    /** Function DisplayMarkerInfo()
-     * Displays the full info of this marker, in a HTML window
-     */
-    void DisplayMarkerInfo(WinEDA_SchematicFrame * aFrame);
+
 
 #if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );

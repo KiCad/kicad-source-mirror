@@ -296,17 +296,17 @@ public:
     // Plotting
     void                     ToPlotter( wxCommandEvent& event );
     void                     Genere_GERBER( const wxString& FullFileName, int Layer,
-                                            bool PlotOriginIsAuxAxis, 
+                                            bool PlotOriginIsAuxAxis,
 					    GRTraceMode trace_mode );
     void                     Genere_HPGL( const wxString& FullFileName, int Layer,
 	    GRTraceMode trace_mode);
-    void                     Genere_PS( const wxString& FullFileName, int Layer, 
+    void                     Genere_PS( const wxString& FullFileName, int Layer,
 	    bool useA4, GRTraceMode trace_mode );
     void                     Genere_DXF( const wxString& FullFileName, int Layer,
 	    GRTraceMode trace_mode);
     void		     Plot_Layer(Plotter *plotter, int Layer, GRTraceMode trace_mode );
     void                     Plot_Standard_Layer( Plotter *plotter, int masque_layer,
-                                            int garde, bool trace_via, 
+                                            int garde, bool trace_via,
 					    GRTraceMode trace_mode );
     void                     Plot_Serigraphie( Plotter *plotter, int masque_layer,
 	    GRTraceMode trace_mode);
@@ -395,6 +395,7 @@ private:
     void createPopupMenuForTracks( TRACK* aTrack, wxMenu* aPopMenu );
     void createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
     void createPopUpBlockMenu( wxMenu* menu );
+    void createPopUpMenuForMarkers( MARKER* aMarker, wxMenu* aPopMenu );
 
 public:
     WinEDA_PcbFrame( wxWindow* father, const wxString& title,

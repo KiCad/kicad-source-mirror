@@ -502,7 +502,7 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="maximum_size"></property>
-                                                <property name="minimum_size"></property>
+                                                <property name="minimum_size">220,-1</property>
                                                 <property name="name">fieldListCtrl</property>
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>

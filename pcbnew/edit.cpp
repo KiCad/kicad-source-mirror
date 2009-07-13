@@ -141,6 +141,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT:
     case ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS:
     case ID_POPUP_PCB_EDIT_DRAWING:
+    case ID_POPUP_PCB_GETINFO_MARKER:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -1016,6 +1017,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DELETE_MARKER:
         RemoveStruct( GetCurItem(), &dc );
+        DrawPanel->MouseToCursorSchema();
+        break;
+
+    case ID_POPUP_PCB_GETINFO_MARKER:
+        if( GetCurItem() && GetCurItem()->Type() == TYPE_MARKER )
+            ((MARKER*)GetCurItem())->DisplayMarkerInfo( this );
         DrawPanel->MouseToCursorSchema();
         break;
 

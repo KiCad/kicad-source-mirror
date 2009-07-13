@@ -11,7 +11,6 @@
 
 #include "class_marker_sch.h"
 #include "erc.h"
-#include "dialog_display_info_HTML_base.h"
 
 /* Marker are mainly used to show an ERC error
  * but they could be used to give a specifi info
@@ -130,17 +129,3 @@ EDA_Rect MARKER_SCH::GetBoundingBox()
     return GetBoundingBoxMarker();
 }
 
-
-/** Function DisplayMarkerInfo()
- * Displays the full info of this marker, within an HTML window
- */
-void MARKER_SCH::DisplayMarkerInfo( WinEDA_SchematicFrame* aFrame )
-{
-    wxString msg = GetReporter().ShowHtml();
-
-    DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( aFrame, -1, _("Marker Info"),
-                                              wxGetMousePosition(), wxSize( 550, 140 ) );
-
-    infodisplay.m_htmlWindow->SetPage( msg );
-    infodisplay.ShowModal();
-}

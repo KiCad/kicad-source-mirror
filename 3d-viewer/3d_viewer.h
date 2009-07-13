@@ -79,6 +79,7 @@ public:
 private:
     bool   m_init;
     GLuint m_gllist;
+    wxGLContext* m_glRC;
 
 public:
     Pcb3D_GLCanvas( WinEDA3D_DrawFrame *parent );

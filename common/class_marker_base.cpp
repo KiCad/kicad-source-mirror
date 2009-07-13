@@ -13,6 +13,7 @@
 #include "macros.h"
 #include "class_drawpanel.h"
 #include "class_marker_base.h"
+#include "dialog_display_info_HTML_base.h"
 
 
 // Default marquer shape:
@@ -169,4 +170,19 @@ void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode
                   m_Color,      // outline color
                   m_Color       // fill collor
                   );
+}
+
+
+/** Function DisplayMarkerInfo()
+ * Displays the full info of this marker, within an HTML window
+ */
+void MARKER_BASE::DisplayMarkerInfo( WinEDA_DrawFrame* aFrame )
+{
+    wxString msg = m_drc.ShowHtml();
+    DIALOG_DISPLAY_HTML_TEXT_BASE
+        infodisplay( (wxWindow*)aFrame, wxID_ANY, _("Marker Info"),
+        wxGetMousePosition(), wxSize( 550, 140 ) );
+
+    infodisplay.m_htmlWindow->SetPage( msg );
+    infodisplay.ShowModal();
 }

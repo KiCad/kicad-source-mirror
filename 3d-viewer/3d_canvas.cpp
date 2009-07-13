@@ -63,12 +63,18 @@ END_EVENT_TABLE()
 
 /*************************************************************************/
 Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
-    wxGLCanvas( parent, -1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
+    wxGLCanvas( parent, -1, NULL, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
 /*************************************************************************/
 {
     m_init   = FALSE;
     m_gllist = 0;
     m_Parent = parent;
+
+    // Explicitly create a new rendering context instance for this canvas.
+    m_glRC = new wxGLContext(this);
+
+    // Make the new context current (activate it for use) with this canvas.
+    SetCurrent(*m_glRC);
     DisplayStatus();
 }
 
@@ -79,6 +85,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 {
     ClearLists();
     m_init = FALSE;
+    delete m_glRC;
 }
 
 
@@ -484,6 +491,7 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
     const wxSize ClientSize = GetClientSize();
 
     glViewport( 0, 0, ClientSize.x, ClientSize.y );
+
     Redraw();
     event.Skip();
 }
