@@ -76,9 +76,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
         if( !tmp )
         {
-            msg.Printf( _( "PCB foot print library file <%s> could not be found in the default search paths." ),
-                        filename.GetFullName().c_str() );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            mdc_files_not_found << filename.GetFullName() << wxT("\n");
             continue;
         }
 
@@ -87,9 +85,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
         if( file == NULL )
         {
-            msg.Printf( _( "Could not open PCB foot print library file <%s>." ),
-                        tmp.c_str() );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            mdc_files_invalid << tmp <<  _(" (file cannot be opened)") << wxT("\n");
             continue;
         }
 
@@ -97,9 +93,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         fgets( buffer, 32, file );
         if( strncmp( buffer, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            msg.Printf( _( "<%s> is not a valid Kicad PCB foot print library" ),
-                        tmp.c_str() );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+            mdc_files_invalid << tmp << _(" (Not a Kicad file)") << wxT("\n");
             fclose( file );
             continue;
         }
@@ -129,9 +123,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
                 if( !end )
                 {
-                    msg.Printf( _( "Unexpected end of file occurred while parsing PCB foot print library <%s>." ),
-                                tmp.c_str() );
-                    wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
+                    mdc_files_invalid << tmp << _(" (Unexpected end of file)") << wxT("\n");
                 }
             }
         }
@@ -144,26 +136,26 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
 
 	/* Display if there are mdc files not found */
-	if( !mdc_files_not_found.IsEmpty() )
-	{
-		wxString message = _("Some MDC files could not be found!");
-		DIALOG_LOAD_ERROR *dialog = new DIALOG_LOAD_ERROR(NULL);
-		dialog->Show();
-		dialog->MessageSet(&message);
-		dialog->ListSet(&mdc_files_not_found);
-		mdc_files_not_found = wxT("");
-	}
+	if( !mdc_files_not_found.IsEmpty() || !mdc_files_invalid.IsEmpty() )
+    {
+        DIALOG_LOAD_ERROR dialog(NULL);
+        if( !mdc_files_not_found.IsEmpty() )
+        {
+            wxString message = _("Some MDC files could not be found!");
+            dialog.MessageSet(message);
+            dialog.ListSet(mdc_files_not_found);
+            mdc_files_not_found.Empty();
+        }
 
-	/* Display if there are mdc files invalid */
-	if( !mdc_files_invalid.IsEmpty() )
-	{
-		wxString message = _("Some MDC files are invalid!");
-		DIALOG_LOAD_ERROR *dialog = new DIALOG_LOAD_ERROR(NULL);
-		dialog->Show();
-		dialog->MessageSet(&message);
-		dialog->ListSet(&mdc_files_invalid);
-		mdc_files_invalid = wxT("");
-	}
+        /* Display if there are mdc files invalid */
+        if( !mdc_files_invalid.IsEmpty() )
+        {
+            dialog.MessageSet( _("Some MDC files are invalid!"));
+            dialog.ListSet(mdc_files_invalid);
+            mdc_files_invalid.Empty();
+        }
+        dialog.ShowModal();
+    }
 
 	list.sort();
 

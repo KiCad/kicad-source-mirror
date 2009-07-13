@@ -20,15 +20,15 @@ public:
 	DIALOG_LOAD_ERROR( wxWindow* parent );
     /** Function ListSet
      * Add a list of items.
-     * @param list = a pointer on a string containing items. Items are separated by '\n'
+     * @param list = a string containing items. Items are separated by '\n'
      */
-	void ListSet(wxString *list);
+	void ListSet(const wxString &list);
 	void ListClear();
     /** Function MessageSet
      * Add a message (in bold) to message list.
-     * @param message = a pointer to the message
+     * @param message = the message
      */
-	void MessageSet(wxString *message);
+	void MessageSet(const wxString &message);
 };
 
 #endif // __dialog_load_error_h_

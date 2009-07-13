@@ -10,7 +10,7 @@ DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, _("Load Error!"),wxDefaultPosit
 
 void DIALOG_LOAD_ERROR::OnCloseButtonClick( wxCommandEvent& event )
 {
-	Destroy();
+    EndModal(0);
 }
 
 
@@ -23,11 +23,11 @@ void DIALOG_LOAD_ERROR::ListClear(void)
  * Add a list of items.
  * @param list = a pointer on a string containing items. Items are separated by '\n'
  */
-void DIALOG_LOAD_ERROR::ListSet(wxString *list)
+void DIALOG_LOAD_ERROR::ListSet(const wxString &list)
 {
     wxArrayString* wxStringSplit( wxString txt, wxChar splitter );
 
-    wxArrayString* strings_list = wxStringSplit( *list, wxChar('\n') );
+    wxArrayString* strings_list = wxStringSplit( list, wxChar('\n') );
     m_htmlWindow->AppendToPage(wxT("<ul>") );
 	for ( unsigned ii = 0; ii < strings_list->GetCount(); ii ++ )
     {
@@ -44,10 +44,10 @@ void DIALOG_LOAD_ERROR::ListSet(wxString *list)
  * Add a message (in bold) to message list.
  * @param message = a pointer to the message
  */
-void DIALOG_LOAD_ERROR::MessageSet(wxString *message)
+void DIALOG_LOAD_ERROR::MessageSet(const wxString &message)
 {
 	wxString message_value;
-    message_value.Printf(wxT("<b>%s</b><br>"), message->GetData() );
+    message_value.Printf(wxT("<b>%s</b><br>"), message.GetData() );
     m_htmlWindow->AppendToPage( message_value );
 }
 
