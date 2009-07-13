@@ -18,6 +18,8 @@
 #include "general.h"
 #include "protos.h"
 
+#include "dialog_load_error.h"
+
 /* Local Functions */
 static LibEDA_BaseStruct* ReadDrawEntryItemDescription( EDA_LibComponentStruct* aParent, FILE* f,
                                         char* Line, int* LineNum );

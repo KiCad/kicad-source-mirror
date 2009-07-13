@@ -19,7 +19,9 @@
 #include "cvpcb.h"
 #include "protos.h"
 
-/* MDC file strings */ 
+#include "dialog_load_error.h"
+
+/* MDC file strings */
 wxString mdc_files_not_found;
 wxString mdc_files_invalid;
 
@@ -54,7 +56,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 	if( !list.empty() )
 		list.clear();
 
-	/* Check if there are footprint libraries in project file */ 
+	/* Check if there are footprint libraries in project file */
     if( libNames.GetCount() == 0 )
     {
         wxMessageBox( _( "No PCB foot print libraries are listed in the current project file." ),
@@ -169,7 +171,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 }
 
 
-/** 
+/**
  * Routine de lecture du fichier Doc associe a la librairie ModLibName.
  *   Cree en memoire la chaine liste des docs pointee par MList
  *   ModLibName = full file Name de la librairie Modules

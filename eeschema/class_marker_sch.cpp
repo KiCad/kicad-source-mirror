@@ -138,7 +138,7 @@ void MARKER_SCH::DisplayMarkerInfo( WinEDA_SchematicFrame* aFrame )
 {
     wxString msg = GetReporter().ShowHtml();
 
-    DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( aFrame, -1, wxEmptyString,
+    DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( aFrame, -1, _("Marker Info"),
                                               wxGetMousePosition(), wxSize( 550, 140 ) );
 
     infodisplay.m_htmlWindow->SetPage( msg );

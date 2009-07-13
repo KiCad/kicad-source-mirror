@@ -4,7 +4,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../pcbnew
-                    ../polygon)
+                    ../polygon
+                    ${CMAKE_SOURCE_DIR}/common)
 
 set(CVPCB_SRCS
     autosel.cpp

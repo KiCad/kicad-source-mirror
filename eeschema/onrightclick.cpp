@@ -640,5 +640,5 @@ void AddMenusForMarkers( wxMenu* aPopMenu, MARKER_SCH* aMarker,
 /**********************************************************************/
 {
     ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ), delete_xpm );
-    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_GETINFO_MARKER, _( "About this Marker" ), info_xpm );
+    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_GETINFO_MARKER, _( "Marker Error Info" ), info_xpm );
 }

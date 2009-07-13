@@ -9,9 +9,6 @@
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 
-/* TODO how do i else need to include a common dialog ? */
-#include "../common/dialog_load_error.h"
-
 class wxAboutDialogInfo;
 class BASE_SCREEN;
 class WinEDA_DrawFrame;
