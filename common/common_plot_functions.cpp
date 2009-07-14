@@ -264,10 +264,10 @@ void WinEDA_DrawFrame::PlotWorkSheet( Plotter *plotter, BASE_SCREEN* screen )
 		case WS_UPPER_SEGMENT:
 		case WS_LEFT_SEGMENT:
 		case WS_SEGMENT:
-		    plot->move_to(pos);
+		    plotter->move_to(pos);
 		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
 		    pos.y = (ref.y - WsItem->m_Endy)  * conv_unit;
-		    plot->finish_to(pos);
+		    plotter->finish_to(pos);
 		    break;
 	    }
 	}
@@ -298,10 +298,10 @@ void WinEDA_DrawFrame::PlotWorkSheet( Plotter *plotter, BASE_SCREEN* screen )
 		    break;
 		case WS_LEFT_SEGMENT_D:
 		case WS_SEGMENT_D:
-		    plot->move_to(pos);
+		    plotter->move_to(pos);
 		    pos.x = (ref.x - WsItem->m_Endx) * conv_unit;
 		    pos.y = (ref.y - WsItem->m_Endy) * conv_unit;
-		    plot->finish_to(pos);
+		    plotter->finish_to(pos);
 		    break;
 	    }
 	}
