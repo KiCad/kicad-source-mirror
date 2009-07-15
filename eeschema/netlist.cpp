@@ -83,7 +83,7 @@ void WinEDA_SchematicFrame::BuildNetListBase()
  */
 {
     int            NetNumber;
-    int            i, NetCode;
+    int            NetCode;
     DrawSheetPath* sheet;
     wxString       msg, activity;
     wxBusyCursor   Busy;
@@ -97,7 +97,6 @@ void WinEDA_SchematicFrame::BuildNetListBase()
 
     /* Build the sheet (not screen) list (flattened)*/
     EDA_SheetList SheetListList;
-    i = 0;
 
     /* Fill g_NetObjectslist with items used in connectivity calculation */
 
@@ -122,14 +121,16 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     sheet = &(g_NetObjectslist[0]->m_SheetList);
     LastNetCode = LastBusNetCode = 1;
 
-    for( unsigned i = 0, istart = 0; i < g_NetObjectslist.size(); i++ )
+    for( unsigned ii = 0, istart = 0; ii < g_NetObjectslist.size(); ii++ )
     {
-        if( g_NetObjectslist[i]->m_SheetList != *sheet )
+        NETLIST_OBJECT* net_item = g_NetObjectslist[ii];
+        if( net_item->m_SheetList != *sheet )   // Sheet change
         {
-            sheet = &(g_NetObjectslist[i]->m_SheetList);
+            sheet = &(net_item->m_SheetList);
+            istart = ii;
         }
 
-        switch( g_NetObjectslist[i]->m_Type )
+        switch( net_item->m_Type )
         {
         case NET_ITEM_UNSPECIFIED:
             wxMessageBox(wxT("BuildNetListBase() error"));
@@ -138,73 +139,73 @@ void WinEDA_SchematicFrame::BuildNetListBase()
         case NET_PINLABEL:
         case NET_SHEETLABEL:
         case NET_NOCONNECT:
-            if( g_NetObjectslist[i]->GetNet() != 0 )
+            if( net_item->GetNet() != 0 )
                 break; /* Deja connecte */
 
         case NET_SEGMENT:
             /* Controle des connexions type point a point ( Sans BUS ) */
-            if( g_NetObjectslist[i]->GetNet() == 0 )
+            if( net_item->GetNet() == 0 )
             {
-                g_NetObjectslist[i]->SetNet( LastNetCode );
+                net_item->SetNet( LastNetCode );
                 LastNetCode++;
             }
-            PointToPointConnect( g_NetObjectslist[i], 0, istart );
+            PointToPointConnect( net_item, 0, istart );
             break;
 
         case NET_JONCTION:
             /* Controle des jonction , hors BUS */
-            if( g_NetObjectslist[i]->GetNet() == 0 )
+            if( net_item->GetNet() == 0 )
             {
-                g_NetObjectslist[i]->SetNet( LastNetCode );
+                net_item->SetNet( LastNetCode );
                 LastNetCode++;
             }
-            SegmentToPointConnect( g_NetObjectslist[i], 0, istart );
+            SegmentToPointConnect( net_item, 0, istart );
 
             /* Controle des jonction , sur BUS */
-            if( g_NetObjectslist[i]->m_BusNetCode == 0 )
+            if( net_item->m_BusNetCode == 0 )
             {
-                g_NetObjectslist[i]->m_BusNetCode = LastBusNetCode;
+                net_item->m_BusNetCode = LastBusNetCode;
                 LastBusNetCode++;
             }
-            SegmentToPointConnect( g_NetObjectslist[i], ISBUS, istart );
+            SegmentToPointConnect( net_item, ISBUS, istart );
             break;
 
         case NET_LABEL:
         case NET_HIERLABEL:
         case NET_GLOBLABEL:
             /* Controle des connexions type jonction ( Sans BUS ) */
-            if( g_NetObjectslist[i]->GetNet() == 0 )
+            if( net_item->GetNet() == 0 )
             {
-                g_NetObjectslist[i]->SetNet( LastNetCode );
+                net_item->SetNet( LastNetCode );
                 LastNetCode++;
             }
-            SegmentToPointConnect( g_NetObjectslist[i], 0, istart );
+            SegmentToPointConnect( net_item, 0, istart );
             break;
 
         case NET_SHEETBUSLABELMEMBER:
-            if( g_NetObjectslist[i]->m_BusNetCode != 0 )
+            if( net_item->m_BusNetCode != 0 )
                 break; /* Deja connecte */
 
         case NET_BUS:
             /* Controle des connexions type point a point mode BUS */
-            if( g_NetObjectslist[i]->m_BusNetCode == 0 )
+            if( net_item->m_BusNetCode == 0 )
             {
-                g_NetObjectslist[i]->m_BusNetCode = LastBusNetCode;
+                net_item->m_BusNetCode = LastBusNetCode;
                 LastBusNetCode++;
             }
-            PointToPointConnect( g_NetObjectslist[i], ISBUS, istart );
+            PointToPointConnect( net_item, ISBUS, istart );
             break;
 
         case NET_BUSLABELMEMBER:
         case NET_HIERBUSLABELMEMBER:
         case NET_GLOBBUSLABELMEMBER:
             /* Controle des connexions semblables a des sur BUS */
-            if( g_NetObjectslist[i]->GetNet() == 0 )
+            if( net_item->GetNet() == 0 )
             {
-                g_NetObjectslist[i]->m_BusNetCode = LastBusNetCode;
+                net_item->m_BusNetCode = LastBusNetCode;
                 LastBusNetCode++;
             }
-            SegmentToPointConnect( g_NetObjectslist[i], ISBUS, istart );
+            SegmentToPointConnect( net_item, ISBUS, istart );
             break;
         }
     }
@@ -225,9 +226,9 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     SetStatusText( activity );
 
     /* Connections des groupes d'objets par labels identiques */
-    for( unsigned i = 0;  i<g_NetObjectslist.size();  i++ )
+    for( unsigned ii = 0;  ii < g_NetObjectslist.size(); ii++ )
     {
-        switch( g_NetObjectslist[i]->m_Type )
+        switch( g_NetObjectslist[ii]->m_Type )
         {
         case NET_PIN:
         case NET_SHEETLABEL:
@@ -242,7 +243,7 @@ void WinEDA_SchematicFrame::BuildNetListBase()
         case NET_PINLABEL:
         case NET_BUSLABELMEMBER:
         case NET_GLOBBUSLABELMEMBER:
-            LabelConnect( g_NetObjectslist[i] );
+            LabelConnect( g_NetObjectslist[ii] );
             break;
 
         case NET_SHEETBUSLABELMEMBER:
@@ -265,17 +266,15 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     /* Connexion des hierarchies */
     activity << wxT( ";  " ) << _( "Hierar." );
     SetStatusText( activity );
-
-    for( unsigned i = 0; i< g_NetObjectslist.size(); i++ )
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
-        if( g_NetObjectslist[i]->m_Type == NET_SHEETLABEL
-            || g_NetObjectslist[i]->m_Type == NET_SHEETBUSLABELMEMBER )
-            SheetLabelConnect( g_NetObjectslist[i] );
+        if( g_NetObjectslist[ii]->m_Type == NET_SHEETLABEL
+            || g_NetObjectslist[ii]->m_Type == NET_SHEETBUSLABELMEMBER )
+            SheetLabelConnect( g_NetObjectslist[ii] );
     }
 
     /* Sort objects by NetCode */
     sort( g_NetObjectslist.begin(), g_NetObjectslist.end(), SortItemsbyNetcode );
-
 
 #if defined(NETLIST_DEBUG) && defined(DEBUG)
     std::cout << "after qsort()\n";
@@ -286,21 +285,16 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     SetStatusText( activity );
 
     /* Compression des numeros de NetCode a des valeurs consecutives */
-    activity << wxT( ";  " ) << _( "Sorting Nets" );
-    SetStatusText( activity );
     LastNetCode = NetCode = 0;
-    for( unsigned i = 0; i < g_NetObjectslist.size(); i++ )
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
-        if( g_NetObjectslist[i]->GetNet() != LastNetCode )
+        if( g_NetObjectslist[ii]->GetNet() != LastNetCode )
         {
             NetCode++;
-            LastNetCode = g_NetObjectslist[i]->GetNet();
+            LastNetCode = g_NetObjectslist[ii]->GetNet();
         }
-        g_NetObjectslist[i]->SetNet( NetCode );
+        g_NetObjectslist[ii]->SetNet( NetCode );
     }
-
-    activity << wxT( " " ) << _( "Done" );
-    SetStatusText( activity );
 
     /* Affectation du m_FlagOfConnection en fonction de connection ou non */
     SetUnconnectedFlag( g_NetObjectslist );
@@ -319,9 +313,9 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 
     /* Comparaison du SheetLabel avec les GLABELS de la sous feuille
      *      pour regroupement des NetCodes */
-    for( unsigned i = 0; i < g_NetObjectslist.size(); i++ )
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
-        NETLIST_OBJECT* ObjetNet = g_NetObjectslist[i];
+        NETLIST_OBJECT* ObjetNet = g_NetObjectslist[ii];
         if( ObjetNet->m_SheetList != SheetLabel->m_SheetListInclude )
             continue; //use SheetInclude, not the sheet!!
 
@@ -332,12 +326,14 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
         if( ObjetNet->GetNet() == SheetLabel->GetNet() )
             continue; //already connected.
 
+        wxASSERT(ObjetNet->m_Label);
+        wxASSERT(SheetLabel->m_Label);
         if( ObjetNet->m_Label->CmpNoCase( *SheetLabel->m_Label ) != 0 )
             continue; //different names.
 
         /* Propagation du Netcode a tous les Objets de meme NetCode */
         if( ObjetNet->GetNet() )
-            PropageNetCode( ObjetNet[i].GetNet(), SheetLabel->GetNet(), 0 );
+            PropageNetCode( ObjetNet->GetNet(), SheetLabel->GetNet(), 0 );
         else
             ObjetNet->SetNet( SheetLabel->GetNet() );
     }

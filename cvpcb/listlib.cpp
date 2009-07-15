@@ -21,9 +21,9 @@
 
 #include "dialog_load_error.h"
 
-/* MDC file strings */
-wxString mdc_files_not_found;
-wxString mdc_files_invalid;
+/* MDC and MOD file strings */
+static wxString s_files_not_found;
+static wxString s_files_invalid;
 
 /* routines locales : */
 static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list );
@@ -76,7 +76,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
         if( !tmp )
         {
-            mdc_files_not_found << filename.GetFullName() << wxT("\n");
+            s_files_not_found << filename.GetFullName() << wxT("\n");
             continue;
         }
 
@@ -85,7 +85,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
         if( file == NULL )
         {
-            mdc_files_invalid << tmp <<  _(" (file cannot be opened)") << wxT("\n");
+            s_files_invalid << tmp <<  _(" (file cannot be opened)") << wxT("\n");
             continue;
         }
 
@@ -93,7 +93,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         fgets( buffer, 32, file );
         if( strncmp( buffer, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
-            mdc_files_invalid << tmp << _(" (Not a Kicad file)") << wxT("\n");
+            s_files_invalid << tmp << _(" (Not a Kicad file)") << wxT("\n");
             fclose( file );
             continue;
         }
@@ -123,7 +123,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
                 if( !end )
                 {
-                    mdc_files_invalid << tmp << _(" (Unexpected end of file)") << wxT("\n");
+                    s_files_invalid << tmp << _(" (Unexpected end of file)") << wxT("\n");
                 }
             }
         }
@@ -132,27 +132,24 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         ReadDocLib( tmp, list );
     }
 
-
-
-
 	/* Display if there are mdc files not found */
-	if( !mdc_files_not_found.IsEmpty() || !mdc_files_invalid.IsEmpty() )
+	if( !s_files_not_found.IsEmpty() || !s_files_invalid.IsEmpty() )
     {
         DIALOG_LOAD_ERROR dialog(NULL);
-        if( !mdc_files_not_found.IsEmpty() )
+        if( !s_files_not_found.IsEmpty() )
         {
-            wxString message = _("Some MDC files could not be found!");
+            wxString message = _("Some files could not be found!");
             dialog.MessageSet(message);
-            dialog.ListSet(mdc_files_not_found);
-            mdc_files_not_found.Empty();
+            dialog.ListSet(s_files_not_found);
+            s_files_not_found.Empty();
         }
 
         /* Display if there are mdc files invalid */
-        if( !mdc_files_invalid.IsEmpty() )
+        if( !s_files_invalid.IsEmpty() )
         {
-            dialog.MessageSet( _("Some MDC files are invalid!"));
-            dialog.ListSet(mdc_files_invalid);
-            mdc_files_invalid.Empty();
+            dialog.MessageSet( _("Some files are invalid!"));
+            dialog.ListSet(s_files_invalid);
+            s_files_invalid.Empty();
         }
         dialog.ShowModal();
     }
@@ -184,7 +181,7 @@ ReadDocLib( const wxString& ModLibName,
 	/* Check if mdc file exists and can be opened */
 	if( ( mdc_file = wxFopen( mdc_filename.GetFullPath(), wxT( "rt" ) ) ) == NULL )
 	{
-		mdc_files_not_found += mdc_filename.GetFullPath() + wxT("\n");
+		s_files_not_found += mdc_filename.GetFullPath() + wxT("\n");
 		return;
 	}
 
@@ -192,7 +189,7 @@ ReadDocLib( const wxString& ModLibName,
 	GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 );
 	if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
 	{
-		mdc_files_invalid += mdc_filename.GetFullPath() + wxT("\n");
+		s_files_invalid += mdc_filename.GetFullPath() + wxT("\n");
 		return;
 	}
 
