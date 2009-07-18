@@ -410,7 +410,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             g_DesignSettings.m_ViasMinSize = atoi( data );
             continue;
         }
- 
+
         if( stricmp( Line, "MicroViaSize" ) == 0 )
         {
             g_DesignSettings.m_CurrentMicroViaSize = atoi( data );
@@ -776,7 +776,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
 /** ReadPcbFile
  * Read a board file  <file>.brd
- * @param Append if 0: a previoulsy loaded boar is delete before loadin the file.
+ * @param Append if 0: a previoulsy loaded board is deleted before loading the file.
  *  else all items of the board file are added to the existing board
  */
 {
@@ -790,6 +790,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
     GetBoard()->m_Status_Pcb = 0;
+    GetBoard()->m_NetClassesList.ClearList();
 
     while( GetLine( File, Line, &LineNum ) != NULL )
     {
@@ -828,6 +829,15 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             NETINFO_ITEM* net = new NETINFO_ITEM( GetBoard() );
             GetBoard()->m_NetInfo->AppendNet( net );
             net->ReadDescr( File, &LineNum );
+            continue;
+        }
+
+        if( strnicmp( Line, "$NETCLASS", 8 ) == 0 )
+        {
+            NETCLASS* netclass = new NETCLASS( GetBoard() );
+            netclass->ReadDescr( File, &LineNum );
+            if( ! GetBoard()->m_NetClassesList.AddNetclass( netclass ) )
+                delete netclass;
             continue;
         }
 
@@ -913,6 +923,15 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     BestZoom();
 
+    // One netclass *must* exists (the default netclass)
+    if( GetBoard()->m_NetClassesList.GetNetClassCount() == 0 )
+    {
+        NETCLASS* ncdefault =  new NETCLASS(GetBoard());
+        GetBoard()->m_NetClassesList.AddNetclass( ncdefault );
+    }
+
+
+    GetBoard()->TransfertDesignRulesToNets( );
     GetBoard()->m_Status_Pcb = 0;
     return 1;
 }

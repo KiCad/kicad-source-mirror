@@ -16,6 +16,8 @@
 #include "3d_viewer.h"
 #include "kbool/include/kbool/booleng.h"
 
+#include "dialog_design_rules.h"
+
 // Keys used in read/write config
 #define PCB_CURR_GRID wxT( "PcbCurrGrid" )
 #define PCB_MAGNETIC_PADS_OPT wxT( "PcbMagPadOpt" )
@@ -115,6 +117,9 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
 // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_PcbFrame::Show3D_Frame )
+
+// Menu Get Design Rules Editor
+    EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, WinEDA_PcbFrame::ShowDesignRulesEditor )
 
 // Horizontal toolbar
     EVT_TOOL( ID_TO_LIBRARY, WinEDA_PcbFrame::Process_Special_Functions )
@@ -638,4 +643,18 @@ void WinEDA_PcbFrame::Show3D_Frame( wxCommandEvent& event )
 
     m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ) );
     m_Draw3DFrame->Show( TRUE );
+}
+
+/**
+ * Display the Design Rules Editor.
+ */
+void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
+{
+    DIALOG_DESIGN_RULES dR_editor( this );
+    int change = dR_editor.ShowModal( );
+    if ( change )
+    {
+        ReCreateLayerBox( NULL );
+        GetScreen()->SetModify();
+    }
 }

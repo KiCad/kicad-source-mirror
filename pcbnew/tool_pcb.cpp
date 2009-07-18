@@ -678,9 +678,6 @@ void WinEDA_PcbFrame::UpdateToolbarLayerInfo()
 WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 /**************************************************************************/
 {
-    // wxASSERT("ReCreateLayerBox"=="");    // get a stack trace, who is calling me and from where
-    D(printf("ReCreateLayerBox\n");)
-
     if( m_SelLayerBox == NULL )
     {
         if( parent == NULL )

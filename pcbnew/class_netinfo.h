@@ -9,6 +9,8 @@
 #ifndef __CLASSES_NETINFO__
 #define __CLASSES_NETINFO__
 
+#include "class_netclass.h"
+
 // Forward declaration:
 class NETINFO_ITEM;
 
@@ -147,17 +149,21 @@ private:
 class NETINFO_ITEM
 {
 private:
-    int      m_NetCode;         // this is a number equivalent to the net name
-                                // Used for fast comparisons in rastnest and DRC computations.
-    wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by eeschema
-    wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
+    int               m_NetCode;        // this is a number equivalent to the net name
+                                        // Used for fast comparisons in rastnest and DRC computations.
+    wxString          m_Netname;        // Full net name like /mysheet/mysubsheet/vout used by eeschema
+    wxString          m_ShortNetname;   // short net name, like vout from /mysheet/mysubsheet/vout
+    wxString          m_NetClassName; /* Net Class name. if void this is equivalent to "default" (the first
+                                 *  item of the net classes list
+                                 */
+    NET_DESIGN_PARAMS m_NetParams;       // values of net classes parameters
 
 
 public:
-    int      m_NbNodes;                             // Pads count for this net
+    int m_NbNodes;                                  // Pads count for this net
     int      m_NbLink;                              // Ratsnets count for this net
     int      m_NbNoconn;                            // Ratsnets remaining to route count
-    int      m_ForceWidth;                          // specific width (0 = default width)
+    int      m_Flag;                                // used in some calculations. Had no special meaning
     std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
     unsigned m_RatsnestStartIdx;                    /* Starting point of ratsnests of this net (included)
                                                      * in a general buffer of ratsnest (a vector<RATSNEST_ITEM*> buffer)
@@ -168,7 +174,86 @@ public:
     ~NETINFO_ITEM();
 
 
-    /* Readind and writing data on files */
+    /** Functions SetClassParameters
+     * copy the class parameters in the locale buffer m_NetParams
+     */
+    void SetClassParameters(const NET_DESIGN_PARAMS& aParams )
+    {
+        m_NetParams = aParams;
+    }
+
+    /** Functions SetClass
+     * copy the class Name and class parmeters
+     */
+    void SetClass(const NETCLASS& aNetclass )
+    {
+        m_NetParams = aNetclass.m_NetParams;
+        m_NetClassName = aNetclass.m_Name;
+    }
+
+    /** Functions GetClassName
+     * @return the class Name
+     */
+    wxString GetClassName( ) const
+    {
+        return m_NetClassName;
+    }
+
+    /** function GetTracksWidth()
+     *            @return the "default" value for tracks thickness used to route this net
+     */
+    int GetTracksWidth()
+    {
+        return m_NetParams.m_TracksWidth;
+    }
+
+
+    /** Function GetTracksMinWidth()
+     *  @return the Minimum value for tracks thickness (used in DRC)
+     */
+    int GetTracksMinWidth()
+    {
+        return m_NetParams.m_TracksMinWidth = 150;
+    }
+
+
+    /** Function
+     *   @return the "Default" value for vias sizes used to route this net
+     */
+    int GetViasSize()
+    {
+        return m_NetParams.m_ViasSize;
+    }
+
+
+    /** Function GetViasMinSize()
+     *  @return the Minimum value for  vias sizes (used in DRC)
+     */
+    int  GetViasMinSize()
+    {
+        return m_NetParams.m_ViasMinSize;
+    }
+
+
+    /** Function GetClearance()
+     *          @return the "Default" clearance when routing
+     */
+    int  GetClearance()
+    {
+        return m_NetParams.m_Clearance;
+    }
+
+
+    /** Function GetMinClearance()
+     *         @return the  Minimum value for clearance (used in DRC)
+     */
+    int  GetMinClearance()
+    {
+        return m_NetParams.m_MinClearance;
+    }
+
+
+    /* Reading and writing data on files */
     int  ReadDescr( FILE* File, int* LineNum );
 
     /**

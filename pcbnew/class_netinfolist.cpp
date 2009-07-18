@@ -125,6 +125,7 @@ void NETINFO_LIST::BuildListOfNets()
     }
 
     m_Parent->m_NbNodes = nodes_count;
+    m_Parent->TransfertDesignRulesToNets( );
 
     m_Parent->m_Status_Pcb |= NET_CODES_OK;
 

@@ -22,7 +22,7 @@ enum LAYER_T {
     LT_SIGNAL,
     LT_POWER,
     LT_MIXED,
-    LT_JUMPER,
+    LT_JUMPER
 };
 
 
@@ -97,7 +97,8 @@ public:
     std::vector<RATSNEST_ITEM> m_LocalRatsnest;             /* Rastnest list relative to a given footprint
                                                              *  (used while moving a footprint) */
 
-    ZONE_CONTAINER*            m_CurrentZoneContour; // zone contour currently in progress
+    NETCLASS_LIST               m_NetClassesList;           // List of current netclasses. There is always the default netclass
+    ZONE_CONTAINER*             m_CurrentZoneContour; // zone contour currently in progress
 
     BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
@@ -334,6 +335,17 @@ public:
      * @return int - net names count.
      */
     int           ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
+
+    /**
+     * Function TransfertDesignRulesToNets
+     * Copy Netclass parameters to each net, corresponding to its net class
+     * Must be called after a Design Rules edition, or after reading a netlist (or editing the list of nets)
+     * Also this function remove the non existing nets in netclasses and add net nets in default netclass
+     * (this happens after reading a netlist)
+     * @param none
+     * @return none
+     */
+    void           TransfertDesignRulesToNets( );
 
     /**
      * Function Save

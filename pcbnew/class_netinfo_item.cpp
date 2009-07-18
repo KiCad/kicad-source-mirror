@@ -17,8 +17,10 @@
 NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
 {
     SetNet( 0 );
-    m_NbNodes       = m_NbLink = m_NbNoconn = 0;
-    m_ForceWidth    = 0;
+    m_NbNodes = 0;
+    m_NbLink = 0;
+    m_NbNoconn = 0;
+    m_Flag = 0;
     m_RatsnestStartIdx = 0;    // Starting point of ratsnests of this net in a general buffer of ratsnest
     m_RatsnestEndIdx   = 0;    // Ending point of ratsnests of this net
 }
@@ -58,10 +60,10 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
             continue;
         }
 
-        if( strncmp( Line, "Lw", 2 ) == 0 ) /* Texte */
+        if( strncmp( Line, "NetClass", 8 ) == 0 ) /* Net Class */
         {
-            sscanf( Line + 2, " %d", &tmp );
-            m_ForceWidth = tmp;
+            ReadDelimitedText( Ltmp, Line + 8, sizeof(Ltmp) );
+            m_NetClassName = CONV_FROM_UTF8( Ltmp );
             continue;
         }
     }
@@ -70,9 +72,9 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
 }
 
 
-/**************************************/
+/*******************************************/
 bool NETINFO_ITEM::Save( FILE* aFile ) const
-/**************************************/
+/*******************************************/
 
 /** Note: the old name of class NETINFO_ITEM was EQUIPOT
  * so in Save (and read) functions, for compatibility, we use EQUIPOT as keyword
@@ -84,8 +86,7 @@ bool NETINFO_ITEM::Save( FILE* aFile ) const
     fprintf( aFile, "Na %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
     fprintf( aFile, "St %s\n", "~" );
 
-    if( m_ForceWidth )
-        fprintf( aFile, "Lw %d\n", m_ForceWidth );
+    fprintf( aFile, "NetClass \"%s\"\n", CONV_TO_UTF8(m_NetClassName) );
 
     if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
         goto out;

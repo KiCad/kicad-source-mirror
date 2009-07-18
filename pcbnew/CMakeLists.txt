@@ -32,6 +32,8 @@ set(PCBNEW_SRCS
     deltrack.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
+    dialog_design_rules.cpp
+    dialog_design_rules_base.cpp
     dialog_display_options.cpp
     dialog_display_options_base.cpp
     dialog_drc_base.cpp

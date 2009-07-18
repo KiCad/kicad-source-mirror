@@ -38,6 +38,9 @@ static wxMenu* Append_Track_Width_List()
 
     trackwidth_menu = new wxMenu;
 
+    ADD_MENUITEM( trackwidth_menu, ID_PCB_TRACK_SIZE_SETUP,
+                _( "New Width/Size" ), showtrack_xpm );
+
     trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
                              _( "Auto Width" ),
                              _(

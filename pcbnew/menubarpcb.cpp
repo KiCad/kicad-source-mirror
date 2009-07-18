@@ -205,6 +205,13 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->AppendSeparator();
     AddHotkeyConfigMenu( configmenu );
 
+    // Add acces to the Design Rules Dialog:
+    wxMenu* designRulesMenu = new wxMenu;
+    item = new wxMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
+                           _( "Design Rules" ), _( "Open the design rules dialog editor" ) );
+    item->SetBitmap( hammer_xpm );
+    designRulesMenu->Append( item );
+
     /////////////////////////////
     // Ajustage de dimensions: //
     /////////////////////////////
@@ -319,6 +326,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );
+    menuBar->Append( designRulesMenu, _( "&Design Rules" ) );
     menuBar->Append( sizes_menu, _( "&Dimensions" ) );
     menuBar->Append( miscellaneous_menu, _( "&Miscellaneous" ) );
     menuBar->Append( postprocess_menu, _( "P&ostprocess" ) );

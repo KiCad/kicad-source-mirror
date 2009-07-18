@@ -431,6 +431,11 @@ public:
     void             Show3D_Frame( wxCommandEvent& event );
     void             GeneralControle( wxDC* DC, wxPoint Mouse );
 
+    /** function ShowDesignRulesEditor
+     * Display the Design Rules Editor.
+     */
+    void             ShowDesignRulesEditor( wxCommandEvent& event );
+
     /**
      * Function UpdateToolbarLayerInfo
      * updates the currently selected layer in the layer listbox and

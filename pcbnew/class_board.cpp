@@ -36,6 +36,11 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
         m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
+
+    // Add the default Netclass to list
+    m_NetClassesList.m_Parent = this;
+    NETCLASS * default_netclass = new NETCLASS(this);
+    m_NetClassesList.AddNetclass( default_netclass );
 }
 
 
@@ -928,6 +933,9 @@ bool BOARD::Save( FILE* aFile ) const
 {
     bool        rc = false;
     BOARD_ITEM* item;
+
+    // save the netclasses
+    m_NetClassesList.Save( aFile );
 
     // save the nets
     for( unsigned ii = 0; ii < m_NetInfo->GetNetsCount(); ii++ )
