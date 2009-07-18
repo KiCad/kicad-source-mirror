@@ -26,9 +26,9 @@
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/listbox.h>
+#include <wx/notebook.h>
 #include <wx/stattext.h>
 #include <wx/html/htmlwin.h>
-#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 684,486 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 684,568 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };

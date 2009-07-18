@@ -23,11 +23,11 @@
 #define LAYERS_GRID_NAME_POSITION     2
 
 // Fields Positions on rules grid
-#define RULE_GRID_TRACKSIZE_POSITION 0
-#define RULE_GRID_VIASIZE_POSITION 1
-#define RULE_GRID_CLEARANCE_POSITION 2
+#define RULE_GRID_TRACKSIZE_POSITION    0
+#define RULE_GRID_VIASIZE_POSITION      1
+#define RULE_GRID_CLEARANCE_POSITION    2
 #define RULE_GRID_MINTRACKSIZE_POSITION 3
-#define RULE_GRID_MINVIASIZE_POSITION 4
+#define RULE_GRID_MINVIASIZE_POSITION   4
 
 /***********************************************************************************/
 DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
@@ -48,11 +48,11 @@ void DIALOG_DESIGN_RULES::Init()
 /********************************************************************/
 {
     SetFocus();
+    SetReturnCode( 0 );
 
     // Initialize the layers grid:
     m_ActivesLayersCount = g_DesignSettings.m_CopperLayerCount;
-    m_Pcb     = m_Parent->GetBoard();
-    m_Changes = 0;
+    m_Pcb = m_Parent->GetBoard();
 
     m_LayersCountSelection->SetSelection( m_ActivesLayersCount / 2 );
 
@@ -100,49 +100,55 @@ void DIALOG_DESIGN_RULES::Init()
     InitRulesList();
 
     /* Initialize the list of nets buffers
-    (note the netcode 0 is not a real net, so it is not loaded)
-    */
-    for ( unsigned ii = 1; ; ii ++ )
+     *  (note the netcode 0 is not a real net, so it is not loaded)
+     */
+    for( unsigned ii = 1; ; ii++ )
     {
         NETINFO_ITEM* net = m_Pcb->FindNet( ii );
         if( net == NULL )
             break;
-        m_StockNets.push_back(net);
+        m_StockNets.push_back( net );
+
         // search the index in rules list for this net
         int rules_idx = 0;
-        for (int jj = 0; jj < m_gridNetClassesProperties->GetNumberRows(); jj++ )
+        for( int jj = 0; jj < m_gridNetClassesProperties->GetNumberRows(); jj++ )
         {
-            if( m_gridNetClassesProperties->GetRowLabelValue(jj).CmpNoCase(net->GetClassName()) == 0 )
+            if( m_gridNetClassesProperties->GetRowLabelValue( jj ).CmpNoCase( net->GetClassName() )
+                == 0 )
             {
                 rules_idx = jj;
                 break;
             }
         }
-        m_NetsLinkToClasses.push_back(rules_idx); // All nets are set to default net class
+
+        m_NetsLinkToClasses.push_back( rules_idx ); // All nets are set to default net class
     }
 
     InitializeRulesSelectionBoxes();
 }
 
+
 /** Function FillListBoxWithNetsNames
  * populates the aListBox with net names members of the aNetclassIndex net class
  * the "Client Data pointer" is used to store the index of nets in ne nets lists
  */
-void DIALOG_DESIGN_RULES::FillListBoxWithNetsNames(wxListBox* aListBox, int aNetclassIndex)
+void DIALOG_DESIGN_RULES::FillListBoxWithNetsNames( wxListBox* aListBox, int aNetclassIndex )
 {
     aListBox->Clear();
     unsigned idx = 0;
-    for(unsigned ii = 0; ii < m_StockNets.size(); ii++ )
+    for( unsigned ii = 0; ii < m_StockNets.size(); ii++ )
     {
-        if (aNetclassIndex == m_NetsLinkToClasses[ii] )
+        if( aNetclassIndex == m_NetsLinkToClasses[ii] )
         {
             aListBox->Append( m_StockNets[ii]->GetNetname() );
+
             // Store the index of this net
-            aListBox->SetClientData(idx, (void *) ii);
+            aListBox->SetClientData( idx, (void*) ii );
             idx++;
         }
     }
 }
+
 
 /* Initialize the combno boxes by the list of existing net classes
  */
@@ -150,17 +156,18 @@ void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 {
     m_CBoxRightSelection->Clear();
     m_CBoxLeftSelection->Clear();
-    for (int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
+    for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
     {
-        m_CBoxRightSelection->Append(m_gridNetClassesProperties->GetRowLabelValue(ii));
-        m_CBoxLeftSelection->Append(m_gridNetClassesProperties->GetRowLabelValue(ii));
+        m_CBoxRightSelection->Append( m_gridNetClassesProperties->GetRowLabelValue( ii ) );
+        m_CBoxLeftSelection->Append( m_gridNetClassesProperties->GetRowLabelValue( ii ) );
     }
-    m_CBoxRightSelection->Select(0);
-    m_CBoxLeftSelection->Select(0);
-    m_buttonRightToLeft->Enable(false);
-    m_buttonLeftToRight->Enable(false);;
-    FillListBoxWithNetsNames(m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
-    FillListBoxWithNetsNames(m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
+
+    m_CBoxRightSelection->Select( 0 );
+    m_CBoxLeftSelection->Select( 0 );
+    m_buttonRightToLeft->Enable( false );
+    m_buttonLeftToRight->Enable( false );;
+    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
+    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
 }
 
 
@@ -179,96 +186,110 @@ void DIALOG_DESIGN_RULES::SetRoutableLayerStatus()
             value = wxT( "1" );
         m_gridLayersProperties->SetCellValue( ii, LAYERS_GRID_ROUTABLE_POSITION, value );
         m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_ROUTABLE_POSITION );
+
         // Set to Read Only cell for non existing copper layers:
         m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_STATUS_POSITION, value != wxT( "1" ) );
         m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_NAME_POSITION, value != wxT( "1" ) );
     }
 }
 
+
 /* Initialize the rules list from board
-*/
+ */
 void DIALOG_DESIGN_RULES::InitRulesList()
 {
     for( int ii = 0;  ; ii++ )
     {
-        const NETCLASS * netclass = m_Pcb->m_NetClassesList.GetNetClass(ii);
-        if ( netclass == NULL )
+        const NETCLASS* netclass = m_Pcb->m_NetClassesList.GetNetClass( ii );
+        if( netclass == NULL )
             break;
+
         // Creates one entry if needed
-        if (ii >= m_gridNetClassesProperties->GetNumberRows() )
-            m_gridNetClassesProperties->AppendRows( );
+        if( ii >= m_gridNetClassesProperties->GetNumberRows() )
+            m_gridNetClassesProperties->AppendRows();
+
         // Init name
-        m_gridNetClassesProperties->SetRowLabelValue(ii, netclass->m_Name);
+        m_gridNetClassesProperties->SetRowLabelValue( ii, netclass->m_Name );
+
         // Init data
         wxString msg;
-        msg =  ReturnStringFromValue( g_UnitMetric,
-                    netclass->m_NetParams.m_TracksWidth,
-                    m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue(ii, RULE_GRID_TRACKSIZE_POSITION, msg);
-        msg =  ReturnStringFromValue( g_UnitMetric,
-                    netclass->m_NetParams.m_ViasSize,
-                    m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue(ii, RULE_GRID_VIASIZE_POSITION, msg);
-        msg =  ReturnStringFromValue( g_UnitMetric,
-                    netclass->m_NetParams.m_Clearance,
-                    m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue(ii, RULE_GRID_CLEARANCE_POSITION, msg);
-        msg =  ReturnStringFromValue( g_UnitMetric,
-                    netclass->m_NetParams.m_TracksMinWidth,
-                    m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue(ii, RULE_GRID_MINTRACKSIZE_POSITION, msg);
-        msg =  ReturnStringFromValue( g_UnitMetric,
-                    netclass->m_NetParams.m_ViasMinSize,
-                    m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue(ii, RULE_GRID_MINVIASIZE_POSITION, msg);
+        msg = ReturnStringFromValue( g_UnitMetric,
+                                     netclass->m_NetParams.m_TracksWidth,
+                                     m_Parent->m_InternalUnits, false );
+        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_TRACKSIZE_POSITION, msg );
+        msg = ReturnStringFromValue( g_UnitMetric,
+                                     netclass->m_NetParams.m_ViasSize,
+                                     m_Parent->m_InternalUnits, false );
+        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_VIASIZE_POSITION, msg );
+        msg = ReturnStringFromValue( g_UnitMetric,
+                                     netclass->m_NetParams.m_Clearance,
+                                     m_Parent->m_InternalUnits, false );
+        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_CLEARANCE_POSITION, msg );
+        msg = ReturnStringFromValue( g_UnitMetric,
+                                     netclass->m_NetParams.m_TracksMinWidth,
+                                     m_Parent->m_InternalUnits, false );
+        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_MINTRACKSIZE_POSITION, msg );
+        msg = ReturnStringFromValue( g_UnitMetric,
+                                     netclass->m_NetParams.m_ViasMinSize,
+                                     m_Parent->m_InternalUnits, false );
+        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_MINVIASIZE_POSITION, msg );
     }
 }
 
+
 /* Copy the rules list to board
-*/
+ */
 void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 {
     m_Pcb->m_NetClassesList.ClearList();
     for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
     {
-        NETCLASS * netclass = new NETCLASS(m_Pcb,
-            m_gridNetClassesProperties->GetRowLabelValue(ii) );
-        m_Pcb->m_NetClassesList.AddNetclass(netclass);
+        NETCLASS* netclass = new NETCLASS( m_Pcb,
+                                          m_gridNetClassesProperties->GetRowLabelValue( ii ) );
+        m_Pcb->m_NetClassesList.AddNetclass( netclass );
+
         // Init data
         netclass->m_NetParams.m_TracksWidth =
             ReturnValueFromString( g_UnitMetric,
-                        m_gridNetClassesProperties->GetCellValue(ii, RULE_GRID_TRACKSIZE_POSITION),
-                          m_Parent->m_InternalUnits );
+                                   m_gridNetClassesProperties->GetCellValue( ii,
+                                                                             RULE_GRID_TRACKSIZE_POSITION ),
+                                   m_Parent->m_InternalUnits );
 
         netclass->m_NetParams.m_ViasSize =
             ReturnValueFromString( g_UnitMetric,
-                        m_gridNetClassesProperties->GetCellValue(ii, RULE_GRID_VIASIZE_POSITION),
-                          m_Parent->m_InternalUnits );
+                                   m_gridNetClassesProperties->GetCellValue( ii,
+                                                                             RULE_GRID_VIASIZE_POSITION ),
+                                   m_Parent->m_InternalUnits );
 
         netclass->m_NetParams.m_Clearance =
             ReturnValueFromString( g_UnitMetric,
-                        m_gridNetClassesProperties->GetCellValue(ii, RULE_GRID_CLEARANCE_POSITION),
-                          m_Parent->m_InternalUnits );
+                                   m_gridNetClassesProperties->GetCellValue( ii,
+                                                                             RULE_GRID_CLEARANCE_POSITION ),
+                                   m_Parent->m_InternalUnits );
 
         netclass->m_NetParams.m_TracksMinWidth =
             ReturnValueFromString( g_UnitMetric,
-                        m_gridNetClassesProperties->GetCellValue(ii, RULE_GRID_MINTRACKSIZE_POSITION),
-                          m_Parent->m_InternalUnits );
+                                   m_gridNetClassesProperties->GetCellValue( ii,
+                                                                             RULE_GRID_MINTRACKSIZE_POSITION ),
+                                   m_Parent->m_InternalUnits );
 
         netclass->m_NetParams.m_ViasMinSize =
             ReturnValueFromString( g_UnitMetric,
-                        m_gridNetClassesProperties->GetCellValue(ii, RULE_GRID_MINVIASIZE_POSITION),
-                          m_Parent->m_InternalUnits );
+                                   m_gridNetClassesProperties->GetCellValue( ii,
+                                                                             RULE_GRID_MINVIASIZE_POSITION ),
+                                   m_Parent->m_InternalUnits );
+
         // Copy the list of nets associated to this netclass:
-        for(unsigned idx = 0; idx < m_StockNets.size(); idx++ )
+        for( unsigned idx = 0; idx < m_StockNets.size(); idx++ )
         {
             if( m_NetsLinkToClasses[idx] == ii )
-                netclass->AddMember(m_StockNets[idx]->GetNetname());
+                netclass->AddMember( m_StockNets[idx]->GetNetname() );
         }
     }
 
-    m_Pcb->TransfertDesignRulesToNets( );
+    m_Pcb->TransfertDesignRulesToNets();
 }
+
 
 /*****************************************************************/
 void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
@@ -282,6 +303,12 @@ void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
 void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
 /**************************************************************************/
 {
+    if( !TestDataValidity() )
+    {
+        DisplayError( this, _( "Errors detected, Abort" ) );
+        return;
+    }
+
     g_DesignSettings.m_CopperLayerCount = m_ActivesLayersCount;
 
     // Initialize the new layer name
@@ -311,7 +338,7 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
 
     CopyRulesListToBoard();
 
-    EndModal( 1 );
+    EndModal( wxID_OK );
 }
 
 
@@ -333,7 +360,8 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
 /**************************************************************************/
 {
     wxString class_name;
-    if( Get_Message( _("New Net Class Name:"),
+
+    if( Get_Message( _( "New Net Class Name:" ),
                      wxEmptyString,
                      class_name,
                      this ) )
@@ -343,26 +371,28 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
     for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
     {
         wxString value;
-        value = m_gridNetClassesProperties->GetRowLabelValue(ii);
-        if( class_name.CmpNoCase( value) == 0 )       // Already exists!
+        value = m_gridNetClassesProperties->GetRowLabelValue( ii );
+        if( class_name.CmpNoCase( value ) == 0 )       // Already exists!
         {
-            DisplayError(this, _("This NetClass is alerady existing, cannot add it") );
+            DisplayError( this, _( "This NetClass is already existing, cannot add it; Aborted" ) );
             return;
         }
     }
 
-    m_gridNetClassesProperties->AppendRows( );
+    m_gridNetClassesProperties->AppendRows();
     m_gridNetClassesProperties->SetRowLabelValue(
-        m_gridNetClassesProperties->GetNumberRows()-1,
-        class_name);
+        m_gridNetClassesProperties->GetNumberRows() - 1,
+        class_name );
+
     // Copy values of the previous class:
-    int irow = m_gridNetClassesProperties->GetNumberRows()-1;
+    int irow = m_gridNetClassesProperties->GetNumberRows() - 1;
     for( int icol = 0; icol < m_gridNetClassesProperties->GetNumberCols(); icol++ )
     {
         wxString value;
-        value = m_gridNetClassesProperties->GetCellValue(irow-1, icol);
-        m_gridNetClassesProperties->SetCellValue(irow, icol, value);
+        value = m_gridNetClassesProperties->GetCellValue( irow - 1, icol );
+        m_gridNetClassesProperties->SetCellValue( irow, icol, value );
     }
+
     InitializeRulesSelectionBoxes();
 }
 
@@ -372,116 +402,194 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
 /**************************************************************************/
 {
     wxArrayInt select = m_gridNetClassesProperties->GetSelectedRows();
-    for( int ii = select.GetCount()-1; ii >= 0; ii-- )
+
+    for( int ii = select.GetCount() - 1; ii >= 0; ii-- )
     {
         if( select[ii] != 0 )   // Do not remove the default class
         {
-            m_gridNetClassesProperties->DeleteRows(select[ii]);
+            m_gridNetClassesProperties->DeleteRows( select[ii] );
+
             // reset the net class to default for nets member of the removed net class
-            for ( unsigned jj = 0; jj< m_NetsLinkToClasses.size(); jj++ )
+            for( unsigned jj = 0; jj< m_NetsLinkToClasses.size(); jj++ )
                 if( m_NetsLinkToClasses[jj] == ii )
                     m_NetsLinkToClasses[jj] = 0;    // Reset to default net class
 
         }
     }
+
     InitializeRulesSelectionBoxes();
 }
 
+
 /*
  * Called on the left Choice Box selection
-*/
+ */
 void DIALOG_DESIGN_RULES::OnLeftCBSelection( wxCommandEvent& event )
 {
-    FillListBoxWithNetsNames(m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
-    if ( m_CBoxLeftSelection->GetCurrentSelection() ==  m_CBoxRightSelection->GetCurrentSelection() )
+    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
+    if( m_CBoxLeftSelection->GetCurrentSelection() ==  m_CBoxRightSelection->GetCurrentSelection() )
     {
-		m_buttonRightToLeft->Enable(false);
-		m_buttonLeftToRight->Enable(false);
+        m_buttonRightToLeft->Enable( false );
+        m_buttonLeftToRight->Enable( false );
     }
     else
     {
-		m_buttonRightToLeft->Enable(true);
-		m_buttonLeftToRight->Enable(true);
+        m_buttonRightToLeft->Enable( true );
+        m_buttonLeftToRight->Enable( true );
     }
 }
 
+
 /*
  * Called on the Right Choice Box selection
-*/
+ */
 void DIALOG_DESIGN_RULES::OnRightCBSelection( wxCommandEvent& event )
 {
-    FillListBoxWithNetsNames(m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
-    if ( m_CBoxLeftSelection->GetCurrentSelection() ==  m_CBoxRightSelection->GetCurrentSelection() )
+    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
+    if( m_CBoxLeftSelection->GetCurrentSelection() ==  m_CBoxRightSelection->GetCurrentSelection() )
     {
-		m_buttonRightToLeft->Enable(false);
-		m_buttonLeftToRight->Enable(false);;
+        m_buttonRightToLeft->Enable( false );
+        m_buttonLeftToRight->Enable( false );;
     }
     else
     {
-		m_buttonRightToLeft->Enable(true);
-		m_buttonLeftToRight->Enable(true);
+        m_buttonRightToLeft->Enable( true );
+        m_buttonLeftToRight->Enable( true );
     }
 }
 
 
 /* Called on clicking the "<<<" or Copy Right to Left button:
  * Selected items are moved from the right list to the left list
-*/
+ */
 
 void DIALOG_DESIGN_RULES::OnRightToLeftCopyButton( wxCommandEvent& event )
 {
     int idx_class = m_CBoxLeftSelection->GetCurrentSelection();
-    if ( idx_class == wxNOT_FOUND )
+
+    if( idx_class == wxNOT_FOUND )
         return;
     for( unsigned ii = 0; ii < m_listBoxRightNetSelect->GetCount(); ii++ )
     {
-        if( ! m_listBoxRightNetSelect->IsSelected(ii) )
+        if( !m_listBoxRightNetSelect->IsSelected( ii ) )
             continue;
 
-        unsigned idx = (unsigned) m_listBoxRightNetSelect->GetClientData( ii);
+        unsigned idx = (unsigned) m_listBoxRightNetSelect->GetClientData( ii );
         m_NetsLinkToClasses[idx] = idx_class;
     }
 
-    FillListBoxWithNetsNames(m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection());
-    FillListBoxWithNetsNames(m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection());
+    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
+    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
 }
+
 
 /* Called on clicking the ">>>" or Copy Left to Right button:
  * Selected items are moved from the left list to the right list
-*/
+ */
 void DIALOG_DESIGN_RULES::OnLeftToRightCopyButton( wxCommandEvent& event )
 {
     int idx_class = m_CBoxRightSelection->GetCurrentSelection();
-    if ( idx_class == wxNOT_FOUND )
+
+    if( idx_class == wxNOT_FOUND )
         return;
     for( unsigned ii = 0; ii < m_listBoxLeftNetSelect->GetCount(); ii++ )
     {
-        if( ! m_listBoxLeftNetSelect->IsSelected(ii) )
+        if( !m_listBoxLeftNetSelect->IsSelected( ii ) )
             continue;
 
-        unsigned idx = (unsigned) m_listBoxLeftNetSelect->GetClientData(ii);
+        unsigned idx = (unsigned) m_listBoxLeftNetSelect->GetClientData( ii );
         m_NetsLinkToClasses[idx] = idx_class;
     }
 
-    FillListBoxWithNetsNames(m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection());
-    FillListBoxWithNetsNames(m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection());
+    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
+    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
 }
+
 
 /* Called on clicking the left "select all" button:
  * select alls items of the left netname list lisxt box
-*/
+ */
 void DIALOG_DESIGN_RULES::OnLeftSelectAllButton( wxCommandEvent& event )
 {
     for( unsigned ii = 0; ii < m_listBoxLeftNetSelect->GetCount(); ii++ )
-        m_listBoxLeftNetSelect->SetSelection(ii);
+        m_listBoxLeftNetSelect->SetSelection( ii );
 }
+
 
 /* Called on clicking the right "select all" button:
  * select alls items of the right netname list lisxt box
-*/
+ */
 void DIALOG_DESIGN_RULES::OnRightSelectAllButton( wxCommandEvent& event )
 {
     for( unsigned ii = 0; ii < m_listBoxRightNetSelect->GetCount(); ii++ )
-        m_listBoxRightNetSelect->SetSelection(ii);
+        m_listBoxRightNetSelect->SetSelection( ii );
 }
 
+
+/* TestDataValidity
+ * Performs a control of data validity
+ * set the background of a bad cell in RED and display an info message
+ * @return true if Ok, false if error
+ */
+bool DIALOG_DESIGN_RULES::TestDataValidity()
+{
+    bool success = true;
+    m_MessagesList->SetPage(wxEmptyString); // Clear message list
+
+    //  Test duplicate layers names
+    for( int ii = 0; ii < m_gridLayersProperties->GetNumberRows() - 1; ii++ )
+    {
+        wxString value = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_NAME_POSITION );
+        for( int jj = ii+1; jj < m_gridLayersProperties->GetNumberRows(); jj++ )
+        {
+            wxString othervalue = m_gridLayersProperties->GetCellValue( ii,
+                                                                        LAYERS_GRID_NAME_POSITION );
+            othervalue = m_gridLayersProperties->GetCellValue( jj, LAYERS_GRID_NAME_POSITION );
+            if( value.CmpNoCase( othervalue ) == 0 )   // Already exists!
+            {
+                wxString text;
+                text.Printf( _(
+                                "<small>This layer name <b>%s</b> is already existing<br>" ),
+                            value.GetData() );
+                m_MessagesList->AppendToPage( text );
+                success = false;
+            }
+        }
+    }
+
+    int value;
+    int minvalue;
+
+    for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
+    {
+        value = ReturnValueFromString( g_UnitMetric,
+                                       m_gridNetClassesProperties->GetCellValue(
+                                           ii, RULE_GRID_TRACKSIZE_POSITION ),
+                                       m_Parent->m_InternalUnits );
+        minvalue = ReturnValueFromString( g_UnitMetric,
+                                          m_gridNetClassesProperties->GetCellValue( ii,
+                                                                                    RULE_GRID_MINTRACKSIZE_POSITION ),
+                                          m_Parent->m_InternalUnits );
+        if( value < minvalue )
+        {
+            success = false;
+            m_MessagesList->AppendToPage( _( "The <b>track</b> minimum size is bigger than the size<br>" ) );
+        }
+
+        value = ReturnValueFromString( g_UnitMetric,
+                                       m_gridNetClassesProperties->GetCellValue(
+                                           ii, RULE_GRID_VIASIZE_POSITION ),
+                                       m_Parent->m_InternalUnits );
+        minvalue = ReturnValueFromString( g_UnitMetric,
+                                          m_gridNetClassesProperties->GetCellValue( ii,
+                                                                                    RULE_GRID_MINVIASIZE_POSITION ),
+                                          m_Parent->m_InternalUnits );
+        if( value < minvalue )
+        {
+            success = false;
+            m_MessagesList->AppendToPage( _( "The <b>via</b> minimum size is bigger than the size<br>" ) );
+        }
+    }
+
+    return success;
+}

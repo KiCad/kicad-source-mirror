@@ -651,8 +651,8 @@ void WinEDA_PcbFrame::Show3D_Frame( wxCommandEvent& event )
 void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
 {
     DIALOG_DESIGN_RULES dR_editor( this );
-    int change = dR_editor.ShowModal( );
-    if ( change )
+    int returncode = dR_editor.ShowModal( );
+    if ( returncode == wxID_OK )    // New rules, or others changes.
     {
         ReCreateLayerBox( NULL );
         GetScreen()->SetModify();

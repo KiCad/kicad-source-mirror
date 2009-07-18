@@ -11,7 +11,7 @@
 
 DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,450 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 600,520 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -124,7 +124,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	// Cell Defaults
 	m_gridNetClassesProperties->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_gridNetClassesProperties->SetMinSize( wxSize( -1,100 ) );
+	m_gridNetClassesProperties->SetMinSize( wxSize( -1,150 ) );
 	
 	sbSizer1->Add( m_gridNetClassesProperties, 1, wxALL|wxEXPAND, 5 );
 	
@@ -139,7 +139,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	sbSizer1->Add( bSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bmainSizerNclasses->Add( sbSizer1, 1, wxEXPAND, 5 );
+	bmainSizerNclasses->Add( sbSizer1, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerNetSelect;
 	bSizerNetSelect = new wxBoxSizer( wxHORIZONTAL );
@@ -194,21 +194,21 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	bmainSizerNclasses->Add( bSizerNetSelect, 1, wxEXPAND, 5 );
 	
-	m_staticTextMsg = new wxStaticText( m_panelNetClasses, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextMsg->Wrap( -1 );
-	bmainSizerNclasses->Add( m_staticTextMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_MessagesList = new wxHtmlWindow( m_panelNetClasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
-	m_MessagesList->SetMinSize( wxSize( -1,100 ) );
-	
-	bmainSizerNclasses->Add( m_MessagesList, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
 	m_panelNetClasses->SetSizer( bmainSizerNclasses );
 	m_panelNetClasses->Layout();
 	bmainSizerNclasses->Fit( m_panelNetClasses );
 	m_notebook->AddPage( m_panelNetClasses, _("Net Classes"), false );
 	
 	bMainSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
+	
+	m_staticTextMsg = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextMsg->Wrap( -1 );
+	bMainSizer->Add( m_staticTextMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_MessagesList = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
+	m_MessagesList->SetMinSize( wxSize( -1,100 ) );
+	
+	bMainSizer->Add( m_MessagesList, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

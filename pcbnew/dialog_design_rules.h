@@ -14,7 +14,6 @@ class DIALOG_DESIGN_RULES : public DIALOG_DESIGN_RULES_BASE
         WinEDA_PcbFrame * m_Parent;
         int m_ActivesLayersCount;
         BOARD * m_Pcb;
-        int m_Changes;
         LAYER_T m_LayersType[4];
         wxString m_LayersTypeName[4];
         std::vector<NETINFO_ITEM*> m_StockNets;     // full list of nets on board
@@ -36,6 +35,7 @@ class DIALOG_DESIGN_RULES : public DIALOG_DESIGN_RULES_BASE
 		void OnLeftToRightCopyButton( wxCommandEvent& event );
 		void OnLeftSelectAllButton( wxCommandEvent& event );
 		void OnRightSelectAllButton( wxCommandEvent& event );
+		bool TestDataValidity( );
         void Init();
         void InitRulesList();
         void InitializeRulesSelectionBoxes();
