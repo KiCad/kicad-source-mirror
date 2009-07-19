@@ -143,7 +143,10 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetsNames( wxListBox* aListBox, int aNe
             aListBox->Append( m_StockNets[ii]->GetNetname() );
 
             // Store the index of this net
-            aListBox->SetClientData( idx, (void*) ii );
+            // This is a trick to get an unsigned integer index from a pointer value.
+            // Some compilers cannot accept to convert an unsigned to a pointer  without complains
+            char * ptr = (char*)0 + ii;
+            aListBox->SetClientData( idx, ptr );
             idx++;
         }
     }
@@ -474,7 +477,10 @@ void DIALOG_DESIGN_RULES::OnRightToLeftCopyButton( wxCommandEvent& event )
         if( !m_listBoxRightNetSelect->IsSelected( ii ) )
             continue;
 
-        unsigned idx = (unsigned) m_listBoxRightNetSelect->GetClientData( ii );
+        // This is a trick to get an unsigned integer index from a pointer value.
+        // Some compilers cannot accept to convert a pointer to an unsigned without complains
+        char * ptr = (char*) m_listBoxRightNetSelect->GetClientData( ii );
+        unsigned idx = ptr - (char*)0;
         m_NetsLinkToClasses[idx] = idx_class;
     }
 
@@ -497,7 +503,10 @@ void DIALOG_DESIGN_RULES::OnLeftToRightCopyButton( wxCommandEvent& event )
         if( !m_listBoxLeftNetSelect->IsSelected( ii ) )
             continue;
 
-        unsigned idx = (unsigned) m_listBoxLeftNetSelect->GetClientData( ii );
+        // This is a trick to get an unsigned integer index from a pointer value.
+        // Some compilers cannot accept to convert a pointer to an unsigned without complains
+        char * ptr = (char*) m_listBoxLeftNetSelect->GetClientData( ii );
+        unsigned idx = ptr - (char*)0 ;
         m_NetsLinkToClasses[idx] = idx_class;
     }
 
