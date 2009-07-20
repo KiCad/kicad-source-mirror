@@ -63,18 +63,26 @@ END_EVENT_TABLE()
 
 /*************************************************************************/
 Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
+#if wxCHECK_VERSION( 2, 9, 0 )
     wxGLCanvas( parent, -1, NULL, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
+#else
+    wxGLCanvas( parent, -1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
+#endif
 /*************************************************************************/
 {
     m_init   = FALSE;
     m_gllist = 0;
     m_Parent = parent;
 
+#if wxCHECK_VERSION( 2, 9, 0 )
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext(this);
 
     // Make the new context current (activate it for use) with this canvas.
     SetCurrent(*m_glRC);
+#else
+    SetCurrent(NULL);
+#endif
     DisplayStatus();
 }
 
@@ -85,7 +93,9 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 {
     ClearLists();
     m_init = FALSE;
+#if wxCHECK_VERSION( 2, 9, 0 )
     delete m_glRC;
+#endif
 }
 
 

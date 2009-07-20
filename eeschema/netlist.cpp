@@ -740,7 +740,6 @@ static int ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
     {
         NETLIST_OBJECT* new_label = new NETLIST_OBJECT( BusLabel );
         NumItem++;
-
         /* Convertion du BusLabel en la racine du Label + le numero du fil */
         BufLine = BusLabel.m_Label->Left( RootBusNameLength );
         BufLine << BusMember;

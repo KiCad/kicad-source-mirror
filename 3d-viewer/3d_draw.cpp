@@ -46,7 +46,11 @@ static GLfloat Get3DLayerSide( int act_layer );
 void Pcb3D_GLCanvas::Redraw( bool finish )
 /******************************************/
 {
+#if wxCHECK_VERSION( 2, 9, 0 )
     SetCurrent(*m_glRC);
+#else
+    SetCurrent(NULL);
+#endif
     InitGL();
 
     glMatrixMode( GL_MODELVIEW );    /* position viewer */

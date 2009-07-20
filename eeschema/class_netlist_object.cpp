@@ -119,12 +119,13 @@ NETLIST_OBJECT::NETLIST_OBJECT()
     m_Label  = 0;                   /* For all labels:pointer on the text label */
 }
 
-
 // Copy constructor
 NETLIST_OBJECT::NETLIST_OBJECT( NETLIST_OBJECT& aSource )
 {
+    *this = aSource;
+    m_Label  = NULL;        // set to null because some items are owner, so the delete operator can create problems
+                            // if this member is copied here (if 2 different items are owner of the same object)
 }
-
 
 NETLIST_OBJECT::~NETLIST_OBJECT()
 {

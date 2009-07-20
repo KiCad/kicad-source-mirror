@@ -79,7 +79,9 @@ public:
 private:
     bool   m_init;
     GLuint m_gllist;
+#if wxCHECK_VERSION( 2, 9, 0 )
     wxGLContext* m_glRC;
+#endif
 
 public:
     Pcb3D_GLCanvas( WinEDA3D_DrawFrame *parent );
