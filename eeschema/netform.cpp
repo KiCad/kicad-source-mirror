@@ -728,6 +728,8 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
         int idxref = ii;
         for( unsigned jj = ii + 1; jj < aPinList.size(); jj++ )
         {
+            if (  aPinList[jj] == NULL )    // Already removed
+                continue;
             if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )
                 break;
             if ( aPinList[idxref]->m_FlagOfConnection == PAD_CONNECT )
