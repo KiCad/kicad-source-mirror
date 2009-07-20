@@ -152,7 +152,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_CBoxLeftSelection->SetSelection( 0 );
 	bLeftSizerNetSelect->Add( m_CBoxLeftSelection, 0, wxALL|wxEXPAND, 5 );
 	
-	m_listBoxLeftNetSelect = new wxListBox( m_panelNetClasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_MULTIPLE ); 
+	m_listBoxLeftNetSelect = new wxListBox( m_panelNetClasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED ); 
 	bLeftSizerNetSelect->Add( m_listBoxLeftNetSelect, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	bSizerNetSelect->Add( bLeftSizerNetSelect, 1, wxEXPAND, 5 );
@@ -187,7 +187,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_CBoxRightSelection->SetSelection( 0 );
 	bLeftSizerNetSelect1->Add( m_CBoxRightSelection, 0, wxALL|wxEXPAND, 5 );
 	
-	m_listBoxRightNetSelect = new wxListBox( m_panelNetClasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_MULTIPLE ); 
+	m_listBoxRightNetSelect = new wxListBox( m_panelNetClasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED ); 
 	bLeftSizerNetSelect1->Add( m_listBoxRightNetSelect, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	bSizerNetSelect->Add( bLeftSizerNetSelect1, 1, wxEXPAND, 5 );

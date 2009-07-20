@@ -79,7 +79,6 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
     }
 
-    UpdateStatusBar();
     GetScreen()->ClrRefreshReq();
 
     // Display the sheet filename, and the sheet path, for non root sheets

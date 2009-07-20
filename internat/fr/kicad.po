@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-20 08:07+0100\n"
-"PO-Revision-Date: 2009-07-20 08:11+0100\n"
+"POT-Creation-Date: 2009-07-20 20:16+0100\n"
+"PO-Revision-Date: 2009-07-20 20:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -6366,7 +6366,7 @@ msgstr "&Accepter Offset"
 msgid "Plot: %s\n"
 msgstr "Trace: %s\n"
 
-#: eeschema/eeredraw.cpp:96
+#: eeschema/eeredraw.cpp:95
 msgid "Sheet"
 msgstr "Feuille"
 
@@ -9133,7 +9133,7 @@ msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enreg
 
 #: eeschema/load_one_schematic_file.cpp:380
 msgid "Done Loading "
-msgstr "Chargement terminé"
+msgstr "Chargement terminé "
 
 #: eeschema/dialog_edit_libentry_fields_in_lib.cpp:228
 #, c-format
@@ -11122,59 +11122,59 @@ msgstr "Erreur de Chargement!"
 msgid "Vertex "
 msgstr "Vertex "
 
-#: 3d-viewer/3d_canvas.cpp:330
+#: 3d-viewer/3d_canvas.cpp:340
 msgid "Zoom +"
 msgstr "Zoom +"
 
-#: 3d-viewer/3d_canvas.cpp:335
+#: 3d-viewer/3d_canvas.cpp:345
 msgid "Zoom -"
 msgstr "Zoom -"
 
-#: 3d-viewer/3d_canvas.cpp:341
+#: 3d-viewer/3d_canvas.cpp:351
 msgid "Top View"
 msgstr "Vue de dessus"
 
-#: 3d-viewer/3d_canvas.cpp:346
+#: 3d-viewer/3d_canvas.cpp:356
 msgid "Bottom View"
 msgstr "Vue de dessous"
 
-#: 3d-viewer/3d_canvas.cpp:352
+#: 3d-viewer/3d_canvas.cpp:362
 msgid "Right View"
 msgstr "Vue à Droite"
 
-#: 3d-viewer/3d_canvas.cpp:357
+#: 3d-viewer/3d_canvas.cpp:367
 msgid "Left View"
 msgstr "Vue à Gauche"
 
-#: 3d-viewer/3d_canvas.cpp:364
+#: 3d-viewer/3d_canvas.cpp:374
 msgid "Front View"
 msgstr "Vue de face"
 
-#: 3d-viewer/3d_canvas.cpp:369
+#: 3d-viewer/3d_canvas.cpp:379
 msgid "Back View"
 msgstr "Vue arrière"
 
-#: 3d-viewer/3d_canvas.cpp:375
+#: 3d-viewer/3d_canvas.cpp:385
 #: 3d-viewer/3d_toolbar.cpp:85
 msgid "Move left <-"
 msgstr "Vers la gauche <-"
 
-#: 3d-viewer/3d_canvas.cpp:380
+#: 3d-viewer/3d_canvas.cpp:390
 #: 3d-viewer/3d_toolbar.cpp:88
 msgid "Move right ->"
 msgstr "Vers la droite ->"
 
-#: 3d-viewer/3d_canvas.cpp:385
+#: 3d-viewer/3d_canvas.cpp:395
 #: 3d-viewer/3d_toolbar.cpp:91
 msgid "Move Up ^"
 msgstr "Vers le haut ^"
 
-#: 3d-viewer/3d_canvas.cpp:390
+#: 3d-viewer/3d_canvas.cpp:400
 #: 3d-viewer/3d_toolbar.cpp:94
 msgid "Move Down"
 msgstr "Vers le bas"
 
-#: 3d-viewer/3d_canvas.cpp:624
+#: 3d-viewer/3d_canvas.cpp:634
 msgid "3D Image filename:"
 msgstr "Nom fichier Image 3D:"
 

@@ -79,7 +79,7 @@ bool WinEDA_App::OnInit()
 
     Read_Config();
 
-    if( argc == 0 )
+    if( argc <= 1 )
         return true;
 
     fn = argv[1];

@@ -84,7 +84,6 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     Trace_Gerber( DC, GR_COPY, -1 );
     TraceWorkSheet( DC, screen, 0 );
-    UpdateStatusBar();
 
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
