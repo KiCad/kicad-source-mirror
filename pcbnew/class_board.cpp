@@ -823,14 +823,15 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  */
 NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
 {
-    // the first valid netcode is 1.
+    // the first valid netcode is 1 and the last is m_NetInfo->GetNetsCount()-1.
     // zero is reserved for "no connection" and is not used.
-    if( anetcode > 0 )
+    // NULL is returned for non valid netcodes
+    NETINFO_ITEM* item = m_NetInfo->GetNetItem( anetcode );
+    if ( item )     // item can be NULL if not valid
     {
-        wxASSERT( anetcode == m_NetInfo->GetNetItem( anetcode )->GetNet() );
-        return m_NetInfo->GetNetItem( anetcode );
+        wxASSERT( anetcode == item->GetNet() );
     }
-    return NULL;
+    return item;
 }
 
 
@@ -848,8 +849,9 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
     {
         for( unsigned ii = 1;  ii <  m_NetInfo->GetNetsCount();  ii++ )
         {
-            if( m_NetInfo->GetNetItem( ii )->GetNetname() == aNetname )
-                return m_NetInfo->GetNetItem( ii );
+            NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
+            if( item && item->GetNetname() == aNetname )
+                return item;
         }
     }
     return NULL;

@@ -68,6 +68,11 @@ WinEDA_BasicFrame::~WinEDA_BasicFrame()
     if( wxGetApp().m_HtmlCtrl )
         delete wxGetApp().m_HtmlCtrl;
     wxGetApp().m_HtmlCtrl = NULL;
+
+    /* This needed for OSX: avoids furter OnDraw processing after this destructor
+     * and before the native window is destroyed
+     */
+    this->Freeze( );
 }
 
 

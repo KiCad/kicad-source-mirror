@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 20:36+0100\n"
-"PO-Revision-Date: 2009-07-17 20:53+0100\n"
+"POT-Creation-Date: 2009-07-20 08:07+0100\n"
+"PO-Revision-Date: 2009-07-20 08:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2128,7 +2128,7 @@ msgstr "Lire les préférences de l'application"
 
 #: pcbnew/menubarpcb.cpp:211
 msgid "Design Rules"
-msgstr "Rrègles de Conception"
+msgstr "Règles de Conception"
 
 #: pcbnew/menubarpcb.cpp:211
 msgid "Open the design rules dialog editor"
@@ -4590,19 +4590,19 @@ msgstr ""
 "Entrez un nom de fichier si vous ne voulez pas utiliser les noms par défaut\n"
 "Ne peut être utilisé que pour imprimer la feuille courante"
 
-#: pcbnew/class_netinfo_item.cpp:136
+#: pcbnew/class_netinfo_item.cpp:137
 msgid "Net Name"
 msgstr "Nom Equipot"
 
-#: pcbnew/class_netinfo_item.cpp:139
+#: pcbnew/class_netinfo_item.cpp:140
 msgid "Net Code"
 msgstr "Net Code"
 
-#: pcbnew/class_netinfo_item.cpp:168
+#: pcbnew/class_netinfo_item.cpp:169
 msgid "Vias"
 msgstr "Vias"
 
-#: pcbnew/class_netinfo_item.cpp:171
+#: pcbnew/class_netinfo_item.cpp:172
 msgid "Net Length"
 msgstr "Long. Net"
 
@@ -5808,7 +5808,7 @@ msgstr "<< Selectionner Tout"
 msgid "Select All >>"
 msgstr "Selectionner Tout >>"
 
-#: pcbnew/dialog_design_rules_base.cpp:209
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Net Classes"
 msgstr "Classes d'Equipots."
 
@@ -5849,9 +5849,30 @@ msgstr "Change tous"
 msgid "Browse Libs modules"
 msgstr "Liste modules"
 
-#: pcbnew/dialog_design_rules.cpp:319
+#: pcbnew/dialog_design_rules.cpp:311
+msgid "Errors detected, Abort"
+msgstr "Erreurs detectées, Abandont"
+
+#: pcbnew/dialog_design_rules.cpp:367
 msgid "New Net Class Name:"
 msgstr "Nouveau Nom de Classe d'Equipotentielle:"
+
+#: pcbnew/dialog_design_rules.cpp:380
+msgid "This NetClass is already existing, cannot add it; Aborted"
+msgstr "Cette NetClass existe déjà, et ne peut être ajoutée; Abandon"
+
+#: pcbnew/dialog_design_rules.cpp:561
+#, c-format
+msgid "<small>This layer name <b>%s</b> is already existing<br>"
+msgstr "<small>Ce nom de couche <b>%s</b> existe déjà<br>"
+
+#: pcbnew/dialog_design_rules.cpp:585
+msgid "The <b>track</b> minimum size is bigger than the size<br>"
+msgstr "La <b>track</b>taille minimum est plus grande que la taille<br>"
+
+#: pcbnew/dialog_design_rules.cpp:599
+msgid "The <b>via</b> minimum size is bigger than the size<br>"
+msgstr "La taille minimum de<b>via</b>est plus grande que la taille<br>"
 
 #: eeschema/libedit.cpp:35
 msgid " Part:   "
@@ -11051,20 +11072,20 @@ msgstr "Emplacement des Fichiers des Hotkeys"
 msgid "Select hotkey config file location (home directory or kicad tree)"
 msgstr "Sélection emplacement des fichiers de config. des hotkeys(\"home\" ou répertoire kicad)"
 
-#: common/basicframe.cpp:219
+#: common/basicframe.cpp:224
 msgid " file <"
 msgstr " Fichier <"
 
-#: common/basicframe.cpp:219
+#: common/basicframe.cpp:224
 msgid "> was not found."
 msgstr ">  non trouvé."
 
-#: common/basicframe.cpp:255
+#: common/basicframe.cpp:260
 #, c-format
 msgid "Help file %s not found"
 msgstr "Fichier d'aide %s non trouvé"
 
-#: common/basicframe.cpp:263
+#: common/basicframe.cpp:268
 #, c-format
 msgid "Help file %s could not be found."
 msgstr "Fichier d'aide %s non trouvé."
@@ -11384,7 +11405,7 @@ msgstr "Options de Remplissage de Zone"
 
 #: pcbnew/dialog_design_rules_base.h:94
 msgid "Design Rules Editor"
-msgstr "Editeur deRègles de Conception"
+msgstr "Editeur de Règles de Conception"
 
 #: pcbnew/dialog_non_copper_zones_properties_base.h:59
 msgid "Non Copper Zones Properties"
