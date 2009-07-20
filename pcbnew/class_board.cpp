@@ -827,10 +827,12 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
     NETINFO_ITEM* item = m_NetInfo->GetNetItem( anetcode );
+#if defined(DEBUG)
     if ( item )     // item can be NULL if not valid
     {
         wxASSERT( anetcode == item->GetNet() );
     }
+#endif
     return item;
 }
 
