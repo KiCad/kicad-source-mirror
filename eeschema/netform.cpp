@@ -703,34 +703,36 @@ static void AddPinToComponentPinList( SCH_COMPONENT* Component,
 static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 /**********************************************************************/
 
-/*
+/** Function EraseDuplicatePins
  *  Function to remove duplicate Pins in the TabPin pin list
  *  (This is a list of pins found in the whole schematic, for a given component)
  *  These duplicate pins were put in list because some pins (powers... )
  *  are found more than one time when we have a multiple parts per package component
  *  for instance, a 74ls00 has 4 parts, and therefore the VCC pin and GND pin appears 4 times
  *  in the list.
+ * @param aPinList = a NETLIST_OBJECT_LIST that contains the list of pins for a given component.
+ * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
  */
 {
-    for( unsigned ii = 0; ii < aPinList.size() - 1; ii++ )
+    if ( aPinList.size() == 0 ) // Trivial case: compônent with no pin
+        return;
+
+    for( unsigned ii = 0; ii < aPinList.size(); ii++ )
     {
-        if( aPinList[ii] == NULL )
-            continue; /* already deleted */
-        if( aPinList[ii+1] == NULL )
-            continue; /* already tested and deleted */
-        if( aPinList[ii]->m_PinNum != aPinList[ii + 1]->m_PinNum )
+        if( aPinList[ii] == NULL ) /* already deleted */
             continue;
-        /* Duplicated Pins
-         * remove duplicates. The priority is to keep connected pins and remove unconnected
-         * So this allows (for instance when using multi op amps per package
-         * to connect only one op amp to power
+        /* Search for duplicated pins
+         * If found, remove duplicates. The priority is to keep connected pins and remove unconnected
+         * - So this allows (for instance when using multi op amps per package
+         * - to connect only one op amp to power
+         * Because the pin list is sorted by m_PinNum value, duplicated pins are necessary successive in list
         */
         int idxref = ii;
         for( unsigned jj = ii + 1; jj < aPinList.size(); jj++ )
         {
             if (  aPinList[jj] == NULL )    // Already removed
                 continue;
-            if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )
+            if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )  // other pin num => end of duplicate list
                 break;
             if ( aPinList[idxref]->m_FlagOfConnection == PAD_CONNECT )
                 aPinList[jj] = NULL;
