@@ -81,7 +81,7 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
     // Make the new context current (activate it for use) with this canvas.
     SetCurrent(*m_glRC);
 #else
-    SetCurrent(NULL);
+    SetCurrent( );
 #endif
     DisplayStatus();
 }

@@ -49,7 +49,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
 #if wxCHECK_VERSION( 2, 9, 0 )
     SetCurrent(*m_glRC);
 #else
-    SetCurrent(NULL);
+    SetCurrent( );
 #endif
     InitGL();
 
