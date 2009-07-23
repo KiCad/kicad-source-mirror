@@ -60,33 +60,33 @@
 
 
 /************************************/
-void SwapData( EDA_BaseStruct* Item )
+void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 /************************************/
 
 /* Used if undo / redo command:
  *  swap data between Item and its copy, pointed by its .m_Image member
  */
 {
-    if( Item == NULL )
+    if( aItem == NULL || aImage == NULL )
+    {
+        wxMessageBox(wxT("SwapData error: NULL pointer"));
         return;
-    EDA_BaseStruct* image = Item->m_Image;
-    if( image == NULL )
-        return;
+    }
 
-    switch( Item->Type() )
+    switch( aItem->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawPolylineStruct*) Item )
-        #define DEST   ( (DrawPolylineStruct*) image )
+        #define SOURCE ( (DrawPolylineStruct*) aItem )
+        #define DEST   ( (DrawPolylineStruct*) aImage )
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawJunctionStruct*) Item )
-        #define DEST   ( (DrawJunctionStruct*) image )
+        #define SOURCE ( (DrawJunctionStruct*) aItem )
+        #define DEST   ( (DrawJunctionStruct*) aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
@@ -96,24 +96,24 @@ void SwapData( EDA_BaseStruct* Item )
     case TYPE_SCH_TEXT:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (SCH_TEXT*) Item )
-        #define DEST   ( (SCH_TEXT*) image )
+        #define SOURCE ( (SCH_TEXT*) aItem )
+        #define DEST   ( (SCH_TEXT*) aImage )
         DEST->SwapData( SOURCE );
         break;
 
     case TYPE_SCH_COMPONENT:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (SCH_COMPONENT*) Item )
-        #define DEST   ( (SCH_COMPONENT*) image )
+        #define SOURCE ( (SCH_COMPONENT*) aItem )
+        #define DEST   ( (SCH_COMPONENT*) aImage )
         DEST->SwapData( SOURCE );
         break;
 
     case DRAW_SEGMENT_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (EDA_DrawLineStruct*) Item )
-        #define DEST   ( (EDA_DrawLineStruct*) image )
+        #define SOURCE ( (EDA_DrawLineStruct*) aItem )
+        #define DEST   ( (EDA_DrawLineStruct*) aImage )
         EXCHG( SOURCE->m_Start, DEST->m_Start );
         EXCHG( SOURCE->m_End, DEST->m_End );
         break;
@@ -121,8 +121,8 @@ void SwapData( EDA_BaseStruct* Item )
     case DRAW_BUSENTRY_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawBusEntryStruct*) Item )
-        #define DEST   ( (DrawBusEntryStruct*) image )
+        #define SOURCE ( (DrawBusEntryStruct*) aItem )
+        #define DEST   ( (DrawBusEntryStruct*) aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         EXCHG( SOURCE->m_Size, DEST->m_Size );
         break;
@@ -130,24 +130,24 @@ void SwapData( EDA_BaseStruct* Item )
     case DRAW_SHEET_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawSheetStruct*) Item )
-        #define DEST   ( (DrawSheetStruct*) image )
+        #define SOURCE ( (DrawSheetStruct*) aItem )
+        #define DEST   ( (DrawSheetStruct*) aImage )
         DEST->SwapData( SOURCE );
         break;
 
     case DRAW_MARKER_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (MARKER_SCH*) Item )
-        #define DEST   ( (MARKER_SCH*) image )
+        #define SOURCE ( (MARKER_SCH*) aItem )
+        #define DEST   ( (MARKER_SCH*) aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (Hierarchical_PIN_Sheet_Struct*) Item )
-        #define DEST   ( (Hierarchical_PIN_Sheet_Struct*) image )
+        #define SOURCE ( (Hierarchical_PIN_Sheet_Struct*) aItem )
+        #define DEST   ( (Hierarchical_PIN_Sheet_Struct*) aImage )
         EXCHG( SOURCE->m_Edge, DEST->m_Edge );
         EXCHG( SOURCE->m_Shape, DEST->m_Shape );
         break;
@@ -155,19 +155,15 @@ void SwapData( EDA_BaseStruct* Item )
     case DRAW_NOCONNECT_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawNoConnectStruct*) Item )
-        #define DEST   ( (DrawNoConnectStruct*) image )
+        #define SOURCE ( (DrawNoConnectStruct*) aItem )
+        #define DEST   ( (DrawNoConnectStruct*) aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
     case DRAW_PART_TEXT_STRUCT_TYPE:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (DrawPolylineStruct*) Item )
-        #define DEST   ( (DrawPolylineStruct*) image )
         break;
 
-        // not directly used in schematic:
+    // not directly used in schematic:
     default:
         DisplayInfoMessage( NULL, wxT( "SwapData() error: unexpected type" ) );
         break;
@@ -176,8 +172,8 @@ void SwapData( EDA_BaseStruct* Item )
 
 
 /***********************************************************************/
-void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
-                                                int             flag_type_command )
+void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
+                                                int       flag_type_command )
 /***********************************************************************/
 
 /* Create a copy of the current schematic draw list, and put it in the undo list.
@@ -205,11 +201,11 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
  *  saved in Undo List (for Undo or Redo commands, saved wires will be exchanged with current wire list
  */
 {
-    SCH_ITEM*   CopyItem;
+    SCH_ITEM*          CopyOfItem;
+    PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
-    DrawPickedStruct* NewList = new DrawPickedStruct( NULL );
-
-    NewList->m_Flags = flag_type_command;
+    commandToUndo->m_UndoRedoType = flag_type_command;
+    ITEM_PICKER     itemWrapper( ItemToCopy, flag_type_command );
 
     if( ItemToCopy )
     {
@@ -219,79 +215,107 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM * ItemToCopy,
             break;
 
         case IS_CHANGED:        /* Create a copy of schematic */
-            CopyItem = DuplicateStruct( ItemToCopy );
-            NewList->SetSon( CopyItem );
-
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
-                DrawPickedStruct* PickedList = (DrawPickedStruct*) CopyItem;
+                DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
-                    CopyItem = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    CopyItem->m_Flags   = flag_type_command;
-                    PickedList->m_Image = CopyItem->m_Image;
+                    CopyOfItem = DuplicateStruct( (SCH_ITEM*) PickedList->m_PickedStruct);
+                    CopyOfItem->m_Flags = flag_type_command;
+                    itemWrapper.m_Item  = CopyOfItem;
+                    itemWrapper.m_Link = (SCH_ITEM*) PickedList->m_PickedStruct;
+                    commandToUndo->PushItem( itemWrapper );
                     PickedList = PickedList->Next();
-                }
+               }
             }
             else
             {
-                CopyItem->m_Flags = flag_type_command;
-                CopyItem->m_Image = ItemToCopy;
+                CopyOfItem = DuplicateStruct(ItemToCopy);
+                itemWrapper.m_Item  = CopyOfItem;
+                itemWrapper.m_Link = ItemToCopy;
+                commandToUndo->PushItem( itemWrapper );
             }
             break;
 
         case IS_NEW:
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
-                NewList->SetSon( ItemToCopy );
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
-                    CopyItem = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    PickedList->m_Image = CopyItem;
+                    CopyOfItem = (SCH_ITEM*) PickedList->m_PickedStruct;
                     PickedList->m_PickedStruct = NULL;
                     PickedList->m_Flags = flag_type_command;
                     PickedList = PickedList->Next();
+                    itemWrapper.m_Item = CopyOfItem;
+                    commandToUndo->PushItem( itemWrapper );
                 }
             }
             else
             {
-                NewList->m_Image = ItemToCopy;
+                commandToUndo->PushItem( itemWrapper );
             }
             break;
 
-        case IS_NEW | IS_CHANGED:
+        case IS_NEW | IS_CHANGED:   // when more than one item, some are new, some are changed
+            if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
+            {
+                DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
+                while( PickedList )
+                {
+                    CopyOfItem = (SCH_ITEM*) PickedList->m_PickedStruct;
+                    PickedList->m_PickedStruct = NULL;
+                    PickedList = PickedList->Next();
+                    itemWrapper.m_Item = CopyOfItem;
+                    itemWrapper.m_UndoRedoStatus = PickedList->m_Flags;
+                    commandToUndo->PushItem( itemWrapper );
+                }
+            }
+            else
+            {
+                commandToUndo->PushItem( itemWrapper );
+            }
+            break;
+
         case IS_WIRE_IMAGE:
-            NewList->SetSon( ItemToCopy );
+            commandToUndo->PushItem( itemWrapper );
             break;
 
         case IS_DELETED:
-            NewList->SetSon( ItemToCopy );
             ItemToCopy->m_Flags = flag_type_command;
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
-                    CopyItem = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    CopyItem->m_Flags   = flag_type_command;
+                    CopyOfItem = (SCH_ITEM*) PickedList->m_PickedStruct;
+                    CopyOfItem->m_Flags = flag_type_command;
                     PickedList->m_Flags = flag_type_command;
                     PickedList = PickedList->Next();
+                    itemWrapper.m_Item = CopyOfItem;
+                    commandToUndo->PushItem( itemWrapper );
                 }
+            }
+            else
+            {
+                commandToUndo->PushItem( itemWrapper );
             }
             break;
 
         default:
-            DisplayError( this, wxT( "SaveCopyInUndoList() error" ) );
+        {
+            wxString msg;
+            msg.Printf(wxT( "SaveCopyInUndoList() error (unknown code %X)" ), flag_type_command);
+            DisplayError( this,  msg);
+        }
             break;
         }
     }
     /* Save the copy in undo list */
-    GetScreen()->AddItemToUndoList( NewList );
+    GetScreen()->PushCommandToUndoList( commandToUndo );
 
     /* Clear redo list, because after new save there is no redo to do */
-    ( (SCH_SCREEN*) GetScreen() )->ClearUndoORRedoList( GetScreen()->m_RedoList );
-    GetScreen()->m_RedoList = NULL;
+    GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
 }
 
 
@@ -302,15 +326,17 @@ bool WinEDA_SchematicFrame::GetSchematicFromRedoList()
 /* Redo the last edition:
  *  - Save the current schematic in undo list
  *  - Get the old version
- *  @return FALSE if nothing done, else true
+ *  @return false if nothing done, else true
  */
 {
-    if( GetScreen()->m_RedoList == NULL )
-        return FALSE;
+    if( GetScreen()->GetRedoCommandCount() == 0 )
+        return false;
+
 
     /* Get the old wrapper and put it in UndoList */
-    DrawPickedStruct* List = (DrawPickedStruct*) GetScreen()->GetItemFromRedoList();
-    GetScreen()->AddItemToUndoList( List );
+    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
+    GetScreen()->PushCommandToUndoList( List );
+
     /* Redo the command: */
     PutDataInPreviousState( List );
 
@@ -325,148 +351,64 @@ bool WinEDA_SchematicFrame::GetSchematicFromRedoList()
 
 
 /***************************************************************************/
-void WinEDA_SchematicFrame::PutDataInPreviousState( DrawPickedStruct* List )
+void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 /***************************************************************************/
 
 /* Used in undo or redo command.
  *  Put data pointed by List in the previous state, i.e. the state memorised by List
  */
 {
-    SCH_ITEM*   FirstItem = (SCH_ITEM*) List->GetSon();
-    SCH_ITEM*   item;
-    DrawPickedStruct* PickedList;
+    SCH_ITEM*         item;
+    SCH_ITEM*         alt_item;
 
-    switch( List->m_Flags )
+    for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
-    case IS_CHANGED:        /* Exchange old and new data for each item */
-        if( FirstItem == NULL )
+        ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
+        item = (SCH_ITEM*) itemWrapper.m_Item;
+        SCH_ITEM * image = (SCH_ITEM*) itemWrapper.m_Link;
+        switch( itemWrapper.m_UndoRedoStatus )
         {
-            DisplayError( this, wxT( "PutDataInPreviousState() error : Null item" ) );
+        case IS_CHANGED:    /* Exchange old and new data for each item */
+            SwapData( item, image );
             break;
-        }
-        if( FirstItem->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-        {
-            DrawPickedStruct* PickedList = (DrawPickedStruct*) FirstItem;
-            while( PickedList )
-            {
-                SwapData( PickedList->m_PickedStruct );
-                PickedList = PickedList->Next();
-            }
-        }
-        else
-        {
-            SwapData( FirstItem );
-        }
-        break;
 
-    case IS_NEW:            /* new items are deleted */
-        List->m_Flags = IS_DELETED;
-        if( FirstItem && FirstItem->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-        {
-            PickedList = (DrawPickedStruct*) FirstItem;
-            while( PickedList )
-            {
-                item = (SCH_ITEM*) PickedList->m_Image;
-                ( (SCH_SCREEN*) GetScreen() )->RemoveFromDrawList( item );
-                item->m_Flags = IS_DELETED;
-                PickedList->m_PickedStruct = item;
-                PickedList->m_Flags = IS_DELETED;
-                PickedList = PickedList->Next();
-            }
-        }
-        else
-        {
-            FirstItem = (SCH_ITEM*)List->m_Image;
-            ( (SCH_SCREEN*) GetScreen() )->RemoveFromDrawList( FirstItem );
-            FirstItem->m_Flags = IS_DELETED;
-            List->SetSon( FirstItem );
-        }
-        break;
+        case IS_NEW:        /* new items are deleted */
+            aList->m_UndoRedoType = IS_DELETED;
+            aList->SetItemStatus( IS_DELETED, ii );
+            GetScreen()->RemoveFromDrawList( item );
+            item->m_Flags = IS_DELETED;
+            break;
 
-    case IS_DELETED:        /* deleted items are put in EEdrawList, as new items */
-        List->m_Flags = IS_NEW;
-        if( FirstItem->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-        {
-            PickedList = (DrawPickedStruct*) FirstItem;
-            while( PickedList )
+        case IS_DELETED:    /* deleted items are put in EEdrawList, as new items */
+            aList->m_UndoRedoType = IS_NEW;
+            aList->SetItemStatus( IS_NEW, ii );
+            item->SetNext( GetScreen()->EEDrawList );
+            GetScreen()->EEDrawList = item;
+            item->m_Flags = 0;
+            break;
+
+        case IS_WIRE_IMAGE:
+            /* Exchange the current wires and the old wires */
+            alt_item = GetScreen()->ExtractWires( false );
+            aList->SetItem( alt_item, ii );
+            while( item )
             {
-                item = (SCH_ITEM*) PickedList->m_PickedStruct;
+                SCH_ITEM* nextitem = item->Next();
                 item->SetNext( GetScreen()->EEDrawList );
                 GetScreen()->EEDrawList = item;
                 item->m_Flags = 0;
-                PickedList->m_PickedStruct = NULL;
-                PickedList->m_Image = item;
-                PickedList->m_Flags = IS_NEW;
-                PickedList = PickedList->Next();
+                item = nextitem;
             }
-        }
-        else
-        {
-            FirstItem->SetNext( GetScreen()->EEDrawList );
-            GetScreen()->EEDrawList = FirstItem;
-            FirstItem->m_Flags = 0;
-            List->m_Image = List->GetSon();
-            List->SetSon( NULL );
-        }
-        break;
+            break;
 
-    case IS_WIRE_IMAGE:
-        /* Exchange the current wires and the old wires */
-        List->SetSon( ( (SCH_SCREEN*) GetScreen() )->ExtractWires( FALSE ) );
-        while( FirstItem )
+        default:
         {
-            SCH_ITEM* nextitem = FirstItem->Next();
-            FirstItem->SetNext( GetScreen()->EEDrawList );
-            GetScreen()->EEDrawList = FirstItem;
-            FirstItem->m_Flags = 0;
-            FirstItem = nextitem;
+            wxString msg;
+            msg.Printf(wxT( "PutDataInPreviousState() error (unknown code %X)" ), itemWrapper.m_UndoRedoStatus);
+            DisplayError( this,  msg);
         }
-
-        break;
-
-    case IS_NEW | IS_CHANGED:
-    case IS_DELETED | IS_CHANGED:
-        if( !FirstItem || FirstItem->Type() != DRAW_PICK_ITEM_STRUCT_TYPE )
-        {
-            DisplayError( this, wxT( "GetSchematicFromUndoList() error: Pickstruct expected" ) );
             break;
         }
-        PickedList = (DrawPickedStruct*) FirstItem;
-        while( PickedList )
-        {
-            switch( PickedList->m_Flags )
-            {
-            case IS_CHANGED:
-                SwapData( PickedList->m_PickedStruct );
-                break;
-
-            case IS_NEW:
-                item = (SCH_ITEM*) PickedList->m_Image;
-                ( (SCH_SCREEN*) GetScreen() )->RemoveFromDrawList( item );
-                item->m_Flags = IS_DELETED;
-                PickedList->m_PickedStruct = item;
-                PickedList->m_Flags = IS_DELETED;
-                break;
-
-            case IS_DELETED:
-                item = (SCH_ITEM*) PickedList->m_PickedStruct;
-                item->SetNext( GetScreen()->EEDrawList );
-                GetScreen()->EEDrawList = item;
-                item->m_Flags = 0;
-                PickedList->m_PickedStruct = NULL;
-                PickedList->m_Image = item;
-                PickedList->m_Flags = IS_NEW;
-                break;
-            }
-
-            PickedList = PickedList->Next();
-        }
-
-        break;
-
-    default:
-        DisplayError( this, wxT( "GetSchematicFromUndoList() error: Unknown cmd" ) );
-        break;
     }
 }
 
@@ -479,15 +421,15 @@ bool WinEDA_SchematicFrame::GetSchematicFromUndoList()
  *  Undo the last edition:
  *  - Save the current schematic in Redo list
  *  - Get an old version of the schematic
- *  @return FALSE if nothing done, else true
+ *  @return false if nothing done, else true
  */
 {
-    if( GetScreen()->m_UndoList == NULL )
-        return FALSE;
+    if( GetScreen()->GetUndoCommandCount() <= 0 )
+        return false;
 
-    /* Get the old wrapper and put it in RedoList (the real data list is the m_Son member) */
-    DrawPickedStruct* List = (DrawPickedStruct*) GetScreen()->GetItemFromUndoList();
-    GetScreen()->AddItemToRedoList( List );
+    /* Get the old wrapper and put it in RedoList */
+    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
+    GetScreen()->PushCommandToRedoList( List );
     /* Undo the command */
     PutDataInPreviousState( List );
 
@@ -502,118 +444,61 @@ bool WinEDA_SchematicFrame::GetSchematicFromUndoList()
 
 
 /*********************************************************/
-void SCH_SCREEN::ClearUndoORRedoList( EDA_BaseStruct* List )
+void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 /*********************************************************/
 
-/* free the undo or redo list from List element
+/** Function ClearUndoORRedoList
+ * free the undo or redo list from List element
  *  Wrappers are deleted.
  *  datas pointed by wrappers are deleted if not flagged IS_NEW
  *  because they are copy of used data or they are not in use (DELETED)
+ * @param aList = the UNDO_REDO_CONTAINER to clear
+ * @param aItemCount = the count of items to remove. < 0 for all items
+ * items are removed from the beginning of the list.
+ * So this function can be called to remove old commands
  */
 {
-    EDA_BaseStruct* nextitem;
-    EDA_BaseStruct* FirstItem;
     int             CmdType;
 
-    if( List == NULL )
+    if( aItemCount == 0 )
         return;
 
-    for( ; List != NULL; List = nextitem )
+    unsigned icnt = aList.m_CommandsList.size();
+    if( aItemCount > 0 )
+        icnt = aItemCount;
+    for( unsigned ii = 0; ii < icnt; ii++ )
     {
-        nextitem  = List->Next();
-        FirstItem = List->GetSon();
-        CmdType   = List->m_Flags;
+        if ( aList.m_CommandsList.size() == 0 )
+            break;
+        PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
+        aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
+        CmdType = curr_cmd->m_UndoRedoType;
 
-        SAFE_DELETE( List );
-
-        if( FirstItem == NULL )
-            continue;
-
-        if( FirstItem->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
+        // Delete items is they are not flagged IS_NEW
+        while(1)
         {
-            EDA_BaseStruct*   item;
-            DrawPickedStruct* PickedList = (DrawPickedStruct*) FirstItem;
-            while( PickedList )    // delete wrapper list and copies
+            ITEM_PICKER wrapper = curr_cmd->PopItem();
+            EDA_BaseStruct* item = wrapper.m_Item;
+            if( item == NULL ) // No more item in list.
+                break;
+            if( wrapper.m_UndoRedoStatus == IS_WIRE_IMAGE )
             {
-                item = PickedList->m_PickedStruct;
-                if( item )
+                while( item )
                 {
-#if 0
-                    if( item->Type() == DRAW_SHEET_STRUCT_TYPE )
-                    {
-                                printf(
-                                    "schematic undo_redo.cpp: undo_redo with a DRAW_SHEET_STRUCT_TYPE, checkme!!\n" );
-                        DrawSheetStruct* sheet = (DrawSheetStruct*) item;
-                        /* Delete sub hierarchy if the sheet must be deleted */
-                        if( (sheet->m_Flags & IS_DELETED) != 0 )
-                            DeleteSubHierarchy( sheet, FALSE );
-                        else    /* EEDrawList, UndoList and Redo list are shared, and are deleted
-                                 *  only if sheet is deleted */
-                        {
-                            if( (item->m_Flags & IS_NEW) == 0 )
-                            {
-
-                                /*
-                                  * sheet->EEDrawList = NULL;
-                                  * sheet->m_UndoList = NULL;
-                                  * sheet->m_RedoList = NULL;
-                                 */
-                            }
-                        }
-                    }
-#endif
-                    if( (item->m_Flags & IS_NEW) == 0 )
-                    {
-                        SAFE_DELETE( item );
-                    }
-                }
-                DrawPickedStruct* wrapper = PickedList;
-                PickedList = PickedList->Next();
-                SAFE_DELETE( wrapper );
-            }
-        }
-        else    // This is a single item: deleted copy
-        {
-            if( CmdType == IS_WIRE_IMAGE )
-            {
-                while( FirstItem )
-                {
-                    EDA_BaseStruct* nextitem = FirstItem->Next();
-                    delete          FirstItem;
-                    FirstItem = nextitem;
+                    EDA_BaseStruct* nextitem = item->Next();
+                    delete          item;
+                    item = nextitem;
                 }
             }
             else
             {
-#if 0
-                if( FirstItem->Type() == DRAW_SHEET_STRUCT_TYPE )
+                if( (wrapper.m_UndoRedoStatus & IS_NEW) == 0 )
                 {
-                    DrawSheetStruct* sheet = (DrawSheetStruct*) FirstItem;
-                    /* Delete hierarchy if the sheet must be deleted */
-                    if( (sheet->m_Flags & IS_DELETED) == IS_DELETED )
-                        DeleteSubHierarchy( sheet, FALSE );
-                    else
-                    {
-                        if( (FirstItem->m_Flags & IS_NEW) == 0 )
-                        {
-                            printf(
-                                "schematic undo_redo.cpp undo_redo with a DRAW_SHEET_STRUCT_TYPE, checkme!!\n" );
-
-                            /*
-                              * sheet->EEDrawList = NULL;
-                              * sheet->m_UndoList = NULL;
-                              * sheet->m_RedoList = NULL;
-                             */
-                        }
-                    }
-                }
-#endif
-                if( (FirstItem->m_Flags & IS_NEW) == 0 )
-                {
-                    SAFE_DELETE( FirstItem );
+                    delete item;
                 }
             }
         }
+        delete curr_cmd;    // Delete command
     }
 }
 
@@ -625,79 +510,36 @@ void SCH_SCREEN::ClearUndoRedoList()
 /* free the undo and the redo lists
  */
 {
-    ClearUndoORRedoList( m_UndoList ); m_UndoList = NULL;
-    ClearUndoORRedoList( m_RedoList ); m_RedoList = NULL;
+    ClearUndoORRedoList( m_UndoList );
+    ClearUndoORRedoList( m_RedoList );
 }
 
 
 /***********************************************************/
-void SCH_SCREEN::AddItemToUndoList( EDA_BaseStruct* newitem )
+void SCH_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
 /************************************************************/
 
 /* Put newitem in head of undo list
  *  Deletes olds items if > count max.
  */
 {
-    int             ii;
-    EDA_BaseStruct* item, * nextitem;
+    m_UndoList.PushCommand( aItem );
 
-    if( newitem == NULL )
-        return;
-
-    if( m_UndoList )
-        m_UndoList->SetBack( newitem );
-
-    newitem->SetNext( m_UndoList );
-    newitem->SetBack( NULL );
-    m_UndoList = newitem;
-
-    /* Free oldest items, if count max reached */
-    for( ii = 0, item = m_UndoList; ii < m_UndoRedoCountMax; ii++ )
-    {
-        if( item->Next() == NULL )
-            return;
-        item = item->Next();
-    }
-
-    if( item == NULL )
-        return;
-
-    nextitem    = item->Next();
-    item->SetNext( NULL ); // Set end of chain
-
-    // Delete the extra  items
-    ClearUndoORRedoList( nextitem );
+    /* Delete the extra items, if count max reached */
+    int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
+    if( extraitems > 0 ) // Delete the extra items
+        ClearUndoORRedoList( m_UndoList, extraitems );
 }
 
 
 /***********************************************************/
-void SCH_SCREEN::AddItemToRedoList( EDA_BaseStruct* newitem )
+void SCH_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
 /***********************************************************/
 {
-    int             ii;
-    EDA_BaseStruct* item, * nextitem;
+    m_RedoList.PushCommand( aItem );
 
-    if( newitem == NULL )
-        return;
-
-    newitem->SetBack( NULL );
-    newitem->SetNext( m_RedoList );
-    m_RedoList = newitem;
-
-    /* Free first items, if count max reached */
-    for( ii = 0, item = m_RedoList; ii < m_UndoRedoCountMax; ii++ )
-    {
-        if( item->Next() == NULL )
-            break;
-        item = item->Next();
-    }
-
-    if( item == NULL )
-        return;
-
-    nextitem    = item->Next();
-    item->SetNext( NULL ); // Set end of chain
-
-    // Delete the extra items
-    ClearUndoORRedoList( nextitem );
+    /* Delete the extra items, if count max reached */
+    int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
+    if( extraitems > 0 ) // Delete the extra items
+        ClearUndoORRedoList( m_RedoList, extraitems );
 }

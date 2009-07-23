@@ -220,6 +220,26 @@ class DHEAD;
  * Class EDA_BaseStruct
  * is a base class for most all the kicad significant classes, used in schematics and boards.
  */
+// These define are used for the .m_Flags and .m_UndoRedoStatus member of the class EDA_BaseStruct
+#define IS_CHANGED      (1 << 0)
+#define IS_LINKED       (1 << 1)
+#define IN_EDIT         (1 << 2)
+#define IS_MOVED        (1 << 3)
+#define IS_NEW          (1 << 4)
+#define IS_RESIZED      (1 << 5)
+#define IS_DRAGGED      (1 << 6)
+#define IS_DELETED      (1 << 7)
+#define IS_WIRE_IMAGE   (1 << 8)
+#define STARTPOINT      (1 << 9)
+#define ENDPOINT        (1 << 10)
+#define SELECTED        (1 << 11)
+#define SELECTEDNODE    (1 << 12)           ///< flag indiquant que la structure a deja selectionnee
+#define STRUCT_DELETED  (1 << 13)           ///< Bit flag de Status pour structures effacee
+#define CANDIDATE       (1 << 14)           ///< flag indiquant que la structure est connectee
+#define SKIP_STRUCT     (1 << 15)           ///< flag indiquant que la structure ne doit pas etre traitee
+#define DO_NOT_DRAW     (1 << 16)           ///< Used to disable draw function
+#define DRAW_ERASED     (1 << 17)           ///< draw in background color, used by classs TRACK in gerbview
+
 class EDA_BaseStruct
 {
 private:
@@ -240,30 +260,12 @@ protected:
 
 public:
     int m_Flags;            // flags for editing and other misc. uses
-#define IS_CHANGED      (1 << 0)
-#define IS_LINKED       (1 << 1)
-#define IN_EDIT         (1 << 2)
-#define IS_MOVED        (1 << 3)
-#define IS_NEW          (1 << 4)
-#define IS_RESIZED      (1 << 5)
-#define IS_DRAGGED      (1 << 6)
-#define IS_DELETED      (1 << 7)
-#define IS_WIRE_IMAGE   (1 << 8)
-#define STARTPOINT      (1 << 9)
-#define ENDPOINT        (1 << 10)
-#define SELECTED        (1 << 11)
-#define SELECTEDNODE    (1 << 12)           ///< flag indiquant que la structure a deja selectionnee
-#define STRUCT_DELETED  (1 << 13)           ///< Bit flag de Status pour structures effacee
-#define CANDIDATE       (1 << 14)           ///< flag indiquant que la structure est connectee
-#define SKIP_STRUCT     (1 << 15)           ///< flag indiquant que la structure ne doit pas etre traitee
-#define DO_NOT_DRAW     (1 << 16)           ///< Used to disable draw function
-#define DRAW_ERASED     (1 << 17)           ///< draw in background color, used by classs TRACK in gerbview
-
-
-    EDA_BaseStruct* m_Image;            /* Link to an image copy for undelete or abort command */
 
     unsigned long   m_TimeStamp;        // Time stamp used for logical links
     int             m_Selected;         /* Used by block commands, and selective editing */
+
+    // member used in undo/redo function
+    EDA_BaseStruct* m_Image;            // Link to an image copy to save a copy of old parmeters values
 
 private:
     int             m_Status;

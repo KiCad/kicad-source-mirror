@@ -14,6 +14,7 @@ set(COMMON_SRCS
     block_commande.cpp
     class_drawpickedstruct.cpp
     class_marker_base.cpp
+    class_undoredo_container.cpp
     common.cpp
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp

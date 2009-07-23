@@ -28,9 +28,7 @@ BASE_SCREEN* ActiveScreen = NULL;
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 {
     EEDrawList         = NULL;   /* Schematic items list */
-    m_UndoList         = NULL;
-    m_RedoList         = NULL;
-    m_UndoRedoCountMax = 1;
+    m_UndoRedoCountMax = 1;     /* undo/Redo command Max depth */
     m_FirstRedraw      = TRUE;
     m_ScreenNumber     = 1;
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
@@ -486,121 +484,57 @@ void BASE_SCREEN::ClearUndoRedoList()
 /* free the undo and the redo lists
  */
 {
-    EDA_BaseStruct* nextitem;
-
-    while( m_UndoList )
-    {
-        nextitem = m_UndoList->Next();
-        delete m_UndoList;
-        m_UndoList = nextitem;
-    }
-
-    while( m_RedoList )
-    {
-        nextitem = m_RedoList->Next();
-        delete m_RedoList;
-        m_RedoList = nextitem;
-    }
+    m_UndoList.ClearCommandList();
+    m_RedoList.ClearCommandList();
 }
 
 
 /***********************************************************/
-void BASE_SCREEN::AddItemToUndoList( EDA_BaseStruct* newitem )
+void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 /************************************************************/
 
-/* Put newitem in head of undo list
+/* Put aNewitem in top of undo list
  *  Deletes olds items if > count max.
  */
 {
-    int             ii;
-    EDA_BaseStruct* item;
-    EDA_BaseStruct* nextitem;
-
-    if( newitem == NULL )
-        return;
-
-    newitem->SetNext( m_UndoList );
-    m_UndoList = newitem;
-
-    /* Free first items, if count max reached */
-    for( ii = 0, item = m_UndoList; ii < m_UndoRedoCountMax; ii++ )
+    m_UndoList.PushCommand(aNewitem);
+    while( m_UndoList.m_CommandsList.size() > 0 &&
+            m_UndoList.m_CommandsList.size() >= m_UndoRedoCountMax )
     {
-        if( item->Next() == NULL )
-            return;
-        item = item->Next();
+        delete m_UndoList.m_CommandsList[0];
+        m_UndoList.m_CommandsList.erase( m_UndoList.m_CommandsList.begin() );
     }
 
-    if( item == NULL )
-        return;
-
-    nextitem    = item->Next();
-    item->SetNext( NULL ); // Set end of chain
-
-    // Delete the extra  items
-    for( item = nextitem; item != NULL; item = nextitem )
-    {
-        nextitem = item->Next();
-        delete item;
-    }
 }
 
 
 /***********************************************************/
-void BASE_SCREEN::AddItemToRedoList( EDA_BaseStruct* newitem )
+void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 /***********************************************************/
 {
-    int             ii;
-    EDA_BaseStruct* item, * nextitem;
-
-    if( newitem == NULL )
-        return;
-
-    newitem->SetNext( m_RedoList );
-    m_RedoList = newitem;
-    /* Free first items, if count max reached */
-    for( ii = 0, item = m_RedoList; ii < m_UndoRedoCountMax; ii++ )
+    m_RedoList.PushCommand(aNewitem);
+    while( m_RedoList.m_CommandsList.size() > 0 &&
+            m_RedoList.m_CommandsList.size() >= m_UndoRedoCountMax )
     {
-        if( item->Next() == NULL )
-            break;
-        item = item->Next();
-    }
-
-    if( item == NULL )
-        return;
-
-    nextitem    = item->Next();
-    item->SetNext( NULL );      // Set end of chain
-
-    // Delete the extra items
-    for( item = nextitem; item != NULL; item = nextitem )
-    {
-        nextitem = item->Next();
-        delete item;
+        delete m_RedoList.m_CommandsList[0];
+        m_RedoList.m_CommandsList.erase( m_RedoList.m_CommandsList.begin() );
     }
 }
 
 
 /*****************************************************/
-EDA_BaseStruct* BASE_SCREEN::GetItemFromUndoList()
+PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromUndoList( )
 /*****************************************************/
 {
-    EDA_BaseStruct* item = m_UndoList;
-
-    if( item )
-        m_UndoList = item->Next();
-    return item;
+    return m_UndoList.PopCommand( );
 }
 
 
 /******************************************************/
-EDA_BaseStruct* BASE_SCREEN::GetItemFromRedoList()
+PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
 /******************************************************/
 {
-    EDA_BaseStruct* item = m_RedoList;
-
-    if( item )
-        m_RedoList = item->Next();
-    return item;
+    return m_RedoList.PopCommand( );
 }
 
 

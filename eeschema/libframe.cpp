@@ -279,8 +279,8 @@ void WinEDA_LibeditFrame::SetToolbars()
 
             if( GetScreen() )
             {
-                m_HToolBar->EnableTool( ID_LIBEDIT_UNDO, GetScreen()->m_UndoList );
-                m_HToolBar->EnableTool( ID_LIBEDIT_REDO, GetScreen()->m_RedoList );
+                m_HToolBar->EnableTool( ID_LIBEDIT_UNDO, GetScreen()->GetUndoCommandCount() );
+                m_HToolBar->EnableTool( ID_LIBEDIT_REDO, GetScreen()->GetRedoCommandCount() );
             }
         }
 

@@ -11,6 +11,7 @@
 #define  __CLASS_BASE_SCREEN_H__
 
 #include "base_struct.h"
+#include "class_undoredo_container.h"
 
 
 // Forward declarations:
@@ -116,11 +117,12 @@ public:
                                 * Schematic */
     bool    m_FirstRedraw;
 
-    /* Gestion des editions */
     SCH_ITEM*       EEDrawList; /* Object list (main data) for schematic */
-    EDA_BaseStruct* m_UndoList; /* Object list for the undo command (old data) */
-    EDA_BaseStruct* m_RedoList; /* Object list for the redo command (old data) */
-    int             m_UndoRedoCountMax;     /* undo/Redo command Max depth */
+
+    // Undo/redo list of commands
+    UNDO_REDO_CONTAINER m_UndoList; /* Object list for the undo command (old data) */
+    UNDO_REDO_CONTAINER m_RedoList; /* Object list for the redo command (old data) */
+    unsigned m_UndoRedoCountMax;                            // undo/Redo command Max depth
 
     /* block control */
     DrawBlockStruct BlockLocate;    /* Bock description for block commands */
@@ -187,10 +189,18 @@ public:
 
     /* general Undo/Redo command control */
     virtual void            ClearUndoRedoList();
-    virtual void            AddItemToUndoList( EDA_BaseStruct* item );
-    virtual void            AddItemToRedoList( EDA_BaseStruct* item );
-    virtual EDA_BaseStruct* GetItemFromUndoList();
-    virtual EDA_BaseStruct* GetItemFromRedoList();
+    virtual void            PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
+    virtual void            PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
+    virtual PICKED_ITEMS_LIST* PopCommandFromUndoList();
+    virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
+    int GetUndoCommandCount( )
+    {
+        return m_UndoList.m_CommandsList.size();
+    }
+    int GetRedoCommandCount( )
+    {
+        return m_RedoList.m_CommandsList.size();
+    }
 
     /* Manipulation des flags */
     void    SetRefreshReq() { m_FlagRefreshReq = 1; }

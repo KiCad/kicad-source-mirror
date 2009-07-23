@@ -298,8 +298,8 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 
     if( GetScreen() )
     {
-        m_HToolBar->EnableTool( ID_MODEDIT_UNDO, GetScreen()->m_UndoList && active );
-        m_HToolBar->EnableTool( ID_MODEDIT_REDO, GetScreen()->m_RedoList && active );
+        m_HToolBar->EnableTool( ID_MODEDIT_UNDO, GetScreen()->GetUndoCommandCount( )>0 && active );
+        m_HToolBar->EnableTool( ID_MODEDIT_REDO, GetScreen()->GetRedoCommandCount( )>0 && active );
     }
 
     if( frame->GetBoard()->m_Modules )

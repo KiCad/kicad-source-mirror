@@ -19,22 +19,32 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 {
     EDA_BaseStruct* item;
     MODULE*         CopyItem;
+    PICKED_ITEMS_LIST* lastcmd;
 
     CopyItem = new MODULE( GetBoard() );
     CopyItem->Copy( (MODULE*) ItemToCopy );
     CopyItem->SetParent( GetBoard() );
 
-    GetScreen()->AddItemToUndoList( (EDA_BaseStruct*) CopyItem );
+    lastcmd = new PICKED_ITEMS_LIST();
+    ITEM_PICKER wrapper(CopyItem);
+    lastcmd->PushItem(wrapper);
+
+    GetScreen()->PushCommandToUndoList( lastcmd );
     /* Clear current flags (which can be temporary set by a current edit command) */
     for( item = CopyItem->m_Drawings; item != NULL; item = item->Next() )
         item->m_Flags = 0;
 
     /* Clear redo list, because after new save there is no redo to do */
-    while( GetScreen()->m_RedoList )
+    while( (lastcmd = GetScreen()->PopCommandFromRedoList( ) ) != NULL )
     {
-        item = GetScreen()->m_RedoList->Next();
-        delete GetScreen()->m_RedoList;
-        GetScreen()->m_RedoList = item;
+        while ( 1 )
+        {
+            wrapper = lastcmd->PopItem();
+            if ( wrapper.m_Item == NULL )
+                break;      // All items are removed
+            delete wrapper.m_Item;
+        }
+        delete lastcmd;
     }
 }
 
@@ -48,12 +58,19 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
  *  - Get old version of the current edited library component
  */
 {
-    if( GetScreen()->m_RedoList == NULL )
+    if ( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
-    GetScreen()->AddItemToUndoList( GetBoard()->m_Modules.PopFront() );
+    PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
+    ITEM_PICKER wrapper( GetBoard()->m_Modules.PopFront() );
+    lastcmd->PushItem(wrapper);
+    GetScreen()->PushCommandToUndoList( lastcmd );
 
-    GetBoard()->Add( (MODULE*) GetScreen()->GetItemFromRedoList() );
+    lastcmd = GetScreen()->PopCommandFromRedoList( );
+
+    wrapper = lastcmd->PopItem();
+
+    GetBoard()->Add( (MODULE*)  wrapper.m_Item );
 
     SetCurItem( NULL );;
     GetScreen()->SetModify();
@@ -71,19 +88,21 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
  *  - Get old version of the current edited library component
  */
 {
-    if( GetScreen()->m_UndoList == NULL )
+    if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    GetScreen()->AddItemToRedoList( GetBoard()->m_Modules.PopFront() );
+    PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
+    ITEM_PICKER wrapper(GetBoard()->m_Modules.PopFront());
+    lastcmd->PushItem(wrapper);
+    GetScreen()->PushCommandToRedoList( lastcmd );
 
-    MODULE* module = (MODULE*) GetScreen()->GetItemFromUndoList();
-    if( module )
-        GetBoard()->Add( module, ADD_APPEND );
+    lastcmd = GetScreen()->PopCommandFromUndoList( );
 
-/*  Add() calls PushBack(), no need for this
-    if( GetBoard()->m_Modules )
-        GetBoard()->m_Modules->SetNext( NULL );
-*/
+    wrapper = lastcmd->PopItem();
+
+    if( wrapper.m_Item )
+        GetBoard()->Add( (MODULE*) wrapper.m_Item, ADD_APPEND );
+
 
     GetScreen()->SetModify();
     SetCurItem( NULL );;

@@ -33,6 +33,7 @@ class LibDrawField;
 class SCH_CMP_FIELD;
 class LibDrawPin;
 class DrawJunctionStruct;
+class PICKED_ITEMS_LIST;
 
 /*******************************/
 /* class WinEDA_SchematicFrame */
@@ -371,7 +372,7 @@ public:
                                        int       flag_type_command = 0 );
 
 private:
-    void           PutDataInPreviousState( DrawPickedStruct* List );
+    void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
     bool           GetSchematicFromRedoList();
     bool           GetSchematicFromUndoList();
 
