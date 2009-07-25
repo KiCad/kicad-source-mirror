@@ -10,7 +10,6 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "block_commande.h"
-#include "class_drawpickedstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -22,10 +21,10 @@
 /* Variables Locales */
 
 /* Fonctions exportees */
+void               DeleteItemsInList( WinEDA_DrawPanel*  panel,
+                                             PICKED_ITEMS_LIST& aItemsList );
 
 /* Fonctions Locales */
-static void               DeleteItemsInList( WinEDA_DrawPanel*  panel,
-                                             PICKED_ITEMS_LIST& aItemsList );
 static void               PlaceItemsInList( SCH_SCREEN* aScreen, PICKED_ITEMS_LIST& aItemsList );
 static void               MoveListOfItems( SCH_SCREEN* aScreen, PICKED_ITEMS_LIST& aItemsList );
 static void               CopyItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList );
@@ -247,7 +246,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_MOVE:    /* Move */
         case BLOCK_COPY:    /* Copy */
-            PickStruct( GetScreen()->m_BlockLocate, GetScreen() );
+            PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
 
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
             if( block->GetCount() )
@@ -268,7 +267,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_DELETE: /* Delete */
-            PickStruct( GetScreen()->m_BlockLocate, GetScreen() );
+            PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             if( block->GetCount() )
             {
@@ -282,7 +281,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_SAVE: /* Save */
-            PickStruct( GetScreen()->m_BlockLocate, GetScreen() );
+            PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             if( block->GetCount() )
             {
@@ -380,7 +379,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
         BreakSegmentOnJunction( GetScreen() );
 
-        PickStruct( GetScreen()->m_BlockLocate, GetScreen() );
+        PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
         if( block->GetCount() )
         {
             ii = 1;
@@ -677,9 +676,6 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& Center )
         MirrorYPoint( DrawSheetLabel->m_Pos, Center );
         break;
 
-    case DRAW_PICK_ITEM_STRUCT_TYPE:
-        break;
-
     default:
         break;
     }
@@ -730,7 +726,6 @@ void CopyItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList )
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
             case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            case DRAW_PICK_ITEM_STRUCT_TYPE:
             case DRAW_MARKER_STRUCT_TYPE:
             case DRAW_NOCONNECT_STRUCT_TYPE:
             default:
@@ -786,25 +781,6 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
         return;
     }
 
-    if( DrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-    {
-        // Unlink all picked structs from current EEDrawList
-
-        for( DrawPickedStruct* cur = (DrawPickedStruct*) DrawStruct;
-            cur;
-            cur = cur->Next() )
-        {
-            SCH_ITEM* item = (SCH_ITEM*) cur->m_PickedStruct;
-            screen->RemoveFromDrawList( item );
-            panel->PostDirtyRect( item->GetBoundingBox() );
-            item->SetNext( 0 );
-            item->SetBack( 0 );
-            item->m_Flags = IS_DELETED;
-        }
-
-        // Removed items are put onto the Undo list
-        frame->SaveCopyInUndoList( DrawStruct, IS_DELETED );
-    }
     else    /* structure classique */
     {
         screen->RemoveFromDrawList( DrawStruct );
@@ -1065,9 +1041,6 @@ void MoveOneStruct( SCH_ITEM* DrawStruct, const wxPoint& move_vector )
         DrawSheetLabel->m_Pos += move_vector;
         break;
 
-    case DRAW_PICK_ITEM_STRUCT_TYPE:
-        break;
-
     default:
         break;
     }
@@ -1139,27 +1112,6 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
     case DRAW_SHEET_STRUCT_TYPE:
         NewDrawStruct = ( (DrawSheetStruct*) DrawStruct )->GenCopy();
         break;
-
-    case DRAW_PICK_ITEM_STRUCT_TYPE:
-    {
-        DrawPickedStruct* NewPickedItem, * PickedList = NULL,
-        * LastPickedItem = NULL;
-        PickedList = (DrawPickedStruct*) DrawStruct;
-        while( PickedList )
-        {
-            NewPickedItem = new DrawPickedStruct();
-            if( NewDrawStruct == NULL )
-                NewDrawStruct = (SCH_ITEM*) NewPickedItem;
-            if( LastPickedItem )
-                LastPickedItem->SetNext( NewPickedItem );
-            LastPickedItem = NewPickedItem;
-            NewPickedItem->m_PickedStruct =
-                DuplicateStruct( (SCH_ITEM*) PickedList->m_PickedStruct );
-            PickedList = PickedList->Next();
-        }
-
-        break;
-    }
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     case DRAW_PART_TEXT_STRUCT_TYPE:
@@ -1417,15 +1369,8 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             break;
 
         case TYPE_SCH_COMPONENT:
-            break;
-
         case DRAW_SHEET_STRUCT_TYPE:
-            break;
-
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            break;
-
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
             break;
 
         case DRAW_MARKER_STRUCT_TYPE:

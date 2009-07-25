@@ -109,10 +109,10 @@ LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
 SCH_COMPONENT * LocateSmallestComponent( SCH_SCREEN * Screen );
 /* Recherche du plus petit (en surface) composant pointe par la souris */
 
-int PickStruct(BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
-SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMask);
-/* 2 functions PickStruct:
-    Search in  block, or Search at location pos
+int PickItemsInBlock(BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
+
+/* function PickStruct:
+    Search at location pos
 
     SearchMask = (bitwise OR):
     LIBITEM
@@ -145,6 +145,7 @@ SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMas
         Positon search:
             pointeur sur la structure.
         Si pas de structures selectionnees: retourne NULL */
+SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMask);
 
 
 
@@ -325,11 +326,14 @@ void SchematicCleanUp(SCH_SCREEN * screen, wxDC * DC);
 void BreakSegmentOnJunction( SCH_SCREEN * Screen );
     /* Routine creant des debuts / fin de segment (BUS ou WIRES) sur les jonctions
         et les raccords */
-DrawPickedStruct * BreakSegment(SCH_SCREEN * screen, wxPoint breakpoint,
-            bool PutInUndoList = FALSE);
-    /* Coupe un segment ( BUS, WIRE ) en 2 au point breakpoint,
-        - si ce point est sur le segment
-        - extremites non comprises */
+
+/* Break a segment ( BUS, WIRE ) int 2 segments at location aBreakpoint,
+ * if aBreakpoint in on segment segment
+ * ( excluding ends)
+ * fill aPicklist with modified items if non null
+ */
+void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
+            PICKED_ITEMS_LIST * aPicklist = NULL);
 
     /**************/
     /* EECLASS.CPP */

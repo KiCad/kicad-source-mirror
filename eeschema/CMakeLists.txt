@@ -27,7 +27,7 @@ set(EESCHEMA_SRCS
     class_pin.cpp
     class_sch_cmp_field.cpp
     class_schematic_items.cpp
-    class_screen.cpp
+    class_sch_screen.cpp
     class_text-label.cpp
     classes_body_items.cpp
     cleanup.cpp

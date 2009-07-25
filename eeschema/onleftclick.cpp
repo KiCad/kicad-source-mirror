@@ -55,7 +55,6 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 return;
 
             case SCREEN_STRUCT_TYPE:
-            case DRAW_PICK_ITEM_STRUCT_TYPE:
                 DisplayError( this,
                              wxT( "OnLeftClick err: unexpected type for Place" ) );
                 DrawStruct->m_Flags = 0;

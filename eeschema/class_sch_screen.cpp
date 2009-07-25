@@ -32,7 +32,6 @@ void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
         break;
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-    case DRAW_PICK_ITEM_STRUCT_TYPE:
         break;
 
     default:

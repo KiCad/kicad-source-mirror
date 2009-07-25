@@ -300,7 +300,7 @@ private:
     void                           BeginSegment( wxDC* DC, int type );
     void                           EndSegment( wxDC* DC );
     void                           DeleteCurrentSegment( wxDC* DC );
-    void                           DeleteConnection( wxDC* DC, bool DeleteFullConnection );
+    void                           DeleteConnection( bool DeleteFullConnection );
 
     // graphic lines
     void                           Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );

@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
-#include "class_drawpickedstruct.h"
 
 #include "program.h"
 #include "libcmp.h"
@@ -173,8 +172,8 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 
 
 /***********************************************************************/
-void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
-                                                int       flag_type_command )
+void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
+                                                int       aCommandType )
 /***********************************************************************/
 
 /** function SaveCopyInUndoList
@@ -201,110 +200,33 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
     SCH_ITEM*          CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
-    commandToUndo->m_UndoRedoType = flag_type_command;
-    ITEM_PICKER        itemWrapper( ItemToCopy, flag_type_command );
+    commandToUndo->m_UndoRedoType = aCommandType;
+    ITEM_PICKER        itemWrapper( aItemToCopy, aCommandType );
 
-    if( ItemToCopy )
+    switch( aCommandType )
     {
-        switch( flag_type_command )
-        {
-        case IS_CHANGED:        /* Create a copy of schematic */
-            if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-            {
-                DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
-                while( PickedList )
-                {
-                    CopyOfItem = DuplicateStruct( (SCH_ITEM*) PickedList->m_PickedStruct );
-                    CopyOfItem->m_Flags = flag_type_command;
-                    itemWrapper.m_Item  = CopyOfItem;
-                    itemWrapper.m_Link  = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    commandToUndo->PushItem( itemWrapper );
-                    PickedList = PickedList->Next();
-                }
-            }
-            else
-            {
-                CopyOfItem = DuplicateStruct( ItemToCopy );
-                itemWrapper.m_Item = CopyOfItem;
-                itemWrapper.m_Link = ItemToCopy;
-                commandToUndo->PushItem( itemWrapper );
-            }
-            break;
-
-        case IS_NEW:
-            if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-            {
-                DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
-                while( PickedList )
-                {
-                    CopyOfItem = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    PickedList->m_PickedStruct = NULL;
-                    PickedList->m_Flags = flag_type_command;
-                    PickedList = PickedList->Next();
-                    itemWrapper.m_Item = CopyOfItem;
-                    commandToUndo->PushItem( itemWrapper );
-                }
-            }
-            else
-            {
-                commandToUndo->PushItem( itemWrapper );
-            }
-            break;
-
-        case IS_NEW | IS_CHANGED:   // when more than one item, some are new, some are changed
-            if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-            {
-                DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
-                while( PickedList )
-                {
-                    CopyOfItem = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    PickedList->m_PickedStruct = NULL;
-                    PickedList = PickedList->Next();
-                    itemWrapper.m_Item = CopyOfItem;
-                    itemWrapper.m_UndoRedoStatus = PickedList->m_Flags;
-                    commandToUndo->PushItem( itemWrapper );
-                }
-            }
-            else
-            {
-                commandToUndo->PushItem( itemWrapper );
-            }
-            break;
-
-        case IS_WIRE_IMAGE:
-            commandToUndo->PushItem( itemWrapper );
-            break;
-
-        case IS_DELETED:
-            ItemToCopy->m_Flags = flag_type_command;
-            if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-            {
-                DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
-                while( PickedList )
-                {
-                    CopyOfItem = (SCH_ITEM*) PickedList->m_PickedStruct;
-                    CopyOfItem->m_Flags = flag_type_command;
-                    PickedList->m_Flags = flag_type_command;
-                    PickedList = PickedList->Next();
-                    itemWrapper.m_Item = CopyOfItem;
-                    commandToUndo->PushItem( itemWrapper );
-                }
-            }
-            else
-            {
-                commandToUndo->PushItem( itemWrapper );
-            }
-            break;
-
-        default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), flag_type_command );
-            DisplayError( this, msg );
-        }
+    case IS_CHANGED:            /* Create a copy of schematic */
+        CopyOfItem = DuplicateStruct( aItemToCopy );
+        itemWrapper.m_Item = CopyOfItem;
+        itemWrapper.m_Link = aItemToCopy;
+        commandToUndo->PushItem( itemWrapper );
         break;
-        }
+
+    case IS_NEW:
+    case IS_WIRE_IMAGE:
+    case IS_DELETED:
+        commandToUndo->PushItem( itemWrapper );
+        break;
+
+    default:
+    {
+        wxString msg;
+        msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), aCommandType );
+        DisplayError( this, msg );
     }
+    break;
+    }
+
     /* Save the copy in undo list */
     GetScreen()->PushCommandToUndoList( commandToUndo );
 
@@ -418,7 +340,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     {
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
         item = (SCH_ITEM*) itemWrapper.m_Item;
-        wxASSERT ( item  );
+        wxASSERT( item  );
         SCH_ITEM*   image = (SCH_ITEM*) itemWrapper.m_Link;
         switch( itemWrapper.m_UndoRedoStatus )
         {

@@ -11,7 +11,6 @@
 #include "general.h"
 #include "trigo.h"
 #include "macros.h"
-#include "class_drawpickedstruct.h"
 #include "class_marker_sch.h"
 
 #include "protos.h"
@@ -118,9 +117,6 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
 }
 
 
-/***********************************************************************/
-int PickStruct( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
-/************************************************************************/
 
 /** Function PickStruct
  * Search items in a block
@@ -128,6 +124,7 @@ int PickStruct( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
  * @param aBlock a BLOCK_SELECTOR that gives the search area boundary
  * list of items is stored in aBlock
  */
+int PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
 {
     int x, y, OrigX, OrigY;
     int itemcount = 0;
@@ -355,13 +352,10 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             }
             break;
 
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
-            break;
-
         default:
         {
             wxString msg;
-            msg.Printf( wxT( "SnapPoint2() error: unexpected strct type %d (" ), DrawList->Type() );
+            msg.Printf( wxT( "SnapPoint2() error: unexpected struct type %d (" ), DrawList->Type() );
             msg << DrawList->GetClass() << wxT( ")" );
             DisplayError( NULL, msg );
             break;
@@ -538,9 +532,6 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
         break;
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-        break;
-
-    case DRAW_PICK_ITEM_STRUCT_TYPE:
         break;
 
     default:

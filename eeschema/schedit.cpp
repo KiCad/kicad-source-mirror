@@ -9,7 +9,6 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
-#include "class_drawpickedstruct.h"
 #include "class_marker_sch.h"
 
 #include "program.h"
@@ -329,20 +328,20 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
         DrawPanel->MouseToCursorSchema();
-        DeleteConnection( &dc,
-                          id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
+        DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
         screen->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
         TestDanglingEnds( screen->EEDrawList, &dc );
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_SCH_BREAK_WIRE:
     {
-        DrawPickedStruct* ListForUndo;
         DrawPanel->MouseToCursorSchema();
-        ListForUndo = BreakSegment( screen, screen->m_Curseur, TRUE );
-        if( ListForUndo )
-            SaveCopyInUndoList( (SCH_ITEM*) ListForUndo, IS_NEW | IS_CHANGED );
+        PICKED_ITEMS_LIST picklistForUndo;
+        BreakSegment( screen, screen->m_Curseur, &picklistForUndo );
+        if( picklistForUndo.GetCount() )
+            SaveCopyInUndoList( picklistForUndo, IS_NEW | IS_CHANGED );
         TestDanglingEnds( screen->EEDrawList, &dc );
     }
         break;

@@ -7,7 +7,6 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "class_drawpickedstruct.h"
 #include "appl_wxstruct.h"
 
 #include "program.h"
@@ -127,32 +126,18 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref,
 * If the list is of DrawPickStruct types then the picked item are drawn.	 *
 *****************************************************************************/
 void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
-                       SCH_ITEM* Structs, int DrawMode, int Color )
+                       SCH_ITEM* Structlist, int DrawMode, int Color )
 {
-    while( Structs )
+    while( Structlist )
     {
-        if( Structs->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
+        if( !(Structlist->m_Flags & IS_MOVED) )
         {
-            SCH_ITEM* item =
-                (SCH_ITEM*) ( (DrawPickedStruct*) Structs )->m_PickedStruct;
-
 // uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
-            //   if( panel->m_ClipBox.Intersects( item->GetBoundingBox() ) )
-            {
-                RedrawOneStruct( panel, DC, item, DrawMode, Color );
-            }
-        }
-        else
-        {
-            if( !(Structs->m_Flags & IS_MOVED) )
-            {
-// uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
-                //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox() ) )
-                RedrawOneStruct( panel, DC, Structs, DrawMode, Color );
-            }
+            //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox() ) )
+            RedrawOneStruct( panel, DC, Structlist, DrawMode, Color );
         }
 
-        Structs = Structs->Next();
+        Structlist = Structlist->Next();
     }
 }
 

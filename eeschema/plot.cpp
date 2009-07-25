@@ -750,9 +750,6 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
             PlotLibPart( plotter, DrawLibItem );
             break;
 
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
-            break;
-
         case DRAW_POLYLINE_STRUCT_TYPE:
             break;
 

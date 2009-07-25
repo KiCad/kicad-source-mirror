@@ -7,7 +7,6 @@
 #include "common.h"
 #include "trigo.h"
 #include "confirm.h"
-#include "class_drawpickedstruct.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -115,7 +114,6 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
         case TYPE_SCH_COMPONENT:
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
         case DRAW_POLYLINE_STRUCT_TYPE:
         case DRAW_MARKER_STRUCT_TYPE:
         case TYPE_SCH_TEXT:
@@ -131,78 +129,48 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
 }
 
 
-/*********************************************************/
-DrawPickedStruct* BreakSegment( SCH_SCREEN* screen,
-                                wxPoint breakpoint, bool PutInUndoList )
-/*********************************************************/
-
-/* Coupe un segment ( BUS, WIRE ) en 2 au point breakpoint,
- *  - si ce point est sur le segment
- *  - extremites non comprises
- *  If PutInUndoList == TRUE, create a list of modifictions, for undo command
+/* Break a segment ( BUS, WIRE ) int 2 segments at location aBreakpoint,
+ * if aBreakpoint in on segment segment
+ * ( excluding ends)
+ * fill aPicklist with modified items if non null
  */
+void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
+            PICKED_ITEMS_LIST * aPicklist)
 {
-    EDA_BaseStruct* DrawList;
     EDA_DrawLineStruct* segment, * NewSegment;
-    DrawPickedStruct* List = NULL;
-
-    DrawList = screen->EEDrawList;
-    while( DrawList )
+    for( SCH_ITEM* DrawList = aScreen->EEDrawList;DrawList; DrawList = DrawList->Next() )
     {
-        switch( DrawList->Type() )
+    if( DrawList->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+        continue;
+
+        segment = (EDA_DrawLineStruct*) DrawList;
+
+        if( !TestSegmentHit( aBreakpoint, segment->m_Start, segment->m_End, 0 ) )
+            continue;
+
+        /* Segment connecte: doit etre coupe en 2 si px,py n'est
+         *  pas une extremite */
+        if( (segment->m_Start == aBreakpoint) || (segment->m_End == aBreakpoint ) )
+            continue;
+        /* Ici il faut couper le segment en 2 */
+        if( aPicklist )         // First: put copy of the old segment in undo list
         {
-        case DRAW_SEGMENT_STRUCT_TYPE:
-            segment = (EDA_DrawLineStruct*) DrawList;
-
-            if( !TestSegmentHit( breakpoint, segment->m_Start, segment->m_End, 0 ) )
-                break;
-
-            /* Segment connecte: doit etre coupe en 2 si px,py n'est
-             *  pas une extremite */
-            if( (segment->m_Start == breakpoint) || (segment->m_End == breakpoint ) )
-                break;
-            /* Ici il faut couper le segment en 2 */
-            if( PutInUndoList )         // First: put copy of the old segment in undo list
-            {
-                DrawPickedStruct* wrapper = new DrawPickedStruct();
-
-                wrapper->m_Flags = IS_CHANGED;
-                wrapper->m_PickedStruct = segment->GenCopy();
-                wrapper->m_Image = segment;
-                wrapper->m_PickedStruct->m_Image = segment;
-                wrapper->SetNext( List );
-                List = wrapper;
-            }
-            NewSegment = segment->GenCopy();
-            NewSegment->m_Start = breakpoint;
-            segment->m_End = NewSegment->m_Start;
-            NewSegment->SetNext( segment->Next() );
-            segment->SetNext( NewSegment );
-            DrawList = NewSegment;
-            if( PutInUndoList )
-            {
-                DrawPickedStruct* wrapper = new DrawPickedStruct();
-
-                wrapper->m_Flags = IS_NEW;
-                wrapper->m_Image = NewSegment;
-                wrapper->SetNext( List );
-                List = wrapper;
-            }
-            break;
-
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case DRAW_BUSENTRY_STRUCT_TYPE:
-        case DRAW_POLYLINE_STRUCT_TYPE:
-            break;
-
-        default:
-            break;
+            ITEM_PICKER picker((SCH_ITEM*) segment->GenCopy(), IS_CHANGED);
+            picker.m_Link = segment;
+            aPicklist->PushItem(picker);
         }
-
-        DrawList = DrawList->Next();
+        NewSegment = segment->GenCopy();
+        NewSegment->m_Start = aBreakpoint;
+        segment->m_End = NewSegment->m_Start;
+        NewSegment->SetNext( segment->Next() );
+        segment->SetNext( NewSegment );
+        DrawList = NewSegment;
+        if( aPicklist )
+        {
+            ITEM_PICKER picker(NewSegment, IS_NEW);
+            aPicklist->PushItem(picker);
+        }
     }
-
-    return List;
 }
 
 

@@ -533,7 +533,6 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
 
             break;
 
-        case DRAW_PICK_ITEM_STRUCT_TYPE:
         case DRAW_POLYLINE_STRUCT_TYPE:
         case DRAW_BUSENTRY_STRUCT_TYPE:
         case DRAW_MARKER_STRUCT_TYPE:
