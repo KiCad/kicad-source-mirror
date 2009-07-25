@@ -108,11 +108,11 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
         /* ne devrait pas etre execute, sauf bug */
-        if( GetScreen()->BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
-            GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-            GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-            GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+            GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+            GetScreen()->m_BlockLocate.ClearItemsList();
         }
         if( m_ID_current_state == 0 )
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
@@ -250,34 +250,34 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
         DrawPanel->m_AutoPAN_Request = FALSE;
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_COPY;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         DrawPanel->m_AutoPAN_Request = FALSE;
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_ZOOM;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_MIRROR_X;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_X;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 

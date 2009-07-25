@@ -18,11 +18,10 @@
 
 /* Routines Locales */
 static SCH_ITEM* LastSnappedStruct = NULL;
-static int       PickedBoxMinX, PickedBoxMinY, PickedBoxMaxX, PickedBoxMaxY;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
 static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
-                        SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, double aScaleFactor );
+                        SCH_ITEM* DrawList, double aScaleFactor );
 
 
 /*********************************************************************/
@@ -43,10 +42,10 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
     while( DrawList )
     {
         if( ( SnapPoint2( Screen->m_MousePosition, LIBITEM,
-                         DrawList, NULL, Screen->GetZoom() ) ) == FALSE )
+                         DrawList, Screen->GetZoom() ) ) == FALSE )
         {
             if( ( SnapPoint2( Screen->m_Curseur, LIBITEM,
-                             DrawList, NULL, Screen->GetScalingFactor() ) ) == FALSE )
+                             DrawList, Screen->GetScalingFactor() ) ) == FALSE )
                 break;
         }
         component = (SCH_COMPONENT*) LastSnappedStruct;
@@ -111,7 +110,7 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
         return NULL;
 
     if( ( Snapped = SnapPoint2( refpos, SearchMask,
-                               screen->EEDrawList, NULL, screen->GetScalingFactor() ) ) != FALSE )
+                               screen->EEDrawList, screen->GetScalingFactor() ) ) != FALSE )
     {
         return LastSnappedStruct;
     }
@@ -120,62 +119,45 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
 
 
 /***********************************************************************/
-SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
+int PickStruct( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
 /************************************************************************/
 
-/* Search items in block
- *      Return:
- *          pointeur sur liste de pointeurs de structures si Plusieurs
- *                  structures selectionnees.
- *          pointeur sur la structure si 1 seule
- *
+/** Function PickStruct
+ * Search items in a block
+ * @return items count
+ * @param aBlock a BLOCK_SELECTOR that gives the search area boundary
+ * list of items is stored in aBlock
  */
 {
     int x, y, OrigX, OrigY;
-    DrawPickedStruct* PickedList = NULL, * PickedItem;
-    SCH_ITEM*         DrawStruct;
+    int itemcount = 0;
 
-    OrigX = block.GetX();
-    OrigY = block.GetY();
-    x     = block.GetRight();
-    y     = block.GetBottom();
+    if( aScreen == NULL )
+        return itemcount;
+
+    OrigX = aBlock.GetX();
+    OrigY = aBlock.GetY();
+    x     = aBlock.GetRight();
+    y     = aBlock.GetBottom();
 
     if( x < OrigX )
         EXCHG( x, OrigX );
     if( y < OrigY )
         EXCHG( y, OrigY );
 
-    SCH_ITEM* DrawList = screen->EEDrawList;
-    if( screen==NULL || DrawList == NULL )
-        return NULL;
-
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+    ITEM_PICKER picker;
+    SCH_ITEM* DrawStruct = aScreen->EEDrawList;
+    for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
         {
             /* Put this structure in the picked list: */
-            PickedItem = new DrawPickedStruct( DrawStruct );
-
-            PickedItem->SetNext( PickedList );
-            PickedList = PickedItem;
+            picker.m_Item = DrawStruct;
+            aBlock.PushItem(picker);
+            itemcount++;
         }
     }
-
-    if( PickedList && PickedList->Next() == NULL )
-    {
-        /* Only one item was picked - convert to scalar form (no list): */
-        PickedItem = PickedList;
-        PickedList = (DrawPickedStruct*) PickedList->m_PickedStruct;
-        SAFE_DELETE( PickedItem );
-    }
-
-    if( PickedList != NULL )
-    {
-        PickedBoxMinX = OrigX;  PickedBoxMinY = OrigY;
-        PickedBoxMaxX = x; PickedBoxMaxY = y;
-    }
-
-    return (SCH_ITEM*) PickedList;
+    return itemcount;
 }
 
 
@@ -185,26 +167,13 @@ SCH_ITEM* PickStruct( EDA_Rect& block, BASE_SCREEN* screen, int SearchMask )
 * Note we use L1 norm as distance measure, as it is the fastest.			 *
 * This routine updates LastSnappedStruct to the last object used in to snap  *
 * a point. This variable is global to this module only (see above).			 *
-* If DontSnapList is not NULL, structes in this list are skipped.			 *
 * The routine returns TRUE if point was snapped.							 *
 *****************************************************************************/
 bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
-                 SCH_ITEM* DrawList, DrawPickedStruct* DontSnapList, double aScaleFactor )
+                 SCH_ITEM* DrawList, double aScaleFactor )
 {
-    DrawPickedStruct* DontSnap;
-
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
-        /* Make sure this structure is NOT in the dont snap list: */
-        DontSnap = DontSnapList;
-        for( ; DontSnap != NULL; DontSnap = DontSnap->Next() )
-            if( DontSnap->m_PickedStruct == DrawList )
-                break;
-
-        if( DontSnap )
-            if( DontSnap->m_PickedStruct == DrawList )
-                continue;
-
         int hitminDist = MAX( g_DrawDefaultLineThickness, 3 ) ;
         switch( DrawList->Type() )
         {

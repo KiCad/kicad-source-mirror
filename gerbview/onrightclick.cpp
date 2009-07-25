@@ -22,7 +22,7 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
 {
     BOARD_ITEM*     DrawStruct = GetScreen()->GetCurItem();
     wxString        msg;
-    bool            BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool            BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
 

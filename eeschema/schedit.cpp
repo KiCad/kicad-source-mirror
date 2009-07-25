@@ -127,7 +127,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( screen->BlockLocate.m_Command != BLOCK_IDLE )
+        if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
                                                 DrawPanel->
                                                 m_PanelDefaultCursor ) );
@@ -137,11 +137,11 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
         /* ne devrait pas etre execute, sauf bug: */
-        if( screen->BlockLocate.m_Command != BLOCK_IDLE )
+        if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
-            screen->BlockLocate.m_Command = BLOCK_IDLE;
-            screen->BlockLocate.m_State   = STATE_NO_BLOCK;
-            screen->BlockLocate.m_BlockDrawStruct = NULL;
+            screen->m_BlockLocate.m_Command = BLOCK_IDLE;
+            screen->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+            screen->m_BlockLocate.ClearItemsList();
         }
         break;
 
@@ -174,7 +174,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_CUT:
-        if( screen->BlockLocate.m_Command != BLOCK_MOVE )
+        if( screen->m_BlockLocate.m_Command != BLOCK_MOVE )
             break;
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
         g_ItemToRepeat = NULL;
@@ -389,7 +389,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_EDIT_SHEET:
         EditSheet( (DrawSheetStruct*) screen->GetCurItem(), &dc );
         break;
-    
+
     case ID_POPUP_IMPORT_GLABEL:
         if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
             GetScreen()->SetCurItem( Import_PinSheet( (DrawSheetStruct*)screen->GetCurItem(), &dc ) );
@@ -426,7 +426,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             // The easiest way to handle a drag component is simulate a
             // block drag command
-            if( screen->BlockLocate.m_State == STATE_NO_BLOCK )
+            if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
             {
                 if( !HandleBlockBegin( &dc, BLOCK_DRAG,
                                        screen->m_Curseur ) )

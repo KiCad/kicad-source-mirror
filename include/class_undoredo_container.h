@@ -88,9 +88,18 @@ public:
     ~PICKED_ITEMS_LIST();
     void           PushItem( ITEM_PICKER& aItem );
     ITEM_PICKER PopItem();
+
+    /** Function ClearItemsList
+     * delete only the list of EDA_BaseStruct * pointers, NOT the pointed data itself
+     */
     void           ClearItemsList();
 
-    unsigned        GetCount()
+    /** Function ClearListAndDeleteItems
+     * delete only the list of EDA_BaseStruct * pointers, AND the data pinted by m_Item
+     */
+    void           ClearListAndDeleteItems();
+
+    unsigned        GetCount() const
     {
         return m_ItemsList.size();
     }
@@ -105,6 +114,12 @@ public:
     bool            SetLink( EDA_BaseStruct* aItem, unsigned aIdx );
     bool            SetItemStatus( int aStatus, unsigned aIdx );
     bool            RemoveItem( unsigned aIdx );
+
+    /** Function CopyList
+     * copy all data from aSource
+     * Items picked are not copied. just pointer on them are copied
+     */
+    void CopyList(const PICKED_ITEMS_LIST & aSource);
 };
 
 /**

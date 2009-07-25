@@ -1,9 +1,8 @@
-/********************************************/
-/*  library editor: undo and redo functions */
-/********************************************/
+/*************************************************************/
+/*  eeschema: undo and redo functions for schemùatic editor  */
+/*************************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
 #include "class_drawpickedstruct.h"
@@ -11,18 +10,20 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "id.h"
 #include "protos.h"
 #include "class_marker_sch.h"
 
 /* Functions to undo and redo edit commands.
- *  commmands to undo are in CurrentScreen->m_UndoList
- *  commmands to redo are in CurrentScreen->m_RedoList
+ *  commmands to undo are stored in CurrentScreen->m_UndoList
+ *  commmands to redo are stored in CurrentScreen->m_RedoList
  *
- *  m_UndoList and m_RedoList are a linked list of DrawPickedStruct.
- *  each DrawPickedStruct has its .m_Son member pointing to an item to undo or redo,
- *  or to a list of DrawPickedStruct which points (.m_PickedStruct membre)
- *  the items to undo or redo
+ *  m_UndoList and m_RedoList handle a std::vector of PICKED_ITEMS_LIST
+ *  Each PICKED_ITEMS_LIST handle a std::vector of pickers (class ITEM_PICKER),
+ *  that store the list of schematic items that are concerned by the command to undo or redo
+ *  and is created for each command to undo (handle also a command to redo).
+ *  each picker has a pointer pointing to an item to undo or redo (in fact: deleted, added or modified),
+ * and has a pointer to a copy of this item, when this item has been modified
+ * (the old values of parameters are therefore saved)
  *
  *  there are 3 cases:
  *  - delete item(s) command
@@ -31,45 +32,45 @@
  *
  *  Undo command
  *  - delete item(s) command:
- *  deleted items are moved in undo list
+ *       =>  deleted items are moved in undo list
  *
  *  - change item(s) command
- *  A copy of item(s) is made (a DrawPickedStruct list of wrappers)
- *  the .m_Image member of each wrapper points the modified item.
+ *      => A copy of item(s) is made (a DrawPickedStruct list of wrappers)
+ *      the .m_Link member of each wrapper points the modified item.
+ *      the .m_Item member of each wrapper points the old copy of this item.
  *
  *  - add item(s) command
- *  A list of item(s) is made
- *  the .m_Image member of each wrapper points the new item.
+ *      =>A list of item(s) is made. The .m_Item member of each wrapper points the new item.
  *
  *  Redo command
  *  - delete item(s) old command:
- *  deleted items are moved in EEDrawList list
+ *      => deleted items are moved in EEDrawList list, and in
  *
  *  - change item(s) command
- *  the copy of item(s) is moved in Undo list
+ *      => the copy of item(s) is moved in Undo list
  *
  *  - add item(s) command
- *  The list of item(s) is used to create a deleted list in undo list
- *  (same as a delete command)
+ *      => The list of item(s) is used to create a deleted list in undo list(same as a delete command)
  *
  *  A problem is the hierarchical sheet handling.
  *  the data associated (subhierarchy, uno/redo list) is deleted only
  *  when the sheet is really deleted (i.e. when deleted from undo or redo list)
- *  and not when it is a copy.
+ *  This is handled by its destructor.
  */
 
 
-/************************************/
+/**************************************************************/
 void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
-/************************************/
+/***************************************************************/
 
 /* Used if undo / redo command:
  *  swap data between Item and its copy, pointed by its .m_Image member
+ * swapped data is data modified by edition, so not all values are swapped
  */
 {
     if( aItem == NULL || aImage == NULL )
     {
-        wxMessageBox(wxT("SwapData error: NULL pointer"));
+        wxMessageBox( wxT( "SwapData error: NULL pointer" ) );
         return;
     }
 
@@ -176,19 +177,15 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
                                                 int       flag_type_command )
 /***********************************************************************/
 
-/* Create a copy of the current schematic draw list, and put it in the undo list.
- *  A DrawPickedStruct wrapper is created to handle the draw list.
- *  the .m_Son of this wrapper points the list of items
+/** function SaveCopyInUndoList
+ * Create a copy of the current schematic item, and put it in the undo list.
  *
  *  flag_type_command =
- *      0 (unspecified)
  *      IS_CHANGED
  *      IS_NEW
  *      IS_DELETED
  *      IS_WIRE_IMAGE
  *
- *  for 0: only a wrapper is created. The used must init the .Flags member of the
- *  wrapper, and add the item list to the wrapper
  *  If it is a delete command, items are put on list with the .Flags member set to IS_DELETED.
  *  When it will be really deleted, the EEDrawList and the subhierarchy will be deleted.
  *  If it is only a copy, the EEDrawList and the subhierarchy must NOT be deleted.
@@ -205,33 +202,30 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_UndoRedoType = flag_type_command;
-    ITEM_PICKER     itemWrapper( ItemToCopy, flag_type_command );
+    ITEM_PICKER        itemWrapper( ItemToCopy, flag_type_command );
 
     if( ItemToCopy )
     {
         switch( flag_type_command )
         {
-        case 0:
-            break;
-
         case IS_CHANGED:        /* Create a copy of schematic */
             if( ItemToCopy->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
             {
                 DrawPickedStruct* PickedList = (DrawPickedStruct*) ItemToCopy;
                 while( PickedList )
                 {
-                    CopyOfItem = DuplicateStruct( (SCH_ITEM*) PickedList->m_PickedStruct);
+                    CopyOfItem = DuplicateStruct( (SCH_ITEM*) PickedList->m_PickedStruct );
                     CopyOfItem->m_Flags = flag_type_command;
                     itemWrapper.m_Item  = CopyOfItem;
-                    itemWrapper.m_Link = (SCH_ITEM*) PickedList->m_PickedStruct;
+                    itemWrapper.m_Link  = (SCH_ITEM*) PickedList->m_PickedStruct;
                     commandToUndo->PushItem( itemWrapper );
                     PickedList = PickedList->Next();
-               }
+                }
             }
             else
             {
-                CopyOfItem = DuplicateStruct(ItemToCopy);
-                itemWrapper.m_Item  = CopyOfItem;
+                CopyOfItem = DuplicateStruct( ItemToCopy );
+                itemWrapper.m_Item = CopyOfItem;
                 itemWrapper.m_Link = ItemToCopy;
                 commandToUndo->PushItem( itemWrapper );
             }
@@ -305,12 +299,71 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
         default:
         {
             wxString msg;
-            msg.Printf(wxT( "SaveCopyInUndoList() error (unknown code %X)" ), flag_type_command);
-            DisplayError( this,  msg);
+            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), flag_type_command );
+            DisplayError( this, msg );
         }
-            break;
+        break;
         }
     }
+    /* Save the copy in undo list */
+    GetScreen()->PushCommandToUndoList( commandToUndo );
+
+    /* Clear redo list, because after new save there is no redo to do */
+    GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
+}
+
+
+/** function SaveCopyInUndoList
+ * @param aItemsList = a PICKED_ITEMS_LIST of items to save
+ * @param aTypeCommand = type of comand ( IS_CHANGED, IS_NEW, IS_DELETED ...
+ */
+void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, int aTypeCommand )
+{
+    SCH_ITEM*          CopyOfItem;
+    PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
+
+    commandToUndo->m_UndoRedoType = aTypeCommand;
+    ITEM_PICKER        itemWrapper;
+
+    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    {
+        SCH_ITEM* ItemToCopy = (SCH_ITEM*) aItemsList.GetItemData( ii );
+        int       command    = aItemsList.GetItemStatus( ii );
+        if( command == 0 )
+        {
+            command = aTypeCommand;
+        }
+        itemWrapper.m_Item = ItemToCopy;
+        itemWrapper.m_UndoRedoStatus = command;
+        switch( command )
+        {
+        case IS_CHANGED:        /* Create a copy of schematic */
+            CopyOfItem = DuplicateStruct( ItemToCopy );
+            itemWrapper.m_Item = CopyOfItem;
+            itemWrapper.m_Link = ItemToCopy;
+            commandToUndo->PushItem( itemWrapper );
+            break;
+
+        case IS_NEW:
+        case IS_NEW | IS_CHANGED:   // when more than one item, some are new, some are changed
+            commandToUndo->PushItem( itemWrapper );
+            break;
+
+        case IS_DELETED:
+            ItemToCopy->m_Flags = IS_DELETED;
+            commandToUndo->PushItem( itemWrapper );
+            break;
+
+        default:
+        {
+            wxString msg;
+            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
+            DisplayError( this, msg );
+        }
+        break;
+        }
+    }
+
     /* Save the copy in undo list */
     GetScreen()->PushCommandToUndoList( commandToUndo );
 
@@ -358,14 +411,15 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
  *  Put data pointed by List in the previous state, i.e. the state memorised by List
  */
 {
-    SCH_ITEM*         item;
-    SCH_ITEM*         alt_item;
+    SCH_ITEM* item;
+    SCH_ITEM* alt_item;
 
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
         item = (SCH_ITEM*) itemWrapper.m_Item;
-        SCH_ITEM * image = (SCH_ITEM*) itemWrapper.m_Link;
+        wxASSERT ( item  );
+        SCH_ITEM*   image = (SCH_ITEM*) itemWrapper.m_Link;
         switch( itemWrapper.m_UndoRedoStatus )
         {
         case IS_CHANGED:    /* Exchange old and new data for each item */
@@ -399,15 +453,18 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 item->m_Flags = 0;
                 item = nextitem;
             }
+
             break;
 
         default:
         {
             wxString msg;
-            msg.Printf(wxT( "PutDataInPreviousState() error (unknown code %X)" ), itemWrapper.m_UndoRedoStatus);
-            DisplayError( this,  msg);
+            msg.Printf( wxT(
+                            "PutDataInPreviousState() error (unknown code %X)" ),
+                        itemWrapper.m_UndoRedoStatus );
+            DisplayError( this, msg );
         }
-            break;
+        break;
         }
     }
 }
@@ -458,7 +515,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
  * So this function can be called to remove old commands
  */
 {
-    int             CmdType;
+    int CmdType;
 
     if( aItemCount == 0 )
         return;
@@ -468,17 +525,17 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         icnt = aItemCount;
     for( unsigned ii = 0; ii < icnt; ii++ )
     {
-        if ( aList.m_CommandsList.size() == 0 )
+        if( aList.m_CommandsList.size() == 0 )
             break;
         PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
         aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
         CmdType = curr_cmd->m_UndoRedoType;
 
         // Delete items is they are not flagged IS_NEW
-        while(1)
+        while( 1 )
         {
-            ITEM_PICKER wrapper = curr_cmd->PopItem();
-            EDA_BaseStruct* item = wrapper.m_Item;
+            ITEM_PICKER     wrapper = curr_cmd->PopItem();
+            EDA_BaseStruct* item    = wrapper.m_Item;
             if( item == NULL ) // No more item in list.
                 break;
             if( wrapper.m_UndoRedoStatus == IS_WIRE_IMAGE )
@@ -498,6 +555,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
                 }
             }
         }
+
         delete curr_cmd;    // Delete command
     }
 }

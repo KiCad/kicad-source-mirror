@@ -112,7 +112,7 @@ extern bool           g_LastSearchIsMarker; // True if last seach is a marker se
 // Used for hotkey next search
 
 /* Block operation (copy, paste) */
-extern SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
+extern BLOCK_SELECTOR g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
 extern bool      g_HVLines;

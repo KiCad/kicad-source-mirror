@@ -255,21 +255,21 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 {
     int ItemsCount = 0, MustDoPlace = 0;
 
-    if( GetScreen()->BlockLocate.m_BlockDrawStruct )
+    if( GetScreen()->m_BlockLocate.GetCount() )
     {
-        BlockState state     = GetScreen()->BlockLocate.m_State;
-        CmdBlockType command = GetScreen()->BlockLocate.m_Command;
+        BlockState state     = GetScreen()->m_BlockLocate.m_State;
+        CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
         DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
-        GetScreen()->BlockLocate.m_State   = state;
-        GetScreen()->BlockLocate.m_Command = command;
+        GetScreen()->m_BlockLocate.m_State   = state;
+        GetScreen()->m_BlockLocate.m_Command = command;
         DrawPanel->ManageCurseur = DrawAndSizingBlockOutlines;
         DrawPanel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
-        GetScreen()->m_Curseur.x = GetScreen()->BlockLocate.GetRight();
-        GetScreen()->m_Curseur.y = GetScreen()->BlockLocate.GetBottom();
+        GetScreen()->m_Curseur.x = GetScreen()->m_BlockLocate.GetRight();
+        GetScreen()->m_Curseur.y = GetScreen()->m_BlockLocate.GetBottom();
         DrawPanel->MouseToCursorSchema();
     }
 
-    switch( GetScreen()->BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
         DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
@@ -278,7 +278,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
     case BLOCK_COPY:        /* Copy */
-        ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->BlockLocate );
+        ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->m_BlockLocate );
         if( ItemsCount )
         {
             MustDoPlace = 1;
@@ -288,7 +288,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
                 DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
                 DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
             }
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_MOVE;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -296,11 +296,11 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         MustDoPlace = 1;
         DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-        GetScreen()->BlockLocate.m_State = STATE_BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 
     case BLOCK_DELETE:     /* Delete */
-        ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->BlockLocate );
+        ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->m_BlockLocate );
         if( ItemsCount )
             SaveCopyInUndoList( CurrentLibEntry );
         DeleteMarkedItems( CurrentLibEntry );
@@ -315,14 +315,14 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
 
     case BLOCK_INVERT:
-        ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->BlockLocate );
+        ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->m_BlockLocate );
         if( ItemsCount )
             SaveCopyInUndoList( CurrentLibEntry );
-        MirrorMarkedItems( CurrentLibEntry, GetScreen()->BlockLocate.Centre() );
+        MirrorMarkedItems( CurrentLibEntry, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
-        Window_Zoom( GetScreen()->BlockLocate );
+        Window_Zoom( GetScreen()->m_BlockLocate );
         break;
 
     case BLOCK_ABORT:
@@ -334,13 +334,13 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
     if( MustDoPlace <= 0 )
     {
-        if( GetScreen()->BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
+        if( GetScreen()->m_BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
         {
             ClearMarkItems( CurrentLibEntry );
         }
-        GetScreen()->BlockLocate.m_Flags   = 0;
-        GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-        GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
+        GetScreen()->m_BlockLocate.m_Flags   = 0;
+        GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
@@ -371,9 +371,9 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
         DisplayError( this, wxT( "HandleBlockPLace : ManageCurseur = NULL" ) );
     }
 
-    GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+    GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
-    switch( GetScreen()->BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
         err = TRUE;
@@ -382,25 +382,25 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( CurrentLibEntry );
-        MoveMarkedItems( CurrentLibEntry, GetScreen()->BlockLocate.m_MoveVector );
+        MoveMarkedItems( CurrentLibEntry, GetScreen()->m_BlockLocate.m_MoveVector );
         DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:     /* Copy */
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( CurrentLibEntry );
-        CopyMarkedItems( CurrentLibEntry, GetScreen()->BlockLocate.m_MoveVector );
+        CopyMarkedItems( CurrentLibEntry, GetScreen()->m_BlockLocate.m_MoveVector );
         break;
 
     case BLOCK_PASTE:     /* Paste (recopie du dernier bloc sauve */
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_INVERT:      /* Invert by popup menu, from block move */
         SaveCopyInUndoList( CurrentLibEntry );
-        MirrorMarkedItems( CurrentLibEntry, GetScreen()->BlockLocate.Centre() );
+        MirrorMarkedItems( CurrentLibEntry, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
@@ -417,9 +417,9 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->BlockLocate.m_Flags   = 0;
-    GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-    GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
+    GetScreen()->m_BlockLocate.m_Flags   = 0;
+    GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+    GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
     DrawPanel->Refresh( TRUE );
 
@@ -436,20 +436,17 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
  *  L'ensemble du block suit le curseur
  */
 {
-    DrawBlockStruct* PtBlock;
+    BLOCK_SELECTOR* PtBlock;
     BASE_SCREEN* screen = panel->GetScreen();
     LibEDA_BaseStruct* item;
     wxPoint move_offset;
 
-    PtBlock = &panel->GetScreen()->BlockLocate;
-    GRSetDrawMode( DC, g_XorMode );
+    PtBlock = &screen->m_BlockLocate;
 
     /* Effacement ancien cadre */
     if( erase )
     {
-        PtBlock->Offset( PtBlock->m_MoveVector );
-        PtBlock->Draw( panel, DC );
-        PtBlock->Offset( -PtBlock->m_MoveVector.x, -PtBlock->m_MoveVector.y );
+        PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
         if( CurrentLibEntry )
         {
@@ -474,9 +471,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
     PtBlock->m_MoveVector.y = screen->m_Curseur.y - PtBlock->m_BlockLastCursorPosition.y;
 
     GRSetDrawMode( DC, g_XorMode );
-    PtBlock->Offset( PtBlock->m_MoveVector );
-    PtBlock->Draw( panel, DC );
-    PtBlock->Offset( -PtBlock->m_MoveVector.x, -PtBlock->m_MoveVector.y );
+    PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
 
     if( CurrentLibEntry )

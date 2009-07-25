@@ -20,7 +20,7 @@
 
 static void     DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
-static TRACK*   IsSegmentInBox( DrawBlockStruct& blocklocate, TRACK* PtSegm );
+static TRACK*   IsSegmentInBox( BLOCK_SELECTOR& blocklocate, TRACK* PtSegm );
 
 /* Variables locales :*/
 
@@ -79,9 +79,9 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
         err = TRUE;
         DisplayError( this, wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
     }
-    GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+    GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
-    switch( GetScreen()->BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
         err = TRUE;
@@ -93,14 +93,14 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         Block_Move( DC );
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         Block_Duplicate( DC );
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_PASTE:
@@ -122,13 +122,13 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->BlockLocate.m_Flags   = 0;
-    GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-    GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-    if( GetScreen()->BlockLocate.m_BlockDrawStruct )
+    GetScreen()->m_BlockLocate.m_Flags   = 0;
+    GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+    GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+    if( GetScreen()->m_BlockLocate.GetCount() )
     {
-        DisplayError( this, wxT( "Error in HandleBlockPLace DrawStruct != NULL" ) );
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        DisplayError( this, wxT( "HandleBlockPLace error: some items left" ) );
+        GetScreen()->m_BlockLocate.ClearItemsList();
     }
 
     DisplayToolMsg( wxEmptyString );
@@ -151,7 +151,7 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 
     if( DrawPanel->ManageCurseur )
 
-        switch( GetScreen()->BlockLocate.m_Command )
+        switch( GetScreen()->m_BlockLocate.m_Command )
         {
         case  BLOCK_IDLE:
             DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
@@ -161,7 +161,7 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_MOVE:            /* Move */
         case BLOCK_COPY:            /* Copy */
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_MOVE;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             endcommande = FALSE;
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
             DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
@@ -169,13 +169,13 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_DELETE: /* Delete */
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
             Block_Delete( DC );
             break;
 
         case BLOCK_MIRROR_X: /* Mirror*/
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
             Block_Mirror_X( DC );
             break;
@@ -204,17 +204,17 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 
     if( endcommande == TRUE )
     {
-        GetScreen()->BlockLocate.m_Flags   = 0;
-        GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-        GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.m_Flags   = 0;
+        GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         DisplayToolMsg( wxEmptyString );
     }
 
     if( zoom_command )
-        Window_Zoom( GetScreen()->BlockLocate );
+        Window_Zoom( GetScreen()->m_BlockLocate );
 
     return endcommande;
 }
@@ -230,34 +230,28 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     int          Color;
     BASE_SCREEN* screen = panel->GetScreen();
 
-    Color = YELLOW; GRSetDrawMode( DC, g_XorMode );
+    Color = YELLOW;
 
     /* Effacement ancien cadre */
     if( erase )
     {
-        screen->BlockLocate.Draw( panel, DC );
-        if( screen->BlockLocate.m_MoveVector.x || screen->BlockLocate.m_MoveVector.y )
+        screen->m_BlockLocate.Draw( panel, DC, wxPoint(0,0),g_XorMode, Color );
+        if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
         {
-            screen->BlockLocate.Offset( screen->BlockLocate.m_MoveVector );
-            screen->BlockLocate.Draw( panel, DC );
-            screen->BlockLocate.Offset( -screen->BlockLocate.m_MoveVector.x,
-                                        -screen->BlockLocate.m_MoveVector.y );
+            screen->m_BlockLocate.Draw( panel, DC, screen->m_BlockLocate.m_MoveVector,g_XorMode, Color );
         }
     }
 
-    if( panel->GetScreen()->BlockLocate.m_State != STATE_BLOCK_STOP )
+    if( panel->GetScreen()->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
-        screen->BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->BlockLocate.GetRight();
-        screen->BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->BlockLocate.GetBottom();
+        screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->m_BlockLocate.GetRight();
+        screen->m_BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->m_BlockLocate.GetBottom();
     }
 
-    screen->BlockLocate.Draw( panel, DC );
-    if( screen->BlockLocate.m_MoveVector.x || screen->BlockLocate.m_MoveVector.y )
+    screen->m_BlockLocate.Draw( panel, DC, wxPoint(0,0),g_XorMode, Color );
+    if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
     {
-        screen->BlockLocate.Offset( screen->BlockLocate.m_MoveVector );
-        screen->BlockLocate.Draw( panel, DC );
-        screen->BlockLocate.Offset( -screen->BlockLocate.m_MoveVector.x,
-                                    -screen->BlockLocate.m_MoveVector.y );
+        screen->m_BlockLocate.Draw( panel, DC, screen->m_BlockLocate.m_MoveVector,g_XorMode, Color );
     }
 }
 
@@ -274,7 +268,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         return;
 
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
     GetScreen()->SetCurItem( NULL );
 
     /* Effacement des Pistes */
@@ -282,7 +276,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = NextS )
     {
         NextS = pt_segm->Next();
-        if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, pt_segm ) )
         {
             /* la piste est ici bonne a etre efface */
             pt_segm->Draw( DrawPanel, DC, GR_XOR );
@@ -294,7 +288,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextS )
     {
         NextS = pt_segm->Next();
-        if( IsSegmentInBox( GetScreen()->BlockLocate, pt_segm ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, pt_segm ) )
         {
             /* la piste est ici bonne a etre efface */
             pt_segm->Draw( DrawPanel, DC, GR_XOR );
@@ -324,16 +318,16 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     GetScreen()->m_Curseur = oldpos;
     DrawPanel->MouseToCursorSchema();
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
     /* calcul du vecteur de deplacement pour les deplacements suivants */
-    delta = GetScreen()->BlockLocate.m_MoveVector;
+    delta = GetScreen()->m_BlockLocate.m_MoveVector;
 
     /* Move the Track segments in block */
     TRACK* track = m_Pcb->m_Track;
     while( track )
     {
-        if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, track ) )
         {
             m_Pcb->m_Status_Pcb = 0;
             track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
@@ -353,7 +347,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     SEGZONE * zsegment= m_Pcb->m_Zone;
     while( zsegment )
     {
-        if( IsSegmentInBox( GetScreen()->BlockLocate, zsegment ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, zsegment ) )
         {
             zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
             zsegment->m_Start += delta;
@@ -388,16 +382,16 @@ void WinEDA_BasePcbFrame::Block_Mirror_X( wxDC* DC )
     GetScreen()->m_Curseur = oldpos;
     DrawPanel->MouseToCursorSchema();
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
     /* Calculate offset to mirror track points from block edges */
-    xoffset = GetScreen()->BlockLocate.m_Pos.x + GetScreen()->BlockLocate.m_Pos.x
-              + GetScreen()->BlockLocate.m_Size.x;
+    xoffset = GetScreen()->m_BlockLocate.m_Pos.x + GetScreen()->m_BlockLocate.m_Pos.x
+              + GetScreen()->m_BlockLocate.m_Size.x;
 
     /* Move the Track segments in block */
     for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
     {
-        if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, track ) )
         {
             m_Pcb->m_Status_Pcb = 0;
             track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
@@ -414,7 +408,7 @@ void WinEDA_BasePcbFrame::Block_Mirror_X( wxDC* DC )
     /* Move the Zone segments in block */
     for( SEGZONE* zsegment = m_Pcb->m_Zone; zsegment; zsegment = zsegment->Next() )
     {
-        if( IsSegmentInBox( GetScreen()->BlockLocate, zsegment ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, zsegment ) )
         {
             zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
             zsegment->m_Start.x = xoffset - zsegment->m_Start.x;
@@ -426,7 +420,7 @@ void WinEDA_BasePcbFrame::Block_Mirror_X( wxDC* DC )
             zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone zegment
         }
     }
-    
+
     DrawPanel->Refresh( TRUE );
 }
 
@@ -448,18 +442,18 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     GetScreen()->m_Curseur = oldpos;
     DrawPanel->MouseToCursorSchema();
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
 
     /* calcul du vecteur de deplacement pour les deplacements suivants */
-    delta = GetScreen()->BlockLocate.m_MoveVector;
+    delta = GetScreen()->m_BlockLocate.m_MoveVector;
 
     /* Copy selected track segments and move the new track its new location */
     TRACK* track = m_Pcb->m_Track;
     while( track )
     {
         TRACK* next_track = track->Next();
-        if( IsSegmentInBox( GetScreen()->BlockLocate, track ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, track ) )
         {
             /* this track segment must be duplicated */
             m_Pcb->m_Status_Pcb = 0;
@@ -480,7 +474,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     while( zsegment )
     {
         SEGZONE * next_zsegment = zsegment->Next();
-        if( IsSegmentInBox( GetScreen()->BlockLocate, zsegment ) )
+        if( IsSegmentInBox( GetScreen()->m_BlockLocate, zsegment ) )
         {
             /* this zone segment must be duplicated */
             SEGZONE * new_zsegment = (SEGZONE*) zsegment->Copy();
@@ -498,7 +492,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 
 
 /**************************************************************************/
-static TRACK* IsSegmentInBox( DrawBlockStruct& blocklocate, TRACK* PtSegm )
+static TRACK* IsSegmentInBox( BLOCK_SELECTOR& blocklocate, TRACK* PtSegm )
 /**************************************************************************/
 
 /* Teste si la structure PtStruct est inscrite dans le block selectionne

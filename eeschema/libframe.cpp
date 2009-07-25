@@ -730,34 +730,34 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ZOOM_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        GetScreen()->BlockLocate.m_Command = BLOCK_ZOOM;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
         DrawPanel->MouseToCursorSchema();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        GetScreen()->BlockLocate.m_Command = BLOCK_COPY;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
         DrawPanel->MouseToCursorSchema();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_SELECT_ITEMS_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        GetScreen()->BlockLocate.m_Command = BLOCK_SELECT_ITEMS_ONLY;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_SELECT_ITEMS_ONLY;
         DrawPanel->MouseToCursorSchema();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_INVERT_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        GetScreen()->BlockLocate.m_Command = BLOCK_INVERT;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_INVERT;
         DrawPanel->MouseToCursorSchema();
         HandleBlockPlace( &dc );
         break;

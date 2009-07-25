@@ -384,7 +384,7 @@ void WinEDA_PcbFrame::SetToolbars()
 
     m_HToolBar->EnableTool( ID_SAVE_BOARD, GetScreen()->IsModify() );
 
-    if( GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
+    if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
     {
         m_HToolBar->EnableTool( wxID_CUT, TRUE );
         m_HToolBar->EnableTool( wxID_COPY, TRUE );

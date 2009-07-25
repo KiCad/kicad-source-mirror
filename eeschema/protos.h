@@ -96,22 +96,20 @@ SCH_ITEM * DuplicateStruct(SCH_ITEM *DrawStruct);
 void MoveOneStruct(SCH_ITEM *DrawStructs, const wxPoint & move_vector);
                         /* Given a structure move it by move_vector. */
 
-bool PlaceStruct(BASE_SCREEN * screen, SCH_ITEM *DrawStruct);
-bool MoveStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *DrawStruct);
 void DeleteStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *DrawStruct);
-bool DrawStructInBox(int x1, int y1, int x2, int y2,
-                        SCH_ITEM *DrawStruct);
 
     /*************/
     /* LOCATE.CPP */
     /*************/
+bool DrawStructInBox(int x1, int y1, int x2, int y2,
+                        SCH_ITEM *DrawStruct);
 LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
                              SCH_COMPONENT* eComponent );
 
 SCH_COMPONENT * LocateSmallestComponent( SCH_SCREEN * Screen );
 /* Recherche du plus petit (en surface) composant pointe par la souris */
 
-SCH_ITEM * PickStruct(EDA_Rect & block, BASE_SCREEN* screen, int SearchMask );
+int PickStruct(BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
 SCH_ITEM * PickStruct(const wxPoint & refpos, BASE_SCREEN* screen, int SearchMask);
 /* 2 functions PickStruct:
     Search in  block, or Search at location pos

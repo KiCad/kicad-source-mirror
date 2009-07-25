@@ -488,7 +488,7 @@ int WinEDA_DrawFrame::ReturnBlockCommand( int key )
 
 void WinEDA_DrawFrame::InitBlockPasteInfos()
 {
-    GetBaseScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+    GetBaseScreen()->m_BlockLocate.ClearItemsList();
     DrawPanel->ManageCurseur = NULL;
 }
 
@@ -652,7 +652,31 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
     }
 }
 
+/* used in UpdateStatusBar() when coordinates are in mm
+ * try to approximate a coordinate (in 0.001 mm) to an easy to read number
+ * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
+ */
+double Round_To_0(double x)
+{
+    long long ix = wxRound(x * 1000); // ix is in 0.001 mm
+    if ( x < 0 ) NEGATE(ix);
 
+    int remainder = ix%10;  // remainder is in 0.001 mm
+    if ( remainder <= 2 )
+        ix -= remainder;    // truncate to the near number
+    else if (remainder >= 8 )
+        ix += 10 - remainder;   // round to near number
+
+    if ( x < 0 ) NEGATE(ix);
+    return (double)ix/1000.0;
+}
+
+/** Function UpdateStatusBar()
+ * Displays in the bottom of the main window a stust:
+ *  - Absolute Cursor coordinates
+ *  - Relative Cursor coordinates (relative to the last coordinate stored when actiavte the space bar)
+ * ( in this status is also displayed the zoom level, but this is not made by this function)
+ */
 void WinEDA_DrawFrame::UpdateStatusBar()
 {
     wxString        Line;
@@ -670,20 +694,30 @@ void WinEDA_DrawFrame::UpdateStatusBar()
     SetStatusText( Line, 1 );
 
     /* Display absolute coordinates:  */
-    Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) : wxT( "X %.4f  Y %.4f" ),
-                 To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
-                               m_InternalUnits ),
-                 To_User_Unit( g_UnitMetric, screen->m_Curseur.y,
-                               m_InternalUnits ) );
+    double dXpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.x, m_InternalUnits );
+    double dYpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.y, m_InternalUnits );
+    /* When using mm the conversion from 1/10000 inch to mm can give some non easy to read numbers,
+     * like 1.999 or 2.001 that be better if displayed 2.000, so small diffs are filtered here.
+    */
+    if ( g_UnitMetric )
+    {
+        dXpos = Round_To_0(dXpos);
+        dYpos = Round_To_0(dYpos);
+    }
+    Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) : wxT( "X %.4f  Y %.4f" ), dXpos, dYpos );
     SetStatusText( Line, 2 );
 
     /* Display relative coordinates:  */
     dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
     dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
-
-    Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) : wxT( "x %.4f  y %.4f" ),
-                 To_User_Unit( g_UnitMetric, dx, m_InternalUnits ),
-                 To_User_Unit( g_UnitMetric, dy, m_InternalUnits ) );
+    dXpos = To_User_Unit( g_UnitMetric, dx, m_InternalUnits );
+    dYpos = To_User_Unit( g_UnitMetric, dy, m_InternalUnits );
+    if ( g_UnitMetric )
+    {
+        dXpos = Round_To_0(dXpos);
+        dYpos = Round_To_0(dYpos);
+    }
+    Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) : wxT( "x %.4f  y %.4f" ), dXpos, dYpos );
 
     SetStatusText( Line, 3 );
 }

@@ -252,7 +252,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_DELETE:
-        if( !ItemInEdit && screen->BlockLocate.m_State == STATE_NO_BLOCK )
+        if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
             RefreshToolBar = LocateAndDeleteItem( this, DC );
             GetScreen()->SetModify();
@@ -290,7 +290,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_BEGIN_WIRE:
         /* An item is selected. If edited and not a wire, a new command is not
          * possible */
-        if( !ItemInEdit && screen->BlockLocate.m_State == STATE_NO_BLOCK )
+        if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
             if( DrawStruct && DrawStruct->m_Flags )
             {

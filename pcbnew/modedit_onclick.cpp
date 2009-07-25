@@ -177,7 +177,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     BOARD_ITEM*     DrawStruct = GetCurItem();
     wxString        msg;
     bool            append_set_width = FALSE;
-    bool            BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool            BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )

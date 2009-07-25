@@ -3,7 +3,6 @@
 **********************/
 
 /* define :
- *  class DrawBlockStruct used to handle block commands
  *  class BASE_SCREEN to handle how to draw a screen (a board, a schematic ...)
  */
 
@@ -12,6 +11,7 @@
 
 #include "base_struct.h"
 #include "class_undoredo_container.h"
+#include "block_commande.h"
 
 
 // Forward declarations:
@@ -19,65 +19,11 @@ class SCH_ITEM;
 class Ki_PageDescr;
 
 
-/**************************/
-/*  class DrawBlockStruct */
-/**************************/
-/* Definition d'un block pour les fonctions sur block (block move, ..) */
-typedef enum {
-    /* definition de l'etat du block */
-    STATE_NO_BLOCK,             /* Block non initialise */
-    STATE_BLOCK_INIT,           /* Block initialise: 1er point defini */
-    STATE_BLOCK_END,            /* Block initialise: 2eme point defini */
-    STATE_BLOCK_MOVE,           /* Block en deplacement */
-    STATE_BLOCK_STOP            /* Block fixe (fin de deplacement) */
-} BlockState;
-
-/* codes des differentes commandes sur block: */
-typedef enum {
-    BLOCK_IDLE,
-    BLOCK_MOVE,
-    BLOCK_COPY,
-    BLOCK_SAVE,
-    BLOCK_DELETE,
-    BLOCK_PASTE,
-    BLOCK_DRAG,
-    BLOCK_ROTATE,
-    BLOCK_INVERT,
-    BLOCK_ZOOM,
-    BLOCK_ABORT,
-    BLOCK_PRESELECT_MOVE,
-    BLOCK_SELECT_ITEMS_ONLY,
-    BLOCK_MIRROR_X,
-    BLOCK_MIRROR_Y
-} CmdBlockType;
-
-
-class DrawBlockStruct : public EDA_BaseStruct, public EDA_Rect
-{
-public:
-    BlockState      m_State;        /* Etat (enum BlockState) du block */
-    CmdBlockType    m_Command;      /* Type (enum CmdBlockType) d'operation */
-    EDA_BaseStruct* m_BlockDrawStruct;  /* pointeur sur la structure
-                                         *   selectionnee dans le bloc */
-    int             m_Color;        /* Block Color */
-    wxPoint         m_MoveVector;   /* Move distance in move, drag, copy ... command */
-    wxPoint         m_BlockLastCursorPosition; /* Last Mouse position in block command
-                                                *  = last cursor position in move commands
-                                                *  = 0,0 in block paste */
-
-public:
-    DrawBlockStruct();
-    ~DrawBlockStruct();
-    void SetMessageBlock( WinEDA_DrawFrame* frame );
-    void Draw( WinEDA_DrawPanel* panel, wxDC* DC );
-};
-
-
 /* Simple class for handling grid arrays. */
 class GRID_TYPE
 {
 public:
-    int    m_Id;
+    int         m_Id;
     wxRealPoint m_Size;
 };
 
@@ -93,9 +39,9 @@ WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
 class BASE_SCREEN : public EDA_BaseStruct
 {
 public:
-    wxPoint m_DrawOrg;         /* offsets pour tracer le circuit sur l'ecran */
-    wxPoint m_Curseur;         /* Screen cursor coordinate (on grid) in user units. */
-    wxPoint m_MousePosition;   /* Mouse cursor coordinate (off grid) in user units. */
+    wxPoint m_DrawOrg;          /* offsets pour tracer le circuit sur l'ecran */
+    wxPoint m_Curseur;          /* Screen cursor coordinate (on grid) in user units. */
+    wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user units. */
     wxPoint m_MousePositionInPixels;
     wxPoint m_O_Curseur;       /* Relative Screen cursor coordinate (on grid) in user units.
                                 * (coordinates from last reset position)*/
@@ -115,32 +61,32 @@ public:
                                 * > 0   all but schematic
                                 *  FALSE: when coordinates can be only >= 0
                                 * Schematic */
-    bool    m_FirstRedraw;
+    bool                m_FirstRedraw;
 
-    SCH_ITEM*       EEDrawList; /* Object list (main data) for schematic */
+    SCH_ITEM*           EEDrawList; /* Object list (main data) for schematic */
 
     // Undo/redo list of commands
-    UNDO_REDO_CONTAINER m_UndoList; /* Object list for the undo command (old data) */
-    UNDO_REDO_CONTAINER m_RedoList; /* Object list for the redo command (old data) */
-    unsigned m_UndoRedoCountMax;                            // undo/Redo command Max depth
+    UNDO_REDO_CONTAINER m_UndoList;                         /* Objects list for the undo command (old data) */
+    UNDO_REDO_CONTAINER m_RedoList;                         /* Objects list for the redo command (old data) */
+    unsigned            m_UndoRedoCountMax;                 // undo/Redo command Max depth
 
     /* block control */
-    DrawBlockStruct BlockLocate;    /* Bock description for block commands */
+    BLOCK_SELECTOR      m_BlockLocate; /* Block description for block commands */
 
     /* Page description */
-    Ki_PageDescr*   m_CurrentSheetDesc;
-    int             m_ScreenNumber;
-    int             m_NumberOfScreen;
+    Ki_PageDescr*       m_CurrentSheetDesc;
+    int      m_ScreenNumber;
+    int      m_NumberOfScreen;
 
-    wxString        m_FileName;
-    wxString        m_Title;            /* titre de la feuille */
-    wxString        m_Date;             /* date de mise a jour */
-    wxString        m_Revision;         /* code de revision */
-    wxString        m_Company;          /* nom du proprietaire */
-    wxString        m_Commentaire1;
-    wxString        m_Commentaire2;
-    wxString        m_Commentaire3;
-    wxString        m_Commentaire4;
+    wxString m_FileName;
+    wxString m_Title;                   /* titre de la feuille */
+    wxString m_Date;                    /* date de mise a jour */
+    wxString m_Revision;                /* code de revision */
+    wxString m_Company;                 /* nom du proprietaire */
+    wxString m_Commentaire1;
+    wxString m_Commentaire2;
+    wxString m_Commentaire3;
+    wxString m_Commentaire4;
 
 private:
     /* indicateurs divers */
@@ -151,14 +97,14 @@ private:
 
     /* Valeurs du pas de grille et du zoom */
 public:
-    wxRealPoint     m_Grid;             /* Current grid. */
-    GridArray  m_GridList;
-    bool       m_UserGridIsON;
+    wxRealPoint m_Grid;                 /* Current grid. */
+    GridArray   m_GridList;
+    bool        m_UserGridIsON;
 
-    wxArrayInt m_ZoomList;       /* Array of standard zoom coefficients. */
-    int        m_Zoom;           /* Current zoom coefficient. */
-    int        m_ZoomScalar;     /* Allow zooming to non-integer increments. */
-    bool       m_IsPrinting;
+    wxArrayInt  m_ZoomList;         /* Array of standard zoom coefficients. */
+    int         m_Zoom;             /* Current zoom coefficient. */
+    int         m_ZoomScalar;       /* Allow zooming to non-integer increments. */
+    bool        m_IsPrinting;
 
 public:
     BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
@@ -176,31 +122,35 @@ public:
     void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
     EDA_BaseStruct* GetCurItem() const { return m_CurrentItem; }
 
-    void                    InitDatas();    /* Inits completes des variables */
+    void                       InitDatas(); /* Inits completes des variables */
 
-    wxSize                  ReturnPageSize( void );
-    virtual int             GetInternalUnits( void );
+    wxSize                     ReturnPageSize( void );
+    virtual int                GetInternalUnits( void );
 
     /** Function CursorRealPosition
      * @return the position in user units of location ScreenPos
      * @param ScreenPos = the screen (in pixel) position co convert
      */
-    wxPoint                 CursorRealPosition( const wxPoint& ScreenPos );
+    wxPoint                    CursorRealPosition( const wxPoint& ScreenPos );
 
     /* general Undo/Redo command control */
-    virtual void            ClearUndoRedoList();
-    virtual void            PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
-    virtual void            PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
+    virtual void               ClearUndoRedoList();
+    virtual void               PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
+    virtual void               PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
     virtual PICKED_ITEMS_LIST* PopCommandFromUndoList();
     virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
-    int GetUndoCommandCount( )
+
+    int GetUndoCommandCount()
     {
         return m_UndoList.m_CommandsList.size();
     }
-    int GetRedoCommandCount( )
+
+
+    int GetRedoCommandCount()
     {
         return m_RedoList.m_CommandsList.size();
     }
+
 
     /* Manipulation des flags */
     void    SetRefreshReq() { m_FlagRefreshReq = 1; }
@@ -230,51 +180,51 @@ public:
      * @param the the current scale used to draw items on screen
      * draw coordinates are user coordinates * GetScalingFactor( )
      */
-    void   SetScalingFactor( double aScale );
+    void        SetScalingFactor( double aScale );
 
     /** Function GetZoom
      * @return the current zoom factor
      * Note: the zoom factor is NOT the scaling factor
      *       the scaling factor is m_ZoomScalar * GetZoom()
      */
-    int    GetZoom() const;
+    int         GetZoom() const;
 
     /**
      * Function SetZoom
      * adjusts the current zoom factor
      */
-    bool   SetZoom( int coeff );
+    bool        SetZoom( int coeff );
 
     /**
      * Function SetZoomList
      * sets the list of zoom factors.
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
-    void   SetZoomList( const wxArrayInt& zoomlist );
+    void        SetZoomList( const wxArrayInt& zoomlist );
 
-    int    Scale( int coord );
-    double Scale( double coord );
-    void   Scale( wxPoint& pt );
-    void   Scale( wxSize& sz );
-    void   Scale( wxRealPoint& sz );
+    int         Scale( int coord );
+    double      Scale( double coord );
+    void        Scale( wxPoint& pt );
+    void        Scale( wxSize& sz );
+    void        Scale( wxRealPoint& sz );
 
-    int    Unscale( int coord );
-    void   Unscale( wxPoint& pt );
-    void   Unscale( wxSize& sz );
+    int         Unscale( int coord );
+    void        Unscale( wxPoint& pt );
+    void        Unscale( wxSize& sz );
 
-    bool   SetNextZoom();               /* ajuste le prochain coeff de zoom */
-    bool   SetPreviousZoom();           /* ajuste le precedent coeff de zoom */
-    bool   SetFirstZoom();              /* ajuste le coeff de zoom a 1*/
-    bool   SetLastZoom();               /* ajuste le coeff de zoom au max */
+    bool        SetNextZoom();          /* ajuste le prochain coeff de zoom */
+    bool        SetPreviousZoom();      /* ajuste le precedent coeff de zoom */
+    bool        SetFirstZoom();         /* ajuste le coeff de zoom a 1*/
+    bool        SetLastZoom();          /* ajuste le coeff de zoom au max */
 
     //----<grid stuff>----------------------------------------------------------
     wxRealPoint GetGrid();                      /* retourne la grille */
-    void   SetGrid( const wxRealPoint& size );
-    void   SetGrid( int );
-    void   SetGridList( GridArray& sizelist );
-    void   AddGrid( const GRID_TYPE& grid );
-    void   AddGrid( const wxRealPoint& size, int id );
-    void   AddGrid( const wxRealPoint& size, int units, int id );
+    void        SetGrid( const wxRealPoint& size );
+    void        SetGrid( int );
+    void        SetGridList( GridArray& sizelist );
+    void        AddGrid( const GRID_TYPE& grid );
+    void        AddGrid( const wxRealPoint& size, int id );
+    void        AddGrid( const wxRealPoint& size, int units, int id );
 
 
     /**

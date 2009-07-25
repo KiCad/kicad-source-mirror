@@ -1,6 +1,6 @@
 /****************************************************/
 /* Routines de gestion des commandes sur blocks		*/
-/* (section commune eeschema/pcbnew... 				*/
+/* (section commune eeschema/pcbnew...              */
 /****************************************************/
 
 /* Fichier common.cpp */
@@ -19,31 +19,30 @@
 
 
 /*******************/
-/* DrawBlockStruct */
+/* BLOCK_SELECTOR */
 /*******************/
 
 /****************************************************************************/
-DrawBlockStruct::DrawBlockStruct() :
-    EDA_BaseStruct( BLOCK_LOCATE_STRUCT_TYPE )
-    , EDA_Rect()
+BLOCK_SELECTOR::BLOCK_SELECTOR() :
+    EDA_BaseStruct( BLOCK_LOCATE_STRUCT_TYPE ),
+    EDA_Rect()
 /****************************************************************************/
 {
     m_State   = STATE_NO_BLOCK; /* Etat (enum BlockState) du block */
     m_Command = BLOCK_IDLE;     /* Type (enum CmdBlockType) d'operation */
-    m_BlockDrawStruct = NULL;   /* pointeur sur la structure */
-    m_Color = BROWN;
+    m_Color   = BROWN;
 }
 
 
 /****************************************/
-DrawBlockStruct::~DrawBlockStruct()
+BLOCK_SELECTOR::~BLOCK_SELECTOR()
 /****************************************/
 {
 }
 
 
 /***************************************************************/
-void DrawBlockStruct::SetMessageBlock( WinEDA_DrawFrame* frame )
+void BLOCK_SELECTOR::SetMessageBlock( WinEDA_DrawFrame* frame )
 /***************************************************************/
 
 /*
@@ -112,19 +111,67 @@ void DrawBlockStruct::SetMessageBlock( WinEDA_DrawFrame* frame )
 
 
 /**************************************************************/
-void DrawBlockStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC )
+void BLOCK_SELECTOR::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                           const wxPoint& aOffset,
+                           int aDrawMode,
+                           int aColor )
 /**************************************************************/
 {
-    int w = panel->GetScreen()->Scale( GetWidth() );
-    int h = panel->GetScreen()->Scale( GetHeight() );
+    int w = aPanel->GetScreen()->Scale( GetWidth() );
+    int h = aPanel->GetScreen()->Scale( GetHeight() );
 
+    GRSetDrawMode( aDC, aDrawMode );
     if(  w == 0 || h == 0 )
-        GRLine( &panel->m_ClipBox, DC, GetX(), GetY(),
-                GetRight(), GetBottom(), 0, m_Color );
+        GRLine( &aPanel->m_ClipBox, aDC, GetX() + aOffset.x, GetY() + aOffset.y,
+                GetRight() + aOffset.x, GetBottom() + aOffset.y, 0, aColor );
     else
-        GRRect( &panel->m_ClipBox, DC, GetX(), GetY(),
-                GetRight(), GetBottom(), 0, m_Color );
+        GRRect( &aPanel->m_ClipBox, aDC, GetX() + aOffset.x, GetY() + aOffset.y,
+                GetRight() + aOffset.x, GetBottom() + aOffset.y, 0, aColor );
 }
+
+
+/*************************************************************************/
+void BLOCK_SELECTOR::InitData( WinEDA_DrawPanel* aPanel, const wxPoint& startpos )
+/*************************************************************************/
+
+/** function InitData
+ *  Init the initial values of a BLOCK_SELECTOR, before starting a block command
+ */
+{
+    m_State = STATE_BLOCK_INIT;
+    SetOrigin( startpos );
+    SetSize( wxSize( 0, 0 ) );
+    m_ItemsSelection.ClearItemsList();
+    aPanel->ManageCurseur = DrawAndSizingBlockOutlines;
+    aPanel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
+}
+
+
+/** Function ClearItemsList
+ * delete only the list of EDA_BaseStruct * pointers, NOT the pointed data itself
+ */
+void BLOCK_SELECTOR::ClearItemsList()
+{
+    m_ItemsSelection.ClearItemsList();
+}
+
+/** Function ClearListAndDeleteItems
+ * delete only the list of EDA_BaseStruct * pointers, AND the data pinted by m_Item
+ */
+void BLOCK_SELECTOR::ClearListAndDeleteItems()
+{
+     m_ItemsSelection.ClearListAndDeleteItems();
+}
+
+/** Function PushItem
+ * Add aItem to the list of items
+ * @param aItem = an ITEM_PICKER to add to the list
+ */
+void BLOCK_SELECTOR::PushItem( ITEM_PICKER& aItem )
+{
+    m_ItemsSelection.PushItem(  aItem );
+}
+
 
 
 /*************************************************************************/
@@ -132,14 +179,14 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
                                          const wxPoint& startpos )
 /*************************************************************************/
 
-/* 	First command block function:
+/*  First command block function:
  *  Init the Block infos: command type, initial position, and other variables..
  */
 {
-    DrawBlockStruct* Block = & GetBaseScreen()->BlockLocate;
+    BLOCK_SELECTOR* Block = &GetBaseScreen()->m_BlockLocate;
 
     if( ( Block->m_Command != BLOCK_IDLE )
-        || ( Block->m_State != STATE_NO_BLOCK ) )
+       || ( Block->m_State != STATE_NO_BLOCK ) )
         return FALSE;
 
     Block->m_Flags   = 0;
@@ -163,26 +210,26 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:            /* mirror */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        InitBlockLocateDatas( DrawPanel, startpos );
+        Block->InitData( DrawPanel, startpos );
         break;
 
     case BLOCK_PASTE:
-        InitBlockLocateDatas( DrawPanel, startpos );
+        Block->InitData( DrawPanel, startpos );
         Block->m_BlockLastCursorPosition.x = 0;
         Block->m_BlockLastCursorPosition.y = 0;
         InitBlockPasteInfos();
-        if( Block->m_BlockDrawStruct == NULL )      /* No data to paste */
+        if( Block->m_ItemsSelection.GetCount() == 0 )      /* No data to paste */
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
-            GetBaseScreen()->BlockLocate.m_Command = BLOCK_IDLE;
+            GetBaseScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
             DrawPanel->ManageCurseur = NULL;
             return TRUE;
         }
         if( DrawPanel->ManageCurseur == NULL )
         {
-            Block->m_BlockDrawStruct = NULL;
+            Block->m_ItemsSelection.ClearItemsList();
             DisplayError( this,
-                          wxT( "WinEDA_DrawFrame::HandleBlockBegin() Err: ManageCurseur NULL" ) );
+                         wxT( "WinEDA_DrawFrame::HandleBlockBegin() Err: ManageCurseur NULL" ) );
             return TRUE;
         }
         Block->m_State = STATE_BLOCK_MOVE;
@@ -196,11 +243,44 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
         Block->m_Command;
         DisplayError( this, msg );
     }
-        break;
+    break;
     }
 
     Block->SetMessageBlock( this );
     return TRUE;
+}
+
+/********************************************************************************/
+void DrawAndSizingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+/********************************************************************************/
+
+/* Redraw the outlines of the block which shows the search area for block commands
+ *  The first point of the rectangle showing the area is initialised
+ *  by Initm_BlockLocateDatas().
+ *  The other point of the rectangle is the mouse cursor
+ */
+{
+    BLOCK_SELECTOR* PtBlock;
+
+    PtBlock = &panel->GetScreen()->m_BlockLocate;
+
+    PtBlock->m_MoveVector = wxPoint( 0, 0 );
+
+    /* Effacement ancien cadre */
+    if( erase )
+        PtBlock->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
+
+    PtBlock->m_BlockLastCursorPosition = panel->GetScreen()->m_Curseur;
+    PtBlock->SetEnd( panel->GetScreen()->m_Curseur );
+
+    PtBlock->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
+
+    if( PtBlock->m_State == STATE_BLOCK_INIT )
+    {
+        if( PtBlock->GetWidth() || PtBlock->GetHeight() )
+            /* 2ieme point existant: le rectangle n'est pas de surface nulle */
+            PtBlock->m_State = STATE_BLOCK_END;
+    }
 }
 
 
@@ -222,81 +302,17 @@ void AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC )
         screen->SetCurItem( NULL );
 
         /* Delete the picked wrapper if this is a picked list. */
-        if( (screen->BlockLocate.m_Command != BLOCK_PASTE)
-           && screen->BlockLocate.m_BlockDrawStruct )
-        {
-            if( screen->BlockLocate.m_BlockDrawStruct->Type() == DRAW_PICK_ITEM_STRUCT_TYPE )
-            {
-                DrawPickedStruct* PickedList;
-                PickedList = (DrawPickedStruct*) screen->BlockLocate.m_BlockDrawStruct;
-                PickedList->DeleteWrapperList();
-            }
-            screen->BlockLocate.m_BlockDrawStruct = NULL;
-        }
+        if( screen->m_BlockLocate.m_Command != BLOCK_PASTE )
+            screen->m_BlockLocate.ClearItemsList();
     }
 
-    screen->BlockLocate.m_Flags = 0;
-    screen->BlockLocate.m_State = STATE_NO_BLOCK;
+    screen->m_BlockLocate.m_Flags = 0;
+    screen->m_BlockLocate.m_State = STATE_NO_BLOCK;
 
-    screen->BlockLocate.m_Command = BLOCK_ABORT;
+    screen->m_BlockLocate.m_Command = BLOCK_ABORT;
     Panel->m_Parent->HandleBlockEnd( DC );
 
-    screen->BlockLocate.m_Command = BLOCK_IDLE;
+    screen->m_BlockLocate.m_Command = BLOCK_IDLE;
     Panel->m_Parent->DisplayToolMsg( wxEmptyString );
 }
 
-
-/*************************************************************************/
-void InitBlockLocateDatas( WinEDA_DrawPanel* Panel, const wxPoint& startpos )
-/*************************************************************************/
-
-/*
- *  Init the initial values of a BlockLocate, before starting a block command
- */
-{
-    BASE_SCREEN* screen = Panel->GetScreen();
-
-    screen->BlockLocate.m_State = STATE_BLOCK_INIT;
-    screen->BlockLocate.SetOrigin( startpos );
-    screen->BlockLocate.SetSize( wxSize( 0, 0 ) );
-    screen->BlockLocate.SetNext( NULL );
-    screen->BlockLocate.m_BlockDrawStruct = NULL;
-    Panel->ManageCurseur = DrawAndSizingBlockOutlines;
-    Panel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
-}
-
-
-/********************************************************************************/
-void DrawAndSizingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
-/********************************************************************************/
-
-/* Redraw the outlines of the block which shows the search area for block commands
- *  The first point of the rectangle showing the area is initialised
- *  by InitBlockLocateDatas().
- *  The other point of the rectangle is the mouse cursor
- */
-{
-    DrawBlockStruct* PtBlock;
-
-    PtBlock = &panel->GetScreen()->BlockLocate;
-
-    PtBlock->m_MoveVector = wxPoint( 0, 0 );
-
-    GRSetDrawMode( DC, g_XorMode );
-
-    /* Effacement ancien cadre */
-    if( erase )
-        PtBlock->Draw( panel, DC );
-
-    PtBlock->m_BlockLastCursorPosition = panel->GetScreen()->m_Curseur;
-    PtBlock->SetEnd( panel->GetScreen()->m_Curseur );
-
-    PtBlock->Draw( panel, DC );
-
-    if( PtBlock->m_State == STATE_BLOCK_INIT )
-    {
-        if( PtBlock->GetWidth() || PtBlock->GetHeight() )
-            /* 2ieme point existant: le rectangle n'est pas de surface nulle */
-            PtBlock->m_State = STATE_BLOCK_END;
-    }
-}

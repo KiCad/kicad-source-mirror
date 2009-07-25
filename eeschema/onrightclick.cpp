@@ -54,7 +54,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
  */
 {
     SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
-    bool      BlockActive = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
+    bool      BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
 
     DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
@@ -608,13 +608,13 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 
     PopMenu->AppendSeparator();
 
-    if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
         ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
                       _( "Window Zoom" ), zoom_selected_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
 
-    if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
     {   // After a block move (that is also a block selection) one can reselect a block function:
         ADD_MENUITEM( PopMenu, wxID_COPY, _( "Save Block" ), copy_button );
         ADD_MENUITEM( PopMenu, ID_POPUP_COPY_BLOCK,

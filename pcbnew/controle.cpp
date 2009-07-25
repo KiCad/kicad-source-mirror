@@ -500,10 +500,10 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( (CurrentTime - g_SaveTime) > g_TimeOut )
     {
         wxString tmpFileName = GetScreen()->m_FileName;
-        wxString filename    = g_SaveFileName + PcbExtBuffer;
+        wxFileName fn = wxFileName( wxEmptyString, g_SaveFileName, PcbExtBuffer );
         bool     flgmodify   = GetScreen()->IsModify();
 
-        ( (WinEDA_PcbFrame*) this )->SavePcbFile( filename );
+        SavePcbFile( fn.GetFullPath() );
 
         if( flgmodify ) // Set the flags m_Modify cleared by SavePcbFile()
         {
@@ -569,7 +569,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         keep_on_grid = FALSE;
 
     /* Cursor is left off grid if no block in progress and no moving object */
-    if( GetScreen()->BlockLocate.m_State != STATE_NO_BLOCK )
+    if( GetScreen()->m_BlockLocate.m_State != STATE_NO_BLOCK )
         keep_on_grid = TRUE;
 
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();

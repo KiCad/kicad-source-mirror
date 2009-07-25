@@ -416,7 +416,7 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet( )
 void WinEDA_SchematicFrame::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 {
     bool enable = ( GetScreen() &&
-                    GetScreen()->BlockLocate.m_Command == BLOCK_MOVE );
+                    GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE );
     event.Enable(enable);
     m_HToolBar->EnableTool( wxID_CUT, enable );
     m_HToolBar->EnableTool( wxID_COPY, enable );
@@ -424,8 +424,8 @@ void WinEDA_SchematicFrame::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 
 void WinEDA_SchematicFrame::OnUpdatePaste( wxUpdateUIEvent& event )
 {
-    event.Enable( g_BlockSaveDataList != NULL );
-    m_HToolBar->EnableTool( wxID_PASTE, g_BlockSaveDataList != NULL );
+    event.Enable( g_BlockSaveDataList.GetCount() > 0 );
+    m_HToolBar->EnableTool( wxID_PASTE, g_BlockSaveDataList.GetCount() > 0 );
 }
 
 void WinEDA_SchematicFrame::OnUpdateSchematicUndo( wxUpdateUIEvent& event )

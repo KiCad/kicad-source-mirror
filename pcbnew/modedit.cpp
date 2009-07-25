@@ -2,10 +2,6 @@
 /* modedit.cpp  */
 /****************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
@@ -637,7 +633,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
         DrawPanel->m_AutoPAN_Request = FALSE;
         {
             SET_DC;
@@ -646,8 +642,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_COPY;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         DrawPanel->m_AutoPAN_Request = FALSE;
         {
             SET_DC;
@@ -656,8 +652,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_ZOOM;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         {
             SET_DC;
             HandleBlockEnd( &dc );
@@ -665,8 +661,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         {
             SET_DC;
             HandleBlockEnd( &dc );
@@ -674,8 +670,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_ROTATE;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ROTATE;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         {
             SET_DC;
             HandleBlockEnd( &dc );
@@ -685,8 +681,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_INVERT_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_INVERT;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_INVERT;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         {
             SET_DC;
             HandleBlockEnd( &dc );

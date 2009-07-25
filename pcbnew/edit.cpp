@@ -28,14 +28,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 /* Traite les selections d'outils et les commandes appelees du menu POPUP
  */
 {
-    int        id = event.GetId();
-    wxPoint    pos;
+    int         id = event.GetId();
+    wxPoint     pos;
 
-    int        itmp;
-    wxClientDC dc( DrawPanel );
+    int         itmp;
+    wxClientDC  dc( DrawPanel );
     BOARD_ITEM* DrawStruct = GetCurItem();
 
-    int toggle = 0;
+    int         toggle = 0;
 
     DrawPanel->CursorOff( &dc );
     DrawPanel->PrepareGraphicContext( &dc );
@@ -151,26 +151,29 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
         /* Should not be executed, just in case */
-        if( GetScreen()->BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
-            GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-            GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-            GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+            GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+            GetScreen()->m_BlockLocate.ClearItemsList();
         }
         if( m_ID_current_state == 0 )
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         else
             SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
         break;
+
     case ID_TOGGLE_PRESENT_COMMAND:
-          /* if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
-   */
+
+        /* if( DrawPanel->ManageCurseur
+         *  && DrawPanel->ForceCloseManageCurseur )
+         *  {
+         *  DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+         *  }
+         */
 
         break;
+
     default:        // Finish (abort ) the command
         if( DrawPanel->ManageCurseur
             && DrawPanel->ForceCloseManageCurseur )
@@ -178,168 +181,103 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
 
-        if( m_ID_current_state != id ){
-          if (m_ID_last_state != m_ID_current_state)
-            m_ID_last_state = m_ID_current_state;
-          SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        if( m_ID_current_state != id )
+        {
+            if( m_ID_last_state != m_ID_current_state )
+                m_ID_last_state = m_ID_current_state;
+            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         }
         break;
     }
 
     switch( id )   // Execute command
     {
-    case 0: break;
+    case 0:
+        break;
+
     case ID_EXIT:
         Close( true );
         break;
+
     case ID_TOGGLE_PRESENT_COMMAND:
-            switch( m_ID_current_state )
-                {
-                case 0:
-                   /*  if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
-                    {
-                        DrawStruct = PcbGeneralLocateAndDisplay();
-                    }
+        switch( m_ID_current_state )
+        {
+        case 0:
+            toggle = 1;
+            break;
 
-                    if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
-                        break;
+        case ID_TRACK_BUTT:
+            if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
+            {
+                End_Route( (TRACK*) DrawStruct, &dc );
+                DrawPanel->m_AutoPAN_Request = false;
+            }
+            else
+                toggle = 1;
+            break;
 
-                    SendMessageToEESCHEMA( DrawStruct );
+        case ID_PCB_ZONES_BUTT:
+            if( End_Zone( &dc ) )
+            {
+                DrawPanel->m_AutoPAN_Request = false;
+                SetCurItem( NULL );
+            }
+            else
+                toggle = 1;
+            break;
 
-                    // An item is found
-                    SetCurItem( DrawStruct );
+        case ID_LINE_COMMENT_BUTT:
+        case ID_PCB_ARC_BUTT:
+        case ID_PCB_CIRCLE_BUTT:
+            if( DrawStruct == NULL )
+            {
+            }
+            else if( DrawStruct->Type() != TYPE_DRAWSEGMENT )
+            {
+                DisplayError( this, wxT( "DrawStruct Type error" ) );
+                DrawPanel->m_AutoPAN_Request = false;
+            }
+            else if( (DrawStruct->m_Flags & IS_NEW) )
+            {
+                End_Edge( (DRAWSEGMENT*) DrawStruct, &dc );
+                DrawPanel->m_AutoPAN_Request = false;
+                SetCurItem( NULL );
+            }
+            else
+                toggle = 1;
+            break;
 
-                    switch( DrawStruct->Type() )
-                    {
-                    case TYPE_TRACK:
-                    case TYPE_VIA:
-                        if( DrawStruct->m_Flags & IS_NEW )
-                        {
-                            End_Route( (TRACK*) DrawStruct, DC );
-                            DrawPanel->m_AutoPAN_Request = false;
-                        }
-                        else if( DrawStruct->m_Flags == 0 )
-                        {
-                            Edit_TrackSegm_Width( DC, (TRACK*) DrawStruct );
-                        }
-                        break;
+        default:
 
-                    case TYPE_TEXTE:
-                        InstallTextPCBOptionsFrame( (TEXTE_PCB*) DrawStruct, DC );
-                        DrawPanel->MouseToCursorSchema();
-                        break;
+            toggle = 1;
+            break;
+        }
 
-                    case TYPE_PAD:
-                        InstallPadOptionsFrame( (D_PAD*) DrawStruct, &dc, pos );
-                        DrawPanel->MouseToCursorSchema();
-                        break;
-
-                    case TYPE_MODULE:
-                        InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc );
-                        DrawPanel->MouseToCursorSchema();
-                        break;
-
-                    case TYPE_MIRE:
-                        InstallMireOptionsFrame( (MIREPCB*) DrawStruct, &dc, pos );
-                        DrawPanel->MouseToCursorSchema();
-                        break;
-
-                    case TYPE_COTATION:
-                        Install_Edit_Cotation( (COTATION*) DrawStruct, &dc, pos );
-                        DrawPanel->MouseToCursorSchema();
-                        break;
-
-                    case TYPE_TEXTE_MODULE:
-                        InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc, pos );
-                        DrawPanel->MouseToCursorSchema();
-                        break;
-
-                    case TYPE_DRAWSEGMENT:
-                        InstallGraphicItemPropertiesDialog((DRAWSEGMENT*)DrawStruct, &dc);
-                        break;
-
-                    case TYPE_ZONE_CONTAINER:
-                        if( DrawStruct->m_Flags )
-                            break;
-                        Edit_Zone_Params( &dc, (ZONE_CONTAINER*) DrawStruct );
-                        break;
-
-                    default:
-                        break;
-                    }
-
-                    break;      // end case 0
-                    */
-                      toggle = 1;
-                   break;
-                case ID_TRACK_BUTT:
-                    if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
-                    {
-                        End_Route( (TRACK*) DrawStruct, &dc );
-                        DrawPanel->m_AutoPAN_Request = false;
-                    }
-                    else
-                      toggle = 1;
-                    break;
-
-                case ID_PCB_ZONES_BUTT:
-                    if ( End_Zone( &dc ) )
-                    {
-                        DrawPanel->m_AutoPAN_Request = false;
-                        SetCurItem( NULL );
-                    }
-                    else
-                      toggle = 1;
-                    break;
-
-                case ID_LINE_COMMENT_BUTT:
-                case ID_PCB_ARC_BUTT:
-                case ID_PCB_CIRCLE_BUTT:
-                          if( DrawStruct == NULL )
-                            {}
-                          else if( DrawStruct->Type() != TYPE_DRAWSEGMENT )
-                          {
-                              DisplayError( this, wxT( "DrawStruct Type error" ) );
-                              DrawPanel->m_AutoPAN_Request = false;
-
-                          }
-                          else if( (DrawStruct->m_Flags & IS_NEW) )
-                          {
-                              End_Edge( (DRAWSEGMENT*) DrawStruct, &dc );
-                              DrawPanel->m_AutoPAN_Request = false;
-                              SetCurItem( NULL );
-                          }
-                          else
-                            toggle = 1;
-                    break;
-                  default:
-
-                      toggle = 1;
-                    break;
-                }
-                if (toggle){
-                    int swap = m_ID_last_state;
-                    m_ID_last_state  = m_ID_current_state;
-                    SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-                    m_ID_current_state = swap;
-                }
+        if( toggle )
+        {
+            int swap = m_ID_last_state;
+            m_ID_last_state = m_ID_current_state;
+            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+            m_ID_current_state = swap;
+        }
 
 
-                    //SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
+        //SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
 
-                event.SetId(m_ID_current_state);
-                Process_Special_Functions(event);
+        event.SetId( m_ID_current_state );
+        Process_Special_Functions( event );
 
 
         break;
+
     case ID_OPEN_MODULE_EDITOR:
         if( m_ModuleEditFrame == NULL )
         {
             m_ModuleEditFrame =
                 new WinEDA_ModuleEditFrame( this,
-                                            _( "Module Editor" ),
-                                            wxPoint( -1, -1 ),
-                                            wxSize( 600, 400 ) );
+                                           _( "Module Editor" ),
+                                           wxPoint( -1, -1 ),
+                                           wxSize( 600, 400 ) );
             m_ModuleEditFrame->Show( true );
             m_ModuleEditFrame->Zoom_Automatique( true );
         }
@@ -357,40 +295,40 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
         DrawPanel->m_AutoPAN_Request = false;
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_COPY;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         DrawPanel->m_AutoPAN_Request = false;
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_ZOOM;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_DELETE;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_ROTATE;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ROTATE;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_INVERT_BLOCK:
-        GetScreen()->BlockLocate.m_Command = BLOCK_INVERT;
-        GetScreen()->BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_INVERT;
+        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
@@ -617,13 +555,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() == NULL )
             break;
         {
-        SEGZONE* zsegm = (SEGZONE*) GetCurItem();
-        int netcode = zsegm->GetNet();
-        Delete_Zone_Fill( &dc, zsegm );
-        SetCurItem( NULL );
-        test_1_net_connexion( NULL, netcode );
-        GetScreen()->SetModify();
-        GetBoard()->DisplayInfo(this );
+            SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
+            int      netcode = zsegm->GetNet();
+            Delete_Zone_Fill( &dc, zsegm );
+            SetCurItem( NULL );
+            test_1_net_connexion( NULL, netcode );
+            GetScreen()->SetModify();
+            GetBoard()->DisplayInfo( this );
         }
         break;
 
@@ -648,11 +586,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_ZONE_CUTOUT:
         DrawPanel->MouseToCursorSchema();
         {
-        int netcode = ((ZONE_CONTAINER*) GetCurItem())->GetNet();
-        Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
-        SetCurItem( NULL );
-        test_1_net_connexion( NULL, netcode );
-        GetBoard()->DisplayInfo(this );
+            int netcode = ( (ZONE_CONTAINER*) GetCurItem() )->GetNet();
+            Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
+            SetCurItem( NULL );
+            test_1_net_connexion( NULL, netcode );
+            GetBoard()->DisplayInfo( this );
         }
         break;
 
@@ -730,7 +668,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         DrawPanel->MouseToCursorSchema();
         Fill_All_Zones();
-        GetBoard()->DisplayInfo(this );
+        GetBoard()->DisplayInfo( this );
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
@@ -740,24 +678,26 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             Delete_Zone_Fill( &dc, NULL, zone_container->m_TimeStamp );
             test_1_net_connexion( NULL, zone_container->GetNet() );
             GetScreen()->SetModify();
-            GetBoard()->DisplayInfo(this );
+            GetBoard()->DisplayInfo( this );
             DrawPanel->Refresh();
         }
         SetCurItem( NULL );
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        GetBoard()->m_Zone.DeleteAll();    // remove zone segments used to fill zones.
+        GetBoard()->m_Zone.DeleteAll();                 // remove zone segments used to fill zones.
         for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
-        {   // Remove filled aresa in zone
+        {
+            // Remove filled aresa in zone
             ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
             zone_container->m_FilledPolysList.clear();;
         }
-        SetCurItem(NULL);           // CurItem might be deleted by this command, clear the pointer
+
+        SetCurItem( NULL );             // CurItem might be deleted by this command, clear the pointer
         test_connexions( NULL );
-        Tst_Ratsnest( NULL, 0 );    // Recalculate the active ratsnest, i.e. the unconnected links */
+        Tst_Ratsnest( NULL, 0 );        // Recalculate the active ratsnest, i.e. the unconnected links */
         GetScreen()->SetModify();
-        GetBoard()->DisplayInfo(this );
+        GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();
         break;
 
@@ -765,7 +705,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         Fill_Zone( NULL, (ZONE_CONTAINER*) GetCurItem() );
         test_1_net_connexion( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
-        GetBoard()->DisplayInfo(this );
+        GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();
         break;
 
@@ -927,19 +867,19 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_LAYER:
         itmp = SelectLayer(
-             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer, -1, -1 );
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer, -1, -1 );
         if( itmp >= 0 )
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
         DrawPanel->MouseToCursorSchema();
         break;
 
-    case  ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
+    case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
         SelectLayerPair();
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
         itmp = SelectLayer(
-             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer,
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer,
             FIRST_NO_COPPER_LAYER,
             -1 );
         if( itmp >= 0 )
@@ -949,7 +889,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
         itmp = SelectLayer(
-             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer, -1,
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer, -1,
             LAST_COPPER_LAYER );
         if( itmp >= 0 )
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
@@ -1022,7 +962,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_GETINFO_MARKER:
         if( GetCurItem() && GetCurItem()->Type() == TYPE_MARKER )
-            ((MARKER*)GetCurItem())->DisplayMarkerInfo( this );
+            ( (MARKER*) GetCurItem() )->DisplayMarkerInfo( this );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -1033,7 +973,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_DRAWING:
-        InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*)GetCurItem(), &dc);
+        InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -1084,6 +1024,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         g_DesignSettings.m_UseConnectedTrackWidth = false;
     }
     break;
+
     case ID_AUX_TOOLBAR_PCB_CLR_WIDTH:
     {
         int ii = m_SelClrWidthBox->GetChoice();
@@ -1091,7 +1032,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             g_DesignSettings.m_TrackClearenceHistory[ii];
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = false;
-        m_SelClrWidthBox_Changed = false;
+        m_SelClrWidthBox_Changed   = false;
         m_SelViaSizeBox_Changed    = false;
         g_DesignSettings.m_UseConnectedTrackWidth = false;
     }
@@ -1225,7 +1166,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-              wxString msg;
+        wxString msg;
         msg.Printf(
             wxT( "WinEDA_PcbFrame::Process_Special_Functions() id %d error" ),
             DrawStruct->Type() );
@@ -1252,7 +1193,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
 
     switch( DrawStruct->Type() )
     {
-    case  TYPE_TEXTE:
+    case TYPE_TEXTE:
         frame->StartMoveTextePcb( (TEXTE_PCB*) DrawStruct, DC );
         break;
 
@@ -1314,14 +1255,14 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case TYPE_ZONE_CONTAINER:
-        {
+    {
         SetCurItem( NULL );
-        int netcode = ((ZONE_CONTAINER*) Item)->GetNet();
+        int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
         Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
         test_1_net_connexion( NULL, netcode );
-        GetBoard()->DisplayInfo(this );
-        }
-        break;
+        GetBoard()->DisplayInfo( this );
+    }
+    break;
 
     case TYPE_MARKER:
         if( Item == GetCurItem() )

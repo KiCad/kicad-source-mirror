@@ -67,6 +67,14 @@ void PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::ClearItemsList()
     m_ItemsList.clear();
 }
 
+void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
+{
+    for(unsigned ii = 0; ii < m_ItemsList.size(); ii++ )
+        delete m_ItemsList[ii].m_Item;
+    m_ItemsList.clear();
+}
+
+
 ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
 {
     ITEM_PICKER picker;
@@ -158,6 +166,20 @@ bool PICKED_ITEMS_LIST::RemoveItem( unsigned aIdx )
         return false;
     m_ItemsList.erase( m_ItemsList.begin() + aIdx );
     return true;
+}
+
+/** Function CopyList
+ * copy all data from aSource
+ * Items picked are not copied. just pointer on them are copied
+ */
+void PICKED_ITEMS_LIST::CopyList(const PICKED_ITEMS_LIST & aSource)
+{
+    ITEM_PICKER picker;
+    for(unsigned ii = 0; ii < aSource.GetCount(); ii++ )
+    {
+        picker = aSource.m_ItemsList[ii];
+        PushItem(picker);
+    }
 }
 
 

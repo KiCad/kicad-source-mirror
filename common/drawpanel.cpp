@@ -1095,7 +1095,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
     else if( event.LeftUp() )
     {
-        if( screen->BlockLocate.m_State==STATE_NO_BLOCK     // A block command is in progress: a left up is the end of block
+        if( screen->m_BlockLocate.m_State==STATE_NO_BLOCK     // A block command is in progress: a left up is the end of block
             && !s_IgnoreNextLeftButtonRelease )             // This is the end of a double click, already seen
             m_Parent->OnLeftClick( &DC, screen->m_MousePositionInPixels );
 
@@ -1111,7 +1111,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         s_IgnoreNextLeftButtonRelease = false;
     }
 
-    if( event.ButtonUp( 2 ) && (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
+    if( event.ButtonUp( 2 ) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK) )
     {
         // The middle button has been released, with no block command:
         // We use it for a zoom center at cursor position command
@@ -1158,14 +1158,14 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( m_Block_Enable && !(localbutt & GR_M_DCLICK) )
     {
-        if( (screen->BlockLocate.m_Command == BLOCK_IDLE)
-            || (screen->BlockLocate.m_State == STATE_NO_BLOCK) )
+        if( (screen->m_BlockLocate.m_Command == BLOCK_IDLE)
+            || (screen->m_BlockLocate.m_State == STATE_NO_BLOCK) )
         {
-            screen->BlockLocate.SetOrigin( m_CursorStartPos );
+            screen->m_BlockLocate.SetOrigin( m_CursorStartPos );
         }
         if( event.LeftDown() || event.MiddleDown() )
         {
-            if( screen->BlockLocate.m_State == STATE_BLOCK_MOVE )
+            if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
             {
                 m_AutoPAN_Request = FALSE;
                 m_Parent->HandleBlockPlace( &DC );
@@ -1177,7 +1177,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
                  && ManageCurseur == NULL
                  && ForceCloseManageCurseur == NULL )
         {       // Mouse is dragging: if no block in progress:  start a block command
-            if( screen->BlockLocate.m_State == STATE_NO_BLOCK )
+            if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
             {   //  Start a block command
                 int cmd_type = kbstat;
 
@@ -1217,10 +1217,10 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
              */
             #define BLOCK_MINSIZE_LIMIT 1
             bool BlockIsSmall =
-                ( ABS( screen->Scale( screen->BlockLocate.GetWidth() ) ) < BLOCK_MINSIZE_LIMIT)
-                  && ( ABS( screen->Scale( screen->BlockLocate.GetHeight() ) ) < BLOCK_MINSIZE_LIMIT);
+                ( ABS( screen->Scale( screen->m_BlockLocate.GetWidth() ) ) < BLOCK_MINSIZE_LIMIT)
+                  && ( ABS( screen->Scale( screen->m_BlockLocate.GetHeight() ) ) < BLOCK_MINSIZE_LIMIT);
 
-            if( (screen->BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
+            if( (screen->m_BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
             {
                 if( ForceCloseManageCurseur )
                 {
@@ -1229,12 +1229,12 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
                 }
                 SetCursor( m_PanelCursor = m_PanelDefaultCursor );
             }
-            else if( screen->BlockLocate.m_State == STATE_BLOCK_END )
+            else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
             {
                 m_AutoPAN_Request = FALSE;
                 m_Parent->HandleBlockEnd( &DC );
                 SetCursor( m_PanelCursor = m_PanelDefaultCursor );
-                if( screen->BlockLocate.m_State == STATE_BLOCK_MOVE )
+                if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
                 {
                     m_AutoPAN_Request = TRUE;
                     SetCursor( m_PanelCursor = wxCURSOR_HAND );
@@ -1244,10 +1244,10 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
 
     // End of block command on a double click
-    // To avoid an unwanted block move command if the move is moved while double click
+    // To avoid an unwanted block move command if the mouse is moved while double clicking
     if( localbutt == (int) (GR_M_LEFT_DOWN | GR_M_DCLICK) )
     {
-        if( screen->BlockLocate.m_Command != BLOCK_IDLE )
+        if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
             if( ForceCloseManageCurseur )
             {
@@ -1261,7 +1261,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 #if 0
     wxString msg_debug;
     msg_debug.Printf( " block state %d, cmd %d",
-                      screen->BlockLocate.m_State, screen->BlockLocate.m_Command );
+                      screen->m_BlockLocate.m_State, screen->m_BlockLocate.m_Command );
     m_Parent->PrintMsg( msg_debug );
 #endif
 

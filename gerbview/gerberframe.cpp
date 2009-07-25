@@ -214,7 +214,7 @@ void WinEDA_GerberFrame::SetToolbars()
     if( m_HToolBar == NULL )
         return;
 
-    if( GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
+    if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
     {
         m_HToolBar->EnableTool( wxID_CUT, TRUE );
         m_HToolBar->EnableTool( wxID_COPY, TRUE );

@@ -364,12 +364,12 @@ private:
     void           RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC );
 
     /* Operations sur bloc */
-    void           PasteStruct( wxDC* DC );
+    void           PasteListOfItems( wxDC* DC );
 
     /* Undo - redo */
 public:
-    void           SaveCopyInUndoList( SCH_ITEM* ItemToCopy,
-                                       int       flag_type_command = 0 );
+    void           SaveCopyInUndoList( SCH_ITEM* ItemToCopy, int aTypeCommand );
+    void           SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, int aTypeCommand );
 
 private:
     void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList );

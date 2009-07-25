@@ -247,9 +247,9 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
         err = TRUE;
         DisplayError( this, wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
     }
-    GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+    GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
-    switch( GetScreen()->BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
         err = TRUE;
@@ -261,14 +261,14 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         Block_Move( DC );
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         Block_Duplicate( DC );
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_PASTE:
@@ -283,13 +283,13 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->BlockLocate.m_Flags   = 0;
-    GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-    GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-    if( GetScreen()->BlockLocate.m_BlockDrawStruct )
+    GetScreen()->m_BlockLocate.m_Flags   = 0;
+    GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+    GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+    if( GetScreen()->m_BlockLocate.GetCount() )
     {
-        DisplayError( this, wxT( "Error in HandleBlockPLace DrawStruct != NULL" ) );
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        DisplayError( this, wxT( "Error in HandleBlockPLace some items left in list" ) );
+        GetScreen()->m_BlockLocate.ClearItemsList();
     }
 
     DisplayToolMsg( wxEmptyString );
@@ -310,7 +310,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
     int endcommande = TRUE;
 
     if( DrawPanel->ManageCurseur )
-        switch( GetScreen()->BlockLocate.m_Command )
+        switch( GetScreen()->m_BlockLocate.m_Command )
         {
         case  BLOCK_IDLE:
             DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
@@ -320,7 +320,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_MOVE:            /* Move */
         case BLOCK_COPY:            /* Copy */
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_MOVE;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             endcommande = FALSE;
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
             DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
@@ -331,7 +331,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
             // Turn off the block rectangle now so it is not redisplayed
             DrawPanel->ManageCurseur = NULL;
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             Block_Delete( DC );
             break;
@@ -340,7 +340,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
             // Turn off the block rectangle now so it is not redisplayed
             DrawPanel->ManageCurseur = NULL;
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             Block_Rotate( DC );
             break;
@@ -349,18 +349,18 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
             // Turn off the block rectangle now so it is not redisplayed
             DrawPanel->ManageCurseur = NULL;
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             Block_Invert( DC );
             break;
 
         case BLOCK_SAVE: /* Save (not used, for future enhancements)*/
-            GetScreen()->BlockLocate.m_State = STATE_BLOCK_STOP;
-            if( GetScreen()->BlockLocate.m_BlockDrawStruct != NULL )
+            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+            if( GetScreen()->m_BlockLocate.GetCount() )
             {
                 DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
 
-//				SaveStruct(GetScreen()->BlockLocate.m_BlockDrawStruct);
+//				SaveStruct(GetScreen()->m_BlockLocate.m_BlockDrawStruct);
             }
             break;
 
@@ -372,7 +372,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             //Turn off the redraw block routine now so it is not displayed
             // with one corner at the new center of the screen
             DrawPanel->ManageCurseur = NULL;
-            Window_Zoom( GetScreen()->BlockLocate );
+            Window_Zoom( GetScreen()->m_BlockLocate );
             break;
 
         default:
@@ -381,10 +381,10 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
     if( endcommande == TRUE )
     {
-        GetScreen()->BlockLocate.m_Flags   = 0;
-        GetScreen()->BlockLocate.m_State   = STATE_NO_BLOCK;
-        GetScreen()->BlockLocate.m_Command = BLOCK_IDLE;
-        GetScreen()->BlockLocate.m_BlockDrawStruct = NULL;
+        GetScreen()->m_BlockLocate.m_Flags   = 0;
+        GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+        GetScreen()->m_BlockLocate.ClearItemsList();
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         DisplayToolMsg( wxEmptyString );
@@ -405,34 +405,27 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     BASE_SCREEN* screen = panel->GetScreen();
 
     Color = YELLOW;
-    GRSetDrawMode( DC, g_XorMode );
 
     /* Effacement ancien cadre */
     if( erase )
     {
-        screen->BlockLocate.Draw( panel, DC );
-        if( screen->BlockLocate.m_MoveVector.x || screen->BlockLocate.m_MoveVector.y )
+        screen->m_BlockLocate.Draw( panel, DC, wxPoint(0,0), g_XorMode, Color );
+        if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
         {
-            screen->BlockLocate.Offset( screen->BlockLocate.m_MoveVector );
-            screen->BlockLocate.Draw( panel, DC );
-            screen->BlockLocate.Offset( -screen->BlockLocate.m_MoveVector.x,
-                                        -screen->BlockLocate.m_MoveVector.y );
+            screen->m_BlockLocate.Draw( panel, DC, screen->m_BlockLocate.m_MoveVector, g_XorMode, Color );
         }
     }
 
-    if( screen->BlockLocate.m_State != STATE_BLOCK_STOP )
+    if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
-        screen->BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->BlockLocate.GetRight();
-        screen->BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->BlockLocate.GetBottom();
+        screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->m_BlockLocate.GetRight();
+        screen->m_BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->m_BlockLocate.GetBottom();
     }
 
-    screen->BlockLocate.Draw( panel, DC );
-    if( screen->BlockLocate.m_MoveVector.x || screen->BlockLocate.m_MoveVector.y )
+    screen->m_BlockLocate.Draw( panel, DC, wxPoint(0,0), g_XorMode, Color );
+    if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
     {
-        screen->BlockLocate.Offset( screen->BlockLocate.m_MoveVector );
-        screen->BlockLocate.Draw( panel, DC );
-        screen->BlockLocate.Offset( -screen->BlockLocate.m_MoveVector.x,
-                                    -screen->BlockLocate.m_MoveVector.y );
+        screen->m_BlockLocate.Draw( panel, DC, screen->m_BlockLocate.m_MoveVector, g_XorMode, Color );
     }
 }
 
@@ -452,7 +445,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         return;
 
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
     SetCurItem( NULL );
 
     /* Effacement des modules */
@@ -463,7 +456,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         for( ; module != NULL; module = (MODULE*) NextS )
         {
             NextS = module->Next();
-            if( module->HitTest( GetScreen()->BlockLocate ) )
+            if( module->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 module->m_Flags = 0;
                 module->DeleteStructure();
@@ -480,7 +473,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) NextS )
         {
             NextS = pt_segm->Next();
-            if( pt_segm->HitTest( GetScreen()->BlockLocate ) )
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 /* la piste est ici bonne a etre efface */
                 pt_segm->DeleteStructure();
@@ -506,7 +499,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         case TYPE_DRAWSEGMENT:
             if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
 
             /* l'element est ici bon a etre efface */
@@ -517,7 +510,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         case TYPE_TEXTE:
             if( !Block_Include_PcbTextes )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* le texte est ici bon a etre efface */
             PtStruct->Draw( DrawPanel, DC, GR_XOR );
@@ -528,7 +521,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         case TYPE_MIRE:
             if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre efface */
             PtStruct->DeleteStructure();
@@ -537,7 +530,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         case TYPE_COTATION:
             if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             PtStruct->DeleteStructure();
             break;
@@ -556,7 +549,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextSegZ )
         {
             NextSegZ = pt_segm->Next();
-            if( pt_segm->HitTest( GetScreen()->BlockLocate ) )
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 pt_segm->DeleteStructure();
             }
@@ -564,7 +557,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
 
         for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 m_Pcb->Delete(m_Pcb->GetArea(ii));
                 ii--;	// because the current data was removed, ii points actually the next data
@@ -597,9 +590,9 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         return;
 
     oldpos = GetScreen()->m_Curseur;
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
-    centre = GetScreen()->BlockLocate.Centre();	// This is the rotation centre
+    centre = GetScreen()->m_BlockLocate.Centre();	// This is the rotation centre
 
     GetScreen()->SetModify();
 
@@ -611,7 +604,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         module = m_Pcb->m_Modules;
         for( ; module != NULL; module = module->Next() )
         {
-            if( ! module->HitTest( GetScreen()->BlockLocate ) )
+            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
                 continue;
             m_Pcb->m_Status_Pcb = 0;
             module->m_Flags = 0;
@@ -635,7 +628,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         track = m_Pcb->m_Track;
         while( track )
         {
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {                                           /* la piste est ici bonne a etre deplacee */
                 m_Pcb->m_Status_Pcb = 0;
                 RotatePoint( &track->m_Start, centre, 900 );
@@ -654,7 +647,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         track = (TRACK*) m_Pcb->m_Zone;
         while( track )
         {
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 RotatePoint( &track->m_Start, centre, 900 );
                 RotatePoint( &track->m_End, centre, 900 );
@@ -663,7 +656,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
         }
         for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 m_Pcb->GetArea(ii)->Rotate(centre, 900);
             }
@@ -687,7 +680,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
             #define STRUCT ( (DRAWSEGMENT*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             RotatePoint( &STRUCT->m_Start, centre, 900 );
             RotatePoint( &STRUCT->m_End, centre, 900 );
@@ -698,7 +691,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
             #define STRUCT ( (TEXTE_PCB*) PtStruct )
             if( !Block_Include_PcbTextes )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             RotatePoint( &STRUCT->m_Pos, centre, 900 );
             STRUCT->m_Orient += 900;
@@ -711,7 +704,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
             #define STRUCT ( (MIREPCB*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre modifie */
             RotatePoint( &STRUCT->m_Pos, centre, 900 );
@@ -722,7 +715,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
             #define STRUCT ( (COTATION*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             STRUCT->Rotate(centre, 900);
             break;
@@ -759,10 +752,10 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         return;
 
     memo = GetScreen()->m_Curseur;
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
     /* calcul du centre d'inversion */
-    centerY = GetScreen()->BlockLocate.Centre().y;
+    centerY = GetScreen()->m_BlockLocate.Centre().y;
 
     GetScreen()->SetModify();
 
@@ -773,7 +766,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         module = m_Pcb->m_Modules;
         for( ; module != NULL; module = module->Next() )
         {
-            if( ! module->HitTest( GetScreen()->BlockLocate ) )
+            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
                 continue;
             /* le module est ici bon a etre efface */
             m_Pcb->m_Status_Pcb = 0;
@@ -804,7 +797,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         track = m_Pcb->m_Track;
         while( track )
         {
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {                                           /* la piste est ici bonne a etre deplacee */
                 m_Pcb->m_Status_Pcb = 0;
                 INVERT( track->m_Start.y );
@@ -826,7 +819,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         track = (TRACK*) m_Pcb->m_Zone;
         while( track )
         {
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {                                           /* la piste est ici bonne a etre deplacee */
                 INVERT( track->m_Start.y );
                 INVERT( track->m_End.y );
@@ -836,7 +829,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
         }
         for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 m_Pcb->GetArea(ii)->Mirror( wxPoint(0, centerY) );
                 m_Pcb->GetArea(ii)->SetLayer( ChangeSideNumLayer( m_Pcb->GetArea(ii)->GetLayer() ) );
@@ -860,7 +853,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             #define STRUCT ( (DRAWSEGMENT*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre selectionne */
             if( STRUCT->m_Shape == S_ARC )
@@ -877,7 +870,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             #define STRUCT ( (TEXTE_PCB*) PtStruct )
             if( !Block_Include_PcbTextes )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* le texte est ici bon a etre selectionne*/
             INVERT( STRUCT->m_Pos.y );
@@ -894,7 +887,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             #define STRUCT ( (MIREPCB*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre modifie */
             INVERT( STRUCT->m_Pos.y );
@@ -906,7 +899,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
             #define STRUCT ( (COTATION*) PtStruct )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! PtStruct->HitTest( GetScreen()->BlockLocate ) )
+            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre modifie */
 
@@ -934,7 +927,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
 {
     int masque_layer;
     wxPoint oldpos;
-    wxPoint MoveVector = GetScreen()->BlockLocate.m_MoveVector;
+    wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
 
     oldpos = GetScreen()->m_Curseur;
     DrawPanel->ManageCurseur = NULL;
@@ -945,7 +938,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     GetScreen()->m_Curseur = oldpos;
     DrawPanel->MouseToCursorSchema();
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
     /* Deplacement des modules */
     if( Block_Include_Modules )
@@ -955,7 +948,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
 
         for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
         {
-            if( ! module->HitTest( GetScreen()->BlockLocate ) )
+            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
                 continue;
 
             /* le module est ici bon a etre deplace */
@@ -974,7 +967,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     {
         for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
         {
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {                                           /* la piste est ici bonne a etre deplacee */
                 m_Pcb->m_Status_Pcb = 0;
                 track->m_Start += MoveVector;
@@ -988,7 +981,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
     {
         for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
         {
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {                                           /* la piste est ici bonne a etre deplacee */
                 track->m_Start += MoveVector;
                 track->m_End   += MoveVector;
@@ -996,7 +989,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
         }
         for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 m_Pcb->GetArea(ii)->Move( MoveVector );
             }
@@ -1018,7 +1011,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             #define STRUCT ( (DRAWSEGMENT*) item )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! item->HitTest( GetScreen()->BlockLocate ) )
+            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre efface */
             STRUCT->m_Start += MoveVector;
@@ -1030,7 +1023,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             #define STRUCT ( (TEXTE_PCB*) item )
             if( !Block_Include_PcbTextes )
                 break;
-            if( ! item->HitTest( GetScreen()->BlockLocate ) )
+            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* le texte est ici bon a etre deplace */
             /* Redessin du Texte */
@@ -1042,7 +1035,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             #define STRUCT ( (MIREPCB*) item )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! item->HitTest( GetScreen()->BlockLocate ) )
+            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre efface */
             STRUCT->m_Pos += MoveVector;
@@ -1053,7 +1046,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
             #define STRUCT ( (COTATION*) item )
             if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                 break;
-            if( ! item->HitTest( GetScreen()->BlockLocate ) )
+            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             /* l'element est ici bon a etre efface */
             ( (COTATION*) item )->Move( wxPoint(MoveVector) );
@@ -1079,7 +1072,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
 {
     int masque_layer;
     wxPoint oldpos;
-    wxPoint MoveVector = GetScreen()->BlockLocate.m_MoveVector;
+    wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
 
     oldpos = GetScreen()->m_Curseur;
     DrawPanel->ManageCurseur = NULL;
@@ -1090,7 +1083,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     GetScreen()->m_Curseur = oldpos;
     DrawPanel->MouseToCursorSchema();
     GetScreen()->SetModify();
-    GetScreen()->BlockLocate.Normalize();
+    GetScreen()->m_BlockLocate.Normalize();
 
     /* Module copy */
     if( Block_Include_Modules )
@@ -1102,7 +1095,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         for( MODULE* module= m_Pcb->m_Modules;  module;  module = module->Next() )
         {
             MODULE* new_module;
-            if( ! module->HitTest( GetScreen()->BlockLocate ) )
+            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
                 continue;
 
             /* le module est ici bon a etre deplace */
@@ -1130,7 +1123,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         while( track )
         {
             next_track = track->Next();
-            if( track->HitTest( GetScreen()->BlockLocate ) )
+            if( track->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 /* la piste est ici bonne a etre deplacee */
                 m_Pcb->m_Status_Pcb = 0;
@@ -1150,7 +1143,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
     {
         for( SEGZONE* segzone = m_Pcb->m_Zone;  segzone;  segzone = segzone->Next() )
         {
-            if( segzone->HitTest( GetScreen()->BlockLocate ) )
+            if( segzone->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 SEGZONE* new_segzone = (SEGZONE*) segzone->Copy();
 
@@ -1164,7 +1157,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
         unsigned imax = m_Pcb->GetAreaCount();
         for ( unsigned ii = 0; ii < imax; ii++ )
         {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->BlockLocate ) )
+            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 ZONE_CONTAINER * new_zone = new ZONE_CONTAINER(m_Pcb);
                 new_zone->Copy( m_Pcb->GetArea(ii) );
@@ -1191,7 +1184,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 #define STRUCT ( (DRAWSEGMENT*) item )
                 if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                     break;
-                if( ! item->HitTest( GetScreen()->BlockLocate ) )
+                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                     break;
 
                 /* l'element est ici bon a etre copie */
@@ -1211,7 +1204,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 #define STRUCT ( (TEXTE_PCB*) item )
                 if( !Block_Include_PcbTextes )
                     break;
-                if( ! item->HitTest( GetScreen()->BlockLocate ) )
+                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                     break;
                 /* le texte est ici bon a etre deplace */
                 TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
@@ -1230,7 +1223,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 #define STRUCT ( (MIREPCB*) item )
                 if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                     break;
-                if( ! item->HitTest( GetScreen()->BlockLocate ) )
+                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                     break;
                 /* l'element est ici bon a etre efface */
                 MIREPCB* new_mire = new MIREPCB( m_Pcb );
@@ -1248,7 +1241,7 @@ void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
                 #define STRUCT ( (COTATION*) item )
                 if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
                     break;
-                if( ! item->HitTest( GetScreen()->BlockLocate ) )
+                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
                     break;
                 /* l'element est ici bon a etre copie */
                 COTATION* new_cotation = new COTATION( m_Pcb );

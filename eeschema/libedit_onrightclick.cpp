@@ -29,7 +29,7 @@ bool WinEDA_LibeditFrame::OnRightClick(const wxPoint& MousePos, wxMenu * PopMenu
 /********************************************************************************/
 {
 LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
-bool BlockActive = (GetScreen()->BlockLocate.m_Command !=  BLOCK_IDLE);
+bool BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     if ( CurrentLibEntry == NULL ) return true;
 
@@ -232,14 +232,14 @@ void AddMenusForBlock(wxMenu * PopMenu, WinEDA_LibeditFrame * frame)
 {
     ADD_MENUITEM(PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _("Cancel Block"), cancel_xpm);
 
-    if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
             ADD_MENUITEM(PopMenu, ID_POPUP_ZOOM_BLOCK, _("Zoom Block (drag middle mouse)"), zoom_selected_xpm);
 
     PopMenu->AppendSeparator();
 
     ADD_MENUITEM(PopMenu, ID_POPUP_PLACE_BLOCK, _("Place Block"), apply_xpm );
 
-    if( frame->GetScreen()->BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
     {
         ADD_MENUITEM(PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _("Select Items"), green_xpm);
         ADD_MENUITEM(PopMenu, ID_POPUP_COPY_BLOCK,

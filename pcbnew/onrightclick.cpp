@@ -97,7 +97,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     wxString    msg;
     int         flags = 0;
     bool        locate_track = FALSE;
-    bool        BlockActive  = (GetScreen()->BlockLocate.m_Command != BLOCK_IDLE);
+    bool        BlockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
     wxClientDC  dc( DrawPanel );
 

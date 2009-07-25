@@ -40,7 +40,7 @@ bool      g_LastSearchIsMarker; /* True if last seach is a marker serach
                                  * Used for hotkey next search */
 
 /* Block operation (copy, paste) */
-SCH_ITEM* g_BlockSaveDataList; // List of items to paste (Created by Block Save)
+BLOCK_SELECTOR g_BlockSaveDataList; // List of items to paste (Created by Block Save)
 
 // Gestion d'options
 bool      g_HVLines = true;   // Bool: force H or V directions (Wires, Bus ..)

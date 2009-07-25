@@ -35,7 +35,7 @@ void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
 
     if(  event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
-        if( GetBaseScreen()->BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetBaseScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
                         DrawPanel->m_PanelDefaultCursor ) );
 
@@ -74,13 +74,13 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     /* scale is the ratio resolution/internal units */
     float   scale = 82.0 / panel->m_Parent->m_InternalUnits;
 
-    if( ActiveScreen->BlockLocate.m_Command != BLOCK_IDLE )
+    if( ActiveScreen->m_BlockLocate.m_Command != BLOCK_IDLE )
     {
         DrawBlock = TRUE;
-        DrawArea.SetX( (int) ( ActiveScreen->BlockLocate.GetX() ) );
-        DrawArea.SetY( (int) ( ActiveScreen->BlockLocate.GetY() ) );
-        DrawArea.SetWidth( (int) ( ActiveScreen->BlockLocate.GetWidth() ) );
-        DrawArea.SetHeight( (int) ( ActiveScreen->BlockLocate.GetHeight() ) );
+        DrawArea.SetX( ActiveScreen->m_BlockLocate.GetX() );
+        DrawArea.SetY( ActiveScreen->m_BlockLocate.GetY() );
+        DrawArea.SetWidth( ActiveScreen->m_BlockLocate.GetWidth() );
+        DrawArea.SetHeight( ActiveScreen->m_BlockLocate.GetHeight() );
     }
 
     /* modification des cadrages et reglages locaux */
