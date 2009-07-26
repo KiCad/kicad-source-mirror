@@ -128,7 +128,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
 
     /* save old cmp in undo list if not already in edit, or moving ... */
     if( Field->m_Flags == 0 )
-        SaveCopyInUndoList( Cmp, IS_CHANGED );
+        SaveCopyInUndoList( Cmp, UR_CHANGED );
 
     wxString newtext = Field->m_Text;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -270,7 +270,7 @@ void WinEDA_SchematicFrame::RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC )
 
     /* save old cmp in undo list if not already in edit, or moving ... */
     if( Field->m_Flags == 0 )
-        SaveCopyInUndoList( Cmp, IS_CHANGED );
+        SaveCopyInUndoList( Cmp, UR_CHANGED );
 
     Field->m_AddExtraText = flag;
     Field->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
@@ -310,7 +310,7 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
     {
         /* save old cmp in undo list if not already in edit, or moving ... */
         if( Cmp->m_Flags == 0 )
-            SaveCopyInUndoList( Cmp, IS_CHANGED );
+            SaveCopyInUndoList( Cmp, UR_CHANGED );
         Cmp->SetRef(GetSheet(), ref);
 
         Cmp->GetField( REFERENCE )->m_AddExtraText = flag;
@@ -349,7 +349,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     {
         /* save old cmp in undo list if not already in edit, or moving ... */
         if( Cmp->m_Flags == 0 )
-            SaveCopyInUndoList( Cmp, IS_CHANGED );
+            SaveCopyInUndoList( Cmp, UR_CHANGED );
 
         TextField->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
         TextField->m_Text = message;
@@ -388,7 +388,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( Cmp->m_Flags == 0 )
-        SaveCopyInUndoList( Cmp, IS_CHANGED );
+        SaveCopyInUndoList( Cmp, UR_CHANGED );
     Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint(0,0), g_XorMode );
 
     // move the field if it was new.

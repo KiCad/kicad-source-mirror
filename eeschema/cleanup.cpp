@@ -155,7 +155,7 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
         /* Ici il faut couper le segment en 2 */
         if( aPicklist )         // First: put copy of the old segment in undo list
         {
-            ITEM_PICKER picker((SCH_ITEM*) segment->GenCopy(), IS_CHANGED);
+            ITEM_PICKER picker((SCH_ITEM*) segment->GenCopy(), UR_CHANGED);
             picker.m_Link = segment;
             aPicklist->PushItem(picker);
         }
@@ -167,7 +167,7 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
         DrawList = NewSegment;
         if( aPicklist )
         {
-            ITEM_PICKER picker(NewSegment, IS_NEW);
+            ITEM_PICKER picker(NewSegment, UR_NEW);
             aPicklist->PushItem(picker);
         }
     }

@@ -164,25 +164,23 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
  * de structures.
  * Utilisee dans les deplacements de blocs
  */
-void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
-                         SCH_ITEM* DrawStruct, int dx, int dy )
+void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem, const wxPoint & aOffset )
 {
     int DrawMode = g_XorMode;
     int width    = g_DrawDefaultLineThickness;
 
+    GRSetDrawMode( aDC, DrawMode );
 
-    GRSetDrawMode( DC, DrawMode );
-
-    switch( DrawStruct->Type() )
+    switch( aItem->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
     {
-        DrawPolylineStruct* Struct = (DrawPolylineStruct*) DrawStruct;
-        GRMoveTo( Struct->m_PolyPoints[0].x + dx,
-                  Struct->m_PolyPoints[0].y + dy );
+        DrawPolylineStruct* Struct = (DrawPolylineStruct*) aItem;
+        GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x,
+                  Struct->m_PolyPoints[0].y + aOffset.y );
         for( unsigned ii = 1; ii < Struct->GetCornerCount(); ii++ )
-            GRLineTo( &panel->m_ClipBox, DC, Struct->m_PolyPoints[ii].x + dx,
-                      Struct->m_PolyPoints[ii].y + dy, width, g_GhostColor );
+            GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_PolyPoints[ii].x + aOffset.x,
+                      Struct->m_PolyPoints[ii].y + aOffset.y, width, g_GhostColor );
 
         break;
     }
@@ -190,10 +188,10 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     case DRAW_SEGMENT_STRUCT_TYPE:
     {
         EDA_DrawLineStruct* Struct;
-        Struct = (EDA_DrawLineStruct*) DrawStruct;
+        Struct = (EDA_DrawLineStruct*) aItem;
         if( (Struct->m_Flags & STARTPOINT) == 0 )
         {
-            GRMoveTo( Struct->m_Start.x + dx, Struct->m_Start.y + dy );
+            GRMoveTo( Struct->m_Start.x + aOffset.x, Struct->m_Start.y + aOffset.y );
         }
         else
         {
@@ -201,12 +199,12 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
         }
         if( (Struct->m_Flags & ENDPOINT) == 0 )
         {
-            GRLineTo( &panel->m_ClipBox, DC, Struct->m_End.x + dx,
-                      Struct->m_End.y + dy, width, g_GhostColor );
+            GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_End.x + aOffset.x,
+                      Struct->m_End.y + aOffset.y, width, g_GhostColor );
         }
         else
         {
-            GRLineTo( &panel->m_ClipBox, DC, Struct->m_End.x,
+            GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_End.x,
                       Struct->m_End.y, width, g_GhostColor );
         }
         break;
@@ -214,27 +212,27 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
     {
-        DrawBusEntryStruct* Struct = (DrawBusEntryStruct*) DrawStruct;
-        int xx = Struct->m_Pos.x + dx, yy = Struct->m_Pos.y + dy;
-        GRMoveTo( xx, yy );
-        GRLineTo( &panel->m_ClipBox, DC, Struct->m_Size.x + xx,
-                  Struct->m_Size.y + yy, width, g_GhostColor );
+        DrawBusEntryStruct* Struct = (DrawBusEntryStruct*) aItem;
+        wxPoint start = Struct->m_Pos + aOffset;
+        GRMoveTo( start.x, start.y );
+        GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_Size.x + start.x,
+                  Struct->m_Size.y + start.y, width, g_GhostColor );
         break;
     }
 
     case DRAW_JUNCTION_STRUCT_TYPE:
     {
         DrawJunctionStruct* Struct;
-        Struct = (DrawJunctionStruct*) DrawStruct;
-        Struct->Draw( panel, DC, wxPoint(0,0), DrawMode, g_GhostColor );
+        Struct = (DrawJunctionStruct*) aItem;
+        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
         break;
     }
 
     case TYPE_SCH_TEXT:
     {
         SCH_TEXT* Struct;
-        Struct = (SCH_TEXT*) DrawStruct;
-        Struct->Draw( panel, DC, wxPoint( dx, dy ), DrawMode, g_GhostColor );
+        Struct = (SCH_TEXT*) aItem;
+        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
         break;
     }
 
@@ -243,16 +241,16 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     case TYPE_SCH_HIERLABEL:
     {
         SCH_LABEL* Struct;
-        Struct = (SCH_LABEL*) DrawStruct;
-        Struct->Draw( panel, DC, wxPoint( dx, dy ), DrawMode, g_GhostColor );
+        Struct = (SCH_LABEL*) aItem;
+        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
         break;
     }
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
     {
         DrawNoConnectStruct* Struct;
-        Struct = (DrawNoConnectStruct*) DrawStruct;
-        Struct->Draw( panel, DC, wxPoint( dx, dy ), DrawMode, g_GhostColor );
+        Struct = (DrawNoConnectStruct*) aItem;
+        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
         break;
     }
 
@@ -260,23 +258,23 @@ void DrawStructsInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         EDA_LibComponentStruct* LibEntry;
         SCH_COMPONENT*          Struct;
-        Struct   = (SCH_COMPONENT*) DrawStruct;
+        Struct   = (SCH_COMPONENT*) aItem;
         LibEntry = FindLibPart( Struct->m_ChipName.GetData(), wxEmptyString,
                                 FIND_ROOT );
         if( LibEntry == NULL )
             break;
-        DrawingLibInGhost( panel, DC, LibEntry, Struct, Struct->m_Pos.x + dx,
-                           Struct->m_Pos.y + dy, Struct->m_Multi,
+        DrawingLibInGhost( aPanel, aDC, LibEntry, Struct, Struct->m_Pos.x + aOffset.x,
+                           Struct->m_Pos.y + aOffset.y, Struct->m_Multi,
                            Struct->m_Convert, g_GhostColor, FALSE );
         break;
     }
 
     case DRAW_SHEET_STRUCT_TYPE:
     {
-        DrawSheetStruct* Struct = (DrawSheetStruct*) DrawStruct;
-        GRRect( &panel->m_ClipBox, DC, Struct->m_Pos.x + dx,
-                Struct->m_Pos.y + dy, Struct->m_Pos.x + Struct->m_Size.x + dx,
-                Struct->m_Pos.y + Struct->m_Size.y + dy, width, g_GhostColor );
+        DrawSheetStruct* Struct = (DrawSheetStruct*) aItem;
+        GRRect( &aPanel->m_ClipBox, aDC, Struct->m_Pos.x + aOffset.x,
+                Struct->m_Pos.y + aOffset.y, Struct->m_Pos.x + Struct->m_Size.x + aOffset.x,
+                Struct->m_Pos.y + Struct->m_Size.y + aOffset.y, width, g_GhostColor );
         break;
     }
 

@@ -138,7 +138,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
     /* Locate all the wires, bus or junction under the mouse cursor, and put them in a list
       * of items to delete
      */
-    ITEM_PICKER picker(NULL, IS_DELETED);
+    ITEM_PICKER picker(NULL, UR_DELETED);
     SCH_SCREEN* screen = (SCH_SCREEN*) GetScreen();
     SCH_ITEM* savedEEDrawList = screen->EEDrawList; // Save the list entry point of this screen
     DelStruct = GetScreen()->EEDrawList;

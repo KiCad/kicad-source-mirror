@@ -73,6 +73,7 @@ set(EESCHEMA_SRCS
     erc.cpp
     files-io.cpp
     find.cpp
+    geometric_transforms.cpp
     getpart.cpp
     hierarch.cpp
     hotkeys.cpp

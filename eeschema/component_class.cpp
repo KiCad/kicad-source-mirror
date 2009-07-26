@@ -615,7 +615,7 @@ void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
         SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
 
         /* save in undo list */
-        frame->SaveCopyInUndoList( this, IS_CHANGED );
+        frame->SaveCopyInUndoList( this, UR_CHANGED );
 
         /* restore new values */
         SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );

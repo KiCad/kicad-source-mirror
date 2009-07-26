@@ -341,7 +341,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         PICKED_ITEMS_LIST picklistForUndo;
         BreakSegment( screen, screen->m_Curseur, &picklistForUndo );
         if( picklistForUndo.GetCount() )
-            SaveCopyInUndoList( picklistForUndo, IS_NEW | IS_CHANGED );
+            SaveCopyInUndoList( picklistForUndo, UR_UNSPECIFIED );
         TestDanglingEnds( screen->EEDrawList, &dc );
     }
         break;
@@ -485,7 +485,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
             DrawPanel->MouseToCursorSchema();
             if( screen->GetCurItem()->m_Flags == 0 )
-                SaveCopyInUndoList( (SCH_ITEM*) screen->GetCurItem(), IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) screen->GetCurItem(), UR_CHANGED );
 
             CmpRotationMiroir(
                 (SCH_COMPONENT*) screen->GetCurItem(),

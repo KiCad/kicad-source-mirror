@@ -104,7 +104,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     copySelectedFieldToPanel();
 
     wxToolTip::Enable( true );
-    
+
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
@@ -243,7 +243,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     /* save old cmp in undo list if not already in edit, or moving ... */
     if( m_Cmp->m_Flags == 0 )
-        m_Parent->SaveCopyInUndoList( m_Cmp, IS_CHANGED );
+        m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )

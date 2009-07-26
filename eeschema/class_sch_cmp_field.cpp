@@ -416,7 +416,7 @@ void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == component->Type()) )
     {
         component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-        frame->SaveCopyInUndoList( component, IS_CHANGED );
+        frame->SaveCopyInUndoList( component, UR_CHANGED );
         component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
     }
 

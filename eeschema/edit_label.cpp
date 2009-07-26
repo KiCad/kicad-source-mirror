@@ -39,7 +39,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
 
     /* save old text in undo list if not already in edit */
     if( m_CurrentText->m_Flags == 0 )
-        m_Parent->SaveCopyInUndoList( m_CurrentText, IS_CHANGED );
+        m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
 
     text = m_TextLabel->GetValue();
     if( !text.IsEmpty() )
@@ -162,7 +162,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     /* save old text in undo list if is not already in edit */
     if( TextStruct->m_Flags == 0 )
-        SaveCopyInUndoList( TextStruct, IS_CHANGED );
+        SaveCopyInUndoList( TextStruct, UR_CHANGED );
 
     /* Effacement du texte en cours */
     DrawPanel->CursorOff( DC );
@@ -432,7 +432,7 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
      */
     if( (flags & IS_NEW) == 0 )
     {
-        SaveCopyInUndoList( newtext, IS_NEW );
+        SaveCopyInUndoList( newtext, UR_NEW );
     }
     else
     {

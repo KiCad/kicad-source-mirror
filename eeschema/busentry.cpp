@@ -145,7 +145,7 @@ void WinEDA_SchematicFrame::SetBusEntryShape( wxDC* DC,
 
     /* Put old item in undo list if it is not currently in edit */
     if( BusEntry->m_Flags == 0 )
-        SaveCopyInUndoList( BusEntry, IS_CHANGED );
+        SaveCopyInUndoList( BusEntry, UR_CHANGED );
 
     RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
 

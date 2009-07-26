@@ -8,6 +8,7 @@
 
 #include "wxstruct.h"
 #include "param_config.h"
+#include "class_undoredo_container.h"
 
 
 class WinEDA_LibeditFrame;
@@ -33,7 +34,7 @@ class LibDrawField;
 class SCH_CMP_FIELD;
 class LibDrawPin;
 class DrawJunctionStruct;
-class PICKED_ITEMS_LIST;
+
 
 /*******************************/
 /* class WinEDA_SchematicFrame */
@@ -368,8 +369,26 @@ private:
 
     /* Undo - redo */
 public:
-    void           SaveCopyInUndoList( SCH_ITEM* ItemToCopy, int aTypeCommand );
-    void           SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, int aTypeCommand );
+
+    /** Function SaveCopyInUndoList.
+     * Creates a new entry in undo list of commands.
+     * add a picker to handle aItemToCopy
+     * @param aItemToCopy = the schematic item modified by the command to undo
+     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTransformPoint = the reference point of the transformation, for commands like move
+     */
+    void           SaveCopyInUndoList( SCH_ITEM* aItemToCopy, UndoRedoOpType aTypeCommand,
+                        const wxPoint& aTransformPoint = wxPoint(0,0) );
+
+    /** Function SaveCopyInUndoList (overloaded).
+     * Creates a new entry in undo list of commands.
+     * add a list of pickers to handle a list of items
+     * @param aItemsList = the list of items modified by the command to undo
+     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTransformPoint = the reference point of the transformation, for commands like move
+     */
+    void           SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, UndoRedoOpType aTypeCommand,
+                        const wxPoint& aTransformPoint = wxPoint(0,0) );
 
 private:
     void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList );

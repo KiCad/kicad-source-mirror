@@ -331,7 +331,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         case TYPE_SCH_COMPONENT:
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
 
@@ -345,7 +345,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         case TYPE_SCH_HIERLABEL:
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
             ChangeTextOrient( (SCH_TEXT*) DrawStruct, DC );
@@ -364,7 +364,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_Y );
@@ -378,7 +378,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_X );
@@ -392,7 +392,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( DrawStruct->m_Flags == 0 )
             {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, IS_CHANGED );
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );

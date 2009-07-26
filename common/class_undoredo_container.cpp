@@ -32,7 +32,7 @@
 
 PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 {
-    m_UndoRedoType = 0;
+    m_Status = UR_UNSPECIFIED;
 };
 
 PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
@@ -102,12 +102,12 @@ EDA_BaseStruct* PICKED_ITEMS_LIST::GetImage( unsigned int aIdx )
 }
 
 
-int PICKED_ITEMS_LIST::GetItemStatus( unsigned int aIdx )
+UndoRedoOpType PICKED_ITEMS_LIST::GetItemStatus( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_UndoRedoStatus;
     else
-        return 0;
+        return UR_UNSPECIFIED;
 }
 
 
@@ -135,7 +135,7 @@ bool PICKED_ITEMS_LIST::SetLink( EDA_BaseStruct* aItem, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, int aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
@@ -148,7 +148,7 @@ bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, int aStatus, unsigned aI
 }
 
 
-bool PICKED_ITEMS_LIST::SetItemStatus( int aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetItemStatus( UndoRedoOpType aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

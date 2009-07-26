@@ -45,10 +45,26 @@
  * and they are undo/redo by the same command
  */
 
+/* Type of undo/redo operations
+ * each type must be redo/undoed by a specfic operation
+ */
+enum UndoRedoOpType {
+    UR_UNSPECIFIED = 0,     // illegal
+    UR_CHANGED,             // params of items have a value changed: undo is made by exchange values with a copy of these values
+    UR_NEW,                 // new item, undo by changing in deleted
+    UR_DELETED,             // deleted item, undo by changing in deleted
+    UR_MOVED,               // moved item, undo by move it
+    UR_MIRRORED_X,          // mirrored item, undo by mirror X
+    UR_MIRRORED_Y,          // mirrored item, undo by mirror Y
+    UR_ROTATED,             // Rotated item, undo by rotating it
+    UR_FLIPPED,             // flipped (board items only), undo by flipping it
+    UR_WIRE_IMAGE           // Specific to eeschema: handle wires changes
+};
+
 class ITEM_PICKER
 {
 public:
-    int             m_UndoRedoStatus;   // type of operation to undo/redo for this item
+    UndoRedoOpType  m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_BaseStruct* m_Item;             /* Pointer on the schematic or board item that is concerned,
                                          *  or in undo redo commands, the copy of an edited item.
                                          */
@@ -60,10 +76,10 @@ public:
                                          */
 
 public:
-    ITEM_PICKER( EDA_BaseStruct* aItem = NULL, int aUndoRedoStatus = 0 )
+    ITEM_PICKER( EDA_BaseStruct* aItem = NULL, UndoRedoOpType aUndoRedoStatus = UR_UNSPECIFIED )
     {
         m_UndoRedoStatus = aUndoRedoStatus;
-        m_Item  = aItem;
+        m_Item = aItem;
         m_Link = NULL;
     }
 };
@@ -76,28 +92,28 @@ public:
 class PICKED_ITEMS_LIST
 {
 public:
-    int     m_UndoRedoType;                             // type of operation to undo/redo
-                                                        // UNSPECIFIED (0), IS_NEW, IS_DELETED, IS_CHANGED
-    wxPoint m_TransformPoint;                           // used to undo redo command by the same command:
-                                                        // we usually need to know the rotate point or the move vector
+    UndoRedoOpType  m_Status;               /* info about operation to undo/redo for this item. can be UR_UNSPECIFIED */
+    wxPoint m_TransformPoint;               /* used to undo redo command by the same command:
+                                             * we usually need to know the rotate point or the move vector
+                                             */
 private:
     std::vector <ITEM_PICKER> m_ItemsList;
 
 public:
     PICKED_ITEMS_LIST();
     ~PICKED_ITEMS_LIST();
-    void           PushItem( ITEM_PICKER& aItem );
+    void        PushItem( ITEM_PICKER& aItem );
     ITEM_PICKER PopItem();
 
     /** Function ClearItemsList
      * delete only the list of EDA_BaseStruct * pointers, NOT the pointed data itself
      */
-    void           ClearItemsList();
+    void        ClearItemsList();
 
     /** Function ClearListAndDeleteItems
      * delete only the list of EDA_BaseStruct * pointers, AND the data pinted by m_Item
      */
-    void           ClearListAndDeleteItems();
+    void        ClearListAndDeleteItems();
 
     unsigned        GetCount() const
     {
@@ -105,21 +121,21 @@ public:
     }
 
 
-    ITEM_PICKER  GetItemWrapper( unsigned int aIdx );
+    ITEM_PICKER     GetItemWrapper( unsigned int aIdx );
     EDA_BaseStruct* GetItemData( unsigned int aIdx );
     EDA_BaseStruct* GetImage( unsigned int aIdx );
-    int             GetItemStatus( unsigned int aIdx );
+    UndoRedoOpType  GetItemStatus( unsigned int aIdx );
     bool            SetItem( EDA_BaseStruct* aItem, unsigned aIdx );
-    bool            SetItem( EDA_BaseStruct* aItem, int aStatus, unsigned aIdx );
+    bool            SetItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx );
     bool            SetLink( EDA_BaseStruct* aItem, unsigned aIdx );
-    bool            SetItemStatus( int aStatus, unsigned aIdx );
+    bool            SetItemStatus( UndoRedoOpType aStatus, unsigned aIdx );
     bool            RemoveItem( unsigned aIdx );
 
     /** Function CopyList
      * copy all data from aSource
      * Items picked are not copied. just pointer on them are copied
      */
-    void CopyList(const PICKED_ITEMS_LIST & aSource);
+    void            CopyList( const PICKED_ITEMS_LIST& aSource );
 };
 
 /**

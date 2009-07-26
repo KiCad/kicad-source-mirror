@@ -231,7 +231,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         curr_field->m_Name = ( ii < FIELD1 ) ? ReturnDefaultFieldName( ii ) : EntryField->m_Name;
     }
 
-    DrawStructsInGhost( DrawPanel, DC, Component, 0, 0 );
+    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint(0,0) );
 
     MsgPanel->EraseMsgBox();
     Component->DisplayInfo( this );
@@ -255,14 +255,14 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* Effacement du composant */
     if( erase )
     {
-        DrawStructsInGhost( panel, DC, Component, 0, 0 );
+        DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
     }
 
     move_vector.x = screen->m_Curseur.x - Component->m_Pos.x;
     move_vector.y = screen->m_Curseur.y - Component->m_Pos.y;
     MoveOneStruct( Component, move_vector );
 
-    DrawStructsInGhost( panel, DC, Component, 0, 0 );
+    DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
 }
 
 
@@ -283,7 +283,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
     {
         DrawPanel->CursorOff( DC );
         if( DrawComponent->m_Flags )
-            DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
+            DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
         else
         {
             DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox() );
@@ -296,7 +296,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
     if( DC )
     {
         if( DrawComponent->m_Flags )
-            DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
+            DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
         else
             DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
                                                          0 ),
@@ -378,7 +378,7 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 
     /* Efface le trace precedent */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
@@ -388,10 +388,9 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 
     /* Redessine le composant dans la nouvelle position */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
-                                                     0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
@@ -421,7 +420,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 
     /* Efface le trace precedent */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
@@ -431,10 +430,9 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 
     /* Redessine le composant dans la nouvelle position */
     if( DrawComponent->m_Flags & IS_MOVED )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, 0, 0 );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
-                                                     0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
@@ -508,7 +506,7 @@ void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
     Component->m_Flags |= IS_MOVED; // omit redrawing the component, erase only
     DrawPanel->PostDirtyRect( Component->GetBoundingBox() );
 
-    DrawStructsInGhost( DrawPanel, DC, Component, 0, 0 );
+    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint(0,0) );
 
 #else
 

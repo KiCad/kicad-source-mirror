@@ -45,7 +45,7 @@ void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
         if( !screen->CheckIfOnDrawList( this ) )  //don't want a loop!
             screen->AddToDrawList( this );
         g_ItemToRepeat = this;
-        frame->SaveCopyInUndoList( this, IS_NEW );
+        frame->SaveCopyInUndoList( this, UR_NEW );
     }
 
     m_Flags = 0;

@@ -357,7 +357,7 @@ void WinEDA_SchematicFrame::EndSegment( wxDC* DC )
 
     DrawPanel->CursorOn( DC );    // Display schematic cursor
 
-    SaveCopyInUndoList( s_OldWiresList, IS_WIRE_IMAGE );
+    SaveCopyInUndoList( s_OldWiresList, UR_WIRE_IMAGE );
     s_OldWiresList = NULL;
 
     GetScreen()->SetModify();
@@ -548,7 +548,7 @@ DrawJunctionStruct* WinEDA_SchematicFrame::CreateNewJunctionStruct(
     GetScreen()->EEDrawList = NewJunction;
     GetScreen()->SetModify();
     if( PutInUndoList )
-        SaveCopyInUndoList( NewJunction, IS_NEW );
+        SaveCopyInUndoList( NewJunction, UR_NEW );
     return NewJunction;
 }
 
@@ -572,7 +572,7 @@ DrawNoConnectStruct* WinEDA_SchematicFrame::CreateNewNoConnectStruct( wxDC* DC )
     NewNoConnect->SetNext( GetScreen()->EEDrawList );
     GetScreen()->EEDrawList = NewNoConnect;
     GetScreen()->SetModify();
-    SaveCopyInUndoList( NewNoConnect, IS_NEW );
+    SaveCopyInUndoList( NewNoConnect, UR_NEW );
     return NewNoConnect;
 }
 
@@ -734,7 +734,7 @@ void WinEDA_SchematicFrame::RepeatDrawItem( wxDC* DC )
         GetScreen()->EEDrawList = g_ItemToRepeat;
         TestDanglingEnds( GetScreen()->EEDrawList, NULL );
         RedrawOneStruct( DrawPanel, DC, g_ItemToRepeat, GR_DEFAULT_DRAWMODE );
-        SaveCopyInUndoList( g_ItemToRepeat, IS_NEW );
+        SaveCopyInUndoList( g_ItemToRepeat, UR_NEW );
         g_ItemToRepeat->m_Flags = 0;
 
 //		GetScreen()->Curseur = new_pos;
