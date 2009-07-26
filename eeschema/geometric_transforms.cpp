@@ -137,9 +137,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& aMirrorPoint )
         else if( DrawText->m_Orient == 2 )  /* invert horizontal text*/
             DrawText->m_Orient = 0;
 
-        px = DrawText->m_Pos;
-        MirrorYPoint( px, aMirrorPoint );
-        DrawText->m_Pos.x = px.x;
+        MirrorYPoint( DrawText->m_Pos, aMirrorPoint );
         break;
 
     case TYPE_SCH_COMPONENT:
@@ -149,7 +147,7 @@ void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint& aMirrorPoint )
         WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
         frame->CmpRotationMiroir( DrawLibItem, NULL, CMP_MIROIR_Y );
         MirrorYPoint( DrawLibItem->m_Pos, aMirrorPoint );
-        dx -= DrawLibItem->m_Pos.x;
+        dx -= DrawLibItem->m_Pos.x;     // dx,0 is the move vector for this transform
 
         for( int ii = 0; ii < DrawLibItem->GetFieldCount(); ii++ )
         {

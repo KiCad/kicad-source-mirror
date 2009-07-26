@@ -374,6 +374,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             wxPoint moveVector = - aList->m_TransformPoint;
             MoveOneStruct( item, moveVector );
+            aList->m_TransformPoint = moveVector;
         }
             break;
 
