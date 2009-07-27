@@ -78,6 +78,28 @@ public:
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile ) const;
+
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        /* Do Nothing: fields are never mirrored alone.
+         * they are moved when the parent component is mirrored
+         * this function is only needed by the virtual pure function of the master class
+         */
+    }
 };
 
 

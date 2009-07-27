@@ -13,9 +13,6 @@
 #include "class_marker_sch.h"
 
 
-// Imported functions
-void MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint&  aMirrorPoint );
-
 /* Functions to undo and redo edit commands.
  *  commmands to undo are stored in CurrentScreen->m_UndoList
  *  commmands to redo are stored in CurrentScreen->m_RedoList
@@ -344,6 +341,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 {
     SCH_ITEM* item;
     SCH_ITEM* alt_item;
+    bool as_moved = false;
 
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
@@ -371,17 +369,14 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             break;
 
         case UR_MOVED:
-        {
-            wxPoint moveVector = - aList->m_TransformPoint;
-            MoveOneStruct( item, moveVector );
-            aList->m_TransformPoint = moveVector;
-        }
+            item->Move( - aList->m_TransformPoint );
+            as_moved = true;
             break;
 
         case UR_MIRRORED_Y:
         {
             wxPoint mirrorPoint = aList->m_TransformPoint;
-            MirrorOneStruct( item, mirrorPoint );
+            item->Mirror_Y( mirrorPoint.x );
         }
             break;
 
@@ -411,6 +406,10 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         break;
         }
     }
+
+    // Undo for move transform needs to change the general move vector:
+    if ( as_moved )
+        aList->m_TransformPoint = - aList->m_TransformPoint;
 }
 
 

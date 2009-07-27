@@ -1,12 +1,11 @@
-/***********************************************************************/
-/* component_class.cpp : handle the  class SCH_COMPONENT  */
-/***********************************************************************/
+/**************************************************************/
+/* class_sch_component.cpp : handle the  class SCH_COMPONENT  */
+/**************************************************************/
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "gr_basic.h"
 #include "common.h"
-#include "confirm.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -14,13 +13,7 @@
 
 #include "protos.h"
 
-#include <wx/arrimpl.cpp>
 #include <wx/tokenzr.h>
-
-#include "component_class.h"
-
-
-WX_DEFINE_OBJARRAY( ArrayOfSheetLists );
 
 
 /* Local variables */
@@ -146,6 +139,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     }
 }
+
 
 
 /*******************************************************************/
@@ -797,7 +791,7 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
 
     default:
         Transform = FALSE;
-        DisplayError( NULL, wxT( "SetRotateMiroir() error: ill value" ) );
+        wxMessageBox( wxT( "SetRotateMiroir() error: ill value" ) );
         break;
     }
 
@@ -873,7 +867,7 @@ int SCH_COMPONENT::GetRotationMiroir()
     }
 
     // Error: orientation not found in list (should not happen)
-    DisplayError(NULL, wxT("Component orientation matrix internal error") );
+    wxMessageBox(wxT("Component orientation matrix internal error") );
     memcpy( m_Transform, ComponentMatOrient, sizeof( ComponentMatOrient ) );
     return CMP_NORMAL;
 }
@@ -1091,5 +1085,25 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         Affiche_1_Parametre( frame, 52, Entry->m_Doc, Entry->m_KeyWord,
                              DARKCYAN );
+    }
+}
+
+/** virtual function Mirror_Y
+ * mirror item relative to an Y axis
+ * @param aYaxis_position = the y axis position
+ */
+void SCH_COMPONENT::Mirror_Y(int aYaxis_position)
+{
+    int dx = m_Pos.x;
+    SetRotationMiroir( CMP_MIROIR_Y );
+    m_Pos.x -= aYaxis_position;
+    NEGATE( m_Pos.x );
+    m_Pos.x += aYaxis_position;
+    dx -= m_Pos.x;     // dx,0 is the move vector for this transform
+
+    for( int ii = 0; ii < GetFieldCount(); ii++ )
+    {
+        /* move the fields to the new position because the component itself has moved */
+        GetField( ii )->m_Pos.x -= dx;
     }
 }

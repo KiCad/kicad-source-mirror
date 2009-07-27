@@ -9,7 +9,6 @@
 #include "drawtxt.h"
 #include "program.h"
 #include "libcmp.h"
-#include "component_class.h"
 #include "general.h"
 #include "trigo.h"
 #include "protos.h"

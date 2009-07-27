@@ -186,6 +186,31 @@ wxPoint SCH_LABEL::GetSchematicTextOffset()
 }
 
 
+/** virtual function Mirror_Y
+ * mirror item relative to an Y axis
+ * @param aYaxis_position = the y axis position
+ */
+void SCH_TEXT::Mirror_Y(int aYaxis_position)
+{
+    // Text is NOT really mirrored; it is moved to a suitable position
+    // which is the closest position for a true mirrored text
+    // The center position is mirrored and the text is moved for half horizontal len
+    int px = m_Pos.x;
+    int dx;
+    if( m_Orient == 0 )       /* horizontal text */
+        dx = LenSize( m_Text ) / 2;
+    else if( m_Orient == 2 )  /* invert horizontal text*/
+        dx = -LenSize( m_Text ) / 2;
+    else
+        dx = 0;
+    px += dx;
+    px -= aYaxis_position;
+    NEGATE(px);
+    px += aYaxis_position;
+    px -= dx;
+    m_Pos.x = px;
+}
+
 /** function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself position
  * This offset depend on orientation, and the type of text
@@ -221,6 +246,41 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
     return text_offset;
 }
 
+/** virtual function Mirror_Y
+ * mirror item relative to an Y axis
+ * @param aYaxis_position = the y axis position
+ */
+void SCH_HIERLABEL::Mirror_Y(int aYaxis_position)
+{
+    // Text is NOT really mirrored; it is moved to a suitable position
+    // which is the closest position for a true mirrored text
+    // The center position is mirrored and the text is moved for half horizontal len
+    if( m_Orient == 0 )       /* horizontal text */
+        m_Orient = 2;
+    else if( m_Orient == 2 )  /* invert horizontal text*/
+        m_Orient = 0;
+    m_Pos.x -= aYaxis_position;
+    NEGATE(m_Pos.x);
+    m_Pos.x += aYaxis_position;
+}
+
+/** virtual function Mirror_Y
+ * mirror item relative to an Y axis
+ * @param aYaxis_position = the y axis position
+ */
+void SCH_GLOBALLABEL::Mirror_Y(int aYaxis_position)
+{
+    // Text is NOT really mirrored; it is moved to a suitable position
+    // which is the closest position for a true mirrored text
+    // The center position is mirrored and the text is moved for half horizontal len
+    if( m_Orient == 0 )       /* horizontal text */
+        m_Orient = 2;
+    else if( m_Orient == 2 )  /* invert horizontal text*/
+        m_Orient = 0;
+    m_Pos.x -= aYaxis_position;
+    NEGATE(m_Pos.x);
+    m_Pos.x += aYaxis_position;
+}
 
 /** function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself position

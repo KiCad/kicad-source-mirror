@@ -62,8 +62,21 @@ public:
                           int               Color = -1 ) = 0;
 
 
-    /* fonction de placement */
+    /* Place function */
     virtual void    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector) = 0;
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position) = 0;
 
     /**
      * Function Save

@@ -258,9 +258,8 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
     }
 
-    move_vector.x = screen->m_Curseur.x - Component->m_Pos.x;
-    move_vector.y = screen->m_Curseur.y - Component->m_Pos.y;
-    MoveOneStruct( Component, move_vector );
+    move_vector = screen->m_Curseur - Component->m_Pos;
+    Component->Move( move_vector );
 
     DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
 }
@@ -327,15 +326,9 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     else if( Component )   /* Deplacement ancien composant en cours */
     {
-        wxPoint move_vector;
-
-        move_vector.x = OldPos.x - Component->m_Pos.x;
-        move_vector.y = OldPos.y - Component->m_Pos.y;
-
-        MoveOneStruct( Component, move_vector );
-
+        wxPoint move_vector = OldPos - Component->m_Pos;
+        Component->Move( move_vector );
         memcpy( Component->m_Transform, OldTransMat, sizeof(OldTransMat) );
-
         Component->m_Flags = 0;
     }
 

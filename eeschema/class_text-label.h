@@ -102,6 +102,21 @@ public:
      */
     int GetPenSize( );
 
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position);
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
@@ -209,6 +224,12 @@ public:
      * @param Pos = Position of the shape
      */
     void     CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos );
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position);
 };
 
 
@@ -268,6 +289,11 @@ public:
     bool     HitTest( const wxPoint& aPosRef );
 
     EDA_Rect GetBoundingBox();
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position);
 };
 
 #endif /* CLASS_TEXT_LABEL_H */

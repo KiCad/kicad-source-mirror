@@ -93,9 +93,6 @@ char * StrPurge(char * text);
     /* BLOCK.CPP */
     /************/
 SCH_ITEM * DuplicateStruct(SCH_ITEM *DrawStruct);
-void MoveOneStruct(SCH_ITEM *DrawStructs, const wxPoint & move_vector);
-                        /* Given a structure move it by move_vector. */
-
 void DeleteStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *DrawStruct);
 
     /*************/

@@ -77,6 +77,27 @@ public:
     virtual EDA_Rect GetBoundingBox();
 
 
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        m_Pos.x -= aYaxis_position;
+        m_Pos.x = - m_Pos.x;
+        m_Pos.x += aYaxis_position;
+    }
+
 #if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );
 #endif

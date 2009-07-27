@@ -10,7 +10,7 @@
 #include "base_struct.h"
 #include "sch_item_struct.h"
 
-#include "component_class.h"
+#include "class_sch_component.h"
 #include "class_sch_screen.h"
 #include "class_drawsheet.h"
 #include "class_drawsheetpath.h"

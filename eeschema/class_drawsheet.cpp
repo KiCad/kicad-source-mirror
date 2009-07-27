@@ -705,6 +705,27 @@ void DrawSheetStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+/** virtual function Mirror_Y
+ * mirror item relative to an Y axis
+ * @param aYaxis_position = the y axis position
+ */
+void DrawSheetStruct::Mirror_Y(int aYaxis_position)
+{
+    m_Pos.x -= aYaxis_position;
+    NEGATE( m_Pos.x );
+    m_Pos.x += aYaxis_position;
+
+    m_Pos.x -= m_Size.x;
+
+   Hierarchical_PIN_Sheet_Struct*  label = m_Label;
+    while( label != NULL )
+    {
+        label->Mirror_Y( aYaxis_position );
+        label = label->Next();
+    }
+}
+
+
 #if defined(DEBUG)
 void DrawSheetStruct::Show( int nestLevel, std::ostream& os )
 {

@@ -21,16 +21,14 @@
 /* Variables Locales */
 
 // Imported functions:
-void               MoveItemsInList( SCH_SCREEN* aScreen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
+void               MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
 void               MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-void               MirrorOneStruct( SCH_ITEM* DrawStruct, wxPoint&  Center );
+void               DeleteItemsInList( WinEDA_DrawPanel*  panel, PICKED_ITEMS_LIST& aItemsList );
+void               DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector  );
 
 /* Fonctions exportees */
-void               DeleteItemsInList( WinEDA_DrawPanel*  panel,
-                                             PICKED_ITEMS_LIST& aItemsList );
 
 /* Fonctions Locales */
-static void               DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector  );
 static void               CollectStructsToDrag( SCH_SCREEN* screen );
 static void               AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
 static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
@@ -140,7 +138,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 
         SaveCopyInUndoList( block->m_ItemsSelection, UR_MOVED, block->m_MoveVector );
 
-        MoveItemsInList( GetScreen(), block->m_ItemsSelection, block->m_MoveVector );
+        MoveItemsInList( block->m_ItemsSelection, block->m_MoveVector );
         block->ClearItemsList();
         break;
 
@@ -287,7 +285,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             {
                 wxPoint move_vector =  -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
                 SaveStructListForPaste( block->m_ItemsSelection );
-                MoveItemsInList( GetScreen(), g_BlockSaveDataList.m_ItemsSelection, move_vector);
+                MoveItemsInList( g_BlockSaveDataList.m_ItemsSelection, move_vector);
                 ii = -1;
             }
             block->ClearItemsList();
@@ -409,7 +407,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             wxPoint move_vector =  -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
             SaveStructListForPaste( block->m_ItemsSelection );
-            MoveItemsInList( GetScreen(), g_BlockSaveDataList.m_ItemsSelection, move_vector );
+            MoveItemsInList( g_BlockSaveDataList.m_ItemsSelection, move_vector );
             ii = -1;
         }
         break;
@@ -500,107 +498,6 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-
-/*****************************************************************************/
-void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
-/*****************************************************************************/
-
-/* Routine to copy a new entity of an object for each object in list and reposition it.
- * Return the new created object list in aItemsList
- */
-{
-    SCH_ITEM* newitem;
-
-    if( aItemsList.GetCount() == 0 )
-        return;
-
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        newitem = DuplicateStruct( (SCH_ITEM*) aItemsList.GetItemData( ii ) );
-        aItemsList.SetItem( newitem, ii );
-        aItemsList.SetItemStatus( UR_NEW, ii );
-        {
-            switch( newitem->Type() )
-            {
-            case DRAW_POLYLINE_STRUCT_TYPE:
-            case DRAW_JUNCTION_STRUCT_TYPE:
-            case DRAW_SEGMENT_STRUCT_TYPE:
-            case DRAW_BUSENTRY_STRUCT_TYPE:
-            case TYPE_SCH_TEXT:
-            case TYPE_SCH_LABEL:
-            case TYPE_SCH_GLOBALLABEL:
-            case TYPE_SCH_HIERLABEL:
-            case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            case DRAW_MARKER_STRUCT_TYPE:
-            case DRAW_NOCONNECT_STRUCT_TYPE:
-            default:
-                break;
-
-            case DRAW_SHEET_STRUCT_TYPE:
-            {
-                DrawSheetStruct* sheet = (DrawSheetStruct*) newitem;
-                sheet->m_TimeStamp = GetTimeStamp();
-                sheet->SetSon( NULL );
-                break;
-            }
-
-            case TYPE_SCH_COMPONENT:
-                ( (SCH_COMPONENT*) newitem )->m_TimeStamp = GetTimeStamp();
-                ( (SCH_COMPONENT*) newitem )->ClearAnnotation( NULL );
-                break;
-            }
-
-            SetaParent( newitem, screen );
-            newitem->SetNext( screen->EEDrawList );
-            screen->EEDrawList = newitem;
-        }
-    }
-
-    MoveItemsInList( screen, aItemsList, aMoveVector );
-}
-
-
-/*********************************************************************************/
-void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
-/*********************************************************************************/
-
-/* Routine to delete an object from global drawing object list.
- *  Object is put in Undo list
- */
-{
-    SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
-    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->m_Parent;
-
-    if( !DrawStruct )
-        return;
-
-    if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-    {
-        /* Cette stucture est rattachee a une feuille, et n'est pas
-         *  accessible par la liste globale directement */
-        frame->SaveCopyInUndoList( (SCH_ITEM*)( (Hierarchical_PIN_Sheet_Struct
-                                                 *) DrawStruct )->GetParent(),
-                                  UR_CHANGED );
-        frame->DeleteSheetLabel( DC ? true : false,
-                                 (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
-        return;
-    }
-
-    else    /* structure classique */
-    {
-        screen->RemoveFromDrawList( DrawStruct );
-
-        panel->PostDirtyRect( DrawStruct->GetBoundingBox() );
-
-        /* Unlink the structure */
-        DrawStruct->SetNext( 0 );
-        DrawStruct->SetBack( 0 );  // Only one struct -> no link
-
-        frame->SaveCopyInUndoList( DrawStruct, UR_DELETED );
-    }
-}
-
-
 /*****************************************************************/
 void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
 /*****************************************************************/
@@ -664,7 +561,7 @@ void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
 
     SaveCopyInUndoList( picklist, UR_NEW );
 
-    MoveItemsInList( GetScreen(), picklist, GetScreen()->m_BlockLocate.m_MoveVector );
+    MoveItemsInList( picklist, GetScreen()->m_BlockLocate.m_MoveVector );
 
     /* clear .m_Flags member for all items */
     for( Struct = GetScreen()->EEDrawList; Struct != NULL; Struct = Struct->Next() )
@@ -673,131 +570,6 @@ void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
     GetScreen()->SetModify();
 
     return;
-}
-
-
-/** function DeleteItemsInList
- * delete schematic items in aItemsList
- * deleted items are put in undo list
- */
-void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
-{
-    SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
-    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->m_Parent;
-    PICKED_ITEMS_LIST      itemsList;
-    ITEM_PICKER            itemWrapper;
-
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetItemData( ii );
-        itemWrapper.m_Item = item;
-        itemWrapper.m_UndoRedoStatus = UR_DELETED;
-        if( item->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        {
-            /* this item is depending on a sheet, and is not in global list */
-            wxMessageBox( wxT(
-                             "DeleteItemsInList() err: unexpected DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
-#if 0
-            Hierarchical_PIN_Sheet_Struct* pinlabel = (Hierarchical_PIN_Sheet_Struct*) item;
-            frame->DeleteSheetLabel( false, pinlabel->m_Parent );
-            itemWrapper.m_Item = pinlabel->m_Parent;
-            itemWrapper.m_UndoRedoStatus = UR_CHANGED;
-            itemsList.PushItem( itemWrapper );
-#endif
-        }
-        else
-        {
-            screen->RemoveFromDrawList( item );
-
-            /* Unlink the structure */
-            item->SetNext( 0 );
-            item->SetBack( 0 );
-            itemsList.PushItem( itemWrapper );
-        }
-    }
-
-    frame->SaveCopyInUndoList( itemsList, UR_DELETED );
-}
-
-
-/************************************************************/
-SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
-/************************************************************/
-
-/* Routine to create a new copy of given struct.
- *  The new object is not put in draw list (not linked)
- */
-{
-    SCH_ITEM* NewDrawStruct = NULL;
-
-    if( DrawStruct == NULL )
-    {
-        DisplayError( NULL, wxT( "DuplicateStruct error: NULL struct" ) );
-        return NULL;
-    }
-
-    switch( DrawStruct->Type() )
-    {
-    case DRAW_POLYLINE_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawPolylineStruct*) DrawStruct )->GenCopy();
-        break;
-
-    case DRAW_SEGMENT_STRUCT_TYPE:
-        NewDrawStruct = ( (EDA_DrawLineStruct*) DrawStruct )->GenCopy();
-        break;
-
-    case DRAW_BUSENTRY_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawBusEntryStruct*) DrawStruct )->GenCopy();
-        break;
-
-    case DRAW_JUNCTION_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawJunctionStruct*) DrawStruct )->GenCopy();
-        break;
-
-    case DRAW_MARKER_STRUCT_TYPE:
-        NewDrawStruct = ( (MARKER_SCH*) DrawStruct )->GenCopy();
-        break;
-
-    case DRAW_NOCONNECT_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawNoConnectStruct*) DrawStruct )->GenCopy();
-        break;
-
-    case TYPE_SCH_TEXT:
-        NewDrawStruct = ( (SCH_TEXT*) DrawStruct )->GenCopy();
-        break;
-
-    case TYPE_SCH_LABEL:
-        NewDrawStruct = ( (SCH_LABEL*) DrawStruct )->GenCopy();
-        break;
-
-    case TYPE_SCH_HIERLABEL:
-        NewDrawStruct = ( (SCH_HIERLABEL*) DrawStruct )->GenCopy();
-        break;
-
-    case TYPE_SCH_GLOBALLABEL:
-        NewDrawStruct = ( (SCH_GLOBALLABEL*) DrawStruct )->GenCopy();
-        break;
-
-    case TYPE_SCH_COMPONENT:
-        NewDrawStruct = ( (SCH_COMPONENT*) DrawStruct )->GenCopy();
-        break;
-
-    case DRAW_SHEET_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawSheetStruct*) DrawStruct )->GenCopy();
-        break;
-
-    default:
-    {
-        wxString msg;
-        msg << wxT( "DuplicateStruct error: unexpected StructType " ) <<
-        DrawStruct->Type() << wxT( " " ) << DrawStruct->GetClass();
-        DisplayError( NULL, msg );
-    }
-    break;
-    }
-
-    NewDrawStruct->m_Image = DrawStruct;
-    return NewDrawStruct;
 }
 
 

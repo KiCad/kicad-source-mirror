@@ -70,6 +70,28 @@ public:
      * @param Pos = Position of the shape
      */
     void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos );
+
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        m_Edge = m_Edge ? 0 : 1;
+        m_Pos.x -= aYaxis_position;
+        NEGATE(  m_Pos.x );
+        m_Pos.x += aYaxis_position;
+    }
 };
 
 
@@ -223,6 +245,28 @@ public:
     //void      RemoveSheet(DrawSheetStruct* sheet);
     //to remove a sheet, just delete it
     //-- the destructor should take care of everything else.
+
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+        Hierarchical_PIN_Sheet_Struct* label    = m_Label;
+        while( label != NULL )
+        {
+            label->Move( aMoveVector );
+            label = label->Next();
+        }
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position);
 
 #if defined (DEBUG)
 

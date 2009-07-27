@@ -69,6 +69,33 @@ public:
      */
     virtual int GetPenSize( );
 
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        if( (m_Flags & STARTPOINT) == 0 )
+            m_Start += aMoveVector;
+        if( (m_Flags & ENDPOINT) == 0 )
+            m_End += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        m_Start.x -= aYaxis_position;
+        NEGATE(  m_Start.x );
+        m_Start.x += aYaxis_position;
+        m_End.x -= aYaxis_position;
+        NEGATE(  m_End.x );
+        m_End.x += aYaxis_position;
+    }
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 #endif
@@ -116,6 +143,26 @@ public:
     bool HitTest( const wxPoint& aPosRef );
 
     EDA_Rect             GetBoundingBox();
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        m_Pos.x -= aYaxis_position;
+        NEGATE(  m_Pos.x );
+        m_Pos.x += aYaxis_position;
+    }
 };
 
 
@@ -162,6 +209,27 @@ public:
      */
     virtual int GetPenSize( );
 
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        m_Pos.x -= aYaxis_position;
+        NEGATE(  m_Pos.x );
+        m_Pos.x += aYaxis_position;
+        NEGATE(  m_Size.x );
+    }
 };
 
 class DrawPolylineStruct  : public SCH_ITEM /* Polyligne (serie de segments) */
@@ -213,6 +281,29 @@ public:
      */
     virtual int GetPenSize( );
 
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
+            m_PolyPoints[ii] += aMoveVector;
+    }
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
+        {
+            m_PolyPoints[ii].x -= aYaxis_position;
+            NEGATE(  m_PolyPoints[ii].x );
+            m_PolyPoints[ii].x = aYaxis_position;
+        }
+    }
 };
 
 
@@ -256,6 +347,27 @@ public:
      * @return bool - true if success writing else false.
      */
     bool                Save( FILE* aFile ) const;
+
+    // Geometric transforms (used in block operations):
+    /** virtual function Move
+     * move item to a new position.
+     * @param aMoveVector = the deplacement vector
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y(int aYaxis_position)
+    {
+        m_Pos.x -= aYaxis_position;
+        NEGATE(  m_Pos.x );
+        m_Pos.x += aYaxis_position;
+    }
 
 #if defined(DEBUG)
     void                Show( int nestLevel, std::ostream& os );

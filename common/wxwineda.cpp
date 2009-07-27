@@ -424,7 +424,7 @@ WinEDA_DFloatValueCtrl::WinEDA_DFloatValueCtrl( wxWindow* parent,
 
     BoxSizer->Add( m_Text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    buffer.Printf( wxT( "%lf" ), m_Value );
+    buffer.Printf( wxT( "%f" ), m_Value );
     m_ValueCtrl = new   wxTextCtrl( parent, -1, buffer );
 
     BoxSizer->Add( m_ValueCtrl, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
@@ -453,7 +453,7 @@ void WinEDA_DFloatValueCtrl::SetValue( double new_value )
 
     m_Value = new_value;
 
-    buffer.Printf( wxT( "%lf" ), m_Value );
+    buffer.Printf( wxT( "%f" ), m_Value );
     m_ValueCtrl->SetValue( buffer );
 }
 

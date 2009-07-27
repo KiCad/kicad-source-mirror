@@ -485,9 +485,8 @@ static void DeplaceSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
     else             /* Move Sheet */
     {
-        move_vector.x = screen->m_Curseur.x - Sheet->m_Pos.x;
-        move_vector.y = screen->m_Curseur.y - Sheet->m_Pos.y;
-        MoveOneStruct( Sheet, move_vector );
+        move_vector = screen->m_Curseur - Sheet->m_Pos;
+        Sheet->Move( move_vector );
     }
 
     RedrawOneStruct( panel, DC, Sheet, g_XorMode );

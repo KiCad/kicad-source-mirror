@@ -26,12 +26,12 @@ set(EESCHEMA_SRCS
     class_netlist_object.cpp
     class_pin.cpp
     class_sch_cmp_field.cpp
+    class_sch_component.cpp
     class_schematic_items.cpp
     class_sch_screen.cpp
     class_text-label.cpp
     classes_body_items.cpp
     cleanup.cpp
-    component_class.cpp
     controle.cpp
     cross-probing.cpp
     dangling_ends.cpp
@@ -73,7 +73,6 @@ set(EESCHEMA_SRCS
     erc.cpp
     files-io.cpp
     find.cpp
-    geometric_transforms.cpp
     getpart.cpp
     hierarch.cpp
     hotkeys.cpp
@@ -94,6 +93,7 @@ set(EESCHEMA_SRCS
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
+    operations_on_items_lists.cpp
     pinedit.cpp
 #   pinedit-dialog.cpp
     plot.cpp

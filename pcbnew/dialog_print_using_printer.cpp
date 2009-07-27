@@ -238,9 +238,9 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 
 
     // Create scale adjust option
-    msg.Printf( wxT( "%lf" ), m_XScaleAdjust );
+    msg.Printf( wxT( "%f" ), m_XScaleAdjust );
     m_FineAdjustXscaleOpt->SetValue( msg );
-    msg.Printf( wxT( "%lf" ), m_YScaleAdjust );
+    msg.Printf( wxT( "%f" ), m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
 
     if( GetSizer() )
