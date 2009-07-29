@@ -219,6 +219,16 @@ public:
     void    Process_Settings( wxCommandEvent& event );
     void    Show3D_Frame( wxCommandEvent& event );
 
+    /* SaveCopyInUndoList() virtual
+     * currently: do nothing in cvpcb.
+     * but but be defined because it is a pure virtual in WinEDA_BasePcbFrame
+     */
+    virtual void        SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
+                        UndoRedoOpType aTypeCommand = UR_UNSPECIFIED,
+                        const wxPoint& aTransformPoint = wxPoint(0,0) )
+                        {
+                        }
+
     DECLARE_EVENT_TABLE()
 };
 

@@ -622,16 +622,6 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         InstallGridFrame( pos );
         break;
 
-    case ID_MODEDIT_UNDO:
-        GetComponentFromUndoList();
-        redraw = true;
-        break;
-
-    case ID_MODEDIT_REDO:
-        GetComponentFromRedoList();
-        redraw = true;
-        break;
-
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
         DrawPanel->m_AutoPAN_Request = FALSE;
@@ -705,10 +695,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
 /******************************************************************************/
 
-/* Execute les transformations de la repr�sentation des modules.
- *  le module, apres transformation est toujours en position de reference:
+/* Execute a geometric transform on the current footprint.
+ *  The footprint, after transform is always in reference position and orientation:
  *  position 0,0
- *  orientation 0, cot� composant.
+ *  orientation 0, component side.
  */
 {
     D_PAD*          pad = module->m_Pads;

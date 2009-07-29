@@ -441,5 +441,6 @@ extern GERBER* g_GERBER_List[32];
 extern int     g_DisplayPolygonsModeSketch;
 
 #include "pcbcommon.h"
+#include "wxGerberFrame.h"
 
 #endif  // ifndef GERBVIEW_H

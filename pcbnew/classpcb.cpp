@@ -81,6 +81,7 @@ PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( TYPE_SCREEN )
 PCB_SCREEN::~PCB_SCREEN()
 /***************************/
 {
+    ClearUndoRedoList();
 }
 
 

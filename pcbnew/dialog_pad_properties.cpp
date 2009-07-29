@@ -475,7 +475,7 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
 
     if( m_CurrentPad )   // Set Pad Name & Num
     {
-        m_Parent->SaveCopyInUndoList( m_Parent->GetBoard()->m_Modules );
+        m_Parent->SaveCopyInUndoList( m_Parent->GetBoard()->m_Modules, UR_CHANGED );
         MODULE* Module = (MODULE*) m_CurrentPad->GetParent();
         Module->m_LastEdit_Time = time( NULL );
 

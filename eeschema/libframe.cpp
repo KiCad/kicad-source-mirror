@@ -44,8 +44,37 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
 // Tools et boutons de Libedit:
 
 /* Main horizontal toolbar */
-    EVT_TOOL_RANGE( ID_LIBEDIT_START_H_TOOL, ID_LIBEDIT_END_H_TOOL,
+    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB,
                     WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_DELETE_PART,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_NEW_PART,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_SELECT_PART,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_UNDO,
+                    WinEDA_LibeditFrame::GetComponentFromUndoList )
+    EVT_TOOL( ID_LIBEDIT_REDO,
+                    WinEDA_LibeditFrame::GetComponentFromRedoList )
+    EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_CHECK_PART,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_VIEW_DOC,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_PIN,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
+
     EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_PART_NUMBER,
                          WinEDA_LibeditFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS,
@@ -60,7 +89,6 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     WinEDA_LibeditFrame::Process_Special_Functions )
 
-// Annulation de commande en cours
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_LibeditFrame::Process_Special_Functions )
 
@@ -766,16 +794,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->m_AutoPAN_Request = false;
         DrawPanel->MouseToCursorSchema();
         HandleBlockPlace( &dc );
-        break;
-
-    case ID_LIBEDIT_UNDO:
-        if( GetComponentFromUndoList() )
-            DrawPanel->Refresh( true );
-        break;
-
-    case ID_LIBEDIT_REDO:
-        if( GetComponentFromRedoList() )
-            DrawPanel->Refresh( true );
         break;
 
     default:

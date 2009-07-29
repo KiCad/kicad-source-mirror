@@ -127,7 +127,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( wxID_CUT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_UNDO_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_UNDO_BUTT, WinEDA_PcbFrame::GetBoardFromUndoList )
+    EVT_TOOL( ID_REDO_BUTT, WinEDA_PcbFrame::GetBoardFromRedoList )
     EVT_TOOL( ID_GEN_PRINT, WinEDA_DrawFrame::ToPrinter )
     EVT_TOOL( ID_GEN_PLOT_SVG, WinEDA_DrawFrame::SVG_Print )
     EVT_TOOL( ID_GEN_PLOT, WinEDA_PcbFrame::Process_Special_Functions )
@@ -369,7 +370,8 @@ void WinEDA_PcbFrame::SetToolbars()
 {
     size_t i;
     int ii, jj;
-
+    bool state;
+    
     if( m_ID_current_state == ID_TRACK_BUTT )
     {
         if( Drc_On )
@@ -384,32 +386,17 @@ void WinEDA_PcbFrame::SetToolbars()
 
     m_HToolBar->EnableTool( ID_SAVE_BOARD, GetScreen()->IsModify() );
 
-    if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
-    {
-        m_HToolBar->EnableTool( wxID_CUT, TRUE );
-        m_HToolBar->EnableTool( wxID_COPY, TRUE );
-    }
-    else
-    {
-        m_HToolBar->EnableTool( wxID_CUT, FALSE );
-        m_HToolBar->EnableTool( wxID_COPY, FALSE );
-    }
+    state = GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE;
+    m_HToolBar->EnableTool( wxID_CUT, state );
+    m_HToolBar->EnableTool( wxID_COPY, state );
 
-    if( g_UnDeleteStackPtr )
-    {
-        m_HToolBar->EnableTool( wxID_PASTE, TRUE );
-    }
-    else
-    {
-        m_HToolBar->EnableTool( wxID_PASTE, FALSE );
-    }
+    m_HToolBar->EnableTool( wxID_PASTE, FALSE );
 
-    if( g_UnDeleteStackPtr )
-    {
-        m_HToolBar->EnableTool( ID_UNDO_BUTT, TRUE );
-    }
-    else
-        m_HToolBar->EnableTool( ID_UNDO_BUTT, FALSE );
+    state = GetScreen()->GetUndoCommandCount() > 0;
+    m_HToolBar->EnableTool( ID_UNDO_BUTT, state );
+
+    state = GetScreen()->GetRedoCommandCount() > 0;
+    m_HToolBar->EnableTool( ID_REDO_BUTT, state );
 
     if( m_OptionsToolBar )
     {

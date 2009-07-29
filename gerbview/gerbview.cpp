@@ -10,6 +10,7 @@
 #include "gestfich.h"
 
 #include "gerbview.h"
+#include "wxGerberFrame.h"
 #include "pcbplot.h"
 #include "bitmaps.h"
 #include "protos.h"

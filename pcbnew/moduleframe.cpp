@@ -70,9 +70,9 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_UNDO,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
+              WinEDA_ModuleEditFrame::GetComponentFromUndoList )
     EVT_TOOL( ID_MODEDIT_REDO,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
+              WinEDA_ModuleEditFrame::GetComponentFromRedoList )
 
 // Vertical toolbar (left click):
     EVT_TOOL( ID_NO_SELECT_BUTT,

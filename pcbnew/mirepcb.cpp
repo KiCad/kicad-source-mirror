@@ -161,7 +161,8 @@ void WinEDA_PcbFrame::Delete_Mire( MIREPCB* MirePcb, wxDC* DC )
         return;
 
     MirePcb->Draw( DrawPanel, DC, GR_XOR );
-    MirePcb->DeleteStructure();
+    SaveCopyInUndoList(MirePcb, UR_DELETED);
+    MirePcb->UnLink();
 }
 
 

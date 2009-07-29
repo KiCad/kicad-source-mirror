@@ -84,7 +84,6 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
         AddGrid( SchematicGridList[i] );
 
     SetGrid( wxRealPoint( 50, 50 ) );        /* usual grid size */
-    m_UndoRedoCountMax = 10;            // Undo/redo levels count. 10 is a reasonnable value
     m_RefCount = 0;
     m_Center = false;                   // Suitable for schematic only. for libedit and viewlib, must be set to true
     InitDatas();

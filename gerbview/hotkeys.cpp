@@ -3,11 +3,8 @@
 /***************/
 
 #include "fctsys.h"
-
-#include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
+#include "gerbview.h"
 #include "id.h"
 #include "hotkeys.h"
 

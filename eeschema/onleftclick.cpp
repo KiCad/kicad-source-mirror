@@ -248,7 +248,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         break;
 
-    case ID_IMPORT_GLABEL_BUTT:
+    case ID_IMPORT_HLABEL_BUTT:
     case ID_SHEET_LABEL_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
             DrawStruct = SchematicGeneralLocateAndDisplay();
@@ -259,7 +259,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE)
            && (DrawStruct->m_Flags == 0) )
         {
-            if( m_ID_current_state == ID_IMPORT_GLABEL_BUTT )
+            if( m_ID_current_state == ID_IMPORT_HLABEL_BUTT )
                 GetScreen()->SetCurItem(
                          Import_PinSheet( (DrawSheetStruct*) DrawStruct, DC ) );
             else

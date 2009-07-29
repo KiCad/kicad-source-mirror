@@ -116,8 +116,8 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
 
-    /* Suppression du texte en Memoire*/
-    TextePcb ->DeleteStructure();
+    SaveCopyInUndoList(TextePcb, UR_DELETED);
+    TextePcb ->UnLink();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );

@@ -143,7 +143,8 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 {
     wxString msg;
 
-    m_Parent->SaveCopyInUndoList( m_Parent->GetBoard()->m_Modules );
+    if ( m_Module)
+        m_Parent->SaveCopyInUndoList( m_Module, UR_CHANGED );
     if( m_DC )     //Erase old text on screen
     {
         m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC, GR_XOR,

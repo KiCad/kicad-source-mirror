@@ -127,6 +127,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
         return FALSE;
     }
 
+    GetScreen()->ClearUndoRedoList();
     LoadOneLibraryPartAux( LibEntry, CurrentLib );
     ReCreateHToolbar();
     Zoom_Automatique( FALSE );

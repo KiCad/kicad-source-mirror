@@ -308,3 +308,12 @@ void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
                                             wxFRAME_FLOAT_ON_PARENT );
     m_Draw3DFrame->Show( TRUE );
 }
+
+/* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
+* this is a virtaul pure function in BASE_SCREEN
+* do nothing in cvpcb
+* could be removed later
+*/
+void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
+{
+}

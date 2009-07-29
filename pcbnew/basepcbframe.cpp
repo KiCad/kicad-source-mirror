@@ -164,21 +164,6 @@ void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void WinEDA_BasePcbFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
-                                              int flag )
-{
-}
-
-
-void WinEDA_BasePcbFrame::GetComponentFromUndoList( void )
-{
-}
-
-
-void WinEDA_BasePcbFrame::GetComponentFromRedoList( void )
-{
-}
-
 
 /****************************************************************/
 void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )

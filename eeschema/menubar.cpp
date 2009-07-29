@@ -256,7 +256,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( add_hierarchical_subsheet_xpm );
     placeMenu->Append( item );
 
-    item = new wxMenuItem( placeMenu, ID_IMPORT_GLABEL_BUTT,
+    item = new wxMenuItem( placeMenu, ID_IMPORT_HLABEL_BUTT,
                            _( "Import Hierarchical Label" ),
                            _( "Place a pin sheet created by importing a hierarchical label from sheet" ),
                            wxITEM_NORMAL );

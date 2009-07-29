@@ -3,13 +3,13 @@
 /********************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
+#include "class_drawpanel.h"
 
 #include "common.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "id.h"
+//#include "id.h"
 
 #include "protos.h"
 
@@ -49,7 +49,7 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 
 
 /******************************************************/
-bool WinEDA_LibeditFrame::GetComponentFromRedoList()
+void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
 /******************************************************/
 
 /* Redo the last edition:
@@ -59,7 +59,7 @@ bool WinEDA_LibeditFrame::GetComponentFromRedoList()
  */
 {
     if ( GetScreen()->GetRedoCommandCount() <= 0 )
-        return false;
+        return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
     ITEM_PICKER wrapper(CurrentLibEntry);
@@ -77,12 +77,12 @@ bool WinEDA_LibeditFrame::GetComponentFromRedoList()
     ReCreateHToolbar();
     SetToolbars();
 
-    return true;
+    DrawPanel->Refresh();
 }
 
 
 /******************************************************/
-bool WinEDA_LibeditFrame::GetComponentFromUndoList()
+void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
 /******************************************************/
 
 /* Undo the last edition:
@@ -92,7 +92,7 @@ bool WinEDA_LibeditFrame::GetComponentFromUndoList()
  */
 {
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
-        return false;
+        return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
     ITEM_PICKER wrapper(CurrentLibEntry);
@@ -111,5 +111,5 @@ bool WinEDA_LibeditFrame::GetComponentFromUndoList()
     ReCreateHToolbar();
     SetToolbars();
 
-    return true;
+    DrawPanel->Refresh();
 }

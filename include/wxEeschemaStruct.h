@@ -392,8 +392,8 @@ public:
 
 private:
     void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
-    bool           GetSchematicFromRedoList();
-    bool           GetSchematicFromUndoList();
+    void           GetSchematicFromRedoList(wxCommandEvent& event);
+    void           GetSchematicFromUndoList(wxCommandEvent& event);
 
 
 public:
@@ -502,8 +502,8 @@ public:
     void               InstallFieldsEditorDialog( void );
 
 private:
-    bool               GetComponentFromUndoList();
-    bool               GetComponentFromRedoList();
+    void               GetComponentFromUndoList(wxCommandEvent& event);
+    void               GetComponentFromRedoList(wxCommandEvent& event);
 
     // Edition des Pins:
     void               CreatePin( wxDC* DC );

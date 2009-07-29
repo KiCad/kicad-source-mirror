@@ -134,10 +134,49 @@ public:
     wxPoint                    CursorRealPosition( const wxPoint& ScreenPos );
 
     /* general Undo/Redo command control */
+
+    /** function ClearUndoORRedoList (virtual).
+     * this function must remove the aItemCount old commands from aList
+     * and delete commmands, pickers and picked items if needed
+     * Because picked items must be deleted only if they are not in use, this is a virtual pure
+     * function that must be created for SCH_SCREEN and PCB_SCREEN
+     * @param aList = the UNDO_REDO_CONTAINER of commands
+     * @param aItemCount = number of old commands to delete. -1 to remove all old commands
+     *  this will empty the list of commands.
+     *  Commands are deleted from the older to the last.
+     */
+    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1) = 0;
+
+    /** Function ClearUndoRedoList
+     * clear undo and redo list, using ClearUndoORRedoList()
+     * picked items are deleted by ClearUndoORRedoList() according to their status
+     */
     virtual void               ClearUndoRedoList();
+
+    /** function PushCommandToUndoList
+     * add a command to undo in undo list
+     * delete the very old commands when the max count of undo commands is reached
+     * ( using ClearUndoORRedoList)
+     */
     virtual void               PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
+
+    /** function PushCommandToRedoList
+     * add a command to redo in redo list
+     * delete the very old commands when the max count of redo commands is reached
+     * ( using ClearUndoORRedoList)
+     */
     virtual void               PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
+
+    /** PopCommandFromUndoList
+     * return the last command to undo and remove it from list
+     * nothing is deleted.
+     */
     virtual PICKED_ITEMS_LIST* PopCommandFromUndoList();
+
+    /** PopCommandFromRedoList
+     * return the last command to undo and remove it from list
+     * nothing is deleted.
+     */
     virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
 
     int GetUndoCommandCount()

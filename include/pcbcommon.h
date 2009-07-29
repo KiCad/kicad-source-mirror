@@ -5,7 +5,6 @@
 #include "pcbstruct.h"
 #include "dlist.h"
 
-#define UNDELETE_STACK_SIZE 10
 #define L_MIN_DESSIN 1  /* Min width segments to allow draws with tickness */
 
 class DPAD;
@@ -23,8 +22,6 @@ extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 
 extern wxArrayString   g_LibName_List;    // library list to load
-extern BOARD_ITEM*     g_UnDeleteStack[UNDELETE_STACK_SIZE];
-extern int             g_UnDeleteStackPtr;
 extern DISPLAY_OPTIONS DisplayOpt;
 
 extern wxString PcbExtBuffer;

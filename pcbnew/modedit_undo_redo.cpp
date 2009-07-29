@@ -3,7 +3,7 @@
 /********************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
+#include "class_drawpanel.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -13,8 +13,9 @@
 
 
 /**************************************************************************/
-void WinEDA_ModuleEditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
-                                                 int             unused_flag )
+void WinEDA_ModuleEditFrame::SaveCopyInUndoList( BOARD_ITEM* ItemToCopy,
+                                                UndoRedoOpType     aTypeCommand,
+                                                const wxPoint& aTransformPoint )
 /************************************************************************/
 {
     EDA_BaseStruct* item;
@@ -50,7 +51,7 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 
 
 /*********************************************************/
-void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
+void WinEDA_ModuleEditFrame::GetComponentFromRedoList(wxCommandEvent& event)
 /*********************************************************/
 
 /* Redo the last edition:
@@ -76,12 +77,13 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList()
     GetScreen()->SetModify();
     ReCreateHToolbar();
     SetToolbars();
+    DrawPanel->Refresh();
 }
 
 
-/*********************************************************/
-void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
-/*********************************************************/
+/***************************************************************************/
+void WinEDA_ModuleEditFrame::GetComponentFromUndoList(wxCommandEvent& event)
+/***************************************************************************/
 
 /* Undo the last edition:
  *  - Place the current edited library component in Redo list
@@ -108,4 +110,5 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList()
     SetCurItem( NULL );;
     ReCreateHToolbar();
     SetToolbars();
+    DrawPanel->Refresh();
 }

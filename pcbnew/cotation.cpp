@@ -364,7 +364,9 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
 
     if( DC )
         Cotation->Draw( DrawPanel, DC, GR_XOR );
-    Cotation->DeleteStructure();
+
+    SaveCopyInUndoList(Cotation, UR_DELETED);
+    Cotation->UnLink();
     GetScreen()->SetModify();
 }
 

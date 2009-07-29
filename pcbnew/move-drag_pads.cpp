@@ -322,7 +322,8 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
     Pad->Draw( DrawPanel, DC, GR_XOR );
 
     /* Save old module */
-    Pad->m_Pos = Pad_OldPos; SaveCopyInUndoList( m_Pcb->m_Modules );
+    Pad->m_Pos = Pad_OldPos;
+    SaveCopyInUndoList( Module, UR_CHANGED );
     Pad->m_Pos = GetScreen()->m_Curseur;
 
     /* Compute local coordinates (i.e refer to Module position and for Module orient = 0)*/

@@ -56,21 +56,20 @@ public:
     SCH_ITEM*    ExtractWires( bool CreateCopy );
 
     /* full undo redo management : */
-    virtual void ClearUndoRedoList();
-    virtual void PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
-    virtual void PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
+    // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
+    // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
 
     /** Function ClearUndoORRedoList
      * free the undo or redo list from List element
      *  Wrappers are deleted.
-     *  datas pointed by wrappers are deleted if not flagged IS_NEW
-     *  because they are copy of used data or they are not in use (DELETED)
+     *  datas pointed by wrappers are deleted if not in use in schematic
+     *  i.e. when they are copy of a schematic item or they are no more in use (DELETED)
      * @param aList = the UNDO_REDO_CONTAINER to clear
      * @param aItemCount = the count of items to remove. < 0 for all items
      * items are removed from the beginning of the list.
      * So this function can be called to remove old commands
      */
-    void         ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
+    virtual void         ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
 
     /**
      * Function Save

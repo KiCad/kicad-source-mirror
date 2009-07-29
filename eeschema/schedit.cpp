@@ -240,7 +240,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_PENCIL, _( "Add PinSheet" ) );
         break;
 
-    case ID_IMPORT_GLABEL_BUTT:
+    case ID_IMPORT_HLABEL_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Import PinSheet" ) );
         break;
 
@@ -716,22 +716,6 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_GETINFO_MARKER:
         if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_MARKER_STRUCT_TYPE )
             ((MARKER_SCH*)screen->GetCurItem())->DisplayMarkerInfo( this );
-        break;
-
-    case ID_SCHEMATIC_UNDO:
-        if( GetSchematicFromUndoList() )
-        {
-            TestDanglingEnds( screen->EEDrawList, NULL );
-            DrawPanel->Refresh( TRUE );
-        }
-        break;
-
-    case ID_SCHEMATIC_REDO:
-        if( GetSchematicFromRedoList() )
-        {
-            TestDanglingEnds( screen->EEDrawList, NULL );
-            DrawPanel->Refresh( TRUE );
-        }
         break;
 
     default:        // Log error:

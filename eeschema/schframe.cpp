@@ -48,10 +48,6 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_TOOL( ID_NEW_PROJECT, WinEDA_SchematicFrame::OnNewProject )
     EVT_TOOL( ID_LOAD_PROJECT, WinEDA_SchematicFrame::OnLoadProject )
 
-    EVT_TOOL_RANGE( ID_SCHEMATIC_MAIN_TOOLBAR_START,
-                    ID_SCHEMATIC_MAIN_TOOLBAR_END,
-                    WinEDA_SchematicFrame::Process_Special_Functions )
-
     EVT_MENU( ID_SAVE_PROJECT, WinEDA_SchematicFrame::Save_File )
     EVT_MENU( ID_SAVE_ONE_SHEET, WinEDA_SchematicFrame::Save_File )
     EVT_MENU( ID_SAVE_ONE_SHEET_AS, WinEDA_SchematicFrame::Save_File )
@@ -87,7 +83,8 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_TOOL( wxID_CUT, WinEDA_SchematicFrame::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, WinEDA_SchematicFrame::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, WinEDA_SchematicFrame::Process_Special_Functions )
-    EVT_TOOL( ID_UNDO_BUTT, WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_TOOL( ID_SCHEMATIC_UNDO, WinEDA_SchematicFrame::GetSchematicFromUndoList )
+    EVT_TOOL( ID_SCHEMATIC_REDO, WinEDA_SchematicFrame::GetSchematicFromRedoList )
     EVT_TOOL( ID_GET_ANNOTATE, WinEDA_SchematicFrame::OnAnnotate )
     EVT_TOOL( ID_GEN_PRINT, WinEDA_SchematicFrame::ToPrinter )
     EVT_TOOL( ID_GET_ERC, WinEDA_SchematicFrame::OnErc )

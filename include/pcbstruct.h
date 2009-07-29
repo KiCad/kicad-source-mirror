@@ -127,9 +127,6 @@ class NETINFO_ITEM;
 class MARKER;
 class RATSNEST_ITEM;
 
-//class Ki_PageDescr;
-//class DrawBlockStruct;
-
 
 /* main window classes : */
 #include "wxPcbStruct.h"
@@ -204,48 +201,7 @@ enum DisplayViaMode {
 };
 
 /* Handle info to display a board */
-class PCB_SCREEN : public BASE_SCREEN
-{
-public:
-    int m_Active_Layer;             /* ref couche active */
-    int m_Route_Layer_TOP;          /* ref couches actives */
-    int m_Route_Layer_BOTTOM;       /* pour placement vias et routage 2 couches */
-
-public:
-    PCB_SCREEN();
-    ~PCB_SCREEN();
-
-    PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
-    void        Init();
-    void        SetNextZoom();
-    void        SetPreviousZoom();
-    void        SetLastZoom();
-
-    virtual int GetInternalUnits( void );
-
-    /**
-     * Function GetCurItem
-     * returns the currently selected BOARD_ITEM, overriding BASE_SCREEN::GetCurItem().
-     * @return BOARD_ITEM* - the one selected, or NULL.
-     */
-    BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
-
-    /**
-     * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.
-     * @param aItem Any object derived from BOARD_ITEM
-     */
-    void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( aItem ); }
-
-
-    /* Return true if a microvia can be put on board
-     * A microvia ia a small via restricted to 2 near neighbour layers
-     * because its is hole is made by laser which can penetrate only one layer
-     * It is mainly used to connect BGA to the first inner layer
-     * And it is allowed from an external layer to the first inner layer
-     */
-    bool IsMicroViaAcceptable( void );
-};
+#include "class_pcb_screen.h"
 
 /**********************************/
 /* Module (Footprint) description */

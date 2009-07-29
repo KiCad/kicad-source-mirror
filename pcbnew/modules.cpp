@@ -320,10 +320,12 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
     if( g_Show_Ratsnest )
         DrawGeneralRatsnest( DC );
 
-    /* Sauvegarde en buffer des undelete */
-    SaveItemEfface( module, 1 );
+    /* Remove module from list, and put it in undo command list */
+    m_Pcb->m_Modules.Remove( module );
+    module->SetState( DELETED, ON );
+    SaveCopyInUndoList( module, UR_DELETED );
 
-     Compile_Ratsnest( DC, true );
+    Compile_Ratsnest( DC, true );
 
     // redraw the area where the module was
     if( DC )
@@ -790,7 +792,7 @@ void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
 #ifndef __WXMAC__
         DisplayOpt.DisplayPadFill = true;  /* Trace en SKETCH en deplacement */
 #else
-        DisplayOpt.DisplayPadFill = false;  
+        DisplayOpt.DisplayPadFill = false;
 #endif
         pt_pad = module->m_Pads;
         for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )

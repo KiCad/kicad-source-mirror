@@ -14,6 +14,7 @@ set(PCBNEW_SRCS
     block.cpp
     block_module_editor.cpp
     board.cpp
+    board_undo_redo.cpp
     build_BOM_from_board.cpp
 #    class_board_item.cpp
 #    class_drawsegment.cpp
@@ -141,7 +142,6 @@ set(PCBNEW_SRCS
     track.cpp
     tr_modif.cpp
     trpiste.cpp
-    undelete.cpp
     via_edit.cpp
     work.cpp
     xchgmod.cpp

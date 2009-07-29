@@ -43,12 +43,6 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
 
     GetBoard()->m_Zone.DeleteAll();
 
-    for( ; g_UnDeleteStackPtr != 0; )
-    {
-        g_UnDeleteStackPtr--;
-        delete g_UnDeleteStack[ g_UnDeleteStackPtr];
-    }
-
     /* init pointeurs  et variables */
     for( layer = 0; layer < 32; layer++ )
     {

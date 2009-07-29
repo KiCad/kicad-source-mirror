@@ -228,8 +228,11 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          _( "Paste" ) );
 #endif
 
-    m_HToolBar->AddTool( ID_UNDO_BUTT, wxEmptyString, wxBitmap( undelete_xpm ),
-                         _( "Undelete" ) );
+    m_HToolBar->AddSeparator();
+    m_HToolBar->AddTool( ID_UNDO_BUTT, wxEmptyString, wxBitmap( undo_xpm ),
+                         _( "Undo last edition" ) );
+    m_HToolBar->AddTool( ID_REDO_BUTT, wxEmptyString, wxBitmap( redo_xpm ),
+                         _( "Redo the last undo command" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, wxBitmap( print_button ),

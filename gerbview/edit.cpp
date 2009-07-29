@@ -144,22 +144,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_PCB_GLOBAL_DELETE:
         Erase_Current_Layer( TRUE );
         break;
-
-    case wxID_CUT:
-        break;
-
-    case wxID_COPY:
-        break;
-
-    case wxID_PASTE:
-
-//			HandleBlockBegin(&dc, BLOCK_PASTE);
-        break;
-
-    case ID_UNDO_BUTT:
-        UnDeleteItem( &dc );
-        break;
-
     case ID_GET_TOOLS:
 
 //			InstallToolsFrame(this, wxPoint(-1,-1) );

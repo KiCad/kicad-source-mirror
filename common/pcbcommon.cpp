@@ -67,9 +67,6 @@ wxString g_ViaType_Name[4] = {
 
 wxArrayString g_LibName_List;    // library list to load
 
-BOARD_ITEM* g_UnDeleteStack[UNDELETE_STACK_SIZE]; // Linked list of deleted items
-int         g_UnDeleteStackPtr;
-
 DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
 
 /* PCB file name extension definitions. */

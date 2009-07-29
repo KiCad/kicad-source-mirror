@@ -139,13 +139,6 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
     // layer names are put into the BOARD.
     SetBoard( new BOARD( NULL, this ) );
 
-    while( g_UnDeleteStackPtr > 0 )
-    {
-        g_UnDeleteStackPtr--;
-
-        delete g_UnDeleteStack[g_UnDeleteStackPtr];
-    }
-
     /* init pointeurs  et variables */
     GetScreen()->m_FileName.Empty();
 

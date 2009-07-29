@@ -225,18 +225,6 @@ void WinEDA_GerberFrame::SetToolbars()
         m_HToolBar->EnableTool( wxID_COPY, FALSE );
     }
 
-    if( g_UnDeleteStackPtr )
-    {
-        m_HToolBar->EnableTool( wxID_PASTE, TRUE );
-        m_HToolBar->EnableTool( ID_UNDO_BUTT, TRUE );
-    }
-    else
-    {
-        m_HToolBar->EnableTool( wxID_PASTE, FALSE );
-        m_HToolBar->EnableTool( ID_UNDO_BUTT, FALSE );
-    }
-
-
     if( m_SelLayerBox->GetSelection() !=
         ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer )
     {

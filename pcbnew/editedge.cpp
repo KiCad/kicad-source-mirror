@@ -120,7 +120,8 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     {
         Segment->Draw( DrawPanel, DC, GR_XOR );
         Segment->m_Flags = 0;
-        Segment ->DeleteStructure();
+        SaveCopyInUndoList(Segment, UR_DELETED);
+        Segment->UnLink();
         SetCurItem( NULL );
         GetScreen()->SetModify();
     }

@@ -332,10 +332,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
-    case ID_UNDO_BUTT:
-        UnDeleteItem( &dc );
-        break;
-
     case ID_DRC_CONTROL:
         Install_Test_DRC_Frame( &dc );
         break;
@@ -1269,7 +1265,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
             SetCurItem( NULL );
         ( (MARKER*) Item )->Draw( DrawPanel, DC, GR_XOR );
 
-        // delete the marker, and free memory.  Don't use undelete stack.
+        // delete the marker, and free memory.  Don't use undo stack.
         GetBoard()->Delete( Item );
         break;
 

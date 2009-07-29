@@ -186,3 +186,13 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 
     GetScreen()->ClrRefreshReq();
 }
+
+
+/* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
+* this is a virtaul pure function in BASE_SCREEN
+* do nothing in gerbview
+* could be removed later
+*/
+void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
+{
+}

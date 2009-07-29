@@ -28,7 +28,7 @@ BASE_SCREEN* ActiveScreen = NULL;
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 {
     EEDrawList         = NULL;   /* Schematic items list */
-    m_UndoRedoCountMax = 1;     /* undo/Redo command Max depth */
+    m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a reasonnable value */
     m_FirstRedraw      = TRUE;
     m_ScreenNumber     = 1;
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
@@ -48,7 +48,6 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 BASE_SCREEN::~BASE_SCREEN()
 /******************************/
 {
-    ClearUndoRedoList();
 }
 
 
@@ -484,8 +483,8 @@ void BASE_SCREEN::ClearUndoRedoList()
 /* free the undo and the redo lists
  */
 {
-    m_UndoList.ClearCommandList();
-    m_RedoList.ClearCommandList();
+    ClearUndoORRedoList( m_UndoList );
+    ClearUndoORRedoList( m_RedoList );
 }
 
 
@@ -497,14 +496,12 @@ void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
  *  Deletes olds items if > count max.
  */
 {
-    m_UndoList.PushCommand(aNewitem);
-    while( m_UndoList.m_CommandsList.size() > 0 &&
-            m_UndoList.m_CommandsList.size() >= m_UndoRedoCountMax )
-    {
-        delete m_UndoList.m_CommandsList[0];
-        m_UndoList.m_CommandsList.erase( m_UndoList.m_CommandsList.begin() );
-    }
+    m_UndoList.PushCommand( aNewitem );
 
+    /* Delete the extra items, if count max reached */
+    int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
+    if( extraitems > 0 ) // Delete the extra items
+        ClearUndoORRedoList( m_UndoList, extraitems );
 }
 
 
@@ -512,13 +509,12 @@ void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 /***********************************************************/
 {
-    m_RedoList.PushCommand(aNewitem);
-    while( m_RedoList.m_CommandsList.size() > 0 &&
-            m_RedoList.m_CommandsList.size() >= m_UndoRedoCountMax )
-    {
-        delete m_RedoList.m_CommandsList[0];
-        m_RedoList.m_CommandsList.erase( m_RedoList.m_CommandsList.begin() );
-    }
+    m_RedoList.PushCommand( aNewitem );
+
+    /* Delete the extra items, if count max reached */
+    int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
+    if( extraitems > 0 ) // Delete the extra items
+        ClearUndoORRedoList( m_RedoList, extraitems );
 }
 
 
