@@ -9,7 +9,7 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "pcbnew.h"
-#include "autorout.h"
+#include "wxPcbStruct.h"
 #include "trigo.h"
 #include "bitmaps.h"
 #include "3d_struct.h"

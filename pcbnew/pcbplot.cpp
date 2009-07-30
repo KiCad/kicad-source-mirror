@@ -9,6 +9,7 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "pcbplot.h"
 #include "worksheet.h"
 #include "id.h"
@@ -533,7 +534,7 @@ void WinEDA_PlotFrame::OnSetScaleOpt( wxCommandEvent& event )
     /* Disable sheet reference for scale != 1:1 */
     bool scale1 = (m_Scale_Opt->GetSelection() == 1);
     m_Plot_Sheet_Ref->Enable( scale1 );
-    if (!scale1) 
+    if (!scale1)
 	m_Plot_Sheet_Ref->SetValue(false);
 }
 
@@ -757,7 +758,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         break;
 
     case PLOT_FORMAT_DXF:
-        g_pcb_plot_options.Scale = 1.0; 
+        g_pcb_plot_options.Scale = 1.0;
         ext = wxT( "dxf" );
         wildcard = _( "DXF files (.dxf)|*.dxf" );
         break;
@@ -792,23 +793,23 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
             switch( format )
             {
             case PLOT_FORMAT_POST:
-                m_Parent->Genere_PS( fn.GetFullPath(), layer_to_plot, useA4(), 
+                m_Parent->Genere_PS( fn.GetFullPath(), layer_to_plot, useA4(),
 			g_pcb_plot_options.Trace_Mode );
                 break;
 
             case PLOT_FORMAT_GERBER:
                 m_Parent->Genere_GERBER( fn.GetFullPath(), layer_to_plot,
-                                         s_PlotOriginIsAuxAxis, 
+                                         s_PlotOriginIsAuxAxis,
 					 g_pcb_plot_options.Trace_Mode );
                 break;
 
             case PLOT_FORMAT_HPGL:
-                m_Parent->Genere_HPGL( fn.GetFullPath(), layer_to_plot, 
+                m_Parent->Genere_HPGL( fn.GetFullPath(), layer_to_plot,
 			g_pcb_plot_options.Trace_Mode );
                 break;
 
             case PLOT_FORMAT_DXF:
-                m_Parent->Genere_DXF( fn.GetFullPath(), layer_to_plot, 
+                m_Parent->Genere_DXF( fn.GetFullPath(), layer_to_plot,
 			g_pcb_plot_options.Trace_Mode );
                 break;
             }

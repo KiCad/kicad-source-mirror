@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "collectors.h"
 #include "bitmaps.h"
 #include "protos.h"
@@ -371,7 +372,7 @@ void WinEDA_PcbFrame::SetToolbars()
     size_t i;
     int ii, jj;
     bool state;
-    
+
     if( m_ID_current_state == ID_TRACK_BUTT )
     {
         if( Drc_On )

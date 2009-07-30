@@ -31,8 +31,9 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "pcbnew.h"
 #include "class_drawpanel.h"
+#include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "autorout.h"
 #include "trigo.h"
 #include "gestfich.h"

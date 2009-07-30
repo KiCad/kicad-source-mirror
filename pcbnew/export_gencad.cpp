@@ -10,11 +10,8 @@
 #include "appl_wxstruct.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "trigo.h"
-
-#include "bitmaps.h"
-#include "protos.h"
-#include "id.h"
 
 bool        CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame );
 static void CreateTracksInfoData( FILE* file, BOARD* pcb );

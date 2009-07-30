@@ -8,7 +8,7 @@
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
-#include "protos.h"
+#include "wxPcbStruct.h"
 
 /* Local functions */
 static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

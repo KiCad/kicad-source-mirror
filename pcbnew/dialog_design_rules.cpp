@@ -12,6 +12,7 @@
 
 #include "confirm.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #include "id.h"
 #include "dialog_design_rules.h"

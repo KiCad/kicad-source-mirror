@@ -12,6 +12,7 @@
 #include "kicad_string.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #ifdef PCBNEW
 #include "autorout.h"

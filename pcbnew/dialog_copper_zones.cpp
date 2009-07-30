@@ -16,6 +16,7 @@
 #include "confirm.h"
 #include "PolyLine.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "trigo.h"
 #include "autorout.h"
 #include "zones.h"

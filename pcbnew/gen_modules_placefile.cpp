@@ -12,6 +12,7 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "trigo.h"
 #include "appl_wxstruct.h"
 

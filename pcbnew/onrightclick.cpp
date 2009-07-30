@@ -10,11 +10,12 @@
 #include "confirm.h"
 
 #include "pcbnew.h"
-#include "autorout.h"
+#include "wxPcbStruct.h"
+//#include "autorout.h"
 #include "id.h"
 #include "hotkeys.h"
 #include "collectors.h"
-#include "protos.h"
+//#include "protos.h"
 
 
 /* Bitmaps */

@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #include "protos.h"
 

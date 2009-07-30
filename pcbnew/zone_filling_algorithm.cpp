@@ -9,6 +9,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #include "autorout.h"
 #include "zones.h"

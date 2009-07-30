@@ -176,7 +176,7 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
         msg = _( "Layer" );
         msg << wxT( " " ) << ii + 1;
 #else
-        msg = ( (WinEDA_PcbFrame*) m_Parent )->GetBoard()->GetLayerName( ii );
+        msg = ( (WinEDA_BasePcbFrame*) m_Parent )->GetBoard()->GetLayerName( ii );
 #endif
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 

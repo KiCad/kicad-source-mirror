@@ -11,6 +11,7 @@
 #include "confirm.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "trigo.h"
 
 #include "protos.h"

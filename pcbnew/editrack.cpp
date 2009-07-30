@@ -4,17 +4,16 @@
 /*******************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
-#include "autorout.h"
+#include "wxPcbStruct.h"
 
-#include "protos.h"
 #include "drc_stuff.h"
 #include "trigo.h"
 
+#include "protos.h"
 
 /* Routines Locales */
 static void Exit_Editrack( WinEDA_DrawPanel* panel, wxDC* DC );

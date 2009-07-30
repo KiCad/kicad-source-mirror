@@ -5,17 +5,15 @@
 /*Set up the items and layer colors and show/no show options
  */
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma implementation "set_color.h"
-#endif
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
-#include "protos.h"
+#include "wxPcbStruct.h"
+
+//#include "protos.h"
 
 // temporary variable used to handle grid visibility:
 bool s_showGrid;

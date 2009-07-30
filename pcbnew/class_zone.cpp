@@ -883,7 +883,7 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         if( GetNet() >= 0 )
         {
-            NETINFO_ITEM* equipot = ( (WinEDA_PcbFrame*) frame )->GetBoard()->FindNet( GetNet() );
+            NETINFO_ITEM* equipot = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->FindNet( GetNet() );
 
             if( equipot )
                 msg = equipot->GetNetname();

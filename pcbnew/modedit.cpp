@@ -14,6 +14,7 @@
 
 #include "3d_viewer.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "protos.h"
 
 #include "collectors.h"

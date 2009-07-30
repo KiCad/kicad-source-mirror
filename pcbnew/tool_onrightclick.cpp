@@ -3,15 +3,12 @@
 /********************************************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
 #include "pcbnew.h"
-#include "autorout.h"
+#include "wxPcbStruct.h"
 
 #include "id.h"
-
-#include "protos.h"
 
 
 /*****************************************************************/

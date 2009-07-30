@@ -11,11 +11,11 @@
 #include "confirm.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "autorout.h"
 #include "zones.h"
 #include "protos.h"
 
-#include <fcntl.h>
 #include "cell.h"
 
 /* Routines definies ici : */

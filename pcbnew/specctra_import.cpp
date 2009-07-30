@@ -37,6 +37,7 @@
 #include "class_drawpanel.h"    // DrawPanel
 #include "confirm.h"            // DisplayError()
 #include "gestfich.h"           // EDA_FileSelector()
+#include "wxPcbStruct.h"
 
 
 

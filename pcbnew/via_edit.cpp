@@ -3,11 +3,11 @@
 /**********************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "id.h"
 
 
@@ -105,7 +105,7 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_PcbFrame::Via_Edition() error: unknown command" ) );
+        wxMessageBox( wxT( "WinEDA_PcbFrame::Via_Edition() error: unknown command" ) );
         break;
     }
 

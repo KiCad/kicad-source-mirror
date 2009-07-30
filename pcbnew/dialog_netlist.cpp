@@ -7,6 +7,7 @@
 #include "fctsys.h"
 #include "common.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 
 #include "dialog_netlist.h"

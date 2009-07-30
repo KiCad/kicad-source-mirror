@@ -6,7 +6,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
-#include "protos.h"
+#include "wxPcbStruct.h"
 
 /* Routines Locales */
 static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC );

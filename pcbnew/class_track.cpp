@@ -854,7 +854,7 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     int      text_pos;
-    BOARD*   board = ( (WinEDA_PcbFrame*) frame )->GetBoard();
+    BOARD*   board = ( (WinEDA_BasePcbFrame*)frame)->GetBoard();
 
 #ifdef RATSNET_DEBUG
     DbgDisplayTrackInfos( this );

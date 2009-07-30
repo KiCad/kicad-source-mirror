@@ -11,6 +11,7 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "pcbplot.h"
 #include "pcbcfg.h"
 #include "worksheet.h"

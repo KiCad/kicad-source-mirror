@@ -5,10 +5,6 @@
 #ifndef SET_COLOR_H
 #define SET_COLOR_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "set_color.cpp"
-#endif
-
 #include "wx/statline.h"
 
 class wxBoxSizer;

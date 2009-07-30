@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "plot_common.h"
 #include "gestfich.h"
 #include "pcbplot.h"

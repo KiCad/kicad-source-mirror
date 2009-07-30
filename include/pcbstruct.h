@@ -129,7 +129,7 @@ class RATSNEST_ITEM;
 
 
 /* main window classes : */
-#include "wxPcbStruct.h"
+#include "wxBasePcbFrame.h"
 
 /* Class to handle a board */
 #include "class_board.h"

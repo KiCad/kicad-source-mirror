@@ -7,7 +7,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
-#include "id.h"
+#include "wxPcbStruct.h"
 
 #include "protos.h"
 

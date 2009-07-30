@@ -12,6 +12,7 @@
 #include "block_commande.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "autorout.h"
 #include "pcbplot.h"
 #include "trigo.h"

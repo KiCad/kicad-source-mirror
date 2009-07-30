@@ -9,6 +9,7 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "protos.h"
 #include "id.h"
 
@@ -268,7 +269,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     // Display the loaded board:
     DrawPanel->Refresh( true);
     wxSafeYield();      // Needed if we want to see the board now.
-    
+
     // Compile rastnest and displays net info
     Compile_Ratsnest( NULL, true );
     GetBoard()->DisplayInfo( this );

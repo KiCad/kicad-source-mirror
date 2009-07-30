@@ -2,14 +2,11 @@
 /* menubarmodedit.cpp - creation du menu general de l'editeur de module*/
 /***********************************************************************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #include "bitmaps.h"
 #include "protos.h"
@@ -26,7 +23,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 {
 wxMenuBar * menuBar = GetMenuBar();
 wxMenuItem * item;
-	
+
 	if( ! menuBar )
 		{
 		menuBar = new wxMenuBar();
@@ -52,14 +49,14 @@ wxMenuItem * item;
 	    item->SetBitmap(grid_xpm);
 		sizes_menu->Append(item);
 
-		
+
 		////////////////
 		// Menu Help: //
 		////////////////
 		wxMenu *helpMenu = new wxMenu;
 
                 // Contents
-		item = new wxMenuItem(helpMenu , 
+		item = new wxMenuItem(helpMenu ,
                                       ID_GENERAL_HELP,
                                       _("&Contents"), // Menu entry name
                                       _("Open the pcbnew manual")); // Statusbar message

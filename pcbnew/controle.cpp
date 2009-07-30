@@ -8,6 +8,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "protos.h"
 
 #include "id.h"

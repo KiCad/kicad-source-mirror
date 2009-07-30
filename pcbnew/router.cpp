@@ -11,6 +11,7 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "autorout.h"
 #include "zones.h"
 #include "cell.h"

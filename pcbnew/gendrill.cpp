@@ -5,8 +5,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 
-using namespace std;
-
 #include <vector>
 
 #include "common.h"
@@ -16,6 +14,7 @@ using namespace std;
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "pcbplot.h"
 #include "macros.h"
 #include "appl_wxstruct.h"

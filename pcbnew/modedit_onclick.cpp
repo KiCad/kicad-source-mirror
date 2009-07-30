@@ -2,16 +2,13 @@
 /* modedit_onclick.cpp  */
 /************************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #include "bitmaps.h"
 #include "protos.h"

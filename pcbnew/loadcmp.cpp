@@ -14,6 +14,7 @@
 #include "appl_wxstruct.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "protos.h"
 
 class ModList

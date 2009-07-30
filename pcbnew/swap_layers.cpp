@@ -9,6 +9,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "protos.h"
 
 

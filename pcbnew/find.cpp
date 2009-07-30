@@ -17,6 +17,7 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 #include "id.h"
 

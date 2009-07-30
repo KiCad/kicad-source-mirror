@@ -7,6 +7,7 @@
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 
 /* Functions to undo and redo edit commands.
  *  commmands to undo are stored in CurrentScreen->m_UndoList

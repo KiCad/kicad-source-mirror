@@ -5,6 +5,7 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "bitmaps.h"
 #include "protos.h"
 #include "hotkeys.h"

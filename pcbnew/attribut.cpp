@@ -7,6 +7,7 @@
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "autorout.h"
 #include "protos.h"
 

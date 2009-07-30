@@ -9,7 +9,7 @@
 #include "kicad_string.h"
 
 #include "pcbnew.h"
-#include "protos.h"
+#include "wxPcbStruct.h"
 #include "collectors.h"
 
 
