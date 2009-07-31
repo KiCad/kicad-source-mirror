@@ -30,6 +30,16 @@
 #include "base_struct.h"
 #include "class_undoredo_container.h"
 
+
+ITEM_PICKER::ITEM_PICKER( EDA_BaseStruct* aItem, UndoRedoOpType aUndoRedoStatus )
+{
+    m_UndoRedoStatus = aUndoRedoStatus;
+    m_PickedItem = aItem;
+    m_PickedItemType = TYPE_NOT_INIT;
+    m_Link = NULL;
+}
+
+
 PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 {
     m_Status = UR_UNSPECIFIED;
@@ -70,11 +80,17 @@ void PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::ClearItemsList()
 void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 {
     for(unsigned ii = 0; ii < m_ItemsList.size(); ii++ )
-        delete m_ItemsList[ii].m_Item;
+        delete m_ItemsList[ii].m_PickedItem;
     m_ItemsList.clear();
 }
 
 
+/** function GetItemWrapper
+ * @return the picker of a picked item
+ * @param aIdx = index of the picker in the picked list
+ * if this picker does not exist, a picker is returned,
+ * with its members set to 0 or NULL
+ */
 ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
 {
     ITEM_PICKER picker;
@@ -84,16 +100,24 @@ ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
     return picker;
 }
 
-EDA_BaseStruct* PICKED_ITEMS_LIST::GetItemData( unsigned int aIdx )
+/** function GetPickedItem
+ * @return a pointer to the picked item, or null if does not exist
+ * @param aIdx = index of the picked item in the picked list
+ */
+EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
-        return m_ItemsList[aIdx].m_Item;
+        return m_ItemsList[aIdx].m_PickedItem;
     else
         return NULL;
 }
 
 
-EDA_BaseStruct* PICKED_ITEMS_LIST::GetImage( unsigned int aIdx )
+/** function GetLink
+ * @return link of the picked item, or null if does not exist
+ * @param aIdx = index of the picked item in the picked list
+ */
+EDA_BaseStruct* PICKED_ITEMS_LIST::GetLink( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_Link;
@@ -102,7 +126,12 @@ EDA_BaseStruct* PICKED_ITEMS_LIST::GetImage( unsigned int aIdx )
 }
 
 
-UndoRedoOpType PICKED_ITEMS_LIST::GetItemStatus( unsigned int aIdx )
+/** function GetPickedItemStatus
+ * @return the type of undo/redo opertaion associated to the picked item,
+ *   or UR_UNSPECIFIED if does not exist
+ * @param aIdx = index of the picked item in the picked list
+ */
+UndoRedoOpType PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_UndoRedoStatus;
@@ -111,11 +140,16 @@ UndoRedoOpType PICKED_ITEMS_LIST::GetItemStatus( unsigned int aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, unsigned aIdx )
+/** function SetPickedItem
+ * @param aItem = a pointer to the item to pick
+ * @param aIdx = index of the picker in the picked list
+ * @return true if the picker exists, or false if does not exist
+ */
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_Item = aItem;
+        m_ItemsList[aIdx].m_PickedItem = aItem;
         return true;
     }
     else
@@ -123,11 +157,17 @@ bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetLink( EDA_BaseStruct* aItem, unsigned aIdx )
+/** function SetLink
+ * Set the link associated to a given picked item
+ * @param aLink = the link to the item associated to the picked item
+ * @param aIdx = index of the picker in the picked list
+ * @return true if the picker exists, or false if does not exist
+ */
+bool PICKED_ITEMS_LIST::SetLink( EDA_BaseStruct* aLink, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_Link = aItem;
+        m_ItemsList[aIdx].m_Link = aLink;
         return true;
     }
     else
@@ -135,11 +175,17 @@ bool PICKED_ITEMS_LIST::SetLink( EDA_BaseStruct* aItem, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx )
+/** function SetPickedItem
+ * @param aItem = a pointer to the item to pick
+ * @param aStatus = the type of undo/redo operation associated to the item to pick
+ * @param aIdx = index of the picker in the picked list
+ * @return true if the picker exists, or false if does not exist
+ */
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_Item = aItem;
+        m_ItemsList[aIdx].m_PickedItem = aItem;
         m_ItemsList[aIdx].m_UndoRedoStatus = aStatus;
         return true;
     }
@@ -148,7 +194,13 @@ bool PICKED_ITEMS_LIST::SetItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, 
 }
 
 
-bool PICKED_ITEMS_LIST::SetItemStatus( UndoRedoOpType aStatus, unsigned aIdx )
+/** function SetPickedItemStatus
+ * Set the the type of undo/redo operation for a given picked item
+ * @param aStatus = the type of undo/redo operation associated to the picked item
+ * @param aIdx = index of the picker in the picked list
+ * @return true if the picker exists, or false if does not exist
+ */
+bool PICKED_ITEMS_LIST::SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
@@ -160,7 +212,12 @@ bool PICKED_ITEMS_LIST::SetItemStatus( UndoRedoOpType aStatus, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::RemoveItem( unsigned aIdx )
+/** function RemovePickedItem
+ * remùove one entry (one picker) from the list of picked items
+ * @param aIdx = index of the picker in the picked list
+ * @return true if ok, or false if did not exist
+ */
+bool PICKED_ITEMS_LIST::RemovePickedItem( unsigned aIdx )
 {
     if( aIdx >= m_ItemsList.size() )
         return false;

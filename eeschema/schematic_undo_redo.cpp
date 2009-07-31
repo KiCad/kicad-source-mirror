@@ -212,12 +212,13 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItemToCopy,
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     ITEM_PICKER        itemWrapper( aItemToCopy, aCommandType );
+    itemWrapper.m_PickedItemType = aItemToCopy->Type();
 
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of schematic */
         CopyOfItem = DuplicateStruct( aItemToCopy );
-        itemWrapper.m_Item = CopyOfItem;
+        itemWrapper.m_PickedItem = CopyOfItem;
         itemWrapper.m_Link = aItemToCopy;
         if ( CopyOfItem )
             commandToUndo->PushItem( itemWrapper );
@@ -268,19 +269,20 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM*      ItemToCopy = (SCH_ITEM*) aItemsList.GetItemData( ii );
-        UndoRedoOpType command    = aItemsList.GetItemStatus( ii );
+        SCH_ITEM*      ItemToCopy = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        UndoRedoOpType command    = aItemsList.GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
         }
-        itemWrapper.m_Item = ItemToCopy;
+        itemWrapper.m_PickedItem = ItemToCopy;
+        itemWrapper.m_PickedItemType = ItemToCopy->Type();
         itemWrapper.m_UndoRedoStatus = command;
         switch( command )
         {
         case UR_CHANGED:        /* Create a copy of schematic */
             CopyOfItem = DuplicateStruct( ItemToCopy );
-            itemWrapper.m_Item = CopyOfItem;
+            itemWrapper.m_PickedItem = CopyOfItem;
             itemWrapper.m_Link = ItemToCopy;
             if ( CopyOfItem )
                 commandToUndo->PushItem( itemWrapper );
@@ -335,7 +337,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
-        item = (SCH_ITEM*) itemWrapper.m_Item;
+        item = (SCH_ITEM*) itemWrapper.m_PickedItem;
         wxASSERT( item  );
         SCH_ITEM*   image = (SCH_ITEM*) itemWrapper.m_Link;
         switch( itemWrapper.m_UndoRedoStatus )
@@ -345,13 +347,13 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             break;
 
         case UR_NEW:        /* new items are deleted */
-            aList->SetItemStatus( UR_DELETED, ii );
+            aList->SetPickedItemStatus( UR_DELETED, ii );
             GetScreen()->RemoveFromDrawList( item );
             item->m_Flags = UR_DELETED;
             break;
 
         case UR_DELETED:    /* deleted items are put in EEdrawList, as new items */
-            aList->SetItemStatus( UR_NEW, ii );
+            aList->SetPickedItemStatus( UR_NEW, ii );
             item->SetNext( GetScreen()->EEDrawList );
             GetScreen()->EEDrawList = item;
             item->m_Flags = 0;
@@ -372,7 +374,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         case UR_WIRE_IMAGE:
             /* Exchange the current wires and the old wires */
             alt_item = GetScreen()->ExtractWires( false );
-            aList->SetItem( alt_item, ii );
+            aList->SetPickedItem( alt_item, ii );
             while( item )
             {
                 SCH_ITEM* nextitem = item->Next();
@@ -496,7 +498,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         while( 1 )
         {
             ITEM_PICKER     wrapper = curr_cmd->PopItem();
-            EDA_BaseStruct* item    = wrapper.m_Item;
+            EDA_BaseStruct* item    = wrapper.m_PickedItem;
             if( item == NULL ) // No more item in list.
                 break;
             switch( wrapper.m_UndoRedoStatus )

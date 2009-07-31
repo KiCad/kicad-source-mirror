@@ -257,7 +257,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 
 
 /************************************************/
-void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
+void WinEDA_GerberFrame::Block_Delete( wxDC* DC )
 /************************************************/
 
 /*
@@ -302,7 +302,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
 
 
 /************************************************/
-void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
+void WinEDA_GerberFrame::Block_Move( wxDC* DC )
 /************************************************/
 
 /*
@@ -366,7 +366,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
 
 
 /************************************************/
-void WinEDA_BasePcbFrame::Block_Mirror_X( wxDC* DC )
+void WinEDA_GerberFrame::Block_Mirror_X( wxDC* DC )
 /************************************************/
 
 /*
@@ -426,7 +426,7 @@ void WinEDA_BasePcbFrame::Block_Mirror_X( wxDC* DC )
 
 
 /**************************************************/
-void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
+void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
 /**************************************************/
 
 /*

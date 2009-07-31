@@ -29,7 +29,7 @@ void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetItemData( ii );
+        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         item->Mirror_Y( aMirrorPoint.x );      // Place it in its new position.
         item->m_Flags = 0;
     }
@@ -46,7 +46,7 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetItemData( ii );
+        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         item->Move( aMoveVector );
     }
 }
@@ -66,8 +66,8 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetItemData( ii );
-        itemWrapper.m_Item = item;
+        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        itemWrapper.m_PickedItem = item;
         itemWrapper.m_UndoRedoStatus = UR_DELETED;
         if( item->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
         {
@@ -77,7 +77,7 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
 #if 0
             Hierarchical_PIN_Sheet_Struct* pinlabel = (Hierarchical_PIN_Sheet_Struct*) item;
             frame->DeleteSheetLabel( false, pinlabel->m_Parent );
-            itemWrapper.m_Item = pinlabel->m_Parent;
+            itemWrapper.m_PickedItem = pinlabel->m_Parent;
             itemWrapper.m_UndoRedoStatus = UR_CHANGED;
             itemsList.PushItem( itemWrapper );
 #endif
@@ -154,9 +154,9 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, co
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        newitem = DuplicateStruct( (SCH_ITEM*) aItemsList.GetItemData( ii ) );
-        aItemsList.SetItem( newitem, ii );
-        aItemsList.SetItemStatus( UR_NEW, ii );
+        newitem = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
+        aItemsList.SetPickedItem( newitem, ii );
+        aItemsList.SetPickedItemStatus( UR_NEW, ii );
         {
             switch( newitem->Type() )
             {

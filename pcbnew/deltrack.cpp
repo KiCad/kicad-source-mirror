@@ -165,7 +165,8 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
         GetBoard()->m_Track.Remove( segm );
         // redraw the area where the track was
         DrawPanel->PostDirtyRect( segm->GetBoundingBox() );
-        picker.m_Item = segm;
+        picker.m_PickedItem = segm;
+        picker.m_PickedItemType = segm->Type();
         itemsList.PushItem(picker);
     }
 
@@ -214,7 +215,8 @@ void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         GetBoard()->m_Track.Remove( tracksegment );
         // redraw the area where the track was
         DrawPanel->PostDirtyRect( tracksegment->GetBoundingBox() );
-        picker.m_Item = tracksegment;
+        picker.m_PickedItem = tracksegment;
+        picker.m_PickedItemType = tracksegment->Type();
         itemsList.PushItem(picker);
     }
 

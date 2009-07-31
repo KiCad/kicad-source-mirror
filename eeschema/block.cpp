@@ -479,7 +479,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
         block->Draw( panel, DC, block->m_MoveVector, g_XorMode, block->m_Color );
         for( unsigned ii = 0; ii < block->GetCount(); ii++ )
         {
-            schitem = (SCH_ITEM*) block->m_ItemsSelection.GetItemData( ii );
+            schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
             DrawStructsInGhost( panel, DC, schitem, block->m_MoveVector );
         }
     }
@@ -492,7 +492,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
-        schitem = (SCH_ITEM*) block->m_ItemsSelection.GetItemData( ii );
+        schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
         DrawStructsInGhost( panel, DC, schitem, block->m_MoveVector );
     }
 }
@@ -515,9 +515,9 @@ void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         /* Make a copy of the original picked item. */
-        SCH_ITEM* DrawStructCopy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetItemData( ii ) );
+        SCH_ITEM* DrawStructCopy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
         DrawStructCopy->SetParent( NULL );
-        item.m_Item = DrawStructCopy;
+        item.m_PickedItem = DrawStructCopy;
         g_BlockSaveDataList.PushItem( item );
     }
 }
@@ -543,8 +543,8 @@ void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
     ITEM_PICKER picker( NULL, UR_NEW );
     for( unsigned ii = 0; ii < g_BlockSaveDataList.GetCount(); ii++ )
     {
-        Struct = DuplicateStruct( (SCH_ITEM*) g_BlockSaveDataList.m_ItemsSelection.GetItemData( ii ) );
-        picker.m_Item = Struct;
+        Struct = DuplicateStruct( (SCH_ITEM*) g_BlockSaveDataList.m_ItemsSelection.GetPickedItem( ii ) );
+        picker.m_PickedItem = Struct;
         picklist.PushItem( picker );
 
         // Clear annotation and init new time stamp for the new components:
@@ -600,7 +600,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     // Sel .m_Flags to selected for a wire or bus in selected area if there is only one item:
     if( pickedlist->GetCount() == 1 )
     {
-        Struct = (SCH_ITEM*) pickedlist->GetItemData( 0 );
+        Struct = (SCH_ITEM*) pickedlist->GetPickedItem( 0 );
         if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
             Struct->m_Flags = SELECTED;
     }
@@ -609,7 +609,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     {
         for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
         {
-            Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetItemData( ii );
+            Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
             Struct->m_Flags = SELECTED;
         }
     }
@@ -632,7 +632,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
      *  de selection */
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetItemData( ii );
+        Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
         if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         {
             SegmStruct = (EDA_DrawLineStruct*) Struct;
@@ -651,7 +651,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetItemData( ii );
+        Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
         if( Struct->Type() == TYPE_SCH_COMPONENT )
         {
             // Add all pins of the selected component to list
@@ -712,7 +712,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        Struct = (SCH_ITEM*) pickedlist->GetItemData( ii );
+        Struct = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
 
         switch( Struct->Type() )
         {
@@ -737,6 +737,8 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
     Struct = screen->EEDrawList;
     while( Struct )
     {
+        picker.m_PickedItem    = Struct;
+        picker.m_PickedItemType = Struct->Type();
         switch( Struct->Type() )
         {
         case TYPE_NOT_INIT:
@@ -754,7 +756,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
                 break; /* Deja en liste */
             if( STRUCT->m_Pos != position )
                 break;
-            picker.m_Item = Struct;
             pickedlist->PushItem( picker );
             break;
 
@@ -767,14 +768,12 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             {
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~STARTPOINT;
-                picker.m_Item    = Struct;
                 pickedlist->PushItem( picker );
             }
             else if( STRUCT->m_End == position )
             {
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~ENDPOINT;
-                picker.m_Item    = Struct;
                 pickedlist->PushItem( picker );
             }
             break;
@@ -793,7 +792,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             if( STRUCT->m_Pos != position )
                 break;
             Struct->m_Flags |= SELECTED;
-            picker.m_Item    = Struct;
             pickedlist->PushItem( picker );
             break;
 
@@ -806,7 +804,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             if( STRUCT->m_Pos != position )
                 break;
             Struct->m_Flags |= SELECTED;
-            picker.m_Item    = Struct;
             pickedlist->PushItem( picker );
             break;
 
@@ -823,7 +820,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             if( STRUCT->m_Pos != position )
                 break;
             Struct->m_Flags |= SELECTED;
-            picker.m_Item    = Struct;
             pickedlist->PushItem( picker );
             break;
 
@@ -835,7 +831,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             if( STRUCT->m_Pos != position )
                 break;
             Struct->m_Flags |= SELECTED;
-            picker.m_Item    = Struct;
             pickedlist->PushItem( picker );
             break;
 

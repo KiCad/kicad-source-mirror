@@ -829,8 +829,11 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
 
     Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );  // Remove fill segments
 
-    if( ncont == 0 )                                            // This is the main outline: remove all
-        GetBoard()->Delete( zone_container );
+    if( ncont == 0 )    // This is the main outline: remove all
+    {
+        SaveCopyInUndoList( zone_container, UR_DELETED );
+        GetBoard()->Remove( zone_container );
+    }
 
     else
     {

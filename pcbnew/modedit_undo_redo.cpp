@@ -41,9 +41,9 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( BOARD_ITEM* ItemToCopy,
         while ( 1 )
         {
             wrapper = lastcmd->PopItem();
-            if ( wrapper.m_Item == NULL )
+            if ( wrapper.m_PickedItem == NULL )
                 break;      // All items are removed
-            delete wrapper.m_Item;
+            delete wrapper.m_PickedItem;
         }
         delete lastcmd;
     }
@@ -71,7 +71,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList(wxCommandEvent& event)
 
     wrapper = lastcmd->PopItem();
 
-    GetBoard()->Add( (MODULE*)  wrapper.m_Item );
+    GetBoard()->Add( (MODULE*) wrapper.m_PickedItem );
 
     SetCurItem( NULL );;
     GetScreen()->SetModify();
@@ -102,8 +102,8 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList(wxCommandEvent& event)
 
     wrapper = lastcmd->PopItem();
 
-    if( wrapper.m_Item )
-        GetBoard()->Add( (MODULE*) wrapper.m_Item, ADD_APPEND );
+    if( wrapper.m_PickedItem )
+        GetBoard()->Add( (MODULE*) wrapper.m_PickedItem, ADD_APPEND );
 
 
     GetScreen()->SetModify();

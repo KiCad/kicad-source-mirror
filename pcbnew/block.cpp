@@ -432,9 +432,8 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 
 
 /************************************************/
-void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
+void WinEDA_PcbFrame::Block_Delete( wxDC* DC )
 /************************************************/
-
 /*
  *  routine d'effacement du block deja selectionne
  */
@@ -449,6 +448,9 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     GetScreen()->m_BlockLocate.Normalize();
     SetCurItem( NULL );
 
+    PICKED_ITEMS_LIST      itemsList;
+    ITEM_PICKER            picker(NULL,UR_DELETED);
+
     /* Effacement des modules */
     if( Block_Include_Modules )
     {
@@ -460,13 +462,16 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             if( module->HitTest( GetScreen()->m_BlockLocate ) )
             {
                 module->m_Flags = 0;
-                module->DeleteStructure();
+                module->UnLink();
                 m_Pcb->m_Status_Pcb = 0;
+                picker.m_PickedItem = module;
+                picker.m_PickedItemType = module->Type();
+                itemsList.PushItem(picker);
             }
         }
     }
 
-    /* Effacement des Pistes */
+    /* Remove tracks and vias */
     if( Block_Include_Tracks )
     {
         TRACK* pt_segm;
@@ -476,13 +481,16 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             NextS = pt_segm->Next();
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                /* la piste est ici bonne a etre efface */
-                pt_segm->DeleteStructure();
+                /* This track is in bloc: remove it */
+                pt_segm->UnLink();
+                picker.m_PickedItem = pt_segm;
+                picker.m_PickedItemType = pt_segm->Type();
+                itemsList.PushItem(picker);
             }
         }
     }
 
-    /* Effacement des Elements De Dessin */
+    /* Remove graphic items */
     masque_layer = EDGE_LAYER;
     if( Block_Include_Draw_Items )
         masque_layer = ALL_LAYERS;
@@ -494,7 +502,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
     for( ; PtStruct != NULL; PtStruct = NextS )
     {
         NextS = PtStruct->Next();
-
+        bool remove_me = false;
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
@@ -502,10 +510,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
-
-            /* l'element est ici bon a etre efface */
-            PtStruct->Draw( DrawPanel, DC, GR_XOR );
-            PtStruct->DeleteStructure();
+            remove_me = true; // This item is in bloc: remove it
             break;
 
         case TYPE_TEXTE:
@@ -513,10 +518,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
-            /* le texte est ici bon a etre efface */
-            PtStruct->Draw( DrawPanel, DC, GR_XOR );
-            /* Suppression du texte en Memoire*/
-            PtStruct->DeleteStructure();
+            remove_me = true; // This item is in bloc: remove it
             break;
 
         case TYPE_MIRE:
@@ -524,8 +526,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
-            /* l'element est ici bon a etre efface */
-            PtStruct->DeleteStructure();
+            remove_me = true; // This item is in bloc: remove it
             break;
 
         case TYPE_COTATION:
@@ -533,11 +534,19 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
                 break;
             if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
-            PtStruct->DeleteStructure();
+            remove_me = true; // This item is in bloc: remove it
             break;
 
         default:
             break;
+        }
+
+        if ( remove_me )
+        {
+            PtStruct->UnLink();
+            picker.m_PickedItem = PtStruct;
+            picker.m_PickedItemType = PtStruct->Type();
+            itemsList.PushItem(picker);
         }
     }
 
@@ -552,7 +561,10 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
             NextSegZ = pt_segm->Next();
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                pt_segm->DeleteStructure();
+                pt_segm->UnLink();
+                picker.m_PickedItem = PtStruct;
+                picker.m_PickedItemType = PtStruct->Type();
+                itemsList.PushItem(picker);
             }
         }
 
@@ -560,11 +572,17 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
         {
             if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                m_Pcb->Delete(m_Pcb->GetArea(ii));
+                BOARD_ITEM* zone_c = m_Pcb->Remove(m_Pcb->GetArea(ii));
                 ii--;	// because the current data was removed, ii points actually the next data
+                picker.m_PickedItem = zone_c;
+                picker.m_PickedItemType = zone_c->Type();
+                itemsList.PushItem(picker);
             }
         }
     }
+
+    if ( itemsList.GetCount() )
+        SaveCopyInUndoList( itemsList, UR_DELETED );
 
     DrawPanel->Refresh( TRUE );
     Compile_Ratsnest( DC, TRUE );
@@ -572,7 +590,7 @@ void WinEDA_BasePcbFrame::Block_Delete( wxDC* DC )
 
 
 /****************************************************/
-void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
+void WinEDA_PcbFrame::Block_Rotate( wxDC* DC )
 /****************************************************/
 
 /**
@@ -732,7 +750,7 @@ void WinEDA_BasePcbFrame::Block_Rotate( wxDC* DC )
 
 
 /*****************************************************/
-void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
+void WinEDA_PcbFrame::Block_Invert( wxDC* DC )
 /*****************************************************/
 
 /*
@@ -919,7 +937,7 @@ void WinEDA_BasePcbFrame::Block_Invert( wxDC* DC )
 
 
 /************************************************/
-void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
+void WinEDA_PcbFrame::Block_Move( wxDC* DC )
 /************************************************/
 
 /*
@@ -1064,7 +1082,7 @@ void WinEDA_BasePcbFrame::Block_Move( wxDC* DC )
 
 
 /**************************************************/
-void WinEDA_BasePcbFrame::Block_Duplicate( wxDC* DC )
+void WinEDA_PcbFrame::Block_Duplicate( wxDC* DC )
 /**************************************************/
 
 /*

@@ -149,7 +149,8 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
         if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
         {
             /* Put this structure in the picked list: */
-            picker.m_Item = DrawStruct;
+            picker.m_PickedItem = DrawStruct;
+            picker.m_PickedItemType = DrawStruct->Type();
             aBlock.PushItem(picker);
             itemcount++;
         }

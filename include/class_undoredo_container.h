@@ -26,6 +26,8 @@
 #define _CLASS_UNDOREDO_CONTAINER_H
 #include <vector>
 
+#include "base_struct.h"
+
 /**
  * @info Undo Redo considerations:
  * Basically we have 3 cases
@@ -65,8 +67,10 @@ class ITEM_PICKER
 {
 public:
     UndoRedoOpType  m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
-    EDA_BaseStruct* m_Item;             /* Pointer on the schematic or board item that is concerned,
+    EDA_BaseStruct* m_PickedItem;       /* Pointer on the schematic or board item that is concerned (picked),
                                          *  or in undo redo commands, the copy of an edited item.
+                                         */
+    KICAD_T         m_PickedItemType;   /* type of schematic or board item that is concerned
                                          */
     EDA_BaseStruct* m_Link;             /* Pointer on an other item. Used in undo redo command
                                          * used when a duplicate exists i.e. when an item is modified,
@@ -76,12 +80,8 @@ public:
                                          */
 
 public:
-    ITEM_PICKER( EDA_BaseStruct* aItem = NULL, UndoRedoOpType aUndoRedoStatus = UR_UNSPECIFIED )
-    {
-        m_UndoRedoStatus = aUndoRedoStatus;
-        m_Item = aItem;
-        m_Link = NULL;
-    }
+    ITEM_PICKER( EDA_BaseStruct* aItem = NULL,
+        UndoRedoOpType aUndoRedoStatus = UR_UNSPECIFIED );
 };
 
 /* Class PICKED_ITEMS_LIST
@@ -121,15 +121,70 @@ public:
     }
 
 
+    /** function GetItemWrapper
+     * @return the picker of a picked item
+     * @param aIdx = index of the picker in the picked list
+     * if this picker does not exist, a picker is returned,
+     * with its members set to 0 or NULL
+     */
     ITEM_PICKER     GetItemWrapper( unsigned int aIdx );
-    EDA_BaseStruct* GetItemData( unsigned int aIdx );
-    EDA_BaseStruct* GetImage( unsigned int aIdx );
-    UndoRedoOpType  GetItemStatus( unsigned int aIdx );
-    bool            SetItem( EDA_BaseStruct* aItem, unsigned aIdx );
-    bool            SetItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx );
-    bool            SetLink( EDA_BaseStruct* aItem, unsigned aIdx );
-    bool            SetItemStatus( UndoRedoOpType aStatus, unsigned aIdx );
-    bool            RemoveItem( unsigned aIdx );
+
+    /** function GetPickedItem
+     * @return a pointer to the picked item
+     * @param aIdx = index of the picked item in the picked list
+     */
+    EDA_BaseStruct* GetPickedItem( unsigned int aIdx );
+
+    /** function GetLink
+     * @return link of the picked item, or null if does not exist
+     * @param aIdx = index of the picked item in the picked list
+     */
+    EDA_BaseStruct* GetLink( unsigned int aIdx );
+
+    /** function GetPickedItemStatus
+     * @return the type of undo/redo opertaion associated to the picked item,
+     *   or UR_UNSPECIFIED if does not exist
+     * @param aIdx = index of the picked item in the picked list
+     */
+    UndoRedoOpType  GetPickedItemStatus( unsigned int aIdx );
+
+    /** function SetPickedItem
+     * @param aItem = a pointer to the item to pick
+     * @param aIdx = index of the picker in the picked list
+     * @return true if the pixker exists, or false if does not exist
+     */
+    bool            SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx );
+
+    /** function SetPickedItem
+     * @param aItem = a pointer to the item to pick
+     * @param aStatus = the type of undo/redo operation associated to the item to pick
+     * @param aIdx = index of the picker in the picked list
+     * @return true if the pixker exists, or false if does not exist
+     */
+    bool            SetPickedItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx );
+
+    /** function SetLink
+     * Set the link associated to a given picked item
+     * @param aLink = the link to the item associated to the picked item
+     * @param aIdx = index of the picker in the picked list
+     * @return true if the pixker exists, or false if does not exist
+     */
+    bool            SetLink( EDA_BaseStruct* aLink, unsigned aIdx );
+
+    /** function SetPickedItemStatus
+     * Set the the type of undo/redo operation for a given picked item
+     * @param aStatus = the type of undo/redo operation associated to the picked item
+     * @param aIdx = index of the picker in the picked list
+     * @return true if the picker exists, or false if does not exist
+     */
+    bool            SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aIdx );
+
+    /** function RemovePickedItem
+     * remùove one entry (one picker) from the list of picked items
+     * @param aIdx = index of the picker in the picked list
+     * @return true if ok, or false if did not exist
+     */
+    bool            RemovePickedItem( unsigned aIdx );
 
     /** Function CopyList
      * copy all data from aSource

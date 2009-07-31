@@ -149,7 +149,8 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
         DelStruct->m_Flags = SELECTEDNODE | STRUCT_DELETED;
 
         /* Put this structure in the picked list: */
-        picker.m_Item = DelStruct;
+        picker.m_PickedItem = DelStruct;
+        picker.m_PickedItemType = DelStruct->Type();
         pickList.PushItem(picker);
 
         DelStruct  = DelStruct->Next();
@@ -237,7 +238,8 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
             {
                 DelStruct->m_Flags |= STRUCT_DELETED;
                 /* Put this structure in the picked list: */
-                picker.m_Item = DelStruct;
+                picker.m_PickedItem = DelStruct;
+                picker.m_PickedItemType = DelStruct->Type();
                 pickList.PushItem(picker);
 
                 DelStruct  = GetScreen()->EEDrawList;
@@ -264,7 +266,8 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                     DelStruct->m_Flags |= STRUCT_DELETED;
 
                     /* Put this structure in the picked list: */
-                    picker.m_Item = DelStruct;
+                    picker.m_PickedItem = DelStruct;
+                    picker.m_PickedItemType = DelStruct->Type();
                     pickList.PushItem(picker);
                 }
                 #undef JUNCTION
@@ -290,7 +293,8 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                 DelStruct->m_Flags |= STRUCT_DELETED;
 
                 /* Put this structure in the picked list: */
-                picker.m_Item = DelStruct;
+                picker.m_PickedItem = DelStruct;
+                picker.m_PickedItemType = DelStruct->Type();
                 pickList.PushItem(picker);
             }
         }
