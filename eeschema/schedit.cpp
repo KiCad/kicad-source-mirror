@@ -714,7 +714,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_MARKER_STRUCT_TYPE )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == TYPE_MARKER_SCH )
             ((MARKER_SCH*)screen->GetCurItem())->DisplayMarkerInfo( this );
         break;
 
@@ -775,7 +775,7 @@ void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC*  DC )
         StartMoveCmpField( (SCH_CMP_FIELD*) DrawStruct, DC );
         break;
 
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     default:
         wxString msg;

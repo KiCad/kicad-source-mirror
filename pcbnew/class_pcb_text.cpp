@@ -11,6 +11,8 @@
 #include "kicad_string.h"
 
 #include "pcbnew.h"
+#include "trigo.h"
+#include "protos.h"
 
 
 /*******************/
@@ -257,6 +259,39 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
     valeur_param( m_Size.y, msg );
     Affiche_1_Parametre( frame, 70, _( "V Size" ), msg, RED );
 }
+
+/**
+ * Function Rotate
+ * Rotate this object.
+ * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aAngle - the rotation angle in 0.1 degree.
+ */
+void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
+{
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    m_Orient += aAngle;
+    while( m_Orient >= 3600 )
+        m_Orient -= 3600;
+    while( m_Orient < -3600 )
+        m_Orient += 3600;
+}
+
+/**
+ * Function Flip
+ * Flip this object, i.e. change the board side for this object
+ * @param const wxPoint& aCentre - the rotation point.
+ */
+void TEXTE_PCB::Flip(const wxPoint& aCentre )
+{
+    m_Pos.y  = aCentre.y - (m_Pos.y - aCentre.y);
+    NEGATE( m_Orient );
+    if( (GetLayer() == COPPER_LAYER_N) || (GetLayer() == CMP_N) )
+    {
+        m_Mirror = not m_Mirror;      /* inverse miroir */
+    }
+    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+}
+
 
 
 #if defined(DEBUG)

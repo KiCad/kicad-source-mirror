@@ -409,7 +409,7 @@ void DRC::testZones( bool adoTestFillSegments )
 }
 
 
-MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER* fillMe )
+MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
 {
     wxString textA = aTrack->MenuText( m_pcb );
     wxString textB;
@@ -464,11 +464,11 @@ MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKE
     else
     {
         if( aItem )
-            fillMe = new MARKER( aErrorCode, position,
+            fillMe = new MARKER_PCB( aErrorCode, position,
                                  textA, aTrack->GetPosition(),
                                  textB, posB );
         else
-            fillMe = new MARKER( aErrorCode, position,
+            fillMe = new MARKER_PCB( aErrorCode, position,
                                 textA, aTrack->GetPosition() );
     }
 
@@ -476,7 +476,7 @@ MARKER* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKE
 }
 
 
-MARKER* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillMe )
+MARKER_PCB* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe )
 {
     wxString textA = aPad->MenuText( m_pcb );
     wxString textB = bPad->MenuText( m_pcb );
@@ -487,13 +487,13 @@ MARKER* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillM
     if( fillMe )
         fillMe->SetData( aErrorCode, posA, textA, posA, textB, posB );
     else
-        fillMe = new MARKER( aErrorCode, posA, textA, posA, textB, posB );
+        fillMe = new MARKER_PCB( aErrorCode, posA, textA, posA, textB, posB );
 
     return fillMe;
 }
 
 
-MARKER* DRC::fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER* fillMe )
+MARKER_PCB* DRC::fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe )
 {
     wxString textA = aArea->MenuText( m_pcb );
 
@@ -502,16 +502,16 @@ MARKER* DRC::fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER* fillMe )
     if( fillMe )
         fillMe->SetData( aErrorCode, posA, textA, posA );
     else
-        fillMe = new MARKER( aErrorCode, posA, textA, posA );
+        fillMe = new MARKER_PCB( aErrorCode, posA, textA, posA );
 
     return fillMe;
 }
 
 
-MARKER* DRC::fillMarker( const ZONE_CONTAINER* aArea,
+MARKER_PCB* DRC::fillMarker( const ZONE_CONTAINER* aArea,
                          const wxPoint&        aPos,
                          int                   aErrorCode,
-                         MARKER*               fillMe )
+                         MARKER_PCB*               fillMe )
 {
     wxString textA = aArea->MenuText( m_pcb );
 
@@ -520,7 +520,7 @@ MARKER* DRC::fillMarker( const ZONE_CONTAINER* aArea,
     if( fillMe )
         fillMe->SetData( aErrorCode, posA, textA, posA );
     else
-        fillMe = new MARKER( aErrorCode, posA, textA, posA );
+        fillMe = new MARKER_PCB( aErrorCode, posA, textA, posA );
 
     return fillMe;
 }

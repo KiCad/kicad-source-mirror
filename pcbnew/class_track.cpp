@@ -272,6 +272,34 @@ EDA_Rect TRACK::GetBoundingBox()
     return ret;
 }
 
+/**
+ * Function Rotate
+ * Rotate this object.
+ * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aAngle - the rotation angle in 0.1 degree.
+ */
+void TRACK::Rotate(const wxPoint& aRotCentre, int aAngle)
+{
+    RotatePoint( &m_Start, aRotCentre, aAngle );
+    RotatePoint( &m_End, aRotCentre, aAngle );
+}
+
+/**
+ * Function Flip
+ * Flip this object, i.e. change the board side for this object
+ * @param const wxPoint& aCentre - the rotation point.
+ */
+void TRACK::Flip(const wxPoint& aCentre )
+{
+    m_Start.y  = aCentre.y - (m_Start.y - aCentre.y);
+    m_End.y  = aCentre.y - (m_End.y - aCentre.y);
+    if( Type() == TYPE_VIA )
+    {
+    }
+    else
+        SetLayer( ChangeSideNumLayer( GetLayer() ) );
+}
+
 
 // see class_track.h
 // SEGVIA and SEGZONE inherit this version

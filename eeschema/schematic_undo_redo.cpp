@@ -144,7 +144,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (MARKER_SCH*) aItem )
@@ -322,17 +322,16 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/***************************************************************************/
-void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
-/***************************************************************************/
-
-/* Used in undo or redo command.
- *  Put data pointed by List in the previous state, i.e. the state memorised by List
+/** Function PutDataInPreviousState()
+ * Used in undo or redo command.
+ * Put data pointed by List in the previous state, i.e. the state memorised by List
+ * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+ * @param aRedoCommand = a bool: true for redo, false for undo
  */
+void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
     SCH_ITEM* item;
     SCH_ITEM* alt_item;
-    bool as_moved = false;
 
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
@@ -360,8 +359,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             break;
 
         case UR_MOVED:
-            item->Move( - aList->m_TransformPoint );
-            as_moved = true;
+            item->Move( aRedoCommand ? aList->m_TransformPoint : - aList->m_TransformPoint );
             break;
 
         case UR_MIRRORED_Y:
@@ -397,10 +395,6 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         break;
         }
     }
-
-    // Undo for move transform needs to change the general move vector:
-    if ( as_moved )
-        aList->m_TransformPoint = - aList->m_TransformPoint;
 }
 
 
@@ -411,8 +405,8 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
 /** Function GetSchematicFromUndoList
  *  Undo the last edition:
  *  - Save the current schematic in Redo list
- *  - Get an old version of the schematic
- *  @return false if nothing done, else true
+ *  - Get the previous version of the schematic from Unodo list
+ *  @return none
  */
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
@@ -422,7 +416,7 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
     GetScreen()->PushCommandToRedoList( List );
     /* Undo the command */
-    PutDataInPreviousState( List );
+    PutDataInPreviousState( List, false );
 
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
@@ -438,10 +432,11 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
 void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
 /**********************************************************/
 
-/* Redo the last edition:
+/** Function GetSchematicFromRedoList
+ * Redo the last edition:
  *  - Save the current schematic in undo list
- *  - Get the old version
- *  @return false if nothing done, else true
+ *  - Get the previous version from Redo list
+ *  @return none
  */
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
@@ -453,7 +448,7 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
     GetScreen()->PushCommandToUndoList( List );
 
     /* Redo the command: */
-    PutDataInPreviousState( List );
+    PutDataInPreviousState( List, true );
 
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();

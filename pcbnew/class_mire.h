@@ -29,6 +29,31 @@ public:
 
 
     /**
+     * Function Move
+     * move this object.
+     * @param const wxPoint& aMoveVector - the move vector for this object.
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
+
+    /**
+     * Function Rotate
+     * Rotate this object.
+     * @param const wxPoint& aRotCentre - the rotation point.
+     * @param aAngle - the rotation angle in 0.1 degree.
+     */
+    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+
+    /**
+     * Function Flip
+     * Flip this object, i.e. change the board side for this object
+     * @param const wxPoint& aCentre - the rotation point.
+     */
+    virtual void Flip(const wxPoint& aCentre );
+
+    /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.

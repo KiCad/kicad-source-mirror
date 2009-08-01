@@ -135,11 +135,11 @@ public:
      */
     EDA_BaseStruct* GetPickedItem( unsigned int aIdx );
 
-    /** function GetLink
+    /** function GetPickedItemLink
      * @return link of the picked item, or null if does not exist
      * @param aIdx = index of the picked item in the picked list
      */
-    EDA_BaseStruct* GetLink( unsigned int aIdx );
+    EDA_BaseStruct* GetPickedItemLink( unsigned int aIdx );
 
     /** function GetPickedItemStatus
      * @return the type of undo/redo opertaion associated to the picked item,
@@ -163,13 +163,13 @@ public:
      */
     bool            SetPickedItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx );
 
-    /** function SetLink
+    /** function SetPickedItemLink
      * Set the link associated to a given picked item
      * @param aLink = the link to the item associated to the picked item
      * @param aIdx = index of the picker in the picked list
      * @return true if the pixker exists, or false if does not exist
      */
-    bool            SetLink( EDA_BaseStruct* aLink, unsigned aIdx );
+    bool            SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx );
 
     /** function SetPickedItemStatus
      * Set the the type of undo/redo operation for a given picked item

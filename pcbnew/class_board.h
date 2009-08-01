@@ -70,8 +70,8 @@ class BOARD : public BOARD_ITEM
     friend class WinEDA_PcbFrame;
 
 private:
-    typedef std::vector<MARKER*> MARKERS;                   // @todo: switch to boost:ptr_vector, and change ~BOARD()
-    MARKERS m_markers;                                      ///< MARKERs for clearance problems, owned by pointer
+    typedef std::vector<MARKER_PCB*> MARKERS;               // @todo: switch to boost:ptr_vector, and change ~BOARD()
+    MARKERS m_markers;                                      ///< MARKER_PCBs for clearance problems, owned by pointer
 
     typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;   // @todo: switch to boost::ptr_vector, and change ~BOARD()
     ZONE_CONTAINERS            m_ZoneDescriptorList;        ///< edge zone descriptors, owned by pointer
@@ -162,10 +162,10 @@ public:
     /**
      * Function GetMARKER
      * returns the MARKER at a given index.
-     * @param index The array type index into a collection of MARKERS.
-     * @return MARKER* - a pointer to the MARKER or NULL if index out of range.
+     * @param index The array type index into a collection of MARKER_PCBS.
+     * @return MARKER_PCB* - a pointer to the MARKER_PCB or NULL if index out of range.
      */
-    MARKER* GetMARKER( int index ) const
+    MARKER_PCB* GetMARKER( int index ) const
     {
         if( (unsigned) index < m_markers.size() )
             return m_markers[index];
@@ -175,7 +175,7 @@ public:
 
     /**
      * Function GetMARKERCount
-     * @return int - The number of MARKERS.
+     * @return int - The number of MARKER_PCBS.
      */
     int GetMARKERCount() const
     {

@@ -3,7 +3,6 @@
 /******************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "id.h"
 #include "class_drawpanel.h"
@@ -370,7 +369,7 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DrawPanel->MouseToCursorSchema();
             break;
 
-        case DRAW_MARKER_STRUCT_TYPE:
+        case TYPE_MARKER_SCH:
             ((MARKER_SCH*)DrawStruct)->DisplayMarkerInfo( this);
             break;
 

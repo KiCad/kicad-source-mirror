@@ -124,7 +124,7 @@
 
 /* Forward declaration */
 class NETINFO_ITEM;
-class MARKER;
+class MARKER_PCB;
 class RATSNEST_ITEM;
 
 
@@ -223,7 +223,7 @@ enum DisplayViaMode {
 #include "class_cotation.h"
 #include "class_mire.h"
 #include "class_track.h"
-#include "class_marker.h"
+#include "class_marker_pcb.h"
 #include "class_zone.h"
 
 /* Values for DISPLAY_OPTIONS.ShowTrackClearanceMode parameter option

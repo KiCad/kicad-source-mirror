@@ -21,32 +21,6 @@
 #include "3d_struct.h"
 #include "protos.h"
 
-/*********************************************************************************/
-void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                        int dim_ancre, int draw_mode )
-/*********************************************************************************/
-
-/* trace de l'ancre (croix verticale)
- *  (doit etre fait apres les pads,
- *  car le trace du trou efface tout donc peut etre l'ancre */
-{
-    int anchor_size = panel->GetScreen()->Unscale( dim_ancre );
-
-    GRSetDrawMode( DC, draw_mode );
-
-    if( (g_AnchorColor & ITEM_NOT_SHOW) == 0 )
-    {
-        GRLine( &panel->m_ClipBox, DC,
-            m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
-            m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
-            0, g_AnchorColor );
-        GRLine( &panel->m_ClipBox, DC,
-            m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
-            m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
-            0, g_AnchorColor );
-    }
-}
-
 
 /*************************************************/
 /* Class MODULE : description d'un composant pcb */
@@ -80,6 +54,32 @@ MODULE::~MODULE()
     delete m_Value;
 }
 
+
+/*********************************************************************************/
+void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                        int dim_ancre, int draw_mode )
+/*********************************************************************************/
+
+/* trace de l'ancre (croix verticale)
+ *  (doit etre fait apres les pads,
+ *  car le trace du trou efface tout donc peut etre l'ancre */
+{
+    int anchor_size = panel->GetScreen()->Unscale( dim_ancre );
+
+    GRSetDrawMode( DC, draw_mode );
+
+    if( (g_AnchorColor & ITEM_NOT_SHOW) == 0 )
+    {
+        GRLine( &panel->m_ClipBox, DC,
+            m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
+            m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
+            0, g_AnchorColor );
+        GRLine( &panel->m_ClipBox, DC,
+            m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
+            m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
+            0, g_AnchorColor );
+    }
+}
 
 /*********************************/
 void MODULE::Copy( MODULE* aModule )
@@ -131,7 +131,7 @@ void MODULE::Copy( MODULE* aModule )
             break;
 
         default:
-            DisplayError( NULL, wxT( "Internal Err: CopyModule: type indefini" ) );
+            wxMessageBox( wxT( "Internal Err: CopyModule: type indefini" ) );
             break;
         }
     }
@@ -591,118 +591,6 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
     /* Recalculate the bounding box */
     Set_Rectangle_Encadrement();
     return 0;
-}
-
-
-/*************************************************/
-void MODULE::SetPosition( const wxPoint& newpos )
-/*************************************************/
-
-// replace le module en position newpos
-{
-    int deltaX = newpos.x - m_Pos.x;
-    int deltaY = newpos.y - m_Pos.y;
-
-    /* deplacement de l'ancre */
-    m_Pos.x += deltaX;
-    m_Pos.y += deltaY;
-
-    /* deplacement de la reference */
-    m_Reference->m_Pos.x += deltaX;
-    m_Reference->m_Pos.y += deltaY;
-
-    /* deplacement de la Valeur */
-    m_Value->m_Pos.x += deltaX;
-    m_Value->m_Pos.y += deltaY;
-
-    /* deplacement des pastilles */
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        pad->m_Pos.x += deltaX;
-        pad->m_Pos.y += deltaY;
-    }
-
-    /* deplacement des dessins de l'empreinte : */
-    EDA_BaseStruct* PtStruct = m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        switch( PtStruct->Type() )
-        {
-        case TYPE_EDGE_MODULE:
-        {
-            EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) PtStruct;
-            pt_edgmod->SetDrawCoord();
-            break;
-        }
-
-        case TYPE_TEXTE_MODULE:
-        {
-            TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
-            pt_texte->m_Pos.x += deltaX;
-            pt_texte->m_Pos.y += deltaY;
-            break;
-        }
-
-        default:
-            DisplayError( NULL, wxT( "Type Draw Indefini" ) ); break;
-        }
-    }
-
-    Set_Rectangle_Encadrement();
-}
-
-
-/*********************************************/
-void MODULE::SetOrientation( int newangle )
-/*********************************************/
-
-/* Tourne de newangle (en 0.1 degres) le module
- */
-{
-    int px, py;
-
-    newangle -= m_Orient;       // = delta de rotation
-
-    m_Orient += newangle;
-    NORMALIZE_ANGLE_POS( m_Orient );
-
-    /* deplacement et rotation des pastilles */
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        px = pad->m_Pos0.x;
-        py = pad->m_Pos0.y;
-
-        pad->m_Orient += newangle; /* change m_Orientation */
-        NORMALIZE_ANGLE_POS( pad->m_Orient );
-
-        RotatePoint( &px, &py, (int) m_Orient );
-        pad->m_Pos.x = m_Pos.x + px;
-        pad->m_Pos.y = m_Pos.y + py;
-    }
-
-    /* mise a jour de la reference et de la valeur*/
-    m_Reference->SetDrawCoord();
-    m_Value->SetDrawCoord();
-
-    /* deplacement des contours et textes de l'empreinte : */
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
-    {
-        if( item->Type() == TYPE_EDGE_MODULE )
-        {
-            EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) item;
-            pt_edgmod->SetDrawCoord();
-        }
-
-        if( item->Type() == TYPE_TEXTE_MODULE )
-        {
-            /* deplacement des inscriptions : */
-            TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) item;
-            pt_texte->SetDrawCoord();
-        }
-    }
-
-    /* Recalcul du rectangle d'encadrement */
-    Set_Rectangle_Encadrement();
 }
 
 

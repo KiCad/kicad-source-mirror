@@ -32,14 +32,14 @@ const wxChar* NameMarqueurType[] =
 /**************************/
 
 MARKER_SCH::MARKER_SCH() :
-    SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE ),
+    SCH_ITEM( NULL, TYPE_MARKER_SCH ),
     MARKER_BASE()
 {
 }
 
 
 MARKER_SCH::MARKER_SCH( const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, DRAW_MARKER_STRUCT_TYPE ),
+    SCH_ITEM( NULL, TYPE_MARKER_SCH ),
     MARKER_BASE( 0, pos, text, pos )
 {
 }

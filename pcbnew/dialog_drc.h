@@ -136,7 +136,7 @@ public:
 
     const DRC_ITEM* GetItem( int aIndex )
     {
-        const MARKER* marker = m_board->GetMARKER( aIndex );
+        const MARKER_PCB* marker = m_board->GetMARKER( aIndex );
         if( marker )
             return &marker->GetReporter();
         return NULL;
@@ -144,7 +144,7 @@ public:
 
     void DeleteItem( int aIndex )
     {
-        MARKER* marker = m_board->GetMARKER( aIndex );
+        MARKER_PCB* marker = m_board->GetMARKER( aIndex );
         if( marker )
             m_board->Delete( marker );
     }

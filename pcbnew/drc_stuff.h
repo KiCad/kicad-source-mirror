@@ -67,7 +67,7 @@
 
 
 class WinEDA_DrawPanel;
-class MARKER;
+class MARKER_PCB;
 class DIALOG_DRC_CONTROL;
 
 
@@ -144,7 +144,7 @@ private:
 
     // int              m_errorCount;
 
-    MARKER*           m_currentMarker;
+    MARKER_PCB*           m_currentMarker;
 
     bool              m_aboartDRC;
     bool              m_drcInProgress;
@@ -188,14 +188,14 @@ private:
      *         or TRACK.
      * @param aErrorCode A categorizing identifier for the particular type
      *         of error that is being reported.
-     * @param fillMe A MARKER* which is to be filled in, or NULL if one is to
+     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
      *         first be allocated, then filled.
      */
-    MARKER* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER* fillMe );
+    MARKER_PCB* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
-    MARKER* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER* fillMe );
+    MARKER_PCB* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe );
 
-    MARKER* fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER* fillMe );
+    MARKER_PCB* fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER_PCB* fillMe );
 
     /**
      * Function fillMarker
@@ -206,10 +206,10 @@ private:
      * @param aEdge edge zone to test
      * @param aPos position of error
      * @param aErrorCode  Type of error
-     * @param fillMe A MARKER* which is to be filled in, or NULL if one is to
+     * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
      *         first be allocated, then filled.
      */
-    MARKER* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER* fillMe );
+    MARKER_PCB* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER_PCB* fillMe );
 
     //-----<categorical group tests>-----------------------------------------
 

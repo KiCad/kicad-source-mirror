@@ -14,8 +14,6 @@
 #include "protos.h"
 #include "id.h"
 
-/* Fonctions locales */
-
 
 /****************************************************************/
 void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )

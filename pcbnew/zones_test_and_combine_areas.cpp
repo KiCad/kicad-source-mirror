@@ -847,7 +847,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                     {
                         wxString msg1   = Area_Ref->MenuText( this );
                         wxString msg2   = Area_To_Test->MenuText( this );
-                        MARKER*  marker = new MARKER( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
+                        MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
                                                      msg1, wxPoint( x, y ),
                                                      msg2, wxPoint( x, y ) );
                         Add( marker );
@@ -868,7 +868,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                     {
                         wxString msg1   = Area_To_Test->MenuText( this );
                         wxString msg2   = Area_Ref->MenuText( this );
-                        MARKER*  marker = new MARKER( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
+                        MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
                                                      msg1, wxPoint( x, y ),
                                                      msg2, wxPoint( x, y ) );
                         Add( marker );
@@ -935,7 +935,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                                 {
                                     wxString msg1   = Area_Ref->MenuText( this );
                                     wxString msg2   = Area_To_Test->MenuText( this );
-                                    MARKER*  marker = new MARKER( COPPERAREA_CLOSE_TO_COPPERAREA,
+                                    MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_CLOSE_TO_COPPERAREA,
                                                                  wxPoint( x, y ),
                                                                  msg1, wxPoint( x, y ),
                                                                  msg2, wxPoint( x, y ) );

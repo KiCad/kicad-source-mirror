@@ -474,7 +474,7 @@ void DeleteAllMarkers( int type )
         for( DrawStruct = screen->EEDrawList; DrawStruct != NULL; DrawStruct = NextStruct )
         {
             NextStruct = DrawStruct->Next();
-            if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
+            if( DrawStruct->Type() != TYPE_MARKER_SCH )
                 continue;
 
             /* Marqueur trouve */

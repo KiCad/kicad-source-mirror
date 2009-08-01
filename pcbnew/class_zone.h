@@ -286,6 +286,14 @@ public:
     void Rotate( const wxPoint& centre, int angle );
 
     /**
+     * Function Flip
+     * Flip this object, i.e. change the board side for this object
+     * (like Mirror() but changes layer)
+     * @param const wxPoint& aCentre - the rotation point.
+     */
+    virtual void Flip(const wxPoint& aCentre );
+
+    /**
      * Function Mirror
      * Mirror the outlines , relative to a given horizontal axis
      * the layer is not changed

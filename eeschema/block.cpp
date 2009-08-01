@@ -812,7 +812,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             break;
 
-        case DRAW_MARKER_STRUCT_TYPE:
+        case TYPE_MARKER_SCH:
                 #undef STRUCT
                 #define STRUCT ( (MARKER_SCH*) Struct )
             if( Struct->m_Flags & SELECTED )

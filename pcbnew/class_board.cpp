@@ -203,9 +203,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     switch( aBoardItem->Type() )
     {
     // this one uses a vector
-    case TYPE_MARKER:
+    case TYPE_MARKER_PCB:
         aBoardItem->SetParent( this );
-        m_markers.push_back( (MARKER*) aBoardItem );
+        m_markers.push_back( (MARKER_PCB*) aBoardItem );
         break;
 
     // this one uses a vector
@@ -267,12 +267,12 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     switch( aBoardItem->Type() )
     {
-    case TYPE_MARKER:
+    case TYPE_MARKER_PCB:
 
         // find the item in the vector, then remove it
         for( unsigned i = 0;  i<m_markers.size();  ++i )
         {
-            if( m_markers[i] == (MARKER*) aBoardItem )
+            if( m_markers[i] == (MARKER_PCB*) aBoardItem )
             {
                 m_markers.erase( m_markers.begin() + i );
                 break;
@@ -326,7 +326,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
 void BOARD::DeleteMARKERs()
 {
-    // the vector does not know how to delete the MARKER, it holds pointers
+    // the vector does not know how to delete the MARKER_PCB, it holds pointers
     for( unsigned i = 0;  i<m_markers.size();  ++i )
         delete m_markers[i];
 
@@ -691,9 +691,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             break;
 #endif
 
-        case TYPE_MARKER:
+        case TYPE_MARKER_PCB:
 
-            // MARKERS are in the m_markers std::vector
+            // MARKER_PCBS are in the m_markers std::vector
             for( unsigned i = 0;  i<m_markers.size();  ++i )
             {
                 result = m_markers[i]->Visit( inspector, testData, p );
@@ -720,9 +720,6 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         case TYPE_ZONE:
             result = IterateForward( m_Zone, inspector, testData, p );
             ++p;
-            break;
-
-        case TYPE_ZONE_UNUSED:  // Unused type
             break;
 
         default:        // catch EOT or ANY OTHER type here and return.
@@ -975,7 +972,7 @@ bool BOARD::Save( FILE* aFile ) const
         }
     }
 
-    // do not save MARKERs, they can be regenerated easily
+    // do not save MARKER_PCBs, they can be regenerated easily
 
     // save the tracks & vias
     fprintf( aFile, "$TRACK\n" );

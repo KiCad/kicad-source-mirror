@@ -57,7 +57,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( Plotter* plotter,
             PlotMirePcb( plotter, (MIREPCB*) PtStruct, masque_layer, trace_mode );
             break;
 
-        case TYPE_MARKER:
+        case TYPE_MARKER_PCB:
             break;
 
         default:
@@ -740,7 +740,7 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( Plotter*    plotter,
             PlotMirePcb( plotter, (MIREPCB*) item, masque_layer, trace_mode );
             break;
 
-        case TYPE_MARKER:
+        case TYPE_MARKER_PCB:
             break;
 
         default:

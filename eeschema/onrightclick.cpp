@@ -3,10 +3,6 @@
 /*	droit de la souris											  */
 /******************************************************************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "id.h"
@@ -140,7 +136,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Delete Bus Entry" ), delete_bus_xpm );
         break;
 
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
         AddMenusForMarkers( PopMenu, (MARKER_SCH*) DrawStruct, this );
         break;
 

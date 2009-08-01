@@ -21,7 +21,6 @@
 /* fonctions externes */
 
 /* Fonctions locales */
-static int  ChangeSideMaskLayer( int masque );
 static void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC );
 
 /* Variables locales : */
@@ -349,10 +348,6 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
  * @param  DC Current Device Context. if NULL, no redraw
  */
 {
-    D_PAD*          pt_pad;
-    TEXTE_MODULE*   pt_texte;
-    EDGE_MODULE*    pt_edgmod;
-    EDA_BaseStruct* PtStruct;
 
     if( Module == NULL )
         return;
@@ -390,131 +385,8 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
         }
     }
 
-    /* mise a jour du Flag de l'empreinte et des couches des contours et textes */
-    Module->SetLayer( ChangeSideNumLayer( Module->GetLayer() ) );
-
-    /* Inversion miroir de l'orientation */
-    Module->m_Orient = -Module->m_Orient;
-    NORMALIZE_ANGLE_POS( Module->m_Orient );
-
-    /* Inversion miroir + layers des pastilles */
-    pt_pad = Module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-    {
-        pt_pad->m_Pos.y      -= Module->m_Pos.y;
-        pt_pad->m_Pos.y       = -pt_pad->m_Pos.y;
-        pt_pad->m_Pos.y      += Module->m_Pos.y;
-        pt_pad->m_Pos0.y      = -pt_pad->m_Pos0.y;
-        pt_pad->m_Offset.y    = -pt_pad->m_Offset.y;
-        pt_pad->m_DeltaSize.y = -pt_pad->m_DeltaSize.y;
-        NEGATE_AND_NORMALIZE_ANGLE_POS( pt_pad->m_Orient );
-
-        /* change cote pour pastilles surfaciques */
-        pt_pad->m_Masque_Layer = ChangeSideMaskLayer( pt_pad->m_Masque_Layer );
-    }
-
-    /* Inversion miroir de la Reference et mise en miroir : */
-    pt_texte = Module->m_Reference;
-    pt_texte->m_Pos.y -= Module->m_Pos.y;
-    pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
-    pt_texte->m_Pos.y += Module->m_Pos.y;
-    pt_texte->m_Pos0.y = -pt_texte->m_Pos0.y;
-    pt_texte->m_Mirror = false;
-    NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
-    pt_texte->SetLayer( Module->GetLayer() );
-    pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
-
-    if( Module->GetLayer() == COPPER_LAYER_N )
-        pt_texte->SetLayer( SILKSCREEN_N_CU );
-
-    if( Module->GetLayer() == CMP_N )
-        pt_texte->SetLayer( SILKSCREEN_N_CMP );
-
-    if( (Module->GetLayer() == SILKSCREEN_N_CU)
-       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == COPPER_LAYER_N) )
-        pt_texte->m_Mirror = true;
-
-    /* Inversion miroir de la Valeur et mise en miroir : */
-    pt_texte = Module->m_Value;
-    pt_texte->m_Pos.y -= Module->m_Pos.y;
-    pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
-    pt_texte->m_Pos.y += Module->m_Pos.y;
-    pt_texte->m_Pos0.y = -pt_texte->m_Pos0.y;
-    pt_texte->m_Mirror = false;
-    NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
-    pt_texte->SetLayer( Module->GetLayer() );
-    pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
-
-    if( Module->GetLayer() == COPPER_LAYER_N )
-        pt_texte->SetLayer( SILKSCREEN_N_CU );
-
-    if( Module->GetLayer() == CMP_N )
-        pt_texte->SetLayer( SILKSCREEN_N_CMP );
-
-    if( (Module->GetLayer() == SILKSCREEN_N_CU)
-       || (Module->GetLayer() == ADHESIVE_N_CU) || (Module->GetLayer() == COPPER_LAYER_N) )
-        pt_texte->m_Mirror = true;
-
-    /* Inversion miroir des dessins de l'empreinte : */
-    PtStruct = Module->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        switch( PtStruct->Type() )
-        {
-        case TYPE_EDGE_MODULE:
-            pt_edgmod = (EDGE_MODULE*) PtStruct;
-            pt_edgmod->m_Start.y -= Module->m_Pos.y;
-            pt_edgmod->m_Start.y  = -pt_edgmod->m_Start.y;
-            pt_edgmod->m_Start.y += Module->m_Pos.y;
-            pt_edgmod->m_End.y   -= Module->m_Pos.y;
-            pt_edgmod->m_End.y    = -pt_edgmod->m_End.y;
-            pt_edgmod->m_End.y   += Module->m_Pos.y;
-            /* inversion des coords locales */
-            pt_edgmod->m_Start0.y = -pt_edgmod->m_Start0.y;
-            pt_edgmod->m_End0.y   = -pt_edgmod->m_End0.y;
-            if( pt_edgmod->m_Shape == S_ARC )
-            {
-                pt_edgmod->m_Angle = -pt_edgmod->m_Angle;
-            }
-
-            pt_edgmod->SetLayer( ChangeSideNumLayer( pt_edgmod->GetLayer() ) );
-            break;
-
-        case TYPE_TEXTE_MODULE:
-            /* Inversion miroir de la position et mise en miroir : */
-            pt_texte = (TEXTE_MODULE*) PtStruct;
-            pt_texte->m_Pos.y -= Module->m_Pos.y;
-            pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
-            pt_texte->m_Pos.y += Module->m_Pos.y;
-            pt_texte->m_Pos0.y = - pt_texte->m_Pos0.y;
-            pt_texte->m_Mirror = false;
-            NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
-
-            pt_texte->SetLayer( Module->GetLayer() );
-            pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
-
-            if( Module->GetLayer() == COPPER_LAYER_N )
-                pt_texte->SetLayer( SILKSCREEN_N_CU );
-
-            if( Module->GetLayer() == CMP_N )
-                pt_texte->SetLayer( SILKSCREEN_N_CMP );
-
-            if(  Module->GetLayer() == SILKSCREEN_N_CU
-                 || Module->GetLayer() == ADHESIVE_N_CU
-                 || Module->GetLayer() == COPPER_LAYER_N )
-            {
-                pt_texte->m_Mirror = true;
-            }
-
-            break;
-
-        default:
-            DisplayError( m_PcbFrame, wxT( "Unknown Draw Type" ) ); break;
-        }
-    }
-
-    /* calcul du rectangle d'encadrement */
-    Module->Set_Rectangle_Encadrement();
+    /* Flip the module */
+    Module->Flip( Module->m_Pos );
 
     if( m_PcbFrame )
         Module->DisplayInfo( m_PcbFrame );
@@ -538,109 +410,6 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
         }
         m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     }
-}
-
-
-/*********************************************/
-static int ChangeSideMaskLayer( int masque )
-/*********************************************/
-
-/* Routine de recalcul du masque-layer lors des
- *  echanges cote cu/cmp pour les couches CU/CMP specialisees
- *  (cuivre, serigr., pate , soudure)
- */
-{
-    int newmasque;
-
-    newmasque = masque & ~(CUIVRE_LAYER | CMP_LAYER |
-                           SILKSCREEN_LAYER_CU | SILKSCREEN_LAYER_CMP |
-                           ADHESIVE_LAYER_CU | ADHESIVE_LAYER_CMP |
-                           SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP |
-                           SOLDERPASTE_LAYER_CU | SOLDERPASTE_LAYER_CMP |
-                           ADHESIVE_LAYER_CU | ADHESIVE_LAYER_CMP);
-
-    if( masque & CUIVRE_LAYER )
-        newmasque |= CMP_LAYER;
-    if( masque & CMP_LAYER )
-        newmasque |= CUIVRE_LAYER;
-
-    if( masque & SILKSCREEN_LAYER_CU )
-        newmasque |= SILKSCREEN_LAYER_CMP;
-    if( masque & SILKSCREEN_LAYER_CMP )
-        newmasque |= SILKSCREEN_LAYER_CU;
-
-    if( masque & ADHESIVE_LAYER_CU )
-        newmasque |= ADHESIVE_LAYER_CMP;
-    if( masque & ADHESIVE_LAYER_CMP )
-        newmasque |= ADHESIVE_LAYER_CU;
-
-    if( masque & SOLDERMASK_LAYER_CU )
-        newmasque |= SOLDERMASK_LAYER_CMP;
-    if( masque & SOLDERMASK_LAYER_CMP )
-        newmasque |= SOLDERMASK_LAYER_CU;
-
-    if( masque & SOLDERPASTE_LAYER_CU )
-        newmasque |= SOLDERPASTE_LAYER_CMP;
-    if( masque & SOLDERPASTE_LAYER_CMP )
-        newmasque |= SOLDERPASTE_LAYER_CU;
-
-    if( masque & ADHESIVE_LAYER_CU )
-        newmasque |= ADHESIVE_LAYER_CMP;
-    if( masque & ADHESIVE_LAYER_CMP )
-        newmasque |= ADHESIVE_LAYER_CU;
-
-    return newmasque;
-}
-
-
-/*************************************/
-int ChangeSideNumLayer( int oldlayer )
-/*************************************/
-
-/* Routine de recalcul du numero de couche lors des
- *  echanges cote cu/cmp pour les couches CU/CMP specialisees
- *  (cuivre, serigr., pate , soudure)
- */
-{
-    int newlayer;
-
-    switch( oldlayer )
-    {
-    case COPPER_LAYER_N:
-        newlayer = CMP_N; break;
-
-    case CMP_N:
-        newlayer = COPPER_LAYER_N; break;
-
-    case SILKSCREEN_N_CU:
-        newlayer = SILKSCREEN_N_CMP; break;
-
-    case SILKSCREEN_N_CMP:
-        newlayer = SILKSCREEN_N_CU; break;
-
-    case ADHESIVE_N_CU:
-        newlayer = ADHESIVE_N_CMP; break;
-
-    case ADHESIVE_N_CMP:
-        newlayer = ADHESIVE_N_CU; break;
-
-    case SOLDERMASK_N_CU:
-        newlayer = SOLDERMASK_N_CMP; break;
-
-    case SOLDERMASK_N_CMP:
-        newlayer = SOLDERMASK_N_CU; break;
-
-    case SOLDERPASTE_N_CU:
-        newlayer = SOLDERPASTE_N_CMP; break;
-
-    case SOLDERPASTE_N_CMP:
-        newlayer = SOLDERPASTE_N_CU; break;
-
-    default:
-        newlayer = oldlayer;
-    }
-
-    return newlayer;
 }
 
 

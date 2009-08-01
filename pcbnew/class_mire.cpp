@@ -9,6 +9,8 @@
 #include "kicad_string.h"
 
 #include "pcbnew.h"
+#include "trigo.h"
+#include "protos.h"
 
 
 MIREPCB::MIREPCB( BOARD_ITEM* aParent ) :
@@ -199,5 +201,27 @@ bool    MIREPCB::HitTest( EDA_Rect& refArea )
     if( refArea.Inside( m_Pos ) )
         return true;
     return false;
+}
+
+/**
+ * Function Rotate
+ * Rotate this object.
+ * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aAngle - the rotation angle in 0.1 degree.
+ */
+void MIREPCB::Rotate(const wxPoint& aRotCentre, int aAngle)
+{
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
+}
+
+/**
+ * Function Flip
+ * Flip this object, i.e. change the board side for this object
+ * @param const wxPoint& aCentre - the rotation point.
+ */
+void MIREPCB::Flip(const wxPoint& aCentre )
+{
+    m_Pos.y  = aCentre.y - (m_Pos.y - aCentre.y);
+    SetLayer( ChangeSideNumLayer( GetLayer() ) );
 }
 

@@ -3,9 +3,7 @@
 /***********************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
-#include "confirm.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -535,7 +533,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
 
         case DRAW_POLYLINE_STRUCT_TYPE:
         case DRAW_BUSENTRY_STRUCT_TYPE:
-        case DRAW_MARKER_STRUCT_TYPE:
+        case TYPE_MARKER_SCH:
         case TYPE_SCH_TEXT:
             break;
 
@@ -569,15 +567,12 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
             break;
 
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            DisplayError( NULL, wxT( "Netlist: Type DRAW_SHEETLABEL inattendu" ) );
-            break;
-
         default:
         {
             wxString msg;
-            msg.Printf( wxT( "Netlist: unexpected type struct %d" ),
+            msg.Printf( wxT( "Netlist: unexpected struct type %d" ),
                        DrawList->Type() );
-            DisplayError( NULL, msg );
+            wxMessageBox( msg );
             break;
         }
         }

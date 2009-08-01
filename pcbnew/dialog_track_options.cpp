@@ -119,7 +119,7 @@ void DIALOG_TRACKS_OPTIONS::OnButtonOkClick( wxCommandEvent& event )
 
     m_Parent->AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
     m_Parent->AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
-    m_Parent->AddHistory( g_DesignSettings.m_TrackClearence, TYPE_CLR );
+    m_Parent->AddHistory( g_DesignSettings.m_TrackClearence, TYPE_CLEARANCE );
     EndModal( 1 );
 }
 
@@ -171,7 +171,7 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
         }
 
         break;
-    case TYPE_CLR:
+    case TYPE_CLEARANCE:
             for( ii = 0; ii < HISTORY_NUMBER; ii++ )
             {
                 if( g_DesignSettings.m_TrackClearenceHistory[ii] == value )

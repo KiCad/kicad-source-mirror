@@ -76,7 +76,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
             item->Draw( this, aDC, drawmode );
             break;
 
-        case TYPE_MARKER:       /* Trace des marqueurs */
+        case TYPE_MARKER_PCB:       /* Trace des marqueurs */
         default:
             break;
         }

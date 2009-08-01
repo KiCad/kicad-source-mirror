@@ -26,7 +26,7 @@ void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
     case DRAW_SEGMENT_STRUCT_TYPE:
     case DRAW_BUSENTRY_STRUCT_TYPE:
     case DRAW_SHEET_STRUCT_TYPE:
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
     case DRAW_NOCONNECT_STRUCT_TYPE:
         Struct->SetParent( Screen );
         break;

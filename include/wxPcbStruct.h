@@ -72,7 +72,7 @@ private:
     void createPopupMenuForTracks( TRACK* aTrack, wxMenu* aPopMenu );
     void createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
     void createPopUpBlockMenu( wxMenu* menu );
-    void createPopUpMenuForMarkers( MARKER* aMarker, wxMenu* aPopMenu );
+    void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
 public:
     WinEDA_PcbFrame( wxWindow* father, const wxString& title,
@@ -156,8 +156,26 @@ public:
     void           SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, UndoRedoOpType aTypeCommand,
                         const wxPoint& aTransformPoint = wxPoint(0,0) );
 
-    void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
+    /** Function PutDataInPreviousState()
+     * Used in undo or redo command.
+     * Put data pointed by List in the previous state, i.e. the state memorised by List
+     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+     * @param aRedoCommand = a bool: true for redo, false for undo
+     */
+    void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
+    /** Function GetBoardFromRedoList
+     *  Redo the last edition:
+     *  - Save the current board in Undo list
+     *  - Get an old version of the board from Redo list
+     *  @return none
+     */
     void           GetBoardFromRedoList(wxCommandEvent& event);
+    /** Function GetBoardFromUndoList
+     *  Undo the last edition:
+     *  - Save the current board in Redo list
+     *  - Get an old version of the board from Undo list
+     *  @return none
+     */
     void           GetBoardFromUndoList(wxCommandEvent& event);
 
     /* Gestion generale des operations sur block */
@@ -167,40 +185,54 @@ public:
 
     /* Block operations: */
     /**
-     * Function Block_Delete
-     * deletes all tracks and segments within the selected block.
-     * Defined separately in pcbnew and gerbview
-     *
-     * @param DC A device context to draw on.
+     * Function Block_SelectItems
+     * Uses  GetScreen()->m_BlockLocate
+     * select items within the selected block.
+     * selected items are put in the pick list
+     * @param none
      */
-    void                     Block_Delete( wxDC* DC );
-    void                     Block_Rotate( wxDC* DC );
-    void                     Block_Invert( wxDC* DC );
+    void                     Block_SelectItems( );
+
+    /**
+     * Function Block_Delete
+     * deletes all items within the selected block.
+     * @param none
+     */
+    void                     Block_Delete( );
+    /**
+     * Function Block_Rotate
+     * Rotate all items within the selected block.
+     * The rotation centre is the centre of the block
+     * @param none
+     */
+    void                     Block_Rotate( );
+    /**
+     * Function Block_Flip
+     * Flip items within the selected block.
+     * The flip centre is the centre of the block
+     * @param none
+     */
+    void                     Block_Flip( );
     /**
      * Function Block_Move
-     * moves all tracks and segments within the selected block.
+     * move all items within the selected block.
      * New location is determined by the current offset from the selected block's original location.
-     * Defined separately in pcbnew and gerbview
-     *
-     * @param DC A device context to draw on.
+     * @param none
      */
-    void                     Block_Move( wxDC* DC );
+    void                     Block_Move( );
     /**
      * Function Block_Mirror_X
-     * mirrors all tracks and segments within the currently selected block in the X axis.
-     *
-     * @param DC A device context to draw on.
+     * mirrors all items within the currently selected block in the X axis.
+     * @param none
      */
-    void                     Block_Mirror_X( wxDC* DC );
+    void                     Block_Mirror_X( );
     /**
      * Function Block_Duplicate
-     * copies-and-moves all tracks and segments within the selected block.
+     * Duplicate all items within the selected block.
      * New location is determined by the current offset from the selected block's original location.
-     * Defined separately in pcbnew and gerbview
-     *
-     * @param DC A device context to draw on.
+     * @param none
      */
-     void                     Block_Duplicate( wxDC* DC );
+     void                     Block_Duplicate( );
 
 
     void             SetToolbars();

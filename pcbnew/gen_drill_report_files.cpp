@@ -21,7 +21,7 @@ using namespace std;
 #include "gendrill.h"
 
 /**********************************************************************************/
-void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName, 
+void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 		      Ki_PageDescr* aSheet,
                       std::vector<HOLE_INFO> aHoleListBuffer,
                       std::vector<DRILL_TOOL> aToolListBuffer,
@@ -122,9 +122,9 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     plotter->start_plot(aFile);
 
     /* Draw items on edge layer */
-    
-    for (PtStruct = aPcb->m_Drawings; 
-	    PtStruct != NULL; 
+
+    for (PtStruct = aPcb->m_Drawings;
+	    PtStruct != NULL;
 	    PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
@@ -145,7 +145,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             PlotMirePcb(plotter, (MIREPCB*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
-        case TYPE_MARKER:     // do not draw
+        case TYPE_MARKER_PCB:     // do not draw
             break;
 
         default:
@@ -219,7 +219,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 		    aToolListBuffer[ii].m_TotalCount - 1 );
             else  // if ( aToolListBuffer[ii]m_OvalCount > 1 )
 	    sprintf( line, "(%d holes + %d slots)",
-		    aToolListBuffer[ii].m_TotalCount - 
+		    aToolListBuffer[ii].m_TotalCount -
 		    aToolListBuffer[ii].m_OvalCount,
                          aToolListBuffer[ii].m_OvalCount );
             msg += CONV_FROM_UTF8( line );

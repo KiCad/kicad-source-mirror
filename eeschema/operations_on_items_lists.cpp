@@ -169,7 +169,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, co
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
             case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            case DRAW_MARKER_STRUCT_TYPE:
+            case TYPE_MARKER_SCH:
             case DRAW_NOCONNECT_STRUCT_TYPE:
             default:
                 break;
@@ -232,7 +232,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
         NewDrawStruct = ( (DrawJunctionStruct*) DrawStruct )->GenCopy();
         break;
 
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
         NewDrawStruct = ( (MARKER_SCH*) DrawStruct )->GenCopy();
         break;
 

@@ -203,6 +203,15 @@ public:
      */
     static int Compare( const D_PAD* padref, const D_PAD* padcmp );
 
+    /**
+     * Function Move
+     * move this object.
+     * @param const wxPoint& aMoveVector - the move vector for this object.
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
 
 #if defined(DEBUG)
 

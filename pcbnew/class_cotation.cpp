@@ -10,7 +10,7 @@
 #include "wxstruct.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
-
+#include "protos.h"
 
 COTATION::COTATION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, TYPE_COTATION )
@@ -235,36 +235,46 @@ void COTATION::Rotate(const wxPoint& centre, int angle)
 /******************************************************/
 /**
  * Function Rotate
- * @param offset : Rotation point
+ * @param centre : Rotation point
  * @param angle : Rotation angle in 0.1 degrees
  */
 {
-    RotatePoint( &m_Pos, centre, 900 );
+    RotatePoint( &m_Pos, centre, angle );
 
-    RotatePoint( &m_Text->m_Pos, centre, 900 );
-    m_Text->m_Orient += 900;
+    RotatePoint( &m_Text->m_Pos, centre, angle );
+    m_Text->m_Orient += angle;
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
     if( (m_Text->m_Orient > 900)
        && (m_Text->m_Orient <2700) )
         m_Text->m_Orient -= 1800;
 
-    RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, 900 );
-    RotatePoint( &Barre_fx, &Barre_fy, centre.x, centre.y, 900 );
-    RotatePoint( &TraitG_ox, &TraitG_oy, centre.x, centre.y, 900 );
-    RotatePoint( &TraitG_fx, &TraitG_fy, centre.x, centre.y, 900 );
-    RotatePoint( &TraitD_ox, &TraitD_oy, centre.x, centre.y, 900 );
-    RotatePoint( &TraitD_fx, &TraitD_fy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheG1_ox, &FlecheG1_oy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheG1_fx, &FlecheG1_fy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheG2_ox, &FlecheG2_oy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheG2_fx, &FlecheG2_fy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheD1_ox, &FlecheD1_oy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheD1_fx, &FlecheD1_fy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheD2_ox, &FlecheD2_oy, centre.x, centre.y, 900 );
-    RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, 900 );
+    RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, angle );
+    RotatePoint( &Barre_fx, &Barre_fy, centre.x, centre.y, angle );
+    RotatePoint( &TraitG_ox, &TraitG_oy, centre.x, centre.y, angle );
+    RotatePoint( &TraitG_fx, &TraitG_fy, centre.x, centre.y, angle );
+    RotatePoint( &TraitD_ox, &TraitD_oy, centre.x, centre.y, angle );
+    RotatePoint( &TraitD_fx, &TraitD_fy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheG1_ox, &FlecheG1_oy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheG1_fx, &FlecheG1_fy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheG2_ox, &FlecheG2_oy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheG2_fx, &FlecheG2_fy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheD1_ox, &FlecheD1_oy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheD1_fx, &FlecheD1_fy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheD2_ox, &FlecheD2_oy, centre.x, centre.y, angle );
+    RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, angle );
 }
 
+/**
+ * Function Flip
+ * Flip this object, i.e. change the board side for this object
+ * @param const wxPoint& aCentre - the rotation point.
+ */
+void COTATION::Flip(const wxPoint& aCentre )
+{
+    Mirror( aCentre );
+    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+}
 
 /**********************************************/
 void COTATION::Mirror(const wxPoint& axis_pos)

@@ -391,8 +391,26 @@ public:
                         const wxPoint& aTransformPoint = wxPoint(0,0) );
 
 private:
-    void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
+    /** Function PutDataInPreviousState()
+     * Used in undo or redo command.
+     * Put data pointed by List in the previous state, i.e. the state memorised by List
+     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+     * @param aRedoCommand = a bool: true for redo, false for undo
+     */
+    void           PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
+    /** Function GetSchematicFromRedoList
+     *  Redo the last edition:
+     *  - Save the current schematic in Undo list
+     *  - Get an old version of the schematic from Redo list
+     *  @return none
+     */
     void           GetSchematicFromRedoList(wxCommandEvent& event);
+    /** Function GetSchematicFromUndoList
+     *  Undo the last edition:
+     *  - Save the current schematic in Redo list
+     *  - Get an old version of the schematic from Undo list
+     *  @return none
+     */
     void           GetSchematicFromUndoList(wxCommandEvent& event);
 
 

@@ -2,47 +2,69 @@
 /* Markers: used to show a drc problem */
 /***************************************/
 
-#ifndef CLASS_MARKER_H
-#define CLASS_MARKER_H
+#ifndef CLASS_MARKER_PCB_H
+#define CLASS_MARKER_PCB_H
 
 #include "base_struct.h"
 
 #include "drc_stuff.h"
 
-class MARKER : public BOARD_ITEM, public MARKER_BASE
+class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {
 
 public:
 
-    MARKER( BOARD_ITEM* aParent );
+    MARKER_PCB( BOARD_ITEM* aParent );
 
     /**
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
      * @param aText Text describing the first of two objects
      * @param aPos The position of the first of two objects
      * @param bText Text describing the second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    MARKER( int aErrorCode, const wxPoint& aMarkerPos,
+    MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos,
            const wxString& bText, const wxPoint& bPos );
      /**
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
      * @param aText Text describing the object
      * @param aPos The position of the object
      */
-    MARKER( int aErrorCode, const wxPoint& aMarkerPos,
+    MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos );
 
 
-    ~MARKER();
+    ~MARKER_PCB();
 
-    void    UnLink();       // Deprecated
+    /**
+     * Function Move
+     * move this object.
+     * @param const wxPoint& aMoveVector - the move vector for this object.
+     */
+    virtual void Move(const wxPoint& aMoveVector)
+    {
+        m_Pos += aMoveVector;
+    }
 
+    /**
+     * Function Rotate
+     * Rotate this object.
+     * @param const wxPoint& aRotCentre - the rotation point.
+     * @param aAngle - the rotation angle in 0.1 degree.
+     */
+    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+
+    /**
+     * Function Flip
+     * Flip this object, i.e. change the board side for this object
+     * @param const wxPoint& aCentre - the rotation point.
+     */
+    virtual void Flip(const wxPoint& aCentre );
 
     /** Function Draw
      */
@@ -53,7 +75,7 @@ public:
 
     /**
      * Function GetPosition
-     * returns the position of this MARKER.
+     * returns the position of this MARKER_PCB.
      */
     wxPoint& GetPosition()
     {
@@ -93,4 +115,4 @@ public:
 };
 
 
-#endif      //  CLASS_MARKER_H
+#endif      //  CLASS_MARKER_PCB_H

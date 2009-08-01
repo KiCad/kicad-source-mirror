@@ -279,7 +279,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
     }
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
         break;
 
     default:

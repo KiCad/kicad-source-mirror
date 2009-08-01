@@ -291,7 +291,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
         while( DrawList && NotFound )
         {
-            if( DrawList->Type() == DRAW_MARKER_STRUCT_TYPE )
+            if( DrawList->Type() == TYPE_MARKER_SCH )
             {
                 Marker   = (MARKER_SCH*) DrawList;
                 NotFound = FALSE;

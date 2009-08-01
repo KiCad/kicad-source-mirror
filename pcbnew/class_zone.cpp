@@ -14,6 +14,8 @@
 #include "pcbnew.h"
 #include "zones.h"
 
+#include "protos.h"
+
 
 /************************/
 /* class ZONE_CONTAINER */
@@ -1010,6 +1012,17 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
     m_Poly->Hatch();
 }
 
+/**
+ * Function Flip
+ * Flip this object, i.e. change the board side for this object
+ * (like Mirror() but changes layer)
+ * @param const wxPoint& aCentre - the rotation point.
+ */
+void ZONE_CONTAINER::Flip(const wxPoint& aCentre )
+{
+    Mirror( aCentre );
+    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+}
 
 /**
  * Function Mirror

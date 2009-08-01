@@ -3,9 +3,7 @@
 /******************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
-#include "confirm.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
@@ -16,6 +14,7 @@
 #include "protos.h"
 
 /* Routines Locales */
+static bool DrawStructInBox(int x1, int y1, int x2, int y2, SCH_ITEM *DrawStruct);
 static SCH_ITEM* LastSnappedStruct = NULL;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
@@ -262,7 +261,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             }
             break;
 
-        case DRAW_MARKER_STRUCT_TYPE:
+        case TYPE_MARKER_SCH:
         {
             #undef  STRUCT
             #define STRUCT ( (MARKER_SCH*) DrawList )
@@ -358,7 +357,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             wxString msg;
             msg.Printf( wxT( "SnapPoint2() error: unexpected struct type %d (" ), DrawList->Type() );
             msg << DrawList->GetClass() << wxT( ")" );
-            DisplayError( NULL, msg );
+            wxMessageBox( msg );
             break;
         }
         }
@@ -433,7 +432,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
         break;
 
 
-    case DRAW_MARKER_STRUCT_TYPE:
+    case TYPE_MARKER_SCH:
         #undef STRUCT
         #define STRUCT ( (MARKER_SCH*) DrawStruct )
         if( (STRUCT->m_Pos.x >= x1) && (STRUCT->m_Pos.x <= x2)
@@ -540,7 +539,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
             wxT( "DrawStructInBox() Err: unexpected StructType %d (" ),
             DrawStruct->Type() );
         msg << DrawStruct->GetClass() << wxT( ")" );
-        DisplayError( NULL, msg );
+        wxMessageBox( msg );
         break;
     }
 
@@ -634,7 +633,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
 
     if( LibEntry->Type != ROOT )
     {
-        DisplayError( NULL, wxT( "Error in LocateDrawItem: Entry is ALIAS" ) );
+        wxMessageBox( wxT( "Error in LocateDrawItem: Entry is ALIAS" ) );
         return NULL;
     }
 
@@ -729,7 +728,7 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
 
     if( Entry->Type != ROOT )
     {
-        DisplayError( NULL, wxT( "LocatePinByNumber() error: Entry is ALIAS" ) );
+        wxMessageBox( wxT( "LocatePinByNumber() error: Entry is ALIAS" ) );
         return NULL;
     }
 
@@ -776,7 +775,7 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
 
     if( Entry->Type != ROOT )
     {
-        DisplayError( NULL, wxT( "LocatePin() error: Entry is ALIAS" ) );
+        wxMessageBox( wxT( "LocatePin() error: Entry is ALIAS" ) );
         return NULL;
     }
 

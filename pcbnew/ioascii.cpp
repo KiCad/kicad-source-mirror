@@ -370,7 +370,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "TrackClearenceHistory" ) == 0 )
                 {
                     int tmp = atoi( data );
-                    AddHistory( tmp, TYPE_CLR );
+                    AddHistory( tmp, TYPE_CLEARANCE );
                     continue;
                 }
 

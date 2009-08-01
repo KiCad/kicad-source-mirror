@@ -24,27 +24,24 @@ enum KICAD_T {
 
     TYPE_NOT_INIT = 0,
     TYPE_PCB,
+    TYPE_SCREEN,            // not really an item, used to identify a screen
 
     // Items in pcb
-    TYPE_MODULE,
-    TYPE_PAD,
-    TYPE_DRAWSEGMENT,
-    TYPE_TEXTE,
-    TYPE_TEXTE_MODULE,
-    TYPE_EDGE_MODULE,
-    TYPE_TRACK,
-    TYPE_CLR,
-    TYPE_ZONE,
-    TYPE_VIA,
-    TYPE_MARKER,
-    TYPE_COTATION,
-    TYPE_MIRE,
-    TYPE_SCREEN,
-    TYPE_BLOCK,
-    TYPE_ZONE_UNUSED,
-    TYPE_ZONE_EDGE_CORNER,
-    TYPE_ZONE_CONTAINER,
-    TYPE_BOARD_ITEM_LIST,
+    TYPE_MODULE,            // a footprint
+    TYPE_PAD,               // a pad in a footprint
+    TYPE_DRAWSEGMENT,       // a segment not on copper layers
+    TYPE_TEXTE,             // a text on a layer
+    TYPE_TEXTE_MODULE,      // a text in a footprint
+    TYPE_EDGE_MODULE,       // a footprint edge
+    TYPE_TRACK,             // a track segment (segment on a copper layer)
+    TYPE_VIA,               // a via (like atrack segment on a copper layer)
+    TYPE_ZONE,              // a segment used to fill a zome area (segment on a copper layer)
+    TYPE_MARKER_PCB,            // a marker used to show something
+    TYPE_COTATION,          // a dimension (graphic item)
+    TYPE_MIRE,              // a target (graphic item)
+    TYPE_ZONE_EDGE_CORNER,  // in zone outline: a point to define an outline
+    TYPE_ZONE_CONTAINER,    // a zone area
+    TYPE_BOARD_ITEM_LIST,   // a list of board items
 
     // Draw Items in schematic
     DRAW_POLYLINE_STRUCT_TYPE,
@@ -58,7 +55,7 @@ enum KICAD_T {
     DRAW_BUSENTRY_STRUCT_TYPE,
     DRAW_SHEET_STRUCT_TYPE,
     DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE,
-    DRAW_MARKER_STRUCT_TYPE,
+    TYPE_MARKER_SCH,
     DRAW_NOCONNECT_STRUCT_TYPE,
     DRAW_PART_TEXT_STRUCT_TYPE,
 
@@ -77,6 +74,9 @@ enum KICAD_T {
     COMPONENT_PIN_DRAW_TYPE,
     COMPONENT_FIELD_DRAW_TYPE,
     COMPONENT_BEZIER_DRAW_TYPE,
+
+    // Special id used to store clearance values (this is not a good idea: TODO: change it)
+    TYPE_CLEARANCE,
 
     // End value
     MAX_STRUCT_TYPE_ID

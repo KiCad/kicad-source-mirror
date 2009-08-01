@@ -3,7 +3,6 @@
 /***************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "plot_common.h"
 #include "worksheet.h"
@@ -756,7 +755,7 @@ void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             break;
 
-        case DRAW_MARKER_STRUCT_TYPE:
+        case TYPE_MARKER_SCH:
             break;
 
         case DRAW_SHEET_STRUCT_TYPE:

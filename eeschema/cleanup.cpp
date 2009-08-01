@@ -115,7 +115,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         case TYPE_SCH_HIERLABEL:
         case TYPE_SCH_COMPONENT:
         case DRAW_POLYLINE_STRUCT_TYPE:
-        case DRAW_MARKER_STRUCT_TYPE:
+        case TYPE_MARKER_SCH:
         case TYPE_SCH_TEXT:
         case DRAW_SHEET_STRUCT_TYPE:
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:

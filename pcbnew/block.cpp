@@ -23,7 +23,7 @@
 
 /* Routines Locales */
 
-static void             DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
 /* Variables locales :*/
@@ -61,8 +61,8 @@ public:
 
 
 private:
-    void    ExecuteCommand( wxCommandEvent& event );
-    void    Cancel( wxCommandEvent& event );
+    void ExecuteCommand( wxCommandEvent& event );
+    void Cancel( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
@@ -123,28 +123,38 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     // Selection des options :
-    m_Include_Modules = new wxCheckBox( this, -1, _( "Include Modules" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_Include_Modules = new wxCheckBox( this, -1, _(
+                                            "Include Modules" ), wxDefaultPosition, wxDefaultSize,
+                                        0 );
     m_Include_Modules->SetValue( Block_Include_Modules );
     fgSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
 
-    m_Include_Tracks = new wxCheckBox( this, -1, _( "Include tracks" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_Include_Tracks = new wxCheckBox( this, -1, _(
+                                           "Include tracks" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Tracks->SetValue( Block_Include_Tracks );
     fgSizer1->Add( m_Include_Tracks, 0, wxALL, 5 );
 
-    m_Include_Zones = new wxCheckBox( this, -1, _( "Include zones" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_Include_Zones = new wxCheckBox( this, -1, _(
+                                          "Include zones" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Zones->SetValue( Block_Include_Zones );
     fgSizer1->Add( m_Include_Zones, 0, wxALL, 5 );
 
     m_Include_PcbTextes = new wxCheckBox( this, -1,
-                                          _( "Include Text on copper layers" ), wxDefaultPosition, wxDefaultSize, 0 );
+                                          _(
+                                              "Include Text on copper layers" ), wxDefaultPosition,
+                                          wxDefaultSize, 0 );
     m_Include_PcbTextes->SetValue( Block_Include_PcbTextes );
     fgSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
 
-    m_Include_Draw_Items = new wxCheckBox( this, -1, _( "Include drawings" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_Include_Draw_Items = new wxCheckBox( this, -1, _(
+                                               "Include drawings" ), wxDefaultPosition,
+                                           wxDefaultSize, 0 );
     m_Include_Draw_Items->SetValue( Block_Include_Draw_Items );
     fgSizer1->Add( m_Include_Draw_Items, 0, wxALL, 5 );
 
-    m_Include_Edges_Items = new wxCheckBox( this, -1, _( "Include board outline layer" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_Include_Edges_Items = new wxCheckBox( this, -1, _(
+                                                "Include board outline layer" ), wxDefaultPosition,
+                                            wxDefaultSize, 0 );
     m_Include_Edges_Items->SetValue( Block_Include_Edges_Items );
     fgSizer1->Add( m_Include_Edges_Items, 0, wxALL, 5 );
 
@@ -155,7 +165,8 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     /* Creation des boutons de commande */
-    m_button2 = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
+    m_button2 = new wxButton( this, wxID_CANCEL, _(
+                                  "Cancel" ), wxDefaultPosition, wxDefaultSize, 0 );
     fgSizer2->Add( m_button2, 0, wxALL, 5 );
     m_button1 = new wxButton( this, wxID_OK, _( "OK" ), wxDefaultPosition, wxDefaultSize, 0 );
     m_button1->SetDefault();
@@ -252,7 +263,7 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
 
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
-    case  BLOCK_IDLE:
+    case BLOCK_IDLE:
         err = TRUE;
         break;
 
@@ -261,14 +272,14 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-        Block_Move( DC );
+        Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-        Block_Duplicate( DC );
+        Block_Duplicate();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
@@ -283,7 +294,7 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     GetScreen()->SetModify();
 
     DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->ForceCloseManageCurseur   = NULL;
     GetScreen()->m_BlockLocate.m_Flags   = 0;
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
@@ -313,7 +324,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
     if( DrawPanel->ManageCurseur )
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
-        case  BLOCK_IDLE:
+        case BLOCK_IDLE:
             DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
             break;
 
@@ -334,7 +345,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             DrawPanel->ManageCurseur = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
-            Block_Delete( DC );
+            Block_Delete();
             break;
 
         case BLOCK_ROTATE: /* Rotation */
@@ -343,7 +354,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             DrawPanel->ManageCurseur = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
-            Block_Rotate( DC );
+            Block_Rotate();
             break;
 
         case BLOCK_INVERT: /* Flip */
@@ -352,7 +363,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             DrawPanel->ManageCurseur = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
-            Block_Invert( DC );
+            Block_Flip();
             break;
 
         case BLOCK_SAVE: /* Save (not used, for future enhancements)*/
@@ -361,7 +372,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             {
                 DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
 
-//				SaveStruct(GetScreen()->m_BlockLocate.m_BlockDrawStruct);
+// TODO	(if useful)			Save_Block( );
             }
             break;
 
@@ -395,6 +406,139 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 }
 
 
+/* Block operations: */
+
+/**
+ * Function Block_SelectItems
+ * Uses  GetScreen()->m_BlockLocate
+ * select items within the selected block.
+ * selected items are put in the pick list
+ * @param none
+ */
+void WinEDA_PcbFrame::Block_SelectItems()
+{
+    BOARD_ITEM* PtStruct;
+    int         masque_layer;
+
+    GetScreen()->m_BlockLocate.Normalize();
+
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    ITEM_PICKER        picker( NULL, UR_UNSPECIFIED );
+
+    /* Effacement des modules */
+    if( Block_Include_Modules )
+    {
+        ;
+        for( MODULE* module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
+        {
+            if( module->HitTest( GetScreen()->m_BlockLocate ) )
+            {
+                picker.m_PickedItem     = module;
+                picker.m_PickedItemType = module->Type();
+                itemsList->PushItem( picker );
+            }
+        }
+    }
+
+    /* Remove tracks and vias */
+    if( Block_Include_Tracks )
+    {
+        for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
+        {
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
+            {
+                /* This track is in bloc: select it */
+                picker.m_PickedItem     = pt_segm;
+                picker.m_PickedItemType = pt_segm->Type();
+                itemsList->PushItem( picker );
+            }
+        }
+    }
+
+    /* Select graphic items */
+    masque_layer = EDGE_LAYER;
+    if( Block_Include_Draw_Items )
+        masque_layer = ALL_LAYERS;
+
+    if( !Block_Include_Edges_Items )
+        masque_layer &= ~EDGE_LAYER;
+
+    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    {
+        bool select_me = false;
+        switch( PtStruct->Type() )
+        {
+        case TYPE_DRAWSEGMENT:
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
+                break;
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+                break;
+            select_me = true; // This item is in bloc: select it
+            break;
+
+        case TYPE_TEXTE:
+            if( !Block_Include_PcbTextes )
+                break;
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+                break;
+            select_me = true; // This item is in bloc: select it
+            break;
+
+        case TYPE_MIRE:
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
+                break;
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+                break;
+            select_me = true; // This item is in bloc: select it
+            break;
+
+        case TYPE_COTATION:
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
+                break;
+            if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
+                break;
+            select_me = true; // This item is in bloc: select it
+            break;
+
+        default:
+            break;
+        }
+
+        if( select_me )
+        {
+            picker.m_PickedItem     = PtStruct;
+            picker.m_PickedItemType = PtStruct->Type();
+            itemsList->PushItem( picker );
+        }
+    }
+
+    /* Effacement des Zones */
+    if( Block_Include_Zones )
+    {
+        for( SEGZONE* pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = pt_segm->Next() )
+        {
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
+            {
+                picker.m_PickedItem     = PtStruct;
+                picker.m_PickedItemType = PtStruct->Type();
+                itemsList->PushItem( picker );
+            }
+        }
+
+        for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
+        {
+            if( m_Pcb->GetArea( ii )->HitTest( GetScreen()->m_BlockLocate ) )
+            {
+                BOARD_ITEM* zone_c = m_Pcb->GetArea( ii );
+                picker.m_PickedItem     = zone_c;
+                picker.m_PickedItemType = zone_c->Type();
+                itemsList->PushItem( picker );
+            }
+        }
+    }
+}
+
+
 /**************************************************************************/
 static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /**************************************************************************/
@@ -410,874 +554,427 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     /* Effacement ancien cadre */
     if( erase )
     {
-        screen->m_BlockLocate.Draw( panel, DC, wxPoint(0,0), g_XorMode, Color );
+        screen->m_BlockLocate.Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, Color );
         if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
         {
-            screen->m_BlockLocate.Draw( panel, DC, screen->m_BlockLocate.m_MoveVector, g_XorMode, Color );
+            screen->m_BlockLocate.Draw( panel,
+                                        DC,
+                                        screen->m_BlockLocate.m_MoveVector,
+                                        g_XorMode,
+                                        Color );
         }
     }
 
     if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x - screen->m_BlockLocate.GetRight();
-        screen->m_BlockLocate.m_MoveVector.y = screen->m_Curseur.y - screen->m_BlockLocate.GetBottom();
+        screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x -
+                                               screen->m_BlockLocate.GetRight();
+        screen->m_BlockLocate.m_MoveVector.y = screen->m_Curseur.y -
+                                               screen->m_BlockLocate.GetBottom();
     }
 
-    screen->m_BlockLocate.Draw( panel, DC, wxPoint(0,0), g_XorMode, Color );
+    screen->m_BlockLocate.Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, Color );
     if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
     {
-        screen->m_BlockLocate.Draw( panel, DC, screen->m_BlockLocate.m_MoveVector, g_XorMode, Color );
+        screen->m_BlockLocate.Draw( panel,
+                                    DC,
+                                    screen->m_BlockLocate.m_MoveVector,
+                                    g_XorMode,
+                                    Color );
     }
 }
 
 
 /************************************************/
-void WinEDA_PcbFrame::Block_Delete( wxDC* DC )
+void WinEDA_PcbFrame::Block_Delete()
 /************************************************/
+
 /*
  *  routine d'effacement du block deja selectionne
  */
 {
-    BOARD_ITEM*     PtStruct, * NextS;
-    int             masque_layer;
-
     if( !InstallBlockCmdFrame( this, _( "Delete Block" ) ) )
         return;
 
+    Block_SelectItems();
+    if( GetScreen()->m_BlockLocate.GetCount() == 0 )
+        return;
+
     GetScreen()->SetModify();
-    GetScreen()->m_BlockLocate.Normalize();
     SetCurItem( NULL );
 
-    PICKED_ITEMS_LIST      itemsList;
-    ITEM_PICKER            picker(NULL,UR_DELETED);
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    itemsList->m_Status = UR_DELETED;
 
-    /* Effacement des modules */
-    if( Block_Include_Modules )
+    /* unlink items and clear flags */
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
-        MODULE* module;
-        module = m_Pcb->m_Modules;
-        for( ; module != NULL; module = (MODULE*) NextS )
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        itemsList->SetPickedItemStatus( UR_DELETED, ii );
+        switch( item->Type() )
         {
-            NextS = module->Next();
-            if( module->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                module->m_Flags = 0;
-                module->UnLink();
-                m_Pcb->m_Status_Pcb = 0;
-                picker.m_PickedItem = module;
-                picker.m_PickedItemType = module->Type();
-                itemsList.PushItem(picker);
-            }
+        case TYPE_MODULE:
+        {
+            MODULE* module = (MODULE*) item;
+            module->m_Flags = 0;
+            module->UnLink();
+            m_Pcb->m_Status_Pcb = 0;
         }
-    }
+        break;
 
-    /* Remove tracks and vias */
-    if( Block_Include_Tracks )
-    {
-        TRACK* pt_segm;
-
-        for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = (TRACK*) NextS )
-        {
-            NextS = pt_segm->Next();
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                /* This track is in bloc: remove it */
-                pt_segm->UnLink();
-                picker.m_PickedItem = pt_segm;
-                picker.m_PickedItemType = pt_segm->Type();
-                itemsList.PushItem(picker);
-            }
-        }
-    }
-
-    /* Remove graphic items */
-    masque_layer = EDGE_LAYER;
-    if( Block_Include_Draw_Items )
-        masque_layer = ALL_LAYERS;
-
-    if( !Block_Include_Edges_Items )
-        masque_layer &= ~EDGE_LAYER;
-
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = NextS )
-    {
-        NextS = PtStruct->Next();
-        bool remove_me = false;
-        switch( PtStruct->Type() )
-        {
-        case TYPE_DRAWSEGMENT:
-            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            remove_me = true; // This item is in bloc: remove it
+        case TYPE_ZONE_CONTAINER:        // a zone area
+            m_Pcb->Remove( item );
             break;
 
-        case TYPE_TEXTE:
-            if( !Block_Include_PcbTextes )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            remove_me = true; // This item is in bloc: remove it
-            break;
-
-        case TYPE_MIRE:
-            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            remove_me = true; // This item is in bloc: remove it
-            break;
-
-        case TYPE_COTATION:
-            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            remove_me = true; // This item is in bloc: remove it
+        case TYPE_DRAWSEGMENT:              // a segment not on copper layers
+        case TYPE_TEXTE:                    // a text on a layer
+        case TYPE_TRACK:                    // a track segment (segment on a copper layer)
+        case TYPE_VIA:                      // a via (like atrack segment on a copper layer)
+        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+        case TYPE_MARKER_PCB:                   // a marker used to show something
+        case TYPE_COTATION:                 // a dimension (graphic item)
+        case TYPE_MIRE:                     // a target (graphic item)
+            item->UnLink();
             break;
 
         default:
+            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Delete( ) error: unexpected type" ) );
             break;
         }
-
-        if ( remove_me )
-        {
-            PtStruct->UnLink();
-            picker.m_PickedItem = PtStruct;
-            picker.m_PickedItemType = PtStruct->Type();
-            itemsList.PushItem(picker);
-        }
     }
 
-    /* Effacement des Zones */
-    if( Block_Include_Zones )
-    {
-        SEGZONE* pt_segm, *NextSegZ;
+    SaveCopyInUndoList( *itemsList, UR_DELETED );
 
-        Affiche_Message( _( "Delete zones" ) );
-        for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextSegZ )
-        {
-            NextSegZ = pt_segm->Next();
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                pt_segm->UnLink();
-                picker.m_PickedItem = PtStruct;
-                picker.m_PickedItemType = PtStruct->Type();
-                itemsList.PushItem(picker);
-            }
-        }
-
-        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-        {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                BOARD_ITEM* zone_c = m_Pcb->Remove(m_Pcb->GetArea(ii));
-                ii--;	// because the current data was removed, ii points actually the next data
-                picker.m_PickedItem = zone_c;
-                picker.m_PickedItemType = zone_c->Type();
-                itemsList.PushItem(picker);
-            }
-        }
-    }
-
-    if ( itemsList.GetCount() )
-        SaveCopyInUndoList( itemsList, UR_DELETED );
-
+    Compile_Ratsnest( NULL, TRUE );
     DrawPanel->Refresh( TRUE );
-    Compile_Ratsnest( DC, TRUE );
 }
 
 
-/****************************************************/
-void WinEDA_PcbFrame::Block_Rotate( wxDC* DC )
-/****************************************************/
-
 /**
  * Function Block_Rotate
- * Rotate 90 deg the selected block
+ * Rotate all items within the selected block.
  * The rotation centre is the centre of the block
+ * @param none
  */
+void WinEDA_PcbFrame::Block_Rotate()
 {
-    MODULE* module;
-    EDA_BaseStruct* PtStruct;
-    int masque_layer;
     wxPoint oldpos;
-    wxPoint centre;   	/* rotation centre for the rotation transform */
+    wxPoint centre;         // rotation centre for the rotation transform
+    int rotAngle = 900;     // rottaion angle in 0.1 deg.
 
     if( !InstallBlockCmdFrame( this, _( "Rotate Block" ) ) )
         return;
 
-    oldpos = GetScreen()->m_Curseur;
-    GetScreen()->m_BlockLocate.Normalize();
-
-    centre = GetScreen()->m_BlockLocate.Centre();	// This is the rotation centre
-
-    GetScreen()->SetModify();
-
-    /* Rotation des modules */
-    if( Block_Include_Modules )
-    {
-        bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
-        int Angle_Rot_Module   = 900;
-        module = m_Pcb->m_Modules;
-        for( ; module != NULL; module = module->Next() )
-        {
-            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
-                continue;
-            m_Pcb->m_Status_Pcb = 0;
-            module->m_Flags = 0;
-            /* Move the footprint before rotate it */
-            RotatePoint( &module->m_Pos, centre, 900 );
-            GetScreen()->m_Curseur = module->m_Pos;
-            Place_Module( module, NULL );
-            /* Rotate the footprint */
-            Rotate_Module( DC, module, Angle_Rot_Module, TRUE );
-        }
-
-        /* regeneration des valeurs originelles */
-        GetScreen()->m_Curseur = oldpos;
-        g_Show_Ratsnest = Show_Ratsnest_tmp;
-    }
-
-    /* Move and rotate the track segments */
-    if( Block_Include_Tracks )
-    {
-        TRACK* track;
-        track = m_Pcb->m_Track;
-        while( track )
-        {
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {                                           /* la piste est ici bonne a etre deplacee */
-                m_Pcb->m_Status_Pcb = 0;
-                RotatePoint( &track->m_Start, centre, 900 );
-                RotatePoint( &track->m_End, centre, 900 );
-            }
-            track = track->Next();
-        }
-    }
-
-    /* Move and rotate the zone fill segments, and outlines */
-    if( Block_Include_Zones )
-    {
-        TRACK* track;
-
-        Affiche_Message( _( "Zone rotation" ) );
-        track = (TRACK*) m_Pcb->m_Zone;
-        while( track )
-        {
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                RotatePoint( &track->m_Start, centre, 900 );
-                RotatePoint( &track->m_End, centre, 900 );
-            }
-            track = track->Next();
-        }
-        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-        {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                m_Pcb->GetArea(ii)->Rotate(centre, 900);
-            }
-        }
-    }
-
-    masque_layer = EDGE_LAYER;
-    if( Block_Include_Draw_Items )
-        masque_layer = ALL_LAYERS;
-    if( !Block_Include_Edges_Items )
-        masque_layer &= ~EDGE_LAYER;
-
-    /* Move and rotate the graphic items */
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        switch( PtStruct->Type() )
-        {
-        case TYPE_DRAWSEGMENT:
-            #undef STRUCT
-            #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            RotatePoint( &STRUCT->m_Start, centre, 900 );
-            RotatePoint( &STRUCT->m_End, centre, 900 );
-            break;
-
-        case TYPE_TEXTE:
-            #undef STRUCT
-            #define STRUCT ( (TEXTE_PCB*) PtStruct )
-            if( !Block_Include_PcbTextes )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            RotatePoint( &STRUCT->m_Pos, centre, 900 );
-            STRUCT->m_Orient += 900;
-            if( STRUCT->m_Orient >= 3600 )
-                STRUCT->m_Orient -= 3600;
-            break;
-
-        case TYPE_MIRE:
-            #undef STRUCT
-            #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre modifie */
-            RotatePoint( &STRUCT->m_Pos, centre, 900 );
-            break;
-
-        case TYPE_COTATION:
-            #undef STRUCT
-            #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            STRUCT->Rotate(centre, 900);
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    DrawPanel->Refresh( TRUE );
-    Compile_Ratsnest( DC, TRUE );
-}
-
-
-/*****************************************************/
-void WinEDA_PcbFrame::Block_Invert( wxDC* DC )
-/*****************************************************/
-
-/*
- *  routine d'inversion miroir deg du block deja selectionne
- *  les elements sont inverse / axe horizontal,
- *  l'axe d'inversion est la mediane horizontale du block
- */
-{
-#define INVERT( pos )       (pos) = centerY - ( (pos) - centerY )
-#define INVERT_ANGLE( phi ) (phi) = -(phi)
-    MODULE* module;
-    EDA_BaseStruct* PtStruct;
-    int masque_layer;
-    wxPoint memo;
-    int Ny, centerY;/* position de l'axe d'inversion de l'ensemble des elements */
-
-    if( !InstallBlockCmdFrame( this, _( "Block mirroring" ) ) )
+    Block_SelectItems();
+    if( GetScreen()->m_BlockLocate.GetCount() == 0 )
         return;
 
-    memo = GetScreen()->m_Curseur;
-    GetScreen()->m_BlockLocate.Normalize();
-
-    /* calcul du centre d'inversion */
-    centerY = GetScreen()->m_BlockLocate.Centre().y;
+    oldpos = GetScreen()->m_Curseur;
+    centre = GetScreen()->m_BlockLocate.Centre();   // This is the rotation centre
 
     GetScreen()->SetModify();
 
-    /* Inversion des modules */
-    if( Block_Include_Modules )
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    itemsList->m_Status = UR_ROTATED;
+
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
-        bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
-        module = m_Pcb->m_Modules;
-        for( ; module != NULL; module = module->Next() )
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        wxASSERT(item);
+        itemsList->SetPickedItemStatus( UR_ROTATED, ii );
+        item->Rotate(centre, rotAngle);
+        switch( item->Type() )
         {
-            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
-                continue;
-            /* le module est ici bon a etre efface */
+        case TYPE_MODULE:
+            ((MODULE*) item)->m_Flags     = 0;
             m_Pcb->m_Status_Pcb = 0;
-            module->m_Flags = 0;
+        break;
 
-            /* calcul de la nouvelle position du Module */
-            Ny = module->m_Pos.y;
-            INVERT( Ny );
-            GetScreen()->m_Curseur.x = module->m_Pos.x;
-            GetScreen()->m_Curseur.y = Ny;
-            Place_Module( module, NULL );
+        /* Move and rotate the track segments */
+        case TYPE_TRACK:                    // a track segment (segment on a copper layer)
+        case TYPE_VIA:                      // a via (like atrack segment on a copper layer)
+            m_Pcb->m_Status_Pcb = 0;
+        break;
 
-            /* inversion du module  */
-            m_Pcb->Change_Side_Module( module, DC );
-
-            /* regeneration des valeurs originelles */
-            GetScreen()->m_Curseur = memo;
-        }
-
-        g_Show_Ratsnest = Show_Ratsnest_tmp;
-    }
-
-    /* Deplacement des Segments de piste */
-    if( Block_Include_Tracks )
-    {
-        TRACK* track;
-
-        track = m_Pcb->m_Track;
-        while( track )
-        {
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {                                           /* la piste est ici bonne a etre deplacee */
-                m_Pcb->m_Status_Pcb = 0;
-                INVERT( track->m_Start.y );
-                INVERT( track->m_End.y );
-                if( track->Type() != TYPE_VIA )
-                {
-                    track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
-                }
-            }
-            track = track->Next();
-        }
-    }
-
-    /* Deplacement des Segments de Zone */
-    if( Block_Include_Zones )
-    {
-        TRACK* track;
-
-        track = (TRACK*) m_Pcb->m_Zone;
-        while( track )
-        {
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {                                           /* la piste est ici bonne a etre deplacee */
-                INVERT( track->m_Start.y );
-                INVERT( track->m_End.y );
-                track->SetLayer( ChangeSideNumLayer( track->GetLayer() ) );
-            }
-            track = track->Next();
-        }
-        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-        {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                m_Pcb->GetArea(ii)->Mirror( wxPoint(0, centerY) );
-                m_Pcb->GetArea(ii)->SetLayer( ChangeSideNumLayer( m_Pcb->GetArea(ii)->GetLayer() ) );
-            }
-        }
-    }
-
-    masque_layer = EDGE_LAYER;
-    if( Block_Include_Draw_Items )
-        masque_layer = ALL_LAYERS;
-    if( !Block_Include_Edges_Items )
-        masque_layer &= ~EDGE_LAYER;
-
-    PtStruct = m_Pcb->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        switch( PtStruct->Type() )
-        {
+        case TYPE_ZONE:                  // a segment used to fill a zone area (segment on a copper layer)
+        case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
-            #undef STRUCT
-            #define STRUCT ( (DRAWSEGMENT*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre selectionne */
-            if( STRUCT->m_Shape == S_ARC )
-            {
-                INVERT_ANGLE( STRUCT->m_Angle );
-            }
-            INVERT( STRUCT->m_Start.y );
-            INVERT( STRUCT->m_End.y );
-            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
-            break;
-
         case TYPE_TEXTE:
-            #undef STRUCT
-            #define STRUCT ( (TEXTE_PCB*) PtStruct )
-            if( !Block_Include_PcbTextes )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* le texte est ici bon a etre selectionne*/
-            INVERT( STRUCT->m_Pos.y );
-            INVERT_ANGLE( STRUCT->m_Orient );
-            if( (STRUCT->GetLayer() == COPPER_LAYER_N) || (STRUCT->GetLayer() == CMP_N) )
-            {
-                STRUCT->m_Mirror = not STRUCT->m_Mirror;      /* inverse miroir */
-            }
-            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
-            break;
-
         case TYPE_MIRE:
-            #undef STRUCT
-            #define STRUCT ( (MIREPCB*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre modifie */
-            INVERT( STRUCT->m_Pos.y );
-            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
-            break;
-
         case TYPE_COTATION:
-            #undef STRUCT
-            #define STRUCT ( (COTATION*) PtStruct )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre modifie */
-
-            STRUCT->Mirror( wxPoint(0, centerY) );
-            STRUCT->SetLayer( ChangeSideNumLayer( STRUCT->GetLayer() ) );
             break;
+
 
         default:
+            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Rotate( ) error: unexpected type" ) );
             break;
         }
     }
 
+    SaveCopyInUndoList( *itemsList, UR_ROTATED, centre );
+
+    Compile_Ratsnest( NULL, TRUE );
     DrawPanel->Refresh( TRUE );
-    Compile_Ratsnest( DC, TRUE );
 }
 
 
-/************************************************/
-void WinEDA_PcbFrame::Block_Move( wxDC* DC )
-/************************************************/
-
-/*
- *  Function to move items withing the selected block
+/**
+ * Function Block_Flip
+ * Flip items within the selected block.
+ * The flip centre is the centre of the block
+ * @param none
  */
+void WinEDA_PcbFrame::Block_Flip()
 {
-    int masque_layer;
-    wxPoint oldpos;
-    wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
+#define INVERT( pos ) (pos) = center.y - ( (pos) - center.y )
+    wxPoint memo;
+    wxPoint center; /* position de l'axe d'inversion de l'ensemble des elements */
 
-    oldpos = GetScreen()->m_Curseur;
-    DrawPanel->ManageCurseur = NULL;
+    Block_SelectItems();
+    if( GetScreen()->m_BlockLocate.GetCount() == 0 )
+        return;
 
+    GetScreen()->SetModify();
+
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    itemsList->m_Status = UR_FLIPPED;
+
+    memo = GetScreen()->m_Curseur;
+
+    /* calcul du centre d'inversion */
+    center = GetScreen()->m_BlockLocate.Centre();
+
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
+    {
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        wxASSERT(item);
+        itemsList->SetPickedItemStatus( UR_FLIPPED, ii );
+        item->Flip(center);
+        switch( item->Type() )
+        {
+        case TYPE_MODULE:
+            ((MODULE*) item)->m_Flags     = 0;
+            m_Pcb->m_Status_Pcb = 0;
+        break;
+
+        /* Move and rotate the track segments */
+        case TYPE_TRACK:                    // a track segment (segment on a copper layer)
+        case TYPE_VIA:                      // a via (like atrack segment on a copper layer)
+            m_Pcb->m_Status_Pcb = 0;
+            break;
+
+        case TYPE_ZONE:                  // a segment used to fill a zone area (segment on a copper layer)
+        case TYPE_ZONE_CONTAINER:
+        case TYPE_DRAWSEGMENT:
+        case TYPE_TEXTE:
+        case TYPE_MIRE:
+        case TYPE_COTATION:
+            break;
+
+
+        default:
+            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Flip( ) error: unexpected type" ) );
+            break;
+        }
+    }
+
+    SaveCopyInUndoList( *itemsList, UR_FLIPPED, center );
+    Compile_Ratsnest( NULL, TRUE );
+    DrawPanel->Refresh( TRUE );
+}
+
+
+/**
+ * Function Block_Move
+ * moves all tracks and segments within the selected block.
+ * New location is determined by the current offset from the selected block's original location.
+ * @param none
+ */
+void WinEDA_PcbFrame::Block_Move()
+{
     if( !InstallBlockCmdFrame( this, _( "Move Block" ) ) )
         return;
 
-    GetScreen()->m_Curseur = oldpos;
-    DrawPanel->MouseToCursorSchema();
+    Block_SelectItems();
+    if( GetScreen()->m_BlockLocate.GetCount() == 0 )
+        return;
+
     GetScreen()->SetModify();
-    GetScreen()->m_BlockLocate.Normalize();
 
-    /* Deplacement des modules */
-    if( Block_Include_Modules )
+    wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
+
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    itemsList->m_Status = UR_MOVED;
+
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
-        bool Show_Ratsnest_tmp = g_Show_Ratsnest; g_Show_Ratsnest = false;
-        oldpos = GetScreen()->m_Curseur;
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        itemsList->SetPickedItemStatus( UR_MOVED, ii );
+        item->Move( MoveVector );
 
-        for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
-        {
-            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
-                continue;
-
-            /* le module est ici bon a etre deplace */
-            m_Pcb->m_Status_Pcb = 0;
-            module->m_Flags = 0;
-            GetScreen()->m_Curseur = module->m_Pos + MoveVector;
-            Place_Module( module, NULL );
-        }
-
-        GetScreen()->m_Curseur = oldpos;
-        g_Show_Ratsnest = Show_Ratsnest_tmp;
-    }
-
-    /* Deplacement des Segments de piste */
-    if( Block_Include_Tracks )
-    {
-        for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
-        {
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {                                           /* la piste est ici bonne a etre deplacee */
-                m_Pcb->m_Status_Pcb = 0;
-                track->m_Start += MoveVector;
-                track->m_End   += MoveVector;
-            }
-        }
-    }
-
-    /* Deplacement des Segments de Zone */
-    if( Block_Include_Zones )
-    {
-        for( TRACK* track = m_Pcb->m_Zone;  track;  track = track->Next() )
-        {
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {                                           /* la piste est ici bonne a etre deplacee */
-                track->m_Start += MoveVector;
-                track->m_End   += MoveVector;
-            }
-        }
-        for ( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
-        {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                m_Pcb->GetArea(ii)->Move( MoveVector );
-            }
-        }
-    }
-
-    masque_layer = EDGE_LAYER;
-    if( Block_Include_Draw_Items )
-        masque_layer = ALL_LAYERS;
-    if( !Block_Include_Edges_Items )
-        masque_layer &= ~EDGE_LAYER;
-
-    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = item->Next() )
-    {
         switch( item->Type() )
         {
+        case TYPE_MODULE:
+            m_Pcb->m_Status_Pcb    = 0;
+            ((MODULE*) item)->m_Flags        = 0;
+        break;
+
+        /* Move track segments */
+        case TYPE_TRACK:                    // a track segment (segment on a copper layer)
+        case TYPE_VIA:                      // a via (like a track segment on a copper layer)
+            m_Pcb->m_Status_Pcb = 0;
+        break;
+
+        case TYPE_ZONE:                  // a segment used to fill a zome area (segment on a copper layer)
+        case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
-            #undef STRUCT
-            #define STRUCT ( (DRAWSEGMENT*) item )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre efface */
-            STRUCT->m_Start += MoveVector;
-            STRUCT->m_End   += MoveVector;
-            break;
-
         case TYPE_TEXTE:
-            #undef STRUCT
-            #define STRUCT ( (TEXTE_PCB*) item )
-            if( !Block_Include_PcbTextes )
-                break;
-            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* le texte est ici bon a etre deplace */
-            /* Redessin du Texte */
-            STRUCT->m_Pos += MoveVector;
-            break;
-
         case TYPE_MIRE:
-            #undef STRUCT
-            #define STRUCT ( (MIREPCB*) item )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre efface */
-            STRUCT->m_Pos += MoveVector;
-            break;
-
         case TYPE_COTATION:
-            #undef STRUCT
-            #define STRUCT ( (COTATION*) item )
-            if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                break;
-            if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                break;
-            /* l'element est ici bon a etre efface */
-            ( (COTATION*) item )->Move( wxPoint(MoveVector) );
             break;
 
         default:
+            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Move( ) error: unexpected type" ) );
             break;
         }
     }
 
+    SaveCopyInUndoList( *itemsList, UR_MOVED, MoveVector );
+
+    Compile_Ratsnest( NULL, TRUE );
     DrawPanel->Refresh( TRUE );
-    Compile_Ratsnest( DC, TRUE );
 }
 
 
-/**************************************************/
-void WinEDA_PcbFrame::Block_Duplicate( wxDC* DC )
-/**************************************************/
-
-/*
- *  routine de duplication des elements du block deja selectionne
+/**
+ * Function Block_Duplicate
+ * Duplicate all items within the selected block.
+ * New location is determined by the current offset from the selected block's original location.
+ * @param none
  */
+void WinEDA_PcbFrame::Block_Duplicate()
 {
-    int masque_layer;
-    wxPoint oldpos;
     wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
-
-    oldpos = GetScreen()->m_Curseur;
-    DrawPanel->ManageCurseur = NULL;
 
     if( !InstallBlockCmdFrame( this, _( "Copy Block" ) ) )
         return;
 
-    GetScreen()->m_Curseur = oldpos;
-    DrawPanel->MouseToCursorSchema();
+    Block_SelectItems();
+    if( GetScreen()->m_BlockLocate.GetCount() == 0 )
+        return;
+
     GetScreen()->SetModify();
-    GetScreen()->m_BlockLocate.Normalize();
 
-    /* Module copy */
-    if( Block_Include_Modules )
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+
+    PICKED_ITEMS_LIST newList;
+    newList.m_Status = UR_NEW;
+
+    ITEM_PICKER picker(NULL, UR_NEW);
+    BOARD_ITEM * newitem;
+
+    for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
-        bool Show_Ratsnest_tmp = g_Show_Ratsnest;
-        g_Show_Ratsnest = false;
-        oldpos = GetScreen()->m_Curseur;
-
-        for( MODULE* module= m_Pcb->m_Modules;  module;  module = module->Next() )
-        {
-            MODULE* new_module;
-            if( ! module->HitTest( GetScreen()->m_BlockLocate ) )
-                continue;
-
-            /* le module est ici bon a etre deplace */
-            m_Pcb->m_Status_Pcb = 0;
-            module->m_Flags = 0;
-            new_module = new MODULE( m_Pcb );
-            new_module->Copy( module );
-            new_module->m_TimeStamp = GetTimeStamp();
-
-            m_Pcb->m_Modules.PushFront( new_module );
-
-            GetScreen()->m_Curseur = module->m_Pos + MoveVector;
-            Place_Module( new_module, NULL );
-        }
-
-        GetScreen()->m_Curseur = oldpos;
-        g_Show_Ratsnest = Show_Ratsnest_tmp;
-    }
-
-    /* Deplacement des Segments de piste */
-    if( Block_Include_Tracks )
-    {
-        TRACK* track, * next_track, * new_track;
-        track = m_Pcb->m_Track;
-        while( track )
-        {
-            next_track = track->Next();
-            if( track->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                /* la piste est ici bonne a etre deplacee */
-                m_Pcb->m_Status_Pcb = 0;
-
-                new_track = track->Copy();
-                m_Pcb->m_Track.PushFront( new_track );
-
-                new_track->m_Start += MoveVector;
-                new_track->m_End += MoveVector;
-            }
-            track = next_track;
-        }
-    }
-
-    /* Duplicate Zones */
-    if( Block_Include_Zones )
-    {
-        for( SEGZONE* segzone = m_Pcb->m_Zone;  segzone;  segzone = segzone->Next() )
-        {
-            if( segzone->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                SEGZONE* new_segzone = (SEGZONE*) segzone->Copy();
-
-                m_Pcb->m_Zone.PushFront( new_segzone );
-
-                new_segzone->m_Start += MoveVector;
-                new_segzone->m_End   += MoveVector;
-            }
-        }
-
-        unsigned imax = m_Pcb->GetAreaCount();
-        for ( unsigned ii = 0; ii < imax; ii++ )
-        {
-            if( m_Pcb->GetArea(ii)->HitTest( GetScreen()->m_BlockLocate ) )
-            {
-                ZONE_CONTAINER * new_zone = new ZONE_CONTAINER(m_Pcb);
-                new_zone->Copy( m_Pcb->GetArea(ii) );
-                new_zone->m_TimeStamp = GetTimeStamp();
-                new_zone->Move( MoveVector );
-                m_Pcb->Add(new_zone);
-            }
-        }
-    }
-
-    masque_layer = EDGE_LAYER;
-    if( Block_Include_Draw_Items )
-        masque_layer = ALL_LAYERS;
-    if( !Block_Include_Edges_Items )
-        masque_layer &= ~EDGE_LAYER;
-
-    for( BOARD_ITEM* item = m_Pcb->m_Drawings;  item;  item = item->Next() )
-    {
+        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+        newitem = NULL;
         switch( item->Type() )
         {
+        case TYPE_MODULE:
+        {
+            MODULE* module = (MODULE*) item;
+            MODULE* new_module;
+            m_Pcb->m_Status_Pcb = 0;
+            module->m_Flags     = 0;
+            newitem = new_module = new MODULE( m_Pcb );
+            new_module->Copy( module );
+            new_module->m_TimeStamp = GetTimeStamp();
+            m_Pcb->m_Modules.PushFront( new_module );
+        }
+        break;
+
+        case TYPE_TRACK:
+        case TYPE_VIA:
+        {
+            TRACK* track = (TRACK*) item;
+            m_Pcb->m_Status_Pcb = 0;
+            TRACK* new_track = track->Copy();
+            newitem = new_track;
+            m_Pcb->m_Track.PushFront( new_track );
+        }
+        break;
+
+        case TYPE_ZONE:                  // a segment used to fill a zome area (segment on a copper layer)
+        {
+            SEGZONE* track     = (SEGZONE*) item;
+            SEGZONE* new_track = (SEGZONE*) track->Copy();
+            newitem = new_track;
+            m_Pcb->m_Track.PushFront( new_track );
+        }
+        break;
+
+        case TYPE_ZONE_CONTAINER:
+        {
+            ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) item->GetParent() );
+            new_zone->Copy( (ZONE_CONTAINER*) item );
+            new_zone->m_TimeStamp = GetTimeStamp();
+            newitem = new_zone;
+            m_Pcb->Add( new_zone );
+        }
+        break;
+
         case TYPE_DRAWSEGMENT:
-            {
-                #undef STRUCT
-                #define STRUCT ( (DRAWSEGMENT*) item )
-                if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                    break;
-                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                    break;
-
-                /* l'element est ici bon a etre copie */
-                DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
-                new_drawsegment->Copy( STRUCT );
-
-                m_Pcb->Add( new_drawsegment );
-
-                new_drawsegment->m_Start += MoveVector;
-                new_drawsegment->m_End   += MoveVector;
-            }
-            break;
+        {
+            DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
+            new_drawsegment->Copy( (DRAWSEGMENT*) item );
+            m_Pcb->Add( new_drawsegment );
+            newitem = new_drawsegment;
+        }
+        break;
 
         case TYPE_TEXTE:
-            {
-                #undef STRUCT
-                #define STRUCT ( (TEXTE_PCB*) item )
-                if( !Block_Include_PcbTextes )
-                    break;
-                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                    break;
-                /* le texte est ici bon a etre deplace */
-                TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
-                new_pcbtext->Copy( STRUCT );
-
-                m_Pcb->Add( new_pcbtext );
-
-                /* Redessin du Texte */
-                new_pcbtext->m_Pos += MoveVector;
-            }
-            break;
+        {
+            TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
+            new_pcbtext->Copy( (TEXTE_PCB*) item );
+            m_Pcb->Add( new_pcbtext );
+            newitem = new_pcbtext;
+        }
+        break;
 
         case TYPE_MIRE:
-            {
-                #undef STRUCT
-                #define STRUCT ( (MIREPCB*) item )
-                if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                    break;
-                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                    break;
-                /* l'element est ici bon a etre efface */
-                MIREPCB* new_mire = new MIREPCB( m_Pcb );
-                new_mire->Copy( STRUCT );
-
-                m_Pcb->Add( new_mire );
-
-                new_mire->m_Pos += MoveVector;
-            }
-            break;
+        {
+            MIREPCB* new_mire = new MIREPCB( m_Pcb );
+            new_mire->Copy( (MIREPCB*) item );
+            m_Pcb->Add( new_mire );
+            newitem = new_mire;
+        }
+        break;
 
         case TYPE_COTATION:
-            {
-                #undef STRUCT
-                #define STRUCT ( (COTATION*) item )
-                if( (g_TabOneLayerMask[STRUCT->GetLayer()] & masque_layer) == 0 )
-                    break;
-                if( ! item->HitTest( GetScreen()->m_BlockLocate ) )
-                    break;
-                /* l'element est ici bon a etre copie */
-                COTATION* new_cotation = new COTATION( m_Pcb );
-                new_cotation->Copy( STRUCT );
-
-                m_Pcb->Add( new_cotation );
-
-                new_cotation->Move( MoveVector );
-            }
-            break;
+        {
+            COTATION* new_cotation = new COTATION( m_Pcb );
+            new_cotation->Copy( (COTATION*) item );
+            m_Pcb->Add( new_cotation );
+            newitem = new_cotation;
+        }
+        break;
 
         default:
+            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Duplicate( ) error: unexpected type" ) );
             break;
+        }
+
+        if ( newitem )
+        {
+            newitem->Move( MoveVector );
+            picker.m_PickedItem = newitem;
+            picker.m_PickedItemType = newitem->Type();
+            newList.PushItem(picker);
         }
     }
 
-    DrawPanel->Refresh( TRUE );
-    Compile_Ratsnest( DC, TRUE );
+    if( newList.GetCount() )
+        SaveCopyInUndoList( newList, UR_NEW );
 
+    Compile_Ratsnest( NULL, TRUE );
+    DrawPanel->Refresh( TRUE );
 }

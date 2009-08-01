@@ -36,7 +36,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // there are some restrictions on the order of items in the general case.
     // all items in m_Drawings for instance should be contiguous.
     //  *** all items in a same list (shown here) must be contiguous ****
-    TYPE_MARKER,                 // in m_markers
+    TYPE_MARKER_PCB,                 // in m_markers
     TYPE_TEXTE,                  // in m_Drawings
     TYPE_DRAWSEGMENT,            // in m_Drawings
     TYPE_COTATION,               // in m_Drawings
@@ -66,7 +66,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
 
 
 const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
-    TYPE_MARKER,
+    TYPE_MARKER_PCB,
     TYPE_TEXTE,
     TYPE_DRAWSEGMENT,
     TYPE_COTATION,

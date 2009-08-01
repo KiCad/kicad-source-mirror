@@ -275,8 +275,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             createPopupMenuForTracks( (TRACK*) item, aPopMenu );
             break;
 
-        case TYPE_MARKER:
-            createPopUpMenuForMarkers( (MARKER*) item, aPopMenu );
+        case TYPE_MARKER_PCB:
+            createPopUpMenuForMarkers( (MARKER_PCB*) item, aPopMenu );
             break;
 
         case TYPE_COTATION:
@@ -879,7 +879,7 @@ void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 }
 
 /**********************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER* aMarker, wxMenu* aPopMenu )
+void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu )
 /**********************************************************************/
 {
     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MARKER, _( "Delete Marker" ), delete_xpm );

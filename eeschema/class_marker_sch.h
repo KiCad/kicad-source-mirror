@@ -2,8 +2,8 @@
 /* classes to handle markers used in schematic ... */
 /***************************************************/
 
-#ifndef _CLASS_MARKER_SCH_H_
-#define _CLASS_MARKER_SCH_H_
+#ifndef _TYPE_MARKER_SCH_H_
+#define _TYPE_MARKER_SCH_H_
 
 #include "sch_item_struct.h"
 #include "class_marker_base.h"
@@ -103,4 +103,4 @@ public:
 #endif
 };
 
-#endif /* _CLASS_MARKER_SCH_H_ */
+#endif /* _TYPE_MARKER_SCH_H_ */

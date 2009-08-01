@@ -958,8 +958,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_GETINFO_MARKER:
-        if( GetCurItem() && GetCurItem()->Type() == TYPE_MARKER )
-            ( (MARKER*) GetCurItem() )->DisplayMarkerInfo( this );
+        if( GetCurItem() && GetCurItem()->Type() == TYPE_MARKER_PCB )
+            ( (MARKER_PCB*) GetCurItem() )->DisplayMarkerInfo( this );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -1261,10 +1261,10 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     }
     break;
 
-    case TYPE_MARKER:
+    case TYPE_MARKER_PCB:
         if( Item == GetCurItem() )
             SetCurItem( NULL );
-        ( (MARKER*) Item )->Draw( DrawPanel, DC, GR_XOR );
+        ( (MARKER_PCB*) Item )->Draw( DrawPanel, DC, GR_XOR );
 
         // delete the marker, and free memory.  Don't use undo stack.
         GetBoard()->Delete( Item );

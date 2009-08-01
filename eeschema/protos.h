@@ -98,8 +98,6 @@ void DeleteStruct(WinEDA_DrawPanel * panel, wxDC * DC, SCH_ITEM *DrawStruct);
     /*************/
     /* LOCATE.CPP */
     /*************/
-bool DrawStructInBox(int x1, int y1, int x2, int y2,
-                        SCH_ITEM *DrawStruct);
 LibDrawPin* LocatePinByNumber( const wxString & ePin_Number,
                              SCH_COMPONENT* eComponent );
 

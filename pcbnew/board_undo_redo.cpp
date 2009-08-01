@@ -70,36 +70,38 @@
  * @param aBoard = board to test
  * @param aItem = item to find
  */
-static bool TestForExistingItem( BOARD * aPcb, BOARD_ITEM * aItem )
+static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    BOARD_ITEM *item;
+    BOARD_ITEM* item;
+
     // search in tracks:
     for( item = aPcb->m_Track; item != NULL; item = item->Next() )
-        if (item == aItem )
+        if( item == aItem )
             return true;
 
     // search in modules:
     for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
-        if (item == aItem )
+        if( item == aItem )
             return true;
 
     // Search in drawings
     for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
-        if (item == aItem )
+        if( item == aItem )
             return true;
 
     // Search in zones outlines
-    for ( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
-        if( aPcb->GetArea(ii) == aItem )
+    for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
+        if( aPcb->GetArea( ii ) == aItem )
             return true;
 
     // search in zones segm:
     for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
-        if (item == aItem )
+        if( item == aItem )
             return true;
 
     return false;
 }
+
 
 /**************************************************************/
 void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
@@ -133,8 +135,6 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
  *  The new object is not put in list (not linked)
  */
 {
-    BOARD_ITEM* newItem = NULL;
-
     if( aItem == NULL )
     {
         wxMessageBox( wxT( "DuplicateStruct error: NULL struct" ) );
@@ -143,17 +143,82 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
+    case TYPE_MODULE:
+    {
+        MODULE* new_module;
+        new_module = new MODULE( (BOARD*)aItem->GetParent() );
+        new_module->Copy( (MODULE*) aItem );
+        return new_module;
+    }
+
+    case TYPE_TRACK:
+    {
+        TRACK* new_track = ( (TRACK*) aItem )->Copy();
+        return new_track;
+    }
+
+    case TYPE_VIA:
+    {
+        SEGVIA* new_via = (SEGVIA*)( (SEGVIA*) aItem )->Copy();
+        return new_via;
+    }
+
+    case TYPE_ZONE:
+    {
+        SEGZONE* new_segzone = (SEGZONE*)( (SEGZONE*) aItem )->Copy();
+        return new_segzone;
+    }
+
+    case TYPE_ZONE_CONTAINER:
+    {
+        ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*)aItem->GetParent() );
+        new_zone->Copy( (ZONE_CONTAINER*)aItem );
+        return new_zone;
+    }
+
+    case TYPE_DRAWSEGMENT:
+    {
+        DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( aItem->GetParent() );
+        new_drawsegment->Copy( (DRAWSEGMENT*)aItem );
+        return new_drawsegment;
+    }
+    break;
+
+    case TYPE_TEXTE:
+    {
+        TEXTE_PCB* new_pcbtext = new TEXTE_PCB( aItem->GetParent() );
+        new_pcbtext->Copy( (TEXTE_PCB*)aItem );
+        return new_pcbtext;
+    }
+    break;
+
+    case TYPE_MIRE:
+    {
+        MIREPCB* new_mire = new MIREPCB( aItem->GetParent() );
+        new_mire->Copy( (MIREPCB*)aItem );
+        return new_mire;
+    }
+    break;
+
+    case TYPE_COTATION:
+    {
+        COTATION* new_cotation = new COTATION( aItem->GetParent() );
+        new_cotation->Copy( (COTATION*) aItem );
+        return new_cotation;
+    }
+    break;
+
     default:
     {
         wxString msg;
         msg << wxT( "DuplicateStruct error: unexpected StructType " ) <<
         aItem->Type() << wxT( " " ) << aItem->GetClass();
-//        wxMessageBox( msg );
+        wxMessageBox( msg );
     }
     break;
     }
 
-    return newItem;
+    return NULL;
 }
 
 
@@ -170,17 +235,14 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItemToCopy,
  *      UR_CHANGED
  *      UR_NEW
  *      UR_DELETED
+ *      UR_MOVED
+ *      UR_FLIPPED
+ *      UR_ROTATED
  *
  *  If it is a delete command, items are put on list with the .Flags member set to UR_DELETED.
  *  When it will be really deleted, the EEDrawList and the subhierarchy will be deleted.
  *  If it is only a copy, the EEDrawList and the subhierarchy must NOT be deleted.
  *
- *  Note:
- *  Edit wires and busses is a bit complex.
- *  because when a new wire is added, modifications in wire list
- *  (wire concatenation) there are modified items, deleted items and new items
- *  so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of wires
- *  saved in Undo List (for Undo or Redo commands, saved wires will be exchanged with current wire list
  */
 {
     BOARD_ITEM*        CopyOfItem;
@@ -194,7 +256,7 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItemToCopy,
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of schematic */
-        CopyOfItem = DuplicateStruct( aItemToCopy );
+        CopyOfItem = NULL;//DuplicateStruct( aItemToCopy );
         itemWrapper.m_PickedItem = CopyOfItem;
         itemWrapper.m_Link = aItemToCopy;
         if( CopyOfItem )
@@ -202,7 +264,9 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItemToCopy,
         break;
 
     case UR_NEW:
-    case UR_WIRE_IMAGE:
+    case UR_MOVED:
+    case UR_FLIPPED:
+    case UR_ROTATED:
     case UR_DELETED:
         commandToUndo->PushItem( itemWrapper );
         break;
@@ -246,34 +310,31 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        BOARD_ITEM*    ItemToCopy = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
+        BOARD_ITEM*    item = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
         UndoRedoOpType command    = aItemsList.GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
         }
-        wxASSERT( ItemToCopy );
-        itemWrapper.m_PickedItem = ItemToCopy;
-        itemWrapper.m_PickedItemType = ItemToCopy->Type();
+        wxASSERT( item );
+        itemWrapper.m_PickedItem     = item;
+        itemWrapper.m_PickedItemType = item->Type();
         itemWrapper.m_UndoRedoStatus = command;
         switch( command )
         {
         case UR_CHANGED:        /* Create a copy of schematic */
-            CopyOfItem = DuplicateStruct( ItemToCopy );
+            CopyOfItem = DuplicateStruct( item );
             itemWrapper.m_PickedItem = CopyOfItem;
-            itemWrapper.m_Link = ItemToCopy;
+            itemWrapper.m_Link = item;
             if( CopyOfItem )
                 commandToUndo->PushItem( itemWrapper );
             break;
 
         case UR_MOVED:
-        case UR_MIRRORED_Y:
+        case UR_ROTATED:
+        case UR_FLIPPED:
         case UR_NEW:
-            commandToUndo->PushItem( itemWrapper );
-            break;
-
         case UR_DELETED:
-            ItemToCopy->m_Flags = UR_DELETED;
             commandToUndo->PushItem( itemWrapper );
             break;
 
@@ -300,27 +361,24 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/***************************************************************************/
-void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
-/***************************************************************************/
-
-/* Used in undo or redo command.
- *  Put data pointed by List in the previous state, i.e. the state memorised by List
+/** Function PutDataInPreviousState()
+ * Used in undo or redo command.
+ * Put data pointed by List in the previous state, i.e. the state memorised by List
+ * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+ * @param aRedoCommand = a bool: true for redo, false for undo
  */
+void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
     BOARD_ITEM* item;
-    bool        as_moved = false;
     bool        not_found = false;
 
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
-        ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
-        item = (BOARD_ITEM*) itemWrapper.m_PickedItem;
+        item = (BOARD_ITEM*) aList->GetPickedItem(ii);
         wxASSERT( item );
-        BOARD_ITEM* image = (BOARD_ITEM*) itemWrapper.m_Link;
-        if( itemWrapper.m_UndoRedoStatus != UR_DELETED )
+        if( aList->GetPickedItemStatus(ii) != UR_DELETED )
         {
-            if( ! TestForExistingItem( GetBoard(), item ) )
+            if( !TestForExistingItem( GetBoard(), item ) )
             {
                 // Remove this non existant item
                 aList->RemovePickedItem( ii );
@@ -330,10 +388,13 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 continue;
             }
         }
-        switch( itemWrapper.m_UndoRedoStatus )
+        switch( aList->GetPickedItemStatus(ii) )
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */
+        {
+            BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink(ii);
             SwapData( item, image );
+        }
             break;
 
         case UR_NEW:        /* new items are deleted */
@@ -349,14 +410,15 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             break;
 
         case UR_MOVED:
-
-            //           item->Move( - aList->m_TransformPoint );
-            as_moved = true;
+            item->Move( aRedoCommand ? aList->m_TransformPoint : - aList->m_TransformPoint );
             break;
 
-        case UR_MIRRORED_Y:
+        case UR_ROTATED:
+            item->Rotate( aList->m_TransformPoint, aRedoCommand ? 900 : -900 );
+            break;
 
-//            item->Mirror_Y( aList->m_TransformPoint.x );
+        case UR_FLIPPED:
+            item->Flip( aList->m_TransformPoint );
             break;
 
         default:
@@ -364,7 +426,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             wxString msg;
             msg.Printf( wxT(
                             "PutDataInPreviousState() error (unknown code %X)" ),
-                        itemWrapper.m_UndoRedoStatus );
+                        aList->GetPickedItemStatus(ii) );
             wxMessageBox( msg );
         }
         break;
@@ -372,11 +434,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     }
 
     if( not_found )
-        wxMessageBox(wxT("Incomplete undo/redo command: item not found" ) );
-
-    // Undo for move transform needs to change the general move vector:
-    if( as_moved )
-        aList->m_TransformPoint = -aList->m_TransformPoint;
+        wxMessageBox( wxT( "Incomplete undo/redo command: item not found" ) );
 
     Compile_Ratsnest( NULL, true );
 }
@@ -385,12 +443,11 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 /**********************************************************/
 void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
 /**********************************************************/
-
-/** Function GetSchematicFromUndoList
+/** Function GetBoardFromUndoList
  *  Undo the last edition:
- *  - Save the current schematic in Redo list
- *  - Get an old version of the schematic
- *  @return false if nothing done, else true
+ *  - Save the current board in Redo list
+ *  - Get an old version of the board from Undo list
+ *  @return none
  */
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
@@ -400,7 +457,7 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
     GetScreen()->PushCommandToRedoList( List );
     /* Undo the command */
-    PutDataInPreviousState( List );
+    PutDataInPreviousState( List, false );
 
     GetScreen()->SetModify();
     ReCreateHToolbar();
@@ -410,15 +467,13 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
 }
 
 
-/**********************************************************/
-void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
-/**********************************************************/
-
-/* Redo the last edition:
- *  - Save the current schematic in undo list
- *  - Get the old version
- *  @return false if nothing done, else true
+/** Function GetBoardFromRedoList
+ *  Redo the last edition:
+ *  - Save the current board in Undo list
+ *  - Get an old version of the board from Redo list
+ *  @return none
  */
+void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
@@ -429,7 +484,7 @@ void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
     GetScreen()->PushCommandToUndoList( List );
 
     /* Redo the command: */
-    PutDataInPreviousState( List );
+    PutDataInPreviousState( List, true );
 
     GetScreen()->SetModify();
     ReCreateHToolbar();
@@ -460,6 +515,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
     unsigned icnt = aList.m_CommandsList.size();
     if( aItemCount > 0 )
         icnt = aItemCount;
+    bool displ_error = true;
     for( unsigned ii = 0; ii < icnt; ii++ )
     {
         if( aList.m_CommandsList.size() == 0 )
@@ -476,7 +532,13 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
                 break;
             switch( wrapper.m_UndoRedoStatus )
             {
+            case UR_UNSPECIFIED:
+                if( displ_error )
+                    wxMessageBox(wxT("ClearUndoORRedoList() error: unspecified item type"));
+                displ_error = false;
+                break;
             case UR_MOVED:
+            case UR_FLIPPED:
             case UR_MIRRORED_X:
             case UR_MIRRORED_Y:
             case UR_ROTATED:

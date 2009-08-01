@@ -64,10 +64,18 @@ public:
 
     /**
      * Function Rotate
-     * @param offset : Rotation point
-     * @param angle : Rotation angle in 0.1 degrees
+     * Rotate this object.
+     * @param const wxPoint& aRotCentre - the rotation point.
+     * @param aAngle - the rotation angle in 0.1 degree.
      */
-    void    Rotate(const wxPoint& centre, int angle);
+    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+
+    /**
+     * Function Flip
+     * Flip this object, i.e. change the board side for this object
+     * @param const wxPoint& aCentre - the rotation point.
+     */
+    virtual void Flip(const wxPoint& aCentre );
 
     /**
      * Function Mirror

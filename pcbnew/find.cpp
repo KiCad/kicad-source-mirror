@@ -72,7 +72,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
 
     if( FindMarker )
     {
-        MARKER* marker = m_Parent->GetBoard()->GetMARKER( s_MarkerCount++ );
+        MARKER_PCB* marker = m_Parent->GetBoard()->GetMARKER( s_MarkerCount++ );
         if( marker )
         {
             foundItem  = marker;

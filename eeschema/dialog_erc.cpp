@@ -303,7 +303,7 @@ void DIALOG_ERC::DisplayERC_MarkersList()
         SCH_ITEM* DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != DRAW_MARKER_STRUCT_TYPE )
+            if( DrawStruct->Type() != TYPE_MARKER_SCH )
                 continue;
 
             /* Marqueur trouve */

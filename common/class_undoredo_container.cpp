@@ -113,11 +113,11 @@ EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
 }
 
 
-/** function GetLink
+/** function GetPickedItemLink
  * @return link of the picked item, or null if does not exist
  * @param aIdx = index of the picked item in the picked list
  */
-EDA_BaseStruct* PICKED_ITEMS_LIST::GetLink( unsigned int aIdx )
+EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_Link;
@@ -157,13 +157,13 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx )
 }
 
 
-/** function SetLink
+/** function SetPickedItemLink
  * Set the link associated to a given picked item
  * @param aLink = the link to the item associated to the picked item
  * @param aIdx = index of the picker in the picked list
  * @return true if the picker exists, or false if does not exist
  */
-bool PICKED_ITEMS_LIST::SetLink( EDA_BaseStruct* aLink, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

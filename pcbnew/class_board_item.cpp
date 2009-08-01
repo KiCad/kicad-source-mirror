@@ -212,9 +212,9 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         }
         break;
 
-    case TYPE_MARKER:
-        text << _( "Marker" ) << wxT( " @(" ) << ((MARKER*)item)->GetPos().x
-             << wxT(",") << ((MARKER*)item)->GetPos().y << wxT(")");
+    case TYPE_MARKER_PCB:
+        text << _( "Marker" ) << wxT( " @(" ) << ((MARKER_PCB*)item)->GetPos().x
+             << wxT(",") << ((MARKER_PCB*)item)->GetPos().y << wxT(")");
         break;
 
     case TYPE_COTATION:
@@ -226,10 +226,6 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         text << _( "Target" ) << _( " on " ) << aPcb->GetLayerName( item->GetLayer() ).Trim()
             << wxT( " " ) << _( "size" ) << wxT( " " ) << msg
             ;
-        break;
-
-    case TYPE_ZONE_UNUSED:
-        text << wxT( "Unused" );
         break;
 
     default:
@@ -291,7 +287,7 @@ const char** BOARD_ITEM::MenuIcon() const
         xpm = pad_sketch_xpm;
         break;
 
-    case TYPE_MARKER:
+    case TYPE_MARKER_PCB:
         xpm = pad_xpm;              // @todo: create and use marker xpm
         break;
 
@@ -301,10 +297,6 @@ const char** BOARD_ITEM::MenuIcon() const
 
     case TYPE_MIRE:
         xpm = add_mires_xpm;
-        break;
-
-    case TYPE_ZONE_UNUSED:
-        xpm = 0;    // unused
         break;
 
     default:
