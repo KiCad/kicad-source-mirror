@@ -999,9 +999,9 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
  */
 void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
 {
+    wxPoint pos;
     for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
     {
-        wxPoint pos;
         pos.x = m_Poly->corner[ii].x;
         pos.y = m_Poly->corner[ii].y;
         RotatePoint( &pos, centre, angle );
@@ -1010,6 +1010,17 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
     }
 
     m_Poly->Hatch();
+
+    /* rotate filled areas: */
+    for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
+    {
+        CPolyPt* corner = &m_FilledPolysList[ic];
+        pos.x = corner->x;
+        pos.y = corner->y;
+        RotatePoint( &pos, centre, angle );
+        corner->x = pos.x;
+        corner->y = pos.y;
+    }
 }
 
 /**
@@ -1034,11 +1045,20 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
     for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
     {
         m_Poly->corner[ii].y -= mirror_ref.y;
-        m_Poly->corner[ii].y  = -m_Poly->corner[ii].y;
+        NEGATE(m_Poly->corner[ii].y);
         m_Poly->corner[ii].y += mirror_ref.y;
     }
 
     m_Poly->Hatch();
+
+    /* mirror filled areas: */
+    for( unsigned ic = 0; ic < m_FilledPolysList.size(); ic++ )
+    {
+        CPolyPt* corner = &m_FilledPolysList[ic];
+        corner->y -= mirror_ref.y;
+        NEGATE(corner->y);
+        corner->y += mirror_ref.y;
+    }
 }
 
 
