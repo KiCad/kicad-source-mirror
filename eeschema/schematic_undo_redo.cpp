@@ -509,6 +509,10 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
             case UR_NEW:        // Do nothing, items are in use
                 break;
 
+            case UR_LIBEDIT:    // Libedit save always a copy of the current item
+                delete item;    // So, the picker is always owner of the picked item
+                break;
+
             case UR_DELETED:
                 delete item;    // Delete the picked item, because it was deleted from schematic
                 break;

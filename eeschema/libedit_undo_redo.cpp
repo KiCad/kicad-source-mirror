@@ -26,7 +26,7 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
     CopyItem = CopyLibEntryStruct( this, (EDA_LibComponentStruct*) ItemToCopy );
 
     lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(CopyItem);
+    ITEM_PICKER wrapper(CopyItem, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
     /* Clear current flags (which can be temporary set by a current edit command) */
@@ -34,17 +34,7 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
         item->m_Flags = 0;
 
     /* Clear redo list, because after new save there is no redo to do */
-    while( (lastcmd = GetScreen()->PopCommandFromRedoList( ) ) != NULL )
-    {
-        while ( 1 )
-        {
-            wrapper = lastcmd->PopItem();
-            if ( wrapper.m_PickedItem == NULL )
-                break;      // All items are removed
-            delete wrapper.m_PickedItem;
-        }
-        delete lastcmd;
-    }
+    GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
 }
 
 
@@ -62,7 +52,7 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(CurrentLibEntry);
+    ITEM_PICKER wrapper(CurrentLibEntry, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
 
@@ -95,7 +85,7 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(CurrentLibEntry);
+    ITEM_PICKER wrapper(CurrentLibEntry, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToRedoList( lastcmd );
 

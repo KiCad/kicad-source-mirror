@@ -59,6 +59,9 @@
  *
  */
 
+BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
+
+
 /** function TestForExistingItem
  * test if aItem exists somewhere in lists of items
  * This is a function unsed by PutDataInPreviousState to be sure an item was not deleted
@@ -123,61 +126,66 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
 
     int layer, layerimg;
-    layer = aItem->GetLayer();
+    layer    = aItem->GetLayer();
     layerimg = aImage->GetLayer();
-    aItem->SetLayer(layerimg);
-    aImage->SetLayer(layer);
+    aItem->SetLayer( layerimg );
+    aImage->SetLayer( layer );
 
     switch( aItem->Type() )
     {
     case TYPE_MODULE:
-        wxMessageBox( wxT( "SwapData(): TYPE_MODULE not handled" ) );
-        break;
+    {
+        MODULE* m_tmp = (MODULE*) DuplicateStruct( aImage );
+        ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
+        ( (MODULE*) aItem )->Copy( m_tmp );
+        delete m_tmp;
+    }
+    break;
 
     case TYPE_ZONE_CONTAINER:
         wxMessageBox( wxT( "SwapData(): TYPE_ZONE_CONTAINER not handled" ) );
         break;
 
     case TYPE_DRAWSEGMENT:
-        EXCHG( ((TRACK*)aItem)->m_Start, ((TRACK*)aImage)->m_Start);
-        EXCHG( ((TRACK*)aItem)->m_End, ((TRACK*)aImage)->m_End);
-        EXCHG( ((TRACK*)aItem)->m_Width,  ((TRACK*)aImage)->m_Width);
-        EXCHG( ((TRACK*)aItem)->m_Shape,  ((TRACK*)aImage)->m_Shape);
+        EXCHG( ( (TRACK*) aItem )->m_Start, ( (TRACK*) aImage )->m_Start );
+        EXCHG( ( (TRACK*) aItem )->m_End, ( (TRACK*) aImage )->m_End );
+        EXCHG( ( (TRACK*) aItem )->m_Width, ( (TRACK*) aImage )->m_Width );
+        EXCHG( ( (TRACK*) aItem )->m_Shape, ( (TRACK*) aImage )->m_Shape );
         break;
 
     case TYPE_TRACK:
     case TYPE_VIA:
     case TYPE_ZONE:
-        EXCHG( ((TRACK*)aItem)->m_Start, ((TRACK*)aImage)->m_Start);
-        EXCHG( ((TRACK*)aItem)->m_End, ((TRACK*)aImage)->m_End);
-        EXCHG( ((TRACK*)aItem)->m_Width,  ((TRACK*)aImage)->m_Width);
-        EXCHG( ((TRACK*)aItem)->m_Shape,  ((TRACK*)aImage)->m_Shape);
-    break;
+        EXCHG( ( (TRACK*) aItem )->m_Start, ( (TRACK*) aImage )->m_Start );
+        EXCHG( ( (TRACK*) aItem )->m_End, ( (TRACK*) aImage )->m_End );
+        EXCHG( ( (TRACK*) aItem )->m_Width, ( (TRACK*) aImage )->m_Width );
+        EXCHG( ( (TRACK*) aItem )->m_Shape, ( (TRACK*) aImage )->m_Shape );
+        break;
 
     case TYPE_TEXTE:
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Mirror, ((TEXTE_PCB*)aImage)->m_Mirror);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Size, ((TEXTE_PCB*)aImage)->m_Size);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Pos, ((TEXTE_PCB*)aImage)->m_Pos);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Width, ((TEXTE_PCB*)aImage)->m_Width);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Orient, ((TEXTE_PCB*)aImage)->m_Orient);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Text, ((TEXTE_PCB*)aImage)->m_Text);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Italic, ((TEXTE_PCB*)aImage)->m_Italic);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_Bold, ((TEXTE_PCB*)aImage)->m_Bold);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_HJustify, ((TEXTE_PCB*)aImage)->m_HJustify);
-        EXCHG( ((TEXTE_PCB*)aItem)->m_VJustify, ((TEXTE_PCB*)aImage)->m_VJustify);
-       break;
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Mirror, ( (TEXTE_PCB*) aImage )->m_Mirror );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Size, ( (TEXTE_PCB*) aImage )->m_Size );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Pos, ( (TEXTE_PCB*) aImage )->m_Pos );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Width, ( (TEXTE_PCB*) aImage )->m_Width );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Orient, ( (TEXTE_PCB*) aImage )->m_Orient );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Text, ( (TEXTE_PCB*) aImage )->m_Text );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Italic, ( (TEXTE_PCB*) aImage )->m_Italic );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Bold, ( (TEXTE_PCB*) aImage )->m_Bold );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_HJustify, ( (TEXTE_PCB*) aImage )->m_HJustify );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_VJustify, ( (TEXTE_PCB*) aImage )->m_VJustify );
+        break;
 
     case TYPE_MIRE:
-        EXCHG(((MIREPCB*)aItem)->m_Pos,((MIREPCB*)aImage)->m_Pos);
-        EXCHG(((MIREPCB*)aItem)->m_Width, ((MIREPCB*)aImage)->m_Width);
-        EXCHG(((MIREPCB*)aItem)->m_Size, ((MIREPCB*)aImage)->m_Size);
-        EXCHG(((MIREPCB*)aItem)->m_Shape, ((MIREPCB*)aImage)->m_Shape);
-    break;
+        EXCHG( ( (MIREPCB*) aItem )->m_Pos, ( (MIREPCB*) aImage )->m_Pos );
+        EXCHG( ( (MIREPCB*) aItem )->m_Width, ( (MIREPCB*) aImage )->m_Width );
+        EXCHG( ( (MIREPCB*) aItem )->m_Size, ( (MIREPCB*) aImage )->m_Size );
+        EXCHG( ( (MIREPCB*) aItem )->m_Shape, ( (MIREPCB*) aImage )->m_Shape );
+        break;
 
     case TYPE_COTATION:
-        EXCHG(((COTATION*)aItem)->m_Text->m_Size, ((COTATION*)aImage)->m_Text->m_Size);
-        EXCHG(((COTATION*)aItem)->m_Text->m_Width, ((COTATION*)aImage)->m_Text->m_Width);
-        EXCHG(((COTATION*)aItem)->m_Text->m_Mirror, ((COTATION*)aImage)->m_Text->m_Mirror);
+        EXCHG( ( (COTATION*) aItem )->m_Text->m_Size, ( (COTATION*) aImage )->m_Text->m_Size );
+        EXCHG( ( (COTATION*) aItem )->m_Text->m_Width, ( (COTATION*) aImage )->m_Text->m_Width );
+        EXCHG( ( (COTATION*) aItem )->m_Text->m_Mirror, ( (COTATION*) aImage )->m_Text->m_Mirror );
         break;
 
     default:
@@ -206,7 +214,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     case TYPE_MODULE:
     {
         MODULE* new_module;
-        new_module = new MODULE( (BOARD*)aItem->GetParent() );
+        new_module = new MODULE( (BOARD*) aItem->GetParent() );
         new_module->Copy( (MODULE*) aItem );
         return new_module;
     }
@@ -231,15 +239,15 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 
     case TYPE_ZONE_CONTAINER:
     {
-        ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*)aItem->GetParent() );
-        new_zone->Copy( (ZONE_CONTAINER*)aItem );
+        ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) aItem->GetParent() );
+        new_zone->Copy( (ZONE_CONTAINER*) aItem );
         return new_zone;
     }
 
     case TYPE_DRAWSEGMENT:
     {
         DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( aItem->GetParent() );
-        new_drawsegment->Copy( (DRAWSEGMENT*)aItem );
+        new_drawsegment->Copy( (DRAWSEGMENT*) aItem );
         return new_drawsegment;
     }
     break;
@@ -247,7 +255,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     case TYPE_TEXTE:
     {
         TEXTE_PCB* new_pcbtext = new TEXTE_PCB( aItem->GetParent() );
-        new_pcbtext->Copy( (TEXTE_PCB*)aItem );
+        new_pcbtext->Copy( (TEXTE_PCB*) aItem );
         return new_pcbtext;
     }
     break;
@@ -255,7 +263,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     case TYPE_MIRE:
     {
         MIREPCB* new_mire = new MIREPCB( aItem->GetParent() );
-        new_mire->Copy( (MIREPCB*)aItem );
+        new_mire->Copy( (MIREPCB*) aItem );
         return new_mire;
     }
     break;
@@ -369,21 +377,19 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        BOARD_ITEM*    item = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
-        UndoRedoOpType command    = aItemsList.GetPickedItemStatus( ii );
+        BOARD_ITEM*    item    = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
+        UndoRedoOpType command = aItemsList.GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
-        {
             command = aTypeCommand;
-        }
+
         wxASSERT( item );
         itemWrapper.m_PickedItem     = item;
         itemWrapper.m_PickedItemType = item->Type();
         itemWrapper.m_UndoRedoStatus = command;
         switch( command )
         {
-        case UR_CHANGED:        /* Create a copy of schematic */
+        case UR_CHANGED:        /* Create a copy of item, and put in undo list */
             CopyOfItem = DuplicateStruct( item );
-            itemWrapper.m_PickedItem = item;
             itemWrapper.m_Link = CopyOfItem;
             if( CopyOfItem )
                 commandToUndo->PushItem( itemWrapper );
@@ -434,9 +440,9 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
 
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
-        item = (BOARD_ITEM*) aList->GetPickedItem(ii);
+        item = (BOARD_ITEM*) aList->GetPickedItem( ii );
         wxASSERT( item );
-        if( aList->GetPickedItemStatus(ii) != UR_DELETED )
+        if( aList->GetPickedItemStatus( ii ) != UR_DELETED )
         {
             if( !TestForExistingItem( GetBoard(), item ) )
             {
@@ -449,48 +455,29 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
             }
         }
         item->m_Flags = 0;
+
         // see if one must rebuild ratsnets and pointers lists
         switch( item->Type() )
         {
-            case TYPE_MODULE:
-            case TYPE_ZONE_CONTAINER:
-            case TYPE_TRACK:
-            case TYPE_VIA:
-                reBuild_ratsnest = true;
-                break;
-            default:
-                break;
+        case TYPE_MODULE:
+        case TYPE_ZONE_CONTAINER:
+        case TYPE_TRACK:
+        case TYPE_VIA:
+            reBuild_ratsnest = true;
+            break;
+
+        default:
+            break;
         }
 
-        switch( aList->GetPickedItemStatus(ii) )
+        switch( aList->GetPickedItemStatus( ii ) )
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
-            BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink(ii);
-            // Note modules and zones containers have a lot of data
-            // so items and thier copy are swapped, not just edited data
-            // The main drawback is pointers on these items must be rebuilt
-            // but often, this is needed by connectivity change,
-            // so this is not really an important drawback in this function
-            // Could change later
-            switch( item->Type() )
-            {
-                case TYPE_MODULE:
-                case TYPE_ZONE_CONTAINER:
-                    // Swap the item and its copy
-                    GetBoard()->Remove(item);
-                    GetBoard()->Add(image);
-                    aList->SetPickedItem(image, ii);
-                    aList->SetPickedItemLink(item, ii);
-                    break;
-
-                default:
-                    // For other items: swap editable data only
-                    SwapData( item, image );
-                    break;
-            }
+            BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
+            SwapData( item, image );
         }
-            break;
+        break;
 
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
@@ -503,7 +490,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
             break;
 
         case UR_MOVED:
-            item->Move( aRedoCommand ? aList->m_TransformPoint : - aList->m_TransformPoint );
+            item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
             break;
 
         case UR_ROTATED:
@@ -518,8 +505,8 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
         {
             wxString msg;
             msg.Printf( wxT(
-                            "PutDataInPreviousState() error (unknown code %X)" ),
-                        aList->GetPickedItemStatus(ii) );
+                           "PutDataInPreviousState() error (unknown code %X)" ),
+                       aList->GetPickedItemStatus( ii ) );
             wxMessageBox( msg );
         }
         break;
@@ -538,6 +525,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
 /**********************************************************/
 void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
 /**********************************************************/
+
 /** Function GetBoardFromUndoList
  *  Undo the last edition:
  *  - Save the current board in Redo list
@@ -610,7 +598,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
     unsigned icnt = aList.m_CommandsList.size();
     if( aItemCount > 0 )
         icnt = aItemCount;
-    bool displ_error = true;
+    bool     displ_error = true;
     for( unsigned ii = 0; ii < icnt; ii++ )
     {
         if( aList.m_CommandsList.size() == 0 )
@@ -621,16 +609,17 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         // Delete items is they are not flagged UR_NEW, or if this is a block operation
         while( 1 )
         {
-            ITEM_PICKER     wrapper = curr_cmd->PopItem();
+            ITEM_PICKER wrapper = curr_cmd->PopItem();
             if( wrapper.m_PickedItem == NULL ) // No more item in list.
                 break;
             switch( wrapper.m_UndoRedoStatus )
             {
             case UR_UNSPECIFIED:
                 if( displ_error )
-                    wxMessageBox(wxT("ClearUndoORRedoList() error: unspecified item type"));
+                    wxMessageBox( wxT( "ClearUndoORRedoList() error: unspecified item type" ) );
                 displ_error = false;
                 break;
+
             case UR_MOVED:
             case UR_FLIPPED:
             case UR_MIRRORED_X:
@@ -643,7 +632,14 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
                 delete wrapper.m_Link;      //  the picker is owner of this item
                 break;
 
-             default:
+            case UR_MODEDIT:             /* Specific to the module editor
+                                          *  (modedit creates a full copy of the current module when changed),
+                                          *  and the picker is owner of this item
+                                          */
+                delete wrapper.m_PickedItem;
+                break;
+
+            default:
                 delete wrapper.m_PickedItem;    //  the picker is owner of this item
                 break;
             }

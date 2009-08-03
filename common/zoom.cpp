@@ -219,7 +219,6 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
     maxZoomIds = ( (size_t) maxZoomIds < GetScreen()->m_ZoomList.GetCount() ) ?
         maxZoomIds : GetScreen()->m_ZoomList.GetCount();
-    wxLogDebug( _T( "%d zoom IDs used." ), maxZoomIds );
 
     /* Populate zoom submenu. */
     for( i = 0; i < (size_t) maxZoomIds; i++ )

@@ -110,7 +110,6 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
     }
 
     pt_mod->Set_Rectangle_Encadrement();
-    DrawPanel->Refresh();
 }
 
 

@@ -229,6 +229,19 @@ public:
                         {
                         }
 
+    /** Function SaveCopyInUndoList (overloaded).
+     * Creates a new entry in undo list of commands.
+     * add a list of pickers to handle a list of items
+     * @param aItemsList = the list of items modified by the command to undo
+     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTransformPoint = the reference point of the transformation, for commands like move
+     */
+    virtual void    SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, UndoRedoOpType aTypeCommand,
+                        const wxPoint& aTransformPoint = wxPoint(0,0) )
+    {
+        // currently: do nothing in cvpcb.
+    }
+
     DECLARE_EVENT_TABLE()
 };
 

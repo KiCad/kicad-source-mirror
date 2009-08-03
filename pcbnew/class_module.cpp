@@ -102,7 +102,8 @@ void MODULE::Copy( MODULE* aModule )
     m_Reference->Copy( aModule->m_Reference );
     m_Value->Copy( aModule->m_Value );
 
-    /* Copie des structures auxiliaires: Pads */
+    /* Copy auxiliary data: Pads */
+    m_Pads.DeleteAll();
     for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( this );
@@ -111,7 +112,8 @@ void MODULE::Copy( MODULE* aModule )
         m_Pads.PushBack( newpad );
     }
 
-    /* Copy des structures auxiliaires: Drawings */
+    /* Copy auxiliary data: Drawings */
+    m_Drawings.DeleteAll();
     for( BOARD_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
@@ -131,11 +133,13 @@ void MODULE::Copy( MODULE* aModule )
             break;
 
         default:
-            wxMessageBox( wxT( "Internal Err: CopyModule: type indefini" ) );
+            wxMessageBox( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
             break;
         }
     }
 
+   /* Copy auxiliary data: 3D_Drawings info */
+     m_3D_Drawings.DeleteAll();
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
         if ( item->m_Shape3DName.IsEmpty() )            // do not copy empty shapes.

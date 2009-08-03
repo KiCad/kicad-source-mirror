@@ -191,8 +191,7 @@ void D_PAD::Copy( D_PAD* source )
     m_Offset     = source->m_Offset;                            // Offset de la forme
     m_Size = source->m_Size;                                    // Dimension ( pour orient 0 )
     m_DeltaSize = source->m_DeltaSize;                          // delta sur formes rectangle -> trapezes
-    m_Pos0 = source->m_Pos0;                                    // Coord relatives a l'ancre du pad en
-    //  orientation 0
+    m_Pos0 = source->m_Pos0;                                    /* Coord relatives a l'ancre du pad en orientation 0 */
     m_Rayon    = source->m_Rayon;                               // rayon du cercle exinscrit du pad
     m_PadShape = source->m_PadShape;                            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
     m_Attribut = source->m_Attribut;                            // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK

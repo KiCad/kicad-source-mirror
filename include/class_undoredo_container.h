@@ -60,7 +60,9 @@ enum UndoRedoOpType {
     UR_MIRRORED_Y,          // mirrored item, undo by mirror Y
     UR_ROTATED,             // Rotated item, undo by rotating it
     UR_FLIPPED,             // flipped (board items only), undo by flipping it
-    UR_WIRE_IMAGE           // Specific to eeschema: handle wires changes
+    UR_WIRE_IMAGE,          // Specific to eeschema: handle wires changes
+    UR_MODEDIT,             // Specific to the module editor (modedit creates a full copy of the current module when changed)
+    UR_LIBEDIT              // Specific to the component editor (libedit creates a full copy of the current component when changed)
 };
 
 class ITEM_PICKER

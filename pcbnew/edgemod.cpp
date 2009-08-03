@@ -60,15 +60,11 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 {
     if( Edge == NULL )
         return;
-    Edge->m_Start.x -= MoveVector.x;
-    Edge->m_Start.y -= MoveVector.y;
-    Edge->m_End.x   -= MoveVector.x;
-    Edge->m_End.y   -= MoveVector.y;
+    Edge->m_Start -= MoveVector;
+    Edge->m_End   -= MoveVector;
 
-    Edge->m_Start0.x -= MoveVector.x;
-    Edge->m_Start0.y -= MoveVector.y;
-    Edge->m_End0.x   -= MoveVector.x;
-    Edge->m_End0.y   -= MoveVector.y;
+    Edge->m_Start0 -= MoveVector;
+    Edge->m_End0   -= MoveVector;
 
     Edge->Draw( DrawPanel, DC, GR_OR );
     Edge->m_Flags = 0;
@@ -131,10 +127,8 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     Edge->m_End = screen->m_Curseur;
 
     /* Mise a jour des coord relatives */
-    Edge->m_End0.x = Edge->m_End.x - Module->m_Pos.x;
-    Edge->m_End0.y = Edge->m_End.y - Module->m_Pos.y;
-    RotatePoint( (int*) &Edge->m_End0.x,
-                (int*) &Edge->m_End0.y, -Module->m_Orient );
+    Edge->m_End0 = Edge->m_End - Module->m_Pos;
+    RotatePoint( &Edge->m_End0, -Module->m_Orient );
 
     Edge->Draw( panel, DC, GR_XOR );
 
@@ -155,7 +149,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge )
 {
     MODULE* Module = GetBoard()->m_Modules;
 
-    SaveCopyInUndoList( Module );
+    SaveCopyInUndoList( Module, UR_MODEDIT );
 
     if( Edge == NULL )
     {
@@ -205,7 +199,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
             return;
     }
 
-    SaveCopyInUndoList( Module );
+    SaveCopyInUndoList( Module, UR_MODEDIT );
 
     if( Edge == NULL )
     {
@@ -341,7 +335,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 
     if( Edge == NULL )       /* Start a new edge item */
     {
-        SaveCopyInUndoList( module );
+        SaveCopyInUndoList( module, UR_MODEDIT );
 
         Edge = new EDGE_MODULE( module );
         MoveVector.x = MoveVector.y = 0;
@@ -372,11 +366,9 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         Edge->m_End = Edge->m_Start;
 
         /* Initialise the relative coordinates */
-        Edge->m_Start0.x = Edge->m_Start.x - module->m_Pos.x;
-        Edge->m_Start0.y = Edge->m_Start.y - module->m_Pos.y;
+        Edge->m_Start0 = Edge->m_Start - module->m_Pos;
 
-        RotatePoint( (int*) &Edge->m_Start0.x,
-                    (int*) &Edge->m_Start0.y, -module->m_Orient );
+        RotatePoint( &Edge->m_Start0, -module->m_Orient );
 
         Edge->m_End0 = Edge->m_Start0;
         module->Set_Rectangle_Encadrement();
@@ -401,9 +393,9 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 
                 // insert _after_ Edge, which is the same as inserting _before_ Edge->Next()
                 module->m_Drawings.Insert( newedge, Edge->Next() );
-
                 Edge->m_Flags = 0;
-                Edge = newedge;
+
+                Edge = newedge;     // point now new item
 
                 Edge->m_Flags = IS_NEW;
                 Edge->m_Width = ModuleSegmentWidth;
@@ -411,11 +403,9 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
                 Edge->m_End   = Edge->m_Start;
 
                 /* Mise a jour des coord relatives */
-                Edge->m_Start0.x = Edge->m_Start.x - module->m_Pos.x;
-                Edge->m_Start0.y = Edge->m_Start.y - module->m_Pos.y;
+                Edge->m_Start0 = Edge->m_Start - module->m_Pos;
 
-                RotatePoint( (int*) &Edge->m_Start0.x,
-                            (int*) &Edge->m_Start0.y, -module->m_Orient );
+                RotatePoint( &Edge->m_Start0, -module->m_Orient );
 
                 Edge->m_End0 = Edge->m_Start0;
 
@@ -425,7 +415,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
             }
         }
         else
-            DisplayError( this, wxT( "Begin_Edge() error" ) );
+            wxMessageBox( wxT( "Begin_Edge() error" ) );
     }
     return Edge;
 }
@@ -439,16 +429,13 @@ void WinEDA_ModuleEditFrame::End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
 {
     MODULE* Module = GetBoard()->m_Modules;
 
-    /* If last segment length is 0: deletion */
     if( Edge )
     {
-        if( (Edge->m_Start.x == Edge->m_End.x)
-           && (Edge->m_Start.y == Edge->m_End.y) )
-        {
+        Edge->m_Flags = 0;
+        /* If last segment length is 0: remove it */
+        if( Edge->m_Start == Edge->m_End )
             Edge ->DeleteStructure();
-        }
     }
-    Edge->m_Flags = 0;
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
     GetScreen()->SetModify();

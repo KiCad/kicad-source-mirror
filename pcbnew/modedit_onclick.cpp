@@ -31,12 +31,12 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             switch( DrawStruct->Type() )
             {
             case TYPE_TEXTE_MODULE:
-                SaveCopyInUndoList( GetBoard()->m_Modules );
+                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
                 PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, DC );
                 break;
 
             case TYPE_EDGE_MODULE:
-                SaveCopyInUndoList( GetBoard()->m_Modules );
+                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
                 Place_EdgeMod( (EDGE_MODULE*) DrawStruct, DC );
                 break;
 
@@ -118,7 +118,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct = ModeditLocateAndDisplay();
             if( DrawStruct && (DrawStruct->m_Flags == 0) )
             {
-                SaveCopyInUndoList( GetBoard()->m_Modules );
+                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
                 RemoveStruct( DrawStruct );
                 SetCurItem( DrawStruct = NULL );
             }
@@ -126,26 +126,30 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_PLACE_ANCHOR:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
-        Place_Ancre( GetBoard()->m_Modules );
-        GetBoard()->m_Modules->m_Flags  = 0;
+    {
+        MODULE * module = GetBoard()->m_Modules;
+        module->m_Flags  = 0;
+        SaveCopyInUndoList( module, UR_MODEDIT );
+        Place_Ancre( module );      // set the new relatives internal coordinates of items
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Recadre_Trace( TRUE );
-        Place_Module( GetBoard()->m_Modules, DC );
-        RedrawActiveWindow( DC, TRUE );
+        // Replace the module in position 0, to recalculate absolutes coordinates of items
+        module->SetPosition( wxPoint(0,0) );
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         SetCurItem( NULL );
+        DrawPanel->Refresh();
+    }
         break;
 
     case ID_TEXT_COMMENT_BUTT:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         CreateTextModule( GetBoard()->m_Modules, DC );
         break;
 
     case ID_MODEDIT_ADD_PAD:
         if( GetBoard()->m_Modules )
         {
-            SaveCopyInUndoList( GetBoard()->m_Modules );
+            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
             AddPad( GetBoard()->m_Modules, true );
         }
         break;

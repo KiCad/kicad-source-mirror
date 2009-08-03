@@ -821,6 +821,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
         DrawPanel->MouseToCursorSchema();
+        SaveCopyInUndoList( GetCurItem()->GetParent(), UR_CHANGED );
         Import_Pad_Settings( (D_PAD*) GetCurItem(), true );
         break;
 
@@ -835,6 +836,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_PAD:
+        SaveCopyInUndoList( GetCurItem()->GetParent(), UR_CHANGED );
         DeletePad( (D_PAD*) GetCurItem() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();

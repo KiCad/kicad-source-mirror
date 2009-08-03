@@ -152,7 +152,7 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DELETE:     /* Delete */
         ItemsCount = MarkItemsInBloc( Currentmodule, GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( Currentmodule );
+            SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         DeleteMarkedItems( Currentmodule );
         break;
 
@@ -163,7 +163,7 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_ROTATE:
         ItemsCount = MarkItemsInBloc( Currentmodule, GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( Currentmodule );
+            SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         RotateMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -173,7 +173,7 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_INVERT:     /* mirror */
         ItemsCount = MarkItemsInBloc( Currentmodule, GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( Currentmodule );
+            SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         MirrorMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -240,14 +240,14 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( Currentmodule );
+        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         MoveMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.m_MoveVector );
         DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( Currentmodule );
+        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         CopyMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.m_MoveVector );
         break;
 
@@ -258,12 +258,12 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
     case BLOCK_INVERT:      /* Mirror by popup menu, from block move */
-        SaveCopyInUndoList( Currentmodule );
+        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         MirrorMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ROTATE:
-        SaveCopyInUndoList( Currentmodule );
+        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
         RotateMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 

@@ -475,20 +475,20 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     break;
 
     case ID_POPUP_PCB_DELETE_PAD:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         DeletePad( (D_PAD*) GetScreen()->GetCurItem() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
         break;
 
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         DrawPanel->MouseToCursorSchema();
         Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
         break;
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         Global_Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
         DrawPanel->MouseToCursorSchema();
         break;
@@ -526,7 +526,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     break;
 
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         DeleteTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
@@ -586,7 +586,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_EDGE:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         DrawPanel->MouseToCursorSchema();
         RemoveStruct( GetScreen()->GetCurItem() );
         SetCurItem( NULL );
@@ -597,7 +597,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_MODULE_SCALE:
     case ID_MODEDIT_MODULE_SCALEX:
     case ID_MODEDIT_MODULE_SCALEY:
-        SaveCopyInUndoList( GetBoard()->m_Modules );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         redraw = true;
         break;

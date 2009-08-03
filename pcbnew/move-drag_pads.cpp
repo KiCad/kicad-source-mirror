@@ -9,6 +9,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "trigo.h"
+#include "block_commande.h"
 
 #include "drag.h"
 
@@ -310,7 +311,6 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 {
     int        dX, dY;
     TRACK*     Track;
-    DRAG_SEGM* pt_drag;
     MODULE*    Module;
 
     if( Pad == NULL )
@@ -318,13 +318,60 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 
     Module = (MODULE*) Pad->GetParent();
 
+    ITEM_PICKER picker(NULL, UR_CHANGED);
+    PICKED_ITEMS_LIST pickList;
+
+    /* Save  dragged track segments in undo list */
+    for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag; pt_drag = pt_drag->Pnext )
+    {
+        Track = pt_drag->m_Segm;
+        // Set the old state
+        wxPoint t_start = Track->m_Start;
+        wxPoint t_end = Track->m_End;
+        if( pt_drag->m_Pad_Start )
+            Track->m_Start = Pad_OldPos;
+        if( pt_drag->m_Pad_End )
+            Track->m_End = Pad_OldPos;
+
+        picker.m_PickedItem = Track;
+        pickList.PushItem(picker);
+    }
+
+    /* Save old module and old items values */
+    wxPoint pad_curr_position = Pad->m_Pos;
+
+    Pad->m_Pos = Pad_OldPos;
+    if ( g_DragSegmentList == NULL )
+        SaveCopyInUndoList( Module, UR_CHANGED );
+    else
+    {
+        picker.m_PickedItem = Module;
+        pickList.PushItem(picker);
+    }
+
+
+    if ( g_DragSegmentList )
+        SaveCopyInUndoList( pickList, UR_CHANGED );
+
     /* Placement du pad */
+    Pad->m_Pos = pad_curr_position;
+
     Pad->Draw( DrawPanel, DC, GR_XOR );
 
-    /* Save old module */
-    Pad->m_Pos = Pad_OldPos;
-    SaveCopyInUndoList( Module, UR_CHANGED );
-    Pad->m_Pos = GetScreen()->m_Curseur;
+    /* Redraw dragged track segments */
+     for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag; pt_drag = pt_drag->Pnext )
+    {
+        Track = pt_drag->m_Segm;
+        // Set the new state
+        if( pt_drag->m_Pad_Start )
+            Track->m_Start = Pad->m_Pos;
+        if( pt_drag->m_Pad_End )
+            Track->m_End = Pad->m_Pos;
+
+        Track->SetState( EDIT, OFF );
+        if ( DC )
+            Track->Draw( DrawPanel, DC, GR_OR );
+    }
 
     /* Compute local coordinates (i.e refer to Module position and for Module orient = 0)*/
     dX = Pad->m_Pos.x - Pad_OldPos.x;
@@ -342,15 +389,6 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
 
-    /* Tracage des segments dragges */
-    pt_drag = g_DragSegmentList;
-    for( ; pt_drag; pt_drag = pt_drag->Pnext )
-    {
-        Track = pt_drag->m_Segm;
-        Track->SetState( EDIT, OFF );
-        if ( DC )
-            Track->Draw( DrawPanel, DC, GR_OR );
-    }
 
     EraseDragListe();
 
