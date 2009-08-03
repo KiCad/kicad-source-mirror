@@ -98,6 +98,9 @@ MODULE* WinEDA_BasePcbFrame::GetModuleByName()
 void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
 /**********************************************************************/
 {
+    
+    wxPoint Mouse;
+    
     if( module == NULL )
         return;
 
@@ -106,6 +109,11 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     module->m_Flags |= IS_MOVED;
     ModuleInitOrient = module->m_Orient;
     ModuleInitLayer  = module->GetLayer();
+
+    GetScreen()->m_Curseur = module->m_Pos;
+    Mouse.x = wxRound( module->m_Pos.x );
+    Mouse.y = wxRound( module->m_Pos.y );
+    DrawPanel->MouseTo( Mouse );
 
     /* Effacement chevelu general si necessaire */
     if( g_Show_Ratsnest )
@@ -330,6 +338,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
     // redraw the area where the module was
     if( DC )
         DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+        RedrawActiveWindow( DC, TRUE);
     return TRUE;
 }
 
@@ -463,6 +472,9 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRec
     if( !aDoNotRecreateRatsnest )
         Compile_Ratsnest( DC, true );
 
+    if( DC )
+    	RedrawActiveWindow( DC, TRUE);
+
     module->DisplayInfo( this );
 
     DrawPanel->ManageCurseur = NULL;
@@ -539,6 +551,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
             DrawModuleOutlines( DrawPanel, DC, module );
             Dessine_Segments_Dragges( DrawPanel, DC );
         }
+        RedrawActiveWindow( DC, TRUE);
     }
 }
 

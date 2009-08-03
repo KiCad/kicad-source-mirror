@@ -323,7 +323,7 @@ wxString ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit,
         StringValue << aValue;
     else
     {
-        value_to_print = To_User_Unit( (bool) aUnits, aValue, aInternal_Unit );
+        value_to_print = To_User_Unit( (bool) aUnits, (double) aValue, aInternal_Unit );
         StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
                            value_to_print );
     }
@@ -407,33 +407,7 @@ wxArrayString* wxStringSplit( wxString txt, wxChar splitter )
 
 
 /******************************************************************/
-double To_User_Unit( bool is_metric, int val, int internal_unit_value )
-/******************************************************************/
-
-/**
- * Function To_User_Unit
- * Convert in inch or mm the variable "val" (double)given in internal units
- * @return the converted value, in double
- * @param is_metric : true if the result must be returned in mm , false if inches
- * @param val : integer : the given value
- * @param internal_unit_value = internal units per inch
- */
-{
-    double value;
-
-    if( is_metric )
-        value = (double) ( val ) * 25.4 / internal_unit_value;
-    else
-        value = (double) ( val ) / internal_unit_value;
-
-    return value;
-}
-
-
-/******************************************************************/
-double To_User_Unit( bool   is_metric,
-                     double val,
-                     int    internal_unit_value )
+double To_User_Unit( bool is_metric, double val, int internal_unit_value )
 /******************************************************************/
 
 /**

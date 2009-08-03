@@ -65,8 +65,6 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
         {
             GetBoard()->m_FullRatsnest[ii].m_Status |= CH_VISIBLE;
         }
-
-        DrawGeneralRatsnest( DC, 0 );
     }
     else
     {

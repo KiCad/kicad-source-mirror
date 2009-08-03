@@ -113,6 +113,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     {
         g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
         m_Parent->Ratsnest_On_Off( m_DC );
+        m_Parent->RedrawActiveWindow( m_DC, TRUE);
     }
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
@@ -208,6 +209,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         wxClientDC dc( DrawPanel );
         DrawPanel->PrepareGraphicContext( &dc );
         Ratsnest_On_Off( &dc );
+        RedrawActiveWindow( &dc, TRUE);
         }
         break;
 
