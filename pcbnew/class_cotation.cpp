@@ -39,7 +39,7 @@ void COTATION:: SetText( const wxString& NewText )
 
 
 /**********************************/
-wxString COTATION:: GetText( void )
+wxString COTATION::GetText( void )
 /**********************************/
 /* Reutun the dimension text
 */
@@ -47,6 +47,16 @@ wxString COTATION:: GetText( void )
     return m_Text->m_Text;
 }
 
+/**
+ * Function SetLayer
+ * sets the layer this item is on.
+ * @param aLayer The layer number.
+ */
+void  COTATION::SetLayer( int aLayer )
+{
+    m_Layer = aLayer;
+    m_Text->SetLayer( aLayer);
+}
 
 /*************************************/
 void COTATION::Copy( COTATION* source )

@@ -37,6 +37,13 @@ public:
     }
 
 
+    /**
+     * Function SetLayer
+     * sets the layer this item is on.
+     * @param aLayer The layer number.
+     */
+    void  SetLayer( int aLayer );
+
     bool    ReadCotationDescr( FILE* File, int* LineNum );
 
     /**

@@ -161,6 +161,7 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
         CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
 
+    m_Parent->SaveCopyInUndoList(CurrentCotation, UR_CHANGED);
     if( m_Name->GetValue() != wxEmptyString )
     {
         CurrentCotation->SetText( m_Name->GetValue() );
@@ -172,7 +173,6 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
     CurrentCotation->m_Text->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
 
     CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
-    CurrentCotation->m_Text->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
 
     if( m_DC )     // Affichage nouveau texte
     {

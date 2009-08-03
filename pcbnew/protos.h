@@ -11,6 +11,15 @@
 
 class COMMAND;
 
+/** Function SwapData
+ * Used in undo / redo command:
+ *  swap data between Item and a copy
+ *  swapped data is data modified by edition, so NOT ALL values are swapped
+ * @param aItem = the item
+ * @param aImage = a copy of the item
+ */
+void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage );
+
 
 /* install function for DialogNonCopperZonesEditor dialog frame :*/
 bool InstallDialogNonCopperZonesEditor(WinEDA_PcbFrame* aParent, ZONE_CONTAINER* aZone);

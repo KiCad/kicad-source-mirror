@@ -173,8 +173,12 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
         aMessageWindow->AppendText( msg + wxT( "\n" ) );
     }
 
+    // Clear undo and redo lists to avoid inconsistencies between lists
+    aFrame->GetScreen()->ClearUndoRedoList();
+
     aFrame->GetScreen()->SetModify();
-    aFrame->GetBoard()->m_Status_Pcb = 0; State = 0; LineNum = 0; Comment = 0;
+    aFrame->GetBoard()->m_Status_Pcb = 0;
+    State = 0; LineNum = 0; Comment = 0;
     s_NbNewModules = 0;
 
     wxBusyCursor        dummy; // Shows an hourglass while calculating

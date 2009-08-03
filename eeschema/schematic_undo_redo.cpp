@@ -181,7 +181,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 
 
 /***********************************************************************/
-void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItemToCopy,
+void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
                                                 UndoRedoOpType aCommandType,
                                                 const wxPoint& aTransformPoint )
 /***********************************************************************/
@@ -194,6 +194,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItemToCopy,
  *      UR_NEW
  *      UR_DELETED
  *      UR_WIRE_IMAGE
+ *      UR_MOVED
  *
  *  If it is a delete command, items are put on list with the .Flags member set to UR_DELETED.
  *  When it will be really deleted, the EEDrawList and the subhierarchy will be deleted.
@@ -211,15 +212,14 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItemToCopy,
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
     commandToUndo->m_TransformPoint = aTransformPoint;
 
-    ITEM_PICKER        itemWrapper( aItemToCopy, aCommandType );
-    itemWrapper.m_PickedItemType = aItemToCopy->Type();
+    ITEM_PICKER        itemWrapper( aItem, aCommandType );
+    itemWrapper.m_PickedItemType = aItem->Type();
 
     switch( aCommandType )
     {
-    case UR_CHANGED:            /* Create a copy of schematic */
-        CopyOfItem = DuplicateStruct( aItemToCopy );
-        itemWrapper.m_PickedItem = CopyOfItem;
-        itemWrapper.m_Link = aItemToCopy;
+    case UR_CHANGED:            /* Create a copy of item */
+        CopyOfItem = DuplicateStruct( aItem );
+        itemWrapper.m_Link = CopyOfItem;
         if ( CopyOfItem )
             commandToUndo->PushItem( itemWrapper );
         break;
@@ -269,21 +269,20 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM*      ItemToCopy = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM*      item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         UndoRedoOpType command    = aItemsList.GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
         }
-        itemWrapper.m_PickedItem = ItemToCopy;
-        itemWrapper.m_PickedItemType = ItemToCopy->Type();
+        itemWrapper.m_PickedItem = item;
+        itemWrapper.m_PickedItemType = item->Type();
         itemWrapper.m_UndoRedoStatus = command;
         switch( command )
         {
-        case UR_CHANGED:        /* Create a copy of schematic */
-            CopyOfItem = DuplicateStruct( ItemToCopy );
-            itemWrapper.m_PickedItem = CopyOfItem;
-            itemWrapper.m_Link = ItemToCopy;
+        case UR_CHANGED:        /* Create a copy of item */
+            CopyOfItem = DuplicateStruct( item );
+            itemWrapper.m_Link = CopyOfItem;
             if ( CopyOfItem )
                 commandToUndo->PushItem( itemWrapper );
             break;
@@ -291,11 +290,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         case UR_MOVED:
         case UR_MIRRORED_Y:
         case UR_NEW:
-            commandToUndo->PushItem( itemWrapper );
-            break;
-
         case UR_DELETED:
-            ItemToCopy->m_Flags = UR_DELETED;
             commandToUndo->PushItem( itemWrapper );
             break;
 
@@ -338,6 +333,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bo
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
         item = (SCH_ITEM*) itemWrapper.m_PickedItem;
         wxASSERT( item  );
+        item->m_Flags = 0;
         SCH_ITEM*   image = (SCH_ITEM*) itemWrapper.m_Link;
         switch( itemWrapper.m_UndoRedoStatus )
         {
@@ -348,14 +344,12 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bo
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
             GetScreen()->RemoveFromDrawList( item );
-            item->m_Flags = UR_DELETED;
             break;
 
         case UR_DELETED:    /* deleted items are put in EEdrawList, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
             item->SetNext( GetScreen()->EEDrawList );
             GetScreen()->EEDrawList = item;
-            item->m_Flags = 0;
             break;
 
         case UR_MOVED:
@@ -500,7 +494,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
             {
             case UR_WIRE_IMAGE:
                 while( item )
-                {
+                {   // Delete old copy of wires
                     EDA_BaseStruct* nextitem = item->Next();
                     delete          item;
                     item = nextitem;
@@ -515,9 +509,23 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
             case UR_NEW:        // Do nothing, items are in use
                 break;
 
-            default:
-                delete item;
+            case UR_DELETED:
+                delete item;    // Delete the picked item, because it was deleted from schematic
                 break;
+
+            case UR_CHANGED:
+                delete wrapper.m_Link;  // Delete the copy of item (the item is itself in use)
+                break;
+
+            default:
+            {
+                wxString msg;
+                msg.Printf(
+                    wxT("ClearUndoORRedoList() error: unexpected undo/redo type %d"),
+                    wrapper.m_UndoRedoStatus );
+                wxMessageBox( msg );
+                break;
+            }
             }
         }
 

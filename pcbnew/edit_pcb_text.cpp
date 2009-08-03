@@ -10,13 +10,16 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
+#include "protos.h"
+
 /* Local functions */
 static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC );
 
-/* Local variables : */
-static wxPoint old_pos; // initial position of the text when moving it
-
+/* variables : */
+static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL );   /* copy of the edited text
+                                                        *  (used to undo/redo/abort a complex edition command
+                                                        */
 
 /*************************************************************/
 void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC )
@@ -27,21 +30,27 @@ void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC )
  *  Si un texte est selectionne, ses coord initiales sont regenerees
  */
 {
-    TEXTE_PCB* TextePcb;
-
-    TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
-
-    if( TextePcb )
-    {
-        TextePcb->Draw( Panel, DC, GR_XOR );
-        TextePcb->m_Pos = old_pos;
-        TextePcb->Draw( Panel, DC, GR_OR );
-        TextePcb->m_Flags = 0;
-    }
-
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ((WinEDA_PcbFrame*)Panel->m_Parent)->SetCurItem( NULL );
+    ( (WinEDA_PcbFrame*) Panel->m_Parent )->SetCurItem( NULL );
+
+    TEXTE_PCB* TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
+
+    if( TextePcb == NULL )  // Should not occur
+        return;
+
+    TextePcb->Draw( Panel, DC, GR_XOR );
+
+    if( (TextePcb->m_Flags & IS_NEW) )  // If new: remove it
+    {
+        TextePcb->DeleteStructure();
+        return;
+    }
+
+
+    SwapData(TextePcb, &s_TextCopy);
+    TextePcb->Draw( Panel, DC, GR_OR );
+    TextePcb->m_Flags = 0;
 }
 
 
@@ -53,14 +62,35 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
  *  Place the current text being moving
  */
 {
+    DrawPanel->ManageCurseur = NULL;
+    DrawPanel->ForceCloseManageCurseur = NULL;
+    SetCurItem( NULL );
+
     if( TextePcb == NULL )
         return;
 
     TextePcb->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
-    SetCurItem( NULL );
     GetScreen()->SetModify();
+
+    if( (TextePcb->m_Flags & IS_NEW) )  // If new: prepare undo command
+    {
+        SaveCopyInUndoList( TextePcb, UR_NEW );
+        TextePcb->m_Flags = 0;
+        return;
+    }
+
+    if( TextePcb->m_Flags == IS_MOVED ) // If moved only
+        SaveCopyInUndoList( TextePcb, UR_MOVED, TextePcb->m_Pos - s_TextCopy.m_Pos );
+    else
+    {
+        // Restore initial params
+        SwapData( TextePcb, &s_TextCopy);
+        // Prepare undo command
+        SaveCopyInUndoList( TextePcb, UR_CHANGED );
+        SwapData( TextePcb, &s_TextCopy);
+        // Restore current params
+    }
+
     TextePcb->m_Flags = 0;
 }
 
@@ -74,7 +104,11 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
     if( TextePcb == NULL )
         return;
-    old_pos = TextePcb->m_Pos;
+
+    // if it is an existing item: prepare a copy to undo/abort command
+    if( (TextePcb->m_Flags & IS_NEW) == 0 )
+        s_TextCopy.Copy( TextePcb );
+
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
     TextePcb->m_Flags |= IS_MOVED;
     TextePcb->DisplayInfo( this );
@@ -116,8 +150,8 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
 
-    SaveCopyInUndoList(TextePcb, UR_DELETED);
-    TextePcb ->UnLink();
+    SaveCopyInUndoList( TextePcb, UR_DELETED );
+    TextePcb->UnLink();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
@@ -136,8 +170,8 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     GetBoard()->Add( TextePcb );
 
     /* Mise a jour des caracteristiques */
-    TextePcb->m_Flags  = IS_NEW;
-    TextePcb->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+    TextePcb->m_Flags = IS_NEW;
+    TextePcb->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     TextePcb->m_Mirror = false;
     if( TextePcb->GetLayer() == COPPER_LAYER_N )
         TextePcb->m_Mirror = true;
@@ -149,7 +183,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     InstallTextPCBOptionsFrame( TextePcb, DC );
     if( TextePcb->m_Text.IsEmpty() )
     {
-        TextePcb ->DeleteStructure();
+        TextePcb->DeleteStructure();
         TextePcb = NULL;
     }
     else
@@ -172,16 +206,16 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     /* effacement du texte : */
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
 
-
     TextePcb->m_Orient += angle;
-    if( TextePcb->m_Orient >= 3600 )
-        TextePcb->m_Orient -= 3600;
-    if( TextePcb->m_Orient < 0 )
-        TextePcb->m_Orient += 3600;
+    NORMALIZE_ANGLE( TextePcb->m_Orient );
 
     /* Redessin du Texte */
     TextePcb->Draw( DrawPanel, DC, drawmode );
     TextePcb->DisplayInfo( this );
+    if( TextePcb->m_Flags == 0 )    // i.e. not edited, or moved
+        SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->m_Pos );
+    else                            // set flag edit, to show it was a complex command
+        TextePcb->m_Flags |= IN_EDIT;
 
     GetScreen()->SetModify();
 }

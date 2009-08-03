@@ -104,12 +104,16 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 
 
 /**************************************************************/
-void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
+void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 /***************************************************************/
 
-/* Used if undo / redo command:
- *  swap data between Item and its copy, pointed by its .m_Image member
- * swapped data is data modified by edition, so not all values are swapped
+/** Function SwapData
+ * Used in undo / redo command:
+ *  swap data between Item and a copy
+ *  swapped data is data modified by edition, mainly sizes and texts
+ * so ONLY FEW values are swapped
+ * @param aItem = the item
+ * @param aImage = a copy of the item
  */
 {
     if( aItem == NULL || aImage == NULL )
@@ -118,8 +122,64 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         return;
     }
 
+    int layer, layerimg;
+    layer = aItem->GetLayer();
+    layerimg = aImage->GetLayer();
+    aItem->SetLayer(layerimg);
+    aImage->SetLayer(layer);
+
     switch( aItem->Type() )
     {
+    case TYPE_MODULE:
+        wxMessageBox( wxT( "SwapData(): TYPE_MODULE not handled" ) );
+        break;
+
+    case TYPE_ZONE_CONTAINER:
+        wxMessageBox( wxT( "SwapData(): TYPE_ZONE_CONTAINER not handled" ) );
+        break;
+
+    case TYPE_DRAWSEGMENT:
+        EXCHG( ((TRACK*)aItem)->m_Start, ((TRACK*)aImage)->m_Start);
+        EXCHG( ((TRACK*)aItem)->m_End, ((TRACK*)aImage)->m_End);
+        EXCHG( ((TRACK*)aItem)->m_Width,  ((TRACK*)aImage)->m_Width);
+        EXCHG( ((TRACK*)aItem)->m_Shape,  ((TRACK*)aImage)->m_Shape);
+        break;
+
+    case TYPE_TRACK:
+    case TYPE_VIA:
+    case TYPE_ZONE:
+        EXCHG( ((TRACK*)aItem)->m_Start, ((TRACK*)aImage)->m_Start);
+        EXCHG( ((TRACK*)aItem)->m_End, ((TRACK*)aImage)->m_End);
+        EXCHG( ((TRACK*)aItem)->m_Width,  ((TRACK*)aImage)->m_Width);
+        EXCHG( ((TRACK*)aItem)->m_Shape,  ((TRACK*)aImage)->m_Shape);
+    break;
+
+    case TYPE_TEXTE:
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Mirror, ((TEXTE_PCB*)aImage)->m_Mirror);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Size, ((TEXTE_PCB*)aImage)->m_Size);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Pos, ((TEXTE_PCB*)aImage)->m_Pos);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Width, ((TEXTE_PCB*)aImage)->m_Width);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Orient, ((TEXTE_PCB*)aImage)->m_Orient);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Text, ((TEXTE_PCB*)aImage)->m_Text);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Italic, ((TEXTE_PCB*)aImage)->m_Italic);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_Bold, ((TEXTE_PCB*)aImage)->m_Bold);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_HJustify, ((TEXTE_PCB*)aImage)->m_HJustify);
+        EXCHG( ((TEXTE_PCB*)aItem)->m_VJustify, ((TEXTE_PCB*)aImage)->m_VJustify);
+       break;
+
+    case TYPE_MIRE:
+        EXCHG(((MIREPCB*)aItem)->m_Pos,((MIREPCB*)aImage)->m_Pos);
+        EXCHG(((MIREPCB*)aItem)->m_Width, ((MIREPCB*)aImage)->m_Width);
+        EXCHG(((MIREPCB*)aItem)->m_Size, ((MIREPCB*)aImage)->m_Size);
+        EXCHG(((MIREPCB*)aItem)->m_Shape, ((MIREPCB*)aImage)->m_Shape);
+    break;
+
+    case TYPE_COTATION:
+        EXCHG(((COTATION*)aItem)->m_Text->m_Size, ((COTATION*)aImage)->m_Text->m_Size);
+        EXCHG(((COTATION*)aItem)->m_Text->m_Width, ((COTATION*)aImage)->m_Text->m_Width);
+        EXCHG(((COTATION*)aItem)->m_Text->m_Mirror, ((COTATION*)aImage)->m_Text->m_Mirror);
+        break;
+
     default:
         wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
         break;
@@ -223,7 +283,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 
 
 /***********************************************************************/
-void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItemToCopy,
+void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
                                           UndoRedoOpType aCommandType,
                                           const wxPoint& aTransformPoint )
 /***********************************************************************/
@@ -250,15 +310,14 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItemToCopy,
 
     commandToUndo->m_TransformPoint = aTransformPoint;
 
-    ITEM_PICKER itemWrapper( aItemToCopy, aCommandType );
-    itemWrapper.m_PickedItemType = aItemToCopy->Type();
+    ITEM_PICKER itemWrapper( aItem, aCommandType );
+    itemWrapper.m_PickedItemType = aItem->Type();
 
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of schematic */
-        CopyOfItem = NULL;//DuplicateStruct( aItemToCopy );
-        itemWrapper.m_PickedItem = CopyOfItem;
-        itemWrapper.m_Link = aItemToCopy;
+        CopyOfItem = DuplicateStruct( aItem );
+        itemWrapper.m_Link = CopyOfItem;
         if( CopyOfItem )
             commandToUndo->PushItem( itemWrapper );
         break;
@@ -324,8 +383,8 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         {
         case UR_CHANGED:        /* Create a copy of schematic */
             CopyOfItem = DuplicateStruct( item );
-            itemWrapper.m_PickedItem = CopyOfItem;
-            itemWrapper.m_Link = item;
+            itemWrapper.m_PickedItem = item;
+            itemWrapper.m_Link = CopyOfItem;
             if( CopyOfItem )
                 commandToUndo->PushItem( itemWrapper );
             break;
@@ -371,6 +430,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
 {
     BOARD_ITEM* item;
     bool        not_found = false;
+    bool        reBuild_ratsnest = false;
 
     for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
     {
@@ -388,25 +448,58 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
                 continue;
             }
         }
+        item->m_Flags = 0;
+        // see if one must rebuild ratsnets and pointers lists
+        switch( item->Type() )
+        {
+            case TYPE_MODULE:
+            case TYPE_ZONE_CONTAINER:
+            case TYPE_TRACK:
+            case TYPE_VIA:
+                reBuild_ratsnest = true;
+                break;
+            default:
+                break;
+        }
+
         switch( aList->GetPickedItemStatus(ii) )
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink(ii);
-            SwapData( item, image );
+            // Note modules and zones containers have a lot of data
+            // so items and thier copy are swapped, not just edited data
+            // The main drawback is pointers on these items must be rebuilt
+            // but often, this is needed by connectivity change,
+            // so this is not really an important drawback in this function
+            // Could change later
+            switch( item->Type() )
+            {
+                case TYPE_MODULE:
+                case TYPE_ZONE_CONTAINER:
+                    // Swap the item and its copy
+                    GetBoard()->Remove(item);
+                    GetBoard()->Add(image);
+                    aList->SetPickedItem(image, ii);
+                    aList->SetPickedItemLink(item, ii);
+                    break;
+
+                default:
+                    // For other items: swap editable data only
+                    SwapData( item, image );
+                    break;
+            }
         }
             break;
 
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
             GetBoard()->Remove( item );
-            item->m_Flags = UR_DELETED;
             break;
 
         case UR_DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
             GetBoard()->Add( item );
-            item->m_Flags = 0;
             break;
 
         case UR_MOVED:
@@ -436,7 +529,9 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
     if( not_found )
         wxMessageBox( wxT( "Incomplete undo/redo command: item not found" ) );
 
-    Compile_Ratsnest( NULL, true );
+    // Rebuild pointers and rastnest
+    if( reBuild_ratsnest )
+        Compile_Ratsnest( NULL, true );
 }
 
 
@@ -527,8 +622,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         while( 1 )
         {
             ITEM_PICKER     wrapper = curr_cmd->PopItem();
-            EDA_BaseStruct* item    = wrapper.m_PickedItem;
-            if( item == NULL ) // No more item in list.
+            if( wrapper.m_PickedItem == NULL ) // No more item in list.
                 break;
             switch( wrapper.m_UndoRedoStatus )
             {
@@ -545,8 +639,12 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
             case UR_NEW:        // Do nothing, items are in use, the picker is not owner of items
                 break;
 
-            default:
-                delete item;    //  the picker is owner of this item
+            case UR_CHANGED:
+                delete wrapper.m_Link;      //  the picker is owner of this item
+                break;
+
+             default:
+                delete wrapper.m_PickedItem;    //  the picker is owner of this item
                 break;
             }
         }

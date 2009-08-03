@@ -76,6 +76,9 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->MsgPanel->EraseMsgBox();
     frame->GetBoard()->GetNumSegmTrack();    // update the count
 
+    // Clear undo and redo lists to avoid inconsistencies between lists
+    frame->GetScreen()->ClearUndoRedoList();
+
     /* Rebuild the pad infos (pad list and netcodes) to ensure an up to date info */
     frame->GetBoard()->m_Status_Pcb = 0;
     frame->GetBoard()->m_NetInfo->BuildListOfNets();
