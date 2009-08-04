@@ -21,7 +21,6 @@
 #include "bitmaps.h"
 
 #include "3d_viewer.h"
-#include "3d_struct.h"
 #include "trackball.h"
 
 /**************************************************************************/

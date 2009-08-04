@@ -184,7 +184,7 @@ if(APPLE)
     set_target_properties(pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
 
 install(TARGETS pcbnew
         DESTINATION ${KICAD_BIN}

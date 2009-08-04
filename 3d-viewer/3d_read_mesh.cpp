@@ -15,7 +15,6 @@
 #include "kicad_string.h"
 #include "appl_wxstruct.h"
 
-#include "3d_struct.h"
 #include "3d_viewer.h"
 
 

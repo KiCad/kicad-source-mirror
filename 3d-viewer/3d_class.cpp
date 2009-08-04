@@ -11,7 +11,6 @@
 
 #include "fctsys.h"
 
-#include "3d_struct.h"
 #include "3d_viewer.h"
 
 

@@ -13,8 +13,6 @@
 #include "3d_viewer.h"
 #include "trackball.h"
 
-#include "3d_struct.h"
-
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
