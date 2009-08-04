@@ -313,6 +313,9 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
  *
  */
 {
+    if( aItem == NULL )     // Nothing to save
+        return;
+
     BOARD_ITEM*        CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 

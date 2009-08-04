@@ -49,6 +49,17 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
 #else
     SetCurrent( );
 #endif
+
+    // Set the OpenGL viewport according to the client size of this canvas.
+    // This is done here rather than in a wxSizeEvent handler because our
+    // OpenGL rendering context (and thus viewport setting) is used with
+    // multiple canvases: If we updated the viewport in the wxSizeEvent
+    // handler, changing the size of one canvas causes a viewport setting that
+    // is wrong when next another canvas is repainted.
+    const wxSize ClientSize = GetClientSize();
+    // *MUST* be called after  SetCurrent( ):
+    glViewport( 0, 0, ClientSize.x, ClientSize.y );
+
     InitGL();
 
     glMatrixMode( GL_MODELVIEW );    /* position viewer */

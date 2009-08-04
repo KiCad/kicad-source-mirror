@@ -56,14 +56,14 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                                 UndoRedoOpType aTypeCommand,
                                                 const wxPoint& aTransformPoint )
 {
-    // Currently Unused in modedit
+    // Currently unused in modedit, because the module itself is saved for each change
     wxMessageBox( wxT( "SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList..) not yet in use" ) );
 }
 
 
-/*********************************************************/
+/********************************************************************************/
 void WinEDA_ModuleEditFrame::GetComponentFromRedoList( wxCommandEvent& event )
-/*********************************************************/
+/********************************************************************************/
 
 /* Redo the last edition:
  *  - Place the current edited library component in undo list
@@ -73,18 +73,24 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList( wxCommandEvent& event )
     if( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
+    // Save current module state in undo list
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER        wrapper( GetBoard()->m_Modules.PopFront(), UR_MODEDIT );
+    MODULE * module = GetBoard()->m_Modules.PopFront();
+    ITEM_PICKER        wrapper( module, UR_MODEDIT );
     lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToUndoList( lastcmd );
 
+    // Retrieve last module state from undo list
     lastcmd = GetScreen()->PopCommandFromRedoList();
-
     wrapper = lastcmd->PopItem();
+    module = (MODULE *)wrapper.m_PickedItem;
+    delete lastcmd;
 
-    GetBoard()->Add( (MODULE*) wrapper.m_PickedItem );
+    if( module )
+        GetBoard()->Add( module );
 
-    SetCurItem( NULL );;
+    SetCurItem( NULL );
+
     GetScreen()->SetModify();
     ReCreateHToolbar();
     SetToolbars();
@@ -104,21 +110,26 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList( wxCommandEvent& event )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
+    // Save current module state in redo list
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER        wrapper( GetBoard()->m_Modules.PopFront(), UR_MODEDIT );
+    MODULE * module = GetBoard()->m_Modules.PopFront();
+    ITEM_PICKER        wrapper( module, UR_MODEDIT );
     lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToRedoList( lastcmd );
 
+    // Retrieve last module state from undo list
     lastcmd = GetScreen()->PopCommandFromUndoList();
-
     wrapper = lastcmd->PopItem();
+    module = (MODULE *)wrapper.m_PickedItem;
+    delete lastcmd;
 
-    if( wrapper.m_PickedItem )
-        GetBoard()->Add( (MODULE*) wrapper.m_PickedItem, ADD_APPEND );
+    if( module )
+        GetBoard()->Add( module, ADD_APPEND );
 
+
+    SetCurItem( NULL );;
 
     GetScreen()->SetModify();
-    SetCurItem( NULL );;
     ReCreateHToolbar();
     SetToolbars();
     DrawPanel->Refresh();

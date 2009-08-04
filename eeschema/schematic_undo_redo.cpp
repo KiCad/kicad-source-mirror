@@ -208,12 +208,22 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
  *  saved in Undo List (for Undo or Redo commands, saved wires will be exchanged with current wire list
  */
 {
+    /* Does not save a null item.
+     * but if aCommandType == UR_WIRE_IMAGE, we must save null item.
+     * It happens for the first wire entered in schematic:
+     * To undo this first command, the previous state is a NULL item,
+     * and we accept this
+     */
+    if( aItem == NULL && (aCommandType != UR_WIRE_IMAGE) )     // Nothing to save
+        return;
+
     SCH_ITEM*          CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     ITEM_PICKER        itemWrapper( aItem, aCommandType );
-    itemWrapper.m_PickedItemType = aItem->Type();
+    if( aItem )
+        itemWrapper.m_PickedItemType = aItem->Type();
 
     switch( aCommandType )
     {
@@ -270,6 +280,8 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM*      item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        if( item == NULL )
+            continue;
         UndoRedoOpType command    = aItemsList.GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
@@ -332,8 +344,8 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bo
     {
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
         item = (SCH_ITEM*) itemWrapper.m_PickedItem;
-        wxASSERT( item  );
-        item->m_Flags = 0;
+        if ( item )
+            item->m_Flags = 0;
         SCH_ITEM*   image = (SCH_ITEM*) itemWrapper.m_Link;
         switch( itemWrapper.m_UndoRedoStatus )
         {

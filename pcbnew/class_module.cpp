@@ -39,12 +39,11 @@ MODULE::MODULE( BOARD* parent ) :
     m_LastEdit_Time = time( NULL );
 
     m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
-//    m_Reference->SetBack( this );
 
     m_Value = new TEXTE_MODULE( this, TEXT_is_VALUE );
-//    m_Value->SetBack( this );
 
-    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );   // Reserve one void 3D entry
+    // Reserve one void 3D entry, to avoid problems with void list
+    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );
 }
 
 
@@ -139,7 +138,9 @@ void MODULE::Copy( MODULE* aModule )
     }
 
    /* Copy auxiliary data: 3D_Drawings info */
-     m_3D_Drawings.DeleteAll();
+    m_3D_Drawings.DeleteAll();
+    // Ensure there is one (or more) item in m_3D_Drawings
+    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );   // push a void item
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
         if ( item->m_Shape3DName.IsEmpty() )            // do not copy empty shapes.
@@ -861,8 +862,11 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     Affiche_1_Parametre( frame, pos, _( "Module" ), m_LibRef, BLUE );
 
     pos += 9;
-    Affiche_1_Parametre( frame, pos, _( "3D-Shape" ),
-        m_3D_Drawings->m_Shape3DName, RED );
+    if(  m_3D_Drawings != NULL )
+        msg = m_3D_Drawings->m_Shape3DName;
+    else
+        msg = _("No 3D shape");
+    Affiche_1_Parametre( frame, pos, _( "3D-Shape" ), msg, RED );
 
     pos += 14;
     wxString doc     = _( "Doc:  " ) + m_Doc;

@@ -40,8 +40,9 @@ EDGE_MODULE::~EDGE_MODULE()
 
 
 /********************************************/
-void EDGE_MODULE:: Copy( EDGE_MODULE* source )       // copy structure
+void EDGE_MODULE::Copy( EDGE_MODULE* source )
 /********************************************/
+// copy structure
 {
     if( source == NULL )
         return;

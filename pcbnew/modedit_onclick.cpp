@@ -113,15 +113,17 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_DELETE_ITEM_BUTT:
-        if( !DrawStruct || (DrawStruct->m_Flags == 0) )
+        if( DrawStruct && (DrawStruct->m_Flags != 0) )  // Item in edit, cannot delete it
+            break;
+        DrawStruct = ModeditLocateAndDisplay();
+        if( DrawStruct == NULL || (DrawStruct->m_Flags != 0) )
+            break;
+        if( DrawStruct->Type() != TYPE_MODULE) //GetBoard()->m_Modules )     // Cannot delete the module itself
         {
-            DrawStruct = ModeditLocateAndDisplay();
-            if( DrawStruct && (DrawStruct->m_Flags == 0) )
-            {
-                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-                RemoveStruct( DrawStruct );
-                SetCurItem( DrawStruct = NULL );
-            }
+            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+            RemoveStruct( DrawStruct );
+            DrawStruct = NULL;
+            SetCurItem( NULL );
         }
         break;
 

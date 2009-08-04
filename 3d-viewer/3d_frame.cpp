@@ -73,15 +73,11 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
     ReCreateMenuBar();
     ReCreateHToolbar();
 
-//	ReCreateAuxiliaryToolbar();
+    //	ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
 
     // Make a Pcb3D_GLCanvas
-
     m_Canvas = new Pcb3D_GLCanvas( this );
-
-    /* init OpenGL once */
-    m_Canvas->InitGL();
 }
 
 
@@ -204,8 +200,8 @@ void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
         return;
     }
 
-    m_Canvas->DisplayStatus();
     m_Canvas->Refresh( FALSE );
+    m_Canvas->DisplayStatus();
 }
 
 
@@ -337,8 +333,8 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
         return;
     }
 
-    m_Canvas->DisplayStatus();
     m_Canvas->Refresh( true );
+    m_Canvas->DisplayStatus();
 }
 
 
@@ -348,9 +344,9 @@ void WinEDA3D_DrawFrame::NewDisplay()
 {
     m_Canvas->ClearLists();
     m_Canvas->CreateDrawGL_List();
-    m_Canvas->InitGL();
-    m_Canvas->DisplayStatus();
+//    m_Canvas->InitGL();
     m_Canvas->Refresh( true );
+    m_Canvas->DisplayStatus();
 }
 
 

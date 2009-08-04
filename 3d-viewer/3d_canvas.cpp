@@ -491,17 +491,6 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
 /*************************************************/
 {
     wxPaintDC dc( this );
-
-    // Set the OpenGL viewport according to the client size of this canvas.
-    // This is done here rather than in a wxSizeEvent handler because our
-    // OpenGL rendering context (and thus viewport setting) is used with
-    // multiple canvases: If we updated the viewport in the wxSizeEvent
-    // handler, changing the size of one canvas causes a viewport setting that
-    // is wrong when next another canvas is repainted.
-    const wxSize ClientSize = GetClientSize();
-
-    glViewport( 0, 0, ClientSize.x, ClientSize.y );
-
     Redraw();
     event.Skip();
 }
@@ -529,6 +518,24 @@ void Pcb3D_GLCanvas::InitGL()
         m_init = TRUE;
         g_Parm_3D_Visu.m_Zoom = 1.0;
         ZBottom = 1.0; ZTop = 10.0;
+
+        glDisable( GL_CULL_FACE );      // show back faces
+
+        glEnable( GL_DEPTH_TEST );      // Enable z-buferring
+
+        glEnable( GL_LINE_SMOOTH );
+        glEnable( GL_COLOR_MATERIAL );
+        glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
+
+        /* speedups */
+        glEnable( GL_DITHER );
+        glShadeModel( GL_SMOOTH );
+        glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST );
+        glHint( GL_POLYGON_SMOOTH_HINT, GL_FASTEST );
+
+        /* blend */
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     }
 
     /* set viewing projection */
@@ -558,23 +565,6 @@ void Pcb3D_GLCanvas::InitGL()
     SetLights();
 
 
-    glDisable( GL_CULL_FACE );      // show back faces
-
-    glEnable( GL_DEPTH_TEST );      // Enable z-buferring
-
-    glEnable( GL_LINE_SMOOTH );
-    glEnable( GL_COLOR_MATERIAL );
-    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-
-    /* speedups */
-    glEnable( GL_DITHER );
-    glShadeModel( GL_SMOOTH );
-    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST );
-    glHint( GL_POLYGON_SMOOTH_HINT, GL_FASTEST );
-
-    /* blend */
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 }
 
 

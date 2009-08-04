@@ -27,7 +27,6 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 
     if( GetBoard()->m_Modules == NULL )
         return NULL;
-
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
     // Assign to scanList the proper item types desired based on tool type

@@ -108,14 +108,17 @@ void WinEDA_ModulePropertiesFrame::CreateControls()
     /* creation des autres formes 3D */
     Panel3D_Ctrl*    panel3D = m_Panel3D, * nextpanel3D;
     S3D_MASTER* draw3D  = m_CurrentModule->m_3D_Drawings;
-    draw3D = (S3D_MASTER*) draw3D->Next();
-    for( ; draw3D != NULL; draw3D = (S3D_MASTER*) draw3D->Next() )
+    if( draw3D )
     {
-        nextpanel3D = new Panel3D_Ctrl( this, m_NoteBook, -1, draw3D );
-        m_NoteBook->AddPage( nextpanel3D, _( "3D settings" ), FALSE );
-        panel3D->m_Pnext     = nextpanel3D;
-        nextpanel3D->m_Pback = panel3D;
-        panel3D = nextpanel3D;
+        draw3D = (S3D_MASTER*) draw3D->Next();
+        for( ; draw3D != NULL; draw3D = (S3D_MASTER*) draw3D->Next() )
+        {
+            nextpanel3D = new Panel3D_Ctrl( this, m_NoteBook, -1, draw3D );
+            m_NoteBook->AddPage( nextpanel3D, _( "3D settings" ), FALSE );
+            panel3D->m_Pnext     = nextpanel3D;
+            nextpanel3D->m_Pback = panel3D;
+            panel3D = nextpanel3D;
+        }
     }
 
     /* Creation des boutons de commande */
@@ -596,37 +599,41 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
     if( m_Keyword )
         m_CurrentModule->m_KeyWord = m_Keyword->GetValue();
 
-    /* Mise a jour des parametres 3D */
+    /* Update 3D shape list */
     Panel3D_Ctrl*    panel3D = m_Panel3D;
     S3D_MASTER* draw3D  = m_CurrentModule->m_3D_Drawings;
-    S3D_MASTER* nextdraw3D;
     for( ; panel3D != NULL; panel3D = panel3D->m_Pnext )
     {
-        draw3D->m_Shape3DName = panel3D->m_3D_ShapeName->GetValue();
+        wxString name3D = panel3D->m_3D_ShapeName->GetValue();;
+        if( name3D.IsEmpty() )
+            continue;
+        if( draw3D == NULL )
+        {
+            draw3D = new S3D_MASTER( draw3D );
+            m_CurrentModule->m_3D_Drawings.Append( draw3D );
+        }
+
+        draw3D->m_Shape3DName = name3D;
         draw3D->m_MatScale    = panel3D->m_3D_Scale->GetValue();
         draw3D->m_MatRotation = panel3D->m_3D_Rotation->GetValue();
         draw3D->m_MatPosition = panel3D->m_3D_Offset->GetValue();
 
-        if( ( draw3D->m_Shape3DName.IsEmpty() )
-           && (draw3D != m_CurrentModule->m_3D_Drawings) )
-            continue;
-
-        if( (draw3D->Next() == NULL) && panel3D->m_Pnext )
-        {
-            nextdraw3D = new S3D_MASTER( draw3D );
-
-            // insert after draw3D, therefore pass ->Next() to insert before the next.
-            m_CurrentModule->m_3D_Drawings.Insert( nextdraw3D, draw3D->Next() );
-        }
         draw3D = (S3D_MASTER*) draw3D->Next();
     }
 
+    // Remove old extra 3D shapes
+    S3D_MASTER* nextdraw3D;
     for( ; draw3D != NULL; draw3D = nextdraw3D )
     {
         nextdraw3D = (S3D_MASTER*) draw3D->Next();
-
         delete m_CurrentModule->m_3D_Drawings.Remove( draw3D );
     }
+
+    // Fill shape list with one void entry, if no entry
+    if( m_CurrentModule->m_3D_Drawings == NULL )
+        m_CurrentModule->m_3D_Drawings.PushBack( new S3D_MASTER( m_CurrentModule ) );
+
+
 
     m_CurrentModule->Set_Rectangle_Encadrement();
 
