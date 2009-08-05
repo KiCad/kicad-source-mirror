@@ -99,8 +99,6 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
 /**********************************************************************/
 {
     
-    wxPoint Mouse;
-    
     if( module == NULL )
         return;
 
@@ -111,9 +109,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     ModuleInitLayer  = module->GetLayer();
 
     GetScreen()->m_Curseur = module->m_Pos;
-    Mouse.x = wxRound( module->m_Pos.x );
-    Mouse.y = wxRound( module->m_Pos.y );
-    DrawPanel->MouseTo( Mouse );
+    DrawPanel->MouseToCursorSchema();
 
     /* Effacement chevelu general si necessaire */
     if( g_Show_Ratsnest )
