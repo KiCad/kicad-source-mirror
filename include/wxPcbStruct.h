@@ -407,11 +407,10 @@ public:
     /** Function Delete_Zone_Fill
      * Remove the zone filling which include the segment aZone, or the zone which have the given time stamp.
      *  A zone is a group of segments which have the same TimeStamp
-     * @param DC = current Device Context (can be NULL)
      * @param aZone = zone segment within the zone to delete. Can be NULL
      * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
      */
-    void             Delete_Zone_Fill( wxDC* DC, SEGZONE* Track, long aTimestamp = 0 );
+    void             Delete_Zone_Fill( SEGZONE* Track, long aTimestamp = 0 );
 
 
     /** Function Delete_LastCreatedCorner

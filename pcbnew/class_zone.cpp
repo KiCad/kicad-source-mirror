@@ -25,11 +25,12 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     BOARD_ITEM( parent, TYPE_ZONE_CONTAINER )
 
 {
-    m_NetCode = -1;                                                             // Net number for fast comparisons
+    m_NetCode = -1;                           // Net number for fast comparisons
     m_CornerSelection = -1;
-    utility  = 0;                                                               // flags used in polygon calculations
-    utility2 = 0;                                                               // flags used in polygon calculations
-    m_Poly   = new CPolyLine();                                                 // Outlines
+    m_IsFilled = false;                       // fill status : true when the zone is filled
+    utility  = 0;                             // flags used in polygon calculations
+    utility2 = 0;                             // flags used in polygon calculations
+    m_Poly   = new CPolyLine();               // Outlines
     g_Zone_Default_Setting.ExportSetting(*this);
 }
 
@@ -165,7 +166,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
         return false;
 
     ret = fprintf( aFile, "ZOptions %d %d %c %d %d\n", m_FillMode, m_ArcToSegmentsCount,
-        m_Unused ? 'S' : 'F', m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
+        m_IsFilled ? 'S' : 'F', m_ThermalReliefGapValue, m_ThermalReliefCopperBridgeValue );
     if( ret < 3 )
         return false;
 
@@ -184,17 +185,32 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( m_FilledPolysList.size() )
     {
         fprintf( aFile, "$POLYSCORNERS\n" );
-        for( item_pos = 0; item_pos < m_FilledPolysList.size(); item_pos++ )
+        for( unsigned ii = 0; ii < m_FilledPolysList.size(); ii++ )
         {
-            const CPolyPt* corner = &m_FilledPolysList[item_pos];
+            const CPolyPt* corner = &m_FilledPolysList[ii];
             ret = fprintf( aFile, "%d %d %d %d\n", corner->x, corner->y, corner->end_contour,  corner->utility );
-            if( ret < 3 )
+            if( ret < 4 )
                 return false;
         }
 
         fprintf( aFile, "$endPOLYSCORNERS\n" );
     }
 
+    // Save the filling segments list
+    if( m_FillSegmList.size() )
+    {
+        fprintf( aFile, "$FILLSEGMENTS\n" );
+        for( unsigned ii = 0; ii < m_FillSegmList.size(); ii++ )
+        {
+            ret = fprintf( aFile, "%d %d %d %d\n",
+                m_FillSegmList[ii].m_Start.x, m_FillSegmList[ii].m_Start.y,
+                m_FillSegmList[ii].m_End.x, m_FillSegmList[ii].m_End.y );
+            if( ret < 4 )
+                return false;
+        }
+
+        fprintf( aFile, "$endFILLSEGMENTS\n" );
+    }
     fprintf( aFile, "$endCZONE_OUTLINE\n" );
 
     return true;
@@ -308,9 +324,9 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         {
             int  fillmode = 1;
             int  arcsegmentcount = 16;
-            char drawopt = 'F';
+            char fillstate = 'F';
             text = Line + 8;
-            ret  = sscanf( text, "%d %d %c %d %d", &fillmode, &arcsegmentcount, &drawopt,
+            ret  = sscanf( text, "%d %d %c %d %d", &fillmode, &arcsegmentcount, &fillstate,
                 &m_ThermalReliefGapValue, &m_ThermalReliefCopperBridgeValue );
 
             if( ret < 1 )  // Must find 1 or more args.
@@ -321,7 +337,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             if( arcsegmentcount >= 32 )
                 m_ArcToSegmentsCount = 32;
 
-            m_Unused = 0;      // Waiting for a better use
+            m_IsFilled = fillstate == 'F' ? true : false;
         }
         else if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
@@ -376,7 +392,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
                 int     end_contour, utility;
                 utility = 0;
                 ret = sscanf( Line, "%d %d %d %d", &corner.x, &corner.y, &end_contour, &utility );
-                if( ret < 3 )
+                if( ret < 4 )
                     return false;
                 corner.end_contour = end_contour ? true : false;
                 corner.utility = utility;
@@ -384,6 +400,19 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             }
         }
 
+        else if( strnicmp( Line, "$FILLSEGMENTS", 13) == 0  )
+        {
+            SEGMENT segm;
+            while( GetLine( aFile, Line, aLineNum, sizeof(Line) - 1 ) != NULL )
+            {
+                if( strnicmp( Line, "$endFILLSEGMENTS", 4 ) == 0  )
+                    break;
+                ret = sscanf( Line, "%d %d %d %d", &segm.m_Start.x, &segm.m_Start.y, &segm.m_End.x, &segm.m_End.y );
+                if( ret < 4 )
+                    return false;
+                m_FillSegmList.push_back( segm );
+            }
+        }
         else if( strnicmp( Line, "$end", 4 ) == 0 )    // end of description
         {
             break;
@@ -592,6 +621,19 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
             }
             CornersTypeBuffer.clear();
             CornersBuffer.clear();
+        }
+    }
+
+    if( m_FillMode == 1  && !outline_mode )     // filled with segments
+    {
+        for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+        {
+            wxPoint start =  m_FillSegmList[ic].m_Start + offset;
+            wxPoint end =  m_FillSegmList[ic].m_End + offset;
+            if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
+                GRCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, m_ZoneMinThickness, color );
+            else
+                GRFillCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, m_ZoneMinThickness, color );
         }
     }
 }
@@ -962,6 +1004,11 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
         corner->x += offset.x;
         corner->y += offset.y;
     }
+    for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+    {
+        m_FillSegmList[ic].m_Start += offset;
+        m_FillSegmList[ic].m_End += offset;
+    }
 }
 
 
@@ -1021,6 +1068,11 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
         corner->x = pos.x;
         corner->y = pos.y;
     }
+    for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+    {
+        RotatePoint( &m_FillSegmList[ic].m_Start, centre, angle );
+        RotatePoint( &m_FillSegmList[ic].m_End, centre, angle );
+    }
 }
 
 /**
@@ -1059,6 +1111,15 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
         NEGATE(corner->y);
         corner->y += mirror_ref.y;
     }
+    for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+    {
+        m_FillSegmList[ic].m_Start.y -= mirror_ref.y;
+        NEGATE(m_FillSegmList[ic].m_Start.y);
+        m_FillSegmList[ic].m_Start.y += mirror_ref.y;
+        m_FillSegmList[ic].m_End.y -= mirror_ref.y;
+        NEGATE(m_FillSegmList[ic].m_End.y);
+        m_FillSegmList[ic].m_End.y += mirror_ref.y;
+    }
 }
 
 
@@ -1078,6 +1139,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_FillMode   = src->m_FillMode;   // Grid used for filling
     m_PadOption = src->m_PadOption;
     m_Poly->SetHatch( src->m_Poly->GetHatchStyle() );
+    m_FilledPolysList = src->m_FilledPolysList;
+    m_FillSegmList = src->m_FillSegmList;
 }
 
 /**

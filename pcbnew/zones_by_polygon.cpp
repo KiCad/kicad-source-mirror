@@ -92,7 +92,7 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
 
 
 /**********************************************************************************/
-void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestamp )
+void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 /**********************************************************************************/
 
 /** Function Delete_Zone_Fill
@@ -123,7 +123,7 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
         }
     }
 
-    // Now delete the outlines of the corresponding copper areas
+    // Now delete the outlines of the corresponding copper areas (deprecated)
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
@@ -131,6 +131,8 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( wxDC* DC, SEGZONE* aZone, long aTimestam
         {
             modify = TRUE;
             zone->m_FilledPolysList.clear();
+            zone->m_FillSegmList.clear();
+            zone->m_IsFilled = false;
         }
     }
 
@@ -352,7 +354,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
         DrawPanel->PostDirtyRect( zone_container->GetBoundingBox() );
         if( DC )
         {  // Remove the full zone because this is no more an area
-            Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );
+            Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
             zone_container->DrawFilledArea( DrawPanel, DC, GR_XOR );
         }
         GetBoard()->Delete( zone_container );
@@ -827,7 +829,7 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
 
     EDA_Rect dirty = zone_container->GetBoundingBox();
 
-    Delete_Zone_Fill( DC, NULL, zone_container->m_TimeStamp );  // Remove fill segments
+    Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );  // Remove fill segments
 
     if( ncont == 0 )    // This is the main outline: remove all
     {
@@ -905,8 +907,9 @@ int WinEDA_PcbFrame::Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool v
 
     int          error_level = 0;
     zone_container->m_FilledPolysList.clear();
-    Delete_Zone_Fill( NULL, NULL, zone_container->m_TimeStamp );
+    Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
     zone_container->BuildFilledPolysListData( GetBoard() );
+
     if ( DC )
         DrawPanel->Refresh();
 

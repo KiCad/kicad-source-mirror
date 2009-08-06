@@ -4,6 +4,13 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-aug-08 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    Work on undo/redo in pcbnew in progress.
+    SEG_ZONE is now deprecated.
+    When a zone is fille by segment, the ZONE_CONTAINER handles these segments
+
 2009-july-29 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

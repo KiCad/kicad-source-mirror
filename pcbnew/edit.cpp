@@ -554,7 +554,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
             int      netcode = zsegm->GetNet();
-            Delete_Zone_Fill( &dc, zsegm );
+            Delete_Zone_Fill( zsegm );
             SetCurItem( NULL );
             test_1_net_connexion( NULL, netcode );
             GetScreen()->SetModify();
@@ -672,7 +672,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( ( GetCurItem() )->Type() == TYPE_ZONE_CONTAINER )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
-            Delete_Zone_Fill( &dc, NULL, zone_container->m_TimeStamp );
+            Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
             test_1_net_connexion( NULL, zone_container->GetNet() );
             GetScreen()->SetModify();
             GetBoard()->DisplayInfo( this );
@@ -1254,7 +1254,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case TYPE_ZONE:
-        Delete_Zone_Fill( DC, (SEGZONE*) Item );
+        Delete_Zone_Fill( (SEGZONE*) Item );
         break;
 
     case TYPE_ZONE_EDGE_CORNER:

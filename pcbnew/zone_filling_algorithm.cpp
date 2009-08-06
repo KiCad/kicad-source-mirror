@@ -75,7 +75,7 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
         AddClearanceAreasPolygonsToPolysList( aPcb );
 
     if ( m_FillMode )   // if fill mode uses segments, create them:
-        Fill_Zone_Areas_With_Segments( (WinEDA_PcbFrame*) aPcb->m_PcbFrame );
+        Fill_Zone_Areas_With_Segments( );
 
     return count;
 }
@@ -87,7 +87,7 @@ static bool SortByXValues( const int& a, const int &b)
 }
 
 /***********************************************************************************/
-int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
+int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( )
 /***********************************************************************************/
 
 /** Function Fill_Zone_Areas_With_Segments()
@@ -112,6 +112,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
     step = max(step, 2);
 
     // Read all filled areas in m_FilledPolysList
+    m_FillSegmList.clear();
     istart = 0;
     int end_list =  m_FilledPolysList.size()-1;
     for( int ic = 0; ic <= end_list; ic++ )
@@ -197,14 +198,8 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( WinEDA_PcbFrame* aFrame )
                     seg_start.y = refy;
                     seg_end.x = x_coordinates[ii+1];
                     seg_end.y = refy;
-                    SEGZONE* segment = new SEGZONE( aFrame->GetBoard() );
-                    segment->m_Start = seg_start;
-                    segment->m_End   = seg_end;
-                    segment->SetNet( GetNet() );
-                    segment->m_TimeStamp = m_TimeStamp;
-                    segment->m_Width = m_ZoneMinThickness;
-                    segment->SetLayer( GetLayer() );
-                    aFrame->GetBoard()->Add( segment );
+                    SEGMENT segment( seg_start, seg_end );
+                    m_FillSegmList.push_back( segment );
                 }
             }   //End examine segments in one area
             if ( error ) break;
