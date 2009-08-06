@@ -20,7 +20,6 @@ public:
     int  m_Zone_HatchingStyle;                          // Option to show the zone area (outlines only, short hatches or full hatches
     int  m_ArcToSegmentsCount;                  /* Option to select number of segments to approximate a circle
                                                  * 16 or 32 segments */
-    int  m_Unused;                              // waiting for a better use
     long m_ThermalReliefGapValue;                       // tickness of the gap in thermal reliefs
     long m_ThermalReliefCopperBridgeValue;              // tickness of the copper bridge in thermal reliefs
     int  m_Zone_Pad_Options;                            // How pads are covered by copper in zone
