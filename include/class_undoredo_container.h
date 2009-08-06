@@ -196,12 +196,12 @@ public:
      */
     bool            SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aIdx );
 
-    /** function RemovePickedItem
-     * remùove one entry (one picker) from the list of picked items
+    /** function RemovePicker
+     * remove one entry (one picker) from the list of picked items
      * @param aIdx = index of the picker in the picked list
      * @return true if ok, or false if did not exist
      */
-    bool            RemovePickedItem( unsigned aIdx );
+    bool            RemovePicker( unsigned aIdx );
 
     /** Function CopyList
      * copy all data from aSource

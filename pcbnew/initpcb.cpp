@@ -33,107 +33,132 @@ void WinEDA_PcbFrame::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 /***********************************************************************/
 {
-    int        track_mask;
-    bool       redraw = false;
-    bool       gen_rastnest = false;
-    wxClientDC dc( m_Parent->DrawPanel );
-
-    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
+    bool gen_rastnest = false;
 
     m_Parent->SetCurItem( NULL );
 
     if( m_DelAlls->GetValue() )
     {
-        m_Parent->Clear_Pcb( TRUE );
-        redraw = TRUE;
+        m_Parent->Clear_Pcb( true );
     }
     else
     {
+        if( !IsOK( this, _( "Ok to delete selected items ?" ) ) )
+            return;
+
+        BOARD * pcb = m_Parent->GetBoard();
+        PICKED_ITEMS_LIST pickersList;
+        ITEM_PICKER       itemPicker( NULL, UR_DELETED );
+        BOARD_ITEM*       item, * nextitem;
+
         if( m_DelZones->GetValue() )
         {
-            m_Parent->Erase_Zones( TRUE );
             gen_rastnest = true;
-            redraw = TRUE;
+
+            /* Segments used in Zone filling selection */
+            // for many reasons saving these items can create problems so they are not saved
+            // (because they are numerous and can be deleted in zones operation)
+            pcb->m_Zone.DeleteAll();
+ 
+            while( pcb->GetAreaCount() )
+            {
+                item = pcb->GetArea( 0 );
+                itemPicker.m_PickedItem = item;
+                pickersList.PushItem( itemPicker );
+                pcb->Remove( item );
+            }
         }
 
-        if( m_DelTexts->GetValue() )
-        {
-            m_Parent->Erase_Textes_Pcb( TRUE );
-            redraw = TRUE;
-        }
+        int masque_layer = 0;
+        if( m_DelDrawings->GetValue() )
+            masque_layer = (~EDGE_LAYER) & 0x1FFF0000;
 
         if( m_DelEdges->GetValue() )
-        {
-            m_Parent->Erase_Segments_Pcb( TRUE, TRUE );
-            redraw = TRUE;
-        }
+            masque_layer |= EDGE_LAYER;
 
-        if( m_DelDrawings->GetValue() )
+        for( item = pcb->m_Drawings; item != NULL; item = nextitem )
         {
-            m_Parent->Erase_Segments_Pcb( FALSE, TRUE );
-            redraw = TRUE;
+            nextitem = item->Next();
+            bool removeme = (g_TabOneLayerMask[ item->GetLayer()] & masque_layer) != 0;
+            if( ( item->Type() == TYPE_TEXTE ) && m_DelTexts->GetValue() )
+                removeme = true;
+            if( removeme )
+            {
+                itemPicker.m_PickedItem = item;
+                pickersList.PushItem( itemPicker );
+                item->UnLink();
+            }
         }
 
         if( m_DelModules->GetValue() )
         {
-            m_Parent->Erase_Modules( TRUE );
             gen_rastnest = true;
-            redraw = TRUE;
+            for( item = pcb->m_Modules; item; item = nextitem )
+            {
+                nextitem = item->Next();
+                itemPicker.m_PickedItem = item;
+                pickersList.PushItem( itemPicker );
+                item->UnLink();
+            }
         }
 
         if( m_DelTracks->GetValue() )
         {
-                track_mask = 0;
-                if( !m_TrackFilterLocked->GetValue() )
-                    track_mask |= SEGM_FIXE;
-                if( !m_TrackFilterAR->GetValue() )
-                    track_mask |= SEGM_AR;
-
-                m_Parent->Erase_Pistes( &dc, track_mask, TRUE );
-                redraw = TRUE;
+            int track_mask_filter = 0;
+            if( !m_TrackFilterLocked->GetValue() )
+                track_mask_filter |= SEGM_FIXE;
+            if( !m_TrackFilterAR->GetValue() )
+                track_mask_filter |= SEGM_AR;
+            for( item = pcb->m_Track; item != NULL; item = nextitem )
+            {
+                nextitem = item->Next();
+                if( (item->GetState( SEGM_FIXE | SEGM_AR ) & track_mask_filter) != 0 )
+                    continue;
+                itemPicker.m_PickedItem = item;
+                pickersList.PushItem( itemPicker );
+                item->UnLink();
                 gen_rastnest = true;
+            }
         }
+
+        if( pickersList.GetCount() )
+            m_Parent->SaveCopyInUndoList( pickersList, UR_DELETED );
 
         if( m_DelMarkers->GetValue() )
-        {
-            m_Parent->Erase_Marqueurs();
-            redraw = TRUE;
-        }
+            pcb->DeleteMARKERs();
 
-        if ( gen_rastnest )
-            m_Parent->Compile_Ratsnest( &dc, true );
-
+        if( gen_rastnest )
+            m_Parent->Compile_Ratsnest( NULL, true );
     }
 
-    if( redraw )
-    {
-        m_Parent->DrawPanel->Refresh();
-    }
+    m_Parent->DrawPanel->Refresh();
 
     EndModal( 1 );
 }
 
 
-/*********************************************************/
-bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
-/*********************************************************/
-
-/* Realise les init des pointeurs et variables
- *  Si query == FALSE, il n'y aura pas de confirmation
+/** function WinEDA_PcbFrame::Clear_Pcb()
+ * delete all and reinitialize the current board
+ * @param aQuery = true to prompt user for confirmation, false to initialize silently
  */
+bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
         return FALSE;
 
-    if( query && GetScreen()->IsModify() )
+    if( aQuery )
     {
         if( GetBoard()->m_Drawings || GetBoard()->m_Modules
             || GetBoard()->m_Track || GetBoard()->m_Zone )
         {
-            if( !IsOK( this, _( "Current Board will be lost ?" ) ) )
+            if( !IsOK( this,
+                _( "Current Board will be lost and this operation and cannot be undone. Continue ?" ) ) )
                 return FALSE;
         }
     }
+
+    // Clear undo and redo lists because we want a full deletion
+    GetScreen()->ClearUndoRedoList();
 
     // delete the old BOARD and create a new BOARD so that the default
     // layer names are put into the BOARD.
@@ -146,7 +171,7 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
 
     /* Init parametres de gestion */
     wxRealPoint gridsize = GetScreen()->GetGrid();
-    ((PCB_SCREEN*)GetScreen())->Init();
+    GetScreen()->Init();
     GetScreen()->SetGrid( gridsize );
 
     g_HightLigt_Status = 0;
@@ -158,160 +183,54 @@ bool WinEDA_BasePcbFrame::Clear_Pcb( bool query )
         g_DesignSettings.m_TrackClearenceHistory[ii] = 0;
     }
 
-    g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
+    g_DesignSettings.m_TrackWidthHistory[0]     = g_DesignSettings.m_CurrentTrackWidth;
     g_DesignSettings.m_TrackClearenceHistory[0] = g_DesignSettings.m_TrackClearence;
     g_DesignSettings.m_ViaSizeHistory[0] = g_DesignSettings.m_CurrentViaSize;
-
-/* NO, this is a global setting, and changing it here changes a loaded board's layer count when loading a module in the module editor since
-    the module editor calls this when loading an existing module.
     g_DesignSettings.m_CopperLayerCount = 2;		// Default copper layers count set to 2: double layer board
-*/
 
-    Zoom_Automatique( TRUE );
+    Zoom_Automatique( true );
 
-    return TRUE;
+    return true;
 }
 
 
-/************************************************************/
-void WinEDA_PcbFrame::Erase_Zones( bool query )
-/************************************************************/
+
+/** function WinEDA_ModuleEditFrame::Clear_Pcb()
+ * delete all and reinitialize the current board
+ * @param aQuery = true to prompt user for confirmation, false to initialize silently
+ */
+bool WinEDA_ModuleEditFrame::Clear_Pcb( bool aQuery )
 {
-    if( query && !IsOK( this, _( "Delete Zones ?" ) ) )
-        return;
+    if( GetBoard() == NULL )
+        return FALSE;
 
-    GetBoard()->m_Zone.DeleteAll();
-    GetBoard()->DeleteZONEOutlines();
-
-    GetScreen()->SetModify();
-}
-
-
-/*****************************************************************************/
-void WinEDA_PcbFrame::Erase_Segments_Pcb( bool is_edges, bool query )
-/*****************************************************************************/
-{
-    BOARD_ITEM*     PtStruct;
-    BOARD_ITEM*     PtNext;
-    int             masque_layer = (~EDGE_LAYER) & 0x1FFF0000;
-
-    if( is_edges )
+    if( aQuery && GetScreen()->IsModify() )
     {
-        masque_layer = EDGE_LAYER;
-        if( query && !IsOK( this, _( "Delete Board edges ?" ) ) )
-            return;
-    }
-    else
-    {
-        if( query && !IsOK( this, _( "Delete draw items?" ) ) )
-            return;
-    }
-
-    PtStruct = GetBoard()->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtNext )
-    {
-        PtNext = PtStruct->Next();
-
-        switch( PtStruct->Type() )
+        if( GetBoard()->m_Modules )
         {
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
-        case TYPE_COTATION:
-        case TYPE_MIRE:
-            if( g_TabOneLayerMask[ PtStruct->GetLayer()] & masque_layer )
-                GetBoard()->Delete( PtStruct );
-            break;
-
-        default:
-            DisplayError( this, wxT( "Unknown/unexpected Draw Type" ) );
-            break;
+            if( !IsOK( this,
+                _( "Current Footprint will be lost and this operation and cannot be undone. Continue ?" ) ) )
+                return FALSE;
         }
     }
 
-    GetScreen()->SetModify();
-}
-
-
-/**************************************************************************/
-void WinEDA_PcbFrame::Erase_Pistes( wxDC * DC, int masque_type, bool query )
-/**************************************************************************/
-
-/* Efface les segments de piste, selon les autorisations affichees
- *  masque_type = masque des options de selection:
- *  SEGM_FIXE, SEGM_AR
- *  Si un des bits est a 1, il n'y a pas effacement du segment de meme bit a 1
- */
-{
-    TRACK*  pt_segm;
-    TRACK*  PtNext;
-
-    if( query && !IsOK( this, _( "Delete Tracks?" ) ) )
-        return;
-
-    /* Marquage des pistes a effacer */
-    for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = (TRACK*) PtNext )
-    {
-        PtNext = pt_segm->Next();
-
-        if( pt_segm->GetState( SEGM_FIXE | SEGM_AR ) & masque_type )
-            continue;
-
-        pt_segm->DeleteStructure();
-    }
-
-    GetScreen()->SetModify();
-    Compile_Ratsnest( DC, TRUE );
-}
-
-
-/**************************************************************/
-void WinEDA_PcbFrame::Erase_Modules( bool query )
-/**************************************************************/
-{
-    if( query && !IsOK( this, _( "Delete Modules?" ) ) )
-        return;
-
+    // Clear undo and redo lists
+    GetScreen()->ClearUndoRedoList();
+    
+    // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
 
-    GetBoard()->m_Status_Pcb = 0;
-    m_Pcb->m_NetInfo->DeleteData();
-    m_Pcb->m_FullRatsnest.clear();          // empty the pad list pointers
-    m_Pcb->m_LocalRatsnest.clear();          // empty the pad list pointers
-    GetBoard()->m_NbNodes     = 0;
-    GetBoard()->m_NbNoconnect = 0;
+    /* init pointeurs  et variables */
+    GetScreen()->m_FileName.Empty();
 
-    GetScreen()->SetModify();
+    SetCurItem( NULL );
+
+    /* Init parametres de gestion */
+    wxRealPoint gridsize = GetScreen()->GetGrid();
+    GetScreen()->Init();
+    GetScreen()->SetGrid( gridsize );
+
+    Zoom_Automatique( true );
+
+    return true;
 }
-
-
-/************************************************************/
-void WinEDA_PcbFrame::Erase_Textes_Pcb( bool query )
-/************************************************************/
-{
-    BOARD_ITEM* PtStruct, * PtNext;
-
-    if( query && !IsOK( this, _( "Delete Pcb Texts" ) ) )
-        return;
-
-    PtStruct = GetBoard()->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtNext )
-    {
-        PtNext = PtStruct->Next();
-        if( PtStruct->Type() == TYPE_TEXTE )
-        {
-            PtStruct->DeleteStructure();
-        }
-    }
-
-    GetScreen()->SetModify();
-}
-
-
-/*******************************************/
-void WinEDA_PcbFrame::Erase_Marqueurs()
-/*******************************************/
-{
-    GetBoard()->DeleteMARKERs();
-    GetScreen()->SetModify();   // @todo : why mark this if MARKERs are not saved in the *.brd file?
-}
-

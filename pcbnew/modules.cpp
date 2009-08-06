@@ -122,7 +122,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     if( g_Show_Ratsnest )
         DrawGeneralRatsnest( DC );
 
-    if( g_DragSegmentList ) /* Anormal ! */
+    if( g_DragSegmentList ) /* Should not occur ! */
     {
         EraseDragListe();
     }

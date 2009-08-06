@@ -274,37 +274,38 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     SCH_ITEM*          CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
     commandToUndo->m_TransformPoint = aTransformPoint;
+    // Copy picker list:
+    commandToUndo->CopyList( aItemsList );
 
-    ITEM_PICKER        itemWrapper;
-
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    // Verify list, and creates data if needed
+    for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
-        SCH_ITEM*      item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        if( item == NULL )
-            continue;
-        UndoRedoOpType command    = aItemsList.GetPickedItemStatus( ii );
+        SCH_ITEM*      item = (SCH_ITEM*) commandToUndo->GetPickedItem( ii );
+        wxASSERT( item );
+
+        UndoRedoOpType command    = commandToUndo->GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
+            commandToUndo->SetPickedItemStatus(command, ii );
         }
-        itemWrapper.m_PickedItem = item;
-        itemWrapper.m_PickedItemType = item->Type();
-        itemWrapper.m_UndoRedoStatus = command;
-        itemWrapper.m_Link = aItemsList.GetPickedItemLink( ii );
+
         switch( command )
         {
         case UR_CHANGED:        /* Create a copy of item */
-            if( itemWrapper.m_Link == NULL )
-                itemWrapper.m_Link = DuplicateStruct( item );
-            if ( itemWrapper.m_Link )
-                commandToUndo->PushItem( itemWrapper );
+            /* If needed, create a copy of item, and put in undo list
+             * in the picker, as link
+             * If this link is not null, the copy is already done
+             */
+            if( commandToUndo->GetPickedItemLink(ii) == NULL )
+                commandToUndo->SetPickedItemLink( DuplicateStruct( item ), ii );
+            wxASSERT( commandToUndo->GetPickedItemLink(ii) );
             break;
 
         case UR_MOVED:
         case UR_MIRRORED_Y:
         case UR_NEW:
         case UR_DELETED:
-            commandToUndo->PushItem( itemWrapper );
             break;
 
         default:
@@ -325,7 +326,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         /* Clear redo list, because after new save there is no redo to do */
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
     }
-    else
+    else    // Should not occur
         delete commandToUndo;
 }
 

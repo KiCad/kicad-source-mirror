@@ -121,9 +121,6 @@ public:
     int                      ReadSetup( FILE* File, int* LineNum );
     int                      ReadGeneralDescrPcb( FILE* File, int* LineNum );
 
-    // PCB handling
-    bool                     Clear_Pcb( bool query );
-
 
     /**
      * Function PcbGeneralLocateAndDisplay

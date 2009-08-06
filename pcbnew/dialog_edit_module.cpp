@@ -533,6 +533,14 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
     bool change_layer = FALSE;
     wxPoint modpos;
 
+    if( m_CurrentModule->m_Flags == 0 )       // this is a simple edition, we must create an undo entry
+    {
+        if( m_Parent->m_Ident == PCB_FRAME )
+            m_Parent->SaveCopyInUndoList( m_CurrentModule, UR_CHANGED );
+        else
+            m_Parent->SaveCopyInUndoList( m_CurrentModule, UR_MODEDIT );
+    }
+
     if( m_DC )
     {
         m_Parent->DrawPanel->CursorOff( m_DC );

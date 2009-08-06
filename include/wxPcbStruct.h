@@ -254,6 +254,13 @@ public:
     int              SavePcbFormatAscii( FILE* File );
     bool             WriteGeneralDescrPcb( FILE* File );
 
+    // BOARD handling
+    /** function Clear_Pcb()
+     * delete all and reinitialize the current board
+     * @param aQuery = true to prompt user for confirmation, false to initialize silently
+     */
+    bool                     Clear_Pcb( bool aQuery );
+
     /**
      * Function RecreateBOMFileFromBoard
      * Recreates a .cmp file from the current loaded board
@@ -348,12 +355,6 @@ public:
     // loading modules: see WinEDA_BasePcbFrame
 
     // Board handling
-    void             Erase_Zones( bool query );
-    void             Erase_Segments_Pcb( bool is_edges, bool query );
-    void             Erase_Pistes( wxDC* DC, int masque_type, bool query );
-    void             Erase_Modules( bool query );
-    void             Erase_Textes_Pcb( bool query );
-    void             Erase_Marqueurs();
     void             RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
     void             Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via );
 
@@ -654,6 +655,13 @@ public:
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
     virtual void OnSelectGrid( wxCommandEvent& event );
     void         LoadModuleFromBoard( wxCommandEvent& event );
+
+    // BOARD handling
+    /** function Clear_Pcb()
+     * delete all and reinitialize the current board
+     * @param aQuery = true to prompt user for confirmation, false to initialize silently
+     */
+    bool                     Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
     int          ReturnBlockCommand( int key );

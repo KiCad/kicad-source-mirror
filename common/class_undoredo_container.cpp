@@ -292,12 +292,12 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aI
 }
 
 
-/** function RemovePickedItem
+/** function RemovePicker
  * remùove one entry (one picker) from the list of picked items
  * @param aIdx = index of the picker in the picked list
  * @return true if ok, or false if did not exist
  */
-bool PICKED_ITEMS_LIST::RemovePickedItem( unsigned aIdx )
+bool PICKED_ITEMS_LIST::RemovePicker( unsigned aIdx )
 {
     if( aIdx >= m_ItemsList.size() )
         return false;
@@ -308,17 +308,11 @@ bool PICKED_ITEMS_LIST::RemovePickedItem( unsigned aIdx )
 
 /** Function CopyList
  * copy all data from aSource
- * Items picked are not copied. just pointer on them are copied
+ * Picked items are not copied. just pointers on them are copied
  */
 void PICKED_ITEMS_LIST::CopyList( const PICKED_ITEMS_LIST& aSource )
 {
-    ITEM_PICKER picker;
-
-    for( unsigned ii = 0; ii < aSource.GetCount(); ii++ )
-    {
-        picker = aSource.m_ItemsList[ii];
-        PushItem( picker );
-    }
+    m_ItemsList = aSource.m_ItemsList;  // Vector's copy
 }
 
 

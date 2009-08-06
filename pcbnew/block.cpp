@@ -417,7 +417,6 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
  */
 void WinEDA_PcbFrame::Block_SelectItems()
 {
-    BOARD_ITEM* PtStruct;
     int         masque_layer;
 
     GetScreen()->m_BlockLocate.Normalize();
@@ -428,7 +427,6 @@ void WinEDA_PcbFrame::Block_SelectItems()
     /* Effacement des modules */
     if( Block_Include_Modules )
     {
-        ;
         for( MODULE* module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
         {
             if( module->HitTest( GetScreen()->m_BlockLocate ) )
@@ -463,7 +461,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
     if( !Block_Include_Edges_Items )
         masque_layer &= ~EDGE_LAYER;
 
-    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         bool select_me = false;
         switch( PtStruct->Type() )
@@ -512,19 +510,25 @@ void WinEDA_PcbFrame::Block_SelectItems()
         }
     }
 
-    /* Effacement des Zones */
+    /* Zone selection */
     if( Block_Include_Zones )
     {
+#if 0  
+        /* This section can creates problems if selected:
+         * m_Pcb->m_Zone can have a *lot* of items (100 000 is easily possible)
+         * so it is not selected (and TODO: will be removed, one day)
+         */
         for( SEGZONE* pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = pt_segm->Next() )
-        {
+        {    /* Segments used in Zone filling selection */
+
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                picker.m_PickedItem     = PtStruct;
-                picker.m_PickedItemType = PtStruct->Type();
+                picker.m_PickedItem     = pt_segm;
+                picker.m_PickedItemType = pt_segm->Type();
                 itemsList->PushItem( picker );
             }
         }
-
+#endif
         for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
             if( m_Pcb->GetArea( ii )->HitTest( GetScreen()->m_BlockLocate ) )
@@ -536,7 +540,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
             }
         }
     }
-}
+ }
 
 
 /**************************************************************************/
@@ -630,11 +634,18 @@ void WinEDA_PcbFrame::Block_Delete()
         case TYPE_TEXTE:                    // a text on a layer
         case TYPE_TRACK:                    // a track segment (segment on a copper layer)
         case TYPE_VIA:                      // a via (like atrack segment on a copper layer)
-        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
-        case TYPE_MARKER_PCB:                   // a marker used to show something
         case TYPE_COTATION:                 // a dimension (graphic item)
         case TYPE_MIRE:                     // a target (graphic item)
             item->UnLink();
+            break;
+
+        // These items are deleted, but not put in undo list
+        case TYPE_MARKER_PCB:               // a marker used to show something
+        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+            item->UnLink();
+            itemsList->RemovePicker( ii );
+            ii--;
+            item->DeleteStructure();
             break;
 
         default:
@@ -696,7 +707,6 @@ void WinEDA_PcbFrame::Block_Rotate()
             m_Pcb->m_Status_Pcb = 0;
         break;
 
-        case TYPE_ZONE:                  // a segment used to fill a zone area (segment on a copper layer)
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
@@ -704,6 +714,11 @@ void WinEDA_PcbFrame::Block_Rotate()
         case TYPE_COTATION:
             break;
 
+        // This item is not put in undo list
+        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+            itemsList->RemovePicker( ii );
+            ii--;
+            break;
 
         default:
             wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Rotate( ) error: unexpected type" ) );
@@ -763,12 +778,17 @@ void WinEDA_PcbFrame::Block_Flip()
             m_Pcb->m_Status_Pcb = 0;
             break;
 
-        case TYPE_ZONE:                  // a segment used to fill a zone area (segment on a copper layer)
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_MIRE:
         case TYPE_COTATION:
+            break;
+
+        // This item is not put in undo list
+        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+            itemsList->RemovePicker( ii );
+            ii--;
             break;
 
 
@@ -825,12 +845,17 @@ void WinEDA_PcbFrame::Block_Move()
             m_Pcb->m_Status_Pcb = 0;
         break;
 
-        case TYPE_ZONE:                  // a segment used to fill a zome area (segment on a copper layer)
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_MIRE:
         case TYPE_COTATION:
+            break;
+
+        // This item is not put in undo list
+        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+            itemsList->RemovePicker( ii );
+            ii--;
             break;
 
         default:
@@ -905,10 +930,8 @@ void WinEDA_PcbFrame::Block_Duplicate()
 
         case TYPE_ZONE:                  // a segment used to fill a zome area (segment on a copper layer)
         {
-            SEGZONE* track     = (SEGZONE*) item;
-            SEGZONE* new_track = (SEGZONE*) track->Copy();
-            newitem = new_track;
-            m_Pcb->m_Track.PushFront( new_track );
+            // SEG_ZONE items are not copied or put in undo list
+            // they must be recreated by zone filling
         }
         break;
 

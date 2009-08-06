@@ -364,8 +364,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
 
-        //if either m_Reference or m_Value are gone, reinstate them -
-        //otherwise it becomes hard to see what you are working with in the layout!
+        // if either m_Reference or m_Value are gone, reinstall them -
+        // otherwise you cannot see what you are doing on board
         if( GetBoard() && GetBoard()->m_Modules )
         {
             TEXTE_MODULE* ref = GetBoard()->m_Modules->m_Reference;

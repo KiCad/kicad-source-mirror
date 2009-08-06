@@ -126,11 +126,14 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
 
     // Swap layers:
-    int layer, layerimg;
-    layer    = aItem->GetLayer();
-    layerimg = aImage->GetLayer();
-    aItem->SetLayer( layerimg );
-    aImage->SetLayer( layer );
+    if( aItem->Type() != TYPE_MODULE )     // Modules have a global swap function
+    {
+        int layer, layerimg;
+        layer    = aItem->GetLayer();
+        layerimg = aImage->GetLayer();
+        aItem->SetLayer( layerimg );
+        aImage->SetLayer( layer );
+    }
 
     switch( aItem->Type() )
     {
@@ -211,7 +214,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 {
     if( aItem == NULL )
     {
-        wxMessageBox( wxT( "DuplicateStruct error: NULL struct" ) );
+        wxMessageBox( wxT( "DuplicateStruct() error: NULL aItem" ) );
         return NULL;
     }
 
@@ -380,28 +383,31 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
+    // Copy picker list:
+    commandToUndo->CopyList( aItemsList );
 
-    ITEM_PICKER itemWrapper;
-
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    // Verify list, and creates data if needed
+    for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
-        BOARD_ITEM*    item    = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
-        UndoRedoOpType command = aItemsList.GetPickedItemStatus( ii );
+        BOARD_ITEM*    item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
+        UndoRedoOpType command = commandToUndo->GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
+        {
             command = aTypeCommand;
+            commandToUndo->SetPickedItemStatus(command, ii );
+        }
 
         wxASSERT( item );
-        itemWrapper.m_PickedItem     = item;
-        itemWrapper.m_PickedItemType = item->Type();
-        itemWrapper.m_UndoRedoStatus = command;
-        itemWrapper.m_Link = aItemsList.GetPickedItemLink( ii );
         switch( command )
         {
-        case UR_CHANGED:        /* If needed, create a copy of item, and put in undo list */
-            if( itemWrapper.m_Link == NULL )    // When not null, the copy is already done
-                itemWrapper.m_Link = DuplicateStruct( item );
-            if( itemWrapper.m_Link )
-                commandToUndo->PushItem( itemWrapper );
+        case UR_CHANGED:
+            /* If needed, create a copy of item, and put in undo list
+             * in the picker, as link
+             * If this link is not null, the copy is already done
+             */
+            if( commandToUndo->GetPickedItemLink(ii) == NULL )
+                commandToUndo->SetPickedItemLink( DuplicateStruct( item ), ii );
+            wxASSERT( commandToUndo->GetPickedItemLink(ii) );
             break;
 
         case UR_MOVED:
@@ -410,7 +416,6 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         case UR_FLIPPED:
         case UR_NEW:
         case UR_DELETED:
-            commandToUndo->PushItem( itemWrapper );
             break;
 
         default:
@@ -428,10 +433,10 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         /* Save the copy in undo list */
         GetScreen()->PushCommandToUndoList( commandToUndo );
 
-        /* Clear redo list, because after new save there is no redo to do */
+        /* Clear redo list, because after a new command one cannot redo a command */
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
     }
-    else
+    else    // Should not occur
         delete commandToUndo;
 }
 
@@ -452,21 +457,23 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
         wxASSERT( item );
+#if 1
         if( aList->GetPickedItemStatus( ii ) != UR_DELETED )
         {
             if( !TestForExistingItem( GetBoard(), item ) )
             {
                 // Remove this non existant item
-                aList->RemovePickedItem( ii );
+                aList->RemovePicker( ii );
                 ii--;       // the current item was removed, ii points now the next item
                             // whe must decrement it because it will be incremented
                 not_found = true;
                 continue;
             }
         }
+#endif
         item->m_Flags = 0;
 
-        // see if one must rebuild ratsnets and pointers lists
+        // see if we must rebuild ratsnets and pointers lists
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -528,9 +535,9 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
     }
 
     if( not_found )
-        wxMessageBox( wxT( "Incomplete undo/redo command: item not found" ) );
+        wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
-    // Rebuild pointers and rastnest
+    // Rebuild pointers and rastnest that can be changed.
     if( reBuild_ratsnest )
         Compile_Ratsnest( NULL, true );
 }
@@ -542,8 +549,8 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
 
 /** Function GetBoardFromUndoList
  *  Undo the last edition:
- *  - Save the current board in Redo list
- *  - Get an old version of the board from Undo list
+ *  - Save the current board state in Redo list
+ *  - Get an old version of the board state from Undo list
  *  @return none
  */
 {
@@ -612,7 +619,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
     unsigned icnt = aList.m_CommandsList.size();
     if( aItemCount > 0 )
         icnt = aItemCount;
-    bool     displ_error = true;
+
     for( unsigned ii = 0; ii < icnt; ii++ )
     {
         if( aList.m_CommandsList.size() == 0 )
