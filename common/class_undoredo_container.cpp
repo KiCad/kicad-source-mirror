@@ -64,7 +64,7 @@ void PICKED_ITEMS_LIST::PushItem( ITEM_PICKER& aItem )
  * @return the picker from the top of the list
  * the picker is removed from the list
  */
-ITEM_PICKER PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::PopItem()
+ITEM_PICKER PICKED_ITEMS_LIST::PopItem()
 {
     ITEM_PICKER item;
 
@@ -80,7 +80,7 @@ ITEM_PICKER PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::PopItem()
 /** Function ClearItemsList
  * delete only the list of pickers, NOT the picked data itself
  */
-void PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::ClearItemsList()
+void PICKED_ITEMS_LIST::ClearItemsList()
 {
     m_ItemsList.clear();
 }
@@ -150,8 +150,7 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         default:
         {
             wxString msg;
-            msg.Printf( wxT(
-                            "ClearUndoORRedoList() error: unknown command type %d" ),
+            msg.Printf( wxT( "ClearUndoORRedoList() error: unknown command type %d" ),
                         wrapper.m_UndoRedoStatus );
             wxMessageBox( msg );
         }
