@@ -765,7 +765,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-        Rotate_Module( &dc, (MODULE*) GetCurItem(), -900, true );
+
+        if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
+            SaveCopyInUndoList(GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->m_Pos);
+        Rotate_Module( &dc, (MODULE*) GetCurItem(), 900, true );
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
@@ -777,7 +780,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-        Rotate_Module( &dc, (MODULE*) GetCurItem(), 900, true );
+        if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
+            SaveCopyInUndoList(GetCurItem(), UR_ROTATED_CLOCKWISE, ((MODULE*)GetCurItem())->m_Pos);
+        Rotate_Module( &dc, (MODULE*) GetCurItem(), -900, true );
         break;
 
     case ID_POPUP_PCB_CHANGE_SIDE_MODULE:
@@ -788,7 +793,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-        GetBoard()->Change_Side_Module( (MODULE*) GetCurItem(), &dc );
+
+        if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple flip, no other edition in progress */
+            SaveCopyInUndoList(GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->m_Pos);
+
+        Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE:

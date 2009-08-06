@@ -11,7 +11,7 @@
 /* Routines Locales */
 static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Ajuste_Details_Cotation( COTATION* pts );
+static void Ajuste_Details_Cotation( COTATION* pts, bool aDoNotChangeText = false );
 
 /* Variables "locales" : */
 static int status_cotation; /*  = 0 : pas de cotation en cours
@@ -349,7 +349,7 @@ void WinEDA_PcbFrame::Install_Edit_Cotation( COTATION* Cotation,
     WinEDA_CotationPropertiesFrame* frame = new WinEDA_CotationPropertiesFrame( this,
                                                                                 Cotation, DC, pos );
 
-    Ajuste_Details_Cotation( Cotation );
+    Ajuste_Details_Cotation( Cotation, true );
     frame->ShowModal();
     frame->Destroy();
 }
@@ -372,7 +372,7 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
 
 
 /*****************************************************/
-static void Ajuste_Details_Cotation( COTATION* Cotation )
+static void Ajuste_Details_Cotation( COTATION* Cotation, bool aDoNotChangeText )
 /*****************************************************/
 
 /* Calcule les details des coordonnees des differents segments constitutifs
@@ -411,8 +411,8 @@ static void Ajuste_Details_Cotation( COTATION* Cotation )
     /* On tient compte de l'inclinaison de la cote */
     if( mesure )
     {
-        hx = (abs) ( (int) ( ( (float) deltay * hx ) / mesure ) );
-        hy = (abs) ( (int) ( ( (float) deltax * hy ) / mesure ) );
+        hx = (abs) ( (int) ( ( (double) deltay * hx ) / mesure ) );
+        hy = (abs) ( (int) ( ( (double) deltax * hy ) / mesure ) );
 
         if( Cotation->TraitG_ox > Cotation->Barre_ox )
             hx = -hx;
@@ -476,7 +476,10 @@ static void Ajuste_Details_Cotation( COTATION* Cotation )
     if( (Cotation->m_Text->m_Orient > 900) && (Cotation->m_Text->m_Orient <2700) )
         Cotation->m_Text->m_Orient -= 1800;
 
-    Cotation->m_Value = mesure;
-    valeur_param( Cotation->m_Value, msg );
-    Cotation->SetText( msg );
+    if( !aDoNotChangeText )
+    {
+        Cotation->m_Value = mesure;
+        valeur_param( Cotation->m_Value, msg );
+        Cotation->SetText( msg );
+    }
 }

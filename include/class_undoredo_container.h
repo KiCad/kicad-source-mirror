@@ -58,7 +58,8 @@ enum UndoRedoOpType {
     UR_MOVED,               // moved item, undo by move it
     UR_MIRRORED_X,          // mirrored item, undo by mirror X
     UR_MIRRORED_Y,          // mirrored item, undo by mirror Y
-    UR_ROTATED,             // Rotated item, undo by rotating it
+    UR_ROTATED,             // Rotated item (counterclockwise), undo by rotating it
+    UR_ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
     UR_FLIPPED,             // flipped (board items only), undo by flipping it
     UR_WIRE_IMAGE,          // Specific to eeschema: handle wires changes
     UR_MODEDIT,             // Specific to the module editor (modedit creates a full copy of the current module when changed)
@@ -104,19 +105,33 @@ private:
 public:
     PICKED_ITEMS_LIST();
     ~PICKED_ITEMS_LIST();
+
+    /** PushItem
+     * push a picker to the top of the list
+     * @param aItem = picker to push
+     */
     void        PushItem( ITEM_PICKER& aItem );
+
+    /** PopItem
+     * @return the picker from the top of the list
+     * the picker is removed from the list
+     */
     ITEM_PICKER PopItem();
 
     /** Function ClearItemsList
-     * delete only the list of EDA_BaseStruct * pointers, NOT the pointed data itself
+     * delete only the list of pickers, NOT the picked data itself
      */
     void        ClearItemsList();
 
     /** Function ClearListAndDeleteItems
-     * delete only the list of EDA_BaseStruct * pointers, AND the data pinted by m_Item
+     * delete the list of pickers, AND the data pointed
+     * by m_PickedItem or m_PickedItemLink, according to the type of undo/redo command recorded
      */
     void        ClearListAndDeleteItems();
 
+    /** function GetCount()
+     * @return the count of pickers stored in this list
+     */
     unsigned        GetCount() const
     {
         return m_ItemsList.size();

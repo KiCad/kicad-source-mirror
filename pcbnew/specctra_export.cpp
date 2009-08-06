@@ -34,7 +34,7 @@
 
 #include "specctra.h"
 #include "collectors.h"
-#include "wxPcbStruct.h"        // Change_Side_Module()
+#include "wxPcbStruct.h"
 #include "pcbstruct.h"          // HISTORY_NUMBER
 #include "confirm.h"            // DisplayError()
 #include "gestfich.h"           // EDA_FileSelector()
@@ -113,7 +113,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
     db.RevertMODULEs( GetBoard() );
 
 
-    // The two calls below to BOARD::Change_Side_Module(), both set the
+    // The two calls below to MODULE::Flip(), both set the
     // modified flag, yet their actions cancel each other out, so it should
     // be ok to clear the modify flag.
     if( !wasModified )
@@ -1451,7 +1451,7 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
         module->flag = 0;
         if( module->GetLayer() == COPPER_LAYER_N )
         {
-            aBoard->Change_Side_Module( module, NULL );
+            module->Flip( module->m_Pos );
             module->flag = 1;
         }
     }
@@ -1471,7 +1471,7 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
     {
         if( module->flag )
         {
-            aBoard->Change_Side_Module( module, NULL );
+            module->Flip( module->m_Pos );
             module->flag = 0;
         }
     }

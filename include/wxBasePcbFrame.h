@@ -178,9 +178,6 @@ public:
     // Gestion des modules
     void                     InstallModuleOptionsFrame( MODULE* Module, wxDC * DC );
     MODULE*                  Copie_Module( MODULE* module );
-    MODULE*                  Exchange_Module( wxWindow* winaff,
-                                              MODULE*   old_module,
-                                              MODULE*   new_module );
 
     /** Function Save_Module_In_Library
      *  Save in an existing library a given footprint
@@ -207,7 +204,6 @@ public:
                                             int     angle,
                                             bool    incremental );
     void                     Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest = false );
-    void                     InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
 
     // Graphic items edition:
     void                     InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );

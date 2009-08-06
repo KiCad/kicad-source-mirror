@@ -125,6 +125,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         return;
     }
 
+    // Swap layers:
     int layer, layerimg;
     layer    = aItem->GetLayer();
     layerimg = aImage->GetLayer();
@@ -183,9 +184,14 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case TYPE_COTATION:
+    {
+        wxString txt = ( (COTATION*) aItem )->GetText();
+        ( (COTATION*) aItem )->SetText( ((COTATION*) aImage )->GetText() );
+        ( (COTATION*) aImage )->SetText( txt );
         EXCHG( ( (COTATION*) aItem )->m_Text->m_Size, ( (COTATION*) aImage )->m_Text->m_Size );
         EXCHG( ( (COTATION*) aItem )->m_Text->m_Width, ( (COTATION*) aImage )->m_Text->m_Width );
         EXCHG( ( (COTATION*) aItem )->m_Text->m_Mirror, ( (COTATION*) aImage )->m_Text->m_Mirror );
+    }
         break;
 
     default:
@@ -316,7 +322,6 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     if( aItem == NULL )     // Nothing to save
         return;
 
-    BOARD_ITEM*        CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
@@ -327,9 +332,9 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of schematic */
-        CopyOfItem = DuplicateStruct( aItem );
-        itemWrapper.m_Link = CopyOfItem;
-        if( CopyOfItem )
+        if( itemWrapper.m_Link == NULL )    // When not null, the copy is already done
+            itemWrapper.m_Link = DuplicateStruct( aItem );;
+        if( itemWrapper.m_Link )
             commandToUndo->PushItem( itemWrapper );
         break;
 
@@ -337,6 +342,7 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     case UR_MOVED:
     case UR_FLIPPED:
     case UR_ROTATED:
+    case UR_ROTATED_CLOCKWISE:
     case UR_DELETED:
         commandToUndo->PushItem( itemWrapper );
         break;
@@ -371,7 +377,6 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                           UndoRedoOpType     aTypeCommand,
                                           const wxPoint&     aTransformPoint )
 {
-    BOARD_ITEM*        CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
@@ -389,17 +394,19 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         itemWrapper.m_PickedItem     = item;
         itemWrapper.m_PickedItemType = item->Type();
         itemWrapper.m_UndoRedoStatus = command;
+        itemWrapper.m_Link = aItemsList.GetPickedItemLink( ii );
         switch( command )
         {
-        case UR_CHANGED:        /* Create a copy of item, and put in undo list */
-            CopyOfItem = DuplicateStruct( item );
-            itemWrapper.m_Link = CopyOfItem;
-            if( CopyOfItem )
+        case UR_CHANGED:        /* If needed, create a copy of item, and put in undo list */
+            if( itemWrapper.m_Link == NULL )    // When not null, the copy is already done
+                itemWrapper.m_Link = DuplicateStruct( item );
+            if( itemWrapper.m_Link )
                 commandToUndo->PushItem( itemWrapper );
             break;
 
         case UR_MOVED:
         case UR_ROTATED:
+        case UR_ROTATED_CLOCKWISE:
         case UR_FLIPPED:
         case UR_NEW:
         case UR_DELETED:
@@ -498,6 +505,10 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
 
         case UR_ROTATED:
             item->Rotate( aList->m_TransformPoint, aRedoCommand ? 900 : -900 );
+            break;
+
+        case UR_ROTATED_CLOCKWISE:
+            item->Rotate( aList->m_TransformPoint, aRedoCommand ? -900 : 900 );
             break;
 
         case UR_FLIPPED:
@@ -609,45 +620,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
         aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
 
-        // Delete items is they are not flagged UR_NEW, or if this is a block operation
-        while( 1 )
-        {
-            ITEM_PICKER wrapper = curr_cmd->PopItem();
-            if( wrapper.m_PickedItem == NULL ) // No more item in list.
-                break;
-            switch( wrapper.m_UndoRedoStatus )
-            {
-            case UR_UNSPECIFIED:
-                if( displ_error )
-                    wxMessageBox( wxT( "ClearUndoORRedoList() error: unspecified item type" ) );
-                displ_error = false;
-                break;
-
-            case UR_MOVED:
-            case UR_FLIPPED:
-            case UR_MIRRORED_X:
-            case UR_MIRRORED_Y:
-            case UR_ROTATED:
-            case UR_NEW:        // Do nothing, items are in use, the picker is not owner of items
-                break;
-
-            case UR_CHANGED:
-                delete wrapper.m_Link;      //  the picker is owner of this item
-                break;
-
-            case UR_MODEDIT:             /* Specific to the module editor
-                                          *  (modedit creates a full copy of the current module when changed),
-                                          *  and the picker is owner of this item
-                                          */
-                delete wrapper.m_PickedItem;
-                break;
-
-            default:
-                delete wrapper.m_PickedItem;    //  the picker is owner of this item
-                break;
-            }
-        }
-
+        curr_cmd->ClearListAndDeleteItems();
         delete curr_cmd;    // Delete command
     }
 }

@@ -22,75 +22,7 @@
 
 /* Bitmaps */
 #include "bitmaps.h"
-
-
-/********************************************/
-static wxMenu* Append_Track_Width_List()
-/********************************************/
-
-/* create a wxMenu * which shows the last used track widths and via diameters
- *  @return a pointeur to the menu
- */
-{
-    #define TRACK_HISTORY_NUMBER_MAX 6
-    #define VIA_HISTORY_NUMBER_MAX   4
-    int      ii;
-    wxString msg;
-    wxMenu*  trackwidth_menu;
-    double   value;
-
-    trackwidth_menu = new wxMenu;
-
-    ADD_MENUITEM( trackwidth_menu, ID_PCB_TRACK_SIZE_SETUP,
-                  _( "New Width/Size" ), showtrack_xpm );
-
-    trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
-                             _( "Auto Width" ),
-                             _(
-                                 "Use the track width when starting on a track, otherwise the current track width" ),
-                             TRUE );
-
-    if( g_DesignSettings.m_UseConnectedTrackWidth )
-        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
-
-    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
-    {
-        if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
-            break;
-        value = To_User_Unit( g_UnitMetric,
-                              g_DesignSettings.m_TrackWidthHistory[ii],
-                              PCB_INTERNAL_UNIT );
-        if( g_UnitMetric == INCHES )  // Affichage en mils
-            msg.Printf( _( "Track %.1f" ), value * 1000 );
-        else
-            msg.Printf( _( "Track %.3f" ), value );
-
-        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
-
-        if( (g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
-           && !g_DesignSettings.m_UseConnectedTrackWidth )
-            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
-    }
-
-    trackwidth_menu->AppendSeparator();
-    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < VIA_HISTORY_NUMBER_MAX); ii++ )
-    {
-        if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
-            break;
-        value = To_User_Unit( g_UnitMetric,
-                              g_DesignSettings.m_ViaSizeHistory[ii],
-                              PCB_INTERNAL_UNIT );
-        if( g_UnitMetric == INCHES )
-            msg.Printf( _( "Via %.1f" ), value * 1000 );
-        else
-            msg.Printf( _( "Via %.3f" ), value );
-        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, TRUE );
-        if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
-            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, TRUE );
-    }
-
-    return trackwidth_menu;
-}
+static wxMenu* Append_Track_Width_List();
 
 
 /******************************************************************************/
@@ -732,19 +664,19 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
                       msg, drag_module_xpm );
     }
-    msg = AddHotkeyName( _( "Rotate  +" ), s_Board_Editor_Hokeys_Descr, HK_ROTATE_FOOTPRINT );
-    ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
-                  msg, rotate_module_pos_xpm );
+    msg = AddHotkeyName( _( "Rotate +" ), s_Board_Editor_Hokeys_Descr, HK_ROTATE_FOOTPRINT );
     ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
+                  msg, rotate_module_pos_xpm );
+    ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
                   _( "Rotate -" ), rotate_module_neg_xpm );
     msg = AddHotkeyName( _( "Flip" ), s_Board_Editor_Hokeys_Descr, HK_FLIP_FOOTPRINT );
     ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
                   msg, invert_module_xpm );
-    ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE,
-                  _( "Edit" ), edit_module_xpm );
 
     if( !flags )
     {
+        ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE,
+                      _( "Edit" ), edit_module_xpm );
         sub_menu_footprint->AppendSeparator();
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
                       _( "Delete Module" ), delete_module_xpm );
@@ -887,3 +819,73 @@ void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aP
     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MARKER, _( "Delete Marker" ), delete_xpm );
     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_GETINFO_MARKER, _( "Marker Error Info" ), info_xpm );
 }
+
+
+/********************************************/
+static wxMenu* Append_Track_Width_List()
+/********************************************/
+
+/* create a wxMenu * which shows the last used track widths and via diameters
+ *  @return a pointeur to the menu
+ */
+{
+    #define TRACK_HISTORY_NUMBER_MAX 6
+    #define VIA_HISTORY_NUMBER_MAX   4
+    int      ii;
+    wxString msg;
+    wxMenu*  trackwidth_menu;
+    double   value;
+
+    trackwidth_menu = new wxMenu;
+
+    ADD_MENUITEM( trackwidth_menu, ID_PCB_TRACK_SIZE_SETUP,
+                  _( "New Width/Size" ), showtrack_xpm );
+
+    trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
+                             _( "Auto Width" ),
+                             _(
+                                 "Use the track width when starting on a track, otherwise the current track width" ),
+                             TRUE );
+
+    if( g_DesignSettings.m_UseConnectedTrackWidth )
+        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
+
+    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
+    {
+        if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
+            break;
+        value = To_User_Unit( g_UnitMetric,
+                              g_DesignSettings.m_TrackWidthHistory[ii],
+                              PCB_INTERNAL_UNIT );
+        if( g_UnitMetric == INCHES )  // Affichage en mils
+            msg.Printf( _( "Track %.1f" ), value * 1000 );
+        else
+            msg.Printf( _( "Track %.3f" ), value );
+
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
+
+        if( (g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
+           && !g_DesignSettings.m_UseConnectedTrackWidth )
+            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
+    }
+
+    trackwidth_menu->AppendSeparator();
+    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < VIA_HISTORY_NUMBER_MAX); ii++ )
+    {
+        if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
+            break;
+        value = To_User_Unit( g_UnitMetric,
+                              g_DesignSettings.m_ViaSizeHistory[ii],
+                              PCB_INTERNAL_UNIT );
+        if( g_UnitMetric == INCHES )
+            msg.Printf( _( "Via %.1f" ), value * 1000 );
+        else
+            msg.Printf( _( "Via %.3f" ), value );
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, TRUE );
+        if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
+            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, TRUE );
+    }
+
+    return trackwidth_menu;
+}
+

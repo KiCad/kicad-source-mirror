@@ -513,7 +513,7 @@ void WinEDA_PcbFrame::OnHotKey(wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct)
 				break;
 
 			case HK_FLIP_FOOTPRINT: // move to other side
-				GetBoard()->Change_Side_Module(module, DC);
+				Change_Side_Module(module, DC);
 				break;
 
 			case HK_DRAG_FOOTPRINT: // Start move (and drag) module

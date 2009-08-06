@@ -380,10 +380,6 @@ public:
 
 #endif
 
-    /**************************/
-    /* footprint operations : */
-    /**************************/
-    void Change_Side_Module( MODULE* Module, wxDC* DC );
 
     /*************************/
     /* Copper Areas handling */

@@ -330,6 +330,20 @@ public:
     // Footprint edition (see also WinEDA_BasePcbFrame)
     void             StartMove_Module( MODULE* module, wxDC* DC );
     bool             Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDeleting );
+    void            Change_Side_Module( MODULE* Module, wxDC* DC );
+
+    void             InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
+    /** function Exchange_Module
+     * Replaces OldModule by NewModule, using OldModule settings:
+     * position, orientation, pad netnames ...)
+     * OldModule is deleted or put in undo list.
+     * @param aOldModule = footprint to replace
+     * @param aNewModule = footprint to put
+     * @param aUndoPickList = the undo list used to save  OldModule. If null, OldModule is deleted
+     */
+    void            Exchange_Module( MODULE*   aOldModule,
+                                                  MODULE*   aNewModule,
+                                                PICKED_ITEMS_LIST* aUndoPickList);
 
     // loading modules: see WinEDA_BasePcbFrame
 

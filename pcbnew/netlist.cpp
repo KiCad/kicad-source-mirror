@@ -475,7 +475,10 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                         MODULE* NewModule =
                             aFrame->Get_Librairie_Module( wxEmptyString, NameLibCmp, true );
                         if( NewModule )  /* Change old module to the new module (and delete the old one)*/
-                            Module = aFrame->Exchange_Module( NULL, Module, NewModule );
+                        {
+                            aFrame->Exchange_Module( Module, NewModule, NULL );
+                            Module = NewModule;
+                        }
                     }
                     else
                     {

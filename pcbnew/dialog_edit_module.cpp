@@ -14,6 +14,7 @@
 #include "gestfich.h"
 #include "3d_struct.h"
 #include "3d_viewer.h"
+#include "wxPcbStruct.h"
 #include "dialog_edit_module.h"
 
 extern bool GoToEditor;
@@ -569,7 +570,7 @@ void WinEDA_ModulePropertiesFrame::OnOkClick( wxCommandEvent& event )
 
     if( change_layer )
     {
-        m_Parent->GetBoard()->Change_Side_Module( m_CurrentModule, m_DC );
+        ((WinEDA_PcbFrame*)m_Parent)->Change_Side_Module( m_CurrentModule, m_DC );
     }
 
     if( m_AutoPlaceCtrl->GetSelection() == 1 )
@@ -668,7 +669,7 @@ void WinEDA_ModulePropertiesFrame::GotoModuleEditor( wxCommandEvent& event )
 void WinEDA_ModulePropertiesFrame::ExchangeModule( wxCommandEvent& event )
 /**********************************************************************/
 {
-    m_Parent->InstallExchangeModuleFrame( m_CurrentModule );
+    ((WinEDA_PcbFrame*)m_Parent)->InstallExchangeModuleFrame( m_CurrentModule );
 
     // Attention: si il y a eu echange, m_CurrentModule a été delete!
     m_Parent->SetCurItem( NULL );

@@ -291,10 +291,14 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( source_module )         // this is an update command
         {
-            // The new module replace the old module (pos, orient, ref, value and connexions are kept)
+            // In the main board,
+            // the new module replace the old module (pos, orient, ref, value and connexions are kept)
             // and the source_module (old module) is deleted
-            newmodule = pcbframe->Exchange_Module( this, source_module, newmodule );
+            PICKED_ITEMS_LIST pickList;
+            pcbframe->Exchange_Module( source_module, newmodule, &pickList );
             newmodule->m_TimeStamp = module_in_edit->m_Link;
+            if( pickList.GetCount() )
+                pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
         }
         else        // This is an insert command
         {

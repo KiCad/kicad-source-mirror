@@ -25,13 +25,13 @@ class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
 {
 private:
 
-    WinEDA_BasePcbFrame* m_Parent;
+    WinEDA_PcbFrame* m_Parent;
     MODULE* m_CurrentModule;
 
 public:
 
     // Constructor and destructor
-    DIALOG_EXCHANGE_MODULE( WinEDA_BasePcbFrame* aParent, MODULE* aModule );
+    DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* aParent, MODULE* aModule );
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
@@ -46,13 +46,14 @@ private:
     void    Change_ModuleAll();
     int     Maj_ListeCmp( const wxString& reference, const wxString& old_name,
                           const wxString& new_name, bool ShowError );
-    MODULE* Change_1_Module( MODULE*         Module,
+    bool Change_1_Module( MODULE*         Module,
                              const wxString& new_module,
+                             PICKED_ITEMS_LIST* aUndoPickList,
                              bool            ShowError );
 };
 
 
-DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_BasePcbFrame* parent, MODULE* Module ) :
+DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* parent, MODULE* Module ) :
     DIALOG_EXCHANGE_MODULE_BASE( parent )
 {
     m_Parent = parent;
@@ -63,7 +64,7 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_BasePcbFrame* parent, MOD
 }
 
 
-void WinEDA_BasePcbFrame::InstallExchangeModuleFrame( MODULE* Module )
+void WinEDA_PcbFrame::InstallExchangeModuleFrame( MODULE* Module )
 {
     DIALOG_EXCHANGE_MODULE dialog( this, Module );
 
@@ -195,7 +196,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n",
             DateAndTime( Line ) );
 
-    bool start_descr = FALSE;
+    bool start_descr = false;
     while( fgets( Line, sizeof(Line), FichCmp ) != NULL )
     {
         if( strnicmp( Line, "Reference = ", 9 ) == 0 )
@@ -212,7 +213,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         if( (strnicmp( Line, "Begin", 5 ) == 0)
            || (strnicmp( Line, "End", 3 ) == 0) )
         {
-            start_descr = FALSE;
+            start_descr = false;
         }
 
         if( start_descr && strnicmp( Line, "IdModule", 8 ) == 0 )
@@ -222,7 +223,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             msg = wxT( " * in <" ) + fn.GetFullPath() + wxT( ">.\n" );
             m_WinMessages->AppendText( msg );
 
-            start_descr = FALSE;
+            start_descr = false;
         }
         fputs( Line, NewFile );
     }
@@ -250,11 +251,16 @@ void DIALOG_EXCHANGE_MODULE::Change_Module()
     if( newmodulename == wxEmptyString )
         return;
 
-    if( Change_1_Module( m_CurrentModule, newmodulename, true ) )
+    PICKED_ITEMS_LIST pickList;
+
+    if( Change_1_Module( m_CurrentModule, newmodulename, &pickList, true ) )
     {
         m_Parent->Compile_Ratsnest( NULL, true );
         m_Parent->DrawPanel->Refresh();
     }
+
+    if( pickList.GetCount() )
+        m_Parent->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
 }
 
 
@@ -273,10 +279,10 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
 {
     wxString msg;
     MODULE*  Module, * PtBack;
-    bool     change = FALSE;
+    bool     change = false;
     wxString newmodulename = m_NewModule->GetValue();
     wxString value, lib_reference;
-    bool     check_module_value = FALSE;
+    bool     check_module_value = false;
     int      ShowErr = 3;           // Affiche 3 messages d'err maxi
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
@@ -307,12 +313,12 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    /* note: for the first module in chain (the last here), Module->Back() points the board or is NULL
+    PICKED_ITEMS_LIST pickList;
+   /* note: for the first module in chain (the last here), Module->Back() points the board or is NULL
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
     {
-        MODULE* module;
         PtBack = Module->Back();
         if( lib_reference.CmpNoCase( Module->m_LibRef ) != 0 )
             continue;
@@ -321,8 +327,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
             if( value.CmpNoCase( Module->m_Value->m_Text ) != 0 )
                 continue;
         }
-        module = Change_1_Module( Module, newmodulename.GetData(), ShowErr );
-        if( module )
+        if( Change_1_Module( Module, newmodulename.GetData(), &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -333,6 +338,9 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         m_Parent->Compile_Ratsnest( NULL, true );
         m_Parent->DrawPanel->Refresh();
     }
+
+    if( pickList.GetCount() )
+        m_Parent->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
 }
 
 
@@ -347,7 +355,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
 void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
 {
     MODULE* Module, * PtBack;
-    bool    change  = FALSE;
+    bool    change  = false;
     int     ShowErr = 3; // Affiche 3 messages d'err maxi
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
@@ -360,13 +368,15 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
      *  Change_1_Module() modifie le dernier module de la liste
      */
 
-    /* note: for the first module in chain (the last here), Module->Back() points the board or is NULL
+     PICKED_ITEMS_LIST pickList;
+
+   /* note: for the first module in chain (the last here), Module->Back() points the board or is NULL
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
     {
         PtBack = Module->Back();
-        if( Change_1_Module( Module, Module->m_LibRef.GetData(), ShowErr ) )
+        if( Change_1_Module( Module, Module->m_LibRef.GetData(), &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -377,6 +387,8 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
         m_Parent->Compile_Ratsnest( NULL, true );
         m_Parent->DrawPanel->Refresh();
     }
+    if( pickList.GetCount() )
+        m_Parent->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
 }
 
 
@@ -388,12 +400,13 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
  *      - memes textes valeur et ref
  *      - memes netnames pour pads de meme nom
  *  Retourne :
- *      0 si pas de changement ( si le nouveau module n'est pas en libr)
- *      1 si OK
+ *      false si pas de changement ( si le nouveau module n'est pas en libr)
+ *      true si OK
  * Ratsnest *must be recalculated* after modules changes
  */
-MODULE* DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
+bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
                                                  const wxString& new_module,
+                                                 PICKED_ITEMS_LIST* aUndoPickList,
                                                  bool            ShowError )
 {
     wxString namecmp, oldnamecmp;
@@ -401,7 +414,7 @@ MODULE* DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
     wxString Line;
 
     if( Module == NULL )
-        return NULL;
+        return false;
 
     wxBusyCursor dummy;
 
@@ -415,89 +428,91 @@ MODULE* DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
     m_WinMessages->AppendText( Line );
 
     namecmp.Trim( true );
-    namecmp.Trim( FALSE );
+    namecmp.Trim( false );
     NewModule = m_Parent->Get_Librairie_Module( wxEmptyString,
                                                 namecmp,
                                                 ShowError );
     if( NewModule == NULL )  /* Nouveau module NON trouve, reaffichage de l'ancien */
     {
         m_WinMessages->AppendText( wxT( "No\n" ) );
-        return NULL;
+        return false;
     }
 
     if( Module == m_CurrentModule )
         m_CurrentModule = NewModule;
     m_WinMessages->AppendText( wxT( "Ok\n" ) );
 
-    m_Parent->Exchange_Module( this, Module, NewModule );
+    m_Parent->Exchange_Module( Module, NewModule, aUndoPickList );
 
     Maj_ListeCmp( NewModule->m_Reference->m_Text,
                   oldnamecmp,
                   namecmp,
                   ShowError );
 
-    return NewModule;
+    return true;
 }
 
 
-/*
- * Remplace le module OldModule par le module NewModule (en conservant
- * position, orientation..)
- * OldModule est supprim� de la memoire.
+/** function Exchange_Module
+ * Replaces OldModule by NewModule, using OldModule settings:
+ * position, orientation, pad netnames ...)
+ * OldModule is deleted or put in undo list.
+ * @param aOldModule = footprint to replace
+ * @param aNewModule = footprint to put
+ * @param aUndoPickList = the undo list used to save  OldModule. If null, OldModule is deleted
  */
-MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
-                                              MODULE*   OldModule,
-                                              MODULE*   NewModule )
+void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
+                                              MODULE*   aNewModule,
+                                            PICKED_ITEMS_LIST* aUndoPickList)
 {
     wxPoint oldpos; /* memorisation temporaire pos curseur */
     D_PAD*  pad, * old_pad;
 
-    if( (OldModule->Type() != TYPE_MODULE)
-       || (NewModule->Type() != TYPE_MODULE) )
+    if( (aOldModule->Type() != TYPE_MODULE) || (aNewModule->Type() != TYPE_MODULE) )
     {
-        DisplayError( winaff,
-                     wxT( "WinEDA_BasePcbFrame::Exchange_Module() StuctType error" ) );
+        wxMessageBox( wxT( "WinEDA_PcbFrame::Exchange_Module() StuctType error" ) );
+        return;
     }
 
-    NewModule->SetParent( GetBoard() );
+    aNewModule->SetParent( GetBoard() );
 
     GetBoard()->m_Status_Pcb = 0;
     oldpos = GetScreen()->m_Curseur;
-    GetScreen()->m_Curseur = OldModule->m_Pos;
+    GetScreen()->m_Curseur = aOldModule->m_Pos;
 
     /* place module without ratsnets refresh: this will be made later
      * when all modules are on board
      */
-    Place_Module( NewModule, NULL, true );
+    Place_Module( aNewModule, NULL, true );
     GetScreen()->m_Curseur = oldpos;
 
     /* Flip footprint if needed */
-    if( OldModule->GetLayer() != NewModule->GetLayer() )
+    if( aOldModule->GetLayer() != aNewModule->GetLayer() )
     {
-        GetBoard()->Change_Side_Module( NewModule, NULL );
+        aNewModule->Flip( aNewModule->m_Pos );
     }
 
     /* Rotate footprint if needed */
-    if( OldModule->m_Orient != NewModule->m_Orient )
+    if( aOldModule->m_Orient != aNewModule->m_Orient )
     {
-        Rotate_Module( NULL, NewModule, OldModule->m_Orient, FALSE );
+        Rotate_Module( NULL, aNewModule, aOldModule->m_Orient, false );
     }
 
     /* Update reference and value */
-    NewModule->m_Reference->m_Text = OldModule->m_Reference->m_Text;
-    NewModule->m_Value->m_Text     = OldModule->m_Value->m_Text;
+    aNewModule->m_Reference->m_Text = aOldModule->m_Reference->m_Text;
+    aNewModule->m_Value->m_Text     = aOldModule->m_Value->m_Text;
 
     /* Mise a jour des autres parametres */
-    NewModule->m_TimeStamp = OldModule->m_TimeStamp;
-    NewModule->m_Path = OldModule->m_Path;
+    aNewModule->m_TimeStamp = aOldModule->m_TimeStamp;
+    aNewModule->m_Path = aOldModule->m_Path;
 
     /* Update pad netnames ( when possible) */
-    pad = NewModule->m_Pads;
+    pad = aNewModule->m_Pads;
     for( ; pad != NULL; pad = pad->Next() )
     {
         pad->SetNetname( wxEmptyString );
         pad->SetNet( 0 );
-        old_pad = OldModule->m_Pads;
+        old_pad = aOldModule->m_Pads;
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( strnicmp( pad->m_Padname, old_pad->m_Padname,
@@ -509,14 +524,20 @@ MODULE* WinEDA_BasePcbFrame::Exchange_Module( wxWindow* winaff,
         }
     }
 
-    /* Effacement de l'ancien module */
-    OldModule->DeleteStructure();
+    if( aUndoPickList )
+    {
+        GetBoard()->Remove(aOldModule);
+        ITEM_PICKER picker_old(aOldModule, UR_DELETED);
+        ITEM_PICKER picker_new(aNewModule, UR_NEW);
+        aUndoPickList->PushItem(picker_old);
+        aUndoPickList->PushItem(picker_new);
+    }
+    else /* Effacement de l'ancien module */
+        aOldModule->DeleteStructure();
 
     GetBoard()->m_Status_Pcb = 0;
-    NewModule->m_Flags = 0;
+    aNewModule->m_Flags = 0;
     GetScreen()->SetModify();
-
-    return NewModule;
 }
 
 

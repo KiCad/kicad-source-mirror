@@ -34,7 +34,7 @@
 ITEM_PICKER::ITEM_PICKER( EDA_BaseStruct* aItem, UndoRedoOpType aUndoRedoStatus )
 {
     m_UndoRedoStatus = aUndoRedoStatus;
-    m_PickedItem = aItem;
+    m_PickedItem     = aItem;
     m_PickedItemType = TYPE_NOT_INIT;
     m_Link = NULL;
 }
@@ -50,12 +50,20 @@ PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
 }
 
 
-void PICKED_ITEMS_LIST::PushItem( ITEM_PICKER& aItem)
+/** PushItem
+ * push a picker to the top of the list
+ * @param aItem = picker to push
+ */
+void PICKED_ITEMS_LIST::PushItem( ITEM_PICKER& aItem )
 {
     m_ItemsList.push_back( aItem );
 }
 
 
+/** PopItem
+ * @return the picker from the top of the list
+ * the picker is removed from the list
+ */
 ITEM_PICKER PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::PopItem()
 {
     ITEM_PICKER item;
@@ -69,19 +77,87 @@ ITEM_PICKER PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::PopItem()
 }
 
 
-void PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::ClearItemsList()
-
-/* delete only the list of EDA_BaseStruct * pointers, NOT the pointed data itself
+/** Function ClearItemsList
+ * delete only the list of pickers, NOT the picked data itself
  */
+void PICKED_ITEMS_LIST::PICKED_ITEMS_LIST::ClearItemsList()
 {
     m_ItemsList.clear();
 }
 
+
+/** Function ClearListAndDeleteItems
+ * delete the list of pickers, AND the data pointed
+ * by m_PickedItem or m_PickedItemLink, according to the type of undo/redo command recorded
+ */
 void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 {
-    for(unsigned ii = 0; ii < m_ItemsList.size(); ii++ )
-        delete m_ItemsList[ii].m_PickedItem;
-    m_ItemsList.clear();
+    bool show_error_message = true;
+
+    // Delete items is they are not flagged UR_NEW, or if this is a block operation
+    while( GetCount() > 0 )
+    {
+        ITEM_PICKER wrapper = PopItem();
+        if( wrapper.m_PickedItem == NULL ) // No more item in list.
+            break;
+        switch( wrapper.m_UndoRedoStatus )
+        {
+        case UR_UNSPECIFIED:
+            if( show_error_message )
+                wxMessageBox( wxT( "ClearUndoORRedoList() error: UR_UNSPECIFIED command type" ) );
+            show_error_message = false;
+            break;
+
+        case UR_WIRE_IMAGE:
+        {
+            // Specific to eeschema: a linked list of wires is stored.
+            // the wrapper picks only the first item (head of list), and is owner of all picked items
+            EDA_BaseStruct* item = wrapper.m_PickedItem;
+            while( item )
+            {
+                // Delete old copy of wires
+                EDA_BaseStruct* nextitem = item->Next();
+                delete item;
+                item = nextitem;
+            }
+        }
+        break;
+
+        case UR_MOVED:
+        case UR_FLIPPED:
+        case UR_MIRRORED_X:
+        case UR_MIRRORED_Y:
+        case UR_ROTATED:
+        case UR_ROTATED_CLOCKWISE:
+        case UR_NEW:        // Do nothing, items are in use, the picker is not owner of items
+            break;
+
+        case UR_CHANGED:
+            delete wrapper.m_Link;   //  the picker is owner of this item
+            break;
+
+        case UR_DELETED:            // the picker is owner of this item
+        case UR_LIBEDIT:            /* Libedit save always a copy of the current item
+                                     *  So, the picker is always owner of the picked item
+                                     */
+        case UR_MODEDIT:            /* Specific to the module editor
+                                     *  (modedit creates a full copy of the current module when changed),
+                                     *  and the picker is owner of this item
+                                     */
+            delete wrapper.m_PickedItem;
+            break;
+
+        default:
+        {
+            wxString msg;
+            msg.Printf( wxT(
+                            "ClearUndoORRedoList() error: unknown command type %d" ),
+                        wrapper.m_UndoRedoStatus );
+            wxMessageBox( msg );
+        }
+        break;
+        }
+    }
 }
 
 
@@ -94,11 +170,13 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
 {
     ITEM_PICKER picker;
+
     if( aIdx < m_ItemsList.size() )
         picker = m_ItemsList[aIdx];
 
     return picker;
 }
+
 
 /** function GetPickedItem
  * @return a pointer to the picked item, or null if does not exist
@@ -181,11 +259,13 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx 
  * @param aIdx = index of the picker in the picked list
  * @return true if the picker exists, or false if does not exist
  */
-bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem,
+                                       UndoRedoOpType  aStatus,
+                                       unsigned        aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_PickedItem = aItem;
+        m_ItemsList[aIdx].m_PickedItem     = aItem;
         m_ItemsList[aIdx].m_UndoRedoStatus = aStatus;
         return true;
     }
@@ -225,17 +305,19 @@ bool PICKED_ITEMS_LIST::RemovePickedItem( unsigned aIdx )
     return true;
 }
 
+
 /** Function CopyList
  * copy all data from aSource
  * Items picked are not copied. just pointer on them are copied
  */
-void PICKED_ITEMS_LIST::CopyList(const PICKED_ITEMS_LIST & aSource)
+void PICKED_ITEMS_LIST::CopyList( const PICKED_ITEMS_LIST& aSource )
 {
     ITEM_PICKER picker;
-    for(unsigned ii = 0; ii < aSource.GetCount(); ii++ )
+
+    for( unsigned ii = 0; ii < aSource.GetCount(); ii++ )
     {
         picker = aSource.m_ItemsList[ii];
-        PushItem(picker);
+        PushItem( picker );
     }
 }
 

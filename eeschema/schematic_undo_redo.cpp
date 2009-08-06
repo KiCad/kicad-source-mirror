@@ -290,12 +290,13 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         itemWrapper.m_PickedItem = item;
         itemWrapper.m_PickedItemType = item->Type();
         itemWrapper.m_UndoRedoStatus = command;
+        itemWrapper.m_Link = aItemsList.GetPickedItemLink( ii );
         switch( command )
         {
         case UR_CHANGED:        /* Create a copy of item */
-            CopyOfItem = DuplicateStruct( item );
-            itemWrapper.m_Link = CopyOfItem;
-            if ( CopyOfItem )
+            if( itemWrapper.m_Link == NULL )
+                itemWrapper.m_Link = DuplicateStruct( item );
+            if ( itemWrapper.m_Link )
                 commandToUndo->PushItem( itemWrapper );
             break;
 
@@ -495,56 +496,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
         aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
 
-        // Delete items is they are not flagged UR_NEW, or if this is a block operation
-        while( 1 )
-        {
-            ITEM_PICKER     wrapper = curr_cmd->PopItem();
-            EDA_BaseStruct* item    = wrapper.m_PickedItem;
-            if( item == NULL ) // No more item in list.
-                break;
-            switch( wrapper.m_UndoRedoStatus )
-            {
-            case UR_WIRE_IMAGE:
-                while( item )
-                {   // Delete old copy of wires
-                    EDA_BaseStruct* nextitem = item->Next();
-                    delete          item;
-                    item = nextitem;
-                }
-
-                break;
-
-            case UR_MOVED:
-            case UR_MIRRORED_X:
-            case UR_MIRRORED_Y:
-            case UR_ROTATED:
-            case UR_NEW:        // Do nothing, items are in use
-                break;
-
-            case UR_LIBEDIT:    // Libedit save always a copy of the current item
-                delete item;    // So, the picker is always owner of the picked item
-                break;
-
-            case UR_DELETED:
-                delete item;    // Delete the picked item, because it was deleted from schematic
-                break;
-
-            case UR_CHANGED:
-                delete wrapper.m_Link;  // Delete the copy of item (the item is itself in use)
-                break;
-
-            default:
-            {
-                wxString msg;
-                msg.Printf(
-                    wxT("ClearUndoORRedoList() error: unexpected undo/redo type %d"),
-                    wrapper.m_UndoRedoStatus );
-                wxMessageBox( msg );
-                break;
-            }
-            }
-        }
-
+        curr_cmd->ClearListAndDeleteItems();
         delete curr_cmd;    // Delete command
     }
 }

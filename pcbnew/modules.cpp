@@ -24,8 +24,8 @@
 static void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC );
 
 /* Variables locales : */
-static int ModuleInitOrient;    // Lors des moves, val init de l'orient (pour annulation)
-static int ModuleInitLayer;     // Lors des moves, val init de la couche (pour annulation)
+static MODULE* s_ModuleInitialCopy = NULL;      // Copy of module for abort/undo command
+static PICKED_ITEMS_LIST s_PickedList;          // a picked list to save initial module and dragged tracks
 
 
 /*************************************************************************/
@@ -98,15 +98,22 @@ MODULE* WinEDA_BasePcbFrame::GetModuleByName()
 void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
 /**********************************************************************/
 {
-    
+
     if( module == NULL )
         return;
+
+    if( s_ModuleInitialCopy )
+        delete s_ModuleInitialCopy;
+
+    s_PickedList.ClearItemsList();  // Should be empty, but...
+    // Creates a copy of the cuttent module, for abort and undo commands
+    s_ModuleInitialCopy = new MODULE( GetBoard());
+    s_ModuleInitialCopy->Copy( module );
+    s_ModuleInitialCopy->m_Flags = 0;
 
     SetCurItem( module );
     GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     module->m_Flags |= IS_MOVED;
-    ModuleInitOrient = module->m_Orient;
-    ModuleInitLayer  = module->GetLayer();
 
     GetScreen()->m_Curseur = module->m_Pos;
     DrawPanel->MouseToCursorSchema();
@@ -123,6 +130,15 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     if( g_Drag_Pistes_On )
     {
         Build_Drag_Liste( DrawPanel, DC, module );
+        ITEM_PICKER itemWrapper(NULL, UR_CHANGED);
+        for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+        {
+            TRACK * segm = pt_drag->m_Segm;
+            itemWrapper.m_PickedItem = segm;
+            itemWrapper.m_Link = segm->Copy();
+            itemWrapper.m_Link->SetState( EDIT, OFF );
+            s_PickedList.PushItem(itemWrapper);
+        }
     }
 
     GetBoard()->m_Status_Pcb     |= DO_NOT_SHOW_GENERAL_RASTNEST;
@@ -154,7 +170,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     DRAG_SEGM*           pt_drag;
     TRACK*               pt_segm;
     MODULE*              module;
-    WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) Panel->m_Parent;
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
 
     module = (MODULE*) pcbframe->GetScreen()->GetCurItem();
     pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
@@ -203,18 +219,22 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
 
     /* Reaffichage du module a l'ecran */
-    if( module )
+    if( module && s_ModuleInitialCopy )
     {
-        if( ModuleInitOrient != module->m_Orient )
-            pcbframe->Rotate_Module( NULL, module, ModuleInitOrient, FALSE );
-        if( ModuleInitLayer != module->GetLayer() )
-            pcbframe->GetBoard()->Change_Side_Module( module, NULL );
+        if( s_ModuleInitialCopy->m_Orient != module->m_Orient )
+            pcbframe->Rotate_Module( NULL, module, s_ModuleInitialCopy->m_Orient, FALSE );
+        if( s_ModuleInitialCopy->GetLayer() != module->GetLayer() )
+            pcbframe->Change_Side_Module( module, NULL );
         module->Draw( Panel, DC, GR_OR );
     }
     g_Drag_Pistes_On     = FALSE;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
     pcbframe->SetCurItem( NULL );
+
+    delete s_ModuleInitialCopy;
+    s_ModuleInitialCopy = NULL;
+    s_PickedList.ClearListAndDeleteItems();
 
     pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;   // Display ratsnest is allowed
     if( g_Show_Ratsnest )
@@ -290,7 +310,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
 /**
  *  Function Delete Module
  *  Remove a footprint from m_Modules linked list and put it in undelete buffer
- *  The net rastenes and pad list are recalcualed
+ *  The rastnest and pad list are recalcualed
  * @param module = footprint to delete
  * @param DC = currentDevice Context. if NULL: do not redraw new ratsnets and dirty rectange
  * @param aPromptBeforeDeleting : if true: ask for confirmation before deleting
@@ -340,7 +360,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDe
 
 
 /****************************************************************************/
-void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
+void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
 /****************************************************************************/
 
 /**
@@ -359,22 +379,22 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     if( (Module->GetLayer() != CMP_N) && (Module->GetLayer() != COPPER_LAYER_N) )
         return;
 
-    m_PcbFrame->GetScreen()->SetModify();
+    GetScreen()->SetModify();
 
-    if( !(Module->m_Flags & IS_MOVED) )
+    if( !(Module->m_Flags & IS_MOVED) ) /* This is a simple flip, no other edition in progress */
     {
-        m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
-        if( DC && m_PcbFrame )
+        GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
+        if( DC )
         {
             int tmp = Module->m_Flags;
             Module->m_Flags |= DO_NOT_DRAW;
-            m_PcbFrame->DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+            DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
             Module->m_Flags = tmp;
         }
 
         /* Effacement chevelu general si necessaire */
         if( DC && g_Show_Ratsnest )
-            m_PcbFrame->DrawGeneralRatsnest( DC );
+            DrawGeneralRatsnest( DC );
 
         /* Init des variables utilisees dans la routine Dessine_Drag_segment() */
         g_Offset_Module.x = 0;
@@ -383,37 +403,36 @@ void BOARD::Change_Side_Module( MODULE* Module, wxDC* DC )
     else    // Module en deplacement
     {
         /* efface empreinte ( vue en contours) si elle a ete deja dessinee */
-        if( DC && m_PcbFrame )
+        if( DC )
         {
-            DrawModuleOutlines( m_PcbFrame->DrawPanel, DC, Module );
-            Dessine_Segments_Dragges( m_PcbFrame->DrawPanel, DC );
+            DrawModuleOutlines( DrawPanel, DC, Module );
+            Dessine_Segments_Dragges( DrawPanel, DC );
         }
     }
 
     /* Flip the module */
     Module->Flip( Module->m_Pos );
 
-    if( m_PcbFrame )
-        Module->DisplayInfo( m_PcbFrame );
+    Module->DisplayInfo( this );
 
     if( !(Module->m_Flags & IS_MOVED) ) /* Inversion simple */
     {
-        if( DC && m_PcbFrame )
+        if( DC )
         {
-            Module->Draw( m_PcbFrame->DrawPanel, DC, GR_OR );
+            Module->Draw( DrawPanel, DC, GR_OR );
 
             /* affichage chevelu general si necessaire */
-            m_PcbFrame->Compile_Ratsnest( DC, true );
+            Compile_Ratsnest( DC, true );
         }
     }
     else
     {
-        if( DC && m_PcbFrame )
+        if( DC )
         {
-            DrawModuleOutlines( m_PcbFrame->DrawPanel, DC, Module );
-            Dessine_Segments_Dragges( m_PcbFrame->DrawPanel, DC );
+            DrawModuleOutlines( DrawPanel, DC, Module );
+            Dessine_Segments_Dragges( DrawPanel, DC );
         }
-        m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
+        GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     }
 }
 
@@ -425,14 +444,13 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRec
 /* Place a l'endroit pointe par la souris le module deja existant selectionne
  *  auparavant.
  *  Entree: module = num du module a replacer
- *          DC ( si NULL: pas d'affichage a l'�ran
+ *          DC ( si NULL: pas d'affichage a l'ecran
  *  Sortie :
  *          mise a jour des nouvelles coord des differents elements du module
  *          affichage a l'ecran du module
  */
 {
     TRACK*     pt_segm;
-    DRAG_SEGM* pt_drag;
     wxPoint    newpos;
 
     if( module == 0 )
@@ -440,6 +458,27 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRec
 
     GetScreen()->SetModify();
     GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
+
+    if( (module->m_Flags & IS_NEW ) )
+    {
+        SaveCopyInUndoList(module, UR_NEW);
+    }
+
+    else if( (module->m_Flags & IS_MOVED ) )
+    {
+        ITEM_PICKER picker(module, UR_CHANGED);
+        picker.m_Link = s_ModuleInitialCopy;
+        s_PickedList.PushItem(picker);
+        s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
+    }
+
+    if ( s_PickedList.GetCount() )
+    {
+        SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);
+        // Clear list, but DO NOT delete items,
+        // because they are owned by the saved undo list and they therefore in use
+        s_PickedList.ClearItemsList();
+    }
 
     if( g_Show_Module_Ratsnest && (GetBoard()->m_Status_Pcb & LISTE_PAD_OK) && DC )
         trace_ratsnest_module( DC );
@@ -450,11 +489,11 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRec
     if( DC )
         module->Draw( DrawPanel, DC, GR_OR );
 
-    /* Tracage des segments dragges et liberation memoire */
+
     if( g_DragSegmentList )
     {
-        pt_drag = g_DragSegmentList;
-        for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+        /* Redraw dragged track segments */
+        for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag != NULL; pt_drag = pt_drag->Pnext )
         {
             pt_segm = pt_drag->m_Segm;
             pt_segm->SetState( EDIT, OFF );
@@ -462,9 +501,9 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRec
                 pt_segm->Draw( DrawPanel, DC, GR_OR );
         }
 
+        // Delete drag list
         EraseDragListe();
     }
-
     if( !aDoNotRecreateRatsnest )
         Compile_Ratsnest( DC, true );
 
@@ -477,6 +516,9 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRec
     DrawPanel->ForceCloseManageCurseur = NULL;
     module->m_Flags  = 0;
     g_Drag_Pistes_On = FALSE;
+
+    delete s_ModuleInitialCopy;
+    s_ModuleInitialCopy = NULL;
 }
 
 
@@ -498,10 +540,9 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
 
     GetScreen()->SetModify();
 
-    /* efface ancienne position */
-    if( !(module->m_Flags & IS_MOVED) ) /* Rotation simple */
+    if( !(module->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
     {
-        if( DC )
+        if( DC )    // Erase footprint to screen
         {
             int tmp = module->m_Flags;
             module->m_Flags |= DO_NOT_DRAW;
