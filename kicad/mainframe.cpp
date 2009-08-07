@@ -48,7 +48,8 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line (bottom of the frame
-    int dims[3] = { -1, -1, 100 };
+    static const int dims[3] = { -1, -1, 100 };
+
     CreateStatusBar( 3 );
     SetStatusWidths( 3, dims );
 

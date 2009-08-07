@@ -4,6 +4,14 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Aug-6 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    MsgPanel is dynamically sized based on system gui font.  Before this fix
+    the window height was hardcoded and was too small on systems with large
+    fonts.  See  WinEDA_MsgPanel::GetRequiredHeight();
+
+
 2009-aug-08 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

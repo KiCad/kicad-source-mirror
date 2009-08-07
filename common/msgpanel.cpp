@@ -30,11 +30,34 @@ WinEDA_MsgPanel::WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id,
     SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
     m_last_x = 0;
+
+    m_fontSize = computeFontSize();
 }
 
 
 WinEDA_MsgPanel::~WinEDA_MsgPanel()
 {
+}
+
+
+wxSize WinEDA_MsgPanel::computeFontSize()
+{
+    // Get size of the wxSYS_DEFAULT_GUI_FONT
+    wxSize      fontSizeInPixels;
+
+    wxScreenDC dc;
+
+    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
+
+    return fontSizeInPixels;
+}
+
+
+int WinEDA_MsgPanel::GetRequiredHeight()
+{
+    // make space for two rows of text plus a number of pixels between them.
+    return 2 * computeFontSize().y + 0;
 }
 
 
@@ -78,20 +101,9 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
     wxPoint     pos;
     wxSize      drawSize = GetClientSize();
 
-
-    // Get size of the font
-    wxSize      fontSizeInPixels;
-    {
-        wxClientDC dc( this );
-
-        dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
-        dc.GetTextExtent( wxT( "W" ), &fontSizeInPixels.x, &fontSizeInPixels.y );
-
-    }   // destroy wxClientDC ASAP
-
     if( pos_X >= 0 )
     {
-        m_last_x = pos.x = pos_X * (fontSizeInPixels.x + 2);
+        m_last_x = pos.x = pos_X * (m_fontSize.x + 2);
     }
     else
         pos.x = m_last_x;
@@ -100,8 +112,8 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
 
     item.m_X = pos.x;
 
-    item.m_UpperY = (drawSize.y / 2) - fontSizeInPixels.y;
-    item.m_LowerY = drawSize.y - fontSizeInPixels.y;
+    item.m_UpperY = (drawSize.y / 2) - m_fontSize.y;
+    item.m_LowerY = drawSize.y - m_fontSize.y;
 
     item.m_UpperText = texte_H;
     item.m_LowerText = texte_L;

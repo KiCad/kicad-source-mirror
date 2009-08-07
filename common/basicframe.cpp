@@ -40,10 +40,12 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
     m_Ident  = idtype;
     m_HToolBar       = NULL;
     m_FrameIsActive  = TRUE;
-    m_MsgFrameHeight = MSG_PANEL_DEFAULT_HEIGHT;
+
+    m_MsgFrameHeight = WinEDA_MsgPanel::GetRequiredHeight();
 
     minsize.x = 470;
     minsize.y = 350 + m_MsgFrameHeight;
+
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
     /* Verification des parametres de creation */

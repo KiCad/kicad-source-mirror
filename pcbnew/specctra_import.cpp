@@ -424,7 +424,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
                 {
                     // module is on component layer (front)
                     module->Flip( module->m_Pos );
-               }
+                }
                 module->SetOrientation( orientation );
             }
             else

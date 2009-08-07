@@ -80,8 +80,6 @@ enum id_toolbar {
 /* Classes for basic main frames used in kicad */
 /***********************************************/
 
-#define MSG_PANEL_DEFAULT_HEIGHT ( 28 )     // height of the infos display window
-
 
 /******************************************************************/
 /* Basic frame for kicad, eeschema, pcbnew and gerbview.          */
@@ -348,13 +346,21 @@ struct MsgItem
 class WinEDA_MsgPanel : public wxPanel
 {
 protected:
-    std::vector<MsgItem> m_Items;
-    int m_last_x;                           ///< the last used x coordinate
+    std::vector<MsgItem>    m_Items;
+    int                     m_last_x;      ///< the last used x coordinate
+    wxSize                  m_fontSize;
 
 
     void showItem( wxDC& dc, const MsgItem& aItem );
 
     void erase( wxDC* DC );
+
+    /**
+     * Function getFontSize
+     * computes the height and width of a 'W' in the system font.
+     */
+    static wxSize computeFontSize();
+
 
 public:
     WinEDA_DrawFrame* m_Parent;
@@ -365,6 +371,14 @@ public:
     // Constructor and destructor
     WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
     ~WinEDA_MsgPanel();
+
+
+    /**
+     * Function GetRequiredHeight
+     * returns the required height (in pixels) of a WinEDA_MsgPanel.  This takes
+     * into consideration the system gui font, wxSYS_DEFAULT_GUI_FONT.
+     */
+    static int GetRequiredHeight();
 
     void OnPaint( wxPaintEvent& event );
     void EraseMsgBox();

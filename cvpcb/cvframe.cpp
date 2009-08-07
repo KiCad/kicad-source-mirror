@@ -144,9 +144,11 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
         m_FrameSize.y = FRAME_MIN_SIZE_Y;
 
     // create the status bar
-    int dims[3] = { -1, -1, 250 };
+    static const int dims[3] = { -1, -1, 250 };
+
     CreateStatusBar( 3 );
     SetStatusWidths( 3, dims );
+
     ReCreateMenuBar();
     ReCreateHToolbar();
 

@@ -67,9 +67,11 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line
-    int dims[5] = { -1, 100, 100, 100, 140 };
+    static const int dims[5] = { -1, 100, 100, 100, 140 };
+
     CreateStatusBar( 5 );
     SetStatusWidths( 5, dims );
+
     ReCreateMenuBar();
     ReCreateHToolbar();
 
