@@ -208,9 +208,7 @@ TRACK*          Locate_Pistes( TRACK* start_adresse, int typeloc );
 
 DRAWSEGMENT*    Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
 
-
 D_PAD*          Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int layer );
-
 /* Routine cherchant le pad contenant le point px,py, sur la couche layer
   * ( extremite de piste )
   *  La liste des pads doit deja exister.
@@ -290,30 +288,6 @@ void    ListSetState( EDA_BaseStruct* Start, int Nbitem, int State, int onoff );
 /* Met a jour le membre .state d'une chaine de structures */
 
 
-/************/
-/* DRC.CPP : */
-/************/
-int     Drc( WinEDA_BasePcbFrame* frame, wxDC* DC,
-             TRACK* pt_segment, TRACK* pt_start_buffer, int show_err );
-
-/* Teste le segment pointe par pt_segment:
-  *     debsegment = adresse du segment a tester
-  *     pt_start_buffer = adresse de la zone piste
-  *      show_err (flag) si 0 pas d'affichage d'erreur sur ecran
-  *     retourne :
-  *          BAD_DRC (1) si Violation DRC
-  *          OK_DRC  (0) si OK  */
-
-
-/*****************/
-/* TR_MODIF.CPP : */
-/*****************/
-
-int     EraseOldTrack( WinEDA_BasePcbFrame* frame, BOARD* Pcb, wxDC* DC,
-                       TRACK* pt_new_track, int nbptnewpiste );
-void    Modif_Auto_Route( TRACK* pt_debut_new_piste );
-
-
 /**************/
 /* CLEAN.CPP : */
 /**************/
@@ -322,21 +296,6 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche );
 
 /* Supprime les segments mal connectes, cad interconnectant des segments
   * de net_code differents */
-
-
-/************/
-/* BLOCK.CPP */
-/************/
-
-void    Block_Affiche( int on_off ); /*
-                                  * routine de trace du cadre d'un Block en cours de delimitation
-                                  * Si on_off = 0 : effacement du cadre
-                                  * Si on_off = 1 : affichage  du cadre */
-
-void    Trace_Block( WinEDA_DrawPanel* panel, wxDC* DC, int ox, int oy, int fx, int fy, int color );
-
-/* Routine de trace d'un rectangle symbolisant un block
-  *   (toujours en mode XOR) */
 
 
 /************/
@@ -362,8 +321,6 @@ void MasqueAttributs( int* masque_set, int* masque_clr );
 /* DUPLTRAC.CPP */
 /***************/
 
-BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask );
-
 /* Routine trouvant le point " d'accrochage " d'une extremite de piste.
  *  Ce point peut etre un PAD ou un autre segment de piste
  * Retourne:
@@ -371,24 +328,26 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask );
  *      - pointeur sur le segment ou:
  *      - NULL
  *  Parametres d'appel:
- *   coord pX, pY du point tst
- *   masque des couches a tester
+ *   coord aPos du point tst
+ *   aLayerMask masque des couches a tester
  */
+BOARD_ITEM* LocateLockPoint( BOARD* aPcb, wxPoint aPos, int aLayerMask );
 
-
-TRACK*          CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm );
 
 /* Routine de creation d'un point intermediaire sur un segment
-  * le segment ptsegm est casse en 2 segments se raccordant au point pX, pY
-  *  retourne:
-  *      NULL si pas de nouveau point ( c.a.d si pX, pY correspondait deja
-  *     a une extremite ou:
-  *      pointeur sur le segment cree
-  * si refsegm != NULL refsegm est pointeur sur le segment incident,
-  * et le point cree est l'ntersection des 2 axes des segments ptsegm et
-  * refsegm
-  * retourne la valeur exacte de pX et pY
+ *  le segment aSegm est casse en 2 segments se raccordant au point pX, pY
+ *  retourne:
+ *      NULL si pas de nouveau point ( c.a.d si aRefPoint correspondait deja
+ *      a une extremite ou:
+ *      pointeur sur le segment cree
+ *  si aRefSegm != NULL refsegm est pointeur sur le segment incident,
+ *  et le point cree est l'intersection des 2 axes des segments ptsegm et aRefSegm
+ *  retourne la valeur exacte de aRefPoint
+ *  Si aSegm pointe sur une via:
+ *      retourne la valeur exacte de aRefPoint et aSegm,
+ *      mais ne cree pas de point supplementaire
  */
+TRACK* CreateLockPoint( wxPoint & aRefPoint, TRACK* aSegm, TRACK* aRefSegm, PICKED_ITEMS_LIST* aItemsListPicker );
 
 /****************/
 /* CONTROLE.CPP */

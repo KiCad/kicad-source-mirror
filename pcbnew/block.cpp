@@ -513,7 +513,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
     /* Zone selection */
     if( Block_Include_Zones )
     {
-#if 0  
+#if 0
         /* This section can creates problems if selected:
          * m_Pcb->m_Zone can have a *lot* of items (100 000 is easily possible)
          * so it is not selected (and TODO: will be removed, one day)
@@ -641,7 +641,7 @@ void WinEDA_PcbFrame::Block_Delete()
 
         // These items are deleted, but not put in undo list
         case TYPE_MARKER_PCB:               // a marker used to show something
-        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+        case TYPE_ZONE:                     // SEG_ZONE items are now deprecated
             item->UnLink();
             itemsList->RemovePicker( ii );
             ii--;
@@ -715,7 +715,7 @@ void WinEDA_PcbFrame::Block_Rotate()
             break;
 
         // This item is not put in undo list
-        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+        case TYPE_ZONE:                     // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -786,7 +786,7 @@ void WinEDA_PcbFrame::Block_Flip()
             break;
 
         // This item is not put in undo list
-        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+        case TYPE_ZONE:                     // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -853,7 +853,7 @@ void WinEDA_PcbFrame::Block_Move()
             break;
 
         // This item is not put in undo list
-        case TYPE_ZONE:                     // a segment used to fill a zome area (segment on a copper layer)
+        case TYPE_ZONE:                     // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -928,12 +928,8 @@ void WinEDA_PcbFrame::Block_Duplicate()
         }
         break;
 
-        case TYPE_ZONE:                  // a segment used to fill a zome area (segment on a copper layer)
-        {
-            // SEG_ZONE items are not copied or put in undo list
-            // they must be recreated by zone filling
-        }
-        break;
+        case TYPE_ZONE:                  // SEG_ZONE items are now deprecated
+            break;
 
         case TYPE_ZONE_CONTAINER:
         {

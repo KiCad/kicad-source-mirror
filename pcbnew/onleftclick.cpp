@@ -50,7 +50,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             case TYPE_VIA:
                 if( DrawStruct->m_Flags & IS_DRAGGED )
                 {
-                    PlaceDraggedTrackSegment( (TRACK*) DrawStruct, DC );
+                    PlaceDraggedOrMovedTrackSegment( (TRACK*) DrawStruct, DC );
                     exit = true;
                 }
                 break;

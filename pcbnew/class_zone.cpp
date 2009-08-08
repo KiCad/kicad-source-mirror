@@ -1145,8 +1145,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 
 /**
  * Function SetNetNameFromNetCode
- * Fin the nat name corresponding to the net code.
- * @param aPcb: the curren board
+ * Find the net name corresponding to the net code.
+ * @param aPcb: the current board
  * @return bool - true if net found, else false
  */
 bool ZONE_CONTAINER::SetNetNameFromNetCode( void )

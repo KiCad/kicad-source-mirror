@@ -165,22 +165,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOGGLE_PRESENT_COMMAND:
-
-        /* if( DrawPanel->ManageCurseur
-         *  && DrawPanel->ForceCloseManageCurseur )
-         *  {
-         *  DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-         *  }
-         */
-
         break;
 
     default:        // Finish (abort ) the command
-        if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
-        {
+        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
 
         if( m_ID_current_state != id )
         {
@@ -284,11 +273,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         else
             m_ModuleEditFrame->Iconize( false );
-        break;
-
-    case ID_NEW_PROJECT:
-    case ID_LOAD_PROJECT:
-        Files_io( event );
         break;
 
     case ID_PCB_GLOBAL_DELETE:
@@ -470,7 +454,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem()->m_Flags & IS_DRAGGED )
         {
-            PlaceDraggedTrackSegment( (TRACK*) GetCurItem(), &dc );
+            PlaceDraggedOrMovedTrackSegment( (TRACK*) GetCurItem(), &dc );
         }
         break;
 
@@ -482,7 +466,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem()->m_Flags & IS_DRAGGED )
         {
-            PlaceDraggedTrackSegment( (TRACK*) GetCurItem(), &dc );
+            PlaceDraggedOrMovedTrackSegment( (TRACK*) GetCurItem(), &dc );
         }
         else
         {
@@ -1131,7 +1115,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             TRACK*  track = (TRACK*) GetScreen()->GetCurItem();
             wxPoint pos   = GetScreen()->m_Curseur;
             track->Draw( DrawPanel, &dc, GR_XOR );
-            TRACK*  newtrack = CreateLockPoint( &pos.x, &pos.y, track, NULL );
+            PICKED_ITEMS_LIST itemsListPicker;
+            TRACK*  newtrack = CreateLockPoint( pos, track, NULL, &itemsListPicker);
+            SaveCopyInUndoList(itemsListPicker,UR_UNSPECIFIED);
             track->Draw( DrawPanel, &dc, GR_XOR );
             newtrack->Draw( DrawPanel, &dc, GR_XOR );
         }

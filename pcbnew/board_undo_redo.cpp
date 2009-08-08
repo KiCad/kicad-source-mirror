@@ -126,7 +126,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
 
     // Swap layers:
-    if( aItem->Type() != TYPE_MODULE )     // Modules have a global swap function
+    if( aItem->Type() != TYPE_MODULE && aItem->Type() != TYPE_ZONE_CONTAINER )     // these items have a global swap function
     {
         int layer, layerimg;
         layer    = aItem->GetLayer();
@@ -139,16 +139,21 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     {
     case TYPE_MODULE:
     {
-        MODULE* m_tmp = (MODULE*) DuplicateStruct( aImage );
+        MODULE* tmp = (MODULE*) DuplicateStruct( aImage );
         ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
-        ( (MODULE*) aItem )->Copy( m_tmp );
-        delete m_tmp;
+        ( (MODULE*) aItem )->Copy( tmp );
+        delete tmp;
     }
     break;
 
     case TYPE_ZONE_CONTAINER:
-        wxMessageBox( wxT( "SwapData(): TYPE_ZONE_CONTAINER not handled" ) );
-        break;
+    {
+        ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) DuplicateStruct( aImage );
+        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
+        ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
+        delete tmp;
+    }
+    break;
 
     case TYPE_DRAWSEGMENT:
         EXCHG( ( (TRACK*) aItem )->m_Start, ( (TRACK*) aImage )->m_Start );
@@ -189,13 +194,13 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     case TYPE_COTATION:
     {
         wxString txt = ( (COTATION*) aItem )->GetText();
-        ( (COTATION*) aItem )->SetText( ((COTATION*) aImage )->GetText() );
+        ( (COTATION*) aItem )->SetText( ( (COTATION*) aImage )->GetText() );
         ( (COTATION*) aImage )->SetText( txt );
         EXCHG( ( (COTATION*) aItem )->m_Text->m_Size, ( (COTATION*) aImage )->m_Text->m_Size );
         EXCHG( ( (COTATION*) aItem )->m_Text->m_Width, ( (COTATION*) aImage )->m_Text->m_Width );
         EXCHG( ( (COTATION*) aItem )->m_Text->m_Mirror, ( (COTATION*) aImage )->m_Text->m_Mirror );
     }
-        break;
+    break;
 
     default:
         wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
@@ -334,7 +339,7 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
 
     switch( aCommandType )
     {
-    case UR_CHANGED:            /* Create a copy of schematic */
+    case UR_CHANGED:                        /* Create a copy of schematic */
         if( itemWrapper.m_Link == NULL )    // When not null, the copy is already done
             itemWrapper.m_Link = DuplicateStruct( aItem );;
         if( itemWrapper.m_Link )
@@ -383,6 +388,7 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
+
     // Copy picker list:
     commandToUndo->CopyList( aItemsList );
 
@@ -394,20 +400,21 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
-            commandToUndo->SetPickedItemStatus(command, ii );
+            commandToUndo->SetPickedItemStatus( command, ii );
         }
 
         wxASSERT( item );
         switch( command )
         {
         case UR_CHANGED:
+
             /* If needed, create a copy of item, and put in undo list
              * in the picker, as link
              * If this link is not null, the copy is already done
              */
-            if( commandToUndo->GetPickedItemLink(ii) == NULL )
+            if( commandToUndo->GetPickedItemLink( ii ) == NULL )
                 commandToUndo->SetPickedItemLink( DuplicateStruct( item ), ii );
-            wxASSERT( commandToUndo->GetPickedItemLink(ii) );
+            wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;
 
         case UR_MOVED:
@@ -453,7 +460,9 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
     bool        not_found = false;
     bool        reBuild_ratsnest = false;
 
-    for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
+    // Undo in the reverse order of list creation: (this can allow stacked changes
+    // like the same item can be changes and deleted in the same complex command
+    for( int ii = aList->GetCount()-1; ii >= 0 ; ii--  )
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
         wxASSERT( item );
@@ -464,7 +473,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
             {
                 // Remove this non existant item
                 aList->RemovePicker( ii );
-                ii--;       // the current item was removed, ii points now the next item
+                ii++;       // the current item was removed, ii points now the next item
                             // whe must decrement it because it will be incremented
                 not_found = true;
                 continue;
@@ -557,11 +566,14 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    /* Get the old wrapper and put it in RedoList */
+    /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
-    GetScreen()->PushCommandToRedoList( List );
     /* Undo the command */
     PutDataInPreviousState( List, false );
+
+    /* Pu the old list in RedoList */
+     List->ReversePickersListOrder();
+    GetScreen()->PushCommandToRedoList( List );
 
     GetScreen()->SetModify();
     ReCreateHToolbar();
@@ -583,12 +595,15 @@ void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
         return;
 
 
-    /* Get the old wrapper and put it in UndoList */
+    /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
-    GetScreen()->PushCommandToUndoList( List );
 
     /* Redo the command: */
     PutDataInPreviousState( List, true );
+
+    /* Put the old list in UndoList */
+    List->ReversePickersListOrder();
+    GetScreen()->PushCommandToUndoList( List );
 
     GetScreen()->SetModify();
     ReCreateHToolbar();

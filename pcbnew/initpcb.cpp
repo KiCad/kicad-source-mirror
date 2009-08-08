@@ -55,11 +55,11 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
         {
             gen_rastnest = true;
 
-            /* Segments used in Zone filling selection */
-            // for many reasons saving these items can create problems so they are not saved
-            // (because they are numerous and can be deleted in zones operation)
+            /* ZEG_ZONE items used in Zone filling selection are now deprecated :
+            * and are deleted but not put in undo buffer if exist
+            */
             pcb->m_Zone.DeleteAll();
- 
+
             while( pcb->GetAreaCount() )
             {
                 item = pcb->GetArea( 0 );
@@ -216,7 +216,7 @@ bool WinEDA_ModuleEditFrame::Clear_Pcb( bool aQuery )
 
     // Clear undo and redo lists
     GetScreen()->ClearUndoRedoList();
-    
+
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
 

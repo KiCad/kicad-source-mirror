@@ -137,6 +137,15 @@ public:
         return m_ItemsList.size();
     }
 
+    /** function ReversePickersListOrder()
+     * reverses the order of pickers stored in this list
+     * Useful when pop a list from Undo to Redo (and vice-versa)
+     * because sometimes undo (or redo) a command needs to keep the
+     * order of successive changes.
+     * and obviously, undo and redo are in reverse order
+     */
+    void        ReversePickersListOrder();
+
 
     /** function GetItemWrapper
      * @return the picker of a picked item

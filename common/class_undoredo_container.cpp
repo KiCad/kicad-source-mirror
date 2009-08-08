@@ -314,6 +314,25 @@ void PICKED_ITEMS_LIST::CopyList( const PICKED_ITEMS_LIST& aSource )
     m_ItemsList = aSource.m_ItemsList;  // Vector's copy
 }
 
+/** function ReversePickersListOrder()
+ * reverses the order of pickers stored in this list
+ * Useful when pop a list from Undo to Redo (and vice-versa)
+ * because sometimes undo (or redo) a command needs to keep the
+ * order of successive changes.
+ * and obviously, undo and redo are in reverse order
+ */
+void PICKED_ITEMS_LIST::ReversePickersListOrder()
+{
+    std::vector <ITEM_PICKER> tmp;
+    while( !m_ItemsList.empty() )
+    {
+        tmp.push_back( m_ItemsList.back() );
+        m_ItemsList.pop_back();
+    }
+
+    m_ItemsList.swap( tmp );
+}
+
 
 /**********************************************/
 /********** UNDO_REDO_CONTAINER ***************/
@@ -355,3 +374,5 @@ PICKED_ITEMS_LIST* UNDO_REDO_CONTAINER::PopCommand()
     }
     return NULL;
 }
+
+

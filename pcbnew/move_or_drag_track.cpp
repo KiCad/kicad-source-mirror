@@ -38,12 +38,13 @@ bool           s_StartPointVertical, s_EndPointVertical,
                s_StartPointHorizontal, s_EndPointHorizontal; // vertical or horizontal line indicators
 bool           s_StartSegmentPresent, s_EndSegmentPresent;
 
+static PICKED_ITEMS_LIST s_ItemsListPicker;
+
 /**************************************************************/
 static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 /***************************************************************/
 
-/* routine d'annulation de la commande drag, copy ou move track  si une piste est en cours
- *  de tracage, ou de sortie de l'application EDITRACK.
+/** Abort function for commandes drag, copy ou move track
  */
 {
     TRACK* NextS;
@@ -55,7 +56,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->GetScreen()->m_Curseur = PosInit;
 
     if( Panel->ManageCurseur )
-        Panel->ManageCurseur( Panel, DC, TRUE );
+        Panel->ManageCurseur( Panel, DC, true );
 
     Panel->GetScreen()->m_Curseur = oldpos;
     g_HightLigt_Status = FALSE;
@@ -116,6 +117,9 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         Track->Draw( Panel, DC, GR_OR );
     }
 
+    // Clear the undo picker list:
+    s_ItemsListPicker.ClearListAndDeleteItems();
+
     g_HightLigth_NetCode = Old_HightLigth_NetCode;
     g_HightLigt_Status   = Old_HightLigt_Status;
     if( g_HightLigt_Status )
@@ -132,7 +136,8 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /*************************************************************************/
 /* Redraw the moved node according to the mouse cursor position */
 {
-    int          ii, dx, dy;
+    int          ii;
+    wxPoint moveVector;
     TRACK*       Track;
     BASE_SCREEN* screen = panel->GetScreen();
     int          track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
@@ -140,7 +145,7 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     DisplayOpt.DisplayPcbTrackFill = FALSE;
 
-    erase = TRUE;
+    erase = true;
 
     /* erase the current moved track segments from screen */
     if( erase )
@@ -152,9 +157,7 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* set the new track coordinates */
     wxPoint Pos = screen->m_Curseur;
 
-    dx = Pos.x - s_LastPos.x;
-    dy = Pos.y - s_LastPos.y;
-
+    moveVector = Pos - s_LastPos;
     s_LastPos = Pos;
 
     ii    = NbPtNewTrack;
@@ -162,15 +165,9 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     for( ; (ii > 0) && (Track != NULL); ii--, Track = Track->Next() )
     {
         if( Track->m_Flags & STARTPOINT )
-        {
-            Track->m_Start.x += dx;
-            Track->m_Start.y += dy;
-        }
+            Track->m_Start += moveVector;
         if( Track->m_Flags & ENDPOINT )
-        {
-            Track->m_End.x += dx;
-            Track->m_End.y += dy;
-        }
+            Track->m_End += moveVector;
     }
 
     /* Redraw the current moved track segments */
@@ -184,16 +181,10 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
             Track->Draw( panel, DC, draw_mode );
 
         if( Track->m_Flags & STARTPOINT )
-        {
-            Track->m_Start.x += dx;
-            Track->m_Start.y += dy;
-        }
+            Track->m_Start += moveVector;
 
         if( Track->m_Flags & ENDPOINT )
-        {
-            Track->m_End.x += dx;
-            Track->m_End.y += dy;
-        }
+            Track->m_End += moveVector;
 
         Track->Draw( panel, DC, draw_mode );
     }
@@ -456,7 +447,7 @@ bool InitialiseDragParameters()
 /**********************************/
 
 /* Init variables (slope, Y intersect point, flags) for Show_Drag_Track_Segment_With_Cte_Slope()
- *  return TRUE if Ok, FALSE if dragging is not possible
+ *  return true if Ok, FALSE if dragging is not possible
  *  (2 colinear segments)
  */
 {
@@ -614,7 +605,7 @@ bool InitialiseDragParameters()
             return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -685,15 +676,32 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int co
 
         track->m_Flags |= IS_DRAGGED;
     }
+    // Prepare the Undo command
+    ITEM_PICKER picker( track, UR_CHANGED );
+    picker.m_Link = track->Copy();
+    s_ItemsListPicker.PushItem( picker );
+    DRAG_SEGM* pt_drag = g_DragSegmentList;
+    for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+    {
+        TRACK* draggedtrack = pt_drag->m_Segm;
+        picker.m_PickedItem = draggedtrack;
+        picker.m_Link = draggedtrack->Copy();
+        s_ItemsListPicker.PushItem( picker );
+        draggedtrack = (TRACK*)picker.m_Link;
+        draggedtrack->SetStatus( 0 );
+        draggedtrack->m_Flags = 0;
+    }
+
     s_LastPos = PosInit;
     DrawPanel->ManageCurseur = Show_MoveNode;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveTrack;
 
     g_HightLigth_NetCode = track->GetNet();
-    g_HightLigt_Status   = TRUE;
+    g_HightLigt_Status   = true;
 
     GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
-    DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, true );
+
 }
 
 
@@ -727,7 +735,7 @@ bool WinEDA_PcbFrame::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 /***********************************************************************************/
 /**
  * @todo: this function is broken, because it merge segments having different width or without any connectivity test.
- * 2 collinear segments can be merged only in no other segment or vais is connected to the common point
+ * 2 collinear segments can be merged only in no other segment or via is connected to the common point
  * and if they have the same width. See cleanup.cpp for merge functions,
  * and consider Marque_Une_Piste() to locate segments that can be merged
  */
@@ -796,30 +804,32 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
     };
 #endif
 
-    s_StartSegmentPresent = s_EndSegmentPresent = TRUE;
+    s_StartSegmentPresent = s_EndSegmentPresent = true;
 
     if( (track->start == NULL) || (track->start->Type() == TYPE_TRACK) )
-        TrackToStartPoint = (TRACK*) Locate_Piste_Connectee( track,
+        TrackToStartPoint = Locate_Piste_Connectee( track,
                                                              GetBoard()->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
     if( TrackToStartPoint )
     {
         TrackToStartPoint->SetState( BUSY, ON );
-        if( Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, START ) )
-            error = TRUE;
+        if( (TrackToStartPoint->Type() == TYPE_VIA) ||
+            Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, START ) )
+            error = true;
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
     if( (track->end == NULL) || (track->end->Type() == TYPE_TRACK) )
-        TrackToEndPoint = (TRACK*) Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END );
+        TrackToEndPoint = Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
     if( TrackToEndPoint )
     {
         TrackToEndPoint->SetState( BUSY, ON );
-        if( Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END ) )
-            error = TRUE;
+        if( (TrackToStartPoint->Type() == TYPE_VIA) ||
+            Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END ) )
+            error = true;
         TrackToEndPoint->SetState( BUSY, OFF );
     }
 
@@ -874,8 +884,22 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
     DrawPanel->ForceCloseManageCurseur = Abort_MoveTrack;
 
     g_HightLigth_NetCode = track->GetNet();
-    g_HightLigt_Status   = TRUE;
+    g_HightLigt_Status   = true;
     GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
+
+    // Prepare the Undo command
+    DRAG_SEGM* pt_drag = g_DragSegmentList;
+    ITEM_PICKER picker( NULL, UR_CHANGED );
+    for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+    {
+        TRACK* draggedtrack = pt_drag->m_Segm;
+        picker.m_PickedItem = draggedtrack;
+        picker.m_Link = draggedtrack->Copy();
+        s_ItemsListPicker.PushItem( picker );
+        draggedtrack = (TRACK*)picker.m_Link;
+        draggedtrack->SetStatus( 0 );
+        draggedtrack->m_Flags = 0;
+    }
 
     if( !InitialiseDragParameters() )
     {
@@ -888,7 +912,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
 
 
 /**********************************************************************/
-bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
+bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 /**********************************************************************/
 /* Place a dragged (or moved) track segment or via */
 {
@@ -923,7 +947,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     Track->SetState( EDIT, OFF );
     Track->Draw( DrawPanel, DC, draw_mode );
 
-    /* Draw ddragged tracks */
+    /* Draw dragged tracks */
     pt_drag = g_DragSegmentList;
     for( ; pt_drag; pt_drag = pt_drag->Pnext )
     {
@@ -941,6 +965,9 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
 
     EraseDragListe();
 
+    SaveCopyInUndoList(s_ItemsListPicker, UR_UNSPECIFIED);
+    s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
+
     GetScreen()->SetModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
@@ -948,7 +975,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     if( current_net_code > 0 )
         test_1_net_connexion( DC, current_net_code );
 
-    return TRUE;
+    return true;
 }
 
 
@@ -985,60 +1012,55 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
 
 
 /******************************************************************************/
-TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
+TRACK* CreateLockPoint( wxPoint & aRefPoint, TRACK* aSegm, TRACK* aRefSegm, PICKED_ITEMS_LIST* aItemsListPicker )
 /******************************************************************************/
 
 /* Routine de creation d'un point intermediaire sur un segment
- *  le segment ptsegm est casse en 2 segments se raccordant au point pX, pY
+ *  le segment aSegm est casse en 2 segments se raccordant au point pX, pY
  *  retourne:
- *      NULL si pas de nouveau point ( c.a.d si pX, pY correspondait deja
+ *      NULL si pas de nouveau point ( c.a.d si aRefPoint correspondait deja
  *      a une extremite ou:
  *      pointeur sur le segment cree
- *  si refsegm != NULL refsegm est pointeur sur le segment incident,
- *  et le point cree est l'intersection des 2 axes des segments ptsegm et
- *  refsegm
- *  retourne la valeur exacte de pX et pY
- *  Si ptsegm pointe sur une via:
- *      retourne la valeur exacte de pX et pY et ptsegm,
+ *  et le point cree est l'intersection des 2 axes des segments aSegm et refsegm
+ *  retourne la valeur exacte de aRefPoint
+ *  Si aSegm pointe sur une via:
+ *      retourne la valeur exacte de aRefPoint et ptsegm,
  *      mais ne cree pas de point supplementaire
- *
  */
 {
     int cX, cY;
     int dx, dy;             /* Coord de l'extremite du segm ptsegm / origine */
-    int ox, oy, fx, fy;     /* coord de refsegm / origine de prsegm */
 
-    if( (ptsegm->m_Start.x == *pX) && (ptsegm->m_Start.y == *pY) )
+    if( aSegm->m_Start == aRefPoint || aSegm->m_End == aRefPoint )
         return NULL;
 
-    if( (ptsegm->m_End.x == *pX) && (ptsegm->m_End.y == *pY) )
-        return NULL;
-
-    /* le point n'est pas sur une extremite de piste */
-    if( ptsegm->Type() == TYPE_VIA )
+    /* A via is a good lock point */
+    if( aSegm->Type() == TYPE_VIA )
     {
-        *pX = ptsegm->m_Start.x;
-        *pY = ptsegm->m_Start.y;
-        return ptsegm;
+        aRefPoint = aSegm->m_Start;
+        return aSegm;
     }
 
     /* calcul des coord vraies du point intermediaire dans le repere d'origine
      *  = origine de ptsegm
      */
-    cX = *pX - ptsegm->m_Start.x;
-    cY = *pY - ptsegm->m_Start.y;
+    cX = aRefPoint.x - aSegm->m_Start.x;
+    cY = aRefPoint.y - aSegm->m_Start.y;
 
-    dx = ptsegm->m_End.x - ptsegm->m_Start.x;
-    dy = ptsegm->m_End.y - ptsegm->m_Start.y;
+    dx = aSegm->m_End.x - aSegm->m_Start.x;
+    dy = aSegm->m_End.y - aSegm->m_Start.y;
 
-    // ***** A COMPLETER : non utilise
-    if( refsegm )
+    // Not yet used:
+#if 0
+    int ox, oy, fx, fy;     /* coord de refsegm / origine de prsegm */
+    if( aRefSegm )
     {
-        ox = refsegm->m_Start.x - ptsegm->m_Start.x;
-        oy = refsegm->m_Start.y - ptsegm->m_Start.y;
-        fx = refsegm->m_End.x - ptsegm->m_Start.x;
-        fy = refsegm->m_End.y - ptsegm->m_Start.y;
+        ox = aRefSegm->m_Start.x - aSegm->m_Start.x;
+        oy = aRefSegm->m_Start.y - aSegm->m_Start.y;
+        fx = aRefSegm->m_End.x - aSegm->m_Start.x;
+        fy = aRefSegm->m_End.y - aSegm->m_Start.y;
     }
+#endif
 
     /* pour que le point soit sur le segment ptsegm: cY/cX = dy/dx */
     if( dx == 0 )
@@ -1050,32 +1072,44 @@ TRACK* CreateLockPoint( int* pX, int* pY, TRACK* ptsegm, TRACK* refsegm )
      * segment, debutant au point intermediaire
      */
 
-    cX += ptsegm->m_Start.x;
-    cY += ptsegm->m_Start.y;
+    cX += aSegm->m_Start.x;
+    cY += aSegm->m_Start.y;
 
-    TRACK*        newTrack = ptsegm->Copy();
+    TRACK*        newTrack = aSegm->Copy();
+    if( aItemsListPicker )
+    {
+        ITEM_PICKER picker( newTrack, UR_NEW );
+        aItemsListPicker->PushItem(picker);
+    }
 
-    DLIST<TRACK>* list = (DLIST<TRACK>*)ptsegm->GetList();
+
+    DLIST<TRACK>* list = (DLIST<TRACK>*)aSegm->GetList();
     wxASSERT( list );
-    list->Insert( newTrack, ptsegm->Next() );
+    list->Insert( newTrack, aSegm->Next() );
 
     /* correction du pointeur de fin du nouveau segment */
-    newTrack->end = ptsegm->end;
+    newTrack->end = aSegm->end;
 
     /* le segment primitif finit au nouveau point : */
-    ptsegm->m_End.x = cX;
-    ptsegm->m_End.y = cY;
+    if( aItemsListPicker )
+    {
+        ITEM_PICKER picker( aSegm, UR_CHANGED );
+        picker.m_Link = aSegm->Copy();
+        aItemsListPicker->PushItem(picker);
+    }
+    aSegm->m_End.x = cX;
+    aSegm->m_End.y = cY;
 
-    ptsegm->SetState( END_ONPAD, OFF );
+    aSegm->SetState( END_ONPAD, OFF );
 
     /* le nouveau segment debute au nouveau point : */
-    ptsegm = newTrack;;
-    ptsegm->m_Start.x = cX;
-    ptsegm->m_Start.y = cY;
-    ptsegm->SetState( BEGIN_ONPAD, OFF );
+    aSegm = newTrack;;
+    aSegm->m_Start.x = cX;
+    aSegm->m_Start.y = cY;
+    aSegm->SetState( BEGIN_ONPAD, OFF );
 
-    *pX = cX;
-    *pY = cY;
+    aRefPoint.x = cX;
+    aRefPoint.y = cY;
 
-    return ptsegm;
+    return aSegm;
 }

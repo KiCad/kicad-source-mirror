@@ -12,72 +12,131 @@
 #include "wxPcbStruct.h"
 #include "protos.h"
 
-/* Routines Locales */
 
-/*********************************************************************/
-int WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* pt_segm )
-/*********************************************************************/
 
-/* Routine to modify one track segment width or one via diameter.
+/** Function SetTrackSegmentWidth
+ *  Modify one track segment width or one via diameter (using DRC control).
  *  Basic routine used by other routines when editing tracks or vias
+ * @param aTrackItem = the track segment or via to modify
+ * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
+ * @return  true if done, false if no not change (because DRC error)
  */
+bool WinEDA_PcbFrame::SetTrackSegmentWidth( TRACK*             aTrackItem,
+                                            PICKED_ITEMS_LIST* aItemsListPicker )
 {
-    int errdrc = OK_DRC;
-    int old_w, consigne;
+    int  initial_width, new_width;
+    bool change_ok = false;
 
-    DrawPanel->CursorOff( DC );                     // Erase cursor shape
-    pt_segm->Draw( DrawPanel, DC, GR_XOR );         // Erase old track shape
-
-    /* Test DRC and width change */
-    old_w    = pt_segm->m_Width;
-    consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentTrackWidth;
-    if( pt_segm->Type() == TYPE_VIA )
+    initial_width = aTrackItem->m_Width;
+    new_width = aTrackItem->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+    if( aTrackItem->Type() == TYPE_VIA )
     {
-        consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentViaSize;
-        if ( pt_segm->m_Shape == VIA_MICROVIA )
-            consigne = pt_segm->m_Width = g_DesignSettings.m_CurrentMicroViaSize;
+        new_width = aTrackItem->m_Width = g_DesignSettings.m_CurrentViaSize;
+        if( aTrackItem->m_Shape == VIA_MICROVIA )
+            new_width = aTrackItem->m_Width = g_DesignSettings.m_CurrentMicroViaSize;
     }
 
-    if( old_w < consigne ) /* DRC utile puisque augm de dimension */
+    if( initial_width < new_width )     /* make a DRC test because the new size is bigger than the old size */
     {
+        int diagdrc = OK_DRC;
         if( Drc_On )
-            errdrc = m_drc->Drc( pt_segm, GetBoard()->m_Track );
-        if( errdrc == BAD_DRC )
-            pt_segm->m_Width = old_w;
-        else
-            GetScreen()->SetModify();
+            diagdrc = m_drc->Drc( aTrackItem, GetBoard()->m_Track );
+        if( diagdrc == OK_DRC )
+            change_ok = true;
+    }
+    else if( initial_width > new_width )
+        change_ok = true;
+    // if new width == initial_width: do nothing
+
+    if( change_ok )
+    {
+        GetScreen()->SetModify();
+        if( aItemsListPicker )
+        {
+            aTrackItem->m_Width = initial_width;
+            ITEM_PICKER picker( aTrackItem, UR_CHANGED );
+            picker.m_Link = aTrackItem->Copy();
+            aItemsListPicker->PushItem( picker );
+            aTrackItem->m_Width = new_width;
+        }
     }
     else
-        GetScreen()->SetModify();                   /* Correction systematiquement faite si reduction */
+        aTrackItem->m_Width = initial_width;
 
-    pt_segm->Draw( DrawPanel, DC, GR_OR );          // Display new track shape
-    DrawPanel->CursorOn( DC );                      // Display cursor shape
-    return errdrc;
+    return change_ok;
 }
 
 
-/*****************************************************************/
-void WinEDA_PcbFrame::Edit_Track_Width( wxDC* DC, TRACK* pt_segm )
-/*****************************************************************/
+/** Function Edit_TrackSegm_Width
+ * Modify one track segment width or one via diameter (using DRC control).
+ * @param  DC = the curred device context (can be NULL)
+ * @param aTrackItem = the track segment or via to modify
+ */
+void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* aTrackItem )
 {
-    int    ii;
-    TRACK* pt_track;
-    int    errdrc;
-    int    nb_segm, nb_segm_modifies = 0, nb_segm_non_modifies = 0;
+    PICKED_ITEMS_LIST itemsListPicker;
+    bool change = SetTrackSegmentWidth( aTrackItem, &itemsListPicker );
 
-    if( pt_segm == NULL )
+    if( change == 0 || aTrackItem->m_Flags )
+        return;     // No change
+
+    // The segment has changed: redraw it and save it in undo list
+    TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItem( 0 );
+    if( DC )
+    {
+        DrawPanel->CursorOff( DC );                     // Erase cursor shape
+        oldsegm->Draw( DrawPanel, DC, GR_XOR );         // Erase old track shape
+        aTrackItem->Draw( DrawPanel, DC, GR_OR );       // Display new track shape
+        DrawPanel->CursorOn( DC );                      // Display cursor shape
+    }
+    SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
+}
+
+/** Function Edit_Track_Width
+ * Modify a full track width (using DRC control).
+ * a full track is the set of track segments between 2 ends: pads or a point that has more than 2 segments ends connected
+ * @param  DC = the curred device context (can be NULL)
+ * @param aTrackSegment = a segment or via on the track to change
+ * @return  none
+ */
+void WinEDA_PcbFrame::Edit_Track_Width( wxDC* DC, TRACK* aTrackSegment )
+{
+    TRACK* pt_track;
+    int    nb_segm;
+
+    if( aTrackSegment == NULL )
         return;
 
-    pt_track = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, 0 );
-    for( ii = 0; ii < nb_segm; ii++, pt_track = pt_track->Next() )
+    pt_track = Marque_Une_Piste( this, DC, aTrackSegment, &nb_segm, 0 );
+
+    PICKED_ITEMS_LIST itemsListPicker;
+    bool change = false;
+    for( int ii = 0; ii < nb_segm; ii++, pt_track = pt_track->Next() )
     {
         pt_track->SetState( BUSY, OFF );
-        errdrc = Edit_TrackSegm_Width( DC, pt_track );
-        if( errdrc == BAD_DRC )
-            nb_segm_non_modifies++;
-        else
-            nb_segm_modifies++;
+        if( SetTrackSegmentWidth( pt_track, &itemsListPicker ) )
+            change = true;
     }
+
+    if( !change )
+        return;
+
+    // Some segment have changed: redraw them and save in undo list
+    if( DC )
+    {
+        DrawPanel->CursorOff( DC );                     // Erase cursor shape
+        for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
+        {
+            TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
+            segm->Draw( DrawPanel, DC, GR_XOR );            // Erase old track shape
+            segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
+            segm->Draw( DrawPanel, DC, GR_OR );             // Display new track shape
+        }
+
+        DrawPanel->CursorOn( DC );                   // Display cursor shape
+    }
+
+    SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 }
 
 
@@ -86,9 +145,6 @@ void WinEDA_PcbFrame::Edit_Net_Width( wxDC* DC, int Netcode )
 /***********************************************************/
 {
     TRACK* pt_segm;
-    int    errdrc;
-    int    nb_segm_modifies     = 0;
-    int    nb_segm_non_modifies = 0;
 
     if( Netcode <= 0 )
         return;
@@ -97,17 +153,36 @@ void WinEDA_PcbFrame::Edit_Net_Width( wxDC* DC, int Netcode )
         return;
 
     /* balayage des segments */
+    PICKED_ITEMS_LIST itemsListPicker;
+    bool change = false;
     for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        if( Netcode != pt_segm->GetNet() ) /* mauvaise piste */
+        if( Netcode != pt_segm->GetNet() )         /* mauvaise piste */
             continue;
         /* piste d'un net trouvee */
-        errdrc = Edit_TrackSegm_Width( DC, pt_segm );
-        if( errdrc == BAD_DRC )
-            nb_segm_non_modifies++;
-        else
-            nb_segm_modifies++;
+        if( SetTrackSegmentWidth( pt_segm, &itemsListPicker ) )
+            change = true;
     }
+
+    if( !change )
+        return;
+
+    // Some segment have changed: redraw them and save in undo list
+    if( DC )
+    {
+        DrawPanel->CursorOff( DC );                     // Erase cursor shape
+        for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
+        {
+            TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
+            segm->Draw( DrawPanel, DC, GR_XOR );            // Erase old track shape
+            segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
+            segm->Draw( DrawPanel, DC, GR_OR );             // Display new track shape
+        }
+
+        DrawPanel->CursorOn( DC );                  // Display cursor shape
+    }
+
+    SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 }
 
 
@@ -121,9 +196,6 @@ bool WinEDA_PcbFrame::Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via )
  */
 {
     TRACK* pt_segm;
-    int    errdrc;
-    int    nb_segm_modifies     = 0;
-    int    nb_segm_non_modifies = 0;
 
     if( Track && Via )
     {
@@ -141,34 +213,42 @@ bool WinEDA_PcbFrame::Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via )
             return FALSE;
     }
 
-    pt_segm = GetBoard()->m_Track;
-    for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
+    /* balayage des segments */
+    PICKED_ITEMS_LIST itemsListPicker;
+    bool change = false;
+    for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        if( pt_segm->Type() == TYPE_VIA ) /* mise a jour du diametre de la via */
+        if( (pt_segm->Type() == TYPE_VIA ) && Via )
         {
-            if( Via )
-            {
-                errdrc = Edit_TrackSegm_Width( DC, pt_segm );
-                if( errdrc == BAD_DRC )
-                    nb_segm_non_modifies++;
-                else
-                    nb_segm_modifies++;
-            }
-        }
-        else    /* mise a jour de la largeur du segment */
-        {
-            if( Track )
-            {
-                errdrc = Edit_TrackSegm_Width( DC, pt_segm );
-                if( errdrc == BAD_DRC )
-                    nb_segm_non_modifies++;
-                else
-                    nb_segm_modifies++;
-            }
+            if( SetTrackSegmentWidth( pt_segm, &itemsListPicker ) )
+                change = true;
         }
     }
 
-    if( nb_segm_modifies  )
-        return TRUE;
-    return FALSE;
+    if( (pt_segm->Type() == TYPE_TRACK ) && Track )
+    {
+        if( SetTrackSegmentWidth( pt_segm, &itemsListPicker ) )
+            change = true;;
+    }
+    if( !change )
+        return false;
+
+    // Some segment have changed: redraw them and save in undo list
+    if( DC )
+    {
+        DrawPanel->CursorOff( DC );                     // Erase cursor shape
+        for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
+        {
+            TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
+            segm->Draw( DrawPanel, DC, GR_XOR );            // Erase old track shape
+            segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
+            segm->Draw( DrawPanel, DC, GR_OR );             // Display new track shape
+        }
+
+        DrawPanel->CursorOn( DC );                  // Display cursor shape
+    }
+
+    SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
+
+    return true;
 }

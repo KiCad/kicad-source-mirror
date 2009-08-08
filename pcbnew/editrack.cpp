@@ -27,6 +27,7 @@ static void EnsureEndTrackOnPad( D_PAD* Pad );
 /* variables locales */
 static int OldNetCodeSurbrillance;
 static int OldEtatSurbrillance;
+static PICKED_ITEMS_LIST s_ItemsListPicker;
 
 
 /************************************************************/
@@ -52,6 +53,9 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
             frame->Hight_Light( DC );
 
         frame->MsgPanel->EraseMsgBox();
+
+        // Clear the undo picker list:
+        s_ItemsListPicker.ClearListAndDeleteItems();
 
         // Delete current (new) track
         g_CurrentTrackList.DeleteAll();
@@ -95,6 +99,9 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
     if( aTrack == NULL )  /* Starting a new track  */
     {
+        // Prepare the undo command info
+        s_ItemsListPicker.ClearListAndDeleteItems();        // Should not be necessary, but...
+
         /* erase old highlight */
         OldNetCodeSurbrillance = g_HightLigth_NetCode;
         OldEtatSurbrillance    = g_HightLigt_Status;
@@ -126,7 +133,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
                 g_HightLigth_NetCode = TrackOnStartPoint->GetNet();
-                CreateLockPoint( &pos.x, &pos.y, TrackOnStartPoint, NULL );
+                CreateLockPoint( pos, TrackOnStartPoint, NULL, &s_ItemsListPicker );
             }
         }
         else    // no starting point, but a filled zone area can exist. This is also a good starting point.
@@ -471,10 +478,10 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
             g_HightLigth_NetCode = adr_buf->GetNet();
 
             /* creation eventuelle d'un point d'accrochage */
-            LockPoint = CreateLockPoint( &g_CurrentTrackSegment->m_End.x,
-                                         &g_CurrentTrackSegment->m_End.y,
+            LockPoint = CreateLockPoint( g_CurrentTrackSegment->m_End,
                                          adr_buf,
-                                         g_CurrentTrackSegment );
+                                         g_CurrentTrackSegment,
+                                        &s_ItemsListPicker);
         }
     }
 
@@ -488,11 +495,13 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         TRACK* firstTrack = g_FirstTrackSegment;
         int    newCount   = g_CurrentTrackList.GetCount();
 
-        // Put entire new current segment list in BOARD
+        // Put entire new current segment list in BOARD, ans prepare undo command
         TRACK* track;
         TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( GetBoard() );
         while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
         {
+            ITEM_PICKER picker( track, UR_NEW );
+            s_ItemsListPicker.PushItem( picker );
             GetBoard()->m_Track.Insert( track, insertBeforeMe );
         }
 
@@ -510,8 +519,10 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         // erase the old track, if exists
         if( g_AutoDeleteOldTrack )
         {
-            EraseOldTrack( this, GetBoard(), DC, firstTrack, newCount );
+            EraseRedundantTrack( DC, firstTrack, newCount, & s_ItemsListPicker );
         }
+        SaveCopyInUndoList(s_ItemsListPicker, UR_UNSPECIFIED);
+        s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
         /* compute the new rastnest : */
         test_1_net_connexion( DC, netcode );

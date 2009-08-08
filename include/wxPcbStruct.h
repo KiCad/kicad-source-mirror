@@ -386,8 +386,21 @@ public:
     void             Remove_One_Track( wxDC* DC, TRACK* pt_segm );
     bool             Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via );
     void             Edit_Net_Width( wxDC* DC, int Netcode );
+
+    /** Function Edit_Track_Width
+     * Modify a full track width (using DRC control).
+     * a full track is the set of track segments between 2 ends: pads or a point that has more than 2 segments ends connected
+     * @param  DC = the curred device context (can be NULL)
+     * @param aTrackSegment = a segment or via on the track to change
+     */
     void             Edit_Track_Width( wxDC* DC, TRACK* Track );
-    int              Edit_TrackSegm_Width( wxDC* DC, TRACK* segm );
+
+    /** Function Edit_TrackSegm_Width
+     *  Modify one track segment width or one via diameter (using DRC control).
+     * @param  DC = the curred device context (can be NULL)
+     * @param aTrackItem = the track segment or via to modify
+     */
+    void             Edit_TrackSegm_Width( wxDC* DC, TRACK* segm );
     TRACK*           Begin_Route( TRACK* track, wxDC* DC );
     void             End_Route( TRACK* track, wxDC* DC );
     void             ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC );
@@ -395,12 +408,34 @@ public:
     void             Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );
     void             Attribut_net( wxDC* DC, int net_code, bool Flag_On );
     void             Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int command );
-    bool             PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC );
+    bool             PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC );
     bool             MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
     void             Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void             SwitchLayer( wxDC* DC, int layer );
     bool             Add_45_degrees_Segment( wxDC* DC );
     bool             Genere_Pad_Connexion( wxDC* DC, int layer );
+
+    /** function EraseRedundantTrack
+     * Called after creating a track
+     * Remove (if exists) the old track that have the same starting and the same ending point as the new created track
+     * (this is the redunding track)
+     * @param aDC = the current device context (can be NULL)
+     * @param aNewTrack = the new created track (a pointer to a segment of the track list)
+     * @param aNewTrackSegmentsCount = number of segments in this new track
+ * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
+ */
+    int             EraseRedundantTrack( wxDC* aDC, TRACK* aNewTrack, int aNewTrackSegmentsCount,
+                                        PICKED_ITEMS_LIST*  aItemsListPicker );
+
+    /** Function SetTrackSegmentWidth
+     *  Modify one track segment width or one via diameter (using DRC control).
+     *  Basic routine used by other routines when editing tracks or vias
+     * @param aTrackItem = the track segment or via to modify
+     * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
+     * @return  true if done, false if no not change (because DRC error)
+     */
+    bool             SetTrackSegmentWidth( TRACK* aTrackItem, PICKED_ITEMS_LIST* aItemsListPicker );
+
 
     // zone handling
 

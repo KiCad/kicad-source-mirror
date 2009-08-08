@@ -139,7 +139,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE* File,
             GetBoard()->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
-        case TYPE_ZONE:
+        case TYPE_ZONE:     // this is now deprecated, but exits in old boards
             newTrack = new SEGZONE( GetBoard() );
             GetBoard()->m_Zone.Insert( (SEGZONE*)newTrack, (SEGZONE*)insertBeforeMe );
             break;
@@ -846,7 +846,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(GetBoard());
             zone_descr->ReadDescr( File, &LineNum );
-            if ( zone_descr->GetNumCorners( ) > 2 )     // should not occur
+            if ( zone_descr->GetNumCorners( ) > 2 )     // should always occur
                 GetBoard()->Add(zone_descr);
             else delete zone_descr;
             continue;
