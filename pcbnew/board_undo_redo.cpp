@@ -164,11 +164,20 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 
     case TYPE_TRACK:
     case TYPE_VIA:
-    case TYPE_ZONE:
         EXCHG( ( (TRACK*) aItem )->m_Start, ( (TRACK*) aImage )->m_Start );
         EXCHG( ( (TRACK*) aItem )->m_End, ( (TRACK*) aImage )->m_End );
         EXCHG( ( (TRACK*) aItem )->m_Width, ( (TRACK*) aImage )->m_Width );
         EXCHG( ( (TRACK*) aItem )->m_Shape, ( (TRACK*) aImage )->m_Shape );
+    {
+        int itmp = ((TRACK*) aItem )->GetDrillValue();
+        if( ((TRACK*) aItem )->IsDrillDefault() )
+            itmp = -1;
+        int atmp = ((TRACK*) aImage )->GetDrillValue();
+        if( ((TRACK*) aImage )->IsDrillDefault() )
+            atmp = -1;
+        ( (TRACK*) aItem )->SetDrillValue( atmp );
+        ( (TRACK*) aImage )->SetDrillValue(itmp);
+    }
         break;
 
     case TYPE_TEXTE:
@@ -202,6 +211,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
     break;
 
+    case TYPE_ZONE:
     default:
         wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
         break;

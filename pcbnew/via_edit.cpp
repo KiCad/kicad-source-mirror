@@ -1,5 +1,5 @@
 /**********************************************/
-/* vi_edit.cpp: som editing function for vias */
+/* vi_edit.cpp: some editing function for vias */
 /**********************************************/
 
 #include "fctsys.h"
@@ -12,7 +12,7 @@
 
 
 /**********************************************************************************/
-void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via )
+void WinEDA_PcbFrame::Via_Edit_Control( wxCommandEvent& event )
 /**********************************************************************************/
 
 /*
@@ -21,8 +21,17 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
 {
     int    ii;
     TRACK* via_struct;
+    SEGVIA* via = (SEGVIA*) GetCurItem();
+    wxClientDC  dc( DrawPanel );
+    DrawPanel->CursorOff( &dc );
+    DrawPanel->PrepareGraphicContext( &dc );
 
-    switch( command_type )
+    wxASSERT( via->Type() == TYPE_VIA);
+
+    PICKED_ITEMS_LIST itemsListPicker;
+    ITEM_PICKER picker( NULL, UR_CHANGED );
+
+    switch( event.GetId() )
     {
     case ID_POPUP_PCB_SELECT_VIASIZE1:
     case ID_POPUP_PCB_SELECT_VIASIZE2:
@@ -33,21 +42,22 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
     case ID_POPUP_PCB_SELECT_VIASIZE7:
     case ID_POPUP_PCB_SELECT_VIASIZE8:      // selec the new current value for via size (via diameter)
         DrawPanel->MouseToCursorSchema();
-        ii = command_type - ID_POPUP_PCB_SELECT_VIASIZE1;
+        ii = event.GetId() - ID_POPUP_PCB_SELECT_VIASIZE1;
         g_DesignSettings.m_CurrentViaSize = g_DesignSettings.m_ViaSizeHistory[ii];
         DisplayTrackSettings();
         break;
 
     case ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE:     // Enter a new alternate value for drill via
-        InstallPcbOptionsFrame( wxDefaultPosition, DC, ID_PCB_TRACK_SIZE_SETUP );
+        InstallPcbOptionsFrame( wxDefaultPosition, &dc, ID_PCB_TRACK_SIZE_SETUP );
         DrawPanel->MouseToCursorSchema();
 
     case ID_POPUP_PCB_VIA_HOLE_TO_VALUE:        // Set the drill via to custom
         if( (g_DesignSettings.m_ViaDrillCustomValue > 0) && (g_DesignSettings.m_ViaDrillCustomValue < via->m_Width) )
         {
-            via->Draw( DrawPanel, DC, GR_XOR );
+            SaveCopyInUndoList(via, UR_CHANGED);
+            via->Draw( DrawPanel, &dc, GR_XOR );
             via->SetDrillValue( g_DesignSettings.m_ViaDrillCustomValue );
-            via->Draw( DrawPanel, DC, GR_OR );
+            via->Draw( DrawPanel, &dc, GR_OR );
             GetScreen()->SetModify();
         }
         else
@@ -70,19 +80,24 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
             {
                 if( via_struct->m_Width != via->m_Width )
                     continue;
-                via_struct->Draw( DrawPanel, DC, GR_XOR );
+                picker.m_PickedItem = via_struct;
+                picker.m_Link = via_struct->Copy();
+                itemsListPicker.PushItem(picker);
+                via_struct->Draw( DrawPanel, &dc, GR_XOR );
                 via_struct->SetDrillValue( via->GetDrillValue() );
-                via_struct->Draw( DrawPanel, DC, GR_OR );
+                via_struct->Draw( DrawPanel, &dc, GR_OR );
             }
         }
+        SaveCopyInUndoList(itemsListPicker, UR_CHANGED);
 
         GetScreen()->SetModify();
         break;
 
     case ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT:
-        via->Draw( DrawPanel, DC, GR_XOR );
+        SaveCopyInUndoList(via, UR_CHANGED);
+        via->Draw( DrawPanel, &dc, GR_XOR );
         via->SetDrillDefault();
-        via->Draw( DrawPanel, DC, GR_OR );
+        via->Draw( DrawPanel, &dc, GR_OR );
         GetScreen()->SetModify();
         break;
 
@@ -94,12 +109,16 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
             {
                 if( ! via_struct->IsDrillDefault() )
                 {
-                    via_struct->Draw( DrawPanel, DC, GR_XOR );
+                    picker.m_PickedItem = via_struct;
+                    picker.m_Link = via_struct->Copy();
+                    itemsListPicker.PushItem(picker);
+                    via_struct->Draw( DrawPanel, &dc, GR_XOR );
                     via_struct->SetDrillDefault();
-                    via_struct->Draw( DrawPanel, DC, GR_OR );
+                    via_struct->Draw( DrawPanel, &dc, GR_OR );
                 }
             }
         }
+        SaveCopyInUndoList(itemsListPicker, UR_CHANGED);
 
         GetScreen()->SetModify();
         break;
@@ -109,5 +128,6 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxDC* DC, int command_type, SEGVIA* via 
         break;
     }
 
+    DrawPanel->CursorOn( &dc );
     DrawPanel->MouseToCursorSchema();
 }

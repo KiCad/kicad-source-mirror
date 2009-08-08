@@ -104,15 +104,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH6:
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
-    case ID_POPUP_PCB_SELECT_VIASIZE:
-    case ID_POPUP_PCB_SELECT_VIASIZE1:
-    case ID_POPUP_PCB_SELECT_VIASIZE2:
-    case ID_POPUP_PCB_SELECT_VIASIZE3:
-    case ID_POPUP_PCB_SELECT_VIASIZE4:
-    case ID_POPUP_PCB_SELECT_VIASIZE5:
-    case ID_POPUP_PCB_SELECT_VIASIZE6:
-    case ID_POPUP_PCB_SELECT_VIASIZE7:
-    case ID_POPUP_PCB_SELECT_VIASIZE8:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
@@ -135,12 +126,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
     case ID_POPUP_PCB_VIA_EDITING:
-    case ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT:
-    case ID_POPUP_PCB_VIA_HOLE_TO_VALUE:
-    case ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE:
-    case ID_POPUP_PCB_VIA_HOLE_EXPORT:
-    case ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT:
-    case ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS:
     case ID_POPUP_PCB_EDIT_DRAWING:
     case ID_POPUP_PCB_GETINFO_MARKER:
         break;
@@ -1058,9 +1043,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         g_DesignSettings.m_UseConnectedTrackWidth = true;
         break;
 
-    case ID_POPUP_PCB_SELECT_VIASIZE:
-        break;
-
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
     {
         int ii = m_SelViaSizeBox->GetChoice();
@@ -1071,24 +1053,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         m_SelViaSizeBox_Changed    = false;
     }
     break;
-
-    case ID_POPUP_PCB_SELECT_VIASIZE1:
-    case ID_POPUP_PCB_SELECT_VIASIZE2:
-    case ID_POPUP_PCB_SELECT_VIASIZE3:
-    case ID_POPUP_PCB_SELECT_VIASIZE4:
-    case ID_POPUP_PCB_SELECT_VIASIZE5:
-    case ID_POPUP_PCB_SELECT_VIASIZE6:
-    case ID_POPUP_PCB_SELECT_VIASIZE7:
-    case ID_POPUP_PCB_SELECT_VIASIZE8:
-    case ID_POPUP_PCB_VIA_EDITING:
-    case ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT:
-    case ID_POPUP_PCB_VIA_HOLE_TO_VALUE:
-    case ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE:
-    case ID_POPUP_PCB_VIA_HOLE_EXPORT:
-    case ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT:
-    case ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS:
-        Via_Edit_Control( &dc, id, (SEGVIA*) GetScreen()->GetCurItem() );
-        break;
 
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
         DrawPanel->MouseToCursorSchema();

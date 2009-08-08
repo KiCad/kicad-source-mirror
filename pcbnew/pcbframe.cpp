@@ -88,7 +88,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_PCB_TRACK_SIZE_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )
-     EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_CONFIG_READ, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, WinEDA_PcbFrame::InstallDisplayOptionsDialog )
 
@@ -194,9 +194,12 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
 
-// Annulation de commande en cours
+    // popup menus
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
+
+EVT_MENU_RANGE( ID_POPUP_VIA_EDIT_START_RANGE, ID_POPUP_VIA_EDIT_END_RANGE,
+                    WinEDA_PcbFrame::Via_Edit_Control )
 
 // PopUp Menus pour Zooms traites dans drawpanel.cpp
 END_EVENT_TABLE()
