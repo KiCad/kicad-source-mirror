@@ -2,12 +2,19 @@
 /* class to Net Classes */
 /**************************************/
 
+
+
 #ifndef CLASS_NETCLASS_H
 #define CLASS_NETCLASS_H
 
-/* this small class NET_DESIGN_PARAMS handles netclass parameters.
- *  This is a separate class because these parameters are also duplicated
- *  (for calculation time consideration) in each NETINFO_ITEM when making tests DRC and routing
+
+/**
+ * Class NET_DESIGN_PARAMS
+ * handles netclass parameters.
+ *
+ * This is a separate class because these parameters are also duplicated
+ * (for calculation time consideration) in each NETINFO_ITEM when making
+ * tests DRC and routing
  */
 class NET_DESIGN_PARAMS
 {
@@ -15,12 +22,14 @@ public:
     int m_TracksWidth;              // "Default" value for tracks thickness used to route this net
     int m_TracksMinWidth;           // Minimum value for tracks thickness (used in DRC)
     int m_ViasSize;                 // "Default" value for vias sizes used to route this net
-    int m_ViasMinSize;              // Minimum value for  vias sizes (used in DRC)
+    int m_ViasMinSize;              // Minimum value for vias sizes (used in DRC)
     int m_Clearance;                // "Default" clearance when routing
     int m_MinClearance;             // Minimum value for clearance (used in DRC)
+
 public:
     NET_DESIGN_PARAMS();
-    ~NET_DESIGN_PARAMS() {}
+    // ~NET_DESIGN_PARAMS() {}
+
 
     /**
      * Function Save
@@ -29,6 +38,7 @@ public:
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile ) const;
+
 
     /**
      * Function ReadDescr
@@ -39,8 +49,10 @@ public:
     bool ReadDescr( FILE* aFile, int* aLineNum );
 };
 
+
 /**
- * @info A NETCLASS handles a list of nets and the parameters used to route or test these nets
+ * Class NETCLASS
+ * handles a list of nets and the parameters used to route or test these nets
  */
 class NETCLASS
 {
@@ -50,12 +62,14 @@ public:
     wxArrayString     m_MembersNetNames;    // List of nets members of this class
     NET_DESIGN_PARAMS m_NetParams;          // values of net classes parameters
 
+
 public:
     NETCLASS( BOARD* aParent, const wxString& aName = wxT( "default" ) );
     ~NETCLASS();
 
-    /** Function GetMembersCount
-     *@return the number of nets using this rule
+    /**
+     * Function GetMembersCount
+     * returns the number of nets using this rule
      */
     unsigned GetMembersCount() const
     {
@@ -101,21 +115,27 @@ public:
     bool ReadDescr( FILE* aFile, int* aLineNum );
 };
 
-/* This NETCLASS_LIST handles the list of NETCLASS for the board
+
+/**
+ * Class NETCLASS_LIST handles the list of NETCLASS for the board
  * Note: the NETCLASS_LIST is owner of all NETCLASS in list
  */
 class NETCLASS_LIST
 {
-public:
+protected:
     BOARD* m_Parent;
     std::vector <NETCLASS*> m_Netclass_List;
+
 
 public:
     NETCLASS_LIST( BOARD* aParent = NULL );
     ~NETCLASS_LIST();
+
+
     void ClearList();
 
-    /** Function GetNetClassCount()
+    /**
+     * Function GetNetClassCount()
      * @return the number of existing netclasses
      */
     unsigned GetNetClassCount()
@@ -153,4 +173,4 @@ public:
 };
 
 
-#endif      // #ifndef CLASS_NETCLASS_H
+#endif  // CLASS_NETCLASS_H

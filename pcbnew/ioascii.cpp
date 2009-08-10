@@ -837,8 +837,10 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             NETCLASS* netclass = new NETCLASS( GetBoard() );
             netclass->ReadDescr( File, &LineNum );
+
             if( ! GetBoard()->m_NetClassesList.AddNetclass( netclass ) )
                 delete netclass;
+
             continue;
         }
 

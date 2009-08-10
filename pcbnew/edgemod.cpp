@@ -139,13 +139,6 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /***************************************************************************/
 void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge )
 /***************************************************************************/
-
-/* Change the EDGE_MODULE Edge width,
- * if Edge == NULL change the width of the entire footprint edges
- * @param ModuleSegmentWidth (global) = new width
- * @param Edge = edge to edit, or NULL
- * @param DC = current Device Context
-*/
 {
     MODULE* Module = GetBoard()->m_Modules;
 

@@ -98,7 +98,8 @@ public:
                                                              *  (used while moving a footprint) */
 
     NETCLASS_LIST               m_NetClassesList;           // List of current netclasses. There is always the default netclass
-    ZONE_CONTAINER*             m_CurrentZoneContour; // zone contour currently in progress
+
+    ZONE_CONTAINER*             m_CurrentZoneContour;       // zone contour currently in progress
 
     BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
@@ -338,14 +339,14 @@ public:
 
     /**
      * Function TransfertDesignRulesToNets
-     * Copy Netclass parameters to each net, corresponding to its net class
+     * copies Netclass parameters to each net, corresponding to its net class.
      * Must be called after a Design Rules edition, or after reading a netlist (or editing the list of nets)
-     * Also this function remove the non existing nets in netclasses and add net nets in default netclass
+     * Also this function removes the non existing nets in netclasses and add net nets in default netclass
      * (this happens after reading a netlist)
      * @param none
      * @return none
      */
-    void           TransfertDesignRulesToNets( );
+    void           TransfertDesignRulesToNets();
 
     /**
      * Function Save

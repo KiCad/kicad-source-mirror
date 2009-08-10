@@ -743,6 +743,16 @@ public:
     void         Load_Module_From_BOARD( MODULE* Module );
 
     // functions to edit footprint edges
+
+
+    /**
+     * Function Edit_Edge_Width
+     * changes the width of module perimeter lines, EDGE_MODULEs.
+     * @param ModuleSegmentWidth (global) = new width
+     * @param Edge = edge to edit, or NULL.  If Edge == NULL change
+     *  the width of all the footprint's edges
+     * @param DC = current Device Context
+     */
     void         Edit_Edge_Width( EDGE_MODULE* Edge );
     void         Edit_Edge_Layer( EDGE_MODULE* Edge );
     void         Delete_Edge_Module( EDGE_MODULE* Edge );

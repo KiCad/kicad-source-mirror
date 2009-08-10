@@ -142,10 +142,11 @@ private:
     void Build_Pads_Full_List();
 };
 
-/** class NETINFO_ITEM
- * @info This class handle the data relative to a given net
- */
 
+/**
+ * Class NETINFO_ITEM
+ * handles the data for a net
+ */
 class NETINFO_ITEM
 {
 private:
@@ -153,21 +154,24 @@ private:
                                         // Used for fast comparisons in rastnest and DRC computations.
     wxString          m_Netname;        // Full net name like /mysheet/mysubsheet/vout used by eeschema
     wxString          m_ShortNetname;   // short net name, like vout from /mysheet/mysubsheet/vout
-    wxString          m_NetClassName; /* Net Class name. if void this is equivalent to "default" (the first
-                                 *  item of the net classes list
-                                 */
-    NET_DESIGN_PARAMS m_NetParams;       // values of net classes parameters
+    wxString          m_NetClassName;   // Net Class name. if void this is equivalent to "default" (the first
+                                        // item of the net classes list
+
+    NET_DESIGN_PARAMS m_NetParams;      // values of net classes parameters
 
 
 public:
-    int m_NbNodes;                                  // Pads count for this net
-    int      m_NbLink;                              // Ratsnets count for this net
-    int      m_NbNoconn;                            // Ratsnets remaining to route count
-    int      m_Flag;                                // used in some calculations. Had no special meaning
+    int     m_NbNodes;                              // Pads count for this net
+    int     m_NbLink;                               // Ratsnets count for this net
+    int     m_NbNoconn;                             // Ratsnets remaining to route count
+    int     m_Flag;                                 // used in some calculations. Had no special meaning
+
     std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
+
     unsigned m_RatsnestStartIdx;                    /* Starting point of ratsnests of this net (included)
                                                      * in a general buffer of ratsnest (a vector<RATSNEST_ITEM*> buffer)
                                                      */
+
     unsigned m_RatsnestEndIdx;                      // Ending point of ratsnests of this net (excluded) in this buffer
 
     NETINFO_ITEM( BOARD_ITEM* aParent );

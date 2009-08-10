@@ -19,7 +19,8 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 /* Constructor */
 BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
-    BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB )
+    BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
+    m_NetClassesList(this)
 {
     m_PcbFrame = frame;
     m_Status_Pcb    = 0;                        // Mot d'etat: Bit 1 = Chevelu calcule
@@ -38,7 +39,6 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     }
 
     // Add the default Netclass to list
-    m_NetClassesList.m_Parent = this;
     NETCLASS * default_netclass = new NETCLASS(this);
     m_NetClassesList.AddNetclass( default_netclass );
 }
@@ -826,12 +826,14 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
     NETINFO_ITEM* item = m_NetInfo->GetNetItem( anetcode );
+
 #if defined(DEBUG)
-    if ( item )     // item can be NULL if not valid
+    if ( item )     // item can be NULL if anetcode is not valid
     {
         wxASSERT( anetcode == item->GetNet() );
     }
 #endif
+
     return item;
 }
 
@@ -910,16 +912,18 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCoun
     if( m_NetInfo->GetNetsCount() == 0 )
         return 0;
 
-    /* Build the list */
+    // Build the list
     std::vector <NETINFO_ITEM*> netBuffer;
+
     netBuffer.reserve( m_NetInfo->GetNetsCount() );
+
     for( unsigned ii = 1; ii < m_NetInfo->GetNetsCount(); ii++ )
     {
         if( m_NetInfo->GetNetItem( ii )->GetNet() > 0 )
             netBuffer.push_back( m_NetInfo->GetNetItem( ii ) );
     }
 
-    /* sort the list */
+    // sort the list
     if( aSortbyPadsCount )
         sort( netBuffer.begin(), netBuffer.end(), s_SortByNodes );
 

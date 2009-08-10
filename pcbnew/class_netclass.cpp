@@ -77,15 +77,6 @@ bool NETCLASS_LIST::AddNetclass( NETCLASS* aNetclass )
 }
 
 
-/**
- * Function TransfertDesignRulesToNets
- * Copy Netclass parameters to each net, corresponding to its net class
- * Must be called after a Design Rules edition, or after reading a netlist (or editing the list of nets)
- * Also this function remove the non existing nets in netclasses and add net nets in default netclass
- * (this happens after reading a netlist)
- * @param none
- * @return none
- */
 void BOARD::TransfertDesignRulesToNets()
 {
     // Clear .m_Flag member of nets (used to detect not in netclass list nets)
@@ -94,17 +85,20 @@ void BOARD::TransfertDesignRulesToNets()
         NETINFO_ITEM* net = FindNet( ii );
         if( net == NULL )
             break;
+
         net->m_Flag = 0;
     }
 
-    for( unsigned ii = 0; ii < m_NetClassesList.m_Netclass_List.size(); ii++ )
+    for( unsigned ii = 0; ii < m_NetClassesList.GetNetClassCount();  ii++ )
     {
-        //Transfert rules and netclass name to nets:
-        NETCLASS* netclass = m_NetClassesList.m_Netclass_List[ii];
+        // Transfert rules and netclass name to nets:
+        NETCLASS* netclass = m_NetClassesList.GetNetClass( ii );
+
         for( unsigned jj = 0; jj < netclass->GetMembersCount(); jj++ )
         {
             wxString      netname = netclass->GetMemberName( jj );
             NETINFO_ITEM* net     = FindNet( netname );
+
             if( net == NULL )    // This net does not exists: remove it
             {
                 netclass->m_MembersNetNames.RemoveAt( jj );
@@ -119,12 +113,15 @@ void BOARD::TransfertDesignRulesToNets()
     }
 
     // Now, set nets that do not have yet a netclass to default netclass
-    NETCLASS* defaultnetclass = m_NetClassesList.m_Netclass_List[0];
+    NETCLASS* defaultnetclass = m_NetClassesList.GetNetClass( 0 );
+
     for( unsigned ii = 1; ; ii++ )
     {
         NETINFO_ITEM* net = FindNet( ii );
+
         if( net == NULL )
             break;
+
         if( net->m_Flag == 0 )
         {
             net->SetClass( *defaultnetclass );
@@ -174,7 +171,6 @@ bool NETCLASS::Save( FILE* aFile ) const
     // Write members list:
     for( unsigned ii = 0; ii < GetMembersCount(); ii++ )
         fprintf( aFile, "AddNet \"%s\"\n", CONV_TO_UTF8( GetMemberName( ii ) ) );
-
 
     fprintf( aFile, "$EndNETCLASS\n" );
 
