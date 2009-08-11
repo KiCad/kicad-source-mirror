@@ -18,7 +18,7 @@
 
 /* Routines Locales */
 static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC );
 
 /* local variables */
 wxPoint MoveVector;                     // Move vector for move edge, exported to dialog_edit mod_text.cpp
@@ -129,9 +129,8 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
 
 
 /*************************************************************/
-static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*************************************************************/
-
 /*
  *  Routine de sortie du menu edit texte module
  *  Si un texte est selectionne, ses coord initiales sont regenerees
@@ -151,8 +150,12 @@ static void ExitTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Text->Draw( Panel, DC, GR_XOR, MoveVector );
 
-    /* Redessin du Texte */
-    // Text->Draw( Panel, DC, GR_OR );
+    // If the text was moved (the move does not change internal data)
+    // it could be rotated while moving. So set old value for orientation
+    if ( (Text->m_Flags & IS_MOVED) )
+        Text->m_Orient = TextInitialOrientation;
+
+    /* Redraw the text */
     Panel->PostDirtyRect( Text->GetBoundingBox() );
 
     // leave it at (0,0) so we can use it Rotate when not moving.
@@ -191,7 +194,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     SetCurItem( Text );
     DrawPanel->ManageCurseur = Show_MoveTexte_Module;
-    DrawPanel->ForceCloseManageCurseur = ExitTextModule;
+    DrawPanel->ForceCloseManageCurseur = AbortMoveTextModule;
 
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 }
@@ -209,20 +212,19 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     {
         DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
 
-        Text->m_Pos = GetScreen()->m_Curseur;
         /* mise a jour des coordonnées relatives a l'ancre */
         MODULE* Module = (MODULE*) Text->GetParent();
         if( Module )
         {
-            // Prepare undo command for Board Editor:
+            // Prepare undo command (a rotation can be made while moving)
+            EXCHG(Text->m_Orient, TextInitialOrientation);
             if( m_Ident == PCB_FRAME )
-            {
-                EXCHG(Text->m_Pos, TextInitialPosition);
-                EXCHG(Text->m_Orient, TextInitialOrientation);
                 SaveCopyInUndoList(Module, UR_CHANGED);
-                EXCHG(Text->m_Pos, TextInitialPosition);
-                EXCHG(Text->m_Orient, TextInitialOrientation);
-            }
+            else
+                SaveCopyInUndoList(Module, UR_MODEDIT);
+            EXCHG(Text->m_Orient, TextInitialOrientation);
+
+            Text->m_Pos = GetScreen()->m_Curseur;   // Set the new position for text
             wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
             RotatePoint( &textRelPos, -Module->m_Orient );
             Text->m_Pos0  = textRelPos;
@@ -234,6 +236,8 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             /* Redessin du Texte */
             DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
         }
+        else
+            Text->m_Pos = GetScreen()->m_Curseur;
     }
 
     // leave it at (0,0) so we can use it Rotate when not moving.

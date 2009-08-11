@@ -33,7 +33,6 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             switch( DrawStruct->Type() )
             {
             case TYPE_TEXTE_MODULE:
-                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
                 PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, DC );
                 break;
 
@@ -64,9 +63,9 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     DrawStruct = GetCurItem();
     if( !DrawStruct || (DrawStruct->m_Flags == 0) )
     {
-        if( !wxGetKeyState(WXK_SHIFT) && !wxGetKeyState(WXK_ALT) &&
-                !wxGetKeyState(WXK_CONTROL) )
-        DrawStruct = ModeditLocateAndDisplay();
+        if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
+           && !wxGetKeyState( WXK_CONTROL ) )
+            DrawStruct = ModeditLocateAndDisplay();
         SetCurItem( DrawStruct );
     }
 
@@ -90,7 +89,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 shape = S_ARC;
 
             SetCurItem(
-                 Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );
+                Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );
         }
         else if( (DrawStruct->m_Flags & IS_NEW) )
         {
@@ -120,7 +119,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawStruct = ModeditLocateAndDisplay();
         if( DrawStruct == NULL || (DrawStruct->m_Flags != 0) )
             break;
-        if( DrawStruct->Type() != TYPE_MODULE) //GetBoard()->m_Modules )     // Cannot delete the module itself
+        if( DrawStruct->Type() != TYPE_MODULE ) //GetBoard()->m_Modules )     // Cannot delete the module itself
         {
             SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
             RemoveStruct( DrawStruct );
@@ -131,19 +130,20 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_MODEDIT_PLACE_ANCHOR:
     {
-        MODULE * module = GetBoard()->m_Modules;
-        module->m_Flags  = 0;
+        MODULE* module = GetBoard()->m_Modules;
+        module->m_Flags = 0;
         SaveCopyInUndoList( module, UR_MODEDIT );
         Place_Ancre( module );      // set the new relatives internal coordinates of items
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Recadre_Trace( TRUE );
+
         // Replace the module in position 0, to recalculate absolutes coordinates of items
-        module->SetPosition( wxPoint(0,0) );
+        module->SetPosition( wxPoint( 0, 0 ) );
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         SetCurItem( NULL );
         DrawPanel->Refresh();
     }
-        break;
+    break;
 
     case ID_TEXT_COMMENT_BUTT:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
@@ -179,10 +179,10 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
  * After this menu is built, the standart ZOOM menu is added
  */
 {
-    BOARD_ITEM*     DrawStruct = GetCurItem();
-    wxString        msg;
-    bool            append_set_width = FALSE;
-    bool            BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
+    BOARD_ITEM* DrawStruct = GetCurItem();
+    wxString    msg;
+    bool        append_set_width = FALSE;
+    bool        BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     // Simple localisation des elements si possible
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
@@ -290,11 +290,14 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         }
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE,
                       _( "Rotate Text Mod." ), rotate_field_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE,
-                      _( "Edit Text Mod." ), edit_text_xpm );
-        if( ( (TEXTE_MODULE*) DrawStruct )->m_Type == TEXT_is_DIVERS )
-            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE,
-                          _( "Delete Text Mod." ), delete_text_xpm );
+        if( !flags )
+        {
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE,
+                          _( "Edit Text Mod." ), edit_text_xpm );
+            if( ( (TEXTE_MODULE*) DrawStruct )->m_Type == TEXT_is_DIVERS )
+                ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE,
+                              _( "Delete Text Mod." ), delete_text_xpm );
+        }
         break;
 
     case TYPE_EDGE_MODULE:
@@ -323,7 +326,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Delete edge" ), delete_xpm );
         append_set_width = TRUE;
     }
-        break;
+    break;
 
     case TYPE_DRAWSEGMENT:
     case TYPE_TEXTE:
@@ -376,9 +379,9 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
  *  If the double clicked item is editable: call the corresponding editor.
  */
 {
-    BOARD_ITEM*     DrawStruct = GetCurItem();
-    wxPoint         pos = GetPosition();
-    wxClientDC      dc( DrawPanel );
+    BOARD_ITEM* DrawStruct = GetCurItem();
+    wxPoint     pos = GetPosition();
+    wxClientDC  dc( DrawPanel );
 
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -414,7 +417,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             if( ret > 0 )
                 DrawPanel->Refresh();
         }
-            break;
+        break;
 
         case TYPE_TEXTE_MODULE:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc );

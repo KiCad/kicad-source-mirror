@@ -176,10 +176,11 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_DRAWING_REQUEST,
                               _( "Move Drawing" ), move_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ), edit_xpm );
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING, _( "Delete Drawing" ), delete_xpm );
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING, _(
+                                  "Delete Drawing" ), delete_xpm );
                 if( item->GetLayer() > LAST_COPPER_LAYER )
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
-                        _( "Delete All Drawing on Layer" ), delete_body_xpm );
+                                  _( "Delete All Drawing on Layer" ), delete_body_xpm );
             }
             break;
 
@@ -220,7 +221,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_COTATION,
                               _( "Edit Dimension" ), edit_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_COTATION,
-                          _( "Delete Dimension" ), delete_xpm );
+                              _( "Delete Dimension" ), delete_xpm );
             }
             break;
 
@@ -707,8 +708,9 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 
     ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
                   _( "Rotate" ), rotate_field_xpm );
-    ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
-                  _( "Edit" ), edit_text_xpm );
+    if( !flags )
+        ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
+                      _( "Edit" ), edit_text_xpm );
 
     if( !flags && FpText->m_Type == TEXT_is_DIVERS )    // Graphic texts can be deleted only if are not currently edited
     {
@@ -891,4 +893,3 @@ static wxMenu* Append_Track_Width_List()
 
     return trackwidth_menu;
 }
-
