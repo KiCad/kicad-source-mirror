@@ -107,7 +107,6 @@ DialogGraphicItemProperties_base::DialogGraphicItemProperties_base( wxWindow* pa
 	this->Layout();
 	
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogGraphicItemProperties_base::OnInitDialog ) );
 	m_LayerSelection->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnLayerChoice ), NULL, this );
 	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnOkClick ), NULL, this );
 	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnCancelClick ), NULL, this );
@@ -116,7 +115,6 @@ DialogGraphicItemProperties_base::DialogGraphicItemProperties_base( wxWindow* pa
 DialogGraphicItemProperties_base::~DialogGraphicItemProperties_base()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogGraphicItemProperties_base::OnInitDialog ) );
 	m_LayerSelection->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnLayerChoice ), NULL, this );
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnOkClick ), NULL, this );
 	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnCancelClick ), NULL, this );

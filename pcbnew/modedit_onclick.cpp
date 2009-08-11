@@ -7,8 +7,10 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 
+#include "3d_viewer.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "dialog_edit_module_for_modedit.h"
 
 #include "bitmaps.h"
 #include "protos.h"
@@ -403,13 +405,19 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_MODULE:
-            InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc );
+        {
+            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) DrawStruct );
+            int ret = dialog.ShowModal();
+            GetScreen()->GetCurItem()->m_Flags = 0;
+            GetScreen()->GetCurItem()->m_Flags = 0;
             DrawPanel->MouseToCursorSchema();
+            if( ret > 0 )
+                DrawPanel->Refresh();
+        }
             break;
 
         case TYPE_TEXTE_MODULE:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct,
-                                       &dc, pos );
+            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc );
             DrawPanel->MouseToCursorSchema();
             break;
 

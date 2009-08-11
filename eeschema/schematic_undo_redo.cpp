@@ -271,7 +271,6 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                                 UndoRedoOpType     aTypeCommand,
                                                 const wxPoint& aTransformPoint )
 {
-    SCH_ITEM*          CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
     commandToUndo->m_TransformPoint = aTransformPoint;
     // Copy picker list:
@@ -342,7 +341,9 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bo
     SCH_ITEM* item;
     SCH_ITEM* alt_item;
 
-    for( unsigned ii = 0; ii < aList->GetCount(); ii++  )
+    // Undo in the reverse order of list creation: (this can allow stacked changes
+    // like the same item can be changes and deleted in the same complex command
+    for( int ii = aList->GetCount()-1; ii >= 0 ; ii--  )
     {
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
         item = (SCH_ITEM*) itemWrapper.m_PickedItem;
@@ -420,11 +421,15 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    /* Get the old wrapper and put it in RedoList */
+    /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
-    GetScreen()->PushCommandToRedoList( List );
+
     /* Undo the command */
     PutDataInPreviousState( List, false );
+
+    /* Put the old list in RedoList */
+    List->ReversePickersListOrder();
+    GetScreen()->PushCommandToRedoList( List );
 
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
@@ -451,12 +456,15 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
         return;
 
 
-    /* Get the old wrapper and put it in UndoList */
+    /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
-    GetScreen()->PushCommandToUndoList( List );
 
     /* Redo the command: */
     PutDataInPreviousState( List, true );
+
+    /* Put the old list in UndoList */
+    List->ReversePickersListOrder();
+    GetScreen()->PushCommandToUndoList( List );
 
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();

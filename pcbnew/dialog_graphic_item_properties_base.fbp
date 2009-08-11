@@ -32,7 +32,7 @@
             <property name="minimum_size"></property>
             <property name="name">DialogGraphicItemProperties_base</property>
             <property name="pos"></property>
-            <property name="size">348,247</property>
+            <property name="size">399,247</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
             <property name="subclass"></property>
             <property name="title">Graphic item properties</property>
@@ -49,7 +49,7 @@
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog">OnInitDialog</event>
+            <event name="OnInitDialog"></event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>

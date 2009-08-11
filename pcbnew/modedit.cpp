@@ -17,6 +17,8 @@
 #include "wxPcbStruct.h"
 #include "protos.h"
 
+#include "dialog_edit_module_for_modedit.h"
+
 #include "collectors.h"
 
 /****************************************************************************/
@@ -396,10 +398,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_EDIT_MODULE_PROPERTIES:
         if( GetBoard()->m_Modules )
         {
-            SET_DC;
             SetCurItem( GetBoard()->m_Modules );
-            InstallModuleOptionsFrame( (MODULE*) GetScreen()->GetCurItem(), &dc );
+            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
+            int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->m_Flags = 0;
+            if( ret > 0 )
+                DrawPanel->Refresh();
         }
         break;
 
@@ -453,10 +457,13 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_MODULE:
     {
-        SET_DC;
-        InstallModuleOptionsFrame( (MODULE*) GetScreen()->GetCurItem(), &dc );
+        DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
+        int ret = dialog.ShowModal();
+        GetScreen()->GetCurItem()->m_Flags = 0;
         GetScreen()->GetCurItem()->m_Flags = 0;
         DrawPanel->MouseToCursorSchema();
+        if( ret > 0 )
+            DrawPanel->Refresh();
     }
     break;
 
@@ -504,9 +511,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
     {
         SET_DC;
-
-        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetScreen()->GetCurItem(),
-                                   &dc, pos );
+        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
     }
     break;
@@ -522,8 +527,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
     {
         SET_DC;
-        RotateTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem(),
-                         &dc );
+        RotateTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
     }
     break;

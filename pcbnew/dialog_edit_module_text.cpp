@@ -38,23 +38,18 @@ private:
     void OnCancelClick( wxCommandEvent& event );
 };
 
-/***************************************************************************/
-void WinEDA_BasePcbFrame::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
-                                                      wxDC* DC, const wxPoint& pos )
-/***************************************************************************/
+/*************************************************************************************/
+void WinEDA_BasePcbFrame::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
+/**************************************************************************************/
 {
     DrawPanel->m_IgnoreMouseEvents = TRUE;
-    DialogEditModuleText* frame = new DialogEditModuleText( this,
-        TextMod, DC );
-    frame->ShowModal(); frame->Destroy();
-    DrawPanel->MouseToCursorSchema();
+    DialogEditModuleText dialog( this, TextMod, DC );
+    dialog.ShowModal();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
 
 
-DialogEditModuleText::DialogEditModuleText( WinEDA_BasePcbFrame* parent,
-                                                              TEXTE_MODULE* TextMod,
-                                                              wxDC* DC ) :
+DialogEditModuleText::DialogEditModuleText( WinEDA_BasePcbFrame* parent,  TEXTE_MODULE* TextMod, wxDC* DC ) :
     DialogEditModuleText_base(parent)
 
 {
@@ -90,8 +85,13 @@ void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
             m_Module->m_Reference->m_Text.GetData(),
             m_Module->m_Value->m_Text.GetData(),
             (float) (m_Module->m_Orient / 10) );
-        m_ModuleInfoText->SetLabel( msg );
     }
+
+    else
+        msg.Empty();
+
+    m_ModuleInfoText->SetLabel( msg );
+
 
     if( m_CurrentTextMod->m_Type == TEXT_is_VALUE )
         m_TextDataTitle->SetLabel( _( "Value:" ) );
@@ -200,7 +200,8 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
             (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
     }
     m_Parent->GetScreen()->SetModify();
-    ( (MODULE*) m_CurrentTextMod->GetParent() )->m_LastEdit_Time = time( NULL );
+    if( m_Module )
+        m_Module->m_LastEdit_Time = time( NULL );
 
     Close( TRUE );
 }

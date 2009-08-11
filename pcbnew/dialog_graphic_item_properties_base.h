@@ -58,14 +58,13 @@ class DialogGraphicItemProperties_base : public wxDialog
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnLayerChoice( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DialogGraphicItemProperties_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Graphic item properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 348,247 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DialogGraphicItemProperties_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Graphic item properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 399,247 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DialogGraphicItemProperties_base();
 	
 };

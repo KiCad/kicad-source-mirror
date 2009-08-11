@@ -36,7 +36,7 @@ enum KICAD_T {
     TYPE_TRACK,             // a track segment (segment on a copper layer)
     TYPE_VIA,               // a via (like atrack segment on a copper layer)
     TYPE_ZONE,              // a segment used to fill a zome area (segment on a copper layer)
-    TYPE_MARKER_PCB,            // a marker used to show something
+    TYPE_MARKER_PCB,        // a marker used to show something
     TYPE_COTATION,          // a dimension (graphic item)
     TYPE_MIRE,              // a target (graphic item)
     TYPE_ZONE_EDGE_CORNER,  // in zone outline: a point to define an outline

@@ -239,8 +239,7 @@ void TEXTE_MODULE:: SetDrawCoord()
     NORMALIZE_ANGLE_POS( angle );
 
     RotatePoint( &m_Pos.x, &m_Pos.y, angle );
-    m_Pos.x += Module->m_Pos.x;
-    m_Pos.y += Module->m_Pos.y;
+    m_Pos += Module->m_Pos;
 }
 
 
@@ -250,10 +249,12 @@ void TEXTE_MODULE:: SetLocalCoord()
     MODULE* Module = (MODULE*) m_Parent;
 
     if( Module == NULL )
+    {
+        m_Pos0 = m_Pos;
         return;
+    }
 
-    m_Pos0.x = m_Pos.x - Module->m_Pos.x;
-    m_Pos0.y = m_Pos.y - Module->m_Pos.y;
+    m_Pos0 = m_Pos - Module->m_Pos;
 
     int angle = Module->m_Orient;
     NORMALIZE_ANGLE_POS( angle );
@@ -447,18 +448,12 @@ int TEXTE_MODULE::GetDrawRotation()
 // see class_text_mod.h
 void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    wxString msg, Line;
-    int      ii;
-
     MODULE*  module = (MODULE*) m_Parent;
-
-    wxASSERT( module );
-
-    if( !module )
+    if( module == NULL )        // Happens in modedit, and for new texts
         return;
 
-    BOARD* board = (BOARD*) module->GetParent();
-    wxASSERT( board );
+    wxString msg, Line;
+    int      ii;
 
     static const wxString text_type_msg[3] = {
         _( "Ref." ), _( "Value" ), _( "Text" )
@@ -484,11 +479,13 @@ void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = _( "Yes" );
     Affiche_1_Parametre( frame, 25, _( "Display" ), msg, DARKGREEN );
 
-    ii = m_Layer;
-    if( ii < NB_LAYERS )
-        msg = board->GetLayerName( ii );
+    // Display text layer (use layer name if possible)
+    BOARD* board = NULL;
+    board = (BOARD*) module->GetParent();
+    if( m_Layer < NB_LAYERS && board )
+        msg = board->GetLayerName( m_Layer );
     else
-        msg.Printf( wxT( "%d" ), ii );
+        msg.Printf( wxT( "%d" ), m_Layer );
     Affiche_1_Parametre( frame, 31, _( "Layer" ), msg, DARKGREEN );
 
     msg = _( " No" );

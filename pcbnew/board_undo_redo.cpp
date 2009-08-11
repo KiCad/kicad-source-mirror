@@ -156,10 +156,10 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     break;
 
     case TYPE_DRAWSEGMENT:
-        EXCHG( ( (TRACK*) aItem )->m_Start, ( (TRACK*) aImage )->m_Start );
-        EXCHG( ( (TRACK*) aItem )->m_End, ( (TRACK*) aImage )->m_End );
-        EXCHG( ( (TRACK*) aItem )->m_Width, ( (TRACK*) aImage )->m_Width );
-        EXCHG( ( (TRACK*) aItem )->m_Shape, ( (TRACK*) aImage )->m_Shape );
+        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Start, ( (DRAWSEGMENT*) aImage )->m_Start );
+        EXCHG( ( (DRAWSEGMENT*) aItem )->m_End, ( (DRAWSEGMENT*) aImage )->m_End );
+        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Width, ( (DRAWSEGMENT*) aImage )->m_Width );
+        EXCHG( ( (DRAWSEGMENT*) aItem )->m_Shape, ( (DRAWSEGMENT*) aImage )->m_Shape );
         break;
 
     case TYPE_TRACK:
@@ -581,8 +581,8 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
     /* Undo the command */
     PutDataInPreviousState( List, false );
 
-    /* Pu the old list in RedoList */
-     List->ReversePickersListOrder();
+    /* Put the old list in RedoList */
+    List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
     GetScreen()->SetModify();

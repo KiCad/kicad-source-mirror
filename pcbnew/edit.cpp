@@ -821,7 +821,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetCurItem(), &dc, pos );
+        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -944,9 +944,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_DRAWING_LAYER:
-        Delete_Drawings_All_Layer( (DRAWSEGMENT*) GetCurItem(), &dc );
+        if( GetCurItem()->m_Flags != 0 )
+            break;
+        Delete_Drawings_All_Layer( GetCurItem()->GetLayer() );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_DRAWING:

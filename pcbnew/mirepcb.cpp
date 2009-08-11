@@ -200,7 +200,7 @@ static void AbortMoveAndEditTarget( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     else    /* it is an existing item: retrieve initial values of parameters */
     {
-        if( (MirePcb->m_Flags & IN_EDIT) )
+        if( (MirePcb->m_Flags & (IN_EDIT |IS_MOVED)) )
         {
             MirePcb->m_Pos = s_TargetCopy.m_Pos;
             MirePcb->m_Width = s_TargetCopy.m_Width;

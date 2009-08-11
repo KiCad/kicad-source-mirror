@@ -333,11 +333,13 @@ public:
     // Graphic Segments type DRAWSEGMENT
     void             Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
     void             Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
+    void             InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );  // Graphic items edition
 
     // Footprint edition (see also WinEDA_BasePcbFrame)
+    void             InstallModuleOptionsFrame( MODULE* Module, wxDC * DC );
     void             StartMove_Module( MODULE* module, wxDC* DC );
     bool             Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDeleting );
-    void            Change_Side_Module( MODULE* Module, wxDC* DC );
+    void             Change_Side_Module( MODULE* Module, wxDC* DC );
 
     void             InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
     /** function Exchange_Module
@@ -578,7 +580,7 @@ public:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
     void         End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void         Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void         Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC );
+    void         Delete_Drawings_All_Layer( int aLayer );
 
     // Dimension handling:
     void         Install_Edit_Cotation( COTATION* Cotation, wxDC* DC, const wxPoint& pos );

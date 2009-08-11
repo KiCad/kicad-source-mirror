@@ -265,7 +265,8 @@ wxString ReturnUnitSymbol( int Units )
 void AddUnitSymbol( wxStaticText& Stext, int Units )
 /**************************************************/
 {
-    wxString msg = Stext.GetLabel() + ReturnUnitSymbol( Units );
+    wxString msg = Stext.GetLabel();
+    msg += ReturnUnitSymbol( Units );
 
     Stext.SetLabel( msg );
 }

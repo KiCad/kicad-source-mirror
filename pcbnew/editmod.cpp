@@ -7,46 +7,47 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "gestfich.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
-#include "bitmaps.h"
-#include "3d_struct.h"
 #include "3d_viewer.h"
 
-#include "dialog_edit_module.h"
-
-#include "protos.h"
-
-bool GoToEditor = FALSE;
+#include "dialog_edit_module_for_BoardEditor.h"
 
 /*******************************************************************/
-void WinEDA_BasePcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC * DC )
+void WinEDA_PcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 /*******************************************************************/
 
 /* Fonction relai d'installation de la frame d'édition des proprietes
  *  du module*/
 {
-    WinEDA_ModulePropertiesFrame* frame =
-        new WinEDA_ModulePropertiesFrame( this, Module, DC );
+    if( Module == NULL )
+        return;
 
-    frame->ShowModal(); frame->Destroy();
+    DIALOG_MODULE_BOARD_EDITOR* dialog =
+        new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
 
-    if( GoToEditor && GetScreen()->GetCurItem() )
+    int retvalue = dialog->ShowModal(); /* retvalue =
+                                         *  -1 if abort,
+                                         *  0 if exchange module,
+                                         *  1 for normal edition
+                                         *  and 2 for a goto editor command
+                                         */
+    dialog->Destroy();
+
+    if( retvalue == 2 )
     {
         if( m_ModuleEditFrame == NULL )
         {
             m_ModuleEditFrame = new WinEDA_ModuleEditFrame( this,
-                                                            _( "Module Editor" ),
-                                                            wxPoint( -1, -1 ),
-                                                            wxSize( 600, 400 ) );
+                                                           _( "Module Editor" ),
+                                                           wxPoint( -1, -1 ),
+                                                           wxSize( 600, 400 ) );
         }
 
-        m_ModuleEditFrame->Load_Module_From_BOARD( (MODULE*) GetScreen()->GetCurItem() );
+        m_ModuleEditFrame->Load_Module_From_BOARD( Module );
         SetCurItem( NULL );
 
-        GoToEditor = FALSE;
         m_ModuleEditFrame->Show( TRUE );
         m_ModuleEditFrame->Iconize( FALSE );
     }
@@ -59,30 +60,29 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 
 /*
  *  Repositionne l'ancre sous le curseur souris
- *  Le module doit etre d'abort selectionne
  */
 {
-    wxPoint         delta;
+    wxPoint         moveVector;
     EDA_BaseStruct* PtStruct;
     D_PAD*          pt_pad;
 
     if( pt_mod == NULL )
         return;
 
-    delta = pt_mod->m_Pos - GetScreen()->m_Curseur;
+    moveVector = pt_mod->m_Pos - GetScreen()->m_Curseur;
 
     pt_mod->m_Pos = GetScreen()->m_Curseur;
 
     /* Mise a jour des coord relatives des elements:
      *  les coordonnees relatives sont relatives a l'ancre, pour orient 0.
      *  il faut donc recalculer deltaX et deltaY en orientation 0 */
-    RotatePoint( &delta, -pt_mod->m_Orient );
+    RotatePoint( &moveVector, -pt_mod->m_Orient );
 
     /* Mise a jour des coord relatives des pads */
     pt_pad = (D_PAD*) pt_mod->m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        pt_pad->m_Pos0 += delta;
+        pt_pad->m_Pos0 += moveVector;
     }
 
     /* Mise a jour des coord relatives contours .. */
@@ -94,14 +94,14 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
         case TYPE_EDGE_MODULE:
                 #undef STRUCT
                 #define STRUCT ( (EDGE_MODULE*) PtStruct )
-            STRUCT->m_Start0 += delta;
-            STRUCT->m_End0   += delta;
+            STRUCT->m_Start0 += moveVector;
+            STRUCT->m_End0   += moveVector;
             break;
 
         case TYPE_TEXTE_MODULE:
                 #undef STRUCT
                 #define STRUCT ( (TEXTE_MODULE*) PtStruct )
-            STRUCT->m_Pos0 += delta;
+            STRUCT->m_Pos0 += moveVector;
             break;
 
         default:
@@ -141,7 +141,7 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
         }
         DeleteTextModule( text );
     }
-        break;
+    break;
 
     case TYPE_EDGE_MODULE:
         Delete_Edge_Module( (EDGE_MODULE*) Item );
@@ -155,9 +155,9 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
     {
         wxString Line;
         Line.Printf( wxT( " Remove: StructType %d Inattendu" ),
-                     Item->Type() );
+                    Item->Type() );
         DisplayError( this, Line );
     }
-        break;
+    break;
     }
 }

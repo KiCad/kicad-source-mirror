@@ -173,7 +173,6 @@ public:
                                              int DrawMode, int color, int type );
 
     // Gestion des modules
-    void                     InstallModuleOptionsFrame( MODULE* Module, wxDC * DC );
     MODULE*                  Copie_Module( MODULE* module );
 
     /** Function Save_Module_In_Library
@@ -202,9 +201,6 @@ public:
                                             bool    incremental );
     void                     Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest = false );
 
-    // Graphic items edition:
-    void                     InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
-
     // module texts
     void                     RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
     void                     DeleteTextModule( TEXTE_MODULE* Text );
@@ -213,8 +209,7 @@ public:
     TEXTE_MODULE*            CreateTextModule( MODULE* Module, wxDC* DC );
 
     void                     InstallPadOptionsFrame( D_PAD* pad, wxDC* DC, const wxPoint& pos );
-    void                     InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
-                                                         wxDC* DC, const wxPoint& pos );
+    void                     InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC );
 
     // Pads sur modules
     void                     AddPad( MODULE* Module, bool draw );

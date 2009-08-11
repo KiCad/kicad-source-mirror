@@ -115,7 +115,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         DisplayOpt.DisplayDrawItems = track_fill_copy;
         SetCurItem( NULL );
     }
-    else
+    else if( Segment->m_Flags == 0)
     {
         Segment->Draw( DrawPanel, DC, GR_XOR );
         Segment->m_Flags = 0;
@@ -128,30 +128,22 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 
 
 /******************************************************************************/
-void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC )
+void WinEDA_PcbFrame::Delete_Drawings_All_Layer( int aLayer )
 /******************************************************************************/
 {
-    int             layer = Segment->GetLayer();
-
-    if( layer <= LAST_COPPER_LAYER )
+    if( aLayer <= LAST_COPPER_LAYER )
     {
         DisplayError( this, _( "Copper layer global delete not allowed!" ), 20 );
         return;
     }
 
-    if( Segment->m_Flags )
-    {
-        DisplayError( this, _( "Segment is being edited" ), 10 );
-        return;
-    }
-
-    wxString msg = _( "Delete Layer " ) + GetBoard()->GetLayerName( layer );
+    wxString msg = _( "Delete Layer " ) + GetBoard()->GetLayerName( aLayer );
     if( !IsOK( this, msg ) )
         return;
 
     PICKED_ITEMS_LIST pickList;
     ITEM_PICKER picker(NULL, UR_DELETED);
-    
+
     BOARD_ITEM*     PtNext;
     for( BOARD_ITEM* item = GetBoard()->m_Drawings;  item;  item = PtNext )
     {
@@ -162,9 +154,9 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_COTATION:
-            if( item->GetLayer() == layer )
+        case TYPE_MIRE:
+            if( item->GetLayer() == aLayer )
             {
-                item->Draw( DrawPanel, DC, GR_XOR );
                 item->UnLink();
                 picker.m_PickedItem = item;
                 pickList.PushItem(picker);
@@ -172,15 +164,19 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC 
             break;
 
         default:
-            DisplayError( this, wxT( "Type Drawing Inconnu" ) );
+        {
+            wxString msg;
+            msg.Printf( wxT("Delete_Drawings_All_Layer() error: unknown type %d"), item->Type());
+            wxMessageBox( msg );
             break;
+        }
         }
     }
 
     if( pickList.GetCount() )
     {
         GetScreen()->SetModify();
-        SaveCopyInUndoList(Segment, UR_DELETED);
+        SaveCopyInUndoList(pickList, UR_DELETED);
     }
 }
 
