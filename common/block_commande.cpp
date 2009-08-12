@@ -88,8 +88,8 @@ void BLOCK_SELECTOR::SetMessageBlock( WinEDA_DrawFrame* frame )
         msg = _( "Block Rotate" );
         break;
 
-    case BLOCK_INVERT:     /* Flip */
-        msg = _( "Block Invert" );
+    case BLOCK_FLIP:     /* Flip */
+        msg = _( "Block Flip" );
         break;
 
     case BLOCK_MIRROR_X:
@@ -204,7 +204,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
     case BLOCK_DELETE:              /* Delete */
     case BLOCK_SAVE:                /* Save */
     case BLOCK_ROTATE:              /* Rotate 90 deg */
-    case BLOCK_INVERT:              /* Flip */
+    case BLOCK_FLIP:              /* Flip */
     case BLOCK_ZOOM:                /* Window Zoom */
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:            /* mirror */

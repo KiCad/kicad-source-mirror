@@ -79,11 +79,11 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
-    item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_HELP, _( "&Contents" ),
+    item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the cvpcb manual" ) );
     item->SetBitmap( help_xpm );
     helpMenu->Append( item );
-    item = new wxMenuItem( helpMenu, ID_CVPCB_DISPLAY_LICENCE,
+    item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT,
                            _( "&About cvpcb" ),
                            _( "About cvpcb schematic to pcb converter" ) );
     item->SetBitmap( info_xpm );

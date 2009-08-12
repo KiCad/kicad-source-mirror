@@ -108,7 +108,7 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_ZOOM:        // Handle by HandleBlockEnd()
     case BLOCK_ROTATE:
-    case BLOCK_INVERT:
+    case BLOCK_FLIP:
     case BLOCK_DELETE:
     case BLOCK_SAVE:
     case BLOCK_ABORT:
@@ -183,7 +183,7 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_ROTATE: /* Unused */
             break;
 
-        case BLOCK_INVERT: /* Fip */
+        case BLOCK_FLIP: /* Flip, unused */
             break;
 
         case BLOCK_SAVE: /* Save (not used)*/

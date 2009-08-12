@@ -414,7 +414,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
     case ID_POPUP_SELECT_ITEMS_BLOCK:
-    case ID_POPUP_INVERT_BLOCK:
+    case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
     case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
@@ -783,9 +783,9 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
-    case ID_POPUP_INVERT_BLOCK:
+    case ID_POPUP_MIRROR_Y_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_INVERT;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_Y;
         DrawPanel->MouseToCursorSchema();
         HandleBlockPlace( &dc );
         break;

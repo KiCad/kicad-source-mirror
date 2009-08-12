@@ -122,7 +122,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_INVERT_BLOCK:
+    case ID_POPUP_FLIP_BLOCK:
     case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
     case ID_POPUP_PCB_VIA_EDITING:
@@ -296,8 +296,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
-    case ID_POPUP_INVERT_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_INVERT;
+    case ID_POPUP_FLIP_BLOCK:
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_FLIP;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

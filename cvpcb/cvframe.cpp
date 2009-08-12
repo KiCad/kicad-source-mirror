@@ -40,9 +40,9 @@ BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, WinEDA_BasicFrame )
               WinEDA_CvpcbFrame::SaveQuitCvpcb )
     EVT_MENU( ID_CVPCB_QUIT,
               WinEDA_CvpcbFrame::OnQuit )
-    EVT_MENU( ID_CVPCB_DISPLAY_HELP,
+    EVT_MENU( ID_GENERAL_HELP,
               WinEDA_CvpcbFrame::GetKicadHelp )
-    EVT_MENU( ID_CVPCB_DISPLAY_LICENCE,
+    EVT_MENU( ID_KICAD_ABOUT,
               WinEDA_CvpcbFrame::GetKicadAbout )
     EVT_MENU( ID_CONFIG_REQ,
               WinEDA_CvpcbFrame::ConfigCvpcb )

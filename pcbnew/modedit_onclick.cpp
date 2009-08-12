@@ -248,11 +248,6 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Rotate" ), rotate_module_pos_xpm );
         ADD_MENUITEM( transform_choice, ID_MODEDIT_MODULE_MIRROR,
                       _( "Mirror" ), mirror_H_xpm );
-#if 0
-        transform_choice->Append( ID_MODEDIT_MODULE_SCALE, _( "Scale" ) );
-        transform_choice->Append( ID_MODEDIT_MODULE_SCALE, _( "Scale X" ) );
-        transform_choice->Append( ID_MODEDIT_MODULE_SCALE, _( "Scale Y" ) );
-#endif
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_MODULE,
                       _( "Edit Module" ), edit_module_xpm );
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, transform_choice,

@@ -394,7 +394,7 @@ void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
                   _( "Place Block" ), apply_xpm );
     ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK,
                   _( "Copy Block" ), copyblock_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_INVERT_BLOCK,
+    ADD_MENUITEM( menu, ID_POPUP_FLIP_BLOCK,
                   _( "Flip Block" ), invert_module_xpm );
     ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK,
                   _( "Rotate Block" ), rotate_pos_xpm );

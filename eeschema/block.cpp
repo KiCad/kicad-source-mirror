@@ -168,7 +168,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_ROTATE:
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
-    case BLOCK_INVERT:
+    case BLOCK_FLIP:
     case BLOCK_ABORT:
     case BLOCK_SELECT_ITEMS_ONLY:
         break;
@@ -295,7 +295,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             block->m_State = STATE_BLOCK_MOVE;
             break;
 
-        case BLOCK_INVERT: /* pcbnew only! */
+        case BLOCK_FLIP: /* pcbnew only! */
             break;
 
         case BLOCK_ROTATE:

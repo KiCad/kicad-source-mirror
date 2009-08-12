@@ -96,7 +96,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_INVERT_BLOCK:
+    case ID_POPUP_FLIP_BLOCK:
     case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
         break;
@@ -144,28 +144,15 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_PCB_GLOBAL_DELETE:
         Erase_Current_Layer( TRUE );
         break;
-    case ID_GET_TOOLS:
 
+    case ID_GET_TOOLS:
 //			InstallToolsFrame(this, wxPoint(-1,-1) );
         break;
 
     case ID_FIND_ITEMS:
-
 //			InstallFindFrame(this, pos);
         break;
 
-
-    case ID_BUS_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, wxT( "Add Tracks" ) );
-        break;
-
-    case ID_LINE_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, wxT( "Add Drawing" ) );
-        break;
-
-    case ID_TEXT_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, wxT( "Add Text" ) );
-        break;
 
     case ID_NO_SELECT_BUTT:
         SetToolID( 0, 0, wxEmptyString );
@@ -176,12 +163,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        break;
-
-    case ID_POPUP_END_LINE:
-        DrawPanel->MouseToCursorSchema();
-
-//			EndSegment(&dc);
         break;
 
     case ID_POPUP_PCB_DELETE_TRACKSEG:
@@ -198,7 +179,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = m_SelLayerBox->GetChoice();
+        GetScreen()->m_Active_Layer = m_SelLayerBox->GetChoice();
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -283,11 +264,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 /**************************************************************************/
 
-/* Appel� sur un double click:
- *  pour un �l�ment editable (textes, composant):
- *      appel de l'editeur correspondant.
- *  pour une connexion en cours:
- *      termine la connexion
+/* Called on a double click:
  */
 {
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
@@ -305,11 +282,7 @@ void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         break;      // end case 0
 
-    case ID_BUS_BUTT:
-    case ID_WIRE_BUTT:
-
-//			if ( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
-//				EndSegment(DC);
+    default:
         break;
     }
 }

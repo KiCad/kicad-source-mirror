@@ -231,7 +231,7 @@ int WinEDA_LibeditFrame::ReturnBlockCommand( int key )
         break;
 
     case GR_KB_CTRL:
-        cmd = BLOCK_INVERT;
+        cmd = BLOCK_MIRROR_Y;
         break;
 
     case MOUSE_MIDDLE:
@@ -310,11 +310,11 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_PASTE:
     case BLOCK_ROTATE:
     case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:
+    case BLOCK_FLIP:
         break;
 
 
-    case BLOCK_INVERT:
+    case BLOCK_MIRROR_Y:
         ItemsCount = MarkItemsInBloc( CurrentLibEntry, GetScreen()->m_BlockLocate );
         if( ItemsCount )
             SaveCopyInUndoList( CurrentLibEntry );
@@ -398,7 +398,7 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
-    case BLOCK_INVERT:      /* Invert by popup menu, from block move */
+    case BLOCK_MIRROR_Y:      /* Invert by popup menu, from block move */
         SaveCopyInUndoList( CurrentLibEntry );
         MirrorMarkedItems( CurrentLibEntry, GetScreen()->m_BlockLocate.Centre() );
         break;

@@ -1,7 +1,8 @@
 /****************************************************************************/
-/* Name:        zones_by_polygon.cpp										*/
+/* Name:        zones_test_and_combine_areas.cpp							*/
 /* Licence:     GPL License													*/
-/* functions to test, merges and cut polygons used as copper areas outlines */
+/* functions to test, merge and cut polygons used as copper areas outlines  */
+/* some pieces of code come from FreePCB                                    */
 /****************************************************************************/
 
 #include <vector>
@@ -10,11 +11,6 @@
 #include "common.h"
 #include "confirm.h"
 #include "pcbnew.h"
-
-using namespace std;
-
-#undef ASSERT
-#define ASSERT wxASSERT
 
 bool bDontShowSelfIntersectionArcsWarning;
 bool bDontShowSelfIntersectionWarning;
@@ -685,7 +681,7 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
 {
     if( area_ref == area_to_combine )
     {
-        ASSERT( 0 );
+        wxASSERT( 0 );
     }
 
     // polygons intersect, combine them

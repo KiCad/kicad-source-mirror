@@ -152,7 +152,7 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DELETE:     /* Delete */
         ItemsCount = MarkItemsInBloc( Currentmodule, GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+            SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         DeleteMarkedItems( Currentmodule );
         break;
 
@@ -163,17 +163,17 @@ int WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_ROTATE:
         ItemsCount = MarkItemsInBloc( Currentmodule, GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+            SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         RotateMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
 
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
-    case BLOCK_INVERT:     /* mirror */
+    case BLOCK_FLIP:     /* mirror */
         ItemsCount = MarkItemsInBloc( Currentmodule, GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+            SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         MirrorMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -240,14 +240,14 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+        SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         MoveMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.m_MoveVector );
         DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+        SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         CopyMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.m_MoveVector );
         break;
 
@@ -257,13 +257,13 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
-    case BLOCK_INVERT:      /* Mirror by popup menu, from block move */
-        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+    case BLOCK_FLIP:      /* Mirror by popup menu, from block move */
+        SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         MirrorMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ROTATE:
-        SaveCopyInUndoList( Currentmodule, UR_CHANGED );
+        SaveCopyInUndoList( Currentmodule, UR_MODEDIT );
         RotateMarkedItems( Currentmodule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -348,10 +348,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
     }
 
     /* Redessin nouvel affichage */
-    PtBlock->m_MoveVector.x = screen->m_Curseur.x -
-                              PtBlock->m_BlockLastCursorPosition.x;
-    PtBlock->m_MoveVector.y = screen->m_Curseur.y -
-                              PtBlock->m_BlockLastCursorPosition.y;
+    PtBlock->m_MoveVector = screen->m_Curseur - PtBlock->m_BlockLastCursorPosition;
 
     PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
@@ -359,8 +356,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
     if( Currentmodule )
     {
         item = Currentmodule->m_Drawings;
-        move_offset.x = -PtBlock->m_MoveVector.x;
-        move_offset.y = -PtBlock->m_MoveVector.y;
+        move_offset = - PtBlock->m_MoveVector;
         for( ; item != NULL; item = item->Next() )
         {
             if( item->m_Selected == 0 )
@@ -552,8 +548,8 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             continue;
         SETMIRROR( pad->GetPosition().x );
         pad->m_Pos0.x = pad->GetPosition().x;
-        pad->m_Offset.x    = -pad->m_Offset.x;
-        pad->m_DeltaSize.x = -pad->m_DeltaSize.x;
+        NEGATE( pad->m_Offset.x );
+        NEGATE( pad->m_DeltaSize.x );
         pad->m_Orient      = 1800 - pad->m_Orient;
         NORMALIZE_ANGLE( pad->m_Orient );
     }
@@ -567,14 +563,13 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case TYPE_EDGE_MODULE:
-            SETMIRROR( ( (EDGE_MODULE*) item )->m_Start.x );
-            ( (EDGE_MODULE*) item )->m_Start0.x =
-                ( (EDGE_MODULE*) item )->m_Start.x;
-            SETMIRROR( ( (EDGE_MODULE*) item )->m_End.x );
-            ( (EDGE_MODULE*) item )->m_End0.x =
-                ( (EDGE_MODULE*) item )->m_End.x;
-            ( (EDGE_MODULE*) item )->m_Angle =
-                -( (EDGE_MODULE*) item )->m_Angle;
+        {  EDGE_MODULE * edge =  (EDGE_MODULE*) item;
+            SETMIRROR( edge->m_Start.x );
+            edge->m_Start0.x = edge->m_Start.x;
+            SETMIRROR( edge->m_End.x );
+            edge->m_End0.x = edge->m_End.x;
+            NEGATE( edge->m_Angle );
+        }
             break;
 
         case TYPE_TEXTE_MODULE:
@@ -584,10 +579,11 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             break;
 
         default:
-            ;
+            break;
         }
 
-        item->m_Flags = item->m_Selected = 0;
+        item->m_Flags = 0;
+        item->m_Selected = 0;
     }
 }
 

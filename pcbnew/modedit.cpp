@@ -175,7 +175,6 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
@@ -309,6 +308,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             pcbframe->Place_Module( newmodule, NULL );
             pcbframe->GetScreen()->m_Curseur = cursor_pos;
             newmodule->m_TimeStamp = GetTimeStamp();
+            pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
         }
 
         newmodule->m_Flags = 0;
@@ -601,9 +601,6 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_MODULE_ROTATE:
     case ID_MODEDIT_MODULE_MIRROR:
-    case ID_MODEDIT_MODULE_SCALE:
-    case ID_MODEDIT_MODULE_SCALEX:
-    case ID_MODEDIT_MODULE_SCALEY:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         redraw = true;
@@ -677,9 +674,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
-    case ID_POPUP_MIRROR_Y_BLOCK:
-    case ID_POPUP_INVERT_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_INVERT;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_X;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         {
             SET_DC;
@@ -761,25 +756,25 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
     case ID_MODEDIT_MODULE_MIRROR:
         for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
         {
-            pad->m_Pos.y       = -pad->m_Pos.y;
-            pad->m_Pos0.y      = -pad->m_Pos0.y;
-            pad->m_Offset.y    = -pad->m_Offset.y;
-            pad->m_DeltaSize.y = -pad->m_DeltaSize.y;
+            NEGATE( pad->m_Pos.y );
+            NEGATE( pad->m_Pos0.y );
+            NEGATE( pad->m_Offset.y );
+            NEGATE( pad->m_DeltaSize.y );
             if( pad->m_Orient )
                 pad->m_Orient = 3600 - pad->m_Orient;
         }
 
         /* Inversion miroir de la Reference */
         textmod = module->m_Reference;
-        textmod->m_Pos.y  = -textmod->m_Pos.y;
-        textmod->m_Pos0.y = textmod->m_Pos0.y;
+        NEGATE( textmod->m_Pos.y );
+        NEGATE( textmod->m_Pos0.y );
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
         /* Inversion miroir de la Valeur  */
         textmod = module->m_Value;
-        textmod->m_Pos.y  = -textmod->m_Pos.y;
-        textmod->m_Pos0.y = textmod->m_Pos0.y;
+        NEGATE( textmod->m_Pos.y );
+        NEGATE( textmod->m_Pos0.y );
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
@@ -791,18 +786,18 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
             {
             case TYPE_EDGE_MODULE:
                 edgemod = (EDGE_MODULE*) PtStruct;
-                edgemod->m_Start.y = -edgemod->m_Start.y;
-                edgemod->m_End.y   = -edgemod->m_End.y;
+                NEGATE( edgemod->m_Start.y );
+                NEGATE( edgemod->m_End.y );
                 /* inversion des coords locales */
-                edgemod->m_Start0.y = -edgemod->m_Start0.y;
-                edgemod->m_End0.y   = -edgemod->m_End0.y;
+                NEGATE( edgemod->m_Start0.y );
+                NEGATE( edgemod->m_End0.y );
                 break;
 
             case TYPE_TEXTE_MODULE:
                 /* Inversion miroir de la position et mise en miroir : */
                 textmod = (TEXTE_MODULE*) PtStruct;
-                textmod->m_Pos.y  = -textmod->m_Pos.y;
-                textmod->m_Pos0.y = textmod->m_Pos0.y;
+                NEGATE( textmod->m_Pos.y );
+                NEGATE( textmod->m_Pos0.y );
                 if( textmod->m_Orient )
                     textmod->m_Orient = 3600 - textmod->m_Orient;
                 break;
@@ -815,9 +810,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
 
         break;
 
-    case ID_MODEDIT_MODULE_SCALE:
-    case ID_MODEDIT_MODULE_SCALEX:
-    case ID_MODEDIT_MODULE_SCALEY:
+    default:
         DisplayInfoMessage( this, wxT( "Not availlable" ) );
         break;
     }

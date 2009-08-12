@@ -235,7 +235,7 @@ int WinEDA_PcbFrame::ReturnBlockCommand( int key )
         break;
 
     case GR_KB_ALT:
-        cmd = BLOCK_INVERT;
+        cmd = BLOCK_FLIP;
         break;
 
     case MOUSE_MIDDLE:
@@ -357,7 +357,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             Block_Rotate();
             break;
 
-        case BLOCK_INVERT: /* Flip */
+        case BLOCK_FLIP: /* Flip */
 
             // Turn off the block rectangle now so it is not redisplayed
             DrawPanel->ManageCurseur = NULL;

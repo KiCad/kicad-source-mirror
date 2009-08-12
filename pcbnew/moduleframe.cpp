@@ -113,23 +113,17 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
                     WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
 
+// popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     WinEDA_ModuleEditFrame::Process_Special_Functions )
 
-// Annulation de commande en cours
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    WinEDA_PcbFrame::Process_Special_Functions )
+                    WinEDA_ModuleEditFrame::Process_Special_Functions )
 
 // Transformations du module
     EVT_MENU( ID_MODEDIT_MODULE_ROTATE,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_MENU( ID_MODEDIT_MODULE_MIRROR,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_MENU( ID_MODEDIT_MODULE_SCALE,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_MENU( ID_MODEDIT_MODULE_SCALEX,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_MENU( ID_MODEDIT_MODULE_SCALEY,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
 
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP,
