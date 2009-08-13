@@ -108,14 +108,6 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
         pt_piste->Draw( this, aDC, drawmode );
     }
 
-    // Draw footprints, this is done at last in order to print the pad holes in while
-    // after the tracks
-    Module = (MODULE*) Pcb->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
-    {
-        Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer );
-    }
-
 
     /* Draw filled areas (i.e. zones) */
     for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
@@ -125,6 +117,14 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
             continue;
 
         zone->DrawFilledArea( this, aDC, drawmode );
+    }
+
+    // Draw footprints, this is done at last in order to print the pad holes in white (or g_DrawBgColor)
+    // after the tracks and zones
+    Module = (MODULE*) Pcb->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
+    {
+        Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer );
     }
 
     /* Print via holes in bg color: Not sure it is good for buried or blind vias */
