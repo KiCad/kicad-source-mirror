@@ -463,8 +463,10 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
  * Put data pointed by List in the previous state, i.e. the state memorised by List
  * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
  * @param aRedoCommand = a bool: true for redo, false for undo
+ * @param aRebuildRatsnet = a bool: true to rebuid ratsnet (normal use, and default), false
+ * to just retrieve las state (used in abort commands that do not need to rebuild ratsnest)
  */
-void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
+void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand, bool aRebuildRatsnet )
 {
     BOARD_ITEM* item;
     bool        not_found = false;
@@ -557,7 +559,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
     // Rebuild pointers and rastnest that can be changed.
-    if( reBuild_ratsnest )
+    if( reBuild_ratsnest && aRebuildRatsnet )
         Compile_Ratsnest( NULL, true );
 }
 

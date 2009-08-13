@@ -54,7 +54,8 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
         frame->MsgPanel->EraseMsgBox();
 
-        // Clear the undo picker list:
+        // Undo pending changes (mainly a lock point cretion) and clear the undo picker list:
+        frame->PutDataInPreviousState(&s_ItemsListPicker, false, false);
         s_ItemsListPicker.ClearListAndDeleteItems();
 
         // Delete current (new) track
