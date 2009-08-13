@@ -998,7 +998,7 @@ void WinEDA_App::SaveLastVisitedLibraryPath( const wxString& aPath )
 
 /** ReturnFilenameWithRelativePathInLibPath
  * @return a short filename (with extension) with only a relative path if this filename
- * can be found in library paths
+ * can be found in library paths (i.e. if the path is a sub path of a libraries path)
  * @param aFullFilename = filename with path and extension.
  */
 wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aFullFilename )
@@ -1008,7 +1008,8 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aF
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,
      * because it preserve use of default libraries paths, when the path is a sub path of these default paths
-     *
+     * Note we accept only sub paths,
+     * not relative paths starting by ../ that are not subpaths and are outside kicad libs paths
      */
     wxFileName fn = aFullFilename;
     wxString   filename = aFullFilename;
@@ -1023,8 +1024,10 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aF
         {
             if( fn.MakeRelativeTo( m_libSearchPaths[kk] ) )
             {
-                if( pathlen < 0                             // a subpath is found
-                   || pathlen > (int) fn.GetPath().Len() )  // a better subpath if found
+                if( fn.GetPathWithSep().StartsWith( wxT("..") ) )  // Path outside kicad libs paths
+                    continue;
+                if( pathlen < 0                             // a first subpath is found
+                   || pathlen > (int) fn.GetPath().Len() )  // or a better subpath if found
                 {
                     filename = fn.GetPathWithSep() + fn.GetFullName();
                     pathlen  = fn.GetPath().Len();
