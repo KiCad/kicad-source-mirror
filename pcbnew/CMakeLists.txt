@@ -41,8 +41,8 @@ set(PCBNEW_SRCS
     dialog_drc.cpp
     dialog_edit_module_for_BoardEditor.cpp
     dialog_edit_module_for_BoardEditor_base.cpp
-    dialog_edit_module_for_modedit_base.cpp
-    dialog_edit_module_for_modedit.cpp
+    dialog_edit_module_for_Modedit_base.cpp
+    dialog_edit_module_for_Modedit.cpp
     dialog_edit_module_text.cpp
     dialog_edit_module_text_base.cpp
     dialog_exchange_modules_base.cpp

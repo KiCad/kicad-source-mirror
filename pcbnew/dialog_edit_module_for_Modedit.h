@@ -7,7 +7,7 @@
 
 // Include the wxFormBuider header base:
 #include <vector>
-#include "dialog_edit_module_for_modedit_base.h"
+#include "dialog_edit_module_for_Modedit_base.h"
 
 /**************************************/
 /* class DIALOG_MODULE_MODULE_EDITOR */

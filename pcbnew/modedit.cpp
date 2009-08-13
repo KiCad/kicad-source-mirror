@@ -17,7 +17,7 @@
 #include "wxPcbStruct.h"
 #include "protos.h"
 
-#include "dialog_edit_module_for_modedit.h"
+#include "dialog_edit_module_for_Modedit.h"
 
 #include "collectors.h"
 

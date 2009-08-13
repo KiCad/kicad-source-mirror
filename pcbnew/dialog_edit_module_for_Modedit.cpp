@@ -13,7 +13,7 @@
 #include "3d_struct.h"
 #include "3d_viewer.h"
 #include "wxPcbStruct.h"
-#include "dialog_edit_module_for_modedit.h"
+#include "dialog_edit_module_for_Modedit.h"
 
 /**************************************************************************************/
 DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( WinEDA_ModuleEditFrame* aParent,
