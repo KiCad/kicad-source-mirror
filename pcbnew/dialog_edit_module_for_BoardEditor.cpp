@@ -296,6 +296,16 @@ void DIALOG_MODULE_BOARD_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
     if( m_LastSelected3DShapeIndex >= 0 )
         TransfertDisplayTo3DValues( m_LastSelected3DShapeIndex );
     m_LastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetSelection();
+
+    if( m_LastSelected3DShapeIndex < 0 )    // happens under wxGTK when deleting an item in m_3D_ShapeNameListBox wxListBox 
+       return;
+
+    if( m_LastSelected3DShapeIndex >= (int) m_Shapes3D_list.size() )
+    {
+        wxMessageBox(wxT("On3DShapeNameSelected() error"));
+        m_LastSelected3DShapeIndex = -1;
+        return;
+    }
     Transfert3DValuesToDisplay( m_Shapes3D_list[m_LastSelected3DShapeIndex] );
 }
 
