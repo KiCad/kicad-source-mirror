@@ -318,8 +318,14 @@ void BOARD_ITEM::UnLink()
 
 BOARD* BOARD_ITEM::GetBoard() const
 {
-    // overload this function as needed.
+    if( Type() == TYPE_PCB )
+        return (BOARD*) this;
 
-    return (BOARD*) GetParent();
+    BOARD_ITEM* parent = GetParent();
+
+    if( parent )
+        return parent->GetBoard();
+
+    return NULL;
 }
 
