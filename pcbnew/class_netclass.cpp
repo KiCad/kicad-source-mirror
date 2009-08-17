@@ -163,12 +163,13 @@ void BOARD::SynchronizeNetsAndNetClasses()
     }
 
     // Add netclass name and pointer to nets.  If a net is in more than one netclass,
-    // remove it from all but the first netclass in which it resides.
+    // set the net's name and pointer to only the first netclass.  Subsequent
+    // and therefore bogus netclass memberships will be deleted in logic below this loop.
     for( NETCLASSES::iterator clazz=m_NetClasses.begin();  clazz!=m_NetClasses.end();  ++clazz )
     {
         NETCLASS* netclass = clazz->second;
 
-        for( NETCLASS::iterator member = netclass->begin();  member!=netclass->end();  )
+        for( NETCLASS::iterator member = netclass->begin();  member!=netclass->end();  ++member )
         {
             const wxString&  netname = *member;
 
@@ -177,22 +178,9 @@ void BOARD::SynchronizeNetsAndNetClasses()
             // think is a sequential search.
             NETINFO_ITEM* net = FindNet( netname );
 
-            if( !net )    // NET 'netname' does not exist, remove it from 'netclass'
-            {
-                NETCLASS::iterator e = member++;
-                netclass->Remove( e );
-            }
-            else if( net->GetClassName() != NETCLASS::Default )
-            {
-                // 'net' is already in a non-default net class.  This makes its
-                // entry in 'netclass' bogus, delete it.
-                NETCLASS::iterator e = member++;
-                netclass->Remove( e );
-            }
-            else
+            if( net && net->GetClassName() == NETCLASS::Default )
             {
                 net->SetClass( netclass );
-                ++member;
             }
         }
     }
